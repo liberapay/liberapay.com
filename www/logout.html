@@ -1,0 +1,11 @@
+from aspen import Response
+from logstown import db
+LOGOUT = "UPDATE users SET token=NULL, expires=now() WHERE token=%s"
+
+token = request.user.session.get('token')
+if token:
+    db.execute(LOGOUT, (token,))
+request.user.session = {}
+referer = request.headers.one('Referer', '/').split(', ')[0] # ???
+response = Response(302, headers={'Location': referer})
+

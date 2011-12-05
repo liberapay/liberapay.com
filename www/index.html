@@ -1,1 +1,24 @@
-Greetings, program!
+^L
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Logstown Education Marketplace</title>
+        <style></style>
+    </head>
+    <body>
+        <h1>Logstown Education Marketplace</h1>
+
+        <p>The best learning happens face to face.</p>
+
+        <p></p>
+        
+        <p>
+            {% if request.user.session %}
+            <a href="/logout.html">Logout</a>.
+            {% else %}
+            <a href="">Offer to teach</a>.
+            {% end %}
+            </p>
+
+    </body>
+</html>

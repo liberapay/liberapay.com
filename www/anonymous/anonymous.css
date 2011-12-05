@@ -1,0 +1,86 @@
+BODY {
+    margin: 0;
+    padding: 0;
+    font: normal 9pt/12pt Arial, sans-serif;
+    background: #CCC;
+    text-align: center;
+}
+
+#floater {
+    width: 400px;
+    margin: 0 auto;
+    position: relative;
+    text-align: left;
+}
+#wrapper {
+    background: white;
+    padding: 40px;
+    border: 1px solid #AAA;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+
+    -khtml-box-shadow:  2px 2px 8px #666;
+    -moz-box-shadow:    2px 2px 8px #666;
+    -webkit-box-shadow: 2px 2px 8px #666;
+    box-shadow: 2px 2px 8px #666;
+}
+#form {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    width: 300px;
+}
+H2 {
+    margin: 0;
+    padding: 0 0 0.5em 0;
+    line-height: 100%;
+    font: normal 14pt/18pt Arial, sans-serif;
+    text-transform: uppercase; 
+    color: #777772; /* Pantone Cool Gray 10U, per 
+    http://www.materials-world.com/pantone/pantone_uncoated_stock.htm */
+}
+
+FORM INPUT#username, FORM INPUT#password {
+    width: 180px;
+}
+#feedback {
+    padding: 10px 10px 10px 30px;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    margin-bottom: 10px;
+    display: none;
+}
+#feedback.success {
+    background: #B5E1AE url("/anonymous/accept.png") 10px 10px no-repeat;
+    border: 2px solid #247D22;
+    color: #0B390B;
+}
+#feedback.error {
+    background: #FABCA8 url("/anonymous/exclamation.png") 10px 10px no-repeat;
+    border: 2px solid #CB553C;
+    color: #481A10;
+}
+LABEL {
+    font-weight: bold;
+    display: block;
+    margin: 1em 0 0;
+}
+LABEL.disabled {
+    color: #666;
+}
+P IMG {
+    margin-bottom: -4px;
+}
+INPUT.text {
+    width: 180px;
+}
+
+#footer {
+    margin: 10px 0 0;
+    border-top: 1px solid #AAA;
+    padding: 10px 0 10px 0px;
+    color: #999;
+    text-align: right;
+}

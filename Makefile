@@ -13,4 +13,4 @@ clean:
 	rm -rf env
 
 run: env
-	sudo ./env/bin/thrash ./env/bin/aspen -vDEBUG -a:80www/
+    SHARED_DATABASE_URL="postgres://postgres:jesus@localhost:5432/logstown" sudo -E ./env/bin/thrash ./env/bin/aspen -vDEBUG -a:80 www/

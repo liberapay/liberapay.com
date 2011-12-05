@@ -1,0 +1,80 @@
+"""Accounts.
+
+http://stackoverflow.com/questions/549/the-definitive-guide-to-website-authentication-beta
+
+"""
+import json
+import re
+
+import aspen
+from aspen import Response
+from logstown import authentication
+
+# http://www.regular-expressions.info/email.html
+email_re = re.compile('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}')
+
+
+# =========================================================================== 
+
+# Set WWW-Authenticate
+# ====================
+# "The 401 response MUST include a WWW-Authenticate header field (section
+# 14.47) containing a challenge applicable to the requested resource."
+# http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2
+
+response.headers.set('WWW-Authenticate', 'X-Cookie')
+
+
+# JavaScript doesn't need a login form.
+# =====================================
+
+if request.headers.one('X-Requested-With', '') == 'XMLHttpRequest':
+    raise response
+
+
+# Only support GET requests.
+# ==========================
+# HEAD? POST?
+
+if request.method != 'GET':
+    raise Response(302, '/') # should trigger a GET, but maybe HEAD?
+
+
+# =========================================================================== 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <title>Login to Logstown</title>
+        <style type="text/css">@import url("/anonymous/anonymous.css");</style>
+        <script src="/anonymous/jquery-1.7.1.min.js"></script>
+        <script src="/anonymous/anonymous.js"></script>
+        <script>$(document).ready(Anon.main);</script>
+    </head>
+    <body>
+        <div id="floater">
+            <div id="wrapper">
+                <div id="form">
+                    <h2>Login</h2>
+                    <form method="POST" action="/anonymous/authenticate.json">
+                        <div id="feedback"></div>
+                        <label for="email">Email</label>
+                        <input class="start-here text" id="email" 
+                            name="email" />
+                        
+                        <label for="password">Password</label>
+                        <input type="password" name="password" 
+                            id="password" class="text" />
+
+                        <label>&nbsp;</label>
+                        <input type="submit" id="submit" 
+                                value="Login" />
+                    </form>
+                </div>
+                <div id="footer">
+                    &copy; 2011 Logstown 
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
