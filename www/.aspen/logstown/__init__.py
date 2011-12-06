@@ -9,12 +9,18 @@ import samurai.config
 
 
 log = logging.getLogger('logstown.db')
-canonical_host = os.environ.get('CANONICAL_HOST', False)
 
+
+canonical_scheme = os.environ['CANONICAL_SCHEME']
+canonical_host = os.environ['CANONICAL_HOST']
 
 def canonize(request):
-    if canonical_host and request.headers.one('Host') != canonical_host:
-        request.redirect('http://%s/' % canonical_host, permanent=True)
+    scheme_bad = request.urlparts.scheme != canonical_scheme
+    host_bad = request.headers.one('Host') != canonical_host
+    if scheme_bad or host_bad:
+        request.redirect( '%s://%s/' % (canonical_scheme, canonical_host)
+                        , permanent=True
+                         )
 
 
 class MissedConnection:
