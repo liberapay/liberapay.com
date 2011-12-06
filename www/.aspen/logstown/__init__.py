@@ -17,11 +17,11 @@ import pprint
 def canonize(request):
     scheme_bad = request.urlparts.scheme != canonical_scheme
     host_bad = request.headers.one('Host') != canonical_host
+    pprint.pprint(request.environ)
     if scheme_bad or host_bad:
         url = '%s://%s/' % (canonical_scheme, canonical_host)
         old = '%s://%s/' % (request.urlparts.scheme, request.headers.one('Host'))
         print "redirecting to", url, "from", old
-        pprint.pprint(os.environ)
         request.redirect(url, permanent=True)
 
 
