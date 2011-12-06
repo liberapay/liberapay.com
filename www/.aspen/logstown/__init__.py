@@ -13,7 +13,7 @@ log = logging.getLogger('logstown.db')
 
 canonical_scheme = os.environ['CANONICAL_SCHEME']
 canonical_host = os.environ['CANONICAL_HOST']
-
+import pprint
 def canonize(request):
     scheme_bad = request.urlparts.scheme != canonical_scheme
     host_bad = request.headers.one('Host') != canonical_host
