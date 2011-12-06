@@ -68,13 +68,18 @@ class PostgresContextManager:
 
 db = None
 def startup(website):
+    """Adapt from URL (per Heroku) to DSN (per psycopg2).
+    """
     global db
     url = os.environ['SHARED_DATABASE_URL']
     parsed = urlparse.urlparse(url)
+    dbname = parsed.path[1:] # /foobar
+    # Why is the user:pass not parsed!? Is the scheme unrecognized?
     foo, bar = parsed.netloc.split('@')
     user, password = foo.split(':')
-    host, port = bar.split(':')
+    port = '5432' # postgres default port
+    if ':' in host:
+        host, port = host.split(':')
     dsn = "dbname=%s user=%s password=%s host=%s port=%s"
-    dsn %= (parsed.path[1:], user, password, host, port)
+    dsn %= (dbname, user, password, host, port)
     db = PostgresManager(dsn)
-
