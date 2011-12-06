@@ -75,8 +75,8 @@ def startup(website):
     parsed = urlparse.urlparse(url)
     dbname = parsed.path[1:] # /foobar
     # Why is the user:pass not parsed!? Is the scheme unrecognized?
-    foo, bar = parsed.netloc.split('@')
-    user, password = foo.split(':')
+    user_pass, host = parsed.netloc.split('@')
+    user, password = user_pass.split(':')
     port = '5432' # postgres default port
     if ':' in host:
         host, port = host.split(':')
