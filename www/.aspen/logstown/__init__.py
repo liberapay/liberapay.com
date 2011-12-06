@@ -13,15 +13,15 @@ log = logging.getLogger('logstown.db')
 
 canonical_scheme = os.environ['CANONICAL_SCHEME']
 canonical_host = os.environ['CANONICAL_HOST']
-import pprint
+
 def canonize(request):
-    scheme_bad = request.urlparts.scheme != canonical_scheme
-    host_bad = request.headers.one('Host') != canonical_host
-    pprint.pprint(request.environ)
-    if scheme_bad or host_bad:
+    """Enforce a certain scheme and hostname.
+    """
+    scheme = request.environ.get('HTTP_X_FORWARDED_PROTO', 'http') # per Heroku
+    bad_scheme = scheme != canonical_scheme
+    bad_host = request.headers.one('Host') != canonical_host
+    if bad_scheme or bad_host:
         url = '%s://%s/' % (canonical_scheme, canonical_host)
-        old = '%s://%s/' % (request.urlparts.scheme, request.headers.one('Host'))
-        print "redirecting to", url, "from", old
         request.redirect(url, permanent=True)
 
 
