@@ -11,18 +11,23 @@ import samurai.config
 log = logging.getLogger('logstown.db')
 
 
+class X: pass
 canonical_scheme = os.environ['CANONICAL_SCHEME']
 canonical_host = os.environ['CANONICAL_HOST']
 
 def canonize(request):
-    """Enforce a certain scheme and hostname.
+    """Enforce a certain scheme and hostname. Store these on request as well.
     """
     scheme = request.environ.get('HTTP_X_FORWARDED_PROTO', 'http') # per Heroku
+    host = request.headers.one('Host')
     bad_scheme = scheme != canonical_scheme
-    bad_host = request.headers.one('Host') != canonical_host
+    bad_host = host != canonical_host
     if bad_scheme or bad_host:
         url = '%s://%s/' % (canonical_scheme, canonical_host)
         request.redirect(url, permanent=True)
+    request.x = X()
+    request.x.scheme = scheme
+    request.x.host = host
 
 
 class MissedConnection:

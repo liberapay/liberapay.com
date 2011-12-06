@@ -20,7 +20,7 @@ if pmt is not None:
         <h2>What are your numbers and letters?</h2>
 
         <form action="https://api.samurai.feefighters.com/v1/payment_methods" method="POST">
-            <input name="redirect_url" type="hidden" value="http://{{ request.headers.one('Host') }}/update-payment-method.html" />
+            <input name="redirect_url" type="hidden" value="{{ request.x.scheme }}://{{ request.x.host }}/update-payment-method.html" />
             <input name="merchant_key" type="hidden" value="7b79175baca336eaf4bfe8c8" />
             <input name="sandbox" type="hidden" value="true" />
             {% if pmt %}
