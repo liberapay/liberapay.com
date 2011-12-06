@@ -73,7 +73,9 @@ def inbound(request):
             raise Response(401) # use nice error messages for login form
 
 def outbound(response):
-    session = response.request.user.session
+    session = {}
+    if hasattr(response.request, 'user'):
+        session = response.request.user.session
     if not session:                                 # user is anonymous
         if 'session' not in response.request.cookie:
             # no cookie in the request, don't set one on response

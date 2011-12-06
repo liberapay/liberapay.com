@@ -1,5 +1,6 @@
 import logging
 import os
+import urlparse
 
 import psycopg2
 import psycopg2.extras
@@ -70,8 +71,10 @@ def startup(website):
     global db
     url = os.environ['SHARED_DATABASE_URL']
     parsed = urlparse.urlparse(url)
-    host, port = parsed.netloc.split(':')
-    dsn = "database=%s user=%s password=% host=%s port=%s"
-    dsn %= (parsed.path[1:], parsed.username, parsed.password, host, port)
+    foo, bar = parsed.netloc.split('@')
+    user, password = foo.split(':')
+    host, port = bar.split(':')
+    dsn = "dbname=%s user=%s password=%s host=%s port=%s"
+    dsn %= (parsed.path[1:], user, password, host, port)
     db = PostgresManager(dsn)
 
