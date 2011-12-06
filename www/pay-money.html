@@ -1,0 +1,12 @@
+from samurai.processor import Processor
+^L
+pmt = request.user.session['payment_method_token']
+amount = request.body.one('amount')
+Processor.purchase(pmt, amount)
+
+^L
+
+<p>Congratulations! You have paid ${{ amount }}.</p>
+
+<p><a href="/">Home</a></p>
+

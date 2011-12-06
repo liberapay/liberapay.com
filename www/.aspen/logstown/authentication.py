@@ -14,7 +14,8 @@ TIMEOUT = 60 * 60 * 24 * 7 # one week
 
 salt = "cheese and crackers" # XXX
 
-SESSION = "UPDATE users SET token=%s WHERE email=%s AND hash=%s RETURNING *"
+SESSION = ("UPDATE users SET session_token=%s "
+           "WHERE email=%s AND hash=%s RETURNING *")
 def authenticate(email, password):
     from logstown import db
     token = str(uuid.uuid4())
@@ -28,13 +29,14 @@ def authenticate(email, password):
             return rec
     return {}
 
-TOKEN = "SELECT email, teacher, token, expires FROM users WHERE token=%s" 
+TOKEN = ("SELECT email, teacher, session_token, session_expires, "
+         "payment_method_token FROM users WHERE session_token=%s")
 def load_session(token):
     from logstown import db
     with db.execute(TOKEN, (token,)) as cursor:
         rec = cursor.fetchone()
         if rec is not None:
-            assert rec['token'] == token # sanity
+            assert rec['session_token'] == token # sanity
             assert 'hash' not in rec # safety
             return rec
     return {}
@@ -86,8 +88,8 @@ def outbound(response):
             expires = 0
     else:                                           # user is authenticated
         response.headers.set('Expires', BEGINNING_OF_EPOCH) # don't cache
-        response.cookie['session'] = session['token']
-        expires = session['expires'] = time.time() + TIMEOUT
+        response.cookie['session'] = session['session_token']
+        expires = session['session_expires'] = time.time() + TIMEOUT
 
     cookie = response.cookie['session']
     # I am not setting domain, because it is supposed to default to what we 

@@ -1,6 +1,7 @@
 from aspen import Response
 from logstown import db
-LOGOUT = "UPDATE users SET token=NULL, expires=now() WHERE token=%s"
+LOGOUT = ("UPDATE users SET session_token=NULL, session_expires=now() "
+          "WHERE token=%s")
 
 token = request.user.session.get('token')
 if token:

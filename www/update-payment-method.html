@@ -1,0 +1,14 @@
+from logstown import db
+^L
+pmt = request.qs.one('payment_method_token')
+session_token = request.user.session['session_token']
+
+PMT = "UPDATE users SET payment_method_token=%s WHERE session_token=%s RETURNING *"
+with db.execute(PMT, (pmt, session_token,)) as cursor:
+    rec = cursor.fetchone()
+^L
+
+<p>Congratulations! New token for {{ rec['email'] }} is 
+    {{ rec['payment_method_token'] }}.</p>
+
+<p><a href="/">Home</a></p>

@@ -13,4 +13,8 @@ clean:
 	rm -rf env
 
 run: env
-	SHARED_DATABASE_URL="postgres://postgres:jesus@localhost:5432/logstown" sudo -E ./env/bin/thrash ./env/bin/aspen -vDEBUG -a:80 www/
+	SHARED_DATABASE_URL="postgres://postgres:jesus@localhost:5432/logstown" \
+	SAMURAI_MERCHANT_KEY="7b79175baca336eaf4bfe8c8" \
+	SAMURAI_MERCHANT_PASSWORD="3d6b8ad3b16d8c538c9189a0" \
+	SAMURAI_PROCESSOR_TOKEN="4620d34456c7de7bab7f3a13" \
+		sudo -E ./env/bin/thrash ./env/bin/aspen -vDEBUG -a:80 www/

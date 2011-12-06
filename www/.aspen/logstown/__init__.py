@@ -5,6 +5,7 @@ import urlparse
 import psycopg2
 import psycopg2.extras
 import psycopg2.pool
+import samurai.config
 
 
 log = logging.getLogger('logstown.db')
@@ -66,10 +67,15 @@ class PostgresContextManager:
         """
         self.pool.putconn(self.conn)
 
-db = None
+db = None 
 def startup(website):
-    """Adapt from URL (per Heroku) to DSN (per psycopg2).
+    """Set up db and cc.
     """
+
+    # Database
+    # ========
+    # Adapt from URL (per Heroku) to DSN (per psycopg2).
+
     global db
     url = os.environ['SHARED_DATABASE_URL']
     parsed = urlparse.urlparse(url)
@@ -83,3 +89,11 @@ def startup(website):
     dsn = "dbname=%s user=%s password=%s host=%s port=%s"
     dsn %= (dbname, user, password, host, port)
     db = PostgresManager(dsn)
+
+
+    # Samurai
+    # =======
+
+    samurai.config.merchant_key = os.environ['SAMURAI_MERCHANT_KEY']
+    samurai.config.merchant_password = os.environ['SAMURAI_MERCHANT_PASSWORD']
+    samurai.config.processor_token = os.environ['SAMURAI_PROCESSOR_TOKEN']
