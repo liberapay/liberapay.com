@@ -1,8 +1,13 @@
+@import url(http://fonts.googleapis.com/css?family=Cabin:400,500,600,700,400italic,500italic,600italic,700italic);
+@import url(http://fonts.googleapis.com/css?family=Cabin+Sketch:400,700);
+
+
 BODY {
     margin: 0;
     padding: 0;
-    font: normal 9pt/12pt Arial, sans-serif;
-    background: #CCC;
+    font: normal 9pt/12pt Cabin, sans-serif;
+    /* http://www.backgroundcity.com/groups/gfiles/g4/g4wd14.gif */
+    background: brown url("/anonymous/bg.gif") repeat;
     text-align: center;
 }
 
@@ -15,15 +20,10 @@ BODY {
 #wrapper {
     background: white;
     padding: 40px;
-    border: 1px solid #AAA;
+    border: 2px solid black;
     border-radius: 3px;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
-
-    -khtml-box-shadow:  2px 2px 8px #666;
-    -moz-box-shadow:    2px 2px 8px #666;
-    -webkit-box-shadow: 2px 2px 8px #666;
-    box-shadow: 2px 2px 8px #666;
 }
 #form {
     margin: 0;
@@ -35,14 +35,12 @@ H2 {
     margin: 0;
     padding: 0 0 0.5em 0;
     line-height: 100%;
-    font: normal 14pt/18pt Arial, sans-serif;
-    text-transform: uppercase; 
-    color: #777772; /* Pantone Cool Gray 10U, per 
-    http://www.materials-world.com/pantone/pantone_uncoated_stock.htm */
+    font: normal 36pt/36pt "Cabin Sketch", sans-serif;
 }
 
-FORM INPUT#username, FORM INPUT#password {
-    width: 180px;
+FORM INPUT#email, FORM INPUT#password {
+    width: 300px;
+    font: 16pt/20pt Cabin, sans-serif;
 }
 #feedback {
     padding: 10px 10px 10px 30px;
@@ -73,8 +71,28 @@ LABEL.disabled {
 P IMG {
     margin-bottom: -4px;
 }
-INPUT.text {
-    width: 180px;
+#submit-button {
+    text-align: right;
+    margin: 1em 0;
+}
+INPUT#submit {
+    font: 12pt/16pt Cabin, sans-serif;
+    padding: 6px 10px;
+    -webkit-border-radius: 3px 3px;
+    border: solid 1px rgb(153, 153, 153);
+    background: -webkit-gradient( linear
+                                , 0% 0%
+                                , 0% 100%
+                                , from(rgb(255, 255, 255))
+                                , to(rgb(221, 221, 221))
+                                 );
+    color: #333;
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-block;
+    text-align: center;
+    text-shadow: 0px 1px 1px rgba(255,255,255,1);
+    line-height: 1;
 }
 
 #footer {

@@ -55,7 +55,7 @@ if request.method != 'GET':
         <div id="floater">
             <div id="wrapper">
                 <div id="form">
-                    <h2>Login</h2>
+                    <h2>Logstown.com</h2>
                     <form method="POST" action="/anonymous/authenticate.json">
                         <div id="feedback"></div>
                         <label for="email">Email</label>
@@ -66,13 +66,14 @@ if request.method != 'GET':
                         <input type="password" name="password" 
                             id="password" class="text" />
 
-                        <label>&nbsp;</label>
-                        <input type="submit" id="submit" 
-                                value="Login" />
+                        <div id="submit-button"> 
+                            <input type="submit" id="submit" 
+                            value="Login" />
+                        </div>
                     </form>
                 </div>
                 <div id="footer">
-                    &copy; 2011 Logstown 
+                    &copy; 2011 Logstown.com
                 </div>
             </div>
         </div>
