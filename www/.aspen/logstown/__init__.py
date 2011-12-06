@@ -18,9 +18,9 @@ def canonize(request):
     scheme_bad = request.urlparts.scheme != canonical_scheme
     host_bad = request.headers.one('Host') != canonical_host
     if scheme_bad or host_bad:
-        request.redirect( '%s://%s/' % (canonical_scheme, canonical_host)
-                        , permanent=True
-                         )
+        url = '%s://%s/' % (canonical_scheme, canonical_host)
+        print "redirecting to ", url
+        request.redirect(url, permanent=True)
 
 
 class MissedConnection:
