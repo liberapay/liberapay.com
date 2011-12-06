@@ -19,7 +19,8 @@ def canonize(request):
     host_bad = request.headers.one('Host') != canonical_host
     if scheme_bad or host_bad:
         url = '%s://%s/' % (canonical_scheme, canonical_host)
-        print "redirecting to ", url
+        old = '%s://%s/' % (request.urlparts.scheme, request.headers.one('Host'))
+        print "redirecting to ", url, "from", old
         request.redirect(url, permanent=True)
 
 
