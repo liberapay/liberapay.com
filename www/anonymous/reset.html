@@ -1,0 +1,25 @@
+import os
+from logstown import db
+^L
+
+fp = open(os.path.join(website.root, '..', 'logstown.sql'))
+SQL = ['']
+for line in fp:
+    line = line.strip('\n')
+    if line.startswith('--') or not line:
+        continue
+    SQL[-1] += line
+    if line.endswith(';'):
+        SQL.append('')
+
+for statement in SQL:
+    if not statement:
+        continue
+    with db.execute(statement) as cursor:
+        pass
+
+^L
+{% for line in SQL %}
+{{ line }}<br /><br />
+{% end %}
+Database reset.

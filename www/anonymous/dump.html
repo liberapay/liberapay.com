@@ -1,0 +1,13 @@
+from logstown import db
+
+^L
+
+with db.execute("SELECT * FROM users") as cursor:
+    foo = cursor
+
+^L
+{% for rec in foo %}
+{% for k,v in rec.items() %}
+<td>{{ v }}</td>
+{% end %}
+{% end %}
