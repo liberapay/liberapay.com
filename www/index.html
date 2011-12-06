@@ -15,23 +15,10 @@ if pmt is not None:
         </style>
     </head>
     <body>
-        <h1>Logstown Education Marketplace</h1>
-
-        <p>People paying people money.</p>
-
-        <h2>Pay money.</h2>
-        {% if pmt %}
-        <form action="/pay-money.html" method="POST">
-            <fieldset>
-                <input name="amount" type="text" />
-                <input type="submit" />
-            </fieldset>
-        </form>
-        {% else %}
-        <p style="color: red;">Enter payment details to make a payment.</p>
-        {% end %}
+        <h1>Logstown: People paying me money.</h1>
 
         <h2>What are your numbers and letters?</h2>
+
         <form action="https://api.samurai.feefighters.com/v1/payment_methods" method="POST">
             <input name="redirect_url" type="hidden" value="http://{{ request.headers.one('Host') }}/update-payment-method.html" />
             <input name="merchant_key" type="hidden" value="7b79175baca336eaf4bfe8c8" />
@@ -89,7 +76,7 @@ if pmt is not None:
 
 
             <br />
-            <input type="submit" value="Save Details" />
+            <input type="submit" value="Save and Proceed ..." />
         </form>
          
         </p>

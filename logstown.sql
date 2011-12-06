@@ -1,5 +1,4 @@
-DROP TABLE IF EXISTS users;
-
+DROP TABLE IF EXISTS users CASCADE;
 CREATE TABLE users (
     email                   varchar(255)    NOT NULL UNIQUE,
     hash                    char(40)        NOT NULL,
@@ -14,11 +13,9 @@ INSERT INTO users (email, hash)
 INSERT INTO users (email, hash) 
     VALUES ('christian@dowski.com', '657faae1aef3c3e7e806f8354a3e3f5b6839a76f');
 
---DROP ROLE logstown;
---CREATE ROLE logstown;
---ALTER ROLE logstown WITH LOGIN;
---ALTER ROLE logstown WITH PASSWORD 'blah';
---GRANT INSERT,SELECT,UPDATE,DELETE ON TABLE domains TO logstown;
---GRANT INSERT,SELECT,UPDATE,DELETE ON TABLE datasets TO logstown;
---GRANT SELECT,UPDATE ON TABLE datasets_id_seq TO logstown;
-
+DROP TABLE IF EXISTS payments;
+CREATE TABLE payments (
+    email   varchar(255)    REFERENCES users (email),
+    amount  int             NOT NULL,
+    ts      timestamp       NOT NULL DEFAULT 'now'
+);

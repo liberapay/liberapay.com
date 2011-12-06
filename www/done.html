@@ -1,0 +1,18 @@
+from samurai.processor import Processor
+from logstown import db
+
+
+^L
+email = request.user.session['email']
+pmt = request.user.session['payment_method_token']
+amount = int(request.body.one('amount'))
+Processor.purchase(pmt, amount)
+
+RECORD = "INSERT INTO payments (email, amount) VALUES (%s, %s)"
+with db.execute(RECORD, (email, amount,)):
+    pass
+
+^L
+<p>Congratulations! You have paid ${{ amount }}.</p>
+
+<p><a href="/pay-money.html">Pay more.</a></p>
