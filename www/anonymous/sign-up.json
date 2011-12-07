@@ -19,7 +19,7 @@ def plural(i):
 # =========================================================================== 
 
 email = request.body.one('email').strip()
-password = request.body.one('password').strip()
+password = request.body.one('password') # Don't strip!
 problem = ""
 
 if not problem:
@@ -35,10 +35,10 @@ if not problem:
         problem = "That doesn&rsquo;t look to me like an email address."
 
 if not problem:
-    pk = email.lower()
+    id = email.lower()
     hashed = hash(password)
     try:
-        db.execute(SIGN_UP, (pk, email, hashed))
+        db.execute(SIGN_UP, (id, email, hashed))
     except IntegrityError:
         problem = ("That email address is taken. You probably forgot your "
                    "password ... aaaaaand I can&rsquo;t help you yet. :-(")
