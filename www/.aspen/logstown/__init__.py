@@ -1,15 +1,19 @@
 import logging
 import os
 import urlparse
+from contextlib import contextmanager
 
 import psycopg2
 import psycopg2.extras
-import psycopg2.pool
+from psycopg2.pool import ThreadedConnectionPool as ConnectionPool
 import samurai.config
 
 
-log = logging.getLogger('logstown.db')
+log = logging.getLogger('logstown')
 
+
+# canonizer
+# =========
 
 class X: pass
 canonical_scheme = os.environ['CANONICAL_SCHEME']
@@ -30,36 +34,55 @@ def canonize(request):
     request.x.host = host
 
 
-class MissedConnection:
-    """This signals that a database connection was set to the empty string.
+# db
+# ==
+
+class PostgresConnection(psycopg2.extensions.connection):
+    """Subclass to change transaction behavior.
+
+    THE DBAPI 2.0 spec calls for transactions to be left open by default. I 
+    don't think we want this.
+
     """
-    def __repr__(self):
-        return "<MissedConnection>"
-MissedConnection = MissedConnection() # singleton
+
+    def __init__(self, *a, **kw):
+        psycopg2.extensions.connection.__init__(self, *a, **kw)
+        self.autocommit = True # override dbapi2 default
 
 class PostgresManager(object):
     """Manage connections to a PostgreSQL datastore. One per process.
     """
 
-    pool = None
-
     def __init__(self, connection_spec):
-        self.connection_spec = connection_spec
-        log.info('wiring up logstown.db: %s' % self.connection_spec)
-
-    def check_configuration(self):
-        if self.connection_spec is MissedConnection:
-            msg = "logstown.db is not configured."
-            raise RuntimeError(msg)
+        log.info('wiring up logstown.db: %s' % connection_spec)
+        self.pool = ConnectionPool( minconn=1
+                                  , maxconn=10
+                                  , dsn=connection_spec
+                                  , connection_factory=PostgresConnection
+                                   )
 
     def execute(self, *a, **kw):
-        """This is a convenience function.
+        """Execute the query and discard the results.
         """
-        if self.pool is None: # lazy
-            self.check_configuration()
-            # http://www.initd.org/psycopg/docs/pool.html
-            dsn = self.connection_spec
-            self.pool = psycopg2.pool.ThreadedConnectionPool(1, 10, dsn)
+        with self.get_cursor(*a, **kw) as cursor:
+            pass
+
+    def fetchone(self, *a, **kw):
+        """Execute the query and yield the results.
+        """
+        with self.get_cursor(*a, **kw) as cursor:
+            return cursor.fetchone()
+
+    def fetchall(self, *a, **kw):
+        """Execute the query and yield the results.
+        """
+        with self.get_cursor(*a, **kw) as cursor:
+            for row in cursor:
+                yield row
+
+    def get_cursor(self, *a, **kw):
+        """Execute the query and return a context manager wrapping the cursor.
+        """
         return PostgresContextManager(self.pool, *a, **kw)
 
 class PostgresContextManager:
@@ -86,17 +109,13 @@ class PostgresContextManager:
         """
         self.pool.putconn(self.conn)
 
-db = None 
-def startup(website):
-    """Set up db and cc.
+
+# wireup
+# ======
+
+def url_to_dsn(url):
+    """Heroku gives us an URL, psycopg2 wants a DSN. Convert!
     """
-
-    # Database
-    # ========
-    # Adapt from URL (per Heroku) to DSN (per psycopg2).
-
-    global db
-    url = os.environ['SHARED_DATABASE_URL']
     parsed = urlparse.urlparse(url)
     dbname = parsed.path[1:] # /foobar
     # Why is the user:pass not parsed!? Is the scheme unrecognized?
@@ -107,11 +126,16 @@ def startup(website):
         host, port = host.split(':')
     dsn = "dbname=%s user=%s password=%s host=%s port=%s"
     dsn %= (dbname, user, password, host, port)
+    return dsn
+
+db = None 
+def startup(website):
+    """Set up db and cc.
+    """
+    global db
+    url = os.environ['SHARED_DATABASE_URL']
+    dsn = url_to_dsn(url)
     db = PostgresManager(dsn)
-
-
-    # Samurai
-    # =======
 
     samurai.config.merchant_key = os.environ['SAMURAI_MERCHANT_KEY']
     samurai.config.merchant_password = os.environ['SAMURAI_MERCHANT_PASSWORD']

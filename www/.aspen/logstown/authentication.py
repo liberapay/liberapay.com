@@ -13,32 +13,30 @@ BEGINNING_OF_EPOCH = rfc822.formatdate(0)
 TIMEOUT = 60 * 60 * 24 * 7 # one week
 
 salt = "cheese and crackers" # XXX
+def hash(password):
+    return sha1(password + salt).hexdigest()
 
 SESSION = ("UPDATE users SET session_token=%s "
-           "WHERE email=%s AND hash=%s RETURNING *")
-def authenticate(email, password):
+           "WHERE id=%s AND hash=%s RETURNING *")
+def authenticate(id, password):
     from logstown import db
     token = str(uuid.uuid4())
-    hash = sha1(password + salt).hexdigest()
-    with db.execute(SESSION, (token, email, hash)) as cursor:
-        rec = cursor.fetchone()
-        if rec is not None:
-            assert rec['email'] == email # sanity
-            assert rec['hash'] == hash   # sanity
-            del rec['hash'] # safety
-            return rec
+    hashed = hash(password)
+    rec = db.fetchone(SESSION, (token, id, hashed))
+    if rec is not None:
+        del rec['hash'] # safety
+        return rec
     return {}
 
-TOKEN = ("SELECT email, teacher, session_token, session_expires, "
-         "payment_method_token FROM users WHERE session_token=%s")
+TOKEN = ("SELECT email, session_token, session_expires, payment_method_token "
+         "FROM users WHERE session_token=%s")
 def load_session(token):
     from logstown import db
-    with db.execute(TOKEN, (token,)) as cursor:
-        rec = cursor.fetchone()
-        if rec is not None:
-            assert rec['session_token'] == token # sanity
-            assert 'hash' not in rec # safety
-            return rec
+    rec = db.fetchone(TOKEN, (token,))
+    if rec is not None:
+        assert rec['session_token'] == token # sanity
+        assert 'hash' not in rec # safety
+        return rec
     return {}
 
 class User:

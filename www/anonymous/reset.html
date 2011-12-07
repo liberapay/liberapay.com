@@ -2,9 +2,12 @@ import os
 from logstown import db
 ^L
 
+# Convert from a .sql file to something I can feed in via psycopg2.
 fp = open(os.path.join(website.root, '..', 'logstown.sql'))
+raw = []
 SQL = ['']
 for line in fp:
+    raw.append(line)
     line = line.strip('\n')
     if line.startswith('--') or not line:
         continue
@@ -12,14 +15,14 @@ for line in fp:
     if line.endswith(';'):
         SQL.append('')
 
+# Feed into psycopg2.
 for statement in SQL:
     if not statement:
         continue
-    with db.execute(statement) as cursor:
-        pass
+    db.execute(statement)
 
+# Send it to the viewer.
 ^L
-{% for line in SQL %}
-{{ line }}<br /><br />
-{% end %}
-Database reset.
+<b>Database reset.</b>
+<pre>{{ ''.join(raw) }}
+</pre>

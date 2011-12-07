@@ -2,10 +2,8 @@ from logstown import db
 
 ^L
 
-with db.execute("SELECT * FROM users") as cursor:
-    users = cursor
-with db.execute("SELECT * FROM payments") as cursor:
-    payments = cursor
+users = db.fetchall("SELECT * FROM users")
+ledger = db.fetchall("SELECT * FROM ledger")
 
 ^L
 <h2>Payments</h2>
@@ -13,10 +11,10 @@ with db.execute("SELECT * FROM payments") as cursor:
     <tr>
         <th>email</th>
         <th>hash</th>
+        <th>id</th>
         <th>payment_method_token</th>
         <th>session_expires</th>
         <th>session_token</th>
-        <th>teacher</th>
     </tr>
 {% for rec in users %}
 <tr>
@@ -29,11 +27,12 @@ with db.execute("SELECT * FROM payments") as cursor:
 <h2>Payments</h2>
 <table>
     <tr>
+        <th>id</th>
+        <th>user_id</th>
         <th>amount</th>
-        <th>email</th>
         <th>timestamp</th>
     </tr>
-{% for rec in payments %}
+{% for rec in ledger %}
 <tr>
 {% for k,v in sorted(rec.items()) %}
 <td>{{ v }}</td>

@@ -64,12 +64,12 @@ Anon.errorMessage = function(msg)
                   .show();
 };
 
-Anon.success = function(info)
+Anon.success = function(response)
 {
-    console.log(info);
-    if (!info)
+    var problem = response.problem;
+    if (problem)
     {
-        Anon.errorMessage( "Sorry, those credentials are invalid.");
+        Anon.errorMessage(problem);
         Anon.enableSubmit();
     }
     else
@@ -84,32 +84,33 @@ Anon.success = function(info)
 
 Anon.error = function(a,b,c)
 {
-    Anon.errorMessage( "Sorry, a server error prevented us from logging you "
+    Anon.errorMessage( "Sorry, a server error prevented us from signing you "
                      + "in. Please try again later.");
     Anon.enableSubmit();
     console.log(a,b,c);
 };
 
-Anon.disableSubmit = function()
+Anon.disableSubmit = function(which)
 {
-    $('#submit').attr('disabled', 'true');
-    $('#submit').val('Logging in ...');
+    $('.submit').attr('disabled', 'true');
+    $('#sign-'+which).val('Signing ' + which + ' ...');
+    $('I').css('-webkit-transform', 'rotate(120deg)');
 };
 
-Anon.enableSubmit = function()
+Anon.enableSubmit = function(which)
 {
-    $('#submit').removeAttr('disabled');
-    $('#submit').val('Login');
+    $('.submit').removeAttr('disabled');
+    $('#sign-'+which).val('Sign ' + which);
 };
 
-Anon.authenticate = function()
+Anon.submit = function(e)
 {
-    Anon.disableSubmit(); 
+    Anon.disableSubmit();
     var data = {}
     data.email = $('[name=email]').val();
     data.password = $('[name=password]').val();
     jQuery.ajax(
-        { url: $('FORM').attr('action')
+        { url: "/anonymous/" + $(e.target).attr('id') + ".json"
         , type: "POST"
         , data: data
         , dataType: 'json'
@@ -129,5 +130,11 @@ Anon.main = function()
     Anon.resize()
     $(window).resize(Anon.resize);
     $('.start-here').focus();
-    $('FORM').submit(Anon.authenticate);
+    $('FORM').submit(function(e) { 
+        // Why use a FORM at all?
+        e.preventDefault();
+        e.stopPropagation();
+        return false; 
+    });
+    $('.submit').click(Anon.submit);
 };

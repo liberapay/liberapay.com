@@ -9,6 +9,7 @@ BODY {
     /* http://www.backgroundcity.com/groups/gfiles/g4/g4wd14.gif */
     background: url("/anonymous/bg.gif") repeat;
     text-align: center;
+    color: #301403;
 }
 
 #floater {
@@ -20,7 +21,7 @@ BODY {
 #wrapper {
     background: white;
     padding: 40px;
-    border: 2px solid black;
+    border: 2px solid #301403;
     border-radius: 3px;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
@@ -38,11 +39,17 @@ H2 {
     font: normal 36pt/36pt "Cabin Sketch", sans-serif;
 }
 
+INPUT {
+    color: #301403;
+} 
 FORM INPUT#email, FORM INPUT#password {
     width: 304px;
     border: 1px solid #999;
     padding: 5px;
     font: 16pt/20pt Cabin, sans-serif;
+}
+FORM INPUT#password{
+    letter-spacing: 0.5em;
 }
 #feedback {
     padding: 10px 10px 10px 30px;
@@ -77,7 +84,7 @@ P IMG {
     text-align: right;
     margin: 1em 0;
 }
-INPUT#submit {
+INPUT.submit {
     font: 12pt/16pt Cabin, sans-serif;
     padding: 6px 10px;
     -webkit-border-radius: 3px 3px;
@@ -88,7 +95,7 @@ INPUT#submit {
                                 , from(rgb(255, 255, 255))
                                 , to(rgb(221, 221, 221))
                                  );
-    color: #333;
+    color: #301403;
     text-decoration: none;
     cursor: pointer;
     display: inline-block;

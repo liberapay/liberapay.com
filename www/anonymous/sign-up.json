@@ -1,0 +1,55 @@
+"""Given a email and password, return a boolean.
+"""
+import re
+
+from logstown import db
+from logstown.authentication import authenticate, hash, sessions, User
+from psycopg2 import IntegrityError
+
+
+# http://www.regular-expressions.info/email.html
+EMAIL = re.compile('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}')
+SIGN_UP = "INSERT INTO users (id, email, hash) VALUES (%s, %s, %s)"
+DIGITS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven',
+          'eight', 'nine']
+
+def plural(i):
+    return "s" if i != 1 else ""
+
+# =========================================================================== 
+
+email = request.body.one('email').strip()
+password = request.body.one('password').strip()
+problem = ""
+
+if not problem:
+    npassword = len(password)
+    if npassword < 6:
+        short = 6 - npassword
+        problem = ("Sorry, your password must be at least six characters long."
+                   " You need %s more character%s.")
+        problem %= DIGITS[short], plural(short)
+
+if not problem:
+    if EMAIL.match(email) is None:
+        problem = "That doesn&rsquo;t look to me like an email address."
+
+if not problem:
+    pk = email.lower()
+    hashed = hash(password)
+    try:
+        db.execute(SIGN_UP, (pk, email, hashed))
+    except IntegrityError:
+        problem = ("That email address is taken. You probably forgot your "
+                   "password ... aaaaaand I can&rsquo;t help you yet. :-(")
+
+
+# Let them in.
+# ============
+
+session = {}
+if email is not None:
+    session = authenticate(email, password)
+
+request.user = User(session)
+response.body = {"problem": problem}
