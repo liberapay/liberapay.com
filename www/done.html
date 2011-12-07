@@ -8,11 +8,14 @@ pmt = request.user.session['payment_method_token']
 amount = int(request.body.one('amount'))
 Processor.purchase(pmt, amount)
 
-RECORD = "INSERT INTO payments (email, amount) VALUES (%s, %s)"
-with db.execute(RECORD, (email, amount,)):
-    pass
+RECORD = "INSERT INTO transactions (email, amount) VALUES (%s, %s)"
+db.execute(RECORD, (email, amount,))
 
 ^L
-<p>Congratulations! You have paid ${{ amount }}.</p>
+{% extends "base.html" %}
+{% block content %}
+<h2>Thank you!</h2>
+<p>You have paid ${{ amount }}.</p>
 
-<p><a href="/pay-money.html">Pay more.</a></p>
+<p><a href="/pay-money.html">Pay more</a>.</p>
+{% end %}

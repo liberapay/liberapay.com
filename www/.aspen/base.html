@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Logstown</title>
+        <style>@import url("/assets/logstown.css");</style>
+        {% block head %}{% end %}
+    </head>
+    <body>
+        <div id="content">
+            <h1><a href="/">Logstown.com</a></h1>
+            
+            <div id="signed">Signed in as <b>{{ request.user.session['email'] }}</b>. 
+                <a href="/sign/out.html">Sign out</a></div>
+
+            {% block content %}{% end %}
+        </div>
+    </body>
+</html>

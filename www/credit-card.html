@@ -1,0 +1,86 @@
+from samurai.payment_method import PaymentMethod
+^L
+pmt = request.user.session['payment_method_token']
+if pmt is not None:
+    pmt = PaymentMethod.find(pmt)
+^L
+{% extends "base.html" %}
+{% block head %}
+    <script type="text/javascript" src="https://samurai.feefighters.com/assets/api/samurai.js"></script>
+    <script type="text/javascript">
+        Samurai.init({
+            merchant_key: 'your-merchant-key',
+            sandbox: true
+        });
+    </script>
+{% end %}
+
+
+{% block content %}
+<h2>Credit Card on File</h2>
+
+<!--
+<div data-samurai-payment-form class="samurai-standard samurai-placeholders"></div>
+-->
+
+<form action="https://api.samurai.feefighters.com/v1/payment_methods" method="POST">
+    <input name="redirect_url" type="hidden" value="{{ request.x.scheme }}://{{ request.x.host }}/update-payment-method.html" />
+    <input name="merchant_key" type="hidden" value="7b79175baca336eaf4bfe8c8" />
+    <input name="sandbox" type="hidden" value="true" />
+    {% if pmt %}
+    <input name="payment_method_token" type="hidden" value="{{ pmt.payment_method_token }}" />
+    {% end %}
+    
+
+    <!-- Before populating the ‘custom’ parameter, remember to escape reserved characters
+         like <, > and & into their safe counterparts like &lt;, &gt; and &amp; -->
+    <input name="custom" type="hidden" value="" />
+
+    <label for="credit_card_first_name">First name</label>
+    <input id="credit_card_first_name" name="credit_card[first_name]" 
+        type="text" {% if pmt %}value="{{ pmt.first_name }}"{% end %} />
+
+    <label for="credit_card_last_name">Last name</label>
+    <input id="credit_card_last_name" name="credit_card[last_name]" 
+        type="text" {% if pmt %}value="{{ pmt.last_name }}"{% end %} />
+
+    <label for="credit_card_address_1">Address 1</label>
+    <input id="credit_card_address_1" name="credit_card[address_1]" 
+        type="text" {% if pmt %}value="{{ pmt.address_1 }}"{% end %} />
+
+    <label for="credit_card_address_2">Address 2</label>
+    <input id="credit_card_address_2" name="credit_card[address_2]" 
+        type="text" {% if pmt %}value="{{ pmt.address_2 }}"{% end %} />
+
+    <label for="credit_card_city">City</label>
+    <input id="credit_card_city" name="credit_card[city]" 
+        type="text" {% if pmt %}value="{{ pmt.city }}"{% end %} />
+
+    <label for="credit_card_state">State</label>
+    <input id="credit_card_state" name="credit_card[state]" 
+        type="text" {% if pmt %}value="{{ pmt.state }}"{% end %} />
+
+    <label for="credit_card_zip">Zip</label>
+    <input id="credit_card_zip" name="credit_card[zip]" 
+    type="text" {% if pmt %}value="{{ pmt.zip }}"{% end %} />
+
+    <label for="credit_card_number">Card Number</label>
+    <input id="credit_card_number" name="credit_card[card_number]" 
+    type="text" {% if pmt %}value="************{{ pmt.last_four_digits }}"{% end %} />
+
+    <label for="credit_card_cvv">Security Code</label>
+    <input id="credit_card_cvv" name="credit_card[cvv]" 
+    type="text" />
+
+    <label for="credit_card_month">Expires on</label>
+    <input id="credit_card_month" name="credit_card[expiry_month]" 
+        type="text" {% if pmt %}value="{{ pmt.expiry_month }}"{% end %} />
+    <input id="credit_card_year" name="credit_card[expiry_year]" 
+        type="text" {% if pmt %}value="{{ pmt.expiry_year }}"{% end %} />
+
+    <br />
+    <input type="submit" value="Save and Proceed ..." />
+</form>
+
+{% end %}
+

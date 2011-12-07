@@ -4,8 +4,7 @@ pmt = request.qs.one('payment_method_token')
 session_token = request.user.session['session_token']
 
 PMT = "UPDATE users SET payment_method_token=%s WHERE session_token=%s"
-with db.execute(PMT, (pmt, session_token,)) as cursor:
-    pass
+db.execute(PMT, (pmt, session_token,))
 
 request.redirect('/pay-money.html')
 ^L

@@ -9,7 +9,7 @@ from psycopg2 import IntegrityError
 
 # http://www.regular-expressions.info/email.html
 EMAIL = re.compile('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}')
-SIGN_UP = "INSERT INTO users (id, email, hash) VALUES (%s, %s, %s)"
+SIGN_UP = "INSERT INTO users (email, hash) VALUES (%s, %s)"
 DIGITS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven',
           'eight', 'nine']
 
@@ -18,27 +18,30 @@ def plural(i):
 
 # =========================================================================== 
 
-email = request.body.one('email').strip()
+email = request.body.one('email').strip().lower()
 password = request.body.one('password') # Don't strip!
 problem = ""
 
 if not problem:
-    npassword = len(password)
-    if npassword < 6:
-        short = 6 - npassword
+    if len(password) < 6:
+        short = 6 - len(password)
         problem = ("Sorry, your password must be at least six characters long."
                    " You need %s more character%s.")
         problem %= DIGITS[short], plural(short)
+
+if not problem:
+    if len(email) > 64:
+        problem = ("Sorry, we won't take an email address longer than 64 "
+                   "characters. Yours is %d." % len(email))
 
 if not problem:
     if EMAIL.match(email) is None:
         problem = "That doesn&rsquo;t look to me like an email address."
 
 if not problem:
-    id = email.lower()
     hashed = hash(password)
     try:
-        db.execute(SIGN_UP, (id, email, hashed))
+        db.execute(SIGN_UP, (email, hashed))
     except IntegrityError:
         problem = ("That email address is taken. You probably forgot your "
                    "password ... aaaaaand I can&rsquo;t help you yet. :-(")

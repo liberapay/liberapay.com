@@ -3,15 +3,14 @@ from logstown import db
 ^L
 
 users = db.fetchall("SELECT * FROM users")
-ledger = db.fetchall("SELECT * FROM ledger")
+transactions = db.fetchall("SELECT * FROM transactions")
 
 ^L
-<h2>Payments</h2>
+<h2>Users</h2>
 <table>
     <tr>
         <th>email</th>
         <th>hash</th>
-        <th>id</th>
         <th>payment_method_token</th>
         <th>session_expires</th>
         <th>session_token</th>
@@ -24,7 +23,7 @@ ledger = db.fetchall("SELECT * FROM ledger")
 {% end %}
 </table>
 
-<h2>Payments</h2>
+<h2>Transactions</h2>
 <table>
     <tr>
         <th>id</th>
@@ -32,7 +31,7 @@ ledger = db.fetchall("SELECT * FROM ledger")
         <th>amount</th>
         <th>timestamp</th>
     </tr>
-{% for rec in ledger %}
+{% for rec in transactions %}
 <tr>
 {% for k,v in sorted(rec.items()) %}
 <td>{{ v }}</td>

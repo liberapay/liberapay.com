@@ -1,0 +1,129 @@
+@import url(https://fonts.googleapis.com/css?family=Cabin:400,500,600,700,400italic,500italic,600italic,700italic);
+@import url(https://fonts.googleapis.com/css?family=Cabin+Sketch:400);
+@import url("/assets/reset.css");
+
+
+LABEL {
+    display: block;
+}
+
+
+BODY {
+    margin: 0;
+    padding: 0;
+    font: normal 12pt/16pt Cabin, sans-serif;
+    /* http://www.backgroundcity.com/groups/gfiles/g4/g4wd14.gif */
+    background: url("/anonymous/bg.gif") repeat;
+    color: #301403;
+}
+
+#content {
+    position: relative;
+    background: white;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border: 2px solid #301403;
+    margin: 20px auto;
+    padding: 40px;
+    width: 800px;
+    
+}
+
+H1 {
+    margin: 0;
+    padding: 0 0 0.5em 0;
+    line-height: 100%;
+    font: normal 36pt/36pt "Cabin Sketch", sans-serif;
+}
+H1 A {
+    text-decoration: none;
+    color: #301403;
+}
+#signed {
+    position: absolute;
+    top: 50px;
+    right: 40px; 
+}
+H2 {
+    font-size: 24pt;
+    line-height: 24pt; 
+    font-weight: 700;
+    margin: 0 0 0.5em;
+    padding: 0;
+}
+H3 {
+    margin: 0;
+    padding: 1em 0 0.5em;
+    color: #615C4C;
+}
+H3.year {
+    margin: 0;
+    padding: 11px 0 0;
+    float: left;
+    text-align: right;
+    width: 64px;
+    margin-left: -18px;
+}
+H3 A {
+    display: none;
+}
+H3:hover A {
+    display: inline;
+}
+.posts {
+    padding: 10px 0 0 64px;
+}
+.nav {
+    margin: 0;
+    padding: 0;
+}
+.hr {
+    padding: 10px 0;
+    clear: both;
+}
+A IMG {
+    border: none;
+}
+.sidebar {
+    float: right;
+    width: 360px;
+    font-size: 10pt;
+    line-height: 12pt;
+}
+.sidebar-padding {
+    margin: 20px 0 10px 30px;
+    border-left: 2px solid #CCC;
+}
+.sidebar P {
+    margin: 5px 0 0 30px;
+    font-style: italic;
+}
+.sidebar IMG {
+    display: block;
+    margin: 0 5px 0 30px;
+}
+@media screen and (max-width: 900px) {
+    DIV#post {
+        width: auto;
+    }
+    
+    .sidebar, .midbar {
+        float: none;
+        width: auto;
+        text-align: center;
+    }
+    .sidebar-padding, .midbar {
+        border: 2px solid #CCC;
+        border-style: solid none;
+        padding: 20px;
+        margin: 0;
+    }
+    .sidebar IMG {
+        margin: 0 auto;
+    }
+    .midbar IMG {
+        margin: 0 auto;
+        width: 300px;
+    }
+}

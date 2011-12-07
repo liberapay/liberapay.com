@@ -1,8 +1,22 @@
-<h2>Pay money.</h2>
-<p style="color: green;">Pay me money.</p>
+pmt = request.user.session['payment_method_token']
+if not pmt:
+    request.redirect('/credit-card.html')
+^L
+{% extends "base.html" %}
+{% block head %}
+<style>
+    #amount {
+        text-align: right;
+        width: 50px;
+    }
+</style>
+{% end %}
+{% block content %}
+<h2>Pay Money</h2>
 <form action="/done.html" method="POST">
     <fieldset>
-        $<input name="amount" type="text" />.00
+        $<input name="amount" type="text" id="amount" />.00
         <input type="submit" />
     </fieldset>
 </form>
+{% end %}
