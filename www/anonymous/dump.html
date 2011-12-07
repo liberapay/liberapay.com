@@ -26,9 +26,9 @@ transactions = db.fetchall("SELECT * FROM transactions")
 <h2>Transactions</h2>
 <table>
     <tr>
-        <th>id</th>
-        <th>user_id</th>
         <th>amount</th>
+        <th>email</th>
+        <th>id</th>
         <th>timestamp</th>
     </tr>
 {% for rec in transactions %}
