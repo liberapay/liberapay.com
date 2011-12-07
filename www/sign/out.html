@@ -7,6 +7,5 @@ token = request.user.session.get('token')
 if token:
     db.execute(LOGOUT, (token,))
 request.user.session = {}
-referer = request.headers.one('Referer', '/').split(', ')[0] # ???
-response = Response(302, headers={'Location': referer})
+response = Response(302, headers={'Location': '/'})
 
