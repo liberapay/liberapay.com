@@ -26,12 +26,6 @@ BODY {
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
 }
-#form {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    width: 316px;
-}
 H2 {
     margin: 0;
     padding: 0 0 0.5em 0;
@@ -42,13 +36,13 @@ H2 {
 INPUT {
     color: #301403;
 } 
-FORM INPUT#email, FORM INPUT#password {
+INPUT#email, INPUT#password {
     width: 304px;
     border: 1px solid #999;
     padding: 5px;
     font: 16pt/20pt Cabin, sans-serif;
 }
-FORM INPUT#password{
+INPUT#password{
     letter-spacing: 0.5em;
 }
 #feedback {
@@ -103,8 +97,8 @@ INPUT.submit {
     text-shadow: 0px 1px 1px rgba(255,255,255,1);
     line-height: 1;
 }
-#sign-up:hover { color: black; }
-#sign-in:hover { color: #1E8235 ; }
+#sign-up:hover, #sign-up.focused { color: black; }
+#sign-in:hover, #sign-in.focused { color: #1E8235 ; }
 #sign-in {
     color: white;
     border-color: #1E8235;

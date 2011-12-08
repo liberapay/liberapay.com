@@ -52,23 +52,22 @@ if request.method != 'GET':
             <div id="wrapper">
                 <div id="form">
                     <h2>Logstown.com</h2>
-                    <form method="POST" action="/anonymous/authenticate.json">
-                        <div id="feedback"></div>
-                        <label for="email">Email</label>
-                        <input class="start-here text" id="email" 
-                            name="email" tabindex="1" />
-                        
-                        <label for="password">Password</label>
-                        <input type="password" name="password" 
-                            id="password" class="text" tabindex="2" />
+                    <div id="feedback"></div>
+                    <label for="email">Email</label>
+                    <input class="start-here text" id="email" 
+                        name="email" tabindex="1" />
+                    
+                    <label for="password">Password</label>
+                    <input type="password" name="password" 
+                        id="password" class="text" tabindex="2" />
 
-                        <div id="submit-button"> 
-                            <input type="submit" class="submit" id="sign-up"
-                                value="Sign Up" tabindex="4" />
-                            <i>- or -</i>
-                            <input type="submit" class="submit" id="sign-in"
-                                value="Sign In" tabindex="3" />
-                        </div>
+                    <div id="submit-button"> 
+                        <input type="submit" class="submit" id="sign-up"
+                            value="Sign Up" tabindex="4" />
+                        <i>- or -</i>
+                        <input type="submit" class="submit" id="sign-in"
+                            value="Sign In" tabindex="3" />
+                    </div>
                     </form>
                 </div>
                 <div id="footer">

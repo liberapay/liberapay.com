@@ -131,15 +131,14 @@ Anon.main = function()
     Anon.resize()
     $(window).resize(Anon.resize);
     $('.start-here').focus();
-    $('FORM').submit(function(e) { 
-        // Why use a FORM at all?
-        e.preventDefault();
-        e.stopPropagation();
-        return false; 
-    });
-    $('FORM').keyup(function(e) {
+    $('INPUT').keyup(function(e) 
+    {
         if (e.which === 13) // default to sign-in when the user hits enter
             Anon.submit({target: $('#sign-in').get(0)});
     });
     $('.submit').click(Anon.submit);
+    $('#sign-up').focus(function (e) { $(e.target).addClass('focused') });
+    $('#sign-up').blur(function (e) { $(e.target).removeClass('focused') });
+    $('#sign-in').focus(function (e) { $(e.target).addClass('focused') });
+    $('#sign-up').blur(function (e) { $(e.target).removeClass('focused') });
 };
