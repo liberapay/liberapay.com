@@ -94,7 +94,6 @@ Anon.disableSubmit = function(which)
 {
     $('.submit').attr('disabled', 'true');
     $('#sign-'+which).val('Signing ' + which + ' ...');
-    $('I').css('-webkit-transform', 'rotate(120deg)');
 };
 
 Anon.enableSubmit = function(which)
@@ -105,10 +104,12 @@ Anon.enableSubmit = function(which)
 
 Anon.submit = function(e)
 {
+    console.log(e);
     Anon.disableSubmit();
     var data = {}
     data.email = $('[name=email]').val();
     data.password = $('[name=password]').val();
+    console.log($(e.target).attr('id'));
     jQuery.ajax(
         { url: "/anonymous/" + $(e.target).attr('id') + ".json"
         , type: "POST"
@@ -135,6 +136,10 @@ Anon.main = function()
         e.preventDefault();
         e.stopPropagation();
         return false; 
+    });
+    $('FORM').keyup(function(e) {
+        if (e.which === 13) // default to sign-in when the user hits enter
+            Anon.submit({target: $('#sign-in').get(0)});
     });
     $('.submit').click(Anon.submit);
 };

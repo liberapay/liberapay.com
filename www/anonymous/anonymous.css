@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css?family=Cabin:400,500,600,700,400italic,500italic,600italic,700italic);
+@import url(https://fonts.googleapis.com/css?family=Cabin:400,700,400italic,700italic);
 @import url(https://fonts.googleapis.com/css?family=Cabin+Sketch:400);
 
 
@@ -85,23 +85,36 @@ P IMG {
     margin: 1em 0;
 }
 INPUT.submit {
-    font: 12pt/16pt Cabin, sans-serif;
-    padding: 6px 10px;
+    font: 12pt/12pt Cabin, sans-serif;
+    padding: 6px 10px 9px;
     -webkit-border-radius: 3px 3px;
-    border: solid 1px rgb(153, 153, 153);
+    border: solid 1px #999;
     background: -webkit-gradient( linear
                                 , 0% 0%
                                 , 0% 100%
                                 , from(rgb(255, 255, 255))
                                 , to(rgb(221, 221, 221))
                                  );
-    color: #301403;
+    color: #999;
     text-decoration: none;
     cursor: pointer;
     display: inline-block;
     text-align: center;
     text-shadow: 0px 1px 1px rgba(255,255,255,1);
     line-height: 1;
+}
+#sign-up:hover { color: black; }
+#sign-in:hover { color: #1E8235 ; }
+#sign-in {
+    color: white;
+    border-color: #1E8235;
+    background: -webkit-gradient( linear
+                                , 0% 0%
+                                , 0% 100%
+                                , from(rgb(177, 219, 179))
+                                , to(rgb(30, 130, 53))
+                                 );
+    text-shadow: 0px 1px 1px rgba(30:e ~/,219,255,1);
 }
 
 #footer {
