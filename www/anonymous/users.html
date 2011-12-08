@@ -1,0 +1,7 @@
+from logstown import db
+^L
+users = db.fetchall("SELECT email FROM users") 
+^L
+{% for user in users %}
+{{ user['email'] }}<br />
+{% end %}
