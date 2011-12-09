@@ -50,18 +50,18 @@ Anon.resize = function()
 
 Anon.successMessage = function(msg)
 {
-    $('#feedback').removeClass('error')
-                  .addClass('success')
-                  .html(msg)
-                  .show();
+    Anon.feedback.removeClass('error')
+                 .addClass('success')
+                 .html(msg)
+                 .show();
 };
 
 Anon.errorMessage = function(msg)
 {
-    $('#feedback').removeClass('success')
-                  .addClass('error')
-                  .html(msg)
-                  .show();
+    Anon.feedback.removeClass('success')
+                 .addClass('error')
+                 .html(msg)
+                 .show();
 };
 
 Anon.success = function(response)
@@ -136,6 +136,7 @@ Anon.toggleState = function(e)
     e.stopPropagation();
     e.preventDefault();
 
+    Anon.feedback.hide(50);
     if (Anon.other.text() === 'Register')
     {
         Anon.confirmBox.show(100);
@@ -173,12 +174,13 @@ Anon.main = function()
     Anon.resize()
     $(window).resize(Anon.resize);
 
-    Anon.first = $('.start-here');
-    Anon.submit = $('#submit');
-    Anon.other = $('#other');
-    Anon.form = $('FORM');
-    Anon.help = $('LABEL I');
     Anon.confirmBox = $('#confirm-box');
+    Anon.help = $('LABEL I');
+    Anon.feedback = $('#feedback');
+    Anon.first = $('.start-here');
+    Anon.form = $('FORM');
+    Anon.other = $('#other');
+    Anon.submit = $('#submit');
 
     Anon.first.focus();
     Anon.form.submit(Anon.submitForm);
