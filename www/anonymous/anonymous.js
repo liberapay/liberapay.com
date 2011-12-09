@@ -99,17 +99,18 @@ Anon.disableSubmit = function(which)
 Anon.enableSubmit = function(which)
 {
     $('.submit').removeAttr('disabled');
-    $('#sign-'+which).val('Sign ' + which);
+    $('#sign-up').val('Sign Up');
+    $('#sign-in').val('Sign In');
 };
 
 Anon.submit = function(e)
 {
-    console.log(e);
-    Anon.disableSubmit();
+    var which = $(e.target).attr('id').replace('sign-', '');
+    Anon.disableSubmit(which);
+
     var data = {}
     data.email = $('[name=email]').val();
     data.password = $('[name=password]').val();
-    console.log($(e.target).attr('id'));
     jQuery.ajax(
         { url: "/anonymous/" + $(e.target).attr('id') + ".json"
         , type: "POST"
@@ -140,5 +141,13 @@ Anon.main = function()
     $('#sign-up').focus(function (e) { $(e.target).addClass('focused') });
     $('#sign-up').blur(function (e) { $(e.target).removeClass('focused') });
     $('#sign-in').focus(function (e) { $(e.target).addClass('focused') });
-    $('#sign-up').blur(function (e) { $(e.target).removeClass('focused') });
+    $('#sign-in').blur(function (e) { $(e.target).removeClass('focused') });
+    $('#sign-up').keyup(function (e) { 
+        if (e.which === 13)
+        {
+            e.preventDefault(); 
+            e.stopPropagation(); 
+            Anon.submit({target: $('#sign-up').get(0)});
+        }
+    });
 };
