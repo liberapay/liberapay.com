@@ -134,20 +134,16 @@ Anon.main = function()
     $('.start-here').focus();
     $('INPUT').keyup(function(e) 
     {
-        if (e.which === 13) // default to sign-in when the user hits enter
-            Anon.submit({target: $('#sign-in').get(0)});
+        if (e.which === 13)
+            if (!$(e.target).hasClass('submit'))
+            {   // Capture enter/return on the form, and default to sign in.
+                e.target = $('#sign-in').get(0);
+                Anon.submit(e);
+            }
     });
     $('.submit').click(Anon.submit);
     $('#sign-up').focus(function (e) { $(e.target).addClass('focused') });
     $('#sign-up').blur(function (e) { $(e.target).removeClass('focused') });
     $('#sign-in').focus(function (e) { $(e.target).addClass('focused') });
     $('#sign-in').blur(function (e) { $(e.target).removeClass('focused') });
-    $('#sign-up').keyup(function (e) { 
-        if (e.which === 13)
-        {
-            e.preventDefault(); 
-            e.stopPropagation(); 
-            Anon.submit({target: $('#sign-up').get(0)});
-        }
-    });
 };
