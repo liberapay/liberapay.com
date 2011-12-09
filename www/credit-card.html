@@ -58,6 +58,9 @@ def gen_months():
                )
 
 def gen_years():
+    # XXX Make this smarter to extend the range to include the users's actual 
+    # year (their card expires in 2011 and they don't login again until 2012, 
+    # e.g.)
     this_year = datetime.datetime.now().year
     for year in range(this_year, this_year + 5):
         target = get('expiry_year') # returns int
