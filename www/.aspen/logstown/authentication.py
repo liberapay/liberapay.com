@@ -12,30 +12,42 @@ sessions = {}
 BEGINNING_OF_EPOCH = rfc822.formatdate(0)
 TIMEOUT = 60 * 60 * 24 * 7 # one week
 
-salt = "cheese and crackers" # XXX
+# XXX We have users using this salt, but really it should be stronger, and
+# not stored in code. Idea: add a second salt, and mark in the db whether to
+# use both salts for a given user. Or ask existing users to change their 
+# password.
+salt = "cheese and crackers" 
+
 def hash(password):
     return sha1(password + salt).hexdigest()
 
-SESSION_NEW = ("UPDATE users SET session_token=%s "
-               "WHERE email=%s AND hash=%s RETURNING *")
-def authenticate(email, password):
+def authentic(email, password):
     from logstown import db
+    SQL = ("SELECT email FROM users WHERE email=%s AND hash=%s")
+    hashed = hash(password)
+    rec = db.fetchone(SQL, (email, hashed))
+    return rec is not None
+
+def sign_in(email, password):
+    from logstown import db
+    SQL = ("UPDATE users SET session_token=%s "
+           "WHERE email=%s AND hash=%s RETURNING *")
     token = str(uuid.uuid4())
     hashed = hash(password)
-    rec = db.fetchone(SESSION_NEW, (token, email, hashed))
+    rec = db.fetchone(SQL, (token, email, hashed))
     if rec is not None:
         del rec['hash'] # safety
         return rec
     return {}
 
-SESSION_LOAD = """\
-    SELECT email, session_token, session_expires, payment_method_token 
-      FROM users
-     WHERE session_token=%s
-"""
 def load_session(token):
     from logstown import db
-    rec = db.fetchone(SESSION_LOAD, (token,))
+    SQL = """\
+        SELECT email, session_token, session_expires, payment_method_token 
+          FROM users
+         WHERE session_token=%s
+    """
+    rec = db.fetchone(SQL, (token,))
     if rec is not None:
         assert rec['session_token'] == token # sanity
         assert 'hash' not in rec # safety

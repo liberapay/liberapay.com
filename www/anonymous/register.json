@@ -1,20 +1,11 @@
 """Given a email and password, return a boolean.
 """
-import re
-
-from logstown import db
-from logstown.authentication import authenticate, hash, sessions, User
+from logstown import db, validate
+from logstown.authentication import sign_in, hash, sessions, User
 from psycopg2 import IntegrityError
 
 
-# http://www.regular-expressions.info/email.html
-EMAIL = re.compile('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}')
 SIGN_UP = "INSERT INTO users (email, hash) VALUES (%s, %s)"
-DIGITS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven',
-          'eight', 'nine']
-
-def plural(i):
-    return "s" if i != 1 else ""
 
 # =========================================================================== 
 
@@ -23,54 +14,20 @@ password = request.body.one('password') # Don't strip!
 confirm = request.body.one('confirm') # Don't strip!
 problem = ""
 
-
-# Email
-# =====
-
-if not email:
-    problem = ("Um, did you enter an email address?")
-
 if not problem:
-    if len(email) > 64:
-        problem = ("Sorry, we won't take an email address longer than 64 "
-                   "characters. Yours is %d." % len(email))
-
+    problem = validate.email(email)
 if not problem:
-    if EMAIL.match(email) is None:
-        problem = "That doesn&rsquo;t look to me like an email address."
-
-
-# Password
-# ========
-
-if not problem:
-    if len(password) < 6:
-        short = 6 - len(password)
-        problem = ("Sorry, your password must be at least six characters long."
-                   " You need %s more character%s.")
-        problem %= DIGITS[short], plural(short)
-
-if not problem:
-    if password != confirm:
-        problem = "Sorry, the passwords you entered don&rsquo;t match."
-
+    problem = validate.password(password, confirm)
 if not problem:
     hashed = hash(password)
     try:
         db.execute(SIGN_UP, (email, hashed))
     except IntegrityError:
-        problem = ("That email address is taken. You maybe forgot your "
-                   "password ... aaaaaand I can&rsquo;t help you yet. :-(")
-
-
-# Let them in.
-# ============
-
+        problem = ("That email address is already registered. You maybe forgot"
+                   " your password ... aaaaaand I can&rsquo;t help you yet. "
+                   ":-(")
 if not problem:
-    session = {}
-    if email is not None:
-        session = authenticate(email, password)
-
+    session = sign_in(email, password) # bug if it fails
     request.user = User(session)
 
 

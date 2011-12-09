@@ -1,7 +1,6 @@
 """Given a email and password, return a boolean.
 """
-from logstown.authentication import authenticate, sessions, User
-
+from logstown.authentication import sign_in, sessions, User
 
 # =========================================================================== 
 
@@ -11,7 +10,7 @@ problem = ""
 
 session = {}
 if email is not None:
-    session = authenticate(email, password)
+    session = sign_in(email, password)
 if not session:
     problem = "Sorry, those credentials are invalid."
 
