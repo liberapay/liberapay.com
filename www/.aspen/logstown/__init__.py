@@ -4,9 +4,9 @@ import urlparse
 from contextlib import contextmanager
 
 import psycopg2
-import psycopg2.extras
-from psycopg2.pool import ThreadedConnectionPool as ConnectionPool
 import samurai.config
+from psycopg2.extras import RealDictCursor
+from psycopg2.pool import ThreadedConnectionPool as ConnectionPool
 
 
 log = logging.getLogger('logstown')
@@ -99,9 +99,14 @@ class PostgresContextManager:
         """Get a connection from the pool.
         """
         self.conn = self.pool.getconn()
-        cursor_factory = psycopg2.extras.RealDictCursor
-        cursor = self.conn.cursor(cursor_factory=cursor_factory)
-        cursor.execute(*self.a, **self.kw)
+        try:
+            cursor = self.conn.cursor(cursor_factory=RealDictCursor)
+            cursor.execute(*self.a, **self.kw)
+        finally:
+            # If we get an exception here (like, the query fails: pretty
+            # common), then the __exit__ clause is not triggered. We trigger it
+            # ourselves to avoid draining the pool.
+            self.__exit__()
         return cursor
 
     def __exit__(self, *a, **kw):
