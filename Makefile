@@ -17,6 +17,7 @@ run: env
 	SAMURAI_MERCHANT_KEY="7b79175baca336eaf4bfe8c8" \
 	SAMURAI_MERCHANT_PASSWORD="3d6b8ad3b16d8c538c9189a0" \
 	SAMURAI_PROCESSOR_TOKEN="4620d34456c7de7bab7f3a13" \
+	SAMURAI_SANDBOX="true" \
 	CANONICAL_HOST=localhost \
 	CANONICAL_SCHEME=http \
 		sudo -E ./env/bin/thrash ./env/bin/aspen -vDEBUG -a:80 www/

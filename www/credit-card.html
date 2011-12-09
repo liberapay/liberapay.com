@@ -93,8 +93,10 @@ card.</p>
         <input name="redirect_url" type="hidden" 
             value="{{ request.x.base }}/credit-card.html" />
         <input name="merchant_key" type="hidden" 
-            value="7b79175baca336eaf4bfe8c8" />
+            value="{{ samurai.config.merchant_key }}" />
+        {% if samurai.config.sandbox %}
         <input name="sandbox" type="hidden" value="true" />
+        {% end %}
         {% if pmt %}
         <input name="payment_method_token" type="hidden" 
             value="{{ pmt.payment_method_token }}" />
