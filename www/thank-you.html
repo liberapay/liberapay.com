@@ -1,8 +1,9 @@
-from samurai.processor import Processor
 from logstown import db
+from samurai.processor import Processor
+
+#=========================================================================== ^L
 
 
-^L
 email = request.user.session['email']
 pmt = request.user.session['payment_method_token']
 amount = int(request.body.one('amount'))
@@ -11,7 +12,9 @@ Processor.purchase(pmt, amount)
 RECORD = "INSERT INTO transactions (email, amount) VALUES (%s, %s)"
 db.execute(RECORD, (email, amount,))
 
-^L
+
+#=========================================================================== ^L
+
 {% extends "base.html" %}
 {% block content %}
 <h2>Thank you!</h2>

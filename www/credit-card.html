@@ -196,15 +196,4 @@ card.</p>
 </form>
 </div>
 
-
-
-{% if 0 %}
-    <label for="credit_card_month">Expires on</label>
-    <input id="credit_card_month" name="credit_card[expiry_month]" 
-        type="text" {% if pmt %}value="{{ pmt.expiry_month }}"{% end %} />
-    <input id="credit_card_year" name="credit_card[expiry_year]" 
-        type="text" {% if pmt %}value="{{ pmt.expiry_year }}"{% end %} />
-</form>
-{% end %}
-
 {% end %}

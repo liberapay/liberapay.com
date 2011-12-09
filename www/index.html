@@ -1,14 +1,20 @@
 from samurai.payment_method import PaymentMethod
-^L
+
+#=========================================================================== ^L
+
+
 pmt = request.user.session['payment_method_token']
 if pmt is not None:
     pmt = PaymentMethod.find(pmt)
-^L
+    
+    
+#=========================================================================== ^L
+
 {% extends "base.html" %}
 {% block head %}
 <style>
     LI {
-        font-size: 16pt;
+        font-size: 18pt;
         line-height: 20pt;
         margin-bottom: 0.5em;
         display: list-item;

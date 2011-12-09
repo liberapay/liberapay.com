@@ -25,6 +25,7 @@ pmt = PaymentMethod.find(pmt)
     .samurai .button {
         float: none;
         display: inline-block;
+        margin-left: 40px;
     }
 </style>
 <script>
@@ -39,7 +40,7 @@ pmt = PaymentMethod.find(pmt)
 <p>You are using your <a href="/credit-card.html">credit card, 
     ************{{ pmt.last_four_digits}}</a>.</p>
 
-<form action="/done.html" method="POST" class="samurai">
+<form action="/thank-you.html" method="POST" class="samurai">
     <fieldset>
         $<input name="amount" type="text" id="amount" />.00
         <button type="submit" class="button">Pay Money</button>
