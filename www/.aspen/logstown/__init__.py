@@ -32,6 +32,7 @@ def canonize(request):
     request.x = X()
     request.x.scheme = scheme
     request.x.host = host
+    request.x.base = scheme + "://" + host
 
 
 # db

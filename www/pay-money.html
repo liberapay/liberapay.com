@@ -1,22 +1,48 @@
+"""This page allows users to pay money.
+"""
+from samurai.payment_method import PaymentMethod
+
+#=========================================================================== ^L
+
+
 pmt = request.user.session['payment_method_token']
 if not pmt:
     request.redirect('/credit-card.html')
-^L
+pmt = PaymentMethod.find(pmt)
+
+
+#=========================================================================== ^L
+
 {% extends "base.html" %}
 {% block head %}
 <style>
+    @import url("https://samurai.feefighters.com/assets/api/0.1/samurai-540ad0fe1d10267c4f468150b02e6e3f.css");
     #amount {
         text-align: right;
-        width: 50px;
+        width: 100px;
+        margin: 0 5px;
+    }
+    .samurai .button {
+        float: none;
+        display: inline-block;
     }
 </style>
+<script>
+    $(document).ready(function() {
+        $('#amount').focus();
+    });
+</script>
 {% end %}
 {% block content %}
 <h2>Pay Money</h2>
-<form action="/done.html" method="POST">
+
+<p>You are using your <a href="/credit-card.html">credit card, 
+    ************{{ pmt.last_four_digits}}</a>.</p>
+
+<form action="/done.html" method="POST" class="samurai">
     <fieldset>
         $<input name="amount" type="text" id="amount" />.00
-        <input type="submit" />
+        <button type="submit" class="button">Pay Money</button>
     </fieldset>
 </form>
 {% end %}

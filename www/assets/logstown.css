@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css?family=Cabin:400,500,600,700,400italic,500italic,600italic,700italic);
+@import url(https://fonts.googleapis.com/css?family=Cabin:400,700,400italic,700italic);
 @import url(https://fonts.googleapis.com/css?family=Cabin+Sketch:400);
 @import url("/assets/reset.css");
 
@@ -17,7 +17,7 @@ BODY {
     color: #301403;
 }
 
-#content {
+#body {
     position: relative;
     background: white;
     border-radius: 3px;
@@ -28,6 +28,9 @@ BODY {
     padding: 40px;
     width: 800px;
     
+}
+#content {
+    padding: 50px 0 50px 230px;
 }
 
 H1 {
@@ -48,9 +51,17 @@ H1 A {
 H2 {
     font-size: 24pt;
     line-height: 24pt; 
-    font-weight: 700;
+    font-weight: normal;
     margin: 0 0 0.5em;
     padding: 0;
+}
+A { color: #866639; }
+A:hover {
+    color: #301403; 
+    background: #FFFF00; 
+}
+P {
+    margin: 0 0 1em;
 }
 H3 {
     margin: 0;
@@ -85,24 +96,11 @@ H3:hover A {
 A IMG {
     border: none;
 }
-.sidebar {
-    float: right;
-    width: 360px;
-    font-size: 10pt;
-    line-height: 12pt;
+LI {
+    margin-left: 1em;
+    border-left: 10px solid #301403;
 }
-.sidebar-padding {
-    margin: 20px 0 10px 30px;
-    border-left: 2px solid #CCC;
-}
-.sidebar P {
-    margin: 5px 0 0 30px;
-    font-style: italic;
-}
-.sidebar IMG {
-    display: block;
-    margin: 0 5px 0 30px;
-}
+
 @media screen and (max-width: 900px) {
     DIV#post {
         width: auto;

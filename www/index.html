@@ -5,8 +5,23 @@ if pmt is not None:
     pmt = PaymentMethod.find(pmt)
 ^L
 {% extends "base.html" %}
+{% block head %}
+<style>
+    LI {
+        font-size: 16pt;
+        line-height: 20pt;
+        margin-bottom: 0.5em;
+        display: list-item;
+    }
+    LI A {
+        padding: 0 0.5em;
+    }
+</style>
+{% end %}
 {% block content %}
-<h2>Things</h2>
-<a href="/credit-card.html">Credit Card on File</a><br />
-<a href="/pay-money.html">Pay Money</a>
+<h2>Things To Do:</h2>
+<ul>
+    <li><a href="/credit-card.html">Save a Credit Card on File</a></li>
+    <li><a href="/pay-money.html">Pay Money</a></li>
+</ul>
 {% end %}
