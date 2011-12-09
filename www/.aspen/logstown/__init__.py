@@ -102,11 +102,12 @@ class PostgresContextManager:
         try:
             cursor = self.conn.cursor(cursor_factory=RealDictCursor)
             cursor.execute(*self.a, **self.kw)
-        finally:
+        except:
             # If we get an exception here (like, the query fails: pretty
             # common), then the __exit__ clause is not triggered. We trigger it
             # ourselves to avoid draining the pool.
             self.__exit__()
+            raise
         return cursor
 
     def __exit__(self, *a, **kw):
