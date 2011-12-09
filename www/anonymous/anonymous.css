@@ -33,16 +33,20 @@ H2 {
     font: normal 36pt/36pt "Cabin Sketch", sans-serif;
 }
 
+LABEL I {
+    font-weight: normal;
+    display: none;
+}
 INPUT {
     color: #301403;
 } 
-INPUT#email, INPUT#password {
+INPUT.text {
     width: 304px;
     border: 1px solid #999;
     padding: 5px;
     font: 16pt/20pt Cabin, sans-serif;
 }
-INPUT#password{
+#password, #confirm {
     letter-spacing: 0.5em;
 }
 #feedback {
@@ -74,11 +78,22 @@ LABEL.disabled {
 P IMG {
     margin-bottom: -4px;
 }
-#submit-buttons {
+#submit-button {
     text-align: right;
     margin: 1em 0;
 }
-INPUT.submit {
+#confirm-box {
+    display: none;
+}
+#other {
+    color: #00E;
+    margin-right: 20px;
+    cursor: pointer;
+}
+#other:hover {
+    text-decoration: underline;
+}
+#submit {
     font: 12pt/12pt Cabin, sans-serif;
     padding: 6px 10px 9px;
     -webkit-border-radius: 3px;
@@ -86,49 +101,6 @@ INPUT.submit {
     -o-border-radius: 3px;
     border-radius: 3px;
     border: solid 1px #999;
-    background: -moz-linear-gradient( top
-                                    , rgb(255, 255, 255)
-                                    , rgb(221, 221, 221)
-                                     );
-    background: -o-linear-gradient( top
-                                  , rgb(255, 255, 255)
-                                  , rgb(221, 221, 221)
-                                   );
-    background: -webkit-gradient( linear, 0% 0%, 0% 100%
-                                , from(rgb(255, 255, 255))
-                                , to(rgb(221, 221, 221))
-                                 );
-    background: linear-gradient( top
-                               , rgb(255, 255, 255)
-                               , rgb(221, 221, 221)
-                                );
-    background-repeat: repeat-x;
-    color: #999;
-    text-decoration: none;
-    cursor: pointer;
-    display: inline-block;
-    text-align: center;
-    text-shadow: 0px 1px 1px rgba(255,255,255,1);
-    line-height: 1;
-}
-#sign-in {
-    text-shadow:-1px -1px 0 rgba(0,0,0,.3);
-}
-#sign-up:hover, #sign-up.focused {
-    color: #333;
-}
-#sign-in:hover, #sign-in.focused {
-    background: -moz-linear-gradient(top, rgb(177, 219, 179), rgb(17, 89, 34));
-    background: -o-linear-gradient(top, rgb(177, 219, 179), rgb(17, 89, 34));
-    background: -webkit-gradient( linear
-                                , 0% 0%
-                                , 0% 100%
-                                , from(rgb(177, 219, 179))
-                                , to(rgb(17, 89, 34))
-                                 );
-    background: linear-gradient(top, rgb(177, 219, 179), rgb(17, 89, 34));
-}
-#sign-in {
     color: white;
     border-color: #1E8235;
     background: -moz-linear-gradient(top, rgb(177, 219, 179), rgb(30, 130, 53));
@@ -140,8 +112,27 @@ INPUT.submit {
                                 , to(rgb(30, 130, 53))
                                  );
     background: linear-gradient(top, rgb(177, 219, 179), rgb(30, 130, 53));
+    background-repeat: repeat-x;
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-block;
+    text-align: center;
+    text-shadow: 0px 1px 1px rgba(255,255,255,1);
+    line-height: 1;
+    text-shadow:-1px -1px 0 rgba(0,0,0,.3);
 }
-.submit:active {
+#submit:hover, #submit.focused {
+    background: -moz-linear-gradient(top, rgb(177, 219, 179), rgb(17, 89, 34));
+    background: -o-linear-gradient(top, rgb(177, 219, 179), rgb(17, 89, 34));
+    background: -webkit-gradient( linear
+                                , 0% 0%
+                                , 0% 100%
+                                , from(rgb(177, 219, 179))
+                                , to(rgb(17, 89, 34))
+                                 );
+    background: linear-gradient(top, rgb(177, 219, 179), rgb(17, 89, 34));
+}
+#submit:active {
     /* http://somadesign.ca/demos/buttons-redux.html */
     -moz-box-shadow
         :0 .33em 1em rgba(0,0,0,.67) inset,

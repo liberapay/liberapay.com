@@ -90,29 +90,36 @@ Anon.error = function(a,b,c)
     console.log(a,b,c);
 };
 
-Anon.disableSubmit = function(which)
+Anon.disableSubmit = function()
 {
-    $('.submit').attr('disabled', 'true');
-    $('#sign-'+which).val('Signing ' + which + ' ...');
+    Anon.submit.attr('disabled', 'true');
+    if (Anon.submit.val() === 'Sign In')
+        Anon.submit.val('Signing In ...');
+    else
+        Anon.submit.val('Registering ...');
 };
 
-Anon.enableSubmit = function(which)
+Anon.enableSubmit = function()
 {
-    $('.submit').removeAttr('disabled');
-    $('#sign-up').val('Sign Up');
-    $('#sign-in').val('Sign In');
+    Anon.submit.removeAttr('disabled');
+    if (Anon.submit.val() === 'Signing In ...')
+        Anon.submit.val('Sign In');
+    else
+        Anon.submit.val('Register');
 };
 
-Anon.submit = function(e)
+Anon.submitForm = function(e)
 {
-    var which = $(e.target).attr('id').replace('sign-', '');
-    Anon.disableSubmit(which);
+    e.stopPropagation();
+    e.preventDefault();
+    Anon.disableSubmit();
 
     var data = {}
     data.email = $('[name=email]').val();
     data.password = $('[name=password]').val();
+    data.confirm = $('[name=confirm]').val();
     jQuery.ajax(
-        { url: "/anonymous/" + $(e.target).attr('id') + ".json"
+        { url: Anon.form.attr('action')
         , type: "POST"
         , data: data
         , dataType: 'json'
@@ -120,7 +127,41 @@ Anon.submit = function(e)
         , error: Anon.error
          }
     );
+
     return false;
+};
+
+Anon.toggleState = function(e)
+{
+    e.stopPropagation();
+    e.preventDefault();
+
+    if (Anon.other.text() === 'Register')
+    {
+        Anon.confirmBox.show(100);
+        Anon.other.text('Sign In');
+        Anon.submit.val('Register');
+        Anon.help.show(); 
+        Anon.form.attr('action', '/anonymous/register.json');
+        Anon.first.focus();
+    }
+    else
+    {
+        Anon.confirmBox.hide(100);
+        Anon.other.text('Register');
+        Anon.submit.val('Sign In');
+        Anon.help.hide(); 
+        Anon.form.attr('action', '/anonymous/sign-in.json');
+        Anon.first.focus();
+    }
+
+    return false;
+};
+
+Anon.toggleStateSpace = function(e)
+{
+    if (e.which === 32)
+        Anon.toggleState(e);
 };
 
 
@@ -131,19 +172,16 @@ Anon.main = function()
 {
     Anon.resize()
     $(window).resize(Anon.resize);
-    $('.start-here').focus();
-    $('INPUT').keyup(function(e) 
-    {
-        if (e.which === 13)
-            if (!$(e.target).hasClass('submit'))
-            {   // Capture enter/return on the form, and default to sign in.
-                e.target = $('#sign-in').get(0);
-                Anon.submit(e);
-            }
-    });
-    $('.submit').click(Anon.submit);
-    $('#sign-up').focus(function (e) { $(e.target).addClass('focused') });
-    $('#sign-up').blur(function (e) { $(e.target).removeClass('focused') });
-    $('#sign-in').focus(function (e) { $(e.target).addClass('focused') });
-    $('#sign-in').blur(function (e) { $(e.target).removeClass('focused') });
+
+    Anon.first = $('.start-here');
+    Anon.submit = $('#submit');
+    Anon.other = $('#other');
+    Anon.form = $('FORM');
+    Anon.help = $('LABEL I');
+    Anon.confirmBox = $('#confirm-box');
+
+    Anon.first.focus();
+    Anon.form.submit(Anon.submitForm);
+    Anon.other.click(Anon.toggleState);
+    Anon.other.keyup(Anon.toggleStateSpace); // capture spacebar too
 };

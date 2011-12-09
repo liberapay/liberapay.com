@@ -20,17 +20,15 @@ def plural(i):
 
 email = request.body.one('email').strip().lower()
 password = request.body.one('password') # Don't strip!
+confirm = request.body.one('confirm') # Don't strip!
 problem = ""
+
+
+# Email
+# =====
 
 if not email:
     problem = ("Um, did you enter an email address?")
-
-if not problem:
-    if len(password) < 6:
-        short = 6 - len(password)
-        problem = ("Sorry, your password must be at least six characters long."
-                   " You need %s more character%s.")
-        problem %= DIGITS[short], plural(short)
 
 if not problem:
     if len(email) > 64:
@@ -41,12 +39,27 @@ if not problem:
     if EMAIL.match(email) is None:
         problem = "That doesn&rsquo;t look to me like an email address."
 
+
+# Password
+# ========
+
+if not problem:
+    if len(password) < 6:
+        short = 6 - len(password)
+        problem = ("Sorry, your password must be at least six characters long."
+                   " You need %s more character%s.")
+        problem %= DIGITS[short], plural(short)
+
+if not problem:
+    if password != confirm:
+        problem = "Sorry, the passwords you entered don&rsquo;t match."
+
 if not problem:
     hashed = hash(password)
     try:
         db.execute(SIGN_UP, (email, hashed))
     except IntegrityError:
-        problem = ("That email address is taken. You probably forgot your "
+        problem = ("That email address is taken. You maybe forgot your "
                    "password ... aaaaaand I can&rsquo;t help you yet. :-(")
 
 
