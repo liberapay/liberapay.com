@@ -6,7 +6,7 @@ from samurai.payment_method import PaymentMethod
 pmt = request.user.session['payment_method_token']
 if pmt is not None:
     pmt = PaymentMethod.find(pmt)
-    
+save_edit = "Edit your" if pmt else "Save a"
     
 #=========================================================================== ^L
 
@@ -27,7 +27,7 @@ if pmt is not None:
 {% block content %}
 <h2>Things To Do:</h2>
 <ul>
-    <li><a href="/credit-card.html">Save a Credit Card on File</a></li>
+    <li><a href="/credit-card.html">{{ save_edit }} Credit Card on File</a></li>
     <li><a href="/pay-money.html">Pay Money</a></li>
 </ul>
 {% end %}

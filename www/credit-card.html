@@ -28,8 +28,11 @@ else:
 # ==============================
 # If the user has not submitted this form at all yet, then pmt will be None.
 
+save_edit = "Save a"
 if pmt is not None:
+    save_edit = "Edit your"
     pmt = PaymentMethod.find(pmt)
+save_edit_2 = save_edit.split()[0]
 
 
 # Set up some content helpers.
@@ -81,7 +84,7 @@ def gen_years():
 
 
 {% block content %}
-<h2>Save Credit Card on File</h2>
+<h2>{{ save_edit }} Credit Card on File</h2>
 
 <p>With this credit card, you may <a href="/pay-money.html">pay money</a>.</p>
 
@@ -194,7 +197,8 @@ def gen_years():
                 </div>
             </div>
         </fieldset>
-        <button type="submit" class="button">Save Credit Card on File</button>
+        <button type="submit" class="button">{{ save_edit_2 }} Card on 
+            File</button>
         <!--span class="loading" style=""></span-->
         <span class="results" style="display: none;"></span>
 </form>
