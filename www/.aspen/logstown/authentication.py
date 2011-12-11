@@ -59,20 +59,14 @@ class User:
     def __init__(self, session):
         """Takes a dict of user info.
         """
-        self.__dict__.update(session)
         self.session = session
 
     def __str__(self):
         return '<User: %s>' % getattr(self, 'email', 'Anonymous')
 
-def _authorize_anonymous(path):
-    """Given the path part of an URL, return a boolean.
-    """
-    if path in ('/favicon.ico', '/robots.txt'): # special cases
-        return True
-    if path and path.startswith('/anonymous/'): # logging in
-        return True
-    return False
+    @property
+    def ANON(self):
+        return bool(self.session.get('email', False))
 
 def inbound(request):
     """Authenticate from a cookie.
@@ -81,11 +75,7 @@ def inbound(request):
     if 'session' in request.cookie:
         token = request.cookie['session'].value
         session = load_session(token)
-
     request.user = User(session)
-    if not session:
-        if not _authorize_anonymous(request.path.raw):
-            raise Response(401) # use nice error messages for login form
 
 def outbound(response):
     session = {}

@@ -1,13 +1,3 @@
-from samurai.payment_method import PaymentMethod
-
-#=========================================================================== ^L
-
-
-pmt = request.user.session['payment_method_token']
-if pmt is not None:
-    pmt = PaymentMethod.find(pmt)
-save_edit = "Edit your" if pmt else "Save a"
-    
 #=========================================================================== ^L
 
 {% extends "base.html" %}
@@ -27,7 +17,13 @@ save_edit = "Edit your" if pmt else "Save a"
 {% block content %}
 <h2>Things To Do:</h2>
 <ul>
-    <li><a href="/credit-card.html">{{ save_edit }} Credit Card on File</a></li>
-    <li><a href="/pay-money.html">Pay Money</a></li>
+    <li><a href="/classes/new.html">Offer a Class</a></li>
 </ul>
+
+<h2>Pricing</h2>
+
+<p><b>Teachers:</b> $100 per year + 3.8% per class</p>
+
+<p><b>Students:</b> the price is set by each teacher</p>
+
 {% end %}

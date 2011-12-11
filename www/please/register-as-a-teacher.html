@@ -1,5 +1,6 @@
 """This page allows users to pay money.
 """
+from aspen import Response
 from samurai.payment_method import PaymentMethod
 
 #=========================================================================== ^L
@@ -7,7 +8,7 @@ from samurai.payment_method import PaymentMethod
 
 pmt = request.user.session['payment_method_token']
 if not pmt:
-    request.redirect('/credit-card.html')
+    raise Response(402)
 pmt = PaymentMethod.find(pmt)
 
 
@@ -35,7 +36,11 @@ pmt = PaymentMethod.find(pmt)
 </script>
 {% end %}
 {% block content %}
-<h2>Pay Money</h2>
+<h2>Register as a Teacher</h2>
+
+<p> 
+
+<p>The first 100 teachers get t
 
 <p>You are using your <a href="/credit-card.html">credit card, 
     ************{{ pmt.last_four_digits}}</a>.</p>
