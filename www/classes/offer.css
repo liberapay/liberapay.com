@@ -2,16 +2,20 @@
     width: 316px;
 }
 .step {
-    border: 1px solid #301403;
-    border-style: solid none none;
-    margin: 4em 0 1em;
+    margin: 50px 0 0;
     padding: 0 0 0;
 }
+H1 { padding : 0; }
+H2 { margin: 50px 0; }
 H3 {
     font: normal 16px/16px Cabin;
-    padding: 0 0.5em;
-    margin: -8px 0 0 12px;
+    padding: 0;
     color: #301403;
+    text-align: center;
+}
+H3 SPAN {
+    padding: 0 10px;
+    background: white;
 }
 H3 B {
     text-transform: uppercase;
@@ -21,10 +25,37 @@ H3 B I {
     font-size: 9pt;
     text-transform: none;
 }
-H3 SPAN {
-    padding: 0 10px;
-    background: white;
+DIV.unpegged {
+    margin-bottom: 1em;
 }
+DIV.line {
+    border-bottom: 1px solid #304103;
+    margin-top: -10px;
+    height: 0px;
+}
+DIV.pegged {
+    position: fixed;
+    top: 0px;
+    left: 50%;
+    width: 356px;
+    margin-left: -178px;
+    display: none;
+    overflow: hidden;
+    height: 25px;
+}
+DIV.header {
+    width: 376px;
+    margin-left: -10px;
+    background: white;
+    border-bottom: 1px solid #304103;
+}
+DIV.header.shadow {
+    -moz-box-shadow: 0 3px 3px #999;
+    -o-box-shadow: 0 3px 3px #999;
+    -webkit-box-shadow: 0 3px 3px #999;
+    box-shadow: 0 3px 3px #999;
+}
+
 LABEL {
     font: normal 9pt/12pt Cabin;
     display: block;

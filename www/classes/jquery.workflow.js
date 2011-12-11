@@ -160,9 +160,21 @@
         };
 
         this.renderTitle = function()
-        {
-            return ('<h3><span><b>Step ' + this.n + ' <i>of</i> 6:</b> ' + 
-                    this.title + '</span></h3>');
+        {   // Return two so we can peg one of them.
+            return ( '<div id="unpegged-' + this.n + '" class="unpegged">'
+                   + '<h3><span>'
+                   + '<b>Step ' + this.n + ' <i>of</i> 6:</b> '
+                   + this.title 
+                   +  '</span></h3><div class="line"></div></div>'
+
+                   + '<div id="pegged-' + this.n + '" class="pegged" '
+                   +    'style="z-index: ' + this.n + '">'
+                   + '<div class="header shadow">'
+                   + '<h3><span>'
+                   + '<b>Step ' + this.n + ' <i>of</i> 6:</b> '
+                   + this.title 
+                   + '</span></h3></div></div>'
+                    );
         };
 
         this.render = function()
@@ -218,11 +230,44 @@
         that.html(render(parse(data)));
     }
 
+    function pegHeaders()
+    {   
+        var unpegged = $('.unpegged');
+        var N = unpegged.length;
+        var x,y,z;
+
+        x = $(this).scrollTop();
+
+        unpegged.each(function (i)
+        {
+            var pegged = $('#pegged-'+(i+1));
+            var next = $('#unpegged-'+(i+2));
+            var y = $(this).position().top + 21; // XXX + 21?!
+
+            if (x > y)
+            {
+                if (next.position() !== null)
+                {
+                    z = next.position().top - 140 + 21;
+                    if (x > z)
+                        pegged.hide();
+                    else
+                        pegged.show();
+                }
+                else
+                    pegged.show();
+            }
+            else 
+                pegged.hide();
+        });
+    }
+
     $.fn.workflow = function()
     {
         that = this;
         var url = that.attr('workflow');
         jQuery.get(url, {}, success, 'text');
+        $(document).scroll(pegHeaders);
     };
 
 })(jQuery);
