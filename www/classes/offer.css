@@ -25,6 +25,9 @@ H3 B I {
     font-size: 9pt;
     text-transform: none;
 }
+DIV.field {
+    float: left;
+}
 DIV.unpegged {
     margin-bottom: 1em;
 }
@@ -74,10 +77,14 @@ TEXTAREA {
     height: 200px;
 }
 
-.field.button {
+.button {
     padding-top: 1em;
     text-align: right;
 }
+.dollar LABEL {
+    padding-left: 7px;
+}
+
 BUTTON {
     font: 12pt/12pt Cabin, sans-serif;
     padding: 6px 10px 9px;
@@ -131,4 +138,8 @@ BUTTON:active {
         0 .33em 2em rgba(0,0,0,.67) inset,
         1px 1px 0 rgba(255,255,255,.25) inset, 
         -1px -1px 0 rgba(255,255,255,.25) inset;
+}
+.clear {
+    height: 0;
+    clear: both;
 }
