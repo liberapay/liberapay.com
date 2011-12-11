@@ -30,17 +30,32 @@ if (!Array.prototype.indexOf)
 }
 
 
+// Add replaceAll.
+// ===============
+
+if (!String.prototype.replaceAll)
+{
+    String.prototype.replaceAll = function(p, r)
+    {
+        var s = this;
+        while (s.indexOf(p) !== -1)
+            s = s.replace(p, r);
+        return s;
+    }
+}
+
+
 // Main Namespace
 // ==============
 
-Lt = {};
+Offer = {};
 
-Lt.mk = function(tagName)
+Offer.mk = function(tagName)
 {
     return $(document.createElement(tagName));
 };
 
-Lt.main = function()
+Offer.main = function()
 {
-    $('#workflow').renderWorkflow();
+    $('#workflow').workflow();
 };

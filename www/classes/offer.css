@@ -1,6 +1,34 @@
-LABEL I {
+#body {
+    width: 316px;
+}
+.step {
+    border: 1px solid #301403;
+    border-style: solid none none;
+    margin: 4em 0 1em;
+    padding: 0 0 0;
+}
+H3 {
+    font: normal 16px/16px Cabin;
+    padding: 0 0.5em;
+    margin: -8px 0 0 12px;
+    color: #301403;
+}
+H3 B {
+    text-transform: uppercase;
+}
+H3 B I {
     font-weight: normal;
-    display: none;
+    font-size: 9pt;
+    text-transform: none;
+}
+H3 SPAN {
+    padding: 0 10px;
+    background: white;
+}
+LABEL {
+    font: normal 9pt/12pt Cabin;
+    display: block;
+    margin: 1em 0 0;
 }
 INPUT {
     color: #301403;
@@ -14,100 +42,10 @@ TEXTAREA {
     width: 304px;
     height: 200px;
 }
-#body {
-    width: 316px;
-}
-#password, #confirm {
-    letter-spacing: 0.5em;
-}
-#feedback {
-    padding: 10px 10px 10px 30px;
-    border-radius: 3px;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    margin-bottom: 10px;
-    display: none;
-}
-#feedback.success {
-    background: #B5E1AE url("/assets/accept.png") 10px 10px no-repeat;
-    border: 2px solid #247D22;
-    color: #0B390B;
-}
-#feedback.error {
-    background: #FABCA8 url("/assets/exclamation.png") 10px 10px no-repeat;
-    border: 2px solid #CB553C;
-    color: #481A10;
-}
-.toplevel {
-    border: 1px solid #301403;
-    border-style: solid none none;
-    margin: 4em 0 1em;
-    padding: 0 0 0;
-}
-H3 {
-    font: normal 16px/16px Cabin;
-    padding: 0 0.5em;
-    margin: -8px 0 0 12px;
-    color: #301403;
-}
-H3 SPAN {
-    padding: 0 10px;
-    background: white;
-}
-H3 B SPAN {
-    padding: 0;
-    font: normal italic 12px/16px Cabin;
-    text-transform: none;
-}
-H3 B {
-    text-transform: uppercase;
-}
-H3 I {
-}
-.toplevel.disabled {
-    border-color: #CCC;
-    color: #CCC;
-}
-.toplevel.disabled H3 {
-    color: #CCC;
-}
-LABEL {
-    font: normal 9pt/12pt Cabin;
-    display: block;
-    margin: 1em 0 0;
-}
-LABEL.disabled {
-    color: #666;
-}
-P IMG {
-    margin-bottom: -4px;
-}
-.submit-button {
-    width: 316px;
+
+.field.button {
+    padding-top: 1em;
     text-align: right;
-    margin: 1em 0;
-}
-#confirm-box {
-    display: none;
-}
-#other {
-    color: #00E;
-    margin-right: 20px;
-    cursor: pointer;
-    font-size: 9pt;
-}
-#other:hover {
-    text-decoration: underline;
-}
-.field-group {
-    clear: both;
-}
-.share DIV {
-    float: left;
-    margin-left: 12px;
-}
-.share DIV:first-child {
-    margin-left: 0;
 }
 BUTTON {
     font: 12pt/12pt Cabin, sans-serif;
@@ -163,4 +101,3 @@ BUTTON:active {
         1px 1px 0 rgba(255,255,255,.25) inset, 
         -1px -1px 0 rgba(255,255,255,.25) inset;
 }
-

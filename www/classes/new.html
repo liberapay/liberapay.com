@@ -69,7 +69,7 @@ def gen_years():
         target = get('expiry_year') # returns int
         yield (year, ' selected="true"' if year == target else "")
 
-
+title = "New"
 #=========================================================================== ^L
  
 {% extends "base.html" %}
@@ -82,9 +82,7 @@ def gen_years():
 {% end %}
 
 {% block content %}
-<style>@import url("offer.css");</style>
-<script src="offer.js"></script>
-<script>$(document).ready(Lt.main);</script>
+<style>@import url("new.css");</style>
 
 <h2>Offer a Class</h2>
 
