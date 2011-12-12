@@ -3,27 +3,25 @@
 {% extends "base.html" %}
 {% block head %}
 <style>
-    LI {
-        font-size: 18pt;
-        line-height: 20pt;
-        margin-bottom: 0.5em;
-        display: list-item;
+    P {
+        text-align: center;
+        margin: 2em 0;
     }
-    LI A {
-        padding: 0 0.5em;
+    .price SPAN {
+        font: italic 8.5pt/8.5pt Cabin;
     }
 </style>
 {% end %}
 {% block content %}
-<h2>Things To Do:</h2>
-<ul>
-    <li><a href="/classes/offer.html">Offer a Class</a></li>
-</ul>
 
-<h2>Pricing</h2>
+<p>Logstown is a loose network of independent <b>teachers, tutors, instructors,
+    lecturers, professors, and other educators</b>.</p>
 
-<p><b>Teachers:</b> $100 per year + 3.8% per class</p>
-
-<p><b>Students:</b> the price is set by each teacher</p>
+<p class="price">
+    <button type="submit" 
+        onclick="window.location='/classes/offer.html'">Offer a 
+        Class</button><br />
+    <span>$100 per year + 3.8% per class</span>
+</p>
 
 {% end %}
