@@ -109,7 +109,7 @@
         var spaceBetween = 10; // px between multiple fields in the same row
         var availableWidth = Math.floor( that.width()
                                        - (spaceBetween * (this.N - 1))
-                                        );
+                                        ); // XXX add back pxs lost in rounding
         var ourWidth = Math.floor(availableWidth * widthRatio);
         var spacing = 0;
         var marginRight = 0;
@@ -171,11 +171,11 @@
                     +'</div></div>');
         };
 
-        this.renderTitle = function()
+        this.renderTitle = function(N)
         {   // Return two so we can peg one of them.
             return ( '<div id="unpegged-' + this.n + '" class="unpegged">'
                    + '<h3><span>'
-                   + '<b>Step ' + this.n + ' <i>of</i> 6:</b> '
+                   + '<b>Step ' + this.n + ' <i>of</i> ' + N + ':</b> '
                    + this.title 
                    +  '</span></h3><div class="line"></div></div>'
 
@@ -183,15 +183,15 @@
                    +    'style="z-index: ' + this.n + '">'
                    + '<div class="header shadow">'
                    + '<h3><span>'
-                   + '<b>Step ' + this.n + ' <i>of</i> 6:</b> '
+                   + '<b>Step ' + this.n + ' <i>of</i> ' + N + ':</b> '
                    + this.title 
                    + '</span></h3></div></div>'
                     );
         };
 
-        this.render = function()
+        this.render = function(N)
         {   // Return an HTML representation of this Step.
-            var out = this.renderTitle();
+            var out = this.renderTitle(N);
             var nrows = this.rows.length;
             for (var i=0; i < nrows; i++)
                 out += this.rows[i].render(); 
@@ -284,7 +284,7 @@
         var out = '';
 
         for (var i=0; i < nsteps; i++)
-            out += steps[i].render();
+            out += steps[i].render(nsteps);
 
         return out;
     }
