@@ -25,7 +25,8 @@ def canonize(request):
     scheme = request.environ.get('HTTP_X_FORWARDED_PROTO', 'http') # per Heroku
     host = request.headers.one('Host')
     bad_scheme = scheme != canonical_scheme
-    bad_host = host != canonical_host
+    bad_host = bool(canonical_host) and (host != canonical_host) 
+                # '' and False => ''
     if bad_scheme or bad_host:
         url = '%s://%s/' % (canonical_scheme, canonical_host)
         request.redirect(url, permanent=True)
