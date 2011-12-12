@@ -18,17 +18,14 @@ Class Details
 (button)Save Class Details
 
 Pricing
-[50]Spots Available;(dollar)[50]Price Per Slot
+[50]Spots Available;(dollar)[50]Price Per Spot
 (button)Set Pricing
 
-File a Credit Card
+Pay and Publish
 [50]First Name;[50]Last Name
 Address 1
 Address 2
 [55]City;[15]State;[30]ZIP
 *[75]Card Number;*[25]CVV
 *Expiration
-(button)File Credit Card
-
-Publish Your Class
-(button)Publish Class
+(button)Publish Your Class!
