@@ -2,6 +2,14 @@
 @import url(https://fonts.googleapis.com/css?family=Cabin+Sketch:400);
 @import url("/assets/reset.css");
 
+/*
+
+XXX:
+http://www.typotheque.com/webfonts/FOUC
+http://code.google.com/apis/webfonts/docs/webfont_loader.html
+
+*/
+
 
 LABEL {
     display: block;
@@ -134,6 +142,14 @@ LI {
         width: 300px;
     }
 }
+.clear {
+    height: 0;
+    clear: both;
+}
+
+
+
+/*
 BUTTON {
     font: 12pt/12pt Cabin, sans-serif;
     padding: 6px 10px 9px;
@@ -146,9 +162,7 @@ BUTTON {
     border-color: #0D4035;
     background: -moz-linear-gradient(top, #2A8F79, #0D4035);
     background: -o-linear-gradient(top, #2A8F79, #0D4035);
-    background: -webkit-gradient( linear
-                                , 0% 0%
-                                , 0% 100%
+    background: -webkit-gradient( linear, 0% 0%, 0% 100%
                                 , from(#2A8F79)
                                 , to(#0D4035)
                                  );
@@ -174,7 +188,7 @@ BUTTON:hover, BUTTON.focused {
     background: linear-gradient(top, #2A8F79, #0A382E);
 }
 BUTTON:active {
-    /* http://somadesign.ca/demos/buttons-redux.html */
+    /* http://somadesign.ca/demos/buttons-redux.html /
     -moz-box-shadow
         :0 .33em 1em rgba(0,0,0,.67) inset,
         1px 1px 0 rgba(255,255,255,.25) inset, 
@@ -188,7 +202,91 @@ BUTTON:active {
         1px 1px 0 rgba(255,255,255,.25) inset, 
         -1px -1px 0 rgba(255,255,255,.25) inset;
 }
-.clear {
-    height: 0;
-    clear: both;
+*/
+
+/* Adapted from http://brandonmathis.com/projects/fancy-buttons/demo/stylesheets/buttons.css */
+
+BUTTON {
+    font: normal 18px/1.2em Cabin, sans-serif;
+    text-shadow: #001b38 0px 1px 1px;
+    text-decoration: none;
+
+    background: #2A8F79 url("/assets/button-bg.png") repeat-x bottom left;
+    width: auto;
+    overflow: visible;
+    display: inline-block;
+    cursor: pointer;
+
+    border: 1px solid #0A382E;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -o-border-radius: 4px;
+    -ms-border-radius: 4px;
+    -khtml-border-radius: 4px;
+    border-radius: 4px;
+
+    padding: 0.3em 1em;
+    margin: 0 2px;
+    vertical-align: middle;
+
+    background-image: -webkit-gradient( linear, 0% 0%, 0% 100%
+                                      , from(#2A8F79)
+                                      , to(#0D4035)
+                                       );
+    background-image: -moz-linear-gradient(top, #2A8F79, #0D4035);
+    background-image: linear-gradient(top, #2A8F79, #0D4035);
+
+    -moz-box-shadow: rgba(255,255,255,0.359) 0 0 0.1em 1px inset;
+    -webkit-box-shadow: rgba(255,255,255,0.359) 0 0 0.1em 1px inset;
+    -o-box-shadow: rgba(255,255,255,0.359) 0 0 0.1em 1px inset;
+    box-shadow: rgba(255,255,255,0.359) 0 0 0.1em 1px inset;
+
+    -moz-background-clip: padding;
+    -webkit-background-clip: padding;
+    -o-background-clip: padding-box;
+    -ms-background-clip: padding-box;
+    -khtml-background-clip: padding-box;
+    background-clip: padding-box;
+}
+
+BUTTON::-moz-focus-inner {
+    border: none;
+    padding: 0;
+}
+
+BUTTON:focus {
+    outline: none;
+}
+
+BUTTON, BUTTON:visited,
+BUTTON:hover, BUTTON:hover:visited,
+BUTTON:focus, BUTTON:focus:visited,
+BUTTON:active, BUTTON:active:visited {
+    color: white;
+}
+
+BUTTON:hover, BUTTON:focus {
+    background-image: url("/assets/button-bg.over.png");
+    background-image: -webkit-gradient( linear, 0% 0%, 0% 100%
+                                      , from(#2A8F79)
+                                      , to(#04221B)
+                                       );
+    background-image: -moz-linear-gradient(top, #2A8F79, #04221B);
+    background-image: linear-gradient(top, #2A8F79, #04221B));
+}
+
+BUTTON:active {
+    /* http://somadesign.ca/demos/buttons-redux.html */
+    -moz-box-shadow
+        :0 .33em 1em rgba(0,0,0,.67) inset,
+        1px 1px 0 rgba(255,255,255,.25) inset, 
+        -1px -1px 0 rgba(255,255,255,.25) inset;
+    -webkit-box-shadow:
+        0 .33em 2em rgba(0,0,0,.67) inset,
+        1px 1px 0 rgba(255,255,255,.25) inset, 
+        -1px -1px 0 rgba(255,255,255,.25) inset;
+    box-shadow:
+        0 .33em 2em rgba(0,0,0,.67) inset,
+        1px 1px 0 rgba(255,255,255,.25) inset, 
+        -1px -1px 0 rgba(255,255,255,.25) inset;
 }
