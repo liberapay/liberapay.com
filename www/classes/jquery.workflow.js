@@ -89,14 +89,11 @@
     }
 
 
-    var Field = function(o, n, N)
+    var Field = function(spec, n, N)
     {   // Model a field in a row in a step in a workflow.
 
-        for (var prop in o) // transfer o to this
-            if (o.hasOwnProperty(prop))
-                this[prop] = o[prop];
-        
-        this.n = n; // index in the row
+        this.parse(spec);
+        this.n = n; // 1-index in the row
         this.N = N; // total fields in this row
         
         this.label = this.name.toLowerCase();
@@ -113,7 +110,7 @@
         var ourWidth = Math.floor(availableWidth * widthRatio);
         var spacing = 0;
         var marginRight = 0;
-        if (this.N > 1 && (this.n+1) < this.N)
+        if (this.N > 1 && this.n < this.N)
             marginRight = spaceBetween;
 
         this.getWidth = function()
@@ -135,6 +132,48 @@
         };
     };
 
+    Field.prototype.parse = function(s)
+    {   // *(text)[100]Blah blah. => 
+        //      {required:'*', type: text, width:100, name="Blah blah."}
+
+        this.required = ''; // or '*'
+        this.type = 'text';
+        this.width = 100;
+        this.name = '';
+
+        var a = [];
+
+        if (s[0] === '*')
+        {
+            this.required = '*';
+            s = s.slice(1);
+        }
+
+        while (s !== '')
+        {
+            c = s[0];
+            s = s.slice(1);
+            if (c === '(')
+            {
+                a = _consume(s, ')');
+                this.type = a[0];
+                s = a[1];
+            }
+            else if (c === '[')
+            {
+                a = _consume(s, ']');
+                this.width = parseInt(a[0], 10);
+                s = a[1];
+            }
+            else 
+            {
+                this.name += c;
+            }
+        }
+    }
+
+
+
     var Row = function(fields)
     {   // Model a collection of fields on the same row.
 
@@ -154,28 +193,44 @@
         };
     };
 
-    var Step = function(n)
-    {   // Model a step in a workflow. The argument is n, as is "Step n of 6".
+    var Step = function(n, slug, title)
+    {   /* Model a step in a workflow. The arguments are: 
+            n, as is "Step n of 6".
+            slug, as in "register"
+            title, as in "Register"
+          
+           There is expected to be an enpoint at ./$slug.json that responds to
+           GET and POST with a JSON structure like the following:
 
+            { "html": ["", "Switch Users"]
+            , "fields": ["*(text)[100]Email"]
+             }
+
+           If "html" is not empty, it will be displayed to the user, with the
+           second array item being the text of a link that will bring up a
+           form. The form will be built from the fields defined in "fields".
+           The form will POST back to the same endpoint, expecting a response
+           of the same format.
+
+        */
+
+        var that = this;
         this.n = n;
-        this.rows = [];
-
-        this.add = function(row)
-        {   // Given an Array of Field objects, store it.
-            this.rows.push(row);
-        };
+        this.slug = slug;
+        this.title = title;
 
         this.contain = function(contents)
         {   // Given a string, wrap and return.
-            return ('<div class="step">' + contents + '<div class="clear">'
-                    +'</div></div>');
+            return ( '<div class="step" id="' + this.slug + '">' + contents 
+                   + '<div class="clear"></div></div>'
+                    );
         };
 
-        this.renderTitle = function(N)
+        this.renderTitle = function()
         {   // Return two so we can peg one of them.
             return ( '<div id="unpegged-' + this.n + '" class="unpegged">'
                    + '<h3><span>'
-                   + '<b>Step ' + this.n + ' <i>of</i> ' + N + ':</b> '
+                   + '<b>Step ' + this.n + ' <i>of</i> ' + this.N + ':</b> '
                    + this.title 
                    +  '</span></h3><div class="line"></div></div>'
 
@@ -183,18 +238,43 @@
                    +    'style="z-index: ' + this.n + '">'
                    + '<div class="header shadow">'
                    + '<h3><span>'
-                   + '<b>Step ' + this.n + ' <i>of</i> ' + N + ':</b> '
+                   + '<b>Step ' + this.n + ' <i>of</i> ' + this.N + ':</b> '
                    + this.title 
                    + '</span></h3></div></div>'
                     );
         };
 
-        this.render = function(N)
+        this.populate = function(data)
+        {
+            var box = $('#'+that.slug + ' .container');
+            if (data.html)
+                box.html(data.html);
+            else
+            {
+                box.empty('');
+                var i=0, j=0, row, spec;
+                while (row = data.rows[i++])
+                {
+                    var j=0, spec, fields=[];
+                    while (spec = row[j++])
+                        fields.push(new Field(spec, j, row.length));
+                    box.append((new Row(fields)).render());
+                }
+            }
+            Logstown.resize();
+        };
+
+        this.render = function()
         {   // Return an HTML representation of this Step.
-            var out = this.renderTitle(N);
-            var nrows = this.rows.length;
-            for (var i=0; i < nrows; i++)
-                out += this.rows[i].render(); 
+            var out = this.renderTitle();
+            out += '<div class="container"></div>'; // ajax lands here
+            jQuery.ajax(
+                { url: '/ajax/'+this.slug+'.json'
+                , type: 'GET'
+                , dataType: 'json'
+                , success: this.populate
+                 }
+            );
             return this.contain(out); 
         };
     };
@@ -203,96 +283,34 @@
     // Top-level Parse and Render
     // ==========================
 
-    function parseOne(s)
-    {   // *(text)[100]Blah blah. => 
-        //      {required:'*', type: text, width:100, name="Blah blah."}
-
-        var out = {};
-        out.required = ''; // or '*'
-        out.type = 'text';
-        out.width = 100;
-        out.name = '';
-
-        var a = [];
-
-        if (s[0] === '*')
-        {
-            out.required = '*';
-            s = s.slice(1);
-        }
-
-        while (s !== '')
-        {
-            c = s[0];
-            s = s.slice(1);
-            if (c === '(')
-            {
-                a = _consume(s, ')');
-                out.type = a[0];
-                s = a[1];
-            }
-            else if (c === '[')
-            {
-                a = _consume(s, ']');
-                out.width = parseInt(a[0], 10);
-                s = a[1];
-            }
-            else 
-            {
-                out.name += c;
-            }
-        }
-        return out;
-    }
-
     function parse(raw)
     {   // Given raw *.workflow content, return an array of Steps.
-        var lines = raw.split('\n');
-        var nlines = lines.length;
-        var line;
-
-        var n = 1; // as in, "Step n of 6"
+        
+        var re = /^ +(\S+) +(.+)$/gm;
+        var m = [];
+        var n = 1; // "Step n of N"
         var steps = [];
-        var step = new Step(n++);
-        var row = []; // Array of Fields
 
-        for (var i=0; i < nlines; i++)
-        {
-            line = lines[i];
-            if (line === '')
-            {
-                steps.push(step);
-                step = new Step(n++);
-                continue;
-            }
-            if (step.title === undefined)
-                step.title = line;
-            else
-            {
-                row = line.split(';');
-                for (var j=0, spec; spec=row[j]; j++)
-                    row[j] = new Field(parseOne(row[j]), j, row.length);
-                step.add(new Row(row));
-            }
-        }
+        while (m = re.exec(raw))
+            steps.push(new Step(n++, m[1], m[2]));
+
+        Step.prototype.N = n - 1;
+
+            /*
+            */
+        
         return steps;
     }
 
     function render(steps)
     {   // Given an array of Steps, return HTML.
-        var nsteps = steps.length;
+        var i=0, step;
         var out = '';
 
-        for (var i=0; i < nsteps; i++)
-            out += steps[i].render(nsteps);
+        while (step = steps[i++])
+            out += step.render();
 
         return out;
-    }
-
-    function success(data)
-    {   // Catch the raw *.workflow content and do something with it.
-        that.html(render(parse(data)));
-        Logstown.resize();
     }
 
 
@@ -339,8 +357,8 @@
     $.fn.workflow = function()
     {
         that = this;
-        var url = that.attr('workflow');
-        jQuery.get(url, {}, success, 'text');
+        that.html(render(parse(that.text())));
+        Logstown.resize();
         $(document).scroll(pegHeaders);
     };
 

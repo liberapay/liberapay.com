@@ -1,0 +1,8 @@
+from logstown import parse_rows
+
+rows = """\
+[50]Spots Available;(dollar)[50]Price Per Spot
+(button)Set Pricing
+"""
+
+response.body = {"html": "", "rows": parse_rows(rows)}

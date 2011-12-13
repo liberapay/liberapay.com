@@ -36,6 +36,13 @@ def canonize(request):
     request.x.base = scheme + "://" + host
 
 
+# utils
+# =====
+
+def parse_rows(rows):
+    return [row.strip().split(';') for row in rows.splitlines()]
+
+
 # db
 # ==
 

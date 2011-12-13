@@ -1,0 +1,11 @@
+from logstown import parse_rows
+
+rows = """\
+*Class Name
+*(textarea)What?
+*(meetings)When?
+*(map)Where?
+(button)Save Class Details
+"""
+
+response.body = {"html": "", "rows": parse_rows(rows)}
