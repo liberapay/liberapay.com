@@ -311,13 +311,14 @@
         {
             var pegged = $('#pegged-'+(i+1));
             var next = $('#unpegged-'+(i+2));
-            var y = $(this).position().top + 21; // XXX + 21?!
+            var randomNumber = 20; // I haven't tracked this down.
+            var y = $(this).position().top + randomNumber;
 
-            if (x > y)
+            if (x >= y)
             {
                 if (next.position() !== null)
                 {
-                    z = next.position().top - 140 + 21;
+                    z = next.position().top - 140 + randomNumber;
                     if (x > z)
                         pegged.hide();
                     else
