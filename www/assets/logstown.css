@@ -12,23 +12,29 @@ BODY {
     margin: 0;
     padding: 0;
     font: normal 12pt/16pt Cabin, sans-serif;
-    /* http://www.backgroundcity.com/groups/gfiles/g4/g4wd14.gif */
-    background: url("/assets/bg.gif") repeat;
     color: #301403;
+    color: #614C3E;
 }
-
 #body {
     position: relative;
-    background: white;
-    border-radius: 3px;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border: 2px solid #301403;
     margin: 20px auto;
     padding: 10px 20px;
     width: 316px;
-    
+    z-index: 1;
+    background: rgba(255,255,255,0.9);
 }
+#bg {
+    /* Formerly http://www.backgroundcity.com/groups/gfiles/g4/g4wd14.gif,
+        which is where the colors are from. */
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    background: white url("/assets/logstown.jpg") bottom center no-repeat;
+    height: 320px;
+    width: 283px;
+    z-index: 0;
+}
+
 #content {
     padding: 0;
 }
@@ -42,10 +48,11 @@ H1 {
 }
 H1 A {
     text-decoration: none;
-    color: #301403;
     color: #0A382E;
     color: #04221B;
     color: #2A8F79;
+    color: #301403;
+    color: #614C3E;
 }
 #signed {
     position: absolute;
@@ -58,9 +65,8 @@ H2 {
     padding: 0;
     text-align: center;
 }
-A { color: #866639; }
+A { color: #2A8F79; }
 A:hover {
-    color: #301403; 
     background: #FFFF00; 
 }
 P {
@@ -69,7 +75,7 @@ P {
 H3 {
     margin: 0;
     padding: 1em 0 0.5em;
-    color: #615C4C;
+    color: #614C3E;
 }
 H3.year {
     margin: 0;

@@ -4,11 +4,32 @@
         <title>Logstown{% if 'title' in globals() %} - {{ title }}{% end %}</title>
         <script src="/assets/jquery-1.7.1.min.js"></script>
         <style>@import url("/assets/logstown.css");</style>
+        <script>
+            $(document).ready(function()
+            {
+                var WIN = $(window);
+                var BOD = $('BODY');
+                var bod = $('#body');
+
+                Logstown = {};
+                Logstown.resize = function()
+                {
+                    var offset = 0;
+                    var hb = bod.height(); 
+                    var hW = WIN.height(); 
+                    if (hb < hW)
+                        offset = Math.floor((hW - hb) / 2);
+                    BOD.css('padding-top', offset); 
+                };
+                Logstown.resize();
+                WIN.resize(Logstown.resize);
+            });
+        </script>
         {% block head %}{% end %}
     </head>
     <body>
         <div id="body">
-            <h1><a href="/">Logstown.com</a></h1>
+            <h1><a href="/">Logstown</a></h1>
 
             {% if request.user.ANON %}       
             <div id="signed">Signed in as <b>{{ request.user.session['email'] }}</b>. 
@@ -17,5 +38,19 @@
 
             <div id="content">{% block content %}{% end %}</div>
         </div>
+        <div id="bg"></div>
+    <script type="text/javascript">
+      var _gauges = _gauges || [];
+      (function() {
+        var t   = document.createElement('script');
+        t.type  = 'text/javascript';
+        t.async = true;
+        t.id    = 'gauges-tracker';
+        t.setAttribute('data-site-id', '4ee664fe613f5d7f24000001');
+        t.src = '//secure.gaug.es/track.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(t, s);
+      })();
+    </script>
     </body>
 </html>

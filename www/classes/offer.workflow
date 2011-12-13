@@ -1,7 +1,6 @@
 Register or Sign In
 *Email
-*Password
-*Confirm
+*[50]Password;*[50]Confirm
 (button)Sign In
 
 Profile

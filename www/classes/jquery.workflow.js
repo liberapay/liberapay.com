@@ -292,6 +292,7 @@
     function success(data)
     {   // Catch the raw *.workflow content and do something with it.
         that.html(render(parse(data)));
+        Logstown.resize();
     }
 
 
