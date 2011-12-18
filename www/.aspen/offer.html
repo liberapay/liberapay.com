@@ -1,0 +1,17 @@
+{% extends "base.html %}
+{% block head %}
+<style>@import url("offer.css");</style>
+<script src="/assets/jquery.workflow.js"></script>
+<script src="offer.js"></script>
+<script>
+    $(document).ready(Offer.main);
+</script>
+{% end %}
+
+{% block content %}
+<h2>Offer a Class</h2>
+<form action="" method="POST">
+    {% block form %}
+    {% end %}
+</form>
+{% end %}
