@@ -1,7 +1,73 @@
 ^L
+if not request.user.ANON:
+    request.redirect('/classes/offer/profile.html')
+^L
 {% extends offer.html %}
+{% block head2 %}
+<style>
+    .submit A {
+        color: #00E;
+        font-size: 11px;
+    }
+    .submit A:hover {
+        background: transparent;
+    }
+</style>
+<script>
+    Logstown.wire('informed', function()
+    {
+        $('.submit').prepend('<a href=""></a>');
+        $('.submit A').after('&nbsp;&nbsp;&nbsp;&nbsp;');
+
+        var wEmailOut = $('#field-email').width();
+        var wEmailIn = $('#email').width();
+        var wPasswordOut = $('#field-password').width();
+        var wPasswordIn = $('#password').width();
+
+        function lets(e)
+        {
+            if (e)
+            {
+                e.stopPropagation();
+                e.preventDefault();
+                $(e.target).blur();
+            } 
+        };
+
+        function letsSignIn(e)
+        {
+            lets(e);
+            $('.submit A').text('Register').click(letsRegister);
+            $('#field-confirm').hide();
+            $('#field-password').width(wEmailOut);
+            $('#field-password INPUT').width(wEmailIn);
+            $('#field-password I').hide();
+            $('#field-sign-in BUTTON').text('Sign In');
+            $('FORM').attr('action', '/ajax/sign-in.json');
+            return false;
+        };
+
+        function letsRegister(e)
+        {
+            lets(e);
+            $('.submit A').text('Sign In').click(letsSignIn);
+            $('#field-confirm').show();
+            $('#field-password').width(wPasswordOut);
+            $('#field-password INPUT').width(wPasswordIn);
+            $('#field-password I').show();
+            $('#field-sign-in BUTTON').text('Register');
+            $('FORM').attr('action', '/ajax/register.json');
+            return false;
+        };
+
+        letsSignIn();
+
+    });
+</script>
+{% end %}
 {% block form %}
+1 5 Sign In or Register
 *Email
-*[50]Password;*[50]Confirm
+*[50](password)Password{6+ characters};*[50](password)Confirm
 (submit)Sign In|Signing In
 {% end %}

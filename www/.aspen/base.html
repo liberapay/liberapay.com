@@ -9,12 +9,13 @@
             $(document).ready(Logstown.main);
         </script>
         {% block head %}{% end %}
+        {% block head2 %}{% end %}
     </head>
     <body>
         <div id="body">
             <h1><a href="/">Logstown</a></h1>
 
-            {% if not request.user.ANON %}       
+            {% if 0 and not request.user.ANON %}       
             <div id="signed">Signed in as <b>{{ request.user.session['email'] }}</b>. 
                 <a href="/sign/out.html">Sign out</a></div>
             {% end %}

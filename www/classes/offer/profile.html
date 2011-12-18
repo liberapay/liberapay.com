@@ -1,0 +1,24 @@
+^L
+if request.user.ANON:
+    request.redirect('/classes/offer/')
+^L
+{% extends offer.html %}
+{% block already %}
+
+<div id="unpegged-2" class="unpegged">
+    <h3><span><b>Step 1 <i>of</i> 5:</b> Register or Sign In</span></h3>
+    <div class="line"></div>
+
+    <p>You are signed in as {{ request.user.session['email'] }}. <a href="">Sign
+        out</a>.</p>
+
+</div>
+
+{% end %}
+{% block form %}
+2 5 Profile 
+*Full Name
+(textarea)About You
+Link for More Info
+(submit)Save Profile
+{% end %}

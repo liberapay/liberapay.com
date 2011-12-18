@@ -10,5 +10,5 @@ Offer.main = function()
         $('#field-confirm').hide();
     });
 
-    $('#workflow').workflow();
+    $('FORM').inform();
 };
