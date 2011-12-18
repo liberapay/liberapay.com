@@ -73,24 +73,18 @@ def gen_years():
 
 title = "Offer a Class"
 #=========================================================================== ^L
- 
 {% extends "base.html" %}
 {% block head %}
+<style>@import url("offer.css");</style>
+<script src="jquery.workflow.js"></script>
+<script src="offer.js"></script>
 <script>
-    $(document).ready(function() {
-        $('#credit_card_first_name').focus();
-    });
+    $(document).ready(Offer.main);
 </script>
 {% end %}
 
 {% block content %}
-<style>@import url("offer.css");</style>
-<script src="offer.js"></script>
-<script src="jquery.workflow.js"></script>
-<script>$(document).ready(Offer.main);</script>
-
 <h2>Offer a Class</h2>
-
 <div id="workflow">
     authenticate    Register or Sign In
     profile         Profile
@@ -98,5 +92,4 @@ title = "Offer a Class"
     pricing         Pricing
     publish         Pay and Publish
 </div>
-
 {% end %}

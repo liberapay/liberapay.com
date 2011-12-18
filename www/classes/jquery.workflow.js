@@ -23,13 +23,24 @@
     // Object model: <Control>, Field, Row, Step.
     // ==========================================
 
-    var Button = function(f)
+    var Submit = function(f)
     {
         this.noLabel = true;
         this.render = function()
         {
-            return ('<button name="' + f.label + '" id="' + f.label + 
-                    '">' + f.name + '</button>');
+            var POST_name = f.label.split('|')[0];
+            var standby = '', acting = '', parts = f.name.split('|'); 
+            if (parts.length === 1)
+            { 
+                standby = parts[0];
+                acting = standby + 'ing ...';
+            } else {
+                standby = parts[0];
+                acting = parts[1];
+            }
+            return ( '<button type="submit" name="' + POST_name 
+                   + '" id="' + POST_name + '" holder="' + acting + '">' 
+                   + standby + '</button>');
         };
     };
 
@@ -80,10 +91,10 @@
     };
 
     var controls = {
-          button: Button
-        , dollar: Dollar
+          dollar: Dollar
         , map: Map 
         , meetings: Meetings
+        , submit: Submit 
         , text: Text 
         , textarea: TextArea
     }
@@ -99,6 +110,7 @@
         this.label = this.name.toLowerCase();
         this.label = this.label.replaceAll(' ', '-');
         this.label = this.label.replaceAll('?', '');
+        this.label = this.label.split('|')[0];
        
         this.control = new controls[this.type](this);
 
@@ -121,9 +133,11 @@
 
         this.render = function()
         {   // Return HTML representing this field.
-            var out = ('<div class="field ' + this.type + '"'
-                       +'style="width: ' + ourWidth + 'px;'
-                       +'margin-right: ' + marginRight + 'px">');
+            var out = ( '<div class="field ' + this.type 
+                      + '" id="field-' + this.label + '" '
+                      + 'style="width: ' + ourWidth + 'px;'
+                      + 'margin-right: ' + marginRight + 'px">'
+                       );
             if (this.control.noLabel === undefined)
                 out += ('<label for="' + this.label + '">' 
                         + this.name + this.required + '</label>');
@@ -145,7 +159,7 @@
 
         if (s[0] === '*')
         {
-            this.required = '*';
+            //this.required = '*'; OOPS! XD
             s = s.slice(1);
         }
 
@@ -165,7 +179,7 @@
                 this.width = parseInt(a[0], 10);
                 s = a[1];
             }
-            else 
+            else
             {
                 this.name += c;
             }
@@ -221,7 +235,7 @@
         self.contain = function(contents)
         {   // Given a string, wrap and return.
             return ( '<form class="step" id="' + self.slug + '" '
-                   + 'action="' + self.slug + '.json" method="POST">'
+                   + 'action="/ajax/' + self.slug + '.json" method="POST">'
                    + contents 
                    + '<div class="clear"></div>'
                    + '</form>'
@@ -268,8 +282,11 @@
                     out += (new Row(fields)).render();
                 }
             }
-            $('#' + self.slug).html(self.contain(out));
+            var container = $('#' + self.slug)
+            container.html(self.contain(out));
+            $('FORM', container).submit(submit);
             Logstown.resize();
+            Logstown.fire(self.slug + '-populated');
         };
 
         self.render = function()
@@ -359,10 +376,18 @@
 
     function success()
     {
+        that.html(render(parse(that.text())));
     };
 
-    function submit()
+    function error()
     {
+        console.log("failure");
+    };
+
+    function submit(e)
+    {
+        e.stopPropagation();
+        e.preventDefault();
         var frm = $(this);
         jQuery.ajax(
             { type: 'POST'
@@ -372,7 +397,8 @@
             , success: success
             , error: error
              }
-         );
+        );
+        return false;
     }; 
 
 
@@ -383,7 +409,6 @@
     {
         that = this;
         that.html(render(parse(that.text())));
-        Logstown.resize();
         $(document).scroll(pegHeaders);
     };
 

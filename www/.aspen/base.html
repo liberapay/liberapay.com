@@ -4,26 +4,9 @@
         <title>Logstown{% if 'title' in globals() %} - {{ title }}{% end %}</title>
         <script src="/assets/jquery-1.7.1.min.js"></script>
         <style>@import url("/assets/logstown.css");</style>
+        <script src="/assets/logstown.js"></script>
         <script>
-            $(document).ready(function()
-            {
-                var WIN = $(window);
-                var BOD = $('BODY');
-                var bod = $('#body');
-
-                Logstown = {};
-                Logstown.resize = function()
-                {
-                    var offset = 0;
-                    var hb = bod.height(); 
-                    var hW = WIN.height(); 
-                    if (hb < hW)
-                        offset = Math.floor((hW - hb) / 2);
-                    BOD.css('padding-top', offset); 
-                };
-                Logstown.resize();
-                WIN.resize(Logstown.resize);
-            });
+            $(document).ready(Logstown.main);
         </script>
         {% block head %}{% end %}
     </head>
