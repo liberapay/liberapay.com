@@ -66,7 +66,7 @@ class User:
 
     @property
     def ANON(self):
-        return bool(self.session.get('email', False))
+        return not bool(self.session.get('email', False))
 
 def inbound(request):
     """Authenticate from a cookie.

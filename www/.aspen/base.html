@@ -31,7 +31,7 @@
         <div id="body">
             <h1><a href="/">Logstown</a></h1>
 
-            {% if request.user.ANON %}       
+            {% if not request.user.ANON %}       
             <div id="signed">Signed in as <b>{{ request.user.session['email'] }}</b>. 
                 <a href="/sign/out.html">Sign out</a></div>
             {% end %}

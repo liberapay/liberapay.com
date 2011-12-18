@@ -1,7 +1,22 @@
-{ "html": ""
-, "rows": [ ["*Full Name"]
-          , ["*(textarea)About You"]
-          , ["Link for More Info"]
-          , ["(button)Save Profile"]
-           ]
- }
+"""Given a email and password, return a boolean.
+"""
+from logstown import parse_rows
+from logstown.authentication import sign_in, sessions, User
+
+rows = """\
+*Full Name
+*(textarea)About You
+Link for More Info
+(button)Save Profile
+"""
+
+# ========================================================================== ^L
+
+out = {}
+out['html'] = ''
+out['rows'] = ''
+
+if not request.user.ANON:
+    out['rows'] = parse_rows(rows)
+
+response.body = out

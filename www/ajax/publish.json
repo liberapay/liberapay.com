@@ -10,5 +10,13 @@ Address 2
 (button)Publish Your Class!
 """
 
-
-response.body = {"html": "", "rows": parse_rows(rows)}
+# ========================================================================== ^L
+
+out = {}
+out['html'] = ''
+out['rows'] = ''
+
+if not request.user.ANON:
+    out['rows'] = parse_rows(rows)
+
+response.body = out

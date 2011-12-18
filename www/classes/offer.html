@@ -9,6 +9,7 @@ from samurai.payment_method import PaymentMethod
 #=========================================================================== ^L
 
 
+"""
 # Get the user's payment_method_token, if they have one.
 # ======================================================
 # If it comes to us in the querystring, that means we're getting a redirect
@@ -68,6 +69,7 @@ def gen_years():
     for year in range(this_year, this_year + 5):
         target = get('expiry_year') # returns int
         yield (year, ' selected="true"' if year == target else "")
+"""
 
 title = "Offer a Class"
 #=========================================================================== ^L

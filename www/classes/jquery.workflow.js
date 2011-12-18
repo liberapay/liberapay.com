@@ -172,8 +172,6 @@
         }
     }
 
-
-
     var Row = function(fields)
     {   // Model a collection of fields on the same row.
 
@@ -195,6 +193,7 @@
 
     var Step = function(n, slug, title)
     {   /* Model a step in a workflow. The arguments are: 
+
             n, as is "Step n of 6".
             slug, as in "register"
             title, as in "Register"
@@ -214,68 +213,76 @@
 
         */
 
-        var that = this;
-        this.n = n;
-        this.slug = slug;
-        this.title = title;
+        var self = this;
+        self.n = n;
+        self.slug = slug;
+        self.title = title;
 
-        this.contain = function(contents)
+        self.contain = function(contents)
         {   // Given a string, wrap and return.
-            return ( '<div class="step" id="' + this.slug + '">' + contents 
-                   + '<div class="clear"></div></div>'
+            return ( '<form class="step" id="' + self.slug + '" '
+                   + 'action="' + self.slug + '.json" method="POST">'
+                   + contents 
+                   + '<div class="clear"></div>'
+                   + '</form>'
                     );
         };
 
-        this.renderTitle = function()
+        self.renderTitle = function()
         {   // Return two so we can peg one of them.
-            return ( '<div id="unpegged-' + this.n + '" class="unpegged">'
+            return ( '<div id="unpegged-' + self.n + '" class="unpegged">'
                    + '<h3><span>'
-                   + '<b>Step ' + this.n + ' <i>of</i> ' + this.N + ':</b> '
-                   + this.title 
+                   + '<b>Step ' + self.n + ' <i>of</i> ' + self.N + ':</b> '
+                   + self.title 
                    +  '</span></h3><div class="line"></div></div>'
 
-                   + '<div id="pegged-' + this.n + '" class="pegged" '
-                   +    'style="z-index: ' + this.n + '">'
+                   + '<div id="pegged-' + self.n + '" class="pegged" '
+                   +    'style="z-index: ' + self.n + '">'
                    + '<div class="header shadow">'
                    + '<h3><span>'
-                   + '<b>Step ' + this.n + ' <i>of</i> ' + this.N + ':</b> '
-                   + this.title 
+                   + '<b>Step ' + self.n + ' <i>of</i> ' + self.N + ':</b> '
+                   + self.title 
                    + '</span></h3></div></div>'
                     );
         };
 
-        this.populate = function(data)
+        self.populate = function(data)
         {
-            var box = $('#'+that.slug + ' .container');
+            var out = '';
+
             if (data.html)
-                box.html(data.html);
-            else
             {
-                box.empty('');
+                out += self.renderTitle();
+                out += data.html;
+            }
+            else if (data.rows)
+            {
                 var i=0, j=0, row, spec;
+
+                out += self.renderTitle();
                 while (row = data.rows[i++])
                 {
                     var j=0, spec, fields=[];
                     while (spec = row[j++])
                         fields.push(new Field(spec, j, row.length));
-                    box.append((new Row(fields)).render());
+                    out += (new Row(fields)).render();
                 }
             }
+            $('#' + self.slug).html(self.contain(out));
             Logstown.resize();
         };
 
-        this.render = function()
-        {   // Return an HTML representation of this Step.
-            var out = this.renderTitle();
-            out += '<div class="container"></div>'; // ajax lands here
+        self.render = function()
+        {   // Return an HTML representation of self Step.
+            // This is done asynchronously, actually.
             jQuery.ajax(
-                { url: '/ajax/'+this.slug+'.json'
+                { url: '/ajax/' + self.slug + '.json'
                 , type: 'GET'
                 , dataType: 'json'
-                , success: this.populate
+                , success: self.populate
                  }
             );
-            return this.contain(out); 
+            return '<div id="' + self.slug + '"></div>';
         };
     };
     
@@ -304,10 +311,10 @@
 
     function render(steps)
     {   // Given an array of Steps, return HTML.
-        var i=0, step;
+        var i = steps.length, step;
         var out = '';
 
-        while (step = steps[i++])
+        while (step = steps[--i])
             out += step.render();
 
         return out;
@@ -349,6 +356,24 @@
                 pegged.hide();
         });
     }
+
+    function success()
+    {
+    };
+
+    function submit()
+    {
+        var frm = $(this);
+        jQuery.ajax(
+            { type: 'POST'
+            , url: frm.attr('action')
+            , data: frm.serialize()
+            , dataType: 'json'
+            , success: success
+            , error: error
+             }
+         );
+    }; 
 
 
     // Plugin Registration

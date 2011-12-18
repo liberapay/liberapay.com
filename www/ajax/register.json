@@ -7,7 +7,7 @@ from psycopg2 import IntegrityError
 
 SIGN_UP = "INSERT INTO users (email, hash) VALUES (%s, %s)"
 
-# =========================================================================== 
+# ========================================================================== ^L
 
 email = request.body.one('email').strip().lower()
 password = request.body.one('password') # Don't strip!
