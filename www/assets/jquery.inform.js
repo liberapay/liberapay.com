@@ -30,7 +30,6 @@
         this.noLabel = true;
         this.render = function()
         {
-            var POST_name = f.label.split('|')[0];
             var standby = '', acting = '', parts = f.name.split('|'); 
             if (parts.length === 1)
             { 
@@ -40,8 +39,14 @@
                 standby = parts[0];
                 acting = parts[1];
             }
-            return ( '<button type="submit" name="' + POST_name 
-                   + '" id="' + POST_name + '" holder="' + acting + '">' 
+
+            this.acting = acting;
+            this.standby = standby;
+
+            return ( '<button type="submit" name="' + f.label 
+                   + '" id="' + f.id
+                   + '" acting="' + acting
+                   + '" standby="' + standby + '">' 
                    + standby + '</button>');
         };
     };
@@ -51,7 +56,7 @@
         this.render = function()
         {
             return ('$<input style="width: ' + (f.getWidth() - 40) 
-                    + 'px;" name="' + f.label + '" id="' + f.label 
+                    + 'px;" name="' + f.label + '" id="' + f.id
                     + '" />.00');
         };
     };
@@ -61,7 +66,7 @@
         this.render = function()
         {
             return ('<input style="width: ' + f.getWidth() + 'px;" name="' 
-                    + f.label + '" id="' + f.label + '" />');
+                    + f.label + '" id="' + f.id + '" />');
         };
     };
 
@@ -70,7 +75,7 @@
         this.render = function()
         {
             return ('<input style="width: ' + f.getWidth() + 'px;" name="' 
-                    + f.label + '" id="' + f.label + '" />');
+                    + f.label + '" id="' + f.id + '" />');
         };
     };
 
@@ -80,7 +85,7 @@
         {
             return ('<input type="password" '
                     + 'style="width: ' + f.getWidth() + 'px;" name="' 
-                    + f.label + '" id="' + f.label + '" />');
+                    + f.label + '" id="' + f.id + '" />');
         };
     };
 
@@ -89,7 +94,7 @@
         this.render = function()
         {
             return ('<input style="width: ' + f.getWidth() + 'px;" name="' 
-                    + f.label + '" id="' + f.label + '" />');
+                    + f.label + '" id="' + f.id + '" />');
         };
     };
 
@@ -98,7 +103,7 @@
         this.render = function()
         {
             return ('<textarea style="width: ' + f.getWidth() + 'px;" name="' 
-                    + f.label + '" id="' + f.label + '"></textarea>');
+                    + f.label + '" id="' + f.id + '"></textarea>');
         };
     };
 
@@ -119,11 +124,12 @@
         this.parse(spec);
         this.n = n; // 1-index in the row
         this.N = N; // total fields in this row
-        
+       
         this.label = this.name.toLowerCase();
         this.label = this.label.replaceAll(' ', '-');
         this.label = this.label.replaceAll('?', '');
         this.label = this.label.split('|')[0];
+        this.id = 'control-' + this.label;
        
         this.control = new controls[this.type](this);
 
@@ -155,8 +161,8 @@
             if (this.control.noLabel === undefined)
             {
                 help = this.help ? '<i>(' + this.help + ')</i>' : ''; 
-                out += ('<label for="' + this.label + '">' 
-                        + this.name + this.required + help + '</label>');
+                out += ('<label for="' + this.id + '">' + this.name 
+                        + this.required + help + '</label>');
             }
             out += this.control.render(this);
             return out + '</div>';
@@ -174,6 +180,9 @@
         this.help = '';
 
         var a = [];
+
+        while (s[0] === ' ')
+            s = s.slice(1); // strip leading whitespace
 
         if (s[0] === '*')
         {
@@ -251,7 +260,7 @@
         // Rows
         this.rows = [];
         var line = '';
-        for (var i=0; lines[i]; i++)
+        for (var i=0; i < lines.length; i++)
         {
             line = lines[i].trim();
             if (line === '')
@@ -285,7 +294,7 @@
             var i=0, j=0, row;
 
             out += this.renderTitle();
-            out += '<div id="problem"></div>';
+            out += '<p id="problem"></p>';
             while (row = this.rows[i++])
                 out += row.render();
             out += '<div class="clear"></div>';
@@ -296,12 +305,26 @@
         // Behavior
         // ========
 
+        this.refocus = function()
+        {
+            $('INPUT:first').focus();
+        }
+
         this.success = function(data)
         {
             if (data.problem === '')
                 window.location.href = window.location.href;
-            $('#problem').html(data.problem);
 
+            // Change button text back.
+            var btn = $('BUTTON[type=submit]');
+            btn.html(btn.attr('standby'));
+            $('#problem').stop()
+                         .html(data.problem)
+                         .css({color: 'red'})
+                         .animate({color: '#614C3E'}, 5000); // requires plugin
+                             // http://www.bitstorm.org/jquery/color-animation/
+            form.refocus();
+            Logstown.resize(); 
         };
 
         this.error = function(a,b,c)
@@ -313,6 +336,11 @@
         {
             e.stopPropagation();
             e.preventDefault();
+
+            // Change button text.
+            var btn = $('BUTTON[type=submit]');
+            btn.html('<i>' + btn.attr('acting') + ' ...</i>');
+
             jQuery.ajax(
                 { type: 'POST'
                 , url: $form.attr('action')
@@ -332,14 +360,13 @@
 
     $.fn.inform = function()
     {
-        console.log("informing");
         $form = this;
         form = new Form($form.text())
         $form.html(form.render());
         $form.submit(form.submit);
         Logstown.resize();
         Logstown.fire('informed');
-        $('INPUT:first').focus();
+        form.refocus();
     };
 
 })(jQuery);

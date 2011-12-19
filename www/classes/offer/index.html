@@ -16,13 +16,11 @@ if not request.user.ANON:
 <script>
     Logstown.wire('informed', function()
     {
-        $('.submit').prepend('<a href=""></a>');
-        $('.submit A').after('&nbsp;&nbsp;&nbsp;&nbsp;');
-
-        var wEmailOut = $('#field-email').width();
-        var wEmailIn = $('#email').width();
-        var wPasswordOut = $('#field-password').width();
-        var wPasswordIn = $('#password').width();
+        var wEmailField = $('#field-email').width();
+        var wEmailControl = $('#control-email').width();
+        var wPasswordField = $('#field-password').width();
+        var wPasswordControl = $('#control-password').width();
+        var registering = true; // immediately toggled by first call to lets
 
         function lets(e)
         {
@@ -30,44 +28,70 @@ if not request.user.ANON:
             {
                 e.stopPropagation();
                 e.preventDefault();
-                $(e.target).blur();
-            } 
+            }
+
+            (registering ? letsSignIn : letsRegister)();
+            $('#control-email').focus();
+            $('#problem').empty();
+            return false;
         };
 
         function letsSignIn(e)
         {
-            lets(e);
-            $('.submit A').text('Register').click(letsRegister);
+            registering = false;
             $('#field-confirm').hide();
-            $('#field-password').width(wEmailOut);
-            $('#field-password INPUT').width(wEmailIn);
+            $('#field-password').width(wEmailField);
+            $('#control-password').width(wEmailControl);
             $('#field-password I').hide();
-            $('#field-sign-in BUTTON').text('Sign In');
+            $('#control-sign-in').text('Sign In');
+            $('#control-sign-in').attr('acting', 'Signing In');
+            $('#control-sign-in').attr('standby', 'Sign In');
+            $('#field-sign-in A').text('Register');
             $('FORM').attr('action', '/ajax/sign-in.json');
-            return false;
         };
 
         function letsRegister(e)
         {
-            lets(e);
-            $('.submit A').text('Sign In').click(letsSignIn);
+            registering = true;
             $('#field-confirm').show();
-            $('#field-password').width(wPasswordOut);
-            $('#field-password INPUT').width(wPasswordIn);
+            $('#field-password').width(wPasswordField);
+            $('#control-password').width(wPasswordControl);
             $('#field-password I').show();
-            $('#field-sign-in BUTTON').text('Register');
+            $('#control-sign-in').text('Register');
+            $('#control-sign-in').attr('acting', 'Registering');
+            $('#control-sign-in').attr('standby', 'Register');
+            $('#field-sign-in A').text('Sign In');
             $('FORM').attr('action', '/ajax/register.json');
-            return false;
         };
 
-        letsSignIn();
+        // Add in the context switcher.
+        $('#field-sign-in').prepend('<a href=""></a>');
+        $('#field-sign-in A').after('&nbsp;&nbsp;&nbsp;&nbsp;');
+        $('#field-sign-in A').click(lets);
+        $('#field-sign-in A').keyup(function(e) 
+        {
+            if (e.which === 32) // space
+                lets();
+        });
 
+        // Configure the tabindex.
+        $('#control-email').attr('tabindex', 1);
+        $('#control-password').attr('tabindex', 2);
+        $('#control-confirm').attr('tabindex', 3);
+        $('#control-sign-in').attr('tabindex', 4);
+        $('#field-sign-in A').attr('tabindex', 5);
+
+        // Go!
+        lets();
     });
 </script>
 {% end %}
 {% block form %}
-1 5 Sign In or Register
-*Email
-*[50](password)Password{6+ characters};*[50](password)Confirm
-(submit)Sign In|Signing In
+
+    1 5 Sign In or Register
+
+    *Email
+    *[50](password)Password{6+ characters};*[50](password)Confirm
+    (submit)Sign In|Signing In
+
 {% end %}
