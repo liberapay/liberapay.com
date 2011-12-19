@@ -6,22 +6,22 @@ if request.user.ANON:
 {% block already %}
 
 <div id="unpegged-2" class="unpegged">
-    <h3><span><b>Step 1 <i>of</i> 5:</b> Register or Sign In</span></h3>
+    <h3><span><b>Step 1 <i>of</i> 4:</b> Register or Sign In</span></h3>
     <div class="line"></div>
 
     <p>You are signed in as {{ request.user.session['email'] }}. <a
         href="/sign/out.html">Sign out</a>.</p>
-
 </div>
 
 {% end %}
 {% block form %}
 
-    2 5 Profile 
+    2 4 Class Details 
 
-    *Full Name
-    (textarea)About You
-    Link for More Info
-    (submit)Save Profile
+    *Class Name
+    (textarea)What?
+    When?
+    (map)Where?
+    (submit)Save Class Details
 
 {% end %}

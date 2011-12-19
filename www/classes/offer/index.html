@@ -1,6 +1,6 @@
 ^L
 if not request.user.ANON:
-    request.redirect('/classes/offer/profile.html')
+    request.redirect('/classes/offer/details.html')
 ^L
 {% extends offer.html %}
 {% block head2 %}
@@ -88,7 +88,7 @@ if not request.user.ANON:
 {% end %}
 {% block form %}
 
-    1 5 Sign In or Register
+    1 4 Sign In or Register
 
     *Email
     *[50](password)Password{6+ characters};*[50](password)Confirm
