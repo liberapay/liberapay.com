@@ -70,12 +70,38 @@
         };
     };
 
-    var Meetings = function(f)
+    var Schedule = function(f)
     {
         this.render = function()
         {
-            return ('<input style="width: ' + f.getWidth() + 'px;" name="' 
-                    + f.label + '" id="' + f.id + '" />');
+            var out = '';
+            out = ''
+                + '<div class="range">'
+                + '  <h4>Registration</h4>'
+                + '  <span class="date">Dec 31<span>Monday</span></span>'
+                + '  &mdash; '
+                + '  <span class="date">Jan 14<span>Friday</span></span>'
+                + '</div>'
+                + '<div class="range">'
+                + '  <h4>Class</h4>'
+                + '  <span class="date">March 1<span>Monday</span></span>'
+                + '  &mdash; '
+                + '  <span class="date">May 28<span>Thursday</span></span>'
+                + '</div>'
+                + '<div class="clear"></div>'
+                + '<div class="timeline" style="width: ' + f.getWidth() + '">'
+                + '<div class="point today">Today</div>'
+                + '<div class="point year-2012">2012</div>'
+                + '<div class="point year-2013">2013</div>'
+                + '<div class="selection reg"></div>'
+                + '<div class="selection class"></div>'
+                + '<div class="pin reg start"><div class="head"></div></div>'
+                + '<div class="pin reg end"><div class="head"></div></div>'
+                + '<div class="pin class start"><div class="head"></div></div>'
+                + '<div class="pin class end"><div class="head"></div></div>'
+                + '</div>'
+                + '<input type="hidden" name="' + f.label + '" />';
+            return out;
         };
     };
 
@@ -110,7 +136,7 @@
     var controls = {
           dollar: Dollar
         , map: Map 
-        , meetings: Meetings
+        , schedule: Schedule 
         , password: Password
         , submit: Submit 
         , text: Text 
@@ -160,7 +186,7 @@
                        );
             if (this.control.noLabel === undefined)
             {
-                help = this.help ? '<i>(' + this.help + ')</i>' : ''; 
+                help = this.help ? '<i>' + this.help + '</i>' : ''; 
                 out += ('<label for="' + this.id + '">' + this.name 
                         + this.required + help + '</label>');
             }

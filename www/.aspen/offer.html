@@ -12,7 +12,7 @@
 {% block content %}
 <h2>Offer a Class</h2>
 {% block already %}{% end %}
-<form action="{{ request.path.raw }}" method="POST">
+<form action="{{ request.path.raw[:-5] }}.json" method="POST">
     {% block form %}
     {% end %}
 </form>

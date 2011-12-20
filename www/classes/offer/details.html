@@ -1,8 +1,123 @@
 ^L
 if request.user.ANON:
     request.redirect('/classes/offer/')
+
+if request.POST:
+    name = request.body.one('class-name')
+    what = request.body.one('what')
+    when = request.body.one('when')
+    where = request.body.one('where')
 ^L
 {% extends offer.html %}
+{% block head2 %}
+<style>
+    .schedule {
+        margin: 0 0 3em;
+    }
+    .schedule LABEL {
+        border-bottom: 1px solid #614C3E;
+    }
+    .range {
+        font-weight: bold;
+        float: left;
+        width: 50%;
+        padding: 0.25em 0 1em;
+    }
+    .range .date {
+        position: relative;
+    }
+    .range .date SPAN {
+        position: absolute;
+        left: 0;
+        bottom: -10px;
+        font: normal 9px/9px Cabin;
+        color: #CCBAAD;
+    }
+    .range H4 {
+        font: normal 9pt/12pt Cabin;
+        color: #B0C2BA;
+    }
+    .timeline {
+        margin-top: 20px;
+        height: 10px;
+        background: #F5F2F0;
+        position: relative;
+    }
+    .selection {
+        background: #2A8F79;
+        background: #B0C2BA;
+        height: 10px;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    .selection.reg {
+        width: 10px;
+        left: 10px;
+    }
+    .selection.class {
+        width: 90px;
+        left: 110px;
+    }
+    .pin {
+        width: 10px;
+        height: 15px;
+        position: absolute;
+        top: -5px;
+    }
+    .pin.start {
+        border-right: 1px solid #614C3E;
+    }
+    .pin.end {
+        border-left: 1px solid #614C3E;
+    }
+    .pin .head {
+        width: 10px;
+        height: 10px;
+        background: #614C3E;
+        cursor: pointer;
+        margin-top: -10px;
+    }
+    .pin .head:hover {
+        box-shadow: 0 0 20px #FFFF00;
+        cursor: pointer;
+    }
+    .pin.start .head {
+        border-radius: 5px 5px 0 5px;
+        margin-left: 1px;
+    }
+    .pin.end .head {
+        border-radius: 5px 5px 5px 0;
+        margin-left: -1px;
+    }
+    .pin.reg.start { left: 0; }
+    .pin.reg.end { left: 20px; }
+    .pin.class.start { left: 100px; }
+    .pin.class.end { left: 200px; }
+
+    .point {
+        position: absolute;
+        border-left: 1px solid #CCBAAD;
+        font: normal 9px/10px Cabin;
+        position: absolute;
+        padding: 15px 0 0 2px;
+        color: #614C3E;
+        color: #AE9889;
+        color: #CCBAAD;
+    }
+    .today {
+        left: 0;
+    }
+    .year-2012 {
+        left: 40px;
+    }
+    .year-2013 {
+        left: 260px;
+    }
+</style>
+<script>
+</script>
+{% end %}
 {% block already %}
 
 <div id="unpegged-2" class="unpegged">
@@ -20,8 +135,9 @@ if request.user.ANON:
 
     *Class Name
     (textarea)What?
-    When?
+    (schedule)Dates?{Slide a pin, then pick a day.}
+    Time?{Examples: &ldquo;9:00 to Noon&rdquo; or &ldquo;Tu/Th 6-8:30&rdquo;}
     (map)Where?
-    (submit)Save Class Details
+    (submit)Save Class Details|Saving Class Details
 
 {% end %}
