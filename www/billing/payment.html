@@ -1,6 +1,6 @@
 ^L
 if request.user.ANON:
-    request.redirect('/classes/offer/')
+    request.redirect('/subscribe/')
 
 if request.POST:
     name = request.body.one('class-name')
