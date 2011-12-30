@@ -15,11 +15,6 @@ title = "Subscribe"
     }
 </style>
 <script>
-    Logstown.wire('authenticate-populated', function()
-    {
-        $('#field-confirm').hide();
-    });
-
     Logstown.wire('informed', function()
     {
         var wEmailField = $('#field-email').width();

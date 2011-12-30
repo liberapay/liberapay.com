@@ -51,57 +51,14 @@
         };
     };
 
-    var Dollar = function(f)
+    var Hidden = function(f)
     {
+        this.noContainer = true;
         this.render = function()
         {
-            return ('$<input style="width: ' + (f.getWidth() - 40) 
-                    + 'px;" name="' + f.label + '" id="' + f.id
-                    + '" />.00');
-        };
-    };
-
-    var Map = function(f)
-    {
-        this.render = function()
-        {
-            return ('<input style="width: ' + f.getWidth() + 'px;" name="' 
-                    + f.label + '" id="' + f.id + '" />');
-        };
-    };
-
-    var Schedule = function(f)
-    {
-        this.render = function()
-        {
-            var out = '';
-            out = ''
-                + '<div class="range">'
-                + '  <h4>Registration</h4>'
-                + '  <span class="date">Dec 31<span>Monday</span></span>'
-                + '  &mdash; '
-                + '  <span class="date">Jan 14<span>Friday</span></span>'
-                + '</div>'
-                + '<div class="range">'
-                + '  <h4>Class</h4>'
-                + '  <span class="date">March 1<span>Monday</span></span>'
-                + '  &mdash; '
-                + '  <span class="date">May 28<span>Thursday</span></span>'
-                + '</div>'
-                + '<div class="clear"></div>'
-                + '<div class="timeline" style="width: ' + f.getWidth() + '">'
-                + '<div class="point today">Today</div>'
-                + '<div class="point year-2012">2012</div>'
-                + '<div class="point year-2013">2013</div>'
-                + '<div class="selection reg"></div>'
-                + '<div class="selection class"></div>'
-                + '<div class="pin reg start"><div class="head"></div></div>'
-                + '<div class="pin reg end"><div class="head"></div></div>'
-                + '<div class="pin class start"><div class="head"></div></div>'
-                + '<div class="pin class end"><div class="head"></div></div>'
-                + '</div>'
-                + '<input type="hidden" name="' + f.label + '" />';
-            return out;
+            return ('<input type="hidden" name="' + f.label + '" ' 
+                    + 'id="' + f.id + '" '
+                    + 'value="' + f.value + '" />');
         };
     };
 
@@ -134,9 +91,7 @@
     };
 
     var controls = {
-          dollar: Dollar
-        , map: Map 
-        , schedule: Schedule 
+          hidden: Hidden
         , password: Password
         , submit: Submit 
         , text: Text 
@@ -146,6 +101,8 @@
 
     var Field = function(spec, n, N)
     {   // Model a field in a row in a step in a workflow.
+
+        var Control;
 
         this.parse(spec);
         this.n = n; // 1-index in the row
@@ -157,7 +114,10 @@
         this.label = this.label.split('|')[0];
         this.id = 'control-' + this.label;
        
-        this.control = new controls[this.type](this);
+        Control = controls[this.type];
+        if (Control === undefined)
+            throw (new Error('There is no control named "' + this.type) +'".');
+        this.control = new Control(this);
 
         var widthRatio = this.width / 100.0; // 55 => 0.55
         var spaceBetween = 10; // px between multiple fields in the same row
@@ -176,9 +136,9 @@
             return ourWidth - 12;
         };
 
-        this.render = function()
-        {   // Return HTML representing this field.
-            var help = ''
+        this.contain = function(html)
+        {
+            var help = '';
             var out = ( '<div class="field ' + this.type 
                       + '" id="field-' + this.label + '" '
                       + 'style="width: ' + ourWidth + 'px;'
@@ -190,8 +150,16 @@
                 out += ('<label for="' + this.id + '">' + this.name 
                         + this.required + help + '</label>');
             }
-            out += this.control.render(this);
+            out += html;
             return out + '</div>';
+        };
+
+        this.render = function()
+        {   // Return HTML representing this field.
+            var html = this.control.render(this);
+            if (this.control.noContainer === undefined)
+                html = this.contain(html);
+            return html;
         };
     };
 
@@ -203,6 +171,7 @@
         this.type = 'text';
         this.width = 100;
         this.name = '';
+        this.value = '';
         this.help = '';
 
         var a = [];
@@ -238,6 +207,12 @@
                 this.help = a[0];
                 s = a[1];
             }
+            else if (c === '"')
+            {
+                a = _consume(s, '"');
+                this.value = a[0];
+                s = a[1];
+            }
             else
             {
                 this.name += c;
@@ -270,14 +245,19 @@
     var Form = function(raw)
     {   // Model a form.
 
-        var lines = raw.split('\n');
+        var line, lines, parts;
+
+        raw = raw.replace(/\n\n/g, '\n');       // remove inner blank lines
+        raw = raw.replace(/ *[\\]\n */g, ';');  // support line continuations
+
+        lines = raw.split('\n');
         while (lines[0].trim() === '')
-            // skip blank lines
-            lines = lines.slice(1);
+            // remove leading blank lines
+            lines = lines.slice(1); 
 
 
         // Header
-        var parts = lines[0].trim().split(' ');
+        parts = lines[0].trim().split(' ');
         lines = lines.slice(1);
         this.n = parts[0];
         this.N = parts[1];
@@ -285,7 +265,7 @@
 
         // Rows
         this.rows = [];
-        var line = '';
+        line = '';
         for (var i=0; i < lines.length; i++)
         {
             line = lines[i].trim();

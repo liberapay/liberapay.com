@@ -1,124 +1,93 @@
-^L
+"""This page allows users to file their credit card details with us.
+"""
+import datetime
+
+import samurai.config
+from aspen import Response
+from logstown import db
+from samurai.payment_method import PaymentMethod
+
+#=========================================================================== ^L
+
 if request.user.ANON:
     request.redirect('/sign/in/then/subscribe.html')
 
 if request.POST:
-    name = request.body.one('class-name')
-    what = request.body.one('what')
-    when = request.body.one('when')
-    where = request.body.one('where')
+    raise Response(405)
+
+
+# Get the user's payment_method_token, if they have one.
+# ======================================================
+# If it comes to us in the querystring, that means we're getting a redirect
+# back from Samurai, and we want to save it. Otherwise we expect it in the 
+# session.
+
+pmt = request.qs.one('payment_method_token')
+if pmt is not None: # We got sent back here after POSTing ourself to Samurai.
+    session_token = request.user.session['session_token']
+    PMT = "UPDATE users SET payment_method_token=%s WHERE session_token=%s"
+    db.execute(PMT, (pmt, session_token,))
+else:
+    pmt = request.user.session.get('payment_method_token')
+
+
+# Download details from Samurai.
+# ==============================
+# If the user has not submitted this form at all yet, then pmt will be None.
+
+if pmt is not None:
+    pmt = {}
+    #pmt = PaymentMethod.find(pmt)
+
+
+# Set up some content helpers.
+# ============================
+
+def get(name):
+    out = ""
+    if pmt is not None:
+        out = getattr(pmt, name, "")
+        if out is None:
+            out = ""
+    return out
+
+def get_last_four():
+    last_four = get('last_four_digits')
+    if last_four:
+        last_four = "************" + last_four
+    return last_four
+
+def gen_months():
+    for month in range(1, 13):
+        target = get('expiry_month') # returns int
+        yield ( month
+              , str(month).zfill(2)
+              , ' selected="true"' if month == target else ""
+               )
+
+def gen_years():
+    # XXX Make this smarter to extend the range to include the users's actual 
+    # year (their card expires in 2011 and they don't login again until 2012, 
+    # e.g.)
+    this_year = datetime.datetime.now().year
+    for year in range(this_year, this_year + 5):
+        target = get('expiry_year') # returns int
+        yield (year, ' selected="true"' if year == target else "")
+
 
 title = "Subscribe"
 
-^L
+#=========================================================================== ^L
 {% extends form.html %}
 {% block head2 %}
 <style>
-    .schedule {
-        margin: 0 0 2em;
-    }
-    .schedule LABEL {
-        border-bottom: 1px solid #614C3E;
-    }
-    .range {
-        font-weight: bold;
-        float: left;
-        width: 50%;
-        padding: 0.25em 0 1em;
-    }
-    .range .date {
-        position: relative;
-    }
-    .range .date SPAN {
-        position: absolute;
-        left: 0;
-        bottom: -10px;
-        font: normal 9px/9px Cabin;
-        color: #CCBAAD;
-    }
-    .range H4 {
-        font: normal 9pt/12pt Cabin;
-        color: #B0C2BA;
-    }
-    .timeline {
-        margin-top: 20px;
-        height: 10px;
-        background: #F5F2F0;
-        position: relative;
-    }
-    .selection {
-        background: #2A8F79;
-        background: #B0C2BA;
-        height: 10px;
-        position: absolute;
-        top: 0;
-        left: 0;
-    }
-    .selection.reg {
-        width: 10px;
-        left: 10px;
-    }
-    .selection.class {
-        width: 90px;
-        left: 110px;
-    }
-    .pin {
-        width: 10px;
-        height: 15px;
-        position: absolute;
-    }
-    .pin.start {
-        border-right: 1px solid #614C3E;
-    }
-    .pin.end {
-        border-left: 1px solid #614C3E;
-    }
-    .pin .head {
-        width: 10px;
-        height: 10px;
-        background: #614C3E;
-        cursor: pointer;
-        margin-top: 15px;
-    }
-    .pin .head:hover {
-        box-shadow: 0 0 20px #FFFF00;
-        cursor: pointer;
-    }
-    .pin.start .head {
-        border-radius: 5px 0 5px 5px;
-        margin-left: 1px;
-    }
-    .pin.end .head {
-        border-radius: 0 5px 5px 5px;
-        margin-left: -1px;
-    }
-    .pin.reg.start { left: 0; }
-    .pin.reg.end { left: 20px; }
-    .pin.class.start { left: 100px; }
-    .pin.class.end { left: 200px; }
-
-    .point {
-        position: absolute;
-        border-left: 1px solid #CCBAAD;
-        font: normal 9px/10px Cabin;
-        position: absolute;
-        padding: 0 0 15px 2px;
-        margin-top: -15px;
-        color: #614C3E;
-        color: #AE9889;
-        color: #CCBAAD;
-    }
-    .today {
-        left: 0;
-    }
-    .year-2012 {
-        left: 40px;
-    }
-    .year-2013 {
-        left: 260px;
-    }
 </style>
 <script>
+    Logstown.wire('informed', function()
+    {
+        var action = 'https://api.samurai.feefighters.com/v1/payment_methods';
+        $('FORM').attr('action', action);
+    });
 </script>
 {% end %}
 {% block already %}
@@ -129,6 +98,8 @@ title = "Subscribe"
 
     <p>You are signed in as {{ request.user.session['email'] }}. <a
         href="/sign/out.html">Sign out</a>.</p>
+
+
 </div>
 
 {% end %}
@@ -144,4 +115,11 @@ title = "Subscribe"
     *Expiration
     (submit)Save Credit Card Details|Saving Credit Card Details
 
+    (hidden)redirect_url"{{ request.x.base }}/subscribe.html" \
+    (hidden)merchant_key"{{ samurai.config.merchant_key }}" \
+    {% if samurai.config.sandbox %}(hidden)sandbox"true" \
+    {% end %}
+    {% if pmt %}(hidden)payment_method_token"{{ pmt.payment_method_token }}" \
+    {% end %}
+        
 {% end %}
