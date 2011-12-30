@@ -1,8 +1,9 @@
 ^L
 if not request.user.ANON:
-    request.redirect('/subscribe/payment.html')
+    request.redirect('/subscribe.html')
+title = "Subscribe"
 ^L
-{% extends offer.html %}
+{% extends "form.html" %}
 {% block head2 %}
 <style>
     .submit A {
@@ -14,6 +15,11 @@ if not request.user.ANON:
     }
 </style>
 <script>
+    Logstown.wire('authenticate-populated', function()
+    {
+        $('#field-confirm').hide();
+    });
+
     Logstown.wire('informed', function()
     {
         var wEmailField = $('#field-email').width();
@@ -88,7 +94,7 @@ if not request.user.ANON:
 {% end %}
 {% block form %}
 
-    1 4 Sign In or Register
+    1 3 Sign In or Register
 
     *Email
     *[50](password)Password{6+ characters};*[50](password)Confirm

@@ -1,16 +1,15 @@
 {% extends "base.html %}
 {% block head %}
-<style>@import url("offer.css");</style>
 <script src="/assets/jquery.inform.js"></script>
 <script src="/assets/jquery.animate-colors-min.js"></script>
-<script src="offer.js"></script>
+<style>@import url("/assets/form.css");</style>
 <script>
-    $(document).ready(Offer.main);
+    $(document).ready(function() { $('FORM').inform() });
 </script>
 {% end %}
 
 {% block content %}
-<h2>Offer a Class</h2>
+<h2>{{ title }}</h2>
 {% block already %}{% end %}
 <form action="{{ request.path.raw[:-5] }}.json" method="POST">
     {% block form %}

@@ -1,14 +1,17 @@
 ^L
 if request.user.ANON:
-    request.redirect('/subscribe/')
+    request.redirect('/sign/in/then/subscribe.html')
 
 if request.POST:
     name = request.body.one('class-name')
     what = request.body.one('what')
     when = request.body.one('when')
     where = request.body.one('where')
+
+title = "Subscribe"
+
 ^L
-{% extends offer.html %}
+{% extends form.html %}
 {% block head2 %}
 <style>
     .schedule {
@@ -121,7 +124,7 @@ if request.POST:
 {% block already %}
 
 <div id="unpegged-2" class="unpegged">
-    <h3><span><b>Step 1 <i>of</i> 4:</b> Register or Sign In</span></h3>
+    <h3><span><b>Step 1 <i>of</i> 3:</b> Register or Sign In</span></h3>
     <div class="line"></div>
 
     <p>You are signed in as {{ request.user.session['email'] }}. <a
@@ -131,13 +134,14 @@ if request.POST:
 {% end %}
 {% block form %}
 
-    2 4 Class Details 
+    2 3 Credit Card Details 
 
-    *Class Name
-    (textarea)Description
-    (schedule)Dates{Slide the pins.}
-    Time{Examples: &ldquo;9:00 to Noon&rdquo; or &ldquo;Tu/Th 6-8:30&rdquo;}
-    (map)Location
-    (submit)Save Class Details|Saving Class Details
+    [50]First Name;[50]Last Name
+    Address 1
+    Address 2
+    [55]City;[15]State;[30]ZIP
+    *[75]Card Number;*[25]CVV
+    *Expiration
+    (submit)Save Credit Card Details|Saving Credit Card Details
 
 {% end %}
