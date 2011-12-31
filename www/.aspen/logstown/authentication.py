@@ -75,6 +75,7 @@ def inbound(request):
     if 'session' in request.cookie:
         token = request.cookie['session'].value
         session = load_session(token)
+        session['subscription'] = True
     request.user = User(session)
 
 def outbound(response):

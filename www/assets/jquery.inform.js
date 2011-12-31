@@ -240,10 +240,14 @@
         this.name = this.name.trim();
         if (this.label === '')
         {
-            this.label = this.label.split('|')[0];
             this.label = this.name.toLowerCase();
+            this.label = this.label.split('|')[0];
             this.label = this.label.replaceAll(' ', '-');
             this.label = this.label.replaceAll('?', '');
+        }
+        else 
+        {
+            this.label = this.label.split('|')[0];
         }
     }
 
@@ -394,8 +398,9 @@
     $.fn.inform = function()
     {
         $form = this;
-        form = new Form($form.text())
-        $form.html(form.render());
+        $inform = $('#inform', $form);
+        form = new Form($inform.text())
+        $inform.html(form.render());
         $form.submit(form.submit);
         Logstown.resize();
         Logstown.fire('informed');

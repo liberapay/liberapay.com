@@ -1,6 +1,6 @@
 ^L
 if not request.user.ANON:
-    request.redirect('/subscribe.html')
+    request.redirect('/subscription/create.html')
 title = "Subscribe"
 ^L
 {% extends "form.html" %}
@@ -17,6 +17,7 @@ title = "Subscribe"
 <script>
     Logstown.wire('informed', function()
     {
+        console.log('making it');
         var wEmailField = $('#field-email').width();
         var wEmailControl = $('#control-email').width();
         var wPasswordField = $('#field-password').width();
@@ -25,6 +26,7 @@ title = "Subscribe"
 
         function lets(e)
         {
+            console.log(e);
             if (e)
             {
                 e.stopPropagation();

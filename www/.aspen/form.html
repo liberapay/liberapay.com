@@ -10,9 +10,13 @@
 
 {% block content %}
 <h2>{{ title }}</h2>
-{% block already %}{% end %}
 <form action="{{ request.path.raw[:-5] }}.json" method="POST">
+    <div id="already">
+    {% block already %}{% end %}
+    </div>
+    <div id="inform">
     {% block form %}
     {% end %}
+    </div>
 </form>
 {% end %}

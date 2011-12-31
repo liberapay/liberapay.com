@@ -20,8 +20,8 @@ if request.POST:
 # ======================================================
 # If it comes to us in the querystring, that means we're getting a redirect
 # back from Samurai, and we want to save it and then bump to confirm.
-# Otherwise we look for it in the session and this page becomes an update CC
-# details instead of just a create subscription.
+# Otherwise we look for it in the session. If it exists, we bump to confirm
+# unless asked not to.
 
 pmt = request.qs.one('payment_method_token')
 if pmt is not None: # We got sent back here after POSTing ourself to Samurai.
@@ -32,7 +32,7 @@ if pmt is not None: # We got sent back here after POSTing ourself to Samurai.
 else:
     pmt = request.user.session.get('payment_method_token')
     if pmt is not None:
-        if not request.qs.one('update'): # can force update in querystring
+        if not request.qs.one('change'): # can force load via querystring
             request.redirect('/subscription/confirm.html')
 
 
@@ -61,24 +61,6 @@ def get_last_four():
     if last_four:
         last_four = "************" + last_four
     return last_four
-
-def gen_months():
-    for month in range(1, 13):
-        target = get('expiry_month') # returns int
-        yield ( month
-              , str(month).zfill(2)
-              , ' selected="true"' if month == target else ""
-               )
-
-def gen_years():
-    # XXX Make this smarter to extend the range to include the users's actual 
-    # year (their card expires in 2011 and they don't login again until 2012, 
-    # e.g.)
-    this_year = datetime.datetime.now().year
-    for year in range(this_year, this_year + 5):
-        target = get('expiry_year') # returns int
-        yield (year, ' selected="true"' if year == target else "")
-
 
 title = "Subscribe"
 
@@ -117,6 +99,8 @@ title = "Subscribe"
 
     2 3 Credit Card Details 
 
+    (help) "Your credit card details are securely stored by &lt;a href='https://samurai.feefighters.com/merchants/7b79175baca336eaf4bfe8c8/verify'&gt;Samurai&lt;/a&gt;, our secure payments partner."
+
     [50] 'credit_card[first_name]'  First Name  "{{ get('first_name') }}"\
     [50] 'credit_card[last_name]'   Last Name   "{{ get('last_name') }}"
          'credit_card[address_1]'   Address 1   "{{ get('address_1') }}"
@@ -126,11 +110,13 @@ title = "Subscribe"
     [30] 'credit_card[zip]'         ZIP         "{{ get('zip') }}"
    *[75] 'credit_card[card_number]' Card Number "{{ get_last_four() }}" \
    *[25] 'credit_card[cvv]'         CVV         ""
-   *[50] 'credit_card[expiry]'      Expiration  "{{ get('expiry_year') }} "
+   *[50] 'credit_card[expiry]'      Expiration  "" \
+    (hidden)    'credit_card[expiry_month]'     "{{ get('expiry_month') }}" \
+    (hidden)    'credit_card[expiry_year]'      "{{ get('expiry_year') }}"
     (submit) Save Credit Card Details|Saving Credit Card Details
 
-    (hidden)    redirect_url    "{{ request.x.base }}{{ request.path.raw }}" \
-    (hidden)    merchant_key    "{{ samurai.config.merchant_key }}" \
+    (hidden)    'redirect_url'  "{{ request.x.base }}{{ request.path.raw }}" \
+    (hidden)    'merchant_key'  "{{ samurai.config.merchant_key }}" \
     {% if samurai.config.sandbox %}(hidden) sandbox "true" \{% end %}
     {% if pmt %} (hidden) payment_method_token "{{ pmt.payment_method_token }}"
     {% end %}
