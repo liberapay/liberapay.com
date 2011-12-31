@@ -20,5 +20,5 @@ run: env
 	SAMURAI_SANDBOX="true" \
 	CANONICAL_HOST="" \
 	CANONICAL_SCHEME=http \
-	GAUGES= \
+	GAUGES=false \
 		sudo -E ./env/bin/thrash ./env/bin/aspen -vDEBUG -a:80 www/

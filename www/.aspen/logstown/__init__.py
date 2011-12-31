@@ -157,4 +157,4 @@ def startup(website):
     samurai.config.processor_token = os.environ['SAMURAI_PROCESSOR_TOKEN']
     samurai.config.sandbox = os.environ['SAMURAI_SANDBOX'] != 'false'
 
-    website.gauges = os.environ['GAUGES'] != ''
+    website.gauges = os.environ['GAUGES'] != 'false'
