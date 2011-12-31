@@ -6,19 +6,19 @@
         text-align: center;
         margin: 2em 0;
     }
-    .subscribe SPAN {
+    SPAN.price {
         font: italic 8.5pt/8.5pt Cabin;
     }
 </style>
 {% end %}
 {% block content %}
 
-<p><b>A Web of Ideas</b><br /><i>curated by</i><br />Chad Whitacre</p>
+<p><b>A Community of Ideas</b><br /><i>curated by</i><br />Chad Whitacre</p>
 
-<p class="subscribe">
+<p>
     <button type="submit"
-        onclick="window.location='/subscribe.html'">Subscribe</button><br />
-    <span>$9 / month</span>
+        onclick="window.location='/subscription/create.html'">Subscribe</button><br />
+    <span class="price">$9 / month</span>
 </p>
 
 {% end %}

@@ -13,22 +13,28 @@ if request.user.ANON:
     request.redirect('/sign/in/then/subscribe.html')
 
 if request.POST:
-    raise Response(405)
+    raise Response(405) # Method Not Allowed
 
 
 # Get the user's payment_method_token, if they have one.
 # ======================================================
 # If it comes to us in the querystring, that means we're getting a redirect
-# back from Samurai, and we want to save it. Otherwise we expect it in the 
-# session.
+# back from Samurai, and we want to save it and then bump to confirm.
+# Otherwise we look for it in the session and this page becomes an update CC
+# details instead of just a create subscription.
 
 pmt = request.qs.one('payment_method_token')
 if pmt is not None: # We got sent back here after POSTing ourself to Samurai.
     session_token = request.user.session['session_token']
     PMT = "UPDATE users SET payment_method_token=%s WHERE session_token=%s"
     db.execute(PMT, (pmt, session_token,))
+    request.redirect('/subscription/confirm.html')
 else:
     pmt = request.user.session.get('payment_method_token')
+    if pmt is not None:
+        if not request.qs.one('update'): # can force update in querystring
+            request.redirect('/subscription/confirm.html')
+
 
 
 # Download details from Samurai.
@@ -36,8 +42,7 @@ else:
 # If the user has not submitted this form at all yet, then pmt will be None.
 
 if pmt is not None:
-    pmt = {}
-    #pmt = PaymentMethod.find(pmt)
+    pmt = PaymentMethod.find(pmt)
 
 
 # Set up some content helpers.
@@ -86,7 +91,14 @@ title = "Subscribe"
     Logstown.wire('informed', function()
     {
         var action = 'https://api.samurai.feefighters.com/v1/payment_methods';
-        $('FORM').attr('action', action);
+        var form = $('FORM')
+        form.attr('action', action);
+        form.unbind('submit'); // use plain HTML submit instead of AJAX
+        form.submit(function() // but make sure a few fields are present
+        {
+
+        });
+
     });
 </script>
 {% end %}
@@ -98,8 +110,6 @@ title = "Subscribe"
 
     <p>You are signed in as {{ request.user.session['email'] }}. <a
         href="/sign/out.html">Sign out</a>.</p>
-
-
 </div>
 
 {% end %}
@@ -107,19 +117,22 @@ title = "Subscribe"
 
     2 3 Credit Card Details 
 
-    [50]First Name;[50]Last Name
-    Address 1
-    Address 2
-    [55]City;[15]State;[30]ZIP
-    *[75]Card Number;*[25]CVV
-    *Expiration
-    (submit)Save Credit Card Details|Saving Credit Card Details
+    [50] 'credit_card[first_name]'  First Name  "{{ get('first_name') }}"\
+    [50] 'credit_card[last_name]'   Last Name   "{{ get('last_name') }}"
+         'credit_card[address_1]'   Address 1   "{{ get('address_1') }}"
+         'credit_card[address_2]'   Address 2   "{{ get('address_2') }}"
+    [55] 'credit_card[city]'        City        "{{ get('city') }}" \
+    [15] 'credit_card[state]'       State       "{{ get('state') }}" \
+    [30] 'credit_card[zip]'         ZIP         "{{ get('zip') }}"
+   *[75] 'credit_card[card_number]' Card Number "{{ get_last_four() }}" \
+   *[25] 'credit_card[cvv]'         CVV         ""
+   *[50] 'credit_card[expiry]'      Expiration  "{{ get('expiry_year') }} "
+    (submit) Save Credit Card Details|Saving Credit Card Details
 
-    (hidden)redirect_url"{{ request.x.base }}/subscribe.html" \
-    (hidden)merchant_key"{{ samurai.config.merchant_key }}" \
-    {% if samurai.config.sandbox %}(hidden)sandbox"true" \
-    {% end %}
-    {% if pmt %}(hidden)payment_method_token"{{ pmt.payment_method_token }}" \
+    (hidden)    redirect_url    "{{ request.x.base }}{{ request.path.raw }}" \
+    (hidden)    merchant_key    "{{ samurai.config.merchant_key }}" \
+    {% if samurai.config.sandbox %}(hidden) sandbox "true" \{% end %}
+    {% if pmt %} (hidden) payment_method_token "{{ pmt.payment_method_token }}"
     {% end %}
         
 {% end %}

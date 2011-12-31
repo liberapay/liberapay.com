@@ -25,6 +25,36 @@
     // Object model: Form, Row, Field, <Control>.
     // ==========================================
 
+    var Help = function(f)
+    {
+        this.noContainer = true;
+        this.render = function()
+        {
+            return ('<p>' + f.value + '</p>');
+        };
+    };
+
+    var Hidden = function(f)
+    {
+        this.noContainer = true;
+        this.render = function()
+        {
+            return ('<input type="hidden" name="' + f.label + '" ' 
+                    + 'id="' + f.id + '" '
+                    + 'value="' + f.value + '" />');
+        };
+    };
+
+    var Password = function(f)
+    {
+        this.render = function()
+        {
+            return ('<input type="password" '
+                    + 'style="width: ' + f.getWidth() + 'px;" name="' 
+                    + f.label + '" id="' + f.id + '" />');
+        };
+    };
+
     var Submit = function(f)
     {
         this.noLabel = true;
@@ -51,33 +81,16 @@
         };
     };
 
-    var Hidden = function(f)
-    {
-        this.noContainer = true;
-        this.render = function()
-        {
-            return ('<input type="hidden" name="' + f.label + '" ' 
-                    + 'id="' + f.id + '" '
-                    + 'value="' + f.value + '" />');
-        };
-    };
-
-    var Password = function(f)
-    {
-        this.render = function()
-        {
-            return ('<input type="password" '
-                    + 'style="width: ' + f.getWidth() + 'px;" name="' 
-                    + f.label + '" id="' + f.id + '" />');
-        };
-    };
-
     var Text = function(f)
     {
         this.render = function()
         {
-            return ('<input style="width: ' + f.getWidth() + 'px;" name="' 
-                    + f.label + '" id="' + f.id + '" />');
+            return ('<input '
+                    + 'style="width: ' + f.getWidth() + 'px;" '
+                    + 'name="' + f.label + '" '
+                    + 'id="' + f.id + '" '
+                    + 'value="' + f.value + '" '
+                    + '/>');
         };
     };
 
@@ -91,7 +104,8 @@
     };
 
     var controls = {
-          hidden: Hidden
+          help: Help 
+        , hidden: Hidden
         , password: Password
         , submit: Submit 
         , text: Text 
@@ -107,11 +121,7 @@
         this.parse(spec);
         this.n = n; // 1-index in the row
         this.N = N; // total fields in this row
-       
-        this.label = this.name.toLowerCase();
-        this.label = this.label.replaceAll(' ', '-');
-        this.label = this.label.replaceAll('?', '');
-        this.label = this.label.split('|')[0];
+      
         this.id = 'control-' + this.label;
        
         Control = controls[this.type];
@@ -171,6 +181,7 @@
         this.type = 'text';
         this.width = 100;
         this.name = '';
+        this.label = '';
         this.value = '';
         this.help = '';
 
@@ -213,10 +224,26 @@
                 this.value = a[0];
                 s = a[1];
             }
+            else if (c === "'")
+            {
+                a = _consume(s, "'");
+                this.label = a[0];
+                s = a[1];
+            }
             else
             {
                 this.name += c;
             }
+        }
+
+        // post-process name and label
+        this.name = this.name.trim();
+        if (this.label === '')
+        {
+            this.label = this.label.split('|')[0];
+            this.label = this.name.toLowerCase();
+            this.label = this.label.replaceAll(' ', '-');
+            this.label = this.label.replaceAll('?', '');
         }
     }
 

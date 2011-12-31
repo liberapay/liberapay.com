@@ -1,54 +1,59 @@
-"""This page allows users to pay money.
+"""This page allows users to confirm their intent to subscribe.
 """
-from aspen import Response
 from samurai.payment_method import PaymentMethod
 
 #=========================================================================== ^L
 
-
-pmt = request.user.session['payment_method_token']
+pmt = request.user.session.get('payment_method_token')
 if not pmt:
-    raise Response(402)
-pmt = PaymentMethod.find(pmt)
+    request.redirect('/subscription/create.html')
+#pmt = PaymentMethod.find(pmt)
+class Foo: pass
+pmt = Foo()
+pmt.last_four_digits = '1234'
 
 
+title = "Subscribe"
 #=========================================================================== ^L
 
-{% extends "base.html" %}
-{% block head %}
+{% extends "form.html" %}
+{% block head2 %}
 <style>
-    @import url("https://samurai.feefighters.com/assets/api/0.1/samurai-540ad0fe1d10267c4f468150b02e6e3f.css");
-    #amount {
-        text-align: right;
-        width: 100px;
-        margin: 0 5px;
-    }
-    .samurai .button {
-        float: none;
-        display: inline-block;
-        margin-left: 40px;
-    }
 </style>
 <script>
-    $(document).ready(function() {
-        $('#amount').focus();
-    });
 </script>
 {% end %}
-{% block content %}
-<h2>Register as a Teacher</h2>
+{% block already %}
 
-<p> 
+<div id="unpegged-2" class="unpegged">
+    <h3><span><b>Step 1 <i>of</i> 3:</b> Register or Sign In</span></h3>
+    <div class="line"></div>
 
-<p>The first 100 teachers get t
+    <p>You are signed in as {{ request.user.session['email'] }}. <a
+        href="/sign/out.html">Sign out</a>.</p>
+</div>
 
-<p>You are using your <a href="/credit-card.html">credit card, 
-    ************{{ pmt.last_four_digits}}</a>.</p>
+<div id="unpegged-2" class="unpegged">
+    <h3><span><b>Step 2 <i>of</i> 3:</b> Credit Card Details</span></h3>
+    <div class="line"></div>
 
-<form action="/thank-you.html" method="POST" class="samurai">
-    <fieldset>
-        $<input name="amount" type="text" id="amount" />.00
-        <button type="submit" class="button">Pay Money</button>
-    </fieldset>
-</form>
+    <p>You are using your credit card 
+    <code>************{{ pmt.last_four_digits }}</code>. 
+    <a href="/subscription/create.html?update=1">Update</a>.</p>
+</div>
+
+{% end %}
+{% block form %}
+
+    3 3 Confirm Subscription
+
+    (help) "Your subscription costs $9 per month." \
+    (help) "You will be billed in advance on the first of every month." \
+    (help) "Your first bill will be for $7 to cover the rest of this month." \
+    (help) "Your credit card will be securely kept on file with &lt;a href='https://samurai.feefighters.com/merchants/7b79175baca336eaf4bfe8c8/verify'&gt;Samurai&lt;/a&gt;, our secure payments partner." \
+    (help) "You may cancel your subscription at any time. You will receive a prorated refund for the rest of that month."
+    (help) "Thank you for your subscription! &lt;code&gt;:-)&lt;/code&gt;"
+
+    (submit) Yes, subscribe.|Finalizing subscription ...
+    
 {% end %}
