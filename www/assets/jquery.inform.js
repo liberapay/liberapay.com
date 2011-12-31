@@ -308,20 +308,11 @@
         // Step n of N: title.
 
         this.renderTitle = function()
-        {   // Return two so we can peg one of them.
-            return ( '<div id="unpegged-' + this.n + '" class="unpegged">'
-                   + '<h3><span>'
-                   + '<b>Step ' + this.n + ' <i>of</i> ' + this.N + ':</b> '
+        {   return ( '<h3><span>'
+                   + '<b>Step ' + this.n + ' <i>of</i> ' + this.N
+                   + ((this.title === '') ? '</b> ' : ':</b> ')
                    + this.title 
                    +  '</span></h3><div class="line"></div></div>'
-
-                   + '<div id="pegged-' + this.n + '" class="pegged" '
-                   +    'style="z-index: ' + this.n + '">'
-                   + '<div class="header shadow">'
-                   + '<h3><span>'
-                   + '<b>Step ' + this.n + ' <i>of</i> ' + this.N + ':</b> '
-                   + this.title 
-                   + '</span></h3></div></div>'
                     );
         };
 
