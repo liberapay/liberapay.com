@@ -22,7 +22,7 @@
 
             <div id="content">{% block content %}{% end %}</div>
         </div>
-        <div id="bg"></div>
+        <div id="bg"></div>{% if website.gauges %}
         <script type="text/javascript">
           var _gauges = _gauges || [];
           (function() {
@@ -34,7 +34,7 @@
             t.src = '//secure.gaug.es/track.js';
             var s = document.getElementsByTagName('script')[0];
             s.parentNode.insertBefore(t, s);
-          });
-        </script>
+          })();
+        </script>{% end %}
     </body>
 </html>

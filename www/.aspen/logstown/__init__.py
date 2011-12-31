@@ -156,3 +156,5 @@ def startup(website):
     samurai.config.merchant_password = os.environ['SAMURAI_MERCHANT_PASSWORD']
     samurai.config.processor_token = os.environ['SAMURAI_PROCESSOR_TOKEN']
     samurai.config.sandbox = os.environ['SAMURAI_SANDBOX'] != 'false'
+
+    website.gauges = os.environ['GAUGES'] != ''
