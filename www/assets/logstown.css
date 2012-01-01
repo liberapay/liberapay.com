@@ -1,6 +1,5 @@
-import url(https://fonts.googleapis.com/css?family=Cabin:400,700,400italic,700italic);
-import url(https://fonts.googleapis.com/css?family=Cabin+Sketch:400);
 @import url("/assets/reset.css");
+@import url("/assets/fonts.css");
 
 LABEL {
     display: block;
@@ -64,16 +63,20 @@ H1 A {
     font: normal 9pt/12pt Cabin;
     text-align: right;
     overflow: hidden;
+    color: #CCBAAD;
 }
+#signed A { color: #CCBAAD; }
+#signed A:hover { color: #614C3E; }
 #signed .shadow {
     padding: 5px 0;
-    border-top: 1px solid #614C3E;
+    border-top: 1px solid #CCBAAD;
     background: white;
-    box-shadow: 0px 0px 5px #614C3E;
-    -o-box-shadow: 0px 0px 5px #614C3E;
-    -moz-box-shadow: 0px 0px 5px #614C3E;
-    -webkit-box-shadow: 0px 0px 5px #614C3E;
+    box-shadow: 0px 0px 5px #CCBAAD;
+    -o-box-shadow: 0px 0px 5px #CCBAAD;
+    -moz-box-shadow: 0px 0px 5px #CCBAAD;
+    -webkit-box-shadow: 0px 0px 5px #CCBAAD;
 }
+
 H2 {
     font: normal italic 16pt/16pt Cabin;
     margin: 2em 0 0.5em;
