@@ -7,11 +7,7 @@ from samurai.payment_method import PaymentMethod
 pmt = request.user.session.get('payment_method_token')
 if not pmt:
     request.redirect('/subscription/create.html')
-#pmt = PaymentMethod.find(pmt)
-class Foo: pass
-pmt = Foo()
-pmt.last_four_digits = '1234'
-
+pmt = PaymentMethod.find(pmt)
 
 subscription = request.user.session.get('subscription') 
 if subscription is not None:

@@ -308,12 +308,16 @@
         // Step n of N: title.
 
         this.renderTitle = function()
-        {   return ( '<h3><span>'
-                   + '<b>Step ' + this.n + ' <i>of</i> ' + this.N
-                   + ((this.title === '') ? '</b> ' : ':</b> ')
-                   + this.title 
-                   +  '</span></h3><div class="line"></div></div>'
-                    );
+        {  
+            var out = '';
+            if (this.N > 1)
+                out = ( '<h3><span>'
+                      + '<b>Step ' + this.n + ' <i>of</i> ' + this.N
+                      + ((this.title === '') ? '</b> ' : ':</b> ')
+                      + this.title 
+                      +  '</span></h3><div class="line"></div></div>'
+                       );
+            return out;
         };
 
         this.render = function()
@@ -341,7 +345,13 @@
         this.success = function(data)
         {
             if (data.problem === '')
-                window.location.href = window.location.href;
+            {
+                var to = data.redirect !== undefined 
+                       ? data.redirect
+                       : window.location.href
+                        ;
+                window.location.href = to;
+            }
 
             // Change button text back.
             var btn = $('BUTTON[type=submit]');

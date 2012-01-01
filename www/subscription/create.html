@@ -9,8 +9,16 @@ from samurai.payment_method import PaymentMethod
 
 #=========================================================================== ^L
 
+title = "Subscribe"
+N = 3
+
 if request.user.ANON:
-    request.redirect('/sign/in/then/subscribe.html')
+    response = Response(401)
+    response.sign_in_form = { "title": title
+                            , "step": "Register or Sign In"
+                            , "N": N
+                             }
+    raise response
 
 if request.POST:
     raise Response(405) # Method Not Allowed
@@ -61,8 +69,6 @@ def get_last_four():
     if last_four:
         last_four = "************" + last_four
     return last_four
-
-title = "Subscribe"
 
 #=========================================================================== ^L
 {% extends form.html %}

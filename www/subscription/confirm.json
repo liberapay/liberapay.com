@@ -1,1 +1,11 @@
-{"problem": ""}
+import datetime
+from logstown import db
+
+SUBSCRIBE = "UPDATE users SET subscribed_on=%s WHERE email=%s"
+
+# ========================================================================== ^L
+
+email = request.user.session['email']
+today = datetime.date.today()
+db.execute(SUBSCRIBE, (today, email))
+response.body = {"problem": "", "redirect": "/subscription/"}

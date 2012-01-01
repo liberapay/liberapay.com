@@ -1,8 +1,4 @@
-^L
-if not request.user.ANON:
-    request.redirect('/subscribe/payment.html')
-^L
-{% extends offer.html %}
+{% extends "form.html" %}
 {% block head2 %}
 <style>
     .submit A {
@@ -47,7 +43,7 @@ if not request.user.ANON:
             $('#control-sign-in').attr('acting', 'Signing In');
             $('#control-sign-in').attr('standby', 'Sign In');
             $('#field-sign-in A').text('Register');
-            $('FORM').attr('action', '/ajax/sign-in.json');
+            $('FORM').attr('action', '/sign/in.json');
         };
 
         function letsRegister(e)
@@ -61,7 +57,7 @@ if not request.user.ANON:
             $('#control-sign-in').attr('acting', 'Registering');
             $('#control-sign-in').attr('standby', 'Register');
             $('#field-sign-in A').text('Sign In');
-            $('FORM').attr('action', '/ajax/register.json');
+            $('FORM').attr('action', '/sign/up.json');
         };
 
         // Add in the context switcher.
@@ -85,13 +81,4 @@ if not request.user.ANON:
         lets();
     });
 </script>
-{% end %}
-{% block form %}
-
-    1 4 Sign In or Register
-
-    *Email
-    *[50](password)Password{6+ characters};*[50](password)Confirm
-    (submit)Sign In|Signing In
-
 {% end %}

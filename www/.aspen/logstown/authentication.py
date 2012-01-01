@@ -43,7 +43,13 @@ def sign_in(email, password):
 def load_session(token):
     from logstown import db
     SQL = """\
-        SELECT email, session_token, session_expires, payment_method_token 
+        SELECT email
+             , session_token
+             , session_expires
+             , payment_method_token 
+             , created
+             , subscribed_on
+             , subscribed_through
           FROM users
          WHERE session_token=%s
     """
@@ -75,7 +81,6 @@ def inbound(request):
     if 'session' in request.cookie:
         token = request.cookie['session'].value
         session = load_session(token)
-        session['subscription'] = True
     request.user = User(session)
 
 def outbound(response):

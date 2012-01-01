@@ -17,7 +17,7 @@ BODY {
 #body {
     position: relative;
     margin: 20px auto;
-    padding: 10px 20px;
+    padding: 10px 20px 30px;
     width: 316px;
     z-index: 1;
     background: rgba(255,255,255,0.9);
@@ -55,9 +55,24 @@ H1 A {
     color: #614C3E;
 }
 #signed {
-    position: absolute;
-    top: 50px;
-    right: 40px; 
+    width: 316px;
+    padding: 5px 0 0;
+    position: fixed;
+    bottom: 0;
+    left: 50%; 
+    margin-left: -158px;
+    font: normal 9pt/12pt Cabin;
+    text-align: right;
+    overflow: hidden;
+}
+#signed .shadow {
+    padding: 5px 0;
+    border-top: 1px solid #614C3E;
+    background: white;
+    box-shadow: 0px 0px 5px #614C3E;
+    -o-box-shadow: 0px 0px 5px #614C3E;
+    -moz-box-shadow: 0px 0px 5px #614C3E;
+    -webkit-box-shadow: 0px 0px 5px #614C3E;
 }
 H2 {
     font: normal italic 16pt/16pt Cabin;

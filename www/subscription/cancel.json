@@ -1,0 +1,13 @@
+from logstown import db
+
+CANCEL = "UPDATE users SET subscribed_on=NULL WHERE email=%s"
+
+# An asynchronous worker will select records where subscribed_on is NULL and
+# subscribed_through is not NULL. It will issue a prorated refund, set
+# subscribed_through to NULL, and purge credit card details from Samurai.
+
+# ========================================================================== ^L
+
+email = request.user.session['email']
+db.execute(CANCEL, (email,))
+response.body = {"problem": "", "redirect": "/"}

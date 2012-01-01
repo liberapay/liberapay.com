@@ -1,0 +1,21 @@
+^L
+title = "Register or Sign In"
+step = ""
+signing_in = True # affects footer, "Signed in as ..."
+N = 1
+
+if hasattr(response, "sign_in_form"):
+    title = response.sign_in_form['title']
+    step = response.sign_in_form['step']
+    N = response.sign_in_form['N']
+^L
+{% extends "sign-in.html" %}
+{% block form %}
+
+    1 {{ N }} {{ step }}
+
+    *Email
+    *[50](password)Password{6+ characters};*[50](password)Confirm
+    (submit)Sign In|Signing In
+
+{% end %}
