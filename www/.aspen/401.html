@@ -1,4 +1,6 @@
-^L
+
+#=========================================================================== ^L
+
 title = "Register or Sign In"
 step = ""
 signing_in = True # affects footer, "Signed in as ..."
@@ -8,7 +10,9 @@ if hasattr(response, "sign_in_form"):
     title = response.sign_in_form['title']
     step = response.sign_in_form['step']
     N = response.sign_in_form['N']
-^L
+
+#=========================================================================== ^L
+
 {% extends "sign-in.html" %}
 {% block form %}
 
