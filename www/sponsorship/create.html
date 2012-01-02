@@ -20,7 +20,8 @@ if request.user.ANON:
                             , "N": N
                              }
     raise response
-
+if request.user.SPONSOR:
+    request.redirect('/sponsorship/')
 
 # Load current details from Samurai.
 # ==================================

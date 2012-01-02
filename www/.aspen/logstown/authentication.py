@@ -72,6 +72,10 @@ class User:
         return '<User: %s>' % getattr(self, 'email', 'Anonymous')
 
     @property
+    def SPONSOR(self):
+        return self.session.get('sponsor_since') is not None
+
+    @property
     def ADMIN(self):
         return bool(self.session.get('is_admin', False))
 
