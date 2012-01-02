@@ -1,3 +1,10 @@
+through = request.user.session['sponsor_through']
+if through is None:
+    # Their first bill hasn't posted yet. XXX: Reason about race condition.
+    through = "as soon as you click the button"
+else:
+    through = "on " + through
+
 title = "Cancel Sponsorship"
 
 # ========================================================================== ^L
@@ -7,10 +14,9 @@ title = "Cancel Sponsorship"
 
     1 1
 
-    (help) "Your sponsorship will be cancelled immediately." \
-    (help) "You will be refunded $5, for the rest of this month." \
+    (help) "Your sponsorship will end {{ through }}." \
     (help) "Your credit card details will be purged."
-    (help) "Sorry. &lt;code&gt;:-(&lt;/code&gt;"
+    (help) "&lt;b&gt;Sorry.&lt;/b&gt; &lt;code&gt;:-(&lt;/code&gt;"
 
     (submit) Cancel Sponsorship|Canceling Your Sponsorship
 

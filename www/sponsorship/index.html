@@ -15,7 +15,9 @@ through = request.user.session['sponsor_through']
 {% block content %}
 <h2>Your Sponsorship</h2>
 
-<p>You started sponsoring me on {{ on }}.</p>
+<p>You have sponsored Logstown since {{ since }}.</p>
+
+<p><b>Thank you!</b> <code>:-)</code></p>
 
 {% if through is None %}
 <p>Your first bill has not posted yet.</p>
