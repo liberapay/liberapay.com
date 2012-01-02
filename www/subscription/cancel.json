@@ -1,4 +1,5 @@
 from logstown import db
+import samurai.config
 
 CANCEL = "UPDATE users SET subscribed_on=NULL WHERE email=%s"
 
