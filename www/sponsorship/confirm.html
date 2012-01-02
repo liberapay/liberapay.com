@@ -1,4 +1,4 @@
-"""This page allows users to confirm their intent to subscribe.
+"""This page allows users to confirm their intent to sponsor.
 """
 from samurai.payment_method import PaymentMethod
 
@@ -6,15 +6,15 @@ from samurai.payment_method import PaymentMethod
 
 pmt = request.user.session.get('payment_method_token')
 if not pmt:
-    request.redirect('/subscription/create.html')
+    request.redirect('/sponsorship/create.html')
 pmt = PaymentMethod.find(pmt)
 
-subscription = request.user.session.get('subscription') 
-if subscription is not None:
-    request.redirect('/subscription/')
+sponsorship = request.user.session.get('sponsorship') 
+if sponsorship is not None:
+    request.redirect('/sponsorship/')
 
 
-title = "Subscribe"
+title = "Sponsor Me"
 #=========================================================================== ^L
 
 {% extends "form.html" %}
@@ -40,20 +40,20 @@ title = "Subscribe"
 
     <p>You are using your credit card, 
     <code>************{{ pmt.last_four_digits }}</code>. 
-    <a href="/subscription/create.html?change=1">Change</a>.</p>
+    <a href="/sponsorship/create.html?change=1">Change</a>.</p>
 </div>
 
 {% end %}
 {% block form %}
 
-    3 3 Confirm Subscription
+    3 3 Confirm Sponsorship
 
-    (help) "Your subscription costs &lt;b&gt;$9 per month&lt;/b&gt;." \
+    (help) "Your sponsorship costs &lt;b&gt;$9 per month&lt;/b&gt;." \
     (help) "You will be billed &lt;b&gt;in advance on the second&lt;/b&gt; of every month." \
     (help) "Your credit card details are &ltb&gt;securely stored&lt;/b&gt; by &lt;a href='https://samurai.feefighters.com/merchants/7b79175baca336eaf4bfe8c8/verify' target='_blank'&gt;Samurai&lt;/a&gt;, our secure payments partner." \
-    (help) "You may &lt;a href='/subscription/cancel.html'&gt;&lt;b&gt;cancel&lt;/b&gt;&lt;/a&gt; your subscription at any time, and your credit card details will be purged."
-    (help) "&lt;b&gt;Thank you for your subscription!&lt;/b&gt; &lt;code&gt;:-)&lt;/code&gt;"
+    (help) "You may &lt;a href='/sponsorship/cancel.html'&gt;&lt;b&gt;cancel&lt;/b&gt;&lt;/a&gt; your sponsorship at any time, and your credit card details will be purged."
+    (help) "&lt;b&gt;Thank you for your sponsorship!&lt;/b&gt; &lt;code&gt;:-)&lt;/code&gt;"
 
-    (submit) Yes, subscribe me.|Finalizing subscription ...
+    (submit) Yes, I will sponsor you.|Finalizing sponsorship ...
     
 {% end %}

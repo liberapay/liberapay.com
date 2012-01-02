@@ -9,7 +9,7 @@ from samurai.payment_method import PaymentMethod
 
 #=========================================================================== ^L
 
-title = "Subscribe"
+title = "Sponsor Me"
 N = 3
 
 request.allow('GET')
@@ -32,7 +32,7 @@ if request.user.ANON:
 pmt = request.user.session.get('payment_method_token')
 if pmt is not None:
     if not request.qs.one('change'): # can force this form via querystring
-        request.redirect('/subscription/confirm.html')
+        request.redirect('/sponsorship/confirm.html')
     pmt = PaymentMethod.find(pmt)
 
 

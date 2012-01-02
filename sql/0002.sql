@@ -1,6 +1,6 @@
 ALTER TABLE users
   ADD COLUMN created            timestamp       NOT NULL DEFAULT 'now'
-, ADD COLUMN subscribed_on      date            DEFAULT NULL
-, ADD COLUMN subscribed_through date            DEFAULT NULL
 , ADD COLUMN is_admin           boolean         NOT NULL DEFAULT FALSE
+, ADD COLUMN sponsor_since      date            DEFAULT NULL
+, ADD COLUMN sponsor_through    date            DEFAULT NULL
  ;

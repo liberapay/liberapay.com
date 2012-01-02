@@ -48,8 +48,8 @@ def load_session(token):
              , session_expires
              , payment_method_token 
              , created
-             , subscribed_on
-             , subscribed_through
+             , sponsor_since
+             , sponsor_through
              , is_admin
           FROM users
          WHERE session_token=%s

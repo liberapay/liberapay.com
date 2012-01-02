@@ -6,8 +6,8 @@ USERS = """\
     SELECT email
          , is_admin
          , payment_method_token
-         , subscribed_on
-         , subscribed_through 
+         , sponsor_since
+         , sponsor_through 
       FROM users
 
 """
@@ -45,16 +45,16 @@ users = db.fetchall(USERS)
                 <th>email</th>
                 <th>admin</th>
                 <th>pmt</th>
-                <th>on</th>
-                <th>through</th>
+                <th>sponsor_on</th>
+                <th>sponsor_through</th>
             </tr>
             {% for user in users %}
             <tr>
                 <td>{{ user['email'] }}</td>
                 <td>{{ user['is_admin'] }}</td>
                 <td>{{ user['payment_method_token'] }}</td>
-                <td>{{ user['subscribed_on'] }}</td>
-                <td>{{ user['subscribed_through'] }}</td>
+                <td>{{ user['sponsor_since'] }}</td>
+                <td>{{ user['sponsor_through'] }}</td>
             </tr>
             {% end %}
         </table>

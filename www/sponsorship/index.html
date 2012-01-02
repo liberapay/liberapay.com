@@ -3,24 +3,24 @@
 
 if request.user.ANON:
     request.redirect('create.html')
-if request.user.session['subscribed_on'] is None:
+if request.user.session['sponsor_since'] is None:
     request.redirect('create.html')
 
-on = request.user.session['subscribed_on']
-through = request.user.session['subscribed_through']
+since = request.user.session['sponsor_since']
+through = request.user.session['sponsor_through']
 
 # ========================================================================== ^L
 
 {% extends "base.html" %}
 {% block content %}
-<h2>Your Subscription</h2>
+<h2>Your Sponsorship</h2>
 
-<p>You subscribed on {{ on }}.</p>
+<p>You started sponsoring me on {{ on }}.</p>
 
 {% if through is None %}
 <p>Your first bill has not posted yet.</p>
 {% else %}
-<p>You are subscribed through {{ through }}.</p>
+<p>You next bill will be on {{ through }}.</p>
 {% end %}
 
 <p><a href="cancel.html">Cancel</a>.</p>
