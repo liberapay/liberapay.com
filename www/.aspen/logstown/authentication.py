@@ -50,6 +50,7 @@ def load_session(token):
              , created
              , subscribed_on
              , subscribed_through
+             , is_admin
           FROM users
          WHERE session_token=%s
     """
@@ -69,6 +70,10 @@ class User:
 
     def __str__(self):
         return '<User: %s>' % getattr(self, 'email', 'Anonymous')
+
+    @property
+    def ADMIN(self):
+        return bool(self.session.get('is_admin', False))
 
     @property
     def ANON(self):

@@ -1,0 +1,14 @@
+from logstown import db
+
+PMT = "UPDATE users SET payment_method_token=%s WHERE email=%s"
+
+# ========================================================================== ^L
+
+email = request.user.session.get('email')
+pmt = request.body.one('payment_method_token')
+
+if None in (email, pmt):
+    raise Response(400)
+
+db.execute(PMT, (pmt, email,))
+response.body = {}

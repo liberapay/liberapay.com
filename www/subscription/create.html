@@ -12,6 +12,8 @@ from samurai.payment_method import PaymentMethod
 title = "Subscribe"
 N = 3
 
+request.allow('GET')
+
 if request.user.ANON:
     response = Response(401)
     response.sign_in_form = { "title": title
@@ -20,36 +22,17 @@ if request.user.ANON:
                              }
     raise response
 
-if request.POST:
-    raise Response(405) # Method Not Allowed
 
+# Load current details from Samurai.
+# ==================================
+# If we have nothing in Samurai for this user, then they'll definitely get the 
+# form. Otherwise we'll bump them to the next step unless they ask to stay 
+# here.
 
-# Get the user's payment_method_token, if they have one.
-# ======================================================
-# If it comes to us in the querystring, that means we're getting a redirect
-# back from Samurai, and we want to save it and then bump to confirm.
-# Otherwise we look for it in the session. If it exists, we bump to confirm
-# unless asked not to.
-
-pmt = request.qs.one('payment_method_token')
-if pmt is not None: # We got sent back here after POSTing ourself to Samurai.
-    session_token = request.user.session['session_token']
-    PMT = "UPDATE users SET payment_method_token=%s WHERE session_token=%s"
-    db.execute(PMT, (pmt, session_token,))
-    request.redirect('/subscription/confirm.html')
-else:
-    pmt = request.user.session.get('payment_method_token')
-    if pmt is not None:
-        if not request.qs.one('change'): # can force load via querystring
-            request.redirect('/subscription/confirm.html')
-
-
-
-# Download details from Samurai.
-# ==============================
-# If the user has not submitted this form at all yet, then pmt will be None.
-
+pmt = request.user.session.get('payment_method_token')
 if pmt is not None:
+    if not request.qs.one('change'): # can force this form via querystring
+        request.redirect('/subscription/confirm.html')
     pmt = PaymentMethod.find(pmt)
 
 
@@ -70,24 +53,92 @@ def get_last_four():
         last_four = "************" + last_four
     return last_four
 
+def get_expiry():
+    month = get('expiry_month')
+    year = get('expiry_year')
+    out = ''
+    if month and year:
+        out = "%02d/%s" % (int(month), year)
+    return out
+
 #=========================================================================== ^L
+
 {% extends form.html %}
 {% block head2 %}
 <style>
+    #field-card-type P {
+        margin: 0;
+        padding: 9px 0 0;
+        position: relative;
+    }
+    #field-card-type IMG {
+    }
 </style>
+<script src="https://samurai.feefighters.com/assets/api/samurai.js"></script>
 <script>
     Logstown.wire('informed', function()
     {
-        var action = 'https://api.samurai.feefighters.com/v1/payment_methods';
-        var form = $('FORM')
-        form.attr('action', action);
-        form.unbind('submit'); // use plain HTML submit instead of AJAX
-        form.submit(function() // but make sure a few fields are present
+        function errback(a,b,c)
         {
+            console.log(a,b,c);
+        }
 
-        });
+        function callback(data)
+        {
+            var pmt = data.payment_method.payment_method_token;
+            jQuery.ajax(
+                { url: "create.json"
+                , type: "POST"
+                , data: {"payment_method_token": pmt}
+                , dataType: "json"
+                , success: function()
+                {
+                    window.location.href = window.location.href;
+                }
+                 }
+            );
+        }
 
+        function submit(e)
+        {
+            e.preventDefault();
+            e.stopPropagation();
+
+            Samurai.init(
+                { merchant_key: '{{ samurai.config.merchant_key }}'
+                , {% if samurai.config.sandbox %}sandbox: true{% end %}
+                 }
+            );
+            
+            var details = $(this).serializeObject();
+
+            // parse out expiry parts
+            var parts = details.expiry.split('/');
+            details.expiry_month = parts[0];
+            details.expiry_year = parts[1];
+            delete details.expiry;
+
+            // wrap for samurai
+            data = { "credit_card": details
+                   {% if pmt %}, "payment_method_token": "{{ pmt.payment_method_token }}"
+                     {% end %}};
+
+            Samurai.payment(data, callback);
+
+            return false;
+        }
+
+        // Overwrite inform submit with a custom submit.
+        $('FORM').off('submit').submit(submit);
+        
+        var errorHandler = new Samurai.PaymentErrorHandler($('FORM'));
+        errorHandler.handleErrorsFromResponse(errback);
+
+        // Use a mask for the expiration date.
+        $('#control-expiry').mask('99/2099', {placeholder:'-'});
     });
+
+
 </script>
 {% end %}
 {% block already %}
@@ -107,24 +158,18 @@ def get_last_four():
 
     (help) "Your credit card details are securely stored by &lt;a href='https://samurai.feefighters.com/merchants/7b79175baca336eaf4bfe8c8/verify' target='_blank'&gt;Samurai&lt;/a&gt;, our secure payments partner."
 
-    [50] 'credit_card[first_name]'  First Name  "{{ get('first_name') }}"\
-    [50] 'credit_card[last_name]'   Last Name   "{{ get('last_name') }}"
-         'credit_card[address_1]'   Address 1   "{{ get('address_1') }}"
-         'credit_card[address_2]'   Address 2   "{{ get('address_2') }}"
-    [55] 'credit_card[city]'        City        "{{ get('city') }}" \
-    [15] 'credit_card[state]'       State       "{{ get('state') }}" \
-    [30] 'credit_card[zip]'         ZIP         "{{ get('zip') }}"
-   *[75] 'credit_card[card_number]' Card Number "{{ get_last_four() }}" \
-   *[25] 'credit_card[cvv]'         CVV         ""
-   *[50] 'credit_card[expiry]'      Expiration  "" \
-    (hidden)    'credit_card[expiry_month]'     "{{ get('expiry_month') }}" \
-    (hidden)    'credit_card[expiry_year]'      "{{ get('expiry_year') }}"
+    [50] 'first_name'   First Name  "{{ get('first_name') }}"\
+    [50] 'last_name'    Last Name   "{{ get('last_name') }}"
+         'address_1'    Address 1   "{{ get('address_1') }}"
+         'address_2'    Address 2   "{{ get('address_2') }}"
+    [55] 'city'         City        "{{ get('city') }}" \
+    [15] 'state'        State       "{{ get('state') }}" \
+    [30] 'zip'          ZIP         "{{ get('zip') }}"
+   *     'card_number'  Card Number "{{ get_last_four() }}"
+   *[21] 'cvv'          CVV         "" \
+   *[35] 'expiry'       Expiration  "{{ get_expiry() }}" \
+   *[44] 'card-type'    (shell)     "&nbsp;&lt;img src='cards.png' /&gt;" 
+
     (submit) Save Credit Card Details|Saving Credit Card Details
 
-    (hidden)    'redirect_url'  "{{ request.x.base }}{{ request.path.raw }}" \
-    (hidden)    'merchant_key'  "{{ samurai.config.merchant_key }}" \
-    {% if samurai.config.sandbox %}(hidden) sandbox "true" \{% end %}
-    {% if pmt %} (hidden) payment_method_token "{{ pmt.payment_method_token }}"
-    {% end %}
-        
 {% end %}

@@ -1,7 +1,61 @@
+from aspen import Response
 from logstown import db
-^L
-users = db.fetchall("SELECT email FROM users") 
-^L
-{% for user in users %}
-{{ user['email'] }}<br />
-{% end %}
+
+USERS = """\
+
+    SELECT email
+         , is_admin
+         , payment_method_token
+         , subscribed_on
+         , subscribed_through 
+      FROM users
+
+"""
+
+#=========================================================================== ^L
+
+if not request.user.ADMIN:
+    raise Response(404)
+users = db.fetchall(USERS)
+
+#=========================================================================== ^L
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Users</title>
+        <style>
+            @import url("/assets/logstown.css");
+            BODY {
+                padding: 10px;
+            }
+            TH {
+                font-weight: bold;
+                padding: 0 1em 0 0;
+                border-bottom: 1px solid #614C3E;
+            }
+            TD {
+                padding: 0 1em 0 0;
+            }
+       </style>
+    </head>
+    <body>
+        <table>
+            <tr>
+                <th>email</th>
+                <th>admin</th>
+                <th>pmt</th>
+                <th>on</th>
+                <th>through</th>
+            </tr>
+            {% for user in users %}
+            <tr>
+                <td>{{ user['email'] }}</td>
+                <td>{{ user['is_admin'] }}</td>
+                <td>{{ user['payment_method_token'] }}</td>
+                <td>{{ user['subscribed_on'] }}</td>
+                <td>{{ user['subscribed_through'] }}</td>
+            </tr>
+            {% end %}
+        </table>
+    </body>
+</html>

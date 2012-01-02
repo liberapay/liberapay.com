@@ -39,9 +39,12 @@
         this.noContainer = true;
         this.render = function()
         {
-            return ('<input type="hidden" name="' + f.label + '" ' 
-                    + 'id="' + f.id + '" '
-                    + 'value="' + f.value + '" />');
+            return ( '<input type="hidden" '
+                   + 'name="' + f.label + '" ' 
+                   + 'id="' + f.id + '" '
+                   + 'value="' + f.value + '" '
+                   + '/>'
+                    );
         };
     };
 
@@ -49,9 +52,26 @@
     {
         this.render = function()
         {
-            return ('<input type="password" '
-                    + 'style="width: ' + f.getWidth() + 'px;" name="' 
-                    + f.label + '" id="' + f.id + '" />');
+            return ( '<input '
+                   + 'style="width: ' + f.getWidth() + 'px;" '
+                   + 'type="password" '
+                   + 'name="' + f.label + '" '
+                   + 'id="' + f.id + '" '
+                   + '/>'
+                    );
+        };
+    };
+
+    var Shell = function(f)
+    {
+        this.render = function()
+        {
+            return ( '<p '
+                   + 'style="' + f.getWidth() + 'px;" '
+                   + 'id="' + f.label + '">' 
+                   + f.value 
+                   + '</p>'
+                    );
         };
     };
 
@@ -77,7 +97,9 @@
                    + '" id="' + f.id
                    + '" acting="' + acting
                    + '" standby="' + standby + '">' 
-                   + standby + '</button>');
+                   + standby 
+                   + '</button>'
+                    );
         };
     };
 
@@ -90,7 +112,8 @@
                     + 'name="' + f.label + '" '
                     + 'id="' + f.id + '" '
                     + 'value="' + f.value + '" '
-                    + '/>');
+                    + '/>'
+                     );
         };
     };
 
@@ -98,8 +121,12 @@
     {
         this.render = function()
         {
-            return ('<textarea style="width: ' + f.getWidth() + 'px;" name="' 
-                    + f.label + '" id="' + f.id + '"></textarea>');
+            return ( '<textarea '
+                   + 'style="width: ' + f.getWidth() + 'px;" '
+                   + 'name="' + f.label + '" '
+                   + 'id="' + f.id + '"' + '>'
+                   + '</textarea>'
+                    );
         };
     };
 
@@ -107,6 +134,7 @@
           help: Help 
         , hidden: Hidden
         , password: Password
+        , shell: Shell
         , submit: Submit 
         , text: Text 
         , textarea: TextArea
@@ -361,7 +389,7 @@
                          .css({color: 'red'})
                          .animate({color: '#614C3E'}, 5000); // requires plugin
                              // http://www.bitstorm.org/jquery/color-animation/
-            form.refocus();
+            Logstown.form.refocus();
             Logstown.resize(); 
         };
 
@@ -372,6 +400,7 @@
 
         this.submit = function(e)
         {
+            console.log('submitting form man');
             e.stopPropagation();
             e.preventDefault();
 
@@ -384,8 +413,8 @@
                 , url: $form.attr('action')
                 , data: $form.serialize()
                 , dataType: 'json'
-                , success: form.success
-                , error: form.error
+                , success: Logstown.form.success
+                , error: Logstown.form.error
                  }
             );
             return false;
@@ -400,12 +429,12 @@
     {
         $form = this;
         $inform = $('#inform', $form);
-        form = new Form($inform.text())
-        $inform.html(form.render());
-        $form.submit(form.submit);
+        Logstown.form = new Form($inform.text())
+        $inform.html(Logstown.form.render());
+        $form.submit(Logstown.form.submit);
         Logstown.resize();
         Logstown.fire('informed');
-        form.refocus();
+        Logstown.form.refocus();
     };
 
 })(jQuery);

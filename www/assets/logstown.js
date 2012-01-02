@@ -17,6 +17,25 @@ if (!window.console)
 // Make sure we have some things.
 // ==============================
 
+
+$.fn.serializeObject = function()
+{   // http://stackoverflow.com/questions/763345/jquery-how-to-store-form-values-in-data-object
+    var o = {};
+    var a = this.serializeArray();
+    $.each(a, function() {
+        if (o[this.name] !== undefined) {
+            if (!o[this.name].push) {
+                o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+        } else {
+            o[this.name] = this.value || '';
+        }
+    });
+    return o;
+};
+
+
 if (!Array.prototype.indexOf)
 {   // http://stackoverflow.com/questions/1744310/how-to-fix-array-indexof-in-javascript-for-ie-browsers
     Array.prototype.indexOf = function(obj, start)
