@@ -46,10 +46,7 @@ def load_session(token):
         SELECT email
              , session_token
              , session_expires
-             , payment_method_token 
              , created
-             , sponsor_since
-             , sponsor_through
              , is_admin
           FROM users
          WHERE session_token=%s
@@ -70,10 +67,6 @@ class User:
 
     def __str__(self):
         return '<User: %s>' % getattr(self, 'email', 'Anonymous')
-
-    @property
-    def SPONSOR(self):
-        return self.session.get('sponsor_since') is not None
 
     @property
     def ADMIN(self):

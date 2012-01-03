@@ -5,9 +5,7 @@ USERS = """\
 
     SELECT email
          , is_admin
-         , payment_method_token
-         , sponsor_since
-         , sponsor_through 
+         , created
       FROM users
 
 """
@@ -44,17 +42,13 @@ users = db.fetchall(USERS)
             <tr>
                 <th>email</th>
                 <th>admin</th>
-                <th>pmt</th>
-                <th>sponsor_on</th>
-                <th>sponsor_through</th>
+                <th>created</th>
             </tr>
             {% for user in users %}
             <tr>
                 <td>{{ user['email'] }}</td>
                 <td>{{ user['is_admin'] }}</td>
-                <td>{{ user['payment_method_token'] }}</td>
-                <td>{{ user['sponsor_since'] }}</td>
-                <td>{{ user['sponsor_through'] }}</td>
+                <td>{{ user['created'] }}</td>
             </tr>
             {% end %}
         </table>

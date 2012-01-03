@@ -1,9 +1,0 @@
-from logstown import db
-
-CANCEL = "UPDATE users SET sponsor_since=NULL WHERE email=%s"
-
-# ========================================================================== ^L
-
-email = request.user.session['email']
-db.execute(CANCEL, (email,))
-response.body = {"problem": "", "redirect": "/"}
