@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Logstown{% if 'title' in globals() %} - {{ title }}{% end %}</title>
+        <title>{% if 'title' in globals() %}{{ title }} - {% end %}Logstown</title>
         <script src="/assets/jquery-1.7.1.min.js"></script>
         <style>@import url("/assets/logstown.css");</style>
         <script src="/assets/logstown.js"></script>

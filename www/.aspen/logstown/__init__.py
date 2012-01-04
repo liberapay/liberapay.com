@@ -4,7 +4,6 @@ import urlparse
 from contextlib import contextmanager
 
 import psycopg2
-import samurai.config
 from psycopg2.extras import RealDictCursor
 from psycopg2.pool import ThreadedConnectionPool as ConnectionPool
 
@@ -34,6 +33,8 @@ def canonize(request):
     request.x.scheme = scheme
     request.x.host = host
     request.x.base = scheme + "://" + host
+    if request.path.raw.count('/') >= 2:
+        request.x.id = request.path.raw.split('/')[2]
 
 
 # utils
@@ -151,10 +152,5 @@ def startup(website):
     url = os.environ['SHARED_DATABASE_URL']
     dsn = url_to_dsn(url)
     db = PostgresManager(dsn)
-
-    samurai.config.merchant_key = os.environ['SAMURAI_MERCHANT_KEY']
-    samurai.config.merchant_password = os.environ['SAMURAI_MERCHANT_PASSWORD']
-    samurai.config.processor_token = os.environ['SAMURAI_PROCESSOR_TOKEN']
-    samurai.config.sandbox = os.environ['SAMURAI_SANDBOX'] != 'false'
 
     website.gauges = os.environ['GAUGES'] != 'false'
