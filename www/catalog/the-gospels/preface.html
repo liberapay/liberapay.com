@@ -1,0 +1,325 @@
+
+# ========================================================================== ^L
+
+{% extends "base.html" %}
+{% block head %}
+{% end %}
+{% block content %}
+
+        <style>
+            @import url("003.css");
+
+            H1 A {
+                color: black;
+                text-decoration: none;
+                font-weight: 700;
+            }        
+            TABLE {
+                margin: 1em 0 1em 1em;
+                font: 300 12pt/14pt Lato, sans-serif;
+            } 
+            .number {
+                text-align: right;
+            }
+            TH {
+                padding: 0 0.5em 0.25em;
+                font-weight: 400;
+                vertical-align: top;
+            }
+            TD {
+                font-weight: 300;
+                padding: 0 0 0.25em;
+                vertical-align: top;
+            }
+            #order TH {
+                font-weight: 300;
+            }
+            #flipped TD {
+                padding: 0 0.5em;
+            }
+            UL {
+                margin: 1em 1em 1em 2.5em;
+            }
+            LI {
+                list-style: square;
+            }
+            .borrowing {
+                margin: 0;
+                padding: 1em 1em 0;
+                text-indent: -1em;
+            }
+            .borrowing * {
+                text-indent: 0;
+            }
+            .borrowing P {
+                margin-top: 1em;
+            }
+            .borrowing B {
+                font-weight: 400;
+            }
+            .signature {
+                margin: 2em 1em 1em 20em;
+            }
+        </style>
+    </head>
+    <body><div id="body">
+
+
+        <div id="head">
+            <h1><a href="./">The Gospels</a></h1>
+            <div id="ed">Edited by <a href="/">Chad Whitacre</a></div>
+            <div id="buy">
+                <a href="http://static.whit537.org/2011/gospels-1.1.1.pdf"
+                   onClick="javascript: _gaq.push(['_trackPageview', '/the-gospels/gospels-1.1.1.pdf']);">PDF</a>&ndash;free
+                &nbsp;
+                &nbsp;
+                &nbsp;
+                &nbsp;
+                <a href="http://www.lulu.com/product/paperback/-/16172489">Paperback</a>&ndash;$10
+                &nbsp;
+                &nbsp;
+                &nbsp;
+                &nbsp;
+                <a href="http://www.lulu.com/product/hardcover/-/16172488">Hardcover</a>&ndash;$20
+            </div>
+        </div>
+
+        <h2>Preface</h2>
+        <div id="back">&larr; <a href="./">Back</a></div>
+
+<p>No, I didn&rsquo;t rewrite the Bible. This is the same old four
+Gospels&mdash;Mark, Matthew, Luke, and John&mdash;laid out in a way that
+hopefully makes them easier to read. Bibles have gotten so cluttered up with
+chapter and verse numbers, footnotes, cross-references, charts, maps, drawings,
+columns, sections, and sidebars that it&rsquo;s hard to actually read the text
+straight through like a normal book. Besides that, the Bible is a big book.
+It&rsquo;s all important, but the Gospels are the <i>most</i> important. It
+should be easy for people to read the most important part of the Bible.</p>
+
+<p>The <i>New English Bible</i> (<u>NEB</u>; Oxford/Cambridge, 1970) was my
+main inspiration. I found it in a used-book shop in college, and fell in love
+with it because it&rsquo;s so easy to read. All of the text is in one column,
+and the chapter and verse numbers are in the margin instead of inline in the
+text.  There are section headings every so often, but other than that there are
+very few distractions.  My friends and I would read it out loud to each other.
+If you pass the book around the room and each take a turn reading, it takes an
+hour or two to get through one of the Gospels.  Unfortunately, the <u>NEB</u>
+isn&rsquo;t in print anymore. Also, it was published as a full Bible or the New
+Testament, but not just the Gospels.</p>
+
+<p>Years later I led a Bible study group, and while in college we <i>read</i>
+whole books at a time, in our Bible study we <i>discussed</i> whole books at a
+time. We might read as much as a page or two at once, but it was up to each
+person to read that week&rsquo;s book of the Bible on their own before the
+meeting.</p>
+
+<p>For our Bible study we used an edition called <i>The Books of The Bible</i>
+(<u>TBOTB</u>, International Bible Society [<u>IBS</u>], 2007), which takes
+<i>Today&rsquo;s New International Version</i> (<u>TNIV</u>) and does a few
+interesting things with it. It sets it in one column, like the <u>NEB</u>.
+Unlike the <u>NEB</u>, it puts abbreviated chapter and verse numbers in the
+footer rather than in the margin, and uses unnumbered endnotes where the
+<u>NEB</u> uses footnotes. It&rsquo;s nice not to have footnotes, but it turns
+out that not having the full chapter and verse numbers is a step too far,
+because then it&rsquo;s hard to get everyone to the same spot on the page,
+especially if some people are using different translations.</p>
+
+<p>The most interesting thing about <u>TBOTB</u> is how it reorders the books
+of the Bible. The traditional order for the New Testament is:</p>
+
+<table id="order">
+    <tr><td class="number">4</td>
+        <th>Gospels</th>
+        <td>Matthew, Mark, Luke, John</td></tr>
+    <tr><td></td>
+        <th>Acts</th>
+        <td>This is really Luke, Volume 2. Why is it after John?</td></tr>
+    <tr><td class="number">21</td>
+        <th>Letters</th>
+        <td>These are more or less jumbled together.</td></tr>
+    <tr><td></td>
+        <th>Revelation</th>
+        <td>This one does make sense at the end.</td></tr>
+</table>
+
+<p class="no-indent">In <u>TBOTB</u>, the New Testament is organized as four
+&ldquo;streams,&rdquo; each starting with a Gospel and then moving
+chronologically through the books within the same sub-tradition.  For example,
+Mark is followed by 1 and 2 Peter and Jude, because there&rsquo;s a popular
+theory that the apostle Peter is the source behind Mark, and Jude is similar to
+Peter&rsquo;s two letters. The different book order is the best part of
+<u>TBOTB</u>. I&rsquo;m presenting the four Gospels together because I think
+they are the most important part of the Bible, but I can imagine also putting
+out separate volumes for each of the <u>TBOTB</u>&rsquo;s Gospel streams.</p>
+
+<p>Sadly, <u>TBOTB</u> is ugly.  It&rsquo;s set in a clumsy font, the margins
+are too small, and the paper is cheap.  The Bible&rsquo;s size does present a
+challenge for a book designer, especially with a group like the <u>IBS</u> that
+is focused on mass distribution and is trying to keep it affordable. Issuing
+multiple volumes would drive up the cost, and might also under-emphasize the
+thematic unity of the Bible.</p>
+
+<p>I haven&rsquo;t used them in a group setting, but I did take ideas from two
+other editions of Scripture:</p>
+
+<ul>
+    <li>Richmond Lattimore&rsquo;s <i>The New Testament</i> (North Point, 1997)</li>
+    <li><i>The Four Gospels</i> (Penguin, 2008)</li>
+</ul>
+    
+<p class="no-indent">The former is a good-quality paperback and is quite
+readable. It has chapter/verse ranges in the header, and no section headings at
+all. The Penguin edition is chock full of section headings. There are two or
+three of them on every page, and they&rsquo;re in bold, with cross-references
+in italics underneath. The chapter numbers are too large, the verse numbers are
+inline, and the bottom of the page is cluttered with unhelpful footnotes.  The
+only good thing about this edition is that it is just the four Gospels, the
+only one like this I&rsquo;ve found so far.  Lattimore&rsquo;s out-of-print
+first edition of Scripture (1962) included the Gospels and Revelation.</p>
+
+<p>Those are the four editions of the Bible that I&rsquo;ve been most inspired
+by.  Now for some notes on specific decisions I made when putting together this
+edition.</p>
+
+<div class="break"># # #</div>
+
+<div class="borrowing"><b>Book Ordering</b>&mdash;With Richmond Lattimore, I
+    changed the ordering of the Gospels:
+
+    <table id="flipped">
+        <tr>
+            <th>Old</th>
+            <th>New</th>
+        </tr>
+        <tr class="r0">
+            <td class="book">Matthew</td> 
+            <td class="book">Mark</td> 
+        </tr>
+        <tr>
+            <td class="book">Mark</td> 
+            <td class="book">Matthew</td> 
+        </tr>
+        <tr>
+            <td class="book">Luke</td> 
+            <td class="book">Luke</td> 
+        </tr>
+        <tr>
+            <td class="book">John</td> 
+            <td class="book">John</td> 
+        </tr>
+    </table>
+
+    <p class="no-indent">The reason to put Mark first is that the action moves
+    faster, so it gives a better first impression of the Gospels overall.
+    Matthew begins with a genealogy.  Read that same distance into Mark, and
+    Jesus is already calling his first two disciples.  There is some historical
+    justice to this switch as well, in that Mark is often thought to have been
+    written first.
+
+</div>
+
+<div class="borrowing"><b>Chapter &amp; Verse</b>&mdash;Our chapters were
+    devised in the early 1200&rsquo;s and our verses in 1551. They barely
+    relate to the meaning of the text, but they are wonderful for
+    cross-referencing thousands of years of scholarship. They also make it
+    easier for a group of people reading the Bible together to find where they
+    are. For readability I followed the <u>NEB</u>&rsquo;s lead and put the
+    chapter and verse numbers in the margin.</div>
+
+<div class="borrowing"><b>Page Scrolling</b>&mdash;I came up with this idea to
+    be able to scroll through a book as if it were a web page, and now I see
+    that the latest phone book from Verizon has done the same thing! It must be
+    a good idea.  Here, a black tab is printed on the right edge of the right
+    page, representing the current Gospel. View the book edge on, and the tabs
+    show the extent of each Gospel within the book as a whole.  The height and
+    edge-on width of the tab is proportional to the size of that Gospel. Open
+    the book, and the numbers next to the tab are the chapters present on the
+    two currently-open pages.  They are positioned according to the distance of
+    the chapter through the current Gospel.
+
+    <p>Page scrolling is designed so that as one leafs through the pages like a
+    flipbook, the book tabs and chapter numbers scroll down the side of the
+    page.  This helps to quickly locate book and chapter references.  The verse
+    numbers on the inside margin then help locate verse references. The numbers
+    in the footer on the outside are regular page numbers.
+
+    <p>Page scrolling began life as a sparkline at the bottom of the page, so I
+    have Edward Tufte to thank for its inspiration. It&rsquo;s also related to
+    how we marked the edges of our Greek and Hebrew dictionaries in
+    college.</div>
+
+<div class="borrowing"><b>Punctuation</b>&mdash;In the spirit of Cormac
+    McCarthy (e.g., <i>The Road</i>, Knopf, 2006), I removed single and double
+    quotation marks, and I replaced semicolons with commas. Maybe this is a
+    fad, but it&rsquo;s also a return: not only did the ancient texts have no
+    punctuation whatsoever, but the immediate ancestor of the text adapted here
+    also did not use quotation marks (the <u>WEB</u> adds them to the
+    <u>ASV</u>; see <i>Translation</i>).</div>
+
+<div class="borrowing"><b>Scope</b>&mdash;As with <i>The Four Gospels</i>, this
+    edition only includes the four Gospels. I don&rsquo;t want people to miss
+    out on the Gospels just because the whole Bible or even the whole New
+    Testament is overwhelming.
+
+    <p>I encourage any reader to also read anything and everything
+    else&mdash;New Testament, Bible, Gnostic texts, other apocrypha, other
+    scriptures, modern books, etc. I see the Gospels as a centerpoint, and not
+    a boundary line.</div>
+
+<div class="borrowing"><b>Sections</b>&mdash;I added sections to the Gospels,
+    to give a sense of the flow of the story for each Gospel, and to make it
+    easy to divide up a Gospel over multiple sessions of a reading group. I
+    call these <i>sections</i> and use letters to denote them because the word
+    <i>chapter</i> with numerals is already taken.  Sections are indicated at
+    the bottom inside of the right page.
+
+    <p>These are different from the sections in other editions because they are
+    large in scope, they are untitled, and they actually start a new page.
+    These sections are designed to feel like chapter breaks in a novel, giving
+    you a place to stop if you really must get to bed, but at the same time
+    drawing you onwards&mdash;&ldquo;Just one more chapter!&rdquo; There are 34
+    of them all told, and their size varies considerably according to the flow
+    of the story for each Gospel.</div>
+
+<div class="borrowing"><b>Translation</b>&mdash;I used the <i>World English
+        Bible</i> because it&rsquo;s the best translation that I could use for
+    free.  It&rsquo;s a literal translation, a light modernization of the
+    <i>American Standard Version</i>, and therefore a descendent of the <i>King
+        James Version</i> and a sibling of the <i>New American Standard
+        Version</i>.  Michael Paul Johnson is the editor, and it is available
+    in multiple formats at <a href="http://www.ebible.org">ebible.org</a>.
+   
+    <p>I would probably rather use a less literal translation, but which
+    translation to use is not the most important thing.  Someone who likes to
+    study the Bible will own several translations. Someone who is less
+    interested won&rsquo;t appreciate the subtle differences between them
+    anyway.  One way to offset the potential difficulty of this translation is
+    to read the Gospels together as a group, because in a group setting better
+    readers can help others. If everyone participates in shared reading, it
+    builds confidence as well as community.</div>
+
+<div class="borrowing"><b>Typography</b>&mdash;This is my first time
+    typesetting a book, so I thought it best to try to imitate a classic: the
+    <u>NEB</u>. I referred often to Robert Bringhurst&rsquo;s <i>The Elements
+        of Typographical Style</i> (v3.2, Hartley &amp; Marks, 2008) to
+    understand the <u>NEB</u>&rsquo;s technique.</div>
+
+
+<div class="break"># # #</div>
+
+<p>The Gospels introduced something into human affairs that it is important to
+come to terms with, and the best way to do that is to actually read them.  I
+hope that this edition helps you to read the Gospels, both on your own and with
+others.</p>
+
+<p>Lastly, I&rsquo;d like to thank Jessica Whitacre, Leah Whitacre, Miriam
+Whitacre, Rod Whitacre, Steven Brown, Craig McClean, Kirk Botula, Ed Schrothe,
+Edward Tufte, Chris Mulligan, Ben Butler, and David Yun for providing feedback
+on earlier versions of this book.</p>
+
+<div class="signature">&mdash;<a href="/">Chad Whitacre</a><br />
+    &nbsp;&nbsp;&nbsp;&nbsp;June 29, 2011</div>
+
+    </div>
+
+{% end %}
