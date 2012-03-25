@@ -1,0 +1,45 @@
+^L
+{% extends "base.html" %}
+{% block head %}
+<style>
+    .order SPAN {
+        width: 24px;
+        display: inline-block;
+    }
+    .order .hide {
+        visibility: hidden;
+    }
+</style>
+{% end %}
+{% block content %}
+        <h2>The Gospels</h2>
+
+        <p>  
+            <b>Paperback:</b> 224 pages<br />
+            <b>ISBN-13:</b> 0-98515-490-5<br />
+            <b>Dimensions:</b> 6.0 x 9.0 x 0.7 inches<br />
+            <b>Weight:</b> 1.1 pounds<br />
+        </p>
+
+        <h3>Praise</h3>
+
+        <p class="quote">&ldquo;<span class="highlight">[A] splendid edition of
+            the gospels based on a sound design
+            philosophy[.]</span>&rdquo;<span class="attrib">&mdash;J. Mark
+            Bertrand on the <a
+                href="http://www.bibledesignblog.com/2011/08/the-gospels-edited-by-chad-whitacre.html">Bible
+                Design Blog</a></span></p>
+
+        <h3>Order&mdash;<a href="mailto:chad@zetaweb.com">chad@zetaweb.com</a></h3>
+
+        <p class="order">
+            <b>Price:</b> <span>1</span> $13.95<br />
+            <b class="hide">Price:</b> <span>2-11</span> $10 each<br />
+            <b class="hide">Price:</b> <span>12+</span> $8 each<br />
+            <b class="hide">Price:</b> <span><a href="gospels-1.2.1.pdf">PDF</a></span>free
+        </p>
+
+        <h3>Cover</h3>
+
+        <img src="cover.jpg" />
+{% end %}
