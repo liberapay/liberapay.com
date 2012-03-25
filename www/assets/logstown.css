@@ -1,11 +1,6 @@
 @import url("/assets/reset.css");
 @import url("/assets/fonts.css");
 
-LABEL {
-    display: block;
-}
-
-
 BODY {
     margin: 0;
     padding: 0;
@@ -17,13 +12,9 @@ BODY {
     position: relative;
     margin: 20px auto;
     padding: 10px 20px 30px;
-    width: 316px;
     z-index: 1;
-    background: rgba(255,255,255,0.9);
 }
 #bg {
-    /* Formerly http://www.backgroundcity.com/groups/gfiles/g4/g4wd14.gif,
-        which is where the colors are from, kind of. */
     position: fixed;
     bottom: 0;
     right: 0;
@@ -40,8 +31,7 @@ BODY {
 H1 {
     margin: 0;
     padding: 0;
-    font: normal 36pt/36pt "Cabin Sketch", sans-serif;
-    text-align: center;
+    font: bold 24pt/24pt Cabin, sans-serif;
 }
 H1 A {
     text-decoration: none;
@@ -51,29 +41,6 @@ H1 A {
     color: #301403;
     color: #B0C2BA;
     color: #614C3E;
-}
-#signed {
-    width: 316px;
-    padding: 5px 0 0;
-    position: fixed;
-    bottom: 0;
-    left: 50%; 
-    margin-left: -158px;
-    font: normal 9pt/12pt Cabin;
-    text-align: right;
-    overflow: hidden;
-    color: #CCBAAD;
-}
-#signed A { color: #CCBAAD; }
-#signed A:hover { color: #614C3E; }
-#signed .shadow {
-    padding: 5px 0;
-    border-top: 1px solid #CCBAAD;
-    background: white;
-    box-shadow: 0px 0px 5px #CCBAAD;
-    -o-box-shadow: 0px 0px 5px #CCBAAD;
-    -moz-box-shadow: 0px 0px 5px #CCBAAD;
-    -webkit-box-shadow: 0px 0px 5px #CCBAAD;
 }
 
 H2 {
@@ -92,6 +59,9 @@ P {
     font: normal 9pt/12pt Cabin;
     margin: 0 0 1em;
 }
+TABLE {
+    font: normal 9pt/12pt Cabin;
+}
 H3 {
     margin: 0;
     padding: 1em 0 0.5em;
@@ -104,12 +74,6 @@ H3.year {
     text-align: right;
     width: 64px;
     margin-left: -18px;
-}
-H3 A {
-    display: none;
-}
-H3:hover A {
-    display: inline;
 }
 .posts {
     padding: 10px 0 0 64px;
@@ -128,177 +92,4 @@ A IMG {
 LI {
     margin-left: 1em;
     border-left: 10px solid #301403;
-}
-
-@media screen and (max-width: 900px) {
-    DIV#post {
-        width: auto;
-    }
-    
-    .sidebar, .midbar {
-        float: none;
-        width: auto;
-        text-align: center;
-    }
-    .sidebar-padding, .midbar {
-        border: 2px solid #CCC;
-        border-style: solid none;
-        padding: 20px;
-        margin: 0;
-    }
-    .sidebar IMG {
-        margin: 0 auto;
-    }
-    .midbar IMG {
-        margin: 0 auto;
-        width: 300px;
-    }
-}
-.clear {
-    height: 0;
-    clear: both;
-}
-
-
-
-/*
-BUTTON {
-    font: 12pt/12pt Cabin, sans-serif;
-    padding: 6px 10px 9px;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    -o-border-radius: 3px;
-    border-radius: 3px;
-    border: solid 1px #999;
-    color: white;
-    border-color: #0D4035;
-    background: -moz-linear-gradient(top, #2A8F79, #0D4035);
-    background: -o-linear-gradient(top, #2A8F79, #0D4035);
-    background: -webkit-gradient( linear, 0% 0%, 0% 100%
-                                , from(#2A8F79)
-                                , to(#0D4035)
-                                 );
-    background: linear-gradient(top, #2A8F79, #0D4035);
-    background-repeat: repeat-x;
-    text-decoration: none;
-    cursor: pointer;
-    display: inline-block;
-    text-align: center;
-    text-shadow: 0px 1px 1px rgba(255,255,255,1);
-    line-height: 1;
-    text-shadow:-1px -1px 0 rgba(0,0,0,.3);
-}
-BUTTON:hover, BUTTON.focused {
-    background: -moz-linear-gradient(top, #2A8F79, #0A382E);
-    background: -o-linear-gradient(top, #2A8F79, #0A382E);
-    background: -webkit-gradient( linear
-                                , 0% 0%
-                                , 0% 100%
-                                , from(#2A8F79)
-                                , to(#04221B)
-                                 );
-    background: linear-gradient(top, #2A8F79, #0A382E);
-}
-BUTTON:active {
-    /* http://somadesign.ca/demos/buttons-redux.html /
-    -moz-box-shadow
-        :0 .33em 1em rgba(0,0,0,.67) inset,
-        1px 1px 0 rgba(255,255,255,.25) inset, 
-        -1px -1px 0 rgba(255,255,255,.25) inset;
-    -webkit-box-shadow:
-        0 .33em 2em rgba(0,0,0,.67) inset,
-        1px 1px 0 rgba(255,255,255,.25) inset, 
-        -1px -1px 0 rgba(255,255,255,.25) inset;
-    box-shadow:
-        0 .33em 2em rgba(0,0,0,.67) inset,
-        1px 1px 0 rgba(255,255,255,.25) inset, 
-        -1px -1px 0 rgba(255,255,255,.25) inset;
-}
-*/
-
-/* Adapted from http://brandonmathis.com/projects/fancy-buttons/demo/stylesheets/buttons.css */
-
-BUTTON {
-    font: normal 18px/1.2em Cabin, sans-serif;
-    text-shadow: #001b38 0px 1px 1px;
-    text-decoration: none;
-
-    background: #2A8F79 url("/assets/button-bg.png") repeat-x bottom left;
-    width: auto;
-    overflow: visible;
-    display: inline-block;
-    cursor: pointer;
-
-    border: 1px solid #0A382E;
-    -moz-border-radius: 4px;
-    -webkit-border-radius: 4px;
-    -o-border-radius: 4px;
-    -ms-border-radius: 4px;
-    -khtml-border-radius: 4px;
-    border-radius: 4px;
-
-    padding: 0.3em 1em;
-    margin: 0 2px;
-    vertical-align: middle;
-
-    background-image: -webkit-gradient( linear, 0% 0%, 0% 100%
-                                      , from(#2A8F79)
-                                      , to(#0D4035)
-                                       );
-    background-image: -moz-linear-gradient(top, #2A8F79, #0D4035);
-    background-image: linear-gradient(top, #2A8F79, #0D4035);
-
-    -moz-box-shadow: rgba(255,255,255,0.359) 0 0 0.1em 1px inset;
-    -webkit-box-shadow: rgba(255,255,255,0.359) 0 0 0.1em 1px inset;
-    -o-box-shadow: rgba(255,255,255,0.359) 0 0 0.1em 1px inset;
-    box-shadow: rgba(255,255,255,0.359) 0 0 0.1em 1px inset;
-
-    -moz-background-clip: padding;
-    -webkit-background-clip: padding;
-    -o-background-clip: padding-box;
-    -ms-background-clip: padding-box;
-    -khtml-background-clip: padding-box;
-    background-clip: padding-box;
-}
-
-BUTTON::-moz-focus-inner {
-    border: none;
-    padding: 0;
-}
-
-BUTTON:focus {
-    outline: none;
-}
-
-BUTTON, BUTTON:visited,
-BUTTON:hover, BUTTON:hover:visited,
-BUTTON:focus, BUTTON:focus:visited,
-BUTTON:active, BUTTON:active:visited {
-    color: white;
-}
-
-BUTTON:hover, BUTTON:focus {
-    background-image: url("/assets/button-bg.over.png");
-    background-image: -webkit-gradient( linear, 0% 0%, 0% 100%
-                                      , from(#2A8F79)
-                                      , to(#04221B)
-                                       );
-    background-image: -moz-linear-gradient(top, #2A8F79, #04221B);
-    background-image: linear-gradient(top, #2A8F79, #04221B));
-}
-
-BUTTON:active {
-    /* http://somadesign.ca/demos/buttons-redux.html */
-    -moz-box-shadow
-        :0 .33em 1em rgba(0,0,0,.67) inset,
-        1px 1px 0 rgba(255,255,255,.25) inset, 
-        -1px -1px 0 rgba(255,255,255,.25) inset;
-    -webkit-box-shadow:
-        0 .33em 2em rgba(0,0,0,.67) inset,
-        1px 1px 0 rgba(255,255,255,.25) inset, 
-        -1px -1px 0 rgba(255,255,255,.25) inset;
-    box-shadow:
-        0 .33em 2em rgba(0,0,0,.67) inset,
-        1px 1px 0 rgba(255,255,255,.25) inset, 
-        -1px -1px 0 rgba(255,255,255,.25) inset;
 }

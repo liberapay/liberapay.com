@@ -3,19 +3,14 @@
     <head>
         <title>{% if 'title' in globals() %}{{ title }} - {% end %}Logstown 
             Publishing Company</title>
-        <script src="/assets/jquery-1.7.1.min.js"></script>
         <style>@import url("/assets/logstown.css");</style>
-        <script src="/assets/logstown.js"></script>
-        <script>
-            $(document).ready(Logstown.main);
-        </script>
         {% block head %}{% end %}
         {% block head2 %}{% end %}
     </head>
     <body>
         <div id="body">
 
-            <h1><a href="/"><img src="/assets/logo.png" alt="Logstown" /></a></h1>
+            <h1>Logstown Publishing Company</h1>
 
             <div id="content">{% block content %}{% end %}</div>
         </div>

@@ -2,44 +2,50 @@
 {% extends "base.html" %}
 {% block head %}
 <style>
-    .order SPAN {
-        width: 24px;
-        display: inline-block;
+    TD {
+        text-align: right;
+        padding-left: 10px;
     }
-    .order .hide {
-        visibility: hidden;
+    .attrib {
+        padding-left: 2em;
     }
 </style>
 {% end %}
 {% block content %}
-        <h2>The Gospels</h2>
 
-        <p>  
-            <b>Paperback:</b> 224 pages<br />
-            <b>ISBN-13:</b> 0-98515-490-5<br />
-            <b>Dimensions:</b> 6.0 x 9.0 x 0.7 inches<br />
-            <b>Weight:</b> 1.1 pounds<br />
-        </p>
+    <img src="cover.jpg" style="float: left; margin-right: 20px;" />
 
-        <h3>Praise</h3>
+    <h2>The Gospels</h2>
 
-        <p class="quote">&ldquo;<span class="highlight">[A] splendid edition of
-            the gospels based on a sound design
-            philosophy[.]</span>&rdquo;<span class="attrib">&mdash;J. Mark
-            Bertrand on the <a
-                href="http://www.bibledesignblog.com/2011/08/the-gospels-edited-by-chad-whitacre.html">Bible
-                Design Blog</a></span></p>
+    <p>  
+        <b>Paperback:</b> 224 pages<br />
+        <b>ISBN-13:</b> 0-98515-490-5<br />
+        <b>Dimensions:</b> 6.0 x 9.0 x 0.7 inches<br />
+        <b>Weight:</b> 0.9 pounds<br />
+    </p>
 
-        <h3>Order&mdash;<a href="mailto:chad@zetaweb.com">chad@zetaweb.com</a></h3>
+    <h3>Praise</h3>
 
-        <p class="order">
-            <b>Price:</b> <span>1</span> $13.95<br />
-            <b class="hide">Price:</b> <span>2-11</span> $10 each<br />
-            <b class="hide">Price:</b> <span>12+</span> $8 each<br />
-            <b class="hide">Price:</b> <span><a href="gospels-1.2.1.pdf">PDF</a></span>free
-        </p>
+    <p class="quote">&ldquo;<span class="highlight">[A] splendid edition of
+        the gospels based on a sound design
+        philosophy[.]</span>&rdquo;<br /><span class="attrib">&mdash;J. Mark
+        Bertrand on the <a
+            href="http://www.bibledesignblog.com/2011/08/the-gospels-edited-by-chad-whitacre.html">Bible
+            Design Blog</a></span></p>
 
-        <h3>Cover</h3>
+    <h3>Order</h3>
 
-        <img src="cover.jpg" />
+    <table>
+        <tr><th>Quantity</th><td>Price Each</td></tr>
+        <tr><th>&nbsp;&nbsp;&nbsp;1</th><td>$13.95</td></tr>
+        <tr><th>&nbsp;&nbsp;&nbsp;2-8</th><td>$12.00</td></tr>
+        <tr><th>&nbsp;&nbsp;&nbsp;12+</th><td>$9.00</td></tr>
+        <tr><td colspan="2">plus shipping</td></tr>
+    </table>
+
+    <h3>
+        <a href="mailto:chad@zetaweb.com">chad@zetaweb.com</a><br />
+        412-925-4220
+    </h3>
+
 {% end %}
