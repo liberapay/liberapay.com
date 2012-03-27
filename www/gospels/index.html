@@ -6,15 +6,33 @@
         text-align: right;
         padding-left: 10px;
     }
+    IMG {
+        float: left;
+        margin-top: 20px;
+    }
+    .details {
+        float: left;
+        margin: 20px 0 0 20px;
+    }
+    .details H2 {
+        margin: 0;
+        padding: 0;
+        line-height: 100%;
+    }
     .attrib {
         padding-left: 2em;
+    }
+    .reseller {
+        margin: 0 0 2em 1em;
+        text-indent: -1em;
     }
 </style>
 {% end %}
 {% block content %}
 
-    <img src="cover.jpg" style="float: left; margin-right: 20px;" />
+    <img src="cover.jpg" />
 
+    <div class="details">
     <h2>The Gospels</h2>
 
     <p>  
@@ -26,26 +44,35 @@
 
     <h3>Praise</h3>
 
-    <p class="quote">&ldquo;<span class="highlight">[A] splendid edition of
-        the gospels based on a sound design
-        philosophy[.]</span>&rdquo;<br /><span class="attrib">&mdash;J. Mark
-        Bertrand on the <a
-            href="http://www.bibledesignblog.com/2011/08/the-gospels-edited-by-chad-whitacre.html">Bible
-            Design Blog</a></span></p>
+    <p class="quote">&ldquo;<b><a
+        href="http://www.bibledesignblog.com/2011/08/the-gospels-edited-by-chad-whitacre.html">
+            a splendid edition of the gospels based on a
+            sound design philosophy</a>&rdquo;<br /><span
+        class="attrib">&mdash;J. Mark Bertrand on the Bible Design
+        Blog</span></p>
 
-    <h3>Order</h3>
+    <h3>Order for $13.95</h3>
 
-    <table>
-        <tr><th>Quantity</th><td>Price Each</td></tr>
-        <tr><th>&nbsp;&nbsp;&nbsp;1</th><td>$13.95</td></tr>
-        <tr><th>&nbsp;&nbsp;&nbsp;2-8</th><td>$12.00</td></tr>
-        <tr><th>&nbsp;&nbsp;&nbsp;12+</th><td>$9.00</td></tr>
-        <tr><td colspan="2">plus shipping</td></tr>
-    </table>
+    <p>Available at ...</p>
 
-    <h3>
-        <a href="mailto:chad@zetaweb.com">chad@zetaweb.com</a><br />
-        412-925-4220
-    </h3>
+    <p class="reseller">
+        <b><a href="https://www.heartsandmindsbooks.com/">Hearts and Minds Bookstore</a></b><br />
+        Byron and Beth Borger<br />
+        234 East Main Street<br />
+        Dallastown, PA 17313<br />
+        (717) 246-3333<br />
+        <a href="https://www.heartsandmindsbooks.com/order/">online ordering</a><br />
+    </p> 
+    <p class="reseller">
+        <b><a href="http://tsm.edu/bookstore">Trinity School for Ministry Bookstore</a></b><br />
+        Pam Kuhns<br />
+        311 Eleventh Street<br />
+        Ambridge, PA 15003<br />
+        (800) 874-8754<br />
+        <a href="mailto:bookstore@tsm.edu">bookstore@tsm.edu</a><br />
+    </p> 
+
+    </div>
+
 
 {% end %}
