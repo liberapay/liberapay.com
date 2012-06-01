@@ -109,18 +109,14 @@ canonical_host = None
 def canonize(request):
     """Enforce a certain scheme and hostname. Store these on request as well.
     """
-    scheme = request.environ.get('HTTP_X_FORWARDED_PROTO', 'http') # per Heroku
-    host = request.headers.one('Host')
+    scheme = request.headers.get('X-Forwarded-Proto', 'http') # per Heroku
+    host = request.headers['Host']
     bad_scheme = scheme != canonical_scheme
     bad_host = bool(canonical_host) and (host != canonical_host) 
                 # '' and False => ''
     if bad_scheme or bad_host:
         url = '%s://%s/' % (canonical_scheme, canonical_host)
         request.redirect(url, permanent=True)
-    request.x = X()
-    request.x.scheme = scheme
-    request.x.host = host
-    request.x.base = scheme + "://" + host
 
 
 # wireup
