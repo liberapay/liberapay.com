@@ -20,7 +20,6 @@ There are two pieces of information for each customer related to billing:
 
 """
 import decimal
-import traceback
 
 from aspen import json, log
 from aspen.utils import typecheck
@@ -187,7 +186,7 @@ def charge(participant_id, pmt, amount):
         """
         cur.execute(RESULT, (last_bill_result, amount, participant_id))
 
-        cur.commit()
+        conn.commit()
 
     return not bool(last_bill_result)  # True indicates success
 
