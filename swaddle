@@ -12,7 +12,7 @@ if envdef == '-':
     m = "[SWADDLE] reading environment from stdin."
     print >> sys.stderr, m
     fp = sys.stdin
-    splitter = " => "
+    splitter = ": "
 elif not os.path.isfile(envdef):
     m = "[SWADDLE] %s is not a file; environment unchanged." % envdef
     print >> sys.stderr, m
@@ -32,9 +32,10 @@ if not os.path.isfile(args[0]):
 if envdef:
     for line in fp:
         line = line.split('#')[0].strip()
-        if "=" not in line:
+        if splitter not in line:
             m = "[SWADDLE] Skipping line: %s." % line
             print >> sys.stderr, m
+            continue
         key, val = line.split(splitter, 1)
         os.environ[key.strip()] = val.strip()
 
