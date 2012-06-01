@@ -8,7 +8,7 @@ from psycopg2.extensions import cursor as RegularCursor
 
 db = None # This global is wired below. It's an instance of 
           # logstown.postgres.PostgresManager.
-AMOUNTS= [decimal.Decimal(a) for a in ('0.00', '0.49', '0.99', '1.49', '1.99', '2.49')]
+AMOUNTS= [decimal.Decimal(a) for a in ('0.00', '0.25', '0.50', '0.75', '1.00', '1.25')]
 
 
 def get_tip(tipper, tippee):

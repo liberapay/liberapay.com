@@ -1,3 +1,5 @@
+from logstown import AMOUNTS
+^L
 ^L
 {% extends base.html %}
 
@@ -97,9 +99,9 @@
     Expenses are ongoing. Income must be, too.</p>
 
     <p>Tips are <b>anonymous</b>. The people you tip aren&rsquo;t told who
-    tipped them. Also, you can&rsquo;t tip more then $2.49 a week. This
-    way, tips come with <b>no strings attached</b>. Alice works on whatever
-    she wants to work on. Bob tips whomever he wants to tip.</p>
+    tipped them. Also, you can&rsquo;t tip more than ${{ AMOUNTS[-1] }} a week.
+    This way, tips come with <b>no strings attached</b>. Alice works on
+    whatever she wants to work on. Bob tips whomever he wants to tip.</p>
 
     <p>Tips are <b>public</b>. The amount you give is private, but the
     total amount you receive is public. Tip income closely reflects benefit
@@ -113,24 +115,24 @@
     an additional <b>10&cent; + 3.9%</b> fee when pulling money in from your
     credit card, to cover credit card processing, hosting, and other expenses.
     For example, let&rsquo;s say that you have $10 in your account, and you are
-    set up to tip $1.99 to ten people. Here&rsquo;s what we will charge your
+    set up to tip $1.00 to twenty people. Here&rsquo;s what we will charge your
     credit card on Friday:</p>
 
     <p style="font-family: monospace; font-size: smaller; padding-left: 40%;">
-        &nbsp;$&nbsp;1.99<br />
-        <u>x&nbsp;10&nbsp;&nbsp;&nbsp;</u><br />
-        &nbsp;$19.90&nbsp;&nbsp;&nbsp;total tips<br />
+        &nbsp;$&nbsp;1.00<br />
+        <u>x&nbsp;20&nbsp;&nbsp;&nbsp;</u><br />
+        &nbsp;$20.00&nbsp;&nbsp;&nbsp;total tips<br />
         <u>-$10.00</u>&nbsp;&nbsp;&nbsp;current balance<br />
-        &nbsp;$&nbsp;9.90&nbsp;&nbsp;&nbsp;amount needed<br />
+        &nbsp;$&nbsp;10.00&nbsp;&nbsp;&nbsp;amount needed<br />
         <u>+$ 0.10</u><br />
-        &nbsp;$10.00<br />
+        &nbsp;$10.10<br />
         <u>x&nbsp;&nbsp;1.039</u><br />
-        &nbsp;<b>$10.39&nbsp;&nbsp;&nbsp;amount charged</b>
+        &nbsp;<b>$10.50&nbsp;&nbsp;&nbsp;amount charged</b>
     </p>
 
     <p>Recipients get the full face value of your tip to them. If you tip
-    someone $1.99, they will have $1.99 in their Logstown account every
-    Friday until your credit card expires. Participants can withdraw funds
-    from their Logstown account at any time.</p>
+    someone $1.00, they will have $1.00 in their Logstown account every Friday
+    until you run out of money. Participants can withdraw funds from their
+    Logstown account at any time.</p>
 
 {% end %}
