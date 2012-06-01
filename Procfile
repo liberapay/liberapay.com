@@ -1,1 +1,1 @@
-web: aspen --address :$PORT www/
+web: aspen --network_address :$PORT --www_root www/ --project_root ..
