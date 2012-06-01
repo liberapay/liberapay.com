@@ -2,6 +2,7 @@ import decimal
 import os
 
 import psycopg2
+from logstown.version import __version__
 from psycopg2.extensions import cursor as RegularCursor 
 
 

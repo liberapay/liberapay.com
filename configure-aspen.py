@@ -16,7 +16,7 @@ website.hooks.inbound_early.register(logstown.authentication.inbound)
 website.hooks.outbound_late.register(logstown.authentication.outbound) 
 
 def add_stuff(request):
-    request.context['__version__'] = "dev"
+    request.context['__version__'] = logstown.__version__
     request.context['username'] = None 
 
 website.hooks.inbound_early.register(add_stuff) 
