@@ -1,0 +1,179 @@
+* { margin: 0; padding: 0; }
+html, body, #main { height: 100% }
+body, div { font-family: 'lucida grande', helvetica, verdana, arial, sans-serif }
+body { margin: 0; padding: 0; font-size: small; color: #333 }
+h1, h2 { font-family: 'trebuchet ms', verdana, arial; padding: 10px; margin: 0 }
+h1 { font-size: large }
+h3 { margin-top: .5em; }
+#main { padding: 1em; }
+#banner { padding: 15px; background-color: #06b; color: white; font-size: large; border-bottom: 1px solid #ccc;
+    background: url(bg.gif) repeat-x; text-align: center }
+#banner a { color: white; }
+fieldset { padding: 8px; }
+legend { font-weight: bold; }
+
+pre { margin-bottom: 1em; }
+    
+.jscom, .mix htcom   { color: #4040c2; }
+.com      { color: green; }
+.regexp   { color: maroon; }
+.string   { color: teal; }
+.keywords { color: blue; }
+.global   { color: #008; }
+.numbers  { color: #880; }
+.comm     { color: green; }
+.tag      { color: blue; }
+.entity   { color: blue; }
+.string   { color: teal; }
+.aname    { color: maroon; }
+.avalue   { color: maroon; }
+.jquery   { color: #00a; }
+.plugin   { color: red; }
+
+li { list-style-type: none; }
+.basic, #list2, #list3, #navigation { width:20em; }
+
+#log { position:fixed; bottom: 0; right:1em; text-align:right; }
+#switch { position: fixed; bottom: 0; right: 15em; }
+
+.basic  {
+	width: 260px;
+	font-family: verdana;
+	border: 1px solid black;
+}
+.basic div {
+	background-color: #eee;
+}
+
+.basic p {
+	margin-bottom : 10px;
+	border: none;
+	text-decoration: none;
+	font-weight: bold;
+	font-size: 10px;
+	margin: 0px;
+	padding: 10px;
+}
+.basic a {
+	cursor:pointer;
+	display:block;
+	padding:5px;
+	margin-top: 0;
+	text-decoration: none;
+	font-weight: bold;
+	font-size: 12px;
+	color: black;
+	background-color: #00a0c6;
+	border-top: 1px solid #FFFFFF;
+	border-bottom: 1px solid #999;
+	
+	background-image: url("AccordionTab0.gif");
+}
+.basic a:hover {
+	background-color: white;
+	background-image: url("AccordionTab2.gif");
+}
+.basic a.selected {
+	color: black;
+	background-color: #80cfe2;
+	background-image: url("AccordionTab2.gif");
+}
+
+#list2 {
+	height: 178px;
+	border: 1px solid #eee;
+	overflow: hidden;
+}
+#list2 .red {
+	color: red;
+	background-color: red;
+}
+#list2 .green {
+	color: green;
+	background-color: green;
+}
+#list2 .blue {
+	color: blue;
+	background-color: blue;
+}
+#list2 dd { height: 130px; overflow: hidden; }
+
+#list3 { border: 1px solid #111; }
+#list3 div.selected .title { font-weight: bold; }
+#list3 div div {
+	border-left:8px solid #6699CC;
+	padding: 5px;
+}
+#list3 div.title {
+	border: 1px solid #3366AA;
+	background-color: #6699CC;
+	padding: 10px;
+	cursor: pointer;
+}
+#list3 div.selected {
+	border-bottom: none;
+}
+
+#navigation {
+	border:1px solid #5263AB;
+	margin:0px;
+	padding:0px;
+	text-indent:0px;
+	background-color:#E2E2E2;
+	width:200px;
+}
+#navigation a.head {
+	cursor:pointer;
+	border:1px solid #CCCCCC;
+	background:#5263AB url(collapsed.gif) no-repeat scroll 3px 4px;
+	color:#FFFFFF;
+	display:block;
+	font-weight:bold;
+	margin:0px;
+	padding:0px;
+	text-indent:14px;
+	text-decoration: none;
+}
+#navigation a.head:hover {
+	color:#FFFF99;
+}
+#navigation a.selected {
+	background-image: url(expanded.gif);
+}
+#navigation a.current {
+	background-color:#FFFF99;
+}
+#navigation ul {
+	border-width:0px;
+	margin:0px;
+	padding:0px;
+	text-indent:0px;
+}
+#navigation li {
+	list-style:none outside none; display:inline;
+}
+#navigation li li a {
+	color:#000000;
+	display:block;
+	text-indent:10px;
+	text-decoration: none;
+}
+#navigation li li a:hover {
+	background-color:#FFFF99;
+	color:#FF0000;
+}
+
+#wizard {
+	width: 200px;
+	border: 1px solid black;
+}
+#wizard .title {
+	background-color:#DDDDDD;
+}
+
+@media print {
+	.basic div, #navigation ul, #list2 dd, #list3 div{
+		display: block!important;
+		height: auto!important
+	}
+}

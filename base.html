@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Logstown Gift Economy</title>
+        <style>
+            @import url("/assets/{{ __version__ }}/logstown.css");
+        </style>
+        <script src="/assets/jquery-1.7.1.min.js"></script>
+        <script src="/assets/jquery.maskedinput-1.3.min.js"></script>
+        <script src="/assets/{{ __version__ }}/logstown.js"></script>
+    </head>
+    <body><div id="body">
+        {% block heading %}
+        <h2>Logstown is <b><a href="/">a gift economy</a></b>.
+            {% if not user.ANON and user.id != username %}
+            <br />
+                You are <a href="/{{ user.id }}/">{{ user.id }}</a>.
+                <span class="small"><a href="/sign/out.html">Sign out</a></span>
+            {% end %} 
+        </h2>
+        {% end %}
+        {% block body %}{% end %}
+    </div><div id="bg"></div></body>
+</html>

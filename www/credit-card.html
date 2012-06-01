@@ -1,0 +1,175 @@
+import json
+import samurai.config
+from aspen import Response
+from logstown import billing
+
+# ========================================================================== ^L
+if user.ANON:
+    raise Response(404)
+
+pmt = user.payment_method_token
+if not pmt:
+    status = "missing"
+else:
+    working = not bool(user.last_bill_result)
+    status = "working" if working else "failing"
+
+try:
+    pm = billing.PaymentMethod(pmt)
+except urllib2.URLError: # samurai is unavailable
+    log(traceback.format_exc())
+    samurai_down = True
+else:
+    pmt = pm['payment_method_token']
+    samurai_down = False
+
+username = user.id
+# ========================================================================== ^L
+{% extends base.html %}
+{% block body %}
+<script>
+    $(document).ready(function()
+    {
+        Logstown.initPayment("{{ samurai.config.merchant_key }}");
+    });
+</script>
+<style>
+    #feedback {
+        position: absolute;
+        width: 220px;
+        left: 360px;
+    }
+    #feedback H2 {
+        margin-top: 0;
+    }
+    #feedback .details P {
+        font-size: 9pt;
+        line-height: 12pt;
+        margin: 0;
+        padding: 0 0 0 1em;
+        text-indent: -1em;
+    }
+    {% if not pmt %}
+    #delete {
+        display: none;
+    }
+    {% end %}
+</style>
+<div id="their-voice">
+
+    <h2 class="first">You are <a href="/{{ user.id }}/">{{ user.id }}</a>.</h2>
+    <h2>Your <b>credit card</b> is <span id="status">{{ status }}</span>.</h2>
+    
+    {% if samurai_down %}
+
+    <p>Our payment processor (Samurai) is down right now. Please come back
+    later to update your credit card details.</p>
+
+    {% else %}
+
+    <p>When you don&rsquo;t have enough in your Logstown account to cover your
+    tips, we {% if pmt %}will{% else %}can{% end %} pull money in using 
+    {% if pmt %}this{% else %}a{% end %} credit card. If your credit card
+    is missing or fails then your tips won&rsquo;t go through for that week.<p>
+
+    <form id="payment">
+        <div id="feedback">{% if user.last_bill_result %}
+        <h2>Problems</h2>
+        <div class="details">
+        {% for foo, probs in json.loads(user.last_bill_result).items() %}
+        {% for prob in probs %}
+        <p>{{ prob }}</p>
+        {% end %}
+        {% end %}
+        </div>
+        {% end %}</div>
+    
+        {% if pmt %}
+        <input name="payment_method_token" type="hidden" 
+            value="{{ pmt }}" />
+        {% end %}
+
+        <div class="left half">
+            <label for="first_name">First Name</label>
+            <input id="first_name" name="first_name" 
+                   value="{{ pm['first_name'] }}" />
+        </div>
+
+        <div class="right half">
+            <label for="last_name">Last Name</label>
+            <input id="last_name" name="last_name" 
+                   value="{{ pm['last_name'] }}" />
+        </div>
+
+        <div class="clear"></div>
+
+        <label for="address_1">Address 1</label>
+        <input id="address_1" name="address_1" 
+               value="{{ pm['address_1'] }}" />
+
+        <label for="address_2">Address 2</label>
+        <input id="address_2" name="address_2" 
+               value="{{ pm['address_2'] }}" />
+
+
+        <div class="float city">
+            <label for="city">City</label>
+            <input id="city" name="city" 
+                   value="{{ pm['city'] }}" />
+        </div>
+
+        <div class="float state not-first">
+            <label for="state">State</label>
+            <input id="state" name="state" 
+                   value="{{ pm['state'] }}" />
+        </div>
+
+        <div class="float zip not-first">
+            <label for="zip">ZIP</label>
+            <input id="zip" name="zip" 
+                   value="{{ pm['zip'] }}" />
+        </div>
+
+        <div class="clear"></div>
+
+        <div class="float card_number">
+            <label for="card_number">Credit Card Number</label>
+            <input id="card_number" name="card_number" 
+                   value="{{ pm['last_four'] }}" />
+        </div>
+
+        <div class="float expiry not-first">
+            <label for="expiry">Expiry</label>
+            <input id="expiry" name="expiry" 
+                   value="{{ pm['expiry'] }}" />
+        </div>
+
+        <div class="float cvv not-first">
+            <label for="cvv">CVV</label>
+            <input id="cvv" name="cvv" />
+        </div>
+
+        <div class="clear"></div>
+
+        <div class="full">
+            <img src="/assets/{{ __version__ }}/cards.png" />
+            <button class="selected"
+            type="submit">Save</button>
+        </div>
+        {% end %}
+    </form>
+
+    <div id="delete"> 
+    <h2>Delete credit card.</h2>
+
+    <p>Your credit card details will immediately be completely purged from
+    Logstown.</p>
+
+    <form action="credit-card.json">
+        <input type="hidden" name="action" value="delete"> 
+        <button>Delete my credit card</button>
+    </form>
+    </div>
+
+</div>
+{% end %}

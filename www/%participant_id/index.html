@@ -1,0 +1,123 @@
+"""Show information about a single participant in the economy.
+
+There is an implicit participant for every account on the social networks. When
+someone claims a social network account on Logstown, the underlying participant
+is upgraded to an explicit participant. Participant accounts can be folded into
+other participant accounts. All of the social network profiles associated with
+the old participant are re-associated with the new participant, and the old
+participant is pruned. All the money attached to the old social network
+profiles is rolled over to the new participant.
+
+"""
+import requests
+from logstown import AMOUNTS, db, get_tip, get_tips_and_total
+from aspen import json, Response
+__version__ = "devel"
+
+
+tip_suggestions = ('torvalds', 'jeresig', 'ry', 'antirez', 'bartaz')
+tip_suggestions = [{'tippee': name, 'amount': 0} for name in tip_suggestions]
+
+
+# ========================================================================== ^L
+
+SELECT = """
+
+    SELECT p.*
+         , s.network
+         , s.user_info
+      FROM participants p 
+      JOIN social_network_users s 
+        ON p.id = s.participant_id 
+     WHERE p.id = %s
+
+"""
+participant = db.fetchone(SELECT, (path['participant_id'],))
+if participant is None:
+    raise Response(404)
+username = participant['id']
+if participant['claimed_time'] is None:
+    login = participant['user_info'].get('login')
+    if login is None:
+        raise Response(404)
+    request.redirect('/github/%s/' % login)
+
+if not user.ANON:
+    if user.id == username:
+        tips, total = get_tips_and_total(user.id)
+        if total == 0:
+            tips = tip_suggestions
+    else:
+        my_tip = get_tip(user.id, participant['id'])
+
+# ========================================================================== ^L
+{% extends participant.html %}
+{% block their_voice %}
+    <style>
+        #matrix TR.not-over BUTTON.empty {
+            background: transparent;
+            color: #F2F0EF;
+        }
+    </style>
+    <script>
+        $(document).ready(function()
+        {
+            Logstown.initTipButtons();
+            function hover()
+            {
+                $(this).toggleClass('over');
+                $(this).toggleClass('not-over');
+            }
+            $('#matrix TR').hover(hover, hover);
+        });
+    </script>
+
+{% if not user.ANON and user.id == participant['id'] %}
+    <h2 class="first">You are <b>{{ user.id }}</b>.
+        <span class="small"><a href="/sign/out.html">Sign out</a></span>
+    </h2>
+    {% if participant['statement'] %}
+    <div id="statement">{{ escape(participant['statement']) }}</div>
+    {% end %}
+
+    <h2>You tip <span id="total">${{ total }}</span> per week.
+        <span class="small"><a href="/credit-card.html">Credit card</a></span>
+    </h2>
+    {% if total == 0 %}
+
+    <p>Here are some programmers on Github that you might consider tipping.</p>
+
+    {% end %}
+    <table id="matrix">
+        {% for tip in tips %}
+        {% if tip['amount'] > 0 or total == 0 %}
+        <tr class="not-over">
+            <th><a href="/{{ tip['tippee'] }}/">{{ tip['tippee'] }}</a></th>
+            <td>
+                {% for amount in AMOUNTS %}
+                <button amount="{{ amount }}" tippee="{{ tip['tippee'] }}"
+                    class="tip small {{ 'selected' if amount == tip['amount'] else 'empty' }}">{{ amount }}</button>
+                {% end %}
+            </td>
+        </tr>
+        {% end %}
+        {% end %}
+    </table>
+
+    <h2>Your balance is ${{ user.balance }}.</h2>
+
+    {% if user.balance > 0 %}
+    <p>Release early! Release often! Automated withdrawals have not been
+    implemented yet. Email <a
+        href="mailto:chad@zetaweb.com">chad@zetaweb.com</a> or call
+    +1-412-925-4220 to work something out if you need your cash now.</p>
+    {% end %}
+
+{% else %}
+    <h2 class="first">I am <b>{{ participant['id'] }}</b>.</h2>
+    {% if participant['statement'] %}
+    <div id="statement">{{ escape(participant['statement']) }}</div>
+    {% end %}
+{% end %}
+
+{% end %}

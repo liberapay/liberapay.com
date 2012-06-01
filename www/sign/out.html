@@ -1,0 +1,21 @@
+from aspen import Response
+from logstown import db
+
+SIGNOUT = """\
+
+    UPDATE participants 
+       SET session_token=NULL
+         , session_expires=now()
+     WHERE session_token=%
+           
+"""
+
+# ========================================================================== ^L
+
+token = user.session.get('token')
+if token:
+    db.execute(SIGNOUT, (token,))
+user.session = {}
+request.redirect('/')
+
+# ========================================================================== ^L

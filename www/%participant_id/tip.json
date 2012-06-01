@@ -1,0 +1,73 @@
+import decimal
+
+from aspen import Response
+from logstown import AMOUNTS, db
+from logstown.networks import github
+
+
+# ========================================================================== ^L
+
+
+# Get tipper and tippee.
+# ======================
+
+tipper = user.id
+if 'participant_id' in path:    # logstown
+    tippee = path['participant_id']
+elif 'login' in path:           # github
+    tippee = github.resolve(path['login'])
+else:
+    raise Response(400, "can't find tippee")
+if tippee == tipper:
+    amount = "0.00"
+else:
+    
+    # Add a new tip record.
+    # =====================
+    # Insert instead of update. The analytics may be interesting some day.
+
+    if 'amount' in qs:
+        try:
+            amount = decimal.Decimal(qs['amount'])
+            if amount not in AMOUNTS:
+                raise ValueError 
+        except decimal.InvalidOperation, ValueError:
+            raise Response(400, "bad amount")
+
+        NEW_TIP = """\
+                
+            INSERT INTO tips
+                        (ctime, tipper, tippee, amount)
+                 VALUES ( COALESCE (( SELECT ctime 
+                                        FROM tips 
+                                       WHERE (tipper=%s AND tippee=%s)
+                                       LIMIT 1
+                                      ), CURRENT_TIMESTAMP)
+                        , %s, %s, %s
+                         )
+
+        """
+        db.execute(NEW_TIP, (tipper, tippee, tipper, tippee, amount))
+
+
+    # Fetch the current tip record.
+    # =============================
+
+    else:
+        FETCH = """\
+                
+            SELECT amount
+              FROM tips
+             WHERE tippee=%s AND tipper=%s
+          ORDER BY mtime DESC
+             LIMIT 1
+             
+        """
+        rec = db.fetchone(FETCH, (tippee, tipper))
+        if rec is None:
+            amount = "0.00"
+        else:
+            amount = str(rec['amount'])
+
+
+response.body = {"amount": amount}

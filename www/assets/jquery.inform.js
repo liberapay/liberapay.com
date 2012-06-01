@@ -1,5 +1,5 @@
 (function($) {
-  
+
     // set in the plugin itself, at the bottom
     var $form = null;
     var form = null;
@@ -389,8 +389,8 @@
                          .css({color: 'red'})
                          .animate({color: '#614C3E'}, 5000); // requires plugin
                              // http://www.bitstorm.org/jquery/color-animation/
-            Logstown.form.refocus();
-            Logstown.resize(); 
+            IHazMoney.form.refocus();
+            IHazMoney.resize(); 
         };
 
         this.error = function(a,b,c)
@@ -413,8 +413,8 @@
                 , url: $form.attr('action')
                 , data: $form.serialize()
                 , dataType: 'json'
-                , success: Logstown.form.success
-                , error: Logstown.form.error
+                , success: IHazMoney.form.success
+                , error: IHazMoney.form.error
                  }
             );
             return false;
@@ -429,12 +429,12 @@
     {
         $form = this;
         $inform = $('#inform', $form);
-        Logstown.form = new Form($inform.text())
-        $inform.html(Logstown.form.render());
-        $form.submit(Logstown.form.submit);
-        Logstown.resize();
-        Logstown.fire('informed');
-        Logstown.form.refocus();
+        IHazMoney.form = new Form($inform.text())
+        $inform.html(IHazMoney.form.render());
+        $form.submit(IHazMoney.form.submit);
+        IHazMoney.resize();
+        IHazMoney.fire('informed');
+        IHazMoney.form.refocus();
     };
 
 })(jQuery);

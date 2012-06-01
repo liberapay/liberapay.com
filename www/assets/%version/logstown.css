@@ -1,0 +1,269 @@
+@import url(http://fonts.googleapis.com/css?family=Lato:100,900);
+@import url("/assets/reset.css");
+
+BODY {
+    font: 100 12pt/18pt "Lato", sans-serif;
+    text-align: center;
+    color: #614C3E;
+}
+#body {
+    width: 600px;
+    text-align: left;
+    margin: 0 auto 256pt;
+    z-index: 1;
+    position: relative;
+    background: transparent;
+}
+#bg {
+    width: 273px;
+    height: 238px;
+    position: fixed;
+    z-index: 2;
+    background: transparent url("logstown.png") bottom right no-repeat; 
+    bottom: 0;
+    right: 0;
+}
+
+
+H2 {
+    font-size: 24pt;
+    line-height: 24pt; 
+    font-weight: 100;
+    margin: 36pt 0 12pt;
+}
+H2 .small {
+    font-size: 10pt;
+    line-height: 12pt;
+}
+P {
+    margin: 0 0 1em;
+}
+UL {
+    list-style: disc;
+}
+UL LI {
+    margin-left: 2em;
+}
+OL {
+    list-style: decimal;
+}
+OL LI {
+    margin-left: 2em;
+}
+TH {
+    padding-right: 2em;
+    font-weight: 900;
+}
+TD {
+    text-align: right;
+}
+A {
+    color: #2A8F79;
+}
+
+
+#their-voice {
+    background: #F2F0EF;
+    padding: 24pt;
+    margin: 36pt 0 0;
+}
+#their-voice H2.first {
+    margin: 12pt 0 12pt;
+}
+
+.clear {
+    clear: both;
+}
+
+
+/* FORM */
+/* ==== */
+
+FORM {
+    width: 300px;
+}
+FORM .half {
+    width: 150px;
+}
+FORM .full {
+    clear: both;
+    text-align: right;
+    padding-top: 5px;
+}
+FORM #other {
+    font: normal 9pt/14pt Arial, sans-serif;
+    color: #00E;
+    cursor: pointer;
+    margin-right: 1em;
+}
+FORM #other:hover {
+    text-decoration: underline;
+}
+FORM .left {
+    float: left;
+}
+FORM .right {
+    float: left;
+}
+FORM LABEL {
+    display: block;
+    font: normal 10px/14px Monaco, "Lucida Console", monospace;
+    margin: 5px 0 0;
+    padding: 0;
+}
+FORM INPUT {
+    font: normal 11pt/14pt Arial, sans-serif;
+    width: 292px;
+    margin: 0;
+    padding: 3px;
+    border: 1px solid #CCBAAD;
+    outline: none;
+    color: #614C3E;
+}
+FORM .half INPUT {
+    width: 137px;
+}
+FORM .right.half LABEL,
+FORM .right.half INPUT {
+    margin-left: 5px;
+}
+FORM INPUT:focus {
+    border-color: #2A8F79;
+}
+FORM .float {
+    float: left;
+}
+FORM .city          INPUT { width: 137px; }
+FORM .state         INPUT { width: 43px; }
+FORM .zip           INPUT { width: 75px; }
+FORM .card_number   INPUT { width: 137px; }
+FORM .cvv           INPUT { width: 43px; }
+FORM .expiry        INPUT { width: 75px; }
+FORM .not-first LABEL,
+FORM .not-first INPUT {
+    margin-left: 10px;
+}
+FORM#payment IMG {
+    float: left;
+}
+FORM#payment P {
+    margin: 3em 0 0;
+    font-size: 14pt;
+    line-height: 18pt;
+}
+FORM#payment .full {
+    padding-top: 10px;
+}
+
+
+/* Button */
+/* ====== */
+
+BUTTON {
+    font: normal 12pt/12pt "Lato", sans-serif;
+    text-shadow: #F2F0EF 0px 1pt 1pt;
+    text-decoration: none;
+
+    width: auto;
+    overflow: visible;
+    display: inline-block;
+    cursor: pointer;
+
+    border: 1pt solid #999;
+    -moz-border-radius: 7pt;
+    -webkit-border-radius: 7pt;
+    -o-border-radius: 7pt;
+    -ms-border-radius: 7pt;
+    -khtml-border-radius: 7pt;
+    border-radius: 7pt;
+
+    background: #F2F0EF url("/assets/button-bg.png") repeat-x bottom left;
+    background-image: -webkit-gradient( linear, 0% 0%, 0% 100%
+                                      , from(#F2F0EF)
+                                      , to(#999)
+                                       );
+    background-image: -moz-linear-gradient(top, #F2F0EF, #CCC);
+    background-image: linear-gradient(top, #F2F0EF, #999);
+
+    padding: 4pt 12pt 6pt 11pt;
+    margin: 0;
+    vertical-align: middle;
+
+    -moz-background-clip: padding;
+    -webkit-background-clip: padding;
+    -o-background-clip: padding-box;
+    -ms-background-clip: padding-box;
+    -khtml-background-clip: padding-box;
+    background-clip: padding-box;
+}
+
+BUTTON.selected {
+    border: 1px solid #0A382E;
+    background: #2A8F79 url("/assets/button-bg.png") repeat-x bottom left;
+    background-image: -webkit-gradient( linear, 0% 0%, 0% 100%
+                                      , from(#2A8F79)
+                                      , to(#0D4035)
+                                       );
+    background-image: -moz-linear-gradient(top, #2A8F79, #0D4035);
+    background-image: linear-gradient(top, #2A8F79, #0D4035);
+    text-shadow-color: #001b38;
+}
+
+BUTTON.small {
+    font: normal 9pt/9pt "Lato", sans-serif;
+    padding: 2pt 5pt 3pt;
+    -moz-border-radius: 3pt;
+    -webkit-border-radius: 3pt;
+    -o-border-radius: 3pt;
+    -ms-border-radius: 3pt;
+    -khtml-border-radius: 3pt;
+    border-radius: 3pt;
+}
+
+BUTTON::-moz-focus-inner {
+    border: none;
+    padding: 0;
+}
+
+BUTTON:focus {
+    outline: none;
+}
+
+BUTTON, BUTTON:visited {
+    color: #888;
+}
+
+BUTTON.selected, BUTTON.selected:visited,
+BUTTON:hover, BUTTON:hover:visited,
+BUTTON:focus, BUTTON:focus:visited,
+BUTTON:active, BUTTON:active:visited {
+    color: white;
+}
+
+BUTTON:hover, BUTTON:focus {
+    border: 1px solid #0A382E;
+    background-image: url("/assets/button-bg.over.png");
+    background-image: -webkit-gradient( linear, 0% 0%, 0% 100%
+                                      , from(#2A8F79)
+                                      , to(#04221B)
+                                       );
+    background-image: -moz-linear-gradient(top, #2A8F79, #04221B);
+    background-image: linear-gradient(top, #2A8F79, #04221B));
+    text-shadow-color: #001b38;
+}
+
+BUTTON:active {
+    /* http://somadesign.ca/demos/buttons-redux.html */
+    -moz-box-shadow
+        :0 .33em 1em rgba(0,0,0,.67) inset,
+        1px 1px 0 rgba(255,255,255,.25) inset, 
+        -1px -1px 0 rgba(255,255,255,.25) inset;
+    -webkit-box-shadow:
+        0 .33em 2em rgba(0,0,0,.67) inset,
+        1px 1px 0 rgba(255,255,255,.25) inset, 
+        -1px -1px 0 rgba(255,255,255,.25) inset;
+    box-shadow:
+        0 .33em 2em rgba(0,0,0,.67) inset,
+        1px 1px 0 rgba(255,255,255,.25) inset, 
+        -1px -1px 0 rgba(255,255,255,.25) inset;
+}

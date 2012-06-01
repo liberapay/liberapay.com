@@ -1,0 +1,61 @@
+"""Github user page on Logstown.
+"""
+import decimal
+
+
+import requests
+from aspen import json, Response
+from logstown import AMOUNTS, db, get_tip
+from logstown.networks import github
+
+
+__version__ = "devel"
+
+
+# ========================================================================== ^L
+
+# Try to load from Github.
+# ========================
+
+url = "https://api.github.com/users/%s"
+userinfo = requests.get(url % path['login'])
+if userinfo.status_code != 200:
+    raise Response(404)
+userinfo = json.loads(userinfo.text)
+
+
+# Try to load from Logstown.
+# ==========================
+
+participant_id, claimed_time = github.upsert(userinfo)
+if claimed_time:
+    request.redirect('/%s/' % participant_id)
+
+participant = False
+username = userinfo['login']
+
+if not user.ANON:
+    my_tip = get_tip(user.id, participant_id)
+
+
+# ========================================================================== ^L
+{% extends participant.html %}
+
+{% block their_voice %}
+    <script>
+        $(document).ready(Logstown.initTipButtons);
+    </script>
+    <h2 class="first"><b>{{ username }}</b> has not claimed their account.</h2>
+
+    <p>This page is a placeholder for {{ userinfo['login'] }} 
+    {% if userinfo.get('name', '') %}({{ userinfo['name'] }}){% end %}
+    <a href="{{ userinfo['html_url'] }}">from Github</a>.</p>
+
+    {% if user.ANON %}
+    <p>If you are {{ userinfo['login'] }}, you can <a 
+        href="https://github.com/login/oauth/authorize?client_id={{ website.github_client_id }}">claim
+        your account</a> to collect your tips.</p>
+    {% else %}
+    {% end %}
+
+{% end %}

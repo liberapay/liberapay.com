@@ -1,2 +1,138 @@
-request.redirect('/gospels/')
-# ========================================================================== ^L
+__version__ = "dev"
+^L
+^L
+{% extends base.html %}
+
+{% block heading %}
+<h2><b>Logstown</b> is a gift economy.</h2>
+{% end %}
+
+{% block body %}
+    <div id="their-voice">
+        {% if user.ANON %}
+        <h2 class="first">Sign in with your <a 
+            href="https://github.com/login/oauth/authorize?client_id={{ website.github_client_id }}">Github</a> account.</h2>
+        {% else %}
+        <h2 class="first">You are <b><a href="/{{ user.id }}/">{{ user.id }}</a></b>.
+        <span class="small"><a href="/sign/out.html">Sign out</a>.</span>
+        </h2>
+        {% end %}
+    </div>
+
+    {% if not user.ANON %}
+    <h2>Getting Started</h2>
+
+    <p>Here are some popular programmers on Github that you might consider
+    tipping:</p>
+
+    <ul>
+
+        <li><a href="/github/torvalds/">torvalds (Linus Torvalds)</a>,
+        author of Linux</a></li>
+
+        <li><a href="/github/jeresig/">jeresig (John Resig)</a>,
+        author of jQuery</a></li>
+
+        <li><a href="/github/ry/">ry (Ryan Dahl)</a>,
+        author of Node.js</a></li>
+
+        <li><a href="/github/antirez/">antirez (Salvatore Sanfilippo)</a>,
+        author of Redis</a></li>
+
+        <li><a href="/github/bartaz/">bartaz (Bartek Szopka)</a>,
+        author of Impress.js</a></li>
+
+    </ul>
+    {% end %}
+
+    <h2>Our Mission</h2>
+
+    <p>Logstown&rsquo;s mission is to <b>bootstrap a gift economy</b>.
+    Imagine walking down the street and a bunch of your local townsfolk are
+    lined up sitting there alongside a slew of celebrities and a random
+    assortment of other humans. Each one is doing their own thing and has a
+    jar out. You have a few bucks in your pocket and you&rsquo;re in a good
+    mood. <b>Who would you tip?</b></p>
+
+    <p>There&rsquo;s something called a <a
+        href="http://en.wikipedia.org/wiki/MacArthur_Fellows_Program">genius
+        grant</a> that the MacArthur Foundation gives to about 30 people
+    each year. It&rsquo;s ten million dollars over five years, <b>no
+        strings attached</b>. &ldquo;Just keep being a genius. Please spend
+    another five years making the world better for the rest of us.&rdquo;
+    The winners don&rsquo;t even know they&rsquo;re in the running until
+    they get the phone call that they won.</p>
+    
+    <p>Logstown is <b>genius grants for the rest of us</b>. Call them
+    pretty-smart grants, or crowd-sourced genius grants.</p>
+
+    <p>Logstown is for the local coffee shop owner that&rsquo;s really
+    doing a lot for your town. You&rsquo;re a fan. You buy coffee from her,
+    but you want to do something more&mdash;a little something, not a big
+    deal. If a hundred other people in your town feel the same way, it
+    starts to add up. Now she can offer free coffee on Sunday mornings. Or
+    whatever. She knows what she&rsquo;s doing. No strings attached.</p>
+
+    <p>Logstown is for the musician who gives their music away for free.
+    You love their work. You go to their shows, you actually pay for the
+    downloads, but you want to make sure their family is covered. You want
+    to chip in&mdash;a little something&mdash;so they&rsquo;re freed up to
+    make great music.</p>
+
+    <p>Logstown is for your favorite open source developer. You study their
+    code, and you implicitly trust any software they write. You want to free
+    them up to write even more of it.</p>
+    
+    <p>Logstown is voluntary <b>welfare for productive people</b>.</p>
+
+    <p>Logstown is <b>Kickstarter for people</b> (not just projects).</p>
+
+    <p>Logstown is <b>Flattr for people</b> (not just content).</p>
+
+    <p>Logstown is a <b>gift economy</b> implemented atop the global
+    exchange economy.</p>
+    
+    
+    <h2>Details</h2>
+
+    <p>Tips are <b>weekly</b>. One-off contributions aren&rsquo;t enough.
+    Expenses are ongoing. Income must be, too.</p>
+
+    <p>Tips are <b>anonymous</b>. The people you tip aren&rsquo;t told who
+    tipped them. Also, you can&rsquo;t tip more then $2.49 a week. This
+    way, tips come with <b>no strings attached</b>. Alice works on whatever
+    she wants to work on. Bob tips whomever he wants to tip.</p>
+
+    <p>Tips are <b>public</b>. The amount you give is private, but the
+    total amount you receive is public. Tip income closely reflects benefit
+    to society, so calling out high earners encourages <b>true value
+        creation</b>. Alice is concretely rewarded by a thousand Bobs for
+    contributing to society.</p>
+
+    <p>Logstown distributes <b>tips every Friday</b>. Tips come out of your
+    current balance (the money people have tipped you), and if that&rsquo;s not
+    enough, Logstown charges your credit card to make up the difference. We add
+    an additional <b>10&cent; + 3.9%</b> fee when pulling money in from your
+    credit card, to cover credit card processing, hosting, and other expenses.
+    For example, let&rsquo;s say that you have $10 in your account, and you are
+    set up to tip $1.99 to ten people. Here&rsquo;s what we will charge your
+    credit card on Friday:</p>
+
+    <p style="font-family: monospace; font-size: smaller; padding-left: 40%;">
+        &nbsp;$&nbsp;1.99<br />
+        <u>x&nbsp;10&nbsp;&nbsp;&nbsp;</u><br />
+        &nbsp;$19.90&nbsp;&nbsp;&nbsp;total tips<br />
+        <u>-$10.00</u>&nbsp;&nbsp;&nbsp;current balance<br />
+        &nbsp;$&nbsp;9.90&nbsp;&nbsp;&nbsp;amount needed<br />
+        <u>+$ 0.10</u><br />
+        &nbsp;$10.00<br />
+        <u>x&nbsp;&nbsp;1.039</u><br />
+        &nbsp;<b>$10.39&nbsp;&nbsp;&nbsp;amount charged</b>
+    </p>
+
+    <p>Recipients get the full face value of your tip to them. If you tip
+    someone $1.99, they will have $1.99 in their Logstown account every
+    Friday until your credit card expires. Participants can withdraw funds
+    from their Logstown account at any time.</p>
+
+{% end %}

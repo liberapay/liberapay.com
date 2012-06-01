@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<title>Nested Accordions</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-Language" content="en-us" />
+	
+	<link type="text/css" rel="stylesheet" href="css/flora.css" />
+	<link type="text/css" rel="stylesheet" href="css/flora.accordion.css" />
+	<link type="text/css" rel="stylesheet" href="css/flora.tabs.css" />
+	
+	<script type="text/javascript" src="../lib/jquery.js"></script>
+	<script type="text/javascript" src="../lib/jquery.dimensions.js"></script>
+	<script type="text/javascript" src="../jquery.accordion.js"></script>
+	
+	<script type="text/javascript">
+	$(document).ready(function() {
+		$("#acc1").accordion({
+			alwaysOpen: false,
+			autoheight: false,
+			header: 'a.acc1',
+			clearStyle: true
+		});
+		$("#acc2").accordion({
+			alwaysOpen: false,
+			autoheight: false,
+			header: 'a.acc2',
+			clearStyle: true
+		});
+	});
+	</script>
+</head>
+<body>
+<ul id="acc1" class="ui-accordion-container">
+	<li>
+		<div class="ui-accordion-left"></div>
+		<a class="ui-accordion-link acc1">1a
+			<span class="ui-accordion-right"></span></a>
+		<div>
+
+			<ul class="ui-accordion-container" id="acc2">
+				<li>
+					<div class="ui-accordion-left"></div>
+					<a class="ui-accordion-link acc2">2a
+						<span class="ui-accordion-right"></span></a>
+					<div>
+						2a<br />
+						2a<br />
+
+						2a<br />
+					</div>
+				</li>
+				<li>
+					<div class="ui-accordion-left"></div>
+					<a class="ui-accordion-link acc2">2b
+						<span class="ui-accordion-right"></span></a>
+					<div>
+						2b<br />
+
+						2b<br />
+						2b<br />
+					</div>
+				</li>
+			</ul>
+		</div>
+	</li>
+	<li>
+
+		<div class="ui-accordion-left"></div>
+		<a class="ui-accordion-link acc1">1b
+			<span class="ui-accordion-right"></span></a>
+		<div>
+			1b<br />
+			1b<br />
+			1b<br />
+		</div>
+
+	</li>
+</ul>
+</body>
+</html>

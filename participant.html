@@ -1,0 +1,23 @@
+{% extends base.html %}
+{% block body %}
+    <div id="their-voice">
+        {% block their_voice %}{% end %}
+    </div>
+
+    {% if user.ANON %}
+        <h2>Sign in 
+        <a href="https://github.com/login/oauth/authorize?client_id={{ website.github_client_id }}">with 
+            Github</a> to tip {{ username }}.</h2>
+    {% else %}
+        {% if user.id != username %}
+            <h2>Your weekly tip to {{ username }} is:</h2>
+
+            <div id="tips">
+                {% for amount in AMOUNTS %}
+                <button amount="{{ amount }}" tippee="{{ username }}"
+                    class="tip{{ ' selected' if amount == my_tip else '' }}">${{ amount }}</button>
+                {% end %}
+            </div>
+        {% end %}
+    {% end %}
+{% end %}

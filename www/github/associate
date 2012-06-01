@@ -1,0 +1,55 @@
+"""Associate a Github account with a Logstown account.
+
+First we do the OAuth dance with Github. Once we've authenticated the user
+against Github, we record them in our user_infos table. This table contains
+information for Github users whether or not they are explicit participants in
+the Logstown economy.
+
+"""
+import requests
+from aspen import json, log, Response
+from logstown.networks import github
+from logstown.authentication import User 
+
+# ========================== ^L
+
+
+# Do the dance.
+# =============
+# http://developer.github.com/v3/oauth/
+
+log("Doing an OAuth dance with Github.") 
+
+if 'error' in qs:
+    raise Response(500, str(qs['error']))
+
+data = { 'code': qs['code'].encode('US-ASCII')
+       , 'client_id': website.github_client_id
+       , 'client_secret': website.github_client_secret
+        }
+r = requests.post("https://github.com/login/oauth/access_token", data=data)
+assert r.status_code == 200, (r.status_code, r.text)
+
+back = dict([pair.split('=') for pair in r.text.split('&')]) # XXX
+if 'error' in back:
+    raise Response(400, back['error'].encode('utf-8'))
+assert back.get('token_type', '') == 'bearer', back
+access_token = back['access_token']
+
+r = requests.get( "https://api.github.com/user"
+                , headers={'Authorization': 'token %s' % access_token}
+                 )
+assert r.status_code == 200, (r.status_code, r.text)
+user_info = json.loads(r.text)
+log("Done with OAuth dance with Github for %s (%s)." 
+    % (user_info['login'], user_info['id']))
+
+
+# Bind to a participant.
+# ======================
+
+participant_id = github.upsert(user_info, claim=True)
+user = User.from_id(participant_id)
+request.redirect('/%s/' % participant_id)
+
+# ========================== ^L text/plain

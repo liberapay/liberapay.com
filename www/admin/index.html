@@ -1,0 +1,62 @@
+from aspen import Response
+from ihasamoney import db, __version__
+
+^L
+
+if not request.user.ADMIN:
+    # XXX If the user hits /admin they are redirected to /admin/ before getting
+    # 404, indicating that Something is Up.
+    raise Response(404)
+
+customers = db.fetchall("""\
+    
+    SELECT email, created, next_bill_date, is_admin, last_bill_result
+      FROM customers
+  ORDER BY next_bill_date, created
+
+""")
+
+^L
+<title>Admin</title>
+<style>
+    BODY, TABLE {
+        font: normal 10px/14px Monaco, "Lucida Console", monospace;
+        border-collapse: collapse;
+    }
+    TR:hover {
+        background: #EEE;
+    }
+    TH {
+        border-bottom: 1px solid black;
+        text-align: left;
+        font-weight: normal;
+        white-space: nowrap;
+        padding: 0 10px 0 0;
+    }
+    TD B {
+        font-weight: normal;
+        background: #FFFE26;
+    }
+    TD { 
+        padding: 0 10px 0 0;
+        white-space: nowrap;
+    }
+</style>
+{{ __version__}}<br />
+<br />
+<table>
+    <tr>
+        <th>email</th>
+        <th>created</th>
+        <th>next bill date</th>
+        <th>last bill result</th>
+    </tr>
+{% for customer in customers %}
+<tr>
+<td>{% if customer['is_admin'] %}<b>{{ customer['email'] }}</b>{% else %}{{ customer['email'] }}{% end %}</td>
+<td>{{ customer['created'].strftime('%Y-%m-%d') }}</td>
+<td style="text-align: right;">{{ customer['next_bill_date'] }}</td>
+<td>{{ customer['last_bill_result'] }}</td>
+</tr>
+{% end %}
+</table>

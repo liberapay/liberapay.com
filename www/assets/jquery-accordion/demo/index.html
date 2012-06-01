@@ -1,0 +1,385 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+	<title>jQuery UI Accordion</title>
+	
+	<link rel="stylesheet" href="demo.css" />
+	
+	<script type="text/javascript" src="../lib/jquery.js"></script>
+	<script type="text/javascript" src="../lib/chili-1.7.pack.js"></script>
+	
+	<script type="text/javascript" src="../lib/jquery.easing.js"></script>
+	<script type="text/javascript" src="../lib/jquery.dimensions.js"></script>
+	<script type="text/javascript" src="../jquery.accordion.js"></script>
+
+	<script type="text/javascript">
+	jQuery().ready(function(){
+		// simple accordion
+		jQuery('#list1a').accordion();
+		jQuery('#list1b').accordion({
+			autoheight: false
+		});
+		
+		// second simple accordion with special markup
+		jQuery('#navigation').accordion({
+			active: false,
+			header: '.head',
+			navigation: true,
+			event: 'mouseover',
+			fillSpace: true,
+			animated: 'easeslide'
+		});
+		
+		// highly customized accordion
+		jQuery('#list2').accordion({
+			event: 'mouseover',
+			active: '.selected',
+			selectedClass: 'active',
+			animated: "bounceslide",
+			header: "dt"
+		}).bind("change.ui-accordion", function(event, ui) {
+			jQuery('<div>' + ui.oldHeader.text() + ' hidden, ' + ui.newHeader.text() + ' shown</div>').appendTo('#log');
+		});
+		
+		// first simple accordion with special markup
+		jQuery('#list3').accordion({
+			header: 'div.title',
+			active: false,
+			alwaysOpen: false,
+			animated: false,
+			autoheight: false
+		});
+		
+		var wizard = $("#wizard").accordion({
+			header: '.title',
+			event: false
+		});
+		
+		var wizardButtons = $([]);
+		$("div.title", wizard).each(function(index) {
+			wizardButtons = wizardButtons.add($(this)
+			.next()
+			.children(":button")
+			.filter(".next, .previous")
+			.click(function() {
+				wizard.accordion("activate", index + ($(this).is(".next") ? 1 : -1))
+			}));
+		});
+		
+		// bind to change event of select to control first and seconds accordion
+		// similar to tab's plugin triggerTab(), without an extra method
+		var accordions = jQuery('#list1a, #list1b, #list2, #list3, #navigation, #wizard');
+		
+		jQuery('#switch select').change(function() {
+			accordions.accordion("activate", this.selectedIndex-1 );
+		});
+		jQuery('#close').click(function() {
+			accordions.accordion("activate", -1);
+		});
+		jQuery('#switch2').change(function() {
+			accordions.accordion("activate", this.value);
+		});
+		jQuery('#enable').click(function() {
+			accordions.accordion("enable");
+		});
+		jQuery('#disable').click(function() {
+			accordions.accordion("disable");
+		});
+		jQuery('#remove').click(function() {
+			accordions.accordion("destroy");
+			wizardButtons.unbind("click");
+		});
+	});
+	</script>
+
+</head>
+<body>
+
+<h1 id="banner"><a href="http://bassistance.de/jquery-plugins/jquery-plugin-accordion/">jQuery accordion Plugin</a> Demo</h1>
+<div id="main">
+
+	<fieldset>
+		<legend>Standard, container is a div, header is h3 and content div and nested p</legend>	
+
+		<h3>Code</h3>
+		<pre><code class="mix">jQuery('#list1a').accordion();
+jQuery('#list1b').accordion({
+	autoheight: false
+});</code></pre>
+
+		<div class="basic" style="float:left;"  id="list1a">
+			<a>There is one obvious advantage:</a>
+			<div>
+				<p>
+					You've seen it coming!<br/>
+					Buy now and get nothing for free!<br/>
+					Well, at least no free beer. Perhaps a bear,<br/>
+					if you can afford it.
+				</p>
+			</div>
+			<a>Now that you've got...</a>
+			<div>
+				<p>
+					your bear, you have to admit it!<br/>
+					No, we aren't selling bears.
+				</p>
+			</div>
+			<a>Rent one bear, ...</a>
+			<div>
+				<p>
+					get two for three beer.
+				</p>
+				<p>
+					And now, for something completely different.<br/>
+					And now, for something completely different.<br/>
+					And now, for something completely different.<br/>
+					And now, for something completely different.<br/>
+					And now, for something completely different.<br/>
+					And now, for something completely different.<br/>
+					And now, for something completely different.<br/>
+					And now, for something completely different.<br/>
+					Period.
+				</p>
+			</div>
+		</div>
+			
+		<div class="basic" style="float:left; margin-left: 2em;" id="list1b">
+			<a>There is one obvious advantage:</a>
+			<div>
+				<p>
+					You've seen it coming!<br/>
+					Buy now and get nothing for free!<br/>
+					Well, at least no free beer. Perhaps a bear,<br/>
+					if you can afford it.
+				</p>
+			</div>
+			<a>Now that you've got...</a>
+			<div>
+				<p>
+					your bear, you have to admit it!<br/>
+					No, we aren't selling bears.
+				</p>
+			</div>
+			<a>Rent one bear, ...</a>
+			<div>
+				<p>
+					get two for three beer.
+				</p>
+				<p>
+					And now, for something completely different.<br/>
+					And now, for something completely different.<br/>
+					And now, for something completely different.<br/>
+					And now, for something completely different.<br/>
+					And now, for something completely different.<br/>
+					And now, for something completely different.<br/>
+					And now, for something completely different.<br/>
+					And now, for something completely different.<br/>
+					Period.
+				</p>
+			</div>
+		</div>
+		
+	</fieldset>
+		
+	<fieldset>
+		<legend>Navigation - Unordered List with anchors and nested lists.</legend>
+		<p>Location-based state-saving: The active element is choosen based on location.hash: Click one of the links, then reload the page to see it in action.</p>
+
+		<h3>Code</h3>
+		<pre><code class="mix">jQuery('#navigation').accordion({
+	active: false,
+	header: '.head',
+	navigation: true,
+	event: 'mouseover',
+	fillSpace: true,
+	animated: 'easeslide'
+});</code></pre>
+		<div  style="height:250px;margin-bottom:1em;">
+			<ul id="navigation">
+				<li>
+					<a class="head" href="?p=1.1.1">Guitar</a>
+					<ul>
+						<li><a href="?p=1.1.1.1">Electric</a></li>
+						<li><a href="?p=1.1.1.2">Acoustic</a></li>
+						<li><a href="?p=1.1.1.3">Amps</a></li>
+						<li><a href="?p=1.1.1.4.1">Effects A</a></li>
+						<li><a href="?p=1.1.1.4.2">Effects B</a></li>
+						<li><a href="?p=1.1.1.4.3">Effects C</a></li>
+						<li><a href="?p=1.1.1.4.4">Effects D</a></li>
+						<li><a href="?p=1.1.1.5">Accessories</a></li>
+					</ul> 
+				</li>
+				<li>
+					<a class="head" href="?p=1.1.2">Bass</a>
+					<ul>
+						<li><a href="?p=1.1.2.1">Electric</a></li>
+						<li><a href="?p=1.1.2.2">Acoustic</a></li>
+						<li><a href="?p=1.1.2.3">Amps</a></li>
+						<li><a href="?p=1.1.2.4">Effects</a></li>
+						<li><a href="?p=1.1.2.5">Accessories</a></li>
+					</ul> 
+				</li>
+				<li>
+					<a class="head" href="?p=1.1.3">Drums</a>
+					<ul>
+						<li><a href="?p=1.1.3.2">Acoustic Drums</a></li>
+						<li><a href="?p=1.1.3.3">Electronic Drums</a></li>
+						<li><a href="?p=1.1.3.4">Cymbals</a></li>
+						<li><a href="?p=1.1.3.5">Hardware</a></li>
+						<li><a href="?p=1.1.3.6">Accessories</a></li>
+					</ul> 
+				</li>
+			</ul>
+		</div>
+		
+	</fieldset>
+
+	<fieldset>
+		<legend>With options, container is a definition list, header dt, content dd</legend>
+		
+		<h3>Code</h3>
+		<pre><code class="mix">jQuery('#list2').accordion({
+	event: 'mouseover',
+	active: '.selected',
+	selectedClass: 'active',
+	animated: "bounceslide",
+	header: "dt"
+}).bind("change.ui-accordion", function(event, ui) {
+	jQuery('&lt;div&gt;' + ui.oldHeader.text() + ' hidden, ' + ui.newHeader.text() + ' shown&lt;/div&gt;').appendTo('#log');
+});</code></pre>
+
+		<dl id="list2">
+			<dt class="red">Red</dt>
+			<dd>
+				Fancy stuff about red thingies.
+			</dd>
+			<dt class="green selected">Green</dt>
+			<dd>
+				Green! Green! Green!
+			</dd>
+			<dt class="blue">Blue</dt>
+			<dd>
+				Cool kids are blue.
+			</dd>
+		</dl>
+		
+	</fieldset>
+
+	<fieldset>
+		<legend>Divitus structure, div container, div header (class title), div
+		content, no active on startup and can be completely closed</legend>
+		
+		<h3>Code</h3>
+		<pre><code class="mix">jQuery('#list3').accordion({
+	header: 'div.title',
+	active: false,
+	alwaysOpen: false,
+	animated: false,
+	autoheight: false
+});</code></pre>
+
+		<div id="list3">
+			<div>
+				<div class="title">Tennis</div>
+				<div>
+					One ball, two players. Lots of fun.
+				</div>
+			</div>
+			<div>
+				<div class="title">Soccer</div>
+				<div>
+					One ball, 22 players. Lots of fun. <a href="http://google.com">Go to google?</a>
+				</div>
+			</div>
+			<div>
+				<div class="title">Baseball</div>
+				<div>
+					<p>
+						Well, one ball, some guys running around, some guys hitting others with a stick.<br/>
+						Sounds like fun, doesn't it?
+					</p>
+					<p>
+						Well, apart from the running part.
+						<a href="#navigation">Navigation example</a>
+					</p>
+				</div>
+			</div>
+		</div>
+		
+	</fieldset>
+	
+	<fieldset>
+		<legend>accordion wizard</legend>
+		
+		<h3>Code</h3>
+		<pre><code class="mix">var wizard = $("#wizard").accordion({
+	header: '.title',
+	event: false
+});
+
+$("div.title", wizard).each(function(index) {
+	$(this)
+	.next()
+	.children(":button")
+	.filter(".next, .previous")
+	.click(function() {
+		wizard.changeAccordion("activate", index + ($(this).is(".next") ? 1 : -1))
+	});
+});</code></pre>
+	
+		<div id="wizard">
+			<div>
+				<div class="title">Header 1</div>
+				<div>
+					Content 1<br/>
+					<input type="button" class="next" value="next" />
+				</div>
+			</div>
+			<div>
+		
+				<div class="title">Header 2</div>
+				<div>
+					Content 2<br/>
+					<input type="button" class="previous" value="previous"/>
+					<input type="button" class="next" value="next"/>
+				</div>
+			</div>
+			<div>
+				<div class="title">Header 3</div>
+		
+				<div>
+					Content 3<br/>
+					<input type="button" class="previous" value="previous"/>
+				</div>
+			</div>
+		
+		
+		</div>
+		
+	</fieldset>
+	
+	<div id="switch">
+		<select>
+			<option>Switch to...</option>
+			<option value="1">1</option>
+			<option value="2">2</option>
+			<option value="3">3</option>
+		</select>
+		<button id="close">Close all</button>
+		<button id="enable">Enable all</button>
+		<button id="disable">Disable all</button>
+		<button id="remove">Remove all</button>
+		Activate via selector, eg. ':first' or ':eq(1)': <input id="switch2" />
+	</div>
+
+	<div id="log"><div><strong>Log</strong></div></div>
+</div>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-2623402-1";
+urchinTracker();
+</script>
+	</body>
+</html>
