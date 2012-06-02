@@ -36,12 +36,12 @@ def get_tipjar(participant_id):
     TIPJAR = """\
 
         SELECT sum(amount) AS tipjar
-          FROM ( SELECT DISTINCT ON (tippee)
+          FROM ( SELECT DISTINCT ON (tipper)
                         amount
-                      , tippee
+                      , tipper
                    FROM tips
                   WHERE tippee=%s
-               ORDER BY tippee
+               ORDER BY tipper
                       , mtime DESC
                 ) AS foo
 
