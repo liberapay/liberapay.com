@@ -10,7 +10,8 @@ env:
 	./env/bin/pip install -e ./
 
 clean:
-	rm -rf env
+	rm -rf env *.egg *.egg-info
+	find . -name \*.pyc -delete
 
 run: env
 	sudo ./swaddle local.env ./env/bin/aspen \
