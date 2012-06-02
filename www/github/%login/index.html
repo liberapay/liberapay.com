@@ -5,7 +5,7 @@ import decimal
 
 import requests
 from aspen import json, Response
-from gittip import AMOUNTS, db, get_tip
+from gittip import AMOUNTS, db, get_tip, get_tipjar
 from gittip.networks import github
 
 
@@ -37,13 +37,6 @@ if not name:
 if not user.ANON:
     my_tip = get_tip(user.id, participant_id)
 
-if balance == 0:
-    balance = "an empty tipjar. Show some love?"
-elif balance < 10:
-    balance = "a little in their tipjar."
-else:
-    balance = "$%s in their tipjar." % balance
-
 # ========================================================================== ^L
 {% extends templates/participant.html %}
 
@@ -51,9 +44,9 @@ else:
     <script>
         $(document).ready(Gittip.initTipButtons);
     </script>
-
-    <h2 class="first"><b>{{ name }}</b> has {{ balance }}</h2>
     
+    <h2 class="first"><b>{{ name }}</b> has {{ get_tipjar(username) }}</h2>
+
     {% if user.ANON %}
     <p>Are you <a href="{{ userinfo['html_url'] }}">{{ userinfo['login'] }}</a> from Github? <a 
         href="{{ github_oauth_url(username) }}">Click here</a> to claim this tipjar.</p>

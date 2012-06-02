@@ -10,7 +10,7 @@ profiles is rolled over to the new participant.
 
 """
 import requests
-from gittip import AMOUNTS, db, get_tip, get_tips_and_total
+from gittip import AMOUNTS, db, get_tip, get_tips_and_total, get_tipjar
 from aspen import json, Response
 
 
@@ -113,7 +113,7 @@ if not user.ANON:
     {% end %}
 
 {% else %}
-    <h2 class="first">I am <b>{{ participant['id'] }}</b>.</h2>
+    <h2 class="first"><b>{{ participant['id'] }}</b> has {{ get_tipjar(participant['id']) }}</h2>
     {% if participant['statement'] %}
     <div id="statement">{{ escape(participant['statement']) }}</div>
     {% end %}

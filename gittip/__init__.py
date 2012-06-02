@@ -30,6 +30,40 @@ def get_tip(tipper, tippee):
     return tip
 
 
+def get_tipjar(participant_id):
+    """Given a participant id, return a unicode.
+    """
+    TIPJAR = """\
+
+        SELECT sum(amount) AS tipjar
+          FROM ( SELECT DISTINCT ON (tippee)
+                        amount
+                      , tippee
+                   FROM tips
+                  WHERE tippee=%s
+               ORDER BY tippee
+                      , mtime DESC
+                ) AS foo
+
+    """
+    rec = db.fetchone(TIPJAR, (participant_id,))
+    if rec is None:
+        tipjar = None
+    else:
+        tipjar = rec['tipjar']  # might be None
+    if tipjar is None:
+        tipjar = Decimal(0.00)
+
+    if tipjar == 0:
+        tipjar = u"an empty tipjar."
+    elif tipjar < Decimal('5.12'):
+        tipjar = u"a little in their tipjar."
+    else:
+        tipjar = u"$%s in their tipjar." % tipjar
+
+    return tipjar
+
+
 def get_tips_and_total(tipper, for_payday=False):
     """Given a participant id, return a list and a Decimal.
 
