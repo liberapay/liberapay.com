@@ -23,7 +23,7 @@ import decimal
 
 from aspen import json, log
 from aspen.utils import typecheck
-from logstown import db, get_tips_and_total
+from gittip import db, get_tips_and_total
 from psycopg2 import IntegrityError
 from samurai.payment_method import PaymentMethod as SamuraiPaymentMethod
 from samurai.processor import Processor
@@ -92,7 +92,7 @@ def charge(participant_id, pmt, amount):
     """Given two unicodes and a Decimal, return a boolean indicating success.
 
     This is the only place where we actually charge credit cards. Amount should
-    be the nominal amount. We compute Logstown's fee in this function and add
+    be the nominal amount. We compute Gittip's fee in this function and add
     it to amount.
 
     """
@@ -194,7 +194,7 @@ def charge(participant_id, pmt, amount):
 def transfer(tipper, tippee, amount):
     """Given two unicodes and a Decimal, return a boolean indicating success.
 
-    If the tipper doesn't have enough in their Logstown account then we return
+    If the tipper doesn't have enough in their Gittip account then we return
     False. Otherwise we decrement tipper's balance and increment tippee's
     *pending* balance by amount.
 
@@ -284,9 +284,9 @@ def transfer(tipper, tippee, amount):
 def payday():
     """This is the big one.
 
-    Settling the graph of Logstown balances is an abstract event called Payday.
+    Settling the graph of Gittip balances is an abstract event called Payday.
 
-    On Payday, we want to use a participant's Logstown balance to settle their
+    On Payday, we want to use a participant's Gittip balance to settle their
     tips due (pulling in more money via credit card as needed), but we only
     want to use their balance at the start of Payday. Balance changes should be
     atomic globally per-Payday.
@@ -387,7 +387,7 @@ def payday_one(payday_start, participant):
     """Given one participant record, pay their day.
 
     Charge each participants' credit card if needed before transfering money
-    between Logstown accounts.
+    between Gittip accounts.
  
     """
     tips, total = get_tips_and_total( participant['id']

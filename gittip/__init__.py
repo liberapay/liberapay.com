@@ -2,12 +2,12 @@ import decimal
 import os
 
 import psycopg2
-from logstown.version import __version__
+from gittip.version import __version__
 from psycopg2.extensions import cursor as RegularCursor 
 
 
 db = None # This global is wired below. It's an instance of 
-          # logstown.postgres.PostgresManager.
+          # gittip.postgres.PostgresManager.
 AMOUNTS= [decimal.Decimal(a) for a in ('0.00', '0.08', '0.16', '0.32', '0.64', '1.28')]
 
 
@@ -132,7 +132,7 @@ def wire_canonical():
 
 def wire_db():
     global db
-    from logstown.postgres import PostgresManager
+    from gittip.postgres import PostgresManager
     dburl = os.environ['DATABASE_URL']
     db = PostgresManager(dburl)
 

@@ -1,7 +1,7 @@
 import json
 import samurai.config
 from aspen import Response
-from logstown import billing
+from gittip import billing
 
 # ========================================================================== ^L
 if user.ANON:
@@ -30,7 +30,7 @@ username = user.id
 <script>
     $(document).ready(function()
     {
-        Logstown.initPayment("{{ samurai.config.merchant_key }}");
+        Gittip.initPayment("{{ samurai.config.merchant_key }}");
     });
 </script>
 <style>
@@ -67,7 +67,7 @@ username = user.id
 
     {% else %}
 
-    <p>When you don&rsquo;t have enough in your Logstown account to cover your
+    <p>When you don&rsquo;t have enough in your Gittip account to cover your
     tips, we {% if pmt %}will{% else %}can{% end %} pull money in using 
     {% if pmt %}this{% else %}a{% end %} credit card. If your credit card
     is missing or fails then your tips won&rsquo;t go through for that week.<p>
@@ -163,7 +163,7 @@ username = user.id
     <h2>Delete credit card.</h2>
 
     <p>Your credit card details will immediately be completely purged from
-    Logstown.</p>
+    Gittip.</p>
 
     <form action="credit-card.json">
         <input type="hidden" name="action" value="delete"> 

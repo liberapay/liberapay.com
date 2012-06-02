@@ -24,7 +24,7 @@ class User:
 
     @classmethod
     def from_id(cls, participant_id):
-        from logstown import db
+        from gittip import db
         session = cls.load_session("WHERE p.id=%s", participant_id)
         session['session_token'] = uuid.uuid4().hex
         db.execute( "UPDATE participants SET session_token=%s WHERE id=%s"
@@ -34,7 +34,7 @@ class User:
 
     @staticmethod
     def load_session(where, val):
-        from logstown import db
+        from gittip import db
         SQL = """\
             SELECT p.id
                  , p.statement
@@ -100,7 +100,7 @@ def inbound(request):
 
 
 def outbound(response):
-    from logstown import db
+    from gittip import db
     session = {}
     if 'user' in response.request.context:
         user = response.request.context['user']

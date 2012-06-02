@@ -1,15 +1,15 @@
-"""Associate a Github account with a Logstown account.
+"""Associate a Github account with a Gittip account.
 
 First we do the OAuth dance with Github. Once we've authenticated the user
 against Github, we record them in our user_infos table. This table contains
 information for Github users whether or not they are explicit participants in
-the Logstown economy.
+the Gittip economy.
 
 """
 import requests
 from aspen import json, log, Response
-from logstown.networks import github
-from logstown.authentication import User 
+from gittip.networks import github
+from gittip.authentication import User 
 
 # ========================== ^L
 

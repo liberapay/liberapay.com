@@ -1,8 +1,8 @@
 import decimal
 
 from aspen import Response
-from logstown import AMOUNTS, db
-from logstown.networks import github
+from gittip import AMOUNTS, db
+from gittip.networks import github
 
 
 # ========================================================================== ^L
@@ -12,7 +12,7 @@ from logstown.networks import github
 # ======================
 
 tipper = user.id
-if 'participant_id' in path:    # logstown
+if 'participant_id' in path:    # gittip
     tippee = path['participant_id']
 elif 'login' in path:           # github
     tippee = github.resolve(path['login'])

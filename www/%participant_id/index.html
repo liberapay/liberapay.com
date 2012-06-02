@@ -1,7 +1,7 @@
 """Show information about a single participant in the economy.
 
 There is an implicit participant for every account on the social networks. When
-someone claims a social network account on Logstown, the underlying participant
+someone claims a social network account on Gittip, the underlying participant
 is upgraded to an explicit participant. Participant accounts can be folded into
 other participant accounts. All of the social network profiles associated with
 the old participant are re-associated with the new participant, and the old
@@ -10,7 +10,7 @@ profiles is rolled over to the new participant.
 
 """
 import requests
-from logstown import AMOUNTS, db, get_tip, get_tips_and_total
+from gittip import AMOUNTS, db, get_tip, get_tips_and_total
 from aspen import json, Response
 
 
@@ -61,7 +61,7 @@ if not user.ANON:
     <script>
         $(document).ready(function()
         {
-            Logstown.initTipButtons();
+            Gittip.initTipButtons();
             function hover()
             {
                 $(this).toggleClass('over');

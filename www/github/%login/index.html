@@ -1,12 +1,12 @@
-"""Github user page on Logstown.
+"""Github user page on Gittip.
 """
 import decimal
 
 
 import requests
 from aspen import json, Response
-from logstown import AMOUNTS, db, get_tip
-from logstown.networks import github
+from gittip import AMOUNTS, db, get_tip
+from gittip.networks import github
 
 
 # ========================================================================== ^L
@@ -21,7 +21,7 @@ if userinfo.status_code != 200:
 userinfo = json.loads(userinfo.text)
 
 
-# Try to load from Logstown.
+# Try to load from Gittip.
 # ==========================
 
 participant_id, claimed_time, balance = github.upsert(userinfo)
@@ -45,7 +45,7 @@ balance = "$%s" % balance if balance < 10 else "less than $10"
 
 {% block their_voice %}
     <script>
-        $(document).ready(Logstown.initTipButtons);
+        $(document).ready(Gittip.initTipButtons);
     </script>
 
     <h2 class="first"><b>{{ name }}</b> has {{ balance }} in their tipjar.</h2>

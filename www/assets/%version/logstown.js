@@ -78,34 +78,34 @@ if(!Array.prototype.remove)
 // Main namespace.
 // ===============
 
-Logstown = {};
+Gittip = {};
 
 
 /* Spinner */
 /* ======= */
 
-Logstown.spin = function()
+Gittip.spin = function()
 {
-    Logstown.disabled = true;
+    Gittip.disabled = true;
     $('#spinner').show();
 };
 
-Logstown.stopSpinning = function()
+Gittip.stopSpinning = function()
 {
     $('#spinner').hide();
-    Logstown.disabled = false;
+    Gittip.disabled = false;
 };
 
 
 /* Form Generics */
 /* ============= */
 
-Logstown.clearFeedback = function()
+Gittip.clearFeedback = function()
 {
     $('#feedback').empty();
 }
 
-Logstown.showFeedback = function(msg, details)
+Gittip.showFeedback = function(msg, details)
 {
     msg = '<h2>' + msg + '</h2>'; 
     msg += '<div class="details"></div>';
@@ -115,13 +115,13 @@ Logstown.showFeedback = function(msg, details)
             $('#feedback .details').append('<p>' + details[i] + '</p>');
 }
 
-Logstown.submitForm = function(url, data, success, error)
+Gittip.submitForm = function(url, data, success, error)
 {
     if (success === undefined)
     {
         success = function()
         {   
-            Logstown.showFeedback("Success!");
+            Gittip.showFeedback("Success!");
         }
     }
 
@@ -129,7 +129,7 @@ Logstown.submitForm = function(url, data, success, error)
     {
         error = function(data)
         {
-            Logstown.showFeedback(data.problem);
+            Gittip.showFeedback(data.problem);
         };
     }
     
@@ -143,7 +143,7 @@ Logstown.submitForm = function(url, data, success, error)
 
     function _error(xhr, foo, bar)
     {
-        Logstown.showFeedback("So sorry!!");
+        Gittip.showFeedback("So sorry!!");
         console.log("failed", xhr, foo, bar);
     }
 
@@ -160,10 +160,10 @@ Logstown.submitForm = function(url, data, success, error)
 /* Payment Details Form */
 /* ==================== */
 
-Logstown.haveSamurai = false;
-Logstown.samuraiAttempts = 0;
+Gittip.haveSamurai = false;
+Gittip.samuraiAttempts = 0;
 
-Logstown.submitDeleteForm = function(e)
+Gittip.submitDeleteForm = function(e)
 {
     if (!confirm("Really delete your credit card details?"))
     {
@@ -173,21 +173,21 @@ Logstown.submitDeleteForm = function(e)
     }
 };
 
-Logstown.submitPaymentForm = function(e)
+Gittip.submitPaymentForm = function(e)
 {
     e.stopPropagation();
     e.preventDefault();
-    Logstown.spin()
+    Gittip.spin()
 
-    if (!Logstown.haveSamurai)
+    if (!Gittip.haveSamurai)
     {
-        if (Logstown.samuraiAttempts++ === 50)
+        if (Gittip.samuraiAttempts++ === 50)
             alert( "Gah! Apparently I don't want your money after all. If "
                  + "you're really motivated, call me (Chad) at 412-925-4220 "
                  + "and we'll figure this out. Sorry. :-("
                   );
         else
-            setTimeout(Logstown.submitPaymentForm, 200);
+            setTimeout(Gittip.submitPaymentForm, 200);
         return false;
     }
     
@@ -218,12 +218,12 @@ Logstown.submitPaymentForm = function(e)
     credit_card.expiry_year = expiry[1];
     
     data.credit_card = credit_card; 
-    Samurai.payment(data, Logstown.savePaymentMethod);
+    Samurai.payment(data, Gittip.savePaymentMethod);
 
     return false;
 };
 
-Logstown.savePaymentMethod = function(data)
+Gittip.savePaymentMethod = function(data)
 {
     // Afaict this is always present, no matter the garbage we gave to Samurai.
     console.log("saving payment method");
@@ -233,7 +233,7 @@ Logstown.savePaymentMethod = function(data)
     {
         $('#status').text('working');
         $('#delete').show();
-        Logstown.clearFeedback();
+        Gittip.clearFeedback();
     }
 
     function detailedFeedback(data)
@@ -249,21 +249,21 @@ Logstown.savePaymentMethod = function(data)
                 details.push(errors[i]);
         }
 
-        Logstown.showFeedback(data.problem, details);
-        Logstown.stopSpinning();
+        Gittip.showFeedback(data.problem, details);
+        Gittip.stopSpinning();
     }
 
-    Logstown.submitForm( "/credit-card.json"
+    Gittip.submitForm( "/credit-card.json"
                        , {pmt: pmt}
                        , success
                        , detailedFeedback
                         );
 };
 
-Logstown.initPayment = function(merchant_key)
+Gittip.initPayment = function(merchant_key)
 {
-    $('#delete FORM').submit(Logstown.submitDeleteForm);
-    $('FORM#payment').submit(Logstown.submitPaymentForm);
+    $('#delete FORM').submit(Gittip.submitDeleteForm);
+    $('FORM#payment').submit(Gittip.submitPaymentForm);
     $('INPUT[name=expiry]').mask('99/2099');
 
     // Lazily depend on Samurai. 
@@ -271,14 +271,14 @@ Logstown.initPayment = function(merchant_key)
     jQuery.getScript(samurai_js, function()
     {
         Samurai.init({merchant_key: merchant_key});
-        Logstown.haveSamurai = true;
+        Gittip.haveSamurai = true;
         console.log("Samurai loaded.");
         console.log($('INPUT').eq(0));
         $('INPUT[type!="hidden"]').eq(0).focus();
     });
 };
 
-Logstown.initTipButtons = function()
+Gittip.initTipButtons = function()
 {
     $('BUTTON.tip').click(function()
     {

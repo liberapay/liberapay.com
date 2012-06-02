@@ -2,7 +2,7 @@ import random
 
 from aspen import log
 from aspen.utils import typecheck
-from logstown import db
+from gittip import db
 from psycopg2 import IntegrityError
 
 
@@ -70,9 +70,9 @@ def upsert(network, user_id, username, user_info, claim=False):
     Network is the name of a social network that we support (ASCII blah).
     User_id is an immutable unique identifier for the given user on the given
     social network. Username is the user's login/user_id on the given social
-    network. We will try to claim that for them here on Logstown. If their
-    username is already taken on Logstown then we give them a random one; they
-    can change it on their Logstown profile page. User_id and username may or
+    network. We will try to claim that for them here on Gittip. If their
+    username is already taken on Gittip then we give them a random one; they
+    can change it on their Gittip profile page. User_id and username may or
     may not be the same. User is a dictionary of profile info per the named
     network. All network dicts must have an id key that corresponds to the
     primary key in the underlying table in our own db.
@@ -124,7 +124,7 @@ def upsert(network, user_id, username, user_info, claim=False):
     
     if rec is not None and rec['participant_id'] is not None:
 
-        # There is already a Logstown participant associated with this account.
+        # There is already a Gittip participant associated with this account.
 
         participant_id = rec['participant_id']
         new_participant = False
@@ -138,7 +138,7 @@ def upsert(network, user_id, username, user_info, claim=False):
         new_participant = True
 
 
-    # Associate the social network user with the Logstown participant.
+    # Associate the social network user with the Gittip participant.
     # ================================================================
 
     ASSOCIATE = """\
@@ -154,7 +154,7 @@ def upsert(network, user_id, username, user_info, claim=False):
 
     """
 
-    log(u"Associating %s (%s) on %s with %s on Logstown." 
+    log(u"Associating %s (%s) on %s with %s on Gittip." 
         % (username, user_id, network, participant_id))
     rows = db.fetchall( ASSOCIATE
                       , (participant_id, network, user_id, participant_id)
@@ -190,7 +190,7 @@ def upsert(network, user_id, username, user_info, claim=False):
             # at the last moment! Log it and fail.
 
             raise Exception("We're bailing on associating %s user %s (%s) with"
-                            " a Logstown participant." 
+                            " a Gittip participant." 
                             % (network, username, user_id))
 
 
