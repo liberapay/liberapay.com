@@ -37,8 +37,12 @@ if not name:
 if not user.ANON:
     my_tip = get_tip(user.id, participant_id)
 
-
-balance = "$%s" % balance if balance < 10 else "less than $10"
+if balance == 0:
+    balance = "an empty tipjar. Show some love?"
+elif balance < 10:
+    balance = "a little in their tipjar."
+else:
+    balance = "$%s in their tipjar." % balance
 
 # ========================================================================== ^L
 {% extends templates/participant.html %}
@@ -48,11 +52,11 @@ balance = "$%s" % balance if balance < 10 else "less than $10"
         $(document).ready(Gittip.initTipButtons);
     </script>
 
-    <h2 class="first"><b>{{ name }}</b> has {{ balance }} in their tipjar.</h2>
+    <h2 class="first"><b>{{ name }}</b> has {{ balance }}</h2>
     
     {% if user.ANON %}
     <p>Are you <a href="{{ userinfo['html_url'] }}">{{ userinfo['login'] }}</a> from Github? <a 
-        href="{{ github_oauth_url(username) }}">Click here</a> to collect your tips.</p>
+        href="{{ github_oauth_url(username) }}">Click here</a> to claim this tipjar.</p>
     {% else %}
     <p><a href="{{ userinfo['html_url'] }}">{{ userinfo['html_url'] }}</a></p>
     {% end %}
