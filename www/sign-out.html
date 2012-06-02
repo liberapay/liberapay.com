@@ -16,6 +16,7 @@ token = user.session.get('token')
 if token:
     db.execute(SIGNOUT, (token,))
 user.session = {}
-request.redirect('/')
+back_to = request.headers.get('referer', '/')
+request.redirect(back_to)
 
 # ========================================================================== ^L

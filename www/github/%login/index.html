@@ -49,12 +49,12 @@ balance = "$%s" % balance if balance < 10 else "less than $10"
     </script>
 
     <h2 class="first"><b>{{ name }}</b> has {{ balance }} in their tipjar.</h2>
-
+    
     {% if user.ANON %}
     <p>Are you <a href="{{ userinfo['html_url'] }}">{{ userinfo['login'] }}</a> from Github? <a 
-        href="https://github.com/login/oauth/authorize?client_id={{ website.github_client_id }}">Click
-        here</a> to collect your tips.</p>
+        href="{{ github_oauth_url(username) }}">Click here</a> to collect your tips.</p>
     {% else %}
+    <p><a href="{{ userinfo['html_url'] }}">{{ userinfo['html_url'] }}</a></p>
     {% end %}
 
 {% end %}

@@ -6,7 +6,7 @@
 
     {% if user.ANON %}
         <h2>Sign in 
-            <a href="https://github.com/login/oauth/authorize?client_id={{ website.github_client_id }}&redirect_uri={{ website.github_callback }}?then={{ username }}">with 
+            <a href="{{ github_oauth_url(username) }}">with 
             Github</a> to tip {{ username }}.</h2>
     {% else %}
         {% if user.id != username %}
