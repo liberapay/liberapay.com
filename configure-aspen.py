@@ -10,6 +10,7 @@ logstown.wire_samurai()
 
 website.github_client_id = os.environ['GITHUB_CLIENT_ID']
 website.github_client_secret = os.environ['GITHUB_CLIENT_SECRET']
+website.github_callback = os.environ['GITHUB_CALLBACK']
 
 website.hooks.inbound_early.register(logstown.canonize) 
 website.hooks.inbound_early.register(logstown.authentication.inbound) 

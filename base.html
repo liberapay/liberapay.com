@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Logstown Gift Economy</title>
+        <title>Gittip Gift Economy</title>
         <style>
             @import url("/assets/{{ __version__ }}/logstown.css");
         </style>
@@ -11,14 +11,14 @@
     </head>
     <body><div id="body">
         {% block heading %}
-        <h2>Logstown is <b><a href="/">a gift economy</a></b>.
-            {% if not user.ANON and user.id != username %}
-            <br />
-                You are <a href="/{{ user.id }}/">{{ user.id }}</a>.
-                <span class="small"><a href="/sign/out.html">Sign out</a></span>
-            {% end %} 
+        <h2>Gittip is <b><a href="/">a gift economy</a></b>.</h2>
+        {% if not user.ANON and user.id != username %}
+        <h2>
+            You are <a href="/{{ user.id }}/">{{ user.id }}</a>.
+            <span class="small"><a href="/sign/out.html">Sign out</a></span>
         </h2>
+        {% end %} 
         {% end %}
         {% block body %}{% end %}
-    </div><div id="bg"></div></body>
+    </div></body>
 </html>

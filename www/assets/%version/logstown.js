@@ -283,10 +283,14 @@ Logstown.initTipButtons = function()
     $('BUTTON.tip').click(function()
     {
         var container = $(this).parent();
-        function select(btn)
+        function select(btn, amount)
         {
             $('BUTTON.selected', container).removeClass('selected').addClass('empty');
             $(btn).addClass('selected').removeClass('empty');
+            if (amount == '0.00')
+                $('#payment-prompt.needed').removeClass('needed');
+            else
+                $('#payment-prompt').addClass('needed');
         }
         var cur = $('BUTTON.selected');
         if (cur.get(0) === this)
@@ -296,7 +300,7 @@ Logstown.initTipButtons = function()
         }
         var amount = $(this).text().replace('$', '');
         var tippee = $(this).attr('tippee');
-        select(this);
+        select(this, amount);
         jQuery.ajax(
             { url: '/' + tippee + '/tip.json'
             , data: {amount: amount}

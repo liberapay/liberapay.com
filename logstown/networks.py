@@ -78,7 +78,7 @@ def upsert(network, user_id, username, user_info, claim=False):
     primary key in the underlying table in our own db.
 
     If claim is True, the return value is the participant_id. Otherwise it is a
-    tuple: (participant_id, claimed_time).
+    tuple: (participant_id, claimed [boolean], balance).
 
     """
     typecheck( network, str
@@ -209,10 +209,11 @@ def upsert(network, user_id, username, user_info, claim=False):
         db.execute(CLAIM, (participant_id,))
         out = participant_id
     else:
-        rec = db.fetchone( "SELECT claimed_time FROM participants WHERE id=%s"
+        rec = db.fetchone( "SELECT claimed_time, balance FROM participants "
+                           "WHERE id=%s"
                          , (participant_id,)
                           )
         assert rec is not None
-        out = (participant_id, rec['claimed_time'] is not None)
+        out = (participant_id, rec['claimed_time'] is not None, rec['balance'])
 
     return out

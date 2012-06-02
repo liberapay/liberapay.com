@@ -13,8 +13,9 @@ clean:
 	rm -rf env
 
 run: env
-	./swaddle local.env ./env/bin/aspen \
+	sudo ./swaddle local.env ./env/bin/aspen \
 		--www_root=www/ \
 		--project_root=.. \
 		--show_tracebacks=yes \
-		--changes_reload=yes
+		--changes_reload=yes \
+		--network_address=:80

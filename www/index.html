@@ -4,156 +4,49 @@ from logstown import AMOUNTS
 {% extends base.html %}
 
 {% block heading %}
-<h2><b>Logstown</b> is a gift economy.</h2>
-{% end %}
+<h2><b>Gittip</b> is a gift economy.</h2>
 
+    <p>Set up recurring tips to people who do great work. <a
+        href="/about/">Learn more ...</a></p>
+
+{% end %}
 {% block body %}
+    {% if user.ANON %}
+    <h2 class="first">Step 1. Sign in with your <a 
+        href="https://github.com/login/oauth/authorize?client_id={{ website.github_client_id }}">Github</a> account.</h2>
+
+    <h2>Step 2. Tip someone!</h2>
+
+    {% else %}
     <div id="their-voice">
-        {% if user.ANON %}
-        <h2 class="first">Sign in with your <a 
-            href="https://github.com/login/oauth/authorize?client_id={{ website.github_client_id }}">Github</a> account.</h2>
-        {% else %}
-        <h2 class="first">You are <b><a href="/{{ user.id }}/">{{ user.id }}</a></b>.
-        <span class="small"><a href="/sign/out.html">Sign out</a>.</span>
+        <h2 class="first">
+            You are <b><a href="/{{ user.id }}/">{{ user.id }}</a></b>.
+            <span class="small"><a href="/sign/out.html">Sign out</a>.</span>
         </h2>
-        {% end %}
     </div>
 
-    {% if not user.ANON %}
-    <h2>Getting Started</h2>
+    <h2>Tip someone!</h2>
+    {% end %}
 
-    <p>Here are some popular programmers on Github that you might consider
-    tipping:</p>
+    <p>Here are some great programmers, for example.</p>
 
     <ul>
 
-        <li><a href="/github/torvalds/">torvalds (Linus Torvalds)</a>,
+        <li><a href="/github/torvalds/"><b>Linus Torvalds</b></a>,
         author of Linux</a></li>
 
-        <li><a href="/github/jeresig/">jeresig (John Resig)</a>,
+        <li><a href="/github/jeresig/"><b>John Resig</b></a>,
         author of jQuery</a></li>
 
-        <li><a href="/github/ry/">ry (Ryan Dahl)</a>,
+        <li><a href="/github/ry/"><b>Ryan Dahl</b></a>,
         author of Node.js</a></li>
 
-        <li><a href="/github/antirez/">antirez (Salvatore Sanfilippo)</a>,
+        <li><a href="/github/antirez/"><b>Salvatore Sanfilippo</b></a>,
         author of Redis</a></li>
 
-        <li><a href="/github/bartaz/">bartaz (Bartek Szopka)</a>,
+        <li><a href="/github/bartaz/"><b>Bartek Szopka</b></a>,
         author of Impress.js</a></li>
 
     </ul>
-    {% end %}
-
-    <h2>Our Mission</h2>
-
-    <p>Logstown&rsquo;s mission is to <b>bootstrap a gift economy</b>. Tips are
-    the first step.
-    
-    <p>Imagine walking down the street and a bunch of your local townsfolk are
-    lined up sitting there alongside a slew of celebrities and a random
-    assortment of other humans. Each one is doing their own thing and has a jar
-    out. You have a few bucks in your pocket and you&rsquo;re in a good mood.
-    <b>Who would you tip?</b></p>
-
-    <p>There&rsquo;s something called a <a
-        href="http://en.wikipedia.org/wiki/MacArthur_Fellows_Program">genius
-        grant</a> that the MacArthur Foundation gives to about 30 people
-    each year. It&rsquo;s ten million dollars over five years, <b>no
-        strings attached</b>. &ldquo;Just keep being a genius. Please spend
-    another five years making the world better for the rest of us.&rdquo;
-    The winners don&rsquo;t even know they&rsquo;re in the running until
-    they get the phone call that they won.</p>
-    
-    <p>Logstown is <b>genius grants for the rest of us</b>. Call them
-    pretty-smart grants, or crowd-sourced genius grants.</p>
-
-    <p>Logstown is for the local coffee shop owner that&rsquo;s really
-    doing a lot for your town. You&rsquo;re a fan. You buy coffee from her,
-    but you want to do something more&mdash;a little something, not a big
-    deal. If a hundred other people in your town feel the same way, it
-    starts to add up. Now she can offer free coffee on Sunday mornings. Or
-    whatever. She knows what she&rsquo;s doing. No strings attached.</p>
-
-    <p>Logstown is for the musician who gives their music away for free.
-    You love their work. You go to their shows, you actually pay for the
-    downloads, but you want to make sure their family is covered. You want
-    to chip in&mdash;a little something&mdash;so they&rsquo;re freed up to
-    make great music.</p>
-
-    <p>Logstown is for your favorite open source developer. You study their
-    code, and you implicitly trust any software they write. You want to free
-    them up to write even more of it.</p>
-    
-    <p>Logstown is voluntary <b>welfare for productive people</b>.</p>
-
-    <p>Logstown is <b>Kickstarter for people</b> (not just projects).</p>
-
-    <p>Logstown is <b>Flattr for people</b> (not just content).</p>
-
-    <p>Logstown is a <b>gift economy</b> implemented atop the global
-    exchange economy.</p>
-    
-    
-    <h2>Details</h2>
-
-    <p>Tips are <b>weekly</b>. One-off contributions aren&rsquo;t enough.
-    Expenses are ongoing. Income must be, too.</p>
-
-    <p>Tips are <b>anonymous</b>. The people you tip aren&rsquo;t told who
-    tipped them. Also, you can&rsquo;t tip more than $1.28 a week. This way,
-    tips come with <b>no strings attached</b>. Alice works on whatever she
-    wants to work on. Bob tips whomever he wants to tip.</p>
-
-    <p>Tips are <b>public</b>. The amount you give is private, but the
-    total amount you receive is public. Tip income closely reflects benefit
-    to society, so calling out high earners encourages <b>true value
-        creation</b>. Alice is concretely rewarded by a thousand Bobs for
-    contributing to society.</p>
-
-    <p>Tips are distributed <b>every Friday</b>. Tips come out of your current
-    balance (the money people have tipped you), and if that&rsquo;s not enough,
-    Logstown charges your credit card to make up the difference. We add an
-    additional <b>10&cent; + 3.9%</b> fee when pulling money in from your
-    credit card, to cover credit card processing, hosting, and other expenses.
-    For example, let&rsquo;s say that you have $5 in your account, and you are
-    set up to tip $0.64 to 20 people. Here&rsquo;s what we will charge your
-    credit card on Friday:</p>
-
-    <p style="font-family: monospace; font-size: smaller; padding-left: 40%;">
-        &nbsp;$&nbsp;0.64<br />
-        <u>x&nbsp;20&nbsp;&nbsp;&nbsp;</u><br />
-        &nbsp;$12.80&nbsp;&nbsp;&nbsp;total tips<br />
-        <u>-$&nbsp;5.00</u>&nbsp;&nbsp;&nbsp;current balance<br />
-        &nbsp;$&nbsp;7.80&nbsp;&nbsp;&nbsp;amount needed<br />
-        <u>+$ 0.10</u>&nbsp;&nbsp;&nbsp;fee<br />
-        &nbsp;$&nbsp;7.90<br />
-        <u>x&nbsp;&nbsp;1.039</u>&nbsp;&nbsp;fee<br />
-        &nbsp;<b>$&nbsp;8.21&nbsp;&nbsp;&nbsp;amount charged</b>
-    </p>
-
-    <p>Recipients get the full face value of your tip to them. If you tip
-    someone $1.28, they will have $1.28 in their Logstown account every Friday
-    until you run out of money. Participants can withdraw funds from their
-    Logstown account at any time.</p>
-
-
-    <h2>Get Involved</h2>
-
-    <p>Logstown.com is <a
-        href="https://github.com/whit537/www.logstown.com">open source</a> on
-    Github. Join <a href="irc://irc.freenode.net/#logstown">#logstown</a> on
-    freenode, or the <a
-        href="https://groups.google.com/forum/#!forum/logstown">logstown</a>
-    (general) or <a
-        href="https://groups.google.com/forum/#!forum/logstown-dev">logstown-dev</a>
-    (technical) mailing lists. Or call <a href="/whit537/">Chad Whitacre</a> at
-    +1-412-925-4220, or visit him at 716 Park Road in Ambridge, PA, 15003,
-    USA.</p>
-
-    <p>My intention is to organize Logstown as a cooperative, where all
-    participants are members. If you&rsquo;re interested in being an organizing
-    member, let&rsquo;s talk.</p>
-
 
 {% end %}

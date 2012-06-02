@@ -24,16 +24,21 @@ userinfo = json.loads(userinfo.text)
 # Try to load from Logstown.
 # ==========================
 
-participant_id, claimed_time = github.upsert(userinfo)
+participant_id, claimed_time, balance = github.upsert(userinfo)
 if claimed_time:
     request.redirect('/%s/' % participant_id)
 
 participant = False
 username = userinfo['login']
+name = userinfo.get('name')
+if not name:
+    name = username
 
 if not user.ANON:
     my_tip = get_tip(user.id, participant_id)
 
+
+balance = "$%s" % balance if balance < 10 else "less than $10"
 
 # ========================================================================== ^L
 {% extends participant.html %}
@@ -42,16 +47,13 @@ if not user.ANON:
     <script>
         $(document).ready(Logstown.initTipButtons);
     </script>
-    <h2 class="first"><b>{{ username }}</b> has not claimed their account.</h2>
 
-    <p>This page is a placeholder for {{ userinfo['login'] }} 
-    {% if userinfo.get('name', '') %}({{ userinfo['name'] }}){% end %}
-    <a href="{{ userinfo['html_url'] }}">from Github</a>.</p>
+    <h2 class="first"><b>{{ name }}</b> has {{ balance }} in their tipjar.</h2>
 
     {% if user.ANON %}
-    <p>If you are {{ userinfo['login'] }}, you can <a 
-        href="https://github.com/login/oauth/authorize?client_id={{ website.github_client_id }}">claim
-        your account</a> to collect your tips.</p>
+    <p>Are you <a href="{{ userinfo['html_url'] }}">{{ userinfo['login'] }}</a> from Github? <a 
+        href="https://github.com/login/oauth/authorize?client_id={{ website.github_client_id }}">Click
+        here</a> to collect your tips.</p>
     {% else %}
     {% end %}
 

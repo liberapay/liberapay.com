@@ -14,7 +14,7 @@ BODY {
     position: relative;
     background: transparent;
 }
-#bg {
+#g {
     width: 273px;
     height: 238px;
     position: fixed;
@@ -69,6 +69,13 @@ A {
 }
 #their-voice H2.first {
     margin: 12pt 0 12pt;
+}
+#payment-prompt {
+    display: none;
+    margin: 1em 0 0;
+}
+#payment-prompt.needed {
+    display: block;
 }
 
 .clear {
