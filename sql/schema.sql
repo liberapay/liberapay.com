@@ -71,7 +71,7 @@ CREATE TABLE paydays
 , exchange_fees_volume  numeric(35,2)               DEFAULT 0.00 
  );
 
--- exchanges -- when a participant moves cash between Logstown and their bank
+-- exchanges -- when a participant moves cash between Gittip and their bank
 CREATE TABLE exchanges
 ( id                    serial                      PRIMARY KEY
 , timestamp             timestamp with time zone    NOT NULL DEFAULT CURRENT_TIMESTAMP
