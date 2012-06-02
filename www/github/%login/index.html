@@ -41,7 +41,7 @@ if not user.ANON:
 balance = "$%s" % balance if balance < 10 else "less than $10"
 
 # ========================================================================== ^L
-{% extends participant.html %}
+{% extends templates/participant.html %}
 
 {% block their_voice %}
     <script>

@@ -1,16 +1,17 @@
 import os
 
 import gittip 
+import gittip.wireup
 import gittip.authentication
 
 
-gittip.wire_canonical()
-gittip.wire_db()
-gittip.wire_samurai()
+gittip.wireup.canonical()
+gittip.wireup.db()
+gittip.wireup.samurai()
 
 website.github_client_id = os.environ['GITHUB_CLIENT_ID']
 website.github_client_secret = os.environ['GITHUB_CLIENT_SECRET']
-website.github_callback = os.environ['GITHUB_CALLBACK'
+website.github_callback = os.environ['GITHUB_CALLBACK']
 
 website.hooks.inbound_early.register(gittip.canonize) 
 website.hooks.inbound_early.register(gittip.authentication.inbound) 

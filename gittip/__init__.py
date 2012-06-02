@@ -1,14 +1,12 @@
-import decimal
-import os
-
-import psycopg2
-from gittip.version import __version__
-from psycopg2.extensions import cursor as RegularCursor 
+from decimal import Decimal
 
 
-db = None # This global is wired below. It's an instance of 
+db = None # This global is wired in wireup. It's an instance of 
           # gittip.postgres.PostgresManager.
-AMOUNTS= [decimal.Decimal(a) for a in ('0.00', '0.08', '0.16', '0.32', '0.64', '1.28')]
+AMOUNTS= [Decimal(a) for a in ('0.00', '0.08', '0.16', '0.32', '0.64', '1.28')]
+
+
+__version__ = "~~VERSION~~"
 
 
 def get_tip(tipper, tippee):
@@ -26,7 +24,7 @@ def get_tip(tipper, tippee):
     """
     rec = db.fetchone(TIP, (tipper, tippee))
     if rec is None:
-        tip = decimal.Decimal(0.00)
+        tip = Decimal(0.00)
     else:
         tip = rec['amount']
     return tip
@@ -94,7 +92,7 @@ def get_tips_and_total(tipper, for_payday=False):
     tips = list(db.fetchall(TIPS, args))
     total = sum([tip['amount'] for tip in tips])
     if not total:
-        total = decimal.Decimal('0.00')
+        total = Decimal('0.00')
     return tips, total
 
 
@@ -118,31 +116,3 @@ def canonize(request):
     if bad_scheme or bad_host:
         url = '%s://%s/' % (canonical_scheme, canonical_host)
         request.redirect(url, permanent=True)
-
-
-# wireup
-# ======
-# Define some methods to be run via the Aspen startup hook. BTW, Aspen hooks
-# are configured in www/.aspen/hooks.conf.
-
-def wire_canonical():
-    global canonical_scheme, canonical_host
-    canonical_scheme = os.environ['CANONICAL_SCHEME']
-    canonical_host = os.environ['CANONICAL_HOST']
-
-def wire_db():
-    global db
-    from gittip.postgres import PostgresManager
-    dburl = os.environ['DATABASE_URL']
-    db = PostgresManager(dburl)
-
-    # register hstore type (but don't use RealDictCursor)
-    with db.get_connection() as conn:
-        curs = conn.cursor(cursor_factory=RegularCursor)
-        psycopg2.extras.register_hstore(curs, globally=True, unicode=True)
-
-def wire_samurai():
-    import samurai.config
-    samurai.config.merchant_key = os.environ['SAMURAI_MERCHANT_KEY']
-    samurai.config.merchant_password = os.environ['SAMURAI_MERCHANT_PASSWORD']
-    samurai.config.processor_token = os.environ['SAMURAI_PROCESSOR_TOKEN']

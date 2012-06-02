@@ -20,7 +20,7 @@ if [ $# = 0 ]; then
     echo "Usage: $0 <version>"
     echo
     echo "  This is a release script for Gittip. We bump the version number in "
-    echo "  gittip/version.py and then do a git dance, pushing to Heroku."
+    echo "  gittip/__init__.py and then do a git dance, pushing to Heroku."
     echo
     exit
 fi
@@ -69,9 +69,9 @@ if [ $1 ]; then
             # Fix the version.
             # ================
 
-            sed -e "s/~~VERSION~~/$1/" -i '' gittip/version.py
-            git ci gittip/version.py \
-                -m"Setting version to $1 in gittip/version.py."
+            sed -e "s/~~VERSION~~/$1/" -i '' gittip/__init__.py
+            git ci gittip/__init__.py \
+                -m"Setting version to $1 in gittip/__init__.py."
             git tag $1
 
 
@@ -88,9 +88,9 @@ if [ $1 ]; then
             # Change the version back.
             # ========================
 
-            sed -e "s/$1/~~VERSION~~/" -i '' gittip/version.py
-            git ci gittip/version.py \
-                -m"Resetting version in gittip/version.py."
+            sed -e "s/$1/~~VERSION~~/" -i '' gittip/__init__.py
+            git ci gittip/__init__.py \
+                -m"Resetting version in gittip/__init__.py."
 
         fi
     fi

@@ -1,7 +1,7 @@
 from gittip import AMOUNTS
 ^L
 ^L
-{% extends base.html %}
+{% extends templates/base.html %}
 
 {% block heading %}
 <h2><b>Gittip</b> is a gift economy.</h2>
@@ -21,7 +21,7 @@ from gittip import AMOUNTS
     <div id="their-voice">
         <h2 class="first">
             You are <b><a href="/{{ user.id }}/">{{ user.id }}</a></b>.
-            <span class="small"><a href="/sign/out.html">Sign out</a>.</span>
+            <span class="small"><a href="/sign-out.html">Sign out</a>.</span>
         </h2>
     </div>
 
