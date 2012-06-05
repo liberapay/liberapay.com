@@ -57,9 +57,9 @@ def get_tipjar(participant_id):
     if tipjar == 0:
         tipjar = u"an empty tipjar."
     elif tipjar < Decimal('5.12'):
-        tipjar = u"a little in their tipjar."
+        tipjar = u"a few tips pledged."
     else:
-        tipjar = u"$%s in their tipjar." % tipjar
+        tipjar = u"$%s pledged." % tipjar
 
     return tipjar
 
