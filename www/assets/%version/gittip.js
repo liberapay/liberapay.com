@@ -312,3 +312,17 @@ Gittip.initTipButtons = function()
         );
     });
 };
+
+Gittip.initJumpToPerson = function()
+{
+    $('#jumpToPersonButton').click(function()
+    {
+        $('#jumpToPersonBox').show();
+        $('#jumpToPersonButton').hide();
+    });
+
+    $('#jumpToPersonBox').change(function()
+    {
+        window.location = '/github/' + $('#jumpToPersonBox').value;
+    });
+}

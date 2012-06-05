@@ -9,6 +9,10 @@ from gittip import AMOUNTS
     <p>Set up recurring tips to people who do great work. <a
         href="/about/">Learn more ...</a></p>
 
+    <script>
+        $(document).ready(Gittip.initJumpToPerson);
+    </script>
+
 {% end %}
 {% block body %}
     {% if user.ANON %}
@@ -51,5 +55,10 @@ from gittip import AMOUNTS
         Rails and jQuery core dev</a></li>
 
     </ul>
+
+    <p>Or perhaps somebody
+    <a id="jumpToPersonButton" href="#">else ...</a>
+    <input id="jumpToPersonBox"/>
+    </p>
 
 {% end %}
