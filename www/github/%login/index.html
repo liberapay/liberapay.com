@@ -48,8 +48,13 @@ if not user.ANON:
     <h2 class="first"><b>{{ name }}</b> has {{ get_tipjar(username) }}</h2>
 
     {% if user.ANON %}
-    <p>Are you <a href="{{ userinfo['html_url'] }}">{{ userinfo['login'] }}</a> from Github? <a 
-        href="{{ github_oauth_url(username) }}">Click here</a> to claim this tipjar.</p>
+    <ul id="accounts">
+        <li>
+            <img src="{{ userinfo.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" /> 
+            Are you <a href="{{ userinfo['html_url'] }}">{{ userinfo['login'] }}</a> from Github?<br />
+            <a href="{{ github_oauth_url(username) }}">Click here</a> to claim this tipjar.
+        </li>
+    </ul>
     {% else %}
     <p><a href="{{ userinfo['html_url'] }}">{{ userinfo['html_url'] }}</a></p>
     {% end %}
