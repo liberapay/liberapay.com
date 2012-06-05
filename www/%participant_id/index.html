@@ -106,6 +106,8 @@ github = participant['user_info']
         {% end %}
     </table>
 
+    <h2>You have {{ get_tipjar(user.id) }}</h2>
+
     <h2>Your balance is ${{ user.balance }}.</h2>
 
     {% if user.balance > 0 %}
