@@ -49,6 +49,9 @@ if not user.ANON:
     else:
         my_tip = get_tip(user.id, participant['id'])
 
+name = participant['user_info'].get('name', username)
+github = participant['user_info']
+
 # ========================================================================== ^L
 {% extends templates/participant.html %}
 {% block their_voice %}
@@ -56,6 +59,19 @@ if not user.ANON:
         #matrix TR.not-over BUTTON.empty {
             background: transparent;
             color: #F2F0EF;
+        }
+        #accounts {
+            list-style: none;
+        }
+        #accounts LI {
+            margin-left: 0;
+            padding-left: 0;
+        }
+        #accounts IMG {
+            width: 36pt;
+            height 36pt;
+            float: left;
+            margin-right: 10pt;
         }
     </style>
     <script>
@@ -114,6 +130,15 @@ if not user.ANON:
 
 {% else %}
     <h2 class="first"><b>{{ participant['id'] }}</b> has {{ get_tipjar(participant['id']) }}</h2>
+    <ul id="accounts">
+        <li>
+        <img src="{{ github.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" /> 
+            {% if name %}{{ name }}<br />{% end %}
+            <a href="{{ github.get('html_url', '') }}">
+                {{ github.get('html_url', '') }}
+            </a>
+        </li>
+    </ul>
     {% if participant['statement'] %}
     <div id="statement">{{ escape(participant['statement']) }}</div>
     {% end %}
