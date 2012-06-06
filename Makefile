@@ -1,7 +1,7 @@
 env:
 	python2.7 ./vendor/virtualenv-1.7.1.2.py \
 				--unzip-setuptools \
-				--prompt="[logstown] " \
+				--prompt="[gittip] " \
 				--never-download \
 				--extra-search-dir=./vendor/ \
 				--distribute \
@@ -14,9 +14,9 @@ clean:
 	find . -name \*.pyc -delete
 
 run: env
-	sudo ./swaddle local.env ./env/bin/aspen \
+	./swaddle local.env ./env/bin/aspen \
 		--www_root=www/ \
 		--project_root=.. \
 		--show_tracebacks=yes \
 		--changes_reload=yes \
-		--network_address=:80
+		--network_address=:8537
