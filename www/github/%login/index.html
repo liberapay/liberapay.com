@@ -23,10 +23,7 @@ userinfo = json.loads(userinfo.text)
 
 # Try to load from Gittip.
 # ==========================
-
-participant_id, claimed_time, balance = github.upsert(userinfo)
-if claimed_time:
-    request.redirect('/%s/' % participant_id)
+# We can only tip Users, not Organizations (or whatever else type can be).
 
 participant = False
 username = userinfo['login']
@@ -34,35 +31,88 @@ name = userinfo.get('name')
 if not name:
     name = username
 
-if not user.ANON:
-    my_tip = get_tip(user.id, participant_id)
+usertype = userinfo.get("type", "unknown type of account").lower()
+if usertype == "user":
+    can_tip = True
+    participant_id, claimed_time, balance = github.upsert(userinfo)
+    if claimed_time:
+        request.redirect('/%s/' % participant_id)
+
+    if not user.ANON:
+        my_tip = get_tip(user.id, participant_id)
+elif usertype == "organization":
+    members = []
+    resp = requests.get("https://api.github.com/orgs/%s/members" % username)
+    if resp.status_code == 200:
+        members = json.loads(resp.text)
+    can_tip = False
+else:
+    can_tip = False
+
 
 # ========================================================================== ^L
 {% extends templates/participant.html %}
 
 {% block their_voice %}
-    <script>
-        $(document).ready(Gittip.initTipButtons);
-    </script>
+    {% if usertype == "user" %}
+        <script>
+            $(document).ready(Gittip.initTipButtons);
+        </script>
+        
+        <h2 class="first"><b>{{ name }}</b> has {{ get_tipjar(username) }}</h2>
+
+        {% if user.ANON %}
+        <ul id="accounts">
+            <li>
+                <img src="{{ userinfo.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" /> 
+                Are you <a href="{{ userinfo['html_url'] }}">{{ userinfo['login'] }}</a> from Github?<br />
+                <a href="{{ github_oauth_url(username) }}">Click here</a> to claim this tipjar.
+            </li>
+        </ul>
+        {% else %}
+        <ul id="accounts">
+            <li>
+                <img src="{{ userinfo.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" /> 
+                Are you <a href="{{ userinfo['html_url'] }}">{{ userinfo['login'] }}</a> from Github?<br />
+                You&rsquo;ll have to <a href="/sign-out.html">sign out</a> and sign back in to claim this tipjar.
+            </li>
+        </ul>
+        {% end %}
+    {% elif usertype == "organization"  %}
     
-    <h2 class="first"><b>{{ name }}</b> has {{ get_tipjar(username) }}</h2>
-
-    {% if user.ANON %}
+    <h2 class="first"><b>{{ name }}</b> is an {{ usertype }} on Github.</h2>
     <ul id="accounts">
         <li>
             <img src="{{ userinfo.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" /> 
-            Are you <a href="{{ userinfo['html_url'] }}">{{ userinfo['login'] }}</a> from Github?<br />
-            <a href="{{ github_oauth_url(username) }}">Click here</a> to claim this tipjar.
+            Gittip is designed for people, not corporations.<br />
+            {% if len(members) == 0 %}
+            {{ name }} does not have any public members.
+            {% elif len(members) == 1 %}
+            {{ name }} has one public member.
+            {% else %}
+            Here are the {{ len(members) }} public members of <a href="https://github.com/{{ username }}">{{ name }}</a>.
+            {% end %}
         </li>
     </ul>
+    <table id="members">
+        {% for member in members %}
+        <tr><td>
+            <a href="/github/{{ member['login'] }}/"><img src="{{ member.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" /> 
+            {{ member['login'] }}</a>
+        </td></tr>
+        {% end %}
+    </table> 
+
     {% else %}
+    
+    <h2 class="first">Not sure what to do with <b>{{ name }}</b>.</h2>
     <ul id="accounts">
         <li>
             <img src="{{ userinfo.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" /> 
-            Are you <a href="{{ userinfo['html_url'] }}">{{ userinfo['login'] }}</a> from Github?<br />
-            You&rsquo;ll have to <a href="/sign-out.html">sign out</a> and sign back in to claim this tipjar.
+            I don&rsquo;t recognize the &ldquo;{{ usertype }}&rdquo; type of user on Github.<br />
+            Sorry. :-(
         </li>
-    </ul>
-    {% end %}
+    </ul> 
 
+    {% end %}
 {% end %}

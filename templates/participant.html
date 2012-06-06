@@ -4,11 +4,11 @@
         {% block their_voice %}{% end %}
     </div>
 
-    {% if user.ANON %}
+    {% if can_tip and user.ANON %}
         <h2>Sign in 
             <a href="{{ github_oauth_url(username) }}">with 
             Github</a> to tip {{ username }}.</h2>
-    {% else %}
+    {% elif can_tip  %}
         {% if user.id != username %}
             <h2>Your weekly tip to {{ username }} is:</h2>
 
