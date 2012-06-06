@@ -8,15 +8,51 @@ into Gittip's (Zeta's) bank account. Money is allocated to other participants
 according to tips. Participants may withdraw money at any time.
 
 
+Installation
+============
+
+The site is built with Python and the Aspen web framework, and is hosted on
+Heroku. Samurai is used for credit card processing, and Google for analytics.
+
+You need Postgres with headers installed. There's a simple Makefile for
+building the software. All Python dependencies are included in vendor/. To
+`make run` you need a local.env file in the distribution root with these keys:
+
+CANONICAL_HOST=
+CANONICAL_SCHEME=http
+DATABASE_URL=postgres://user:pass@localhost/dbname
+GAUGES=false
+SAMURAI_MERCHANT_KEY=
+SAMURAI_MERCHANT_PASSWORD=
+SAMURAI_PROCESSOR_TOKEN=
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
+GITHUB_CALLBACK=http://vcap.me/github/associate
+DYLD_LIBRARY_PATH=/Library/PostgreSQL/9.1/lib
+
+The GAUGES key is cruft and can go away (using Google Analytics).
+
+The SAMURAI_* keys are problematic. I need to think about how to handle that
+safely. Same with GITHUB_*.
+
+The DYLD_LIBRARY_PATH thing is to get psycopg2 working on Mac OS with
+EnterpriseDB's Postgres 9.1 installer.
+
+
 See Also
 ========
+
+Same Room
+    https://propster.me/
+    http://kachingle.com/
+
+    http://krisstraub.com/2011/11/20/kachingle-and-the-transgression-of-opt-out/
 
 Next Door
     http://www.kickstarter.com/
     http://flattr.com/
     http://www.indiegogo.com/
     http://www.pledgemusic.com/
-    https://propster.me/
 
 Credit Card Payments
     https://samurai.feefighters.com/
