@@ -12,6 +12,14 @@ from gittip import AMOUNTS
     <script>
         $(document).ready(Gittip.initJumpToPerson);
     </script>
+    <style>
+        #jump {
+            width: auto;
+        }
+        #jump INPUT {
+            width: 6em;
+        }
+    </style>
 
 {% end %}
 {% block body %}
@@ -56,9 +64,12 @@ from gittip import AMOUNTS
 
     </ul>
 
-    <p>Or perhaps somebody
-    <a id="jumpToPersonButton" href="#">else ...</a>
-    <input id="jumpToPersonBox"/>
-    </p>
+
+    <h2>Find someone else.</h2> 
+    <form id="jump">
+    Enter a Github username:
+        <input placeholder="" />
+        <button class="selected small" type="submit">Go</button>
+    </form>
 
 {% end %}

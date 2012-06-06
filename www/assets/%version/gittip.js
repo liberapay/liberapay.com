@@ -315,14 +315,14 @@ Gittip.initTipButtons = function()
 
 Gittip.initJumpToPerson = function()
 {
-    $('#jumpToPersonButton').click(function()
+    function jump(e)
     {
-        $('#jumpToPersonBox').show();
-        $('#jumpToPersonButton').hide();
-    });
-
-    $('#jumpToPersonBox').change(function()
-    {
-        window.location = '/github/' + $('#jumpToPersonBox').value;
-    });
+        var val = $('#jump INPUT').val();
+        e.preventDefault();
+        e.stopPropagation();
+        if (val !== '')
+            window.location = '/github/' + val + '/';
+        return false;
+    }
+    $('#jump').submit(jump);
 }
