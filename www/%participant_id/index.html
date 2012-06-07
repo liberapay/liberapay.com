@@ -10,13 +10,13 @@ profiles is rolled over to the new participant.
 
 """
 import requests
-from gittip import AMOUNTS, db, get_tip, get_tips_and_total, get_tipjar
 from aspen import json, Response
+from gittip import AMOUNTS, db, get_tip, get_tips_and_total, get_tipjar
+from gittip.utils import wrap
 
 
 tip_suggestions = ('jeresig', 'antirez', 'wycats', 'kennethreitz', 'alex')
 tip_suggestions = [{'tippee': name, 'amount': 0} for name in tip_suggestions]
-
 
 # ========================================================================== ^L
 
@@ -52,6 +52,7 @@ if not user.ANON:
 name = participant['user_info'].get('name', username)
 github = participant['user_info']
 can_tip = True
+tipjar = get_tipjar(user.id)
 
 # ========================================================================== ^L
 {% extends templates/participant.html %}
@@ -60,6 +61,15 @@ can_tip = True
         #matrix TR.not-over BUTTON.empty {
             background: transparent;
             color: #F2F0EF;
+        }
+        FORM.statement TEXTAREA {
+            width: 98%;
+            height: 126pt;
+            padding: 1%
+        }
+        FORM.statement BUTTON {
+            float: right;
+            margin-left: 0.5em;
         }
     </style>
     <script>
@@ -72,6 +82,39 @@ can_tip = True
                 $(this).toggleClass('not-over');
             }
             $('#matrix TR').hover(hover, hover);
+            $('TEXTAREA').focus();
+            $('BLOCKQUOTE.statement BUTTON').click(function()
+            {
+                $('BLOCKQUOTE.statement').hide();
+                $('FORM.statement').show();
+            });
+            $('FORM.statement').submit(function(e)
+            {
+                e.preventDefault();
+
+                $('#save').text('Saving ...');
+
+                function success(d)
+                {
+                    $('FORM.statement').hide();
+                    $('BLOCKQUOTE.statement SPAN').html(d.statement);
+                    $('BLOCKQUOTE.statement').show();
+                    $('#save').text('Save');
+                }
+                jQuery.ajax(
+                    { url: "statement.json"
+                    , type: "POST"
+                    , success: success
+                    , data: {"statement": $('TEXTAREA').val()}
+                     }
+                )
+                return false;
+            });
+            $('#cancel').click(function()
+            {
+                $('FORM.statement').hide();
+                $('BLOCKQUOTE.statement').show();
+            });
         });
     </script>
 
@@ -79,16 +122,31 @@ can_tip = True
     <h2 class="first">You are <b>{{ user.id }}</b>.
         <span class="small"><a href="/sign-out.html">Sign out</a></span>
     </h2>
-    {% if participant['statement'] %}
-    <div id="statement">{{ escape(participant['statement']) }}</div>
-    {% end %}
+    <form class="statement"
+        {% if participant['statement'] %}style="display: none;"{% end %}>
+        <blockquote>
+            I am making the world better by ...
+            <textarea>{{ participant['statement'] }}</textarea>
+            <span class="help">Newlines and links are converted to HTML.</span>
+            <button id="save" type="Submit" class="selected">Save</button>
+            <button id="cancel">Cancel</button>
+        </blockquote>
+    </form>
+
+    <blockquote id="my-statement" class="statement" 
+        {% if not participant['statement'] %}style="display: none"{% end %}>
+        I am making the world better by <span>
+            {{ wrap(participant['statement']) }}</span><br />
+        <button class="small selected">Edit</button>
+    </blockquote>
 
     <h2>You tip <span id="total">${{ total }}</span> per week.
         <span class="small"><a href="/credit-card.html">Credit card</a></span>
     </h2>
     {% if total == 0 %}
 
-    <p>Here are some great programmers that you might consider tipping.</p>
+    <p>Here are some great programmers that you might consider tipping.<br />
+    <span class="help">Each has agreed to be listed here.</span></p>
 
     {% end %}
     <table id="matrix">
@@ -107,8 +165,6 @@ can_tip = True
         {% end %}
     </table>
 
-    <h2>You have {{ get_tipjar(user.id) }}</h2>
-
     <h2>Your balance is ${{ user.balance }}.</h2>
 
     {% if user.balance > 0 %}
@@ -118,20 +174,38 @@ can_tip = True
     +1-412-925-4220 to work something out if you need your cash now.</p>
     {% end %}
 
+    <h3>You have {{ tipjar }}</h3>
+
+    {% if tipjar == "an empty tipjar." %} 
+
+    <p>How can you convince people to tip you? <b>Make the world a better
+    place!</b></p>
+
+    {% else %}
+    <p>Tips only go through if people back them up with a credit card or have
+    received tips themselves. Right now people can pledge tips without a credit
+    card, so you probably won&rsquo;t get this full amount.</p>
+    {% end %}
+
 {% else %}
     <h2 class="first"><b>{{ participant['id'] }}</b> has {{ get_tipjar(participant['id']) }}</h2>
+
+    {% if participant['statement'] %}
+    <blockquote class="statement">I am making the world better by
+    {{ wrap(participant['statement']) }}</blockquote>
+    {% end %}
+
+    <h3>Linked Accounts</h3>
     <ul id="accounts">
         <li>
         <img src="{{ github.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" /> 
-            {% if name %}{{ name }}<br />{% end %}
+            {{ username }} {% if name %}({{ name }})<br />{% end %}
             <a href="{{ github.get('html_url', '') }}">
                 {{ github.get('html_url', '') }}
             </a>
         </li>
     </ul>
-    {% if participant['statement'] %}
-    <div id="statement">{{ escape(participant['statement']) }}</div>
-    {% end %}
+
 {% end %}
 
 {% end %}

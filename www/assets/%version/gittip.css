@@ -69,6 +69,10 @@ A {
 B {
     font-weight: 900;
 }
+BLOCKQUOTE {
+    background: url("/assets/{{ __version__ }}/ldquo.png") 9pt 0 no-repeat;
+    padding-left: 36pt;
+}
 
 
 #their-voice {
@@ -121,12 +125,15 @@ B {
 .clear {
     clear: both;
 }
+.help {
+    font-size: smaller;
+    color: #B2A196;
+}
 
 /* FORM */
 /* ==== */
 
 FORM {
-    width: 300px;
 }
 FORM .half {
     width: 150px;
