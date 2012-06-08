@@ -85,7 +85,10 @@ tipjar = get_tipjar(user.id)
             $('TEXTAREA').focus();
             $('BLOCKQUOTE.statement BUTTON').click(function()
             {
+                var h = $('BLOCKQUOTE.statement').height() - 64;
+                h = Math.max(h, 128);
                 $('BLOCKQUOTE.statement').hide();
+                $('FORM.statement TEXTAREA').height(h);
                 $('FORM.statement').show();
             });
             $('FORM.statement').submit(function(e)
