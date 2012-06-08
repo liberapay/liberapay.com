@@ -1,11 +1,11 @@
 """This is installed as `payday`.
 """
-import gittip
+from gittip import wireup
 
 
 def payday():
-    gittip.wire_db()
-    gittip.wire_samurai()
+    wireup.db()
+    wireup.samurai()
 
 
     # Lazily import the billing module.
@@ -15,7 +15,8 @@ def payday():
     #
     #   https://github.com/FeeFighters/samurai-client-python/issues/8
 
-    from gittip import billing 
+    from gittip import billing
+
 
     try:
         billing.payday()
