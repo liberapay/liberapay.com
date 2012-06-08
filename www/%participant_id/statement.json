@@ -2,14 +2,13 @@ from aspen import Response
 from gittip import db
 from gittip.utils import wrap
 
-^L
+# ========================================================================== ^L
 
 if user.ANON:
     raise Response(404)
 request.allow("POST")
 
 statement = request.body["statement"]
-print user.id, statement
 db.execute( "UPDATE participants SET statement=%s WHERE id=%s"
           , (statement, user.id)
            )
