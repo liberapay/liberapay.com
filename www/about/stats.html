@@ -20,7 +20,10 @@ average_tippees = int(db.fetchone("""\
         SELECT round(avg(ntippees))
           FROM ( SELECT count(tippee) as NTIPPEES 
                    FROM ( SELECT DISTINCT ON (tipper, tippee) tipper, tippee 
-                            FROM tips GROUP BY tipper, tippee
+                            FROM tips
+                            JOIN participants p ON tipper = p.id 
+                           WHERE p.last_bill_result = ''
+                        GROUP BY tipper, tippee
                          ) AS foo GROUP BY tipper) AS bar
 """)['round'])
 
