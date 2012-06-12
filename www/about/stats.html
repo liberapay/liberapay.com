@@ -31,8 +31,8 @@ def part(s):
 
 <p>
 {% for statement in statements %}
-<b><a href="/{{ statement['id'] }}/">{{ escape(statement['id']) }}</a></b> 
-&mdash;{{ escape(part(statement['statement'])) }}</b><br />{% end %}
+<b><a href="/{{ statement['id'] }}.//">{{ escape(statement['id']) }}</a></b> 
+is {{ escape(part(statement['statement'])) }}</b><br />{% end %}
 </p>
 
 {% end %}
