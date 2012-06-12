@@ -1,6 +1,13 @@
+from gittip import age
+^L
 ^L
 {% extends templates/base.html %}
 {% block body %}
+    <a name="stats"></a> 
+    <h2>Gittip is <b>{{ age() }}</b> old.
+        <span class="small"><a href="stats.html">More stats</a></span>
+    </h2>
+
     <a name="our-mission"></a> 
     <h2>Our Mission</h2>
 

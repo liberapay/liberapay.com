@@ -1,4 +1,10 @@
+import datetime
 from decimal import Decimal
+
+BIRTHDAY = datetime.date(2012, 6, 5)
+def age():
+    age = datetime.date.today() - BIRTHDAY
+    return "%d days" % age.days
 
 
 db = None # This global is wired in wireup. It's an instance of 
