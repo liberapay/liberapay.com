@@ -12,8 +12,10 @@ currently quite manual.
 Installation
 ============
 
-The site is built with Python and the Aspen web framework, and is hosted on
+The site is built with Python 2.7 and the Aspen web framework, and is hosted on
 Heroku. Samurai is used for credit card processing, and Google for analytics.
+
+You need python2.7 on your PATH.
 
 You need Postgres with headers installed. There's a simple Makefile for
 building the software. All Python dependencies are included in vendor/. To
