@@ -84,7 +84,7 @@ def clear(participant_id, pmt):
     db.execute(CLEAR, (participant_id,))
 
 
-FEE = ( decimal.Decimal("0.10")   # $0.10
+FEE = ( decimal.Decimal("0.30")   # $0.30
       , decimal.Decimal("1.039")  #  3.9%
        )
 
