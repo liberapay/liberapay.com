@@ -396,15 +396,32 @@ def payday_one(payday_start, participant):
     typecheck(total, decimal.Decimal)
     short = total - participant['balance']
     if short > 0:
+
+        # The participant's Gittip account is short the amount needed to fund
+        # all their tips. Let's try pulling in money from their credit card. If
+        # their credit card fails we'll forge ahead, in case they have a
+        # positive Gittip balance already that can be used to fund at least
+        # *some* tips. The charge method will have set last_bill_result to a
+        # non-empty string if the card did fail.
+
         charge(participant['id'], participant['pmt'], short)
  
     ntips = 0 
     for tip in tips:
         if tip['amount'] == 0:
+
+            # The tips table contains a record for every time you click a tip
+            # button. So if you click $0.08 then $0.64 then $0.00, that
+            # generates three entries. We are looking at the last entry here, 
+            # and it's zero.
+
             continue
+
         if not transfer(participant['id'], tip['tippee'], tip['amount']):
-            # The transfer failed due to a lack of funds for the 
-            # participant. Don't try any further transfers.
+
+            # The transfer failed due to a lack of funds for the participant.
+            # Don't try any further transfers.
+
             log("FAILURE: $%s from %s to %s." % (tip['amount'], participant['id'], tip['tippee']))
             break
         log("SUCCESS: $%s from %s to %s." % (tip['amount'], participant['id'], tip['tippee']))
@@ -428,7 +445,7 @@ def payday_one(payday_start, participant):
 
 
 def assert_one_payday(payday):
-    """Given the result of a payday stats update, clear it.
+    """Given the result of a payday stats update, make sure it's okay.
     """
     assert payday is not None 
     payday = list(payday)
