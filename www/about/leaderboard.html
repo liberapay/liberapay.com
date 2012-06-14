@@ -1,0 +1,55 @@
+from gittip import db
+^L
+
+leaders = db.fetchall("""
+
+    SELECT tippee, sum(amount) AS amount
+      FROM (    SELECT DISTINCT ON (tipper, tippee)
+                       amount
+                     , tippee
+                  FROM tips 
+                  JOIN participants p ON p.id = tipper
+                 WHERE last_bill_result = ''
+              ORDER BY tipper, tippee, mtime DESC
+            ) AS foo
+  GROUP BY tippee
+  ORDER BY amount DESC
+  LIMIT 10
+
+""")
+
+^L
+{% extends templates/base.html %}
+{% block body %}
+<style>
+    TABLE {
+        font: 300 17pt/17pt Lato, sans-serif;
+        }
+    TD {
+            text-align: left;
+            padding: 6pt 12pt 6pt 0;
+    }
+</style>
+
+<h2>These people have the most backed tips.</h2>
+
+<p>Backed tips are tips from people with a {% if user.ANON %}working credit
+card{% else %}<a href="/credit-card.html">working credit card</a>{% end %} on
+file. If a card stops working this week then the actual amount distributed can
+be lower.  If someone doesn't have a working card but does have a positive
+Gittip balance themselves then the actual amount distributed can be higher.</p>
+
+<table>
+    {% for i, leader in enumerate(leaders, start=1) %}
+    <tr>
+        <td>{{ i }}.</td>
+        <td>$</td>
+        <td>{{ leader['amount'] }}</td>
+        <td><a href="/{{ leader['tippee'] }}/">{{ leader['tippee'] }}</a></td>
+    </tr>
+    {% end %}
+</table>
+
+<h2>Gifts are distributed every Friday.</h2>
+
+{% end %}
