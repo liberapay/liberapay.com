@@ -12,7 +12,7 @@ amount = db.fetchone("SELECT transfer_volume AS v FROM paydays ORDER BY ts_end D
 average_tip = db.fetchone("""\
         SELECT avg(amount) FROM ( SELECT DISTINCT ON (tipper, tippee) amount 
                                     FROM tips 
-                                    JOIN participants p ON tipper = p.id 
+                                    JOIN participants p ON p.id = tipper 
                                    WHERE p.last_bill_result = ''
                                  ) AS foo
 """)['avg']
@@ -21,11 +21,20 @@ average_tippees = int(db.fetchone("""\
           FROM ( SELECT count(tippee) as NTIPPEES 
                    FROM ( SELECT DISTINCT ON (tipper, tippee) tipper, tippee 
                             FROM tips
-                            JOIN participants p ON tipper = p.id 
+                            JOIN participants p ON p.id = tipper
                            WHERE p.last_bill_result = ''
                         GROUP BY tipper, tippee
                          ) AS foo GROUP BY tipper) AS bar
 """)['round'])
+total_backed_tips = db.fetchone("""
+        SELECT sum(amount)
+         FROM (    SELECT DISTINCT ON (tipper, tippee) amount, tippee
+                     FROM tips
+                     JOIN participants p ON p.id = tipper
+                    WHERE last_bill_result = ''
+                 ORDER BY tipper, tippee, mtime DESC
+               ) AS foo; 
+""")['sum']
 
 word = "people"
 if average_tippees < 10:
@@ -53,14 +62,19 @@ def part(s):
 
 <h2><b>{{ npeople }}</b> people have <b>claimed</b> their account.</h2>
 
-<h2><b>{{ ncc }}</b> people have a working <b>credit card</b> on file.</h2>
+<p>{{ ncc }} people have a working credit card on file.</p>
 
-<h2><b>${{ amount }} changed hands</b> last Friday.
+
+<h2><b>${{ amount }}</b> changed hands <b>last Friday</b>.</h2>
+
+<h2>There is <b>${{ amount }}</b> backed for <b>this Friday</b>.
     <span class="small"><a href="leaderboard.html">Leaderboard</a></span>
 </h2>
 
 <p>On average, people who tip tip ${{ "%.2f" % average_tip }} to 
-    {{ other_people }}.</p>
+{{ other_people }}.
+
+
 
 <h2><b>{{ len(statements) }}</b> people are <b>making the world better</b>.</h2>
 
