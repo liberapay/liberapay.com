@@ -68,7 +68,7 @@ tip_or_pledge = "pledge"
             <li>
                 <img src="{{ userinfo.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" /> 
                 Are you <a href="{{ userinfo['html_url'] }}">{{ userinfo['login'] }}</a> from Github?<br />
-                <a href="{{ github_oauth_url(username) }}">Click here</a> to claim this tipjar.
+                <a href="{{ github_oauth_url(username) }}">Click here</a> to opt in to Gittip.
             </li>
         </ul>
         {% else %}
