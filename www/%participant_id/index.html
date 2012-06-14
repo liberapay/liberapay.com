@@ -37,6 +37,11 @@ if participant is None:
     raise Response(404)
 username = participant['id']
 if participant['claimed_time'] is None:
+
+    # This is a hack to make writing links easier in other parts of the app. We
+    # can get away with this since we're only on GitHub for now. We should have
+    # an URL constructor helper instead of depending on this. XXX
+
     login = participant['user_info'].get('login')
     if login is None:
         raise Response(404)
@@ -53,7 +58,8 @@ if not user.ANON:
 name = participant['user_info'].get('name', username)
 github = participant['user_info']
 can_tip = True
-tipjar = get_tipjar(user.id, pronoun="your")
+tipjar = get_tipjar(user.id, pronoun="your", claimed=True)
+tip_or_pledge = "tip"
 
 # ========================================================================== ^L
 {% extends templates/participant.html %}
@@ -196,7 +202,7 @@ tipjar = get_tipjar(user.id, pronoun="your")
     {% end %}
 
 {% else %}
-    <h2 class="first"><b>{{ participant['id'] }}</b> {{ get_tipjar(participant['id']) }}</h2>
+    <h2 class="first"><b>{{ participant['id'] }}</b> {{ get_tipjar(participant['id'], claimed=True) }}</h2>
 
     {% if participant['statement'] %}
     <blockquote class="statement">I am making the world better by

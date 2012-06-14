@@ -49,6 +49,8 @@ elif usertype == "organization":
 else:
     can_tip = False
 
+tip_or_pledge = "pledge"
+
 
 # ========================================================================== ^L
 {% extends templates/participant.html %}
@@ -59,7 +61,7 @@ else:
             $(document).ready(Gittip.initTipButtons);
         </script>
         
-        <h2 class="first"><b>{{ name }}</b> {{ get_tipjar(username) }}</h2>
+        <h2 class="first"><b>{{ name }}</b> {{ get_tipjar(username, claimed=False) }}</h2>
 
         {% if user.ANON %}
         <ul id="accounts">
@@ -78,6 +80,17 @@ else:
             </li>
         </ul>
         {% end %}
+
+        <h3>How does this work?</h3>
+
+        <p>The pledged amount above is what people are willing to give 
+        {{ username }} as a weekly gift, if they choose to accept it.
+        Tips are processed every Friday.</p>
+
+        <p>Gittip is <b>opt-in</b>. We never collect money on a person&rsquo;s behalf
+        until that person opts-in by <a 
+        href="{{ github_oauth_url(username) }}">claiming their account</a>.</p>
+
     {% elif usertype == "organization"  %}
     
     <h2 class="first"><b>{{ name }}</b> is an {{ usertype }} on Github.</h2>

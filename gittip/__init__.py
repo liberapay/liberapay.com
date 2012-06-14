@@ -36,7 +36,7 @@ def get_tip(tipper, tippee):
     return tip
 
 
-def get_tipjar(participant_id, pronoun="their"):
+def get_tipjar(participant_id, pronoun="their", claimed=False):
     """Given a participant id, return a unicode.
     """
 
@@ -88,6 +88,16 @@ def get_tipjar(participant_id, pronoun="their"):
         elif pronoun == "their":
             tipjar = u"has $%s in backed tips."
         tipjar %= amount
+
+
+    # We're opt-in.
+    # =============
+    # If the user hasn't claimed the tipjar then the tips are only pledges, 
+    # we're not going to actually collect money on their behalf.
+   
+    if not claimed:
+        tipjar = tipjar.replace("backed", "pledged")
+
 
     return tipjar
 
