@@ -36,9 +36,13 @@ def get_tip(tipper, tippee):
     return tip
 
 
-def get_tipjar(participant_id):
+def get_tipjar(participant_id, pronoun="their"):
     """Given a participant id, return a unicode.
     """
+
+    # Compute the amount.
+    # ===================
+
     TIPJAR = """\
 
         SELECT sum(amount) AS tipjar
@@ -46,7 +50,9 @@ def get_tipjar(participant_id):
                         amount
                       , tipper
                    FROM tips
+                   JOIN participants p ON p.id = tipper
                   WHERE tippee=%s
+                    AND last_bill_result = ''
                ORDER BY tipper
                       , mtime DESC
                 ) AS foo
@@ -54,18 +60,34 @@ def get_tipjar(participant_id):
     """
     rec = db.fetchone(TIPJAR, (participant_id,))
     if rec is None:
-        tipjar = None
+        amount = None
     else:
-        tipjar = rec['tipjar']  # might be None
-    if tipjar is None:
-        tipjar = Decimal(0.00)
+        amount = rec['tipjar']  # might be None
 
-    if tipjar == 0:
-        tipjar = u"an empty tipjar."
-    elif tipjar < Decimal('5.12'):
-        tipjar = u"a few tips pledged."
+    if amount is None:
+        amount = Decimal(0.00)
+
+
+    # Compute a unicode describing the amount.
+    # ========================================
+    # This is down here because we use it in multiple places in the app,
+    # basically in the claimed participant page and the non-claimed GitHub page
+    # (hopefully soon to be Facebook and Twitter as well).
+
+    if pronoun not in ('your', 'their'):
+        raise Exception("Unknown, um, pronoun: %s" % pronoun)
+
+    if amount == 0:
+        if pronoun == "your":
+            tipjar = u"have no backed tips."
+        elif pronoun == "their":
+            tipjar = u"has no backed tips."
     else:
-        tipjar = u"$%s pledged." % tipjar
+        if pronoun == "your":
+            tipjar = u"have $%s in backed tips."
+        elif pronoun == "their":
+            tipjar = u"has $%s in backed tips."
+        tipjar %= amount
 
     return tipjar
 

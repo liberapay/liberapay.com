@@ -59,7 +59,7 @@ else:
             $(document).ready(Gittip.initTipButtons);
         </script>
         
-        <h2 class="first"><b>{{ name }}</b> has {{ get_tipjar(username) }}</h2>
+        <h2 class="first"><b>{{ name }}</b> {{ get_tipjar(username) }}</h2>
 
         {% if user.ANON %}
         <ul id="accounts">

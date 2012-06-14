@@ -52,7 +52,7 @@ if not user.ANON:
 name = participant['user_info'].get('name', username)
 github = participant['user_info']
 can_tip = True
-tipjar = get_tipjar(user.id)
+tipjar = get_tipjar(user.id, pronoun="your")
 
 # ========================================================================== ^L
 {% extends templates/participant.html %}
@@ -177,21 +177,25 @@ tipjar = get_tipjar(user.id)
     +1-412-925-4220 to work something out if you need your cash now.</p>
     {% end %}
 
-    <h3>You have {{ tipjar }}</h3>
+    <h3>You {{ tipjar }}</h3>
 
-    {% if tipjar == "an empty tipjar." %} 
+    {% if tipjar == "have no backed tips." %} 
 
     <p>How can you convince people to tip you? <b>Make the world a better
     place!</b></p>
 
     {% else %}
-    <p>Tips only go through if people back them up with a credit card or have
-    received tips themselves. Right now people can pledge tips without a credit
-    card, so you probably won&rsquo;t get this full amount.</p>
+
+    <p>Backed tips are tips from people who have a credit card on file that
+    worked last week. You may receive less this Friday if someone's credit card
+    fails this week, and you may receive more if someone without a working card
+    has received money from someone <i>else</i> on Gittip that they want to
+    pass on to you.</p>
+
     {% end %}
 
 {% else %}
-    <h2 class="first"><b>{{ participant['id'] }}</b> has {{ get_tipjar(participant['id']) }}</h2>
+    <h2 class="first"><b>{{ participant['id'] }}</b> {{ get_tipjar(participant['id']) }}</h2>
 
     {% if participant['statement'] %}
     <blockquote class="statement">I am making the world better by
