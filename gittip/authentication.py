@@ -76,11 +76,11 @@ class User:
 
     @property
     def PAID(self):
-        """A boolean indicating whether the participant is in good standing.
+        """A boolean, whether the participant has a working credit card.
 
-        We base this determination on the last_bill_result field. Billing code
-        should set this to a non-empty string in any case where an attempt to
-        bill the customer failed.
+        We base this determination on the last_bill_result field. Our billing
+        code sets this to a non-empty string in any case where an attempt to
+        bill the participant fails.
 
         """
         if self.session.get('last_bill_result', None) is None:
