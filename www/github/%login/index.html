@@ -84,11 +84,11 @@ tip_or_pledge = "pledge"
         <h3>How does this work?</h3>
 
         <p>The pledged amount above is what people are willing to give 
-        {{ username }} as a weekly gift, if they choose to accept it.
-        Tips are processed every Friday.</p>
+        {{ username }} as a weekly gift, but only if {{ username }} accepts it.
+        Gifts are distributed every Friday.</p>
 
-        <p>Gittip is <b>opt-in</b>. We never collect money on a person&rsquo;s behalf
-        until that person opts-in by <a 
+        <p>Gittip is <b>opt-in</b>. We never collect money on a person&rsquo;s 
+        behalf until that person opts-in by <a 
         href="{{ github_oauth_url(username) }}">claiming their account</a>.</p>
 
     {% elif usertype == "organization"  %}
