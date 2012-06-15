@@ -61,7 +61,7 @@ tip_or_pledge = "pledge"
             $(document).ready(Gittip.initTipButtons);
         </script>
         
-        <h2 class="first"><b>{{ name }}</b> {{ get_tipjar(username, claimed=False) }}</h2>
+        <h2 class="first"><b>{{ name }}</b> has not joined Gittip.</h2>
 
         {% if user.ANON %}
         <ul id="accounts">
@@ -76,12 +76,13 @@ tip_or_pledge = "pledge"
             <li>
                 <img src="{{ userinfo.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" /> 
                 Are you <a href="{{ userinfo['html_url'] }}">{{ userinfo['login'] }}</a> from Github?<br />
-                You&rsquo;ll have to <a href="/sign-out.html">sign out</a> and sign back in to claim this tipjar.
+                You&rsquo;ll have to <a href="/sign-out.html">sign out</a> and sign back in to claim this account.
             </li>
         </ul>
         {% end %}
 
-        <h3>Gittip is <b>opt-in</b>.</h3>
+
+        <h3>This person {{ get_tipjar(username, claimed=False) }}</h3>
 
         <p>We never collect money on a person&rsquo;s behalf until that person
         opts-in by claiming their account, which {{ username }} has not done.
