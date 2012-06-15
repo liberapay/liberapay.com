@@ -408,6 +408,8 @@ def payday_one(payday_start, participant):
  
     ntips = 0 
     for tip in tips:
+        msg = "$%s from %s to %s." 
+        msg %= (tip['amount'], participant['id'], tip['tippee'])
 
         claimed_time = tip['claimed_time']
         if claimed_time is None or claimed_time > payday_start:
@@ -416,6 +418,7 @@ def payday_one(payday_start, participant):
             # behalf if they opted-in by claiming their account before the
             # start of this payday.
 
+            log("SKIPPED: %s" % msg)
             continue
 
         if tip['amount'] == 0:
@@ -432,9 +435,9 @@ def payday_one(payday_start, participant):
             # The transfer failed due to a lack of funds for the participant.
             # Don't try any further transfers.
 
-            log("FAILURE: $%s from %s to %s." % (tip['amount'], participant['id'], tip['tippee']))
+            log("FAILURE: %s" % msg)
             break
-        log("SUCCESS: $%s from %s to %s." % (tip['amount'], participant['id'], tip['tippee']))
+        log("SUCCESS: %s" % msg)
         ntips += 1
 
 
