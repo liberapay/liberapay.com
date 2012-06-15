@@ -1,10 +1,16 @@
+import datetime
 from gittip import db, age
 
 CARDINALS = ["zero", "one", "two", "three", "four", "five", "six", "seven", 
              "eight", "nine"]
+FRIDAY = 4
 
 # ========================================================================== ^L
 
+yesterday = datetime.datetime.utcnow() - datetime.timedelta(hours=24)
+payday = db.fetchone( "SELECT ts_start, ts_end FROM paydays WHERE ts_start > %s"
+                    , (yesterday,)
+                     )
 npeople = db.fetchone("SELECT count(*) AS n FROM participants WHERE claimed_time IS NOT NULL")['n']
 ncc = db.fetchone("SELECT count(*) AS n FROM participants WHERE last_bill_result = ''")['n']
 statements = list(db.fetchall("SELECT id, statement FROM participants WHERE statement != '' ORDER BY id"))
@@ -52,6 +58,23 @@ def part(s):
         s = s[:57].rsplit(None, 1)[0] + " ..."
     return s
 
+
+# Adapt wording to payday status.
+# ===============================
+
+last_friday = "last Friday"
+this_friday = "this Friday"
+now = datetime.datetime.utcnow() 
+if now.weekday() == FRIDAY:
+    if payday is None or payday['ts_end'] is None:
+        # Payday hasn't started yet or is going on right now.
+        this_friday = "today"
+    else:
+        # Payday is finished for today.
+        last_friday = "today"
+        this_friday = "next Friday"
+        
+
 # ========================================================================== ^L
 {% extends templates/base.html %}
 {% block body %}
@@ -65,9 +88,9 @@ def part(s):
 <p>{{ ncc }} people have a working credit card on file.</p>
 
 
-<h2><b>${{ amount }}</b> changed hands <b>last Friday</b>.</h2>
+<h2><b>${{ amount }}</b> changed hands <b>{{ last_friday }}</b>.</h2>
 
-<h2><b>${{ total_backed_tips }}</b> is backed for <b>this Friday</b>.
+<h2><b>${{ total_backed_tips }}</b> is backed for <b>{{ this_friday }}</b>.
     <span class="small"><a href="leaderboard.html">Leaderboard</a></span>
 </h2>
 
