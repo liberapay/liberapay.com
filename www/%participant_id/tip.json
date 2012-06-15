@@ -67,6 +67,7 @@ if not user.ANON:
 
             """
             db.execute(NEW_TIP, (tipper, tippee, tipper, tippee, amount))
+            amount = str(amount)
 
 
         # Fetch the current tip record.
