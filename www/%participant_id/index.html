@@ -178,10 +178,14 @@ tip_or_pledge = "tip"
     <h2>Your balance is ${{ user.balance }}.</h2>
 
     {% if user.balance > 0 %}
+
     <p>Release early! Release often! Automated withdrawals have not been
-    implemented yet. Email <a
+    implemented yet. To arrange for a check or PayPal withdrawal, email <a
         href="mailto:chad@zetaweb.com">chad@zetaweb.com</a> or call
-    +1-412-925-4220 to work something out if you need your cash now.</p>
+    +1-412-925-4220. If you can program, you&rsquo;re welcome to <a
+        href="https://github.com/whit537/www.gittip.com/issues/22">help
+        implement automated withdrawals</a>.</p>
+
     {% end %}
 
     <h3>You {{ tipjar }}</h3>
