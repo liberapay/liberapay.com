@@ -103,10 +103,11 @@ def get_tipjar(participant_id, pronoun="their", claimed=False):
 
 
 def get_tips_and_total(tipper, for_payday=False):
-    """Given a participant id, return a list and a Decimal.
+    """Given a participant id and a date, return a list and a Decimal.
 
     This function is used to populate a participant's page for their own
-    viewing pleasure, and also by the payday function.
+    viewing pleasure, and also by the payday function. If for_payday is not
+    False it must be a date object.
 
     """
     if for_payday:
@@ -132,8 +133,8 @@ def get_tips_and_total(tipper, for_payday=False):
                AND mtime < %s
                AND ( SELECT id 
                        FROM transfers
-                      WHERE tipper=tips.tipper
-                        AND tippee=tips.tippee
+                      WHERE tipper=t.tipper
+                        AND tippee=t.tippee
                         AND timestamp >= %s
                     ) IS NULL
                  
@@ -150,21 +151,39 @@ def get_tips_and_total(tipper, for_payday=False):
             SELECT DISTINCT ON (tippee) 
                    amount
                  , tippee
-                 , ctime
-              FROM tips
+                 , t.ctime
+                 , p.claimed_time
+              FROM tips t
+              JOIN participants p ON p.id = t.tippee
              WHERE tipper = %%s
                %s
           ORDER BY tippee
-                 , mtime DESC
+                 , t.mtime DESC
         ) AS foo
         ORDER BY %s
                , tippee
 
-    """ % (ts_filter, order_by)
+    """ % (ts_filter, order_by)  # XXX, No injections here, right?!
     tips = list(db.fetchall(TIPS, args))
-    total = sum([tip['amount'] for tip in tips])
-    if not total:
+
+
+    # Compute the total.
+    # ==================
+    # For payday we only want to process payments to tippees who have
+    # themselves opted into Gittip. For the tipper's profile page we want to
+    # show the total amount they've pledged (so they're not surprised when
+    # someone *does* start accepting tips and all of a sudden they're hit with
+    # bigger charges.
+
+    if for_payday:
+        to_total = [t for t in tips if t['claimed_time'] is not None]
+    else:
+        to_total = tips
+    total = sum([t['amount'] for t in to_total])
+
+    if not total:  # XXX Why is this necessary?
         total = Decimal('0.00')
+
     return tips, total
 
 

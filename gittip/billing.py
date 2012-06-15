@@ -408,6 +408,16 @@ def payday_one(payday_start, participant):
  
     ntips = 0 
     for tip in tips:
+
+        claimed_time = tip['claimed_time']
+        if claimed_time is None or claimed_time > payday_start:
+
+            # Gittip is opt-in. We're only going to collect money on a person's
+            # behalf if they opted-in by claiming their account before the
+            # start of this payday.
+
+            continue
+
         if tip['amount'] == 0:
 
             # The tips table contains a record for every time you click a tip
