@@ -4,10 +4,7 @@ from gittip import db, utils
 # ========================================================================== ^L
 
 yesterday = datetime.datetime.utcnow() - datetime.timedelta(hours=24)
-paydays = db.fetchall("SELECT * FROM paydays")
-payday = db.fetchone( "SELECT ts_start, ts_end FROM paydays WHERE ts_start > %s"
-                    , (yesterday,)
-                     )
+paydays = db.fetchall("SELECT * FROM paydays ORDER BY ts_start")
 npeople = db.fetchone("SELECT count(*) AS n FROM participants WHERE claimed_time IS NOT NULL")['n']
 ncredit_card = db.fetchone("SELECT count(*) AS n FROM participants WHERE last_bill_result = ''")['n']
 percentage_credit_card = float("%5.1f" % ((ncredit_card * 100.0) / npeople))
