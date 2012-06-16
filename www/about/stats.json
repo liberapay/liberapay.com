@@ -10,7 +10,7 @@ payday = db.fetchone( "SELECT ts_start, ts_end FROM paydays WHERE ts_start > %s"
                      )
 npeople = db.fetchone("SELECT count(*) AS n FROM participants WHERE claimed_time IS NOT NULL")['n']
 ncredit_card = db.fetchone("SELECT count(*) AS n FROM participants WHERE last_bill_result = ''")['n']
-percentage_credit_card = (ncredit_card* 100.0) / npeople
+percentage_credit_card = float("%5.1f" % ((ncredit_card * 100.0) / npeople))
 statements = db.fetchall("SELECT id, statement FROM participants WHERE statement != '' LIMIT 100")
 statements = [{'id': r['id'], 'statement': utils.wrap(r['statement'])} for r in statements]
 average_tip = db.fetchone("""\
@@ -20,6 +20,7 @@ average_tip = db.fetchone("""\
                                    WHERE p.last_bill_result = ''
                                  ) AS foo
 """)['avg']
+average_tip = float("%4.2f" % average_tip)
 average_tippees = int(db.fetchone("""\
         SELECT round(avg(ntippees))
           FROM ( SELECT count(tippee) as NTIPPEES 
