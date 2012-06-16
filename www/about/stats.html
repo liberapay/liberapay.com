@@ -4,6 +4,8 @@ from gittip import db, age
 CARDINALS = ["zero", "one", "two", "three", "four", "five", "six", "seven", 
              "eight", "nine"]
 FRIDAY = 4
+SATURDAY = 5
+SUNDAY = 6
 
 # ========================================================================== ^L
 
@@ -74,6 +76,12 @@ if now.weekday() == FRIDAY:
         # Payday is finished for today.
         last_friday = "today"
         this_friday = "next Friday"
+elif now.weekday() == SATURDAY:
+    last_friday = "yesterday"
+    this_friday = "next Friday"
+elif now.weekday() == SUNDAY:
+    last_friday = "this past Friday"
+    this_friday = "this coming Friday"
         
 
 # ========================================================================== ^L
@@ -91,7 +99,8 @@ if now.weekday() == FRIDAY:
 
 <h2><b>${{ amount }}</b> changed hands <b>{{ last_friday }}</b>.</h2>
 
-<p>We were expecting more like $55, but our <a
+<p>We moved $25 our first Friday. We were expecting more like $55 
+{{ last_friday }}, but our <a
 href="https://github.com/whit537/aspen/issues/76">credit card processor
 died</a>. :-(</p>
 
