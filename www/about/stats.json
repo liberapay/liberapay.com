@@ -1,0 +1,51 @@
+import datetime
+from gittip import db, utils
+
+# ========================================================================== ^L
+
+yesterday = datetime.datetime.utcnow() - datetime.timedelta(hours=24)
+paydays = db.fetchall("SELECT * FROM paydays")
+payday = db.fetchone( "SELECT ts_start, ts_end FROM paydays WHERE ts_start > %s"
+                    , (yesterday,)
+                     )
+npeople = db.fetchone("SELECT count(*) AS n FROM participants WHERE claimed_time IS NOT NULL")['n']
+ncc = db.fetchone("SELECT count(*) AS n FROM participants WHERE last_bill_result = ''")['n']
+pcc = "%5.1f" % ((ncc * 100.0) / npeople)
+statements = db.fetchall("SELECT id, statement FROM participants WHERE statement != '' LIMIT 100")
+statements = [{'id': r['id'], 'statement': utils.wrap(r['statement'])} for r in statements]
+average_tip = db.fetchone("""\
+        SELECT avg(amount) FROM ( SELECT DISTINCT ON (tipper, tippee) amount 
+                                    FROM tips 
+                                    JOIN participants p ON p.id = tipper 
+                                   WHERE p.last_bill_result = ''
+                                 ) AS foo
+""")['avg']
+average_tippees = int(db.fetchone("""\
+        SELECT round(avg(ntippees))
+          FROM ( SELECT count(tippee) as NTIPPEES 
+                   FROM ( SELECT DISTINCT ON (tipper, tippee) tipper, tippee 
+                            FROM tips
+                            JOIN participants p ON p.id = tipper
+                           WHERE p.last_bill_result = ''
+                        GROUP BY tipper, tippee
+                         ) AS foo GROUP BY tipper) AS bar
+""")['round'])
+total_backed_tips = db.fetchone("""
+        SELECT sum(amount)
+         FROM (    SELECT DISTINCT ON (tipper, tippee) amount, tippee
+                     FROM tips
+                     JOIN participants p ON p.id = tipper
+                    WHERE last_bill_result = ''
+                 ORDER BY tipper, tippee, mtime DESC
+               ) AS foo; 
+""")['sum']
+
+response.body = {}
+response.body['paydays'] = list(paydays)
+response.body['npeople'] = npeople
+response.body['ncc'] = ncc
+response.body['pcc'] = pcc
+response.body['statements'] = statements
+response.body['average_tip'] = average_tip
+response.body['average_tippees'] = average_tippees
+response.body['total_backed_tips'] = total_backed_tips
