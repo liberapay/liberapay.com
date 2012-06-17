@@ -36,16 +36,13 @@ def get_tip(tipper, tippee):
     return tip
 
 
-def get_tipjar(participant_id, pronoun="their", claimed=False):
-    """Given a participant id, return a unicode.
+def get_backed_amount(participant_id):
+    """Given a unicode, return a Decimal. 
     """
 
-    # Compute the amount.
-    # ===================
+    BACKED = """\
 
-    TIPJAR = """\
-
-        SELECT sum(amount) AS tipjar
+        SELECT sum(amount) AS backed
           FROM ( SELECT DISTINCT ON (tipper)
                         amount
                       , tipper
@@ -58,14 +55,23 @@ def get_tipjar(participant_id, pronoun="their", claimed=False):
                 ) AS foo
 
     """
-    rec = db.fetchone(TIPJAR, (participant_id,))
+    rec = db.fetchone(BACKED, (participant_id,))
     if rec is None:
         amount = None
     else:
-        amount = rec['tipjar']  # might be None
+        amount = rec['backed']  # might be None
 
     if amount is None:
         amount = Decimal(0.00)
+
+    return amount
+
+
+def get_tipjar(participant_id, pronoun="their", claimed=False):
+    """Given a participant id, return a unicode.
+    """
+
+    amount = get_backed_amount(participant_id)
 
 
     # Compute a unicode describing the amount.
