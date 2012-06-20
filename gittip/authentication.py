@@ -38,7 +38,6 @@ class User:
         SQL = """\
             SELECT p.id
                  , p.statement
-                 , p.payment_method_token
                  , p.last_bill_result
                  , p.session_token
                  , p.session_expires
