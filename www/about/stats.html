@@ -15,6 +15,7 @@ payday = db.fetchone( "SELECT ts_start, ts_end FROM paydays WHERE ts_start > %s"
                      )
 npeople = db.fetchone("SELECT count(*) AS n FROM participants WHERE claimed_time IS NOT NULL")['n']
 ncc = db.fetchone("SELECT count(*) AS n FROM participants WHERE last_bill_result = ''")['n']
+ncc = 0 if ncc is None else ncc
 pcc = "%5.1f" % ((ncc * 100.0) / npeople)
 statements = list(db.fetchall("SELECT id, statement FROM participants WHERE statement != '' ORDER BY id"))
 amount = db.fetchone("SELECT transfer_volume AS v FROM paydays ORDER BY ts_end DESC LIMIT 1")['v']
@@ -25,7 +26,8 @@ average_tip = db.fetchone("""\
                                    WHERE p.last_bill_result = ''
                                  ) AS foo
 """)['avg']
-average_tippees = int(db.fetchone("""\
+average_tip = 0 if average_tip is None else average_tip
+average_tippees = db.fetchone("""\
         SELECT round(avg(ntippees))
           FROM ( SELECT count(tippee) as NTIPPEES 
                    FROM ( SELECT DISTINCT ON (tipper, tippee) tipper, tippee 
@@ -34,7 +36,9 @@ average_tippees = int(db.fetchone("""\
                            WHERE p.last_bill_result = ''
                         GROUP BY tipper, tippee
                          ) AS foo GROUP BY tipper) AS bar
-""")['round'])
+""")['round']
+average_tippees = 0 if average_tippees is None else int(average_tippees)
+
 total_backed_tips = db.fetchone("""
         SELECT sum(amount)
          FROM (    SELECT DISTINCT ON (tipper, tippee) amount, tippee
@@ -44,6 +48,7 @@ total_backed_tips = db.fetchone("""
                  ORDER BY tipper, tippee, mtime DESC
                ) AS foo; 
 """)['sum']
+total_backed_tips = 0 if total_backed_tips is None else total_backed_tips
 
 word = "people"
 if average_tippees < 10:
