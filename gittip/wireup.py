@@ -22,6 +22,8 @@ def db():
         curs = conn.cursor(cursor_factory=RegularCursor)
         psycopg2.extras.register_hstore(curs, globally=True, unicode=True)
 
+    return gittip.db
+
 def samurai():
     samurai_config.merchant_key = os.environ['SAMURAI_MERCHANT_KEY']
     samurai_config.merchant_password = os.environ['SAMURAI_MERCHANT_PASSWORD']
