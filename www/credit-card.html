@@ -26,7 +26,50 @@ else:
 username = user.id
 # ========================================================================== ^L
 {% extends templates/base.html %}
+
+
+
+
 {% block body %}
+<style>
+    #under-construction {
+        position: absolute; 
+        top: 34pt;
+        left: -23px;
+    }
+    #their-voice {
+        position: relative;
+    }
+</style>
+<div id="their-voice">
+
+    <img id="under-construction" src="/assets/{{ __version__ }}/under-construction.gif" />
+    <h2 class="first">Under Construction</h2>
+
+    <p>We use a third party to store and process credit cards, to avoid the
+    burden of <a
+        href="http://en.wikipedia.org/wiki/Payment_Card_Industry_Data_Security_Standard">PCI
+        compliance</a>. Unfortunately the vendor we picked was <a
+        href="http://techcrunch.com/2012/03/23/groupon-acquires-feefighters-the-billshrink-for-business-services/">acquired
+        by GroupOn</a> and their payment gateway product has stopped being
+    supported. The chat room is closed, the toll free number is dead, and
+    I&rsquo;m getting no response on Twitter. :-(</p>
+    
+    <p>We&rsquo;ve deleted all of your credit card information that was on
+    their system, and are <a
+        href="https://github.com/whit537/www.gittip.com/issues/58">migrating to
+        a new vendor</a>. We should be back in a day or two.</p>
+    
+    <p>Sorry. :-(</p>
+
+</div>
+{% end %}
+
+
+
+
+
+{% block _body %}
 <script>
     $(document).ready(function()
     {
