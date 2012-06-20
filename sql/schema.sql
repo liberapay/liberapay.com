@@ -6,7 +6,7 @@ CREATE TABLE participants
 ( id                    text                        PRIMARY KEY 
 , statement             text                        DEFAULT ''
     
-, payment_method_token  text                        DEFAULT NULL
+, stripe_customer_id    text                        DEFAULT NULL
 , last_bill_result      text                        DEFAULT NULL
 
 , session_token         text                        UNIQUE DEFAULT NULL
