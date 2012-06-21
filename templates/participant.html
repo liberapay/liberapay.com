@@ -19,7 +19,7 @@
                 {% end %}
             </div>
 
-            {% if user.payment_method_token is None %}
+            {% if user.stripe_customer_id is None %}
             <p id="payment-prompt"{% if my_tip > 0 %} class="needed"{% end %}>
             <a href="/credit-card.html" class="highlight">Back your tip with a 
                 credit card</a> to make sure your tip goes through!</p>
