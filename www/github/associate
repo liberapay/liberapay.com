@@ -47,12 +47,15 @@ log("Done with OAuth dance with Github for %s (%s)."
 
 # Bind to a participant.
 # ======================
-# Redirect to the new participant, or to the one they came from.
+# Redirect to the new participant, or to the one they came from, or wherever 
+# else they came from.
 
 participant_id = github.upsert(user_info, claim=True)
 user = User.from_id(participant_id)
 then = qs.get('then')
 if then is not None:
+    if then.startswith('/'):
+        request.redirect(then)
     participant_id = 'github/' + then
 request.redirect('/%s/' % participant_id)
 
