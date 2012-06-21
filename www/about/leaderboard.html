@@ -39,9 +39,10 @@ leaders = db.fetchall("""
     }
 </style>
 
-<h2>These people have the most backed tips.</h2>
 
-<p>Backed tips are tips from people with a {% if user.ANON %}working credit
+<h2>These people receive the most money.</h2>
+
+<p>These amounts are tips from people with a {% if user.ANON %}working credit
 card{% else %}<a href="/credit-card.html">working credit card</a>{% end %} on
 file. If a card stops working this week then the actual amount distributed can
 be lower. If someone doesn&rsquo;t have a working card but does have a positive
