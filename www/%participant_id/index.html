@@ -151,7 +151,8 @@ tip_or_pledge = "tip"
     </blockquote>
 
     <h2>You tip <span id="total">${{ total }}</span> per week.
-        <span class="small"><a href="/credit-card.html">Credit card</a></span>
+        <span class="small{% if not user.last_bill_result == "" %} highlight{% end %}"><a 
+        href="/credit-card.html">Credit card</a></span>
     </h2>
     {% if total == 0 %}
 

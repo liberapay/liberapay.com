@@ -4,7 +4,7 @@ import os
 
 import gittip
 import psycopg2
-import samurai.config as samurai_config
+import stripe
 from gittip.postgres import PostgresManager
 from psycopg2.extensions import cursor as RegularCursor 
 
@@ -24,7 +24,6 @@ def db():
 
     return gittip.db
 
-def samurai():
-    samurai_config.merchant_key = os.environ['SAMURAI_MERCHANT_KEY']
-    samurai_config.merchant_password = os.environ['SAMURAI_MERCHANT_PASSWORD']
-    samurai_config.processor_token = os.environ['SAMURAI_PROCESSOR_TOKEN']
+def billing():
+    stripe.api_key= os.environ['STRIPE_SECRET_API_KEY']
+    stripe.publishable_api_key= os.environ['STRIPE_PUBLISHABLE_API_KEY']

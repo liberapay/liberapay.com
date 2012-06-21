@@ -21,10 +21,10 @@
 
             {% if user.payment_method_token is None %}
             <p id="payment-prompt"{% if my_tip > 0 %} class="needed"{% end %}>
-            <a href="/credit-card.html">Back your tip with a credit
-                    card</a> to make sure your tip goes through!</p>
+            <a href="/credit-card.html" class="highlight">Back your tip with a 
+                credit card</a> to make sure your tip goes through!</p>
             {% elif user.last_bill_result %}
-            <p id="payment-prompt" class="really-needed"><a
+            <p id="payment-prompt" class="really-needed highlight"><a
                 href="/credit-card.html">Fix your credit card</a> to make sure
             your tips go through!</p>
             {% end %}

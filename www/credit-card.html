@@ -1,79 +1,39 @@
-import json
-import samurai.config
-from aspen import Response
+import traceback
+
+import stripe
+from aspen import json, log, Response
 from gittip import billing
 
 # ========================================================================== ^L
 if user.ANON:
     raise Response(404)
 
-pmt = user.payment_method_token
-if not pmt:
+stripe_customer_id = user.stripe_customer_id
+if not stripe_customer_id:
     status = "missing"
 else:
     working = not bool(user.last_bill_result)
     status = "working" if working else "failing"
 
 try:
-    pm = billing.PaymentMethod(pmt)
-except urllib2.URLError: # samurai is unavailable
+    customer = billing.Customer(stripe_customer_id)
+except:  # stripe is unavailable? could be a bad stripe_customer_id?
     log(traceback.format_exc())
-    samurai_down = True
+    stripe_down = True
 else:
-    pmt = pm['payment_method_token']
-    samurai_down = False
+    assert stripe_customer_id == customer['id']
+    stripe_down = False
 
 username = user.id
 # ========================================================================== ^L
 {% extends templates/base.html %}
 
 
-
-
 {% block body %}
-<style>
-    #under-construction {
-        position: absolute; 
-        top: 34pt;
-        left: -23px;
-    }
-    #their-voice {
-        position: relative;
-    }
-</style>
-<div id="their-voice">
-
-    <img id="under-construction" src="/assets/{{ __version__ }}/under-construction.gif" />
-    <h2 class="first">Under Construction</h2>
-
-    <p>We use a third party to store and process credit cards, to avoid the
-    burden of <a
-        href="http://en.wikipedia.org/wiki/Payment_Card_Industry_Data_Security_Standard">PCI
-        compliance</a>. Unfortunately the vendor we picked was <a
-        href="http://techcrunch.com/2012/03/23/groupon-acquires-feefighters-the-billshrink-for-business-services/">acquired
-        by GroupOn</a> and their payment gateway product has stopped being
-    supported. The chat room is closed, the toll free number is dead, and
-    I&rsquo;m getting no response on Twitter. :-(</p>
-    
-    <p>We&rsquo;ve deleted all of your credit card information that was on
-    their system, and are <a
-        href="https://github.com/whit537/www.gittip.com/issues/58">migrating to
-        a new vendor</a>. We should be back in a day or two.</p>
-    
-    <p>Sorry. :-(</p>
-
-</div>
-{% end %}
-
-
-
-
-
-{% block _body %}
 <script>
     $(document).ready(function()
     {
-        Gittip.initPayment("{{ samurai.config.merchant_key }}");
+        Gittip.initPayment("{{ stripe.publishable_api_key }}", "{{ user.id }}");
     });
 </script>
 <style>
@@ -82,7 +42,7 @@ username = user.id
         width: 220px;
         left: 360px;
     }
-    #feedback H2 {
+    #feedback H3 {
         margin-top: 0;
     }
     #feedback .details P {
@@ -95,7 +55,7 @@ username = user.id
     FORM {
         width: 300px;
     }
-    {% if not pmt %}
+    {% if not stripe_customer_id %}
     #delete {
         display: none;
     }
@@ -106,100 +66,84 @@ username = user.id
     <h2 class="first">You are <a href="/{{ user.id }}/">{{ user.id }}</a>.</h2>
     <h2>Your <b>credit card</b> is <span id="status">{{ status }}</span>.</h2>
     
-    {% if samurai_down %}
+    {% if stripe_down %}
 
-    <p>Our payment processor (Samurai) is down right now. Please come back
-    later to update your credit card details.</p>
+    <p>We had a problem contacting <a href="https://stripe.com/">our payment
+    processor</a>. Could I ask if you&rsquo;d be willing to try again
+    later? Thanksorry. :-(</p>
 
     {% else %}
 
     <p>When you don&rsquo;t have enough in your Gittip account to cover your
-    tips, we {% if pmt %}will{% else %}can{% end %} pull money in using 
-    {% if pmt %}this{% else %}a{% end %} credit card. If your credit card
-    is missing or fails then your tips won&rsquo;t go through for that week.<p>
+    tips, we {% if stripe_customer_id %}will{% else %}can{% end %} pull money
+    in using {% if stripe_customer_id %}this{% else %}a{% end %} credit card.
+    If your credit card is missing or fails then your tips won&rsquo;t go
+    through for that week.<p>
+
+    {% if stripe_customer_id %}
+    <p>Your current card is <b>{{ customer['last4'] }}</b>.</p>
+
+    <h2>Change your card on file.</h2>
+    {% end %}
 
     <form id="payment">
         <div id="feedback">{% if user.last_bill_result %}
-        <h2>Problems</h2>
+        <h3><span>Darn it all!</span></h3>
         <div class="details">
-        {% for foo, probs in json.loads(user.last_bill_result).items() %}
-        {% for prob in probs %}
-        <p>{{ prob }}</p>
-        {% end %}
-        {% end %}
+        <p>{{ json.loads(user.last_bill_result)['error']['message'] }}</p>
         </div>
         {% end %}</div>
-    
-        {% if pmt %}
-        <input name="payment_method_token" type="hidden" 
-            value="{{ pmt }}" />
-        {% end %}
-
-        <div class="left half">
-            <label for="first_name">First Name</label>
-            <input id="first_name" name="first_name" 
-                   value="{{ pm['first_name'] }}" />
-        </div>
-
-        <div class="right half">
-            <label for="last_name">Last Name</label>
-            <input id="last_name" name="last_name" 
-                   value="{{ pm['last_name'] }}" />
-        </div>
-
-        <div class="clear"></div>
-
-        <label for="address_1">Address 1</label>
-        <input id="address_1" name="address_1" 
-               value="{{ pm['address_1'] }}" />
-
-        <label for="address_2">Address 2</label>
-        <input id="address_2" name="address_2" 
-               value="{{ pm['address_2'] }}" />
 
 
-        <div class="float city">
-            <label for="city">City</label>
-            <input id="city" name="city" 
-                   value="{{ pm['city'] }}" />
-        </div>
-
-        <div class="float state not-first">
-            <label for="state">State</label>
-            <input id="state" name="state" 
-                   value="{{ pm['state'] }}" />
-        </div>
-
-        <div class="float zip not-first">
-            <label for="zip">ZIP</label>
-            <input id="zip" name="zip" 
-                   value="{{ pm['zip'] }}" />
-        </div>
-
-        <div class="clear"></div>
+        <h3>Required</h3>
 
         <div class="float card_number">
             <label for="card_number">Credit Card Number</label>
-            <input id="card_number" name="card_number" 
-                   value="{{ pm['last_four'] }}" />
+            <input id="card_number" />
         </div>
 
         <div class="float expiry not-first">
-            <label for="expiry">Expiry</label>
-            <input id="expiry" name="expiry" 
-                   value="{{ pm['expiry'] }}" />
+            <label for="expiry">Expiration</label>
+            <input id="expiry" />
         </div>
 
         <div class="float cvv not-first">
             <label for="cvv">CVV</label>
-            <input id="cvv" name="cvv" />
+            <input id="cvv" />
+        </div>
+
+        <div class="clear"></div>
+
+
+        <h3>Optional</h3>
+
+        <label for="name">Full Name on Card</label>
+        <input id="name" value="{{ customer['name'] }}" />
+
+        <div class="clear"></div>
+
+        <label for="address_1">Address 1</label>
+        <input id="address_1" value="{{ customer['address_line1'] }}" />
+
+        <label for="address_2">Address 2</label>
+        <input id="address_2" value="{{ customer['address_line2'] }}" />
+
+
+        <div class="half left">
+            <label for="state">State or Province</label>
+            <input id="state" value="{{ customer['state'] }}" />
+        </div>
+
+        <div class="half right">
+            <label for="zip">ZIP or Postal Code</label>
+            <input id="zip" value="{{ customer['zip'] }}" />
         </div>
 
         <div class="clear"></div>
 
         <div class="full">
             <img src="/assets/{{ __version__ }}/cards.png" />
-            <button class="selected"
+            <button class="selected" id="save"
             type="submit">Save</button>
         </div>
         {% end %}

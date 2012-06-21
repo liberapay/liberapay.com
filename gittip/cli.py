@@ -5,7 +5,7 @@ from gittip import wireup
 
 def payday():
     wireup.db()
-    wireup.samurai()
+    wireup.billing()
 
 
     # Lazily import the billing module.

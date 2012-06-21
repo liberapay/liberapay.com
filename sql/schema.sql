@@ -64,8 +64,8 @@ CREATE TABLE paydays
 , ntips                 bigint                      DEFAULT 0
 , ntransfers            bigint                      DEFAULT 0
 , transfer_volume       numeric(35,2)               DEFAULT 0.00
-, npmt_failing          bigint                      DEFAULT 0
-, npmt_missing          bigint                      DEFAULT 0
+, ncc_failing           bigint                      DEFAULT 0
+, ncc_missing           bigint                      DEFAULT 0
 , nexchanges            bigint                      DEFAULT 0
 , exchange_volume       numeric(35,2)               DEFAULT 0.00 
 , exchange_fees_volume  numeric(35,2)               DEFAULT 0.00 

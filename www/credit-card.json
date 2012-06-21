@@ -1,15 +1,15 @@
-"""Save a payment method token (pmt) for a user.
+"""Save a payment method token (stripe_customer_id) for a user.
 
-When the user fills out the payment details form in the UI, we POST the new
-info to Samurai (using the Samurai js library, which wraps a cross-site AJAX
-library). Samurai always gives us a payment method token in return, no matter
-how bad the info was that we POSTed. This present script is called next. It
-takes the pmt and tries to bill or resume billing with it. The proof of the
-pudding, as they say, is in the eating. If the attempt fails, we will ask the
-customer to re-enter their details.
+When the user fills out the payment details form in the UI, we send the new
+info to Stripe (using the Stripe.js library). Stripe always gives us a
+so-called "single-use token" in return, no matter how bad the info was that we
+posted. This present script is called next. It takes the token and tries to
+associate it with a Stripe Customer object (creating one as needed). It's at
+this point that Stripe validates the credit card details, which they don't
+charge us for directly.
 
 """
-from aspen import log, Response
+from aspen import Response
 from gittip import billing
 
 #=========================================================================== ^L
@@ -20,23 +20,22 @@ if user.ANON:
 request.allow('GET')
 
 if qs.get('action') == 'delete':
-    billing.clear(user.id, user.payment_method_token)
+    billing.clear(user.id, user.stripe_customer_id)
     request.redirect('/credit-card.html')
 else:
-    # validate pmt
-    pmt = qs.get('pmt')
-    if pmt is None:
+
+    # Associate the single-use token representing the credit card details (we
+    # call it "tok" here because that's the prefix Stripe uses in the token
+    # itself) the user entered with a Stripe Customer. Stripe only ever gives
+    # us one error at a time.
+
+    tok = qs.get('tok')
+    if tok is None:
         raise Response(400) 
 
-    errors = billing.authorize(user.id, pmt)
-
-    worked = "No" if errors else "Yes"
-    log("Tried authorizing a payment with %s for %s. Did it work? %s." 
-       % (pmt, user.id, worked)
-              )
-
-    if errors:
-        out = {"problem": "Problems", "errors": errors}
+    error = billing.associate(user.id, user.stripe_customer_id, tok)
+    if error:
+        out = {"problem": "Problem", "error": error}
     else:
         out = {"problem": ""}
 

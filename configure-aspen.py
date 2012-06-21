@@ -7,7 +7,7 @@ import gittip.authentication
 
 gittip.wireup.canonical()
 gittip.wireup.db()
-gittip.wireup.samurai()
+gittip.wireup.billing()
 
 website.github_client_id = os.environ['GITHUB_CLIENT_ID']
 website.github_client_secret = os.environ['GITHUB_CLIENT_SECRET']
