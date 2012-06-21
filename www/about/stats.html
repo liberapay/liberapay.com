@@ -3,6 +3,7 @@ from gittip import db, age
 
 CARDINALS = ["zero", "one", "two", "three", "four", "five", "six", "seven", 
              "eight", "nine"]
+THURSDAY = 3
 FRIDAY = 4
 SATURDAY = 5
 SUNDAY = 6
@@ -73,6 +74,8 @@ def part(s):
 last_friday = "last Friday"
 this_friday = "this Friday"
 now = datetime.datetime.utcnow() 
+if now.weekday() == THURSDAY:
+    this_friday = "tomorrow"
 if now.weekday() == FRIDAY:
     if payday is None or payday['ts_end'] is None:
         # Payday hasn't started yet or is going on right now.
