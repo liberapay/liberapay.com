@@ -17,7 +17,7 @@ unclaimed = db.fetchall("""
                        ) AS foo
                GROUP BY tippee
            ) as bar
-   WHERE sum >= 0.1
+   WHERE sum >= 1
 GROUP BY tippee, sum
 ORDER BY sum DESC
 
