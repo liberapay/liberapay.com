@@ -1,0 +1,73 @@
+from gittip import db
+^L
+
+unclaimed = db.fetchall("""
+
+    SELECT tippee, claimed_time, sum(amount) AS amount
+      FROM (    SELECT DISTINCT ON (tipper, tippee)
+                       amount
+                     , tippee
+                  FROM tips 
+                  JOIN participants p ON p.id = tipper
+                  JOIN participants p2 ON p2.id = tippee
+                 WHERE p.last_bill_result = ''
+                   AND p2.claimed_time IS NULL
+              ORDER BY tipper, tippee, mtime DESC
+              ) AS foo
+      JOIN participants p ON p.id = tippee
+     WHERE amount >= 1
+  GROUP BY tippee, claimed_time
+  ORDER BY amount DESC
+  LIMIT 10
+
+""")
+
+^L
+{% extends templates/base.html %}
+{% block body %}
+<style>
+    TABLE {
+        font: 300 17pt/17pt Lato, sans-serif;
+        }
+    TD {
+        text-align: left;
+        padding: 6pt 12pt 6pt 0;
+    }
+    TR.unclaimed,
+    TR.unclaimed A {
+        color: #B2A196;
+    }
+    TR.unclaimed TD SPAN {
+        font-size: 10pt;
+    }
+</style>
+
+
+<h2>These people have unclaimed money.</h2>
+
+<p>These amounts represent pledges from people with a {% if user.ANON %}working
+credit card{% else %}<a href="/credit-card.html">working credit card</a>{%end%}
+on file, to people who have not joined Gittip. Only accounts with at least
+$1.00 in pledges are listed.</p>
+
+<table>
+    {% for i, unclaim in enumerate(unclaimed, start=1) %}
+    <tr{% if unclaim['claimed_time'] is None %} class="unclaimed"{% end %}>
+        <td>{{ i }}.</td>
+        <td class="amount">$</td>
+        <td class="amount">{{ unclaim['amount'] }}</td>
+        <td><a href="/{{ unclaim['tippee'] }}/">{{ unclaim['tippee'] }}</a>
+            {% if unclaim['claimed_time'] is None %}<span class="small help">unclaimed!</span>{% end %}
+        </td>
+    </tr>
+    {% end %}
+</table>
+
+<h2>Gittip happens every Friday.</h2>
+
+<p>The amounts above are what the Gittip community is willing to give as
+a weekly gift to each person, but only if the person accepts it. Gittip is
+<b>opt-in</b>. We never collect money on a person&rsquo;s behalf until that
+person opts-in by claiming their account.</p>
+
+{% end %}
