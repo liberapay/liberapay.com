@@ -18,7 +18,6 @@ unclaimed = db.fetchall("""
      WHERE amount >= 1
   GROUP BY tippee, claimed_time
   ORDER BY amount DESC
-  LIMIT 10
 
 """)
 
