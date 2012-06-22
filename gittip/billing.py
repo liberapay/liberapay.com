@@ -382,6 +382,7 @@ def payday():
     PARTICIPANTS = """\
         SELECT id, balance, stripe_customer_id
           FROM participants
+         WHERE claimed_time IS NOT NULL
     """
     participants = db.fetchall(PARTICIPANTS)
     log("Fetched participants.")
