@@ -20,36 +20,39 @@ ncc = 0 if ncc is None else ncc
 pcc = "%5.1f" % ((ncc * 100.0) / npeople)
 statements = list(db.fetchall("SELECT id, statement FROM participants WHERE statement != '' ORDER BY id"))
 amount = db.fetchone("SELECT transfer_volume AS v FROM paydays ORDER BY ts_end DESC LIMIT 1")['v']
-average_tip = db.fetchone("""\
-        SELECT avg(amount) FROM ( SELECT DISTINCT ON (tipper, tippee) amount 
-                                    FROM tips 
-                                    JOIN participants p ON p.id = tipper 
-                                   WHERE p.last_bill_result = ''
-                                 ) AS foo
-""")['avg']
-average_tip = 0 if average_tip is None else average_tip
+tip_amounts = db.fetchone("""
+        SELECT avg(amount), sum(amount)
+         FROM (    SELECT DISTINCT ON (tipper, tippee) amount
+                     FROM tips
+                     JOIN participants p ON p.id = tipper
+                     JOIN participants p2 ON p2.id = tippee
+                    WHERE p.last_bill_result = ''
+                      AND p2.claimed_time IS NOT NULL
+                 ORDER BY tipper, tippee, mtime DESC
+               ) AS foo; 
+""")
+if tip_amounts is None:
+    average_tip = 0
+    total_backed_tips = 0
+else:
+    average_tip = tip_amounts['avg']
+    total_backed_tips = tip_amounts['sum']
+
 average_tippees = db.fetchone("""\
         SELECT round(avg(ntippees))
           FROM ( SELECT count(tippee) as NTIPPEES 
                    FROM ( SELECT DISTINCT ON (tipper, tippee) tipper, tippee 
                             FROM tips
                             JOIN participants p ON p.id = tipper
+                            JOIN participants p2 on p2.id = tippee
                            WHERE p.last_bill_result = ''
-                        GROUP BY tipper, tippee
+                             AND p2.claimed_time IS NOT NULL
+                             AND amount > 0
+                        GROUP BY tipper, tippee, mtime
+                        ORDER BY tipper, tippee, mtime DESC
                          ) AS foo GROUP BY tipper) AS bar
 """)['round']
 average_tippees = 0 if average_tippees is None else int(average_tippees)
-
-total_backed_tips = db.fetchone("""
-        SELECT sum(amount)
-         FROM (    SELECT DISTINCT ON (tipper, tippee) amount, tippee
-                     FROM tips
-                     JOIN participants p ON p.id = tipper
-                    WHERE last_bill_result = ''
-                 ORDER BY tipper, tippee, mtime DESC
-               ) AS foo; 
-""")['sum']
-total_backed_tips = 0 if total_backed_tips is None else total_backed_tips
 
 word = "people"
 if average_tippees < 10:
@@ -107,7 +110,7 @@ elif now.weekday() == SUNDAY:
 
 <h2><b>${{ amount }}</b> changed hands <b>{{ last_friday }}</b>.</h2>
 
-<h2><b>${{ total_backed_tips }}</b> is backed for <b>{{ this_friday }}</b>.
+<h2><b>${{ total_backed_tips }}</b> is ready for <b>{{ this_friday }}</b>.
     <span class="small"><a href="leaderboard.html">Leaderboard</a></span>
 </h2>
 
