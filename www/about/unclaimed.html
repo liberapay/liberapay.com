@@ -3,21 +3,23 @@ from gittip import db
 
 unclaimed = db.fetchall("""
 
-    SELECT tippee, claimed_time, sum(amount) AS amount
-      FROM (    SELECT DISTINCT ON (tipper, tippee)
-                       amount
-                     , tippee
-                  FROM tips 
-                  JOIN participants p ON p.id = tipper
-                  JOIN participants p2 ON p2.id = tippee
-                 WHERE p.last_bill_result = ''
-                   AND p2.claimed_time IS NULL
-              ORDER BY tipper, tippee, mtime DESC
-              ) AS foo
-      JOIN participants p ON p.id = tippee
-     WHERE amount >= 1
-  GROUP BY tippee, claimed_time
-  ORDER BY amount DESC
+  SELECT tippee, sum 
+    FROM (   SELECT tippee, sum(amount) AS sum
+               FROM (    SELECT DISTINCT ON (tipper, tippee)
+                                amount
+                              , tippee
+                           FROM tips 
+                           JOIN participants p ON p.id = tipper
+                           JOIN participants p2 ON p2.id = tippee
+                          WHERE p.last_bill_result = ''
+                            AND p2.claimed_time IS NULL
+                       ORDER BY tipper, tippee, mtime DESC
+                       ) AS foo
+               GROUP BY tippee
+           ) as bar
+   WHERE sum >= 0.1
+GROUP BY tippee, sum
+ORDER BY sum DESC
 
 """)
 
@@ -51,12 +53,12 @@ $1.00 in pledges are listed.</p>
 
 <table>
     {% for i, unclaim in enumerate(unclaimed, start=1) %}
-    <tr{% if unclaim['claimed_time'] is None %} class="unclaimed"{% end %}>
+    <tr class="unclaimed">
         <td>{{ i }}.</td>
         <td class="amount">$</td>
-        <td class="amount">{{ unclaim['amount'] }}</td>
+        <td class="amount">{{ unclaim['sum'] }}</td>
         <td><a href="/{{ unclaim['tippee'] }}/">{{ unclaim['tippee'] }}</a>
-            {% if unclaim['claimed_time'] is None %}<span class="small help">unclaimed!</span>{% end %}
+            <span class="small help">unclaimed!</span>
         </td>
     </tr>
     {% end %}
