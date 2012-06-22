@@ -41,16 +41,18 @@ else:
 average_tippees = db.fetchone("""\
         SELECT round(avg(ntippees))
           FROM ( SELECT count(tippee) as NTIPPEES 
-                   FROM ( SELECT DISTINCT ON (tipper, tippee) tipper, tippee 
+                   FROM ( SELECT DISTINCT ON (tipper, tippee) 
+                                 tipper
+                               , tippee
+                               , amount
                             FROM tips
                             JOIN participants p ON p.id = tipper
                             JOIN participants p2 on p2.id = tippee
                            WHERE p.last_bill_result = ''
                              AND p2.claimed_time IS NOT NULL
-                             AND amount > 0
-                        GROUP BY tipper, tippee, mtime
+                        GROUP BY tipper, tippee, mtime, amount
                         ORDER BY tipper, tippee, mtime DESC
-                         ) AS foo GROUP BY tipper) AS bar
+                         ) AS foo WHERE amount > 0 GROUP BY tipper) AS bar
 """)['round']
 average_tippees = 0 if average_tippees is None else int(average_tippees)
 
