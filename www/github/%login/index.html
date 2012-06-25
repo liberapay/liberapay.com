@@ -1,4 +1,4 @@
-"""Github user page on Gittip.
+"""GitHub user page on Gittip.
 """
 import decimal
 
@@ -11,7 +11,7 @@ from gittip.networks import github
 
 # ========================================================================== ^L
 
-# Try to load from Github.
+# Try to load from GitHub.
 # ========================
 
 url = "https://api.github.com/users/%s"
@@ -67,7 +67,7 @@ tip_or_pledge = "pledge"
         <ul id="accounts">
             <li>
                 <img src="{{ userinfo.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" /> 
-                Are you <a href="{{ userinfo['html_url'] }}">{{ userinfo['login'] }}</a> from Github?<br />
+                Are you <a href="{{ userinfo['html_url'] }}">{{ userinfo['login'] }}</a> from GitHub?<br />
                 <a href="{{ github_oauth_url(username) }}">Click here</a> to opt in to Gittip.
             </li>
         </ul>
@@ -75,7 +75,7 @@ tip_or_pledge = "pledge"
         <ul id="accounts">
             <li>
                 <img src="{{ userinfo.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" /> 
-                Are you <a href="{{ userinfo['html_url'] }}">{{ userinfo['login'] }}</a> from Github?<br />
+                Are you <a href="{{ userinfo['html_url'] }}">{{ userinfo['login'] }}</a> from GitHub?<br />
                 You&rsquo;ll have to <a href="/sign-out.html">sign out</a> and sign back in to claim this account.
             </li>
         </ul>
@@ -92,7 +92,7 @@ tip_or_pledge = "pledge"
 
     {% elif usertype == "organization"  %}
     
-    <h2 class="first"><b>{{ name }}</b> is an {{ usertype }} on Github.</h2>
+    <h2 class="first"><b>{{ name }}</b> is an {{ usertype }} on GitHub.</h2>
     <ul id="accounts">
         <li>
             <img src="{{ userinfo.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" /> 
@@ -121,7 +121,7 @@ tip_or_pledge = "pledge"
     <ul id="accounts">
         <li>
             <img src="{{ userinfo.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" /> 
-            I don&rsquo;t recognize the &ldquo;{{ usertype }}&rdquo; type of user on Github.<br />
+            I don&rsquo;t recognize the &ldquo;{{ usertype }}&rdquo; type of user on GitHub.<br />
             Sorry. :-(
         </li>
     </ul> 

@@ -60,7 +60,7 @@ class github:
         """ # XXX Uniqueness constraint on login?
         rec = db.fetchone(FETCH, (login,))
         if rec is None:
-            raise Exception("Github user %s has no participant." % (login))
+            raise Exception("GitHub user %s has no participant." % (login))
         return rec['participant_id']
 
 

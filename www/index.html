@@ -25,7 +25,7 @@ from gittip import AMOUNTS
 {% block body %}
     {% if user.ANON %}
     <h2 class="first">Step 1. Sign in with <a 
-        href="https://github.com/login/oauth/authorize?client_id={{ website.github_client_id }}">Github</a>.</h2>
+        href="https://github.com/login/oauth/authorize?client_id={{ website.github_client_id }}">GitHub</a>.</h2>
 
     <h2>Step 2. Tip someone!</h2>
 
@@ -71,7 +71,7 @@ from gittip import AMOUNTS
 
     <h3>Find someone else.</h3> 
     <form id="jump">
-    Enter a Github username:
+    Enter a GitHub username:
         <input placeholder="" />
         <button class="selected small" type="submit">Go</button>
     </form>
