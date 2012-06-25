@@ -7,7 +7,7 @@
     {% if can_tip and user.ANON %}
         <h2>Sign in 
             <a href="{{ github_oauth_url(username) }}">with 
-            Github</a> to tip {{ username }}.</h2>
+            GitHub</a> to tip {{ username }}.</h2>
     {% elif can_tip  %}
         {% if user.id != username %}
             <h2>Your weekly {{ tip_or_pledge }} to {{ username }} is:</h2>
