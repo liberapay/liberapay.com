@@ -12,7 +12,7 @@ db = None # This global is wired in wireup. It's an instance of
 AMOUNTS= [Decimal(a) for a in ('0.00', '0.08', '0.16', '0.32', '0.64', '1.28')]
 
 
-__version__ = "3.0.6"
+__version__ = "~~VERSION~~"
 
 
 def get_tip(tipper, tippee):
