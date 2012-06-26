@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Gittip - A Gift Economy Platform</title>
+        <title>Gittip - A Gift Economy</title>
         <style>
             @import url("/assets/{{ __version__ }}/gittip.css");
         </style>
@@ -11,7 +11,7 @@
     </head>
     <body><div id="body">
         {% block heading %}
-        <h2>Gittip is <b><a href="/">a gift economy platform</a></b>.</h2>
+        <h2>Gittip is <b><a href="/">a gift economy</a></b>.</h2>
         {% if not user.ANON and user.id != username %}
         <h2>
             You are <a href="/{{ user.id }}/">{{ user.id }}</a>.
