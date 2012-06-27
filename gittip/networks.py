@@ -78,7 +78,7 @@ def upsert(network, user_id, username, user_info, claim=False):
     primary key in the underlying table in our own db.
 
     If claim is True, the return value is the participant_id. Otherwise it is a
-    tuple: (participant_id, claimed [boolean], balance).
+    tuple: (participant_id [unicode], is_claimed [boolean], balance [Decimal]).
 
     """
     typecheck( network, str
@@ -112,7 +112,8 @@ def upsert(network, user_id, username, user_info, claim=False):
 
     """
     for k, v in user_info.items():
-        # I believe hstore can take any type of value, but psycopg2 can't.
+        # Cast everything to unicode. I believe hstore can take any type of 
+        # value, but psycopg2 can't. 
         # https://postgres.heroku.com/blog/past/2012/3/14/introducing_keyvalue_data_storage_in_heroku_postgres/
         # http://initd.org/psycopg/docs/extras.html#hstore-data-type
         user_info[k] = unicode(v)

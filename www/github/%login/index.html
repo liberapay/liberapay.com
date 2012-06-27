@@ -34,8 +34,8 @@ if not name:
 usertype = userinfo.get("type", "unknown type of account").lower()
 if usertype == "user":
     can_tip = True
-    participant_id, claimed_time, balance = github.upsert(userinfo)
-    if claimed_time:
+    participant_id, is_claimed, balance = github.upsert(userinfo)
+    if is_claimed:
         request.redirect('/%s/' % participant_id)
 
     if not user.ANON:

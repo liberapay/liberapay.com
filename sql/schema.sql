@@ -31,6 +31,7 @@ CREATE TABLE social_network_users
 , network               text            NOT NULL
 , user_id               text            NOT NULL
 , user_info             hstore
+, opted_out             boolean         DEFAULT FALSE
 , participant_id        text            DEFAULT NULL REFERENCES participants ON DELETE RESTRICT
 , UNIQUE(network, user_id)
  );
