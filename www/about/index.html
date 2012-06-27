@@ -1,12 +1,15 @@
-from gittip import age
+from gittip import age, db
 ^L
+if not user.ANON:
+    username = user.id
+nparticipants = db.fetchone("SELECT count(*) AS n FROM participants WHERE claimed_time IS NOT NULL")['n']
 ^L
 {% extends templates/base.html %}
 {% block body %}
-    <a name="stats"></a> 
-    <h2>Gittip is <b>{{ age() }}</b> old.
-        <span class="small"><a href="stats.html">More stats</a></span>
-    </h2>
+
+    <p>Gittip is <b>{{ age() }}</b> old and has <b>{{ nparticipants }}</b>
+    participants. <span class="small"><a href="stats.html">More 
+            stats ...</a></span></p>
 
 
     <a name="gittips"></a> 
