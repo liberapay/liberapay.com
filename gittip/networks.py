@@ -83,7 +83,9 @@ def upsert(network, user_id, username, user_info, claim=False):
     """
     typecheck( network, str
              , user_id, (int, unicode)
+             , username, unicode
              , user_info, dict
+             , claim, bool
               )  
     user_id = unicode(user_id)
 
