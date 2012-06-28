@@ -1,7 +1,7 @@
 from gittip import db
 ^L
 
-leaders = db.fetchall("""
+receivers = db.fetchall("""
 
     SELECT tippee, claimed_time, sum(amount) AS amount
       FROM (    SELECT DISTINCT ON (tipper, tippee)
@@ -16,6 +16,26 @@ leaders = db.fetchall("""
               ) AS foo
       JOIN participants p ON p.id = tippee
   GROUP BY tippee, claimed_time
+  ORDER BY amount DESC
+  LIMIT 10
+
+""")
+
+givers = db.fetchall("""
+
+    SELECT tipper, sum(amount) AS amount
+      FROM (    SELECT DISTINCT ON (tipper, tippee)
+                       amount
+                     , tipper
+                  FROM tips 
+                  JOIN participants p ON p.id = tipper
+                  JOIN social_network_users snu ON snu.participant_id = tippee
+                 WHERE last_bill_result = ''
+                   AND snu.is_locked = false
+              ORDER BY tipper, tippee, mtime DESC
+              ) AS foo
+      JOIN participants p ON p.id = tipper
+  GROUP BY tipper, claimed_time
   ORDER BY amount DESC
   LIMIT 10
 
@@ -39,36 +59,66 @@ leaders = db.fetchall("""
     TR.unclaimed TD SPAN {
         font-size: 10pt;
     }
+    #givers { 
+        float: left;
+    }
+    #receivers {
+        float: right;
+    }
+    H2.clear {
+        padding-top: 36pt;
+    }
 </style>
 
+<div id="givers">
 
-<h2>These people receive the most money.</h2>
+    <h2>Top Givers</h2>
 
-<p>These amounts are tips from people with a {% if user.ANON %}working credit
-card{% else %}<a href="/credit-card.html">working credit card</a>{% end %} on
-file. If a card stops working this week then the actual amount distributed can
-be lower. If someone doesn&rsquo;t have a working card but does have a positive
-Gittip balance themselves then the actual amount distributed can be higher.
-Make sense?</p>
+    <table>
+        {% for i, giver in enumerate(givers, start=1) %}
+        <tr>
+            <td>{{ i }}.</td>
+            <td class="amount">$</td>
+            <td class="amount">{{ giver['amount'] }}</td>
+            <td><a href="/{{ giver['tipper'] }}/">{{ giver['tipper'] }}</a></td>
+        </tr>
+        {% end %}
+    </table>
 
-<table>
-    {% for i, leader in enumerate(leaders, start=1) %}
-    <tr{% if leader['claimed_time'] is None %} class="unclaimed"{% end %}>
-        <td>{{ i }}.</td>
-        <td class="amount">$</td>
-        <td class="amount">{{ leader['amount'] }}</td>
-        <td><a href="/{{ leader['tippee'] }}/">{{ leader['tippee'] }}</a>
-            {% if leader['claimed_time'] is None %}<span class="small help">unclaimed!</span>{% end %}
-        </td>
-    </tr>
-    {% end %}
-</table>
+</div>
 
-<h2>Gittip happens every Friday.</h2>
+<div id="receivers">
+
+    <h2>Top Receivers</h2>
+
+    <table>
+        {% for i, receiver in enumerate(receivers, start=1) %}
+        <tr{% if receiver['claimed_time'] is None %} class="unclaimed"{% end %}>
+            <td>{{ i }}.</td>
+            <td class="amount">$</td>
+            <td class="amount">{{ receiver['amount'] }}</td>
+            <td><a href="/{{ receiver['tippee'] }}/">{{ receiver['tippee'] }}</a>
+                {% if receiver['claimed_time'] is None %}<span class="small help">unclaimed!</span>{% end %}
+            </td>
+        </tr>
+        {% end %}
+    </table>
+
+</div>
+
+<h2 class="clear">Gittip happens every Friday.</h2>
 
 <p>The amounts above are what the Gittip community is willing to give as
 a weekly gift to each person, but only if the person accepts it. Gittip is
 <b>opt-in</b>. We never collect money on a person&rsquo;s behalf until that
 person opts in by claiming their account.</p>
+
+<p class="help">Amounts are based on tips from people with a 
+{% if user.ANON %}working credit card{% else %}<a href="/credit-card.html">working 
+    credit card</a>{% end %} on file. If a card stops working this week 
+then the actual amount distributed can be lower. If someone doesn&rsquo;t 
+have a working card but does have a positive Gittip balance themselves then
+the actual amount distributed can be higher.  Make sense?</p>
+
 
 {% end %}
