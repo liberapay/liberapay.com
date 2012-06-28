@@ -1,0 +1,23 @@
+from aspen import Response
+from gittip import db
+^L
+if user.ANON:
+    raise Response(404) 
+request.allow("GET", "POST")
+if POST:
+    rec = db.fetchone("""
+
+        UPDATE participants 
+           SET shares_giving=not shares_giving 
+         WHERE id=%s
+     RETURNING shares_giving
+
+    """, (user.id,))
+else:
+    rec = db.fetchone("""
+
+        SELECT shares_giving FROM participants WHERE id=%s
+
+    """, (user.id,))
+assert rec is not None
+response.body = {"shares_giving": rec['shares_giving']}
