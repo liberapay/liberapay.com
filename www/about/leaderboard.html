@@ -23,7 +23,7 @@ receivers = db.fetchall("""
 
 givers = db.fetchall("""
 
-    SELECT tipper, sum(amount) AS amount
+    SELECT tipper, shares_giving, sum(amount) AS amount
       FROM (    SELECT DISTINCT ON (tipper, tippee)
                        amount
                      , tipper
@@ -35,7 +35,7 @@ givers = db.fetchall("""
               ORDER BY tipper, tippee, mtime DESC
               ) AS foo
       JOIN participants p ON p.id = tipper
-  GROUP BY tipper, claimed_time
+  GROUP BY tipper, shares_giving
   ORDER BY amount DESC
   LIMIT 10
 
@@ -72,11 +72,19 @@ givers = db.fetchall("""
     H2.clear {
         padding-top: 36pt;
     }
+    H3 {
+        margin-top: 12pt;
+    }
 </style>
+
+
+<h2>Leaderboard
+    <span class="small"><a href="unclaimed.html">Unclaimed</a></span>
+</h2>
 
 <div id="givers">
 
-    <h2>Top Givers</h2>
+    <h3 class="first">Top Givers</h3>
 
     <table>
         {% for i, giver in enumerate(givers, start=1) %}
@@ -84,7 +92,11 @@ givers = db.fetchall("""
             <td>{{ i }}.</td>
             <td class="amount">$</td>
             <td class="amount">{{ giver['amount'] }}</td>
+            {% if giver['shares_giving'] %}
             <td><a href="/{{ giver['tipper'] }}/">{{ giver['tipper'] }}</a></td>
+            {% else %}
+            <td class="unclaimed">anonymous</td>
+            {% end %}
         </tr>
         {% end %}
     </table>
@@ -93,7 +105,7 @@ givers = db.fetchall("""
 
 <div id="receivers">
 
-    <h2>Top Receivers</h2>
+    <h3 class="first">Top Receivers</h3>
 
     <table>
         {% for i, receiver in enumerate(receivers, start=1) %}
@@ -109,6 +121,7 @@ givers = db.fetchall("""
     </table>
 
 </div>
+
 
 <h2 class="clear">Gittip happens every Friday.</h2>
 

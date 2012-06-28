@@ -126,6 +126,24 @@ tip_or_pledge = "tip"
                 $('FORM.statement').hide();
                 $('BLOCKQUOTE.statement').show();
             });
+            $('.shares-giving').click(function()
+            {
+                jQuery.ajax(
+                    { url: 'shares-giving.json'
+                    , type: 'POST'
+                    , dataType: 'json'
+                    , success: function(data)
+                    {
+                        $('INPUT.shares-giving').attr('checked', data.shares_giving);
+                    }
+                    , error: function() {
+                            alert( "Failed to change your giving sharing "
+                                 + "preference. Try again?"
+                                  );
+                        }
+                     }
+                );
+            });
         });
     </script>
 
@@ -151,10 +169,18 @@ tip_or_pledge = "tip"
         <button class="small selected">Edit</button>
     </blockquote>
 
+
     <h2>You tip <span id="total">${{ total }}</span> per week.
         <span class="small{% if not user.last_bill_result == "" %} highlight{% end %}"><a 
         href="/credit-card.html">Credit card</a></span>
     </h2>
+
+    <p>
+        <input name="shares-giving" class="shares-giving" type="checkbox" 
+            {% if participant['shares_giving'] %}checked="true"{% end %} /> 
+        <label for="shares-giving" class="shares-giving">Share aggregate giving</label>
+    </p>
+
     {% if total == 0 %}
 
     <p>Here are some great programmers that you might consider tipping.<br />
