@@ -1,4 +1,20 @@
 from gittip import db
+
+class Totalizer:
+
+    def __init__(self, unclaimed):
+        self.unclaimed = unclaimed
+        self.total = 0
+
+    def __iter__(self):
+        for i, unclaim in enumerate(self.unclaimed, start=1):
+            self.total += unclaim['sum']
+            yield i, unclaim 
+
+    def __unicode__(self):
+        return unicode(self.total)
+    __str__ = __unicode__
+
 ^L
 
 unclaimed = db.fetchall("""
@@ -24,6 +40,8 @@ GROUP BY tippee, sum
 ORDER BY sum DESC
 
 """)
+
+unclaimed = Totalizer(unclaimed)
 
 ^L
 {% extends templates/base.html %}
@@ -54,7 +72,7 @@ on file, to people who have not joined Gittip. Only accounts with at least
 $1.00 in pledges are listed.</p>
 
 <table>
-    {% for i, unclaim in enumerate(unclaimed, start=1) %}
+    {%  for i, unclaim in unclaimed %}
     <tr class="unclaimed">
         <td>{{ i }}.</td>
         <td class="amount">$</td>
@@ -64,6 +82,13 @@ $1.00 in pledges are listed.</p>
         </td>
     </tr>
     {% end %}
+    <tr class="unclaimed">
+        <td></td>
+        <td class="amount">$</td>
+        <td class="amount">{{ unclaimed }}</td>
+        <td></span>
+        </td>
+    </tr>
 </table>
 
 <h2>Gittip happens every Friday.</h2>
