@@ -11,8 +11,10 @@ unclaimed = db.fetchall("""
                            FROM tips 
                            JOIN participants p ON p.id = tipper
                            JOIN participants p2 ON p2.id = tippee
+                           JOIN social_network_users snu ON snu.participant_id = tippee
                           WHERE p.last_bill_result = ''
                             AND p2.claimed_time IS NULL
+                            AND snu.is_locked = false
                        ORDER BY tipper, tippee, mtime DESC
                        ) AS foo
                GROUP BY tippee

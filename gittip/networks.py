@@ -1,7 +1,9 @@
 import random
 
-from aspen import log
+import requests
+from aspen import json, log, Response
 from aspen.utils import typecheck
+from aspen.website import Website
 from gittip import db
 from psycopg2 import IntegrityError
 
@@ -45,7 +47,75 @@ class github:
                      , user_info
                      , claim=claim
                       )
-    
+ 
+
+    @staticmethod
+    def oauth_url(website, action, then=u""):
+        """Given a website object and a string, return a URL string.
+        
+        `action' is one of 'opt-in', 'lock' and 'unlock'
+        
+        `then' is either a github username or an URL starting with '/'. It's 
+            where we'll send the user after we get the redirect back from 
+            GitHub. 
+
+        """
+        typecheck(website, Website, action, unicode, then, unicode)
+        assert action in [u'opt-in', u'lock', u'unlock']
+        url = u"https://github.com/login/oauth/authorize?client_id=%s&redirect_uri=%s" 
+        url %= (website.github_client_id, website.github_callback)
+
+        # Pack action,then into data and base64-encode. Querystring isn't
+        # available because it's consumed by the initial GitHub request.
+
+        data = u'%s,%s' % (action, then)
+        data = data.encode('UTF-8').encode('base64').decode('US-ASCII')
+        url += u'?data=%s' % data
+        return url
+
+
+    @staticmethod
+    def oauth_dance(website, qs):
+        """Given a querystring, return a dict of user_info.
+
+        The querystring should be the querystring that we get from GitHub when
+        we send the user to the return value of oauth_url above.
+
+        See also: 
+
+            http://developer.github.com/v3/oauth/
+
+        """
+
+        log("Doing an OAuth dance with Github.") 
+
+        if 'error' in qs:
+            raise Response(500, str(qs['error']))
+
+        data = { 'code': qs['code'].encode('US-ASCII')
+               , 'client_id': website.github_client_id
+               , 'client_secret': website.github_client_secret
+                }
+        r = requests.post("https://github.com/login/oauth/access_token", data=data)
+        assert r.status_code == 200, (r.status_code, r.text)
+
+        back = dict([pair.split('=') for pair in r.text.split('&')]) # XXX
+        if 'error' in back:
+            raise Response(400, back['error'].encode('utf-8'))
+        assert back.get('token_type', '') == 'bearer', back
+        access_token = back['access_token']
+
+        r = requests.get( "https://api.github.com/user"
+                        , headers={'Authorization': 'token %s' % access_token}
+                         )
+        assert r.status_code == 200, (r.status_code, r.text)
+        user_info = json.loads(r.text)
+        log("Done with OAuth dance with Github for %s (%s)." 
+            % (user_info['login'], user_info['id']))
+
+        return user_info
+
+
     @staticmethod
     def resolve(login):
         """Given two str, return a participant_id.
@@ -78,7 +148,8 @@ def upsert(network, user_id, username, user_info, claim=False):
     primary key in the underlying table in our own db.
 
     If claim is True, the return value is the participant_id. Otherwise it is a
-    tuple: (participant_id [unicode], is_claimed [boolean], balance [Decimal]).
+    tuple: (participant_id [unicode], is_claimed [boolean], is_locked 
+    [boolean], balance [Decimal]).
 
     """
     typecheck( network, str
@@ -153,7 +224,7 @@ def upsert(network, user_id, username, user_info, claim=False):
            AND (  (participant_id IS NULL)
                OR (participant_id=%s)
                  )
-     RETURNING participant_id
+     RETURNING participant_id, is_locked
 
     """
 
@@ -162,9 +233,13 @@ def upsert(network, user_id, username, user_info, claim=False):
     rows = db.fetchall( ASSOCIATE
                       , (participant_id, network, user_id, participant_id)
                        )
-    nrows = len(list(rows))
+    rows = list(rows)
+    nrows = len(rows)
     assert nrows in (0, 1)
-    if nrows == 0:
+
+    if nrows == 1:
+        is_locked = rows[0]['is_locked']
+    else:
 
         # Against all odds, the account was otherwise associated with another
         # participant while we weren't looking. Maybe someone paid them money
@@ -176,7 +251,8 @@ def upsert(network, user_id, username, user_info, claim=False):
                       , (participant_id,)
                        )
 
-        rec = db.fetchone( "SELECT participant_id FROM social_network_users "
+        rec = db.fetchone( "SELECT participant_id, is_locked "
+                           "FROM social_network_users "
                            "WHERE network=%s AND user_id=%s" 
                          , (network, user_id)
                           )
@@ -185,6 +261,7 @@ def upsert(network, user_id, username, user_info, claim=False):
             # Use the participant associated with this account.
 
             participant_id = rec['participant_id']
+            is_locked = rec['is_locked']
             assert participant_id is not None
 
         else:
@@ -217,6 +294,10 @@ def upsert(network, user_id, username, user_info, claim=False):
                          , (participant_id,)
                           )
         assert rec is not None
-        out = (participant_id, rec['claimed_time'] is not None, rec['balance'])
+        out = ( participant_id
+              , rec['claimed_time'] is not None
+              , is_locked
+              , rec['balance']
+               )
 
     return out

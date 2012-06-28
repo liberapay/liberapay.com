@@ -3,6 +3,7 @@ import traceback
 import stripe
 from aspen import json, log, Response
 from gittip import billing
+from gittip.networks import github
 
 # ========================================================================== ^L
 
@@ -34,7 +35,7 @@ if not user.ANON:
 
 <h2 class="first">Credit Card</h2>
 
-<p>Sign in <a href="{{ github_oauth_url('/credit-card.html') }}">with
+<p>Sign in <a href="{{ github.oauth_url(website, u'opt-in', u'/credit-card.html') }}">with
 GitHub</a>, and then you&rsquo;ll be able to add or change your credit card.
 Thanks! :-)</p>
 

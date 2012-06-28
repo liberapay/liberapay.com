@@ -2,7 +2,6 @@
 """
 import decimal
 
-
 import requests
 from aspen import json, Response
 from gittip import AMOUNTS, db, get_tip, get_tipjar
@@ -33,8 +32,9 @@ if not name:
 
 usertype = userinfo.get("type", "unknown type of account").lower()
 if usertype == "user":
-    can_tip = True
-    participant_id, is_claimed, balance = github.upsert(userinfo)
+    participant_id, is_claimed, is_locked, balance = github.upsert(userinfo)
+    can_tip = not is_locked
+    lock_action = "unlock" if is_locked else "lock"
     if is_claimed:
         request.redirect('/%s/' % participant_id)
 
@@ -57,6 +57,18 @@ tip_or_pledge = "pledge"
 
 {% block their_voice %}
     {% if usertype == "user" %}
+      {% if is_locked %}
+
+        <h2 class="first"><b>{{ username }}</b> has opted out of Gittip.</h2>
+
+        <p>If you are <a href="">{{ username }}</a> on GitHub, you can unlock
+        your account to allow people to pledge tips to you on Gittip. We never
+        collect any money on your behalf until you explicitly opt in.</p>
+
+        <a href="{{ github.oauth_url(website, u'unlock', username) }}"
+            ><button>Unlock</button></a>
+
+      {% else %}
         <script>
             $(document).ready(Gittip.initTipButtons);
         </script>
@@ -68,7 +80,7 @@ tip_or_pledge = "pledge"
             <li>
                 <img src="{{ userinfo.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" /> 
                 Are you <a href="{{ userinfo['html_url'] }}">{{ userinfo['login'] }}</a> from GitHub?<br />
-                <a href="{{ github_oauth_url(username) }}">Click here</a> to opt in to Gittip.
+                <a href="{{ github.oauth_url(website, u'opt-in', username) }}">Click here</a> to opt in to Gittip.
             </li>
         </ul>
         {% else %}
@@ -85,11 +97,25 @@ tip_or_pledge = "pledge"
         <h3>This person {{ get_tipjar(username, claimed=False) }}</h3>
 
         <p>We never collect money on a person&rsquo;s behalf until that person
-        opts-in by claiming their account, which {{ username }} has not done.
+        opts in by claiming their account, which {{ username }} has not done.
         Any amount above is what the Gittip community is willing to give 
         {{ username }} as a weekly gift, but only if {{ username }} accepts
         it by opting in.</p>
 
+        {% if user.ANON %}
+
+        <h3>Don&rsquo;t like what you see?</h3>
+        
+        <p>If you are {{ username }} you can explicitly opt out of Gittip by
+        locking this account. We don&rsquo;t allow new pledges to locked
+        accounts, and we&rsquo;ll set aside your username on Gittip to prevent
+        squatting.</p>
+
+        <a href="{{ github.oauth_url(website, u'lock', username) }}"
+            ><button>Lock</button></a>
+
+        {% end %}
+      {% end %}
     {% elif usertype == "organization"  %}
     
     <h2 class="first"><b>{{ name }}</b> is an {{ usertype }} on GitHub.</h2>

@@ -1,62 +1,74 @@
 """Associate a Github account with a Gittip account.
 
 First we do the OAuth dance with Github. Once we've authenticated the user
-against Github, we record them in our user_infos table. This table contains
-information for Github users whether or not they are explicit participants in
-the Gittip economy.
+against Github, we record them in our social_network_users table. This table
+contains information for Github users whether or not they are explicit
+participants in the Gittip community.
 
 """
-import requests
-from aspen import json, log, Response
+from aspen import log, Response
+from gittip import db
 from gittip.networks import github
 from gittip.authentication import User 
 
 # ========================== ^L
 
+# Load GitHub user info.
+user_info = github.oauth_dance(website, qs)
 
-# Do the dance.
-# =============
-# http://developer.github.com/v3/oauth/
+# Determine what we're supposed to do.
+data = qs['data'].decode('base64').decode('UTF-8')
+action, then = data.split(',', 1)
+if action not in [u'opt-in', u'lock', u'unlock']:
+    raise Response(400)
 
-log("Doing an OAuth dance with Github.") 
+# Make sure we have a GitHub login.
+login = user_info.get('login')
+if login is None:
+    log(u"We got a user_info from GitHub with no login [%s, %s]" 
+        % (action, then))
+    raise Response(400)
 
-if 'error' in qs:
-    raise Response(500, str(qs['error']))
+# Do something.
+log(u"%s wants to %s" % (login, action))
+if action == 'opt-in':      # opt in
+    participant_id = github.upsert(user_info, claim=True)
+    user = User.from_id(participant_id)  # give them a session
+else:                       # lock or unlock 
+    if then != login:
 
-data = { 'code': qs['code'].encode('US-ASCII')
-       , 'client_id': website.github_client_id
-       , 'client_secret': website.github_client_secret
-        }
-r = requests.post("https://github.com/login/oauth/access_token", data=data)
-assert r.status_code == 200, (r.status_code, r.text)
+        # The user could spoof then to match their login, but below we work
+        # with login (not then), so that the most they can do is lock/unlock
+        # their own account in a convoluted way.
 
-back = dict([pair.split('=') for pair in r.text.split('&')]) # XXX
-if 'error' in back:
-    raise Response(400, back['error'].encode('utf-8'))
-assert back.get('token_type', '') == 'bearer', back
-access_token = back['access_token']
+        then = u'/github/%s/lock-fail.html' % then
 
-r = requests.get( "https://api.github.com/user"
-                , headers={'Authorization': 'token %s' % access_token}
-                 )
-assert r.status_code == 200, (r.status_code, r.text)
-user_info = json.loads(r.text)
-log("Done with OAuth dance with Github for %s (%s)." 
-    % (user_info['login'], user_info['id']))
+    else:
 
+        # Associate the GitHub login with a Gittip participant to prevent
+        # squatting, but don't claim the Gittip account. 
+        
+        participant_id, is_claimed, is_locked, balance \
+                                        = github.upsert(user_info, claim=False)
+        if participant_id != login:
 
-# Bind to a participant.
-# ======================
-# Redirect to the new participant, or to the one they came from, or wherever 
-# else they came from.
+            # XXX When we have multiple networks we'll need to worry about the
+            # case where someone already claimed this id. For now this is a 
+            # bug.
 
-participant_id = github.upsert(user_info, claim=True)
-user = User.from_id(participant_id)
-then = qs.get('then')
-if then is not None:
-    if then.startswith('/'):
-        request.redirect(then)
-    participant_id = 'github/' + then
-request.redirect('/%s/' % participant_id)
+            raise Response(500, participant_id)
+
+        db.execute( "UPDATE social_network_users "
+                    "SET is_locked=%s "
+                    "WHERE participant_id=%s"
+                  , (action == 'lock', participant_id)
+                   )
+
+if then == u'':
+    then = u'/%s/' % participant_id
+if not then.startswith(u'/'):
+    # Interpret it as a GitHub login.
+    then = u'/github/%s/' % then
+request.redirect(then)
 
 # ========================== ^L text/plain

@@ -9,7 +9,9 @@ leaders = db.fetchall("""
                      , tippee
                   FROM tips 
                   JOIN participants p ON p.id = tipper
+                  JOIN social_network_users snu ON snu.participant_id = tippee
                  WHERE last_bill_result = ''
+                   AND snu.is_locked = false
               ORDER BY tipper, tippee, mtime DESC
               ) AS foo
       JOIN participants p ON p.id = tippee
@@ -67,6 +69,6 @@ Make sense?</p>
 <p>The amounts above are what the Gittip community is willing to give as
 a weekly gift to each person, but only if the person accepts it. Gittip is
 <b>opt-in</b>. We never collect money on a person&rsquo;s behalf until that
-person opts-in by claiming their account.</p>
+person opts in by claiming their account.</p>
 
 {% end %}

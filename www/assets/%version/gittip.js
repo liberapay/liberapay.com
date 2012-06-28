@@ -343,6 +343,7 @@ Gittip.initTipButtons = function()
     });
 };
 
+
 Gittip.initJumpToPerson = function()
 {
     function jump(e)
