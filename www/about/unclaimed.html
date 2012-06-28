@@ -48,7 +48,7 @@ unclaimed = Totalizer(unclaimed)
 {% block body %}
 <style>
     TABLE {
-        font: 300 17pt/17pt Lato, sans-serif;
+        font: 300 13pt/13pt Lato, sans-serif;
         }
     TD {
         text-align: left;
@@ -67,12 +67,9 @@ unclaimed = Totalizer(unclaimed)
 </style>
 
 
-<h2>These people have unclaimed money.</h2>
-
-<p>These amounts represent pledges from people with a {% if user.ANON %}working
-credit card{% else %}<a href="/credit-card.html">working credit card</a>{%end%}
-on file, to people who have not joined Gittip. Only accounts with at least
-$1.00 in pledges are listed.</p>
+<h2>Unclaimed
+    <span class="small"><a href="leaderboard.html">Leaderboard</a></span>
+</h2>
 
 <table>
     {%  for i, unclaim in unclaimed %}
@@ -100,5 +97,11 @@ $1.00 in pledges are listed.</p>
 a weekly gift to each person, but only if the person accepts it. Gittip is
 <b>opt-in</b>. We never collect money on a person&rsquo;s behalf until that
 person opts-in by claiming their account.</p>
+
+<p class="help">Amounts represent pledges from people with a 
+{% if user.ANON %}working credit card{% else %}<a href="/credit-card.html">working credit
+    card</a>{%end%} on file, to people who have neither joined Gittip nor 
+explicitly opted out. Only accounts with at least $1.00 in pledges
+are listed.</p>
 
 {% end %}
