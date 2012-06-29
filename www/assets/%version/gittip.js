@@ -136,6 +136,7 @@ Gittip.submitForm = function(url, data, success, error)
         console.log("failed", xhr, foo, bar);
     }
 
+    data.csrf = Gittip.getCookie('session');
     jQuery.ajax({ url: url
                 , type: "GET"
                 , data: data
@@ -308,6 +309,18 @@ Gittip.initPayment = function(stripe_publishable_key, participantId)
     });
 };
 
+Gittip.getCookie = function(name)
+{   // http://www.quirksmode.org/js/cookies.html
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+}
+
 Gittip.initTipButtons = function()
 {
     $('BUTTON.tip').click(function()
@@ -333,7 +346,7 @@ Gittip.initTipButtons = function()
         select(this, amount);
         jQuery.ajax(
             { url: '/' + tippee + '/tip.json'
-            , data: {amount: amount}
+            , data: {amount: amount, csrf: Gittip.getCookie('session')}
             , type: "POST"
             , error: function(x,y,z) {
                 select(cur); console.log(x,y,z);
