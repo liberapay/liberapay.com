@@ -117,7 +117,7 @@ def inbound(request):
             # Barth et al. found that the Referer header is missing for
             # same-domain requests in only about 0.2% of cases or less, so
             # we can use strict Referer checking.
-            referer = request.headers.get('HTTP_REFERER')
+            referer = request.headers.get('Referer')
             if referer is None:
                 raise Response(403, REASON_NO_REFERER)
 
