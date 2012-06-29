@@ -1,0 +1,5 @@
+from gittip import db
+^L
+paydays = db.fetchall("SELECT * FROM paydays ORDER BY ts_start DESC")
+paydays = [] if paydays is None else list(paydays)
+response.body = paydays
