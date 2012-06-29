@@ -45,9 +45,9 @@ if not user.ANON:
         # =====================
         # Insert instead of update. The analytics may be interesting some day.
 
-        if 'amount' in qs:
+        if POST and 'amount' in body:
             try:
-                amount = decimal.Decimal(qs['amount'])
+                amount = decimal.Decimal(body['amount'])
                 if amount not in AMOUNTS:
                     raise ValueError 
             except (decimal.InvalidOperation, ValueError):

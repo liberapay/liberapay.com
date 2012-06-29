@@ -334,7 +334,7 @@ Gittip.initTipButtons = function()
         jQuery.ajax(
             { url: '/' + tippee + '/tip.json'
             , data: {amount: amount}
-            , type: "GET"
+            , type: "POST"
             , error: function(x,y,z) {
                 select(cur); console.log(x,y,z);
               }
