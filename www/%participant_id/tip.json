@@ -9,7 +9,6 @@ from gittip.networks import github
 
 # ========================================================================== ^L
 
-
 out = {}
 if not user.ANON:
 
@@ -36,7 +35,7 @@ if not user.ANON:
         # =====================
         # Insert instead of update. The analytics may be interesting some day.
 
-        if POST and 'amount' in body and body.get('csrf') == user.session_token:
+        if POST and 'amount' in body:
 
             try:
                 amount = decimal.Decimal(body['amount'])

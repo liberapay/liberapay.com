@@ -136,4 +136,4 @@ def outbound(response):
     #cookie['domain']
     cookie['path'] = '/'
     cookie['expires'] = rfc822.formatdate(expires)
-    #cookie['httponly'] = "Yes, please."
+    cookie['httponly'] = "Yes, please."

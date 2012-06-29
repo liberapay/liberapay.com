@@ -136,7 +136,6 @@ Gittip.submitForm = function(url, data, success, error)
         console.log("failed", xhr, foo, bar);
     }
 
-    data.csrf = Gittip.getCookie('session');
     jQuery.ajax({ url: url
                 , type: "GET"
                 , data: data
@@ -309,17 +308,45 @@ Gittip.initPayment = function(stripe_publishable_key, participantId)
     });
 };
 
-Gittip.getCookie = function(name)
-{   // http://www.quirksmode.org/js/cookies.html
-    var nameEQ = name + "=";
-    var ca = document.cookie.split(';');
-    for(var i=0;i < ca.length;i++) {
-        var c = ca[i];
-        while (c.charAt(0)==' ') c = c.substring(1,c.length);
-        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-    }
-    return null;
-}
+Gittip.initCSRF = function()
+{   // https://docs.djangoproject.com/en/dev/ref/contrib/csrf/#ajax
+    jQuery(document).ajaxSend(function(event, xhr, settings) {
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        function sameOrigin(url) {
+            // url could be relative or scheme relative or absolute
+            var host = document.location.host; // host + port
+            var protocol = document.location.protocol;
+            var sr_origin = '//' + host;
+            var origin = protocol + sr_origin;
+            // Allow absolute or scheme relative URLs to same origin
+            return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+                (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+                // or any other URL that isn't scheme relative or absolute i.e relative.
+                !(/^(\/\/|http:|https:).*/.test(url));
+        }
+        function safeMethod(method) {
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
+            xhr.setRequestHeader("X-CSRF-TOKEN", getCookie('csrf_token'));
+        }
+    });
+};
 
 Gittip.initTipButtons = function()
 {
@@ -346,7 +373,7 @@ Gittip.initTipButtons = function()
         select(this, amount);
         jQuery.ajax(
             { url: '/' + tippee + '/tip.json'
-            , data: {amount: amount, csrf: Gittip.getCookie('session')}
+            , data: {amount: amount}
             , type: "POST"
             , error: function(x,y,z) {
                 select(cur); console.log(x,y,z);
