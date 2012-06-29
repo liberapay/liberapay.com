@@ -1,4 +1,5 @@
 import datetime
+from aspen import json
 from gittip import db, age
 
 CARDINALS = ["zero", "one", "two", "three", "four", "five", "six", "seven", 
@@ -8,7 +9,7 @@ FRIDAY = 4
 SATURDAY = 5
 SUNDAY = 6
 
-# ========================================================================== ^L
+# ===================================================== ^L
 
 yesterday = datetime.datetime.utcnow() - datetime.timedelta(hours=24)
 payday = db.fetchone( "SELECT ts_start, ts_end FROM paydays WHERE ts_start > %s"
@@ -97,9 +98,15 @@ elif now.weekday() == SATURDAY:
 elif now.weekday() == SUNDAY:
     last_friday = "this past Friday"
     this_friday = "this coming Friday"
-        
 
-# ========================================================================== ^L
+names = ['ncc', 'pcc', 'statements', 'amount', 
+         'last_friday', 'this_friday', 'other_people',
+         'average_tip', 'average_tippees', 'total_backed_tips']
+
+^L application/json
+{{ json.dumps({name: globals()[name] for name in names}) }}
+^L text/html
+
 {% extends templates/base.html %}
 {% block body %}
 
