@@ -1,13 +1,4 @@
 """Get or change the authenticated user's tip to this person.
-
-Unauthenticated users will always get back {}, so retval.amount will be
-undefined in JavaScript. Authenticated users can pass "amount" in the
-querystring to change their tip. It will be ignored if you try to tip yourself,
-otherwise it must be one of: "0.00", "0.08", "0.16", "0.32", "0.64", "1.28"
-(you'll get a 400 otherwise). The return value for authenticated users is
-{"amount": "0.08"}, where the value is guaranteed to be one of those same
-strings, or null if it's yourself.
-
 """
 import decimal
 
