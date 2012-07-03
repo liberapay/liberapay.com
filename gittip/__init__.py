@@ -211,5 +211,13 @@ def canonize(request):
     bad_host = bool(canonical_host) and (host != canonical_host) 
                 # '' and False => ''
     if bad_scheme or bad_host:
-        url = '%s://%s/' % (canonical_scheme, canonical_host)
-        request.redirect(url, permanent=True)
+        url = '%s://%s' % (canonical_scheme, canonical_host)
+        if request.line.method in ('GET', 'HEAD', 'OPTIONS', 'TRACE'):
+            # Redirect to a particular path for idempotent methods.
+            url += request.line.uri.path.raw
+            if request.line.uri.querystring:
+                url += '?' + request.line.uri.querystring.raw
+        else:
+            # For non-idempotent methods, redirect to homepage.
+            url += '/'
+        request.redirect(url)#, permanent=True)
