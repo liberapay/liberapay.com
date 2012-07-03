@@ -12,7 +12,7 @@ db = None # This global is wired in wireup. It's an instance of
 AMOUNTS= [Decimal(a) for a in ('0.00', '0.08', '0.16', '0.32', '0.64', '1.28')]
 
 
-__version__ = "3.1.19"
+__version__ = "~~VERSION~~"
 
 
 def get_tip(tipper, tippee):
@@ -220,4 +220,4 @@ def canonize(request):
         else:
             # For non-idempotent methods, redirect to homepage.
             url += '/'
-        request.redirect(url)#, permanent=True)
+        request.redirect(url, permanent=True)
