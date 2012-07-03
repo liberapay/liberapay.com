@@ -68,6 +68,23 @@ else:
     number = str(average_tippees)
 other_people = "%s other %s" % (number, word)
 
+tip_distribution = list(db.fetchall("""
+
+    SELECT amount, count(amount) 
+      FROM (SELECT DISTINCT ON (tipper, tippee) 
+                   amount 
+              FROM tips 
+             WHERE amount > 0
+          GROUP BY tipper, tippee, amount, mtime 
+          ORDER BY tipper, tippee, mtime DESC
+                  ) AS foo 
+  GROUP BY amount 
+  ORDER BY amount
+
+"""))
+tip_n = sum([row['count'] for row in tip_distribution])
+for row in tip_distribution:
+    row['percentage'] = row['count'] * 1.0 / tip_n
 
 def part(s):
     s = s.splitlines()[0]
@@ -101,7 +118,8 @@ elif now.weekday() == SUNDAY:
 
 names = ['ncc', 'pcc', 'statements', 'amount', 
          'last_friday', 'this_friday', 'other_people',
-         'average_tip', 'average_tippees', 'total_backed_tips']
+         'average_tip', 'average_tippees', 'total_backed_tips',
+         'tip_distribution', 'tip_n']
 
 ^L application/json
 {{ json.dumps({name: globals()[name] for name in names}) }}
@@ -109,6 +127,24 @@ names = ['ncc', 'pcc', 'statements', 'amount',
 
 {% extends templates/base.html %}
 {% block body %}
+<style>
+    .dollar-sign {
+        padding: 0 2pt 0 24pt;
+        text-align: right;
+    }
+    .amount {
+        padding: 0 6pt 0 0;
+        text-align: right;
+    }
+    .count {
+        white-space: nowrap;
+    }
+    .count SPAN {
+        background: #B2A196;
+        display: inline-block;
+        height: 9pt;
+    }
+</style>
 
 <h2>Gittip is <b>{{ age() }}</b> old.
     <span class="small"><a href="./">About</a></span>
@@ -126,7 +162,19 @@ names = ['ncc', 'pcc', 'statements', 'amount',
 </h2>
 
 <p>On average, people who tip tip ${{ "%.2f" % average_tip }} each to 
-{{ other_people }}.</p>
+{{ other_people }}. Here&rsquo;s how tip amounts are distributed:</p>
+
+<table id="tip-distribution">
+    {% for row in tip_distribution %}
+    <tr>
+        <td class="dollar-sign">$</td>
+        <td class="amount">{{ row['amount'] }}</td>
+        <td class="count">
+            <span style="width: {{ row['percentage'] * 256 }}pt"></span>&nbsp;&nbsp;{{ "%5.1f" % (row['percentage'] * 100) }}% ({{ row['count'] }})
+        </td>
+    </tr>
+    {% end %}
+</table>
 
 
 
