@@ -72,12 +72,16 @@ tip_distribution = list(db.fetchall("""
 
     SELECT amount, count(amount) 
       FROM (SELECT DISTINCT ON (tipper, tippee) 
-                   amount 
-              FROM tips 
-             WHERE amount > 0
-          GROUP BY tipper, tippee, amount, mtime 
+                   amount
+              FROM tips
+              JOIN participants p ON p.id = tipper
+              JOIN participants p2 on p2.id = tippee
+             WHERE p.last_bill_result = ''
+               AND amount > 0
+          GROUP BY tipper, tippee, mtime, amount
           ORDER BY tipper, tippee, mtime DESC
                   ) AS foo 
+     WHERE amount > 0
   GROUP BY amount 
   ORDER BY amount
 
