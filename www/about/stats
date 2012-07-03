@@ -140,9 +140,13 @@ names = ['ncc', 'pcc', 'statements', 'amount',
         text-align: left;
         white-space: nowrap;
     }
-    .count SPAN {
+    .count SPAN.number {
+        font-size: 8pt;
+    }
+    .count SPAN.bar {
         background: #B2A196;
         display: inline-block;
+        margin-right: 3pt;
         height: 9pt;
     }
 </style>
@@ -171,7 +175,9 @@ names = ['ncc', 'pcc', 'statements', 'amount',
         <td class="dollar-sign">$</td>
         <td class="amount">{{ row['amount'] }}</td>
         <td class="count">
-            <span style="width: {{ row['percentage'] * 256 }}pt"></span>&nbsp;&nbsp;{{ "%5.1f" % (row['percentage'] * 100) }}% ({{ row['count'] }})
+            <span class="bar" style="width: {{ row['percentage'] * 256 }}pt"></span>
+            {{ "%5.1f" % (row['percentage'] * 100) }}% 
+            <span class="number">({{ row['count'] }})</span>
         </td>
     </tr>
     {% end %}
