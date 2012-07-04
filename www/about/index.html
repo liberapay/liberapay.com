@@ -68,7 +68,7 @@ nparticipants = db.fetchone("SELECT count(*) AS n FROM participants WHERE claime
     enough.</p>
 
     <p>Gittips are <b>anonymous</b>. The people you gittip aren&rsquo;t told
-    who tipped them. Also, you can&rsquo;t gittip more than $1.28 a week. This
+    who tipped them. Also, you can&rsquo;t gittip more than $24 a week. This
     way, gittips come with no strings attached.</p>
 
     <p>Gittips are <b>public</b>. The total amount you give and the total
@@ -81,25 +81,25 @@ nparticipants = db.fetchone("SELECT count(*) AS n FROM participants WHERE claime
     difference. We add an additional <b>30&cent; + 3.9%</b> fee when pulling
     money in from your credit card, to cover credit card processing (as well as
     hosting and other expenses). Recipients get the <b>full face value</b> of
-    your gift to them.  If you give someone $1.28, they will have $1.28 in
+    your gift to them.  If you give someone $3, they will have $3 in
     their Gittip account every Friday until you run out of money.</p>
 
     <p>For example, let&rsquo;s say that you have $5 in your account, and you
-    are set up to give $0.64 to 20 people. Here&rsquo;s what we will charge
+    are set up to give $0.25 to 30 people. Here&rsquo;s what we will charge
     your credit card on Friday:</p>
 
     <p style="font-family: monospace; font-size: smaller; padding-left: 33%;">
-        &nbsp;$&nbsp;0.64<br />
+        &nbsp;$&nbsp;0.25<br />
         <u>x&nbsp;20&nbsp;&nbsp;&nbsp;</u><br />
-        &nbsp;$12.80&nbsp;&nbsp;&nbsp;total gittips<br />
+        &nbsp;$7.50&nbsp;&nbsp;&nbsp;total gittips<br />
         <u>-$&nbsp;5.00</u>&nbsp;&nbsp;&nbsp;current balance<br />
-        &nbsp;<b>$&nbsp;7.80&nbsp;&nbsp;&nbsp;amount needed</b><br />
+        &nbsp;<b>$&nbsp;2.50&nbsp;&nbsp;&nbsp;amount needed</b><br />
         <u>+$&nbsp;0.30</u>&nbsp;&nbsp;&nbsp;fee<br />
-        &nbsp;$&nbsp;8.10<br />
+        &nbsp;$&nbsp;2.80<br />
         <u>x&nbsp;&nbsp;1.039</u>&nbsp;&nbsp;fee<br />
-        &nbsp;<b>$&nbsp;8.42&nbsp;&nbsp;&nbsp;amount charged</b><br />
-        <u>-$&nbsp;7.80</u>&nbsp;&nbsp;&nbsp;<br />
-        &nbsp;$&nbsp;0.62&nbsp;&nbsp;&nbsp;total fee<br />
+        &nbsp;<b>$&nbsp;2.91&nbsp;&nbsp;&nbsp;amount charged</b><br />
+        <u>-$&nbsp;2.50</u>&nbsp;&nbsp;&nbsp;<br />
+        &nbsp;$&nbsp;0.41&nbsp;&nbsp;&nbsp;total fee<br />
     </p>
 
     <p>Participants can withdraw funds from their Gittip account at any time,
