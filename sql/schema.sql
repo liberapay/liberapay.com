@@ -15,6 +15,7 @@ CREATE TABLE participants
 , ctime                 timestamp with time zone    NOT NULL DEFAULT CURRENT_TIMESTAMP
 , claimed_time          timestamp with time zone    DEFAULT NULL
 , is_admin              boolean                     NOT NULL DEFAULT FALSE
+, shares_giving         boolean                     NOT NULL DEFAULT TRUE
 
 -- If this isn't NULL then it means one participants was folded into another
 -- and all requests for this participant should be redirected to the other.
