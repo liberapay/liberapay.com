@@ -18,11 +18,11 @@ payday = db.fetchone( "SELECT ts_start, ts_end FROM paydays WHERE ts_start > %s"
 npeople = db.fetchone("SELECT count(*) AS n FROM participants WHERE claimed_time IS NOT NULL")['n']
 ncc = db.fetchone("SELECT count(*) AS n FROM participants WHERE last_bill_result = ''")['n']
 ncc = 0 if ncc is None else ncc
-pcc = "%5.1f" % ((ncc * 100.0) / npeople)
+pcc = "%5.1f" % ((ncc * 100.0) / npeople) if npeople > 0 else 0.0
 statements = db.fetchall("SELECT id, statement FROM participants WHERE statement != '' ORDER BY id")
 statements = [] if statements is None else list(statements)
-amount = db.fetchone("SELECT transfer_volume AS v FROM paydays ORDER BY ts_end DESC LIMIT 1")['v']
-amount = 0 if amount is None else amount
+amount = db.fetchone("SELECT transfer_volume AS v FROM paydays ORDER BY ts_end DESC LIMIT 1")
+amount = 0 if amount is None else amount['v']
 tip_amounts = db.fetchone("""
         SELECT avg(amount), sum(amount)
          FROM (    SELECT DISTINCT ON (tipper, tippee) amount
@@ -39,7 +39,7 @@ if tip_amounts is None:
     total_backed_tips = 0
 else:
     average_tip = tip_amounts['avg'] if tip_amounts['avg'] is not None else 0
-    total_backed_tips = tip_amounts['sum']
+    total_backed_tips = tip_amounts['sum'] if tip_amounts['sum'] is not None else 0
 
 average_tippees = db.fetchone("""\
         SELECT round(avg(ntippees))
