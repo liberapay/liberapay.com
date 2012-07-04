@@ -1,10 +1,17 @@
 import datetime
 from decimal import Decimal
 
-BIRTHDAY = datetime.date(2012, 6, 5)
+BIRTHDAY = datetime.date(2012, 6, 1)
+CARDINALS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
 def age():
-    age = datetime.date.today() - BIRTHDAY
-    return "%d days" % age.days
+    today = datetime.date.today()
+    nmonths = today.month - BIRTHDAY.month
+    plural = 's' if nmonths != 1 else ''
+    if nmonths < 10:
+        nmonths = CARDINALS[nmonths]
+    else:
+        nmonths = str(nmonths)
+    return "%s month%s" % (nmonths, plural)
 
 
 db = None # This global is wired in wireup. It's an instance of 
