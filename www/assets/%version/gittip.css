@@ -25,7 +25,20 @@ BODY {
 }
 
 H1 {
-    margin: 36pt 0 0 -64px;
+    margin: 36pt 0 0;
+    border-bottom: 1pt solid #614C3E;
+    position: relative;
+}
+H1 A {
+    position: relative;
+    left: -64px;
+}
+.below-header {
+    text-align: right;
+    font-size: 11pt;
+    background: #F2F0EF;
+    border-bottom: 1pt solid #614C3E;
+    padding: 0 3pt 0 0;
 }
 H2 {
     font-size: 24pt;
@@ -77,11 +90,16 @@ BLOCKQUOTE {
     padding-left: 46pt;
 }
 
-
+#you-are {
+    position: absolute;
+    top: 34pt;
+    right: 0;
+}
 #their-voice {
     background: #F2F0EF;
     padding: 24pt;
-    margin: 36pt 0 0;
+    margin: 0;
+    border-bottom: 1pt solid #614C3E;
 }
 #their-voice H2.first {
     margin: 12pt 0 12pt;

@@ -7,9 +7,9 @@ nparticipants = db.fetchone("SELECT count(*) AS n FROM participants WHERE claime
 {% extends templates/base.html %}
 {% block body %}
 
-    <p>Gittip is <b>{{ age() }}</b> old and has <b>{{ nparticipants }}</b>
-    participants. <span class="small"><a href="stats.html">More 
-            stats ...</a></span></p>
+    <p class="below-header">Gittip is <b>{{ age() }}</b> old and has 
+    <b>{{ nparticipants }}</b> participants. <span class="small"><a
+            href="stats.html">More stats ...</a></span></p>
 
 
     <a name="gittips"></a> 

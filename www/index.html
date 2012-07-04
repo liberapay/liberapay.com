@@ -6,14 +6,8 @@ from gittip.networks import github
 
 {% block heading %}
 
-    <h1>
-        <a href="/"><img 
-            src="/assets/{{ __version__ }}/logo.png" 
-            alt="Gittip - Personal Funding" /></a>
-    </h1>
-
-    <p>Set up recurring gift tips to people who make the world better. <a
-        href="/about/">Learn more ...</a></p>
+    <p class="below-header">Set up recurring gift tips to people who make the
+    world better. <a href="/about/">Learn more ...</a></p>
 
     <script>
         $(document).ready(Gittip.initJumpToPerson);
@@ -36,11 +30,9 @@ from gittip.networks import github
     <h2>Step 2. Tip someone!</h2>
 
     {% else %}
-    <div id="their-voice">
-        <h2 class="first">
-            You are <b><a href="/{{ user.id }}/">{{ user.id }}</a></b>.
-            <span class="small"><a href="/sign-out.html">Sign out</a>.</span>
-        </h2>
+    <div id="you-are">
+        You are <b><a href="/{{ user.id }}/">{{ user.id }}</a></b>.
+        <span class="small"><a href="/sign-out.html">Sign out</a>.</span>
     </div>
 
     <h2>Tip someone!</h2>
