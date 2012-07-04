@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Gittip - A Micro-Giving Community</title>
+        <title>Gittip - Personal Funding</title>
         <style>
             @import url("/assets/{{ __version__ }}/gittip.css");
         </style>
@@ -12,7 +12,11 @@
     </head>
     <body><div id="body">
         {% block heading %}
-        <h2>Gittip is <b><a href="/">a micro-giving community</a></b>.</h2>
+        <h1>
+            <a href="/"><img 
+                src="/assets/{{ __version__ }}/logo.png" 
+                alt="Gittip - Personal Funding" /></a>
+        </h1>
         {% if not user.ANON and user.id != username %}
         <h2>
             You are <a href="/{{ user.id }}/">{{ user.id }}</a>.

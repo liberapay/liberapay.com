@@ -5,7 +5,12 @@ from gittip.networks import github
 {% extends templates/base.html %}
 
 {% block heading %}
-<h2><b>Gittip</b> is a micro-giving community.</h2>
+
+    <h1>
+        <a href="/"><img 
+            src="/assets/{{ __version__ }}/logo.png" 
+            alt="Gittip - Personal Funding" /></a>
+    </h1>
 
     <p>Set up recurring gift tips to people who make the world better. <a
         href="/about/">Learn more ...</a></p>
