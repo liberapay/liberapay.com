@@ -70,6 +70,9 @@ tip_or_pledge = "tip"
             background: transparent;
             color: #F2F0EF;
         }
+        #matrix TD {
+            text-align: left;
+        }
         FORM.statement TEXTAREA {
             width: 98%;
             height: 126pt; /* 18pt * 7 rows; overriden in js */
@@ -79,17 +82,43 @@ tip_or_pledge = "tip"
             float: right;
             margin-left: 0.5em;
         }
+        .old-amount-link {
+            font-size: 9pt;
+            display: none;
+            position: relative;
+            top: 2pt;
+            line-height: 9pt;
+        }
     </style>
     <script>
         $(document).ready(function()
         {
+
+            // Wire up buttons.
+            // ================
+
             Gittip.initTipButtons();
-            function hover()
+
+            function rowIn()
             {
-                $(this).toggleClass('over');
-                $(this).toggleClass('not-over');
+                $(this).addClass('over');
+                $(this).removeClass('not-over');
             }
-            $('#matrix TR').hover(hover, hover);
+            function rowOut()
+            {
+                $(this).removeClass('over');
+                $(this).addClass('not-over');
+            }
+            $('#matrix TR').hover(rowIn, rowOut);
+
+            function oldIn() { $('.old-amount-link', this).show(); }
+            function oldOut() { $('.old-amount-link', this).hide(); }
+            $('.old-amount').hover(oldIn, oldOut);
+
+
+            // Wire up textarea for statement.
+            // ===============================
+
             $('TEXTAREA').focus();
             $('BLOCKQUOTE.statement BUTTON').click(function()
             {
@@ -126,6 +155,11 @@ tip_or_pledge = "tip"
                 $('FORM.statement').hide();
                 $('BLOCKQUOTE.statement').show();
             });
+
+
+            // Wire up aggregate giving knob.
+            // ==============================
+
             $('.shares-giving').click(function()
             {
                 jQuery.ajax(
@@ -196,6 +230,13 @@ tip_or_pledge = "tip"
                 {% for amount in AMOUNTS %}
                 <button amount="{{ amount }}" tippee="{{ tip['tippee'] }}"
                     class="tip small {{ 'selected' if amount == tip['amount'] else 'empty' }}">{{ amount }}</button>
+                {% end %}
+                {% if tip['amount'] not in AMOUNTS %}
+                <span class="old-amount">
+                    <button class="tip small disabled selected">{{ tip['amount'] }}</button>
+                    <span class="old-amount-link">&mdash;
+                    <a href="https://github.com/whit537/www.gittip.com/issues/95" target="_blank">old amount</a>!</span>
+                </span>
                 {% end %}
             </td>
         </tr>

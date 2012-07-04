@@ -334,7 +334,6 @@ BUTTON:hover, BUTTON:focus {
     background-image: linear-gradient(top, #2A8F79, #04221B));
     text-shadow-color: #001b38;
 }
-
 BUTTON:active {
     /* http://somadesign.ca/demos/buttons-redux.html */
     -moz-box-shadow
@@ -349,4 +348,23 @@ BUTTON:active {
         0 .33em 2em rgba(0,0,0,.67) inset,
         1px 1px 0 rgba(255,255,255,.25) inset, 
         -1px -1px 0 rgba(255,255,255,.25) inset;
+}
+BUTTON.disabled:hover,
+BUTTON.disabled:focus,
+BUTTON.disabled:active,
+BUTTON.disabled:visited {
+    border: 1pt solid #999;
+    background: #F2F0EF url("/assets/button-bg.png") repeat-x bottom left;
+    background-image: -webkit-gradient( linear, 0% 0%, 0% 100%
+                                      , from(#F2F0EF)
+                                      , to(#999)
+                                       );
+    background-image: -moz-linear-gradient(top, #F2F0EF, #CCC);
+    background-image: linear-gradient(top, #F2F0EF, #999);
+    text-shadow: #F2F0EF 0px 1pt 1pt;
+    color: #888;
+    cursor: default;
+    -moz-box-shadow none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
 }

@@ -16,7 +16,12 @@ def age():
 
 db = None # This global is wired in wireup. It's an instance of 
           # gittip.postgres.PostgresManager.
-AMOUNTS= [Decimal(a) for a in ('0.00', '0.08', '0.16', '0.32', '0.64', '1.28')]
+
+# Not sure we won't want this for something yet. Prune if you don't find it in 
+# the codebase in a month.
+OLD_AMOUNTS= [Decimal(a) for a in ('0.00', '0.08', '0.16', '0.32', '0.64', '1.28')]
+
+AMOUNTS= [Decimal(a) for a in ('0.00', '0.25', '3.00', '6.00', '12.00', '24.00')]
 
 
 __version__ = "~~VERSION~~"

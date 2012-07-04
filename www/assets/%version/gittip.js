@@ -352,31 +352,57 @@ Gittip.initTipButtons = function()
 {
     $('BUTTON.tip').click(function()
     {
+
+        // Exit early if the button has the disabled class. I'm not using the
+        // disabled HTML attribute because (in Chrome) hovering over a disabled
+        // button means the row doesn't get the hover event.
+        
+        if ($(this).hasClass('disabled'))
+            return;
+
+        
+        // Grab the row and the current button. Exit early if they clicked the
+        // current selection.
+
         var container = $(this).parent();
+        var cur = $('BUTTON.selected');
+        if (cur.get(0) === this)
+            return
+
+
+        // Define a closure that will be used to select the new button, and
+        // also to revert back in case of error.
+
         function select(btn, amount)
         {
-            $('BUTTON.selected', container).removeClass('selected').addClass('empty');
+            $('BUTTON.selected', container).removeClass('selected')
+                                           .addClass('empty');
             $(btn).addClass('selected').removeClass('empty');
+
             if (amount == '0.00')
                 $('#payment-prompt.needed').removeClass('needed');
             else
                 $('#payment-prompt').addClass('needed');
         }
-        var cur = $('BUTTON.selected');
-        if (cur.get(0) === this)
-        {
-            console.log('bail');
-            return
-        }
+
+        
+        // Go to work!
+
         var amount = $(this).text().replace('$', '');
         var tippee = $(this).attr('tippee');
         select(this, amount);
+
         jQuery.ajax(
             { url: '/' + tippee + '/tip.json'
             , data: {amount: amount}
             , type: "POST"
+            , success: function() {
+                $('.old-amount', container).remove();
+              }
             , error: function(x,y,z) {
-                select(cur); console.log(x,y,z);
+                select(cur);
+                alert("Sorry, something went wrong changing your tip. :(");
+                console.log(x,y,z);
               }
              }
         );
