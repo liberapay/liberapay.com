@@ -61,9 +61,10 @@ tip_or_pledge = "pledge"
 
         <h2 class="first"><b>{{ username }}</b> has opted out of Gittip.</h2>
 
-        <p>If you are <a href="">{{ username }}</a> on GitHub, you can unlock
-        your account to allow people to pledge tips to you on Gittip. We never
-        collect any money on your behalf until you explicitly opt in.</p>
+        <p>If you are <a href="{{ userinfo.get('html_url', '') }}">{{ username }}</a>
+        on GitHub, you can unlock your account to allow people to
+        pledge tips to you on Gittip. We never collect any money on your behalf
+        until you explicitly opt in.</p>
 
         <a href="{{ github.oauth_url(website, u'unlock', username) }}"
             ><button>Unlock</button></a>
