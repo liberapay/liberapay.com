@@ -1,6 +1,46 @@
-from gittip import AMOUNTS
+from gittip import db, AMOUNTS
 from gittip.networks import github
 ^L
+
+receivers = db.fetchall("""
+
+    SELECT tippee, claimed_time, sum(amount) AS amount
+      FROM (    SELECT DISTINCT ON (tipper, tippee)
+                       amount
+                     , tippee
+                  FROM tips 
+                  JOIN participants p ON p.id = tipper
+                  JOIN social_network_users snu ON snu.participant_id = tippee
+                 WHERE last_bill_result = ''
+                   AND snu.is_locked = false
+              ORDER BY tipper, tippee, mtime DESC
+              ) AS foo
+      JOIN participants p ON p.id = tippee
+  GROUP BY tippee, claimed_time
+  ORDER BY amount DESC
+  LIMIT 10
+
+""")
+
+givers = db.fetchall("""
+
+    SELECT tipper, shares_giving, sum(amount) AS amount
+      FROM (    SELECT DISTINCT ON (tipper, tippee)
+                       amount
+                     , tipper
+                  FROM tips 
+                  JOIN participants p ON p.id = tipper
+                  JOIN social_network_users snu ON snu.participant_id = tippee
+                 WHERE last_bill_result = ''
+                   AND snu.is_locked = false
+              ORDER BY tipper, tippee, mtime DESC
+              ) AS foo
+      JOIN participants p ON p.id = tipper
+  GROUP BY tipper, shares_giving
+  ORDER BY amount DESC
+  LIMIT 10
+
+""")
 ^L
 {% extends templates/base.html %}
 
@@ -19,65 +59,107 @@ from gittip.networks import github
         #jump INPUT {
             width: 6em;
         }
+
+        TABLE {
+            font: 300 13pt/13pt Lato, sans-serif;
+            }
+        TD {
+            text-align: left;
+            vertical-align: top;
+            padding: 6pt 12pt 6pt 0;
+        }
+        TD.amount {
+            text-align: right;
+        }
+        TR.unclaimed,
+        TR.unclaimed A {
+            color: #B2A196;
+        }
+        TR.unclaimed TD SPAN {
+            font-size: 10pt;
+        }
+        #givers { 
+            float: left;
+        }
+        #receivers {
+            float: right;
+        }
+        H2.clear {
+            padding-top: 36pt;
+        }
+        H3 {
+            margin-top: 12pt;
+        }
     </style>
 
 {% end %}
 {% block body %}
-    {% if user.ANON %}
-    <h2 class="first">Step 1. Sign in using <a 
-            href="{{ github.oauth_url(website, u'opt-in') }}">GitHub</a>.</h2>
 
-    <h2>Step 2. Tip someone!</h2>
-
-    {% else %}
-    <div id="you-are">
-        You are <b><a href="/{{ user.id }}/">{{ user.id }}</a></b>.
-        <span class="small"><a href="/sign-out.html">Sign out</a>.</span>
-    </div>
-
-    <h2>Tip someone!</h2>
-    {% end %}
-
-    <p>Here are some great programmers, for example.<br />
-    <span class="help">Each has agreed to be listed here.</span></p>
-
-    <ul>
-
-        <li><a href="/github/jeresig/"><b>John Resig</b></a>,
-        author of jQuery</a></li>
-
-        <li><a href="/antirez/"><b>Salvatore Sanfilippo</b></a>,
-        author of Redis</a></li>
-
-        <li><a href="/wycats/"><b>Yehuda Katz</b></a>,
-        Rails and jQuery core dev</a></li>
-
-        <li><a href="/fabpot/"><b>Fabien Potencier</b></a>,
-        founder of Symfony</a></li>
-
-        <li><a href="/mitsuhiko/"><b>Armin Ronacher</b></a>,
-        author of Flask, etc.</a></li>
-
-        <li><a href="/jtauber/"><b>James Tauber</b></a>,
-        Pinax lead, Django core dev, etc.</a></li>
-
-        <li><a href="/kennethreitz/"><b>Kenneth Reitz</b></a>,
-        author of Requests, etc.</a></li>
-
-        <li><a href="/alex/"><b>Alex Gaynor</b></a>,
-        Django and PyPy core dev</a></li>
-
-        <li><a href="/taylorotwell/"><b>Taylor Otwell</b></a>,
-        author of Laravel</a></li>
-    
-    </ul>
-
-
-    <h3>Find someone else.</h3> 
+    <h2>Tip someone!</h3> 
     <form id="jump">
     Enter a GitHub username:
         <input placeholder="" />
         <button class="selected small" type="submit">Go</button>
     </form>
+
+
+    <h2>Leaderboard
+        <span class="small"><a href="/about/unclaimed.html">Unclaimed</a></span>
+    </h2>
+
+    <div id="givers">
+
+        <h3 class="first">Top Givers</h3>
+
+        <table>
+            {% for i, giver in enumerate(givers, start=1) %}
+            <tr>
+                <td>{{ i }}.</td>
+                <td class="amount">$</td>
+                <td class="amount">{{ giver['amount'] }}</td>
+                {% if giver['shares_giving'] %}
+                <td><a href="/{{ giver['tipper'] }}/">{{ giver['tipper'] }}</a></td>
+                {% else %}
+                <td class="unclaimed">anonymous</td>
+                {% end %}
+            </tr>
+            {% end %}
+        </table>
+
+    </div>
+
+    <div id="receivers">
+
+        <h3 class="first">Top Receivers</h3>
+
+        <table>
+            {% for i, receiver in enumerate(receivers, start=1) %}
+            <tr{% if receiver['claimed_time'] is None %} class="unclaimed"{% end %}>
+                <td>{{ i }}.</td>
+                <td class="amount">$</td>
+                <td class="amount">{{ receiver['amount'] }}</td>
+                <td><a href="/{{ receiver['tippee'] }}/">{{ receiver['tippee'] }}</a>
+                    {% if receiver['claimed_time'] is None %}<br /><span class="small help">unclaimed!</span>{% end %}
+                </td>
+            </tr>
+            {% end %}
+        </table>
+
+    </div>
+
+
+    <h2 class="clear">Gittip happens every Friday.</h2>
+
+    <p>The amounts above are what the Gittip community is willing to give as
+    a weekly gift to each person, but only if the person accepts it. Gittip is
+    <b>opt-in</b>. We never collect money on a person&rsquo;s behalf until that
+    person opts in by claiming their account.</p>
+
+    <p class="help">Amounts are based on tips from people with a 
+    {% if user.ANON %}working credit card{% else %}<a href="/credit-card.html">working 
+        credit card</a>{% end %} on file. If a card stops working this week 
+    then the actual amount distributed can be lower. If someone doesn&rsquo;t 
+    have a working card but does have a positive Gittip balance themselves then
+    the actual amount distributed can be higher.  Make sense?</p>
 
 {% end %}

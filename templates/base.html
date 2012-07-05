@@ -16,14 +16,16 @@
                 src="/assets/{{ __version__ }}/logo.png" 
                 alt="Gittip - Personal Funding" /></a>
         </h1>
-        {% block heading %}
-        {% if not user.ANON and user.id != username %}
+        {% if user.ANON %}
+        <div id="you-are">Sign in using <a 
+                href="{{ github.oauth_url(website, u'opt-in') }}">GitHub</a>.</div>
+        {% else %}
         <div id="you-are">
-            You are <a href="/{{ user.id }}/">{{ user.id }}</a>.
-            <span class="small"><a href="/sign-out.html">Sign out</a></span>
+            You are <b><a href="/{{ user.id }}/">{{ user.id }}</a></b>.
+            <span class="small"><a href="/sign-out.html">Sign out</a>.</span>
         </div>
-        {% end %} 
         {% end %}
+        {% block heading %}{% end %}
         {% block body %}{% end %}
     </div>
     <script type="text/javascript">
