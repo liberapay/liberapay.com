@@ -1,12 +1,12 @@
-This is Gittip, a gift economy.
+This is Gittip, a platform for personal funding.
 
-Gittip is a cooperative escrow agent for recurring micro-gifts, or tips.
-Possible tip amounts per week are 0.00, 0.08, 0.16, 0.32, 0.64, and 1.28.
+Gittip is a cooperative escrow agent for recurring micro-gifts, or gift tips.
+Possible tip amounts per week are 0.00, 0.25, 3.00, 6.00, 12.00, and 24.00.
 
 Friday is payday. On Friday, we charge people's credit cards and the money goes
-into Gittip's (Zeta's) bank account. Money is allocated to other participants
-according to tips. Participants may withdraw money at any time, though this is
-currently quite manual.
+into Gittip's (Zeta Design & Development, LLC's) bank account. Money is
+allocated to other participants according to tips. Participants may withdraw
+money at any time, though this is currently quite manual.
 
 
 Installation
