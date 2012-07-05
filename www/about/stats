@@ -151,7 +151,8 @@ names = ['ncc', 'pcc', 'statements', 'transfer_volume',
         text-align: right;
     }
     .amount-change {
-        padding: 6pt 0;
+        padding: 6pt 0 6pt 24pt;
+        text-align: left;
     }
     .count {
         text-align: left;
@@ -187,30 +188,25 @@ names = ['ncc', 'pcc', 'statements', 'transfer_volume',
 {{ other_people }}. Here&rsquo;s how tip amounts are distributed:</p>
 
 <table id="tip-distribution">
-    {% for old_amount, new_amount in zip(OLD_AMOUNTS[1:], AMOUNTS[1:]) %}
+    {% for amount in all_amounts %}
     <tr>
         <td class="dollar-sign">$</td>
-        <td class="amount">{{ old_amount }}</td>
+        <td class="amount">{{ amount }}</td>
         <td class="count">
-            <span class="bar" style="width: {{ tip_distribution[old_amount][1] * 200 }}pt"></span>
-            {{ "%5.1f" % (tip_distribution[old_amount][1] * 100) }}% 
-            <span class="number">({{ tip_distribution[old_amount][0] }})</span>
-        </td>
-        <td class="dollar-sign">$</td>
-        <td class="amount">{{ new_amount }}</td>
-        <td class="count">
-            <span class="bar" style="width: {{ tip_distribution[new_amount][1] * 200 }}pt"></span>
-            {{ "%5.1f" % (tip_distribution[new_amount][1] * 100) }}% 
-            <span class="number">({{ tip_distribution[new_amount][0] }})</span>
+            <span class="bar" style="width: {{ tip_distribution[amount][1] * 300 }}pt"></span>
+            {{ "%5.1f" % (tip_distribution[amount][1] * 100) }}% 
+            <span class="number">({{ tip_distribution[amount][0] }})</span>
         </td>
     </tr>
+    {% if str(amount) == '1.28' %}
+    <td class="amount-change help" colspan="3">
+        <a href="http://blog.gittip.com/post/26505682007/is-personal-funding-viable"
+           target="_blank">Read
+        here</a> about the change in amounts.
+    </td>
+    {% end %}
     {% end %}
 </table>
-<p class="amount-change help" style="padding-left: 24pt;">
-    <a href="http://blog.gittip.com/post/26505682007/is-personal-funding-viable"
-       target="_blank">Read
-    here</a> about the change in amounts.
-</p>
 
 
 
