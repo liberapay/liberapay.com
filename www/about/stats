@@ -1,6 +1,6 @@
 import datetime
 from aspen import json
-from gittip import db, age
+from gittip import db, age, AMOUNTS, OLD_AMOUNTS
 
 CARDINALS = ["zero", "one", "two", "three", "four", "five", "six", "seven", 
              "eight", "nine"]
@@ -21,8 +21,8 @@ ncc = 0 if ncc is None else ncc
 pcc = "%5.1f" % ((ncc * 100.0) / npeople) if npeople > 0 else 0.0
 statements = db.fetchall("SELECT id, statement FROM participants WHERE statement != '' ORDER BY id")
 statements = [] if statements is None else list(statements)
-amount = db.fetchone("SELECT transfer_volume AS v FROM paydays ORDER BY ts_end DESC LIMIT 1")
-amount = 0 if amount is None else amount['v']
+transfer_volume = db.fetchone("SELECT transfer_volume AS v FROM paydays ORDER BY ts_end DESC LIMIT 1")
+transfer_volume = 0 if transfer_volume is None else transfer_volume['v']
 tip_amounts = db.fetchone("""
         SELECT avg(amount), sum(amount)
          FROM (    SELECT DISTINCT ON (tipper, tippee) amount
@@ -68,7 +68,8 @@ else:
     number = str(average_tippees)
 other_people = "%s other %s" % (number, word)
 
-tip_distribution = list(db.fetchall("""
+# Tip Distribution
+_tip_distribution = list(db.fetchall("""
 
     SELECT amount, count(amount) 
       FROM (SELECT DISTINCT ON (tipper, tippee) 
@@ -86,9 +87,14 @@ tip_distribution = list(db.fetchall("""
   ORDER BY amount
 
 """))
-tip_n = sum([row['count'] for row in tip_distribution])
-for row in tip_distribution:
+tip_n = sum([row['count'] for row in _tip_distribution])
+
+all_amounts = OLD_AMOUNTS[1:] + AMOUNTS[1:]
+tip_distribution = {a: (0, 0.0) for a in all_amounts}  # prime it
+for row in _tip_distribution:
     row['percentage'] = row['count'] * 1.0 / tip_n
+    tip_distribution[row['amount']] = (row['count'], row['percentage'])
+
 
 def part(s):
     s = s.splitlines()[0]
@@ -120,7 +126,7 @@ elif now.weekday() == SUNDAY:
     last_friday = "this past Friday"
     this_friday = "this coming Friday"
 
-names = ['ncc', 'pcc', 'statements', 'amount', 
+names = ['ncc', 'pcc', 'statements', 'transfer_volume', 
          'last_friday', 'this_friday', 'other_people',
          'average_tip', 'average_tippees', 'total_backed_tips',
          'tip_distribution', 'tip_n']
@@ -140,6 +146,9 @@ names = ['ncc', 'pcc', 'statements', 'amount',
         padding: 0 6pt 0 0;
         text-align: right;
     }
+    .amount-change {
+        padding: 6pt 0;
+    }
     .count {
         text-align: left;
         white-space: nowrap;
@@ -152,7 +161,7 @@ names = ['ncc', 'pcc', 'statements', 'amount',
         display: inline-block;
         margin-right: 3pt;
         height: 9pt;
-    }
+        }
 </style>
 
 <p class="below-header"><a href="./">About</a></p>
@@ -164,7 +173,7 @@ names = ['ncc', 'pcc', 'statements', 'amount',
 <p>Of those, {{ pcc }}% ({{ ncc }}) have a working credit card on file.</p>
 
 
-<h2><b>${{ amount }}</b> changed hands <b>{{ last_friday }}</b>.</h2>
+<h2><b>${{ transfer_volume }}</b> changed hands <b>{{ last_friday }}</b>.</h2>
 
 <h2><b>${{ total_backed_tips }}</b> is ready for <b>{{ this_friday }}</b>.
     <span class="small"><a href="leaderboard.html">Leaderboard</a></span>
@@ -174,16 +183,27 @@ names = ['ncc', 'pcc', 'statements', 'amount',
 {{ other_people }}. Here&rsquo;s how tip amounts are distributed:</p>
 
 <table id="tip-distribution">
-    {% for row in tip_distribution %}
+    {% for amount in all_amounts %}
     <tr>
         <td class="dollar-sign">$</td>
-        <td class="amount">{{ row['amount'] }}</td>
+        <td class="amount">{{ amount }}</td>
         <td class="count">
-            <span class="bar" style="width: {{ row['percentage'] * 256 }}pt"></span>
-            {{ "%5.1f" % (row['percentage'] * 100) }}% 
-            <span class="number">({{ row['count'] }})</span>
+            <span class="bar" style="width: {{ tip_distribution[amount][1] * 256 }}pt"></span>
+            {{ "%5.1f" % (tip_distribution[amount][1] * 100) }}% 
+            <span class="number">({{ tip_distribution[amount][0] }})</span>
         </td>
     </tr>
+    {% if str(amount) == '1.28' %}
+    <tr>
+        <td class="dollar-sign"></td>
+        <td class="amount"></td>
+        <td class="amount-change help">
+            <a href="http://blog.gittip.com/post/26505682007/is-personal-funding-viable"
+               target="_blank">Read
+            here</a> about the change in amounts.
+        </td>
+    </tr>
+    {% end %}
     {% end %}
 </table>
 
