@@ -4,7 +4,6 @@ import gittip
 import gittip.wireup
 import gittip.authentication
 import gittip.csrf
-from gittip.networks import github
 
 
 gittip.wireup.canonical()
@@ -23,6 +22,7 @@ website.hooks.outbound_late.register(gittip.csrf.outbound)
 
 
 def add_stuff(request):
+    from gittip.networks import github
     request.context['__version__'] = gittip.__version__
     request.context['username'] = None 
     request.context['github'] = github
