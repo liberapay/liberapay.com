@@ -72,34 +72,11 @@ talk to me (@whit537) and we'll figure out how to get you what you need.
 See Also
 ========
 
-Same Room
-
-Next Door
-    http://www.kickstarter.com/
-    http://flattr.com/
-    http://tiptheweb.org/
-    http://www.indiegogo.com/
-    http://www.pledgemusic.com/
-    https://propster.me/
-    http://kachingle.com/
-    https://venmo.com/
-
-    http://krisstraub.com/2011/11/20/kachingle-and-the-transgression-of-opt-out/
-
-Credit Card Payments
-    https://samurai.feefighters.com/
-    https://www.braintreepayments.com/
-    https://stripe.com/
-    https://stripe.com/platform
-
-    https://www.braintreepayments.com/blog/high-risk-mechant-account-third-party-payments-aggregation
-
-Bank Withdrawals
-    https://gocardless.com/
-
-    http://stackoverflow.com/questions/679946/api-for-direct-deposit-ach-eft-whatever
-
-Mobile Payments
-    http://www.boku.com/merchants/
-    https://www.obopay.com/consumer/welcome.shtml
-    https://venmo.com/
+ - http://www.kickstarter.com/
+ - http://flattr.com/
+ - http://tiptheweb.org/
+ - http://www.indiegogo.com/
+ - http://www.pledgemusic.com/
+ - https://propster.me/
+ - http://kachingle.com/
+ - https://venmo.com/
