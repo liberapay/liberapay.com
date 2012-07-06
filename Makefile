@@ -7,7 +7,9 @@ env:
 				--distribute \
 				./env/
 	./env/bin/pip install -r requirements.txt
+	./env/bin/pip install ./vendor/nose-1.1.2.tar.gz
 	./env/bin/pip install -e ./
+
 
 clean:
 	rm -rf env *.egg *.egg-info
@@ -20,3 +22,6 @@ run: env
 		--show_tracebacks=yes \
 		--changes_reload=yes \
 		--network_address=:8537
+
+test: env
+	./env/bin/nosetests ./tests/
