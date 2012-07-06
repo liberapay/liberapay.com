@@ -2,73 +2,80 @@
 
 There are two pieces of information for each customer related to billing:
 
-    stripe_customer_id      NULL - This customer has never been billed, even 
+    pp_customer_id          NULL - This customer has never been billed, even
                                 unsuccessfully.
                             'deadbeef' - This customer's card has been validate
-                                and associated with a Stripe customer
+                                and associated with a balanced account
     last_bill_result        NULL - This customer has not been billed yet.
                             '' - This customer is in good standing.
-                            <json> - A error struct encoded as JSON.
+                            <message> - A error message.
 
 """
 import decimal
 
-import stripe
+import balanced
 from aspen import json, log
 from aspen.utils import typecheck
 from gittip import db, get_tips_and_total
 from psycopg2 import IntegrityError
 
 
-def associate(participant_id, stripe_customer_id, tok):
+def associate(participant_id, pp_customer_id, tok):
     """Given three unicodes, return a dict.
 
     This function attempts to associate the credit card details referenced by
-    tok with a Stripe Customer. If the attempt succeeds we cancel the
+    tok with a Balanced Account. If the attempt succeeds we cancel the
     transaction. If it fails we log the failure. Even for failure we keep the
     payment_method_token, we don't reset it to None/NULL. It's useful for
-    loading the previous (bad) credit card info from Stripe in order to
+    loading the previous (bad) credit card info from Balanced in order to
     prepopulate the form.
 
     """
     typecheck( participant_id, unicode
-             , stripe_customer_id, (unicode, None)
+             , pp_customer_id, (unicode, None)
              , tok, unicode
               )
 
 
-    # Load or create a Stripe Customer.
+    # Load or create a Balanced Account.
     # =================================
-
-    if stripe_customer_id is None:
-        customer = stripe.Customer.create()
+    email_address = '{}@gittip.com'.format(
+        participant_id
+    )
+    if pp_customer_id is None:
+        # arg - balanced requires an email address
+        try:
+            customer = balanced.Account.query.filter(
+                email_address=email_address).one()
+        except balanced.exc.NoResultFound:
+            customer = balanced.Account(email_address=email_address).save()
         CUSTOMER = """\
                 
                 UPDATE participants 
-                   SET stripe_customer_id=%s 
+                   SET pp_customer_id=%s 
                  WHERE id=%s
                 
         """
-        db.execute(CUSTOMER, (customer.id, participant_id))
-        customer.description = participant_id
+        db.execute(CUSTOMER, (customer.uri, participant_id))
+        customer.meta['participant_id'] = participant_id
         customer.save()  # HTTP call under here
     else:
-        customer = stripe.Customer.retrieve(stripe_customer_id)
+        customer = balanced.Account.find(pp_customer_id)
 
 
 
     # Associate the card with the customer.
     # =====================================
     # Handle errors. Return a unicode, a simple error message. If empty it
-    # means there was no error. Yay! Store any raw error message from the
-    # Stripe API in JSON format as last_bill_result. That may be helpful for
+    # means there was no error. Yay! Store any error message from the
+    # Balanced API as a string in last_bill_result. That may be helpful for
     # debugging at some point.
 
-    customer.card = tok
+    customer.card_uri = tok
     try:
         customer.save()
-    except stripe.StripeError, err:
-        last_bill_result = json.dumps(err.json_body)
+    except balanced.exc.HTTPError as err:
+        last_bill_result = err.message
         typecheck(last_bill_result, str)
         out = err.message
     else:
@@ -85,28 +92,22 @@ def associate(participant_id, stripe_customer_id, tok):
     return out
 
 
-def clear(participant_id, stripe_customer_id):
-    typecheck(participant_id, unicode, stripe_customer_id, unicode)
+def clear(participant_id, pp_customer_id):
+    typecheck(participant_id, unicode, pp_customer_id, unicode)
 
-    # "Unlike other objects, deleted customers can still be retrieved through
-    # the API, in order to be able to track the history of customers while
-    # still removing their credit card details and preventing any further
-    # operations to be performed" https://stripe.com/docs/api#delete_customer
-    #
-    # Hmm ... should we protect against that in associate (above)?
-    # 
-    # What this means though is (I think?) that we'll continue to be able to
-    # search for customers in the Stripe management UI by participant_id (which
-    # is stored as description in associate) even after the association is lost
-    # in our own database. This should be helpful for customer support.
-
-    customer = stripe.Customer.retrieve(stripe_customer_id)
-    customer.delete()
+    # accounts in balanced cannot be deleted at the moment. instead we mark all
+    # valid cards as invalid which will restrict against anyone being able to
+    # issue charges against them in the future.
+    customer = balanced.Account.find(pp_customer_id)
+    for card in customer.cards:
+        if card.is_valid:
+            card.is_valid = False
+            card.save()
 
     CLEAR = """\
 
         UPDATE participants
-           SET stripe_customer_id=NULL
+           SET pp_customer_id=NULL
              , last_bill_result=NULL
          WHERE id=%s
 
@@ -114,13 +115,13 @@ def clear(participant_id, stripe_customer_id):
     db.execute(CLEAR, (participant_id,))
 
 
-MINIMUM = decimal.Decimal("0.50") # per Stripe
+MINIMUM = decimal.Decimal("0.50") # per Balanced
 FEE = ( decimal.Decimal("0.30")   # $0.30
       , decimal.Decimal("1.039")  #  3.9%
        )
 
 
-def charge(participant_id, stripe_customer_id, amount):
+def charge(participant_id, pp_customer_id, amount):
     """Given two unicodes and a Decimal, return a boolean indicating success.
 
     This is the only place where we actually charge credit cards. Amount should
@@ -129,11 +130,11 @@ def charge(participant_id, stripe_customer_id, amount):
 
     """
     typecheck( participant_id, unicode
-             , stripe_customer_id, (unicode, None)
+             , pp_customer_id, (unicode, None)
              , amount, decimal.Decimal
               )
 
-    if stripe_customer_id is None:
+    if pp_customer_id is None:
         STATS = """\
 
             UPDATE paydays 
@@ -146,7 +147,7 @@ def charge(participant_id, stripe_customer_id, amount):
         return False 
 
 
-    # We have a purported stripe_customer_id. Try to use it.
+    # We have a purported pp_customer_id. Try to use it.
     # ======================================================
 
     try_charge_amount = (amount + FEE[0]) * FEE[1]
@@ -156,7 +157,7 @@ def charge(participant_id, stripe_customer_id, amount):
     charge_amount = try_charge_amount
     also_log = ''
     if charge_amount < MINIMUM:
-        charge_amount = MINIMUM  # per Stripe
+        charge_amount = MINIMUM  # per Balanced
         also_log = ', rounded up to $%s' % charge_amount
 
     fee = try_charge_amount - amount
@@ -166,25 +167,33 @@ def charge(participant_id, stripe_customer_id, amount):
     msg %= participant_id, cents, amount, fee, try_charge_amount, also_log
 
     try:
-        stripe.Charge.create( customer=stripe_customer_id
-                            , amount=cents
-                            , description=participant_id
-                            , currency="USD"
-                             )
+        customer = balanced.Account.find(pp_customer_id)
+        customer.debit(cents, description=participant_id)
         err = False
         log(msg + "succeeded.")
-    except stripe.StripeError, err:
+    except balanced.exc.HTTPError as err:
         log(msg + "failed: %s" % err.message)
 
     # XXX If the power goes out at this point then Postgres will be out of sync
-    # with Stripe. We'll have to resolve that manually be reviewing the Stripe
-    # transaction log and modifying Postgres accordingly.
+    # with Balanced. We'll have to resolve that manually be reviewing the
+    # Balanced transaction log and modifying Postgres accordingly.
+    #
+    # this could be done by generating an ID locally and commiting that to the
+    # db and then passing that through in the meta field -
+    # https://www.balancedpayments.com/docs/meta
+    # Then syncing would be a case of simply:
+    # for payment in unresolved_payments:
+    #     payment_in_balanced = balanced.Transaction.query.filter(
+    #       **{'meta.unique_id': 'value'}).one()
+    #     payment.transaction_uri = payment_in_balanced.uri
+    #
+
 
     with db.get_connection() as conn:
         cur = conn.cursor()
 
         if err:
-            last_bill_result = json.dumps(err.json_body)
+            last_bill_result = err.message
             amount = decimal.Decimal('0.00')
 
             STATS = """\
@@ -380,7 +389,7 @@ def payday():
     log("Zeroed out the pending column.")
 
     PARTICIPANTS = """\
-        SELECT id, balance, stripe_customer_id
+        SELECT id, balance, pp_customer_id
           FROM participants
          WHERE claimed_time IS NOT NULL
     """
@@ -458,7 +467,7 @@ def payday_one(payday_start, participant):
         # *some* tips. The charge method will have set last_bill_result to a
         # non-empty string if the card did fail.
 
-        charge(participant['id'], participant['stripe_customer_id'], short)
+        charge(participant['id'], participant['pp_customer_id'], short)
  
     ntips = 0 
     for tip in tips:
@@ -475,6 +484,7 @@ def payday_one(payday_start, participant):
             continue
 
         claimed_time = tip['claimed_time']
+
         if claimed_time is None or claimed_time > payday_start:
 
             # Gittip is opt-in. We're only going to collect money on a person's
@@ -523,29 +533,38 @@ def assert_one_payday(payday):
 # ==============
 
 class DummyPaymentMethod(dict):
-    """Define a dict that can be used when Stripe is unavailable.
+    """Define a dict that can be used when Balanced is unavailable.
     """
     def __getitem__(self, name):
         return ''
 
 class Customer(object):
-    """This is a dict-like wrapper around a Stripe PaymentMethod.
+    """This is a dict-like wrapper around a Balanced Account.
     """
 
-    _customer = None  # underlying stripe.Customer object
+    _customer = None  # underlying balanced.Account object
 
-    def __init__(self, stripe_customer_id):
-        """Given a Stripe customer id, load data from Stripe.
+    def __init__(self, pp_customer_id):
+        """Given a Balanced account_uri, load data from Balanced.
         """
-        if stripe_customer_id is not None:
-            self._customer = stripe.Customer.retrieve(stripe_customer_id)
+        if pp_customer_id is not None:
+            self._customer = balanced.Account.find(pp_customer_id)
 
     def _get(self, name):
         """Given a name, return a string.
         """
         out = ""
         if self._customer is not None:
-            out = self._customer.get('active_card', {}).get(name, "")
+            try:
+                # this is an abortion
+                # https://github.com/balanced/balanced-python/issues/3
+                cards = self._customer.cards
+                cards = sorted(cards, key=lambda c: c.created_at)
+                cards.reverse()
+                card = cards[0]
+                out = getattr(card, name, "")
+            except IndexError:  # no cards associated
+                pass
             if out is None:
                 out = ""
         return out
@@ -554,14 +573,14 @@ class Customer(object):
         """Given a name, return a string.
         """
         if name == 'id':
-            out = self._customer.id if self._customer is not None else None
+            out = self._customer.uri if self._customer is not None else None
         elif name == 'last4':
-            out = self._get('last4')
+            out = self._get('last_four')
             if out:
                 out = "************" + out
         elif name == 'expiry':
-            month = self._get('exp_month')
-            year = self._get('exp_year')
+            month = self._get('expiration_month')
+            year = self._get('expiration_month')
 
             if month and year:
                 out = "%d/%d" % (month, year)

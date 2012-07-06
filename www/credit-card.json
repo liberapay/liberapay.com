@@ -1,11 +1,11 @@
-"""Save a payment method token (stripe_customer_id) for a user.
+"""Save a payment method token (pp_customer_id) for a user.
 
 When the user fills out the payment details form in the UI, we send the new
-info to Stripe (using the Stripe.js library). Stripe always gives us a
+info to balanced (using the balanced.js library). balanced always gives us a
 so-called "single-use token" in return, no matter how bad the info was that we
 posted. This present script is called next. It takes the token and tries to
-associate it with a Stripe Customer object (creating one as needed). It's at
-this point that Stripe validates the credit card details, which they don't
+associate it with a balanced account object (creating one as needed). It's at
+this point that balanced validates the credit card details, which they don't
 charge us for directly.
 
 """
@@ -20,7 +20,7 @@ if user.ANON:
 request.allow('GET')
 
 if qs.get('action') == 'delete':
-    billing.clear(user.id, user.stripe_customer_id)
+    billing.clear(user.id, user.pp_customer_id)
     request.redirect('/credit-card.html')
 else:
 
@@ -33,7 +33,7 @@ else:
     if tok is None:
         raise Response(400) 
 
-    error = billing.associate(user.id, user.stripe_customer_id, tok)
+    error = billing.associate(user.id, user.pp_customer_id, tok)
     if error:
         out = {"problem": "Problem", "error": error}
     else:

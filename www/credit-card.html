@@ -1,6 +1,6 @@
 import traceback
 
-import stripe
+import balanced
 from aspen import json, log, Response
 from gittip import billing
 from gittip.networks import github
@@ -8,21 +8,21 @@ from gittip.networks import github
 # ========================================================================== ^L
 
 if not user.ANON:
-    stripe_customer_id = user.stripe_customer_id
-    if not stripe_customer_id:
+    pp_customer_id = user.pp_customer_id
+    if not pp_customer_id:
         status = "missing"
     else:
         working = not bool(user.last_bill_result)
         status = "working" if working else "failing"
 
     try:
-        customer = billing.Customer(stripe_customer_id)
-    except:  # stripe is unavailable? could be a bad stripe_customer_id?
+        customer = billing.Customer(pp_customer_id)
+    except:  # balanced is unavailable? could be a bad pp_customer_id?
         log(traceback.format_exc())
-        stripe_down = True
+        payments_down = True
     else:
-        assert stripe_customer_id == customer['id']
-        stripe_down = False
+        assert pp_customer_id == customer['id']
+        payments_down = False
 
     username = user.id
 # ========================================================================== ^L
@@ -32,7 +32,6 @@ if not user.ANON:
 {% block body %}
 {% if user.ANON %}
 <div id="their-voice">
-
 <h2 class="first">Credit Card</h2>
 
 <p>Sign in <a href="{{ github.oauth_url(website, u'opt-in', u'/credit-card.html') }}">with
@@ -42,10 +41,12 @@ Thanks! :-)</p>
 </div>
 
 {% else %}
+hdif
+{{ user.statement }}
 <script>
     $(document).ready(function()
     {
-        Gittip.initPayment("{{ stripe.publishable_api_key }}", "{{ user.id }}");
+        Gittip.initPayment("{{ balanced.Marketplace.my_marketplace.uri }}", "{{ user.id }}");
     });
 </script>
 <style>
@@ -67,7 +68,7 @@ Thanks! :-)</p>
     FORM {
         width: 300px;
     }
-    {% if not stripe_customer_id %}
+    {% if not pp_customer_id %}
     #delete {
         display: none;
     }
@@ -78,27 +79,25 @@ Thanks! :-)</p>
     <h2 class="first">You are <a href="/{{ user.id }}/">{{ user.id }}</a>.</h2>
     <h2>Your <b>credit card</b> is <span id="status">{{ status }}</span>.</h2>
     
-    {% if stripe_down %}
+    {% if payments_down %}
 
-    <p>We had a problem contacting <a href="https://stripe.com/">our payment
+    <p>We had a problem contacting <a href="https://www.balancedpayments.com/">our payment
     processor</a>. Could I ask if you&rsquo;d be willing to try again
     later? Thanksorry. :-(</p>
 
     {% else %}
 
     <p>When you don&rsquo;t have enough in your Gittip account to cover your
-    tips, we {% if stripe_customer_id %}will{% else %}can{% end %} pull money
-    in using {% if stripe_customer_id %}this{% else %}a{% end %} credit card.
+    tips, we {% if pp_customer_id %}will{% else %}can{% end %} pull money
+    in using {% if pp_customer_id %}this{% else %}a{% end %} credit card.
     If your credit card is missing or fails then your tips won&rsquo;t go
     through for that week.<p>
 
     <p>Credit card information is currently stored with <a
-        href="https://stripe.com/">Stripe</a>, though we&rsquo;re in the
-    process of <a
-        href="https://github.com/whit537/www.gittip.com/issues/67">migrating</a>.</p>
+        href="https://balancedpayments.com/">Balanced</a>, and we're quite pleased with them.</p>
 
-    {% if stripe_customer_id %}
-    <p>Your current card is <b>{{ customer['last4'] }}</b>.</p>
+    {% if pp_customer_id %}
+    <p>Your current card is a <b>{{ customer['card_type'] }}</b> ending in <b>{{ customer['last_four'] }}</b>.</p>
 
     <h2>Change your card on file.</h2>
     {% end %}
@@ -107,7 +106,7 @@ Thanks! :-)</p>
         <div id="feedback">{% if user.last_bill_result %}
         <h3><span>Darn it all!</span></h3>
         <div class="details">
-        <p>{{ json.loads(user.last_bill_result)['error']['message'] }}</p>
+        <p>{{ user.last_bill_result }}</p>
         </div>
         {% end %}</div>
 

@@ -7,6 +7,8 @@ CREATE TABLE participants
 , statement             text                        DEFAULT ''
     
 , stripe_customer_id    text                        DEFAULT NULL
+-- payment processor customer id 
+, pp_customer_id        text
 , last_bill_result      text                        DEFAULT NULL
 
 , session_token         text                        UNIQUE DEFAULT NULL

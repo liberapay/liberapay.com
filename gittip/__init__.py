@@ -1,5 +1,7 @@
 import datetime
 from decimal import Decimal
+import os
+
 
 BIRTHDAY = datetime.date(2012, 6, 1)
 CARDINALS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
@@ -233,3 +235,8 @@ def canonize(request):
             # For non-idempotent methods, redirect to homepage.
             url += '/'
         request.redirect(url, permanent=True)
+
+
+def configure_payments(request):
+    import balanced
+    balanced.configure(os.environ['BALANCED_API_SECRET'])
