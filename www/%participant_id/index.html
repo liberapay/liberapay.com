@@ -244,7 +244,10 @@ tip_or_pledge = "tip"
         {% end %}
     </table>
 
-    <h2>Your balance is ${{ user.balance }}.</h2>
+    <h2>Your balance is ${{ user.balance }}.
+        <span class="small{% if not user.last_bill_result == "" %} highlight{% end %}"><a 
+                href="/bank-account.html">Bank account</a></span>
+    </h2>
 
     {% if user.balance > 0 %}
 

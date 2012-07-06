@@ -25,3 +25,7 @@ run: env
 
 test: env
 	./env/bin/nosetests ./tests/
+
+data: env
+	./swaddle local.env ./env/bin/python ./gittip/testing.py
+
