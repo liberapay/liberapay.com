@@ -76,7 +76,7 @@ def associate(participant_id, pp_customer_id, tok):
         customer.save()
     except balanced.exc.HTTPError as err:
         last_bill_result = err.message
-        typecheck(last_bill_result, str)
+        assert(isinstance(last_bill_result, basestring))
         out = err.message
     else:
         out = last_bill_result = ''
