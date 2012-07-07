@@ -580,7 +580,7 @@ class Customer(object):
                 out = "************" + out
         elif name == 'expiry':
             month = self._get('expiration_month')
-            year = self._get('expiration_month')
+            year = self._get('expiration_year')
 
             if month and year:
                 out = "%d/%d" % (month, year)
