@@ -47,6 +47,37 @@ class TestBilling(GittipBaseDBTest):
 
         user = authentication.User.from_id(self.participant_id)
         # participant in db should be updated to reflect the error message of
-        # last uppepdate
+        # last update
         self.assertEqual(user.session['last_bill_result'], error_message)
         self.assertTrue(ba.find.call_count)
+
+    @mock.patch('balanced.Account')
+    def test_clear(self, ba):
+        valid_card = mock.Mock()
+        valid_card.is_valid = True
+        invalid_card = mock.Mock()
+        invalid_card.is_valid = False
+        card_collection = [
+            valid_card, invalid_card
+        ]
+        balanced.Account.find.return_value.cards = card_collection
+
+        MURKY = """\
+
+            UPDATE participants
+               SET pp_customer_id='not null'
+                 , last_bill_result='ooga booga'
+             WHERE id=%s
+
+        """
+        self.db.execute(MURKY, (self.participant_id,))
+
+        billing.clear(self.participant_id, self.pp_customer_id)
+
+        self.assertFalse(valid_card.is_valid)
+        self.assertTrue(valid_card.save.call_count)
+        self.assertFalse(invalid_card.save.call_count)
+
+        user = authentication.User.from_id(self.participant_id)
+        self.assertFalse(user.session['last_bill_result'])
+        self.assertFalse(user.session['pp_customer_id'])
