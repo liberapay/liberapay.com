@@ -1,12 +1,10 @@
 """Save a payment method token (balanced_account_uri) for a user.
 
 When the user fills out the payment details form in the UI, we send the new
-info to balanced (using the balanced.js library). balanced always gives us a
-so-called "single-use token" in return, no matter how bad the info was that we
-posted. This present script is called next. It takes the token and tries to
-associate it with a balanced account object (creating one as needed). It's at
-this point that balanced validates the credit card details, which they don't
-charge us for directly.
+info to Balanced (using the balanced.js library). Balanced always gives us a
+so-called "single-use token" in return, provided that the credit card info
+validated. This present script is called next. It takes the token and tries to
+associate it with a Balanced account object (creating one as needed).
 
 """
 from aspen import Response
@@ -25,9 +23,9 @@ if qs.get('action') == 'delete':
 else:
 
     # Associate the single-use token representing the credit card details (we
-    # call it "tok" here because that's the prefix Stripe uses in the token
-    # itself) the user entered with a Stripe Customer. Stripe only ever gives
-    # us one error at a time.
+    # call it "tok" here because that's how it was always done). Possible error
+    # codes would be 409 (this card cannot be associated with this account in
+    # this case).
 
     tok = qs.get('tok')
     if tok is None:
