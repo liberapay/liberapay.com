@@ -135,44 +135,12 @@ def charge(participant_id, pp_customer_id, amount):
               )
 
     if pp_customer_id is None:
-        STATS = """\
+        mark_payday_missing_funding()
+        return False
 
-            UPDATE paydays 
-               SET ncc_missing = ncc_missing + 1
-             WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
-         RETURNING id
-        
-        """
-        assert_one_payday(db.fetchone(STATS))
-        return False 
-
-
-    # We have a purported pp_customer_id. Try to use it.
-    # ======================================================
-
-    try_charge_amount = (amount + FEE[0]) * FEE[1]
-    try_charge_amount = try_charge_amount.quantize( FEE[0]
-                                                  , rounding=decimal.ROUND_UP
-                                                   )
-    charge_amount = try_charge_amount
-    also_log = ''
-    if charge_amount < MINIMUM:
-        charge_amount = MINIMUM  # per Balanced
-        also_log = ', rounded up to $%s' % charge_amount
-
-    fee = try_charge_amount - amount
-    cents = int(charge_amount * 100)
-
-    msg = "Charging %s %d cents ($%s + $%s fee = $%s%s) ... " 
-    msg %= participant_id, cents, amount, fee, try_charge_amount, also_log
-
-    try:
-        customer = balanced.Account.find(pp_customer_id)
-        customer.debit(cents, description=participant_id)
-        err = False
-        log(msg + "succeeded.")
-    except balanced.exc.HTTPError as err:
-        log(msg + "failed: %s" % err.message)
+    charge_amount, fee, err = charge_balanced_account(participant_id,
+                                                      pp_customer_id,
+                                                      amount)
 
     # XXX If the power goes out at this point then Postgres will be out of sync
     # with Balanced. We'll have to resolve that manually be reviewing the
@@ -187,51 +155,20 @@ def charge(participant_id, pp_customer_id, amount):
     #       **{'meta.unique_id': 'value'}).one()
     #     payment.transaction_uri = payment_in_balanced.uri
     #
-
-
     with db.get_connection() as conn:
         cur = conn.cursor()
 
         if err:
             last_bill_result = err.message
             amount = decimal.Decimal('0.00')
-
-            STATS = """\
-
-                UPDATE paydays 
-                   SET ncc_failing = ncc_failing + 1
-                 WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
-             RETURNING id
-            
-            """
-            cur.execute(STATS)
-            assert_one_payday(cur.fetchone())
-
+            mark_payday_failed(cur)
         else:
             last_bill_result = ''
-
-            EXCHANGE = """\
-
-            INSERT INTO exchanges
-                   (amount, fee, participant_id)
-            VALUES (%s, %s, %s)
-
-            """
-            cur.execute(EXCHANGE, (amount, fee, participant_id))
-
-            STATS = """\
-
-                UPDATE paydays 
-                   SET nexchanges = nexchanges + 1
-                     , exchange_volume = exchange_volume + %s
-                     , exchange_fees_volume = exchange_fees_volume + %s
-                 WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
-             RETURNING id
-            
-            """
-            cur.execute(STATS, (charge_amount, fee))
-            assert_one_payday(cur.fetchone())
-
+            mark_payday_success(participant_id,
+                                  amount,
+                                  fee,
+                                  charge_amount,
+                                  cur)
 
         # Update the participant's balance.
         # =================================
@@ -240,16 +177,97 @@ def charge(participant_id, pp_customer_id, amount):
         RESULT = """\
 
         UPDATE participants
-           SET last_bill_result=%s 
+           SET last_bill_result=%s
              , balance=(balance + %s)
          WHERE id=%s
 
         """
         cur.execute(RESULT, (last_bill_result, amount, participant_id))
-
         conn.commit()
 
     return not bool(last_bill_result)  # True indicates success
+
+
+def mark_payday_missing_funding():
+    STATS = """\
+
+        UPDATE paydays
+        SET ncc_missing = ncc_missing + 1
+        WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
+        RETURNING id
+
+        """
+    assert_one_payday(db.fetchone(STATS))
+
+
+def mark_payday_failed(cur):
+
+    STATS = """\
+
+        UPDATE paydays
+        SET ncc_failing = ncc_failing + 1
+        WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
+        RETURNING id
+
+            """
+    cur.execute(STATS)
+    assert_one_payday(cur.fetchone())
+
+
+def mark_payday_success(participant_id, amount, fee, charge_amount, cur):
+
+    EXCHANGE = """\
+
+            INSERT INTO exchanges
+                   (amount, fee, participant_id)
+            VALUES (%s, %s, %s)
+
+            """
+    cur.execute(EXCHANGE, (amount, fee, participant_id))
+
+    STATS = """\
+
+                UPDATE paydays
+                   SET nexchanges = nexchanges + 1
+                     , exchange_volume = exchange_volume + %s
+                     , exchange_fees_volume = exchange_fees_volume + %s
+                 WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
+             RETURNING id
+
+            """
+    cur.execute(STATS, (charge_amount, fee))
+    assert_one_payday(cur.fetchone())
+
+
+def charge_balanced_account(participant_id, pp_customer_id, amount_in_dollars):
+    # We have a purported pp_customer_id. Try to use it.
+    # ======================================================
+
+    try_charge_amount = (amount_in_dollars + FEE[0]) * FEE[1]
+    try_charge_amount = try_charge_amount.quantize( FEE[0]
+                                                    , rounding=decimal.ROUND_UP
+    )
+    charge_amount = try_charge_amount
+    also_log = ''
+    if charge_amount < MINIMUM:
+        charge_amount = MINIMUM  # per Balanced
+        also_log = ', rounded up to $%s' % charge_amount
+
+    fee = try_charge_amount - amount_in_dollars
+    cents = int(charge_amount * 100)
+
+    msg = "Charging %s %d cents ($%s + $%s fee = $%s%s) ... "
+    msg %= participant_id, cents, amount_in_dollars, fee, try_charge_amount, \
+           also_log
+
+    try:
+        customer = balanced.Account.find(pp_customer_id)
+        customer.debit(cents, description=participant_id)
+        log(msg + "succeeded.")
+    except balanced.exc.HTTPError as err:
+        log(msg + "failed: %s" % err.message)
+        return charge_amount, fee, err.description
+    return charge_amount, fee, None
 
 
 def transfer(tipper, tippee, amount):
