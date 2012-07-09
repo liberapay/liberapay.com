@@ -138,9 +138,9 @@ def charge(participant_id, pp_customer_id, amount):
         mark_payday_missing_funding()
         return False
 
-    charge_amount, fee, err = charge_balanced_account(participant_id,
-                                                      pp_customer_id,
-                                                      amount)
+    charge_amount, fee, error_message = charge_balanced_account(participant_id,
+                                                                pp_customer_id,
+                                                                amount)
 
     # XXX If the power goes out at this point then Postgres will be out of sync
     # with Balanced. We'll have to resolve that manually be reviewing the
@@ -158,8 +158,8 @@ def charge(participant_id, pp_customer_id, amount):
     with db.get_connection() as conn:
         cur = conn.cursor()
 
-        if err:
-            last_bill_result = err.message
+        if error_message:
+            last_bill_result = error_message
             amount = decimal.Decimal('0.00')
             mark_payday_failed(cur)
         else:

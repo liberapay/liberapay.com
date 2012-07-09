@@ -116,9 +116,7 @@ class TestBillingCharge(GittipBaseDBTest):
     @mock.patch('gittip.billing.charge_balanced_account')
     @mock.patch('gittip.billing.mark_payday_failed')
     def test_charge_failure(self, mpf, cba):
-        error = mock.Mock()
-        error.message = 'FAILED'
-        cba.return_value = (None, None, error)
+        cba.return_value = (None, None, 'FAILED')
         result = billing.charge(self.participant_id, self.pp_customer_id,
                                 decimal.Decimal(1))
         self.assertEqual(cba.call_count, 1)
