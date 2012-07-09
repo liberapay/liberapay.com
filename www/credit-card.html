@@ -8,20 +8,20 @@ from gittip.networks import github
 # ========================================================================== ^L
 
 if not user.ANON:
-    pp_customer_id = user.pp_customer_id
-    if not pp_customer_id:
+    balanced_account_uri = user.balanced_account_uri
+    if not balanced_account_uri:
         status = "missing"
     else:
         working = not bool(user.last_bill_result)
         status = "working" if working else "failing"
 
     try:
-        customer = billing.Customer(pp_customer_id)
-    except:  # balanced is unavailable? could be a bad pp_customer_id?
+        customer = billing.Customer(balanced_account_uri)
+    except:  # balanced is unavailable? could be a bad balanced_account_uri?
         log(traceback.format_exc())
         payments_down = True
     else:
-        assert pp_customer_id == customer['id']
+        assert balanced_account_uri == customer['id']
         payments_down = False
 
     username = user.id
@@ -68,7 +68,7 @@ hdif
     FORM {
         width: 300px;
     }
-    {% if not pp_customer_id %}
+    {% if not balanced_account_uri %}
     #delete {
         display: none;
     }
@@ -88,15 +88,15 @@ hdif
     {% else %}
 
     <p>When you don&rsquo;t have enough in your Gittip account to cover your
-    tips, we {% if pp_customer_id %}will{% else %}can{% end %} pull money
-    in using {% if pp_customer_id %}this{% else %}a{% end %} credit card.
+    tips, we {% if balanced_account_uri %}will{% else %}can{% end %} pull money
+    in using {% if balanced_account_uri %}this{% else %}a{% end %} credit card.
     If your credit card is missing or fails then your tips won&rsquo;t go
     through for that week.<p>
 
     <p>Credit card information is currently stored with <a
         href="https://balancedpayments.com/">Balanced</a>, and we're quite pleased with them.</p>
 
-    {% if pp_customer_id %}
+    {% if balanced_account_uri %}
     <p>Your current card is a <b>{{ customer['card_type'] }}</b> ending in <b>{{ customer['last_four'] }}</b>.</p>
 
     <h2>Change your card on file.</h2>

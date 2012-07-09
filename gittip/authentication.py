@@ -39,7 +39,7 @@ class User:
             SELECT p.id
                  , p.statement
                  , p.stripe_customer_id
-                 , p.pp_customer_id
+                 , p.balanced_account_uri
                  , p.last_bill_result
                  , p.session_token
                  , p.session_expires

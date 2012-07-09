@@ -8,7 +8,7 @@ CREATE TABLE participants
     
 , stripe_customer_id    text                        DEFAULT NULL
 -- payment processor customer id 
-, pp_customer_id        text
+, balanced_account_uri        text
 , last_bill_result      text                        DEFAULT NULL
 
 , session_token         text                        UNIQUE DEFAULT NULL

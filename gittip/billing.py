@@ -2,8 +2,8 @@
 
 There are two pieces of information for each customer related to billing:
 
-    pp_customer_id          NULL - This customer has never been billed, even
-                                unsuccessfully.
+    balanced_account_uri    NULL - This customer has never been billed, even
+                                   unsuccessfully.
                             'deadbeef' - This customer's card has been validate
                                 and associated with a balanced account
     last_bill_result        NULL - This customer has not been billed yet.
@@ -20,7 +20,7 @@ from gittip import db, get_tips_and_total
 from psycopg2 import IntegrityError
 
 
-def associate(participant_id, pp_customer_id, tok):
+def associate(participant_id, balanced_account_uri, tok):
     """Given three unicodes, return a dict.
 
     This function attempts to associate the credit card details referenced by
@@ -32,7 +32,7 @@ def associate(participant_id, pp_customer_id, tok):
 
     """
     typecheck( participant_id, unicode
-             , pp_customer_id, (unicode, None)
+             , balanced_account_uri, (unicode, None)
              , tok, unicode
               )
 
@@ -42,7 +42,7 @@ def associate(participant_id, pp_customer_id, tok):
     email_address = '{}@gittip.com'.format(
         participant_id
     )
-    if pp_customer_id is None:
+    if balanced_account_uri is None:
         # arg - balanced requires an email address
         try:
             customer = balanced.Account.query.filter(
@@ -52,7 +52,7 @@ def associate(participant_id, pp_customer_id, tok):
         CUSTOMER = """\
                 
                 UPDATE participants 
-                   SET pp_customer_id=%s 
+                   SET balanced_account_uri=%s
                  WHERE id=%s
                 
         """
@@ -60,7 +60,7 @@ def associate(participant_id, pp_customer_id, tok):
         customer.meta['participant_id'] = participant_id
         customer.save()  # HTTP call under here
     else:
-        customer = balanced.Account.find(pp_customer_id)
+        customer = balanced.Account.find(balanced_account_uri)
 
 
 
@@ -92,13 +92,13 @@ def associate(participant_id, pp_customer_id, tok):
     return out
 
 
-def clear(participant_id, pp_customer_id):
-    typecheck(participant_id, unicode, pp_customer_id, unicode)
+def clear(participant_id, balanced_account_uri):
+    typecheck(participant_id, unicode, balanced_account_uri, unicode)
 
     # accounts in balanced cannot be deleted at the moment. instead we mark all
     # valid cards as invalid which will restrict against anyone being able to
     # issue charges against them in the future.
-    customer = balanced.Account.find(pp_customer_id)
+    customer = balanced.Account.find(balanced_account_uri)
     for card in customer.cards:
         if card.is_valid:
             card.is_valid = False
@@ -107,7 +107,7 @@ def clear(participant_id, pp_customer_id):
     CLEAR = """\
 
         UPDATE participants
-           SET pp_customer_id=NULL
+           SET balanced_account_uri=NULL
              , last_bill_result=NULL
          WHERE id=%s
 
@@ -121,7 +121,7 @@ FEE = ( decimal.Decimal("0.30")   # $0.30
        )
 
 
-def charge(participant_id, pp_customer_id, amount):
+def charge(participant_id, balanced_account_uri, amount):
     """Given two unicodes and a Decimal, return a boolean indicating success.
 
     This is the only place where we actually charge credit cards. Amount should
@@ -130,17 +130,19 @@ def charge(participant_id, pp_customer_id, amount):
 
     """
     typecheck( participant_id, unicode
-             , pp_customer_id, (unicode, None)
+             , balanced_account_uri, (unicode, None)
              , amount, decimal.Decimal
               )
 
-    if pp_customer_id is None:
+    if balanced_account_uri is None:
         mark_payday_missing_funding()
         return False
 
-    charge_amount, fee, error_message = charge_balanced_account(participant_id,
-                                                                pp_customer_id,
-                                                                amount)
+    (charge_amount,
+     fee,
+     error_message) = charge_balanced_account(participant_id,
+                                              balanced_account_uri,
+                                              amount)
 
     # XXX If the power goes out at this point then Postgres will be out of sync
     # with Balanced. We'll have to resolve that manually be reviewing the
@@ -239,13 +241,15 @@ def mark_payday_success(participant_id, amount, fee, charge_amount, cur):
     assert_one_payday(cur.fetchone())
 
 
-def charge_balanced_account(participant_id, pp_customer_id, amount_in_dollars):
-    # We have a purported pp_customer_id. Try to use it.
+def charge_balanced_account(participant_id,
+                            balanced_account_uri,
+                            amount_in_dollars):
+    # We have a purported balanced_account_uri. Try to use it.
     # ======================================================
 
     try_charge_amount = (amount_in_dollars + FEE[0]) * FEE[1]
-    try_charge_amount = try_charge_amount.quantize( FEE[0]
-                                                    , rounding=decimal.ROUND_UP
+    try_charge_amount = try_charge_amount.quantize(FEE[0],
+                                                   rounding=decimal.ROUND_UP
     )
     charge_amount = try_charge_amount
     also_log = ''
@@ -261,7 +265,7 @@ def charge_balanced_account(participant_id, pp_customer_id, amount_in_dollars):
            also_log
 
     try:
-        customer = balanced.Account.find(pp_customer_id)
+        customer = balanced.Account.find(balanced_account_uri)
         customer.debit(cents, description=participant_id)
         log(msg + "succeeded.")
     except balanced.exc.HTTPError as err:
@@ -390,7 +394,11 @@ def payday():
                           "RETURNING ts_start")
         log("Starting a new payday.")
     except IntegrityError:  # Collision, we have a Payday already.
-        rec = db.fetchone("SELECT ts_start FROM paydays WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz")
+        rec = db.fetchone("""
+            SELECT ts_start
+            FROM paydays
+            WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
+        """)
         log("Picking up with an existing payday.")
     assert rec is not None  # Must either create or recycle a Payday.
     payday_start = rec['ts_start']
@@ -407,7 +415,7 @@ def payday():
     log("Zeroed out the pending column.")
 
     PARTICIPANTS = """\
-        SELECT id, balance, pp_customer_id
+        SELECT id, balance, balanced_account_uri
           FROM participants
          WHERE claimed_time IS NOT NULL
     """
@@ -485,7 +493,7 @@ def payday_one(payday_start, participant):
         # *some* tips. The charge method will have set last_bill_result to a
         # non-empty string if the card did fail.
 
-        charge(participant['id'], participant['pp_customer_id'], short)
+        charge(participant['id'], participant['balanced_account_uri'], short)
  
     ntips = 0 
     for tip in tips:
@@ -556,17 +564,18 @@ class DummyPaymentMethod(dict):
     def __getitem__(self, name):
         return ''
 
+
 class Customer(object):
     """This is a dict-like wrapper around a Balanced Account.
     """
 
     _customer = None  # underlying balanced.Account object
 
-    def __init__(self, pp_customer_id):
+    def __init__(self, balanced_account_uri):
         """Given a Balanced account_uri, load data from Balanced.
         """
-        if pp_customer_id is not None:
-            self._customer = balanced.Account.find(pp_customer_id)
+        if balanced_account_uri is not None:
+            self._customer = balanced.Account.find(balanced_account_uri)
 
     def _get(self, name):
         """Given a name, return a string.

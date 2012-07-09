@@ -1,4 +1,4 @@
-"""Save a payment method token (pp_customer_id) for a user.
+"""Save a payment method token (balanced_account_uri) for a user.
 
 When the user fills out the payment details form in the UI, we send the new
 info to balanced (using the balanced.js library). balanced always gives us a
@@ -20,7 +20,7 @@ if user.ANON:
 request.allow('GET')
 
 if qs.get('action') == 'delete':
-    billing.clear(user.id, user.pp_customer_id)
+    billing.clear(user.id, user.balanced_account_uri)
     request.redirect('/credit-card.html')
 else:
 
@@ -33,7 +33,7 @@ else:
     if tok is None:
         raise Response(400) 
 
-    error = billing.associate(user.id, user.pp_customer_id, tok)
+    error = billing.associate(user.id, user.balanced_account_uri, tok)
     if error:
         out = {"problem": "Problem", "error": error}
     else:

@@ -14,7 +14,7 @@ class TestBilling(GittipBaseDBTest):
     def setUp(self):
         super(TestBilling, self).setUp()
         self.participant_id = 'lgtest'
-        self.pp_customer_id = '/v1/marketplaces/M123/accounts/A123'
+        self.balanced_account_uri = '/v1/marketplaces/M123/accounts/A123'
         self.tok = '/v1/marketplaces/M123/accounts/A123/cards/C123'
         billing.db = self.db
 
@@ -22,7 +22,7 @@ class TestBilling(GittipBaseDBTest):
     def test_associate_valid(self, ba):
         not_found = balanced.exc.NoResultFound()
         ba.query.filter.return_value.one.side_effect = not_found
-        ba.return_value.save.return_value.uri = self.pp_customer_id
+        ba.return_value.save.return_value.uri = self.balanced_account_uri
 
         # first time through, payment processor account is None
         billing.associate(self.participant_id, None, self.tok)
@@ -35,7 +35,8 @@ class TestBilling(GittipBaseDBTest):
 
         user = authentication.User.from_id(self.participant_id)
         # participant in db should be updated
-        self.assertEqual(user.session['pp_customer_id'], self.pp_customer_id)
+        self.assertEqual(user.session['balanced_account_uri'],
+                         self.balanced_account_uri)
 
     @mock.patch('balanced.Account')
     def test_associate_invalid_card(self, ba):
@@ -45,8 +46,8 @@ class TestBilling(GittipBaseDBTest):
 
         # second time through, payment processor account is balanced
         # account_uri
-        billing.associate(self.participant_id, self.pp_customer_id, self.tok)
-
+        billing.associate(self.participant_id, self.balanced_account_uri,
+                          self.tok)
         user = authentication.User.from_id(self.participant_id)
         # participant in db should be updated to reflect the error message of
         # last update
@@ -67,14 +68,14 @@ class TestBilling(GittipBaseDBTest):
         MURKY = """\
 
             UPDATE participants
-               SET pp_customer_id='not null'
+               SET balanced_account_uri='not null'
                  , last_bill_result='ooga booga'
              WHERE id=%s
 
         """
         self.db.execute(MURKY, (self.participant_id,))
 
-        billing.clear(self.participant_id, self.pp_customer_id)
+        billing.clear(self.participant_id, self.balanced_account_uri)
 
         self.assertFalse(valid_card.is_valid)
         self.assertTrue(valid_card.save.call_count)
@@ -82,14 +83,14 @@ class TestBilling(GittipBaseDBTest):
 
         user = authentication.User.from_id(self.participant_id)
         self.assertFalse(user.session['last_bill_result'])
-        self.assertFalse(user.session['pp_customer_id'])
+        self.assertFalse(user.session['balanced_account_uri'])
 
 
 class TestBillingCharge(GittipBaseDBTest):
     def setUp(self):
         super(TestBillingCharge, self).setUp()
         self.participant_id = 'lgtest'
-        self.pp_customer_id = '/v1/marketplaces/M123/accounts/A123'
+        self.balanced_account_uri = '/v1/marketplaces/M123/accounts/A123'
         self.tok = '/v1/marketplaces/M123/accounts/A123/cards/C123'
         billing.db = self.db
         # TODO: remove once we rollback transactions....
@@ -117,7 +118,7 @@ class TestBillingCharge(GittipBaseDBTest):
     @mock.patch('gittip.billing.mark_payday_failed')
     def test_charge_failure(self, mpf, cba):
         cba.return_value = (None, None, 'FAILED')
-        result = billing.charge(self.participant_id, self.pp_customer_id,
+        result = billing.charge(self.participant_id, self.balanced_account_uri,
                                 decimal.Decimal(1))
         self.assertEqual(cba.call_count, 1)
         self.assertEqual(mpf.call_count, 1)
@@ -127,7 +128,7 @@ class TestBillingCharge(GittipBaseDBTest):
     @mock.patch('gittip.billing.mark_payday_success')
     def test_charge_success(self, mps, cba):
         cba.return_value = (decimal.Decimal(1), decimal.Decimal(2), None)
-        result = billing.charge(self.participant_id, self.pp_customer_id,
+        result = billing.charge(self.participant_id, self.balanced_account_uri,
                                 decimal.Decimal(1))
         self.assertEqual(cba.call_count, 1)
         self.assertEqual(mps.call_count, 1)
@@ -195,11 +196,11 @@ class TestBillingCharge(GittipBaseDBTest):
             billing.FEE[0], rounding=decimal.ROUND_UP)) * -1
         charge_amount, fee, msg = billing.charge_balanced_account(
             self.participant_id,
-            self.pp_customer_id,
+            self.balanced_account_uri,
             amount_to_charge)
         self.assertEqual(charge_amount, amount_to_charge + fee)
         self.assertEqual(fee, expected_fee)
-        self.assertTrue(ba.find.called_with(self.pp_customer_id))
+        self.assertTrue(ba.find.called_with(self.balanced_account_uri))
         customer = ba.find.return_value
         self.assertTrue(customer.debit.called_with(
             int(charge_amount * 100),

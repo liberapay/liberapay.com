@@ -11,7 +11,7 @@ from tests import GittipBaseTest
 class TestBilling(GittipBaseTest):
     def setUp(self):
         super(TestBilling, self).setUp()
-        self.pp_customer_id = '/v1/marketplaces/M123/accounts/A123'
+        self.balanced_account_uri = '/v1/marketplaces/M123/accounts/A123'
 
     @mock.patch('balanced.Account')
     def test_customer(self, ba):
@@ -23,7 +23,7 @@ class TestBilling(GittipBaseTest):
         balanced_account.cards = [
             card,
         ]
-        customer = billing.Customer(self.pp_customer_id)
+        customer = billing.Customer(self.balanced_account_uri)
         self.assertEqual(customer['id'], balanced_account.uri)
         self.assertIn(card.last_four, customer['last4'])
         self.assertEqual(customer['expiry'], '10/2020')
