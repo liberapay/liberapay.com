@@ -160,18 +160,18 @@ tip_or_pledge = "tip"
             // Wire up aggregate giving knob.
             // ==============================
 
-            $('.shares-giving').click(function()
+            $('.anonymous').click(function()
             {
                 jQuery.ajax(
-                    { url: 'shares-giving.json'
+                    { url: 'anonymous.json'
                     , type: 'POST'
                     , dataType: 'json'
                     , success: function(data)
                     {
-                        $('INPUT.shares-giving').attr('checked', data.shares_giving);
+                        $('INPUT.anonymous').attr('checked', data.anonymous);
                     }
                     , error: function() {
-                            alert( "Failed to change your giving sharing "
+                            alert( "Failed to change your anonymity "
                                  + "preference. Try again?"
                                   );
                         }
@@ -210,9 +210,10 @@ tip_or_pledge = "tip"
     </h2>
 
     <p>
-        <input name="shares-giving" class="shares-giving" type="checkbox" 
-            {% if participant['shares_giving'] %}checked="true"{% end %} /> 
-        <label for="shares-giving" class="shares-giving">Share aggregate giving</label>
+        <input name="anonymous" class="anonymous" type="checkbox" 
+            {% if participant['anonymous'] %}checked="true"{% end %} /> 
+        <label for="anonymous" class="anonymous">Show as 
+            &ldquo;anonymous&rdquo; on leaderboard.</label>
     </p>
 
     {% if total == 0 %}

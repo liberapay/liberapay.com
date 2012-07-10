@@ -8,16 +8,16 @@ if POST:
     rec = db.fetchone("""
 
         UPDATE participants 
-           SET shares_giving=not shares_giving 
+           SET anonymous=not anonymous
          WHERE id=%s
-     RETURNING shares_giving
+     RETURNING anonymous
 
     """, (user.id,))
 else:
     rec = db.fetchone("""
 
-        SELECT shares_giving FROM participants WHERE id=%s
+        SELECT anonymous FROM participants WHERE id=%s
 
     """, (user.id,))
 assert rec is not None
-response.body = {"shares_giving": rec['shares_giving']}
+response.body = {"anonymous": rec['anonymous']}

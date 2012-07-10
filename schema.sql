@@ -90,3 +90,8 @@ CREATE TABLE exchanges
 --                             |         |               |   |   |   thousand
 --                             |         |               |   |   |   | 
 -- numeric(34,2) maxes out at $999,999,999,999,999,999,999,999,999,999,999.00.
+
+
+-- https://github.com/whit537/www.gittip.com/issues/128
+ALTER TABLE participants ADD COLUMN anonymous bool NOT NULL DEFAULT FALSE;
+ALTER TABLE participants DROP COLUMN shares_giving; 
