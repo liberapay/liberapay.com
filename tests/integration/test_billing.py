@@ -15,7 +15,7 @@ class TestBilling(GittipBaseDBTest):
         super(TestBilling, self).setUp()
         self.participant_id = 'lgtest'
         self.balanced_account_uri = '/v1/marketplaces/M123/accounts/A123'
-        self.tok = '/v1/marketplaces/M123/accounts/A123/cards/C123'
+        self.card_uri = '/v1/marketplaces/M123/accounts/A123/cards/C123'
         billing.db = self.db
 
     @mock.patch('balanced.Account')
@@ -25,7 +25,7 @@ class TestBilling(GittipBaseDBTest):
         ba.return_value.save.return_value.uri = self.balanced_account_uri
 
         # first time through, payment processor account is None
-        billing.associate(self.participant_id, None, self.tok)
+        billing.associate(self.participant_id, None, self.card_uri)
 
         expected_email_address = '{}@gittip.com'.format(
             self.participant_id
@@ -47,7 +47,7 @@ class TestBilling(GittipBaseDBTest):
         # second time through, payment processor account is balanced
         # account_uri
         billing.associate(self.participant_id, self.balanced_account_uri,
-                          self.tok)
+                          self.card_uri)
         user = authentication.User.from_id(self.participant_id)
         # participant in db should be updated to reflect the error message of
         # last update

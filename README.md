@@ -30,13 +30,18 @@ building the software. All Python dependencies are included in vendor/. To
     GITHUB_CALLBACK=http://localhost:8537/github/associate
     DYLD_LIBRARY_PATH=/Library/PostgreSQL/9.1/lib
 
-The BALANCED_API_SECRET is a test marketplace. To generate a new secret for your
-own testing run this command:
+The `BALANCED_API_SECRET` is a test marketplace. To generate a new secret for
+your own testing run this command:
 
     curl -X POST https://api.balancedpayments.com/v1/api_keys | grep secret
 
+Grab that secret and also create a new marketplace to test against:
+
+    curl -X POST https://api.balancedpayments.com/v1/marketplaces -u <your_secret>:
+
 The site works without this, except for the credit card page (you have to set
-this).
+this). Visit the [Balanced Documentation](https://www.balancedpayments.com/docs)
+if you want to know more about creating marketplace's.
 
 The GITHUB_* keys are for a gittip-dev application in the Gittip organization
 on Github. It points back to localhost:8537, which is where Gittip will be

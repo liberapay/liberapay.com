@@ -2,9 +2,9 @@
 
 When the user fills out the payment details form in the UI, we send the new
 info to Balanced (using the balanced.js library). Balanced always gives us a
-so-called "single-use token" in return, provided that the credit card info
-validated. This present script is called next. It takes the token and tries to
-associate it with a Balanced account object (creating one as needed).
+single-use token in return, provided that the credit card info validated. This
+present script is called next. It takes the token and tries to associate it with
+a Balanced account object (creating one as needed).
 
 """
 from aspen import Response
@@ -23,15 +23,15 @@ if qs.get('action') == 'delete':
 else:
 
     # Associate the single-use token representing the credit card details (we
-    # call it "tok" here because that's how it was always done). Possible error
-    # codes would be 409 (this card cannot be associated with this account in
-    # this case).
+    # call it "card_uri" here because that's how Balanced refers to it).
+    # Possible error codes would be 409 (this card cannot be associated with
+    # this account in this case).
 
-    tok = qs.get('tok')
-    if tok is None:
+    card_uri = qs.get('card_uri')
+    if card_uri is None:
         raise Response(400) 
 
-    error = billing.associate(user.id, user.balanced_account_uri, tok)
+    error = billing.associate(user.id, user.balanced_account_uri, card_uri)
     if error:
         out = {"problem": "Problem", "error": error}
     else:

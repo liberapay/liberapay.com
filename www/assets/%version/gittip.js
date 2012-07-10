@@ -280,7 +280,7 @@ Gittip.paymentsResponseHandler = function(response)
         }
 
         Gittip.submitForm( "/credit-card.json"
-                         , {tok: response.data.uri}
+                         , {card_uri: response.data.uri}
                          , success
                          , detailedFeedback
                           );

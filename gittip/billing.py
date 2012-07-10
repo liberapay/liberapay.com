@@ -2,10 +2,10 @@
 
 There are two pieces of information for each customer related to billing:
 
-    balanced_account_uri    NULL - This customer has never been billed, even
-                                   unsuccessfully.
-                            'deadbeef' - This customer's card has been validate
-                                and associated with a balanced account
+    balanced_account_uri    NULL - This customer has never been billed.
+                            'deadbeef' - This customer's card has been
+                                validated and associated with a Balanced
+                                account.
     last_bill_result        NULL - This customer has not been billed yet.
                             '' - This customer is in good standing.
                             <message> - A error message.
@@ -20,11 +20,11 @@ from gittip import db, get_tips_and_total
 from psycopg2 import IntegrityError
 
 
-def associate(participant_id, balanced_account_uri, tok):
+def associate(participant_id, balanced_account_uri, card_uri):
     """Given three unicodes, return a dict.
 
     This function attempts to associate the credit card details referenced by
-    tok with a Balanced Account. If the attempt succeeds we cancel the
+    card_uri with a Balanced Account. If the attempt succeeds we cancel the
     transaction. If it fails we log the failure. Even for failure we keep the
     payment_method_token, we don't reset it to None/NULL. It's useful for
     loading the previous (bad) credit card info from Balanced in order to
@@ -33,7 +33,7 @@ def associate(participant_id, balanced_account_uri, tok):
     """
     typecheck( participant_id, unicode
              , balanced_account_uri, (unicode, None)
-             , tok, unicode
+             , card_uri, unicode
               )
 
 
@@ -71,7 +71,7 @@ def associate(participant_id, balanced_account_uri, tok):
     # Balanced API as a string in last_bill_result. That may be helpful for
     # debugging at some point.
 
-    customer.card_uri = tok
+    customer.card_uri = card_uri
     try:
         customer.save()
     except balanced.exc.HTTPError as err:
