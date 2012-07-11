@@ -176,16 +176,16 @@ paydays = Paydays(participant_id, info['balance'])
         text-align: left;
         border-bottom: 1px solid #614C3E;
     }
-    TD.out {
+    TD.debit {
         color: red;
+    }
+    .head TD.debit {
+        color: #614C3E;
     }
     TD.note {
         text-align: left;
     }
     .fee {
-        border-left: 1px solid #614C3E;
-    }
-    .in-out {
         border-right: 1px solid #614C3E;
         text-align: right;
     }
@@ -211,22 +211,22 @@ paydays = Paydays(participant_id, info['balance'])
             ({{ utils.dt2age(event['timestamp']) }})</b></th>
     </tr>
     <tr class="head">
-        <td colspan="3" class="outside">&larr; Outside</td>
-        <td colspan="3" class="inside">Inside Gittip &rarr;</td>
+        <td colspan="2" class="outside">&larr; Outside</td>
+        <td colspan="4" class="inside">Inside Gittip &rarr;</td>
     </tr>
     <tr class="head">
         <td class="card">Card</td>
         <td class="fee">Fee</td>
-        <td class="in-out">In/Out</td>
-        <td class="tip">Tip</td>
+        <td class="credit">Credit</td>
+        <td class="debit">Debit</td>
         <td class="balance">Balance</td>
         <td class="note">Note</td>
     </tr>
     <tr>
         <td class="card"></td>
         <td class="fee"></td>
-        <td class="in-out"></td>
-        <td class="tip"></td>
+        <td class="credit"></td>
+        <td class="debit"></td>
         <td class="balance">{{ event['balance'] }}</td>
         <td class="note"></td>
     </tr>
@@ -234,8 +234,8 @@ paydays = Paydays(participant_id, info['balance'])
     <tr>
         <td class="card"></td>
         <td class="fee"></td>
-        <td class="in-out"></td>
-        <td class="tip"></td>
+        <td class="credit"></td>
+        <td class="debit"></td>
         <td class="balance">{{ event['balance'] }}</td>
         <td class="note"></td>
     </tr>
@@ -243,8 +243,8 @@ paydays = Paydays(participant_id, info['balance'])
     <tr>
         <td class="card">{{ event['amount'] + event['fee'] }}</td>
         <td class="fee">{{ event['fee'] }}</td>
-        <td class="in-out">{{ event['amount'] }}</td>
-        <td class="tip"></td>
+        <td class="credit">{{ event['amount'] }}</td>
+        <td class="debit"></td>
         <td class="balance">{{ event['balance'] }}</td>
         <td class="note"></td>
     </tr>
@@ -252,12 +252,13 @@ paydays = Paydays(participant_id, info['balance'])
     <tr>
         <td class="card"></td>
         <td class="fee"></td>
-        <td class="in-out"></td>
 
         {% if event['tippee'] == participant_id %}
-        <td class="tip in">{{ event['amount'] }}</td>
+        <td class="credit">{{ event['amount'] }}</td>
+        <td class="debit"></td>
         {% else %}
-        <td class="tip out">{{ event['amount'] }}</td>
+        <td class="credit"></td>
+        <td class="debit">{{ event['amount'] }}</td>
         {% end %}
 
         <td class="balance">{{ event['balance'] }}</td>
