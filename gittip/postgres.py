@@ -111,8 +111,10 @@ class PostgresManager(object):
         """Execute the query and yield the results.
         """
         with self.get_cursor(*a, **kw) as cursor:
-            for row in cursor:
-                yield row
+            if cursor.rowcount > 0:
+                return cursor
+            else:
+                return []
 
     def get_cursor(self, *a, **kw):
         """Execute the query and return a context manager wrapping the cursor.
@@ -128,7 +130,7 @@ class PostgresManager(object):
 class PostgresConnection(psycopg2.extensions.connection):
     """Subclass to change transaction, encoding, and cursor behavior.
 
-    THE DBAPI 2.0 spec calls for transactions to be left open by default.  I
+    THE DBAPI 2.0 spec calls for transactions to be left open by default. I
     don't think we want this. We set autocommit to True.
 
     We enforce UTF-8.

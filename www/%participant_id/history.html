@@ -1,0 +1,288 @@
+from decimal import Decimal
+
+from aspen import Response, log
+from gittip import db, utils, AMOUNTS
+
+
+class Paydays(object):
+
+    def __init__(self, participant_id, balance):
+        self._participant_id = participant_id
+        self._paydays = db.fetchall("SELECT ts_start, ts_end FROM paydays "
+                                    "ORDER BY ts_end DESC")
+        self._npaydays = self._paydays.rowcount
+        self._exchanges = list(db.fetchall( "SELECT * FROM exchanges "
+                                            "WHERE participant_id=%s "
+                                            "ORDER BY timestamp ASC"
+                                          , (participant_id,)
+                                           ))
+        self._transfers = list(db.fetchall( "SELECT * FROM transfers "
+                                            "WHERE tipper=%s OR tippee=%s "
+                                            "ORDER BY timestamp ASC"
+                                          , (participant_id, participant_id)
+                                          ))
+        self._balance = balance
+
+
+    def __iter__(self):
+        """Yield iterators of events.
+
+        Each payday is expected to encompass 0 or 1 exchanges and 0 or more
+        transfers per participant. Here we knit them together along with start
+        and end events for each payday. If we have exchanges or transfers that
+        fall outside of a payday, then we have a logic bug. I am 50% confident
+        that this will manifest some day.
+
+        """
+        _i = 1
+        for payday in self._paydays:
+
+            if not (self._exchanges or self._transfers):
+                # Show all paydays since the user started really participating.
+                break
+
+            payday_start = { 'event': 'payday-start'
+                           , 'timestamp': payday['ts_start']
+                           , 'number': self._npaydays - _i
+                           , 'balance': Decimal('0.00')
+                            }
+            payday_end = { 'event': 'payday-end'
+                         , 'timestamp': payday['ts_end']
+                         , 'number': self._npaydays - _i
+                          }
+            received = { 'event': 'received'
+                       , 'amount': Decimal('0.00')
+                       , 'n': 0
+                        }
+            _i += 1
+
+
+            events = []
+            while (self._exchanges or self._transfers):
+
+                # Take the next event, either an exchange or transfer.
+                # ====================================================
+                # We do this by peeking at both lists, and popping the list
+                # that has the next event.
+
+                exchange = self._exchanges[-1] if self._exchanges else None
+                transfer = self._transfers[-1] if self._transfers else None
+
+                if exchange is None:
+                    event = self._transfers.pop()
+                elif transfer is None:
+                    event = self._exchanges.pop()
+                elif transfer['timestamp'] > exchange['timestamp']:
+                    event = self._transfers.pop()
+                else:
+                    event = self._exchanges.pop()
+
+                event['event'] = 'exchange' if 'fee' in event else 'transfer' 
+
+
+                # Record the next event.
+                # ======================
+
+                if event['timestamp'] < payday_start['timestamp']:
+                    if event['event'] == 'exchange':
+                        back_on = self._exchanges
+                    else:
+                        back_on = self._transfers
+                    back_on.append(event)
+                    break
+
+                if event['event'] == 'transfer':
+                    if event['tippee'] == self._participant_id:
+                        
+                        # Don't leak details about who tipped you. Only show 
+                        # aggregates for that.
+
+                        received['amount'] += event['amount']
+                        received['n'] += 1
+
+                        #continue  # Don't leak!
+
+                events.append(event)
+
+            if not events:
+                continue
+
+
+            # Calculate balance.
+            # ==================
+
+            prev = events[0]
+            prev['balance'] = self._balance
+            for event in events[1:] + [payday_start]:
+                if prev['event'] == 'exchange':
+                    balance = prev['balance'] - prev['amount']
+                elif prev['event'] == 'transfer':
+                    if prev['tippee'] == self._participant_id:
+                        balance = prev['balance'] - prev['amount']
+                    else:
+                        balance = prev['balance'] + prev['amount']
+                event['balance'] = balance
+                prev = event
+            self._balance = payday_start['balance']
+
+            yield payday_start
+            for event in reversed(events):
+                yield event
+            yield payday_end
+
+        # This should catch that logic bug.
+        if self._exchanges or self._transfers:
+            log("These should be empty:", self._exchanges, self._transfers)
+            raise "Logic bug in payday timestamping."
+
+# ========================================================================== ^L
+
+if user.ANON:
+    raise Response(404)
+
+participant_id = path['participant_id']
+
+if participant_id != user.id:
+    if not user.ADMIN:
+        raise Response(403)
+
+info = db.fetchone( "SELECT balance,claimed_time FROM participants WHERE id=%s"
+                  , (participant_id,)
+                   )
+if info is None:
+    raise Response(404)
+claimed_time = info['claimed_time']
+paydays = Paydays(participant_id, info['balance'])
+
+# ========================================================================== ^L
+{% extends templates/base.html %}
+{% block body %}
+<style>
+    TH {
+        padding-top: 24pt;
+    }
+    TH B {
+        font-weight: 300;
+        font-size: 9pt;
+    }
+    TD {
+        padding: 1pt 3pt;
+        font-size: 9pt;
+        line-height: 10pt;
+    }
+    .head TD {
+        font-size: 9pt;
+        white-space: normal;
+        text-align: left;
+        border-bottom: 1px solid #614C3E;
+    }
+    TD.out {
+        color: red;
+    }
+    TD.note {
+        text-align: left;
+    }
+    .fee {
+        border-left: 1px solid #614C3E;
+    }
+    .in-out {
+        border-right: 1px solid #614C3E;
+        text-align: right;
+    }
+    .outside {
+        border-right: 1px solid #614C3E;
+        text-align: right ! important;
+    }
+
+</style>
+<div id="their-voice">
+    <h2 class="first">{{ participant_id == user.id and "You" or participant_id }} joined 
+    {{ utils.dt2age(claimed_time) }}.</h2>
+
+    <h3>{{ participant_id == user.id and "Your" or "Their" }} balance is 
+    ${{ info['balance'] }}.</h2>
+
+    <table>
+    {% for event in paydays %}
+    {% if event['event'] == 'payday-start' %}
+    <tr>
+        <th colspan="6">Gittip #{{ event['number'] }}
+            <b>&mdash;{{ event['timestamp'].strftime("%B %d, %Y").replace(' 0', ' ') }} 
+            ({{ utils.dt2age(event['timestamp']) }})</b></th>
+    </tr>
+    <tr class="head">
+        <td colspan="3" class="outside">&larr; Outside</td>
+        <td colspan="3" class="inside">Inside Gittip &rarr;</td>
+    </tr>
+    <tr class="head">
+        <td class="card">Card</td>
+        <td class="fee">Fee</td>
+        <td class="in-out">In/Out</td>
+        <td class="tip">Tip</td>
+        <td class="balance">Balance</td>
+        <td class="note">Note</td>
+    </tr>
+    <tr>
+        <td class="card"></td>
+        <td class="fee"></td>
+        <td class="in-out"></td>
+        <td class="tip"></td>
+        <td class="balance">{{ event['balance'] }}</td>
+        <td class="note"></td>
+    </tr>
+    {% elif event['event'] == 'balance' %}
+    <tr>
+        <td class="card"></td>
+        <td class="fee"></td>
+        <td class="in-out"></td>
+        <td class="tip"></td>
+        <td class="balance">{{ event['balance'] }}</td>
+        <td class="note"></td>
+    </tr>
+    {% elif event['event'] == 'exchange' %}
+    <tr>
+        <td class="card">{{ event['amount'] + event['fee'] }}</td>
+        <td class="fee">{{ event['fee'] }}</td>
+        <td class="in-out">{{ event['amount'] }}</td>
+        <td class="tip"></td>
+        <td class="balance">{{ event['balance'] }}</td>
+        <td class="note"></td>
+    </tr>
+    {% elif event['event'] == 'transfer' %}
+    <tr>
+        <td class="card"></td>
+        <td class="fee"></td>
+        <td class="in-out"></td>
+
+        {% if event['tippee'] == participant_id %}
+        <td class="tip in">{{ event['amount'] }}</td>
+        {% else %}
+        <td class="tip out">{{ event['amount'] }}</td>
+        {% end %}
+
+        <td class="balance">{{ event['balance'] }}</td>
+
+        {% if event['tippee'] == participant_id %}
+            {% if user.ADMIN and (participant_id != user.id or 'override' in qs) %}
+            <td class="note">from <a href="/{{ event['tipper'] }}/history.html">{{ event['tipper'] }}</a></td>
+            {% else %}
+            <td class="note">from someone</td>
+            {% end %}
+        {% else %}
+            {% if user.ADMIN %}
+            <td class="note">to 
+                <a href="/{{ event['tippee'] }}/history.html">{{ event['tippee'] }}</a></td>
+            {% else %}
+            <td class="note">to 
+                <a href="/{{ event['tippee'] }}/">{{ event['tippee'] }}</a></td>
+            {% end %}
+        {% end %}
+
+    </tr>
+    {% end %}
+    {% end %}
+    </table>
+
+</div>
+
+{% end %}

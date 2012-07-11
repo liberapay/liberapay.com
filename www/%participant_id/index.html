@@ -12,7 +12,7 @@ profiles is rolled over to the new participant.
 import requests
 from aspen import json, Response
 from gittip import AMOUNTS, db, get_tip, get_tips_and_total, get_tipjar
-from gittip.utils import wrap
+from gittip.utils import wrap, dt2age
 from gittip.networks import github
 
 
@@ -278,6 +278,10 @@ tip_or_pledge = "tip"
 
     {% end %}
 
+    <h2>You joined {{ dt2age(user.claimed_time) }}.
+        <span class="small"><a href="history.html">History</a></span>
+    </h2>
+
 {% else %}
     <h2 class="first"><b>{{ participant['id'] }}</b> {{ get_tipjar(participant['id'], claimed=True) }}</h2>
 
@@ -296,6 +300,10 @@ tip_or_pledge = "tip"
             </a>
         </li>
     </ul>
+
+    <h3>{{ participant['id'] }} joined {{ dt2age(participant['claimed_time']) }}.{% if user.ADMIN or user.id == participant['id'] %}
+        <span class="small"><a href="history.html">History</a></span>
+    {% end %}</h3>
 
 {% end %}
 
