@@ -111,10 +111,8 @@ class PostgresManager(object):
         """Execute the query and yield the results.
         """
         with self.get_cursor(*a, **kw) as cursor:
-            if cursor.rowcount > 0:
-                return cursor
-            else:
-                return []
+            for row in cursor:
+                yield row
 
     def get_cursor(self, *a, **kw):
         """Execute the query and return a context manager wrapping the cursor.

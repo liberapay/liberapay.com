@@ -8,9 +8,9 @@ class Paydays(object):
 
     def __init__(self, participant_id, balance):
         self._participant_id = participant_id
-        self._paydays = db.fetchall("SELECT ts_start, ts_end FROM paydays "
-                                    "ORDER BY ts_end DESC")
-        self._npaydays = self._paydays.rowcount
+        self._paydays = list(db.fetchall("SELECT ts_start, ts_end FROM paydays "
+                                         "ORDER BY ts_end DESC"))
+        self._npaydays = len(self._paydays)
         self._exchanges = list(db.fetchall( "SELECT * FROM exchanges "
                                             "WHERE participant_id=%s "
                                             "ORDER BY timestamp ASC"
