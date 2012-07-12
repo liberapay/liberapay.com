@@ -24,7 +24,7 @@ receivers = db.fetchall("""
 
 givers = db.fetchall("""
 
-    SELECT tipper, shares_giving, sum(amount) AS amount
+    SELECT tipper, anonymous, sum(amount) AS amount
       FROM (    SELECT DISTINCT ON (tipper, tippee)
                        amount
                      , tipper
@@ -36,7 +36,7 @@ givers = db.fetchall("""
               ORDER BY tipper, tippee, mtime DESC
               ) AS foo
       JOIN participants p ON p.id = tipper
-  GROUP BY tipper, shares_giving
+  GROUP BY tipper, anonymous 
   ORDER BY amount DESC
   LIMIT 10
 
@@ -117,10 +117,10 @@ givers = db.fetchall("""
                 <td>{{ i }}.</td>
                 <td class="amount">$</td>
                 <td class="amount">{{ giver['amount'] }}</td>
-                {% if giver['shares_giving'] %}
-                <td><a href="/{{ giver['tipper'] }}/">{{ giver['tipper'] }}</a></td>
-                {% else %}
+                {% if giver['anonymous'] %}
                 <td class="unclaimed">anonymous</td>
+                {% else %}
+                <td><a href="/{{ giver['tipper'] }}/">{{ giver['tipper'] }}</a></td>
                 {% end %}
             </tr>
             {% end %}

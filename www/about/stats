@@ -78,6 +78,7 @@ _tip_distribution = list(db.fetchall("""
               JOIN participants p ON p.id = tipper
               JOIN participants p2 on p2.id = tippee
              WHERE p.last_bill_result = ''
+               AND p2.claimed_time IS NOT NULL
                AND amount > 0
           GROUP BY tipper, tippee, mtime, amount
           ORDER BY tipper, tippee, mtime DESC

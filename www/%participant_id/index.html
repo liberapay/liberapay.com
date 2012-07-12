@@ -12,7 +12,7 @@ profiles is rolled over to the new participant.
 import requests
 from aspen import json, Response
 from gittip import AMOUNTS, db, get_tip, get_tips_and_total, get_tipjar
-from gittip.utils import wrap
+from gittip.utils import wrap, dt2age
 from gittip.networks import github
 
 
@@ -160,18 +160,18 @@ tip_or_pledge = "tip"
             // Wire up aggregate giving knob.
             // ==============================
 
-            $('.shares-giving').click(function()
+            $('.anonymous').click(function()
             {
                 jQuery.ajax(
-                    { url: 'shares-giving.json'
+                    { url: 'anonymous.json'
                     , type: 'POST'
                     , dataType: 'json'
                     , success: function(data)
                     {
-                        $('INPUT.shares-giving').attr('checked', data.shares_giving);
+                        $('INPUT.anonymous').attr('checked', data.anonymous);
                     }
                     , error: function() {
-                            alert( "Failed to change your giving sharing "
+                            alert( "Failed to change your anonymity "
                                  + "preference. Try again?"
                                   );
                         }
@@ -210,9 +210,10 @@ tip_or_pledge = "tip"
     </h2>
 
     <p>
-        <input name="shares-giving" class="shares-giving" type="checkbox" 
-            {% if participant['shares_giving'] %}checked="true"{% end %} /> 
-        <label for="shares-giving" class="shares-giving">Share aggregate giving</label>
+        <input name="anonymous" class="anonymous" type="checkbox" 
+            {% if participant['anonymous'] %}checked="true"{% end %} /> 
+        <label for="anonymous" class="anonymous">Show as 
+            &ldquo;anonymous&rdquo; on leaderboard.</label>
     </p>
 
     {% if total == 0 %}
@@ -245,8 +246,6 @@ tip_or_pledge = "tip"
     </table>
 
     <h2>Your balance is ${{ user.balance }}.
-        <span class="small{% if not user.last_bill_result == "" %} highlight{% end %}"><a 
-                href="/bank-account.html">Bank account</a></span>
     </h2>
 
     {% if user.balance > 0 %}
@@ -277,6 +276,10 @@ tip_or_pledge = "tip"
 
     {% end %}
 
+    <h2>You joined {{ dt2age(user.claimed_time) }}.
+        <span class="small"><a href="history.html">History</a></span>
+    </h2>
+
 {% else %}
     <h2 class="first"><b>{{ participant['id'] }}</b> {{ get_tipjar(participant['id'], claimed=True) }}</h2>
 
@@ -295,6 +298,10 @@ tip_or_pledge = "tip"
             </a>
         </li>
     </ul>
+
+    <h3>{{ participant['id'] }} joined {{ dt2age(participant['claimed_time']) }}.{% if user.ADMIN or user.id == participant['id'] %}
+        <span class="small"><a href="history.html">History</a></span>
+    {% end %}</h3>
 
 {% end %}
 
