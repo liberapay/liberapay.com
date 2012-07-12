@@ -103,7 +103,7 @@ Thanks! :-)</p>
     <h2>Change your card on file.</h2>
     {% end %}
 
-    <form id="payment">
+    <form id="payment" class="special">
         <div id="feedback">{% if user.last_bill_result %}
         <h3><span>Darn it all!</span></h3>
         <div class="details">
@@ -172,7 +172,7 @@ Thanks! :-)</p>
     <p>Your credit card details will immediately be completely purged from
     Gittip.</p>
 
-    <form action="credit-card.json">
+    <form action="credit-card.json" class="special">
         <input type="hidden" name="action" value="delete"> 
         <button>Delete my credit card</button>
     </form>

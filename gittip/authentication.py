@@ -47,6 +47,7 @@ class User:
                  , p.is_admin
                  , p.redirect
                  , p.balance
+                 , p.goal
                  , n.network
                  , n.user_info
               FROM participants         p

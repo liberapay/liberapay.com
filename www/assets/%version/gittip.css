@@ -163,38 +163,38 @@ BLOCKQUOTE {
 /* FORM */
 /* ==== */
 
-FORM {
+FORM.special {
 }
-FORM .half {
+FORM.special .half {
     width: 150px;
 }
-FORM .full {
+FORM.special .full {
     clear: both;
     text-align: right;
     padding-top: 5px;
 }
-FORM #other {
+FORM.special #other {
     font: normal 9pt/14pt Arial, sans-serif;
     color: #00E;
     cursor: pointer;
     margin-right: 1em;
 }
-FORM #other:hover {
+FORM.special #other:hover {
     text-decoration: underline;
 }
-FORM .left {
+FORM.special .left {
     float: left;
 }
-FORM .right {
+FORM.special .right {
     float: left;
 }
-FORM LABEL {
+FORM.special LABEL {
     display: block;
     font: normal 10px/14px Monaco, "Lucida Console", monospace;
     margin: 5px 0 0;
     padding: 0;
 }
-FORM INPUT {
+FORM.special INPUT {
     font: normal 11pt/14pt Arial, sans-serif;
     width: 292px;
     margin: 0;
@@ -203,38 +203,38 @@ FORM INPUT {
     outline: none;
     color: #614C3E;
 }
-FORM .half INPUT {
+FORM.special .half INPUT {
     width: 137px;
 }
-FORM .right.half LABEL,
-FORM .right.half INPUT {
+FORM.special .right.half LABEL,
+FORM.special .right.half INPUT {
     margin-left: 5px;
 }
-FORM INPUT:focus {
+FORM.special INPUT:focus {
     border-color: #2A8F79;
 }
-FORM .float {
+FORM.special .float {
     float: left;
 }
-FORM .city          INPUT { width: 137px; }
-FORM .state         INPUT { width: 43px; }
-FORM .zip           INPUT { width: 75px; }
-FORM .card_number   INPUT { width: 137px; }
-FORM .cvv           INPUT { width: 43px; }
-FORM .expiry        INPUT { width: 75px; }
-FORM .not-first LABEL,
-FORM .not-first INPUT {
+FORM.special .city          INPUT { width: 137px; }
+FORM.special .state         INPUT { width: 43px; }
+FORM.special .zip           INPUT { width: 75px; }
+FORM.special .card_number   INPUT { width: 137px; }
+FORM.special .cvv           INPUT { width: 43px; }
+FORM.special .expiry        INPUT { width: 75px; }
+FORM.special .not-first LABEL,
+FORM.special .not-first INPUT {
     margin-left: 10px;
 }
-FORM#payment IMG {
+FORM.special#payment IMG {
     float: left;
 }
-FORM#payment P {
+FORM.special#payment P {
     margin: 3em 0 0;
     font-size: 14pt;
     line-height: 18pt;
 }
-FORM#payment .full {
+FORM.special#payment .full {
     padding-top: 10px;
 }
 

@@ -1,5 +1,10 @@
 import datetime
+import locale
 from decimal import Decimal
+
+
+locale.setlocale(locale.LC_ALL, "en_US")
+
 
 BIRTHDAY = datetime.date(2012, 6, 1)
 CARDINALS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
@@ -79,45 +84,36 @@ def get_backed_amount(participant_id):
     return amount
 
 
-def get_tipjar(participant_id, pronoun="their", claimed=False):
-    """Given a participant id, return a unicode.
+def get_number_of_backers(participant_id):
+    """Given a unicode, return an int.
     """
 
-    amount = get_backed_amount(participant_id)
+    BACKED = """\
 
+        SELECT count(amount) AS nbackers
+          FROM ( SELECT DISTINCT ON (tipper)
+                        amount
+                      , tipper
+                   FROM tips
+                   JOIN participants p ON p.id = tipper
+                  WHERE tippee=%s
+                    AND last_bill_result = ''
+               ORDER BY tipper
+                      , mtime DESC
+                ) AS foo
+         WHERE amount > 0
 
-    # Compute a unicode describing the amount.
-    # ========================================
-    # This is down here because we use it in multiple places in the app,
-    # basically in the claimed participant page and the non-claimed GitHub page
-    # (hopefully soon to be Facebook and Twitter as well).
-
-    if pronoun not in ('your', 'their'):
-        raise Exception("Unknown, um, pronoun: %s" % pronoun)
-
-    if amount == 0:
-        if pronoun == "your":
-            tipjar = u"have no backed tips."
-        elif pronoun == "their":
-            tipjar = u"has no backed tips."
+    """
+    rec = db.fetchone(BACKED, (participant_id,))
+    if rec is None:
+        nbackers = None
     else:
-        if pronoun == "your":
-            tipjar = u"have $%s in backed tips."
-        elif pronoun == "their":
-            tipjar = u"has $%s in backed tips."
-        tipjar %= amount
+        nbackers = rec['nbackers']  # might be None
 
+    if nbackers is None:
+        nbackers = 0
 
-    # We're opt-in.
-    # =============
-    # If the user hasn't claimed the tipjar then the tips are only pledges, 
-    # we're not going to actually collect money on their behalf.
-   
-    if not claimed:
-        tipjar = tipjar.replace("backed", "pledged")
-
-
-    return tipjar
+    return nbackers
 
 
 def get_tips_and_total(tipper, for_payday=False):

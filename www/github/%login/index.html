@@ -4,7 +4,7 @@ import decimal
 
 import requests
 from aspen import json, Response
-from gittip import AMOUNTS, db, get_tip, get_tipjar
+from gittip import AMOUNTS, CARDINALS, db, get_tip, get_number_of_backers
 from gittip.networks import github
 
 
@@ -50,7 +50,7 @@ else:
     can_tip = False
 
 tip_or_pledge = "pledge"
-
+nbackers = get_number_of_backers(username)
 
 # ========================================================================== ^L
 {% extends templates/participant.html %}
@@ -95,15 +95,22 @@ tip_or_pledge = "pledge"
         {% end %}
 
 
-        <h3>This person {{ get_tipjar(username, claimed=False) }}</h3>
+        {% if nbackers == 1 %}
+        <h3>There is one person ready to give.</h3>
+        {% elif nbackers > 1 %}
+        <h3>There are {{ CARDINALS[nbackers] }} people ready to give.</h3>
+        {% end %}
 
-        <p>We never collect money on a person&rsquo;s behalf until that person
-        opts in by claiming their account, which {{ username }} has not done.
-        Any amount above is what the Gittip community is willing to give 
-        {{ username }} as a weekly gift, but only if {{ username }} accepts
-        it by opting in.</p>
 
-        {% if user.ANON %}
+        {% if not user.ANON %}
+
+        <p>{{ 'But we' if nbackers > 0 else 'We' }} will never collect money on
+        behalf of {{ username }} until they ask us to.</p>
+
+        {% else %}
+
+        <p>{{ 'But we' if nbackers > 0 else 'We' }} will never collect money on
+        your behalf until you ask us to.</p>
 
         <h3>Don&rsquo;t like what you see?</h3>
         

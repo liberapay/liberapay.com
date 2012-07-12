@@ -1,3 +1,13 @@
+--                             million trillion trillion
+--                             |         trillion trillion
+--                             |         |               trillion
+--                             |         |               |   billion
+--                             |         |               |   |   million
+--                             |         |               |   |   |   thousand
+--                             |         |               |   |   |   | 
+-- numeric(35,2) maxes out at $999,999,999,999,999,999,999,999,999,999,999.00.
+
+
 -- Create the initial structure.
 
 CREATE EXTENSION hstore;
@@ -82,16 +92,11 @@ CREATE TABLE exchanges
 , participant_id        text                        NOT NULL REFERENCES participants ON DELETE RESTRICT
  );
 
---                             million trillion trillion
---                             |         trillion trillion
---                             |         |               trillion
---                             |         |               |   billion
---                             |         |               |   |   million
---                             |         |               |   |   |   thousand
---                             |         |               |   |   |   | 
--- numeric(34,2) maxes out at $999,999,999,999,999,999,999,999,999,999,999.00.
-
 
 -- https://github.com/whit537/www.gittip.com/issues/128
 ALTER TABLE participants ADD COLUMN anonymous bool NOT NULL DEFAULT FALSE;
 ALTER TABLE participants DROP COLUMN shares_giving; 
+
+
+-- https://github.com/whit537/www.gittip.com/issues/110
+ALTER TABLE participants ADD COLUMN goal numeric(35,2) DEFAULT NULL;

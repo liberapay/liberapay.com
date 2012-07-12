@@ -14,23 +14,6 @@ def wrap(u):
     return u if u else '...'
 
 
-def commaize(n, places=1):
-    """Given a number, return a string with commas and a decimal -- 1,000.0.
-    """
-    out = ("%%.0%df" % places) % n
-    try:
-        whole, fraction = out.split('.')
-    except ValueError:
-        whole, fraction = (out, '')
-    _whole = []
-    for i, digit in enumerate(reversed(whole), start=1):
-        _whole.insert(0, digit)
-        if i % 3 == 0:
-            _whole.insert(0, ',')
-    out = ''.join(_whole + ['.', fraction]).lstrip(',').rstrip('.')
-    return out
-
-
 def total_seconds(td):
     """
     Python 2.7 adds a total_seconds method to timedelta objects.
