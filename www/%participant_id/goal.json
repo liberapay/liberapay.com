@@ -1,0 +1,33 @@
+import locale
+import decimal
+
+from aspen import Response
+from gittip import db
+
+# ========================================================================== ^L
+
+if user.ANON:
+    raise Response(404)
+request.allow("POST")
+
+goal = request.body["goal"]
+
+if goal == "null":
+    goal = None
+elif goal == "custom":
+    goal = request.body["goal_custom"]
+
+if goal is not None:
+    try:
+        goal = decimal.Decimal(goal)
+    except decimal.InvalidOperation:
+        raise Response(400, "Bad input.") 
+    
+rec = db.fetchone( "UPDATE participants SET goal=%s "
+                   "WHERE id=%s RETURNING goal"
+                 , (goal, user.id)
+                  )
+goal = rec['goal']
+if goal is not None:
+    goal = locale.format("%.2f", rec['goal'], grouping=True)
+response.body = {"goal": goal}
