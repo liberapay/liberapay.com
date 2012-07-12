@@ -3,7 +3,10 @@ import locale
 from decimal import Decimal
 
 
-locale.setlocale(locale.LC_ALL, "en_US.utf8")
+try:  # XXX This can't be right.
+    locale.setlocale(locale.LC_ALL, "en_US.utf8")
+except locale.Error:
+    locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
 
 
 BIRTHDAY = datetime.date(2012, 6, 1)
