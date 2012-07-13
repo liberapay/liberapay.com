@@ -95,10 +95,13 @@ nbackers = get_number_of_backers(username)
         {% end %}
 
 
-        {% if nbackers == 1 %}
+        {% if nbackers == 0 %}
+        {% elif nbackers == 1 %}
         <h3>There is one person ready to give.</h3>
-        {% elif nbackers > 1 %}
+        {% elif nbackers < 10 %}
         <h3>There are {{ CARDINALS[nbackers] }} people ready to give.</h3>
+        {% else %}
+        <h3>There are {{ nbackers }} people ready to give.</h3>
         {% end %}
 
 
