@@ -413,6 +413,40 @@ tip_or_pledge = "tip"
 
     {% end %}
 
+
+    <h2>Embed</h2>
+
+    <p>Use this code to embed a Gittip button on your website:</p>
+
+    <pre>&lt;iframe style="border: 0; margin: 0; padding: 0;"
+        src="/{{ username }}/widget.html" 
+        width="48pt" 
+        height="20pt" /></pre>
+
+    <p>The button opens your profile on Gittip in a new tab or window. Here&rsquo;s what the text reads:</p>
+    
+    <ul class="no-bullets">
+
+        <li><button class="small selected">Gittip</button>&mdash;person is not
+        logged into Gittip</li>
+
+        <li><button class="small selected">3.00</button>&mdash;logged into
+        Gittip; shows current gift amount</li>
+
+        <li><button class="small selected">You!</button>&mdash;your own
+        button</li>
+
+    </ul>
+   
+    <p>Here&rsquo;s an example using
+        <a href="/whit537/">whit537</a>:
+        <iframe style="border: 0; margin: 0 0 -3pt 3pt; padding: 0;"
+            src="/whit537/widget.html" 
+            width="42pt" 
+            height="20pt" />
+    </p>
+
+
 {% else %}
     <h2 class="first"><b>{{ participant['id'] }}</b> receives 
         ${{ backed_amount }} per week.</h2>

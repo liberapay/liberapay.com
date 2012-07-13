@@ -1,0 +1,40 @@
+from gittip import AMOUNTS, get_tip
+^L
+if user.ANON:
+    button_text = "Gittip"
+elif user.id == path['participant_id']:
+    button_text = "You!"
+else:
+    button_text = get_tip(user.id, path['participant_id'])
+^L
+<!doctype html>
+<html>
+    <head>
+        <style>@import url("/assets/{{ __version__ }}/gittip.css");</style>
+        <style>
+            BODY {
+                margin: 0;
+                padding: 0;
+            }
+            BUTTON {
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
+        </style>
+        <script src="/assets/jquery-1.7.1.min.js"></script>
+        <script src="/assets/{{ __version__ }}/gittip.js"></script>
+        <script>
+            $(document).ready(function()
+            {
+                $('BUTTON').click(function()
+                {
+                    window.open('./');
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <button class="small selected">{{ button_text }}</button>
+    </body>
+</html>

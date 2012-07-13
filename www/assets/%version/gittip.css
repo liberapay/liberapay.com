@@ -62,9 +62,16 @@ P {
 }
 UL {
     list-style: disc;
+    margin: 0 0 1em;
 }
 UL LI {
     margin-left: 2em;
+}
+UL.no-bullets {
+    list-style: none;
+}
+UL.no-bullets LI {
+    margin-left: 1em;
 }
 OL {
     list-style: decimal;
@@ -88,6 +95,11 @@ B {
 BLOCKQUOTE {
     background: url("/assets/{{ __version__ }}/ldquo.png") 21pt 0 no-repeat;
     padding-left: 46pt;
+}
+PRE {
+    font: 11pt/13pt monospace;
+    margin: 0 0 1em 1em;
+    padding: 0;
 }
 
 #you-are {
