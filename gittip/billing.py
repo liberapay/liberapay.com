@@ -380,16 +380,27 @@ def payday():
     """
     log("Greetings, program! It's PAYDAY!!!!")
 
+    participants, payday_start = initialize_payday()
 
+    # Drop to core.
+    # =============
+    # We are now locked for Payday. If the power goes out at this point then we
+    # will need to start over and reacquire the lock.
+    
+    payday_loop(payday_start, participants)
+
+    finish_payday()
+
+def initialize_payday():
     # Start Payday.
     # =============
-    # We try to start a new Payday. If there is a Payday that hasn't finished 
+    # We try to start a new Payday. If there is a Payday that hasn't finished
     # yet, then the UNIQUE constraint on ts_end will kick in and notify us
-    # of that. In that case we load the existing Payday and work on it some 
-    # more. We use the start time of the current Payday to synchronize our 
+    # of that. In that case we load the existing Payday and work on it some
+    # more. We use the start time of the current Payday to synchronize our
     # work.
 
-    try: 
+    try:
         rec = db.fetchone("INSERT INTO paydays DEFAULT VALUES "
                           "RETURNING ts_start")
         log("Starting a new payday.")
@@ -405,7 +416,7 @@ def payday():
     log("Payday started at %s." % payday_start)
 
     START_PENDING = """\
-        
+
         UPDATE participants
            SET pending=0.00
          WHERE pending IS NULL
@@ -421,19 +432,14 @@ def payday():
     """
     participants = db.fetchall(PARTICIPANTS)
     log("Fetched participants.")
-  
 
-    # Drop to core.
-    # =============
-    # We are now locked for Payday. If the power goes out at this point then we
-    # will need to start over and reacquire the lock.
-    
-    payday_loop(payday_start, participants)
+    return participants, payday_start
 
 
+def finish_payday():
     # Finish Payday.
     # ==============
-    # Transfer pending into balance for all users, setting pending to NULL. 
+    # Transfer pending into balance for all users, setting pending to NULL.
     # Close out the paydays entry as well.
 
     with db.get_connection() as conn:
@@ -447,7 +453,7 @@ def payday():
 
         """)
         cursor.execute("""\
-            
+
             UPDATE paydays
                SET ts_end=now()
              WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz

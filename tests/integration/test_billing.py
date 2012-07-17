@@ -100,7 +100,6 @@ class TestBillingCharge(GittipBaseDBTest):
                 ncc_failing, ts_end
             )
             select 0, '1970-01-01T00:00:00+00'::timestamptz
-            from paydays
             where not exists (
                 select *
                 from paydays
@@ -221,7 +220,6 @@ class TestBillingPayday(GittipBaseDBTest):
                 ncc_failing, ts_end
             )
             select 0, '1970-01-01T00:00:00+00'::timestamptz
-            from paydays
             where not exists (
                 select *
                 from paydays
@@ -364,3 +362,92 @@ class TestBillingPayday(GittipBaseDBTest):
         transfer.return_value = False
         result = billing.log_tip(participant, tip, payday_start)
         self.assertEqual(result, -1)
+
+    @mock.patch('gittip.billing.log')
+    def test_initialize_payday(self, log):
+        # TODO: remove this once we have test db transactions
+        self.db.execute('''
+            delete from paydays
+            where ts_end='1970-01-01T00:00:00+00'::timestamptz
+        ''')
+
+        PARTICIPANT_SQL = '''
+            insert into participants (
+                id, balance, balanced_account_uri, pending, claimed_time
+            ) values (
+                %s, %s, %s, %s, %s
+            )
+        '''
+
+        participants = [
+            ('whit537', 0, self.balanced_account_uri, None, None),
+            ('mjallday', 10, self.balanced_account_uri, 1, None),
+            ('mahmoudimus', 10, self.balanced_account_uri, 1,
+             datetime.utcnow())
+        ]
+
+        for participant in participants:
+            self.db.execute(PARTICIPANT_SQL, participant)
+
+        participants, payday_start = billing.initialize_payday()
+
+        expected_logging_call_args = [
+            ('Starting a new payday.'),
+            ('Payday started at {}.'.format(payday_start)),
+            ('Zeroed out the pending column.'),
+            ('Fetched participants.'),
+        ]
+        expected_logging_call_args.reverse()
+        for args, _ in log.call_args_list:
+            self.assertEqual(args[0], expected_logging_call_args.pop())
+
+        log.reset_mock()
+        # run a second time, we should see it pick up the existing payday
+        second_participants, second_payday_start = billing.initialize_payday()
+
+        self.assertEqual(payday_start, second_payday_start)
+        participants = list(participants)
+        second_participants = list(second_participants)
+
+        # mahmoudimus is the only valid participant as he has a claimed time
+        self.assertEqual(len(participants), 1)
+        self.assertEqual(participants, second_participants)
+
+        expected_logging_call_args = [
+            ('Picking up with an existing payday.'),
+            ('Payday started at {}.'.format(second_payday_start)),
+            ('Zeroed out the pending column.'),
+            ('Fetched participants.')]
+        expected_logging_call_args.reverse()
+        for args, _ in log.call_args_list:
+            self.assertEqual(args[0], expected_logging_call_args.pop())
+
+    @mock.patch('gittip.billing.log')
+    def test_finish_payday(self, log):
+        billing.finish_payday()
+        self.assertTrue(log.called_with('Finished payday.'))
+
+        # finishing the payday will set the ts_end date on this payday record
+        # to now, so this will not return any result
+        result = self.db.fetchone('''
+            select * from paydays
+            where ts_end='1970-01-01T00:00:00+00'::timestamptz
+        ''')
+        self.assertFalse(result)
+
+    @mock.patch('gittip.billing.log')
+    @mock.patch('gittip.billing.initialize_payday')
+    @mock.patch('gittip.billing.payday_loop')
+    @mock.patch('gittip.billing.finish_payday')
+    def test_payday(self, finish, loop, init, log):
+        participants = mock.Mock()
+        payday_start = mock.Mock()
+        init.return_value = (participants, payday_start)
+        greeting = 'Greetings, program! It\'s PAYDAY!!!!'
+
+        billing.payday()
+
+        self.assertTrue(log.called_with(greeting))
+        self.assertTrue(init.call_count)
+        self.assertTrue(loop.called_with(init.return_value))
+        self.assertTrue(finish.call_count)
