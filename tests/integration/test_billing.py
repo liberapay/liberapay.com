@@ -223,3 +223,9 @@ class TestBillingPayday(GittipBaseDBTest):
         self.assertEqual(log.call_count, 3)
         self.assertEqual(payday_one.call_count, len(participants))
         self.assertTrue(payday_one.called_with(start))
+
+    def test_assert_one_payday(self):
+        with self.assertRaises(AssertionError):
+            billing.assert_one_payday(None)
+        with self.assertRaises(AssertionError):
+            billing.assert_one_payday([1, 2])
