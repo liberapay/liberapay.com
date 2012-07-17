@@ -522,7 +522,7 @@ def payday_one(payday_start, participant):
 def log_tip(participant, tip, payday_start):
     """
     Returns
-         0 if no valid tip available
+         0 if no valid tip available or tip has not been claimed
          1 if tip is valid
         -1 if transfer fails and we cannot continue
     """

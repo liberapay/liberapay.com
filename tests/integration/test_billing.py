@@ -318,3 +318,49 @@ class TestBillingPayday(GittipBaseDBTest):
                          resulting_payday['ntips'])
         self.assertEqual(initial_payday['nparticipants'] + 1,
                          resulting_payday['nparticipants'])
+
+    @mock.patch('gittip.billing.transfer')
+    @mock.patch('gittip.billing.log')
+    def test_log_tip(self, log, transfer):
+        amount = decimal.Decimal(1)
+        invalid_amount = decimal.Decimal(0)
+        tip = {
+            'amount': amount,
+            'tippee': self.participant_id,
+            'claimed_time': datetime.utcnow(),
+        }
+        payday_start = datetime.utcnow()
+        participant = {
+            'id': 'mjallday',
+        }
+        result = billing.log_tip(participant, tip, payday_start)
+        self.assertTrue(result)
+        self.assertTrue(transfer.called_with(participant['id'],
+                                             tip['tippee'],
+                                             tip['amount']))
+        self.assertTrue(log.called_with(
+            'SUCCESS: $1 from mjallday to lgtest.'))
+
+        # invalid amount
+        tip['amount'] = invalid_amount
+        result = billing.log_tip(participant, tip, payday_start)
+        self.assertFalse(result)
+
+        tip['amount'] = amount
+
+        # not claimed
+        tip['claimed_time'] = None
+        result = billing.log_tip(participant, tip, payday_start)
+        self.assertFalse(result)
+
+        # claimed after payday
+        tip['claimed_time'] = datetime.utcnow()
+        result = billing.log_tip(participant, tip, payday_start)
+        self.assertFalse(result)
+
+        payday_start = datetime.utcnow()
+
+        # transfer failed
+        transfer.return_value = False
+        result = billing.log_tip(participant, tip, payday_start)
+        self.assertEqual(result, -1)
