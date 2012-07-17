@@ -206,3 +206,20 @@ class TestBillingCharge(GittipBaseDBTest):
             int(charge_amount * 100),
             self.participant_id
         ))
+
+
+class TestBillingPayday(GittipBaseDBTest):
+    def setUp(self):
+        super(TestBillingPayday, self).setUp()
+        billing.db = self.db
+
+    @mock.patch('gittip.billing.log')
+    @mock.patch('gittip.billing.payday_one')
+    def test_payday_loop(self, payday_one, log):
+        participants = range(100)
+        start = mock.Mock()
+        billing.payday_loop(start, participants)
+
+        self.assertEqual(log.call_count, 3)
+        self.assertEqual(payday_one.call_count, len(participants))
+        self.assertTrue(payday_one.called_with(start))
