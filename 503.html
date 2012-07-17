@@ -1,0 +1,41 @@
+^L
+from aspen.utils import dt2age
+^L
+<!doctype html>
+<html>
+    <head>
+        <title>Gittip is Down for Maintenance</title>
+        <style>
+            @import url("https://fonts.googleapis.com/css?family=Lato:300,900");
+
+            BODY {
+                padding-top: 10em;
+                font: 300 12pt/18pt "Lato", sans-serif;
+                text-align: center;
+                color: #614C3E;
+            }
+        </style>
+    </head> 
+    <body>
+        <h1>Gittip.com is</h1>
+        <h2>down for maintenance.</h2>
+        <p>We should be back {{ dt2age(website.retry_after) }}.</p>
+        <br />
+        <br />
+        <h1>:-(</h1>
+        <script type="text/javascript">
+
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-247427-33']);
+            _gaq.push(['_setDomainName', '.gittip.com']);
+            _gaq.push(['_trackEvent', 'Errors', '503']);
+
+            (function() {
+              var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+              ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+              var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+
+        </script>
+    </body>
+</html>

@@ -13,8 +13,9 @@ import locale
 
 import requests
 from aspen import json, Response
+from aspen.utils import dt2age
 from gittip import AMOUNTS, db, get_tip, get_tips_and_total, get_backed_amount
-from gittip.utils import wrap, dt2age
+from gittip.utils import wrap
 from gittip.networks import github
 
 

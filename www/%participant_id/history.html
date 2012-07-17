@@ -1,7 +1,8 @@
 from decimal import Decimal
 
 from aspen import Response, log
-from gittip import db, utils, AMOUNTS
+from aspen.utils import dt2age
+from gittip import db, AMOUNTS
 
 
 class Paydays(object):
@@ -197,7 +198,7 @@ paydays = Paydays(participant_id, info['balance'])
 </style>
 <div id="their-voice">
     <h2 class="first">{{ participant_id == user.id and "You" or participant_id }} joined 
-    {{ utils.dt2age(claimed_time) }}.</h2>
+    {{ dt2age(claimed_time) }}.</h2>
 
     <h3>{{ participant_id == user.id and "Your" or "Their" }} balance is 
     ${{ info['balance'] }}.</h2>
@@ -208,7 +209,7 @@ paydays = Paydays(participant_id, info['balance'])
     <tr>
         <th colspan="6">Gittip #{{ event['number'] }}
             <b>&mdash;{{ event['timestamp'].strftime("%B %d, %Y").replace(' 0', ' ') }} 
-            ({{ utils.dt2age(event['timestamp']) }})</b></th>
+            ({{ dt2age(event['timestamp']) }})</b></th>
     </tr>
     <tr class="head">
         <td colspan="2" class="outside">&larr; Outside</td>
