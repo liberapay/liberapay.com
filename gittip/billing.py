@@ -485,7 +485,6 @@ def payday_one(payday_start, participant):
     typecheck(total, decimal.Decimal)
     short = total - participant['balance']
     if short > 0:
-
         # The participant's Gittip account is short the amount needed to fund
         # all their tips. Let's try pulling in money from their credit card. If
         # their credit card fails we'll forge ahead, in case they have a
@@ -495,41 +494,13 @@ def payday_one(payday_start, participant):
 
         charge(participant['id'], participant['balanced_account_uri'], short)
  
-    ntips = 0 
+    successful_tips = 0
     for tip in tips:
-        msg = "$%s from %s to %s." 
-        msg %= (tip['amount'], participant['id'], tip['tippee'])
-
-        if tip['amount'] == 0:
-
-            # The tips table contains a record for every time you click a tip
-            # button. So if you click $0.08 then $0.64 then $0.00, that
-            # generates three entries. We are looking at the last entry here, 
-            # and it's zero.
-
-            continue
-
-        claimed_time = tip['claimed_time']
-
-        if claimed_time is None or claimed_time > payday_start:
-
-            # Gittip is opt-in. We're only going to collect money on a person's
-            # behalf if they opted-in by claiming their account before the
-            # start of this payday.
-
-            log("SKIPPED: %s" % msg)
-            continue
-
-        if not transfer(participant['id'], tip['tippee'], tip['amount']):
-
-            # The transfer failed due to a lack of funds for the participant.
-            # Don't try any further transfers.
-
-            log("FAILURE: %s" % msg)
+        result = log_tip(participant, tip, payday_start)
+        if result >= 0:
+            successful_tips += result
+        else:
             break
-        log("SUCCESS: %s" % msg)
-        ntips += 1
-
 
     # Update stats.
     # =============
@@ -544,7 +515,50 @@ def payday_one(payday_start, participant):
      RETURNING id
 
     """
-    assert_one_payday(db.fetchone(STATS, (1 if ntips > 0 else 0, ntips)))
+    assert_one_payday(db.fetchone(STATS,
+        (1 if successful_tips > 0 else 0, successful_tips)))
+
+
+def log_tip(participant, tip, payday_start):
+    """
+    Returns
+         0 if no valid tip available
+         1 if tip is valid
+        -1 if transfer fails and we cannot continue
+    """
+    msg = "$%s from %s to %s."
+    msg %= (tip['amount'], participant['id'], tip['tippee'])
+
+    if tip['amount'] == 0:
+
+        # The tips table contains a record for every time you click a tip
+        # button. So if you click $0.08 then $0.64 then $0.00, that
+        # generates three entries. We are looking at the last entry here,
+        # and it's zero.
+
+        return 0
+
+    claimed_time = tip['claimed_time']
+
+    if claimed_time is None or claimed_time > payday_start:
+
+        # Gittip is opt-in. We're only going to collect money on a person's
+        # behalf if they opted-in by claiming their account before the
+        # start of this payday.
+
+        log("SKIPPED: %s" % msg)
+        return 0
+
+    if not transfer(participant['id'], tip['tippee'], tip['amount']):
+
+        # The transfer failed due to a lack of funds for the participant.
+        # Don't try any further transfers.
+
+        log("FAILURE: %s" % msg)
+        return -1
+
+    log("SUCCESS: %s" % msg)
+    return 1
 
 
 def assert_one_payday(payday):

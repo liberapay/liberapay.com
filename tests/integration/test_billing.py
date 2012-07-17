@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+from datetime import datetime
 import decimal
 import mock
 import unittest
@@ -211,7 +212,31 @@ class TestBillingCharge(GittipBaseDBTest):
 class TestBillingPayday(GittipBaseDBTest):
     def setUp(self):
         super(TestBillingPayday, self).setUp()
+        self.participant_id = 'lgtest'
+        self.balanced_account_uri = '/v1/marketplaces/M123/accounts/A123'
         billing.db = self.db
+        # TODO: remove once we rollback transactions....
+        insert = '''
+            insert into paydays (
+                ncc_failing, ts_end
+            )
+            select 0, '1970-01-01T00:00:00+00'::timestamptz
+            from paydays
+            where not exists (
+                select *
+                from paydays
+                where ts_end='1970-01-01T00:00:00+00'::timestamptz
+            )
+        '''
+        self.db.execute(insert)
+
+    def _get_payday(self):
+        select = '''
+            select *
+            from paydays
+            where ts_end='1970-01-01T00:00:00+00'::timestamptz
+        '''
+        return self.db.fetchone(select)
 
     @mock.patch('gittip.billing.log')
     @mock.patch('gittip.billing.payday_one')
@@ -229,3 +254,67 @@ class TestBillingPayday(GittipBaseDBTest):
             billing.assert_one_payday(None)
         with self.assertRaises(AssertionError):
             billing.assert_one_payday([1, 2])
+
+    @mock.patch('gittip.billing.get_tips_and_total')
+    def test_payday_one_no_tips(self, get_tips_and_total):
+        amount = decimal.Decimal(1.00)
+
+        get_tips_and_total.return_value = [], amount
+        payday_start = datetime.utcnow()
+        participant = {
+            'balance': 1,
+            'id': self.participant_id,
+            'balanced_account_uri': self.balanced_account_uri,
+        }
+
+        initial_payday = self._get_payday()
+        billing.payday_one(payday_start, participant)
+        resulting_payday = self._get_payday()
+
+        self.assertEqual(initial_payday['ntippers'],
+                         resulting_payday['ntippers'])
+        self.assertEqual(initial_payday['ntips'],
+                         resulting_payday['ntips'])
+        self.assertEqual(initial_payday['nparticipants'] + 1,
+                         resulting_payday['nparticipants'])
+
+    @mock.patch('gittip.billing.get_tips_and_total')
+    @mock.patch('gittip.billing.log_tip')
+    def test_payday_one(self, log_tip, get_tips_and_total):
+        amount = decimal.Decimal(1.00)
+        like_a_tip = {
+            'amount': amount,
+            'tippee': 'mjallday',
+            'ctime': datetime.utcnow(),
+            'claimed_time': datetime.utcnow(),
+        }
+
+        # success, success, claimed, failure
+        tips = [like_a_tip, like_a_tip, like_a_tip, like_a_tip]
+        get_tips_and_total.return_value = tips, amount
+
+        payday_start = datetime.utcnow()
+        participant = {
+            'balance': 1,
+            'id': self.participant_id,
+            'balanced_account_uri': self.balanced_account_uri,
+        }
+
+        return_values = [1, 1, 0, -1]
+        return_values.reverse()
+
+        def log_tip_return_values(*_):
+            return return_values.pop()
+
+        log_tip.side_effect = log_tip_return_values
+
+        initial_payday = self._get_payday()
+        billing.payday_one(payday_start, participant)
+        resulting_payday = self._get_payday()
+
+        self.assertEqual(initial_payday['ntippers'] + 1,
+                         resulting_payday['ntippers'])
+        self.assertEqual(initial_payday['ntips'] + 2,
+                         resulting_payday['ntips'])
+        self.assertEqual(initial_payday['nparticipants'] + 1,
+                         resulting_payday['nparticipants'])
