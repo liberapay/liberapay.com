@@ -207,6 +207,36 @@ class TestBillingCharge(GittipBaseDBTest):
             self.participant_id
         ))
 
+    @mock.patch('balanced.Account')
+    def test_charge_balanced_account_small_amount(self, ba):
+        amount_to_charge = decimal.Decimal(0.06)  # $0.06 USD
+        expected_fee = (amount_to_charge + billing.FEE[0]) * billing.FEE[1]
+        expected_fee = (amount_to_charge - expected_fee.quantize(
+            billing.FEE[0], rounding=decimal.ROUND_UP)) * -1
+        expected_amount = billing.MINIMUM
+        charge_amount, fee, msg = billing.charge_balanced_account(
+            self.participant_id,
+            self.balanced_account_uri,
+            amount_to_charge)
+        self.assertEqual(charge_amount, expected_amount)
+        self.assertEqual(fee, expected_fee)
+        customer = ba.find.return_value
+        self.assertTrue(customer.debit.called_with(
+            int(charge_amount * 100),
+            self.participant_id
+        ))
+
+    @mock.patch('balanced.Account')
+    def test_charge_balanced_account_failure(self, ba):
+        amount_to_charge = decimal.Decimal(0.06)  # $0.06 USD
+        error_message = 'Woah, crazy'
+        ba.find.side_effect = balanced.exc.HTTPError(error_message)
+        charge_amount, fee, msg = billing.charge_balanced_account(
+            self.participant_id,
+            self.balanced_account_uri,
+            amount_to_charge)
+        self.assertEqual(msg, error_message)
+
 
 class TestBillingPayday(GittipBaseDBTest):
     def setUp(self):

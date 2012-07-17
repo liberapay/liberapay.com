@@ -270,7 +270,7 @@ def charge_balanced_account(participant_id,
         log(msg + "succeeded.")
     except balanced.exc.HTTPError as err:
         log(msg + "failed: %s" % err.message)
-        return charge_amount, fee, err.description
+        return charge_amount, fee, err.message
     return charge_amount, fee, None
 
 
