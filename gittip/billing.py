@@ -286,29 +286,45 @@ def transfer(tipper, tippee, amount):
     with db.get_connection() as conn:
         cursor = conn.cursor()
 
-        # Decrement the tipper's balance.
-        # ===============================
-
-        DECREMENT = """\
-
-           UPDATE participants
-              SET balance=(balance - %s)
-            WHERE id=%s
-              AND pending IS NOT NULL
-        RETURNING balance
-
-        """
-        cursor.execute(DECREMENT, (amount, tipper))
-        rec = cursor.fetchone()
-        assert rec is not None, (tipper, tippee, amount)  # sanity check
-        if rec['balance'] < 0:
-
-            # User is out of money. Bail. The transaction will be rolled back 
-            # by our context manager.
-
+        try:
+            debit_participant(cursor, tipper, amount)
+        except ValueError:
             return False
 
+        credit_participant(cursor, tippee, amount)
+        record_transfer(cursor, tipper, tippee, amount)
+        increment_payday(cursor, amount)
 
+        # Success.
+        # ========
+
+        conn.commit()
+        return True
+
+
+def debit_participant(cursor, participant, amount):
+    # Decrement the tipper's balance.
+    # ===============================
+
+    DECREMENT = """\
+
+       UPDATE participants
+          SET balance=(balance - %s)
+        WHERE id=%s
+          AND pending IS NOT NULL
+    RETURNING balance
+
+    """
+    cursor.execute(DECREMENT, (amount, participant))
+    rec = cursor.fetchone()
+    assert rec is not None, (amount, participant)  # sanity check
+    if rec['balance'] < 0:
+        # User is out of money. Bail. The transaction will be rolled back
+        # by our context manager.
+        raise ValueError()  # TODO: proper exception type
+
+
+def credit_participant(cursor, participant, amount):
         # Increment the tippee's *pending* balance.
         # =========================================
         # The pending balance will clear to the balance proper when Payday is 
@@ -323,11 +339,12 @@ def transfer(tipper, tippee, amount):
         RETURNING pending
 
         """
-        cursor.execute(INCREMENT, (amount, tippee))
+        cursor.execute(INCREMENT, (amount, participant))
         rec = cursor.fetchone()
-        assert rec is not None, (tipper, tippee, amount)  # sanity check
+        assert rec is not None, (participant, amount)  # sanity check
 
 
+def record_transfer(cursor, tipper, tippee, amount):
         # Record the transfer.
         # ====================
 
@@ -341,27 +358,21 @@ def transfer(tipper, tippee, amount):
         cursor.execute(RECORD, (tipper, tippee, amount))
 
 
-        # Record some stats.
-        # ==================
+def increment_payday(cursor, amount):
+    # Record some stats.
+    # ==================
 
-        STATS = """\
+    STATS = """\
 
-            UPDATE paydays 
-               SET ntransfers = ntransfers + 1
-                 , transfer_volume = transfer_volume + %s
-             WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
-         RETURNING id
+        UPDATE paydays
+           SET ntransfers = ntransfers + 1
+             , transfer_volume = transfer_volume + %s
+         WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
+     RETURNING id
 
-        """
-        cursor.execute(STATS, (amount,))
-        assert_one_payday(cursor.fetchone())
-
-
-        # Success.
-        # ========
-        
-        conn.commit()
-        return True
+    """
+    cursor.execute(STATS, (amount,))
+    assert_one_payday(cursor.fetchone())
 
 
 def payday():

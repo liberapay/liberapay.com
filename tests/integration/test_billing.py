@@ -4,6 +4,7 @@ import decimal
 import mock
 import unittest
 
+from psycopg2 import IntegrityError
 import balanced
 
 from gittip import authentication, billing
@@ -259,12 +260,12 @@ class TestBillingPayday(GittipBaseDBTest):
         self.db.execute(insert)
 
     def _get_payday(self):
-        select = '''
+        SELECT_PAYDAY = '''
             select *
             from paydays
             where ts_end='1970-01-01T00:00:00+00'::timestamptz
         '''
-        return self.db.fetchone(select)
+        return self.db.fetchone(SELECT_PAYDAY)
 
     @mock.patch('gittip.billing.log')
     @mock.patch('gittip.billing.payday_one')
@@ -518,3 +519,172 @@ class TestBillingPayday(GittipBaseDBTest):
         self.assertTrue(init.call_count)
         self.assertTrue(loop.called_with(init.return_value))
         self.assertTrue(finish.call_count)
+
+
+class TestBillingTransfer(GittipBaseDBTest):
+    def setUp(self):
+        super(TestBillingTransfer, self).setUp()
+        self.participant_id = 'lgtest'
+        self.balanced_account_uri = '/v1/marketplaces/M123/accounts/A123'
+        billing.db = self.db
+        # TODO: remove once we rollback transactions....
+        insert = '''
+            insert into paydays (
+                ncc_failing, ts_end
+            )
+            select 0, '1970-01-01T00:00:00+00'::timestamptz
+            where not exists (
+                select *
+                from paydays
+                where ts_end='1970-01-01T00:00:00+00'::timestamptz
+            )
+        '''
+        self.db.execute(insert)
+
+    def _get_payday(self, cursor):
+        SELECT_PAYDAY = '''
+            select *
+            from paydays
+            where ts_end='1970-01-01T00:00:00+00'::timestamptz
+        '''
+        cursor.execute(SELECT_PAYDAY)
+        return cursor.fetchone()
+
+    def _create_participant(self, name):
+        INSERT_PARTICIPANT = '''
+            insert into participants (
+                id, pending, balance
+            ) values (
+                %s, 0, 1
+            )
+        '''
+        return self.db.execute(INSERT_PARTICIPANT, (name,))
+
+    def test_transfer(self):
+        amount = decimal.Decimal(1)
+        sender = 'test_transfer_sender'
+        recipient = 'test_transfer_recipient'
+        self._create_participant(sender)
+        self._create_participant(recipient)
+
+        result = billing.transfer(sender, recipient, amount)
+        self.assertTrue(result)
+
+        # no balance remaining for a second transfer
+        result = billing.transfer(sender, recipient, amount)
+        self.assertFalse(result)
+
+    def test_debit_participant(self):
+        amount = decimal.Decimal(1)
+        participant = 'test_debit_participant'
+
+        def get_balance_amount(participant):
+            recipient_sql = '''
+            select balance
+            from participants
+            where id = %s
+            '''
+            return self.db.fetchone(recipient_sql, (participant,))['balance']
+
+        self._create_participant(participant)
+        initial_amount = get_balance_amount(participant)
+
+        with self.db.get_connection() as conn:
+            cur = conn.cursor()
+
+            billing.debit_participant(cur, participant, amount)
+            conn.commit()
+
+        final_amount = get_balance_amount(participant)
+        self.assertEqual(initial_amount - amount, final_amount)
+
+        # this will fail because not enough balance
+        with self.db.get_connection() as conn:
+            cur = conn.cursor()
+
+            with self.assertRaises(ValueError):
+                billing.debit_participant(cur, participant, amount)
+
+    def test_credit_participant(self):
+        amount = decimal.Decimal(1)
+        recipient = 'test_credit_participant'
+
+        def get_pending_amount(recipient):
+            recipient_sql = '''
+            select pending
+            from participants
+            where id = %s
+            '''
+            return self.db.fetchone(recipient_sql, (recipient,))['pending']
+
+        self._create_participant(recipient)
+        initial_amount = get_pending_amount(recipient)
+
+        with self.db.get_connection() as conn:
+            cur = conn.cursor()
+
+            billing.credit_participant(cur, recipient, amount)
+            conn.commit()
+
+        final_amount = get_pending_amount(recipient)
+        self.assertEqual(initial_amount + amount, final_amount)
+
+    def test_record_transfer(self):
+        amount = decimal.Decimal(1)
+
+        # check with db that amount is what we expect
+        def assert_transfer(recipient, amount):
+            transfer_sql = '''
+                select sum(amount) as sum
+                from transfers
+                where tippee = %s
+            '''
+            result = self.db.fetchone(transfer_sql, (recipient,))
+            self.assertEqual(result['sum'], amount)
+
+        recipients = [
+            'jim', 'jim', 'kate', 'bob',
+        ]
+        seen = []
+
+        for recipient in recipients:
+            if not recipient in seen:
+                self._create_participant(recipient)
+                seen.append(recipient)
+
+        with self.db.get_connection() as conn:
+            cur = conn.cursor()
+
+            for recipient in recipients:
+                billing.record_transfer(cur,
+                                        self.participant_id,
+                                        recipient,
+                                        amount)
+
+            conn.commit()
+
+        assert_transfer('jim', amount * 2)
+        assert_transfer('kate', amount)
+        assert_transfer('bob', amount)
+
+    def test_record_transfer_invalid_participant(self):
+        amount = decimal.Decimal(1)
+
+        with self.db.get_connection() as conn:
+            cur = conn.cursor()
+            with self.assertRaises(IntegrityError):
+                billing.record_transfer(cur, 'idontexist', 'nori', amount)
+
+    def test_increment_payday(self):
+        amount = decimal.Decimal(1)
+
+        with self.db.get_connection() as conn:
+            cur = conn.cursor()
+            payday = self._get_payday(cur)
+            billing.increment_payday(cur, amount)
+            payday2 = self._get_payday(cur)
+
+        self.assertEqual(payday['ntransfers'] + 1,
+                         payday2['ntransfers'])
+        self.assertEqual(payday['transfer_volume'] + amount,
+                         payday2['transfer_volume'])
