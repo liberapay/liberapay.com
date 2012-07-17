@@ -347,6 +347,43 @@ class TestBillingPayday(GittipBaseDBTest):
         self.assertEqual(initial_payday['nparticipants'] + 1,
                          resulting_payday['nparticipants'])
 
+    @mock.patch('gittip.billing.get_tips_and_total')
+    @mock.patch('gittip.billing.charge')
+    def test_payday_one_short(self, charge, get_tips_and_total):
+        amount = decimal.Decimal(1.00)
+        like_a_tip = {
+            'amount': amount,
+            'tippee': 'mjallday',
+            'ctime': datetime.utcnow(),
+            'claimed_time': datetime.utcnow(),
+        }
+
+        # success, success, claimed, failure
+        tips = [like_a_tip, like_a_tip, like_a_tip, like_a_tip]
+        get_tips_and_total.return_value = tips, amount
+
+        payday_start = datetime.utcnow()
+        participant = {
+            'balance': 0,
+            'id': self.participant_id,
+            'balanced_account_uri': self.balanced_account_uri,
+        }
+
+        # in real-life we wouldn't be able to catch an error as the charge
+        # method will swallow any errors and return false. we don't handle this
+        # return value within payday_one but instead continue on trying to
+        # use the remaining credit in the user's account to payout as many tips
+        # as possible.
+        # here we're hacking the system and throwing the exception so execution
+        # stops since we're only testing this part of the method. that smells
+        # like we need to refactor.
+        charge.side_effect = Exception()
+        with self.assertRaises(Exception):
+            billing.payday_one(payday_start, participant)
+        self.assertTrue(charge.called_with(self.participant_id,
+                                           self.balanced_account_uri,
+                                           amount))
+
     @mock.patch('gittip.billing.transfer')
     @mock.patch('gittip.billing.log')
     def test_log_tip(self, log, transfer):
