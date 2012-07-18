@@ -24,8 +24,7 @@ run: env
 		--network_address=:8537
 
 test: env
-	./env/bin/nosetests ./tests/
+	./swaddle local.env ./env/bin/nosetests ./tests/
 
 data: env
 	./swaddle local.env ./env/bin/python ./gittip/testing.py
-
