@@ -15,6 +15,7 @@ website.github_client_secret = os.environ['GITHUB_CLIENT_SECRET'].decode('ASCII'
 website.github_callback = os.environ['GITHUB_CALLBACK'].decode('ASCII')
 
 website.hooks.inbound_early.register(gittip.canonize)
+website.hooks.inbound_early.register(gittip.configure_payments)
 website.hooks.inbound_early.register(gittip.csrf.inbound) 
 website.hooks.inbound_early.register(gittip.authentication.inbound) 
 website.hooks.outbound_late.register(gittip.authentication.outbound) 
