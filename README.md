@@ -41,7 +41,7 @@ Grab that secret and also create a new marketplace to test against:
 
 The site works without this, except for the credit card page (you have to set
 this). Visit the [Balanced Documentation](https://www.balancedpayments.com/docs)
-if you want to know more about creating marketplace's.
+if you want to know more about creating marketplaces.
 
 The GITHUB_* keys are for a gittip-dev application in the Gittip organization
 on Github. It points back to localhost:8537, which is where Gittip will be
@@ -51,20 +51,10 @@ The DYLD_LIBRARY_PATH thing is to get psycopg2 working on Mac OS with
 EnterpriseDB's Postgres 9.1 installer.
 
 
-Testing
--------
-
-Unit and integration tests can be run using `make test`. Write unit tests for
-all new code and all code you change.
-
-**TODO:** Write a unittest teardown method that runs all the unit tests in a
-transaction so we don't end up one day with a massive test database.
-
-
 Setting up the Database
 -----------------------
 
-The schema for the Gittip.com database is defined in sql/schema.sql. Here's how
+The schema for the Gittip.com database is defined in schema.sql. Here's how
 to install it:
 
     $ createuser -s gittip
@@ -79,8 +69,20 @@ And if you want a separate db for running unit tests:
 The best version of Postgres to use is 9.1, because gittip uses the hstore
 extension for unstructured data, and that isn't bundled with earlier versions.
 
-If you need to make schema changes or work on the credit card workflow then
-talk to me (@whit537) and we'll figure out how to get you what you need.
+The schema.sql file should be considered append-only. The idea is that this is
+the log of DDL that we've run against the production database. You should never
+change commands that have already been run. New DDL will be (manually) run
+against the production database as part of deployment.
+
+
+Testing
+-------
+
+Unit and integration tests can be run using `make test`. Write unit tests for
+all new code and all code you change.
+
+**TODO:** Write a unittest teardown method that runs all the unit tests in a
+transaction so we don't end up one day with a massive test database.
 
 
 See Also
