@@ -149,8 +149,8 @@ Gittip.submitForm = function(url, data, success, error)
 /* Payment Details Form */
 /* ==================== */
 
-Gittip.haveStripe = false;
-Gittip.stripeAttempts = 0;
+Gittip.havePayments = false;
+Gittip.paymentProcessorAttempts = 0;
 
 Gittip.submitDeleteForm = function(e)
 {
@@ -169,9 +169,9 @@ Gittip.submitPaymentForm = function(e)
     $('BUTTON#save').text('Saving ...');
     Gittip.clearFeedback();
 
-    if (!Gittip.haveStripe)
+    if (!Gittip.havePayments)
     {
-        if (Gittip.stripeAttempts++ === 50)
+        if (Gittip.paymentProcessorAttempts++ === 50)
             alert( "Gah! Apparently we suck. If you're really motivated, call "
                    +"me (Chad) at 412-925-4220 and we'll figure this out. "
                    +"Sorry. :-("
@@ -182,52 +182,51 @@ Gittip.submitPaymentForm = function(e)
     }
     
 
-    // Adapt our form lingo to Stripe nomenclature.
+    // Adapt our form lingo to balanced nomenclature.
     
     function val(field)
     {
         return $('FORM#payment INPUT[id="' + field + '"]').val();
-    };
+    }
 
     var credit_card = {};   // holds CC info
     
-    credit_card.number = val('card_number');
-    console.log(credit_card.number);
-    if (credit_card.number.search('[*]') !== -1)
-        credit_card.number = '';  // don't send if it's the **** version
-    console.log(credit_card.number);
-    credit_card.cvc = val('cvv'); // cvv? cvc?
+    credit_card.card_number = val('card_number');
+    console.log(credit_card.card_number);
+    if (credit_card.card_number.search('[*]') !== -1)
+        credit_card.card_number = '';  // don't send if it's the **** version
+    console.log(credit_card.card_number);
+    credit_card.security_code = val('cvv'); // cvv? cvc?
     credit_card.name = val('name');
-    credit_card.address_line1 = val('address_1');
-    credit_card.address_line2 = val('address_2');
-    credit_card.address_state = val('state');
-    credit_card.address_zip = val('zip');
+    credit_card.street_address = val('address_1') + ' ' + val('address_2');
+    credit_card.region = val('state');
+    credit_card.postal_code = val('zip');
     
     var expiry = val('expiry').split('/');  // format enforced by mask
-    credit_card.exp_month = expiry[0];
-    credit_card.exp_year = expiry[1];
+    credit_card.expiration_month= expiry[0];
+    credit_card.expiration_year = expiry[1];
 
 
     // Require some options (expiry is theoretically handled by the mask).
     
-    if (credit_card.number.match("^[ ]*$") === 0) {
+    if (!balanced.card.isCardNumberValid(credit_card.card_number)) {
         $('BUTTON#save').text('Save');
         Gittip.showFeedback(null, "Card number is required.");
-    } else if (credit_card.cvc.match("[0-9]{3,4}") === -1) {
+    } else if (!balanced.card.isSecurityCodeValid(credit_card.card_number, credit_card.security_code)) {
         $('BUTTON#save').text('Save');
         Gittip.showFeedback(null, "A 3- or 4-digit CVV is required.");
-    } else { 
-        Stripe.createToken(credit_card, Gittip.stripeResponseHandler);
+    } else {
+        balanced.card.create(credit_card, Gittip.paymentsResponseHandler);
     }
 
     return false;
 };
 
-Gittip.stripeResponseHandler = function(status, response)
+Gittip.paymentsResponseHandler = function(response)
 {
 
     /* Status is guaranteed to be in the set {200,400,401,402,404,500,502,503,
-     * 504}. If status === 200 then response.error will contain information 
+     * 504}. If status !== 201 then response.error will contain information
      * about the error, in this form:
      *
      *      { "code": "incorrect_number"
@@ -238,25 +237,23 @@ Gittip.stripeResponseHandler = function(status, response)
      *
      * The error codes are documented here:
      *
-     *      https://stripe.com/docs/api#errors
+     *      https://www.balancedpayments.com/docs/js
      *
      */
-
-    if (status !== 200)
-    {   
+    if (response.status !== 201)
+    {
         $('BUTTON#save').text('Save');
-        Gittip.showFeedback(null, [response.error.message]);
+        Gittip.showFeedback(null, [response.error.description]);
     }
     else
     {
 
         /* The request to create the token succeeded. We now have a single-use
          * token associated with the credit card info. This token can be
-         * single-used in one of two ways: to make a charge, or to associate
-         * the card with a customer. We want to do the latter, and that happens
-         * on the server side. When the card is associated with a customer,
-         * Stripe performs card validation, so we will know at that point that
-         * the card is good.
+         * used to associate the card with a customer. We want to do the
+         * latter, and that happens on the server side. When the card is
+         * tokenized Balanced performs card validation, so we alredy know the
+         * card is good.
          */
 
         function success()
@@ -283,27 +280,27 @@ Gittip.stripeResponseHandler = function(status, response)
         }
 
         Gittip.submitForm( "/credit-card.json"
-                         , {tok: response.id}
+                         , {card_uri: response.data.uri}
                          , success
                          , detailedFeedback
                           );
     }
 };
 
-Gittip.initPayment = function(stripe_publishable_key, participantId)
+Gittip.initPayment = function(balanced_uri, participantId)
 {
     Gittip.participantId = participantId;
     $('#delete FORM').submit(Gittip.submitDeleteForm);
     $('FORM#payment').submit(Gittip.submitPaymentForm);
     $('INPUT[id=expiry]').mask('99/2099');
 
-    // Lazily depend on Stripe. 
-    var stripe_js = "https://js.stripe.com/v1/";
-    jQuery.getScript(stripe_js, function()
+    // Lazily depend on Balanced.
+    var balanced_js = "https://js.balancedpayments.com/v1/balanced.js";
+    jQuery.getScript(balanced_js, function()
     {
-        Stripe.setPublishableKey(stripe_publishable_key);
-        Gittip.haveStripe = true;
-        console.log("Stripe loaded.");
+        balanced.init(balanced_uri);
+        Gittip.havePayments = true;
+        console.log("Payments loaded.");
         $('INPUT[type!="hidden"]').eq(0).focus();
     });
 };

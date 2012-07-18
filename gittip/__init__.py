@@ -1,6 +1,8 @@
 import datetime
 import locale
 from decimal import Decimal
+import os
+
 
 
 try:  # XXX This can't be right.
@@ -232,3 +234,8 @@ def canonize(request):
             # For non-idempotent methods, redirect to homepage.
             url += '/'
         request.redirect(url, permanent=True)
+
+
+def configure_payments(request):
+    import balanced
+    balanced.configure(os.environ['BALANCED_API_SECRET'])

@@ -13,7 +13,7 @@ Installation
 ============
 
 The site is built with Python 2.7 and the Aspen web framework, and is hosted on
-Heroku. Samurai is used for credit card processing, and Google for analytics.
+Heroku. Balanced is used for credit card processing, and Google for analytics.
 
 You need python2.7 on your PATH.
 
@@ -24,16 +24,24 @@ building the software. All Python dependencies are included in vendor/. To
     CANONICAL_HOST=
     CANONICAL_SCHEME=http
     DATABASE_URL=postgres://user:pass@localhost/dbname
-    STRIPE_SECRET_API_KEY=
-    STRIPE_PUBLISHABLE_API_KEY=
+    BALANCED_API_SECRET=90bb3648ca0a11e1a977026ba7e239a9
     GITHUB_CLIENT_ID=3785a9ac30df99feeef5
     GITHUB_CLIENT_SECRET=e69825fafa163a0b0b6d2424c107a49333d46985
     GITHUB_CALLBACK=http://localhost:8537/github/associate
     DYLD_LIBRARY_PATH=/Library/PostgreSQL/9.1/lib
 
-The STRIPE_* keys are problematic. I need to think about how to handle that
-safely. The site works without them, except for the credit card page (you have
-to set them but you can set them to the empty string).
+The `BALANCED_API_SECRET` is a test marketplace. To generate a new secret for
+your own testing run this command:
+
+    curl -X POST https://api.balancedpayments.com/v1/api_keys | grep secret
+
+Grab that secret and also create a new marketplace to test against:
+
+    curl -X POST https://api.balancedpayments.com/v1/marketplaces -u <your_secret>:
+
+The site works without this, except for the credit card page (you have to set
+this). Visit the [Balanced Documentation](https://www.balancedpayments.com/docs)
+if you want to know more about creating marketplace's.
 
 The GITHUB_* keys are for a gittip-dev application in the Gittip organization
 on Github. It points back to localhost:8537, which is where Gittip will be
@@ -43,24 +51,30 @@ The DYLD_LIBRARY_PATH thing is to get psycopg2 working on Mac OS with
 EnterpriseDB's Postgres 9.1 installer.
 
 
+Testing
+-------
+
+Unit and integration tests can be run using `make test`. Write unit tests for
+all new code and all code you change.
+
+**TODO:** Write a unittest teardown method that runs all the unit tests in a
+transaction so we don't end up one day with a massive test database.
+
+
 Setting up the Database
 -----------------------
 
 The schema for the Gittip.com database is defined in sql/schema.sql. Here's how
 to install it:
 
-    $ psql --user postgres 
-    Password for user postgres: 
-    psql (9.1.3)
-    Type "help" for help.
+    $ createuser -s gittip
+    $ createdb gittip -O gittip
+    $ psql gittip < schema.sql
 
-    postgres=# create database gittip;
-    CREATE DATABASE
-    postgres=# \c gittip
-    You are now connected to database "gittip" as user "postgres".
-    gittip=# \i sql/schema.sql
-    ...
+And if you want a separate db for running unit tests:
 
+    $ createdb gittip_test -O gittip
+    $ psql gittip_test < schema.sql
 
 The best version of Postgres to use is 9.1, because gittip uses the hstore
 extension for unstructured data, and that isn't bundled with earlier versions.

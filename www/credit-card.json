@@ -1,12 +1,10 @@
-"""Save a payment method token (stripe_customer_id) for a user.
+"""Save a payment method token (balanced_account_uri) for a user.
 
 When the user fills out the payment details form in the UI, we send the new
-info to Stripe (using the Stripe.js library). Stripe always gives us a
-so-called "single-use token" in return, no matter how bad the info was that we
-posted. This present script is called next. It takes the token and tries to
-associate it with a Stripe Customer object (creating one as needed). It's at
-this point that Stripe validates the credit card details, which they don't
-charge us for directly.
+info to Balanced (using the balanced.js library). Balanced always gives us a
+single-use token in return, provided that the credit card info validated. This
+present script is called next. It takes the token and tries to associate it with
+a Balanced account object (creating one as needed).
 
 """
 from aspen import Response
@@ -20,20 +18,20 @@ if user.ANON:
 request.allow('GET')
 
 if qs.get('action') == 'delete':
-    billing.clear(user.id, user.stripe_customer_id)
+    billing.clear(user.id, user.balanced_account_uri)
     request.redirect('/credit-card.html')
 else:
 
     # Associate the single-use token representing the credit card details (we
-    # call it "tok" here because that's the prefix Stripe uses in the token
-    # itself) the user entered with a Stripe Customer. Stripe only ever gives
-    # us one error at a time.
+    # call it "card_uri" here because that's how Balanced refers to it).
+    # Possible error codes would be 409 (this card cannot be associated with
+    # this account in this case).
 
-    tok = qs.get('tok')
-    if tok is None:
+    card_uri = qs.get('card_uri')
+    if card_uri is None:
         raise Response(400) 
 
-    error = billing.associate(user.id, user.stripe_customer_id, tok)
+    error = billing.associate(user.id, user.balanced_account_uri, card_uri)
     if error:
         out = {"problem": "Problem", "error": error}
     else:
