@@ -23,7 +23,7 @@ building the software. All Python dependencies are included in vendor/. To
 
     CANONICAL_HOST=
     CANONICAL_SCHEME=http
-    DATABASE_URL=postgres://user:pass@localhost/dbname
+    DATABASE_URL=postgres://gittip@localhost/gittip
     BALANCED_API_SECRET=90bb3648ca0a11e1a977026ba7e239a9
     GITHUB_CLIENT_ID=3785a9ac30df99feeef5
     GITHUB_CLIENT_SECRET=e69825fafa163a0b0b6d2424c107a49333d46985
@@ -54,32 +54,44 @@ EnterpriseDB's Postgres 9.1 installer.
 Setting up the Database
 -----------------------
 
-The schema for the Gittip.com database is defined in schema.sql. Here's how
-to install it:
+First install Postgres. The best version to use is 9.1, because Gittip uses the
+hstore extension for unstructured data, and that isn't bundled with earlier
+versions.
 
-    $ createuser -s gittip
-    $ createdb gittip -O gittip
-    $ psql gittip < schema.sql
+Then add a "role" (Postgres user) that matches your OS username. Make sure it's
+a superuser role and has login privileges. Here's a sample invocation of the
+createuser executable that comes with Postgres that will do this for you,
+assuming that a "postgres" superuser was already created as part of initial
+installation:
 
-And if you want a separate db for running unit tests:
+    $ createuser --username postgres --superuser $USER 
 
-    $ createdb gittip_test -O gittip
-    $ psql gittip_test < schema.sql
+It's also convenient to set the authentication method to "trust" in pg_hba.conf
+for local connections, so you don't have to enter a password all the time. Once
+you locate and change pg_hba.conf you'll need to restart Postgres using pg_ctl.
 
-The best version of Postgres to use is 9.1, because gittip uses the hstore
-extension for unstructured data, and that isn't bundled with earlier versions.
+Once Postgres is set up, run:
 
-The schema.sql file should be considered append-only. The idea is that this is
-the log of DDL that we've run against the production database. You should never
-change commands that have already been run. New DDL will be (manually) run
-against the production database as part of deployment.
+    $ ./makedb.sh
+
+That will create a new gittip superuser and a gittip database, populated with
+structure from ./schema.sql. If you want a separate db for running unit tests,
+start with the test target in ./Makefile, and then explore the ./swaddle
+utility for configuring different execution environments.
+
+The schema for the Gittip.com database is defined in schema.sql. It should be
+considered append-only. The idea is that this is the log of DDL that we've run
+against the production database. You should never change commands that have
+already been run. New DDL will be (manually) run against the production
+database as part of deployment.
 
 
 Testing
 -------
 
-Unit and integration tests can be run using `make test`. Write unit tests for
-all new code and all code you change.
+Unit and integration tests can be run using `make test`, with configuration
+coming from local.env. Write unit tests for all new code and all code you
+change.
 
 **TODO:** Write a unittest teardown method that runs all the unit tests in a
 transaction so we don't end up one day with a massive test database.
