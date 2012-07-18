@@ -8,13 +8,13 @@ There are two pieces of information for each customer related to billing:
                                 account.
     last_bill_result        NULL - This customer has not been billed yet.
                             '' - This customer is in good standing.
-                            <message> - A error message.
+                            <message> - An error message.
 
 """
 import decimal
 
 import balanced
-from aspen import json, log
+from aspen import log
 from aspen.utils import typecheck
 from gittip import db, get_tips_and_total
 from psycopg2 import IntegrityError
@@ -39,14 +39,13 @@ def associate(participant_id, balanced_account_uri, card_uri):
 
     # Load or create a Balanced Account.
     # =================================
-    email_address = '{}@gittip.com'.format(
-        participant_id
-    )
+
+    email_address = '{}@gittip.com'.format(participant_id)
     if balanced_account_uri is None:
         # arg - balanced requires an email address
         try:
-            customer = balanced.Account.query.filter(
-                email_address=email_address).one()
+            customer = \
+               balanced.Account.query.filter(email_address=email_address).one()
         except balanced.exc.NoResultFound:
             customer = balanced.Account(email_address=email_address).save()
         CUSTOMER = """\
@@ -61,7 +60,6 @@ def associate(participant_id, balanced_account_uri, card_uri):
         customer.save()  # HTTP call under here
     else:
         customer = balanced.Account.find(balanced_account_uri)
-
 
 
     # Associate the card with the customer.
