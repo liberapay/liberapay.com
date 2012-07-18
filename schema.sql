@@ -17,8 +17,6 @@ CREATE TABLE participants
 , statement             text                        DEFAULT ''
     
 , stripe_customer_id    text                        DEFAULT NULL
--- payment processor customer id 
-, balanced_account_uri        text
 , last_bill_result      text                        DEFAULT NULL
 
 , session_token         text                        UNIQUE DEFAULT NULL
@@ -29,7 +27,7 @@ CREATE TABLE participants
 , is_admin              boolean                     NOT NULL DEFAULT FALSE
 , shares_giving         boolean                     NOT NULL DEFAULT TRUE
 
--- If this isn't NULL then it means one participants was folded into another
+-- If this isn't NULL then it means one participant was folded into another
 -- and all requests for this participant should be redirected to the other.
 , redirect              text            DEFAULT NULL REFERENCES participants
 
@@ -102,3 +100,7 @@ ALTER TABLE participants DROP COLUMN shares_giving;
 
 -- https://github.com/whit537/www.gittip.com/issues/110
 ALTER TABLE participants ADD COLUMN goal numeric(35,2) DEFAULT NULL;
+
+
+-- https://github.com/whit537/www.gittip.com/issues/78
+ALTER TABLE participants ADD COLUMN balanced_account_uri text DEFAULT NULL;
