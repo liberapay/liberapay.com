@@ -82,3 +82,4 @@ See Also
  - https://venmo.com/
  - https://www.snoball.com/
  - http://pledgie.com/
+ - http://www.humblebundle.com/
