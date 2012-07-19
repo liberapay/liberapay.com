@@ -1,18 +1,40 @@
 from __future__ import unicode_literals
-from datetime import datetime
+
 import decimal
 import mock
-import unittest
+from datetime import datetime
 
-from psycopg2 import IntegrityError
 import balanced
-
-from gittip import authentication, billing
-
-from tests import GittipBaseDBTest
+from gittip import authentication, billing, testing
+from psycopg2 import IntegrityError
 
 
-class TestBilling(GittipBaseDBTest):
+__author__ = 'marshall'
+
+
+class TestCustomer(testing.GittipBaseTest):
+    def setUp(self):
+        super(TestCustomer, self).setUp()
+        self.balanced_account_uri = '/v1/marketplaces/M123/accounts/A123'
+
+    @mock.patch('balanced.Account')
+    def test_customer(self, ba):
+        card = mock.Mock()
+        card.last_four = '1234'
+        card.expiration_month = 10
+        card.expiration_year = 2020
+        balanced_account = ba.find.return_value
+        balanced_account.cards = [
+            card,
+        ]
+        customer = billing.Customer(self.balanced_account_uri)
+        self.assertEqual(customer['id'], balanced_account.uri)
+        self.assertIn(card.last_four, customer['last4'])
+        self.assertEqual(customer['expiry'], '10/2020')
+        self.assertEqual(customer['nothing'], card.nothing)
+
+
+class TestBilling(testing.GittipBaseDBTest):
     def setUp(self):
         super(TestBilling, self).setUp()
         self.participant_id = 'lgtest'
@@ -88,7 +110,7 @@ class TestBilling(GittipBaseDBTest):
         self.assertFalse(user.session['balanced_account_uri'])
 
 
-class TestBillingCharge(GittipBaseDBTest):
+class TestBillingCharge(testing.GittipBaseDBTest):
     def setUp(self):
         super(TestBillingCharge, self).setUp()
         self.participant_id = 'lgtest'
@@ -239,7 +261,7 @@ class TestBillingCharge(GittipBaseDBTest):
         self.assertEqual(msg, error_message)
 
 
-class TestBillingPayday(GittipBaseDBTest):
+class TestBillingPayday(testing.GittipBaseDBTest):
     def setUp(self):
         super(TestBillingPayday, self).setUp()
         self.participant_id = 'lgtest'
@@ -521,7 +543,7 @@ class TestBillingPayday(GittipBaseDBTest):
         self.assertTrue(finish.call_count)
 
 
-class TestBillingTransfer(GittipBaseDBTest):
+class TestBillingTransfer(testing.GittipBaseDBTest):
     def setUp(self):
         super(TestBillingTransfer, self).setUp()
         self.participant_id = 'lgtest'
