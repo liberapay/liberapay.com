@@ -8,13 +8,13 @@ There are two pieces of information for each customer related to billing:
                                 account.
     last_bill_result        NULL - This customer has not been billed yet.
                             '' - This customer is in good standing.
-                            <message> - A error message.
+                            <message> - An error message.
 
 """
 import decimal
 
 import balanced
-from aspen import json, log
+from aspen import log
 from aspen.utils import typecheck
 from gittip import db, get_tips_and_total
 from psycopg2 import IntegrityError
@@ -39,14 +39,13 @@ def associate(participant_id, balanced_account_uri, card_uri):
 
     # Load or create a Balanced Account.
     # =================================
-    email_address = '{}@gittip.com'.format(
-        participant_id
-    )
+
+    email_address = '{}@gittip.com'.format(participant_id)
     if balanced_account_uri is None:
         # arg - balanced requires an email address
         try:
-            customer = balanced.Account.query.filter(
-                email_address=email_address).one()
+            customer = \
+               balanced.Account.query.filter(email_address=email_address).one()
         except balanced.exc.NoResultFound:
             customer = balanced.Account(email_address=email_address).save()
         CUSTOMER = """\
@@ -61,7 +60,6 @@ def associate(participant_id, balanced_account_uri, card_uri):
         customer.save()  # HTTP call under here
     else:
         customer = balanced.Account.find(balanced_account_uri)
-
 
 
     # Associate the card with the customer.
@@ -402,14 +400,16 @@ def payday():
 
     finish_payday()
 
+
 def initialize_payday():
-    # Start Payday.
-    # =============
-    # We try to start a new Payday. If there is a Payday that hasn't finished
-    # yet, then the UNIQUE constraint on ts_end will kick in and notify us
-    # of that. In that case we load the existing Payday and work on it some
-    # more. We use the start time of the current Payday to synchronize our
-    # work.
+    """Try to start a new Payday.
+    
+    If there is a Payday that hasn't finished yet, then the UNIQUE constraint
+    on ts_end will kick in and notify us of that. In that case we load the
+    existing Payday and work on it some more. We use the start time of the
+    current Payday to synchronize our work.
+
+    """
 
     try:
         rec = db.fetchone("INSERT INTO paydays DEFAULT VALUES "
@@ -448,10 +448,12 @@ def initialize_payday():
 
 
 def finish_payday():
-    # Finish Payday.
-    # ==============
-    # Transfer pending into balance for all users, setting pending to NULL.
-    # Close out the paydays entry as well.
+    """Finish Payday.
+
+    Transfer pending into balance for all users, setting pending to NULL.
+    Close out the paydays entry as well.
+
+    """
 
     with db.get_connection() as conn:
         cursor = conn.cursor()
@@ -502,6 +504,7 @@ def payday_one(payday_start, participant):
     typecheck(total, decimal.Decimal)
     short = total - participant['balance']
     if short > 0:
+
         # The participant's Gittip account is short the amount needed to fund
         # all their tips. Let's try pulling in money from their credit card. If
         # their credit card fails we'll forge ahead, in case they have a
@@ -532,16 +535,23 @@ def payday_one(payday_start, participant):
      RETURNING id
 
     """
-    assert_one_payday(db.fetchone(STATS,
-        (1 if successful_tips > 0 else 0, successful_tips)))
+    assert_one_payday( db.fetchone( STATS
+                                  , ( 1 if successful_tips > 0 else 0
+                                    , successful_tips
+                                     )
+                                   )
+                      )
 
 
 def log_tip(participant, tip, payday_start):
-    """
-    Returns
+    """Given dict, dict, and datetime, log and return int.
+
+    Return values:
+
          0 if no valid tip available or tip has not been claimed
          1 if tip is valid
         -1 if transfer fails and we cannot continue
+
     """
     msg = "$%s from %s to %s."
     msg %= (tip['amount'], participant['id'], tip['tippee'])
@@ -549,14 +559,12 @@ def log_tip(participant, tip, payday_start):
     if tip['amount'] == 0:
 
         # The tips table contains a record for every time you click a tip
-        # button. So if you click $0.08 then $0.64 then $0.00, that
-        # generates three entries. We are looking at the last entry here,
-        # and it's zero.
+        # button. So if you click $0.25 then $3.00 then $0.00, that generates
+        # three entries. We are looking at the last entry here, and it's zero.
 
         return 0
 
     claimed_time = tip['claimed_time']
-
     if claimed_time is None or claimed_time > payday_start:
 
         # Gittip is opt-in. We're only going to collect money on a person's
