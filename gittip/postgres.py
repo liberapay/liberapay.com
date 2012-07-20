@@ -39,7 +39,6 @@ single transaction?)
 Look at the first three methods for examples of how to use get_cursor.
 
 """
-import logging
 import urlparse
 
 import psycopg2
@@ -55,9 +54,6 @@ psycopg2.extensions.register_type(psycopg2.extensions.UNICODEARRAY)
 
 from psycopg2.extras import RealDictCursor
 from psycopg2.pool import ThreadedConnectionPool as ConnectionPool
-
-
-log = logging.getLogger('postgres')
 
 
 # Teach urlparse about postgres:// URLs.
@@ -88,7 +84,6 @@ class PostgresManager(object):
     def __init__(self, dsn, minconn=1, maxconn=10):
         if dsn.startswith("postgres://"):
             dsn = url_to_dsn(dsn)
-        log.info('wiring up ihasamoney.db: %s' % dsn)
         self.pool = ConnectionPool( minconn=minconn
                                   , maxconn=maxconn
                                   , dsn=dsn
