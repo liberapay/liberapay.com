@@ -16,7 +16,7 @@ if not user.ANON:
         status = "working" if working else "failing"
 
     try:
-        customer = billing.Customer(balanced_account_uri)
+        customer = billing.Account(balanced_account_uri)
     except:  # balanced is unavailable? could be a bad balanced_account_uri?
         log(traceback.format_exc())
         payments_down = True

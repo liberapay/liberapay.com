@@ -3,8 +3,6 @@ import locale
 import os
 from decimal import Decimal
 
-import balanced
-
 
 try:  # XXX This can't be right.
     locale.setlocale(locale.LC_ALL, "en_US.utf8")
@@ -122,14 +120,19 @@ def get_number_of_backers(participant_id):
     return nbackers
 
 
-def get_tips_and_total(tipper, for_payday=False):
+def get_tips_and_total(tipper, for_payday=False, db=None):
     """Given a participant id and a date, return a list and a Decimal.
 
     This function is used to populate a participant's page for their own
     viewing pleasure, and also by the payday function. If for_payday is not
     False it must be a date object.
 
+    A half-injected dependency, that's what db is.
+
     """
+    if db is None:
+        from gittip import db
+
     if for_payday:
 
         # For payday we want the oldest relationship to be paid first.
@@ -239,4 +242,5 @@ def canonize(request):
 
 def configure_payments(request):
     # Work-around for https://github.com/balanced/balanced-python/issues/5
+    import balanced
     balanced.configure(os.environ['BALANCED_API_SECRET'])

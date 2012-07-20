@@ -4,22 +4,19 @@ from gittip import wireup
 
 
 def payday():
-    wireup.db()
+    db = wireup.db()
     wireup.billing()
 
 
     # Lazily import the billing module.
     # =================================
     # This dodges a problem where db in billing is None if we import it from 
-    # gittip before calling wire_samurai, and it also dodges:
-    #
-    #   https://github.com/FeeFighters/samurai-client-python/issues/8
+    # gittip before calling wire_samurai.
 
-    from gittip import billing
-
+    from gittip.billing.payday import Payday
 
     try:
-        billing.payday()
+        Payday(db).run()
     except KeyboardInterrupt:
         pass
     except:
