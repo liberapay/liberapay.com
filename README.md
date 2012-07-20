@@ -39,9 +39,9 @@ Grab that secret and also create a new marketplace to test against:
 
     curl -X POST https://api.balancedpayments.com/v1/marketplaces -u <your_secret>:
 
-The site works without this, except for the credit card page (you have to set
-this). Visit the [Balanced Documentation](https://www.balancedpayments.com/docs)
-if you want to know more about creating marketplaces.
+The site works without this, except for the credit card page. Visit the
+[Balanced Documentation](https://www.balancedpayments.com/docs) if you want to
+know more about creating marketplaces.
 
 The GITHUB_* keys are for a gittip-dev application in the Gittip organization
 on Github. It points back to localhost:8537, which is where Gittip will be
@@ -54,12 +54,14 @@ EnterpriseDB's Postgres 9.1 installer.
 Setting up the Database
 -----------------------
 
-First install Postgres. The best version to use is 9.1, because Gittip uses the
+Install PostgreSQL. The best version to use is 9.1, because Gittip uses the
 hstore extension for unstructured data, and that isn't bundled with earlier
-versions.
+versions. If you're on a Mac, maybe try out Heroku's Postgres.app:
 
-Then add a "role" (Postgres user) that matches your OS username. Make sure it's
-a superuser role and has login privileges. Here's a sample invocation of the
+    http://postgresapp.com/
+
+Add a "role" (Postgres user) that matches your OS username. Make sure it's a
+superuser role and has login privileges. Here's a sample invocation of the
 createuser executable that comes with Postgres that will do this for you,
 assuming that a "postgres" superuser was already created as part of initial
 installation:
@@ -67,17 +69,22 @@ installation:
     $ createuser --username postgres --superuser $USER 
 
 It's also convenient to set the authentication method to "trust" in pg_hba.conf
-for local connections, so you don't have to enter a password all the time. Once
-you locate and change pg_hba.conf you'll need to restart Postgres using pg_ctl.
+for local connections, so you don't have to enter a password all the time.
+Reload Postgres using pg_ctl for this to take effect.
 
 Once Postgres is set up, run:
 
     $ ./makedb.sh
 
-That will create a new gittip superuser and a gittip database, populated with
-structure from ./schema.sql. If you want a separate db for running unit tests,
-start with the test target in ./Makefile, and then explore the ./swaddle
-utility for configuring different execution environments.
+That will create a new gittip superuser and a gittip database (with UTC as the
+default timezone), populated with structure from ./schema.sql. To change the
+name of the database and/or user, pass them on the command line:
+
+    $ ./makedb.sh mygittip myuser
+
+If you only pass one argument it will be used for both dbname and owner role:
+
+    $ ./makedb.sh gittip-test
 
 The schema for the Gittip.com database is defined in schema.sql. It should be
 considered append-only. The idea is that this is the log of DDL that we've run
@@ -89,12 +96,16 @@ database as part of deployment.
 Testing
 -------
 
-Unit and integration tests can be run using `make test`, with configuration
-coming from local.env. Write unit tests for all new code and all code you
-change.
+Please write unit tests for all new code and all code you change. Gittip's test
+suite is designed for the nosetests test runner. Assuming you have make, the
+easiest way to run the test suite is:
 
-**TODO:** Write a unittest teardown method that runs all the unit tests in a
-transaction so we don't end up one day with a massive test database.
+    $ make test
+
+To invoke nosetests directly you need to set DATABASE_URL in its environment,
+like so:
+
+    [gittip] $ DATABASE_URL=postgres://gittip@localhost/gittip nosetests
 
 
 See Also
@@ -113,3 +124,5 @@ See Also
  - http://www.humblebundle.com/
  - https://www.crowdtilt.com/
  - http://www1.networkforgood.org/
+ - http://anyfu.com/
+ - http://videovivoapp.com/
