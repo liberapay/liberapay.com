@@ -9,20 +9,31 @@ from gittip.networks import github
 
 if not user.ANON:
     balanced_account_uri = user.balanced_account_uri
-    if not balanced_account_uri:
-        status = "missing"
-    else:
+    stripe_customer_id = user.stripe_customer_id
+
+    status = "missing"
+    if stripe_customer_id or balanced_account_uri:
         working = not bool(user.last_bill_result)
         status = "working" if working else "failing"
 
-    try:
-        customer = billing.Account(balanced_account_uri)
-    except:  # balanced is unavailable? could be a bad balanced_account_uri?
-        log(traceback.format_exc())
-        payments_down = True
+    if balanced_account_uri:
+        try:
+            customer = billing.BalancedAccount(balanced_account_uri)
+        except:  # balanced is unavailable (or balanced_account_uri is bad?)
+            log(traceback.format_exc())
+            payments_down = True
+        else:
+            assert balanced_account_uri == customer['id']
+            payments_down = False
     else:
-        assert balanced_account_uri == customer['id']
-        payments_down = False
+        try:
+            customer = billing.StripeCustomer(stripe_customer_id)
+        except:  # stripe is unavailable (or strip_customer_id is bad?)
+            log(traceback.format_exc())
+            payments_down = True
+        else:
+            assert stripe_customer_id == customer['id']
+            payments_down = False
 
     username = user.id
 # ========================================================================== ^L
@@ -93,11 +104,24 @@ hdif
     If your credit card is missing or fails then your tips won&rsquo;t go
     through for that week.<p>
 
+    {% if stripe_customer_id and not balanced_account_uri %}
+    <p>We are currently migrating your credit information from one processor,
+    <a href="https://stripe.com/">Stripe</a>, to another, <a
+    href="https://www.balancedpayments.com/">Balanced</a>. Feel free to make
+    changes in the mean time.</p>
+    {% else %}
     <p>Credit card information is stored and processed by <a
-    href="https://balancedpayments.com/">Balanced</a>.</p>
+    href="https://www.balancedpayments.com/">Balanced</a>.</p>
+    {% end %}
 
     {% if balanced_account_uri %}
-    <p>Your current card is a <b>{{ customer['card_type'] }}</b> ending in <b>{{ customer['last_four'] }}</b>.</p>
+
+    <p>Your current card is <b>{{ customer['last4'] }}</b>.</p>
+
+    <h2>Change your card on file.</h2>
+    {% elif stripe_customer_id %}
+
+    <p>Your current card is <b>{{ customer['last4'] }}</b>.</p>
 
     <h2>Change your card on file.</h2>
     {% end %}

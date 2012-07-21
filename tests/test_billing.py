@@ -17,22 +17,40 @@ class TestAccount(testing.GittipBaseTest):
     def setUp(self):
         super(TestAccount, self).setUp()
         self.balanced_account_uri = '/v1/marketplaces/M123/accounts/A123'
+        self.balanced_account_uri = '/v1/marketplaces/M123/accounts/A123'
+        self.stripe_customer_id = 'deadbeef'
 
     @mock.patch('balanced.Account')
-    def test_customer(self, ba):
+    def test_balanced_account_wrapper(self, ba):
         card = mock.Mock()
-        card.last_four = '1234'
+        card.last_four = 1234
         card.expiration_month = 10
         card.expiration_year = 2020
         balanced_account = ba.find.return_value
-        balanced_account.cards = [
-            card,
-        ]
-        customer = billing.Account(self.balanced_account_uri)
+        balanced_account.cards = [card]
+        customer = billing.BalancedAccount(self.balanced_account_uri)
         self.assertEqual(customer['id'], balanced_account.uri)
-        self.assertIn(card.last_four, customer['last4'])
+        self.assertEqual(customer['last_four'], card.last_four)
+        self.assertEqual(customer['last4'], '************1234')
         self.assertEqual(customer['expiry'], '10/2020')
         self.assertEqual(customer['nothing'], card.nothing)
+
+    @mock.patch('stripe.Customer')
+    def test_stripe_customer_wrapper(self, sc):
+        active_card = {}
+        active_card['last4'] = '1234'
+        active_card['expiry_month'] = 10
+        active_card['expiry_year'] = 2020
+
+        stripe_customer = sc.retrieve.return_value
+        stripe_customer.id = self.stripe_customer_id
+        stripe_customer.get = {'active_card': active_card}.get
+
+        customer = billing.StripeCustomer(self.stripe_customer_id)
+        self.assertEqual(customer['id'], self.stripe_customer_id)
+        self.assertEqual(customer['last4'], "************1234")
+        self.assertEqual(customer['expiry'], '10/2020')
+        self.assertEqual(customer['nothing'], '')
 
 
 class TestBilling(testing.GittipPaydayTest):

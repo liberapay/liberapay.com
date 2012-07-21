@@ -2,9 +2,10 @@
 """
 import os
 
+import balanced
 import gittip
 import psycopg2
-import balanced
+import stripe
 from gittip.postgres import PostgresManager
 from psycopg2.extensions import cursor as RegularCursor 
 
@@ -25,4 +26,6 @@ def db():
     return gittip.db
 
 def billing():
+    stripe.api_key= os.environ['STRIPE_SECRET_API_KEY']
+    stripe.publishable_api_key= os.environ['STRIPE_PUBLISHABLE_API_KEY']
     balanced.configure(os.environ['BALANCED_API_SECRET'])
