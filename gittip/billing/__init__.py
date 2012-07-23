@@ -72,9 +72,9 @@ def associate(participant_id, balanced_account_uri, card_uri):
     try:
         customer.save()
     except balanced.exc.HTTPError as err:
-        last_bill_result = err.message
+        last_bill_result = err.message.decode('UTF-8')  # XXX UTF-8?
         typecheck(last_bill_result, unicode)
-        out = err.message
+        out = last_bill_result
     else:
         out = last_bill_result = ''
         
