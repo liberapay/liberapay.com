@@ -93,7 +93,7 @@ already been run. New DDL will be (manually) run against the production
 database as part of deployment.
 
 
-Testing
+Testing [![Testing](https://secure.travis-ci.org/bruceadams/www.gittip.com.png)](http://travis-ci.org/bruceadams/www.gittip.com)
 -------
 
 Please write unit tests for all new code and all code you change. Gittip's test
