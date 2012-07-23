@@ -255,7 +255,7 @@ Gittip.paymentsResponseHandler = function(response)
         jQuery.ajax(
             { type: "POST"
             , url: "/credit-card.json"
-            , data: {error: response.error.description}
+            , data: {action: 'store-error', error: response.error.description}
              }
         );
 

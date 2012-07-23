@@ -34,7 +34,7 @@ if not user.ANON:
         else:
             assert stripe_customer_id == card['id']
             payments_down = False
-    import pdb; pdb.set_trace() 
+    
     username = user.id
 # ========================================================================== ^L
 {% extends templates/base.html %}
