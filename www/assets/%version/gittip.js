@@ -192,23 +192,20 @@ Gittip.submitPaymentForm = function(e)
     var credit_card = {};   // holds CC info
     
     credit_card.card_number = val('card_number');
-    console.log(credit_card.card_number);
     if (credit_card.card_number.search('[*]') !== -1)
         credit_card.card_number = '';  // don't send if it's the **** version
-    console.log(credit_card.card_number);
     credit_card.security_code = val('cvv');
     credit_card.name = val('name');
     credit_card.street_address = val('address_1');
-    credit_card.meta = { 'address_2': val('address_2')
-                       , 'region': val('state')
-                        };
     credit_card.region = val('state');
+    credit_card.meta = { 'address_2': val('address_2')
+                       , 'region': credit_card.region // workaround
+                        };
     credit_card.postal_code = val('zip');
     
     var expiry = val('expiry').split('/');  // format enforced by mask
     credit_card.expiration_month= expiry[0];
     credit_card.expiration_year = expiry[1];
-    console.log("filing", credit_card);
 
 
     // Require some options (expiry is theoretically handled by the mask).
@@ -320,7 +317,6 @@ Gittip.initPayment = function(balanced_uri, participantId)
     {
         balanced.init(balanced_uri);
         Gittip.havePayments = true;
-        console.log("Payments loaded.");
         $('INPUT[type!="hidden"]').eq(0).focus();
     });
 };
