@@ -213,14 +213,14 @@ Gittip.submitPaymentForm = function(e)
     if (!balanced.card.isCardNumberValid(credit_card.card_number))
     {
         $('BUTTON#save').text('Save');
-        Gittip.showFeedback(null, ["Card number is required."]);
+        Gittip.showFeedback(null, ["Your card number is bad."]);
     }
     else if (!balanced.card.isSecurityCodeValid( credit_card.card_number
                                                , credit_card.security_code
                                                 ))
     {
         $('BUTTON#save').text('Save');
-        Gittip.showFeedback(null, ["A 3- or 4-digit CVV is required."]);
+        Gittip.showFeedback(null, ["Your CVV is bad."]);
     }
     else 
     {
