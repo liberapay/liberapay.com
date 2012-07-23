@@ -92,7 +92,7 @@ Gittip.clearFeedback = function()
 Gittip.showFeedback = function(msg, details)
 {
     if (msg === null)
-        msg = "Darn it all!";
+        msg = "Sorry";
     msg = '<h3><span class="highlight">' + msg + '</span></h3>'; 
     msg += '<div class="details"></div>';
     $('#feedback').html(msg);
