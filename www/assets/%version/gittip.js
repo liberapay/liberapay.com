@@ -137,7 +137,7 @@ Gittip.submitForm = function(url, data, success, error)
     }
 
     jQuery.ajax({ url: url
-                , type: "GET"
+                , type: "POST"
                 , data: data
                 , dataType: "json"
                 , success: _success
