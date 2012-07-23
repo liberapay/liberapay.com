@@ -196,26 +196,35 @@ Gittip.submitPaymentForm = function(e)
     if (credit_card.card_number.search('[*]') !== -1)
         credit_card.card_number = '';  // don't send if it's the **** version
     console.log(credit_card.card_number);
-    credit_card.security_code = val('cvv'); // cvv? cvc?
+    credit_card.security_code = val('cvv');
     credit_card.name = val('name');
-    credit_card.street_address = val('address_1') + ' ' + val('address_2');
+    credit_card.street_address = val('address_1');
+    credit_card.meta = {'address_2': val('address_2')};
     credit_card.region = val('state');
     credit_card.postal_code = val('zip');
     
     var expiry = val('expiry').split('/');  // format enforced by mask
     credit_card.expiration_month= expiry[0];
     credit_card.expiration_year = expiry[1];
+    console.log("filing", credit_card);
 
 
     // Require some options (expiry is theoretically handled by the mask).
     
-    if (!balanced.card.isCardNumberValid(credit_card.card_number)) {
+    if (!balanced.card.isCardNumberValid(credit_card.card_number))
+    {
         $('BUTTON#save').text('Save');
         Gittip.showFeedback(null, "Card number is required.");
-    } else if (!balanced.card.isSecurityCodeValid(credit_card.card_number, credit_card.security_code)) {
+    }
+    else if (!balanced.card.isSecurityCodeValid( credit_card.card_number
+                                               , credit_card.security_code
+                                                ))
+    {
         $('BUTTON#save').text('Save');
         Gittip.showFeedback(null, "A 3- or 4-digit CVV is required.");
-    } else {
+    }
+    else 
+    {
         balanced.card.create(credit_card, Gittip.paymentsResponseHandler);
     }
 
@@ -225,9 +234,8 @@ Gittip.submitPaymentForm = function(e)
 Gittip.paymentsResponseHandler = function(response)
 {
 
-    /* Status is guaranteed to be in the set {200,400,401,402,404,500,502,503,
-     * 504}. If status !== 201 then response.error will contain information
-     * about the error, in this form:
+    /* If status !== 201 then response.error will contain information about the
+     * error, in this form:
      *
      *      { "code": "incorrect_number"
      *      , "message": "Your card number is incorrect"
@@ -241,9 +249,18 @@ Gittip.paymentsResponseHandler = function(response)
      *
      */
     if (response.status !== 201)
-    {
+    {   // The request to create the token failed. Store the failure message in
+        // our db.
         $('BUTTON#save').text('Save');
-        Gittip.showFeedback(null, [response.error.description]);
+        jQuery.ajax(
+            { type: "POST"
+            , url: "/credit-card.json"
+            , data: {error: response.error.description}
+             }
+        );
+
+        Gittip.showFeedback(null, [ 'We hit a snag saving your card. We are '
+                                  + 'investigating. :-(']);
     }
     else
     {

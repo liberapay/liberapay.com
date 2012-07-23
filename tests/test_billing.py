@@ -13,44 +13,64 @@ from psycopg2 import IntegrityError
 __author__ = 'marshall'
 
 
-class TestAccount(testing.GittipBaseTest):
+class TestCard(testing.GittipBaseTest):
     def setUp(self):
-        super(TestAccount, self).setUp()
-        self.balanced_account_uri = '/v1/marketplaces/M123/accounts/A123'
+        super(TestCard, self).setUp()
         self.balanced_account_uri = '/v1/marketplaces/M123/accounts/A123'
         self.stripe_customer_id = 'deadbeef'
 
     @mock.patch('balanced.Account')
-    def test_balanced_account_wrapper(self, ba):
+    def test_balanced_card(self, ba):
         card = mock.Mock()
         card.last_four = 1234
         card.expiration_month = 10
         card.expiration_year = 2020
+        card.street_address = "123 Main Street"
+        card.meta = {"address_2": "Box 2"}
+        card.region = "Confusion"
+        card.postal_code = "90210"
+
         balanced_account = ba.find.return_value
+        balanced_account.uri = self.balanced_account_uri
         balanced_account.cards = [card]
-        customer = billing.BalancedAccount(self.balanced_account_uri)
-        self.assertEqual(customer['id'], balanced_account.uri)
-        self.assertEqual(customer['last_four'], card.last_four)
-        self.assertEqual(customer['last4'], '************1234')
-        self.assertEqual(customer['expiry'], '10/2020')
-        self.assertEqual(customer['nothing'], card.nothing)
+
+        card = billing.BalancedCard(self.balanced_account_uri)
+
+        self.assertEqual(card['id'], '/v1/marketplaces/M123/accounts/A123')
+        self.assertEqual(card['last_four'], 1234)
+        self.assertEqual(card['last4'], '************1234')
+        self.assertEqual(card['expiry'], '10/2020')
+        self.assertEqual(card['address_1'], '123 Main Street')
+        self.assertEqual(card['address_2'], 'Box 2')
+        self.assertEqual(card['state'], 'Confusion')
+        self.assertEqual(card['zip'], '90210')
+        self.assertEqual(card['nothing'].__class__.__name__, mock.Mock.__name__)
 
     @mock.patch('stripe.Customer')
-    def test_stripe_customer_wrapper(self, sc):
+    def test_stripe_card(self, sc):
         active_card = {}
         active_card['last4'] = '1234'
         active_card['expiry_month'] = 10
         active_card['expiry_year'] = 2020
+        active_card['address_line1'] = "123 Main Street"
+        active_card['address_line2'] = "Box 2"
+        active_card['address_state'] = "Confusion"
+        active_card['address_zip'] = "90210"
 
         stripe_customer = sc.retrieve.return_value
         stripe_customer.id = self.stripe_customer_id
         stripe_customer.get = {'active_card': active_card}.get
 
-        customer = billing.StripeCustomer(self.stripe_customer_id)
-        self.assertEqual(customer['id'], self.stripe_customer_id)
-        self.assertEqual(customer['last4'], "************1234")
-        self.assertEqual(customer['expiry'], '10/2020')
-        self.assertEqual(customer['nothing'], '')
+        card = billing.StripeCard(self.stripe_customer_id)
+
+        self.assertEqual(card['id'], 'deadbeef')
+        self.assertEqual(card['last4'], "************1234")
+        self.assertEqual(card['expiry'], '10/2020')
+        self.assertEqual(card['address_1'], '123 Main Street')
+        self.assertEqual(card['address_2'], 'Box 2')
+        self.assertEqual(card['state'], 'Confusion')
+        self.assertEqual(card['zip'], '90210')
+        self.assertEqual(card['nothing'], '')
 
 
 class TestBilling(testing.GittipPaydayTest):

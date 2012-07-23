@@ -18,23 +18,23 @@ if not user.ANON:
 
     if balanced_account_uri:
         try:
-            customer = billing.BalancedAccount(balanced_account_uri)
+            card = billing.BalancedCard(balanced_account_uri)
         except:  # balanced is unavailable (or balanced_account_uri is bad?)
             log(traceback.format_exc())
             payments_down = True
         else:
-            assert balanced_account_uri == customer['id']
+            assert balanced_account_uri == card['id']
             payments_down = False
     else:
         try:
-            customer = billing.StripeCustomer(stripe_customer_id)
+            card = billing.StripeCard(stripe_customer_id)
         except:  # stripe is unavailable (or strip_customer_id is bad?)
             log(traceback.format_exc())
             payments_down = True
         else:
-            assert stripe_customer_id == customer['id']
+            assert stripe_customer_id == card['id']
             payments_down = False
-
+    import pdb; pdb.set_trace() 
     username = user.id
 # ========================================================================== ^L
 {% extends templates/base.html %}
@@ -114,12 +114,12 @@ Thanks! :-)</p>
 
     {% if balanced_account_uri %}
 
-    <p>Your current card is <b>{{ customer['last4'] }}</b>.</p>
+    <p>Your current card is <b>{{ card['last4'] }}</b>.</p>
 
     <h2>Change your card on file.</h2>
     {% elif stripe_customer_id %}
 
-    <p>Your current card is <b>{{ customer['last4'] }}</b>.</p>
+    <p>Your current card is <b>{{ card['last4'] }}</b>.</p>
 
     <h2>Change your card on file.</h2>
     {% end %}
@@ -156,25 +156,25 @@ Thanks! :-)</p>
         <h3>Optional</h3>
 
         <label for="name">Full Name on Card</label>
-        <input id="name" value="{{ customer['name'] }}" />
+        <input id="name" value="{{ card['name'] }}" />
 
         <div class="clear"></div>
 
         <label for="address_1">Address 1</label>
-        <input id="address_1" value="{{ customer['address_line1'] }}" />
+        <input id="address_1" value="{{ card['address_1'] }}" />
 
         <label for="address_2">Address 2</label>
-        <input id="address_2" value="{{ customer['address_line2'] }}" />
+        <input id="address_2" value="{{ card['address_2'] }}" />
 
 
         <div class="half left">
             <label for="state">State or Province</label>
-            <input id="state" value="{{ customer['address_state'] }}" />
+            <input id="state" value="{{ card['state'] }}" />
         </div>
 
         <div class="half right">
             <label for="zip">ZIP or Postal Code</label>
-            <input id="zip" value="{{ customer['address_zip'] }}" />
+            <input id="zip" value="{{ card['zip'] }}" />
         </div>
 
         <div class="clear"></div>

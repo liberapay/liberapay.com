@@ -112,13 +112,13 @@ def clear(participant_id, balanced_account_uri):
     db.execute(CLEAR, (participant_id,))
 
 
-# Customer and Account
-# ====================
+# Card
+# ====
 # While we're migrating data we need to support loading data from both Stripe 
 # and Balanced.
 
 
-class StripeCustomer(object):
+class StripeCard(object):
     """This is a dict-like wrapper around a Stripe PaymentMethod.
     """
 
@@ -158,11 +158,16 @@ class StripeCustomer(object):
             else:
                 out = ""
         else:
+            name = { 'address_1': 'address_line1'
+                   , 'address_2': 'address_line2'
+                   , 'state': 'address_state'
+                   , 'zip': 'address_zip'
+                    }.get(name, name)
             out = self._get(name)
         return out
 
 
-class BalancedAccount(object):
+class BalancedCard(object):
     """This is a dict-like wrapper around a Balanced Account.
     """
 
@@ -174,18 +179,23 @@ class BalancedAccount(object):
         if balanced_account_uri is not None:
             self._account = balanced.Account.find(balanced_account_uri)
 
+    def _get_card(self):
+        """Return the most recent card on file for this account.
+        """
+        # this is an abortion
+        # https://github.com/balanced/balanced-python/issues/3
+        cards = self._account.cards
+        cards = sorted(cards, key=lambda c: c.created_at)
+        cards.reverse()
+        return cards[0]
+
     def _get(self, name):
         """Given a name, return a unicode.
         """
         out = ""
         if self._account is not None:
             try:
-                # this is an abortion
-                # https://github.com/balanced/balanced-python/issues/3
-                cards = self._account.cards
-                cards = sorted(cards, key=lambda c: c.created_at)
-                cards.reverse()
-                card = cards[0]
+                card = self._get_card()
                 out = getattr(card, name, "")
             except IndexError:  # no cards associated
                 pass
@@ -210,6 +220,13 @@ class BalancedAccount(object):
                 out = "%d/%d" % (month, year)
             else:
                 out = ""
+        elif name == 'address_2':
+            meta = self._get('meta')
+            out = meta.get('address_2', '')
         else:
+            name = { 'address_1': 'street_address'
+                   , 'state': 'region'
+                   , 'zip': 'postal_code'
+                    }.get(name, name)
             out = self._get(name)
         return out
