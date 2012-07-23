@@ -18,7 +18,7 @@ class TestCard(testing.GittipBaseTest):
         super(TestCard, self).setUp()
         self.balanced_account_uri = '/v1/marketplaces/M123/accounts/A123'
         self.stripe_customer_id = 'deadbeef'
-
+        
     @mock.patch('balanced.Account')
     def test_balanced_card(self, ba):
         card = mock.Mock()
@@ -80,6 +80,11 @@ class TestBilling(testing.GittipPaydayTest):
         self.balanced_account_uri = '/v1/marketplaces/M123/accounts/A123'
         self.card_uri = '/v1/marketplaces/M123/accounts/A123/cards/C123'
         billing.db = self.db
+
+    def test_store_error_stores_error(self):
+        billing.store_error("lgtest", "cheese is yummy")
+        rec = self.db.fetchone("select * from participants where id='lgtest'")
+        self.assertEqual(rec['last_bill_result'], "cheese is yummy")
 
     @mock.patch('balanced.Account')
     def test_associate_valid(self, ba):

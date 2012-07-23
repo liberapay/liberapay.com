@@ -112,6 +112,18 @@ def clear(participant_id, balanced_account_uri):
     db.execute(CLEAR, (participant_id,))
 
 
+def store_error(participant_id, msg):
+    typecheck(participant_id, unicode, msg, unicode)
+    ERROR = """\
+
+        UPDATE participants
+           SET last_bill_result=%s
+         WHERE id=%s
+
+    """
+    db.execute(ERROR, (msg, participant_id))
+
+
 # Card
 # ====
 # While we're migrating data we need to support loading data from both Stripe 
@@ -130,14 +142,14 @@ class StripeCard(object):
         if stripe_customer_id is not None:
             self._customer = stripe.Customer.retrieve(stripe_customer_id)
 
-    def _get(self, name):
+    def _get(self, name, default=""):
         """Given a name, return a string.
         """
         out = ""
         if self._customer is not None:
             out = self._customer.get('active_card', {}).get(name, "")
             if out is None:
-                out = ""
+                out = default
         return out
 
     def __getitem__(self, name):
@@ -189,7 +201,7 @@ class BalancedCard(object):
         cards.reverse()
         return cards[0]
 
-    def _get(self, name):
+    def _get(self, name, default=""):
         """Given a name, return a unicode.
         """
         out = ""
@@ -200,7 +212,7 @@ class BalancedCard(object):
             except IndexError:  # no cards associated
                 pass
             if out is None:
-                out = ""
+                out = default
         return out
 
     def __getitem__(self, name):
@@ -221,11 +233,16 @@ class BalancedCard(object):
             else:
                 out = ""
         elif name == 'address_2':
-            meta = self._get('meta')
-            out = meta.get('address_2', '')
+            out = self._get('meta', {}).get('address_2', '')
+        elif name == 'state':
+            out = self._get('region')
+            if not out:
+                # There's a bug in balanced where the region does get persisted
+                # but doesn't make it back out. This is a workaround until such
+                # time as that's fixed.
+                out = self._get('meta', {}).get('region', '')
         else:
             name = { 'address_1': 'street_address'
-                   , 'state': 'region'
                    , 'zip': 'postal_code'
                     }.get(name, name)
             out = self._get(name)

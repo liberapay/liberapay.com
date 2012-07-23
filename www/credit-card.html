@@ -70,9 +70,10 @@ Thanks! :-)</p>
     #feedback .details P {
         font-size: 9pt;
         line-height: 12pt;
-        margin: 0;
+        margin: 0 ! important;
         padding: 0 0 0 1em;
         text-indent: -1em;
+        overflow: hidden;
     }
     FORM {
         width: 300px;
@@ -126,7 +127,7 @@ Thanks! :-)</p>
 
     <form id="payment" class="special">
         <div id="feedback">{% if user.last_bill_result %}
-        <h3><span>Darn it all!</span></h3>
+        <h3><span>Failure</span></h3>
         <div class="details">
         <p>{{ user.last_bill_result }}</p>
         </div>

@@ -16,10 +16,12 @@ if user.ANON:
     raise Response(404)
 
 request.allow('POST')
+out = {}
 
 if body.get('action') == 'delete':
     billing.clear(user.id, user.balanced_account_uri)
-    request.redirect('/credit-card.html')
+elif body.get('action') == 'store-error':
+    billing.store_error(user.id, body['msg'])
 else:
 
     # Associate the single-use token representing the credit card details (we

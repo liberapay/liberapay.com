@@ -92,7 +92,7 @@ Gittip.clearFeedback = function()
 Gittip.showFeedback = function(msg, details)
 {
     if (msg === null)
-        msg = "Sorry";
+        msg = "Failure";
     msg = '<h3><span class="highlight">' + msg + '</span></h3>'; 
     msg += '<div class="details"></div>';
     $('#feedback').html(msg);
@@ -199,7 +199,9 @@ Gittip.submitPaymentForm = function(e)
     credit_card.security_code = val('cvv');
     credit_card.name = val('name');
     credit_card.street_address = val('address_1');
-    credit_card.meta = {'address_2': val('address_2')};
+    credit_card.meta = { 'address_2': val('address_2')
+                       , 'region': val('state')
+                        };
     credit_card.region = val('state');
     credit_card.postal_code = val('zip');
     
@@ -214,14 +216,14 @@ Gittip.submitPaymentForm = function(e)
     if (!balanced.card.isCardNumberValid(credit_card.card_number))
     {
         $('BUTTON#save').text('Save');
-        Gittip.showFeedback(null, "Card number is required.");
+        Gittip.showFeedback(null, ["Card number is required."]);
     }
     else if (!balanced.card.isSecurityCodeValid( credit_card.card_number
                                                , credit_card.security_code
                                                 ))
     {
         $('BUTTON#save').text('Save');
-        Gittip.showFeedback(null, "A 3- or 4-digit CVV is required.");
+        Gittip.showFeedback(null, ["A 3- or 4-digit CVV is required."]);
     }
     else 
     {
@@ -248,19 +250,20 @@ Gittip.paymentsResponseHandler = function(response)
      *      https://www.balancedpayments.com/docs/js
      *
      */
+
     if (response.status !== 201)
     {   // The request to create the token failed. Store the failure message in
         // our db.
         $('BUTTON#save').text('Save');
+        var msg = response.status.toString() + " " + response.error.description;
         jQuery.ajax(
             { type: "POST"
             , url: "/credit-card.json"
-            , data: {action: 'store-error', error: response.error.description}
+            , data: {action: 'store-error', msg: msg}
              }
         );
 
-        Gittip.showFeedback(null, [ 'We hit a snag saving your card. We are '
-                                  + 'investigating. :-(']);
+        Gittip.showFeedback(null, [response.error.description]);
     }
     else
     {
