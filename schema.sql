@@ -83,6 +83,16 @@ CREATE TABLE paydays
 , exchange_fees_volume  numeric(35,2)               DEFAULT 0.00 
  );
 
+-- aggregate of the exchanges for paying out
+CREATE TABLE settlements
+(
+  id                    serial                      PRIMARY KEY
+, timestamp             timestamp with time zone    NOT NULL DEFAULT CURRENT_TIMESTAMP
+, amount_in_cents       integer                     NOT NULL
+, participant_id        text                        NOT NULL REFERENCES participants ON DELETE RESTRICT
+, settled               timestamp with time zone
+);
+
 -- exchanges -- when a participant moves cash between Gittip and their bank
 CREATE TABLE exchanges
 ( id                    serial                      PRIMARY KEY
@@ -91,7 +101,6 @@ CREATE TABLE exchanges
 , fee                   numeric(35,2)               NOT NULL
 , participant_id        text                        NOT NULL REFERENCES participants ON DELETE RESTRICT
  );
-
 
 -- https://github.com/whit537/www.gittip.com/issues/128
 ALTER TABLE participants ADD COLUMN anonymous bool NOT NULL DEFAULT FALSE;
@@ -104,3 +113,12 @@ ALTER TABLE participants ADD COLUMN goal numeric(35,2) DEFAULT NULL;
 
 -- https://github.com/whit537/www.gittip.com/issues/78
 ALTER TABLE participants ADD COLUMN balanced_account_uri text DEFAULT NULL;
+
+
+-- we have a balanced_destination_uri if the user has a specific bank account to
+-- pay out to
+ALTER TABLE participants ADD COLUMN balanced_destination_uri text DEFAULT NULL;
+
+-- when we pay out we mark the date the credit was created as settled so we know
+-- what not to settle again.
+ALTER TABLE exchanges ADD COLUMN settlement_id INT REFERENCES settlements(id);

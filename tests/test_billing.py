@@ -10,9 +10,6 @@ from gittip.billing.payday import FEE, MINIMUM
 from psycopg2 import IntegrityError
 
 
-__author__ = 'marshall'
-
-
 class TestCard(testing.GittipBaseTest):
     def setUp(self):
         super(TestCard, self).setUp()
@@ -766,3 +763,239 @@ class TestBillingTransfer(testing.GittipPaydayTest):
                          payday2['ntransfers'])
         self.assertEqual(payday['transfer_volume'] + amount,
                          payday2['transfer_volume'])
+
+
+class TestBillingPayouts(testing.GittipSettlementTest):
+    def setUp(self):
+        super(TestBillingPayouts, self).setUp()
+
+        # let's create a couple of exchanges + participants so we can simulate
+        # real life.
+        participants = [
+            ('claimed_recipient_without_balanced', None, None),
+            ('claimed_recipient_no_merchant', 'no_merchant', None),
+            ('claimed_recipient_no_bank_ac', 'merchant', None),
+            ('claimed_recipient_with_bank_ac', 'merchant', '/v1/bank_ac'),
+        ]
+
+        for participant in participants:
+            self._create_participant(*participant)
+            for i in range(1, 3):
+                self._create_exchange(participant[0], 3 * i, 0.5 * i)
+
+    def _create_participant(self,
+                            name,
+                            account_uri=None,
+                            destination_uri=None):
+        INSERT_PARTICIPANT = '''
+            insert into participants (
+                id, pending, balance, balanced_account_uri,
+                balanced_destination_uri
+            ) values (
+                %s, 0, 1, %s, %s
+            )
+        '''
+        return self.db.execute(INSERT_PARTICIPANT,
+                               (name, account_uri, destination_uri))
+
+    def _create_exchange(self, particpant_id, amount, fee):
+        return self.db.execute("""
+            INSERT INTO exchanges (participant_id, amount, fee) VALUES (
+                %s, %s, %s
+            )
+        """, (particpant_id, amount, fee))
+
+    @mock.patch('gittip.billing.payday.balanced.Account')
+    @mock.patch('gittip.billing.payday.balanced.Credit')
+    def test_it_all(self, b_credit, b_account):
+        """
+        This runs the whole thing from end to end with minimal mocking.
+        """
+        accounts = []
+
+        def find_account(account_uri):
+            account = mock.Mock()
+            accounts.append(account)
+            if account_uri != 'merchant':
+                account.roles = []
+            else:
+                account.roles = ['merchant']
+            account.credit.return_value.created_at = datetime.utcnow()
+            return account
+
+        b_credit.query.filter.side_effect = balanced.exc.NoResultFound
+        b_account.find = find_account
+
+        self.settlement_manager.run()
+
+        # two participants were merchants
+        self.assertEqual(sum(a.credit.call_count for a in accounts), 2)
+
+        self.settlement_manager.run()
+
+        # second time we run should create no new calls to credit as we have
+        # already market the exchanges as settled
+        self.assertEqual(sum(a.credit.call_count for a in accounts), 2)
+
+        recipients_who_should_be_settled = [
+            'claimed_recipient_no_bank_ac', 'claimed_recipient_with_bank_ac'
+        ]
+
+        settled_recipients = list(self.db.fetchall('''
+            SELECT participant_id, amount_in_cents
+            FROM settlements
+            WHERE settled IS NOT NULL
+        '''))
+
+        self.assertEqual(len(settled_recipients), 2)
+        for participant in settled_recipients:
+            self.assertIn(participant['participant_id'],
+                          recipients_who_should_be_settled)
+            self.assertEqual(participant['amount_in_cents'], 750)
+
+    @mock.patch('gittip.billing.payday.balanced.Account')
+    @mock.patch('gittip.billing.payday.balanced.Credit')
+    def test_credit_settlement(self, b_credit, b_account):
+        credit = mock.Mock()
+        credit.created_at = datetime.utcnow()
+        b_credit.query.filter.return_value.one.return_value = credit
+
+        settlement_id = 999
+        amount_in_cents = 500
+        balanced_account_uri = '/v1/accounts/X'
+        balanced_destination_uri = '/v1/bank_accounts/X'
+        self.settlement_manager.cur = cursor = mock.Mock()
+        account = mock.Mock()
+        b_account.find.return_value = account
+
+        cursor.rowcount = 2  # invalid
+
+        args = (settlement_id,
+                amount_in_cents,
+                balanced_account_uri,
+                balanced_destination_uri)
+
+        with self.assertRaises(AssertionError):
+            self.settlement_manager.credit_settlement(*args)
+
+        cursor.rowcount = 1
+
+        # should work fine, existing credit is returned and we mark as settled
+        self.settlement_manager.credit_settlement(*args)
+
+        _, kwargs = b_credit.query.filter.call_args
+        self.assertEqual(kwargs, {'settlement_id': settlement_id})
+
+        cursor_args, _ = cursor.execute.call_args
+        self.assertEqual(cursor_args[1], (credit.created_at, settlement_id))
+
+        # oh no, we will return
+        b_credit.query.filter.side_effect = balanced.exc.NoResultFound()
+
+        self.settlement_manager.credit_settlement(*args)
+
+        credit_args, credit_kwargs = account.credit.call_args
+        self.assertEqual(credit_args, (amount_in_cents,))
+        self.assertItemsEqual(credit_kwargs, dict(
+            destination_uri=balanced_destination_uri,
+            meta_data={'settlement_id': settlement_id},
+            description=u'Settlement {}'.format(settlement_id))
+        )
+
+    @mock.patch('gittip.billing.payday.balanced.Account')
+    @mock.patch('gittip.billing.payday.SettleExchanges.'
+                'get_exchanges_for_participant')
+    @mock.patch('gittip.billing.payday.SettleExchanges.'
+                'ask_participant_for_merchant_info')
+    def test_create_settlement_for_exchanges(self,
+                                             info_request,
+                                             get_exchanges,
+                                             b_account):
+
+        get_exchanges.return_value = []
+        account = mock.Mock()
+        account.roles = ['merchant']
+        account.bank_accounts.query.total = 0
+        b_account.find.return_value = None
+        participant_id = 'mjallday'
+        balanced_account_uri = '/v1/accounts/X'
+        self.settlement_manager.cur = cursor = mock.Mock()
+
+        # no account found
+        self.settlement_manager.create_settlement_for_exchanges(
+            participant_id, balanced_account_uri)
+
+        b_account.find.return_value = account
+
+        # no bank accounts
+        self.settlement_manager.create_settlement_for_exchanges(
+            participant_id, balanced_account_uri)
+
+        account.bank_accounts.query.total = 1
+        account.roles.pop()
+
+        # not a merchant
+        self.settlement_manager.create_settlement_for_exchanges(
+            participant_id, balanced_account_uri)
+
+        account.roles = ['merchant']
+
+        # everything passes
+        self.settlement_manager.create_settlement_for_exchanges(
+            participant_id, balanced_account_uri)
+
+        self.assertEqual(info_request.call_count, 3)
+        self.assertEqual(get_exchanges.call_count, 1)
+        self.assertEqual(cursor.call_count, 0)
+
+        exchanges = [
+            {'exchange_id': 1, 'amount': Decimal('1.23'),
+             'fee': Decimal('0.01')},
+            {'exchange_id': 2, 'amount': Decimal('1.23'),
+             'fee': Decimal('0.01')},
+            {'exchange_id': 3, 'amount': Decimal('1.23'),
+             'fee': Decimal('0.01')},
+        ]
+
+        get_exchanges.return_value = exchanges
+
+        self.settlement_manager.create_settlement_for_exchanges(
+            participant_id, balanced_account_uri)
+
+        # amount was too low to trigger a settlement
+        self.assertEqual(cursor.execute.call_count, 0)
+
+        exchanges.append({
+            'exchange_id': 4,
+            'amount': Decimal('10.23'),
+            'fee': Decimal('0.01')},
+        )
+
+        # setup db emulation
+        cursor.fetchone.return_value = {'id': 1}
+        cursor.rowcount = 3
+
+        with self.assertRaises(AssertionError):
+            self.settlement_manager.create_settlement_for_exchanges(
+                participant_id, balanced_account_uri)
+
+        self.assertEqual(cursor.execute.call_count, 2)
+
+        cursor.reset_mock()
+        cursor.rowcount = 4
+
+        # this one will work OK
+        self.settlement_manager.create_settlement_for_exchanges(
+            participant_id, balanced_account_uri)
+
+        self.assertEqual(cursor.execute.call_count, 2)
+
+        # let's check the parameters we passed to the DB
+        settlement_insert, _ = cursor.execute.call_args_list[0]
+        exchange_update, _ = cursor.execute.call_args_list[1]
+
+        _, args = settlement_insert
+        self.assertEqual(args, ('mjallday', 1388))
+
+        _, args = exchange_update
+        self.assertEqual(args, (1, (1, 2, 3, 4)))

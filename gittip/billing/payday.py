@@ -513,6 +513,179 @@ class Payday(object):
     def assert_one_payday(self, payday):
         """Given the result of a payday stats update, make sure it's okay.
         """
-        assert payday is not None 
+        assert payday is not None
         payday = list(payday)
         assert len(payday) == 1, payday
+
+
+class SettleExchanges(object):
+    MINIMUM_CREDIT_AMOUNT = 500  # $5.00 USD
+
+    def __init__(self, db):
+        """Takes a gittip.postgres.PostgresManager instance.
+        """
+        self.db = db
+
+    def run(self):
+        """Run through all exchanges which have yet to be settled. Group by
+        participant id so we can aggregate them together and create a
+        settlement for eligible exchanges.
+
+        Once we've created the settlements we can run over them and credit them
+        to the merchant in question, this will actually pay the credit out via
+        Balanced and mark it as paid.
+
+        Exchanges are only created if the account is claimed.
+
+        This is re-runable so if it dies during any point we are OK.
+
+        TODO: verify that this is true.
+        """
+        with self.db.get_connection() as conn:
+            self.conn = conn
+            self.cur = conn.cursor()
+
+            self.process_exchanges()
+            self.conn.commit()
+
+            self.process_settlements()
+            self.conn.commit()
+
+    def process_exchanges(self):
+        # TODO: we should open this up with a read lock so if a second process
+        #   is running we hold the lock until we've finished processing.
+        participants_with_exchanges = self.get_participants_with_exchanges()
+
+        for participant in participants_with_exchanges:
+            self.create_settlement_for_exchanges(**participant)
+
+    def process_settlements(self):
+        settlements_to_process = self.get_settlements_to_process()
+
+        for settlement in settlements_to_process:
+            # settle the settlement by setting the settled date ;)
+            self.credit_settlement(**settlement)
+
+    def get_settlements_to_process(self):
+        self.cur.execute("""
+            SELECT s.id as settlement_id,
+                s.amount_in_cents,
+                p.balanced_account_uri,
+                p.balanced_destination_uri
+            FROM settlements s
+            INNER JOIN participants p on s.participant_id = p.id
+            WHERE s.settled IS NULL
+        """)
+        return self.cur.fetchall()
+
+    def get_participants_with_exchanges(self):
+        self.cur.execute("""
+            SELECT p.id as participant_id, p.balanced_account_uri
+            FROM participants p
+            INNER JOIN exchanges e on p.id = e.participant_id
+            WHERE e.settlement_id IS NULL
+            GROUP BY p.id, p.balanced_account_uri
+            HAVING COUNT(*) > 0
+        """)
+        return self.cur.fetchall()
+
+    def credit_settlement(self, settlement_id, amount_in_cents,
+                          balanced_account_uri, balanced_destination_uri):
+        meta_data = {
+            'settlement_id': settlement_id
+        }
+        description = 'Settlement {}'.format(settlement_id)
+
+        try:
+            credit = balanced.Credit.query.filter(**meta_data).one()
+        except balanced.exc.NoResultFound:
+            account = balanced.Account.find(balanced_account_uri)
+            # TODO: possible errors that can be generated here:
+            #
+            #   Not enough money in escrow (402)
+            #   Not a merchant (should have been caught earlier in the process)
+            #   No funding destination set (should be caught earlier)
+            #   Invalid funding destination (should be caught via validation
+            #       when adding account) but possible if funding_destination is
+            #       marked is_valid=False specifically.
+            #
+            credit = account.credit(amount_in_cents,
+                                    description=description,
+                                    meta_data=meta_data,
+                                    destination_uri=balanced_destination_uri)
+
+        # mark settled
+        self.cur.execute("""
+            UPDATE settlements
+            SET settled = %s
+            WHERE id = %s
+                AND settled IS NULL
+        """, (credit.created_at, settlement_id))
+
+        assert self.cur.rowcount == 1, credit.uri
+
+    def create_settlement_for_exchanges(self, participant_id,
+                                        balanced_account_uri):
+        # check if this account is a merchant, if not we should shoot them
+        # a message asking them to add their merchant details (US only
+        # right now)
+        account = balanced.Account.find(balanced_account_uri)
+
+        if (not account or
+            'merchant' not in account.roles or
+                account.bank_accounts.query.total == 0):
+            self.ask_participant_for_merchant_info(participant_id)
+            return
+
+        exchanges = self.get_exchanges_for_participant(participant_id)
+
+        total_amount = sum(int(e['amount'] * 100) for e in exchanges)
+        total_fees = sum(int(e['fee'] * 100) for e in exchanges)
+        exchange_ids = [e['exchange_id'] for e in exchanges]
+
+        # we aggregate the payouts so if there isn't enough we'll try again
+        # next time.
+        if total_amount - total_fees < SettleExchanges.MINIMUM_CREDIT_AMOUNT:
+            return
+
+        self.cur.execute("""
+            INSERT INTO settlements (
+                participant_id, amount_in_cents
+            ) VALUES (
+                %s, %s
+            )
+            RETURNING id
+        """, (participant_id, total_amount - total_fees))
+        settlement_id = self.cur.fetchone()['id']
+
+        self.cur.execute("""
+            UPDATE exchanges
+            SET settlement_id = %s
+            WHERE id IN %s
+                AND settlement_id IS NULL
+        """, (settlement_id, tuple(exchange_ids)))
+
+        row_count = self.cur.rowcount
+
+        assert(row_count == len(exchanges))
+
+        # we've adjusted everything locally, we will make the actual call to
+        # our payment processor later on so this process is re-runnable. for
+        # now we are DONE!
+
+    def ask_participant_for_merchant_info(self, particpant_id):
+        # TODO: email and ask for info
+        msg = 'TODO: Email {} and ask nicely to signup as a merchant'
+        log(msg.format(particpant_id))
+
+    def get_exchanges_for_participant(self, participant_id):
+        self.cur.execute("""
+                SELECT e.id as exchange_id,
+                    e.amount,
+                    e.fee
+                FROM exchanges e
+                WHERE e.settlement_id IS NULL
+                    and e.participant_id = %s
+            """, (participant_id,)
+        )
+        return self.cur.fetchall()
