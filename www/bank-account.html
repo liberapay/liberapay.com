@@ -10,20 +10,20 @@ from gittip.networks import github
 if not user.ANON:
     balanced_account_uri = user.balanced_account_uri
 
-    status = "missing"
+    status = "not connected"
     if balanced_account_uri:
-        working = not bool(user.last_bill_result)
-        status = "working" if working else "failing"
+        working = not bool(user.last_ach_result)
+        status = "connected" if working else "not connected"
 
     if balanced_account_uri:
         try:
-            card = billing.BalancedCard(balanced_account_uri)
+            card = billing.BalancedBankAccount(balanced_account_uri)
         except:  # balanced is unavailable (or balanced_account_uri is bad?)
             log(traceback.format_exc())
-            payments_down = True
+            payouts_down = True
         else:
             assert balanced_account_uri == card['id']
-            payments_down = False
+            payouts_down = False
     
     username = user.id
 # ========================================================================== ^L
@@ -77,31 +77,25 @@ Thanks! :-)</p>
 <div id="their-voice">
 
     <h2 class="first">You are <a href="/{{ user.id }}/">{{ user.id }}</a>.</h2>
-    <h2>Your <b>credit card</b> is <span id="status">{{ status }}</span>.</h2>
+    <h2>Your <b>bank account</b> is <span id="status">{{ status }}</span>.</h2>
     
-    {% if payments_down %}
+    {% if payouts_down %}
 
-    <p>We had a problem contacting <a href="https://www.balancedpayments.com/">our payment
-    processor</a>. Could I ask if you&rsquo;d be willing to try again
-    later? Thanksorry. :-(</p>
+    <p>We had a problem contacting <a
+        href="https://www.balancedpayments.com/">our payment processor</a>.
+    Could I ask if you&rsquo;d be willing to try again later? Thanksorry.
+    :-(</p>
 
     {% else %}
 
-    <p>When you don&rsquo;t have enough in your Gittip account to cover your
-    tips, we {% if balanced_account_uri %}will{% else %}can{% end %} pull money
-    in using {% if balanced_account_uri %}this{% else %}a{% end %} credit card.
-    If your credit card is missing or fails then your tips won&rsquo;t go
-    through for that week.<p>
+    <p>When you receive money on Gittip we 
+    {% if balanced_account_uri %}will{% else %}can{% end %} automatically 
+    deposit it into your bank account. If you don't connect a bank account then
+    your money will accumulate within Gittip, and will be used to regift 
+    others.<p>
 
-    {% if not balanced_account_uri %}
-    <p>We are currently migrating your credit card information from one
-    processor, <a href="https://stripe.com/">Stripe</a>, to another, <a
-    href="https://www.balancedpayments.com/">Balanced</a>. Feel free to make
-    changes in the mean time.</p>
-    {% else %}
-    <p>Credit card information is stored and processed by <a
-    href="https://www.balancedpayments.com/">Balanced</a>.</p>
-    {% end %}
+    <p>Bank account information is stored and processed by <a
+        href="https://www.balancedpayments.com/">Balanced</a>.</p>
 
     {% if balanced_account_uri %}
 
