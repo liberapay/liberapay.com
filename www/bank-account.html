@@ -1,0 +1,195 @@
+import traceback
+
+import balanced
+from aspen import json, log, Response
+from gittip import billing
+from gittip.networks import github
+
+# ========================================================================== ^L
+
+if not user.ANON:
+    balanced_account_uri = user.balanced_account_uri
+
+    status = "missing"
+    if balanced_account_uri:
+        working = not bool(user.last_bill_result)
+        status = "working" if working else "failing"
+
+    if balanced_account_uri:
+        try:
+            card = billing.BalancedCard(balanced_account_uri)
+        except:  # balanced is unavailable (or balanced_account_uri is bad?)
+            log(traceback.format_exc())
+            payments_down = True
+        else:
+            assert balanced_account_uri == card['id']
+            payments_down = False
+    
+    username = user.id
+# ========================================================================== ^L
+{% extends templates/base.html %}
+
+
+{% block body %}
+{% if user.ANON %}
+<div id="their-voice">
+<h2 class="first">Credit Card</h2>
+
+<p>Sign in <a href="{{ github.oauth_url(website, u'opt-in', u'/credit-card.html') }}">with
+GitHub</a>, and then you&rsquo;ll be able to add or change your credit card.
+Thanks! :-)</p>
+
+</div>
+
+{% else %}
+<script>
+    $(document).ready(function()
+    {
+        Gittip.initPayment("{{ balanced.Marketplace.my_marketplace.uri }}", "{{ user.id }}");
+    });
+</script>
+<style>
+    #feedback {
+        position: absolute;
+        width: 220px;
+        left: 360px;
+    }
+    #feedback H3 {
+        margin-top: 0;
+    }
+    #feedback .details P {
+        font-size: 9pt;
+        line-height: 12pt;
+        margin: 0 ! important;
+        padding: 0 0 0 1em;
+        text-indent: -1em;
+        overflow: hidden;
+    }
+    FORM {
+        width: 300px;
+    }
+    {% if not balanced_account_uri %}
+    #delete {
+        display: none;
+    }
+    {% end %}
+</style>
+<div id="their-voice">
+
+    <h2 class="first">You are <a href="/{{ user.id }}/">{{ user.id }}</a>.</h2>
+    <h2>Your <b>credit card</b> is <span id="status">{{ status }}</span>.</h2>
+    
+    {% if payments_down %}
+
+    <p>We had a problem contacting <a href="https://www.balancedpayments.com/">our payment
+    processor</a>. Could I ask if you&rsquo;d be willing to try again
+    later? Thanksorry. :-(</p>
+
+    {% else %}
+
+    <p>When you don&rsquo;t have enough in your Gittip account to cover your
+    tips, we {% if balanced_account_uri %}will{% else %}can{% end %} pull money
+    in using {% if balanced_account_uri %}this{% else %}a{% end %} credit card.
+    If your credit card is missing or fails then your tips won&rsquo;t go
+    through for that week.<p>
+
+    {% if not balanced_account_uri %}
+    <p>We are currently migrating your credit card information from one
+    processor, <a href="https://stripe.com/">Stripe</a>, to another, <a
+    href="https://www.balancedpayments.com/">Balanced</a>. Feel free to make
+    changes in the mean time.</p>
+    {% else %}
+    <p>Credit card information is stored and processed by <a
+    href="https://www.balancedpayments.com/">Balanced</a>.</p>
+    {% end %}
+
+    {% if balanced_account_uri %}
+
+    <p>Your current card is <b>{{ card['last4'] }}</b>.</p>
+
+    <h2>Change your card on file.</h2>
+    {% elif stripe_customer_id %}
+
+    <p>Your current card is <b>{{ card['last4'] }}</b>.</p>
+
+    <h2>Change your card on file.</h2>
+    {% end %}
+
+    <form id="payment" class="special">
+        <div id="feedback">{% if user.last_bill_result %}
+        <h3><span>Failure</span></h3>
+        <div class="details">
+        <p>{{ user.last_bill_result }}</p>
+        </div>
+        {% end %}</div>
+
+
+        <h3>Required</h3>
+
+        <div class="float card_number">
+            <label for="card_number">Credit Card Number</label>
+            <input id="card_number" />
+        </div>
+
+        <div class="float expiry not-first">
+            <label for="expiry">Expiration</label>
+            <input id="expiry" />
+        </div>
+
+        <div class="float cvv not-first">
+            <label for="cvv">CVV</label>
+            <input id="cvv" />
+        </div>
+
+        <div class="clear"></div>
+
+
+        <h3>Optional</h3>
+
+        <label for="name">Full Name on Card</label>
+        <input id="name" value="{{ card['name'] }}" />
+
+        <div class="clear"></div>
+
+        <label for="address_1">Address 1</label>
+        <input id="address_1" value="{{ card['address_1'] }}" />
+
+        <label for="address_2">Address 2</label>
+        <input id="address_2" value="{{ card['address_2'] }}" />
+
+
+        <div class="half left">
+            <label for="state">State or Province</label>
+            <input id="state" value="{{ card['state'] }}" />
+        </div>
+
+        <div class="half right">
+            <label for="zip">ZIP or Postal Code</label>
+            <input id="zip" value="{{ card['zip'] }}" />
+        </div>
+
+        <div class="clear"></div>
+
+        <div class="full">
+            <img src="/assets/{{ __version__ }}/cards.png" />
+            <button class="selected" id="save"
+            type="submit">Save</button>
+        </div>
+        {% end %}
+    </form>
+
+    <div id="delete"> 
+    <h2>Delete credit card.</h2>
+
+    <p>Your credit card details will immediately be completely purged from
+    Gittip.</p>
+
+    <form action="credit-card.json" class="special">
+        <input type="hidden" name="action" value="delete"> 
+        <button>Delete my credit card</button>
+    </form>
+    </div>
+
+</div>
+{% end %}
+{% end %}
