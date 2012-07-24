@@ -321,6 +321,22 @@ Gittip.initPayment = function(balanced_uri, participantId)
     });
 };
 
+Gittip.initPayout = function(balanced_uri, participantId)
+{
+    Gittip.participantId = participantId;
+    $('#delete FORM').submit(Gittip.submitDeleteForm);
+    $('FORM#payout').submit(Gittip.submitPayoutForm);
+
+    // Lazily depend on Balanced.
+    var balanced_js = "https://js.balancedpayments.com/v1/balanced.js";
+    jQuery.getScript(balanced_js, function()
+    {
+        balanced.init(balanced_uri);
+        Gittip.havePayouts = true;
+        $('INPUT[type!="hidden"]').eq(0).focus();
+    });
+};
+
 Gittip.initCSRF = function()
 {   // https://docs.djangoproject.com/en/dev/ref/contrib/csrf/#ajax
     jQuery(document).ajaxSend(function(event, xhr, settings) {

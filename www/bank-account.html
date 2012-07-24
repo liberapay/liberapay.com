@@ -45,7 +45,7 @@ Thanks! :-)</p>
 <script>
     $(document).ready(function()
     {
-        Gittip.initPayment("{{ balanced.Marketplace.my_marketplace.uri }}", "{{ user.id }}");
+        Gittip.initPayout("{{ balanced.Marketplace.my_marketplace.uri }}", "{{ user.id }}");
     });
 </script>
 <style>
@@ -99,12 +99,7 @@ Thanks! :-)</p>
 
     {% if balanced_account_uri %}
 
-    <p>Your current card is <b>{{ card['last4'] }}</b>.</p>
-
-    <h2>Change your card on file.</h2>
-    {% elif stripe_customer_id %}
-
-    <p>Your current card is <b>{{ card['last4'] }}</b>.</p>
+    <p>Your current linked account is <b>{{ account['blah'] }}</b>.</p>
 
     <h2>Change your card on file.</h2>
     {% end %}
@@ -173,14 +168,14 @@ Thanks! :-)</p>
     </form>
 
     <div id="delete"> 
-    <h2>Delete credit card.</h2>
+    <h2>Disconnect bank account.</h2>
 
-    <p>Your credit card details will immediately be completely purged from
+    <p>Your bank account details will immediately be completely purged from
     Gittip.</p>
 
-    <form action="credit-card.json" class="special">
+    <form action="bank-account.json" class="special">
         <input type="hidden" name="action" value="delete"> 
-        <button>Delete my credit card</button>
+        <button>Disconnect my bank account</button>
     </form>
     </div>
 
