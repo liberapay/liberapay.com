@@ -366,10 +366,9 @@ tip_or_pledge = "tip"
         <tr class="not-over">
             <th><a href="/{{ tip['tippee'] }}/">{{ tip['tippee'] }}</a></th>
             <td>
-                {% for i, amount in enumerate(AMOUNTS) %}
+                {% for amount in AMOUNTS %}
                 <button amount="{{ amount }}" tippee="{{ tip['tippee'] }}"
                     class="tip small {{ 'selected' if amount == tip['amount'] else 'empty' }}">{{ amount }}</button>
-                {% if i == 5 %}<br />{% end %}
                 {% end %}
                 {% if tip['amount'] not in AMOUNTS %}
                 <span class="old-amount">
