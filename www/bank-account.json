@@ -67,12 +67,11 @@ else:
     # no errors? great! let's add the bank account
     if not out:
         try:
-            account.add_bank_account(bank_account_uri)
+            billing.associate_bank_account(user.id, account.uri,
+                                           bank_account_uri)
         except balanced.exc.HTTPError as ex:
             out = {"problem": "Problem", "error": ex.message}
         else:
             out = {"problem": ""}
-            billing.associate_bank_account(user.id, account.uri,
-                                           bank_account_uri)
 
 response.body = out

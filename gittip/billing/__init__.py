@@ -88,6 +88,7 @@ def associate(participant_id, balanced_account_uri, card_uri):
     db.execute(STANDING, (last_bill_result, participant_id))
     return out
 
+
 def associate_bank_account(participant_id, balanced_account_uri,
                            balanced_destination_uri):
     """
@@ -98,19 +99,30 @@ def associate_bank_account(participant_id, balanced_account_uri,
              , balanced_destination_uri, unicode
               )
 
+    account = balanced.Account.find(balanced_account_uri)
+    try:
+        account.add_bank_account(balanced_destination_uri)
+    except balanced.exc.HTTPError as err:
+        last_bill_result = err.message.decode('UTF-8')  # XXX UTF-8?
+        typecheck(last_bill_result, unicode)
+        out = last_bill_result
+    else:
+        out = last_bill_result = ''
+
     STANDING = """\
 
         UPDATE participants
-           SET last_ach_result=null,
+           SET last_ach_result = %s,
                balanced_account_uri = %s,
                balanced_destination_uri = %s
-         WHERE id=%s
+         WHERE id = %s
 
     """
-    db.execute(STANDING, (balanced_account_uri,
+    db.execute(STANDING, (last_bill_result,
+                          balanced_account_uri,
                           balanced_destination_uri,
                           participant_id))
-    return ''
+    return out
 
 
 def clear_bank_account(participant_id, balanced_account_uri):
@@ -128,9 +140,9 @@ def clear_bank_account(participant_id, balanced_account_uri):
     CLEAR = """\
 
         UPDATE participants
-           SET balanced_destination_uri=NULL
-             , last_ach_result=NULL
-         WHERE id=%s
+           SET balanced_destination_uri = NULL
+             , last_ach_result = NULL
+         WHERE id = %s
 
     """
     db.execute(CLEAR, (participant_id,))
@@ -165,6 +177,18 @@ def store_error(participant_id, msg):
 
         UPDATE participants
            SET last_bill_result=%s
+         WHERE id=%s
+
+    """
+    db.execute(ERROR, (msg, participant_id))
+
+
+def store_ach_error(participant_id, msg):
+    typecheck(participant_id, unicode, msg, unicode)
+    ERROR = """\
+
+        UPDATE participants
+           SET last_ach_result=%s
          WHERE id=%s
 
     """
@@ -241,12 +265,7 @@ class BalancedCard(object):
     def _get_card(self):
         """Return the most recent card on file for this account.
         """
-        # this is an abortion
-        # https://github.com/balanced/balanced-python/issues/3
-        cards = self._account.cards
-        cards = sorted(cards, key=lambda c: c.created_at)
-        cards.reverse()
-        return cards[0]
+        return self._account.cards[-1]
 
     def _get(self, name, default=""):
         """Given a name, return a unicode.
@@ -326,6 +345,9 @@ class BalancedBankAccount(object):
             raise IndexError()
         if not self._bank_account:
             return None
+        # account.uri will become:
+        #     tiem = getattr(self._bank_account, 'account')
+        #     tiem = getattr(tiem, 'uri')
         tiem  = self._bank_account
         for vals in mapper[item].split('.'):
             tiem = getattr(tiem, vals)

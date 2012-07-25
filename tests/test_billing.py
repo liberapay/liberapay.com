@@ -73,10 +73,32 @@ class TestCard(testing.GittipBaseTest):
 
 
 class TestBankAccount(testing.GittipBaseTest):
+    def setUp(self):
+        super(TestBankAccount, self).setUp()
+        self.balanced_account_uri = '/v1/marketplaces/M123/accounts/A123'
+        self.balanced_bank_account_uri = (self.balanced_account_uri +
+                                          '/bank_accounts/B123')
 
-    @unittest.skip('TODO: write me')
-    def test_balanced_bank_account(self):
-        pass
+    @mock.patch('gittip.billing.balanced.Account')
+    @mock.patch('gittip.billing.balanced.BankAccount')
+    def test_balanced_bank_account(self, b_b_account, b_account):
+        bank_account = billing.BalancedBankAccount(
+            self.balanced_account_uri, self.balanced_bank_account_uri)
+        ba = b_b_account.find.return_value
+        self.assertTrue(b_account.find.called_with(self.balanced_account_uri))
+        self.assertTrue(b_b_account.find.called_with(
+            self.balanced_bank_account_uri))
+
+        self.assertTrue(bank_account.is_setup)
+        self.assertEqual(bank_account['id'], ba.uri)
+        self.assertEqual(bank_account['account_uri'], ba.account.uri)
+        with self.assertRaises(IndexError):
+            bank_account['invalid']
+
+    def test_balanced_bank_account_not_setup(self):
+        bank_account = billing.BalancedBankAccount(None, None)
+        self.assertFalse(bank_account.is_setup)
+        self.assertFalse(bank_account['id'])
 
 
 class TestBilling(testing.GittipPaydayTest):
@@ -127,7 +149,7 @@ class TestBilling(testing.GittipPaydayTest):
         self.assertTrue(ba.find.call_count)
 
     @mock.patch('balanced.Account')
-    def test_clear(self, ba):
+    def test_clear(self, _):
         valid_card = mock.Mock()
         valid_card.is_valid = True
         invalid_card = mock.Mock()
@@ -157,17 +179,82 @@ class TestBilling(testing.GittipPaydayTest):
         self.assertFalse(user.session['last_bill_result'])
         self.assertFalse(user.session['balanced_account_uri'])
 
-    @unittest.skip('TODO: write me')
-    def test_clear_bank_account(self):
-        pass
+    @mock.patch('gittip.billing.balanced.Account')
+    def test_clear_bank_account(self, b_account):
+        valid_ba = mock.Mock()
+        valid_ba.is_valid = True
+        invalid_ba = mock.Mock()
+        invalid_ba.is_valid = False
+        ba_collection = [
+            valid_ba, invalid_ba
+        ]
+        b_account.find.return_value.bank_accounts = ba_collection
 
-    @unittest.skip('TODO: write me')
-    def test_associate_bank_account(self):
-        pass
+        MURKY = """\
 
-    @unittest.skip('TODO: write me')
+            UPDATE participants
+               SET balanced_destination_uri='not null'
+                 , last_ach_result='ooga booga'
+             WHERE id=%s
+
+        """
+        self.db.execute(MURKY, (self.participant_id,))
+
+        billing.clear_bank_account(self.participant_id, 'something')
+
+        self.assertFalse(valid_ba.is_valid)
+        self.assertTrue(valid_ba.save.call_count)
+        self.assertFalse(invalid_ba.save.call_count)
+
+        user = authentication.User.from_id(self.participant_id)
+        self.assertFalse(user.session['last_ach_result'])
+        self.assertFalse(user.session['balanced_destination_uri'])
+
+    @mock.patch('gittip.billing.balanced.Account')
+    def test_associate_bank_account_valid(self, b_account):
+        balanced_destination_uri = '/v1/bank_accounts/X'
+
+        billing.associate_bank_account(self.participant_id,
+                                       self.balanced_account_uri,
+                                       balanced_destination_uri)
+
+        args, _ = b_account.find.call_args
+
+        self.assertEqual(args, (self.balanced_account_uri,))
+
+        args, _ = b_account.find.return_value.add_bank_account.call_args
+
+        self.assertEqual(args, (balanced_destination_uri,))
+
+        user = authentication.User.from_id(self.participant_id)
+
+        # participant in db should be updated
+        self.assertEqual(user.session['balanced_account_uri'],
+                         self.balanced_account_uri)
+        self.assertEqual(user.session['balanced_destination_uri'],
+                         balanced_destination_uri)
+        self.assertEqual(user.session['last_ach_result'], '')
+
+    @mock.patch('gittip.billing.balanced.Account')
+    def test_associate_bank_account_invalid(self, b_account):
+        balanced_destination_uri = '/v1/bank_accounts/X'
+        ex = balanced.exc.HTTPError('errrrrror')
+        b_account.find.return_value.add_bank_account.side_effect = ex
+        billing.associate_bank_account(self.participant_id,
+                                       self.balanced_account_uri,
+                                       balanced_destination_uri)
+
+        user = authentication.User.from_id(self.participant_id)
+
+        # participant in db should be updated
+        self.assertEqual(user.session['last_ach_result'], 'errrrrror')
+
     def test_store_ach_error(self):
-        pass
+        for message in ['cheese is yummy', 'cheese smells like my vibrams']:
+            billing.store_ach_error(self.participant_id, message)
+            rec = self.db.fetchone("select * from participants where id=%s",
+                (self.participant_id,))
+            self.assertEqual(rec['last_ach_result'], message)
 
 
 class TestBillingCharge(testing.GittipPaydayTest):
