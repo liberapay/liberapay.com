@@ -5,9 +5,11 @@ from datetime import datetime
 from decimal import Decimal, ROUND_UP
 
 import balanced
+import unittest
+from psycopg2 import IntegrityError
+
 from gittip import authentication, billing, testing
 from gittip.billing.payday import FEE, MINIMUM
-from psycopg2 import IntegrityError
 
 
 class TestCard(testing.GittipBaseTest):
@@ -68,6 +70,13 @@ class TestCard(testing.GittipBaseTest):
         self.assertEqual(card['state'], 'Confusion')
         self.assertEqual(card['zip'], '90210')
         self.assertEqual(card['nothing'], '')
+
+
+class TestBankAccount(testing.GittipBaseTest):
+
+    @unittest.skip('TODO: write me')
+    def test_balanced_bank_account(self):
+        pass
 
 
 class TestBilling(testing.GittipPaydayTest):
@@ -147,6 +156,18 @@ class TestBilling(testing.GittipPaydayTest):
         user = authentication.User.from_id(self.participant_id)
         self.assertFalse(user.session['last_bill_result'])
         self.assertFalse(user.session['balanced_account_uri'])
+
+    @unittest.skip('TODO: write me')
+    def test_clear_bank_account(self):
+        pass
+
+    @unittest.skip('TODO: write me')
+    def test_associate_bank_account(self):
+        pass
+
+    @unittest.skip('TODO: write me')
+    def test_store_ach_error(self):
+        pass
 
 
 class TestBillingCharge(testing.GittipPaydayTest):
