@@ -1,0 +1,26 @@
+import locale
+from gittip import db
+
+^L
+
+ngoals = db.fetchone("SELECT count(id) FROM participants WHERE goal > 0")
+ngoals = ngoals['count'] if ngoals is not None else 0
+goals = db.fetchall("SELECT id, goal FROM participants WHERE goal > 0 ORDER BY goal DESC")
+goals = goals if goals is not None else []
+
+^L
+
+{% extends templates/base.html %}
+{% block body %}
+<p class="below-header"><a href="./">About</a></p>
+
+<h2>{{ ngoals}} people have set a funding goal.</h2>
+<table>
+    {% for rec in goals %}
+    <tr>
+        <th><a href="/{{ rec['id'] }}/">{{ rec['id'] }}</a></th>
+        <td>{{ locale.format("%.2f", rec['goal'], grouping=True) }}</a></td>
+    </tr>
+    {% end %}
+</table>
+{% end %}
