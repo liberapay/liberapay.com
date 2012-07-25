@@ -91,7 +91,7 @@ _tip_distribution = list(db.fetchall("""
 old_tip_n = sum([row['count'] for row in _tip_distribution if row['amount'] in OLD_AMOUNTS])
 new_tip_n = sum([row['count'] for row in _tip_distribution if row['amount'] in AMOUNTS])
 
-all_amounts = OLD_AMOUNTS[1:] + AMOUNTS[1:]
+all_amounts = OLD_AMOUNTS + AMOUNTS[1:]
 tip_distribution = {a: (0, 0.0) for a in all_amounts}  # prime it
 for row in _tip_distribution:
     tip_n = old_tip_n if row['amount'] in OLD_AMOUNTS else new_tip_n
@@ -199,11 +199,11 @@ names = ['ncc', 'pcc', 'statements', 'transfer_volume',
             <span class="number">({{ tip_distribution[amount][0] }})</span>
         </td>
     </tr>
-    {% if str(amount) == '1.28' %}
+    {% if str(amount) == '0.25' %}
     <td class="amount-change help" colspan="3">
-        <a href="http://blog.gittip.com/post/26505682007/is-personal-funding-viable"
+        <a href="https://github.com/whit537/www.gittip.com/issues/180"
            target="_blank">Read
-        here</a> about the change in amounts.
+        here</a> about raising the minimum.
     </td>
     {% end %}
     {% end %}
