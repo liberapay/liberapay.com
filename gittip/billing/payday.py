@@ -9,7 +9,9 @@ from gittip import get_tips_and_total
 from psycopg2 import IntegrityError
 
 
-MINIMUM = Decimal("0.50") # per Balanced
+MINIMUM = Decimal("10.00")  # Balanced has a $0.50 minimum. We go even higher 
+                            # to avoid onerous per-transaction fees. See:
+                            # https://github.com/whit537/www.gittip.com/issues/166
 FEE = ( Decimal("0.30")   # $0.30
       , Decimal("1.039")  #  3.9%
        )

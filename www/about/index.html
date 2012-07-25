@@ -75,31 +75,33 @@ nparticipants = db.fetchone("SELECT count(*) AS n FROM participants WHERE claime
     amount you receive is public. Participants on both sides of the equation
     are rewarded publicly for their participation.</p>
 
-    <p>Gittips are distributed <b>every Friday</b>. Gittips come out of
-    your current balance (the money people have gifted you), and if
-    that&rsquo;s not enough, Gittip can charge your credit card to make up the
-    difference. We add an additional <b>30&cent; + 3.9%</b> fee when pulling
-    money in from your credit card, to cover credit card processing (as well as
-    hosting and other expenses). Recipients get the <b>full face value</b> of
-    your gift to them.  If you give someone $3, they will have $3 in
-    their Gittip account every Friday until you run out of money.</p>
+    <p>Gittips are distributed <b>every Friday</b>. Gittips come out of your
+    current balance (the money people have gifted you), and if that&rsquo;s not
+    enough, Gittip can charge your credit card to make up the difference. We
+    add an additional <b>30&cent; + 3.9%</b> fee when pulling money in from
+    your credit card, to cover credit card processing (as well as hosting and
+    other expenses). We also charge you no less than <b>$10</b> to minimize
+    credit card processing fees. Any extra remains in your account to be used
+    next week. Recipients get the <b>full face value</b> of your gift to them.
+    If you give someone $3, they will have $3 in their Gittip account every
+    Friday until you run out of money.</p>
 
-    <p>For example, let&rsquo;s say that you have $5 in your account, and you
-    are set up to give $0.25 to 30 people. Here&rsquo;s what we will charge
-    your credit card on Friday:</p>
+    <p>For example, let&rsquo;s say that you have $2.00 in your account, and
+    you are set up to give $1.00 each to 20 people. Here&rsquo;s what we will
+    charge your credit card on Friday:</p>
 
     <p style="font-family: monospace; font-size: smaller; padding-left: 33%;">
-        &nbsp;$&nbsp;0.25<br />
-        <u>x&nbsp;30&nbsp;&nbsp;&nbsp;</u><br />
-        &nbsp;$7.50&nbsp;&nbsp;&nbsp;total gittips<br />
-        <u>-$&nbsp;5.00</u>&nbsp;&nbsp;&nbsp;current balance<br />
-        &nbsp;<b>$&nbsp;2.50&nbsp;&nbsp;&nbsp;amount needed</b><br />
+        &nbsp;$&nbsp;1.00<br />
+        <u>x&nbsp;20&nbsp;&nbsp;&nbsp;</u>&nbsp;&nbsp;&nbsp;people<br />
+        &nbsp;$20.00&nbsp;&nbsp;&nbsp;total gittips<br />
+        <u>-$&nbsp;2.00</u>&nbsp;&nbsp;&nbsp;current balance<br />
+        &nbsp;<b>$18.00&nbsp;&nbsp;&nbsp;amount needed</b><br />
         <u>+$&nbsp;0.30</u>&nbsp;&nbsp;&nbsp;fee<br />
-        &nbsp;$&nbsp;2.80<br />
+        &nbsp;$18.30<br />
         <u>x&nbsp;&nbsp;1.039</u>&nbsp;&nbsp;fee<br />
-        &nbsp;<b>$&nbsp;2.91&nbsp;&nbsp;&nbsp;amount charged</b><br />
-        <u>-$&nbsp;2.50</u>&nbsp;&nbsp;&nbsp;<br />
-        &nbsp;$&nbsp;0.41&nbsp;&nbsp;&nbsp;total fee<br />
+        &nbsp;<b>$19.02&nbsp;&nbsp;&nbsp;amount to charge</b><br />
+        <u>-$18.00</u>&nbsp;&nbsp;&nbsp;<br />
+        &nbsp;$&nbsp;1.02&nbsp;&nbsp;&nbsp;total fee<br />
     </p>
 
     <p>Participants can withdraw funds from their Gittip account at any time,
