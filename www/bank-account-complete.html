@@ -1,0 +1,34 @@
+"""Used when a person needed to go to Balanced to verify their merchant details
+they are redirected here after the fact.
+"""
+import balanced
+import urllib
+
+from aspen import Response
+from gittip import billing
+
+#=========================================================================== ^L
+
+if user.ANON:
+    raise Response(404)
+
+request.allow('GET')
+out = {}
+
+email_address = '{}@gittip.com'.format(user.id)
+merchant_uri = body.get('merchant_uri')
+
+accounts = balanced.Account.query.filter(email_address=email_address)
+# no validation here, if any of this stuff errors out, it's because someone has
+# done something dodgy (or we f'd up)
+account = accounts[0]
+account.add_merchant(merchant_uri)
+
+bank_account = account.bank_accounts[-1]
+
+billing.associate_bank_account(user.id, account.uri, bank_account.uri)
+
+request.redirect('/bank-account.html')
+
+#=========================================================================== ^L
+

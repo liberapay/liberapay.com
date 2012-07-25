@@ -88,6 +88,53 @@ def associate(participant_id, balanced_account_uri, card_uri):
     db.execute(STANDING, (last_bill_result, participant_id))
     return out
 
+def associate_bank_account(participant_id, balanced_account_uri,
+                           balanced_destination_uri):
+    """
+
+    """
+    typecheck( participant_id, unicode
+             , balanced_account_uri, (unicode, None)
+             , balanced_destination_uri, unicode
+              )
+
+    STANDING = """\
+
+        UPDATE participants
+           SET last_ach_result=null,
+               balanced_account_uri = %s,
+               balanced_destination_uri = %s
+         WHERE id=%s
+
+    """
+    db.execute(STANDING, (balanced_account_uri,
+                          balanced_destination_uri,
+                          participant_id))
+    return ''
+
+
+def clear_bank_account(participant_id, balanced_account_uri):
+    typecheck(participant_id, unicode, balanced_account_uri, unicode)
+
+    # accounts in balanced cannot be deleted at the moment. instead we mark all
+    # valid cards as invalid which will restrict against anyone being able to
+    # issue charges against them in the future.
+    customer = balanced.Account.find(balanced_account_uri)
+    for bank_account in customer.bank_accounts:
+        if bank_account.is_valid:
+            bank_account.is_valid = False
+            bank_account.save()
+
+    CLEAR = """\
+
+        UPDATE participants
+           SET balanced_destination_uri=NULL
+             , last_ach_result=NULL
+         WHERE id=%s
+
+    """
+    db.execute(CLEAR, (participant_id,))
+
 
 def clear(participant_id, balanced_account_uri):
     typecheck(participant_id, unicode, balanced_account_uri, unicode)
@@ -247,3 +294,43 @@ class BalancedCard(object):
                     }.get(name, name)
             out = self._get(name)
         return out
+
+
+class BalancedBankAccount(object):
+    """This is a dict-like wrapper around a Balanced Account.
+    """
+
+    _account = None  # underlying balanced.Account object
+    _bank_account = None
+
+    def __init__(self, balanced_account_uri, balanced_destination_uri):
+        """Given a Balanced account_uri, load data from Balanced.
+        """
+        if not balanced_account_uri:
+            return
+
+        self._account = balanced.Account.find(balanced_account_uri)
+
+        if balanced_destination_uri:
+            self._bank_account = balanced.BankAccount.find(
+                balanced_destination_uri)
+
+    def __getitem__(self, item):
+        mapper = {
+            'id': 'uri',
+            'account_uri': 'account.uri',
+            'bank_name': 'bank_name',
+            'last_four': 'last_four',
+        }
+        if item not in mapper:
+            raise IndexError()
+        if not self._bank_account:
+            return None
+        tiem  = self._bank_account
+        for vals in mapper[item].split('.'):
+            tiem = getattr(tiem, vals)
+        return tiem
+
+    @property
+    def is_setup(self):
+        return self._bank_account is not None

@@ -2,11 +2,14 @@
 
 When the user fills out the payment details form in the UI, we send the new
 info to Balanced (using the balanced.js library). Balanced always gives us a
-single-use token in return, provided that the credit card info validated. This
+single-use token in return, provided that the bank account info validated. This
 present script is called next. It takes the token and tries to associate it with
 a Balanced account object (creating one as needed).
 
 """
+import balanced
+import urllib
+
 from aspen import Response
 from gittip import billing
 
@@ -16,27 +19,60 @@ if user.ANON:
     raise Response(404)
 
 request.allow('POST')
+
 out = {}
+redirect_to = 'https://www.gittip.com/bank-account-complete.html'
 
 if body.get('action') == 'delete':
-    billing.clear(user.id, user.balanced_account_uri)
+    billing.clear_bank_account(user.id, user.balanced_account_uri)
 elif body.get('action') == 'store-error':
     billing.store_error(user.id, body['msg'])
 else:
+    # we need to try and create the merchant role for this acccount, let's get to it.
+    email_address = '{}@gittip.com'.format(user.id)
+    merchant_keys = ['type', 'street_address', 'postal_code', 'region', 'dob',
+                     'name', 'phone_number']
+    merchant_data = dict((key, body.get(key)) for key in merchant_keys)
+    bank_account_uri = body.get('bank_account_uri')
 
-    # Associate the single-use token representing the credit card details (we
-    # call it "card_uri" here because that's how Balanced refers to it).
-    # Possible error codes would be 409 (this card cannot be associated with
-    # this account in this case).
+    if bank_account_uri is None:
+        raise Response(400)
 
-    card_uri = body.get('card_uri')
-    if card_uri is None:
-        raise Response(400) 
+    accounts = balanced.Account.query.filter(email_address=email_address)
 
-    error = billing.associate(user.id, user.balanced_account_uri, card_uri)
-    if error:
-        out = {"problem": "Problem", "error": error}
+    # create an empty account with no role, not much can go wrong here.
+    if not accounts.total:
+        # we're creating a new account
+        account = balanced.Account(email_address=email_address,
+                                   name=user.id).save()
     else:
-        out = {"problem": ""}
+        account = accounts[0]
+
+    out = None
+
+    # add merchant data if supplied, this will possibly fail with 400 if
+    # formatted badly or 300 if we cannot identify the merchant
+    if 'merchant' not in account.roles:
+        try:
+            account.add_merchant(merchant_data)
+        except balanced.exc.MoreInformationRequiredError as mirex:
+            out = {'problem': 'Escalate',
+                   'error': 'Unable to verify',
+                   'redirect_uri': mirex.redirect_uri + '?' +
+                        urllib.urlencode([('redirect_uri', redirect_to)]) + '&'
+            }
+        except balanced.exc.HTTPError as hex:
+            out = {"problem": "Problem", "error": hex.message}
+
+    # no errors? great! let's add the bank account
+    if not out:
+        try:
+            account.add_bank_account(bank_account_uri)
+        except balanced.exc.HTTPError as ex:
+            out = {"problem": "Problem", "error": ex.message}
+        else:
+            out = {"problem": ""}
+            billing.associate_bank_account(user.id, account.uri,
+                                           bank_account_uri)
 
 response.body = out

@@ -380,3 +380,20 @@ BUTTON.disabled:visited {
     -webkit-box-shadow: none;
     box-shadow: none;
 }
+
+form div.error > label {
+    color: red;
+}
+form div.error > input, form div.error select {
+    border: 1px solid red;
+}
+
+#powered-by-balanced { margin-top: 30px; }
+#powered-by-balanced a {
+    display: block;
+    text-indent: -4000px;
+    background: url(https://www.balancedpayments.com/images/payments-by-balanced-2.png) 0 0 no-repeat;
+    width: 240px;
+    height: 75px;
+    margin: auto;
+}

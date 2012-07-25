@@ -154,11 +154,152 @@ Gittip.paymentProcessorAttempts = 0;
 
 Gittip.submitDeleteForm = function(e)
 {
-    if (!confirm("Really delete your credit card details?"))
+    var item = $("#payout").length ? "bank account" : "credit card";
+    var msg = "Really delete your " + item + " details?";
+    if (!confirm(msg))
     {
         e.stopPropagation();
-        e.preventDefault()
+        e.preventDefault();
         return false;
+    }
+};
+
+Gittip.submitPayoutForm = function (e) {
+    e.preventDefault();
+
+    $('BUTTON#save').text('Saving ...');
+    Gittip.clearFeedback();
+
+    var bankAccount = {
+        name: $('#account_name').val(),
+        account_number: $('#account_number').val(),
+        bank_code: $('#routing_number').val()
+    };
+
+    var dobs = [
+        $('#dob-year').val(),
+        $('#dob-month').val(),
+        $('#dob-day').val()
+    ];
+
+    Gittip.merchantData = {
+        type: 'person',
+        street_address: $('#address_1').val(),
+        postal_code: $('#zip').val(),
+        phone_number: $('#phone_number').val(),
+        region: $('#state').val(),
+        dob: dobs.join('-'),
+        name: $('#name').val()
+    };
+    var requiredFields = {
+        name: 'Your legal name is required',
+        address_1: 'Your street address is required',
+        zip: 'Your zip code is required',
+        account_name: 'The name on your bank account is required',
+        account_number: 'Your bank account number is required',
+        phone_number: 'A phone number is required'
+    };
+    var errors = [];
+
+    for (var field in requiredFields) {
+        var $f = $('#' + field);
+        if (!$f.length) {
+            continue;
+        }
+        var value = $f.val();
+
+        if (!value) {
+            $f.closest('div').addClass('error');
+            errors.push(requiredFields[field]);
+        } else {
+            $f.closest('div').removeClass('error');
+        }
+    }
+
+    var $rn = $('#routing_number');
+    if (!balanced.bankAccount.validateRoutingNumber(bankAccount.bank_code)) {
+        $rn.closest('div').addClass('error');
+        errors.push("Invalid routing number.");
+    } else {
+        $rn.closest('div').removeClass('error');
+    }
+
+    try {
+        new Date(dobs[0], dobs[1] - 1, dobs[2]); // TODO: this is not failing - 1900, 2, 31 gives 3 march :P
+    } catch (err) {
+        errors.push('Invalid date of birth.');
+    }
+    if (errors.length) {
+        $('BUTTON#save').text('Save');
+        Gittip.showFeedback(null, errors);
+    } else {
+        balanced.bankAccount.create(bankAccount, Gittip.bankAccountResponseHandler);
+    }
+};
+
+Gittip.bankAccountResponseHandler = function (response) {
+    console.log('bank account response', response);
+    if (response.status != 201) {
+        $('BUTTON#save').text('Save');
+        var msg = response.status.toString() + " " + response.error.description;
+        jQuery.ajax(
+            { type: "POST"
+                , url: "/bank-account.json"
+                , data: {action: 'store-error', msg: msg}
+            }
+        );
+
+        Gittip.showFeedback(null, [response.error.description]);
+    } else {
+
+        /* The request to tokenize the bank account succeeded. Now we need to
+         * validate the merchant information. We'll submit it to /bank-accounts.json
+         * and check the response code to see what's going on there.
+         */
+
+        function success()
+        {
+            $('#status').text('working').addClass('highlight');
+            setTimeout(function() {
+                $('#status').removeClass('highlight');
+            }, 8000);
+            $('#delete').show();
+            Gittip.clearFeedback();
+            $('BUTTON#save').text('Save');
+            setTimeout(function() {
+                window.location.href = '/bank-account.html';
+            }, 1000);
+        }
+
+        function detailedFeedback(data)
+        {
+            $('#status').text('failing');
+            $('#delete').show();
+            var messages = [data.error];
+            if (data.problem == 'Escalate') {
+                var redirect_uri = data.redirect_uri;
+                for (var key in Gittip.merchantData) {
+                    redirect_uri += 'merchant[' + encodeURIComponent(key) + ']'
+                        + '=' + encodeURIComponent((Gittip.merchantData[key])) + '&';
+                }
+                messages = [
+                    'Oh no, sorry we couldn\'t verify your identity. ' +
+                    'Please check, correct, and resubmit your details, or step through ' +
+                    'our <a href="' + redirect_uri + '">payment processor\'s escalation process</a>.'
+                ];
+            }
+            Gittip.showFeedback(data.problem, messages);
+            $('BUTTON#save').text('Save');
+        }
+
+        var detailsToSubmit = Gittip.merchantData;
+        detailsToSubmit.bank_account_uri = response.data.uri;
+
+        Gittip.submitForm( "/bank-account.json"
+            , detailsToSubmit
+            , success
+            , detailedFeedback
+        );
     }
 };
 
@@ -325,7 +466,7 @@ Gittip.initPayout = function(balanced_uri, participantId)
 {
     Gittip.participantId = participantId;
     $('#delete FORM').submit(Gittip.submitDeleteForm);
-    $('FORM#payout').submit(Gittip.submitPayoutForm);
+    $('#payout').submit(Gittip.submitPayoutForm);
 
     // Lazily depend on Balanced.
     var balanced_js = "https://js.balancedpayments.com/v1/balanced.js";

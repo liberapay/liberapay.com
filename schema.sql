@@ -118,6 +118,7 @@ ALTER TABLE participants ADD COLUMN balanced_account_uri text DEFAULT NULL;
 -- we have a balanced_destination_uri if the user has a specific bank account to
 -- pay out to
 ALTER TABLE participants ADD COLUMN balanced_destination_uri text DEFAULT NULL;
+ALTER TABLE participants ADD COLUMN last_ach_result text DEFAULT NULL;
 
 -- when we pay out we mark the date the credit was created as settled so we know
 -- what not to settle again.
