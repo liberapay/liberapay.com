@@ -1,0 +1,4 @@
+if user.ANON:
+    request.redirect('/')
+request.redirect('/%s/' % user.id)
+^L
