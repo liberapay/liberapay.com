@@ -1,4 +1,15 @@
-if user.ANON:
-    request.redirect('/')
-request.redirect('/%s/' % user.id)
+if not user.ANON:
+    request.redirect('/%s/' % user.id)
 ^L
+{% extends templates/base.html %}
+{% block body %}
+<div id="their-voice">
+<h2 class="first">Sign In</h2>
+
+<p>Sign in <a href="{{ github.oauth_url(website, u'opt-in') }}">with
+    GitHub</a> and this page will redirect you to your profile page.</p>
+
+<p>Thanks! :-)</p>
+
+</div>
+{% end %}
