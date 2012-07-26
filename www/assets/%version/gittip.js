@@ -427,7 +427,7 @@ Gittip.initJumpToPerson = function()
 {
     function jump(e)
     {
-        var val = $('#jump INPUT').val();
+        var val = $('#jump INPUT').val().trim();
         e.preventDefault();
         e.stopPropagation();
         if (val !== '')
