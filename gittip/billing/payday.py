@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from decimal import Decimal, ROUND_UP
 
 import balanced
+import stripe
 from aspen import log
 from aspen.utils import typecheck
 from gittip import get_tips_and_total
@@ -101,7 +102,7 @@ class Payday(object):
         """Return an iterator of participants dicts.
         """
         PARTICIPANTS = """\
-            SELECT id, balance, balanced_account_uri
+            SELECT id, balance, balanced_account_uri, stripe_customer_id
               FROM participants
              WHERE claimed_time IS NOT NULL
         """
@@ -146,6 +147,7 @@ class Payday(object):
 
             self.charge( participant['id']
                        , participant['balanced_account_uri']
+                       , participant['stripe_customer_id']
                        , short
                         )
      
@@ -314,8 +316,8 @@ class Payday(object):
     # Move money into Gittip from the outside world.
     # ==============================================
 
-    def charge(self, participant_id, balanced_account_uri, amount):
-        """Given two unicodes and a Decimal, return a boolean.
+    def charge(self, participant_id, balanced_account_uri, stripe_customer_id, amount):
+        """Given three unicodes and a Decimal, return a boolean.
 
         This is the only place where we actually charge credit cards. Amount
         should be the nominal amount. We compute Gittip's fee in this function
@@ -327,14 +329,21 @@ class Payday(object):
                  , amount, Decimal
                   )
 
-        if balanced_account_uri is None:
+        if balanced_account_uri is None and stripe_customer_id is None:
             self.mark_missing_funding()
             return False
 
-        charge_amount, fee, error = self.hit_balanced( participant_id
-                                                     , balanced_account_uri
-                                                     , amount
-                                                      )
+        if balanced_account_uri is not None:
+            charge_amount, fee, error = self.hit_balanced( participant_id
+                                                         , balanced_account_uri
+                                                         , amount
+                                                          )
+        else:
+            assert stripe_customer_id is not None
+            charge_amount, fee, error = self.hit_stripe( participant_id
+                                                       , stripe_customer_id
+                                                       , amount
+                                                        )
 
         # XXX If the power goes out at this point then Postgres will be out of
         # sync with Balanced. We'll have to resolve that manually be reviewing
@@ -397,6 +406,48 @@ class Payday(object):
                  , amount, Decimal
                   )
 
+        cents, msg, charge_amount, fee = self._prep_hit(amount)
+        msg = msg % (participant_id, "Balanced")
+
+        try:
+            customer = balanced.Account.find(balanced_account_uri)
+            customer.debit(cents, description=participant_id)
+            log(msg + "succeeded.")
+        except balanced.exc.HTTPError as err:
+            log(msg + "failed: %s" % err.message)
+            return charge_amount, fee, err.message
+
+        return charge_amount, fee, False
+
+
+    def hit_stripe(self, participant_id, stripe_customer_id, amount):
+        """We have a purported stripe_customer_id. Try to use it.
+        """
+        typecheck( participant_id, unicode
+                 , stripe_customer_id, unicode
+                 , amount, Decimal
+                  )
+
+        cents, msg, charge_amount, fee = self._prep_hit(amount)
+        msg = msg % (participant_id, "Stripe")
+
+        try:
+            stripe.Charge.create( customer=stripe_customer_id
+                                , amount=cents
+                                , description=participant_id
+                                , currency="USD"
+                                 )
+            err = False
+            log(msg + "succeeded.")
+        except stripe.StripeError, err:
+            log(msg + "failed: %s" % err.message)
+
+        return charge_amount, fee, err.message
+
+
+    def _prep_hit(self, amount):
+        """Takes the nominal amount in dollars. Returns cents.
+        """
         try_charge_amount = (amount + FEE[0]) * FEE[1]
         try_charge_amount = try_charge_amount.quantize( FEE[0]
                                                       , rounding=ROUND_UP
@@ -410,18 +461,10 @@ class Payday(object):
         fee = try_charge_amount - amount
         cents = int(charge_amount * 100)
 
-        msg = "Charging %s %d cents ($%s + $%s fee = $%s%s) ... "
-        msg %= participant_id, cents, amount, fee, try_charge_amount, also_log
+        msg = "Charging %%s %d cents ($%s + $%s fee = $%s%s) on %%s ... "
+        msg %= cents, amount, fee, try_charge_amount, also_log
 
-        try:
-            customer = balanced.Account.find(balanced_account_uri)
-            customer.debit(cents, description=participant_id)
-            log(msg + "succeeded.")
-        except balanced.exc.HTTPError as err:
-            log(msg + "failed: %s" % err.message)
-            return charge_amount, fee, err.message
-
-        return charge_amount, fee, None
+        return cents, msg, charge_amount, fee
 
 
     # Record-keeping.

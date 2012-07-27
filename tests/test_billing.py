@@ -157,6 +157,7 @@ class TestBillingCharge(testing.GittipPaydayTest):
         super(TestBillingCharge, self).setUp()
         self.participant_id = 'lgtest'
         self.balanced_account_uri = '/v1/marketplaces/M123/accounts/A123'
+        self.stripe_customer_id = 'cus_deadbeef'
         self.tok = '/v1/marketplaces/M123/accounts/A123/cards/C123'
         billing.db = self.db
         # TODO: remove once we rollback transactions....
@@ -174,8 +175,9 @@ class TestBillingCharge(testing.GittipPaydayTest):
         self.db.execute(insert)
 
     @mock.patch('gittip.billing.payday.Payday.mark_missing_funding')
-    def test_charge_without_balanced_customer_id(self, mpmf):
+    def test_charge_without_balanced_customer_id_or_stripe_customer_id(self, mpmf):
         result = self.payday.charge( self.participant_id
+                                   , None
                                    , None
                                    , Decimal(1)
                                     )
@@ -188,6 +190,7 @@ class TestBillingCharge(testing.GittipPaydayTest):
         hb.return_value = (None, None, 'FAILED')
         result = self.payday.charge( self.participant_id
                                    , self.balanced_account_uri
+                                   , self.stripe_customer_id
                                    , Decimal(1)
                                     )
         self.assertEqual(hb.call_count, 1)
@@ -200,6 +203,7 @@ class TestBillingCharge(testing.GittipPaydayTest):
         hb.return_value = (Decimal(1), Decimal(2), None)
         result = self.payday.charge( self.participant_id
                                    , self.balanced_account_uri
+                                   , self.stripe_customer_id
                                    , Decimal(1)
                                     )
         self.assertEqual(hb.call_count, 1)
