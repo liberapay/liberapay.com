@@ -261,6 +261,25 @@ class TestBillingCharge(testing.GittipPaydayTest):
             cursor.execute(payday_sql)
             self.assertEqual(cursor.fetchone()['nexchanges'], 1)
 
+    @mock.patch('stripe.Charge')
+    def test_hit_stripe(self, ba):
+        amount_to_charge = Decimal(10)  # $10.00 USD
+        expected_fee = (amount_to_charge + FEE[0]) * FEE[1]
+        expected_fee = (amount_to_charge - expected_fee.quantize(
+            FEE[0], rounding=ROUND_UP)) * -1
+        charge_amount, fee, msg = self.payday.hit_stripe(
+            self.participant_id,
+            self.stripe_customer_id,
+            amount_to_charge)
+        self.assertEqual(charge_amount, amount_to_charge + fee)
+        self.assertEqual(fee, expected_fee)
+        self.assertTrue(ba.find.called_with(self.stripe_customer_id))
+        customer = ba.find.return_value
+        self.assertTrue(customer.debit.called_with(
+            int(charge_amount * 100),
+            self.participant_id
+        ))
+
     @mock.patch('balanced.Account')
     def test_hit_balanced(self, ba):
         amount_to_charge = Decimal(10)  # $10.00 USD

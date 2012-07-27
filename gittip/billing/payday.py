@@ -413,11 +413,12 @@ class Payday(object):
             customer = balanced.Account.find(balanced_account_uri)
             customer.debit(cents, description=participant_id)
             log(msg + "succeeded.")
+            error = ""
         except balanced.exc.HTTPError as err:
-            log(msg + "failed: %s" % err.message)
-            return charge_amount, fee, err.message
+            error = err.message
+            log(msg + "failed: %s" % error)
 
-        return charge_amount, fee, False
+        return charge_amount, fee, error
 
 
     def hit_stripe(self, participant_id, stripe_customer_id, amount):
@@ -437,12 +438,13 @@ class Payday(object):
                                 , description=participant_id
                                 , currency="USD"
                                  )
-            err = False
             log(msg + "succeeded.")
+            error = ""
         except stripe.StripeError, err:
-            log(msg + "failed: %s" % err.message)
+            error = err.message
+            log(msg + "failed: %s" % error)
 
-        return charge_amount, fee, err.message
+        return charge_amount, fee, error
 
 
     def _prep_hit(self, amount):
