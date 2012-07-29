@@ -45,12 +45,13 @@ elif usertype == "organization":
     resp = requests.get("https://api.github.com/orgs/%s/members" % username)
     if resp.status_code == 200:
         members = json.loads(resp.text)
-    can_tip = False
+    can_tip = user.ANON
 else:
     can_tip = False
 
 tip_or_pledge = "pledge"
 nbackers = get_number_of_backers(username)
+members = [(member, get_tip(user.id, member['login'])) for member in members]
 
 # ========================================================================== ^L
 {% extends templates/participant.html %}
@@ -73,13 +74,13 @@ nbackers = get_number_of_backers(username)
         <script>
             $(document).ready(Gittip.initTipButtons);
         </script>
-        
+
         <h2 class="first"><b>{{ name }}</b> has not joined Gittip.</h2>
 
         {% if user.ANON %}
         <ul id="accounts">
             <li>
-                <img src="{{ userinfo.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" /> 
+                <img src="{{ userinfo.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" />
                 Are you <a href="{{ userinfo['html_url'] }}">{{ userinfo['login'] }}</a> from GitHub?<br />
                 <a href="{{ github.oauth_url(website, u'opt-in', username) }}">Click here</a> to opt in to Gittip.
             </li>
@@ -87,7 +88,7 @@ nbackers = get_number_of_backers(username)
         {% else %}
         <ul id="accounts">
             <li>
-                <img src="{{ userinfo.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" /> 
+                <img src="{{ userinfo.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" />
                 Are you <a href="{{ userinfo['html_url'] }}">{{ userinfo['login'] }}</a> from GitHub?<br />
                 You&rsquo;ll have to <a href="/sign-out.html">sign out</a> and sign back in to claim this account.
             </li>
@@ -116,7 +117,7 @@ nbackers = get_number_of_backers(username)
         your behalf until you ask us to.</p>
 
         <h3>Don&rsquo;t like what you see?</h3>
-        
+
         <p>If you are {{ username }} you can explicitly opt out of Gittip by
         locking this account. We don&rsquo;t allow new pledges to locked
         accounts, and we&rsquo;ll set aside your username on Gittip to prevent
@@ -128,11 +129,14 @@ nbackers = get_number_of_backers(username)
         {% end %}
       {% end %}
     {% elif usertype == "organization"  %}
-    
+    <script>
+        $(document).ready(Gittip.initTipButtons);
+    </script>
+
     <h2 class="first"><b>{{ name }}</b> is an {{ usertype }} on GitHub.</h2>
     <ul id="accounts">
         <li>
-            <img src="{{ userinfo.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" /> 
+            <img src="{{ userinfo.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" />
             Gittip is optimized for people at the moment, not organizations.<br />
             {% if len(members) == 0 %}
             {{ name }} does not have any public members.
@@ -144,24 +148,49 @@ nbackers = get_number_of_backers(username)
         </li>
     </ul>
     <table id="members">
-        {% for member in members %}
-        <tr><td>
-            <a href="/github/{{ member['login'] }}/"><img src="{{ member.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" /> 
-            {{ member['login'] }}</a>
+        {% for member, tip in members %}
+        <tr class="not-over"><td>
+            {% if not user.ANON %}
+            <th>
+                <a href="/{{ member['login'] }}/"><img src="{{ member.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" />
+                    {{ member['login'] }}</a>
+            </th>
+            <td>
+                {% for amount in AMOUNTS %}
+                <button amount="{{ amount }}" tippee="{{ member['login'] }}"
+                    class="tip small {{ 'selected' if amount == tip else 'empty' }}">{{ amount }}</button>
+                {% end %}
+                {% if tip not in AMOUNTS %}
+                <span class="old-amount">
+                    <button class="tip small disabled selected">{{ tip }}</button>
+                    <span class="old-amount-link">&mdash;
+                    <a href="http://blog.gittip.com/post/26505682007/is-personal-funding-viable" target="_blank">old amount</a>!</span>
+                </span>
+                {% end %}
+            </td>
+            {% else %}
+            <td>
+                <a href="/{{ member['login'] }}/"><img src="{{ member.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" />
+                    {{ member['login'] }}</a>
+            </td>
+            {% end %}
         </td></tr>
         {% end %}
-    </table> 
+    </table>
 
     {% else %}
-    
+
     <h2 class="first">Not sure what to do with <b>{{ name }}</b>.</h2>
     <ul id="accounts">
         <li>
-            <img src="{{ userinfo.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" /> 
+            <img src="{{ userinfo.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" />
             I don&rsquo;t recognize the &ldquo;{{ usertype }}&rdquo; type of user on GitHub.<br />
             Sorry. :-(
         </li>
-    </ul> 
+    </ul>
 
+    {% end %}
+
+    {% if user.ANON %}
     {% end %}
 {% end %}
