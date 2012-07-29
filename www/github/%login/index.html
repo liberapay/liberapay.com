@@ -45,13 +45,13 @@ elif usertype == "organization":
     resp = requests.get("https://api.github.com/orgs/%s/members" % username)
     if resp.status_code == 200:
         members = json.loads(resp.text)
+    members = [(member, get_tip(user.id, member['login'])) for member in members]
     can_tip = user.ANON
 else:
     can_tip = False
 
 tip_or_pledge = "pledge"
 nbackers = get_number_of_backers(username)
-members = [(member, get_tip(user.id, member['login'])) for member in members]
 
 # ========================================================================== ^L
 {% extends templates/participant.html %}
