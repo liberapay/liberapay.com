@@ -152,7 +152,7 @@ members = [(member, get_tip(user.id, member['login'])) for member in members]
         <tr class="not-over"><td>
             {% if not user.ANON %}
             <th>
-                <a href="/{{ member['login'] }}/"><img src="{{ member.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" />
+                <a href="/github/{{ member['login'] }}/"><img src="{{ member.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" />
                     {{ member['login'] }}</a>
             </th>
             <td>
@@ -170,7 +170,7 @@ members = [(member, get_tip(user.id, member['login'])) for member in members]
             </td>
             {% else %}
             <td>
-                <a href="/{{ member['login'] }}/"><img src="{{ member.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" />
+                <a href="/github/{{ member['login'] }}/"><img src="{{ member.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" />
                     {{ member['login'] }}</a>
             </td>
             {% end %}
