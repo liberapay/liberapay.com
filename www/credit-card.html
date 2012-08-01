@@ -34,7 +34,7 @@ if not user.ANON:
         else:
             assert stripe_customer_id == card['id']
             payments_down = False
-    
+
     username = user.id
 # ========================================================================== ^L
 {% extends templates/base.html %}
@@ -89,7 +89,7 @@ GitHub</a>, and then you&rsquo;ll be able to add or change your credit card.</p>
 
     <h2 class="first">You are <a href="/{{ user.id }}/">{{ user.id }}</a>.</h2>
     <h2>Your <b>credit card</b> is <span id="status">{{ status }}</span>.</h2>
-    
+
     {% if payments_down %}
 
     <p>We had a problem contacting <a href="https://www.balancedpayments.com/">our payment
@@ -189,7 +189,7 @@ GitHub</a>, and then you&rsquo;ll be able to add or change your credit card.</p>
         {% end %}
     </form>
 
-    <div id="delete"> 
+    <div id="delete">
     <h2>Delete credit card.</h2>
 
     <p>Your credit card details will immediately be completely purged from
