@@ -154,13 +154,29 @@ Gittip.paymentProcessorAttempts = 0;
 
 Gittip.submitDeleteForm = function(e)
 {
+    e.stopPropagation()
+    e.preventDefault()
+
     if (!confirm("Really delete your credit card details?"))
-    {
-        e.stopPropagation();
-        e.preventDefault()
         return false;
-    }
+
+    jQuery.ajax(
+        { url: '/credit-card.json'
+        , data: {action: "delete"}
+        , type: "POST"
+        , success: function() {
+            window.location.href = "/credit-card.html";
+          }
+        , error: function(x,y,z) {
+            select(cur);
+            alert("Sorry, something went wrong deleting your credit card. :(");
+            console.log(x,y,z);
+          }
+         }
+    );
+    return false;
 };
+
 
 Gittip.submitPaymentForm = function(e)
 {
