@@ -27,7 +27,7 @@ from gittip import get_tips_and_total
 from psycopg2 import IntegrityError
 
 
-MINIMUM = Decimal("10.00")  # Balanced has a $0.50 minimum. We go even higher 
+MINIMUM = Decimal("10.00")  # Balanced has a $0.50 minimum. We go even higher
                             # to avoid onerous per-transaction fees. See:
                             # https://github.com/whit537/www.gittip.com/issues/166
 FEE = ( Decimal("0.30")   # $0.30
@@ -68,7 +68,7 @@ class Payday(object):
 
     def start(self):
         """Try to start a new Payday.
-        
+
         If there is a Payday that hasn't finished yet, then the UNIQUE
         constraint on ts_end will kick in and notify us of that. In that case
         we load the existing Payday and work on it some more. We use the start
@@ -131,7 +131,7 @@ class Payday(object):
     def loop(self, ts_start, participants):
         """Given an iterator, do Payday.
         """
-        i = 0 
+        i = 0
         log("Processing participants.")
         for i, participant in enumerate(participants, start=1):
             if i % 100 == 0:
@@ -145,7 +145,7 @@ class Payday(object):
 
         Charge each participants' credit card if needed before transfering
         money between Gittip accounts.
-     
+
         """
         tips, total = get_tips_and_total( participant['id']
                                         , for_payday=ts_start
@@ -167,7 +167,7 @@ class Payday(object):
                        , participant['stripe_customer_id']
                        , short
                         )
-     
+
         nsuccessful_tips = 0
         for tip in tips:
             result = self.tip(participant, tip, ts_start)
@@ -299,7 +299,7 @@ class Payday(object):
 
     def credit_participant(self, cursor, participant, amount):
         """Increment the tippee's *pending* balance.
-        
+
         The pending balance will clear to the balance proper when Payday is
         done.
 
@@ -365,8 +365,8 @@ class Payday(object):
         # XXX If the power goes out at this point then Postgres will be out of
         # sync with Balanced. We'll have to resolve that manually be reviewing
         # the Balanced transaction log and modifying Postgres accordingly.
-        # 
-        # this could be done by generating an ID locally and commiting that to 
+        #
+        # this could be done by generating an ID locally and commiting that to
         # the db and then passing that through in the meta field -
         # https://www.balancedpayments.com/docs/meta
         # Then syncing would be a case of simply:
@@ -374,7 +374,7 @@ class Payday(object):
         #     payment_in_balanced = balanced.Transaction.query.filter(
         #       **{'meta.unique_id': 'value'}).one()
         #     payment.transaction_uri = payment_in_balanced.uri
-        
+
         with self.db.get_connection() as connection:
             cursor = connection.cursor()
 
@@ -546,7 +546,7 @@ class Payday(object):
     def mark_participant(self, nsuccessful_tips):
         STATS = """\
 
-            UPDATE paydays 
+            UPDATE paydays
                SET nparticipants = nparticipants + 1
                  , ntippers = ntippers + %s
                  , ntips = ntips + %s
@@ -577,6 +577,6 @@ class Payday(object):
     def assert_one_payday(self, payday):
         """Given the result of a payday stats update, make sure it's okay.
         """
-        assert payday is not None 
+        assert payday is not None
         payday = list(payday)
         assert len(payday) == 1, payday
