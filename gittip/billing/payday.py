@@ -1,3 +1,20 @@
+"""This is Gittip's payday algorithm. I would appreciate feedback on it.
+
+The payday algorithm is designed to be crash-resistant and parallelizable, but
+it's not eventually consistent in the strict sense (iinm) because consistency
+is always apodeictically knowable.
+
+Exchanges (moving money between Gittip and the outside world) and transfers
+(moving money amongst Gittip users) happen within an isolated event called
+payday. This event has duration (it's not punctiliar). It is started
+transactionally, and it ends transactionally, and inside of it, exchanges and
+transfers happen transactionally (though the link between our db and our
+processor's db could be tightened up; see #213). These exchanges and transfers
+accrue against a "pending" column in the database. Once the payday event has
+completed successfully, it ends with the pending column being applied to the
+balance column and reset to NULL in a single transaction.
+
+"""
 from __future__ import unicode_literals
 
 from decimal import Decimal, ROUND_UP
