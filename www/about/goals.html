@@ -8,6 +8,7 @@ def rows(goals, backed):
               , rec['goal']
               , so_far
               , (so_far / rec['goal']) * 100
+              , rec['statement']
                ]
         yield row
 
@@ -24,7 +25,7 @@ ngoals = db.fetchone("SELECT count(id) FROM participants WHERE goal > 0")
 ngoals = ngoals['count'] if ngoals is not None else 0
 goals = db.fetchall(""" \
 
-    SELECT id, goal
+    SELECT id, statement, goal
       FROM participants
      WHERE goal > 0
   ORDER BY goal DESC
@@ -60,6 +61,17 @@ rows.sort(cmp=sortfunc)
     TH, TD {
         padding-right: 1em;
     }
+    .statement {
+        text-align: left;
+        font-size: 9pt;
+        line-height: 11pt;
+        padding-bottom: 1em;
+    }
+    .statement DIV {
+        overflow: hidden;
+        white-space: nowrap;
+        width: 600px;
+    }
 </style>
 
 <h2>{{ ngoals}} people have set a funding goal.</h2>
@@ -67,14 +79,17 @@ rows.sort(cmp=sortfunc)
     <tr>
         <th>Participant</th>
         <th style="text-align: right;">Goal ($)</a></th>
-        <th colspan="2">Backed ($, %)</a></th>
+        <th colspan="2" style="text-align: right;">Backed ($, %)</a></th>
     </tr>
-    {% for participant_id, goal, backed, percentage in rows %}
+    {% for participant_id, goal, backed, percentage, statement, in rows %}
     <tr>
         <th><a href="/{{ participant_id }}/">{{ participant_id }}</a></th>
         <td>{{ locale.format("%.2f", goal, grouping=True) }}</td>
         <td>{{ locale.format("%.2f", backed, grouping=True) }}</td>
         <td>{{ "%5.1f" % percentage }}</td>
+    </tr>
+    <tr>
+        <td class="statement" colspan="4"><div>{{ statement }}</divk</td>
     </tr>
     {% end %}
 </table>
