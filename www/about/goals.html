@@ -1,6 +1,26 @@
 import locale
 from gittip import db, get_backed_amount
 
+def rows(goals):
+    for rec in goals:
+
+        # What's a hundred db calls between friends? *blush*
+        so_far = get_backed_amount(rec['id'])
+
+        row = [ rec['id']
+              , rec['goal']
+              , so_far
+              , (so_far / rec['goal']) * 100
+               ]
+        yield row
+
+def sortfunc(a, b):
+    percentage = cmp(a[3], b[3])
+    if percentage != 0:             # percentage descending
+        return percentage * -1
+    else:                           # goal, id ascending
+        return cmp((a[1], a[0]), (b[1], a[1]))
+
 # ==== ^L
 
 ngoals = db.fetchone("SELECT count(id) FROM participants WHERE goal > 0")
@@ -14,28 +34,7 @@ goals = db.fetchall(""" \
 
 """)
 goals = goals if goals is not None else []
-
-def rows(goals):
-    for rec in goals:
-
-        # What's a hundred db calls between friends? *blush*
-        so_far = get_backed_amount(rec['id'])
-
-        row = [ rec['id']
-              , rec['goal']
-              , so_far
-              , (so_far / rec['goal']) * 100
-               ]
-        yield row
 rows = list(rows(goals))
-
-def sortfunc(a, b):
-    percentage = cmp(a[3], b[3])
-    if percentage != 0:
-        return percentage * -1
-    else:
-        return cmp((a[1], a[0]), (b[1], a[1]))
-
 rows.sort(cmp=sortfunc)
 
 
