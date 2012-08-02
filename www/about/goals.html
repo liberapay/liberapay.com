@@ -1,12 +1,9 @@
 import locale
-from gittip import db, get_backed_amount
+from gittip import db
 
-def rows(goals):
+def rows(goals, backed):
     for rec in goals:
-
-        # What's a hundred db calls between friends? *blush*
-        so_far = get_backed_amount(rec['id'])
-
+        so_far = backed.get(rec['id'], 0)
         row = [ rec['id']
               , rec['goal']
               , so_far
@@ -34,7 +31,24 @@ goals = db.fetchall(""" \
 
 """)
 goals = goals if goals is not None else []
-rows = list(rows(goals))
+
+backed = db.fetchall("""
+       SELECT tippee as id, sum(amount) as amount
+         FROM (    SELECT DISTINCT ON (tipper, tippee) tippee, amount
+                     FROM tips
+                     JOIN participants p ON p.id = tipper
+                     JOIN participants p2 ON p2.id = tippee
+                    WHERE p.last_bill_result = ''
+                      AND p2.claimed_time IS NOT NULL
+                 ORDER BY tipper, tippee, mtime DESC
+               ) AS foo
+     GROUP BY tippee
+""")
+backed = backed if backed is not None else []
+backed = {rec['id']:rec['amount'] for rec in backed}
+
+
+rows = list(rows(goals, backed))
 rows.sort(cmp=sortfunc)
 
 
