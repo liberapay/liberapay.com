@@ -264,7 +264,7 @@ class Payday(object):
 
             try:
                 self.debit_participant(cursor, tipper, amount)
-            except ValueError:
+            except IntegrityError:
                 return False
 
             self.credit_participant(cursor, tippee, amount)
@@ -288,13 +288,13 @@ class Payday(object):
         RETURNING balance
 
         """
+
+        # This will fail with IntegrityError if the balanced goes below zero.
+        # We catch that and return false in our caller.
         cursor.execute(DECREMENT, (amount, participant))
+
         rec = cursor.fetchone()
         assert rec is not None, (amount, participant)  # sanity check
-        if rec['balance'] < 0:
-            # User is out of money. Bail. The transaction will be rolled back
-            # by our context manager.
-            raise ValueError()  # TODO: proper exception type
 
 
     def credit_participant(self, cursor, participant, amount):

@@ -18,7 +18,7 @@ class TestCard(testing.GittipBaseTest):
         super(TestCard, self).setUp()
         self.balanced_account_uri = '/v1/marketplaces/M123/accounts/A123'
         self.stripe_customer_id = 'deadbeef'
-        
+
     @mock.patch('balanced.Account')
     def test_balanced_card(self, ba):
         card = mock.Mock()
@@ -702,7 +702,7 @@ class TestBillingTransfer(testing.GittipPaydayTest):
         with self.db.get_connection() as conn:
             cur = conn.cursor()
 
-            with self.assertRaises(ValueError):
+            with self.assertRaises(IntegrityError):
                 self.payday.debit_participant(cur, participant, amount)
 
     def test_credit_participant(self):
