@@ -107,3 +107,6 @@ ALTER TABLE participants ADD COLUMN balanced_account_uri text DEFAULT NULL;
 
 -- https://github.com/whit537/www.gittip.com/issues/161
 ALTER TABLE participants ADD CONSTRAINT min_balance CHECK(balance >= 0);
+
+-- https://github.com/whit537/www.gittip.com/issues/35
+ALTER TABLE participants ALTER COLUMN statement SET NOT NULL;
