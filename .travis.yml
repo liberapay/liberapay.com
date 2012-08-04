@@ -1,2 +1,7 @@
 language: python
 script: make test
+before_script:
+  - psql -c 'create database gittip-test;' -U postgres
+  - psql gittip-test -U postgres < schema.sql
+  - echo "DATABASE_URL=postgres://postgres@127.0.0.1/gittip-test" >> local.env
+
