@@ -1,0 +1,76 @@
+^L
+{% extends templates/base.html %}
+{% block body %}
+<style>
+    H2 {
+        padding-top: 100px;
+    }
+    .chart {
+        position: relative;
+        width: 600px;
+        height: 400px;
+    }
+    .point {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+</style>
+
+<h2 style="margin-top: 0; padding-top: 64px">Registrations</h2>
+<div class="chart" id="registrations"></div>
+
+<h2>Funders</h2>
+<div class="chart" id="funders"></div>
+
+<h2>Transfer Volume ($)</h2>
+<div class="chart" id="volume"></div>
+
+<script>
+    $(document).ready(function()
+    {
+        var Volume = $('#volume');
+        var Funders = $('#funders');
+        var Registrations= $('#registrations');
+        jQuery.get('/about/paydays.json', function(paydays)
+        {
+            var n = paydays.length;
+            var w = 580 / n;
+            for (var i=0, payday; payday = paydays[i]; i++)
+            {
+                console.log(payday.transfer_volume);
+
+                // volume
+                var point = $(document.createElement('div'));
+                point.addClass('point');
+                point.text(payday.transfer_volume);
+                var volume = parseFloat(payday.transfer_volume);
+                point.css({ top: 400 - ((volume / 1000) * 400)
+                          , left: w * (n - i - 1)
+                           });
+                Volume.append(point);
+
+                // funders
+                var p2 = $(document.createElement('div'));
+                p2.addClass('point');
+                p2.text(payday.ntippers);
+                var ntippers = parseFloat(payday.ntippers);
+                p2.css({ top: 400 - ((ntippers / 175) * 400)
+                          , left: w * (n - i - 1)
+                           });
+                Funders.append(p2);
+
+                // registrations
+                var p3 = $(document.createElement('div'));
+                p3.addClass('point');
+                p3.text(payday.nparticipants);
+                var ntippers = parseFloat(payday.nparticipants);
+                p3.css({ top: 400 - ((ntippers / 4000) * 400)
+                          , left: w * (n - i - 1)
+                           });
+                Registrations.append(p3);
+            }
+        });
+    });
+</script>
+{% end %}
