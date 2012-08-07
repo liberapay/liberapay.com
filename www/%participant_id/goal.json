@@ -15,7 +15,7 @@ goal = request.body["goal"]
 if goal == "null":
     goal = None
 elif goal == "custom":
-    goal = request.body["goal_custom"]
+    goal = request.body["goal_custom"].replace(',', '')
 
 if goal is not None:
     try:
