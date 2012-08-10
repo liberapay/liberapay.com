@@ -356,6 +356,15 @@ class TestBillingCharge(testing.GittipPaydayTest):
                     )
         assert actual == expected, actual
 
+    def test_prep_hit_full_in_rounded_case(self):
+        actual = self.payday._prep_hit(Decimal('5.00'))
+        expected = ( 1000
+                   , u'Charging %s 1000 cents ($5.00 + $0.51 fee = $5.51, rounded up to $10.00) on %s ... '
+                   , Decimal('10.00')
+                   , Decimal('0.51')
+                    )
+        assert actual == expected, actual
+
 
     def test_prep_hit_at_ten_dollars(self):
         actual = self.prep('10.00')
