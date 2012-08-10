@@ -34,11 +34,13 @@
         var Registrations= $('#registrations');
         jQuery.get('/about/paydays.json', function(paydays)
         {
-            var n = paydays.length;
+            var n = paydays.length - 1; // don't show Gittip #0
             var w = 580 / n;
-            for (var i=1, payday; payday = paydays[i]; i++)
+            var payday = null;
+
+            for (var i=0; i < n; i++)
             {
-                console.log(payday.transfer_volume);
+                payday = paydays[i];
 
                 // volume
                 var point = $(document.createElement('div'));
