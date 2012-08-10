@@ -319,17 +319,6 @@ class Payday(object):
         assert rec is not None, (participant, amount)  # sanity check
 
 
-    def record_transfer(self, cursor, tipper, tippee, amount):
-        RECORD = """\
-
-          INSERT INTO transfers
-                      (tipper, tippee, amount)
-               VALUES (%s, %s, %s)
-
-        """
-        cursor.execute(RECORD, (tipper, tippee, amount))
-
-
     # Move money into Gittip from the outside world.
     # ==============================================
 
@@ -362,57 +351,14 @@ class Payday(object):
                                                        , amount
                                                         )
 
-        # XXX If the power goes out at this point then Postgres will be out of
-        # sync with Balanced. We'll have to resolve that manually be reviewing
-        # the Balanced transaction log and modifying Postgres accordingly.
-        #
-        # this could be done by generating an ID locally and commiting that to
-        # the db and then passing that through in the meta field -
-        # https://www.balancedpayments.com/docs/meta
-        # Then syncing would be a case of simply:
-        # for payment in unresolved_payments:
-        #     payment_in_balanced = balanced.Transaction.query.filter(
-        #       **{'meta.unique_id': 'value'}).one()
-        #     payment.transaction_uri = payment_in_balanced.uri
+        self.record_exchange( amount
+                            , charge_amount
+                            , fee
+                            , error
+                            , participant_id
+                             )
 
-        with self.db.get_connection() as connection:
-            cursor = connection.cursor()
-
-            if error:
-                last_bill_result = error
-                amount = Decimal('0.00')
-                self.mark_failed(cursor)
-            else:
-                last_bill_result = ''
-                EXCHANGE = """\
-
-                        INSERT INTO exchanges
-                               (amount, fee, participant_id)
-                        VALUES (%s, %s, %s)
-
-                """
-                cursor.execute(EXCHANGE, (amount, fee, participant_id))
-                self.mark_success(cursor, charge_amount, fee)
-
-
-            # Update the participant's balance.
-            # =================================
-            # Credit card charges go immediately to balance, not to pending.
-
-            RESULT = """\
-
-            UPDATE participants
-               SET last_bill_result=%s
-                 , balance=(balance + %s)
-             WHERE id=%s
-
-            """
-            cursor.execute(RESULT, (last_bill_result, amount, participant_id))
-
-
-            connection.commit()
-
-        return not bool(last_bill_result)  # True indicates success
+        return not bool(error)  # True indicates success
 
 
     def hit_balanced(self, participant_id, balanced_account_uri, amount):
@@ -488,6 +434,69 @@ class Payday(object):
 
     # Record-keeping.
     # ===============
+
+    def record_exchange(self, amount, charge_amount, fee, error, participant_id):
+        # XXX If the power goes out at this point then Postgres will be out of
+        # sync with Balanced. We'll have to resolve that manually be reviewing
+        # the Balanced transaction log and modifying Postgres accordingly.
+        #
+        # this could be done by generating an ID locally and commiting that to
+        # the db and then passing that through in the meta field -
+        # https://www.balancedpayments.com/docs/meta
+        # Then syncing would be a case of simply:
+        # for payment in unresolved_payments:
+        #     payment_in_balanced = balanced.Transaction.query.filter(
+        #       **{'meta.unique_id': 'value'}).one()
+        #     payment.transaction_uri = payment_in_balanced.uri
+
+        with self.db.get_connection() as connection:
+            cursor = connection.cursor()
+
+            if error:
+                last_bill_result = error
+                amount = Decimal('0.00')
+                self.mark_failed(cursor)
+            else:
+                last_bill_result = ''
+                EXCHANGE = """\
+
+                        INSERT INTO exchanges
+                               (amount, fee, participant_id)
+                        VALUES (%s, %s, %s)
+
+                """
+                cursor.execute(EXCHANGE, (amount, fee, participant_id))
+                self.mark_success(cursor, charge_amount, fee)
+
+
+            # Update the participant's balance.
+            # =================================
+            # Credit card charges go immediately to balance, not to pending.
+
+            RESULT = """\
+
+            UPDATE participants
+               SET last_bill_result=%s
+                 , balance=(balance + %s)
+             WHERE id=%s
+
+            """
+            cursor.execute(RESULT, (last_bill_result, amount, participant_id))
+
+
+            connection.commit()
+
+
+    def record_transfer(self, cursor, tipper, tippee, amount):
+        RECORD = """\
+
+          INSERT INTO transfers
+                      (tipper, tippee, amount)
+               VALUES (%s, %s, %s)
+
+        """
+        cursor.execute(RECORD, (tipper, tippee, amount))
+
 
     def mark_missing_funding(self):
         STATS = """\
