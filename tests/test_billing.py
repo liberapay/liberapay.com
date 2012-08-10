@@ -384,6 +384,11 @@ class TestBillingCharge(testing.GittipPaydayTest):
         assert actual == expected, actual
 
 
+    def test_prep_hit_at_nine_fifteen(self):
+        actual = self.prep('9.15')
+        expected = (1000, Decimal('10.00'), Decimal('0.67'))
+        assert actual == expected, actual
+
     def test_prep_hit_at_nine_thirty_one(self):
         actual = self.prep('9.31')
         expected = (1000, Decimal('10.00'), Decimal('0.68'))
