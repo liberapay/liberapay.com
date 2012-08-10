@@ -8,6 +8,7 @@ import balanced
 from gittip import authentication, billing, testing
 from gittip.billing.payday import FEE, MINIMUM
 from psycopg2 import IntegrityError
+from aspen.utils import typecheck
 
 
 __author__ = 'marshall'
@@ -174,6 +175,19 @@ class TestBillingCharge(testing.GittipPaydayTest):
         '''
         self.db.execute(insert)
 
+    def prep(self, amount):
+        """Given a dollar amount as a string, return a 3-tuple.
+
+        The return tuple is like the one returned from _prep_hit, but with the
+        second value, a log message, removed.
+
+        """
+        typecheck(amount, unicode)
+        out = list(self.payday._prep_hit(Decimal(amount)))
+        out = [out[0]] + out[2:]
+        return tuple(out)
+
+
     @mock.patch('gittip.billing.payday.Payday.mark_missing_funding')
     def test_charge_without_balanced_customer_id_or_stripe_customer_id(self, mpmf):
         result = self.payday.charge( self.participant_id
@@ -329,6 +343,61 @@ class TestBillingCharge(testing.GittipPaydayTest):
             self.balanced_account_uri,
             amount_to_charge)
         self.assertEqual(msg, error_message)
+
+
+    # _prep_hit
+
+    def test_prep_hit_basically_works(self):
+        actual = self.payday._prep_hit(Decimal('20.00'))
+        expected = ( 2110
+                   , u'Charging %s 2110 cents ($20.00 + $1.10 fee = $21.10) on %s ... '
+                   , Decimal('21.10')
+                   , Decimal('1.10')
+                    )
+        assert actual == expected, actual
+
+
+    def test_prep_hit_at_ten_dollars(self):
+        actual = self.prep('10.00')
+        expected = (1071, Decimal('10.71'), Decimal('0.71'))
+        assert actual == expected, actual
+
+
+    def test_prep_hit_at_forty_cents(self):
+        actual = self.prep('0.40')
+        expected = (1000, Decimal('10.00'), Decimal('0.33'))
+        assert actual == expected, actual
+
+    def test_prep_hit_at_fifty_cents(self):
+        actual = self.prep('0.50')
+        expected = (1000, Decimal('10.00'), Decimal('0.34'))
+        assert actual == expected, actual
+
+    def test_prep_hit_at_sixty_cents(self):
+        actual = self.prep('0.60')
+        expected = (1000, Decimal('10.00'), Decimal('0.34'))
+        assert actual == expected, actual
+
+    def test_prep_hit_at_eighty_cents(self):
+        actual = self.prep('0.80')
+        expected = (1000, Decimal('10.00'), Decimal('0.35'))
+        assert actual == expected, actual
+
+
+    def test_prep_hit_at_nine_thirty_one(self):
+        actual = self.prep('9.31')
+        expected = (1000, Decimal('10.00'), Decimal('0.68'))
+        assert actual == expected, actual
+
+    def test_prep_hit_at_nine_thirty_two(self):
+        actual = self.prep('9.32')
+        expected = (1000, Decimal('10.00'), Decimal('0.68'))
+        assert actual == expected, actual
+
+    def test_prep_hit_at_nine_thirty_three(self):
+        actual = self.prep('9.33')
+        expected = (1001, Decimal('10.01'), Decimal('0.68'))
+        assert actual == expected, actual
 
 
 class TestBillingPayday(testing.GittipPaydayTest):
