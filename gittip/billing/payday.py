@@ -326,8 +326,8 @@ class Payday(object):
         """Given three unicodes and a Decimal, return a boolean.
 
         This is the only place where we actually charge credit cards. Amount
-        should be the nominal amount. We compute Gittip's fee in this function
-        and add it to amount.
+        should be the nominal amount. We'll compute Gittip's fee below this
+        function and add it to amount to end up with charge_amount.
 
         """
         typecheck( participant_id, unicode
@@ -436,18 +436,26 @@ class Payday(object):
     # ===============
 
     def record_exchange(self, amount, charge_amount, fee, error, participant_id):
-        # XXX If the power goes out at this point then Postgres will be out of
-        # sync with Balanced. We'll have to resolve that manually be reviewing
-        # the Balanced transaction log and modifying Postgres accordingly.
-        #
-        # this could be done by generating an ID locally and commiting that to
-        # the db and then passing that through in the meta field -
-        # https://www.balancedpayments.com/docs/meta
-        # Then syncing would be a case of simply:
-        # for payment in unresolved_payments:
-        #     payment_in_balanced = balanced.Transaction.query.filter(
-        #       **{'meta.unique_id': 'value'}).one()
-        #     payment.transaction_uri = payment_in_balanced.uri
+        """Given a Bunch of Stuff, return None.
+
+        This function takes the result of an API call to a payment processor
+        and records the result in our db. If the power goes out at this point
+        then Postgres will be out of sync with the payment processor. We'll
+        have to resolve that manually be reviewing the transaction log at the
+        processor and modifying Postgres accordingly.
+
+        For Balanced, this could be automated by generating an ID locally and
+        commiting that to the db and then passing that through in the meta
+        field.* Then syncing would be a case of simply:
+
+            for payment in unresolved_payments:
+                payment_in_balanced = balanced.Transaction.query.filter(
+                  **{'meta.unique_id': 'value'}).one()
+                payment.transaction_uri = payment_in_balanced.uri
+
+        * https://www.balancedpayments.com/docs/meta
+
+        """
 
         with self.db.get_connection() as connection:
             cursor = connection.cursor()
