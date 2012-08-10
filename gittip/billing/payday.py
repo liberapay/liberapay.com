@@ -362,6 +362,9 @@ class Payday(object):
                                                        , amount
                                                         )
 
+        amount = charge_amount - fee  # account for possible rounding under
+                                      # hit_*
+
         self.record_exchange( amount
                             , charge_amount
                             , fee

@@ -201,7 +201,7 @@ class TestBillingCharge(testing.GittipPaydayTest):
     @mock.patch('gittip.billing.payday.Payday.hit_balanced')
     @mock.patch('gittip.billing.payday.Payday.mark_failed')
     def test_charge_failure(self, mf, hb):
-        hb.return_value = (None, None, 'FAILED')
+        hb.return_value = (Decimal('10.00'), Decimal('0.68'), 'FAILED')
         result = self.payday.charge( self.participant_id
                                    , self.balanced_account_uri
                                    , self.stripe_customer_id
@@ -212,9 +212,22 @@ class TestBillingCharge(testing.GittipPaydayTest):
         self.assertFalse(result)
 
     @mock.patch('gittip.billing.payday.Payday.hit_balanced')
+    @mock.patch('gittip.billing.payday.Payday.record_exchange')
+    def test_record_exchange_gets_proper_amount(self, rx, hb):
+        hb.return_value = (Decimal('10.00'), Decimal('0.68'), None)
+        result = self.payday.charge( self.participant_id
+                                   , self.balanced_account_uri
+                                   , self.stripe_customer_id
+                                   , Decimal('1.00')
+                                    )
+        self.assertEqual(rx.call_args[0][0], Decimal('9.32'))
+        self.assertEqual(rx.call_args[0][2], Decimal('0.68'))
+        self.assertTrue(result)
+
+    @mock.patch('gittip.billing.payday.Payday.hit_balanced')
     @mock.patch('gittip.billing.payday.Payday.mark_success')
     def test_charge_success(self, ms, hb):
-        hb.return_value = (Decimal('1.00'), Decimal('2.00'), None)
+        hb.return_value = (Decimal('10.00'), Decimal('0.68'), None)
         result = self.payday.charge( self.participant_id
                                    , self.balanced_account_uri
                                    , self.stripe_customer_id
