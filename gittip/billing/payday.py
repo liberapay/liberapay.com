@@ -27,12 +27,23 @@ from gittip import get_tips_and_total
 from psycopg2 import IntegrityError
 
 
-MINIMUM = Decimal("10.00")  # Balanced has a $0.50 minimum. We go even higher
-                            # to avoid onerous per-transaction fees. See:
-                            # https://github.com/whit537/www.gittip.com/issues/166
 FEE = ( Decimal("0.30")   # $0.30
       , Decimal("1.039")  #  3.9%
        )
+
+MINIMUM = Decimal("9.32") # Balanced has a $0.50 minimum. We go even higher
+                          # to avoid onerous per-transaction fees. See:
+                          # https://github.com/whit537/www.gittip.com/issues/167
+                          # XXX I should maybe compute this using *ahem* math.
+
+def upcharge(amount):
+    """Given an amount, return a higher amount.
+    """
+    typecheck(amount, Decimal)
+    amount = (amount + FEE[0]) * FEE[1]
+    return amount.quantize(FEE[0], rounding=ROUND_UP)
+
+assert upcharge(MINIMUM) == Decimal('10.00')
 
 
 class Payday(object):
@@ -410,26 +421,34 @@ class Payday(object):
         return charge_amount, fee, error
 
 
-    def _prep_hit(self, amount):
-        """Takes the nominal amount in dollars. Returns cents.
+    def _prep_hit(self, unrounded):
+        """Takes an amount in dollars. Returns cents, etc.
+
+        cents       This is passed to the payment processor charge API. This is
+                    the value that is actually charged to the participant. It's
+                    an int.
+        msg         A log message with a couple %s to be filled in by the
+                    caller.
+        upcharged   Decimal dollar equivalent to `cents'.
+        fee         Decimal dollar amount of the fee portion of `upcharged'.
+
+        The latter two end up in the db in a couple places via record_exchange.
+
         """
-        try_charge_amount = (amount + FEE[0]) * FEE[1]
-        try_charge_amount = try_charge_amount.quantize( FEE[0]
-                                                      , rounding=ROUND_UP
-                                                       )
-        charge_amount = try_charge_amount
         also_log = ''
-        if charge_amount < MINIMUM:
-            charge_amount = MINIMUM  # per Balanced
-            also_log = ', rounded up to $%s' % charge_amount
+        rounded = unrounded
+        if unrounded < MINIMUM:
+            rounded = MINIMUM  # per github/#167
+            also_log = ' [rounded up from $%s]' % unrounded
 
-        fee = try_charge_amount - amount
-        cents = int(charge_amount * 100)
+        upcharged = upcharge(rounded)
+        fee = upcharged - rounded
+        cents = int(upcharged * 100)
 
-        msg = "Charging %%s %d cents ($%s + $%s fee = $%s%s) on %%s ... "
-        msg %= cents, amount, fee, try_charge_amount, also_log
+        msg = "Charging %%s %d cents ($%s%s + $%s fee = $%s) on %%s ... "
+        msg %= cents, rounded, also_log, fee, upcharged
 
-        return cents, msg, charge_amount, fee
+        return cents, msg, upcharged, fee
 
 
     # Record-keeping.
