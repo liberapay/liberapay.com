@@ -263,7 +263,7 @@ class TestBillingCharge(testing.GittipPaydayTest):
 
     @mock.patch('stripe.Charge')
     def test_hit_stripe(self, ba):
-        amount_to_charge = Decimal(10)  # $10.00 USD
+        amount_to_charge = Decimal('10.00')  # $10.00 USD
         expected_fee = (amount_to_charge + FEE[0]) * FEE[1]
         expected_fee = (amount_to_charge - expected_fee.quantize(
             FEE[0], rounding=ROUND_UP)) * -1
@@ -282,7 +282,7 @@ class TestBillingCharge(testing.GittipPaydayTest):
 
     @mock.patch('balanced.Account')
     def test_hit_balanced(self, ba):
-        amount_to_charge = Decimal(10)  # $10.00 USD
+        amount_to_charge = Decimal('10.00')  # $10.00 USD
         expected_fee = (amount_to_charge + FEE[0]) * FEE[1]
         expected_fee = (amount_to_charge - expected_fee.quantize(
             FEE[0], rounding=ROUND_UP)) * -1
@@ -301,7 +301,7 @@ class TestBillingCharge(testing.GittipPaydayTest):
 
     @mock.patch('balanced.Account')
     def test_hit_balanced_small_amount(self, ba):
-        amount_to_charge = Decimal(0.06)  # $0.06 USD
+        amount_to_charge = Decimal('0.06')  # $0.06 USD
         expected_fee = (amount_to_charge + FEE[0]) * FEE[1]
         expected_fee = (amount_to_charge - expected_fee.quantize(
             FEE[0], rounding=ROUND_UP)) * Decimal('-1')
@@ -321,7 +321,7 @@ class TestBillingCharge(testing.GittipPaydayTest):
 
     @mock.patch('balanced.Account')
     def test_hit_balanced_failure(self, ba):
-        amount_to_charge = Decimal(0.06)  # $0.06 USD
+        amount_to_charge = Decimal('0.06')  # $0.06 USD
         error_message = 'Woah, crazy'
         ba.find.side_effect = balanced.exc.HTTPError(error_message)
         charge_amount, fee, msg = self.payday.hit_balanced(
