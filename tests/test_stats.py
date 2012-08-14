@@ -1,23 +1,11 @@
 from datetime import datetime
 
-from aspen.testing import Website, StubRequest
 from mock import patch
 
 from gittip.billing.payday import Payday
 from gittip import testing
 from gittip import wireup
-
-
-website = Website(['--www_root', 'www/', '--project_root', '..'])
-
-
-def serve_request(path):
-    """Given an URL path, return response"""
-
-    request = StubRequest(path)
-    request.website = website
-    response = website.handle_safely(request)
-    return response
+from tests import serve_request
 
 
 class TestStatsPage(testing.GittipBaseTest):

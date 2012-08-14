@@ -7,10 +7,12 @@ import gittip
 import psycopg2
 import stripe
 from gittip.postgres import PostgresManager
-from psycopg2.extensions import cursor as RegularCursor 
+from psycopg2.extensions import cursor as RegularCursor
 
 
 def canonical():
+    print os.environ['CANONICAL_SCHEME']
+    print os.environ['CANONICAL_HOST']
     gittip.canonical_scheme = os.environ['CANONICAL_SCHEME']
     gittip.canonical_host = os.environ['CANONICAL_HOST']
 
