@@ -1,14 +1,12 @@
 from datetime import datetime
-from aspen.testing import Website, StubRequest
-from os.path import dirname
 
+from aspen.testing import Website, StubRequest
 from mock import patch
 
+from gittip.billing.payday import Payday
 from gittip import testing
 from gittip import wireup
-from gittip.billing.payday import Payday
 
-PROJECT_ROOT = dirname(dirname(__file__))
 
 website = Website(['--www_root', 'www/', '--project_root', '..'])
 
