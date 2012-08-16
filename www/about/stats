@@ -116,7 +116,6 @@ now = datetime.datetime.utcnow()
 if now.weekday() == THURSDAY:
     this_friday = "tomorrow"
 if now.weekday() == FRIDAY:
-    print payday
     if payday is None or payday['ts_end'] is None:
         # Payday hasn't started yet.
         this_friday = "today"
