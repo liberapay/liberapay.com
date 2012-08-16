@@ -14,6 +14,7 @@ def canonical():
     gittip.canonical_scheme = os.environ['CANONICAL_SCHEME']
     gittip.canonical_host = os.environ['CANONICAL_HOST']
 
+
 def db():
     dburl = os.environ['DATABASE_URL']
     gittip.db = PostgresManager(dburl)
@@ -24,6 +25,7 @@ def db():
         psycopg2.extras.register_hstore(curs, globally=True, unicode=True)
 
     return gittip.db
+
 
 def billing():
     stripe.api_key= os.environ['STRIPE_SECRET_API_KEY']
