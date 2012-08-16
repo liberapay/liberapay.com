@@ -39,7 +39,18 @@ class TestStatsPage(testing.GittipBaseTest):
         self.assertTrue("is changing hands <b>right now!</b>" in body)
         pd.end()
 
-    def test_stats_description_accurate_outside_of_payday(self):
+    @patch('datetime.datetime')
+    def test_stats_description_accurate_outside_of_payday(self, mock_datetime):
         """Test stats page outside of the payday running"""
+        self.clear_paydays()
+        a_monday = datetime(2012, 8, 6, 12, 00, 01)
+        mock_datetime.utcnow.return_value = a_monday
+
+        db = wireup.db()
+        wireup.billing()
+        pd = Payday(db)
+        pd.start()
+
         body = self.get_stats_page()
         self.assertTrue("is ready for <b>this Friday</b>" in body)
+        pd.end()
