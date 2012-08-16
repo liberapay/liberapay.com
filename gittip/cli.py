@@ -10,7 +10,7 @@ def payday():
 
     # Lazily import the billing module.
     # =================================
-    # This dodges a problem where db in billing is None if we import it from 
+    # This dodges a problem where db in billing is None if we import it from
     # gittip before calling wire_samurai.
 
     from gittip.billing.payday import Payday

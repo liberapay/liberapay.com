@@ -7,12 +7,12 @@ nparticipants = db.fetchone("SELECT count(*) AS n FROM participants WHERE claime
 {% extends templates/base.html %}
 {% block body %}
 
-    <p class="below-header">Gittip is <b>{{ age() }}</b> old and has 
+    <p class="below-header">Gittip is <b>{{ age() }}</b> old and has
     <b>{{ nparticipants }}</b> participants. <span class="small"><a
             href="stats.html">More stats ...</a></span></p>
 
 
-    <a name="gittips"></a> 
+    <a name="gittips"></a>
     <h2>What&rsquo;s a gittip?</h2>
 
     <p>Gittips (short for &ldquo;gift tips&rdquo;) are <b>small gifts of money
@@ -32,7 +32,7 @@ nparticipants = db.fetchone("SELECT count(*) AS n FROM participants WHERE claime
     five years making the world better for the rest of us.&rdquo; The winners
     don&rsquo;t even know they&rsquo;re in the running until they get the phone
     call that they won.</p>
-    
+
     <p>Gittip is <b>genius grants for the rest of us</b>. Call them
     pretty-smart grants, or crowd-sourced genius grants.</p>
 
@@ -55,13 +55,13 @@ nparticipants = db.fetchone("SELECT count(*) AS n FROM participants WHERE claime
     <p>Gittip is (today) for your favorite open source hacker. You implicitly
     trust any software they write. You study their code. You want to free them
     up to write even more of it.</p>
-    
+
     <p>Gittip is <b>Kickstarter for people</b> (not just projects).</p>
 
     <p>Gittip is <b>Flattr for people</b> (not just content).</p>
 
 
-    <a name="details"></a> 
+    <a name="details"></a>
     <h2>Details</h2>
 
     <p>Gittips are <b>weekly</b>. One-off contributions aren&rsquo;t
@@ -109,9 +109,9 @@ nparticipants = db.fetchone("SELECT count(*) AS n FROM participants WHERE claime
         href="https://github.com/whit537/www.gittip.com/issues/22">a manual
         process</a>. Postage and/or fees for withdrawing money are charged at
     cost.</p>
-    
 
-    <a name="get-involved"></a> 
+
+    <a name="get-involved"></a>
     <h2>Get Involved</h2>
 
     <p>Gittip.com is <a

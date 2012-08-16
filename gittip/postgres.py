@@ -12,7 +12,7 @@ The main object is PostgresManager. Instantiate it with the following
 parameters:
 
     dsn         A Postgres connection string (see http://www.postgresql.org
-                /docs/9.1/static/libpq-connect.html) or an URL starting with 
+                /docs/9.1/static/libpq-connect.html) or an URL starting with
                 "postgres://". [required]
     minconn     The minimum size of the connection pool. [1]
     maxconn     The maximum size of the connection pool. [10]
@@ -27,12 +27,12 @@ single transaction?)
     fetchone    Execute the query and return a single result or None.
     fetchall    Execute the query and yield the results.
     get_cursor  Execute the query and return a context manager wrapping a
-                 psycopg2 RealDictCursor. The connection underlying the cursor 
+                 psycopg2 RealDictCursor. The connection underlying the cursor
                  will be checked out of the connection pool and checked back in
-                 upon both successful and execeptional executions against the 
+                 upon both successful and execeptional executions against the
                  cursor.
-    get_connection  Return a context manager wrapping a db PostgresConnection. 
-                The manager turns autocommit off for you and then turns it on 
+    get_connection  Return a context manager wrapping a db PostgresConnection.
+                The manager turns autocommit off for you and then turns it on
                 again when you're done with it. Use this when you need fine-
                 grained transaction control.
 
@@ -136,7 +136,7 @@ class PostgresConnection(psycopg2.extensions.connection):
         psycopg2.extensions.connection.__init__(self, *a, **kw)
         self.set_client_encoding('UTF-8')
         self.autocommit = True
-       
+
     def cursor(self, *a, **kw):
         if 'cursor_factory' not in kw:
             kw['cursor_factory'] = RealDictCursor
@@ -155,7 +155,7 @@ class PostgresConnectionContextManager:
     def __init__(self, pool, *a, **kw):
         self.pool = pool
         self.conn = None
-    
+
     def __enter__(self):
         """Get a connection from the pool.
         """
@@ -169,7 +169,7 @@ class PostgresConnectionContextManager:
         self.conn.rollback()
         self.conn.autocommit = True
         self.pool.putconn(self.conn)
-        
+
 
 class PostgresCursorContextManager:
     """Instantiated once per cursor-level db access.
@@ -180,7 +180,7 @@ class PostgresCursorContextManager:
         self.a = a
         self.kw = kw
         self.conn = None
-    
+
     def __enter__(self):
         """Get a connection from the pool.
         """

@@ -7,7 +7,7 @@ import gittip
 import psycopg2
 import stripe
 from gittip.postgres import PostgresManager
-from psycopg2.extensions import cursor as RegularCursor 
+from psycopg2.extensions import cursor as RegularCursor
 
 
 def canonical():

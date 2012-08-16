@@ -164,7 +164,7 @@ def outbound(response):
 
     response.headers.cookie['csrf_token'] = csrf_token
     cookie = response.headers.cookie['csrf_token']
-    # I am not setting domain, because it is supposed to default to what we 
+    # I am not setting domain, because it is supposed to default to what we
     # want: the domain of the object requested.
     #cookie['domain']
     cookie['path'] = '/'

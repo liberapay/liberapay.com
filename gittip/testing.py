@@ -67,5 +67,5 @@ class GittipPaydayTest(GittipBaseDBTest):
         self.payday = Payday(self.db)
 
 if __name__ == "__main__":
-    db = wireup.db() 
+    db = wireup.db()
     populate_db_with_dummy_data(db)

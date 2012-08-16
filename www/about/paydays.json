@@ -16,7 +16,7 @@ paydays = db.fetchall("""\
 
          , ncc_missing
          , ncc_failing
-      FROM paydays 
+      FROM paydays
   ORDER BY ts_start DESC
 
 """)

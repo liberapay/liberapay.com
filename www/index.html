@@ -8,7 +8,7 @@ receivers = db.fetchall("""
       FROM (    SELECT DISTINCT ON (tipper, tippee)
                        amount
                      , tippee
-                  FROM tips 
+                  FROM tips
                   JOIN participants p ON p.id = tipper
                   JOIN social_network_users snu ON snu.participant_id = tippee
                  WHERE last_bill_result = ''
@@ -28,7 +28,7 @@ givers = db.fetchall("""
       FROM (    SELECT DISTINCT ON (tipper, tippee)
                        amount
                      , tipper
-                  FROM tips 
+                  FROM tips
                   JOIN participants p ON p.id = tipper
                   JOIN social_network_users snu ON snu.participant_id = tippee
                  WHERE last_bill_result = ''
@@ -36,7 +36,7 @@ givers = db.fetchall("""
               ORDER BY tipper, tippee, mtime DESC
               ) AS foo
       JOIN participants p ON p.id = tipper
-  GROUP BY tipper, anonymous 
+  GROUP BY tipper, anonymous
   ORDER BY amount DESC
   LIMIT 10
 
@@ -78,7 +78,7 @@ givers = db.fetchall("""
         TR.unclaimed TD SPAN {
             font-size: 10pt;
         }
-        #givers { 
+        #givers {
             float: left;
         }
         #receivers {
@@ -95,7 +95,7 @@ givers = db.fetchall("""
 {% end %}
 {% block body %}
 
-    <h2>Tip someone!</h3> 
+    <h2>Tip someone!</h3>
     <form id="jump">
     Enter a GitHub username:
         <input placeholder="" />
@@ -155,10 +155,10 @@ givers = db.fetchall("""
     <b>opt-in</b>. We never collect money on a person&rsquo;s behalf until that
     person opts in by claiming their account.</p>
 
-    <p class="help">Amounts are based on tips from people with a 
-    {% if user.ANON %}working credit card{% else %}<a href="/credit-card.html">working 
-        credit card</a>{% end %} on file. If a card stops working this week 
-    then the actual amount distributed can be lower. If someone doesn&rsquo;t 
+    <p class="help">Amounts are based on tips from people with a
+    {% if user.ANON %}working credit card{% else %}<a href="/credit-card.html">working
+        credit card</a>{% end %} on file. If a card stops working this week
+    then the actual amount distributed can be lower. If someone doesn&rsquo;t
     have a working card but does have a positive Gittip balance themselves then
     the actual amount distributed can be higher.  Make sense?</p>
 
