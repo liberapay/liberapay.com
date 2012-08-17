@@ -111,6 +111,7 @@ def part(s):
 
 last_friday = "last Friday"
 this_friday = "this Friday"
+punc = "."
 future_processing_text = "is ready for"
 now = datetime.datetime.utcnow()
 if now.weekday() == THURSDAY:
@@ -123,6 +124,7 @@ if now.weekday() == FRIDAY:
         # Payday is going on right now.
         future_processing_text = "is changing hands"
         this_friday = "right now!"
+        punc = ""
     else:
         # Payday is finished for today.
         last_friday = "today"
@@ -137,7 +139,7 @@ elif now.weekday() == SUNDAY:
 
 tip_distribution_json = {str(k): v for k,v in tip_distribution.items()}
 names = ['ncc', 'pcc', 'statements', 'transfer_volume',
-         'last_friday', 'this_friday', 'other_people',
+         'last_friday', 'this_friday', 'punc', 'other_people',
          'average_tip', 'average_tippees', 'total_backed_tips',
          'tip_distribution_json', 'old_tip_n', 'new_tip_n']
 
@@ -186,7 +188,7 @@ names = ['ncc', 'pcc', 'statements', 'transfer_volume',
 
 <h2><b>${{ transfer_volume }}</b> changed hands <b>{{ last_friday }}</b>.</h2>
 
-<h2><b>${{ total_backed_tips }}</b> {{ future_processing_text }} <b>{{ this_friday }}</b>.
+<h2><b>${{ total_backed_tips }}</b> {{ future_processing_text }} <b>{{ this_friday }}</b>{{ punc }}
     <span class="small"><a href="unclaimed.html">Unclaimed</a></span>
 </h2>
 
