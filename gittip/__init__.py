@@ -34,7 +34,7 @@ OLD_AMOUNTS= [Decimal(a) for a in ('0.25',)]
 AMOUNTS= [Decimal(a) for a in ('0.00', '1.00', '3.00', '6.00', '12.00', '24.00')]
 
 
-__version__ = "4.1.18"
+__version__ = "~~VERSION~~"
 
 
 def get_tip(tipper, tippee):
