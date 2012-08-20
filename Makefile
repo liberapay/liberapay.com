@@ -23,8 +23,11 @@ run: env
 		--changes_reload=yes \
 		--network_address=:8537
 
-test: env
-	./swaddle local.env ./env/bin/nosetests ./tests/
+test: env data
+	DATABASE_URL=postgres://gittip-test@localhost/gittip-test \
+		 ./env/bin/nosetests ./tests/
 
 data: env
-	./swaddle local.env ./env/bin/python ./gittip/testing.py
+	./makedb.sh gittip-test gittip-test
+	DATABASE_URL=postgres://gittip-test@localhost/gittip-test \
+		 ./env/bin/python ./gittip/testing.py
