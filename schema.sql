@@ -1,3 +1,4 @@
+-------------------------------------------------------------------------------
 --                             million trillion trillion
 --                             |         trillion trillion
 --                             |         |               trillion
@@ -8,6 +9,7 @@
 -- numeric(35,2) maxes out at $999,999,999,999,999,999,999,999,999,999,999.00.
 
 
+-------------------------------------------------------------------------------
 -- Create the initial structure.
 
 CREATE EXTENSION hstore;
@@ -92,24 +94,39 @@ CREATE TABLE exchanges
 , participant_id        text                        NOT NULL REFERENCES participants ON DELETE RESTRICT
  );
 
+
+-------------------------------------------------------------------------------
 -- https://github.com/whit537/www.gittip.com/issues/128
+
 ALTER TABLE participants ADD COLUMN anonymous bool NOT NULL DEFAULT FALSE;
 ALTER TABLE participants DROP COLUMN shares_giving; 
 
 
+-------------------------------------------------------------------------------
 -- https://github.com/whit537/www.gittip.com/issues/110
+
 ALTER TABLE participants ADD COLUMN goal numeric(35,2) DEFAULT NULL;
 
 
+-------------------------------------------------------------------------------
 -- https://github.com/whit537/www.gittip.com/issues/78
+
 ALTER TABLE participants ADD COLUMN balanced_account_uri text DEFAULT NULL;
 
+
+-------------------------------------------------------------------------------
 -- https://github.com/whit537/www.gittip.com/issues/161
+
 ALTER TABLE participants ADD CONSTRAINT min_balance CHECK(balance >= 0);
 
+
+-------------------------------------------------------------------------------
 -- https://github.com/whit537/www.gittip.com/issues/35
+
 ALTER TABLE participants ALTER COLUMN statement SET NOT NULL;
 
+
+-------------------------------------------------------------------------------
 -- https://github.com/whit537/www.gittip.com/issues/22
 
 -- aggregate of the exchanges for paying out
