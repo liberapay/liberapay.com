@@ -9,7 +9,7 @@ if not request.user.ADMIN:
     raise Response(404)
 
 customers = db.fetchall("""\
-    
+
     SELECT email, created, next_bill_date, is_admin, last_bill_result
       FROM customers
   ORDER BY next_bill_date, created
@@ -37,7 +37,7 @@ customers = db.fetchall("""\
         font-weight: normal;
         background: #FFFE26;
     }
-    TD { 
+    TD {
         padding: 0 10px 0 0;
         white-space: nowrap;
     }

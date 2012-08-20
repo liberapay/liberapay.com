@@ -3,11 +3,11 @@ from gittip import db
 
 SIGNOUT = """\
 
-    UPDATE participants 
+    UPDATE participants
        SET session_token=NULL
          , session_expires=now()
      WHERE session_token=%
-           
+
 """
 
 # ========================================================================== ^L

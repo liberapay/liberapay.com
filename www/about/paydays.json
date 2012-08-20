@@ -1,5 +1,24 @@
 from gittip import db
 ^L
-paydays = db.fetchall("SELECT * FROM paydays ORDER BY ts_start DESC")
+paydays = db.fetchall("""\
+
+    SELECT ts_start
+         , ts_end
+
+         , transfer_volume
+         , exchange_volume
+         , exchange_fees_volume
+
+         , nparticipants
+         , ntippers
+         , ntransfers
+         , nexchanges
+
+         , ncc_missing
+         , ncc_failing
+      FROM paydays
+  ORDER BY ts_start DESC
+
+""")
 paydays = [] if paydays is None else list(paydays)
 response.body = paydays

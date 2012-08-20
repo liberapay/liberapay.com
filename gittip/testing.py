@@ -77,5 +77,5 @@ class GittipSettlementTest(GittipBaseDBTest):
 
 
 if __name__ == "__main__":
-    db = wireup.db() 
+    db = wireup.db()
     populate_db_with_dummy_data(db)

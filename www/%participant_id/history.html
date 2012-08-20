@@ -78,7 +78,7 @@ class Paydays(object):
                 else:
                     event = self._exchanges.pop()
 
-                event['event'] = 'exchange' if 'fee' in event else 'transfer' 
+                event['event'] = 'exchange' if 'fee' in event else 'transfer'
 
 
                 # Record the next event.
@@ -94,8 +94,8 @@ class Paydays(object):
 
                 if event['event'] == 'transfer':
                     if event['tippee'] == self._participant_id:
-                        
-                        # Don't leak details about who tipped you. Only show 
+
+                        # Don't leak details about who tipped you. Only show
                         # aggregates for that.
 
                         received['amount'] += event['amount']
@@ -197,10 +197,10 @@ paydays = Paydays(participant_id, info['balance'])
 
 </style>
 <div id="their-voice">
-    <h2 class="first">{{ participant_id == user.id and "You" or participant_id }} joined 
+    <h2 class="first">{{ participant_id == user.id and "You" or participant_id }} joined
     {{ dt2age(claimed_time) }}.</h2>
 
-    <h3>{{ participant_id == user.id and "Your" or "Their" }} balance is 
+    <h3>{{ participant_id == user.id and "Your" or "Their" }} balance is
     ${{ info['balance'] }}.</h2>
 
     <table>
@@ -208,7 +208,7 @@ paydays = Paydays(participant_id, info['balance'])
     {% if event['event'] == 'payday-start' %}
     <tr>
         <th colspan="6">Gittip #{{ event['number'] }}
-            <b>&mdash;{{ event['timestamp'].strftime("%B %d, %Y").replace(' 0', ' ') }} 
+            <b>&mdash;{{ event['timestamp'].strftime("%B %d, %Y").replace(' 0', ' ') }}
             ({{ dt2age(event['timestamp']) }})</b></th>
     </tr>
     <tr class="head">
@@ -272,10 +272,10 @@ paydays = Paydays(participant_id, info['balance'])
             {% end %}
         {% else %}
             {% if user.ADMIN %}
-            <td class="note">to 
+            <td class="note">to
                 <a href="/{{ event['tippee'] }}/history.html">{{ event['tippee'] }}</a></td>
             {% else %}
-            <td class="note">to 
+            <td class="note">to
                 <a href="/{{ event['tippee'] }}/">{{ event['tippee'] }}</a></td>
             {% end %}
         {% end %}

@@ -48,11 +48,11 @@ def associate(participant_id, balanced_account_uri, card_uri):
         except balanced.exc.NoResultFound:
             customer = balanced.Account(email_address=email_address).save()
         CUSTOMER = """\
-                
-                UPDATE participants 
+
+                UPDATE participants
                    SET balanced_account_uri=%s
                  WHERE id=%s
-                
+
         """
         db.execute(CUSTOMER, (customer.uri, participant_id))
         customer.meta['participant_id'] = participant_id
@@ -77,11 +77,11 @@ def associate(participant_id, balanced_account_uri, card_uri):
         out = last_bill_result
     else:
         out = last_bill_result = ''
-        
+
     STANDING = """\
 
         UPDATE participants
-           SET last_bill_result=%s 
+           SET last_bill_result=%s
          WHERE id=%s
 
     """
@@ -197,7 +197,7 @@ def store_ach_error(participant_id, msg):
 
 # Card
 # ====
-# While we're migrating data we need to support loading data from both Stripe 
+# While we're migrating data we need to support loading data from both Stripe
 # and Balanced.
 
 

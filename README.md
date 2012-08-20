@@ -24,6 +24,8 @@ building the software. All Python dependencies are included in vendor/. To
     CANONICAL_HOST=
     CANONICAL_SCHEME=http
     DATABASE_URL=postgres://gittip@localhost/gittip
+    STRIPE_SECRET_API_KEY=1
+    STRIPE_PUBLISHABLE_API_KEY=1
     BALANCED_API_SECRET=90bb3648ca0a11e1a977026ba7e239a9
     GITHUB_CLIENT_ID=3785a9ac30df99feeef5
     GITHUB_CLIENT_SECRET=e69825fafa163a0b0b6d2424c107a49333d46985
@@ -93,7 +95,7 @@ already been run. New DDL will be (manually) run against the production
 database as part of deployment.
 
 
-Testing
+Testing [![Testing](https://secure.travis-ci.org/whit537/www.gittip.com.png)](http://travis-ci.org/whit537/www.gittip.com)
 -------
 
 Please write unit tests for all new code and all code you change. Gittip's test
@@ -126,3 +128,4 @@ See Also
  - http://www1.networkforgood.org/
  - http://anyfu.com/
  - http://videovivoapp.com/
+ - http://techcrunch.com/2009/08/20/tipjoy-heads-to-the-deadpool/

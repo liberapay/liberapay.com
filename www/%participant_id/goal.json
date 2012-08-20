@@ -15,14 +15,14 @@ goal = request.body["goal"]
 if goal == "null":
     goal = None
 elif goal == "custom":
-    goal = request.body["goal_custom"]
+    goal = request.body["goal_custom"].replace(',', '')
 
 if goal is not None:
     try:
         goal = decimal.Decimal(goal)
     except decimal.InvalidOperation:
-        raise Response(400, "Bad input.") 
-    
+        raise Response(400, "Bad input.")
+
 rec = db.fetchone( "UPDATE participants SET goal=%s "
                    "WHERE id=%s RETURNING goal"
                  , (goal, user.id)

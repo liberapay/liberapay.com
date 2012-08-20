@@ -6,7 +6,7 @@
 if (!window.console)
 {
     var names = ["log", "debug", "info", "warn", "error", "assert", "dir",
-                 "dirxml", "group", "groupEnd", "time", "timeEnd", "count", 
+                 "dirxml", "group", "groupEnd", "time", "timeEnd", "count",
                  "trace", "profile", "profileEnd"];
     window.console = {};
     for (var i=0, name; name = names[i]; i++)
@@ -58,7 +58,7 @@ if (!String.prototype.replaceAll)
 
 if(!String.prototype.trim)
 {   // http://stackoverflow.com/questions/1418050/string-strip-for-javascript
-    String.prototype.trim = function() 
+    String.prototype.trim = function()
     {
         return String(this).replace(/^\s+|\s+$/g, '');
     };
@@ -93,7 +93,7 @@ Gittip.showFeedback = function(msg, details)
 {
     if (msg === null)
         msg = "Failure";
-    msg = '<h3><span class="highlight">' + msg + '</span></h3>'; 
+    msg = '<h3><span class="highlight">' + msg + '</span></h3>';
     msg += '<div class="details"></div>';
     $('#feedback').html(msg);
     if (details !== undefined)
@@ -106,7 +106,7 @@ Gittip.submitForm = function(url, data, success, error)
     if (success === undefined)
     {
         success = function()
-        {   
+        {
             Gittip.showFeedback("Success!");
         }
     }
@@ -118,7 +118,7 @@ Gittip.submitForm = function(url, data, success, error)
             Gittip.showFeedback(data.problem);
         };
     }
-    
+
     function _success(data)
     {
         if (data.problem === "" || data.problem === undefined)
@@ -162,6 +162,22 @@ Gittip.submitDeleteForm = function(e)
         e.preventDefault();
         return false;
     }
+
+    jQuery.ajax(
+        { url: '/credit-card.json'
+        , data: {action: "delete"}
+        , type: "POST"
+        , success: function() {
+            window.location.href = "/credit-card.html";
+          }
+        , error: function(x,y,z) {
+            select(cur);
+            alert("Sorry, something went wrong deleting your credit card. :(");
+            console.log(x,y,z);
+          }
+         }
+    );
+    return false;
 };
 
 Gittip.submitPayoutForm = function (e) {
@@ -321,17 +337,17 @@ Gittip.submitPaymentForm = function(e)
             setTimeout(Gittip.submitPaymentForm, 200);
         return false;
     }
-    
+
 
     // Adapt our form lingo to balanced nomenclature.
-    
+
     function val(field)
     {
         return $('FORM#payment INPUT[id="' + field + '"]').val();
     }
 
     var credit_card = {};   // holds CC info
-    
+
     credit_card.card_number = val('card_number');
     if (credit_card.card_number.search('[*]') !== -1)
         credit_card.card_number = '';  // don't send if it's the **** version
@@ -343,14 +359,14 @@ Gittip.submitPaymentForm = function(e)
                        , 'region': credit_card.region // workaround
                         };
     credit_card.postal_code = val('zip');
-    
+
     var expiry = val('expiry').split('/');  // format enforced by mask
     credit_card.expiration_month= expiry[0];
     credit_card.expiration_year = expiry[1];
 
 
     // Require some options (expiry is theoretically handled by the mask).
-    
+
     if (!balanced.card.isCardNumberValid(credit_card.card_number))
     {
         $('BUTTON#save').text('Save');
@@ -363,7 +379,7 @@ Gittip.submitPaymentForm = function(e)
         $('BUTTON#save').text('Save');
         Gittip.showFeedback(null, ["Your CVV is bad."]);
     }
-    else 
+    else
     {
         balanced.card.create(credit_card, Gittip.paymentsResponseHandler);
     }
@@ -526,11 +542,11 @@ Gittip.initTipButtons = function()
         // Exit early if the button has the disabled class. I'm not using the
         // disabled HTML attribute because (in Chrome) hovering over a disabled
         // button means the row doesn't get the hover event.
-        
+
         if ($(this).hasClass('disabled'))
             return;
 
-        
+
         // Grab the row and the current button. Exit early if they clicked the
         // current selection.
 
@@ -555,7 +571,7 @@ Gittip.initTipButtons = function()
                 $('#payment-prompt').addClass('needed');
         }
 
-        
+
         // Go to work!
 
         var amount = $(this).text().replace('$', '');
@@ -584,7 +600,7 @@ Gittip.initJumpToPerson = function()
 {
     function jump(e)
     {
-        var val = $('#jump INPUT').val();
+        var val = $('#jump INPUT').val().trim();
         e.preventDefault();
         e.stopPropagation();
         if (val !== '')

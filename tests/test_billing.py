@@ -7,6 +7,7 @@ from decimal import Decimal, ROUND_UP
 import balanced
 import unittest
 from psycopg2 import IntegrityError
+from aspen.utils import typecheck
 
 from gittip import authentication, billing, testing
 from gittip.billing.payday import FEE, MINIMUM
@@ -17,7 +18,7 @@ class TestCard(testing.GittipBaseTest):
         super(TestCard, self).setUp()
         self.balanced_account_uri = '/v1/marketplaces/M123/accounts/A123'
         self.stripe_customer_id = 'deadbeef'
-        
+
     @mock.patch('balanced.Account')
     def test_balanced_card(self, ba):
         card = mock.Mock()
@@ -262,6 +263,7 @@ class TestBillingCharge(testing.GittipPaydayTest):
         super(TestBillingCharge, self).setUp()
         self.participant_id = 'lgtest'
         self.balanced_account_uri = '/v1/marketplaces/M123/accounts/A123'
+        self.stripe_customer_id = 'cus_deadbeef'
         self.tok = '/v1/marketplaces/M123/accounts/A123/cards/C123'
         billing.db = self.db
         # TODO: remove once we rollback transactions....
@@ -278,11 +280,25 @@ class TestBillingCharge(testing.GittipPaydayTest):
         '''
         self.db.execute(insert)
 
+    def prep(self, amount):
+        """Given a dollar amount as a string, return a 3-tuple.
+
+        The return tuple is like the one returned from _prep_hit, but with the
+        second value, a log message, removed.
+
+        """
+        typecheck(amount, unicode)
+        out = list(self.payday._prep_hit(Decimal(amount)))
+        out = [out[0]] + out[2:]
+        return tuple(out)
+
+
     @mock.patch('gittip.billing.payday.Payday.mark_missing_funding')
-    def test_charge_without_balanced_customer_id(self, mpmf):
+    def test_charge_without_balanced_customer_id_or_stripe_customer_id(self, mpmf):
         result = self.payday.charge( self.participant_id
                                    , None
-                                   , Decimal(1)
+                                   , None
+                                   , Decimal('1.00')
                                     )
         self.assertFalse(result)
         self.assertEqual(mpmf.call_count, 1)
@@ -290,22 +306,37 @@ class TestBillingCharge(testing.GittipPaydayTest):
     @mock.patch('gittip.billing.payday.Payday.hit_balanced')
     @mock.patch('gittip.billing.payday.Payday.mark_failed')
     def test_charge_failure(self, mf, hb):
-        hb.return_value = (None, None, 'FAILED')
+        hb.return_value = (Decimal('10.00'), Decimal('0.68'), 'FAILED')
         result = self.payday.charge( self.participant_id
                                    , self.balanced_account_uri
-                                   , Decimal(1)
+                                   , self.stripe_customer_id
+                                   , Decimal('1.00')
                                     )
         self.assertEqual(hb.call_count, 1)
         self.assertEqual(mf.call_count, 1)
         self.assertFalse(result)
 
     @mock.patch('gittip.billing.payday.Payday.hit_balanced')
-    @mock.patch('gittip.billing.payday.Payday.mark_success')
-    def test_charge_success(self, ms, hb):
-        hb.return_value = (Decimal(1), Decimal(2), None)
+    @mock.patch('gittip.billing.payday.Payday.record_exchange')
+    def test_record_exchange_gets_proper_amount(self, rx, hb):
+        hb.return_value = (Decimal('10.00'), Decimal('0.68'), None)
         result = self.payday.charge( self.participant_id
                                    , self.balanced_account_uri
-                                   , Decimal(1)
+                                   , self.stripe_customer_id
+                                   , Decimal('1.00')
+                                    )
+        self.assertEqual(rx.call_args[0][0], Decimal('9.32'))
+        self.assertEqual(rx.call_args[0][2], Decimal('0.68'))
+        self.assertTrue(result)
+
+    @mock.patch('gittip.billing.payday.Payday.hit_balanced')
+    @mock.patch('gittip.billing.payday.Payday.mark_success')
+    def test_charge_success(self, ms, hb):
+        hb.return_value = (Decimal('10.00'), Decimal('0.68'), None)
+        result = self.payday.charge( self.participant_id
+                                   , self.balanced_account_uri
+                                   , self.stripe_customer_id
+                                   , Decimal('1.00')
                                     )
         self.assertEqual(hb.call_count, 1)
         self.assertEqual(ms.call_count, 1)
@@ -362,9 +393,28 @@ class TestBillingCharge(testing.GittipPaydayTest):
             cursor.execute(payday_sql)
             self.assertEqual(cursor.fetchone()['nexchanges'], 1)
 
+    @mock.patch('stripe.Charge')
+    def test_hit_stripe(self, ba):
+        amount_to_charge = Decimal('10.00')  # $10.00 USD
+        expected_fee = (amount_to_charge + FEE[0]) * FEE[1]
+        expected_fee = (amount_to_charge - expected_fee.quantize(
+            FEE[0], rounding=ROUND_UP)) * -1
+        charge_amount, fee, msg = self.payday.hit_stripe(
+            self.participant_id,
+            self.stripe_customer_id,
+            amount_to_charge)
+        self.assertEqual(charge_amount, amount_to_charge + fee)
+        self.assertEqual(fee, expected_fee)
+        self.assertTrue(ba.find.called_with(self.stripe_customer_id))
+        customer = ba.find.return_value
+        self.assertTrue(customer.debit.called_with(
+            int(charge_amount * 100),
+            self.participant_id
+        ))
+
     @mock.patch('balanced.Account')
     def test_hit_balanced(self, ba):
-        amount_to_charge = Decimal(10)  # $10.00 USD
+        amount_to_charge = Decimal('10.00')  # $10.00 USD
         expected_fee = (amount_to_charge + FEE[0]) * FEE[1]
         expected_fee = (amount_to_charge - expected_fee.quantize(
             FEE[0], rounding=ROUND_UP)) * -1
@@ -383,11 +433,9 @@ class TestBillingCharge(testing.GittipPaydayTest):
 
     @mock.patch('balanced.Account')
     def test_hit_balanced_small_amount(self, ba):
-        amount_to_charge = Decimal(0.06)  # $0.06 USD
-        expected_fee = (amount_to_charge + FEE[0]) * FEE[1]
-        expected_fee = (amount_to_charge - expected_fee.quantize(
-            FEE[0], rounding=ROUND_UP)) * Decimal('-1')
-        expected_amount = MINIMUM
+        amount_to_charge = Decimal('0.06')  # $0.06 USD
+        expected_fee = Decimal('0.68')
+        expected_amount = Decimal('10.00')
         charge_amount, fee, msg = \
                             self.payday.hit_balanced( self.participant_id
                                                     , self.balanced_account_uri
@@ -403,7 +451,7 @@ class TestBillingCharge(testing.GittipPaydayTest):
 
     @mock.patch('balanced.Account')
     def test_hit_balanced_failure(self, ba):
-        amount_to_charge = Decimal(0.06)  # $0.06 USD
+        amount_to_charge = Decimal('0.06')  # $0.06 USD
         error_message = 'Woah, crazy'
         ba.find.side_effect = balanced.exc.HTTPError(error_message)
         charge_amount, fee, msg = self.payday.hit_balanced(
@@ -411,6 +459,75 @@ class TestBillingCharge(testing.GittipPaydayTest):
             self.balanced_account_uri,
             amount_to_charge)
         self.assertEqual(msg, error_message)
+
+
+    # _prep_hit
+
+    def test_prep_hit_basically_works(self):
+        actual = self.payday._prep_hit(Decimal('20.00'))
+        expected = ( 2110
+                   , u'Charging %s 2110 cents ($20.00 + $1.10 fee = $21.10) on %s ... '
+                   , Decimal('21.10')
+                   , Decimal('1.10')
+                    )
+        assert actual == expected, actual
+
+    def test_prep_hit_full_in_rounded_case(self):
+        actual = self.payday._prep_hit(Decimal('5.00'))
+        expected = ( 1000
+                   , u'Charging %s 1000 cents ($9.32 [rounded up from $5.00] + $0.68 fee = $10.00) on %s ... '
+                   , Decimal('10.00')
+                   , Decimal('0.68')
+                    )
+        assert actual == expected, actual
+
+
+    def test_prep_hit_at_ten_dollars(self):
+        actual = self.prep('10.00')
+        expected = (1071, Decimal('10.71'), Decimal('0.71'))
+        assert actual == expected, actual
+
+
+    def test_prep_hit_at_forty_cents(self):
+        actual = self.prep('0.40')
+        expected = (1000, Decimal('10.00'), Decimal('0.68'))
+        assert actual == expected, actual
+
+    def test_prep_hit_at_fifty_cents(self):
+        actual = self.prep('0.50')
+        expected = (1000, Decimal('10.00'), Decimal('0.68'))
+        assert actual == expected, actual
+
+    def test_prep_hit_at_sixty_cents(self):
+        actual = self.prep('0.60')
+        expected = (1000, Decimal('10.00'), Decimal('0.68'))
+        assert actual == expected, actual
+
+    def test_prep_hit_at_eighty_cents(self):
+        actual = self.prep('0.80')
+        expected = (1000, Decimal('10.00'), Decimal('0.68'))
+        assert actual == expected, actual
+
+
+    def test_prep_hit_at_nine_fifteen(self):
+        actual = self.prep('9.15')
+        expected = (1000, Decimal('10.00'), Decimal('0.68'))
+        assert actual == expected, actual
+
+    def test_prep_hit_at_nine_thirty_one(self):
+        actual = self.prep('9.31')
+        expected = (1000, Decimal('10.00'), Decimal('0.68'))
+        assert actual == expected, actual
+
+    def test_prep_hit_at_nine_thirty_two(self):
+        actual = self.prep('9.32')
+        expected = (1000, Decimal('10.00'), Decimal('0.68'))
+        assert actual == expected, actual
+
+    def test_prep_hit_at_nine_thirty_three(self):
+        actual = self.prep('9.33')
+        expected = (1001, Decimal('10.01'), Decimal('0.68'))
+        assert actual == expected, actual
 
 
 class TestBillingPayday(testing.GittipPaydayTest):
@@ -460,7 +577,7 @@ class TestBillingPayday(testing.GittipPaydayTest):
 
     @mock.patch('gittip.billing.payday.get_tips_and_total')
     def test_charge_and_or_transfer_no_tips(self, get_tips_and_total):
-        amount = Decimal(1.00)
+        amount = Decimal('1.00')
 
         get_tips_and_total.return_value = [], amount
         ts_start = datetime.utcnow()
@@ -484,7 +601,7 @@ class TestBillingPayday(testing.GittipPaydayTest):
     @mock.patch('gittip.billing.payday.get_tips_and_total')
     @mock.patch('gittip.billing.payday.Payday.tip')
     def test_charge_and_or_transfer(self, tip, get_tips_and_total):
-        amount = Decimal(1.00)
+        amount = Decimal('1.00')
         like_a_tip = {
             'amount': amount,
             'tippee': 'mjallday',
@@ -525,7 +642,7 @@ class TestBillingPayday(testing.GittipPaydayTest):
     @mock.patch('gittip.billing.payday.get_tips_and_total')
     @mock.patch('gittip.billing.payday.Payday.charge')
     def test_charge_and_or_transfer_short(self, charge, get_tips_and_total):
-        amount = Decimal(1.00)
+        amount = Decimal('1.00')
         like_a_tip = {
             'amount': amount,
             'tippee': 'mjallday',
@@ -565,8 +682,8 @@ class TestBillingPayday(testing.GittipPaydayTest):
     @mock.patch('gittip.billing.payday.Payday.transfer')
     @mock.patch('gittip.billing.payday.log')
     def test_tip(self, log, transfer):
-        amount = Decimal(1)
-        invalid_amount = Decimal(0)
+        amount = Decimal('1.00')
+        invalid_amount = Decimal('0.00')
         tip = {
             'amount': amount,
             'tippee': self.participant_id,
@@ -743,7 +860,7 @@ class TestBillingTransfer(testing.GittipPaydayTest):
         return self.db.execute(INSERT_PARTICIPANT, (name,))
 
     def test_transfer(self):
-        amount = Decimal(1)
+        amount = Decimal('1.00')
         sender = 'test_transfer_sender'
         recipient = 'test_transfer_recipient'
         self._create_participant(sender)
@@ -757,7 +874,7 @@ class TestBillingTransfer(testing.GittipPaydayTest):
         self.assertFalse(result)
 
     def test_debit_participant(self):
-        amount = Decimal(1)
+        amount = Decimal('1.00')
         participant = 'test_debit_participant'
 
         def get_balance_amount(participant):
@@ -784,11 +901,11 @@ class TestBillingTransfer(testing.GittipPaydayTest):
         with self.db.get_connection() as conn:
             cur = conn.cursor()
 
-            with self.assertRaises(ValueError):
+            with self.assertRaises(IntegrityError):
                 self.payday.debit_participant(cur, participant, amount)
 
     def test_credit_participant(self):
-        amount = Decimal(1)
+        amount = Decimal('1.00')
         recipient = 'test_credit_participant'
 
         def get_pending_amount(recipient):
@@ -812,7 +929,7 @@ class TestBillingTransfer(testing.GittipPaydayTest):
         self.assertEqual(initial_amount + amount, final_amount)
 
     def test_record_transfer(self):
-        amount = Decimal(1)
+        amount = Decimal('1.00')
 
         # check with db that amount is what we expect
         def assert_transfer(recipient, amount):
@@ -851,7 +968,7 @@ class TestBillingTransfer(testing.GittipPaydayTest):
         assert_transfer('bob', amount)
 
     def test_record_transfer_invalid_participant(self):
-        amount = Decimal(1)
+        amount = Decimal('1.00')
 
         with self.db.get_connection() as conn:
             cur = conn.cursor()
@@ -859,7 +976,7 @@ class TestBillingTransfer(testing.GittipPaydayTest):
                 self.payday.record_transfer(cur, 'idontexist', 'nori', amount)
 
     def test_mark_transfer(self):
-        amount = Decimal(1)
+        amount = Decimal('1.00')
 
         with self.db.get_connection() as conn:
             cur = conn.cursor()

@@ -9,7 +9,7 @@ class Totalizer:
     def __iter__(self):
         for i, unclaim in enumerate(self.unclaimed, start=1):
             self.total += unclaim['sum']
-            yield i, unclaim 
+            yield i, unclaim
 
     def __unicode__(self):
         return unicode(self.total)
@@ -19,12 +19,12 @@ class Totalizer:
 
 unclaimed = db.fetchall("""
 
-  SELECT tippee, sum 
+  SELECT tippee, sum
     FROM (   SELECT tippee, sum(amount) AS sum
                FROM (    SELECT DISTINCT ON (tipper, tippee)
                                 amount
                               , tippee
-                           FROM tips 
+                           FROM tips
                            JOIN participants p ON p.id = tipper
                            JOIN participants p2 ON p2.id = tippee
                            JOIN social_network_users snu ON snu.participant_id = tippee
@@ -99,9 +99,9 @@ a weekly gift to each person, but only if the person accepts it. Gittip is
 <b>opt-in</b>. We never collect money on a person&rsquo;s behalf until that
 person opts-in by claiming their account.</p>
 
-<p class="help">Amounts represent pledges from people with a 
+<p class="help">Amounts represent pledges from people with a
 {% if user.ANON %}working credit card{% else %}<a href="/credit-card.html">working credit
-    card</a>{%end%} on file, to people who have neither joined Gittip nor 
+    card</a>{%end%} on file, to people who have neither joined Gittip nor
 explicitly opted out. Only accounts with at least $1.00 in pledges
 are listed.</p>
 

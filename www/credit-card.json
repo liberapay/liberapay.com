@@ -31,7 +31,7 @@ else:
 
     card_uri = body.get('card_uri')
     if card_uri is None:
-        raise Response(400) 
+        raise Response(400)
 
     error = billing.associate(user.id, user.balanced_account_uri, card_uri)
     if error:

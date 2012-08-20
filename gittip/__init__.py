@@ -23,14 +23,15 @@ def age():
     return "%s month%s" % (nmonths, plural)
 
 
-db = None # This global is wired in wireup. It's an instance of 
+db = None # This global is wired in wireup. It's an instance of
           # gittip.postgres.PostgresManager.
 
-# Not sure we won't want this for something yet. Prune if you don't find it in 
+# Not sure we won't want this for something yet. Prune if you don't find it in
 # the codebase in a month.
-OLD_AMOUNTS= [Decimal(a) for a in ('0.00', '0.08', '0.16', '0.32', '0.64', '1.28')]
+OLD_OLD_AMOUNTS= [Decimal(a) for a in ('0.00', '0.08', '0.16', '0.32', '0.64', '1.28')]
+OLD_AMOUNTS= [Decimal(a) for a in ('0.25',)]
 
-AMOUNTS= [Decimal(a) for a in ('0.00', '0.25', '3.00', '6.00', '12.00', '24.00')]
+AMOUNTS= [Decimal(a) for a in ('0.00', '1.00', '3.00', '6.00', '12.00', '24.00')]
 
 
 __version__ = "~~VERSION~~"
@@ -40,11 +41,11 @@ def get_tip(tipper, tippee):
     """Given two user ids, return a Decimal.
     """
     TIP = """\
-            
-        SELECT amount 
-          FROM tips 
-         WHERE tipper=%s 
-           AND tippee=%s 
+
+        SELECT amount
+          FROM tips
+         WHERE tipper=%s
+           AND tippee=%s
       ORDER BY mtime DESC
          LIMIT 1
 
@@ -58,7 +59,7 @@ def get_tip(tipper, tippee):
 
 
 def get_backed_amount(participant_id):
-    """Given a unicode, return a Decimal. 
+    """Given a unicode, return a Decimal.
     """
 
     BACKED = """\
@@ -145,22 +146,22 @@ def get_tips_and_total(tipper, for_payday=False, db=None):
         # Payday and we're re-running that function. We only want to select
         # tips that existed before Payday started, but haven't been processed
         # as part of this Payday yet.
-        # 
+        #
         # It's a bug if the paydays subselect returns > 1 rows.
-        # 
-        # XXX If we crash during Payday and we rerun it after a timezone 
+        #
+        # XXX If we crash during Payday and we rerun it after a timezone
         # change, will we get burned? How?
 
         ts_filter = """\
 
                AND mtime < %s
-               AND ( SELECT id 
+               AND ( SELECT id
                        FROM transfers
                       WHERE tipper=t.tipper
                         AND tippee=t.tippee
                         AND timestamp >= %s
                     ) IS NULL
-                 
+
         """
         args = (tipper, for_payday, for_payday)
     else:
@@ -171,7 +172,7 @@ def get_tips_and_total(tipper, for_payday=False, db=None):
     TIPS = """\
 
         SELECT * FROM (
-            SELECT DISTINCT ON (tippee) 
+            SELECT DISTINCT ON (tippee)
                    amount
                  , tippee
                  , t.ctime
@@ -225,7 +226,7 @@ def canonize(request):
     scheme = request.headers.get('X-Forwarded-Proto', 'http') # per Heroku
     host = request.headers['Host']
     bad_scheme = scheme != canonical_scheme
-    bad_host = bool(canonical_host) and (host != canonical_host) 
+    bad_host = bool(canonical_host) and (host != canonical_host)
                 # '' and False => ''
     if bad_scheme or bad_host:
         url = '%s://%s' % (canonical_scheme, canonical_host)

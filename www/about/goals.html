@@ -1,0 +1,96 @@
+import locale
+from gittip import db
+
+def rows(goals, backed):
+    for rec in goals:
+        so_far = backed.get(rec['id'], 0)
+        row = [ rec['id']
+              , rec['goal']
+              , so_far
+              , (so_far / rec['goal']) * 100
+              , rec['statement']
+               ]
+        yield row
+
+def sortfunc(a, b):
+    percentage = cmp(a[3], b[3])
+    if percentage != 0:             # percentage descending
+        return percentage * -1
+    else:                           # goal, id ascending
+        return cmp((a[1], a[0]), (b[1], a[1]))
+
+# ==== ^L
+
+ngoals = db.fetchone("SELECT count(id) FROM participants WHERE goal > 0")
+ngoals = ngoals['count'] if ngoals is not None else 0
+goals = db.fetchall(""" \
+
+    SELECT id, statement, goal
+      FROM participants
+     WHERE goal > 0
+  ORDER BY goal DESC
+
+""")
+goals = goals if goals is not None else []
+
+backed = db.fetchall("""
+       SELECT tippee as id, sum(amount) as amount
+         FROM (    SELECT DISTINCT ON (tipper, tippee) tippee, amount
+                     FROM tips
+                     JOIN participants p ON p.id = tipper
+                     JOIN participants p2 ON p2.id = tippee
+                    WHERE p.last_bill_result = ''
+                      AND p2.claimed_time IS NOT NULL
+                 ORDER BY tipper, tippee, mtime DESC
+               ) AS foo
+     GROUP BY tippee
+""")
+backed = backed if backed is not None else []
+backed = {rec['id']:rec['amount'] for rec in backed}
+
+
+rows = list(rows(goals, backed))
+rows.sort(cmp=sortfunc)
+
+
+# ==== ^L
+{% extends templates/base.html %}
+{% block body %}
+<p class="below-header"><a href="./">About</a></p>
+<style>
+    TH, TD {
+        padding-right: 1em;
+    }
+    .statement {
+        text-align: left;
+        font-size: 9pt;
+        line-height: 11pt;
+        padding-bottom: 1em;
+    }
+    .statement DIV {
+        overflow: hidden;
+        white-space: nowrap;
+        width: 600px;
+    }
+</style>
+
+<h2>{{ ngoals }} people have set a weekly funding goal.</h2>
+<table>
+    <tr>
+        <th>Participant</th>
+        <th style="text-align: right;">Goal ($)</a></th>
+        <th colspan="2" style="text-align: right;">Backed ($, %)</a></th>
+    </tr>
+    {% for participant_id, goal, backed, percentage, statement, in rows %}
+    <tr>
+        <th><a href="/{{ participant_id }}/">{{ participant_id }}</a></th>
+        <td>{{ locale.format("%.2f", goal, grouping=True) }}</td>
+        <td>{{ locale.format("%.2f", backed, grouping=True) }}</td>
+        <td>{{ "%5.1f" % percentage }}</td>
+    </tr>
+    <tr>
+        <td class="statement" colspan="4"><div>{{ statement }}</divk</td>
+    </tr>
+    {% end %}
+</table>
+{% end %}

@@ -19,7 +19,7 @@ from gittip.utils import wrap
 from gittip.networks import github
 
 
-tip_suggestions = ('jeresig', 'antirez', 'wycats', 'fabpot', 'mitsuhiko', 
+tip_suggestions = ('jeresig', 'antirez', 'wycats', 'fabpot', 'mitsuhiko',
                    'jtauber', 'kennethreitz', 'alex', 'taylorotwell')
 tip_suggestions = [{'tippee': name, 'amount': 0} for name in tip_suggestions]
 
@@ -30,9 +30,9 @@ SELECT = """
     SELECT p.*
          , s.network
          , s.user_info
-      FROM participants p 
-      JOIN social_network_users s 
-        ON p.id = s.participant_id 
+      FROM participants p
+      JOIN social_network_users s
+        ON p.id = s.participant_id
      WHERE p.id = %s
 
 """
@@ -75,6 +75,9 @@ tip_or_pledge = "tip"
         }
         #matrix TD {
             text-align: left;
+        }
+        #matrix TH {
+            vertical-align: top;
         }
         FORM.statement TEXTAREA {
             width: 98%;
@@ -196,7 +199,7 @@ tip_or_pledge = "tip"
                 {
                     var newtext = $('LABEL[for=' + goal.attr('id') + ']').text();
                     newtext = newtext.replace('$', '$' + d.goal);
-                    
+
                     $('FORM.goal').hide();
                     if (d.goal !== '0.00')
                         $('INPUT[name=goal_custom]').val(d.goal);
@@ -276,7 +279,7 @@ tip_or_pledge = "tip"
         </blockquote>
     </form>
 
-    <blockquote id="my-statement" class="statement" 
+    <blockquote id="my-statement" class="statement"
         {% if not participant['statement'] %}style="display: none"{% end %}>
         I am making the world better by <span>
             {{ wrap(participant['statement']) }}</span><br />
@@ -293,26 +296,26 @@ tip_or_pledge = "tip"
 
             <input type="radio" name="goal" id="goal-yes" value="custom"
             {% if user.goal > 0 %} checked="true"{% end %}/>
-            <label for="goal-yes">My goal is to receive 
+            <label for="goal-yes">My goal is to receive
                 $<input name="goal_custom" id="goal-custom"
                 {% if (user.goal is None) or (user.goal == 0) %}
                 {% else %}
-                value="{{ locale.format("%.2f", user.goal, grouping=True) }}" 
-                {% end %} /> 
+                value="{{ locale.format("%.2f", user.goal, grouping=True) }}"
+                {% end %} />
                 per week on Gittip.</label>
 
             <br />
 
             <input type="radio" name="goal" id="goal-0" value="null"
             {% if user.goal is None %} checked="true"{% end %}/>
-            <label for="goal-0">I&rsquo;m grateful for tips, but I don&rsquo;t 
+            <label for="goal-0">I&rsquo;m grateful for tips, but I don&rsquo;t
                 have a specific funding goal.</label>
-            
+
             <br />
 
             <input type="radio" name="goal" id="goal-null" value="0.00"
             {% if user.goal == 0 %} checked="true"{% end %}/>
-            <label for="goal-null">I&rsquo;m not here to receive tips. 
+            <label for="goal-null">I&rsquo;m not here to receive tips.
                 I&rsquo;ll generally regift them.</label>
 
             </td></tr><tr><td class="buttons">
@@ -332,7 +335,7 @@ tip_or_pledge = "tip"
         {% elif user.goal == 0 %}
         I&rsquo;m not here to receive tips. I&rsquo;ll generally regift them.
         {% else %}
-        I&rsquo;m grateful for tips, but I don&rsquo;t have a specific funding 
+        I&rsquo;m grateful for tips, but I don&rsquo;t have a specific funding
         goal.
         {% end %}
         </div>
@@ -340,14 +343,14 @@ tip_or_pledge = "tip"
     </blockquote>
 
     <h2>You give <span id="total">${{ total }}</span> per week.
-        <span class="small{% if not user.last_bill_result == "" %} highlight{% end %}"><a 
+        <span class="small{% if not user.last_bill_result == "" %} highlight{% end %}"><a
         href="/credit-card.html">Credit card</a></span>
     </h2>
 
     <p>
-        <input name="anonymous" class="anonymous" type="checkbox" 
-            {% if participant['anonymous'] %}checked="true"{% end %} /> 
-        <label for="anonymous" class="anonymous">Show as 
+        <input name="anonymous" class="anonymous" type="checkbox"
+            {% if participant['anonymous'] %}checked="true"{% end %} />
+        <label for="anonymous" class="anonymous">Show as
             &ldquo;anonymous&rdquo; on leaderboard.</label>
     </p>
 
@@ -381,11 +384,11 @@ tip_or_pledge = "tip"
     </table>
 
 
-    <h2>You receive ${{ backed_amount }} per week. 
+    <h2>You receive ${{ backed_amount }} per week.
         <span class="small"><a href="history.html">History</a></span>
     </h2>
 
-    {% if backed_amount == 0 %} 
+    {% if backed_amount == 0 %}
 
     <p>How can you convince people to tip you? <b>Make the world
         better!</b></p>
@@ -410,7 +413,7 @@ tip_or_pledge = "tip"
     <p>To arrange for a check or PayPal withdrawal, email <a
         href="mailto:chad@zetaweb.com">chad@zetaweb.com</a> or call
     +1-412-925-4220. Postage and/or fees are charged at cost.</p>
-    
+
     <p>Automated withdrawals are in the works. If you can program, you&rsquo;re
     welcome to <a
         href="https://github.com/whit537/www.gittip.com/issues/22">help</a>.</p>
@@ -423,11 +426,11 @@ tip_or_pledge = "tip"
     <p>Use this code to embed a Gittip button on your website:</p>
 
     <pre>&lt;iframe style="border: 0; margin: 0; padding: 0;"
-        src="https://www.gittip.com/{{ username }}/widget.html" 
+        src="https://www.gittip.com/{{ username }}/widget.html"
         width="48pt" height="20pt"&gt;&lt;/iframe&gt;</pre>
 
     <p>The button opens your profile on Gittip in a new tab or window. Here&rsquo;s what the text reads:</p>
-    
+
     <ul class="no-bullets">
 
         <li><button class="small selected">Gittip</button>&mdash;person is not
@@ -440,17 +443,17 @@ tip_or_pledge = "tip"
         button</li>
 
     </ul>
-   
+
     <p>Here&rsquo;s an example using
         <a href="/whit537/">whit537</a>:
         <iframe style="border: 0; margin: 0 0 -3pt 3pt; padding: 0;"
-            src="https://www.gittip.com/whit537/widget.html" 
+            src="https://www.gittip.com/whit537/widget.html"
             width="48pt" height="20pt"></iframe>
     </p>
 
 
 {% else %}
-    <h2 class="first"><b>{{ participant['id'] }}</b> receives 
+    <h2 class="first"><b>{{ participant['id'] }}</b> receives
         ${{ backed_amount }} per week.</h2>
 
     {% if participant['statement'] %}
@@ -469,12 +472,12 @@ tip_or_pledge = "tip"
         My goal is to receive ${{ locale.format("%.2f", participant['goal'], grouping=True) }} per week on Gittip.
         {% end %}
     </blockquote>
-    
+
 
     <h3>Linked Accounts</h3>
     <ul id="accounts">
         <li>
-        <img src="{{ github_user_info.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" /> 
+        <img src="{{ github_user_info.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" />
             {{ username }} {% if name %}({{ name }})<br />{% end %}
             <a href="{{ github_user_info.get('html_url', '') }}">
                 {{ github_user_info.get('html_url', '') }}

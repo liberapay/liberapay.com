@@ -34,7 +34,7 @@ if not user.ANON:
         else:
             assert stripe_customer_id == card['id']
             payments_down = False
-    
+
     username = user.id
 # ========================================================================== ^L
 {% extends templates/base.html %}
@@ -46,8 +46,9 @@ if not user.ANON:
 <h2 class="first">Credit Card</h2>
 
 <p>Sign in <a href="{{ github.oauth_url(website, u'opt-in', u'/credit-card.html') }}">with
-GitHub</a>, and then you&rsquo;ll be able to add or change your credit card.
-Thanks! :-)</p>
+GitHub</a>, and then you&rsquo;ll be able to add or change your credit card.</p>
+
+<p>Thanks! :-)</p>
 
 </div>
 
@@ -88,7 +89,7 @@ Thanks! :-)</p>
 
     <h2 class="first">You are <a href="/{{ user.id }}/">{{ user.id }}</a>.</h2>
     <h2>Your <b>credit card</b> is <span id="status">{{ status }}</span>.</h2>
-    
+
     {% if payments_down %}
 
     <p>We had a problem contacting <a href="https://www.balancedpayments.com/">our payment
@@ -188,14 +189,14 @@ Thanks! :-)</p>
         {% end %}
     </form>
 
-    <div id="delete"> 
+    <div id="delete">
     <h2>Delete credit card.</h2>
 
     <p>Your credit card details will immediately be completely purged from
     Gittip.</p>
 
-    <form action="credit-card.json" class="special">
-        <input type="hidden" name="action" value="delete"> 
+    <form action="credit-card.json" class="special" method="POST">
+        <input type="hidden" name="action" value="delete">
         <button>Delete my credit card</button>
     </form>
     </div>

@@ -1,4 +1,4 @@
-import datetime 
+import datetime
 import rfc822
 import time
 import uuid
@@ -118,7 +118,7 @@ def outbound(response):
             return
         else:
             # expired cookie in the request, instruct browser to delete it
-            response.headers.cookie['session'] = '' 
+            response.headers.cookie['session'] = ''
             expires = 0
     else:                                           # user is authenticated
         response.headers['Expires'] = BEGINNING_OF_EPOCH # don't cache
@@ -134,7 +134,7 @@ def outbound(response):
                    )
 
     cookie = response.headers.cookie['session']
-    # I am not setting domain, because it is supposed to default to what we 
+    # I am not setting domain, because it is supposed to default to what we
     # want: the domain of the object requested.
     #cookie['domain']
     cookie['path'] = '/'

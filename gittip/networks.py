@@ -16,7 +16,7 @@ def claim_id(participant_id):
     """Given a participant_id, return a participant_id.
 
     If we can claim the given participant_id, we will. Otherwise we'll find a
-    random one that isn't taken yet. Whichever we return is guaranteed to be 
+    random one that isn't taken yet. Whichever we return is guaranteed to be
     claimed in the database.
 
     """
@@ -47,22 +47,22 @@ class github:
                      , user_info
                      , claim=claim
                       )
- 
+
 
     @staticmethod
     def oauth_url(website, action, then=u""):
         """Given a website object and a string, return a URL string.
-        
+
         `action' is one of 'opt-in', 'lock' and 'unlock'
-        
-        `then' is either a github username or an URL starting with '/'. It's 
-            where we'll send the user after we get the redirect back from 
-            GitHub. 
+
+        `then' is either a github username or an URL starting with '/'. It's
+            where we'll send the user after we get the redirect back from
+            GitHub.
 
         """
         typecheck(website, Website, action, unicode, then, unicode)
         assert action in [u'opt-in', u'lock', u'unlock']
-        url = u"https://github.com/login/oauth/authorize?client_id=%s&redirect_uri=%s" 
+        url = u"https://github.com/login/oauth/authorize?client_id=%s&redirect_uri=%s"
         url %= (website.github_client_id, website.github_callback)
 
         # Pack action,then into data and base64-encode. Querystring isn't
@@ -81,13 +81,13 @@ class github:
         The querystring should be the querystring that we get from GitHub when
         we send the user to the return value of oauth_url above.
 
-        See also: 
+        See also:
 
             http://developer.github.com/v3/oauth/
 
         """
 
-        log("Doing an OAuth dance with Github.") 
+        log("Doing an OAuth dance with Github.")
 
         if 'error' in qs:
             raise Response(500, str(qs['error']))
@@ -110,7 +110,7 @@ class github:
                          )
         assert r.status_code == 200, (r.status_code, r.text)
         user_info = json.loads(r.text)
-        log("Done with OAuth dance with Github for %s (%s)." 
+        log("Done with OAuth dance with Github for %s (%s)."
             % (user_info['login'], user_info['id']))
 
         return user_info
@@ -121,7 +121,7 @@ class github:
         """Given two str, return a participant_id.
         """
         FETCH = """\
-        
+
             SELECT participant_id
               FROM social_network_users
              WHERE network='github'
@@ -148,7 +148,7 @@ def upsert(network, user_id, username, user_info, claim=False):
     primary key in the underlying table in our own db.
 
     If claim is True, the return value is the participant_id. Otherwise it is a
-    tuple: (participant_id [unicode], is_claimed [boolean], is_locked 
+    tuple: (participant_id [unicode], is_claimed [boolean], is_locked
     [boolean], balance [Decimal]).
 
     """
@@ -157,7 +157,7 @@ def upsert(network, user_id, username, user_info, claim=False):
              , username, unicode
              , user_info, dict
              , claim, bool
-              )  
+              )
     user_id = unicode(user_id)
 
 
@@ -165,28 +165,28 @@ def upsert(network, user_id, username, user_info, claim=False):
     # =====================================
 
     INSERT = """\
-            
+
         INSERT INTO social_network_users
-                    (network, user_id) 
+                    (network, user_id)
              VALUES (%s, %s)
-             
-    """ 
+
+    """
     try:
         db.execute(INSERT, (network, user_id,))
     except IntegrityError:
         pass  # That login is already in our db.
-    
+
     UPDATE = """\
-            
+
         UPDATE social_network_users
            SET user_info=%s
-         WHERE user_id=%s 
+         WHERE user_id=%s
      RETURNING participant_id
 
     """
     for k, v in user_info.items():
-        # Cast everything to unicode. I believe hstore can take any type of 
-        # value, but psycopg2 can't. 
+        # Cast everything to unicode. I believe hstore can take any type of
+        # value, but psycopg2 can't.
         # https://postgres.heroku.com/blog/past/2012/3/14/introducing_keyvalue_data_storage_in_heroku_postgres/
         # http://initd.org/psycopg/docs/extras.html#hstore-data-type
         user_info[k] = unicode(v)
@@ -195,7 +195,7 @@ def upsert(network, user_id, username, user_info, claim=False):
 
     # Find a participant.
     # ===================
-    
+
     if rec is not None and rec['participant_id'] is not None:
 
         # There is already a Gittip participant associated with this account.
@@ -216,7 +216,7 @@ def upsert(network, user_id, username, user_info, claim=False):
     # ================================================================
 
     ASSOCIATE = """\
-            
+
         UPDATE social_network_users
            SET participant_id=%s
          WHERE network=%s
@@ -228,7 +228,7 @@ def upsert(network, user_id, username, user_info, claim=False):
 
     """
 
-    log(u"Associating %s (%s) on %s with %s on Gittip." 
+    log(u"Associating %s (%s) on %s with %s on Gittip."
         % (username, user_id, network, participant_id))
     rows = db.fetchall( ASSOCIATE
                       , (participant_id, network, user_id, participant_id)
@@ -253,7 +253,7 @@ def upsert(network, user_id, username, user_info, claim=False):
 
         rec = db.fetchone( "SELECT participant_id, is_locked "
                            "FROM social_network_users "
-                           "WHERE network=%s AND user_id=%s" 
+                           "WHERE network=%s AND user_id=%s"
                          , (network, user_id)
                           )
         if rec is not None:
@@ -270,7 +270,7 @@ def upsert(network, user_id, username, user_info, claim=False):
             # at the last moment! Log it and fail.
 
             raise Exception("We're bailing on associating %s user %s (%s) with"
-                            " a Gittip participant." 
+                            " a Gittip participant."
                             % (network, username, user_id))
 
 
@@ -280,9 +280,9 @@ def upsert(network, user_id, username, user_info, claim=False):
     if claim:
         CLAIM = """\
 
-            UPDATE participants 
+            UPDATE participants
                SET claimed_time=CURRENT_TIMESTAMP
-             WHERE id=%s 
+             WHERE id=%s
                AND claimed_time IS NULL
 
         """

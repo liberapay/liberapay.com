@@ -1,18 +1,49 @@
+"""This is Gittip's payday algorithm. I would appreciate feedback on it.
+
+The payday algorithm is designed to be crash-resistant and parallelizable, but
+it's not eventually consistent in the strict sense (iinm) because consistency
+is always apodeictically knowable.
+
+Exchanges (moving money between Gittip and the outside world) and transfers
+(moving money amongst Gittip users) happen within an isolated event called
+payday. This event has duration (it's not punctiliar). It is started
+transactionally, and it ends transactionally, and inside of it, exchanges and
+transfers happen transactionally (though the link between our db and our
+processor's db could be tightened up; see #213). These exchanges and transfers
+accrue against a "pending" column in the database. Once the payday event has
+completed successfully, it ends with the pending column being applied to the
+balance column and reset to NULL in a single transaction.
+
+"""
 from __future__ import unicode_literals
 
 from decimal import Decimal, ROUND_UP
 
 import balanced
+import stripe
 from aspen import log
 from aspen.utils import typecheck
 from gittip import get_tips_and_total
 from psycopg2 import IntegrityError
 
 
-MINIMUM = Decimal("0.50") # per Balanced
 FEE = ( Decimal("0.30")   # $0.30
       , Decimal("1.039")  #  3.9%
        )
+
+MINIMUM = Decimal("9.32") # Balanced has a $0.50 minimum. We go even higher
+                          # to avoid onerous per-transaction fees. See:
+                          # https://github.com/whit537/www.gittip.com/issues/167
+                          # XXX I should maybe compute this using *ahem* math.
+
+def upcharge(amount):
+    """Given an amount, return a higher amount.
+    """
+    typecheck(amount, Decimal)
+    amount = (amount + FEE[0]) * FEE[1]
+    return amount.quantize(FEE[0], rounding=ROUND_UP)
+
+assert upcharge(MINIMUM) == Decimal('10.00')
 
 
 class Payday(object):
@@ -48,7 +79,7 @@ class Payday(object):
 
     def start(self):
         """Try to start a new Payday.
-        
+
         If there is a Payday that hasn't finished yet, then the UNIQUE
         constraint on ts_end will kick in and notify us of that. In that case
         we load the existing Payday and work on it some more. We use the start
@@ -99,7 +130,7 @@ class Payday(object):
         """Return an iterator of participants dicts.
         """
         PARTICIPANTS = """\
-            SELECT id, balance, balanced_account_uri
+            SELECT id, balance, balanced_account_uri, stripe_customer_id
               FROM participants
              WHERE claimed_time IS NOT NULL
         """
@@ -111,7 +142,7 @@ class Payday(object):
     def loop(self, ts_start, participants):
         """Given an iterator, do Payday.
         """
-        i = 0 
+        i = 0
         log("Processing participants.")
         for i, participant in enumerate(participants, start=1):
             if i % 100 == 0:
@@ -125,7 +156,7 @@ class Payday(object):
 
         Charge each participants' credit card if needed before transfering
         money between Gittip accounts.
-     
+
         """
         tips, total = get_tips_and_total( participant['id']
                                         , for_payday=ts_start
@@ -144,9 +175,10 @@ class Payday(object):
 
             self.charge( participant['id']
                        , participant['balanced_account_uri']
+                       , participant['stripe_customer_id']
                        , short
                         )
-     
+
         nsuccessful_tips = 0
         for tip in tips:
             result = self.tip(participant, tip, ts_start)
@@ -243,7 +275,7 @@ class Payday(object):
 
             try:
                 self.debit_participant(cursor, tipper, amount)
-            except ValueError:
+            except IntegrityError:
                 return False
 
             self.credit_participant(cursor, tippee, amount)
@@ -267,18 +299,18 @@ class Payday(object):
         RETURNING balance
 
         """
+
+        # This will fail with IntegrityError if the balanced goes below zero.
+        # We catch that and return false in our caller.
         cursor.execute(DECREMENT, (amount, participant))
+
         rec = cursor.fetchone()
         assert rec is not None, (amount, participant)  # sanity check
-        if rec['balance'] < 0:
-            # User is out of money. Bail. The transaction will be rolled back
-            # by our context manager.
-            raise ValueError()  # TODO: proper exception type
 
 
     def credit_participant(self, cursor, participant, amount):
         """Increment the tippee's *pending* balance.
-        
+
         The pending balance will clear to the balance proper when Payday is
         done.
 
@@ -298,26 +330,15 @@ class Payday(object):
         assert rec is not None, (participant, amount)  # sanity check
 
 
-    def record_transfer(self, cursor, tipper, tippee, amount):
-        RECORD = """\
-
-          INSERT INTO transfers
-                      (tipper, tippee, amount)
-               VALUES (%s, %s, %s)
-
-        """
-        cursor.execute(RECORD, (tipper, tippee, amount))
-
-
     # Move money into Gittip from the outside world.
     # ==============================================
 
-    def charge(self, participant_id, balanced_account_uri, amount):
-        """Given two unicodes and a Decimal, return a boolean.
+    def charge(self, participant_id, balanced_account_uri, stripe_customer_id, amount):
+        """Given three unicodes and a Decimal, return a boolean.
 
         This is the only place where we actually charge credit cards. Amount
-        should be the nominal amount. We compute Gittip's fee in this function
-        and add it to amount.
+        should be the nominal amount. We'll compute Gittip's fee below this
+        function and add it to amount to end up with charge_amount.
 
         """
         typecheck( participant_id, unicode
@@ -325,28 +346,139 @@ class Payday(object):
                  , amount, Decimal
                   )
 
-        if balanced_account_uri is None:
+        if balanced_account_uri is None and stripe_customer_id is None:
             self.mark_missing_funding()
             return False
 
-        charge_amount, fee, error = self.hit_balanced( participant_id
-                                                     , balanced_account_uri
-                                                     , amount
-                                                      )
+        if balanced_account_uri is not None:
+            charge_amount, fee, error = self.hit_balanced( participant_id
+                                                         , balanced_account_uri
+                                                         , amount
+                                                          )
+        else:
+            assert stripe_customer_id is not None
+            charge_amount, fee, error = self.hit_stripe( participant_id
+                                                       , stripe_customer_id
+                                                       , amount
+                                                        )
 
-        # XXX If the power goes out at this point then Postgres will be out of
-        # sync with Balanced. We'll have to resolve that manually be reviewing
-        # the Balanced transaction log and modifying Postgres accordingly.
-        # 
-        # this could be done by generating an ID locally and commiting that to 
-        # the db and then passing that through in the meta field -
-        # https://www.balancedpayments.com/docs/meta
-        # Then syncing would be a case of simply:
-        # for payment in unresolved_payments:
-        #     payment_in_balanced = balanced.Transaction.query.filter(
-        #       **{'meta.unique_id': 'value'}).one()
-        #     payment.transaction_uri = payment_in_balanced.uri
-        
+        amount = charge_amount - fee  # account for possible rounding under
+                                      # hit_*
+
+        self.record_exchange( amount
+                            , charge_amount
+                            , fee
+                            , error
+                            , participant_id
+                             )
+
+        return not bool(error)  # True indicates success
+
+
+    def hit_balanced(self, participant_id, balanced_account_uri, amount):
+        """We have a purported balanced_account_uri. Try to use it.
+        """
+        typecheck( participant_id, unicode
+                 , balanced_account_uri, unicode
+                 , amount, Decimal
+                  )
+
+        cents, msg, charge_amount, fee = self._prep_hit(amount)
+        msg = msg % (participant_id, "Balanced")
+
+        try:
+            customer = balanced.Account.find(balanced_account_uri)
+            customer.debit(cents, description=participant_id)
+            log(msg + "succeeded.")
+            error = ""
+        except balanced.exc.HTTPError as err:
+            error = err.message
+            log(msg + "failed: %s" % error)
+
+        return charge_amount, fee, error
+
+
+    def hit_stripe(self, participant_id, stripe_customer_id, amount):
+        """We have a purported stripe_customer_id. Try to use it.
+        """
+        typecheck( participant_id, unicode
+                 , stripe_customer_id, unicode
+                 , amount, Decimal
+                  )
+
+        cents, msg, charge_amount, fee = self._prep_hit(amount)
+        msg = msg % (participant_id, "Stripe")
+
+        try:
+            stripe.Charge.create( customer=stripe_customer_id
+                                , amount=cents
+                                , description=participant_id
+                                , currency="USD"
+                                 )
+            log(msg + "succeeded.")
+            error = ""
+        except stripe.StripeError, err:
+            error = err.message
+            log(msg + "failed: %s" % error)
+
+        return charge_amount, fee, error
+
+
+    def _prep_hit(self, unrounded):
+        """Takes an amount in dollars. Returns cents, etc.
+
+        cents       This is passed to the payment processor charge API. This is
+                    the value that is actually charged to the participant. It's
+                    an int.
+        msg         A log message with a couple %s to be filled in by the
+                    caller.
+        upcharged   Decimal dollar equivalent to `cents'.
+        fee         Decimal dollar amount of the fee portion of `upcharged'.
+
+        The latter two end up in the db in a couple places via record_exchange.
+
+        """
+        also_log = ''
+        rounded = unrounded
+        if unrounded < MINIMUM:
+            rounded = MINIMUM  # per github/#167
+            also_log = ' [rounded up from $%s]' % unrounded
+
+        upcharged = upcharge(rounded)
+        fee = upcharged - rounded
+        cents = int(upcharged * 100)
+
+        msg = "Charging %%s %d cents ($%s%s + $%s fee = $%s) on %%s ... "
+        msg %= cents, rounded, also_log, fee, upcharged
+
+        return cents, msg, upcharged, fee
+
+
+    # Record-keeping.
+    # ===============
+
+    def record_exchange(self, amount, charge_amount, fee, error, participant_id):
+        """Given a Bunch of Stuff, return None.
+
+        This function takes the result of an API call to a payment processor
+        and records the result in our db. If the power goes out at this point
+        then Postgres will be out of sync with the payment processor. We'll
+        have to resolve that manually be reviewing the transaction log at the
+        processor and modifying Postgres accordingly.
+
+        For Balanced, this could be automated by generating an ID locally and
+        commiting that to the db and then passing that through in the meta
+        field.* Then syncing would be a case of simply:
+
+            for payment in unresolved_payments:
+                payment_in_balanced = balanced.Transaction.query.filter(
+                  **{'meta.unique_id': 'value'}).one()
+                payment.transaction_uri = payment_in_balanced.uri
+
+        * https://www.balancedpayments.com/docs/meta
+
+        """
+
         with self.db.get_connection() as connection:
             cursor = connection.cursor()
 
@@ -384,46 +516,17 @@ class Payday(object):
 
             connection.commit()
 
-        return not bool(last_bill_result)  # True indicates success
 
+    def record_transfer(self, cursor, tipper, tippee, amount):
+        RECORD = """\
 
-    def hit_balanced(self, participant_id, balanced_account_uri, amount):
-        """We have a purported balanced_account_uri. Try to use it.
+          INSERT INTO transfers
+                      (tipper, tippee, amount)
+               VALUES (%s, %s, %s)
+
         """
-        typecheck( participant_id, unicode
-                 , balanced_account_uri, unicode
-                 , amount, Decimal
-                  )
+        cursor.execute(RECORD, (tipper, tippee, amount))
 
-        try_charge_amount = (amount + FEE[0]) * FEE[1]
-        try_charge_amount = try_charge_amount.quantize( FEE[0]
-                                                      , rounding=ROUND_UP
-                                                       )
-        charge_amount = try_charge_amount
-        also_log = ''
-        if charge_amount < MINIMUM:
-            charge_amount = MINIMUM  # per Balanced
-            also_log = ', rounded up to $%s' % charge_amount
-
-        fee = try_charge_amount - amount
-        cents = int(charge_amount * 100)
-
-        msg = "Charging %s %d cents ($%s + $%s fee = $%s%s) ... "
-        msg %= participant_id, cents, amount, fee, try_charge_amount, also_log
-
-        try:
-            customer = balanced.Account.find(balanced_account_uri)
-            customer.debit(cents, description=participant_id)
-            log(msg + "succeeded.")
-        except balanced.exc.HTTPError as err:
-            log(msg + "failed: %s" % err.message)
-            return charge_amount, fee, err.message
-
-        return charge_amount, fee, None
-
-
-    # Record-keeping.
-    # ===============
 
     def mark_missing_funding(self):
         STATS = """\
@@ -482,7 +585,7 @@ class Payday(object):
     def mark_participant(self, nsuccessful_tips):
         STATS = """\
 
-            UPDATE paydays 
+            UPDATE paydays
                SET nparticipants = nparticipants + 1
                  , ntippers = ntippers + %s
                  , ntips = ntips + %s
