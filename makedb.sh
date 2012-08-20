@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -e
+
 # Make a database for Gittip.
 #
 #   usage: makedb.sh {dbname} {owner}
@@ -12,20 +14,20 @@ OWNER=${2:-$OWNER_DEFAULT}
 
 
 echo "=============================================================================="
-echo "Creating user ..."
-echo 
+printf "Creating user ... "
 
-createuser -s $OWNER
+createuser -s $OWNER && echo "done" || :
 
-echo 
 echo "=============================================================================="
-echo "Dropping and creating db ..."
-echo 
+printf "Dropping db ... "
 
-dropdb $DBNAME
-createdb $DBNAME -O $OWNER
+dropdb $DBNAME && echo "done" || :
 
-echo 
+echo "=============================================================================="
+printf "Creating db ... "
+
+createdb $DBNAME -O $OWNER && echo "done"
+
 echo "=============================================================================="
 echo "Applying schema.sql ..."
 echo 
