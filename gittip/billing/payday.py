@@ -27,23 +27,36 @@ from gittip import get_tips_and_total
 from psycopg2 import IntegrityError
 
 
-FEE = ( Decimal("0.30")   # $0.30
-      , Decimal("1.039")  #  3.9%
-       )
+# Set fees and minimums.
+# ======================
+# Balanced has a $0.50 minimum. We go even higher to avoid onerous
+# per-transaction fees. See:
+# https://github.com/whit537/www.gittip.com/issues/167 XXX I should maybe
+# compute this using *ahem* math.
 
-MINIMUM = Decimal("9.32") # Balanced has a $0.50 minimum. We go even higher
-                          # to avoid onerous per-transaction fees. See:
-                          # https://github.com/whit537/www.gittip.com/issues/167
-                          # XXX I should maybe compute this using *ahem* math.
+FEE_CHARGE = ( Decimal("0.30")   # $0.30
+             , Decimal("1.039")  #  3.9%
+              )
+FEE_CREDIT = Decimal("0.30")
+
+MINIMUM_CHARGE = Decimal("9.32")
+MINIMUM_CREDIT = Decimal("10.00")
+
 
 def upcharge(amount):
     """Given an amount, return a higher amount.
     """
     typecheck(amount, Decimal)
-    amount = (amount + FEE[0]) * FEE[1]
-    return amount.quantize(FEE[0], rounding=ROUND_UP)
+    amount = (amount + FEE_CHARGE[0]) * FEE_CHARGE[1]
+    return amount.quantize(FEE_CHARGE[0], rounding=ROUND_UP)
 
-assert upcharge(MINIMUM) == Decimal('10.00')
+def skim_credit(amount):
+    """Given an amount, return a lower amount.
+    """
+    typecheck(amount, Decimal)
+    amount = amount - FEE_CREDIT
+
+assert upcharge(MINIMUM_CHARGE) == Decimal('10.00')
 
 
 class Payday(object):
@@ -73,7 +86,22 @@ class Payday(object):
         ts_start = self.start()
         self.zero_out_pending()
         participants = self.get_participants()
-        self.loop(ts_start, participants)
+
+        def genparticipants():
+            """Closure generator to yield participants with tips and total.
+            """
+            for participant in participants:
+                tips, total = get_tips_and_total( participant['id']
+                                                , for_payday=ts_start
+                                                , db=self.db
+                                                 )
+                typecheck(total, Decimal)
+                yield(participant, tips, total)
+
+        self.payin(ts_start, genparticipants())
+        self.clear_pending_to_balance()
+        self.payout(ts_start, genparticipants())
+
         self.end()
 
 
@@ -127,7 +155,7 @@ class Payday(object):
 
 
     def get_participants(self):
-        """Return an iterator of participants dicts.
+        """Return a list of participants dicts.
         """
         PARTICIPANTS = """\
             SELECT id, balance, balanced_account_uri, stripe_customer_id
@@ -136,33 +164,40 @@ class Payday(object):
         """
         participants = self.db.fetchall(PARTICIPANTS)
         log("Fetched participants.")
-        return participants
+        return list(participants)
 
 
-    def loop(self, ts_start, participants):
-        """Given an iterator, do Payday.
+    def payin(self, ts_start, participants):
+        """Given a datetime and an iterator, do the payin side of Payday.
         """
         i = 0
-        log("Processing participants.")
+        log("Starting payin loop.")
         for i, participant in enumerate(participants, start=1):
             if i % 100 == 0:
-                log("Processed %d participants." % i)
+                log("Payin done for %d participants." % i)
             self.charge_and_or_transfer(ts_start, participant)
-        log("Processed %d participants." % i)
+        log("Did payin for %d participants." % i)
 
 
-    def charge_and_or_transfer(self, ts_start, participant):
+    def payout(self, ts_start, participants):
+        """Given a datetime and an iterator, do the payout side of Payday.
+        """
+        i = 0
+        log("Starting payout loop.")
+        for i, participant in enumerate(participants, start=1):
+            if i % 100 == 0:
+                log("Payout done for %d participants." % i)
+            self.ach_credit(ts_start, participant)
+        log("Did payout for %d participants." % i)
+
+
+    def charge_and_or_transfer(self, ts_start, participant, tips, total):
         """Given one participant record, pay their day.
 
         Charge each participants' credit card if needed before transfering
         money between Gittip accounts.
 
         """
-        tips, total = get_tips_and_total( participant['id']
-                                        , for_payday=ts_start
-                                        , db=self.db
-                                         )
-        typecheck(total, Decimal)
         short = total - participant['balance']
         if short > 0:
 
@@ -190,28 +225,30 @@ class Payday(object):
         self.mark_participant(nsuccessful_tips)
 
 
-    def end(self):
-        """End Payday.
-
-        Transfer pending into balance for all users, setting pending to NULL.
-        Close out the paydays entry as well.
-
+    def clear_pending_to_balance(self):
+        """Transfer pending into balance, setting pending to NULL.
         """
 
-        with self.db.get_connection() as conn:
-            cursor = conn.cursor()
+        self.db.execute("""\
 
-            cursor.execute("""\
+            UPDATE participants
+               SET balance = (balance + pending)
+                 , pending = NULL
 
-                UPDATE participants
-                   SET balance = (balance + pending)
-                     , pending = NULL
+        """)
+        log("Cleared pending to balance. Ready for payouts.")
 
-            """)
-            self.mark_end(cursor)
 
-            conn.commit()
-            log("Finished payday.")
+    def end(self):
+        rec = self.db.fetchone("""\
+
+            UPDATE paydays
+               SET ts_end=now()
+             WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
+         RETURNING id
+
+        """)
+        self.assert_one_payday(rec)
 
 
     # Move money between Gittip participants.
@@ -330,8 +367,8 @@ class Payday(object):
         assert rec is not None, (participant, amount)  # sanity check
 
 
-    # Move money into Gittip from the outside world.
-    # ==============================================
+    # Move money between Gittip and the outside world.
+    # ================================================
 
     def charge(self, participant_id, balanced_account_uri, stripe_customer_id, amount):
         """Given three unicodes and a Decimal, return a boolean.
@@ -365,17 +402,51 @@ class Payday(object):
         amount = charge_amount - fee  # account for possible rounding under
                                       # hit_*
 
-        self.record_exchange( amount
-                            , charge_amount
-                            , fee
-                            , error
-                            , participant_id
-                             )
+        self.record_charge( amount
+                          , charge_amount
+                          , fee
+                          , error
+                          , participant_id
+                           )
 
         return not bool(error)  # True indicates success
 
 
-    def hit_balanced(self, participant_id, balanced_account_uri, amount):
+    def ach_credit(self, ts_start, participant, tips, total):
+        balanced_account_uri = participant['balanced_account_uri']
+        if balanced_account_uri is None:
+            self.log("%s has no balanced_account_uri.")
+            return
+
+        balance = participant['balance']
+        assert balance is not None, balance # sanity check
+
+        amount = balance - total
+        if amount < MINIMUM_CREDIT:
+            self.log("%s only has $%s ($%s - $%s). We'll pay out when they "
+                     "reach $%s." % (participant['id'], amount, balance, total,
+                     MINIMUM_CREDIT))
+
+        amount = skim_credit()
+
+        account = balanced.Account.find(balanced_account_uri)
+
+        # TODO: possible errors that can be generated here:
+        #
+        #   Not enough money in escrow (402)
+        #   Not a merchant (should have been caught earlier in the process)
+        #   No funding destination set (should be caught earlier)
+        #   Invalid funding destination (should be caught via validation
+        #       when adding account) but possible if funding_destination is
+        #       marked is_valid=False specifically.
+
+        cents = amount * 100
+        account.credit(cents)
+
+        # XXX Insert into exchanges table.
+
+
+    def charge_on_balanced(self, participant_id, balanced_account_uri, amount):
         """We have a purported balanced_account_uri. Try to use it.
         """
         typecheck( participant_id, unicode
@@ -398,7 +469,7 @@ class Payday(object):
         return charge_amount, fee, error
 
 
-    def hit_stripe(self, participant_id, stripe_customer_id, amount):
+    def charge_on_stripe(self, participant_id, stripe_customer_id, amount):
         """We have a purported stripe_customer_id. Try to use it.
         """
         typecheck( participant_id, unicode
@@ -435,13 +506,13 @@ class Payday(object):
         upcharged   Decimal dollar equivalent to `cents'.
         fee         Decimal dollar amount of the fee portion of `upcharged'.
 
-        The latter two end up in the db in a couple places via record_exchange.
+        The latter two end up in the db in a couple places via record_charge.
 
         """
         also_log = ''
         rounded = unrounded
-        if unrounded < MINIMUM:
-            rounded = MINIMUM  # per github/#167
+        if unrounded < MINIMUM_CHARGE:
+            rounded = MINIMUM_CHARGE  # per github/#167
             also_log = ' [rounded up from $%s]' % unrounded
 
         upcharged = upcharge(rounded)
@@ -457,7 +528,7 @@ class Payday(object):
     # Record-keeping.
     # ===============
 
-    def record_exchange(self, amount, charge_amount, fee, error, participant_id):
+    def record_charge(self, amount, charge_amount, fee, error, participant_id):
         """Given a Bunch of Stuff, return None.
 
         This function takes the result of an API call to a payment processor
@@ -513,6 +584,47 @@ class Payday(object):
             """
             cursor.execute(RESULT, (last_bill_result, amount, participant_id))
 
+
+            connection.commit()
+
+
+    def record_credit(self, amount, fee, error, participant_id):
+        """Given a Bunch of Stuff, return None.
+        """
+        credit = -amount
+
+        with self.db.get_connection() as connection:
+            cursor = connection.cursor()
+
+            if error:
+                last_ach_result = error
+                amount = Decimal('0.00')
+                #self.mark_failed(cursor)
+            else:
+                last_ach_result = ''
+                EXCHANGE = """\
+
+                        INSERT INTO exchanges
+                               (amount, fee, participant_id)
+                        VALUES (%s, %s, %s)
+
+                """
+                cursor.execute(EXCHANGE, (credit, fee, participant_id))
+                #self.mark_success(cursor, fee)
+
+
+            # Update the participant's balance.
+            # =================================
+
+            RESULT = """\
+
+            UPDATE participants
+               SET last_ach_result=%s
+                 , balance=(balance + %s)
+             WHERE id=%s
+
+            """
+            cursor.execute(RESULT, (last_ach_result, credit, participant_id))
 
             connection.commit()
 
@@ -601,194 +713,9 @@ class Payday(object):
                                )
 
 
-    def mark_end(self, cursor):
-        cursor.execute("""\
-
-            UPDATE paydays
-               SET ts_end=now()
-             WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
-         RETURNING id
-
-        """)
-        self.assert_one_payday(cursor.fetchone())
-
-
     def assert_one_payday(self, payday):
         """Given the result of a payday stats update, make sure it's okay.
         """
         assert payday is not None
         payday = list(payday)
         assert len(payday) == 1, payday
-
-
-class SettleExchanges(object):
-    MINIMUM_CREDIT_AMOUNT = 500  # $5.00 USD
-
-    def __init__(self, db):
-        """Takes a gittip.postgres.PostgresManager instance.
-        """
-        self.db = db
-
-    def run(self):
-        """Run through all exchanges which have yet to be settled. Group by
-        participant id so we can aggregate them together and create a
-        settlement for eligible exchanges.
-
-        Once we've created the settlements we can run over them and credit them
-        to the merchant in question, this will actually pay the credit out via
-        Balanced and mark it as paid.
-
-        Exchanges are only created if the account is claimed.
-
-        This is re-runable so if it dies during any point we are OK.
-
-        TODO: verify that this is true.
-        """
-        with self.db.get_connection() as conn:
-            self.conn = conn
-            self.cur = conn.cursor()
-
-            self.process_exchanges()
-            self.conn.commit()
-
-            self.process_settlements()
-            self.conn.commit()
-
-    def process_exchanges(self):
-        # TODO: we should open this up with a read lock so if a second process
-        #   is running we hold the lock until we've finished processing.
-        participants_with_exchanges = self.get_participants_with_exchanges()
-
-        for participant in participants_with_exchanges:
-            self.create_settlement_for_exchanges(**participant)
-
-    def process_settlements(self):
-        settlements_to_process = self.get_settlements_to_process()
-
-        for settlement in settlements_to_process:
-            # settle the settlement by setting the settled date ;)
-            self.credit_settlement(**settlement)
-
-    def get_settlements_to_process(self):
-        self.cur.execute("""
-            SELECT s.id as settlement_id,
-                s.amount_in_cents,
-                p.balanced_account_uri,
-                p.balanced_destination_uri
-            FROM settlements s
-            INNER JOIN participants p on s.participant_id = p.id
-            WHERE s.settled IS NULL
-        """)
-        return self.cur.fetchall()
-
-    def get_participants_with_exchanges(self):
-        self.cur.execute("""
-            SELECT p.id as participant_id, p.balanced_account_uri
-            FROM participants p
-            INNER JOIN exchanges e on p.id = e.participant_id
-            WHERE e.settlement_id IS NULL
-            GROUP BY p.id, p.balanced_account_uri
-            HAVING COUNT(*) > 0
-        """)
-        return self.cur.fetchall()
-
-    def credit_settlement(self, settlement_id, amount_in_cents,
-                          balanced_account_uri, balanced_destination_uri):
-        meta_data = {
-            'settlement_id': settlement_id
-        }
-        description = 'Settlement {}'.format(settlement_id)
-
-        try:
-            credit = balanced.Credit.query.filter(**meta_data).one()
-        except balanced.exc.NoResultFound:
-            account = balanced.Account.find(balanced_account_uri)
-            # TODO: possible errors that can be generated here:
-            #
-            #   Not enough money in escrow (402)
-            #   Not a merchant (should have been caught earlier in the process)
-            #   No funding destination set (should be caught earlier)
-            #   Invalid funding destination (should be caught via validation
-            #       when adding account) but possible if funding_destination is
-            #       marked is_valid=False specifically.
-            #
-            credit = account.credit(amount_in_cents,
-                                    description=description,
-                                    meta_data=meta_data,
-                                    destination_uri=balanced_destination_uri)
-
-        # mark settled
-        self.cur.execute("""
-            UPDATE settlements
-            SET settled = %s
-            WHERE id = %s
-                AND settled IS NULL
-        """, (credit.created_at, settlement_id))
-
-        assert self.cur.rowcount == 1, credit.uri
-
-    def create_settlement_for_exchanges(self, participant_id,
-                                        balanced_account_uri):
-        # check if this account is a merchant, if not we should shoot them
-        # a message asking them to add their merchant details (US only
-        # right now)
-        account = balanced.Account.find(balanced_account_uri)
-
-        if (not account or
-            'merchant' not in account.roles or
-                account.bank_accounts.query.total == 0):
-            self.ask_participant_for_merchant_info(participant_id)
-            return
-
-        exchanges = self.get_exchanges_for_participant(participant_id)
-
-        total_amount = sum(int(e['amount'] * 100) for e in exchanges)
-        total_fees = sum(int(e['fee'] * 100) for e in exchanges)
-        exchange_ids = [e['exchange_id'] for e in exchanges]
-
-        # we aggregate the payouts so if there isn't enough we'll try again
-        # next time.
-        if total_amount - total_fees < SettleExchanges.MINIMUM_CREDIT_AMOUNT:
-            return
-
-        self.cur.execute("""
-            INSERT INTO settlements (
-                participant_id, amount_in_cents
-            ) VALUES (
-                %s, %s
-            )
-            RETURNING id
-        """, (participant_id, total_amount - total_fees))
-        settlement_id = self.cur.fetchone()['id']
-
-        self.cur.execute("""
-            UPDATE exchanges
-            SET settlement_id = %s
-            WHERE id IN %s
-                AND settlement_id IS NULL
-        """, (settlement_id, tuple(exchange_ids)))
-
-        row_count = self.cur.rowcount
-
-        assert(row_count == len(exchanges))
-
-        # we've adjusted everything locally, we will make the actual call to
-        # our payment processor later on so this process is re-runnable. for
-        # now we are DONE!
-
-    def ask_participant_for_merchant_info(self, particpant_id):
-        # TODO: email and ask for info
-        msg = 'TODO: Email {} and ask nicely to signup as a merchant'
-        log(msg.format(particpant_id))
-
-    def get_exchanges_for_participant(self, participant_id):
-        self.cur.execute("""
-                SELECT e.id as exchange_id,
-                    e.amount,
-                    e.fee
-                FROM exchanges e
-                WHERE e.settlement_id IS NULL
-                    and e.participant_id = %s
-            """, (participant_id,)
-        )
-        return self.cur.fetchall()
