@@ -1,5 +1,2 @@
 language: python
 script: make test
-before_script:
-  - make tests/env
-  - echo "DATABASE_URL=postgres://postgres@localhost/gittip-test" >> tests/env
