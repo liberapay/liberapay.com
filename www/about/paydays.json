@@ -22,3 +22,4 @@ paydays = db.fetchall("""\
 """)
 paydays = [] if paydays is None else list(paydays)
 response.body = paydays
+response.headers["Access-Control-Allow-Origin"] = "*"
