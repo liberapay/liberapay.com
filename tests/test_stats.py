@@ -5,13 +5,12 @@ from mock import patch
 from gittip.billing.payday import Payday
 from gittip import testing
 from gittip import wireup
-from tests import serve_request
 
 
 class TestStatsPage(testing.GittipBaseTest):
 
     def get_stats_page(self):
-        response = serve_request('/about/stats.html')
+        response = testing.serve_request('/about/stats.html')
         return response.body
 
     def clear_paydays(self):

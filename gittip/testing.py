@@ -6,11 +6,12 @@ import unittest
 from os.path import join, dirname, realpath
 
 import gittip
+from aspen.testing import Website, StubRequest
 from gittip import wireup
 from gittip.billing.payday import Payday
 
-
-SCHEMA = open(join(realpath(dirname(__file__)), "..", "schema.sql")).read()
+TOP = join(realpath(dirname(__file__)), '..')
+SCHEMA = open(join(TOP, "schema.sql")).read()
 
 
 def create_schema(db):
@@ -66,6 +67,22 @@ class GittipPaydayTest(GittipBaseDBTest):
     def setUp(self):
         super(GittipPaydayTest, self).setUp()
         self.payday = Payday(self.db)
+
+
+# Helpers for testing simplates.
+# ==============================
+
+test_website = Website([ '--www_root', str(join(TOP, 'www'))
+                       , '--project_root', str('..')
+                        ])
+
+def serve_request(path):
+    """Given an URL path, return response.
+    """
+    request = StubRequest(path)
+    request.website = test_website
+    response = test_website.handle_safely(request)
+    return response
 
 
 if __name__ == "__main__":
