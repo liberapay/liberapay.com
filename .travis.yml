@@ -3,5 +3,4 @@ script: make test
 before_script:
   - createdb -U postgres gittip-test
   - psql gittip-test -U postgres < schema.sql
-  - echo "DATABASE_URL=postgres://postgres@127.0.0.1/gittip-test" >> local.env
-
+  - echo "DATABASE_URL=postgres://postgres@localhost/gittip-test" >> tests.env
