@@ -556,7 +556,7 @@ class Payday(object):
             if error:
                 last_bill_result = error
                 amount = Decimal('0.00')
-                self.mark_failed(cursor)
+                self.mark_charge_failed(cursor)
             else:
                 last_bill_result = ''
                 EXCHANGE = """\
@@ -567,7 +567,7 @@ class Payday(object):
 
                 """
                 cursor.execute(EXCHANGE, (amount, fee, participant_id))
-                self.mark_success(cursor, charge_amount, fee)
+                self.mark_charge_success(cursor, charge_amount, fee)
 
 
             # Update the participant's balance.
@@ -591,7 +591,8 @@ class Payday(object):
     def record_credit(self, amount, fee, error, participant_id):
         """Given a Bunch of Stuff, return None.
         """
-        credit = -amount
+        credit = -amount  # From Gittip's POV this is money flowing out of the
+                          # system.
 
         with self.db.get_connection() as connection:
             cursor = connection.cursor()
@@ -599,7 +600,7 @@ class Payday(object):
             if error:
                 last_ach_result = error
                 amount = Decimal('0.00')
-                #self.mark_failed(cursor)
+                self.mark_ach_failed(cursor)
             else:
                 last_ach_result = ''
                 EXCHANGE = """\
@@ -610,7 +611,7 @@ class Payday(object):
 
                 """
                 cursor.execute(EXCHANGE, (credit, fee, participant_id))
-                #self.mark_success(cursor, fee)
+                self.mark_ach_success(cursor, fee)
 
 
             # Update the participant's balance.
@@ -652,7 +653,7 @@ class Payday(object):
         self.assert_one_payday(self.db.fetchone(STATS))
 
 
-    def mark_failed(self, cursor):
+    def mark_charge_failed(self, cursor):
         STATS = """\
 
             UPDATE paydays
@@ -664,19 +665,45 @@ class Payday(object):
         cursor.execute(STATS)
         self.assert_one_payday(cursor.fetchone())
 
-
-    def mark_success(self, cursor, charge_amount, fee):
+    def mark_charge_success(self, cursor, amount, fee):
         STATS = """\
 
             UPDATE paydays
-               SET nexchanges = nexchanges + 1
-                 , exchange_volume = exchange_volume + %s
-                 , exchange_fees_volume = exchange_fees_volume + %s
+               SET ncharges = ncharges + 1
+                 , charge_volume = charge_volume + %s
+                 , charge_fees_volume = charge_fees_volume + %s
              WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
          RETURNING id
 
         """
-        cursor.execute(STATS, (charge_amount, fee))
+        cursor.execute(STATS, (amount, fee))
+        self.assert_one_payday(cursor.fetchone())
+
+
+    def mark_ach_failed(self, cursor):
+        STATS = """\
+
+            UPDATE paydays
+               SET nach_failing = nach_failing + 1
+             WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
+         RETURNING id
+
+        """
+        cursor.execute(STATS)
+        self.assert_one_payday(cursor.fetchone())
+
+    def mark_ach_success(self, cursor, amount, fee):
+        STATS = """\
+
+            UPDATE paydays
+               SET nachs = nachs + 1
+                 , ach_volume = ach_volume + %s
+                 , ach_fees_volume = ach_fees_volume + %s
+             WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
+         RETURNING id
+
+        """
+        cursor.execute(STATS, (-amount, fee))
         self.assert_one_payday(cursor.fetchone())
 
 

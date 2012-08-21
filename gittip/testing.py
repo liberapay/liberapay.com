@@ -7,7 +7,7 @@ from os.path import join, dirname, realpath
 
 import gittip
 from gittip import wireup
-from gittip.billing.payday import Payday, SettleExchanges
+from gittip.billing.payday import Payday
 
 
 SCHEMA = open(join(realpath(dirname(__file__)), "..", "schema.sql")).read()
@@ -56,7 +56,6 @@ class GittipBaseDBTest(GittipBaseTest):
             'transfers',
             'paydays',
             'exchanges',
-            'settlements',
         ]
         for t in tables:
             self.db.execute('truncate table %s cascade' % t)
@@ -67,13 +66,6 @@ class GittipPaydayTest(GittipBaseDBTest):
     def setUp(self):
         super(GittipPaydayTest, self).setUp()
         self.payday = Payday(self.db)
-
-
-class GittipSettlementTest(GittipBaseDBTest):
-
-    def setUp(self):
-        super(GittipSettlementTest, self).setUp()
-        self.settlement_manager = SettleExchanges(self.db)
 
 
 if __name__ == "__main__":

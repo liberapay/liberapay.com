@@ -130,3 +130,11 @@ ALTER TABLE participants ALTER COLUMN statement SET NOT NULL;
 -- https://github.com/whit537/www.gittip.com/issues/22
 
 ALTER TABLE participants ADD COLUMN last_ach_result text DEFAULT NULL;
+
+ALTER TABLE paydays RENAME COLUMN nexchanges            TO ncharges;
+ALTER TABLE paydays RENAME COLUMN exchange_volume       TO charge_volume;
+ALTER TABLE paydays RENAME COLUMN exchange_fees_volume  TO charge_fees_volume;
+
+ALTER TABLE paydays ADD COLUMN nachs            bigint          DEFAULT 0;
+ALTER TABLE paydays ADD COLUMN ach_volume       numeric(35,2)   DEFAULT 0.00;
+ALTER TABLE paydays ADD COLUMN ach_fees_volume  numeric(35,2)   DEFAULT 0.00;
