@@ -13,8 +13,8 @@ if not user.ANON:
 
     status = "missing"
     if stripe_customer_id or balanced_account_uri:
-        working = user.last_bill_result == ""
-        status = "working" if working else "failing"
+        if user.last_bill_result is not None:
+            status = "working" if user.last_bill_result == "" else "failing"
 
     if balanced_account_uri:
         try:
@@ -28,7 +28,7 @@ if not user.ANON:
     else:
         try:
             card = billing.StripeCard(stripe_customer_id)
-        except:  # stripe is unavailable (or strip_customer_id is bad?)
+        except:  # stripe is unavailable (or stripe_customer_id is bad?)
             log(traceback.format_exc())
             payments_down = True
         else:
@@ -79,7 +79,7 @@ GitHub</a>, and then you&rsquo;ll be able to add or change your credit card.</p>
     FORM {
         width: 300px;
     }
-    {% if not balanced_account_uri %}
+    {% if status == "missing" %}
     #delete {
         display: none;
     }
@@ -114,12 +114,7 @@ GitHub</a>, and then you&rsquo;ll be able to add or change your credit card.</p>
     href="https://www.balancedpayments.com/">Balanced</a>.</p>
     {% end %}
 
-    {% if balanced_account_uri %}
-
-    <p>Your current card is <b>{{ card['last4'] }}</b>.</p>
-
-    <h2>Change your card on file.</h2>
-    {% elif stripe_customer_id %}
+    {% if status != "missing" %}
 
     <p>Your current card is <b>{{ card['last4'] }}</b>.</p>
 

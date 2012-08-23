@@ -1,13 +1,18 @@
 """This module encapsulates billing logic and db access.
 
-There are two pieces of information for each customer related to billing:
+There are three pieces of information for each participant related to billing:
 
-    balanced_account_uri    NULL - This customer has never been billed.
-                            'deadbeef' - This customer's card has been
-                                validated and associated with a Balanced
-                                account.
-    last_bill_result        NULL - This customer has not been billed yet.
-                            '' - This customer is in good standing.
+    balanced_account_uri    NULL - This participant has never been billed.
+                            'deadbeef' - This participant has had a Balanced
+                                account created for them, either by adding a
+                                credit card or a bank account.
+    last_bill_result        NULL - This participant has not had their credit
+                                card charged yet.
+                            '' - This participant has a working card.
+                            <message> - An error message.
+    last_ach_result         NULL - This participant has not wired up a bank
+                                account yet.
+                            '' - This participant has a working bank account.
                             <message> - An error message.
 
 """
@@ -115,20 +120,18 @@ def clear(thing, participant_id, balanced_account_uri):
     account = balanced.Account.find(balanced_account_uri)
     things = account.cards if thing == "credit card" else account.bank_accounts
 
-    for thing in things:
-        if thing.is_valid:
-            thing.is_valid = False
-            thing.save()
+    for _thing in things:
+        if _thing.is_valid:
+            _thing.is_valid = False
+            _thing.save()
 
     CLEAR = """\
 
         UPDATE participants
-           SET balanced_account_uri=NULL
-             , last_%s_result=NULL
+           SET last_%s_result=NULL
          WHERE id=%%s
 
     """ % ("bill" if thing == "credit card" else "ach")
-
     db.execute(CLEAR, (participant_id,))
 
 
@@ -213,20 +216,22 @@ class BalancedCard(object):
     def _get_card(self):
         """Return the most recent card on file for this account.
         """
-        return self._account.cards[-1]
+        # XXX Indexing is borken. See:
+        # https://github.com/balanced/balanced-python/issues/10
+        return self._account.cards.all()[-1]
 
     def _get(self, name, default=""):
         """Given a name, return a unicode.
         """
-        out = ""
+        out = None
         if self._account is not None:
             try:
                 card = self._get_card()
-                out = getattr(card, name, "")
+                out = getattr(card, name, None)
             except IndexError:  # no cards associated
                 pass
-            if out is None:
-                out = default
+        if out is None:
+            out = default
         return out
 
     def __getitem__(self, name):
@@ -278,7 +283,9 @@ class BalancedBankAccount(object):
 
         self._account = balanced.Account.find(balanced_account_uri)
         try:
-            self._bank_account = self._account.bank_accounts[-1]
+            # XXX Indexing is borken. See:
+            # https://github.com/balanced/balanced-python/issues/10
+            self._bank_account = self._account.bank_accounts.all()[-1]
         except IndexError:
             self._bank_account = None
 

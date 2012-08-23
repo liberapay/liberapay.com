@@ -82,12 +82,10 @@ class TestBankAccount(testing.GittipBaseTest):
     @mock.patch('gittip.billing.balanced.Account')
     @mock.patch('gittip.billing.balanced.BankAccount')
     def test_balanced_bank_account(self, b_b_account, b_account):
-        bank_account = billing.BalancedBankAccount(
-            self.balanced_account_uri, self.balanced_bank_account_uri)
+        bank_account = billing.BalancedBankAccount(self.balanced_account_uri)
         ba = b_b_account.find.return_value
         self.assertTrue(b_account.find.called_with(self.balanced_account_uri))
-        self.assertTrue(b_b_account.find.called_with(
-            self.balanced_bank_account_uri))
+        self.assertTrue(b_b_account.find.called_with(self.balanced_bank_account_uri))
 
         self.assertTrue(bank_account.is_setup)
         self.assertEqual(bank_account['id'], ba.uri)

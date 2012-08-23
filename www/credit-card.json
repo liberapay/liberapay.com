@@ -29,11 +29,9 @@ else:
     # Possible error codes would be 409 (this card cannot be associated with
     # this account in this case).
 
-    card_uri = body.get('card_uri')
-    if card_uri is None:
-        raise Response(400)
+    card_uri = body['card_uri']
 
-    error = billing.associate( u"bank account"
+    error = billing.associate( u"credit card"
                              , user.id
                              , user.balanced_account_uri
                              , card_uri
