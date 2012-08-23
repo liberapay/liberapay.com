@@ -172,10 +172,10 @@ class Payday(object):
         """
         i = 0
         log("Starting payin loop.")
-        for i, participant in enumerate(participants, start=1):
+        for i, (participant, tips, total) in enumerate(participants, start=1):
             if i % 100 == 0:
                 log("Payin done for %d participants." % i)
-            self.charge_and_or_transfer(ts_start, participant)
+            self.charge_and_or_transfer(ts_start, participant, tips, total)
         log("Did payin for %d participants." % i)
 
 
@@ -184,10 +184,10 @@ class Payday(object):
         """
         i = 0
         log("Starting payout loop.")
-        for i, participant in enumerate(participants, start=1):
+        for i, (participant, tips, total) in enumerate(participants, start=1):
             if i % 100 == 0:
                 log("Payout done for %d participants." % i)
-            self.ach_credit(ts_start, participant)
+            self.ach_credit(ts_start, participant, tips, total)
         log("Did payout for %d participants." % i)
 
 
@@ -388,19 +388,21 @@ class Payday(object):
             return False
 
         if balanced_account_uri is not None:
-            charge_amount, fee, error = self.hit_balanced( participant_id
-                                                         , balanced_account_uri
-                                                         , amount
-                                                          )
+            things = self.charge_on_balanced( participant_id
+                                            , balanced_account_uri
+                                            , amount
+                                             )
+            charge_amount, fee, error = things
         else:
             assert stripe_customer_id is not None
-            charge_amount, fee, error = self.hit_stripe( participant_id
-                                                       , stripe_customer_id
-                                                       , amount
-                                                        )
+            things = self.charge_on_stripe( participant_id
+                                          , stripe_customer_id
+                                          , amount
+                                           )
+            charge_amount, fee, error = things
 
         amount = charge_amount - fee  # account for possible rounding under
-                                      # hit_*
+                                      # charge_on_*
 
         self.record_charge( amount
                           , charge_amount

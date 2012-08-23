@@ -137,13 +137,14 @@ def clear(thing, participant_id, balanced_account_uri):
 
 def store_error(thing, participant_id, msg):
     typecheck(thing, unicode, participant_id, unicode, msg, unicode)
+    assert thing in ("credit card", "bank account"), thing
     ERROR = """\
 
         UPDATE participants
            SET last_%s_result=%%s
          WHERE id=%%s
 
-    """ % "bill" if thing == "credit card" else "ach"
+    """ % ("bill" if thing == "credit card" else "ach")
     db.execute(ERROR, (msg, participant_id))
 
 

@@ -31,7 +31,8 @@ class TestCard(testing.GittipBaseTest):
 
         balanced_account = ba.find.return_value
         balanced_account.uri = self.balanced_account_uri
-        balanced_account.cards = [card]
+        balanced_account.cards = mock.Mock()
+        balanced_account.cards.all.return_value = [card]
 
         card = billing.BalancedCard(self.balanced_account_uri)
 
@@ -94,7 +95,7 @@ class TestBankAccount(testing.GittipBaseTest):
             bank_account['invalid']
 
     def test_balanced_bank_account_not_setup(self):
-        bank_account = billing.BalancedBankAccount(None, None)
+        bank_account = billing.BalancedBankAccount(None)
         self.assertFalse(bank_account.is_setup)
         self.assertFalse(bank_account['id'])
 
@@ -108,18 +109,24 @@ class TestBilling(testing.GittipPaydayTest):
         billing.db = self.db
 
     def test_store_error_stores_error(self):
-        billing.store_error("lgtest", "cheese is yummy")
+        billing.store_error(u"credit card", "lgtest", "cheese is yummy")
         rec = self.db.fetchone("select * from participants where id='lgtest'")
         self.assertEqual(rec['last_bill_result'], "cheese is yummy")
 
-    @mock.patch('balanced.Account')
-    def test_associate_valid_card(self, ba):
+    @mock.patch('balanced.Account.query')
+    @mock.patch('balanced.Card.save')
+    def test_associate_valid_card(self, query, save):
         not_found = balanced.exc.NoResultFound()
-        ba.query.filter.return_value.one.side_effect = not_found
-        ba.return_value.save.return_value.uri = self.balanced_account_uri
+        query.filter.return_value.one.side_effect = not_found
+        query.filter.return_value.one.uri = self.balanced_account_uri
+        save.return_value.uri = self.balanced_account_uri
 
         # first time through, payment processor account is None
-        billing.associate(self.participant_id, None, self.card_uri)
+        billing.associate( u"credit card"
+                         , self.participant_id
+                         , None
+                         , self.card_uri
+                          )
 
         expected_email_address = '{}@gittip.com'.format(self.participant_id)
         _, kwargs = balanced.Account.call_args
@@ -130,24 +137,27 @@ class TestBilling(testing.GittipPaydayTest):
         self.assertEqual(user.session['balanced_account_uri'],
                          self.balanced_account_uri)
 
-    @mock.patch('balanced.Account')
-    def test_associate_invalid_card(self, ba):
+    @mock.patch('balanced.Account.find')
+    def test_associate_invalid_card(self, find):
         error_message = 'Something terrible'
         not_found = balanced.exc.HTTPError(error_message)
-        ba.find.return_value.save.side_effect = not_found
+        find.return_value.add_card.side_effect = not_found
 
         # second time through, payment processor account is balanced
         # account_uri
-        billing.associate(self.participant_id, self.balanced_account_uri,
-                          self.card_uri)
+        billing.associate( u"credit card"
+                         , self.participant_id
+                         , self.balanced_account_uri
+                         , self.card_uri
+                          )
         user = authentication.User.from_id(self.participant_id)
         # participant in db should be updated to reflect the error message of
         # last update
         self.assertEqual(user.session['last_bill_result'], error_message)
-        self.assertTrue(ba.find.call_count)
+        self.assertTrue(find.call_count)
 
-    @mock.patch('balanced.Account')
-    def test_clear(self, _):
+    @mock.patch('balanced.Account.find')
+    def test_clear(self, find):
         valid_card = mock.Mock()
         valid_card.is_valid = True
         invalid_card = mock.Mock()
@@ -155,7 +165,7 @@ class TestBilling(testing.GittipPaydayTest):
         card_collection = [
             valid_card, invalid_card
         ]
-        balanced.Account.find.return_value.cards = card_collection
+        find.return_value.cards = card_collection
 
         MURKY = """\
 
@@ -167,7 +177,10 @@ class TestBilling(testing.GittipPaydayTest):
         """
         self.db.execute(MURKY, (self.participant_id,))
 
-        billing.clear(self.participant_id, self.balanced_account_uri)
+        billing.clear( u"credit card"
+                     , self.participant_id
+                     , self.balanced_account_uri
+                      )
 
         self.assertFalse(valid_card.is_valid)
         self.assertTrue(valid_card.save.call_count)
@@ -197,7 +210,7 @@ class TestBilling(testing.GittipPaydayTest):
         """
         self.db.execute(MURKY, (self.participant_id,))
 
-        billing.clear_bank_account(self.participant_id, 'something')
+        billing.clear(u"bank account", self.participant_id, 'something')
 
         self.assertFalse(valid_ba.is_valid)
         self.assertTrue(valid_ba.save.call_count)
@@ -206,39 +219,37 @@ class TestBilling(testing.GittipPaydayTest):
         user = authentication.User.from_id(self.participant_id)
         self.assertFalse(user.session['last_ach_result'])
 
-    @mock.patch('gittip.billing.balanced.Account')
-    def test_associate_bank_account_valid(self, b_account):
+    @mock.patch('gittip.billing.balanced.Account.find')
+    def test_associate_bank_account_valid(self, find):
         balanced_destination_uri = '/v1/bank_accounts/X'
 
-        billing.associate_bank_account(self.participant_id,
-                                       self.balanced_account_uri,
-                                       balanced_destination_uri)
+        billing.associate( u"bank account"
+                         , self.participant_id
+                         , self.balanced_account_uri
+                         , balanced_destination_uri
+                          )
 
-        args, _ = b_account.find.call_args
-
+        args, _ = find.call_args
         self.assertEqual(args, (self.balanced_account_uri,))
 
-        args, _ = b_account.find.return_value.add_bank_account.call_args
-
+        args, _ = find.return_value.add_bank_account.call_args
         self.assertEqual(args, (balanced_destination_uri,))
 
         user = authentication.User.from_id(self.participant_id)
 
         # participant in db should be updated
-        self.assertEqual(user.session['balanced_account_uri'],
-                         self.balanced_account_uri)
-        self.assertEqual(user.session['balanced_destination_uri'],
-                         balanced_destination_uri)
         self.assertEqual(user.session['last_ach_result'], '')
 
-    @mock.patch('gittip.billing.balanced.Account')
-    def test_associate_bank_account_invalid(self, b_account):
+    @mock.patch('gittip.billing.balanced.Account.find')
+    def test_associate_bank_account_invalid(self, find):
         balanced_destination_uri = '/v1/bank_accounts/X'
         ex = balanced.exc.HTTPError('errrrrror')
-        b_account.find.return_value.add_bank_account.side_effect = ex
-        billing.associate_bank_account(self.participant_id,
-                                       self.balanced_account_uri,
-                                       balanced_destination_uri)
+        find.return_value.add_bank_account.side_effect = ex
+        billing.associate( u"bank account"
+                         , self.participant_id
+                         , self.balanced_account_uri
+                         , balanced_destination_uri
+                          )
 
         user = authentication.User.from_id(self.participant_id)
 
@@ -247,7 +258,7 @@ class TestBilling(testing.GittipPaydayTest):
 
     def test_store_ach_error(self):
         for message in ['cheese is yummy', 'cheese smells like my vibrams']:
-            billing.store_ach_error(self.participant_id, message)
+            billing.store_error(u"bank account", self.participant_id, message)
             rec = self.db.fetchone("select * from participants where id=%s",
                 (self.participant_id,))
             self.assertEqual(rec['last_ach_result'], message)
@@ -298,8 +309,8 @@ class TestBillingCharge(testing.GittipPaydayTest):
         self.assertFalse(result)
         self.assertEqual(mpmf.call_count, 1)
 
-    @mock.patch('gittip.billing.payday.Payday.hit_balanced')
-    @mock.patch('gittip.billing.payday.Payday.mark_failed')
+    @mock.patch('gittip.billing.payday.Payday.charge_on_balanced')
+    @mock.patch('gittip.billing.payday.Payday.mark_charge_failed')
     def test_charge_failure(self, mf, hb):
         hb.return_value = (Decimal('10.00'), Decimal('0.68'), 'FAILED')
         result = self.payday.charge( self.participant_id
@@ -311,9 +322,9 @@ class TestBillingCharge(testing.GittipPaydayTest):
         self.assertEqual(mf.call_count, 1)
         self.assertFalse(result)
 
-    @mock.patch('gittip.billing.payday.Payday.hit_balanced')
-    @mock.patch('gittip.billing.payday.Payday.record_exchange')
-    def test_record_exchange_gets_proper_amount(self, rx, hb):
+    @mock.patch('gittip.billing.payday.Payday.charge_on_balanced')
+    @mock.patch('gittip.billing.payday.Payday.record_charge')
+    def test_record_charge_gets_proper_amount(self, rx, hb):
         hb.return_value = (Decimal('10.00'), Decimal('0.68'), None)
         result = self.payday.charge( self.participant_id
                                    , self.balanced_account_uri
@@ -324,8 +335,8 @@ class TestBillingCharge(testing.GittipPaydayTest):
         self.assertEqual(rx.call_args[0][2], Decimal('0.68'))
         self.assertTrue(result)
 
-    @mock.patch('gittip.billing.payday.Payday.hit_balanced')
-    @mock.patch('gittip.billing.payday.Payday.mark_success')
+    @mock.patch('gittip.billing.payday.Payday.charge_on_balanced')
+    @mock.patch('gittip.billing.payday.Payday.mark_charge_success')
     def test_charge_success(self, ms, hb):
         hb.return_value = (Decimal('10.00'), Decimal('0.68'), None)
         result = self.payday.charge( self.participant_id
@@ -349,7 +360,7 @@ class TestBillingCharge(testing.GittipPaydayTest):
         res = self.db.fetchone(query)
         self.assertEqual(res['ncc_missing'], missing_count + 1)
 
-    def test_mark_failed(self):
+    def test_mark_charge_failed(self):
         query = '''
             select ncc_failing
             from paydays
@@ -359,12 +370,12 @@ class TestBillingCharge(testing.GittipPaydayTest):
         fail_count = res['ncc_failing']
         with self.db.get_connection() as conn:
             cur = conn.cursor()
-            self.payday.mark_failed(cur)
+            self.payday.mark_charge_failed(cur)
             cur.execute(query)
             res = cur.fetchone()
         self.assertEqual(res['ncc_failing'], fail_count + 1)
 
-    def test_mark_success(self):
+    def test_mark_charge_success(self):
         amount = 1
         fee = 2
         charge_amount = 4
@@ -376,25 +387,25 @@ class TestBillingCharge(testing.GittipPaydayTest):
                 and participant_id=%s
         """
         payday_sql = """
-            select nexchanges
+            select ncharges
             from paydays
             where ts_end='1970-01-01T00:00:00+00'::timestamptz
         """
         with self.db.get_connection() as connection:
             cursor = connection.cursor()
-            self.payday.mark_success(cursor, charge_amount, fee)
+            self.payday.mark_charge_success(cursor, charge_amount, fee)
 
             # verify paydays
             cursor.execute(payday_sql)
-            self.assertEqual(cursor.fetchone()['nexchanges'], 1)
+            self.assertEqual(cursor.fetchone()['ncharges'], 1)
 
     @mock.patch('stripe.Charge')
-    def test_hit_stripe(self, ba):
+    def test_charge_on_stripe(self, ba):
         amount_to_charge = Decimal('10.00')  # $10.00 USD
         expected_fee = (amount_to_charge + FEE_CHARGE[0]) * FEE_CHARGE[1]
         expected_fee = (amount_to_charge - expected_fee.quantize(
-            FEE[0], rounding=ROUND_UP)) * -1
-        charge_amount, fee, msg = self.payday.hit_stripe(
+            FEE_CHARGE[0], rounding=ROUND_UP)) * -1
+        charge_amount, fee, msg = self.payday.charge_on_stripe(
             self.participant_id,
             self.stripe_customer_id,
             amount_to_charge)
@@ -408,12 +419,12 @@ class TestBillingCharge(testing.GittipPaydayTest):
         ))
 
     @mock.patch('balanced.Account')
-    def test_hit_balanced(self, ba):
+    def test_charge_on_balanced(self, ba):
         amount_to_charge = Decimal('10.00')  # $10.00 USD
-        expected_fee = (amount_to_charge + FEE[0]) * FEE[1]
+        expected_fee = (amount_to_charge + FEE_CHARGE[0]) * FEE_CHARGE[1]
         expected_fee = (amount_to_charge - expected_fee.quantize(
-            FEE[0], rounding=ROUND_UP)) * -1
-        charge_amount, fee, msg = self.payday.hit_balanced(
+            FEE_CHARGE[0], rounding=ROUND_UP)) * -1
+        charge_amount, fee, msg = self.payday.charge_on_balanced(
             self.participant_id,
             self.balanced_account_uri,
             amount_to_charge)
@@ -427,12 +438,12 @@ class TestBillingCharge(testing.GittipPaydayTest):
         ))
 
     @mock.patch('balanced.Account')
-    def test_hit_balanced_small_amount(self, ba):
+    def test_charge_on_balanced_small_amount(self, ba):
         amount_to_charge = Decimal('0.06')  # $0.06 USD
         expected_fee = Decimal('0.68')
         expected_amount = Decimal('10.00')
         charge_amount, fee, msg = \
-                            self.payday.hit_balanced( self.participant_id
+                            self.payday.charge_on_balanced( self.participant_id
                                                     , self.balanced_account_uri
                                                     , amount_to_charge
                                                      )
@@ -445,11 +456,11 @@ class TestBillingCharge(testing.GittipPaydayTest):
         ))
 
     @mock.patch('balanced.Account')
-    def test_hit_balanced_failure(self, ba):
+    def test_charge_on_balanced_failure(self, ba):
         amount_to_charge = Decimal('0.06')  # $0.06 USD
         error_message = 'Woah, crazy'
         ba.find.side_effect = balanced.exc.HTTPError(error_message)
-        charge_amount, fee, msg = self.payday.hit_balanced(
+        charge_amount, fee, msg = self.payday.charge_on_balanced(
             self.participant_id,
             self.balanced_account_uri,
             amount_to_charge)
@@ -556,12 +567,14 @@ class TestBillingPayday(testing.GittipPaydayTest):
     @mock.patch('gittip.billing.payday.log')
     @mock.patch('gittip.billing.payday.Payday.charge_and_or_transfer')
     def test_payin(self, charge_and_or_transfer, log):
-        participants = range(100)
+        def participants():
+            for i in range(100):
+                yield i, [], None
         start = mock.Mock()
-        self.payday.payin(start, participants)
+        self.payday.payin(start, participants())
 
         self.assertEqual(log.call_count, 3)
-        self.assertEqual(charge_and_or_transfer.call_count, len(participants))
+        self.assertEqual(charge_and_or_transfer.call_count, 100)
         self.assertTrue(charge_and_or_transfer.called_with(start))
 
     def test_assert_one_payday(self):
@@ -574,7 +587,7 @@ class TestBillingPayday(testing.GittipPaydayTest):
     def test_charge_and_or_transfer_no_tips(self, get_tips_and_total):
         amount = Decimal('1.00')
 
-        get_tips_and_total.return_value = [], amount
+        tips, total = [], amount
         ts_start = datetime.utcnow()
         participant = {
             'balance': 1,
@@ -583,7 +596,7 @@ class TestBillingPayday(testing.GittipPaydayTest):
         }
 
         initial_payday = self._get_payday()
-        self.payday.charge_and_or_transfer(ts_start, participant)
+        self.payday.charge_and_or_transfer(ts_start, participant, tips, total)
         resulting_payday = self._get_payday()
 
         self.assertEqual(initial_payday['ntippers'],
@@ -606,7 +619,7 @@ class TestBillingPayday(testing.GittipPaydayTest):
 
         # success, success, claimed, failure
         tips = [like_a_tip, like_a_tip, like_a_tip, like_a_tip]
-        get_tips_and_total.return_value = tips, amount
+        total = amount
 
         ts_start = datetime.utcnow()
         participant = {
@@ -624,7 +637,7 @@ class TestBillingPayday(testing.GittipPaydayTest):
         tip.side_effect = tip_return_values
 
         initial_payday = self._get_payday()
-        self.payday.charge_and_or_transfer(ts_start, participant)
+        self.payday.charge_and_or_transfer(ts_start, participant, tips, total)
         resulting_payday = self._get_payday()
 
         self.assertEqual(initial_payday['ntippers'] + 1,
