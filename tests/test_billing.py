@@ -115,7 +115,7 @@ class TestBilling(testing.GittipPaydayTest):
         self.assertEqual(rec['last_bill_result'], "cheese is yummy")
 
     @mock.patch('balanced.Account')
-    def test_associate_valid(self, ba):
+    def test_associate_valid_card(self, ba):
         not_found = balanced.exc.NoResultFound()
         ba.query.filter.return_value.one.side_effect = not_found
         ba.return_value.save.return_value.uri = self.balanced_account_uri
@@ -193,8 +193,7 @@ class TestBilling(testing.GittipPaydayTest):
         MURKY = """\
 
             UPDATE participants
-               SET balanced_destination_uri='not null'
-                 , last_ach_result='ooga booga'
+               SET last_ach_result='ooga booga'
              WHERE id=%s
 
         """
@@ -208,7 +207,6 @@ class TestBilling(testing.GittipPaydayTest):
 
         user = authentication.User.from_id(self.participant_id)
         self.assertFalse(user.session['last_ach_result'])
-        self.assertFalse(user.session['balanced_destination_uri'])
 
     @mock.patch('gittip.billing.balanced.Account')
     def test_associate_bank_account_valid(self, b_account):

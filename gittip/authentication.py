@@ -40,7 +40,6 @@ class User:
                  , p.statement
                  , p.stripe_customer_id
                  , p.balanced_account_uri
-                 , p.balanced_destination_uri
                  , p.last_bill_result
                  , p.last_ach_result
                  , p.session_token

@@ -203,7 +203,7 @@ FORM.special .right {
 FORM.special LABEL {
     display: block;
     font: normal 10px/14px Monaco, "Lucida Console", monospace;
-    margin: 5px 0 0;
+    margin: 8px 0 0;
     padding: 0;
 }
 FORM.special INPUT {
@@ -215,6 +215,10 @@ FORM.special INPUT {
     outline: none;
     color: #614C3E;
 }
+FORM.special INPUT.disabled {
+    color: #CCBAAD;
+}
+
 FORM.special .half INPUT {
     width: 137px;
 }

@@ -343,7 +343,7 @@ tip_or_pledge = "tip"
     </blockquote>
 
     <h2>You give <span id="total">${{ total }}</span> per week.
-        <span class="small{% if not user.last_bill_result == "" %} highlight{% end %}"><a
+        <span class="small{% if user.last_bill_result != "" %} highlight{% end %}"><a
         href="/credit-card.html">Credit card</a></span>
     </h2>
 
@@ -405,7 +405,8 @@ tip_or_pledge = "tip"
 
 
     <h2>Your balance is ${{ user.balance }}.
-        <span class="small"><a href="/bank-account.html">Bank account</a></span>
+        <span class="small{% if user.last_ach_result != "" %} highlight{% end %}"><a
+        href="/bank-account.html">Bank account</a></span>
     </h2>
 
     {% if user.balance > 0 %}

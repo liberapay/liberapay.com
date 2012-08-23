@@ -19,179 +19,128 @@ from aspen.utils import typecheck
 from gittip import db
 
 
-def associate(participant_id, balanced_account_uri, card_uri):
-    """Given three unicodes, return a dict.
-
-    This function attempts to associate the credit card details referenced by
-    card_uri with a Balanced Account. If the attempt succeeds we cancel the
-    transaction. If it fails we log the failure. Even for failure we keep the
-    balanced_account_uri, we don't reset it to None/NULL. It's useful for
-    loading the previous (bad) credit card info from Balanced in order to
-    prepopulate the form.
-
+def get_balanced_account(participant_id, balanced_account_uri):
+    """Find or create a balanced.Account.
     """
     typecheck( participant_id, unicode
              , balanced_account_uri, (unicode, None)
-             , card_uri, unicode
               )
 
-
-    # Load or create a Balanced Account.
-    # ==================================
+    # XXX Balanced requires an email address
+    # https://github.com/balanced/balanced-api/issues/20
 
     email_address = '{}@gittip.com'.format(participant_id)
+
     if balanced_account_uri is None:
-        # arg - balanced requires an email address
         try:
-            customer = \
+            account = \
                balanced.Account.query.filter(email_address=email_address).one()
         except balanced.exc.NoResultFound:
-            customer = balanced.Account(email_address=email_address).save()
-        CUSTOMER = """\
+            account = balanced.Account(email_address=email_address).save()
+        BALANCED_ACCOUNT = """\
 
                 UPDATE participants
                    SET balanced_account_uri=%s
                  WHERE id=%s
 
         """
-        db.execute(CUSTOMER, (customer.uri, participant_id))
-        customer.meta['participant_id'] = participant_id
-        customer.save()  # HTTP call under here
+        db.execute(BALANCED_ACCOUNT, (account.uri, participant_id))
+        account.meta['participant_id'] = participant_id
+        account.save()  # HTTP call under here
     else:
-        customer = balanced.Account.find(balanced_account_uri)
+        account = balanced.Account.find(balanced_account_uri)
+    return account
 
 
-    # Associate the card with the customer.
-    # =====================================
-    # Handle errors. Return a unicode, a simple error message. If empty it
-    # means there was no error. Yay! Store any error message from the
-    # Balanced API as a string in last_bill_result. That may be helpful for
-    # debugging at some point.
+def associate(thing, participant_id, balanced_account_uri, balanced_thing_uri):
+    """Given four unicodes, return a unicode.
 
-    customer.card_uri = card_uri
-    try:
-        customer.save()
-    except balanced.exc.HTTPError as err:
-        last_bill_result = err.message.decode('UTF-8')  # XXX UTF-8?
-        typecheck(last_bill_result, unicode)
-        out = last_bill_result
-    else:
-        out = last_bill_result = ''
-
-    STANDING = """\
-
-        UPDATE participants
-           SET last_bill_result=%s
-         WHERE id=%s
-
-    """
-    db.execute(STANDING, (last_bill_result, participant_id))
-    return out
-
-
-def associate_bank_account(participant_id, balanced_account_uri,
-                           balanced_destination_uri):
-    """
+    This function attempts to associate the credit card or bank account details
+    referenced by balanced_thing_uri with a Balanced Account. If it fails we
+    log and return a unicode describing the failure. Even for failure we keep
+    balanced_account_uri; we don't reset it to None/NULL. It's useful for
+    loading the previous (bad) info from Balanced in order to prepopulate the
+    form.
 
     """
     typecheck( participant_id, unicode
-             , balanced_account_uri, (unicode, None)
-             , balanced_destination_uri, unicode
+             , balanced_account_uri, (unicode, None, balanced.Account)
+             , balanced_thing_uri, unicode
+             , thing, unicode
               )
 
-    account = balanced.Account.find(balanced_account_uri)
-    try:
-        account.add_bank_account(balanced_destination_uri)
-    except balanced.exc.HTTPError as err:
-        last_bill_result = err.message.decode('UTF-8')  # XXX UTF-8?
-        typecheck(last_bill_result, unicode)
-        out = last_bill_result
+    if isinstance(balanced_account_uri, balanced.Account):
+        balanced_account = balanced_account_uri
     else:
-        out = last_bill_result = ''
+        balanced_account = get_balanced_account( participant_id
+                                               , balanced_account_uri
+                                                )
+    SQL = "UPDATE participants SET last_%s_result=%%s WHERE id=%%s"
 
-    STANDING = """\
+    if thing == "credit card":
+        add = balanced_account.add_card
+        SQL %= "bill"
+    else:
+        assert thing == "bank account", thing # sanity check
+        add = balanced_account.add_bank_account
+        SQL %= "ach"
 
-        UPDATE participants
-           SET last_ach_result = %s,
-               balanced_account_uri = %s,
-               balanced_destination_uri = %s
-         WHERE id = %s
+    try:
+        add(balanced_thing_uri)
+    except balanced.exc.HTTPError as err:
+        error = err.message.decode('UTF-8')  # XXX UTF-8?
+    else:
+        error = ''
+    typecheck(error, unicode)
 
-    """
-    db.execute(STANDING, (last_bill_result,
-                          balanced_account_uri,
-                          balanced_destination_uri,
-                          participant_id))
-    return out
-
-
-def clear_bank_account(participant_id, balanced_account_uri):
-    typecheck(participant_id, unicode, balanced_account_uri, unicode)
-
-    # accounts in balanced cannot be deleted at the moment. instead we mark all
-    # valid cards as invalid which will restrict against anyone being able to
-    # issue charges against them in the future.
-    customer = balanced.Account.find(balanced_account_uri)
-    for bank_account in customer.bank_accounts:
-        if bank_account.is_valid:
-            bank_account.is_valid = False
-            bank_account.save()
-
-    CLEAR = """\
-
-        UPDATE participants
-           SET balanced_destination_uri = NULL
-             , last_ach_result = NULL
-         WHERE id = %s
-
-    """
-    db.execute(CLEAR, (participant_id,))
+    db.execute(SQL, (error, participant_id))
+    return error
 
 
-def clear(participant_id, balanced_account_uri):
-    typecheck(participant_id, unicode, balanced_account_uri, unicode)
+def clear(thing, participant_id, balanced_account_uri):
+    typecheck( thing, unicode
+             , participant_id, unicode
+             , balanced_account_uri, unicode
+              )
+    assert thing in ("credit card", "bank account"), thing
 
-    # accounts in balanced cannot be deleted at the moment. instead we mark all
-    # valid cards as invalid which will restrict against anyone being able to
-    # issue charges against them in the future.
-    customer = balanced.Account.find(balanced_account_uri)
-    for card in customer.cards:
-        if card.is_valid:
-            card.is_valid = False
-            card.save()
+
+    # XXX Things in balanced cannot be deleted at the moment.
+    # =======================================================
+    # Instead we mark all valid cards as invalid which will restrict against
+    # anyone being able to issue charges against them in the future.
+    #
+    # See: https://github.com/balanced/balanced-api/issues/22
+
+    account = balanced.Account.find(balanced_account_uri)
+    things = account.cards if thing == "credit card" else account.bank_accounts
+
+    for thing in things:
+        if thing.is_valid:
+            thing.is_valid = False
+            thing.save()
 
     CLEAR = """\
 
         UPDATE participants
            SET balanced_account_uri=NULL
-             , last_bill_result=NULL
-         WHERE id=%s
+             , last_%s_result=NULL
+         WHERE id=%%s
 
-    """
+    """ % ("bill" if thing == "credit card" else "ach")
+
     db.execute(CLEAR, (participant_id,))
 
 
-def store_error(participant_id, msg):
-    typecheck(participant_id, unicode, msg, unicode)
+def store_error(thing, participant_id, msg):
+    typecheck(thing, unicode, participant_id, unicode, msg, unicode)
     ERROR = """\
 
         UPDATE participants
-           SET last_bill_result=%s
-         WHERE id=%s
+           SET last_%s_result=%%s
+         WHERE id=%%s
 
-    """
-    db.execute(ERROR, (msg, participant_id))
-
-
-def store_ach_error(participant_id, msg):
-    typecheck(participant_id, unicode, msg, unicode)
-    ERROR = """\
-
-        UPDATE participants
-           SET last_ach_result=%s
-         WHERE id=%s
-
-    """
+    """ % "bill" if thing == "credit card" else "ach"
     db.execute(ERROR, (msg, participant_id))
 
 
@@ -199,7 +148,6 @@ def store_ach_error(participant_id, msg):
 # ====
 # While we're migrating data we need to support loading data from both Stripe
 # and Balanced.
-
 
 class StripeCard(object):
     """This is a dict-like wrapper around a Stripe PaymentMethod.
@@ -322,17 +270,17 @@ class BalancedBankAccount(object):
     _account = None  # underlying balanced.Account object
     _bank_account = None
 
-    def __init__(self, balanced_account_uri, balanced_destination_uri):
+    def __init__(self, balanced_account_uri):
         """Given a Balanced account_uri, load data from Balanced.
         """
         if not balanced_account_uri:
             return
 
         self._account = balanced.Account.find(balanced_account_uri)
-
-        if balanced_destination_uri:
-            self._bank_account = balanced.BankAccount.find(
-                balanced_destination_uri)
+        try:
+            self._bank_account = self._account.bank_accounts[-1]
+        except IndexError:
+            self._bank_account = None
 
     def __getitem__(self, item):
         mapper = {

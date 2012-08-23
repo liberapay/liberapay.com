@@ -13,7 +13,7 @@ if not user.ANON:
 
     status = "missing"
     if stripe_customer_id or balanced_account_uri:
-        working = not bool(user.last_bill_result)
+        working = user.last_bill_result == ""
         status = "working" if working else "failing"
 
     if balanced_account_uri:

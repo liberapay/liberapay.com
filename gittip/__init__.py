@@ -12,6 +12,9 @@ except locale.Error:
 
 BIRTHDAY = datetime.date(2012, 6, 1)
 CARDINALS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
+MONTHS = [None, 'January', 'February', 'March', 'April', 'May', 'June', 'July',
+          'August', 'September', 'October', 'November', 'December']
+
 def age():
     today = datetime.date.today()
     nmonths = today.month - BIRTHDAY.month

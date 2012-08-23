@@ -155,6 +155,7 @@ Gittip.paymentProcessorAttempts = 0;
 Gittip.submitDeleteForm = function(e)
 {
     var item = $("#payout").length ? "bank account" : "credit card";
+    var slug = $("#payout").length ? "bank-account" : "credit-card";
     var msg = "Really delete your " + item + " details?";
     if (!confirm(msg))
     {
@@ -164,15 +165,15 @@ Gittip.submitDeleteForm = function(e)
     }
 
     jQuery.ajax(
-        { url: '/credit-card.json'
+        { url: '/' + slug + '.json'
         , data: {action: "delete"}
         , type: "POST"
         , success: function() {
-            window.location.href = "/credit-card.html";
+            window.location.href = '/' + slug + '.html';
           }
         , error: function(x,y,z) {
             select(cur);
-            alert("Sorry, something went wrong deleting your credit card. :(");
+            alert("Sorry, something went wrong deleting your " + item + ". :(");
             console.log(x,y,z);
           }
          }
@@ -208,12 +209,13 @@ Gittip.submitPayoutForm = function (e) {
         name: $('#name').val()
     };
     var requiredFields = {
-        name: 'Your legal name is required',
-        address_1: 'Your street address is required',
-        zip: 'Your zip code is required',
-        account_name: 'The name on your bank account is required',
-        account_number: 'Your bank account number is required',
-        phone_number: 'A phone number is required'
+        name: 'Your legal name is required.',
+        address_1: 'Your street address is required.',
+        zip: 'Your ZIP or postal code is required.',
+        phone_number: 'A phone number is required.',
+        account_name: 'The name on your bank account is required.',
+        account_number: 'Your bank account number is required.',
+        routing_number: 'A routing number is required.'
     };
     var errors = [];
 
@@ -224,58 +226,74 @@ Gittip.submitPayoutForm = function (e) {
         }
         var value = $f.val();
 
-        if (!value) {
+        if (!value)
+        {
             $f.closest('div').addClass('error');
             errors.push(requiredFields[field]);
-        } else {
+        }
+        else
+        {
             $f.closest('div').removeClass('error');
         }
     }
 
     var $rn = $('#routing_number');
-    if (!balanced.bankAccount.validateRoutingNumber(bankAccount.bank_code)) {
-        $rn.closest('div').addClass('error');
-        errors.push("Invalid routing number.");
-    } else {
-        $rn.closest('div').removeClass('error');
+    if (bankAccount.bank_code)
+    {
+        if (!balanced.bankAccount.validateRoutingNumber(bankAccount.bank_code))
+        {
+            $rn.closest('div').addClass('error');
+            errors.push("That routing number is invalid.");
+        }
+        else
+        {
+            $rn.closest('div').removeClass('error');
+        }
     }
 
-    try {
-        new Date(dobs[0], dobs[1] - 1, dobs[2]); // TODO: this is not failing - 1900, 2, 31 gives 3 march :P
-    } catch (err) {
+    var d = new Date(dobs[0], dobs[1] - 1, dobs[2]);
+    // (1900, 2, 31) gives 3 march :P
+    if (d.getMonth() !== dobs[1] - 1)
         errors.push('Invalid date of birth.');
-    }
-    if (errors.length) {
+
+    if (errors.length)
+    {
         $('BUTTON#save').text('Save');
         Gittip.showFeedback(null, errors);
-    } else {
+    }
+    else
+    {
         balanced.bankAccount.create(bankAccount, Gittip.bankAccountResponseHandler);
     }
 };
 
 Gittip.bankAccountResponseHandler = function (response) {
     console.log('bank account response', response);
-    if (response.status != 201) {
+    if (response.status != 201)
+    {
         $('BUTTON#save').text('Save');
         var msg = response.status.toString() + " " + response.error.description;
         jQuery.ajax(
             { type: "POST"
-                , url: "/bank-account.json"
-                , data: {action: 'store-error', msg: msg}
-            }
+            , url: "/bank-account.json"
+            , data: {action: 'store-error', msg: msg}
+             }
         );
 
         Gittip.showFeedback(null, [response.error.description]);
-    } else {
+    }
+    else
+    {
 
         /* The request to tokenize the bank account succeeded. Now we need to
-         * validate the merchant information. We'll submit it to /bank-accounts.json
-         * and check the response code to see what's going on there.
+         * validate the merchant information. We'll submit it to
+         * /bank-accounts.json and check the response code to see what's going
+         * on there.
          */
 
         function success()
         {
-            $('#status').text('working').addClass('highlight');
+            $('#status').text('connected').addClass('highlight');
             setTimeout(function() {
                 $('#status').removeClass('highlight');
             }, 8000);
@@ -283,7 +301,7 @@ Gittip.bankAccountResponseHandler = function (response) {
             Gittip.clearFeedback();
             $('BUTTON#save').text('Save');
             setTimeout(function() {
-                window.location.href = '/bank-account.html';
+                window.location.href = '/' + Gittip.participantId + '/';
             }, 1000);
         }
 
@@ -312,10 +330,10 @@ Gittip.bankAccountResponseHandler = function (response) {
         detailsToSubmit.bank_account_uri = response.data.uri;
 
         Gittip.submitForm( "/bank-account.json"
-            , detailsToSubmit
-            , success
-            , detailedFeedback
-        );
+                         , detailsToSubmit
+                         , success
+                         , detailedFeedback
+                          );
     }
 };
 

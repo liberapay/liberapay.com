@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 
 import balanced
 from aspen import json, log, Response
-from gittip import billing
+from gittip import billing, MONTHS
 from gittip.networks import github
 
 # ========================================================================== ^L
@@ -17,21 +17,19 @@ if not user.ANON:
 
     status = "not connected"
     if balanced_account_uri:
-        working = user.balanced_destination_uri and not bool(user.last_ach_result)
+        working = user.last_ach_result == ""
         status = "connected" if working else "not connected"
         account = balanced.Account.find(balanced_account_uri)
 
         try:
-            bank_account = billing.BalancedBankAccount(balanced_account_uri, user.balanced_destination_uri)
-        except balanced.exc.HTTPError:  # balanced is unavailable (or balanced_account_uri is bad?)
-            log(traceback.format_exc())
-        except Exception:
+            bank_account = billing.BalancedBankAccount(balanced_account_uri)
+        except Exception:  # balanced is unavailable (or balanced_account_uri is bad?)
             log(traceback.format_exc())
             payouts_down = True
         else:
             if bank_account.is_setup:
                 assert balanced_account_uri == bank_account['account_uri']
-    
+
     username = user.id
 
 # ========================================================================== ^L
@@ -105,22 +103,99 @@ Thanks! :-)</p>
     <p>Bank account information is stored and processed by <a
         href="https://www.balancedpayments.com/">Balanced</a>.</p>
 
+    {% if account and 'merchant' in account.roles %}
+
+    <h3>Identity Verification &nbsp; &#x2714;</h3>
+
+    <h3>Routing Information</h3>
+
     {% if bank_account and bank_account.is_setup %}
 
-    <p>Your current linked account is a <b>{{ bank_account['bank_name'] }}</b> account ending in {{ bank_account['last_four'] }}.</p>
+    <p>Your current account is a
+    <b>{{ bank_account['bank_name'] }}</b> account ending in
+    <b>{{ bank_account['last_four'] }}</b>.</p>
 
-    <h2>Change your bank account on file.</h2>
+    {% end %}
     {% end %}
 
     <form id="payout" class="special">
-        <div id="feedback">{% if user.last_bill_result %}
-        <h3><span>Failure</span></h3>
-        <div class="details">
-        <p>{{ user.last_bill_result }}</p>
-        </div>
+
+        <div id="feedback">{% if user.last_ach_result %}
+            <h3><span>Failure</span></h3>
+            <div class="details">
+                <p>{{ user.last_ach_result }}</p>
+            </div>
         {% end %}</div>
 
-        <h3>Required</h3>
+        {% if not account or 'merchant' not in account.roles %}
+
+        <h3>Identity Verification</h3>
+
+        <div>
+        <label for="name">Your Legal Name</label>
+        <input id="name" value="" />
+        </div>
+
+        <div class="clear"></div>
+
+        <div>
+            <label for="address_1">Street Address</label>
+            <input id="address_1" value="" />
+        </div>
+
+        <div>
+            <label for="address_1">City</label>
+            <input id="address_1" value="" />
+        </div>
+
+        <div class="half left">
+            <label for="state">State or Province</label>
+            <input id="state" value="" />
+        </div>
+
+        <div class="half right">
+            <label for="zip">ZIP or Postal Code</label>
+            <input id="zip" value="" />
+        </div>
+
+        <div class="clear"></div>
+
+        <div>
+            <label for="address_1">Country (<a href="https://github.com/whit537/www.gittip.com/issues/126">non-US?</a>)</label>
+            <input id="zip" value="United States of America" disabled="true"
+                class="disabled" />
+        </div>
+
+        <div>
+            <label for="phone_number">Contact Phone Number</label>
+            <input id="phone_number" value="" />
+        </div>
+
+        <div class="left">
+            <label for="dob-year">Date of Birth</label>
+            <select id="dob-month">
+                {% for i in range(1, 13) %}
+                <option value="{{ i }}">{{ MONTHS[i] }}</option>
+                {% end %}
+            </select>
+            <select id="dob-day">
+                {% for i in range(1, 32) %}
+                <option value="{{ i }}">{{ i }}</option>
+                {% end %}
+            </select>
+            <select id="dob-year">
+            {% for i in range(1900, datetime.utcnow().year - 18) %}
+                <option value="{{ i }}" {{ 'selected="selected"' if i == 1990 else '' }}>{{ i }}</option>
+            {% end %}
+            </select>
+        </div>
+
+        <div class="clear"></div>
+
+        <h3>Routing Information</h3>
+
+        {% end %}
+
         <div class="float">
             <label for="account_name">Name on Bank Account</label>
             <input id="account_name" autofocus="autofocus" />
@@ -138,58 +213,6 @@ Thanks! :-)</p>
 
         <div class="clear"></div>
 
-        {% if not account or 'merchant' not in account.roles %}
-
-        <div>
-        <label for="name">Your Legal Name</label>
-        <input id="name" value="" />
-        </div>
-
-        <div class="clear"></div>
-
-        <div>
-        <label for="address_1">Street Address</label>
-        <input id="address_1" value="" />
-        </div>
-
-        <div class="half left">
-            <label for="state">State or Province</label>
-            <input id="state" value="" />
-        </div>
-
-        <div class="half right">
-            <label for="zip">ZIP or Postal Code</label>
-            <input id="zip" value="" />
-        </div>
-
-        <div>
-            <label for="phone_number">Contact Phone Number</label>
-            <input id="phone_number" value="" />
-        </div>
-
-        <div class="left">
-            <label for="dob-year">Date of Birth <small><a href="#">(Why?)</a></small></label>
-            <select id="dob-year">
-            {% for i in range(1900, int(datetime.utcnow().strftime('%Y')) - 18) %}
-                <option value="{{ i }}" {{ 'selected="selected"' if i == 1990 else '' }}>{{ i }}</option>
-            {% end %}
-            </select>
-            <select id="dob-month">
-                {% for i in range(1, 13) %}
-                <option value="{{ i }}">{{ i }}</option>
-                {% end %}
-            </select>
-            <select id="dob-day">
-                {% for i in range(1, 32) %}
-                <option value="{{ i }}">{{ i }}</option>
-                {% end %}
-            </select>
-        </div>
-
-        {% end %}
-
-        <div class="clear"></div>
-
         <div class="full">
             <button class="selected" id="save"
             type="submit">Save</button>
@@ -197,7 +220,7 @@ Thanks! :-)</p>
         {% end %}
     </form>
 
-    <div id="delete"> 
+    <div id="delete">
         <h2>Disconnect bank account.</h2>
 
         <p>Your bank account details will immediately be completely purged from
@@ -210,6 +233,8 @@ Thanks! :-)</p>
     </div>
 
 </div>
-<div id="powered-by-balanced"><a href="https://www.balancedpayments.com">Payments By Balanced</a></div>
+<div id="powered-by-balanced">
+    <a href="https://www.balancedpayments.com">Payments By Balanced</a>
+</div>
 {% end %}
 {% end %}
