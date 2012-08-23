@@ -6,13 +6,18 @@ paydays = db.fetchall("""\
          , ts_end
 
          , transfer_volume
-         , exchange_volume
-         , exchange_fees_volume
+
+         , ncharges
+         , charge_volume
+         , charge_fees_volume
+
+         , nachs
+         , ach_volume
+         , ach_fees_volume
 
          , nparticipants
          , ntippers
          , ntransfers
-         , nexchanges
 
          , ncc_missing
          , ncc_failing
