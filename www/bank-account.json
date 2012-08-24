@@ -3,8 +3,11 @@
 import balanced
 import urllib
 
+import gittip
 from aspen import Response
 from gittip import billing
+
+base_url = gittip.canonical_scheme + "://" + gittip.canonical_host
 
 #=========================================================================== ^L
 
@@ -14,7 +17,7 @@ if user.ANON:
 request.allow('POST')
 
 out = {}
-redirect_to = 'https://www.gittip.com/bank-account-complete.html'
+redirect_to = base_url + '/bank-account-complete.html'
 
 if body.get('action') == 'delete':
     billing.clear(u"bank account", user.id, user.balanced_account_uri)
