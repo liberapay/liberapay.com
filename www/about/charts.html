@@ -10,17 +10,21 @@ from gittip.networks import github
     .chart {
         position: relative;
         width: 600px;
-        height: 400px;
+        height: 200px;
     }
     .point {
-        font-size: 14px;
-        line-height: 14px;
+        font-size: 12px;
+        line-height: 12px;
         position: absolute;
         top: 0;
         left: 0;
     }
     .x-axis {
         text-align: center;
+        padding-top: 1em;
+    }
+    .note {
+        font: italic 300 10pt/12pt Lato, sans-serif;
     }
 </style>
 
@@ -30,33 +34,54 @@ from gittip.networks import github
 
 <p><a href="/">Gittip</a> is a way to support people who build free culture.
 Primarily right now it works for open source programmers. This page shows
-Gittip&rsquo;s growth since it launched 11 weeks ago.</p>
+Gittip&rsquo;s growth since it launched 12 weeks ago.</p>
 
 <p>If you use free software, consider <a
     href="{{ github.oauth_url(website, u'opt-in', u'/') }}">joining Gittip</a>
 using your GitHub account and setting up a $1 per week tip to your favorite
 free software developer. Thanks!</p>
 
-<h2 style="margin-top: 0; padding-top: 64px">Registrations</h2>
-<div class="chart" id="registrations"></div>
+<a name="users"></a>
+<h2>Total Users</h2>
+<p class="note">Anyone who&rsquo;s ever created an account on Gittip</p>
+<div class="chart" id="registrations-"></div>
 <div class="x-axis">weeks</div>
 
+<a name="funders"></a>
 <h2>Funders</h2>
-<div class="chart" id="funders"></div>
+<p class="note">People who gave money to other people within Gittip</p>
+<div class="chart" id="funders-"></div>
 <div class="x-axis">weeks</div>
 
-<h2>Transfer Volume ($)</h2>
-<div class="chart" id="volume"></div>
+<a name="gifts"></a>
+<h2>Gifts ($)</h2>
+<p class="note">Money transfered from one person to another within Gittip</p>
+<div class="chart" id="volume-"></div>
+<div class="x-axis">weeks</div>
+
+<a name="withdrawals"></a>
+<h2 style="margin-top: 0; padding-top: 64px">Withdrawals ($)</h2>
+<p class="note">Money withdrawn from Gittip into a bank account (feature added in week 12)</p>
+<div class="chart" id="withdrawals-"></div>
+<div class="x-axis">weeks</div>
+
+<a name="charges"></a>
+<h2>Charges ($)</h2>
+<p class="note">Money transfered into Gittip via credit card (minimum charge upped to $10 in week 8)</p>
+<div class="chart" id="charges-"></div>
 <div class="x-axis">weeks</div>
 
 <script>
     $(document).ready(function()
     {
-        var Volume = $('#volume');
-        var Funders = $('#funders');
-        var Registrations= $('#registrations');
+        var Withdrawals = $('#withdrawals-');
+        var Charges = $('#charges-');
+        var Volume = $('#volume-');
+        var Funders = $('#funders-');
+        var Registrations= $('#registrations-');
         jQuery.get('/about/paydays.json', function(paydays)
         {
+            var H = 200;
             var n = paydays.length - 1; // don't show Gittip #0
             var w = 580 / n;
             var payday = null;
@@ -65,14 +90,44 @@ free software developer. Thanks!</p>
             {
                 payday = paydays[i];
 
+                // withdrawals
+                var point = $(document.createElement('div'));
+                point.addClass('point');
+                var ach = -parseFloat(payday.ach_volume);
+                point.text(ach.toFixed(2));
+                point.css({ top: H - ((ach / 1200) * H) - 6
+                          , left: w * (n - i - 1)
+                           });
+                Withdrawals.append(point);
+
+                // charges 
+                var point = $(document.createElement('div'));
+                point.addClass('point');
+                var charge = parseFloat(payday.charge_volume);
+                point.text(charge.toFixed(2));
+                point.css({ top: H - ((charge / 1800) * H) - 6
+                          , left: w * (n - i - 1)
+                           });
+                Charges.append(point);
+
+                // volume
+                var point = $(document.createElement('div'));
+                point.addClass('point');
+                var volume = parseFloat(payday.transfer_volume);
+                point.text(volume.toFixed(2));
+                point.css({ top: H - ((volume / 1200) * H) - 6
+                          , left: w * (n - i - 1)
+                           });
+                Volume.append(point);
+
                 // registrations
                 var p3 = $(document.createElement('div'));
                 p3.addClass('point');
                 p3.text(payday.nparticipants);
                 var ntippers = parseFloat(payday.nparticipants);
-                p3.css({ top: 400 - ((ntippers / 4000) * 400) - 6
-                          , left: w * (n - i - 1)
-                           });
+                p3.css({ top: H - ((ntippers / 10000) * H) - 6
+                       , left: w * (n - i - 1)
+                        });
                 Registrations.append(p3);
 
                 // funders
@@ -80,20 +135,10 @@ free software developer. Thanks!</p>
                 p2.addClass('point');
                 p2.text(payday.ntippers);
                 var ntippers = parseFloat(payday.ntippers);
-                p2.css({ top: 400 - ((ntippers / 200) * 400) - 6
-                          , left: w * (n - i - 1)
-                           });
+                p2.css({ top: H - ((ntippers / 200) * H) - 6
+                       , left: w * (n - i - 1)
+                        });
                 Funders.append(p2);
-
-                // volume
-                var point = $(document.createElement('div'));
-                point.addClass('point');
-                point.text(payday.transfer_volume);
-                var volume = parseFloat(payday.transfer_volume);
-                point.css({ top: 400 - ((volume / 1100) * 400) - 6
-                          , left: w * (n - i - 1)
-                           });
-                Volume.append(point);
             }
         });
     });
