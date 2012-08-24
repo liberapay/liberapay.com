@@ -44,19 +44,20 @@ MINIMUM_CREDIT = Decimal("10.00")
 
 
 def upcharge(amount):
-    """Given an amount, return a higher amount.
+    """Given an amount, return a higher amount and the difference.
     """
     typecheck(amount, Decimal)
-    amount = (amount + FEE_CHARGE[0]) * FEE_CHARGE[1]
-    return amount.quantize(FEE_CHARGE[0], rounding=ROUND_UP)
+    charge_amount = (amount + FEE_CHARGE[0]) * FEE_CHARGE[1]
+    charge_amount = charge_amount.quantize(FEE_CHARGE[0], rounding=ROUND_UP)
+    return charge_amount, charge_amount - amount
 
 def skim_credit(amount):
-    """Given an amount, return a lower amount.
+    """Given an amount, return a lower amount and the difference.
     """
     typecheck(amount, Decimal)
-    amount = amount - FEE_CREDIT
+    return amount - FEE_CREDIT, FEE_CREDIT
 
-assert upcharge(MINIMUM_CHARGE) == Decimal('10.00')
+assert upcharge(MINIMUM_CHARGE) == (Decimal('10.00'), Decimal('0.68'))
 
 
 class Payday(object):
@@ -85,12 +86,18 @@ class Payday(object):
         log("Greetings, program! It's PAYDAY!!!!")
         ts_start = self.start()
         self.zero_out_pending()
-        participants = self.get_participants()
 
-        def genparticipants():
+        def genparticipants(ts_start):
             """Closure generator to yield participants with tips and total.
+
+            We re-fetch participants each time, because the second time through
+            we want to use the total obligations they have for next week, and
+            if we pass a non-False ts_start to get_tips_and_total then we only
+            get unfulfilled tips from prior to that timestamp, which is none of
+            them by definition.
+
             """
-            for participant in participants:
+            for participant in self.get_participants():
                 tips, total = get_tips_and_total( participant['id']
                                                 , for_payday=ts_start
                                                 , db=self.db
@@ -98,9 +105,9 @@ class Payday(object):
                 typecheck(total, Decimal)
                 yield(participant, tips, total)
 
-        self.payin(ts_start, genparticipants())
+        self.payin(ts_start, genparticipants(ts_start))
         self.clear_pending_to_balance()
-        self.payout(ts_start, genparticipants())
+        self.payout(ts_start, genparticipants(False))
 
         self.end()
 
@@ -161,10 +168,11 @@ class Payday(object):
             SELECT id, balance, balanced_account_uri, stripe_customer_id
               FROM participants
              WHERE claimed_time IS NOT NULL
+          ORDER BY claimed_time ASC
         """
         participants = self.db.fetchall(PARTICIPANTS)
         log("Fetched participants.")
-        return list(participants)
+        return participants
 
 
     def payin(self, ts_start, participants):
@@ -415,37 +423,68 @@ class Payday(object):
 
 
     def ach_credit(self, ts_start, participant, tips, total):
-        balanced_account_uri = participant['balanced_account_uri']
-        if balanced_account_uri is None:
-            self.log("%s has no balanced_account_uri.")
-            return
+
+        # Compute the amount to credit them.
+        # ==================================
+        # Leave money in Gittip to cover their obligations next week (as these
+        # currently stand). Also reduce the amount by our service fee.
 
         balance = participant['balance']
         assert balance is not None, balance # sanity check
 
         amount = balance - total
+        if amount <= 0:
+            return  # Participant not owed anything.
+
         if amount < MINIMUM_CREDIT:
-            self.log("%s only has $%s ($%s - $%s). We'll pay out when they "
-                     "reach $%s." % (participant['id'], amount, balance, total,
-                     MINIMUM_CREDIT))
+            also_log = ""
+            if total > 0:
+                also_log = " ($%s balance - $%s in obligations)"
+                also_log %= (balance, total)
+            log("Minimum payout is $%s. %s is only due $%s%s."
+               % (MINIMUM_CREDIT, participant['id'], amount, also_log))
+            return  # Participant owed too little.
 
-        amount = skim_credit()
+        credit_amount, fee = skim_credit(amount)
+        cents = credit_amount * 100
 
-        account = balanced.Account.find(balanced_account_uri)
+        if total > 0:
+            also_log = "$%s balance - $%s in obligations"
+            also_log %= (balance, total)
+        else:
+            also_log = "$%s" % amount
+        msg = "Crediting %s %d cents (%s - $%s fee = $%s) on Balanced ... "
+        msg %= (participant['id'], cents, also_log, fee, credit_amount)
 
-        # TODO: possible errors that can be generated here:
-        #
-        #   Not enough money in escrow (402)
-        #   Not a merchant (should have been caught earlier in the process)
-        #   No funding destination set (should be caught earlier)
-        #   Invalid funding destination (should be caught via validation
-        #       when adding account) but possible if funding_destination is
-        #       marked is_valid=False specifically.
 
-        cents = amount * 100
-        account.credit(cents)
+        # Try to dance with Balanced.
+        # ===========================
 
-        # XXX Insert into exchanges table.
+        try:
+
+            balanced_account_uri = participant['balanced_account_uri']
+            if balanced_account_uri is None:
+                log("%s has no balanced_account_uri." % participant['id'])
+                return  # not in Balanced
+
+            account = balanced.Account.find(balanced_account_uri)
+            if 'merchant' not in account.roles:
+                log("%s is not a merchant." % participant['id'])
+                return  # not a merchant
+
+            if not account.bank_accounts.all()[-1].is_valid:
+                log("%s has no valid bank account connected." % participant['id'])
+                return  # no valid funding destination
+
+            account.credit(cents)
+
+            error = ""
+            log(msg + "succeeded.")
+        except balanced.exc.HTTPError as err:
+            error = err.message
+            log(msg + "failed: %s" % error)
+
+        self.record_credit(credit_amount, fee, error, participant['id'])
 
 
     def charge_on_balanced(self, participant_id, balanced_account_uri, amount):
@@ -517,8 +556,7 @@ class Payday(object):
             rounded = MINIMUM_CHARGE  # per github/#167
             also_log = ' [rounded up from $%s]' % unrounded
 
-        upcharged = upcharge(rounded)
-        fee = upcharged - rounded
+        upcharged, fee = upcharge(rounded)
         cents = int(upcharged * 100)
 
         msg = "Charging %%s %d cents ($%s%s + $%s fee = $%s) on %%s ... "
@@ -592,6 +630,16 @@ class Payday(object):
 
     def record_credit(self, amount, fee, error, participant_id):
         """Given a Bunch of Stuff, return None.
+
+        Records in the exchanges table for credits have these characteristics:
+
+            amount  It's negative, representing an outflow from Gittip to you.
+                    This is oppositive of charges, where amount is positive.
+                    The sign is how we differentiate the two in, e.g., the
+                    history page.
+
+            fee     It's positive, just like with charges.
+
         """
         credit = -amount  # From Gittip's POV this is money flowing out of the
                           # system.
@@ -613,7 +661,7 @@ class Payday(object):
 
                 """
                 cursor.execute(EXCHANGE, (credit, fee, participant_id))
-                self.mark_ach_success(cursor, fee)
+                self.mark_ach_success(cursor, amount, fee)
 
 
             # Update the participant's balance.
@@ -627,7 +675,10 @@ class Payday(object):
              WHERE id=%s
 
             """
-            cursor.execute(RESULT, (last_ach_result, credit, participant_id))
+            cursor.execute(RESULT, ( last_ach_result
+                                   , credit - fee     # -10.00 - 0.30 = -10.30
+                                   , participant_id
+                                    ))
 
             connection.commit()
 
