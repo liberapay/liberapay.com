@@ -208,7 +208,8 @@ def get_tips_and_total(tipper, for_payday=False, db=None):
         to_total = tips
     total = sum([t['amount'] for t in to_total])
 
-    if not total:  # XXX Why is this necessary?
+    if not total:
+        # If to_total is an empty list then total is int 0. We want a Decimal.
         total = Decimal('0.00')
 
     return tips, total
