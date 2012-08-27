@@ -199,11 +199,18 @@ names = ['ncc', 'pcc', 'statements', 'transfer_volume',
 <h2><b>{{ commaize(npeople) }} people</b> have joined Gittip.</h2>
 
 <p>Of those, {{ pcc }}% ({{ commaize(ncc) }}) have a working credit card on
-file.</p>
+file.{% if user.last_bill_result == '' %} You&rsquo;re one of them.
+{% elif not user.ANON %} You&rsquo;re not one of them.</p><p><b><a
+href="/credit-card.html" class="highlight">Click here to set up a credit
+card</a></b>.{% end %}</p>
 
 <h2><b>${{ commaize(escrow, 2) }}</b> is escrowed within Gittip.</h2>
 
-<p>{{ nach }} people have connected a bank account for withdrawals.</p>
+<p>{{ nach }} people have connected a bank account</a> for withdrawals.
+{% if user.last_ach_result == '' %}You&rsquo;re one of them.
+{% elif not user.ANON %} You&rsquo;re not one of them.</p><p><b><a
+href="/bank-account.html" class="highlight">Click here to connect a bank
+account</a></b>.{% end %}</p>
 
 <h2><b>${{ commaize(transfer_volume, 2) }}</b> changed hands
     <b>{{ last_friday }}</b>.</h2>
