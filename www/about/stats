@@ -1,4 +1,5 @@
 import datetime
+import locale
 from aspen import json
 from gittip import db, age, AMOUNTS, OLD_AMOUNTS
 
@@ -9,9 +10,20 @@ FRIDAY = 4
 SATURDAY = 5
 SUNDAY = 6
 
+def commaize(number, places=0):
+    return locale.format("%%.%df" % places, number, grouping=True)
+
 # ===================================================== ^L
 
 yesterday = datetime.datetime.utcnow() - datetime.timedelta(hours=24)
+escrow = db.fetchone("SELECT sum(balance) FROM participants")['sum']
+escrow = 0 if escrow is None else escrow
+nach = db.fetchone("SELECT count(*) AS n FROM participants WHERE last_ach_result = ''")['n']
+nach = 0 if nach is None else nach
+if nach < 10:
+    nach = CARDINALS[nach].title()
+else:
+    nach = commaize(nach)
 payday = db.fetchone( "SELECT ts_start, ts_end FROM paydays WHERE ts_start > %s"
                     , (yesterday,)
                      )
@@ -60,12 +72,14 @@ average_tippees = db.fetchone("""\
 average_tippees = 0 if average_tippees is None else int(average_tippees)
 
 word = "people"
+if average_tippees == 1:
+    word = "person"
+
 if average_tippees < 10:
     number = CARDINALS[average_tippees]
-    if average_tippees == 1:
-        word = "person"
 else:
     number = str(average_tippees)
+
 other_people = "%s other %s" % (number, word)
 
 # Tip Distribution
@@ -141,7 +155,8 @@ tip_distribution_json = {str(k): v for k,v in tip_distribution.items()}
 names = ['ncc', 'pcc', 'statements', 'transfer_volume',
          'last_friday', 'this_friday', 'punc', 'other_people',
          'average_tip', 'average_tippees', 'total_backed_tips',
-         'tip_distribution_json', 'old_tip_n', 'new_tip_n']
+         'tip_distribution_json', 'old_tip_n', 'new_tip_n',
+         'nach', 'escrow']
 
 ^L application/json
 {{ json.dumps({name: globals()[name] for name in names}) }}
@@ -181,14 +196,20 @@ names = ['ncc', 'pcc', 'statements', 'transfer_volume',
 
 <h2>Gittip is <b>{{ age() }}</b> old.</h2>
 
-<h2><b>{{ npeople }} people</b> have joined Gittip.</h2>
+<h2><b>{{ commaize(npeople) }} people</b> have joined Gittip.</h2>
 
-<p>Of those, {{ pcc }}% ({{ ncc }}) have a working credit card on file.</p>
+<p>Of those, {{ pcc }}% ({{ commaize(ncc) }}) have a working credit card on
+file.</p>
 
+<h2><b>${{ commaize(escrow, 2) }}</b> is escrowed within Gittip.</h2>
 
-<h2><b>${{ transfer_volume }}</b> changed hands <b>{{ last_friday }}</b>.</h2>
+<p>{{ nach }} people have connected a bank account for withdrawals.</p>
 
-<h2><b>${{ total_backed_tips }}</b> {{ future_processing_text }} <b>{{ this_friday }}</b>{{ punc }}
+<h2><b>${{ commaize(transfer_volume, 2) }}</b> changed hands
+    <b>{{ last_friday }}</b>.</h2>
+
+<h2><b>${{ commaize(total_backed_tips, 2) }}</b>
+    {{ future_processing_text }} <b>{{ this_friday }}</b>{{ punc }}
     <span class="small"><a href="unclaimed.html">Unclaimed</a></span>
 </h2>
 
