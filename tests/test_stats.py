@@ -7,6 +7,22 @@ from gittip import testing
 from gittip import wireup
 
 
+# commaize
+
+simplate = testing.load_simplate('/about/stats.html')
+commaize = simplate.pages[0]['commaize']
+
+def test_commaize_commaizes():
+    actual = commaize(1000.0)
+    assert actual == "1,000", actual
+
+def test_commaize_commaizes_and_obeys_decimal_places():
+    actual = commaize(1000, 4)
+    assert actual == "1,000.0000", actual
+
+
+# rendering
+
 class TestStatsPage(testing.GittipBaseTest):
 
     def get_stats_page(self):

@@ -6,6 +6,7 @@ import unittest
 from os.path import join, dirname, realpath
 
 import gittip
+from aspen import resources
 from aspen.testing import Website, StubRequest
 from gittip import wireup
 from gittip.billing.payday import Payday
@@ -83,6 +84,21 @@ def serve_request(path):
     request.website = test_website
     response = test_website.handle_safely(request)
     return response
+
+def load_simplate(path):
+    """Given an URL path, return dict.
+    """
+    request = StubRequest(path)
+    request.website = test_website
+
+    # XXX HACK - aspen.website should be refactored
+    from aspen import gauntlet, sockets
+    test_website.hooks.inbound_early.run(request)
+    gauntlet.run(request)  # sets request.fs
+    request.socket = sockets.get(request)
+    test_website.hooks.inbound_late.run(request)
+
+    return resources.get(request)
 
 
 if __name__ == "__main__":
