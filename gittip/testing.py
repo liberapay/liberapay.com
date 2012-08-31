@@ -86,7 +86,7 @@ def serve_request(path):
     return response
 
 def load_simplate(path):
-    """Given an URL path, return dict.
+    """Given an URL path, return resource.
     """
     request = StubRequest(path)
     request.website = test_website
