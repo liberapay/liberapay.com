@@ -42,8 +42,8 @@ class TestStatsPage(testing.GittipBaseTest):
         https://github.com/whit537/www.gittip.com/issues/92.
         """
         self.clear_paydays()
-        a_friday = datetime(2012, 8, 10, 12, 00, 01)
-        mock_datetime.utcnow.return_value = a_friday
+        a_thursday = datetime(2012, 8, 9, 12, 00, 01)
+        mock_datetime.utcnow.return_value = a_thursday
 
         db = wireup.db()
         wireup.billing()
@@ -67,5 +67,5 @@ class TestStatsPage(testing.GittipBaseTest):
         pd.start()
 
         body = self.get_stats_page()
-        self.assertTrue("is ready for <b>this Friday</b>" in body)
+        self.assertTrue("is ready for <b>this Thursday</b>" in body)
         pd.end()

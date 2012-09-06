@@ -79,8 +79,9 @@ class Payday(object):
     def run(self):
         """This is the starting point for payday.
 
-        This method runs every Friday. It is structured such that it can be run
-        again safely (with a newly-instantiated Payday object) if it crashes.
+        This method runs every Thursday. It is structured such that it can be
+        run again safely (with a newly-instantiated Payday object) if it
+        crashes.
 
         """
         log("Greetings, program! It's PAYDAY!!!!")
