@@ -622,7 +622,7 @@ Gittip.initJumpToPerson = function()
         e.preventDefault();
         e.stopPropagation();
         if (val !== '')
-            window.location = '/github/' + val + '/';
+            window.location = '/on/github/' + val + '/';
         return false;
     }
     $('#jump').submit(jump);

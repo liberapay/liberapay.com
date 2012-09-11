@@ -152,7 +152,7 @@ nbackers = get_number_of_backers(username)
         <tr class="not-over"><td>
             {% if not user.ANON %}
             <th>
-                <a href="/github/{{ member['login'] }}/"><img src="{{ member.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" />
+                <a href="/on/github/{{ member['login'] }}/"><img src="{{ member.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" />
                     {{ member['login'] }}</a>
             </th>
             <td>
@@ -170,7 +170,7 @@ nbackers = get_number_of_backers(username)
             </td>
             {% else %}
             <td>
-                <a href="/github/{{ member['login'] }}/"><img src="{{ member.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" />
+                <a href="/on/github/{{ member['login'] }}/"><img src="{{ member.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" />
                     {{ member['login'] }}</a>
             </td>
             {% end %}

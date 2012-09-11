@@ -49,7 +49,7 @@ if participant['claimed_time'] is None:
     login = participant['user_info'].get('login')
     if login is None:
         raise Response(404)
-    request.redirect('/github/%s/' % login)
+    request.redirect('/on/github/%s/' % login)
 
 if not user.ANON:
     if user.id == username:
