@@ -41,7 +41,7 @@ else:                       # lock or unlock
         # with login (not then), so that the most they can do is lock/unlock
         # their own account in a convoluted way.
 
-        then = u'/github/%s/lock-fail.html' % then
+        then = u'/on/github/%s/lock-fail.html' % then
 
     else:
 
@@ -68,7 +68,7 @@ if then == u'':
     then = u'/%s/' % participant_id
 if not then.startswith(u'/'):
     # Interpret it as a GitHub login.
-    then = u'/github/%s/' % then
+    then = u'/on/github/%s/' % then
 request.redirect(then)
 
 # ========================== ^L text/plain
