@@ -9,7 +9,7 @@ participants in the Gittip community.
 from aspen import log, Response
 from gittip import db
 from gittip.networks import github
-from gittip.authentication import User 
+from gittip.authentication import User
 
 # ========================== ^L
 
@@ -25,7 +25,7 @@ if action not in [u'opt-in', u'lock', u'unlock']:
 # Make sure we have a GitHub login.
 login = user_info.get('login')
 if login is None:
-    log(u"We got a user_info from GitHub with no login [%s, %s]" 
+    log(u"We got a user_info from GitHub with no login [%s, %s]"
         % (action, then))
     raise Response(400)
 
@@ -34,7 +34,7 @@ log(u"%s wants to %s" % (login, action))
 if action == 'opt-in':      # opt in
     participant_id = github.upsert(user_info, claim=True)
     user = User.from_id(participant_id)  # give them a session
-else:                       # lock or unlock 
+else:                       # lock or unlock
     if then != login:
 
         # The user could spoof then to match their login, but below we work
@@ -46,14 +46,14 @@ else:                       # lock or unlock
     else:
 
         # Associate the GitHub login with a Gittip participant to prevent
-        # squatting, but don't claim the Gittip account. 
-        
+        # squatting, but don't claim the Gittip account.
+
         participant_id, is_claimed, is_locked, balance \
                                         = github.upsert(user_info, claim=False)
         if participant_id != login:
 
             # XXX When we have multiple networks we'll need to worry about the
-            # case where someone already claimed this id. For now this is a 
+            # case where someone already claimed this id. For now this is a
             # bug.
 
             raise Response(500, participant_id)
