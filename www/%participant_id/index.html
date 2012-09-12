@@ -16,7 +16,7 @@ from aspen import json, Response
 from aspen.utils import dt2age
 from gittip import AMOUNTS, db, get_tip, get_tips_and_total, get_backed_amount
 from gittip.utils import wrap
-from gittip.networks import github
+from gittip.networks import github, resolve_unclaimed
 
 
 tip_suggestions = ('jeresig', 'antirez', 'wycats', 'fabpot', 'mitsuhiko',
@@ -40,16 +40,18 @@ participant = db.fetchone(SELECT, (path['participant_id'],))
 if participant is None:
     raise Response(404)
 participant_id = participant['id']
+
 if participant['claimed_time'] is None:
 
-    # This is a hack to make writing links easier in other parts of the app. We
-    # can get away with this since we're only on GitHub for now. We should have
-    # an URL constructor helper instead of depending on this. XXX
+    # This is a stub participant record for someone on a social network who
+    # hasn't actually registered yet. Let's bounce the viewer over to the
+    # appropriate social network page.
 
-    login = participant['user_info'].get('login')
-    if login is None:
+    to = resolve_unclaimed(participant)
+    if to is None:
         raise Response(404)
-    request.redirect('/on/github/%s/' % login)
+    request.redirect(to)
+
 
 if not user.ANON:
     if user.id == participant_id:

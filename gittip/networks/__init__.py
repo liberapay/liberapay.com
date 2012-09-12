@@ -10,6 +10,17 @@ class RunawayTrain(Exception):
     pass
 
 
+def resolve_unclaimed(participant):
+    """Given a participant dict, return an URL path.
+    """
+    login = participant['user_info'].get('login')
+    if login is None:
+        out = None
+    else:
+        out = '/on/github/%s/' % login
+    return out
+
+
 def get_a_participant_id():
     """Return a random participant_id.
 
