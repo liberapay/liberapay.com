@@ -5,7 +5,7 @@
 --                             |         |               |   billion
 --                             |         |               |   |   million
 --                             |         |               |   |   |   thousand
---                             |         |               |   |   |   | 
+--                             |         |               |   |   |   |
 -- numeric(35,2) maxes out at $999,999,999,999,999,999,999,999,999,999,999.00.
 
 
@@ -14,10 +14,10 @@
 
 CREATE EXTENSION hstore;
 
-CREATE TABLE participants 
-( id                    text                        PRIMARY KEY 
+CREATE TABLE participants
+( id                    text                        PRIMARY KEY
 , statement             text                        DEFAULT ''
-    
+
 , stripe_customer_id    text                        DEFAULT NULL
 , last_bill_result      text                        DEFAULT NULL
 
@@ -33,7 +33,7 @@ CREATE TABLE participants
 -- and all requests for this participant should be redirected to the other.
 , redirect              text            DEFAULT NULL REFERENCES participants
 
--- The participants balance is expected to be receipts - disbursements. It is 
+-- The participants balance is expected to be receipts - disbursements. It is
 -- stored here as an optimization and sanity check.
 , balance               numeric(35,2)               DEFAULT 0.0
 , pending               numeric(35,2)               DEFAULT NULL
@@ -60,7 +60,7 @@ CREATE TABLE tips
  );
 
 -- transfers -- balance transfers from one user to another
-CREATE TABLE transfers 
+CREATE TABLE transfers
 ( id                    serial                      PRIMARY KEY
 , timestamp             timestamp with time zone    NOT NULL DEFAULT CURRENT_TIMESTAMP
 , tipper                text                        NOT NULL REFERENCES participants ON DELETE RESTRICT
@@ -81,8 +81,8 @@ CREATE TABLE paydays
 , ncc_failing           bigint                      DEFAULT 0
 , ncc_missing           bigint                      DEFAULT 0
 , nexchanges            bigint                      DEFAULT 0
-, exchange_volume       numeric(35,2)               DEFAULT 0.00 
-, exchange_fees_volume  numeric(35,2)               DEFAULT 0.00 
+, exchange_volume       numeric(35,2)               DEFAULT 0.00
+, exchange_fees_volume  numeric(35,2)               DEFAULT 0.00
  );
 
 -- exchanges -- when a participant moves cash between Gittip and their bank
@@ -99,7 +99,7 @@ CREATE TABLE exchanges
 -- https://github.com/whit537/www.gittip.com/issues/128
 
 ALTER TABLE participants ADD COLUMN anonymous bool NOT NULL DEFAULT FALSE;
-ALTER TABLE participants DROP COLUMN shares_giving; 
+ALTER TABLE participants DROP COLUMN shares_giving;
 
 
 -------------------------------------------------------------------------------
