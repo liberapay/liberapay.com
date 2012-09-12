@@ -16,16 +16,16 @@ website.github_callback = os.environ['GITHUB_CALLBACK'].decode('ASCII')
 
 website.hooks.inbound_early.register(gittip.canonize)
 website.hooks.inbound_early.register(gittip.configure_payments)
-website.hooks.inbound_early.register(gittip.csrf.inbound) 
-website.hooks.inbound_early.register(gittip.authentication.inbound) 
-website.hooks.outbound_late.register(gittip.authentication.outbound) 
-website.hooks.outbound_late.register(gittip.csrf.outbound) 
+website.hooks.inbound_early.register(gittip.csrf.inbound)
+website.hooks.inbound_early.register(gittip.authentication.inbound)
+website.hooks.outbound_late.register(gittip.authentication.outbound)
+website.hooks.outbound_late.register(gittip.csrf.outbound)
 
 
 def add_stuff(request):
     from gittip.networks import github
     request.context['__version__'] = gittip.__version__
-    request.context['username'] = None 
+    request.context['username'] = None
     request.context['github'] = github
 
-website.hooks.inbound_early.register(add_stuff) 
+website.hooks.inbound_early.register(add_stuff)
