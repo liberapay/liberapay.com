@@ -8,7 +8,7 @@ participants in the Gittip community.
 """
 from aspen import log, Response
 from gittip import db
-from gittip.networks import github
+from gittip.networks import github, set_as_claimed
 from gittip.authentication import User
 
 # ========================== ^L
@@ -32,31 +32,25 @@ if login is None:
 # Do something.
 log(u"%s wants to %s" % (login, action))
 if action == 'opt-in':      # opt in
-    participant_id = github.upsert(user_info, claim=True)
+    participant_id, is_claimed, is_locked, balance = github.upsert(user_info)
+    set_as_claimed(participant_id)
     user = User.from_id(participant_id)  # give them a session
 else:                       # lock or unlock
     if then != login:
 
-        # The user could spoof then to match their login, but below we work
-        # with login (not then), so that the most they can do is lock/unlock
-        # their own account in a convoluted way.
+        # The user could spoof `then' to match their login, but the most they
+        # can do is lock/unlock their own GitHub account in a convoluted way.
 
         then = u'/on/github/%s/lock-fail.html' % then
 
     else:
 
-        # Associate the GitHub login with a Gittip participant to prevent
-        # squatting, but don't claim the Gittip account.
+        # Associate the GitHub login with a randomly-named, unclaimed Gittip
+        # participant.
 
         participant_id, is_claimed, is_locked, balance \
-                                        = github.upsert(user_info, claim=False)
-        if participant_id != login:
-
-            # XXX When we have multiple networks we'll need to worry about the
-            # case where someone already claimed this id. For now this is a
-            # bug.
-
-            raise Response(500, participant_id)
+                                                     = github.upsert(user_info)
+        assert participant_id != login, login # sanity check
 
         db.execute( "UPDATE social_network_users "
                     "SET is_locked=%s "

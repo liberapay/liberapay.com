@@ -39,7 +39,7 @@ SELECT = """
 participant = db.fetchone(SELECT, (path['participant_id'],))
 if participant is None:
     raise Response(404)
-username = participant['id']
+participant_id = participant['id']
 if participant['claimed_time'] is None:
 
     # This is a hack to make writing links easier in other parts of the app. We
@@ -52,18 +52,18 @@ if participant['claimed_time'] is None:
     request.redirect('/on/github/%s/' % login)
 
 if not user.ANON:
-    if user.id == username:
+    if user.id == participant_id:
         tips, total = get_tips_and_total(user.id)
         if total == 0:
             tips = tip_suggestions
     else:
         my_tip = get_tip(user.id, participant['id'])
 
-name = participant['user_info'].get('name', username)
 github_user_info = participant['user_info']
 can_tip = True
 backed_amount = get_backed_amount(participant['id'])
 tip_or_pledge = "tip"
+username = participant_id # used in footer shared with on/network/ pages
 
 # ========================================================================== ^L
 {% extends templates/participant.html %}
@@ -415,7 +415,7 @@ tip_or_pledge = "tip"
     <p>Use this code to embed a Gittip button on your website:</p>
 
     <pre>&lt;iframe style="border: 0; margin: 0; padding: 0;"
-        src="https://www.gittip.com/{{ username }}/widget.html"
+        src="https://www.gittip.com/{{ participant_id }}/widget.html"
         width="48pt" height="20pt"&gt;&lt;/iframe&gt;</pre>
 
     <p>The button opens your profile on Gittip in a new tab or window. Here&rsquo;s what the text reads:</p>
@@ -467,7 +467,7 @@ tip_or_pledge = "tip"
     <ul id="accounts">
         <li>
         <img src="{{ github_user_info.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" />
-            {{ username }} {% if name %}({{ name }})<br />{% end %}
+            {{ github_user_info.get('login') }} {% if github_user_info.get('name') %}({{ github_user_info.get('name') }}){% end %}<br />
             <a href="{{ github_user_info.get('html_url', '') }}">
                 {{ github_user_info.get('html_url', '') }}
             </a>

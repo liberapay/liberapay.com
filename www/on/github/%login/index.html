@@ -120,8 +120,7 @@ nbackers = get_number_of_backers(username)
 
         <p>If you are {{ username }} you can explicitly opt out of Gittip by
         locking this account. We don&rsquo;t allow new pledges to locked
-        accounts, and we&rsquo;ll set aside your username on Gittip to prevent
-        squatting.</p>
+        accounts.</p>
 
         <a href="{{ github.oauth_url(website, u'lock', username) }}"
             ><button>Lock</button></a>

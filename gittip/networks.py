@@ -12,22 +12,20 @@ class RunawayTrain(Exception):
     pass
 
 
-def claim_id(participant_id):
-    """Given a participant_id, return a participant_id.
+def get_a_participant_id():
+    """Return a random participant_id.
 
-    If we can claim the given participant_id, we will. Otherwise we'll find a
-    random one that isn't taken yet. Whichever we return is guaranteed to be
-    claimed in the database.
+    The returned value is guaranteed to have been reserved in the database.
 
     """
     seatbelt = 0
     while 1:
+        participant_id = hex(int(random.random() * 16**12))[2:].zfill(12)
         try:
             db.execute( "INSERT INTO participants (id) VALUES (%s)"
                       , (participant_id,)
                        )
-        except IntegrityError:  # Collision, try again with a random value.
-            participant_id = hex(int(random.random() * 16**12))[2:].zfill(12)
+        except IntegrityError:  # Collision, try again with another value.
             seatbelt += 1
             if seatbelt > 100:
                 raise RunawayTrain
@@ -45,7 +43,6 @@ class github:
                      , user_info['id']
                      , user_info['login']
                      , user_info
-                     , claim=claim
                       )
 
 
@@ -134,29 +131,28 @@ class github:
         return rec['participant_id']
 
 
-def upsert(network, user_id, username, user_info, claim=False):
+def upsert(network, user_id, username, user_info):
     """Given str, unicode, unicode, and dict, return unicode and boolean.
 
     Network is the name of a social network that we support (ASCII blah).
     User_id is an immutable unique identifier for the given user on the given
     social network. Username is the user's login/user_id on the given social
-    network. We will try to claim that for them here on Gittip. If their
-    username is already taken on Gittip then we give them a random one; they
-    can change it on their Gittip profile page. User_id and username may or
-    may not be the same. User is a dictionary of profile info per the named
-    network. All network dicts must have an id key that corresponds to the
-    primary key in the underlying table in our own db.
+    network. It is only used here for logging. Specifically, we don't reserve
+    their username for them on Gittip if they're new here. We give them a
+    random participant_id here, and they'll have a chance to change it if/when
+    they opt in. User_id and username may or may not be the same. User_info is
+    a dictionary of profile info per the named network. All network dicts must
+    have an id key that corresponds to the primary key in the underlying table
+    in our own db.
 
-    If claim is True, the return value is the participant_id. Otherwise it is a
-    tuple: (participant_id [unicode], is_claimed [boolean], is_locked
-    [boolean], balance [Decimal]).
+    The return value is a tuple: (participant_id [unicode], is_claimed
+    [boolean], is_locked [boolean], balance [Decimal]).
 
     """
     typecheck( network, str
              , user_id, (int, unicode)
              , username, unicode
              , user_info, dict
-             , claim, bool
               )
     user_id = unicode(user_id)
 
@@ -206,9 +202,9 @@ def upsert(network, user_id, username, user_info, claim=False):
     else:
 
         # This is the first time we've seen this user. Let's create a new
-        # participant for them, claiming their user_id for them if possible.
+        # participant for them.
 
-        participant_id = claim_id(username)
+        participant_id = get_a_participant_id()
         new_participant = True
 
 
@@ -273,31 +269,25 @@ def upsert(network, user_id, username, user_info, claim=False):
                             " a Gittip participant."
                             % (network, username, user_id))
 
+    rec = db.fetchone( "SELECT claimed_time, balance FROM participants "
+                       "WHERE id=%s"
+                     , (participant_id,)
+                      )
+    assert rec is not None
+    return ( participant_id
+           , rec['claimed_time'] is not None
+           , is_locked
+           , rec['balance']
+            )
 
-    # Record the participant as claimed if asked to.
-    # ==============================================
 
-    if claim:
-        CLAIM = """\
+def set_as_claimed(participant_id):
+    CLAIMED = """\
 
-            UPDATE participants
-               SET claimed_time=CURRENT_TIMESTAMP
-             WHERE id=%s
-               AND claimed_time IS NULL
+        UPDATE participants
+           SET claimed_time=CURRENT_TIMESTAMP
+         WHERE id=%s
+           AND claimed_time IS NULL
 
-        """
-        db.execute(CLAIM, (participant_id,))
-        out = participant_id
-    else:
-        rec = db.fetchone( "SELECT claimed_time, balance FROM participants "
-                           "WHERE id=%s"
-                         , (participant_id,)
-                          )
-        assert rec is not None
-        out = ( participant_id
-              , rec['claimed_time'] is not None
-              , is_locked
-              , rec['balance']
-               )
-
-    return out
+    """
+    db.execute(CLAIMED, (participant_id,))
