@@ -47,7 +47,6 @@ class User:
                  , p.ctime
                  , p.claimed_time
                  , p.is_admin
-                 , p.redirect
                  , p.balance
                  , p.goal
                  , n.network

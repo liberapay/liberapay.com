@@ -138,3 +138,53 @@ ALTER TABLE paydays RENAME COLUMN exchange_fees_volume  TO charge_fees_volume;
 ALTER TABLE paydays ADD COLUMN nachs            bigint          DEFAULT 0;
 ALTER TABLE paydays ADD COLUMN ach_volume       numeric(35,2)   DEFAULT 0.00;
 ALTER TABLE paydays ADD COLUMN ach_fees_volume  numeric(35,2)   DEFAULT 0.00;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/whit537/www.gittip.com/issues/80
+
+-- The redirect column ended up being YAGNI. I'm dropping it here because
+-- it's implicated in constraints that we'd otherwise have to alter below.
+
+ALTER TABLE participants DROP redirect;
+
+BEGIN;
+
+    -- We need to be able to change participant_id and have that cascade out to
+    -- other tables. Let's do this in a transaction, just for kicks. Kinda
+    -- gives me the willies to be changing constraints like this. I think it's
+    -- because I never created the constraints so explicitly in the first
+    -- place. The below is copied / pasted / edited from `\d participants`.
+    -- I *think* I'm doing this right. :^O
+
+    ALTER TABLE "exchanges" DROP CONSTRAINT "exchanges_participant_id_fkey";
+    ALTER TABLE "exchanges" ADD CONSTRAINT "exchanges_participant_id_fkey"
+        FOREIGN KEY (participant_id) REFERENCES participants(id)
+        ON UPDATE CASCADE ON DELETE RESTRICT;
+
+    ALTER TABLE "social_network_users" DROP CONSTRAINT "social_network_users_participant_id_fkey";
+    ALTER TABLE "social_network_users" ADD CONSTRAINT "social_network_users_participant_id_fkey"
+        FOREIGN KEY (participant_id) REFERENCES participants(id)
+        ON UPDATE CASCADE ON DELETE RESTRICT;
+
+    ALTER TABLE "tips" DROP CONSTRAINT "tips_tippee_fkey";
+    ALTER TABLE "tips" ADD CONSTRAINT "tips_tippee_fkey"
+        FOREIGN KEY (tippee) REFERENCES participants(id)
+        ON UPDATE CASCADE ON DELETE RESTRICT;
+
+    ALTER TABLE "tips" DROP CONSTRAINT "tips_tipper_fkey";
+    ALTER TABLE "tips" ADD CONSTRAINT "tips_tipper_fkey"
+        FOREIGN KEY (tipper) REFERENCES participants(id)
+        ON UPDATE CASCADE ON DELETE RESTRICT;
+
+    ALTER TABLE "transfers" DROP CONSTRAINT "transfers_tippee_fkey";
+    ALTER TABLE "transfers" ADD CONSTRAINT "transfers_tippee_fkey"
+        FOREIGN KEY (tippee) REFERENCES participants(id)
+        ON UPDATE CASCADE ON DELETE RESTRICT;
+
+    ALTER TABLE "transfers" DROP CONSTRAINT "transfers_tipper_fkey";
+    ALTER TABLE "transfers" ADD CONSTRAINT "transfers_tipper_fkey"
+        FOREIGN KEY (tipper) REFERENCES participants(id)
+        ON UPDATE CASCADE ON DELETE RESTRICT;
+
+END;
