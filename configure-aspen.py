@@ -1,6 +1,6 @@
 import os
 
-import gittip 
+import gittip
 import gittip.wireup
 import gittip.authentication
 import gittip.csrf
