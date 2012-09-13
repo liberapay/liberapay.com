@@ -542,6 +542,8 @@ username = participant_id # used in footer shared with on/network/ pages
             width="48pt" height="20pt"></iframe>
     </p>
 
+    <h2>Linked Accounts</h2>
+
 
 {% else %}
     <h2 class="first"><b>{{ participant['id'] }}</b> receives
@@ -564,8 +566,17 @@ username = participant_id # used in footer shared with on/network/ pages
         {% end %}
     </blockquote>
 
+    {% if user.ADMIN %}
+    <h3>{{ participant['id'] }} joined {{ dt2age(participant['claimed_time']) }}.
+        <span class="small"><a href="history.html">History</a></span>
+    </h3>
 
     <h3>Linked Accounts</h3>
+    {% end %}
+
+{% end %}
+
+
     <ul id="accounts">
         {% for account in accounts %}
         <li>
@@ -585,13 +596,5 @@ username = participant_id # used in footer shared with on/network/ pages
         </li>
         {% end %}
     </ul>
-
-    {% if user.ADMIN %}
-    <h3>{{ participant['id'] }} joined {{ dt2age(participant['claimed_time']) }}.
-        <span class="small"><a href="history.html">History</a></span>
-    </h3>
-    {% end %}
-
-{% end %}
 
 {% end %}
