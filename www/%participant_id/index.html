@@ -27,13 +27,9 @@ tip_suggestions = [{'tippee': name, 'amount': 0} for name in tip_suggestions]
 
 SELECT = """
 
-    SELECT p.*
-         , s.network
-         , s.user_info
-      FROM participants p
-      JOIN social_network_users s
-        ON p.id = s.participant_id
-     WHERE p.id = %s
+    SELECT *
+      FROM participants
+     WHERE id = %s
 
 """
 participant = db.fetchone(SELECT, (path['participant_id'],))
@@ -53,6 +49,13 @@ if participant['claimed_time'] is None:
     request.redirect(to)
 
 
+ACCOUNTS = """
+    SELECT * FROM social_network_users WHERE participant_id=%s;
+"""
+accounts = db.fetchall(ACCOUNTS, (participant_id,))
+assert accounts is not None
+
+
 if not user.ANON:
     if user.id == participant_id:
         tips, total = get_tips_and_total(user.id)
@@ -61,7 +64,6 @@ if not user.ANON:
     else:
         my_tip = get_tip(user.id, participant['id'])
 
-github_user_info = participant['user_info']
 can_tip = True
 backed_amount = get_backed_amount(participant['id'])
 tip_or_pledge = "tip"
@@ -565,13 +567,23 @@ username = participant_id # used in footer shared with on/network/ pages
 
     <h3>Linked Accounts</h3>
     <ul id="accounts">
+        {% for account in accounts %}
         <li>
-        <img src="{{ github_user_info.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" />
-            {{ github_user_info.get('login') }} {% if github_user_info.get('name') %}({{ github_user_info.get('name') }}){% end %}<br />
-            <a href="{{ github_user_info.get('html_url', '') }}">
-                {{ github_user_info.get('html_url', '') }}
+        {% if account['network'] == 'github' %}
+        <img src="{{ account['user_info'].get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" />
+            {{ account['user_info'].get('login') }} {% if account['user_info'].get('name') %}({{ account['user_info'].get('name') }}){% end %}<br />
+            <a href="{{ account['user_info'].get('html_url', '') }}">
+                {{ account['user_info'].get('html_url', '') }}
             </a>
+        {% elif account['network'] == 'twitter' %}
+        <img src="{{ account['user_info'].get('profile_image_url_https', '/assets/%s/no-avatar.png' % __version__) }}" />
+            {{ account['user_info'].get('screen_name') }} {% if account['user_info'].get('name') %}({{ account['user_info'].get('name') }}){% end %}<br />
+            <a href="{{ account['user_info'].get('html_url', '') }}">
+                {{ account['user_info'].get('html_url', '') }}
+            </a>
+        {% end %}
         </li>
+        {% end %}
     </ul>
 
     {% if user.ADMIN %}
