@@ -1,7 +1,7 @@
 This is Gittip, a platform for personal funding.
 
 Gittip is a cooperative escrow agent for recurring micro-gifts, or gift tips.
-Possible tip amounts per week are 0.00, 0.25, 3.00, 6.00, 12.00, and 24.00.
+Possible tip amounts per week are 0.00, 1.00, 3.00, 6.00, 12.00, and 24.00.
 
 Friday is payday. On Friday, we charge people's credit cards and the money goes
 into Gittip's (Zeta Design & Development, LLC's) bank account. Money is
