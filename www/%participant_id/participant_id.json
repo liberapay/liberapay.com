@@ -1,15 +1,6 @@
-import os
-
 from aspen import Response
-from gittip import db
+from gittip.networks import change_participant_id
 from psycopg2 import IntegrityError
-
-ALLOWED_ASCII = set("0123456789"
-                    "abcdefghijklmnopqrstuvwxyz"
-                    "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                    ".,-_;:@ ")
-
-FILENAMES = os.listdir(website.www_root)
 
 # ========================================================================== ^L
 
@@ -18,34 +9,8 @@ if user.ANON:
 
 new_participant_id = request.body['participant_id']
 
-
-# Lightly sanitize input.
-# =======================
-# We want to be pretty loose with usernames. Unicode is allowed. So are spaces.
-# Control characters aren't. We also limit to 32 characters in length.
-
-for i, c in enumerate(new_participant_id):
-    if i == 32:
-        raise Response(413)  # Request Entity Too Large (more or less)
-    elif ord(c) < 128 and c not in ALLOWED_ASCII:
-        raise Response(400)  # Yeah, no.
-    elif c not in ALLOWED_ASCII:
-        raise Response(400)  # XXX Burned by an Aspen bug. :`-(
-                             # https://github.com/whit537/aspen/issues/102
-
-if new_participant_id in FILENAMES:
-    raise Response(400)
-
-
-# Persist
-# =======
-
 try:
-    if new_participant_id != user.id:
-        rec = db.fetchone( "UPDATE participants SET id=%s WHERE id=%s " \
-                           "RETURNING id", (new_participant_id, user.id))
-        assert rec is not None                  # sanity check
-        assert new_participant_id == rec['id']  # sanity check
+    change_participant_id(website, user.id, new_participant_id)
     response.body = {"participant_id": new_participant_id}
 except IntegrityError:
-    response.code = 409 # Conflict
+    raise Response(409)  # Conflict

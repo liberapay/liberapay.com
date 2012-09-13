@@ -1,6 +1,7 @@
+import os
 import random
 
-from aspen import log
+from aspen import log, Response
 from aspen.utils import typecheck
 from gittip import db
 from psycopg2 import IntegrityError
@@ -19,6 +20,39 @@ def resolve_unclaimed(participant):
     else:
         out = '/on/github/%s/' % login
     return out
+
+
+ALLOWED_ASCII = set("0123456789"
+                    "abcdefghijklmnopqrstuvwxyz"
+                    "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                    ".,-_;:@ ")
+
+def change_participant_id(website, old, suggested):
+    """Raise response return None.
+
+    We want to be pretty loose with usernames. Unicode is allowed. So are
+    spaces.  Control characters aren't. We also limit to 32 characters in
+    length.
+
+    """
+    for i, c in enumerate(suggested):
+        if i == 32:
+            raise Response(413)  # Request Entity Too Large (more or less)
+        elif ord(c) < 128 and c not in ALLOWED_ASCII:
+            raise Response(400)  # Yeah, no.
+        elif c not in ALLOWED_ASCII:
+            raise Response(400)  # XXX Burned by an Aspen bug. :`-(
+                                 # https://github.com/whit537/aspen/issues/102
+
+    if suggested in os.listdir(website.www_root):
+        raise Response(400)
+
+    if suggested != old:
+        rec = db.fetchone( "UPDATE participants SET id=%s WHERE id=%s " \
+                           "RETURNING id", (suggested, old))
+                                                     # May raise IntegrityError
+        assert rec is not None         # sanity check
+        assert suggested == rec['id']  # sanity check
 
 
 def get_a_participant_id():

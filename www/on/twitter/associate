@@ -10,9 +10,10 @@ import requests
 from oauth_hook import OAuthHook
 from aspen import log, Response, json
 from gittip import db
-from gittip.networks import twitter, set_as_claimed
+from gittip.networks import change_participant_id, twitter, set_as_claimed
 from gittip.authentication import User
 from urlparse import parse_qs
+from psycopg2 import IntegrityError
 
 # ========================== ^L
 
@@ -62,7 +63,13 @@ user_info['html_url'] = "https://twitter.com/" + screen_name
 log(u"%s wants to %s" % (screen_name, action))
 if action == 'opt-in':      # opt in
     participant_id, is_claimed, is_locked, balance = twitter.upsert(user_info)
-    set_as_claimed(participant_id)
+    if not is_claimed:
+        try:
+            change_participant_id(website, participant_id, screen_name)
+            participant_id = screen_name
+        except (Response, IntegrityError):
+            pass
+        set_as_claimed(participant_id)
     user = User.from_id(participant_id)  # give them a session
 else:                       # lock or unlock
     if then != screen_name:

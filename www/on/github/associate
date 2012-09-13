@@ -8,8 +8,9 @@ participants in the Gittip community.
 """
 from aspen import log, Response
 from gittip import db
-from gittip.networks import github, set_as_claimed
+from gittip.networks import change_participant_id, github, set_as_claimed
 from gittip.authentication import User
+from psycopg2 import IntegrityError
 
 # ========================== ^L
 
@@ -33,7 +34,13 @@ if login is None:
 log(u"%s wants to %s" % (login, action))
 if action == 'opt-in':      # opt in
     participant_id, is_claimed, is_locked, balance = github.upsert(user_info)
-    set_as_claimed(participant_id)
+    if not is_claimed:
+        try:
+            change_participant_id(website, participant_id, login)
+            participant_id = login
+        except (Response, IntegrityError):
+            pass
+        set_as_claimed(participant_id)
     user = User.from_id(participant_id)  # give them a session
 else:                       # lock or unlock
     if then != login:
