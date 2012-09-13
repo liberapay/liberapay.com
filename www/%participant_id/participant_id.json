@@ -1,0 +1,36 @@
+from aspen import Response
+from gittip import db
+from psycopg2 import IntegrityError
+
+# ========================================================================== ^L
+
+if user.ANON:
+    raise Response(404)
+
+new_participant_id = request.body['participant_id']
+
+
+# Lightly sanitize input.
+# =======================
+# We want to be pretty loose with usernames. Unicode is allowed. So are spaces.
+# Control characters aren't. We also limit to 32 characters in length.
+
+for i, c in enumerate(new_participant_id):
+    if i == 32:
+        raise Response(413)  # Request Entity Too Large (more or less)
+    if ord(c) < 32:
+        raise Response(400)  # Yeah, no.
+
+
+# Persist
+# =======
+
+try:
+    if new_participant_id != user.id:
+        rec = db.fetchone( "UPDATE participants SET id=%s WHERE id=%s " \
+                           "RETURNING id", (new_participant_id, user.id))
+        assert rec is not None                  # sanity check
+        assert new_participant_id == rec['id']  # sanity check
+    response.body = {"participant_id": new_participant_id}
+except IntegrityError:
+    response.code = 409 # Conflict

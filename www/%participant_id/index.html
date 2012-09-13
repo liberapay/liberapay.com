@@ -71,6 +71,14 @@ username = participant_id # used in footer shared with on/network/ pages
 {% extends templates/participant.html %}
 {% block their_voice %}
     <style>
+        H2 {
+            margin-bottom: 27pt ! important;
+        }
+        H2.editing {
+            position: relative;
+            top: -3pt;
+            margin-bottom: 24pt ! important;
+        }
         #matrix TR.not-over BUTTON.empty {
             background: transparent;
             color: #F7F7F6;
@@ -96,6 +104,20 @@ username = participant_id # used in footer shared with on/network/ pages
             position: relative;
             top: 2pt;
             line-height: 9pt;
+        }
+        SPAN.participant_id {
+            display: none;
+        }
+        SPAN.participant_id FORM {
+            display: inline;
+        }
+        SPAN.participant_id FORM BUTTON {
+            float: none;
+            margin-left: 0;
+        }
+        SPAN.participant_id INPUT {
+            width: 6em;
+            font-weight: 900;
         }
         FORM.goal {
             display: none;
@@ -238,6 +260,75 @@ username = participant_id # used in footer shared with on/network/ pages
             });
 
 
+            // Wire up participant_id knob.
+            // ============================
+
+            $('H2 BUTTON').click(function()
+            {
+                $('B.participant_id').hide();
+                $('#edit-participant_id').hide();
+                $('SPAN.participant_id').show();
+                $('SPAN.participant_id INPUT').focus();
+                $('H2.first').addClass('editing');
+            });
+            $('SPAN.participant_id FORM').submit(function(e)
+            {
+                e.preventDefault();
+
+                $('#save-participant_id').text('Saving ...');
+
+                var participant_id = $('INPUT[name=participant_id]').val();
+
+                function success(d)
+                {
+                    window.location.href = "/" + encodeURI(d.participant_id) + "/";
+                }
+                function error(e)
+                {
+                    $('#save-participant_id').text('Save');
+                    if (e.status === 409)
+                    {
+                        alert("Sorry, that username is already taken.");
+                    }
+                    else if (e.status === 413)
+                    {
+                        alert( "Sorry, that username is too long (it can only "
+                             + "have 32 characters).");
+                    }
+                    else
+                    {
+                        alert( "Sorry, something went wrong. :-( Try again "
+                             + "later?");
+                    }
+                }
+                jQuery.ajax(
+                    { url: "participant_id.json"
+                    , type: "POST"
+                    , success: success
+                    , dataType: 'json'
+                    , data: { participant_id: participant_id }
+                    , success: success
+                    , error: error
+                     }
+                );
+                return false;
+            });
+            $('#cancel-participant_id').click(function(e)
+            {
+                e.preventDefault();
+                e.stopPropagation();
+                finish_editing_participant_id();
+                return false;
+            });
+            function finish_editing_participant_id()
+            {
+                $('SPAN.participant_id').hide();
+                $('B.participant_id').show();
+                $('#edit-participant_id').show();
+                $('H2.first').removeClass('editing');
+            }
+
+
             // Wire up aggregate giving knob.
             // ==============================
 
@@ -263,7 +354,13 @@ username = participant_id # used in footer shared with on/network/ pages
     </script>
 
 {% if not user.ANON and user.id == participant['id'] %}
-    <h2 class="first">You are <b>{{ user.id }}</b>.
+    <h2 class="first">You are
+        <b class="participant_id">{{ escape(user.id) }}</b>
+        <span class="participant_id"><form>
+            <input name="participant_id" value="{{ escape(user.id) }}"/>
+            <button id="save-participant_id" type="submit" class="selected small">Save</button>
+            <button id="cancel-participant_id" type="cancel" class="small">Cancel</button></form></span><button
+        id="edit-participant_id" class="small selected">Edit</button>.
         <span class="small"><a href="/sign-out.html">Sign out</a></span>
     </h2>
 
