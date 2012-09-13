@@ -19,13 +19,13 @@ class User:
 
     @classmethod
     def from_session_token(cls, token):
-        session = cls.load_session("WHERE p.session_token=%s", token)
+        session = cls.load_session("WHERE session_token=%s", token)
         return cls(session)
 
     @classmethod
     def from_id(cls, participant_id):
         from gittip import db
-        session = cls.load_session("WHERE p.id=%s", participant_id)
+        session = cls.load_session("WHERE id=%s", participant_id)
         session['session_token'] = uuid.uuid4().hex
         db.execute( "UPDATE participants SET session_token=%s WHERE id=%s"
                   , (session['session_token'], participant_id)
@@ -35,26 +35,7 @@ class User:
     @staticmethod
     def load_session(where, val):
         from gittip import db
-        SQL = """\
-            SELECT p.id
-                 , p.statement
-                 , p.stripe_customer_id
-                 , p.balanced_account_uri
-                 , p.last_bill_result
-                 , p.last_ach_result
-                 , p.session_token
-                 , p.session_expires
-                 , p.ctime
-                 , p.claimed_time
-                 , p.is_admin
-                 , p.balance
-                 , p.goal
-                 , n.network
-                 , n.user_info
-              FROM participants         p
-              JOIN social_network_users n
-                ON n.participant_id = p.id
-        """ + where
+        SQL = "SELECT * FROM participants " + where
         rec = db.fetchone(SQL, (val,))
         out = {}
         if rec is not None:
