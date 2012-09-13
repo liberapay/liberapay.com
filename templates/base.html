@@ -13,12 +13,12 @@
     </head>
     <body><div id="body">
         <h1>
-            <a href="/"><img 
-                src="/assets/{{ __version__ }}/logo.png" 
+            <a href="/"><img
+                src="/assets/{{ __version__ }}/logo.png"
                 alt="Gittip - Personal Funding" /></a>
         </h1>
         {% if user.ANON %}
-        <div id="you-are">Sign in using <a 
+        <div id="you-are">Sign in using <a
                 href="{{ github.oauth_url(website, u'opt-in') }}">GitHub</a>.</div>
         {% else %}
         <div id="you-are">
