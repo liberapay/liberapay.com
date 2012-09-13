@@ -30,6 +30,9 @@ building the software. All Python dependencies are included in vendor/. To
     GITHUB_CLIENT_ID=3785a9ac30df99feeef5
     GITHUB_CLIENT_SECRET=e69825fafa163a0b0b6d2424c107a49333d46985
     GITHUB_CALLBACK=http://localhost:8537/on/github/associate
+    TWITTER_CONSUMER_KEY=QBB9vEhxO4DFiieRF68zTA
+    TWITTER_CONSUMER_SECRET=mUymh1hVMiQdMQbduQFYRi79EYYVeOZGrhj27H59H78
+    TWITTER_CALLBACK=http://127.0.0.1:8537/on/twitter/associate
     DYLD_LIBRARY_PATH=/Library/PostgreSQL/9.1/lib
 
 The `BALANCED_API_SECRET` is a test marketplace. To generate a new secret for
@@ -47,10 +50,11 @@ know more about creating marketplaces.
 
 The GITHUB_* keys are for a gittip-dev application in the Gittip organization
 on Github. It points back to localhost:8537, which is where Gittip will be
-running if you start it locally with `make run`.
+running if you start it locally with `make run`. Similarly with the TWITTER_*
+keys, but there they required us to spell it `127.0.0.1`.
 
 The DYLD_LIBRARY_PATH thing is to get psycopg2 working on Mac OS with
-EnterpriseDB's Postgres 9.1 installer.
+EnterpriseDB's Postgres 9.1 installer. You might not need it.
 
 
 Setting up the Database
