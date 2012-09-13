@@ -281,7 +281,7 @@ username = participant_id # used in footer shared with on/network/ pages
 
                 function success(d)
                 {
-                    window.location.href = "/" + encodeURI(d.participant_id) + "/";
+                    window.location.href = "/" + encodeURIComponent(d.participant_id) + "/";
                 }
                 function error(e)
                 {
@@ -297,8 +297,9 @@ username = participant_id # used in footer shared with on/network/ pages
                     }
                     else
                     {
-                        alert( "Sorry, something went wrong. :-( Try again "
-                             + "later?");
+                        alert( "Sorry, something went wrong. Either you used "
+                             + "disallowed characters or something broke on "
+                             + "our end.");
                     }
                 }
                 jQuery.ajax(

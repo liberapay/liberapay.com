@@ -2,6 +2,12 @@ from aspen import Response
 from gittip import db
 from psycopg2 import IntegrityError
 
+ALLOWED_ASCII = set("0123456789"
+                    "abcdefghijklmnopqrstuvwxyz"
+                    "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                    ".,-_;:@ ")
+
+
 # ========================================================================== ^L
 
 if user.ANON:
@@ -18,8 +24,11 @@ new_participant_id = request.body['participant_id']
 for i, c in enumerate(new_participant_id):
     if i == 32:
         raise Response(413)  # Request Entity Too Large (more or less)
-    if ord(c) < 32:
+    elif ord(c) < 128 and c not in ALLOWED_ASCII:
         raise Response(400)  # Yeah, no.
+    elif c not in ALLOWED_ASCII:
+        raise Response(400)  # XXX Burned by an Aspen bug. :`-(
+                             # https://github.com/whit537/aspen/issues/102
 
 
 # Persist
