@@ -1,0 +1,16 @@
+username = path['login']
+^L
+{% extends templates/base.html %}
+
+{% block body %}
+
+<div id="their-voice">
+<h2 class="first">Are you really {{ username }}?</h2>
+
+<p>Your attempt to lock or unlock this account failed because you&rsquo;re
+logged into GitHub as someone else. Please <a href="https://github.com/logout"
+    target="_blank">log out of GitHub</a> and <a
+    href="./">try again</a>.</p>
+</div>
+
+{% end %}

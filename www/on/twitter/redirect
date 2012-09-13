@@ -1,0 +1,32 @@
+from urlparse import parse_qs
+
+import requests
+from oauth_hook import OAuthHook
+
+OAuthHook.consumer_key = website.twitter_consumer_key
+OAuthHook.consumer_secret = website.twitter_consumer_secret
+
+website.oauth_cache = {}
+
+# ========================== ^L
+
+oauth_hook = OAuthHook(header_auth=True)
+response = requests.post( "https://api.twitter.com/oauth/request_token"
+                        , hooks={'pre_request': oauth_hook}
+                         )
+
+assert response.status_code == 200, response.status_code  # safety check
+
+qs = parse_qs(response.text)
+
+token = qs['oauth_token'][0]
+secret = qs['oauth_token_secret'][0]
+assert qs['oauth_callback_confirmed'][0] == "true"  # sanity check
+
+action = qs.get('action', 'opt-in')
+then = qs.get('then', '')
+website.oauth_cache[token] = (secret, action, then)
+
+url = "https://api.twitter.com/oauth/authenticate?oauth_token=%s"
+request.redirect(url % token)
+# ========================== ^L text/plain
