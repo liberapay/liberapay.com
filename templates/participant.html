@@ -14,7 +14,7 @@
 
             <div id="tips">
                 {% for amount in AMOUNTS %}
-                <button amount="{{ amount }}" tippee="{{ username }}"
+                <button amount="{{ amount }}" tippee="{{ participant_id }}"
                     class="tip{{ ' selected' if amount == my_tip else '' }}">${{ amount }}</button>
                 {% end %}
                 {% if my_tip not in AMOUNTS %}

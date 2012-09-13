@@ -4,7 +4,6 @@ import decimal
 
 from aspen import Response
 from gittip import AMOUNTS, db
-from gittip.networks import github
 
 
 # ========================================================================== ^L
@@ -14,14 +13,11 @@ if not user.ANON:
 
     # Get tipper and tippee.
     # ======================
+    # XXX We could/should enforce that tips cannot be pledged at all to locked
+    # accounts.
 
     tipper = user.id
-    if 'participant_id' in path:    # gittip
-        tippee = path['participant_id']
-    elif 'login' in path:           # github
-        tippee = github.resolve(path['login'])
-    else:
-        raise Response(400, "can't find tippee")
+    tippee = path['participant_id']
 
 
     # Get and maybe set amount.

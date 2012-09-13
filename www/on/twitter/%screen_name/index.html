@@ -1,0 +1,118 @@
+"""Twitter user page on Gittip.
+"""
+import decimal
+
+import requests
+from aspen import json, Response
+from gittip import AMOUNTS, CARDINALS, db, get_tip, get_number_of_backers
+from gittip.networks import twitter
+
+
+# ========================================================================== ^L
+
+# Try to load from Twitter.
+# =========================
+
+url = "https://api.twitter.com/1/users/show.json?screen_name=%s"
+userinfo = requests.get(url % path['screen_name'])
+if userinfo.status_code != 200:
+    raise Response(404)
+userinfo = json.loads(userinfo.text)
+
+
+# Try to load from Gittip.
+# ========================
+
+participant = False
+username = userinfo['screen_name']
+name = userinfo.get('name')
+if not name:
+    name = username
+userinfo['html_url'] = "https://twitter.com/%s" % username
+
+participant_id, is_claimed, is_locked, balance = twitter.upsert(userinfo)
+can_tip = not is_locked
+lock_action = "unlock" if is_locked else "lock"
+if is_claimed:
+    request.redirect('/%s/' % participant_id)
+
+if not user.ANON:
+    my_tip = get_tip(user.id, participant_id)
+
+tip_or_pledge = "pledge"
+nbackers = get_number_of_backers(participant_id)
+
+# ========================================================================== ^L
+{% extends templates/participant.html %}
+
+{% block their_voice %}
+  {% if is_locked %}
+
+    <h2 class="first"><b>{{ username }}</b> has opted out of Gittip.</h2>
+
+    <p>If you are <a href="{{ userinfo.get('html_url', '') }}">{{ username }}</a>
+    on Twitter, you can unlock your account to allow people to
+    pledge tips to you on Gittip. We never collect any money on your behalf
+    until you explicitly opt in.</p>
+
+    <a href="{{ twitter.oauth_url(website, u'unlock', username) }}"
+        ><button>Unlock</button></a>
+
+  {% else %}
+    <script>
+        $(document).ready(Gittip.initTipButtons);
+    </script>
+
+    <h2 class="first"><b>{{ name }}</b> has not joined Gittip.</h2>
+
+    {% if user.ANON %}
+    <ul id="accounts">
+        <li>
+            <img src="{{ userinfo.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" />
+            Are you <a href="{{ userinfo['html_url'] }}">{{ userinfo['screen_name'] }}</a> from Twitter?<br />
+            <a href="{{ twitter.oauth_url(website, u'opt-in', username) }}">Click here</a> to opt in to Gittip.
+        </li>
+    </ul>
+    {% else %}
+    <ul id="accounts">
+        <li>
+            <img src="{{ userinfo.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" />
+            Are you <a href="{{ userinfo['html_url'] }}">{{ userinfo['screen_name'] }}</a> from Twitter?<br />
+            You&rsquo;ll have to <a href="/sign-out.html">sign out</a> and sign back in to claim this account.
+        </li>
+    </ul>
+    {% end %}
+
+
+    {% if nbackers == 0 %}
+    {% elif nbackers == 1 %}
+    <h3>There is one person ready to give.</h3>
+    {% elif nbackers < 10 %}
+    <h3>There are {{ CARDINALS[nbackers] }} people ready to give.</h3>
+    {% else %}
+    <h3>There are {{ nbackers }} people ready to give.</h3>
+    {% end %}
+
+
+    {% if not user.ANON %}
+
+    <p>{{ 'But we' if nbackers > 0 else 'We' }} will never collect money on
+    behalf of {{ username }} until they ask us to.</p>
+
+    {% else %}
+
+    <p>{{ 'But we' if nbackers > 0 else 'We' }} will never collect money on
+    your behalf until you ask us to.</p>
+
+    <h3>Don&rsquo;t like what you see?</h3>
+
+    <p>If you are {{ username }} you can explicitly opt out of Gittip by
+    locking this account. We don&rsquo;t allow new pledges to locked
+    accounts.</p>
+
+    <a href="{{ twitter.oauth_url(website, u'lock', username) }}"
+        ><button>Lock</button></a>
+
+    {% end %}
+    {% end %}
+{% end %}
