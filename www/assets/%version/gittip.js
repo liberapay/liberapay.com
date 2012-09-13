@@ -618,11 +618,12 @@ Gittip.initJumpToPerson = function()
 {
     function jump(e)
     {
+        var network = $('#jump SELECT').val().trim();
         var val = $('#jump INPUT').val().trim();
         e.preventDefault();
         e.stopPropagation();
         if (val !== '')
-            window.location = '/on/github/' + val + '/';
+            window.location = '/on/' + network + '/' + val + '/';
         return false;
     }
     $('#jump').submit(jump);

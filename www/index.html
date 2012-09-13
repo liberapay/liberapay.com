@@ -97,7 +97,10 @@ givers = db.fetchall("""
 
     <h2>Tip someone!</h3>
     <form id="jump">
-    Enter a GitHub username:
+        Enter a <select>
+            <option value="twitter">Twitter</option>
+            <option value="github">GitHub</option>
+        </select> username:
         <input placeholder="" />
         <button class="selected small" type="submit">Go</button>
     </form>
