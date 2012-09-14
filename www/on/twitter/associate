@@ -32,10 +32,10 @@ response = requests.post( "https://api.twitter.com/oauth/access_token"
                          )
 assert response.status_code == 200
 
-qs = parse_qs(response.text)
-token = qs['oauth_token'][0]
-secret = qs['oauth_token_secret'][0]
-user_id = qs['user_id'][0]
+reply = parse_qs(response.text)
+token = reply['oauth_token'][0]
+secret = reply['oauth_token_secret'][0]
+user_id = reply['user_id'][0]
 
 
 oauth_hook = OAuthHook(token, secret, header_auth=True)

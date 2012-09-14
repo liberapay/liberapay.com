@@ -17,11 +17,11 @@ response = requests.post( "https://api.twitter.com/oauth/request_token"
 
 assert response.status_code == 200, response.status_code  # safety check
 
-qs = parse_qs(response.text)
+reply = parse_qs(response.text)
 
-token = qs['oauth_token'][0]
-secret = qs['oauth_token_secret'][0]
-assert qs['oauth_callback_confirmed'][0] == "true"  # sanity check
+token = reply['oauth_token'][0]
+secret = reply['oauth_token_secret'][0]
+assert reply['oauth_callback_confirmed'][0] == "true"  # sanity check
 
 action = qs.get('action', 'opt-in')
 then = qs.get('then', '')
