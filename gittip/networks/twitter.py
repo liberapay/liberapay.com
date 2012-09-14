@@ -24,3 +24,7 @@ def resolve(user_id):
     if rec is None:
         raise Exception("Twitter user %s has no participant." % (user_id))
     return rec['participant_id']
+
+
+def oauth_url(website, action, then):
+    return "/on/twitter/redirect?action=%s&then=%s" % (action, then)
