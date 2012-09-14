@@ -3,7 +3,7 @@
 import decimal
 
 import requests
-from aspen import json, Response
+from aspen import json, Response, log
 from gittip import AMOUNTS, CARDINALS, db, get_tip, get_number_of_backers
 from gittip.networks import twitter
 
@@ -13,11 +13,20 @@ from gittip.networks import twitter
 # Try to load from Twitter.
 # =========================
 
-url = "https://api.twitter.com/1/users/show.json?screen_name=%s"
-userinfo = requests.get(url % path['screen_name'])
-if userinfo.status_code != 200:
-    raise Response(404)
-userinfo = json.loads(userinfo.text)
+rec = db.fetchone( "SELECT user_info FROM social_network_users "
+                   "WHERE user_info -> 'screen_name' = %s"
+                 , (path['screen_name'],)
+                  )
+if rec is not None:
+    userinfo = rec['user_info']
+else:
+    url = "https://api.twitter.com/1/users/show.json?screen_name=%s"
+    userinfo = requests.get(url % path['screen_name'])
+    if userinfo.status_code == 200:
+        userinfo = json.loads(userinfo.text)
+    else:
+        log("Twitter lookup failed with %d." % userinfo.status_code)
+        raise Response(404)
 
 
 # Try to load from Gittip.
