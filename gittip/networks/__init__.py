@@ -44,7 +44,7 @@ def change_participant_id(website, old, suggested):
             raise Response(400)  # XXX Burned by an Aspen bug. :`-(
                                  # https://github.com/whit537/aspen/issues/102
 
-    if suggested in os.listdir(website.www_root):
+    if website is not None and suggested in os.listdir(website.www_root):
         raise Response(400)
 
     if suggested != old:

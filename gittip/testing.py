@@ -18,15 +18,19 @@ SCHEMA = open(join(TOP, "schema.sql")).read()
 def create_schema(db):
     db.execute(SCHEMA)
 
+GITHUB_USERS = [ ("1775515", "lgtest")
+               , ("1903357", "lglocktest")
+               , ("1933953", "gittip-test-0")
+               , ("1933959", "gittip-test-1")
+               , ("1933965", "gittip-test-2")
+               , ("1933967", "gittip-test-3")
+                ]
 
 def populate_db_with_dummy_data(db):
-    from gittip.networks import github
-    github.upsert({"id": "1775515", "login": "lgtest"})
-    github.upsert({"id": "1903357", "login": "lglocktest"})
-    github.upsert({"id": "1933953", "login": "gittip-test-0"})
-    github.upsert({"id": "1933959", "login": "gittip-test-1"})
-    github.upsert({"id": "1933965", "login": "gittip-test-2"})
-    github.upsert({"id": "1933967", "login": "gittip-test-3"})
+    from gittip.networks import github, change_participant_id
+    for user_id, login in  GITHUB_USERS:
+        participant_id, a,b,c = github.upsert({"id": user_id, "login": login})
+        change_participant_id(None, participant_id, login)
 
 
 class GittipBaseTest(unittest.TestCase):
