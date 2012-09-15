@@ -18,8 +18,14 @@
                 alt="Gittip - Personal Funding" /></a>
         </h1>
         {% if user.ANON %}
-        <div id="you-are">Sign in using <a href="/on/twitter/redirect">Twitter</a> or <a
-                href="{{ github.oauth_url(website, u'opt-in') }}">GitHub</a>.</div>
+        <div id="you-are">
+            <span class="nowrap">Sign in using</span>
+            <span class="nowrap">
+                <a href="/on/twitter/redirect">Twitter</a>
+                or
+                <a href="{{ github.oauth_url(website, u'opt-in') }}">GitHub</a>.
+            </span>
+        </div>
         {% else %}
         <div id="you-are">
             You are <b><a href="/{{ user.id }}/">{{ user.id }}</a></b>.

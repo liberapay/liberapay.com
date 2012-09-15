@@ -5,6 +5,7 @@ BODY {
     font: 300 12pt/18pt "Lato", sans-serif;
     text-align: center;
     color: #614C3E;
+    padding: 0 10px;
 }
 #body {
     max-width: 600px;
@@ -106,6 +107,8 @@ PRE {
     position: absolute;
     top: 0;
     right: 0;
+    text-align: right;
+    width: 40%;
 }
 #their-voice {
     background: #F7F7F6;
@@ -397,4 +400,10 @@ form div.error > input, form div.error select {
     width: 240px;
     height: 75px;
     margin: auto;
+}
+
+.nowrap {
+    white-space: nowrap;
+}
+@media screen and (max-width: 640px) {
 }

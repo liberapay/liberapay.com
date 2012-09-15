@@ -46,8 +46,10 @@ givers = db.fetchall("""
 
 {% block heading %}
 
-    <p class="below-header">Set up recurring gift tips to people who make the
-    world better. <a href="/about/">Learn more ...</a></p>
+    <p class="below-header">
+        <span class="nowrap">Set up recurring gift tips to people who</span>
+        <span class="nowrap">make the world better. <a href="/about/">Learn more ...</a></span>
+    </p>
 
     <script>
         $(document).ready(Gittip.initJumpToPerson);
@@ -101,8 +103,10 @@ givers = db.fetchall("""
             <option value="twitter">Twitter</option>
             <option value="github">GitHub</option>
         </select> username:
-        <input placeholder="" />
-        <button class="selected small" type="submit">Go</button>
+        <span class="nowrap">
+            <input placeholder="" />
+            <button class="selected small" type="submit">Go</button>
+        </span>
     </form>
 
 
