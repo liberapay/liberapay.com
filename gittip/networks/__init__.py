@@ -14,11 +14,15 @@ class RunawayTrain(Exception):
 def resolve_unclaimed(participant):
     """Given a participant dict, return an URL path.
     """
-    login = participant['user_info'].get('login')
-    if login is None:
+    rec = db.fetchone("SELECT network, user_info FROM social_network_users "
+                      "WHERE participant_id=%s", (participant['id'],))
+    if rec is None:
         out = None
+    elif rec['network'] == 'github':
+        out = '/on/github/%s/' % rec['user_info']['login']
     else:
-        out = '/on/github/%s/' % login
+        assert rec['network'] == 'twitter'
+        out = '/on/twitter/%s/' % rec['user_info']['screen_name']
     return out
 
 
