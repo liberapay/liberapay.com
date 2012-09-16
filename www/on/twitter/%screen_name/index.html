@@ -1,9 +1,11 @@
 """Twitter user page on Gittip.
 """
+import datetime
 import decimal
 
 import requests
 from aspen import json, Response, log
+from aspen.utils import to_age, utc
 from gittip import AMOUNTS, CARDINALS, db, get_tip, get_number_of_backers
 from gittip.networks import twitter
 
@@ -22,6 +24,31 @@ if rec is not None:
 else:
     url = "https://api.twitter.com/1/users/show.json?screen_name=%s"
     userinfo = requests.get(url % path['screen_name'])
+
+
+    # Keep an eye on our Twitter usage.
+    # =================================
+
+    rate_limit = userinfo.headers['X-RateLimit-Limit']
+    rate_limit_remaining = userinfo.headers['X-RateLimit-Remaining']
+    rate_limit_reset = userinfo.headers['X-RateLimit-Reset']
+
+    try:
+        rate_limit = int(rate_limit)
+        rate_limit_remaining = int(rate_limit_remaining)
+        rate_limit_reset = int(rate_limit_reset)
+    except (TypeError, ValueError):
+        log( "Got weird rate headers from Twitter: %s %s %s"
+           % (rate_limit, rate_limit_remaining, rate_limit_reset)
+            )
+    else:
+        reset = datetime.datetime.fromtimestamp(rate_limit_reset, tz=utc)
+        reset = to_age(reset)
+        log( "Twitter API calls used: %d / %d. Resets %s."
+           % (rate_limit - rate_limit_remaining, rate_limit, reset)
+            )
+
+
     if userinfo.status_code == 200:
         userinfo = json.loads(userinfo.text)
     else:
