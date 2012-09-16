@@ -13,7 +13,7 @@ import locale
 
 import requests
 from aspen import json, Response
-from aspen.utils import dt2age
+from aspen.utils import to_age
 from gittip import AMOUNTS, db, get_tip, get_tips_and_total, get_backed_amount
 from gittip.utils import wrap
 from gittip.networks import github, resolve_unclaimed
@@ -567,7 +567,7 @@ username = participant_id # used in footer shared with on/network/ pages
     </blockquote>
 
     {% if user.ADMIN %}
-    <h3>{{ participant['id'] }} joined {{ dt2age(participant['claimed_time']) }}.
+    <h3>{{ participant['id'] }} joined {{ to_age(participant['claimed_time']) }}.
         <span class="small"><a href="history.html">History</a></span>
     </h3>
 
