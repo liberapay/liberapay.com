@@ -167,7 +167,7 @@ else:
     </ul>
     <table id="members">
       {% for i, sequence in enumerate([on_gittip, not_on_gittip]) %}
-        <tr><td colspan="2"><h3>{{ i == 0 and "Also on" or "Not on" }} Gittip</h3></td></tr>
+        {% if sequence %}<tr><td colspan="2"><h3>{{ i == 0 and "Also on" or "Not on" }} Gittip</h3></td></tr>{% end %}
         {% for member, tip in sequence %}
         <tr class="not-over"><td>
             {% if not user.ANON %}
