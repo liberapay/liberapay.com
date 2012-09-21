@@ -40,18 +40,37 @@ if usertype == "user":
 
     if not user.ANON:
         my_tip = get_tip(user.id, participant_id)
+
+    tip_or_pledge = "pledge"
+    nbackers = get_number_of_backers(participant_id)
+
 elif usertype == "organization":
     members = []
     resp = requests.get("https://api.github.com/orgs/%s/members" % username)
     if resp.status_code == 200:
         members = json.loads(resp.text)
-    members = [(member, get_tip(user.id, member['login'])) for member in members]
+
+    logins = [member['login'] for member in members]
+    ON_GITTIP = """\
+
+        SELECT snu.user_info -> 'login' AS login
+          FROM social_network_users snu
+          JOIN participants p
+            ON p.id = snu.participant_id
+         WHERE snu.network='github'
+           AND snu.user_info -> 'login' = any(%s)
+           AND p.claimed_time IS NOT NULL
+
+    """
+    _on_gittip = [rec['login'] for rec in db.fetchall(ON_GITTIP, (logins,))]
+    on_gittip = []
+    not_on_gittip = []
+    for member in members:
+        seq = on_gittip if member['login'] in _on_gittip else not_on_gittip
+        seq.append((member, get_tip(user.id, member['login'])))
     can_tip = user.ANON
 else:
     can_tip = False
-
-tip_or_pledge = "pledge"
-nbackers = get_number_of_backers(participant_id)
 
 # ========================================================================== ^L
 {% extends templates/participant.html %}
@@ -147,7 +166,9 @@ nbackers = get_number_of_backers(participant_id)
         </li>
     </ul>
     <table id="members">
-        {% for member, tip in members %}
+      {% for i, sequence in enumerate([on_gittip, not_on_gittip]) %}
+        <tr><td colspan="2"><h3>{{ i == 0 and "Also on" or "Not on" }} Gittip</h3></td></tr>
+        {% for member, tip in sequence %}
         <tr class="not-over"><td>
             {% if not user.ANON %}
             <th>
@@ -175,6 +196,7 @@ nbackers = get_number_of_backers(participant_id)
             {% end %}
         </td></tr>
         {% end %}
+      {% end %}
     </table>
 
     {% else %}
