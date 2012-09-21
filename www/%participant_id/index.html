@@ -73,14 +73,6 @@ username = participant_id # used in footer shared with on/network/ pages
 {% extends templates/participant.html %}
 {% block their_voice %}
     <style>
-        H2 {
-            margin-bottom: 27pt ! important;
-        }
-        H2.editing {
-            position: relative;
-            top: -3pt;
-            margin-bottom: 24pt ! important;
-        }
         #matrix TR.not-over BUTTON.empty {
             background: transparent;
             color: #F7F7F6;
@@ -133,6 +125,9 @@ username = participant_id # used in footer shared with on/network/ pages
         #goal-custom {
             text-align: right;
             width: 6pc;
+        }
+        LI {
+            margin-bottom: 1em;
         }
     </style>
     <script>
