@@ -136,3 +136,4 @@ See Also
  - http://hopemob.org/
  - http://www.awesomefoundation.org/
  - http://www.crowdrise.com/
+ - http://www.chipin.com/
