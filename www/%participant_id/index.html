@@ -14,7 +14,8 @@ import locale
 import requests
 from aspen import json, Response
 from aspen.utils import to_age
-from gittip import AMOUNTS, db, get_tip, get_tips_and_total, get_backed_amount
+from gittip import AMOUNTS, db, get_tip, get_tips_and_total, \
+     get_backed_amount, get_histogram_of_giving
 from gittip.utils import wrap
 from gittip.networks import github, resolve_unclaimed
 
@@ -64,6 +65,9 @@ if not user.ANON:
     else:
         my_tip = get_tip(user.id, participant['id'])
 
+giving_histogram = get_histogram_of_giving(user.id)
+total_givers = sum(giving_histogram.values())
+
 can_tip = True
 backed_amount = get_backed_amount(participant['id'])
 tip_or_pledge = "tip"
@@ -72,7 +76,36 @@ username = participant_id # used in footer shared with on/network/ pages
 # ========================================================================== ^L
 {% extends templates/participant.html %}
 {% block their_voice %}
+
     <style>
+        /** This is blatantly copied from stats.html. We should really fix
+            that somehow. **/
+        .dollar-sign {
+            padding: 0 2pt 0 24pt;
+            text-align: right;
+        }
+        .amount {
+            padding: 0 6pt 0 0;
+            text-align: right;
+        }
+        .amount-change {
+            padding: 6pt 0 6pt 24pt;
+            text-align: left;
+        }
+        .count {
+            text-align: left;
+            white-space: nowrap;
+        }
+        .count SPAN.number {
+            font-size: 8pt;
+        }
+        .count SPAN.bar {
+            background: #B2A196;
+            display: inline-block;
+            margin-right: 3pt;
+            height: 9pt;
+        }
+
         #matrix TR.not-over BUTTON.empty {
             background: transparent;
             color: #F7F7F6;
@@ -484,6 +517,30 @@ username = participant_id # used in footer shared with on/network/ pages
     <h2>You receive ${{ backed_amount }} per week.
         <span class="small"><a href="history.html">History</a></span>
     </h2>
+
+    <table id="tip-distribution">
+        {% for amount, contributors in giving_histogram.iteritems() %}
+        <tr>
+            <td class="dollar-sign">$</td>
+            <td class="amount">{{ amount }}</td>
+            <td class="count">
+                <span class="bar" style="width: {{ ((1.0 * contributors) / total_givers) * 300 }}pt"></span>
+                {{((1.0 * contributors) / total_givers) * 100 }}%
+                <span class="number">({{ contributors }})</span>
+            </td>
+        </tr>
+        {% if str(amount) == '0.25' %}
+        <td class="amount-change help" colspan="3">
+            <a href="https://github.com/whit537/www.gittip.com/issues/180"
+               target="_blank">Read
+            here</a> about raising the minimum.
+        </td>
+        {% end %}
+        {% end %}
+    </table>
+
+
+
 
     {% if backed_amount == 0 %}
 
