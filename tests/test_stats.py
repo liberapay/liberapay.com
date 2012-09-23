@@ -1,7 +1,9 @@
 from datetime import datetime
+from decimal import Decimal
 
 from mock import patch
 
+import gittip
 from gittip.billing.payday import Payday
 from gittip import testing
 from gittip import wireup
@@ -19,6 +21,59 @@ def test_commaize_commaizes():
 def test_commaize_commaizes_and_obeys_decimal_places():
     actual = commaize(1000, 4)
     assert actual == "1,000.0000", actual
+
+
+class HistogramOfGivingTests(testing.GittipBaseDBTest):
+    def setUp(self):
+        super(HistogramOfGivingTests, self).setUp()
+
+        user_ids = [x[1] for x in testing.GITHUB_USERS]
+        prices = (0, 1, 3, 6, 12, 24)
+        donation_map = {
+            'lgtest': {
+                'lglocktest': 1,
+                'gittip-test-0': 3,
+                'gittip-test-1': 6,
+                'gittip-test-2': 0,
+                },
+            'lglocktest': {
+                'lgtest': 3,
+                'gittip-test-0': 6,
+                'gittip-test-1': 6,
+                'gittip-test-2': 3,
+                },
+            'gittip-test-0': {
+                'lgtest': 12,
+                },
+            'gittip-test-1': {
+                'lgtest': 3,
+                },
+            'gittip-test-2': {
+                'lgtest': 6,
+                },
+            'gittip-test-3': {
+                },
+        }
+        for tipper, donation in donation_map.iteritems():
+            for tippee, amount in donation.iteritems():
+                self.db.execute(
+                    "INSERT INTO tips (ctime, tipper, tippee, amount) " \
+                    "VALUES (now(), %s, %s, %s);",
+                    (tipper, tippee, amount))
+
+    def test_histogram(self):
+        expected = {
+            Decimal('3.00'): 2,
+            Decimal('6.00'): 1,
+            Decimal('12.00'):1
+        }
+        actual = gittip.get_histogram_of_giving('lgtest')
+        self.assertEqual(expected, actual)
+
+    def test_histogram_no_tips(self):
+        expected = {}
+        actual = gittip.get_histogram_of_giving('gittip-test-3')
+        self.assertEqual(expected, actual)
 
 
 # rendering
