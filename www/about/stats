@@ -102,13 +102,11 @@ _tip_distribution = list(db.fetchall("""
   ORDER BY amount
 
 """))
-old_tip_n = sum([row['count'] for row in _tip_distribution if row['amount'] in OLD_AMOUNTS])
-new_tip_n = sum([row['count'] for row in _tip_distribution if row['amount'] in AMOUNTS])
+tip_n = sum([row['count'] for row in _tip_distribution if row['amount'] in AMOUNTS])
 
-all_amounts = OLD_AMOUNTS + AMOUNTS[1:]
+all_amounts = AMOUNTS[1:]
 tip_distribution = {a: (0, 0.0) for a in all_amounts}  # prime it
 for row in _tip_distribution:
-    tip_n = old_tip_n if row['amount'] in OLD_AMOUNTS else new_tip_n
     row['percentage'] = row['count'] * 1.0 / tip_n
     tip_distribution[row['amount']] = (row['count'], row['percentage'])
 
@@ -155,8 +153,7 @@ tip_distribution_json = {str(k): v for k,v in tip_distribution.items()}
 names = ['ncc', 'pcc', 'statements', 'transfer_volume',
          'last_thursday', 'this_thursday', 'punc', 'other_people',
          'average_tip', 'average_tippees', 'total_backed_tips',
-         'tip_distribution_json', 'old_tip_n', 'new_tip_n',
-         'nach', 'escrow']
+         'tip_distribution_json', 'tip_n', 'nach', 'escrow']
 
 ^L application/json
 {{ json.dumps({name: globals()[name] for name in names}) }}
@@ -234,13 +231,6 @@ account</a></b>.{% end %}</p>
             <span class="number">({{ tip_distribution[amount][0] }})</span>
         </td>
     </tr>
-    {% if str(amount) == '0.25' %}
-    <td class="amount-change help" colspan="3">
-        <a href="https://github.com/whit537/www.gittip.com/issues/180"
-           target="_blank">Read
-        here</a> about raising the minimum.
-    </td>
-    {% end %}
     {% end %}
 </table>
 
