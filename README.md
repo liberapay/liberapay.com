@@ -21,7 +21,7 @@ You need Postgres with headers installed. There's a simple Makefile for
 building the software. All Python dependencies are included in vendor/. To
 `make run` you need a local.env file in the distribution root with these keys:
 
-    CANONICAL_HOST=
+    CANONICAL_HOST=localhost:8537
     CANONICAL_SCHEME=http
     DATABASE_URL=postgres://gittip@localhost/gittip
     STRIPE_SECRET_API_KEY=1
