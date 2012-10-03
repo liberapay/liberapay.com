@@ -48,8 +48,8 @@ else:
         try:
             balanced_account.add_merchant(merchant_data)  # HTTP under here
         except balanced.exc.MoreInformationRequiredError as mirerr:
-            out = { 'problem': 'Escalate'
-                  , 'error': 'Unable to verify'
+            out = { 'problem': 'More Info Needed'
+                  , 'error': 'Unable to verify your identity'
                   , 'redirect_uri': mirerr.redirect_uri + '?' +
                         urllib.urlencode([('redirect_uri', redirect_to)]) + '&'
                    }

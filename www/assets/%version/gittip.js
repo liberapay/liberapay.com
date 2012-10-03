@@ -310,16 +310,16 @@ Gittip.bankAccountResponseHandler = function (response) {
             $('#status').text('failing');
             $('#delete').show();
             var messages = [data.error];
-            if (data.problem == 'Escalate') {
+            if (data.problem == 'More Info Needed') {
                 var redirect_uri = data.redirect_uri;
                 for (var key in Gittip.merchantData) {
                     redirect_uri += 'merchant[' + encodeURIComponent(key) + ']'
                         + '=' + encodeURIComponent((Gittip.merchantData[key])) + '&';
                 }
-                messages = [
-                    'Oh no, sorry we couldn\'t verify your identity. ' +
-                    'Please check, correct, and resubmit your details, or step through ' +
-                    'our <a href="' + redirect_uri + '">payment processor\'s escalation process</a>.'
+                messages = [ "Sorry, we couldn't verify your identity. Please "
+                           + "check, correct, and resubmit your details, or "
+                           + "step through our <a href=\"" + redirect_uri
+                           + "\">payment processor's escalation process</a>."
                 ];
             }
             Gittip.showFeedback(data.problem, messages);
