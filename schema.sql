@@ -188,3 +188,10 @@ BEGIN;
         ON UPDATE CASCADE ON DELETE RESTRICT;
 
 END;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/whit537/www.gittip.com/issues/35
+-- https://github.com/whit537/www.gittip.com/issues/170
+
+ALTER TABLE participants ALTER COLUMN balance SET NOT NULL;
