@@ -15,9 +15,11 @@ request.allow('GET')
 # done something dodgy (or we f'd up)
 
 assert user.balanced_account_uri is not None, user.id
+
 account = billing.get_balanced_account(user.id, user.balanced_account_uri)
-merchant_uri = qs['merchant_uri']
-account.add_merchant(merchant_uri)
+account.merchant_uri = qs['merchant_uri']
+account.save()
+
 bank_account = account.bank_accounts.all()[-1]
 billing.associate(u"bank account", user.id, account, bank_account.uri)
 request.redirect('/bank-account.html')
