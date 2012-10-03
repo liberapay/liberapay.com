@@ -29,7 +29,7 @@ test: env tests/env data
 tests/env:
 	echo "Creating a tests/env file ..."
 	echo
-	echo "CANONICAL_HOST=localhost:8537" > tests/env
+	echo "CANONICAL_HOST=" > tests/env
 	echo "CANONICAL_SCHEME=http" >> tests/env
 	echo "DATABASE_URL=postgres://gittip-test@localhost/gittip-test" >> tests/env
 	echo "STRIPE_SECRET_API_KEY=1" >> tests/env
