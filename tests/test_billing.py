@@ -757,8 +757,8 @@ class TestBillingPayday(testing.GittipPaydayTest):
             self.db.execute(PARTICIPANT_SQL, participant)
 
         ts_start = self.payday.start()
-        self.payday.zero_out_pending()
-        participants = self.payday.get_participants()
+        self.payday.zero_out_pending(ts_start)
+        participants = self.payday.get_participants(ts_start)
 
         expected_logging_call_args = [
             ('Starting a new payday.'),
@@ -774,8 +774,8 @@ class TestBillingPayday(testing.GittipPaydayTest):
 
         # run a second time, we should see it pick up the existing payday
         second_ts_start = self.payday.start()
-        self.payday.zero_out_pending()
-        second_participants = self.payday.get_participants()
+        self.payday.zero_out_pending(second_ts_start)
+        second_participants = self.payday.get_participants(second_ts_start)
 
         self.assertEqual(ts_start, second_ts_start)
         participants = list(participants)
@@ -812,9 +812,8 @@ class TestBillingPayday(testing.GittipPaydayTest):
     @mock.patch('gittip.billing.payday.Payday.payin')
     @mock.patch('gittip.billing.payday.Payday.end')
     def test_payday(self, end, payin, init, log):
-        participants = mock.Mock()
-        ts_start = mock.Mock()
-        init.return_value = (participants, ts_start)
+        ts_start = datetime.utcnow()
+        init.return_value = (ts_start,)
         greeting = 'Greetings, program! It\'s PAYDAY!!!!'
 
         self.payday.run()
