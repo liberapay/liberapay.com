@@ -86,21 +86,29 @@ class Payday(object):
         """
         log("Greetings, program! It's PAYDAY!!!!")
         ts_start = self.start()
-        self.zero_out_pending()
+        self.zero_out_pending(ts_start)
 
-        def genparticipants(ts_start):
+        def genparticipants(for_payday):
             """Closure generator to yield participants with tips and total.
 
             We re-fetch participants each time, because the second time through
             we want to use the total obligations they have for next week, and
-            if we pass a non-False ts_start to get_tips_and_total then we only
-            get unfulfilled tips from prior to that timestamp, which is none of
-            them by definition.
+            if we pass a non-False for_payday to get_tips_and_total then we
+            only get unfulfilled tips from prior to that timestamp, which is
+            none of them by definition.
+
+            If someone changes tips after payout starts, and we crash during
+            payout, then their new tips_and_total will be used on the re-run.
+            That's okay.
+
+            Note that we take ts_start from the outer scope when we pass it to
+            get_participants, but we pass in for_payday, because we might want
+            it to be False (per the definition of git_tips_and_total).
 
             """
-            for participant in self.get_participants():
+            for participant in self.get_participants(ts_start):
                 tips, total = get_tips_and_total( participant['id']
-                                                , for_payday=ts_start
+                                                , for_payday=for_payday
                                                 , db=self.db
                                                  )
                 typecheck(total, Decimal)
@@ -142,8 +150,8 @@ class Payday(object):
         return ts_start
 
 
-    def zero_out_pending(self):
-        """Zero out the pending column.
+    def zero_out_pending(self, ts_start):
+        """Given a timestamp, zero out the pending column.
 
         We keep track of balance changes as a result of Payday in the pending
         column, and then move them over to the balance column in one big
@@ -155,23 +163,25 @@ class Payday(object):
             UPDATE participants
                SET pending=0.00
              WHERE pending IS NULL
+               AND claimed_time < %s
 
         """
-        self.db.execute(START_PENDING)
+        self.db.execute(START_PENDING, (ts_start,))
         log("Zeroed out the pending column.")
         return None
 
 
-    def get_participants(self):
-        """Return a list of participants dicts.
+    def get_participants(self, ts_start):
+        """Given a timestamp, return a list of participants dicts.
         """
         PARTICIPANTS = """\
             SELECT id, balance, balanced_account_uri, stripe_customer_id
               FROM participants
              WHERE claimed_time IS NOT NULL
+               AND claimed_time < %s
           ORDER BY claimed_time ASC
         """
-        participants = self.db.fetchall(PARTICIPANTS)
+        participants = self.db.fetchall(PARTICIPANTS, (ts_start,))
         log("Fetched participants.")
         return participants
 
