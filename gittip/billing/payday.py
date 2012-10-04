@@ -236,6 +236,14 @@ class Payday(object):
 
     def clear_pending_to_balance(self):
         """Transfer pending into balance, setting pending to NULL.
+
+        Any users that were created while the payin loop was running will have
+        pending NULL (the default). If we try to add that to balance we'll get
+        a NULL (0.0 + NULL = NULL), and balance has a NOT NULL constraint.
+        Hence the where clause. See:
+
+            https://github.com/whit537/www.gittip.com/issues/170
+
         """
 
         self.db.execute("""\
@@ -243,6 +251,7 @@ class Payday(object):
             UPDATE participants
                SET balance = (balance + pending)
                  , pending = NULL
+             WHERE pending IS NOT NULL
 
         """)
         log("Cleared pending to balance. Ready for payouts.")
