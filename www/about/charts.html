@@ -85,6 +85,36 @@ weeks ago.</p>
             {
                 payday = paydays[i];
 
+                // registrations / users
+                var p3 = $(document.createElement('div'));
+                p3.addClass('point');
+                p3.text(payday.nparticipants);
+                var ntippers = parseFloat(payday.nparticipants);
+                p3.css({ top: H - ((ntippers / 6000) * H) - 6
+                       , left: w * (n - i - 1)
+                        });
+                Registrations.append(p3);
+
+                // funders
+                var p2 = $(document.createElement('div'));
+                p2.addClass('point');
+                p2.text(payday.ntippers);
+                var ntippers = parseFloat(payday.ntippers);
+                p2.css({ top: H - ((ntippers / 300) * H) - 6
+                       , left: w * (n - i - 1)
+                        });
+                Funders.append(p2);
+
+                // volume / gifts
+                var point = $(document.createElement('div'));
+                point.addClass('point');
+                var volume = parseFloat(payday.transfer_volume);
+                point.text(volume.toFixed(2));
+                point.css({ top: H - ((volume / 1500) * H) - 6
+                          , left: w * (n - i - 1)
+                           });
+                Volume.append(point);
+
                 // withdrawals
                 var point = $(document.createElement('div'));
                 point.addClass('point');
@@ -104,36 +134,6 @@ weeks ago.</p>
                           , left: w * (n - i - 1)
                            });
                 Charges.append(point);
-
-                // volume
-                var point = $(document.createElement('div'));
-                point.addClass('point');
-                var volume = parseFloat(payday.transfer_volume);
-                point.text(volume.toFixed(2));
-                point.css({ top: H - ((volume / 1200) * H) - 6
-                          , left: w * (n - i - 1)
-                           });
-                Volume.append(point);
-
-                // registrations
-                var p3 = $(document.createElement('div'));
-                p3.addClass('point');
-                p3.text(payday.nparticipants);
-                var ntippers = parseFloat(payday.nparticipants);
-                p3.css({ top: H - ((ntippers / 4200) * H) - 6
-                       , left: w * (n - i - 1)
-                        });
-                Registrations.append(p3);
-
-                // funders
-                var p2 = $(document.createElement('div'));
-                p2.addClass('point');
-                p2.text(payday.ntippers);
-                var ntippers = parseFloat(payday.ntippers);
-                p2.css({ top: H - ((ntippers / 200) * H) - 6
-                       , left: w * (n - i - 1)
-                        });
-                Funders.append(p2);
             }
         });
     });
