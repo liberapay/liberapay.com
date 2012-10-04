@@ -130,7 +130,7 @@ See Also
  - http://www.humblebundle.com/
  - https://www.crowdtilt.com/
  - http://www1.networkforgood.org/
- - http://anyfu.com/
+ - http://anyfu.com/ (also: http://ohours.org/)
  - http://videovivoapp.com/
  - http://techcrunch.com/2009/08/20/tipjoy-heads-to-the-deadpool/
  - http://hopemob.org/
