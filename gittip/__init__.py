@@ -215,6 +215,17 @@ def get_tips_and_total(tipper, for_payday=False, db=None):
     return tips, total
 
 
+def get_histogram_of_giving(user):
+    SQL = """
+    SELECT amount, count(amount) num_contributing FROM tips t WHERE
+    tippee=%s GROUP BY (amount)
+    """
+    results = dict()
+    for amount_dict in db.fetchall(SQL, (user,)):
+        results[amount_dict['amount']] = amount_dict['num_contributing']
+    return results
+
+
 # canonizer
 # =========
 # This is an Aspen hook to ensure that requests are served on a certain root
