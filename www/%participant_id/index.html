@@ -56,21 +56,20 @@ ACCOUNTS = """
 accounts = db.fetchall(ACCOUNTS, (participant_id,))
 assert accounts is not None
 
+backed_amount = get_backed_amount(participant['id'])
 
 if not user.ANON:
     if user.id == participant_id:
         tips, total = get_tips_and_total(user.id)
         if total == 0:
             tips = tip_suggestions
+        giving_histogram, npatrons, contributed = \
+                                     get_histogram_of_giving(participant['id'])
+        assert backed_amount == contributed, (backed_amount, contributed)
     else:
         my_tip = get_tip(user.id, participant['id'])
 
 can_tip = True
-backed_amount = get_backed_amount(participant['id'])
-giving_histogram, npatrons, contributed  = get_histogram_of_giving(user.id)
-for row in giving_histogram:
-    print row
-assert backed_amount == contributed, (backed_amount, contributed)
 tip_or_pledge = "tip"
 username = participant_id # used in footer shared with on/network/ pages
 
