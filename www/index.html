@@ -86,6 +86,11 @@ givers = db.fetchall("""
         #receivers {
             float: right;
         }
+        @media screen and (max-width: 640px) {
+            #givers, #receivers {
+                float: none;
+            }
+        }
         H2.clear {
             padding-top: 36pt;
         }

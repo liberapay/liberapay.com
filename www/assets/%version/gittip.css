@@ -101,6 +101,7 @@ PRE {
     font: 11pt/13pt monospace;
     margin: 0 0 1em 1em;
     padding: 0;
+    overflow: auto;
 }
 
 #you-are {
@@ -410,4 +411,7 @@ form div.error > input, form div.error select {
     white-space: nowrap;
 }
 @media screen and (max-width: 640px) {
+    H1 A {
+        left: 0;
+    }
 }
