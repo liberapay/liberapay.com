@@ -34,7 +34,7 @@ db = None # This global is wired in wireup. It's an instance of
 OLD_OLD_AMOUNTS= [Decimal(a) for a in ('0.00', '0.08', '0.16', '0.32', '0.64', '1.28')]
 OLD_AMOUNTS= [Decimal(a) for a in ('0.25',)]
 
-AMOUNTS= [Decimal(a) for a in ('0.00', '1.00', '3.00', '6.00', '12.00', '24.00')]
+AMOUNTS = [Decimal(a) for a in ('0.00', '1.00', '3.00', '6.00', '12.00', '24.00')]
 
 
 __version__ = "~~VERSION~~"
@@ -87,7 +87,7 @@ def get_backed_amount(participant_id):
         amount = rec['backed']  # might be None
 
     if amount is None:
-        amount = Decimal(0.00)
+        amount = Decimal('0.00')
 
     return amount
 
@@ -122,6 +122,49 @@ def get_number_of_backers(participant_id):
         nbackers = 0
 
     return nbackers
+
+
+def get_histogram_of_giving(user):
+    SQL = """
+
+        SELECT amount
+             , count(amount) AS ncontributing
+          FROM ( SELECT DISTINCT ON (tipper)
+                        amount
+                      , tipper
+                   FROM tips
+                   JOIN participants p ON p.id = tipper
+                  WHERE tippee=%s
+                    AND last_bill_result = ''
+               ORDER BY tipper
+                      , mtime DESC
+                ) AS foo
+         WHERE amount > 0
+      GROUP BY amount
+      ORDER BY amount
+
+    """
+    npatrons = 0.0
+    contributed = Decimal('0.00')
+    other = [-1, 0, 0]  # accumulates old tip amounts
+    out = []
+    for rec in db.fetchall(SQL, (user,)):
+        print rec
+        if rec['amount'] not in AMOUNTS:
+            other[1] += rec['ncontributing']
+            other[2] += rec['amount'] * rec['ncontributing']
+            contributed += rec['amount'] * rec['ncontributing']
+        else:
+            out.append([ rec['amount']
+                       , rec['ncontributing']
+                       , rec['amount'] * rec['ncontributing']
+                        ])
+            contributed += out[-1][2]
+        npatrons += rec['ncontributing']
+    out.append(other)
+    for row in out:
+        row.extend([row[1] / npatrons, row[2] / contributed])
+    return out, npatrons, contributed
 
 
 def get_tips_and_total(tipper, for_payday=False, db=None):
@@ -213,17 +256,6 @@ def get_tips_and_total(tipper, for_payday=False, db=None):
         total = Decimal('0.00')
 
     return tips, total
-
-
-def get_histogram_of_giving(user):
-    SQL = """
-    SELECT amount, count(amount) num_contributing FROM tips t WHERE
-    tippee=%s GROUP BY (amount)
-    """
-    results = dict()
-    for amount_dict in db.fetchall(SQL, (user,)):
-        results[amount_dict['amount']] = amount_dict['num_contributing']
-    return results
 
 
 # canonizer

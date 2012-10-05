@@ -65,11 +65,12 @@ if not user.ANON:
     else:
         my_tip = get_tip(user.id, participant['id'])
 
-giving_histogram = get_histogram_of_giving(user.id)
-total_givers = sum(giving_histogram.values())
-
 can_tip = True
 backed_amount = get_backed_amount(participant['id'])
+giving_histogram, npatrons, contributed  = get_histogram_of_giving(user.id)
+for row in giving_histogram:
+    print row
+assert backed_amount == contributed, (backed_amount, contributed)
 tip_or_pledge = "tip"
 username = participant_id # used in footer shared with on/network/ pages
 
@@ -161,6 +162,9 @@ username = participant_id # used in footer shared with on/network/ pages
         }
         LI {
             margin-bottom: 1em;
+        }
+        .count SPAN.bar.green {
+            background: #2A8F79;
         }
     </style>
     <script>
@@ -518,30 +522,6 @@ username = participant_id # used in footer shared with on/network/ pages
         <span class="small"><a href="history.html">History</a></span>
     </h2>
 
-    <table id="tip-distribution">
-        {% for amount, contributors in giving_histogram.iteritems() %}
-        <tr>
-            <td class="dollar-sign">$</td>
-            <td class="amount">{{ amount }}</td>
-            <td class="count">
-                <span class="bar" style="width: {{ ((1.0 * contributors) / total_givers) * 300 }}pt"></span>
-                {{((1.0 * contributors) / total_givers) * 100 }}%
-                <span class="number">({{ contributors }})</span>
-            </td>
-        </tr>
-        {% if str(amount) == '0.25' %}
-        <td class="amount-change help" colspan="3">
-            <a href="https://github.com/whit537/www.gittip.com/issues/180"
-               target="_blank">Read
-            here</a> about raising the minimum.
-        </td>
-        {% end %}
-        {% end %}
-    </table>
-
-
-
-
     {% if backed_amount == 0 %}
 
     <p>How can you convince people to tip you? <b>Make the world
@@ -555,6 +535,48 @@ username = participant_id # used in footer shared with on/network/ pages
     received money from someone <i>else</i> on Gittip that they want to pass on
     to you.</p>
 
+    <p>Here&rsquo;s a breakdown of this estimate by tip amount, showing the
+    percentage of the number of tips:</p>
+
+    <table id="tip-distribution">
+        {% for amount, ncontributors, summed, pcontributors, psummed in giving_histogram %}
+        <tr>
+            {% if str(amount) == '-1' %}
+            <td class="amount" colspan="2">Other</td>
+            {% else %}
+            <td class="dollar-sign">$</td>
+            <td class="amount">{{ amount }}</td>
+            {% end %}
+            <td class="count">
+                <span class="bar" style="width:{{ pcontributors * 300 }}pt"></span>
+                {{ "%5.1f" % (pcontributors * 100) }}%
+                <span class="number">({{ ncontributors }})</span>
+            </td>
+        </tr>
+        {% end %}
+    </table>
+
+    <p><br />Here&rsquo;s the same info, but showing the percentage of the
+    total dollar amount of your tips:</p>
+
+    <table id="tip-distribution">
+        {% for amount, ncontributors, summed, pcontributors, psummed in giving_histogram %}
+        <tr>
+            {% if str(amount) == '-1' %}
+            <td class="amount" colspan="2">Other</td>
+            {% else %}
+            <td class="dollar-sign">$</td>
+            <td class="amount">{{ amount }}</td>
+            {% end %}
+            <td colspan="2"></td>
+            <td class="count">
+                <span class="green bar" style="width: {{ psummed * 300 }}pt"></span>
+                {{ "%5.1f" % (psummed * 100) }}%
+                <span class="number">(${{ summed }})</span>
+            </td>
+        </tr>
+        {% end %}
+    </table>
     {% end %}
 
 
