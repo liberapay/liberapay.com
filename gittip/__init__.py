@@ -163,7 +163,8 @@ def get_histogram_of_giving(user):
         npatrons += rec['ncontributing']
     out.append(other)
     for row in out:
-        row.extend([row[1] / npatrons, row[2] / contributed])
+        row.append((row[1] / npatrons) if npatrons > 0 else 0)
+        row.append((row[2] / contributed) if contributed > 0 else 0)
     return out, npatrons, contributed
 
 
