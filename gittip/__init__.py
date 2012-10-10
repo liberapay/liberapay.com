@@ -149,7 +149,6 @@ def get_histogram_of_giving(user):
     other = [-1, 0, 0]  # accumulates old tip amounts
     out = []
     for rec in db.fetchall(SQL, (user,)):
-        print rec
         if rec['amount'] not in AMOUNTS:
             other[1] += rec['ncontributing']
             other[2] += rec['amount'] * rec['ncontributing']
