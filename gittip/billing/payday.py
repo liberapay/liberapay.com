@@ -21,6 +21,7 @@ from decimal import Decimal, ROUND_UP
 
 import balanced
 import stripe
+import aspen.utils
 from aspen import log
 from aspen.utils import typecheck
 from gittip import get_tips_and_total
@@ -84,6 +85,7 @@ class Payday(object):
         crashes.
 
         """
+        _start = aspen.utils.utcnow()
         log("Greetings, program! It's PAYDAY!!!!")
         ts_start = self.start()
         self.zero_out_pending(ts_start)
@@ -119,6 +121,16 @@ class Payday(object):
         self.payout(ts_start, genparticipants(False))
 
         self.end()
+
+        _end = aspen.utils.utcnow()
+        _delta = _end - _start
+        fmt_past = "Script ran for {age} (%s)." % _delta
+
+        # XXX For some reason newer versions of aspen use old string
+        # formatting, so if/when we upgrade this will break. Why do we do that
+        # in aspen, anyway?
+
+        log(aspen.utils.to_age(_start, fmt_past=fmt_past))
 
 
     def start(self):
