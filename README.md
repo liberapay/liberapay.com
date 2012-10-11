@@ -139,3 +139,4 @@ See Also
  - http://www.chipin.com/
  - http://www.fundable.com/
  - https://www.modestneeds.org/
+ - http://www.freedomsponsors.org/
