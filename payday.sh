@@ -62,11 +62,12 @@ start () {
     date -u >> $LOG
 }
 
+
 # Work
 # ====
 
 if [ "$2" == "for_real_please" ]; then
-    LOG="../paydays/for-real-$1.log"
+    LOG="../paydays/gittip-$1.log"
 else
     LOG="../paydays/test-$1.log"
 fi
