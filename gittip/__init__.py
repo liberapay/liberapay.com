@@ -144,7 +144,7 @@ def get_histogram_of_giving(user):
       ORDER BY amount
 
     """
-    npatrons = 0.0
+    npatrons = 0.0  # float to trigger float division
     contributed = Decimal('0.00')
     other = [-1, 0, 0]  # accumulates old tip amounts
     out = []

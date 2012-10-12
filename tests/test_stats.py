@@ -55,6 +55,11 @@ class HistogramOfGivingTests(testing.GittipBaseDBTest):
                 },
         }
         for tipper, donation in donation_map.iteritems():
+            if tipper != 'gittip-test-0':
+                # Only people with a credit card on file should show up.
+                self.db.execute(
+                    "UPDATE participants SET last_bill_result='' WHERE id=%s",
+                    (tipper,))
             for tippee, amount in donation.iteritems():
                 self.db.execute(
                     "INSERT INTO tips (ctime, tipper, tippee, amount) " \
@@ -62,16 +67,21 @@ class HistogramOfGivingTests(testing.GittipBaseDBTest):
                     (tipper, tippee, amount))
 
     def test_histogram(self):
-        expected = {
-            Decimal('3.00'): 2,
-            Decimal('6.00'): 1,
-            Decimal('12.00'):1
-        }
+        expected = ( [ [ Decimal('3.00'), 2L, Decimal('6.00')
+                       , 0.6666666666666666, Decimal('0.5')
+                        ]
+                     , [ Decimal('6.00'), 1L, Decimal('6.00')
+                       , 0.3333333333333333, Decimal('0.5')
+                        ]
+                      ]
+                   , 3.0
+                   , Decimal('12.00')
+                    )
         actual = gittip.get_histogram_of_giving('lgtest')
         self.assertEqual(expected, actual)
 
     def test_histogram_no_tips(self):
-        expected = {}
+        expected = ([], 0.0, Decimal('0.00'))
         actual = gittip.get_histogram_of_giving('gittip-test-3')
         self.assertEqual(expected, actual)
 
