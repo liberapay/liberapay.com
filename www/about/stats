@@ -214,7 +214,7 @@ account</a></b>.{% end %}</p>
 
 <h2><b>${{ commaize(total_backed_tips, 2) }}</b>
     {{ future_processing_text }} <b>{{ this_thursday }}</b>{{ punc }}
-    <span class="small"><a href="unclaimed.html">Unclaimed</a></span>
+    <span class="small"><a href="/about/unclaimed.html">Unclaimed</a></span>
 </h2>
 
 <p>On average, people who tip, tip ${{ "%.2f" % average_tip }} each to
