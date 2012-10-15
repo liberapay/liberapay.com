@@ -23,9 +23,9 @@ def test_commaize_commaizes_and_obeys_decimal_places():
     assert actual == "1,000.0000", actual
 
 
-class HistogramOfGivingTests(testing.GittipBaseDBTest):
+class ChartOfGivingTests(testing.GittipBaseDBTest):
     def setUp(self):
-        super(HistogramOfGivingTests, self).setUp()
+        super(ChartOfGivingTests, self).setUp()
 
         user_ids = [x[1] for x in testing.GITHUB_USERS]
         prices = (0, 1, 3, 6, 12, 24)
@@ -66,7 +66,7 @@ class HistogramOfGivingTests(testing.GittipBaseDBTest):
                     "VALUES (now(), %s, %s, %s);",
                     (tipper, tippee, amount))
 
-    def test_histogram(self):
+    def test_chart(self):
         expected = ( [ [ Decimal('3.00'), 2L, Decimal('6.00')
                        , 0.6666666666666666, Decimal('0.5')
                         ]
@@ -77,12 +77,12 @@ class HistogramOfGivingTests(testing.GittipBaseDBTest):
                    , 3.0
                    , Decimal('12.00')
                     )
-        actual = gittip.get_histogram_of_giving('lgtest')
+        actual = gittip.get_chart_of_giving('lgtest')
         self.assertEqual(expected, actual)
 
-    def test_histogram_no_tips(self):
+    def test_chart_no_tips(self):
         expected = ([], 0.0, Decimal('0.00'))
-        actual = gittip.get_histogram_of_giving('gittip-test-3')
+        actual = gittip.get_chart_of_giving('gittip-test-3')
         self.assertEqual(expected, actual)
 
 

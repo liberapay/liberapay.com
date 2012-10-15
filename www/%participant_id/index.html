@@ -15,7 +15,7 @@ import requests
 from aspen import json, Response
 from aspen.utils import to_age
 from gittip import AMOUNTS, db, get_tip, get_tips_and_total, \
-     get_backed_amount, get_histogram_of_giving
+     get_backed_amount, get_chart_of_giving
 from gittip.utils import wrap
 from gittip.networks import github, resolve_unclaimed
 
@@ -60,8 +60,8 @@ backed_amount = get_backed_amount(participant['id'])
 
 if not user.ANON:
     if user.id == participant_id or user.ADMIN:
-        giving_histogram, npatrons, contributed = \
-                                     get_histogram_of_giving(participant['id'])
+        giving_chart, npatrons, contributed = \
+                                     get_chart_of_giving(participant['id'])
     if user.id == participant_id:
         tips, total = get_tips_and_total(user.id)
         if total == 0:
@@ -544,7 +544,7 @@ username = participant_id # used in footer shared with on/network/ pages
     total dollar amount of your tips:</p>
 
     <table id="tip-distribution">
-        {% for amount, ncontributors, summed, pcontributors, psummed in giving_histogram %}
+        {% for amount, ncontributors, summed, pcontributors, psummed in giving_chart %}
         <tr>
             {% if str(amount) == '-1' %}
             <td class="amount" colspan="2">Other</td>

@@ -124,7 +124,7 @@ def get_number_of_backers(participant_id):
     return nbackers
 
 
-def get_histogram_of_giving(user):
+def get_chart_of_giving(user):
     SQL = """
 
         SELECT amount
