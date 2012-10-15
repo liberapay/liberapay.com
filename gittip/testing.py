@@ -179,23 +179,8 @@ class Context(object):
         if safety_belt != "Pretty please, with sugar on top.":
             raise Exception("Heck.")
 
-        tables = self._get_table_names()
-        deleted = []
-        safety_belt = 0
-        while tables != deleted:
-            safety_belt += 1
-            if safety_belt > 24:
-                raise RuntimeError("max recursion exceeded deleting data")
-            for table_name in tables:
-                if table_name not in deleted:
-                    try:
-                        self.db.execute("DELETE FROM %s" % table_name)
-                        deleted.append(table_name)
-                        deleted.sort()
-                    except psycopg2.IntegrityError:
-                        # I guess this depends on another table. We'll get back
-                        # to this one after we delete that one.
-                        pass
+        for table_name in self._get_table_names():
+            self.db.execute("TRUNCATE TABLE %s CASCADE" % table_name)
 
 load = Context()
 
