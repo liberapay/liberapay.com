@@ -114,6 +114,10 @@ with Aspen. First `make tests/env`, and then:
     [gittip] $ cd tests/
     [gittip] $ swaddle env ../env/bin/nosetests
 
+Gittip's test suite uses module-level test functions with a context manager for
+managing testing state.  Please don't use test classes.
+
+
 
 See Also
 ========
