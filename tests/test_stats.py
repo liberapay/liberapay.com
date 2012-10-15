@@ -1,12 +1,12 @@
+import unittest
 from datetime import datetime
 from decimal import Decimal
-
-from mock import patch
 
 import gittip
 from gittip.billing.payday import Payday
 from gittip import testing
 from gittip import wireup
+from mock import patch
 
 
 # commaize
@@ -88,7 +88,7 @@ class HistogramOfGivingTests(testing.GittipBaseDBTest):
 
 # rendering
 
-class TestStatsPage(testing.GittipBaseTest):
+class TestStatsPage(unittest.TestCase):
 
     def get_stats_page(self):
         response = testing.serve_request('/about/stats.html')

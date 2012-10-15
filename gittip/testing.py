@@ -33,12 +33,7 @@ def populate_db_with_dummy_data(db):
         change_participant_id(None, participant_id, login)
 
 
-class GittipBaseTest(unittest.TestCase):
-    # TODO: rad common test methods here.
-    pass
-
-
-class GittipBaseDBTest(GittipBaseTest):
+class GittipBaseDBTest(unittest.TestCase):
     """
     Similar to the above but will setup a db connection so we can perform db
     operations. Everything is performed in a transaction and will be rolled

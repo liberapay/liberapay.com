@@ -1,18 +1,18 @@
 from __future__ import unicode_literals
 
-import mock
+import unittest
 from datetime import datetime
 from decimal import Decimal, ROUND_UP
 
 import balanced
-from psycopg2 import IntegrityError
+import mock
 from aspen.utils import typecheck
-
 from gittip import authentication, billing, testing
 from gittip.billing.payday import FEE_CHARGE
+from psycopg2 import IntegrityError
 
 
-class TestCard(testing.GittipBaseTest):
+class TestCard(unittest.TestCase):
     def setUp(self):
         super(TestCard, self).setUp()
         self.balanced_account_uri = '/v1/marketplaces/M123/accounts/A123'
@@ -73,7 +73,7 @@ class TestCard(testing.GittipBaseTest):
         self.assertEqual(card['nothing'], '')
 
 
-class TestBankAccount(testing.GittipBaseTest):
+class TestBankAccount(unittest.TestCase):
     def setUp(self):
         super(TestBankAccount, self).setUp()
         self.balanced_account_uri = '/v1/marketplaces/M123/accounts/A123'
