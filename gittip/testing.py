@@ -2,6 +2,7 @@
 """
 from __future__ import unicode_literals
 
+import os
 import re
 import unittest
 from decimal import Decimal
@@ -174,6 +175,10 @@ class Context(object):
     def _delete_data(self):
         """Delete all data from all tables in the public schema (eep!).
         """
+        safety_belt = os.environ["YES_PLEASE_DELETE_ALL_MY_DATA_VERY_OFTEN"]
+        if safety_belt != "Pretty please, with sugar on top.":
+            raise Exception("Heck.")
+
         tables = self._get_table_names()
         deleted = []
         safety_belt = 0

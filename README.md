@@ -103,19 +103,34 @@ Testing [![Testing](https://secure.travis-ci.org/whit537/www.gittip.com.png)](ht
 -------
 
 Please write unit tests for all new code and all code you change. Gittip's test
-suite is designed for the nosetests test runner. Assuming you have make, the
-easiest way to run the test suite is:
+suite is designed for the nosetests test runner (maybe it also works with
+py.test?), and uses module-level test functions with a context manager for
+managing testing state. Please don't use test classes.
+
+Assuming you have make, the easiest way to run the test suite is:
 
     $ make test
+
+However, the test suite deletes data in all tables in the public schema of the
+database configured in your testing environment, and as a safety precaution, we
+require the following key and value to be set in said environment:
+
+    YES_PLEASE_DELETE_ALL_MY_DATA_VERY_OFTEN=Pretty please, with sugar on top.
+
+`make test` will not set this for you. Run `make tests/env` and then edit that
+file and manually add that key=value, then `make test` will work. Even just
+importing the gittip.testing module will trigger deletion of all data. Without
+this safety precaution, an attacker could try sneaking `import gittip.testing`
+into a commit. Once their changeset was deployed, we would have ...  problems.
+Of course, they could also remove the check in the same or even a different
+commit. Of course, they could also sneak in whatever the heck code they wanted
+to try to sneak in.
 
 To invoke nosetests directly you should use the `swaddle` utility that comes
 with Aspen. First `make tests/env`, and then:
 
     [gittip] $ cd tests/
     [gittip] $ swaddle env ../env/bin/nosetests
-
-Gittip's test suite uses module-level test functions with a context manager for
-managing testing state.  Please don't use test classes.
 
 
 

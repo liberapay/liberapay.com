@@ -12,7 +12,7 @@ env:
 
 
 clean:
-	rm -rf env *.egg *.egg-info
+	rm -rf env *.egg *.egg-info tests/env
 	find . -name \*.pyc -delete
 
 run: env
