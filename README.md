@@ -108,10 +108,11 @@ easiest way to run the test suite is:
 
     $ make test
 
-To invoke nosetests directly you need to set DATABASE_URL in its environment,
-like so:
+To invoke nosetests directly you should use the `swaddle` utility that comes
+with Aspen. First `make tests/env`, and then:
 
-    [gittip] $ DATABASE_URL=postgres://gittip@localhost/gittip nosetests
+    [gittip] $ cd tests/
+    [gittip] $ swaddle env ../env/bin/nosetests
 
 
 See Also
