@@ -104,7 +104,7 @@ Testing [![Testing](https://secure.travis-ci.org/whit537/www.gittip.com.png)](ht
 
 Please write unit tests for all new code and all code you change. Gittip's test
 suite is designed for the nosetests test runner (maybe it also works with
-py.test?), and uses module-level test functions with a context manager for
+py.test?), and uses module-level test functions, with a context manager for
 managing testing state. Please don't use test classes.
 
 Assuming you have make, the easiest way to run the test suite is:
@@ -127,7 +127,7 @@ commit. Of course, they could also sneak in whatever the heck code they wanted
 to try to sneak in.
 
 To invoke nosetests directly you should use the `swaddle` utility that comes
-with Aspen. First `make tests/env`, and then:
+with Aspen. First `make tests/env`, edit it as noted above, and then:
 
     [gittip] $ cd tests/
     [gittip] $ swaddle env ../env/bin/nosetests
