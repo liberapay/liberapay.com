@@ -2,6 +2,7 @@
 """
 from __future__ import unicode_literals
 
+import copy
 import os
 import re
 import unittest
@@ -153,6 +154,7 @@ class Context(object):
 
             self.db.execute(SQL, values)
 
+        self.a = self.dump()
         return self
 
     def __enter__(self):
@@ -161,11 +163,82 @@ class Context(object):
     def __exit__(self, *a):
         self._delete_data()
 
-    def diff(self):
-        pass
+    def diff(self, deets=False):
+        """Compare the data state now with when we started.
+        """
+        a = copy.deepcopy(self.a)  # avoid mutation
+        b = self.dump()
+        return self._diff(a, b, deets)
+
+    def _diff(self, a, b, deets):
+        """Compare two data dumps.
+
+        The return value is a list representing tables that have change:
+
+            [ ("table1", inserts, updates, deletes)
+            , ("table2", inserts, updates, deletes)
+             ]
+
+        If deets is False then inserts and deletes are ints, otherwise they're
+        lists of dicts. Updates is always a list of dicts showing new values.
+
+        """
+        out = []
+        assert sorted(a.keys()) == sorted(b.keys()), \
+                                           "Sorry, diff isn't designed for DDL"
+        for table_name, b_table in b.items():
+            a_table = a[table_name]
+
+            inserts = []
+            updates = []
+            deletes = []
+
+            for key, row in b_table.items():
+                if key not in a_table:
+                    inserts.append(row)
+                else:
+                    update = {}
+                    for colname, value in row.items():
+                        if a_table[key][colname] != value:
+                            update[colname] = value
+                    if update:
+                        updates.append(update)
+
+            for key, row in a_table.items():
+                if key not in b_table:
+                    deletes.append(row)
+
+            if deletes or inserts or updates:
+                out.append((table_name, inserts, deletes, updates))
+
+        return out
 
     def dump(self):
-        pass
+        """Return a dump of the database.
+
+        Format:
+
+            { "table1": {1: {}, 2: {}}
+            , "table2": {1: {}}
+             }
+
+        That's table name to a mapping of primary key to the rest of the row as
+        a dict.
+
+        """
+        out = {}
+        pkeys = self._get_primary_keys()
+        for table_name in self._get_table_names():
+            pkey = pkeys[table_name]
+            rows = self.db.fetchall("SELECT * FROM %s" % table_name)
+            if rows is None:
+                rows = []
+            mapped = {}
+            for row in rows:
+                key = row[pkey]
+                mapped[key] = row
+            out[table_name] = mapped
+        return out
 
     def _get_table_names(self):
         """Return a sorted list of tables in the public schema.
@@ -179,6 +252,26 @@ class Context(object):
         tables.sort()
         return tables
 
+    def _get_primary_keys(self):
+        """Return a mapping of table name in the public schema to primary key.
+        """
+        _pkeys = self.db.fetchall("""
+
+            SELECT tablename, indexdef
+              FROM pg_indexes
+             WHERE schemaname='public'
+               AND indexname LIKE '%_pkey'
+
+        """)
+        if _pkeys is None:
+            _pkeys = []
+        else:
+            pkeys = {}
+            for row in _pkeys:
+                pkey = row['indexdef'].split('(')[1].split(')')[0]
+                pkeys[row['tablename']] = pkey
+        return pkeys
+
     def _delete_data(self):
         """Delete all data from all tables in the public schema (eep!).
         """
@@ -191,9 +284,12 @@ class Context(object):
 
 load = Context()
 
-def start_payday():
-    context = load()
+def start_payday(*data):
+    context = load(*data)
     context.payday = Payday(gittip.db)
+    ts_start = context.payday.start()
+    context.payday.zero_out_pending(ts_start)
+    context.ts_start = ts_start
     return context
 
 
