@@ -291,12 +291,35 @@ def test_store_error_stores_ach_error():
 # charge
 # ======
 
-@mock.patch('gittip.billing.payday.Payday.mark_missing_funding')
-def test_charge_without_balanced_customer_id_or_stripe_customer_id(mpmf):
-    with testing.start_payday() as ctx:
-        result = ctx.payday.charge('foo', None, None, Decimal('1.00'))
-        assert not result
-        assert mpmf.call_count == 1
+def get_numbers(context):
+    """Return a list of 8 ints:
+
+        nachs
+        ncc_failing
+        ncc_missing
+        ncharges
+        nparticipants
+        ntippers
+        ntips
+        ntransfers
+
+    """
+    paydays = context.dump()['paydays'].values()
+    assert len(paydays) == 1, len(paydays)
+    payday = paydays[0]
+    return [v for k,v in sorted(payday.items()) if k.startswith('n')]
+
+
+def test_charge_without_cc_details_returns_False():
+    with testing.start_payday("participants", ("foo",)) as context:
+        assert not context.payday.charge('foo', None, None, Decimal('1.00'))
+
+def test_charge_without_cc_marked_as_failure():
+    with testing.start_payday("participants", ("foo",)) as context:
+        context.payday.charge('foo', None, None, Decimal('1.00'))
+        actual = get_numbers(context)
+        assert actual == [0, 0, 1, 0, 0, 0, 0, 0], actual
+
 
 class TestBillingCharge(testing.GittipPaydayTest):
     def setUp(self):
