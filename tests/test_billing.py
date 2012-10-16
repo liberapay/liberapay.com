@@ -291,6 +291,13 @@ def test_store_error_stores_ach_error():
 # charge
 # ======
 
+@mock.patch('gittip.billing.payday.Payday.mark_missing_funding')
+def test_charge_without_balanced_customer_id_or_stripe_customer_id(mpmf):
+    with testing.start_payday() as ctx:
+        result = ctx.payday.charge('foo', None, None, Decimal('1.00'))
+        assert not result
+        assert mpmf.call_count == 1
+
 class TestBillingCharge(testing.GittipPaydayTest):
     def setUp(self):
         super(TestBillingCharge, self).setUp()
@@ -313,16 +320,6 @@ class TestBillingCharge(testing.GittipPaydayTest):
         '''
         self.db.execute(insert)
 
-
-    @mock.patch('gittip.billing.payday.Payday.mark_missing_funding')
-    def test_charge_without_balanced_customer_id_or_stripe_customer_id(self, mpmf):
-        result = self.payday.charge( self.participant_id
-                                   , None
-                                   , None
-                                   , Decimal('1.00')
-                                    )
-        self.assertFalse(result)
-        self.assertEqual(mpmf.call_count, 1)
 
     @mock.patch('gittip.billing.payday.Payday.charge_on_balanced')
     @mock.patch('gittip.billing.payday.Payday.mark_charge_failed')
