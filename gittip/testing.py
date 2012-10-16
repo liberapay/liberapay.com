@@ -104,43 +104,54 @@ class Context(object):
 
         Here's the format for data:
 
-            [ "table1": [{}, {}, {}]
-            , "table1": [{}, {}, {}]
-             ]
+            ( "table1", (), {}
+            , "table2", {}, [], {}
+             )
+
+        If it's a basestring it's a table name, if it's a dict it's a mapping
+        of colname to value, if it's a tuple or list it's a sequence of values.
 
         """
-        if len(data) % 2 == 1:
-            raise ValueError('Bad data, should be ("name", [row, row, row])')
-
         known_tables = self._get_table_names()
+        table_name = ""
 
-        for i in range(0, len(data), 2):
+        for thing in data:
 
-            table_name = data[i]
-            rows = data[i+1]
+            typ = type(thing)
 
-            if table_name not in known_tables:
-                raise RuntimeError("Unknown table: %s" % table_name)
+            if typ in (str, unicode):
+                table_name = thing
+                if table_name not in known_tables:  # SQLi pro
+                    raise ValueError("Unknown table: %s" % table_name)
+                continue
 
-            for row in rows:
-                n = len(row)
+            if not table_name:
+                raise ValueError("What table am I INSERTing into?")
 
+            row = thing
+            n = len(row)
+
+            if typ is dict:
                 colnames = []
                 values = []
                 for colname, value in sorted(row.iteritems()):
-                    if colname_re.match(colname) is None:
-                        raise RuntimeError( "colname must match %s"
-                                          % colname_re.pattern)
+                    if colname_re.match(colname) is None:  # SQLi pro
+                        raise ValueError( "colname must match %s"
+                                        % colname_re.pattern)
                     colnames.append(colname)
                     values.append(value)
-                colnames = ', '.join(colnames)
-                value_placeholders = ', '.join(['%s'] * n)
+                colnames = ' (%s) ' % ', '.join(colnames)
+            elif typ in (list, tuple):
+                colnames = ' '
+                values = thing
 
-                SQL = "INSERT INTO %s (%s) VALUES (%s)"
-                SQL %= (table_name, colnames, value_placeholders)
+            values = tuple(values)
+            value_placeholders = ', '.join(['%s'] * n)
 
-                row = tuple(values)
-                self.db.execute(SQL, row)
+            SQL = "INSERT INTO %s%sVALUES (%s)"
+            SQL %= (table_name, colnames, value_placeholders)
+
+            self.db.execute(SQL, values)
 
         return self
 
@@ -221,7 +232,7 @@ def setup_tips(*recs):
             rec["last_bill_result"] = "" if good_cc else "Failure!"
         participants.append(rec)
 
-    data = ["participants", participants, "tips", tips]
+    data = ["participants"] + participants + ["tips"] + tips
     return load(*data)
 
 

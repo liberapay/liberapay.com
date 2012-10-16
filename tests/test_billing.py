@@ -124,7 +124,7 @@ balanced_account_uri = '/v1/marketplaces/M123/accounts/A123'
 card_uri = '/v1/marketplaces/M123/accounts/A123/cards/C123'
 
 def foo_user():
-    return testing.load("participants", [{"id": "foo"}])
+    return testing.load("participants", ("foo",))
 
 
 # associate
@@ -150,7 +150,7 @@ def test_associate_invalid_card(find):
 
         # second time through, payment processor account is balanced
         # account_uri
-        billing.associate(u"credit card"
+        billing.associate( u"credit card"
                          , 'foo'
                          , balanced_account_uri
                          , card_uri
