@@ -1,2 +1,5 @@
 language: python
+before_script:
+ - make tests/env
+ - echo "YES_PLEASE_DELETE_ALL_MY_DATA_VERY_OFTEN=Pretty please, with sugar on top." >> tests/env
 script: make test
