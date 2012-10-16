@@ -380,6 +380,8 @@ def test_charge_success_touches_a_few_tables(hb):
         actual = context.diff(compact=True)
         assert actual == expected, actual
 
+# XXX I started refactoring billing tests out of test classes into module-level
+# functions + context managers, and this is as far as I got.
 
 class TestBillingCharge(testing.GittipPaydayTest):
     def setUp(self):
