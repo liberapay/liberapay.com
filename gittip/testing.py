@@ -87,7 +87,7 @@ class Context(object):
     load = testing.Context()
 
     def test():
-        with load(data):
+        with load(*data):
             actual = my_func()
             expected = "Cheese whiz!"
             assert actual == expected, actual
@@ -99,7 +99,7 @@ class Context(object):
         self.billing = wireup.billing()
         self._delete_data()
 
-    def __call__(self, data=None):
+    def __call__(self, *data):
         """Load up the database with data.
 
         Here's the format for data:
@@ -109,11 +109,8 @@ class Context(object):
              ]
 
         """
-        if data is None:
-            data = []
-
         if len(data) % 2 == 1:
-            raise Exception('Bad data, should be ["name", [row, row, row]]')
+            raise ValueError('Bad data, should be ("name", [row, row, row])')
 
         known_tables = self._get_table_names()
 
@@ -183,6 +180,11 @@ class Context(object):
 
 load = Context()
 
+def start_payday():
+    context = load()
+    context.payday = Payday(gittip.db)
+    return context
+
 
 def setup_tips(*recs):
     """Setup some participants and tips. recs is a list of:
@@ -220,7 +222,7 @@ def setup_tips(*recs):
         participants.append(rec)
 
     data = ["participants", participants, "tips", tips]
-    return load(data)
+    return load(*data)
 
 
 # Helpers for testing simplates.
