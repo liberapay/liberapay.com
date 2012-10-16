@@ -163,14 +163,14 @@ class Context(object):
     def __exit__(self, *a):
         self._delete_data()
 
-    def diff(self, deets=False):
+    def diff(self, compact=False):
         """Compare the data state now with when we started.
         """
         a = copy.deepcopy(self.a)  # avoid mutation
         b = self.dump()
-        return self._diff(a, b, deets)
+        return self._diff(a, b, compact)
 
-    def _diff(self, a, b, deets):
+    def _diff(self, a, b, compact):
         """Compare two data dumps.
 
         The return value is a list representing tables that have change:
@@ -183,7 +183,8 @@ class Context(object):
         lists of dicts. Updates is always a list of dicts showing new values.
 
         """
-        out = []
+        out = {}
+        pkeys = self._get_primary_keys()
         assert sorted(a.keys()) == sorted(b.keys()), \
                                            "Sorry, diff isn't designed for DDL"
         for table_name, b_table in b.items():
@@ -202,14 +203,26 @@ class Context(object):
                         if a_table[key][colname] != value:
                             update[colname] = value
                     if update:
+                        pkey = pkeys[table_name]
+                        update[pkey] = row[pkey] # include primary key
                         updates.append(update)
 
             for key, row in a_table.items():
                 if key not in b_table:
                     deletes.append(row)
 
-            if deletes or inserts or updates:
-                out.append((table_name, inserts, deletes, updates))
+            if inserts or updates or deletes:
+                out[table_name] = {}
+                if compact:
+                    out[table_name] = [ len(inserts)
+                                      , len(updates)
+                                      , len(deletes)
+                                       ]
+                else:
+                    out[table_name] = { "inserts": inserts
+                                      , "updates": updates
+                                      , "deletes": deletes
+                                       }
 
         return out
 

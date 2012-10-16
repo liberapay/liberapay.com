@@ -291,6 +291,8 @@ def test_store_error_stores_ach_error():
 # charge
 # ======
 
+STRIPE_CUSTOMER_ID = 'cus_deadbeef'
+
 def get_numbers(context):
     """Return a list of 8 ints:
 
@@ -320,6 +322,64 @@ def test_charge_without_cc_marked_as_failure():
         actual = get_numbers(context)
         assert actual == [0, 0, 1, 0, 0, 0, 0, 0], actual
 
+@mock.patch('gittip.billing.payday.Payday.charge_on_balanced')
+def test_charge_failure_returns_False(cob):
+    data = ("participants", {"id": "foo", "last_bill_result": "failure"})
+    with testing.start_payday(*data) as context:
+        cob.return_value = (Decimal('10.00'), Decimal('0.68'), 'FAILED')
+        actual = context.payday.charge('foo'
+                                      , balanced_account_uri
+                                      , STRIPE_CUSTOMER_ID
+                                      , Decimal('1.00')
+                                       )
+        assert actual is False, actual
+
+@mock.patch('gittip.billing.payday.Payday.charge_on_balanced')
+def test_charge_success_returns_True(hb):
+    data = ("participants", {"id": "foo", "last_bill_result": "failure"})
+    with testing.start_payday(*data) as context:
+        hb.return_value = (Decimal('10.00'), Decimal('0.68'), None)
+        actual = context.payday.charge( 'foo'
+                                      , balanced_account_uri
+                                      , STRIPE_CUSTOMER_ID
+                                      , Decimal('1.00')
+                                       )
+        assert actual is True, actual
+
+@mock.patch('gittip.billing.payday.Payday.charge_on_balanced')
+def test_charge_success_updates_participant(hb):
+    data = ("participants", {"id": "foo", "last_bill_result": "failure"})
+    with testing.start_payday(*data) as context:
+        hb.return_value = (Decimal('10.00'), Decimal('0.68'), None)
+        context.payday.charge( 'foo'
+                             , balanced_account_uri
+                             , STRIPE_CUSTOMER_ID
+                             , Decimal('1.00')
+                              )
+        expected = [{ 'id': 'foo'
+                    , 'balance': Decimal('9.32')
+                    , 'last_bill_result': ''
+                     }]
+        actual = context.diff()['participants']['updates']
+        assert actual == expected, actual
+
+@mock.patch('gittip.billing.payday.Payday.charge_on_balanced')
+def test_charge_success_touches_a_few_tables(hb):
+    data = ("participants", {"id": "foo", "last_bill_result": "failure"})
+    with testing.start_payday(*data) as context:
+        hb.return_value = (Decimal('10.00'), Decimal('0.68'), None)
+        context.payday.charge( 'foo'
+                             , balanced_account_uri
+                             , STRIPE_CUSTOMER_ID
+                             , Decimal('1.00')
+                              )
+        expected = { "exchanges": [1,0,0]
+                   , "participants": [0,1,0]
+                   , "paydays": [1,0,0]
+                    }
+        actual = context.diff(compact=True)
+        assert actual == expected, actual
+
 
 class TestBillingCharge(testing.GittipPaydayTest):
     def setUp(self):
@@ -342,33 +402,6 @@ class TestBillingCharge(testing.GittipPaydayTest):
             )
         '''
         self.db.execute(insert)
-
-
-    @mock.patch('gittip.billing.payday.Payday.charge_on_balanced')
-    @mock.patch('gittip.billing.payday.Payday.mark_charge_failed')
-    def test_charge_failure(self, mf, hb):
-        hb.return_value = (Decimal('10.00'), Decimal('0.68'), 'FAILED')
-        result = self.payday.charge( self.participant_id
-                                   , self.balanced_account_uri
-                                   , self.stripe_customer_id
-                                   , Decimal('1.00')
-                                    )
-        self.assertEqual(hb.call_count, 1)
-        self.assertEqual(mf.call_count, 1)
-        self.assertFalse(result)
-
-    @mock.patch('gittip.billing.payday.Payday.charge_on_balanced')
-    @mock.patch('gittip.billing.payday.Payday.record_charge')
-    def test_record_charge_gets_proper_amount(self, rx, hb):
-        hb.return_value = (Decimal('10.00'), Decimal('0.68'), None)
-        result = self.payday.charge( self.participant_id
-                                   , self.balanced_account_uri
-                                   , self.stripe_customer_id
-                                   , Decimal('1.00')
-                                    )
-        self.assertEqual(rx.call_args[0][0], Decimal('9.32'))
-        self.assertEqual(rx.call_args[0][2], Decimal('0.68'))
-        self.assertTrue(result)
 
     @mock.patch('gittip.billing.payday.Payday.charge_on_balanced')
     @mock.patch('gittip.billing.payday.Payday.mark_charge_success')
