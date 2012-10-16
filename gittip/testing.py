@@ -9,7 +9,6 @@ from decimal import Decimal
 from os.path import join, dirname, realpath
 
 import gittip
-import psycopg2
 from aspen import resources
 from aspen.testing import Website, StubRequest
 from aspen.utils import utcnow

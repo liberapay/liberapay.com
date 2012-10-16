@@ -1,107 +1,123 @@
 from __future__ import unicode_literals
 
-import unittest
 from datetime import datetime
 from decimal import Decimal, ROUND_UP
 
 import balanced
+import gittip
 import mock
 from aspen.utils import typecheck
+from aspen.testing import assert_raises
 from gittip import authentication, billing, testing
-from gittip.billing.payday import FEE_CHARGE
+from gittip.billing.payday import FEE_CHARGE, Payday
 from psycopg2 import IntegrityError
 
 
-class TestCard(unittest.TestCase):
-    def setUp(self):
-        super(TestCard, self).setUp()
-        self.balanced_account_uri = '/v1/marketplaces/M123/accounts/A123'
-        self.stripe_customer_id = 'deadbeef'
+balanced_account_uri = '/v1/marketplaces/M123/accounts/A123'
 
-    @mock.patch('balanced.Account')
-    def test_balanced_card(self, ba):
-        card = mock.Mock()
-        card.last_four = 1234
-        card.expiration_month = 10
-        card.expiration_year = 2020
-        card.street_address = "123 Main Street"
-        card.meta = {"address_2": "Box 2"}
-        card.region = "Confusion"
-        card.postal_code = "90210"
+@mock.patch('balanced.Account')
+def test_balanced_card_basically_works(ba):
+    card = mock.Mock()
+    card.last_four = 1234
+    card.expiration_month = 10
+    card.expiration_year = 2020
+    card.street_address = "123 Main Street"
+    card.meta = {"address_2": "Box 2"}
+    card.region = "Confusion"
+    card.postal_code = "90210"
 
-        balanced_account = ba.find.return_value
-        balanced_account.uri = self.balanced_account_uri
-        balanced_account.cards = mock.Mock()
-        balanced_account.cards.all.return_value = [card]
+    balanced_account = ba.find.return_value
+    balanced_account.uri = balanced_account_uri
+    balanced_account.cards = mock.Mock()
+    balanced_account.cards.all.return_value = [card]
 
-        card = billing.BalancedCard(self.balanced_account_uri)
+    expected = { 'id': '/v1/marketplaces/M123/accounts/A123'
+               , 'last_four': 1234
+               , 'last4': '************1234'
+               , 'expiry': '10/2020'
+               , 'address_1': '123 Main Street'
+               , 'address_2': 'Box 2'
+               , 'state': 'Confusion'
+               , 'zip': '90210'
+                }
+    card = billing.BalancedCard(balanced_account_uri)
+    actual = dict([(name, card[name]) for name in expected])
+    assert actual == expected, actual
 
-        self.assertEqual(card['id'], '/v1/marketplaces/M123/accounts/A123')
-        self.assertEqual(card['last_four'], 1234)
-        self.assertEqual(card['last4'], '************1234')
-        self.assertEqual(card['expiry'], '10/2020')
-        self.assertEqual(card['address_1'], '123 Main Street')
-        self.assertEqual(card['address_2'], 'Box 2')
-        self.assertEqual(card['state'], 'Confusion')
-        self.assertEqual(card['zip'], '90210')
-        self.assertEqual(card['nothing'].__class__.__name__, mock.Mock.__name__)
+@mock.patch('balanced.Account')
+def test_balanced_card_gives_class_name_instead_of_KeyError(ba):
+    card = mock.Mock()
 
-    @mock.patch('stripe.Customer')
-    def test_stripe_card(self, sc):
-        active_card = {}
-        active_card['last4'] = '1234'
-        active_card['expiry_month'] = 10
-        active_card['expiry_year'] = 2020
-        active_card['address_line1'] = "123 Main Street"
-        active_card['address_line2'] = "Box 2"
-        active_card['address_state'] = "Confusion"
-        active_card['address_zip'] = "90210"
+    balanced_account = ba.find.return_value
+    balanced_account.uri = balanced_account_uri
+    balanced_account.cards = mock.Mock()
+    balanced_account.cards.all.return_value = [card]
 
-        stripe_customer = sc.retrieve.return_value
-        stripe_customer.id = self.stripe_customer_id
-        stripe_customer.get = {'active_card': active_card}.get
+    card = billing.BalancedCard(balanced_account_uri)
 
-        card = billing.StripeCard(self.stripe_customer_id)
+    expected = mock.Mock.__name__
+    actual = card['nothing'].__class__.__name__
+    assert actual == expected, actual
 
-        self.assertEqual(card['id'], 'deadbeef')
-        self.assertEqual(card['last4'], "************1234")
-        self.assertEqual(card['expiry'], '10/2020')
-        self.assertEqual(card['address_1'], '123 Main Street')
-        self.assertEqual(card['address_2'], 'Box 2')
-        self.assertEqual(card['state'], 'Confusion')
-        self.assertEqual(card['zip'], '90210')
-        self.assertEqual(card['nothing'], '')
+@mock.patch('stripe.Customer')
+def test_stripe_card_basically_works(sc):
+    active_card = {}
+    active_card['last4'] = '1234'
+    active_card['expiry_month'] = 10
+    active_card['expiry_year'] = 2020
+    active_card['address_line1'] = "123 Main Street"
+    active_card['address_line2'] = "Box 2"
+    active_card['address_state'] = "Confusion"
+    active_card['address_zip'] = "90210"
+
+    stripe_customer = sc.retrieve.return_value
+    stripe_customer.id = 'deadbeef'
+    stripe_customer.get = {'active_card': active_card}.get
+
+    expected = { 'id': 'deadbeef'
+               , 'last4': '************1234'
+               , 'expiry': '10/2020'
+               , 'address_1': '123 Main Street'
+               , 'address_2': 'Box 2'
+               , 'state': 'Confusion'
+               , 'zip': '90210'
+                }
+    card = billing.StripeCard('deadbeef')
+    actual = dict([(name, card[name]) for name in expected])
+    assert actual == expected, actual
+
+@mock.patch('stripe.Customer')
+def test_stripe_card_gives_empty_string_instead_of_KeyError(sc):
+    stripe_customer = sc.retrieve.return_value
+    stripe_customer.id = 'deadbeef'
+    stripe_customer.get = {'active_card': {}}.get
+
+    expected = ''
+    actual = billing.StripeCard('deadbeef')['nothing']
+    assert actual == expected, actual
 
 
-class TestBankAccount(unittest.TestCase):
-    def setUp(self):
-        super(TestBankAccount, self).setUp()
-        self.balanced_account_uri = '/v1/marketplaces/M123/accounts/A123'
-        self.balanced_bank_account_uri = (self.balanced_account_uri +
-                                          '/bank_accounts/B123')
+balanced_account_uri = '/v1/marketplaces/M123/accounts/A123'
+balanced_bank_account_uri = balanced_account_uri + '/bank_accounts/B123'
 
-    @mock.patch('gittip.billing.balanced.Account')
-    @mock.patch('gittip.billing.balanced.BankAccount')
-    def test_balanced_bank_account(self, b_b_account, b_account):
-        # b_account = balanced.Account
-        # b_b_account = balanced.BankAccount
-        # b_b_b_account = billing.BalancedBankAccount
-        # got it?
-        b_b_b_account = billing.BalancedBankAccount(self.balanced_account_uri)
-        self.assertTrue(b_account.find.called_with(self.balanced_account_uri))
-        self.assertTrue(b_b_account.find.called_with(self.balanced_bank_account_uri))
+@mock.patch('gittip.billing.balanced.Account')
+@mock.patch('gittip.billing.balanced.BankAccount')
+def test_balanced_bank_account(b_b_account, b_account):
+    # b_account = balanced.Account
+    # b_b_account = balanced.BankAccount
+    # b_b_b_account = billing.BalancedBankAccount
+    # got it?
+    b_b_b_account = billing.BalancedBankAccount(balanced_account_uri)
+    assert b_account.find.called_with(balanced_account_uri)
+    assert b_b_account.find.called_with(balanced_bank_account_uri)
 
-        ba = b_b_account.find.return_value
-        self.assertTrue(b_b_b_account.is_setup)
-        #self.assertEqual(b_b_b_account['id'], ba.uri)
-        #self.assertEqual(b_b_b_account['account_uri'], ba.account.uri)
-        with self.assertRaises(IndexError):
-            b_b_b_account['invalid']
+    assert b_b_b_account.is_setup
+    assert_raises(IndexError, b_b_b_account.__getitem__, 'invalid')
 
-    def test_balanced_bank_account_not_setup(self):
-        bank_account = billing.BalancedBankAccount(None)
-        self.assertFalse(bank_account.is_setup)
-        self.assertFalse(bank_account['id'])
+def test_balanced_bank_account_not_setup():
+    bank_account = billing.BalancedBankAccount(None)
+    assert not bank_account.is_setup
+    assert not bank_account['id']
 
 
 class TestBilling(testing.GittipPaydayTest):
@@ -283,18 +299,6 @@ class TestBillingCharge(testing.GittipPaydayTest):
         '''
         self.db.execute(insert)
 
-    def prep(self, amount):
-        """Given a dollar amount as a string, return a 3-tuple.
-
-        The return tuple is like the one returned from _prep_hit, but with the
-        second value, a log message, removed.
-
-        """
-        typecheck(amount, unicode)
-        out = list(self.payday._prep_hit(Decimal(amount)))
-        out = [out[0]] + out[2:]
-        return tuple(out)
-
 
     @mock.patch('gittip.billing.payday.Payday.mark_missing_funding')
     def test_charge_without_balanced_customer_id_or_stripe_customer_id(self, mpmf):
@@ -464,73 +468,91 @@ class TestBillingCharge(testing.GittipPaydayTest):
         self.assertEqual(msg, error_message)
 
 
-    # _prep_hit
+# _prep_hit
 
-    def test_prep_hit_basically_works(self):
-        actual = self.payday._prep_hit(Decimal('20.00'))
-        expected = ( 2110
-                   , u'Charging %s 2110 cents ($20.00 + $1.10 fee = $21.10) on %s ... '
-                   , Decimal('21.10')
-                   , Decimal('1.10')
-                    )
-        assert actual == expected, actual
+def test_prep_hit_basically_works():
+    payday = Payday(gittip.db)
+    actual = payday._prep_hit(Decimal('20.00'))
+    expected = ( 2110
+               , u'Charging %s 2110 cents ($20.00 + $1.10 fee = $21.10) on %s '
+                 u'... '
+               , Decimal('21.10')
+               , Decimal('1.10')
+                )
+    assert actual == expected, actual
 
-    def test_prep_hit_full_in_rounded_case(self):
-        actual = self.payday._prep_hit(Decimal('5.00'))
-        expected = ( 1000
-                   , u'Charging %s 1000 cents ($9.32 [rounded up from $5.00] + $0.68 fee = $10.00) on %s ... '
-                   , Decimal('10.00')
-                   , Decimal('0.68')
-                    )
-        assert actual == expected, actual
-
-
-    def test_prep_hit_at_ten_dollars(self):
-        actual = self.prep('10.00')
-        expected = (1071, Decimal('10.71'), Decimal('0.71'))
-        assert actual == expected, actual
+def test_prep_hit_full_in_rounded_case():
+    payday = Payday(gittip.db)
+    actual = payday._prep_hit(Decimal('5.00'))
+    expected = ( 1000
+               , u'Charging %s 1000 cents ($9.32 [rounded up from $5.00] + '
+                 u'$0.68 fee = $10.00) on %s ... '
+               , Decimal('10.00')
+               , Decimal('0.68')
+                )
+    assert actual == expected, actual
 
 
-    def test_prep_hit_at_forty_cents(self):
-        actual = self.prep('0.40')
-        expected = (1000, Decimal('10.00'), Decimal('0.68'))
-        assert actual == expected, actual
+def prep(amount):
+    """Given a dollar amount as a string, return a 3-tuple.
 
-    def test_prep_hit_at_fifty_cents(self):
-        actual = self.prep('0.50')
-        expected = (1000, Decimal('10.00'), Decimal('0.68'))
-        assert actual == expected, actual
+    The return tuple is like the one returned from _prep_hit, but with the
+    second value, a log message, removed.
 
-    def test_prep_hit_at_sixty_cents(self):
-        actual = self.prep('0.60')
-        expected = (1000, Decimal('10.00'), Decimal('0.68'))
-        assert actual == expected, actual
-
-    def test_prep_hit_at_eighty_cents(self):
-        actual = self.prep('0.80')
-        expected = (1000, Decimal('10.00'), Decimal('0.68'))
-        assert actual == expected, actual
+    """
+    typecheck(amount, unicode)
+    payday = Payday(gittip.db)
+    out = list(payday._prep_hit(Decimal(amount)))
+    out = [out[0]] + out[2:]
+    return tuple(out)
 
 
-    def test_prep_hit_at_nine_fifteen(self):
-        actual = self.prep('9.15')
-        expected = (1000, Decimal('10.00'), Decimal('0.68'))
-        assert actual == expected, actual
+def test_prep_hit_at_ten_dollars():
+    actual = prep('10.00')
+    expected = (1071, Decimal('10.71'), Decimal('0.71'))
+    assert actual == expected, actual
 
-    def test_prep_hit_at_nine_thirty_one(self):
-        actual = self.prep('9.31')
-        expected = (1000, Decimal('10.00'), Decimal('0.68'))
-        assert actual == expected, actual
 
-    def test_prep_hit_at_nine_thirty_two(self):
-        actual = self.prep('9.32')
-        expected = (1000, Decimal('10.00'), Decimal('0.68'))
-        assert actual == expected, actual
+def test_prep_hit_at_forty_cents():
+    actual = prep('0.40')
+    expected = (1000, Decimal('10.00'), Decimal('0.68'))
+    assert actual == expected, actual
 
-    def test_prep_hit_at_nine_thirty_three(self):
-        actual = self.prep('9.33')
-        expected = (1001, Decimal('10.01'), Decimal('0.68'))
-        assert actual == expected, actual
+def test_prep_hit_at_fifty_cents():
+    actual = prep('0.50')
+    expected = (1000, Decimal('10.00'), Decimal('0.68'))
+    assert actual == expected, actual
+
+def test_prep_hit_at_sixty_cents():
+    actual = prep('0.60')
+    expected = (1000, Decimal('10.00'), Decimal('0.68'))
+    assert actual == expected, actual
+
+def test_prep_hit_at_eighty_cents():
+    actual = prep('0.80')
+    expected = (1000, Decimal('10.00'), Decimal('0.68'))
+    assert actual == expected, actual
+
+
+def test_prep_hit_at_nine_fifteen():
+    actual = prep('9.15')
+    expected = (1000, Decimal('10.00'), Decimal('0.68'))
+    assert actual == expected, actual
+
+def test_prep_hit_at_nine_thirty_one():
+    actual = prep('9.31')
+    expected = (1000, Decimal('10.00'), Decimal('0.68'))
+    assert actual == expected, actual
+
+def test_prep_hit_at_nine_thirty_two():
+    actual = prep('9.32')
+    expected = (1000, Decimal('10.00'), Decimal('0.68'))
+    assert actual == expected, actual
+
+def test_prep_hit_at_nine_thirty_three():
+    actual = prep('9.33')
+    expected = (1001, Decimal('10.01'), Decimal('0.68'))
+    assert actual == expected, actual
 
 
 class TestBillingPayday(testing.GittipPaydayTest):
