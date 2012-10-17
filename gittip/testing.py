@@ -172,16 +172,6 @@ class Context(object):
 
     def _diff(self, a, b, compact):
         """Compare two data dumps.
-
-        The return value is a list representing tables that have change:
-
-            [ ("table1", inserts, updates, deletes)
-            , ("table2", inserts, updates, deletes)
-             ]
-
-        If deets is False then inserts and deletes are ints, otherwise they're
-        lists of dicts. Updates is always a list of dicts showing new values.
-
         """
         out = {}
         pkeys = self._get_primary_keys()
@@ -235,8 +225,8 @@ class Context(object):
             , "table2": {1: {}}
              }
 
-        That's table name to a mapping of primary key to the rest of the row as
-        a dict.
+        That's table name to a mapping of primary key to the entire row as a
+        dict.
 
         """
         out = {}
