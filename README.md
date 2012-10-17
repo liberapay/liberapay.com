@@ -106,7 +106,8 @@ Please write unit tests for all new code and all code you change. Gittip's test
 suite is designed for the nosetests test runner (maybe it also works with
 py.test?), and uses module-level test functions, with a context manager for
 managing testing state. Please don't use test classes. As a rule of thumb, each
-test case should perform one assertion.
+test case should perform one assertion. For a guided intro to Gittip's test
+suite, check out tests/test_suite_intro.py.
 
 Assuming you have make, the easiest way to run the test suite is:
 

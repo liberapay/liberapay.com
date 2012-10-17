@@ -118,12 +118,12 @@ def test_something_changes_something():
 
 # Wrappers
 # --------
-# Write wrappers for test cases that want slightly varying but similar state.
-# Start by writing them in the same file as the test cases. If the wrappers
-# turn out to be useful in multiple test scripts then we'll move them into
-# gittip.testing.
+# As a rule of thumb, test cases should have one assertion each. Write wrappers
+# for test cases that want slightly varying but similar state. Start by writing
+# them in the same file as the test cases, and if they turn out to be useful in
+# multiple test scripts, we'll move them into gittip.testing.
 
-def let_them_eat_cake(): # For demonstration; this would be imported.
+def let_them_eat_cake():           # For demonstration; this would be imported.
     """Simulate the gittip application doing something.
     """
     import gittip
@@ -131,7 +131,7 @@ def let_them_eat_cake(): # For demonstration; this would be imported.
     return "{id} eats cake.".format(**rec)
 
 
-def participant(participant_id):
+def participant(participant_id):                   # This is a context wrapper.
     """Wrap testing.load to install a participant.
     """
     context = testing.load("participants", (participant_id,))
