@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Gittip - Inspiring Generosity</title>
+        <title>{% if 'title' in globals() %}{{ title }} - {% end %}Gittip - Inspiring Generosity</title>
         <meta content='width=device-width' name='viewport' />
         <style>
             @import url("/assets/{{ __version__ }}/gittip.css");

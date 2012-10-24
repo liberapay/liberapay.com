@@ -36,7 +36,7 @@ SELECT = """
 participant = db.fetchone(SELECT, (path['participant_id'],))
 if participant is None:
     raise Response(404)
-participant_id = participant['id']
+participant_id = title = participant['id']
 
 if participant['claimed_time'] is None:
 

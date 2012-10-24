@@ -15,6 +15,7 @@ def commaize(number, places=0):
 
 # ===================================================== ^L
 
+title = "Stats"
 yesterday = datetime.datetime.utcnow() - datetime.timedelta(hours=24)
 escrow = db.fetchone("SELECT sum(balance) FROM participants")['sum']
 escrow = 0 if escrow is None else escrow
