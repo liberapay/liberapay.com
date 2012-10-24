@@ -15,7 +15,7 @@ import requests
 from aspen import json, Response
 from aspen.utils import to_age
 from gittip import AMOUNTS, db, get_tip, get_tips_and_total, \
-     get_backed_amount, get_chart_of_giving
+     get_dollars_receiving, get_chart_of_giving
 from gittip.utils import wrap
 from gittip.networks import github, resolve_unclaimed
 
@@ -56,7 +56,7 @@ ACCOUNTS = """
 accounts = db.fetchall(ACCOUNTS, (participant_id,))
 assert accounts is not None
 
-backed_amount = get_backed_amount(participant['id'])
+backed_amount = get_dollars_receiving(participant['id'])
 
 if not user.ANON:
     if user.id == participant_id or user.ADMIN:
@@ -570,13 +570,13 @@ username = participant_id # used in footer shared with on/network/ pages
     </h2>
 
 
-    <h2>Embed</h2>
+    <h2>Embed #1</h2>
 
     <p>Use this code to embed a Gittip button on your website:</p>
 
     <pre>&lt;iframe style="border: 0; margin: 0; padding: 0;"
         src="https://www.gittip.com/{{ participant_id }}/widget.html"
-        width="48pt" height="20pt"&gt;&lt;/iframe&gt;</pre>
+        width="48pt" height="22pt"&gt;&lt;/iframe&gt;</pre>
 
     <p>The button opens your profile on Gittip in a new tab or window. Here&rsquo;s what the text reads:</p>
 
@@ -599,6 +599,21 @@ username = participant_id # used in footer shared with on/network/ pages
             src="https://www.gittip.com/whit537/widget.html"
             width="48pt" height="20pt"></iframe>
     </p>
+
+
+    <h2>Embed #2</h2>
+
+    <p>Use this code to add a Gittip &ldquo;receiving&rdquo; widget on your website:</p>
+
+    <pre>&lt;span class="gittip-0001" gittip-username="{{ participant_id }}" /&gt;
+&lt;script id="gittip-0001"
+  src="https://www.gittip.com/assets/widgets/0001.js" /&gt;</pre>
+
+    <p>Here&rsquo;s what it looks like:</p>
+
+    <span class="gittip-0001" gittip-username="{{ participant_id }}"></span>
+    <script id="gittip-0001" src="/assets/widgets/0001.js"></script>
+
 
     <h2>Linked Accounts</h2>
 

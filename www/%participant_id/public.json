@@ -1,0 +1,10 @@
+"""JSON endpoint for a Gittip widget.
+"""
+from gittip import get_dollars_receiving
+
+# ========================================================================== ^L
+
+receiving = get_dollars_receiving(path['participant_id'])
+
+response.headers["Access-Control-Allow-Origin"] = "*"
+response.body = {"receiving": str(receiving)}

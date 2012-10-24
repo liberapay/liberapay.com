@@ -61,13 +61,13 @@ def get_tip(tipper, tippee):
     return tip
 
 
-def get_backed_amount(participant_id):
+def get_dollars_receiving(participant_id):
     """Given a unicode, return a Decimal.
     """
 
     BACKED = """\
 
-        SELECT sum(amount) AS backed
+        SELECT sum(amount) AS dollars_receiving
           FROM ( SELECT DISTINCT ON (tipper)
                         amount
                       , tipper
@@ -84,7 +84,38 @@ def get_backed_amount(participant_id):
     if rec is None:
         amount = None
     else:
-        amount = rec['backed']  # might be None
+        amount = rec['dollars_receiving']  # might be None
+
+    if amount is None:
+        amount = Decimal('0.00')
+
+    return amount
+
+
+def get_dollars_giving(participant_id):
+    """Given a unicode, return a Decimal.
+    """
+
+    BACKED = """\
+
+        SELECT sum(amount) AS dollars_giving
+          FROM ( SELECT DISTINCT ON (tippee)
+                        amount
+                      , tippee
+                   FROM tips
+                   JOIN participants p ON p.id = tippee
+                  WHERE tipper=%s
+                    AND last_bill_result = ''
+               ORDER BY tippee
+                      , mtime DESC
+                ) AS foo
+
+    """
+    rec = db.fetchone(BACKED, (participant_id,))
+    if rec is None:
+        amount = None
+    else:
+        amount = rec['dollars_giving']  # might be None
 
     if amount is None:
         amount = Decimal('0.00')
