@@ -677,11 +677,10 @@ class TestBillingPayday(testing.GittipPaydayTest):
 
         tips, total = [], amount
         ts_start = datetime.utcnow()
-        participant = {
-            'balance': 1,
-            'id': self.participant_id,
-            'balanced_account_uri': self.balanced_account_uri,
-        }
+        participant = { 'balance': 1
+                      , 'id': self.participant_id
+                      , 'balanced_account_uri': self.balanced_account_uri
+                       }
 
         initial_payday = self._get_payday()
         self.payday.charge_and_or_transfer(ts_start, participant, tips, total)
@@ -698,23 +697,21 @@ class TestBillingPayday(testing.GittipPaydayTest):
     @mock.patch('gittip.billing.payday.Payday.tip')
     def test_charge_and_or_transfer(self, tip, get_tips_and_total):
         amount = Decimal('1.00')
-        like_a_tip = {
-            'amount': amount,
-            'tippee': 'mjallday',
-            'ctime': datetime.utcnow(),
-            'claimed_time': datetime.utcnow(),
-        }
+        like_a_tip = { 'amount': amount
+                     , 'tippee': 'mjallday'
+                     , 'ctime': datetime.utcnow()
+                     , 'claimed_time': datetime.utcnow()
+                      }
 
         # success, success, claimed, failure
         tips = [like_a_tip, like_a_tip, like_a_tip, like_a_tip]
         total = amount
 
         ts_start = datetime.utcnow()
-        participant = {
-            'balance': 1,
-            'id': self.participant_id,
-            'balanced_account_uri': self.balanced_account_uri,
-        }
+        participant = { 'balance': 1
+                      , 'id': self.participant_id
+                      , 'balanced_account_uri': self.balanced_account_uri
+                       }
 
         return_values = [1, 1, 0, -1]
         return_values.reverse()
@@ -739,23 +736,21 @@ class TestBillingPayday(testing.GittipPaydayTest):
     @mock.patch('gittip.billing.payday.Payday.charge')
     def test_charge_and_or_transfer_short(self, charge, get_tips_and_total):
         amount = Decimal('1.00')
-        like_a_tip = {
-            'amount': amount,
-            'tippee': 'mjallday',
-            'ctime': datetime.utcnow(),
-            'claimed_time': datetime.utcnow(),
-        }
+        like_a_tip = { 'amount': amount
+                     , 'tippee': 'mjallday'
+                     , 'ctime': datetime.utcnow()
+                     , 'claimed_time': datetime.utcnow()
+                      }
 
         # success, success, claimed, failure
         tips = [like_a_tip, like_a_tip, like_a_tip, like_a_tip]
         get_tips_and_total.return_value = tips, amount
 
         ts_start = datetime.utcnow()
-        participant = {
-            'balance': 0,
-            'id': self.participant_id,
-            'balanced_account_uri': self.balanced_account_uri,
-        }
+        participant = { 'balance': 0
+                      , 'id': self.participant_id
+                      , 'balanced_account_uri': self.balanced_account_uri
+                       }
 
 
         # In real-life we wouldn't be able to catch an error as the charge
@@ -780,15 +775,12 @@ class TestBillingPayday(testing.GittipPaydayTest):
     def test_tip(self, log, transfer):
         amount = Decimal('1.00')
         invalid_amount = Decimal('0.00')
-        tip = {
-            'amount': amount,
-            'tippee': self.participant_id,
-            'claimed_time': datetime.utcnow(),
-        }
+        tip = { 'amount': amount
+              , 'tippee': self.participant_id
+              , 'claimed_time': datetime.utcnow()
+               }
         ts_start = datetime.utcnow()
-        participant = {
-            'id': 'mjallday',
-        }
+        participant = {'id': 'mjallday'}
         result = self.payday.tip(participant, tip, ts_start)
         self.assertTrue(result)
         self.assertTrue(transfer.called_with(participant['id'],
