@@ -171,6 +171,9 @@ username = participant_id # used in footer shared with on/network/ pages
         .count SPAN.bar.green {
             background: #2A8F79;
         }
+        .payin-suspended {
+            border: 2px solid red;
+        }
     </style>
     <script>
         $(document).ready(function()
@@ -390,6 +393,35 @@ username = participant_id # used in footer shared with on/network/ pages
                      }
                 );
             });
+
+            {% if user.ADMIN and participant['balanced_account_uri'] %}
+            // Wire up payin suspender.
+            // ========================
+
+            $('#payin-suspender').click(function()
+            {
+                jQuery.ajax(
+                    { url: 'toggle-payin-suspension.json'
+                    , type: 'POST'
+                    , dataType: 'json'
+                    , success: function(data)
+                    {
+                        if (data.payin_suspended)
+                            $('#balanced-account').addClass('payin-suspended');
+                        else
+                            $('#balanced-account').removeClass('payin-suspended');
+                        var val = data.payin_suspended ? 'Uns' : 'S';
+                        $('#payin-suspender').text(val + 'uspend Payins');
+                    }
+                    , error: function() {
+                        alert( "Failed to toggle payin suspension. "
+                             + "Please try again."
+                                  );
+                        }
+                     }
+                );
+            });
+            {% end %}
         });
     </script>
 
@@ -677,9 +709,11 @@ username = participant_id # used in footer shared with on/network/ pages
         </li>
         {% end %}
         {% if user.ADMIN and participant['balanced_account_uri'] %}
-        <li>
+        <li id="balanced-account"{% if participant['payin_suspended'] %} class="payin-suspended"{% end %}>
             <img src="/assets/balanced-avatar.png" />
-            Balanced Payments<br />
+            Balanced Payments
+            <button id="payin-suspender" class="small">{{ 'Unsuspend' if participant['payin_suspended'] else 'Suspend' }} Payins</button>
+            <br />
             <a href="https://www.balancedpayments.com/{{ participant['balanced_account_uri'][3:] }}">balancedpayments.com/...</a>
         </li>
         {% end %}

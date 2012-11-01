@@ -1,0 +1,17 @@
+from gittip import db
+^L
+if not user.ADMIN:
+    raise Response(400)
+
+rec = db.fetchone("""
+
+    UPDATE participants
+       SET payin_suspended = not payin_suspended
+     WHERE id=%s
+ RETURNING payin_suspended
+
+""", (path['participant_id'],))
+
+assert rec is not None
+
+response.body = {"payin_suspended": rec['payin_suspended']}
