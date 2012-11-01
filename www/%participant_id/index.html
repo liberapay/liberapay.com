@@ -676,6 +676,13 @@ username = participant_id # used in footer shared with on/network/ pages
         {% end %}
         </li>
         {% end %}
+        {% if user.ADMIN and participant['balanced_account_uri'] %}
+        <li>
+            <img src="/assets/balanced-avatar.png" />
+            Balanced Payments<br />
+            <a href="https://www.balancedpayments.com/{{ participant['balanced_account_uri'][3:] }}">balancedpayments.com/...</a>
+        </li>
+        {% end %}
     </ul>
 
 {% end %}
