@@ -23,12 +23,15 @@ def test_commaize_commaizes_and_obeys_decimal_places():
 
 # chart of giving
 
+def setup(*a):
+    return testing.load(*testing.setup_tips(*a))
+
 def test_get_chart_of_giving_handles_a_tip():
     tip = ("foo", "bar", "3.00", True)
     expected = ( [[Decimal('3.00'), 1, Decimal('3.00'), 1.0, Decimal('1')]]
                , 1.0, Decimal('3.00')
                 )
-    with testing.setup_tips(tip):
+    with setup(tip):
         actual = gittip.get_chart_of_giving('bar')
         assert actual == expected, actual
 
@@ -37,13 +40,13 @@ def test_get_chart_of_giving_handles_a_non_standard_amount():
     expected = ( [[-1, 1, Decimal('5.37'), 1.0, Decimal('1')]]
                , 1.0, Decimal('5.37')
                 )
-    with testing.setup_tips(tip):
+    with setup(tip):
         actual = gittip.get_chart_of_giving('bar')
         assert actual == expected, actual
 
 def test_get_chart_of_giving_handles_no_tips():
     expected = ([], 0.0, Decimal('0.00'))
-    with testing.setup_tips():
+    with setup():
         actual = gittip.get_chart_of_giving('foo')
         assert actual == expected, actual
 
@@ -56,7 +59,7 @@ def test_get_chart_of_giving_handles_multiple_tips():
                   ]
                , 2.0, Decimal('4.00')
                 )
-    with testing.setup_tips(*tips):
+    with setup(*tips):
         actual = gittip.get_chart_of_giving('bar')
         assert actual == expected, actual
 
@@ -67,7 +70,7 @@ def test_get_chart_of_giving_ignores_bad_cc():
     expected = ( [[Decimal('1.00'), 1L, Decimal('1.00'), 1, Decimal('1')]]
                , 1.0, Decimal('1.00')
                 )
-    with testing.setup_tips(*tips):
+    with setup(*tips):
         actual = gittip.get_chart_of_giving('bar')
         assert actual == expected, actual
 
@@ -78,7 +81,7 @@ def test_get_chart_of_giving_ignores_missing_cc():
     expected = ( [[Decimal('1.00'), 1L, Decimal('1.00'), 1, Decimal('1')]]
                , 1.0, Decimal('1.00')
                 )
-    with testing.setup_tips(*tips):
+    with setup(*tips):
         actual = gittip.get_chart_of_giving('bar')
         assert actual == expected, actual
 

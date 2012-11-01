@@ -77,6 +77,29 @@ class Payday(object):
         self.db = db
 
 
+    def genparticipants(self, ts_start, for_payday):
+        """Generator to yield participants with tips and total.
+
+        We re-fetch participants each time, because the second time through
+        we want to use the total obligations they have for next week, and
+        if we pass a non-False for_payday to get_tips_and_total then we
+        only get unfulfilled tips from prior to that timestamp, which is
+        none of them by definition.
+
+        If someone changes tips after payout starts, and we crash during
+        payout, then their new tips_and_total will be used on the re-run.
+        That's okay.
+
+        """
+        for participant in self.get_participants(ts_start):
+            tips, total = get_tips_and_total( participant['id']
+                                            , for_payday=for_payday
+                                            , db=self.db
+                                             )
+            typecheck(total, Decimal)
+            yield(participant, tips, total)
+
+
     def run(self):
         """This is the starting point for payday.
 
@@ -90,35 +113,9 @@ class Payday(object):
         ts_start = self.start()
         self.zero_out_pending(ts_start)
 
-        def genparticipants(for_payday):
-            """Closure generator to yield participants with tips and total.
-
-            We re-fetch participants each time, because the second time through
-            we want to use the total obligations they have for next week, and
-            if we pass a non-False for_payday to get_tips_and_total then we
-            only get unfulfilled tips from prior to that timestamp, which is
-            none of them by definition.
-
-            If someone changes tips after payout starts, and we crash during
-            payout, then their new tips_and_total will be used on the re-run.
-            That's okay.
-
-            Note that we take ts_start from the outer scope when we pass it to
-            get_participants, but we pass in for_payday, because we might want
-            it to be False (per the definition of git_tips_and_total).
-
-            """
-            for participant in self.get_participants(ts_start):
-                tips, total = get_tips_and_total( participant['id']
-                                                , for_payday=for_payday
-                                                , db=self.db
-                                                 )
-                typecheck(total, Decimal)
-                yield(participant, tips, total)
-
-        self.payin(ts_start, genparticipants(ts_start))
+        self.payin(ts_start, self.genparticipants(ts_start, ts_start))
         self.clear_pending_to_balance()
-        self.payout(ts_start, genparticipants(False))
+        self.payout(ts_start, self.genparticipants(ts_start, False))
 
         self.end()
 
@@ -187,7 +184,11 @@ class Payday(object):
         """Given a timestamp, return a list of participants dicts.
         """
         PARTICIPANTS = """\
-            SELECT id, balance, balanced_account_uri, stripe_customer_id
+            SELECT id
+                 , balance
+                 , balanced_account_uri
+                 , stripe_customer_id
+                 , payin_suspended
               FROM participants
              WHERE claimed_time IS NOT NULL
                AND claimed_time < %s
@@ -229,6 +230,10 @@ class Payday(object):
         money between Gittip accounts.
 
         """
+        if participant['payin_suspended']:
+            log("PAYIN SUSPENDED: %s" % participant['id'])
+            return
+
         short = total - participant['balance']
         if short > 0:
 

@@ -380,6 +380,57 @@ def test_charge_success_touches_a_few_tables(hb):
         actual = context.diff(compact=True)
         assert actual == expected, actual
 
+
+@mock.patch('gittip.billing.payday.Payday.charge_on_balanced')
+def test_payday_does_stuff(charge_on_balanced):
+    charge_on_balanced.return_value = (Decimal('10.00'), Decimal('0.68'), None)
+    tips = testing.setup_tips(('buz', 'bar', '6.00', True))  # under $10!
+    with testing.load(*tips) as context:
+        Payday(context.db).run()
+        expected = { 'exchanges': [1, 0, 0]
+                   , 'participants': [0, 2, 0]
+                   , 'paydays': [1, 0, 0]
+                   , 'transfers': [1, 0, 0]
+                    }
+        actual = context.diff(compact=True)
+        assert actual == expected, actual
+
+@mock.patch('gittip.billing.payday.Payday.charge_on_balanced')
+def test_payday_moves_money(charge_on_balanced):
+    charge_on_balanced.return_value = (Decimal('10.00'), Decimal('0.68'), None)
+    tips = testing.setup_tips(('buz', 'bar', '6.00', True))  # under $10!
+    with testing.load(*tips) as context:
+        Payday(context.db).run()
+        expected = [ {"id": "buz", "balance": Decimal('3.32')}
+                   , {"id": "bar", "balance": Decimal('6.00')}
+                    ]
+        actual = context.diff()['participants']['updates']
+        assert actual == expected, actual
+
+@mock.patch('gittip.billing.payday.Payday.charge_on_balanced')
+def test_payday_doesnt_move_money_from_a_suspended_payin_account(charge_on_balanced):
+    charge_on_balanced.return_value = (Decimal('10.00'), Decimal('0.68'), None)
+    tips = testing.setup_tips(('buz', 'bar', '6.00', True, True))  # under $10!
+    with testing.load(*tips) as context:
+        Payday(context.db).run()
+        actual = context.diff(compact=True)
+        assert actual == {"paydays": [1,0,0]}, actual
+
+@mock.patch('gittip.billing.payday.Payday.charge_on_balanced')
+def test_payday_does_move_money_TO_a_suspended_payin_account(charge_on_balanced):
+    charge_on_balanced.return_value = (Decimal('10.00'), Decimal('0.68'), None)
+    tips = testing.setup_tips( ('buz', 'bar', '6.00', True, True)
+                             , ('foo', 'buz', '1.00')
+                              )  # under $10!
+    with testing.load(*tips) as context:
+        Payday(context.db).run()
+        expected = [ {"id": "buz", "balance": Decimal('1.00')}
+                   , {"id": "foo", "balance": Decimal('8.32')}
+                    ]
+        actual = context.diff()['participants']['updates']
+        assert actual == expected, actual
+
+
 # XXX I started refactoring billing tests out of test classes into module-level
 # functions + context managers, and this is as far as I got.
 
@@ -680,6 +731,7 @@ class TestBillingPayday(testing.GittipPaydayTest):
         participant = { 'balance': 1
                       , 'id': self.participant_id
                       , 'balanced_account_uri': self.balanced_account_uri
+                      , 'payin_suspended': False
                        }
 
         initial_payday = self._get_payday()
@@ -711,6 +763,7 @@ class TestBillingPayday(testing.GittipPaydayTest):
         participant = { 'balance': 1
                       , 'id': self.participant_id
                       , 'balanced_account_uri': self.balanced_account_uri
+                      , 'payin_suspended': False
                        }
 
         return_values = [1, 1, 0, -1]
@@ -750,6 +803,7 @@ class TestBillingPayday(testing.GittipPaydayTest):
         participant = { 'balance': 0
                       , 'id': self.participant_id
                       , 'balanced_account_uri': self.balanced_account_uri
+                      , 'payin_suspended': False
                        }
 
 

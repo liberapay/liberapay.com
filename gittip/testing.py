@@ -2,6 +2,7 @@
 """
 from __future__ import unicode_literals
 
+import datetime
 import copy
 import os
 import re
@@ -306,16 +307,31 @@ def setup_tips(*recs):
     good_cc can be True, False, or None
 
     """
-    data = []
     tips = []
 
     _participants = {}
 
-    for tipper, tippee, amount, good_cc in recs:
+    for rec in recs:
+        defaults = good_cc, payin_suspended, claimed = (True, False, True)
+
+        if len(rec) == 3:
+            tipper, tippee, amount = rec
+        elif len(rec) == 4:
+            tipper, tippee, amount, good_cc = rec
+            payin_suspended, claimed = (False, True)
+        elif len(rec) == 5:
+            tipper, tippee, amount, good_cc, payin_suspended = rec
+            claimed = True
+        elif len(rec) == 6:
+            tipper, tippee, amount, good_cc, payin_suspended, claimed = rec
+
         assert good_cc in (True, False, None), good_cc
-        _participants[tipper] = good_cc
+        assert payin_suspended in (True, False), payin_suspended
+        assert claimed in (True, False), claimed
+
+        _participants[tipper] = (good_cc, payin_suspended, claimed)
         if tippee not in _participants:
-            _participants[tippee] = None
+            _participants[tippee] = defaults
         now = utcnow()
         tips.append({ "ctime": now
                     , "mtime": now
@@ -324,15 +340,20 @@ def setup_tips(*recs):
                     , "amount": Decimal(amount)
                      })
 
+    then = utcnow() - datetime.timedelta(seconds=3600)
+
     participants = []
-    for participant_id, good_cc in _participants.items():
+    for participant_id, (good_cc, payin_suspended, claimed) in _participants.items():
         rec = {"id": participant_id}
         if good_cc is not None:
             rec["last_bill_result"] = "" if good_cc else "Failure!"
+            rec["balanced_account_uri"] = "/v1/blah/blah/" + participant_id
+        rec["payin_suspended"] = payin_suspended
+        if claimed:
+            rec["claimed_time"] = then
         participants.append(rec)
 
-    data = ["participants"] + participants + ["tips"] + tips
-    return load(*data)
+    return ["participants"] + participants + ["tips"] + tips
 
 
 # Helpers for testing simplates.
