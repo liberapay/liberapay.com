@@ -2,6 +2,12 @@ from gittip import db, AMOUNTS
 from gittip.networks import github
 ^L
 
+try:
+    limit = min(int(qs.get('limit', 10)), 100)
+    offset = int(qs.get('offset', 0))
+except ValueError:
+    raise Response(400)
+
 receivers = db.fetchall("""
 
     SELECT tippee, claimed_time, sum(amount) AS amount
@@ -18,9 +24,10 @@ receivers = db.fetchall("""
       JOIN participants p ON p.id = tippee
   GROUP BY tippee, claimed_time
   ORDER BY amount DESC
-  LIMIT 10
+  LIMIT %s
+  OFFSET %s
 
-""")
+""", (limit, offset))
 
 givers = db.fetchall("""
 
@@ -38,9 +45,10 @@ givers = db.fetchall("""
       JOIN participants p ON p.id = tipper
   GROUP BY tipper, anonymous
   ORDER BY amount DESC
-  LIMIT 10
+  LIMIT %s
+  OFFSET %s
 
-""")
+""", (limit, offset))
 ^L
 {% extends templates/base.html %}
 
