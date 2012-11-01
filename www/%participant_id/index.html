@@ -26,6 +26,11 @@ tip_suggestions = [{'tippee': name, 'amount': 0} for name in tip_suggestions]
 
 # ========================================================================== ^L
 
+if not path.raw.endswith('/'):
+    # Work around https://github.com/whit537/aspen/issues/108 until we upgrade.
+    request.redirect(path.raw + '/', permanent=True)
+
+
 SELECT = """
 
     SELECT *
