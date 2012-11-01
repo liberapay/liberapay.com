@@ -195,3 +195,9 @@ END;
 -- https://github.com/whit537/www.gittip.com/issues/170
 
 ALTER TABLE participants ALTER COLUMN balance SET NOT NULL;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/whit537/www.gittip.com/issues/350
+
+ALTER TABLE participants ADD COLUMN suspended bool NOT NULL DEFAULT FALSE;
