@@ -184,7 +184,7 @@ Thanks! :-)</p>
                 {% end %}
             </select>
             <select id="dob-year">
-            {% for i in range(1900, datetime.utcnow().year - 18) %}
+            {% for i in range(1900, datetime.utcnow().year - 17) %}
                 <option value="{{ i }}" {{ 'selected="selected"' if i == 1990 else '' }}>{{ i }}</option>
             {% end %}
             </select>
