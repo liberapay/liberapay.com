@@ -394,28 +394,29 @@ username = participant_id # used in footer shared with on/network/ pages
                 );
             });
 
-            {% if user.ADMIN and participant['balanced_account_uri'] %}
-            // Wire up payin suspender.
-            // ========================
+            {% if user.ADMIN %}
+            // Wire up is_suspicious toggle.
+            // =============================
 
-            $('#payin-suspender').click(function()
+            $('.is-suspicious-knob').click(function()
             {
                 jQuery.ajax(
-                    { url: 'toggle-payin-suspension.json'
+                    { url: 'toggle-is-suspicious.json'
                     , type: 'POST'
                     , dataType: 'json'
                     , success: function(data)
                     {
                         if (data.is_suspicious)
-                            $('#balanced-account').addClass('is-suspicious');
+                            $("#accounts").addClass('is-suspicious');
                         else
-                            $('#balanced-account').removeClass('is-suspicious');
-                        var val = data.is_suspicious ? 'Uns' : 'S';
-                        $('#payin-suspender').text(val + 'uspend Payins');
+                            $("#accounts").removeClass('is-suspicious');
+                        $('INPUT.is-suspicious-knob').attr( 'checked'
+                                                          , data.is_suspicious
+                                                           );
                     }
                     , error: function() {
-                        alert( "Failed to toggle payin suspension. "
-                             + "Please try again."
+                            alert( "Failed to change is_suspicious. Please "
+                                 + "try again."
                                   );
                         }
                      }
@@ -689,8 +690,16 @@ username = participant_id # used in footer shared with on/network/ pages
 
 {% end %}
 
+    {% if user.ADMIN %}
+    <p>
+        <input name="is_suspicious" class="is-suspicious-knob" type="checkbox"
+            {% if participant['is_suspicious'] %}checked="true"{% end %} />
+        <label for="is_suspicious" class="is-suspicious-knob">Suspicious</label>
+    </p>
+    {% end %}
 
-    <ul id="accounts">
+
+    <ul id="accounts"{% if participant['is_suspicious'] %} class="is-suspicious"{% end %}>
         {% for account in accounts %}
         <li>
         {% if account['network'] == 'github' %}
@@ -709,11 +718,8 @@ username = participant_id # used in footer shared with on/network/ pages
         </li>
         {% end %}
         {% if user.ADMIN and participant['balanced_account_uri'] %}
-        <li id="balanced-account"{% if participant['is_suspicious'] %} class="is-suspicious"{% end %}>
-            <img src="/assets/balanced-avatar.png" />
-            Balanced Payments
-            <button id="payin-suspender" class="small">{{ 'Unsuspend' if participant['is_suspicious'] else 'Suspend' }} Payins</button>
-            <br />
+        <li id="balanced-account">
+            <img src="/assets/balanced-avatar.png" /> Balanced Payments<br />
             <a href="https://www.balancedpayments.com/{{ participant['balanced_account_uri'][3:] }}">balancedpayments.com/...</a>
         </li>
         {% end %}
