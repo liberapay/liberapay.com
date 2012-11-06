@@ -41,12 +41,34 @@ def suspicious():
              WHERE tippee=%s
 
         """, (person['id'],))
+
+        person['transfers'] = db.fetchall("""
+
+            SELECT tippee
+                 , tipper
+                 , amount
+              FROM transfers
+             WHERE tipper=%s OR tippee=%s
+          ORDER BY timestamp DESC
+
+
+        """, (person['id'], person['id']))
+
+        person['exchanges'] = db.fetchall("""
+
+            SELECT amount, fee
+              FROM exchanges
+             WHERE participant_id=%s
+          ORDER BY timestamp DESC
+
+
+        """, (person['id'],))
+
         yield person
-suspicious = suspicious()
+suspicious = list(suspicious())
+names = set([person['id'] for person in suspicious])
 
 ^L
-{% extends templates/base.html %}
-{% block body %}
 <style>
     TABLE {
         width: auto;
@@ -65,6 +87,9 @@ suspicious = suspicious()
         font-weight: bold;
         color: red;
     }
+    .charge {
+        color: red;
+    }
 </style>
 <h3>Fraud, Grommit!</h3>
 <table>
@@ -72,8 +97,9 @@ suspicious = suspicious()
         <th>Suspicious Person</th>
         <th></th>
         <th>Balance</th>
-        <th>Gives To</th>
-        <th>Receives From</th>
+        <th>Tips</th>
+        <th>Transfers</th>
+        <th>Exchanges</th>
     </tr>
     {% for row in suspicious %}
     <tr>
@@ -82,12 +108,29 @@ suspicious = suspicious()
         <td class="amount">{{ row['balance'] }}</td>
         <td>
             {% for person in row['gives_to'] %}
-                <a href="/{{ person['id'] }}/"{% if person['is_suspicious'] %} class="suspicious"{% end %}>{{ person['id'] }}</a><br />
+                &rarr;<a href="/{{ person['id'] }}/"{% if person['is_suspicious'] %} class="suspicious"{% end %}>{{ person['id'] }}</a><br />
+            {% end %}
+            {% for person in row['receives_from'] %}
+                &larr;<a href="/{{ person['id'] }}/"{% if person['is_suspicious'] %} class="suspicious"{% end %}>{{ person['id'] }}</a><br />
             {% end %}
         </td>
         <td>
-            {% for person in row['receives_from'] %}
-                <a href="/{{ person['id'] }}/"{% if person['is_suspicious'] %} class="suspicious"{% end %}>{{ person['id'] }}</a><br />
+            {% for transfer in row['transfers'] %}
+                {% if row['id'] == transfer['tipper'] %}
+                <span class="amount">{{ str(transfer['amount']).rjust(6).replace(' ', '&nbsp;') }}</span>&rarr;
+                <a href="/{{ transfer['tippee'] }}/"{% if transfer['tippee'] in names %} class="suspicious"{% end %}>{{ transfer['tippee'] }}</a><br />
+                {% else %}
+                <span class="amount">{{ str(transfer['amount']).rjust(6).replace(' ', '&nbsp;') }}</span>&larr;
+                <a href="/{{ transfer['tipper'] }}/"{% if transfer['tipper'] in names %} class="suspicious"{% end %}>{{ transfer['tipper'] }}</a><br />
+                {% end %}
+            {% end %}
+        </td>
+        <td>
+            {% for exchange in row['exchanges'] %}
+            <span class="amount{% if exchange['amount'] < 0 %} charge{% end %}">
+                {{ str(exchange['amount']).rjust(7).replace(' ', '&nbsp;') }}
+                {{ str(exchange['fee']).rjust(4).replace(' ', '&nbsp;') }}
+            </span><br />
             {% end %}
         </td>
     </tr>
@@ -95,4 +138,3 @@ suspicious = suspicious()
 </table>
 <br />
 <hr />
-{% end %}
