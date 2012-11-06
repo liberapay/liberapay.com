@@ -12,6 +12,7 @@ _suspicious = db.fetchall("""
          , balance
       FROM participants
      WHERE is_suspicious
+  ORDER BY ctime
 
 """)
 if _suspicious is None:
@@ -49,17 +50,17 @@ def suspicious():
                  , amount
               FROM transfers
              WHERE tipper=%s OR tippee=%s
-          ORDER BY timestamp DESC
+          ORDER BY timestamp
 
 
         """, (person['id'], person['id']))
 
         person['exchanges'] = db.fetchall("""
 
-            SELECT amount, fee
+            SELECT amount, fee, timestamp
               FROM exchanges
              WHERE participant_id=%s
-          ORDER BY timestamp DESC
+          ORDER BY timestamp
 
 
         """, (person['id'],))
@@ -80,9 +81,14 @@ names = set([person['id'] for person in suspicious])
     }
     .amount {
         text-align: right;
-        padding-right: 1em;
+        padding-right: 6pt;
         font-family: Lucida Mono, monospace;
-        }
+    }
+    .date {
+        font-family: Lucida Mono, monospace;
+        font-size: smaller;
+        color: #999;
+    }
     .suspicious {
         font-weight: bold;
         color: red;
@@ -97,7 +103,7 @@ names = set([person['id'] for person in suspicious])
         <th>Suspicious Person</th>
         <th></th>
         <th>Balance</th>
-        <th>Tips</th>
+        <th>Tip Graph</th>
         <th>Transfers</th>
         <th>Exchanges</th>
     </tr>
@@ -118,10 +124,12 @@ names = set([person['id'] for person in suspicious])
             {% for transfer in row['transfers'] %}
                 {% if row['id'] == transfer['tipper'] %}
                 <span class="amount">{{ str(transfer['amount']).rjust(6).replace(' ', '&nbsp;') }}</span>&rarr;
-                <a href="/{{ transfer['tippee'] }}/"{% if transfer['tippee'] in names %} class="suspicious"{% end %}>{{ transfer['tippee'] }}</a><br />
+                <a href="/{{ transfer['tippee'] }}/"{% if transfer['tippee'] in names %}
+                    class="suspicious"{% end %}>{{ transfer['tippee'] }}</a><br />
                 {% else %}
                 <span class="amount">{{ str(transfer['amount']).rjust(6).replace(' ', '&nbsp;') }}</span>&larr;
-                <a href="/{{ transfer['tipper'] }}/"{% if transfer['tipper'] in names %} class="suspicious"{% end %}>{{ transfer['tipper'] }}</a><br />
+                <a href="/{{ transfer['tipper'] }}/"{% if transfer['tipper'] in names %}
+                    class="suspicious"{% end %}>{{ transfer['tipper'] }}</a><br />
                 {% end %}
             {% end %}
         </td>
@@ -130,7 +138,11 @@ names = set([person['id'] for person in suspicious])
             <span class="amount{% if exchange['amount'] < 0 %} charge{% end %}">
                 {{ str(exchange['amount']).rjust(7).replace(' ', '&nbsp;') }}
                 {{ str(exchange['fee']).rjust(4).replace(' ', '&nbsp;') }}
-            </span><br />
+            </span>
+            <span class="date">
+                {{ str(exchange['timestamp'])[:10] }}
+            </span>
+            <br />
             {% end %}
         </td>
     </tr>
