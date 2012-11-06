@@ -39,7 +39,7 @@ givers = db.fetchall("""
                   JOIN participants p ON p.id = tipper
                   JOIN social_network_users snu ON snu.participant_id = tippee
                  WHERE last_bill_result = ''
-                   AND (is_suspicious IS true) OR (is_suspicious IS NULL)
+                   AND ((is_suspicious IS false) OR (is_suspicious IS NULL))
                    AND snu.is_locked = false
               ORDER BY tipper, tippee, mtime DESC
               ) AS foo
