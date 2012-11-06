@@ -1,0 +1,98 @@
+from aspen import Response
+from gittip import db
+
+^L
+if not user.ADMIN:
+    raise Response(404)
+
+
+_suspicious = db.fetchall("""
+
+    SELECT id
+         , balance
+      FROM participants
+     WHERE payin_suspended
+
+""")
+if _suspicious is None:
+    _suspicious = []
+
+
+def suspicious():
+    for person in _suspicious:
+        person['gives_to'] = db.fetchall("""
+
+            SELECT DISTINCT tippee AS id
+                 , payin_suspended AS is_suspicious
+              FROM tips
+              JOIN participants p
+                ON tippee = p.id
+             WHERE tipper=%s
+
+
+        """, (person['id'],))
+        person['receives_from'] = db.fetchall("""
+
+            SELECT DISTINCT tipper AS id
+                 , payin_suspended AS is_suspicious
+              FROM tips
+              JOIN participants p
+                ON tipper = p.id
+             WHERE tippee=%s
+
+        """, (person['id'],))
+        yield person
+suspicious = suspicious()
+
+^L
+{% extends templates/base.html %}
+{% block body %}
+<style>
+    TABLE {
+        width: auto;
+    }
+    TD, TH {
+        text-align: left;
+        vertical-align: top;
+        border-bottom: 1px solid #B2A196;
+    }
+    .amount {
+        text-align: right;
+        padding-right: 1em;
+        font-family: Lucida Mono, monospace;
+        }
+    .suspicious {
+        font-weight: bold;
+        color: red;
+    }
+</style>
+<h3>Fraud, Grommit!</h3>
+<table>
+    <tr>
+        <th>Suspicious Person</th>
+        <th></th>
+        <th>Balance</th>
+        <th>Gives To</th>
+        <th>Receives From</th>
+    </tr>
+    {% for row in suspicious %}
+    <tr>
+        <td><a href="/{{ row['id'] }}/">{{ row['id'] }}</a></td>
+        <td class="dollar-sign">$</td>
+        <td class="amount">{{ row['balance'] }}</td>
+        <td>
+            {% for person in row['gives_to'] %}
+                <a href="/{{ person['id'] }}/"{% if person['is_suspicious'] %} class="suspicious"{% end %}>{{ person['id'] }}</a><br />
+            {% end %}
+        </td>
+        <td>
+            {% for person in row['receives_from'] %}
+                <a href="/{{ person['id'] }}/"{% if person['is_suspicious'] %} class="suspicious"{% end %}>{{ person['id'] }}</a><br />
+            {% end %}
+        </td>
+    </tr>
+    {% end %}
+</table>
+<br />
+<hr />
+{% end %}
