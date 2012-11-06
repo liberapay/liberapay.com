@@ -171,7 +171,7 @@ username = participant_id # used in footer shared with on/network/ pages
         .count SPAN.bar.green {
             background: #2A8F79;
         }
-        .payin-suspended {
+        .is-suspicious {
             border: 2px solid red;
         }
     </style>
@@ -406,11 +406,11 @@ username = participant_id # used in footer shared with on/network/ pages
                     , dataType: 'json'
                     , success: function(data)
                     {
-                        if (data.payin_suspended)
-                            $('#balanced-account').addClass('payin-suspended');
+                        if (data.is_suspicious)
+                            $('#balanced-account').addClass('is-suspicious');
                         else
-                            $('#balanced-account').removeClass('payin-suspended');
-                        var val = data.payin_suspended ? 'Uns' : 'S';
+                            $('#balanced-account').removeClass('is-suspicious');
+                        var val = data.is_suspicious ? 'Uns' : 'S';
                         $('#payin-suspender').text(val + 'uspend Payins');
                     }
                     , error: function() {
@@ -709,10 +709,10 @@ username = participant_id # used in footer shared with on/network/ pages
         </li>
         {% end %}
         {% if user.ADMIN and participant['balanced_account_uri'] %}
-        <li id="balanced-account"{% if participant['payin_suspended'] %} class="payin-suspended"{% end %}>
+        <li id="balanced-account"{% if participant['is_suspicious'] %} class="is-suspicious"{% end %}>
             <img src="/assets/balanced-avatar.png" />
             Balanced Payments
-            <button id="payin-suspender" class="small">{{ 'Unsuspend' if participant['payin_suspended'] else 'Suspend' }} Payins</button>
+            <button id="payin-suspender" class="small">{{ 'Unsuspend' if participant['is_suspicious'] else 'Suspend' }} Payins</button>
             <br />
             <a href="https://www.balancedpayments.com/{{ participant['balanced_account_uri'][3:] }}">balancedpayments.com/...</a>
         </li>
