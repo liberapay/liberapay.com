@@ -188,7 +188,7 @@ class Payday(object):
                  , balance
                  , balanced_account_uri
                  , stripe_customer_id
-                 , payin_suspended
+                 , is_suspicious
               FROM participants
              WHERE claimed_time IS NOT NULL
                AND claimed_time < %s
@@ -230,8 +230,8 @@ class Payday(object):
         money between Gittip accounts.
 
         """
-        if participant['payin_suspended']:
-            log("PAYIN SUSPENDED: %s" % participant['id'])
+        if participant['is_suspicious']:
+            log("SUSPICIOUS: %s" % participant['id'])
             return
 
         short = total - participant['balance']

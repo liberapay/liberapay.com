@@ -15,6 +15,7 @@ from aspen import resources
 from aspen.testing import Website, StubRequest
 from aspen.utils import utcnow
 from gittip import wireup
+from gittip.authentication import User
 from gittip.billing.payday import Payday
 
 
@@ -312,24 +313,24 @@ def setup_tips(*recs):
     _participants = {}
 
     for rec in recs:
-        defaults = good_cc, payin_suspended, claimed = (True, False, True)
+        defaults = good_cc, is_suspicious, claimed = (True, False, True)
 
         if len(rec) == 3:
             tipper, tippee, amount = rec
         elif len(rec) == 4:
             tipper, tippee, amount, good_cc = rec
-            payin_suspended, claimed = (False, True)
+            is_suspicious, claimed = (False, True)
         elif len(rec) == 5:
-            tipper, tippee, amount, good_cc, payin_suspended = rec
+            tipper, tippee, amount, good_cc, is_suspicious = rec
             claimed = True
         elif len(rec) == 6:
-            tipper, tippee, amount, good_cc, payin_suspended, claimed = rec
+            tipper, tippee, amount, good_cc, is_suspicious, claimed = rec
 
         assert good_cc in (True, False, None), good_cc
-        assert payin_suspended in (True, False), payin_suspended
+        assert is_suspicious in (True, False), is_suspicious
         assert claimed in (True, False), claimed
 
-        _participants[tipper] = (good_cc, payin_suspended, claimed)
+        _participants[tipper] = (good_cc, is_suspicious, claimed)
         if tippee not in _participants:
             _participants[tippee] = defaults
         now = utcnow()
@@ -343,12 +344,12 @@ def setup_tips(*recs):
     then = utcnow() - datetime.timedelta(seconds=3600)
 
     participants = []
-    for participant_id, (good_cc, payin_suspended, claimed) in _participants.items():
+    for participant_id, (good_cc, is_suspicious, claimed) in _participants.items():
         rec = {"id": participant_id}
         if good_cc is not None:
             rec["last_bill_result"] = "" if good_cc else "Failure!"
             rec["balanced_account_uri"] = "/v1/blah/blah/" + participant_id
-        rec["payin_suspended"] = payin_suspended
+        rec["is_suspicious"] = is_suspicious
         if claimed:
             rec["claimed_time"] = then
         participants.append(rec)
@@ -363,11 +364,15 @@ test_website = Website([ '--www_root', str(join(TOP, 'www'))
                        , '--project_root', str('..')
                         ])
 
-def serve_request(path):
+def serve_request(path, user=None):
     """Given an URL path, return response.
     """
     request = StubRequest(path)
     request.website = test_website
+    if user is not None:
+        user = User.from_id(user)
+        # Note that Cookie needs a bytestring.
+        request.headers.cookie[str('session')] = user.session_token
     response = test_website.handle_safely(request)
     return response
 

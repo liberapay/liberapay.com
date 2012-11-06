@@ -11,7 +11,7 @@ _suspicious = db.fetchall("""
     SELECT id
          , balance
       FROM participants
-     WHERE payin_suspended
+     WHERE is_suspicious
 
 """)
 if _suspicious is None:
@@ -23,7 +23,7 @@ def suspicious():
         person['gives_to'] = db.fetchall("""
 
             SELECT DISTINCT tippee AS id
-                 , payin_suspended AS is_suspicious
+                 , is_suspicious
               FROM tips
               JOIN participants p
                 ON tippee = p.id
@@ -34,7 +34,7 @@ def suspicious():
         person['receives_from'] = db.fetchall("""
 
             SELECT DISTINCT tipper AS id
-                 , payin_suspended AS is_suspicious
+                 , is_suspicious
               FROM tips
               JOIN participants p
                 ON tipper = p.id

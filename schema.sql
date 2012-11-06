@@ -201,3 +201,11 @@ ALTER TABLE participants ALTER COLUMN balance SET NOT NULL;
 -- https://github.com/whit537/www.gittip.com/issues/350
 
 ALTER TABLE participants ADD COLUMN payin_suspended bool NOT NULL DEFAULT FALSE;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/whit537/www.gittip.com/issues/354
+
+ALTER TABLE participants ADD COLUMN is_suspicious bool DEFAULT NULL;
+UPDATE participants SET is_suspicious=true WHERE payin_suspended;
+ALTER TABLE participants DROP COLUMN payin_suspended;

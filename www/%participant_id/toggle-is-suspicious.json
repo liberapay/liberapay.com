@@ -1,3 +1,4 @@
+from aspen import Response
 from gittip import db
 ^L
 if not user.ADMIN:
@@ -6,12 +7,12 @@ if not user.ADMIN:
 rec = db.fetchone("""
 
     UPDATE participants
-       SET payin_suspended = not payin_suspended
+       SET is_suspicious = (is_suspicious IS NULL) OR (is_suspicious IS false)
      WHERE id=%s
- RETURNING payin_suspended
+ RETURNING is_suspicious
 
 """, (path['participant_id'],))
 
 assert rec is not None
 
-response.body = {"payin_suspended": rec['payin_suspended']}
+response.body = {"is_suspicious": rec['is_suspicious']}

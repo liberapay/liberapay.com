@@ -408,7 +408,7 @@ def test_payday_moves_money(charge_on_balanced):
         assert actual == expected, actual
 
 @mock.patch('gittip.billing.payday.Payday.charge_on_balanced')
-def test_payday_doesnt_move_money_from_a_suspended_payin_account(charge_on_balanced):
+def test_payday_doesnt_move_money_from_a_suspicious_account(charge_on_balanced):
     charge_on_balanced.return_value = (Decimal('10.00'), Decimal('0.68'), None)
     tips = testing.setup_tips(('buz', 'bar', '6.00', True, True))  # under $10!
     with testing.load(*tips) as context:
@@ -417,7 +417,7 @@ def test_payday_doesnt_move_money_from_a_suspended_payin_account(charge_on_balan
         assert actual == {"paydays": [1,0,0]}, actual
 
 @mock.patch('gittip.billing.payday.Payday.charge_on_balanced')
-def test_payday_does_move_money_TO_a_suspended_payin_account(charge_on_balanced):
+def test_payday_does_move_money_TO_a_suspicious_account(charge_on_balanced):
     charge_on_balanced.return_value = (Decimal('10.00'), Decimal('0.68'), None)
     tips = testing.setup_tips( ('buz', 'bar', '6.00', True, True)
                              , ('foo', 'buz', '1.00')
@@ -731,7 +731,7 @@ class TestBillingPayday(testing.GittipPaydayTest):
         participant = { 'balance': 1
                       , 'id': self.participant_id
                       , 'balanced_account_uri': self.balanced_account_uri
-                      , 'payin_suspended': False
+                      , 'is_suspicious': False
                        }
 
         initial_payday = self._get_payday()
@@ -763,7 +763,7 @@ class TestBillingPayday(testing.GittipPaydayTest):
         participant = { 'balance': 1
                       , 'id': self.participant_id
                       , 'balanced_account_uri': self.balanced_account_uri
-                      , 'payin_suspended': False
+                      , 'is_suspicious': False
                        }
 
         return_values = [1, 1, 0, -1]
@@ -803,7 +803,7 @@ class TestBillingPayday(testing.GittipPaydayTest):
         participant = { 'balance': 0
                       , 'id': self.participant_id
                       , 'balanced_account_uri': self.balanced_account_uri
-                      , 'payin_suspended': False
+                      , 'is_suspicious': False
                        }
 
 
