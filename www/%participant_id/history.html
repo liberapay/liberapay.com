@@ -205,7 +205,7 @@ paydays = Paydays(participant_id, info['balance'])
 
 </style>
 <div id="their-voice">
-    <h2 class="first">{{ participant_id == user.id and "You" or participant_id }} joined
+    <h2 class="first"><a href="./">{{ participant_id == user.id and "You" or participant_id }}</a> joined
     {{ to_age(claimed_time) }}.</h2>
 
     <h3>{{ participant_id == user.id and "Your" or "Their" }} balance is
