@@ -234,7 +234,8 @@ fmtdate = lambda d: str(d)[:10]
 
     <p>Gittip&rsquo;s first <a href="./">fraud incident</a> surfaced when an
     unknown user named delpan appeared among the top receivers on the site.
-    This page provides data and collects resources related to the incident.</p>
+    This page provides data and collects information related to the
+    incident.</p>
 
 
     <h3>Status</h3>
@@ -242,7 +243,7 @@ fmtdate = lambda d: str(d)[:10]
     <p>This incident is <b>open</b>.</p>
 
 
-    <h3>Related Resources</h3>
+    <h3>Related</h3>
 
     <ul>
 
@@ -290,11 +291,11 @@ occured over a period of <b>{{ nweeks }} weeks</b>, from
         <td class="amount">${{ gittip_fees }}&nbsp;</td></tr>
     <tr><th><b>Total Stolen</b></th>
         <td class="amount"><b>${{ total_charged }}&nbsp;</b></td></tr>
-    <tr><th>Overall Volume</th>
+    <tr><th>Overall Volume <span class="help">during the incident</span></th>
         <td class="amount">${{ overall_volume }}&nbsp;</td></tr>
     <tr><th><b>Percentage Stolen</b></th>
         <td class="amount"><b>&nbsp;{{ percentage_stolen }}%</b></td></tr>
-    <tr><th>Total Credit Card Transactions</b></th>
+    <tr><th>Total Credit Card Transactions</th>
         <td class="amount">&nbsp;{{ overall_transactions }}&nbsp;</td></tr>
     <tr><th>Fraudulent Transactions</th>
         <td class="amount">&nbsp;{{ total_fraudulent }}&nbsp;</td></tr>
@@ -334,7 +335,7 @@ incident.</p>
         <th class="tips">Tip Graph</th>
         <th class="transfers">Transfers</th>
         <th class="exchanges">Exchanges &amp; Fees<br />
-        <span class="help">Negative means bank deposit,<br />positive means credit card charge</span></th>
+        <span class="help">Negative means bank deposit,<br />positive means credit card charge.</span></th>
     </tr>
     {% for row in suspicious %}
     <tr>
