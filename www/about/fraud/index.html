@@ -1,5 +1,7 @@
 from aspen import Response
 from gittip import db
+from collections import defaultdict
+from decimal import Decimal
 
 ^L
 if not user.ADMIN:
@@ -55,7 +57,7 @@ def suspicious():
 
         """, (person['id'], person['id']))
 
-        person['exchanges'] = db.fetchall("""
+        person['exchanges'] = list(db.fetchall("""
 
             SELECT amount, fee, timestamp
               FROM exchanges
@@ -63,11 +65,56 @@ def suspicious():
           ORDER BY timestamp
 
 
-        """, (person['id'],))
+        """, (person['id'],)))
 
         yield person
 suspicious = list(suspicious())
 names = set([person['id'] for person in suspicious])
+
+total_charged = 0
+total_withdrawn = 0
+total_fees = 0
+total_escrowed = 0
+total_legit = 0
+
+bystanders = defaultdict(lambda: [Decimal('0.00')])
+
+for person in suspicious:
+    total_escrowed += person['balance']
+    for transfer in person['transfers']:
+        if transfer['tippee'] not in names:
+            total_legit += transfer['amount']
+            bystanders[transfer['tippee']][0] += transfer['amount']
+    for exchange in person['exchanges']:
+        amount, fee = exchange['amount'], exchange['fee']
+        total_fees += fee
+        if amount < 0:
+            total_withdrawn += abs(exchange['amount'])
+        else:
+            total_charged += exchange['amount'] + fee
+
+assert total_legit == total_charged - total_withdrawn - total_fees - total_escrowed
+
+pad = lambda d, n: str(d).rjust(n).replace(' ', '&nbsp;')
+
+w = 7
+total_charged = pad(total_charged, w)
+total_withdrawn = pad(total_withdrawn, w)
+total_fees = pad(total_fees, w)
+total_escrowed = pad(total_escrowed, w)
+total_legit = pad(total_legit, w)
+
+bystander_balances = db.fetchall("""
+
+    SELECT id, balance FROM participants WHERE id = ANY(%s)
+
+""", (list(bystanders),))
+if bystander_balances is None:
+    bystander_balances = []
+for row in bystander_balances:
+    bystanders[row['id']].append(row['balance'])
+
+bystanders = sorted(bystanders.items(), key=lambda i: i[1], reverse=True)
 
 ^L
 <style>
@@ -96,8 +143,37 @@ names = set([person['id'] for person in suspicious])
     .charge {
         color: red;
     }
+    TABLE {
+        border-spacing: 0;
+        border-collapse: collapse;
+    }
+    TD {
+        padding: 1pt 3pt;
+    }
 </style>
-<h3>Fraud, Grommit!</h3>
+<h1>Fraud, Grommit!</h1>
+<table>
+    <tr><th>Charged</th>    <td class="amount">${{ total_charged }}</td></tr>
+    <tr><th>Withdrawn</th>  <td class="amount">${{ total_withdrawn }}</td></tr>
+    <tr><th>Fees</th>       <td class="amount">${{ total_fees }}</td></tr>
+    <tr><th>Escrowed</th>   <td class="amount">${{ total_escrowed }}</td></tr>
+    <tr><th>Innocent
+            Bystanders</th> <td class="amount">${{ total_legit }}</td></tr>
+</table>
+
+<h2>Innocent Bystanders (N = {{ len(bystanders) }})</h2>
+<table>
+    <tr><th></th><th>Stolen</th><th>Balance</th></tr>
+    {% for name, (amount, balance) in bystanders %}
+    <tr>
+        <td><a href="/{{ name }}/">{{ name }}</a></td>
+        <td class="amount">${{ pad(amount, 6) }}</td>
+        <td class="amount">${{ pad(balance, 7) }}</td>
+    </tr>
+    {% end %}
+</table>
+
+<h2>Suspicious Participants</h2>
 <table>
     <tr>
         <th>Suspicious Person</th>
@@ -123,11 +199,11 @@ names = set([person['id'] for person in suspicious])
         <td>
             {% for transfer in row['transfers'] %}
                 {% if row['id'] == transfer['tipper'] %}
-                <span class="amount">{{ str(transfer['amount']).rjust(6).replace(' ', '&nbsp;') }}</span>&rarr;
+                <span class="amount">{{ pad(transfer['amount'], 6)}}</span>&rarr;
                 <a href="/{{ transfer['tippee'] }}/"{% if transfer['tippee'] in names %}
                     class="suspicious"{% end %}>{{ transfer['tippee'] }}</a><br />
                 {% else %}
-                <span class="amount">{{ str(transfer['amount']).rjust(6).replace(' ', '&nbsp;') }}</span>&larr;
+                <span class="amount">{{ pad(transfer['amount'], 6) }}</span>&larr;
                 <a href="/{{ transfer['tipper'] }}/"{% if transfer['tipper'] in names %}
                     class="suspicious"{% end %}>{{ transfer['tipper'] }}</a><br />
                 {% end %}
@@ -136,8 +212,8 @@ names = set([person['id'] for person in suspicious])
         <td>
             {% for exchange in row['exchanges'] %}
             <span class="amount{% if exchange['amount'] < 0 %} charge{% end %}">
-                {{ str(exchange['amount']).rjust(7).replace(' ', '&nbsp;') }}
-                {{ str(exchange['fee']).rjust(4).replace(' ', '&nbsp;') }}
+                {{ pad(exchange['amount'], 7) }}
+                {{ pad(exchange['fee'], 4) }}
             </span>
             <span class="date">
                 {{ str(exchange['timestamp'])[:10] }}
