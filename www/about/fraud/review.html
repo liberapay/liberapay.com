@@ -33,6 +33,15 @@ unreviewed = list(unreviewed)
         text-align: left;
         vertical-align: top;
     }
+    IFRAME {
+        width: 55%;
+        height: 60%;
+        position: fixed;
+        top: 30%;
+        left: 43%;
+        background: white;
+        border-radius: 5pt;
+    }
 </style>
 <script>
     $(document).ready(function()
@@ -70,9 +79,11 @@ unreviewed = list(unreviewed)
 <div participant_id="{{ account['id'] }}">
     <button class="good small selected">Good</button>
     <button class="bad small">Bad</button>
-    <a href="/{{ account['id'] }}/">{{ account['id'] }}</a>
+    &nbsp;
+    <a href="/{{ account['id'] }}/" target="drill-down">{{ account['id'] }}</a>
 </div>
 {% end %}
+<iframe name="drill-down"></iframe>
 <br />
 <hr />
 {% end %}
