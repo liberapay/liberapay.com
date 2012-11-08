@@ -61,6 +61,18 @@ def skim_credit(amount):
 assert upcharge(MINIMUM_CHARGE) == (Decimal('10.00'), Decimal('0.68'))
 
 
+def whitelist(participant):
+    """Given a dict, return bool, possibly logging.
+    """
+    if participant['is_suspicious'] is True:
+        log("SUSPICIOUS: %s" % participant['id'])
+        return False
+    elif participant['is_suspicious'] is None:
+        log("UNREVIEWED: %s" % participant['id'])
+        return False
+    return True
+
+
 class Payday(object):
     """Represent an abstract event during which money is moved.
 
@@ -207,7 +219,8 @@ class Payday(object):
         for i, (participant, tips, total) in enumerate(participants, start=1):
             if i % 100 == 0:
                 log("Payin done for %d participants." % i)
-            self.charge_and_or_transfer(ts_start, participant, tips, total)
+            if whitelist(participant):
+                self.charge_and_or_transfer(ts_start, participant, tips, total)
         log("Did payin for %d participants." % i)
 
 
@@ -219,7 +232,8 @@ class Payday(object):
         for i, (participant, tips, total) in enumerate(participants, start=1):
             if i % 100 == 0:
                 log("Payout done for %d participants." % i)
-            self.ach_credit(ts_start, participant, tips, total)
+            if whitelist(participant):
+                self.ach_credit(ts_start, participant, tips, total)
         log("Did payout for %d participants." % i)
 
 
@@ -230,10 +244,6 @@ class Payday(object):
         money between Gittip accounts.
 
         """
-        if participant['is_suspicious']:
-            log("SUSPICIOUS: %s" % participant['id'])
-            return
-
         short = total - participant['balance']
         if short > 0:
 

@@ -708,13 +708,30 @@ class TestBillingPayday(testing.GittipPaydayTest):
     def test_payin(self, charge_and_or_transfer, log):
         def participants():
             for i in range(100):
-                yield i, [], None
+                yield {'is_suspicious': False, 'id': 'something'}, [], None
+            yield {'is_suspicious': True, 'id': 'something'}, [], None
+            yield {'is_suspicious': None, 'id': 'something'}, [], None
         start = mock.Mock()
         self.payday.payin(start, participants())
 
-        self.assertEqual(log.call_count, 3)
+        self.assertEqual(log.call_count, 5)
         self.assertEqual(charge_and_or_transfer.call_count, 100)
         self.assertTrue(charge_and_or_transfer.called_with(start))
+
+    @mock.patch('gittip.billing.payday.log')
+    @mock.patch('gittip.billing.payday.Payday.ach_credit')
+    def test_payout(self, ach_credit, log):
+        def participants():
+            for i in range(100):
+                yield {'is_suspicious': False, 'id': 'something'}, [], None
+            yield {'is_suspicious': True, 'id': 'something'}, [], None
+            yield {'is_suspicious': None, 'id': 'something'}, [], None
+        start = mock.Mock()
+        self.payday.payout(start, participants())
+
+        self.assertEqual(log.call_count, 5)
+        self.assertEqual(ach_credit.call_count, 100)
+        self.assertTrue(ach_credit.called_with(start))
 
     def test_assert_one_payday(self):
         with self.assertRaises(AssertionError):
