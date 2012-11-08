@@ -26,6 +26,7 @@ from aspen import log
 from aspen.utils import typecheck
 from gittip import get_tips_and_total
 from psycopg2 import IntegrityError
+from psycopg2.extras import RealDictRow
 
 
 # Set fees and minimums.
@@ -61,7 +62,7 @@ def skim_credit(amount):
 assert upcharge(MINIMUM_CHARGE) == (Decimal('10.00'), Decimal('0.68'))
 
 
-def whitelist(participant):
+def is_whitelisted(participant):
     """Given a dict, return bool, possibly logging.
 
     We only perform credit card charges and bank deposits for whitelisted
@@ -235,8 +236,7 @@ class Payday(object):
         for i, (participant, tips, total) in enumerate(participants, start=1):
             if i % 100 == 0:
                 log("Payout done for %d participants." % i)
-            if whitelist(participant):
-                self.ach_credit(ts_start, participant, tips, total)
+            self.ach_credit(ts_start, participant, tips, total)
         log("Did payout for %d participants." % i)
 
 
@@ -248,7 +248,7 @@ class Payday(object):
 
         """
         short = total - participant['balance']
-        if short > 0 and whitelist(participant):
+        if short > 0:
 
             # The participant's Gittip account is short the amount needed to
             # fund all their tips. Let's try pulling in money from their credit
@@ -257,11 +257,7 @@ class Payday(object):
             # at least *some* tips. The charge method will have set
             # last_bill_result to a non-empty string if the card did fail.
 
-            self.charge( participant['id']
-                       , participant['balanced_account_uri']
-                       , participant['stripe_customer_id']
-                       , short
-                        )
+            self.charge(participant, short)
 
         nsuccessful_tips = 0
         for tip in tips:
@@ -428,22 +424,39 @@ class Payday(object):
     # Move money between Gittip and the outside world.
     # ================================================
 
-    def charge(self, participant_id, balanced_account_uri, stripe_customer_id, amount):
-        """Given three unicodes and a Decimal, return a boolean.
+    def charge(self, participant, amount):
+        """Given dict and Decimal, return None.
 
         This is the only place where we actually charge credit cards. Amount
         should be the nominal amount. We'll compute Gittip's fee below this
         function and add it to amount to end up with charge_amount.
 
         """
+        typecheck(participant, RealDictRow, amount, Decimal)
+
+        participant_id = participant['id']
+        balanced_account_uri = participant['balanced_account_uri']
+        stripe_customer_id = participant['stripe_customer_id']
+
         typecheck( participant_id, unicode
                  , balanced_account_uri, (unicode, None)
-                 , amount, Decimal
+                 , stripe_customer_id, (unicode, None)
                   )
+
+
+        # Perform some last-minute checks.
+        # ================================
 
         if balanced_account_uri is None and stripe_customer_id is None:
             self.mark_missing_funding()
-            return False
+            return      # Participant has no funding source.
+
+        if not is_whitelisted(participant):
+            return      # Participant not trusted.
+
+
+        # Go to Balanced or Stripe.
+        # =========================
 
         if balanced_account_uri is not None:
             things = self.charge_on_balanced( participant_id
@@ -469,8 +482,6 @@ class Payday(object):
                           , participant_id
                            )
 
-        return not bool(error)  # True indicates success
-
 
     def ach_credit(self, ts_start, participant, tips, total):
 
@@ -481,10 +492,14 @@ class Payday(object):
 
         balance = participant['balance']
         assert balance is not None, balance # sanity check
-
         amount = balance - total
+
+
+        # Do some last-minute checks.
+        # ===========================
+
         if amount <= 0:
-            return  # Participant not owed anything.
+            return      # Participant not owed anything.
 
         if amount < MINIMUM_CREDIT:
             also_log = ""
@@ -493,7 +508,14 @@ class Payday(object):
                 also_log %= (balance, total)
             log("Minimum payout is $%s. %s is only due $%s%s."
                % (MINIMUM_CREDIT, participant['id'], amount, also_log))
-            return  # Participant owed too little.
+            return      # Participant owed too little.
+
+        if not is_whitelisted(participant):
+            return      # Participant not trusted.
+
+
+        # Do final calculations.
+        # ======================
 
         credit_amount, fee = skim_credit(amount)
         cents = credit_amount * 100

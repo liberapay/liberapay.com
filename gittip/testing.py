@@ -301,11 +301,16 @@ def start_payday(*data):
 def setup_tips(*recs):
     """Setup some participants and tips. recs is a list of:
 
-        ("tipper", "tippee", '2.00', False)
-                                       ^
+        ("tipper", "tippee", '2.00', True, False, True)
+                                       ^     ^      ^
+                                       |     |      |
+                                       |     |      -- claimed?
+                                       |     -- is_suspicious?
                                        |-- good cc?
 
     good_cc can be True, False, or None
+    is_suspicious can be True, False, or None
+    claimed can be True or False
 
     """
     tips = []
@@ -327,7 +332,7 @@ def setup_tips(*recs):
             tipper, tippee, amount, good_cc, is_suspicious, claimed = rec
 
         assert good_cc in (True, False, None), good_cc
-        assert is_suspicious in (True, False), is_suspicious
+        assert is_suspicious in (True, False, None), is_suspicious
         assert claimed in (True, False), claimed
 
         _participants[tipper] = (good_cc, is_suspicious, claimed)
