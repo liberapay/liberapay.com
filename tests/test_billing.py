@@ -417,18 +417,15 @@ def test_payday_doesnt_move_money_from_a_suspicious_account(charge_on_balanced):
         assert actual == {"paydays": [1,0,0]}, actual
 
 @mock.patch('gittip.billing.payday.Payday.charge_on_balanced')
-def test_payday_does_move_money_TO_a_suspicious_account(charge_on_balanced):
+def test_payday_doesnt_move_money_to_a_suspicious_account(charge_on_balanced):
     charge_on_balanced.return_value = (Decimal('10.00'), Decimal('0.68'), None)
     tips = testing.setup_tips( ('buz', 'bar', '6.00', True, True)
                              , ('foo', 'buz', '1.00')
                               )  # under $10!
     with testing.load(*tips) as context:
         Payday(context.db).run()
-        expected = [ {"id": "buz", "balance": Decimal('1.00')}
-                   , {"id": "foo", "balance": Decimal('8.32')}
-                    ]
-        actual = context.diff()['participants']['updates']
-        assert actual == expected, actual
+        actual = context.diff(compact=True)
+        assert actual == {"paydays": [1,0,0]}, actual
 
 
 # XXX I started refactoring billing tests out of test classes into module-level
