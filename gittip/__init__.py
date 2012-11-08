@@ -262,6 +262,7 @@ def get_tips_and_total(tipper, for_payday=False, db=None):
               FROM tips t
               JOIN participants p ON p.id = t.tippee
              WHERE tipper = %%s
+               AND p.is_suspicious IS NOT true
                %s
           ORDER BY tippee
                  , t.mtime DESC
