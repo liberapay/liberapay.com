@@ -15,6 +15,7 @@ unreviewed = db.fetchall("""
        AND (  last_bill_result IS NOT NULL
            OR last_ach_result IS NOT NULL
              )
+  ORDER BY claimed_time
 
 """)
 if unreviewed is None:
