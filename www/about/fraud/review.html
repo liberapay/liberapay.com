@@ -1,0 +1,78 @@
+from aspen import Response
+from gittip import db
+
+^L
+if not user.ADMIN:
+    raise Response(404)
+
+
+unreviewed = db.fetchall("""
+
+    SELECT id
+         , balance
+      FROM participants
+     WHERE is_suspicious IS NULL
+       AND (  last_bill_result IS NOT NULL
+           OR last_ach_result IS NOT NULL
+             )
+
+""")
+if unreviewed is None:
+    unreviewed = []
+unreviewed = list(unreviewed)
+
+^L
+{% extends templates/base.html %}
+{% block body %}
+<style>
+    TABLE {
+        width: auto;
+    }
+    TD, TH {
+        text-align: left;
+        vertical-align: top;
+    }
+</style>
+<script>
+    $(document).ready(function()
+    {
+        function error(a,b,c)
+        {
+            console.log(a,b,c);
+            alert("Failed!");
+        }
+
+        $('BUTTON').click(function()
+        {
+            var row = $(this).parent();
+            var to = $(this).text() !== 'Good';
+            var participant_id = row.attr('participant_id');
+            var url = "/" + participant_id + "/toggle-is-suspicious.json";
+
+            function success()
+            {
+                row.remove();
+            }
+
+            jQuery.ajax({ url: url
+                        , type: "POST"
+                        , dataType: "json"
+                        , data: {to: to}
+                        , success: success
+                        , error: error
+                         })
+        });
+    });
+</script>
+<h3>Unreviewed Accounts (N = {{ len(unreviewed) }})</h3>
+{% for account in unreviewed %}
+<div participant_id="{{ account['id'] }}">
+    <button class="good small selected">Good</button>
+    <button class="bad small">Bad</button>
+    <a href="/{{ account['id'] }}/">{{ account['id'] }}</a>
+</div>
+{% end %}
+<br />
+<hr />
+{% end %}
+

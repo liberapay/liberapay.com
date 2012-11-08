@@ -4,14 +4,28 @@ from gittip import db
 if not user.ADMIN:
     raise Response(400)
 
-rec = db.fetchone("""
+to = body.get('to')
+if not to in ('true', 'false', None):
+    raise Response(400)
 
-    UPDATE participants
-       SET is_suspicious = (is_suspicious IS NULL) OR (is_suspicious IS false)
-     WHERE id=%s
- RETURNING is_suspicious
+if to is None:
+    rec = db.fetchone("""
 
-""", (path['participant_id'],))
+        UPDATE participants
+           SET is_suspicious = (is_suspicious IS NULL) OR (is_suspicious IS false)
+         WHERE id=%s
+     RETURNING is_suspicious
+
+    """, (path['participant_id'],))
+else:
+    rec = db.fetchone("""
+
+        UPDATE participants
+           SET is_suspicious = %s
+         WHERE id=%s
+     RETURNING is_suspicious
+
+    """, (to == 'true', path['participant_id'],))
 
 assert rec is not None
 
