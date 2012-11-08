@@ -699,7 +699,7 @@ username = participant_id # used in footer shared with on/network/ pages
     {% end %}
 
 
-    <ul id="accounts"{% if participant['is_suspicious'] %} class="is-suspicious"{% end %}>
+    <ul id="accounts"{% if user.ADMIN and participant['is_suspicious'] %} class="is-suspicious"{% end %}>
         {% for account in accounts %}
         <li>
         {% if account['network'] == 'github' %}
