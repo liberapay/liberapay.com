@@ -19,9 +19,11 @@ receivers = db.fetchall("""
                   JOIN social_network_users snu ON snu.participant_id = tippee
                  WHERE last_bill_result = ''
                    AND snu.is_locked = false
+                   AND is_suspicious IS NOT true
               ORDER BY tipper, tippee, mtime DESC
               ) AS foo
       JOIN participants p ON p.id = tippee
+     WHERE is_suspicious IS NOT true
   GROUP BY tippee, claimed_time
   ORDER BY amount DESC
   LIMIT %s
@@ -39,11 +41,12 @@ givers = db.fetchall("""
                   JOIN participants p ON p.id = tipper
                   JOIN social_network_users snu ON snu.participant_id = tippee
                  WHERE last_bill_result = ''
-                   AND ((is_suspicious IS false) OR (is_suspicious IS NULL))
+                   AND is_suspicious IS NOT true
                    AND snu.is_locked = false
               ORDER BY tipper, tippee, mtime DESC
               ) AS foo
       JOIN participants p ON p.id = tipper
+     WHERE is_suspicious IS NOT true
   GROUP BY tipper, anonymous
   ORDER BY amount DESC
   LIMIT %s

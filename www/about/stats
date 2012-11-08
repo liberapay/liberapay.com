@@ -19,7 +19,7 @@ title = "Stats"
 yesterday = datetime.datetime.utcnow() - datetime.timedelta(hours=24)
 escrow = db.fetchone("SELECT sum(balance) FROM participants")['sum']
 escrow = 0 if escrow is None else escrow
-nach = db.fetchone("SELECT count(*) AS n FROM participants WHERE last_ach_result = ''")['n']
+nach = db.fetchone("SELECT count(*) AS n FROM participants WHERE last_ach_result = '' AND is_suspicious IS NOT true")['n']
 nach = 0 if nach is None else nach
 if nach < 10:
     nach = CARDINALS[nach].title()
@@ -28,11 +28,11 @@ else:
 payday = db.fetchone( "SELECT ts_start, ts_end FROM paydays WHERE ts_start > %s"
                     , (yesterday,)
                      )
-npeople = db.fetchone("SELECT count(*) AS n FROM participants WHERE claimed_time IS NOT NULL")['n']
-ncc = db.fetchone("SELECT count(*) AS n FROM participants WHERE last_bill_result = ''")['n']
+npeople = db.fetchone("SELECT count(*) AS n FROM participants WHERE claimed_time IS NOT NULL AND is_suspicious IS NOT true")['n']
+ncc = db.fetchone("SELECT count(*) AS n FROM participants WHERE last_bill_result = '' AND is_suspicious IS NOT true")['n']
 ncc = 0 if ncc is None else ncc
 pcc = "%5.1f" % ((ncc * 100.0) / npeople) if npeople > 0 else 0.0
-statements = db.fetchall("SELECT id, statement FROM participants WHERE statement != '' ORDER BY random(), id LIMIT 500")
+statements = db.fetchall("SELECT id, statement FROM participants WHERE statement != '' AND is_suspicious IS NOT true ORDER BY random(), id LIMIT 500")
 statements = [] if statements is None else list(statements)
 transfer_volume = db.fetchone("SELECT transfer_volume AS v FROM paydays ORDER BY ts_end DESC LIMIT 1")
 transfer_volume = 0 if transfer_volume is None else transfer_volume['v']
@@ -44,6 +44,8 @@ tip_amounts = db.fetchone("""
                      JOIN participants p2 ON p2.id = tippee
                     WHERE p.last_bill_result = ''
                       AND p2.claimed_time IS NOT NULL
+                      AND p.is_suspicious IS NOT true
+                      AND p2.is_suspicious IS NOT true
                  ORDER BY tipper, tippee, mtime DESC
                ) AS foo;
 """)
@@ -66,6 +68,8 @@ average_tippees = db.fetchone("""\
                             JOIN participants p2 on p2.id = tippee
                            WHERE p.last_bill_result = ''
                              AND p2.claimed_time IS NOT NULL
+                             AND NOT (p.is_suspicious IS true)
+                             AND NOT (p2.is_suspicious IS true)
                         GROUP BY tipper, tippee, mtime, amount
                         ORDER BY tipper, tippee, mtime DESC
                          ) AS foo WHERE amount > 0 GROUP BY tipper) AS bar
@@ -94,6 +98,8 @@ _tip_distribution = list(db.fetchall("""
               JOIN participants p2 on p2.id = tippee
              WHERE p.last_bill_result = ''
                AND p2.claimed_time IS NOT NULL
+               AND NOT (p.is_suspicious IS true)
+               AND NOT (p2.is_suspicious IS true)
                AND amount > 0
           GROUP BY tipper, tippee, mtime, amount
           ORDER BY tipper, tippee, mtime DESC

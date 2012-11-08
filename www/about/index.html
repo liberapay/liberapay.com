@@ -2,7 +2,7 @@ from gittip import age, db
 ^L
 if not user.ANON:
     username = user.id
-nparticipants = db.fetchone("SELECT count(*) AS n FROM participants WHERE claimed_time IS NOT NULL")['n']
+nparticipants = db.fetchone("SELECT count(*) AS n FROM participants WHERE claimed_time IS NOT NULL AND is_suspicious IS NOT true")['n']
 title = "About"
 ^L
 {% extends templates/base.html %}

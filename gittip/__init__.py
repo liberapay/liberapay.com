@@ -75,6 +75,7 @@ def get_dollars_receiving(participant_id):
                    JOIN participants p ON p.id = tipper
                   WHERE tippee=%s
                     AND last_bill_result = ''
+                    AND is_suspicious IS NOT true
                ORDER BY tipper
                       , mtime DESC
                 ) AS foo
@@ -106,6 +107,7 @@ def get_dollars_giving(participant_id):
                    JOIN participants p ON p.id = tippee
                   WHERE tipper=%s
                     AND last_bill_result = ''
+                    AND is_suspicious IS NOT true
                ORDER BY tippee
                       , mtime DESC
                 ) AS foo
@@ -137,6 +139,7 @@ def get_number_of_backers(participant_id):
                    JOIN participants p ON p.id = tipper
                   WHERE tippee=%s
                     AND last_bill_result = ''
+                    AND is_suspicious IS NOT true
                ORDER BY tipper
                       , mtime DESC
                 ) AS foo
@@ -167,6 +170,7 @@ def get_chart_of_giving(user):
                    JOIN participants p ON p.id = tipper
                   WHERE tippee=%s
                     AND last_bill_result = ''
+                    AND is_suspicious IS NOT true
                ORDER BY tipper
                       , mtime DESC
                 ) AS foo
