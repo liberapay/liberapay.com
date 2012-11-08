@@ -63,11 +63,14 @@ assert upcharge(MINIMUM_CHARGE) == (Decimal('10.00'), Decimal('0.68'))
 
 def whitelist(participant):
     """Given a dict, return bool, possibly logging.
+
+    We only perform credit card charges and bank deposits for whitelisted
+    participants. We don't even include is_suspicious participants in the
+    initial SELECT, so we should never see one here.
+
     """
-    if participant['is_suspicious'] is True:
-        log("SUSPICIOUS: %s" % participant['id'])
-        return False
-    elif participant['is_suspicious'] is None:
+    assert participant['is_suspicious'] is not True, participant['id']
+    if participant['is_suspicious'] is None:
         log("UNREVIEWED: %s" % participant['id'])
         return False
     return True
@@ -204,6 +207,7 @@ class Payday(object):
               FROM participants
              WHERE claimed_time IS NOT NULL
                AND claimed_time < %s
+               AND is_suspicious IS NOT true
           ORDER BY claimed_time ASC
         """
         participants = self.db.fetchall(PARTICIPANTS, (ts_start,))
@@ -219,8 +223,7 @@ class Payday(object):
         for i, (participant, tips, total) in enumerate(participants, start=1):
             if i % 100 == 0:
                 log("Payin done for %d participants." % i)
-            if whitelist(participant):
-                self.charge_and_or_transfer(ts_start, participant, tips, total)
+            self.charge_and_or_transfer(ts_start, participant, tips, total)
         log("Did payin for %d participants." % i)
 
 
@@ -245,7 +248,7 @@ class Payday(object):
 
         """
         short = total - participant['balance']
-        if short > 0:
+        if short > 0 and whitelist(participant):
 
             # The participant's Gittip account is short the amount needed to
             # fund all their tips. Let's try pulling in money from their credit

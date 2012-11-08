@@ -703,33 +703,39 @@ class TestBillingPayday(testing.GittipPaydayTest):
         '''
         return self.db.fetchone(SELECT_PAYDAY)
 
-    @mock.patch('gittip.billing.payday.log')
-    @mock.patch('gittip.billing.payday.Payday.charge_and_or_transfer')
-    def test_payin(self, charge_and_or_transfer, log):
-        def participants():
-            for i in range(100):
-                yield {'is_suspicious': False, 'id': 'something'}, [], None
-            yield {'is_suspicious': True, 'id': 'something'}, [], None
-            yield {'is_suspicious': None, 'id': 'something'}, [], None
-        start = mock.Mock()
-        self.payday.payin(start, participants())
+    @staticmethod
+    def genparticipants():
+        for i in range(100):
+            yield { 'is_suspicious': False
+                  , 'id': 'something'
+                  , 'balance': Decimal('0.00')
+                  , 'balanced_account_uri': ''
+                  , 'stripe_customer_id': ''
+                   }, [], Decimal('2.00')
+        yield { 'is_suspicious': None
+              , 'id': 'something'
+              , 'balance': Decimal('0.00')
+              , 'balanced_account_uri': ''
+              , 'stripe_customer_id': ''
+               }, [], Decimal('2.00')
 
-        self.assertEqual(log.call_count, 5)
-        self.assertEqual(charge_and_or_transfer.call_count, 100)
-        self.assertTrue(charge_and_or_transfer.called_with(start))
+    @mock.patch('gittip.billing.payday.log')
+    @mock.patch('gittip.billing.payday.Payday.charge')
+    @mock.patch('gittip.billing.payday.Payday.tip')
+    def test_payin(self, tip, charge, log):
+        start = mock.Mock()
+        self.payday.payin(start, self.genparticipants())
+        self.assertEqual(log.call_count, 4)
+        self.assertEqual(charge.call_count, 100)
+        self.assertTrue(charge.called_with(start))
 
     @mock.patch('gittip.billing.payday.log')
     @mock.patch('gittip.billing.payday.Payday.ach_credit')
     def test_payout(self, ach_credit, log):
-        def participants():
-            for i in range(100):
-                yield {'is_suspicious': False, 'id': 'something'}, [], None
-            yield {'is_suspicious': True, 'id': 'something'}, [], None
-            yield {'is_suspicious': None, 'id': 'something'}, [], None
         start = mock.Mock()
-        self.payday.payout(start, participants())
+        self.payday.payout(start, self.genparticipants())
 
-        self.assertEqual(log.call_count, 5)
+        self.assertEqual(log.call_count, 4)
         self.assertEqual(ach_credit.call_count, 100)
         self.assertTrue(ach_credit.called_with(start))
 
