@@ -227,6 +227,7 @@ def get_giving_for_profile(tipper, db=None):
               JOIN participants p ON p.id = t.tippee
              WHERE tipper = %s
                AND p.is_suspicious IS NOT true
+               AND p.claimed_time IS NOT NULL
           ORDER BY tippee
                  , t.mtime DESC
         ) AS foo
