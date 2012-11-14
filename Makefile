@@ -15,7 +15,23 @@ clean:
 	rm -rf env *.egg *.egg-info tests/env
 	find . -name \*.pyc -delete
 
-run: env
+local.env:
+	echo "Creating a local.env file ..."
+	echo
+	echo "CANONICAL_HOST=" > local.env
+	echo "CANONICAL_SCHEME=http" >> local.env
+	echo "DATABASE_URL=postgres://gittip@localhost/gittip" >> local.env
+	echo "STRIPE_SECRET_API_KEY=1" >> local.env
+	echo "STRIPE_PUBLISHABLE_API_KEY=1" >> local.env
+	echo "BALANCED_API_SECRET=90bb3648ca0a11e1a977026ba7e239a9" >> local.env
+	echo "GITHUB_CLIENT_ID=3785a9ac30df99feeef5" >> local.env
+	echo "GITHUB_CLIENT_SECRET=e69825fafa163a0b0b6d2424c107a49333d46985" >> local.env
+	echo "GITHUB_CALLBACK=http://localhost:8537/github/associate" >> local.env
+	echo "TWITTER_CONSUMER_KEY=QBB9vEhxO4DFiieRF68zTA" >> local.env
+	echo "TWITTER_CONSUMER_SECRET=mUymh1hVMiQdMQbduQFYRi79EYYVeOZGrhj27H59H78" >> local.env
+	echo "TWITTER_CALLBACK=http://127.0.0.1:8537/on/twitter/associate" >> local.env
+
+run: env local.env
 	./env/bin/swaddle local.env ./env/bin/aspen \
 		--www_root=www/ \
 		--project_root=.. \

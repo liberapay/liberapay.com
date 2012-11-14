@@ -18,8 +18,24 @@ Heroku. Balanced is used for credit card processing, and Google for analytics.
 You need python2.7 on your PATH.
 
 You need Postgres with headers installed. There's a simple Makefile for
-building the software. All Python dependencies are included in vendor/. To
-`make run` you need a local.env file in the distribution root with these keys:
+building the software. All Python dependencies (including virtualenv) are
+included in vendor/.
+
+Once you have Python and Postgres, you can use make to launch Gittip:
+
+    $ make run
+
+If you don't have make, look at the Makefile to see what steps you need to
+perform to launch Gittip.
+
+
+local.env
+=========
+
+When using `make run`, Gittip's execution environment is defined in a
+`local.env` file, which is not included in the source code repo. If you `make
+run` you'll have one generated for you, which you can then tweak as needed.
+Here's the default:
 
     CANONICAL_HOST=localhost:8537
     CANONICAL_SCHEME=http
@@ -33,7 +49,6 @@ building the software. All Python dependencies are included in vendor/. To
     TWITTER_CONSUMER_KEY=QBB9vEhxO4DFiieRF68zTA
     TWITTER_CONSUMER_SECRET=mUymh1hVMiQdMQbduQFYRi79EYYVeOZGrhj27H59H78
     TWITTER_CALLBACK=http://127.0.0.1:8537/on/twitter/associate
-    DYLD_LIBRARY_PATH=/Library/PostgreSQL/9.1/lib
 
 The `BALANCED_API_SECRET` is a test marketplace. To generate a new secret for
 your own testing run this command:
@@ -53,8 +68,10 @@ on Github. It points back to localhost:8537, which is where Gittip will be
 running if you start it locally with `make run`. Similarly with the TWITTER_*
 keys, but there they required us to spell it `127.0.0.1`.
 
-The DYLD_LIBRARY_PATH thing is to get psycopg2 working on Mac OS with
-EnterpriseDB's Postgres 9.1 installer. You might not need it.
+You probably don't need it, but at one point I had to set this to get psycopg2
+working on Mac OS with EnterpriseDB's Postgres 9.1 installer:
+
+    DYLD_LIBRARY_PATH=/Library/PostgreSQL/9.1/lib
 
 
 Setting up the Database
