@@ -12,21 +12,26 @@ money at any time, though this is currently quite manual.
 Installation
 ============
 
-The site is built with Python 2.7 and the Aspen web framework, and is hosted on
-Heroku. Balanced is used for credit card processing, and Google for analytics.
+The site is built with Python 2.7 and the [Aspen](http://aspen.io/) web
+framework, and is hosted on Heroku.
+[Balanced](https://www.balancedpayments.com/) is used for credit card
+processing, and Google for analytics.
 
 You need python2.7 on your PATH.
 
-You need Postgres with headers installed. There's a simple Makefile for
-building the software. All Python dependencies (including virtualenv) are
-included in vendor/.
+You need Postgres with headers installed.
 
-Once you have Python and Postgres, you can use make to launch Gittip:
+Once you have Python and Postgres, you can use make to build and launch Gittip:
 
     $ make run
 
 If you don't have make, look at the Makefile to see what steps you need to
-perform to launch Gittip.
+perform to build and launch Gittip. The Makefile is pretty simple and
+straightforward. 
+
+All Python dependencies (including virtualenv) are bundled with Gittip in the
+vendor/ directory. Gittip is designed so that you don't manage its virtualenv
+directly and you don't download its dependencies at build time.
 
 
 local.env
