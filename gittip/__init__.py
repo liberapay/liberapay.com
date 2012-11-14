@@ -203,12 +203,66 @@ def get_chart_of_giving(user):
     return out, npatrons, contributed
 
 
-def get_tips_and_total(tipper, for_payday=False, db=None):
+def get_giving_for_profile(tipper, db=None):
     """Given a participant id and a date, return a list and a Decimal.
 
     This function is used to populate a participant's page for their own
-    viewing pleasure, and also by the payday function. If for_payday is not
-    False it must be a date object.
+    viewing pleasure.
+
+    A half-injected dependency, that's what db is.
+
+    """
+    if db is None:
+        from gittip import db
+
+    TIPS = """\
+
+        SELECT * FROM (
+            SELECT DISTINCT ON (tippee)
+                   amount
+                 , tippee
+                 , t.ctime
+                 , p.claimed_time
+              FROM tips t
+              JOIN participants p ON p.id = t.tippee
+             WHERE tipper = %s
+               AND p.is_suspicious IS NOT true
+          ORDER BY tippee
+                 , t.mtime DESC
+        ) AS foo
+        ORDER BY amount DESC
+               , tippee
+
+    """
+    tips = list(db.fetchall(TIPS, (tipper,)))
+
+
+    # Compute the total.
+    # ==================
+    # For payday we only want to process payments to tippees who have
+    # themselves opted into Gittip. For the tipper's profile page we want to
+    # show the total amount they've pledged (so they're not surprised when
+    # someone *does* start accepting tips and all of a sudden they're hit with
+    # bigger charges.
+
+    to_total = tips
+    total = sum([t['amount'] for t in to_total])
+
+    if not total:
+        # If to_total is an empty list then total is int 0. We want a Decimal.
+        total = Decimal('0.00')
+
+    return tips, total
+
+
+def get_tips_and_total(tipper, for_payday=False, db=None):
+    """Given a participant id and a date, return a list and a Decimal.
+
+    This function is used by the payday function. If for_payday is not False it
+    must be a date object. Originally we also used this function to populate
+    the profile page, but our requirements there changed while, oddly, our
+    requirements in payday *also* changed to match the old requirements of the
+    profile page. So this function keeps the for_payday parameter after all.
 
     A half-injected dependency, that's what db is.
 

@@ -14,7 +14,7 @@ import locale
 import requests
 from aspen import json, Response
 from aspen.utils import to_age
-from gittip import AMOUNTS, db, get_tip, get_tips_and_total, \
+from gittip import AMOUNTS, db, get_tip, get_giving_for_profile, \
      get_dollars_receiving, get_chart_of_giving
 from gittip.utils import wrap
 from gittip.networks import github, resolve_unclaimed
@@ -68,7 +68,7 @@ if not user.ANON:
         giving_chart, npatrons, contributed = \
                                      get_chart_of_giving(participant['id'])
     if user.id == participant_id:
-        tips, total = get_tips_and_total(user.id)
+        tips, total = get_giving_for_profile(user.id)
         if total == 0:
             tips = tip_suggestions
         assert backed_amount == contributed, (backed_amount, contributed)
