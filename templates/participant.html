@@ -1,6 +1,6 @@
 {% extends base.html %}
 {% block body %}
-    <div id="their-voice">
+    <div id="their-voice"{% if user.ADMIN and participant['is_suspicious'] %} class="is-suspicious"{% end %}>
         {% block their_voice %}{% end %}
     </div>
 

@@ -138,18 +138,35 @@ PRE {
     background: #FFFE96;
 }
 #accounts {
-    list-style: none;
     margin-bottom: 12pt;
 }
-#accounts LI {
-    margin-left: 0;
-    padding-left: 0;
+#accounts TD {
+    text-align: left;
+    vertical-align: middle;
+    line-height: 100%;
 }
-#accounts IMG {
+#accounts TD.account-type {
+    border-right: 1pt solid #B2A196;
+    padding: 6pt 6pt 6pt 0;
+}
+#accounts TD.account-type IMG {
     width: 36pt;
-    height 36pt;
+    height: 36pt;
+}
+#accounts DIV.account-type {
+    font-size: x-small;
+    clear: both;
+    color: #B2A196;
+    text-align: right;
+}
+#accounts .account-details {
+    padding-left: 6pt;
+}
+#accounts IMG.avatar {
+    width: 24pt;
+    height 24pt;
     float: left;
-    margin-right: 10pt;
+    margin-right: 3pt;
 }
 
 #members {
