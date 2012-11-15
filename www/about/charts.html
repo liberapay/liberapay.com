@@ -10,15 +10,36 @@ title = "Charts"
     }
     .chart {
         position: relative;
-        width: 600px;
         height: 200px;
     }
-    .point {
-        font-size: 12px;
-        line-height: 12px;
+    .week {
         position: absolute;
         top: 0;
         left: 0;
+    }
+    .shaded {
+        position: absolute;
+        background: #2A8F79;
+        bottom: 0;
+    }
+    .week SPAN {
+        display: none;
+        position: absolute;
+        top: -17pt;
+        font: normal 8pt/8pt "Lucida Mono", Monaco, monospace;
+        text-align: center;
+        background: white;
+        color: #614C3E;
+        border: 2pt solid #614C3E;
+        border-radius: 0 3pt 3pt 0;
+        padding: 2pt 3pt;
+    }
+    .week.max SPAN {
+        display: block;
+    }
+    .week.stick SPAN,
+    .week.hover SPAN {
+        display: block;
     }
     .x-axis {
         text-align: center;
@@ -34,13 +55,13 @@ title = "Charts"
 <h3>Welcome!</h3>
 
 <p>Gittip is a way to <a href="/about/">support people who build free
-    culture</a>. This page shows Gittip&rsquo;s growth since it launched 18
-weeks ago.</p>
+    culture</a>. This page shows Gittip&rsquo;s growth since it launched <span
+    class="n-weeks"></span> weeks ago.</p>
 
 <a name="users"></a>
-<h2>Total Users</h2>
+<h2>Users</h2>
 <p class="note">Anyone who&rsquo;s ever created an account on Gittip</p>
-<div class="chart" id="registrations-"></div>
+<div class="chart" id="users-"></div>
 <div class="x-axis">weeks</div>
 
 <a name="funders"></a>
@@ -73,69 +94,87 @@ weeks ago.</p>
         var Withdrawals = $('#withdrawals-');
         var Charges = $('#charges-');
         var Volume = $('#volume-');
+        var Users = $('#users-');
         var Funders = $('#funders-');
-        var Registrations= $('#registrations-');
         jQuery.get('/about/paydays.json', function(paydays)
         {
             var H = 200;
-            var n = paydays.length - 1; // don't show Gittip #0
-            var w = 580 / n;
+            var nweeks = paydays.length - 1; // don't show Gittip #0
+            var w = Math.floor(600 / nweeks);
+            var W = w * nweeks;
+            
             var payday = null;
 
-            for (var i=0; i < n; i++)
+            $('.n-weeks').text(nweeks);
+            $('.chart').width(W);
+
+
+            // Compute vertical scale.
+            // =======================
+
+            var maxUsers = 0;
+            var maxFunders = 0;
+            var maxGifts = 0;
+            var maxWithdrawals = 0;
+            var maxCharges = 0;
+
+            for (var i=0; i < nweeks; i++)
+            {
+                payday = paydays[i];
+                maxUsers = Math.max(maxUsers, parseFloat(payday.nparticipants));
+                maxFunders = Math.max(maxFunders, parseFloat(payday.ntippers));
+                maxGifts = Math.max(maxGifts, parseFloat(payday.transfer_volume));
+                maxWithdrawals = Math.max(maxWithdrawals, -parseFloat(payday.ach_volume));
+                maxCharges = Math.max(maxCharges, parseFloat(payday.charge_volume));
+            }
+
+            scaleUsers = Math.ceil(maxUsers / 100) * 100;
+            scaleFunders = Math.ceil(maxFunders / 100) * 100;
+            scaleGifts = Math.ceil(maxGifts / 100) * 100;
+            scaleWithdrawals = Math.ceil(maxWithdrawals / 100) * 100;
+            scaleCharges = Math.ceil(maxCharges / 100) * 100;
+
+
+            // Draw weeks.
+            // ===========
+
+            function Week(i, max, N, n)
+            {
+                var week = $(document.createElement('div')).addClass('week');
+                var shaded = $(document.createElement('div')).addClass('shaded');
+                shaded.html('<span>' + parseInt(n) + '</span>');
+                week.append(shaded);
+                if (n === max)
+                    week.addClass('stick');
+                var n = parseFloat(n);
+                var h = Math.ceil(((n / N) * H));
+                week.height(H);
+                week.width(w);
+                week.css({"left": w * (nweeks - i - 1)});
+                shaded.css({"height": h});
+                return week;
+            }
+
+            for (var i=0; i < nweeks; i++)
             {
                 payday = paydays[i];
 
-                // registrations / users
-                var p3 = $(document.createElement('div'));
-                p3.addClass('point');
-                p3.text(payday.nparticipants);
-                var ntippers = parseFloat(payday.nparticipants);
-                p3.css({ top: H - ((ntippers / 6000) * H) - 6
-                       , left: w * (n - i - 1)
-                        });
-                Registrations.append(p3);
-
-                // funders
-                var p2 = $(document.createElement('div'));
-                p2.addClass('point');
-                p2.text(payday.ntippers);
-                var ntippers = parseFloat(payday.ntippers);
-                p2.css({ top: H - ((ntippers / 300) * H) - 6
-                       , left: w * (n - i - 1)
-                        });
-                Funders.append(p2);
-
-                // volume / gifts
-                var point = $(document.createElement('div'));
-                point.addClass('point');
-                var volume = parseFloat(payday.transfer_volume);
-                point.text(volume.toFixed(2));
-                point.css({ top: H - ((volume / 1500) * H) - 6
-                          , left: w * (n - i - 1)
-                           });
-                Volume.append(point);
-
-                // withdrawals
-                var point = $(document.createElement('div'));
-                point.addClass('point');
-                var ach = -parseFloat(payday.ach_volume);
-                point.text(ach.toFixed(2));
-                point.css({ top: H - ((ach / 1200) * H) - 6
-                          , left: w * (n - i - 1)
-                           });
-                Withdrawals.append(point);
-
-                // charges 
-                var point = $(document.createElement('div'));
-                point.addClass('point');
-                var charge = parseFloat(payday.charge_volume);
-                point.text(charge.toFixed(2));
-                point.css({ top: H - ((charge / 1800) * H) - 6
-                          , left: w * (n - i - 1)
-                           });
-                Charges.append(point);
+                Users.append(Week(i, maxUsers, scaleUsers, payday.nparticipants));
+                Funders.append(Week(i, maxFunders, scaleFunders, payday.ntippers));
+                Volume.append(Week(i, maxGifts, scaleGifts, payday.transfer_volume));
+                Withdrawals.append(Week(i, maxWithdrawals, scaleWithdrawals, -payday.ach_volume));
+                Charges.append(Week(i, maxCharges, scaleCharges, payday.charge_volume));
             }
+            $('.week').click(function() 
+            { 
+                $(this).toggleClass('stick');
+                if ($(this).hasClass('stick'))
+                    $(this).removeClass('hover');
+            });
+            $('.week').mouseover(function() { $(this).addClass('hover') });
+            $('.week').mouseout(function() { $(this).removeClass('hover') });
+            $('.week').width(w);
+            $('.shaded').width(w);
         });
     });
 </script>
