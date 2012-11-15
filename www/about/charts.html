@@ -46,7 +46,7 @@ title = "Charts"
         border-color: #B2A196;
         color: #B2A196;
     }
-    .week.flag SPAN.x-tick.on,
+    .week.flagged SPAN.x-tick.on,
     .week.hover SPAN.x-tick.on {
         border-color: #614C3E;
         color: #614C3E;
@@ -65,8 +65,8 @@ title = "Charts"
     .week.max SPAN.y-label {
         display: block;
     }
-    .week.flag SPAN.y-label,
-    .week.flag SPAN.x-tick,
+    .week.flagged SPAN.y-label,
+    .week.flagged SPAN.x-tick,
     .week.hover SPAN.y-label,
     .week.hover SPAN.x-tick {
         display: block;
@@ -111,7 +111,7 @@ title = "Charts"
 <div class="chart-wrapper">
     <a name="gifts"></a>
     <h3>Gifts ($)</h3>
-    <p class="note">Money transfered from one person to another within Gittip</p>
+    <p class="note">Money transferred within Gittip</p>
     <div class="chart" id="volume-"></div>
     <div class="x-axis">weeks</div>
 </div>
@@ -119,7 +119,10 @@ title = "Charts"
 <div class="chart-wrapper newline">
     <a name="charges"></a>
     <h3>Charges ($)</h3>
-    <p class="note">Money transfered into Gittip via credit card (minimum charge <a href="http://blog.gittip.com/post/28158537529/why-were-you-charged-10">upped</a> to $10 in week 8)</p>
+    <p class="note">Money moved into Gittip via credit card<br /> (minimum
+    charge <a
+        href="http://blog.gittip.com/post/28158537529/why-were-you-charged-10">upped</a>
+    to $10 in week 8)</p>
     <div class="chart" id="charges-"></div>
     <div class="x-axis">weeks</div>
 </div>
@@ -127,7 +130,11 @@ title = "Charts"
 <div class="chart-wrapper">
     <a name="withdrawals"></a>
     <h3>Withdrawals ($)</h3>
-    <p class="note">Money withdrawn from Gittip into a bank account (feature <a href="http://blog.gittip.com/post/30116848405/with-payouts-gittip-is-minimally-viable">added</a> in week 12)</p>
+
+    <p class="note">Money withdrawn from Gittip to a bank account<br />(feature <a
+        href="http://blog.gittip.com/post/30116848405/with-payouts-gittip-is-minimally-viable">added</a>
+    in week 12)</p>
+
     <div class="chart" id="withdrawals-"></div>
     <div class="x-axis">weeks</div>
 </div>
@@ -212,7 +219,7 @@ title = "Charts"
                     xTick.addClass('on');
                 week.append(xTick);
                 if (y === max)
-                    week.addClass('flag');
+                    week.addClass('flagged');
 
                 var y = parseFloat(y);
                 var h = Math.ceil(((y / N) * H));
@@ -233,16 +240,22 @@ title = "Charts"
                 Withdrawals.append(Week(i, maxWithdrawals, scaleWithdrawals, -payday.ach_volume));
                 Charges.append(Week(i, maxCharges, scaleCharges, payday.charge_volume));
             }
+
+            $('.week').width(w);
+            $('.shaded').width(w);
+
+
+            // Wire up behaviors.
+            // ==================
+
             $('.week').click(function() 
             { 
-                $(this).toggleClass('flag');
-                if ($(this).hasClass('flag'))
+                $(this).toggleClass('flagged');
+                if ($(this).hasClass('flagged'))
                     $(this).removeClass('hover');
             });
             $('.week').mouseover(mouseover)
             $('.week').mouseout(mouseout)
-            $('.week').width(w);
-            $('.shaded').width(w);
         });
     });
 </script>
