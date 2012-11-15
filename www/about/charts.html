@@ -5,28 +5,56 @@ title = "Charts"
 {% extends templates/base.html %}
 {% block body %}
 <style>
+    .chart-wrapper {
+        width: 300px;
+        float: left;
+    }
+    .chart-wrapper.newline {
+        clear: left;
+    }
     H2 {
-        padding-top: 100px;
+        padding-top: 12pt;
     }
     .chart {
         position: relative;
-        height: 200px;
+        height: 100px;
     }
     .week {
         position: absolute;
         top: 0;
         left: 0;
+        cursor: pointer;
     }
     .shaded {
         position: absolute;
         background: #2A8F79;
         bottom: 0;
     }
-    .week SPAN {
+    .week SPAN, .x-axis {
+        font: normal 7pt/7pt "Lucida Mono", Monaco, monospace;
+    }
+    .week SPAN.x-tick {
+        position: absolute;
+        bottom: -12pt;
+        padding: 6pt 0 0 0.5pt;
+        border: 1pt solid #614C3E;
+        border-style: none none none solid;
+        display: none;
+        color: #614C3E;
+    }
+    .week SPAN.x-tick.on {
+        border-color: #B2A196;
+        color: #B2A196;
+    }
+    .week.flag SPAN.x-tick.on,
+    .week.hover SPAN.x-tick.on {
+        border-color: #614C3E;
+        color: #614C3E;
+    }
+    .week SPAN.y-label {
         display: none;
         position: absolute;
         top: -17pt;
-        font: normal 8pt/8pt "Lucida Mono", Monaco, monospace;
         text-align: center;
         background: white;
         color: #614C3E;
@@ -34,19 +62,25 @@ title = "Charts"
         border-radius: 0 3pt 3pt 0;
         padding: 2pt 3pt;
     }
-    .week.max SPAN {
+    .week.max SPAN.y-label {
         display: block;
     }
-    .week.stick SPAN,
-    .week.hover SPAN {
+    .week.flag SPAN.y-label,
+    .week.flag SPAN.x-tick,
+    .week.hover SPAN.y-label,
+    .week.hover SPAN.x-tick {
         display: block;
+    }
+    .eek.hover {
+        background: red;
     }
     .x-axis {
         text-align: center;
-        padding-top: 1em;
+        padding-top: 14pt;
     }
-    .note, .x-axis {
+    .note {
         font: italic 300 10pt/12pt Lato, sans-serif;
+        padding-bottom: 12pt;
     }
 </style>
 
@@ -58,35 +92,45 @@ title = "Charts"
     culture</a>. This page shows Gittip&rsquo;s growth since it launched <span
     class="n-weeks"></span> weeks ago.</p>
 
-<a name="users"></a>
-<h2>Users</h2>
-<p class="note">Anyone who&rsquo;s ever created an account on Gittip</p>
-<div class="chart" id="users-"></div>
-<div class="x-axis">weeks</div>
+<div class="chart-wrapper">
+    <a name="users"></a>
+    <h3>Users</h3>
+    <p class="note">Anyone who&rsquo;s ever created an account on Gittip</p>
+    <div class="chart" id="users-"></div>
+    <div class="x-axis">weeks</div>
+</div>
 
-<a name="funders"></a>
-<h2>Funders</h2>
-<p class="note">People who gave money to other people within Gittip</p>
-<div class="chart" id="funders-"></div>
-<div class="x-axis">weeks</div>
+<div class="chart-wrapper">
+    <a name="funders"></a>
+    <h3>Funders</h3>
+    <p class="note">People who gave money to other people within Gittip</p>
+    <div class="chart" id="funders-"></div>
+    <div class="x-axis">weeks</div>
+</div>
 
-<a name="gifts"></a>
-<h2>Gifts ($)</h2>
-<p class="note">Money transfered from one person to another within Gittip</p>
-<div class="chart" id="volume-"></div>
-<div class="x-axis">weeks</div>
+<div class="chart-wrapper">
+    <a name="gifts"></a>
+    <h3>Gifts ($)</h3>
+    <p class="note">Money transfered from one person to another within Gittip</p>
+    <div class="chart" id="volume-"></div>
+    <div class="x-axis">weeks</div>
+</div>
 
-<a name="withdrawals"></a>
-<h2>Withdrawals ($)</h2>
-<p class="note">Money withdrawn from Gittip into a bank account (feature <a href="http://blog.gittip.com/post/30116848405/with-payouts-gittip-is-minimally-viable">added</a> in week 12)</p>
-<div class="chart" id="withdrawals-"></div>
-<div class="x-axis">weeks</div>
+<div class="chart-wrapper newline">
+    <a name="charges"></a>
+    <h3>Charges ($)</h3>
+    <p class="note">Money transfered into Gittip via credit card (minimum charge <a href="http://blog.gittip.com/post/28158537529/why-were-you-charged-10">upped</a> to $10 in week 8)</p>
+    <div class="chart" id="charges-"></div>
+    <div class="x-axis">weeks</div>
+</div>
 
-<a name="charges"></a>
-<h2>Charges ($)</h2>
-<p class="note">Money transfered into Gittip via credit card (minimum charge <a href="http://blog.gittip.com/post/28158537529/why-were-you-charged-10">upped</a> to $10 in week 8)</p>
-<div class="chart" id="charges-"></div>
-<div class="x-axis">weeks</div>
+<div class="chart-wrapper">
+    <a name="withdrawals"></a>
+    <h3>Withdrawals ($)</h3>
+    <p class="note">Money withdrawn from Gittip into a bank account (feature <a href="http://blog.gittip.com/post/30116848405/with-payouts-gittip-is-minimally-viable">added</a> in week 12)</p>
+    <div class="chart" id="withdrawals-"></div>
+    <div class="x-axis">weeks</div>
+</div>
 
 <script>
     $(document).ready(function()
@@ -96,11 +140,26 @@ title = "Charts"
         var Volume = $('#volume-');
         var Users = $('#users-');
         var Funders = $('#funders-');
+
+        function mouseover()
+        {
+            var x = $(this).attr('x');
+            var y = $(this).attr('y');
+
+            $(this).addClass('hover');
+        }
+
+        function mouseout() 
+        { 
+            $(this).removeClass('hover') 
+        }
+
         jQuery.get('/about/paydays.json', function(paydays)
         {
-            var H = 200;
+            var H = $('.chart').height();
+            var W = $('.chart').width();
             var nweeks = paydays.length - 1; // don't show Gittip #0
-            var w = Math.floor(600 / nweeks);
+            var w = Math.floor((W - 20) / nweeks);
             var W = w * nweeks;
             
             var payday = null;
@@ -138,19 +197,28 @@ title = "Charts"
             // Draw weeks.
             // ===========
 
-            function Week(i, max, N, n)
+            function Week(n, max, N, y)
             {
+                var x = nweeks - n;
                 var week = $(document.createElement('div')).addClass('week');
                 var shaded = $(document.createElement('div')).addClass('shaded');
-                shaded.html('<span>' + parseInt(n) + '</span>');
+                shaded.html('<span class="y-label">' + parseInt(y) + '</span>');
                 week.append(shaded);
-                if (n === max)
-                    week.addClass('stick');
-                var n = parseFloat(n);
-                var h = Math.ceil(((n / N) * H));
+                week.attr({x: x, y: y});
+
+                var xTick = $(document.createElement('span')).addClass('x-tick');
+                xTick.text(x);
+                if ((x % 5) === 0)
+                    xTick.addClass('on');
+                week.append(xTick);
+                if (y === max)
+                    week.addClass('flag');
+
+                var y = parseFloat(y);
+                var h = Math.ceil(((y / N) * H));
                 week.height(H);
                 week.width(w);
-                week.css({"left": w * (nweeks - i - 1)});
+                week.css({"left": w * (nweeks - n - 1)});
                 shaded.css({"height": h});
                 return week;
             }
@@ -167,15 +235,20 @@ title = "Charts"
             }
             $('.week').click(function() 
             { 
-                $(this).toggleClass('stick');
-                if ($(this).hasClass('stick'))
+                $(this).toggleClass('flag');
+                if ($(this).hasClass('flag'))
                     $(this).removeClass('hover');
             });
-            $('.week').mouseover(function() { $(this).addClass('hover') });
-            $('.week').mouseout(function() { $(this).removeClass('hover') });
+            $('.week').mouseover(mouseover)
+            $('.week').mouseout(mouseout)
             $('.week').width(w);
             $('.shaded').width(w);
         });
     });
 </script>
+<div class="clear"></div>
+<br />
+<br />
+<br />
+<hr />
 {% end %}
