@@ -39,11 +39,11 @@ required packages are: postgresql (base), libpq5-dev (includes headers needed
 to build the psycopg2 Python library), and postgresql-contrib (includes hstore)
 
 The reason we want you to use Postgres locally instead of SQLite is so that
-your development environment closely matches production, eliminiting a class of
+your development environment closely matches production, minimizing a class of
 bugs (works in dev, breaks in prod). Furthermore, it's a design decision in
 Gittip to use SQL, and specifically PostgreSQL, instead of an ORM. We want to
-treat the database as a first-class citizen in Gittip's architecture, and we
-also want to be free to use Postgres features such as hstore.
+treat our database as a first-class citizen, and we want to be free to use
+Postgres features such as hstore.
 
 Now, you need to setup the database.
 
