@@ -1,7 +1,7 @@
 This is Gittip, a sustainable crowd-funding platform.
 
-The basis of Gittip is a small, anonymous, recurring gift of between $1 and
-$24. These gifts come with no explicit strings attached.
+The basis of Gittip is an anonymous gift between $1 and $24 per week to people
+who do great work. These gifts come with no explicit strings attached.
 
 The Gittip gift exchange happens every Thursday. On Thursday, we charge
 people's credit cards and the money goes into a marketplace account with
@@ -9,18 +9,21 @@ people's credit cards and the money goes into a marketplace account with
 other participants, and for those with a bank account attached and money due,
 the money is deposited in their bank account on Friday.
 
+Gittip is funded on Gittip.
+
 
 Installation
 ============
 
-The site is built with Python 2.7 and the [Aspen](http://aspen.io/) web
-framework, and is hosted on Heroku.
+The site is built with [Python](http://www.python.org/) 2.7 and the
+[Aspen](http://aspen.io/) web framework, and is hosted on
+[Heroku](http://www.heroku.com/).
 [Balanced](https://www.balancedpayments.com/) is used for credit card
 processing, and Google for analytics.
 
 You need python2.7 on your PATH.
 
-You need Postgres with headers installed.
+You need [Postgres](http://www.postgresql.org/) with headers installed.
 
 Once you have Python and Postgres, you can use make to build and launch Gittip:
 
