@@ -253,6 +253,11 @@ with Aspen. First `make tests/env`, edit it as noted above, and then:
 See Also
 ========
 
+Here's a list of projects we're aware of in the crowd-funding space. Something
+missing? Ping [@whit537](https://twitter.com/whit537) on Twitter or [edit the
+file](/whit537/www.gittip.com/edit/master/README.md) yourself (add your link at
+the end). :smile:
+
  - http://www.kickstarter.com/
  - http://flattr.com/
  - http://tiptheweb.org/
