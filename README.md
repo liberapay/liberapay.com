@@ -106,8 +106,9 @@ installation:
 
     $ sudo -u postgres createuser --superuser $USER
 
-Set the authentication method to "trust" in pg_hba.conf for all connections.
-For this, ensure that the file contains these lines:
+Set the authentication method to "trust" in pg_hba.conf for all local
+connections and host connections from localhost. For this, ensure that the
+file contains these lines:
 
     local   all             all                                     trust
     host    all             all             127.0.0.1/32            trust
