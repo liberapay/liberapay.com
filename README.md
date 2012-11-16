@@ -161,7 +161,8 @@ pid-12508 thread-140735090330816 (MainThread) Aspen will restart when configurat
 pid-12508 thread-140735090330816 (MainThread) Starting up Aspen website.
 ```
 
-You should then find this in your browser at http://localhost:8537/:
+You should then find this in your browser at
+[http://localhost:8537/](http://localhost:8537/):
 
 ![Success](https://raw.github.com/whit537/www.gittip.com/master/img-src/success.png)
 
