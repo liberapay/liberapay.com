@@ -13,8 +13,11 @@ the money is deposited in their bank account on Friday.
 Gittip is funded on Gittip.
 
 
-Dependencies
+Installation
 ============
+
+Dependencies
+------------
 
 Gittip is built with [Python](http://www.python.org/) 2.7 and the
 [Aspen](http://aspen.io/) web framework, and is hosted on
@@ -35,12 +38,63 @@ package manager, you may need several packages. On Ubuntu and Debian, the
 required packages are: postgresql (base), libpq5-dev (includes headers needed
 to build the psycopg2 Python library), and postgresql-contrib (includes hstore)
 
-Now, you need to setup the database as described below in "[Setting up the
-Database](#setting-up-the-database)".
+The reason we want you to use Postgres locally instead of SQLite is so that
+your development environment closely matches production, eliminiting a class of
+bugs (works in dev, breaks in prod). Furthermore, it's a design decision in
+Gittip to use SQL, and specifically PostgreSQL, instead of an ORM. We want to
+treat the database as a first-class citizen in Gittip's architecture, and we
+also want to be free to use Postgres features such as hstore.
+
+Now, you need to setup the database.
 
 
-Installation
-============
+Setting up the Database
+-----------------------
+
+Once Postgres is installed, you need to configure it and set up a gittip
+database.
+
+First, add a "role" (Postgres user) that matches your OS username. Make sure
+it's a superuser role and has login privileges. Here's a sample invocation of
+the createuser executable that comes with Postgres that will do this for you,
+assuming that a "postgres" superuser was already created as part of initial
+installation:
+
+    $ sudo -u postgres createuser --superuser $USER
+
+Set the authentication method to "trust" in pg_hba.conf for all local
+connections and host connections from localhost. For this, ensure that the
+file contains these lines:
+
+    local   all             all                                     trust
+    host    all             all             127.0.0.1/32            trust
+    host    all             all             ::1/128                 trust
+
+Reload Postgres using pg_ctl for changes to take effect.
+
+Once Postgres is set up, run:
+
+    $ ./makedb.sh
+
+That will create a new gittip superuser and a gittip database (with UTC as the
+default timezone), populated with structure from ./schema.sql. To change the
+name of the database and/or user, pass them on the command line:
+
+    $ ./makedb.sh mygittip myuser
+
+If you only pass one argument it will be used for both dbname and owner role:
+
+    $ ./makedb.sh gittip-test
+
+The schema for the Gittip.com database is defined in schema.sql. It should be
+considered append-only. The idea is that this is the log of DDL that we've run
+against the production database. You should never change commands that have
+already been run. New DDL will be (manually) run against the production
+database as part of deployment.
+
+
+Building and Launching
+----------------------
 
 Once you've installed Python and Postgres and set up a database, you can use
 make to build and launch Gittip:
@@ -56,8 +110,8 @@ vendor/ directory. Gittip is designed so that you don't manage its virtualenv
 directly and you don't download its dependencies at build time.
 
 
-local.env
-=========
+Configuration
+=============
 
 When using `make run`, Gittip's execution environment is defined in a
 `local.env` file, which is not included in the source code repo. If you `make
@@ -101,51 +155,6 @@ working on Mac OS with EnterpriseDB's Postgres 9.1 installer:
     DYLD_LIBRARY_PATH=/Library/PostgreSQL/9.1/lib
 
 
-Setting up the Database
------------------------
-
-Once Postgres is installed (see [above](#dependencies)), you need to configure
-it and set up a gittip database.
-
-First, add a "role" (Postgres user) that matches your OS username. Make sure
-it's a superuser role and has login privileges.  Here's a sample invocation of
-the createuser executable that comes with Postgres that will do this for you,
-assuming that a "postgres" superuser was already created as part of initial
-installation:
-
-    $ sudo -u postgres createuser --superuser $USER
-
-Set the authentication method to "trust" in pg_hba.conf for all local
-connections and host connections from localhost. For this, ensure that the
-file contains these lines:
-
-    local   all             all                                     trust
-    host    all             all             127.0.0.1/32            trust
-    host    all             all             ::1/128                 trust
-
-Reload Postgres using pg_ctl for changes to take effect.
-
-Once Postgres is set up, run:
-
-    $ ./makedb.sh
-
-That will create a new gittip superuser and a gittip database (with UTC as the
-default timezone), populated with structure from ./schema.sql. To change the
-name of the database and/or user, pass them on the command line:
-
-    $ ./makedb.sh mygittip myuser
-
-If you only pass one argument it will be used for both dbname and owner role:
-
-    $ ./makedb.sh gittip-test
-
-The schema for the Gittip.com database is defined in schema.sql. It should be
-considered append-only. The idea is that this is the log of DDL that we've run
-against the production database. You should never change commands that have
-already been run. New DDL will be (manually) run against the production
-database as part of deployment.
-
-
 Testing [![Testing](https://secure.travis-ci.org/whit537/www.gittip.com.png)](http://travis-ci.org/whit537/www.gittip.com)
 -------
 
@@ -170,7 +179,7 @@ require the following key and value to be set in said environment:
 file and manually add that key=value, then `make test` will work. Even just
 importing the gittip.testing module will trigger deletion of all data. Without
 this safety precaution, an attacker could try sneaking `import gittip.testing`
-into a commit. Once their changeset was deployed, we would have ...  problems.
+into a commit. Once their changeset was deployed, we would have ... problems.
 Of course, they could also remove the check in the same or even a different
 commit. Of course, they could also sneak in whatever the heck code they wanted
 to try to sneak in.
@@ -180,7 +189,6 @@ with Aspen. First `make tests/env`, edit it as noted above, and then:
 
     [gittip] $ cd tests/
     [gittip] $ swaddle env ../env/bin/nosetests
-
 
 
 See Also
