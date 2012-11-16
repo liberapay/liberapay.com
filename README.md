@@ -156,7 +156,7 @@ working on Mac OS with EnterpriseDB's Postgres 9.1 installer:
 
 
 Testing [![Testing](https://secure.travis-ci.org/whit537/www.gittip.com.png)](http://travis-ci.org/whit537/www.gittip.com)
--------
+=======
 
 Please write unit tests for all new code and all code you change. Gittip's test
 suite is designed for the nosetests test runner (maybe it also works with
