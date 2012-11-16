@@ -166,7 +166,7 @@ You should then find this in your browser at
 
 ![Success](https://raw.github.com/whit537/www.gittip.com/master/img-src/success.png)
 
-Congratulations! Click "Sign in with GitHub" and you're off and running. At
+Congratulations! Sign in using Twitter or GitHub and you're off and running. At
 some point, try [running the test suite](#testing).
 
 
