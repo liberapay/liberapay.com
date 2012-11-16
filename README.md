@@ -161,8 +161,19 @@ pid-12508 thread-140735090330816 (MainThread) Aspen will restart when configurat
 pid-12508 thread-140735090330816 (MainThread) Starting up Aspen website.
 ```
 
-If it works, congratulations! If it doesn't, you can find help in the #gittip
-channel on [Freenode](http://webchat.freenode.net/) or in the [issue
+You should then find this in your browser at http://localhost:8537/:
+
+![Success](https://raw.github.com/whit537/www.gittip.com/master/img-src/success.png)
+
+Congratulations! Click "Sign in with GitHub" and you're off and running. At
+some point, try [running the test suite](#testing).
+
+
+Help!
+-----
+
+If it doesn't, you can find help in the #gittip channel on
+[Freenode](http://webchat.freenode.net/) or in the [issue
 tracker](/whit537/www.gittip.com/issues/new) here on GitHub. If all else fails
 ping [@whit537](https://twitter.com/whit537) on Twitter.
 
