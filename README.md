@@ -26,7 +26,9 @@ You need python2.7 on your PATH.
 
 You need [Postgres](http://www.postgresql.org/download/). (If installing using
 a package manager, be sure to install the headers as well. On Ubuntu and
-Debian, the packages are called postgresql and libpq5-dev respectively.)
+Debian, the packages are called postgresql and libpq5-dev respectively. On
+Ubuntu and Debian, an additional package called postgresql-contrib will also
+be required.)
 
 Now, you need to setup the database as described below in "[Setting up the
 Database](#setting-up-the-database)".
