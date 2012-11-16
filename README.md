@@ -13,10 +13,10 @@ the money is deposited in their bank account on Friday.
 Gittip is funded on Gittip.
 
 
-Installation
+Dependencies
 ============
 
-The site is built with [Python](http://www.python.org/) 2.7 and the
+Gittip is built with [Python](http://www.python.org/) 2.7 and the
 [Aspen](http://aspen.io/) web framework, and is hosted on
 [Heroku](http://www.heroku.com/).
 [Balanced](https://www.balancedpayments.com/) is used for payment processing,
@@ -24,16 +24,26 @@ and [Google](https://www.google.com/analytics) for analytics.
 
 You need python2.7 on your PATH.
 
-You need [Postgres](http://www.postgresql.org/download/). (If installing using
-a package manager, be sure to install the headers as well. On Ubuntu and
-Debian, the packages are called postgresql and libpq5-dev respectively. On
-Ubuntu and Debian, an additional package called postgresql-contrib will also
-be required.)
+You need [Postgres](http://www.postgresql.org/download/). The best version to
+use is 9.2, because that's what is being run in production at Heroku. Version
+9.1 is the second-best, because Gittip uses the
+[hstore](http://www.postgresql.org/docs/9.1/static/hstore.html) extension for
+unstructured data, and that isn't bundled with earlier versions than 9.1. If
+you're on a Mac, maybe try out Heroku's
+[Postgres.app](http://www.postgresql.org/download/). If installing using a
+package manager, you may need several packages. On Ubuntu and Debian, the
+required packages are: postgresql (base), libpq5-dev (includes headers needed
+to build the psycopg2 Python library), and postgresql-contrib (includes hstore)
 
 Now, you need to setup the database as described below in "[Setting up the
 Database](#setting-up-the-database)".
 
-Once you're done, you can use make to build and launch Gittip:
+
+Installation
+============
+
+Once you've installed Python and Postgres and set up a database, you can use
+make to build and launch Gittip:
 
     $ make run
 
@@ -94,15 +104,12 @@ working on Mac OS with EnterpriseDB's Postgres 9.1 installer:
 Setting up the Database
 -----------------------
 
-Install PostgreSQL. The best version to use is 9.1, because Gittip uses the
-hstore extension for unstructured data, and that isn't bundled with earlier
-versions. If you're on a Mac, maybe try out Heroku's Postgres.app:
+Once Postgres is installed (see [above](#dependencies)), you need to configure
+it and set up a gittip database.
 
-    http://postgresapp.com/
-
-Add a "role" (Postgres user) that matches your OS username. Make sure it's a
-superuser role and has login privileges. Here's a sample invocation of the
-createuser executable that comes with Postgres that will do this for you,
+First, add a "role" (Postgres user) that matches your OS username. Make sure
+it's a superuser role and has login privileges.  Here's a sample invocation of
+the createuser executable that comes with Postgres that will do this for you,
 assuming that a "postgres" superuser was already created as part of initial
 installation:
 
