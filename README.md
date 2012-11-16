@@ -1,8 +1,8 @@
 This is [Gittip](https://www.gittip.com/), a sustainable crowd-funding
 platform.
 
-The basis of Gittip is an anonymous gift between $1 and $24 per week to people
-who do great work. These gifts come with no explicit strings attached.
+The basis of Gittip is an anonymous gift between $1 and $24 per week to someone
+who does great work. These gifts come with no explicit strings attached.
 
 The Gittip gift exchange happens every Thursday. On Thursday, we charge
 people's credit cards and the money goes into a marketplace account with
