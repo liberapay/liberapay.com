@@ -28,8 +28,8 @@ You need [Postgres](http://www.postgresql.org/download/). (If installing using
 a package manager, be sure to install the headers as well. On Ubuntu and
 Debian, the packages are called postgresql and libpq5-dev respectively.)
 
-Now, you need to setup the database as described in "Setting up the
-Database".
+Now, you need to setup the database as described in "[Setting up the
+Database](#setting-up-the-database)".
 
 Once you're done, you can use make to build and launch Gittip:
 
