@@ -24,9 +24,14 @@ and [Google](https://www.google.com/analytics) for analytics.
 
 You need python2.7 on your PATH.
 
-You need [Postgres](http://www.postgresql.org/) with headers installed.
+You need [Postgres](http://www.postgresql.org/) with headers
+installed.  The packages are called postgresql and libpq5-dev
+respectively on Ubuntu/ Debian.
 
-Once you have Python and Postgres, you can use make to build and launch Gittip:
+Now, you need to setup the database as described in "Setting up the
+Database".
+
+Once you're done, you can use make to build and launch Gittip:
 
     $ make run
 
@@ -99,11 +104,14 @@ createuser executable that comes with Postgres that will do this for you,
 assuming that a "postgres" superuser was already created as part of initial
 installation:
 
-    $ createuser --username postgres --superuser $USER 
+    $ sudo -u postgres createuser --superuser $USER
 
-It's also convenient to set the authentication method to "trust" in pg_hba.conf
-for local connections, so you don't have to enter a password all the time.
-Reload Postgres using pg_ctl for this to take effect.
+Set the authentication method to "trust" in pg_hba.conf for local
+connections.  For this, ensure that the file contains this line:
+
+    local   all             all                                     trust
+
+Reload Postgres using pg_ctl for changes to take effect.
 
 Once Postgres is set up, run:
 
