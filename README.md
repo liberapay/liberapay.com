@@ -30,7 +30,7 @@ You need python2.7 on your PATH.
 You need [Postgres](http://www.postgresql.org/download/). The best version to
 use is 9.2, because that's what is being run in production at Heroku. Version
 9.1 is the second-best, because Gittip uses the
-[hstore](http://www.postgresql.org/docs/9.1/static/hstore.html) extension for
+[hstore](http://www.postgresql.org/docs/9.2/static/hstore.html) extension for
 unstructured data, and that isn't bundled with earlier versions than 9.1. If
 you're on a Mac, maybe try out Heroku's
 [Postgres.app](http://www.postgresql.org/download/). If installing using a
