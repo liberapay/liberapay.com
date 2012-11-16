@@ -19,8 +19,8 @@ Installation
 The site is built with [Python](http://www.python.org/) 2.7 and the
 [Aspen](http://aspen.io/) web framework, and is hosted on
 [Heroku](http://www.heroku.com/).
-[Balanced](https://www.balancedpayments.com/) is used for credit card
-processing, and [Google](https://www.google.com/analytics) for analytics.
+[Balanced](https://www.balancedpayments.com/) is used for payment processing,
+and [Google](https://www.google.com/analytics) for analytics.
 
 You need python2.7 on your PATH.
 
