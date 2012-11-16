@@ -173,10 +173,11 @@ some point, try [running the test suite](#testing-).
 Help!
 -----
 
-If it doesn't, you can find help in the #gittip channel on
-[Freenode](http://webchat.freenode.net/) or in the [issue
+If you get stuck somewhere along the way, you can find help in the #gittip
+channel on [Freenode](http://webchat.freenode.net/) or in the [issue
 tracker](/whit537/www.gittip.com/issues/new) here on GitHub. If all else fails
-ping [@whit537](https://twitter.com/whit537) on Twitter.
+ping [@whit537](https://twitter.com/whit537) on Twitter or email
+[chad@zetaweb.com](mailto:chad@zetaweb.com).
 
 Thanks for installing Gittip! :smiley: 
 
