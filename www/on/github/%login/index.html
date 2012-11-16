@@ -96,24 +96,29 @@ else:
 
         <h2 class="first"><b>{{ name }}</b> has not joined Gittip.</h2>
 
+        <p>Is this you?
         {% if user.ANON %}
-        <ul id="accounts">
-            <li>
-                <img src="{{ userinfo.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" />
-                Are you <a href="{{ userinfo['html_url'] }}">{{ userinfo['login'] }}</a> from GitHub?<br />
-                <a href="{{ github.oauth_url(website, u'opt-in', username) }}">Click here</a> to opt in to Gittip.
-            </li>
-        </ul>
+        <a href="{{ github.oauth_url(website, u'opt-in', username) }}">Click here</a> to opt in to Gittip.
         {% else %}
-        <ul id="accounts">
-            <li>
-                <img src="{{ userinfo.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" />
-                Are you <a href="{{ userinfo['html_url'] }}">{{ userinfo['login'] }}</a> from GitHub?<br />
-                You&rsquo;ll have to <a href="/sign-out.html">sign out</a> and sign back in to claim this account.
-            </li>
-        </ul>
-        {% end %}
+        You&rsquo;ll have to <a href="/sign-out.html">sign out</a> and sign back in to claim this account.
+        {% end %}</p>
 
+        <table id="accounts">
+            <tr>
+                <td class="account-type">
+                    <img src="/assets/octocat.png" />
+                </td>
+                <td class="account-details">
+                    <a href="{{ userinfo['html_url'] }}">
+                    <img class="avatar"
+                         src="{{ userinfo.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" />
+                         {{ userinfo['login'] }}
+                    {% if userinfo.get('name') %}({{ userinfo.get('name') }}){% end %}
+                    </a>
+                    <div class="account-type">GitHub</div>
+                </td>
+            </tr>
+        </table>
 
         {% if nbackers == 0 %}
         {% elif nbackers == 1 %}
@@ -128,12 +133,12 @@ else:
         {% if not user.ANON %}
 
         <p>{{ 'But we' if nbackers > 0 else 'We' }} will never collect money on
-        behalf of {{ username }} until they ask us to.</p>
+        behalf of {{ username }} until they opt in.</p>
 
         {% else %}
 
         <p>{{ 'But we' if nbackers > 0 else 'We' }} will never collect money on
-        your behalf until you ask us to.</p>
+        your behalf until you opt in.</p>
 
         <h3>Don&rsquo;t like what you see?</h3>
 
