@@ -24,9 +24,9 @@ and [Google](https://www.google.com/analytics) for analytics.
 
 You need python2.7 on your PATH.
 
-You need [Postgres](http://www.postgresql.org/) with headers
-installed.  The packages are called postgresql and libpq5-dev
-respectively on Ubuntu/ Debian.
+You need [Postgres](http://www.postgresql.org/download/). (If installing using
+a package manager, be sure to install the headers as well. On Ubuntu and
+Debian, the packages are called postgresql and libpq5-dev respectively.)
 
 Now, you need to setup the database as described in "Setting up the
 Database".
