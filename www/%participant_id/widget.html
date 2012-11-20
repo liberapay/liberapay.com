@@ -25,27 +25,11 @@ else:
                 left: 0;
             }
         </style>
-
-        <!-- http://css-tricks.com/snippets/jquery/fallback-for-cdn-hosted-jquery/ -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-        <script>
-            if (typeof jQuery === 'undefined')
-                document.write(unescape("%3Cscript src='/assets/jquery-1.8.3.min.js'%3E%3C/script%3E"));
-        </script>
-
-        <script src="/assets/{{ __version__ }}/gittip.js"></script>
-        <script>
-            $(document).ready(function()
-            {
-                $('BUTTON').click(function()
-                {
-                    window.open('./');
-                });
-            });
-        </script>
     </head>
     <body>
-        <button class="small selected">{{ button_text }}</button>
+        <button class="small selected" onclick="javascript: window.open('./');">
+            {{ button_text }}
+        </button>
         <script type="text/javascript">
 
           var _gaq = _gaq || [];
