@@ -25,11 +25,11 @@ single transaction?)
 
     execute     Execute the query and discard the results.
     fetchone    Execute the query and return a single result or None.
-    fetchall    Execute the query and yield the results.
+    fetchall    Execute the query and return a results generator or None.
     get_cursor  Execute the query and return a context manager wrapping a
                  psycopg2 RealDictCursor. The connection underlying the cursor
                  will be checked out of the connection pool and checked back in
-                 upon both successful and execeptional executions against the
+                 upon both successful and exceptional executions against the
                  cursor.
     get_connection  Return a context manager wrapping a db PostgresConnection.
                 The manager turns autocommit off for you and then turns it on
