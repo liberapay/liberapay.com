@@ -271,6 +271,10 @@ missing? Ping [@whit537](https://twitter.com/whit537) on Twitter or [edit the
 file](/whit537/www.gittip.com/edit/master/README.md) yourself (add your link at
 the end). :grinning:
 
+*Note: there are comprehensive directories that can complement this list,
+such as [startingtrends.com's](http://www.startingtrends.com/crowdfunding-directory/)
+and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
+
  - [KickStater](http://www.kickstarter.com/) - crowdfunding campaigns
  - [Flattr](http://flattr.com/) - micro-donations (flat monthly rate)
  - [TipTheWeb](http://tiptheweb.org/) - micro-donations
