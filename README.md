@@ -271,30 +271,35 @@ missing? Ping [@whit537](https://twitter.com/whit537) on Twitter or [edit the
 file](/whit537/www.gittip.com/edit/master/README.md) yourself (add your link at
 the end). :grinning:
 
- - http://www.kickstarter.com/
- - http://flattr.com/
- - http://tiptheweb.org/
- - http://www.indiegogo.com/
- - http://www.pledgemusic.com/
- - https://propster.me/
- - http://kachingle.com/
- - https://venmo.com/
- - https://www.snoball.com/
- - http://pledgie.com/
- - http://www.humblebundle.com/
- - https://www.crowdtilt.com/
- - http://www1.networkforgood.org/
- - http://anyfu.com/ (also: http://ohours.org/)
- - http://videovivoapp.com/
- - http://techcrunch.com/2009/08/20/tipjoy-heads-to-the-deadpool/
- - http://hopemob.org/
- - http://www.awesomefoundation.org/
- - http://www.crowdrise.com/
- - http://www.chipin.com/
- - http://www.fundable.com/
- - https://www.modestneeds.org/
- - http://www.freedomsponsors.org/
- - https://gumroad.com/
- - http://macheist.com/
- - http://www.prosper.com/
- - http://togather.me/
+*Note: there are comprehensive directories that can complement this list,
+such as [startingtrends.com's](http://www.startingtrends.com/crowdfunding-directory/)
+and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
+
+ - [KickStater](http://www.kickstarter.com/) - crowdfunding campaigns
+ - [Flattr](http://flattr.com/) - micro-donations (flat monthly rate)
+ - [TipTheWeb](http://tiptheweb.org/) - micro-donations
+ - [IndieGoGo](http://www.indiegogo.com/) - crowdfunding campaigns (partial funding allowed)
+ - [PledgeMusic](http://www.pledgemusic.com/) - crowdfunding for musicians
+ - [Propster](https://propster.me/)
+ - [Kachingle](http://kachingle.com/)
+ - [Venmo](https://venmo.com/) - transactions among friends (US only)
+ - [Snoball](https://www.snoball.com/) - link events or actions as triggers for micro-donations
+ - [Pledgie](http://pledgie.com/) - crowdfunding campaigns
+ - [HumbleBundle](http://www.humblebundle.com/)
+ - [CrowdTilt](https://www.crowdtilt.com/) - crowdfunding campaigns
+ - [NetworkForGood](http://www1.networkforgood.org/)
+ - [AnyFu](http://anyfu.com/) - hire an expert for one-on-one, screen-share work sessions
+ - [OpenOfficeHours](http://ohours.org/)
+ - [VideoVivoApp](http://videovivoapp.com/)
+ - [TipJoy](http://techcrunch.com/2009/08/20/tipjoy-heads-to-the-deadpool/) [discontinued]
+ - [HopeMob](http://hopemob.org/)
+ - [AwesomeFoundation](http://www.awesomefoundation.org/)
+ - [CrowdRise](http://www.crowdrise.com/)
+ - [ChipIn](http://www.chipin.com/)
+ - [Fundable](http://www.fundable.com/) - fund start-up companies
+ - [ModestNeeds](https://www.modestneeds.org/) - crowdfunding campaigns in support of the 'working poor' 
+ - [FreedomSponsors](http://www.freedomsponsors.org/) - place bounties for open source projects issues
+ - [GumRoad](https://gumroad.com/)
+ - [MacHeist](http://macheist.com/)
+ - [Prosper](http://www.prosper.com/) - peer-to-peer lending
+ - [Togather](http://togather.me/)
