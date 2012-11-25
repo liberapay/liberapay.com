@@ -1,3 +1,9 @@
+"""Part of Twitter oauth.
+
+From here we redirect users to Twitter after storing needed info in an
+in-memory cache. We get them again at www/on/twitter/associate.
+
+"""
 from urlparse import parse_qs
 
 import requests
@@ -6,7 +12,8 @@ from oauth_hook import OAuthHook
 OAuthHook.consumer_key = website.twitter_consumer_key
 OAuthHook.consumer_secret = website.twitter_consumer_secret
 
-website.oauth_cache = {}
+website.oauth_cache = {}  # XXX What happens to someone who was half-authed
+                          # when we bounced the server?
 
 # ========================== ^L
 
