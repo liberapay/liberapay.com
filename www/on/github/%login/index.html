@@ -157,19 +157,31 @@ else:
     </script>
 
     <h2 class="first"><b>{{ name }}</b> is an {{ usertype }} on GitHub.</h2>
-    <ul id="accounts">
-        <li>
-            <img src="{{ userinfo.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" />
-            Gittip is optimized for people at the moment, not organizations.<br />
-            {% if len(members) == 0 %}
-            {{ name }} does not have any public members.
-            {% elif len(members) == 1 %}
-            {{ name }} has one public member.
-            {% else %}
-            Here are the {{ len(members) }} public members of <a href="https://github.com/{{ username }}">{{ name }}</a>.
-            {% end %}
-        </li>
-    </ul>
+    <table id="accounts">
+        <tr>
+            <td class="account-type">
+                <img src="/assets/octocat.png" />
+            </td>
+            <td class="account-details">
+                <a href="{{ userinfo['html_url'] }}">
+                <img class="avatar"
+                     src="{{ userinfo.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" />
+                     {{ userinfo['login'] }}
+                {% if userinfo.get('name') %}({{ userinfo.get('name') }}){% end %}
+                </a>
+                <div class="account-type">GitHub</div>
+            </td>
+        </tr>
+    </table>
+
+    {% if len(members) == 0 %}
+    {{ name }} does not have any public members.
+    {% elif len(members) == 1 %}
+    {{ name }} has one public member.
+    {% else %}
+    Here are the {{ len(members) }} public members of <a href="https://github.com/{{ username }}">{{ name }}</a>:
+    {% end %}
+
     <table id="members">
       {% for i, sequence in enumerate([on_gittip, not_on_gittip]) %}
         {% if sequence %}<tr><td colspan="2"><h3>{{ i == 0 and "Also on" or "Not on" }} Gittip</h3></td></tr>{% end %}
@@ -207,13 +219,9 @@ else:
     {% else %}
 
     <h2 class="first">Not sure what to do with <b>{{ name }}</b>.</h2>
-    <ul id="accounts">
-        <li>
-            <img src="{{ userinfo.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" />
-            I don&rsquo;t recognize the &ldquo;{{ usertype }}&rdquo; type of user on GitHub.<br />
-            Sorry. :-(
-        </li>
-    </ul>
+
+    I don&rsquo;t recognize the &ldquo;{{ usertype }}&rdquo; type of user on GitHub.<br />
+    Sorry. :-(
 
     {% end %}
 
