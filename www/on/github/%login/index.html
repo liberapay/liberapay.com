@@ -13,11 +13,21 @@ from gittip.networks import github
 # Try to load from GitHub.
 # ========================
 
-url = "https://api.github.com/users/%s"
-userinfo = requests.get(url % path['login'])
-if userinfo.status_code != 200:
-    raise Response(404)
-userinfo = json.loads(userinfo.text)
+rec = db.fetchone( "SELECT user_info FROM social_network_users "
+                   "WHERE network='github' AND user_info->'login' = %s"
+                 , (path['login'],)
+                  )
+if rec is not None:
+    userinfo = rec['user_info']
+else:
+    url = "https://api.github.com/users/%s"
+    userinfo = requests.get(url % path['login'])
+
+    if userinfo.status_code == 200:
+        userinfo = json.loads(userinfo.text)
+    else:
+        code = userinfo.status_code
+        raise Response(500, "GitHub lookup failed with %d." % code)
 
 
 # Try to load from Gittip.
