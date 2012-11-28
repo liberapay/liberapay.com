@@ -16,7 +16,7 @@ from gittip.networks import twitter
 # =========================
 
 rec = db.fetchone( "SELECT user_info FROM social_network_users "
-                   "WHERE user_info -> 'screen_name' = %s"
+                   "WHERE network='twitter' AND user_info->'screen_name' = %s"
                  , (path['screen_name'],)
                   )
 if rec is not None:
