@@ -283,17 +283,19 @@ class BalancedBankAccount(object):
             return
 
         self._account = balanced.Account.find(balanced_account_uri)
-        try:
-            all_accounts = self._account.bank_accounts.all()
-            valid_accounts = [a for a in all_accounts if a.is_valid]
-            if len(valid_accounts) != 1:
-                msg = "%s has %d valid accounts"
-                msg %= (balanced_account_uri, len(valid_accounts))
-                raise RuntimeError(msg)
-            self._bank_account = valid_accounts[0]
 
-        except IndexError:
+        all_accounts = self._account.bank_accounts.all()
+        valid_accounts = [a for a in all_accounts if a.is_valid]
+        nvalid = len(valid_accounts)
+
+        if nvalid == 0:
             self._bank_account = None
+        elif nvalid == 1:
+            self._bank_account = valid_accounts[0]
+        else:
+            msg = "%s has %d valid accounts"
+            msg %= (balanced_account_uri, len(valid_accounts))
+            raise RuntimeError(msg)
 
     def __getitem__(self, item):
         mapper = {
