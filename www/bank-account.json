@@ -61,6 +61,10 @@ else:
     # =============================================
 
     if not out:
+
+        # Clear out any old ones first.
+        billing.clear(u"bank account", user.id, balanced_account.uri)
+
         bank_account_uri = body['bank_account_uri']
         try:
             billing.associate( u"bank account"
