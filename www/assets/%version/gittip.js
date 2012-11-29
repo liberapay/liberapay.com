@@ -200,7 +200,7 @@ Gittip.submitPayoutForm = function (e) {
     ];
 
     Gittip.merchantData = {
-        type: 'person',
+        type: 'person',  // Oooh, may need to vary this some day?
         street_address: $('#address_1').val(),
         postal_code: $('#zip').val(),
         phone_number: $('#phone_number').val(),
@@ -208,6 +208,15 @@ Gittip.submitPayoutForm = function (e) {
         dob: dobs.join('-'),
         name: $('#name').val()
     };
+    var errors = [];
+
+
+    // Require some fields.
+    // ====================
+    // We only require fields that are actually on the page. Since we don't
+    // load the identity verification fields if they're already verified, not
+    // all of these will necessarily be present at all.
+
     var requiredFields = {
         name: 'Your legal name is required.',
         address_1: 'Your street address is required.',
@@ -217,13 +226,11 @@ Gittip.submitPayoutForm = function (e) {
         account_number: 'Your bank account number is required.',
         routing_number: 'A routing number is required.'
     };
-    var errors = [];
-
-    for (var field in requiredFields) {
+    for (var field in requiredFields)
+    {
         var $f = $('#' + field);
-        if (!$f.length) {
+        if (!$f.length)  // Only validate if it's on the page.
             continue;
-        }
         var value = $f.val();
 
         if (!value)
@@ -236,6 +243,24 @@ Gittip.submitPayoutForm = function (e) {
             $f.closest('div').removeClass('error');
         }
     }
+
+
+    // Validate date of birth.
+    // =======================
+    // This might not be on the page if they've already verified their
+    // identity.
+
+    if (dobs[0] !== undefined)
+    {
+        var d = new Date(dobs[0], dobs[1] - 1, dobs[2]);
+        // (1900, 2, 31) gives 3 march :P
+        if (d.getMonth() !== dobs[1] - 1)
+            errors.push('Invalid date of birth.');
+    }
+
+
+    // Validate routing number.
+    // ========================
 
     var $rn = $('#routing_number');
     if (bankAccount.bank_code)
@@ -251,10 +276,6 @@ Gittip.submitPayoutForm = function (e) {
         }
     }
 
-    var d = new Date(dobs[0], dobs[1] - 1, dobs[2]);
-    // (1900, 2, 31) gives 3 march :P
-    if (d.getMonth() !== dobs[1] - 1)
-        errors.push('Invalid date of birth.');
 
     if (errors.length)
     {
