@@ -107,6 +107,10 @@ def test_balanced_bank_account(b_b_account, b_account):
     # b_b_account = balanced.BankAccount
     # b_b_b_account = billing.BalancedBankAccount
     # got it?
+    bank_account = mock.Mock()
+    bank_account.is_valid = True
+    b_account.find.return_value.bank_accounts.all.return_value = [bank_account]
+
     b_b_b_account = billing.BalancedBankAccount(balanced_account_uri)
     assert b_account.find.called_with(balanced_account_uri)
     assert b_b_account.find.called_with(balanced_bank_account_uri)
