@@ -220,6 +220,8 @@ Thanks! :-)</p>
         {% end %}
     </form>
 
+    {% if bank_account and bank_account.is_setup %}
+
     <div id="delete">
         <h2>Disconnect bank account.</h2>
 
@@ -231,6 +233,8 @@ Thanks! :-)</p>
             <button>Disconnect my bank account</button>
         </form>
     </div>
+
+    {% end %}
 
 </div>
 <div id="powered-by-balanced">
