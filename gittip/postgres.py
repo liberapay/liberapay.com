@@ -17,11 +17,11 @@ parameters:
     minconn     The minimum size of the connection pool. [1]
     maxconn     The maximum size of the connection pool. [10]
 
-The resulting object gives you four methods for interacting with Postgres, all
-taking a string of SQL and a tuple of arguments to be used to replace the
-instances of "%s" in the SQL string. Each call to these methods is isolated in
-its own transaction. (XXX Are multiple statements in a single call wrapped in a
-single transaction?)
+The resulting object gives you five methods for interacting with Postgres. The
+first four take a string of SQL and a tuple of arguments to be used to replace
+the instances of "%s" in the SQL string. Each call to these methods is isolated
+in its own transaction. (XXX Are multiple statements in a single call wrapped
+in a single transaction?)
 
     execute     Execute the query and discard the results.
     fetchone    Execute the query and return a single result or None.
