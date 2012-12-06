@@ -544,10 +544,6 @@ class Payday(object):
                 log("%s is not a merchant." % participant['id'])
                 return  # not a merchant
 
-            if not account.bank_accounts.all()[-1].is_valid:
-                log("%s has no valid bank account connected." % participant['id'])
-                return  # no valid funding destination
-
             account.credit(cents)
 
             error = ""
