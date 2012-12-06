@@ -66,31 +66,32 @@ if [ $1 ]; then
         confirm "Tag and push version $1?"
         if [ $? -eq 0 ]; then
 
-            # Fix the version.
-            # ================
+            # Bump the version.
+            # =================
 
-            sed -e "s/~~VERSION~~/$1/" -i '' gittip/__init__.py
-            git ci gittip/__init__.py \
-                -m"Setting version to $1 in gittip/__init__.py."
+            printf "$1" > www/version.txt
+            git ci www/version.txt -m"Bump version to $1"
             git tag $1
 
 
             # Deploy to Heroku.
             # =================
-            # If this fails we still want to reset the version, so modify bash 
-            # error handling around this call.
+            # If this fails we still want to bump the version again, so modify 
+            # bash error handling around this call.
 
             set +e
             git push heroku
             set -e
 
 
-            # Change the version back.
-            # ========================
+            # Bump the version again.
+            # =======================
+            # We're using a Pythonic convention here by using -dev to mean, "a
+            # dev version following $whatever." We escape the dash for bash's
+            # sake
 
-            sed -e "s/$1/~~VERSION~~/" -i '' gittip/__init__.py
-            git ci gittip/__init__.py \
-                -m"Resetting version in gittip/__init__.py."
+            printf "\055dev" >> www/version.txt
+            git ci www/version.txt -m"Bump version to $1\055dev"
 
         fi
     fi
