@@ -67,16 +67,17 @@ if not name:
 userinfo['html_url'] = "https://twitter.com/%s" % username
 
 participant_id, is_claimed, is_locked, balance = twitter.upsert(userinfo)
+participant = Participant(participant_id)
 can_tip = not is_locked
 lock_action = "unlock" if is_locked else "lock"
 if is_claimed:
     request.redirect('/%s/' % participant_id)
 
 if not user.ANON:
-    my_tip = user.get_tip(participant_id)
+    my_tip = user.get_tip_to(participant_id)
 
 tip_or_pledge = "pledge"
-nbackers = Participant(participant_id).get_number_of_backers()
+nbackers = participant.get_number_of_backers()
 
 # ========================================================================== ^L
 {% extends templates/participant.html %}

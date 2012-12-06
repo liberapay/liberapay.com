@@ -52,7 +52,8 @@ if usertype == "user":
         my_tip = user.get_tip_to(participant_id)
 
     tip_or_pledge = "pledge"
-    nbackers = Participant(participant_id).get_number_of_backers()
+    participant = Participant(participant_id)
+    nbackers = participant.get_number_of_backers()
 
 elif usertype == "organization":
     members = []
