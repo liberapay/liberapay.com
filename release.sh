@@ -91,7 +91,7 @@ if [ $1 ]; then
             # sake
 
             printf "\055dev" >> www/version.txt
-            git ci www/version.txt -m"Bump version to $1\055dev"
+            git ci www/version.txt -m"Bump version to $1-dev"
 
         fi
     fi
