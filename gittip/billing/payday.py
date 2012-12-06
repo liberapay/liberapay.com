@@ -24,7 +24,7 @@ import stripe
 import aspen.utils
 from aspen import log
 from aspen.utils import typecheck
-from gittip import get_tips_and_total
+from gittip.participant import Participant
 from psycopg2 import IntegrityError
 from psycopg2.extras import RealDictRow
 
@@ -107,13 +107,13 @@ class Payday(object):
         That's okay.
 
         """
-        for participant in self.get_participants(ts_start):
-            tips, total = get_tips_and_total( participant['id']
-                                            , for_payday=for_payday
-                                            , db=self.db
-                                             )
+        for participant_dict in self.get_participants(ts_start):
+            participant = Participant(participant_dict['id'])
+            tips, total = participant.get_tips_and_total( for_payday=for_payday
+                                                        , db=self.db
+                                                         )
             typecheck(total, Decimal)
-            yield(participant, tips, total)
+            yield(participant_dict, tips, total)
 
 
     def run(self):

@@ -378,7 +378,7 @@ def serve_request(path, user=None):
         user = User.from_id(user)
         # Note that Cookie needs a bytestring.
         request.headers.cookie[str('session')] = user.session_token
-    response = test_website.handle_safely(request)
+    response = test_website.handler(request)
     return response
 
 def load_simplate(path):

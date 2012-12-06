@@ -4,24 +4,30 @@ import time
 import uuid
 
 from aspen import Response
+from aspen.utils import typecheck
+from gittip.participant import Participant
 
 
 BEGINNING_OF_EPOCH = rfc822.formatdate(0)
 TIMEOUT = 60 * 60 * 24 * 7 # one week
 
 
-class User:
+class User(Participant):
+    """Model a website user.
+    """
 
     def __init__(self, session):
         """Takes a dict of user info.
         """
+        typecheck(session, dict)
         self.session = session
+        Participant.__init__(self, session['id'])
 
     @classmethod
     def from_session_token(cls, token):
         SESSION = ("SELECT * FROM participants "
                    "WHERE is_suspicious IS NOT true "
-                   "AND session=%s")
+                   "AND session_token=%s")
         session = cls.load_session(SESSION, token)
         return cls(session)
 
