@@ -21,7 +21,7 @@ class User:
     def from_session_token(cls, token):
         SESSION = ("SELECT * FROM participants "
                    "WHERE is_suspicious IS NOT true "
-                   "AND session=%s")
+                   "AND session_token=%s")
         session = cls.load_session(SESSION, token)
         return cls(session)
 
