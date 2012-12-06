@@ -7,7 +7,7 @@ if user.ANON:
 elif user.id == participant.id:
     button_text = "You!"
 else:
-    button_text = get_tip(user.id, path['participant_id'])
+    button_text = user.get_tip_to(participant.id)
     if button_text == 0:
         button_text = "Gittip"
 ^L
