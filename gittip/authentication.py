@@ -19,13 +19,19 @@ class User:
 
     @classmethod
     def from_session_token(cls, token):
-        session = cls.load_session("session_token=%s", token)
+        SESSION = ("SELECT * FROM participants "
+                   "WHERE is_suspicious IS NOT true "
+                   "AND session=%s")
+        session = cls.load_session(SESSION, token)
         return cls(session)
 
     @classmethod
     def from_id(cls, participant_id):
         from gittip import db
-        session = cls.load_session("id=%s", participant_id)
+        SESSION = ("SELECT * FROM participants "
+                   "WHERE is_suspicious IS NOT true "
+                   "AND id=%s")
+        session = cls.load_session(SESSION, participant_id)
         session['session_token'] = uuid.uuid4().hex
         db.execute( "UPDATE participants SET session_token=%s WHERE id=%s"
                   , (session['session_token'], participant_id)
@@ -33,11 +39,9 @@ class User:
         return cls(session)
 
     @staticmethod
-    def load_session(where, val):
+    def load_session(SESSION, val):
         from gittip import db
-        SQL =("SELECT * FROM participants WHERE is_suspicious IS NOT true "
-              "AND " + where)
-        rec = db.fetchone(SQL, (val,))
+        rec = db.fetchone(SESSION, (val,))
         out = {}
         if rec is not None:
             out = rec
