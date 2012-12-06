@@ -14,8 +14,8 @@ import locale
 import requests
 from aspen import json, Response
 from aspen.utils import to_age
-from gittip import AMOUNTS, db, get_tip, get_giving_for_profile, \
-     get_dollars_receiving, get_chart_of_giving
+from gittip import AMOUNTS
+from gittip.participant import Participant
 from gittip.utils import wrap
 from gittip.networks import github, resolve_unclaimed
 
@@ -26,66 +26,61 @@ tip_suggestions = [{'tippee': name, 'amount': 0} for name in tip_suggestions]
 
 # ========================================================================== ^L
 
+# XXX Hack
+# ========
+# Work around https://github.com/whit537/aspen/issues/108 until we upgrade.
+
 if not path.raw.endswith('/'):
-    # Work around https://github.com/whit537/aspen/issues/108 until we upgrade.
     request.redirect(path.raw + '/', permanent=True)
 
 
-SELECT = """
+# Instantiate a Participant object.
+# =================================
+# And load their details from the database.
 
-    SELECT *
-      FROM participants
-     WHERE id = %s
+participant = Participant(path['participant_id'])
+deets = participant.get_details()
 
-"""
-participant = db.fetchone(SELECT, (path['participant_id'],))
-if participant is None:
+if deets is None:
     raise Response(404)
-participant_id = title = participant['id']
 
-if participant['claimed_time'] is None:
+elif deets['claimed_time'] is None:
 
     # This is a stub participant record for someone on a social network who
     # hasn't actually registered yet. Let's bounce the viewer over to the
     # appropriate social network page.
 
-    to = resolve_unclaimed(participant)
+    to = resolve_unclaimed(participant.id)
     if to is None:
         raise Response(404)
     request.redirect(to)
 
 
-ACCOUNTS = """
-    SELECT * FROM social_network_users WHERE participant_id=%s;
-"""
-accounts = db.fetchall(ACCOUNTS, (participant_id,))
-assert accounts is not None
-twitter_account = None
-github_account = None
-for account in accounts:
-    if account['network'] == 'github':
-        github_account = account
-    else:
-        assert account['network'] == 'twitter'
-        twitter_account = account
+# Load money info.
+# ================
 
-backed_amount = get_dollars_receiving(participant['id'])
+backed_amount = participant.get_dollars_receiving()
 
 if not user.ANON:
-    if user.id == participant_id or user.ADMIN:
-        giving_chart, npatrons, contributed = \
-                                     get_chart_of_giving(participant['id'])
-    if user.id == participant_id:
-        tips, total = get_giving_for_profile(user.id)
+    if user.id == participant.id or user.ADMIN:
+        giving_chart, npatrons, contributed = participant.get_chart_of_receiving()
+    if user.id == participant.id:
+        tips, total = user.get_giving_for_profile()
         if total == 0:
             tips = tip_suggestions
         assert backed_amount == contributed, (backed_amount, contributed)
     else:
-        my_tip = get_tip(user.id, participant['id'])
+        my_tip = user.get_tip_to(participant.id)
+
+
+# Set a few more things.
+# ======================
 
 can_tip = True
 tip_or_pledge = "tip"
-username = participant_id # used in footer shared with on/network/ pages
+title = participant.id      # used in <title>
+username = participant.id   # used in footer shared with on/network/ pages
+github_account, twitter_account = participant.get_social_network_accounts()
 
 # ========================================================================== ^L
 {% extends templates/participant.html %}
@@ -434,7 +429,7 @@ username = participant_id # used in footer shared with on/network/ pages
         });
     </script>
 
-{% if not user.ANON and user.id == participant['id'] %}
+{% if not user.ANON and user.id == deets['id'] %}
     <h2 class="first">You are
         <b class="participant_id">{{ escape(user.id) }}</b>
         <span class="participant_id"><form>
@@ -449,10 +444,10 @@ username = participant_id # used in footer shared with on/network/ pages
     <h3>How are you making the world better?</h3>
 
     <form class="statement"
-        {% if participant['statement'] %}style="display: none;"{% end %}>
+        {% if deets['statement'] %}style="display: none;"{% end %}>
         <blockquote>
             I am making the world better by ...
-            <textarea>{{ participant['statement'] }}</textarea>
+            <textarea>{{ deets['statement'] }}</textarea>
             <span class="help">Newlines and links are converted to HTML.</span>
             <button id="save-statement" type="submit" class="selected small">Save</button>
             <button id="cancel-statement" type="cancel" class="small">Cancel</button>
@@ -460,9 +455,9 @@ username = participant_id # used in footer shared with on/network/ pages
     </form>
 
     <blockquote id="my-statement" class="statement"
-        {% if not participant['statement'] %}style="display: none"{% end %}>
+        {% if not deets['statement'] %}style="display: none"{% end %}>
         I am making the world better by <span>
-            {{ wrap(participant['statement']) }}</span><br />
+            {{ wrap(deets['statement']) }}</span><br />
         <button class="small selected">Edit</button>
     </blockquote>
 
@@ -526,7 +521,7 @@ username = participant_id # used in footer shared with on/network/ pages
 
     <p>
         <input name="anonymous" class="anonymous" type="checkbox"
-            {% if participant['anonymous'] %}checked="true"{% end %} />
+            {% if deets['anonymous'] %}checked="true"{% end %} />
         <label for="anonymous" class="anonymous">Show as
             &ldquo;anonymous&rdquo; on leaderboard.</label>
     </p>
@@ -615,7 +610,7 @@ username = participant_id # used in footer shared with on/network/ pages
     <p>Use this code to embed a Gittip button on your website:</p>
 
     <pre>&lt;iframe style="border: 0; margin: 0; padding: 0;"
-        src="https://www.gittip.com/{{ participant_id }}/widget.html"
+        src="https://www.gittip.com/{{ participant.id }}/widget.html"
         width="48pt" height="22pt"&gt;&lt;/iframe&gt;</pre>
 
     <p>The button opens your profile on Gittip in a new tab or window. Here&rsquo;s what the text reads:</p>
@@ -645,7 +640,7 @@ username = participant_id # used in footer shared with on/network/ pages
 
     <p>Use this code to add a Gittip &ldquo;receiving&rdquo; widget on your website:</p>
 
-    <pre>&lt;span class="gittip-0001" gittip-username="{{ participant_id }}"&gt;
+    <pre>&lt;span class="gittip-0001" gittip-username="{{ participant.id }}"&gt;
 &lt/span&gt;
 &lt;script id="gittip-0001"
   src="https://www.gittip.com/assets/widgets/0001.js"&gt;
@@ -653,7 +648,7 @@ username = participant_id # used in footer shared with on/network/ pages
 
     <p>Here&rsquo;s what it looks like:</p>
 
-    <span class="gittip-0001" gittip-username="{{ participant_id }}"></span>
+    <span class="gittip-0001" gittip-username="{{ participant.id }}"></span>
     <script id="gittip-0001" src="/assets/widgets/0001.js"></script>
 
 
@@ -662,28 +657,28 @@ username = participant_id # used in footer shared with on/network/ pages
 
 {% else %}
 
-    <h2 class="first"><b>{{ participant['id'] }}</b> receives
+    <h2 class="first"><b>{{ participant.id }}</b> receives
         ${{ backed_amount }} per week.</h2>
 
-    {% if participant['statement'] %}
+    {% if deets['statement'] %}
     <blockquote class="statement">I am making the world better by
-    {{ wrap(participant['statement']) }}</blockquote>
+    {{ wrap(deets['statement']) }}</blockquote>
 
     <h3>Funding Goal</h3>
     {% end %}
 
     <blockquote class="goal">
-        {% if participant['goal'] is None %}
+        {% if deets['goal'] is None %}
         I&rsquo;m grateful for tips, but I don&rsquo;t have a specific funding goal.
-        {% elif participant['goal'] == 0 %}
+        {% elif deets['goal'] == 0 %}
         I&rsquo;m not here to receive tips. I&rsquo;ll generally regift them.
         {% else %}
-        My goal is to receive ${{ locale.format("%.2f", participant['goal'], grouping=True) }} per week on Gittip.
+        My goal is to receive ${{ locale.format("%.2f", deets['goal'], grouping=True) }} per week on Gittip.
         {% end %}
     </blockquote>
 
     {% if user.ADMIN %}
-    <h3>{{ participant['id'] }} joined {{ to_age(participant['claimed_time']) }}.
+    <h3>{{ participant.id }} joined {{ to_age(deets['claimed_time']) }}.
         <span class="small"><a href="history.html">History</a></span>
     </h3>
 
@@ -736,25 +731,25 @@ username = participant_id # used in footer shared with on/network/ pages
                 <img src="/assets/balanced-avatar.png" /></a>
             </td>
             <td class="account-details">
-                {% if user.id == participant['id'] %}
+                {% if user.id == participant.id %}
 
                 <a href="/credit-card.html">Credit card</a>:
-                    {% if participant['last_bill_result'] != "" %}&#x2718;{% else %}&#x2714;{% end %}
+                    {% if deets['last_bill_result'] != "" %}&#x2718;{% else %}&#x2714;{% end %}
                 &nbsp; &nbsp; &nbsp;
                 <a href="/bank-account.html">Bank account</a>:
-                    {% if participant['last_ach_result'] != "" %}&#x2718;{% else %}&#x2714;{% end %}
+                    {% if deets['last_ach_result'] != "" %}&#x2718;{% else %}&#x2714;{% end %}
 
                 {% else %}
 
                 Credit card:
-                    {% if participant['last_bill_result'] != "" %}&#x2718;{% else %}&#x2714;{% end %}
+                    {% if deets['last_bill_result'] != "" %}&#x2718;{% else %}&#x2714;{% end %}
                 &nbsp; &nbsp; &nbsp;
                 Bank account:
-                    {% if participant['last_ach_result'] != "" %}&#x2718;{% else %}&#x2714;{% end %}
+                    {% if deets['last_ach_result'] != "" %}&#x2718;{% else %}&#x2714;{% end %}
 
                 {% end %}
-                <div class="account-type">{% if user.ADMIN and participant['balanced_account_uri'] %}
-                    <a href="https://www.balancedpayments.com/{{ participant['balanced_account_uri'][3:] }}"
+                <div class="account-type">{% if user.ADMIN and deets['balanced_account_uri'] %}
+                    <a href="https://www.balancedpayments.com/{{ deets['balanced_account_uri'][3:] }}"
                         >Balanced Payments</a>{% else %}Balanced Payments{% end %}</div>
             </td>
         </tr>
@@ -763,7 +758,7 @@ username = participant_id # used in footer shared with on/network/ pages
     {% if user.ADMIN %}
     <p style="text-align: right">
         <input name="is_suspicious" class="is-suspicious-knob" type="checkbox"
-            {% if participant['is_suspicious'] %}checked="true"{% end %} />
+            {% if deets['is_suspicious'] %}checked="true"{% end %} />
         <label for="is_suspicious" class="is-suspicious-knob">Suspicious</label>
     </p>
     {% end %}

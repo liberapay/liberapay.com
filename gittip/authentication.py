@@ -4,18 +4,23 @@ import time
 import uuid
 
 from aspen import Response
+from aspen.utils import typecheck
+from gittip.participant import Participant
+from psycopg2.extras import RealDictRow
 
 
 BEGINNING_OF_EPOCH = rfc822.formatdate(0)
 TIMEOUT = 60 * 60 * 24 * 7 # one week
 
 
-class User:
+class User(Participant):
 
     def __init__(self, session):
         """Takes a dict of user info.
         """
+        typecheck(session, (RealDictRow, dict))
         self.session = session
+        Participant.__init__(self, session.get('id'))
 
     @classmethod
     def from_session_token(cls, token):

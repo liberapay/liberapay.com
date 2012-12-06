@@ -6,7 +6,8 @@ import decimal
 import requests
 from aspen import json, Response, log
 from aspen.utils import to_age, utc
-from gittip import AMOUNTS, CARDINALS, db, get_tip, get_number_of_backers
+from gittip import AMOUNTS, CARDINALS, db
+from gittip.participant import Participant
 from gittip.networks import twitter
 
 
@@ -59,7 +60,6 @@ else:
 # Try to load from Gittip.
 # ========================
 
-participant = False
 username = userinfo['screen_name']
 name = userinfo.get('name')
 if not name:
@@ -73,10 +73,10 @@ if is_claimed:
     request.redirect('/%s/' % participant_id)
 
 if not user.ANON:
-    my_tip = get_tip(user.id, participant_id)
+    my_tip = user.get_tip(participant_id)
 
 tip_or_pledge = "pledge"
-nbackers = get_number_of_backers(participant_id)
+nbackers = Participant(participant_id).get_number_of_backers()
 
 # ========================================================================== ^L
 {% extends templates/participant.html %}

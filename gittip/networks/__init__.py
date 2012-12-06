@@ -11,11 +11,12 @@ class RunawayTrain(Exception):
     pass
 
 
-def resolve_unclaimed(participant):
-    """Given a participant dict, return an URL path.
+def resolve_unclaimed(participant_id):
+    """Given a participant_id, return an URL path.
     """
+    typecheck(participant_id, unicode)
     rec = db.fetchone("SELECT network, user_info FROM social_network_users "
-                      "WHERE participant_id=%s", (participant['id'],))
+                      "WHERE participant_id=%s", (participant_id,))
     if rec is None:
         out = None
     elif rec['network'] == 'github':
@@ -79,7 +80,7 @@ def get_a_participant_id():
         else:
             break
 
-    return participant_id
+    return participant_id.decode('US-ASCII')
 
 
 def upsert(network, user_id, username, user_info):
@@ -160,7 +161,7 @@ def upsert(network, user_id, username, user_info):
 
 
     # Associate the social network user with the Gittip participant.
-    # ================================================================
+    # ==============================================================
 
     ASSOCIATE = """\
 

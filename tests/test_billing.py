@@ -706,7 +706,7 @@ class TestBillingPayday(testing.GittipPaydayTest):
         with self.assertRaises(AssertionError):
             self.payday.assert_one_payday([1, 2])
 
-    @mock.patch('gittip.billing.payday.get_tips_and_total')
+    @mock.patch('gittip.participant.Participant.get_tips_and_total')
     def test_charge_and_or_transfer_no_tips(self, get_tips_and_total):
         amount = Decimal('1.00')
 
@@ -729,7 +729,7 @@ class TestBillingPayday(testing.GittipPaydayTest):
         self.assertEqual(initial_payday['nparticipants'] + 1,
                          resulting_payday['nparticipants'])
 
-    @mock.patch('gittip.billing.payday.get_tips_and_total')
+    @mock.patch('gittip.participant.Participant.get_tips_and_total')
     @mock.patch('gittip.billing.payday.Payday.tip')
     def test_charge_and_or_transfer(self, tip, get_tips_and_total):
         amount = Decimal('1.00')
@@ -769,7 +769,7 @@ class TestBillingPayday(testing.GittipPaydayTest):
         self.assertEqual(initial_payday['nparticipants'] + 1,
                          resulting_payday['nparticipants'])
 
-    @mock.patch('gittip.billing.payday.get_tips_and_total')
+    @mock.patch('gittip.participant.Participant.get_tips_and_total')
     @mock.patch('gittip.billing.payday.Payday.charge')
     def test_charge_and_or_transfer_short(self, charge, get_tips_and_total):
         amount = Decimal('1.00')

@@ -4,8 +4,9 @@ import decimal
 
 import requests
 from aspen import json, Response
-from gittip import AMOUNTS, CARDINALS, db, get_tip, get_number_of_backers
+from gittip import AMOUNTS, CARDINALS, db
 from gittip.networks import github
+from gittip.participant import Participant
 
 
 # ========================================================================== ^L
@@ -34,7 +35,6 @@ else:
 # ==========================
 # We can only tip Users, not Organizations (or whatever else type can be).
 
-participant = False
 username = userinfo['login']
 name = userinfo.get('name')
 if not name:
@@ -49,10 +49,10 @@ if usertype == "user":
         request.redirect('/%s/' % participant_id)
 
     if not user.ANON:
-        my_tip = get_tip(user.id, participant_id)
+        my_tip = user.get_tip_to(participant_id)
 
     tip_or_pledge = "pledge"
-    nbackers = get_number_of_backers(participant_id)
+    nbackers = Participant(participant_id).get_number_of_backers()
 
 elif usertype == "organization":
     members = []
@@ -77,7 +77,7 @@ elif usertype == "organization":
     not_on_gittip = []
     for member in members:
         seq = on_gittip if member['login'] in _on_gittip else not_on_gittip
-        seq.append((member, get_tip(user.id, member['login'])))
+        seq.append((member, user.get_tip_to(member['login'])))
     can_tip = user.ANON
 else:
     can_tip = False

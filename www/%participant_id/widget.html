@@ -1,8 +1,10 @@
-from gittip import AMOUNTS, get_tip
+from gittip import AMOUNTS
+from gittip.participant import Participant
 ^L
+participant = Participant(path['participant_id'])
 if user.ANON:
     button_text = "Gittip"
-elif user.id == path['participant_id']:
+elif user.id == participant.id:
     button_text = "You!"
 else:
     button_text = get_tip(user.id, path['participant_id'])
