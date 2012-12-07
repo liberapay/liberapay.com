@@ -31,3 +31,7 @@ def billing():
     stripe.api_key= os.environ['STRIPE_SECRET_API_KEY']
     stripe.publishable_api_key= os.environ['STRIPE_PUBLISHABLE_API_KEY']
     balanced.configure(os.environ['BALANCED_API_SECRET'])
+
+
+def id_restrictions(website):
+    gittip.RESTRICTED_IDS = os.listdir(website.www_root)

@@ -9,6 +9,8 @@ import gittip.csrf
 gittip.wireup.canonical()
 gittip.wireup.db()
 gittip.wireup.billing()
+gittip.wireup.id_restrictions(website)
+
 
 website.github_client_id = os.environ['GITHUB_CLIENT_ID'].decode('ASCII')
 website.github_client_secret = os.environ['GITHUB_CLIENT_SECRET'].decode('ASCII')

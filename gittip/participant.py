@@ -1,9 +1,16 @@
 """Defines a Participant class.
 """
+from aspen import Response
 from decimal import Decimal
 
 import gittip
 from aspen.utils import typecheck
+
+
+ASCII_ALLOWED_IN_PARTICIPANT_ID = set("0123456789"
+                                      "abcdefghijklmnopqrstuvwxyz"
+                                      "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                                      ".,-_;:@ ")
 
 
 class NoParticipantId(StandardError):
@@ -43,6 +50,11 @@ class Participant(object):
         return gittip.db.fetchone(SELECT, (self.id,))
 
 
+    # Claiming
+    # ========
+    # An unclaimed Participant is a stub that's created when someone pledges to
+    # give to an AccountElsewhere that's not been connected on Gittip yet.
+
     @require_id
     def resolve_unclaimed(self):
         """Given a participant_id, return an URL path.
@@ -57,6 +69,51 @@ class Participant(object):
             assert rec['platform'] == 'twitter'
             out = '/on/twitter/%s/' % rec['user_info']['screen_name']
         return out
+
+    @require_id
+    def set_as_claimed(self):
+        CLAIM = """\
+
+            UPDATE participants
+               SET claimed_time=CURRENT_TIMESTAMP
+             WHERE id=%s
+               AND claimed_time IS NULL
+
+        """
+        gittip.db.execute(CLAIM, (self.id,))
+
+
+
+    @require_id
+    def change_id(self, suggested):
+        """Raise Response or return None.
+
+        We want to be pretty loose with usernames. Unicode is allowed--XXX
+        aspen bug :(. So are spaces.Control characters aren't. We also limit to
+        32 characters in length.
+
+        """
+        for i, c in enumerate(suggested):
+            if i == 32:
+                raise Response(413)  # Request Entity Too Large (more or less)
+            elif ord(c) < 128 and c not in ASCII_ALLOWED_IN_PARTICIPANT_ID:
+                raise Response(400)  # Yeah, no.
+            elif c not in ASCII_ALLOWED_IN_PARTICIPANT_ID:
+                raise Response(400)  # XXX Burned by an Aspen bug. :`-(
+                                     # https://github.com/whit537/aspen/issues/102
+
+        if suggested in gittip.RESTRICTED_IDS:
+            raise Response(400)
+
+        if suggested != self.id:
+            # Will raise IntegrityError if the desired participant_id is taken.
+            rec = gittip.db.fetchone("UPDATE participants "
+                                     "SET id=%s WHERE id=%s "
+                                     "RETURNING id", (suggested, self.id))
+
+            assert rec is not None         # sanity check
+            assert suggested == rec['id']  # sanity check
+            self.id = suggested
 
 
     @require_id

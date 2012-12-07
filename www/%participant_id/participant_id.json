@@ -1,5 +1,4 @@
 from aspen import Response
-from gittip.elsewhere import change_participant_id
 from psycopg2 import IntegrityError
 
 # ========================================================================== ^L
@@ -10,7 +9,7 @@ if user.ANON:
 new_participant_id = request.body['participant_id']
 
 try:
-    change_participant_id(website, user.id, new_participant_id)
+    user.change_id(new_participant_id)
     response.body = {"participant_id": new_participant_id}
 except IntegrityError:
     raise Response(409)  # Conflict

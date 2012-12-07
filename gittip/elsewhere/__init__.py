@@ -1,7 +1,6 @@
-import os
 import random
 
-from aspen import log, Response
+from aspen import log
 from aspen.utils import typecheck
 from gittip import db
 from psycopg2 import IntegrityError
@@ -9,39 +8,6 @@ from psycopg2 import IntegrityError
 
 class RunawayTrain(Exception):
     pass
-
-
-ALLOWED_ASCII = set("0123456789"
-                    "abcdefghijklmnopqrstuvwxyz"
-                    "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                    ".,-_;:@ ")
-
-def change_participant_id(website, old, suggested):
-    """Raise response return None.
-
-    We want to be pretty loose with usernames. Unicode is allowed. So are
-    spaces.  Control characters aren't. We also limit to 32 characters in
-    length.
-
-    """
-    for i, c in enumerate(suggested):
-        if i == 32:
-            raise Response(413)  # Request Entity Too Large (more or less)
-        elif ord(c) < 128 and c not in ALLOWED_ASCII:
-            raise Response(400)  # Yeah, no.
-        elif c not in ALLOWED_ASCII:
-            raise Response(400)  # XXX Burned by an Aspen bug. :`-(
-                                 # https://github.com/whit537/aspen/issues/102
-
-    if website is not None and suggested in os.listdir(website.www_root):
-        raise Response(400)
-
-    if suggested != old:
-        rec = db.fetchone( "UPDATE participants SET id=%s WHERE id=%s " \
-                           "RETURNING id", (suggested, old))
-                                                     # May raise IntegrityError
-        assert rec is not None         # sanity check
-        assert suggested == rec['id']  # sanity check
 
 
 def get_a_participant_id():
@@ -214,15 +180,3 @@ def upsert(platform, user_id, username, user_info):
            , is_locked
            , rec['balance']
             )
-
-
-def set_as_claimed(participant_id):
-    CLAIMED = """\
-
-        UPDATE participants
-           SET claimed_time=CURRENT_TIMESTAMP
-         WHERE id=%s
-           AND claimed_time IS NULL
-
-    """
-    db.execute(CLAIMED, (participant_id,))
