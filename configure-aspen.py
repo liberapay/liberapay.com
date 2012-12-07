@@ -29,7 +29,7 @@ website.hooks.outbound_late.register(gittip.csrf.outbound)
 __version__ = open(os.path.join(website.www_root, 'version.txt')).read().strip()
 
 def add_stuff(request):
-    from gittip.networks import github, twitter
+    from gittip.elsewhere import github, twitter
     request.context['__version__'] = __version__
     request.context['username'] = None
     request.context['github'] = github

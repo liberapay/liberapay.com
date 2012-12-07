@@ -2,15 +2,15 @@ import requests
 from aspen import json, log, Response
 from aspen.website import Website
 from aspen.utils import typecheck
-from gittip import db, networks
+from gittip import db, elsewhere
 
 
 def upsert(user_info):
-    return networks.upsert( 'github'
-                          , user_info['id']
-                          , user_info['login']
-                          , user_info
-                           )
+    return elsewhere.upsert( 'github'
+                           , user_info['id']
+                           , user_info['login']
+                           , user_info
+                            )
 
 
 def oauth_url(website, action, then=u""):

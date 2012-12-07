@@ -1,12 +1,12 @@
-from gittip import db, networks
+from gittip import db, elsewhere
 
 
 def upsert(user_info):
-    return networks.upsert( 'twitter'
-                          , user_info['id']
-                          , user_info['screen_name']
-                          , user_info
-                           )
+    return elsewhere.upsert( 'twitter'
+                           , user_info['id']
+                           , user_info['screen_name']
+                           , user_info
+                            )
 
 
 def resolve(user_id):
