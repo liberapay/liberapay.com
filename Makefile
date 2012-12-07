@@ -53,6 +53,8 @@ run: env local.env
 test: env tests/env data
 	./env/bin/swaddle tests/env ./env/bin/nosetests ./tests/
 
+tests: test
+
 tests/env:
 	echo "Creating a tests/env file ..."
 	echo
