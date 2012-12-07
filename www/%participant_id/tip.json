@@ -27,11 +27,15 @@ if not user.ANON:
         amount = None
     else:
 
-        # Add a new tip record.
-        # =====================
-        # Insert instead of update. The analytics may be interesting some day.
-
         if POST and 'amount' in body:
+
+            # Add a new tip record.
+            # =====================
+            # Insert instead of update. The analytics may be interesting some
+            # day. The COALESCE function returns the first of its arguments
+            # that is not NULL. The effect here is to stamp all tips with the
+            # timestamp of the first tip from this user to that. I believe this
+            # is used to determine the order of transfers during payday.
 
             try:
                 amount = decimal.Decimal(body['amount'])
