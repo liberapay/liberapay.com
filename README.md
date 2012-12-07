@@ -263,6 +263,20 @@ with Aspen. First `make tests/env`, edit it as noted above, and then:
     [gittip] $ swaddle env ../env/bin/nosetests
 
 
+Glossary
+========
+
+**Account Elsewhere** - An entity's registration on a platform other than
+Gittip (e.g., Twitter).
+
+**Entity** - An entity.
+
+**Participant** - An entity registered with Gittip.
+
+**User** - A person using the Gittip website. Can be authenticated or
+anonymous. If authenticated, the user is guaranteed to also be a participant.
+
+
 See Also
 ========
 
