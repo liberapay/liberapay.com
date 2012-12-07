@@ -75,19 +75,6 @@ class User(Participant):
     def ANON(self):
         return self.id is None
 
-    @property
-    def PAID(self):
-        """A boolean, whether the participant has a working credit card.
-
-        We base this determination on the last_bill_result field. Our billing
-        code sets this to a non-empty string in any case where an attempt to
-        bill the participant fails.
-
-        """
-        if self.session.get('last_bill_result', None) is None:
-            return False
-        return self.session['last_bill_result'] == ""
-
 
 def inbound(request):
     """Authenticate from a cookie.
