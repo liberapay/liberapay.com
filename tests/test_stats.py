@@ -1,8 +1,8 @@
 from datetime import datetime
 from decimal import Decimal
 
-import gittip
-from gittip import testing, wireup
+from gittip import wireup
+from gittip.testing import load, load_simplate, serve_request, tip_graph
 from gittip.billing.payday import Payday
 from gittip.participant import Participant
 from mock import patch
@@ -10,7 +10,7 @@ from mock import patch
 
 # commaize
 
-simplate = testing.load_simplate('/about/stats.html')
+simplate = load_simplate('/about/stats.html')
 commaize = simplate.pages[0]['commaize']
 
 def test_commaize_commaizes():
@@ -28,16 +28,12 @@ def check_chart_of_receiving(participant_id):
     return Participant(participant_id).get_chart_of_receiving()
 
 
-def setup(*a):
-    return testing.load(*testing.setup_tips(*a))
-
-
 def test_get_chart_of_receiving_handles_a_tip():
     tip = ("foo", "bar", "3.00", True)
     expected = ( [[Decimal('3.00'), 1, Decimal('3.00'), 1.0, Decimal('1')]]
                , 1.0, Decimal('3.00')
                 )
-    with setup(tip):
+    with tip_graph(tip):
         actual = check_chart_of_receiving(u'bar')
         assert actual == expected, actual
 
@@ -46,13 +42,13 @@ def test_get_chart_of_receiving_handles_a_non_standard_amount():
     expected = ( [[-1, 1, Decimal('5.37'), 1.0, Decimal('1')]]
                , 1.0, Decimal('5.37')
                 )
-    with setup(tip):
+    with tip_graph(tip):
         actual = check_chart_of_receiving(u'bar')
         assert actual == expected, actual
 
 def test_get_chart_of_receiving_handles_no_tips():
     expected = ([], 0.0, Decimal('0.00'))
-    with setup():
+    with tip_graph():
         actual = check_chart_of_receiving(u'foo')
         assert actual == expected, actual
 
@@ -65,7 +61,7 @@ def test_get_chart_of_receiving_handles_multiple_tips():
                   ]
                , 2.0, Decimal('4.00')
                 )
-    with setup(*tips):
+    with tip_graph(*tips):
         actual = check_chart_of_receiving(u'bar')
         assert actual == expected, actual
 
@@ -76,7 +72,7 @@ def test_get_chart_of_receiving_ignores_bad_cc():
     expected = ( [[Decimal('1.00'), 1L, Decimal('1.00'), 1, Decimal('1')]]
                , 1.0, Decimal('1.00')
                 )
-    with setup(*tips):
+    with tip_graph(*tips):
         actual = check_chart_of_receiving(u'bar')
         assert actual == expected, actual
 
@@ -87,7 +83,7 @@ def test_get_chart_of_receiving_ignores_missing_cc():
     expected = ( [[Decimal('1.00'), 1L, Decimal('1.00'), 1, Decimal('1')]]
                , 1.0, Decimal('1.00')
                 )
-    with setup(*tips):
+    with tip_graph(*tips):
         actual = check_chart_of_receiving(u'bar')
         assert actual == expected, actual
 
@@ -95,7 +91,7 @@ def test_get_chart_of_receiving_ignores_missing_cc():
 # rendering
 
 def get_stats_page():
-    response = testing.serve_request('/about/stats.html')
+    response = serve_request('/about/stats.html')
     return response.body
 
 
@@ -106,7 +102,7 @@ def test_stats_description_accurate_during_payday_run(mock_datetime):
     This test was originally written to expose the fix required for
     https://github.com/whit537/www.gittip.com/issues/92.
     """
-    with testing.load() as context:
+    with load() as context:
         a_thursday = datetime(2012, 8, 9, 12, 00, 01)
         mock_datetime.utcnow.return_value = a_thursday
 
@@ -121,7 +117,7 @@ def test_stats_description_accurate_during_payday_run(mock_datetime):
 @patch('datetime.datetime')
 def test_stats_description_accurate_outside_of_payday(mock_datetime):
     """Test stats page outside of the payday running"""
-    with testing.load() as context:
+    with load() as context:
         a_monday = datetime(2012, 8, 6, 12, 00, 01)
         mock_datetime.utcnow.return_value = a_monday
 

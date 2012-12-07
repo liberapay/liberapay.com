@@ -1,4 +1,4 @@
-from gittip.testing import serve_request, load, setup_tips
+from gittip.testing import serve_request, tip_graph
 
 
 def test_homepage():
@@ -7,13 +7,13 @@ def test_homepage():
     assert expected in actual, actual
 
 def test_profile():
-    with load(*setup_tips(("cheese", "puffs", 0))):
+    with tip_graph(("cheese", "puffs", 0)):
         expected = "I&rsquo;m grateful for tips"
         actual = serve_request('/cheese/').body
         assert expected in actual, actual
 
 def test_widget():
-    with load(*setup_tips(("cheese", "puffs", 0))):
+    with tip_graph(("cheese", "puffs", 0)):
         expected = "javascript: window.open"
         actual = serve_request('/cheese/widget.html').body
         assert expected in actual, actual

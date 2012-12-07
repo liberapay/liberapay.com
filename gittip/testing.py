@@ -363,6 +363,10 @@ def setup_tips(*recs):
     return ["participants"] + participants + ["tips"] + tips
 
 
+def tip_graph(*a, **kw):
+    return load(*setup_tips(*a, **kw))
+
+
 # Helpers for testing simplates.
 # ==============================
 
