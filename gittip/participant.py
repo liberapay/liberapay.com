@@ -44,21 +44,21 @@ class Participant(object):
 
 
     @require_id
-    def get_social_network_accounts(self):
-        """Return a two-tuple of social_network_account dicts.
+    def get_accounts_elsewhere(self):
+        """Return a two-tuple of elsewhere dicts.
         """
         ACCOUNTS = """
-            SELECT * FROM social_network_users WHERE participant_id=%s;
+            SELECT * FROM elsewhere WHERE participant_id=%s;
         """
         accounts = gittip.db.fetchall(ACCOUNTS, (self.id,))
         assert accounts is not None
         twitter_account = None
         github_account = None
         for account in accounts:
-            if account['network'] == 'github':
+            if account['platform'] == 'github':
                 github_account = account
             else:
-                assert account['network'] == 'twitter'
+                assert account['platform'] == 'twitter'
                 twitter_account = account
         return (github_account, twitter_account)
 

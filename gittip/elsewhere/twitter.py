@@ -15,8 +15,8 @@ def resolve(user_id):
     FETCH = """\
 
         SELECT participant_id
-          FROM social_network_users
-         WHERE network='twitter'
+          FROM elsewhere
+         WHERE platform='twitter'
            AND user_info -> 'user_id' = %s
 
     """ # XXX Uniqueness constraint on screen_name?

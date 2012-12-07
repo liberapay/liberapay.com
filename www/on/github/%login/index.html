@@ -14,8 +14,8 @@ from gittip.participant import Participant
 # Try to load from GitHub.
 # ========================
 
-rec = db.fetchone( "SELECT user_info FROM social_network_users "
-                   "WHERE network='github' AND user_info->'login' = %s"
+rec = db.fetchone( "SELECT user_info FROM elsewhere "
+                   "WHERE platform='github' AND user_info->'login' = %s"
                  , (path['login'],)
                   )
 if rec is not None:
@@ -64,12 +64,12 @@ elif usertype == "organization":
     logins = [member['login'] for member in members]
     ON_GITTIP = """\
 
-        SELECT snu.user_info -> 'login' AS login
-          FROM social_network_users snu
+        SELECT elsewhere.user_info -> 'login' AS login
+          FROM elsewhere
           JOIN participants p
-            ON p.id = snu.participant_id
-         WHERE snu.network='github'
-           AND snu.user_info -> 'login' = any(%s)
+            ON p.id = elsewhere.participant_id
+         WHERE elsewhere.platform = 'github'
+           AND elsewhere.user_info -> 'login' = any(%s)
            AND p.claimed_time IS NOT NULL
 
     """

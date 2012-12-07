@@ -1,13 +1,4 @@
 """Show information about a single participant.
-
-There is an implicit participant for every account on the social networks. When
-someone claims a social network account on Gittip, the underlying participant
-is upgraded to an explicit participant. Participant accounts can be folded into
-other participant accounts. All of the social network profiles associated with
-the old participant are re-associated with the new participant, and the old
-participant is pruned. All the money attached to the old social network
-profiles is rolled over to the new participant.
-
 """
 import locale
 
@@ -46,9 +37,9 @@ if deets is None:
 
 elif deets['claimed_time'] is None:
 
-    # This is a stub participant record for someone on a social network who
-    # hasn't actually registered yet. Let's bounce the viewer over to the
-    # appropriate social network page.
+    # This is a stub participant record for someone on another platform who
+    # hasn't actually registered with Gittip yet. Let's bounce the viewer over
+    # to the appropriate platform page.
 
     to = resolve_unclaimed(participant.id)
     if to is None:
@@ -79,8 +70,8 @@ if not user.ANON:
 can_tip = True
 tip_or_pledge = "tip"
 title = participant.id      # used in <title>
-username = participant.id   # used in footer shared with on/network/ pages
-github_account, twitter_account = participant.get_social_network_accounts()
+username = participant.id   # used in footer shared with on/$platform/ pages
+github_account, twitter_account = participant.get_accounts_elsewhere()
 
 # ========================================================================== ^L
 {% extends templates/participant.html %}

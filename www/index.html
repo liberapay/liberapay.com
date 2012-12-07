@@ -16,9 +16,9 @@ receivers = db.fetchall("""
                      , tippee
                   FROM tips
                   JOIN participants p ON p.id = tipper
-                  JOIN social_network_users snu ON snu.participant_id = tippee
+                  JOIN elsewhere ON elsewhere.participant_id = tippee
                  WHERE last_bill_result = ''
-                   AND snu.is_locked = false
+                   AND elsewhere.is_locked = false
                    AND is_suspicious IS NOT true
               ORDER BY tipper, tippee, mtime DESC
               ) AS foo
@@ -39,10 +39,10 @@ givers = db.fetchall("""
                      , tipper
                   FROM tips
                   JOIN participants p ON p.id = tipper
-                  JOIN social_network_users snu ON snu.participant_id = tippee
+                  JOIN elsewhere ON elsewhere.participant_id = tippee
                  WHERE last_bill_result = ''
                    AND is_suspicious IS NOT true
-                   AND snu.is_locked = false
+                   AND elsewhere.is_locked = false
               ORDER BY tipper, tippee, mtime DESC
               ) AS foo
       JOIN participants p ON p.id = tipper

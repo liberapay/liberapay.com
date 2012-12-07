@@ -15,14 +15,14 @@ def resolve_unclaimed(participant_id):
     """Given a participant_id, return an URL path.
     """
     typecheck(participant_id, unicode)
-    rec = db.fetchone("SELECT network, user_info FROM social_network_users "
+    rec = db.fetchone("SELECT platform, user_info FROM elsewhere "
                       "WHERE participant_id=%s", (participant_id,))
     if rec is None:
         out = None
-    elif rec['network'] == 'github':
+    elif rec['platform'] == 'github':
         out = '/on/github/%s/' % rec['user_info']['login']
     else:
-        assert rec['network'] == 'twitter'
+        assert rec['platform'] == 'twitter'
         out = '/on/twitter/%s/' % rec['user_info']['screen_name']
     return out
 
@@ -83,25 +83,24 @@ def get_a_participant_id():
     return participant_id.decode('US-ASCII')
 
 
-def upsert(network, user_id, username, user_info):
+def upsert(platform, user_id, username, user_info):
     """Given str, unicode, unicode, and dict, return unicode and boolean.
 
-    Network is the name of a social network that we support (ASCII blah).
-    User_id is an immutable unique identifier for the given user on the given
-    social network. Username is the user's login/user_id on the given social
-    network. It is only used here for logging. Specifically, we don't reserve
-    their username for them on Gittip if they're new here. We give them a
-    random participant_id here, and they'll have a chance to change it if/when
-    they opt in. User_id and username may or may not be the same. User_info is
-    a dictionary of profile info per the named network. All network dicts must
-    have an id key that corresponds to the primary key in the underlying table
-    in our own db.
+    Platform is the name of a platform that we support (ASCII blah). User_id is
+    an immutable unique identifier for the given user on the given platform
+    Username is the user's login/user_id on the given platform.  It is only
+    used here for logging. Specifically, we don't reserve their username for
+    them on Gittip if they're new here. We give them a random participant_id
+    here, and they'll have a chance to change it if/when they opt in. User_id
+    and username may or may not be the same. User_info is a dictionary of
+    profile info per the named platform. All platform dicts must have an id key
+    that corresponds to the primary key in the underlying table in our own db.
 
     The return value is a tuple: (participant_id [unicode], is_claimed
     [boolean], is_locked [boolean], balance [Decimal]).
 
     """
-    typecheck( network, str
+    typecheck( platform, str
              , user_id, (int, unicode)
              , username, unicode
              , user_info, dict
@@ -114,19 +113,19 @@ def upsert(network, user_id, username, user_info):
 
     INSERT = """\
 
-        INSERT INTO social_network_users
-                    (network, user_id)
+        INSERT INTO elsewhere
+                    (platform, user_id)
              VALUES (%s, %s)
 
     """
     try:
-        db.execute(INSERT, (network, user_id,))
+        db.execute(INSERT, (platform, user_id,))
     except IntegrityError:
         pass  # That login is already in our db.
 
     UPDATE = """\
 
-        UPDATE social_network_users
+        UPDATE elsewhere
            SET user_info=%s
          WHERE user_id=%s
      RETURNING participant_id
@@ -160,14 +159,14 @@ def upsert(network, user_id, username, user_info):
         new_participant = True
 
 
-    # Associate the social network user with the Gittip participant.
-    # ==============================================================
+    # Associate the elsewhere account with the Gittip participant.
+    # ============================================================
 
     ASSOCIATE = """\
 
-        UPDATE social_network_users
+        UPDATE elsewhere
            SET participant_id=%s
-         WHERE network=%s
+         WHERE platform=%s
            AND user_id=%s
            AND (  (participant_id IS NULL)
                OR (participant_id=%s)
@@ -177,9 +176,9 @@ def upsert(network, user_id, username, user_info):
     """
 
     log(u"Associating %s (%s) on %s with %s on Gittip."
-        % (username, user_id, network, participant_id))
+        % (username, user_id, platform, participant_id))
     rows = db.fetchall( ASSOCIATE
-                      , (participant_id, network, user_id, participant_id)
+                      , (participant_id, platform, user_id, participant_id)
                        )
     rows = list(rows)
     nrows = len(rows)
@@ -200,9 +199,9 @@ def upsert(network, user_id, username, user_info):
                        )
 
         rec = db.fetchone( "SELECT participant_id, is_locked "
-                           "FROM social_network_users "
-                           "WHERE network=%s AND user_id=%s"
-                         , (network, user_id)
+                           "FROM elsewhere "
+                           "WHERE platform=%s AND user_id=%s"
+                         , (platform, user_id)
                           )
         if rec is not None:
 
@@ -219,7 +218,7 @@ def upsert(network, user_id, username, user_info):
 
             raise Exception("We're bailing on associating %s user %s (%s) with"
                             " a Gittip participant."
-                            % (network, username, user_id))
+                            % (platform, username, user_id))
 
     rec = db.fetchone( "SELECT claimed_time, balance FROM participants "
                        "WHERE id=%s"

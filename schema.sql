@@ -209,3 +209,10 @@ ALTER TABLE participants ADD COLUMN payin_suspended bool NOT NULL DEFAULT FALSE;
 ALTER TABLE participants ADD COLUMN is_suspicious bool DEFAULT NULL;
 UPDATE participants SET is_suspicious=true WHERE payin_suspended;
 ALTER TABLE participants DROP COLUMN payin_suspended;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/whit537/www.gittip.com/issues/406
+
+ALTER TABLE social_network_users RENAME TO elsewhere;
+ALTER TABLE elsewhere RENAME COLUMN network TO platform;

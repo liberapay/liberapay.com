@@ -62,7 +62,7 @@ class GittipBaseDBTest(unittest.TestCase):
         # TODO: hack for now, truncate all tables.
         tables = [
             'participants',
-            'social_network_users',
+            'elsewhere',
             'tips',
             'transfers',
             'paydays',

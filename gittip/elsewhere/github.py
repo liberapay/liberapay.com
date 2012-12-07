@@ -84,8 +84,8 @@ def resolve(login):
     FETCH = """\
 
         SELECT participant_id
-          FROM social_network_users
-         WHERE network='github'
+          FROM elsewhere
+         WHERE platform = 'github'
            AND user_info -> 'login' = %s
 
     """ # XXX Uniqueness constraint on login?

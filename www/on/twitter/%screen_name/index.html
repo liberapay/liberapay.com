@@ -16,8 +16,8 @@ from gittip.elsewhere import twitter
 # Try to load from Twitter.
 # =========================
 
-rec = db.fetchone( "SELECT user_info FROM social_network_users "
-                   "WHERE network='twitter' AND user_info->'screen_name' = %s"
+rec = db.fetchone( "SELECT user_info FROM elsewhere "
+                   "WHERE platform='twitter' AND user_info->'screen_name' = %s"
                  , (path['screen_name'],)
                   )
 if rec is not None:

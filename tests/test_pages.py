@@ -28,6 +28,36 @@ def test_credit_card():
     actual = serve_request('/credit-card.html').body
     assert expected in actual, actual
 
+def test_github_associate():
+    expected = "Bad request, program!"
+    actual = serve_request('/on/github/associate').body
+    assert expected in actual, actual
+
+def test_twitter_associate():
+    expected = "Bad request, program!"
+    actual = serve_request('/on/twitter/associate').body
+    assert expected in actual, actual
+
+def test_about():
+    expected = "pretty-smart grants"
+    actual = serve_request('/about/').body
+    assert expected in actual, actual
+
+def test_about_stats():
+    expected = "have joined Gittip"
+    actual = serve_request('/about/stats.html').body
+    assert expected in actual, actual
+
+def test_about_charts():
+    expected = "growth since it launched"
+    actual = serve_request('/about/charts.html').body
+    assert expected in actual, actual
+
+def test_about_unclaimed():
+    expected = "Unclaimed"
+    actual = serve_request('/about/unclaimed.html').body
+    assert expected in actual, actual
+
 
 # These hit the network. XXX add a knob to skip these
 

@@ -1,14 +1,14 @@
 """Associate a Github account with a Gittip account.
 
 First we do the OAuth dance with Github. Once we've authenticated the user
-against Github, we record them in our social_network_users table. This table
-contains information for Github users whether or not they are explicit
-participants in the Gittip community.
+against Github, we record them in our elsewhere table. This table contains
+information for Github users whether or not they are explicit participants in
+the Gittip community.
 
 """
 from aspen import log, Response
 from gittip import db
-from gittip.networks import change_participant_id, github, set_as_claimed
+from gittip.elsewhere import change_participant_id, github, set_as_claimed
 from gittip.authentication import User
 from psycopg2 import IntegrityError
 
@@ -59,7 +59,7 @@ else:                       # lock or unlock
                                                      = github.upsert(user_info)
         assert participant_id != login, login # sanity check
 
-        db.execute( "UPDATE social_network_users "
+        db.execute( "UPDATE elsewhere "
                     "SET is_locked=%s "
                     "WHERE participant_id=%s"
                   , (action == 'lock', participant_id)

@@ -1,16 +1,16 @@
 """Associate a Twitter account with a Gittip account.
 
 First we do the OAuth dance with Twitter. Once we've authenticated the user
-against Twitter, we record them in our social_network_users table. This table
-contains information for Twitter users whether or not they are explicit
-participants in the Gittip community.
+against Twitter, we record them in our elsewhere table. This table contains
+information for Twitter users whether or not they are explicit participants in
+the Gittip community.
 
 """
 import requests
 from oauth_hook import OAuthHook
 from aspen import log, Response, json
 from gittip import db
-from gittip.networks import change_participant_id, twitter, set_as_claimed
+from gittip.elsewhere import change_participant_id, twitter, set_as_claimed
 from gittip.authentication import User
 from urlparse import parse_qs
 from psycopg2 import IntegrityError
@@ -89,7 +89,7 @@ else:                       # lock or unlock
                                                     = twitter.upsert(user_info)
         assert participant_id != screen_name, screen_name # sanity check
 
-        db.execute( "UPDATE social_network_users "
+        db.execute( "UPDATE elsewhere "
                     "SET is_locked=%s "
                     "WHERE participant_id=%s"
                   , (action == 'lock', participant_id)
