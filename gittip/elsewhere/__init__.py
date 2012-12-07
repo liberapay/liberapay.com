@@ -10,7 +10,7 @@ class RunawayTrain(Exception):
     pass
 
 
-def get_a_participant_id():
+def get_a_random_participant_id():
     """Return a random participant_id.
 
     The returned value is guaranteed to have been reserved in the database.
@@ -105,7 +105,7 @@ def upsert(platform, user_id, username, user_info):
         # This is the first time we've seen this user. Let's create a new
         # participant for them.
 
-        participant_id = get_a_participant_id()
+        participant_id = get_a_random_participant_id()
         new_participant = True
 
 
