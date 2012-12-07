@@ -8,7 +8,6 @@ from aspen.utils import to_age
 from gittip import AMOUNTS
 from gittip.participant import Participant
 from gittip.utils import wrap
-from gittip.elsewhere import resolve_unclaimed
 
 
 tip_suggestions = ('jeresig', 'antirez', 'wycats', 'fabpot', 'mitsuhiko',
@@ -41,7 +40,7 @@ elif deets['claimed_time'] is None:
     # hasn't actually registered with Gittip yet. Let's bounce the viewer over
     # to the appropriate platform page.
 
-    to = resolve_unclaimed(participant.id)
+    to = participant.resolve_unclaimed()
     if to is None:
         raise Response(404)
     request.redirect(to)

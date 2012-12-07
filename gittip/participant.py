@@ -44,6 +44,22 @@ class Participant(object):
 
 
     @require_id
+    def resolve_unclaimed(self):
+        """Given a participant_id, return an URL path.
+        """
+        rec = gittip.db.fetchone("SELECT platform, user_info FROM elsewhere "
+                                 "WHERE participant_id = %s", (self.id,))
+        if rec is None:
+            out = None
+        elif rec['platform'] == 'github':
+            out = '/on/github/%s/' % rec['user_info']['login']
+        else:
+            assert rec['platform'] == 'twitter'
+            out = '/on/twitter/%s/' % rec['user_info']['screen_name']
+        return out
+
+
+    @require_id
     def get_accounts_elsewhere(self):
         """Return a two-tuple of elsewhere dicts.
         """

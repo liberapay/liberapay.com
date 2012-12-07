@@ -11,22 +11,6 @@ class RunawayTrain(Exception):
     pass
 
 
-def resolve_unclaimed(participant_id):
-    """Given a participant_id, return an URL path.
-    """
-    typecheck(participant_id, unicode)
-    rec = db.fetchone("SELECT platform, user_info FROM elsewhere "
-                      "WHERE participant_id=%s", (participant_id,))
-    if rec is None:
-        out = None
-    elif rec['platform'] == 'github':
-        out = '/on/github/%s/' % rec['user_info']['login']
-    else:
-        assert rec['platform'] == 'twitter'
-        out = '/on/twitter/%s/' % rec['user_info']['screen_name']
-    return out
-
-
 ALLOWED_ASCII = set("0123456789"
                     "abcdefghijklmnopqrstuvwxyz"
                     "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
