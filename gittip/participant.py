@@ -6,10 +6,16 @@ import gittip
 from aspen.utils import typecheck
 
 
-def handle_None(func):
+class NoParticipantId(StandardError):
+    """Represent a bug where we treat an anonymous user as a participant.
+    """
+
+
+def require_id(func):
+    # XXX This should be done with a metaclass, maybe?
     def wrapped(self, *a, **kw):
         if self.id is None:
-            raise RuntimeError("User does not participate.")
+            raise NoParticipantId("User does not participate, apparently.")
         return func(self, *a, **kw)
     return wrapped
 
@@ -23,7 +29,7 @@ class Participant(object):
         self.id = participant_id
 
 
-    @handle_None
+    @require_id
     def get_details(self):
         """Return a dictionary.
         """
@@ -37,7 +43,7 @@ class Participant(object):
         return gittip.db.fetchone(SELECT, (self.id,))
 
 
-    @handle_None
+    @require_id
     def get_social_network_accounts(self):
         """Return a two-tuple of social_network_account dicts.
         """
@@ -57,7 +63,7 @@ class Participant(object):
         return (github_account, twitter_account)
 
 
-    @handle_None
+    @require_id
     def get_tip_to(self, tippee):
         """Given two user ids, return a Decimal.
         """
@@ -79,7 +85,7 @@ class Participant(object):
         return tip
 
 
-    @handle_None
+    @require_id
     def get_dollars_receiving(self):
         """Return a Decimal.
         """
@@ -112,7 +118,7 @@ class Participant(object):
         return amount
 
 
-    @handle_None
+    @require_id
     def get_dollars_giving(self):
         """Return a Decimal.
         """
@@ -145,7 +151,7 @@ class Participant(object):
         return amount
 
 
-    @handle_None
+    @require_id
     def get_number_of_backers(self):
         """Given a unicode, return an int.
         """
@@ -179,7 +185,7 @@ class Participant(object):
         return nbackers
 
 
-    @handle_None
+    @require_id
     def get_chart_of_receiving(self):
         SQL = """
 
@@ -225,7 +231,7 @@ class Participant(object):
         return out, npatrons, contributed
 
 
-    @handle_None
+    @require_id
     def get_giving_for_profile(self, db=None):
         """Given a participant id and a date, return a list and a Decimal.
 
@@ -279,7 +285,7 @@ class Participant(object):
         return tips, total
 
 
-    @handle_None
+    @require_id
     def get_tips_and_total(self, for_payday=False, db=None):
         """Given a participant id and a date, return a list and a Decimal.
 

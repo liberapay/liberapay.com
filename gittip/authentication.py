@@ -1,3 +1,5 @@
+"""Defines website authentication helpers.
+"""
 import datetime
 import rfc822
 import time
@@ -14,13 +16,19 @@ TIMEOUT = 60 * 60 * 24 * 7 # one week
 
 
 class User(Participant):
+    """Represent a website user.
+
+    Every current website user is also a participant, though if the user is
+    anonymous then the methods from Participant will fail with NoParticipantId.
+
+    """
 
     def __init__(self, session):
         """Takes a dict of user info.
         """
         typecheck(session, (RealDictRow, dict))
         self.session = session
-        Participant.__init__(self, session.get('id'))
+        Participant.__init__(self, session.get('id'))  # sets self.id
 
     @classmethod
     def from_session_token(cls, token):
@@ -65,7 +73,7 @@ class User(Participant):
 
     @property
     def ANON(self):
-        return 'id' not in self.session
+        return self.id is None
 
     @property
     def PAID(self):
