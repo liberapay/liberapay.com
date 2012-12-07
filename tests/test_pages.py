@@ -18,8 +18,18 @@ def test_widget():
         actual = serve_request('/cheese/widget.html').body
         assert expected in actual, actual
 
+def test_bank_account():
+    expected = "add or change your bank account"
+    actual = serve_request('/bank-account.html').body
+    assert expected in actual, actual
 
-# These hit the network.
+def test_credit_card():
+    expected = "add or change your credit card"
+    actual = serve_request('/credit-card.html').body
+    assert expected in actual, actual
+
+
+# These hit the network. XXX add a knob to skip these
 
 def test_github_proxy():
     expected = "<b>lgtest</b> has not joined"
