@@ -114,6 +114,11 @@ class PostgresManager(object):
         """
         return PostgresCursorContextManager(self.pool, *a, **kw)
 
+    def get_transaction(self, *a, **kw):
+        """Return a context manager wrapping a transactional cursor.
+        """
+        return PostgresTransactionContextManager(self.pool, *a, **kw)
+
     def get_connection(self):
         """Return a context manager wrapping a connection.
         """
@@ -143,11 +148,45 @@ class PostgresConnection(psycopg2.extensions.connection):
         return psycopg2.extensions.connection.cursor(self, *a, **kw)
 
 
-class PostgresConnectionContextManager:
+class PostgresTransactionContextManager(object):
+    """Instantiated once per db.get_transaction call.
+
+    This manager gives you a cursor with autocommit turned off on its
+    connection. If the block under management raises then the connection is
+    rolled back. Otherwise it's committed. Use this when you want a series of
+    statements to be part of one transaction, but you don't need fine-grained
+    control over the transaction.
+
+    """
+
+    def __init__(self, pool, *a, **kw):
+        self.pool = pool
+        self.conn = None
+
+    def __enter__(self, *a, **kw):
+        """Get a connection from the pool.
+        """
+        self.conn = self.pool.getconn()
+        self.conn.autocommit = False
+        return self.conn.cursor(*a, **kw)
+
+    def __exit__(self, *exc_info):
+        """Put our connection back in the pool.
+        """
+        if exc_info == (None, None, None):
+            self.conn.commit()
+        else:
+            self.conn.rollback()
+        self.conn.autocommit = True
+        self.pool.putconn(self.conn)
+
+
+class PostgresConnectionContextManager(object):
     """Instantiated once per db.get_connection call.
 
     This manager turns autocommit off, and back on when you're done with it.
-    The idea is that you'd use this when you want fine-grained transaction
+    The connection is rolled back on exit, so be sure to call commit as needed.
+    The idea is that you'd use this when you want full fine-grained transaction
     control.
 
     """
@@ -163,7 +202,7 @@ class PostgresConnectionContextManager:
         self.conn.autocommit = False
         return self.conn
 
-    def __exit__(self, *a, **kw):
+    def __exit__(self, *exc_info):
         """Put our connection back in the pool.
         """
         self.conn.rollback()
@@ -171,7 +210,7 @@ class PostgresConnectionContextManager:
         self.pool.putconn(self.conn)
 
 
-class PostgresCursorContextManager:
+class PostgresCursorContextManager(object):
     """Instantiated once per cursor-level db access.
     """
 
@@ -196,7 +235,7 @@ class PostgresCursorContextManager:
             raise
         return cursor
 
-    def __exit__(self, *a, **kw):
+    def __exit__(self, *exc_info):
         """Put our connection back in the pool.
         """
         self.pool.putconn(self.conn)
