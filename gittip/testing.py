@@ -61,14 +61,14 @@ class GittipBaseDBTest(unittest.TestCase):
     def tearDown(self):
         # TODO: rollback transaction here so we don't fill up test db.
         # TODO: hack for now, truncate all tables.
-        tables = [
-            'participants',
-            'elsewhere',
-            'tips',
-            'transfers',
-            'paydays',
-            'exchanges',
-        ]
+        tables = [ 'participants'
+                 , 'elsewhere'
+                 , 'tips'
+                 , 'transfers'
+                 , 'paydays'
+                 , 'exchanges'
+                 , 'absorptions'
+                  ]
         for t in tables:
             self.db.execute('truncate table %s cascade' % t)
 

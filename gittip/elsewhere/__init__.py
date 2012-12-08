@@ -6,6 +6,10 @@ from gittip import db
 from psycopg2 import IntegrityError
 
 
+class AccountElsewhere(object):
+    pass
+
+
 class RunawayTrain(Exception):
     pass
 

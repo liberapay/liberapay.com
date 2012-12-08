@@ -216,3 +216,14 @@ ALTER TABLE participants DROP COLUMN payin_suspended;
 
 ALTER TABLE social_network_users RENAME TO elsewhere;
 ALTER TABLE elsewhere RENAME COLUMN network TO platform;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/whit537/www.gittip.com/issues/406
+
+CREATE TABLE absorptions
+( id                    serial                      PRIMARY KEY
+, timestamp             timestamp with time zone    NOT NULL DEFAULT CURRENT_TIMESTAMP
+, absorbed_by           text                        NOT NULL REFERENCES participants ON DELETE RESTRICT
+, absorbed              text                        NOT NULL REFERENCES participants ON DELETE RESTRICT
+ );

@@ -452,3 +452,126 @@ class Participant(object):
             total = Decimal('0.00')
 
         return tips, total
+
+
+
+    # Accounts Elsewhere
+    # ==================
+
+    def absorb(self, other_id):
+        """Absorb another Gittip participant account into self.
+
+        Here's what this means:
+
+            - consolidated tips to and fro are set up for the new participant
+
+                Amounts are summed, so if alice tips bob $1 and carl $1, and
+                then bob absorbs carl, then alice tips bob $2(!) and carl $0.
+
+                And if bob tips alice $1 and carl tips alice $1, and then bob
+                absorbs carl, then bob tips alice $2(!) and carl tips alice $0.
+
+                The ctime of each new consolidated tip is the older of the two
+                tips that are being consolidated.
+
+                If alice tips bob $1, and alice absorbs bob, then alice tips
+                bob $0.
+
+                If alice tips bob $1, and bob absorbs alice, then alice tips
+                bob $0.
+
+            - all tips to and from the other participant are set to zero
+            - the absorption is recorded in an absorptions table
+            - accounts elsewhere are left untouched
+
+        This is done in one transaction.
+
+        """
+        typecheck(other_id, unicode)
+
+
+        CONSOLIDATE_TIPS_RECEIVING = """
+
+            INSERT INTO tips (ctime, tipper, tippee, amount)
+
+                 SELECT min(ctime), tipper, %s AS tippee, sum(amount)
+                   FROM (   SELECT DISTINCT ON (tipper, tippee)
+                                   ctime, tipper, tippee, amount
+                              FROM tips
+                          ORDER BY tipper, tippee, mtime DESC
+                         ) AS unique_tips
+                  WHERE (tippee=%s OR tippee=%s)
+                AND NOT (tipper=%s AND tippee=%s)
+                AND NOT (tipper=%s)
+               GROUP BY tipper
+
+        """
+
+        CONSOLIDATE_TIPS_GIVING = """
+
+            INSERT INTO tips (ctime, tipper, tippee, amount)
+
+                 SELECT min(ctime), %s AS tipper, tippee, sum(amount)
+                   FROM (   SELECT DISTINCT ON (tipper, tippee)
+                                   ctime, tipper, tippee, amount
+                              FROM tips
+                          ORDER BY tipper, tippee, mtime DESC
+                         ) AS unique_tips
+                  WHERE (tipper=%s OR tipper=%s)
+                AND NOT (tipper=%s AND tippee=%s)
+                AND NOT (tippee=%s)
+               GROUP BY tippee
+
+        """
+
+        ZERO_OUT_OLD_TIPS_RECEIVING = """
+
+            INSERT INTO tips (ctime, tipper, tippee, amount)
+
+                 SELECT DISTINCT ON (tipper) ctime, tipper, tippee, 0 AS amount
+                   FROM tips
+                  WHERE tippee=%s
+
+        """
+
+        ZERO_OUT_OLD_TIPS_GIVING = """
+
+            INSERT INTO tips (ctime, tipper, tippee, amount)
+
+                 SELECT DISTINCT ON (tippee) ctime, tipper, tippee, 0 AS amount
+                   FROM tips
+                  WHERE tipper=%s
+
+        """
+
+
+        x, y = self.id, other_id
+        with gittip.db.get_transaction() as txn:
+            txn.execute(CONSOLIDATE_TIPS_RECEIVING, (x, x,y, x,y, x))
+            txn.execute(CONSOLIDATE_TIPS_GIVING, (x, x,y, x,y, x))
+            txn.execute(ZERO_OUT_OLD_TIPS_RECEIVING, (other_id,))
+            txn.execute(ZERO_OUT_OLD_TIPS_GIVING, (other_id,))
+            txn.execute( "INSERT INTO absorptions (absorbed_by, absorbed) "
+                         "VALUES (%s, %s)"
+                       , (self.id, other_id)
+                        )
+
+
+    def disconnect_account(self, elsewhere_id):
+        """
+        """
+
+
+    def connect_account(self, elsewhere_id, and_absorb=False):
+        """Given an int, raise WontAbsorb or return None.
+
+        This method connects an account on another platform (GitHub, Twitter,
+        etc.) to an existing Gittip account.
+
+        When someone connects an AccountElsewhere to a Gittip account, it's
+        possible that that AccountElsewhere is already linked to another Gittip
+        account. If that's the case, we present the user with a confirmation
+        before proceeding to absorb the one Gittip account into the other.
+
+
+        """
