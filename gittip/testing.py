@@ -187,7 +187,11 @@ class Context(object):
             updates = []
             deletes = []
 
-            for key, row in b_table.items():
+            # Be sure to sort {a,b}_table.items() so we can depend on the sort
+            # order of the inserts, updates, and deletes lists.
+            # See https://github.com/whit537/www.gittip.com/issues/413.
+
+            for key, row in sorted(b_table.items()):
                 if key not in a_table:
                     inserts.append(row)
                 else:
@@ -200,7 +204,7 @@ class Context(object):
                         update[pkey] = row[pkey] # include primary key
                         updates.append(update)
 
-            for key, row in a_table.items():
+            for key, row in sorted(a_table.items()):
                 if key not in b_table:
                     deletes.append(row)
 

@@ -23,7 +23,7 @@ def test_participants_start_out_with_is_suspicious_None():
 def test_toggling_NULL_gives_true():
     with participants() as context:
         toggle_is_suspicious()
-        actual = context.diff()['participants']['updates'][0]['is_suspicious']
+        actual = context.diff()['participants']['updates'][1]['is_suspicious']
         assert actual is True, actual
 
 def test_toggling_changes_two_things():
@@ -32,22 +32,22 @@ def test_toggling_changes_two_things():
         actual = context.diff(compact=True)
         assert actual == {'participants': [0,2,0]}, actual
 
-def test_but_the_second_thing_is_just_bars_session():
+def test_but_the_first_thing_is_just_bars_session():
     with participants() as context:
         toggle_is_suspicious()
         expected = ('bar', ['id', 'session_expires', 'session_token'])
-        second = context.diff()['participants']['updates'][1]
+        second = context.diff()['participants']['updates'][0]
         actual = (second['id'], sorted(second.keys()))
         assert actual == expected, actual
 
 def test_toggling_true_gives_false():
     with participants(True) as context:
         toggle_is_suspicious()
-        actual = context.diff()['participants']['updates'][0]['is_suspicious']
+        actual = context.diff()['participants']['updates'][1]['is_suspicious']
         assert actual is False, actual
 
 def test_toggling_false_gives_true():
     with participants(False) as context:
         toggle_is_suspicious()
-        actual = context.diff()['participants']['updates'][0]['is_suspicious']
+        actual = context.diff()['participants']['updates'][1]['is_suspicious']
         assert actual is True, actual

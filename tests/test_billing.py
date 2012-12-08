@@ -414,8 +414,8 @@ def test_payday_moves_money(charge_on_balanced):
     tips = testing.setup_tips(('buz', 'bar', '6.00', True))  # under $10!
     with testing.load(*tips) as context:
         Payday(context.db).run()
-        expected = [ {"id": "buz", "balance": Decimal('3.32')}
-                   , {"id": "bar", "balance": Decimal('6.00')}
+        expected = [ {"id": "bar", "balance": Decimal('6.00')}
+                   , {"id": "buz", "balance": Decimal('3.32')}
                     ]
         actual = context.diff()['participants']['updates']
         assert actual == expected, actual
