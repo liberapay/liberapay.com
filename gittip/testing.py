@@ -240,7 +240,8 @@ class Context(object):
         pkeys = self._get_primary_keys()
         for table_name in self._get_table_names():
             pkey = pkeys[table_name]
-            rows = self.db.fetchall("SELECT * FROM %s" % table_name)
+            rows = self.db.fetchall("SELECT * FROM %s ORDER BY %s"
+                                   % (table_name, pkey))
             if rows is None:
                 rows = []
             mapped = {}
