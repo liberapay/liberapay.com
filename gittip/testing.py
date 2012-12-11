@@ -17,6 +17,7 @@ from aspen.utils import utcnow
 from gittip import wireup
 from gittip.authentication import User
 from gittip.billing.payday import Payday
+from gittip.orm import Session
 
 
 TOP = join(realpath(dirname(__file__)), '..')
@@ -164,6 +165,7 @@ class Context(object):
         return self
 
     def __exit__(self, *a):
+        Session.rollback()
         self._delete_data()
 
     def diff(self, compact=False):
