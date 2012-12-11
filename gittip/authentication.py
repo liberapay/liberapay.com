@@ -30,7 +30,8 @@ class User(Participant):
         """
         typecheck(session, (RealDictRow, RowProxy, dict))
         self.session = dict(session)
-        Participant.__init__(self, self.session.get('id'))  # sets self.id
+        participant_id = self.session.get('id')
+        super(User, self).__init__(participant_id)  # sets self.id
 
     @classmethod
     def from_session_token(cls, token):
