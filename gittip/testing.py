@@ -14,7 +14,7 @@ import gittip
 from aspen import resources
 from aspen.testing import Website, StubRequest
 from aspen.utils import utcnow
-from gittip import wireup
+from gittip import orm, wireup
 from gittip.authentication import User
 from gittip.billing.payday import Payday
 
@@ -164,6 +164,7 @@ class Context(object):
         return self
 
     def __exit__(self, *a):
+        orm.rollback()
         self._delete_data()
 
     def diff(self, compact=False):
