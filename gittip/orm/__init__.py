@@ -1,12 +1,11 @@
 from __future__ import unicode_literals
 import os
 
-from sqlalchemy import create_engine, event, MetaData
-from sqlalchemy.exc import DisconnectionError
-from sqlalchemy.ext.declarative import (
-    declarative_base, _declarative_constructor)
+from sqlalchemy import create_engine, MetaData
+from sqlalchemy.ext.declarative import ( declarative_base
+                                       , _declarative_constructor
+                                        )
 from sqlalchemy.orm import sessionmaker, scoped_session
-from sqlalchemy.pool import Pool
 
 
 class Model(object):
@@ -39,9 +38,7 @@ Base.query = Session.query_property()
 metadata = MetaData()
 metadata.bind = db_engine
 
-all = [
-    Base, Session, metadata
-]
+all = [Base, Session, metadata]
 
 
 def rollback(*_):
