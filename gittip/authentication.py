@@ -7,6 +7,8 @@ import uuid
 
 from aspen import Response
 from aspen.utils import typecheck
+from sqlalchemy.engine.base import RowProxy
+from gittip.orm.tables import participants
 from gittip.participant import Participant
 from psycopg2.extras import RealDictRow
 
@@ -26,29 +28,34 @@ class User(Participant):
     def __init__(self, session):
         """Takes a dict of user info.
         """
-        typecheck(session, (RealDictRow, dict))
-        self.session = session
-        Participant.__init__(self, session.get('id'))  # sets self.id
+        typecheck(session, (RealDictRow, RowProxy, dict))
+        self.session = dict(session)
+        participant_id = self.session.get('id')
+        super(User, self).__init__(participant_id)  # sets self.id
 
     @classmethod
     def from_session_token(cls, token):
-        SESSION = ("SELECT * FROM participants "
-                   "WHERE is_suspicious IS NOT true "
-                   "AND session_token=%s")
-        session = cls.load_session(SESSION, token)
-        return cls(session)
+        user = participants.select().where(
+            participants.c.session_token == token,
+        ).where(
+            participants.c.is_suspicious.isnot(True),
+        ).execute().fetchone()
+        return cls(user)
 
     @classmethod
     def from_id(cls, participant_id):
-        from gittip import db
-        SESSION = ("SELECT * FROM participants "
-                   "WHERE is_suspicious IS NOT true "
-                   "AND id=%s")
-        session = cls.load_session(SESSION, participant_id)
+        user = participants.select().where(
+            participants.c.id == participant_id,
+        ).where(
+            participants.c.is_suspicious.isnot(True),
+        ).execute().fetchone()
+        session = dict(user)
         session['session_token'] = uuid.uuid4().hex
-        db.execute( "UPDATE participants SET session_token=%s WHERE id=%s"
-                  , (session['session_token'], participant_id)
-                   )
+        participants.update().where(
+            participants.c.id == participant_id
+        ).values(
+            session_token = session['session_token'],
+        ).execute()
         return cls(session)
 
     @staticmethod

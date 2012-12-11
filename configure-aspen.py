@@ -3,6 +3,7 @@ import os
 import gittip
 import gittip.wireup
 import gittip.authentication
+import gittip.orm
 import gittip.csrf
 
 
@@ -26,9 +27,11 @@ website.hooks.inbound_early.register(gittip.csrf.inbound)
 website.hooks.inbound_early.register(gittip.authentication.inbound)
 website.hooks.outbound_late.register(gittip.authentication.outbound)
 website.hooks.outbound_late.register(gittip.csrf.outbound)
+website.hooks.outbound_late.register(gittip.orm.rollback)
 
 
 __version__ = open(os.path.join(website.www_root, 'version.txt')).read().strip()
+
 
 def add_stuff(request):
     from gittip.elsewhere import github, twitter
