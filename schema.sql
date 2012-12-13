@@ -272,3 +272,10 @@ BEGIN;
         ON UPDATE CASCADE ON DELETE RESTRICT;
 
 END;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/whit537/www.gittip.com/issues/419
+
+ALTER TABLE paydays ADD COLUMN nach_failures bigint DEFAULT 0;
+ALTER TABLE paydays RENAME COLUMN nach_failures TO nach_failing; -- double oops
