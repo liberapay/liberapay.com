@@ -78,7 +78,8 @@ elif usertype == "organization":
     not_on_gittip = []
     for member in members:
         seq = on_gittip if member['login'] in _on_gittip else not_on_gittip
-        seq.append((member, user.get_tip_to(member['login'])))
+        tip_to = None if user.ANON else user.get_tip_to(member['login'])
+        seq.append((member, tip_to))
     can_tip = user.ANON
 else:
     can_tip = False
@@ -234,8 +235,5 @@ else:
     I don&rsquo;t recognize the &ldquo;{{ usertype }}&rdquo; type of user on GitHub.<br />
     Sorry. :-(
 
-    {% end %}
-
-    {% if user.ANON %}
     {% end %}
 {% end %}
