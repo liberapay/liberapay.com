@@ -286,3 +286,8 @@ ALTER TABLE paydays RENAME COLUMN nach_failures TO nach_failing; -- double oops
 -- https://github.com/whit537/www.gittip.com/issues/406
 
 ALTER TABLE elsewhere ALTER COLUMN participant_id SET NOT NULL;
+
+-- Every account elsewhere must have at least a stub participant account in
+-- Gittip. However, not every participant must have an account elsewhere. A
+-- participant without a connected account elsewhere will have no way to login
+-- to Gittip. It will be considered "archived."
