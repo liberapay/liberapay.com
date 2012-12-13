@@ -1,10 +1,12 @@
 """Defines a Participant class.
 """
-from aspen import Response
+import random
 from decimal import Decimal
 
 import gittip
+from aspen import Response
 from aspen.utils import typecheck
+from psycopg2 import IntegrityError
 
 
 ASCII_ALLOWED_IN_PARTICIPANT_ID = set("0123456789"
@@ -13,9 +15,68 @@ ASCII_ALLOWED_IN_PARTICIPANT_ID = set("0123456789"
                                       ".,-_;:@ ")
 
 
-class NoParticipantId(StandardError):
+class NoParticipantId(Exception):
     """Represent a bug where we treat an anonymous user as a participant.
     """
+
+
+class NeedConfirmation(Exception):
+    """We need confirmation before we'll proceed.
+    """
+
+    def __init__(self, a, b, c):
+        self.other_is_a_real_participant = a
+        self.this_is_others_last_account_elsewhere = b
+        self.we_already_have_that_kind_of_account = c
+        self._all = (a, b, c)
+
+    def __repr__(self):
+        return "<NeedConfirmation: %r %r %r>" % self._all
+    __str__ = __repr__
+
+    def __eq__(self, other):
+        return self._all == other._all
+
+    def __ne__(self, other):
+        return self._all != other._all
+
+    def __nonzero__(self):
+        # For bool(need_confirmation)
+        A, B, C = self._all
+        return A or C
+
+
+def gen_random_participant_ids():
+    """Yield up to 100 random participant_ids.
+    """
+    seatbelt = 0
+    while 1:
+        yield hex(int(random.random() * 16**12))[2:].zfill(12).decode('ASCII')
+        seatbelt += 1
+        if seatbelt > 100:
+            raise StopIteration
+
+
+def reserve_a_random_participant_id(db=None):
+    """Reserve and a random participant_id.
+
+    The returned value is guaranteed to have been reserved in the database.
+
+    """
+    if db is None:  # During take_over we want to use our own transaction.
+        db = gittip.db
+
+    for participant_id in gen_random_participant_ids():
+        try:
+            db.execute( "INSERT INTO participants (id) VALUES (%s)"
+                      , (participant_id,)
+                       )
+        except IntegrityError:  # Collision, try again with another value.
+            pass
+        else:
+            break
+
+    return participant_id
 
 
 def require_id(func):
@@ -458,10 +519,24 @@ class Participant(object):
     # Accounts Elsewhere
     # ==================
 
-    def absorb(self, other_id):
-        """Absorb another Gittip participant account into self.
+    @require_id
+    def take_over(self, platform, user_id, have_confirmation=False):
+        """Given two unicodes, raise WontProceed or return None.
 
-        Here's what this means:
+        This method associates an account on another platform (GitHub, Twitter,
+        etc.) with the Gittip participant represented by self. Every account
+        elsewhere has an associated Gittip participant account, if only a stub
+        (it allows us to track pledges to that account should they ever decide
+        to join Gittip).
+
+        When someone XXX If that's the case, we want to present the user with a
+        confirmation before proceeding to reconnect the AccountElsewhere to the
+        new Gittip account; WontProceed is the signal to request confirmation.
+        If it was the last AccountElsewhere connected to the old Gittip
+        account, then we absorb the old Gittip account into the new one,
+        effectively archiving the old account.
+
+        Here's what absorbing means:
 
             - consolidated tips to and fro are set up for the new participant
 
@@ -481,14 +556,13 @@ class Participant(object):
                 bob $0.
 
             - all tips to and from the other participant are set to zero
+            - the absorbed participant_id is released for reuse
             - the absorption is recorded in an absorptions table
-            - accounts elsewhere are left untouched
 
         This is done in one transaction.
 
         """
-        typecheck(other_id, unicode)
-
+        typecheck(platform, unicode, user_id, unicode, have_confirmation, bool)
 
         CONSOLIDATE_TIPS_RECEIVING = """
 
@@ -544,34 +618,152 @@ class Participant(object):
 
         """
 
-
-        x, y = self.id, other_id
         with gittip.db.get_transaction() as txn:
-            txn.execute(CONSOLIDATE_TIPS_RECEIVING, (x, x,y, x,y, x))
-            txn.execute(CONSOLIDATE_TIPS_GIVING, (x, x,y, x,y, x))
-            txn.execute(ZERO_OUT_OLD_TIPS_RECEIVING, (other_id,))
-            txn.execute(ZERO_OUT_OLD_TIPS_GIVING, (other_id,))
-            txn.execute( "INSERT INTO absorptions (absorbed_by, absorbed) "
-                         "VALUES (%s, %s)"
-                       , (self.id, other_id)
+
+            # Load the existing connection.
+            # =============================
+            # Every account elsewhere has at least a stub participant account
+            # on Gittip.
+
+            txn.execute("""
+
+                SELECT participant_id
+                     , claimed_time IS NULL AS is_stub
+                  FROM elsewhere
+                  JOIN participants ON participant_id=participants.id
+                 WHERE elsewhere.platform=%s AND elsewhere.user_id=%s
+
+            """, (platform, user_id))
+            rec = txn.fetchone()
+            assert rec is not None          # sanity check
+
+            other_id = rec['participant_id']
+
+
+            # Make sure we have user confirmation if needed.
+            # ==============================================
+            # We need confirmation in whatever combination of the following
+            # three cases:
+            #
+            #   - the other participant is not a stub; we are taking the
+            #       account elsewhere away from another viable Gittip
+            #       participant
+            #
+            #   - the other participant has no other accounts elsewhere; taking
+            #       away the account elsewhere will leave the other Gittip
+            #       participant without any means of logging in, and it will be
+            #       archived and its tips absorbed by us
+            #
+            #   - we already have an account elsewhere connected from the given
+            #       platform, and it will be handed off to a new stub
+            #       participant
+
+            # other_is_a_real_participant
+            other_is_a_real_participant = not rec['is_stub']
+
+            # this_is_others_last_account_elsewhere
+            txn.execute( "SELECT count(*) AS nelsewhere FROM elsewhere "
+                         "WHERE participant_id=%s"
+                       , (other_id,)
+                        )
+            nelsewhere = txn.fetchone()['nelsewhere']
+            assert nelsewhere > 0           # sanity check
+            this_is_others_last_account_elsewhere = nelsewhere == 1
+
+            # we_already_have_that_kind_of_account
+            txn.execute( "SELECT count(*) AS nparticipants FROM elsewhere "
+                         "WHERE participant_id=%s AND platform=%s"
+                       , (self.id, platform)
+                        )
+            nparticipants = txn.fetchone()['nparticipants']
+            assert nparticipants in (0, 1)  # sanity check
+            we_already_have_that_kind_of_account = nparticipants == 1
+
+            need_confirmation = NeedConfirmation( other_is_a_real_participant
+                                                , this_is_others_last_account_elsewhere
+                                                , we_already_have_that_kind_of_account
+                                                 )
+            if need_confirmation and not have_confirmation:
+                raise need_confirmation
+
+
+            # We have user confirmation. Proceed.
+            # ===================================
+            # There is a race condition here. The last person to call this will
+            # win. XXX: I'm not sure what will happen to the DB and UI for the
+            # loser.
+
+
+            # Move any old account out of the way.
+            # ====================================
+
+            if we_already_have_that_kind_of_account:
+                new_stub_id = reserve_a_random_participant_id(txn)
+                txn.execute( "UPDATE elsewhere SET participant_id=%s "
+                             "WHERE platform=%s AND participant_id=%s"
+                           , (new_stub_id, platform, self.id)
+                            )
+
+
+            # Do the deal.
+            # ============
+            # If other_is_not_a_stub, then other will have the account
+            # elsewhere taken away from them with this call.
+
+            txn.execute( "UPDATE elsewhere SET participant_id=%s "
+                         "WHERE platform=%s AND user_id=%s"
+                       , (self.id, platform, user_id)
                         )
 
 
+            # Fold the old participant into the new as appropriate.
+            # =====================================================
+            # We want to do this whether or not other is a stub participant.
+
+            if this_is_others_last_account_elsewhere:
+
+                # Take over tips.
+                # ===============
+
+                x, y = self.id, other_id
+                txn.execute(CONSOLIDATE_TIPS_RECEIVING, (x, x,y, x,y, x))
+                txn.execute(CONSOLIDATE_TIPS_GIVING, (x, x,y, x,y, x))
+                txn.execute(ZERO_OUT_OLD_TIPS_RECEIVING, (other_id,))
+                txn.execute(ZERO_OUT_OLD_TIPS_GIVING, (other_id,))
+
+
+                # Archive the old participant.
+                # ============================
+                # We always give them a new, random participant_id.
+
+                for archive_id in gen_random_participant_ids():
+                    try:
+                        txn.execute("UPDATE participants "
+                                    "SET id=%s WHERE id=%s "
+                                    "RETURNING id", (archive_id, other_id))
+                        rec = txn.fetchone()
+                    except IntegrityError:
+                        continue  # archive_id is already taken; extremely
+                                  # unlikely, but ...
+                                  # XXX But can the UPDATE fail in other ways?
+                    else:
+                        assert rec is not None  # sanity checks
+                        assert rec['id'] == archive_id
+                        break
+
+
+                # Record the absorption.
+                # ======================
+                # This is for preservation of history.
+
+                txn.execute( "INSERT INTO absorptions "
+                             "(absorbed_was, absorbed_by, archived_as) "
+                             "VALUES (%s, %s, %s)"
+                           , (other_id, self.id, archive_id)
+                            )
+
+
+    @require_id
     def disconnect_account(self, elsewhere_id):
         """
-        """
-
-
-    def connect_account(self, elsewhere_id, and_absorb=False):
-        """Given an int, raise WontAbsorb or return None.
-
-        This method connects an account on another platform (GitHub, Twitter,
-        etc.) to an existing Gittip account.
-
-        When someone connects an AccountElsewhere to a Gittip account, it's
-        possible that that AccountElsewhere is already linked to another Gittip
-        account. If that's the case, we present the user with a confirmation
-        before proceeding to absorb the one Gittip account into the other.
-
-
         """

@@ -1,40 +1,12 @@
-import random
-
 from aspen import log
 from aspen.utils import typecheck
 from gittip import db
+from gittip.participant import reserve_a_random_participant_id
 from psycopg2 import IntegrityError
 
 
 class AccountElsewhere(object):
     pass
-
-
-class RunawayTrain(Exception):
-    pass
-
-
-def get_a_random_participant_id():
-    """Return a random participant_id.
-
-    The returned value is guaranteed to have been reserved in the database.
-
-    """
-    seatbelt = 0
-    while 1:
-        participant_id = hex(int(random.random() * 16**12))[2:].zfill(12)
-        try:
-            db.execute( "INSERT INTO participants (id) VALUES (%s)"
-                      , (participant_id,)
-                       )
-        except IntegrityError:  # Collision, try again with another value.
-            seatbelt += 1
-            if seatbelt > 100:
-                raise RunawayTrain
-        else:
-            break
-
-    return participant_id.decode('US-ASCII')
 
 
 def upsert(platform, user_id, username, user_info):
@@ -109,7 +81,7 @@ def upsert(platform, user_id, username, user_info):
         # This is the first time we've seen this user. Let's create a new
         # participant for them.
 
-        participant_id = get_a_random_participant_id()
+        participant_id = reserve_a_random_participant_id()
         new_participant = True
 
 

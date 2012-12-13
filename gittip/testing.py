@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 import datetime
 import copy
 import os
+import random
 import re
 import unittest
 from decimal import Decimal
@@ -37,8 +38,11 @@ GITHUB_USERS = [ ("1775515", "lgtest")
 def populate_db_with_dummy_data(db):
     from gittip.elsewhere import github
     from gittip.participant import Participant
-    for user_id, login in  GITHUB_USERS:
+    for user_id, login in GITHUB_USERS:
+        print
+        print user_id, login
         participant_id, a,b,c = github.upsert({"id": user_id, "login": login})
+        print "changing id"
         Participant(participant_id).change_id(login)
 
 
@@ -308,24 +312,31 @@ def start_payday(*data):
 def setup_tips(*recs):
     """Setup some participants and tips. recs is a list of:
 
-        ("tipper", "tippee", '2.00', True, False, True)
+        ("tipper", "tippee", '2.00', True, False, True, "GitHub", "12345")
                                        ^     ^      ^
                                        |     |      |
                                        |     |      -- claimed?
                                        |     -- is_suspicious?
                                        |-- good cc?
 
+    tipper must be a unicode
+    tippee can be None or unicode
+    amount can be None or unicode
     good_cc can be True, False, or None
     is_suspicious can be True, False, or None
     claimed can be True or False
+    platform can be unicode
+    user_id can be unicode
 
     """
     tips = []
 
     _participants = {}
+    randid = lambda: unicode(random.randint(1, 1000000))
 
     for rec in recs:
-        defaults = good_cc, is_suspicious, claimed = (True, False, True)
+        good_cc, is_suspicious, claimed, platform, user_id = \
+                                        (True, False, True, "GitHub", randid())
 
         if len(rec) == 3:
             tipper, tippee, amount = rec
@@ -337,14 +348,25 @@ def setup_tips(*recs):
             claimed = True
         elif len(rec) == 6:
             tipper, tippee, amount, good_cc, is_suspicious, claimed = rec
+        elif len(rec) == 7:
+            tipper, tippee, amount, good_cc, is_suspicious, claimed, platform \
+                                                                          = rec
+        elif len(rec) == 8:
+            tipper, tippee, amount, good_cc, is_suspicious, claimed, \
+                                                        platform, user_id = rec
+        else:
+            raise Exception(rec)
 
         assert good_cc in (True, False, None), good_cc
         assert is_suspicious in (True, False, None), is_suspicious
-        assert claimed in (True, False), claimed
+        _participants[tipper] = \
+                              (good_cc, is_suspicious, True, platform, user_id)
 
-        _participants[tipper] = (good_cc, is_suspicious, claimed)
+        if tippee is None:
+            continue
+        assert claimed in (True, False), claimed  # refers to tippee
         if tippee not in _participants:
-            _participants[tippee] = defaults
+            _participants[tippee] = (None, False, claimed, "GitHub", randid())
         now = utcnow()
         tips.append({ "ctime": now
                     , "mtime": now
@@ -356,7 +378,14 @@ def setup_tips(*recs):
     then = utcnow() - datetime.timedelta(seconds=3600)
 
     participants = []
-    for participant_id, (good_cc, is_suspicious, claimed) in _participants.items():
+    elsewhere = []
+    for participant_id, crap in _participants.items():
+        (good_cc, is_suspicious, claimed, platform, user_id) = crap
+        elsewhere.append({ "platform": platform
+                         , "user_id": user_id
+                         , "participant_id": participant_id
+                         , "user_info": {}
+                          })
         rec = {"id": participant_id}
         if good_cc is not None:
             rec["last_bill_result"] = "" if good_cc else "Failure!"
@@ -366,11 +395,26 @@ def setup_tips(*recs):
             rec["claimed_time"] = then
         participants.append(rec)
 
-    return ["participants"] + participants + ["tips"] + tips
+    return ["participants"] + participants \
+         + ["tips"] + tips \
+         + ["elsewhere"] + elsewhere
 
 
 def tip_graph(*a, **kw):
-    return load(*setup_tips(*a, **kw))
+    context = load(*setup_tips(*a, **kw))
+
+    def resolve_elsewhere(participant_id):
+        recs = context.db.fetchall( "SELECT platform, user_id FROM elsewhere "
+                                    "WHERE participant_id=%s"
+                                  , (participant_id,)
+                                   )
+        if recs is not None:
+            recs = [(rec['platform'], rec['user_id']) for rec in recs]
+        return recs
+
+    context.resolve_elsewhere = resolve_elsewhere  # Wheeee! :D
+
+    return context
 
 
 # Helpers for testing simplates.
