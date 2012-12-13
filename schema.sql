@@ -291,3 +291,12 @@ ALTER TABLE elsewhere ALTER COLUMN participant_id SET NOT NULL;
 -- Gittip. However, not every participant must have an account elsewhere. A
 -- participant without a connected account elsewhere will have no way to login
 -- to Gittip. It will be considered "archived."
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/whit537/www.gittip.com/issues/406
+
+-- Gittip participants can only connect one account per platform at a time.
+
+ALTER TABLE elsewhere ADD CONSTRAINT "elsewhere_platform_participant_id_key"
+    UNIQUE (platform, participant_id);
