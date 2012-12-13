@@ -279,3 +279,10 @@ END;
 
 ALTER TABLE paydays ADD COLUMN nach_failures bigint DEFAULT 0;
 ALTER TABLE paydays RENAME COLUMN nach_failures TO nach_failing; -- double oops
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/whit537/www.gittip.com/issues/35
+-- https://github.com/whit537/www.gittip.com/issues/406
+
+ALTER TABLE elsewhere ALTER COLUMN participant_id SET NOT NULL;
