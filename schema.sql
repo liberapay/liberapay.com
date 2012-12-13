@@ -227,3 +227,48 @@ CREATE TABLE absorptions
 , absorbed_by           text                        NOT NULL REFERENCES participants ON DELETE RESTRICT
 , absorbed              text                        NOT NULL REFERENCES participants ON DELETE RESTRICT
  );
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/whit537/www.gittip.com/issues/406
+
+-- Decided to change this. Easier to drop and recreate at this point.
+DROP TABLE absorptions;
+CREATE TABLE absorptions
+( id                    serial                      PRIMARY KEY
+, timestamp             timestamp with time zone    NOT NULL
+    DEFAULT CURRENT_TIMESTAMP
+
+, absorbed_was          text                        NOT NULL
+    -- Not a foreign key!
+
+, absorbed_by           text                        NOT NULL
+    REFERENCES participants ON DELETE RESTRICT ON UPDATE CASCADE
+
+, archived_as           text                        NOT NULL
+    REFERENCES participants ON DELETE RESTRICT ON UPDATE RESTRICT
+    -- For absorbed we actually want ON UPDATE RESTRICT as a sanity check:
+    -- noone should be changing participant_ids of absorbed accounts.
+ );
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/whit537/www.gittip.com/issues/406
+
+-- Let's clean up the naming of the constraints on the elsewhere table.
+BEGIN;
+
+    ALTER TABLE elsewhere DROP CONSTRAINT "social_network_users_pkey";
+    ALTER TABLE elsewhere ADD CONSTRAINT "elsewhere_pkey"
+        PRIMARY KEY (id);
+
+    ALTER TABLE elsewhere DROP constraint "social_network_users_network_user_id_key";
+    ALTER TABLE elsewhere ADD constraint "elsewhere_platform_user_id_key"
+        UNIQUE (platform, user_id);
+
+    ALTER TABLE elsewhere DROP constraint "social_network_users_participant_id_fkey";
+    ALTER TABLE elsewhere ADD constraint "elsewhere_participant_id_fkey"
+        FOREIGN KEY (participant_id) REFERENCES participants(id)
+        ON UPDATE CASCADE ON DELETE RESTRICT;
+
+END;
