@@ -39,10 +39,7 @@ def populate_db_with_dummy_data(db):
     from gittip.elsewhere import github
     from gittip.participant import Participant
     for user_id, login in GITHUB_USERS:
-        print
-        print user_id, login
         participant_id, a,b,c = github.upsert({"id": user_id, "login": login})
-        print "changing id"
         Participant(participant_id).change_id(login)
 
 
