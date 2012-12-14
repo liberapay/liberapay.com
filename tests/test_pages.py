@@ -1,4 +1,4 @@
-from gittip.testing import serve_request, tip_graph
+from gittip.testing import serve_request, tip_graph, load
 
 
 def test_homepage():
@@ -62,11 +62,13 @@ def test_about_unclaimed():
 # These hit the network. XXX add a knob to skip these
 
 def test_github_proxy():
-    expected = "<b>lgtest</b> has not joined"
-    actual = serve_request('/on/github/lgtest/').body
-    assert expected in actual, actual
+    with load():
+        expected = "<b>lgtest</b> has not joined"
+        actual = serve_request('/on/github/lgtest/').body
+        assert expected in actual, actual
 
 def test_twitter_proxy():
-    expected = "<b>Twitter</b> has not joined"
-    actual = serve_request('/on/twitter/twitter/').body
-    assert expected in actual, actual
+    with load():
+        expected = "<b>Twitter</b> has not joined"
+        actual = serve_request('/on/twitter/twitter/').body
+        assert expected in actual, actual
