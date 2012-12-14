@@ -298,9 +298,10 @@ def test_store_error_stores_ach_error():
 STRIPE_CUSTOMER_ID = 'cus_deadbeef'
 
 def get_numbers(context):
-    """Return a list of 8 ints:
+    """Return a list of 9 ints:
 
         nachs
+        nach_failing
         ncc_failing
         ncc_missing
         ncharges
@@ -327,7 +328,7 @@ def test_charge_without_cc_marked_as_failure():
         participant = context.db.fetchone("SELECT * FROM participants")
         context.payday.charge(participant, Decimal('1.00'))
         actual = get_numbers(context)
-        assert actual == [0, 0, 1, 0, 0, 0, 0, 0], actual
+        assert actual == [0, 0, 0, 1, 0, 0, 0, 0, 0], actual
 
 @mock.patch('gittip.billing.payday.Payday.charge_on_balanced')
 def test_charge_failure_returns_None(cob):
