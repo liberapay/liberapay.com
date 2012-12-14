@@ -16,6 +16,10 @@ def test_need_confirmation6(): assert     NeedConfirmation(True, False, True)
 def test_need_confirmation7(): assert     NeedConfirmation(True, True, False)
 def test_need_confirmation8(): assert     NeedConfirmation(True, True, True)
 
+def test_morse_confirmation():
+    actual = NeedConfirmation(False, True, False)
+    assert actual == '.-.', actual
+
 
 def test_participant_can_be_instantiated():
     expected = Participant
