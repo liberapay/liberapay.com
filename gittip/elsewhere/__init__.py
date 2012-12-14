@@ -34,30 +34,36 @@ def upsert(platform, user_id, username, user_info):
     user_id = unicode(user_id)
 
 
-    # Create a new participant.
-    # =========================
-
-    participant_id = reserve_a_random_participant_id()
-
-
-    # Upsert the account elsewhere.
+    # Insert the account if needed.
     # =============================
+    # Do this with a transaction so that if the insert fails, the
+    # participant we reserved for them is rolled back as well.
 
-    INSERT = """\
-
-        INSERT INTO elsewhere
-                    (platform, user_id, participant_id)
-             VALUES (%s, %s, %s)
-
-    """
     try:
-        db.execute(INSERT, (platform, user_id, participant_id))
+        with db.get_transaction() as txn:
+            participant_id = reserve_a_random_participant_id(txn)
+            INSERT = """\
+
+                INSERT INTO elsewhere
+                            (platform, user_id, participant_id)
+                     VALUES (%s, %s, %s)
+
+            """
+            txn.execute(INSERT, (platform, user_id, participant_id))
     except IntegrityError:
+        pass
 
-        # That account elsewhere is already in our db. Back out the stub
-        # participant we just created.
 
-        db.execute("DELETE FROM participants WHERE id=%s", (participant_id,))
+    # Update their user_info.
+    # =======================
+    # Cast everything to unicode, because (I believe) hstore can take any type
+    # of value, but psycopg2 can't.
+    #
+    #   https://postgres.heroku.com/blog/past/2012/3/14/introducing_keyvalue_data_storage_in_heroku_postgres/
+    #   http://initd.org/psycopg/docs/extras.html#hstore-data-type
+
+    for k, v in user_info.items():
+        user_info[k] = unicode(v)
 
     UPDATE = """\
 
@@ -67,12 +73,7 @@ def upsert(platform, user_id, username, user_info):
      RETURNING participant_id
 
     """
-    for k, v in user_info.items():
-        # Cast everything to unicode. I believe hstore can take any type of
-        # value, but psycopg2 can't.
-        # https://postgres.heroku.com/blog/past/2012/3/14/introducing_keyvalue_data_storage_in_heroku_postgres/
-        # http://initd.org/psycopg/docs/extras.html#hstore-data-type
-        user_info[k] = unicode(v)
+
     rec = db.fetchone(UPDATE, (user_info, platform, user_id))
     participant_id = rec['participant_id']
 
