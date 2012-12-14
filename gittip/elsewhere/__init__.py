@@ -6,6 +6,9 @@ from gittip.participant import reserve_a_random_participant_id
 from psycopg2 import IntegrityError
 
 
+ACTIONS = [u'opt-in', u'lock', u'unlock']
+
+
 def _resolve(platform, username_key, username):
     """Given three unicodes, return a participant_id.
     """

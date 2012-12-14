@@ -7,7 +7,7 @@ the Gittip community.
 
 """
 from aspen import log, Response
-from gittip.elsewhere import github
+from gittip.elsewhere import ACTIONS, github
 
 # ========================== ^L
 
@@ -17,7 +17,7 @@ user_info = github.oauth_dance(website, qs)
 # Determine what we're supposed to do.
 data = qs['data'].decode('base64').decode('UTF-8')
 action, then = data.split(',', 1)
-if action not in [u'opt-in', u'lock', u'unlock']:
+if action not in ACTIONS:
     raise Response(400)
 
 # Make sure we have a GitHub login.

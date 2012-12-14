@@ -9,7 +9,7 @@ the Gittip community.
 import requests
 from oauth_hook import OAuthHook
 from aspen import log, Response, json
-from gittip.elsewhere import twitter
+from gittip.elsewhere import ACTIONS, twitter
 from urlparse import parse_qs
 
 # ========================== ^L
@@ -45,7 +45,7 @@ assert response.status_code == 200
 
 # Load Twitter user info.
 
-if action not in [u'opt-in', u'lock', u'unlock']:
+if action not in ACTIONS:
     raise Response(400)
 
 # Make sure we have a Twitter screen_name.
