@@ -192,7 +192,7 @@ class Participant(object):
             if account['platform'] == 'github':
                 github_account = account
             else:
-                assert account['platform'] == 'twitter'
+                assert account['platform'] == 'twitter', account['platform']
                 twitter_account = account
         return (github_account, twitter_account)
 

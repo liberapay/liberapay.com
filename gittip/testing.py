@@ -312,7 +312,7 @@ def start_payday(*data):
 def setup_tips(*recs):
     """Setup some participants and tips. recs is a list of:
 
-        ("tipper", "tippee", '2.00', True, False, True, "GitHub", "12345")
+        ("tipper", "tippee", '2.00', True, False, True, "github", "12345")
                                        ^     ^      ^
                                        |     |      |
                                        |     |      -- claimed?
@@ -336,7 +336,7 @@ def setup_tips(*recs):
 
     for rec in recs:
         good_cc, is_suspicious, claimed, platform, user_id = \
-                                        (True, False, True, "GitHub", randid())
+                                        (True, False, True, "github", randid())
 
         if len(rec) == 3:
             tipper, tippee, amount = rec
@@ -366,7 +366,7 @@ def setup_tips(*recs):
             continue
         assert claimed in (True, False), claimed  # refers to tippee
         if tippee not in _participants:
-            _participants[tippee] = (None, False, claimed, "GitHub", randid())
+            _participants[tippee] = (None, False, claimed, "github", randid())
         now = utcnow()
         tips.append({ "ctime": now
                     , "mtime": now
