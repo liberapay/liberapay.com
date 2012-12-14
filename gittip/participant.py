@@ -525,15 +525,15 @@ class Participant(object):
 
         This method associates an account on another platform (GitHub, Twitter,
         etc.) with the Gittip participant represented by self. Every account
-        elsewhere has an associated Gittip participant account, if only a stub
-        (it allows us to track pledges to that account should they ever decide
-        to join Gittip).
+        elsewhere has an associated Gittip participant account, even if its
+        only a stub participant (it allows us to track pledges to that account
+        should they ever decide to join Gittip).
 
-        When someone XXX If that's the case, we want to present the user with a
-        confirmation before proceeding to reconnect the AccountElsewhere to the
-        new Gittip account; WontProceed is the signal to request confirmation.
-        If it was the last AccountElsewhere connected to the old Gittip
-        account, then we absorb the old Gittip account into the new one,
+        In certain circumstances, we want to present the user with a
+        confirmation before proceeding to reconnect the account elsewhere to
+        the new Gittip account; NeedConfirmation is the signal to request
+        confirmation. If it was the last account elsewhere connected to the old
+        Gittip account, then we absorb the old Gittip account into the new one,
         effectively archiving the old account.
 
         Here's what absorbing means:
