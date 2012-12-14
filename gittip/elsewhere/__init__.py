@@ -13,8 +13,8 @@ def upsert(platform, user_id, username, user_info):
     """Given str, unicode, unicode, and dict, return unicode and boolean.
 
     Platform is the name of a platform that we support (ASCII blah). User_id is
-    an immutable unique identifier for the given user on the given platform
-    Username is the user's login/user_id on the given platform.  It is only
+    an immutable unique identifier for the given user on the given platform.
+    Username is the user's login/username on the given platform. It is only
     used here for logging. Specifically, we don't reserve their username for
     them on Gittip if they're new here. We give them a random participant_id
     here, and they'll have a chance to change it if/when they opt in. User_id
@@ -34,26 +34,36 @@ def upsert(platform, user_id, username, user_info):
     user_id = unicode(user_id)
 
 
-    # Record the user info in our database.
-    # =====================================
+    # Create a new participant.
+    # =========================
+
+    participant_id = reserve_a_random_participant_id()
+
+
+    # Upsert the account elsewhere.
+    # =============================
 
     INSERT = """\
 
         INSERT INTO elsewhere
-                    (platform, user_id)
-             VALUES (%s, %s)
+                    (platform, user_id, participant_id)
+             VALUES (%s, %s, %s)
 
     """
     try:
-        db.execute(INSERT, (platform, user_id,))
+        db.execute(INSERT, (platform, user_id, participant_id))
     except IntegrityError:
-        pass  # That login is already in our db.
+
+        # That account elsewhere is already in our db. Back out the stub
+        # participant we just created.
+
+        db.execute("DELETE FROM participants WHERE id=%s", (participant_id,))
 
     UPDATE = """\
 
         UPDATE elsewhere
            SET user_info=%s
-         WHERE user_id=%s
+         WHERE platform=%s AND user_id=%s
      RETURNING participant_id
 
     """
@@ -63,96 +73,24 @@ def upsert(platform, user_id, username, user_info):
         # https://postgres.heroku.com/blog/past/2012/3/14/introducing_keyvalue_data_storage_in_heroku_postgres/
         # http://initd.org/psycopg/docs/extras.html#hstore-data-type
         user_info[k] = unicode(v)
-    rec = db.fetchone(UPDATE, (user_info, user_id))
+    rec = db.fetchone(UPDATE, (user_info, platform, user_id))
+    participant_id = rec['participant_id']
 
 
-    # Find a participant.
-    # ===================
+    # Get a little more info to return.
+    # =================================
 
-    if rec is not None and rec['participant_id'] is not None:
-
-        # There is already a Gittip participant associated with this account.
-
-        participant_id = rec['participant_id']
-        new_participant = False
-
-    else:
-
-        # This is the first time we've seen this user. Let's create a new
-        # participant for them.
-
-        participant_id = reserve_a_random_participant_id()
-        new_participant = True
-
-
-    # Associate the elsewhere account with the Gittip participant.
-    # ============================================================
-
-    ASSOCIATE = """\
-
-        UPDATE elsewhere
-           SET participant_id=%s
-         WHERE platform=%s
-           AND user_id=%s
-           AND (  (participant_id IS NULL)
-               OR (participant_id=%s)
-                 )
-     RETURNING participant_id, is_locked
-
-    """
-
-    log(u"Associating %s (%s) on %s with %s on Gittip."
-        % (username, user_id, platform, participant_id))
-    rows = db.fetchall( ASSOCIATE
-                      , (participant_id, platform, user_id, participant_id)
-                       )
-    rows = list(rows)
-    nrows = len(rows)
-    assert nrows in (0, 1)
-
-    if nrows == 1:
-        is_locked = rows[0]['is_locked']
-    else:
-
-        # Against all odds, the account was otherwise associated with another
-        # participant while we weren't looking. Maybe someone paid them money
-        # at *just* the right moment. If we created a new participant then back
-        # that out.
-
-        if new_participant:
-            db.execute( "DELETE FROM participants WHERE id=%s"
-                      , (participant_id,)
-                       )
-
-        rec = db.fetchone( "SELECT participant_id, is_locked "
-                           "FROM elsewhere "
-                           "WHERE platform=%s AND user_id=%s"
-                         , (platform, user_id)
-                          )
-        if rec is not None:
-
-            # Use the participant associated with this account.
-
-            participant_id = rec['participant_id']
-            is_locked = rec['is_locked']
-            assert participant_id is not None
-
-        else:
-
-            # Okay, now this is just screwy. The participant disappeared right
-            # at the last moment! Log it and fail.
-
-            raise Exception("We're bailing on associating %s user %s (%s) with"
-                            " a Gittip participant."
-                            % (platform, username, user_id))
-
-    rec = db.fetchone( "SELECT claimed_time, balance FROM participants "
-                       "WHERE id=%s"
+    rec = db.fetchone( "SELECT claimed_time, balance, is_locked "
+                       "FROM participants "
+                       "JOIN elsewhere ON participants.id = participant_id "
+                       "WHERE participants.id=%s"
                      , (participant_id,)
                       )
-    assert rec is not None
+    assert rec is not None  # sanity check
+
+
     return ( participant_id
            , rec['claimed_time'] is not None
-           , is_locked
+           , rec['is_locked']
            , rec['balance']
             )
