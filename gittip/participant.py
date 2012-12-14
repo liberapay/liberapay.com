@@ -520,7 +520,7 @@ class Participant(object):
     # ==================
 
     @require_id
-    def take_over(self, platform, user_id, have_confirmation=False):
+    def take_over(self, account_elsewhere, have_confirmation=False):
         """Given two unicodes, raise WontProceed or return None.
 
         This method associates an account on another platform (GitHub, Twitter,
@@ -562,6 +562,9 @@ class Participant(object):
         This is done in one transaction.
 
         """
+        platform = account_elsewhere.platform
+        user_id = account_elsewhere.user_id
+
         typecheck(platform, unicode, user_id, unicode, have_confirmation, bool)
 
         CONSOLIDATE_TIPS_RECEIVING = """
