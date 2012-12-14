@@ -31,6 +31,13 @@ def scenario(scenario_function):
         return two
     return one
 
+
+class StubAccount(object):
+    def __init__(self, platform, user_id):
+        self.platform = platform
+        self.user_id = user_id
+
+
 @scenario
 def scenario_1(test_func):
     """Scenarios! :D
@@ -53,7 +60,7 @@ def scenario_1(test_func):
             ]
     with tip_graph(*tips) as context:
         platform, user_id = context.resolve_elsewhere('deadbeef')[0]
-        Participant('bar').take_over(platform, user_id)
+        Participant('bar').take_over(StubAccount(platform, user_id))
 
         p = context.dump()['participants'].keys()
         context.deadbeef_archived_as = [x for x in p if len(x) > 3][0]
@@ -133,12 +140,12 @@ def test_cant_take_over_claimed_participant_without_confirmation():
     with tip_graph(("foo", "bar", 1)) as context:
         platform, user_id = context.resolve_elsewhere("bar")[0]
         func = Participant('foo').take_over
-        assert_raises(NeedConfirmation, func, platform, user_id)
+        assert_raises(NeedConfirmation, func, StubAccount(platform, user_id))
 
 def test_taking_over_yourself_sets_all_to_zero():
     with tip_graph(("foo", "bar", 1)) as context:
         platform, user_id = context.resolve_elsewhere("bar")[0]
-        Participant('foo').take_over(platform, user_id, have_confirmation=True)
+        Participant('foo').take_over(StubAccount(platform, user_id), have_confirmation=True)
 
         expected = { 'amount': Decimal('0.00')
                    , 'tipper': 'foo'
@@ -154,7 +161,7 @@ def test_alice_ends_up_tipping_bob_two_dollars():
             ]
     with tip_graph(*tips) as context:
         platform, user_id = context.resolve_elsewhere('carl')[0]
-        Participant('bob').take_over(platform, user_id, True)
+        Participant('bob').take_over(StubAccount(platform, user_id), True)
         expected = Decimal('2.00')
         actual = context.diff()['tips']['inserts'][0]['amount']
         assert actual == expected, actual
@@ -165,7 +172,7 @@ def test_bob_ends_up_tipping_alice_two_dollars():
             ]
     with tip_graph(*tips) as context:
         platform, user_id = context.resolve_elsewhere('carl')[0]
-        Participant('bob').take_over(platform, user_id, True)
+        Participant('bob').take_over(StubAccount(platform, user_id), True)
         expected = Decimal('2.00')
         actual = context.diff()['tips']['inserts'][0]['amount']
         assert actual == expected, actual
@@ -176,7 +183,7 @@ def test_ctime_comes_from_the_older_tip():
             ]
     with tip_graph(*tips) as context:
         platform, user_id = context.resolve_elsewhere('carl')[0]
-        Participant('bob').take_over(platform, user_id, True)
+        Participant('bob').take_over(StubAccount(platform, user_id), True)
 
         tips = sorted(context.dump()['tips'].items())
         first, second = tips[0][1], tips[1][1]
@@ -198,8 +205,7 @@ def test_connecting_unknown_account_fails():
     with tip_graph(*tips) as context:
         assert_raises( AssertionError
                      , Participant('bob').take_over
-                     , 'GitHub'
-                     , 'jim'
+                     , StubAccount('github', 'jim')
                       )
         actual = context.diff()
         assert actual == {}, actual

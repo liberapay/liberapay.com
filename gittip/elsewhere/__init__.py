@@ -34,9 +34,18 @@ class AccountElsewhere(object):
 
     platform = None  # set in subclass
 
-    def __init__(self, user_id):
+    def __init__(self, user_id, user_info):
+        """Takes a user_id and user_info, and updates the database.
+        """
         typecheck(user_id, (int, unicode))
         self.user_id = unicode(user_id)
+
+        a,b,c,d  = self.upsert(user_info)
+
+        self.participant_id = a
+        self.is_claimed = b
+        self.is_locked = c
+        self.balance = d
 
 
     def set_is_locked(self, is_locked):
@@ -49,16 +58,16 @@ class AccountElsewhere(object):
         """, (is_locked, self.platform, self.user_id))
 
 
-    def opt_in(self, participant_id, user_info):
+    def opt_in(self, desired_participant_id):
         """Given a desired participant_id, return a User object.
         """
         self.set_is_locked(False)
-        participant_id, is_claimed, is_locked, balance = self.upsert(user_info)
-        user = User.from_id(participant_id)  # give them a session
-        if not is_claimed:
+        user = User.from_id(self.participant_id)  # give them a session
+        if not self.is_claimed:
             user.set_as_claimed()
             try:
-                user.change_id(participant_id)
+                user.change_id(desired_participant_id)
+                user.id = self.id = desired_participant_id
             except (Response, IntegrityError):
                 pass
         return user

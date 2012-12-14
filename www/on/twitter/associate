@@ -6,11 +6,13 @@ information for Twitter users whether or not they are explicit participants in
 the Gittip community.
 
 """
+from urlparse import parse_qs
+
 import requests
 from oauth_hook import OAuthHook
 from aspen import log, Response, json
 from gittip.elsewhere import ACTIONS, twitter
-from urlparse import parse_qs
+from gittip.participant import NeedConfirmation
 
 # ========================== ^L
 
@@ -59,11 +61,10 @@ user_info['html_url'] = "https://twitter.com/" + screen_name
 # Do something.
 log(u"%s wants to %s" % (screen_name, action))
 
-account = twitter.TwitterAccount(user_info['id'])
+account = twitter.TwitterAccount(user_info['id'], user_info)
 
 if action == 'opt-in':      # opt in
-    user = account.opt_in()  # setting 'user' gives them a session
-    participant_id = user.id
+    user = account.opt_in(screen_name)  # set 'user' to give them a session :/
 else:                       # lock or unlock
     if then != screen_name:
 
@@ -78,14 +79,11 @@ else:                       # lock or unlock
         # Associate the Twitter screen_name with a randomly-named, unclaimed
         # Gittip participant.
 
-        participant_id, is_claimed, is_locked, balance \
-                                                    = account.upsert(user_info)
-        assert participant_id != screen_name, screen_name # sanity check
-
+        assert account.participant_id != screen_name, screen_name # sanity check
         account.set_is_locked(action == 'lock')
 
 if then == u'':
-    then = u'/%s/' % participant_id
+    then = u'/%s/' % account.participant_id
 if not then.startswith(u'/'):
     # Interpret it as a Twitter screen_name.
     then = u'/on/twitter/%s/' % then

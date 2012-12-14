@@ -42,18 +42,18 @@ if not name:
 
 usertype = user_info.get("type", "unknown type of account").lower()
 if usertype == "user":
-    account = github.GitHubAccount(user_info['id'])
-    participant_id, is_claimed, is_locked, balance = account.upsert(user_info)
-    can_tip = not is_locked
-    lock_action = "unlock" if is_locked else "lock"
-    if is_claimed:
-        request.redirect('/%s/' % participant_id)
+    account = github.GitHubAccount(user_info['id'], user_info)
+    can_tip = not account.is_locked
+    lock_action = "unlock" if account.is_locked else "lock"
+    if account.is_claimed:
+        request.redirect('/%s/' % account.participant_id)
+
+    participant = Participant(account.participant_id)
 
     if not user.ANON:
-        my_tip = user.get_tip_to(participant_id)
+        my_tip = user.get_tip_to(participant.id)
 
     tip_or_pledge = "pledge"
-    participant = Participant(participant_id)
     nbackers = participant.get_number_of_backers()
 
 elif usertype == "organization":
@@ -90,7 +90,7 @@ else:
 
 {% block their_voice %}
     {% if usertype == "user" %}
-      {% if is_locked %}
+      {% if account.is_locked %}
 
         <h2 class="first"><b>{{ username }}</b> has opted out of Gittip.</h2>
 

@@ -39,9 +39,8 @@ def populate_db_with_dummy_data(db):
     from gittip.elsewhere.github import GitHubAccount
     from gittip.participant import Participant
     for user_id, login in GITHUB_USERS:
-        account = GitHubAccount(user_id)
-        participant_id, a,b,c = account.upsert({"id": user_id, "login": login})
-        Participant(participant_id).change_id(login)
+        account = GitHubAccount(user_id, {"id": user_id, "login": login})
+        Participant(account.participant_id).change_id(login)
 
 
 class GittipBaseDBTest(unittest.TestCase):
