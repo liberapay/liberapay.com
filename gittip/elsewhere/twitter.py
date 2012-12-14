@@ -1,29 +1,12 @@
-from gittip import db, elsewhere
+from gittip.elsewhere import AccountElsewhere, _resolve
 
 
-def upsert(user_info):
-    return elsewhere.upsert( 'twitter'
-                           , user_info['id']
-                           , user_info['screen_name']
-                           , user_info
-                            )
+class TwitterAccount(AccountElsewhere):
+    platform = 'twitter'
 
 
-def resolve(user_id):
-    """Given str, return a participant_id.
-    """
-    FETCH = """\
-
-        SELECT participant_id
-          FROM elsewhere
-         WHERE platform='twitter'
-           AND user_info -> 'user_id' = %s
-
-    """ # XXX Uniqueness constraint on screen_name?
-    rec = db.fetchone(FETCH, (user_id,))
-    if rec is None:
-        raise Exception("Twitter user %s has no participant." % (user_id))
-    return rec['participant_id']
+def resolve(screen_name):
+    return _resolve(u'twitter', u'screen_name', screen_name)
 
 
 def oauth_url(website, action, then=""):

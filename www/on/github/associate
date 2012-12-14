@@ -7,10 +7,7 @@ the Gittip community.
 
 """
 from aspen import log, Response
-from gittip import db
-from gittip.authentication import User
 from gittip.elsewhere import github
-from psycopg2 import IntegrityError
 
 # ========================== ^L
 
@@ -32,16 +29,12 @@ if login is None:
 
 # Do something.
 log(u"%s wants to %s" % (login, action))
+
+account = github.GitHubAccount(user_info['id'])
+
 if action == 'opt-in':      # opt in
-    participant_id, is_claimed, is_locked, balance = github.upsert(user_info)
-    user = User.from_id(participant_id)  # give them a session
-    if not is_claimed:
-        user.set_as_claimed()
-        try:
-            user.change_id(login)
-            participant_id = login
-        except (Response, IntegrityError):
-            pass
+    user = account.opt_in()  # setting 'user' gives them a session
+    participant_id = user.id
 else:                       # lock or unlock
     if then != login:
 
@@ -56,14 +49,10 @@ else:                       # lock or unlock
         # participant.
 
         participant_id, is_claimed, is_locked, balance \
-                                                     = github.upsert(user_info)
+                                                    = account.upsert(user_info)
         assert participant_id != login, login # sanity check
 
-        db.execute( "UPDATE elsewhere "
-                    "SET is_locked=%s "
-                    "WHERE participant_id=%s"
-                  , (action == 'lock', participant_id)
-                   )
+        account.set_is_locked(action == 'lock')
 
 if then == u'':
     then = u'/%s/' % participant_id

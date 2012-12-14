@@ -2,15 +2,15 @@ import requests
 from aspen import json, log, Response
 from aspen.website import Website
 from aspen.utils import typecheck
-from gittip import db, elsewhere
+from gittip.elsewhere import AccountElsewhere, _resolve
 
 
-def upsert(user_info):
-    return elsewhere.upsert( 'github'
-                           , user_info['id']
-                           , user_info['login']
-                           , user_info
-                            )
+class GitHubAccount(AccountElsewhere):
+    platform = 'github'
+
+
+def resolve(login):
+    return _resolve(u'github', u'login', login)
 
 
 def oauth_url(website, action, then=u""):
@@ -76,20 +76,3 @@ def oauth_dance(website, qs):
         % (user_info['login'], user_info['id']))
 
     return user_info
-
-
-def resolve(login):
-    """Given two str, return a participant_id.
-    """
-    FETCH = """\
-
-        SELECT participant_id
-          FROM elsewhere
-         WHERE platform = 'github'
-           AND user_info -> 'login' = %s
-
-    """ # XXX Uniqueness constraint on login?
-    rec = db.fetchone(FETCH, (login,))
-    if rec is None:
-        raise Exception("GitHub user %s has no participant." % (login))
-    return rec['participant_id']

@@ -21,18 +21,18 @@ rec = db.fetchone( "SELECT user_info FROM elsewhere "
                  , (path['screen_name'],)
                   )
 if rec is not None:
-    userinfo = rec['user_info']
+    user_info = rec['user_info']
 else:
     url = "https://api.twitter.com/1/users/show.json?screen_name=%s"
-    userinfo = requests.get(url % path['screen_name'])
+    user_info = requests.get(url % path['screen_name'])
 
 
     # Keep an eye on our Twitter usage.
     # =================================
 
-    rate_limit = userinfo.headers['X-RateLimit-Limit']
-    rate_limit_remaining = userinfo.headers['X-RateLimit-Remaining']
-    rate_limit_reset = userinfo.headers['X-RateLimit-Reset']
+    rate_limit = user_info.headers['X-RateLimit-Limit']
+    rate_limit_remaining = user_info.headers['X-RateLimit-Remaining']
+    rate_limit_reset = user_info.headers['X-RateLimit-Reset']
 
     try:
         rate_limit = int(rate_limit)
@@ -50,23 +50,24 @@ else:
             )
 
 
-    if userinfo.status_code == 200:
-        userinfo = json.loads(userinfo.text)
+    if user_info.status_code == 200:
+        user_info = json.loads(user_info.text)
     else:
-        log("Twitter lookup failed with %d." % userinfo.status_code)
+        log("Twitter lookup failed with %d." % user_info.status_code)
         raise Response(404)
 
 
 # Try to load from Gittip.
 # ========================
 
-username = userinfo['screen_name']
-name = userinfo.get('name')
+username = user_info['screen_name']
+name = user_info.get('name')
 if not name:
     name = username
-userinfo['html_url'] = "https://twitter.com/%s" % username
+user_info['html_url'] = "https://twitter.com/%s" % username
 
-participant_id, is_claimed, is_locked, balance = twitter.upsert(userinfo)
+account = twitter.TwitterAccount(user_info['id'])
+participant_id, is_claimed, is_locked, balance = account.upsert(user_info)
 participant = Participant(participant_id)
 can_tip = not is_locked
 lock_action = "unlock" if is_locked else "lock"
@@ -87,7 +88,7 @@ nbackers = participant.get_number_of_backers()
 
     <h2 class="first"><b>{{ username }}</b> has opted out of Gittip.</h2>
 
-    <p>If you are <a href="{{ userinfo.get('html_url', '') }}">{{ username }}</a>
+    <p>If you are <a href="{{ user_info.get('html_url', '') }}">{{ username }}</a>
     on Twitter, you can unlock your account to allow people to
     pledge tips to you on Gittip. We never collect any money on your behalf
     until you explicitly opt in.</p>
@@ -115,11 +116,11 @@ nbackers = participant.get_number_of_backers()
                 <img src="/assets/twitter.png" />
             </td>
             <td class="account-details">
-                <a href="{{ userinfo['html_url'] }}">
+                <a href="{{ user_info['html_url'] }}">
                     <img class="avatar"
-                     src="{{ userinfo.get('profile_image_url_https', '/assets/%s/no-avatar.png' % __version__) }}" />
-                         {{ userinfo['screen_name'] }}
-                {% if userinfo.get('name') %}({{ userinfo.get('name') }}){% end %}
+                     src="{{ user_info.get('profile_image_url_https', '/assets/%s/no-avatar.png' % __version__) }}" />
+                         {{ user_info['screen_name'] }}
+                {% if user_info.get('name') %}({{ user_info.get('name') }}){% end %}
                 </a>
                 <div class="account-type">Twitter</div>
             </td>

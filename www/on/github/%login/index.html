@@ -19,15 +19,15 @@ rec = db.fetchone( "SELECT user_info FROM elsewhere "
                  , (path['login'],)
                   )
 if rec is not None:
-    userinfo = rec['user_info']
+    user_info = rec['user_info']
 else:
     url = "https://api.github.com/users/%s"
-    userinfo = requests.get(url % path['login'])
+    user_info = requests.get(url % path['login'])
 
-    if userinfo.status_code == 200:
-        userinfo = json.loads(userinfo.text)
+    if user_info.status_code == 200:
+        user_info = json.loads(user_info.text)
     else:
-        code = userinfo.status_code
+        code = user_info.status_code
         raise Response(500, "GitHub lookup failed with %d." % code)
 
 
@@ -35,14 +35,15 @@ else:
 # ==========================
 # We can only tip Users, not Organizations (or whatever else type can be).
 
-username = userinfo['login']
-name = userinfo.get('name')
+username = user_info['login']
+name = user_info.get('name')
 if not name:
     name = username
 
-usertype = userinfo.get("type", "unknown type of account").lower()
+usertype = user_info.get("type", "unknown type of account").lower()
 if usertype == "user":
-    participant_id, is_claimed, is_locked, balance = github.upsert(userinfo)
+    account = github.GitHubAccount(user_info['id'])
+    participant_id, is_claimed, is_locked, balance = account.upsert(user_info)
     can_tip = not is_locked
     lock_action = "unlock" if is_locked else "lock"
     if is_claimed:
@@ -93,7 +94,7 @@ else:
 
         <h2 class="first"><b>{{ username }}</b> has opted out of Gittip.</h2>
 
-        <p>If you are <a href="{{ userinfo.get('html_url', '') }}">{{ username }}</a>
+        <p>If you are <a href="{{ user_info.get('html_url', '') }}">{{ username }}</a>
         on GitHub, you can unlock your account to allow people to
         pledge tips to you on Gittip. We never collect any money on your behalf
         until you explicitly opt in.</p>
@@ -121,11 +122,11 @@ else:
                     <img src="/assets/octocat.png" />
                 </td>
                 <td class="account-details">
-                    <a href="{{ userinfo['html_url'] }}">
+                    <a href="{{ user_info['html_url'] }}">
                     <img class="avatar"
-                         src="{{ userinfo.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" />
-                         {{ userinfo['login'] }}
-                    {% if userinfo.get('name') %}({{ userinfo.get('name') }}){% end %}
+                         src="{{ user_info.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" />
+                         {{ user_info['login'] }}
+                    {% if user_info.get('name') %}({{ user_info.get('name') }}){% end %}
                     </a>
                     <div class="account-type">GitHub</div>
                 </td>
@@ -175,11 +176,11 @@ else:
                 <img src="/assets/octocat.png" />
             </td>
             <td class="account-details">
-                <a href="{{ userinfo['html_url'] }}">
+                <a href="{{ user_info['html_url'] }}">
                 <img class="avatar"
-                     src="{{ userinfo.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" />
-                     {{ userinfo['login'] }}
-                {% if userinfo.get('name') %}({{ userinfo.get('name') }}){% end %}
+                     src="{{ user_info.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" />
+                     {{ user_info['login'] }}
+                {% if user_info.get('name') %}({{ user_info.get('name') }}){% end %}
                 </a>
                 <div class="account-type">GitHub</div>
             </td>

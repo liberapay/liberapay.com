@@ -708,7 +708,9 @@ class Participant(object):
             # Do the deal.
             # ============
             # If other_is_not_a_stub, then other will have the account
-            # elsewhere taken away from them with this call.
+            # elsewhere taken away from them with this call. If there are other
+            # browsing sessions open from that account, they will stay open
+            # until they expire (XXX Is that okay?)
 
             txn.execute( "UPDATE elsewhere SET participant_id=%s "
                          "WHERE platform=%s AND user_id=%s"

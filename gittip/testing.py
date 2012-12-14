@@ -36,10 +36,11 @@ GITHUB_USERS = [ ("1775515", "lgtest")
                 ]
 
 def populate_db_with_dummy_data(db):
-    from gittip.elsewhere import github
+    from gittip.elsewhere.github import GitHubAccount
     from gittip.participant import Participant
     for user_id, login in GITHUB_USERS:
-        participant_id, a,b,c = github.upsert({"id": user_id, "login": login})
+        account = GitHubAccount(user_id)
+        participant_id, a,b,c = account.upsert({"id": user_id, "login": login})
         Participant(participant_id).change_id(login)
 
 
@@ -378,10 +379,13 @@ def setup_tips(*recs):
     elsewhere = []
     for participant_id, crap in _participants.items():
         (good_cc, is_suspicious, claimed, platform, user_id) = crap
+        username_key = "login" if platform == 'github' else "screen_name"
         elsewhere.append({ "platform": platform
                          , "user_id": user_id
                          , "participant_id": participant_id
-                         , "user_info": {}
+                         , "user_info": { "id": user_id
+                                        , username_key: participant_id
+                                         }
                           })
         rec = {"id": participant_id}
         if good_cc is not None:

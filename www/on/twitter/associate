@@ -9,11 +9,8 @@ the Gittip community.
 import requests
 from oauth_hook import OAuthHook
 from aspen import log, Response, json
-from gittip import db
-from gittip.authentication import User
 from gittip.elsewhere import twitter
 from urlparse import parse_qs
-from psycopg2 import IntegrityError
 
 # ========================== ^L
 
@@ -61,16 +58,12 @@ user_info['html_url'] = "https://twitter.com/" + screen_name
 
 # Do something.
 log(u"%s wants to %s" % (screen_name, action))
+
+account = twitter.TwitterAccount(user_info['id'])
+
 if action == 'opt-in':      # opt in
-    participant_id, is_claimed, is_locked, balance = twitter.upsert(user_info)
-    user = User.from_id(participant_id)  # give them a session
-    if not is_claimed:
-        user.set_as_claimed()
-        try:
-            user.change_id(screen_name)
-            participant_id = screen_name
-        except (Response, IntegrityError):
-            pass
+    user = account.opt_in()  # setting 'user' gives them a session
+    participant_id = user.id
 else:                       # lock or unlock
     if then != screen_name:
 
@@ -86,14 +79,10 @@ else:                       # lock or unlock
         # Gittip participant.
 
         participant_id, is_claimed, is_locked, balance \
-                                                    = twitter.upsert(user_info)
+                                                    = account.upsert(user_info)
         assert participant_id != screen_name, screen_name # sanity check
 
-        db.execute( "UPDATE elsewhere "
-                    "SET is_locked=%s "
-                    "WHERE participant_id=%s"
-                  , (action == 'lock', participant_id)
-                   )
+        account.set_is_locked(action == 'lock')
 
 if then == u'':
     then = u'/%s/' % participant_id
