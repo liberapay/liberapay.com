@@ -761,9 +761,3 @@ class Participant(object):
                              "VALUES (%s, %s, %s)"
                            , (other_id, self.id, archive_id)
                             )
-
-
-    @require_id
-    def disconnect_account(self, elsewhere_id):
-        """
-        """
