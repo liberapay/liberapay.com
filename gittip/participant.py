@@ -773,3 +773,16 @@ class Participant(object):
                              "VALUES (%s, %s, %s)"
                            , (other_id, self.id, archive_id)
                             )
+
+
+            # Lastly, keep account_elsewhere in sync.
+            # =======================================
+            # Bandaid for
+            #
+            #   https://github.com/whit537/www.gittip.com/issues/421
+            #
+            # XXX This is why we're porting to SQLAlchemy:
+            #
+            #   https://github.com/whit537/www.gittip.com/issues/129
+
+            account_elsewhere.participant_id = self.id
