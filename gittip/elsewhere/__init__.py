@@ -68,7 +68,7 @@ class AccountElsewhere(object):
             user.set_as_claimed()
             try:
                 user.change_id(desired_participant_id)
-                user.id = self.id = desired_participant_id
+                user.id = self.participant_id = desired_participant_id
             except (Response, IntegrityError):
                 pass
         return user
