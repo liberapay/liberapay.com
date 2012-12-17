@@ -268,7 +268,6 @@ class Participant(object):
                        FROM tips
                        JOIN participants p ON p.id = tippee
                       WHERE tipper=%s
-                        AND last_bill_result = ''
                         AND is_suspicious IS NOT true
                    ORDER BY tippee
                           , mtime DESC
