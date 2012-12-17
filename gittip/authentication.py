@@ -28,7 +28,9 @@ class User(Participant):
     def __init__(self, session):
         """Takes a dict of user info.
         """
-        typecheck(session, (RealDictRow, RowProxy, dict))
+        typecheck(session, (RealDictRow, RowProxy, dict, None))
+        if session is None:
+            session = {}
         self.session = dict(session)
         participant_id = self.session.get('id')
         super(User, self).__init__(participant_id)  # sets self.id

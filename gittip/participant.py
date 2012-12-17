@@ -738,13 +738,21 @@ class Participant(object):
 
                 # Archive the old participant.
                 # ============================
-                # We always give them a new, random participant_id.
+                # We always give them a new, random participant_id. We sign out
+                # the old participant.
 
                 for archive_id in gen_random_participant_ids():
                     try:
-                        txn.execute("UPDATE participants "
-                                    "SET id=%s WHERE id=%s "
-                                    "RETURNING id", (archive_id, other_id))
+                        txn.execute("""
+
+                            UPDATE participants
+                               SET id=%s
+                                 , session_token=NULL
+                                 , session_expires=now()
+                             WHERE id=%s
+                         RETURNING id
+
+                        """, (archive_id, other_id))
                         rec = txn.fetchone()
                     except IntegrityError:
                         continue  # archive_id is already taken; extremely
