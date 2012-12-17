@@ -1,8 +1,13 @@
+import datetime
+import gittip
+import requests
+from aspen import json, log, Response
+from aspen.utils import to_age, utc, typecheck
 from gittip.elsewhere import AccountElsewhere, _resolve
 
 
 class TwitterAccount(AccountElsewhere):
-    platform = 'twitter'
+    platform = u'twitter'
 
 
 def resolve(screen_name):
@@ -20,3 +25,51 @@ def oauth_url(website, action, then=""):
 
     """
     return "/on/twitter/redirect?action=%s&then=%s" % (action, then)
+
+
+def get_user_info(screen_name):
+    """Given a unicode, return a dict.
+    """
+    typecheck(screen_name, unicode)
+    rec = gittip.db.fetchone( "SELECT user_info FROM elsewhere "
+                              "WHERE platform='twitter' "
+                              "AND user_info->'screen_name' = %s"
+                            , (screen_name,)
+                             )
+    if rec is not None:
+        user_info = rec['user_info']
+    else:
+        url = "https://api.twitter.com/1/users/show.json?screen_name=%s"
+        user_info = requests.get(url % screen_name)
+
+
+        # Keep an eye on our Twitter usage.
+        # =================================
+
+        rate_limit = user_info.headers['X-RateLimit-Limit']
+        rate_limit_remaining = user_info.headers['X-RateLimit-Remaining']
+        rate_limit_reset = user_info.headers['X-RateLimit-Reset']
+
+        try:
+            rate_limit = int(rate_limit)
+            rate_limit_remaining = int(rate_limit_remaining)
+            rate_limit_reset = int(rate_limit_reset)
+        except (TypeError, ValueError):
+            log( "Got weird rate headers from Twitter: %s %s %s"
+               % (rate_limit, rate_limit_remaining, rate_limit_reset)
+                )
+        else:
+            reset = datetime.datetime.fromtimestamp(rate_limit_reset, tz=utc)
+            reset = to_age(reset)
+            log( "Twitter API calls used: %d / %d. Resets %s."
+               % (rate_limit - rate_limit_remaining, rate_limit, reset)
+                )
+
+
+        if user_info.status_code == 200:
+            user_info = json.loads(user_info.text)
+        else:
+            log("Twitter lookup failed with %d." % user_info.status_code)
+            raise Response(404)
+
+    return user_info

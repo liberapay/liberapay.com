@@ -6,7 +6,7 @@ from gittip.participant import reserve_a_random_participant_id
 from psycopg2 import IntegrityError
 
 
-ACTIONS = [u'opt-in', u'lock', u'unlock']
+ACTIONS = [u'opt-in', u'connect', u'lock', u'unlock']
 
 
 def _resolve(platform, username_key, username):
@@ -34,18 +34,19 @@ class AccountElsewhere(object):
 
     platform = None  # set in subclass
 
-    def __init__(self, user_id, user_info):
+    def __init__(self, user_id, user_info=None):
         """Takes a user_id and user_info, and updates the database.
         """
-        typecheck(user_id, (int, unicode))
+        typecheck(user_id, (int, unicode), user_info, (None, dict))
         self.user_id = unicode(user_id)
 
-        a,b,c,d  = self.upsert(user_info)
+        if user_info is not None:
+            a,b,c,d  = self.upsert(user_info)
 
-        self.participant_id = a
-        self.is_claimed = b
-        self.is_locked = c
-        self.balance = d
+            self.participant_id = a
+            self.is_claimed = b
+            self.is_locked = c
+            self.balance = d
 
 
     def set_is_locked(self, is_locked):

@@ -7,6 +7,7 @@ the Gittip community.
 
 """
 from aspen import log, Response
+from aspen import resources
 from gittip.elsewhere import ACTIONS, github
 from gittip.participant import NeedConfirmation
 
@@ -35,6 +36,19 @@ account = github.GitHubAccount(user_info['id'], user_info)
 
 if action == 'opt-in':      # opt in
     user = account.opt_in(login)  # setting 'user' gives them a session
+elif action == 'connect':   # connect
+    if user.ANON:
+        raise Response(404)
+    try:
+        user.take_over(account)
+    except NeedConfirmation, obstacles:
+
+        # XXX Eep! Internal redirect! Really?!
+        request.internally_redirected_from = request.fs
+        request.fs = website.www_root + '/on/confirm.html'
+        request.resource = resources.get(request)
+
+        raise request.resource.respond(request)
 else:                       # lock or unlock
     if then != login:
 

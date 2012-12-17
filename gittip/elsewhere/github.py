@@ -1,12 +1,13 @@
+import gittip
 import requests
 from aspen import json, log, Response
 from aspen.website import Website
 from aspen.utils import typecheck
-from gittip.elsewhere import AccountElsewhere, _resolve
+from gittip.elsewhere import ACTIONS, AccountElsewhere, _resolve
 
 
 class GitHubAccount(AccountElsewhere):
-    platform = 'github'
+    platform = u'github'
 
 
 def resolve(login):
@@ -24,7 +25,7 @@ def oauth_url(website, action, then=u""):
 
     """
     typecheck(website, Website, action, unicode, then, unicode)
-    assert action in [u'opt-in', u'lock', u'unlock']
+    assert action in ACTIONS
     url = u"https://github.com/login/oauth/authorize?client_id=%s&redirect_uri=%s"
     url %= (website.github_client_id, website.github_callback)
 
@@ -74,5 +75,29 @@ def oauth_dance(website, qs):
     user_info = json.loads(r.text)
     log("Done with OAuth dance with Github for %s (%s)."
         % (user_info['login'], user_info['id']))
+
+    return user_info
+
+
+def get_user_info(login):
+    """Given a unicode, return a dict.
+    """
+    typecheck(login, unicode)
+    rec = gittip.db.fetchone( "SELECT user_info FROM elsewhere "
+                              "WHERE platform='github' "
+                              "AND user_info->'login' = %s"
+                            , (login,)
+                             )
+    if rec is not None:
+        user_info = rec['user_info']
+    else:
+        url = "https://api.github.com/users/%s"
+        user_info = requests.get(url % login)
+
+        if user_info.status_code == 200:
+            user_info = json.loads(user_info.text)
+        else:
+            code = user_info.status_code
+            raise Response(500, "GitHub lookup failed with %d." % code)
 
     return user_info

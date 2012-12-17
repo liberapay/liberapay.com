@@ -11,6 +11,7 @@ from urlparse import parse_qs
 import requests
 from oauth_hook import OAuthHook
 from aspen import log, Response, json
+from aspen import resources
 from gittip.elsewhere import ACTIONS, twitter
 from gittip.participant import NeedConfirmation
 
@@ -21,8 +22,10 @@ if 'denied' in qs:
 
 
 token = qs['oauth_token']
-secret, action, then = website.oauth_cache.pop(token)
-
+try:
+    secret, action, then = website.oauth_cache.pop(token)
+except KeyError:
+    request.redirect("/about/me.html")
 
 oauth_hook = OAuthHook(token, secret, header_auth=True)
 response = requests.post( "https://api.twitter.com/oauth/access_token"
@@ -65,6 +68,19 @@ account = twitter.TwitterAccount(user_info['id'], user_info)
 
 if action == 'opt-in':      # opt in
     user = account.opt_in(screen_name)  # set 'user' to give them a session :/
+elif action == 'connect':   # connect
+    if user.ANON:
+        raise Response(404)
+    try:
+        user.take_over(account)
+    except NeedConfirmation, obstacles:
+
+        # XXX Eep! Internal redirect! Really?!
+        request.internally_redirected_from = request.fs
+        request.fs = website.www_root + '/on/confirm.html'
+        request.resource = resources.get(request)
+
+        raise request.resource.respond(request)
 else:                       # lock or unlock
     if then != screen_name:
 

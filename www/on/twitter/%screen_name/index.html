@@ -16,45 +16,7 @@ from gittip.elsewhere import twitter
 # Try to load from Twitter.
 # =========================
 
-rec = db.fetchone( "SELECT user_info FROM elsewhere "
-                   "WHERE platform='twitter' AND user_info->'screen_name' = %s"
-                 , (path['screen_name'],)
-                  )
-if rec is not None:
-    user_info = rec['user_info']
-else:
-    url = "https://api.twitter.com/1/users/show.json?screen_name=%s"
-    user_info = requests.get(url % path['screen_name'])
-
-
-    # Keep an eye on our Twitter usage.
-    # =================================
-
-    rate_limit = user_info.headers['X-RateLimit-Limit']
-    rate_limit_remaining = user_info.headers['X-RateLimit-Remaining']
-    rate_limit_reset = user_info.headers['X-RateLimit-Reset']
-
-    try:
-        rate_limit = int(rate_limit)
-        rate_limit_remaining = int(rate_limit_remaining)
-        rate_limit_reset = int(rate_limit_reset)
-    except (TypeError, ValueError):
-        log( "Got weird rate headers from Twitter: %s %s %s"
-           % (rate_limit, rate_limit_remaining, rate_limit_reset)
-            )
-    else:
-        reset = datetime.datetime.fromtimestamp(rate_limit_reset, tz=utc)
-        reset = to_age(reset)
-        log( "Twitter API calls used: %d / %d. Resets %s."
-           % (rate_limit - rate_limit_remaining, rate_limit, reset)
-            )
-
-
-    if user_info.status_code == 200:
-        user_info = json.loads(user_info.text)
-    else:
-        log("Twitter lookup failed with %d." % user_info.status_code)
-        raise Response(404)
+user_info = twitter.get_user_info(path['screen_name'])
 
 
 # Try to load from Gittip.

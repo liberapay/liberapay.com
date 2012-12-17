@@ -14,21 +14,7 @@ from gittip.participant import Participant
 # Try to load from GitHub.
 # ========================
 
-rec = db.fetchone( "SELECT user_info FROM elsewhere "
-                   "WHERE platform='github' AND user_info->'login' = %s"
-                 , (path['login'],)
-                  )
-if rec is not None:
-    user_info = rec['user_info']
-else:
-    url = "https://api.github.com/users/%s"
-    user_info = requests.get(url % path['login'])
-
-    if user_info.status_code == 200:
-        user_info = json.loads(user_info.text)
-    else:
-        code = user_info.status_code
-        raise Response(500, "GitHub lookup failed with %d." % code)
+user_info = github.get_user_info(path['login'])
 
 
 # Try to load from Gittip.

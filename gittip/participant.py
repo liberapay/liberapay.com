@@ -32,18 +32,16 @@ class NeedConfirmation(Exception):
 
     def __repr__(self):
         return "<NeedConfirmation: %r %r %r>" % self._all
-
-    def __str__(self):
-        return ''.join([('-' if x else '.') for x in self._all])
+    __str__ = __repr__
 
     def __eq__(self, other):
-        return str(self) == str(other)
+        return self._all == other._all
 
     def __ne__(self, other):
         return not self.__eq__(other)
 
     def __nonzero__(self):
-        # For bool(need_confirmation)
+        # bool(need_confirmation)
         A, B, C = self._all
         return A or C
 
