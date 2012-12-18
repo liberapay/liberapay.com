@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+# OTHER CHANGES
+# - Ignoring locale.Error in gittip/__init__.py
+# - Remove psycopg2 from requirements.txt
+
 import os
 from fabricate import *
 
