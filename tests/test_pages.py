@@ -39,7 +39,7 @@ def test_twitter_associate():
     assert expected in actual, actual
 
 def test_about():
-    expected = "pretty-smart grants"
+    expected = "small weekly cash gifts"
     actual = serve_request('/about/').body
     assert expected in actual, actual
 
