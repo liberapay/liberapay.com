@@ -80,7 +80,7 @@ can_tip = False
         display: block;
         padding: 6pt 0 6pt 9pt;
     }
-    .participant IMG {
+    .participant IMG, IMG.platform-icon {
         margin-bottom: -1pt;
     }
     .participant B {
@@ -106,7 +106,14 @@ can_tip = False
         font-size: 9pt;
     }
 </style>
-<h2 class="first">Now</h2>
+
+<h2 class="first">Oops!</h2>
+
+<p><img class="platform-icon" src="/assets/icons/{{ account.platform }}.12.png"
+/><span class="highlight">{{ username }}</span> is connected<br />to
+<b>{{ other.id }}</b> on Gittip.<br />Reconnect it?</p>
+
+<h2>Now</h2>
 
 <table class="scenario">
     <tr>
@@ -172,7 +179,7 @@ can_tip = False
 </table>
 
 
-<h2>If You Say &ldquo;Yes&rdquo;</h2>
+<h2>After Reconnect</h2>
 
 <table class="scenario">
     <tr>
@@ -284,7 +291,7 @@ can_tip = False
 </table>
 
 
-<h2>Yes?</h2>
+<h2>Reconnect?</h2>
 
 <form action="/on/take-over.html" method="POST">
     <input type="hidden" name="platform" value="{{ account.platform }}" />
