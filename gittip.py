@@ -5,41 +5,40 @@
 # - Remove psycopg2 from requirements.txt
 
 import os
-from fabricate import *
+import sys
+from fabricate import autoclean, main, run, shell
 
 
-sources = ['program', 'util']
+if sys.platform.startswith('win'):
+    BIN = ['env', 'Scripts']
+else:
+    BIN = ['env', 'bin']
 
 
-def run_lines(commands):
-    for c in commands.split('\n', ):
-        if not c.strip():
-            continue
-        print '$', c.strip()
-        os.system(c.strip())
-        print
+PIP = os.path.join(*(BIN + ['pip']))
+p = lambda p: os.path.join(*p.split('/'))
+
+
+def pip_install(*a):
+    run(PIP, 'install', *a)
 
 
 def build():
     if not shell('python', '--version').startswith('Python 2.7'):
         raise SystemExit('Error: Python 2.7 required')
 
-    c = """\
-        python ./vendor/virtualenv-1.7.1.2.py \
-        --with-site-packages \
-        --unzip-setuptools \
-        --prompt="[gittip] " \
-        --never-download \
-        --extra-search-dir=./vendor/ \
-        --distribute \
-        ./env/
-    """.replace('\n', '') + """
-        ./env/Scripts/pip install -r requirements.txt
-        ./env/Scripts/pip install ./vendor/nose-1.1.2.tar.gz
-        ./env/Scripts/pip install -e ./
-        """
+    run( 'python', './vendor/virtualenv-1.7.1.2.py'
+       , '--unzip-setuptools'
+       , '--prompt="[gittip] "'
+       , '--never-download'
+       , '--extra-search-dir=' + p('./vendor/')
+       , '--distribute'
+       , p('./env/')
+        )
 
-    run_lines(c.replace('/', os.sep))
+    pip_install('-r', p('./requirements.txt'))
+    pip_install(p('./vendor/nose-1.1.2.tar.gz'))
+    pip_install('-e', p('./'))
 
 
 def serve():
