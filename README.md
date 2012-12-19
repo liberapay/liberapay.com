@@ -289,7 +289,7 @@ the end). :grinning:
 such as [startingtrends.com's](http://www.startingtrends.com/crowdfunding-directory/)
 and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
 
- - [KickStater](http://www.kickstarter.com/) - crowdfunding campaigns
+ - [Kickstarter](http://www.kickstarter.com/) - crowdfunding campaigns
  - [Flattr](http://flattr.com/) - micro-donations (flat monthly rate)
  - [TipTheWeb](http://tiptheweb.org/) - micro-donations
  - [IndieGoGo](http://www.indiegogo.com/) - crowdfunding campaigns (partial funding allowed)
