@@ -44,7 +44,7 @@ def build():
 
 def serve():
     #build()     #run: env local.env
-    
+
     c = """\
     ./env/Scripts/swaddle local.env ./env/Scripts/aspen.exe \
     --www_root=www/ \
