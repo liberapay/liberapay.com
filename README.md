@@ -317,3 +317,4 @@ and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
  - [MacHeist](http://macheist.com/)
  - [Prosper](http://www.prosper.com/) - peer-to-peer lending
  - [Togather](http://togather.me/)
+ - [PaySwarm](http://payswarm.com/) - open payment protocol
