@@ -318,3 +318,4 @@ and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
  - [Prosper](http://www.prosper.com/) - peer-to-peer lending
  - [Togather](http://togather.me/)
  - [PaySwarm](http://payswarm.com/) - open payment protocol
+ - [Gitbo](http://git.bo/) - another implementation of the bounty model
