@@ -13,6 +13,20 @@ the money is deposited in their bank account on Friday.
 Gittip is funded on Gittip.
 
 
+Table of Contents
+=================
+
+ - [Installation](#installation)
+  - [Dependencies](#dependencies)
+  - [Setting up the Database](#setting-up-the-database)
+  - [Building and Launching](#building-and-launching)
+  - [Help!](#help)
+ - [Configuration](#configuration)
+ - [Testing](#testing-)
+ - [Glossary](#glossary)
+ - [See Also](#see-also)
+
+
 Installation
 ============
 
