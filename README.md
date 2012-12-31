@@ -284,19 +284,19 @@ API
 The Gittip API is comprised of these endpoints:
 
  - **[/about/paydays.json](https://www.gittip.com/about/paydays.json)**
-   ([source](./tree/master/www/about/paydays.json))&mdash;Returns an array of
+   ([source](https://github.com/whit537/www.gittip.com/tree/master/www/about/paydays.json))&mdash;Returns an array of
     objects, one per week, showing aggregate numbers over time. The
     [charts](https://www.gittip.com/about/charts.html) page uses this.
 
  - **[/about/stats.json](https://www.gittip.com/about/stats.json)**
-   ([source](./tree/master/www/about/stats))&mdash;Returns an object giving a
+   ([source](https://github.com/whit537/www.gittip.com/tree/master/www/about/stats))&mdash;Returns an object giving a
     point-in-time snapshot of Gittip. The
     [stats](https://www.gittip.com/about/stats.html) page displays the same 
     info.
 
  - **/%participant_id/public.json**
    ([example](https://www.gittip.com/whit537/public.json),
-    [source](./tree/master/www/%participant_id/public.json))&mdash;Returns an
+    [source](https://github.com/whit537/www.gittip.com/tree/master/www/%25participant_id/public.json))&mdash;Returns an
     object with an estimate of the amount the given participant is receiving 
     each week.
 
