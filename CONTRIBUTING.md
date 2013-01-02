@@ -50,11 +50,11 @@ public domain.
 
 ##### Collaborators
 
-Gittip has a policy that anyone with four commits accepted into the repo is
+Anyone with four commits accepted into the repo through pull requests is
 invited to be a collaborator. This is opt-in, so we'll ask you first before
-adding you. Once you're a collaborator you can commit to the main repo directly
-without having to submit pull requests. Ideally, collaborators represent people
-who think of themselves as part of the Gittip development team. There's no
-shame or hard feelings if you turn down our invitation, or even if you change
-your mind later. If you don't contribute code for a while (a year?) we'll
-probably retire your collaborator status.
+adding you. Once you're a collaborator, you can commit to the main repo
+directly without having to submit pull requests. Ideally, collaborators
+represent people who think of themselves as part of the Gittip development
+team. If you don't contribute code for a while (a year?) we'll probably retire
+your collaborator status. There's no shame or hard feelings if you turn down
+our invitation, or even if you change your mind later, one way or another.
