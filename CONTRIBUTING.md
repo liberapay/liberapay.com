@@ -41,13 +41,6 @@ without.
 Find us on Twitter or Freenode if you get stuck (see above).
 
 
-##### License
-
-Gittip is [licensed under
-CC0](https://github.com/whit537/www.gittip.com/tree/master/COPYING), i.e., it's
-public domain. 
-
-
 ##### Collaborators
 
 Anyone with four commits accepted into the repo through pull requests is
@@ -58,3 +51,10 @@ represent people who think of themselves as part of the Gittip development
 team. If you don't contribute code for a while (a year?) we'll probably retire
 your collaborator status. There's no shame or hard feelings if you turn down
 our invitation, or even if you change your mind later, one way or another.
+
+
+##### License
+
+Gittip is [licensed under
+CC0](https://github.com/whit537/www.gittip.com/tree/master/COPYING), i.e., it's
+public domain. 
