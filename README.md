@@ -31,6 +31,10 @@ Table of Contents
 Installation
 ============
 
+Thanks for hacking on Gittip! Be sure to review 
+[CONTRIBUTING](https://github.com/whit537/www.gittip.com/blob/master/CONTRIBUTING)
+as well.
+
 Dependencies
 ------------
 

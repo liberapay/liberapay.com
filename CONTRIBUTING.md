@@ -11,7 +11,7 @@ unwanted change or whatever, especially if this is your first time
 participating with us. We're glad to have you! :-)
 
 If you feel like we're ignoring your issue or pull request then call me out
-([whit537](https://twitter.com/whit537)) on Twitter, or if you're not on
+([@whit537](https://twitter.com/whit537)) on Twitter, or if you're not on
 Twitter then <a href="mailto:chad@zetaweb.com">email</a> or even call me
 (Chad Whitacre, +1-412-925-4220). 
 
@@ -19,7 +19,7 @@ Twitter then <a href="mailto:chad@zetaweb.com">email</a> or even call me
 ##### Where We Hang Out
 
 Twitter and IRC are the two main online hangouts for Team Gittip (besides
-GitHub). I'm [whit537](https://twitter.com/whit537) on Twitter, and we're in
+GitHub). I'm [@whit537](https://twitter.com/whit537) on Twitter, and we're in
  #gittip on Freenode for our chatroom (here's a [web
 interface](https://webchat.freenode.net/)). Jump in and introduce yourself!
 :-)
