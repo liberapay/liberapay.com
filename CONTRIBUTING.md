@@ -34,8 +34,9 @@ propose changes.
 
 To contribute more substantial changes, the first step is to install Gittip
 locally, which is documented in the
-[README](https://github.com/whit537/www.gittip.com). That file also documents
-our testing setup. Changes with tests are better than changes without.
+[README](https://github.com/whit537/www.gittip.com#readme). That file also
+documents our testing setup. Changes with tests are better than changes
+without.
 
 Find us on Twitter or Freenode if you get stuck.
 
