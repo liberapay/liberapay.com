@@ -1,5 +1,4 @@
-Team Gittip
-===========
+## Team Gittip
 
 First of all, thank you for your interest in Team Gittip! :smiley:
 
@@ -7,8 +6,7 @@ We welcome contributions of all types: design, code, discussion, marketing,
 etc.
 
 
-Where We Hang Out
------------------
+### Where We Hang Out
 
 Besides GitHub, Twitter and IRC are the two main online hangouts for Team
 Gittip. I'm [whit537](https://twitter.com/whit537) on Twitter, and we're in
@@ -17,8 +15,7 @@ interface](https://webchat.freenode.net/)). Jump in and introduce yourself!
 :grinning:
 
 
-Code
-----
+### Code
 
 For typo fixes and other small changes, you can use the GitHub web interface to
 propose changes.
@@ -29,16 +26,14 @@ locally, which is documented in the
 our testing framework. Changes with tests are better than changes without.
 
 
-License
-~~~~~~~
+#### License
 
 Gittip is [licensed under
 CC0](https://github.com/whit537/www.gittip.com/tree/master/LICENSE), i.e., it's
 public domain. 
 
 
-Collaborators
-~~~~~~~~~~~~~
+#### Collaborators
 
 Gittip has a policy that anyone with four commits accepted into the repo is
 invited to be a collaborator. It's opt-in though, so we'll ask you first (or
