@@ -32,7 +32,7 @@ Installation
 ============
 
 Thanks for hacking on Gittip! Be sure to review 
-[CONTRIBUTING](https://github.com/whit537/www.gittip.com/blob/master/CONTRIBUTING)
+[CONTRIBUTING](https://github.com/whit537/www.gittip.com/blob/master/CONTRIBUTING.md#readme)
 as well.
 
 Dependencies
