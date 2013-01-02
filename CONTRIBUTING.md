@@ -10,7 +10,7 @@ etc.
 
 Besides GitHub, Twitter and IRC are the two main online hangouts for Team
 Gittip. I'm [whit537](https://twitter.com/whit537) on Twitter, and we're in
-#gittip on Freenode for IRC (here's a [web
+ #gittip on Freenode for IRC (here's a [web
 interface](https://webchat.freenode.net/)). Jump in and introduce yourself!
 :grinning:
 
@@ -26,14 +26,14 @@ locally, which is documented in the
 our testing framework. Changes with tests are better than changes without.
 
 
-#### License
+##### License
 
 Gittip is [licensed under
 CC0](https://github.com/whit537/www.gittip.com/tree/master/LICENSE), i.e., it's
 public domain. 
 
 
-#### Collaborators
+##### Collaborators
 
 Gittip has a policy that anyone with four commits accepted into the repo is
 invited to be a collaborator. It's opt-in though, so we'll ask you first (or
