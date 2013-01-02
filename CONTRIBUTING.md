@@ -38,7 +38,7 @@ locally, which is documented in the
 documents our testing setup. Changes with tests are better than changes
 without.
 
-Find us on Twitter or Freenode if you get stuck.
+Find us on Twitter or Freenode if you get stuck (see above).
 
 
 ##### License
