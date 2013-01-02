@@ -5,9 +5,15 @@ Thank you for your interest in contributing to Gittip! :smiley:
 We welcome contributions of all types: design, code, discussion, marketing,
 etc.
 
-If you are opening a new issue, go for it! Don't be afraid that it's a dumb
-idea or a duplicate of another issue or whatever, especially if this is your
-first time participating with us. We're glad to have you. :smile:
+If you are opening a new issue or submitting a pull request, go for it! Don't
+be afraid that it's a dumb idea or a duplicate of another issue or an unwanted
+change or whatever, especially if this is your first time participating with
+us. We're glad to have you! :-)
+
+If you feel like we're ignoring your issue or pull request then call me out
+([whit537](https://twitter.com/whit537)) on Twitter, or if you're not on
+Twitter then <a href="mailto:chad@zetaweb.com">email</a> or even call me
+(Chad Whitacre, +1-412-925-4220). 
 
 
 ### Where We Hang Out
@@ -16,9 +22,9 @@ Besides GitHub, Twitter and IRC are the two main online hangouts for Team
 Gittip. I'm [whit537](https://twitter.com/whit537) on Twitter, and we're in
  #gittip on Freenode for our chatroom (here's a [web
 interface](https://webchat.freenode.net/)). Jump in and introduce yourself!
-:grinning:
+:-)
 
-We also exist in the real world at times. :smile:
+We also exist in the real world at times. :-)
 
 
 ### Code
