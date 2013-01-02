@@ -1,18 +1,24 @@
-## Team Gittip
+## Contributing to Gittip
 
-First of all, thank you for your interest in Team Gittip! :smiley:
+Thank you for your interest in contributing to Gittip! :smiley:
 
 We welcome contributions of all types: design, code, discussion, marketing,
 etc.
+
+If you are opening a new issue, go for it! Don't be afraid that it's a dumb
+idea or a duplicate of another issue or whatever, especially if this is your
+first time participating with us. We're glad to have you. :smile:
 
 
 ### Where We Hang Out
 
 Besides GitHub, Twitter and IRC are the two main online hangouts for Team
 Gittip. I'm [whit537](https://twitter.com/whit537) on Twitter, and we're in
- #gittip on Freenode for IRC (here's a [web
+ #gittip on Freenode for our chatroom (here's a [web
 interface](https://webchat.freenode.net/)). Jump in and introduce yourself!
 :grinning:
+
+We also exist in the real world at times. :smile:
 
 
 ### Code
@@ -23,13 +29,15 @@ propose changes.
 To contribute more substantial changes, the first step is to install Gittip
 locally, which is documented in the
 [README](https://github.com/whit537/www.gittip.com). That file also documents
-our testing framework. Changes with tests are better than changes without.
+our testing setup. Changes with tests are better than changes without.
+
+Find us on Twitter or Freenode if you get stuck.
 
 
 ##### License
 
 Gittip is [licensed under
-CC0](https://github.com/whit537/www.gittip.com/tree/master/LICENSE), i.e., it's
+CC0](https://github.com/whit537/www.gittip.com/tree/master/COPYING), i.e., it's
 public domain. 
 
 
