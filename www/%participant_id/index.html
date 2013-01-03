@@ -14,6 +14,14 @@ tip_suggestions = ('jeresig', 'antirez', 'wycats', 'fabpot', 'mitsuhiko',
                    'jtauber', 'kennethreitz', 'alex', 'taylorotwell')
 tip_suggestions = [{'tippee': name, 'amount': 0} for name in tip_suggestions]
 
+def _extract_username(tip):
+    if tip['platform'] == 'github':
+        key = 'login'
+    else:
+        assert tip['platform'] == 'twitter', tip  # sanity check
+        key = 'screen_name'
+    return tip['user_info'][key]
+
 # ========================================================================== ^L
 
 # XXX Hack
@@ -53,9 +61,11 @@ backed_amount = participant.get_dollars_receiving()
 
 if not user.ANON:
     if user.id == participant.id or user.ADMIN:
-        giving_chart, npatrons, contributed = participant.get_chart_of_receiving()
+        giving_chart, npatrons, contributed = \
+                                           participant.get_chart_of_receiving()
     if user.id == participant.id:
-        tips, total = user.get_giving_for_profile()
+        tips, total, unclaimed_tips, unclaimed_total = \
+                                                  user.get_giving_for_profile()
         if total == 0:
             tips = tip_suggestions
         assert backed_amount == contributed, (backed_amount, contributed)
@@ -543,6 +553,36 @@ github_account, twitter_account = participant.get_accounts_elsewhere()
         </tr>
         {% end %}
         {% end %}
+        {% if unclaimed_total > 0 %}
+        <tr>
+            <td colspan="2">
+                <h3>Another ${{ unclaimed_total }} per week is unclaimed.</h3>
+            </td>
+        </tr>
+        {% end %}
+        {% for tip in unclaimed_tips %}
+        {% if tip['amount'] > 0 or total == 0 %}
+        <tr class="not-over">
+            <th>
+                <img class="platform-icon" src="/assets/icons/{{ tip['platform'] }}.12.png" />
+                <a href="/{{ tip['tippee'] }}/">{{ _extract_username(tip) }}</a>
+            </th>
+            <td>
+                {% for amount in AMOUNTS %}
+                <button amount="{{ amount }}" tippee="{{ tip['tippee'] }}"
+                    class="tip small {{ 'selected' if amount == tip['amount'] else 'empty' }}">{{ amount }}</button>
+                {% end %}
+                {% if tip['amount'] not in AMOUNTS %}
+                <span class="old-amount">
+                    <button class="tip small disabled selected">{{ tip['amount'] }}</button>
+                    <span class="old-amount-link">&mdash;
+                    <a href="http://blog.gittip.com/post/26505682007/is-personal-funding-viable" target="_blank">old amount</a>!</span>
+                </span>
+                {% end %}
+            </td>
+        </tr>
+        {% end %}
+        {% end %}
     </table>
 
 
@@ -603,7 +643,8 @@ github_account, twitter_account = participant.get_accounts_elsewhere()
         src="https://www.gittip.com/{{ participant.id }}/widget.html"
         width="48pt" height="22pt"&gt;&lt;/iframe&gt;</pre>
 
-    <p>The button opens your profile on Gittip in a new tab or window. Here&rsquo;s what the text reads:</p>
+    <p>The button opens your profile on Gittip in a new tab or window.
+    Here&rsquo;s what the text reads:</p>
 
     <ul class="no-bullets">
 

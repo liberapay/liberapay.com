@@ -399,6 +399,32 @@ class Participant(object):
         """
         tips = list(db.fetchall(TIPS, (self.id,)))
 
+        UNCLAIMED_TIPS = """\
+
+            SELECT * FROM (
+                SELECT DISTINCT ON (tippee)
+                       amount
+                     , tippee
+                     , t.ctime
+                     , p.claimed_time
+                     , e.platform
+                     , e.user_info
+                  FROM tips t
+                  JOIN participants p ON p.id = t.tippee
+                  JOIN elsewhere e ON e.participant_id = t.tippee
+                 WHERE tipper = %s
+                   AND p.is_suspicious IS NOT true
+                   AND p.claimed_time IS NULL
+              ORDER BY tippee
+                     , t.mtime DESC
+            ) AS foo
+            ORDER BY amount DESC
+                   , user_info->'screen_name'
+                   , user_info->'login'
+
+        """
+        unclaimed_tips = list(db.fetchall(UNCLAIMED_TIPS, (self.id,)))
+
 
         # Compute the total.
         # ==================
@@ -408,14 +434,16 @@ class Participant(object):
         # when someone *does* start accepting tips and all of a sudden they're
         # hit with bigger charges.
 
-        to_total = tips
-        total = sum([t['amount'] for t in to_total])
-
+        total = sum([t['amount'] for t in tips])
         if not total:
-            # If to_total is an empty list, total is int 0. We want a Decimal.
+            # If tips is an empty list, total is int 0. We want a Decimal.
             total = Decimal('0.00')
 
-        return tips, total
+        unclaimed_total = sum([t['amount'] for t in unclaimed_tips])
+        if not unclaimed_total:
+            unclaimed_total = Decimal('0.00')
+
+        return tips, total, unclaimed_tips, unclaimed_total
 
 
     @require_id
