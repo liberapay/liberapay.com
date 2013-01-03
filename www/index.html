@@ -39,9 +39,11 @@ givers = db.fetchall("""
                      , tipper
                   FROM tips
                   JOIN participants p ON p.id = tipper
+                  JOIN participants p2 ON p2.id = tippee
                   JOIN elsewhere ON elsewhere.participant_id = tippee
-                 WHERE last_bill_result = ''
-                   AND is_suspicious IS NOT true
+                 WHERE p.last_bill_result = ''
+                   AND p.is_suspicious IS NOT true
+                   AND p2.claimed_time IS NOT NULL
                    AND elsewhere.is_locked = false
               ORDER BY tipper, tippee, mtime DESC
               ) AS foo
