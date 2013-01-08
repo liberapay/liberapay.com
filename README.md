@@ -101,6 +101,10 @@ name of the database and/or user, pass them on the command line:
 
     $ ./makedb.sh mygittip myuser
 
+*Note:* If you decide to use a different username or database name, you will 
+need to edit `DATABASE_URL` in the generated local.env file, see
+[Configuration](#configuration) for more information.
+
 If you only pass one argument it will be used for both dbname and owner role:
 
     $ ./makedb.sh gittip-test
@@ -244,6 +248,11 @@ You probably don't need it, but at one point I had to set this to get psycopg2
 working on Mac OS with EnterpriseDB's Postgres 9.1 installer:
 
     DYLD_LIBRARY_PATH=/Library/PostgreSQL/9.1/lib
+
+If you wish to use different username or database name for the database, you
+should change the `DATABASE_URL` using the following format:
+
+    DATABASE_URL=postgres://<username>@localhost/<database name>
 
 
 Testing [![Testing](https://secure.travis-ci.org/whit537/www.gittip.com.png)](http://travis-ci.org/whit537/www.gittip.com)
