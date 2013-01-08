@@ -185,11 +185,21 @@ title = "Charts"
             for (var i=0; i < nweeks; i++)
             {
                 payday = paydays[i];
-                maxUsers = Math.max(maxUsers, parseFloat(payday.nparticipants));
-                maxFunders = Math.max(maxFunders, parseFloat(payday.ntippers));
-                maxGifts = Math.max(maxGifts, parseFloat(payday.transfer_volume));
-                maxWithdrawals = Math.max(maxWithdrawals, -parseFloat(payday.ach_volume));
-                maxCharges = Math.max(maxCharges, parseFloat(payday.charge_volume));
+                maxUsers = Math.max( maxUsers
+                                   , parseFloat(payday.nparticipants)
+                                    );
+                maxFunders = Math.max( maxFunders
+                                     , parseFloat(payday.ntippers)
+                                      );
+                maxGifts = Math.max( maxGifts
+                                   , parseFloat(payday.transfer_volume)
+                                    );
+                maxWithdrawals = Math.max( maxWithdrawals
+                                         , -parseFloat(payday.ach_volume)
+                                          );
+                maxCharges = Math.max( maxCharges
+                                     , parseFloat(payday.charge_volume)
+                                      );
             }
 
             scaleUsers = Math.ceil(maxUsers / 100) * 100;
@@ -205,13 +215,17 @@ title = "Charts"
             function Week(n, max, N, y)
             {
                 var x = nweeks - n;
-                var week = $(document.createElement('div')).addClass('week');
-                var shaded = $(document.createElement('div')).addClass('shaded');
-                shaded.html('<span class="y-label">' + parseInt(y) + '</span>');
+                var create = function(x) { return document.createElement(x) };
+                var week = $(create('div')).addClass('week');
+                var shaded = $(create('div')).addClass('shaded');
+                shaded.html( '<span class="y-label">' 
+                           + parseInt(y) 
+                           + '</span>'
+                            );
                 week.append(shaded);
                 week.attr({x: x, y: y});
 
-                var xTick = $(document.createElement('span')).addClass('x-tick');
+                var xTick = $(create('span')).addClass('x-tick');
                 xTick.text(x);
                 if ((x % 5) === 0)
                     xTick.addClass('on');
@@ -232,11 +246,31 @@ title = "Charts"
             {
                 payday = paydays[i];
 
-                Users.append(Week(i, maxUsers, scaleUsers, payday.nparticipants));
-                Funders.append(Week(i, maxFunders, scaleFunders, payday.ntippers));
-                Volume.append(Week(i, maxGifts, scaleGifts, payday.transfer_volume));
-                Withdrawals.append(Week(i, maxWithdrawals, scaleWithdrawals, -payday.ach_volume));
-                Charges.append(Week(i, maxCharges, scaleCharges, payday.charge_volume));
+                Users.append(Week( i
+                                 , maxUsers
+                                 , scaleUsers
+                                 , payday.nparticipants
+                                  ));
+                Funders.append(Week( i
+                                   , maxFunders
+                                   , scaleFunders
+                                   , payday.ntippers
+                                    ));
+                Volume.append(Week( i
+                                  , maxGifts
+                                  , scaleGifts
+                                  , payday.transfer_volume
+                                   ));
+                Withdrawals.append(Week( i 
+                                       , maxWithdrawals
+                                       , scaleWithdrawals
+                                       , -payday.ach_volume
+                                        ));
+                Charges.append(Week( i
+                                   , maxCharges
+                                   , scaleCharges
+                                   , payday.charge_volume 
+                                    ));
             }
 
             $('.week').width(w);
