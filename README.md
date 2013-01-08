@@ -70,10 +70,18 @@ Now, you need to setup the database.
 Setting up the Database
 -----------------------
 
-Once Postgres is installed, you need to configure it and set up a gittip
-database.
+Once Postgres is installed, you need to configure authentication and set up a
+gittip database.
 
-First, add a "role" (Postgres user) that matches your OS username. Make sure
+
+### Authentication
+
+If you already have a "role" (Postgres user) that you'd like to use, you can do
+so by editing `DATABASE_URL` in the generated local.env file. You can also
+change the database name there. See [Configuration](#configuration) for more
+information.
+
+Otherwise, you should add a role that matches your OS username, and make sure
 it's a superuser role and has login privileges. Here's a sample invocation of
 the createuser executable that comes with Postgres that will do this for you,
 assuming that a "postgres" superuser was already created as part of initial
@@ -91,19 +99,20 @@ file contains these lines:
 
 Reload Postgres using pg_ctl for changes to take effect.
 
+
+### Schema
+
 Once Postgres is set up, run:
 
     $ ./makedb.sh
 
 That will create a new gittip superuser and a gittip database (with UTC as the
 default timezone), populated with structure from ./schema.sql. To change the
-name of the database and/or user, pass them on the command line:
+name of the database and/or user, pass them on the command line (you&rsquo;ll
+need to modify the `DATABASE_URL` environment variable as well; see
+[Configuration](#configuration) below):
 
     $ ./makedb.sh mygittip myuser
-
-*Note:* If you decide to use a different username or database name, you will 
-need to edit `DATABASE_URL` in the generated local.env file, see
-[Configuration](#configuration) for more information.
 
 If you only pass one argument it will be used for both dbname and owner role:
 
