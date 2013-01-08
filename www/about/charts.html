@@ -212,7 +212,7 @@ title = "Charts"
             // Draw weeks.
             // ===========
 
-            function Week(n, max, N, y)
+            function Week(n, max, N, y, title)
             {
                 var x = nweeks - n;
                 var create = function(x) { return document.createElement(x) };
@@ -227,6 +227,7 @@ title = "Charts"
 
                 var xTick = $(create('span')).addClass('x-tick');
                 xTick.text(x);
+                xTick.attr('title', title);
                 if ((x % 5) === 0)
                     xTick.addClass('on');
                 week.append(xTick);
@@ -244,32 +245,38 @@ title = "Charts"
 
             for (var i=0; i < nweeks; i++)
             {
-                payday = paydays[i];
+                var payday = paydays[i];
+                var weekstamp = payday.ts_start.slice(0, 10);
 
                 Users.append(Week( i
                                  , maxUsers
                                  , scaleUsers
                                  , payday.nparticipants
+                                 , weekstamp
                                   ));
                 Funders.append(Week( i
                                    , maxFunders
                                    , scaleFunders
                                    , payday.ntippers
+                                   , weekstamp
                                     ));
                 Volume.append(Week( i
                                   , maxGifts
                                   , scaleGifts
                                   , payday.transfer_volume
+                                  , weekstamp
                                    ));
                 Withdrawals.append(Week( i 
                                        , maxWithdrawals
                                        , scaleWithdrawals
                                        , -payday.ach_volume
+                                       , weekstamp
                                         ));
                 Charges.append(Week( i
                                    , maxCharges
                                    , scaleCharges
                                    , payday.charge_volume 
+                                   , weekstamp
                                     ));
             }
 
