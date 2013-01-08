@@ -34,7 +34,7 @@ db = None # This global is wired in wireup. It's an instance of
 OLD_OLD_AMOUNTS= [Decimal(a) for a in ('0.00', '0.08', '0.16', '0.32', '0.64', '1.28')]
 OLD_AMOUNTS= [Decimal(a) for a in ('0.25',)]
 
-AMOUNTS = [Decimal(a) for a in ('0.00', '1.00', '3.00', '6.00', '12.00', '24.00')]
+AMOUNTS = [Decimal(a) for a in ('0.00', '0.25', '1.00', '3.00', '6.00', '12.00', '24.00')]
 RESTRICTED_IDS = None
 
 
