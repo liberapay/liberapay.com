@@ -1,5 +1,5 @@
 from aspen.utils import typecheck
-from aspen._tornado.escape import linkify
+from tornado.escape import linkify
 
 
 def wrap(u):

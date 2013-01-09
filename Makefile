@@ -45,7 +45,7 @@ local.env:
 run: env local.env
 	./env/bin/swaddle local.env ./env/bin/aspen \
 		--www_root=www/ \
-		--project_root=.. \
+		--project_root=. \
 		--show_tracebacks=yes \
 		--changes_reload=yes \
 		--network_address=:8537
