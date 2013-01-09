@@ -76,7 +76,6 @@ GittipWidget0001.setupOneWidget = function()
     {
         var receiving = $('[gittip-username=' + username + '] .receiving');
         receiving.text(a.receiving || DEFAULT);
-        setTimeout(startUpdatingWidget, 32768);
     }
 
     function startUpdatingWidget()
