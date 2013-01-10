@@ -379,3 +379,4 @@ and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
  - [Togather](http://togather.me/)
  - [PaySwarm](http://payswarm.com/) - open payment protocol
  - [Gitbo](http://git.bo/) - another implementation of the bounty model
+ - [Affero](http://www.affero.com/) - old skool attempt "to bring a culture of patronage to the Internet"
