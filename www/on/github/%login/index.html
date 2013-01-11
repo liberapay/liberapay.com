@@ -6,7 +6,7 @@ import requests
 from aspen import json, Response
 from gittip import AMOUNTS, CARDINALS, db
 from gittip.elsewhere import github
-from gittip.participant import Participant
+from gittip.models import Participant
 
 
 # ========================================================================== ^L
@@ -34,7 +34,7 @@ if usertype == "user":
     if account.is_claimed:
         request.redirect('/%s/' % account.participant_id)
 
-    participant = Participant(account.participant_id)
+    participant = Participant.query.get(account.participant_id)
 
     if not user.ANON:
         my_tip = user.get_tip_to(participant.id)
