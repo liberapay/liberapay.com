@@ -2,21 +2,26 @@ from __future__ import unicode_literals
 import os
 
 from sqlalchemy import create_engine, MetaData
-from sqlalchemy.ext.declarative import ( declarative_base
-                                       , _declarative_constructor
-                                        )
+from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session
 
+class SQLAlchemy(object):
+    def __init__(self):
+        self.session = self.create_session()
+
+    @property
+    def engine(self):
+        dburl = os.environ['DATABASE_URL']
+        return create_engine(dburl)
+
+    def create_session(self):
+        session = scoped_session(sessionmaker())
+        session.configure(bind=self.engine)
+        return session
+
+db = SQLAlchemy()
 
 class Model(object):
-    def __init__(self, **kwargs):
-        """
-        Initializes a model by invoking the _declarative_constructor
-        in SQLAlchemy. We do this for full control over construction
-        of an object
-        """
-        _declarative_constructor(self, **kwargs)
-
     def __repr__(self):
         cols = self.__mapper__.c.keys()
         class_name = self.__class__.__name__
@@ -24,22 +29,30 @@ class Model(object):
                            in cols])
         return '%s(%s)' % (class_name, items)
 
+    def attrs_dict(self):
+        keys = self.__mapper__.c.keys()
+        attrs = {}
+        for key in keys:
+            attrs[key] = getattr(self, key)
+        return attrs
 
-dburl = os.environ['DATABASE_URL']
-db_engine = create_engine(dburl)
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
 
-Session = scoped_session(sessionmaker())
-Session.configure(bind=db_engine)
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
 
-Base = declarative_base(cls=Model, constructor=None)
-Base.metadata.bind = db_engine
-Base.query = Session.query_property()
+Base = declarative_base(cls=Model)
+Base.metadata.bind = db.engine
+Base.query = db.session.query_property()
 
 metadata = MetaData()
-metadata.bind = db_engine
+metadata.bind = db.engine
 
-all = [Base, Session, metadata]
+all = [Base, db, metadata]
 
 
 def rollback(*_):
-    Session.rollback()
+    db.session.rollback()
