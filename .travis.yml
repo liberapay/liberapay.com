@@ -3,3 +3,16 @@ before_script:
  - make tests/env
  - echo "YES_PLEASE_DELETE_ALL_MY_DATA_VERY_OFTEN=Pretty please, with sugar on top." >> tests/env
 script: make test
+notifications:
+  email: false
+  irc: 
+    channels:
+      - "irc.freenode.org#gittip"
+    on_success: never
+    on_failure: always
+    template:
+      - "Failed build: %{build_url}"
+    skip_join: true
+branches:
+  only:
+    - master 
