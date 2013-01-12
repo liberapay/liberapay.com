@@ -424,17 +424,17 @@ test_website = Website([ '--www_root', str(join(TOP, 'www'))
                        , '--project_root', str(TOP)
                         ])
 
-# def serve_request(path, user=None):
-#     """Given an URL path, return response.
-#     """
-#     request = StubRequest(path)
-#     request.website = test_website
-#     if user is not None:
-#         user = User.from_id(user)
-#         # Note that Cookie needs a bytestring.
-#         request.headers.cookie[str('session')] = user.session_token
-#     response = test_website.handle_safely(request)
-#     return response
+def serve_request(path, user=None):
+    """Given an URL path, return response.
+    """
+    request = StubRequest(path)
+    request.website = test_website
+    if user is not None:
+        user = User.from_id(user)
+        # Note that Cookie needs a bytestring.
+        request.headers.cookie[str('session')] = user.session_token
+    response = test_website.handle_safely(request)
+    return response
 
 def load_simplate(path):
     """Given an URL path, return resource.
