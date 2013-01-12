@@ -101,7 +101,7 @@ def test_stats_description_accurate_during_payday_run(mock_datetime):
     """Test that stats page takes running payday into account.
 
     This test was originally written to expose the fix required for
-    https://github.com/whit537/www.gittip.com/issues/92.
+    https://github.com/zetaweb/www.gittip.com/issues/92.
     """
     with load() as context:
         a_thursday = datetime(2012, 8, 9, 12, 00, 01)

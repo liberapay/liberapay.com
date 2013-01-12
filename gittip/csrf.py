@@ -4,7 +4,7 @@ See also:
 
     https://github.com/django/django/blob/master/django/middleware/csrf.py
     https://docs.djangoproject.com/en/dev/ref/contrib/csrf/
-    https://github.com/whit537/www.gittip.com/issues/88
+    https://github.com/zetaweb/www.gittip.com/issues/88
 
 """
 import rfc822

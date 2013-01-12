@@ -33,7 +33,7 @@ from psycopg2.extras import RealDictRow
 # ======================
 # Balanced has a $0.50 minimum. We go even higher to avoid onerous
 # per-transaction fees. See:
-# https://github.com/whit537/www.gittip.com/issues/167 XXX I should maybe
+# https://github.com/zetaweb/www.gittip.com/issues/167 XXX I should maybe
 # compute this using *ahem* math.
 
 FEE_CHARGE = ( Decimal("0.30")   # $0.30
@@ -278,7 +278,7 @@ class Payday(object):
         a NULL (0.0 + NULL = NULL), and balance has a NOT NULL constraint.
         Hence the where clause. See:
 
-            https://github.com/whit537/www.gittip.com/issues/170
+            https://github.com/zetaweb/www.gittip.com/issues/170
 
         """
 

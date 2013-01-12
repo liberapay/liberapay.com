@@ -191,7 +191,7 @@ class Context(object):
 
             # Be sure to sort {a,b}_table.items() so we can depend on the sort
             # order of the inserts, updates, and deletes lists.
-            # See https://github.com/whit537/www.gittip.com/issues/413.
+            # See https://github.com/zetaweb/www.gittip.com/issues/413.
 
             for key, row in sorted(b_table.items()):
                 if key not in a_table:
