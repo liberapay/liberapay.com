@@ -421,20 +421,20 @@ def tip_graph(*a, **kw):
 # ==============================
 
 test_website = Website([ '--www_root', str(join(TOP, 'www'))
-                       , '--project_root', str('..')
+                       , '--project_root', str(TOP)
                         ])
 
-def serve_request(path, user=None):
-    """Given an URL path, return response.
-    """
-    request = StubRequest(path)
-    request.website = test_website
-    if user is not None:
-        user = User.from_id(user)
-        # Note that Cookie needs a bytestring.
-        request.headers.cookie[str('session')] = user.session_token
-    response = test_website.handle_safely(request)
-    return response
+# def serve_request(path, user=None):
+#     """Given an URL path, return response.
+#     """
+#     request = StubRequest(path)
+#     request.website = test_website
+#     if user is not None:
+#         user = User.from_id(user)
+#         # Note that Cookie needs a bytestring.
+#         request.headers.cookie[str('session')] = user.session_token
+#     response = test_website.handle_safely(request)
+#     return response
 
 def load_simplate(path):
     """Given an URL path, return resource.
@@ -443,9 +443,9 @@ def load_simplate(path):
     request.website = test_website
 
     # XXX HACK - aspen.website should be refactored
-    from aspen import gauntlet, sockets
+    from aspen import dispatcher, sockets
     test_website.hooks.inbound_early.run(request)
-    gauntlet.run(request)  # sets request.fs
+    dispatcher.dispatch(request)  # sets request.fs
     request.socket = sockets.get(request)
     test_website.hooks.inbound_late.run(request)
 

@@ -1,8 +1,9 @@
 from datetime import datetime
 from decimal import Decimal
 
+from aspen.testing import handle
 from gittip import wireup
-from gittip.testing import load, load_simplate, serve_request, tip_graph
+from gittip.testing import load, load_simplate, tip_graph
 from gittip.billing.payday import Payday
 from gittip.participant import Participant
 from mock import patch
@@ -91,7 +92,7 @@ def test_get_chart_of_receiving_ignores_missing_cc():
 # rendering
 
 def get_stats_page():
-    response = serve_request('/about/stats.html')
+    response = handle('/about/stats.html')
     return response.body
 
 
