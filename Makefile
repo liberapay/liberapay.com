@@ -1,5 +1,7 @@
+python := "$(shell { command -v python2.7 || command -v python; } 2>/dev/null)"
+
 env: env/bin/swaddle
-	python2.7 ./vendor/virtualenv-1.7.1.2.py \
+	$(python) ./vendor/virtualenv-1.7.1.2.py \
 				--unzip-setuptools \
 				--prompt="[gittip] " \
 				--never-download \
@@ -11,7 +13,7 @@ env: env/bin/swaddle
 	./env/bin/pip install -e ./
 
 env/bin/swaddle:
-	python2.7 ./vendor/virtualenv-1.7.1.2.py \
+	$(python) ./vendor/virtualenv-1.7.1.2.py \
 				--unzip-setuptools \
 				--prompt="[gittip] " \
 				--never-download \
