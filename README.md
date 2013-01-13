@@ -55,7 +55,8 @@ you're on a Mac, maybe try out Heroku's
 [Postgres.app](http://www.postgresql.org/download/). If installing using a
 package manager, you may need several packages. On Ubuntu and Debian, the
 required packages are: postgresql (base), libpq5-dev (includes headers needed
-to build the psycopg2 Python library), and postgresql-contrib (includes hstore)
+to build the psycopg2 Python library), and postgresql-contrib (includes
+hstore).
 
 The reason we want you to use Postgres locally instead of SQLite is so that
 your development environment closely matches production, minimizing a class of
