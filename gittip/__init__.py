@@ -7,7 +7,11 @@ from decimal import Decimal
 try:  # XXX This can't be right.
     locale.setlocale(locale.LC_ALL, "en_US.utf8")
 except locale.Error:
-    locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
+    import sys
+    if sys.platform == 'win32':
+        locale.setlocale(locale.LC_ALL, '')
+    else:
+        locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
 
 
 BIRTHDAY = datetime.date(2012, 6, 1)
