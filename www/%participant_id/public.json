@@ -17,10 +17,11 @@ output = {"receiving": str(receiving)}
 # 0.00 - user used to tip this person but now doesn't
 # 3.00 - user tips this person this amount
 if not user.ANON and user.id != path['participant_id']: 
-	my_tip = Participant.get_tip_to(user, path['participant_id'])
-	if my_tip == 0:
-	    my_tip = "%0.2f" % 0.00
-	output["my_tip"] = str(my_tip)
+    my_tip = Participant.get_tip_to(user, path['participant_id'])
+    if my_tip == 0:
+        my_tip = "%0.2f" % 0.00
+    output["my_tip"] = str(my_tip)
+
 
 response.headers["Access-Control-Allow-Origin"] = "*"
 response.body = output
