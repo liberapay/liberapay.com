@@ -58,6 +58,18 @@ def test_about_unclaimed():
     actual = serve_request('/about/unclaimed.html').body
     assert expected in actual, actual
 
+def test_public_json_nothing():
+    with tip_graph(('alice', 'bob', 1)):
+        expected = '{"receiving": "0.00"}'
+        actual = serve_request('/alice/public.json').body
+        assert expected in actual, actual
+
+def test_public_json_something():
+    with tip_graph(('alice', 'bob', 1)):
+        expected = '{"receiving": "1.00"}'
+        actual = serve_request('/bob/public.json').body
+        assert expected in actual, actual
+
 
 # These hit the network. XXX add a knob to skip these
 
