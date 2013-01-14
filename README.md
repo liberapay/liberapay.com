@@ -320,8 +320,19 @@ The Gittip API is comprised of these endpoints:
  - **/%participant_id/public.json**
    ([example](https://www.gittip.com/whit537/public.json),
     [source](https://github.com/zetaweb/www.gittip.com/tree/master/www/%25participant_id/public.json))&mdash;Returns an
-    object with an estimate of the amount the given participant is receiving 
-    each week.
+    object with these keys:
+
+    - "receiving"&mdash;an estimate of the amount the given participant will
+      receive this week
+
+    - "my_tip"&mdash;logged-in user's tip to the Gittip participant in 
+      question; possible values are:
+
+        - `undefined` (key not present)&mdash;there is no logged-in user
+        - "self"&mdash;logged-in user is the participant in question
+        - `null`&mdash;user has never tipped this participant
+        - "0.00"&mdash;user used to tip this participant
+        - "3.00"&mdash;user tips this participant the given amount
 
 
 Glossary
