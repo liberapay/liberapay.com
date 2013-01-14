@@ -88,16 +88,20 @@ def get_user_info(login):
                               "AND user_info->'login' = %s"
                             , (login,)
                              )
-    if rec is not None:
+    if False or rec is not None:
         user_info = rec['user_info']
     else:
         url = "https://api.github.com/users/%s"
         user_info = requests.get(url % login)
-
-        if user_info.status_code == 200:
-            user_info = json.loads(user_info.text)
+        status = user_info.status_code
+        content = user_info.text
+        if status == 200:
+            user_info = json.loads(content)
+        elif status == 404:
+            raise Response(404,
+                           "GitHub identity '{0}' not found.".format(login))
         else:
-            code = user_info.status_code
-            raise Response(500, "GitHub lookup failed with %d." % code)
+            log("Github api responded with {0}: {1}".format(status, content))
+            raise Response(502, "GitHub lookup failed with %d." % status)
 
     return user_info
