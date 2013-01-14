@@ -80,7 +80,13 @@ def oauth_dance(website, qs):
 
 
 def get_user_info(login):
-    """Given a unicode, return a dict.
+    """Get the given user's information from the DB or failing that, github.
+
+    :param login:
+        A unicode string representing a username in github.
+
+    :returns:
+        A dictionary containing github specific information for the user.
     """
     typecheck(login, unicode)
     rec = gittip.db.fetchone( "SELECT user_info FROM elsewhere "
@@ -88,7 +94,7 @@ def get_user_info(login):
                               "AND user_info->'login' = %s"
                             , (login,)
                              )
-    if False or rec is not None:
+    if rec is not None:
         user_info = rec['user_info']
     else:
         url = "https://api.github.com/users/%s"
