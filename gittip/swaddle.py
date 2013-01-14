@@ -29,6 +29,11 @@ def configure(envdef):
     if not args:
         m ="[SWADDLE] No command specified; exiting."
         raise SystemExit(m)
+    if sys.platform == 'win32' and not os.path.isfile(args[0]):
+        # Try with an '.exe' extension on Windows if the command doesn't
+        # already have an extension.
+        if os.path.splitext(args[0])[-1] == '':
+            args[0] += '.exe'
     if not os.path.isfile(args[0]):
         m ="[SWADDLE] Command %s does not exist; exiting." % args[0]
         raise SystemExit(m)
