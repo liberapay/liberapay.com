@@ -9,13 +9,16 @@ receiving = participant.get_dollars_receiving()
 
 output = {"receiving": str(receiving)}
 
+
 # Generate my_tip key
-# ========
+# ===================
 # Display values:
-# undefined - user is not authenticated
-# null - user has never tipped this person
-# 0.00 - user used to tip this person but now doesn't
-# 3.00 - user tips this person this amount
+#
+#   undefined - user is not authenticated
+#   null - user has never tipped this person
+#   0.00 - user used to tip this person but now doesn't
+#   3.00 - user tips this person this amount
+
 if not user.ANON and user.id != path['participant_id']: 
     my_tip = Participant.get_tip_to(user, path['participant_id'])
     if my_tip == 0:
