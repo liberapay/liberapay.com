@@ -1,4 +1,4 @@
-from aspen import Response
+from aspen import Response, log_dammit
 from gittip.models import Participant
 
 # ========================================================================== ^L
@@ -9,8 +9,10 @@ if user.ANON:
 new_participant_id = request.body['participant_id']
 
 try:
+    old_participant_id = user.id
     user.change_id(new_participant_id)
     response.body = {"participant_id": new_participant_id}
+    log_dammit("user with participant_id %s has become participant_id %s" % (old_participant_id, new_participant_id))
 except (Participant.IdContainsInvalidCharacters, Participant.IdIsRestricted):
     raise Response(400)
 except Participant.IdAlreadyTaken:
