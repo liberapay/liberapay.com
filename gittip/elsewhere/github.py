@@ -1,4 +1,5 @@
 import gittip
+import logging
 import requests
 from aspen import json, log, Response
 from aspen.website import Website
@@ -107,7 +108,8 @@ def get_user_info(login):
             raise Response(404,
                            "GitHub identity '{0}' not found.".format(login))
         else:
-            log("Github api responded with {0}: {1}".format(status, content))
+            log("Github api responded with {0}: {1}".format(status, content),
+                level=logging.WARNING)
             raise Response(502, "GitHub lookup failed with %d." % status)
 
     return user_info

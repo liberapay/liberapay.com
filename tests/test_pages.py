@@ -1,4 +1,7 @@
-from gittip.testing import serve_request, tip_graph, load
+from gittip.testing import (
+    serve_request, tip_graph, load, GITHUB_USER_UNREGISTERED_LGTEST)
+
+from mock import patch
 
 
 def test_homepage():
@@ -59,14 +62,17 @@ def test_about_unclaimed():
     assert expected in actual, actual
 
 
-# These hit the network. XXX add a knob to skip these
-
-def test_github_proxy():
+@patch('gittip.elsewhere.github.requests')
+def test_github_proxy(requests):
+    requests.get().status_code = 200
+    requests.get().text = GITHUB_USER_UNREGISTERED_LGTEST
     with load():
         expected = "<b>lgtest</b> has not joined"
         actual = serve_request('/on/github/lgtest/').body
         assert expected in actual, actual
 
+
+# This hits the network. XXX add a knob to skip this
 def test_twitter_proxy():
     with load():
         expected = "<b>Twitter</b> has not joined"
