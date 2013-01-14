@@ -26,7 +26,7 @@ except NotImplementedError:
 SECRET_KEY = ""
 import string
 pool = string.digits + string.letters + string.punctuation
-UNSECURE_RANDOM_STRING = "".join([random.choice(pool) for i in range(64)])
+UNSECURE_RANDOM_STRING = b"".join([random.choice(pool) for i in range(64)])
 
 
 # I get wet.
