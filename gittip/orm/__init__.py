@@ -41,6 +41,12 @@ class SQLAlchemy(object):
         base.query = self.session.query_property()
         return base
 
+    def drop_all(self):
+        self.Model.metadata.drop_all(bind=self.engine)
+
+    def create_all(self):
+        self.Model.metadata.create_all(bind=self.engine)
+
 db = SQLAlchemy()
 
 all = [db]
