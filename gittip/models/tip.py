@@ -1,9 +1,9 @@
 from sqlalchemy.schema import Column, ForeignKey
 from sqlalchemy.types import Integer, Numeric, Text, TIMESTAMP
 
-from gittip.orm import Base
+from gittip.orm import db
 
-class Tip(Base):
+class Tip(db.Model):
     __tablename__ = 'tips'
 
     id = Column(Integer, nullable=False, primary_key=True)

@@ -1,9 +1,9 @@
 from sqlalchemy.schema import Column, ForeignKey
 from sqlalchemy.types import Integer, Text, TIMESTAMP
 
-from gittip.orm import Base
+from gittip.orm import db
 
-class Absorption(Base):
+class Absorption(db.Model):
     __tablename__ = 'absorptions'
 
     id = Column(Integer, nullable=False, primary_key=True)

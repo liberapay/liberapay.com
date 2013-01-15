@@ -4,9 +4,9 @@ import pytz
 from sqlalchemy.schema import Column, UniqueConstraint
 from sqlalchemy.types import Integer, Numeric, Text, TIMESTAMP
 
-from gittip.orm import Base
+from gittip.orm import db
 
-class Payday(Base):
+class Payday(db.Model):
     __tablename__ = 'payday'
     __table_args__ = (
         UniqueConstraint('ts_end', name='paydays_ts_end_key'),

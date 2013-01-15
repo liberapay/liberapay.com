@@ -1,9 +1,9 @@
 from sqlalchemy.schema import Column, ForeignKey
 from sqlalchemy.types import Integer, Numeric, Text, TIMESTAMP
 
-from gittip.orm import Base
+from gittip.orm import db
 
-class Exchange(Base):
+class Exchange(db.Model):
     __tablename__ = 'exchanges'
 
     id = Column(Integer, nullable=False, primary_key=True)
