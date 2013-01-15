@@ -1,9 +1,9 @@
 from sqlalchemy.schema import Column, ForeignKey
 from sqlalchemy.types import Integer, Numeric, Text, TIMESTAMP
 
-from gittip.orm import Base
+from gittip.orm import db
 
-class Transfer(Base):
+class Transfer(db.Model):
     __tablename__ = 'transfers'
 
     id = Column(Integer, nullable=False, primary_key=True)

@@ -1,5 +1,6 @@
 import uuid
 
+from gittip.orm import db
 from gittip.models.participant import Participant
 
 class User(Participant):
@@ -23,8 +24,8 @@ class User(Participant):
         user = User.query.filter_by(id=user_id).first()
         if user and not user.is_suspicious:
             user.session_token = uuid.uuid4().hex
-            user.save()
-            # attrs = participant.attrs_dict()
+            db.session.add(user)
+            db.session.commit()
         else:
             user = User()
         return user

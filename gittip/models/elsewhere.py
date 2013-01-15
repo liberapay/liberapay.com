@@ -2,9 +2,9 @@ from sqlalchemy.dialects.postgresql.hstore import HSTORE
 from sqlalchemy.schema import Column, UniqueConstraint, ForeignKey
 from sqlalchemy.types import Integer, Text, Boolean
 
-from gittip.orm import Base
+from gittip.orm import db
 
-class Elsewhere(Base):
+class Elsewhere(db.Model):
     __tablename__ = 'elsewhere'
     __table_args__ = (
         UniqueConstraint('platform', 'participant_id',

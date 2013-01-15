@@ -10,7 +10,7 @@ from sqlalchemy.types import Text, TIMESTAMP, Boolean, Numeric
 from aspen import Response
 
 import gittip
-from gittip.orm import Base, db
+from gittip.orm import db
 from gittip.models import Elsewhere
 # This is loaded for now to maintain functionality until the class is fully
 # migrated over to doing everything using SQLAlchemy
@@ -21,7 +21,7 @@ ASCII_ALLOWED_IN_PARTICIPANT_ID = set("0123456789"
                                       "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                       ".,-_;:@ ")
 
-class Participant(Base):
+class Participant(db.Model):
     __tablename__ = "participants"
     __table_args__ = (
         UniqueConstraint("session_token",
@@ -70,7 +70,8 @@ class Participant(Base):
 
     def set_as_claimed(self):
         self.claimed_time = datetime.datetime.now(pytz.utc)
-        self.save()
+        db.session.add(self)
+        db.session.commit()
 
     def change_id(self, desired_id):
         ParticipantClass(self.id).change_id(desired_id)
