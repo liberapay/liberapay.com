@@ -1,25 +1,10 @@
 from __future__ import unicode_literals
 import os
+import pdb
 
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session
-
-class SQLAlchemy(object):
-    def __init__(self):
-        self.session = self.create_session()
-
-    @property
-    def engine(self):
-        dburl = os.environ['DATABASE_URL']
-        return create_engine(dburl)
-
-    def create_session(self):
-        session = scoped_session(sessionmaker())
-        session.configure(bind=self.engine)
-        return session
-
-db = SQLAlchemy()
 
 class Model(object):
     def __repr__(self):
@@ -36,23 +21,29 @@ class Model(object):
             attrs[key] = getattr(self, key)
         return attrs
 
-    def save(self):
-        db.session.add(self)
-        db.session.commit()
+class SQLAlchemy(object):
+    def __init__(self):
+        self.session = self.create_session()
+        self.Model = self.make_declarative_base()
 
-    def delete(self):
-        db.session.delete(self)
-        db.session.commit()
+    @property
+    def engine(self):
+        dburl = os.environ['DATABASE_URL']
+        return create_engine(dburl)
 
-Base = declarative_base(cls=Model)
-Base.metadata.bind = db.engine
-Base.query = db.session.query_property()
+    def create_session(self):
+        session = scoped_session(sessionmaker())
+        session.configure(bind=self.engine)
+        return session
 
-metadata = MetaData()
-metadata.bind = db.engine
+    def make_declarative_base(self):
+        base = declarative_base(cls=Model)
+        base.query = self.session.query_property()
+        return base
 
-all = [Base, db, metadata]
+db = SQLAlchemy()
 
+all = [db]
 
 def rollback(*_):
     db.session.rollback()
