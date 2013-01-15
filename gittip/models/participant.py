@@ -62,6 +62,12 @@ class Participant(db.Model):
     transferee = relationship("Transfer", backref="transferee",
                              foreign_keys="Transfer.tippee")
 
+    # Class-specific exceptions
+    class IdTooLong(Exception): pass
+    class IdContainsInvalidCharacters(Exception): pass
+    class IdIsRestricted(Exception): pass
+    class IdAlreadyTaken(Exception): pass
+
     def resolve_unclaimed(self):
         if self.accounts_elsewhere:
             return self.accounts_elsewhere[0].resolve_unclaimed()
@@ -74,7 +80,34 @@ class Participant(db.Model):
         db.session.commit()
 
     def change_id(self, desired_id):
-        ParticipantClass(self.id).change_id(desired_id)
+        """Raise Response or return None.
+
+        We want to be pretty loose with usernames. Unicode is allowed--XXX
+        aspen bug :(. So are spaces.Control characters aren't. We also limit to
+        32 characters in length.
+
+        """
+        for i, c in enumerate(desired_id):
+            if i == 32:
+                raise self.IdTooLong  # Request Entity Too Large (more or less)
+            elif ord(c) < 128 and c not in ASCII_ALLOWED_IN_PARTICIPANT_ID:
+                raise self.IdContainsInvalidCharacters  # Yeah, no.
+            elif c not in ASCII_ALLOWED_IN_PARTICIPANT_ID:
+                raise self.IdContainsInvalidCharacters  # XXX Burned by an Aspen bug. :`-(
+                                                        # https://github.com/zetaweb/aspen/issues/102
+
+        if desired_id in gittip.RESTRICTED_IDS:
+            raise self.IdIsRestricted
+
+        if desired_id != self.id:
+            # Will raise sqlalchemy.exc.IntegrityError if the desired_id is taken.
+            try:
+                self.id = desired_id
+                db.session.add(self)
+                db.session.commit()
+            except IntegrityError as e:
+                db.session.rollback()
+                raise self.IdAlreadyTaken
 
     def get_accounts_elsewhere(self):
         github_account = twitter_account = None
