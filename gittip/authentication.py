@@ -6,6 +6,7 @@ import time
 
 import pytz
 from aspen import Response
+from gittip.orm import db
 from gittip.models import User
 
 BEGINNING_OF_EPOCH = rfc822.formatdate(0)
@@ -45,7 +46,8 @@ def outbound(response):
         expires = time.time() + TIMEOUT
         user.session_expires = datetime.datetime.fromtimestamp(expires)\
                                                 .replace(tzinfo=pytz.utc)
-        user.save()
+        db.session.add(user)
+        db.session.commit()
 
     cookie = response.headers.cookie['session']
     # I am not setting domain, because it is supposed to default to what we
