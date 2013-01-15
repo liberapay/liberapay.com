@@ -29,7 +29,7 @@ class Participant(Base):
     )
   
     id = Column(Text, nullable=False, primary_key=True)
-    statement = Column(Text, nullable=False)
+    statement = Column(Text, default="", nullable=False)
     stripe_customer_id = Column(Text)
     last_bill_result = Column(Text)
     session_token = Column(Text)
@@ -59,7 +59,7 @@ class Participant(Base):
                              foreign_keys="Tip.tippee", lazy="dynamic")
     transferer = relationship("Transfer", backref="transferer",
                              foreign_keys="Transfer.tipper")
-    trasnferee = relationship("Transfer", backref="transferee",
+    transferee = relationship("Transfer", backref="transferee",
                              foreign_keys="Transfer.tippee")
 
     def resolve_unclaimed(self):
