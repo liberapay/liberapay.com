@@ -30,6 +30,10 @@ class SQLAlchemy(object):
         dburl = os.environ['DATABASE_URL']
         return create_engine(dburl)
 
+    @property
+    def metadata(self):
+        return self.Model.metadata
+
     def create_session(self):
         session = scoped_session(sessionmaker())
         session.configure(bind=self.engine)
@@ -39,6 +43,12 @@ class SQLAlchemy(object):
         base = declarative_base(cls=Model)
         base.query = self.session.query_property()
         return base
+
+    def empty_tables(self):
+        for table in reversed(self.metadata.sorted_tables):
+            self.session.execute(table.delete())
+        self.session.commit()
+        self.session.remove()
 
     def drop_all(self):
         self.Model.metadata.drop_all(bind=self.engine)
