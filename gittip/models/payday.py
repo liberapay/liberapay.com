@@ -7,7 +7,7 @@ from sqlalchemy.types import Integer, Numeric, Text, TIMESTAMP
 from gittip.orm import db
 
 class Payday(db.Model):
-    __tablename__ = 'payday'
+    __tablename__ = 'paydays'
     __table_args__ = (
         UniqueConstraint('ts_end', name='paydays_ts_end_key'),
     )
