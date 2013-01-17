@@ -21,7 +21,9 @@ MONTHS = [None, 'January', 'February', 'March', 'April', 'May', 'June', 'July',
 
 def age():
     today = datetime.date.today()
-    nmonths = today.month - BIRTHDAY.month
+    nmonths = (12 - BIRTHDAY.month) \
+            + (12 * (today.year - BIRTHDAY.year - 1)) \
+            + (today.month)
     plural = 's' if nmonths != 1 else ''
     if nmonths < 10:
         nmonths = CARDINALS[nmonths]
