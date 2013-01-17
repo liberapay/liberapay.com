@@ -26,7 +26,7 @@ class Participant(db.Model):
         UniqueConstraint("session_token",
                          name="participants_session_token_key"),
     )
-  
+
     id = Column(Text, nullable=False, primary_key=True)
     statement = Column(Text, default="", nullable=False)
     stripe_customer_id = Column(Text)
