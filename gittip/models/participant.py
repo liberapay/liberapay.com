@@ -74,8 +74,10 @@ class Participant(db.Model):
         else:
             return None
 
-    def set_as_claimed(self):
-        self.claimed_time = datetime.datetime.now(pytz.utc)
+    def set_as_claimed(self, claimed_at=None):
+        if claimed_at is None:
+            claimed_at = datetime.datetime.now(pytz.utc)
+        self.claimed_time = claimed_at
         db.session.add(self)
         db.session.commit()
 
