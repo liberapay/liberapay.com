@@ -2,21 +2,10 @@ from __future__ import unicode_literals
 import os
 
 from sqlalchemy import create_engine, MetaData
-from sqlalchemy.ext.declarative import ( declarative_base
-                                       , _declarative_constructor
-                                        )
+from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session
 
-
 class Model(object):
-    def __init__(self, **kwargs):
-        """
-        Initializes a model by invoking the _declarative_constructor
-        in SQLAlchemy. We do this for full control over construction
-        of an object
-        """
-        _declarative_constructor(self, **kwargs)
-
     def __repr__(self):
         cols = self.__mapper__.c.keys()
         class_name = self.__class__.__name__
@@ -24,22 +13,52 @@ class Model(object):
                            in cols])
         return '%s(%s)' % (class_name, items)
 
+    def attrs_dict(self):
+        keys = self.__mapper__.c.keys()
+        attrs = {}
+        for key in keys:
+            attrs[key] = getattr(self, key)
+        return attrs
 
-dburl = os.environ['DATABASE_URL']
-db_engine = create_engine(dburl)
+class SQLAlchemy(object):
+    def __init__(self):
+        self.session = self.create_session()
+        self.Model = self.make_declarative_base()
 
-Session = scoped_session(sessionmaker())
-Session.configure(bind=db_engine)
+    @property
+    def engine(self):
+        dburl = os.environ['DATABASE_URL']
+        return create_engine(dburl)
 
-Base = declarative_base(cls=Model, constructor=None)
-Base.metadata.bind = db_engine
-Base.query = Session.query_property()
+    @property
+    def metadata(self):
+        return self.Model.metadata
 
-metadata = MetaData()
-metadata.bind = db_engine
+    def create_session(self):
+        session = scoped_session(sessionmaker())
+        session.configure(bind=self.engine)
+        return session
 
-all = [Base, Session, metadata]
+    def make_declarative_base(self):
+        base = declarative_base(cls=Model)
+        base.query = self.session.query_property()
+        return base
 
+    def empty_tables(self):
+        for table in reversed(self.metadata.sorted_tables):
+            self.session.execute(table.delete())
+        self.session.commit()
+        self.session.remove()
+
+    def drop_all(self):
+        self.Model.metadata.drop_all(bind=self.engine)
+
+    def create_all(self):
+        self.Model.metadata.create_all(bind=self.engine)
+
+db = SQLAlchemy()
+
+all = [db]
 
 def rollback(*_):
-    Session.rollback()
+    db.session.rollback()

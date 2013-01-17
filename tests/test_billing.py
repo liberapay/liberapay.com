@@ -162,7 +162,7 @@ def test_associate_invalid_card(find):
         user = authentication.User.from_id('foo')
         # participant in db should be updated to reflect the error message of
         # last update
-        assert user.session['last_bill_result'] == error_message
+        assert user.last_bill_result == error_message
         assert find.call_count
 
 @mock.patch('gittip.billing.balanced.Account.find')
@@ -185,7 +185,7 @@ def test_associate_bank_account_valid(find):
         user = authentication.User.from_id('foo')
 
         # participant in db should be updated
-        assert user.session['last_ach_result'] == ''
+        assert user.last_ach_result == ''
 
 @mock.patch('gittip.billing.balanced.Account.find')
 def test_associate_bank_account_invalid(find):
@@ -202,7 +202,7 @@ def test_associate_bank_account_invalid(find):
         user = authentication.User.from_id('foo')
 
         # participant in db should be updated
-        assert user.session['last_ach_result'] == 'errrrrror'
+        assert user.last_ach_result == 'errrrrror'
 
 
 # clear
@@ -237,8 +237,8 @@ def test_clear(find):
         assert not invalid_card.save.call_count
 
         user = authentication.User.from_id('foo')
-        assert not user.session['last_bill_result']
-        assert user.session['balanced_account_uri']
+        assert not user.last_bill_result
+        assert user.balanced_account_uri
 
 @mock.patch('gittip.billing.balanced.Account')
 def test_clear_bank_account(b_account):
@@ -269,8 +269,8 @@ def test_clear_bank_account(b_account):
         assert not invalid_ba.save.call_count
 
         user = authentication.User.from_id('foo')
-        assert not user.session['last_ach_result']
-        assert user.session['balanced_account_uri']
+        assert not user.last_ach_result
+        assert user.balanced_account_uri
 
 
 # store_error
