@@ -42,6 +42,17 @@ def populate_db_with_dummy_data(db):
         account = GitHubAccount(user_id, {"id": user_id, "login": login})
         Participant(account.participant_id).change_id(login)
 
+class BaseTestCase(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.db = orm.db
+        cls.session = orm.db.session
+
+    def setUp(self):
+        pass
+
+    def tearDown(self):
+        self.db.empty_tables()
 
 class GittipBaseDBTest(unittest.TestCase):
     """
