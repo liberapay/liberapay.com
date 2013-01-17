@@ -6,9 +6,7 @@ import requests
 from aspen import json, Response
 from aspen.utils import to_age
 from gittip import AMOUNTS
-from gittip.participant import Participant
 from gittip.utils import wrap
-
 
 tip_suggestions = ('jeresig', 'antirez', 'wycats', 'fabpot', 'mitsuhiko',
                    'jtauber', 'kennethreitz', 'alex', 'taylorotwell')
@@ -24,6 +22,8 @@ def _extract_username(tip):
 
 # ========================================================================== ^L
 
+from gittip.models import Participant
+
 # XXX Hack
 # ========
 # Work around https://github.com/whit537/aspen/issues/108 until we upgrade.
@@ -31,18 +31,16 @@ def _extract_username(tip):
 if not path.raw.endswith('/'):
     request.redirect(path.raw + '/', permanent=True)
 
-
 # Instantiate a Participant object.
 # =================================
 # And load their details from the database.
 
-participant = Participant(path['participant_id'])
-deets = participant.get_details()
+participant = Participant.query.get(path['participant_id'])
 
-if deets is None:
+if participant is None:
     raise Response(404)
 
-elif deets['claimed_time'] is None:
+elif participant.claimed_time is None:
 
     # This is a stub participant record for someone on another platform who
     # hasn't actually registered with Gittip yet. Let's bounce the viewer over
@@ -57,7 +55,7 @@ elif deets['claimed_time'] is None:
 # Load money info.
 # ================
 
-backed_amount = participant.get_dollars_receiving()
+backed_amount = participant.dollars_receiving
 
 if not user.ANON:
     if user.id == participant.id or user.ADMIN:
@@ -452,7 +450,7 @@ github_account, twitter_account = participant.get_accounts_elsewhere()
     -->
     {% end %}
 
-{% if not user.ANON and user.id == deets['id'] %}
+{% if not user.ANON and user.id == participant.id %}
     <h2 class="first">You are
         <b class="participant_id">{{ escape(user.id) }}</b>
         <span class="participant_id"><form>
@@ -467,10 +465,10 @@ github_account, twitter_account = participant.get_accounts_elsewhere()
     <h3>How are you making the world better?</h3>
 
     <form class="statement"
-        {% if deets['statement'] %}style="display: none;"{% end %}>
+        {% if participant.statement %}style="display: none;"{% end %}>
         <blockquote>
             I am making the world better by ...
-            <textarea>{{ deets['statement'] }}</textarea>
+            <textarea>{{ participant.statement }}</textarea>
             <span class="help">Newlines and links are converted to HTML.</span>
             <button id="save-statement" type="submit" class="selected small">Save</button>
             <button id="cancel-statement" type="cancel" class="small">Cancel</button>
@@ -478,9 +476,9 @@ github_account, twitter_account = participant.get_accounts_elsewhere()
     </form>
 
     <blockquote id="my-statement" class="statement"
-        {% if not deets['statement'] %}style="display: none"{% end %}>
+        {% if not participant.statement %}style="display: none"{% end %}>
         I am making the world better by <span>
-            {{ wrap(deets['statement']) }}</span><br />
+            {{ wrap(participant.statement) }}</span><br />
         <button class="small selected">Edit</button>
     </blockquote>
 
@@ -544,7 +542,7 @@ github_account, twitter_account = participant.get_accounts_elsewhere()
 
     <p>
         <input name="anonymous" class="anonymous" type="checkbox"
-            {% if deets['anonymous'] %}checked="true"{% end %} />
+            {% if participant.anonymous %}checked="true"{% end %} />
         <label for="anonymous" class="anonymous">Show as
             &ldquo;anonymous&rdquo; on leaderboard.</label>
     </p>
@@ -714,25 +712,25 @@ github_account, twitter_account = participant.get_accounts_elsewhere()
     <h2 class="first"><b>{{ participant.id }}</b> receives
         ${{ backed_amount }} per week.</h2>
 
-    {% if deets['statement'] %}
+    {% if participant.statement %}
     <blockquote class="statement">I am making the world better by
-    {{ wrap(deets['statement']) }}</blockquote>
+    {{ wrap(participant.statement) }}</blockquote>
 
     <h3>Funding Goal</h3>
     {% end %}
 
     <blockquote class="goal">
-        {% if deets['goal'] is None %}
+        {% if participant.goal is None %}
         I&rsquo;m grateful for tips, but I don&rsquo;t have a specific funding goal.
-        {% elif deets['goal'] == 0 %}
+        {% elif participant.goal == 0 %}
         I&rsquo;m not here to receive tips. I&rsquo;ll generally regift them.
         {% else %}
-        My goal is to receive ${{ locale.format("%.2f", deets['goal'], grouping=True) }} per week on Gittip.
+        My goal is to receive ${{ locale.format("%.2f", participant.goal, grouping=True) }} per week on Gittip.
         {% end %}
     </blockquote>
 
     {% if user.ADMIN %}
-    <h3>{{ participant.id }} joined {{ to_age(deets['claimed_time']) }}.
+    <h3>{{ participant.id }} joined {{ to_age(participant.claimed_time) }}.
         <span class="small"><a href="history.html">History</a></span>
     </h3>
 
@@ -757,11 +755,11 @@ github_account, twitter_account = participant.get_accounts_elsewhere()
                         No Twitter account connected.
                     {% end %}
                 {% else %}
-                <a href="{{ twitter_account['user_info'].get('html_url', '') }}"
+                <a href="{{ twitter_account.user_info.get('html_url', '') }}"
                     ><img class="avatar"
-                    src="{{ twitter_account['user_info'].get('profile_image_url_https', '/assets/%s/no-avatar.png' % __version__) }}"
-                    />{{ twitter_account['user_info'].get('screen_name') }}
-                    {% if twitter_account['user_info'].get('name') %}({{ twitter_account['user_info'].get('name') }}){% end %}
+                    src="{{ twitter_account.user_info.get('profile_image_url_https', '/assets/%s/no-avatar.png' % __version__) }}"
+                    />{{ twitter_account.user_info.get('screen_name') }}
+                    {% if twitter_account.user_info.get('name') %}({{ twitter_account.user_info.get('name') }}){% end %}
                 </a>
                 {% end %}
                 <div class="account-type">Twitter</div>
@@ -772,18 +770,18 @@ github_account, twitter_account = participant.get_accounts_elsewhere()
                 <img src="/assets/octocat.png" />
             </td>
             <td class="account-details">
-                {% if github_account is None %}
+                {% if github_account %}
+                <a href="{{ github_account.user_info.get('html_url', '') }}"
+                    ><img class="avatar" src="{{ github_account.user_info.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}"
+                    />{{ github_account.user_info.get('login') }}
+                    {% if github_account.user_info.get('name') %}({{ github_account.user_info.get('name') }}){% end %}<br />
+                </a>
+                {% else %}
                     {% if not user.ANON and user.id == participant.id %}
                         Connect a <a href="{{ github.oauth_url(website, u'connect') }}">GitHub account</a>.
                     {% else %}
                         No GitHub account connected.
                     {% end %}
-                {% else %}
-                <a href="{{ github_account['user_info'].get('html_url', '') }}"
-                    ><img class="avatar" src="{{ github_account['user_info'].get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}"
-                    />{{ github_account['user_info'].get('login') }}
-                    {% if github_account['user_info'].get('name') %}({{ github_account['user_info'].get('name') }}){% end %}<br />
-                </a>
                 {% end %}
                 <div class="account-type">GitHub</div>
             </td>
@@ -796,22 +794,22 @@ github_account, twitter_account = participant.get_accounts_elsewhere()
                 {% if user.id == participant.id %}
 
                 <a href="/credit-card.html">Credit card</a>:
-                    {% if deets['last_bill_result'] != "" %}&#x2718;{% else %}&#x2714;{% end %}
+                    {% if participant.last_bill_result != "" %}&#x2718;{% else %}&#x2714;{% end %}
                 &nbsp; &nbsp; &nbsp;
                 <a href="/bank-account.html">Bank account</a>:
-                    {% if deets['last_ach_result'] != "" %}&#x2718;{% else %}&#x2714;{% end %}
+                    {% if participant.last_ach_result != "" %}&#x2718;{% else %}&#x2714;{% end %}
 
                 {% else %}
 
                 Credit card:
-                    {% if deets['last_bill_result'] != "" %}&#x2718;{% else %}&#x2714;{% end %}
+                    {% if participant.last_bill_result != "" %}&#x2718;{% else %}&#x2714;{% end %}
                 &nbsp; &nbsp; &nbsp;
                 Bank account:
-                    {% if deets['last_ach_result'] != "" %}&#x2718;{% else %}&#x2714;{% end %}
+                    {% if participant.last_ach_result != "" %}&#x2718;{% else %}&#x2714;{% end %}
 
                 {% end %}
-                <div class="account-type">{% if user.ADMIN and deets['balanced_account_uri'] %}
-                    <a href="https://www.balancedpayments.com/{{ deets['balanced_account_uri'][3:] }}"
+                <div class="account-type">{% if user.ADMIN and participant.balanced_account_uri %}
+                    <a href="https://www.balancedpayments.com/{{ participant.balanced_account_uri[3:] }}"
                         >Balanced Payments</a>{% else %}Balanced Payments{% end %}</div>
             </td>
         </tr>
@@ -820,7 +818,7 @@ github_account, twitter_account = participant.get_accounts_elsewhere()
     {% if user.ADMIN %}
     <p style="text-align: right">
         <input name="is_suspicious" class="is-suspicious-knob" type="checkbox"
-            {% if deets['is_suspicious'] %}checked="true"{% end %} />
+            {% if participant.is_suspicious %}checked="true"{% end %} />
         <label for="is_suspicious" class="is-suspicious-knob">Suspicious</label>
     </p>
     {% end %}

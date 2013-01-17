@@ -1,5 +1,5 @@
 from aspen import Response
-from psycopg2 import IntegrityError
+from gittip.models import Participant
 
 # ========================================================================== ^L
 
@@ -11,5 +11,9 @@ new_participant_id = request.body['participant_id']
 try:
     user.change_id(new_participant_id)
     response.body = {"participant_id": new_participant_id}
-except IntegrityError:
-    raise Response(409)  # Conflict
+except Participant.IdContainsInvalidCharacters, Participant.IdIsRestricted:
+    raise Response(400)
+except Participant.IdAlreadyTaken:
+    raise Response(409)
+except Participant.IdTooLong:
+    raise Response(413)
