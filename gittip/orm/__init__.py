@@ -1,6 +1,5 @@
 from __future__ import unicode_literals
 import os
-import pdb
 
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy.ext.declarative import declarative_base
