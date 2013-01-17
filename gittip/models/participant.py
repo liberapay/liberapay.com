@@ -11,7 +11,6 @@ from aspen import Response
 
 import gittip
 from gittip.orm import db
-from gittip.models import Elsewhere
 # This is loaded for now to maintain functionality until the class is fully
 # migrated over to doing everything using SQLAlchemy
 from gittip.participant import Participant as ParticipantClass
@@ -142,7 +141,12 @@ class Participant(db.Model):
         return sum(tip.amount for tip in self.tippee_in)
 
     def get_number_of_backers(self):
-        return ParticipantClass(self.id).get_number_of_backers()
+        nbackers = self.tippee_in\
+                       .distinct("tips.tipper")\
+                       .filter(Participant.last_bill_result == '',\
+                               "participants.is_suspicious IS NOT true")\
+                       .count()
+        return nbackers
 
     def get_chart_of_receiving(self):
         # TODO: Move the query in to this class.
