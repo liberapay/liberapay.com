@@ -52,9 +52,9 @@ class Participant(db.Model):
     exchanges = relationship("Exchange", backref="participant")
     # TODO: Once tippee/tipper are renamed to tippee_id/tipper_idd, we can go
     # ahead and drop the foreign_keys & rename backrefs to tipper/tippee
-    tipper_in = relationship("Tip", backref="tipper_participant",
+    _tipper_in = relationship("Tip", backref="tipper_participant",
                              foreign_keys="Tip.tipper", lazy="dynamic")
-    tippee_in = relationship("Tip", backref="tippee_participant",
+    _tippee_in = relationship("Tip", backref="tippee_participant",
                              foreign_keys="Tip.tippee", lazy="dynamic")
     transferer = relationship("Transfer", backref="transferer",
                              foreign_keys="Transfer.tipper")
@@ -66,6 +66,16 @@ class Participant(db.Model):
     class IdContainsInvalidCharacters(Exception): pass
     class IdIsRestricted(Exception): pass
     class IdAlreadyTaken(Exception): pass
+
+    @property
+    def tipper_in(self):
+        return self._tipper_in.distinct("tips.tippee")\
+                              .order_by("tips.tippee, tips.mtime DESC")
+
+    @property
+    def tippee_in(self):
+        return self._tippee_in.distinct("tips.tipper")\
+                              .order_by("tips.tipper, tips.mtime DESC")
 
     def resolve_unclaimed(self):
         if self.accounts_elsewhere:
