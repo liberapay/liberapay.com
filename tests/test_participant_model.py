@@ -71,22 +71,29 @@ class ParticipantTestCase(BaseTestCase):
 
     # TODO: Test that tips transfer
     def test_tips_being_received(self):
-        expected = Decimal('2.00')
+        amount = Decimal('2.00')
         self.session.add(Participant(id='user2'))
-        self.session.add(Tip(tipper='user2', tippee='user1', amount=expected,
-                             ctime=datetime.datetime.now(pytz.utc)))
+        self.session.add(Participant(id='user3'))
+        for _ in xrange(3):
+            self.session.add(Tip(tipper='user2', tippee='user1', amount=amount,
+                                 ctime=datetime.datetime.now(pytz.utc)))
+            self.session.add(Tip(tipper='user3', tippee='user1', amount=amount,
+                                 ctime=datetime.datetime.now(pytz.utc)))
+        expected = amount * 2
         actual = self.participant.dollars_receiving
         assert actual == expected, actual
 
     def test_tips_being_given(self):
-        expected = Decimal('3.00')
+        amount = Decimal('3.00')
         for tippee in ['user2', 'user3']:
             self.session.add(Participant(id=tippee))
-            self.session.add(Tip(tipper='user1', tippee=tippee,
-                                 amount=expected,
-                                 ctime=datetime.datetime.now(pytz.utc)))
+            for _ in xrange(3):
+                self.session.add(Tip(tipper='user1', tippee=tippee,
+                                     amount=amount,
+                                     ctime=datetime.datetime.now(pytz.utc)))
+        expected = amount * 2
         actual = self.participant.dollars_giving
-        assert actual == expected*2, actual
+        assert actual == expected, actual
 
     def test_number_of_backers(self):
         expected = 2
