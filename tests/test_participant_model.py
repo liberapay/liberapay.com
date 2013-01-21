@@ -79,7 +79,7 @@ class ParticipantTestCase(BaseTestCase):
             self.session.add(Tip(tipper='user3', tippee='user1', amount=amount,
                                  ctime=datetime.datetime.now(pytz.utc)))
         expected = amount * 2
-        actual = self.participant.dollars_receiving
+        actual = self.participant.get_dollars_receiving()
         assert actual == expected, actual
 
     def test_tips_being_given(self):
@@ -91,7 +91,7 @@ class ParticipantTestCase(BaseTestCase):
                                      amount=amount,
                                      ctime=datetime.datetime.now(pytz.utc)))
         expected = amount * 2
-        actual = self.participant.dollars_giving
+        actual = self.participant.get_dollars_giving()
         assert actual == expected, actual
 
     def test_number_of_backers(self):

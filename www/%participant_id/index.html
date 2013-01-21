@@ -55,7 +55,7 @@ elif participant.claimed_time is None:
 # Load money info.
 # ================
 
-backed_amount = participant.dollars_receiving
+backed_amount = participant.get_dollars_receiving()
 
 if not user.ANON:
     if user.id == participant.id or user.ADMIN:

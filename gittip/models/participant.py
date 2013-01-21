@@ -141,12 +141,10 @@ class Participant(db.Model):
 
         return amount
 
-    @property
-    def dollars_giving(self):
+    def get_dollars_giving(self):
         return sum(tip.amount for tip in self.tipper_in)
 
-    @property
-    def dollars_receiving(self):
+    def get_dollars_receiving(self):
         return sum(tip.amount for tip in self.tippee_in)
 
     def get_number_of_backers(self):
