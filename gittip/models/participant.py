@@ -2,12 +2,10 @@ import datetime
 from decimal import Decimal
 
 import pytz
-from sqlalchemy import select, func
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Column, CheckConstraint, UniqueConstraint
 from sqlalchemy.types import Text, TIMESTAMP, Boolean, Numeric
-from aspen import Response
 
 import gittip
 from gittip.orm import db
@@ -94,8 +92,8 @@ class Participant(db.Model):
         """Raise Response or return None.
 
         We want to be pretty loose with usernames. Unicode is allowed--XXX
-        aspen bug :(. So are spaces.Control characters aren't. We also limit to
-        32 characters in length.
+        aspen bug :(. So are spaces. Control characters aren't. We also limit
+        to 32 characters in length.
 
         """
         for i, c in enumerate(desired_id):
@@ -104,19 +102,23 @@ class Participant(db.Model):
             elif ord(c) < 128 and c not in ASCII_ALLOWED_IN_PARTICIPANT_ID:
                 raise self.IdContainsInvalidCharacters  # Yeah, no.
             elif c not in ASCII_ALLOWED_IN_PARTICIPANT_ID:
-                raise self.IdContainsInvalidCharacters  # XXX Burned by an Aspen bug. :`-(
-                                                        # https://github.com/zetaweb/aspen/issues/102
+
+                # XXX Burned by an Aspen bug. :`-(
+                # https://github.com/zetaweb/aspen/issues/102
+
+                raise self.IdContainsInvalidCharacters
 
         if desired_id in gittip.RESTRICTED_IDS:
             raise self.IdIsRestricted
 
         if desired_id != self.id:
-            # Will raise sqlalchemy.exc.IntegrityError if the desired_id is taken.
             try:
                 self.id = desired_id
                 db.session.add(self)
                 db.session.commit()
-            except IntegrityError as e:
+                # Will raise sqlalchemy.exc.IntegrityError if the desired_id is
+                # taken.
+            except IntegrityError:
                 db.session.rollback()
                 raise self.IdAlreadyTaken
 
@@ -128,9 +130,6 @@ class Participant(db.Model):
             elif account.platform == "twitter":
                 twitter_account = account
         return (github_account, twitter_account)
-
-    def get_giving_for_profile(self):
-        return ParticipantClass(self.id).get_giving_for_profile()
 
     def get_tip_to(self, tippee):
         tip = self.tipper_in.filter_by(tippee=tippee).first()
