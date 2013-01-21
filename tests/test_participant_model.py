@@ -1,4 +1,3 @@
-import unittest
 import random
 import datetime
 from decimal import Decimal
@@ -27,12 +26,12 @@ class ParticipantTestCase(BaseTestCase):
     def test_claiming_participant(self):
         expected = now = datetime.datetime.now(pytz.utc)
         self.participant.set_as_claimed(claimed_at=now)
-        actual = self.participant.claimed_time 
+        actual = self.participant.claimed_time
         assert actual == expected, actual
 
     def test_changing_id_successfully(self):
         self.participant.change_id('user2')
-        actual = Participant.query.get('user2') 
+        actual = Participant.query.get('user2')
         assert self.participant == actual, actual
 
     def test_changing_id_to_too_long(self):
@@ -61,7 +60,7 @@ class ParticipantTestCase(BaseTestCase):
         self.session.commit()
         actual = self.participant.get_tip_to('user2')
         assert actual == expected, actual
-        
+
     def test_getting_tips_not_made(self):
         expected = Decimal('0.00')
         self.session.add(Participant(id='user2'))
