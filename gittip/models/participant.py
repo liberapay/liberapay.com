@@ -3,11 +3,12 @@ from decimal import Decimal
 
 import pytz
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, aliased
 from sqlalchemy.schema import Column, CheckConstraint, UniqueConstraint
 from sqlalchemy.types import Text, TIMESTAMP, Boolean, Numeric
 
 import gittip
+from gittip.models.tip import Tip
 from gittip.orm import db
 # This is loaded for now to maintain functionality until the class is fully
 # migrated over to doing everything using SQLAlchemy
@@ -45,19 +46,34 @@ class Participant(db.Model):
     is_suspicious = Column(Boolean)
 
     ### Relations ###
-    accounts_elsewhere = relationship("Elsewhere", backref="participant",
-                                      lazy="dynamic")
+    accounts_elsewhere = relationship( "Elsewhere"
+                                     , backref="participant"
+                                     , lazy="dynamic"
+                                      )
     exchanges = relationship("Exchange", backref="participant")
+
     # TODO: Once tippee/tipper are renamed to tippee_id/tipper_idd, we can go
     # ahead and drop the foreign_keys & rename backrefs to tipper/tippee
-    _tipper_in = relationship("Tip", backref="tipper_participant",
-                             foreign_keys="Tip.tipper", lazy="dynamic")
-    _tippee_in = relationship("Tip", backref="tippee_participant",
-                             foreign_keys="Tip.tippee", lazy="dynamic")
-    transferer = relationship("Transfer", backref="transferer",
-                             foreign_keys="Transfer.tipper")
-    transferee = relationship("Transfer", backref="transferee",
-                             foreign_keys="Transfer.tippee")
+
+    _tips_giving = relationship( "Tip"
+                               , backref="tipper_participant"
+                               , foreign_keys="Tip.tipper"
+                               , lazy="dynamic"
+                                )
+    _tips_receiving = relationship( "Tip"
+                                  , backref="tippee_participant"
+                                  , foreign_keys="Tip.tippee"
+                                  , lazy="dynamic"
+                                   )
+
+    transferer = relationship( "Transfer"
+                             , backref="transferer"
+                             , foreign_keys="Transfer.tipper"
+                              )
+    transferee = relationship( "Transfer"
+                             , backref="transferee"
+                             , foreign_keys="Transfer.tippee"
+                              )
 
     # Class-specific exceptions
     class IdTooLong(Exception): pass
@@ -66,14 +82,14 @@ class Participant(db.Model):
     class IdAlreadyTaken(Exception): pass
 
     @property
-    def tipper_in(self):
-        return self._tipper_in.distinct("tips.tippee")\
-                              .order_by("tips.tippee, tips.mtime DESC")
+    def tips_giving(self):
+        return self._tips_giving.distinct("tips.tippee")\
+                                .order_by("tips.tippee, tips.mtime DESC")
 
     @property
-    def tippee_in(self):
-        return self._tippee_in.distinct("tips.tipper")\
-                              .order_by("tips.tipper, tips.mtime DESC")
+    def tips_receiving(self):
+        return self._tips_receiving.distinct("tips.tipper")\
+                                   .order_by("tips.tipper, tips.mtime DESC")
 
     def resolve_unclaimed(self):
         if self.accounts_elsewhere:
@@ -132,7 +148,7 @@ class Participant(db.Model):
         return (github_account, twitter_account)
 
     def get_tip_to(self, tippee):
-        tip = self.tipper_in.filter_by(tippee=tippee).first()
+        tip = self.tips_giving.filter_by(tippee=tippee).first()
 
         if tip:
             amount = tip.amount
@@ -141,14 +157,16 @@ class Participant(db.Model):
 
         return amount
 
-    def get_dollars_giving(self):
-        return sum(tip.amount for tip in self.tipper_in)
-
     def get_dollars_receiving(self):
-        return sum(tip.amount for tip in self.tippee_in)
+        tipper = aliased(Participant)
+        valid_tips = self.tips_receiving.join(tipper, Tip.tipper==tipper.id) \
+                                        .filter( tipper.is_suspicious != True
+                                               , tipper.last_bill_result == ''
+                                                )
+        return sum(tip.amount for tip in valid_tips)
 
     def get_number_of_backers(self):
-        nbackers = self.tippee_in\
+        nbackers = self.tips_receiving\
                        .distinct("tips.tipper")\
                        .filter(Participant.last_bill_result == '',\
                                "participants.is_suspicious IS NOT true")\
