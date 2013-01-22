@@ -96,7 +96,6 @@ class ParticipantTestCase(BaseTestCase):
             self.make_tip('user2', 'user1', amount)
             self.make_tip('user3', 'user1', amount)
         self.session.commit()
-        import pdb; pdb.set_trace()
         expected = amount * 2
         actual = self.participant.get_dollars_receiving()
         assert actual == expected, actual
