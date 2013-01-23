@@ -153,7 +153,7 @@ class Participant(db.Model):
         if tip:
             amount = tip.amount
         else:
-            amount = Decimal('0.0')
+            amount = Decimal('0.00')
 
         return amount
 
