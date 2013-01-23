@@ -3,11 +3,13 @@ import random
 import datetime
 from decimal import Decimal
 
+import psycopg2
 import pytz
 from nose.tools import assert_raises
 
 from gittip.testing import BaseTestCase
 from gittip.models import Participant, Tip
+from gittip.participant import Participant as OldParticipant
 
 class ParticipantTestCase(BaseTestCase):
     def random_restricted_id(self):
@@ -75,6 +77,48 @@ class ParticipantTestCase(BaseTestCase):
         self.session.commit()
         actual = self.participant.get_tip_to('user2')
         assert actual == expected, actual
+
+
+    # set_tip_to - stt
+
+    def test_stt_sets_tip_to(self):
+        alice = self.make_participant('alice', last_bill_result='')
+        self.make_participant('bob')
+        alice.set_tip_to('bob', '1.00')
+
+        actual = alice.get_tip_to('bob')
+        assert actual == Decimal('1.00'), actual
+
+    def test_stt_returns_a_Decimal(self):
+        alice = self.make_participant('alice', last_bill_result='')
+        self.make_participant('bob')
+        actual = alice.set_tip_to('bob', '1.00')
+        assert actual == Decimal('1.00'), actual
+
+    def test_stt_doesnt_allow_self_tipping(self):
+        alice = self.make_participant('alice', last_bill_result='')
+        assert_raises( OldParticipant.NoSelfTipping
+                     , alice.set_tip_to
+                     , 'alice'
+                     , '1000000.00'
+                      )
+
+    def test_stt_doesnt_allow_just_any_ole_amount(self):
+        alice = self.make_participant('alice', last_bill_result='')
+        self.make_participant('bob')
+        assert_raises( OldParticipant.BadAmount
+                     , alice.set_tip_to
+                     , 'bob'
+                     , '1000000.00'
+                      )
+
+    def test_stt_fails_to_tip_unknown_people(self):
+        alice = self.make_participant('alice', last_bill_result='')
+        assert_raises( psycopg2.IntegrityError
+                     , alice.set_tip_to
+                     , 'bob'
+                     , '1.00'
+                      )
 
 
     # get_dollars_receiving - gdr
