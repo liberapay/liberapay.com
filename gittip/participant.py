@@ -209,9 +209,12 @@ class Participant(object):
 
         """
 
+        if self.id == tippee:
+            raise ValueError("No self-tipping, please.")
+
         amount = Decimal(amount)  # May raise InvalidOperation
         if amount not in gittip.AMOUNTS:
-            raise ValueError
+            raise ValueError("Bad tip amount.")
 
         NEW_TIP = """\
 
