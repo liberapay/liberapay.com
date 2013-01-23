@@ -392,3 +392,4 @@ and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
  - [PaySwarm](http://payswarm.com/) - open payment protocol
  - [Gitbo](http://git.bo/) - another implementation of the bounty model
  - [Affero](http://www.affero.com/) - old skool attempt "to bring a culture of patronage to the Internet"
+ - [ShareAGift](http://www.shareagift.com) - one-off, crowd-sourced cash gifts
