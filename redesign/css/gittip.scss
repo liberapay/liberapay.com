@@ -1,0 +1,142 @@
+// Fonts
+$Helvetica: 'Helvetica Neue', Helvetica, Arial, 'Liberation Sans', FreeSans, sans-serif;
+
+/*@font-face {*/
+    /*font-family: '';*/
+    /*src: url('/static/fonts/.eot');*/
+    /*src: url('/static/fonts/.eot?#iefix') format('embedded-opentype'),*/
+         /*url('/static/fonts/.woff') format('woff'),*/
+         /*url('/static/fonts/.ttf') format('truetype');*/
+/*}*/
+
+// Mixins
+@mixin border-radius($radius: 5px) {
+    -webkit-background-clip: padding-box;
+    -webkit-border-radius: $radius;
+    -moz-background-clip: padding-box;
+    -moz-border-radius: $radius;
+    border-radius: $radius;
+    background-clip: padding-box;
+}
+@mixin box-shadow($horizontal: 0px, $vertical: 1px, $blur: 2px, $color: #CCC) {
+  -webkit-box-shadow: $horizontal $vertical $blur $color;
+  -moz-box-shadow: $horizontal $vertical $blur $color;
+  box-shadow: $horizontal $vertical $blur $color;
+}
+@mixin inset-box-shadow($horizontal: 0px, $vertical: 1px, $blur: 2px, $color: #CCC) {
+  -webkit-box-shadow: inset $horizontal $vertical $blur $color;
+  -moz-box-shadow: inset $horizontal $vertical $blur $color;
+  box-shadow: inset $horizontal $vertical $blur $color;
+}
+@mixin multi-color-border($top, $sides, $bottom) {
+    border-top: 1px solid $top;
+    border-left: 1px solid $sides;
+    border-right: 1px solid $sides;
+    border-bottom: 1px solid $bottom;
+}
+@mixin multi-border-radius($topLeft: 5px, $topRight: 5px, $bottomRight: 5px, $bottomLeft: 5px) {
+    -webkit-border-top-left-radius: $topLeft;
+    -webkit-border-top-right-radius: $topRight;
+    -webkit-border-bottom-right-radius: $bottomRight;
+    -webkit-border-bottom-left-radius: $bottomLeft;
+    -moz-border-radius-topleft: $topLeft;
+    -moz-border-radius-topright: $topRight;
+    -moz-border-radius-bottomright: $bottomRight;
+    -moz-border-radius-bottomleft: $bottomLeft;
+    border-top-left-radius: $topLeft;
+    border-top-right-radius: $topRight;
+    border-bottom-right-radius: $bottomRight;
+    border-bottom-left-radius: $bottomLeft;
+}
+@mixin vertical-gradient($start: #000, $stop: #FFF) { background: ($start + $stop) / 2;
+    background: -webkit-gradient(linear, left top, left bottom, from($start), to($stop));
+    background: -moz-linear-gradient(center top, $start 0%, $stop 100%);
+    background: -moz-gradient(center top, $start 0%, $stop 100%);
+}
+@mixin vertical-gradient-with-image($image, $start: #000, $stop: #FFF) {
+    background: ($start + $stop) / 2 $image;
+    background: $image, -webkit-gradient(linear, left top, left bottom, from($start), to($stop));
+    background: $image, -moz-linear-gradient(center top, $start 0%, $stop 100%);
+    background: $image, -moz-gradient(center top, $start 0%, $stop 100%);
+}
+@mixin opacity($op) {
+    -khtml-opacity: $op;
+    -moz-opacity: $op;
+    opacity: $op;
+}
+
+// Page
+html, body {
+    background: #FFF;
+}
+body {
+    color: #6D6E70;
+    font: normal 16px $Helvetica;
+    text-rendering: optimizeLegibility;
+}
+* {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+// Utils
+.group:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+.hidden {
+    display: none;
+}
+
+// Global
+header.main {
+    border-bottom: 1px solid #D0D2D3;
+    padding: 10px 0;
+
+    h1, h2 {
+        float: left;
+        margin: 0;
+    }
+    h1 {
+        a {
+            background: transparent url('../img/logo.png') top left no-repeat;
+            background-size: 100%;
+            color: transparent;
+            display: block;
+            width: 130px;
+        }
+    }
+    h2 {
+        border-left: 2px solid #C8C7C7;
+        font: bold 10px $Helvetica;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        height: 30px;
+        margin: 5px 0 0 18px;
+        padding: 8px 0 0 18px;
+    }
+}
+
+/* Large desktop */
+@media (min-width: 1200px) {
+
+}
+ 
+/* Portrait tablet to landscape and desktop */
+@media (min-width: 768px) and (max-width: 979px) {
+
+}
+ 
+/* Landscape phone to portrait tablet */
+@media (max-width: 767px) {
+
+}
+ 
+/* Landscape phones and down */
+@media (max-width: 480px) {
+
+}
