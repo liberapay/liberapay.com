@@ -126,7 +126,6 @@ class ParticipantTestCase(BaseTestCase):
     def test_gdr_only_sees_latest_tip(self):
         alice = self.make_participant('alice', last_bill_result='')
         bob = self.make_participant('bob')
-
         alice.set_tip_to('bob', '12.00')
         alice.set_tip_to('bob', '3.00')
         self.session.commit()
@@ -199,24 +198,120 @@ class ParticipantTestCase(BaseTestCase):
                                      , is_suspicious=True
                                       )
         bob = self.make_participant('bob')
-
         alice.set_tip_to('bob', '3.00')
+        self.session.commit()
 
         expected = Decimal('0.00')
         actual = bob.get_dollars_receiving()
         assert actual == expected, actual
 
 
-    def test_number_of_backers(self):
-        expected = 2
-        for backer in ['user2', 'user3']:
-            self.session.add(Participant(id=backer, last_bill_result=''))
-            self.session.add(Tip(tipper=backer, tippee='user1',
-                                 amount=Decimal('1.0'),
-                                 ctime=datetime.datetime.now(pytz.utc)))
+    # get_number_of_backers - gnob
+
+    def test_gnob_gets_number_of_backers(self):
+        alice = self.make_participant('alice', last_bill_result='')
+        bob = self.make_participant('bob', last_bill_result='')
+        clancy = self.make_participant('clancy')
+
+        alice.set_tip_to('clancy', '3.00')
+        bob.set_tip_to('clancy', '1.00')
+
         self.session.commit()
-        actual = self.participant.get_number_of_backers()
-        assert actual == expected, actual
+
+        actual = clancy.get_number_of_backers()
+        assert actual == 2, actual
+
+
+    def test_gnob_includes_backers_with_a_working_card_on_file(self):
+        alice = self.make_participant('alice', last_bill_result='')
+        bob = self.make_participant('bob')
+        alice.set_tip_to('bob', '3.00')
+        self.session.commit()
+
+        actual = bob.get_number_of_backers()
+        assert actual == 1, actual
+
+    def test_gnob_ignores_backers_with_no_card_on_file(self):
+        alice = self.make_participant('alice', last_bill_result=None)
+        bob = self.make_participant('bob')
+        alice.set_tip_to('bob', '3.00')
+        self.session.commit()
+
+        actual = bob.get_number_of_backers()
+        assert actual == 0, actual
+
+    def test_gnob_ignores_backers_with_a_failing_card_on_file(self):
+        alice = self.make_participant('alice', last_bill_result="Fail!")
+        bob = self.make_participant('bob')
+        alice.set_tip_to('bob', '3.00')
+        self.session.commit()
+
+        actual = bob.get_number_of_backers()
+        assert actual == 0, actual
+
+
+    def test_gnob_includes_whitelisted_backers(self):
+        alice = self.make_participant( 'alice'
+                                     , last_bill_result=''
+                                     , is_suspicious=False
+                                      )
+        bob = self.make_participant('bob')
+        alice.set_tip_to('bob', '3.00')
+        self.session.commit()
+
+        actual = bob.get_number_of_backers()
+        assert actual == 1, actual
+
+    def test_gnob_includes_unreviewed_backers(self):
+        alice = self.make_participant( 'alice'
+                                     , last_bill_result=''
+                                     , is_suspicious=None
+                                      )
+        bob = self.make_participant('bob')
+        alice.set_tip_to('bob', '3.00')
+        self.session.commit()
+
+        actual = bob.get_number_of_backers()
+        assert actual == 1, actual
+
+    def test_gnob_ignores_blacklisted_backers(self):
+        alice = self.make_participant( 'alice'
+                                     , last_bill_result=''
+                                     , is_suspicious=True
+                                      )
+        bob = self.make_participant('bob')
+        alice.set_tip_to('bob', '3.00')
+        self.session.commit()
+
+        actual = bob.get_number_of_backers()
+        assert actual == 0, actual
+
+
+    def test_gnob_ignores_backers_where_tip_is_zero(self):
+        alice = self.make_participant('alice', last_bill_result='')
+        bob = self.make_participant('bob')
+        alice.set_tip_to('bob', '0.00')
+        self.session.commit()
+
+        actual = bob.get_number_of_backers()
+        assert actual == 0, actual
+
+    def test_gnob_looks_at_latest_tip_only(self):
+        alice = self.make_participant('alice', last_bill_result='')
+        bob = self.make_participant('bob')
+
+        alice.set_tip_to('bob', '1.00')
+        alice.set_tip_to('bob', '12.00')
+        alice.set_tip_to('bob', '3.00')
+        alice.set_tip_to('bob', '6.00')
+        alice.set_tip_to('bob', '0.00')
+
+        self.session.commit()
+
+        actual = bob.get_number_of_backers()
+        assert actual == 0, actual
+
+
 
     # def get_details(self):
     # def resolve_unclaimed(self):
