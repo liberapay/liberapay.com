@@ -160,7 +160,7 @@ class Participant(db.Model):
     def get_dollars_receiving(self):
         tipper = aliased(Participant)
         valid_tips = self.tips_receiving.join(tipper, Tip.tipper==tipper.id) \
-                                        .filter( tipper.is_suspicious != True
+                                        .filter( 'participants_1.is_suspicious IS NOT true'
                                                , tipper.last_bill_result == ''
                                                 )
         return sum(tip.amount for tip in valid_tips)

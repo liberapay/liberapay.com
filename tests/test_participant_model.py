@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import random
 import datetime
 from decimal import Decimal
@@ -26,20 +27,8 @@ class ParticipantTestCase(BaseTestCase):
     def make_participant(self, participant_id, **kw):
         participant = Participant(id=participant_id, **kw)
         self.session.add(participant)
+        self.session.commit()
         return participant
-
-    def make_tip(self, tipper, tippee, amount):
-        amount = Decimal(amount)
-        then = datetime.datetime.now(pytz.utc)
-        now = datetime.datetime.now(pytz.utc)
-        tip = Tip( tipper=tipper
-                 , tippee=tippee
-                 , amount=amount
-                 , ctime=then
-                 , mtime=now
-                  )
-        self.session.add(tip)
-        return tip
 
 
     def test_claiming_participant(self):
@@ -87,48 +76,91 @@ class ParticipantTestCase(BaseTestCase):
         actual = self.participant.get_tip_to('user2')
         assert actual == expected, actual
 
-    # TODO: Test that tips transfer
-    def test_tips_being_received(self):
-        amount = Decimal('2.00')
-        self.make_participant('user2', last_bill_result='')
-        self.make_participant('user3', last_bill_result='')
-        for _ in xrange(3):
-            self.make_tip('user2', 'user1', amount)
-            self.make_tip('user3', 'user1', amount)
-        self.session.commit()
-        expected = amount * 2
-        actual = self.participant.get_dollars_receiving()
-        assert actual == expected, actual
 
-    def test_tips_from_accounts_with_a_working_card_are_counted(self):
-        self.make_participant('alice', last_bill_result='')
+    # get_dollars_receiving - gdr
+
+    def test_gdr_only_sees_latest_tip(self):
+        alice = self.make_participant('alice', last_bill_result='')
         bob = self.make_participant('bob')
 
-        self.make_tip('alice', 'bob', '3.00')
+        alice.set_tip_to('bob', '12.00')
+        alice.set_tip_to('bob', '3.00')
 
         expected = Decimal('3.00')
         actual = bob.get_dollars_receiving()
         assert actual == expected, actual
 
-    def test_tips_from_accounts_with_no_working_card_are_ignored(self):
-        self.make_participant('alice')
+
+    def test_gdr_includes_tips_from_accounts_with_a_working_card(self):
+        alice = self.make_participant('alice', last_bill_result='')
         bob = self.make_participant('bob')
 
-        self.make_tip('alice', 'bob', '3.00')
+        alice.set_tip_to('bob', '3.00')
+
+        expected = Decimal('3.00')
+        actual = bob.get_dollars_receiving()
+        assert actual == expected, actual
+
+    def test_gdr_ignores_tips_from_accounts_with_no_card_on_file(self):
+        alice = self.make_participant('alice', last_bill_result=None)
+        bob = self.make_participant('bob')
+
+        alice.set_tip_to('bob', '3.00')
 
         expected = Decimal('0.00')
         actual = bob.get_dollars_receiving()
         assert actual == expected, actual
 
-    def test_tips_from_suspicious_accounts_are_ignored(self):
-        self.make_participant('alice', last_bill_result='', is_suspicious=True)
+    def test_gdr_ignores_tips_from_accounts_with_a_failing_card_on_file(self):
+        alice = self.make_participant('alice', last_bill_result="Fail!")
         bob = self.make_participant('bob')
 
-        self.make_tip('alice', 'bob', '3.00')
+        alice.set_tip_to('bob', '3.00')
 
         expected = Decimal('0.00')
         actual = bob.get_dollars_receiving()
         assert actual == expected, actual
+
+
+    def test_gdr_includes_tips_from_whitelisted_accounts(self):
+        alice = self.make_participant( 'alice'
+                                     , last_bill_result=''
+                                     , is_suspicious=False
+                                      )
+        bob = self.make_participant('bob')
+
+        alice.set_tip_to('bob', '3.00')
+
+        expected = Decimal('3.00')
+        actual = bob.get_dollars_receiving()
+        assert actual == expected, actual
+
+    def test_gdr_includes_tips_from_unreviewed_accounts(self):
+        alice = self.make_participant( 'alice'
+                                     , last_bill_result=''
+                                     , is_suspicious=None
+                                      )
+        bob = self.make_participant('bob')
+
+        alice.set_tip_to('bob', '3.00')
+
+        expected = Decimal('3.00')
+        actual = bob.get_dollars_receiving()
+        assert actual == expected, actual
+
+    def test_gdr_ignores_tips_from_blacklisted_accounts(self):
+        alice = self.make_participant( 'alice'
+                                     , last_bill_result=''
+                                     , is_suspicious=True
+                                      )
+        bob = self.make_participant('bob')
+
+        alice.set_tip_to('bob', '3.00')
+
+        expected = Decimal('0.00')
+        actual = bob.get_dollars_receiving()
+        assert actual == expected, actual
+
 
     def test_number_of_backers(self):
         expected = 2
