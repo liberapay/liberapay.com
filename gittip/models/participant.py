@@ -12,7 +12,7 @@ from gittip.models.tip import Tip
 from gittip.orm import db
 # This is loaded for now to maintain functionality until the class is fully
 # migrated over to doing everything using SQLAlchemy
-from gittip.participant import Participant as ParticipantClass
+from gittip.participant import Participant as OldParticipant
 
 ASCII_ALLOWED_IN_PARTICIPANT_ID = set("0123456789"
                                       "abcdefghijklmnopqrstuvwxyz"
@@ -173,16 +173,18 @@ class Participant(db.Model):
                        .count()
         return nbackers
 
+
+    # TODO: Move these queries into this class.
+
     def get_chart_of_receiving(self):
-        # TODO: Move the query in to this class.
-        return ParticipantClass(self.id).get_chart_of_receiving()
+        return OldParticipant(self.id).get_chart_of_receiving()
 
     def get_giving_for_profile(self, db=None):
-        return ParticipantClass(self.id).get_giving_for_profile(db)
+        return OldParticipant(self.id).get_giving_for_profile(db)
 
     def get_tips_and_total(self, for_payday=False, db=None):
-        return ParticipantClass(self.id).get_tips_and_total(for_payday, db)
+        return OldParticipant(self.id).get_tips_and_total(for_payday, db)
 
     def take_over(self, account_elsewhere, have_confirmation=False):
-        ParticipantClass(self.id).take_over(account_elsewhere,
+        OldParticipant(self.id).take_over(account_elsewhere,
                                             have_confirmation)
