@@ -198,6 +198,41 @@ class Participant(object):
 
 
     @require_id
+    def set_tip_to(self, tippee, amount):
+        """Given participant id and amount as str, return amount as Decimal.
+
+        We INSERT instead of UPDATE, so that we have history to explore. The
+        COALESCE function returns the first of its arguments that is not NULL.
+        The effect here is to stamp all tips with the timestamp of the first
+        tip from this user to that. I believe this is used to determine the
+        order of transfers during payday.
+
+        """
+
+        amount = Decimal(amount)  # May raise InvalidOperation
+        if amount not in gittip.AMOUNTS:
+            raise ValueError
+
+        NEW_TIP = """\
+
+            INSERT INTO tips
+                        (ctime, tipper, tippee, amount)
+                 VALUES ( COALESCE (( SELECT ctime
+                                        FROM tips
+                                       WHERE (tipper=%s AND tippee=%s)
+                                       LIMIT 1
+                                      ), CURRENT_TIMESTAMP)
+                        , %s, %s, %s
+                         )
+
+        """
+        gittip.db.execute( NEW_TIP
+                         , (self.id, tippee, self.id, tippee, amount)
+                          )
+        return amount
+
+
+    @require_id
     def get_tip_to(self, tippee):
         """Given two user ids, return a Decimal.
         """
@@ -213,7 +248,7 @@ class Participant(object):
         """
         rec = gittip.db.fetchone(TIP, (self.id, tippee))
         if rec is None:
-            tip = Decimal(0.00)
+            tip = Decimal('0.00')
         else:
             tip = rec['amount']
         return tip

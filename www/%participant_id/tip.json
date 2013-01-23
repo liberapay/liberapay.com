@@ -1,9 +1,8 @@
 """Get or change the authenticated user's tip to this person.
 """
-import decimal
+from decimal import InvalidOperation
 
 from aspen import Response
-from gittip import AMOUNTS, db
 
 
 # ========================================================================== ^L
@@ -25,61 +24,14 @@ if not user.ANON:
 
     if tippee == tipper:
         amount = None
+    elif POST and 'amount' in body:
+        try:
+            amount = user.set_tip_to(tippee, body['amount'])
+        except (InvalidOperation, ValueError):
+            raise Response(400, "bad amount")
     else:
+        amount = user.get_tip_to(tippee)
 
-        if POST and 'amount' in body:
-
-            # Add a new tip record.
-            # =====================
-            # Insert instead of update. The analytics may be interesting some
-            # day. The COALESCE function returns the first of its arguments
-            # that is not NULL. The effect here is to stamp all tips with the
-            # timestamp of the first tip from this user to that. I believe this
-            # is used to determine the order of transfers during payday.
-
-            try:
-                amount = decimal.Decimal(body['amount'])
-                if amount not in AMOUNTS:
-                    raise ValueError
-            except (decimal.InvalidOperation, ValueError):
-                raise Response(400, "bad amount")
-
-            NEW_TIP = """\
-
-                INSERT INTO tips
-                            (ctime, tipper, tippee, amount)
-                     VALUES ( COALESCE (( SELECT ctime
-                                            FROM tips
-                                           WHERE (tipper=%s AND tippee=%s)
-                                           LIMIT 1
-                                          ), CURRENT_TIMESTAMP)
-                            , %s, %s, %s
-                             )
-
-            """
-            db.execute(NEW_TIP, (tipper, tippee, tipper, tippee, amount))
-            amount = str(amount)
-
-
-        # Fetch the current tip record.
-        # =============================
-
-        else:
-            FETCH = """\
-
-                SELECT amount
-                  FROM tips
-                 WHERE tippee=%s AND tipper=%s
-              ORDER BY mtime DESC
-                 LIMIT 1
-
-            """
-            rec = db.fetchone(FETCH, (tippee, tipper))
-            if rec is None:
-                amount = "0.00"
-            else:
-                amount = str(rec['amount'])
-
-    out = {"amount": amount}
+    out = {"amount": str(amount)}
 
 response.body = out

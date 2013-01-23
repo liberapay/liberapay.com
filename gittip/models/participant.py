@@ -176,6 +176,9 @@ class Participant(db.Model):
 
     # TODO: Move these queries into this class.
 
+    def set_tip_to(self, tippee_id, amount):
+        return OldParticipant(self.id).set_tip_to(tippee_id, amount)
+
     def get_chart_of_receiving(self):
         return OldParticipant(self.id).get_chart_of_receiving()
 
