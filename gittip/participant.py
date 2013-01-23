@@ -92,6 +92,10 @@ class Participant(object):
     """Represent a Gittip participant.
     """
 
+    class NoSelfTipping(Exception): pass
+    class BadAmount(Exception): pass
+
+
     def __init__(self, participant_id):
         typecheck(participant_id, (unicode, None))
         self.id = participant_id
@@ -210,11 +214,11 @@ class Participant(object):
         """
 
         if self.id == tippee:
-            raise ValueError("No self-tipping, please.")
+            raise self.NoSelfTipping
 
         amount = Decimal(amount)  # May raise InvalidOperation
         if amount not in gittip.AMOUNTS:
-            raise ValueError("Bad tip amount.")
+            raise self.BadAmount
 
         NEW_TIP = """\
 
