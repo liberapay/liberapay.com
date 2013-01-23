@@ -85,6 +85,7 @@ class ParticipantTestCase(BaseTestCase):
 
         alice.set_tip_to('bob', '12.00')
         alice.set_tip_to('bob', '3.00')
+        self.session.commit()
 
         expected = Decimal('3.00')
         actual = bob.get_dollars_receiving()
@@ -94,8 +95,8 @@ class ParticipantTestCase(BaseTestCase):
     def test_gdr_includes_tips_from_accounts_with_a_working_card(self):
         alice = self.make_participant('alice', last_bill_result='')
         bob = self.make_participant('bob')
-
         alice.set_tip_to('bob', '3.00')
+        self.session.commit()
 
         expected = Decimal('3.00')
         actual = bob.get_dollars_receiving()
@@ -104,8 +105,8 @@ class ParticipantTestCase(BaseTestCase):
     def test_gdr_ignores_tips_from_accounts_with_no_card_on_file(self):
         alice = self.make_participant('alice', last_bill_result=None)
         bob = self.make_participant('bob')
-
         alice.set_tip_to('bob', '3.00')
+        self.session.commit()
 
         expected = Decimal('0.00')
         actual = bob.get_dollars_receiving()
@@ -114,8 +115,8 @@ class ParticipantTestCase(BaseTestCase):
     def test_gdr_ignores_tips_from_accounts_with_a_failing_card_on_file(self):
         alice = self.make_participant('alice', last_bill_result="Fail!")
         bob = self.make_participant('bob')
-
         alice.set_tip_to('bob', '3.00')
+        self.session.commit()
 
         expected = Decimal('0.00')
         actual = bob.get_dollars_receiving()
@@ -128,8 +129,8 @@ class ParticipantTestCase(BaseTestCase):
                                      , is_suspicious=False
                                       )
         bob = self.make_participant('bob')
-
         alice.set_tip_to('bob', '3.00')
+        self.session.commit()
 
         expected = Decimal('3.00')
         actual = bob.get_dollars_receiving()
@@ -141,8 +142,8 @@ class ParticipantTestCase(BaseTestCase):
                                      , is_suspicious=None
                                       )
         bob = self.make_participant('bob')
-
         alice.set_tip_to('bob', '3.00')
+        self.session.commit()
 
         expected = Decimal('3.00')
         actual = bob.get_dollars_receiving()
