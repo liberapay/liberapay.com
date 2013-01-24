@@ -3,6 +3,7 @@ from decimal import Decimal
 
 import pytz
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy import func
 from sqlalchemy.orm import relationship, aliased
 from sqlalchemy.schema import Column, CheckConstraint, UniqueConstraint
 from sqlalchemy.types import Text, TIMESTAMP, Boolean, Numeric
@@ -166,11 +167,15 @@ class Participant(db.Model):
         return sum(tip.amount for tip in valid_tips)
 
     def get_number_of_backers(self):
-        nbackers = self.tips_receiving\
+        nested_query = self.tips_receiving\
                        .distinct("tips.tipper")\
                        .filter(Participant.last_bill_result == '',\
                                "participants.is_suspicious IS NOT true")\
-                       .count()
+                       .subquery()
+
+        nbackers = db.session.query(
+                        func.count(nested_query.columns.amount))\
+                            .filter(nested_query.columns.amount > 0).one()[0]
         return nbackers
 
 
