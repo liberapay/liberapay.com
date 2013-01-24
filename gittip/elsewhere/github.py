@@ -1,4 +1,5 @@
 import gittip
+import logging
 import requests
 from aspen import json, log, Response
 from aspen.website import Website
@@ -80,7 +81,13 @@ def oauth_dance(website, qs):
 
 
 def get_user_info(login):
-    """Given a unicode, return a dict.
+    """Get the given user's information from the DB or failing that, github.
+
+    :param login:
+        A unicode string representing a username in github.
+
+    :returns:
+        A dictionary containing github specific information for the user.
     """
     typecheck(login, unicode)
     rec = gittip.db.fetchone( "SELECT user_info FROM elsewhere "
@@ -93,11 +100,16 @@ def get_user_info(login):
     else:
         url = "https://api.github.com/users/%s"
         user_info = requests.get(url % login)
-
-        if user_info.status_code == 200:
-            user_info = json.loads(user_info.text)
+        status = user_info.status_code
+        content = user_info.text
+        if status == 200:
+            user_info = json.loads(content)
+        elif status == 404:
+            raise Response(404,
+                           "GitHub identity '{0}' not found.".format(login))
         else:
-            code = user_info.status_code
-            raise Response(500, "GitHub lookup failed with %d." % code)
+            log("Github api responded with {0}: {1}".format(status, content),
+                level=logging.WARNING)
+            raise Response(502, "GitHub lookup failed with %d." % status)
 
     return user_info
