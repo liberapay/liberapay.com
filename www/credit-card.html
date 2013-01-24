@@ -77,7 +77,7 @@ GitHub</a>, and then you&rsquo;ll be able to add or change your credit card.</p>
         overflow: hidden;
     }
     FORM {
-        width: 300px;
+        width: 320px;
     }
     {% if status == "missing" %}
     #delete {
@@ -139,8 +139,9 @@ GitHub</a>, and then you&rsquo;ll be able to add or change your credit card.</p>
         </div>
 
         <div class="float expiry not-first">
-            <label for="expiry">Expiration</label>
-            <input id="expiry" />
+            <label for="expiry_month">Expiration</label>
+            <input class="expiry_month" id="expiry_month" placeholder="MM"/>
+            <input class="expiry_year" id="expiry_year" placeholder="YYYY"/>
         </div>
 
         <div class="float cvv not-first">

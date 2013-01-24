@@ -34,7 +34,8 @@ def test_balanced_card_basically_works(ba):
     expected = { 'id': '/v1/marketplaces/M123/accounts/A123'
                , 'last_four': 1234
                , 'last4': '************1234'
-               , 'expiry': '10/2020'
+               , 'expiry_month': '10'
+               , 'expiry_year': '2020'
                , 'address_1': '123 Main Street'
                , 'address_2': 'Box 2'
                , 'state': 'Confusion'
@@ -76,7 +77,8 @@ def test_stripe_card_basically_works(sc):
 
     expected = { 'id': 'deadbeef'
                , 'last4': '************1234'
-               , 'expiry': '10/2020'
+               , 'expiry_month': '10'
+               , 'expiry_year': '2020'
                , 'address_1': '123 Main Street'
                , 'address_2': 'Box 2'
                , 'state': 'Confusion'

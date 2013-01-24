@@ -184,14 +184,10 @@ class StripeCard(object):
             out = self._get('last4')
             if out:
                 out = "************" + out
-        elif name == 'expiry':
-            month = self._get('expiry_month')
-            year = self._get('expiry_year')
-
-            if month and year:
-                out = "%d/%d" % (month, year)
-            else:
-                out = ""
+        elif name == 'expiry_month':
+            out = self._get('expiry_month')
+        elif name == 'expiry_year':
+            out = self._get('expiry_year')
         else:
             name = { 'address_1': 'address_line1'
                    , 'address_2': 'address_line2'
@@ -244,14 +240,10 @@ class BalancedCard(object):
             out = self._get('last_four')
             if out:
                 out = "************" + unicode(out)
-        elif name == 'expiry':
-            month = self._get('expiration_month')
-            year = self._get('expiration_year')
-
-            if month and year:
-                out = "%d/%d" % (month, year)
-            else:
-                out = ""
+        elif name == 'expiry_month':
+            out = self._get('expiration_month')
+        elif name == 'expiry_year'
+            out = self._get('expiration_year')
         elif name == 'address_2':
             out = self._get('meta', {}).get('address_2', '')
         elif name == 'state':

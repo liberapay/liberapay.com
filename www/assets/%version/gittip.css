@@ -201,7 +201,7 @@ PRE {
 FORM.special {
 }
 FORM.special .half {
-    width: 150px;
+    width: 156px;
 }
 FORM.special .full {
     clear: both;
@@ -231,7 +231,7 @@ FORM.special LABEL {
 }
 FORM.special INPUT {
     font: normal 11pt/14pt Arial, sans-serif;
-    width: 292px;
+    width: 312px;
     margin: 0;
     padding: 3px;
     border: 1px solid #CCBAAD;
@@ -243,7 +243,7 @@ FORM.special INPUT.disabled {
 }
 
 FORM.special .half INPUT {
-    width: 137px;
+    width: 145px;
 }
 FORM.special .right.half LABEL,
 FORM.special .right.half INPUT {
@@ -258,9 +258,10 @@ FORM.special .float {
 FORM.special .city          INPUT { width: 137px; }
 FORM.special .state         INPUT { width: 43px; }
 FORM.special .zip           INPUT { width: 75px; }
-FORM.special .card_number   INPUT { width: 137px; }
+FORM.special .card_number   INPUT { width: 145px; }
 FORM.special .cvv           INPUT { width: 43px; }
-FORM.special .expiry        INPUT { width: 75px; }
+FORM.special .expiry .expiry_month { width: 2em; }
+FORM.special .expiry .expiry_year  { width: 3em; margin-left: 1px; }
 FORM.special .not-first LABEL,
 FORM.special .not-first INPUT {
     margin-left: 10px;

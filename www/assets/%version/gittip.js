@@ -399,12 +399,8 @@ Gittip.submitPaymentForm = function(e)
                         };
     credit_card.postal_code = val('zip');
 
-    var expiry = val('expiry').split('/');  // format enforced by mask
-    credit_card.expiration_month= expiry[0];
-    credit_card.expiration_year = expiry[1];
-
-
-    // Require some options (expiry is theoretically handled by the mask).
+    credit_card.expiration_month= val('expiry_month');
+    credit_card.expiration_year = val('expiry_month');
 
     if (!balanced.card.isCardNumberValid(credit_card.card_number))
     {
@@ -417,6 +413,13 @@ Gittip.submitPaymentForm = function(e)
     {
         $('BUTTON#save').text('Save');
         Gittip.showFeedback(null, ["Your CVV is bad."]);
+    }
+    else if (!balanced.card.isExpiryValid( credit_card.expiration_month
+                                         , credit_card.expiration_year
+                                          ))
+    {
+       $('BUTTON#save').text('Save');
+       Gittip.showFeedback(null, ["Your Expiration date is bad."]);
     }
     else
     {
@@ -505,7 +508,6 @@ Gittip.initPayment = function(balanced_uri, participantId)
     Gittip.participantId = participantId;
     $('#delete FORM').submit(Gittip.submitDeleteForm);
     $('FORM#payment').submit(Gittip.submitPaymentForm);
-    $('INPUT[id=expiry]').mask('99/2099');
 
     // Lazily depend on Balanced.
     var balanced_js = "https://js.balancedpayments.com/v1/balanced.js";
