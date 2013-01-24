@@ -4,7 +4,6 @@ from decimal import InvalidOperation
 
 from aspen import Response
 
-
 # ========================================================================== ^L
 
 out = {}
@@ -32,6 +31,9 @@ if not user.ANON:
     else:
         amount = user.get_tip_to(tippee)
 
-    out = {"amount": str(amount)}
+    total_giving = user.get_dollars_giving()
+
+    out = {"amount": str(amount), "total_giving": str(total_giving)}
+
 
 response.body = out

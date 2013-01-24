@@ -80,4 +80,4 @@ tests/env:
 
 data: env
 	./makedb.sh gittip-test gittip-test
-	./$(env_bin)/swaddle tests/env ./$(env_bin)/python ./gittip/testing.py
+	./$(env_bin)/swaddle tests/env ./$(env_bin)/python ./gittip/testing/__init__.py

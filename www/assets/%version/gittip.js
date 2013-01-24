@@ -621,16 +621,17 @@ Gittip.initTipButtons = function()
             { url: '/' + tippee + '/tip.json'
             , data: {amount: amount}
             , type: "POST"
-            , success: function() {
-                $('.old-amount', container).remove();
-              }
             , error: function(x,y,z) {
                 select(cur);
                 alert("Sorry, something went wrong changing your tip. :(");
                 console.log(x,y,z);
               }
              }
-        );
+        )
+        .done(function(data) {
+                $('.old-amount', container).remove();
+                $('#total-giving').text("$" + data['total_giving']);
+              });
     });
 };
 
