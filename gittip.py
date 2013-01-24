@@ -107,7 +107,7 @@ tests/env:
 
 data: env
     ./makedb.sh gittip-test gittip-test
-    ./env/Scripts/swaddle tests/env ./env/Scripts/python ./gittip/testing.py
+    ./env/Scripts/swaddle tests/env ./env/Scripts/python ./gittip/testing/__init__.py
 """
 
 
