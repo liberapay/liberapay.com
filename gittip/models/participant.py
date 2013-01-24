@@ -179,6 +179,9 @@ class Participant(db.Model):
     def set_tip_to(self, tippee_id, amount):
         return OldParticipant(self.id).set_tip_to(tippee_id, amount)
 
+    def get_dollars_giving(self):
+        return OldParticipant(self.id).get_dollars_giving()
+
     def get_chart_of_receiving(self):
         return OldParticipant(self.id).get_chart_of_receiving()
 

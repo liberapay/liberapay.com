@@ -38,4 +38,3 @@ def test_get_amount_and_total_back_from_api():
     assert_equal(first_data['total_giving'], "1.00")
     assert_equal(second_data['amount'], "3.00")
     assert_equal(second_data['total_giving'], "4.00")
-    assert_equal(False, True)
