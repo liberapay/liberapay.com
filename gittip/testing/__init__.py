@@ -1,6 +1,7 @@
 """Helpers for testing Gittip.
 """
-from Cookie import SimpleCookie
+from __future__ import unicode_literals
+
 import datetime
 import copy
 import os
@@ -9,19 +10,17 @@ import re
 import unittest
 from decimal import Decimal
 from os.path import join, dirname, realpath
-from StringIO import StringIO
 
 import gittip
 from aspen import resources
-from aspen.http.request import Request
-from aspen.testing import Website, StubRequest, StubWSGIRequest
+from aspen.testing import Website, StubRequest
 from aspen.utils import utcnow
 from gittip import orm, wireup
 from gittip.authentication import User
 from gittip.billing.payday import Payday
 
 
-TOP = join(realpath(dirname(__file__)), '..')
+TOP = join(realpath(dirname(dirname(__file__))), '..')
 SCHEMA = open(join(TOP, "schema.sql")).read()
 
 DUMMY_GITHUB_JSON = u'{"html_url":"https://github.com/whit537","type":"User","public_repos":25,"blog":"http://whit537.org/","gravatar_id":"fb054b407a6461e417ee6b6ae084da37","public_gists":29,"following":15,"updated_at":"2013-01-14T13:43:23Z","company":"Gittip","events_url":"https://api.github.com/users/whit537/events{/privacy}","repos_url":"https://api.github.com/users/whit537/repos","gists_url":"https://api.github.com/users/whit537/gists{/gist_id}","email":"chad@zetaweb.com","organizations_url":"https://api.github.com/users/whit537/orgs","hireable":false,"received_events_url":"https://api.github.com/users/whit537/received_events","starred_url":"https://api.github.com/users/whit537/starred{/owner}{/repo}","login":"whit537","created_at":"2009-10-03T02:47:57Z","bio":"","url":"https://api.github.com/users/whit537","avatar_url":"https://secure.gravatar.com/avatar/fb054b407a6461e417ee6b6ae084da37?d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-user-420.png","followers":90,"name":"Chad Whitacre","followers_url":"https://api.github.com/users/whit537/followers","following_url":"https://api.github.com/users/whit537/following","id":134455,"location":"Pittsburgh, PA","subscriptions_url":"https://api.github.com/users/whit537/subscriptions"}'
@@ -468,98 +467,6 @@ def load_simplate(path):
     test_website.hooks.inbound_late.run(request)
 
     return resources.get(request)
-
-BOUNDARY = 'BoUnDaRyStRiNg'
-MULTIPART_CONTENT = 'multipart/form-data; boundary=%s' % BOUNDARY
-
-def encode_multipart(boundary, data):
-    """
-    Encodes multipart POST data from a dictionary of form values.
-
-    Borrowed from Django
-    The key will be used as the form data name; the value will be transmitted
-    as content. If the value is a file, the contents of the file will be sent
-    as an application/octet-stream; otherwise, str(value) will be sent.
-    """
-    lines = []
-
-    for (key, value) in data.items():
-        lines.extend([
-            '--' + boundary,
-            'Content-Disposition: form-data; name="%s"' % str(key),
-            '',
-            str(value)
-        ])
-
-    lines.extend([
-        '--' + boundary + '--',
-        '',
-    ])
-    return '\r\n'.join(lines)
-
-
-# XXX TODO: Move the TestClient up into the Aspen code base so it can be shared
-#           and used on other OSS projects.
-
-class TestClient(object):
-
-    def __init__(self):
-        self.cookies = SimpleCookie()
-
-    def get_request(self, path, method="GET", body=None,
-                    **extra):
-        env = StubWSGIRequest(path)
-        env['REQUEST_METHOD'] = method
-        env['wsgi.input'] = StringIO(body)
-        env['HTTP_COOKIE'] = self.cookies.output(header='', sep='; ')
-        env.update(extra)
-        return Request.from_wsgi(env)
-
-    def perform_request(self, request, user):
-        request.website = test_website
-        if user is not None:
-            user = User.from_id(user)
-            # Note that Cookie needs a bytestring.
-            request.headers.cookie[str('session')] = user.session_token
-
-        response = test_website.handle_safely(request)
-        if response.headers.cookie:
-            self.cookies.update(response.headers.cookie)
-        return response
-
-    def post(self, path, data, user=None, content_type=MULTIPART_CONTENT,
-             **extra):
-        """Perform a dummy POST request against the test website.
-
-        :param path:
-            The url to perform the virutal-POST to.
-
-        :param data:
-            A dictionary or list of tuples to be encoded before being POSTed.
-
-        :param user:
-            The user id performing the POST.
-
-        Any additional parameters will be sent as headers. NOTE that in Aspen
-        (request.py make_franken_headers) only headers beginning with ``HTTP``
-        are included in the request - and those are changed to no longer
-        include ``HTTP``. There are currently 2 exceptions to this:
-        ``'CONTENT_TYPE'``, ``'CONTENT_LENGTH'`` which are explicitly checked
-        for.
-        """
-        post_data = data
-
-        if content_type is MULTIPART_CONTENT:
-            post_data = encode_multipart(BOUNDARY, data)
-
-        request = self.get_request(path, "POST", post_data,
-                                   CONTENT_TYPE=str(content_type),
-                                   **extra)
-        return self.perform_request(request, user)
-
-    def get(self, path, user=None, **extra):
-        request = self.get_request(path, "GET")
-        return self.perform_request(request, user)
 
 if __name__ == "__main__":
     db = wireup.db()

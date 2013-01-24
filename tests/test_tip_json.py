@@ -1,7 +1,7 @@
 import json
 from nose.tools import assert_equal
 
-from gittip.testing import TestClient
+from gittip.testing.client import TestClient
 from gittip import db
 
 
