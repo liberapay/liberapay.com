@@ -4,7 +4,8 @@ from __future__ import print_function
 
 import os
 import sys
-from fabricate import autoclean, main, run, shell
+from fabricate import autoclean, main, shell
+from fabricate import run as fab_run
 
 if sys.platform.startswith('win'):
     BIN = ['env', 'Scripts']
@@ -21,20 +22,24 @@ LOCAL_ENV = p('./local.env')
 
 
 def pip_install(*a):
-    run(PIP, 'install', *a)
+    fab_run(PIP, 'install', *a)
+
+
+def build():
+    env()
 
 
 def env():
     if not shell('python', '--version').startswith('Python 2.7'):
         raise SystemExit('Error: Python 2.7 required')
 
-    run('python', './vendor/virtualenv-1.7.1.2.py',
-        '--unzip-setuptools',
-        '--prompt="[gittip] "',
-        '--never-download',
-        '--extra-search-dir=' + p('./vendor/'),
-        '--distribute',
-        p('./env/'))
+    fab_run('python', './vendor/virtualenv-1.7.1.2.py',
+            '--unzip-setuptools',
+            '--prompt="[gittip] "',
+            '--never-download',
+            '--extra-search-dir=' + p('./vendor/'),
+            '--distribute',
+            p('./env/'))
 
     pip_install('-r', p('./requirements.txt'))
     pip_install(p('./vendor/nose-1.1.2.tar.gz'))
@@ -63,15 +68,19 @@ def local_env():
 
 
 def serve():
+    run()
+
+
+def run():
     env()
     local_env()
 
-    run(SWADDLE, LOCAL_ENV, ASPEN,
-        '--www_root=www' + os.sep,
-        '--project_root=.',
-        '--show_tracebacks=yes',
-        '--changes_reload=yes',
-        '--network_address=:8537')
+    fab_run(SWADDLE, LOCAL_ENV, ASPEN,
+            '--www_root=www' + os.sep,
+            '--project_root=.',
+            '--show_tracebacks=yes',
+            '--changes_reload=yes',
+            '--network_address=:8537')
 
 
 """
