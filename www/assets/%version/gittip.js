@@ -400,7 +400,7 @@ Gittip.submitPaymentForm = function(e)
     credit_card.postal_code = val('zip');
 
     credit_card.expiration_month= val('expiry_month');
-    credit_card.expiration_year = val('expiry_month');
+    credit_card.expiration_year = val('expiry_year');
 
     if (!balanced.card.isCardNumberValid(credit_card.card_number))
     {
