@@ -1,13 +1,10 @@
 #!/usr/bin/env python
 
-# OTHER CHANGES
-# - Ignoring locale.Error in gittip/__init__.py
-# - Remove psycopg2 from requirements.txt
+from __future__ import print_function
 
 import os
 import sys
 from fabricate import autoclean, main, run, shell
-
 
 if sys.platform.startswith('win'):
     BIN = ['env', 'Scripts']
@@ -16,73 +13,71 @@ else:
 
 
 PIP = os.path.join(*(BIN + ['pip']))
+SWADDLE = os.path.join(*(BIN + ['swaddle']))
+ASPEN = os.path.join(*(BIN + ['aspen']))
+
 p = lambda p: os.path.join(*p.split('/'))
+LOCAL_ENV = p('./local.env')
 
 
 def pip_install(*a):
     run(PIP, 'install', *a)
 
 
-def build():
+def env():
     if not shell('python', '--version').startswith('Python 2.7'):
         raise SystemExit('Error: Python 2.7 required')
 
-    run( 'python', './vendor/virtualenv-1.7.1.2.py'
-       , '--unzip-setuptools'
-       , '--prompt="[gittip] "'
-       , '--never-download'
-       , '--extra-search-dir=' + p('./vendor/')
-       , '--distribute'
-       , p('./env/')
-        )
+    run('python', './vendor/virtualenv-1.7.1.2.py',
+        '--unzip-setuptools',
+        '--prompt="[gittip] "',
+        '--never-download',
+        '--extra-search-dir=' + p('./vendor/'),
+        '--distribute',
+        p('./env/'))
 
     pip_install('-r', p('./requirements.txt'))
     pip_install(p('./vendor/nose-1.1.2.tar.gz'))
     pip_install('-e', p('./'))
 
 
+def local_env():
+    if os.path.exists(LOCAL_ENV):
+        return
+
+    print('Creating a local.env file...\n')
+
+    output = file(LOCAL_ENV, 'wt')
+    print("CANONICAL_HOST=\"\"", file=output)
+    print("CANONICAL_SCHEME=http", file=output)
+    print("DATABASE_URL=postgres://gittip@localhost/gittip", file=output)
+    print("STRIPE_SECRET_API_KEY=1", file=output)
+    print("STRIPE_PUBLISHABLE_API_KEY=1", file=output)
+    print("BALANCED_API_SECRET=90bb3648ca0a11e1a977026ba7e239a9", file=output)
+    print("GITHUB_CLIENT_ID=3785a9ac30df99feeef5", file=output)
+    print("GITHUB_CLIENT_SECRET=e69825fafa163a0b0b6d2424c107a49333d46985", file=output)
+    print("GITHUB_CALLBACK=http://localhost:8537/on/github/associate", file=output)
+    print("TWITTER_CONSUMER_KEY=QBB9vEhxO4DFiieRF68zTA", file=output)
+    print("TWITTER_CONSUMER_SECRET=mUymh1hVMiQdMQbduQFYRi79EYYVeOZGrhj27H59H78", file=output)
+    print("TWITTER_CALLBACK=http://127.0.0.1:8537/on/twitter/associate", file=output)
+
+
 def serve():
-    #build()     #run: env local.env
+    env()
+    local_env()
 
-    c = """\
-    ./env/Scripts/swaddle local.env ./env/Scripts/aspen.exe \
-    --www_root=www/ \
-    --project_root=.. \
-    --show_tracebacks=yes \
-    --changes_reload=yes \
-    --network_address=:8537""".replace('\n', '')
-
-    run_lines(c.replace('/', os.sep))
+    run(SWADDLE, LOCAL_ENV, ASPEN,
+        '--www_root=www' + os.sep,
+        '--project_root=.',
+        '--show_tracebacks=yes',
+        '--changes_reload=yes',
+        '--network_address=:8537')
 
 
 """
 clean:
     rm -rf env *.egg *.egg-info tests/env
     find . -name \*.pyc -delete
-
-local.env:
-    echo "Creating a local.env file ..."
-    echo
-    echo "CANONICAL_HOST=" > local.env
-    echo "CANONICAL_SCHEME=http" >> local.env
-    echo "DATABASE_URL=postgres://gittip@localhost/gittip" >> local.env
-    echo "STRIPE_SECRET_API_KEY=1" >> local.env
-    echo "STRIPE_PUBLISHABLE_API_KEY=1" >> local.env
-    echo "BALANCED_API_SECRET=90bb3648ca0a11e1a977026ba7e239a9" >> local.env
-    echo "GITHUB_CLIENT_ID=3785a9ac30df99feeef5" >> local.env
-    echo "GITHUB_CLIENT_SECRET=e69825fafa163a0b0b6d2424c107a49333d46985" >> local.env
-    echo "GITHUB_CALLBACK=http://localhost:8537/on/github/associate" >> local.env
-    echo "TWITTER_CONSUMER_KEY=QBB9vEhxO4DFiieRF68zTA" >> local.env
-    echo "TWITTER_CONSUMER_SECRET=mUymh1hVMiQdMQbduQFYRi79EYYVeOZGrhj27H59H78" >> local.env
-    echo "TWITTER_CALLBACK=http://127.0.0.1:8537/on/twitter/associate" >> local.env
-
-run: env local.env
-    ./env/Scripts/swaddle local.env ./env/Scripts/aspen \
-        --www_root=www/ \
-        --project_root=.. \
-        --show_tracebacks=yes \
-        --changes_reload=yes \
-        --network_address=:8537
 
 test: env tests/env data
     ./env/Scripts/swaddle tests/env ./env/Scripts/nosetests ./tests/
@@ -114,5 +109,4 @@ data: env
 def clean():
     autoclean()
 
-
-main()
+main(default='env')
