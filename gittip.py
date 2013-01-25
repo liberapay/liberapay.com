@@ -4,6 +4,8 @@ from __future__ import print_function
 
 import os
 import sys
+import glob
+import shutil
 from fabricate import autoclean, main, shell
 from fabricate import run as fab_run
 
@@ -19,6 +21,24 @@ ASPEN = os.path.join(*(BIN + ['aspen']))
 
 p = lambda p: os.path.join(*p.split('/'))
 LOCAL_ENV = p('./local.env')
+
+
+def remove_path(*args):
+    globbed = []
+    for path in args:
+        globbed.extend(glob.glob(path))
+
+    for path in globbed:
+        if os.path.isdir(path):
+            shutil.rmtree(path)
+        elif os.path.isfile(path):
+            os.remove(path)
+
+
+def remove_path_recursive(root, *args):
+    for _, dirs, _ in os.walk(root):
+        for name in dirs:
+            remove_path(*[os.path.join(name, path) for path in args])
 
 
 def pip_install(*a):
@@ -44,6 +64,12 @@ def env():
     pip_install('-r', p('./requirements.txt'))
     pip_install(p('./vendor/nose-1.1.2.tar.gz'))
     pip_install('-e', p('./'))
+
+
+def clean():
+    remove_path('env', '*.egg', '*.egg-info', p('tests/env'))
+    remove_path_recursive(p('./'), '*.pyc')
+    autoclean()
 
 
 def local_env():
@@ -84,10 +110,6 @@ def run():
 
 
 """
-clean:
-    rm -rf env *.egg *.egg-info tests/env
-    find . -name \*.pyc -delete
-
 test: env tests/env data
     ./env/Scripts/swaddle tests/env ./env/Scripts/nosetests ./tests/
 
@@ -114,8 +136,5 @@ data: env
     ./env/Scripts/swaddle tests/env ./env/Scripts/python ./gittip/testing/__init__.py
 """
 
-
-def clean():
-    autoclean()
 
 main(default='env')
