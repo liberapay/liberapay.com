@@ -9,7 +9,7 @@ class User(Participant):
 
     Every current website user is also a participant, though if the user is
     anonymous then the methods from gittip.Participant will fail with
-    NoParticipantId.  The methods
+    NoParticipantId.
 
     """
 
@@ -25,13 +25,21 @@ class User(Participant):
     @classmethod
     def from_id(cls, user_id):
         user = User.query.filter_by(id=user_id).first()
-        if user and not user.is_suspicious:
+        if user is None or user.is_suspicious:
+            user = User()
+        else:
             user.session_token = uuid.uuid4().hex
             db.session.add(user)
             db.session.commit()
-        else:
-            user = User()
         return user
+
+    def sign_out(self):
+        token = self.session_token
+        if token is not None:
+            self.session_token = None
+            db.session.add(self)
+            db.session.commit()
+        return User()
 
     @property
     def ADMIN(self):

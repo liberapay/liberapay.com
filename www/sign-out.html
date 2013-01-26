@@ -4,11 +4,7 @@ from gittip.orm import db
 
 # ========================================================================== ^L
 
-token = user.session_token
-if token:
-    user.session_token = None
-    db.session.add(user)
-    db.session.commit()
+user = user.sign_out()
 back_to = request.headers.get('referer', '/')
 request.redirect(back_to)
 

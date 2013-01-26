@@ -16,6 +16,7 @@ from aspen import resources
 from aspen.testing import Website, StubRequest
 from aspen.utils import utcnow
 from gittip import orm, wireup
+from gittip.models.participant import Participant
 from gittip.authentication import User
 from gittip.billing.payday import Payday
 
@@ -48,7 +49,9 @@ def populate_db_with_dummy_data(db):
         account = GitHubAccount(user_id, {"id": user_id, "login": login})
         Participant(account.participant_id).change_id(login)
 
-class BaseTestCase(unittest.TestCase):
+
+class Harness(unittest.TestCase):
+
     @classmethod
     def setUpClass(cls):
         cls.db = orm.db
@@ -59,6 +62,13 @@ class BaseTestCase(unittest.TestCase):
 
     def tearDown(self):
         self.db.empty_tables()
+
+    def make_participant(self, participant_id, **kw):
+        participant = Participant(id=participant_id, **kw)
+        self.session.add(participant)
+        self.session.commit()
+        return participant
+
 
 class GittipBaseDBTest(unittest.TestCase):
     """

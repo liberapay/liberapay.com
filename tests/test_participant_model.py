@@ -7,11 +7,13 @@ import psycopg2
 import pytz
 from nose.tools import assert_raises
 
-from gittip.testing import BaseTestCase
+from gittip.testing import Harness
 from gittip.models import Participant, Tip
 from gittip.participant import Participant as OldParticipant
 
-class ParticipantTestCase(BaseTestCase):
+
+class TestParticipant(Harness):
+
     def random_restricted_id(self):
         """ helper method that randomly chooses a restricted id for testing """
         from gittip import RESTRICTED_IDS
@@ -21,16 +23,10 @@ class ParticipantTestCase(BaseTestCase):
         return random_item
 
     def setUp(self):
-        super(ParticipantTestCase, self).setUp()
+        super(Harness, self).setUp()
         self.participant = Participant(id='user1') # Our protagonist
         self.session.add(self.participant)
         self.session.commit()
-
-    def make_participant(self, participant_id, **kw):
-        participant = Participant(id=participant_id, **kw)
-        self.session.add(participant)
-        self.session.commit()
-        return participant
 
 
     def test_claiming_participant(self):
@@ -310,7 +306,6 @@ class ParticipantTestCase(BaseTestCase):
 
         actual = bob.get_number_of_backers()
         assert actual == 0, actual
-
 
 
     # def get_details(self):
