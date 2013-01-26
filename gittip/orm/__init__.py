@@ -5,7 +5,9 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session
 
+
 class Model(object):
+
     def __repr__(self):
         cols = self.__mapper__.c.keys()
         class_name = self.__class__.__name__
@@ -20,7 +22,9 @@ class Model(object):
             attrs[key] = getattr(self, key)
         return attrs
 
+
 class SQLAlchemy(object):
+
     def __init__(self):
         self.session = self.create_session()
         self.Model = self.make_declarative_base()
@@ -55,6 +59,7 @@ class SQLAlchemy(object):
 
     def create_all(self):
         self.Model.metadata.create_all(bind=self.engine)
+
 
 db = SQLAlchemy()
 
