@@ -3,6 +3,7 @@ import uuid
 from gittip.orm import db
 from gittip.models.participant import Participant
 
+
 class User(Participant):
     """Represent a website user.
 

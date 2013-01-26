@@ -9,8 +9,10 @@ from aspen import Response
 from gittip.orm import db
 from gittip.models import User
 
+
 BEGINNING_OF_EPOCH = rfc822.formatdate(0)
 TIMEOUT = 60 * 60 * 24 * 7 # one week
+
 
 def inbound(request):
     """Authenticate from a cookie.
@@ -21,6 +23,7 @@ def inbound(request):
     else:
         user = User()
     request.context['user'] = user
+
 
 def outbound(response):
     if 'user' in response.request.context:
