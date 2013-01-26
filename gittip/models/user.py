@@ -8,7 +8,9 @@ class User(Participant):
     """Represent a website user.
 
     Every current website user is also a participant, though if the user is
-    anonymous then the methods from Participant will fail with NoParticipantId.
+    anonymous then the methods from gittip.Participant will fail with
+    NoParticipantId.  The methods
+
     """
 
     @classmethod
