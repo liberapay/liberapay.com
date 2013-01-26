@@ -30,11 +30,11 @@ user_github_account, user_twitter_account = user.get_accounts_elsewhere()
 other_github_account, other_twitter_account = other.get_accounts_elsewhere()
 
 
-user_giving = user.dollars_giving
-user_receiving = user.dollars_receiving
+user_giving = user.get_dollars_giving()
+user_receiving = user.get_dollars_receiving()
 
-other_giving = other.dollars_giving
-other_receiving = other.dollars_receiving
+other_giving = other.get_dollars_giving()
+other_receiving = other.get_dollars_receiving()
 
 combined_giving = user_giving + other_giving
 combined_receiving = user_receiving + other_receiving
@@ -136,11 +136,11 @@ can_tip = False
                 <br />
                 {% if user_github_account is not None %}
                     <img src="/assets/icons/github.12.png" />
-                    {{ user_github_account['user_info']['login'] }}<br />
+                    {{ user_github_account.user_info['login'] }}<br />
                 {% end %}
                 {% if user_twitter_account is not None %}
                     <img src="/assets/icons/twitter.12.png" />
-                    {{ user_twitter_account['user_info']['screen_name'] }}<br />
+                    {{ user_twitter_account.user_info['screen_name'] }}<br />
                 {% end %}
             </div>
             </div>
@@ -187,13 +187,13 @@ can_tip = False
             {% if account.platform == 'github' and user_github_account is not None %}
                 <span class="account-elsewhere">
                     <img src="/assets/icons/github.12.png" />
-                    {{ user_github_account['user_info']['login'] }}<br />
+                    {{ user_github_account.user_info['login'] }}<br />
                 </span>
             {% end %}
             {% if account.platform == 'twitter' and user_twitter_account is not None %}
                 <span class="account-elsewhere">
                     <img src="/assets/icons/twitter.12.png" />
-                    {{ user_twitter_account['user_info']['screen_name'] }}<br />
+                    {{ user_twitter_account.user_info['screen_name'] }}<br />
                 </span>
             {% end %}
         </td>
@@ -225,13 +225,13 @@ can_tip = False
                 {% if user_github_account is not None %}
                     <span class="account-elsewhere">
                         <img src="/assets/icons/github.12.png" />
-                        {{ user_github_account['user_info']['login'] }}<br />
+                        {{ user_github_account.user_info['login'] }}<br />
                     </span>
                 {% end %}
                 {% if user_twitter_account is not None %}
                     <span class="account-elsewhere">
                         <img src="/assets/icons/twitter.12.png" />
-                        {{ user_twitter_account['user_info']['screen_name'] }}<br />
+                        {{ user_twitter_account.user_info['screen_name'] }}<br />
                     </span>
                 {% end %}
 
