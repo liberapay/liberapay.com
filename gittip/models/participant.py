@@ -81,6 +81,7 @@ class Participant(db.Model):
     class IdContainsInvalidCharacters(Exception): pass
     class IdIsRestricted(Exception): pass
     class IdAlreadyTaken(Exception): pass
+    class UnknownPlatform(Exception): pass
 
     @property
     def tips_giving(self):
@@ -154,6 +155,8 @@ class Participant(db.Model):
                 github_account = account
             elif account.platform == "twitter":
                 twitter_account = account
+            else:
+                raise self.UnknownPlatform(account.platform)
         return (github_account, twitter_account)
 
     def get_tip_to(self, tippee):
