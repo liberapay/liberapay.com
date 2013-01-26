@@ -11,6 +11,7 @@ gittip.wireup.canonical()
 gittip.wireup.db()
 gittip.wireup.billing()
 gittip.wireup.id_restrictions(website)
+gittip.wireup.sentry(website)
 
 
 website.github_client_id = os.environ['GITHUB_CLIENT_ID'].decode('ASCII')
