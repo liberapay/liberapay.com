@@ -4,7 +4,7 @@ from decimal import Decimal
 import pytz
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import func
-from sqlalchemy.orm import relationship, aliased
+from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Column, CheckConstraint, UniqueConstraint
 from sqlalchemy.types import Text, TIMESTAMP, Boolean, Numeric
 
@@ -92,6 +92,14 @@ class Participant(db.Model):
         return self._tips_receiving.distinct("tips.tipper")\
                                    .order_by("tips.tipper, tips.mtime DESC")
 
+    @property
+    def valid_tips_receiving(self):
+        return self.tips_receiving \
+                   .join(Participant, Tip.tipper == Participant.id) \
+                   .filter( 'participants.is_suspicious IS NOT true'
+                          , Participant.last_bill_result == ''
+                           )
+
     def resolve_unclaimed(self):
         if self.accounts_elsewhere:
             return self.accounts_elsewhere[0].resolve_unclaimed()
@@ -159,23 +167,12 @@ class Participant(db.Model):
         return amount
 
     def get_dollars_receiving(self):
-        tipper = aliased(Participant)
-        valid_tips = self.tips_receiving.join(tipper, Tip.tipper==tipper.id) \
-                                        .filter( 'participants_1.is_suspicious IS NOT true'
-                                               , tipper.last_bill_result == ''
-                                                )
-        return sum(tip.amount for tip in valid_tips)
+        return sum(tip.amount for tip in self.valid_tips_receiving)
 
     def get_number_of_backers(self):
-        nested_query = self.tips_receiving\
-                       .distinct("tips.tipper")\
-                       .filter(Participant.last_bill_result == '',\
-                               "participants.is_suspicious IS NOT true")\
-                       .subquery()
-
-        nbackers = db.session.query(
-                        func.count(nested_query.columns.amount))\
-                            .filter(nested_query.columns.amount > 0).one()[0]
+        amount_column = self.valid_tips_receiving.subquery().columns.amount
+        count = func.count(amount_column)
+        nbackers = db.session.query(count).filter(amount_column > 0).one()[0]
         return nbackers
 
 
