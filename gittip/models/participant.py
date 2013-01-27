@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 import datetime
 from decimal import Decimal
 
@@ -177,6 +179,18 @@ class Participant(db.Model):
         count = func.count(amount_column)
         nbackers = db.session.query(count).filter(amount_column > 0).one()[0]
         return nbackers
+
+    def get_og_title(self):
+        out = self.id
+        receiving = self.get_dollars_receiving()
+        giving = self.get_dollars_giving()
+        if (giving > receiving) and not self.anonymous:
+            out += " gives $%.2f/wk" % giving
+        elif receiving > 0:
+            out += " receives $%.2f/wk" % receiving
+        else:
+            out += " is"
+        return out + " on Gittip."
 
 
     # TODO: Move these queries into this class.
