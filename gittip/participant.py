@@ -309,6 +309,7 @@ class Participant(object):
                        JOIN participants p ON p.id = tippee
                       WHERE tipper=%s
                         AND is_suspicious IS NOT true
+                        AND claimed_time IS NOT NULL
                    ORDER BY tippee
                           , mtime DESC
                     ) AS foo
