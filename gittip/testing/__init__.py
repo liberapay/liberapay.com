@@ -471,10 +471,10 @@ def load_simplate(path):
 
     # XXX HACK - aspen.website should be refactored
     from aspen import dispatcher, sockets
-    test_website.hooks.inbound_early.run(request)
+    test_website.hooks.run('inbound_early', request)
     dispatcher.dispatch(request)  # sets request.fs
     request.socket = sockets.get(request)
-    test_website.hooks.inbound_late.run(request)
+    test_website.hooks.run('inbound_late', request)
 
     return resources.get(request)
 
