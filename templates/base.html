@@ -17,6 +17,7 @@
         <script src="/assets/jquery.maskedinput-1.3.min.js"></script>
         <script src="/assets/{{ __version__ }}/gittip.js"></script>
         <script>$(document).ready(Gittip.initCSRF);</script>
+        {% block head %}{% end %}
     </head>
     <body><div id="body">
         <h1>
