@@ -190,7 +190,7 @@ class Participant(db.Model):
             out += " receives $%.2f/wk" % receiving
         else:
             out += " is"
-        return out + " on Gittip."
+        return out + " on Gittip"
 
 
     # TODO: Move these queries into this class.
