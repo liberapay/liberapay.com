@@ -24,9 +24,7 @@ if not user.ANON:
     if user.id == path['participant_id']:
         my_tip = "self"
     else:
-        my_tip = Participant.get_tip_to(user, path['participant_id'])
-        if my_tip == 0:
-            my_tip = "%0.2f" % 0.00
+        my_tip = user.get_tip_to(path['participant_id'])
     output["my_tip"] = str(my_tip)
 
 
