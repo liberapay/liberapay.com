@@ -79,10 +79,12 @@ class Participant(db.Model):
                               )
 
     # Class-specific exceptions
-    class IdTooLong(Exception): pass
-    class IdContainsInvalidCharacters(Exception): pass
-    class IdIsRestricted(Exception): pass
-    class IdAlreadyTaken(Exception): pass
+    class ProblemChangingId(Exception): pass
+    class IdTooLong(ProblemChangingId): pass
+    class IdContainsInvalidCharacters(ProblemChangingId): pass
+    class IdIsRestricted(ProblemChangingId): pass
+    class IdAlreadyTaken(ProblemChangingId): pass
+
     class UnknownPlatform(Exception): pass
 
     @property
@@ -117,7 +119,7 @@ class Participant(db.Model):
         db.session.commit()
 
     def change_id(self, desired_id):
-        """Raise Response or return None.
+        """Raise self.ProblemChangingId, or return None.
 
         We want to be pretty loose with usernames. Unicode is allowed--XXX
         aspen bug :(. So are spaces. Control characters aren't. We also limit

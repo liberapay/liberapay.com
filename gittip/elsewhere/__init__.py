@@ -69,7 +69,7 @@ class AccountElsewhere(object):
             try:
                 user.change_id(desired_participant_id)
                 user.id = self.participant_id = desired_participant_id
-            except (Response, IntegrityError):
+            except user.ProblemChangingId:
                 pass
         return user
 
