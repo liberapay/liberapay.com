@@ -101,12 +101,15 @@ def run():
     env()
     local_env()
 
-    fab_run(SWADDLE, LOCAL_ENV, ASPEN,
-            '--www_root=www' + os.sep,
-            '--project_root=.',
-            '--show_tracebacks=yes',
-            '--changes_reload=yes',
-            '--network_address=:8537')
+    try:
+        fab_run(SWADDLE, LOCAL_ENV, ASPEN,
+                '--www_root=www' + os.sep,
+                '--project_root=.',
+                '--show_tracebacks=yes',
+                '--changes_reload=yes',
+                '--network_address=:8537')
+    except KeyboardInterrupt:
+        pass
 
 
 """
