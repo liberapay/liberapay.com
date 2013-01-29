@@ -3,6 +3,8 @@ import locale
 import os
 from decimal import Decimal
 
+import aspen
+
 
 try:  # XXX This can't be right.
     locale.setlocale(locale.LC_ALL, "en_US.utf8")
@@ -42,6 +44,12 @@ OLD_AMOUNTS= [Decimal(a) for a in ('0.25',)]
 
 AMOUNTS = [Decimal(a) for a in ('0.00', '0.25', '1.00', '3.00', '6.00', '12.00', '24.00')]
 RESTRICTED_IDS = None
+
+
+def log(*messages, **kw):
+    if 'level' not in kw:
+        kw['level'] = 2
+    aspen.log(*messages, **kw)
 
 
 # canonizer
