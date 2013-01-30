@@ -18,10 +18,10 @@ There are three pieces of information for each participant related to billing:
 """
 from __future__ import unicode_literals
 
+import gittip
 import balanced
 import stripe
 from aspen.utils import typecheck
-from gittip import db
 
 
 def get_balanced_account(participant_id, balanced_account_uri):
@@ -49,7 +49,7 @@ def get_balanced_account(participant_id, balanced_account_uri):
                  WHERE id=%s
 
         """
-        db.execute(BALANCED_ACCOUNT, (account.uri, participant_id))
+        gittip.db.execute(BALANCED_ACCOUNT, (account.uri, participant_id))
         account.meta['participant_id'] = participant_id
         account.save()  # HTTP call under here
     else:
@@ -98,7 +98,7 @@ def associate(thing, participant_id, balanced_account_uri, balanced_thing_uri):
         error = ''
     typecheck(error, unicode)
 
-    db.execute(SQL, (error, participant_id))
+    gittip.db.execute(SQL, (error, participant_id))
     return error
 
 
@@ -132,7 +132,7 @@ def clear(thing, participant_id, balanced_account_uri):
          WHERE id=%%s
 
     """ % ("bill" if thing == "credit card" else "ach")
-    db.execute(CLEAR, (participant_id,))
+    gittip.db.execute(CLEAR, (participant_id,))
 
 
 def store_error(thing, participant_id, msg):
@@ -145,7 +145,7 @@ def store_error(thing, participant_id, msg):
          WHERE id=%%s
 
     """ % ("bill" if thing == "credit card" else "ach")
-    db.execute(ERROR, (msg, participant_id))
+    gittip.db.execute(ERROR, (msg, participant_id))
 
 
 # Card
