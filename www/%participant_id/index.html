@@ -191,6 +191,16 @@ github_account, twitter_account = participant.get_accounts_elsewhere()
         #their-voice.is-suspicious {
             background: #FFE2DE;
         }
+        .editing #username_edit_warning {
+            visibility: visible;
+            display: block;
+            background-color: orange;
+        }
+        #username_edit_warning {
+            visibility: hidden;
+            display: none;
+        }
+
     </style>
     <script>
         $(document).ready(function()
@@ -472,8 +482,10 @@ github_account, twitter_account = participant.get_accounts_elsewhere()
         <span class="participant_id"><form>
             <input name="participant_id" value="{{ escape(user.id) }}"/>
             <button id="save-participant_id" type="submit" class="selected small">Save</button>
-            <button id="cancel-participant_id" type="cancel" class="small">Cancel</button></form></span><button
-        id="edit-participant_id" class="small selected">Edit</button>.
+            <button id="cancel-participant_id" type="cancel" class="small">Cancel</button>
+        </form></span>
+        <button id="edit-participant_id" class="small selected">Edit</button>.
+        <span class='small' id='username_edit_warning'>If you change your username, associations with other services may break as a result!</span>
         <span class="small"><a href="/sign-out.html">Sign out</a></span>
     </h2>
 
