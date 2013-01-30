@@ -30,14 +30,9 @@
 	), script);
 
 	// display current receiving value
-	(function() {
-		_.json(baseURI + '/' + username + '/public.json', function(data) {
-			receiving.innerHTML = data.receiving;
-		});
-
-		// update every five minutes
-		setTimeout(arguments.callee, 300000);
-	})();
+	_.json(baseURI + '/' + username + '/public.json', function(data) {
+		receiving.innerHTML = data.receiving;
+	});
 })(function(q) { return document.querySelectorAll(q); }, {
 	ml: function(jsonml) {
 		var i, p, v, node;
