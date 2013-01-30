@@ -174,7 +174,7 @@ class Participant(db.Model):
         return amount
 
     def get_dollars_receiving(self):
-        return sum(tip.amount for tip in self.valid_tips_receiving)
+        return sum(tip.amount for tip in self.valid_tips_receiving) + Decimal('0.00')
 
     def get_number_of_backers(self):
         amount_column = self.valid_tips_receiving.subquery().columns.amount
