@@ -1,6 +1,7 @@
 import gittip
 import logging
 import requests
+import os
 from aspen import json, log, Response
 from aspen.website import Website
 from aspen.utils import typecheck
@@ -98,8 +99,9 @@ def get_user_info(login):
     if rec is not None:
         user_info = rec['user_info']
     else:
-        url = "https://api.github.com/users/%s"
-        user_info = requests.get(url % login)
+        url = "https://api.github.com/users/%s?client_id=%s"
+        user_info = requests.get(url % (login,
+                                        os.environ.get('GITHUB_CLIENT_ID')))
         status = user_info.status_code
         content = user_info.text
         if status == 200:
