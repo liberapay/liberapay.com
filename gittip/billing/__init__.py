@@ -242,7 +242,7 @@ class BalancedCard(object):
                 out = "************" + unicode(out)
         elif name == 'expiry_month':
             out = self._get('expiration_month')
-        elif name == 'expiry_year'
+        elif name == 'expiry_year':
             out = self._get('expiration_year')
         elif name == 'address_2':
             out = self._get('meta', {}).get('address_2', '')
