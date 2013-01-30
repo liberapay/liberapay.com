@@ -10,6 +10,20 @@ receiving = participant.get_dollars_receiving()
 output = {"receiving": str(receiving)}
 
 
+# Generate giving key
+# ===================
+# Display values:
+#
+#   null - user is giving anonymously
+#   3.00 - user gives this amount in tips
+
+if not participant.anonymous:
+    giving = str(participant.get_dollars_giving())
+else:
+    giving = None
+output["giving"] = giving
+
+
 # Generate my_tip key
 # ===================
 # Display values:
