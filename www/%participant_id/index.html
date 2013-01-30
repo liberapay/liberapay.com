@@ -723,16 +723,13 @@ github_account, twitter_account = participant.get_accounts_elsewhere()
 
     <p>Use this code to add a Gittip &ldquo;receiving&rdquo; widget on your website:</p>
 
-    <pre>&lt;span class="gittip-0001" gittip-username="{{ participant.id }}"&gt;
-&lt/span&gt;
-&lt;script id="gittip-0001"
-  src="https://www.gittip.com/assets/widgets/0001.js"&gt;
+<pre>&lt;script data-gittip-username="{{ participant.id }}"
+src="https://www.gittip.com/assets/widgets/0002.js"&gt;
 &lt;/script&gt;</pre>
 
     <p>Here&rsquo;s what it looks like:</p>
 
-    <span class="gittip-0001" gittip-username="{{ participant.id }}"></span>
-    <script id="gittip-0001" src="/assets/widgets/0001.js"></script>
+    <script data-gittip-username="{{ participant.id }}" src="/assets/widgets/0002.js"></script>
 
 
     <h2>Connected Accounts</h2>

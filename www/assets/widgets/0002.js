@@ -1,10 +1,9 @@
 (function($, _) {
 	var s        = $('script'),
 	    script   = s[s.length - 1],
-	    baseURI  = script.getAttribute('data-gittip')
+	    baseURI  = script.getAttribute('data-gittip-base')
 	            || script.src.replace(/^((https?:)?\/\/[^\/]+).*$/, '$1'),
-	    username = script.getAttribute('data-username')
-	            || $('.gittip-0001')[0].getAttribute('gittip-username'),
+	    username = script.getAttribute('data-gittip-username'),
 	    widget, receiving;
 
 	// include css
@@ -67,7 +66,7 @@
 		if (xhr.withCredentials == undefined && XDomainRequest)
 			return this._xdr(cb);
 
-		xhr.readystatechange = function() {
+		xhr.onreadystatechange = function() {
 			if (xhr.readyState == 4 && xhr.status == 200) cb();
 		};
 
