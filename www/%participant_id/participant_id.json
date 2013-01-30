@@ -11,7 +11,7 @@ new_participant_id = request.body['participant_id']
 try:
     user.change_id(new_participant_id)
     response.body = {"participant_id": new_participant_id}
-except Participant.IdContainsInvalidCharacters, Participant.IdIsRestricted:
+except (Participant.IdContainsInvalidCharacters, Participant.IdIsRestricted):
     raise Response(400)
 except Participant.IdAlreadyTaken:
     raise Response(409)
