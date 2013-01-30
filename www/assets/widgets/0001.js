@@ -1,103 +1,96 @@
-var GittipWidget0001 = {};
+(function($, _) {
+	var s        = $('script'),
+	    script   = s[s.length - 1],
+	    baseURI  = script.getAttribute('data-gittip')
+	            || script.src.replace(/^((https?:)?\/\/[^\/]+).*$/, '$1'),
+	    username = script.getAttribute('data-username')
+	            || $('.gittip-0001')[0].getAttribute('gittip-username'),
+	    widget, receiving;
 
+	// include css
+	$('head')[0].appendChild(
+		_.ml(['link', {
+			rel: 'stylesheet',
+			href: script.src.replace('.js', '.css').replace(/\?.+/, '')
+		}])
+	);
 
-GittipWidget0001.create_element = function(el_type, ident, opts)
-{
-    var id = "autoloaded-" + ident;
-    if (document.getElementById(id))
-        return;
+	// set up widget
+	script.parentNode.insertBefore(_.ml(
+		['div', { 'class': 'gittip-widget gittip-0002' },
+			[ 'div', { 'class': 'gittip-inner' },
+				'I receive ', ['br'],
+				['a', { href: baseURI + '/' + username + '/' },
+					[ 'b', '$', receiving = _.ml(['span', '0.00'])] , ' / wk'
+				],
+				['br'],
+				' on ', ['a', { href: baseURI }, 'Gittip' ], '.'
+			]
+		]
+	), script);
 
-    var el = document.createElement(el_type);
-    el.id = id;
-    for (var key in opts) {
-        el[key] = opts[key];
-    }
-    document.getElementsByTagName('head')[0].appendChild(el);
-};
+	// display current receiving value
+	(function() {
+		_.json(baseURI + '/' + username + '/public.json', function(data) {
+			receiving.innerHTML = data.receiving;
+		});
 
+		// update every five minutes
+		setTimeout(arguments.callee, 300000);
+	})();
+})(function(q) { return document.querySelectorAll(q); }, {
+	ml: function(jsonml) {
+		var i, p, v, node;
 
-GittipWidget0001.setup = function()
-{
-    // Get the script element and compute a CSS file to load.
+		node = document.createElement(jsonml[0]);
 
-    var script = document.getElementById('gittip-0001')
-      , cssURI = script.src.replace(/.js$/, '.css')
-      , base = script.src.slice(0, 4) === 'http'
-             ? script.src.replace(/^(https?:\/\/[^/]+).*$/, '$1')
-             : ''
-      , jQueryURI = base + '/assets/jquery-1.7.1.min.js'
-       ;
+		for (i=1; i<jsonml.length; i++) {
+			v = jsonml[i];
 
-    this.base = base;
+			switch (v.constructor) {
+				case Object:
+					for (p in v)
+						node.setAttribute(p, v[p]);
+					break;
 
+				case Array: node.appendChild(this.ml(v)); break;
 
-    // Load the CSS file. (We need this even if the page already has jQuery.)
+				case String: case Number:
+					node.appendChild(document.createTextNode(v));
+					break;
 
-    GittipWidget0001.create_element( 'link'
-                                   , 'widget'
-                                   , { 'href': cssURI
-                                     , 'type': 'text/css'
-                                     , 'rel': 'stylesheet'
-                                      }
-                                    );
+				default: node.appendChild(v); break;
+			}
+		}
 
+		return node;
+	},
 
-    // Load jQuery, and block until it loads.
+	_xhr: function(cb) {
+		var xhr = new XMLHttpRequest();
 
-    if (!('jQuery' in window))
-    {
-        GittipWidget0001.create_element( 'script'
-                                       , 'jquery'
-                                       , { 'src': jQueryURI
-                                         , 'type': 'text/javascript'
-                                          }
-                                        );
-        setTimeout(GittipWidget0001.setup, 50);
-        return;
-    }
+		if (xhr.withCredentials == undefined && XDomainRequest)
+			return this._xdr(cb);
 
+		xhr.readystatechange = function() {
+			if (xhr.readyState == 4 && xhr.status == 200) cb();
+		};
 
-    // Once jQuery is loaded, proceed.
+		return xhr;
+	},
 
-    $('SPAN.gittip-0001[gittip-username]').each(GittipWidget0001.setupOneWidget);
-};
+	_xdr: function(cb) {
+		var xdr = new XDomainRequest();
+		xdr.onload = cb;
+		return xdr;
+	},
 
+	json: function(url, cb) {
+		var xhr = this._xhr(function() {
+			cb(JSON.parse(xhr.responseText));
+		});
 
-GittipWidget0001.setupOneWidget = function()
-{
-    var DEFAULT = '0.00';
-
-    var span = $(this)
-      , username = span.attr('gittip-username')
-      , base = GittipWidget0001.base;
-       ;
-
-    function updateWidget(a, b, c)
-    {
-        var receiving = $('[gittip-username=' + username + '] .receiving');
-        receiving.text(a.receiving || DEFAULT);
-    }
-
-    function startUpdatingWidget()
-    {
-        var uri = GittipWidget0001.base + '/' + username + '/public.json'
-        jQuery.ajax({ 'url': uri
-                    , 'type': 'GET'
-                    , 'dataType': 'json'
-                    , 'success': updateWidget
-                    , 'error': updateWidget
-                     });
-    }
-
-    $(document).ready(function()
-    {
-        span.append( '<span class="gittip-0001-padding">I receive<br/>'
-                   + '<b><a href="' + base + '/' + username + '/">'
-                   + '$<span class="receiving">' + DEFAULT + '</span></b>'
-                   + ' / wk</a><br />'
-                   + 'on <a href="' + base + '/">Gittip</a>.</span>')
-        startUpdatingWidget();
-    });
-};
-
-GittipWidget0001.setup();
+		xhr.open('GET', url);
+		xhr.send();
+	}
+});
