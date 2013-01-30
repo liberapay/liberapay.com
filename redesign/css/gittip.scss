@@ -98,6 +98,17 @@ body {
 }
 
 // Global
+button {
+    background: #58595B;
+    border: 3px solid #DEE0E0;
+    color: white;
+    font: bold 11px $Helvetica;
+    letter-spacing: 1px;
+    margin-left: 2px;
+    padding: 4px 10px;
+    text-transform: uppercase;
+    @include border-radius(3px);
+}
 header.main {
     border-bottom: 1px solid #D0D2D3;
     padding: 10px 0;
@@ -125,22 +136,63 @@ header.main {
         padding: 8px 0 0 18px;
     }
     div.login {
-        padding-top: 5px;
+        padding-top: 6px;
         text-align: right;
 
         span {
             font: normal 13px $Helvetica;
         }
-        button {
-            background: #58595B;
-            border: 3px solid #DEE0E0;
-            color: white;
-            font: bold 11px $Helvetica;
-            letter-spacing: 1px;
-            margin-left: 2px;
-            padding: 4px 10px;
-            text-transform: uppercase;
-            @include border-radius(3px);
+    }
+}
+section.hero {
+    background: transparent url('../img/hero-bg.png') top left repeat;
+    color: #231F20;
+    min-height: 350px;
+
+    div {
+        text-align: center;
+    }
+    div.top {
+        letter-spacing: -3px;
+        font: bold 35px $Mensch;
+        padding: 50px 0 35px 0;
+
+        span {
+            background: transparent url('../img/hero-bg.png') top left repeat;
+            display: inline-block;
+            padding: 0 10px;
+        }
+        &:after {
+            background: #848384;
+            content: "";
+            display: block;
+            height: 1px;
+            margin-top: -17px;
+        }
+    }
+    div.middle {
+        letter-spacing: -4px;
+        font: bold 64px $Mensch;
+        padding-bottom: 20px;
+    }
+    div.bottom {
+        span.button-container {
+            background: transparent url('../img/hero-bg.png') top left repeat;
+            display: inline-block;
+            padding: 0 10px;
+
+            button {
+                background: #81A63F;
+                border-color: white;
+                font-size: 14px;
+            }
+        }
+        &:after {
+            background: #848384;
+            content: "";
+            display: block;
+            height: 1px;
+            margin-top: -15px;
         }
     }
 }
@@ -162,7 +214,5 @@ header.main {
  
 /* Landscape phones and down */
 @media (max-width: 480px) {
-	body {
-		background: blue;
-	}
+    
 }
