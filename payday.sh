@@ -81,18 +81,19 @@ else
 fi
 
 if [ $1 ]; then
+    require foreman
     confirm "$RUN payday #$1?"
     if [ $? -eq 0 ]; then
         if [ "$2" == "" ]; then
             start
-            env/bin/swaddle local.env ./env/bin/payday >> $LOG 2>&1
+            foreman run -e local.env ./env/bin/payday >> $LOG 2>&1
         else 
             if [ "$2" == "for_real_please" ]; then
                 confirm "$RUN payday #$1 FOR REAL?!?!?!??!?!?"
                 if [ $? -eq 0 ]; then
                     start
-                    heroku config | ./env/bin/swaddle - ./env/bin/payday \
-                        >> $LOG 2>&1
+                    heroku config -s | foreman run -e /dev/stdin \
+                        ./env/bin/payday >> $LOG 2>&1
                 fi
             else
                 echo "Your second arg was $2. Wazzat mean?"
