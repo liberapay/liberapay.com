@@ -99,9 +99,11 @@ def get_user_info(login):
     if rec is not None:
         user_info = rec['user_info']
     else:
-        url = "https://api.github.com/users/%s?client_id=%s"
-        user_info = requests.get(url % (login,
-                                        os.environ.get('GITHUB_CLIENT_ID')))
+        url = "https://api.github.com/users/%s"
+        user_info = requests.get(url % login, params={
+            'client_id': os.environ.get('GITHUB_CLIENT_ID'),
+            'client_secret': os.environ.get('GITHUB_CLIENT_SECRET')
+        })
         status = user_info.status_code
         content = user_info.text
         if status == 200:
