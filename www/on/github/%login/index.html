@@ -3,6 +3,7 @@
 import decimal
 
 import requests
+from os import environ
 from aspen import json, Response
 from gittip import AMOUNTS, CARDINALS, db
 from gittip.elsewhere import github
@@ -44,7 +45,11 @@ if usertype == "user":
 
 elif usertype == "organization":
     members = []
-    resp = requests.get("https://api.github.com/orgs/%s/members" % username)
+    resp = requests.get(
+        "https://api.github.com/orgs/%s/members" % username,
+        params={'client_id': environ.get('GITHUB_CLIENT_ID'),
+                'client_secret': environ.get('GITHUB_CLIENT_SECRET')}
+    )
     if resp.status_code == 200:
         members = json.loads(resp.text)
 
