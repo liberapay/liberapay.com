@@ -96,6 +96,11 @@ body {
 .hidden {
     display: none;
 }
+input {
+    box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+}
 
 // Global
 button {
@@ -147,7 +152,7 @@ header.main {
 section.hero {
     background: transparent url('../img/hero-bg.png') top left repeat;
     color: #231F20;
-    min-height: 350px;
+    min-height: 320px;
 
     div {
         text-align: center;
@@ -193,6 +198,29 @@ section.hero {
             display: block;
             height: 1px;
             margin-top: -15px;
+        }
+    }
+    div.tip-someone {
+        background: white;
+        border: 5px solid rgba(#49392F, .5);
+        margin-bottom: -35px;
+        margin-top: 40px;
+        min-height: 120px;
+        padding-top: 15px;
+        @include border-radius(3px);
+
+        span {
+            color: #614C3E;
+            font: bold 22px $Helvetica;
+        }
+        form {
+            margin-bottom: 0;
+            margin-top: 12px;
+
+            input {
+                background: transparent url('../img/logo-icon-offset.png') center right no-repeat;
+                margin: 0;
+            }
         }
     }
 }
