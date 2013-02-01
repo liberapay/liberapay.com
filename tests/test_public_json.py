@@ -1,6 +1,7 @@
 import json
 import datetime
 import pytz
+from decimal import Decimal
 from nose.tools import assert_equal
 
 from gittip.testing import Harness
@@ -49,6 +50,33 @@ class Tests(Harness):
         data = json.loads(TestClient().get('/alice/public.json').body)
 
         assert_equal(data['giving'], None)
+
+    def test_anonymous_does_not_get_goal_if_user_regifts(self):
+        alice = self.make_participant('alice', last_bill_result='')
+
+        alice.goal = 0
+
+        data = json.loads(TestClient().get('/alice/public.json').body)
+
+        assert_equal(data.has_key('goal'), False)
+
+
+
+    def test_anonymous_gets_null_goal_if_user_has_no_goal(self):
+        alice = self.make_participant('alice', last_bill_result='')
+
+        data = json.loads(TestClient().get('/alice/public.json').body)
+
+        assert_equal(data['goal'], None)
+
+    def test_anonymous_gets_user_goal_if_set(self):
+        alice = self.make_participant('alice', last_bill_result='')
+
+        alice.goal = Decimal('1.00')
+
+        data = json.loads(TestClient().get('/alice/public.json').body)
+
+        assert_equal(data['goal'], '1.00')
 
     def test_authenticated_user_gets_their_tip(self):
         alice = self.make_participant('alice', last_bill_result='')
