@@ -1,4 +1,6 @@
 import json
+import datetime
+import pytz
 from nose.tools import assert_equal
 
 from gittip.testing import Harness
@@ -29,7 +31,7 @@ class Tests(Harness):
 
     def test_anonymous_gets_giving(self):
         alice = self.make_participant('alice', last_bill_result='')
-        self.make_participant('bob')
+        self.make_participant('bob', claimed_time=datetime.datetime.now(pytz.utc))
 
         alice.set_tip_to('bob', '1.00')
 
