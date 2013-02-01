@@ -1,130 +1,122 @@
 from datetime import datetime
 from decimal import Decimal
 
-from gittip import wireup
-from gittip.testing import load, load_simplate, serve_request, tip_graph
-from gittip.billing.payday import Payday
-from gittip.participant import Participant
+from aspen.utils import utcnow
 from mock import patch
+from nose.tools import assert_equals
+
+from gittip import wireup
+from gittip.billing.payday import Payday
+from gittip.models import Tip
+from gittip.participant import Participant
+from gittip.testing import Harness, load_simplate
+from gittip.testing.client import TestClient
 
 
-# commaize
+class TestCommaize(Harness):
+    # XXX This really ought to be in helper methods test file
+    def setUp(self):
+        super(Harness, self).setUp()
+        simplate = load_simplate('/about/stats.html')
+        self.commaize = simplate.pages[0]['commaize']
 
-simplate = load_simplate('/about/stats.html')
-commaize = simplate.pages[0]['commaize']
+    def test_commaize_commaizes(self):
+        actual = self.commaize(1000.0)
+        assert actual == "1,000", actual
 
-def test_commaize_commaizes():
-    actual = commaize(1000.0)
-    assert actual == "1,000", actual
-
-def test_commaize_commaizes_and_obeys_decimal_places():
-    actual = commaize(1000, 4)
-    assert actual == "1,000.0000", actual
-
-
-# chart of giving
-
-def check_tip_distribution(participant_id):
-    return Participant(participant_id).get_tip_distribution()
+    def test_commaize_commaizes_and_obeys_decimal_places(self):
+        actual = self.commaize(1000, 4)
+        assert actual == "1,000.0000", actual
 
 
-def test_get_chart_of_receiving_handles_a_tip():
-    tip = ("foo", "bar", "3.00", True)
-    expected = ( [[Decimal('3.00'), 1, Decimal('3.00'), 1.0, Decimal('1')]]
-               , 1.0, Decimal('3.00')
-                )
-    with tip_graph(tip):
-        actual = check_tip_distribution(u'bar')
-        assert actual == expected, actual
+class TestChartOfReceiving(Harness):
+    def setUp(self):
+        super(Harness, self).setUp()
+        for participant in ['alice', 'bob']:
+            self.make_participant(participant, last_bill_result='')
 
-def test_get_chart_of_receiving_handles_a_non_standard_amount():
-    tip = ("foo", "bar", "5.37", True)
-    expected = ( [[-1, 1, Decimal('5.37'), 1.0, Decimal('1')]]
-               , 1.0, Decimal('5.37')
-                )
-    with tip_graph(tip):
-        actual = check_tip_distribution(u'bar')
-        assert actual == expected, actual
+    def test_get_tip_distribution_handles_a_tip(self):
+        Participant(u'alice').set_tip_to('bob', '3.00')
+        expected = ([[Decimal('3.00'), 1, Decimal('3.00'), 1.0, Decimal('1')]],
+                    1.0, Decimal('3.00'))
+        actual = Participant(u'bob').get_tip_distribution()
+        assert_equals(actual, expected)
 
-def test_get_chart_of_receiving_handles_no_tips():
-    expected = ([], 0.0, Decimal('0.00'))
-    with tip_graph():
-        actual = check_tip_distribution(u'foo')
-        assert actual == expected, actual
+    def test_get_tip_distribution_handles_a_non_standard_amount(self):
+        tip = Tip(tipper='alice', tippee='bob', amount='5.37', ctime=utcnow())
+        self.session.add(tip)
+        self.session.commit()
+        expected = ([[-1, 1, Decimal('5.37'), 1.0, Decimal('1')]],
+                    1.0, Decimal('5.37'))
+        actual = Participant(u'bob').get_tip_distribution()
+        assert_equals(actual, expected)
 
-def test_get_chart_of_receiving_handles_multiple_tips():
-    tips = [ ("foo", "bar", "1.00", True)
-           , ("baz", "bar", "3.00", True)
-            ]
-    expected = ( [ [Decimal('1.00'), 1L, Decimal('1.00'), 0.5, Decimal('0.25')]
-                 , [Decimal('3.00'), 1L, Decimal('3.00'), 0.5, Decimal('0.75')]
-                  ]
-               , 2.0, Decimal('4.00')
-                )
-    with tip_graph(*tips):
-        actual = check_tip_distribution(u'bar')
-        assert actual == expected, actual
+    def test_get_tip_distribution_handles_no_tips(self):
+        expected = ([], 0.0, Decimal('0.00'))
+        actual = Participant(u'foo').get_tip_distribution()
+        assert_equals(actual, expected)
 
-def test_get_chart_of_receiving_ignores_bad_cc():
-    tips = [ ("foo", "bar", "1.00", True)
-           , ("baz", "bar", "3.00", False)
-            ]
-    expected = ( [[Decimal('1.00'), 1L, Decimal('1.00'), 1, Decimal('1')]]
-               , 1.0, Decimal('1.00')
-                )
-    with tip_graph(*tips):
-        actual = check_tip_distribution(u'bar')
-        assert actual == expected, actual
+    def test_get_tip_distribution_handles_multiple_tips(self):
+        self.make_participant('carl', last_bill_result='')
+        Participant(u'alice').set_tip_to('bob', '1.00')
+        Participant(u'carl').set_tip_to('bob', '3.00')
+        expected = ([
+            [Decimal('1.00'), 1L, Decimal('1.00'), 0.5, Decimal('0.25')],
+            [Decimal('3.00'), 1L, Decimal('3.00'), 0.5, Decimal('0.75')]
+        ], 2.0, Decimal('4.00'))
+        actual = Participant(u'bob').get_tip_distribution()
+        assert_equals(actual, expected)
 
-def test_get_chart_of_receiving_ignores_missing_cc():
-    tips = [ ("foo", "bar", "1.00", True)
-           , ("baz", "bar", "3.00", None)
-            ]
-    expected = ( [[Decimal('1.00'), 1L, Decimal('1.00'), 1, Decimal('1')]]
-               , 1.0, Decimal('1.00')
-                )
-    with tip_graph(*tips):
-        actual = check_tip_distribution(u'bar')
-        assert actual == expected, actual
+    def test_get_tip_distribution_ignores_bad_cc(self):
+        self.make_participant('bad_cc', last_bill_result='Failure!')
+        Participant(u'alice').set_tip_to('bob', '1.00')
+        Participant(u'bad_cc').set_tip_to('bob', '3.00')
+        expected = ([[Decimal('1.00'), 1L, Decimal('1.00'), 1, Decimal('1')]],
+                    1.0, Decimal('1.00'))
+        actual = Participant(u'bob').get_tip_distribution()
+        assert_equals(actual, expected)
+
+    def test_get_tip_distribution_ignores_missing_cc(self):
+        self.make_participant('missing_cc', last_bill_result=None)
+        Participant(u'alice').set_tip_to('bob', '1.00')
+        Participant(u'missing_cc').set_tip_to('bob', '3.00')
+        expected = ([[Decimal('1.00'), 1L, Decimal('1.00'), 1, Decimal('1')]],
+                    1.0, Decimal('1.00'))
+        actual = Participant(u'bob').get_tip_distribution()
+        assert_equals(actual, expected)
 
 
-# rendering
+class TestRenderingStatsPage(Harness):
+    def get_stats_page(self):
+        return TestClient().get('/about/stats.html').body
 
-def get_stats_page():
-    #response = handle('/about/stats.html')
-    response = serve_request('/about/stats.html')
-    return response.body
+    @patch('datetime.datetime')
+    def test_stats_description_accurate_during_payday_run(self, mock_datetime):
+        """Test that stats page takes running payday into account.
 
-
-@patch('datetime.datetime')
-def test_stats_description_accurate_during_payday_run(mock_datetime):
-    """Test that stats page takes running payday into account.
-
-    This test was originally written to expose the fix required for
-    https://github.com/zetaweb/www.gittip.com/issues/92.
-    """
-    with load() as context:
-        a_thursday = datetime(2012, 8, 9, 12, 00, 01)
+        This test was originally written to expose the fix required for
+        https://github.com/zetaweb/www.gittip.com/issues/92.
+        """
+        a_thursday = datetime(2012, 8, 9, 11, 00, 01)
         mock_datetime.utcnow.return_value = a_thursday
 
         wireup.billing()
-        pd = Payday(context.db)
-        pd.start()
+        payday = Payday(wireup.db())
+        payday.start()
 
-        body = get_stats_page()
+        body = self.get_stats_page()
         assert "is changing hands <b>right now!</b>" in body, body
-        pd.end()
+        payday.end()
 
-@patch('datetime.datetime')
-def test_stats_description_accurate_outside_of_payday(mock_datetime):
-    """Test stats page outside of the payday running"""
-    with load() as context:
-        a_monday = datetime(2012, 8, 6, 12, 00, 01)
+    @patch('datetime.datetime')
+    def test_stats_description_accurate_outside_of_payday(self, mock_datetime):
+        """Test stats page outside of the payday running"""
+        a_monday = datetime(2012, 8, 6, 11, 00, 01)
         mock_datetime.utcnow.return_value = a_monday
 
-        pd = Payday(context.db)
-        pd.start()
+        payday = Payday(wireup.db())
+        payday.start()
 
-        body = get_stats_page()
+        body = self.get_stats_page()
         assert "is ready for <b>this Thursday</b>" in body, body
-        pd.end()
+        payday.end()
