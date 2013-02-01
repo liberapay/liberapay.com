@@ -1,75 +1,89 @@
-from gittip.testing import (
-    serve_request, tip_graph, load, GITHUB_USER_UNREGISTERED_LGTEST)
+import datetime
 
 from mock import patch
+import pytz
 
+from gittip.testing import GITHUB_USER_UNREGISTERED_LGTEST, Harness
+from gittip.testing.client import TestClient
 
-def test_homepage():
-    actual = serve_request('/').body
-    expected = "Weekly Cash Gifts"
-    assert expected in actual, actual
+class TestPages(Harness):
+    def setUp(self):
+        super(Harness, self).setUp()
+        self.client = TestClient()
 
-def test_profile():
-    with tip_graph(("cheese", "puffs", 0)):
+    def get(self, url, returning='body'):
+        request = self.client.get(url)
+        return getattr(request, returning)
+
+    def test_homepage(self):
+        actual = self.client.get('/').body
+        expected = "Weekly Cash Gifts"
+        assert expected in actual, actual
+
+    def test_profile(self):
+        self.make_participant('cheese',
+                              claimed_time=datetime.datetime.now(pytz.utc))
         expected = "I&rsquo;m grateful for tips"
-        actual = serve_request('/cheese/').body
+        actual = self.get('/cheese/')
         assert expected in actual, actual
 
-def test_widget():
-    with tip_graph(("cheese", "puffs", 0)):
+    def test_widget(self):
+        self.make_participant('cheese',
+                              claimed_time=datetime.datetime.now(pytz.utc))
         expected = "javascript: window.open"
-        actual = serve_request('/cheese/widget.html').body
+        actual = self.get('/cheese/widget.html')
         assert expected in actual, actual
 
-def test_bank_account():
-    expected = "add or change your bank account"
-    actual = serve_request('/bank-account.html').body
-    assert expected in actual, actual
+    def test_bank_account(self):
+        expected = "add or change your bank account"
+        actual = self.get('/bank-account.html')
+        assert expected in actual, actual
 
-def test_credit_card():
-    expected = "add or change your credit card"
-    actual = serve_request('/credit-card.html').body
-    assert expected in actual, actual
+    def test_credit_card(self):
+        expected = "add or change your credit card"
+        actual = self.get('/credit-card.html')
+        assert expected in actual, actual
 
-def test_github_associate():
-    expected = "Bad request, program!"
-    actual = serve_request('/on/github/associate').body
-    assert expected in actual, actual
+    def test_github_associate(self):
+        expected = "Bad request, program!"
+        actual = self.get('/on/github/associate')
+        assert expected in actual, actual
 
-def test_twitter_associate():
-    expected = "Bad request, program!"
-    actual = serve_request('/on/twitter/associate').body
-    assert expected in actual, actual
+    def test_twitter_associate(self):
+        expected = "Bad request, program!"
+        actual = self.get('/on/twitter/associate')
+        assert expected in actual, actual
 
-def test_about():
-    expected = "small weekly cash gifts"
-    actual = serve_request('/about/').body
-    assert expected in actual, actual
+    def test_about(self):
+        expected = "small weekly cash gifts"
+        actual = self.get('/about/')
+        assert expected in actual, actual
 
-def test_about_stats():
-    expected = "have joined Gittip"
-    actual = serve_request('/about/stats.html').body
-    assert expected in actual, actual
+    def test_about_stats(self):
+        expected = "have joined Gittip"
+        actual = self.get('/about/stats.html')
+        assert expected in actual, actual
 
-def test_about_charts():
-    expected = "Money transferred"
-    actual = serve_request('/about/charts.html').body
-    assert expected in actual, actual
+    def test_about_charts(self):
+        expected = "Money transferred"
+        actual = self.get('/about/charts.html')
+        assert expected in actual, actual
 
+    def test_about_unclaimed(self):
+        expected = "Unclaimed"
+        actual = self.get('/about/unclaimed.html')
+        assert expected in actual, actual
 
-@patch('gittip.elsewhere.github.requests')
-def test_github_proxy(requests):
-    requests.get().status_code = 200
-    requests.get().text = GITHUB_USER_UNREGISTERED_LGTEST
-    with load():
+    @patch('gittip.elsewhere.github.requests')
+    def test_github_proxy(self, requests):
+        requests.get().status_code = 200
+        requests.get().text = GITHUB_USER_UNREGISTERED_LGTEST
         expected = "lgtest has not joined"
-        actual = serve_request('/on/github/lgtest/').body
+        actual = self.get('/on/github/lgtest/')
         assert expected in actual, actual
 
-
-# This hits the network. XXX add a knob to skip this
-def test_twitter_proxy():
-    with load():
+    # This hits the network. XXX add a knob to skip this
+    def test_twitter_proxy(self):
         expected = "Twitter has not joined"
-        actual = serve_request('/on/twitter/twitter/').body
+        actual = self.get('/on/twitter/twitter/')
         assert expected in actual, actual
