@@ -10,6 +10,22 @@ receiving = participant.get_dollars_receiving()
 output = {"receiving": str(receiving)}
 
 
+# Generate goal key
+# =================
+# Display values:
+#
+#   undefined - user is not here to receive tips, but will generally regift them
+#   null - user has no funding goal
+#   3.00 - user wishes to receive at least this amount
+
+if participant.goal != 0:
+    if participant.goal > 0:
+        goal = str(participant.goal)
+    else:
+        goal = None
+    output["goal"] = goal
+
+
 # Generate giving key
 # ===================
 # Display values:
