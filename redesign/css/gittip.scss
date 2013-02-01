@@ -102,7 +102,49 @@ input {
     -webkit-box-sizing: content-box;
 }
 
-// Global
+// Modules
+a.mini-user {
+    background: white;
+    border: 4px solid #DEE0E0;
+    display: block;
+    float: left;
+    width: 100%;
+    @include border-radius(3px);
+
+    span.inner {
+        border: 1px solid #B6B7B9;
+        display: block;
+        min-height: 50px;
+        padding: 5px;
+
+        span.avatar {
+            background: transparent url('../img/avatar-default.gif') center center no-repeat;
+            background-size: cover;
+            display: block;
+            min-height: 70px;
+        }
+        span.money {
+            color: #231F20;
+            display: block;
+            font: bold 18px $Helvetica;
+            margin: 7px 0 5px 0;
+        }
+        span.name {
+            color: #82A546;
+            display: block;
+            font: normal 11px $Helvetica;
+            margin: 3px 0;
+        }
+    }
+    &:hover {
+        border: 4px solid #A49C97;
+        text-decoration: none;
+
+        span.inner {
+            border-color: #7D6250;
+        }
+    }
+}
 button {
     background: #58595B;
     border: 3px solid #DEE0E0;
@@ -114,6 +156,8 @@ button {
     text-transform: uppercase;
     @include border-radius(3px);
 }
+
+// Global
 header.main {
     border-bottom: 1px solid #D0D2D3;
     padding: 10px 0;
@@ -152,6 +196,7 @@ header.main {
 section.hero {
     background: transparent url('../img/hero-bg.png') top left repeat;
     color: #231F20;
+    margin-bottom: 35px;
     min-height: 320px;
 
     div {
@@ -220,6 +265,67 @@ section.hero {
             input {
                 background: transparent url('../img/logo-icon-offset.png') center right no-repeat;
                 margin: 0;
+                width: 85%;
+            }
+        }
+    }
+}
+section {
+    margin: 35px 0;
+
+    h1 {
+        color: #6D6E70;
+        font: bold 35px $Mensch;
+        letter-spacing: -2px;
+        margin: 35px 0 20px 0;
+        text-transform: uppercase;
+    }
+    
+    &.leaderboard {
+        div.top {
+            button {
+                float: right;
+                margin-top: 4px;
+            }
+            h2 {
+                float: left;
+            }
+        }
+        h2 {
+            color: #614C3E;
+            font: bold 14px $Helvetica;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        ul {
+            margin: 0 0 20px 0;
+
+            li {
+                display: block;
+                float: left;
+                margin: 0;
+                min-width: 90px;
+                padding: 2px;
+                width: 10%;
+            }
+        }
+    }
+    &.about {
+        h1 {
+            margin: 0;
+        }
+        p {
+            color: #6D6E70;
+            font: normal 16px/24px $Helvetica;
+            margin: 20px 0;
+        }
+        div.meta {
+            border-left: 1px solid #231F20;
+            padding-left: 50px;
+
+            p {
+                color: #929497;
+                font: normal 13px/21px $Helvetica;
             }
         }
     }
