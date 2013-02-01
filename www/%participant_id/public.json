@@ -1,10 +1,10 @@
 """JSON endpoint for a Gittip widget.
 """
-from gittip.participant import Participant
+from gittip.models import Participant
 
 # ========================================================================== ^L
 
-participant = Participant(path['participant_id'])
+participant = Participant.query.get(path['participant_id'])
 receiving = participant.get_dollars_receiving()
 
 output = {"receiving": str(receiving)}
