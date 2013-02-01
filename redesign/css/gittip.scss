@@ -122,6 +122,20 @@ a.mini-user {
             background-size: cover;
             display: block;
             min-height: 70px;
+            position: relative;
+
+            span.rank {
+                background: #444041;
+                bottom: 4px;
+                color: white;
+                display: block;
+                font: bold 12px $Mensch;
+                left: 4px;
+                padding: 3px 5px 3px 6px;
+                position: absolute;
+                text-align: center;
+                @include border-radius(2px);
+            }
         }
         span.money {
             color: #231F20;
