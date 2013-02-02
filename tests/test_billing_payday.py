@@ -11,7 +11,7 @@ from gittip import billing, wireup
 from gittip.billing.payday import FEE_CHARGE, Payday
 from gittip.models import Payday as PaydayModel
 from gittip.participant import Participant
-from gittip.testing.harness import Harness
+from gittip.testing import Harness
 
 from test_billing import TestBillingBase
 

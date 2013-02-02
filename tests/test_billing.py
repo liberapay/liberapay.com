@@ -6,7 +6,7 @@ from nose.tools import assert_equals, assert_raises
 
 import gittip
 from gittip import authentication, billing
-from gittip.testing.harness import Harness
+from gittip.testing import Harness
 
 
 class TestBillingBase(Harness):
