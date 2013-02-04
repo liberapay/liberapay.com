@@ -383,7 +383,7 @@ and [crowdsourcing.org&rsquo;s](http://www.crowdsourcing.org/directory)*
  - [ChipIn](http://www.chipin.com/)
  - [Fundable](http://www.fundable.com/) - fund start-up companies
  - [ModestNeeds](https://www.modestneeds.org/) - crowdfunding campaigns in support of the &ldquo;working poor&rdquo;
- - [FreedomSponsors](http://www.freedomsponsors.org/) - place bounties for open source projects issues
+ - [FreedomSponsors](http://www.freedomsponsors.org/) - Crowdfunding Free Software, one issue at a time
  - [GumRoad](https://gumroad.com/)
  - [MacHeist](http://macheist.com/)
  - [Prosper](http://www.prosper.com/) - peer-to-peer lending
@@ -392,4 +392,3 @@ and [crowdsourcing.org&rsquo;s](http://www.crowdsourcing.org/directory)*
  - [Gitbo](http://git.bo/) - another implementation of the bounty model
  - [Affero](http://www.affero.com/) - old skool attempt &ldquo;to bring a culture of patronage to the Internet&rdquo;
  - [ShareAGift](http://www.shareagift.com) - one-off, crowd-sourced cash gifts
- - [FreedomSponsors](http://www.freedomsponsors.org) - Crowdfunding Free Software, one issue at a time
