@@ -392,3 +392,4 @@ and [crowdsourcing.org&rsquo;s](http://www.crowdsourcing.org/directory)*
  - [Gitbo](http://git.bo/) - another implementation of the bounty model
  - [Affero](http://www.affero.com/) - old skool attempt &ldquo;to bring a culture of patronage to the Internet&rdquo;
  - [ShareAGift](http://www.shareagift.com) - one-off, crowd-sourced cash gifts
+ - [FreedomSponsors](http://www.freedomsponsors.org) - Crowdfunding Free Software, one issue at a time
