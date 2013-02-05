@@ -61,62 +61,26 @@ givers = db.fetchall("""
 
 {% block heading %}
 
+    <!--
     <p class="below-header">
         <span class="nowrap">Set up recurring gift tips to people who</span>
         <span class="nowrap">make the world better. <a href="/about/">Learn more ...</a></span>
     </p>
+    -->
 
     <script>
         $(document).ready(Gittip.initJumpToPerson);
     </script>
-    <style>
-        #jump {
-            width: auto;
-        }
-        #jump INPUT {
-            width: 6em;
-        }
 
-        TABLE {
-            font: 300 13pt/13pt Lato, sans-serif;
-            }
-        TD {
-            text-align: left;
-            vertical-align: top;
-            padding: 6pt 12pt 6pt 0;
-        }
-        TD.amount {
-            text-align: right;
-        }
-        TR.unclaimed,
-        TR.unclaimed A {
-            color: #B2A196;
-        }
-        TR.unclaimed TD SPAN {
-            font-size: 10pt;
-        }
-        #givers {
-            float: left;
-        }
-        #receivers {
-            float: right;
-        }
-        @media screen and (max-width: 640px) {
-            #givers, #receivers {
-                float: none;
-            }
-        }
-        H2.clear {
-            padding-top: 36pt;
-        }
-        H3 {
-            margin-top: 12pt;
-        }
-    </style>
+    <span>tip someone</span>
+    <form action="." method="get">
+        <fieldset>
+            <input type="text" class="" name="github_username"
+            value="" placeholder="Enter a GitHub username" />
+        </fieldset>
+    </form>
 
-{% end %}
-{% block body %}
-
+    <!--
     <h2>Tip someone!</h3>
     <form id="jump">
         Enter a <select>
@@ -128,8 +92,55 @@ givers = db.fetchall("""
             <button class="selected small" type="submit">Go</button>
         </span>
     </form>
+    -->
 
+{% end %}
+{% block body %}
 
+    <h1>Leaderboard</h1>
+    <section class="top-receivers">
+        <div class="top group">
+            <h2>Top Receivers</h2>
+            <button href="#">View Unclaimed</button>
+        </div>
+        <ul class="group">
+            {% for i, receiver in enumerate(receivers, start=1) %}
+            <li>
+                <a href="/{{ receiver['tippee'] }}/" class="mini-user">
+                    <span class="inner">
+                        <span class="avatar" style="background-image: url('img/avatars/whit537.gif')">
+                            <span class="rank">{{ i }}</span>
+                        </span>
+                        <span class="money">{{ receiver['amount'] }}</span>
+                        <span class="name">{{ receiver['tippee'] }}</span>
+                    </span>
+                </a>
+
+            </li>
+            {% end %}
+        </ul>
+    </section>
+    <section class="top-givers">
+        <h2>Top Givers</h2>
+        <ul class="group">
+            {% for i, giver in enumerate(givers, start=1) %}
+            <li>
+                <a href="/{{ giver['tipper'] }}/" class="mini-user">
+                    <span class="inner">
+                        <span class="avatar" style="background-image: url('img/avatars/whit537.gif')">
+                            <span class="rank">{{ i }}</span>
+                        </span>
+                        <span class="money">{{ giver['amount'] }}</span>
+                        <span class="name">{{ giver['tipper'] }}</span>
+                    </span>
+                </a>
+
+            </li>
+            {% end %}
+        </ul>
+    </section>
+
+    <!--
     <h2>Leaderboard
         <span class="small"><a href="/about/unclaimed.html">Unclaimed</a></span>
     </h2>
@@ -190,5 +201,7 @@ givers = db.fetchall("""
     then the actual amount distributed can be lower. If someone doesn&rsquo;t
     have a working card but does have a positive Gittip balance themselves then
     the actual amount distributed can be higher.  Make sense?</p>
+
+    -->
 
 {% end %}

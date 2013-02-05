@@ -1,46 +1,118 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>{% if 'title' in globals() %}{{ title }} - {% end %}Gittip - Inspiring Generosity</title>
-        <meta content='width=device-width' name='viewport' />
-        <style>
-            @import url("/assets/{{ __version__ }}/gittip.css");
-        </style>
-
-        <!-- http://css-tricks.com/snippets/jquery/fallback-for-cdn-hosted-jquery/ -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-        <script>
-            if (typeof jQuery === 'undefined')
-                document.write(unescape("%3Cscript src='/assets/jquery-1.8.3.min.js'%3E%3C/script%3E"));
-        </script>
-
-        <script src="/assets/{{ __version__ }}/gittip.js"></script>
-        <script>$(document).ready(Gittip.initCSRF);</script>
-        {% block head %}{% end %}
-    </head>
     <body><div id="body">
-        <h1>
-            <a href="/"><img
-                src="/assets/{{ __version__ }}/logo.png"
-                alt="Gittip - Inspiring Generosity" /></a>
-        </h1>
-        {% if user.ANON %}
-        <div id="you-are">
-            <span class="nowrap">Sign in using</span>
-            <span class="nowrap">
-                <a href="/on/twitter/redirect">Twitter</a>
-                or
-                <a href="{{ github.oauth_url(website, u'opt-in') }}">GitHub</a>.
-            </span>
+    </div>
+    </body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <title>{% if 'title' in globals() %}{{ title }} - {% end %}Gittip - Inspiring Generosity</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="assets/bootstrap.min.css" type="text/css" charset="utf-8" />
+    <link rel="stylesheet" href="assets/bootstrap-responsive.min.css" type="text/css" charset="utf-8" />
+    <link rel="stylesheet" href="assets/{{ __version__ }}/gittip.css" type="text/css" charset="utf-8" />
+
+    <!-- http://css-tricks.com/snippets/jquery/fallback-for-cdn-hosted-jquery/ -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script>
+        if (typeof jQuery === 'undefined')
+            document.write(unescape("%3Cscript src='/assets/jquery-1.8.3.min.js'%3E%3C/script%3E"));
+    </script>
+
+    <script src="/assets/{{ __version__ }}/gittip.js"></script>
+    <script>$(document).ready(Gittip.initCSRF);</script>
+    {% block head %}{% end %}
+
+</head>
+<body>
+    <header class="main">
+        <div class="container">
+            <div class="row">
+                <div class="branding span4">
+                    <h1>
+                        <a href="/">Gittip</a>
+                    </h1>
+                    <h2>
+                        Personal Funding
+                    </h2>
+                </div>
+                <div class="login span4 offset4">
+                    {% if user.ANON %}
+                    <div id="you-are">
+                        <span class="nowrap">Sign in using</span>
+                        <span class="nowrap">
+                            <a href="/on/twitter/redirect">Twitter</a>
+                            or
+                            <a href="{{ github.oauth_url(website, u'opt-in') }}">GitHub</a>.
+                        </span>
+                        <button href="#">Sign In</button>
+                    </div>
+                    {% else %}
+                    <div id="you-are">
+                        You are <b><a href="/{{ user.id }}/">{{ user.id }}</a></b>.
+                        <span class="small"><a href="/sign-out.html">Sign out</a>.</span>
+                    </div>
+                    {% end %}
+                </div>
+            </div>
         </div>
-        {% else %}
-        <div id="you-are">
-            You are <b><a href="/{{ user.id }}/">{{ user.id }}</a></b>.
-            <span class="small"><a href="/sign-out.html">Sign out</a>.</span>
+    </header>
+    <section class="hero">
+        <div class="container">
+            <div class="row">
+                <div class="span12">
+                    <div class="top">
+                        <span>Set up recurring gift tips to</span>
+                    </div>
+                    <div class="middle">
+                        <span>people who make the world better</span>
+                    </div>
+                    <div class="bottom">
+                        <span class="button-container">
+                            <button href="#">Learn more</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="tip-someone span6 offset3">
+                    {% block heading %}{% end %}
+                </div>
+            </div>
         </div>
-        {% end %}
-        {% block heading %}{% end %}
-        {% block body %}{% end %}
+    </section>
+
+    <section class="leaderboard container">
+        <div class="row">
+            <div class="span12">
+                {% block body %}{% end %}
+            </div>
+        </div>
+    </section>
+    <section class="about container">
+        <div class="row">
+            <div class="span12">
+                <h1>Gittip happens every Friday</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="span7">
+                <p>
+                    The amounts above are what the Gittip community is willing to give as a weekly gift to each person, but only if the person accepts it. Gittip is opt-in. We never collect money on a person’s behalf until that person opts in by claiming their account.
+                </p>
+            </div>
+            <div class="span5 meta">
+                <p>
+                    Amounts are based on tips from people with a working credit card on file. If a card stops working this week then the actual amount distributed can be lower. If someone doesn’t have a working card but does have a positive Gittip balance themselves then the actual amount distributed can be higher. Make sense?
+                </p>
+            </div>
+        </div>
+    </section>
+    <section class="footer">
         <p id='footer-nav'>
             <a href="/about/">About</a> |
             <a href='/about/faq.html'>FAQ</a> |
@@ -52,7 +124,11 @@
             <a href='/about/fraud/'>Fraud</a> |
             <a href='/security.txt'>Security</a>
         </p>
-    </div>
+    </section>
+    <script>
+        // For local development only (fires LiveReload on SCSS changes).
+        document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')
+    </script>
     <script type="text/javascript">
 
       var _gaq = _gaq || [];
@@ -67,5 +143,5 @@
       })();
 
     </script>
-    </body>
+</body>
 </html>
