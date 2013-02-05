@@ -84,6 +84,9 @@ body {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
 }
+a {
+    color: #2A8F79;
+}
 
 // Utils
 .group:after {
@@ -129,7 +132,7 @@ a.mini-user {
                 bottom: 4px;
                 color: white;
                 display: block;
-                font: bold 12px $Mensch;
+                font: normal 12px $Mensch;
                 left: 4px;
                 padding: 3px 5px 3px 6px;
                 position: absolute;
@@ -144,7 +147,7 @@ a.mini-user {
             margin: 7px 0 5px 0;
         }
         span.name {
-            color: #82A546;
+            color: #2A8F79;
             display: block;
             font: normal 11px $Helvetica;
             margin: 3px 0;
@@ -173,7 +176,6 @@ button {
 
 // Global
 header.main {
-    border-bottom: 1px solid #D0D2D3;
     padding: 10px 0;
 
     h1, h2 {
@@ -210,15 +212,17 @@ header.main {
 section.hero {
     background: transparent url('hero-bg.png') top left repeat;
     color: #231F20;
-    margin-bottom: 35px;
+    margin: 0 0 35px;
     min-height: 320px;
+    border: 1px solid #D0D2D3;
+    border-style: solid none;
 
     div {
         text-align: center;
     }
     div.top {
         letter-spacing: -3px;
-        font: bold 35px $Mensch;
+        font: normal 35px $Mensch;
         padding: 50px 0 35px 0;
 
         span {
@@ -236,7 +240,7 @@ section.hero {
     }
     div.middle {
         letter-spacing: -4px;
-        font: bold 64px $Mensch;
+        font: normal 64px $Mensch;
         padding-bottom: 20px;
     }
     div.bottom {
@@ -246,7 +250,7 @@ section.hero {
             padding: 0 10px;
 
             button {
-                background: #81A63F;
+                background: #2A8F79;
                 border-color: white;
                 font-size: 14px;
             }
@@ -289,7 +293,7 @@ section {
 
     h1 {
         color: #6D6E70;
-        font: bold 35px $Mensch;
+        font: normal 35px $Mensch;
         letter-spacing: -2px;
         margin: 35px 0 20px 0;
         text-transform: uppercase;
