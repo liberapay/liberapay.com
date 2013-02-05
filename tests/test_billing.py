@@ -34,8 +34,8 @@ def test_balanced_card_basically_works(ba):
     expected = { 'id': '/v1/marketplaces/M123/accounts/A123'
                , 'last_four': 1234
                , 'last4': '************1234'
-               , 'expiry_month': '10'
-               , 'expiry_year': '2020'
+               , 'expiration_month': 10
+               , 'expiration_year': 2020
                , 'address_1': '123 Main Street'
                , 'address_2': 'Box 2'
                , 'state': 'Confusion'
@@ -64,8 +64,8 @@ def test_balanced_card_gives_class_name_instead_of_KeyError(ba):
 def test_stripe_card_basically_works(sc):
     active_card = {}
     active_card['last4'] = '1234'
-    active_card['expiry_month'] = 10
-    active_card['expiry_year'] = 2020
+    active_card['expiration_month'] = 10
+    active_card['expiration_year'] = 2020
     active_card['address_line1'] = "123 Main Street"
     active_card['address_line2'] = "Box 2"
     active_card['address_state'] = "Confusion"
@@ -77,8 +77,8 @@ def test_stripe_card_basically_works(sc):
 
     expected = { 'id': 'deadbeef'
                , 'last4': '************1234'
-               , 'expiry_month': '10'
-               , 'expiry_year': '2020'
+               , 'expiration_month': 10
+               , 'expiration_year': 2020
                , 'address_1': '123 Main Street'
                , 'address_2': 'Box 2'
                , 'state': 'Confusion'

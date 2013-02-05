@@ -399,13 +399,20 @@ Gittip.submitPaymentForm = function(e)
                         };
     credit_card.postal_code = val('zip');
 
-    credit_card.expiration_month= val('expiry_month');
-    credit_card.expiration_year = val('expiry_year');
+    credit_card.expiration_month = val('expiration_month');
+    credit_card.expiration_year = val('expiration_year');
 
     if (!balanced.card.isCardNumberValid(credit_card.card_number))
     {
         $('BUTTON#save').text('Save');
         Gittip.showFeedback(null, ["Your card number is bad."]);
+    }
+    else if (!balanced.card.isExpiryValid( credit_card.expiration_month
+                                         , credit_card.expiration_year
+                                          ))
+    {
+        $('BUTTON#save').text('Save');
+        Gittip.showFeedback(null, ["Your expiration date is bad."]);
     }
     else if (!balanced.card.isSecurityCodeValid( credit_card.card_number
                                                , credit_card.security_code
@@ -413,13 +420,6 @@ Gittip.submitPaymentForm = function(e)
     {
         $('BUTTON#save').text('Save');
         Gittip.showFeedback(null, ["Your CVV is bad."]);
-    }
-    else if (!balanced.card.isExpiryValid( credit_card.expiration_month
-                                         , credit_card.expiration_year
-                                          ))
-    {
-       $('BUTTON#save').text('Save');
-       Gittip.showFeedback(null, ["Your Expiration date is bad."]);
     }
     else
     {
