@@ -1,119 +1,120 @@
-title = "FAQ"
+title = "Frequently Asked Questions"
 ^L
 {% extends templates/base.html %}
-{% block body %}
-<style>
-    DT {
-        font-weight: bold;
-        margin: 1em 0 0.25em;
-    }
-</style>
-<h2>FAQ</h2>
+{% block heading %}
+<h2 class="top"><span>Frequently Asked Questions</span></h2>
+{% end %}
+{% block page %}
+<div class="col1">
+    <dl>
 
-<dl>
+        <dt>What is Gittip?</dt>
 
-    <dt>What is Gittip?</dt>
-
-    <dd>Gittip is a platform for sustainable crowd-funding. Use it to set up a
-    25&cent; per week (or more) anonymous gift to someone you think does great
-    work.</dd>
+        <dd>Gittip is a platform for sustainable crowd-funding. Use it to set up a
+        25&cent; per week (or more) anonymous gift to someone you think does great
+        work.</dd>
 
 
-    <dt>Who is Gittip?</dt>
+        <dt>Who is Gittip?</dt>
 
-    <dd>Gittip is owned and operated by <a href="http://www.zetaweb.com/">Zeta
-        Design &amp; Development, LLC</a>, an <a
-        href="http://blog.gittip.com/post/26350459746/the-first-open-company">open
-        company</a> founded by <a href="/whit537/">Chad Whitacre</a> in 2002.
-    Chad is the sole owner/employee of Zeta at the moment, meaning he&rsquo;s
-    the only one authorized to access sensitive data. Anyone is welcome to <a
-        href="/about/#get-involved">get involved</a> in building Gittip. The
-    Gittip community includes a <a href="/on/github/zetaweb/">dozen people</a>
-    actively building the product, and many more occasional contributors.</dd>
-
-
-    <dt>How is Gittip funded?</dt>
-
-    <dd>Gittip is funded on Gittip. As an <a
-        href="http://blog.gittip.com/post/26350459746/the-first-open-company">open
-        company</a>, Zeta doesn&rsquo;t pay any wages and has no profit. We <a
-        href="/about/#details">charge a fee</a> to cover the things that we
-    ourselves are charged for.</dd>
+        <dd>Gittip is owned and operated by <a href="http://www.zetaweb.com/">Zeta
+            Design &amp; Development, LLC</a>, an <a
+            href="http://blog.gittip.com/post/26350459746/the-first-open-company">open
+            company</a> founded by <a href="/whit537/">Chad Whitacre</a> in 2002.
+        Chad is the sole owner/employee of Zeta at the moment, meaning he&rsquo;s
+        the only one authorized to access sensitive data. Anyone is welcome to <a
+            href="/about/#get-involved">get involved</a> in building Gittip. The
+        Gittip community includes a <a href="/on/github/zetaweb/">dozen people</a>
+        actively building the product, and many more occasional contributors.</dd>
 
 
-    <dt>Can I make a one-time tip?</dt>
+        <dt>How is Gittip funded?</dt>
 
-    <dd>No. Gittip is designed for long-term, sustainable funding, and only
-    supports recurring gifts at this time.</dd>  
-
-
-    <dt>I&rsquo;m not in the U.S., can I still tip using Gittip?</dt>
-
-    <dd>Absolutely! We&rsquo;re able to accept international credit card
-    payments. If you encounter any issues tipping and you are outside the U.S.,
-    please let us know.</dd>
+        <dd>Gittip is funded on Gittip. As an <a
+            href="http://blog.gittip.com/post/26350459746/the-first-open-company">open
+            company</a>, Zeta doesn&rsquo;t pay any wages and has no profit. We <a
+            href="/about/#details">charge a fee</a> to cover the things that we
+        ourselves are charged for.</dd>
 
 
-    <dt>I&rsquo;m not in the U.S., can I receive tips using Gittip?</dt>
+        <dt>Can I make a one-time tip?</dt>
 
-    <dd>Yes. But, unfortunately, you can&rsquo;t automatically withdraw your
-    gifts from Gittip unless you have a U.S. bank account (and in one out of
-    ten cases, you&rsquo;ll also be asked to provide a U.S. Social Security
-    Number as a means of identification). We&rsquo;re working on a solution
-    for <a href="https://github.com/zetaweb/www.gittip.com/issues/126">non-U.S.
-        withdrawals</a>.</dd>
+        <dd>No. Gittip is designed for long-term, sustainable funding, and only
+        supports recurring gifts at this time.</dd>  
 
 
-    <dt>How do I withdraw money from Gittip?</dt>
+        <dt>I&rsquo;m not in the U.S., can I still tip using Gittip?</dt>
 
-    <dd>Participants in the U.S. can <a
-        href="https://www.gittip.com/bank-account.html">connect a bank
-        account</a> to have funds <a
-        href="http://blog.gittip.com/post/30116848405/with-payouts-gittip-is-minimally-viable">deposited
-        weekly</a> (less a $0.30 fee). It takes one business day for deposits
-    to clear, so generally they will clear on Friday. Outside the U.S., payouts
-    are <a href="https://github.com/zetaweb/www.gittip.com/issues/126">a manual
-        process</a> (with postage and/or fees charged at cost).</dd>
+        <dd>Absolutely! We&rsquo;re able to accept international credit card
+        payments. If you encounter any issues tipping and you are outside the U.S.,
+        please let us know.</dd>
 
 
-    <dt>Can I pay with bitcoin?</dt>
+        <dt>I&rsquo;m not in the U.S., can I receive tips using Gittip?</dt>
 
-    <dd>No. The challenges with bitcoin are handling recurring payments and
-    transparently converting to USD. We are currently seeking help to <a
-        href="https://github.com/zetaweb/www.gittip.com/issues/14">implement
-        bitcoin tips</a>.</dd>
-
-
-    <dt>Can I use Gittip to support organizations?</dt>
-
-    <dd>Yes. Some accounts on Gittip represent organizations.</dd>
-
-
-    <dt>How do I know my tips are being received by the right person?</dt>
-
-    <dd>You can follow links to Gittip from a trusted source like a person or
-    organization&rsquo;s website. Also, Twitter verifies accounts in instances
-    where this is particularly relevant, so check their Twitter account
-    carefully if it&rsquo;s linked.</dd>
+        <dd>Yes. But, unfortunately, you can&rsquo;t automatically withdraw your
+        gifts from Gittip unless you have a U.S. bank account (and in one out of
+        ten cases, you&rsquo;ll also be asked to provide a U.S. Social Security
+        Number as a means of identification). We&rsquo;re working on a solution
+        for <a href="https://github.com/zetaweb/www.gittip.com/issues/126">non-U.S.
+            withdrawals</a>.</dd>
+    </dl>
+</div>
+<div class="col2">
+    <dl>
 
 
-    <dt>Do I have to pay taxes on the income I receive from Gittip?</dt>
+        <dt>How do I withdraw money from Gittip?</dt>
 
-    <dd>Maybe. Gittip is operating on the principle that money received through
-    the site is a gift for tax purposes in jurisdictions where that is
-    relevant.</dd>
+        <dd>Participants in the U.S. can <a
+            href="https://www.gittip.com/bank-account.html">connect a bank
+            account</a> to have funds <a
+            href="http://blog.gittip.com/post/30116848405/with-payouts-gittip-is-minimally-viable">deposited
+            weekly</a> (less a $0.30 fee). It takes one business day for deposits
+        to clear, so generally they will clear on Friday. Outside the U.S., payouts
+        are <a href="https://github.com/zetaweb/www.gittip.com/issues/126">a manual
+            process</a> (with postage and/or fees charged at cost).</dd>
 
 
-    <dt>Are gifts I give through Gittip tax-deductible?</dt>
+        <dt>Can I pay with bitcoin?</dt>
 
-    <dd>No.</dd>
+        <dd>No. The challenges with bitcoin are handling recurring payments and
+        transparently converting to USD. We are currently seeking help to <a
+            href="https://github.com/zetaweb/www.gittip.com/issues/14">implement
+            bitcoin tips</a>.</dd>
 
 
-    <dt>I don&rsquo;t want to receive tips, I just want to give them. What
-    should I do?</dt>
+        <dt>Can I use Gittip to support organizations?</dt>
 
-    <dd>Please select &ldquo;I&rsquo;m not here to receive tips. I&rsquo;ll
-    generally regift them&rdquo; as your personal funding goal.</dd>
+        <dd>Yes. Some accounts on Gittip represent organizations.</dd>
 
-</dl>
+
+        <dt>How do I know my tips are being received by the right person?</dt>
+
+        <dd>You can follow links to Gittip from a trusted source like a person or
+        organization&rsquo;s website. Also, Twitter verifies accounts in instances
+        where this is particularly relevant, so check their Twitter account
+        carefully if it&rsquo;s linked.</dd>
+
+
+        <dt>Do I have to pay taxes on the income I receive from Gittip?</dt>
+
+        <dd>Maybe. Gittip is operating on the principle that money received through
+        the site is a gift for tax purposes in jurisdictions where that is
+        relevant.</dd>
+
+
+        <dt>Are gifts I give through Gittip tax-deductible?</dt>
+
+        <dd>No.</dd>
+
+
+        <dt>I don&rsquo;t want to receive tips, I just want to give them. What
+        should I do?</dt>
+
+        <dd>Please select &ldquo;I&rsquo;m not here to receive tips. I&rsquo;ll
+        generally regift them&rdquo; as your personal funding goal.</dd>
+
+    </dl>
+</div>
 {% end %}

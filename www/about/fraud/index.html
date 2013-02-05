@@ -1,9 +1,12 @@
+title = "Fraud"
 ^L
 {% extends templates/base.html %}
-{% block body %}
-<h2>Fraud</h2>
 
-<p>This page collects Gittip fraud incident reports.</p>
+{% block box %}
+This page collects Gittip fraud incident reports.
+{% end %}
+
+{% block page %}
 
 <ol>
     <li><a href="2012-11-05.html">2012-11-05 - The Delpan Incident</a></li>
@@ -13,7 +16,5 @@
 
 <p>If you suspect fraud, please report it to <a href="/whit537/">Chad
     Whitacre</a>.</p>
-
-<hr />
 
 {% end %}

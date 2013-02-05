@@ -98,6 +98,15 @@ a {
     color: $green;
     text-decoration: none;
 }
+p, dd {
+    margin: 0;
+    padding: 0 0 1em;
+    line-height: 130%;
+}
+dt {
+    font-weight: bold;
+    margin: 1em 0 0.25em;
+}
 
 // Utils
 .group:after {
@@ -114,6 +123,9 @@ input {
     box-sizing: content-box;
     -moz-box-sizing: content-box;
     -webkit-box-sizing: content-box;
+}
+.clear {
+    clear: both;
 }
 
 // Modules
@@ -224,7 +236,7 @@ button {
     background: transparent url('hero-bg.png') top left repeat;
     border: 1px solid $light-gray;
     border-style: solid none;
-    height: 320px;
+    padding-bottom: 120px;
     text-align: center;
     position: relative;
     z-index: 1;
@@ -233,7 +245,14 @@ button {
         color: #231F20;
     }
 
-    div.top {
+    h2 {
+        span {
+            background: transparent url('hero-bg.png') top left repeat;
+            display: inline-block;
+            padding: 0 10px;
+        }
+    }
+    h2.top {
         letter-spacing: -3px;
         font: normal 35px $Mensch;
         padding: 50px 0 35px 0;
@@ -251,12 +270,12 @@ button {
             margin-top: -17px;
         }
     }
-    div.middle {
+    h1 {
         letter-spacing: -4px;
         font: normal 64px/64px $Mensch;
         padding-bottom: 20px;
     }
-    div.bottom {
+    h2.bottom {
         span.button-container {
             display: inline-block;
             padding: 0 10px;
@@ -282,7 +301,8 @@ button {
     margin: -80px auto 0;
     border: 5px solid rgba(#49392F, .5);
     padding-top: 15px;
-    width: 640px;
+    width: 480px;
+    min-height: 120px;
     @include border-radius(3px);
     position: relative;
     z-index: 2;
@@ -343,6 +363,14 @@ button {
         text-transform: uppercase;
     }
     
+    h2 {
+        color: #6D6E70;
+        font: normal 24px $Mensch;
+        letter-spacing: -2px;
+        margin: 24px 0 20px 0;
+        text-transform: uppercase;
+    }
+    
     &.about {
         h1 {
             margin: 0;
@@ -362,6 +390,21 @@ button {
             }
         }
     }
+
+    .col1 {
+        width: 460px;
+        float: left;
+    }
+    .col2 {
+        width: 460px;
+        float: right;
+    }
+}
+#footer {
+    margin: 2em 0 1em;
+    border-top: 1px solid $light-gray;
+    padding: 0.5em 0 0;
+    text-align: right;
 }
 
 /* Large desktop */

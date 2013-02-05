@@ -55,29 +55,34 @@
 
     <div id="hero">
         <div class="main-padding">
-            {% block heading %}{% end %}
+            {% block heading %}
+            {% if 'title' in globals() %}
+            <h2 class="top"><span>{{ title }}</span></h2>
+            {% end %}
+            {% end %}
         </div>
     </div>
 
     <div class="main-padding"><div id="page">
+        {% block killbox %}
         <div id="box">
             {% block box %}{% end %}
         </div>
+        {% end %}
         {% block page %}{% end %}
+        <div class="clear"></div>
     </div></div>
 
     <div class="main-padding"><div id="footer">
-        <p id='footer-nav'>
-            <a href="/about/">About</a> |
-            <a href='/about/faq.html'>FAQ</a> |
-            <a href='/about/stats.html'>Stats</a> |
-            <a href='/about/charts.html'>Charts</a> |
-            <a href='http://blog.gittip.com/'>Blog</a> |
-            <a href="/about/terms/">Terms</a> |
-            <a href="/about/privacy/">Privacy</a> |
-            <a href='/about/fraud/'>Fraud</a> |
-            <a href='/security.txt'>Security</a>
-        </p>
+        <a href="/about/">About</a> |
+        <a href='/about/faq.html'>FAQ</a> |
+        <a href='/about/stats.html'>Stats</a> |
+        <a href='/about/charts.html'>Charts</a> |
+        <a href='http://blog.gittip.com/'>Blog</a> |
+        <a href="/about/terms/">Terms</a> |
+        <a href="/about/privacy/">Privacy</a> |
+        <a href='/about/fraud/'>Fraud</a> |
+        <a href='/security.txt'>Security</a>
     </div></div>
 
     <script>

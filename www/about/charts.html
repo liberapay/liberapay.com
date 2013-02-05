@@ -1,7 +1,14 @@
 title = "Charts"
 ^L
 {% extends templates/base.html %}
-{% block body %}
+
+{% block box %}
+Gittip is a way to <a href="/about/">support people who build free
+    culture</a>. This page shows Gittip&rsquo;s growth since it launched <span
+    class="n-weeks"></span> weeks ago.
+{% end %}
+
+{% block page %}
 <style>
     .chart-wrapper {
         width: 300px;
@@ -77,18 +84,12 @@ title = "Charts"
         padding-top: 14pt;
     }
     .note {
-        font: italic 300 10pt/12pt Lato, sans-serif;
+        font-style: italic;
+        font-size: 8pt;
+        line-height: 10pt;
         padding-bottom: 12pt;
     }
 </style>
-
-<p class="below-header"><a href="./">About</a></p>
-
-<h3>Welcome!</h3>
-
-<p>Gittip is a way to <a href="/about/">support people who build free
-    culture</a>. This page shows Gittip&rsquo;s growth since it launched <span
-    class="n-weeks"></span> weeks ago.</p>
 
 <div class="chart-wrapper">
     <a name="users"></a>
@@ -298,9 +299,4 @@ title = "Charts"
         });
     });
 </script>
-<div class="clear"></div>
-<br />
-<br />
-<br />
-<hr />
 {% end %}

@@ -2,8 +2,7 @@ if not user.ANON:
     request.redirect('/%s/' % user.id)
 ^L
 {% extends templates/base.html %}
-{% block body %}
-<div id="their-voice">
+{% block page %}
 <h2 class="first">Sign In</h2>
 
 <p>Sign in <a href="{{ github.oauth_url(website, u'opt-in') }}">with
@@ -11,5 +10,4 @@ if not user.ANON:
 
 <p>Thanks! :-)</p>
 
-</div>
 {% end %}
