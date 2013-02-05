@@ -60,7 +60,19 @@ givers = db.fetchall("""
 {% extends templates/base.html %}
 
 {% block heading %}
-
+    <div class="top">
+        <span>Gittip is a platform for</span>
+    </div>
+    <div class="middle">
+        <span>Small Weekly Cash Gifts</span>
+    </div>
+    <div class="bottom">
+        <span class="button-container">
+            <a href="/about/"><button>Learn more</button></a>
+        </span>
+    </div>
+{% end %}
+{% block box %}
     <!--
     <p class="below-header">
         <span class="nowrap">Set up recurring gift tips to people who</span>
@@ -95,7 +107,7 @@ givers = db.fetchall("""
     -->
 
 {% end %}
-{% block body %}
+{% block page %}
 
     <h1>Leaderboard</h1>
     <section class="top-receivers">
@@ -138,6 +150,34 @@ givers = db.fetchall("""
             </li>
             {% end %}
         </ul>
+    </section>
+
+    <section>
+        <div class="row">
+            <div class="span12">
+                <h1>Gittip happens every Thursday</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="span7">
+
+                <p> The amounts above are what the Gittip community is willing
+                to give as a weekly gift to each person, but only if the person
+                accepts it. Gittip is opt-in. We never collect money on a
+                person&rsquo;s behalf until that person opts in by claiming
+                their account.</p>
+
+            </div>
+            <div class="span5 meta">
+
+                <p> Amounts are based on tips from people with a working credit
+                card on file. If a card stops working this week then the actual
+                amount distributed can be lower. If someone doesn&rsquo;t have
+                a working card but does have a positive Gittip balance
+                themselves then the actual amount distributed can be higher.
+                Make sense?</p>
+            </div>
+        </div>
     </section>
 
     <!--

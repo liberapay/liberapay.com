@@ -6,7 +6,7 @@ nparticipants = db.fetchone("SELECT count(*) AS n FROM participants WHERE claime
 title = "About"
 ^L
 {% extends templates/base.html %}
-{% block body %}
+{% block page %}
 
     <p class="below-header">
         <span class="nowrap">Gittip is <b>{{ age() }}</b> old and</span>
