@@ -2,6 +2,11 @@
 $Helvetica: 'Helvetica Neue', Helvetica, Arial, 'Liberation Sans', FreeSans, sans-serif;
 $Mensch: 'Mensch', $Helvetica;
 
+// Colors
+$green: #2A8F79;
+$brown: #614C3E;
+$light-gray: #D0D2D3;
+
 @font-face {
     /* Props to http://www.fontsquirrel.com/ and http://www.losttype.com/. */
     font-family: 'Mensch';
@@ -72,12 +77,17 @@ $Mensch: 'Mensch', $Helvetica;
 
 // Page
 html, body {
-    background: #FFF;
+    ackground: $brown;
 }
 body {
     color: #6D6E70;
     font: normal 16px $Helvetica;
     text-rendering: optimizeLegibility;
+}
+.main-padding { 
+    width: 960px;
+    margin: 0 auto;
+    position: relative;
 }
 * {
     box-sizing: border-box;
@@ -85,7 +95,8 @@ body {
     -webkit-box-sizing: border-box;
 }
 a {
-    color: #2A8F79;
+    color: $green;
+    text-decoration: none;
 }
 
 // Utils
@@ -172,54 +183,56 @@ button {
     padding: 4px 10px;
     text-transform: uppercase;
     @include border-radius(3px);
+    cursor: pointer;
 }
 
 // Global
-header.main {
+#header {
+    background: white;
     padding: 10px 0;
 
-    h1, h2 {
-        float: left;
-        margin: 0;
+    td {
+        text-align: center;
+        vertical-align: middle;
     }
     h1 {
-        a {
-            background: transparent url('logo.png') top left no-repeat;
-            background-size: 100%;
-            color: transparent;
-            display: block;
-            width: 130px;
-        }
+        line-height: 100%;
     }
-    h2 {
-        border-left: 2px solid #C8C7C7;
+    .logo {
+        padding-right: 18px;
+    }
+    .motto {
+        border-left: 2px solid $light-gray;
         font: bold 10px $Helvetica;
         letter-spacing: 1px;
         text-transform: uppercase;
-        height: 30px;
-        margin: 5px 0 0 18px;
-        padding: 8px 0 0 18px;
+        padding-left: 18px;
     }
     div.login {
         padding-top: 6px;
-        text-align: right;
+        position: absolute;
+        top: 0;
+        right: 0;
 
         span {
             font: normal 13px $Helvetica;
         }
     }
 }
-section.hero {
-    background: transparent url('hero-bg.png') top left repeat;
-    color: #231F20;
-    margin: 0 0 35px;
-    min-height: 320px;
-    border: 1px solid #D0D2D3;
-    border-style: solid none;
 
-    div {
-        text-align: center;
+#hero {
+    background: transparent url('hero-bg.png') top left repeat;
+    border: 1px solid $light-gray;
+    border-style: solid none;
+    height: 320px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+
+    .main-padding {
+        color: #231F20;
     }
+
     div.top {
         letter-spacing: -3px;
         font: normal 35px $Mensch;
@@ -240,12 +253,11 @@ section.hero {
     }
     div.middle {
         letter-spacing: -4px;
-        font: normal 64px $Mensch;
+        font: normal 64px/64px $Mensch;
         padding-bottom: 20px;
     }
     div.bottom {
         span.button-container {
-            background: transparent url('hero-bg.png') top left repeat;
             display: inline-block;
             padding: 0 10px;
 
@@ -263,33 +275,65 @@ section.hero {
             margin-top: -15px;
         }
     }
-    div.tip-someone {
-        background: white;
-        border: 5px solid rgba(#49392F, .5);
-        margin-bottom: -35px;
-        margin-top: 40px;
-        min-height: 120px;
-        padding-top: 15px;
-        @include border-radius(3px);
+}
+#box {
+    text-align: center;
+    background: white;
+    margin: -80px auto 0;
+    border: 5px solid rgba(#49392F, .5);
+    padding-top: 15px;
+    width: 640px;
+    @include border-radius(3px);
+    position: relative;
+    z-index: 2;
 
-        span {
-            color: #614C3E;
-            font: bold 22px $Helvetica;
-        }
-        form {
-            margin-bottom: 0;
-            margin-top: 12px;
+    span {
+        color: #614C3E;
+        font: bold 22px $Helvetica;
+    }
+    form {
+        margin-bottom: 0;
+        margin-top: 12px;
 
-            input {
-                background: transparent url('logo-icon-offset.png') center right no-repeat;
-                margin: 0;
-                width: 85%;
-            }
+        input {
+            background: transparent url('logo-icon-offset.png') center right no-repeat;
+            margin: 0;
+            width: 85%;
         }
     }
 }
-section {
-    margin: 35px 0;
+#leaderboard {
+    div.top {
+        button {
+            float: right;
+            margin-top: 4px;
+        }
+        h2 {
+            float: left;
+        }
+    }
+    h2 {
+        color: #614C3E;
+        font: bold 14px $Helvetica;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+    }
+    ul {
+        margin: 0 0 20px 0;
+
+        li {
+            display: block;
+            float: left;
+            margin: 0;
+            min-width: 90px;
+            padding: 2px;
+            width: 10%;
+        }
+    }
+}
+#page {
+    padding: 0;
+    background: white;
 
     h1 {
         color: #6D6E70;
@@ -299,35 +343,6 @@ section {
         text-transform: uppercase;
     }
     
-    &.leaderboard {
-        div.top {
-            button {
-                float: right;
-                margin-top: 4px;
-            }
-            h2 {
-                float: left;
-            }
-        }
-        h2 {
-            color: #614C3E;
-            font: bold 14px $Helvetica;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-        ul {
-            margin: 0 0 20px 0;
-
-            li {
-                display: block;
-                float: left;
-                margin: 0;
-                min-width: 90px;
-                padding: 2px;
-                width: 10%;
-            }
-        }
-    }
     &.about {
         h1 {
             margin: 0;

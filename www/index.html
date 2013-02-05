@@ -109,8 +109,10 @@ givers = db.fetchall("""
 {% end %}
 {% block page %}
 
+<div id="leaderboard">
+
     <h1>Leaderboard</h1>
-    <section class="top-receivers">
+    <div class="top-receivers">
         <div class="top group">
             <h2>Top Receivers</h2>
             <button href="#">View Unclaimed</button>
@@ -131,8 +133,8 @@ givers = db.fetchall("""
             </li>
             {% end %}
         </ul>
-    </section>
-    <section class="top-givers">
+    </div>
+    <div class="top-givers">
         <h2>Top Givers</h2>
         <ul class="group">
             {% for i, giver in enumerate(givers, start=1) %}
@@ -150,9 +152,11 @@ givers = db.fetchall("""
             </li>
             {% end %}
         </ul>
-    </section>
+    </div>
 
-    <section>
+</div>
+
+    <div>
         <div class="row">
             <div class="span12">
                 <h1>Gittip happens every Thursday</h1>
@@ -178,7 +182,7 @@ givers = db.fetchall("""
                 Make sense?</p>
             </div>
         </div>
-    </section>
+    </div>
 
     <!--
     <h2>Leaderboard
