@@ -67,6 +67,7 @@ github_account, twitter_account = participant.get_accounts_elsewhere()
     {% if user.ADMIN %}
     <script src="/assets/{{ __version__ }}/admin.js"></script>
     {% end %}
+    <script>$(document).ready(Gittip.initTipButtons)</script>
 {% end %}
 {% block heading %}
 <h2 class="top"><span>Profile</span></h2>

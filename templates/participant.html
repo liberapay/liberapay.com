@@ -43,7 +43,7 @@
 </table>
 
 {% if participant.id != user.id %}
-{% set my_tip = participant.get_tip_to(user.id) %}
+{% set my_tip = user.get_tip_to(participant.id) %}
 <div class="buttons tips">
     <h2>Your Weekly Gift</h2>
     {% for amount in AMOUNTS %}
