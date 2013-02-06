@@ -43,7 +43,7 @@ fmt = lambda x: '$' + str(int(round(x))) if x > 0 else '-'
 username = user_info['screen_name' if account.platform == 'twitter' else 'login']
 
 title = "Confirm"
-can_tip = False
+locked = True
 # ===== ^L
 {% extends "templates/participant.html" %}
 {% block page %}

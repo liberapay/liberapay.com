@@ -30,7 +30,7 @@ if not name:
 usertype = user_info.get("type", "unknown type of account").lower()
 if usertype == "user":
     account = github.GitHubAccount(user_info['id'], user_info)
-    can_tip = not account.is_locked
+    locked = account.is_locked
     lock_action = "unlock" if account.is_locked else "lock"
     if account.is_claimed:
         request.redirect('/%s/' % account.participant_id)

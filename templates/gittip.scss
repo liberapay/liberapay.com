@@ -139,6 +139,9 @@ input {
 .centered {
     margin: 0 auto;
 }
+.highlight {
+    background: #FFFE26;
+}
 
 // Modules
 .mini-user {
@@ -352,6 +355,14 @@ button.selected:hover {
         color: $brown;
     }
 
+    .help {
+        font: normal 14px/18px $Helvetica;
+
+        &.with-padding {
+            padding: 10px;
+        }
+    }
+
     .on-homepage {
         padding: 20px 0;
 
@@ -410,6 +421,18 @@ button.selected:hover {
         &.tips {
             border-top: 1px solid rgba($brown, 0.2);
             background: $lighter-gray;
+
+            #payment-prompt {
+                display: none;
+                margin: 5px 0 0;
+
+                &.needed {
+                    display: block;
+                }
+                &.really-needed {
+                    display: block;
+                }
+            }
         }
 
         &.nav {

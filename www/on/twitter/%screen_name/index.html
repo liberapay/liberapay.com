@@ -30,7 +30,7 @@ user_info['html_url'] = "https://twitter.com/%s" % username
 
 account = twitter.TwitterAccount(user_info['id'], user_info)
 participant = Participant.query.get(account.participant_id)
-can_tip = not account.is_locked
+locked = account.is_locked
 lock_action = "unlock" if account.is_locked else "lock"
 if account.is_claimed:
     request.redirect('/%s/' % participant.id)

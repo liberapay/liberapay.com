@@ -43,19 +43,50 @@
 </table>
 
 {% if participant.id != user.id %}
-{% set my_tip = user.get_tip_to(participant.id) %}
 <div class="buttons tips">
-    <h2>Your Weekly Gift</h2>
-    {% for amount in AMOUNTS %}
-    <button amount="{{ amount }}" tippee="{{ participant.id }}"
-        class="tip{{ ' selected' if amount == my_tip else '' }}">${{ amount }}</button>
-    {% end %}
-    {% if my_tip not in AMOUNTS %}
-    <span class="old-amount">
-        <button class="tip disabled selected">{{ my_tip }}</button>
-        <span class="old-amount-link">&mdash;
-        <a href="http://blog.gittip.com/post/26505682007/is-personal-funding-viable" target="_blank">old amount</a>!</span>
-    </span>
+    {% if locked %}
+
+        <div class="help with-padding">
+            This account has been locked by its owner.
+        </div>
+
+    {% elif user.ANON %}
+
+        <div class="help with-padding">Sign in using 
+            <a class="highlight" href="/on/twitter/redirect">Twitter</a> or 
+            <a href="{{ github.oauth_url(website, u'opt-in', participant.id ) }}">GitHub</a>
+            to give to {{ participant.id }}.<br />Gifts are <a
+                href="/about/#details">anonymous</a>, and {{ participant.id }}
+            receives the <a href="/about/#details">full face value</a>.</div>
+
+    {% else %}
+
+        {% set my_tip = user.get_tip_to(participant.id) %}
+        <h2>Your Weekly Gift</h2>
+        {% for amount in AMOUNTS %}
+        <button amount="{{ amount }}" tippee="{{ participant.id }}"
+            class="tip{{ ' selected' if amount == my_tip else '' }}">${{ amount }}</button>
+        {% end %}
+        {% if my_tip not in AMOUNTS %}
+        <span class="old-amount">
+            <button class="tip disabled selected">{{ my_tip }}</button>
+            <span class="old-amount-link">&mdash;
+            <a href="http://blog.gittip.com/post/26505682007/is-personal-funding-viable" target="_blank">old amount</a>!</span>
+        </span>
+        {% end %}
+
+        {% if user.last_bill_result is None %}
+
+        <div id="payment-prompt" class="help{% if my_tip > 0 %} needed{% end %}">
+        Back your gift with a <a href="/credit-card.html" 
+            class="highlight">credit card</a> to make sure it goes 
+        through!</div>
+        {% elif user.last_bill_result %}
+        <div id="payment-prompt" class="help really-needed">Fix your <a
+            href="/credit-card.html" class="highlight">credit 
+            card</a> to make sure your gifts go through!</div>
+        {% end %}
+
     {% end %}
 </div>
 {% end %}
@@ -75,43 +106,6 @@
     <div id="their-voice"{% if user.ADMIN and 'deets' in globals() and deets['is_suspicious'] %} class="is-suspicious"{% end %}>
         {% block their_voice %}{% end %}
     </div>
-
-    {% if can_tip and user.ANON %}
-        <h2>Sign in using <a href="/on/twitter/redirect">Twitter</a> or 
-            <a href="{{ github.oauth_url(website, u'opt-in', username) }}">
-            GitHub</a> to tip {{ username }}.</h2>
-    {% elif can_tip  %}
-        {% if user.id != username %}
-            <h2>Your weekly {{ tip_or_pledge }} to {{ username }} is:</h2>
-
-            <div id="tips">
-                {% for amount in AMOUNTS %}
-                <button amount="{{ amount }}" tippee="{{ participant.id }}"
-                    class="tip{{ ' selected' if amount == my_tip else '' }}">${{ amount }}</button>
-                {% end %}
-                {% if my_tip not in AMOUNTS %}
-                <span class="old-amount">
-                    <button class="tip disabled selected">{{ my_tip }}</button>
-                    <span class="old-amount-link">&mdash;
-                    <a href="http://blog.gittip.com/post/26505682007/is-personal-funding-viable" target="_blank">old amount</a>!</span>
-                </span>
-                {% end %}
-            </div>
-
-            {% if user.last_bill_result != "" %}
-            <p id="payment-prompt"{% if my_tip > 0 %} class="needed"{% end %}>
-            <a href="/credit-card.html" class="highlight">Back your tip with a 
-                credit card</a> to make sure your tip goes through!</p>
-            {% elif user.last_bill_result %}
-            <p id="payment-prompt" class="really-needed"><a
-                href="/credit-card.html" class="highlight">Fix your credit 
-                card</a> to make sure your tips go through!</p>
-            {% end %}
-
-            <p id="tip-help">Tips are <a
-                href="/about/#details">anonymous</a>, and {{ username }}
-            receives the <a href="/about/#details">full face value</a>.</p>
-
 
             <h2>Share</h2>
 
@@ -145,6 +139,4 @@
               })();
             </script>
 
-        {% end %}
-    {% end %}
 {% end %}
