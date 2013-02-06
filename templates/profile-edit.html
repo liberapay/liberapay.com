@@ -1,31 +1,49 @@
 <div class="col1">
-
     <h2 class="first">You are
         <b class="participant_id">{{ escape(user.id) }}</b>
         <span class="participant_id"><form>
             <input name="participant_id" value="{{ escape(user.id) }}"/>
-            <button id="save-participant_id" type="submit" class="selected small">Save</button>
-            <button id="cancel-participant_id" type="cancel" class="small">Cancel</button>
+            <button id="save-participant_id" type="submit">Save</button>
+            <button id="cancel-participant_id" type="cancel">Cancel</button>
         </form></span>
-        <button id="edit-participant_id" class="small selected">Edit</button>.
+        <button id="edit-participant_id">Edit</button>
 
-        <span class='small' id='username_edit_warning'>Have you linked to your
+        <span id='username_edit_warning'>Have you linked to your
         Gittip profile from other websites? Be sure to update those links!</span>
     </h2>
-
-    <h2>Your balance is ${{ user.balance }}.</h2>
-
-    <h2>You give <span id="total-giving">${{ total }}</span> per week.</h2>
 
     <p>
         <input name="anonymous" class="anonymous" type="checkbox"
             {% if participant.anonymous %}checked="true"{% end %} />
-        <label for="anonymous" class="anonymous">Show as
-            &ldquo;anonymous&rdquo; on leaderboard.</label>
+        <label for="anonymous" class="anonymous">Don&rsquo;t publish total
+            giving.</label>
     </p>
 
 
-    <h2>What is your personal funding goal on Gittip?</h2>
+    <h2>Contribution
+        <button id="edit-statement">Edit</button>
+        <button id="save-statement" type="submit">Save</button>
+        <button id="cancel-statement" type="cancel">Cancel</button>
+    </h2>
+
+    <form class="statement"
+        {% if participant.statement %}style="display: none;"{% end %}>
+        <blockquote>
+            {{ MAKING }} ...
+            <textarea>{{ participant.statement }}</textarea>
+            <span class="help">Newlines and links are converted to HTML.</span>
+        </blockquote>
+    </form>
+
+    <blockquote id="my-statement" class="statement"
+        {% if not participant.statement %}style="display: none"{% end %}>
+            {{ MAKING }} <span>
+            {{ wrap(participant.statement) }}</span><br />
+    </blockquote>
+</div>
+<div class="col2">
+
+    <h2>Funding Goal</h2>
 
     <form class="goal">
         <blockquote>
@@ -65,59 +83,6 @@
 
         </blockquote>
     </form>
-
-    <h2>You receive ${{ backed_amount }} per week.
-        <span class="small"><a href="history.html">History</a></span>
-    </h2>
-
-    {% if backed_amount > 0 %}
-
-    {% include "tip-distribution.html" %}
-
-    <table id="tip-distribution">
-        {% for amount, ncontributors, summed, pcontributors, psummed in giving_chart %}
-        <tr>
-            {% if str(amount) == '-1' %}
-            <td class="amount" colspan="2">Other</td>
-            {% else %}
-            <td class="dollar-sign">$</td>
-            <td class="amount">{{ amount }}</td>
-            {% end %}
-            <td colspan="2"></td>
-            <td class="count">
-                <span class="green bar" style="width: {{ psummed * 300 }}pt"></span>
-                {{ "%5.1f" % (psummed * 100) }}%
-                <span class="number">(${{ summed }})</span>
-            </td>
-        </tr>
-        {% end %}
-    </table>
-    {% end %}
-
-    </div>
-    <div class="col2">
-
-
-    <h2>Contribution</h2>
-
-    <form class="statement"
-        {% if participant.statement %}style="display: none;"{% end %}>
-        <blockquote>
-            {{ MAKING }} ...
-            <textarea>{{ participant.statement }}</textarea>
-            <span class="help">Newlines and links are converted to HTML.</span>
-            <button id="save-statement" type="submit" class="selected small">Save</button>
-            <button id="cancel-statement" type="cancel" class="small">Cancel</button>
-        </blockquote>
-    </form>
-
-    <blockquote id="my-statement" class="statement"
-        {% if not participant.statement %}style="display: none"{% end %}>
-            {{ MAKING }} <span>
-            {{ wrap(participant.statement) }}</span><br />
-        <button class="small selected">Edit</button>
-    </blockquote>
-
     <blockquote id="my-goal" class="goal">
         <div>
         {% if user.goal > 0 %}
@@ -131,5 +96,37 @@
         </div>
         <button class="small selected">Edit</button>
     </blockquote>
+
     {% include "connected-accounts.html" %}
 </div>
+<div class="clear"></div>
+{% if backed_amount > 0 %}
+
+
+<div class="col1">
+<h2>Tips Received, by Number of Tips</h2>
+{% include "tip-distribution.html" %}
+</div>
+
+<div class="col2">
+<h2>Tips Received, by Dollar Amount</h2>
+<table id="tip-distribution">
+    {% for amount, ncontributors, summed, pcontributors, psummed in giving_chart %}
+    <tr>
+        {% if str(amount) == '-1' %}
+        <td class="amount" colspan="2">Other</td>
+        {% else %}
+        <td class="dollar-sign">$</td>
+        <td class="amount">{{ amount }}</td>
+        {% end %}
+        <td colspan="2"></td>
+        <td class="count">
+            <span class="green bar" style="width: {{ psummed * 300 }}pt"></span>
+            {{ "%5.1f" % (psummed * 100) }}%
+            <span class="number">(${{ summed }})</span>
+        </td>
+    </tr>
+    {% end %}
+</table>
+</div>
+{% end %}

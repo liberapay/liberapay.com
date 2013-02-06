@@ -157,7 +157,7 @@ if participant.id != user.id:
         raise Response(403)
 
 paydays = Paydays(participant.id, participant.balance)
-title = "History"
+title = "Statements"
 
 # ========================================================================== ^L
 {% extends templates/participant.html %}
