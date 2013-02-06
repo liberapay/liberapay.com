@@ -236,14 +236,11 @@ button {
         padding-left: 18px;
     }
     div.login {
-        padding-top: 6px;
+        padding-top: 18px;
         position: absolute;
         top: 0;
         right: 0;
-
-        span {
-            font: normal 13px $Helvetica;
-        }
+        font: normal 13px $Helvetica;
     }
 }
 
@@ -251,7 +248,7 @@ button {
     background: transparent url('hero-bg.png') top left repeat;
     border: 1px solid $light-gray;
     border-style: solid none;
-    padding-bottom: 120px;
+    padding-bottom: 100px;
     text-align: center;
     position: relative;
     z-index: 1;
@@ -291,6 +288,7 @@ button {
         padding-bottom: 20px;
     }
     h2.bottom {
+        padding-bottom: 20px;
         span.button-container {
             display: inline-block;
             padding: 0 10px;
@@ -306,7 +304,7 @@ button {
             content: "";
             display: block;
             height: 1px;
-            margin-top: -15px;
+            margin-top: -16px;
         }
     }
 }
@@ -314,7 +312,7 @@ button {
     text-align: center;
     background: white;
     margin: -80px auto 0;
-    border: 5px solid rgba(#49392F, .5);
+    border: 5px solid rgba($brown, .5);
     padding-top: 15px;
     width: 480px;
     min-height: 120px;
@@ -323,7 +321,7 @@ button {
     z-index: 2;
 
     span {
-        color: #614C3E;
+        color: $brown;
         font: bold 22px $Helvetica;
     }
     form {
@@ -331,9 +329,7 @@ button {
         margin-top: 12px;
 
         input {
-            background: transparent url('logo-icon-offset.png') center right no-repeat;
-            margin: 0;
-            width: 85%;
+            width: 30%;
         }
     }
 }
@@ -359,7 +355,7 @@ button {
     }
 }
 #page {
-    padding: 0;
+    padding: 20px 0 0;
     background: white;
 
     h1 {

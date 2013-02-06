@@ -31,7 +31,7 @@
                 </a>
             </h1>
             </td><td class="motto">
-            Inspiring People
+            Inspiring Generosity
         </td></tr></table>
         <div class="login">
             {% if user.ANON %}
@@ -42,7 +42,6 @@
                     or
                     <a href="{{ github.oauth_url(website, u'opt-in') }}">GitHub</a>.
                 </span>
-                <button href="#">Sign In</button>
             </div>
             {% else %}
             <div id="you-are">
@@ -63,14 +62,15 @@
         </div>
     </div>
 
-    <div class="main-padding"><div id="page">
+    <div class="main-padding"><div id="box-page">
         {% block killbox %}
         <div id="box">
             {% block box %}{% end %}
         </div>
         {% end %}
-        {% block page %}{% end %}
-        <div class="clear"></div>
+        <div id="page" class="group">
+            {% block page %}{% end %}
+        </div>
     </div></div>
 
     <div class="main-padding"><div id="footer">

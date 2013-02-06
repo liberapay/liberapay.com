@@ -81,9 +81,9 @@ givers = db.fetchall("""
 {% extends templates/base.html %}
 
 {% block heading %}
-    <h2 class="top"><span>Weekly Cash Gifts for</span></h2>
+    <h2 class="top"><span>Weekly Cash Gifts</span></h2>
     <h1>
-        <span>Inspiring People</span>
+        <span>Inspiring Generosity</span>
     </h1>
     <h2 class="bottom">
         <span class="button-container">
@@ -98,15 +98,6 @@ givers = db.fetchall("""
     </script>
 
     <span>Who inspires you?</span>
-    <form action="." method="get">
-        <fieldset>
-            <input type="text" class="" name="github_username"
-            value="" placeholder="Enter a GitHub username" />
-        </fieldset>
-    </form>
-
-    <!--
-    <h2>Tip someone!</h3>
     <form id="jump">
         Enter a <select>
             <option value="twitter">Twitter</option>
@@ -114,17 +105,15 @@ givers = db.fetchall("""
         </select> username:
         <span class="nowrap">
             <input placeholder="" />
-            <button class="selected small" type="submit">Go</button>
+            <button type="submit">Go</button>
         </span>
     </form>
-    -->
 
 {% end %}
 {% block page %}
 
 <div id="leaderboard">
 
-    <h1>Leaderboard</h1>
     <div class="top-receivers">
         <h2>Top Receivers</h2>
         <ul class="group">
