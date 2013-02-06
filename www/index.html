@@ -84,7 +84,9 @@ givers = db.fetchall("""
 """, (limit, offset))
 ^L
 {% extends templates/base.html %}
-
+{% block head %}
+    <script>$(document).ready(Gittip.initJumpToPerson);</script>
+{% end %}
 {% block heading %}
     <h2 class="top"><span>Weekly Cash Gifts</span></h2>
     <h1>
@@ -97,23 +99,19 @@ givers = db.fetchall("""
     </h2>
 {% end %}
 {% block box %}
-
-    <script>
-        $(document).ready(Gittip.initJumpToPerson);
-    </script>
-
-    <span>Who inspires you?</span>
-    <form id="jump">
-        Enter a <select>
-            <option value="twitter">Twitter</option>
-            <option value="github">GitHub</option>
-        </select> username:
-        <span class="nowrap">
-            <input placeholder="" />
-            <button type="submit">Go</button>
-        </span>
-    </form>
-
+    <div class="on-homepage">
+        <h1>Who inspires you?</h1>
+        <form id="jump">
+            Enter a <select>
+                <option value="twitter">Twitter</option>
+                <option value="github">GitHub</option>
+            </select> username:
+            <span class="nowrap">
+                <input placeholder="" />
+                <button type="submit">Go</button>
+            </span>
+        </form>
+    </div>
 {% end %}
 {% block page %}
 

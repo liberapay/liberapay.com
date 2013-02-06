@@ -322,28 +322,61 @@ button {
     background: white;
     margin: -80px auto 0;
     border: 5px solid rgba($brown, .5);
-    padding-top: 15px;
     width: 480px;
-    min-height: 120px;
     @include border-radius(3px);
     position: relative;
     z-index: 2;
 
-    img {
-        width: 128px;
-        height: 128px;
-    }
-
-    span {
-        color: $brown;
+    h1 {
         font: bold 22px $Helvetica;
+        color: $brown;
     }
-    form {
-        margin-bottom: 0;
-        margin-top: 12px;
+    h2 {
+        font: bold 16px $Helvetica;
+        color: $brown;
+    }
 
-        input {
-            width: 30%;
+    .on-homepage {
+        padding: 20px 0;
+
+        h1 {
+            padding-bottom: 15px;
+        }
+    }
+
+    .on-profile {
+        margin: 5px;
+
+        img {
+            width: 128px;
+            height: 128px;
+
+            /* Without this we are inline-block and we get an extra 4px.
+             * Is that due to line-height, maybe? */
+            display: block; }
+
+        .giving-receiving {
+            padding-left: 15px;
+            text-align: left;
+        }
+        .amount {
+            color: $black;
+            font: bold 56px $Helvetica;
+        }
+        .per-week {
+            color: $black;
+            font: normal 12px $Helvetica;
+        }
+        .pad-sign {
+            padding-left: 36px;
+        }
+        form {
+            margin-bottom: 0;
+            margin-top: 12px;
+
+            input {
+                width: 30%;
+            }
         }
     }
 }

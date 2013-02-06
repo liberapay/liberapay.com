@@ -1,8 +1,47 @@
 {% extends base.html %}
 
 {% block box %}
-<img src="{{ participant.get_img_src() }}" />
-{{ participant.id }} receives {{ participant.get_dollars_receiving() }}
+
+<table class="on-profile">
+    <tr>
+        <td>
+            <img src="{{ participant.get_img_src(128) }}" />
+        </td>
+        <td class="giving-receiving">
+        {% set g = giving = participant.get_dollars_giving() %}
+        {% set r = receiving = participant.get_dollars_receiving() %}
+
+        {% if g > r and not participant.anonymous %}
+            <h2 class="pad-sign">{{ participant.id }} gives</h2>
+            <div class="amount">${{ giving }}</div>
+            <div class="per-week pad-sign">per 
+                week{% if r > 0 %}, and receives ${{ receiving }}{% end %}
+            </div>
+        {% elif r > 0 %}
+            <h2 class="pad-sign">{{ participant.id }} receives</h2>
+            <div class="amount">${{ receiving }}</div>
+            <div class="per-week pad-sign">per 
+                week{% if g > 0 %}, and gives 
+                {% if participant.anonymous %}
+                anonymously
+                {% else %}
+                ${{ giving }}
+                {% end %}
+                {% end %}
+            </div>
+        {% else %}
+            <h2>{{ participant.id }}
+                {% if g > 0 %}
+                gives anonymously
+                {% else %}
+                is lurking
+                {% end %}
+            </h2>
+        {% end %}
+        </td>
+    </tr>
+</table>
+
 <div class="buttons">
     {% if participant.id == user.id or user.ADMIN %}
         <a href="/{{ participant.id }}/"><button>Profile</button></a>
