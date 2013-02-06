@@ -2,9 +2,9 @@
 
 {% block box %}
 
-<table class="on-profile">
+<table class="on-profile{% if participant.is_suspicious %} is-suspicious{% end %}">
     <tr>
-        <td>
+        <td class="picture">
             <img src="{{ participant.get_img_src(128) }}" />
         </td>
         <td class="giving-receiving">
@@ -100,12 +100,21 @@
     <a href="/{{ participant.id }}/widgets/"><button>Widgets</button></a>
 </div>
 {% end %}
+
+{% if user.ADMIN %}
+<label class="is-suspicious-knob">
+    Suspicious
+    <input class="is-suspicious-knob" type="checkbox"
+        {% if participant.is_suspicious %}checked="true"{% end %} />
+</label>
+{% elif participant.is_suspicious %}
+<div class="is-suspicious-indicator">Suspicious</div>
 {% end %}
 
+{% end %}
+
+
 {% block body %}
-    <div id="their-voice"{% if user.ADMIN and 'deets' in globals() and deets['is_suspicious'] %} class="is-suspicious"{% end %}>
-        {% block their_voice %}{% end %}
-    </div>
 
             <h2>Share</h2>
 

@@ -12,9 +12,9 @@ $(document).ready(function()
             , success: function(data)
             {
                 if (data.is_suspicious)
-                    $("#their-voice").addClass('is-suspicious');
+                    $(".on-profile").addClass('is-suspicious');
                 else
-                    $("#their-voice").removeClass('is-suspicious');
+                    $(".on-profile").removeClass('is-suspicious');
                 $('INPUT.is-suspicious-knob').attr( 'checked'
                                                   , data.is_suspicious
                                                    );
