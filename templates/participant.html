@@ -1,6 +1,7 @@
 {% extends base.html %}
 
 {% block box %}
+<img src="{{ participant.get_img_src() }}" />
 {{ participant.id }} receives {{ participant.get_dollars_receiving() }}
 <div class="buttons">
     {% if participant.id == user.id or user.ADMIN %}

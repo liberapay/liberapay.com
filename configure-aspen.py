@@ -34,6 +34,7 @@ website.hooks.outbound += [ gittip.authentication.outbound
 
 
 __version__ = open(os.path.join(website.www_root, 'version.txt')).read().strip()
+os.environ['__VERSION__'] = __version__
 
 
 def add_stuff(request):

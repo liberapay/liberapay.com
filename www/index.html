@@ -3,6 +3,11 @@ from gittip import db, AMOUNTS
 from gittip.elsewhere import github
 
 def _extract_avatar(participant_id):
+
+    # XXX This can be replaced with Participant.get_img_src when we convert
+    # this simplate to use the ORM.
+    # https://github.com/zetaweb/www.gittip.com/issues/541
+
     recs = db.fetchall("""
 
         SELECT user_info

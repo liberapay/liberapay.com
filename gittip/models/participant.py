@@ -1,9 +1,11 @@
 from __future__ import unicode_literals
 
 import datetime
+import os
 from decimal import Decimal
 
 import pytz
+from aspen.utils import typecheck
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import func
 from sqlalchemy.orm import relationship
@@ -168,6 +170,40 @@ class Participant(db.Model):
             else:
                 raise self.UnknownPlatform(account.platform)
         return (github_account, twitter_account)
+
+    def get_img_src(self, size=128):
+        """Return a value for <img src="..." />.
+
+        Until we have our own profile pics, delegate. XXX Is this an attack
+        vector? Can someone inject this value? Don't think so, but if you make
+        it happen, let me know, eh? Thanks. :)
+
+            https://www.gittip.com/security.txt
+
+        """
+        typecheck(size, int)
+
+        src = '/assets/%s/avatar-default.gif' % os.environ['__VERSION__']
+
+        github, twitter = self.get_accounts_elsewhere()
+        if github is not None:
+            # GitHub -> Gravatar: http://en.gravatar.com/site/implement/images/
+            if 'gravatar_id' in github.user_info:
+                gravatar_hash = github.user_info['gravatar_id']
+                src = "https://www.gravatar.com/avatar/%s.jpg?s=%s"
+                src %= (gravatar_hash, size)
+
+        elif twitter is not None:
+            # https://dev.twitter.com/docs/api/1/get/users/profile_image/%3Ascreen_name
+            if 'profile_image_url_https' in twitter.user_info:
+                src = twitter.user_info['profile_image_url_https']
+
+                # For Twitter, we don't have good control over size. We don't
+                # want the original, cause that can be huge. The next option is
+                # 73px(?!).
+                src = src.replace('_normal.', '_bigger.')
+
+        return src
 
     def get_tip_to(self, tippee):
         tip = self.tips_giving.filter_by(tippee=tippee).first()
