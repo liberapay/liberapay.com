@@ -203,13 +203,6 @@ github_account, twitter_account = participant.get_accounts_elsewhere()
         {% end %}
         </div>
 
-    {% if user.ADMIN %}
-    <h2>{{ participant.id }} joined {{ to_age(participant.claimed_time) }}.
-        <span class="small"><a href="history.html">History</a></span>
-    </h2>
-
-    {% end %}
-
     {% include "templates/connected-accounts.html" %}
 </div>
 {% end %}

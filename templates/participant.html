@@ -3,10 +3,30 @@
 {% block box %}
 {{ participant.id }} receives {{ participant.get_dollars_receiving() }}
 <div class="buttons">
-    <a href="/{{ participant.id }}/"><button>Profile</button></a>
-    <a href="/{{ participant.id }}/giving/"><button>Giving</button></a>
-    <a href="/{{ participant.id }}/statements/"><button>Statements</button></a>
-    <a href="/{{ participant.id }}/widgets/"><button>Widgets</button></a>
+    {% if participant.id == user.id or user.ADMIN %}
+        <a href="/{{ participant.id }}/"><button>Profile</button></a>
+        <a href="/{{ participant.id }}/giving/"><button>Giving</button></a>
+        <a href="/{{ participant.id }}/statements/"><button>Statements</button></a>
+        <a href="/{{ participant.id }}/widgets/"><button>Widgets</button></a>
+    {% end %}
+    {% if participant.id != user.id %}
+        {% set my_tip = participant.get_tip_to(user.id) %}
+        <div id="tips">
+            {% for amount in AMOUNTS %}
+            <button amount="{{ amount }}" tippee="{{ participant.id }}"
+                class="tip{{ ' selected' if amount == my_tip else '' }}">${{ amount }}</button>
+            {% end %}
+            {% if my_tip not in AMOUNTS %}
+            <span class="old-amount">
+                <button class="tip disabled selected">{{ my_tip }}</button>
+                <span class="old-amount-link">&mdash;
+                <a href="http://blog.gittip.com/post/26505682007/is-personal-funding-viable" target="_blank">old amount</a>!</span>
+            </span>
+            {% end %}
+        </div>
+
+    {% end %}
+
 </div>
 {% end %}
 
