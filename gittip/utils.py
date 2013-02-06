@@ -1,5 +1,7 @@
+from aspen import Response
 from aspen.utils import typecheck
 from tornado.escape import linkify
+from gittip.models.participant import Participant
 
 
 def wrap(u):
@@ -11,3 +13,24 @@ def wrap(u):
     return u if u else '...'
 
 
+def get_participant(request):
+    """Given a Request, raise Response or return Participant.
+    """
+    participant_id = request.line.uri.path['participant_id']
+    participant = Participant.query.get(participant_id)
+
+    if participant is None:
+        raise Response(404)
+
+    elif participant.claimed_time is None:
+
+        # This is a stub participant record for someone on another platform who
+        # hasn't actually registered with Gittip yet. Let's bounce the viewer
+        # over to the appropriate platform page.
+
+        to = participant.resolve_unclaimed()
+        if to is None:
+            raise Response(404)
+        request.redirect(to)
+
+    return participant

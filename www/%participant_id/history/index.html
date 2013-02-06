@@ -3,6 +3,7 @@ from decimal import Decimal
 from aspen import Response, log
 from aspen.utils import to_age
 from gittip import db, AMOUNTS
+from gittip.utils import get_participant
 
 
 class Paydays(object):
@@ -149,22 +150,17 @@ class Paydays(object):
 if user.ANON:
     raise Response(404)
 
-participant_id = path['participant_id']
+participant = get_participant(request)
 
-if participant_id != user.id:
+if participant.id != user.id:
     if not user.ADMIN:
         raise Response(403)
 
-info = db.fetchone( "SELECT balance,claimed_time FROM participants WHERE id=%s"
-                  , (participant_id,)
-                   )
-if info is None:
-    raise Response(404)
-claimed_time = info['claimed_time']
-paydays = Paydays(participant_id, info['balance'])
+paydays = Paydays(participant.id, participant.balance)
+title = "History"
 
 # ========================================================================== ^L
-{% extends templates/base.html %}
+{% extends templates/participant.html %}
 {% block page %}
 <style>
     TH {
@@ -204,20 +200,23 @@ paydays = Paydays(participant_id, info['balance'])
     }
 
 </style>
-<div id="their-voice">
-    <h2 class="first"><a href="./">{{ participant_id == user.id and "You" or participant_id }}</a> joined
-    {{ to_age(claimed_time) }}.</h2>
 
-    <h3>{{ participant_id == user.id and "Your" or "Their" }} balance is
-    ${{ info['balance'] }}.</h2>
+<table class="centered">
+    <tr>
+    <td colspan="7">
+        <h2><a href="./">{{ participant.id == user.id and "You" or participant.id }}</a> joined
+        {{ to_age(participant.claimed_time) }}.</h2>
 
-    <table>
+        <h2>{{ participant.id == user.id and "Your" or "Their" }} balance is
+        ${{ participant.balance }}.</h2>
+    </td>
+    </tr>
     {% for event in paydays %}
     {% if event['event'] == 'payday-start' %}
     <tr>
-        <th colspan="7">Gittip #{{ event['number'] }}
+        <th colspan="7"><h2>Gittip #{{ event['number'] }}
             <b>&mdash;{{ event['timestamp'].strftime("%B %d, %Y").replace(' 0', ' ') }}
-            ({{ to_age(event['timestamp']) }})</b></th>
+                ({{ to_age(event['timestamp']) }})</b></h2></th>
     </tr>
     <tr class="head">
         <td colspan="3" class="outside">&larr; Outside</td>
@@ -277,7 +276,7 @@ paydays = Paydays(participant_id, info['balance'])
         <td class="card"></td>
         <td class="fees"></td>
 
-        {% if event['tippee'] == participant_id %}
+        {% if event['tippee'] == participant.id %}
         <td class="credits">{{ event['amount'] }}</td>
         <td class="debits"></td>
         {% else %}
@@ -287,8 +286,8 @@ paydays = Paydays(participant_id, info['balance'])
 
         <td class="balance">{{ event['balance'] }}</td>
 
-        {% if event['tippee'] == participant_id %}
-            {% if user.ADMIN and (participant_id != user.id or 'override' in qs) %}
+        {% if event['tippee'] == participant.id %}
+            {% if user.ADMIN and (participant.id != user.id or 'override' in qs) %}
             <td class="notes">from <a href="/{{ event['tipper'] }}/history.html">{{ event['tipper'] }}</a></td>
             {% else %}
             <td class="notes">from someone</td>
@@ -305,9 +304,7 @@ paydays = Paydays(participant_id, info['balance'])
 
     </tr>
     {% end %}
-    {% end %}
-    </table>
-
-</div>
+{% end %}
+</table>
 
 {% end %}

@@ -78,6 +78,12 @@ class Participant(db.Model):
                              , foreign_keys="Transfer.tippee"
                               )
 
+    def __eq__(self, other):
+        return self.id == other.id
+
+    def __ne__(self, other):
+        return self.id != other.id
+
     # Class-specific exceptions
     class ProblemChangingId(Exception): pass
     class IdTooLong(ProblemChangingId): pass

@@ -1,4 +1,15 @@
 {% extends base.html %}
+
+{% block box %}
+{{ participant.id }} receives {{ participant.get_dollars_receiving() }}
+<div class="buttons">
+    <a href="/{{ participant.id }}/"><button>Profile</button></a>
+    <a href="/{{ participant.id }}/giving/"><button>Giving</button></a>
+    <a href="/{{ participant.id }}/history/"><button>History</button></a>
+    <a href="/{{ participant.id }}/widgets/"><button>Widgets</button></a>
+</div>
+{% end %}
+
 {% block body %}
     <div id="their-voice"{% if user.ADMIN and 'deets' in globals() and deets['is_suspicious'] %} class="is-suspicious"{% end %}>
         {% block their_voice %}{% end %}

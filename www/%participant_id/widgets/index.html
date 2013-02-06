@@ -1,0 +1,60 @@
+from aspen import Response
+from gittip.utils import get_participant
+^L
+participant = get_participant(request)
+
+if participant != user:
+    raise Response(404)
+
+title = "Widgets"
+^L
+{% extends "templates/participant.html" %}
+{% block page %}
+<div class="col1">
+    <h2>Widget #1</h2>
+
+    <p>Use this code to embed a Gittip button on your website:</p>
+
+    <pre>&lt;iframe style="border: 0; margin: 0; padding: 0;"
+        src="https://www.gittip.com/{{ participant.id }}/widget.html"
+        width="48pt" height="22pt"&gt;&lt;/iframe&gt;</pre>
+
+    <p>The button opens your profile on Gittip in a new tab or window.
+    Here&rsquo;s what the text reads:</p>
+
+    <ul class="no-bullets">
+
+        <li><button class="small selected">Gittip</button>&mdash;person is not
+        logged into Gittip or doesn&rsquo;t tip you</li>
+
+        <li><button class="small selected">3.00</button>&mdash;person tips you;
+        shows current gift amount</li>
+
+        <li><button class="small selected">You!</button>&mdash;your own
+        button</li>
+
+    </ul>
+
+    <p>Here&rsquo;s an example using
+        <a href="/whit537/">whit537</a>:
+        <iframe style="border: 0; margin: 0 0 -3pt 3pt; padding: 0;"
+            src="https://www.gittip.com/whit537/widget.html"
+            width="48pt" height="22pt"></iframe>
+    </p>
+</div>
+<div class="col2">
+
+    <h2>Widget #2</h2>
+
+    <p>Use this code to add a Gittip &ldquo;receiving&rdquo; widget on your website:</p>
+
+<pre>&lt;script data-gittip-username="{{ participant.id }}"
+src="https://www.gittip.com/assets/widgets/0002.js"&gt;
+&lt;/script&gt;</pre>
+
+    <p>Here&rsquo;s what it looks like:</p>
+
+    <script data-gittip-username="{{ participant.id }}" src="/assets/widgets/0002.js"></script>
+
+</div>
+{% end %}

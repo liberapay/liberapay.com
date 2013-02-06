@@ -108,6 +108,12 @@ dt {
     font-weight: bold;
     margin: 1em 0 0.25em;
 }
+pre {
+    font: 9pt/13pt monospace;
+    margin: 0 0 1em 1em;
+    padding: 0;
+    overflow: auto;
+}
 
 // Utils
 .group:after {
@@ -127,6 +133,9 @@ input {
 }
 .clear {
     clear: both;
+}
+.centered {
+    margin: 0 auto;
 }
 
 // Modules
@@ -334,13 +343,6 @@ button {
     }
 }
 #page #leaderboard {
-    h2 {
-        color: $brown;
-        font: bold 14px $Helvetica;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        margin: 20px 0 8px;
-    }
     ul {
         margin: 0 0 20px 0;
 
@@ -367,11 +369,11 @@ button {
     }
     
     h2 {
-        color: #6D6E70;
-        font: normal 24px $Mensch;
-        letter-spacing: -2px;
-        margin: 24px 0 20px 0;
+        color: $brown;
+        font: bold 14px $Helvetica;
+        letter-spacing: 1px;
         text-transform: uppercase;
+        margin: 20px 0 8px;
     }
     
     &.about {
@@ -410,6 +412,59 @@ button {
     text-align: right;
     font: normal 12px/16px $Helvetica;
 }
+
+
+#accounts {
+    margin-bottom: 12pt;
+
+    td {
+        text-align: left;
+        vertical-align: middle;
+        line-height: 100%;
+
+        &.account-type {
+            border-right: 1pt solid #B2A196;
+            padding: 6pt 6pt 6pt 0;
+
+            IMG {
+                width: 36pt;
+                height: 36pt;
+            }
+        }
+    }
+    DIV.account-type {
+        font-size: x-small;
+        clear: both;
+        color: #B2A196;
+    }
+    .account-details {
+        padding-left: 6pt;
+    }
+    IMG.avatar {
+        width: 24pt;
+        height: 24pt;
+        float: left;
+        margin-right: 3pt;
+    }
+}
+
+#members {
+    list-style: none;
+    margin-bottom: 12pt;
+    margin: 0 auto;
+
+    TD {
+        padding: 0 0 0.5em 0;
+        text-align: left;
+    }
+    IMG {
+        width: 18pt;
+        height: 18pt;
+        margin-right: 6pt;
+        float: left;
+    }
+}
+
 
 /* Large desktop */
 @media (min-width: 1200px) {

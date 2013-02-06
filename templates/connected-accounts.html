@@ -1,0 +1,74 @@
+<h2>Connected Accounts</h2>
+
+<table id="accounts">
+    <tr>
+        <td class="account-type">
+            <img src="/assets/twitter.png" />
+        </td>
+        <td class="account-details">
+            {% if twitter_account is None %}
+                {% if not user.ANON and user.id == participant.id %}
+                    Connect a <a href="{{ twitter.oauth_url(website, u'connect') }}">Twitter account</a>.
+                {% else %}
+                    No Twitter account connected.
+                {% end %}
+            {% else %}
+            <a href="{{ twitter_account.user_info.get('html_url', '') }}"
+                ><img class="avatar"
+                src="{{ twitter_account.user_info.get('profile_image_url_https', '/assets/%s/no-avatar.png' % __version__) }}"
+                />{{ twitter_account.user_info.get('screen_name') }}
+                {% if twitter_account.user_info.get('name') %}({{ twitter_account.user_info.get('name') }}){% end %}
+            </a>
+            {% end %}
+            <div class="account-type">Twitter</div>
+        </td>
+    </tr>
+    <tr>
+        <td class="account-type">
+            <img src="/assets/octocat.png" />
+        </td>
+        <td class="account-details">
+            {% if github_account %}
+            <a href="{{ github_account.user_info.get('html_url', '') }}"
+                ><img class="avatar" src="{{ github_account.user_info.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}"
+                />{{ github_account.user_info.get('login') }}
+                {% if github_account.user_info.get('name') %}({{ github_account.user_info.get('name') }}){% end %}<br />
+            </a>
+            {% else %}
+                {% if not user.ANON and user.id == participant.id %}
+                    Connect a <a href="{{ github.oauth_url(website, u'connect') }}">GitHub account</a>.
+                {% else %}
+                    No GitHub account connected.
+                {% end %}
+            {% end %}
+            <div class="account-type">GitHub</div>
+        </td>
+    </tr>
+    <tr>
+        <td class="account-type">
+            <img src="/assets/balanced-avatar.png" /></a>
+        </td>
+        <td class="account-details">
+            {% if user.id == participant.id %}
+
+            <a href="/credit-card.html">Credit card</a>:
+                {% if participant.last_bill_result != "" %}&#x2718;{% else %}&#x2714;{% end %}
+            &nbsp; &nbsp; &nbsp;
+            <a href="/bank-account.html">Bank account</a>:
+                {% if participant.last_ach_result != "" %}&#x2718;{% else %}&#x2714;{% end %}
+
+            {% else %}
+
+            Credit card:
+                {% if participant.last_bill_result != "" %}&#x2718;{% else %}&#x2714;{% end %}
+            &nbsp; &nbsp; &nbsp;
+            Bank account:
+                {% if participant.last_ach_result != "" %}&#x2718;{% else %}&#x2714;{% end %}
+
+            {% end %}
+            <div class="account-type">{% if user.ADMIN and participant.balanced_account_uri %}
+                <a href="https://www.balancedpayments.com/{{ participant.balanced_account_uri[3:] }}"
+                    >Balanced Payments</a>{% else %}Balanced Payments{% end %}</div>
+        </td>
+    </tr>
+</table>

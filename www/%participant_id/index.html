@@ -6,21 +6,14 @@ import requests
 from aspen import json, Response
 from aspen.utils import to_age
 from gittip import AMOUNTS
-from gittip.utils import wrap
+from gittip.models import Participant
+from gittip.utils import get_participant, wrap
 
 tip_suggestions = ('jeresig', 'antirez', 'wycats', 'fabpot', 'mitsuhiko',
                    'jtauber', 'kennethreitz', 'alex', 'taylorotwell')
 tip_suggestions = [{'tippee': name, 'amount': 0} for name in tip_suggestions]
 
 MAKING = "I am making the world better by"
-
-def _extract_username(tip):
-    if tip['platform'] == 'github':
-        key = 'login'
-    else:
-        assert tip['platform'] == 'twitter', tip  # sanity check
-        key = 'screen_name'
-    return tip['user_info'][key]
 
 def _clip(text, n):
     text = text.replace('\n', ' ')
@@ -30,34 +23,7 @@ def _clip(text, n):
 
 # ========================================================================== ^L
 
-from gittip.models import Participant
-
-# XXX Hack
-# ========
-# Work around https://github.com/whit537/aspen/issues/108 until we upgrade.
-
-if not path.raw.endswith('/'):
-    request.redirect(path.raw + '/', permanent=True)
-
-# Instantiate a Participant object.
-# =================================
-# And load their details from the database.
-
-participant = Participant.query.get(path['participant_id'])
-
-if participant is None:
-    raise Response(404)
-
-elif participant.claimed_time is None:
-
-    # This is a stub participant record for someone on another platform who
-    # hasn't actually registered with Gittip yet. Let's bounce the viewer over
-    # to the appropriate platform page.
-
-    to = participant.resolve_unclaimed()
-    if to is None:
-        raise Response(404)
-    request.redirect(to)
+participant = get_participant(request)
 
 
 # Load money info.
@@ -98,6 +64,9 @@ github_account, twitter_account = participant.get_accounts_elsewhere()
     <meta name="og:description" content="{{ _clip(MAKING + " " + participant.statement, 200) }}" />
     <meta name="og:image" content="https://www.gittip.com/assets/gittip.opengraph.png" />
 {% end %}
+{% block heading %}
+<h2 class="top"><span>Profile</span></h2>
+{% end %}
 {% block page %}
 
     <style>
@@ -128,17 +97,6 @@ github_account, twitter_account = participant.get_accounts_elsewhere()
             margin-right: 3pt;
             height: 9pt;
         }
-
-        #matrix TR.not-over BUTTON.empty {
-            background: transparent;
-            color: #F7F7F6;
-        }
-        #matrix TD {
-            text-align: left;
-        }
-        #matrix TH {
-            vertical-align: top;
-        }
         FORM.statement TEXTAREA {
             width: 98%;
             height: 126pt; /* 18pt * 7 rows; overriden in js */
@@ -147,13 +105,6 @@ github_account, twitter_account = participant.get_accounts_elsewhere()
         FORM BUTTON {
             float: right;
             margin-left: 0.5em;
-        }
-        .old-amount-link {
-            font-size: 9pt;
-            display: none;
-            position: relative;
-            top: 2pt;
-            line-height: 9pt;
         }
         SPAN.participant_id {
             display: none;
@@ -204,28 +155,6 @@ github_account, twitter_account = participant.get_accounts_elsewhere()
     <script>
         $(document).ready(function()
         {
-
-            // Wire up buttons.
-            // ================
-
-            Gittip.initTipButtons();
-
-            function rowIn()
-            {
-                $(this).addClass('over');
-                $(this).removeClass('not-over');
-            }
-            function rowOut()
-            {
-                $(this).removeClass('over');
-                $(this).addClass('not-over');
-            }
-            $('#matrix TR').hover(rowIn, rowOut);
-
-            function oldIn() { $('.old-amount-link', this).show(); }
-            function oldOut() { $('.old-amount-link', this).hide(); }
-            $('.old-amount').hover(oldIn, oldOut);
-
 
             // Wire up textarea for statement.
             // ===============================
@@ -476,270 +405,11 @@ github_account, twitter_account = participant.get_accounts_elsewhere()
     {% end %}
 
 {% if not user.ANON and user.id == participant.id %}
-    <h2 class="first">You are
-        <b class="participant_id">{{ escape(user.id) }}</b>
-        <span class="participant_id"><form>
-            <input name="participant_id" value="{{ escape(user.id) }}"/>
-            <button id="save-participant_id" type="submit" class="selected small">Save</button>
-            <button id="cancel-participant_id" type="cancel" class="small">Cancel</button>
-        </form></span>
-        <button id="edit-participant_id" class="small selected">Edit</button>.
-
-        <span class='small' id='username_edit_warning'>Have you linked to your
-        Gittip profile from other websites?<br /><b>Be sure to update those
-        links!</b></span>
-
-        <span class="small"><a href="/sign-out.html">Sign out</a></span>
-    </h2>
-
-
-    <h3>How are you making the world better?</h3>
-
-    <form class="statement"
-        {% if participant.statement %}style="display: none;"{% end %}>
-        <blockquote>
-            {{ MAKING }} ...
-            <textarea>{{ participant.statement }}</textarea>
-            <span class="help">Newlines and links are converted to HTML.</span>
-            <button id="save-statement" type="submit" class="selected small">Save</button>
-            <button id="cancel-statement" type="cancel" class="small">Cancel</button>
-        </blockquote>
-    </form>
-
-    <blockquote id="my-statement" class="statement"
-        {% if not participant.statement %}style="display: none"{% end %}>
-            {{ MAKING }} <span>
-            {{ wrap(participant.statement) }}</span><br />
-        <button class="small selected">Edit</button>
-    </blockquote>
-
-
-    <h3>What is your personal funding goal on Gittip?</h3>
-
-    <form class="goal">
-        <blockquote>
-
-            <table><tr><td>
-
-            <input type="radio" name="goal" id="goal-yes" value="custom"
-            {% if user.goal > 0 %} checked="true"{% end %}/>
-            <label for="goal-yes">My goal is to receive
-                $<input name="goal_custom" id="goal-custom"
-                {% if (user.goal is None) or (user.goal == 0) %}
-                {% else %}
-                value="{{ locale.format("%.2f", user.goal, grouping=True) }}"
-                {% end %} />
-                per week on Gittip.</label>
-
-            <br />
-
-            <input type="radio" name="goal" id="goal-0" value="null"
-            {% if user.goal is None %} checked="true"{% end %}/>
-            <label for="goal-0">I&rsquo;m grateful for tips, but I don&rsquo;t
-                have a specific funding goal.</label>
-
-            <br />
-
-            <input type="radio" name="goal" id="goal-null" value="0.00"
-            {% if user.goal == 0 %} checked="true"{% end %}/>
-            <label for="goal-null">I&rsquo;m not here to receive tips.
-                I&rsquo;ll generally regift them.</label>
-
-            </td></tr><tr><td class="buttons">
-
-            <button id="save-goal" type="submit" class="small selected">Save</button>
-            <button id="cancel-goal" type="cancel" class="small">Cancel</button>
-
-            </td></tr></table>
-
-        </blockquote>
-    </form>
-
-    <blockquote id="my-goal" class="goal">
-        <div>
-        {% if user.goal > 0 %}
-        My goal is to receive ${{ locale.format("%.2f", user.goal, grouping=True) }} per week on Gittip.
-        {% elif user.goal == 0 %}
-        I&rsquo;m not here to receive tips. I&rsquo;ll generally regift them.
-        {% else %}
-        I&rsquo;m grateful for tips, but I don&rsquo;t have a specific funding
-        goal.
-        {% end %}
-        </div>
-        <button class="small selected">Edit</button>
-    </blockquote>
-
-    <h2>You give <span id="total-giving">${{ total }}</span> per week.</h2>
-
-    <p>
-        <input name="anonymous" class="anonymous" type="checkbox"
-            {% if participant.anonymous %}checked="true"{% end %} />
-        <label for="anonymous" class="anonymous">Show as
-            &ldquo;anonymous&rdquo; on leaderboard.</label>
-    </p>
-
-    {% if total == 0 %}
-
-    <p>Here are some great programmers that you might consider tipping.<br />
-    <span class="help">Each has agreed to be listed here.</span></p>
-
-    {% end %}
-    <table id="matrix">
-        {% for tip in tips %}
-        {% if tip['amount'] > 0 or total == 0 %}
-        <tr class="not-over">
-            <th><a href="/{{ tip['tippee'] }}/">{{ tip['tippee'] }}</a></th>
-            <td>
-                {% for amount in AMOUNTS %}
-                <button amount="{{ amount }}" tippee="{{ tip['tippee'] }}"
-                    class="tip small {{ 'selected' if amount == tip['amount'] else 'empty' }}">{{ amount }}</button>
-                {% end %}
-                {% if tip['amount'] not in AMOUNTS %}
-                <span class="old-amount">
-                    <button class="tip small disabled selected">{{ tip['amount'] }}</button>
-                    <span class="old-amount-link">&mdash;
-                    <a href="http://blog.gittip.com/post/26505682007/is-personal-funding-viable" target="_blank">old amount</a>!</span>
-                </span>
-                {% end %}
-            </td>
-        </tr>
-        {% end %}
-        {% end %}
-        {% if unclaimed_total > 0 %}
-        <tr>
-            <td colspan="2">
-                <h3>Another ${{ unclaimed_total }} per week goes unclaimed.</h3>
-            </td>
-        </tr>
-        {% end %}
-        {% for tip in unclaimed_tips %}
-        {% if tip['amount'] > 0 or total == 0 %}
-        <tr class="not-over">
-            <th>
-                <img class="platform-icon" src="/assets/icons/{{ tip['platform'] }}.12.png" />
-                <a href="/{{ tip['tippee'] }}/">{{ _extract_username(tip) }}</a>
-            </th>
-            <td>
-                {% for amount in AMOUNTS %}
-                <button amount="{{ amount }}" tippee="{{ tip['tippee'] }}"
-                    class="tip small {{ 'selected' if amount == tip['amount'] else 'empty' }}">{{ amount }}</button>
-                {% end %}
-                {% if tip['amount'] not in AMOUNTS %}
-                <span class="old-amount">
-                    <button class="tip small disabled selected">{{ tip['amount'] }}</button>
-                    <span class="old-amount-link">&mdash;
-                    <a href="http://blog.gittip.com/post/26505682007/is-personal-funding-viable" target="_blank">old amount</a>!</span>
-                </span>
-                {% end %}
-            </td>
-        </tr>
-        {% end %}
-        {% end %}
-    </table>
-
-
-    <h2>You receive ${{ backed_amount }} per week.
-        <span class="small"><a href="history.html">History</a></span>
-    </h2>
-
-    {% if backed_amount == 0 %}
-
-    <p>How can you convince people to tip you? <b>Make the world
-        better!</b></p>
-
-    {% else %}
-
-    <p>This is an estimate based on the number of your donors whose credit card
-    worked last week. You may receive less this Thursday if someone&rsquo;s
-    credit card fails this week, or more if someone without a working card has
-    received money from someone <i>else</i> on Gittip that they want to pass on
-    to you.</p>
-
-    <p>Here&rsquo;s a breakdown of this estimate by tip amount, showing the
-    percentage of the number of tips:</p>
-
-    {% include "templates/tip-distribution.html" %}
-
-    <p><br />Here&rsquo;s the same info, but showing the percentage of the
-    total dollar amount of your tips:</p>
-
-    <table id="tip-distribution">
-        {% for amount, ncontributors, summed, pcontributors, psummed in giving_chart %}
-        <tr>
-            {% if str(amount) == '-1' %}
-            <td class="amount" colspan="2">Other</td>
-            {% else %}
-            <td class="dollar-sign">$</td>
-            <td class="amount">{{ amount }}</td>
-            {% end %}
-            <td colspan="2"></td>
-            <td class="count">
-                <span class="green bar" style="width: {{ psummed * 300 }}pt"></span>
-                {{ "%5.1f" % (psummed * 100) }}%
-                <span class="number">(${{ summed }})</span>
-            </td>
-        </tr>
-        {% end %}
-    </table>
-    {% end %}
-
-
-    <h2>Your balance is ${{ user.balance }}.</h2>
-
-
-    <h2>Embed #1</h2>
-
-    <p>Use this code to embed a Gittip button on your website:</p>
-
-    <pre>&lt;iframe style="border: 0; margin: 0; padding: 0;"
-        src="https://www.gittip.com/{{ participant.id }}/widget.html"
-        width="48pt" height="22pt"&gt;&lt;/iframe&gt;</pre>
-
-    <p>The button opens your profile on Gittip in a new tab or window.
-    Here&rsquo;s what the text reads:</p>
-
-    <ul class="no-bullets">
-
-        <li><button class="small selected">Gittip</button>&mdash;person is not
-        logged into Gittip or doesn&rsquo;t tip you</li>
-
-        <li><button class="small selected">3.00</button>&mdash;person tips you;
-        shows current gift amount</li>
-
-        <li><button class="small selected">You!</button>&mdash;your own
-        button</li>
-
-    </ul>
-
-    <p>Here&rsquo;s an example using
-        <a href="/whit537/">whit537</a>:
-        <iframe style="border: 0; margin: 0 0 -3pt 3pt; padding: 0;"
-            src="https://www.gittip.com/whit537/widget.html"
-            width="48pt" height="22pt"></iframe>
-    </p>
-
-
-    <h2>Embed #2</h2>
-
-    <p>Use this code to add a Gittip &ldquo;receiving&rdquo; widget on your website:</p>
-
-<pre>&lt;script data-gittip-username="{{ participant.id }}"
-src="https://www.gittip.com/assets/widgets/0002.js"&gt;
-&lt;/script&gt;</pre>
-
-    <p>Here&rsquo;s what it looks like:</p>
-
-    <script data-gittip-username="{{ participant.id }}" src="/assets/widgets/0002.js"></script>
-
-
-    <h2>Connected Accounts</h2>
-
-
+    {% include "templates/profile-edit.html" %}
 {% else %}
 
-    <h2 class="first"><b>{{ participant.id }}</b> receives
-        ${{ backed_amount }} per week.</h2>
-
+<div class="col1">
+    <h2>Contribution</h2>
     {% if participant.statement %}
     <blockquote class="statement">{{ MAKING }}
     {{ wrap(participant.statement) }}</blockquote>
@@ -766,89 +436,18 @@ src="https://www.gittip.com/assets/widgets/0002.js"&gt;
 
     {% end %}
 
-    <h3>Connected Accounts</h3>
-
+    {% include "templates/connected-accounts.html" %}
+</div>
 {% end %}
 
-    <table id="accounts">
-        <tr>
-            <td class="account-type">
-                <img src="/assets/twitter.png" />
-            </td>
-            <td class="account-details">
-                {% if twitter_account is None %}
-                    {% if not user.ANON and user.id == participant.id %}
-                        Connect a <a href="{{ twitter.oauth_url(website, u'connect') }}">Twitter account</a>.
-                    {% else %}
-                        No Twitter account connected.
-                    {% end %}
-                {% else %}
-                <a href="{{ twitter_account.user_info.get('html_url', '') }}"
-                    ><img class="avatar"
-                    src="{{ twitter_account.user_info.get('profile_image_url_https', '/assets/%s/no-avatar.png' % __version__) }}"
-                    />{{ twitter_account.user_info.get('screen_name') }}
-                    {% if twitter_account.user_info.get('name') %}({{ twitter_account.user_info.get('name') }}){% end %}
-                </a>
-                {% end %}
-                <div class="account-type">Twitter</div>
-            </td>
-        </tr>
-        <tr>
-            <td class="account-type">
-                <img src="/assets/octocat.png" />
-            </td>
-            <td class="account-details">
-                {% if github_account %}
-                <a href="{{ github_account.user_info.get('html_url', '') }}"
-                    ><img class="avatar" src="{{ github_account.user_info.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}"
-                    />{{ github_account.user_info.get('login') }}
-                    {% if github_account.user_info.get('name') %}({{ github_account.user_info.get('name') }}){% end %}<br />
-                </a>
-                {% else %}
-                    {% if not user.ANON and user.id == participant.id %}
-                        Connect a <a href="{{ github.oauth_url(website, u'connect') }}">GitHub account</a>.
-                    {% else %}
-                        No GitHub account connected.
-                    {% end %}
-                {% end %}
-                <div class="account-type">GitHub</div>
-            </td>
-        </tr>
-        <tr>
-            <td class="account-type">
-                <img src="/assets/balanced-avatar.png" /></a>
-            </td>
-            <td class="account-details">
-                {% if user.id == participant.id %}
+<div class="clear"></div>
 
-                <a href="/credit-card.html">Credit card</a>:
-                    {% if participant.last_bill_result != "" %}&#x2718;{% else %}&#x2714;{% end %}
-                &nbsp; &nbsp; &nbsp;
-                <a href="/bank-account.html">Bank account</a>:
-                    {% if participant.last_ach_result != "" %}&#x2718;{% else %}&#x2714;{% end %}
-
-                {% else %}
-
-                Credit card:
-                    {% if participant.last_bill_result != "" %}&#x2718;{% else %}&#x2714;{% end %}
-                &nbsp; &nbsp; &nbsp;
-                Bank account:
-                    {% if participant.last_ach_result != "" %}&#x2718;{% else %}&#x2714;{% end %}
-
-                {% end %}
-                <div class="account-type">{% if user.ADMIN and participant.balanced_account_uri %}
-                    <a href="https://www.balancedpayments.com/{{ participant.balanced_account_uri[3:] }}"
-                        >Balanced Payments</a>{% else %}Balanced Payments{% end %}</div>
-            </td>
-        </tr>
-    </table>
-
-    {% if user.ADMIN %}
-    <p style="text-align: right">
-        <input name="is_suspicious" class="is-suspicious-knob" type="checkbox"
-            {% if participant.is_suspicious %}checked="true"{% end %} />
-        <label for="is_suspicious" class="is-suspicious-knob">Suspicious</label>
-    </p>
-    {% end %}
+{% if user.ADMIN %}
+<p style="text-align: right">
+    <input name="is_suspicious" class="is-suspicious-knob" type="checkbox"
+        {% if participant.is_suspicious %}checked="true"{% end %} />
+    <label for="is_suspicious" class="is-suspicious-knob">Suspicious</label>
+</p>
+{% end %}
 
 {% end %}
