@@ -51,19 +51,13 @@ locked = False
         vertical-align: middle;
         padding-right: 0.5em;
     }
-    .old-amount-link {
-        font-size: 9pt;
-        display: none;
-        position: relative;
-        top: 2pt;
-        line-height: 9pt;
-    }
 </style>
 <table id="matrix">
     <tr>
         <td colspan="2">
             {% if participant == user %}
-            <h2>You give ${{ total }} per week</h2>
+            <h2>You give $<span class="total-giving">{{ total }}</span> per
+                week</h2>
             {% if total == 0 %}
             <h2>Not sure who to give to? Here are some suggestions</h2>
             {% end %}
@@ -82,11 +76,7 @@ locked = False
                 class="{% if user == participant %}tip{% end %} {{ 'selected' if amount == tip['amount'] else 'empty' }}">{{ amount }}</button>
             {% end %}
             {% if tip['amount'] not in AMOUNTS %}
-            <span class="old-amount">
-                <button class="{% if user == participant %}tip{% end %} disabled selected">{{ tip['amount'] }}</button>
-                <span class="old-amount-link">&mdash;
-                <a href="http://blog.gittip.com/post/26505682007/is-personal-funding-viable" target="_blank">old amount</a>!</span>
-            </span>
+            <button class="old-amount {% if user == participant %}tip{% end %} selected">{{ tip['amount'] }}</button>
             {% end %}
         </td>
     </tr>
@@ -112,11 +102,7 @@ locked = False
                 class="{% if user == participant %}tip{% end %} {{ 'selected' if amount == tip['amount'] else 'empty' }}">{{ amount }}</button>
             {% end %}
             {% if tip['amount'] not in AMOUNTS %}
-            <span class="old-amount">
-                <button class="{% if user == participant %}tip{% end %} disabled selected">{{ tip['amount'] }}</button>
-                <span class="old-amount-link">&mdash;
-                <a href="http://blog.gittip.com/post/26505682007/is-personal-funding-viable" target="_blank">old amount</a>!</span>
-            </span>
+            <button class="old-amount {% if user == participant %}tip{% end %} selected">{{ tip['amount'] }}</button>
             {% end %}
         </td>
     </tr>

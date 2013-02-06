@@ -631,9 +631,9 @@ Gittip.initTipButtons = function()
              }
         )
         .done(function(data) {
-                $('.old-amount', container).remove();
-                $('#total-giving').text("$" + data['total_giving']);
-              });
+            $('.old-amount', container).remove();
+            $('.total-giving').text(data['total_giving']);
+        });
     });
 };
 
