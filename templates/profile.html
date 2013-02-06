@@ -1,0 +1,21 @@
+{% extends "participant.html" %}
+{% block head2 %}
+    <script src="/assets/{{ __version__ }}/profile.js"></script>
+    {% if user.ADMIN %}<script src="/assets/{{ __version__ }}/admin.js"></script>{% end %}
+    <script>$(document).ready(Gittip.initTipButtons)</script>
+{% end %}
+
+{% block heading %}<h2 class="top"><span>{{ hero }}</span></h2>{% end %}
+
+{% block nav %}
+{% if participant.id == user.id or user.ADMIN %}
+<div class="buttons nav">
+    <h2>Navigation</h2>
+    {% set current_page = path.raw.split('/')[2] %}
+    {% set pages = [('/', 'Profile'), ('/giving/', 'Giving'), ('/history/', 'History'), ('/widgets/', 'Widgets')] %}
+    {% for slug, name in pages %}
+    <a href="/{{ participant.id }}{{ slug }}"><button{% if slug.strip('/') == current_page %} class="selected"{% end %}>{{ name }}</button></a>
+    {% end %}
+</div>
+{% end %}
+{% end %}

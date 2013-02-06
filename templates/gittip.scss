@@ -102,6 +102,9 @@ a {
     color: $green;
     text-decoration: none;
 }
+a img {
+    border: 0;
+}
 p, dd {
     margin: 0;
     padding: 0 0 1em;
@@ -306,7 +309,7 @@ button.selected:hover {
             padding: 0 10px;
         }
         &:after {
-            background: #848384;
+            background: $black;
             content: "";
             display: block;
             height: 1px;
@@ -329,7 +332,7 @@ button.selected:hover {
             }
         }
         &:after {
-            background: #848384;
+            background: $black;
             content: "";
             display: block;
             height: 1px;
@@ -543,7 +546,7 @@ button.selected:hover {
 }
 #footer {
     margin: 4em 0 1em;
-    border-top: 1px solid $light-gray;
+    border-top: 1px solid $black;
     padding: 0.5em 0 0;
     text-align: right;
     font: normal 12px/16px $Helvetica;
@@ -598,6 +601,52 @@ button.selected:hover {
         height: 18pt;
         margin-right: 6pt;
         float: left;
+    }
+}
+
+
+
+#history {
+    th {
+        padding-top: 24pt;
+    
+        b {
+            font-weight: 300;
+            font-size: 9pt;
+        }
+    }
+    td {
+        padding: 1pt 3pt;
+        font-size: 9pt;
+        line-height: 10pt;
+        text-align: right;
+
+        h2 {
+            text-align: left;
+        }
+    }
+    .head td {
+        font-size: 9pt;
+        white-space: normal;
+        text-align: left;
+        border-bottom: 1px solid #614C3E;
+    }
+    td.card, td.fees, td.debits {
+        color: red;
+    }
+    .head td.card, .head td.fees, .head td.debits {
+        color: #614C3E;
+    }
+    td.notes {
+        text-align: left;
+    }
+    .fees {
+        border-right: 1px solid #614C3E;
+        text-align: right;
+    }
+    .outside {
+        border-right: 1px solid #614C3E;
+        text-align: right ! important;
     }
 }
 

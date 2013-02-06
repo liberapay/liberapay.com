@@ -3,10 +3,11 @@ $(document).ready(function()
     // Wire up is_suspicious toggle.
     // =============================
 
-    $('.is-suspicious-knob').click(function()
+    $('label.is-suspicious-knob').click(function()
     {
+        var participant_id = $(this).attr('data-participant-id');
         jQuery.ajax(
-            { url: 'toggle-is-suspicious.json'
+            { url: '/' + participant_id + '/toggle-is-suspicious.json'
             , type: 'POST'
             , dataType: 'json'
             , success: function(data)

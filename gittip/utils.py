@@ -13,9 +13,17 @@ def wrap(u):
     return u if u else '...'
 
 
-def get_participant(request):
+def get_participant(request, restrict=True):
     """Given a Request, raise Response or return Participant.
+
+    If user is not None then we'll restrict access to owners and admins.
+
     """
+    user = request.context['user']
+    if restrict:
+        if user.ANON:
+            raise Response(404)
+
     participant_id = request.line.uri.path['participant_id']
     participant = Participant.query.get(participant_id)
 
@@ -32,5 +40,10 @@ def get_participant(request):
         if to is None:
             raise Response(404)
         request.redirect(to)
+
+    if restrict:
+        if participant != user:
+            if not user.ADMIN:
+                raise Response(403)
 
     return participant

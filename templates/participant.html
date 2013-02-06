@@ -5,7 +5,7 @@
 <table class="on-profile{% if participant.is_suspicious %} is-suspicious{% end %}">
     <tr>
         <td class="picture">
-            <img src="{{ participant.get_img_src(128) }}" />
+            <a href="/{{ participant.id }}/"><img src="{{ participant.get_img_src(128) }}" /></a>
         </td>
         <td class="giving-receiving">
         {% set g = giving = participant.get_dollars_giving() %}
@@ -91,20 +91,40 @@
 </div>
 {% end %}
 
-{% if participant.id == user.id or user.ADMIN %}
-<div class="buttons nav">
-    <h2>Navigation</h2>
-    <a href="/{{ participant.id }}/"><button>Profile</button></a>
-    <a href="/{{ participant.id }}/giving/"><button>Giving</button></a>
-    <a href="/{{ participant.id }}/statements/"><button>Statements</button></a>
-    <a href="/{{ participant.id }}/widgets/"><button>Widgets</button></a>
+{% block nav %}{% end %}
+
+{% if participant.id == 'aaronsw' %}
+<style>
+    .rip {
+        background: black;
+        text-align: center;
+        padding: 5px;
+        color: white;
+    }
+    .rip a {
+        display: block;
+        color: white;
+    }
+</style>
+<div class="rip">
+    <a href="http://news.ycombinator.com/item?id=5046845">RIP :`(</a>
 </div>
+<!--
+
+After following Aaron's career for a decade, I interacted with him for the
+first time three days before he committed suicide:
+
+    https://twitter.com/aaronsw/status/288664016723791873
+
+:`(
+
+-->
 {% end %}
 
 {% if user.ADMIN %}
-<label class="is-suspicious-knob">
+<label class="is-suspicious-knob" data-participant-id="{{ participant.id }}">
     Suspicious
-    <input class="is-suspicious-knob" type="checkbox"
+    <input type="checkbox"
         {% if participant.is_suspicious %}checked="true"{% end %} />
 </label>
 {% elif participant.is_suspicious %}

@@ -3,6 +3,11 @@ from gittip import AMOUNTS
 from gittip.utils import get_participant
 
 
+tip_suggestions = ('jeresig', 'antirez', 'wycats', 'fabpot', 'mitsuhiko',
+                   'jtauber', 'kennethreitz', 'alex', 'taylorotwell')
+tip_suggestions = [{'tippee': name, 'amount': 0} for name in tip_suggestions]
+
+
 def _extract_username(tip):
     if tip['platform'] == 'github':
         key = 'login'
@@ -10,46 +15,41 @@ def _extract_username(tip):
         assert tip['platform'] == 'twitter', tip  # sanity check
         key = 'screen_name'
     return tip['user_info'][key]
-^L
 
-participant = get_participant(request)
-if participant != user:
-    raise Response(404)
+# ========================================================================== ^L
+participant = get_participant(request, restrict=True)
 
 backed_amount = participant.get_dollars_receiving()
-
-if not user.ANON:
-    if user.id == participant.id or user.ADMIN:
-        giving_chart, npatrons, contributed = \
+giving_chart, npatrons, contributed = \
                                            participant.get_chart_of_receiving()
-    if user.id == participant.id:
-        tips, total, unclaimed_tips, unclaimed_total = \
-                                                  user.get_giving_for_profile()
-        if total == 0:
-            tips = tip_suggestions
-        assert backed_amount == contributed, (backed_amount, contributed)
-    else:
-        my_tip = user.get_tip_to(participant.id)
+tips, total, unclaimed_tips, unclaimed_total = \
+                                           participant.get_giving_for_profile()
+suggest_tips = (total == 0) and (user == participant)
+if suggest_tips:
+    tips = tip_suggestions
+
+assert backed_amount == contributed, (backed_amount, contributed)
 
 
 username = participant.id   # used in footer shared with on/$platform/ pages
-title = "Giving"
-^L
-{% extends "templates/participant.html" %}
+hero = "Giving"
+title = "%s - %s" % (participant.id, hero)
+locked = False
+
+# ========================================================================== ^L
+{% extends "templates/profile.html" %}
 {% block page %}
 <style>
     #matrix {
         margin: 0 auto;
     }
-    #matrix TR.not-over BUTTON.empty {
-        background: transparent;
-        color: white;
-    }
-    #matrix TD {
+    #matrix td {
         text-align: left;
+        height: 30px;
     }
-    #matrix TH {
-        vertical-align: top;
+    #matrix th {
+        vertical-align: middle;
+        padding-right: 0.5em;
     }
     .old-amount-link {
         font-size: 9pt;
@@ -59,50 +59,31 @@ title = "Giving"
         line-height: 9pt;
     }
 </style>
-<script>
-    $(document).ready(function()
-    {
-
-        // Wire up buttons.
-        // ================
-
-        Gittip.initTipButtons();
-
-        function rowIn()
-        {
-            $(this).addClass('over');
-            $(this).removeClass('not-over');
-        }
-        function rowOut()
-        {
-            $(this).removeClass('over');
-            $(this).addClass('not-over');
-        }
-        $('#matrix TR').hover(rowIn, rowOut);
-
-        function oldIn() { $('.old-amount-link', this).show(); }
-        function oldOut() { $('.old-amount-link', this).hide(); }
-        $('.old-amount').hover(oldIn, oldOut);
-    });
-</script>
 <table id="matrix">
     <tr>
         <td colspan="2">
-            <h2>You give ${{ total }} per week.</h2>
+            {% if participant == user %}
+            <h2>You give ${{ total }} per week</h2>
+            {% if total == 0 %}
+            <h2>Not sure who to give to? Here are some suggestions</h2>
+            {% end %}
+            {% else %}
+            <h2>{{ participant.id }} gives ${{ total }} per week</h2>
+            {% end %}
         </td>
     </tr>
     {% for tip in tips %}
-    {% if tip['amount'] > 0 or total == 0 %}
-    <tr class="not-over">
+    {% if tip['amount'] > 0 or suggest_tips %}
+    <tr>
         <th><a href="/{{ tip['tippee'] }}/">{{ tip['tippee'] }}</a></th>
         <td>
             {% for amount in AMOUNTS %}
             <button amount="{{ amount }}" tippee="{{ tip['tippee'] }}"
-                class="tip small {{ 'selected' if amount == tip['amount'] else 'empty' }}">{{ amount }}</button>
+                class="{% if user == participant %}tip{% end %} {{ 'selected' if amount == tip['amount'] else 'empty' }}">{{ amount }}</button>
             {% end %}
             {% if tip['amount'] not in AMOUNTS %}
             <span class="old-amount">
-                <button class="tip small disabled selected">{{ tip['amount'] }}</button>
+                <button class="{% if user == participant %}tip{% end %} disabled selected">{{ tip['amount'] }}</button>
                 <span class="old-amount-link">&mdash;
                 <a href="http://blog.gittip.com/post/26505682007/is-personal-funding-viable" target="_blank">old amount</a>!</span>
             </span>
@@ -114,13 +95,13 @@ title = "Giving"
     {% if unclaimed_total > 0 %}
     <tr>
         <td colspan="2">
-            <h2>Another ${{ unclaimed_total }} per week goes unclaimed.</h2>
+            <h2>Another ${{ unclaimed_total }} per week goes unclaimed</h2>
         </td>
     </tr>
     {% end %}
     {% for tip in unclaimed_tips %}
-    {% if tip['amount'] > 0 or total == 0 %}
-    <tr class="not-over">
+    {% if tip['amount'] > 0 %}
+    <tr>
         <th>
             <img class="platform-icon" src="/assets/icons/{{ tip['platform'] }}.12.png" />
             <a href="/{{ tip['tippee'] }}/">{{ _extract_username(tip) }}</a>
@@ -128,11 +109,11 @@ title = "Giving"
         <td>
             {% for amount in AMOUNTS %}
             <button amount="{{ amount }}" tippee="{{ tip['tippee'] }}"
-                class="tip small {{ 'selected' if amount == tip['amount'] else 'empty' }}">{{ amount }}</button>
+                class="{% if user == participant %}tip{% end %} {{ 'selected' if amount == tip['amount'] else 'empty' }}">{{ amount }}</button>
             {% end %}
             {% if tip['amount'] not in AMOUNTS %}
             <span class="old-amount">
-                <button class="tip small disabled selected">{{ tip['amount'] }}</button>
+                <button class="{% if user == participant %}tip{% end %} disabled selected">{{ tip['amount'] }}</button>
                 <span class="old-amount-link">&mdash;
                 <a href="http://blog.gittip.com/post/26505682007/is-personal-funding-viable" target="_blank">old amount</a>!</span>
             </span>

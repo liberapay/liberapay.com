@@ -9,10 +9,6 @@ from gittip import AMOUNTS
 from gittip.models import Participant
 from gittip.utils import get_participant, wrap
 
-tip_suggestions = ('jeresig', 'antirez', 'wycats', 'fabpot', 'mitsuhiko',
-                   'jtauber', 'kennethreitz', 'alex', 'taylorotwell')
-tip_suggestions = [{'tippee': name, 'amount': 0} for name in tip_suggestions]
-
 MAKING = "I am making the world better by"
 
 def _clip(text, n):
@@ -23,7 +19,7 @@ def _clip(text, n):
 
 # ========================================================================== ^L
 
-participant = get_participant(request)
+participant = get_participant(request, restrict=False)
 
 
 # Load money info.
@@ -55,7 +51,7 @@ username = participant.id   # used in footer shared with on/$platform/ pages
 github_account, twitter_account = participant.get_accounts_elsewhere()
 
 # ========================================================================== ^L
-{% extends templates/participant.html %}
+{% extends templates/profile.html %}
 {% block head %}
     <meta name="twitter:card" content="summary" />
     <meta name="og:url" content="https://www.gittip.com/{{ username }}/" />
@@ -63,15 +59,8 @@ github_account, twitter_account = participant.get_accounts_elsewhere()
     <meta name="og:title" content="{{ participant.get_og_title() }}" />
     <meta name="og:description" content="{{ _clip(MAKING + " " + participant.statement, 200) }}" />
     <meta name="og:image" content="https://www.gittip.com/assets/gittip.opengraph.png" />
-    <script src="/assets/{{ __version__ }}/profile.js"></script>
-    {% if user.ADMIN %}
-    <script src="/assets/{{ __version__ }}/admin.js"></script>
-    {% end %}
-    <script>$(document).ready(Gittip.initTipButtons)</script>
 {% end %}
-{% block heading %}
-<h2 class="top"><span>Profile</span></h2>
-{% end %}
+{% block heading %}<h2 class="top"><span>Profile</span></h2>{% end %}
 {% block page %}
 
     <style>
@@ -157,30 +146,7 @@ github_account, twitter_account = participant.get_accounts_elsewhere()
 
     </style>
 
-    {% if participant.id == 'aaronsw' %}
-    <style>
-        .rip {
-            text-align: center;
-            font-size: larger;
-            margin: 3em 0;
-        }
-    </style>
-    <div class="rip">
-        <a href="http://news.ycombinator.com/item?id=5046845">RIP</a> :`(
-    </div>
-    <!--
-
-    After following Aaron's career for a decade, I interacted with him for the
-    first time three days before he committed suicide:
-
-        https://twitter.com/aaronsw/status/288664016723791873
-
-    :`(
-
-    -->
-    {% end %}
-
-{% if not user.ANON and user.id == participant.id %}
+{% if user == participant %}
     {% include "templates/profile-edit.html" %}
 {% else %}
 

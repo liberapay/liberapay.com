@@ -1,14 +1,15 @@
 from aspen import Response
 from gittip.utils import get_participant
-^L
-participant = get_participant(request)
+from gittip import AMOUNTS
+# ========================================================================== ^L
 
-if participant != user:
-    raise Response(404)
+participant = get_participant(request, restrict=True)
+hero = "Widgets"
+title = "%s - %s" % (participant.id, hero)
+locked = False
 
-title = "Widgets"
-^L
-{% extends "templates/participant.html" %}
+# ========================================================================== ^L
+{% extends "templates/profile.html" %}
 {% block page %}
 <div class="col1">
     <h2>Widget #1</h2>
