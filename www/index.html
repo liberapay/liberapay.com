@@ -113,7 +113,7 @@ givers = db.fetchall("""
     <div class="top-receivers">
         <div class="top group">
             <h2>Top Receivers</h2>
-            <button href="#">View Unclaimed</button>
+            <a href="/about/unclaimed.html"><button>View Unclaimed</button></a>
         </div>
         <ul class="group">
             {% for i, receiver in enumerate(receivers, start=1) %}
