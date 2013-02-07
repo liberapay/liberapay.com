@@ -97,7 +97,7 @@ title = "Credit Card"
             <div class="constrain-width group">
 
                 {% if status != "missing" %}
-                <h2>Your current card is {{ card['last4'] }}</h2>
+                <h2>Current: {{ card['card_type'] }} {{ card['last4'] }}</h2>
                 {% end %}
 
                 <div id="feedback">{% if user.last_bill_result %}

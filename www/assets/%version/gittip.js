@@ -94,11 +94,11 @@ Gittip.showFeedback = function(msg, details)
     if (msg === null)
         msg = "Failure";
     msg = '<h2><span class="highlight">' + msg + '</span></h2>';
-    msg += '<div class="details"></div>';
+    msg += '<ul class="details"></ul>';
     $('#feedback').html(msg);
     if (details !== undefined)
         for (var i=0; i < details.length; i++)
-            $('#feedback .details').append('<p>' + details[i] + '</p>');
+            $('#feedback .details').append('<li>' + details[i] + '</li>');
 }
 
 Gittip.submitForm = function(url, data, success, error)
@@ -156,7 +156,7 @@ Gittip.submitDeleteForm = function(e)
 {
     var item = $("#payout").length ? "bank account" : "credit card";
     var slug = $("#payout").length ? "bank-account" : "credit-card";
-    var msg = "Really delete your " + item + " details?";
+    var msg = "Really disconnect your " + item + "?";
     if (!confirm(msg))
     {
         e.stopPropagation();

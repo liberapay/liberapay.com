@@ -91,9 +91,8 @@ title = "Bank Account"
             <div class="constrain-width group">
 
                 {% if bank_account and bank_account.is_setup %}
-                <h2>Your current account is a
-                {{ bank_account['bank_name'] }} account ending in
-                {{ bank_account['last_four'] }}</h2>
+                <h2>Current: {{ bank_account['bank_name'] }}
+                ******{{ bank_account['last_four'] }}</h2>
                 {% end %}
 
                 {% if account and 'merchant' in account.roles %}

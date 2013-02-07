@@ -654,11 +654,11 @@ button.selected:hover {
             width: 292px;
             margin: 0;
             padding: 3px;
-            border: 1px solid #CCBAAD;
+            border: 1px solid $light-brown;
             outline: none;
         }
         INPUT.disabled {
-            color: #CCBAAD;
+            color: $light-brown;
         }
 
         .half INPUT {
@@ -669,7 +669,7 @@ button.selected:hover {
             margin-left: 5px;
         }
         INPUT:focus {
-            border-color: #2A8F79;
+            border-color: $green;
         }
         .float {
             float: left;
@@ -687,6 +687,14 @@ button.selected:hover {
         }
         .buttons {
             text-align: center;
+        }
+        #feedback {
+            .details li {
+                margin: 0;
+                padding: 0 0 0 2em;
+                text-indent: -2em;
+                font: normal 12px $Helvetica;
+            }
         }
     }
 }
