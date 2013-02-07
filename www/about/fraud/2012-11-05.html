@@ -167,12 +167,12 @@ bystanders = sorted(bystanders.items(), key=lambda i: i[1], reverse=True)
 
 fmtdate = lambda d: str(d)[:10]
 
+title = "The Delpan Incident"
+
 ^L
 {% extends templates/base.html %}
 {% block box %}
 <div class="as-content left">
-
-    <h2>The Delpan Incident</h2>
 
     <p>Gittip&rsquo;s first <a href="./">fraud incident</a> surfaced when an
     unknown user named delpan appeared among the top receivers on the site.
@@ -220,8 +220,6 @@ fmtdate = lambda d: str(d)[:10]
     </ul>
 
 </div>
-{% end %}
-{% block heading %}
 {% end %}
 {% block page %}
 <style>
