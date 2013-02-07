@@ -18,20 +18,11 @@ def _extract_username(tip):
 
 # ========================================================================== ^L
 participant = get_participant(request, restrict=True)
-
-backed_amount = participant.get_dollars_receiving()
-giving_chart, npatrons, contributed = \
-                                           participant.get_chart_of_receiving()
 tips, total, unclaimed_tips, unclaimed_total = \
                                            participant.get_giving_for_profile()
 suggest_tips = (total == 0) and (user == participant)
 if suggest_tips:
     tips = tip_suggestions
-
-assert backed_amount == contributed, (backed_amount, contributed)
-
-
-username = participant.id   # used in footer shared with on/$platform/ pages
 hero = "Giving"
 title = "%s - %s" % (participant.id, hero)
 locked = False
