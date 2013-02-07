@@ -8,7 +8,6 @@ from gittip.elsewhere import github
 # ========================================================================== ^L
 
 status = ". . ."
-payments_down = False
 balanced_account_uri = None
 
 if not user.ANON:
@@ -21,23 +20,11 @@ if not user.ANON:
             status = "working" if user.last_bill_result == "" else "failing"
 
     if balanced_account_uri:
-        try:
-            card = billing.BalancedCard(balanced_account_uri)
-        except:  # balanced is unavailable (or balanced_account_uri is bad?)
-            log(traceback.format_exc())
-            payments_down = True
-        else:
-            assert balanced_account_uri == card['id']
-            payments_down = False
+        card = billing.BalancedCard(balanced_account_uri)
+        assert balanced_account_uri == card['id']
     else:
-        try:
-            card = billing.StripeCard(stripe_customer_id)
-        except:  # stripe is unavailable (or stripe_customer_id is bad?)
-            log(traceback.format_exc())
-            payments_down = True
-        else:
-            assert stripe_customer_id == card['id']
-            payments_down = False
+        card = billing.StripeCard(stripe_customer_id)
+        assert stripe_customer_id == card['id']
 
     username = user.id
 
@@ -48,13 +35,6 @@ title = "Credit Card"
 {% block heading %}
     <h2 class="top"><span>Your credit card is <em id="status">{{ status }}</em></span></h2>
 
-    {% if payments_down %}
-
-    <p>We are experiencing technical difficulties. Could I ask if you&rsquo;d
-    be willing to try again later? Thanksorry. :-(</p>
-
-    {% else %}
-
     <p>When you don&rsquo;t have enough money in your Gittip account to cover
     your gifts, we {% if balanced_account_uri %}will{% else %}can{% end %}
     attempt to pull money in using
@@ -62,7 +42,6 @@ title = "Credit Card"
     If your credit card is missing or fails then your gifts won&rsquo;t go
     through for that week.<p>
 
-    {% end %}
 {% end %}
 
 {% block box %}
