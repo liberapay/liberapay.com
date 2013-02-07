@@ -364,7 +364,8 @@ button.selected:hover {
         color: $brown;
     }
     h2 {
-        font: bold 16px $Helvetica;
+        font: bold 14px $Helvetica;
+        text-transform: uppercase;
         color: $brown;
     }
 
@@ -377,8 +378,11 @@ button.selected:hover {
         }
     }
 
-    .on-homepage {
+    .as-content {
         padding: 20px;
+        &.left {
+            text-align: left;
+        }
 
         h1 {
             padding-bottom: 15px;

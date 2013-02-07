@@ -169,6 +169,60 @@ fmtdate = lambda d: str(d)[:10]
 
 ^L
 {% extends templates/base.html %}
+{% block box %}
+<div class="as-content left">
+
+    <h2>The Delpan Incident</h2>
+
+    <p>Gittip&rsquo;s first <a href="./">fraud incident</a> surfaced when an
+    unknown user named delpan appeared among the top receivers on the site.
+    This page provides data and collects information related to the
+    incident.</p>
+
+
+    <h2>Status</h2>
+
+    <p>This incident is <b>open</b>.</p>
+
+
+    <h2>Related</h2>
+
+    <ul>
+
+        <li>GitHub ticket: &ldquo;<a
+            href="https://github.com/zetaweb/www.gittip.com/issues/329">make sure
+            "delpan" is not stealing money :-)</a>&rdquo;</li>
+
+        <li>Blog post: &ldquo;<a
+            href="http://blog.gittip.com/post/35057426257/stolen-money-on-gittip-part-1">Stolen
+            Money on Gittip, Part 1</a>&rdquo;</li>
+
+        <li>Hacker News discussion: &ldquo;<a
+        href="http://news.ycombinator.com/item?id=4743954">Stolen Money on
+        Gittip, Part 1</a>&rdquo;</li>
+
+        <li>Vice Motherboard: &ldquo;<a
+        href="http://motherboard.vice.com/2012/11/6/thieves-launder-money-by-crowdfunding-themselves--2">Thieves
+        Launder Money by Crowdfunding Themselves</a>&rdquo;</li>
+
+        <li>Secure Computing Magazine: &ldquo;<a
+        href="http://www.scmagazine.com.au/News/322118,fraudsters-launder-cash-though-grants-startup.aspx?utm_source=feed&utm_medium=rss&utm_campaign=SC+Magazine+All+Articles+feed">Fraudsters
+        launder cash though grants startup</a>&rdquo;</li>
+
+        <li>Blog post: &ldquo;<a
+        href="http://blog.gittip.com/post/35314128322/the-delpan-incident">The
+        Delpan Incident</a>&rdquo; (Part 2 of the above)</li>
+
+        <li>Hacker News discussion: &ldquo;<a
+        href="http://news.ycombinator.com/item?id=4763317">The Delpan
+        Incident</a>&rdquo;</li>
+
+    </ul>
+
+</div>
+{% end %}
+{% block heading %}
+{% end %}
 {% block page %}
 <style>
     TH {
@@ -227,60 +281,9 @@ fmtdate = lambda d: str(d)[:10]
         color: red;
     }
 </style>
+<div class="col0">
 
-<div id="their-voice">
-
-    <h2>The Delpan Incident</h2>
-
-    <p>Gittip&rsquo;s first <a href="./">fraud incident</a> surfaced when an
-    unknown user named delpan appeared among the top receivers on the site.
-    This page provides data and collects information related to the
-    incident.</p>
-
-
-    <h3>Status</h3>
-
-    <p>This incident is <b>open</b>.</p>
-
-
-    <h3>Related</h3>
-
-    <ul>
-
-        <li>GitHub ticket: &ldquo;<a
-            href="https://github.com/zetaweb/www.gittip.com/issues/329">make sure
-            "delpan" is not stealing money :-)</a>&rdquo;</li>
-
-        <li>Blog post: &ldquo;<a
-            href="http://blog.gittip.com/post/35057426257/stolen-money-on-gittip-part-1">Stolen
-            Money on Gittip, Part 1</a>&rdquo;</li>
-
-        <li>Hacker News discussion: &ldquo;<a
-        href="http://news.ycombinator.com/item?id=4743954">Stolen Money on
-        Gittip, Part 1</a>&rdquo;</li>
-
-        <li>Vice Motherboard: &ldquo;<a
-        href="http://motherboard.vice.com/2012/11/6/thieves-launder-money-by-crowdfunding-themselves--2">Thieves
-        Launder Money by Crowdfunding Themselves</a>&rdquo;</li>
-
-        <li>Secure Computing Magazine: &ldquo;<a
-        href="http://www.scmagazine.com.au/News/322118,fraudsters-launder-cash-though-grants-startup.aspx?utm_source=feed&utm_medium=rss&utm_campaign=SC+Magazine+All+Articles+feed">Fraudsters
-        launder cash though grants startup</a>&rdquo;</li>
-
-        <li>Blog post: &ldquo;<a
-        href="http://blog.gittip.com/post/35314128322/the-delpan-incident">The
-        Delpan Incident</a>&rdquo; (Part 2 of the above)</li>
-
-        <li>Hacker News discussion: &ldquo;<a
-        href="http://news.ycombinator.com/item?id=4763317">The Delpan
-        Incident</a>&rdquo;</li>
-
-    </ul>
-
-</div>
-
-
-<h3>Summary</h3>
+<h2>Summary</h2>
 
 <p>The fraudulent credit card transactions associated with this incident
 occured over a period of <b>{{ nweeks }} weeks</b>, from
@@ -312,7 +315,7 @@ occured over a period of <b>{{ nweeks }} weeks</b>, from
 </table>
 
 
-<h3>Innocent Bystanders (N = {{ len(bystanders) }})</h3>
+<h2>Innocent Bystanders (N = {{ len(bystanders) }})</h2>
 
 <p>These people inadvertently received stolen money as part of this
 incident.</p>
@@ -332,11 +335,14 @@ incident.</p>
         {% if user.ADMIN %}<td></td>{% end %}
     </tr>
 </table>
+</div>
 
-
-<h3>Suspicious Accounts (N = {{ len(suspicious) }})</h3>
-
-<table class="details">
+<table class="details centered">
+    <tr>
+        <td colspan="5">
+            <h2>Suspicious Accounts (N = {{ len(suspicious) }})</h2>
+        </td>
+    </tr>
     <tr>
         <th></th>
         <th class="balance">Balance</th>
