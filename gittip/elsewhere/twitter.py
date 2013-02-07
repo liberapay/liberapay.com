@@ -9,6 +9,9 @@ from gittip.elsewhere import AccountElsewhere, _resolve
 class TwitterAccount(AccountElsewhere):
     platform = u'twitter'
 
+    def get_url(self):
+        return "https://twitter.com/" + self.user_info['screen_name']
+
 
 def resolve(screen_name):
     return _resolve(u'twitter', u'screen_name', screen_name)

@@ -11,6 +11,9 @@ from gittip.elsewhere import ACTIONS, AccountElsewhere, _resolve
 class GitHubAccount(AccountElsewhere):
     platform = u'github'
 
+    def get_url(self):
+        return self.user_info['html_url']
+
 
 def resolve(login):
     return _resolve(u'github', u'login', login)

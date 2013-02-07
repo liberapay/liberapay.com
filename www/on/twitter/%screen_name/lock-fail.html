@@ -1,14 +1,14 @@
-username = path['screen_name']
+account
 ^L
-{% extends templates/base.html %}
+{% extends templates/elsewhere.html %}
 
 {% block page %}
 
-<h2 class="first">Are you really {{ username }}?</h2>
+<h2>Are you really {{ username }}?</h2>
 
 <p>Your attempt to lock or unlock this account failed because you&rsquo;re
-logged into GitHub as someone else. Please <a href="https://github.com/logout"
-    target="_blank">log out of GitHub</a> and <a
+logged into GitHub as someone else. Please <a href="https://twitter.com/logout"
+    target="_blank">log out of Twitter</a> and <a
     href="./">try again</a>.</p>
 
 {% end %}

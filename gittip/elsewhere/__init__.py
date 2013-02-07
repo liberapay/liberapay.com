@@ -1,9 +1,10 @@
-import gittip
-from aspen import Response
 from aspen.utils import typecheck
-from gittip.authentication import User
-from gittip.participant import reserve_a_random_participant_id
 from psycopg2 import IntegrityError
+
+import gittip
+from gittip.authentication import User
+from gittip.models.participant import Participant
+from gittip.participant import reserve_a_random_participant_id
 
 
 ACTIONS = [u'opt-in', u'connect', u'lock', u'unlock']
@@ -47,6 +48,10 @@ class AccountElsewhere(object):
             self.is_claimed = b
             self.is_locked = c
             self.balance = d
+
+
+    def get_participant(self):
+        return Participant.query.get(id=self.participant_id)
 
 
     def set_is_locked(self, is_locked):

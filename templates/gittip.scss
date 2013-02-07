@@ -402,6 +402,42 @@ button.selected:hover {
         }
     }
 
+    .on-elsewhere {
+        width: 100%;
+
+        .offset {
+            width: 138px;
+            height: 138px; 
+        }
+
+        .picture {
+            width: 138px;
+            height: 138px; 
+
+            img {
+                width: 128px;
+                height: 128px;
+
+                /* Without this we are inline-block and we get an extra 4px.
+                 * Is that due to line-height, maybe? */
+                display: block;
+                margin: 5px;
+            }
+        }
+
+        .ready {
+            padding-left: 15px;
+            text-align: center;
+        }
+        .nbackers {
+            font: bold 56px $Helvetica;
+        }
+        .ready-to-give {
+            font: normal 12px $Helvetica;
+        }
+    }
+
+
     .on-profile {
         width: 100%;
 
@@ -536,6 +572,10 @@ button.selected:hover {
         }
     }
 
+    .col0 {
+        width: 460px;
+        margin: 0 auto;
+    }
     .col1 {
         width: 460px;
         float: left;

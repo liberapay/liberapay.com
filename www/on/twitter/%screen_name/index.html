@@ -9,8 +9,6 @@ from aspen.utils import to_age, utc
 from gittip import AMOUNTS, CARDINALS, db
 from gittip.elsewhere import twitter
 from gittip.models import Participant
-
-
 # ========================================================================== ^L
 
 # Try to load from Twitter.
@@ -26,33 +24,94 @@ username = user_info['screen_name']
 name = user_info.get('name')
 if not name:
     name = username
-user_info['html_url'] = "https://twitter.com/%s" % username
+url = user_info['html_url'] = "https://twitter.com/%s" % username
 
 account = twitter.TwitterAccount(user_info['id'], user_info)
 participant = Participant.query.get(account.participant_id)
-locked = account.is_locked
-lock_action = "unlock" if account.is_locked else "lock"
 if account.is_claimed:
     request.redirect('/%s/' % participant.id)
+locked = account.is_locked
+lock_action = "unlock" if account.is_locked else "lock"
 
-if not user.ANON:
-    my_tip = user.get_tip_to(participant.id)
-
-tip_or_pledge = "pledge"
 nbackers = participant.get_number_of_backers()
 
 # ========================================================================== ^L
-{% extends templates/participant.html %}
+{% extends templates/base.html %}
+
+{% block heading %}<h2 class="top"><span>Twitter</span></h2>{% end %}
+
+{% block box %}
+
+<table class="on-elsewhere">
+    <tr>
+        <td class="picture">
+            <img src="{{ participant.get_img_src(128) }}" />
+        </td>
+        <td class="ready">
+            <h2><a href="{{ url }}">{{ username }}</a> has</h2>
+            <div class="nbackers">{{ nbackers }}</div>
+            <div class="ready-to-give">{{ 'person' if nbackers == 1 else 'people' }} ready to give</div>
+        </td>
+        <td class="offset"></td>
+    </tr>
+</table>
+
+<div class="buttons tips">
+    {% if account.is_locked %}
+
+        <div class="help with-padding">
+            This account has been locked by its owner.
+        </div>
+
+    {% elif user.ANON %}
+
+        <div class="help with-padding">Sign in using
+            <a class="highlight" href="/on/twitter/redirect">Twitter</a> or
+            <a href="{{ github.oauth_url(website, u'opt-in', participant.id ) }}">GitHub</a>
+            to pledge to {{ username }}.</div>
+
+    {% else %}
+
+        {% set my_tip = user.get_tip_to(participant.id) %}
+        <h2>Your Weekly Pledge</h2>
+        {% for amount in AMOUNTS %}
+        <button amount="{{ amount }}" tippee="{{ participant.id }}"
+            class="tip{{ ' selected' if amount == my_tip else '' }}">${{ amount }}</button>
+        {% end %}
+        {% if my_tip not in AMOUNTS %}
+        <span class="old-amount">
+            <button class="tip disabled selected">{{ my_tip }}</button>
+            <span class="old-amount-link">&mdash;
+            <a href="http://blog.gittip.com/post/26505682007/is-personal-funding-viable" target="_blank">old amount</a>!</span>
+        </span>
+        {% end %}
+
+        {% if user.last_bill_result is None %}
+
+        <div id="payment-prompt" class="help{% if my_tip > 0 %} needed{% end %}">
+        Back your gift with a <a href="/credit-card.html"
+            class="highlight">credit card</a> to make sure it goes
+        through!</div>
+        {% elif user.last_bill_result %}
+        <div id="payment-prompt" class="help really-needed">Fix your <a
+            href="/credit-card.html" class="highlight">credit
+            card</a> to make sure your gifts go through!</div>
+        {% end %}
+
+    {% end %}
+</div>
+{% end %}
 
 {% block page %}
+
+<div class="col0">
   {% if account.is_locked %}
 
     <h2 class="first"><b>{{ username }}</b> has opted out of Gittip.</h2>
 
     <p>If you are <a href="{{ user_info.get('html_url', '') }}">{{ username }}</a>
-    on Twitter, you can unlock your account to allow people to
-    pledge tips to you on Gittip. We never collect any money on your behalf
-    until you explicitly opt in.</p>
+    on Twitter, you can unlock your account to allow people to pledge tips to
+    you on Gittip.</p>
 
     <a href="{{ twitter.oauth_url(website, u'unlock', username) }}"
         ><button>Unlock</button></a>
@@ -66,56 +125,24 @@ nbackers = participant.get_number_of_backers()
 
     <p>Is this you?
     {% if user.ANON %}
-    <a href="{{ twitter.oauth_url(website, u'opt-in', username) }}">Click here</a> to opt in to Gittip.
+    <a href="{{ twitter.oauth_url(website, u'opt-in', username) }}">Click
+        here</a> to opt in to Gittip (we never collect money for you until
+    you do).
     {% else %}
-    You&rsquo;ll have to <a href="/sign-out.html">sign out</a> and sign back in to claim this account.
-    {% end %}</p>
-
-    <table id="accounts">
-        <tr>
-            <td class="account-type">
-                <img src="/assets/twitter.png" />
-            </td>
-            <td class="account-details">
-                <a href="{{ user_info['html_url'] }}">
-                    <img class="avatar"
-                     src="{{ user_info.get('profile_image_url_https', '/assets/%s/no-avatar.png' % __version__) }}" />
-                         {{ user_info['screen_name'] }}
-                {% if user_info.get('name') %}({{ user_info.get('name') }}){% end %}
-                </a>
-                <div class="account-type">Twitter</div>
-            </td>
-        </tr>
-    </table>
-
-
-    {% if nbackers == 0 %}
-    {% elif nbackers == 1 %}
-    <h3>There is one person ready to give.</h3>
-    {% elif nbackers < 10 %}
-    <h3>There are {{ CARDINALS[nbackers] }} people ready to give.</h3>
-    {% else %}
-    <h3>There are {{ nbackers }} people ready to give.</h3>
+    <a href="/sign-out.html">Sign out</a> and sign back in
+    to claim this account
     {% end %}
+    </p>
 
-
-    {% if not user.ANON %}
-
-    <p>{{ 'But we' if nbackers > 0 else 'We' }} will never collect money on
-    behalf of {{ username }} until they opt in.</p>
-
-    {% else %}
-
-    <p>{{ 'But we' if nbackers > 0 else 'We' }} will never collect money on
-    your behalf until you opt in.</p>
-
-    <h3>What is Gittip?</h3>
+    {% if user.ANON %}
+    <h2>What is Gittip?</h2>
 
     <p>Gittip is a way to thank and support your favorite artists, musicians,
-    writers, programmers, etc. by setting up a small weekly gift to them. <a
-    href="/about/">Read more ...</a></p>
+    writers, programmers, etc. by setting up a small weekly cash gif to them.
+    <a href="/about/">Read more ...</a></p>
 
-    <h3>Don&rsquo;t like what you see?</h3>
+
+    <h2>Don&rsquo;t like what you see?</h2>
 
     <p>If you are {{ username }} you can explicitly opt out of Gittip by
     locking this account. We don&rsquo;t allow new pledges to locked
@@ -123,7 +150,8 @@ nbackers = participant.get_number_of_backers()
 
     <a href="{{ twitter.oauth_url(website, u'lock', username) }}"
         ><button>Lock</button></a>
+    {% end %}
 
-    {% end %}
-    {% end %}
+  {% end %}
+</div>
 {% end %}
