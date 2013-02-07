@@ -15,8 +15,11 @@ def _extract_avatar(participant_id):
          WHERE participant_id=%s
       ORDER BY platform
 
-    """, (participant_id,))
-    rec = recs.next()
+      """, (participant_id,))
+    try:
+        rec = recs.next()
+    except StopIteration:
+        raise Exception("%s has no elsewheres?" % participant_id)
     user_info = rec.get('user_info', {})
     out = '/assets/-/avatar-default.gif'
     if 'profile_image_url_https' in user_info:
