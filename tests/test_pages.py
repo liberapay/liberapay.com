@@ -56,11 +56,6 @@ def test_about_charts():
     actual = serve_request('/about/charts.html').body
     assert expected in actual, actual
 
-def test_about_unclaimed():
-    expected = "Unclaimed"
-    actual = serve_request('/about/unclaimed.html').body
-    assert expected in actual, actual
-
 
 @patch('gittip.elsewhere.github.requests')
 def test_github_proxy(requests):
