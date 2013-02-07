@@ -52,18 +52,18 @@
             {% if user.id == participant.id %}
 
             <a href="/credit-card.html">Credit card</a>:
-                {% if participant.last_bill_result != "" %}&#x2718;{% else %}&#x2714;{% end %}
+            <span>{% if participant.last_bill_result != "" %}&#x2718;{% else %}&#x2714;{% end %}</span>
             &nbsp; &nbsp; &nbsp;
             <a href="/bank-account.html">Bank account</a>:
-                {% if participant.last_ach_result != "" %}&#x2718;{% else %}&#x2714;{% end %}
+            <span>{% if participant.last_ach_result != "" %}&#x2718;{% else %}&#x2714;{% end %}</span>
 
             {% else %}
 
             Credit card:
-                {% if participant.last_bill_result != "" %}&#x2718;{% else %}&#x2714;{% end %}
+            <span>{% if participant.last_bill_result != "" %}&#x2718;{% else %}&#x2714;{% end %}</span>
             &nbsp; &nbsp; &nbsp;
             Bank account:
-                {% if participant.last_ach_result != "" %}&#x2718;{% else %}&#x2714;{% end %}
+            <span>{% if participant.last_ach_result != "" %}&#x2718;{% else %}&#x2714;{% end %}</span>
 
             {% end %}
             <div class="account-type">{% if user.ADMIN and participant.balanced_account_uri %}
@@ -72,3 +72,5 @@
         </td>
     </tr>
 </table>
+
+

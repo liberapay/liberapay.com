@@ -43,27 +43,36 @@ github_account, twitter_account = participant.get_accounts_elsewhere()
         {% include "templates/profile-edit.html" %}
     </div>
 {% else %}
-    <div class="col1">
-        <h2>Contribution</h2>
-        {% if participant.statement %}
-        <div class="statement">{{ MAKING }} {{ wrap(participant.statement) }}</div>
-        {% end %}
-    </div>
-    <div class="col2">
-
-        <h2>Funding Goal</h2>
-        <div class="goal">
-            {% if participant.goal is None %}
-            I&rsquo;m grateful for tips, but I don&rsquo;t have a specific funding goal.
-            {% elif participant.goal == 0 %}
-            I&rsquo;m not here to receive tips. I&rsquo;ll generally regift them.
-            {% else %}
-            My goal is to receive ${{ locale.format("%.2f", participant.goal, grouping=True) }} per week on Gittip.
-            {% end %}
+    <div class="group">
+        <div class="col1">
+            <h2>Contribution</h2>
+            <div class="statement">
+                {% if participant.statement %}
+                {{ MAKING }} {{ wrap(participant.statement) }}
+                {% else %}
+                [ unspecified ]
+                {% end %}
             </div>
+        </div>
+        <div class="col2">
 
-        {% include "templates/connected-accounts.html" %}
+            <h2>Funding Goal</h2>
+            <div class="goal">
+                {% if participant.goal is None %}
+                I&rsquo;m grateful for tips, but I don&rsquo;t have a specific
+                funding goal.
+                {% elif participant.goal == 0 %}
+                I&rsquo;m not here to receive tips. I&rsquo;ll generally regift
+                them.
+                {% else %}
+                My goal is to receive
+                ${{ locale.format("%.2f", participant.goal, grouping=True) }}
+                per week on Gittip.
+                {% end %}
+                </div>
+
+            {% include "templates/connected-accounts.html" %}
+        </div>
     </div>
 {% end %}
-<div class="clear"></div>
 {% end %}
