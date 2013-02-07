@@ -961,8 +961,7 @@ button.selected:hover {
 
 @media (max-width: 1029px) {
     .main-padding {
-        width: 480px;
-        margin: 0 auto;
+        width: auto;
         padding: 0 35px;
     }
     #header {
@@ -997,14 +996,8 @@ button.selected:hover {
 @media (max-width: 520px) { .main-padding { padding: 0 16px; } }
 @media (max-width: 510px) { .main-padding { padding: 0 14px; } }
 @media (max-width: 500px) { .main-padding { padding: 0 12px; } }
-@media (max-width: 494px) {
-    #box {
-        width: auto;
-    }
-    .main-padding {
-        width: auto;
-    }
-}
+@media (max-width: 494px) { #box { width: auto;
+} }
 @media (max-width: 490px) { .main-padding { padding: 0 10px; } }
 
 @media (max-width: 480px) {
