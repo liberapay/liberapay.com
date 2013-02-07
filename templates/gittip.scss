@@ -522,6 +522,80 @@ button.selected:hover {
             background: $light-gray;
         }
     }
+
+    .on-confirm {
+        padding: 35px 0 0;
+
+        h2 {
+            font: bold 14px $Helvetica;
+            text-transform: uppercase; 
+            margin: 35px 0 8px;
+        }
+        .nav {
+            margin: 35px 0 0;
+            h2 {
+                margin: 8px 0;
+            }
+            .selected {
+                font-size: 14px;
+            }
+        }
+
+        .scenario {
+            margin: 0 auto;
+        }
+        .scenario TD {
+            padding: 6pt;
+            width: 33%;
+        }
+        #nix {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin: -16px 0 0 -16px;
+        }
+        .participant {
+            position: relative;
+            width: 96pt;
+            display: inline-block;
+            border: 2px solid #614C3E;
+            border-radius: 6pt;
+            font: normal 12px $Helvetica;
+            color: #614C3E;
+            background: white url("/assets/clipped-heart.gif") bottom right no-repeat;
+            text-align: left;
+            overflow: hidden;
+        }
+        .participant-padding {
+            display: block;
+            padding: 6pt 0 6pt 9pt;
+        }
+        .participant IMG, IMG.platform-icon {
+            margin-bottom: -1pt;
+        }
+        .participant B {
+            font-size: 11pt;
+        }
+        .participant TD {
+            padding: 0;
+        }
+        .participant TH {
+            font-weight: normal;
+        }
+        .other, .abandoned {
+            font: normal 10px $Helvetica;
+        }
+        .abandoned {
+            text-align: center;
+            overflow: hidden;
+        }
+        .nix {
+            border-color: #B4181A;
+        }
+        .other B {
+            font-size: 9pt;
+        }
+    }
 }
 #page #leaderboard {
     ul {

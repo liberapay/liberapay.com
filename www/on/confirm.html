@@ -42,264 +42,205 @@ combined_receiving = user_receiving + other_receiving
 fmt = lambda x: '$' + str(int(round(x))) if x > 0 else '-'
 username = user_info['screen_name' if account.platform == 'twitter' else 'login']
 
-title = "Confirm"
-locked = True
+title = "Please Confirm"
 # ===== ^L
-{% extends "templates/participant.html" %}
-{% block page %}
-<style>
-    #their-voice {
-        text-align: center;
-    }
-    .scenario {
-        margin: 0 auto;
-    }
-    .scenario TD {
-        padding: 6pt;
-        width: 33%;
-    }
-    #nix {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        margin: -16px 0 0 -16px;
-    }
-    .participant {
-        position: relative;
-        width: 96pt;
-        display: inline-block;
-        border: 2px solid #614C3E;
-        border-radius: 6pt;
-        font: normal 10pt/14pt Lato, sans-serif;
-        color: #614C3E;
-        background: white url("/assets/clipped-heart.gif") bottom right no-repeat;
-        text-align: left;
-        overflow: hidden;
-    }
-    .participant-padding {
-        display: block;
-        padding: 6pt 0 6pt 9pt;
-    }
-    .participant IMG, IMG.platform-icon {
-        margin-bottom: -1pt;
-    }
-    .participant B {
-        font-size: 11pt;
-    }
-    .participant TD {
-        padding: 0;
-    }
-    .participant TH {
-        font-weight: normal;
-    }
-    .other, .abandoned {
-        font: normal 9pt/12pt Lato, sans-serif;
-    }
-    .abandoned {
-        text-align: center;
-        overflow: hidden;
-    }
-    .nix {
-        border-color: #B4181A;
-    }
-    .other B {
-        font-size: 9pt;
-    }
-</style>
+{% extends "templates/base.html" %}
+{% block box %}
+<div class="on-confirm">
 
-<h2 class="first">Oops!</h2>
+    <div><img class="platform-icon" src="/assets/icons/{{ account.platform }}.12.png"
+    /> <span class="highlight">{{ username }}</span> is connected<br />to
+    <b>{{ other.id }}</b> on Gittip.<br />Reconnect it?</div>
 
-<p><img class="platform-icon" src="/assets/icons/{{ account.platform }}.12.png"
-/> <span class="highlight">{{ username }}</span> is connected<br />to
-<b>{{ other.id }}</b> on Gittip.<br />Reconnect it?</p>
+    <h2>Now</h2>
 
-<h2>Now</h2>
-
-<table class="scenario">
-    <tr>
-        <td>
-        </td>
-        <td>
-            <div class="participant">
-            <div class="participant-padding">
-                <b>{{ user.id }}</b><br />
-                <table>
-                    <tr>
-                        <th><i>Gives</i></th>
-                        <td>{{ fmt(user_giving) }}</td>
-                    </tr>
-                    <tr>
-                        <th><i>Receives</i></th>
-                        <td>{{ fmt(user_receiving) }}</td>
-                    </tr>
-                </table>
-                <br />
-                {% if user_github_account is not None %}
-                    <img src="/assets/icons/github.12.png" />
-                    {{ user_github_account.user_info['login'] }}<br />
-                {% end %}
-                {% if user_twitter_account is not None %}
-                    <img src="/assets/icons/twitter.12.png" />
-                    {{ user_twitter_account.user_info['screen_name'] }}<br />
-                {% end %}
-            </div>
-            </div>
-        </td>
-        <td>
-            <div class="participant other">
-            <div class="participant-padding">
-                <b>{{ other.id }}</b><br />
-                <table>
-                    <tr>
-                        <th><i>Gives</i></th>
-                        <td>{{ fmt(other_giving) }}</td>
-                    </tr>
-                    <tr>
-                        <th><i>Receives</i></th>
-                        <td>{{ fmt(other_receiving) }}</td>
-                    </tr>
-                </table>
-                <br />
-                {% if other_github_account is not None %}
-                    <img src="/assets/icons/github.12.png" />
-                    {% if account.platform == 'github' %}<span class="highlight">{% end %}
-                    {{ other_github_account.user_info['login'] }}<br />
-                    {% if account.platform == 'github' %}</span>{% end %}
-                {% end %}
-                {% if other_twitter_account is not None %}
-                    <img src="/assets/icons/twitter.12.png" />
-                    {% if account.platform == 'twitter' %}<span class="highlight">{% end %}
-                    {{ other_twitter_account.user_info['screen_name'] }}<br />
-                    {% if account.platform == 'twitter' %}</span>{% end %}
-                {% end %}
-            </div>
-            </div>
-        </td>
-    </tr>
-</table>
+    <table class="scenario">
+        <tr>
+            <td></td>
+            <td>
+                <div class="participant">
+                <div class="participant-padding">
+                    <b>{{ user.id }}</b><br />
+                    <table>
+                        <tr>
+                            <th><i>Gives</i></th>
+                            <td>{{ fmt(user_giving) }}</td>
+                        </tr>
+                        <tr>
+                            <th><i>Receives</i></th>
+                            <td>{{ fmt(user_receiving) }}</td>
+                        </tr>
+                    </table>
+                    <br />
+                    {% if user_github_account is not None %}
+                        <img src="/assets/icons/github.12.png" />
+                        {{ user_github_account.user_info['login'] }}<br />
+                    {% end %}
+                    {% if user_twitter_account is not None %}
+                        <img src="/assets/icons/twitter.12.png" />
+                        {{ user_twitter_account.user_info['screen_name'] }}<br />
+                    {% end %}
+                </div>
+                </div>
+            </td>
+            <td>
+                <div class="participant other">
+                <div class="participant-padding">
+                    <b>{{ other.id }}</b><br />
+                    <table>
+                        <tr>
+                            <th><i>Gives</i></th>
+                            <td>{{ fmt(other_giving) }}</td>
+                        </tr>
+                        <tr>
+                            <th><i>Receives</i></th>
+                            <td>{{ fmt(other_receiving) }}</td>
+                        </tr>
+                    </table>
+                    <br />
+                    {% if other_github_account is not None %}
+                        <img src="/assets/icons/github.12.png" />
+                        {% if account.platform == 'github' %}<span class="highlight">{% end %}
+                        {{ other_github_account.user_info['login'] }}<br />
+                        {% if account.platform == 'github' %}</span>{% end %}
+                    {% end %}
+                    {% if other_twitter_account is not None %}
+                        <img src="/assets/icons/twitter.12.png" />
+                        {% if account.platform == 'twitter' %}<span class="highlight">{% end %}
+                        {{ other_twitter_account.user_info['screen_name'] }}<br />
+                        {% if account.platform == 'twitter' %}</span>{% end %}
+                    {% end %}
+                </div>
+                </div>
+            </td>
+        </tr>
+    </table>
 
 
-<h2>After Reconnect</h2>
+    <h2>After Reconnect</h2>
 
-<table class="scenario">
-    <tr>
-        <td class="abandoned">
-            {% if account.platform == 'github' and user_github_account is not None %}
-                <span class="account-elsewhere">
-                    <img src="/assets/icons/github.12.png" />
-                    {{ user_github_account.user_info['login'] }}<br />
-                </span>
-            {% end %}
-            {% if account.platform == 'twitter' and user_twitter_account is not None %}
-                <span class="account-elsewhere">
-                    <img src="/assets/icons/twitter.12.png" />
-                    {{ user_twitter_account.user_info['screen_name'] }}<br />
-                </span>
-            {% end %}
-        </td>
-        <td>
-            <div class="participant">
-            <div class="participant-padding">
-                <b>{{ user.id }}</b><br />
-                <table>
-                    <tr>
-                        {% if obstacles.this_is_others_last_account_elsewhere %}
-                        <th><i>Gives</i></th>
-                        <td>{{ fmt(combined_giving) }}</td>
-                    </tr>
-                    <tr>
-                        <th><i>Receives</i></th>
-                        <td>{{ fmt(combined_receiving ) }}</td>
-                        {% else %}
-                        <th><i>Gives</i></th>
-                        <td>{{ fmt(user_giving) }}</td>
-                    </tr>
-                    <tr>
-                        <th><i>Receives</i></th>
-                        <td>{{ fmt(user_receiving ) }}</td>
-                        {% end %}
-                    </tr>
-                </table>
-                <br />
-
-                {% if user_github_account is not None %}
+    <table class="scenario">
+        <tr>
+            <td class="abandoned">
+                {% if account.platform == 'github' and user_github_account is not None %}
                     <span class="account-elsewhere">
                         <img src="/assets/icons/github.12.png" />
                         {{ user_github_account.user_info['login'] }}<br />
                     </span>
                 {% end %}
-                {% if user_twitter_account is not None %}
+                {% if account.platform == 'twitter' and user_twitter_account is not None %}
                     <span class="account-elsewhere">
                         <img src="/assets/icons/twitter.12.png" />
                         {{ user_twitter_account.user_info['screen_name'] }}<br />
                     </span>
                 {% end %}
+            </td>
+            <td>
+                <div class="participant">
+                <div class="participant-padding">
+                    <b>{{ user.id }}</b><br />
+                    <table>
+                        <tr>
+                            {% if obstacles.this_is_others_last_account_elsewhere %}
+                            <th><i>Gives</i></th>
+                            <td>{{ fmt(combined_giving) }}</td>
+                        </tr>
+                        <tr>
+                            <th><i>Receives</i></th>
+                            <td>{{ fmt(combined_receiving ) }}</td>
+                            {% else %}
+                            <th><i>Gives</i></th>
+                            <td>{{ fmt(user_giving) }}</td>
+                        </tr>
+                        <tr>
+                            <th><i>Receives</i></th>
+                            <td>{{ fmt(user_receiving ) }}</td>
+                            {% end %}
+                        </tr>
+                    </table>
+                    <br />
 
-                <span class="account-elsewhere">
-                    <img src="/assets/icons/{{ account.platform }}.12.png" />
-                    <span class="highlight">{{ username }}</span>
-                </span>
+                    {% if user_github_account is not None %}
+                        <span class="account-elsewhere">
+                            <img src="/assets/icons/github.12.png" />
+                            {{ user_github_account.user_info['login'] }}<br />
+                        </span>
+                    {% end %}
+                    {% if user_twitter_account is not None %}
+                        <span class="account-elsewhere">
+                            <img src="/assets/icons/twitter.12.png" />
+                            {{ user_twitter_account.user_info['screen_name'] }}<br />
+                        </span>
+                    {% end %}
 
-            </div>
-            </div>
-        </td>
-        {% if obstacles.this_is_others_last_account_elsewhere %}
-        <td>
-            <div class="participant other nix">
-            <div class="participant-padding">
-                <img id="nix" src="/assets/nix.png" />
-                <b>{{ other.id }}</b><br />
-                <br />
-            </div>
-            </div>
-        </td>
-        {% else %}
-        <td>
-            <div class="participant other">
-            <div class="participant-padding">
-                <b>{{ other.id }}</b><br />
-                <table>
-                    <tr>
-                        <th><i>Gives</i></th>
-                        <td>{{ fmt(other_giving) }}</td>
-                    </tr>
-                    <tr>
-                        <th><i>Receives</i></th>
-                        <td>{{ fmt(other_receiving ) }}</td>
-                    </tr>
-                </table>
-                <br />
-
-                {% if other_github_account is not None and account.platform != 'github' %}
                     <span class="account-elsewhere">
-                        <img src="/assets/icons/github.12.png" />
-                        {{ other_github_account.user_info['login'] }}<br />
+                        <img src="/assets/icons/{{ account.platform }}.12.png" />
+                        <span class="highlight">{{ username }}</span>
                     </span>
-                {% end %}
-                {% if other_twitter_account is not None and account.platform != 'twitter' %}
-                    <span class="account-elsewhere">
-                        <img src="/assets/icons/twitter.12.png" />
-                        {{ other_twitter_account.user_info['screen_name'] }}<br />
-                    </span>
-                {% end %}
 
-            </div>
-            </div>
-        </td>
-        {% end %}
-    </tr>
-</table>
+                </div>
+                </div>
+            </td>
+            {% if obstacles.this_is_others_last_account_elsewhere %}
+            <td>
+                <div class="participant other nix">
+                <div class="participant-padding">
+                    <img id="nix" src="/assets/nix.png" />
+                    <b>{{ other.id }}</b><br />
+                    <br />
+                </div>
+                </div>
+            </td>
+            {% else %}
+            <td>
+                <div class="participant other">
+                <div class="participant-padding">
+                    <b>{{ other.id }}</b><br />
+                    <table>
+                        <tr>
+                            <th><i>Gives</i></th>
+                            <td>{{ fmt(other_giving) }}</td>
+                        </tr>
+                        <tr>
+                            <th><i>Receives</i></th>
+                            <td>{{ fmt(other_receiving ) }}</td>
+                        </tr>
+                    </table>
+                    <br />
+
+                    {% if other_github_account is not None and account.platform != 'github' %}
+                        <span class="account-elsewhere">
+                            <img src="/assets/icons/github.12.png" />
+                            {{ other_github_account.user_info['login'] }}<br />
+                        </span>
+                    {% end %}
+                    {% if other_twitter_account is not None and account.platform != 'twitter' %}
+                        <span class="account-elsewhere">
+                            <img src="/assets/icons/twitter.12.png" />
+                            {{ other_twitter_account.user_info['screen_name'] }}<br />
+                        </span>
+                    {% end %}
+
+                </div>
+                </div>
+            </td>
+            {% end %}
+        </tr>
+    </table>
 
 
-<h2>Reconnect?</h2>
+    <div class="buttons nav">
+        <h2>Reconnect?</h2>
 
-<form action="/on/take-over.html" method="POST">
-    <input type="hidden" name="platform" value="{{ account.platform }}" />
-    <input type="hidden" name="user_id" value="{{ account.user_id }}" />
-    <input type="hidden" name="csrf_token" value="{{ cookie['csrf_token'].value }}" />
-    <input type="hidden" name="connect_token" value="{{ connect_token }}" />
-    <button class="selected">Yes</button><br />
-</form>
-<a href="/about/me.html">No</a>
+        <form action="/on/take-over.html" method="POST">
+            <input type="hidden" name="platform" value="{{ account.platform }}" />
+            <input type="hidden" name="user_id" value="{{ account.user_id }}" />
+            <input type="hidden" name="csrf_token" value="{{ cookie['csrf_token'].value }}" />
+            <input type="hidden" name="connect_token" value="{{ connect_token }}" />
+            <button class="selected">Yes</button>
+            <a href="/about/me.html"><button>No</button></a>
+        </form>
+    </div>
 
+</div>
 {% end %}
