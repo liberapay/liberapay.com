@@ -1,19 +1,6 @@
-from gittip import age, db
-^L
-if not user.ANON:
-    username = user.id
-nparticipants = db.fetchone("SELECT count(*) AS n FROM participants WHERE claimed_time IS NOT NULL AND is_suspicious IS NOT true")['n']
 title = "About"
 ^L
-{% extends templates/base.html %}
-{% block box %}
-    <p class="below-header">
-        <span class="nowrap">Gittip is <b>{{ age() }}</b> old and</span>
-        <span class="nowrap">has <b>{{ nparticipants }}</b> participants.
-            <a href="stats.html"><button>More stats</button></a></span>
-</p>
-{% end %}
-
+{% extends templates/about.html %}
 {% block page %}
 
     <h1>What Is Gittip?</h1>

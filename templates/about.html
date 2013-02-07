@@ -1,0 +1,17 @@
+{% extends base.html %}
+{% block box %}
+    {% set current_page = path.raw.split('/')[2] %}
+    {% set nav_base = "/about" %}
+    <div class="buttons">
+        {% set pages = [('/', 'About'), ('/faq.html', 'FAQ')] %}
+        {% include nav.html %}
+    </div>
+    <div class="buttons tips">
+        {% set pages = [('/stats.html', 'Stats'), ('/charts.html', 'Charts')] %}
+        {% include nav.html %}
+    </div>
+    <div class="buttons nav">
+        {% set pages = [('/terms/', 'Terms'), ('/privacy/', 'Privacy'), ('/fraud/', 'Fraud')] %}
+        {% include nav.html %}
+    </div>
+{% end %}

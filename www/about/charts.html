@@ -1,17 +1,10 @@
 title = "Charts"
 ^L
-{% extends templates/base.html %}
-
-{% block box %}
-Gittip is a way to <a href="/about/">support people who build free
-    culture</a>. This page shows Gittip&rsquo;s growth since it launched <span
-    class="n-weeks"></span> weeks ago.
-{% end %}
-
+{% extends templates/about.html %}
 {% block page %}
 <style>
     .chart-wrapper {
-        width: 300px;
+        width: 480px;
         float: left;
     }
     .chart-wrapper.newline {
@@ -93,7 +86,7 @@ Gittip is a way to <a href="/about/">support people who build free
 
 <div class="chart-wrapper">
     <a name="users"></a>
-    <h3>Users</h3>
+    <h2>Users</h2>
     <p class="note">Anyone who&rsquo;s ever created an account on Gittip</p>
     <div class="chart" id="users-"></div>
     <div class="x-axis">weeks</div>
@@ -101,7 +94,7 @@ Gittip is a way to <a href="/about/">support people who build free
 
 <div class="chart-wrapper">
     <a name="funders"></a>
-    <h3>Funders</h3>
+    <h2>Funders</h2>
     <p class="note">People who gave money to other people within Gittip</p>
     <div class="chart" id="funders-"></div>
     <div class="x-axis">weeks</div>
@@ -109,7 +102,7 @@ Gittip is a way to <a href="/about/">support people who build free
 
 <div class="chart-wrapper">
     <a name="gifts"></a>
-    <h3>Gifts ($)</h3>
+    <h2>Gifts ($)</h2>
     <p class="note">Money transferred within Gittip</p>
     <div class="chart" id="volume-"></div>
     <div class="x-axis">weeks</div>
@@ -117,7 +110,7 @@ Gittip is a way to <a href="/about/">support people who build free
 
 <div class="chart-wrapper newline">
     <a name="charges"></a>
-    <h3>Charges ($)</h3>
+    <h2>Charges ($)</h2>
     <p class="note">Money moved into Gittip via credit card<br /> (minimum
     charge <a
         href="http://blog.gittip.com/post/28158537529/why-were-you-charged-10">upped</a>
@@ -128,7 +121,7 @@ Gittip is a way to <a href="/about/">support people who build free
 
 <div class="chart-wrapper">
     <a name="withdrawals"></a>
-    <h3>Withdrawals ($)</h3>
+    <h2>Withdrawals ($)</h2>
 
     <p class="note">Money withdrawn from Gittip to a bank account<br />(feature <a
         href="http://blog.gittip.com/post/30116848405/with-payouts-gittip-is-minimally-viable">added</a>
