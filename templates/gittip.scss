@@ -995,6 +995,9 @@ button.selected:hover {
     body {
         font: normal 14px $Helvetica;
     }
+    #header div.login {
+        font: normal 12px $Helvetica;
+    }
 }
 
 @media (max-width: 530px) { .main-padding { padding: 0 18px; } }
@@ -1008,8 +1011,14 @@ button.selected:hover {
     .main-padding {
         padding: 0 8px;
     }
-    #header div.login {
-        position: static;
+    #header {
+        text-align: center;
+        div.login {
+            position: static;
+        }
+        table {
+            margin: 0 auto;
+        }
     }
     body {
         font: normal 13px $Helvetica;
@@ -1156,11 +1165,11 @@ button.selected:hover {
     }
 }
 @media (max-width: 240px) {
-    #header .logo { padding-right: 0; }
-    #header { text-align: center; }
-    #header table { margin: 0 auto; }
-    #header .motto.luxury { display: none; }
-    #header .login .luxury { display: none; }
+    #header {
+        .logo { padding-right: 0; }
+        .motto.luxury { display: none; }
+        .login .luxury { display: none; }
+    }
 }
 @media (max-width: 200px) {
     #box #jump input {
