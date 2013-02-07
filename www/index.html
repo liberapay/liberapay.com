@@ -102,7 +102,7 @@ givers = db.fetchall("""
     <div class="as-content">
         <h1>Who inspires you?</h1>
         <form id="jump">
-            Enter a <select>
+            <span class="luxury">Enter a</span> <select>
                 <option value="twitter">Twitter</option>
                 <option value="github">GitHub</option>
             </select> username:
@@ -121,7 +121,7 @@ givers = db.fetchall("""
         <h2>Top Receivers</h2>
         <ul class="group">
             {% for i, receiver in enumerate(receivers, start=1) %}
-            <li>
+            <li{% if i > 4 %} class="luxury"{% end %}>
                 <a href="/{{ receiver['tippee'] }}/" class="mini-user">
                     <span class="inner">
                         <span class="avatar"
@@ -140,7 +140,7 @@ givers = db.fetchall("""
         <h2>Top Givers</h2>
         <ul class="group">
             {% for i, giver in enumerate(givers, start=1) %}
-            <li>
+            <li{% if i > 4 %} class="luxury"{% end %}>
                 {% if giver['anonymous'] and not user.is_admin %}
                 <span class="mini-user">
                     <span class="inner">

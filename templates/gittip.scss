@@ -257,6 +257,7 @@ button.selected:hover {
 #header {
     background: white;
     padding: 10px 0;
+    position: relative;
 
     td {
         text-align: center;
@@ -274,6 +275,7 @@ button.selected:hover {
         letter-spacing: 1px;
         text-transform: uppercase;
         padding-left: 18px;
+        text-align: left;
     }
     div.login {
         padding-top: 18px;
@@ -308,7 +310,7 @@ button.selected:hover {
         padding: 0 20%;
     }
     h2.top {
-        letter-spacing: -3px;
+        letter-spacing: -2px;
         font: normal 35px $Mensch;
         padding: 50px 0 35px 0;
 
@@ -326,7 +328,7 @@ button.selected:hover {
         }
     }
     h1 {
-        letter-spacing: -4px;
+        letter-spacing: -3px;
         font: normal 64px/64px $Mensch;
         padding-bottom: 20px;
     }
@@ -355,6 +357,7 @@ button.selected:hover {
     margin: -80px auto 0;
     border: 5px solid rgba($brown, 0.5);
     width: 480px;
+    min-width: 240px;
     @include border-radius(3px);
     position: relative;
     z-index: 2;
@@ -418,6 +421,16 @@ button.selected:hover {
         }
     }
 
+    .ready {
+        padding-left: 15px;
+    }
+    .number {
+        font: bold 56px $Helvetica;
+    }
+    .unit {
+        font: normal 12px $Helvetica;
+    }
+
     .on-elsewhere {
         width: 100%;
 
@@ -440,19 +453,7 @@ button.selected:hover {
                 margin: 5px;
             }
         }
-
-        .ready {
-            padding-left: 15px;
-            text-align: center;
-        }
-        .number {
-            font: bold 56px $Helvetica;
-        }
-        .unit {
-            font: normal 12px $Helvetica;
-        }
     }
-
 
     .on-profile {
         width: 100%;
@@ -474,22 +475,13 @@ button.selected:hover {
                 margin: 5px;
             }
         }
-
-        .giving-receiving {
-            padding-left: 15px;
+        td {
             text-align: left;
-        }
-        .amount {
-            color: $black;
-            font: bold 56px $Helvetica;
-        }
-        .per-week {
-            color: $black;
-            font: normal 12px $Helvetica;
         }
         .pad-sign {
             padding-left: 36px;
         }
+        /*
         form {
             margin-bottom: 0;
             margin-top: 12px;
@@ -498,6 +490,7 @@ button.selected:hover {
                 width: 30%;
             }
         }
+        */
     }
 
     .buttons {
@@ -966,22 +959,202 @@ button.selected:hover {
 }
 
 
-/* Large desktop */
-@media (min-width: 1200px) {
-
+@media (max-width: 1029px) {
+    .main-padding {
+        width: auto;
+        padding: 0 35px;
+    }
+    #header {
+    }
+    #page {
+        .col1, .col2 {
+            width: auto;
+            float: none;
+        }
+    }
 }
 
-/* Portrait tablet to landscape and desktop */
-@media (min-width: 768px) and (max-width: 979px) {
+@media (max-width: 670px) { .main-padding { padding: 0 34px; } }
+@media (max-width: 660px) { .main-padding { padding: 0 32px; } }
+@media (max-width: 640px) { .main-padding { padding: 0 30px; } }
+@media (max-width: 620px) { .main-padding { padding: 0 28px; } }
+@media (max-width: 600px) { .main-padding { padding: 0 26px; } }
+@media (max-width: 580px) { .main-padding { padding: 0 24px; } }
+@media (max-width: 560px) { .main-padding { padding: 0 22px; } }
 
+@media (max-width: 540px) {
+    .main-padding { padding: 0 20px; }
+    #page #leaderboard ul li.luxury {
+        display: none;
+    }
+    body {
+        font: normal 14px $Helvetica;
+    }
 }
 
-/* Landscape phone to portrait tablet */
-@media (max-width: 767px) {
+@media (max-width: 530px) { .main-padding { padding: 0 18px; } }
+@media (max-width: 520px) { .main-padding { padding: 0 16px; } }
+@media (max-width: 510px) { .main-padding { padding: 0 14px; } }
+@media (max-width: 500px) { .main-padding { padding: 0 12px; } }
+@media (max-width: 494px) { #box { width: auto; } }
+@media (max-width: 490px) { .main-padding { padding: 0 10px; } }
 
-}
-
-/* Landscape phones and down */
 @media (max-width: 480px) {
+    .main-padding {
+        padding: 0 8px;
+    }
+    #header div.login {
+        position: static;
+    }
+    body {
+        font: normal 13px $Helvetica;
+    }
+    #box #jump .luxury {
+        display: none;
+    }
+    #page .col0 {
+        width: auto;
+    }
+}
 
+@media (max-width: 600px) {
+    #hero h2.top {
+        font-size: 35px;
+        line-height: 35px;
+        &:after { margin-top: -17px; }
+        padding: 50px 0 35px;
+    }
+    #hero h1 {
+        font-size: 64px;
+        line-height: 64px;
+        letter-spacing: -3px;
+        padding: 0 0 20px;
+    }
+}
+@media (max-width: 550px) {
+    #hero h2.top {
+        font-size: 31px;
+        line-height: 31px;
+        &:after { margin-top: -9px; }
+        padding: 43px 0 29px;
+    }
+    #hero h1 {
+        font-size: 57px;
+        line-height: 57px;
+        letter-spacing: -1px;
+        padding: 0 0 15px;
+    }
+}
+@media (max-width: 500px) {
+    #hero h2.top {
+        font-size: 27px;
+        line-height: 27px;
+        &:after { margin-top: -9px; }
+        padding: 36px 0 23px;
+    }
+    #hero h1 {
+        font-size: 50px;
+        line-height: 50px;
+        letter-spacing: -1px;
+        padding: 0 0 10px;
+    }
+}
+@media (max-width: 450px) {
+    #hero h2.top {
+        font-size: 23px;
+        line-height: 23px;
+        &:after { margin-top: -9px; }
+        padding: 29px 0 17px;
+    }
+    #hero h1 {
+        font-size: 43px;
+        line-height: 43px;
+        letter-spacing: -1px;
+        padding: 0 0 5px;
+    }
+}
+@media (max-width: 400px) {
+    #hero h2.top {
+        font-size: 19px;
+        line-height: 19px;
+        &:after { margin-top: -9px; }
+        padding: 22px 0 11px;
+    }
+    #hero h1 {
+        font-size: 36px;
+        line-height: 36px;
+        letter-spacing: -1px;
+        padding: 0;
+    }
+}
+@media (max-width: 350px) {
+    #hero h2.top {
+        font-size: 15px;
+        line-height: 15px;
+        &:after { margin-top: -9px; }
+        padding: 15px 0 5px;
+    }
+    #hero h1 {
+        font-size: 29px;
+        line-height: 29px;
+        letter-spacing: 0px;
+        padding: 0;
+    }
+}
+
+@media (max-width: 360px) {
+    #box {
+        border-radius: 0;
+        border-left-width: 1px;
+        border-right-width: 1px;
+    }
+}
+
+
+@media (max-width: 460px) {
+    #box table h2 { font-size: 14px; line-height: 14px; }
+    #box table .pad-sign { padding-left: 36px ! important; }
+    #box table .number { font-size: 56px; line-height: 56px; }
+    #box table .unit { font-size: 12px; line-height: 12px; }
+}
+@media (max-width: 420px) {
+    #box table h2 { font-size: 13px; line-height: 13px; }
+    #box table .pad-sign { padding-left: 30px ! important; }
+    #box table .number { font-size: 48px; line-height: 48px; }
+    #box table .unit { font-size: 11px; line-height: 11px; }
+}
+@media (max-width: 380px) {
+    #box table h2 { font-size: 13px; line-height: 12px; }
+    #box table .pad-sign { padding-left: 24px ! important; }
+    #box table .number { font-size: 40px; line-height: 40px; }
+}
+@media (max-width: 340px) {
+    #box table h2 { font-size: 11px; line-height: 11px; }
+    #box table .pad-sign { padding-left: 18px ! important; }
+    #box table .number { font-size: 32px; line-height: 32px; }
+    #box table .unit { font-size: 10px; line-height: 10px; }
+}
+@media (max-width: 300px) {
+    #box table h2 { font-size: 10px; line-height: 10px; }
+    #box table .pad-sign { padding-left: 12px ! important; }
+    #box table .number { font-size: 24px; line-height: 24px; }
+    #box table .unit { font-size: 9px; line-height: 9px; }
+}
+
+@media (max-width: 320px) {
+    body {
+        font: normal 13px $Helvetica;
+    }
+}
+@media (max-width: 240px) {
+    #header .logo { padding-right: 0; }
+    #header { text-align: center; }
+    #header table { margin: 0 auto; }
+    #header .motto.luxury { display: none; }
+    #header .login .luxury { display: none; }
+}
+@media (max-width: 200px) {
+    #box #jump input {
+        width: 80%;
+    }
 }
