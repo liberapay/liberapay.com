@@ -158,21 +158,21 @@ locked = False
 {% block page %}
 
 <table id="history" class="centered">
-    <tr>
-    <td colspan="7">
-        <h2><a href="./">{{ participant.id == user.id and "You" or participant.id }}</a> joined
+    <tr><td colspan="7">
+        <h2>{{ participant.id == user.id and "You" or participant.id }} joined
         {{ to_age(participant.claimed_time) }}.</h2>
+    </td></tr>
+    <tr><td colspan="7">
 
         <h2>{{ participant.id == user.id and "Your" or "Their" }} balance is
         ${{ participant.balance }}.</h2>
-    </td>
-    </tr>
+    </td></tr>
     {% for event in paydays %}
     {% if event['event'] == 'payday-start' %}
     <tr>
         <th colspan="7"><h2>Gittip #{{ event['number'] }}
-            <b>&mdash;{{ event['timestamp'].strftime("%B %d, %Y").replace(' 0', ' ') }}
-                ({{ to_age(event['timestamp']) }})</b></h2></th>
+            &mdash;{{ event['timestamp'].strftime("%B %d, %Y").replace(' 0', ' ') }}
+                ({{ to_age(event['timestamp']) }})</h2></th>
     </tr>
     <tr class="head">
         <td colspan="3" class="outside">&larr; Outside</td>
