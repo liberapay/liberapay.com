@@ -24,8 +24,8 @@ def test_commaize_commaizes_and_obeys_decimal_places():
 
 # chart of giving
 
-def check_chart_of_receiving(participant_id):
-    return Participant(participant_id).get_chart_of_receiving()
+def check_tip_distribution(participant_id):
+    return Participant(participant_id).get_tip_distribution()
 
 
 def test_get_chart_of_receiving_handles_a_tip():
@@ -34,7 +34,7 @@ def test_get_chart_of_receiving_handles_a_tip():
                , 1.0, Decimal('3.00')
                 )
     with tip_graph(tip):
-        actual = check_chart_of_receiving(u'bar')
+        actual = check_tip_distribution(u'bar')
         assert actual == expected, actual
 
 def test_get_chart_of_receiving_handles_a_non_standard_amount():
@@ -43,13 +43,13 @@ def test_get_chart_of_receiving_handles_a_non_standard_amount():
                , 1.0, Decimal('5.37')
                 )
     with tip_graph(tip):
-        actual = check_chart_of_receiving(u'bar')
+        actual = check_tip_distribution(u'bar')
         assert actual == expected, actual
 
 def test_get_chart_of_receiving_handles_no_tips():
     expected = ([], 0.0, Decimal('0.00'))
     with tip_graph():
-        actual = check_chart_of_receiving(u'foo')
+        actual = check_tip_distribution(u'foo')
         assert actual == expected, actual
 
 def test_get_chart_of_receiving_handles_multiple_tips():
@@ -62,7 +62,7 @@ def test_get_chart_of_receiving_handles_multiple_tips():
                , 2.0, Decimal('4.00')
                 )
     with tip_graph(*tips):
-        actual = check_chart_of_receiving(u'bar')
+        actual = check_tip_distribution(u'bar')
         assert actual == expected, actual
 
 def test_get_chart_of_receiving_ignores_bad_cc():
@@ -73,7 +73,7 @@ def test_get_chart_of_receiving_ignores_bad_cc():
                , 1.0, Decimal('1.00')
                 )
     with tip_graph(*tips):
-        actual = check_chart_of_receiving(u'bar')
+        actual = check_tip_distribution(u'bar')
         assert actual == expected, actual
 
 def test_get_chart_of_receiving_ignores_missing_cc():
@@ -84,7 +84,7 @@ def test_get_chart_of_receiving_ignores_missing_cc():
                , 1.0, Decimal('1.00')
                 )
     with tip_graph(*tips):
-        actual = check_chart_of_receiving(u'bar')
+        actual = check_tip_distribution(u'bar')
         assert actual == expected, actual
 
 

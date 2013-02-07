@@ -6,7 +6,7 @@ from mock import patch
 
 def test_homepage():
     actual = serve_request('/').body
-    expected = "Gittip happens every Thursday."
+    expected = "Weekly Cash Gifts"
     assert expected in actual, actual
 
 def test_profile():
@@ -62,7 +62,7 @@ def test_github_proxy(requests):
     requests.get().status_code = 200
     requests.get().text = GITHUB_USER_UNREGISTERED_LGTEST
     with load():
-        expected = "<b>lgtest</b> has not joined"
+        expected = "lgtest has not joined"
         actual = serve_request('/on/github/lgtest/').body
         assert expected in actual, actual
 
@@ -70,6 +70,6 @@ def test_github_proxy(requests):
 # This hits the network. XXX add a knob to skip this
 def test_twitter_proxy():
     with load():
-        expected = "<b>Twitter</b> has not joined"
+        expected = "Twitter has not joined"
         actual = serve_request('/on/twitter/twitter/').body
         assert expected in actual, actual
