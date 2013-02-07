@@ -11,6 +11,7 @@ balanced_account_uri = None
 payouts_down = False
 account = None
 bank_account = None
+status = ". . ."
 
 if not user.ANON:
     balanced_account_uri = user.balanced_account_uri
@@ -32,58 +33,13 @@ if not user.ANON:
 
     username = user.id
 
+title = "Bank Account"
 # ========================================================================== ^L
 {% extends templates/base.html %}
 
+{% block heading %}
 
-{% block page %}
-{% if user.ANON %}
-<div id="their-voice">
-<h2 class="first">Bank Account</h2>
-
-<p>Sign in <a href="{{ github.oauth_url(website, u'opt-in', u'/bank-account.html') }}">with
-GitHub</a>, and then you&rsquo;ll be able to add or change your bank account.
-Thanks! :-)</p>
-
-</div>
-
-{% else %}
-<script>
-    $(document).ready(function()
-    {
-        Gittip.initPayout("{{ balanced.Marketplace.my_marketplace.uri }}", "{{ user.id }}");
-    });
-</script>
-<style>
-    #feedback {
-        position: absolute;
-        width: 220px;
-        left: 360px;
-    }
-    #feedback H3 {
-        margin-top: 0;
-    }
-    #feedback .details P {
-        font-size: 9pt;
-        line-height: 12pt;
-        margin: 0 ! important;
-        padding: 0 0 0 1em;
-        text-indent: -1em;
-        overflow: hidden;
-    }
-    FORM {
-        width: 300px;
-    }
-    {% if not balanced_account_uri %}
-    #delete {
-        display: none;
-    }
-    {% end %}
-</style>
-<div id="their-voice">
-
-    <h2 class="first">You are <a href="/{{ user.id }}/">{{ user.id }}</a>.</h2>
-    <h2>Your <b>bank account</b> is <span id="status">{{ status }}</span>.</h2>
+    <h2 class="top"><span>Your bank account is <em id="status">{{ status }}</em></span></h2>
 
     {% if payouts_down %}
 
@@ -98,144 +54,174 @@ Thanks! :-)</p>
     a bank account then your money will accumulate within Gittip unless you
     regift it to others.<p>
 
-    <p>Bank account information is stored and processed by <a
-        href="https://www.balancedpayments.com/">Balanced</a>. Here are their
-    <a href="https://www.balancedpayments.com/terms">Terms of Service</a> and
-    <a href="https://www.balancedpayments.com/privacy">Privacy Policy</a>.</p>
-
-    {% if account and 'merchant' in account.roles %}
-
-    <h3>Identity Verification &nbsp; &#x2714;</h3>
-
-    <h3>Routing Information</h3>
-
-    {% if bank_account and bank_account.is_setup %}
-
-    <p>Your current account is a
-    <b>{{ bank_account['bank_name'] }}</b> account ending in
-    <b>{{ bank_account['last_four'] }}</b>.</p>
-
-    {% end %}
     {% end %}
 
-    <form id="payout" class="special">
 
-        <div id="feedback">{% if user.last_ach_result %}
-            <h3><span>Failure</span></h3>
-            <div class="details">
-                <p>{{ user.last_ach_result }}</p>
-            </div>
-        {% end %}</div>
+{% end %}
 
-        {% if not account or 'merchant' not in account.roles %}
+{% block box %}
+  {% if user.ANON %}
+    <div class="on-homepage">
 
-        <h3>Identity Verification</h3>
+    <p>Sign in using
+    <a href="{{ twitter.oauth_url(website, u'opt-in', u'/bank-account.html') }}">Twitter</a> or
+    <a href="{{ github.oauth_url(website, u'opt-in', u'/bank-account.html') }}">GitHub</a>,
+    and then you&rsquo;ll be able to add or change your bank account.</p>
 
-        <div>
-        <label for="name">Your Legal Name</label>
-        <input id="name" value="" />
-        </div>
+    <p>Thanks! :-)</p>
 
-        <div class="clear"></div>
-
-        <div>
-            <label for="address_1">Street Address</label>
-            <input id="address_1" value="" />
-        </div>
-
-        <div>
-            <label for="address_1">City</label>
-            <input id="address_1" value="" />
-        </div>
-
-        <div class="half left">
-            <label for="state">State or Province</label>
-            <input id="state" value="" />
-        </div>
-
-        <div class="half right">
-            <label for="zip">ZIP or Postal Code</label>
-            <input id="zip" value="" />
-        </div>
-
-        <div class="clear"></div>
-
-        <div>
-            <label for="address_1">Country (<a href="https://github.com/zetaweb/www.gittip.com/issues/126">non-US?</a>)</label>
-            <input id="zip" value="United States of America" disabled="true"
-                class="disabled" />
-        </div>
-
-        <div>
-            <label for="phone_number">Contact Phone Number</label>
-            <input id="phone_number" value="" />
-        </div>
-
-        <div class="left">
-            <label for="dob-year">Date of Birth</label>
-            <select id="dob-month">
-                {% for i in range(1, 13) %}
-                <option value="{{ i }}">{{ MONTHS[i] }}</option>
-                {% end %}
-            </select>
-            <select id="dob-day">
-                {% for i in range(1, 32) %}
-                <option value="{{ i }}">{{ i }}</option>
-                {% end %}
-            </select>
-            <select id="dob-year">
-            {% for i in range(1900, datetime.utcnow().year - 17) %}
-                <option value="{{ i }}" {{ 'selected="selected"' if i == 1990 else '' }}>{{ i }}</option>
-            {% end %}
-            </select>
-        </div>
-
-        <div class="clear"></div>
-
-        <h3>Routing Information</h3>
-
-        {% end %}
-
-        <div class="float">
-            <label for="account_name">Name on Bank Account</label>
-            <input id="account_name" autofocus="autofocus" />
-        </div>
-
-        <div class="float account_number">
-            <label for="account_number">Bank Account Number</label>
-            <input id="account_number" />
-        </div>
-
-        <div class="float routing_number">
-            <label for="routing_number">Routing Number</label>
-            <input id="routing_number" />
-        </div>
-
-        <div class="clear"></div>
-
-        <div class="full">
-            <button class="selected" id="save"
-            type="submit">Save</button>
-        </div>
-        {% end %}
-    </form>
-
-    {% if bank_account and bank_account.is_setup %}
-
-    <div id="delete">
-        <h2>Disconnect bank account.</h2>
-
-        <form action="bank-account.json" class="special" method="POST">
-            <input type="hidden" name="action" value="delete">
-            <button>Disconnect my bank account</button>
-        </form>
     </div>
 
-    {% end %}
+  {% else %}
+    <script>
+        $(document).ready(function()
+        {
+            Gittip.initPayout("{{ balanced.Marketplace.my_marketplace.uri }}", "{{ user.id }}");
+        });
+    </script>
+    <style>
+        {% if not balanced_account_uri %}
+        #delete {
+            display: none;
+        }
+        {% end %}
+    </style>
+    <div class="on-form">
+        <form id="payout">
+            <div class="constrain-width group">
+
+                {% if bank_account and bank_account.is_setup %}
+                <h2>Your current account is a
+                {{ bank_account['bank_name'] }} account ending in
+                {{ bank_account['last_four'] }}</h2>
+                {% end %}
+
+                {% if account and 'merchant' in account.roles %}
+                <h2>Identity Verification &nbsp; <span>&#x2714;</span></h2>
+                <h2>Routing Information</h2>
+                {% end %}
+
+
+                <div id="feedback">{% if user.last_ach_result %}
+                <h2><span>Failure</span></h2>
+                <div class="details"><p>{{ user.last_ach_result }}</p></div>
+                  {% end %}</div>
+
+
+                {% if not account or 'merchant' not in account.roles %}
+                <h2>Identity Verification</h2>
+
+                <div>
+                <label for="name">Your Legal Name</label>
+                <input id="name" value="" />
+                </div>
+
+                <div class="clear"></div>
+
+                <div>
+                    <label for="address_1">Street Address</label>
+                    <input id="address_1" value="" />
+                </div>
+
+                <div>
+                    <label for="address_1">City</label>
+                    <input id="address_1" value="" />
+                </div>
+
+                <div class="half left">
+                    <label for="state">State or Province</label>
+                    <input id="state" value="" />
+                </div>
+
+                <div class="half right">
+                    <label for="zip">ZIP or Postal Code</label>
+                    <input id="zip" value="" />
+                </div>
+
+                <div class="clear"></div>
+
+                <div>
+                    <label for="address_1">Country (<a href="https://github.com/zetaweb/www.gittip.com/issues/126">non-US?</a>)</label>
+                    <input id="zip" value="United States of America" disabled="true"
+                        class="disabled" />
+                </div>
+
+                <div>
+                    <label for="phone_number">Contact Phone Number</label>
+                    <input id="phone_number" value="" />
+                </div>
+
+                <div class="left">
+                    <label for="dob-year">Date of Birth</label>
+                    <select id="dob-month">
+                        {% for i in range(1, 13) %}
+                        <option value="{{ i }}">{{ MONTHS[i] }}</option>
+                        {% end %}
+                    </select>
+                    <select id="dob-day">
+                        {% for i in range(1, 32) %}
+                        <option value="{{ i }}">{{ i }}</option>
+                        {% end %}
+                    </select>
+                    <select id="dob-year">
+                    {% for i in range(1900, datetime.utcnow().year - 17) %}
+                        <option value="{{ i }}" {{ 'selected="selected"' if i == 1990 else '' }}>{{ i }}</option>
+                    {% end %}
+                    </select>
+                </div>
+
+                <div class="clear"></div>
+
+
+                <h2>Routing Information</h2>
+                {% end %}
+
+
+                <div class="float">
+                    <label for="account_name">Name on Bank Account</label>
+                    <input id="account_name" autofocus="autofocus" />
+                </div>
+
+                <div class="float account_number">
+                    <label for="account_number">Bank Account Number</label>
+                    <input id="account_number" />
+                </div>
+
+                <div class="float routing_number">
+                    <label for="routing_number">Routing Number</label>
+                    <input id="routing_number" />
+                </div>
+
+                <div class="clear"></div>
+            </div>
+
+            <div class="buttons tips">
+                <button class="selected" id="save" type="submit">Save</button>
+            </div>
+        </form>
+
+
+        {% if bank_account and bank_account.is_setup %}
+        <div id="delete" class="buttons nav">
+            <form action="bank-account.json" class="special" method="POST">
+                <input type="hidden" name="action" value="delete">
+                <button>Disconnect My Bank Account</button>
+            </form>
+        </div>
+        {% end %}
+
+    </div>
+  {% end %}
+{% end %}
+
+{% block page %}
+<div class="col0 payment-footer">
+
+    <p>Bank account information is stored and processed by <a
+        href="https://www.balancedpayments.com/">Balanced</a>.<br />Here are
+    their <a href="https://www.balancedpayments.com/terms">Terms of Service</a>
+    and <a href="https://www.balancedpayments.com/privacy">Privacy
+        Policy</a>.</p>
 
 </div>
-<div id="powered-by-balanced">
-    <a href="https://www.balancedpayments.com">Payments By Balanced</a>
-</div>
-{% end %}
 {% end %}
