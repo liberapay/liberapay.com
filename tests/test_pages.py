@@ -52,7 +52,7 @@ def test_about_stats():
     assert expected in actual, actual
 
 def test_about_charts():
-    expected = "growth since it launched"
+    expected = "Money transferred"
     actual = serve_request('/about/charts.html').body
     assert expected in actual, actual
 
