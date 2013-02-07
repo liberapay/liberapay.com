@@ -102,7 +102,10 @@ $(document).ready(function()
         $('.statement BUTTON.save').show();
         $('.statement BUTTON.cancel').show();
         $('.statement DIV.view').hide();
-        $('.statement DIV.edit').show();
+        $('.statement DIV.edit').show(0, function() {
+            $('.statement TEXTAREA').focus();
+        });
+
 
         return false;
     });
