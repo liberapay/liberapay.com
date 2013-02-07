@@ -52,6 +52,10 @@
             {% if user.id == participant.id %}
 
             <a href="/credit-card.html">Credit card</a>:
+            <!--
+            These spans are here because otherwise Chrome effs up the
+            unicode(?!)
+            -->
             <span>{% if participant.last_bill_result != "" %}&#x2718;{% else %}&#x2714;{% end %}</span>
             &nbsp; &nbsp; &nbsp;
             <a href="/bank-account.html">Bank account</a>:

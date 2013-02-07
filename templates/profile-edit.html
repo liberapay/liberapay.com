@@ -15,7 +15,8 @@
     <p>
         <input name="anonymous" class="anonymous" type="checkbox"
             {% if participant.anonymous %}checked="true"{% end %} />
-        <label for="anonymous" class="anonymous">Hide total giving from others.</label>
+        <label for="anonymous" class="anonymous">Hide total giving from
+            others.</label>
     </p>
 
 
@@ -85,7 +86,9 @@
     <blockquote id="my-goal" class="goal">
         <div>
         {% if user.goal > 0 %}
-        My goal is to receive ${{ locale.format("%.2f", user.goal, grouping=True) }} per week on Gittip.
+        My goal is to receive
+        ${{ locale.format("%.2f", user.goal, grouping=True) }} per week on
+        Gittip.
         {% elif user.goal == 0 %}
         I&rsquo;m not here to receive tips. I&rsquo;ll generally regift them.
         {% else %}
