@@ -95,16 +95,15 @@ title = "Bank Account"
                 ******{{ bank_account['last_four'] }}</h2>
                 {% end %}
 
-                {% if account and 'merchant' in account.roles %}
-                <h2>Identity Verification &nbsp; <span>&#x2714;</span></h2>
-                <h2>Routing Information</h2>
-                {% end %}
-
-
                 <div id="feedback">{% if user.last_ach_result %}
                 <h2><span>Failure</span></h2>
                 <div class="details"><p>{{ user.last_ach_result }}</p></div>
                   {% end %}</div>
+
+                {% if account and 'merchant' in account.roles %}
+                <h2>Identity Verification &nbsp; <span>&#x2714;</span></h2>
+                <h2>Routing Information</h2>
+                {% end %}
 
 
                 {% if not account or 'merchant' not in account.roles %}
