@@ -89,11 +89,8 @@ $(document).ready(function()
     // ===============================
 
     $('TEXTAREA').focus();
-    $('.statement BUTTON.edit').click(function(e)
+    function start_editing_statement()
     {
-        e.preventDefault();
-        e.stopPropagation();
-
         var h = $('.statement DIV.view').height();
         h = Math.max(h, 128);
         $('.statement TEXTAREA').height(h);
@@ -105,8 +102,16 @@ $(document).ready(function()
         $('.statement DIV.edit').show(0, function() {
             $('.statement TEXTAREA').focus();
         });
-
-
+    }
+    if ($('.statement TEXTAREA').val() === '')
+    {
+        start_editing_statement();
+    }
+    $('.statement BUTTON.edit').click(function(e)
+    {
+        e.preventDefault();
+        e.stopPropagation();
+        start_editing_statement();
         return false;
     });
     $('FORM.statement').submit(function(e)
@@ -124,7 +129,7 @@ $(document).ready(function()
             { url: "statement.json"
             , type: "POST"
             , success: success
-            , data: {"statement": $('TEXTAREA').val()}
+            , data: {"statement": $('.statement TEXTAREA').val()}
              }
         )
         return false;

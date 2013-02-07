@@ -31,13 +31,13 @@
             <button tabindex="9" class="cancel" type="cancel">Cancel</button>
         </h2>
 
-        <div class="edit"{% if participant.statement %} style="display: none;"{% end %}>
+        <div class="edit">
             {{ MAKING }} ...
             <textarea tabindex="7">{{ participant.statement }}</textarea>
             <span class="help">Newlines and links are converted to HTML.</span>
         </div>
 
-        <div class="view"{% if not participant.statement %} style="display: none"{% end %}>
+        <div class="view">
             {{ MAKING }} <span>{{ wrap(participant.statement) }}</span>
         </div>
     </form>
