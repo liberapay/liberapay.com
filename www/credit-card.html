@@ -51,10 +51,11 @@ title = "Credit Card"
 
     {% else %}
 
-    <p>When you don&rsquo;t have enough in your Gittip account to cover your
-    tips, we {% if balanced_account_uri %}will{% else %}can{% end %} pull money
-    in using {% if balanced_account_uri %}this{% else %}a{% end %} credit card.
-    If your credit card is missing or fails then your tips won&rsquo;t go
+    <p>When you don&rsquo;t have enough money in your Gittip account to cover
+    your gifts, we {% if balanced_account_uri %}will{% else %}can{% end %}
+    attempt to pull money in using
+    {% if balanced_account_uri %}this{% else %}a{% end %} credit card.
+    If your credit card is missing or fails then your gifts won&rsquo;t go
     through for that week.<p>
 
     {% end %}
