@@ -41,7 +41,8 @@ if usertype == "user":
         my_tip = user.get_tip_to(participant.id)
 
     tip_or_pledge = "pledge"
-    nbackers = participant.get_number_of_backers()
+    number = participant.get_number_of_backers()
+    img_src = participant.get_img_src(128)
 
 elif usertype == "organization":
     members = []
@@ -73,78 +74,127 @@ elif usertype == "organization":
         tip_to = None if user.ANON else user.get_tip_to(member['login'])
         seq.append((member, tip_to))
     can_tip = user.ANON
+    number = len(members)
+    img_src = user_info['avatar_url'] + "&s=128"
 else:
     can_tip = False
+    img_src = "/assets/-/avatar-default.gif"
 
+url = user_info['html_url']
 # ========================================================================== ^L
-{% extends templates/participant.html %}
+{% extends templates/base.html %}
+
+{% block heading %}<h2 class="top"><span>GitHub</span></h2>{% end %}
+
+{% block box %}
+
+<table class="on-elsewhere">
+    <tr>
+        <td class="picture">
+            <img src="{{ img_src }}" />
+        </td>
+        <td class="ready">
+            <h2><a href="{{ url }}">{{ username }}</a> has</h2>
+            <div class="number">{{ number }}</div>
+            {% if usertype == "user" %}
+            <div class="unit">{{ 'person' if number == 1 else 'people' }} ready to give</div>
+            {% elif usertype == "organization" %}
+            <div class="unit">public member{{ '' if number == 1 else 's' }}</div>
+            {% end %}
+        </td>
+        <td class="offset"></td>
+    </tr>
+</table>
+
+{% if user.ANON or usertype == "user" %}
+<div class="buttons tips">
+    {% if user.ANON %}
+
+        <div class="help with-padding">Sign in using
+            <a href="/on/twitter/redirect">Twitter</a> or
+            <a class="highlight"
+                href="{{ github.oauth_url(website, u'opt-in', username) }}">GitHub</a>
+            to pledge to {{ username }}.</div>
+
+    {% elif usertype == "user" and account.is_locked %}
+
+        <div class="help with-padding">
+            This account has been locked by its owner.
+        </div>
+
+    {% elif usertype == "user" %}
+
+        {% set my_tip = user.get_tip_to(participant.id) %}
+        <h2>Your Weekly Pledge</h2>
+        {% for amount in AMOUNTS %}
+        <button amount="{{ amount }}" tippee="{{ participant.id }}"
+            class="tip{{ ' selected' if amount == my_tip else '' }}">${{ amount }}</button>
+        {% end %}
+        {% if my_tip not in AMOUNTS %}
+        <span class="old-amount">
+            <button class="tip disabled selected">{{ my_tip }}</button>
+            <span class="old-amount-link">&mdash;
+            <a href="http://blog.gittip.com/post/26505682007/is-personal-funding-viable" target="_blank">old amount</a>!</span>
+        </span>
+        {% end %}
+
+        {% if user.last_bill_result is None %}
+
+        <div id="payment-prompt" class="help{% if my_tip > 0 %} needed{% end %}">
+        Back your gift with a <a href="/credit-card.html"
+            class="highlight">credit card</a> to make sure it goes
+        through!</div>
+        {% elif user.last_bill_result %}
+        <div id="payment-prompt" class="help really-needed">Fix your <a
+            href="/credit-card.html" class="highlight">credit
+            card</a> to make sure your gifts go through!</div>
+        {% end %}
+
+    {% end %}
+</div>
+{% end %}
+{% end %}
 
 {% block page %}
-    {% if usertype == "user" %}
+
+  {% if usertype == "user" %}
+    <div class="col0">
       {% if account.is_locked %}
 
-        <h2 class="first"><b>{{ username }}</b> has opted out of Gittip.</h2>
+        <h2>{{ username }} has opted out of Gittip.</h2>
 
         <p>If you are <a href="{{ user_info.get('html_url', '') }}">{{ username }}</a>
-        on GitHub, you can unlock your account to allow people to
-        pledge tips to you on Gittip. We never collect any money on your behalf
-        until you explicitly opt in.</p>
+        on GitHub, you can unlock your account to allow people to pledge tips
+        to you on Gittip.</p>
 
         <a href="{{ github.oauth_url(website, u'unlock', username) }}"
             ><button>Unlock</button></a>
 
       {% else %}
-        <script>
-            $(document).ready(Gittip.initTipButtons);
-        </script>
+        <script>$(document).ready(Gittip.initTipButtons);</script>
 
-        <h2 class="first"><b>{{ name }}</b> has not joined Gittip.</h2>
+        <h2>{{ name }} has not joined Gittip.</h2>
 
         <p>Is this you?
         {% if user.ANON %}
-        <a href="{{ github.oauth_url(website, u'opt-in', username) }}">Click here</a> to opt in to Gittip.
+        <a href="{{ github.oauth_url(website, u'opt-in', username) }}">Click
+            here</a> to opt in to Gittip (we never collect money for you until
+        you do).
         {% else %}
-        You&rsquo;ll have to <a href="/sign-out.html">sign out</a> and sign back in to claim this account.
-        {% end %}</p>
-
-        <table id="accounts">
-            <tr>
-                <td class="account-type">
-                    <img src="/assets/octocat.png" />
-                </td>
-                <td class="account-details">
-                    <a href="{{ user_info['html_url'] }}">
-                    <img class="avatar"
-                         src="{{ user_info.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" />
-                         {{ user_info['login'] }}
-                    {% if user_info.get('name') %}({{ user_info.get('name') }}){% end %}
-                    </a>
-                    <div class="account-type">GitHub</div>
-                </td>
-            </tr>
-        </table>
-
-        {% if nbackers == 0 %}
-        {% elif nbackers == 1 %}
-        <h3>There is one person ready to give.</h3>
-        {% elif nbackers < 10 %}
-        <h3>There are {{ CARDINALS[nbackers] }} people ready to give.</h3>
-        {% else %}
-        <h3>There are {{ nbackers }} people ready to give.</h3>
+        <a href="/sign-out.html">Sign out</a> and sign back in
+        to claim this account
         {% end %}
+        </p>
+
+        {% if user.ANON %}
+        <h2>What is Gittip?</h2>
+
+        <p>Gittip is a way to thank and support your favorite artists,
+        musicians, writers, programmers, etc. by setting up a small weekly cash
+        gift to them. <a href="/about/">Read more ...</a></p>
 
 
-        {% if not user.ANON %}
-
-        <p>{{ 'But we' if nbackers > 0 else 'We' }} will never collect money on
-        behalf of {{ username }} until they opt in.</p>
-
-        {% else %}
-
-        <p>{{ 'But we' if nbackers > 0 else 'We' }} will never collect money on
-        your behalf until you opt in.</p>
-
-        <h3>Don&rsquo;t like what you see?</h3>
+        <h2>Don&rsquo;t like what you see?</h2>
 
         <p>If you are {{ username }} you can explicitly opt out of Gittip by
         locking this account. We don&rsquo;t allow new pledges to locked
@@ -152,43 +202,25 @@ else:
 
         <a href="{{ github.oauth_url(website, u'lock', username) }}"
             ><button>Lock</button></a>
-
         {% end %}
+
       {% end %}
-    {% elif usertype == "organization"  %}
-    <script>
-        $(document).ready(Gittip.initTipButtons);
-    </script>
+    </div>
+  {% elif usertype == "organization"  %}
+    <script>$(document).ready(Gittip.initTipButtons);</script>
 
-    <h2 class="first"><b>{{ name }}</b> is an {{ usertype }} on GitHub.</h2>
-    <table id="accounts">
-        <tr>
-            <td class="account-type">
-                <img src="/assets/octocat.png" />
-            </td>
-            <td class="account-details">
-                <a href="{{ user_info['html_url'] }}">
-                <img class="avatar"
-                     src="{{ user_info.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" />
-                     {{ user_info['login'] }}
-                {% if user_info.get('name') %}({{ user_info.get('name') }}){% end %}
-                </a>
-                <div class="account-type">GitHub</div>
-            </td>
-        </tr>
-    </table>
-
-    {% if len(members) == 0 %}
-    {{ name }} does not have any public members.
-    {% elif len(members) == 1 %}
-    {{ name }} has one public member.
-    {% else %}
-    Here are the {{ len(members) }} public members of <a href="https://github.com/{{ username }}">{{ name }}</a>:
-    {% end %}
-
-    <table id="members">
+    <table id="members" class="centered">
       {% for i, sequence in enumerate([on_gittip, not_on_gittip]) %}
-        {% if sequence %}<tr><td colspan="2"><h3>{{ i == 0 and "Also on" or "Not on" }} Gittip</h3></td></tr>{% end %}
+        {% set nsequence = len(sequence) %}
+        {% if sequence %}<tr><td colspan="2">
+                <h2>{{ nsequence }}
+                    {% if number > 0 %}
+                    ({{ "%.1f" % (nsequence * 100 / float(number)) }}%)
+                    {% end %}
+                    {{ 'is' if nsequence == 1 else 'are' }}
+                    {{ i == 0 and "also on" or "not on" }} Gittip</h2>
+        </td></tr>
+        {% end %}
         {% for member, tip in sequence %}
         <tr class="not-over"><td>
             {% if not user.ANON %}
@@ -222,10 +254,10 @@ else:
 
     {% else %}
 
-    <h2 class="first">Not sure what to do with <b>{{ name }}</b>.</h2>
+    <h2>Not sure what to do with {{ name }}.</h2>
 
     I don&rsquo;t recognize the &ldquo;{{ usertype }}&rdquo; type of user on GitHub.<br />
     Sorry. :-(
 
-    {% end %}
+  {% end %}
 {% end %}

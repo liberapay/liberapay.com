@@ -49,8 +49,8 @@ nbackers = participant.get_number_of_backers()
         </td>
         <td class="ready">
             <h2><a href="{{ url }}">{{ username }}</a> has</h2>
-            <div class="nbackers">{{ nbackers }}</div>
-            <div class="ready-to-give">{{ 'person' if nbackers == 1 else 'people' }} ready to give</div>
+            <div class="number">{{ nbackers }}</div>
+            <div class="unit">{{ 'person' if nbackers == 1 else 'people' }} ready to give</div>
         </td>
         <td class="offset"></td>
     </tr>
@@ -107,7 +107,7 @@ nbackers = participant.get_number_of_backers()
 <div class="col0">
   {% if account.is_locked %}
 
-    <h2 class="first"><b>{{ username }}</b> has opted out of Gittip.</h2>
+    <h2>{{ username }} has opted out of Gittip.</h2>
 
     <p>If you are <a href="{{ user_info.get('html_url', '') }}">{{ username }}</a>
     on Twitter, you can unlock your account to allow people to pledge tips to
@@ -121,7 +121,7 @@ nbackers = participant.get_number_of_backers()
         $(document).ready(Gittip.initTipButtons);
     </script>
 
-    <h2 class="first"><b>{{ name }}</b> has not joined Gittip.</h2>
+    <h2>{{ name }} has not joined Gittip.</h2>
 
     <p>Is this you?
     {% if user.ANON %}
@@ -138,7 +138,7 @@ nbackers = participant.get_number_of_backers()
     <h2>What is Gittip?</h2>
 
     <p>Gittip is a way to thank and support your favorite artists, musicians,
-    writers, programmers, etc. by setting up a small weekly cash gif to them.
+    writers, programmers, etc. by setting up a small weekly cash gift to them.
     <a href="/about/">Read more ...</a></p>
 
 
