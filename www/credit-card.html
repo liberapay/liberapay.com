@@ -36,59 +36,13 @@ if not user.ANON:
             payments_down = False
 
     username = user.id
+
+title = "Credit Card"
 # ========================================================================== ^L
 {% extends templates/base.html %}
 
-
-{% block page %}
-{% if user.ANON %}
-<div id="their-voice">
-<h2 class="first">Credit Card</h2>
-
-<p>Sign in <a href="{{ github.oauth_url(website, u'opt-in', u'/credit-card.html') }}">with
-GitHub</a>, and then you&rsquo;ll be able to add or change your credit card.</p>
-
-<p>Thanks! :-)</p>
-
-</div>
-
-{% else %}
-<script>
-    $(document).ready(function()
-    {
-        Gittip.initPayment("{{ balanced.Marketplace.my_marketplace.uri }}", "{{ user.id }}");
-    });
-</script>
-<style>
-    #feedback {
-        position: absolute;
-        width: 220px;
-        left: 360px;
-    }
-    #feedback H3 {
-        margin-top: 0;
-    }
-    #feedback .details P {
-        font-size: 9pt;
-        line-height: 12pt;
-        margin: 0 ! important;
-        padding: 0 0 0 1em;
-        text-indent: -1em;
-        overflow: hidden;
-    }
-    FORM {
-        width: 300px;
-    }
-    {% if status == "missing" %}
-    #delete {
-        display: none;
-    }
-    {% end %}
-</style>
-<div id="their-voice">
-
-    <h2 class="first">You are <a href="/{{ user.id }}/">{{ user.id }}</a>.</h2>
-    <h2>Your <b>credit card</b> is <span id="status">{{ status }}</span>.</h2>
+{% block heading %}
+    <h2 class="top"><span>Your credit card is <em id="status">{{ status }}</em></span></h2>
 
     {% if payments_down %}
 
@@ -103,98 +57,123 @@ GitHub</a>, and then you&rsquo;ll be able to add or change your credit card.</p>
     If your credit card is missing or fails then your tips won&rsquo;t go
     through for that week.<p>
 
-    {% if stripe_customer_id and not balanced_account_uri %}
-    <p>We are currently migrating your credit card information from one
-    processor, <a href="https://stripe.com/">Stripe</a>, to another, <a
-    href="https://www.balancedpayments.com/">Balanced</a>. Feel free to make
-    changes in the mean time.</p>
-    {% else %}
-    <p>Credit card information is stored and processed by <a
-    href="https://www.balancedpayments.com/">Balanced</a>. Here are their
-    <a href="https://www.balancedpayments.com/terms">Terms of Service</a> and
-    <a href="https://www.balancedpayments.com/privacy">Privacy Policy</a>.</p>
     {% end %}
+{% end %}
 
-    {% if status != "missing" %}
+{% block box %}
+  {% if user.ANON %}
+    <div>
 
-    <p>Your current card is <b>{{ card['last4'] }}</b>.</p>
+    <p>Sign in <a href="{{ github.oauth_url(website, u'opt-in', u'/credit-card.html') }}">with
+    GitHub</a>, and then you&rsquo;ll be able to add or change your credit card.</p>
 
-    <h2>Change your card on file.</h2>
-    {% end %}
+    <p>Thanks! :-)</p>
 
-    <form id="payment" class="special">
-        <div id="feedback">{% if user.last_bill_result %}
-        <h3><span>Failure</span></h3>
-        <div class="details">
-        <p>{{ user.last_bill_result }}</p>
-        </div>
-        {% end %}</div>
-
-
-        <h3>Required</h3>
-
-        <div class="float card_number">
-            <label for="card_number">Credit Card Number</label>
-            <input id="card_number" />
-        </div>
-
-        <div class="float expiration not-first">
-            <label for="expiration_month">Expiration</label>
-            <input class="expiration_month" id="expiration_month" placeholder="MM"/>
-            <input class="expiration_year" id="expiration_year" placeholder="YYYY"/>
-        </div>
-
-        <div class="float cvv not-first">
-            <label for="cvv">CVV</label>
-            <input id="cvv" />
-        </div>
-
-        <div class="clear"></div>
-
-
-        <h3>Optional</h3>
-
-        <label for="name">Full Name on Card</label>
-        <input id="name" value="{{ card['name'] }}" />
-
-        <div class="clear"></div>
-
-        <label for="address_1">Address 1</label>
-        <input id="address_1" value="{{ card['address_1'] }}" />
-
-        <label for="address_2">Address 2</label>
-        <input id="address_2" value="{{ card['address_2'] }}" />
-
-
-        <div class="half left">
-            <label for="state">State or Province</label>
-            <input id="state" value="{{ card['state'] }}" />
-        </div>
-
-        <div class="half right">
-            <label for="zip">ZIP or Postal Code</label>
-            <input id="zip" value="{{ card['zip'] }}" />
-        </div>
-
-        <div class="clear"></div>
-
-        <div class="full">
-            <img src="/assets/{{ __version__ }}/cards.png" />
-            <button class="selected" id="save"
-            type="submit">Save</button>
-        </div>
-        {% end %}
-    </form>
-
-    <div id="delete">
-    <h2>Disconnect credit card.</h2>
-
-    <form action="credit-card.json" class="special" method="POST">
-        <input type="hidden" name="action" value="delete">
-        <button>Disconnect my credit card</button>
-    </form>
     </div>
 
-</div>
+  {% else %}
+    <script>
+        $(document).ready(function()
+        {
+            Gittip.initPayment("{{ balanced.Marketplace.my_marketplace.uri }}", "{{ user.id }}");
+        });
+    </script>
+    <style>
+        {% if status == "missing" %}
+        #delete {
+            display: none;
+        }
+        {% end %}
+    </style>
+    <div class="on-form">
+        <form id="payment">
+            <div class="constrain-width group">
+
+                {% if status != "missing" %}
+                <h2>Your current card is {{ card['last4'] }}</h2>
+                {% end %}
+
+                <div id="feedback">{% if user.last_bill_result %}
+                <h2><span>Failure</span></h2>
+                <div class="details">
+                <p>{{ user.last_bill_result }}</p>
+                </div>
+                {% end %}</div>
+
+
+                <h2>Required</h2>
+
+                <div class="float card_number">
+                    <label for="card_number">Credit Card Number</label>
+                    <input id="card_number" />
+                </div>
+
+                <div class="float expiration not-first">
+                    <label for="expiration_month">Expiration</label>
+                    <input class="expiration_month" id="expiration_month" placeholder="MM"/>
+                    <input class="expiration_year" id="expiration_year" placeholder="YYYY"/>
+                </div>
+
+                <div class="float cvv not-first">
+                    <label for="cvv">CVV</label>
+                    <input id="cvv" />
+                </div>
+
+                <div class="clear"></div>
+
+
+                <h2>Optional</h2>
+
+                <label for="name">Full Name on Card</label>
+                <input id="name" value="{{ card['name'] }}" />
+
+                <div class="clear"></div>
+
+                <label for="address_1">Address 1</label>
+                <input id="address_1" value="{{ card['address_1'] }}" />
+
+                <label for="address_2">Address 2</label>
+                <input id="address_2" value="{{ card['address_2'] }}" />
+
+
+                <div class="half left">
+                    <label for="state">State or Province</label>
+                    <input id="state" value="{{ card['state'] }}" />
+                </div>
+
+                <div class="half right">
+                    <label for="zip">ZIP or Postal Code</label>
+                    <input id="zip" value="{{ card['zip'] }}" />
+                </div>
+
+            </div>
+
+            <div class="buttons tips">
+                <button class="selected" id="save" type="submit">Save</button>
+            </div>
+
+        </form>
+
+        <div id="delete" class="buttons nav">
+            <form action="credit-card.json" class="special" method="POST">
+                <input type="hidden" name="action" value="delete">
+                <button>Disconnect My Credit Card</button>
+            </form>
+        </div>
+    </div>
 {% end %}
+{% end %}
+
+{% block page %}
+<div class="col0 payment-footer">
+
+    <p>Credit card information is stored and processed by <a
+        href="https://www.balancedpayments.com/">Balanced</a>.<br />Here are
+    their <a href="https://www.balancedpayments.com/terms">Terms of Service</a>
+    and <a href="https://www.balancedpayments.com/privacy">Privacy
+        Policy</a>.</p>
+
+    <img src="/assets/{{ __version__ }}/cards.png" />
+
+</div>
 {% end %}

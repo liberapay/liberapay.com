@@ -93,7 +93,7 @@ Gittip.showFeedback = function(msg, details)
 {
     if (msg === null)
         msg = "Failure";
-    msg = '<h3><span class="highlight">' + msg + '</span></h3>';
+    msg = '<h2><span class="highlight">' + msg + '</span></h2>';
     msg += '<div class="details"></div>';
     $('#feedback').html(msg);
     if (details !== undefined)
