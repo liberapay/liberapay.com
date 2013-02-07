@@ -24,8 +24,8 @@ if unreviewed is None:
 unreviewed = list(unreviewed)
 
 ^L
-{% extends templates/base.html %}
-{% block page %}
+<script src="/assets/jquery-1.8.3.min.js"></script>
+<script src="/assets/-/gittip.js"></script>
 <style>
     TABLE {
         width: auto;
@@ -35,18 +35,19 @@ unreviewed = list(unreviewed)
         vertical-align: top;
     }
     IFRAME {
-        width: 55%;
-        height: 60%;
+        width: 70%;
+        height: 100%;
         position: fixed;
-        top: 30%;
-        left: 43%;
+        top: 0;
+        right: 0;
         background: white;
-        border-radius: 5pt;
     }
 </style>
 <script>
     $(document).ready(function()
     {
+        Gittip.initCSRF();
+
         function error(a,b,c)
         {
             console.log(a,b,c);
@@ -63,6 +64,7 @@ unreviewed = list(unreviewed)
             function success()
             {
                 row.remove();
+                $('iframe').attr('src', '');
             }
 
             jQuery.ajax({ url: url
@@ -85,4 +87,3 @@ unreviewed = list(unreviewed)
 </div>
 {% end %}
 <iframe name="drill-down"></iframe>
-{% end %}
