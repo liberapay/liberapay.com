@@ -1,5 +1,5 @@
-    <table id="tip-distribution">
-        {% for amount, ncontributors, summed, pcontributors, psummed in giving_chart %}
+    <table class="tip-distribution">
+        {% for amount, ncontributors, summed, pcontributors, psummed in tip_distribution%}
         <tr>
             {% if str(amount) == '-1' %}
             <td class="amount" colspan="2">Other</td>

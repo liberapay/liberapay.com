@@ -245,8 +245,8 @@ class Participant(db.Model):
     def get_dollars_giving(self):
         return OldParticipant(self.id).get_dollars_giving()
 
-    def get_chart_of_receiving(self):
-        return OldParticipant(self.id).get_chart_of_receiving()
+    def get_tip_distribution(self):
+        return OldParticipant(self.id).get_tip_distribution()
 
     def get_giving_for_profile(self, db=None):
         return OldParticipant(self.id).get_giving_for_profile(db)

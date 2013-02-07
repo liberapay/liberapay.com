@@ -99,33 +99,33 @@
     {% include "connected-accounts.html" %}
 </div>
 <div class="clear"></div>
-{% if backed_amount > 0 %}
 
-
+{% if participant.get_dollars_receiving() > 0 %}
+{% set tip_distribution = participant.get_tip_distribution()[0] %}
 <div class="col1">
-<h2>Tips Received, by Number of Tips</h2>
-{% include "tip-distribution.html" %}
+    <h2>Tips Received, by Number of Tips</h2>
+    {% include "tip-distribution.html" %}
 </div>
 
 <div class="col2">
-<h2>Tips Received, by Dollar Amount</h2>
-<table id="tip-distribution">
-    {% for amount, ncontributors, summed, pcontributors, psummed in giving_chart %}
-    <tr>
-        {% if str(amount) == '-1' %}
-        <td class="amount" colspan="2">Other</td>
-        {% else %}
-        <td class="dollar-sign">$</td>
-        <td class="amount">{{ amount }}</td>
+    <h2>Tips Received, by Dollar Amount</h2>
+    <table class="tip-distribution">
+        {% for amount, ncontributors, summed, pcontributors, psummed in tip_distribution %}
+        <tr>
+            {% if str(amount) == '-1' %}
+            <td class="amount" colspan="2">Other</td>
+            {% else %}
+            <td class="dollar-sign">$</td>
+            <td class="amount">{{ amount }}</td>
+            {% end %}
+            <td colspan="2"></td>
+            <td class="count">
+                <span class="green bar" style="width: {{ psummed * 300 }}pt"></span>
+                {{ "%5.1f" % (psummed * 100) }}%
+                <span class="number">(${{ summed }})</span>
+            </td>
+        </tr>
         {% end %}
-        <td colspan="2"></td>
-        <td class="count">
-            <span class="green bar" style="width: {{ psummed * 300 }}pt"></span>
-            {{ "%5.1f" % (psummed * 100) }}%
-            <span class="number">(${{ summed }})</span>
-        </td>
-    </tr>
-    {% end %}
-</table>
+    </table>
 </div>
 {% end %}

@@ -362,7 +362,7 @@ class Participant(object):
 
 
     @require_id
-    def get_chart_of_receiving(self):
+    def get_tip_distribution(self):
         SQL = """
 
             SELECT amount

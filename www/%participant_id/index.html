@@ -1,4 +1,4 @@
-"""Show information about a single participant.
+"""Show information about a single participant. It might be you!
 """
 import locale
 
@@ -6,7 +6,6 @@ import requests
 from aspen import json, Response
 from aspen.utils import to_age
 from gittip import AMOUNTS
-from gittip.models import Participant
 from gittip.utils import get_participant, wrap
 
 MAKING = "I am making the world better by"
@@ -20,33 +19,10 @@ def _clip(text, n):
 # ========================================================================== ^L
 
 participant = get_participant(request, restrict=False)
-
-
-# Load money info.
-# ================
-
-backed_amount = participant.get_dollars_receiving()
-
-if not user.ANON:
-    if user.id == participant.id or user.ADMIN:
-        giving_chart, npatrons, contributed = \
-                                           participant.get_chart_of_receiving()
-    if user.id == participant.id:
-        tips, total, unclaimed_tips, unclaimed_total = \
-                                                  user.get_giving_for_profile()
-        if total == 0:
-            tips = tip_suggestions
-        assert backed_amount == contributed, (backed_amount, contributed)
-    else:
-        my_tip = user.get_tip_to(participant.id)
-
-
-# Set a few more things.
-# ======================
-
 locked = False
 tip_or_pledge = "tip"
-title = participant.id      # used in <title>
+hero = "Profile"
+title = participant.id      # used in the title tag
 username = participant.id   # used in footer shared with on/$platform/ pages
 github_account, twitter_account = participant.get_accounts_elsewhere()
 
@@ -60,118 +36,34 @@ github_account, twitter_account = participant.get_accounts_elsewhere()
     <meta name="og:description" content="{{ _clip(MAKING + " " + participant.statement, 200) }}" />
     <meta name="og:image" content="https://www.gittip.com/assets/gittip.opengraph.png" />
 {% end %}
-{% block heading %}<h2 class="top"><span>Profile</span></h2>{% end %}
 {% block page %}
 
-    <style>
-        /** This is blatantly copied from stats.html. We should really fix
-            that somehow. **/
-        .dollar-sign {
-            padding: 0 2pt 0 24pt;
-            text-align: right;
-        }
-        /*
-        .amount {
-            padding: 0 6pt 0 0;
-            text-align: right;
-        }
-        */
-        .amount-change {
-            padding: 6pt 0 6pt 24pt;
-            text-align: left;
-        }
-        .count {
-            text-align: left;
-            white-space: nowrap;
-        }
-        .count SPAN.number {
-            font-size: 8pt;
-        }
-        .count SPAN.bar {
-            background: #B2A196;
-            display: inline-block;
-            margin-right: 3pt;
-            height: 9pt;
-        }
-        FORM.statement TEXTAREA {
-            width: 98%;
-            height: 126pt; /* 18pt * 7 rows; overriden in js */
-            padding: 1%
-        }
-        FORM BUTTON {
-            float: right;
-            margin-left: 0.5em;
-        }
-        SPAN.participant_id {
-            display: none;
-        }
-        SPAN.participant_id FORM {
-            display: inline;
-        }
-        SPAN.participant_id FORM BUTTON {
-            float: none;
-            margin-left: 0;
-        }
-        SPAN.participant_id INPUT {
-            width: 6em;
-            font-weight: 900;
-        }
-        FORM.goal {
-            display: none;
-        }
-        FORM.goal TD {
-            text-align: left;
-        }
-        FORM.goal TD.buttons {
-            padding-top: 6pt;
-        }
-        #goal-custom {
-            text-align: right;
-            width: 6pc;
-        }
-        LI {
-            margin-bottom: 1em;
-        }
-        .count SPAN.bar.green {
-            background: #2A8F79;
-        }
-        .editing #username_edit_warning {
-            margin-top: 1em;
-            display: block;
-            color: red;
-        }
-        #username_edit_warning {
-            display: none;
-        }
-
-    </style>
-
 {% if user == participant %}
-    {% include "templates/profile-edit.html" %}
+    <div id="profile-edit">
+        {% include "templates/profile-edit.html" %}
+    </div>
 {% else %}
-
-<div class="col1">
-    <h2>Contribution</h2>
-    {% if participant.statement %}
-    <div class="statement">{{ MAKING }} {{ wrap(participant.statement) }}</div>
-    {% end %}
-</div>
-<div class="col2">
-
-    <h2>Funding Goal</h2>
-    <div class="goal">
-        {% if participant.goal is None %}
-        I&rsquo;m grateful for tips, but I don&rsquo;t have a specific funding goal.
-        {% elif participant.goal == 0 %}
-        I&rsquo;m not here to receive tips. I&rsquo;ll generally regift them.
-        {% else %}
-        My goal is to receive ${{ locale.format("%.2f", participant.goal, grouping=True) }} per week on Gittip.
+    <div class="col1">
+        <h2>Contribution</h2>
+        {% if participant.statement %}
+        <div class="statement">{{ MAKING }} {{ wrap(participant.statement) }}</div>
         {% end %}
-        </div>
+    </div>
+    <div class="col2">
 
-    {% include "templates/connected-accounts.html" %}
-</div>
+        <h2>Funding Goal</h2>
+        <div class="goal">
+            {% if participant.goal is None %}
+            I&rsquo;m grateful for tips, but I don&rsquo;t have a specific funding goal.
+            {% elif participant.goal == 0 %}
+            I&rsquo;m not here to receive tips. I&rsquo;ll generally regift them.
+            {% else %}
+            My goal is to receive ${{ locale.format("%.2f", participant.goal, grouping=True) }} per week on Gittip.
+            {% end %}
+            </div>
+
+        {% include "templates/connected-accounts.html" %}
+    </div>
 {% end %}
-
 <div class="clear"></div>
 {% end %}
