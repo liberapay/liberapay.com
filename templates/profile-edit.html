@@ -1,17 +1,19 @@
 <div class="col1">
-    <h2 class="first">You are
-        <b class="participant_id">{{ escape(user.id) }}</b>
-        <span class="participant_id"><form>
+
+    <!-- Name and Anonymous -->
+    <form class="participant_id">
+        <h2>You are
+            <span class="view">{{ escape(user.id) }}</span>
             <input name="participant_id" value="{{ escape(user.id) }}"/>
-            <button id="save-participant_id" type="submit">Save</button>
-            <button id="cancel-participant_id" type="cancel">Cancel</button>
-        </form></span>
-        <button id="edit-participant_id">Edit</button>
+            <button class="edit">Edit</button>
+            <button class="save" type="submit">Save</button>
+            <button class="cancel" type="cancel">Cancel</button>
+        </h2>
 
-        <span id='username_edit_warning'>Have you linked to your
-        Gittip profile from other websites? Be sure to update those links!</span>
-    </h2>
+        <h2 class="warning">Have you linked to your Gittip profile from other
+            websites? Be sure to update those links!</h2>
 
+    </form>
     <p>
         <input name="anonymous" class="anonymous" type="checkbox"
             {% if participant.anonymous %}checked="true"{% end %} />
@@ -20,35 +22,48 @@
     </p>
 
 
-    <h2>Statement
-        <button id="edit-statement">Edit</button>
-        <button id="save-statement" type="submit">Save</button>
-        <button id="cancel-statement" type="cancel">Cancel</button>
-    </h2>
+    <!-- Statement -->
+    <form class="statement">
+        <h2>Statement
+            <button class="edit">Edit</button>
+            <button class="save" type="submit">Save</button>
+            <button class="cancel" type="cancel">Cancel</button>
+        </h2>
 
-    <form class="statement"
-        {% if participant.statement %}style="display: none;"{% end %}>
-        <blockquote>
+        <div class="edit"{% if participant.statement %} style="display: none;"{% end %}>
             {{ MAKING }} ...
             <textarea>{{ participant.statement }}</textarea>
             <span class="help">Newlines and links are converted to HTML.</span>
-        </blockquote>
+        </div>
+
+        <div class="view"{% if not participant.statement %} style="display: none"{% end %}>
+            {{ MAKING }} <span>{{ wrap(participant.statement) }}</span>
+        </div>
     </form>
 
-    <blockquote id="my-statement" class="statement"
-        {% if not participant.statement %}style="display: none"{% end %}>
-            {{ MAKING }} <span>
-            {{ wrap(participant.statement) }}</span><br />
-    </blockquote>
 </div>
 <div class="col2">
 
-    <h2>Funding Goal</h2>
-
+    <!-- Funding Goal -->
     <form class="goal">
-        <blockquote>
-
-            <table><tr><td>
+        <h2>Funding Goal
+            <button class="edit">Edit</button>
+            <button class="save" type="submit">Save</button>
+            <button class="cancel" type="cancel">Cancel</button>
+        </h2>
+        <div class="view">
+            {% if user.goal > 0 %}
+            My goal is to receive
+            ${{ locale.format("%.2f", user.goal, grouping=True) }} per week on
+            Gittip.
+            {% elif user.goal == 0 %}
+            I&rsquo;m not here to receive tips. I&rsquo;ll generally regift them.
+            {% else %}
+            I&rsquo;m grateful for tips, but I don&rsquo;t have a specific funding
+            goal.
+            {% end %}
+        </div>
+        <table class="edit"><tr><td>
 
             <input type="radio" name="goal" id="goal-yes" value="custom"
             {% if user.goal > 0 %} checked="true"{% end %}/>
@@ -74,32 +89,13 @@
             <label for="goal-null">I&rsquo;m not here to receive tips.
                 I&rsquo;ll generally regift them.</label>
 
-            </td></tr><tr><td class="buttons">
-
-            <button id="save-goal" type="submit" class="small selected">Save</button>
-            <button id="cancel-goal" type="cancel" class="small">Cancel</button>
-
-            </td></tr></table>
-
-        </blockquote>
+        </td></tr></table>
     </form>
-    <blockquote id="my-goal" class="goal">
-        <div>
-        {% if user.goal > 0 %}
-        My goal is to receive
-        ${{ locale.format("%.2f", user.goal, grouping=True) }} per week on
-        Gittip.
-        {% elif user.goal == 0 %}
-        I&rsquo;m not here to receive tips. I&rsquo;ll generally regift them.
-        {% else %}
-        I&rsquo;m grateful for tips, but I don&rsquo;t have a specific funding
-        goal.
-        {% end %}
-        </div>
-        <button class="small selected">Edit</button>
-    </blockquote>
 
+
+    <!-- Connected Accounts -->
     {% include "connected-accounts.html" %}
+
 </div>
 <div class="clear"></div>
 

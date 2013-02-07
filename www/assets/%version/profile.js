@@ -1,118 +1,30 @@
+
 $(document).ready(function()
 {
-    // Wire up textarea for statement.
-    // ===============================
 
-    $('TEXTAREA').focus();
-    $('#edit-statement').click(function()
-    {
-        var h = $('BLOCKQUOTE.statement').height() - 64;
-        h = Math.max(h, 128);
-        $('BLOCKQUOTE.statement').hide();
-        $('FORM.statement TEXTAREA').height(h);
-        $('FORM.statement').show();
-    });
-    $('FORM.statement').submit(function(e)
-    {
-        e.preventDefault();
-
-        $('#save-statement').text('Saving ...');
-
-        function success(d)
-        {
-            $('FORM.statement').hide();
-            $('BLOCKQUOTE.statement SPAN').html(d.statement);
-            $('BLOCKQUOTE.statement').show();
-            $('#save-statement').text('Save');
-        }
-        jQuery.ajax(
-            { url: "statement.json"
-            , type: "POST"
-            , success: success
-            , data: {"statement": $('TEXTAREA').val()}
-             }
-        )
-        return false;
-    });
-    $('#cancel-statement').click(function(e)
-    {
-        e.preventDefault();
-        e.stopPropagation();
-        $('FORM.statement').hide();
-        $('BLOCKQUOTE.statement').show();
-        return false;
-    });
-
-
-    // Wire up goal knob.
-    // ==================
-
-    $('BLOCKQUOTE.goal BUTTON').click(function()
-    {
-        $('BLOCKQUOTE.goal').hide();
-        $('FORM.goal').show();
-    });
-    $('FORM.goal').submit(function(e)
-    {
-        e.preventDefault();
-
-        $('#save-goal').text('Saving ...');
-
-        var goal = $('INPUT[name=goal]:checked');
-
-        function success(d)
-        {
-            var newtext = $('LABEL[for=' + goal.attr('id') + ']').text();
-            newtext = newtext.replace('$', '$' + d.goal);
-
-            $('FORM.goal').hide();
-            if (d.goal !== '0.00')
-                $('INPUT[name=goal_custom]').val(d.goal);
-            $('BLOCKQUOTE.goal DIV').html(newtext);
-            $('BLOCKQUOTE.goal').show();
-            $('#save-goal').text('Save');
-        }
-        jQuery.ajax(
-            { url: "goal.json"
-            , type: "POST"
-            , success: success
-            , dataType: 'json'
-            , data: { goal: goal.val()
-                    , goal_custom: $('[name=goal_custom]').val()
-                     }
-            , success: success
-            , error: function() {
-                    $('#save-goal').text('Save');
-                    alert( "Failed to change your funding goal. "
-                         + "Please try again."
-                          );
-                }
-             }
-        );
-        return false;
-    });
-    $('#cancel-goal').click(function(e)
-    {
-        e.preventDefault();
-        e.stopPropagation();
-        $('FORM.goal').hide();
-        $('BLOCKQUOTE.goal').show();
-        return false;
-    });
+    ////////////////////////////////////////////////////////////
+    //                                                         /
+    // XXX This is ripe for refactoring. I ran out of steam. :-/
+    //                                                         /
+    ////////////////////////////////////////////////////////////
 
 
     // Wire up participant_id knob.
     // ============================
 
-    $('H2 BUTTON').click(function()
+    $('FORM.participant_id BUTTON.edit').click(function(e)
     {
-        $('B.participant_id').hide();
-        $('#edit-participant_id').hide();
-        $('SPAN.participant_id').show();
-        $('SPAN.participant_id INPUT').focus();
-        $('H2.first').addClass('editing');
+        e.preventDefault();
+        e.stopPropagation();
+        $('.participant_id BUTTON.edit').hide();
+        $('.participant_id BUTTON.save').show();
+        $('.participant_id BUTTON.cancel').show();
+        $('.participant_id SPAN.view').hide();
+        $('.participant_id INPUT').show().focus();
+        $('.participant_id .warning').show();
+        return false;
     });
-    $('SPAN.participant_id FORM').submit(function(e)
+    $('FORM.participant_id').submit(function(e)
     {
         e.preventDefault();
 
@@ -155,7 +67,7 @@ $(document).ready(function()
         );
         return false;
     });
-    $('#cancel-participant_id').click(function(e)
+    $('.participant_id BUTTON.cancel').click(function(e)
     {
         e.preventDefault();
         e.stopPropagation();
@@ -164,10 +76,139 @@ $(document).ready(function()
     });
     function finish_editing_participant_id()
     {
-        $('SPAN.participant_id').hide();
-        $('B.participant_id').show();
-        $('#edit-participant_id').show();
-        $('H2.first').removeClass('editing');
+        $('.participant_id BUTTON.edit').show();
+        $('.participant_id BUTTON.save').hide();
+        $('.participant_id BUTTON.cancel').hide();
+        $('.participant_id SPAN.view').show();
+        $('.participant_id INPUT').hide();
+        $('.participant_id .warning').hide();
+    }
+
+
+    // Wire up textarea for statement.
+    // ===============================
+
+    $('TEXTAREA').focus();
+    $('.statement BUTTON.edit').click(function(e)
+    {
+        e.preventDefault();
+        e.stopPropagation();
+
+        var h = $('.statement DIV.view').height();
+        h = Math.max(h, 128);
+        $('.statement TEXTAREA').height(h);
+
+        $('.statement BUTTON.edit').hide();
+        $('.statement BUTTON.save').show();
+        $('.statement BUTTON.cancel').show();
+        $('.statement DIV.view').hide();
+        $('.statement DIV.edit').show();
+
+        return false;
+    });
+    $('FORM.statement').submit(function(e)
+    {
+        e.preventDefault();
+
+        $('.statement BUTTON.save').text('Saving ...');
+
+        function success(d)
+        {
+            $('.statement .view SPAN').html(d.statement);
+            finish_editing_statement();
+        }
+        jQuery.ajax(
+            { url: "statement.json"
+            , type: "POST"
+            , success: success
+            , data: {"statement": $('TEXTAREA').val()}
+             }
+        )
+        return false;
+    });
+    $('.statement BUTTON.cancel').click(function(e)
+    {
+        e.preventDefault();
+        e.stopPropagation();
+        finish_editing_statement();
+        return false;
+    });
+    function finish_editing_statement()
+    {
+        $('.statement BUTTON.edit').show();
+        $('.statement BUTTON.save').hide().text('Save');
+        $('.statement BUTTON.cancel').hide();
+        $('.statement DIV.view').show();
+        $('.statement DIV.edit').hide();
+        $('.statement .warning').hide();
+    }
+
+
+    // Wire up goal knob.
+    // ==================
+
+    $('.goal BUTTON.edit').click(function(e)
+    {
+        e.preventDefault();
+        e.stopPropagation();
+        $('.goal DIV.view').hide();
+        $('.goal TABLE.edit').show();
+        $('.goal BUTTON.edit').hide();
+        $('.goal BUTTON.save').show();
+        $('.goal BUTTON.cancel').show();
+        return false;
+    });
+    $('FORM.goal').submit(function(e)
+    {
+        e.preventDefault();
+
+        $('.goal BUTTON.save').text('Saving ...');
+
+        var goal = $('INPUT[name=goal]:checked');
+
+        function success(d)
+        {
+            var newtext = $('LABEL[for=' + goal.attr('id') + ']').text();
+            newtext = newtext.replace('$', '$' + d.goal);
+
+            if (d.goal !== '0.00')
+                $('INPUT[name=goal_custom]').val(d.goal);
+            $('.goal DIV.view').html(newtext);
+            finish_editing_goal();
+        }
+        jQuery.ajax(
+            { url: "goal.json"
+            , type: "POST"
+            , success: success
+            , dataType: 'json'
+            , data: { goal: goal.val()
+                    , goal_custom: $('[name=goal_custom]').val()
+                     }
+            , success: success
+            , error: function() {
+                    $('#save-goal').text('Save');
+                    alert( "Failed to change your funding goal. "
+                         + "Please try again."
+                          );
+                }
+             }
+        );
+        return false;
+    });
+    $('.goal BUTTON.cancel').click(function(e)
+    {
+        e.preventDefault();
+        e.stopPropagation();
+        finish_editing_goal();
+        return false;
+    });
+    function finish_editing_goal()
+    {
+        $('.goal DIV.view').show();
+        $('.goal TABLE.edit').hide();
+        $('.goal BUTTON.edit').show();
+        $('.goal BUTTON.save').hide().text('Save');;
+        $('.goal BUTTON.cancel').hide();
     }
 
 
