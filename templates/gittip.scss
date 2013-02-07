@@ -757,6 +757,10 @@ button.selected:hover {
         }
     }
 
+    .col {
+        width: auto;
+        margin: 0 auto;
+    }
     .col0 {
         width: 460px;
         margin: 0 auto;
@@ -967,9 +971,10 @@ button.selected:hover {
     #header {
     }
     #page {
-        .col1, .col2 {
-            width: auto;
+        .col, .col1, .col2 {
+            width: 460px;
             float: none;
+            margin: 0 auto;
         }
     }
 }
@@ -996,8 +1001,7 @@ button.selected:hover {
 @media (max-width: 520px) { .main-padding { padding: 0 16px; } }
 @media (max-width: 510px) { .main-padding { padding: 0 14px; } }
 @media (max-width: 500px) { .main-padding { padding: 0 12px; } }
-@media (max-width: 494px) { #box { width: auto;
-} }
+@media (max-width: 494px) { #box { width: auto; } }
 @media (max-width: 490px) { .main-padding { padding: 0 10px; } }
 
 @media (max-width: 480px) {
@@ -1013,8 +1017,10 @@ button.selected:hover {
     #box #jump .luxury {
         display: none;
     }
-    #page .col0 {
-        width: auto;
+    #page {
+        .col, .col0, .col1, .col2 {
+            width: auto;
+        }
     }
 }
 @media (max-width: 470px) { .main-padding { padding: 0 6px; } }
