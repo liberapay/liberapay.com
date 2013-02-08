@@ -69,11 +69,6 @@ class TestPages(Harness):
         actual = self.get('/about/charts.html')
         assert expected in actual, actual
 
-    def test_about_unclaimed(self):
-        expected = "Unclaimed"
-        actual = self.get('/about/unclaimed.html')
-        assert expected in actual, actual
-
     @patch('gittip.elsewhere.github.requests')
     def test_github_proxy(self, requests):
         requests.get().status_code = 200
