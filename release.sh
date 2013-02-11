@@ -93,6 +93,14 @@ if [ $1 ]; then
             printf "\055dev" >> www/version.txt
             git ci www/version.txt -m"Bump version to $1-dev"
 
+
+            # Push to GitHub.
+            # ===============
+            # This will break if we didn't pull before releasing. We should do 
+            # that.
+
+            git push --tags
+
         fi
     fi
 fi
