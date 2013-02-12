@@ -35,7 +35,7 @@ def _to_age(participant):
     # XXX I can't believe I'm doing this. Evolve aspen.utils.to_age!
     age = to_age(participant['claimed_time'], fmt_past="%(age)s")
     age = age.replace('just a moment', 'just now')
-    age = age.replace('a', '1').replace('an', '1')
+    age = age.replace('an ', '1 ').replace('a ', '1 ')
     words = ('zero', 'one', 'two','three', 'four', 'five', 'six', 'seven',
                                                                'eight', 'nine')
     for i, word in enumerate(words):
