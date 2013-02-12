@@ -35,11 +35,11 @@ title = "Credit Card"
 {% block heading %}
     <h2 class="top"><span>Your credit card is <em id="status">{{ status }}</em></span></h2>
 
-    <p>When you don&rsquo;t have enough money in your Gittip account to cover
+    <p>When you don't have enough money in your Gittip account to cover
     your gifts, we {% if balanced_account_uri %}will{% else %}can{% end %}
     attempt to pull money in using
     {% if balanced_account_uri %}this{% else %}a{% end %} credit card.
-    If your credit card is missing or fails then your gifts won&rsquo;t go
+    If your credit card is missing or fails then your gifts won't go
     through for that week.<p>
 
 {% end %}
@@ -51,7 +51,7 @@ title = "Credit Card"
     <p>Sign in using
     <a href="{{ twitter.oauth_url(website, u'opt-in', u'/credit-card.html') }}">Twitter</a> or
     <a href="{{ github.oauth_url(website, u'opt-in', u'/credit-card.html') }}">GitHub</a>,
-    and then you&rsquo;ll be able to add or change your credit card.</p>
+    and then you'll be able to add or change your credit card.</p>
 
     <p>Thanks! :-)</p>
 

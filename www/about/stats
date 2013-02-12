@@ -205,15 +205,15 @@ names = ['ncc', 'pcc', 'statements', 'transfer_volume',
 
     <p><b>{{ commaize(npeople) }} people</b> have joined Gittip. Of those,
     {{ pcc }}% ({{ commaize(ncc) }}) have a working credit card on
-    file.{% if user.last_bill_result == '' %} You&rsquo;re one of them.
-    {% elif not user.ANON %} You&rsquo;re not one of them.</p><p><b><a
+    file.{% if user.last_bill_result == '' %} You're one of them.
+    {% elif not user.ANON %} You're not one of them.</p><p><b><a
             href="/credit-card.html" class="highlight">Click here to set up a
             credit card</a></b>.{% end %}</p>
 
     <p><b>${{ commaize(escrow, 2) }}</b> is escrowed within Gittip.
     {{ nach }} people have connected a bank account</a> for withdrawals.
-    {% if user.last_ach_result == '' %}You&rsquo;re one of them.
-    {% elif not user.ANON %} You&rsquo;re not one of them.</p><p><b><a
+    {% if user.last_ach_result == '' %}You're one of them.
+    {% elif not user.ANON %} You're not one of them.</p><p><b><a
     href="/bank-account.html" class="highlight">Click here to connect a bank
     account</a></b>.{% end %}</p>
 
@@ -225,7 +225,7 @@ names = ['ncc', 'pcc', 'statements', 'transfer_volume',
     </p>
 
     <p>On average, people who tip, tip ${{ "%.2f" % average_tip }} each to
-    {{ other_people }}. Here&rsquo;s how tip amounts are distributed:</p>
+    {{ other_people }}. Here's how tip amounts are distributed:</p>
 
     <table id="tip-distribution">
         {% for amount in all_amounts %}

@@ -5,7 +5,7 @@ The basis of Gittip is an anonymous gift between $1 and $24 per week to someone
 who does great work. These gifts come with no explicit strings attached.
 
 The Gittip gift exchange happens every Thursday. On Thursday, we charge
-people&rsquo;s credit cards and the money goes into a marketplace account with
+people's credit cards and the money goes into a marketplace account with
 [Balanced Payments](https://www.balancedpayments.com). Money is allocated to
 other participants, and for those with a bank account attached and money due,
 the money is deposited in their bank account on Friday.
@@ -33,7 +33,7 @@ Installation
 
 Thanks for hacking on Gittip! Be sure to review
 [CONTRIBUTING](https://github.com/zetaweb/www.gittip.com/blob/master/CONTRIBUTING.md#readme)
-as well if that&rsquo;s what you&rsquo;re planning to do.
+as well if that's what you're planning to do.
 
 Dependencies
 ------------
@@ -46,18 +46,18 @@ and [Google](https://www.google.com/analytics) for analytics.
 
 You need python2.7 on your PATH.
 
-You need [Postgres](http://www.postgresql.org/download/). We&rsquo;re working
+You need [Postgres](http://www.postgresql.org/download/). We're working
 on
 [porting](https://github.com/zetaweb/www.gittip.com/issues?milestone=28&state=open)
 Gittip from raw SQL to a declarative ORM with SQLAlchemy. After that we may be
 able to remove the hard dependency on Postgres so you can use SQLite in
 development, but for now you need Postgres.
 
-The best version of Postgres to use is 9.2, because that&rsquo;s what is being
+The best version of Postgres to use is 9.2, because that's what is being
 run in production at Heroku. Version 9.1 is the second-best, because Gittip
 uses the [hstore](http://www.postgresql.org/docs/9.2/static/hstore.html)
-extension for unstructured data, and that isn&rsquo;t bundled with earlier
-versions than 9.1. If you&rsquo;re on a Mac, maybe try out Heroku&rsquo;s
+extension for unstructured data, and that isn't bundled with earlier
+versions than 9.1. If you're on a Mac, maybe try out Heroku's
 [Postgres.app](http://www.postgresql.org/download/). If installing using a
 package manager, you may need several packages. On Ubuntu and Debian, the
 required packages are: postgresql (base), libpq5-dev (includes headers needed
@@ -76,13 +76,13 @@ gittip database.
 
 ### Authentication
 
-If you already have a &ldquo;role&rdquo; (Postgres user) that you&rsquo;d like
+If you already have a &ldquo;role&rdquo; (Postgres user) that you'd like
 to use, you can do so by editing `DATABASE_URL` in the generated local.env
 file. You can also change the database name there. See
 [Configuration](#configuration) for more information.
 
 Otherwise, you should add a role that matches your OS username, and make sure
-it&rsquo;s a superuser role and has login privileges. Here&rsquo;s a sample
+it's a superuser role and has login privileges. Here's a sample
 invocation of the createuser executable that comes with Postgres that will do
 this for you, assuming that a &ldquo;postgres&rdquo; superuser was already
 created as part of initial installation:
@@ -108,7 +108,7 @@ Once Postgres is set up, run:
 
 That will create a new gittip superuser and a gittip database (with UTC as the
 default timezone), populated with structure from ./schema.sql. To change the
-name of the database and/or user, pass them on the command line (you&rsquo;ll
+name of the database and/or user, pass them on the command line (you'll
 need to modify the `DATABASE_URL` environment variable as well; see
 [Configuration](#configuration) below):
 
@@ -120,7 +120,7 @@ If you only pass one argument it will be used for both dbname and owner role:
 
 The schema for the Gittip.com database is defined in schema.sql. It should be
 considered append-only. The idea is that this is the log of DDL that
-we&rsquo;ve run against the production database. You should never change
+we've run against the production database. You should never change
 commands that have already been run. New DDL will be (manually) run against the
 production database as part of deployment.
 
@@ -128,18 +128,18 @@ production database as part of deployment.
 Building and Launching
 ----------------------
 
-Once you&rsquo;ve installed Python and Postgres and set up a database, you can use
+Once you've installed Python and Postgres and set up a database, you can use
 make to build and launch Gittip:
 
     $ make run
 
-If you don&rsquo;t have make, look at the Makefile to see what steps you need
+If you don't have make, look at the Makefile to see what steps you need
 to perform to build and launch Gittip. The Makefile is pretty simple and
 straightforward. 
 
 All Python dependencies (including virtualenv) are bundled with Gittip in the
-vendor/ directory. Gittip is designed so that you don&rsquo;t manage its
-virtualenv directly and you don&rsquo;t download its dependencies at build
+vendor/ directory. Gittip is designed so that you don't manage its
+virtualenv directly and you don't download its dependencies at build
 time.
 
 If Gittip launches successfully it will look like this:
@@ -199,7 +199,7 @@ You should then find this in your browser at
 
 ![Success](https://raw.github.com/zetaweb/www.gittip.com/master/img-src/success.png)
 
-Congratulations! Sign in using Twitter or GitHub and you&rsquo;re off and
+Congratulations! Sign in using Twitter or GitHub and you're off and
 running. At some point, try [running the test suite](#testing-).
 
 
@@ -218,10 +218,10 @@ Thanks for installing Gittip! :smiley:
 Configuration
 =============
 
-When using `make run`, Gittip&rsquo;s execution environment is defined in a
+When using `make run`, Gittip's execution environment is defined in a
 `local.env` file, which is not included in the source code repo. If you `make
-run` you&rsquo;ll have one generated for you, which you can then tweak as needed.
-Here&rsquo;s the default:
+run` you'll have one generated for you, which you can then tweak as needed.
+Here's the default:
 
     CANONICAL_HOST=localhost:8537
     CANONICAL_SCHEME=http
@@ -254,8 +254,8 @@ on Github. It points back to localhost:8537, which is where Gittip will be
 running if you start it locally with `make run`. Similarly with the TWITTER_*
 keys, but there they required us to spell it `127.0.0.1`.
 
-You probably don&rsquo;t need it, but at one point I had to set this to get
-psycopg2 working on Mac OS with EnterpriseDB&rsquo;s Postgres 9.1 installer:
+You probably don't need it, but at one point I had to set this to get
+psycopg2 working on Mac OS with EnterpriseDB's Postgres 9.1 installer:
 
     DYLD_LIBRARY_PATH=/Library/PostgreSQL/9.1/lib
 
@@ -269,7 +269,7 @@ Testing [![Testing](https://secure.travis-ci.org/zetaweb/www.gittip.com.png)](ht
 =======
 
 Please write unit tests for all new code and all code you change.
-Gittip&rsquo;s test suite is designed for the nosetests test runner (maybe it
+Gittip's test suite is designed for the nosetests test runner (maybe it
 also works with py.test?), and uses module-level test functions, with a context
 manager for managing testing state. As a rule of thumb, each test case should
 perform one assertion.
@@ -324,7 +324,7 @@ The Gittip API is comprised of these endpoints:
     - "receiving"&mdash;an estimate of the amount the given participant will
       receive this week
 
-    - "my_tip"&mdash;logged-in user&rsquo;s tip to the Gittip participant in 
+    - "my_tip"&mdash;logged-in user's tip to the Gittip participant in 
       question; possible values are:
 
         - `undefined` (key not present)&mdash;there is no logged-in user
@@ -337,7 +337,7 @@ The Gittip API is comprised of these endpoints:
 Glossary
 ========
 
-**Account Elsewhere** - An entity&rsquo;s registration on a platform other than
+**Account Elsewhere** - An entity's registration on a platform other than
 Gittip (e.g., Twitter).
 
 **Entity** - An entity.
@@ -351,14 +351,14 @@ anonymous. If authenticated, the user is guaranteed to also be a participant.
 See Also
 ========
 
-Here&rsquo;s a list of projects we&rsquo;re aware of in the crowd-funding
+Here's a list of projects we're aware of in the crowd-funding
 space. Something missing? Ping [@whit537](https://twitter.com/whit537) on
 Twitter or [edit the file](/zetaweb/www.gittip.com/edit/master/README.md)
 yourself (add your link at the end). :grinning:
 
 *Note: there are comprehensive directories that can complement this list,
-such as [startingtrends.com&rsquo;s](http://www.startingtrends.com/crowdfunding-directory/)
-and [crowdsourcing.org&rsquo;s](http://www.crowdsourcing.org/directory)*
+such as [startingtrends.com's](http://www.startingtrends.com/crowdfunding-directory/)
+and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
 
  - [Kickstarter](http://www.kickstarter.com/) - crowdfunding campaigns
  - [Flattr](http://flattr.com/) - micro-donations (flat monthly rate)

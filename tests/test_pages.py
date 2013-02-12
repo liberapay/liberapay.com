@@ -23,7 +23,7 @@ class TestPages(Harness):
     def test_profile(self):
         self.make_participant('cheese',
                               claimed_time=datetime.datetime.now(pytz.utc))
-        expected = "I&rsquo;m grateful for tips"
+        expected = "I'm grateful for tips"
         actual = self.get('/cheese/')
         assert expected in actual, actual
 
