@@ -236,6 +236,13 @@ class Participant(db.Model):
             out += " is"
         return out + " on Gittip"
 
+    def get_age_in_seconds(self):
+        out = -1
+        if self.claimed_time is not None:
+            now = datetime.datetime.now(self.claimed_time.tzinfo)
+            out = (now - self.claimed_time).total_seconds()
+        return out
+
 
     # TODO: Move these queries into this class.
 

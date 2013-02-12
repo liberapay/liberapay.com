@@ -30,9 +30,14 @@
                 {% end %}
             </div>
         {% else %}
+            {% set age = participant.get_age_in_seconds() %}
             <h2>{{ participant.id }}
                 {% if g > 0 %}
                 gives anonymously
+                {% elif age < 60 %}
+                just joined Gittip! :D
+                {% elif age < (60 * 60 * 24 * 7) %}
+                joined recently
                 {% else %}
                 is lurking
                 {% end %}

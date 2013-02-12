@@ -308,6 +308,19 @@ class TestParticipant(Harness):
         assert actual == 0, actual
 
 
+    # get_age_in_seconds - gais
+
+    def test_gais_gets_age_in_seconds(self):
+        now = datetime.datetime.now(pytz.utc)
+        alice = self.make_participant('alice', claimed_time=now)
+        actual = alice.get_age_in_seconds()
+        assert 0 < actual < 1, actual
+
+    def test_gais_returns_negative_one_if_None(self):
+        alice = self.make_participant('alice', claimed_time=None)
+        actual = alice.get_age_in_seconds()
+        assert actual == -1, actual
+
     # def get_details(self):
     # def resolve_unclaimed(self):
     # def set_as_claimed(self):
