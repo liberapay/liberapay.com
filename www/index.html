@@ -1,6 +1,7 @@
 from aspen import Response
 from gittip import db, AMOUNTS
 from gittip.elsewhere import github
+from aspen.utils import to_age
 
 def _extract_avatar(participant_id):
 
@@ -29,6 +30,10 @@ def _extract_avatar(participant_id):
     elif 'avatar_url' in user_info:
         out = user_info['avatar_url']
     return out
+
+def _to_age(participant):
+    age = to_age(participant['claimed_time'], fmt_past="%(age)s")
+    return age.replace(' ', ' <span class="unit">') + "</span>"
 ^L
 
 try:
@@ -37,27 +42,15 @@ try:
 except ValueError:
     raise Response(400)
 
-receivers = db.fetchall("""
+new_participants = db.fetchall("""
 
-    SELECT tippee, claimed_time, sum(amount) AS amount
-      FROM (    SELECT DISTINCT ON (tipper, tippee)
-                       amount
-                     , tippee
-                  FROM tips
-                  JOIN participants p ON p.id = tipper
-                  JOIN elsewhere ON elsewhere.participant_id = tippee
-                 WHERE last_bill_result = ''
-                   AND elsewhere.is_locked = false
-                   AND is_suspicious IS NOT true
-                   AND claimed_time IS NOT null
-              ORDER BY tipper, tippee, mtime DESC
-              ) AS foo
-      JOIN participants p ON p.id = tippee
-     WHERE is_suspicious IS NOT true
-  GROUP BY tippee, claimed_time
-  ORDER BY amount DESC
-  LIMIT %s
-  OFFSET %s
+    SELECT id, claimed_time
+      FROM participants
+     WHERE claimed_time IS NOT null
+       AND is_suspicious IS NOT true
+  ORDER BY claimed_time DESC
+     LIMIT %s
+    OFFSET %s
 
 """, (limit, offset))
 
@@ -80,6 +73,30 @@ givers = db.fetchall("""
       JOIN participants p ON p.id = tipper
      WHERE is_suspicious IS NOT true
   GROUP BY tipper, anonymous
+  ORDER BY amount DESC
+  LIMIT %s
+  OFFSET %s
+
+""", (limit, offset))
+
+receivers = db.fetchall("""
+
+    SELECT tippee, claimed_time, sum(amount) AS amount
+      FROM (    SELECT DISTINCT ON (tipper, tippee)
+                       amount
+                     , tippee
+                  FROM tips
+                  JOIN participants p ON p.id = tipper
+                  JOIN elsewhere ON elsewhere.participant_id = tippee
+                 WHERE last_bill_result = ''
+                   AND elsewhere.is_locked = false
+                   AND is_suspicious IS NOT true
+                   AND claimed_time IS NOT null
+              ORDER BY tipper, tippee, mtime DESC
+              ) AS foo
+      JOIN participants p ON p.id = tippee
+     WHERE is_suspicious IS NOT true
+  GROUP BY tippee, claimed_time
   ORDER BY amount DESC
   LIMIT %s
   OFFSET %s
@@ -120,19 +137,19 @@ givers = db.fetchall("""
 
 <div id="leaderboard">
 
-    <div class="top-receivers">
-        <h2>Top Receivers</h2>
+    <div class="new-participants">
+        <h2>New Participants</h2>
         <ul class="group">
-            {% for i, receiver in enumerate(receivers, start=1) %}
+            {% for i, participant in enumerate(new_participants, start=1) %}
             <li{% if i > 6 %} class="luxury"{% end %}>
-                <a href="/{{ receiver['tippee'] }}/" class="mini-user">
+                <a href="/{{ participant['id'] }}/" class="mini-user">
                     <span class="inner">
                         <span class="avatar"
-                            style="background-image: url('{{ _extract_avatar(receiver['tippee']) }}')">
+                            style="background-image: url('{{ _extract_avatar(participant['id']) }}')">
                             <span class="rank">{{ i }}</span>
                         </span>
-                        <span class="money">${{ receiver['amount'] }}</span>
-                        <span class="name">{{ receiver['tippee'] }}</span>
+                        <span class="age">{{ _to_age(participant) }}</span>
+                        <span class="name">{{ participant['id'] }}</span>
                     </span>
                 </a>
             </li>
@@ -167,6 +184,25 @@ givers = db.fetchall("""
                     </span>
                 </a>
                 {% end %}
+            </li>
+            {% end %}
+        </ul>
+    </div>
+    <div class="top-receivers">
+        <h2>Top Receivers</h2>
+        <ul class="group">
+            {% for i, receiver in enumerate(receivers, start=1) %}
+            <li{% if i > 6 %} class="luxury"{% end %}>
+                <a href="/{{ receiver['tippee'] }}/" class="mini-user">
+                    <span class="inner">
+                        <span class="avatar"
+                            style="background-image: url('{{ _extract_avatar(receiver['tippee']) }}')">
+                            <span class="rank">{{ i }}</span>
+                        </span>
+                        <span class="money">${{ receiver['amount'] }}</span>
+                        <span class="name">{{ receiver['tippee'] }}</span>
+                    </span>
+                </a>
             </li>
             {% end %}
         </ul>

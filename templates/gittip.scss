@@ -188,11 +188,16 @@ input {
                 @include border-radius(2px);
             }
         }
+        span.age,
         span.money {
             color: $black;
             display: block;
             font: bold 18px $Helvetica;
             margin: 7px 0 5px 0;
+
+            span.unit {
+                font: normal 11px $Helvetica;
+            }
         }
         span.name {
             display: block;
