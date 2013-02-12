@@ -99,6 +99,7 @@ if [ $1 ]; then
             # This will break if we didn't pull before releasing. We should do 
             # that.
 
+            git push
             git push --tags
 
         fi
