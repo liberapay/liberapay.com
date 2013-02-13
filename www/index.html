@@ -9,6 +9,7 @@ def _extract_avatar(participant_id):
     # this simplate to use the ORM.
     # https://github.com/zetaweb/www.gittip.com/issues/541
 
+    out = '/assets/-/avatar-default.gif'
     recs = db.fetchall("""
 
         SELECT user_info
@@ -20,9 +21,10 @@ def _extract_avatar(participant_id):
     try:
         rec = recs.next()
     except StopIteration:
-        raise Exception("%s has no elsewheres?" % participant_id)
+        return out
+        #raise Exception("%s has no elsewheres?" % participant_id)
+        pass
     user_info = rec.get('user_info', {})
-    out = '/assets/-/avatar-default.gif'
     if 'profile_image_url_https' in user_info:
         # XXX Attack vector? Can someone inject this value? Don't think so,
         # but ...
