@@ -20,7 +20,7 @@
                 {% if twitter_account.user_info.get('name') %}({{ twitter_account.user_info.get('name') }}){% end %}
             </a>
             {% end %}
-            <div class="account-type">Twitter</div>
+            <div class="account-type">on Twitter</div>
         </td>
     </tr>
     <tr>
@@ -41,7 +41,7 @@
                     No GitHub account connected.
                 {% end %}
             {% end %}
-            <div class="account-type">GitHub</div>
+            <div class="account-type">on GitHub</div>
         </td>
     </tr>
     <tr>
@@ -72,7 +72,7 @@
             {% end %}
             <div class="account-type">{% if user.ADMIN and participant.balanced_account_uri %}
                 <a href="https://www.balancedpayments.com/{{ participant.balanced_account_uri[3:] }}"
-                    >Balanced Payments</a>{% else %}Balanced Payments{% end %}</div>
+                    >on Balanced Payments</a>{% else %}on Balanced Payments{% end %}</div>
         </td>
     </tr>
 </table>
