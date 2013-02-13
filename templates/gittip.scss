@@ -177,7 +177,7 @@ input {
             position: relative;
 
             span.rank {
-                background: #444041;
+                background: $brown;
                 bottom: 4px;
                 color: white;
                 display: block;
@@ -223,11 +223,11 @@ span.mini-user {
     }
 }
 a.mini-user:hover {
-    border: 4px solid #A49C97;
+    border: 4px solid $light-brown;
     text-decoration: none;
 
     span.inner {
-        border-color: #7D6250;
+        border-color: $brown;
     }
 }
 button {
@@ -302,7 +302,7 @@ button.selected:hover {
     z-index: 1;
 
     .main-padding {
-        color: #231F20;
+        color: $black;
     }
 
     h2 {
@@ -568,7 +568,7 @@ button.selected:hover {
             position: relative;
             width: 96pt;
             display: inline-block;
-            border: 2px solid #614C3E;
+            border: 2px solid $brown;
             border-radius: 6pt;
             font: normal 12px $Helvetica;
             color: $brown;
@@ -728,7 +728,7 @@ button.selected:hover {
     background: white;
 
     h1 {
-        color: #6D6E70;
+        color: $green;
         font: normal 35px $Mensch;
         letter-spacing: -2px;
         margin: 35px 0 20px 0;
@@ -790,7 +790,7 @@ button.selected:hover {
     DIV.account-type {
         font-size: x-small;
         clear: both;
-        color: #B2A196;
+        color: $light-brown;
     }
     .account-details {
         padding-left: 6pt;
@@ -927,23 +927,23 @@ button.selected:hover {
         font-size: 9pt;
         white-space: normal;
         text-align: left;
-        border-bottom: 1px solid #614C3E;
+        border-bottom: 1px solid $brown;
     }
     td.card, td.fees, td.debits {
         color: red;
     }
     .head td.card, .head td.fees, .head td.debits {
-        color: #614C3E;
+        color: $brown;
     }
     td.notes {
         text-align: left;
     }
     .fees {
-        border-right: 1px solid #614C3E;
+        border-right: 1px solid $brown;
         text-align: right;
     }
     .outside {
-        border-right: 1px solid #614C3E;
+        border-right: 1px solid $brown;
         text-align: right ! important;
     }
 }
