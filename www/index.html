@@ -21,9 +21,10 @@ def _extract_avatar(participant_id):
     try:
         rec = recs.next()
     except StopIteration:
-        return out
+        return out # XXX We need to take orphan accounts out of queries in the
+                   # caller. See:
+                   #    https://github.com/zetaweb/www.gittip.com/issues/650
         #raise Exception("%s has no elsewheres?" % participant_id)
-        pass
     user_info = rec.get('user_info', {})
     if 'profile_image_url_https' in user_info:
         # XXX Attack vector? Can someone inject this value? Don't think so,
@@ -53,10 +54,16 @@ except ValueError:
 
 new_participants = db.fetchall("""
 
-    SELECT id, claimed_time
-      FROM participants
-     WHERE claimed_time IS NOT null
-       AND is_suspicious IS NOT true
+    SELECT id, claimed_time FROM (
+        SELECT DISTINCT ON (p.id)
+               p.id
+             , claimed_time
+          FROM participants p
+          JOIN elsewhere e
+            ON p.id = participant_id
+         WHERE claimed_time IS NOT null
+           AND is_suspicious IS NOT true
+           ) AS foo
   ORDER BY claimed_time DESC
      LIMIT %s
     OFFSET %s
@@ -87,6 +94,9 @@ givers = db.fetchall("""
   OFFSET %s
 
 """, (limit, offset))
+
+# XXX I'm nearly positive that one or both of givers and receivers can contain
+# orphan accounts. See https://github.com/zetaweb/www.gittip.com/issues/650
 
 receivers = db.fetchall("""
 
