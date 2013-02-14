@@ -34,6 +34,7 @@ locked = account.is_locked
 lock_action = "unlock" if account.is_locked else "lock"
 
 nbackers = participant.get_number_of_backers()
+title = username
 
 # ========================================================================== ^L
 {% extends templates/base.html %}
