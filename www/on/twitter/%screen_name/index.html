@@ -66,8 +66,8 @@ nbackers = participant.get_number_of_backers()
     {% elif user.ANON %}
 
         <div class="help with-padding">Sign in using
-            <a class="highlight" href="/on/twitter/redirect">Twitter</a> or
-            <a href="{{ github.oauth_url(website, u'opt-in', participant.id ) }}">GitHub</a>
+            <a class="highlight" href="{{ twitter.oauth_url(website, u'opt-in', path.decoded) }}">Twitter</a> or
+            <a href="{{ github.oauth_url(website, u'opt-in', path.decoded) }}">GitHub</a>
             to pledge to {{ username }}.</div>
 
     {% else %}

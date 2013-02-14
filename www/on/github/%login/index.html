@@ -111,9 +111,9 @@ url = user_info['html_url']
     {% if user.ANON %}
 
         <div class="help with-padding">Sign in using
-            <a href="/on/twitter/redirect">Twitter</a> or
+            <a href="{{ twitter.oauth_url(website, u'opt-in', path.decoded) }}">Twitter</a> or
             <a class="highlight"
-                href="{{ github.oauth_url(website, u'opt-in', username) }}">GitHub</a>
+                href="{{ github.oauth_url(website, u'opt-in', path.decoded) }}">GitHub</a>
             to pledge to {{ username }}.</div>
 
     {% elif usertype == "user" and account.is_locked %}
