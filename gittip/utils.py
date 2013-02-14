@@ -20,11 +20,12 @@ def get_participant(request, restrict=True):
 
     """
     user = request.context['user']
+    participant_id = request.line.uri.path['participant_id']
+
     if restrict:
         if user.ANON:
-            raise Response(404)
+            request.redirect(u'/%s/' % participant_id)
 
-    participant_id = request.line.uri.path['participant_id']
     participant = Participant.query.get(participant_id)
 
     if participant is None:
