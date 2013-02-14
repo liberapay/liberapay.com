@@ -57,10 +57,15 @@
 
     {% elif user.ANON %}
 
+        <h2>Your Weekly Gift</h2>
+        {% for amount in AMOUNTS %}
+        <button class="tip-anon">${{ amount }}</button>
+        {% end %}
+
         <div class="help with-padding">Sign in using 
-            <a class="highlight" href="{{ twitter.oauth_url(website, u'opt-in', path.decoded) }}">Twitter</a> or 
+            <a class="flash-me" href="{{ twitter.oauth_url(website, u'opt-in', path.decoded) }}">Twitter</a> or 
             <a href="{{ github.oauth_url(website, u'opt-in', path.decoded) }}">GitHub</a>
-            to give to {{ participant.id }}.</div>
+            to give to <b>{{ participant.id }}</b>.</div>
 
     {% else %}
 

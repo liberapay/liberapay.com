@@ -577,6 +577,26 @@ Gittip.initCSRF = function()
 
 Gittip.initTipButtons = function()
 {
+    // For anonymous users we flash a login link.
+
+    $('BUTTON.tip-anon').mouseover(
+        function() { $('.buttons.tips .flash-me').addClass('highlight'); }
+    );
+    $('BUTTON.tip-anon').click(function()
+    {
+        var i = 0
+        function flash()
+        {
+            if (i++ == 6) return;
+            $('.buttons.tips .flash-me').toggleClass('highlight');
+            setTimeout(flash, 100);
+        }
+        flash();
+    });
+
+
+    // For authenticated users we change the tip!
+
     $('BUTTON.tip').click(function()
     {
 
