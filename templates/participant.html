@@ -13,7 +13,13 @@
 
         {% if g > r and not participant.anonymous %}
             <h2 class="pad-sign">{{ participant.id }} gives</h2>
-            <div class="number">$<span class="total-giving">{{ giving }}</span></div>
+            <div class="number">
+                {% if user == participant %}
+                $<span class="total-giving">{{ giving }}</span>
+                {% else %}
+                ${{ giving }}
+                {% end %}
+            </div>
             <div class="unit pad-sign">per 
                 week{% if r > 0 %}, and receives ${{ receiving }}{% end %}
             </div>
@@ -24,8 +30,10 @@
                 week{% if g > 0 %}, and gives 
                 {% if participant.anonymous %}
                 anonymously
-                {% else %}
+                {% elif user == participant %}
                 $<span class="total-giving">{{ giving }}</span>
+                {% else %}
+                ${{ giving }}
                 {% end %}
                 {% end %}
             </div>
