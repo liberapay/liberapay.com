@@ -82,6 +82,7 @@ def local_env():
     print("CANONICAL_HOST=\"\"", file=output)
     print("CANONICAL_SCHEME=http", file=output)
     print("DATABASE_URL=postgres://gittip@localhost/gittip", file=output)
+    print("DATABASE_MAXCONN=10", file=output)
     print("STRIPE_SECRET_API_KEY=1", file=output)
     print("STRIPE_PUBLISHABLE_API_KEY=1", file=output)
     print("BALANCED_API_SECRET=90bb3648ca0a11e1a977026ba7e239a9", file=output)

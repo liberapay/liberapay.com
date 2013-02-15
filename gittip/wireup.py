@@ -20,7 +20,8 @@ def canonical():
 
 def db():
     dburl = os.environ['DATABASE_URL']
-    gittip.db = PostgresManager(dburl)
+    maxconn = int(os.environ['DATABASE_MAXCONN'])
+    gittip.db = PostgresManager(dburl, maxconn=maxconn)
 
     # register hstore type (but don't use RealDictCursor)
     with gittip.db.get_connection() as conn:

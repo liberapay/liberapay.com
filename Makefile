@@ -39,6 +39,7 @@ local.env:
 	echo "CANONICAL_HOST=" > local.env
 	echo "CANONICAL_SCHEME=http" >> local.env
 	echo "DATABASE_URL=postgres://gittip@localhost/gittip" >> local.env
+	echo "DATABASE_MAXCONN=10" >> local.env
 	echo "STRIPE_SECRET_API_KEY=1" >> local.env
 	echo "STRIPE_PUBLISHABLE_API_KEY=1" >> local.env
 	echo "BALANCED_API_SECRET=90bb3648ca0a11e1a977026ba7e239a9" >> local.env
@@ -68,6 +69,7 @@ tests/env:
 	echo "CANONICAL_HOST=" > tests/env
 	echo "CANONICAL_SCHEME=http" >> tests/env
 	echo "DATABASE_URL=postgres://gittip-test@localhost/gittip-test" >> tests/env
+	echo "DATABASE_MAXCONN=10" >> tests/env
 	echo "STRIPE_SECRET_API_KEY=1" >> tests/env
 	echo "STRIPE_PUBLISHABLE_API_KEY=1" >> tests/env
 	echo "BALANCED_API_SECRET=90bb3648ca0a11e1a977026ba7e239a9" >> tests/env
