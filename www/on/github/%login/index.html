@@ -186,8 +186,8 @@ title = username
         <p>Is this you?
         {% if user.ANON %}
         <a href="{{ github.oauth_url(website, u'opt-in', username) }}">Click
-            here</a> to opt in to Gittip (we never collect money for you until
-        you do).
+            here</a> to opt in to Gittip. We never collect money for you until
+        you do.
         {% else %}
         <a href="/sign-out.html">Sign out</a> and sign back in
         to claim this account
