@@ -31,6 +31,12 @@ class TestUser(Harness):
         user = User.from_session_token('deadbeef')
         assert user.ANON
 
+    def test_user_from_None_token_is_anonymous(self):
+        self.make_participant('alice')
+        self.make_participant('bob')
+        user = User.from_session_token(None)
+        assert user.ANON
+
     def test_user_from_bad_id_is_anonymous(self):
         user = User.from_id('deadbeef')
         assert user.ANON

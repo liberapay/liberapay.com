@@ -15,7 +15,15 @@ class User(Participant):
 
     @classmethod
     def from_session_token(cls, token):
-        user = User.query.filter_by(session_token=token).first()
+
+        # This used to read User.query.filter_by(session_token=token), but that
+        # generates "session_token is NULL" when token is None, and we need
+        # "session_token = NULL", or else we will match arbitrary users(!).
+        # This is a bit of WTF from SQLAlchemy here, IMO: it dangerously opts
+        # for idiomatic Python over idiomatic SQL. We fell prey, at least. :-/
+
+        user = User.query.filter(User.session_token.op('=')(token)).first()
+
         if user and not user.is_suspicious:
             user = user
         else:
