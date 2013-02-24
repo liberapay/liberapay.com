@@ -32,7 +32,7 @@ response = requests.post( "https://api.twitter.com/oauth/access_token"
                         , data={"oauth_verifier": qs['oauth_verifier']}
                         , hooks={'pre_request': oauth_hook}
                          )
-assert response.status_code == 200
+assert response.status_code == 200, response.status_code
 
 reply = parse_qs(response.text)
 token = reply['oauth_token'][0]
@@ -45,7 +45,7 @@ response = requests.get( "https://api.twitter.com/1/users/show.json?user_id=%s" 
                        , hooks={'pre_request': oauth_hook}
                         )
 user_info = json.loads(response.text)
-assert response.status_code == 200
+assert response.status_code == 200, response.status_code
 
 
 # Load Twitter user info.
