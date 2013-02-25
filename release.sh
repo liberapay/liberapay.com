@@ -80,7 +80,7 @@ if [ $1 ]; then
             # bash error handling around this call.
 
             set +e
-            git push heroku
+            git push heroku master
             set -e
 
 
