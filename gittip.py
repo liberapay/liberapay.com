@@ -21,6 +21,7 @@ ASPEN = os.path.join(*(BIN + ['aspen']))
 
 p = lambda p: os.path.join(*p.split('/'))
 LOCAL_ENV = p('./local.env')
+DEFAULT_LOCAL_ENV = p('./default_local.env')
 
 
 def remove_path(*args):
@@ -77,21 +78,7 @@ def local_env():
         return
 
     print('Creating a local.env file...\n')
-
-    output = file(LOCAL_ENV, 'wt')
-    print("CANONICAL_HOST=\"\"", file=output)
-    print("CANONICAL_SCHEME=http", file=output)
-    print("DATABASE_URL=postgres://gittip@localhost/gittip", file=output)
-    print("DATABASE_MAXCONN=10", file=output)
-    print("STRIPE_SECRET_API_KEY=1", file=output)
-    print("STRIPE_PUBLISHABLE_API_KEY=1", file=output)
-    print("BALANCED_API_SECRET=90bb3648ca0a11e1a977026ba7e239a9", file=output)
-    print("GITHUB_CLIENT_ID=3785a9ac30df99feeef5", file=output)
-    print("GITHUB_CLIENT_SECRET=e69825fafa163a0b0b6d2424c107a49333d46985", file=output)
-    print("GITHUB_CALLBACK=http://localhost:8537/on/github/associate", file=output)
-    print("TWITTER_CONSUMER_KEY=QBB9vEhxO4DFiieRF68zTA", file=output)
-    print("TWITTER_CONSUMER_SECRET=mUymh1hVMiQdMQbduQFYRi79EYYVeOZGrhj27H59H78", file=output)
-    print("TWITTER_CALLBACK=http://127.0.0.1:8537/on/twitter/associate", file=output)
+    shutil.copyfile(DEFAULT_LOCAL_ENV, LOCAL_ENV)
 
 
 def serve():
@@ -122,18 +109,7 @@ tests: test
 tests/env:
     echo "Creating a tests/env file ..."
     echo
-    echo "CANONICAL_HOST=" > tests/env
-    echo "CANONICAL_SCHEME=http" >> tests/env
-    echo "DATABASE_URL=postgres://gittip-test@localhost/gittip-test" >> tests/env
-    echo "STRIPE_SECRET_API_KEY=1" >> tests/env
-    echo "STRIPE_PUBLISHABLE_API_KEY=1" >> tests/env
-    echo "BALANCED_API_SECRET=90bb3648ca0a11e1a977026ba7e239a9" >> tests/env
-    echo "GITHUB_CLIENT_ID=3785a9ac30df99feeef5" >> tests/env
-    echo "GITHUB_CLIENT_SECRET=e69825fafa163a0b0b6d2424c107a49333d46985" >> tests/env
-    echo "GITHUB_CALLBACK=http://localhost:8537/on/github/associate" >> tests/env
-    echo "TWITTER_CONSUMER_KEY=QBB9vEhxO4DFiieRF68zTA" >> tests/env
-    echo "TWITTER_CONSUMER_SECRET=mUymh1hVMiQdMQbduQFYRi79EYYVeOZGrhj27H59H78" >> tests/env
-    echo "TWITTER_CALLBACK=http://127.0.0.1:8537/on/twitter/associate" >> tests/env
+    cp default_tests.env tests/env
 
 data: env
     ./makedb.sh gittip-test gittip-test
