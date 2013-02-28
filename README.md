@@ -221,11 +221,12 @@ Configuration
 When using `make run`, Gittip's execution environment is defined in a
 `local.env` file, which is not included in the source code repo. If you `make
 run` you'll have one generated for you, which you can then tweak as needed.
-Here's the default:
+Here's the default, which is also contained in default_local.env:
 
-    CANONICAL_HOST=localhost:8537
+    CANONICAL_HOST=
     CANONICAL_SCHEME=http
     DATABASE_URL=postgres://gittip@localhost/gittip
+    DATABASE_MAXCONN=10
     STRIPE_SECRET_API_KEY=1
     STRIPE_PUBLISHABLE_API_KEY=1
     BALANCED_API_SECRET=90bb3648ca0a11e1a977026ba7e239a9
