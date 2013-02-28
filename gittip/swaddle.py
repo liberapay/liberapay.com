@@ -2,6 +2,8 @@
 """
 import os
 import sys
+if sys.platform.startswith('win'):
+    import ctypes
 
 
 def configure(envdef):
@@ -46,7 +48,10 @@ def configure(envdef):
                 print >> sys.stderr, m
                 continue
             key, val = line.split(splitter, 1)
-            os.environ[key.strip()] = val.strip()
+            if sys.platform.startswith('win'):
+                ctypes.windll.kernel32.SetEnvironmentVariableA(key.strip(), val.strip())
+            else:
+                os.environ[key.strip()] = val.strip()
 
     return args
 
