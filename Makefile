@@ -36,19 +36,7 @@ clean:
 local.env:
 	echo "Creating a local.env file ..."
 	echo
-	echo "CANONICAL_HOST=" > local.env
-	echo "CANONICAL_SCHEME=http" >> local.env
-	echo "DATABASE_URL=postgres://gittip@localhost/gittip" >> local.env
-	echo "DATABASE_MAXCONN=10" >> local.env
-	echo "STRIPE_SECRET_API_KEY=1" >> local.env
-	echo "STRIPE_PUBLISHABLE_API_KEY=1" >> local.env
-	echo "BALANCED_API_SECRET=90bb3648ca0a11e1a977026ba7e239a9" >> local.env
-	echo "GITHUB_CLIENT_ID=3785a9ac30df99feeef5" >> local.env
-	echo "GITHUB_CLIENT_SECRET=e69825fafa163a0b0b6d2424c107a49333d46985" >> local.env
-	echo "GITHUB_CALLBACK=http://localhost:8537/on/github/associate" >> local.env
-	echo "TWITTER_CONSUMER_KEY=QBB9vEhxO4DFiieRF68zTA" >> local.env
-	echo "TWITTER_CONSUMER_SECRET=mUymh1hVMiQdMQbduQFYRi79EYYVeOZGrhj27H59H78" >> local.env
-	echo "TWITTER_CALLBACK=http://127.0.0.1:8537/on/twitter/associate" >> local.env
+	cp default_local.env local.env
 
 run: env local.env
 	./$(env_bin)/swaddle local.env ./$(env_bin)/aspen \
@@ -66,19 +54,7 @@ tests: test
 tests/env:
 	echo "Creating a tests/env file ..."
 	echo
-	echo "CANONICAL_HOST=" > tests/env
-	echo "CANONICAL_SCHEME=http" >> tests/env
-	echo "DATABASE_URL=postgres://gittip-test@localhost/gittip-test" >> tests/env
-	echo "DATABASE_MAXCONN=10" >> tests/env
-	echo "STRIPE_SECRET_API_KEY=1" >> tests/env
-	echo "STRIPE_PUBLISHABLE_API_KEY=1" >> tests/env
-	echo "BALANCED_API_SECRET=90bb3648ca0a11e1a977026ba7e239a9" >> tests/env
-	echo "GITHUB_CLIENT_ID=3785a9ac30df99feeef5" >> tests/env
-	echo "GITHUB_CLIENT_SECRET=e69825fafa163a0b0b6d2424c107a49333d46985" >> tests/env
-	echo "GITHUB_CALLBACK=http://localhost:8537/on/github/associate" >> tests/env
-	echo "TWITTER_CONSUMER_KEY=QBB9vEhxO4DFiieRF68zTA" >> tests/env
-	echo "TWITTER_CONSUMER_SECRET=mUymh1hVMiQdMQbduQFYRi79EYYVeOZGrhj27H59H78" >> tests/env
-	echo "TWITTER_CALLBACK=http://127.0.0.1:8537/on/twitter/associate" >> tests/env
+	cp default_tests.env tests/env
 
 data: env
 	./makedb.sh gittip-test gittip-test
