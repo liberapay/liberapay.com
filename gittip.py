@@ -1,120 +1,135 @@
 #!/usr/bin/env python
+"""\
+Gittip
+~~~~~~
 
-from __future__ import print_function
+A personal funding platform.
+
+Dependencies:
+- Python 2.7
+- Postgresql 9.2
+
+To run:
+$ gittip.py
+
+This will also initialize a local environment on the first run.
+"""
 
 import os
 import sys
-import glob
 import shutil
-from fabricate import autoclean, main, shell
-from fabricate import run as fab_run
-
-if sys.platform.startswith('win'):
-    BIN = ['env', 'Scripts']
-else:
-    BIN = ['env', 'bin']
+from subprocess import check_call, check_output, STDOUT, CalledProcessError
 
 
-PIP = os.path.join(*(BIN + ['pip']))
-SWADDLE = os.path.join(*(BIN + ['swaddle']))
-ASPEN = os.path.join(*(BIN + ['aspen']))
+is_win = sys.platform.startswith('win')
+bin_dir = 'Scripts' if is_win else 'bin'
+ext = '.exe' if is_win else ''
 
-p = lambda p: os.path.join(*p.split('/'))
-LOCAL_ENV = p('./local.env')
-DEFAULT_LOCAL_ENV = p('./default_local.env')
-
-
-def remove_path(*args):
-    globbed = []
-    for path in args:
-        globbed.extend(glob.glob(path))
-
-    for path in globbed:
-        if os.path.isdir(path):
-            shutil.rmtree(path)
-        elif os.path.isfile(path):
-            os.remove(path)
+default_port = 8537
+vendor_path = 'vendor'
+env_path = 'env'
+requirements_installed_path = os.path.join(env_path, '.requirements_installed')
+bin_path = os.path.join(env_path, bin_dir)
+default_config_path = 'default_local.env'
+config_path = 'local.env'
+virtualenv_path = os.path.join(vendor_path, 'virtualenv-1.7.1.2.py')
+pip_path = os.path.join(bin_path, 'pip' + ext)
+swaddle_path = os.path.join(bin_path, 'swaddle' + ext)
+aspen_path = os.path.join(bin_path, 'aspen' + ext)
 
 
-def remove_path_recursive(root, *args):
-    for _, dirs, _ in os.walk(root):
-        for name in dirs:
-            remove_path(*[os.path.join(name, path) for path in args])
-
-
-def pip_install(*a):
-    fab_run(PIP, 'install', *a)
-
-
-def build():
-    env()
-
-
-def env():
-    if not shell('python', '--version').startswith('Python 2.7'):
-        raise SystemExit('Error: Python 2.7 required')
-
-    fab_run('python', './vendor/virtualenv-1.7.1.2.py',
-            '--unzip-setuptools',
-            '--prompt="[gittip] "',
-            '--never-download',
-            '--extra-search-dir=' + p('./vendor/'),
-            '--distribute',
-            p('./env/'))
-
-    pip_install('-r', p('./requirements.txt'))
-    pip_install(p('./vendor/nose-1.1.2.tar.gz'))
-    pip_install('-e', p('./'))
-
-
-def clean():
-    remove_path('env', '*.egg', '*.egg-info', p('tests/env'))
-    remove_path_recursive(p('./'), '*.pyc')
-    autoclean()
-
-
-def local_env():
-    if os.path.exists(LOCAL_ENV):
-        return
-
-    print('Creating a local.env file...\n')
-    shutil.copyfile(DEFAULT_LOCAL_ENV, LOCAL_ENV)
-
-
-def serve():
-    run()
-
-
-def run():
-    env()
-    local_env()
+def main():
+    # TODO: Handle command-line arguments to override default config values
+    #  e.g. the address and port to serve on, whether to run tests, etc
 
     try:
-        fab_run(SWADDLE, LOCAL_ENV, ASPEN,
-                '--www_root=www' + os.sep,
-                '--project_root=.',
-                '--show_tracebacks=yes',
-                '--changes_reload=yes',
-                '--network_address=:8537')
-    except KeyboardInterrupt:
-        pass
+        bootstrap_environment()
+    except CalledProcessError as ex:
+        print ex.output
+    except EnvironmentError as ex:
+        print 'Error:', ex
+        return 1
+
+    run_server()
 
 
-"""
-test: env tests/env data
-    ./env/Scripts/swaddle tests/env ./env/Scripts/nosetests ./tests/
-
-tests: test
-
-tests/env:
-    echo "Creating a tests/env file ..."
-    echo
-    cp default_tests.env tests/env
-
-data: env
-    ./makedb.sh gittip-test gittip-test
-    ./env/Scripts/swaddle tests/env ./env/Scripts/python ./gittip/testing/__init__.py
-"""
+def bootstrap_environment():
+    ensure_dependencies()
+    init_config()
+    init_virtualenv()
+    install_requirements()
 
 
-main(default='env')
+def ensure_dependencies():
+    if not shell('python', '--version', capture=True).startswith('Python 2.7'):
+        raise EnvironmentError('Python 2.7 is required.')
+
+    try:
+        shell('pg_config' + ext, capture=True)
+    except OSError as e:
+        if e.errno != os.errno.ENOENT:
+            raise
+        raise EnvironmentError('Postgresql is required. (Make sure pg_config is on your PATH.)')
+
+
+def init_config():
+    if os.path.exists(config_path):
+        return
+
+    print 'Creating a %s file...' % config_path
+    shutil.copyfile(default_config_path, config_path)
+
+
+def init_virtualenv():
+    if os.path.exists(env_path):
+        return
+
+    print 'Initializing virtualenv at %s...' % env_path
+
+    shell('python', virtualenv_path,
+          '--unzip-setuptools',
+          '--prompt="[gittip] "',
+          '--never-download',
+          '--extra-search-dir=' + vendor_path,
+          '--distribute',
+          env_path)
+
+
+def install_requirements():
+    # TODO: Detect when requirements.txt changes instead of checking for a file
+    if os.path.exists(requirements_installed_path):
+        return
+
+    print 'Installing requirements...'
+
+    shell(pip_path, 'install', '-r', 'requirements.txt')
+    shell(pip_path, 'install', os.path.join(vendor_path, 'nose-1.1.2.tar.gz'))
+    shell(pip_path, 'install', '-e', '.')
+
+    open(requirements_installed_path, 'w').close()
+
+
+def run_server(host=None, port=None):
+    if host is None:
+        host = 'localhost'
+    if port is None:
+        port = default_port
+
+    # TODO: Wait for Aspen to quit before exiting
+
+    shell(swaddle_path, config_path, aspen_path,
+          '--www_root=www/',
+          '--project_root=.',
+          '--show_tracebacks=yes',
+          '--changes_reload=yes',
+          '--network_address=%s:%s' % (host, port))
+
+
+def shell(*args, **kwargs):
+    if kwargs.pop('capture', None):
+        return check_output(args, stderr=STDOUT, **kwargs)
+    return check_call(args, **kwargs)
+
+
+if __name__ == '__main__':
+    sys.exit(main())
