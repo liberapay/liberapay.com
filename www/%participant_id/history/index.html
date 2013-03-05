@@ -165,7 +165,19 @@ locked = False
     <tr><td colspan="7">
 
         <h2>{{ participant.id == user.id and "Your" or "Their" }} balance is
-        ${{ participant.balance }}.</h2>
+            ${{ participant.balance }}.</h2>
+        {% if user.ADMIN %}
+        <h2>Record an Exchange.</h2>
+        <form style="text-align: left;" action="record-an-exchange"
+            method="POST">
+            <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
+            <input name="amount" placeholder="amount" />
+            <input name="fee" placeholder="fee" />
+            <br />
+            <input name="note" placeholder="note" style="width: 230px" />
+            <button type="submit">Submit</button>
+        </form>
+        {% end %}
     </td></tr>
     {% for event in paydays %}
     {% if event['event'] == 'payday-start' %}
@@ -214,7 +226,14 @@ locked = False
         <td class="credits"></td>
         <td class="debits">{{ -event['amount'] + event['fee'] }}</td>
         <td class="balance">{{ event['balance'] }}</td>
-        <td class="notes">withdrawal</td>
+        {% if event['recorder'] is None %}
+        <td class="notes">automatic withdrawal</td>
+        {% else %}
+        <td class="notes">
+            &ldquo;{{ escape(event['note']) }}&rdquo;&mdash;<a
+            href="/{{ event['recorder'] }}/">{{ event['recorder'] }}</a>
+        </td>
+        {% end %}
     </tr>
     {% elif event['event'] == 'charge' %}
     <tr>
@@ -224,7 +243,14 @@ locked = False
         <td class="credits">{{ event['amount'] }}</td>
         <td class="debits"></td>
         <td class="balance">{{ event['balance'] }}</td>
-        <td class="notes"></td>
+        {% if event['recorder'] is None %}
+        <td class="notes">automatic charge</td>
+        {% else %}
+        <td class="notes">
+            &ldquo;{{ escape(event['note']) }}&rdquo;&mdash;<a
+            href="/{{ event['recorder'] }}/">{{ event['recorder'] }}</a>
+        </td>
+        {% end %}
     </tr>
     {% elif event['event'] == 'transfer' %}
     <tr>

@@ -300,3 +300,13 @@ ALTER TABLE elsewhere ALTER COLUMN participant_id SET NOT NULL;
 
 ALTER TABLE elsewhere ADD CONSTRAINT "elsewhere_platform_participant_id_key"
     UNIQUE (platform, participant_id);
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/zetaweb/www.gittip.com/issues/53
+
+ALTER TABLE exchanges ADD COLUMN recorder text DEFAULT NULL
+        REFERENCES participants(id)
+        ON UPDATE CASCADE ON DELETE RESTRICT;
+
+ALTER TABLE exchanges ADD COLUMN note text DEFAULT NULL;
