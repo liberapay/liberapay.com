@@ -58,10 +58,9 @@
             ${{ locale.format("%.2f", user.goal, grouping=True) }} per week on
             Gittip.
             {% elif user.goal == 0 %}
-            I'm not here to receive tips. I'll generally regift them.
+            I'm here as a patron.
             {% else %}
-            I'm grateful for tips, but I don't have a specific funding
-            goal.
+            I'm grateful for gifts, but I don't have a specific funding goal.
             {% end %}
         </div>
         <table class="edit"><tr><td>
@@ -80,15 +79,14 @@
 
             <input tabindex="14" type="radio" name="goal" id="goal-0" value="null"
             {% if user.goal is None %} checked="true"{% end %}/>
-            <label for="goal-0">I'm grateful for tips, but I don't
+            <label for="goal-0">I'm grateful for gifts, but I don't
                 have a specific funding goal.</label>
 
             <br />
 
             <input tabindex="14" type="radio" name="goal" id="goal-null" value="0.00"
             {% if user.goal == 0 %} checked="true"{% end %}/>
-            <label for="goal-null">I'm not here to receive tips.
-                I'll generally regift them.</label>
+            <label for="goal-null">I'm here as a patron.</label>
 
         </td></tr></table>
     </form>

@@ -59,11 +59,10 @@ github_account, twitter_account = participant.get_accounts_elsewhere()
             <h2>Funding Goal</h2>
             <div class="goal">
                 {% if participant.goal is None %}
-                I'm grateful for tips, but I don't have a specific
+                I'm grateful for gifts, but I don't have a specific
                 funding goal.
                 {% elif participant.goal == 0 %}
-                I'm not here to receive tips. I'll generally regift
-                them.
+                I'm here as a patron.
                 {% else %}
                 My goal is to receive
                 ${{ locale.format("%.2f", participant.goal, grouping=True) }}
