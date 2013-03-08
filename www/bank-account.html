@@ -177,14 +177,14 @@ title = "Bank Account"
                 <div class="clear"></div>
             </div>
 
-            <div class="buttons tips">
+            <div class="nav level-1">
                 <button class="selected" id="save" type="submit">Save</button>
             </div>
         </form>
 
 
         {% if bank_account and bank_account.is_setup %}
-        <div id="delete" class="buttons nav">
+        <div id="delete" class="nav level-2">
             <form action="bank-account.json" class="special" method="POST">
                 <input type="hidden" name="action" value="delete">
                 <button>Disconnect My Bank Account</button>

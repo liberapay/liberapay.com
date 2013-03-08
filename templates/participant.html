@@ -56,7 +56,7 @@
 </table>
 
 {% if participant.id != user.id %}
-<div class="buttons tips">
+<div class="nav level-1">
     {% if locked %}
 
         <div class="help with-padding">
@@ -110,19 +110,7 @@
 {% block nav %}{% end %}
 
 {% if participant.id == 'aaronsw' %}
-<style>
-    .rip {
-        background: black;
-        text-align: center;
-        padding: 5px;
-        color: white;
-    }
-    .rip a {
-        display: block;
-        color: white;
-    }
-</style>
-<div class="rip">
+<div class="nav level-3">
     <a href="http://news.ycombinator.com/item?id=5046845">RIP :`(</a>
 </div>
 <!--

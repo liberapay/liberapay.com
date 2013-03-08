@@ -580,7 +580,7 @@ Gittip.initTipButtons = function()
     // For anonymous users we flash a login link.
 
     $('BUTTON.tip-anon').mouseover(
-        function() { $('.buttons.tips .flash-me').addClass('highlight'); }
+        function() { $('.nav.level-1 .flash-me').addClass('highlight'); }
     );
     $('BUTTON.tip-anon').click(function()
     {
@@ -588,7 +588,7 @@ Gittip.initTipButtons = function()
         function flash()
         {
             if (i++ == 6) return;
-            $('.buttons.tips .flash-me').toggleClass('highlight');
+            $('.nav.level-1 .flash-me').toggleClass('highlight');
             setTimeout(flash, 100);
         }
         flash();

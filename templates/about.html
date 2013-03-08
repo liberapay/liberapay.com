@@ -2,15 +2,15 @@
 {% block box %}
     {% set current_page = path.raw.split('/')[2] %}
     {% set nav_base = "/about" %}
-    <div class="buttons">
+    <div class="nav">
         {% set pages = [('/', 'About'), ('/faq.html', 'FAQ')] %}
         {% include nav.html %}
     </div>
-    <div class="buttons tips">
+    <div class="nav level-1">
         {% set pages = [('/stats.html', 'Stats'), ('/charts.html', 'Charts')] %}
         {% include nav.html %}
     </div>
-    <div class="buttons nav">
+    <div class="nav level-2">
         {% set pages = [('/terms/', 'Terms'), ('/privacy/', 'Privacy'), ('/fraud/', 'Fraud')] %}
         {% include nav.html %}
     </div>

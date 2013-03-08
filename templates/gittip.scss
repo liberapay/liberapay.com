@@ -506,7 +506,7 @@ button.selected:hover {
         */
     }
 
-    .buttons {
+    .nav {
         padding: 5px;
 
         h2 {
@@ -517,7 +517,7 @@ button.selected:hover {
             margin: 0 0 3px;
         }
 
-        &.tips {
+        &.level-1 {
             border-top: 1px solid rgba($brown, 0.2);
             background: $lighter-gray;
 
@@ -534,9 +534,21 @@ button.selected:hover {
             }
         }
 
-        &.nav {
+        &.level-2 {
             border-top: 1px solid rgba($brown, 0.5);
             background: $light-gray;
+        }
+
+        &.level-3 {
+            background: black;
+            text-align: center;
+            padding: 5px;
+            color: white;
+
+            a {
+                display: block;
+                color: white;
+            }
         }
     }
 
@@ -699,7 +711,7 @@ button.selected:hover {
         .not-first INPUT {
             margin-left: 10px;
         }
-        .buttons {
+        .nav {
             text-align: center;
         }
         #feedback {

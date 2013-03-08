@@ -9,7 +9,7 @@
 
 {% block nav %}
 {% if participant.id == user.id or user.ADMIN %}
-<div class="buttons nav">
+<div class="nav level-2">
     <h2>Navigation</h2>
     {% set current_page = path.raw.split('/')[2] %}
     {% set pages = [('/', 'Profile'), ('/giving/', 'Giving'), ('/history/', 'History'), ('/widgets/', 'Widgets')] %}
