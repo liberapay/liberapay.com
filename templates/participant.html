@@ -63,6 +63,12 @@
             This account has been locked by its owner.
         </div>
 
+    {% elif participant.goal == 0 %}
+
+        <div class="help with-padding">
+            {{ escape(participant.id) }} is here as a patron.
+        </div>
+
     {% elif user.ANON %}
 
         <h2>Your Weekly Gift</h2>
