@@ -89,7 +89,7 @@ rows.sort(cmp=sortfunc)
         <td>{{ "%5.1f" % percentage }}</td>
     </tr>
     <tr>
-        <td class="statement" colspan="4"><div>{{ statement }}</divk</td>
+        <td class="statement" colspan="4"><div>{{ escape(statement) }}</div></td>
     </tr>
     {% end %}
 </table>
