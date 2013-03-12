@@ -34,7 +34,7 @@ propose changes.
 
 To contribute more substantial changes, the first step is to install Gittip
 locally, which is documented in the
-[README](https://github.com/zetaweb/www.gittip.com#readme). That file also
+[README](https://github.com/gittip/www.gittip.com#readme). That file also
 documents our testing setup. Changes with tests are better than changes
 without.
 
@@ -64,5 +64,5 @@ someone else wants to take over a ticket from you they have to talk to you
 first and wait for you to unassign yourself before it's theirs.
 
 **License.** Gittip is [licensed under
-CC0](https://github.com/zetaweb/www.gittip.com/tree/master/COPYING), i.e.,
+CC0](https://github.com/gittip/www.gittip.com/tree/master/COPYING), i.e.,
 it's public domain. 

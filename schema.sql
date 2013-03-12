@@ -96,38 +96,38 @@ CREATE TABLE exchanges
 
 
 -------------------------------------------------------------------------------
--- https://github.com/zetaweb/www.gittip.com/issues/128
+-- https://github.com/gittip/www.gittip.com/issues/128
 
 ALTER TABLE participants ADD COLUMN anonymous bool NOT NULL DEFAULT FALSE;
 ALTER TABLE participants DROP COLUMN shares_giving;
 
 
 -------------------------------------------------------------------------------
--- https://github.com/zetaweb/www.gittip.com/issues/110
+-- https://github.com/gittip/www.gittip.com/issues/110
 
 ALTER TABLE participants ADD COLUMN goal numeric(35,2) DEFAULT NULL;
 
 
 -------------------------------------------------------------------------------
--- https://github.com/zetaweb/www.gittip.com/issues/78
+-- https://github.com/gittip/www.gittip.com/issues/78
 
 ALTER TABLE participants ADD COLUMN balanced_account_uri text DEFAULT NULL;
 
 
 -------------------------------------------------------------------------------
--- https://github.com/zetaweb/www.gittip.com/issues/161
+-- https://github.com/gittip/www.gittip.com/issues/161
 
 ALTER TABLE participants ADD CONSTRAINT min_balance CHECK(balance >= 0);
 
 
 -------------------------------------------------------------------------------
--- https://github.com/zetaweb/www.gittip.com/issues/35
+-- https://github.com/gittip/www.gittip.com/issues/35
 
 ALTER TABLE participants ALTER COLUMN statement SET NOT NULL;
 
 
 -------------------------------------------------------------------------------
--- https://github.com/zetaweb/www.gittip.com/issues/22
+-- https://github.com/gittip/www.gittip.com/issues/22
 
 ALTER TABLE participants ADD COLUMN last_ach_result text DEFAULT NULL;
 
@@ -141,7 +141,7 @@ ALTER TABLE paydays ADD COLUMN ach_fees_volume  numeric(35,2)   DEFAULT 0.00;
 
 
 -------------------------------------------------------------------------------
--- https://github.com/zetaweb/www.gittip.com/issues/80
+-- https://github.com/gittip/www.gittip.com/issues/80
 
 -- The redirect column ended up being YAGNI. I'm dropping it here because
 -- it's implicated in constraints that we'd otherwise have to alter below.
@@ -191,20 +191,20 @@ END;
 
 
 -------------------------------------------------------------------------------
--- https://github.com/zetaweb/www.gittip.com/issues/35
--- https://github.com/zetaweb/www.gittip.com/issues/170
+-- https://github.com/gittip/www.gittip.com/issues/35
+-- https://github.com/gittip/www.gittip.com/issues/170
 
 ALTER TABLE participants ALTER COLUMN balance SET NOT NULL;
 
 
 -------------------------------------------------------------------------------
--- https://github.com/zetaweb/www.gittip.com/issues/350
+-- https://github.com/gittip/www.gittip.com/issues/350
 
 ALTER TABLE participants ADD COLUMN payin_suspended bool NOT NULL DEFAULT FALSE;
 
 
 -------------------------------------------------------------------------------
--- https://github.com/zetaweb/www.gittip.com/issues/354
+-- https://github.com/gittip/www.gittip.com/issues/354
 
 ALTER TABLE participants ADD COLUMN is_suspicious bool DEFAULT NULL;
 UPDATE participants SET is_suspicious=true WHERE payin_suspended;
@@ -212,14 +212,14 @@ ALTER TABLE participants DROP COLUMN payin_suspended;
 
 
 -------------------------------------------------------------------------------
--- https://github.com/zetaweb/www.gittip.com/issues/406
+-- https://github.com/gittip/www.gittip.com/issues/406
 
 ALTER TABLE social_network_users RENAME TO elsewhere;
 ALTER TABLE elsewhere RENAME COLUMN network TO platform;
 
 
 -------------------------------------------------------------------------------
--- https://github.com/zetaweb/www.gittip.com/issues/406
+-- https://github.com/gittip/www.gittip.com/issues/406
 
 CREATE TABLE absorptions
 ( id                    serial                      PRIMARY KEY
@@ -230,7 +230,7 @@ CREATE TABLE absorptions
 
 
 -------------------------------------------------------------------------------
--- https://github.com/zetaweb/www.gittip.com/issues/406
+-- https://github.com/gittip/www.gittip.com/issues/406
 
 -- Decided to change this. Easier to drop and recreate at this point.
 DROP TABLE absorptions;
@@ -253,7 +253,7 @@ CREATE TABLE absorptions
 
 
 -------------------------------------------------------------------------------
--- https://github.com/zetaweb/www.gittip.com/issues/406
+-- https://github.com/gittip/www.gittip.com/issues/406
 
 -- Let's clean up the naming of the constraints on the elsewhere table.
 BEGIN;
@@ -275,15 +275,15 @@ END;
 
 
 -------------------------------------------------------------------------------
--- https://github.com/zetaweb/www.gittip.com/issues/419
+-- https://github.com/gittip/www.gittip.com/issues/419
 
 ALTER TABLE paydays ADD COLUMN nach_failures bigint DEFAULT 0;
 ALTER TABLE paydays RENAME COLUMN nach_failures TO nach_failing; -- double oops
 
 
 -------------------------------------------------------------------------------
--- https://github.com/zetaweb/www.gittip.com/issues/35
--- https://github.com/zetaweb/www.gittip.com/issues/406
+-- https://github.com/gittip/www.gittip.com/issues/35
+-- https://github.com/gittip/www.gittip.com/issues/406
 
 ALTER TABLE elsewhere ALTER COLUMN participant_id SET NOT NULL;
 
@@ -294,7 +294,7 @@ ALTER TABLE elsewhere ALTER COLUMN participant_id SET NOT NULL;
 
 
 -------------------------------------------------------------------------------
--- https://github.com/zetaweb/www.gittip.com/issues/406
+-- https://github.com/gittip/www.gittip.com/issues/406
 
 -- Gittip participants can only connect one account per platform at a time.
 
@@ -303,7 +303,7 @@ ALTER TABLE elsewhere ADD CONSTRAINT "elsewhere_platform_participant_id_key"
 
 
 -------------------------------------------------------------------------------
--- https://github.com/zetaweb/www.gittip.com/issues/53
+-- https://github.com/gittip/www.gittip.com/issues/53
 
 ALTER TABLE exchanges ADD COLUMN recorder text DEFAULT NULL
         REFERENCES participants(id)

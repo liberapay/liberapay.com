@@ -7,7 +7,7 @@ def _extract_avatar(participant_id):
 
     # XXX This can be replaced with Participant.get_img_src when we convert
     # this simplate to use the ORM.
-    # https://github.com/zetaweb/www.gittip.com/issues/541
+    # https://github.com/gittip/www.gittip.com/issues/541
 
     out = '/assets/-/avatar-default.gif'
     recs = db.fetchall("""
@@ -23,7 +23,7 @@ def _extract_avatar(participant_id):
     except StopIteration:
         return out # XXX We need to take orphan accounts out of queries in the
                    # caller. See:
-                   #    https://github.com/zetaweb/www.gittip.com/issues/650
+                   #    https://github.com/gittip/www.gittip.com/issues/650
         #raise Exception("%s has no elsewheres?" % participant_id)
     user_info = rec.get('user_info', {})
     if 'profile_image_url_https' in user_info:
@@ -96,7 +96,7 @@ givers = db.fetchall("""
 """, (limit, offset))
 
 # XXX I'm nearly positive that one or both of givers and receivers can contain
-# orphan accounts. See https://github.com/zetaweb/www.gittip.com/issues/650
+# orphan accounts. See https://github.com/gittip/www.gittip.com/issues/650
 
 receivers = db.fetchall("""
 

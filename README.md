@@ -32,7 +32,7 @@ Installation
 ============
 
 Thanks for hacking on Gittip! Be sure to review
-[CONTRIBUTING](https://github.com/zetaweb/www.gittip.com/blob/master/CONTRIBUTING.md#readme)
+[CONTRIBUTING](https://github.com/gittip/www.gittip.com/blob/master/CONTRIBUTING.md#readme)
 as well if that's what you're planning to do.
 
 Dependencies
@@ -48,7 +48,7 @@ You need python2.7 on your PATH.
 
 You need [Postgres](http://www.postgresql.org/download/). We're working
 on
-[porting](https://github.com/zetaweb/www.gittip.com/issues?milestone=28&state=open)
+[porting](https://github.com/gittip/www.gittip.com/issues?milestone=28&state=open)
 Gittip from raw SQL to a declarative ORM with SQLAlchemy. After that we may be
 able to remove the hard dependency on Postgres so you can use SQLite in
 development, but for now you need Postgres.
@@ -197,7 +197,7 @@ pid-12508 thread-140735090330816 (MainThread) Starting up Aspen website.
 You should then find this in your browser at
 [http://localhost:8537/](http://localhost:8537/):
 
-![Success](https://raw.github.com/zetaweb/www.gittip.com/master/img-src/success.png)
+![Success](https://raw.github.com/gittip/www.gittip.com/master/img-src/success.png)
 
 Congratulations! Sign in using Twitter or GitHub and you're off and
 running. At some point, try [running the test suite](#testing-).
@@ -208,9 +208,9 @@ Help!
 
 If you get stuck somewhere along the way, you can find help in the #gittip
 channel on [Freenode](http://webchat.freenode.net/) or in the [issue
-tracker](/zetaweb/www.gittip.com/issues/new) here on GitHub. If all else fails
+tracker](/gittip/www.gittip.com/issues/new) here on GitHub. If all else fails
 ping [@whit537](https://twitter.com/whit537) on Twitter or email
-[chad@zetaweb.com](mailto:chad@zetaweb.com).
+[chad@gittip.com](mailto:chad@gittip.com).
 
 Thanks for installing Gittip! :smiley: 
 
@@ -266,7 +266,7 @@ should change the `DATABASE_URL` using the following format:
     DATABASE_URL=postgres://<username>@localhost/<database name>
 
 
-Testing [![Testing](https://secure.travis-ci.org/zetaweb/www.gittip.com.png)](http://travis-ci.org/zetaweb/www.gittip.com)
+Testing [![Testing](https://secure.travis-ci.org/gittip/www.gittip.com.png)](http://travis-ci.org/gittip/www.gittip.com)
 =======
 
 Please write unit tests for all new code and all code you change.
@@ -307,19 +307,19 @@ API
 The Gittip API is comprised of these endpoints:
 
  - **[/about/paydays.json](https://www.gittip.com/about/paydays.json)**
-   ([source](https://github.com/zetaweb/www.gittip.com/tree/master/www/about/paydays.json))&mdash;Returns an array of
+   ([source](https://github.com/gittip/www.gittip.com/tree/master/www/about/paydays.json))&mdash;Returns an array of
     objects, one per week, showing aggregate numbers over time. The
     [charts](https://www.gittip.com/about/charts.html) page uses this.
 
  - **[/about/stats.json](https://www.gittip.com/about/stats.json)**
-   ([source](https://github.com/zetaweb/www.gittip.com/tree/master/www/about/stats))&mdash;Returns an object giving a
+   ([source](https://github.com/gittip/www.gittip.com/tree/master/www/about/stats))&mdash;Returns an object giving a
     point-in-time snapshot of Gittip. The
     [stats](https://www.gittip.com/about/stats.html) page displays the same 
     info.
 
  - **/%participant_id/public.json**
    ([example](https://www.gittip.com/whit537/public.json),
-    [source](https://github.com/zetaweb/www.gittip.com/tree/master/www/%25participant_id/public.json))&mdash;Returns an
+    [source](https://github.com/gittip/www.gittip.com/tree/master/www/%25participant_id/public.json))&mdash;Returns an
     object with these keys:
 
     - "receiving"&mdash;an estimate of the amount the given participant will
@@ -354,7 +354,7 @@ See Also
 
 Here's a list of projects we're aware of in the crowd-funding
 space. Something missing? Ping [@whit537](https://twitter.com/whit537) on
-Twitter or [edit the file](/zetaweb/www.gittip.com/edit/master/README.md)
+Twitter or [edit the file](/gittip/www.gittip.com/edit/master/README.md)
 yourself (add your link at the end). :grinning:
 
 *Note: there are comprehensive directories that can complement this list,

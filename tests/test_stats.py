@@ -95,7 +95,7 @@ class TestRenderingStatsPage(Harness):
         """Test that stats page takes running payday into account.
 
         This test was originally written to expose the fix required for
-        https://github.com/zetaweb/www.gittip.com/issues/92.
+        https://github.com/gittip/www.gittip.com/issues/92.
         """
         a_thursday = datetime(2012, 8, 9, 11, 00, 01)
         mock_datetime.utcnow.return_value = a_thursday

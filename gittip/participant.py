@@ -850,10 +850,10 @@ class Participant(object):
             # =======================================
             # Bandaid for
             #
-            #   https://github.com/zetaweb/www.gittip.com/issues/421
+            #   https://github.com/gittip/www.gittip.com/issues/421
             #
             # XXX This is why we're porting to SQLAlchemy:
             #
-            #   https://github.com/zetaweb/www.gittip.com/issues/129
+            #   https://github.com/gittip/www.gittip.com/issues/129
 
             account_elsewhere.participant_id = self.id

@@ -142,7 +142,7 @@ class Participant(db.Model):
             elif c not in ASCII_ALLOWED_IN_PARTICIPANT_ID:
 
                 # XXX Burned by an Aspen bug. :`-(
-                # https://github.com/zetaweb/aspen/issues/102
+                # https://github.com/gittip/aspen/issues/102
 
                 raise self.IdContainsInvalidCharacters
 
