@@ -48,7 +48,7 @@ github_account, twitter_account = participant.get_accounts_elsewhere()
             <h2>Statement</h2>
             <div class="statement">
                 {% if participant.statement %}
-                {{ MAKING }} {{ escape(wrap(participant.statement)) }}
+                {{ MAKING }} {{ wrap(participant.statement) }}
                 {% else %}
                 [ unstated ]
                 {% end %}
