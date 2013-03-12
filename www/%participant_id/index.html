@@ -33,7 +33,7 @@ github_account, twitter_account = participant.get_accounts_elsewhere()
     <meta name="og:url" content="https://www.gittip.com/{{ username }}/" />
     <meta name="og:type" content="website" />
     <meta name="og:title" content="{{ participant.get_og_title() }}" />
-    <meta name="og:description" content="{{ _clip(MAKING + " " + participant.statement, 200) }}" />
+    <meta name="og:description" content="{{ _clip(MAKING + " " + escape(participant.statement), 200) }}" />
     <meta name="og:image" content="https://www.gittip.com/assets/gittip.opengraph.png" />
 {% end %}
 {% block page %}
