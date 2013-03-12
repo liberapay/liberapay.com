@@ -3,6 +3,11 @@
     <script src="/assets/{{ __version__ }}/profile.js"></script>
     {% if user.ADMIN %}<script src="/assets/{{ __version__ }}/admin.js"></script>{% end %}
     <script>$(document).ready(Gittip.initTipButtons)</script>
+    <script>$(document).ready(function() {
+      $('#goal-custom').on('click change', function() {
+        $('#goal-yes').attr('checked', true)
+      })
+    })</script>
 {% end %}
 
 {% block heading %}<h2 class="top"><span>{{ hero }}</span></h2>{% end %}
