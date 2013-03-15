@@ -4,9 +4,10 @@ python := "$(shell { command -v python2.7 || command -v python; } 2>/dev/null)"
 # NOTE: Creating a virtualenv on Windows places binaries in the 'Scripts' directory.
 bin_dir := $(shell $(python) -c 'import sys; bin = "Scripts" if sys.platform == "win32" else "bin"; print(bin)')
 env_bin := env/$(bin_dir)
+venv := "./vendor/virtualenv-1.9.1.py"
 
 env: $(env_bin)/swaddle
-	$(python) ./vendor/virtualenv-1.7.1.2.py \
+	$(python)  $(venv)\
 				--unzip-setuptools \
 				--prompt="[gittip] " \
 				--never-download \
@@ -18,7 +19,7 @@ env: $(env_bin)/swaddle
 	./$(env_bin)/pip install -e ./
 
 $(env_bin)/swaddle:
-	$(python) ./vendor/virtualenv-1.7.1.2.py \
+	$(python) $(venv)\
 				--unzip-setuptools \
 				--prompt="[gittip] " \
 				--never-download \
