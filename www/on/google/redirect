@@ -1,0 +1,39 @@
+"""Part of Twitter oauth.
+
+From here we redirect users to Twitter after storing needed info in an
+in-memory cache. We get them again at www/on/twitter/associate.
+
+"""
+from urlparse import parse_qs
+
+import requests
+from oauth_hook import OAuthHook
+
+OAuthHook.consumer_key = website.twitter_consumer_key
+OAuthHook.consumer_secret = website.twitter_consumer_secret
+
+website.oauth_cache = {}  # XXX What happens to someone who was half-authed
+                          # when we bounced the server?
+
+# ========================== ^L
+
+oauth_hook = OAuthHook(header_auth=True)
+response = requests.post( "https://api.twitter.com/oauth/request_token"
+                        , hooks={'pre_request': oauth_hook}
+                         )
+
+assert response.status_code == 200, response.status_code  # safety check
+
+reply = parse_qs(response.text)
+
+token = reply['oauth_token'][0]
+secret = reply['oauth_token_secret'][0]
+assert reply['oauth_callback_confirmed'][0] == "true"  # sanity check
+
+action = qs.get('action', 'opt-in')
+then = qs.get('then', '')
+website.oauth_cache[token] = (secret, action, then)
+
+url = "https://api.twitter.com/oauth/authenticate?oauth_token=%s"
+request.redirect(url % token)
+# ========================== ^L text/plain

@@ -1,0 +1,108 @@
+"""Associate a Twitter account with a Gittip account.
+
+First we do the OAuth dance with Twitter. Once we've authenticated the user
+against Twitter, we record them in our elsewhere table. This table contains
+information for Twitter users whether or not they are explicit participants in
+the Gittip community.
+
+"""
+from urlparse import parse_qs
+
+import requests
+from oauth_hook import OAuthHook
+from aspen import log, Response, json
+from aspen import resources
+from gittip.elsewhere import ACTIONS, twitter
+from gittip.participant import NeedConfirmation
+
+# ========================== ^L
+
+if 'denied' in qs:
+    request.redirect('/')
+
+
+token = qs['oauth_token']
+try:
+    secret, action, then = website.oauth_cache.pop(token)
+except KeyError:
+    request.redirect("/about/me.html")
+
+oauth_hook = OAuthHook(token, secret, header_auth=True)
+response = requests.post( "https://api.twitter.com/oauth/access_token"
+                        , data={"oauth_verifier": qs['oauth_verifier']}
+                        , hooks={'pre_request': oauth_hook}
+                         )
+assert response.status_code == 200, response.status_code
+
+reply = parse_qs(response.text)
+token = reply['oauth_token'][0]
+secret = reply['oauth_token_secret'][0]
+user_id = reply['user_id'][0]
+
+
+oauth_hook = OAuthHook(token, secret, header_auth=True)
+response = requests.get( "https://api.twitter.com/1/users/show.json?user_id=%s" % user_id
+                       , hooks={'pre_request': oauth_hook}
+                        )
+user_info = json.loads(response.text)
+assert response.status_code == 200, response.status_code
+
+
+# Load Twitter user info.
+
+if action not in ACTIONS:
+    raise Response(400)
+
+# Make sure we have a Twitter screen_name.
+screen_name = user_info.get('screen_name')
+if screen_name is None:
+    log(u"We got a user_info from Twitter with no screen_name [%s, %s]"
+        % (action, then))
+    raise Response(400)
+user_info['html_url'] = "https://twitter.com/" + screen_name
+
+# Do something.
+log(u"%s wants to %s" % (screen_name, action))
+
+account = twitter.TwitterAccount(user_info['id'], user_info)
+
+if action == 'opt-in':      # opt in
+    user = account.opt_in(screen_name)  # set 'user' to give them a session :/
+elif action == 'connect':   # connect
+    if user.ANON:
+        raise Response(404)
+    try:
+        user.take_over(account)
+    except NeedConfirmation, obstacles:
+
+        # XXX Eep! Internal redirect! Really?!
+        request.internally_redirected_from = request.fs
+        request.fs = website.www_root + '/on/confirm.html'
+        request.resource = resources.get(request)
+
+        raise request.resource.respond(request)
+else:                       # lock or unlock
+    if then != screen_name:
+
+        # The user could spoof `then' to match their screen_name, but the most
+        # they can do is lock/unlock their own Twitter account in a convoluted
+        # way.
+
+        then = u'/on/twitter/%s/lock-fail.html' % then
+
+    else:
+
+        # Associate the Twitter screen_name with a randomly-named, unclaimed
+        # Gittip participant.
+
+        assert account.participant_id != screen_name, screen_name # sanity check
+        account.set_is_locked(action == 'lock')
+
+if then == u'':
+    then = u'/%s/' % account.participant_id
+if not then.startswith(u'/'):
+    # Interpret it as a Twitter screen_name.
+    then = u'/on/twitter/%s/' % then
+request.redirect(then)
+
+# ========================== ^L text/plain
