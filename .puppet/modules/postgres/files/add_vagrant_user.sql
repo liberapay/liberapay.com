@@ -7,7 +7,7 @@ BEGIN
       FROM   pg_catalog.pg_user
       WHERE  username = 'vagrant') THEN
 
-      CREATE ROLE my_user LOGIN PASSWORD 'vagrant';
+      CREATE ROLE vagrant LOGIN PASSWORD 'vagrant';
    END IF;
 END
 $body$
