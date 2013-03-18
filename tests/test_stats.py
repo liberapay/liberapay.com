@@ -101,7 +101,7 @@ class TestRenderingStatsPage(Harness):
         mock_datetime.utcnow.return_value = a_thursday
 
         wireup.billing()
-        payday = Payday(wireup.db())
+        payday = Payday(self.postgres)
         payday.start()
 
         body = self.get_stats_page()
@@ -114,7 +114,7 @@ class TestRenderingStatsPage(Harness):
         a_monday = datetime(2012, 8, 6, 11, 00, 01)
         mock_datetime.utcnow.return_value = a_monday
 
-        payday = Payday(wireup.db())
+        payday = Payday(self.postgres)
         payday.start()
 
         body = self.get_stats_page()

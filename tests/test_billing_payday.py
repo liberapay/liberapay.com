@@ -7,7 +7,7 @@ from nose.tools import assert_equals, assert_raises
 from psycopg2 import IntegrityError
 
 from aspen.utils import typecheck, utcnow
-from gittip import billing, wireup
+from gittip import billing
 from gittip.billing.payday import FEE_CHARGE, Payday
 from gittip.models import Payday as PaydayModel
 from gittip.participant import Participant
@@ -21,7 +21,6 @@ class TestPaydayCharge(TestBillingBase):
 
     def setUp(self):
         super(TestBillingBase, self).setUp()
-        self.postgres = wireup.db()
         self.payday = Payday(self.postgres)
 
     def get_numbers(self):
@@ -154,7 +153,6 @@ class TestBillingCharges(Harness):
 
     def setUp(self):
         super(TestBillingCharges, self).setUp()
-        self.postgres = wireup.db()
         self.payday = Payday(self.postgres)
         self.alice = self.make_participant('alice')
 
@@ -337,7 +335,6 @@ class TestBillingPayday(Harness):
 
     def setUp(self):
         super(TestBillingPayday, self).setUp()
-        self.postgres = wireup.db()
         self.payday = Payday(self.postgres)
 
     def test_assert_one_payday(self):
@@ -573,7 +570,6 @@ class TestBillingPayday(Harness):
 class TestBillingTransfer(Harness):
     def setUp(self):
         super(Harness, self).setUp()
-        self.postgres = wireup.db()
         self.payday = Payday(self.postgres)
         self.payday.start()
         self.tipper = self.make_participant('lgtest')
