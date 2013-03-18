@@ -310,3 +310,15 @@ ALTER TABLE exchanges ADD COLUMN recorder text DEFAULT NULL
         ON UPDATE CASCADE ON DELETE RESTRICT;
 
 ALTER TABLE exchanges ADD COLUMN note text DEFAULT NULL;
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/issues/141
+
+-- goals -- all goals a participant has stated over time
+CREATE TABLE goals
+( id                    serial                      PRIMARY KEY
+, ctime                 timestamp with time zone    NOT NULL
+, mtime                 timestamp with time zone    NOT NULL DEFAULT CURRENT_TIMESTAMP
+, participant           text                        NOT NULL REFERENCES participants ON DELETE RESTRICT
+, amount                numeric(35,2)               NOT NULL
+ );

@@ -11,6 +11,7 @@ from sqlalchemy import func
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Column, CheckConstraint, UniqueConstraint
 from sqlalchemy.types import Text, TIMESTAMP, Boolean, Numeric
+from sqlalchemy.sql.expression import desc
 
 import gittip
 from gittip.models.tip import Tip
@@ -45,7 +46,6 @@ class Participant(db.Model):
                      default=0.0, nullable=False)
     pending = Column(Numeric(precision=35, scale=2), default=None)
     anonymous = Column(Boolean, default=False, nullable=False)
-    goal = Column(Numeric(precision=35, scale=2), default=None)
     balanced_account_uri = Column(Text)
     last_ach_result = Column(Text)
     is_suspicious = Column(Boolean)
@@ -80,6 +80,12 @@ class Participant(db.Model):
                              , foreign_keys="Transfer.tippee"
                               )
 
+    _goal = relationship( "Goal"
+                        , backref="goal"
+                        , foreign_keys="Goal.participant"
+                        , lazy="dynamic"
+                         )
+
     def __eq__(self, other):
         return self.id == other.id
 
@@ -112,6 +118,12 @@ class Participant(db.Model):
                    .filter( 'participants.is_suspicious IS NOT true'
                           , Participant.last_bill_result == ''
                            )
+    @property
+    def goal(self):
+        query = self._goal.distinct("goals.participant")\
+                                .order_by("goals.participant, goals.mtime DESC")
+        res = query.first()
+        return res.amount if res is not None else None
 
     def resolve_unclaimed(self):
         if self.accounts_elsewhere:

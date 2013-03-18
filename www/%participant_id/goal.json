@@ -23,11 +23,25 @@ if goal is not None:
     except decimal.InvalidOperation:
         raise Response(400, "Bad input.")
 
-rec = db.fetchone( "UPDATE participants SET goal=%s "
-                   "WHERE id=%s RETURNING goal"
-                 , (goal, user.id)
+GOAL = """\
+
+    INSERT INTO goals
+                (ctime, participant, amount)
+         VALUES ( COALESCE (( SELECT ctime
+                                FROM goals
+                               WHERE (participant=%s)
+                               LIMIT 1
+                              ), CURRENT_TIMESTAMP)
+                , %s, %s
+                 )
+         RETURNING amount
+
+"""
+rec = db.fetchone( GOAL
+                 , (user.id, user.id, goal)
                   )
-goal = rec['goal']
+
+goal = rec['amount']
 if goal is not None:
-    goal = locale.format("%.2f", rec['goal'], grouping=True)
+    goal = locale.format("%.2f", rec['amount'], grouping=True)
 response.body = {"goal": goal}
