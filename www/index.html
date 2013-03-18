@@ -139,14 +139,6 @@ receivers = db.fetchall("""
 {% end %}
 {% block box %}
     <div class="as-content">
-        <h1>Who inspires you?</h1>
-        {% if user.ANON %}
-        Join with
-        <a class="highlight" href="{{ twitter.oauth_url(website, u'opt-in', u'/about/me/giving/') }}">Twitter</a>
-        or
-        <a href="{{ github.oauth_url(website, u'opt-in', u'/about/me/giving/') }}">GitHub</a>
-        to give back.
-        {% else %}
         <form id="jump">
             <span class="luxury">Enter a</span> <select>
                 <option value="twitter">Twitter</option>
@@ -157,7 +149,6 @@ receivers = db.fetchall("""
                 <button type="submit">Go</button>
             </span>
         </form>
-        {% end %}
     </div>
 {% end %}
 {% block page %}
