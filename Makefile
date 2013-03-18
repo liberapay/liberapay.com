@@ -52,6 +52,9 @@ test: env tests/env data
 
 tests: test
 
+jstest:
+	./node_modules/.bin/testacular start testacular.unit-conf.js
+
 tests/env:
 	echo "Creating a tests/env file ..."
 	echo
