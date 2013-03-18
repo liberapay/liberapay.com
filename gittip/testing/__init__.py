@@ -56,7 +56,8 @@ class Harness(unittest.TestCase):
     def setUpClass(cls):
         cls.db = orm.db
         cls.session = orm.db.session
-        cls.postgres = wireup.db()
+        """ Assign gittip.db directly because wireup.db() is called earlier  """
+        cls.postgres = gittip.db
 
     def setUp(self):
         pass
