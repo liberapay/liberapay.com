@@ -1,6 +1,6 @@
 # install postgres
 # custom pg_hba.conf
-# create vagrant user in postgres
+# create gittip user in postgres
 
 group { "puppet":
     ensure => "present", 
