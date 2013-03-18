@@ -194,7 +194,7 @@ $(document).ready(function()
                      }
             , success: success
             , error: function() {
-                    $('#save-goal').text('Save');
+                    $('.goal BUTTON.save').text('Save');
                     alert( "Failed to change your funding goal. "
                          + "Please try again."
                           );
