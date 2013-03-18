@@ -5,9 +5,9 @@ BEGIN
    IF NOT EXISTS (
       SELECT *
       FROM   pg_catalog.pg_user
-      WHERE  username = 'gittip') THEN
+      WHERE  usename = 'gittip') THEN
 
-      CREATE ROLE vagrant LOGIN PASSWORD 'gittip';
+      CREATE ROLE gittip LOGIN PASSWORD 'gittip' SUPERUSER;
    END IF;
 END
 $body$
