@@ -178,7 +178,7 @@ class PostgresTransactionContextManager(object):
         else:
             self.conn.rollback()
         self.conn.autocommit = True
-        self.pool.putconn(self.conn)
+        self.pool.putconn(self.conn, close=True)
 
 
 class PostgresConnectionContextManager(object):
@@ -207,7 +207,7 @@ class PostgresConnectionContextManager(object):
         """
         self.conn.rollback()
         self.conn.autocommit = True
-        self.pool.putconn(self.conn)
+        self.pool.putconn(self.conn, close=True)
 
 
 class PostgresCursorContextManager(object):
@@ -238,4 +238,4 @@ class PostgresCursorContextManager(object):
     def __exit__(self, *exc_info):
         """Put our connection back in the pool.
         """
-        self.pool.putconn(self.conn)
+        self.pool.putconn(self.conn, close=True)
