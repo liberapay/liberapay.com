@@ -15,6 +15,7 @@ setup( name='gittip'
      , entry_points = { 'console_scripts'
                       : [ 'payday=gittip.cli:payday'
                         , 'swaddle=gittip.swaddle:main'
+                        , 'fake_data=gittip.fake_data:main'
                          ]
                        }
       )
