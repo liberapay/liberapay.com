@@ -16,8 +16,8 @@ Vagrant::Config.run do |config|
         "--memory", "1024"]
 
     config.vm.provision :puppet do |puppet|
-        puppet.module_path = ".puppet/modules"
-        puppet.manifests_path = ".puppet/manifests"
+        puppet.module_path = "puppet/modules"
+        puppet.manifests_path = "puppet/manifests"
         puppet.manifest_file  = "gittip.pp"
         puppet.facter = {"fqdn" => "precise64"}
     end
