@@ -9,6 +9,8 @@ from gittip.participant import reserve_a_random_username
 
 ACTIONS = [u'opt-in', u'connect', u'lock', u'unlock']
 
+class AuthorizationFailure(Exception):
+    pass
 
 def _resolve(platform, username_key, username):
     """Given three unicodes, return a username.
@@ -29,6 +31,83 @@ def _resolve(platform, username_key, username):
                        % (username, platform)
                         )
     return rec['participant']
+
+class ServiceElsewhere(object):
+
+    def __init__(self, website=None, username=None):
+        self.username = username
+        self.website = website
+        if username:
+            self._get_user_info()
+
+    @property
+    def external_auth_url(self):
+        '''
+        Returns the URL to which the user should be directed to begin the OAuth
+        handshake.
+
+        If conditions must be met prior to the user being redirected, they
+        should be set up here. Example: Twitter requires a unique request token
+        for each handshake. The initial call to Twitter to get that token
+        should be implmented here.
+
+        '''
+        raise NotImplementedError()
+
+    @property
+    def external_profile_url(self):
+        '''
+        Returns a user's profile on the external platform, if such a beast
+        exists.
+
+        '''
+        raise NotImplementedError()
+
+    @property
+    def get_user_info(self, user_id=None, participant=None):
+        '''
+        Returns a dict containing the user's details on the external service.
+        The following keys are required:
+
+        `user_id`
+            The ID of the user on the external service
+        `token`
+            The long-term token used to access user data
+
+        :param user_id:
+            The ID of the participant, on the external service
+        :param participant:
+            The participant ID
+
+        Note that overriding methods should handle the case where neither params
+        are provided by raising an appropriate excpetion.
+
+        '''
+        raise NotImplementedError()
+
+    _display_name = None
+
+    @property
+    def display_name(self):
+        '''
+        For most services, the name displayed should be `self.username`. For
+        Twitter, this would be the user's screen name. Other services may have
+        different user-facing strings - like Google, which uses email addresses.
+        To make this a bit more complex, the Google's email addresses are
+        mutable.
+
+        This method should be overridden only if the immutable ID from the
+        service provider is not suitable to be displayed back to the user.
+        '''
+        return self._display_name or self.username
+
+    @display_name.setter
+    def display_name(self, val):
+        self._display_name = val
+
+    def get_oauth_init_url(self):
+        raise NotImplementedError()
+
 
 
 class AccountElsewhere(object):

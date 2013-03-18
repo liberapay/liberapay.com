@@ -1,0 +1,21 @@
+import requests
+import os
+
+
+# ========================== ^L
+
+service = website.elsewhere[path['service']](website, qs.get('username'))
+
+host = os.getenv('CANONICAL_HOST')
+scheme = os.getenv('CANONICAL_SCHEME')
+
+redirect_uri = '%s://%s%s' % (
+    scheme,
+    host,
+    '/on/%s/associate' % service.service_name
+)
+
+request.redirect(service.get_oauth_init_url(redirect_uri))
+
+
+# ========================== ^L text/plain

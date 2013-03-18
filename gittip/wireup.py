@@ -10,6 +10,7 @@ import raven
 import psycopg2
 import stripe
 import gittip.mixpanel
+from gittip.elsewhere.google import GoogleProvider
 from gittip.postgres import PostgresManager
 from psycopg2.extensions import cursor as RegularCursor
 
@@ -74,3 +75,8 @@ def nmembers(website):
     from gittip.models import community
     community.NMEMBERS_THRESHOLD = int(os.environ['NMEMBERS_THRESHOLD'])
     website.NMEMBERS_THRESHOLD = community.NMEMBERS_THRESHOLD
+
+def elsewhere_providers(website):
+    website.elsewhere = {
+        'google': GoogleProvider
+    }

@@ -1,0 +1,12 @@
+
+# ========================== ^L
+
+service = website.elsewhere[path['service']](website, username)
+
+service.handle_oauth_callback(qs)
+
+# ========================== ^L text/plain
+
+Caught!
+
+{{ qs['code'] }}

@@ -1,4 +1,4 @@
-"""Google user page on Gittip.
+"""External user page on Gittip.
 """
 import datetime
 import decimal
@@ -7,48 +7,65 @@ import requests
 from aspen import json, Response, log
 from aspen.utils import to_age, utc
 from gittip import AMOUNTS, CARDINALS, db
-from gittip.elsewhere import google
 from gittip.models import Participant
+from gittip.elsewhere import github
 # ========================================================================== ^L
 
-# Try to load from Google.
-# =========================
+# # Try to load from Google.
+# # =========================
 
-user_info = google.get_user_info(path['screen_name'])
+# user_info = google.get_user_info(path['screen_name'])
 
-# Try to load from Gittip.
-# ========================
+# # Try to load from Gittip.
+# # ========================
 
-username = user_info['id']
-name = user_info.get('displayName')
-if not name:
-    name = username
-url = user_info.get('url')
+# username = user_info['id']
+# name = user_info.get('displayName')
+# if not name:
+#     name = username
+# url = user_info.get('url')
 
-account = google.GoogleAccount(user_info['id'], user_info)
-participant = Participant.query.get(account.participant_id)
-if account.is_claimed:
-    request.redirect('/%s/' % participant.id)
-locked = account.is_locked
-lock_action = "unlock" if account.is_locked else "lock"
+# account = google.GoogleAccount(user_info['id'], user_info)
+# participant = Participant.query.get(account.participant_id)
+# if account.is_claimed:
+#     request.redirect('/%s/' % participant.id)
+# locked = account.is_locked
+# lock_action = "unlock" if account.is_locked else "lock"
 
-nbackers = participant.get_number_of_backers()
-title = username
+# nbackers = participant.get_number_of_backers()
+# title = username
+
+service = website.elsewhere[path['service']](website, path['username'])
+
+url = ''
+
+nbackers = 0
+
+
+class account(object):
+    is_locked = False
+    username = 'External Username' #Chad's directive
+    oauth_url = 'oauth.url'
+    profile_url = 'profile.url'
+    service_name = 'External Service'
+
+title = account.service_name
+
 
 # ========================================================================== ^L
 {% extends templates/base.html %}
 
-{% block heading %}<h2 class="top"><span>Google</span></h2>{% end %}
+{% block heading %}<h2 class="top"><span>{{ account.service_name }}</span></h2>{% end %}
 
 {% block box %}
 
 <table class="on-elsewhere">
     <tr>
         <td class="picture">
-            <img src="{{ participant.get_img_src(128) }}" />
+            <img src="{{ service.avatar }}" />
         </td>
         <td class="ready">
-            <h2><a href="{{ url }}">{{ name }}</a> has</h2>
+            <h2><a href="{{ url }}">{{ service.display_name }}</a> has</h2>
             <div class="number">{{ nbackers }}</div>
             <div class="unit">{{ 'person' if nbackers == 1 else 'people' }} ready to give</div>
         </td>
@@ -71,9 +88,9 @@ title = username
         {% end %}
 
         <div class="help with-padding">Sign in using
-            <a class="highlight flash-me" href="{{ twitter.oauth_url(website, u'opt-in', path.decoded) }}">Google</a> or
+            <a class="highlight flash-me" href="{{ account.oauth_url }}">Google</a> or
             <a href="{{ github.oauth_url(website, u'opt-in', path.decoded) }}">GitHub</a>
-            to pledge to <b>{{ name }}</b>.</div>
+            to pledge to <b>{{ service.display_name }}</b>.</div>
 
     {% else %}
 
@@ -112,13 +129,13 @@ title = username
 <div class="col0">
   {% if account.is_locked %}
 
-    <h2>{{ name }} has opted out of Gittip.</h2>
+    <h2>{{ service.display_name }} has opted out of Gittip.</h2>
 
-    <p>If you are <a href="{{ user_info.get('html_url', '') }}">{{ name }}</a>
+    <p>If you are <a href="{{ user_info.get('html_url', '') }}">{{ service.display_name }}</a>
     on Google, you can unlock your account to allow people to pledge tips to
     you on Gittip.</p>
 
-    <a href="{{ twitter.oauth_url(website, u'unlock', username) }}"
+    <a href="{{ account.oauth_url }}"
         ><button>Unlock</button></a>
 
   {% else %}
@@ -126,11 +143,11 @@ title = username
         $(document).ready(Gittip.initTipButtons);
     </script>
 
-    <h2>{{ name }} has not joined Gittip.</h2>
+    <h2>{{ service.display_name }} has not joined Gittip.</h2>
 
     <p>Is this you?
     {% if user.ANON %}
-    <a href="{{ twitter.oauth_url(website, u'opt-in', username) }}">Click
+    <a href="../redirect?username={{ service.username }}">Click
         here</a> to opt in to Gittip. We never collect money for you until
     you do.
     {% else %}
@@ -149,11 +166,11 @@ title = username
 
     <h2>Don't like what you see?</h2>
 
-    <p>If you are {{ name }} you can explicitly opt out of Gittip by
+    <p>If you are {{ service.display_name }} you can explicitly opt out of Gittip by
     locking this account. We don't allow new pledges to locked
     accounts.</p>
 
-    <a href="{{ twitter.oauth_url(website, u'lock', username) }}"
+    <a href="{{ account.oauth_url }}"
         ><button>Lock</button></a>
     {% end %}
 

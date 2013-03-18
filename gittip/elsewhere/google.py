@@ -1,10 +1,83 @@
 import datetime
 import gittip
+import hashlib
 import requests
 from aspen import json, log, Response
 from aspen.utils import to_age, utc, typecheck
 from aspen.website import Website
-from gittip.elsewhere import AccountElsewhere, ACTIONS, _resolve
+from gittip.elsewhere import AccountElsewhere, ACTIONS, _resolve, ServiceElsewhere, AuthorizationFailure
+
+
+class GoogleProvider(ServiceElsewhere):
+    service_name = 'google'
+    oauth_cache = {}
+
+    def get_oauth_init_url(self, next='', action=u'opt-in'):
+        nonce = hashlib.md5(datetime.datetime.now().isoformat()).hexdigest()
+
+        state = ','.join((self.username, nonce, action))
+
+        self.oauth_cache[self.username] = nonce
+
+        return ''.join([
+            "https://accounts.google.com/o/oauth2/auth",
+            "?response_type=code",
+            "&client_id=%s",
+            "&redirect_uri=%s",
+            "&state=%s",
+            "&scope=https://www.googleapis.com/auth/userinfo.profile",
+        ]) % (self.website.google_client_id, next or 'associate', state)
+
+    def handle_oauth_callback(self, qs):
+        # pull info out of the querystring
+        username, nonce, action = qs['state'].split(',')
+
+        # Make sure the nonces match our cache
+        if nonce != self.oauth_cache.get(username): #TODO: Make this a pop
+            raise AuthorizationFailed('Nonces do not match.')
+
+        if action == u'opt-in':
+            log('opt-in detected')
+
+        return True
+
+
+
+
+
+
+    def _get_user_info(self):
+        typecheck(self.username, unicode)
+
+        # Check to see if we've already imported these details
+        rec = gittip.db.fetchone( "SELECT user_info FROM elsewhere "
+                                  "WHERE platform='google' "
+                                  "AND user_info->'screen_name' = %s"
+                                , (self.username,)
+                                 )
+        if rec:
+            # Use the record we have
+            user_info = rec['user_info']
+        else:
+            # Call the service's API
+            url = 'https://www.googleapis.com/plus/v1/people/%s?key=AIzaSyDFwxAtyIPi08FgI58rMsL5A9CqvL3kOaY'
+            response = requests.get(url % self.username)
+
+            # Make sure we got back a valid response
+            if response.status_code != 200:
+                log("Google user lookup failed with %d." % user_info.status_code)
+                raise Response(404)
+
+
+            external_user = json.loads(response.text)
+            self._user_info = external_user
+
+            # Get the user's avatar URL on the outside service.
+            # Google's includes a ?sz=50 arg, which makes it really small.
+            # We strip that out.
+            self.avatar = external_user['image']['url'].split('?')[0]
+            self.display_name = external_user['displayName']
+
 
 
 class GoogleAccount(AccountElsewhere):
@@ -18,23 +91,7 @@ def resolve(screen_name):
     return _resolve(u'google', u'screen_name', screen_name)
 
 
-def oauth_url(website, action, then=""):
-    """Return a URL to start oauth dancing with Google.
 
-    """
-    typecheck(website, Website, action, unicode, then, unicode)
-    assert action in ACTIONS
-
-    # Pack action,then into data and base64-encode. Querystring isn't
-    # available because it's consumed by the initial GitHub request.
-
-    data = u'%s,%s' % (action, then)
-    data = data.encode('UTF-8').encode('base64').decode('US-ASCII')
-
-    url = u'https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=%s&redirect_uri=%s&state=%s'
-    url %= (website.google_client_id, website.google_callback, data)
-
-    return url
 
 
 def get_user_info(screen_name):

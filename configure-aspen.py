@@ -16,6 +16,7 @@ gittip.wireup.sentry(website)
 gittip.wireup.mixpanel(website)
 gittip.wireup.nanswers()
 gittip.wireup.nmembers(website)
+gittip.wireup.elsewhere_providers(website)
 
 
 website.bitbucket_consumer_key = os.environ['BITBUCKET_CONSUMER_KEY'].decode('ASCII')
@@ -36,6 +37,10 @@ website.bountysource_www_host = os.environ['BOUNTYSOURCE_WWW_HOST'].decode('ASCI
 website.bountysource_api_host = os.environ['BOUNTYSOURCE_API_HOST'].decode('ASCII')
 website.bountysource_api_secret = os.environ['BOUNTYSOURCE_API_SECRET'].decode('ASCII')
 website.bountysource_callback = os.environ['BOUNTYSOURCE_CALLBACK'].decode('ASCII')
+
+website.google_client_id = os.environ['GOOGLE_CLIENT_ID'].decode('ASCII')
+website.google_client_secret = os.environ['GOOGLE_CLIENT_SECRET'].decode('ASCII')
+website.google_callback = os.environ['GOOGLE_CALLBACK'].decode('ASCII')
 
 website.hooks.inbound_early += [ gittip.canonize
                                , gittip.configure_payments
