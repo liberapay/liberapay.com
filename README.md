@@ -124,6 +124,27 @@ we've run against the production database. You should never change
 commands that have already been run. New DDL will be (manually) run against the
 production database as part of deployment.
 
+### Notes for Mac OS X users
+
+If when running the tests you see errors of the form:
+
+    psycopg2.OperationalError: FATAL:  sorry, too many clients already
+
+You will need to configure Postgres to accept more connections. You can do this
+by editing your `postgresql.conf`, and setting:
+
+    max_connections = 40
+
+To get this to work you will also need to change your kernel's shared memory
+parameters. You can do this by running these shell commands:
+
+    sudo sysctl -w kern.sysv.shmmax=8388608
+    sudo sysctl -w kern.sysv.shmall=2048
+
+You will need to restart Postgres for the max_connections parameter to
+take effect. Once restarted, the test suite should pass for you. These changes
+will not persist after a reboot, so you will have to set these again after
+a reboot.
 
 Building and Launching
 ----------------------
