@@ -32,7 +32,8 @@ class SQLAlchemy(object):
     @property
     def engine(self):
         dburl = os.environ['DATABASE_URL']
-        return create_engine(dburl)
+        maxconn = int(os.environ['DATABASE_MAXCONN'])
+        return create_engine(dburl, pool_size=maxconn, max_overflow=0)
 
     @property
     def metadata(self):
