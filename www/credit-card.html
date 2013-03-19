@@ -122,8 +122,8 @@ title = "Credit Card"
                 <label for="address_2">Address 2</label>
                 <input id="address_2" value="{{ card['address_2'] }}" />
 
-                <label for="address_1">City or Town</label>
-                <input id="city_town" value="{{ card['meta']['city_town'] }}" />
+                <label for="city_town">City or Town</label>
+                <input id="city_town" value="{{ card['city_town'] }}" />
 
 
 
@@ -140,9 +140,11 @@ title = "Credit Card"
                 <div class="clear"></div>
 
                 <label for="country">Country</label>
+
                 <select id="country" name="country">
+
                 {% for each in COUNTRIES %}
-                    {% if each[0] == card['meta']['country'] %}
+                    {% if each[0] == card['country'] %}
                       <option value="{{ each[0] }}" selected>{{ each[1] }}</option>
                     {% else %}
                       <option value="{{ each[0] }}">{{ each[1] }}</option>
