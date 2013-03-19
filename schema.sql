@@ -320,5 +320,5 @@ CREATE TABLE goals
 , ctime                 timestamp with time zone    NOT NULL
 , mtime                 timestamp with time zone    NOT NULL DEFAULT CURRENT_TIMESTAMP
 , participant           text                        NOT NULL REFERENCES participants ON DELETE RESTRICT
-, amount                numeric(35,2)               NOT NULL
+, amount                numeric(35,2)               DEFAULT NULL
  );
