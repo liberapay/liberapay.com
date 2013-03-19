@@ -124,6 +124,13 @@ we've run against the production database. You should never change
 commands that have already been run. New DDL will be (manually) run against the
 production database as part of deployment.
 
+### Example data
+
+The gittip database created in the last step is empty. To populate it with
+some fake data, so that more of the site is functional, run this command:
+
+    $ make fake_data
+
 ### Notes for Mac OS X users
 
 If when running the tests you see errors of the form:
