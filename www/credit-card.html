@@ -4,7 +4,7 @@ import balanced
 from aspen import json, log, Response
 from gittip import billing
 from gittip.elsewhere import github
-
+from gittip.utils import COUNTRIES
 # ========================================================================== ^L
 
 status = ". . ."
@@ -29,6 +29,7 @@ if not user.ANON:
     username = user.id
 
 title = "Credit Card"
+
 # ========================================================================== ^L
 {% extends templates/base.html %}
 
@@ -116,8 +117,14 @@ title = "Credit Card"
                 <label for="address_1">Address 1</label>
                 <input id="address_1" value="{{ card['address_1'] }}" />
 
+
+
                 <label for="address_2">Address 2</label>
                 <input id="address_2" value="{{ card['address_2'] }}" />
+
+                <label for="address_1">City or Town</label>
+                <input id="city_town" value="{{ card['meta']['city_town'] }}" />
+
 
 
                 <div class="half left">
@@ -129,6 +136,19 @@ title = "Credit Card"
                     <label for="zip">ZIP or Postal Code</label>
                     <input id="zip" value="{{ card['zip'] }}" />
                 </div>
+
+                <div class="clear"></div>
+
+                <label for="country">Country</label>
+                <select id="country" name="country">
+                {% for each in COUNTRIES %}
+                    {% if each[0] == card['meta']['country'] %}
+                      <option value="{{ each[0] }}" selected>{{ each[1] }}</option>
+                    {% else %}
+                      <option value="{{ each[0] }}">{{ each[1] }}</option>
+                    {% end %}
+                {% end %}
+               </select>
 
             </div>
 
