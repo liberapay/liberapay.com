@@ -9,6 +9,7 @@ from gittip import AMOUNTS
 from gittip.utils import get_participant, wrap
 
 MAKING = "I am making the world better by"
+LONG_STATEMENT = 1000
 
 def _clip(text, n):
     text = text.replace('\n', ' ')
@@ -25,6 +26,7 @@ hero = "Profile"
 title = participant.id      # used in the title tag
 username = participant.id   # used in footer shared with on/$platform/ pages
 github_account, twitter_account = participant.get_accounts_elsewhere()
+long_statement = len(participant.statement) > LONG_STATEMENT
 
 # ========================================================================== ^L
 {% extends templates/profile.html %}
@@ -44,17 +46,17 @@ github_account, twitter_account = participant.get_accounts_elsewhere()
     </div>
 {% else %}
     <div class="group">
-        <div class="col1">
+        {% if participant.statement %}
+            <div class="{% if long_statement %}col1{% else %}col0{% end %}">
             <h2>Statement</h2>
             <div class="statement">
-                {% if participant.statement %}
                 {{ MAKING }} {{ wrap(participant.statement) }}
-                {% else %}
-                [ unstated ]
-                {% end %}
             </div>
-        </div>
-        <div class="col2">
+            </div>
+            <div class="{% if long_statement %}col2{% else %}col0{% end %}">
+        {% else %}
+            <div class="col0">
+        {% end %}
 
             <h2>Funding Goal</h2>
             <div class="goal">
