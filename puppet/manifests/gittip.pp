@@ -1,6 +1,6 @@
 # install postgres
 # custom pg_hba.conf
-# create vagrant user in postgres
+# create gittip user in postgres
 
 group { "puppet":
     ensure => "present", 
@@ -32,11 +32,11 @@ class postgres {
         ensure  => file,
         require => Package['postgresql-9.2'],
         source  => 'puppet:///modules/postgres/pg_hba.conf';
-      'add_vagrant_user.sql':
-        path => '/tmp/add_vagrant_user.sql',
+      'add_gittip_user.sql':
+        path => '/tmp/add_gittip_user.sql',
         ensure => file,
         require => [Package['postgresql-9.2'], Exec[pgrestart]],
-        source  => 'puppet:///modules/postgres/add_vagrant_user.sql';
+        source  => 'puppet:///modules/postgres/add_gittip_user.sql';
     }
 
     exec {
@@ -44,8 +44,8 @@ class postgres {
         command => "/etc/init.d/postgresql restart",
         require => File['pg_hba.conf'];
       makeuser:
-        command => "psql -U postgres -f /tmp/add_vagrant_user.sql",
-        require => File['add_vagrant_user.sql'];
+        command => "psql -U postgres -f /tmp/add_gittip_user.sql",
+        require => File['add_gittip_user.sql'];
     }
 
     ppa {

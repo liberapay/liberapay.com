@@ -18,6 +18,7 @@ def canonical():
     gittip.canonical_host = os.environ['CANONICAL_HOST']
 
 
+# wireup.db() should only ever be called once by the application
 def db():
     dburl = os.environ['DATABASE_URL']
     maxconn = int(os.environ['DATABASE_MAXCONN'])

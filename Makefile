@@ -52,6 +52,9 @@ test: env tests/env data
 
 tests: test
 
+jstest:
+	./node_modules/.bin/testacular start testacular.unit-conf.js
+
 tests/env:
 	echo "Creating a tests/env file ..."
 	echo
@@ -60,6 +63,9 @@ tests/env:
 data: env
 	./makedb.sh gittip-test gittip-test
 	./$(env_bin)/swaddle tests/env ./$(env_bin)/python ./gittip/testing/__init__.py
+
+fake_data: env local.env
+	./$(env_bin)/swaddle local.env ./$(env_bin)/fake_data fake_data
 
 css:
 	scss -t compressed templates/gittip.scss gittip.css
