@@ -109,7 +109,6 @@ def clear(thing, participant_id, balanced_account_uri):
               )
     assert thing in ("credit card", "bank account"), thing
 
-
     # XXX Things in balanced cannot be deleted at the moment.
     # =======================================================
     # Instead we mark all valid cards as invalid which will restrict against
@@ -238,6 +237,13 @@ class BalancedCard(object):
                 out = "************" + unicode(out)
         elif name == 'address_2':
             out = self._get('meta', {}).get('address_2', '')
+
+        elif name == 'country':
+            out = self._get('meta', {}).get('country', '')
+
+        elif name == 'city_town':
+            out = self._get('meta', {}).get('city_town', '')
+
         elif name == 'state':
             out = self._get('region')
             if not out:
