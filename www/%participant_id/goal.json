@@ -2,7 +2,7 @@ import locale
 import decimal
 
 from aspen import Response
-from gittip import db
+from gittip.utils import get_participant
 
 # ========================================================================== ^L
 
@@ -23,25 +23,9 @@ if goal is not None:
     except decimal.InvalidOperation:
         raise Response(400, "Bad input.")
 
-GOAL = """\
+participant = get_participant(request)
+participant.goal = goal
 
-    INSERT INTO goals
-                (ctime, participant, amount)
-         VALUES ( COALESCE (( SELECT ctime
-                                FROM goals
-                               WHERE (participant=%s)
-                               LIMIT 1
-                              ), CURRENT_TIMESTAMP)
-                , %s, %s
-                 )
-         RETURNING amount
-
-"""
-rec = db.fetchone( GOAL
-                 , (user.id, user.id, goal)
-                  )
-
-goal = rec['amount']
 if goal is not None:
-    goal = locale.format("%.2f", rec['amount'], grouping=True)
+    goal = locale.format("%.2f", goal, grouping=True)
 response.body = {"goal": goal}
