@@ -4,10 +4,16 @@ from gittip import db
 
 # ==== ^L
 
-ngoals = db.fetchone("SELECT count(id) FROM participants WHERE goal > 0")['count']
+ngoals = db.fetchone("SELECT count(id) FROM participants WHERE goal > 0")\
+                                                                      ['count']
 goals = db.fetchall("""
-select * from goal_summary
-        order by  percentage desc, goal asc, id asc
+
+    SELECT *
+      FROM goal_summary
+  ORDER BY percentage DESC
+         , goal ASC
+         , id ASC
+
 """)
 
 # ==== ^L
