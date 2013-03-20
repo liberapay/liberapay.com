@@ -76,11 +76,11 @@ def associate(thing, participant_id, balanced_account_uri, balanced_thing_uri):
 
     if isinstance(balanced_account_uri, balanced.Account):
         balanced_account = balanced_account_uri
-        invalidate_on_balanced(thing, balanced_account_uri)
     else:
         balanced_account = get_balanced_account( participant_id
                                                , balanced_account_uri
                                                 )
+    invalidate_on_balanced(thing, balanced_account.uri)
     SQL = "UPDATE participants SET last_%s_result=%%s WHERE id=%%s"
 
     if thing == "credit card":
