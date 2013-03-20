@@ -2,14 +2,16 @@
 {% extends templates/base.html %}
 
 {% block heading %}
-    <h1>
+    <h2 class="top">
         <span>Page Not Found</span>
-    </h1>
+    </h2>
 {% end %}
 {% block box %}
-<h4>
-  Sorry we can't find the page that you are searching for.
-</h4>
-<h4>Click <a href="/">here</a> to return to home</h4>
+
+<p class="as-content">
+  Sorry, we can't find the page that you are searching for.
+</p>
+
+<div class="nav level-1"><a href="/"><button>Home</button></a></div>
 
 {% end %}
