@@ -310,3 +310,21 @@ ALTER TABLE exchanges ADD COLUMN recorder text DEFAULT NULL
         ON UPDATE CASCADE ON DELETE RESTRICT;
 
 ALTER TABLE exchanges ADD COLUMN note text DEFAULT NULL;
+
+
+
+-------------------------------------------------------------------------------
+--- https://github.com/gittip/www.gittip.com/issues/545  
+create view goal_summary as SELECT tippee as id, goal, (amount/goal) * 100  as  percentage, statement,  sum(amount) as amount
+         FROM (    SELECT DISTINCT ON (tipper, tippee) tippee, amount
+                     FROM tips
+                     JOIN participants p ON p.id = tipper
+                     JOIN participants p2 ON p2.id = tippee
+                    WHERE p.last_bill_result = ''
+                      AND p2.claimed_time IS NOT NULL
+                 ORDER BY tipper, tippee, mtime DESC
+               ) AS tips_agg
+         join participants p3 on p3.id = tips_agg.tippee
+     GROUP BY tippee, goal, percentage, statement
+;
+
