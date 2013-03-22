@@ -46,6 +46,28 @@
     </tr>
     <tr>
         <td class="account-type">
+            <img src="/assets/bitbucket.png" />
+        </td>
+        <td class="account-details">
+            {% if bitbucket_account is None %}
+                {% if not user.ANON and user.id == participant.id %}
+                    Connect a <a href="{{ bitbucket.oauth_url(website, u'connect') }}">Bitbucket account</a>.
+                {% else %}
+                    No Bitbucket account connected.
+                {% end %}
+            {% else %}
+            <a href="{{ bitbucket_account.user_info.get('html_url', '') }}"
+                ><img class="avatar"
+                src="{{ bitbucket_account.user_info.get('avatar', '/assets/%s/no-avatar.png' % __version__) }}"
+                />{{ bitbucket_account.user_info.get('username') }}
+                {% if bitbucket_account.user_info.get('display_name') %}({{ bitbucket_account.user_info.get('display_name') }}){% end %}
+            </a>
+            {% end %}
+            <div class="account-type">on Bitbucket</div>
+        </td>
+    </tr>
+    <tr>
+        <td class="account-type">
             <img src="/assets/balanced-avatar.png" />
         </td>
         <td class="account-details">

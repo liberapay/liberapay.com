@@ -1,41 +1,83 @@
-"""Associate a BitBucket account with a Gittip account.
+"""Associate a Bitbucket account with a Gittip account.
 
-First we do the OAuth dance with BitBucket. Once we've authenticated the user
-against BitBucket, we record them in our elsewhere table. This table contains
-information for BitBucket users whether or not they are explicit participants in
+First we do the OAuth dance with Bitbucket. Once we've authenticated the user
+against Bitbucket, we record them in our elsewhere table. This table contains
+information for Bitbucket users whether or not they are explicit participants in
 the Gittip community.
 
 """
-from aspen import log, Response
+from urlparse import parse_qs
+
+import requests
+from oauth_hook import OAuthHook
+from aspen import log, Response, json
 from aspen import resources
-from gittip.elsewhere import ACTIONS, bitbucket 
+from gittip.elsewhere import ACTIONS, bitbucket
 from gittip.participant import NeedConfirmation
 
 # ========================== ^L
 
-# Load BitBucket user info.
-user_info = bitbucket.oauth_dance(website, qs)
+if 'denied' in qs:
+    request.redirect('/')
 
-# Determine what we're supposed to do.
-data = qs['data'].decode('base64').decode('UTF-8')
-action, then = data.split(',', 1)
+
+token = qs['oauth_token']
+try:
+    secret, action, then = website.oauth_cache.pop(token)
+except KeyError:
+    request.redirect("/about/me.html")
+
+oauth_hook = OAuthHook( token
+                      , secret
+                      , header_auth=True
+                      , consumer_key=website.bitbucket_consumer_key
+                      , consumer_secret=website.bitbucket_consumer_secret
+                       )
+response = requests.post( "https://bitbucket.org/api/1.0/oauth/access_token"
+                        , data={"oauth_verifier": qs['oauth_verifier']}
+                        , hooks={'pre_request': oauth_hook}
+                         )
+assert response.status_code == 200, response.status_code
+
+reply = parse_qs(response.text)
+token = reply['oauth_token'][0]
+secret = reply['oauth_token_secret'][0]
+
+
+oauth_hook = OAuthHook( token  # XXX really instantiate again?
+                      , secret
+                      , header_auth=True
+                      , consumer_key=website.bitbucket_consumer_key
+                      , consumer_secret=website.bitbucket_consumer_secret
+                       )
+response = requests.get( "https://bitbucket.org/api/1.0/user"
+                       , hooks={'pre_request': oauth_hook}
+                        )
+user_info = json.loads(response.text)['user']
+assert response.status_code == 200, response.status_code
+
+
+# Load Bitbucket user info.
+
 if action not in ACTIONS:
     raise Response(400)
 
-# Make sure we have a BitBucket login.
-login = user_info.get('login')
-if login is None:
-    log(u"We got a user_info from BitBucket with no login [%s, %s]"
+# Make sure we have a Bitbucket username.
+username = user_info.get('username')
+if username is None:
+    log(u"We got a user_info from Bitbucket with no username [%s, %s]"
         % (action, then))
     raise Response(400)
+assert 'html_url' not in user_info
+user_info['html_url'] = "https://bitbucket.org/" + username
 
 # Do something.
-log(u"%s wants to %s" % (login, action))
+log(u"%s wants to %s" % (username, action))
 
-account = bitbucket.BitBucketAccount(user_info['id'], user_info)
+account = bitbucket.BitbucketAccount(username, user_info)
 
 if action == 'opt-in':      # opt in
-    user = account.opt_in(login)  # setting 'user' gives them a session
+    user = account.opt_in(username)  # set 'user' to give them a session :/
 elif action == 'connect':   # connect
     if user.ANON:
         raise Response(404)
@@ -50,26 +92,26 @@ elif action == 'connect':   # connect
 
         raise request.resource.respond(request)
 else:                       # lock or unlock
-    if then != login:
+    if then != username:
 
-        # The user could spoof `then' to match their login, but the most they
-        # can do is lock/unlock their own BitBucket account in a convoluted way.
+        # The user could spoof `then' to match their username, but the most
+        # they can do is lock/unlock their own Bitbucket account in a convoluted
+        # way.
 
         then = u'/on/bitbucket/%s/lock-fail.html' % then
 
     else:
 
-        # Associate the BitBucket login with a randomly-named, unclaimed Gittip
-        # participant.
+        # Associate the Bitbucket username with a randomly-named, unclaimed
+        # Gittip participant.
 
-        assert account.participant_id != login, login # sanity check
-
+        assert account.participant_id != username, username # sanity check
         account.set_is_locked(action == 'lock')
 
 if then == u'':
     then = u'/%s/' % account.participant_id
 if not then.startswith(u'/'):
-    # Interpret it as a BitBucket login.
+    # Interpret it as a Bitbucket username.
     then = u'/on/bitbucket/%s/' % then
 request.redirect(then)
 
