@@ -26,8 +26,8 @@ website.connect_tokens[connect_key] = connect_token
 
 other = Participant.query.get(account.participant_id)
 
-user_github_account, user_twitter_account = user.get_accounts_elsewhere()
-other_github_account, other_twitter_account = other.get_accounts_elsewhere()
+user_github_account, user_twitter_account, user_bitbucket_account = user.get_accounts_elsewhere()
+other_github_account, other_twitter_account, other_bitbucket_account = other.get_accounts_elsewhere()
 
 
 user_giving = user.get_dollars_giving()
