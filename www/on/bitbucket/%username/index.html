@@ -73,7 +73,7 @@ elif is_team:
 
     ON_GITTIP = """\
 
-        SELECT elsewhere.user_info -> 'username' AS login
+        SELECT elsewhere.user_info -> 'username' AS username
           FROM elsewhere
           JOIN participants p
             ON p.id = elsewhere.participant_id
