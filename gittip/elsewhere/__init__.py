@@ -124,6 +124,9 @@ class AccountElsewhere(object):
         #
         #   https://postgres.heroku.com/blog/past/2012/3/14/introducing_keyvalue_data_storage_in_heroku_postgres/
         #   http://initd.org/psycopg/docs/extras.html#hstore-data-type
+        #
+        # XXX This clobbers things, of course, such as booleans. See
+        # /on/bitbucket/%username/index.html
 
         for k, v in user_info.items():
             user_info[k] = unicode(v)

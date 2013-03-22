@@ -27,7 +27,10 @@ name = user_info.get('display_name')
 if not name:
     name = username
 
-is_team = user_info.get("is_team", None)
+# XXX Hack to work around our stringification of hstore values, which we do in
+# gittip/elsewhere/__init__.py. :-/
+is_team = user_info.get("is_team", None) in (True, u"True")
+
 usertype = "unknown type of account"
 if is_team is None:
     can_tip = False
