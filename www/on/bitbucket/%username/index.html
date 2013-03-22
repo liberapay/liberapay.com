@@ -16,7 +16,7 @@ from gittip.models import Participant
 # Try to load from BitBucket.
 # ========================
 
-user_info = bitbucket.get_user_info(path['login'])
+user_info = bitbucket.get_user_info(path['username'])
 
 # Try to load from Gittip.
 # ==========================
@@ -34,7 +34,7 @@ if is_team is None:
     img_src = "/assets/-/avatar-default.gif"
 elif not is_team:
     usertype = "user"
-    account = bitbucket.BitBucketAccount(unicode(username), user_info)
+    account = bitbucket.BitbucketAccount(unicode(username), user_info)
     locked = account.is_locked
     lock_action = "unlock" if account.is_locked else "lock"
     if account.is_claimed:
@@ -69,7 +69,7 @@ elif is_team:
             for m in bb_data['values']:
                 members.append(m)
 
-    logins = [member['username'] for member in members]
+    usernames = [member['username'] for member in members]
 
     ON_GITTIP = """\
 
@@ -82,7 +82,7 @@ elif is_team:
            AND p.claimed_time IS NOT NULL
 
     """
-    _on_gittip = [rec['username'] for rec in db.fetchall(ON_GITTIP, (logins,))]
+    _on_gittip = [rec['username'] for rec in db.fetchall(ON_GITTIP, (usernames,))]
     on_gittip = []
     not_on_gittip = []
     for member in members:
@@ -238,7 +238,7 @@ title = username
       {% end %}
     </div>
   {% elif usertype == "organization"  %}
-    
+
     <script>$(document).ready(Gittip.initTipButtons);</script>
 
     <table id="members" class="centered">
