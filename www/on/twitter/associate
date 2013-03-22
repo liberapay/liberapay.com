@@ -27,7 +27,12 @@ try:
 except KeyError:
     request.redirect("/about/me.html")
 
-oauth_hook = OAuthHook(token, secret, header_auth=True)
+oauth_hook = OAuthHook( token
+                      , secret
+                      , header_auth=True
+                      , consumer_key=website.twitter_consumer_key
+                      , consumer_secret=website.twitter_consumer_secret
+                       )
 response = requests.post( "https://api.twitter.com/oauth/access_token"
                         , data={"oauth_verifier": qs['oauth_verifier']}
                         , hooks={'pre_request': oauth_hook}
