@@ -1,4 +1,4 @@
-"""BitBucket user page on Gittip.
+"""Bitbucket user page on Gittip.
 """
 import decimal
 import os
@@ -13,13 +13,13 @@ from gittip.models import Participant
 
 # ========================================================================== ^L
 
-# Try to load from BitBucket.
-# ========================
+# Try to load from Bitbucket.
+# ===========================
 
 user_info = bitbucket.get_user_info(path['username'])
 
 # Try to load from Gittip.
-# ==========================
+# ========================
 # We can only tip Users, not Organizations (or whatever else type can be).
 
 username = user_info['username']
@@ -56,7 +56,7 @@ elif is_team:
     members = []
     resp = requests.get(bb_url)
     if resp.status_code is not 200:
-        raise Response(404, u"BitBucket is currently unavailable")
+        raise Response(404, u"Bitbucket is currently unavailable")
     else:
         bb_data = json.loads(resp.text)
         for m in bb_data['values']:
@@ -99,7 +99,7 @@ title = username
 # ========================================================================== ^L
 {% extends templates/base.html %}
 
-{% block heading %}<h2 class="top"><span>BitBucket</span></h2>{% end %}
+{% block heading %}<h2 class="top"><span>Bitbucket</span></h2>{% end %}
 
 {% block box %}
 
@@ -186,7 +186,7 @@ title = username
         <h2>{{ username }} has opted out of Gittip.</h2>
 
         <p>If you are <a href="{{ user_info.get('html_url', '') }}">{{ username }}</a>
-        on BitBucket, you can unlock your account to allow people to pledge tips
+        on Bitbucket, you can unlock your account to allow people to pledge tips
         to you on Gittip.</p>
 
         {% if 0 %}
@@ -288,7 +288,7 @@ title = username
 
     <h2>Not sure what to do with {{ name }}.</h2>
 
-    I don't recognize the &ldquo;{{ usertype }}&rdquo; type of user on BitBucket.<br />
+    I don't recognize the &ldquo;{{ usertype }}&rdquo; type of user on Bitbucket.<br />
     Sorry. :-(
 
   {% end %}
