@@ -56,7 +56,7 @@ elif is_team:
     members = []
     resp = requests.get(bb_url)
     if resp.status_code is not 200:
-        raise Response(404, u"Bitbucket is currently unavailable")
+        raise Response(404, "Bitbucket is currently unavailable")
     else:
         bb_data = json.loads(resp.text)
         for m in bb_data['values']:
