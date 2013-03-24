@@ -23,7 +23,15 @@ if not user.ANON:
 
         bank_account = billing.BalancedBankAccount(balanced_account_uri)
         if bank_account.is_setup:
-            assert balanced_account_uri == bank_account['account_uri']
+
+            # Factored out to aid debugging. This extra var will show up in the
+            # context on Sentry so we can compare the two values. See:
+            #
+            #   https://github.com/gittip/www.gittip.com/issues/791
+
+            _bank_account_account_uri = bank_account['account_uri']
+
+            assert balanced_account_uri == _bank_account_account_uri
 
     username = user.id
 
