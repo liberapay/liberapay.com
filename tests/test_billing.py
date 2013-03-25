@@ -171,8 +171,11 @@ class TestBillingAssociate(TestBillingBase):
     @mock.patch('gittip.billing.balanced.Account.find')
     def test_associate_bank_account_valid(self, find):
 
-        billing.associate(u"bank account", 'alice', self.balanced_account_uri,
-                          self.balanced_destination_uri)
+        billing.associate( u"bank account"
+                         , 'alice'
+                         , self.balanced_account_uri
+                         , self.balanced_destination_uri
+                          )
 
         args, _ = find.call_args
         assert args == (self.balanced_account_uri,)
