@@ -160,8 +160,11 @@ class TestBillingAssociate(TestBillingBase):
 
         # second time through, payment processor account is balanced
         # account_uri
-        billing.associate(u"credit card", 'alice', self.balanced_account_uri,
-                          self.card_uri)
+        billing.associate( u"credit card"
+                         , 'alice'
+                         , self.balanced_account_uri
+                         , self.card_uri
+                          )
         user = authentication.User.from_id('alice')
         # participant in db should be updated to reflect the error message of
         # last update
