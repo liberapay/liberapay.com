@@ -15,7 +15,7 @@ def _extract_avatar(participant_id):
         SELECT user_info
           FROM elsewhere
          WHERE participant_id=%s
-      ORDER BY platform
+      ORDER BY platform DESC
 
       """, (participant_id,))
     try:
