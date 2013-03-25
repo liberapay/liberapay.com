@@ -157,6 +157,7 @@ class TestBillingAssociate(TestBillingBase):
         error_message = 'Something terrible'
         not_found = balanced.exc.HTTPError(error_message)
         find.return_value.add_card.side_effect = not_found
+        find.return_value.uri = self.balanced_account_uri
 
         # second time through, payment processor account is balanced
         # account_uri
@@ -174,6 +175,7 @@ class TestBillingAssociate(TestBillingBase):
     @mock.patch('gittip.billing.balanced.Account.find')
     def test_associate_bank_account_valid(self, find):
 
+        find.return_value.uri = self.balanced_account_uri
         billing.associate( u"bank account"
                          , 'alice'
                          , self.balanced_account_uri
@@ -195,6 +197,7 @@ class TestBillingAssociate(TestBillingBase):
     def test_associate_bank_account_invalid(self, find):
         ex = balanced.exc.HTTPError('errrrrror')
         find.return_value.add_bank_account.side_effect = ex
+        find.return_value.uri = self.balanced_account_uri
         billing.associate( u"bank account"
                          , 'alice'
                          , self.balanced_account_uri
