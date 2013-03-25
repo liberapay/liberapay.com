@@ -112,6 +112,7 @@ def invalidate_on_balanced(thing, balanced_account_uri):
     See: https://github.com/balanced/balanced-api/issues/22
 
     """
+    assert thing in ("credit card", "bank account")  # sanity check
     account = balanced.Account.find(balanced_account_uri)
     things = account.cards if thing == "credit card" else account.bank_accounts
 
