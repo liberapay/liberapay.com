@@ -192,8 +192,11 @@ class TestBillingAssociate(TestBillingBase):
     def test_associate_bank_account_invalid(self, find):
         ex = balanced.exc.HTTPError('errrrrror')
         find.return_value.add_bank_account.side_effect = ex
-        billing.associate(u"bank account", 'alice', self.balanced_account_uri,
-                          self.balanced_destination_uri)
+        billing.associate( u"bank account"
+                         , 'alice'
+                         , self.balanced_account_uri
+                         , self.balanced_destination_uri
+                          )
 
         user = authentication.User.from_id('alice')
 
