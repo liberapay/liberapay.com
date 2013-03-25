@@ -11,6 +11,8 @@ proxies = {
   '/': 'http://localhost:8537/'
 };
 
+urlRoot = '/_karma/';
+
 browsers = ['PhantomJS'];
 
 autoWatch = false;

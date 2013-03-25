@@ -50,8 +50,7 @@ def run_tests():
 
     try:
         proc = get_server()
-        cmd_args = ['./node_modules/.bin/testacular', 'start',
-                'testacular.e2e.conf.js']
+        cmd_args = ['./node_modules/.bin/karma', 'start', 'karma-e2e.conf.js']
         call(cmd_args)
     finally:
         if proc:
