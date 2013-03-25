@@ -141,8 +141,10 @@ class TestBalancedBankAccount(Harness):
 
 
 class TestBillingAssociate(TestBillingBase):
+    @mock.patch('gittip.billing.balanced.Account.find')
     @mock.patch('gittip.billing.get_balanced_account')
-    def test_associate_valid_card(self, gba):
+    def test_associate_valid_card(self, gba, find):
+        find.return_value.uri = self.balanced_account_uri
         gba.return_value.uri = self.balanced_account_uri
 
         # first time through, payment processor account is None
