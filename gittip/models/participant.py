@@ -126,8 +126,8 @@ class Participant(db.Model):
 
         def __set__(self, participant, value):
             last_goal = self.most_recent_goal(participant)
-            exising_create_time = last_goal.ctime if last_goal else None
-            existing_or_current_ctime = func.coalesce(  exising_create_time
+            existing_create_time = last_goal.ctime if last_goal else None
+            existing_or_current_ctime = func.coalesce(  existing_create_time
                                                       , func.current_timestamp()
                                                       )
             created = db.session.query(existing_or_current_ctime).as_scalar()
