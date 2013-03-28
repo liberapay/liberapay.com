@@ -354,7 +354,7 @@ GROUP BY tippee, goal, percentage, statement;
 -------------------------------------------------------------------------------
 -- https://github.com/gittip/www.gittip.com/issues/141
 
--- goals -- all goals a participant has stated over time
+-- Create a goals table to track all goals a participant has stated over time.
 CREATE TABLE goals
 ( id                    serial                      PRIMARY KEY
 , ctime                 timestamp with time zone    NOT NULL
@@ -366,3 +366,41 @@ CREATE TABLE goals
                                                     ON DELETE RESTRICT
 , amount                numeric(35,2)               DEFAULT NULL
  );
+
+--- Migrate data from goal column of participants over to new goals table.
+INSERT INTO goals (ctime, mtime, participant, amount)
+     SELECT CURRENT_TIMESTAMP
+          , CURRENT_TIMESTAMP
+          , id
+          , goal
+       FROM participants
+      WHERE goal IS NOT null;
+
+-- Create a view to make it easy to get the latest goal.
+CREATE VIEW latest_goals AS
+
+      SELECT DISTINCT ON (participant) *
+        FROM goals
+    ORDER BY participant, mtime DESC;
+
+-- Recreate the goal_summary view to use the new goals table.
+DROP VIEW goal_summary;
+CREATE VIEW goal_summary AS
+  SELECT tippee as id
+       , latest_goals.amount as goal
+       , CASE goal WHEN 0 THEN 0 ELSE (amount / goal) * 100 END AS percentage
+       , statement
+       , sum(amount) as amount
+    FROM ( SELECT DISTINCT ON (tipper, tippee) tippee, amount
+                         FROM tips
+                         JOIN participants p ON p.id = tipper
+                         JOIN participants p2 ON p2.id = tippee
+                        WHERE p.last_bill_result = ''
+                          AND p2.claimed_time IS NOT NULL
+                     ORDER BY tipper, tippee, mtime DESC
+          ) AS tips_agg
+    JOIN latest_goals ON latest_goals.participant = tips_agg.tippee
+   WHERE latest_goals.goal > 0
+GROUP BY tippee, goal, percentage, statement;
+
+ALTER TABLE participants DROP COLUMN goal;
