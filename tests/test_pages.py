@@ -17,7 +17,7 @@ class TestPages(Harness):
 
     def test_homepage(self):
         actual = self.client.get('/').body
-        expected = "Weekly Cash Gifts"
+        expected = "Weekly Gift Exchange"
         assert expected in actual, actual
 
     def test_profile(self):
