@@ -53,7 +53,8 @@ test: env tests/env data
 tests: test
 
 jstest:
-	./node_modules/.bin/testacular start testacular.unit-conf.js
+	./node_modules/.bin/karma start karma-unit.conf.js
+	./$(env_bin)/python jstests/scripts/e2e_runner.py
 
 tests/env:
 	echo "Creating a tests/env file ..."

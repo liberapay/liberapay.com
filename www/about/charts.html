@@ -108,6 +108,14 @@ title = "Charts"
     <div class="x-axis">weeks</div>
 </div>
 
+<div class="chart-wrapper">
+    <a name="cumulative-gifts"></a>
+    <h2>Cumulative Gifts ($)</h2>
+    <p class="note">Money transferred within Gittip (cumulative)</p>
+    <div class="chart" id="cumulative-"></div>
+    <div class="x-axis">weeks</div>
+</div>
+
 <div class="chart-wrapper newline">
     <a name="charges"></a>
     <h2>Charges ($)</h2>
@@ -137,6 +145,7 @@ title = "Charts"
         var Withdrawals = $('#withdrawals-');
         var Charges = $('#charges-');
         var Volume = $('#volume-');
+        var Cumulative = $('#cumulative-');
         var Users = $('#users-');
         var Funders = $('#funders-');
 
@@ -173,8 +182,10 @@ title = "Charts"
             var maxUsers = 0;
             var maxFunders = 0;
             var maxGifts = 0;
+            var maxCumulative = 0;
             var maxWithdrawals = 0;
             var maxCharges = 0;
+
 
             for (var i=0; i < nweeks; i++)
             {
@@ -185,6 +196,7 @@ title = "Charts"
                 maxFunders = Math.max( maxFunders
                                      , parseFloat(payday.ntippers)
                                       );
+                maxCumulative += parseFloat(payday.transfer_volume);
                 maxGifts = Math.max( maxGifts
                                    , parseFloat(payday.transfer_volume)
                                     );
@@ -199,6 +211,7 @@ title = "Charts"
             scaleUsers = Math.ceil(maxUsers / 100) * 100;
             scaleFunders = Math.ceil(maxFunders / 100) * 100;
             scaleGifts = Math.ceil(maxGifts / 100) * 100;
+            scaleCumulative = Math.ceil(maxCumulative / 100) * 100;
             scaleWithdrawals = Math.ceil(maxWithdrawals / 100) * 100;
             scaleCharges = Math.ceil(maxCharges / 100) * 100;
 
@@ -237,6 +250,7 @@ title = "Charts"
                 return week;
             }
 
+            var cumulative = maxCumulative;
             for (var i=0; i < nweeks; i++)
             {
                 var payday = paydays[i];
@@ -260,6 +274,13 @@ title = "Charts"
                                   , payday.transfer_volume
                                   , weekstamp
                                    ));
+                Cumulative.append(Week( i
+                                      , maxCumulative
+                                      , scaleCumulative
+                                      , cumulative
+                                      , weekstamp
+                                       ));
+                cumulative -= parseFloat(payday.transfer_volume);
                 Withdrawals.append(Week( i 
                                        , maxWithdrawals
                                        , scaleWithdrawals

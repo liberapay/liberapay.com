@@ -422,3 +422,6 @@ and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
  - [Affero](http://www.affero.com/) - old skool attempt &ldquo;to bring a culture of patronage to the Internet&rdquo;
  - [ShareAGift](http://www.shareagift.com) - one-off, crowd-sourced cash gifts
  - [GoFundMe](http://www.gofundme.com/) - derpy-looking platform that [reaches normal people](http://pittsburgh.cbslocal.com/2013/02/19/crowdfunding-growing-in-popularity-as-fundraising-tool/) (my dad emailed this link to me)
+ - [DonorsChoose.org](http://www.donorschoose.org/) - crowd-funded school 
+    supplies; Alexis Ohanian 
+    [likes it](http://www.donorschoose.org/AlexisOnCNN).

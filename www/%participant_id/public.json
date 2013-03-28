@@ -58,5 +58,29 @@ if not user.ANON:
     output["my_tip"] = str(my_tip)
 
 
+
+# Accounts Elsewhere
+# ==================
+# For Twitter we can use an immutable id. For GitHub we have an immutable id
+# but we can't use it. For Bitbucket we don't have an immutable id. It's nice 
+# that Twitter lets us use an immutable id. We should do that ourselves:
+# 
+# https://github.com/gittip/www.gittip.com/issues/680
+
+github, twitter, bitbucket = participant.get_accounts_elsewhere()
+if bitbucket is not None:
+    bitbucket = "https://bitbucket.org/api/1.0/users/%s" % \
+                                                bitbucket.user_info['username']
+if github is not None:
+    github = "https://api.github.com/users/%s" % github.user_info['login']
+if twitter is not None:
+    twitter = "https://api.twitter.com/1/users/show.json?id=%s" \
+                                        "&include_entities=1" % twitter.user_id
+
+output['elsewhere'] = { 'bitbucket': bitbucket
+                      , 'github': github
+                      , 'twitter': twitter
+                       }
+
 response.headers["Access-Control-Allow-Origin"] = "*"
 response.body = output

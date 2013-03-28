@@ -217,7 +217,9 @@ class Participant(object):
             raise self.NoSelfTipping
 
         amount = Decimal(amount)  # May raise InvalidOperation
-        if amount not in gittip.AMOUNTS:
+        lo = gittip.AMOUNTS[0]
+        hi = gittip.AMOUNTS[-1]
+        if (amount < lo) or (amount > hi):
             raise self.BadAmount
 
         NEW_TIP = """\

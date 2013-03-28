@@ -80,6 +80,7 @@ def associate(thing, participant_id, balanced_account_uri, balanced_thing_uri):
         balanced_account = get_balanced_account( participant_id
                                                , balanced_account_uri
                                                 )
+    invalidate_on_balanced(thing, balanced_account.uri)
     SQL = "UPDATE participants SET last_%s_result=%%s WHERE id=%%s"
 
     if thing == "credit card":
@@ -102,20 +103,17 @@ def associate(thing, participant_id, balanced_account_uri, balanced_thing_uri):
     return error
 
 
-def clear(thing, participant_id, balanced_account_uri):
-    typecheck( thing, unicode
-             , participant_id, unicode
-             , balanced_account_uri, unicode
-              )
-    assert thing in ("credit card", "bank account"), thing
+def invalidate_on_balanced(thing, balanced_account_uri):
+    """XXX Things in balanced cannot be deleted at the moment.
 
+    Instead we mark all valid cards as invalid which will restrict against
+    anyone being able to issue charges against them in the future.
 
-    # XXX Things in balanced cannot be deleted at the moment.
-    # =======================================================
-    # Instead we mark all valid cards as invalid which will restrict against
-    # anyone being able to issue charges against them in the future.
-    #
-    # See: https://github.com/balanced/balanced-api/issues/22
+    See: https://github.com/balanced/balanced-api/issues/22
+
+    """
+    assert thing in ("credit card", "bank account")
+    typecheck(balanced_account_uri, unicode)
 
     account = balanced.Account.find(balanced_account_uri)
     things = account.cards if thing == "credit card" else account.bank_accounts
@@ -125,6 +123,14 @@ def clear(thing, participant_id, balanced_account_uri):
             _thing.is_valid = False
             _thing.save()
 
+
+def clear(thing, participant_id, balanced_account_uri):
+    typecheck( thing, unicode
+             , participant_id, unicode
+             , balanced_account_uri, unicode
+              )
+    assert thing in ("credit card", "bank account"), thing
+    invalidate_on_balanced(thing, balanced_account_uri)
     CLEAR = """\
 
         UPDATE participants
@@ -194,24 +200,46 @@ class StripeCard(object):
         return out
 
 
-class BalancedCard(object):
-    """This is a dict-like wrapper around a Balanced Account.
+class BalancedThing(object):
+    """Represent either a credit card or a bank account.
     """
 
-    _account = None  # underlying balanced.Account object
+    thing_type = None
+
+    _account = None     # underlying balanced.Account object
+    _thing = None       # underlying balanced.{BankAccount,Card} object
+
 
     def __init__(self, balanced_account_uri):
         """Given a Balanced account_uri, load data from Balanced.
         """
-        if balanced_account_uri is not None:
-            self._account = balanced.Account.find(balanced_account_uri)
+        if balanced_account_uri is None:
+            return
 
-    def _get_card(self):
-        """Return the most recent card on file for this account.
-        """
         # XXX Indexing is borken. See:
         # https://github.com/balanced/balanced-python/issues/10
-        return self._account.cards.all()[-1]
+
+        self._account = balanced.Account.find(balanced_account_uri)
+
+        things = getattr(self._account, self.thing_type+'s').all()
+        things = [thing for thing in things if thing.is_valid]
+        nvalid = len(things)
+
+        if nvalid == 0:
+            self._thing = None
+        elif nvalid == 1:
+            self._thing = things[0]
+        else:
+            msg = "%s has %d valid %ss"
+            msg %= (balanced_account_uri, len(things), self.thing_type)
+            raise RuntimeError(msg)
+
+
+class BalancedCard(BalancedThing):
+    """This is a dict-like wrapper around a Balanced Account.
+    """
+
+    thing_type = 'card'
 
     def _get(self, name, default=""):
         """Given a name, return a unicode.
@@ -219,8 +247,7 @@ class BalancedCard(object):
         out = None
         if self._account is not None:
             try:
-                card = self._get_card()
-                out = getattr(card, name, None)
+                out = getattr(self._thing, name, None)
             except IndexError:  # no cards associated
                 pass
         if out is None:
@@ -238,6 +265,13 @@ class BalancedCard(object):
                 out = "************" + unicode(out)
         elif name == 'address_2':
             out = self._get('meta', {}).get('address_2', '')
+
+        elif name == 'country':
+            out = self._get('meta', {}).get('country', '')
+
+        elif name == 'city_town':
+            out = self._get('meta', {}).get('city_town', '')
+
         elif name == 'state':
             out = self._get('region')
             if not out:
@@ -253,33 +287,11 @@ class BalancedCard(object):
         return out
 
 
-class BalancedBankAccount(object):
+class BalancedBankAccount(BalancedThing):
     """This is a dict-like wrapper around a Balanced Account.
     """
 
-    _account = None  # underlying balanced.Account object
-    _bank_account = None
-
-    def __init__(self, balanced_account_uri):
-        """Given a Balanced account_uri, load data from Balanced.
-        """
-        if not balanced_account_uri:
-            return
-
-        self._account = balanced.Account.find(balanced_account_uri)
-
-        all_accounts = self._account.bank_accounts.all()
-        valid_accounts = [a for a in all_accounts if a.is_valid]
-        nvalid = len(valid_accounts)
-
-        if nvalid == 0:
-            self._bank_account = None
-        elif nvalid == 1:
-            self._bank_account = valid_accounts[0]
-        else:
-            msg = "%s has %d valid accounts"
-            msg %= (balanced_account_uri, len(valid_accounts))
-            raise RuntimeError(msg)
+    thing_type = 'bank_account'
 
     def __getitem__(self, item):
         mapper = {
@@ -290,16 +302,15 @@ class BalancedBankAccount(object):
         }
         if item not in mapper:
             raise IndexError()
-        if not self._bank_account:
+        if not self._thing:
             return None
         # account.uri will become:
-        #     tiem = getattr(self._bank_account, 'account')
+        #     tiem = getattr(self._thing, 'account')
         #     tiem = getattr(tiem, 'uri')
-        tiem  = self._bank_account
         for vals in mapper[item].split('.'):
-            tiem = getattr(tiem, vals)
+            tiem = getattr(self._thing, vals)
         return tiem
 
     @property
     def is_setup(self):
-        return self._bank_account is not None
+        return self._thing is not None

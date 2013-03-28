@@ -11,6 +11,8 @@ tip_suggestions = [{'tippee': name, 'amount': 0} for name in tip_suggestions]
 def _extract_username(tip):
     if tip['platform'] == 'github':
         key = 'login'
+    elif tip['platform'] == 'bitbucket':
+        key = 'username'
     else:
         assert tip['platform'] == 'twitter', tip  # sanity check
         key = 'screen_name'

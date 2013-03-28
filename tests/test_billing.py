@@ -141,8 +141,10 @@ class TestBalancedBankAccount(Harness):
 
 
 class TestBillingAssociate(TestBillingBase):
+    @mock.patch('gittip.billing.balanced.Account.find')
     @mock.patch('gittip.billing.get_balanced_account')
-    def test_associate_valid_card(self, gba):
+    def test_associate_valid_card(self, gba, find):
+        find.return_value.uri = self.balanced_account_uri
         gba.return_value.uri = self.balanced_account_uri
 
         # first time through, payment processor account is None
@@ -157,11 +159,15 @@ class TestBillingAssociate(TestBillingBase):
         error_message = 'Something terrible'
         not_found = balanced.exc.HTTPError(error_message)
         find.return_value.add_card.side_effect = not_found
+        find.return_value.uri = self.balanced_account_uri
 
         # second time through, payment processor account is balanced
         # account_uri
-        billing.associate(u"credit card", 'alice', self.balanced_account_uri,
-                          self.card_uri)
+        billing.associate( u"credit card"
+                         , 'alice'
+                         , self.balanced_account_uri
+                         , self.card_uri
+                          )
         user = authentication.User.from_id('alice')
         # participant in db should be updated to reflect the error message of
         # last update
@@ -171,8 +177,12 @@ class TestBillingAssociate(TestBillingBase):
     @mock.patch('gittip.billing.balanced.Account.find')
     def test_associate_bank_account_valid(self, find):
 
-        billing.associate(u"bank account", 'alice', self.balanced_account_uri,
-                          self.balanced_destination_uri)
+        find.return_value.uri = self.balanced_account_uri
+        billing.associate( u"bank account"
+                         , 'alice'
+                         , self.balanced_account_uri
+                         , self.balanced_destination_uri
+                          )
 
         args, _ = find.call_args
         assert args == (self.balanced_account_uri,)
@@ -189,8 +199,12 @@ class TestBillingAssociate(TestBillingBase):
     def test_associate_bank_account_invalid(self, find):
         ex = balanced.exc.HTTPError('errrrrror')
         find.return_value.add_bank_account.side_effect = ex
-        billing.associate(u"bank account", 'alice', self.balanced_account_uri,
-                          self.balanced_destination_uri)
+        find.return_value.uri = self.balanced_account_uri
+        billing.associate( u"bank account"
+                         , 'alice'
+                         , self.balanced_account_uri
+                         , self.balanced_destination_uri
+                          )
 
         user = authentication.User.from_id('alice')
 

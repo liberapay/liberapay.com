@@ -3,7 +3,7 @@
 // http://fbug.googlecode.com/svn/branches/firebug1.2/lite/firebugx.js
 // Relaxed to allow for Chrome's console.
 
-if (!window.console)
+function mock_console()
 {
     var names = ["log", "debug", "info", "warn", "error", "assert", "dir",
                  "dirxml", "group", "groupEnd", "time", "timeEnd", "count",
@@ -11,6 +11,11 @@ if (!window.console)
     window.console = {};
     for (var i=0, name; name = names[i]; i++)
         window.console[name] = function() {};
+}
+
+if (!window.console)
+{
+    mock_console();
 }
 
 
@@ -360,6 +365,7 @@ Gittip.bankAccountResponseHandler = function (response) {
 
 Gittip.submitPaymentForm = function(e)
 {
+
     e.stopPropagation();
     e.preventDefault();
     $('BUTTON#save').text('Saving ...');
@@ -394,9 +400,13 @@ Gittip.submitPaymentForm = function(e)
     credit_card.name = val('name');
     credit_card.street_address = val('address_1');
     credit_card.region = val('state');
+    country = $('select[id="country"]').val();
     credit_card.meta = { 'address_2': val('address_2')
                        , 'region': credit_card.region // workaround
+                       , 'city_town': val('city_town')
+                       , 'country': country
                         };
+
     credit_card.postal_code = val('zip');
 
     credit_card.expiration_month = val('expiration_month');

@@ -70,7 +70,7 @@ if [ $1 ]; then
             # =================
 
             printf "$1" > www/version.txt
-            git ci www/version.txt -m"Bump version to $1"
+            git commit www/version.txt -m"Bump version to $1"
             git tag $1
 
 
@@ -91,7 +91,7 @@ if [ $1 ]; then
             # sake
 
             printf "\055dev" >> www/version.txt
-            git ci www/version.txt -m"Bump version to $1-dev"
+            git commit www/version.txt -m"Bump version to $1-dev"
 
 
             # Push to GitHub.

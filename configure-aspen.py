@@ -14,6 +14,10 @@ gittip.wireup.id_restrictions(website)
 gittip.wireup.sentry(website)
 
 
+website.bitbucket_consumer_key = os.environ['BITBUCKET_CONSUMER_KEY'].decode('ASCII')
+website.bitbucket_consumer_secret = os.environ['BITBUCKET_CONSUMER_SECRET'].decode('ASCII')
+website.bitbucket_callback = os.environ['BITBUCKET_CALLBACK'].decode('ASCII')
+
 website.github_client_id = os.environ['GITHUB_CLIENT_ID'].decode('ASCII')
 website.github_client_secret = os.environ['GITHUB_CLIENT_SECRET'].decode('ASCII')
 website.github_callback = os.environ['GITHUB_CALLBACK'].decode('ASCII')
@@ -38,9 +42,10 @@ os.environ['__VERSION__'] = __version__
 
 
 def add_stuff(request):
-    from gittip.elsewhere import github, twitter
+    from gittip.elsewhere import bitbucket, github, twitter
     request.context['__version__'] = __version__
     request.context['username'] = None
+    request.context['bitbucket'] = bitbucket
     request.context['github'] = github
     request.context['twitter'] = twitter
 

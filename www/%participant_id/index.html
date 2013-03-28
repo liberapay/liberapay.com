@@ -9,7 +9,7 @@ from gittip import AMOUNTS
 from gittip.utils import get_participant, wrap
 
 MAKING = "I am making the world better by"
-LONG_STATEMENT = 1000
+LONG_STATEMENT = 256
 
 def _clip(text, n):
     text = text.replace('\n', ' ')
@@ -25,7 +25,7 @@ tip_or_pledge = "tip"
 hero = "Profile"
 title = participant.id      # used in the title tag
 username = participant.id   # used in footer shared with on/$platform/ pages
-github_account, twitter_account = participant.get_accounts_elsewhere()
+github_account, twitter_account, bitbucket_account = participant.get_accounts_elsewhere()
 long_statement = len(participant.statement) > LONG_STATEMENT
 
 # ========================================================================== ^L
