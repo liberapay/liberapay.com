@@ -11,7 +11,6 @@ from sqlalchemy import func
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Column, CheckConstraint, UniqueConstraint
 from sqlalchemy.types import Text, TIMESTAMP, Boolean, Numeric
-from sqlalchemy.sql.expression import desc
 
 import gittip
 from gittip.models.tip import Tip
