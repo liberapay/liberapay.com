@@ -121,13 +121,13 @@ receivers = db.fetchall("""
   OFFSET %s
 
 """, (limit, offset))
-^L
+[-----------------------------------------------------------------------------]
 {% extends templates/base.html %}
 {% block head %}
     <script>$(document).ready(Gittip.initJumpToPerson);</script>
 {% end %}
 {% block heading %}
-    <h2 class="top"><span>Weekly Gift Exchange</span></h2>
+    <h2 class="top"><span>A Weekly Gift Exchange</span></h2>
     <h1>
         <span>Inspiring Generosity</span>
     </h1>
