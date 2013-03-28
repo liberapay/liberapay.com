@@ -121,7 +121,7 @@ receivers = db.fetchall("""
   OFFSET %s
 
 """, (limit, offset))
-[-----------------------------------------------------------------------------]
+^L
 {% extends templates/base.html %}
 {% block head %}
     <script>$(document).ready(Gittip.initJumpToPerson);</script>
