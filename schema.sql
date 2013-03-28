@@ -358,7 +358,11 @@ GROUP BY tippee, goal, percentage, statement;
 CREATE TABLE goals
 ( id                    serial                      PRIMARY KEY
 , ctime                 timestamp with time zone    NOT NULL
-, mtime                 timestamp with time zone    NOT NULL DEFAULT CURRENT_TIMESTAMP
-, participant           text                        NOT NULL REFERENCES participants ON DELETE RESTRICT
+, mtime                 timestamp with time zone    NOT NULL
+                                                    DEFAULT CURRENT_TIMESTAMP
+, participant           text                        NOT NULL
+                                                    REFERENCES participants
+                                                    ON UPDATE CASCADE
+                                                    ON DELETE RESTRICT
 , amount                numeric(35,2)               DEFAULT NULL
  );
