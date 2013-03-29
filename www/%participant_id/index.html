@@ -35,7 +35,11 @@ long_statement = len(participant.statement) > LONG_STATEMENT
     <meta name="og:url" content="https://www.gittip.com/{{ username }}/" />
     <meta name="og:type" content="website" />
     <meta name="og:title" content="{{ participant.get_og_title() }}" />
+    {% if participant.statement %}
     <meta name="og:description" content="{{ _clip(MAKING + " " + escape(participant.statement), 200) }}" />
+    {% else %}
+    <meta name="og:description" content="Gittip is a weekly gift exchange." />
+    {% end %}
     <meta name="og:image" content="https://www.gittip.com/assets/gittip.opengraph.png" />
 {% end %}
 {% block page %}
