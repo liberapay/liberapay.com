@@ -40,7 +40,7 @@ long_statement = len(participant.statement) > LONG_STATEMENT
     {% else %}
     <meta name="og:description" content="Gittip is a weekly gift exchange." />
     {% end %}
-    <meta name="og:image" content="https://www.gittip.com/assets/gittip.opengraph.png" />
+    <meta name="og:image" content="{{ participant.get_img_src() }}" />
 {% end %}
 {% block page %}
 
