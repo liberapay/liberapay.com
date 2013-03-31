@@ -345,9 +345,9 @@ The Gittip API is comprised of these endpoints:
     [stats](https://www.gittip.com/about/stats.html) page displays the same 
     info.
 
- - **/%participant_id/public.json**
+ - **/`%participant_id`/public.json**
    ([example](https://www.gittip.com/whit537/public.json),
-    [source](https://github.com/gittip/www.gittip.com/tree/master/www/%25participant_id/public.json))&mdash;Returns an
+    [source](https://github.com/gittip/www.gittip.com/tree/master/www/%25participant_id/public.json), note that `%participant_id` is [currently](https://github.com/gittip/www.gittip.com/issues/503) case sensitive)&mdash;Returns an
     object with these keys:
 
     - "receiving"&mdash;an estimate of the amount the given participant will
@@ -361,6 +361,26 @@ The Gittip API is comprised of these endpoints:
         - `null`&mdash;user has never tipped this participant
         - "0.00"&mdash;user used to tip this participant
         - "3.00"&mdash;user tips this participant the given amount
+        <br><br>
+
+    - "goal"&mdash;funding goal of the given participant; possible values are:
+
+        - `undefined` (key not present)&mdash;user is a patron (or has 0 as the goal)
+        - `null`&mdash;user is grateful for gifts, but doesn't have a specific funding goal
+        - "100.00"&mdash;user's goal is to receive the given amount per week
+        <br><br>
+
+    - "elsewhere"&mdash;user's connected accounts elsewhere; returns an object with these keys:
+
+        - "bitbucket"&mdash;user's Bitbucket account; possible values are:
+            - `undefined` (key not present)&mdash;no Bitbucket account connected
+            - `https://bitbucket.org/api/1.0/users/%bitbucket_username`
+        - "github"&mdash;user's GitHub account; possible values are:
+            - `undefined` (key not present)&mdash;no GitHub account connected
+            - `https://api.github.com/users/%github_username`
+        - "twitter"&mdash;user's Twitter account; possible values are:
+            - `undefined` (key not present)&mdash;no Twitter account connected
+            - `https://api.twitter.com/1/users/show.json?id=%twitter_immutable_id&include_entities=1`
 
 
 Glossary
