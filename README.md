@@ -365,20 +365,20 @@ The Gittip API is comprised of these endpoints:
 
     - "goal"&mdash;funding goal of the given participant; possible values are:
 
-        - `undefined` (key not present)&mdash;user is a patron (or has 0 as the goal)
-        - `null`&mdash;user is grateful for gifts, but doesn't have a specific funding goal
-        - "100.00"&mdash;user's goal is to receive the given amount per week
+        - `undefined` (key not present)&mdash;participant is a patron (or has 0 as the goal)
+        - `null`&mdash;participant is grateful for gifts, but doesn't have a specific funding goal
+        - "100.00"&mdash;participant's goal is to receive the given amount per week
         <br><br>
 
-    - "elsewhere"&mdash;user's connected accounts elsewhere; returns an object with these keys:
+    - "elsewhere"&mdash;participant's connected accounts elsewhere; returns an object with these keys:
 
-        - "bitbucket"&mdash;user's Bitbucket account; possible values are:
+        - "bitbucket"&mdash;participant's Bitbucket account; possible values are:
             - `undefined` (key not present)&mdash;no Bitbucket account connected
             - `https://bitbucket.org/api/1.0/users/%bitbucket_username`
-        - "github"&mdash;user's GitHub account; possible values are:
+        - "github"&mdash;participant's GitHub account; possible values are:
             - `undefined` (key not present)&mdash;no GitHub account connected
             - `https://api.github.com/users/%github_username`
-        - "twitter"&mdash;user's Twitter account; possible values are:
+        - "twitter"&mdash;participant's Twitter account; possible values are:
             - `undefined` (key not present)&mdash;no Twitter account connected
             - `https://api.twitter.com/1/users/show.json?id=%twitter_immutable_id&include_entities=1`
 
