@@ -30,7 +30,6 @@ if not user.ANON:
             #   https://github.com/gittip/www.gittip.com/issues/791
 
             _bank_account_account_uri = bank_account['account_uri']
-
             assert balanced_account_uri == _bank_account_account_uri
 
     username = user.id
@@ -79,7 +78,7 @@ title = "Bank Account"
         {% end %}
     </style>
     <div class="on-form">
-        <form id="payout">
+        <form id="payout" autocomplete="off">
             <div class="constrain-width group">
 
                 {% if bank_account and bank_account.is_setup %}
