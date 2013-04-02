@@ -304,12 +304,20 @@ class BalancedBankAccount(BalancedThing):
             raise IndexError()
         if not self._thing:
             return None
-        # account.uri will become:
-        #     tiem = getattr(self._thing, 'account')
-        #     tiem = getattr(tiem, 'uri')
-        for vals in mapper[item].split('.'):
-            tiem = getattr(self._thing, vals)
-        return tiem
+
+
+        # Do goofiness to support 'account.uri' in mapper.
+        # ================================================
+        # An account.uri access unrolls to:
+        #     _item = getattr(self._thing, 'account')
+        #     _item = getattr(_item, 'uri')
+
+        _item = self._thing
+        for val in mapper[item].split('.'):
+            _item = getattr(_item, val)
+
+
+        return _item
 
     @property
     def is_setup(self):

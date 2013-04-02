@@ -134,6 +134,26 @@ class TestBalancedBankAccount(Harness):
         with assert_raises(IndexError):
             b_b_b_account.__getitem__('invalid')
 
+    @mock.patch('gittip.billing.balanced.Account')
+    @mock.patch('gittip.billing.balanced.BankAccount')
+    def test_balanced_bank_account_account_uri(self, b_b_account, b_account):
+        # b_account = balanced.Account
+        # b_b_account = balanced.BankAccount
+        # b_b_b_account = billing.BalancedBankAccount
+        # got it?
+        bank_account = mock.Mock()
+        bank_account.is_valid = True
+        b_account.find.return_value\
+                 .bank_accounts.all.return_value = [bank_account]
+        b_account.uri = "Here I am!"
+        bank_account.account = b_account
+
+        b_b_b_account = billing.BalancedBankAccount(self.balanced_account_uri)
+
+        expected = "Here I am!"
+        actual = b_b_b_account['account_uri']
+        assert actual == expected, actual
+
     def test_balanced_bank_account_not_setup(self):
         bank_account = billing.BalancedBankAccount(None)
         assert not bank_account.is_setup

@@ -1,42 +1,21 @@
 from aspen import Response
+from aspen.utils import to_age
 from gittip import db, AMOUNTS
 from gittip.elsewhere import github
-from aspen.utils import to_age
+from gittip.models.participant import Participant
 
-def _extract_avatar(participant_id):
-
-    # XXX This can be replaced with Participant.get_img_src when we convert
-    # this simplate to use the ORM.
-    # https://github.com/gittip/www.gittip.com/issues/541
-
-    out = '/assets/-/avatar-default.gif'
-    recs = db.fetchall("""
-
-        SELECT user_info
-          FROM elsewhere
-         WHERE participant_id=%s
-      ORDER BY platform DESC
-
-      """, (participant_id,))
-    try:
-        rec = recs.next()
-    except StopIteration:
-        return out # XXX We need to take orphan accounts out of queries in the
-                   # caller. See:
-                   #    https://github.com/gittip/www.gittip.com/issues/650
-        #raise Exception("%s has no elsewheres?" % participant_id)
-    user_info = rec.get('user_info', {})
-    if 'profile_image_url_https' in user_info:
-        # XXX Attack vector? Can someone inject this value? Don't think so,
-        # but ...
-        out = user_info['profile_image_url_https']
-    elif 'avatar_url' in user_info:
-        out = user_info['avatar_url']
-    return out
+def _wrap(raw):
+    """This is a step on the way to ORM-ifying this simplate.
+    """
+    for rec in raw:
+        out = Participant.query.get(rec['id'])
+        if 'amount' in rec:
+            out.amount = rec['amount']
+        yield out
 
 def _to_age(participant):
     # XXX I can't believe I'm doing this. Evolve aspen.utils.to_age!
-    age = to_age(participant['claimed_time'], fmt_past="%(age)s")
+    age = to_age(participant.claimed_time, fmt_past="%(age)s")
     age = age.replace('just a moment', 'just now')
     age = age.replace('an ', '1 ').replace('a ', '1 ')
     words = ('zero', 'one', 'two','three', 'four', 'five', 'six', 'seven',
@@ -52,7 +31,7 @@ try:
 except ValueError:
     raise Response(400)
 
-new_participants = db.fetchall("""
+new_participants = _wrap(db.fetchall("""
 
     SELECT id, claimed_time FROM (
         SELECT DISTINCT ON (p.id)
@@ -68,11 +47,11 @@ new_participants = db.fetchall("""
      LIMIT %s
     OFFSET %s
 
-""", (limit, offset))
+""", (limit, offset)))
 
-givers = db.fetchall("""
+givers = _wrap(db.fetchall("""
 
-    SELECT tipper, anonymous, sum(amount) AS amount
+    SELECT tipper AS id, anonymous, sum(amount) AS amount
       FROM (    SELECT DISTINCT ON (tipper, tippee)
                        amount
                      , tipper
@@ -93,14 +72,14 @@ givers = db.fetchall("""
   LIMIT %s
   OFFSET %s
 
-""", (limit, offset))
+""", (limit, offset)))
 
 # XXX I'm nearly positive that one or both of givers and receivers can contain
 # orphan accounts. See https://github.com/gittip/www.gittip.com/issues/650
 
-receivers = db.fetchall("""
+receivers = _wrap(db.fetchall("""
 
-    SELECT tippee, claimed_time, sum(amount) AS amount
+    SELECT tippee AS id, claimed_time, sum(amount) AS amount
       FROM (    SELECT DISTINCT ON (tipper, tippee)
                        amount
                      , tippee
@@ -120,14 +99,14 @@ receivers = db.fetchall("""
   LIMIT %s
   OFFSET %s
 
-""", (limit, offset))
+""", (limit, offset)))
 ^L
 {% extends templates/base.html %}
 {% block head %}
     <script>$(document).ready(Gittip.initJumpToPerson);</script>
 {% end %}
 {% block heading %}
-    <h2 class="top"><span>Weekly Gift Exchange</span></h2>
+    <h2 class="top"><span>A Weekly Gift Exchange</span></h2>
     <h1>
         <span>Inspiring Generosity</span>
     </h1>
@@ -162,14 +141,15 @@ receivers = db.fetchall("""
         <ul class="group">
             {% for i, participant in enumerate(new_participants, start=1) %}
             <li{% if i > 6 %} class="luxury"{% end %}>
-                <a href="/{{ participant['id'] }}/" class="mini-user">
+                <a href="/{{ participant.id }}/" class="mini-user">
                     <span class="inner">
                         <span class="avatar"
-                            style="background-image: url('{{ _extract_avatar(participant['id']) }}')">
+                            style="background-image:
+                                url('{{ participant.get_img_src() }}')">
                             <span class="rank">{{ i }}</span>
                         </span>
                         <span class="age">{{ _to_age(participant) }}</span>
-                        <span class="name">{{ participant['id'] }}</span>
+                        <span class="name">{{ participant.id }}</span>
                     </span>
                 </a>
             </li>
@@ -181,26 +161,26 @@ receivers = db.fetchall("""
         <ul class="group">
             {% for i, giver in enumerate(givers, start=1) %}
             <li{% if i > 6 %} class="luxury"{% end %}>
-                {% if giver['anonymous'] and not user.is_admin %}
+                {% if giver.anonymous and not user.is_admin %}
                 <span class="mini-user">
                     <span class="inner">
                         <span class="avatar">
                             <span class="rank">{{ i }}</span>
                         </span>
-                        <span class="money">${{ giver['amount'] }}</span>
+                        <span class="money">${{ giver.amount }}</span>
                         <span class="name">???</span>
                     </span>
                 </span>
                 {% else %}
-                <a href="/{{ giver['tipper'] }}/"
-                   class="mini-user{{ ' anonymous' if giver['anonymous'] else '' }}">
+                <a href="/{{ giver.id }}/"
+                   class="mini-user{{ ' anonymous' if giver.anonymous else '' }}">
                     <span class="inner">
                         <span class="avatar"
-                            style="background-image: url('{{ _extract_avatar(giver['tipper']) }}')">
+                            style="background-image: url('{{ giver.get_img_src() }}')">
                             <span class="rank">{{ i }}</span>
                         </span>
-                        <span class="money">${{ giver['amount'] }}</span>
-                        <span class="name">{{ giver['tipper'] }}</span>
+                        <span class="money">${{ giver.amount }}</span>
+                        <span class="name">{{ giver.id }}</span>
                     </span>
                 </a>
                 {% end %}
@@ -213,14 +193,14 @@ receivers = db.fetchall("""
         <ul class="group">
             {% for i, receiver in enumerate(receivers, start=1) %}
             <li{% if i > 6 %} class="luxury"{% end %}>
-                <a href="/{{ receiver['tippee'] }}/" class="mini-user">
+                <a href="/{{ receiver.id }}/" class="mini-user">
                     <span class="inner">
                         <span class="avatar"
-                            style="background-image: url('{{ _extract_avatar(receiver['tippee']) }}')">
+                            style="background-image: url('{{ receiver.get_img_src() }}')">
                             <span class="rank">{{ i }}</span>
                         </span>
-                        <span class="money">${{ receiver['amount'] }}</span>
-                        <span class="name">{{ receiver['tippee'] }}</span>
+                        <span class="money">${{ receiver.amount }}</span>
+                        <span class="name">{{ receiver.id }}</span>
                     </span>
                 </a>
             </li>
