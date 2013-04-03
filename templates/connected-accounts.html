@@ -13,11 +13,13 @@
                     No Twitter account connected.
                 {% end %}
             {% else %}
-            <a href="{{ twitter_account.user_info.get('html_url', '') }}"
+            <a href="{{ escape(twitter_account.user_info.get('html_url', '')) }}"
                 ><img class="avatar"
-                src="{{ twitter_account.user_info.get('profile_image_url_https', '/assets/%s/no-avatar.png' % __version__) }}"
-                />{{ twitter_account.user_info.get('screen_name') }}
-                {% if twitter_account.user_info.get('name') %}({{ twitter_account.user_info.get('name') }}){% end %}
+                src="{{ escape(twitter_account.user_info.get('profile_image_url_https', '/assets/%s/no-avatar.png' % __version__)) }}"
+                />{{ escape(twitter_account.user_info.get('screen_name')) }}
+                {% if twitter_account.user_info.get('name') %}
+                ({{ escape(twitter_account.user_info.get('name')) }})
+                {% end %}
             </a>
             <div class="account-type">on Twitter</div>
             {% end %}
@@ -35,10 +37,12 @@
                     No GitHub account connected.
                 {% end %}
             {% else %}
-            <a href="{{ github_account.user_info.get('html_url', '') }}"
-                ><img class="avatar" src="{{ github_account.user_info.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}"
-                />{{ github_account.user_info.get('login') }}
-                {% if github_account.user_info.get('name') %}({{ github_account.user_info.get('name') }}){% end %}<br />
+            <a href="{{ escape(github_account.user_info.get('html_url', '')) }}"
+                ><img class="avatar" src="{{ escape(github_account.user_info.get('avatar_url', '/assets/%s/no-avatar.png' % __version__)) }}"
+                />{{ escape(github_account.user_info.get('login')) }}
+                {% if github_account.user_info.get('name') %}
+                ({{ escape(github_account.user_info.get('name')) }})
+                {% end %}
             </a>
             <div class="account-type">on GitHub</div>
             {% end %}
@@ -56,11 +60,13 @@
                     No Bitbucket account connected.
                 {% end %}
             {% else %}
-            <a href="{{ bitbucket_account.user_info.get('html_url', '') }}"
+            <a href="{{ escape(bitbucket_account.user_info.get('html_url', '')) }}"
                 ><img class="avatar"
-                src="{{ bitbucket_account.user_info.get('avatar', '/assets/%s/no-avatar.png' % __version__) }}"
-                />{{ bitbucket_account.user_info.get('username') }}
-                {% if bitbucket_account.user_info.get('display_name') %}({{ bitbucket_account.user_info.get('display_name') }}){% end %}
+                src="{{ escape(bitbucket_account.user_info.get('avatar', '/assets/%s/no-avatar.png' % __version__)) }}"
+                />{{ escape(bitbucket_account.user_info.get('username')) }}
+                {% if bitbucket_account.user_info.get('display_name') %}
+                ({{ escape(bitbucket_account.user_info.get('display_name')) }})
+                {% end %}
             </a>
             <div class="account-type">on Bitbucket</div>
             {% end %}

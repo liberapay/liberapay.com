@@ -49,7 +49,7 @@ title = username
             <img src="{{ participant.get_img_src(128) }}" />
         </td>
         <td class="ready">
-            <h2><a href="{{ url }}">{{ username }}</a> has</h2>
+            <h2><a href="{{ url }}">{{ escape(username) }}</a> has</h2>
             <div class="number">{{ nbackers }}</div>
             <div class="unit">{{ 'person' if nbackers == 1 else 'people' }} ready to give</div>
         </td>
@@ -74,7 +74,7 @@ title = username
         <div class="help with-padding">Sign in using
             <a class="highlight flash-me" href="{{ twitter.oauth_url(website, u'opt-in', path.decoded) }}">Twitter</a> or
             <a href="{{ github.oauth_url(website, u'opt-in', path.decoded) }}">GitHub</a>
-            to pledge to <b>{{ username }}</b>.</div>
+            to pledge to <b>{{ escape(username) }}</b>.</div>
 
     {% else %}
 
@@ -113,9 +113,9 @@ title = username
 <div class="col0">
   {% if account.is_locked %}
 
-    <h2>{{ username }} has opted out of Gittip.</h2>
+    <h2>{{ escape(username) }} has opted out of Gittip.</h2>
 
-    <p>If you are <a href="{{ user_info.get('html_url', '') }}">{{ username }}</a>
+    <p>If you are <a href="{{ user_info.get('html_url', '') }}">{{ escape(username) }}</a>
     on Twitter, you can unlock your account to allow people to pledge tips to
     you on Gittip.</p>
 
@@ -127,7 +127,7 @@ title = username
         $(document).ready(Gittip.initTipButtons);
     </script>
 
-    <h2>{{ name }} has not joined Gittip.</h2>
+    <h2>{{ escape(name) }} has not joined Gittip.</h2>
 
     <p>Is this you?
     {% if user.ANON %}
@@ -150,9 +150,8 @@ title = username
 
     <h2>Don't like what you see?</h2>
 
-    <p>If you are {{ username }} you can explicitly opt out of Gittip by
-    locking this account. We don't allow new pledges to locked
-    accounts.</p>
+    <p>If you are {{ escape(username) }} you can explicitly opt out of Gittip
+    by locking this account. We don't allow new pledges to locked accounts.</p>
 
     <a href="{{ twitter.oauth_url(website, u'lock', username) }}"
         ><button>Lock</button></a>
