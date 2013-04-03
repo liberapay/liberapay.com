@@ -10,7 +10,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy import func
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Column, CheckConstraint, UniqueConstraint
-from sqlalchemy.types import Text, TIMESTAMP, Boolean, Numeric
+from sqlalchemy.types import Text, TIMESTAMP, Boolean, Numeric, BigInteger
 
 import gittip
 from gittip.models.tip import Tip
@@ -31,7 +31,8 @@ class Participant(db.Model):
                          name="participants_session_token_key"),
     )
 
-    id = Column(Text, nullable=False, primary_key=True)
+    id = Column(BigInteger, nullable=False, unique=True)
+    username = Column(Text, nullable=False, primary_key=True)
     statement = Column(Text, default="", nullable=False)
     stripe_customer_id = Column(Text)
     last_bill_result = Column(Text)
