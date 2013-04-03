@@ -364,11 +364,11 @@ CREATE TABLE goals
                                                     REFERENCES participants
                                                     ON UPDATE CASCADE
                                                     ON DELETE RESTRICT
-, amount                numeric(35,2)               DEFAULT NULL
+, goal                  numeric(35,2)               DEFAULT NULL
  );
 
---- Migrate data from goal column of participants over to new goals table.
-INSERT INTO goals (ctime, mtime, participant, amount)
+-- Migrate data from goal column of participants over to new goals table.
+INSERT INTO goals (ctime, mtime, participant, goal)
      SELECT CURRENT_TIMESTAMP
           , CURRENT_TIMESTAMP
           , id
@@ -376,31 +376,20 @@ INSERT INTO goals (ctime, mtime, participant, amount)
        FROM participants
       WHERE goal IS NOT null;
 
--- Create a view to make it easy to get the latest goal.
-CREATE VIEW latest_goals AS
-
-      SELECT DISTINCT ON (participant) *
-        FROM goals
-    ORDER BY participant, mtime DESC;
-
--- Recreate the goal_summary view to use the new goals table.
-DROP VIEW goal_summary;
-CREATE VIEW goal_summary AS
-  SELECT tippee as id
-       , latest_goals.amount as goal
-       , CASE goal WHEN 0 THEN 0 ELSE (amount / goal) * 100 END AS percentage
-       , statement
-       , sum(amount) as amount
-    FROM ( SELECT DISTINCT ON (tipper, tippee) tippee, amount
-                         FROM tips
-                         JOIN participants p ON p.id = tipper
-                         JOIN participants p2 ON p2.id = tippee
-                        WHERE p.last_bill_result = ''
-                          AND p2.claimed_time IS NOT NULL
-                     ORDER BY tipper, tippee, mtime DESC
-          ) AS tips_agg
-    JOIN latest_goals ON latest_goals.participant = tips_agg.tippee
-   WHERE latest_goals.goal > 0
-GROUP BY tippee, goal, percentage, statement;
-
-ALTER TABLE participants DROP COLUMN goal;
+-- Create a rule to log changes to participant.goal into goals.
+CREATE RULE log_goal_changes
+AS ON UPDATE TO participants
+          WHERE (OLD.goal IS NULL AND NOT NEW.goal IS NULL)
+             OR (NEW.goal IS NULL AND NOT OLD.goal IS NULL)
+             OR NEW.goal <> OLD.goal
+             DO
+    INSERT INTO goals
+                (ctime, participant, goal)
+         VALUES ( COALESCE (( SELECT ctime
+                                FROM goals
+                               WHERE participant=OLD.id
+                               LIMIT 1
+                             ), CURRENT_TIMESTAMP)
+                , OLD.id
+                , NEW.goal
+                 );

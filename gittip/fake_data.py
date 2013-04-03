@@ -43,6 +43,7 @@ def fake_participant(is_admin=False, anonymous=False):
         is_admin=is_admin,
         balance=fake_balance(),
         anonymous=anonymous,
+        goal=fake_balance(),
         balanced_account_uri=faker.uri(),
         last_ach_result='',
         is_suspicious=False,
