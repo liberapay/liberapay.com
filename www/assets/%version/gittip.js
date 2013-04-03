@@ -602,6 +602,13 @@ Gittip.initTipButtons = function()
             setTimeout(flash, 100);
         }
         flash();
+
+        // Log to mixpanel.
+        var amount = $(this).text().replace('$', '');
+        var tippee = $(this).attr('tippee');
+        mixpanel.track( "Anonymous Tip Attempt"
+                      , {"Amount": amount, "Tippee": tippee}
+                       );
     });
 
 
@@ -663,6 +670,11 @@ Gittip.initTipButtons = function()
         .done(function(data) {
             $('.old-amount', container).remove();
             $('.total-giving').text(data['total_giving']);
+
+            // Log to mixpanel.
+            mixpanel.track( "Tip Success"
+                          , {"Amount": amount, "Tippee": tippee}
+                           );
         });
     });
 };

@@ -59,3 +59,7 @@ def sentry(website):
             ident = sentry.get_ident(exc)
             aspen.log_dammit("Exception reference: " + ident)
         website.hooks.error_early += [tell_sentry]
+
+
+def mixpanel(website):
+    website.mixpanel_token = os.environ['MIXPANEL_TOKEN']

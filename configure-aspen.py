@@ -12,6 +12,7 @@ gittip.wireup.db()
 gittip.wireup.billing()
 gittip.wireup.id_restrictions(website)
 gittip.wireup.sentry(website)
+gittip.wireup.mixpanel(website)
 
 
 website.bitbucket_consumer_key = os.environ['BITBUCKET_CONSUMER_KEY'].decode('ASCII')
