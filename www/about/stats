@@ -251,7 +251,8 @@ names = ['ncc', 'pcc', 'statements', 'transfer_volume',
     <p>
     {% for statement in statements %}
     <b><a href="/{{ statement['id'] }}/">{{ escape(statement['id']) }}</a></b>
-    is {{ escape(part(statement['statement'])) }}</b><br />{% end %}
+    is <span title="{{ escape(statement['statement']) }}">{{ escape(part(statement['statement'])) }}</span><br />
+    {% end %}
     </p>
 </div>
 {% end %}
