@@ -6,5 +6,6 @@ from gittip.models.payday import Payday
 from gittip.models.tip import Tip
 from gittip.models.transfer import Transfer
 from gittip.models.user import User
+from gittip.models.goal import Goal
 
 all = [Elsewhere, Exchange, Participant, Payday, Tip, Transfer, User]
