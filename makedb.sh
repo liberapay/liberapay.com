@@ -35,5 +35,14 @@ echo
 psql -U $OWNER $DBNAME < enforce-utc.sql
 psql -U $OWNER $DBNAME < schema.sql
 
+echo "=============================================================================="
+echo "Looking for branch.sql ..."
+echo 
+
+if [ -f branch.sql ]
+then psql -U $OWNER $DBNAME < branch.sql
+else echo "None found."
+fi
+
 echo 
 echo "=============================================================================="
