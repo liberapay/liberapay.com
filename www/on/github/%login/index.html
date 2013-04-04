@@ -57,7 +57,7 @@ elif usertype == "organization":
     logins = [member['login'] for member in members]
     ON_GITTIP = """\
 
-        SELECT elsewhere.user_info -> 'login' AS login
+        SELECT participant_id, elsewhere.user_info -> 'login' AS login
           FROM elsewhere
           JOIN participants p
             ON p.id = elsewhere.participant_id
@@ -66,13 +66,21 @@ elif usertype == "organization":
            AND p.claimed_time IS NOT NULL
 
     """
-    _on_gittip = [rec['login'] for rec in db.fetchall(ON_GITTIP, (logins,))]
+    known = list(db.fetchall(ON_GITTIP, (logins,)))
+    known_map = {rec['login']: rec['participant_id'] for rec in known}
+    _on_gittip = [rec['login'] for rec in known]
     on_gittip = []
     not_on_gittip = []
     for member in members:
-        seq = on_gittip if member['login'] in _on_gittip else not_on_gittip
-        tip_to = None if user.ANON else user.get_tip_to(member['login'])
-        seq.append((member, tip_to))
+        if member['login'] in _on_gittip:
+            seq = on_gittip
+            tippee = known_map[member['login']]
+        else:
+            seq = not_on_gittip
+            elsewhere = github.GitHubAccount(member['id'], member)
+            tippee = elsewhere.participant_id
+        tip_to = None if user.ANON else user.get_tip_to(tippee)
+        seq.append((member, tippee, tip_to))
     can_tip = user.ANON
     number = len(members)
     img_src = user_info['avatar_url'] + "&s=128"
@@ -229,7 +237,7 @@ title = username
                     {{ i == 0 and "also on" or "not on" }} Gittip</h2>
         </td></tr>
         {% end %}
-        {% for member, tip in sequence %}
+        {% for member, tippee, tip in sequence %}
         <tr class="not-over"><td>
             {% if not user.ANON %}
             <th>
@@ -238,7 +246,7 @@ title = username
             </th>
             <td>
                 {% for amount in AMOUNTS %}
-                <button amount="{{ amount }}" tippee="{{ member['login'] }}"
+                <button amount="{{ amount }}" tippee="{{ tippee }}"
                     class="tip small {{ 'selected' if amount == tip else 'empty' }}">{{ amount }}</button>
                 {% end %}
                 {% if tip not in AMOUNTS %}
