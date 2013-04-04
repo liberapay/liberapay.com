@@ -53,10 +53,10 @@ class Participant(db.Model):
 
     ### Relations ###
     accounts_elsewhere = relationship( "Elsewhere"
-                                     , backref="participant"
+                                     , backref="participant_orm"
                                      , lazy="dynamic"
                                       )
-    exchanges = relationship("Exchange", backref="participant")
+    exchanges = relationship("Exchange", backref="participant_orm")
 
     # TODO: Once tippee/tipper are renamed to tippee_id/tipper_idd, we can go
     # ahead and drop the foreign_keys & rename backrefs to tipper/tippee

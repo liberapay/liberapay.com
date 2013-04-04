@@ -8,7 +8,7 @@ def _wrap(raw):
     """This is a step on the way to ORM-ifying this simplate.
     """
     for rec in raw:
-        out = Participant.query.get(rec['id'])
+        out = Participant.query.get(rec['username'])
         if 'amount' in rec:
             out.amount = rec['amount']
         yield out
@@ -33,13 +33,13 @@ except ValueError:
 
 new_participants = _wrap(db.fetchall("""
 
-    SELECT id, claimed_time FROM (
-        SELECT DISTINCT ON (p.id)
-               p.id
+    SELECT username, claimed_time FROM (
+        SELECT DISTINCT ON (p.username)
+               p.username
              , claimed_time
           FROM participants p
           JOIN elsewhere e
-            ON p.id = participant_id
+            ON p.username = participant
          WHERE claimed_time IS NOT null
            AND is_suspicious IS NOT true
            ) AS foo
@@ -51,21 +51,21 @@ new_participants = _wrap(db.fetchall("""
 
 givers = _wrap(db.fetchall("""
 
-    SELECT tipper AS id, anonymous, sum(amount) AS amount
+    SELECT tipper AS username, anonymous, sum(amount) AS amount
       FROM (    SELECT DISTINCT ON (tipper, tippee)
                        amount
                      , tipper
                   FROM tips
-                  JOIN participants p ON p.id = tipper
-                  JOIN participants p2 ON p2.id = tippee
-                  JOIN elsewhere ON elsewhere.participant_id = tippee
+                  JOIN participants p ON p.username = tipper
+                  JOIN participants p2 ON p2.username = tippee
+                  JOIN elsewhere ON elsewhere.participant = tippee
                  WHERE p.last_bill_result = ''
                    AND p.is_suspicious IS NOT true
                    AND p2.claimed_time IS NOT NULL
                    AND elsewhere.is_locked = false
               ORDER BY tipper, tippee, mtime DESC
               ) AS foo
-      JOIN participants p ON p.id = tipper
+      JOIN participants p ON p.username = tipper
      WHERE is_suspicious IS NOT true
   GROUP BY tipper, anonymous
   ORDER BY amount DESC
@@ -79,20 +79,20 @@ givers = _wrap(db.fetchall("""
 
 receivers = _wrap(db.fetchall("""
 
-    SELECT tippee AS id, claimed_time, sum(amount) AS amount
+    SELECT tippee AS username, claimed_time, sum(amount) AS amount
       FROM (    SELECT DISTINCT ON (tipper, tippee)
                        amount
                      , tippee
                   FROM tips
-                  JOIN participants p ON p.id = tipper
-                  JOIN elsewhere ON elsewhere.participant_id = tippee
+                  JOIN participants p ON p.username = tipper
+                  JOIN elsewhere ON elsewhere.participant = tippee
                  WHERE last_bill_result = ''
                    AND elsewhere.is_locked = false
                    AND is_suspicious IS NOT true
                    AND claimed_time IS NOT null
               ORDER BY tipper, tippee, mtime DESC
               ) AS foo
-      JOIN participants p ON p.id = tippee
+      JOIN participants p ON p.username = tippee
      WHERE is_suspicious IS NOT true
   GROUP BY tippee, claimed_time
   ORDER BY amount DESC
@@ -141,7 +141,7 @@ receivers = _wrap(db.fetchall("""
         <ul class="group">
             {% for i, participant in enumerate(new_participants, start=1) %}
             <li{% if i > 6 %} class="luxury"{% end %}>
-                <a href="/{{ participant.id }}/" class="mini-user">
+                <a href="/{{ participant.username }}/" class="mini-user">
                     <span class="inner">
                         <span class="avatar"
                             style="background-image:
@@ -149,7 +149,7 @@ receivers = _wrap(db.fetchall("""
                             <span class="rank">{{ i }}</span>
                         </span>
                         <span class="age">{{ _to_age(participant) }}</span>
-                        <span class="name">{{ participant.id }}</span>
+                        <span class="name">{{ participant.username }}</span>
                     </span>
                 </a>
             </li>
@@ -172,7 +172,7 @@ receivers = _wrap(db.fetchall("""
                     </span>
                 </span>
                 {% else %}
-                <a href="/{{ giver.id }}/"
+                <a href="/{{ giver.username }}/"
                    class="mini-user{{ ' anonymous' if giver.anonymous else '' }}">
                     <span class="inner">
                         <span class="avatar"
@@ -180,7 +180,7 @@ receivers = _wrap(db.fetchall("""
                             <span class="rank">{{ i }}</span>
                         </span>
                         <span class="money">${{ giver.amount }}</span>
-                        <span class="name">{{ giver.id }}</span>
+                        <span class="name">{{ giver.username }}</span>
                     </span>
                 </a>
                 {% end %}
@@ -193,7 +193,7 @@ receivers = _wrap(db.fetchall("""
         <ul class="group">
             {% for i, receiver in enumerate(receivers, start=1) %}
             <li{% if i > 6 %} class="luxury"{% end %}>
-                <a href="/{{ receiver.id }}/" class="mini-user">
+                <a href="/{{ receiver.username }}/" class="mini-user">
                     <span class="inner">
                         <span class="avatar"
                             style="background-image: url('{{ receiver.get_img_src() }}')">

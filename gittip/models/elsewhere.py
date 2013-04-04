@@ -7,8 +7,8 @@ from gittip.orm import db
 class Elsewhere(db.Model):
     __tablename__ = 'elsewhere'
     __table_args__ = (
-        UniqueConstraint('platform', 'participant_id',
-                         name='elsewhere_platform_participant_id_key'),
+        UniqueConstraint('platform', 'participant',
+                         name='elsewhere_platform_participant_key'),
         UniqueConstraint('platform', 'user_id',
                          name='elsewhere_platform_user_id_key')
     )
@@ -18,7 +18,8 @@ class Elsewhere(db.Model):
     user_id = Column(Text, nullable=False)
     user_info = Column(HSTORE)
     is_locked = Column(Boolean, default=False, nullable=False)
-    participant_id = Column(Text, ForeignKey("participants.id"), nullable=False)
+    participant = Column(Text, ForeignKey("participants.username"), \
+                                                                nullable=False)
 
     def resolve_unclaimed(self):
         if self.platform == 'github':
