@@ -398,3 +398,9 @@ BEGIN;
                      );
 
 END;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/issues/406
+
+ALTER SEQUENCE social_network_users_id_seq RENAME TO elsewhere_id_seq;
