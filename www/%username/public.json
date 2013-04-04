@@ -4,7 +4,7 @@ from gittip.models import Participant
 
 # ========================================================================== ^L
 
-participant = Participant.query.get(path['participant_id'])
+participant = Participant.query.get(path['username'])
 receiving = participant.get_dollars_receiving()
 
 output = {"receiving": str(receiving)}
@@ -51,10 +51,10 @@ output["giving"] = giving
 #   3.00 - user tips this person this amount
 
 if not user.ANON:
-    if user.id == path['participant_id']:
+    if user.id == path['username']:
         my_tip = "self"
     else:
-        my_tip = user.get_tip_to(path['participant_id'])
+        my_tip = user.get_tip_to(path['username'])
     output["my_tip"] = str(my_tip)
 
 

@@ -16,7 +16,7 @@ if to is None:
          WHERE id=%s
      RETURNING is_suspicious
 
-    """, (path['participant_id'],))
+    """, (path['username'],))
 else:
     rec = db.fetchone("""
 
@@ -25,7 +25,7 @@ else:
          WHERE id=%s
      RETURNING is_suspicious
 
-    """, (to == 'true', path['participant_id'],))
+    """, (to == 'true', path['username'],))
 
 assert rec is not None
 

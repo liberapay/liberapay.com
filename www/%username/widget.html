@@ -1,7 +1,7 @@
 from gittip import AMOUNTS
 from gittip.models import Participant
 ^L
-participant = Participant.query.get(path['participant_id'])
+participant = Participant.query.get(path['username'])
 if user.ANON:
     button_text = "Gittip"
 elif user.id == participant.id:
