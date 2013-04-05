@@ -20,11 +20,11 @@ if user.ANON:
 # This is a protection against unauthorized users taking over accounts.
 
 connect_token = uuid.uuid4().hex
-connect_key = (user.id, account.platform, account.user_id)
+connect_key = (user.username, account.platform, account.user_id)
 website.connect_tokens[connect_key] = connect_token
 
 
-other = Participant.query.get(account.participant_id)
+other = Participant.query.get(account.username)
 
 user_github_account, user_twitter_account, user_bitbucket_account = \
                                                   user.get_accounts_elsewhere()
@@ -57,7 +57,7 @@ title = "Please Confirm"
 
     <div><img class="platform-icon" src="/assets/icons/{{ account.platform }}.12.png"
     /> <span class="highlight">{{ username }}</span> is connected<br />to
-    <b>{{ other.id }}</b> on Gittip.<br />Reconnect it?</div>
+    <b>{{ other.username }}</b> on Gittip.<br />Reconnect it?</div>
 
     <h2>Now</h2>
 
@@ -67,7 +67,7 @@ title = "Please Confirm"
             <td>
                 <div class="participant">
                 <div class="participant-padding">
-                    <b>{{ user.id }}</b><br />
+                    <b>{{ user.username }}</b><br />
                     <table>
                         <tr>
                             <th><i>Gives</i></th>
@@ -97,7 +97,7 @@ title = "Please Confirm"
             <td>
                 <div class="participant other">
                 <div class="participant-padding">
-                    <b>{{ other.id }}</b><br />
+                    <b>{{ other.username }}</b><br />
                     <table>
                         <tr>
                             <th><i>Gives</i></th>
@@ -161,7 +161,7 @@ title = "Please Confirm"
             <td>
                 <div class="participant">
                 <div class="participant-padding">
-                    <b>{{ user.id }}</b><br />
+                    <b>{{ user.username }}</b><br />
                     <table>
                         <tr>
                             {% if obstacles.this_is_others_last_account_elsewhere %}
@@ -215,7 +215,7 @@ title = "Please Confirm"
                 <div class="participant other nix">
                 <div class="participant-padding">
                     <img id="nix" src="/assets/nix.png" />
-                    <b>{{ other.id }}</b><br />
+                    <b>{{ other.username }}</b><br />
                     <br />
                 </div>
                 </div>
@@ -224,7 +224,7 @@ title = "Please Confirm"
             <td>
                 <div class="participant other">
                 <div class="participant-padding">
-                    <b>{{ other.id }}</b><br />
+                    <b>{{ other.username }}</b><br />
                     <table>
                         <tr>
                             <th><i>Gives</i></th>

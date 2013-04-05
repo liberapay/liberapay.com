@@ -31,7 +31,7 @@ def suspicious():
                  , tips.ctime
               FROM tips
               JOIN participants p
-                ON tippee = p.id
+                ON tippee = p.username
              WHERE tipper=%s
                AND tips.ctime < '2012-11-05'::timestamptz
           ORDER BY tips.ctime
@@ -45,7 +45,7 @@ def suspicious():
                  , tips.ctime
               FROM tips
               JOIN participants p
-                ON tipper = p.id
+                ON tipper = p.username
              WHERE tippee=%s
                AND tips.ctime < '2012-11-05'::timestamptz
           ORDER BY tips.ctime
@@ -70,7 +70,7 @@ def suspicious():
 
             SELECT amount, fee, timestamp
               FROM exchanges
-             WHERE participant_id=%s
+             WHERE participant=%s
                AND timestamp < '2012-11-05'::timestamptz
           ORDER BY timestamp
 

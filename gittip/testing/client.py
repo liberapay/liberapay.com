@@ -57,7 +57,7 @@ class TestClient(object):
     def perform_request(self, request, user):
         request.website = test_website
         if user is not None:
-            user = User.from_id(user)
+            user = User.from_username(user)
             # Note that Cookie needs a bytestring.
             request.headers.cookie[str('session')] = user.session_token
 

@@ -26,7 +26,7 @@ if not user.ANON:
         card = billing.StripeCard(stripe_customer_id)
         assert stripe_customer_id == card['id']
 
-    username = user.id
+    username = user.username
 
 title = "Credit Card"
 
@@ -62,7 +62,7 @@ title = "Credit Card"
     <script>
         $(document).ready(function()
         {
-            Gittip.initPayment("{{ balanced.Marketplace.my_marketplace.uri }}", "{{ user.id }}");
+            Gittip.initPayment("{{ balanced.Marketplace.my_marketplace.uri }}", "{{ user.username }}");
         });
     </script>
     <style>

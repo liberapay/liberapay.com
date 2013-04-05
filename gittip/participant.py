@@ -46,8 +46,8 @@ class NeedConfirmation(Exception):
         return A or C
 
 
-def gen_random_participant_ids():
-    """Yield up to 100 random participant_ids.
+def gen_random_usernames():
+    """Yield up to 100 random usernames.
     """
     seatbelt = 0
     while 1:
@@ -57,8 +57,8 @@ def gen_random_participant_ids():
             raise StopIteration
 
 
-def reserve_a_random_participant_id(db=None):
-    """Reserve and a random participant_id.
+def reserve_a_random_username(db=None):
+    """Reserve and a random username.
 
     The returned value is guaranteed to have been reserved in the database.
 
@@ -66,23 +66,23 @@ def reserve_a_random_participant_id(db=None):
     if db is None:  # During take_over we want to use our own transaction.
         db = gittip.db
 
-    for participant_id in gen_random_participant_ids():
+    for username in gen_random_usernames():
         try:
             db.execute( "INSERT INTO participants (id) VALUES (%s)"
-                      , (participant_id,)
+                      , (username,)
                        )
         except IntegrityError:  # Collision, try again with another value.
             pass
         else:
             break
 
-    return participant_id
+    return username
 
 
-def require_id(func):
+def require_username(func):
     # XXX This should be done with a metaclass, maybe?
     def wrapped(self, *a, **kw):
-        if self.id is None:
+        if self.username is None:
             raise NoParticipantId("User does not participate, apparently.")
         return func(self, *a, **kw)
     return wrapped
@@ -96,12 +96,12 @@ class Participant(object):
     class BadAmount(Exception): pass
 
 
-    def __init__(self, participant_id):
-        typecheck(participant_id, (unicode, None))
-        self.id = participant_id
+    def __init__(self, username):
+        typecheck(username, (unicode, None))
+        self.username = username
 
 
-    @require_id
+    @require_username
     def get_details(self):
         """Return a dictionary.
         """
@@ -112,7 +112,7 @@ class Participant(object):
              WHERE id = %s
 
         """
-        return gittip.db.fetchone(SELECT, (self.id,))
+        return gittip.db.fetchone(SELECT, (self.username,))
 
 
     # Claiming
@@ -120,12 +120,12 @@ class Participant(object):
     # An unclaimed Participant is a stub that's created when someone pledges to
     # give to an AccountElsewhere that's not been connected on Gittip yet.
 
-    @require_id
+    @require_username
     def resolve_unclaimed(self):
-        """Given a participant_id, return an URL path.
+        """Given a username, return an URL path.
         """
         rec = gittip.db.fetchone("SELECT platform, user_info FROM elsewhere "
-                                 "WHERE participant_id = %s", (self.id,))
+                                 "WHERE participant = %s", (self.username,))
         if rec is None:
             out = None
         elif rec['platform'] == 'github':
@@ -135,21 +135,21 @@ class Participant(object):
             out = '/on/twitter/%s/' % rec['user_info']['screen_name']
         return out
 
-    @require_id
+    @require_username
     def set_as_claimed(self):
         CLAIM = """\
 
             UPDATE participants
                SET claimed_time=CURRENT_TIMESTAMP
-             WHERE id=%s
+             WHERE username=%s
                AND claimed_time IS NULL
 
         """
-        gittip.db.execute(CLAIM, (self.id,))
+        gittip.db.execute(CLAIM, (self.username,))
 
 
 
-    @require_id
+    @require_username
     def change_id(self, suggested):
         """Raise Response or return None.
 
@@ -170,25 +170,26 @@ class Participant(object):
         if suggested in gittip.RESTRICTED_IDS:
             raise Response(400)
 
-        if suggested != self.id:
-            # Will raise IntegrityError if the desired participant_id is taken.
+        if suggested != self.username:
+            # Will raise IntegrityError if the desired username is taken.
             rec = gittip.db.fetchone("UPDATE participants "
-                                     "SET id=%s WHERE id=%s "
-                                     "RETURNING id", (suggested, self.id))
+                                     "SET username=%s WHERE username=%s "
+                                     "RETURNING username",
+                                     (suggested, self.username))
 
             assert rec is not None         # sanity check
             assert suggested == rec['id']  # sanity check
-            self.id = suggested
+            self.username = suggested
 
 
-    @require_id
+    @require_username
     def get_accounts_elsewhere(self):
         """Return a two-tuple of elsewhere dicts.
         """
         ACCOUNTS = """
-            SELECT * FROM elsewhere WHERE participant_id=%s;
+            SELECT * FROM elsewhere WHERE participant=%s;
         """
-        accounts = gittip.db.fetchall(ACCOUNTS, (self.id,))
+        accounts = gittip.db.fetchall(ACCOUNTS, (self.username,))
         assert accounts is not None
         twitter_account = None
         github_account = None
@@ -201,7 +202,7 @@ class Participant(object):
         return (github_account, twitter_account)
 
 
-    @require_id
+    @require_username
     def set_tip_to(self, tippee, amount):
         """Given participant id and amount as str, return amount as Decimal.
 
@@ -213,7 +214,7 @@ class Participant(object):
 
         """
 
-        if self.id == tippee:
+        if self.username == tippee:
             raise self.NoSelfTipping
 
         amount = Decimal(amount)  # May raise InvalidOperation
@@ -236,12 +237,12 @@ class Participant(object):
 
         """
         gittip.db.execute( NEW_TIP
-                         , (self.id, tippee, self.id, tippee, amount)
+                         , (self.username, tippee, self.username, tippee, amount)
                           )
         return amount
 
 
-    @require_id
+    @require_username
     def get_tip_to(self, tippee):
         """Given two user ids, return a Decimal.
         """
@@ -255,7 +256,7 @@ class Participant(object):
              LIMIT 1
 
         """
-        rec = gittip.db.fetchone(TIP, (self.id, tippee))
+        rec = gittip.db.fetchone(TIP, (self.username, tippee))
         if rec is None:
             tip = Decimal('0.00')
         else:
@@ -263,7 +264,7 @@ class Participant(object):
         return tip
 
 
-    @require_id
+    @require_username
     def get_dollars_receiving(self):
         """Return a Decimal.
         """
@@ -275,7 +276,7 @@ class Participant(object):
                             amount
                           , tipper
                        FROM tips
-                       JOIN participants p ON p.id = tipper
+                       JOIN participants p ON p.username = tipper
                       WHERE tippee=%s
                         AND last_bill_result = ''
                         AND is_suspicious IS NOT true
@@ -284,7 +285,7 @@ class Participant(object):
                     ) AS foo
 
         """
-        rec = gittip.db.fetchone(BACKED, (self.id,))
+        rec = gittip.db.fetchone(BACKED, (self.username,))
         if rec is None:
             amount = None
         else:
@@ -296,7 +297,7 @@ class Participant(object):
         return amount
 
 
-    @require_id
+    @require_username
     def get_dollars_giving(self):
         """Return a Decimal.
         """
@@ -308,7 +309,7 @@ class Participant(object):
                             amount
                           , tippee
                        FROM tips
-                       JOIN participants p ON p.id = tippee
+                       JOIN participants p ON p.username = tippee
                       WHERE tipper=%s
                         AND is_suspicious IS NOT true
                         AND claimed_time IS NOT NULL
@@ -317,7 +318,7 @@ class Participant(object):
                     ) AS foo
 
         """
-        rec = gittip.db.fetchone(BACKED, (self.id,))
+        rec = gittip.db.fetchone(BACKED, (self.username,))
         if rec is None:
             amount = None
         else:
@@ -329,7 +330,7 @@ class Participant(object):
         return amount
 
 
-    @require_id
+    @require_username
     def get_number_of_backers(self):
         """Given a unicode, return an int.
         """
@@ -341,7 +342,7 @@ class Participant(object):
                             amount
                           , tipper
                        FROM tips
-                       JOIN participants p ON p.id = tipper
+                       JOIN participants p ON p.username = tipper
                       WHERE tippee=%s
                         AND last_bill_result = ''
                         AND is_suspicious IS NOT true
@@ -351,7 +352,7 @@ class Participant(object):
              WHERE amount > 0
 
         """
-        rec = gittip.db.fetchone(BACKED, (self.id,))
+        rec = gittip.db.fetchone(BACKED, (self.username,))
         if rec is None:
             nbackers = None
         else:
@@ -363,7 +364,7 @@ class Participant(object):
         return nbackers
 
 
-    @require_id
+    @require_username
     def get_tip_distribution(self):
         SQL = """
 
@@ -373,7 +374,7 @@ class Participant(object):
                             amount
                           , tipper
                        FROM tips
-                       JOIN participants p ON p.id = tipper
+                       JOIN participants p ON p.username = tipper
                       WHERE tippee=%s
                         AND last_bill_result = ''
                         AND is_suspicious IS NOT true
@@ -389,7 +390,7 @@ class Participant(object):
         contributed = Decimal('0.00')
         other = [-1, 0, 0]  # accumulates old tip amounts
         out = []
-        for rec in gittip.db.fetchall(SQL, (self.id,)):
+        for rec in gittip.db.fetchall(SQL, (self.username,)):
             if rec['amount'] not in gittip.AMOUNTS:
                 other[1] += rec['ncontributing']
                 other[2] += rec['amount'] * rec['ncontributing']
@@ -409,7 +410,7 @@ class Participant(object):
         return out, npatrons, contributed
 
 
-    @require_id
+    @require_username
     def get_giving_for_profile(self, db=None):
         """Given a participant id and a date, return a list and a Decimal.
 
@@ -431,7 +432,7 @@ class Participant(object):
                      , t.ctime
                      , p.claimed_time
                   FROM tips t
-                  JOIN participants p ON p.id = t.tippee
+                  JOIN participants p ON p.username = t.tippee
                  WHERE tipper = %s
                    AND p.is_suspicious IS NOT true
                    AND p.claimed_time IS NOT NULL
@@ -442,7 +443,7 @@ class Participant(object):
                    , tippee
 
         """
-        tips = list(db.fetchall(TIPS, (self.id,)))
+        tips = list(db.fetchall(TIPS, (self.username,)))
 
         UNCLAIMED_TIPS = """\
 
@@ -455,8 +456,8 @@ class Participant(object):
                      , e.platform
                      , e.user_info
                   FROM tips t
-                  JOIN participants p ON p.id = t.tippee
-                  JOIN elsewhere e ON e.participant_id = t.tippee
+                  JOIN participants p ON p.username = t.tippee
+                  JOIN elsewhere e ON e.participant = t.tippee
                  WHERE tipper = %s
                    AND p.is_suspicious IS NOT true
                    AND p.claimed_time IS NULL
@@ -468,7 +469,7 @@ class Participant(object):
                    , user_info->'login'
 
         """
-        unclaimed_tips = list(db.fetchall(UNCLAIMED_TIPS, (self.id,)))
+        unclaimed_tips = list(db.fetchall(UNCLAIMED_TIPS, (self.username,)))
 
 
         # Compute the total.
@@ -491,7 +492,7 @@ class Participant(object):
         return tips, total, unclaimed_tips, unclaimed_total
 
 
-    @require_id
+    @require_username
     def get_tips_and_total(self, for_payday=False, db=None):
         """Given a participant id and a date, return a list and a Decimal.
 
@@ -537,11 +538,11 @@ class Participant(object):
                         ) IS NULL
 
             """
-            args = (self.id, for_payday, for_payday)
+            args = (self.username, for_payday, for_payday)
         else:
             order_by = "amount DESC"
             ts_filter = ""
-            args = (self.id,)
+            args = (self.username,)
 
         TIPS = """\
 
@@ -552,7 +553,7 @@ class Participant(object):
                      , t.ctime
                      , p.claimed_time
                   FROM tips t
-                  JOIN participants p ON p.id = t.tippee
+                  JOIN participants p ON p.username = t.tippee
                  WHERE tipper = %%s
                    AND p.is_suspicious IS NOT true
                    %s
@@ -591,7 +592,7 @@ class Participant(object):
     # Accounts Elsewhere
     # ==================
 
-    @require_id
+    @require_username
     def take_over(self, account_elsewhere, have_confirmation=False):
         """Given two unicodes, raise WontProceed or return None.
 
@@ -628,7 +629,7 @@ class Participant(object):
                 bob $0.
 
             - all tips to and from the other participant are set to zero
-            - the absorbed participant_id is released for reuse
+            - the absorbed username is released for reuse
             - the absorption is recorded in an absorptions table
 
         This is done in one transaction.
@@ -702,17 +703,17 @@ class Participant(object):
 
             txn.execute("""
 
-                SELECT participant_id
+                SELECT participant
                      , claimed_time IS NULL AS is_stub
                   FROM elsewhere
-                  JOIN participants ON participant_id=participants.id
+                  JOIN participants ON participant=participants.username
                  WHERE elsewhere.platform=%s AND elsewhere.user_id=%s
 
             """, (platform, user_id))
             rec = txn.fetchone()
             assert rec is not None          # sanity check
 
-            other_id = rec['participant_id']
+            other_username = rec['participant']
 
 
             # Make sure we have user confirmation if needed.
@@ -738,8 +739,8 @@ class Participant(object):
 
             # this_is_others_last_account_elsewhere
             txn.execute( "SELECT count(*) AS nelsewhere FROM elsewhere "
-                         "WHERE participant_id=%s"
-                       , (other_id,)
+                         "WHERE participant=%s"
+                       , (other_username,)
                         )
             nelsewhere = txn.fetchone()['nelsewhere']
             assert nelsewhere > 0           # sanity check
@@ -747,8 +748,8 @@ class Participant(object):
 
             # we_already_have_that_kind_of_account
             txn.execute( "SELECT count(*) AS nparticipants FROM elsewhere "
-                         "WHERE participant_id=%s AND platform=%s"
-                       , (self.id, platform)
+                         "WHERE participant=%s AND platform=%s"
+                       , (self.username, platform)
                         )
             nparticipants = txn.fetchone()['nparticipants']
             assert nparticipants in (0, 1)  # sanity check
@@ -773,10 +774,10 @@ class Participant(object):
             # ====================================
 
             if we_already_have_that_kind_of_account:
-                new_stub_id = reserve_a_random_participant_id(txn)
-                txn.execute( "UPDATE elsewhere SET participant_id=%s "
-                             "WHERE platform=%s AND participant_id=%s"
-                           , (new_stub_id, platform, self.id)
+                new_stub_username = reserve_a_random_username(txn)
+                txn.execute( "UPDATE elsewhere SET participant=%s "
+                             "WHERE platform=%s AND participant=%s"
+                           , (new_stub_username, platform, self.username)
                             )
 
 
@@ -787,9 +788,9 @@ class Participant(object):
             # browsing sessions open from that account, they will stay open
             # until they expire (XXX Is that okay?)
 
-            txn.execute( "UPDATE elsewhere SET participant_id=%s "
+            txn.execute( "UPDATE elsewhere SET participant=%s "
                          "WHERE platform=%s AND user_id=%s"
-                       , (self.id, platform, user_id)
+                       , (self.username, platform, user_id)
                         )
 
 
@@ -802,38 +803,38 @@ class Participant(object):
                 # Take over tips.
                 # ===============
 
-                x, y = self.id, other_id
+                x, y = self.username, other_username
                 txn.execute(CONSOLIDATE_TIPS_RECEIVING, (x, x,y, x,y, x))
                 txn.execute(CONSOLIDATE_TIPS_GIVING, (x, x,y, x,y, x))
-                txn.execute(ZERO_OUT_OLD_TIPS_RECEIVING, (other_id,))
-                txn.execute(ZERO_OUT_OLD_TIPS_GIVING, (other_id,))
+                txn.execute(ZERO_OUT_OLD_TIPS_RECEIVING, (other_username,))
+                txn.execute(ZERO_OUT_OLD_TIPS_GIVING, (other_username,))
 
 
                 # Archive the old participant.
                 # ============================
-                # We always give them a new, random participant_id. We sign out
+                # We always give them a new, random username. We sign out
                 # the old participant.
 
-                for archive_id in gen_random_participant_ids():
+                for archive_username in gen_random_usernames():
                     try:
                         txn.execute("""
 
                             UPDATE participants
-                               SET id=%s
+                               SET username=%s
                                  , session_token=NULL
                                  , session_expires=now()
-                             WHERE id=%s
-                         RETURNING id
+                             WHERE username=%s
+                         RETURNING username
 
-                        """, (archive_id, other_id))
+                        """, (archive_username, other_username))
                         rec = txn.fetchone()
                     except IntegrityError:
-                        continue  # archive_id is already taken; extremely
-                                  # unlikely, but ...
+                        continue  # archive_username is already taken;
+                                  # extremely unlikely, but ...
                                   # XXX But can the UPDATE fail in other ways?
                     else:
                         assert rec is not None  # sanity checks
-                        assert rec['id'] == archive_id
+                        assert rec['username'] == archive_username
                         break
 
 
@@ -844,7 +845,7 @@ class Participant(object):
                 txn.execute( "INSERT INTO absorptions "
                              "(absorbed_was, absorbed_by, archived_as) "
                              "VALUES (%s, %s, %s)"
-                           , (other_id, self.id, archive_id)
+                           , (other_username, self.username, archive_username)
                             )
 
 
@@ -858,4 +859,4 @@ class Participant(object):
             #
             #   https://github.com/gittip/www.gittip.com/issues/129
 
-            account_elsewhere.participant_id = self.id
+            account_elsewhere.participant = self.username

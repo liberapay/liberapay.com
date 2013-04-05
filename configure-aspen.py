@@ -10,7 +10,7 @@ import gittip.csrf
 gittip.wireup.canonical()
 gittip.wireup.db()
 gittip.wireup.billing()
-gittip.wireup.id_restrictions(website)
+gittip.wireup.username_restrictions(website)
 gittip.wireup.sentry(website)
 gittip.wireup.mixpanel(website)
 

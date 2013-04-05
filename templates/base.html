@@ -26,7 +26,7 @@
         mixpanel.init("{{ website.mixpanel_token }}");
         $(document).ready(function()
         {
-            {% if not user.ANON %}mixpanel.identify("{{ user.number }}");{% end %}
+            {% if not user.ANON %}mixpanel.identify("{{ user.id }}");{% end %}
         });
     </script>
     <!-- end Mixpanel -->
@@ -60,7 +60,7 @@
             </div>
             {% else %}
             <div id="you-are">
-                You are <a href="/{{ user.id }}/">{{ user.id }}</a>.
+                You are <a href="/{{ user.username }}/">{{ user.username }}</a>.
                 <a href="/sign-out.html">Sign out</a>.
             </div>
             {% end %}

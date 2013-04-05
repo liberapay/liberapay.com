@@ -51,7 +51,7 @@ output["giving"] = giving
 #   3.00 - user tips this person this amount
 
 if not user.ANON:
-    if user.id == path['username']:
+    if user.username == path['username']:
         my_tip = "self"
     else:
         my_tip = user.get_tip_to(path['username'])

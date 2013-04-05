@@ -9,7 +9,7 @@ if user.ANON:
 request.allow("POST")
 
 statement = request.body["statement"]
-db.execute( "UPDATE participants SET statement=%s WHERE id=%s"
-          , (statement, user.id)
+db.execute( "UPDATE participants SET statement=%s WHERE username=%s"
+          , (statement, user.username)
            )
 response.body = {"statement": wrap(statement)}

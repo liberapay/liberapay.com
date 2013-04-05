@@ -4,10 +4,10 @@ from gittip.models import Participant
 participant = Participant.query.get(path['username'])
 if user.ANON:
     button_text = "Gittip"
-elif user.id == participant.id:
+elif user == participant:
     button_text = "You!"
 else:
-    button_text = user.get_tip_to(participant.id)
+    button_text = user.get_tip_to(participant.username)
     if button_text == 0:
         button_text = "Gittip"
 ^L

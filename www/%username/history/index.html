@@ -8,20 +8,20 @@ from gittip.utils import get_participant
 
 class Paydays(object):
 
-    def __init__(self, participant_id, balance):
-        self._participant_id = participant_id
+    def __init__(self, username, balance):
+        self._username = username
         self._paydays = list(db.fetchall("SELECT ts_start, ts_end FROM paydays "
                                          "ORDER BY ts_end DESC"))
         self._npaydays = len(self._paydays)
         self._exchanges = list(db.fetchall( "SELECT * FROM exchanges "
-                                            "WHERE participant_id=%s "
+                                            "WHERE username=%s "
                                             "ORDER BY timestamp ASC"
-                                          , (participant_id,)
+                                          , (username,)
                                            ))
         self._transfers = list(db.fetchall( "SELECT * FROM transfers "
                                             "WHERE tipper=%s OR tippee=%s "
                                             "ORDER BY timestamp ASC"
-                                          , (participant_id, participant_id)
+                                          , (username, username)
                                           ))
         self._balance = balance
 
@@ -100,7 +100,7 @@ class Paydays(object):
                     break
 
                 if event['event'] == 'transfer':
-                    if event['tippee'] == self._participant_id:
+                    if event['tippee'] == self._username:
 
                         # Don't leak details about who tipped you. Only show
                         # aggregates for that.
@@ -127,7 +127,7 @@ class Paydays(object):
                 elif prev['event'] == 'credit':
                     balance = prev['balance'] - prev['amount'] + prev['fee']
                 elif prev['event'] == 'transfer':
-                    if prev['tippee'] == self._participant_id:
+                    if prev['tippee'] == self._username:
                         balance = prev['balance'] - prev['amount']
                     else:
                         balance = prev['balance'] + prev['amount']
@@ -148,9 +148,9 @@ class Paydays(object):
 # ========================================================================== ^L
 
 participant = get_participant(request, restrict=True)
-paydays = Paydays(participant.id, participant.balance)
+paydays = Paydays(participant.username, participant.balance)
 hero = "History"
-title = "%s - %s" % (participant.id, hero)
+title = "%s - %s" % (participant.username, hero)
 locked = False
 
 # ========================================================================== ^L
@@ -159,12 +159,12 @@ locked = False
 
 <table id="history" class="centered">
     <tr><td colspan="7">
-        <h2>{{ participant.id == user.id and "You" or participant.id }} joined
+        <h2>{{ participant.username == user.username and "You" or participant.username }} joined
         {{ to_age(participant.claimed_time) }}.</h2>
     </td></tr>
     <tr><td colspan="7">
 
-        <h2>{{ participant.id == user.id and "Your" or "Their" }} balance is
+        <h2>{{ participant.username == user.username and "Your" or "Their" }} balance is
             ${{ participant.balance }}.</h2>
         {% if user.ADMIN %}
         <h2>Record an Exchange.</h2>
@@ -258,7 +258,7 @@ locked = False
         <td class="card"></td>
         <td class="fees"></td>
 
-        {% if event['tippee'] == participant.id %}
+        {% if event['tippee'] == participant.username %}
         <td class="credits">{{ event['amount'] }}</td>
         <td class="debits"></td>
         {% else %}
@@ -268,8 +268,8 @@ locked = False
 
         <td class="balance">{{ event['balance'] }}</td>
 
-        {% if event['tippee'] == participant.id %}
-            {% if user.ADMIN and (participant.id != user.id or 'override' in qs) %}
+        {% if event['tippee'] == participant.username %}
+            {% if user.ADMIN and (participant.username != user.username or 'override' in qs) %}
             <td class="notes">from <a href="/{{ event['tipper'] }}/history.html">{{ event['tipper'] }}</a></td>
             {% else %}
             <td class="notes">from someone</td>

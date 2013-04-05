@@ -23,8 +23,9 @@ participant = get_participant(request, restrict=False)
 locked = False
 tip_or_pledge = "tip"
 hero = "Profile"
-title = participant.id      # used in the title tag
-username = participant.id   # used in footer shared with on/$platform/ pages
+title = participant.username      # used in the title tag
+username = participant.username   # used in footer shared with on/$platform/
+                                  # pages
 github_account, twitter_account, bitbucket_account = participant.get_accounts_elsewhere()
 long_statement = len(participant.statement) > LONG_STATEMENT
 

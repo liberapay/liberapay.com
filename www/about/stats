@@ -40,8 +40,8 @@ tip_amounts = db.fetchone("""
         SELECT avg(amount), sum(amount)
          FROM (    SELECT DISTINCT ON (tipper, tippee) amount
                      FROM tips
-                     JOIN participants p ON p.id = tipper
-                     JOIN participants p2 ON p2.id = tippee
+                     JOIN participants p ON p.username = tipper
+                     JOIN participants p2 ON p2.username = tippee
                     WHERE p.last_bill_result = ''
                       AND p2.claimed_time IS NOT NULL
                       AND p.is_suspicious IS NOT true
@@ -64,8 +64,8 @@ average_tippees = db.fetchone("""\
                                , tippee
                                , amount
                             FROM tips
-                            JOIN participants p ON p.id = tipper
-                            JOIN participants p2 on p2.id = tippee
+                            JOIN participants p ON p.username = tipper
+                            JOIN participants p2 on p2.username = tippee
                            WHERE p.last_bill_result = ''
                              AND p2.claimed_time IS NOT NULL
                              AND NOT (p.is_suspicious IS true)
@@ -94,8 +94,8 @@ _tip_distribution = list(db.fetchall("""
       FROM (SELECT DISTINCT ON (tipper, tippee)
                    amount
               FROM tips
-              JOIN participants p ON p.id = tipper
-              JOIN participants p2 on p2.id = tippee
+              JOIN participants p ON p.username = tipper
+              JOIN participants p2 on p2.username = tippee
              WHERE p.last_bill_result = ''
                AND p2.claimed_time IS NOT NULL
                AND NOT (p.is_suspicious IS true)

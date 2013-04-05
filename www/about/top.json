@@ -10,21 +10,21 @@ except ValueError:
 
 givers = list(db.fetchall("""
 
-    SELECT tipper AS participant_id, anonymous, sum(amount) AS amount
+    SELECT tipper AS username, anonymous, sum(amount) AS amount
       FROM (    SELECT DISTINCT ON (tipper, tippee)
                        amount
                      , tipper
                   FROM tips
-                  JOIN participants p ON p.id = tipper
-                  JOIN participants p2 ON p2.id = tippee
-                  JOIN elsewhere ON elsewhere.participant_id = tippee
+                  JOIN participants p ON p.username = tipper
+                  JOIN participants p2 ON p2.username = tippee
+                  JOIN elsewhere ON elsewhere.participant = tippee
                  WHERE p.last_bill_result = ''
                    AND p.is_suspicious IS NOT true
                    AND p2.claimed_time IS NOT NULL
                    AND elsewhere.is_locked = false
               ORDER BY tipper, tippee, mtime DESC
               ) AS foo
-      JOIN participants p ON p.id = tipper
+      JOIN participants p ON p.username = tipper
      WHERE is_suspicious IS NOT true
   GROUP BY tipper, anonymous
   ORDER BY amount DESC
@@ -38,20 +38,20 @@ givers = list(db.fetchall("""
 
 receivers = list(db.fetchall("""
 
-    SELECT tippee AS participant_id, sum(amount) AS amount
+    SELECT tippee AS username, sum(amount) AS amount
       FROM (    SELECT DISTINCT ON (tipper, tippee)
                        amount
                      , tippee
                   FROM tips
-                  JOIN participants p ON p.id = tipper
-                  JOIN elsewhere ON elsewhere.participant_id = tippee
+                  JOIN participants p ON p.username = tipper
+                  JOIN elsewhere ON elsewhere.participant = tippee
                  WHERE last_bill_result = ''
                    AND elsewhere.is_locked = false
                    AND is_suspicious IS NOT true
                    AND claimed_time IS NOT null
               ORDER BY tipper, tippee, mtime DESC
               ) AS foo
-      JOIN participants p ON p.id = tippee
+      JOIN participants p ON p.username = tippee
      WHERE is_suspicious IS NOT true
   GROUP BY tippee, claimed_time
   ORDER BY amount DESC
@@ -64,7 +64,7 @@ receivers = list(db.fetchall("""
 for giver in givers:
     anon = giver.pop('anonymous')
     if anon:
-        giver['participant_id'] = None
+        giver['username'] = None
 
 
 response.body = { "givers": givers

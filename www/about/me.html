@@ -1,5 +1,5 @@
 if not user.ANON:
-    request.redirect('/%s/' % user.id)
+    request.redirect('/%s/' % user.username)
 title = "Sign In"
 ^L
 {% extends templates/base.html %}

@@ -27,9 +27,9 @@ if not name:
 url = user_info['html_url'] = "https://twitter.com/%s" % username
 
 account = twitter.TwitterAccount(user_info['id'], user_info)
-participant = Participant.query.get(account.participant_id)
+participant = Participant.query.get(account.participant)
 if account.is_claimed:
-    request.redirect('/%s/' % participant.id)
+    request.redirect('/%s/' % participant.username)
 locked = account.is_locked
 lock_action = "unlock" if account.is_locked else "lock"
 
@@ -78,10 +78,10 @@ title = username
 
     {% else %}
 
-        {% set my_tip = user.get_tip_to(participant.id) %}
+        {% set my_tip = user.get_tip_to(participant.username) %}
         <h2>Your Weekly Pledge</h2>
         {% for amount in AMOUNTS %}
-        <button amount="{{ amount }}" tippee="{{ participant.id }}"
+        <button amount="{{ amount }}" tippee="{{ participant.username }}"
             class="tip{{ ' selected' if amount == my_tip else '' }}">${{ amount }}</button>
         {% end %}
         {% if my_tip not in AMOUNTS %}

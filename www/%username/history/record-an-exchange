@@ -25,13 +25,13 @@ if not note:
 
 with gittip.db.get_transaction() as txn:
     SQL = "INSERT INTO exchanges " \
-          "(amount, fee, participant_id, recorder, note) " \
+          "(amount, fee, username, recorder, note) " \
           "VALUES (%s, %s, %s, %s, %s)"
-    txn.execute(SQL, (amount, fee, participant.id, user.id, note))
+    txn.execute(SQL, (amount, fee, participant.username, user.username, note))
 
     SQL = "UPDATE participants SET balance = balance + %s WHERE id=%s"
-    txn.execute(SQL, (amount, participant.id))
+    txn.execute(SQL, (amount, participant.username))
 
-request.redirect('/%s/history/' % participant.id)
+request.redirect('/%s/history/' % participant.username)
 
 # ========================================== ^L text/plain

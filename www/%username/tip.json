@@ -14,7 +14,7 @@ if not user.ANON:
     # XXX We could/should enforce that tips cannot be pledged at all to locked
     # accounts.
 
-    tipper = user.id
+    tipper = user.username
     tippee = path['username']
 
 

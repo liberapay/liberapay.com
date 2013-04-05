@@ -26,7 +26,7 @@ suggest_tips = (total == 0) and (user == participant)
 if suggest_tips:
     tips = tip_suggestions
 hero = "Giving"
-title = "%s - %s" % (participant.id, hero)
+title = "%s - %s" % (participant.username, hero)
 locked = False
 
 # ========================================================================== ^L
@@ -55,7 +55,7 @@ locked = False
             <h2>Not sure who to give to? Here are some suggestions</h2>
             {% end %}
             {% else %}
-            <h2>{{ participant.id }} gives ${{ total }} per week</h2>
+            <h2>{{ participant.username }} gives ${{ total }} per week</h2>
             {% end %}
         </td>
     </tr>

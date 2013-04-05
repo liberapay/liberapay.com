@@ -37,7 +37,8 @@ def fake_participant(is_admin=False, anonymous=False):
     Create a fake User
     """
     return Participant(
-        id=faker.firstName() + fake_text_id(3),
+        id=fake_int_id(),
+        username=faker.firstName() + fake_text_id(3),
         statement=faker.sentence(),
         ctime=faker.dateTimeThisYear(),
         is_admin=is_admin,
@@ -60,8 +61,8 @@ def fake_tip(tipper, tippee):
         id=fake_int_id(),
         ctime=faker.dateTimeThisYear(),
         mtime=faker.dateTimeThisMonth(),
-        tipper=tipper.id,
-        tippee=tippee.id,
+        tipper=tipper.username,
+        tippee=tippee.username,
         amount=random.choice(AMOUNTS)
     )
 
@@ -78,7 +79,7 @@ def fake_elsewhere(participant, platform=None):
         platform=platform,
         user_id=fake_text_id(),
         is_locked=False,
-        participant_id=participant.id,
+        participant=participant.username,
         user_info=''
     )
 

@@ -19,10 +19,10 @@ from gittip.orm import db
 # migrated over to doing everything using SQLAlchemy
 from gittip.participant import Participant as OldParticipant
 
-ASCII_ALLOWED_IN_PARTICIPANT_ID = set("0123456789"
-                                      "abcdefghijklmnopqrstuvwxyz"
-                                      "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                                      ".,-_;:@ ")
+ASCII_ALLOWED_IN_USERNAME = set("0123456789"
+                                "abcdefghijklmnopqrstuvwxyz"
+                                "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                                ".,-_;:@ ")
 
 class Participant(db.Model):
     __tablename__ = "participants"
@@ -88,11 +88,11 @@ class Participant(db.Model):
         return self.id != other.id
 
     # Class-specific exceptions
-    class ProblemChangingId(Exception): pass
-    class IdTooLong(ProblemChangingId): pass
-    class IdContainsInvalidCharacters(ProblemChangingId): pass
-    class IdIsRestricted(ProblemChangingId): pass
-    class IdAlreadyTaken(ProblemChangingId): pass
+    class ProblemChangingUsername(Exception): pass
+    class UsernameTooLong(ProblemChangingUsername): pass
+    class UsernameContainsInvalidCharacters(ProblemChangingUsername): pass
+    class UsernameIsRestricted(ProblemChangingUsername): pass
+    class UsernameAlreadyTaken(ProblemChangingUsername): pass
 
     class UnknownPlatform(Exception): pass
 
@@ -127,39 +127,39 @@ class Participant(db.Model):
         db.session.add(self)
         db.session.commit()
 
-    def change_id(self, desired_id):
-        """Raise self.ProblemChangingId, or return None.
+    def change_username(self, desired_username):
+        """Raise self.ProblemChangingUsername, or return None.
 
         We want to be pretty loose with usernames. Unicode is allowed--XXX
         aspen bug :(. So are spaces. Control characters aren't. We also limit
         to 32 characters in length.
 
         """
-        for i, c in enumerate(desired_id):
+        for i, c in enumerate(desired_username):
             if i == 32:
-                raise self.IdTooLong  # Request Entity Too Large (more or less)
-            elif ord(c) < 128 and c not in ASCII_ALLOWED_IN_PARTICIPANT_ID:
-                raise self.IdContainsInvalidCharacters  # Yeah, no.
-            elif c not in ASCII_ALLOWED_IN_PARTICIPANT_ID:
+                raise self.UsernameTooLong  # Request Entity Too Large (more or less)
+            elif ord(c) < 128 and c not in ASCII_ALLOWED_IN_USERNAME:
+                raise self.UsernameContainsInvalidCharacters  # Yeah, no.
+            elif c not in ASCII_ALLOWED_IN_USERNAME:
 
                 # XXX Burned by an Aspen bug. :`-(
                 # https://github.com/gittip/aspen/issues/102
 
-                raise self.IdContainsInvalidCharacters
+                raise self.UsernameContainsInvalidCharacters
 
-        if desired_id in gittip.RESTRICTED_IDS:
-            raise self.IdIsRestricted
+        if desired_username in gittip.RESTRICTED_USERNAMES:
+            raise self.UsernameIsRestricted
 
-        if desired_id != self.id:
+        if desired_username != self.username:
             try:
-                self.id = desired_id
+                self.username = desired_username
                 db.session.add(self)
                 db.session.commit()
-                # Will raise sqlalchemy.exc.IntegrityError if the desired_id is
-                # taken.
+                # Will raise sqlalchemy.exc.IntegrityError if the
+                # desired_username is taken.
             except IntegrityError:
                 db.session.rollback()
-                raise self.IdAlreadyTaken
+                raise self.UsernameAlreadyTaken
 
     def get_accounts_elsewhere(self):
         github_account = twitter_account = bitbucket_account = None

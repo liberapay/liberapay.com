@@ -100,11 +100,11 @@ else:                       # lock or unlock
         # Associate the Twitter screen_name with a randomly-named, unclaimed
         # Gittip participant.
 
-        assert account.participant_id != screen_name, screen_name # sanity check
+        assert account.participant != screen_name, screen_name # sanity check
         account.set_is_locked(action == 'lock')
 
 if then == u'':
-    then = u'/%s/' % account.participant_id
+    then = u'/%s/' % account.participant
 if not then.startswith(u'/'):
     # Interpret it as a Twitter screen_name.
     then = u'/on/twitter/%s/' % then

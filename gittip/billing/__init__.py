@@ -24,17 +24,17 @@ import stripe
 from aspen.utils import typecheck
 
 
-def get_balanced_account(participant_id, balanced_account_uri):
+def get_balanced_account(username, balanced_account_uri):
     """Find or create a balanced.Account.
     """
-    typecheck( participant_id, unicode
+    typecheck( username, unicode
              , balanced_account_uri, (unicode, None)
               )
 
     # XXX Balanced requires an email address
     # https://github.com/balanced/balanced-api/issues/20
 
-    email_address = '{}@gittip.com'.format(participant_id)
+    email_address = '{}@gittip.com'.format(username)
 
     if balanced_account_uri is None:
         try:
@@ -46,18 +46,18 @@ def get_balanced_account(participant_id, balanced_account_uri):
 
                 UPDATE participants
                    SET balanced_account_uri=%s
-                 WHERE id=%s
+                 WHERE username=%s
 
         """
-        gittip.db.execute(BALANCED_ACCOUNT, (account.uri, participant_id))
-        account.meta['participant_id'] = participant_id
+        gittip.db.execute(BALANCED_ACCOUNT, (account.uri, username))
+        account.meta['username'] = username
         account.save()  # HTTP call under here
     else:
         account = balanced.Account.find(balanced_account_uri)
     return account
 
 
-def associate(thing, participant_id, balanced_account_uri, balanced_thing_uri):
+def associate(thing, username, balanced_account_uri, balanced_thing_uri):
     """Given four unicodes, return a unicode.
 
     This function attempts to associate the credit card or bank account details
@@ -68,7 +68,7 @@ def associate(thing, participant_id, balanced_account_uri, balanced_thing_uri):
     form.
 
     """
-    typecheck( participant_id, unicode
+    typecheck( username, unicode
              , balanced_account_uri, (unicode, None, balanced.Account)
              , balanced_thing_uri, unicode
              , thing, unicode
@@ -77,11 +77,11 @@ def associate(thing, participant_id, balanced_account_uri, balanced_thing_uri):
     if isinstance(balanced_account_uri, balanced.Account):
         balanced_account = balanced_account_uri
     else:
-        balanced_account = get_balanced_account( participant_id
+        balanced_account = get_balanced_account( username
                                                , balanced_account_uri
                                                 )
     invalidate_on_balanced(thing, balanced_account.uri)
-    SQL = "UPDATE participants SET last_%s_result=%%s WHERE id=%%s"
+    SQL = "UPDATE participants SET last_%s_result=%%s WHERE username=%%s"
 
     if thing == "credit card":
         add = balanced_account.add_card
@@ -99,7 +99,7 @@ def associate(thing, participant_id, balanced_account_uri, balanced_thing_uri):
         error = ''
     typecheck(error, unicode)
 
-    gittip.db.execute(SQL, (error, participant_id))
+    gittip.db.execute(SQL, (error, username))
     return error
 
 
@@ -124,9 +124,9 @@ def invalidate_on_balanced(thing, balanced_account_uri):
             _thing.save()
 
 
-def clear(thing, participant_id, balanced_account_uri):
+def clear(thing, username, balanced_account_uri):
     typecheck( thing, unicode
-             , participant_id, unicode
+             , username, unicode
              , balanced_account_uri, unicode
               )
     assert thing in ("credit card", "bank account"), thing
@@ -135,23 +135,23 @@ def clear(thing, participant_id, balanced_account_uri):
 
         UPDATE participants
            SET last_%s_result=NULL
-         WHERE id=%%s
+         WHERE username=%%s
 
     """ % ("bill" if thing == "credit card" else "ach")
-    gittip.db.execute(CLEAR, (participant_id,))
+    gittip.db.execute(CLEAR, (username,))
 
 
-def store_error(thing, participant_id, msg):
-    typecheck(thing, unicode, participant_id, unicode, msg, unicode)
+def store_error(thing, username, msg):
+    typecheck(thing, unicode, username, unicode, msg, unicode)
     assert thing in ("credit card", "bank account"), thing
     ERROR = """\
 
         UPDATE participants
            SET last_%s_result=%%s
-         WHERE id=%%s
+         WHERE username=%%s
 
     """ % ("bill" if thing == "credit card" else "ach")
-    gittip.db.execute(ERROR, (msg, participant_id))
+    gittip.db.execute(ERROR, (msg, username))
 
 
 # Card

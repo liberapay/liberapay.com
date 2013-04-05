@@ -41,12 +41,12 @@ elif not is_team:
     locked = account.is_locked
     lock_action = "unlock" if account.is_locked else "lock"
     if account.is_claimed:
-        request.redirect('/%s/' % account.participant_id)
+        request.redirect('/%s/' % account.participant)
 
-    participant = Participant.query.get(account.participant_id)
+    participant = Participant.query.get(account.participant)
 
     if not user.ANON:
-        my_tip = user.get_tip_to(participant.id)
+        my_tip = user.get_tip_to(participant.username)
 
     tip_or_pledge = "pledge"
     number = participant.get_number_of_backers()
@@ -79,7 +79,7 @@ elif is_team:
         SELECT elsewhere.user_info -> 'username' AS username
           FROM elsewhere
           JOIN participants p
-            ON p.id = elsewhere.participant_id
+            ON p.username = elsewhere.participant
          WHERE elsewhere.platform = 'bitbucket'
            AND elsewhere.user_info -> 'username' = any(%s)
            AND p.claimed_time IS NOT NULL
@@ -149,10 +149,10 @@ title = username
 
     {% elif usertype == "user" %}
 
-        {% set my_tip = user.get_tip_to(participant.id) %}
+        {% set my_tip = user.get_tip_to(participant.username) %}
         <h2>Your Weekly Pledge</h2>
         {% for amount in AMOUNTS %}
-        <button amount="{{ amount }}" tippee="{{ participant.id }}"
+        <button amount="{{ amount }}" tippee="{{ participant.username }}"
             class="tip{{ ' selected' if amount == my_tip else '' }}">${{ amount }}</button>
         {% end %}
         {% if my_tip not in AMOUNTS %}

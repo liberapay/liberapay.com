@@ -5,14 +5,14 @@ from gittip import AMOUNTS
 
 participant = get_participant(request, restrict=True)
 hero = "Widgets"
-title = "%s - %s" % (participant.id, hero)
+title = "%s - %s" % (participant.username, hero)
 locked = False
 
 # ========================================================================== ^L
 {% extends "templates/profile.html" %}
 {% block page %}
 <style>
-    /* Copied and pasted from %participant_id/widget.html */
+    /* Copied and pasted from %username/widget.html */
     .button-examples BUTTON.old-widget-style {
         font: normal 12pt/12pt "Lato", sans-serif;
         text-decoration: none;
@@ -129,7 +129,7 @@ locked = False
     <p>Use this code to embed a Gittip button on your website:</p>
 
     <pre>&lt;iframe style="border: 0; margin: 0; padding: 0;"
-        src="https://www.gittip.com/{{ participant.id }}/widget.html"
+        src="https://www.gittip.com/{{ participant.username }}/widget.html"
         width="48pt" height="22pt"&gt;&lt;/iframe&gt;</pre>
 
     <p>The button opens your profile on Gittip in a new tab or window.
@@ -161,13 +161,13 @@ locked = False
 
     <p>Use this code to add a Gittip &ldquo;receiving&rdquo; widget on your website:</p>
 
-<pre>&lt;script data-gittip-username="{{ participant.id }}"
+<pre>&lt;script data-gittip-username="{{ participant.username }}"
 src="https://www.gittip.com/assets/widgets/0002.js"&gt;
 &lt;/script&gt;</pre>
 
     <p>Here's what it looks like:</p>
 
-    <script data-gittip-username="{{ participant.id }}" src="/assets/widgets/0002.js"></script>
+    <script data-gittip-username="{{ participant.username }}" src="/assets/widgets/0002.js"></script>
 
 </div>
 {% end %}

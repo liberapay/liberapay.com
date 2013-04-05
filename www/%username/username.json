@@ -6,13 +6,13 @@ from gittip.models import Participant
 if user.ANON:
     raise Response(404)
 
-new_participant_id = request.body['participant_id']
+new_username = request.body['username']
 
 try:
-    old_participant_id = user.id
-    user.change_id(new_participant_id)
-    response.body = {"participant_id": new_participant_id}
-    log_dammit("user with participant_id %s has become participant_id %s" % (old_participant_id, new_participant_id))
+    old_username = user.username
+    user.change_username(new_username)
+    response.body = {"username": new_username}
+    log_dammit("user with username %s has become username %s" % (old_username, new_username))
 except (Participant.IdContainsInvalidCharacters, Participant.IdIsRestricted):
     raise Response(400)
 except Participant.IdAlreadyTaken:

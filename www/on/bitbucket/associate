@@ -105,11 +105,11 @@ else:                       # lock or unlock
         # Associate the Bitbucket username with a randomly-named, unclaimed
         # Gittip participant.
 
-        assert account.participant_id != username, username # sanity check
+        assert account.participant != username, username # sanity check
         account.set_is_locked(action == 'lock')
 
 if then == u'':
-    then = u'/%s/' % account.participant_id
+    then = u'/%s/' % account.participant
 if not then.startswith(u'/'):
     # Interpret it as a Bitbucket username.
     then = u'/on/bitbucket/%s/' % then

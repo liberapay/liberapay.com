@@ -7,7 +7,7 @@
         </td>
         <td class="account-details">
             {% if twitter_account is None %}
-                {% if not user.ANON and user.id == participant.id %}
+                {% if not user.ANON and user == participant %}
                     Connect a <a href="{{ twitter.oauth_url(website, u'connect') }}">Twitter account</a>.
                 {% else %}
                     No Twitter account connected.
@@ -31,7 +31,7 @@
         </td>
         <td class="account-details">
             {% if github_account is None %}
-                {% if not user.ANON and user.id == participant.id %}
+                {% if not user.ANON and user == participant %}
                     Connect a <a href="{{ github.oauth_url(website, u'connect') }}">GitHub account</a>.
                 {% else %}
                     No GitHub account connected.
@@ -54,7 +54,7 @@
         </td>
         <td class="account-details">
             {% if bitbucket_account is None %}
-                {% if not user.ANON and user.id == participant.id %}
+                {% if not user.ANON and user == participant %}
                     Connect a <a href="{{ bitbucket.oauth_url(website, u'connect') }}">Bitbucket account</a>.
                 {% else %}
                     No Bitbucket account connected.
@@ -77,7 +77,7 @@
             <img src="/assets/balanced-avatar.png" />
         </td>
         <td class="account-details">
-            {% if user.id == participant.id %}
+            {% if user == participant %}
 
             <a href="/credit-card.html">Credit card</a>:
             <!--

@@ -9,36 +9,36 @@ $(document).ready(function()
     ////////////////////////////////////////////////////////////
 
 
-    // Wire up participant_id knob.
-    // ============================
+    // Wire up username knob.
+    // ======================
 
-    $('FORM.participant_id BUTTON.edit').click(function(e)
+    $('FORM.username BUTTON.edit').click(function(e)
     {
         e.preventDefault();
         e.stopPropagation();
-        $('.participant_id BUTTON.edit').hide();
-        $('.participant_id BUTTON.save').show();
-        $('.participant_id BUTTON.cancel').show();
-        $('.participant_id SPAN.view').hide();
-        $('.participant_id INPUT').show().focus();
-        $('.participant_id .warning').show();
+        $('.username BUTTON.edit').hide();
+        $('.username BUTTON.save').show();
+        $('.username BUTTON.cancel').show();
+        $('.username SPAN.view').hide();
+        $('.username INPUT').show().focus();
+        $('.username .warning').show();
         return false;
     });
-    $('FORM.participant_id').submit(function(e)
+    $('FORM.username').submit(function(e)
     {
         e.preventDefault();
 
-        $('#save-participant_id').text('Saving ...');
+        $('#save-username').text('Saving ...');
 
-        var participant_id = $('INPUT[name=participant_id]').val();
+        var username = $('INPUT[name=username]').val();
 
         function success(d)
         {
-            window.location.href = "/" + encodeURIComponent(d.participant_id) + "/";
+            window.location.href = "/" + encodeURIComponent(d.username) + "/";
         }
         function error(e)
         {
-            $('#save-participant_id').text('Save');
+            $('#save-username').text('Save');
             if (e.status === 409)
             {
                 alert("Sorry, that username is already taken.");
@@ -56,32 +56,32 @@ $(document).ready(function()
             }
         }
         jQuery.ajax(
-            { url: "participant_id.json"
+            { url: "username.json"
             , type: "POST"
             , success: success
             , dataType: 'json'
-            , data: { participant_id: participant_id }
+            , data: { username: username }
             , success: success
             , error: error
              }
         );
         return false;
     });
-    $('.participant_id BUTTON.cancel').click(function(e)
+    $('.username BUTTON.cancel').click(function(e)
     {
         e.preventDefault();
         e.stopPropagation();
-        finish_editing_participant_id();
+        finish_editing_username();
         return false;
     });
-    function finish_editing_participant_id()
+    function finish_editing_username()
     {
-        $('.participant_id BUTTON.edit').show();
-        $('.participant_id BUTTON.save').hide();
-        $('.participant_id BUTTON.cancel').hide();
-        $('.participant_id SPAN.view').show();
-        $('.participant_id INPUT').hide();
-        $('.participant_id .warning').hide();
+        $('.username BUTTON.edit').show();
+        $('.username BUTTON.save').hide();
+        $('.username BUTTON.cancel').hide();
+        $('.username SPAN.view').show();
+        $('.username INPUT').hide();
+        $('.username .warning').hide();
     }
 
 

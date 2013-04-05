@@ -31,8 +31,8 @@ class User(Participant):
         return user
 
     @classmethod
-    def from_id(cls, user_id):
-        user = User.query.filter_by(id=user_id).first()
+    def from_username(cls, username):
+        user = User.query.filter_by(username=username).first()
         if user is None or user.is_suspicious:
             user = User()
         else:
@@ -51,11 +51,11 @@ class User(Participant):
 
     @property
     def ADMIN(self):
-        return self.id is not None and self.is_admin
+        return self.username is not None and self.is_admin
 
     @property
     def ANON(self):
-        return self.id is None
+        return self.username is None
 
     def __unicode__(self):
-        return '<User: %s>' % getattr(self, 'id', 'Anonymous')
+        return '<User: %s>' % getattr(self, 'username', 'Anonymous')

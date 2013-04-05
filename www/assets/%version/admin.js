@@ -5,9 +5,9 @@ $(document).ready(function()
 
     $('label.is-suspicious-knob').click(function()
     {
-        var participant_id = $(this).attr('data-participant-id');
+        var username = $(this).attr('data-username');
         jQuery.ajax(
-            { url: '/' + participant_id + '/toggle-is-suspicious.json'
+            { url: '/' + username + '/toggle-is-suspicious.json'
             , type: 'POST'
             , dataType: 'json'
             , success: function(data)

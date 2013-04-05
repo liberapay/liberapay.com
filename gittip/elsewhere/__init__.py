@@ -4,19 +4,19 @@ from psycopg2 import IntegrityError
 import gittip
 from gittip.authentication import User
 from gittip.models.participant import Participant
-from gittip.participant import reserve_a_random_participant_id
+from gittip.participant import reserve_a_random_username
 
 
 ACTIONS = [u'opt-in', u'connect', u'lock', u'unlock']
 
 
 def _resolve(platform, username_key, username):
-    """Given three unicodes, return a participant_id.
+    """Given three unicodes, return a username.
     """
     typecheck(platform, unicode, username_key, unicode, username, unicode)
     rec = gittip.db.fetchone("""
 
-        SELECT participant_id
+        SELECT participant
           FROM elsewhere
          WHERE platform=%s
            AND user_info->%s = %s
@@ -28,7 +28,7 @@ def _resolve(platform, username_key, username):
         raise Exception( "User %s on %s isn't known to us."
                        % (username, platform)
                         )
-    return rec['participant_id']
+    return rec['participant']
 
 
 class AccountElsewhere(object):
@@ -44,14 +44,14 @@ class AccountElsewhere(object):
         if user_info is not None:
             a,b,c,d  = self.upsert(user_info)
 
-            self.participant_id = a
+            self.participant = a
             self.is_claimed = b
             self.is_locked = c
             self.balance = d
 
 
     def get_participant(self):
-        return Participant.query.get(id=self.participant_id)
+        return Participant.query.get(username=self.participant)
 
 
     def set_is_locked(self, is_locked):
@@ -64,17 +64,17 @@ class AccountElsewhere(object):
         """, (is_locked, self.platform, self.user_id))
 
 
-    def opt_in(self, desired_participant_id):
-        """Given a desired participant_id, return a User object.
+    def opt_in(self, desired_username):
+        """Given a desired username, return a User object.
         """
         self.set_is_locked(False)
-        user = User.from_id(self.participant_id)  # give them a session
+        user = User.from_username(self.username)  # give them a session
         if not self.is_claimed:
             user.set_as_claimed()
             try:
-                user.change_id(desired_participant_id)
-                user.id = self.participant_id = desired_participant_id
-            except user.ProblemChangingId:
+                user.change_id(desired_username)
+                user.username = self.username = desired_username
+            except user.ProblemChangingUsername:
                 pass
         return user
 
@@ -87,14 +87,14 @@ class AccountElsewhere(object):
         given platform.  Username is the user's login/username on the given
         platform. It is only used here for logging. Specifically, we don't
         reserve their username for them on Gittip if they're new here. We give
-        them a random participant_id here, and they'll have a chance to change
-        it if/when they opt in. User_id and username may or may not be the
-        same. User_info is a dictionary of profile info per the named platform.
-        All platform dicts must have an id key that corresponds to the primary
-        key in the underlying table in our own db.
+        them a random username here, and they'll have a chance to change it
+        if/when they opt in. User_id and username may or may not be the same.
+        User_info is a dictionary of profile info per the named platform.  All
+        platform dicts must have an id key that corresponds to the primary key
+        in the underlying table in our own db.
 
-        The return value is a tuple: (participant_id [unicode], is_claimed
-        [boolean], is_locked [boolean], balance [Decimal]).
+        The return value is a tuple: (username [unicode], is_claimed [boolean],
+        is_locked [boolean], balance [Decimal]).
 
         """
         typecheck(user_info, dict)
@@ -107,11 +107,11 @@ class AccountElsewhere(object):
 
         try:
             with gittip.db.get_transaction() as txn:
-                _participant_id = reserve_a_random_participant_id(txn)
+                _username = reserve_a_random_username(txn)
                 txn.execute( "INSERT INTO elsewhere "
-                             "(platform, user_id, participant_id) "
+                             "(platform, user_id, username) "
                              "VALUES (%s, %s, %s)"
-                           , (self.platform, self.user_id, _participant_id)
+                           , (self.platform, self.user_id, _username)
                             )
         except IntegrityError:
             pass
@@ -132,14 +132,14 @@ class AccountElsewhere(object):
             user_info[k] = unicode(v)
 
 
-        participant_id = gittip.db.fetchone("""
+        username = gittip.db.fetchone("""
 
             UPDATE elsewhere
                SET user_info=%s
              WHERE platform=%s AND user_id=%s
-         RETURNING participant_id
+         RETURNING participant
 
-        """, (user_info, self.platform, self.user_id))['participant_id']
+        """, (user_info, self.platform, self.user_id))['participant']
 
 
         # Get a little more info to return.
@@ -150,16 +150,16 @@ class AccountElsewhere(object):
             SELECT claimed_time, balance, is_locked
               FROM participants
               JOIN elsewhere
-                ON participants.id=participant_id
+                ON participants.username=participant
              WHERE platform=%s
-               AND participants.id=%s
+               AND participants.username=%s
 
-        """, (self.platform, participant_id))
+        """, (self.platform, username))
 
         assert rec is not None  # sanity check
 
 
-        return ( participant_id
+        return ( username
                , rec['claimed_time'] is not None
                , rec['is_locked']
                , rec['balance']

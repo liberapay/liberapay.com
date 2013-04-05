@@ -11,6 +11,6 @@ class Exchange(db.Model):
                        default="now()")
     amount = Column(Numeric(precision=35, scale=2), nullable=False)
     fee = Column(Numeric(precision=35, scale=2), nullable=False)
-    participant_id = Column(Text, ForeignKey("participants.id",
-                            onupdate="CASCADE", ondelete="RESTRICT"),
-                            nullable=False)
+    participant = Column(Text, ForeignKey("participants.username",
+                         onupdate="CASCADE", ondelete="RESTRICT"),
+                         nullable=False)

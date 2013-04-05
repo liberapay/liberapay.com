@@ -47,7 +47,7 @@ def populate_db_with_dummy_data(db):
     from gittip.participant import Participant
     for user_id, login in GITHUB_USERS:
         account = GitHubAccount(user_id, {"id": user_id, "login": login})
-        Participant(account.participant_id).change_id(login)
+        Participant(account.participant).change_id(login)
 
 
 class Harness(unittest.TestCase):
@@ -65,8 +65,8 @@ class Harness(unittest.TestCase):
     def tearDown(self):
         self.db.empty_tables()
 
-    def make_participant(self, participant_id, **kw):
-        participant = Participant(id=participant_id, **kw)
+    def make_participant(self, username, **kw):
+        participant = Participant(username=username, **kw)
         self.session.add(participant)
         self.session.commit()
         return participant
@@ -192,20 +192,20 @@ def setup_tips(*recs):
 
     participants = []
     elsewhere = []
-    for participant_id, crap in _participants.items():
+    for username, crap in _participants.items():
         (good_cc, is_suspicious, claimed, platform, user_id) = crap
         username_key = "login" if platform == 'github' else "screen_name"
         elsewhere.append({ "platform": platform
                          , "user_id": user_id
-                         , "participant_id": participant_id
+                         , "participant": username
                          , "user_info": { "id": user_id
-                                        , username_key: participant_id
+                                        , username_key: username
                                          }
                           })
-        rec = {"id": participant_id}
+        rec = {"username": username}
         if good_cc is not None:
             rec["last_bill_result"] = "" if good_cc else "Failure!"
-            rec["balanced_account_uri"] = "/v1/blah/blah/" + participant_id
+            rec["balanced_account_uri"] = "/v1/blah/blah/" + username
         rec["is_suspicious"] = is_suspicious
         if claimed:
             rec["claimed_time"] = then
@@ -219,10 +219,10 @@ def setup_tips(*recs):
 def tip_graph(*a, **kw):
     context = load(*setup_tips(*a, **kw))
 
-    def resolve_elsewhere(participant_id):
+    def resolve_elsewhere(username):
         recs = context.db.fetchall( "SELECT platform, user_id FROM elsewhere "
-                                    "WHERE participant_id=%s"
-                                  , (participant_id,)
+                                    "WHERE participant=%s"
+                                  , (username,)
                                    )
         if recs is not None:
             recs = [(rec['platform'], rec['user_id']) for rec in recs]
@@ -246,7 +246,7 @@ def serve_request(path, user=None):
     request = StubRequest(path)
     request.website = test_website
     if user is not None:
-        user = User.from_id(user)
+        user = User.from_username(user)
         # Note that Cookie needs a bytestring.
         request.headers.cookie[str('session')] = user.session_token
     response = test_website.handle_safely(request)

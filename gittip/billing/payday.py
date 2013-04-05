@@ -385,7 +385,7 @@ class Payday(object):
 
            UPDATE participants
               SET balance=(balance - %s)
-            WHERE id=%s
+            WHERE username=%s
               AND pending IS NOT NULL
         RETURNING balance
 
@@ -411,7 +411,7 @@ class Payday(object):
 
            UPDATE participants
               SET pending=(pending + %s)
-            WHERE id=%s
+            WHERE username=%s
               AND pending IS NOT NULL
         RETURNING pending
 
@@ -434,11 +434,11 @@ class Payday(object):
         """
         typecheck(participant, RealDictRow, amount, Decimal)
 
-        participant_id = participant['id']
+        username = participant['username']
         balanced_account_uri = participant['balanced_account_uri']
         stripe_customer_id = participant['stripe_customer_id']
 
-        typecheck( participant_id, unicode
+        typecheck( username, unicode
                  , balanced_account_uri, (unicode, None)
                  , stripe_customer_id, (unicode, None)
                   )
@@ -459,14 +459,14 @@ class Payday(object):
         # =========================
 
         if balanced_account_uri is not None:
-            things = self.charge_on_balanced( participant_id
+            things = self.charge_on_balanced( username
                                             , balanced_account_uri
                                             , amount
                                              )
             charge_amount, fee, error = things
         else:
             assert stripe_customer_id is not None
-            things = self.charge_on_stripe( participant_id
+            things = self.charge_on_stripe( username
                                           , stripe_customer_id
                                           , amount
                                            )
@@ -479,7 +479,7 @@ class Payday(object):
                           , charge_amount
                           , fee
                           , error
-                          , participant_id
+                          , username
                            )
 
 
@@ -555,20 +555,20 @@ class Payday(object):
         self.record_credit(credit_amount, fee, error, participant['id'])
 
 
-    def charge_on_balanced(self, participant_id, balanced_account_uri, amount):
+    def charge_on_balanced(self, username, balanced_account_uri, amount):
         """We have a purported balanced_account_uri. Try to use it.
         """
-        typecheck( participant_id, unicode
+        typecheck( username, unicode
                  , balanced_account_uri, unicode
                  , amount, Decimal
                   )
 
         cents, msg, charge_amount, fee = self._prep_hit(amount)
-        msg = msg % (participant_id, "Balanced")
+        msg = msg % (username, "Balanced")
 
         try:
             customer = balanced.Account.find(balanced_account_uri)
-            customer.debit(cents, description=participant_id)
+            customer.debit(cents, description=username)
             log(msg + "succeeded.")
             error = ""
         except balanced.exc.HTTPError as err:
@@ -578,21 +578,21 @@ class Payday(object):
         return charge_amount, fee, error
 
 
-    def charge_on_stripe(self, participant_id, stripe_customer_id, amount):
+    def charge_on_stripe(self, username, stripe_customer_id, amount):
         """We have a purported stripe_customer_id. Try to use it.
         """
-        typecheck( participant_id, unicode
+        typecheck( username, unicode
                  , stripe_customer_id, unicode
                  , amount, Decimal
                   )
 
         cents, msg, charge_amount, fee = self._prep_hit(amount)
-        msg = msg % (participant_id, "Stripe")
+        msg = msg % (username, "Stripe")
 
         try:
             stripe.Charge.create( customer=stripe_customer_id
                                 , amount=cents
-                                , description=participant_id
+                                , description=username
                                 , currency="USD"
                                  )
             log(msg + "succeeded.")
@@ -636,7 +636,7 @@ class Payday(object):
     # Record-keeping.
     # ===============
 
-    def record_charge(self, amount, charge_amount, fee, error, participant_id):
+    def record_charge(self, amount, charge_amount, fee, error, username):
         """Given a Bunch of Stuff, return None.
 
         This function takes the result of an API call to a payment processor
@@ -670,11 +670,11 @@ class Payday(object):
                 EXCHANGE = """\
 
                         INSERT INTO exchanges
-                               (amount, fee, participant_id)
+                               (amount, fee, username)
                         VALUES (%s, %s, %s)
 
                 """
-                cursor.execute(EXCHANGE, (amount, fee, participant_id))
+                cursor.execute(EXCHANGE, (amount, fee, username))
                 self.mark_charge_success(cursor, charge_amount, fee)
 
 
@@ -687,16 +687,16 @@ class Payday(object):
             UPDATE participants
                SET last_bill_result=%s
                  , balance=(balance + %s)
-             WHERE id=%s
+             WHERE username=%s
 
             """
-            cursor.execute(RESULT, (last_bill_result, amount, participant_id))
+            cursor.execute(RESULT, (last_bill_result, amount, username))
 
 
             connection.commit()
 
 
-    def record_credit(self, amount, fee, error, participant_id):
+    def record_credit(self, amount, fee, error, username):
         """Given a Bunch of Stuff, return None.
 
         Records in the exchanges table for credits have these characteristics:
@@ -724,11 +724,11 @@ class Payday(object):
                 EXCHANGE = """\
 
                         INSERT INTO exchanges
-                               (amount, fee, participant_id)
+                               (amount, fee, username)
                         VALUES (%s, %s, %s)
 
                 """
-                cursor.execute(EXCHANGE, (credit, fee, participant_id))
+                cursor.execute(EXCHANGE, (credit, fee, username))
                 self.mark_ach_success(cursor, amount, fee)
 
 
@@ -740,12 +740,12 @@ class Payday(object):
             UPDATE participants
                SET last_ach_result=%s
                  , balance=(balance + %s)
-             WHERE id=%s
+             WHERE username=%s
 
             """
             cursor.execute(RESULT, ( last_ach_result
                                    , credit - fee     # -10.00 - 0.30 = -10.30
-                                   , participant_id
+                                   , username
                                     ))
 
             connection.commit()

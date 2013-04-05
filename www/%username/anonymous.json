@@ -9,15 +9,15 @@ if POST:
 
         UPDATE participants
            SET anonymous=not anonymous
-         WHERE id=%s
+         WHERE username=%s
      RETURNING anonymous
 
-    """, (user.id,))
+    """, (user.username,))
 else:
     rec = db.fetchone("""
 
-        SELECT anonymous FROM participants WHERE id=%s
+        SELECT anonymous FROM participants WHERE username=%s
 
-    """, (user.id,))
+    """, (user.username,))
 assert rec is not None
 response.body = {"anonymous": rec['anonymous']}

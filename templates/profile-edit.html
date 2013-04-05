@@ -1,10 +1,10 @@
 <div class="col1">
 
     <!-- Name and Anonymous -->
-    <form class="participant_id">
+    <form class="username">
         <h2>You are
-            <span class="view">{{ escape(user.id) }}</span>
-            <input tabindex="2" name="participant_id" value="{{ escape(user.id) }}"/>
+            <span class="view">{{ escape(user.username) }}</span>
+            <input tabindex="2" name="username" value="{{ escape(user.username) }}"/>
             <button tabindex="1" class="edit">Edit</button>
             <button tabindex="3" class="save" type="submit">Save</button>
             <button tabindex="4" class="cancel" type="cancel">Cancel</button>

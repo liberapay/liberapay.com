@@ -38,8 +38,8 @@ def billing():
     balanced.configure(os.environ['BALANCED_API_SECRET'])
 
 
-def id_restrictions(website):
-    gittip.RESTRICTED_IDS = os.listdir(website.www_root)
+def username_restrictions(website):
+    gittip.RESTRICTED_USERNAMES = os.listdir(website.www_root)
 
 
 def sentry(website):

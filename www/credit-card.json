@@ -19,9 +19,9 @@ request.allow('POST')
 out = {}
 
 if body.get('action') == 'delete':
-    billing.clear(u"credit card", user.id, user.balanced_account_uri)
+    billing.clear(u"credit card", user.username, user.balanced_account_uri)
 elif body.get('action') == 'store-error':
-    billing.store_error(u"credit card", user.id, body['msg'])
+    billing.store_error(u"credit card", user.username, body['msg'])
 else:
 
     # Associate the single-use token representing the credit card details (we
@@ -32,7 +32,7 @@ else:
     card_uri = body['card_uri']
 
     error = billing.associate( u"credit card"
-                             , user.id
+                             , user.username
                              , user.balanced_account_uri
                              , card_uri
                               )

@@ -5,14 +5,14 @@
 <table class="on-profile{% if participant.is_suspicious %} is-suspicious{% end %}">
     <tr>
         <td class="picture">
-            <a href="/{{ participant.id }}/"><img src="{{ participant.get_img_src(128) }}" /></a>
+            <a href="/{{ participant.username }}/"><img src="{{ participant.get_img_src(128) }}" /></a>
         </td>
         <td class="giving-receiving">
         {% set g = giving = participant.get_dollars_giving() %}
         {% set r = receiving = participant.get_dollars_receiving() %}
 
         {% if g > r and not participant.anonymous %}
-            <h2 class="pad-sign">{{ participant.id }} gives</h2>
+            <h2 class="pad-sign">{{ participant.username }} gives</h2>
             <div class="number">
                 {% if user == participant %}
                 $<span class="total-giving">{{ giving }}</span>
@@ -24,7 +24,7 @@
                 week{% if r > 0 %}, and receives ${{ receiving }}{% end %}
             </div>
         {% elif r > 0 %}
-            <h2 class="pad-sign">{{ participant.id }} receives</h2>
+            <h2 class="pad-sign">{{ participant.username }} receives</h2>
             <div class="number">${{ receiving }}</div>
             <div class="unit pad-sign">per 
                 week{% if g > 0 %}, and gives 
@@ -39,7 +39,7 @@
             </div>
         {% else %}
             {% set age = participant.get_age_in_seconds() %}
-            <h2>{{ participant.id }}
+            <h2>{{ participant.username }}
                 {% if g > 0 %}
                 gives anonymously
                 {% elif age < 60 %}
@@ -55,7 +55,7 @@
     </tr>
 </table>
 
-{% if participant.id != user.id %}
+{% if participant != user %}
 <div class="nav level-1">
     {% if locked %}
 
@@ -74,14 +74,14 @@
             <a class="flash-me" href="{{ twitter.oauth_url(website, u'opt-in', path.decoded) }}">Twitter</a>, 
             <a href="{{ github.oauth_url(website, u'opt-in', path.decoded) }}">GitHub</a>, or
             <a href="{{ bitbucket.oauth_url(website, u'opt-in', path.decoded) }}">Bitbucket</a>
-            to give to <b>{{ participant.id }}</b>.</div>
+            to give to <b>{{ participant.username }}</b>.</div>
 
     {% else %}
 
-        {% set my_tip = user.get_tip_to(participant.id) %}
+        {% set my_tip = user.get_tip_to(participant.username) %}
         <h2>Your Weekly Gift</h2>
         {% for amount in AMOUNTS %}
-        <button amount="{{ amount }}" tippee="{{ participant.id }}"
+        <button amount="{{ amount }}" tippee="{{ participant.username }}"
             class="tip{{ ' selected' if amount == my_tip else '' }}">${{ amount }}</button>
         {% end %}
         {% if my_tip not in AMOUNTS %}
@@ -110,7 +110,7 @@
 
 {% block nav %}{% end %}
 
-{% if participant.id == 'aaronsw' %}
+{% if participant.username == 'aaronsw' %}
 <div class="nav level-3">
     <a href="http://news.ycombinator.com/item?id=5046845">RIP :`(</a>
 </div>
@@ -127,7 +127,7 @@ first time three days before he committed suicide:
 {% end %}
 
 {% if user.ADMIN %}
-<label class="is-suspicious-knob" data-participant-id="{{ participant.id }}">
+<label class="is-suspicious-knob" data-username="{{ participant.username }}">
     Suspicious
     <input type="checkbox"
         {% if participant.is_suspicious %}checked="true"{% end %} />
