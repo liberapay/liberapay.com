@@ -108,7 +108,7 @@ class Payday(object):
 
         """
         for deets in self.get_participants(ts_start):
-            participant = Participant(deets['id'])
+            participant = Participant(deets['username'])
             tips, total = participant.get_tips_and_total( for_payday=for_payday
                                                         , db=self.db
                                                          )
@@ -200,7 +200,7 @@ class Payday(object):
         """Given a timestamp, return a list of participants dicts.
         """
         PARTICIPANTS = """\
-            SELECT id
+            SELECT username
                  , balance
                  , balanced_account_uri
                  , stripe_customer_id
@@ -319,7 +319,7 @@ class Payday(object):
 
         """
         msg = "$%s from %s to %s."
-        msg %= (tip['amount'], participant['id'], tip['tippee'])
+        msg %= (tip['amount'], participant['username'], tip['tippee'])
 
         if tip['amount'] == 0:
 
@@ -340,7 +340,8 @@ class Payday(object):
             log("SKIPPED: %s" % msg)
             return 0
 
-        if not self.transfer(participant['id'], tip['tippee'], tip['amount']):
+        if not self.transfer(participant['username'], tip['tippee'], \
+                                                                tip['amount']):
 
             # The transfer failed due to a lack of funds for the participant.
             # Don't try any further transfers.
@@ -507,7 +508,7 @@ class Payday(object):
                 also_log = " ($%s balance - $%s in obligations)"
                 also_log %= (balance, total)
             log("Minimum payout is $%s. %s is only due $%s%s."
-               % (MINIMUM_CREDIT, participant['id'], amount, also_log))
+               % (MINIMUM_CREDIT, participant['username'], amount, also_log))
             return      # Participant owed too little.
 
         if not is_whitelisted(participant):
@@ -526,7 +527,7 @@ class Payday(object):
         else:
             also_log = "$%s" % amount
         msg = "Crediting %s %d cents (%s - $%s fee = $%s) on Balanced ... "
-        msg %= (participant['id'], cents, also_log, fee, credit_amount)
+        msg %= (participant['username'], cents, also_log, fee, credit_amount)
 
 
         # Try to dance with Balanced.
@@ -536,12 +537,13 @@ class Payday(object):
 
             balanced_account_uri = participant['balanced_account_uri']
             if balanced_account_uri is None:
-                log("%s has no balanced_account_uri." % participant['id'])
+                log("%s has no balanced_account_uri."
+                    % participant['username'])
                 return  # not in Balanced
 
             account = balanced.Account.find(balanced_account_uri)
             if 'merchant' not in account.roles:
-                log("%s is not a merchant." % participant['id'])
+                log("%s is not a merchant." % participant['username'])
                 return  # not a merchant
 
             account.credit(cents)
@@ -552,7 +554,7 @@ class Payday(object):
             error = err.message
             log(msg + "failed: %s" % error)
 
-        self.record_credit(credit_amount, fee, error, participant['id'])
+        self.record_credit(credit_amount, fee, error, participant['username'])
 
 
     def charge_on_balanced(self, username, balanced_account_uri, amount):
@@ -670,7 +672,7 @@ class Payday(object):
                 EXCHANGE = """\
 
                         INSERT INTO exchanges
-                               (amount, fee, username)
+                               (amount, fee, participant)
                         VALUES (%s, %s, %s)
 
                 """

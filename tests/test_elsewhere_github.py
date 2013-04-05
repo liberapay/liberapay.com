@@ -32,4 +32,5 @@ class TestElsewhereGithub(Harness):
             requests.get().status_code = github_status
             requests.get().text = github_content
             response = client.get('/on/github/not-in-the-db/')
+            print response.code, expected_gittip_response, response.body
             assert_equal(response.code, expected_gittip_response)

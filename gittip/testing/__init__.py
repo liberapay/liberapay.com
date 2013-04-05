@@ -47,7 +47,7 @@ def populate_db_with_dummy_data(db):
     from gittip.participant import Participant
     for user_id, login in GITHUB_USERS:
         account = GitHubAccount(user_id, {"id": user_id, "login": login})
-        Participant(account.participant).change_id(login)
+        Participant(account.participant).change_username(login)
 
 
 class Harness(unittest.TestCase):

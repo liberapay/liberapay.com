@@ -188,7 +188,7 @@ class TestBillingAssociate(TestBillingBase):
                          , self.balanced_account_uri
                          , self.card_uri
                           )
-        user = authentication.User.from_id('alice')
+        user = authentication.User.from_username('alice')
         # participant in db should be updated to reflect the error message of
         # last update
         assert user.last_bill_result == error_message
@@ -210,7 +210,7 @@ class TestBillingAssociate(TestBillingBase):
         args, _ = find.return_value.add_bank_account.call_args
         assert args == (self.balanced_destination_uri,)
 
-        user = authentication.User.from_id('alice')
+        user = authentication.User.from_username('alice')
 
         # participant in db should be updated
         assert user.last_ach_result == ''
@@ -226,7 +226,7 @@ class TestBillingAssociate(TestBillingBase):
                          , self.balanced_destination_uri
                           )
 
-        user = authentication.User.from_id('alice')
+        user = authentication.User.from_username('alice')
 
         # participant in db should be updated
         assert user.last_ach_result == 'errrrrror'
@@ -247,7 +247,7 @@ class TestBillingClear(TestBillingBase):
             UPDATE participants
                SET balanced_account_uri='not null'
                  , last_bill_result='ooga booga'
-             WHERE id=%s
+             WHERE username=%s
 
         """
         gittip.db.execute(MURKY, ('alice',))
@@ -258,7 +258,7 @@ class TestBillingClear(TestBillingBase):
         assert valid_card.save.call_count
         assert not invalid_card.save.call_count
 
-        user = authentication.User.from_id('alice')
+        user = authentication.User.from_username('alice')
         assert not user.last_bill_result
         assert user.balanced_account_uri
 
@@ -278,7 +278,7 @@ class TestBillingClear(TestBillingBase):
             UPDATE participants
                SET balanced_account_uri='not null'
                  , last_ach_result='ooga booga'
-             WHERE id=%s
+             WHERE username=%s
 
         """
         gittip.db.execute(MURKY, ('alice',))
@@ -289,7 +289,7 @@ class TestBillingClear(TestBillingBase):
         assert valid_ba.save.call_count
         assert not invalid_ba.save.call_count
 
-        user = authentication.User.from_id('alice')
+        user = authentication.User.from_username('alice')
         assert not user.last_ach_result
         assert user.balanced_account_uri
 
@@ -297,7 +297,8 @@ class TestBillingClear(TestBillingBase):
 class TestBillingStoreError(TestBillingBase):
     def test_store_error_stores_bill_error(self):
         billing.store_error(u"credit card", "alice", "cheese is yummy")
-        rec = gittip.db.fetchone("select * from participants where id='alice'")
+        rec = gittip.db.fetchone("select * from participants where "
+                                 "username='alice'")
         expected = "cheese is yummy"
         actual = rec['last_bill_result']
         assert actual == expected, actual
@@ -306,5 +307,5 @@ class TestBillingStoreError(TestBillingBase):
         for message in ['cheese is yummy', 'cheese smells like my vibrams']:
             billing.store_error(u"bank account", 'alice', message)
             rec = gittip.db.fetchone("select * from participants "
-                                     "where id='alice'")
+                                     "where username='alice'")
             assert rec['last_ach_result'] == message

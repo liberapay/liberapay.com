@@ -9,10 +9,10 @@ from aspen.utils import typecheck
 from psycopg2 import IntegrityError
 
 
-ASCII_ALLOWED_IN_PARTICIPANT_ID = set("0123456789"
-                                      "abcdefghijklmnopqrstuvwxyz"
-                                      "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                                      ".,-_;:@ ")
+ASCII_ALLOWED_IN_USERNAME = set("0123456789"
+                                "abcdefghijklmnopqrstuvwxyz"
+                                "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                                ".,-_;:@ ")
 
 
 class NoParticipantId(Exception):
@@ -68,7 +68,7 @@ def reserve_a_random_username(db=None):
 
     for username in gen_random_usernames():
         try:
-            db.execute( "INSERT INTO participants (id) VALUES (%s)"
+            db.execute( "INSERT INTO participants (username) VALUES (%s)"
                       , (username,)
                        )
         except IntegrityError:  # Collision, try again with another value.
@@ -150,7 +150,7 @@ class Participant(object):
 
 
     @require_username
-    def change_id(self, suggested):
+    def change_username(self, suggested):
         """Raise Response or return None.
 
         We want to be pretty loose with usernames. Unicode is allowed--XXX
@@ -161,13 +161,13 @@ class Participant(object):
         for i, c in enumerate(suggested):
             if i == 32:
                 raise Response(413)  # Request Entity Too Large (more or less)
-            elif ord(c) < 128 and c not in ASCII_ALLOWED_IN_PARTICIPANT_ID:
+            elif ord(c) < 128 and c not in ASCII_ALLOWED_IN_USERNAME:
                 raise Response(400)  # Yeah, no.
-            elif c not in ASCII_ALLOWED_IN_PARTICIPANT_ID:
+            elif c not in ASCII_ALLOWED_IN_USERNAME:
                 raise Response(400)  # XXX Burned by an Aspen bug. :`-(
                                      # https://github.com/whit537/aspen/issues/102
 
-        if suggested in gittip.RESTRICTED_IDS:
+        if suggested in gittip.RESTRICTED_USERNAMES:
             raise Response(400)
 
         if suggested != self.username:
@@ -178,7 +178,7 @@ class Participant(object):
                                      (suggested, self.username))
 
             assert rec is not None         # sanity check
-            assert suggested == rec['id']  # sanity check
+            assert suggested == rec['username']  # sanity check
             self.username = suggested
 
 

@@ -9,7 +9,7 @@ from aspen.utils import typecheck
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import func
 from sqlalchemy.orm import relationship
-from sqlalchemy.schema import Column, CheckConstraint, UniqueConstraint
+from sqlalchemy.schema import Column, CheckConstraint, UniqueConstraint, Sequence
 from sqlalchemy.types import Text, TIMESTAMP, Boolean, Numeric, BigInteger
 
 import gittip
@@ -31,7 +31,7 @@ class Participant(db.Model):
                          name="participants_session_token_key"),
     )
 
-    id = Column(BigInteger, nullable=False, unique=True)
+    id = Column(BigInteger, Sequence('participants_id_seq'), nullable=False, unique=True)
     username = Column(Text, nullable=False, primary_key=True)
     statement = Column(Text, default="", nullable=False)
     stripe_customer_id = Column(Text)
@@ -109,7 +109,7 @@ class Participant(db.Model):
     @property
     def valid_tips_receiving(self):
         return self.tips_receiving \
-                   .join(Participant, Tip.tipper == Participant.id) \
+                   .join(Participant, Tip.tipper == Participant.username) \
                    .filter( 'participants.is_suspicious IS NOT true'
                           , Participant.last_bill_result == ''
                            )
@@ -228,7 +228,7 @@ class Participant(db.Model):
         return nbackers
 
     def get_og_title(self):
-        out = self.id
+        out = self.username
         receiving = self.get_dollars_receiving()
         giving = self.get_dollars_giving()
         if (giving > receiving) and not self.anonymous:
@@ -249,21 +249,21 @@ class Participant(db.Model):
 
     # TODO: Move these queries into this class.
 
-    def set_tip_to(self, tippee_id, amount):
-        return OldParticipant(self.id).set_tip_to(tippee_id, amount)
+    def set_tip_to(self, tippee, amount):
+        return OldParticipant(self.username).set_tip_to(tippee, amount)
 
     def get_dollars_giving(self):
-        return OldParticipant(self.id).get_dollars_giving()
+        return OldParticipant(self.username).get_dollars_giving()
 
     def get_tip_distribution(self):
-        return OldParticipant(self.id).get_tip_distribution()
+        return OldParticipant(self.username).get_tip_distribution()
 
     def get_giving_for_profile(self, db=None):
-        return OldParticipant(self.id).get_giving_for_profile(db)
+        return OldParticipant(self.username).get_giving_for_profile(db)
 
     def get_tips_and_total(self, for_payday=False, db=None):
-        return OldParticipant(self.id).get_tips_and_total(for_payday, db)
+        return OldParticipant(self.username).get_tips_and_total(for_payday, db)
 
     def take_over(self, account_elsewhere, have_confirmation=False):
-        OldParticipant(self.id).take_over(account_elsewhere,
-                                            have_confirmation)
+        OldParticipant(self.username).take_over(account_elsewhere,
+                                                have_confirmation)

@@ -68,11 +68,11 @@ class AccountElsewhere(object):
         """Given a desired username, return a User object.
         """
         self.set_is_locked(False)
-        user = User.from_username(self.username)  # give them a session
+        user = User.from_username(self.participant)  # give them a session
         if not self.is_claimed:
             user.set_as_claimed()
             try:
-                user.change_id(desired_username)
+                user.change_username(desired_username)
                 user.username = self.username = desired_username
             except user.ProblemChangingUsername:
                 pass
@@ -109,7 +109,7 @@ class AccountElsewhere(object):
             with gittip.db.get_transaction() as txn:
                 _username = reserve_a_random_username(txn)
                 txn.execute( "INSERT INTO elsewhere "
-                             "(platform, user_id, username) "
+                             "(platform, user_id, participant) "
                              "VALUES (%s, %s, %s)"
                            , (self.platform, self.user_id, _username)
                             )

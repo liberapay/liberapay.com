@@ -199,14 +199,16 @@ class TestBillingCharges(Harness):
         expected_fee = (amount_to_charge - expected_fee.quantize(
             FEE_CHARGE[0], rounding=ROUND_UP)) * -1
         charge_amount, fee, msg = self.payday.charge_on_stripe(
-            self.alice.id, self.STRIPE_CUSTOMER_ID, amount_to_charge)
+            self.alice.username, self.STRIPE_CUSTOMER_ID, amount_to_charge)
 
         assert_equals(charge_amount, amount_to_charge + fee)
         assert_equals(fee, expected_fee)
         self.assertTrue(ba.find.called_with(self.STRIPE_CUSTOMER_ID))
         customer = ba.find.return_value
         self.assertTrue(
-            customer.debit.called_with(int(charge_amount * 100), self.alice.id)
+            customer.debit.called_with( int(charge_amount * 100)
+                                      , self.alice.username
+                                       )
         )
 
     @mock.patch('balanced.Account')
@@ -216,13 +218,15 @@ class TestBillingCharges(Harness):
         expected_fee = (amount_to_charge - expected_fee.quantize(
             FEE_CHARGE[0], rounding=ROUND_UP)) * -1
         charge_amount, fee, msg = self.payday.charge_on_balanced(
-            self.alice.id, self.BALANCED_ACCOUNT_URI, amount_to_charge)
+            self.alice.username, self.BALANCED_ACCOUNT_URI, amount_to_charge)
         self.assertEqual(charge_amount, amount_to_charge + fee)
         self.assertEqual(fee, expected_fee)
         self.assertTrue(ba.find.called_with(self.BALANCED_ACCOUNT_URI))
         customer = ba.find.return_value
         self.assertTrue(
-            customer.debit.called_with(int(charge_amount * 100), self.alice.id)
+            customer.debit.called_with( int(charge_amount * 100)
+                                      , self.alice.username
+                                       )
         )
 
     @mock.patch('balanced.Account')
@@ -231,14 +235,16 @@ class TestBillingCharges(Harness):
         expected_fee = Decimal('0.68')
         expected_amount = Decimal('10.00')
         charge_amount, fee, msg = \
-            self.payday.charge_on_balanced(self.alice.id,
+            self.payday.charge_on_balanced(self.alice.username,
                                            self.BALANCED_ACCOUNT_URI,
                                            amount_to_charge)
         assert_equals(charge_amount, expected_amount)
         assert_equals(fee, expected_fee)
         customer = ba.find.return_value
         self.assertTrue(
-            customer.debit.called_with(int(charge_amount * 100), self.alice.id)
+            customer.debit.called_with( int(charge_amount * 100)
+                                      , self.alice.username
+                                       )
         )
 
     @mock.patch('balanced.Account')
@@ -247,7 +253,7 @@ class TestBillingCharges(Harness):
         error_message = 'Woah, crazy'
         ba.find.side_effect = balanced.exc.HTTPError(error_message)
         charge_amount, fee, msg = self.payday.charge_on_balanced(
-            self.alice.id, self.BALANCED_ACCOUNT_URI, amount_to_charge)
+            self.alice.username, self.BALANCED_ACCOUNT_URI, amount_to_charge)
         assert_equals(msg, error_message)
 
 
@@ -432,7 +438,7 @@ class TestBillingPayday(Harness):
         charge.side_effect = Exception()
         with self.assertRaises(Exception):
             billing.charge_and_or_transfer(ts_start, alice.attrs_dict())
-        self.assertTrue(charge.called_with(alice.id,
+        self.assertTrue(charge.called_with(alice.username,
                                            self.BALANCED_ACCOUNT_URI,
                                            amount))
 
@@ -445,12 +451,15 @@ class TestBillingPayday(Harness):
         participant = alice.attrs_dict()
         amount = Decimal('1.00')
         invalid_amount = Decimal('0.00')
-        tip = {'amount': amount, 'tippee': alice.id, 'claimed_time': utcnow()}
+        tip = { 'amount': amount
+              , 'tippee': alice.username
+              , 'claimed_time': utcnow()
+               }
         ts_start = utcnow()
 
         result = self.payday.tip(participant, tip, ts_start)
         assert_equals(result, 1)
-        result = transfer.called_with(participant['id'], tip['tippee'],
+        result = transfer.called_with(participant['username'], tip['tippee'],
                                       tip['amount'])
         self.assertTrue(result)
 
@@ -582,11 +591,17 @@ class TestBillingTransfer(Harness):
         recipient = self.make_participant('test_transfer_recipient', pending=0,
                                           balance=1)
 
-        result = self.payday.transfer(sender.id, recipient.id, amount)
+        result = self.payday.transfer( sender.username
+                                     , recipient.username
+                                     , amount
+                                      )
         assert_equals(result, True)
 
         # no balance remaining for a second transfer
-        result = self.payday.transfer(sender.id, recipient.id, amount)
+        result = self.payday.transfer( sender.username
+                                     , recipient.username
+                                     , amount
+                                      )
         assert_equals(result, False)
 
     def test_debit_participant(self):
@@ -599,7 +614,7 @@ class TestBillingTransfer(Harness):
         with self.postgres.get_connection() as connection:
             cursor = connection.cursor()
 
-            self.payday.debit_participant(cursor, subject.id, amount)
+            self.payday.debit_participant(cursor, subject.username, amount)
             connection.commit()
 
         self.session.refresh(subject)
@@ -613,7 +628,7 @@ class TestBillingTransfer(Harness):
             cur = conn.cursor()
 
             with self.assertRaises(IntegrityError):
-                self.payday.debit_participant(cur, subject.id, amount)
+                self.payday.debit_participant(cur, subject.username, amount)
             conn.commit()
 
     def test_credit_participant(self):
@@ -625,7 +640,7 @@ class TestBillingTransfer(Harness):
 
         with self.postgres.get_connection() as conn:
             cur = conn.cursor()
-            self.payday.credit_participant(cur, subject.id, amount)
+            self.payday.credit_participant(cur, subject.username, amount)
             conn.commit()
 
         self.session.refresh(subject)
@@ -647,8 +662,11 @@ class TestBillingTransfer(Harness):
 
             # Tip 'jim' twice
             for recipient in ['jim'] + subjects:
-                self.payday.record_transfer(cur, self.tipper.id, recipient,
-                                            amount)
+                self.payday.record_transfer( cur
+                                           , self.tipper.username
+                                           , recipient
+                                           , amount
+                                            )
             conn.commit()
 
         for subject in subjects:
