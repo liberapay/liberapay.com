@@ -75,6 +75,13 @@ class Tests(Harness):
         assert actual == expected, actual
 
 
+    # id
+
+    def test_participant_gets_a_long_id(self):
+        actual = type(self.make_participant('alice').id)
+        assert actual == long, actual
+
+
     # set_tip_to - stt
 
     def test_stt_sets_tip_to(self):
