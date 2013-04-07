@@ -32,7 +32,7 @@ npeople = db.fetchone("SELECT count(*) AS n FROM participants WHERE claimed_time
 ncc = db.fetchone("SELECT count(*) AS n FROM participants WHERE last_bill_result = '' AND is_suspicious IS NOT true")['n']
 ncc = 0 if ncc is None else ncc
 pcc = "%5.1f" % ((ncc * 100.0) / npeople) if npeople > 0 else 0.0
-statements = db.fetchall("SELECT id, statement FROM participants WHERE statement != '' AND is_suspicious IS NOT true ORDER BY random(), id LIMIT 16")
+statements = db.fetchall("SELECT username, statement FROM participants WHERE statement != '' AND is_suspicious IS NOT true ORDER BY random(), username LIMIT 16")
 statements = [] if statements is None else list(statements)
 transfer_volume = db.fetchone("SELECT transfer_volume AS v FROM paydays ORDER BY ts_end DESC LIMIT 1")
 transfer_volume = 0 if transfer_volume is None else transfer_volume['v']
@@ -250,7 +250,7 @@ names = ['ncc', 'pcc', 'statements', 'transfer_volume',
 
     <p>
     {% for statement in statements %}
-    <b><a href="/{{ statement['id'] }}/">{{ escape(statement['id']) }}</a></b>
+    <b><a href="/{{ statement['username'] }}/">{{ escape(statement['username']) }}</a></b>
     is <span title="{{ escape(statement['statement']) }}">{{ escape(part(statement['statement'])) }}</span><br />
     {% end %}
     </p>
