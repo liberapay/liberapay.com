@@ -51,14 +51,14 @@ class TestAbsorptions(Harness):
         super(Harness, self).setUp()
         now = utcnow()
         hour_ago = now - datetime.timedelta(hours=1)
-        for pid in ['alice', 'bob', 'carl']:
-            self.make_participant(pid, claimed_time=hour_ago,
+        for username in ['alice', 'bob', 'carl']:
+            self.make_participant(username, claimed_time=hour_ago,
                                   last_bill_result='')
         deadbeef = TwitterAccount('1', {'screen_name': 'deadbeef'})
-        self.deadbeef_original_pid = deadbeef.participant_id
+        self.deadbeef_original_username = deadbeef.participant
 
         Participant('carl').set_tip_to('bob', '1.00')
-        Participant('alice').set_tip_to(self.deadbeef_original_pid, '1.00')
+        Participant('alice').set_tip_to(self.deadbeef_original_username, '1.00')
         Participant('bob').take_over(deadbeef, have_confirmation=True)
 
     def test_participant_can_be_instantiated(self):
@@ -79,25 +79,25 @@ class TestAbsorptions(Harness):
     def test_deadbeef_is_archived(self):
         actual = Absorption.query\
                            .filter_by(absorbed_by='bob',
-                                      absorbed_was=self.deadbeef_original_pid)\
+                                      absorbed_was=self.deadbeef_original_username)\
                            .count()
         expected = 1
         assert_equals(actual, expected)
 
     def test_alice_doesnt_gives_to_deadbeef_anymore(self):
         expected = Decimal('0.00')
-        actual = Participant('alice').get_tip_to(self.deadbeef_original_pid)
+        actual = Participant('alice').get_tip_to(self.deadbeef_original_username)
         assert actual == expected, actual
 
     def test_alice_doesnt_give_to_whatever_deadbeef_was_archived_as_either(self):
         expected = Decimal('0.00')
-        actual = Participant('alice').get_tip_to(self.deadbeef_original_pid)
+        actual = Participant('alice').get_tip_to(self.deadbeef_original_username)
         assert actual == expected, actual
 
     def test_attempts_to_change_archived_deadbeef_fail(self):
-        participant = Participant(self.deadbeef_original_pid)
+        participant = Participant(self.deadbeef_original_username)
         with assert_raises(AssertionError):
-            participant.change_id('zombeef')
+            participant.change_username('zombeef')
 
     def test_there_is_no_more_deadbeef(self):
         actual = Participant('deadbeef').get_details()
@@ -108,10 +108,10 @@ class TestParticipant(Harness):
     def setUp(self):
         super(Harness, self).setUp()
         now = utcnow()
-        for idx, pid in enumerate(['alice', 'bob', 'carl'], start=1):
-            self.make_participant(pid, claimed_time=now)
-            twitter_account = TwitterAccount(idx, {'screen_name': pid})
-            Participant(pid).take_over(twitter_account)
+        for idx, username in enumerate(['alice', 'bob', 'carl'], start=1):
+            self.make_participant(username, claimed_time=now)
+            twitter_account = TwitterAccount(idx, {'screen_name': username})
+            Participant(username).take_over(twitter_account)
 
     def test_cant_take_over_claimed_participant_without_confirmation(self):
         bob_twitter = StubAccount('twitter', '2')

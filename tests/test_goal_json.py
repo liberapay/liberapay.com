@@ -15,7 +15,7 @@ class Tests(Harness):
 
     def change_goal(self, goal, goal_custom="", user="alice"):
         if isinstance(user, Participant):
-            user = user.id
+            user = user.username
         else:
             self.make_alice()
 

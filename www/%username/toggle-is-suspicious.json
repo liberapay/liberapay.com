@@ -13,7 +13,7 @@ if to is None:
 
         UPDATE participants
            SET is_suspicious = (is_suspicious IS NULL) OR (is_suspicious IS false)
-         WHERE id=%s
+         WHERE username=%s
      RETURNING is_suspicious
 
     """, (path['username'],))
@@ -22,7 +22,7 @@ else:
 
         UPDATE participants
            SET is_suspicious = %s
-         WHERE id=%s
+         WHERE username=%s
      RETURNING is_suspicious
 
     """, (to == 'true', path['username'],))

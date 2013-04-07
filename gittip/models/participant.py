@@ -108,8 +108,30 @@ class Participant(db.Model):
 
     @property
     def valid_tips_receiving(self):
+        '''
+
+      SELECT count(anon_1.amount) AS count_1
+        FROM ( SELECT DISTINCT ON (tips.tipper)
+                      tips.id AS id
+                    , tips.ctime AS ctime
+                    , tips.mtime AS mtime
+                    , tips.tipper AS tipper
+                    , tips.tippee AS tippee
+                    , tips.amount AS amount
+                 FROM tips
+                 JOIN participants ON tips.tipper = participants.username
+                WHERE %(param_1)s = tips.tippee
+                  AND participants.is_suspicious IS NOT true
+                  AND participants.last_bill_result = %(last_bill_result_1)s
+             ORDER BY tips.tipper, tips.mtime DESC
+              ) AS anon_1
+       WHERE anon_1.amount > %(amount_1)s
+
+        '''
         return self.tips_receiving \
-                   .join(Participant, Tip.tipper == Participant.username) \
+                   .join( Participant
+                        , Tip.tipper.op('=')(Participant.username)
+                         ) \
                    .filter( 'participants.is_suspicious IS NOT true'
                           , Participant.last_bill_result == ''
                            )

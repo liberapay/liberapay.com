@@ -109,7 +109,7 @@ class Participant(object):
 
             SELECT *
               FROM participants
-             WHERE id = %s
+             WHERE username = %s
 
         """
         return gittip.db.fetchone(SELECT, (self.username,))

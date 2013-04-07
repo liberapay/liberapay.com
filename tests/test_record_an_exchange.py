@@ -76,11 +76,11 @@ class TestRecordAnExchange(Harness):
         self.record_an_exchange('10', '0.50', 'noted')
         expected = [{ "amount": Decimal('10.00')
                     , "fee": Decimal('0.50')
-                    , "participant_id": "bob"
+                    , "participant": "bob"
                     , "recorder": "alice"
                     , "note": "noted"
                      }]
-        SQL = "SELECT amount, fee, participant_id, recorder, note " \
+        SQL = "SELECT amount, fee, participant, recorder, note " \
               "FROM exchanges"
         actual = list(gittip.db.fetchall(SQL))
         assert actual == expected, actual
@@ -88,7 +88,7 @@ class TestRecordAnExchange(Harness):
     def test_success_updates_balance(self):
         self.record_an_exchange('10', '0', 'noted')
         expected = [{"balance": Decimal('10.00')}]
-        SQL = "SELECT balance FROM participants WHERE id='bob'"
+        SQL = "SELECT balance FROM participants WHERE username='bob'"
         actual = list(gittip.db.fetchall(SQL))
         assert actual == expected, actual
 
@@ -97,6 +97,6 @@ class TestRecordAnExchange(Harness):
         self.make_participant('bob', claimed_time=utcnow(), balance=20)
         self.record_an_exchange('-7', '0', 'noted', False)
         expected = [{"balance": Decimal('13.00')}]
-        SQL = "SELECT balance FROM participants WHERE id='bob'"
+        SQL = "SELECT balance FROM participants WHERE username='bob'"
         actual = list(gittip.db.fetchall(SQL))
         assert actual == expected, actual

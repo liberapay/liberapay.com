@@ -9,8 +9,8 @@ class Tip(db.Model):
     id = Column(Integer, nullable=False, primary_key=True)
     ctime = Column(TIMESTAMP(timezone=True), nullable=False)
     mtime = Column(TIMESTAMP(timezone=True), nullable=False, default="now()")
-    tipper = Column(Text, ForeignKey("participants.id", onupdate="CASCADE",
+    tipper = Column(Text, ForeignKey("participants.username", onupdate="CASCADE",
                                      ondelete="RESTRICT"), nullable=False)
-    tippee = Column(Text, ForeignKey("participants.id", onupdate="CASCADE",
+    tippee = Column(Text, ForeignKey("participants.username", onupdate="CASCADE",
                                      ondelete="RESTRICT"), nullable=False)
     amount = Column(Numeric(precision=35, scale=2), nullable=False)
