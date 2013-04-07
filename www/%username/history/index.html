@@ -14,7 +14,7 @@ class Paydays(object):
                                          "ORDER BY ts_end DESC"))
         self._npaydays = len(self._paydays)
         self._exchanges = list(db.fetchall( "SELECT * FROM exchanges "
-                                            "WHERE username=%s "
+                                            "WHERE participant=%s "
                                             "ORDER BY timestamp ASC"
                                           , (username,)
                                            ))
