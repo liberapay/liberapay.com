@@ -9,7 +9,7 @@ from gittip import db, CARDINALS
 ^L
 _suspicious = db.fetchall("""
 
-    SELECT id
+    SELECT username
          , balance
          , ctime
       FROM participants
@@ -26,7 +26,7 @@ def suspicious():
     for person in _suspicious:
         person['gives_to'] = db.fetchall("""
 
-            SELECT DISTINCT tippee AS id
+            SELECT DISTINCT tippee AS username
                  , is_suspicious
                  , tips.ctime
               FROM tips
@@ -37,10 +37,10 @@ def suspicious():
           ORDER BY tips.ctime
 
 
-        """, (person['id'],))
+        """, (person['username'],))
         person['receives_from'] = db.fetchall("""
 
-            SELECT DISTINCT tipper AS id
+            SELECT DISTINCT tipper AS username
                  , is_suspicious
                  , tips.ctime
               FROM tips
@@ -50,7 +50,7 @@ def suspicious():
                AND tips.ctime < '2012-11-05'::timestamptz
           ORDER BY tips.ctime
 
-        """, (person['id'],))
+        """, (person['username'],))
 
         person['transfers'] = list(db.fetchall("""
 
@@ -64,7 +64,7 @@ def suspicious():
           ORDER BY timestamp
 
 
-        """, (person['id'], person['id'])))
+        """, (person['username'], person['username'])))
 
         person['exchanges'] = list(db.fetchall("""
 
@@ -75,11 +75,11 @@ def suspicious():
           ORDER BY timestamp
 
 
-        """, (person['id'],)))
+        """, (person['username'],)))
 
         yield person
 suspicious = list(suspicious())
-names = set([person['id'] for person in suspicious])
+names = set([person['username'] for person in suspicious])
 
 total_charged = 0
 total_withdrawn = 0
@@ -155,13 +155,13 @@ percentage_fraudulent = pad(percentage_fraudulent, w)
 
 bystander_balances = db.fetchall("""
 
-    SELECT id, balance FROM participants WHERE id = ANY(%s)
+    SELECT username, balance FROM participants WHERE username = ANY(%s)
 
 """, (list(bystanders),))
 if bystander_balances is None:
     bystander_balances = []
 for row in bystander_balances:
-    bystanders[row['id']].append(row['balance'])
+    bystanders[row['username']].append(row['balance'])
 
 bystanders = sorted(bystanders.items(), key=lambda i: i[1], reverse=True)
 
@@ -351,20 +351,20 @@ incident.</p>
     </tr>
     {% for row in suspicious %}
     <tr>
-        <td><a href="/{{ row['id'] }}/">{{ row['id'] }}</a><br />
+        <td><a href="/{{ row['username'] }}/">{{ row['username'] }}</a><br />
             <span class="date no-float">{{ fmtdate(row['ctime']) }}</span></td>
         <td class="balance amount">{{ pad(row['balance'], 5) }}</td>
         <td class="tips">
             {% for person in row['gives_to'] %}
-                &rarr;<a href="/{{ person['id'] }}/"{% if person['is_suspicious'] %} class="suspicious"{% end %}>{{ person['id'] }}</a><br />
+                &rarr;<a href="/{{ person['username'] }}/"{% if person['is_suspicious'] %} class="suspicious"{% end %}>{{ person['username'] }}</a><br />
             {% end %}
             {% for person in row['receives_from'] %}
-                &larr;<a href="/{{ person['id'] }}/"{% if person['is_suspicious'] %} class="suspicious"{% end %}>{{ person['id'] }}</a><br />
+                &larr;<a href="/{{ person['username'] }}/"{% if person['is_suspicious'] %} class="suspicious"{% end %}>{{ person['username'] }}</a><br />
             {% end %}
         </td>
         <td class="transfers">
             {% for transfer in row['transfers'] %}
-            {% if row['id'] == transfer['tipper'] %}
+            {% if row['username'] == transfer['tipper'] %}
             <span class="amount">{{ pad(transfer['amount'], 5)}}</span>&rarr;
             <a href="/{{ transfer['tippee'] }}/"{% if transfer['tippee'] in names %}
                 class="suspicious"{% end %}>{{ transfer['tippee'] }}</a>
