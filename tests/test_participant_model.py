@@ -12,19 +12,19 @@ from gittip.models import Participant, Tip
 from gittip.participant import Participant as OldParticipant
 
 
-class TestParticipant(Harness):
+class Tests(Harness):
 
-    def random_restricted_id(self):
-        """ helper method that randomly chooses a restricted id for testing """
-        from gittip import RESTRICTED_IDS
-        random_item = random.choice(RESTRICTED_IDS)
+    def random_restricted_username(self):
+        """helper method to chooses a restricted username for testing """
+        from gittip import RESTRICTED_USERNAMES
+        random_item = random.choice(RESTRICTED_USERNAMES)
         while random_item.startswith('%'):
-            random_item = random.choice(RESTRICTED_IDS)
+            random_item = random.choice(RESTRICTED_USERNAMES)
         return random_item
 
     def setUp(self):
         super(Harness, self).setUp()
-        self.participant = Participant(id='user1') # Our protagonist
+        self.participant = Participant(username='user1') # Our protagonist
         self.session.add(self.participant)
         self.session.commit()
 
@@ -35,32 +35,32 @@ class TestParticipant(Harness):
         actual = self.participant.claimed_time
         assert actual == expected, actual
 
-    def test_changing_id_successfully(self):
-        self.participant.change_id('user2')
+    def test_changing_username_successfully(self):
+        self.participant.change_username('user2')
         actual = Participant.query.get('user2')
         assert self.participant == actual, actual
 
-    def test_changing_id_to_too_long(self):
-        with assert_raises(Participant.IdTooLong):
-            self.participant.change_id('123456789012345678901234567890123')
+    def test_changing_username_to_too_long(self):
+        with assert_raises(Participant.UsernameTooLong):
+            self.participant.change_username('123456789012345678901234567890123')
 
-    def test_changing_id_to_already_taken(self):
-        self.session.add(Participant(id='user2'))
+    def test_changing_username_to_already_taken(self):
+        self.session.add(Participant(username='user2'))
         self.session.commit()
-        with assert_raises(Participant.IdAlreadyTaken):
-            self.participant.change_id('user2')
+        with assert_raises(Participant.UsernameAlreadyTaken):
+            self.participant.change_username('user2')
 
-    def test_changing_id_to_invalid_characters(self):
-        with assert_raises(Participant.IdContainsInvalidCharacters):
-            self.participant.change_id(u"\u2603") # Snowman
+    def test_changing_username_to_invalid_characters(self):
+        with assert_raises(Participant.UsernameContainsInvalidCharacters):
+            self.participant.change_username(u"\u2603") # Snowman
 
-    def test_changing_id_to_restricted_name(self):
-        with assert_raises(Participant.IdIsRestricted):
-            self.participant.change_id(self.random_restricted_id())
+    def test_changing_username_to_restricted_name(self):
+        with assert_raises(Participant.UsernameIsRestricted):
+            self.participant.change_username(self.random_restricted_username())
 
     def test_getting_tips_actually_made(self):
         expected = Decimal('1.00')
-        self.session.add(Participant(id='user2'))
+        self.session.add(Participant(username='user2'))
         self.session.add(Tip(tipper='user1', tippee='user2', amount=expected,
                              ctime=datetime.datetime.now(pytz.utc)))
         self.session.commit()
@@ -69,7 +69,7 @@ class TestParticipant(Harness):
 
     def test_getting_tips_not_made(self):
         expected = Decimal('0.00')
-        self.session.add(Participant(id='user2'))
+        self.session.add(Participant(username='user2'))
         self.session.commit()
         actual = self.participant.get_tip_to('user2')
         assert actual == expected, actual
@@ -324,7 +324,7 @@ class TestParticipant(Harness):
     # def get_details(self):
     # def resolve_unclaimed(self):
     # def set_as_claimed(self):
-    # def change_id(self, suggested):
+    # def change_username(self, suggested):
     # def get_accounts_elsewhere(self):
     # def get_tip_to(self, tippee):
     # def get_dollars_receiving(self):
