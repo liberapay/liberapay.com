@@ -270,14 +270,14 @@ locked = False
 
         {% if event['tippee'] == participant.username %}
             {% if user.ADMIN and (participant.username != user.username or 'override' in qs) %}
-            <td class="notes">from <a href="/{{ event['tipper'] }}/history.html">{{ event['tipper'] }}</a></td>
+            <td class="notes">from <a href="/{{ event['tipper'] }}/history/">{{ event['tipper'] }}</a></td>
             {% else %}
             <td class="notes">from someone</td>
             {% end %}
         {% else %}
             {% if user.ADMIN %}
             <td class="notes">to
-                <a href="/{{ event['tippee'] }}/history.html">{{ event['tippee'] }}</a></td>
+                <a href="/{{ event['tippee'] }}/history/">{{ event['tippee'] }}</a></td>
             {% else %}
             <td class="notes">to
                 <a href="/{{ event['tippee'] }}/">{{ event['tippee'] }}</a></td>
