@@ -204,13 +204,17 @@ class Participant(object):
 
     @require_username
     def set_tip_to(self, tippee, amount):
-        """Given participant id and amount as str, return amount as Decimal.
+        """Given participant id and amount as str, return a tuple.
 
         We INSERT instead of UPDATE, so that we have history to explore. The
         COALESCE function returns the first of its arguments that is not NULL.
         The effect here is to stamp all tips with the timestamp of the first
         tip from this user to that. I believe this is used to determine the
         order of transfers during payday.
+
+        The tuple returned is the amount as a Decimal and a boolean indicating
+        whether this is the first time this tipper has tipped (we want to track
+        that as part of our conversion funnel).
 
         """
 
@@ -234,12 +238,15 @@ class Participant(object):
                                       ), CURRENT_TIMESTAMP)
                         , %s, %s, %s
                          )
+              RETURNING ( SELECT count(*) = 0 FROM tips WHERE tipper=%s )
+                     AS first_time_tipper
 
         """
-        gittip.db.execute( NEW_TIP
-                         , (self.username, tippee, self.username, tippee, amount)
-                          )
-        return amount
+        args = (self.username, tippee, self.username, tippee, amount, \
+                                                                 self.username)
+        first_time_tipper = \
+                         gittip.db.fetchone(NEW_TIP, args)['first_time_tipper']
+        return amount, first_time_tipper
 
 
     @require_username

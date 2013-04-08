@@ -9,6 +9,7 @@ import gittip
 import raven
 import psycopg2
 import stripe
+import gittip.mixpanel
 from gittip.postgres import PostgresManager
 from psycopg2.extensions import cursor as RegularCursor
 
@@ -63,3 +64,4 @@ def sentry(website):
 
 def mixpanel(website):
     website.mixpanel_token = os.environ['MIXPANEL_TOKEN']
+    gittip.mixpanel.MIXPANEL_TOKEN = os.environ['MIXPANEL_TOKEN']

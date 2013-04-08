@@ -482,7 +482,7 @@ Gittip.paymentsResponseHandler = function(response)
          * card is good.
          */
 
-        function success()
+        function success(data)
         {
             $('#status').text('working').addClass('highlight');
             setTimeout(function() {
@@ -494,6 +494,10 @@ Gittip.paymentsResponseHandler = function(response)
             setTimeout(function() {
                 window.location.href = '/' + Gittip.participantId + '/';
             }, 1000);
+
+            // Log to mixpanel.
+            if (data.first_time === true)
+                mixpanel.track("Add Credit Card");
         }
 
         function detailedFeedback(data)
@@ -602,13 +606,6 @@ Gittip.initTipButtons = function()
             setTimeout(flash, 100);
         }
         flash();
-
-        // Log to mixpanel.
-        var amount = $(this).text().replace('$', '');
-        var tippee = $(this).attr('tippee');
-        // mixpanel.track( "Anonymous Tip Attempt"
-        //               , {"Amount": amount, "Tippee": tippee}
-        //                );
     });
 
 
@@ -672,9 +669,8 @@ Gittip.initTipButtons = function()
             $('.total-giving').text(data['total_giving']);
 
             // Log to mixpanel.
-            // mixpanel.track( "Tip Success"
-            //               , {"Amount": amount, "Tippee": tippee}
-            //                );
+            if (data.first_time === true)
+                mixpanel.track("Explicitly Tip");
         });
     });
 };

@@ -69,14 +69,17 @@ class AccountElsewhere(object):
         """
         self.set_is_locked(False)
         user = User.from_username(self.participant)  # give them a session
-        if not self.is_claimed:
+        if self.is_claimed:
+            newly_claimed = False
+        else:
+            newly_claimed = True
             user.set_as_claimed()
             try:
                 user.change_username(desired_username)
                 user.username = self.username = desired_username
             except user.ProblemChangingUsername:
                 pass
-        return user
+        return user, newly_claimed
 
 
     def upsert(self, user_info):

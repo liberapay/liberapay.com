@@ -8,7 +8,7 @@ a Balanced account object (creating one as needed).
 
 """
 from aspen import Response
-from gittip import billing
+from gittip import billing, mixpanel
 
 #=========================================================================== ^L
 
@@ -36,9 +36,11 @@ else:
                              , user.balanced_account_uri
                              , card_uri
                               )
+
     if error:
         out = {"problem": "Problem", "error": error}
     else:
         out = {"problem": ""}
+    out["first_time"] = user.last_bill_result is None
 
 response.body = out

@@ -92,11 +92,18 @@ class Tests(Harness):
         actual = alice.get_tip_to('bob')
         assert actual == Decimal('1.00'), actual
 
-    def test_stt_returns_a_Decimal(self):
+    def test_stt_returns_a_Decimal_and_a_boolean(self):
         alice = self.make_participant('alice', last_bill_result='')
         self.make_participant('bob')
         actual = alice.set_tip_to('bob', '1.00')
-        assert actual == Decimal('1.00'), actual
+        assert actual == (Decimal('1.00'), True), actual
+
+    def test_stt_returns_False_for_second_time_tipper(self):
+        alice = self.make_participant('alice', last_bill_result='')
+        self.make_participant('bob')
+        alice.set_tip_to('bob', '1.00')
+        actual = alice.set_tip_to('bob', '2.00')
+        assert actual == (Decimal('2.00'), False), actual
 
     def test_stt_doesnt_allow_self_tipping(self):
         alice = self.make_participant('alice', last_bill_result='')

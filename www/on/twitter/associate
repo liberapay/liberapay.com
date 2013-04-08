@@ -10,8 +10,9 @@ from urlparse import parse_qs
 
 import requests
 from oauth_hook import OAuthHook
-from aspen import log, Response, json
+from aspen import json, log, Response
 from aspen import resources
+from gittip import mixpanel
 from gittip.elsewhere import ACTIONS, twitter
 from gittip.participant import NeedConfirmation
 
@@ -72,7 +73,10 @@ log(u"%s wants to %s" % (screen_name, action))
 account = twitter.TwitterAccount(user_info['id'], user_info)
 
 if action == 'opt-in':      # opt in
-    user = account.opt_in(screen_name)  # set 'user' to give them a session :/
+    # set 'user' to give them a session :/
+    user, newly_claimed = account.opt_in(screen_name)
+    if newly_claimed:
+        mixpanel.alias_and_track(cookie, unicode(user.id))
 elif action == 'connect':   # connect
     if user.ANON:
         raise Response(404)
