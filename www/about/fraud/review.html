@@ -9,7 +9,7 @@ if not user.ADMIN:
 
 unreviewed = db.fetchall("""
 
-    SELECT id
+    SELECT username
          , balance
       FROM participants
      WHERE is_suspicious IS NULL
