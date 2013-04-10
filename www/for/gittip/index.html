@@ -3,6 +3,15 @@ from gittip import AMOUNTS
 title = "For Gittip"
 ^L
 {% extends templates/base.html %}
+{% block head %}
+<script src="/assets/{{ __version__ }}/for.js"></script>
+<script>
+    $(document).ready(function()
+    {
+        Gittip.for.init();
+    });
+</script>
+{% end %}
 {% block heading %}
 <h2 class="top"><span>For</span></h2>
 {% end %}
@@ -83,6 +92,8 @@ itself.</p>
     <div class="group">
         <div id="mine">
             <h2>Who deserves it?</h2>
+
+            <input>
         </div>
 
         <div id="split">
