@@ -969,6 +969,46 @@ button.selected:hover {
     }
 }
 
+#for {
+
+    #weeks {
+        margin-top: 10px;
+
+        .fine {
+            font: normal 10px $Helvetica;
+            text-transform: uppercase;
+        }
+
+        #this-week {
+
+            width: 220px;
+            float: left;
+            text-align: left;
+            .amount {
+                font: bold 56px $Helvetica;
+            }
+        }
+
+        #last-week {
+            width: 220px;
+            float: right;
+            text-align: right;
+        }
+    }
+
+    #mine {
+        width: 220px;
+        float: left;
+    }
+
+    #split {
+        width: 220px;
+        float: right;
+        text-align: right;
+    }
+
+}
+
 
 /* A Special Responsive Hell */
 /*****************************/
