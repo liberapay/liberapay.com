@@ -66,7 +66,10 @@ class Harness(unittest.TestCase):
         self.db.empty_tables()
 
     def make_participant(self, username, **kw):
-        participant = Participant(username=username, **kw)
+        participant = Participant( username=username
+                                 , username_lower=username.lower()
+                                 , **kw
+                                  )
         self.session.add(participant)
         self.session.commit()
         return participant

@@ -69,6 +69,7 @@ class AccountElsewhere(object):
         """
         self.set_is_locked(False)
         user = User.from_username(self.participant)  # give them a session
+        assert not user.ANON, self.participant  # sanity check
         if self.is_claimed:
             newly_claimed = False
         else:

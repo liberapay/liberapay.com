@@ -33,6 +33,7 @@ class Participant(db.Model):
 
     id = Column(BigInteger, Sequence('participants_id_seq'), nullable=False, unique=True)
     username = Column(Text, nullable=False, primary_key=True)
+    username_lower = Column(Text, nullable=False, unique=True)
     statement = Column(Text, default="", nullable=False)
     stripe_customer_id = Column(Text)
     last_bill_result = Column(Text)
@@ -169,12 +170,15 @@ class Participant(db.Model):
 
                 raise self.UsernameContainsInvalidCharacters
 
-        if desired_username in gittip.RESTRICTED_USERNAMES:
+        lowercased = desired_username.lower()
+
+        if lowercased in gittip.RESTRICTED_USERNAMES:
             raise self.UsernameIsRestricted
 
         if desired_username != self.username:
             try:
                 self.username = desired_username
+                self.username_lower = lowercased
                 db.session.add(self)
                 db.session.commit()
                 # Will raise sqlalchemy.exc.IntegrityError if the

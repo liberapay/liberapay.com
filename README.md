@@ -347,8 +347,8 @@ The Gittip API is comprised of these endpoints:
 
  - **/`%participant_id`/public.json**
    ([example](https://www.gittip.com/whit537/public.json),
-    [source](https://github.com/gittip/www.gittip.com/tree/master/www/%25participant_id/public.json), note that `%participant_id` is [currently](https://github.com/gittip/www.gittip.com/issues/503) case sensitive)&mdash;Returns an
-    object with these keys:
+    [source](https://github.com/gittip/www.gittip.com/tree/master/www/%25participant_id/public.json))&mdash;Returns
+    an object with these keys:
 
     - "receiving"&mdash;an estimate of the amount the given participant will
       receive this week
@@ -445,3 +445,5 @@ and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
  - [DonorsChoose.org](http://www.donorschoose.org/) - crowd-funded school 
     supplies; Alexis Ohanian 
     [likes it](http://www.donorschoose.org/AlexisOnCNN).
+ - [Catincan](https://www.catincan.com/) - FOSS bounty site
+ - [Bountysource](https://www.bountysource.com/) - FOSS bounty site
