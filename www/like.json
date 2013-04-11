@@ -1,7 +1,7 @@
 from gittip import db
 from aspen import Response
 SQL = "SELECT username, id FROM participants " \
-      "WHERE username LIKE %s ORDER BY username"
+      "WHERE username_lower LIKE %s ORDER BY username"
 ^L
 
 error = ''
@@ -17,4 +17,4 @@ if error:
     response.body = {"error": error}
 else:
     response.body = [(r['username'], r['id']) \
-                                     for r in db.fetchall(SQL, (query + '%',))]
+                             for r in db.fetchall(SQL, (query.lower() + '%',))]
