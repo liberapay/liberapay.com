@@ -58,6 +58,12 @@ class Tests(Harness):
         with assert_raises(Participant.UsernameIsRestricted):
             self.participant.change_username(self.random_restricted_username())
 
+    def test_changing_username_with_casing_conflict(self):
+        self.make_participant('User2')
+        self.participant.change_username('user2')
+        actual = Participant.query.get('user2')
+        assert self.participant == actual, actual
+
     def test_getting_tips_actually_made(self):
         expected = Decimal('1.00')
         self.session.add(Participant(username='user2'))

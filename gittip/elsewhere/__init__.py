@@ -72,13 +72,13 @@ class AccountElsewhere(object):
         if self.is_claimed:
             newly_claimed = False
         else:
-            newly_claimed = True
-            user.set_as_claimed()
             try:
                 user.change_username(desired_username)
                 user.username = self.username = desired_username
             except user.ProblemChangingUsername:
                 pass
+            user.set_as_claimed()
+            newly_claimed = True
         return user, newly_claimed
 
 
