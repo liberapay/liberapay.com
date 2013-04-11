@@ -726,7 +726,7 @@ class Payday(object):
                 EXCHANGE = """\
 
                         INSERT INTO exchanges
-                               (amount, fee, username)
+                               (amount, fee, participant)
                         VALUES (%s, %s, %s)
 
                 """
