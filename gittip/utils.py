@@ -277,10 +277,17 @@ def get_participant(request, restrict=True):
         if user.ANON:
             request.redirect(u'/%s/' % username)
 
-    participant = Participant.query.get(username)
+    participant = \
+           Participant.query.filter_by(username_lower=username.lower()).first()
 
     if participant is None:
         raise Response(404)
+
+    canonical = participant.username
+    given = username
+    if given != canonical:
+        assert canonical.lower() == given.lower()  # sanity check
+        raise Response(302, headers={"Location": "/%s/" % canonical})
 
     elif participant.claimed_time is None:
 
