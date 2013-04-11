@@ -67,7 +67,7 @@ class Harness(unittest.TestCase):
 
     def make_participant(self, username, **kw):
         participant = Participant( username=username
-                                 , username_lowercased=username.lower()
+                                 , username_lower=username.lower()
                                  , **kw
                                   )
         self.session.add(participant)

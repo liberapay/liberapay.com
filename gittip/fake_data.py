@@ -36,9 +36,11 @@ def fake_participant(is_admin=False, anonymous=False):
     """
     Create a fake User
     """
+    username = faker.firstName() + fake_text_id(3)
     return Participant(
         id=fake_int_id(),
-        username=faker.firstName() + fake_text_id(3),
+        username=username,
+        username_lower=username.lower(),
         statement=faker.sentence(),
         ctime=faker.dateTimeThisYear(),
         is_admin=is_admin,

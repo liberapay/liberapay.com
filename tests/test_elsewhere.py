@@ -17,6 +17,6 @@ class TestAccountElsewhere(Harness):
     def test_opt_in_doesnt_have_to_change_username(self):
         self.make_participant("bob")
         account = TwitterAccount("alice", {})
-        expected = account.participant
-        actual = account.opt_in("bob")[0].username # A random one.
+        expected = account.participant # A random one.
+        actual = account.opt_in("bob")[0].username
         assert actual == expected, actual

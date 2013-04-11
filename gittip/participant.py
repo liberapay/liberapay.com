@@ -68,8 +68,9 @@ def reserve_a_random_username(db=None):
 
     for username in gen_random_usernames():
         try:
-            db.execute( "INSERT INTO participants (username) VALUES (%s)"
-                      , (username,)
+            db.execute( "INSERT INTO participants (username, username_lower) "
+                        "VALUES (%s, %s)"
+                      , (username, username.lower())
                        )
         except IntegrityError:  # Collision, try again with another value.
             pass

@@ -32,7 +32,7 @@ class User(Participant):
 
     @classmethod
     def from_username(cls, username):
-        user = User.query.filter_by(username_lowercased=username.lower()).first()
+        user = User.query.filter_by(username_lower=username.lower()).first()
         if user is None or user.is_suspicious:
             user = User()
         else:

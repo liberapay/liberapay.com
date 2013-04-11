@@ -24,9 +24,7 @@ class Tests(Harness):
 
     def setUp(self):
         super(Harness, self).setUp()
-        self.participant = Participant(username='user1') # Our protagonist
-        self.session.add(self.participant)
-        self.session.commit()
+        self.participant = self.make_participant('user1')  # Our protagonist
 
 
     def test_claiming_participant(self):
@@ -45,10 +43,14 @@ class Tests(Harness):
             self.participant.change_username('123456789012345678901234567890123')
 
     def test_changing_username_to_already_taken(self):
-        self.session.add(Participant(username='user2'))
-        self.session.commit()
+        self.make_participant('user2')
         with assert_raises(Participant.UsernameAlreadyTaken):
             self.participant.change_username('user2')
+
+    def test_changing_username_to_already_taken_is_case_insensitive(self):
+        self.make_participant('UsEr2')
+        with assert_raises(Participant.UsernameAlreadyTaken):
+            self.participant.change_username('uSeR2')
 
     def test_changing_username_to_invalid_characters(self):
         with assert_raises(Participant.UsernameContainsInvalidCharacters):
@@ -58,15 +60,9 @@ class Tests(Harness):
         with assert_raises(Participant.UsernameIsRestricted):
             self.participant.change_username(self.random_restricted_username())
 
-    def test_changing_username_with_casing_conflict(self):
-        self.make_participant('User2')
-        self.participant.change_username('user2')
-        actual = Participant.query.get('user2')
-        assert self.participant == actual, actual
-
     def test_getting_tips_actually_made(self):
         expected = Decimal('1.00')
-        self.session.add(Participant(username='user2'))
+        self.make_participant('user2')
         self.session.add(Tip(tipper='user1', tippee='user2', amount=expected,
                              ctime=datetime.datetime.now(pytz.utc)))
         self.session.commit()
@@ -75,8 +71,7 @@ class Tests(Harness):
 
     def test_getting_tips_not_made(self):
         expected = Decimal('0.00')
-        self.session.add(Participant(username='user2'))
-        self.session.commit()
+        self.make_participant('user2')
         actual = self.participant.get_tip_to('user2')
         assert actual == expected, actual
 
