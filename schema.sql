@@ -456,3 +456,4 @@ BEGIN;
 END;
 
 ALTER TABLE participants ADD UNIQUE (username_lower);
+ALTER TABLE participants ALTER COLUMN username_lower DROP DEFAULT;
