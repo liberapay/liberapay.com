@@ -441,3 +441,18 @@ ALTER TABLE "exchanges" ADD CONSTRAINT "exchanges_participant_fkey"
 -- https://github.com/gittip/www.gittip.com/issues/680
 
 ALTER TABLE participants ADD COLUMN id bigserial NOT NULL UNIQUE;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/issues/503
+
+BEGIN;
+
+    ALTER TABLE participants ADD COLUMN username_lower text
+       NOT NULL DEFAULT '';
+
+    UPDATE participants SET username_lower = lower(username);
+
+END;
+
+ALTER TABLE participants ADD UNIQUE (username_lower);
