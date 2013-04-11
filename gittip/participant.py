@@ -829,12 +829,16 @@ class Participant(object):
 
                             UPDATE participants
                                SET username=%s
+                                 , username_lower=%s
                                  , session_token=NULL
                                  , session_expires=now()
                              WHERE username=%s
                          RETURNING username
 
-                        """, (archive_username, other_username))
+                        """, ( archive_username
+                             , archive_username.lower()
+                             , other_username)
+                              )
                         rec = txn.fetchone()
                     except IntegrityError:
                         continue  # archive_username is already taken;
