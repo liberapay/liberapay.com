@@ -13,9 +13,7 @@ unreviewed = db.fetchall("""
          , balance
       FROM participants
      WHERE is_suspicious IS NULL
-       AND (  last_bill_result IS NOT NULL
-           OR last_ach_result IS NOT NULL
-             )
+       AND balanced_account_uri IS NOT NULL
   ORDER BY claimed_time
 
 """)
