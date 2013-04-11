@@ -70,9 +70,9 @@ def is_whitelisted(participant):
     initial SELECT, so we should never see one here.
 
     """
-    assert participant['is_suspicious'] is not True, participant['id']
+    assert participant['is_suspicious'] is not True, participant['username']
     if participant['is_suspicious'] is None:
-        log("UNREVIEWED: %s" % participant['id'])
+        log("UNREVIEWED: %s" % participant['username'])
         return False
     return True
 
