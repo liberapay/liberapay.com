@@ -89,10 +89,41 @@ itself.</p>
             <h2>Who deserves it?</h2>
 
             <div ng-controller="Gittip.for.DesertsCtrl">
-                <input tabindex="1" ng-model="query" ng-change="fetch()"> 
                 <table>
                     <tr ng-repeat="participant in participants">
                         <td>&#123;{ participant.username }}</td>
+                        <td>
+                            <input type="radio" 
+                                   name="&#123;{ participant.username }}" /> 
+                            <input type="radio" 
+                                   name="&#123;{ participant.username }}" /> 
+                            <input type="radio" 
+                                   name="&#123;{ participant.username }}" /> 
+                            <input type="radio" 
+                                   name="&#123;{ participant.username }}" /> 
+                            <input type="radio" 
+                                   name="&#123;{ participant.username }}" /> 
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <form ng-submit="submit()">
+                                <input tabindex="1" id="query" 
+                                       autocomplete="off"
+                                       placeholdey="Enter a Gittip username"
+                                       ng-model="query" ng-change="fetch()" />
+                            </form>
+                        </td>
+                        <td id="lookup-results-container">
+                          &nbsp;
+                          <button>Add</button>
+
+                          <ul id="lookup-results">
+                            <li ng-repeat="participant in lookup">
+                              <span>&#123;{ participant.username }}</span>
+                            </li>
+                          </ul>
+                        </td>
                     </tr>
                 </table>
             </div>

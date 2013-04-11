@@ -162,11 +162,11 @@ input {
 // Modules
 .mini-user {
     background: white;
-    border: 4px solid #DEE0E0;
     display: block;
     float: left;
     width: 100%;
     overflow: hidden;
+    border: 4px solid #DEE0E0;
     @include border-radius(3px);
 
     span.inner {
@@ -980,7 +980,6 @@ button.selected:hover {
         }
 
         #this-week {
-
             width: 220px;
             float: left;
             text-align: left;
@@ -999,6 +998,36 @@ button.selected:hover {
     #deserts {
         width: 220px;
         float: left;
+
+        #query {
+            width: 110px;
+            padding: 2px 5px;
+        }
+
+        #lookup-results-container {
+            position: relative;
+
+            #lookup-results {
+                width: 120px;
+                position: absolute;
+                bottom: 0px;
+                left: -128px;
+                background: white;
+                border: 2px solid black;
+                margin: 0;
+                padding: 5px;
+                border: 4px solid rgba($brown, 0.5);
+                @include border-radius(3px);
+
+                li {
+                    font: normal 16px/16px $Helvetica;
+                    white-space: nowrap;
+                    margin: 0;
+                    padding: 3px 0;
+                    overflow: hidden;
+                }
+            }
+        }
     }
 
     #crowd {

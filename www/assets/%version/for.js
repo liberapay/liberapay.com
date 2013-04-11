@@ -5,10 +5,13 @@ Gittip.for.DesertsCtrl = function($scope, $http)
     $scope.fetch = function()
     {
         if ($scope.query == '')
-            $scope.participants = [];
-        if ($scope.query.length < 2)
-            return;
-        $http.get("/for/_lookup.json", {params: {query: $scope.query}})
-             .success(function(data) { $scope.participants = data });
+            $scope.lookup = [];
+        else
+            $http.get("/for/lookup.json", {params: {query: $scope.query}})
+                 .success(function(data) { $scope.lookup = data });
     };
+
+    // No good way in Angular yet:
+    // http://stackoverflow.com/questions/14833326/
+    jQuery('#query').focus();
 };
