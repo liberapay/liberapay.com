@@ -4,13 +4,8 @@ title = "For Gittip"
 ^L
 {% extends templates/base.html %}
 {% block head %}
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"></script>
 <script src="/assets/{{ __version__ }}/for.js"></script>
-<script>
-    $(document).ready(function()
-    {
-        Gittip.for.init();
-    });
-</script>
 {% end %}
 {% block heading %}
 <h2 class="top"><span>For</span></h2>
@@ -72,7 +67,7 @@ itself.</p>
 
 {% block page %}
 
-<div id="for" class="col0">
+<div id="for" class="col0" ng-app="Gittip.for">
 
     <div id="weeks" class="group">
         <div id="this-week">
@@ -93,7 +88,14 @@ itself.</p>
         <div id="deserts">
             <h2>Who deserves it?</h2>
 
-            <input tabindex="1">
+            <div ng-controller="Gittip.for.DesertsCtrl">
+                <input tabindex="1" ng-model="query" ng-change="fetch()"> 
+                <table>
+                    <tr ng-repeat="participant in participants">
+                        <td>&#123;{ participant.username }}</td>
+                    </tr>
+                </table>
+            </div>
         </div>
 
         <div id="crowd">

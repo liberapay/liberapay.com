@@ -1,31 +1,14 @@
-Gittip.for = {}
+Gittip.for = angular.module('Gittip.for', []);
 
-Gittip.for.success = function(d)
+Gittip.for.DesertsCtrl = function($scope, $http)
 {
-    var UL = document.createElement('UL');
-    for (var i=0, item; item = d[i]; i++)
+    $scope.fetch = function()
     {
-        username = item[0];
-        id = item[1];
-
-        console.log(username, id);
-    }
-};
-
-Gittip.for.reload = function(d)
-{
-    var query = $('#deserts input').val();
-    if (query.length < 2)
-        return;
-    jQuery.ajax(
-        { url: '/for/_lookup.json'
-        , data: {query: query}
-        , success: Gittip.for.success
-         }
-    )
-};
-
-Gittip.for.init = function()
-{
-    $('#deserts input').keyup(Gittip.for.reload)
+        if ($scope.query == '')
+            $scope.participants = [];
+        if ($scope.query.length < 2)
+            return;
+        $http.get("/for/_lookup.json", {params: {query: $scope.query}})
+             .success(function(data) { $scope.participants = data });
+    };
 };

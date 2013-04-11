@@ -16,5 +16,4 @@ if error:
     response.code = 400
     response.body = {"error": error}
 else:
-    response.body = [(r['username'], r['id']) \
-                             for r in db.fetchall(SQL, (query.lower() + '%',))]
+    response.body = list(db.fetchall(SQL, (query.lower() + '%',)))
