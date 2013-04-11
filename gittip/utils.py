@@ -287,7 +287,9 @@ def get_participant(request, restrict=True):
     given = username
     if given != canonical:
         assert canonical.lower() == given.lower()  # sanity check
-        raise Response(302, headers={"Location": "/%s/" % canonical})
+        remainder = request.line.uri.path.raw[len('/%s' % given):]
+        newpath = "/%s%s" % (canonical, remainder)
+        raise Response(302, headers={"Location": newpath})
 
     elif participant.claimed_time is None:
 

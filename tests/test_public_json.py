@@ -1,14 +1,18 @@
 import json
 import datetime
-import pytz
 from decimal import Decimal
 from nose.tools import assert_equal
 
+import pytz
 from gittip.testing import Harness
 from gittip.testing.client import TestClient
 
 
 class Tests(Harness):
+
+    def make_participant(self, *a, **kw):
+        kw['claimed_time'] = datetime.datetime.now(pytz.utc)
+        return Harness.make_participant(self, *a, **kw)
 
     def test_anonymous_gets_receiving(self):
         alice = self.make_participant('alice', last_bill_result='')
@@ -32,7 +36,7 @@ class Tests(Harness):
 
     def test_anonymous_gets_giving(self):
         alice = self.make_participant('alice', last_bill_result='')
-        self.make_participant('bob', claimed_time=datetime.datetime.now(pytz.utc))
+        self.make_participant('bob')
 
         alice.set_tip_to('bob', '1.00')
 
