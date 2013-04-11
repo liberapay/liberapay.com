@@ -445,3 +445,5 @@ and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
  - [DonorsChoose.org](http://www.donorschoose.org/) - crowd-funded school 
     supplies; Alexis Ohanian 
     [likes it](http://www.donorschoose.org/AlexisOnCNN).
+ - [Catincan](https://www.catincan.com/) - FOSS bounty site
+ - [Bountysource](https://www.bountysource.com/) - FOSS bounty site
