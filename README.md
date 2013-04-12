@@ -402,7 +402,7 @@ See Also
 
 Here's a list of projects we're aware of in the crowd-funding
 space. Something missing? Ping [@whit537](https://twitter.com/whit537) on
-Twitter or [edit the file](/gittip/www.gittip.com/edit/master/README.md)
+Twitter or [edit the file](https://github.com/gittip/www.gittip.com/edit/master/README.md)
 yourself (add your link at the end). :grinning:
 
 *Note: there are comprehensive directories that can complement this list,
