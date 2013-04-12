@@ -1,21 +1,23 @@
 from gittip import AMOUNTS
+from gittip.utils import get_brand
 ^L
+brand = get_brand(request)
 title = "For Gittip"
 ^L
 {% extends templates/base.html %}
 {% block head %}
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"></script>
 <script src="/assets/{{ __version__ }}/for.js"></script>
+<script>$(document).ready(function() { Gittip.initTipButtons('/for/') });</script>
 {% end %}
 {% block heading %}
 <h2 class="top"><span>For</span></h2>
 {% end %}
 {% block box %}
 
-<img src="/assets/{{ __version__ }}/logo.256.png" />
+<img src="/for/{{ brand.slug }}.png" alt="{{ brand.name }}" />
 
-<p><a href="/">Gittip</a> is a weekly gift exchange. It is funded on
-itself.</p>
+<p>{{ brand.description }}</p>
 
 <div class="nav level-1">
 
@@ -79,7 +81,7 @@ itself.</p>
         <div id="last-week">
             <h2>Last Week</h2>
             <div class="fine">Gittip received <b>$24</b> from</div>
-            <div class="account">bruceadams</div>
+            <div class="account"><img src="https://si0.twimg.com/profile_images/2182907658/heroku-logo-for-facebook_bigger.png" /></div>
             <div class="fine">See <a href="./patrons/">all patrons</a></div>
         </div>
     </div>

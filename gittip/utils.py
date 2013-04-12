@@ -2,6 +2,7 @@ from aspen import Response
 from aspen.utils import typecheck
 from tornado.escape import linkify
 from gittip.models.participant import Participant
+from gittip.models.brand import Brand
 
 COUNTRIES = (
     ('AF', u'Afghanistan'),
@@ -264,6 +265,25 @@ def wrap(u):
     return u if u else '...'
 
 
+def canonicalize(path, base, canonical, given):
+    if given != canonical:
+        assert canonical.lower() == given.lower()  # sanity check
+        remainder = path[len(base + given):]
+        newpath = base + canonical + remainder
+        raise Response(302, headers={"Location": newpath})
+
+
+def get_brand(request):
+    """Given a Request, raise Response or return Brand.
+    """
+    slug = request.line.uri.path['brand']
+    brand = Brand.query.filter_by(slug=slug.lower()).first()
+    if brand is None:
+        raise Response(404)
+    canonicalize(request.line.uri.path.raw, '/for/', brand.slug, slug)
+    return brand
+
+
 def get_participant(request, restrict=True):
     """Given a Request, raise Response or return Participant.
 
@@ -271,27 +291,21 @@ def get_participant(request, restrict=True):
 
     """
     user = request.context['user']
-    username = request.line.uri.path['username']
+    slug = request.line.uri.path['username']
 
     if restrict:
         if user.ANON:
-            request.redirect(u'/%s/' % username)
+            request.redirect(u'/%s/' % slug)
 
     participant = \
-           Participant.query.filter_by(username_lower=username.lower()).first()
+           Participant.query.filter_by(username_lower=slug.lower()).first()
 
     if participant is None:
         raise Response(404)
 
-    canonical = participant.username
-    given = username
-    if given != canonical:
-        assert canonical.lower() == given.lower()  # sanity check
-        remainder = request.line.uri.path.raw[len('/%s' % given):]
-        newpath = "/%s%s" % (canonical, remainder)
-        raise Response(302, headers={"Location": newpath})
+    canonicalize(request.line.uri.path.raw, '/', participant.username, slug)
 
-    elif participant.claimed_time is None:
+    if participant.claimed_time is None:
 
         # This is a stub participant record for someone on another platform who
         # hasn't actually registered with Gittip yet. Let's bounce the viewer

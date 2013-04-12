@@ -204,7 +204,7 @@ class Participant(object):
 
 
     @require_username
-    def set_tip_to(self, tippee, amount):
+    def set_tip_to(self, tippee, amount, for_brand=False):
         """Given participant id and amount as str, return a tuple.
 
         We INSERT instead of UPDATE, so that we have history to explore. The
@@ -222,6 +222,7 @@ class Participant(object):
         if self.username == tippee:
             raise self.NoSelfTipping
 
+        table = "tips_for_brands" if for_brand else "tips"
         amount = Decimal(amount)  # May raise InvalidOperation
         lo = gittip.AMOUNTS[0]
         hi = gittip.AMOUNTS[-1]
@@ -230,21 +231,23 @@ class Participant(object):
 
         NEW_TIP = """\
 
-            INSERT INTO tips
+            INSERT INTO %s
                         (ctime, tipper, tippee, amount)
                  VALUES ( COALESCE (( SELECT ctime
-                                        FROM tips
+                                        FROM %s
                                        WHERE (tipper=%s AND tippee=%s)
                                        LIMIT 1
                                       ), CURRENT_TIMESTAMP)
                         , %s, %s, %s
                          )
-              RETURNING ( SELECT count(*) = 0 FROM tips WHERE tipper=%s )
+              RETURNING ( (SELECT count(*) = 0 FROM tips WHERE tipper=%s)
+                        + (SELECT count(*) = 0 FROM tips_for_brands WHERE tipper=%s)
+                         )
                      AS first_time_tipper
 
         """
-        args = (self.username, tippee, self.username, tippee, amount, \
-                                                                 self.username)
+        args = (table, table, self.username, tippee, self.username, tippee, \
+                                                         amount, self.username)
         first_time_tipper = \
                          gittip.db.fetchone(NEW_TIP, args)['first_time_tipper']
         return amount, first_time_tipper
