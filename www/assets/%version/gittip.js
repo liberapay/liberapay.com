@@ -589,15 +589,8 @@ Gittip.initCSRF = function()
     });
 };
 
-Gittip.initTipButtons = function(base)
+Gittip.initTipButtons = function()
 {
-    // Set base
-    // ========
-    // This is used to support both tips to participants and tips to brands.
-
-    base = base === undefined ? '/' : base;
-
-
     // For anonymous users we flash a login link.
 
     $('BUTTON.tip-anon').mouseover(
@@ -661,7 +654,7 @@ Gittip.initTipButtons = function(base)
         select(this, amount);
 
         jQuery.ajax(
-            { url: base + tippee + '/tip.json'
+            { url: '/' + tippee + '/tip.json'
             , data: {amount: amount}
             , type: "POST"
             , error: function(x,y,z) {
