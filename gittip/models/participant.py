@@ -10,7 +10,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy import func
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Column, CheckConstraint, UniqueConstraint, Sequence
-from sqlalchemy.types import Text, TIMESTAMP, Boolean, Numeric, BigInteger
+from sqlalchemy.types import Text, TIMESTAMP, Boolean, Numeric, BigInteger, Enum
 
 import gittip
 from gittip.models.tip import Tip
@@ -51,6 +51,7 @@ class Participant(db.Model):
     balanced_account_uri = Column(Text)
     last_ach_result = Column(Text)
     is_suspicious = Column(Boolean)
+    type = Column(Enum('individual', 'group', 'open company', nullable=False))
 
     ### Relations ###
     accounts_elsewhere = relationship( "Elsewhere"

@@ -7,7 +7,7 @@ Gittip.for.DesertsCtrl = function($scope, $http)
         if ($scope.query == '')
             $scope.lookup = [];
         else
-            $http.get("/for/lookup.json", {params: {query: $scope.query}})
+            $http.get("/lookup.json", {params: {query: $scope.query}})
                  .success(function(data) { $scope.lookup = data });
     };
 

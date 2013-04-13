@@ -1,0 +1,72 @@
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"></script>
+<script src="/assets/{{ __version__ }}/for.js"></script>
+
+<div id="for" ng-app="Gittip.for">
+
+    <div id="weeks" class="group">
+        <div id="this-week">
+            <h2>This Week</h2>
+            <div class="fine">Gittip will receive about</div>
+            <div class="amount">$100.00</div>
+            <div class="fine">from about 20 patrons</div>
+        </div>
+        <div id="last-week">
+            <h2>Last Week</h2>
+            <div class="fine">Gittip received <b>$24</b> from</div>
+            <div class="account"><img src="https://si0.twimg.com/profile_images/2182907658/heroku-logo-for-facebook_bigger.png" /></div>
+            <div class="fine">See <a href="./patrons/">all patrons</a></div>
+        </div>
+    </div>
+
+    <div class="group">
+        <div id="deserts">
+            <h2>Who deserves it?</h2>
+
+            <div ng-controller="Gittip.for.DesertsCtrl">
+                <table>
+                    <tr ng-repeat="participant in participants">
+                        <td>&#123;{ participant.username }}</td>
+                        <td>
+                            <input type="radio"
+                                   name="&#123;{ participant.username }}" />
+                            <input type="radio"
+                                   name="&#123;{ participant.username }}" />
+                            <input type="radio"
+                                   name="&#123;{ participant.username }}" />
+                            <input type="radio"
+                                   name="&#123;{ participant.username }}" />
+                            <input type="radio"
+                                   name="&#123;{ participant.username }}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <form ng-submit="submit()">
+                                <input tabindex="1" id="query"
+                                       autocomplete="off"
+                                       placeholdey="Enter a Gittip username"
+                                       ng-model="query" ng-change="fetch()" />
+                            </form>
+                        </td>
+                        <td id="lookup-results-container">
+                          &nbsp;
+                          <button>Add</button>
+
+                          <ul id="lookup-results">
+                            <li ng-repeat="participant in lookup">
+                              <span>&#123;{ participant.username }}</span>
+                            </li>
+                          </ul>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div id="crowd">
+            <h2>Current split</h2>
+        </div>
+    </div>
+
+</div>

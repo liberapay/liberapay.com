@@ -63,6 +63,10 @@ long_statement = len(participant.statement) > LONG_STATEMENT
             <div class="col0">
         {% end %}
 
+            {% if participant.type == 'open company' %}
+            {% include "templates/identifications.html %}
+            {% end %}
+
             <h2>Funding Goal</h2>
             <div class="goal">
                 {% if participant.goal is None %}

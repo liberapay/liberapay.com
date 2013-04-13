@@ -36,7 +36,7 @@ BEGIN;
                                    WHERE participant=OLD.username
                                    LIMIT 1
                                  ), CURRENT_TIMESTAMP)
-                    , OLD.id
+                    , OLD.username
                     , NEW.type
                      );
 
