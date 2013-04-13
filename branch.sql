@@ -7,7 +7,10 @@ BEGIN;
     -------------------
     -- participant kind
 
-    CREATE TYPE participant_type AS ENUM ('individual', 'group', 'open group');
+    CREATE TYPE participant_type AS ENUM ( 'individual'
+                                         , 'group'
+                                         , 'open company'
+                                          );
 
     CREATE TABLE log_participant_type
     ( id                serial                      PRIMARY KEY
