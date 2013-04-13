@@ -8,11 +8,6 @@ DROP TABLE IF EXISTS tips_to_brands;
 
 BEGIN;
 
-    CREATE TABLE companies
-    ( id            bigserial   PRIMARY KEY
-    , legal_name    text        NOT NULL UNIQUE
-     );
-
     CREATE TABLE brands
     ( id            bigserial   PRIMARY KEY
     , name          text        NOT NULL UNIQUE
@@ -23,7 +18,6 @@ BEGIN;
                                  ON DELETE RESTRICT ON UPDATE RESTRICT
      );
 
-    INSERT INTO companies (legal_name) VALUES ('Gittip, LLC');
     INSERT INTO brands (name, slug, url, description, company_id)
          SELECT 'Gittip'
               , 'gittip'
@@ -32,7 +26,7 @@ BEGIN;
                 'It is funded on itself.'
               , id
            FROM companies
-          WHERE legal_name='Gittip, LLC';
+          WHERE username='gittip';
 
     CREATE TABLE identifications
     ( id                bigserial   PRIMARY KEY
