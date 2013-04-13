@@ -223,7 +223,7 @@ $(document).ready(function()
     // Wire up aggregate giving knob.
     // ==============================
 
-    $('.anonymous').click(function()
+    $('.anonymous INPUT').click(function()
     {
         jQuery.ajax(
             { url: 'anonymous.json'
@@ -231,7 +231,7 @@ $(document).ready(function()
             , dataType: 'json'
             , success: function(data)
             {
-                $('INPUT.anonymous').attr('checked', data.anonymous);
+                $('.anonymous INPUT').attr('checked', data.anonymous);
             }
             , error: function() {
                     alert( "Failed to change your anonymity "
