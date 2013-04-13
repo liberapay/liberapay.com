@@ -10,16 +10,16 @@ class Identification(db.Model):
     ctime = Column(TIMESTAMP(timezone=True), nullable=False)
     mtime = Column(TIMESTAMP(timezone=True), nullable=False, default="now()")
 
-    brand_id = Column(BigInteger, ForeignKey( "brands.id"
-                                            , onupdate="CASCADE"
-                                            , ondelete="RESTRICT"
-                                             ), nullable=False)
-    participant_id = Column(BigInteger, ForeignKey( "participants.id"
-                                                  , onupdate="CASCADE"
-                                                  , ondelete="RESTRICT"
-                                                   ), nullable=False)
+    individual = Column(Text, ForeignKey( "participants.username"
+                                        , onupdate="CASCADE"
+                                        , ondelete="RESTRICT"
+                                         ), nullable=False)
+    group = Column(Text, ForeignKey( "participants.username"
+                                   , onupdate="CASCADE"
+                                   , ondelete="RESTRICT"
+                                    ), nullable=False)
     weight = Column(Numeric(precision=17, scale=16), nullable=False)
-    identified_by = Column(Text, ForeignKey( "participants.id"
+    identified_by = Column(Text, ForeignKey( "participants.username"
                                            , onupdate="CASCADE"
                                            , ondelete="RESTRICT"
                                             ), nullable=False)

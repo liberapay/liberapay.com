@@ -2,7 +2,6 @@ from aspen import Response
 from aspen.utils import typecheck
 from tornado.escape import linkify
 from gittip.models.participant import Participant
-from gittip.models.brand import Brand
 
 COUNTRIES = (
     ('AF', u'Afghanistan'),
@@ -271,17 +270,6 @@ def canonicalize(path, base, canonical, given):
         remainder = path[len(base + given):]
         newpath = base + canonical + remainder
         raise Response(302, headers={"Location": newpath})
-
-
-def get_brand(request):
-    """Given a Request, raise Response or return Brand.
-    """
-    slug = request.line.uri.path['brand']
-    brand = Brand.query.filter_by(slug=slug.lower()).first()
-    if brand is None:
-        raise Response(404)
-    canonicalize(request.line.uri.path.raw, '/for/', brand.slug, slug)
-    return brand
 
 
 def get_participant(request, restrict=True):
