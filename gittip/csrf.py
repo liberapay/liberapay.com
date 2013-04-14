@@ -144,6 +144,7 @@ def inbound(request):
             request_csrf_token = request.headers.get('X-CSRF-TOKEN', '')
 
         if not constant_time_compare(request_csrf_token, csrf_token):
+            import ipdb; ipdb.set_trace()
             raise Response(403, REASON_BAD_TOKEN)
 
 

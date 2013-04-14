@@ -1,0 +1,55 @@
+"""Endpoint to record identifications
+"""
+from aspen import Response
+from gittip import db
+from gittip.utils import get_participant
+
+# ================= ^L
+
+request.allow('GET', 'POST')
+participant = get_participant(request)
+if user == participant:
+    raise Response(400)
+if not participant.type == 'open company':
+    raise Response(400)
+
+group = participant.username
+
+if POST:
+    member = body['member']
+    weight = body['weight']
+    db.execute("""
+
+    INSERT
+      INTO identifications (ctime, member, "group", weight, identified_by)
+    VALUES ( COALESCE (( SELECT ctime
+                           FROM identifications
+                          WHERE member=%s
+                            AND "group"=%s
+                          LIMIT 1
+                        ), CURRENT_TIMESTAMP)
+           , %s
+           , %s
+           , %s
+           , %s
+            );
+
+    """, (member, group, member, group, weight, user.username))
+
+identifications = db.fetchall("""
+
+SELECT * FROM (
+    SELECT DISTINCT ON (member, "group", identified_by)
+           member AS username
+         , weight
+      FROM identifications
+     WHERE "group"=%s
+       AND identified_by=%s
+  ORDER BY member, "group", identified_by, mtime DESC
+) AS anon WHERE weight > 0 ORDER BY weight DESC, username
+
+""", (group, user.username))
+
+response.body = { "identifications": list(identifications)
+                , "split": participant.compute_split()
+                 }

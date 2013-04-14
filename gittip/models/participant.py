@@ -273,6 +273,11 @@ class Participant(db.Model):
             out = (now - self.claimed_time).total_seconds()
         return out
 
+    def compute_split(self):
+        if self.type != 'open company':
+            return [{"username": self.username, "weight": "1.0"}]
+        pass
+
 
     # TODO: Move these queries into this class.
 

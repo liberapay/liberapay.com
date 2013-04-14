@@ -49,13 +49,16 @@ BEGIN;
     , ctime             timestamp with time zone    NOT NULL
     , mtime             timestamp with time zone    NOT NULL
                                                      DEFAULT CURRENT_TIMESTAMP
-    , individual        text        NOT NULL REFERENCES participants
+    , member            text        NOT NULL REFERENCES participants
                                      ON DELETE RESTRICT ON UPDATE CASCADE
     , "group"           text        NOT NULL REFERENCES participants
                                      ON DELETE RESTRICT ON UPDATE CASCADE
-    , weight            numeric(17, 16) NOT NULL
+    , weight            numeric     DEFAULT 0.1
     , identified_by     text        NOT NULL REFERENCES participants
                                      ON DELETE RESTRICT ON UPDATE CASCADE
+    , CONSTRAINT no_member_of_self CHECK (member != "group")
+    , CONSTRAINT no_self_nomination CHECK (member != "identified_by")
+    , CONSTRAINT no_stacking_the_deck CHECK ("group" != "identified_by")
      );
 
 END;

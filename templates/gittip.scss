@@ -969,15 +969,15 @@ button.selected:hover {
     }
 }
 
-#for {
+#openco {
+
+    .fine {
+        font: normal 10px $Helvetica;
+        text-transform: uppercase;
+    }
 
     #weeks {
         margin-top: 10px;
-
-        .fine {
-            font: normal 10px $Helvetica;
-            text-transform: uppercase;
-        }
 
         #this-week {
             width: 220px;
@@ -999,35 +999,64 @@ button.selected:hover {
         }
     }
 
-    #deserts {
-        width: 220px;
-        float: left;
+    TD {
+        padding-right: 0.5em;
+    }
+
+    #my-identifications {
+        width: 250px;
+        float: right;
+        position: relative;
+
+        ::-webkit-input-placeholder { color: $light-brown; }
+        ::-moz-placeholder { color: $light-brown; } /* firefox 19+ */
+        :-ms-input-placeholder { color: $light-brown; } /* ie */
+        input:-moz-placeholder { color: $light-brown; }
 
         #query {
-            width: 110px;
+            width: 170px;
             padding: 2px 5px;
+            z-index: 1;
+            position: relative;
+            top: 1px;
+            outline: none;
+            border: none;
         }
 
-        #lookup-results-container {
+        .weight {
+            background: $green;
+            display: inline-block;
+        }
+        .weight.a { height: 24px; width: 24px; }
+        .weight.b { height: 12px; width: 12px; }
+        .weight.c { height: 6px; width: 6px }
+        .weight.d { height: 3px; width: 3px; }
+        .weight.e { height: 1px; width: 1px; }
+        .weight.f { height: 0.25px; width: 0.25px; }
+        .weight.g { background: red; width: 1px; height: 1px; }
+
+        #lookup-container {
             position: relative;
+            vertical-align: middle;
 
             #lookup-results {
-                width: 120px;
+                width: 188px;
+                min-height: 30px;
                 position: absolute;
-                bottom: 0px;
-                left: -128px;
+                bottom: -1px;
+                left: -4px;
                 background: white;
-                border: 2px solid black;
                 margin: 0;
-                padding: 5px;
+                padding: 2px 0;
                 border: 4px solid rgba($brown, 0.5);
+                color: $light-brown;
                 @include border-radius(3px);
 
                 li {
                     font: normal 16px/16px $Helvetica;
                     white-space: nowrap;
                     margin: 0;
-                    padding: 3px 0;
+                    padding: 3px 5px;
                     overflow: hidden;
                 }
             }
@@ -1035,9 +1064,8 @@ button.selected:hover {
     }
 
     #crowd {
-        width: 220px;
-        float: right;
-        text-align: right;
+        width: 180px;
+        float: left;
     }
 
 }
