@@ -63,8 +63,8 @@ BEGIN;
 
 
     CREATE VIEW current_identifications AS
-    SELECT DISTINCT ON (member, "group", identified_by) *
-               FROM identifications
+    SELECT DISTINCT ON (member, "group", identified_by) i.*
+               FROM identifications i
                JOIN participants p ON p.username = identified_by
               WHERE p.is_suspicious IS FALSE
            ORDER BY member
