@@ -7,8 +7,6 @@ from gittip.utils import get_participant
 # ================= ^L
 
 request.allow('GET', 'POST')
-if user.ANON:
-    raise Response(404)
 participant = get_participant(request, restrict=False)
 if user == participant:
     raise Response(400)

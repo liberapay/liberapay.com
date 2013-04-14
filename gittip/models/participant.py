@@ -276,7 +276,8 @@ class Participant(db.Model):
         return out
 
     def allowed_to_answer(self):
-        return self.is_suspicious is False \
+        return not self.ANON \
+           and self.is_suspicious is False \
            and len(self.exchanges) > 1
 
     def compute_split(self):
