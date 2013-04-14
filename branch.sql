@@ -9,7 +9,7 @@ BEGIN;
 
     CREATE TYPE participant_type AS ENUM ( 'individual'
                                          , 'group'
-                                         , 'open company'
+                                         , 'open group'
                                           );
 
     CREATE TABLE log_participant_type
@@ -40,6 +40,8 @@ BEGIN;
                     , NEW.type
                      );
 
+    UPDATE participants SET type='open group' WHERE username_lower='gittip';
+
 
     ------------------
     -- identifications
@@ -53,12 +55,23 @@ BEGIN;
                                      ON DELETE RESTRICT ON UPDATE CASCADE
     , "group"           text        NOT NULL REFERENCES participants
                                      ON DELETE RESTRICT ON UPDATE CASCADE
-    , weight            numeric     DEFAULT 0.1
+    , weight            int         NOT NULL DEFAULT 0
     , identified_by     text        NOT NULL REFERENCES participants
                                      ON DELETE RESTRICT ON UPDATE CASCADE
     , CONSTRAINT no_member_of_self CHECK (member != "group")
     , CONSTRAINT no_self_nomination CHECK (member != "identified_by")
     , CONSTRAINT no_stacking_the_deck CHECK ("group" != "identified_by")
      );
+
+
+    CREATE VIEW current_identifications AS
+    SELECT DISTINCT ON (member, "group", identified_by) *
+               FROM identifications
+               JOIN participants p ON p.username = identified_by
+              WHERE p.is_suspicious IS FALSE
+           ORDER BY member
+                  , "group"
+                  , identified_by
+                  , mtime DESC;
 
 END;

@@ -65,3 +65,7 @@ def sentry(website):
 def mixpanel(website):
     website.mixpanel_token = os.environ['MIXPANEL_TOKEN']
     gittip.mixpanel.MIXPANEL_TOKEN = os.environ['MIXPANEL_TOKEN']
+
+def nanswers():
+    from gittip.models import participant
+    participant.NANSWERS_THRESHOLD = int(os.environ['NANSWERS_THRESHOLD'])

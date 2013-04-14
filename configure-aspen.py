@@ -5,6 +5,7 @@ import gittip.wireup
 import gittip.authentication
 import gittip.orm
 import gittip.csrf
+import gittip.models.participant
 
 
 gittip.wireup.canonical()
@@ -13,6 +14,7 @@ gittip.wireup.billing()
 gittip.wireup.username_restrictions(website)
 gittip.wireup.sentry(website)
 gittip.wireup.mixpanel(website)
+gittip.wireup.nanswers()
 
 
 website.bitbucket_consumer_key = os.environ['BITBUCKET_CONSUMER_KEY'].decode('ASCII')

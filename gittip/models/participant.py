@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 
 import datetime
 import os
+from collections import defaultdict
 from decimal import Decimal
 
 import pytz
@@ -23,6 +24,7 @@ ASCII_ALLOWED_IN_USERNAME = set("0123456789"
                                 "abcdefghijklmnopqrstuvwxyz"
                                 "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                 ".,-_;:@ ")
+NANSWERS_THRESHOLD = 0  # configured in wireup.py
 
 class Participant(db.Model):
     __tablename__ = "participants"
@@ -51,7 +53,7 @@ class Participant(db.Model):
     balanced_account_uri = Column(Text)
     last_ach_result = Column(Text)
     is_suspicious = Column(Boolean)
-    type = Column(Enum('individual', 'group', 'open company', nullable=False))
+    type = Column(Enum('individual', 'group', 'open group', nullable=False))
 
     ### Relations ###
     accounts_elsewhere = relationship( "Elsewhere"
@@ -273,10 +275,50 @@ class Participant(db.Model):
             out = (now - self.claimed_time).total_seconds()
         return out
 
+    def allowed_to_answer(self):
+        return self.is_suspicious is False \
+           and len(self.exchanges) > 1
+
     def compute_split(self):
-        if self.type != 'open company':
+        if self.type != 'open group':
             return [{"username": self.username, "weight": "1.0"}]
-        pass
+
+        nanswers = gittip.db.fetchone("""
+
+            SELECT count(*)
+              FROM ( SELECT identified_by
+                       FROM current_identifications
+                      WHERE "group"=%s
+                        AND weight > 0
+                   GROUP BY identified_by
+                    ) AS anon
+
+        """, (self.username,))['count']
+
+        split = []
+        if nanswers >= NANSWERS_THRESHOLD:
+            rows = gittip.db.fetchall("""
+
+                SELECT *
+                  FROM current_identifications
+                 WHERE "group"=%s
+                   AND weight > 0
+
+            """, (self.username,))
+
+            splitmap = defaultdict(int)
+            total = 0
+            for row in rows:
+                splitmap[row['member']] += row['weight']
+                total += row['weight']
+
+            total = float(total)
+            for username, weight in splitmap.items():
+                split.append({"username": username, "weight": weight / total})
+
+            split.sort(key=lambda r: r['weight'], reverse=True)
+
+        return (nanswers, NANSWERS_THRESHOLD, split)
 
 
     # TODO: Move these queries into this class.

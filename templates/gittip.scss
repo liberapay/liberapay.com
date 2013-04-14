@@ -969,41 +969,18 @@ button.selected:hover {
     }
 }
 
-#openco {
+#open_group {
 
     .fine {
         font: normal 10px $Helvetica;
         text-transform: uppercase;
     }
 
-    #weeks {
-        margin-top: 10px;
-
-        #this-week {
-            width: 220px;
-            float: left;
-            text-align: left;
-            .amount {
-                font: bold 56px $Helvetica;
-            }
-        }
-
-        #last-week {
-            width: 220px;
-            float: right;
-            text-align: right;
-
-            .account {
-                padding: 5px 0;
-            }
-        }
-    }
-
     TD {
         padding-right: 0.5em;
     }
 
-    #my-identifications {
+    #identifications {
         width: 250px;
         float: right;
         position: relative;
@@ -1063,9 +1040,13 @@ button.selected:hover {
         }
     }
 
-    #crowd {
+    #split {
         width: 180px;
         float: left;
+
+        .percentage {
+            text-align: right;
+        }
     }
 
 }
