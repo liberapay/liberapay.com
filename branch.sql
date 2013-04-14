@@ -5,7 +5,7 @@
 BEGIN;
 
     -------------------
-    -- participant kind
+    -- participant type
 
     CREATE TYPE participant_type AS ENUM ( 'individual'
                                          , 'group'
@@ -39,8 +39,6 @@ BEGIN;
                     , OLD.username
                     , NEW.type
                      );
-
-    UPDATE participants SET type='open group' WHERE username_lower='gittip';
 
 
     ------------------
