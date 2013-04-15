@@ -534,3 +534,16 @@ BEGIN;
                   , mtime DESC;
 
 END;
+
+
+-------------------------------------------------------------------------------
+
+CREATE VIEW backed_tips AS
+SELECT DISTINCT ON (tipper, tippee) t.*
+           FROM tips t
+           JOIN participants p ON p.username = tipper
+          WHERE p.is_suspicious IS NOT TRUE
+            AND p.last_bill_result=''
+       ORDER BY tipper
+              , tippee
+              , mtime DESC;
