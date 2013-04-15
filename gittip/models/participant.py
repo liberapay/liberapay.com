@@ -278,7 +278,7 @@ class Participant(db.Model):
     def allowed_to_answer(self):
         return not self.ANON \
            and self.is_suspicious is False \
-           and len(self.exchanges) > 1
+           and len(self.exchanges) > 0
 
     def compute_split(self):
         if self.type != 'open group':
