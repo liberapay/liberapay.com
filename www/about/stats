@@ -125,6 +125,40 @@ def part(s):
     return s
 
 
+ngivers = db.fetchone("select count(distinct tipper) from transfers "
+                      "where timestamp > (now() - interval '7 days')")['count']
+nreceivers = db.fetchone("select count(distinct tippee) from transfers "
+                         "where timestamp > (now() - interval '7 days')"
+                         )['count']
+noverlap = db.fetchone("""
+
+        select count(*) from (
+
+        select distinct tippee from transfers
+        where timestamp > (now() - interval '7 days')
+        intersect
+        select distinct tipper from transfers
+        where timestamp > (now() - interval '7 days')
+
+        ) as anon
+
+""")['count']
+nactive = db.fetchone("""
+
+        select count(*) from (
+
+        select distinct tippee from transfers
+        where timestamp > (now() - interval '7 days')
+        union
+        select distinct tipper from transfers
+        where timestamp > (now() - interval '7 days')
+
+        ) as anon
+
+""")['count']
+assert nactive == ngivers + nreceivers - noverlap
+
+
 # Adapt wording to payday status.
 # ===============================
 
@@ -160,7 +194,8 @@ tip_distribution_json = {str(k): v for k,v in tip_distribution.items()}
 names = ['ncc', 'pcc', 'statements', 'transfer_volume',
          'last_thursday', 'this_thursday', 'punc', 'other_people',
          'average_tip', 'average_tippees', 'total_backed_tips',
-         'tip_distribution_json', 'tip_n', 'nach', 'escrow']
+         'tip_distribution_json', 'tip_n', 'nach', 'escrow'
+         'ngivers', 'nreceivers', 'noverlap', 'nactive']
 
 ^L application/json
 {{ json.dumps({name: globals()[name] for name in names}) }}
@@ -201,7 +236,8 @@ names = ['ncc', 'pcc', 'statements', 'transfer_volume',
 
     <h1>Quick Facts</h1>
 
-    <p>Gittip is <b>{{ age() }}</b> old.</p>
+    <p>Gittip is <b>{{ age() }}</b> old and has <b>{{ nactive }} active
+    users</b>.</p>
 
     <p><b>{{ commaize(npeople) }} people</b> have joined Gittip. Of those,
     {{ pcc }}% ({{ commaize(ncc) }}) have a working credit card on
@@ -209,6 +245,12 @@ names = ['ncc', 'pcc', 'statements', 'transfer_volume',
     {% elif not user.ANON %} You're not one of them.</p><p><b><a
             href="/credit-card.html" class="highlight">Click here to set up a
             credit card</a></b>.{% end %}</p>
+
+    <p>
+        {{ ngivers }} participants gave money in the past week.<br />
+        {{ nreceivers }} received money.<br />
+        {{ noverlap }} did both.
+    </p>
 
     <p><b>${{ commaize(escrow, 2) }}</b> is escrowed within Gittip.
     {{ nach }} people have connected a bank account</a> for withdrawals.
