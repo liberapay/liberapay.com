@@ -313,9 +313,11 @@ class Participant(db.Model):
                 splitmap[row['member']] += row['weight']
                 total += row['weight']
 
-            total = float(total)
+            total = Decimal(total)
             for username, weight in splitmap.items():
-                split.append({"username": username, "weight": weight / total})
+                split.append({ "username": username
+                             , "weight": Decimal(weight) / total
+                              })
 
             split.sort(key=lambda r: r['weight'], reverse=True)
 

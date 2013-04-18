@@ -25,6 +25,7 @@ import aspen.utils
 from aspen import log
 from aspen.utils import typecheck
 from gittip.participant import Participant
+from gittip.models.participant import Participant as ORMParticipant
 from psycopg2 import IntegrityError
 from psycopg2.extras import RealDictRow
 
@@ -130,6 +131,8 @@ class Payday(object):
         self.zero_out_pending(ts_start)
 
         self.payin(ts_start, self.genparticipants(ts_start, ts_start))
+        self.move_pending_to_balance_for_open_groups()
+        self.pachinko(ts_start, self.genparticipants(ts_start, ts_start))
         self.clear_pending_to_balance()
         self.payout(ts_start, self.genparticipants(ts_start, False))
 
@@ -205,6 +208,7 @@ class Payday(object):
                  , balanced_account_uri
                  , stripe_customer_id
                  , is_suspicious
+                 , type
               FROM participants
              WHERE claimed_time IS NOT NULL
                AND claimed_time < %s
@@ -226,6 +230,43 @@ class Payday(object):
                 log("Payin done for %d participants." % i)
             self.charge_and_or_transfer(ts_start, participant, tips, total)
         log("Did payin for %d participants." % i)
+
+
+    def pachinko(self, ts_start, participants):
+        for i, (participant, foo, bar) in enumerate(participants, start=1):
+            if i % 100 == 0:
+                log("Pachinko done for %d participants." % i)
+            if participant['type'] != 'open group':
+                continue
+            p = ORMParticipant.query.get(participant['username'])
+            nanswers, threshold, split = p.compute_split()
+            if nanswers < threshold:
+                continue
+            split.reverse()
+            top_receiver = split.pop()
+
+            total = p.balance
+            given = 0
+            log("Pachinko $%s out from %s." % (total, p.username))
+
+            def tip(member, amount):
+                tip = {}
+                tip['tipper'] = p.username
+                tip['tippee'] = member['username']
+                tip['amount'] = amount
+                tip['claimed_time'] = ts_start
+                self.tip({"username": p.username}, tip, ts_start)
+                return tip['amount']
+
+            for member in split:
+                amount = p.balance * member['weight']
+                amount = amount.quantize(Decimal('0.00'), rounding=ROUND_UP)
+                given += tip(member, amount)
+
+            remainder = total - given
+            tip(top_receiver, remainder)
+
+        log("Did pachinko for %d participants." % i)
 
 
     def payout(self, ts_start, participants):
@@ -270,6 +311,26 @@ class Payday(object):
         self.mark_participant(nsuccessful_tips)
 
 
+    def move_pending_to_balance_for_open_groups(self):
+        """Transfer pending into balance for open groups.
+
+        We do this because debit_participant operates against balance, not
+        pending. This is because credit card charges go directly into balance
+        on the first (payin) loop.
+
+        """
+        self.db.execute("""\
+
+            UPDATE participants
+               SET balance = (balance + pending)
+                 , pending = 0
+             WHERE type='open group'
+
+        """)
+        # "Moved" instead of "cleared" because we don't also set to null.
+        log("Moved pending to balance for open groups. Ready for pachinko.")
+
+
     def clear_pending_to_balance(self):
         """Transfer pending into balance, setting pending to NULL.
 
@@ -290,6 +351,7 @@ class Payday(object):
              WHERE pending IS NOT NULL
 
         """)
+        # "Cleared" instead of "moved because we also set to null.
         log("Cleared pending to balance. Ready for payouts.")
 
 

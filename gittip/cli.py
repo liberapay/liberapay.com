@@ -6,6 +6,7 @@ from gittip import wireup
 def payday():
     db = wireup.db()
     wireup.billing()
+    wireup.nanswers()
 
 
     # Lazily import the billing module.
