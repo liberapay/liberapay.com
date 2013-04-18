@@ -233,6 +233,7 @@ class Payday(object):
 
 
     def pachinko(self, ts_start, participants):
+        i = 0
         for i, (participant, foo, bar) in enumerate(participants, start=1):
             if i % 100 == 0:
                 log("Pachinko done for %d participants." % i)
