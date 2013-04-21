@@ -9,7 +9,7 @@ import random
 
 faker = Factory.create()
 
-platforms = ['github', 'twitter']
+platforms = ['github', 'twitter', 'bitbucket']
 
 
 def fake_text_id(size=6, chars=string.ascii_lowercase + string.digits):
@@ -77,13 +77,33 @@ def fake_elsewhere(participant, platform=None):
     if platform is None:
         platform = random.choice(platforms)
 
+    info_templates = {
+        "github": {
+            "name": participant.username,
+            "html_url": "https://github.com/" + participant.username,
+            "type": "User",
+            "login": participant.username
+        },
+        "twitter": {
+            "name": participant.username,
+            "html_url": "https://twitter.com/" + participant.username,
+            "screen_name": participant.username
+        },
+        "bitbucket": {
+            "display_name": participant.username,
+            "username": participant.username,
+            "is_team": "False",
+            "html_url": "https://bitbucket.org/" + participant.username,
+        }
+    }
+
     return Elsewhere(
         id=fake_int_id(),
         platform=platform,
         user_id=fake_text_id(),
         is_locked=False,
         participant=participant.username,
-        user_info=''
+        user_info=info_templates[platform]
     )
 
 
@@ -100,8 +120,8 @@ def populate_db(session, num_participants=100, num_tips=50):
 
     #Make the "Elsewhere's"
     for p in participants:
-        #All participants get 1 or 2 elsewheres
-        num_elsewheres = random.randint(1, 2)
+        #All participants get between 1 and 3 elsewheres
+        num_elsewheres = random.randint(1, 3)
         for platform_name in platforms[:num_elsewheres]:
             e = fake_elsewhere(p, platform_name)
             session.add(e)
