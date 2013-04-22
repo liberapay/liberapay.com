@@ -447,3 +447,4 @@ and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
     [likes it](http://www.donorschoose.org/AlexisOnCNN).
  - [Catincan](https://www.catincan.com/) - FOSS bounty site
  - [Bountysource](https://www.bountysource.com/) - FOSS bounty site
+ - [IssueHunter](http://issuehunter.co/) - FOSS bounty site
