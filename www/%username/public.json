@@ -13,7 +13,11 @@ callback_pattern = re.compile(r'^[_A-Za-z0-9.]+$')
 participant = get_participant(request, restrict=False)
 receiving = participant.get_dollars_receiving()
 
-output = {"receiving": str(receiving)}
+output = { "id": participant.id
+         , "username": participant.username
+         , "receiving": str(receiving)
+         , "avatar": participant.get_img_src()
+          }
 
 
 # Generate goal key
@@ -62,7 +66,6 @@ if not user.ANON:
     else:
         my_tip = user.get_tip_to(path['username'])
     output["my_tip"] = str(my_tip)
-
 
 
 # Accounts Elsewhere
