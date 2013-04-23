@@ -62,9 +62,9 @@ if not user.ANON:
 # Accounts Elsewhere
 # ==================
 # For Twitter we can use an immutable id. For GitHub we have an immutable id
-# but we can't use it. For Bitbucket we don't have an immutable id. It's nice 
+# but we can't use it. For Bitbucket we don't have an immutable id. It's nice
 # that Twitter lets us use an immutable id. We should do that ourselves:
-# 
+#
 # https://github.com/gittip/www.gittip.com/issues/680
 
 github, twitter, bitbucket = participant.get_accounts_elsewhere()
