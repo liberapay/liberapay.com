@@ -1,6 +1,12 @@
 """JSON endpoint for a Gittip widget.
 """
+import re
+
 from gittip.utils import get_participant
+
+
+callback_pattern = re.compile(r'^[_A-Za-z0-9.]+$')
+
 
 # ========================================================================== ^L
 
@@ -82,5 +88,17 @@ output['elsewhere'] = { 'bitbucket': bitbucket
                       , 'twitter': twitter
                        }
 
-response.headers["Access-Control-Allow-Origin"] = "*"
 response.body = output
+
+# CORS - see https://github.com/gittip/aspen-python/issues/138
+response.headers["Access-Control-Allow-Origin"] = "*"
+
+# JSONP - see https://github.com/gittip/aspen-python/issues/138
+callback = qs.get('callback')
+if callback is not None:
+    if callback_pattern.match(callback) is None:
+        response.code = 400
+        response.body = {"error": "bad callback"}
+    else:
+        response.body = "%s(%s)" % (callback, response.body)
+        response.headers['Content-Type'] = 'application/javascript'
