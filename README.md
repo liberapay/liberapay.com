@@ -46,113 +46,6 @@ and [Google](https://www.google.com/analytics) for analytics.
 
 You need python2.7 on your PATH.
 
-You need [Postgres](http://www.postgresql.org/download/). We're working
-on
-[porting](https://github.com/gittip/www.gittip.com/issues?milestone=28&state=open)
-Gittip from raw SQL to a declarative ORM with SQLAlchemy. After that we may be
-able to remove the hard dependency on Postgres so you can use SQLite in
-development, but for now you need Postgres.
-
-The best version of Postgres to use is 9.2, because that's what is being
-run in production at Heroku. Version 9.1 is the second-best, because Gittip
-uses the [hstore](http://www.postgresql.org/docs/9.2/static/hstore.html)
-extension for unstructured data, and that isn't bundled with earlier
-versions than 9.1. If you're on a Mac, maybe try out Heroku's
-[Postgres.app](http://www.postgresql.org/download/). If installing using a
-package manager, you may need several packages. On Ubuntu and Debian, the
-required packages are: postgresql (base), libpq5-dev (includes headers needed
-to build the psycopg2 Python library), and postgresql-contrib (includes
-hstore).
-
-Now, you need to setup the database.
-
-
-Setting up the Database
------------------------
-
-Once Postgres is installed, you need to configure authentication and set up a
-gittip database.
-
-
-### Authentication
-
-If you already have a &ldquo;role&rdquo; (Postgres user) that you'd like
-to use, you can do so by editing `DATABASE_URL` in the generated local.env
-file. You can also change the database name there. See
-[Configuration](#configuration) for more information.
-
-Otherwise, you should add a role that matches your OS username, and make sure
-it's a superuser role and has login privileges. Here's a sample
-invocation of the createuser executable that comes with Postgres that will do
-this for you, assuming that a &ldquo;postgres&rdquo; superuser was already
-created as part of initial installation:
-
-    $ sudo -u postgres createuser --superuser $USER
-
-Set the authentication method to &ldquo;trust&rdquo; in pg_hba.conf for all
-local connections and host connections from localhost. For this, ensure that
-the file contains these lines:
-
-    local   all             all                                     trust
-    host    all             all             127.0.0.1/32            trust
-    host    all             all             ::1/128                 trust
-
-Reload Postgres using pg_ctl for changes to take effect.
-
-
-### Schema
-
-Once Postgres is set up, run:
-
-    $ ./makedb.sh
-
-That will create a new gittip superuser and a gittip database (with UTC as the
-default timezone), populated with structure from ./schema.sql. To change the
-name of the database and/or user, pass them on the command line (you'll
-need to modify the `DATABASE_URL` environment variable as well; see
-[Configuration](#configuration) below):
-
-    $ ./makedb.sh mygittip myuser
-
-If you only pass one argument it will be used for both dbname and owner role:
-
-    $ ./makedb.sh gittip-test
-
-The schema for the Gittip.com database is defined in schema.sql. It should be
-considered append-only. The idea is that this is the log of DDL that
-we've run against the production database. You should never change
-commands that have already been run. New DDL will be (manually) run against the
-production database as part of deployment.
-
-### Example data
-
-The gittip database created in the last step is empty. To populate it with
-some fake data, so that more of the site is functional, run this command:
-
-    $ make fake_data
-
-### Notes for Mac OS X users
-
-If when running the tests you see errors of the form:
-
-    psycopg2.OperationalError: FATAL:  sorry, too many clients already
-
-You will need to configure Postgres to accept more connections. You can do this
-by editing your `postgresql.conf`, and setting:
-
-    max_connections = 40
-
-To get this to work you will also need to change your kernel's shared memory
-parameters. You can do this by running these shell commands:
-
-    sudo sysctl -w kern.sysv.shmmax=8388608
-    sudo sysctl -w kern.sysv.shmall=2048
-
-You will need to restart Postgres for the max_connections parameter to
-take effect. Once restarted, the test suite should pass for you. These changes
-will not persist after a reboot, so you will have to set these again after
-a reboot.
-
 Building and Launching
 ----------------------
 
@@ -163,7 +56,7 @@ make to build and launch Gittip:
 
 If you don't have make, look at the Makefile to see what steps you need
 to perform to build and launch Gittip. The Makefile is pretty simple and
-straightforward. 
+straightforward.
 
 All Python dependencies (including virtualenv) are bundled with Gittip in the
 vendor/ directory. Gittip is designed so that you don't manage its
@@ -186,36 +79,36 @@ $ make run
 [SWADDLE] Skipping line: .
 [SWADDLE] Skipping line: .
 pid-12508 thread-140735090330816 (MainThread) Reading configuration from defaults, environment, and command line.
-pid-12508 thread-140735090330816 (MainThread)   changes_reload         False                          default                 
+pid-12508 thread-140735090330816 (MainThread)   changes_reload         False                          default
 pid-12508 thread-140735090330816 (MainThread)   changes_reload         True                           command line option --changes_reload=yes
-pid-12508 thread-140735090330816 (MainThread)   charset_dynamic        UTF-8                          default                 
-pid-12508 thread-140735090330816 (MainThread)   charset_static         None                           default                 
-pid-12508 thread-140735090330816 (MainThread)   configuration_scripts  []                             default                 
-pid-12508 thread-140735090330816 (MainThread)   indices                [u'index.html', u'index.json', u'index'] default                 
-pid-12508 thread-140735090330816 (MainThread)   list_directories       False                          default                 
-pid-12508 thread-140735090330816 (MainThread)   logging_threshold      0                              default                 
-pid-12508 thread-140735090330816 (MainThread)   media_type_default     text/plain                     default                 
-pid-12508 thread-140735090330816 (MainThread)   media_type_json        application/json               default                 
-pid-12508 thread-140735090330816 (MainThread)   network_address        ((u'0.0.0.0', 8080), 2)        default                 
+pid-12508 thread-140735090330816 (MainThread)   charset_dynamic        UTF-8                          default
+pid-12508 thread-140735090330816 (MainThread)   charset_static         None                           default
+pid-12508 thread-140735090330816 (MainThread)   configuration_scripts  []                             default
+pid-12508 thread-140735090330816 (MainThread)   indices                [u'index.html', u'index.json', u'index'] default
+pid-12508 thread-140735090330816 (MainThread)   list_directories       False                          default
+pid-12508 thread-140735090330816 (MainThread)   logging_threshold      0                              default
+pid-12508 thread-140735090330816 (MainThread)   media_type_default     text/plain                     default
+pid-12508 thread-140735090330816 (MainThread)   media_type_json        application/json               default
+pid-12508 thread-140735090330816 (MainThread)   network_address        ((u'0.0.0.0', 8080), 2)        default
 pid-12508 thread-140735090330816 (MainThread)   network_address        ((u'0.0.0.0', 8537), 2)        command line option --network_address=:8537
-pid-12508 thread-140735090330816 (MainThread)   network_engine         cherrypy                       default                 
-pid-12508 thread-140735090330816 (MainThread)   project_root           None                           default                 
+pid-12508 thread-140735090330816 (MainThread)   network_engine         cherrypy                       default
+pid-12508 thread-140735090330816 (MainThread)   project_root           None                           default
 pid-12508 thread-140735090330816 (MainThread)   project_root           ..                             command line option --project_root=..
-pid-12508 thread-140735090330816 (MainThread)   renderer_default       tornado                        default                 
-pid-12508 thread-140735090330816 (MainThread)   show_tracebacks        False                          default                 
+pid-12508 thread-140735090330816 (MainThread)   renderer_default       tornado                        default
+pid-12508 thread-140735090330816 (MainThread)   show_tracebacks        False                          default
 pid-12508 thread-140735090330816 (MainThread)   show_tracebacks        True                           command line option --show_tracebacks=yes
-pid-12508 thread-140735090330816 (MainThread)   unavailable            0                              default                 
-pid-12508 thread-140735090330816 (MainThread)   www_root               None                           default                 
+pid-12508 thread-140735090330816 (MainThread)   unavailable            0                              default
+pid-12508 thread-140735090330816 (MainThread)   www_root               None                           default
 pid-12508 thread-140735090330816 (MainThread)   www_root               www/                           command line option --www_root=www/
 pid-12508 thread-140735090330816 (MainThread) project_root is relative: '..'.
 pid-12508 thread-140735090330816 (MainThread) project_root set to /Your/path/to/www.gittip.com.
 pid-12508 thread-140735090330816 (MainThread) Renderers (*ed are unavailable, CAPS is default):
-pid-12508 thread-140735090330816 (MainThread)   TORNADO          
+pid-12508 thread-140735090330816 (MainThread)   TORNADO
 pid-12508 thread-140735090330816 (MainThread)  *pystache         ImportError: No module named pystache
-pid-12508 thread-140735090330816 (MainThread)   stdlib_template  
-pid-12508 thread-140735090330816 (MainThread)   stdlib_format    
+pid-12508 thread-140735090330816 (MainThread)   stdlib_template
+pid-12508 thread-140735090330816 (MainThread)   stdlib_format
 pid-12508 thread-140735090330816 (MainThread)  *jinja2           ImportError: No module named jinja2
-pid-12508 thread-140735090330816 (MainThread)   stdlib_percent   
+pid-12508 thread-140735090330816 (MainThread)   stdlib_percent
 pid-12508 thread-140735090330816 (MainThread) Starting cherrypy engine.
 pid-12508 thread-140735090330816 (MainThread) Greetings, program! Welcome to port 8537.
 pid-12508 thread-140735090330816 (MainThread) Aspen will restart when configuration scripts or Python modules change.
@@ -240,7 +133,7 @@ tracker](/gittip/www.gittip.com/issues/new) here on GitHub. If all else fails
 ping [@whit537](https://twitter.com/whit537) on Twitter or email
 [chad@gittip.com](mailto:chad@gittip.com).
 
-Thanks for installing Gittip! :smiley: 
+Thanks for installing Gittip! :smiley:
 
 
 Configuration
@@ -329,6 +222,113 @@ with Aspen. First `make tests/env`, edit it as noted above, and then:
     [gittip] $ swaddle env ../env/bin/nosetests
 
 
+
+Now, you need to setup the database.
+
+
+Local Database Setup
+--------------------
+
+For advanced development and testing databse changes, you need to configure
+authentication and set up a gittip database.
+
+You need [Postgres](http://www.postgresql.org/download/). We're working
+on [porting](https://github.com/gittip/www.gittip.com/issues?milestone=28&state=open)
+Gittip from raw SQL to a declarative ORM with SQLAlchemy. After that we may be
+able to remove the hard dependency on Postgres so you can use SQLite in
+development, but for now you need Postgres.
+
+The best version of Postgres to use is 9.2, because that's what is being
+run in production at Heroku. Version 9.1 is the second-best, because Gittip
+uses the [hstore](http://www.postgresql.org/docs/9.2/static/hstore.html)
+extension for unstructured data, and that isn't bundled with earlier
+versions than 9.1. If you're on a Mac, maybe try out Heroku's
+[Postgres.app](http://www.postgresql.org/download/). If installing using a
+package manager, you may need several packages. On Ubuntu and Debian, the
+required packages are: postgresql (base), libpq5-dev (includes headers needed
+to build the psycopg2 Python library), and postgresql-contrib (includes
+hstore).
+
+
+### Authentication
+
+If you already have a &ldquo;role&rdquo; (Postgres user) that you'd like
+to use, you can do so by editing `DATABASE_URL` in the generated local.env
+file. You can also change the database name there. See
+[Configuration](#configuration) for more information.
+
+Otherwise, you should add a role that matches your OS username, and make sure
+it's a superuser role and has login privileges. Here's a sample
+invocation of the createuser executable that comes with Postgres that will do
+this for you, assuming that a &ldquo;postgres&rdquo; superuser was already
+created as part of initial installation:
+
+    $ sudo -u postgres createuser --superuser $USER
+
+Set the authentication method to &ldquo;trust&rdquo; in pg_hba.conf for all
+local connections and host connections from localhost. For this, ensure that
+the file contains these lines:
+
+    local   all             all                                     trust
+    host    all             all             127.0.0.1/32            trust
+    host    all             all             ::1/128                 trust
+
+Reload Postgres using pg_ctl for changes to take effect.
+
+
+### Schema
+
+Once Postgres is set up, run:
+
+    $ ./makedb.sh
+
+That will create a new gittip superuser and a gittip database (with UTC as the
+default timezone), populated with structure from ./schema.sql. To change the
+name of the database and/or user, pass them on the command line (you'll
+need to modify the `DATABASE_URL` environment variable as well; see
+[Configuration](#configuration) below):
+
+    $ ./makedb.sh mygittip myuser
+
+If you only pass one argument it will be used for both dbname and owner role:
+
+    $ ./makedb.sh gittip-test
+
+The schema for the Gittip.com database is defined in schema.sql. It should be
+considered append-only. The idea is that this is the log of DDL that
+we've run against the production database. You should never change
+commands that have already been run. New DDL will be (manually) run against the
+production database as part of deployment.
+
+### Example data
+
+The gittip database created in the last step is empty. To populate it with
+some fake data, so that more of the site is functional, run this command:
+
+    $ make fake_data
+
+### Notes for Mac OS X users
+
+If when running the tests you see errors of the form:
+
+    psycopg2.OperationalError: FATAL:  sorry, too many clients already
+
+You will need to configure Postgres to accept more connections. You can do this
+by editing your `postgresql.conf`, and setting:
+
+    max_connections = 40
+
+To get this to work you will also need to change your kernel's shared memory
+parameters. You can do this by running these shell commands:
+
+    sudo sysctl -w kern.sysv.shmmax=8388608
+    sudo sysctl -w kern.sysv.shmall=2048
+
+You will need to restart Postgres for the max_connections parameter to
+take effect. Once restarted, the test suite should pass for you. These changes
+will not persist after a reboot, so you will have to set these again after
+a reboot.
+
 API
 ===
 
@@ -342,7 +342,7 @@ The Gittip API is comprised of these endpoints:
  - **[/about/stats.json](https://www.gittip.com/about/stats.json)**
    ([source](https://github.com/gittip/www.gittip.com/tree/master/www/about/stats))&mdash;Returns an object giving a
     point-in-time snapshot of Gittip. The
-    [stats](https://www.gittip.com/about/stats.html) page displays the same 
+    [stats](https://www.gittip.com/about/stats.html) page displays the same
     info.
 
  - **/`%participant_id`/public.json**
@@ -353,7 +353,7 @@ The Gittip API is comprised of these endpoints:
     - "receiving"&mdash;an estimate of the amount the given participant will
       receive this week
 
-    - "my_tip"&mdash;logged-in user's tip to the Gittip participant in 
+    - "my_tip"&mdash;logged-in user's tip to the Gittip participant in
       question; possible values are:
 
         - `undefined` (key not present)&mdash;there is no logged-in user
@@ -442,8 +442,8 @@ and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
  - [Affero](http://www.affero.com/) - old skool attempt &ldquo;to bring a culture of patronage to the Internet&rdquo;
  - [ShareAGift](http://www.shareagift.com) - one-off, crowd-sourced cash gifts
  - [GoFundMe](http://www.gofundme.com/) - derpy-looking platform that [reaches normal people](http://pittsburgh.cbslocal.com/2013/02/19/crowdfunding-growing-in-popularity-as-fundraising-tool/) (my dad emailed this link to me)
- - [DonorsChoose.org](http://www.donorschoose.org/) - crowd-funded school 
-    supplies; Alexis Ohanian 
+ - [DonorsChoose.org](http://www.donorschoose.org/) - crowd-funded school
+    supplies; Alexis Ohanian
     [likes it](http://www.donorschoose.org/AlexisOnCNN).
  - [Catincan](https://www.catincan.com/) - FOSS bounty site
  - [Bountysource](https://www.bountysource.com/) - FOSS bounty site
