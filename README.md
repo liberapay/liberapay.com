@@ -345,9 +345,9 @@ The Gittip API is comprised of these endpoints:
     [stats](https://www.gittip.com/about/stats.html) page displays the same
     info.
 
- - **/`%participant_id`/public.json**
+ - **/`%username`/public.json**
    ([example](https://www.gittip.com/whit537/public.json),
-    [source](https://github.com/gittip/www.gittip.com/tree/master/www/%25participant_id/public.json))&mdash;Returns
+    [source](https://github.com/gittip/www.gittip.com/tree/master/www/%25username/public.json))&mdash;Returns
     an object with these keys:
 
     - "receiving"&mdash;an estimate of the amount the given participant will
