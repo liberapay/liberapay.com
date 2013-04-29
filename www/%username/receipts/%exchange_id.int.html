@@ -19,7 +19,10 @@ card = BalancedCard(participant.balanced_account_uri)
 exchange = db.fetchone( "SELECT * FROM exchanges "
                         "WHERE id=%s AND participant=%s"
                       , (path['exchange_id'], path['username'])
-                       )
+                      )
+if exchange is None:
+    raise Response(404)
+
 # ================ ^L
 <style>
     body {
