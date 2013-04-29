@@ -244,7 +244,8 @@ locked = False
         <td class="debits"></td>
         <td class="balance">{{ event['balance'] }}</td>
         {% if event['recorder'] is None %}
-        <td class="notes">automatic charge</td>
+        <td class="notes">automatic charge&mdash;<a
+                href="../receipts/{{ event['id'] }}.html">receipt</a></td>
         {% else %}
         <td class="notes">
             &ldquo;{{ escape(event['note']) }}&rdquo;&mdash;<a

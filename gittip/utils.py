@@ -254,6 +254,8 @@ COUNTRIES = (
     ('ZM', u'Zambia'),
     ('ZW', u'Zimbabwe'),
 )
+COUNTRIES_MAP = dict(COUNTRIES)
+
 
 def wrap(u):
     """Given a unicode, return a unicode.
