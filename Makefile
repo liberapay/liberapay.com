@@ -39,6 +39,9 @@ local.env:
 	echo
 	cp default_local.env local.env
 
+clouddb: local.env
+	echo DATABASE_URL=`./$(env_bin)/python -c 'import requests; print requests.get("http://api.postgression.com/").text'` >> local.env
+
 run: env local.env
 	./$(env_bin)/swaddle local.env ./$(env_bin)/aspen \
 		--www_root=www/ \
