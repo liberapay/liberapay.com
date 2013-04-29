@@ -1,16 +1,14 @@
-This is [Gittip](https://www.gittip.com/), a sustainable crowd-funding
-platform.
+This is [Gittip](https://www.gittip.com/), a weekly gift exchange.
 
-The basis of Gittip is an anonymous gift between $1 and $24 per week to someone
-who does great work. These gifts come with no explicit strings attached.
 
-The Gittip gift exchange happens every Thursday. On Thursday, we charge
-people's credit cards and the money goes into a marketplace account with
-[Balanced Payments](https://www.balancedpayments.com). Money is allocated to
-other participants, and for those with a bank account attached and money due,
-the money is deposited in their bank account on Friday.
+Quick Start
+===========
 
-Gittip is funded on Gittip.
+```
+$ git clone git@github.com:gittip/www.gittip.com.git
+$ cd www.gittip.com
+$ make run
+```
 
 
 Table of Contents
@@ -18,11 +16,11 @@ Table of Contents
 
  - [Installation](#installation)
   - [Dependencies](#dependencies)
-  - [Setting up the Database](#setting-up-the-database)
   - [Building and Launching](#building-and-launching)
   - [Help!](#help)
  - [Configuration](#configuration)
  - [Testing](#testing-)
+ - [Setting up a Database](#setting-up-a-database)
  - [API](#api)
  - [Glossary](#glossary)
  - [See Also](#see-also)
@@ -38,13 +36,12 @@ as well if that's what you're planning to do.
 Dependencies
 ------------
 
-Gittip is built with [Python](http://www.python.org/) 2.7 and the
-[Aspen](http://aspen.io/) web framework, and is hosted on
-[Heroku](http://www.heroku.com/).
-[Balanced](https://www.balancedpayments.com/) is used for payment processing,
-and [Google](https://www.google.com/analytics) for analytics.
+The only hard requirement on your system is [Python
+2.7](http://python.org/download/releases/2.7.4/).
 
-You need python2.7 on your PATH.
+All library dependencies are bundled in the repo (under `vendor/`) and by
+default the app is configured to use a Postgres instance in the cloud.
+
 
 Building and Launching
 ----------------------
