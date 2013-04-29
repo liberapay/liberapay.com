@@ -91,7 +91,7 @@ exchange = db.fetchone( "SELECT * FROM exchanges "
     <div id="their-info">
         {{ card['name'] }}
         ({{ participant.username }})<br />
-        {{ card['last4'] }} ({{ card['type'] }})<br />
+        {{ card['last4'] }} ({{ card['card_type'] }})<br />
         {{ card['address_1'] }}<br />
         {% if card['address_2'] %}
         {{ card['address_2'] }}<br />
