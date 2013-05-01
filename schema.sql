@@ -584,3 +584,18 @@ BEGIN;
   ORDER BY nmembers DESC, slug;
 
 END;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/issues/902
+
+CREATE OR REPLACE VIEW current_communities AS
+SELECT * FROM (
+    SELECT DISTINCT ON (participant, slug) c.*
+      FROM communities c
+      JOIN participants p ON p.username = participant
+     WHERE p.is_suspicious IS FALSE
+  ORDER BY participant
+         , slug
+         , mtime DESC
+) AS anon WHERE is_member;
