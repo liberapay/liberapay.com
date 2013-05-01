@@ -599,3 +599,18 @@ SELECT * FROM (
          , slug
          , mtime DESC
 ) AS anon WHERE is_member;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/issues/910
+
+CREATE OR REPLACE VIEW current_communities AS
+SELECT * FROM (
+    SELECT DISTINCT ON (participant, slug) c.*
+      FROM communities c
+      JOIN participants p ON p.username = participant
+     WHERE p.is_suspicious IS NOT TRUE
+  ORDER BY participant
+         , slug
+         , mtime DESC
+) AS anon WHERE is_member;
