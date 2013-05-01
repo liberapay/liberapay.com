@@ -142,8 +142,8 @@ $(document).ready(function() {
 <div class="col0">
 
     {% set nneeded = website.NMEMBERS_THRESHOLD - community.nmembers %}
-    <h2>{{ nneeded }} more member
-        {{ '' if nneeded == 1 else 's' }} needed!</h2>
+    <h2>{{ nneeded }} more
+        member{{ '' if nneeded == 1 else 's' }} needed!</h2>
 
     <p>Once this community reaches {{ website.NMEMBERS_THRESHOLD }}
     member{{ '' if website.NMEMBERS_THRESHOLD == '1' else 's' }},
