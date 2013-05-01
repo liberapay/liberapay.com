@@ -4,6 +4,7 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy.exc import OperationalError
 
 
 class Model(object):
@@ -50,9 +51,13 @@ class SQLAlchemy(object):
         return base
 
     def empty_tables(self):
-        for table in reversed(self.metadata.sorted_tables):
-            self.session.execute(table.delete())
-        self.session.commit()
+        tables = reversed(self.metadata.sorted_tables)
+        for table in tables:
+            try:
+                self.session.execute(table.delete())
+                self.session.commit()
+            except OperationalError:
+                self.session.rollback()
         self.session.remove()
 
     def drop_all(self):
