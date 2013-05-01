@@ -121,15 +121,41 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
 </div>
 {% end %}
 {% block page %}
+<script>
+$(document).ready(function() {
+
+    $('BUTTON.join-leave').click(function()
+    {
+        var button = $(this);
+        var name = button.attr('data-name');
+        var is_member = button.attr('data-is-member') === 'true';
+        Gittip.communities.update(name, !is_member, function()
+        {
+            window.location.reload();
+        });
+    });
+
+});
+</script>
 
 {% if community.nmembers < website.NMEMBERS_THRESHOLD %}
 <div class="col0">
 
-    <h2>{{ website.NMEMBERS_THRESHOLD - community.nmembers }} more members
-    needed!</h2>
+    {% set nneeded = website.NMEMBERS_THRESHOLD - community.nmembers %}
+    <h2>{{ nneeded }} more member
+        {{ '' if nneeded == 1 else 's' }} needed!</h2>
 
-    <p>Once this community reaches {{ website.NMEMBERS_THRESHOLD }} members,
-    we'll show top givers and receivers for this community.</p>
+    <p>Once this community reaches {{ website.NMEMBERS_THRESHOLD }}
+    member{{ '' if website.NMEMBERS_THRESHOLD == '1' else 's' }},
+    we'll start showing stats and info here.</p>
+
+    {% set is_member = community.check_membership(user) %}
+    <button class="join-leave"
+            data-name="{{ community.name }}"
+            data-is-member="{{ 'true' if is_member else 'false' }}">
+        <span>{{ "Leave" if is_member else "Join" }}</span>
+        {{ community.name }}
+    </button>
 
 </div>
 {% else %}
