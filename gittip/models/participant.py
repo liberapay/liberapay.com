@@ -23,7 +23,7 @@ from gittip.participant import Participant as OldParticipant
 ASCII_ALLOWED_IN_USERNAME = set("0123456789"
                                 "abcdefghijklmnopqrstuvwxyz"
                                 "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                                ".,-_;:@ ")
+                                ".,-_:@ ")
 NANSWERS_THRESHOLD = 0  # configured in wireup.py
 
 class Participant(db.Model):
