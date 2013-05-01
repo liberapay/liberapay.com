@@ -5,7 +5,7 @@ from gittip import db
 from gittip.utils import get_participant
 from gittip.models import community  # just for NMEMBERS_THRESHOLD
 
-name_pattern = re.compile(r'[A-Za-z0-9,.-_ ]+')
+name_pattern = re.compile(r'^[A-Za-z0-9,.-_ ]+$')
 
 # =================== ^L
 
