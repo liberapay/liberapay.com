@@ -7,5 +7,6 @@ from gittip.models.tip import Tip
 from gittip.models.transfer import Transfer
 from gittip.models.user import User
 from gittip.models.goal import Goal
+from gittip.models.community import Community
 
-all = [Elsewhere, Exchange, Participant, Payday, Tip, Transfer, User]
+all = [Elsewhere, Exchange, Participant, Payday, Tip, Transfer, User, Community]

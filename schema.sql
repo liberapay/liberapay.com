@@ -547,3 +547,40 @@ SELECT DISTINCT ON (tipper, tippee) t.*
        ORDER BY tipper
               , tippee
               , mtime DESC;
+
+
+-------------------------------------------------------------------------------
+--https://github.com/gittip/www.gittip.com/issues/496
+
+BEGIN;
+
+    CREATE TABLE communities
+    ( id            bigserial   PRIMARY KEY
+    , ctime         timestamp with time zone    NOT NULL
+    , mtime         timestamp with time zone    NOT NULL
+                                                 DEFAULT CURRENT_TIMESTAMP
+    , name          text        NOT NULL
+    , slug          text        NOT NULL
+    , participant   text        NOT NULL REFERENCES participants
+                                 ON UPDATE CASCADE ON DELETE RESTRICT
+    , is_member     boolean
+     );
+
+    CREATE VIEW current_communities AS
+    SELECT DISTINCT ON (participant, slug) c.*
+      FROM communities c
+      JOIN participants p ON p.username = participant
+     WHERE c.is_member AND p.is_suspicious IS FALSE
+  ORDER BY participant
+         , slug
+         , mtime DESC;
+
+    CREATE VIEW community_summary AS
+    SELECT max(name) AS name -- gotta pick one, this is good enough for now
+         , slug
+         , count(participant) AS nmembers
+      FROM current_communities
+  GROUP BY slug
+  ORDER BY nmembers DESC, slug;
+
+END;

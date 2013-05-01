@@ -15,6 +15,7 @@ gittip.wireup.username_restrictions(website)
 gittip.wireup.sentry(website)
 gittip.wireup.mixpanel(website)
 gittip.wireup.nanswers()
+gittip.wireup.nmembers(website)
 
 
 website.bitbucket_consumer_key = os.environ['BITBUCKET_CONSUMER_KEY'].decode('ASCII')

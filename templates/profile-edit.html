@@ -1,3 +1,6 @@
+<script src="/assets/chosen/chosen.jquery.min.js"></script>
+<style>@import url("/assets/chosen/chosen.css");</style>
+
 <div class="col1">
 
     <!-- Name and Anonymous -->
@@ -42,13 +45,21 @@
         </div>
     </form>
 
+
+    <!-- Communities -->
+    <form class="communities">
+        <h2>Communities</h2>
+        <ul class="memberships"></ul>
+        <select data-placeholder="Join a community ..." tabindex="10"></select>
+    </form>
+
 </div>
 <div class="col2">
 
     <!-- Funding Goal -->
     <form class="goal">
         <h2>Funding Goal
-            <button tabindex="10" class="edit">Edit</button>
+            <button tabindex="11" class="edit">Edit</button>
             <button tabindex="12" class="save" type="submit">Save</button>
             <button tabindex="13" class="cancel" type="cancel">Cancel</button>
         </h2>

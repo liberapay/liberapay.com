@@ -458,6 +458,10 @@ button.selected:hover {
         font: normal 12px $Helvetica;
     }
 
+    .on-community {
+        padding: 10px;
+    }
+
     .on-elsewhere {
         width: 100%;
 
@@ -919,6 +923,27 @@ button.selected:hover {
         }
         .help {
             font: normal 12px/12px $Helvetica;
+        }
+    }
+    .communities {
+        UL.memberships {
+            margin: 1em 0;
+            padding: 0;
+
+            LI {
+                padding: 0;
+                margin: 0;
+
+                SPAN.nothers {
+                    display: block;
+                    font-size: 9pt;
+                    line-height: 9pt;
+                    padding-bottom: 3pt;
+                }
+            }
+        }
+        SELECT {
+            width: 98%;
         }
     }
     .goal {

@@ -1,0 +1,67 @@
+import re
+
+from aspen import Response
+from gittip import db
+from gittip.utils import get_participant
+from gittip.models import community  # just for NMEMBERS_THRESHOLD
+
+name_pattern = re.compile(r'[A-Za-z0-9,.-_ ]+')
+
+# =================== ^L
+
+participant = get_participant(request)
+if POST:
+    if participant != user:
+        raise Response(400)
+
+    # name
+    name = body['name']
+    if name_pattern.match(name) is None:
+        raise Response(400)
+
+    # slug
+    slug = name.lower()
+    for c in (' ', ',', '.', '_'):
+        slug = slug.replace(c, '-')
+    while '--' in slug:
+        slug = slug.replace('--', '-')
+    slug = slug.strip('-')
+
+    # is_member
+    is_member = body['is_member']
+    if is_member not in ('true', 'false'):
+        raise Response(400)
+    is_member = is_member == 'true'
+
+    username = user.username
+    db.execute("""
+
+        INSERT INTO communities
+                    (ctime, name, slug, participant, is_member)
+             VALUES ( COALESCE (( SELECT ctime
+                                    FROM communities
+                                   WHERE (participant=%s AND slug=%s)
+                                   LIMIT 1
+                                  ), CURRENT_TIMESTAMP)
+                    , %s, %s, %s, %s
+                     )
+          RETURNING (SELECT count(*) = 0 FROM communities WHERE participant=%s)
+                 AS first_time_community
+
+    """, (username, slug, name, slug, username, is_member, username))
+
+communities = list(db.fetchall("""
+
+    SELECT max(name) AS name
+         , slug
+         , count(*) AS nmembers
+         , bool_or(participant = %s) AS is_member
+      FROM current_communities
+  GROUP BY slug
+  ORDER BY nmembers ASC, slug
+
+""", (participant.username,)))
+
+response.body = { "threshold": community.NMEMBERS_THRESHOLD
+                , "communities": communities
+                 }

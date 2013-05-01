@@ -85,6 +85,65 @@ $(document).ready(function()
     }
 
 
+    // Wire up chosen box for communities.
+    // ===================================
+
+    var communityChooser = $('.communities SELECT')
+    var communityList = $('.communities UL')
+
+    var chosenOpts = { create_option: joinCommunity
+                     , create_option_text: "Add a new community"
+                      };
+    communityChooser.chosen(chosenOpts).change(function() {
+        joinCommunity(communityChooser.val());
+    });
+
+    function updateCommunity(name, is_member)
+    {
+        jQuery.ajax(
+            { type: 'POST'
+            , url: 'communities.json'
+            , data: {name: name, is_member:is_member}
+            , dataType: 'json'
+            , success: updateDOM
+             }
+        );
+    }
+    function joinCommunity(name) { updateCommunity(name, true); }
+    function leaveCommunity(name) { updateCommunity(name, false); }
+
+    function updateDOM(data)
+    {
+        var itms = '';
+        var opts = '<option></option>'; // per Chosen docs, to get placeholder
+        for (var i=0, community; community = data.communities[i]; i++)
+        {
+            if (community.is_member)
+            {
+                var nothers = (community.npeople - 1);
+                itms += '<li data-slug="' + community.slug + '">'
+                      + '<a href="/for/' + community.slug + '/">'
+                      + community.name
+                      + '</a>'
+                      + '<span class="nothers">with '
+                      + nothers
+                      + ' other' + (nothers === 1?'':'s') + '</span>'
+                      + '</li>';
+            } else {
+                opts += '<option value="' + community.name + '">'
+                      + community.name + ' - ' + community.npeople
+                      + ' member' + ((community.npeople === 1) ? '' : 's')
+                      + ' - ' + (data.threshold - community.npeople)
+                      + ' more needed'
+                      + '</option>';
+            }
+        }
+        communityList.html(itms);
+        communityChooser.html(opts).trigger('liszt:updated');
+    }
+    jQuery.get('communities.json', updateDOM);
+
+
     // Wire up textarea for statement.
     // ===============================
 
