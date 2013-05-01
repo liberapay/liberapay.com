@@ -1,4 +1,3 @@
-
 $(document).ready(function()
 {
 
@@ -91,26 +90,10 @@ $(document).ready(function()
     var communityChooser = $('.communities SELECT')
     var communityList = $('.communities UL')
 
-    var chosenOpts = { create_option: joinCommunity
-                     , create_option_text: "Add a new community"
-                      };
-    communityChooser.chosen(chosenOpts).change(function() {
-        joinCommunity(communityChooser.val());
-    });
-
-    function updateCommunity(name, is_member)
+    function createOption(term)
     {
-        jQuery.ajax(
-            { type: 'POST'
-            , url: 'communities.json'
-            , data: {name: name, is_member:is_member}
-            , dataType: 'json'
-            , success: updateDOM
-             }
-        );
+        Gittip.communities.join(term, updateDOM);
     }
-    function joinCommunity(name) { updateCommunity(name, true); }
-    function leaveCommunity(name) { updateCommunity(name, false); }
 
     function updateDOM(data)
     {
@@ -125,9 +108,11 @@ $(document).ready(function()
                       + '<a href="/for/' + community.slug + '/">'
                       + community.name
                       + '</a>'
-                      + '<span class="nothers">with '
+                      + '<div class="fine">with '
                       + nothers
-                      + ' other' + (nothers === 1?'':'s') + '</span>'
+                      + ' other' + (nothers === 1?'':'s')
+                      + ' | ' + '<span class="leave">leave</span>'
+                      + '</div>'
                       + '</li>';
             } else {
                 opts += '<option value="' + community.name + '">'
@@ -140,7 +125,20 @@ $(document).ready(function()
         }
         communityList.html(itms);
         communityChooser.html(opts).trigger('liszt:updated');
+        $('.leave', communityList).click(function()
+        {
+            var name = $('a', $(this).closest('li')).text();
+            Gittip.communities.leave(name, updateDOM);
+        });
     }
+
+    var chosenOpts = { create_option: createOption
+                     , create_option_text: "Add a new community"
+                      };
+    communityChooser.chosen(chosenOpts).change(function() {
+        Gittip.communities.join(communityChooser.val(), updateDOM);
+    });
+
     jQuery.get('communities.json', updateDOM);
 
 
