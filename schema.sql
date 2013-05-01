@@ -550,7 +550,7 @@ SELECT DISTINCT ON (tipper, tippee) t.*
 
 
 -------------------------------------------------------------------------------
---https://github.com/gittip/www.gittip.com/issues/496
+-- https://github.com/gittip/www.gittip.com/issues/496
 
 BEGIN;
 
