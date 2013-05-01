@@ -120,7 +120,7 @@ $(document).ready(function()
         {
             if (community.is_member)
             {
-                var nothers = (community.npeople - 1);
+                var nothers = (community.nmembers - 1);
                 itms += '<li data-slug="' + community.slug + '">'
                       + '<a href="/for/' + community.slug + '/">'
                       + community.name
@@ -131,9 +131,9 @@ $(document).ready(function()
                       + '</li>';
             } else {
                 opts += '<option value="' + community.name + '">'
-                      + community.name + ' - ' + community.npeople
-                      + ' member' + ((community.npeople === 1) ? '' : 's')
-                      + ' - ' + (data.threshold - community.npeople)
+                      + community.name + ' - ' + community.nmembers
+                      + ' member' + ((community.nmembers === 1) ? '' : 's')
+                      + ' - ' + (data.threshold - community.nmembers)
                       + ' more needed'
                       + '</option>';
             }
