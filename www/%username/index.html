@@ -29,9 +29,13 @@ username = participant.username   # used in footer shared with on/$platform/
 github_account, twitter_account, bitbucket_account = participant.get_accounts_elsewhere()
 long_statement = len(participant.statement) > LONG_STATEMENT
 if participant.type == 'individual':
-    MAKING = "I am " + MAKING
+    I_AM = "I am"
+    I_M = "I'm"
+    MY = "My"
 else:
-    MAKING = "We are " + MAKING
+    I_AM = "We are"
+    I_M = "We're"
+    MY = "Our"
 
 # ========================================================================== ^L
 {% extends templates/profile.html %}
@@ -41,7 +45,7 @@ else:
     <meta name="og:type" content="website" />
     <meta name="og:title" content="{{ participant.get_og_title() }}" />
     {% if participant.statement %}
-    <meta name="og:description" content="{{ _clip(MAKING + " " + escape(participant.statement), 200) }}" />
+    <meta name="og:description" content="{{ _clip(I_AM + " " + MAKING + " " + escape(participant.statement), 200) }}" />
     {% else %}
     <meta name="og:description" content="Gittip is a weekly gift exchange." />
     {% end %}
@@ -59,6 +63,7 @@ else:
             <div class="{% if long_statement %}col1{% else %}col0{% end %}">
             <h2>Statement</h2>
             <div class="statement">
+                {{ I_AM }}
                 {{ MAKING }} {{ wrap(participant.statement) }}
             </div>
             </div>
@@ -74,12 +79,12 @@ else:
             <h2>Funding Goal</h2>
             <div class="goal">
                 {% if participant.goal is None %}
-                I'm grateful for gifts, but I don't have a specific
-                funding goal.
+                {{ I_M }} grateful for gifts, but don't have a specific funding
+                goal.
                 {% elif participant.goal == 0 %}
-                I'm here as a patron.
+                {{ I_M }} here as a patron.
                 {% else %}
-                My goal is to receive
+                {{ MY }} goal is to receive
                 ${{ locale.format("%.2f", participant.goal, grouping=True) }}
                 per week on Gittip.
                 {% end %}

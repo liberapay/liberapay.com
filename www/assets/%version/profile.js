@@ -1,3 +1,27 @@
+Gittip.profile = {};
+
+Gittip.profile.toNumber = function(number)
+{
+    if (number == 'plural')
+        Gittip.profile.toPlural();
+    else if (number == 'singular')
+        Gittip.profile.toSingular();
+};
+
+Gittip.profile.toPlural = function()
+{
+    $('.i-am').text('We are');
+    $('.i-m').text("We're");
+    $('.my').text("Our");
+};
+
+Gittip.profile.toSingular = function()
+{
+    $('.i-am').text('I am');
+    $('.i-m').text("I'm");
+    $('.my').text("My");
+};
+
 $(document).ready(function()
 {
 
@@ -180,13 +204,17 @@ $(document).ready(function()
         function success(d)
         {
             $('.statement .view SPAN').html(d.statement);
+            var number = $('.statement SELECT').val();
+            Gittip.profile.toNumber(number);
             finish_editing_statement();
         }
         jQuery.ajax(
             { url: "statement.json"
             , type: "POST"
             , success: success
-            , data: {"statement": $('.statement TEXTAREA').val()}
+            , data: { statement: $('.statement TEXTAREA').val()
+                    , number: $('.statement SELECT').val()
+                     }
              }
         )
         return false;
