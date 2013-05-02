@@ -272,7 +272,7 @@ $(document).ready(function()
                 newtext += $(label.get(1)).html();
             }
 
-            if (d.goal !== '0.00')
+            if (parseFloat(d.goal) > 0)
                 $('INPUT[name=goal_custom]').val(d.goal);
             $('.goal DIV.view').html(newtext);
             finish_editing_goal();

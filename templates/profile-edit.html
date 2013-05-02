@@ -79,6 +79,9 @@
             Gittip.
             {% elif user.goal == 0 %}
             <span class="i-m">{{ I_M }}</span> here as a patron.
+            {% elif user.goal < 0 %}
+            <span class="i-m">{{ I_M }}</span> here as a patron, and politely
+            decline to receive tips.
             {% else %}
             <span class="i-m">{{ I_M }}</span> grateful for gifts, but
             don't have a specific funding goal.
@@ -91,7 +94,7 @@
             <label for="goal-yes"><span class="my">{{ MY }}</span> goal is to
                 receive $</label><input
                 name="goal_custom" id="goal-custom"
-            {% if (user.goal is None) or (user.goal == 0) %}
+            {% if (user.goal is None) or (user.goal <= 0) %}
             {% else %}
             value="{{ locale.format("%.2f", user.goal, grouping=True) }}"
             {% end %} />
@@ -110,6 +113,14 @@
             {% if user.goal == 0 %} checked="true"{% end %}/>
             <label for="goal-0"><span class="i-m">{{ I_M }}</span> here as a
                 patron.</label>
+
+            <br />
+
+            <input tabindex="406" type="radio" name="goal" id="goal-negative"
+                   value="-1"
+            {% if user.goal < 0 %} checked="true"{% end %}/>
+            <label for="goal-negative"><span class="i-m">{{ I_M }}</span> here
+                as a patron, and politely decline to receive tips.</label>
 
         </td></tr></table>
     </form>
