@@ -233,8 +233,16 @@ $(document).ready(function()
 
         function success(d)
         {
-            var newtext = $('LABEL[for=' + goal.attr('id') + ']').text();
-            newtext = newtext.replace('$', '$' + d.goal);
+            var label = $('LABEL[for=' + goal.attr('id') + ']');
+            var newtext = '';
+            if (label.length === 1)
+                newtext = label.html();
+            else
+            {   // custom goal is wonky
+                newtext = label.html();
+                newtext = newtext.replace('$', '$' + d.goal);
+                newtext += $(label.get(1)).html();
+            }
 
             if (d.goal !== '0.00')
                 $('INPUT[name=goal_custom]').val(d.goal);
