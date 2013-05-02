@@ -20,7 +20,7 @@ Table of Contents
   - [Help!](#help)
  - [Configuration](#configuration)
  - [Testing](#testing-)
- - [Setting up a Database](#setting-up-a-database)
+ - [Setting up a Database](#local-database-setup)
  - [API](#api)
  - [Glossary](#glossary)
  - [See Also](#see-also)
