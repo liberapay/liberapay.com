@@ -83,6 +83,9 @@ else:
                 goal.
                 {% elif participant.goal == 0 %}
                 {{ I_M }} here as a patron.
+                {% elif participant.goal < 0 %}
+                {{ I_M }} here as a patron, and politely decline to receive
+                tips.
                 {% else %}
                 {{ MY }} goal is to receive
                 ${{ locale.format("%.2f", participant.goal, grouping=True) }}
