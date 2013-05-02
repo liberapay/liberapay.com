@@ -79,12 +79,12 @@
             Gittip.
             {% elif user.goal == 0 %}
             <span class="i-m">{{ I_M }}</span> here as a patron.
-            {% elif user.goal < 0 %}
-            <span class="i-m">{{ I_M }}</span> here as a patron, and politely
-            decline to receive gifts.
-            {% else %}
+            {% elif user.goal is None %}
             <span class="i-m">{{ I_M }}</span> grateful for gifts, but
             don't have a specific funding goal.
+            {% else %}
+            <span class="i-m">{{ I_M }}</span> here as a patron, and politely
+            decline to receive gifts.
             {% end %}
         </div>
         <table class="edit"><tr><td>
@@ -118,7 +118,7 @@
 
             <input tabindex="406" type="radio" name="goal" id="goal-negative"
                    value="-1"
-            {% if user.goal < 0 %} checked="true"{% end %}/>
+            {% if (user.goal is not None) and user.goal < 0 %} checked="true"{% end %}/>
             <label for="goal-negative"><span class="i-m">{{ I_M }}</span> here
                 as a patron, and politely decline to receive gifts.</label>
 
