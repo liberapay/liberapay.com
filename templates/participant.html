@@ -55,7 +55,7 @@
     </tr>
 </table>
 
-{% if participant != user and participant.goal >= 0 %}
+{% if (participant != user) and participant.accepts_tips %}
 <div class="nav level-1">
     {% if locked %}
 

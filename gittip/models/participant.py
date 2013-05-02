@@ -111,6 +111,10 @@ class Participant(db.Model):
                                    .order_by("tips.tipper, tips.mtime DESC")
 
     @property
+    def accepts_tips(self):
+        return (self.goal is None) or (self.goal >= 0)
+
+    @property
     def valid_tips_receiving(self):
         '''
 
