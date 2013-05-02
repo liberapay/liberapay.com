@@ -256,7 +256,11 @@ class Payday(object):
                 tip['tippee'] = member['username']
                 tip['amount'] = amount
                 tip['claimed_time'] = ts_start
-                self.tip({"username": p.username}, tip, ts_start)
+                self.tip( {"username": p.username}
+                        , tip
+                        , ts_start
+                        , pachinko=True
+                         )
                 return tip['amount']
 
             for member in split:
@@ -371,7 +375,7 @@ class Payday(object):
     # Move money between Gittip participants.
     # =======================================
 
-    def tip(self, participant, tip, ts_start):
+    def tip(self, participant, tip, ts_start, pachinko=False):
         """Given dict, dict, and datetime, log and return int.
 
         Return values:
@@ -381,8 +385,12 @@ class Payday(object):
             -1 if transfer fails and we cannot continue
 
         """
-        msg = "$%s from %s to %s."
-        msg %= (tip['amount'], participant['username'], tip['tippee'])
+        msg = "$%s from %s to %s%s."
+        msg %= ( tip['amount']
+               , participant['username']
+               , tip['tippee']
+               , " (pachinko)" if pachinko else ""
+                )
 
         if tip['amount'] == 0:
 
@@ -404,7 +412,7 @@ class Payday(object):
             return 0
 
         if not self.transfer(participant['username'], tip['tippee'], \
-                                                                tip['amount']):
+                                             tip['amount'], pachinko=pachinko):
 
             # The transfer failed due to a lack of funds for the participant.
             # Don't try any further transfers.
@@ -416,15 +424,19 @@ class Payday(object):
         return 1
 
 
-    def transfer(self, tipper, tippee, amount):
-        """Given two unicodes and a Decimal, return a boolean.
+    def transfer(self, tipper, tippee, amount, pachinko=False):
+        """Given two unicodes, a Decimal, and a boolean, return a boolean.
 
         If the tipper doesn't have enough in their Gittip account then we
         return False. Otherwise we decrement tipper's balance and increment
         tippee's *pending* balance by amount.
 
         """
-        typecheck(tipper, unicode, tippee, unicode, amount, Decimal)
+        typecheck( tipper, unicode
+                 , tippee, unicode
+                 , amount, Decimal
+                 , pachinko, bool
+                  )
         with self.db.get_connection() as conn:
             cursor = conn.cursor()
 
@@ -435,7 +447,10 @@ class Payday(object):
 
             self.credit_participant(cursor, tippee, amount)
             self.record_transfer(cursor, tipper, tippee, amount)
-            self.mark_transfer(cursor, amount)
+            if pachinko:
+                self.mark_pachinko(cursor, amount)
+            else:
+                self.mark_transfer(cursor, amount)
 
             conn.commit()
             return True
@@ -899,6 +914,20 @@ class Payday(object):
             UPDATE paydays
                SET ntransfers = ntransfers + 1
                  , transfer_volume = transfer_volume + %s
+             WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
+         RETURNING id
+
+        """
+        cursor.execute(STATS, (amount,))
+        self.assert_one_payday(cursor.fetchone())
+
+
+    def mark_pachinko(self, cursor, amount):
+        STATS = """\
+
+            UPDATE paydays
+               SET npachinko = npachinko + 1
+                 , pachinko_volume = pachinko_volume + %s
              WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
          RETURNING id
 
