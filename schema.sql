@@ -621,3 +621,23 @@ SELECT * FROM (
 
 ALTER TABLE paydays ADD COLUMN npachinko        bigint          DEFAULT 0;
 ALTER TABLE paydays ADD COLUMN pachinko_volume  numeric(35,2)   DEFAULT 0.00;
+
+
+-------------------------------------------------------------------------------
+-- I want to see current tips as well as backed tips.
+
+CREATE VIEW current_tips AS
+  SELECT DISTINCT ON (tipper, tippee)
+         t.*
+       , p.last_bill_result AS tipper_last_bill_result
+       , p.balance AS tipper_balance
+    FROM tips t
+    JOIN participants p ON p.username = tipper
+   WHERE p.is_suspicious IS NOT TRUE
+ORDER BY tipper
+       , tippee
+       , mtime DESC;
+
+CREATE OR REPLACE VIEW backed_tips AS
+SELECT * FROM current_tips
+ WHERE tipper_last_bill_result='';
