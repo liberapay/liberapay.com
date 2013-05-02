@@ -81,7 +81,7 @@
             <span class="i-m">{{ I_M }}</span> here as a patron.
             {% elif user.goal < 0 %}
             <span class="i-m">{{ I_M }}</span> here as a patron, and politely
-            decline to receive tips.
+            decline to receive gifts.
             {% else %}
             <span class="i-m">{{ I_M }}</span> grateful for gifts, but
             don't have a specific funding goal.
@@ -120,7 +120,7 @@
                    value="-1"
             {% if user.goal < 0 %} checked="true"{% end %}/>
             <label for="goal-negative"><span class="i-m">{{ I_M }}</span> here
-                as a patron, and politely decline to receive tips.</label>
+                as a patron, and politely decline to receive gifts.</label>
 
         </td></tr></table>
     </form>
