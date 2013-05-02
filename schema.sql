@@ -614,3 +614,10 @@ SELECT * FROM (
          , slug
          , mtime DESC
 ) AS anon WHERE is_member;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/issues/910
+
+ALTER TABLE paydays ADD COLUMN npachinko        bigint          DEFAULT 0;
+ALTER TABLE paydays ADD COLUMN pachinko_volume  numeric(35,2)   DEFAULT 0.00;
