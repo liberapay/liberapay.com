@@ -2,7 +2,7 @@ from aspen import Response
 from aspen.utils import to_age
 from gittip import db, AMOUNTS
 from gittip.elsewhere import github
-from gittip.models.community import Community
+from gittip.models.community import Community, name_pattern, slugize
 from gittip.models.participant import Participant
 
 def _wrap(raw):
@@ -26,13 +26,20 @@ def _to_age(participant):
     return age.replace(' ', ' <span class="unit">') + "</span>"
 ^L
 
+_slug = path['slug']
+if name_pattern.match(_slug) is None:
+    raise Response(404)
+slug = slugize(_slug)
+if slug != _slug:
+    request.redirect('../' + slug + '/')
+
 try:
     limit = min(int(qs.get('limit', 10)), 100)
     offset = int(qs.get('offset', 0))
 except ValueError:
     raise Response(400)
 
-community = Community.query.filter_by(slug=path['slug']).first()
+community = Community.query.filter_by(slug=slug).first()
 if community is None:
     raise Response(404)
 
