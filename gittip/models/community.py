@@ -23,7 +23,7 @@ def slugize(slug):
 
 
 def get_list_for(user):
-    if user is None or user.ANON:
+    if user is None or (hasattr(user, 'ANON') and user.ANON):
         return list(dear_god_why.fetchall("""
 
             SELECT max(name) AS name
