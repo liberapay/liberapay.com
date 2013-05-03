@@ -37,6 +37,9 @@ if POST:
 
     """, (username, slug, name, slug, username, is_member, username))
 
+elif GET:
+    response.headers["Access-Control-Allow-Origin"] = "*"
+
 communities = community.get_list_for(user)
 
 response.body = { "threshold": community.NMEMBERS_THRESHOLD

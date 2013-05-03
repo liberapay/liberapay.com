@@ -23,17 +23,29 @@ def slugize(slug):
 
 
 def get_list_for(user):
-    return list(dear_god_why.fetchall("""
+    if user is None or user.ANON:
+        return list(dear_god_why.fetchall("""
 
-        SELECT max(name) AS name
-             , slug
-             , count(*) AS nmembers
-             , bool_or(participant = %s) AS is_member
-          FROM current_communities
-      GROUP BY slug
-      ORDER BY nmembers ASC, slug
+            SELECT max(name) AS name
+                 , slug
+                 , count(*) AS nmembers
+              FROM current_communities
+          GROUP BY slug
+          ORDER BY nmembers DESC, slug
 
-    """, (user.username,)))
+        """))
+    else:
+        return list(dear_god_why.fetchall("""
+
+            SELECT max(name) AS name
+                 , slug
+                 , count(*) AS nmembers
+                 , bool_or(participant = %s) AS is_member
+              FROM current_communities
+          GROUP BY slug
+          ORDER BY nmembers ASC, slug
+
+        """, (user.username,)))
 
 
 class Community(db.Model):
