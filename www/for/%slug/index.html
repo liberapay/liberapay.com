@@ -41,7 +41,13 @@ except ValueError:
 
 community = Community.query.filter_by(slug=slug).first()
 if community is None:
-    raise Response(404)
+    class StubCommunity:
+        name = _slug
+        nmembers = 0
+        check_membership = lambda a, b: False
+
+    community = StubCommunity()
+
 
 if community.nmembers >= website.NMEMBERS_THRESHOLD:
     new_participants = _wrap(db.fetchall("""
@@ -148,9 +154,13 @@ $(document).ready(function() {
 {% if community.nmembers < website.NMEMBERS_THRESHOLD %}
 <div class="col0">
 
+    {% if community.nmembers == 0 %}
+    <h2>Bring the {{ community.name }} community to Gittip!</h2>
+    {% else %}
     {% set nneeded = website.NMEMBERS_THRESHOLD - community.nmembers %}
     <h2>{{ nneeded }} more
         member{{ '' if nneeded == 1 else 's' }} needed!</h2>
+    {% end %}
 
     <p>Once this community reaches {{ website.NMEMBERS_THRESHOLD }}
     member{{ '' if website.NMEMBERS_THRESHOLD == '1' else 's' }},
