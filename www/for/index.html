@@ -1,0 +1,20 @@
+from gittip.models import community
+from gittip.utils import plural
+^L
+communities = community.get_list_for(None)
+^L
+{% extends templates/base.html %}
+{% block heading %}
+<h2 class="top"><span>Communities</span></h2>
+{% end %}
+{% block box %}
+    <ul class="community-memberships">
+        {% for community in communities %}
+        <li>
+            <a href="/for/{{ community['slug'] }}/">{{ community['name'] }}</a>
+            {% set n = community['nmembers'] %}
+            <div class="fine">{{ n }} member{{ plural(n) }}</div>
+        </li>
+        {% end %}
+    </ul>
+{% end %}
