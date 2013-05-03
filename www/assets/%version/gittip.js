@@ -517,18 +517,6 @@ Gittip.paymentsResponseHandler = function(response)
     }
 };
 
-Gittip.init = function(username)
-{
-    // username is useful for constructing API endpoints
-    var username = Gittip.getCookie('username');
-    if (username === '')
-        delete Gittip.username;
-    else
-        Gittip.username = username;
-
-    Gittip.initCSRF();
-};
-
 Gittip.initPayment = function(balanced_uri, participantId)
 {
     Gittip.participantId = participantId;
@@ -717,7 +705,7 @@ Gittip.communities.update = function(name, is_member, callback)
 {
     jQuery.ajax(
         { type: 'POST'
-        , url: '/' + Gittip.username + '/communities.json'
+        , url: '/for/communities.json'
         , data: {name: name, is_member: is_member}
         , dataType: 'json'
         , success: callback

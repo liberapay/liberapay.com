@@ -1,14 +1,10 @@
 from aspen import Response
 from gittip import db
-from gittip.utils import get_participant
 from gittip.models import community
 
 # =================== ^L
 
-participant = get_participant(request)
 if POST:
-    if participant != user:
-        raise Response(400)
 
     # name
     name = body['name']
@@ -51,7 +47,7 @@ communities = list(db.fetchall("""
   GROUP BY slug
   ORDER BY nmembers ASC, slug
 
-""", (participant.username,)))
+""", (user.username,)))
 
 response.body = { "threshold": community.NMEMBERS_THRESHOLD
                 , "communities": communities

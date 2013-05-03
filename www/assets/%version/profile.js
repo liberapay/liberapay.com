@@ -163,7 +163,7 @@ $(document).ready(function()
         Gittip.communities.join(communityChooser.val(), updateDOM);
     });
 
-    jQuery.get('communities.json', updateDOM);
+    jQuery.get('/for/communities.json', updateDOM);
 
 
     // Wire up textarea for statement.
