@@ -1,6 +1,8 @@
 from gittip.models import community
 from gittip.utils import plural
 
+THRESHOLD = website.NMEMBERS_THRESHOLD
+
 # ========================== ^L
 
 communities = community.get_list_for(None)
@@ -10,14 +12,20 @@ viable = []
 forming = []
 
 for community in communities:
-    if community['nmembers'] >= website.NMEMBERS_THRESHOLD:
+    if community['nmembers'] >= THRESHOLD:
         seq = viable
     else:
         seq = forming
     seq.append(community)
 
-grouped = [ ('Viable Communities', viable)
-          , ('Communities in Formation', forming)
+grouped = [ ( 'Viable Communities'
+            , 'at least %d members' % THRESHOLD
+            , viable
+             )
+          , ( 'Communities in Formation'
+            , 'less than %d members' % THRESHOLD
+            , forming
+             )
            ]
 
 # ========================== ^L
@@ -37,9 +45,16 @@ grouped = [ ('Viable Communities', viable)
 </div>
 {% end %}
 {% block page %}
+<style>
+    .help {
+        font-size: 10px;
+        text-transform: uppercase;
+    }
+</style>
 <div class="col0">
-    {% for heading, seq in grouped %}
+    {% for heading, explanation, seq in grouped %}
     <h2>{{ heading }} (N = {{ len(seq) }})</h2>
+    <p class="help">{{ explanation }}</p>
     <ul class="community-memberships">
         {% for community in seq %}
         <li>
