@@ -35,17 +35,13 @@ def outbound(response):
         user = User()
 
     if user.ANON: # user is anonymous
-
         if 'session' not in response.request.headers.cookie:
-            if 'username' not in response.request.headers.cookie:
-                # no cookies in the request, don't set any on response
-                return
-
-        # expired cookies in the request, instruct browser to delete them
-        response.headers.cookie['session'] = ''
-        response.headers.cookie['username'] = ''
-        expires = 0
-
+            # no cookie in the request, don't set one on response
+            return
+        else:
+            # expired cookie in the request, instruct browser to delete it
+            response.headers.cookie['session'] = ''
+            expires = 0
     else: # user is authenticated
         user = User.from_session_token(user.session_token)
         response.headers['Expires'] = BEGINNING_OF_EPOCH # don't cache
@@ -56,14 +52,10 @@ def outbound(response):
         db.session.add(user)
         db.session.commit()
 
-        response.headers.cookie['username'] = user.username
-
-    for cookie_name in ('username', 'session'):
-        cookie = response.headers.cookie[cookie_name]
-        # I am not setting domain, because it is supposed to default to what we
-        # want: the domain of the object requested.
-        #cookie['domain']
-        cookie['path'] = '/'
-        cookie['expires'] = rfc822.formatdate(expires)
-        if cookie_name == 'session':
-            cookie['httponly'] = "Yes, please."
+    cookie = response.headers.cookie['session']
+    # I am not setting domain, because it is supposed to default to what we
+    # want: the domain of the object requested.
+    #cookie['domain']
+    cookie['path'] = '/'
+    cookie['expires'] = rfc822.formatdate(expires)
+    cookie['httponly'] = "Yes, please."
