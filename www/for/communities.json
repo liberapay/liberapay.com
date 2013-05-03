@@ -37,17 +37,7 @@ if POST:
 
     """, (username, slug, name, slug, username, is_member, username))
 
-communities = list(db.fetchall("""
-
-    SELECT max(name) AS name
-         , slug
-         , count(*) AS nmembers
-         , bool_or(participant = %s) AS is_member
-      FROM current_communities
-  GROUP BY slug
-  ORDER BY nmembers ASC, slug
-
-""", (user.username,)))
+communities = community.get_list_for(user)
 
 response.body = { "threshold": community.NMEMBERS_THRESHOLD
                 , "communities": communities

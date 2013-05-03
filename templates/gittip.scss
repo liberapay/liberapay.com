@@ -895,6 +895,28 @@ button.selected:hover {
     }
 }
 
+UL.community-memberships {
+    margin: 1em 0;
+    padding: 0;
+
+    LI {
+        padding: 0;
+        margin: 0;
+
+        DIV.fine {
+            display: block;
+            font-size: 9pt;
+            line-height: 9pt;
+            padding-bottom: 3pt;
+
+            SPAN.leave {
+                cursor: pointer;
+                color: $green;
+                text-decoration: underline;
+            }
+        }
+    }
+}
 
 #profile-edit {
     BUTTON.save, BUTTON.cancel {
@@ -926,28 +948,6 @@ button.selected:hover {
         }
     }
     .communities {
-        UL.memberships {
-            margin: 1em 0;
-            padding: 0;
-
-            LI {
-                padding: 0;
-                margin: 0;
-
-                DIV.fine {
-                    display: block;
-                    font-size: 9pt;
-                    line-height: 9pt;
-                    padding-bottom: 3pt;
-
-                    SPAN.leave {
-                        cursor: pointer;
-                        color: $green;
-                        text-decoration: underline;
-                    }
-                }
-            }
-        }
         SELECT {
             width: 98%;
         }

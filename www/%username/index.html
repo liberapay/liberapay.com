@@ -6,7 +6,8 @@ import requests
 from aspen import json, Response
 from aspen.utils import to_age
 from gittip import AMOUNTS
-from gittip.utils import get_participant, wrap
+from gittip.utils import get_participant, wrap, plural
+from gittip.models import community
 
 MAKING = "making the world better by"
 LONG_STATEMENT = 256
@@ -28,6 +29,8 @@ username = participant.username   # used in footer shared with on/$platform/
                                   # pages
 github_account, twitter_account, bitbucket_account = participant.get_accounts_elsewhere()
 long_statement = len(participant.statement) > LONG_STATEMENT
+communities = community.get_list_for(user)
+communities.reverse()
 if participant.type == 'individual':
     I_AM = "I am"
     I_M = "I'm"
@@ -71,6 +74,18 @@ else:
         {% else %}
             <div class="col0">
         {% end %}
+            {% if communities %}
+            <h2>Communities</h2>
+            <ul class="community-memberships">
+                {% for community in communities %}
+                <li>
+                    <a href="/for/{{ community['slug'] }}/">{{ community['name'] }}</a>
+                    {% set nothers = community['nmembers'] - 1 %}
+                    <div class="fine">with {{ nothers }} other{{ plural(nothers) }}</div>
+                </li>
+                {% end %}
+            </ul>
+            {% end %}
 
             {% if participant.type == 'open group' %}
             {% include "templates/open-group-members.html %}
