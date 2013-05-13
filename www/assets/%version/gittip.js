@@ -713,6 +713,11 @@ Gittip.communities.update = function(name, is_member, callback)
     );
 }
 
+Gittip.communities.jumpTo = function(slug)
+{
+    window.location.href = "/for/" + slug + "/";
+};
+
 Gittip.communities.join = function(name, callback)
 {
     Gittip.communities.update(name, true, callback);
