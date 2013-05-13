@@ -174,6 +174,10 @@ $(document).ready(function() {
     member{{ '' if website.NMEMBERS_THRESHOLD == '1' else 's' }},
     we'll start showing stats and info here.</p>
 
+    {% if user.ANON %}
+    <p>{% include templates/sign-in-using.html %}
+    to join {{ community.name }}.</p>
+    {% else %}
     {% set is_member = community.check_membership(user) %}
     <button class="join-leave"
             data-name="{{ community.name }}"
@@ -181,6 +185,7 @@ $(document).ready(function() {
         <span>{{ "Leave" if is_member else "Join" }}</span>
         {{ community.name }}
     </button>
+    {% end %}
 
 </div>
 {% else %}

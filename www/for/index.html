@@ -60,10 +60,13 @@ members get their own page on Gittip.</p>
                 Gittip.communities.jumpTo(term);
             });
         }
-
+        {% if user.ANON %}
+        var chosenOpts = {};
+        {% else %}
         var chosenOpts = { create_option: createOption
                          , create_option_text: "Add a new community"
                           };
+        {% end %}
         communityChooser.chosen(chosenOpts).change(function() {
             Gittip.communities.jumpTo(communityChooser.val());
         });

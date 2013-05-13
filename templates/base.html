@@ -51,14 +51,7 @@
         <div class="login">
             {% if user.ANON %}
             <div id="you-are">
-                <span class="nowrap">Sign in using</span>
-                <span class="nowrap">
-                    <a href="{{ twitter.oauth_url(website, u'opt-in', path.decoded) }}">Twitter</a>
-                    <span class="luxury">or
-                    <a href="{{ github.oauth_url(website, u'opt-in', path.decoded) }}">GitHub</a>
-                    or
-                    <a href="{{ bitbucket.oauth_url(website, u'opt-in', path.decoded) }}">Bitbucket</a>
-                </span>
+                {% include sign-in-using.html %}
             </div>
             {% else %}
             <div id="you-are">
