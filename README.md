@@ -446,3 +446,4 @@ and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
  - [Bountysource](https://www.bountysource.com/) - FOSS bounty site
  - [IssueHunter](http://issuehunter.co/) - FOSS bounty site
  - [TinyPass](http://www.tinypass.com/) - Soft paywall, used by e.g. [Daily Dish](http://dish.andrewsullivan.com/)
+ - [Patreon](http://www.patreon.com/) - Patronage model for content creators(!)
