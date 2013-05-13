@@ -187,9 +187,17 @@ $(document).ready(function() {
         member{{ '' if nneeded == 1 else 's' }} needed!</h2>
     {% end %}
 
-    <p>Once this community reaches {{ website.NMEMBERS_THRESHOLD }}
+    <p>Communities on Gittip are self-organized. Once this community reaches
+    {{ website.NMEMBERS_THRESHOLD }}
     member{{ '' if website.NMEMBERS_THRESHOLD == '1' else 's' }},
-    we'll start showing stats and info here.</p>
+    we'll start showing stats and info here. Check out <a href="/for/">other
+        communities</a> for examples.</p>
+
+    <h2>What is Gittip?</h2>
+
+    <p>Gittip is a weekly gift exchange. It's a way to support and thank people
+    and projects whose work you admire. <a href="/about/">Learn more
+        ...</a></p>
 
 </div>
 {% else %}
