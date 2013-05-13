@@ -140,6 +140,23 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
     </div>
     <div class="unit pad-sign">member{{ '' if community.nmembers == 1 else 's' }}</div>
 </div>
+<div class="nav level-1">
+    {% if user.ANON %}
+    <div class="help with-padding">
+        {% include templates/sign-in-using.html %} to <br />
+        join the {{ community.name }} community on Gittip.
+    </div>
+    {% else %}
+    {% set is_member = community.check_membership(user) %}
+    <button class="join-leave"
+            data-name="{{ community.name }}"
+            data-is-member="{{ 'true' if is_member else 'false' }}">
+        <span>{{ "Leave" if is_member else "Join" }}</span>
+        {{ community.name }}
+    </button>
+    {% end %}
+</div>
+
 {% end %}
 {% block page %}
 <script>
@@ -173,19 +190,6 @@ $(document).ready(function() {
     <p>Once this community reaches {{ website.NMEMBERS_THRESHOLD }}
     member{{ '' if website.NMEMBERS_THRESHOLD == '1' else 's' }},
     we'll start showing stats and info here.</p>
-
-    {% if user.ANON %}
-    <p>{% include templates/sign-in-using.html %}
-    to join {{ community.name }}.</p>
-    {% else %}
-    {% set is_member = community.check_membership(user) %}
-    <button class="join-leave"
-            data-name="{{ community.name }}"
-            data-is-member="{{ 'true' if is_member else 'false' }}">
-        <span>{{ "Leave" if is_member else "Join" }}</span>
-        {{ community.name }}
-    </button>
-    {% end %}
 
 </div>
 {% else %}
