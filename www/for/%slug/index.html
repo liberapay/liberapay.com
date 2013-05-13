@@ -152,7 +152,7 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
                       FROM tips
                       JOIN participants p ON p.username = tipper
                       JOIN elsewhere ON elsewhere.participant = tippee
-                      JOIN current_communities cc ON cc.participant = tipper
+                      JOIN current_communities cc ON cc.participant = tippee
                      WHERE last_bill_result = ''
                        AND elsewhere.is_locked = false
                        AND is_suspicious IS NOT true
