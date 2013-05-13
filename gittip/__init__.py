@@ -17,7 +17,10 @@ except locale.Error:
 
 
 BIRTHDAY = datetime.date(2012, 6, 1)
-CARDINALS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
+CARDINALS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven',
+             'eight', 'nine']
+ORDINALS = ['zeroth', 'first', 'second', 'third', 'fourth', 'fifth', 'sixth',
+            'seventh', 'eighth', 'ninth', 'tenth']
 MONTHS = [None, 'January', 'February', 'March', 'April', 'May', 'June', 'July',
           'August', 'September', 'October', 'November', 'December']
 
