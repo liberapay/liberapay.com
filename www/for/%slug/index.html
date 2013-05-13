@@ -58,15 +58,18 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
                  , claimed_time
               FROM participants p
               JOIN elsewhere e
-                ON p.username = participant
+                ON p.username = e.participant
+              JOIN current_communities cc
+                ON p.username = cc.participant
              WHERE claimed_time IS NOT null
                AND is_suspicious IS NOT true
+               AND cc.slug = %s AND cc.is_member
                ) AS foo
       ORDER BY claimed_time DESC
          LIMIT %s
         OFFSET %s
 
-    """, (limit, offset)))
+    """, (community.slug, limit, offset)))
 
     givers = _wrap(db.fetchall("""
 
@@ -78,11 +81,13 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
                       JOIN participants p ON p.username = tipper
                       JOIN participants p2 ON p2.username = tippee
                       JOIN elsewhere ON elsewhere.participant = tippee
+                      JOIN current_communities cc ON cc.participant = tipper
                      WHERE p.last_bill_result = ''
                        AND p.is_suspicious IS NOT true
                        AND p2.claimed_time IS NOT NULL
                        AND elsewhere.is_locked = false
-                  ORDER BY tipper, tippee, mtime DESC
+                       AND cc.slug = %s and cc.is_member
+                  ORDER BY tipper, tippee, tips.mtime DESC
                   ) AS foo
           JOIN participants p ON p.username = tipper
          WHERE is_suspicious IS NOT true
@@ -91,7 +96,7 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
       LIMIT %s
       OFFSET %s
 
-    """, (limit, offset)))
+    """, (community.slug, limit, offset)))
 
     # XXX I'm nearly positive that one or both of givers and receivers can contain
     # orphan accounts. See https://github.com/gittip/www.gittip.com/issues/650
@@ -105,11 +110,13 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
                       FROM tips
                       JOIN participants p ON p.username = tipper
                       JOIN elsewhere ON elsewhere.participant = tippee
+                      JOIN current_communities cc ON cc.participant = tipper
                      WHERE last_bill_result = ''
                        AND elsewhere.is_locked = false
                        AND is_suspicious IS NOT true
                        AND claimed_time IS NOT null
-                  ORDER BY tipper, tippee, mtime DESC
+                       AND cc.slug = %s and cc.is_member
+                  ORDER BY tipper, tippee, tips.mtime DESC
                   ) AS foo
           JOIN participants p ON p.username = tippee
          WHERE is_suspicious IS NOT true
@@ -118,7 +125,7 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
       LIMIT %s
       OFFSET %s
 
-    """, (limit, offset)))
+    """, (community.slug, limit, offset)))
 ^L
 {% extends templates/base.html %}
 {% block heading %}
