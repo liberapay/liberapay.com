@@ -152,7 +152,6 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
             data-name="{{ community.name }}"
             data-is-member="{{ 'true' if is_member else 'false' }}">
         <span>{{ "Leave" if is_member else "Join" }}</span>
-        {{ community.name }}
     </button>
     {% end %}
 </div>
