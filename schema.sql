@@ -641,3 +641,9 @@ ORDER BY tipper
 CREATE OR REPLACE VIEW backed_tips AS
 SELECT * FROM current_tips
  WHERE tipper_last_bill_result='';
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/issues/951
+
+CREATE INDEX elsewhere_participant ON elsewhere(participant);
