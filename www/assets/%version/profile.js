@@ -139,11 +139,11 @@ $(document).ready(function()
                       + '</div>'
                       + '</li>';
             } else {
+                var nneeded = data.threshold - community.nmembers;
                 opts += '<option value="' + community.name + '">'
                       + community.name + ' - ' + community.nmembers
                       + ' member' + ((community.nmembers === 1) ? '' : 's')
-                      + ' - ' + (data.threshold - community.nmembers)
-                      + ' more needed'
+                      + (nneeded > 0 ? ' - ' + nneeded + ' more needed' : '')
                       + '</option>';
             }
         }
