@@ -6,16 +6,22 @@ from gittip import db, AMOUNTS, ORDINALS
 from gittip.elsewhere import github
 from gittip.models.community import Community, name_pattern, slugize
 from gittip.models.participant import Participant
+from gittip.query_cache import QueryCache
+
+
+query_cache = QueryCache(db, threshold=20)
 
 
 def _wrap(raw):
     """This is a step on the way to ORM-ifying this simplate.
     """
+    out = []
     for rec in raw:
-        out = Participant.query.get(rec['username'])
+        participant = Participant.query.get(rec['username'])
         if 'amount' in rec:
-            out.amount = rec['amount']
-        yield out
+            participant.amount = rec['amount']
+        out.append(participant)
+    return out
 
 def _to_age(participant):
     # XXX I can't believe I'm doing this. Evolve aspen.utils.to_age!
@@ -95,7 +101,7 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
     # Run queries for listings.
     # =========================
 
-    new_participants = _wrap(db.fetchall("""
+    new_participants = query_cache.fetchall("""
 
         SELECT username, claimed_time FROM (
             SELECT DISTINCT ON (p.username)
@@ -114,9 +120,9 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
          LIMIT %s
         OFFSET %s
 
-    """, (community.slug, limit, offset)))
+    """, (community.slug, limit, offset), _wrap)
 
-    givers = _wrap(db.fetchall("""
+    givers = query_cache.fetchall("""
 
         SELECT tipper AS username, anonymous, sum(amount) AS amount
           FROM (    SELECT DISTINCT ON (tipper, tippee)
@@ -141,12 +147,12 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
       LIMIT %s
       OFFSET %s
 
-    """, (community.slug, limit, offset)))
+    """, (community.slug, limit, offset), _wrap)
 
     # XXX I'm nearly positive that one or both of givers and receivers can contain
     # orphan accounts. See https://github.com/gittip/www.gittip.com/issues/650
 
-    receivers = _wrap(db.fetchall("""
+    receivers = query_cache.fetchall("""
 
         SELECT tippee AS username, claimed_time, sum(amount) AS amount
           FROM (    SELECT DISTINCT ON (tipper, tippee)
@@ -170,7 +176,7 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
       LIMIT %s
       OFFSET %s
 
-    """, (community.slug, limit, offset)))
+    """, (community.slug, limit, offset), _wrap)
 ^L
 {% extends templates/base.html %}
 {% block heading %}
