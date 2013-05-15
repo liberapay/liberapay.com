@@ -21,6 +21,11 @@ github_account, twitter_account, bitbucket_account = participant.get_accounts_el
 
 {% block page %}
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"></script>
+<script>
+    if (typeof angular === 'undefined')
+        document.write(unescape("%3Cscript src='/assets/angular-1.0.6.min.js'%3E%3C/script%3E"));
+</script>
+
 <script src="/assets/{{ __version__ }}/open_group.js"></script>
 
 <div id="open_group" class="col0" ng-app="Gittip.open_group">
