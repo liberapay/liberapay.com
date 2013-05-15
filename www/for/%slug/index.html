@@ -15,13 +15,11 @@ query_cache = QueryCache(db, threshold=20)
 def _wrap(raw):
     """This is a step on the way to ORM-ifying this simplate.
     """
-    out = []
     for rec in raw:
         participant = Participant.query.get(rec['username'])
         if 'amount' in rec:
             participant.amount = rec['amount']
-        out.append(participant)
-    return out
+        yield participant
 
 def _to_age(participant):
     # XXX I can't believe I'm doing this. Evolve aspen.utils.to_age!
@@ -101,7 +99,7 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
     # Run queries for listings.
     # =========================
 
-    new_participants = query_cache.fetchall("""
+    new_participants = _wrap(query_cache.fetchall("""
 
         SELECT username, claimed_time FROM (
             SELECT DISTINCT ON (p.username)
@@ -120,9 +118,9 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
          LIMIT %s
         OFFSET %s
 
-    """, (community.slug, limit, offset), _wrap)
+    """, (community.slug, limit, offset)))
 
-    givers = query_cache.fetchall("""
+    givers = _wrap(query_cache.fetchall("""
 
         SELECT tipper AS username, anonymous, sum(amount) AS amount
           FROM (    SELECT DISTINCT ON (tipper, tippee)
@@ -147,12 +145,12 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
       LIMIT %s
       OFFSET %s
 
-    """, (community.slug, limit, offset), _wrap)
+    """, (community.slug, limit, offset)))
 
     # XXX I'm nearly positive that one or both of givers and receivers can contain
     # orphan accounts. See https://github.com/gittip/www.gittip.com/issues/650
 
-    receivers = query_cache.fetchall("""
+    receivers = _wrap(query_cache.fetchall("""
 
         SELECT tippee AS username, claimed_time, sum(amount) AS amount
           FROM (    SELECT DISTINCT ON (tipper, tippee)
@@ -176,7 +174,7 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
       LIMIT %s
       OFFSET %s
 
-    """, (community.slug, limit, offset), _wrap)
+    """, (community.slug, limit, offset)))
 ^L
 {% extends templates/base.html %}
 {% block heading %}
