@@ -447,3 +447,4 @@ and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
  - [IssueHunter](http://issuehunter.co/) - FOSS bounty site
  - [TinyPass](http://www.tinypass.com/) - Soft paywall, used by e.g. [Daily Dish](http://dish.andrewsullivan.com/)
  - [Patreon](http://www.patreon.com/) - Patronage model for content creators(!)
+ - [WhyNotMe](http://www.whynotme.me/) - "Give as a group to any non-profit in America"
