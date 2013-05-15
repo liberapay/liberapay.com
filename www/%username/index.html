@@ -86,10 +86,6 @@ else:
             </ul>
             {% end %}
 
-            {% if participant.type == 'open group' %}
-            {% include "templates/open-group-members.html %}
-            {% end %}
-
             <h2>Funding Goal</h2>
             <div class="goal">
                 {% if participant.goal is None %}

@@ -1,0 +1,115 @@
+"""Show information about a single participant. It might be you!
+"""
+from gittip import AMOUNTS
+from gittip.utils import get_participant
+
+# ========================================================================== ^L
+
+participant = get_participant(request, restrict=False)
+if participant.type != 'open group':
+    request.redirect('./')
+locked = False
+tip_or_pledge = "tip"
+hero = "Profile"
+title = participant.username      # used in the title tag
+username = participant.username   # used in footer shared with on/$platform/
+                                  # pages
+github_account, twitter_account, bitbucket_account = participant.get_accounts_elsewhere()
+
+# ========================================================================== ^L
+{% extends templates/profile.html %}
+
+{% block page %}
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"></script>
+<script src="/assets/{{ __version__ }}/open_group.js"></script>
+
+<div id="open_group" class="col0" ng-app="Gittip.open_group">
+
+    <div class="group" ng-controller="Gittip.open_group.IdentificationsCtrl">
+        <div id="split">
+            <h2>Money Distribution</h2>
+
+            {% if user.allowed_to_answer() %}
+            <p class="fine" ui-if="nanswers_needed == 0">This info is
+            <b>public</b>.</p>
+            {% end %}
+
+            <p class="fine" ui-if="nanswers_needed == 0">Money given to
+            {{ participant.username }} is split as follows, based on everyone's
+            answer to, &ldquo;Who is {{ participant.username }}?&rdquo;</p>
+
+            <p class="fine" ui-if="nanswers_needed > 0">We need
+
+            <ng-pluralize
+                count="nanswers_needed"
+                when="{ 'one': 'one more person'
+                      , 'other': '{} more people'
+                       }"></ng-pluralize>
+
+            to answer <b>&ldquo;Who is {{ participant.username }}?&rdquo;</b>
+            before we'll start distributing money collected for
+            {{ participant.username }}.</p>
+
+            <table>
+                <tr ng-repeat="participant in split">
+                    <td>&#123;{ participant.username }}</td>
+                    <td class="percentage">&#123;{ participant.weight * 100 | currency:"" }}%</td>
+                </tr>
+            </table>
+        </div>
+
+        <div id="identifications">
+            <h2>Who is {{ participant.username }}?</h2>
+
+            {% if user.allowed_to_answer() %}
+            <p class="fine">Your answer is <b>private</b>.</p>
+
+            <p class="fine">Whom do you associate with
+            {{ participant.username }}, and how strongly?</p>
+
+            <table>
+                <tr ng-repeat="participant in identifications">
+                    <td>&#123;{ participant.username }}</td>
+                    <td>
+                        <input type="radio"
+                               name="weight-&#123;{ participant.username }}"
+                               value="&#123;{ weight }}"
+                               title="weight = &#123;{ weight }}"
+                               ng-repeat="weight in weights"
+                               ng-model="participant.weight"
+                               ng-change="change(participant, weight)"
+                               />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" id="lookup-container">
+                      <br />
+                      <form ng-submit="doAdd()">
+                          <input tabindex="1" id="query"
+                                 autocomplete="off"
+                                 placeholder="Enter a Gittip username"
+                                 ng-model="query"
+                                 ng-change="doLookup()"
+                             />&nbsp;<button type="submit"
+                                             tabindex="2">Add</button>
+                      </form>
+                      <ul id="lookup-results">
+                        <li ng-repeat="participant in lookup">
+                          <span>&#123;{ participant.username }}</span>
+                        </li>
+                      </ul>
+                </tr>
+            </table>
+            {% else %}
+
+            <p class="fine">Once you have successfully moved money into or out
+            of Gittip, you will be able to give your own answer to &ldquo;Who
+            is {{ participant.username }}?&rdquo;</p>
+
+            {% end %}
+        </div>
+    </div>
+
+<div>
+{% end %}
+
