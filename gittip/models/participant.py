@@ -101,6 +101,18 @@ class Participant(db.Model):
     class UnknownPlatform(Exception): pass
 
     @property
+    def IS_INDIVIDUAL(self):
+        return self.type == 'individual'
+
+    @property
+    def IS_GROUP(self):
+        return self.type == 'group'
+
+    @property
+    def IS_OPEN_GROUP(self):
+        return self.type == 'open group'
+
+    @property
     def tips_giving(self):
         return self._tips_giving.distinct("tips.tippee")\
                                 .order_by("tips.tippee, tips.mtime DESC")
