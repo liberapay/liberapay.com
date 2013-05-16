@@ -29,6 +29,7 @@ if POST:
                            FROM identifications
                           WHERE member=%s
                             AND "group"=%s
+                            AND identified_by=%s
                           LIMIT 1
                         ), CURRENT_TIMESTAMP)
            , %s
@@ -37,7 +38,7 @@ if POST:
            , %s
             );
 
-    """, (member, group, member, group, weight, user.username))
+    """, (member, group, user.username, member, group, weight, user.username))
 
 if allowed_to_vote_on:
     identifications = list(db.fetchall("""
