@@ -14,9 +14,10 @@ if not participant.type == 'open group':
     raise Response(400)
 
 group = participant.username
+allowed_to_vote_on = user.allowed_to_vote_on(participant)
 
 if POST:
-    if not user.allowed_to_answer():
+    if not allowed_to_vote_on:
         raise Response(400)
     member = body['member']
     weight = body['weight']
@@ -38,7 +39,7 @@ if POST:
 
     """, (member, group, member, group, weight, user.username))
 
-if user.allowed_to_answer():
+if allowed_to_vote_on:
     identifications = list(db.fetchall("""
 
         SELECT member AS username

@@ -279,7 +279,9 @@ class Participant(db.Model):
             out = (now - self.claimed_time).total_seconds()
         return out
 
-    def allowed_to_answer(self):
+    def allowed_to_vote_on(self, team):
+        """
+        """
         return not self.ANON \
            and self.is_suspicious is False \
            and len(self.exchanges) > 0

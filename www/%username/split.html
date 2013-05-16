@@ -8,6 +8,7 @@ from gittip.utils import get_participant
 participant = get_participant(request, restrict=False)
 if participant.type != 'open group':
     request.redirect('./')
+allowed_to_vote_on = user.allowed_to_vote_on(participant)
 locked = False
 tip_or_pledge = "tip"
 hero = "Profile"
@@ -34,7 +35,7 @@ github_account, twitter_account, bitbucket_account = participant.get_accounts_el
         <div id="split">
             <h2>Money Distribution</h2>
 
-            {% if user.allowed_to_answer() %}
+            {% if allowed_to_vote_on %}
             <p class="fine" ui-if="nanswers_needed == 0">This info is
             <b>public</b>.</p>
             {% end %}
@@ -66,7 +67,7 @@ github_account, twitter_account, bitbucket_account = participant.get_accounts_el
         <div id="identifications">
             <h2>Who is {{ participant.username }}?</h2>
 
-            {% if user.allowed_to_answer() %}
+            {% if allowed_to_vote_on %}
             <p class="fine">Your answer is <b>private</b>.</p>
 
             <p class="fine">Whom do you associate with
