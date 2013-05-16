@@ -647,3 +647,27 @@ SELECT * FROM current_tips
 -- https://github.com/gittip/www.gittip.com/issues/951
 
 CREATE INDEX elsewhere_participant ON elsewhere(participant);
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/issues/901
+
+BEGIN;
+
+    ALTER TABLE identifications DROP CONSTRAINT no_stacking_the_deck;
+
+
+    -- Switch from is_suspicious IS FALSE to IS NOT TRUE. We're changing our
+    -- criteria from "has moved money at all" to a rooted web of trust.
+
+    CREATE OR REPLACE VIEW current_identifications AS
+    SELECT DISTINCT ON (member, "group", identified_by) i.*
+               FROM identifications i
+               JOIN participants p ON p.username = identified_by
+              WHERE p.is_suspicious IS NOT TRUE
+           ORDER BY member
+                  , "group"
+                  , identified_by
+                  , mtime DESC;
+
+END;

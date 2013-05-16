@@ -8,8 +8,6 @@ from gittip.utils import get_participant
 
 request.allow('GET', 'POST')
 participant = get_participant(request, restrict=False)
-if user == participant:
-    raise Response(400)
 if not participant.type == 'open group':
     raise Response(400)
 
@@ -55,6 +53,8 @@ if allowed_to_vote_on:
 else:
     identifications = []
 
+voters, split = participant.compute_split()
 response.body = { "identifications": identifications
-                , "split": participant.compute_split()
+                , "voters": voters
+                , "split": split
                  }

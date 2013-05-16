@@ -240,9 +240,7 @@ class Payday(object):
             if participant['type'] != 'open group':
                 continue
             p = ORMParticipant.query.get(participant['username'])
-            nanswers, threshold, split = p.compute_split()
-            if nanswers < threshold:
-                continue
+            voters, split = p.compute_split()
             split.reverse()
             top_receiver = split.pop()
 

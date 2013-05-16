@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 import datetime
+import math
 import os
 from collections import defaultdict
 from decimal import Decimal
@@ -291,55 +292,105 @@ class Participant(db.Model):
             out = (now - self.claimed_time).total_seconds()
         return out
 
-    def allowed_to_vote_on(self, team):
+    def allowed_to_vote_on(self, group):
+        """Given a Participant object, return a boolean.
         """
-        """
-        return not self.ANON \
-           and self.is_suspicious is False \
-           and len(self.exchanges) > 0
+        if self.ANON:           return False
+        if self.is_suspicious:  return False
+        if group == self:       return True
+        return self.username in group.get_voters()
+
+    def get_voters(self):
+        identifications = list(gittip.db.fetchall("""
+
+            SELECT member
+                 , weight
+                 , identified_by
+                 , mtime
+              FROM current_identifications
+             WHERE "group"=%s
+               AND weight > 0
+          ORDER BY mtime ASC
+
+        """, (self.username,)))
+
+        voters = set()
+        vote_counts = defaultdict(int)
+
+        class Break(Exception): pass
+
+        while identifications:
+            try:
+                for i in range(len(identifications)):
+
+                    identification = identifications[i]
+                    identified_by = identification['identified_by']
+                    member = identification['member']
+
+                    def record():
+                        voters.add(member)
+                        identifications.pop(i)
+
+                    # Group participant itself has chosen.
+                    if identified_by == self.username:
+                        record()
+                        break
+
+                    # Group member has voted.
+                    elif identified_by in voters:
+                        vote_counts[member] += 1
+                        target = math.ceil(len(voters) * 0.667)
+                        if vote_counts[member] == target:
+                            record()
+                            break
+
+                else:
+                    # This pass through didn't find any new voters.
+                    raise Break
+            except Break:
+                break
+
+        voters = list(voters)
+        voters.sort()
+        return voters
 
     def compute_split(self):
-        if self.type != 'open group':
+        if not self.IS_OPEN_GROUP:
             return [{"username": self.username, "weight": "1.0"}]
 
-        nanswers = gittip.db.fetchone("""
-
-            SELECT count(*)
-              FROM ( SELECT identified_by
-                       FROM current_identifications
-                      WHERE "group"=%s
-                        AND weight > 0
-                   GROUP BY identified_by
-                    ) AS anon
-
-        """, (self.username,))['count']
-
         split = []
-        if nanswers >= NANSWERS_THRESHOLD:
-            rows = gittip.db.fetchall("""
 
-                SELECT *
-                  FROM current_identifications
-                 WHERE "group"=%s
-                   AND weight > 0
+        voters = self.get_voters()
+        identifications = gittip.db.fetchall("""
 
-            """, (self.username,))
+            SELECT member
+                 , weight
+                 , identified_by
+                 , mtime
+              FROM current_identifications
+             WHERE "group"=%s
+               AND weight > 0
+          ORDER BY mtime ASC
 
-            splitmap = defaultdict(int)
-            total = 0
-            for row in rows:
-                splitmap[row['member']] += row['weight']
-                total += row['weight']
+        """, (self.username,))
 
-            total = Decimal(total)
-            for username, weight in splitmap.items():
-                split.append({ "username": username
-                             , "weight": Decimal(weight) / total
-                              })
+        splitmap = defaultdict(int)
+        total = 0
+        for row in identifications:
+            if row['identified_by'] not in voters:
+                continue
+            splitmap[row['member']] += row['weight']
+            total += row['weight']
 
-            split.sort(key=lambda r: r['weight'], reverse=True)
+        total = Decimal(total)
+        for username, weight in splitmap.items():
+            split.append({ "username": username
+                         , "weight": Decimal(weight) / total
+                          })
 
-        return (nanswers, NANSWERS_THRESHOLD, split)
+        split.sort(key=lambda r: r['weight'], reverse=True)
+
+        return voters, split
 
 
     # TODO: Move these queries into this class.

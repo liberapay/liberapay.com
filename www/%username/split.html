@@ -36,25 +36,11 @@ github_account, twitter_account, bitbucket_account = participant.get_accounts_el
             <h2>Money Distribution</h2>
 
             {% if allowed_to_vote_on %}
-            <p class="fine" ui-if="nanswers_needed == 0">This info is
-            <b>public</b>.</p>
+            <p class="fine">This info is <b>public</b>.</p>
             {% end %}
 
-            <p class="fine" ui-if="nanswers_needed == 0">Money given to
-            {{ participant.username }} is split as follows, based on everyone's
-            answer to, &ldquo;Who is {{ participant.username }}?&rdquo;</p>
-
-            <p class="fine" ui-if="nanswers_needed > 0">We need
-
-            <ng-pluralize
-                count="nanswers_needed"
-                when="{ 'one': 'one more person'
-                      , 'other': '{} more people'
-                       }"></ng-pluralize>
-
-            to answer <b>&ldquo;Who is {{ participant.username }}?&rdquo;</b>
-            before we'll start distributing money collected for
-            {{ participant.username }}.</p>
+            <p class="fine">Money given to {{ participant.username }} is split
+            as follows.</p>
 
             <table>
                 <tr ng-repeat="participant in split">
@@ -65,13 +51,25 @@ github_account, twitter_account, bitbucket_account = participant.get_accounts_el
         </div>
 
         <div id="identifications">
-            <h2>Who is {{ participant.username }}?</h2>
+            <h2>Who decides?</h2>
 
             {% if allowed_to_vote_on %}
-            <p class="fine">Your answer is <b>private</b>.</p>
+            <p class="fine">This info is <b>public</b>.</p>
+            {% end %}
 
-            <p class="fine">Whom do you associate with
-            {{ participant.username }}, and how strongly?</p>
+            <p class="fine">Here are the participants who have a say in how the
+            money for {{ participant.username }} is split up.</p>
+
+            <table>
+                <tr ng-repeat="voter in voters"><td>&#123;{ voter }}</td></tr>
+            </table>
+
+
+            {% if allowed_to_vote_on %}
+
+            <h2>What's your vote?</h2>
+
+            <p class="fine">Your answer is <b>private</b>.</p>
 
             <table>
                 <tr ng-repeat="participant in identifications">
@@ -106,12 +104,6 @@ github_account, twitter_account, bitbucket_account = participant.get_accounts_el
                       </ul>
                 </tr>
             </table>
-            {% else %}
-
-            <p class="fine">Once you have successfully moved money into or out
-            of Gittip, you will be able to give your own answer to &ldquo;Who
-            is {{ participant.username }}?&rdquo;</p>
-
             {% end %}
         </div>
     </div>

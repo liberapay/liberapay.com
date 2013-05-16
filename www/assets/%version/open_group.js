@@ -7,11 +7,8 @@ Gittip.open_group.IdentificationsCtrl = function($scope, $http)
     function updateMembers(data)
     {
         $scope.identifications = data.identifications;
-        var split = data.split;
-        $scope.nanswers = split[0];
-        $scope.nanswers_threshold = split[1];
-        $scope.nanswers_needed = split[1] - split[0];
-        $scope.split = split[2];
+        $scope.voters = data.voters;
+        $scope.split = data.split;
     }
 
     $scope.doLookup = function()
