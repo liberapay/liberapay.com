@@ -4,6 +4,8 @@ from gittip import db, AMOUNTS
 from gittip.elsewhere import github
 from gittip.models.participant import Participant
 
+LUXURY = 4  # used for responsive design to limit items shown on small screens
+
 def _wrap(raw):
     """This is a step on the way to ORM-ifying this simplate.
     """
@@ -144,7 +146,7 @@ receivers = _wrap(db.fetchall("""
         <h2>New Participants</h2>
         <ul class="group">
             {% for i, participant in enumerate(new_participants, start=1) %}
-            <li{% if i > 6 %} class="luxury"{% end %}>
+            <li{% if i > LUXURY %} class="luxury"{% end %}>
                 <a href="/{{ participant.username }}/" class="mini-user">
                     <span class="inner">
                         <span class="avatar"
@@ -164,7 +166,7 @@ receivers = _wrap(db.fetchall("""
         <h2>Top Givers</h2>
         <ul class="group">
             {% for i, giver in enumerate(givers, start=1) %}
-            <li{% if i > 6 %} class="luxury"{% end %}>
+            <li{% if i > LUXURY %} class="luxury"{% end %}>
                 {% if giver.anonymous and not user.is_admin %}
                 <span class="mini-user">
                     <span class="inner">
@@ -196,7 +198,7 @@ receivers = _wrap(db.fetchall("""
         <h2>Top Receivers</h2>
         <ul class="group">
             {% for i, receiver in enumerate(receivers, start=1) %}
-            <li{% if i > 6 %} class="luxury"{% end %}>
+            <li{% if i > LUXURY %} class="luxury"{% end %}>
                 <a href="/{{ receiver.username }}/" class="mini-user">
                     <span class="inner">
                         <span class="avatar"

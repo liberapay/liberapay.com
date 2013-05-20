@@ -1131,6 +1131,32 @@ UL.community-memberships {
             float: none;
             margin: 0 auto;
         }
+        #leaderboard {
+            width: 600px;
+
+            > * {
+                width: 180px;
+            }
+
+        }
+    }
+}
+
+@media (max-width: 680px) {
+    #page {
+        #leaderboard {
+            width: 375px;
+
+            > * {
+                width: auto;
+                margin: 0;
+                float: none;
+            }
+
+            ul li.luxury {
+                display: none;
+            }
+        }
     }
 }
 
@@ -1144,9 +1170,6 @@ UL.community-memberships {
 
 @media (max-width: 540px) {
     .main-padding { padding: 0 20px; }
-    #page #leaderboard ul li.luxury {
-        display: none;
-    }
     body {
         font: normal 14px $Helvetica;
     }
