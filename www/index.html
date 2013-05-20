@@ -26,7 +26,7 @@ def _to_age(participant):
 ^L
 
 try:
-    limit = min(int(qs.get('limit', 10)), 100)
+    limit = min(int(qs.get('limit', 30)), 100)
     offset = int(qs.get('offset', 0))
 except ValueError:
     raise Response(400)

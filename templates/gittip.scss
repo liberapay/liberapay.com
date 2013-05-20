@@ -745,6 +745,11 @@ button.selected:hover {
     text-align: center;
 }
 #page #leaderboard {
+
+    overflow: hidden;
+    margin: 0 auto;
+    width: 870px;
+
     ul {
         margin: 0 0 20px 0;
 
@@ -756,6 +761,19 @@ button.selected:hover {
             padding: 2px;
             width: 10%;
         }
+
+        overflow: hidden;
+        margin: 0 auto;
+    }
+    
+    > * {
+        width: 270px;
+        float: left;
+        margin-right: 30px;
+    }
+
+    > *:last-child {
+        margin-right: 0;
     }
 }
 #page {

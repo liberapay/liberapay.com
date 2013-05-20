@@ -71,7 +71,7 @@ if slug != _slug:
     request.redirect('../' + slug + '/')
 
 try:
-    limit = min(int(qs.get('limit', 10)), 100)
+    limit = min(int(qs.get('limit', 30)), 100)
     offset = int(qs.get('offset', 0))
 except ValueError:
     raise Response(400)
@@ -251,16 +251,17 @@ $(document).ready(function() {
 {% else %}
 
 {% if community.slug in first_ten %}
+<div style="text-align: center;">
     <h1>Congratulations!</h1>
     <p>You're the {{ first_ten[community.slug] }} community on Gittip! :D</p>
-
+</div>
 {% end %}
 
 
 <div id="leaderboard">
 
     <div class="new-participants">
-        <h2>New Participants</h2>
+        <h2>New Members</h2>
         <ul class="group">
             {% for i, participant in enumerate(new_participants, start=1) %}
             <li{% if i > 6 %} class="luxury"{% end %}>
