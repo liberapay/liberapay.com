@@ -26,8 +26,8 @@ connect_params = {
 
 # collect extra params from elsewhere accounts
 for account in user.get_accounts_elsewhere():
-    # Note: returns None for accounts that hanve't been linked yet
-    if not account:
+    # Note: returns None for accounts that haven't been linked yet
+    if account is None:
         continue
 
     # from Github
