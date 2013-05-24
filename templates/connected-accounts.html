@@ -73,6 +73,30 @@
         </td>
     </tr>
     <tr>
+      <td class="account-type">
+        <img src="/assets/bountysource.png" />
+      </td>
+      <td class="account-details">
+        {% if bountysource_account is None %}
+            {% if not user.ANON and user == participant %}
+                Connect a <a href="{{ bountysource.oauth_url(website, participant) }}">Bountysource account</a>.
+            {% else %}
+                No Bountysource account connected.
+            {% end %}
+        {% else %}
+            <a href="{{ escape(bountysource_account.user_info.get('frontend_url', 'https://www.bountysource.com')) }}"
+                ><img class="avatar"
+                      src="{{ escape(bountysource_account.user_info.get('avatar_url', '/assets/%s/no-avatar.png' % __version__)) }}"
+            />{{ escape(bountysource_account.user_info.get('display_name')) }}
+            {% if bountysource_account.user_info.get('display_name') %}
+                ({{ escape(bountysource_account.user_info.get('first_name')) }} {{ escape(bountysource_account.user_info.get('last_name')) }})
+            {% end %}
+            </a>
+            <div class="account-type">on Bountysource</div>
+        {% end %}
+      </td>
+    </tr>
+    <tr>
         <td class="account-type">
             <img src="/assets/balanced-avatar.png" />
         </td>

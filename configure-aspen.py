@@ -30,6 +30,11 @@ website.twitter_consumer_key = os.environ['TWITTER_CONSUMER_KEY'].decode('ASCII'
 website.twitter_consumer_secret = os.environ['TWITTER_CONSUMER_SECRET'].decode('ASCII')
 website.twitter_callback = os.environ['TWITTER_CALLBACK'].decode('ASCII')
 
+website.bountysource_www_host = os.environ['BOUNTYSOURCE_WWW_HOST'].decode('ASCII')
+website.bountysource_api_host = os.environ['BOUNTYSOURCE_API_HOST'].decode('ASCII')
+website.bountysource_api_secret = os.environ['BOUNTYSOURCE_API_SECRET'].decode('ASCII')
+website.bountysource_callback = os.environ['BOUNTYSOURCE_CALLBACK'].decode('ASCII')
+
 website.hooks.inbound_early += [ gittip.canonize
                                , gittip.configure_payments
                                , gittip.csrf.inbound
@@ -46,11 +51,12 @@ os.environ['__VERSION__'] = __version__
 
 
 def add_stuff(request):
-    from gittip.elsewhere import bitbucket, github, twitter
+    from gittip.elsewhere import bitbucket, github, twitter, bountysource
     request.context['__version__'] = __version__
     request.context['username'] = None
     request.context['bitbucket'] = bitbucket
     request.context['github'] = github
     request.context['twitter'] = twitter
+    request.context['bountysource'] = bountysource
 
 website.hooks.inbound_early += [add_stuff]

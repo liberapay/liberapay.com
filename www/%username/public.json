@@ -77,7 +77,7 @@ if not user.ANON:
 #
 # https://github.com/gittip/www.gittip.com/issues/680
 
-github, twitter, bitbucket = participant.get_accounts_elsewhere()
+github, twitter, bitbucket, bountysource = participant.get_accounts_elsewhere()
 if bitbucket is not None:
     bitbucket = "https://bitbucket.org/api/1.0/users/%s" % \
                                                 bitbucket.user_info['username']
@@ -86,10 +86,13 @@ if github is not None:
 if twitter is not None:
     twitter = "https://api.twitter.com/1/users/show.json?id=%s" \
                                         "&include_entities=1" % twitter.user_id
+if bountysource is not None:
+    bountysource = "https://api.bountysource.com/users/%s" % bountysource.user_info['slug']
 
 output['elsewhere'] = { 'bitbucket': bitbucket
                       , 'github': github
                       , 'twitter': twitter
+                      , 'bountysource': bountysource
                        }
 
 response.body = output

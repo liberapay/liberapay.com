@@ -208,7 +208,7 @@ class Participant(db.Model):
                 raise self.UsernameAlreadyTaken
 
     def get_accounts_elsewhere(self):
-        github_account = twitter_account = bitbucket_account = None
+        github_account = twitter_account = bitbucket_account = bountysource_account = None
         for account in self.accounts_elsewhere.all():
             if account.platform == "github":
                 github_account = account
@@ -216,9 +216,11 @@ class Participant(db.Model):
                 twitter_account = account
             elif account.platform == "bitbucket":
                 bitbucket_account = account
+            elif account.platform == "bountysource":
+                bountysource_account = account
             else:
                 raise self.UnknownPlatform(account.platform)
-        return (github_account, twitter_account, bitbucket_account)
+        return (github_account, twitter_account, bitbucket_account, bountysource_account)
 
     def get_img_src(self, size=128):
         """Return a value for <img src="..." />.
@@ -234,7 +236,7 @@ class Participant(db.Model):
 
         src = '/assets/%s/avatar-default.gif' % os.environ['__VERSION__']
 
-        github, twitter, bitbucket = self.get_accounts_elsewhere()
+        github, twitter, bitbucket, bountysource = self.get_accounts_elsewhere()
         if github is not None:
             # GitHub -> Gravatar: http://en.gravatar.com/site/implement/images/
             if 'gravatar_id' in github.user_info:

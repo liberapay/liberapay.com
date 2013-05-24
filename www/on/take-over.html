@@ -2,13 +2,14 @@ from aspen import Response
 from gittip.elsewhere.bitbucket import BitbucketAccount
 from gittip.elsewhere.github import GitHubAccount
 from gittip.elsewhere.twitter import TwitterAccount
+from gittip.elsewhere.bountysource import BountysourceAccount
 
 # ====== ^L
 if user.ANON or not POST:
     raise Response(404)
 
 platform = body['platform']
-if platform not in ('github', 'twitter', 'bitbucket'):
+if platform not in ('github', 'twitter', 'bitbucket', 'bountysource'):
     raise Response(400, "bad platform: %s" % platform)
 
 user_id = body['user_id']
@@ -36,6 +37,8 @@ elif platform == 'github':
     Account = GitHubAccount
 elif platform == 'twitter':
     Account = TwitterAccount
+elif platform == 'bountysource'
+    Account = BountysourceAccount
 
 account = Account(user_id)
 user.take_over(account, have_confirmation=True)
