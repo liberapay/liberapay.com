@@ -1,16 +1,9 @@
-import gittip
-import logging
-import requests
 import os
 import md5
 import time
-import re
-from aspen import json, log, Response
-from aspen.website import Website
-from aspen.utils import typecheck
 from gittip import db
 from gittip.models import Participant
-from gittip.elsewhere import ACTIONS, AccountElsewhere, _resolve
+from gittip.elsewhere import AccountElsewhere, _resolve
 
 www_host = os.environ['BOUNTYSOURCE_WWW_HOST'].decode('ASCII')
 api_host = os.environ['BOUNTYSOURCE_API_HOST'].decode('ASCII')

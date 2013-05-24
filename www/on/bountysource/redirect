@@ -4,10 +4,9 @@ From here we redirect users to Bountysource after storing needed info in an
 in-memory cache. We get them again at www/on/bountysource/associate.
 
 """
-import requests, re
+import re
 from urllib import urlencode
 from aspen import log, Response
-from gittip.utils import get_participant
 from gittip.elsewhere import bountysource
 
 # ========================== ^L
