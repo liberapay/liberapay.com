@@ -208,7 +208,8 @@ class Participant(db.Model):
                 raise self.UsernameAlreadyTaken
 
     def get_accounts_elsewhere(self):
-        github_account = twitter_account = bitbucket_account = bountysource_account = None
+        github_account = twitter_account = bitbucket_account = \
+                                                    bountysource_account = None
         for account in self.accounts_elsewhere.all():
             if account.platform == "github":
                 github_account = account
@@ -220,7 +221,11 @@ class Participant(db.Model):
                 bountysource_account = account
             else:
                 raise self.UnknownPlatform(account.platform)
-        return (github_account, twitter_account, bitbucket_account, bountysource_account)
+        return ( github_account
+               , twitter_account
+               , bitbucket_account
+               , bountysource_account
+                )
 
     def get_img_src(self, size=128):
         """Return a value for <img src="..." />.

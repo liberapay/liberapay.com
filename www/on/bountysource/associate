@@ -13,7 +13,8 @@ if user.ANON:
 # did something go wrong with account link at Bountysource?
 # redirect to profile page, where an error will be displayed
 if 'bs_error' in qs.keys():
-    request.redirect('/%s?bs_error=%s' % (user.username, qs.get('error', 'Unable to link Bountysource account at this time')))
+    msg = qs.get('error', 'Unable to link Bountysource account at this time')
+    request.redirect('/%s?bs_error=%s' % (user.username, msg))
 
 # Gittip generated access token, passed all the way through the auth process
 token = qs.get('access_token', '')

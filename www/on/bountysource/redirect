@@ -18,8 +18,8 @@ if user.ANON:
 # participant = get_participant(request)
 
 # build params which are passed to Bountysource for creating a linked account.
-# the following attributes will be added to connect_params from linked accounts if present:
-# email, first_name, last_name, avatar_url
+# the following attributes will be added to connect_params from linked accounts
+# if present: email, first_name, last_name, avatar_url
 connect_params = {
     'redirect_url': website.bountysource_callback,
     'external_access_token': bountysource.create_access_token(user),
@@ -58,7 +58,8 @@ for account in user.get_accounts_elsewhere():
         if not connect_params.get('login'):
             connect_params['login'] = account.user_info.get('screen_name')
         if not connect_params.get('avatar_url'):
-            connect_params['avatar_url'] = account.user_info.get('profile_image_url_https')
+            connect_params['avatar_url'] = \
+                               account.user_info.get('profile_image_url_https')
         if not connect_params.get('first_name'):
             if name_parts:
                 connect_params['first_name'] = name_parts[0]
@@ -78,7 +79,9 @@ for account in user.get_accounts_elsewhere():
             connect_params['last_name'] = account.user_info.get('last_name')
 
 # build redirect URL to Bountysource from collected data
-auth_url = "%s#auth/gittip/confirm?%s" % (bountysource.www_host, urlencode(connect_params))
+auth_url = "%s#auth/gittip/confirm?%s" % ( bountysource.www_host
+                                         , urlencode(connect_params)
+                                          )
 
 log("Redirect to Bountysource for authorization: %s" % connect_params)
 request.redirect(auth_url)

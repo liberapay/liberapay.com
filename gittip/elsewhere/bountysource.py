@@ -25,7 +25,10 @@ def create_access_token(participant):
     """Return an access token for the Bountysource API for this user.
     """
     time_now = int(time.time())
-    token = "%s.%s.%s" % (participant.id, time_now, hash_access_token(participant.id, time_now))
+    token = "%s.%s.%s" % ( participant.id
+                         , time_now
+                         , hash_access_token(participant.id, time_now)
+                          )
     return token
 
 
@@ -40,7 +43,10 @@ def hash_access_token(user_id, time_now):
     :returns:
         MD5 hash of user_id, time, and Bountysource API secret
     """
-    raw = "%s.%s.%s" % (user_id, time_now, os.environ['BOUNTYSOURCE_API_SECRET'].decode('ASCII'))
+    raw = "%s.%s.%s" % ( user_id
+                       , time_now
+                       , os.environ['BOUNTYSOURCE_API_SECRET'].decode('ASCII')
+                        )
     return md5.new(raw).hexdigest()
 
 
@@ -51,13 +57,15 @@ def resolve(login):
 def oauth_url(website, participant, redirect_url=None):
     """Return a URL to authenticate with Bountysource.
 
-    Creates an accesstoken from the participant, used at Bountysource to associate accounts.
+    Creates an accesstoken from the participant, used at Bountysource to
+    associate accounts.
 
     :param participant:
         The participant whose account is being linked
 
     :param redirect_url:
-        Optional redirect URL after authentication. Defaults to value defined in local.env
+        Optional redirect URL after authentication. Defaults to value defined
+        in local.env
 
     :returns:
         URL for Bountysource account authorization
@@ -88,9 +96,12 @@ def get_participant_via_access_token(access_token):
         the participant, if found
     """
     if access_token_valid(access_token):
-        # from the user id in access token, query participant database for a username,
-        # since that is the primary key user to find a Participant model.
-        # There is probably a better way to do this, like querying with the id itself.
+
+        # from the user id in access token, query participant database for a
+        # username, since that is the primary key user to find a Participant
+        # model.  There is probably a better way to do this, like querying with
+        # the id itself.
+
         parts = access_token.split('.')
         participant_id = parts[0];
         row = db.fetchone("""
@@ -109,7 +120,8 @@ def filter_params(params):
     This is so that the Bountysource access token doesn't float
     around in a user_info hash (considering nothing else does that).
     """
-    whitelist = ['id', 'display_name', 'first_name', 'last_name', 'email', 'avatar_url']
+    whitelist = ['id', 'display_name', 'first_name', 'last_name', 'email', \
+                                                                  'avatar_url']
     filtered_params = {}
     for key in params:
         if key in whitelist:
