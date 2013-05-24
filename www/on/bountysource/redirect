@@ -15,8 +15,6 @@ from gittip.elsewhere import bountysource
 if user.ANON:
     raise Response(404)
 
-# participant = get_participant(request)
-
 # build params which are passed to Bountysource for creating a linked account.
 # the following attributes will be added to connect_params from linked accounts
 # if present: email, first_name, last_name, avatar_url
