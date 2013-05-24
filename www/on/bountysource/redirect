@@ -32,12 +32,12 @@ for account in user.get_accounts_elsewhere():
     # Note: returns None for accounts that hanve't been linked yet
     if not account:
         continue
-    
+
     # from Github
     if account.platform == 'github':
         # split single name string into parts
         name_parts = re.split('\s+', account.user_info.get('name').strip())
-        
+
         if not connect_params.get('login'):
             connect_params['login'] = account.user_info.get('login')
         if not connect_params.get('email'):
@@ -50,12 +50,12 @@ for account in user.get_accounts_elsewhere():
         if not connect_params.get('last_name'):
             if len(name_parts) >= 2:
                 connect_params['last_name'] = name_parts[-1]
-    
+
     # from Twitter
     if account.platform == 'twitter':
         # split single name string into parts
         name_parts = re.split('/s+', account.user_info.get('name').strip())
-        
+
         if not connect_params.get('login'):
             connect_params['login'] = account.user_info.get('screen_name')
         if not connect_params.get('avatar_url'):
@@ -66,7 +66,7 @@ for account in user.get_accounts_elsewhere():
         if not connect_params.get('last_name'):
             if len(name_parts) >= 2:
                 connect_params['last_name'] = name_parts[-1]
-        
+
     # from Bitbucket
     if account.platform == 'bitbucket':
         if not connect_params.get('login'):
