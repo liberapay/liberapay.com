@@ -15,10 +15,6 @@ class BountysourceAccount(AccountElsewhere):
         url = "https://www.bountysource.com/#users/%s" % self.user_info["slug"]
         return url
 
-    def create_access_token(self):
-        """Create an access token for the associated Participant
-        """
-        return create_access_token(self.participant)
 
 
 def create_access_token(participant):
