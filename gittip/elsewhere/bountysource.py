@@ -1,7 +1,6 @@
 import os
 import md5
 import time
-from gittip import db
 from gittip.models import Participant
 from gittip.elsewhere import AccountElsewhere, _resolve
 
