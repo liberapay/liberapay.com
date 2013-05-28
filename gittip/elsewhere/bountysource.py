@@ -101,7 +101,7 @@ def filter_user_info(user_info):
 
     """
     whitelist = ['id', 'display_name', 'first_name', 'last_name', 'email', \
-                                                                  'avatar_url']
+                                                   'frontend_url', 'image_url']
     filtered_user_info = {}
     for key in user_info:
         if key in whitelist:
