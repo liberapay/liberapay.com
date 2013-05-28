@@ -12,8 +12,8 @@ from gittip.elsewhere import bountysource
 if user.ANON:
     raise Response(404)
 
-# did something go wrong with account link at Bountysource?
-# redirect to profile page, where an error will be displayed
+# Did something go wrong with account link at Bountysource?
+# If so, redirect to a failure page with an error message.
 if 'error' in qs:
     new_qs = urlencode({'msg': qs['error']})
     request.redirect('/on/bountysource/failure.html?%s' % new_qs)
