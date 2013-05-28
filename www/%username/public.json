@@ -88,7 +88,7 @@ if twitter is not None:
                                         "&include_entities=1" % twitter.user_id
 if bountysource is not None:
     bountysource = "https://api.bountysource.com/users/%s" % \
-                                                 bountysource.user_info['slug']
+                                         bountysource.user_info['display_name']
 
 output['elsewhere'] = { 'bitbucket': bitbucket
                       , 'github': github
