@@ -2,6 +2,8 @@
 
 First, must receive token from Bountysource by authorizing the application.
 """
+from urllib import urlencode
+
 from aspen import Response
 from gittip.elsewhere import bountysource
 
@@ -12,9 +14,9 @@ if user.ANON:
 
 # did something go wrong with account link at Bountysource?
 # redirect to profile page, where an error will be displayed
-if 'bs_error' in qs.keys():
-    msg = qs.get('error', 'Unable to link Bountysource account at this time')
-    request.redirect('/%s?bs_error=%s' % (user.username, msg))
+if 'error' in qs:
+    new_qs = urlencode({'error': qs['error']})
+    request.redirect('/on/bountysource/problem.html?%s' % new_qs)
 
 # Gittip generated access token, passed all the way through the auth process
 token = qs.get('access_token', '')
