@@ -36,7 +36,7 @@ for account in user.get_accounts_elsewhere():
     # from Github
     if account.platform == 'github':
         # split single name string into parts
-        name_parts = re.split('\s+', account.user_info.get('name').strip())
+        name_parts = re.split('\s+', account.user_info.get('name', '').strip())
 
         if not connect_params.get('login'):
             connect_params['login'] = account.user_info.get('login')
