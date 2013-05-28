@@ -89,23 +89,9 @@ def get_participant_via_access_token(access_token):
         the participant, if found
     """
     if access_token_valid(access_token):
-
-        # from the user id in access token, query participant database for a
-        # username, since that is the primary key user to find a Participant
-        # model.  There is probably a better way to do this, like querying with
-        # the id itself.
-
         parts = access_token.split('.')
-        participant_id = parts[0];
-        row = db.fetchone("""
-            SELECT username
-            FROM participants
-            WHERE id = %s
-        """, (participant_id))
-        if row:
-            username = row['username']
-            participant = Participant.query.get(username)
-            return participant
+        participant_id = parts[0]
+        return Participant.query.filter_by(id=participant_id).one()
 
 
 def filter_params(params):
