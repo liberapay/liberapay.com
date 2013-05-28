@@ -33,6 +33,11 @@ if not participant or participant != user:
     request.redirect('/%s/' % user.username)
 
 else:
+
+    # For other accounts elsewhere we have multiple possible actions at this
+    # point: opt-in, connect, lock, unlock. Our use of Bountysource is more
+    # limited, so here we basically just have a "connect" action always.
+
     # create a linked account
     user_info = bountysource.filter_user_info(qs)
     account = bountysource.BountysourceAccount(user_info['id'], user_info)
