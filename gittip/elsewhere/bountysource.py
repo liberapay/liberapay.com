@@ -16,6 +16,31 @@ class BountysourceAccount(AccountElsewhere):
         return url
 
 
+def resolve(login):
+    return _resolve(u'bountysource', u'login', login)
+
+
+def oauth_url(website, participant, redirect_url=None):
+    """Return a URL to authenticate with Bountysource.
+
+    :param participant:
+        The participant whose account is being linked
+
+    :param redirect_url:
+        Optional redirect URL after authentication. Defaults to value defined
+        in local.env
+
+    :returns:
+        URL for Bountysource account authorization
+    """
+    if redirect_url:
+        return "/on/bountysource/redirect?redirect_url=%s" % redirect_url
+    else:
+        return "/on/bountysource/redirect"
+
+
+# Bountysource Access Tokens
+# ==========================
 
 def create_access_token(participant):
     """Return an access token for the Bountysource API for this user.
@@ -44,32 +69,6 @@ def hash_access_token(user_id, time_now):
                        , os.environ['BOUNTYSOURCE_API_SECRET'].decode('ASCII')
                         )
     return md5.new(raw).hexdigest()
-
-
-def resolve(login):
-    return _resolve(u'bountysource', u'login', login)
-
-
-def oauth_url(website, participant, redirect_url=None):
-    """Return a URL to authenticate with Bountysource.
-
-    Creates an accesstoken from the participant, used at Bountysource to
-    associate accounts.
-
-    :param participant:
-        The participant whose account is being linked
-
-    :param redirect_url:
-        Optional redirect URL after authentication. Defaults to value defined
-        in local.env
-
-    :returns:
-        URL for Bountysource account authorization
-    """
-    if redirect_url:
-        return "/on/bountysource/redirect?redirect_url=%s" % redirect_url
-    else:
-        return "/on/bountysource/redirect"
 
 
 def access_token_valid(access_token):
