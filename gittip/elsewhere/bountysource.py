@@ -94,17 +94,19 @@ def get_participant_via_access_token(access_token):
         return Participant.query.filter_by(id=participant_id).one()
 
 
-def filter_params(params):
-    """Filter the dictionary of params for a Bountysource account.
-    This is so that the Bountysource access token doesn't float
-    around in a user_info hash (considering nothing else does that).
+def filter_user_info(user_info):
+    """Filter the user info dictionary for a Bountysource account.
+
+    This is so that the Bountysource access token doesn't float around in a
+    user_info hash (considering nothing else does that).
+
     """
     whitelist = ['id', 'display_name', 'first_name', 'last_name', 'email', \
                                                                   'avatar_url']
-    filtered_params = {}
-    for key in params:
+    filtered_user_info = {}
+    for key in user_info:
         if key in whitelist:
-            filtered_params[key] = params[key]
+            filtered_user_info[key] = user_info[key]
 
-    return filtered_params
+    return filtered_user_info
 

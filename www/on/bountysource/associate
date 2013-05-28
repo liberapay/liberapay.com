@@ -34,8 +34,8 @@ if not participant or participant != user:
 
 else:
     # create a linked account
-    params = bountysource.filter_params(qs)
-    account = bountysource.BountysourceAccount(params['id'], params)
+    user_info = bountysource.filter_user_info(qs)
+    account = bountysource.BountysourceAccount(user_info['id'], user_info)
 
     # associate with the Gittip participant
     user.take_over(account)
