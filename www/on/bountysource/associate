@@ -25,12 +25,12 @@ token = qs.get('access_token', '')
 # it better be the logged in user, dammit.
 participant = bountysource.get_participant_via_access_token(token)
 
-# Don't raise 400, just go to profile.
-# This will be the case if the user clicks the 'Reject' button
-# on the Bountysource account authorize screen.
 if not participant or participant != user:
-    # raise Response(400)
-    request.redirect('/%s' % user.username)
+
+    # This will be the case if the user clicks the 'Reject' button
+    # on the Bountysource account authorize screen.
+
+    request.redirect('/%s/' % user.username)
 
 else:
     # create a linked account
