@@ -29,7 +29,7 @@ other = Participant.query.get(account.participant)
 user_github_account, user_twitter_account, user_bitbucket_account, \
                       user_bountysource_account = user.get_accounts_elsewhere()
 other_github_account, other_twitter_account, other_bitbucket_account, \
-                     user_bountysource_account = other.get_accounts_elsewhere()
+                    other_bountysource_account = other.get_accounts_elsewhere()
 
 
 user_giving = user.get_dollars_giving()
@@ -48,6 +48,8 @@ elif account.platform == 'github':
     username = user_info['login']
 elif account.platform == 'bitbucket':
     username = user_info['username']
+elif account.platform == 'bountysource':
+    username = user_info['display_name']
 
 title = "Please Confirm"
 # ===== ^L
@@ -91,6 +93,10 @@ title = "Please Confirm"
                         <img src="/assets/icons/bitbucket.12.png" />
                         {{ user_bitbucket_account.user_info['username'] }}<br />
                     {% end %}
+                    {% if user_bountysource_account is not None %}
+                        <img src="/assets/icons/bountysource.12.png" />
+                        {{ user_bountysource_account.user_info['display_name'] }}<br />
+                    {% end %}
                 </div>
                 </div>
             </td>
@@ -127,6 +133,12 @@ title = "Please Confirm"
                         {{ other_bitbucket_account.user_info['username'] }}<br />
                         {% if account.platform == 'bitbucket' %}</span>{% end %}
                     {% end %}
+                    {% if other_bountysource_account is not None %}
+                        <img src="/assets/icons/bountysource.12.png" />
+                        {% if account.platform == 'bountysource' %}<span class="highlight">{% end %}
+                        {{ other_bountysource_account.user_info['display_name'] }}<br />
+                        {% if account.platform == 'bountysource' %}</span>{% end %}
+                    {% end %}
                 </div>
                 </div>
             </td>
@@ -155,6 +167,12 @@ title = "Please Confirm"
                     <span class="account-elsewhere">
                         <img src="/assets/icons/bitbucket.12.png" />
                         {{ user_bitbucket_account.user_info['username'] }}<br />
+                    </span>
+                {% end %}
+                {% if account.platform == 'bountysource' and user_bountysource_account is not None %}
+                    <span class="account-elsewhere">
+                        <img src="/assets/icons/bountysource.12.png" />
+                        {{ user_bountysource_account.user_info['display_name'] }}<br />
                     </span>
                 {% end %}
             </td>
@@ -199,6 +217,12 @@ title = "Please Confirm"
                         <span class="account-elsewhere">
                             <img src="/assets/icons/bitbucket.12.png" />
                             {{ user_bitbucket_account.user_info['username'] }}<br />
+                        </span>
+                    {% end %}
+                    {% if user_bountysource_account is not None %}
+                        <span class="account-elsewhere">
+                            <img src="/assets/icons/bountysource.12.png" />
+                            {{ user_bountysource_account.user_info['display_name'] }}<br />
                         </span>
                     {% end %}
 
@@ -247,6 +271,12 @@ title = "Please Confirm"
                         <span class="account-elsewhere">
                             <img src="/assets/icons/twitter.12.png" />
                             {{ other_twitter_account.user_info['screen_name'] }}<br />
+                        </span>
+                    {% end %}
+                    {% if other_bountysource_account is not None and account.platform != 'bountysource' %}
+                        <span class="account-elsewhere">
+                            <img src="/assets/icons/bountysource.12.png" />
+                            {{ other_bountysource_account.user_info['screen_name'] }}<br />
                         </span>
                     {% end %}
 
