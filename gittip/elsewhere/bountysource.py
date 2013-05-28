@@ -80,7 +80,8 @@ def access_token_valid(access_token):
     """Helper method to check validity of access token.
     """
     parts = (access_token or '').split('.')
-    return len(parts) == 3 and parts[2] == hash_access_token(parts[0], parts[1])
+    return len(parts) == 3 and parts[2] == \
+                                          hash_access_token(parts[0], parts[1])
 
 
 def get_participant_via_access_token(access_token):
