@@ -16,7 +16,7 @@ if user.ANON:
 # redirect to profile page, where an error will be displayed
 if 'error' in qs:
     new_qs = urlencode({'error': qs['error']})
-    request.redirect('/on/bountysource/problem.html?%s' % new_qs)
+    request.redirect('/on/bountysource/error.html?%s' % new_qs)
 
 # Gittip generated access token, passed all the way through the auth process
 token = qs.get('access_token', '')
