@@ -439,6 +439,7 @@ class Participant(object):
                      , tippee
                      , t.ctime
                      , p.claimed_time
+                     , p.username_lower
                   FROM tips t
                   JOIN participants p ON p.username = t.tippee
                  WHERE tipper = %s
@@ -448,7 +449,7 @@ class Participant(object):
                      , t.mtime DESC
             ) AS foo
             ORDER BY amount DESC
-                   , tippee
+                   , username_lower
 
         """
         tips = list(db.fetchall(TIPS, (self.username,)))
@@ -473,8 +474,9 @@ class Participant(object):
                      , t.mtime DESC
             ) AS foo
             ORDER BY amount DESC
-                   , user_info->'screen_name'
-                   , user_info->'login'
+                   , lower(user_info->'screen_name')
+                   , lower(user_info->'username')
+                   , lower(user_info->'login')
 
         """
         unclaimed_tips = list(db.fetchall(UNCLAIMED_TIPS, (self.username,)))
