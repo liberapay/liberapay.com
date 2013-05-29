@@ -1,7 +1,7 @@
 import re
 
+import gittip
 from gittip.orm import db
-from gittip import db as dear_god_why
 from sqlalchemy.schema import Column
 from sqlalchemy.types import Text, BigInteger
 
@@ -22,9 +22,15 @@ def slugize(slug):
     return slug
 
 
+def slug_to_name(slug):
+    SQL = "SELECT name FROM community_summary WHERE slug=%s"
+    rec = gittip.db.fetchone(SQL, (slug,))
+    return None if rec is None else rec['name']
+
+
 def get_list_for(user):
     if user is None or (hasattr(user, 'ANON') and user.ANON):
-        return list(dear_god_why.fetchall("""
+        return list(gittip.db.fetchall("""
 
             SELECT max(name) AS name
                  , slug
@@ -35,7 +41,7 @@ def get_list_for(user):
 
         """))
     else:
-        return list(dear_god_why.fetchall("""
+        return list(gittip.db.fetchall("""
 
             SELECT max(name) AS name
                  , slug
@@ -56,7 +62,7 @@ class Community(db.Model):
     nmembers = Column(BigInteger)
 
     def check_membership(self, user):
-        return dear_god_why.fetchone("""
+        return gittip.db.fetchone("""
 
         SELECT * FROM current_communities WHERE slug=%s AND participant=%s
 

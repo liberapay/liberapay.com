@@ -1,5 +1,4 @@
 from aspen import Response
-from gittip import db
 from gittip.models import community
 
 # =================== ^L
@@ -20,22 +19,8 @@ if POST:
         raise Response(400)
     is_member = is_member == 'true'
 
-    username = user.username
-    db.execute("""
-
-        INSERT INTO communities
-                    (ctime, name, slug, participant, is_member)
-             VALUES ( COALESCE (( SELECT ctime
-                                    FROM communities
-                                   WHERE (participant=%s AND slug=%s)
-                                   LIMIT 1
-                                  ), CURRENT_TIMESTAMP)
-                    , %s, %s, %s, %s
-                     )
-          RETURNING (SELECT count(*) = 0 FROM communities WHERE participant=%s)
-                 AS first_time_community
-
-    """, (username, slug, name, slug, username, is_member, username))
+    # delegate
+    user.insert_into_communities(is_member, name, slug)
 
 elif GET:
     response.headers["Access-Control-Allow-Origin"] = "*"

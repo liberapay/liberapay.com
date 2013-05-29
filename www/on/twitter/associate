@@ -71,6 +71,7 @@ user_info['html_url'] = "https://twitter.com/" + screen_name
 log(u"%s wants to %s" % (screen_name, action))
 
 account = twitter.TwitterAccount(user_info['id'], user_info)
+newly_claimed = False
 
 if action == 'opt-in':      # opt in
     # set 'user' to give them a session :/
@@ -107,11 +108,15 @@ else:                       # lock or unlock
         assert account.participant != screen_name, screen_name # sanity check
         account.set_is_locked(action == 'lock')
 
-if then == u'':
-    then = u'/%s/' % account.participant
-if not then.startswith(u'/'):
-    # Interpret it as a Twitter screen_name.
-    then = u'/on/twitter/%s/' % then
+if newly_claimed:
+    user.set_up_initial_tips(then)
+    then = u'/%s/giving/?first_time=1' % user.username
+else:
+    if then == u'':
+        then = u'/%s/' % account.participant
+    if not then.startswith(u'/'):
+        # Interpret it as a Twitter screen_name.
+        then = u'/on/twitter/%s/' % then
 request.redirect(then)
 
 # ========================== ^L text/plain

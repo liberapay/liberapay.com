@@ -1,12 +1,14 @@
 """Defines a Participant class.
 """
 import random
+import re
 from decimal import Decimal
 
 import gittip
 from aspen import Response
 from aspen.utils import typecheck
 from psycopg2 import IntegrityError
+from gittip.models import community
 
 
 ASCII_ALLOWED_IN_USERNAME = set("0123456789"
@@ -148,7 +150,112 @@ class Participant(object):
         """
         gittip.db.execute(CLAIM, (self.username,))
 
+    @require_username
+    def set_up_initial_tips(self, then):
+        """First-time users get a few tips suggested for them.
 
+        The incoming `then` parameter is the URL they would otherwise have been
+        redirected to. We use it to base our decision on who the initial tips
+        should be to.
+
+        We want a total of $5.00 in tips:
+
+            - one to Gittip at $1.00
+            - four random ones at $0.25
+            - either:
+                - one at $3.00 to the participant who's profile they were on
+                  when they signed in
+              or:
+                - three random ones at $1.00
+
+        The random ones should be taken from all participants with a statement,
+        or if they signed in from a community page, all participants from that
+        community with a statement (and they should be added to that community
+        as well).
+
+        """
+        initial_tips = []
+        nothers = 7
+
+        their_hero = None
+        if re.match(r'^/[^/]*/$', then):
+            their_hero = then[1:-1]
+            if their_hero != self.username:
+                initial_tips.append((their_hero, '3.00'))
+                nothers = 4
+
+        if their_hero is None:
+            # This is a goofy way to turn the where clause in the SQL
+            # statements below into a no-op when there is no their_hero.
+            their_hero = 'Gittip'
+
+        community_slug = ''
+        if re.match(r'^/for/[^/]*/$', then):
+            community_slug = then[5:-1]
+            community_name = community.slug_to_name(community_slug)
+            self.insert_into_communities(False, community_name, community_slug)
+            others = gittip.db.fetchall("""
+
+                SELECT participant AS username
+                  FROM current_communities
+                 WHERE slug=%s
+                   AND is_member
+                   AND participant != %s
+                   AND participant != %s
+                   AND participant != 'Gittip'
+              ORDER BY random()
+                 LIMIT %s
+
+            """, (community_slug, self.username, their_hero, nothers))
+        else:
+            others = gittip.db.fetchall("""
+
+                SELECT username
+                  FROM participants p
+                  JOIN elsewhere e
+                    ON e.participant = p.username
+                 WHERE statement != ''
+                   AND claimed_time IS NOT NULL
+                   AND is_suspicious IS NOT true
+                   AND username != %s
+                   AND username != %s
+                   AND username != 'Gittip'
+              ORDER BY random()
+                 LIMIT %s
+
+            """, (self.username, their_hero, nothers,))
+
+        for i, rec in enumerate(others):
+            amount = '0.25' if i < 4 else '1.00'
+            initial_tips.append((rec['username'], amount))
+
+        # Tip to Gittip goes at the end so it sorts lower on giving page.
+        initial_tips.append(('Gittip', '1.00'))
+
+        for tippee, amount in initial_tips:
+            amount, first_time_tipper = self.set_tip_to(tippee, amount)
+
+    @require_username
+    def insert_into_communities(self, is_member, name, slug):
+        username = self.username
+        gittip.db.execute("""
+
+            INSERT INTO communities
+                        (ctime, name, slug, participant, is_member)
+                 VALUES ( COALESCE (( SELECT ctime
+                                        FROM communities
+                                       WHERE (participant=%s AND slug=%s)
+                                       LIMIT 1
+                                      ), CURRENT_TIMESTAMP)
+                        , %s, %s, %s, %s
+                         )
+              RETURNING ( SELECT count(*) = 0
+                            FROM communities
+                           WHERE participant=%s
+                         )
+                     AS first_time_community
+
+        """, (username, slug, name, slug, username, is_member, username))
 
     @require_username
     def change_username(self, suggested):

@@ -405,6 +405,9 @@ class Participant(db.Model):
     def set_tip_to(self, tippee, amount):
         return OldParticipant(self.username).set_tip_to(tippee, amount)
 
+    def set_up_initial_tips(self, then):
+        return OldParticipant(self.username).set_up_initial_tips(then)
+
     def get_dollars_giving(self):
         return OldParticipant(self.username).get_dollars_giving()
 
