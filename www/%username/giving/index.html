@@ -34,6 +34,7 @@ first_time = qs.get('first_time') == '1'
         text-align: left;
         height: 30px;
     }
+    #matrix h2,
     #matrix tr.tip td,
     #matrix tr.tip th,
     #matrix tr.pledge td,
@@ -45,7 +46,7 @@ first_time = qs.get('first_time') == '1'
         padding-right: 0.5em;
     }
 </style>
-<table id="matrix">
+<table id="matrix" class="col0">
     <tr>
         <td colspan="2">
             {% if first_time %}
