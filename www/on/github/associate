@@ -34,6 +34,7 @@ if login is None:
 log(u"%s wants to %s" % (login, action))
 
 account = github.GitHubAccount(user_info['id'], user_info)
+newly_claimed = False
 
 if action == 'opt-in':      # opt in
     # set 'user' to give them a session :/

@@ -76,6 +76,7 @@ user_info['html_url'] = "https://bitbucket.org/" + username
 log(u"%s wants to %s" % (username, action))
 
 account = bitbucket.BitbucketAccount(username, user_info)
+newly_claimed = False
 
 if action == 'opt-in':      # opt in
     # set 'user' to give them a session :/
