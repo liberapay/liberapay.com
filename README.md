@@ -377,7 +377,7 @@ The Gittip API is comprised of these endpoints:
             - `https://api.github.com/users/%github_username`
         - "twitter"&mdash;participant's Twitter account; possible values are:
             - `undefined` (key not present)&mdash;no Twitter account connected
-            - `https://api.twitter.com/1/users/show.json?id=%twitter_immutable_id&include_entities=1`
+            - `https://api.twitter.com/1.1/users/show.json?id=%twitter_immutable_id&include_entities=1`
 
 
 Glossary

@@ -4,6 +4,8 @@ import requests
 from aspen import json, log, Response
 from aspen.utils import to_age, utc, typecheck
 from gittip.elsewhere import AccountElsewhere, _resolve
+from os import environ
+from oauth_hook import OAuthHook
 
 
 class TwitterAccount(AccountElsewhere):
@@ -42,9 +44,18 @@ def get_user_info(screen_name):
     if rec is not None:
         user_info = rec['user_info']
     else:
-        url = "https://api.twitter.com/1/users/show.json?screen_name=%s"
-        user_info = requests.get(url % screen_name)
+        oauth = OAuthHook(
+            # we haven't got access to the website obj,
+            # so let's grab the details from the env
+            access_token=environ['TWITTER_ACCESS_KEY'],
+            access_token_secret=environ['TWITTER_ACCESS_SECRET'],
+            consumer_key=environ['TWITTER_CONSUMER_KEY'],
+            consumer_secret=environ['TWITTER_CONSUMER_SECRET'],
+            header_auth=True
+        )
 
+        url = "https://api.twitter.com/1.1/users/show.json?screen_name=%s"
+        user_info = requests.get(url % screen_name, hooks={'pre_request': oauth})
 
         # Keep an eye on our Twitter usage.
         # =================================

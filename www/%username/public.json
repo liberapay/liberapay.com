@@ -84,7 +84,7 @@ if bitbucket is not None:
 if github is not None:
     github = "https://api.github.com/users/%s" % github.user_info['login']
 if twitter is not None:
-    twitter = "https://api.twitter.com/1/users/show.json?id=%s" \
+    twitter = "https://api.twitter.com/1.1/users/show.json?id=%s" \
                                         "&include_entities=1" % twitter.user_id
 if bountysource is not None:
     bountysource = "https://api.bountysource.com/users/%s" % \

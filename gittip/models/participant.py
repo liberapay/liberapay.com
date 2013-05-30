@@ -250,7 +250,7 @@ class Participant(db.Model):
                 src %= (gravatar_hash, size)
 
         elif twitter is not None:
-            # https://dev.twitter.com/docs/api/1/get/users/profile_image/%3Ascreen_name
+            # https://dev.twitter.com/docs/api/1.1/get/users/show
             if 'profile_image_url_https' in twitter.user_info:
                 src = twitter.user_info['profile_image_url_https']
 
