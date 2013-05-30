@@ -15,7 +15,8 @@ hero = "Profile"
 title = participant.username      # used in the title tag
 username = participant.username   # used in footer shared with on/$platform/
                                   # pages
-github_account, twitter_account, bitbucket_account = participant.get_accounts_elsewhere()
+github_account, twitter_account, bitbucket_account, bountysource_account = \
+                                           participant.get_accounts_elsewhere()
 
 # ========================================================================== ^L
 {% extends templates/profile.html %}
