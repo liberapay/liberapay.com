@@ -28,8 +28,8 @@ website.github_callback = os.environ['GITHUB_CALLBACK'].decode('ASCII')
 
 website.twitter_consumer_key = os.environ['TWITTER_CONSUMER_KEY'].decode('ASCII')
 website.twitter_consumer_secret = os.environ['TWITTER_CONSUMER_SECRET'].decode('ASCII')
-website.twitter_access_key = os.environ['TWITTER_ACCESS_KEY'].decode('ASCII')
-website.twitter_access_secret = os.environ['TWITTER_ACCESS_SECRET'].decode('ASCII')
+website.twitter_access_token = os.environ['TWITTER_ACCESS_TOKEN'].decode('ASCII')
+website.twitter_access_token_secret = os.environ['TWITTER_ACCESS_TOKEN_SECRET'].decode('ASCII')
 website.twitter_callback = os.environ['TWITTER_CALLBACK'].decode('ASCII')
 
 website.bountysource_www_host = os.environ['BOUNTYSOURCE_WWW_HOST'].decode('ASCII')

@@ -47,8 +47,8 @@ def get_user_info(screen_name):
         oauth = OAuthHook(
             # we haven't got access to the website obj,
             # so let's grab the details from the env
-            access_token=environ['TWITTER_ACCESS_KEY'],
-            access_token_secret=environ['TWITTER_ACCESS_SECRET'],
+            access_token=environ['TWITTER_ACCESS_TOKEN'],
+            access_token_secret=environ['TWITTER_ACCESS_TOKEN_SECRET'],
             consumer_key=environ['TWITTER_CONSUMER_KEY'],
             consumer_secret=environ['TWITTER_CONSUMER_SECRET'],
             header_auth=True
