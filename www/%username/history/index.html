@@ -243,15 +243,13 @@ locked = False
         <td class="credits">{{ event['amount'] }}</td>
         <td class="debits"></td>
         <td class="balance">{{ event['balance'] }}</td>
-        {% if event['recorder'] is None %}
-        <td class="notes">automatic charge&mdash;<a
-                href="../receipts/{{ event['id'] }}.html">receipt</a></td>
-        {% else %}
         <td class="notes">
+            {% if event['recorder'] is None %}automatic charge{% else %}
             &ldquo;{{ escape(event['note']) }}&rdquo;&mdash;<a
             href="/{{ event['recorder'] }}/">{{ event['recorder'] }}</a>
+            {% end %}
+            (<a href="../receipts/{{ event['id'] }}.html">receipt</a>)
         </td>
-        {% end %}
     </tr>
     {% elif event['event'] == 'transfer' %}
     <tr>
