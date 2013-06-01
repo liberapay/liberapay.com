@@ -671,3 +671,19 @@ BEGIN;
                   , mtime DESC;
 
 END;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/issues/7
+-- https://github.com/gittip/www.gittip.com/issues/145
+
+CREATE TABLE toots
+( id                bigserial       PRIMARY KEY
+, ctime             timestamp with time zone    NOT NULL
+                                                 DEFAULT CURRENT_TIMESTAMP
+, tooter            text            NOT NULL REFERENCES participants
+                                     ON UPDATE CASCADE ON DELETE RESTRICT
+, tootee            text            NOT NULL REFERENCES participants
+                                     ON UPDATE CASCADE ON DELETE RESTRICT
+, toot              text            NOT NULL
+ );

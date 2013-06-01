@@ -989,6 +989,71 @@ UL.community-memberships {
 }
 
 
+#horn {
+    textarea {
+        width: 100%;
+        height: 40px;
+        font: normal 16px/20px $Helvetica;
+    }
+    .help {
+        font: normal 10px/12px $Helvetica;
+        color: $brown;
+        text-transform: uppercase;
+        display: block;
+
+        span {
+            display: inline-block;
+            white-space: nowrap;
+            padding: 2pt 0;
+        }
+    }
+    .datetime {
+        display: block;
+        padding: 0 0 3pt;
+    }
+    button#toot-button {
+        float: right;
+    }
+    li {
+        margin: 0;
+        padding: 0 0 2pt;
+
+        &.me.theirs {
+            font: bold 18px/19px $Helvetica;
+        }
+        &.them {
+            font: normal 12px/13px $Helvetica;
+        }
+        &.them.own {
+            font-weight: bold;
+        }
+        .meta {
+            text-align: right;
+            text-transform: none;
+            font: normal 11px/13px $Helvetica;
+            color: $light-brown;
+
+            span {
+                display: inline-block;
+                white-space: nowrap;
+                padding: 2pt 0;
+            }
+
+            .re {
+                text-align: left;
+                padding-right: 3pt;
+            }
+            .tootee {
+                font-weight: bold;
+            }
+            .time {
+                font-style: italic;
+            }
+        }
+    }
+}
+
+
 #history {
     th {
         padding: 0 3pt;

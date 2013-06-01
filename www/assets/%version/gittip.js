@@ -79,6 +79,28 @@ if(!Array.prototype.remove)
     }
 };
 
+function prettyDate(time) {
+    // http://ejohn.org/blog/javascript-pretty-date/
+    var munged = (time || "").replace(/-\d\d:\d\d$/,"")
+                             .replace(/-/g,"/")
+                             .replace(/[TZ]/g," "),
+        date = new Date(munged),
+        diff = (((new Date()).getTime() - date.getTime()) / 1000),
+        day_diff = Math.floor(diff / 86400);
+    console.log(time, munged, date, diff, day_diff);
+    if ( isNaN(day_diff) || day_diff < 0 || day_diff >= 31 )
+        return;
+
+    return day_diff == 0 && (
+            diff < 60 && "just now" ||
+            diff < 120 && "1 minute" ||
+            diff < 3600 && Math.floor( diff / 60 ) + " minutes" ||
+            diff < 7200 && "1 hour" ||
+            diff < 86400 && Math.floor( diff / 3600 ) + " hours") ||
+        day_diff == 1 && "Yesterday" ||
+        day_diff < 7 && day_diff + " days" ||
+        day_diff < 31 && Math.ceil( day_diff / 7 ) + " weeks";
+}
 
 // Main namespace.
 // ===============
@@ -729,3 +751,78 @@ Gittip.communities.leave = function(name, callback)
         Gittip.communities.update(name, false, callback);
 
 }
+
+
+// Horns
+// =====
+
+Gittip.horn = {};
+
+Gittip.horn.init = function()
+{
+    Gittip.horn.since_id = undefined;
+    $('#toot-form').submit(Gittip.horn.toot);
+    Gittip.horn.update({limit: 20});
+};
+
+Gittip.horn.update = function(data)
+{
+    clearTimeout(Gittip.horn.handle);
+    data = data || {};
+    if (Gittip.horn.since_id !== undefined)
+        data.since_id = Gittip.horn.since_id;
+    jQuery.ajax(
+        { type: "GET"
+        , url: "toots.json"
+        , data: data
+        , success: Gittip.horn.draw
+         });
+};
+
+Gittip.horn.draw = function(toots)
+{
+    for (var i=toots.length-1, toot; toot = toots[i]; i--)
+    {
+        Gittip.horn.since_id = toot.id;
+        Gittip.horn.drawOne(toot);
+    }
+    Gittip.horn.handle = setTimeout(Gittip.horn.update, 1000)
+};
+
+Gittip.horn.drawOne = function(toot)
+{
+    var escaped = $('<div>').text(toot.toot).html();
+    var html = '<li class="'
+             + (toot.horn === toot.tootee ? 'me' : 'them')
+             + ' '
+             + (toot.own ? 'own' : 'theirs')
+             + '"><span class="toot">'
+             + ( toot.tootee !== toot.horn && !toot.own
+               ? 're: ' + toot.tootee + ': '
+               : ''
+                )
+             + escaped
+             + ( toot.tootee !== toot.horn && toot.own
+               ? '&mdash;' + toot.tootee
+               : ''
+                )
+             + '</div>'
+             + '</span>'
+             + '</li>'
+    $('#toots').prepend(html)
+};
+
+Gittip.horn.toot = function(e)
+{
+    e.preventDefault();
+    e.stopPropagation();
+    var toot = $('#toot').val();
+
+    jQuery.ajax(
+        { type: "POST"
+        , url: "toot.json"
+        , data: {toot: toot}
+        , success: Gittip.horn.update
+         });
+    return false;
+};

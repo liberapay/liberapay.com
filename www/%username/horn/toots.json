@@ -1,0 +1,61 @@
+"""Return an array of toots for this participant.
+
+If the user is the participant, then the toot stream will include toots
+referring to people they gave money to last week.
+
+"""
+from gittip import db
+from gittip.utils import get_participant
+
+SQL_SELF = """
+
+    SELECT id, ctime, %s as horn, tootee, tooter = tootee AS own, toot
+      FROM toots
+     WHERE (  tootee = %s
+           OR tootee IN ( SELECT tippee
+                            FROM transfers
+                           WHERE tipper=%s
+                             AND "timestamp" < (now() - interval '8 days')
+                        )
+             )
+       AND id > %s
+       AND id <= %s
+  ORDER BY id DESC
+     LIMIT %s
+
+"""
+
+SQL_OTHER = """
+
+    SELECT id, ctime, %s as horn, tootee, tooter = tootee AS own, toot
+      FROM toots
+     WHERE tootee = %s
+       AND id > %s
+       AND id <= %s
+  ORDER BY id DESC
+     LIMIT %s
+
+"""
+
+DEFAULT_LIMIT = 200
+# =========================== ^L
+participant = get_participant(request, restrict=False)
+username = participant.username
+try:
+    limit = min(int(qs.get('limit', DEFAULT_LIMIT)), DEFAULT_LIMIT)
+    since_id = long(qs.get('since_id', 0))
+    if user == participant:
+        SQL = SQL_SELF
+        args = [username, username, username, since_id, limit]
+    else:
+        SQL = SQL_OTHER
+        args = [username, username, since_id, limit]
+
+    max_id = qs.get('max_id')
+    if max_id is None:
+        SQL = SQL.replace("AND id <= %s", "")
+    else:
+        args.insert(-1, long(max_id))
+except ValueError:  # cast to int/long failed
+    raise Response(400)
+response.body = list(db.fetchall(SQL, tuple(args)))

@@ -1,0 +1,41 @@
+from aspen import Response
+from gittip.utils import get_participant
+from gittip import AMOUNTS
+# ========================================================================== ^L
+
+participant = get_participant(request, restrict=False)
+hero = "Horn"
+title = "%s - %s" % (participant.username, hero)
+locked = False
+
+# ========================================================================== ^L
+{% extends templates/profile.html %}
+{% block page %}
+<script>$(document).ready(Gittip.horn.init);</script>
+<div class="col0" id="horn">
+    {% if not user.ANON %}
+    {% if user == participant %}
+    <h2>Toot your own horn!</h2>
+    {% else %}
+    <h2>Toot their horn!</h2>
+    {% end %}
+    <form id="toot-form">
+        <textarea id="toot"></textarea>
+        <p class="help">
+            <span>
+            {% if user == participant %}
+            What have you done today that's awesome? Don't be shy!<br />
+            Anyone who gave you money last week will see this on their Horn.
+            {% else %}
+            Why do you appreciate {{ participant.username }}?
+            {% end %}
+            </span>
+            <button id="toot-button" type="submit">Toot</button>
+        </p>
+        <div class="clear"></div>
+    </form>
+    {% end %}
+    <h2>Toots</h2>
+    <ul id="toots"></ul>
+</div>
+{% end %}
