@@ -76,7 +76,6 @@ user_info['html_url'] = "https://bitbucket.org/" + username
 log(u"%s wants to %s" % (username, action))
 
 account = bitbucket.BitbucketAccount(username, user_info)
-newly_claimed = False
 
 if action == 'opt-in':      # opt in
     # set 'user' to give them a session :/
@@ -113,15 +112,11 @@ else:                       # lock or unlock
         assert account.participant != username, username # sanity check
         account.set_is_locked(action == 'lock')
 
-if newly_claimed:
-    user.set_up_initial_tips(then)
-    then = u'/%s/giving/?first_time=1' % user.username
-else:
-    if then == u'':
-        then = u'/%s/' % account.participant
-    if not then.startswith(u'/'):
-        # Interpret it as a Bitbucket username.
-        then = u'/on/bitbucket/%s/' % then
+if then == u'':
+    then = u'/%s/' % account.participant
+if not then.startswith(u'/'):
+    # Interpret it as a Bitbucket username.
+    then = u'/on/bitbucket/%s/' % then
 request.redirect(then)
 
 # ========================== ^L text/plain
