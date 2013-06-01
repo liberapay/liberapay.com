@@ -812,6 +812,13 @@ Gittip.horn.drawOne = function(toot)
     $('#toots').prepend(html)
 };
 
+Gittip.horn.success = function(data)
+{
+    // clear the textarea & draw any new toots
+    $('#toot').val('');
+    Gittip.horn.update(data);
+};
+
 Gittip.horn.toot = function(e)
 {
     e.preventDefault();
@@ -822,7 +829,7 @@ Gittip.horn.toot = function(e)
         { type: "POST"
         , url: "toot.json"
         , data: {toot: toot}
-        , success: Gittip.horn.update
+        , success: Gittip.horn.success
          });
     return false;
 };
