@@ -8,11 +8,8 @@ notifications:
   irc: 
     channels:
       - "irc.freenode.org#gittip"
-    on_success: never
+    on_success: change
     on_failure: always
     template:
-      - "Failed build: %{build_url}"
+      - "%{repository} (%{branch}:%{commit} by %{author}): %{message} (%{build_url})"
     skip_join: true
-branches:
-  only:
-    - master 
