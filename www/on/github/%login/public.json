@@ -10,13 +10,13 @@ from gittip.elsewhere import github
 callback_pattern = re.compile(r'^[_A-Za-z0-9.]+$')
 
 
-def stringify_qs(qs):
+def stringify_qs(qs, prefix='?'):
     # XXX Upstream to Aspen
-    out = []
+    tupled = []
     for k, vals in qs.items():
         for v in vals:
-            out.append((k, v))
-    return urlencode(out)
+            tupled.append((k, v))
+    return prefix + urlencode(tupled) if tupled else ""
 
 # ============================= ^L
 
@@ -33,9 +33,9 @@ else:
     if usertype == "user":
         account = github.GitHubAccount(user_info['id'], user_info)
         if account.is_claimed:
-            request.redirect('/%s/public.json?%s' % ( account.participant
-                                                    , stringify_qs(qs)
-                                                     ))
+            next_url = '/%s/public.json' % account.participant
+            next_url += stringify_qs(qs)
+            request.redirect(next_url)
 
 # CORS - see https://github.com/gittip/aspen-python/issues/138
 response.headers["Access-Control-Allow-Origin"] = "*"
