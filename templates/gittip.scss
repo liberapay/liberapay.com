@@ -281,6 +281,14 @@ button.selected:hover {
     color: $gray;
 }
 
+button.join-leave[data-is-member="true"] {
+    background: $light-red
+}
+
+button.join-leave[data-is-member="false"] {
+    background: $green
+}
+
 // Global
 #header {
     background: white;
