@@ -82,7 +82,7 @@ def canonize(request):
         else:
             # For non-idempotent methods, redirect to homepage.
             url += '/'
-        request.redirect(url, permanent=True)
+        request.redirect(url)
 
 
 def configure_payments(request):
