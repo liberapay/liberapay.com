@@ -25,6 +25,7 @@ if 'denied' in qs:
 token = qs['oauth_token']
 try:
     secret, action, then = website.oauth_cache.pop(token)
+    then = then.decode('base64')
 except KeyError:
     request.redirect("/about/me.html")
 

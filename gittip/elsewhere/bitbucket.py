@@ -32,6 +32,7 @@ def oauth_url(website, action, then=""):
     Not sure why website is here. Vestige from GitHub forebear?
 
     """
+    then = then.encode('base64').strip()
     return "/on/bitbucket/redirect?action=%s&then=%s" % (action, then)
 
 
