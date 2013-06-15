@@ -3,9 +3,10 @@ import gittip
 import logging
 import requests
 import os
-from aspen import json, log, Response
+from aspen import json, Response
 from aspen.website import Website
 from aspen.utils import typecheck
+from gittip import log
 from gittip.elsewhere import ACTIONS, AccountElsewhere, _resolve
 
 
