@@ -1,13 +1,14 @@
-import gittip
 import logging
+
+import gittip
 import requests
-import os
 from aspen import json, log, Response
-from aspen.website import Website
 from aspen.utils import typecheck
-from gittip.elsewhere import ACTIONS, AccountElsewhere, _resolve
+from gittip.elsewhere import AccountElsewhere, _resolve
+
 
 BASE_API_URL = "https://bitbucket.org/api/1.0"
+
 
 class BitbucketAccount(AccountElsewhere):
     platform = u'bitbucket'
