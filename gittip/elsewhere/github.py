@@ -38,7 +38,7 @@ def oauth_url(website, action, then=u""):
     # available because it's consumed by the initial GitHub request.
 
     data = u'%s,%s' % (action, then)
-    data = data.encode('UTF-8').encode('base64').decode('US-ASCII')
+    data = data.encode('UTF-8').encode('base64').strip().decode('US-ASCII')
     url += u'?data=%s' % data
     return url
 
