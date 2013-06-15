@@ -6,7 +6,6 @@ from aspen.utils import to_age, utc, typecheck
 from gittip.elsewhere import AccountElsewhere, _resolve
 from os import environ
 from requests_oauthlib import OAuth1
-from oauth_hook import OAuthHook
 
 
 class TwitterAccount(AccountElsewhere):

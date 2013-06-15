@@ -132,7 +132,7 @@ def get_user_info(login):
         elif 0.95 <= percent_remaining:
             log_lvl = logging.CRITICAL
 
-        if log_msg and log_lvl
+        if log_msg and log_lvl:
             log(log_msg, log_lvl)
 
         if status == 200:
