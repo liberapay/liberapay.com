@@ -245,8 +245,8 @@ class Participant(object):
             raise self.NoSelfTipping
 
         amount = Decimal(amount)  # May raise InvalidOperation
-        lo = gittip.AMOUNTS[0]
-        hi = gittip.AMOUNTS[-1]
+        hi = gittip.AMOUNTS[0]
+        lo = gittip.AMOUNTS[-1]
         if (amount < lo) or (amount > hi):
             raise self.BadAmount
 
