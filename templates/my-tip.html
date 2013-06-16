@@ -1,0 +1,7 @@
+<select class="my-tip"
+        data-tippee="{{ tippee }}"
+        data-old-amount="{{ my_tip }}">
+  {% for amount in with_mine(AMOUNTS, my_tip) %}
+  <option value="{{ amount }}" {{ ' selected="1"' if amount == my_tip else ""}}>${{ amount }}</option>
+  {% end %}
+</select>

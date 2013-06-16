@@ -619,10 +619,10 @@ Gittip.initTipButtons = function()
 {
     // For anonymous users we flash a login link.
 
-    $('BUTTON.tip-anon').mouseover(
+    $('SELECT.my-tip.anon').mouseover(
         function() { $('.nav.level-1 .flash-me').addClass('highlight'); }
     );
-    $('BUTTON.tip-anon').click(function()
+    $('SELECT.my-tip.anon').change(function()
     {
         var i = 0
         function flash()
@@ -637,36 +637,13 @@ Gittip.initTipButtons = function()
 
     // For authenticated users we change the tip!
 
-    $('BUTTON.tip').click(function()
+    $('SELECT.my-tip:not(.anon)').change(function()
     {
+        // Define a closure that will be used to show/hide the payment prompt.
 
-        // Exit early if the button has the disabled class. I'm not using the
-        // disabled HTML attribute because (in Chrome) hovering over a disabled
-        // button means the row doesn't get the hover event.
-
-        if ($(this).hasClass('disabled'))
-            return;
-
-
-        // Grab the row and the current button. Exit early if they clicked the
-        // current selection.
-
-        var container = $(this).parent();
-        var cur = $('BUTTON.selected');
-        if (cur.get(0) === this)
-            return
-
-
-        // Define a closure that will be used to select the new button, and
-        // also to revert back in case of error.
-
-        function select(btn, amount)
+        function changePaymentPrompt(amount)
         {
-            $('BUTTON.selected', container).removeClass('selected')
-                                           .addClass('empty');
-            $(btn).addClass('selected').removeClass('empty');
-
-            if (amount == '0.00')
+            if (amount === '0.00')
                 $('#payment-prompt.needed').removeClass('needed');
             else
                 $('#payment-prompt').addClass('needed');
@@ -675,23 +652,27 @@ Gittip.initTipButtons = function()
 
         // Go to work!
 
-        var amount = $(this).text().replace('$', '');
-        var tippee = $(this).attr('tippee');
-        select(this, amount);
+        var amount = $(this).val();
+        var oldAmount = $(this).attr('data-old-amount');
+        var tippee = $(this).attr('data-tippee');
+
+        if (oldAmount === amount)
+            return;
+
+        changePaymentPrompt(amount);
 
         jQuery.ajax(
             { url: '/' + tippee + '/tip.json'
             , data: {amount: amount}
             , type: "POST"
             , error: function(x,y,z) {
-                select(cur);
+                changePaymentPrompt(oldAmount);
                 alert("Sorry, something went wrong changing your tip. :(");
                 console.log(x,y,z);
               }
              }
         )
         .done(function(data) {
-            $('.old-amount', container).remove();
             $('.total-giving').text(data['total_giving']);
 
             // Log to mixpanel.

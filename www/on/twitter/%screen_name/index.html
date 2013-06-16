@@ -57,55 +57,8 @@ title = username
     </tr>
 </table>
 
-<div class="nav level-1">
-    {% if account.is_locked %}
+{% include "templates/participant.tip.html" %}
 
-        <div class="help with-padding">
-            This account has been locked by its owner.
-        </div>
-
-    {% elif user.ANON %}
-
-        <h2>Your Weekly Gift</h2>
-        {% for amount in AMOUNTS %}
-        <button class="tip-anon">${{ amount }}</button>
-        {% end %}
-
-        <div class="help with-padding">Sign in using
-            <a class="highlight flash-me" href="{{ twitter.oauth_url(website, u'opt-in', path.decoded) }}">Twitter</a> or
-            <a href="{{ github.oauth_url(website, u'opt-in', path.decoded) }}">GitHub</a>
-            to pledge to <b>{{ escape(username) }}</b>.</div>
-
-    {% else %}
-
-        {% set my_tip = user.get_tip_to(participant.username) %}
-        <h2>Your Weekly Pledge</h2>
-        {% for amount in AMOUNTS %}
-        <button amount="{{ amount }}" tippee="{{ participant.username }}"
-            class="tip{{ ' selected' if amount == my_tip else '' }}">${{ amount }}</button>
-        {% end %}
-        {% if my_tip not in AMOUNTS %}
-        <span class="old-amount">
-            <button class="tip disabled selected">{{ my_tip }}</button>
-            <span class="old-amount-link">&mdash;
-            <a href="http://blog.gittip.com/post/26505682007/is-personal-funding-viable" target="_blank">old amount</a>!</span>
-        </span>
-        {% end %}
-
-        {% if user.last_bill_result is None %}
-
-        <div id="payment-prompt" class="help{% if my_tip > 0 %} needed{% end %}">
-        Back your gift with a <a href="/credit-card.html"
-            class="highlight">credit card</a> to make sure it goes
-        through!</div>
-        {% elif user.last_bill_result %}
-        <div id="payment-prompt" class="help really-needed">Fix your <a
-            href="/credit-card.html" class="highlight">credit
-            card</a> to make sure your gifts go through!</div>
-        {% end %}
-
-    {% end %}
-</div>
 {% end %}
 
 {% block page %}

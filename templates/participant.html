@@ -56,53 +56,7 @@
 </table>
 
 {% if (participant != user) and participant.accepts_tips %}
-<div class="nav level-1">
-    {% if locked %}
-
-        <div class="help with-padding">
-            This account has been locked by its owner.
-        </div>
-
-    {% elif user.ANON %}
-
-        <h2>Your Weekly Gift</h2>
-
-        <select class="my-tip">
-          {% for amount in AMOUNTS %}
-          <option value="amount"{{ ' selected="1"' if amount == 0 else ""}}>${{ amount }}</option>
-          {% end %}
-        </select>
-
-        <div class="help with-padding">Sign in using 
-            <a class="flash-me" href="{{ twitter.oauth_url(website, u'opt-in', path.decoded) }}">Twitter</a>, 
-            <a href="{{ github.oauth_url(website, u'opt-in', path.decoded) }}">GitHub</a>, or
-            <a href="{{ bitbucket.oauth_url(website, u'opt-in', path.decoded) }}">Bitbucket</a>
-            to give to <b>{{ participant.username }}</b>.</div>
-
-    {% else %}
-
-        {% set my_tip = user.get_tip_to(participant.username) %}
-        <h2>Your Weekly Gift</h2>
-        <select class="my-tip" tippee="{{ participant.username }}">
-          {% for amount in with_mine(AMOUNTS, my_tip) %}
-          <option value="amount"{{ ' selected="1"' if amount == my_tip else ""}}>${{ amount }}</option>
-          {% end %}
-        </select>
-
-        {% if user.last_bill_result is None %}
-
-        <div id="payment-prompt" class="help{% if my_tip > 0 %} needed{% end %}">
-        Back your gift with a <a href="/credit-card.html" 
-            class="highlight">credit card</a> to make sure it goes 
-        through!</div>
-        {% elif user.last_bill_result %}
-        <div id="payment-prompt" class="help really-needed">Fix your <a
-            href="/credit-card.html" class="highlight">credit 
-            card</a> to make sure your gifts go through!</div>
-        {% end %}
-
-    {% end %}
-</div>
+{% include "participant.tip.html" %}
 {% end %}
 
 {% block nav %}{% end %}
