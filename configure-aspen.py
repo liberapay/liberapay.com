@@ -54,11 +54,13 @@ os.environ['__VERSION__'] = __version__
 
 def add_stuff(request):
     from gittip.elsewhere import bitbucket, github, twitter, bountysource
+    from gittip.utils import with_mine
     request.context['__version__'] = __version__
     request.context['username'] = None
     request.context['bitbucket'] = bitbucket
     request.context['github'] = github
     request.context['twitter'] = twitter
     request.context['bountysource'] = bountysource
+    request.context['with_mine'] = with_mine
 
 website.hooks.inbound_early += [add_stuff]

@@ -316,3 +316,17 @@ def get_participant(request, restrict=True):
                 raise Response(403)
 
     return participant
+
+def with_mine(AMOUNTS, my_tip):
+    """Return a list of decimals that includes a possibly custom amount.
+    """
+    if my_tip in AMOUNTS:
+        out = AMOUNTS
+    else:
+        out = set(AMOUNTS)
+        out.add(my_tip)
+        out = list(out)
+        out.sort()
+        out.reverse()
+    return out
+

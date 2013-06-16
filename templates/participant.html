@@ -66,9 +66,12 @@
     {% elif user.ANON %}
 
         <h2>Your Weekly Gift</h2>
-        {% for amount in AMOUNTS %}
-        <button class="tip-anon">${{ amount }}</button>
-        {% end %}
+
+        <select class="my-tip">
+          {% for amount in AMOUNTS %}
+          <option value="amount"{{ ' selected="1"' if amount == 0 else ""}}>${{ amount }}</option>
+          {% end %}
+        </select>
 
         <div class="help with-padding">Sign in using 
             <a class="flash-me" href="{{ twitter.oauth_url(website, u'opt-in', path.decoded) }}">Twitter</a>, 
@@ -80,17 +83,11 @@
 
         {% set my_tip = user.get_tip_to(participant.username) %}
         <h2>Your Weekly Gift</h2>
-        {% for amount in AMOUNTS %}
-        <button amount="{{ amount }}" tippee="{{ participant.username }}"
-            class="tip{{ ' selected' if amount == my_tip else '' }}">${{ amount }}</button>
-        {% end %}
-        {% if my_tip not in AMOUNTS %}
-        <span class="old-amount">
-            <button class="tip disabled selected">{{ my_tip }}</button>
-            <span class="old-amount-link">&mdash;
-            <a href="http://blog.gittip.com/post/26505682007/is-personal-funding-viable" target="_blank">old amount</a>!</span>
-        </span>
-        {% end %}
+        <select class="my-tip" tippee="{{ participant.username }}">
+          {% for amount in with_mine(AMOUNTS, my_tip) %}
+          <option value="amount"{{ ' selected="1"' if amount == my_tip else ""}}>${{ amount }}</option>
+          {% end %}
+        </select>
 
         {% if user.last_bill_result is None %}
 
