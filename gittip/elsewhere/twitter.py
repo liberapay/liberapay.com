@@ -62,9 +62,9 @@ def get_user_info(screen_name):
         # Keep an eye on our Twitter usage.
         # =================================
 
-        rate_limit = user_info.headers['X-RateLimit-Limit']
-        rate_limit_remaining = user_info.headers['X-RateLimit-Remaining']
-        rate_limit_reset = user_info.headers['X-RateLimit-Reset']
+        rate_limit = user_info.headers['X-Rate-Limit-Limit']
+        rate_limit_remaining = user_info.headers['X-Rate-Limit-Remaining']
+        rate_limit_reset = user_info.headers['X-Rate-Limit-Reset']
 
         try:
             rate_limit = int(rate_limit)
