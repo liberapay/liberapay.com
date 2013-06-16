@@ -9,7 +9,7 @@ the Gittip community.
 from urlparse import parse_qs
 
 import requests
-from oauth_hook import OAuthHook
+from requests-oauthlib import OAuth1
 from aspen import json, log, Response
 from aspen import resources
 from gittip import mixpanel
@@ -29,15 +29,14 @@ try:
 except KeyError:
     request.redirect("/about/me.html")
 
-oauth_hook = OAuthHook( token
-                      , secret
-                      , header_auth=True
-                      , consumer_key=website.bitbucket_consumer_key
-                      , consumer_secret=website.bitbucket_consumer_secret
-                       )
+oauth_hook = OAuth1( token
+                   , secret
+                   , consumer_key=website.bitbucket_consumer_key
+                   , consumer_secret=website.bitbucket_consumer_secret
+                    )
 response = requests.post( "https://bitbucket.org/api/1.0/oauth/access_token"
                         , data={"oauth_verifier": qs['oauth_verifier']}
-                        , hooks={'pre_request': oauth_hook}
+                        , auth=oauth_hook
                          )
 assert response.status_code == 200, response.status_code
 
@@ -45,15 +44,13 @@ reply = parse_qs(response.text)
 token = reply['oauth_token'][0]
 secret = reply['oauth_token_secret'][0]
 
-
-oauth_hook = OAuthHook( token  # XXX really instantiate again?
-                      , secret
-                      , header_auth=True
-                      , consumer_key=website.bitbucket_consumer_key
-                      , consumer_secret=website.bitbucket_consumer_secret
-                       )
+oauth_hook = OAuth1( token
+                   , secret
+                   , consumer_key=website.bitbucket_consumer_key
+                   , consumer_secret=website.bitbucket_consumer_secret
+                    )
 response = requests.get( "https://bitbucket.org/api/1.0/user"
-                       , hooks={'pre_request': oauth_hook}
+                       , auth=oauth_hook
                         )
 user_info = json.loads(response.text)['user']
 assert response.status_code == 200, response.status_code
