@@ -13,7 +13,7 @@
                     No Twitter account connected.
                 {% end %}
             {% else %}
-            <a href="{{ escape(twitter_account.user_info.get('html_url', '')) }}"
+            <a rel="me" href="{{ escape(twitter_account.user_info.get('html_url', '')) }}"
                 ><img class="avatar"
                 src="{{ escape(twitter_account.user_info.get('profile_image_url_https', '/assets/%s/no-avatar.png' % __version__)) }}"
                 />{{ escape(twitter_account.user_info.get('screen_name')) }}
@@ -37,7 +37,7 @@
                     No GitHub account connected.
                 {% end %}
             {% else %}
-            <a href="{{ escape(github_account.user_info.get('html_url', '')) }}"
+            <a rel="me" href="{{ escape(github_account.user_info.get('html_url', '')) }}"
                 ><img class="avatar" src="{{ escape(github_account.user_info.get('avatar_url', '/assets/%s/no-avatar.png' % __version__)) }}"
                 />{{ escape(github_account.user_info.get('login')) }}
                 {% if github_account.user_info.get('name') %}
@@ -60,7 +60,7 @@
                     No Bitbucket account connected.
                 {% end %}
             {% else %}
-            <a href="{{ escape(bitbucket_account.user_info.get('html_url', '')) }}"
+            <a rel="me" href="{{ escape(bitbucket_account.user_info.get('html_url', '')) }}"
                 ><img class="avatar"
                 src="{{ escape(bitbucket_account.user_info.get('avatar', '/assets/%s/no-avatar.png' % __version__)) }}"
                 />{{ escape(bitbucket_account.user_info.get('username')) }}
