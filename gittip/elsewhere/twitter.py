@@ -5,7 +5,7 @@ from aspen import json, log, Response
 from aspen.utils import to_age, utc, typecheck
 from gittip.elsewhere import AccountElsewhere, _resolve
 from os import environ
-from oauth_hook import OAuthHook
+from requests_oauthlib import OAuth1
 
 
 class TwitterAccount(AccountElsewhere):
@@ -45,25 +45,26 @@ def get_user_info(screen_name):
     if rec is not None:
         user_info = rec['user_info']
     else:
-        oauth = OAuthHook(
-            # we haven't got access to the website obj,
+        # Updated using Twython as a point of reference:
+        # https://github.com/ryanmcgrath/twython/blob/master/twython/twython.py#L76
+        oauth = OAuth1(
+            # we do not have access to the website obj,
             # so let's grab the details from the env
-            access_token=environ['TWITTER_ACCESS_TOKEN'],
-            access_token_secret=environ['TWITTER_ACCESS_TOKEN_SECRET'],
-            consumer_key=environ['TWITTER_CONSUMER_KEY'],
-            consumer_secret=environ['TWITTER_CONSUMER_SECRET'],
-            header_auth=True
+            environ['TWITTER_CONSUMER_KEY'],
+            environ['TWITTER_CONSUMER_SECRET'],
+            environ['TWITTER_ACCESS_TOKEN'],
+            environ['TWITTER_ACCESS_TOKEN_SECRET'],
         )
 
         url = "https://api.twitter.com/1.1/users/show.json?screen_name=%s"
-        user_info = requests.get(url % screen_name, hooks={'pre_request': oauth})
+        user_info = requests.get(url % screen_name, auth=oauth)
 
         # Keep an eye on our Twitter usage.
         # =================================
 
-        rate_limit = user_info.headers['X-RateLimit-Limit']
-        rate_limit_remaining = user_info.headers['X-RateLimit-Remaining']
-        rate_limit_reset = user_info.headers['X-RateLimit-Reset']
+        rate_limit = user_info.headers['X-Rate-Limit-Limit']
+        rate_limit_remaining = user_info.headers['X-Rate-Limit-Remaining']
+        rate_limit_reset = user_info.headers['X-Rate-Limit-Reset']
 
         try:
             rate_limit = int(rate_limit)

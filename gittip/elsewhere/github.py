@@ -1,10 +1,12 @@
+from __future__ import division
 import gittip
 import logging
 import requests
 import os
-from aspen import json, log, Response
+from aspen import json, Response
 from aspen.website import Website
 from aspen.utils import typecheck
+from gittip import log
 from gittip.elsewhere import ACTIONS, AccountElsewhere, _resolve
 
 
@@ -109,6 +111,30 @@ def get_user_info(login):
         })
         status = user_info.status_code
         content = user_info.text
+
+        # Calculate how much of our ratelimit we have consumed
+        remaining = int(user_info.headers['x-ratelimit-remaining'])
+        limit = int(user_info.headers['x-ratelimit-limit'])
+        # thanks to from __future__ import division this is a float
+        percent_remaining = remaining/limit
+
+        log_msg = ''
+        log_lvl = None
+        # We want anything 50% or over
+        if 0.5 <= percent_remaining:
+            log_msg = ("{0}% of GitHub's ratelimit has been consumed. {1}"
+                       " requests remaining.").format(percent_remaining * 100,
+                                                      remaining)
+        if 0.5 <= percent_remaining < 0.8:
+            log_lvl = logging.WARNING
+        elif 0.8 <= percent_remaining < 0.95:
+            log_lvl = logging.ERROR
+        elif 0.95 <= percent_remaining:
+            log_lvl = logging.CRITICAL
+
+        if log_msg and log_lvl:
+            log(log_msg, log_lvl)
+
         if status == 200:
             user_info = json.loads(content)
         elif status == 404:

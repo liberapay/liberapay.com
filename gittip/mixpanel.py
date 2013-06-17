@@ -45,7 +45,7 @@ def alias_and_track(cookie, gittip_user_id):
     # affect the user experience, and we'll still get a record of the failure
     # in Sentry.
 
-    mpcookie = [v for k,v in cookie.items() if k.endswith('_mixpanel')]
+    mpcookie = [v for k, v in cookie.items() if k.endswith('_mixpanel')]
     if mpcookie:
         distinct_id = json.loads(unquote(mpcookie[0].value))['distinct_id']
         distinct_id = distinct_id.decode("utf8")
@@ -69,7 +69,9 @@ def track(user_id, event, properties=None):
     properties['distinct_id'] = user_id
     data = {"event": event, "properties": properties}
     data = json.dumps(data).encode("base64")
-    response = session.get("http://api.mixpanel.com/track?data=" + data)
+    #response = session.get("http://api.mixpanel.com/track?data=" + data)
+    response = session.get("http://api.mixpanel.com/track",
+                           params={'data': data})
 
     # Read response.content to take advantage of keep-alive. See:
     # http://docs.python-requests.org/en/latest/user/advanced/#keep-alive
