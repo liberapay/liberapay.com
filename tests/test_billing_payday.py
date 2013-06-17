@@ -195,9 +195,7 @@ class TestBillingCharges(Harness):
     @mock.patch('stripe.Charge')
     def test_charge_on_stripe(self, ba):
         amount_to_charge = Decimal('10.00')  # $10.00 USD
-        expected_fee = (amount_to_charge + FEE_CHARGE[0]) * FEE_CHARGE[1]
-        expected_fee = (amount_to_charge - expected_fee.quantize(
-            FEE_CHARGE[0], rounding=ROUND_UP)) * -1
+        expected_fee = Decimal('0.61')
         charge_amount, fee, msg = self.payday.charge_on_stripe(
             self.alice.username, self.STRIPE_CUSTOMER_ID, amount_to_charge)
 
@@ -214,9 +212,7 @@ class TestBillingCharges(Harness):
     @mock.patch('balanced.Account')
     def test_charge_on_balanced(self, ba):
         amount_to_charge = Decimal('10.00')  # $10.00 USD
-        expected_fee = (amount_to_charge + FEE_CHARGE[0]) * FEE_CHARGE[1]
-        expected_fee = (amount_to_charge - expected_fee.quantize(
-            FEE_CHARGE[0], rounding=ROUND_UP)) * -1
+        expected_fee = Decimal('0.61')
         charge_amount, fee, msg = self.payday.charge_on_balanced(
             self.alice.username, self.BALANCED_ACCOUNT_URI, amount_to_charge)
         self.assertEqual(charge_amount, amount_to_charge + fee)
@@ -232,7 +228,7 @@ class TestBillingCharges(Harness):
     @mock.patch('balanced.Account')
     def test_charge_on_balanced_small_amount(self, ba):
         amount_to_charge = Decimal('0.06')  # $0.06 USD
-        expected_fee = Decimal('0.68')
+        expected_fee = Decimal('0.59')
         expected_amount = Decimal('10.00')
         charge_amount, fee, msg = \
             self.payday.charge_on_balanced(self.alice.username,
@@ -278,61 +274,61 @@ class TestPrepHit(Harness):
 
     def test_prep_hit_basically_works(self):
         actual = self.payday._prep_hit(Decimal('20.00'))
-        expected = (2110,
-                    u'Charging %s 2110 cents ($20.00 + $1.10 fee = $21.10) on %s ' u'... ',
-                    Decimal('21.10'), Decimal('1.10'))
+        expected = (2091,
+                    u'Charging %s 2091 cents ($20.00 + $0.91 fee = $20.91) on %s ' u'... ',
+                    Decimal('20.91'), Decimal('0.91'))
         assert actual == expected, actual
 
     def test_prep_hit_full_in_rounded_case(self):
         actual = self.payday._prep_hit(Decimal('5.00'))
         expected = (1000,
-                    u'Charging %s 1000 cents ($9.32 [rounded up from $5.00] + ' u'$0.68 fee = $10.00) on %s ... ',
-                    Decimal('10.00'), Decimal('0.68'))
+                    u'Charging %s 1000 cents ($9.41 [rounded up from $5.00] + ' u'$0.59 fee = $10.00) on %s ... ',
+                    Decimal('10.00'), Decimal('0.59'))
         assert actual == expected, actual
 
     def test_prep_hit_at_ten_dollars(self):
         actual = self.prep(u'10.00')
-        expected = (1071, Decimal('10.71'), Decimal('0.71'))
+        expected = (1061, Decimal('10.61'), Decimal('0.61'))
         assert actual == expected, actual
 
     def test_prep_hit_at_forty_cents(self):
         actual = self.prep(u'0.40')
-        expected = (1000, Decimal('10.00'), Decimal('0.68'))
+        expected = (1000, Decimal('10.00'), Decimal('0.59'))
         assert actual == expected, actual
 
     def test_prep_hit_at_fifty_cents(self):
         actual = self.prep(u'0.50')
-        expected = (1000, Decimal('10.00'), Decimal('0.68'))
+        expected = (1000, Decimal('10.00'), Decimal('0.59'))
         assert actual == expected, actual
 
     def test_prep_hit_at_sixty_cents(self):
         actual = self.prep(u'0.60')
-        expected = (1000, Decimal('10.00'), Decimal('0.68'))
+        expected = (1000, Decimal('10.00'), Decimal('0.59'))
         assert actual == expected, actual
 
     def test_prep_hit_at_eighty_cents(self):
         actual = self.prep(u'0.80')
-        expected = (1000, Decimal('10.00'), Decimal('0.68'))
+        expected = (1000, Decimal('10.00'), Decimal('0.59'))
         assert actual == expected, actual
 
     def test_prep_hit_at_nine_fifteen(self):
         actual = self.prep(u'9.15')
-        expected = (1000, Decimal('10.00'), Decimal('0.68'))
+        expected = (1000, Decimal('10.00'), Decimal('0.59'))
         assert actual == expected, actual
 
-    def test_prep_hit_at_nine_thirty_one(self):
-        actual = self.prep(u'9.31')
-        expected = (1000, Decimal('10.00'), Decimal('0.68'))
+    def test_prep_hit_at_nine_forty(self):
+        actual = self.prep(u'9.40')
+        expected = (1000, Decimal('10.00'), Decimal('0.59'))
         assert actual == expected, actual
 
-    def test_prep_hit_at_nine_thirty_two(self):
-        actual = self.prep(u'9.32')
-        expected = (1000, Decimal('10.00'), Decimal('0.68'))
+    def test_prep_hit_at_nine_forty_one(self):
+        actual = self.prep(u'9.41')
+        expected = (1000, Decimal('10.00'), Decimal('0.59'))
         assert actual == expected, actual
 
-    def test_prep_hit_at_nine_thirty_three(self):
-        actual = self.prep(u'9.33')
-        expected = (1001, Decimal('10.01'), Decimal('0.68'))
+    def test_prep_hit_at_nine_forty_two(self):
+        actual = self.prep(u'9.42')
+        expected = (1002, Decimal('10.02'), Decimal('0.60'))
         assert actual == expected, actual
 
 

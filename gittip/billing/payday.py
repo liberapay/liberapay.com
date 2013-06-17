@@ -38,11 +38,11 @@ from psycopg2.extras import RealDictRow
 # compute this using *ahem* math.
 
 FEE_CHARGE = ( Decimal("0.30")   # $0.30
-             , Decimal("1.039")  #  3.9%
+             , Decimal("0.029")  #  2.9%
               )
-FEE_CREDIT = Decimal("0.30")
+FEE_CREDIT = Decimal("0.25")
 
-MINIMUM_CHARGE = Decimal("9.32")
+MINIMUM_CHARGE = Decimal("9.41")
 MINIMUM_CREDIT = Decimal("10.00")
 
 
@@ -50,7 +50,7 @@ def upcharge(amount):
     """Given an amount, return a higher amount and the difference.
     """
     typecheck(amount, Decimal)
-    charge_amount = (amount + FEE_CHARGE[0]) * FEE_CHARGE[1]
+    charge_amount = (amount + FEE_CHARGE[0]) / (1 - FEE_CHARGE[1])
     charge_amount = charge_amount.quantize(FEE_CHARGE[0], rounding=ROUND_UP)
     return charge_amount, charge_amount - amount
 
@@ -60,7 +60,7 @@ def skim_credit(amount):
     typecheck(amount, Decimal)
     return amount - FEE_CREDIT, FEE_CREDIT
 
-assert upcharge(MINIMUM_CHARGE) == (Decimal('10.00'), Decimal('0.68'))
+assert upcharge(MINIMUM_CHARGE) == (Decimal('10.00'), Decimal('0.59'))
 
 
 def is_whitelisted(participant):
