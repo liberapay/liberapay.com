@@ -689,9 +689,9 @@ Gittip.initTipButtons = function()
             delta    = 0,
             $gift    = $(this),
             $parent  = $gift.parent(),
-            $zero    = $('<button>0</button>'),
+            $zero    = $('<button>$0</button>'),
             $quarter = $('<button>25¢</button>'),
-            $handle  = $('<button class="my-tip-range-handle">$1</button>'),
+            $handle  = $('<button class="my-tip-range-handle">$10</button>'),
             $range   = $('<div class="my-tip-range-range"/>');
 
         function xMax() {
@@ -766,6 +766,8 @@ Gittip.initTipButtons = function()
         $parent.append($zero, $quarter, $range);
 
         // init
+        $handle.css('left', (+$handle.text().substr(1) / 100) * xMax());
+
         switch (+$gift.val()) {
             case 0: $zero.addClass('selected'); break;
             case 0.25: $quarter.addClass('selected'); break;
