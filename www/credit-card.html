@@ -49,9 +49,7 @@ title = "Credit Card"
   {% if user.ANON %}
     <div class="as-content">
 
-    <p>Sign in using
-    <a href="{{ twitter.oauth_url(website, u'opt-in', u'/credit-card.html') }}">Twitter</a> or
-    <a href="{{ github.oauth_url(website, u'opt-in', u'/credit-card.html') }}">GitHub</a>,
+    {% include templates/sign-in-using.html %}
     and then you'll be able to add or change your credit card.</p>
 
     <p>Thanks! :-)</p>
@@ -142,7 +140,6 @@ title = "Credit Card"
                 <label for="country">Country</label>
 
                 <select id="country" name="country">
-
                 {% for each in COUNTRIES %}
                     {% if each[0] == card['country'] %}
                       <option value="{{ each[0] }}" selected>{{ each[1] }}</option>
@@ -150,7 +147,7 @@ title = "Credit Card"
                       <option value="{{ each[0] }}">{{ each[1] }}</option>
                     {% end %}
                 {% end %}
-               </select>
+                </select>
 
             </div>
 
