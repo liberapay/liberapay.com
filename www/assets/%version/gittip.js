@@ -617,24 +617,6 @@ Gittip.initCSRF = function()
 
 Gittip.initTipButtons = function()
 {
-    // For anonymous users we flash a login link.
-
-    $('INPUT.my-tip.anon').mouseover(
-        function() { $('.nav.level-1 .flash-me').addClass('highlight'); }
-    );
-    $('INPUT.my-tip.anon').change(function()
-    {
-        var i = 0
-        function flash()
-        {
-            if (i++ == 6) return;
-            $('.nav.level-1 .flash-me').toggleClass('highlight');
-            setTimeout(flash, 100);
-        }
-        flash();
-    });
-
-
     // For authenticated users we change the tip!
 
     $('INPUT.my-tip:not(.anon)').change(function()
@@ -684,7 +666,7 @@ Gittip.initTipButtons = function()
 
     // Range
 
-    $('.my-tip-range INPUT.my-tip:not(.anon)').each(function() {
+    $('.my-tip-range INPUT.my-tip').each(function() {
         var drag     = false,
             delta    = 0,
             $gift    = $(this),
@@ -778,6 +760,24 @@ Gittip.initTipButtons = function()
                 $handle.addClass('selected');
                 break;
         }
+    });
+
+
+    // For anonymous users we flash a login link.
+
+    $('.my-tip-range.anon BUTTON').mouseover(
+        function() { $('.nav.level-1 .flash-me').addClass('highlight'); }
+    );
+    $('.my-tip-range.anon BUTTON').click(function()
+    {
+        var i = 0
+        function flash()
+        {
+            if (i++ == 6) return;
+            $('.nav.level-1 .flash-me').toggleClass('highlight');
+            setTimeout(flash, 100);
+        }
+        flash();
     });
 };
 

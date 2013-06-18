@@ -1,4 +1,4 @@
-<div class="my-tip-range">
+<div class="my-tip-range{{ " anon" if user.ANON else "" }}">
     <input type="hidden"
            class="my-tip"
            value="{{ my_tip }}"
