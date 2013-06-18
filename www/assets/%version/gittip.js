@@ -709,6 +709,7 @@ Gittip.initTipButtons = function()
         $(window).on({
             'mousemove touchmove': function(e) {
                 if (!drag) return;
+                if (e.originalEvent.touches) e.preventDefault();
 
                 var value,
                     clientX = e.originalEvent.touches ? e.originalEvent.touches[0].clientX : e.clientX,
