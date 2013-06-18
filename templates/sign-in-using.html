@@ -1,7 +1,7 @@
 <span class="nowrap">Sign in using</span>
 <span class="nowrap">
   <a href="{{ twitter.oauth_url(website, u'opt-in', path.decoded) }}"
-    {{ 'class="flash-me"' if path.decoded.startswith('/on/twitter/') else '' }}
+    {{ 'class="flash-me"' if path.decoded.startswith('/on/twitter/') or not path.decoded.startswith('/on/') else '' }}
     >Twitter</a>
   <span class="luxury">or
     <a href="{{ github.oauth_url(website, u'opt-in', path.decoded) }}"

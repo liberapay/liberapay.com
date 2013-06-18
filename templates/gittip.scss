@@ -275,7 +275,7 @@ button.selected {
     background: $green;
     color: white;
 }
-button.selected:hover {
+button.selected:hover, button.selected.drag {
     border-color: rgba($green, 0.5);
     background: $lighter-gray;
     color: $gray;
@@ -287,6 +287,18 @@ button.join-leave[data-is-member="true"] {
 
 button.join-leave[data-is-member="false"] {
     background: $green
+}
+.my-tip-range {
+    .my-tip-range-range {
+        width: 175px;
+        background: url(/assets/range-bg.png) center repeat-x;
+        margin: 2px;
+        text-align: left;
+    }
+    .my-tip-range-handle {
+        width: 54px;
+        margin: 2px;
+    }
 }
 
 // Global
