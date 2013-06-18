@@ -696,9 +696,10 @@ Gittip.initTipButtons = function()
         });
 
         $handle.on({
-            mousedown: function(e) {
+            'mousedown touchstart': function(e) {
+                var clientX = e.originalEvent.touches ? e.originalEvent.touches[0].clientX : e.clientX;
                 drag = true;
-                delta = e.clientX - parseInt($handle.css('left'), 10);
+                delta = clientX - parseInt($handle.css('left'), 10);
                 $parent.find('button').removeClass('selected');
                 $handle.addClass('selected drag');
                 $gift.val($handle.text().substr(1));
@@ -706,11 +707,12 @@ Gittip.initTipButtons = function()
         });
 
         $(window).on({
-            mousemove: function(e) {
+            'mousemove touchmove': function(e) {
                 if (!drag) return;
 
                 var value,
-                    x   = e.clientX - delta,
+                    clientX = e.originalEvent.touches ? e.originalEvent.touches[0].clientX : e.clientX,
+                    x   = clientX - delta,
                     max = xMax();
 
                 if (x < 0)   x = 0;
@@ -725,7 +727,7 @@ Gittip.initTipButtons = function()
                 $gift.val(value);
             },
 
-            mouseup: function() {
+           'mouseup touchend': function() {
                 if (!drag) return;
                 drag = false;
                 $gift.trigger('change');
