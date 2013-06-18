@@ -744,6 +744,7 @@ Gittip.initTipButtons = function()
             },
 
             mouseup: function() {
+                if (!drag) return;
                 drag = false;
                 $gift.trigger('change');
                 $handle.removeClass('drag');
