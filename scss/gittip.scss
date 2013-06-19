@@ -1,8 +1,27 @@
+/*
+
+    This is the top of the Gittip CSS tree. This gets compiled to a single
+    compressed CSS file by `make css`, and that is stored in the repo so new
+    devs can get up and running quickly.
+
+*/
+
+
+// Define some basic things that are used throughout the site.
+
 @import "fonts-colors-mixins";
 @import "utils";
+@import "buttons-knobs";
+
+
+// Define layout. Not sure yet how "global," "page," and "modules" differ. :/
+
+@import "global";
 @import "page";
 @import "modules";
-@import "buttons-knobs";
-@import "global";
 @import "page-parts";
+
+
+// Group media selectors together.
+
 @import "responsiveness";
