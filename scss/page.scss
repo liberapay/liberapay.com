@@ -1,0 +1,54 @@
+// Page
+
+html, body {
+    background: #FFF;
+}
+body {
+    color: $black;
+    font: normal 16px $Helvetica;
+    text-rendering: optimizeLegibility;
+}
+.main-padding {
+    width: 960px;
+    margin: 0 auto;
+    position: relative;
+}
+* {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+a {
+    color: $green;
+    text-decoration: none;
+    font-weight: bold;
+}
+a img {
+    border: 0;
+}
+p, dd {
+    margin: 0;
+    padding: 0 0 1em;
+    line-height: 130%;
+}
+dt {
+    font-weight: bold;
+    margin: 1em 0 0.25em;
+}
+pre {
+    font: 9pt/13pt monospace;
+    margin: 0 0 1em 1em;
+    padding: 0;
+    overflow: auto;
+}
+li {
+    margin: 0;
+    margin: 0 0 1em 1.5em;
+}
+ol {
+    margin: 1em 0 0;
+}
+ol li {
+    list-style: outside decimal;
+}
+

@@ -1,0 +1,81 @@
+// Modules
+
+.mini-user {
+    background: white;
+    display: block;
+    float: left;
+    width: 100%;
+    overflow: hidden;
+    border: 4px solid #DEE0E0;
+    @include border-radius(3px);
+
+    span.inner {
+        border: 1px solid #B6B7B9;
+        display: block;
+        min-height: 50px;
+        padding: 5px;
+
+        span.avatar {
+            background: transparent url('avatar-default.gif') center center no-repeat;
+            background-size: cover;
+            display: block;
+            min-height: 70px;
+            position: relative;
+
+            span.rank {
+                background: $brown;
+                bottom: 4px;
+                color: white;
+                display: block;
+                font: normal 12px $Mensch;
+                left: 4px;
+                padding: 3px 5px 3px 6px;
+                position: absolute;
+                text-align: center;
+                @include border-radius(2px);
+            }
+        }
+        span.age,
+        span.money {
+            color: $black;
+            display: block;
+            font: bold 18px $Helvetica;
+            margin: 7px 0 5px 0;
+            white-space: nowrap;
+
+            span.unit {
+                font: normal 11px $Helvetica;
+            }
+        }
+        span.name {
+            display: block;
+            font: normal 11px $Helvetica;
+            margin: 3px 0;
+            white-space: nowrap;
+        }
+    }
+
+    &.anonymous {
+        opacity: 0.33;
+    }
+}
+a.mini-user {
+    span.name {
+        color: $green;
+    }
+}
+span.mini-user {
+    border-color: white;
+    span.name {
+        color: $black;
+    }
+}
+a.mini-user:hover {
+    border: 4px solid $light-brown;
+    text-decoration: none;
+
+    span.inner {
+        border-color: $brown;
+    }
+}
+

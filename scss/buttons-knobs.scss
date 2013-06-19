@@ -1,0 +1,64 @@
+// Buttons and Knobs
+
+button::-moz-focus-inner { 
+
+    /* "I found out that Firefox adds an extra margin/padding to button
+     * elements that cannot be changed by standard CSS, you can however 
+     * add the following to make it behave"
+     *
+     *  http://stackoverflow.com/questions/5939781/
+     */
+
+    border: 0;
+    padding: 0;
+}
+
+button {
+    background: $gray;
+    border: 3px solid rgba($gray, 0.33);
+    color: white;
+    font: bold 11px $Helvetica;
+    letter-spacing: 1px;
+    margin: 0 0 0 1px;
+    padding: 4px 10px;
+    text-transform: uppercase;
+    @include border-radius(3px);
+    cursor: pointer;
+    display: inline;
+}
+button:hover {
+    border-color: $gray;
+    background: $lighter-gray;
+    color: $gray;
+}
+button.selected {
+    border-color: rgba(#FFF, 0.9);
+    background: $green;
+    color: white;
+}
+button.selected:hover, button.selected.drag {
+    border-color: rgba($green, 0.5);
+    background: $lighter-gray;
+    color: $gray;
+}
+
+button.join-leave[data-is-member="true"] {
+    background: $light-red
+}
+
+button.join-leave[data-is-member="false"] {
+    background: $green
+}
+.my-tip-range {
+    .my-tip-range-range {
+        width: 175px;
+        background: url(/assets/range-bg.png) center repeat-x;
+        margin: 2px;
+        text-align: left;
+    }
+    .my-tip-range-handle {
+        width: 54px;
+        margin: 2px;
+    }
+}
+
