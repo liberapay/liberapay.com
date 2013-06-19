@@ -72,5 +72,5 @@ fake_data: env local.env
 	./$(env_bin)/swaddle local.env ./$(env_bin)/fake_data fake_data
 
 css:
-	scss -t compressed templates/gittip.scss gittip.css
+	scss -t compressed scss/gittip.scss gittip.css
 	mv gittip.css www/assets/%version/gittip.css
