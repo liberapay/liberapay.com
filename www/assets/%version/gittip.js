@@ -656,6 +656,7 @@ Gittip.initTipButtons = function()
         )
         .done(function(data) {
             $('.total-giving').text(data['total_giving']);
+            alert('Tip changed to $' + amount + '!');
 
             // Log to mixpanel.
             if (data.first_time === true)
