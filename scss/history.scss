@@ -1,0 +1,43 @@
+#history {
+    th {
+        padding: 0 3pt;
+
+        b {
+            font-weight: 300;
+            font-size: 9pt;
+        }
+    }
+    td {
+        padding: 1pt 3pt;
+        font-size: 9pt;
+        line-height: 10pt;
+        text-align: right;
+
+        h2 {
+            text-align: left;
+        }
+    }
+    .head td {
+        font-size: 9pt;
+        white-space: normal;
+        text-align: left;
+        border-bottom: 1px solid $brown;
+    }
+    td.card, td.fees, td.debits {
+        color: red;
+    }
+    .head td.card, .head td.fees, .head td.debits {
+        color: $brown;
+    }
+    td.notes {
+        text-align: left;
+    }
+    .fees {
+        border-right: 1px solid $brown;
+        text-align: right;
+    }
+    .outside {
+        border-right: 1px solid $brown;
+        text-align: right ! important;
+    }
+}

@@ -1,0 +1,46 @@
+#profile-edit {
+    BUTTON.save, BUTTON.cancel {
+        display: none;
+    }
+    .username {
+        INPUT {
+            width: 6em;
+            display: none;
+        }
+        .warning {
+            margin-top: 5px;
+            display: block;
+            color: red;
+            display: none;
+        }
+    }
+    .statement {
+        DIV.edit {
+            display: none;
+        }
+        TEXTAREA {
+            width: 98%;
+            height: 126pt; /* 18pt * 7 rows; overriden in js */
+            padding: 1%;
+            margin-top: 8px;
+        }
+        .help {
+            font: normal 12px/12px $Helvetica;
+        }
+    }
+    .goal {
+        TABLE.edit {
+            display: none;
+        }
+        TD {
+            text-align: left;
+        }
+        #goal-custom {
+            text-align: right;
+            width: 6pc;
+        }
+        LI {
+            margin-bottom: 1em;
+        }
+    }
+}

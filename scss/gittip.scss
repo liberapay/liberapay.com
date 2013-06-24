@@ -12,14 +12,21 @@
 @import "fonts-colors-mixins";
 @import "utils";
 @import "buttons-knobs";
+@import "modules";  // bigger than a knob, but used in multiple places
 
 
-// Define layout. Not sure yet how "global," "page," and "modules" differ. :/
+// Define layout. Not sure yet how "global" and "page" differ. :/
 
 @import "global";
 @import "page";
-@import "modules";
-@import "page-parts";
+
+
+// Styles specific to certain pages. 
+
+@import "history";
+@import "horn";
+@import "open-group"; // a.k.a "team"
+@import "profile-edit";
 
 
 // Group media queries together.
