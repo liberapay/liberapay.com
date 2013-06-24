@@ -47,7 +47,7 @@ Gittip.horn.drawOne = function(toot)
              + ' tooted '
              + ( toot.horn === toot.tootee
                ? (toot.own ? 'your own' : 'your')
-               : '<a href="/' + toot.tootee + '/">' + toot.tootee + '\'s</a>'
+               : '<a href="/' + toot.tootee + '/">' + toot.tootee + '</a>\'s'
                 )
              + ' horn</div>'
              + '</li>'
