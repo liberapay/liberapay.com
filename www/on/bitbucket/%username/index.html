@@ -159,7 +159,7 @@ title = username
         {% end %}
 
       {% else %}
-        <script>$(document).ready(Gittip.initTipButtons);</script>
+        <script>$(document).ready(Gittip.tips.init);</script>
 
         <h2>{{ escape(name) }} has not joined Gittip.</h2>
 
@@ -203,7 +203,7 @@ title = username
     </div>
   {% elif usertype == "organization"  %}
 
-    <script>$(document).ready(Gittip.initTipButtons);</script>
+    <script>$(document).ready(Gittip.tips.init);</script>
 
     <table id="members" class="centered">
       {% for i, sequence in enumerate([on_gittip, not_on_gittip]) %}

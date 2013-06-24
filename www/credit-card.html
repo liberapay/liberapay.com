@@ -60,7 +60,7 @@ title = "Credit Card"
     <script>
         $(document).ready(function()
         {
-            Gittip.initPayment("{{ balanced.Marketplace.my_marketplace.uri }}", "{{ user.username }}");
+            Gittip.payments.cc.init("{{ balanced.Marketplace.my_marketplace.uri }}", "{{ user.username }}");
         });
     </script>
     <style>

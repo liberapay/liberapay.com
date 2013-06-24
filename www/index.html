@@ -108,7 +108,7 @@ receivers = _wrap(db.fetchall("""
 {% extends templates/base.html %}
 {% block head %}
     <meta name="description" content="Inspiring Generosity. Gittip is a weekly gift exchange. Support and thank your favorite people and projects and communities with small cash gifts." />
-    <script>$(document).ready(Gittip.initJumpToPerson);</script>
+    <script>$(document).ready(Gittip.jump.init);</script>
 {% end %}
 {% block heading %}
     <h2 class="top"><span>Sustainable Crowdfunding</span></h2>

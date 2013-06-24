@@ -66,7 +66,7 @@ title = "Bank Account"
     <script>
         $(document).ready(function()
         {
-            Gittip.initPayout("{{ balanced.Marketplace.my_marketplace.uri }}", "{{ user.username }}");
+            Gittip.payments.ba.init("{{ balanced.Marketplace.my_marketplace.uri }}", "{{ user.username }}");
         });
     </script>
     <style>

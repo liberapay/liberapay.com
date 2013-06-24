@@ -22,8 +22,15 @@
     <script src="/assets/chosen/chosen.jquery.min.js"></script>
     <style>@import url("/assets/chosen/chosen.css");</style>
 
+    <script src="/assets/{{ __version__ }}/utils.js"></script>
     <script src="/assets/{{ __version__ }}/gittip.js"></script>
-    <script>$(document).ready(Gittip.initCSRF);</script>
+    <script src="/assets/{{ __version__ }}/gittip/communities.js"></script>
+    <script src="/assets/{{ __version__ }}/gittip/forms.js"></script>
+    <script src="/assets/{{ __version__ }}/gittip/horn.js"></script>
+    <script src="/assets/{{ __version__ }}/gittip/jump.js"></script>
+    <script src="/assets/{{ __version__ }}/gittip/payments.js"></script>
+    <script src="/assets/{{ __version__ }}/gittip/tips.js"></script>
+    <script>$(document).ready(Gittip.init);</script>
 
     <!-- start Mixpanel -->
     <script type="text/javascript">
