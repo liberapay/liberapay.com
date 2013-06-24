@@ -13,12 +13,12 @@
 @import "utils";
 @import "buttons-knobs";
 @import "modules";  // bigger than a knob, but used in multiple places
+@import "elements"; // specific HTML elements (body, p, etc.)
 
 
-// Define layout. Not sure yet how "global" and "page" differ. :/
+// Page layout styles
 
-@import "global";
-@import "page";
+@import "layout";
 
 
 // Styles specific to certain pages. 
