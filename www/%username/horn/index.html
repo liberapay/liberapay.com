@@ -12,7 +12,8 @@ locked = False
 {% extends templates/profile.html %}
 {% block page %}
 <script>$(document).ready(Gittip.horn.init);</script>
-<div class="col0" id="horn">
+<div id="horn">
+  <div class="toot-form-wrapper">
     {% if not user.ANON %}
     {% if user == participant %}
     <h2>Toot your own horn!</h2>
@@ -36,7 +37,7 @@ locked = False
         <div class="clear"></div>
     </form>
     {% end %}
-    <h2>Toots</h2>
-    <ul id="toots"></ul>
+  </div>
+  <ul id="toots"></ul>
 </div>
 {% end %}

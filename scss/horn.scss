@@ -1,4 +1,8 @@
 #horn {
+    .box {
+        margin-top: 0;
+    }
+
     textarea {
         width: 100%;
         height: 40px;
@@ -23,9 +27,23 @@
     button#toot-button {
         float: right;
     }
+    .toot-form-wrapper {
+        margin: 0 auto;
+        width: 480px;
+    }
+    .toot {
+        padding: 20px 10px;
+    }
+    .nav {
+        padding: 5px 10px;
+    }
     li {
-        margin: 0;
-        padding: 0 0 2pt;
+        text-align: left;
+        margin: 0 auto 12pt;
+
+        .level-1 {
+            font: normal 11px/13px $Helvetica;
+        }
 
         &.me.theirs {
             font: bold 18px/19px $Helvetica;
@@ -61,6 +79,3 @@
         }
     }
 }
-
-
-

@@ -9,7 +9,7 @@ from gittip.utils import get_participant
 
 SQL_SELF = """
 
-    SELECT id, ctime, %s as horn, tootee, tooter = tootee AS own, toot
+    SELECT id, ctime, %s as horn, tooter, tootee, tooter = tootee AS own, toot
       FROM toots
      WHERE (  tootee = %s
            OR tootee IN ( SELECT tippee
@@ -27,7 +27,7 @@ SQL_SELF = """
 
 SQL_OTHER = """
 
-    SELECT id, ctime, %s as horn, tootee, tooter = tootee AS own, toot
+    SELECT id, ctime, %s as horn, tooter, tootee, tooter = tootee AS own, toot
       FROM toots
      WHERE tootee = %s
        AND id > %s

@@ -28,28 +28,28 @@ Gittip.horn.draw = function(toots)
         Gittip.horn.since_id = toot.id;
         Gittip.horn.drawOne(toot);
     }
-    Gittip.horn.handle = setTimeout(Gittip.horn.update, 1000)
+    Gittip.horn.handle = setTimeout(Gittip.horn.update, 10000)
 };
 
 Gittip.horn.drawOne = function(toot)
 {
     var escaped = $('<div>').text(toot.toot).html();
-    var html = '<li class="'
+    var html = '<li class="box '
              + (toot.horn === toot.tootee ? 'me' : 'them')
              + ' '
              + (toot.own ? 'own' : 'theirs')
-             + '"><span class="toot">'
-             + ( toot.tootee !== toot.horn && !toot.own
-               ? 're: ' + toot.tootee + ': '
-               : ''
+             + '"><div class="toot">' + escaped + '</div>'
+             + '<div class="nav level-1">'
+             + ( toot.own
+               ? 'You'
+               : '<a href="/' + toot.tooter + '/">' + toot.tooter + '</a>'
                 )
-             + escaped
-             + ( toot.tootee !== toot.horn && toot.own
-               ? '&mdash;' + toot.tootee
-               : ''
+             + ' tooted '
+             + ( toot.horn === toot.tootee
+               ? (toot.own ? 'your own' : 'your')
+               : '<a href="/' + toot.tootee + '/">' + toot.tootee + '\'s</a>'
                 )
-             + '</div>'
-             + '</span>'
+             + ' horn</div>'
              + '</li>'
     $('#toots').prepend(html)
 };
