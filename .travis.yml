@@ -3,7 +3,7 @@ before_script:
  - make tests/env
  - echo "YES_PLEASE_DELETE_ALL_MY_DATA_VERY_OFTEN=Pretty please, with sugar on top." >> tests/env
  - echo "DATABASE_URL=postgres://postgres@localhost/gittip-test" >> tests/env
- - psql -U postgres -c "CREATE DATABASE gittip-test;"
+ - psql -U postgres -c 'CREATE DATABASE "gittip-test";'
  - make test-schema
 script: make test
 notifications:
