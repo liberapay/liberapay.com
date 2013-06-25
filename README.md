@@ -11,6 +11,13 @@ $ make db
 $ make run
 ```
 
+And/or:
+
+```
+$ make test-db
+$ make test
+```
+
 
 Table of Contents
 =================
