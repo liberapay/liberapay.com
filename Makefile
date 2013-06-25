@@ -39,13 +39,13 @@ local.env:
 	echo
 	cp default_local.env local.env
 
-clouddb: local.env
+cloud-db: env local.env
 	echo DATABASE_URL=`./$(env_bin)/python -c 'import requests; print requests.get("http://api.postgression.com/").text'` >> local.env
 
-db: env local.env
+schema: env local.env
 	./$(env_bin)/swaddle local.env ./makedb.sh
 
-data: db
+data:
 	./$(env_bin)/swaddle local.env ./$(env_bin)/fake_data fake_data
 
 run: env local.env
@@ -56,10 +56,13 @@ run: env local.env
 		--changes_reload=yes \
 		--network_address=:8537
 
-test-db: env tests/env
+test-cloud-db: env tests/env
+	echo DATABASE_URL=`./$(env_bin)/python -c 'import requests; print requests.get("http://api.postgression.com/").text'` >> tests/env
+
+test-schema: env tests/env
 	./$(env_bin)/swaddle tests/env ./makedb.sh
 
-test: env tests/env test-db
+test: env tests/env test-schema
 	./$(env_bin)/swaddle tests/env ./$(env_bin)/nosetests ./tests/
 
 tests: test
