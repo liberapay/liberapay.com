@@ -48,6 +48,8 @@ schema: env local.env
 data:
 	./$(env_bin)/swaddle local.env ./$(env_bin)/fake_data fake_data
 
+db: cloud-db schema data
+
 run: env local.env
 	./$(env_bin)/swaddle local.env ./$(env_bin)/aspen \
 		--www_root=www/ \
