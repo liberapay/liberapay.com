@@ -39,19 +39,14 @@ fi
 # extract the path (if any)
 path="`echo $url | grep / | cut -d/ -f2-`"
 
-PGUSER=$user
-PGPASSWORD=$pass
-PGHOST=$host
-PGPORT=$port
-PGDATABASE=$path
+export PGUSER=$user
+export PGPASSWORD=$pass
+export PGHOST=$host
+export PGPORT=$port
+export PGDATABASE=$path
 
-
-echo $user
-echo $pass
-echo $host
-echo $port
-echo $path
-
+echo 'PG environment variables:'
+env | grep ^PG
 
 echo "=============================================================================="
 
