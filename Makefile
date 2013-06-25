@@ -42,6 +42,12 @@ local.env:
 clouddb: local.env
 	echo DATABASE_URL=`./$(env_bin)/python -c 'import requests; print requests.get("http://api.postgression.com/").text'` >> local.env
 
+db: env local.env
+	./$(env_bin)/swaddle local.env ./makedb.sh
+
+data: db
+	./$(env_bin)/swaddle local.env ./$(env_bin)/fake_data fake_data
+
 run: env local.env
 	./$(env_bin)/swaddle local.env ./$(env_bin)/aspen \
 		--www_root=www/ \
@@ -50,7 +56,10 @@ run: env local.env
 		--changes_reload=yes \
 		--network_address=:8537
 
-test: env tests/env data
+test-db: env tests/env
+	./$(env_bin)/swaddle tests/env ./makedb.sh
+
+test: env tests/env test-db
 	./$(env_bin)/swaddle tests/env ./$(env_bin)/nosetests ./tests/
 
 tests: test
@@ -63,12 +72,6 @@ tests/env:
 	echo "Creating a tests/env file ..."
 	echo
 	cp default_tests.env tests/env
-
-data: env
-	./makedb.sh gittip-test gittip-test
-
-fake_data: env local.env
-	./$(env_bin)/swaddle local.env ./$(env_bin)/fake_data fake_data
 
 css:
 	scss -t compressed scss/gittip.scss gittip.css
