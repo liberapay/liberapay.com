@@ -7,6 +7,7 @@ participant = get_participant(request, restrict=False)
 hero = "Horn"
 title = "%s - %s" % (participant.username, hero)
 locked = False
+username = participant.username
 
 # ========================================================================== ^L
 {% extends templates/profile.html %}
