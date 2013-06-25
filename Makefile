@@ -64,6 +64,8 @@ test-cloud-db: env tests/env
 test-schema: env tests/env
 	./$(env_bin)/swaddle tests/env ./makedb.sh
 
+test-db: test-cloud-db test-schema
+
 test: env tests/env test-schema
 	./$(env_bin)/swaddle tests/env ./$(env_bin)/nosetests ./tests/
 
