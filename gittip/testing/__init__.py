@@ -37,21 +37,6 @@ DUMMY_BOUNTYSOURCE_JSON = u'{"slug": "6-corytheboyd","updated_at": "2013-05-24T0
 def create_schema(db):
     db.execute(SCHEMA)
 
-GITHUB_USERS = [ ("1775515", "lgtest")
-               , ("1903357", "lglocktest")
-               , ("1933953", "gittip-test-0")
-               , ("1933959", "gittip-test-1")
-               , ("1933965", "gittip-test-2")
-               , ("1933967", "gittip-test-3")
-                ]
-
-def populate_db_with_dummy_data(db):
-    from gittip.elsewhere.github import GitHubAccount
-    from gittip.participant import Participant
-    for user_id, login in GITHUB_USERS:
-        account = GitHubAccount(user_id, {"id": user_id, "login": login})
-        Participant(account.participant).change_username(login)
-
 
 class Harness(unittest.TestCase):
 
@@ -88,7 +73,6 @@ class GittipBaseDBTest(unittest.TestCase):
 
     """
     def setUp(self):
-        populate_db_with_dummy_data(self.db)
         self.conn = self.db.get_connection()
 
     @classmethod
@@ -273,8 +257,3 @@ def load_simplate(path):
     test_website.hooks.run('inbound_late', request)
 
     return resources.get(request)
-
-if __name__ == "__main__":
-    """ One additional DB connection during testing occurs """
-    db = wireup.db()
-    populate_db_with_dummy_data(db)
