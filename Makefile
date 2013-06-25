@@ -43,7 +43,7 @@ cloud-db: env local.env
 	echo DATABASE_URL=`./$(env_bin)/python -c 'import requests; print requests.get("http://api.postgression.com/").text'` >> local.env
 
 schema: env local.env
-	./$(env_bin)/swaddle local.env ./makedb.sh
+	./$(env_bin)/swaddle local.env ./recreate-schema.sh
 
 data:
 	./$(env_bin)/swaddle local.env ./$(env_bin)/fake_data fake_data
@@ -62,7 +62,7 @@ test-cloud-db: env tests/env
 	echo DATABASE_URL=`./$(env_bin)/python -c 'import requests; print requests.get("http://api.postgression.com/").text'` >> tests/env
 
 test-schema: env tests/env
-	./$(env_bin)/swaddle tests/env ./makedb.sh
+	./$(env_bin)/swaddle tests/env ./recreate-schema.sh
 
 test-db: test-cloud-db test-schema
 

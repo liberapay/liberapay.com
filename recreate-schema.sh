@@ -4,7 +4,7 @@ set -e
 
 # Make a database for Gittip.
 #
-#   usage: DATABASE_URL=postgres://foo:bar@baz:5234/buz makedb.sh
+#   usage: DATABASE_URL=postgres://foo:bar@baz:5234/buz recreate-schema.sh
 
 
 # Parse DATABASE_URL

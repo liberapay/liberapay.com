@@ -1,12 +1,13 @@
 
--- Enforce UTC 
+-- Enforce UTC
 -- ===========
 -- The production db is already in UTC (presumably per postgresql.conf). We
 -- need local dev dbs to also use UTC, but we don't want to make users edit
 -- postgresql.conf themselves, nor do we want to clutter schema.sql with this,
 -- nor do we want to do it in the application layer per-session. So it's here
--- instead, and is applied in makedb.sh. From the docs on ALTER DATABASE:
--- 
+-- instead, and is applied in recreate-schema.sh. From the docs on ALTER
+-- DATABASE:
+--
 --      The remaining forms change the session default for a run-time
 --      configuration variable for a PostgreSQL database. Whenever a new
 --      session is subsequently started in that database, the specified value
@@ -15,7 +16,7 @@
 --      received from the postgres command line."
 --
 --      http://www.postgresql.org/docs/current/static/sql-alterdatabase.html
--- 
+--
 -- See also:
 --
 --      "Time Zones"
