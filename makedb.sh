@@ -4,19 +4,19 @@ set -e
 
 # Make a database for Gittip.
 #
-#   usage: makedb.sh {dbname} {owner}
+#   usage: makedb.sh
 
-DBNAME_DEFAULT=gittip
-DBNAME=${1:-$DBNAME_DEFAULT}
-
-OWNER_DEFAULT=$DBNAME
-OWNER=${2:-$OWNER_DEFAULT}
+if [ "$DATABASE_URL" = "" ]; then 
+    echo "You need to source a configuration environment, like default_tests.env or something.";
+exit 1; fi
 
 
-echo "=============================================================================="
-printf "Creating user ... "
+PGHOST=$DATABASE_URL
+PGPORT=$DATABASE_URL
+PGDATABASE=$DATABASE_URL
+PGUSER=$DATABASE_URL
+PGPASSWORD=$DATABASE_URL
 
-createuser -s $OWNER && echo "done" || :
 
 echo "=============================================================================="
 printf "Dropping db ... "
