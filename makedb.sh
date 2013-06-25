@@ -7,11 +7,15 @@ set -e
 #   usage: DATABASE_URL=postgres://foo:bar@baz:5234/buz makedb.sh
 
 
+# Parse DATABASE_URL
+# ==================
+# We will export PG* envvars based on the contents of DATABASE_URL. For 
+# envvars, see http://www.postgresql.org/docs/current/static/libpq-envars.html
+# I committed this but @pjz wrote it: https://gist.github.com/pjz/5855367.
+
 if [ "$DATABASE_URL" = "" ]; then 
     echo "Please set DATABASE_URL, perhaps by sourcing default_tests.env or something.";
 exit 1; fi
-
-# I'm committing this but @pjz wrote it: https://gist.github.com/pjz/5855367
 
 # extract the protocol
 proto="`echo $DATABASE_URL | grep '://' | sed -e's,^\(.*://\).*,\1,g'`"
@@ -39,6 +43,7 @@ fi
 # extract the path (if any)
 path="`echo $url | grep / | cut -d/ -f2-`"
 
+# export envvars for psql
 export PGUSER=$user
 export PGPASSWORD=$pass
 export PGHOST=$host
@@ -47,6 +52,7 @@ export PGDATABASE=$path
 
 echo 'PG environment variables:'
 env | grep ^PG
+
 
 echo "=============================================================================="
 
