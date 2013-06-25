@@ -4,43 +4,81 @@ set -e
 
 # Make a database for Gittip.
 #
-#   usage: makedb.sh {dbname} {owner}
+#   usage: DATABASE_URL=postgres://foo:bar@baz:5234/buz makedb.sh
 
-DBNAME_DEFAULT=gittip
-DBNAME=${1:-$DBNAME_DEFAULT}
 
-OWNER_DEFAULT=$DBNAME
-OWNER=${2:-$OWNER_DEFAULT}
+if [ "$DATABASE_URL" = "" ]; then 
+    echo "Please set DATABASE_URL, perhaps by sourcing default_tests.env or something.";
+exit 1; fi
+
+# I'm committing this but @pjz wrote it: https://gist.github.com/pjz/5855367
+
+# extract the protocol
+proto="`echo $DATABASE_URL | grep '://' | sed -e's,^\(.*://\).*,\1,g'`"
+# remove the protocol
+url=`echo $DATABASE_URL | sed -e s,$proto,,g`
+ 
+# extract the user (if any)
+userpass="`echo $url | grep @ | cut -d@ -f1`"
+pass=`echo $userpass | grep : | cut -d: -f2`
+if [ -n "$pass" ]; then
+    user=`echo $userpass | grep : | cut -d: -f1`
+else
+    user=$userpass
+fi
+ 
+# extract the host
+hostport=`echo $url | sed -e s,$userpass@,,g | cut -d/ -f1`
+port=`echo $hostport | grep : | cut -d: -f2`
+if [ -n "$port" ]; then
+    host=`echo $hostport | grep : | cut -d: -f1`
+else
+    host=$hostport
+fi
+ 
+# extract the path (if any)
+path="`echo $url | grep / | cut -d/ -f2-`"
+
+PGUSER=$user
+PGPASSWORD=$pass
+PGHOST=$host
+PGPORT=$port
+PGDATABASE=$path
+
+
+echo $user
+echo $pass
+echo $host
+echo $port
+echo $path
 
 
 echo "=============================================================================="
-printf "Creating user ... "
 
-createuser -s $OWNER && echo "done" || :
+# I got the idea for dropping the schema as a way to clear out the db from
+# http://www.postgresql.org/message-id/200408241254.19075.josh@agliodbs.com. On
+# Heroku Postgres we don't have permission to drop and create the db as a 
+# whole.
 
-echo "=============================================================================="
-printf "Dropping db ... "
+echo "Recreating public schema ... "
+echo "DROP SCHEMA public CASCADE" | psql
+echo "CREATE SCHEMA public" | psql
 
-dropdb $DBNAME && echo "done" || :
-
-echo "=============================================================================="
-printf "Creating db ... "
-
-createdb $DBNAME -O $OWNER && echo "done"
 
 echo "=============================================================================="
 echo "Applying schema.sql ..."
 echo 
 
-psql -U $OWNER $DBNAME < enforce-utc.sql
-psql -U $OWNER $DBNAME < schema.sql
+psql < enforce-utc.sql
+psql < schema.sql
+
 
 echo "=============================================================================="
 echo "Looking for branch.sql ..."
 echo 
 
 if [ -f branch.sql ]
-then psql -U $OWNER $DBNAME < branch.sql
+then psql < branch.sql
 else echo "None found."
 fi
 
