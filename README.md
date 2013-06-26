@@ -388,6 +388,14 @@ The Gittip API is comprised of these endpoints:
             - `https://api.twitter.com/1.1/users/show.json?id=%twitter_immutable_id&include_entities=1`
 
 
+ - **/`%username`/tips.json**
+   ([source](https://github.com/gittip/www.gittip.com/tree/master/www/%25username/tips.json))&mdash;Responds
+    to `GET` with a list of objects representing your current tips. `POST` the 
+    same structure back in order to update tips in bulk. This endpoint requires
+    authentication.  Look for your API key on your profile page, and pass it as
+    the basic auth username.
+
+
 Glossary
 ========
 
