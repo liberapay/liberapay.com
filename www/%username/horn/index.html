@@ -27,10 +27,8 @@ username = participant.username
             <span>
             {% if user == participant %}
             What have you done today that's awesome? Don't be shy!<br />
-            Anyone who gave you money last week will see this on their Horn.
             {% else %}
             Thank {{ participant.username }} for something!<br />
-            This will be public on their Horn (without your name attached).
             {% end %}
             </span>
             <button id="toot-button" type="submit">Toot</button>

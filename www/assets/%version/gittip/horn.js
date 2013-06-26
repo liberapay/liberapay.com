@@ -34,20 +34,30 @@ Gittip.horn.draw = function(toots)
 Gittip.horn.drawOne = function(toot)
 {
     var escaped = $('<div>').text(toot.toot).html();
+    var TOOTER = '<a href="/' + toot.tooter + '/">' + toot.tooter + '</a>';
+    var TOOTEE = '<a href="/' + toot.tootee + '/">' + toot.tootee + '</a>';
     var html = '<li class="box '
              + (toot.horn === toot.tootee ? 'me' : 'them')
              + ' '
-             + (toot.own ? 'own' : 'theirs')
+             + (toot.tooter_is_tootee ? 'own' : 'theirs')
              + '"><div class="toot">' + escaped + '</div>'
              + '<div class="nav level-1">'
-             + ( toot.own
-               ? 'You'
-               : '<a href="/' + toot.tooter + '/">' + toot.tooter + '</a>'
-                )
+
+             /* [someone] tooted [someone]'s horn
+              *
+              * alice     tooted their own   horn
+              * alice     tooted your        horn
+              * alice     tooted bob      's horn
+              * You       tooted your own    horn
+              * You       tooted bob      's horn
+              *
+              */
+
+             + ( toot.user_is_tooter ? 'You' : TOOTER)
              + ' tooted '
-             + ( toot.horn === toot.tootee
-               ? (toot.own ? 'your own' : 'your')
-               : '<a href="/' + toot.tootee + '/">' + toot.tootee + '</a>\'s'
+             + ( toot.user_is_tootee
+               ? (toot.user_is_tooter ? 'your own' : 'your')
+               : (toot.tooter_is_tootee ? 'their own' : TOOTEE + "'s")
                 )
              + ' horn</div>'
              + '</li>'
