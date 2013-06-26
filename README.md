@@ -459,3 +459,4 @@ and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
  - [LoveMachine](http://web.archive.org/web/20110214110248/http://sendlove.us/trial/faq.php) - "the cool new employee recognition system" (supposedly came out of Linden Lab)
  - [See.Me](https://www.see.me/) - sustainable crowdfunding for artists
  - [NoiseTrade](http://www.noisetrade.com/) - band mailing lists + tips
+ - [YouTube Nonprofit Program](http://www.youtube.com/nonprofits) - puts donate buttons on your vids
