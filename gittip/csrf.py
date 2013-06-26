@@ -11,6 +11,7 @@ import rfc822
 import re
 import time
 import urlparse
+from aspen import log_dammit
 
 
 #from django.utils.cache import patch_vary_headers
@@ -125,6 +126,7 @@ def inbound(request):
             good_referer = 'https://%s/' % _get_host(request)
             if not same_origin(referer, good_referer):
                 reason = REASON_BAD_REFERER % (referer, good_referer)
+                log_dammit(reason)
                 raise Response(403, reason)
 
         if csrf_token is None:
