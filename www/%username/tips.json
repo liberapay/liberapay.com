@@ -8,6 +8,8 @@ class BadPlatform(Exception): pass
 
 # ==================== ^L
 participant = get_participant(request, restrict=True)
+if user != participant:
+    raise Response(403) # disallow admins
 
 if POST:
     out = []
