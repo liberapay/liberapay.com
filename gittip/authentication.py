@@ -6,6 +6,7 @@ import time
 
 import pytz
 from aspen import Response
+from gittip import csrf
 from gittip.orm import db
 from gittip.models import User
 
@@ -27,6 +28,12 @@ def inbound(request):
             creds = header[len('Basic '):].decode('base64')
             token, ignored = creds.split(':')
             user = User.from_api_key(token)
+
+            # We don't require CSRF if they basically authenticated.
+            csrf_token = csrf._get_new_csrf_key()
+            request.headers.cookie['csrf_token'] = csrf_token
+            request.headers['X-CSRF-TOKEN'] = csrf_token
+
     if user is None:
         user = User()
     request.context['user'] = user

@@ -39,8 +39,8 @@ website.bountysource_callback = os.environ['BOUNTYSOURCE_CALLBACK'].decode('ASCI
 
 website.hooks.inbound_early += [ gittip.canonize
                                , gittip.configure_payments
-                               , gittip.csrf.inbound
                                , gittip.authentication.inbound
+                               , gittip.csrf.inbound
                                 ]
 website.hooks.outbound += [ gittip.authentication.outbound
                           , gittip.csrf.outbound
