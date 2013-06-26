@@ -334,4 +334,33 @@ $(document).ready(function()
              }
         );
     });
+
+
+    // Wire up API Key
+    // ===============
+    //
+    function hit_api_key(method)
+    {
+        return function()
+        {
+            jQuery.ajax(
+                { url: 'api-key.json'
+                , type: method
+                , dataType: 'json'
+                , data: {action: 'show'}
+                , success: function(d)
+                {
+                    $('.api-key span').text(d.api_key);
+                }
+                 }
+            );
+        }
+    }
+
+    $('.api-key .show').click(hit_api_key('GET'));
+    $('.api-key .hide').click(function()
+    {
+        $('.api-key span').text('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx');
+    });
+    $('.api-key .recreate').click(hit_api_key('POST'));
 });

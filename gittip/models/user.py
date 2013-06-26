@@ -15,6 +15,14 @@ class User(Participant):
 
     @classmethod
     def from_session_token(cls, token):
+        return cls._from_token(User.session_token, token)
+
+    @classmethod
+    def from_api_key(cls, token):
+        return cls._from_token(User.api_key, token)
+
+    @classmethod
+    def _from_token(cls, field, token):
 
         # This used to read User.query.filter_by(session_token=token), but that
         # generates "session_token is NULL" when token is None, and we need
@@ -22,13 +30,14 @@ class User(Participant):
         # This is a bit of WTF from SQLAlchemy here, IMO: it dangerously opts
         # for idiomatic Python over idiomatic SQL. We fell prey, at least. :-/
 
-        user = User.query.filter(User.session_token.op('=')(token)).first()
+        user = User.query.filter(field.op('=')(token)).first()
 
         if user and not user.is_suspicious:
             user = user
         else:
             user = User()
         return user
+
 
     @classmethod
     def from_username(cls, username):

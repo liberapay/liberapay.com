@@ -2,6 +2,7 @@
 """
 import random
 import re
+import uuid
 from decimal import Decimal
 
 import gittip
@@ -116,6 +117,17 @@ class Participant(object):
 
         """
         return gittip.db.fetchone(SELECT, (self.username,))
+
+
+    # API Key
+    # =======
+
+    @require_username
+    def recreate_api_key(self):
+        api_key = str(uuid.uuid4())
+        SQL = "UPDATE participants SET api_key=%s WHERE username=%s"
+        gittip.db.execute(SQL, (api_key, self.username))
+        return api_key
 
 
     # Claiming

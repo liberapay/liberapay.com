@@ -15,12 +15,19 @@ TIMEOUT = 60 * 60 * 24 * 7 # one week
 
 
 def inbound(request):
-    """Authenticate from a cookie.
+    """Authenticate from a cookie or an API key in basic auth.
     """
+    user = None
     if 'session' in request.headers.cookie:
         token = request.headers.cookie['session'].value
         user = User.from_session_token(token)
-    else:
+    elif 'Authorization' in request.headers:
+        header = request.headers['authorization']
+        if header.startswith('Basic '):
+            creds = header[len('Basic '):].decode('base64')
+            token, ignored = creds.split(':')
+            user = User.from_api_key(token)
+    if user is None:
         user = User()
     request.context['user'] = user
 

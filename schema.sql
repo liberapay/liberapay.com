@@ -687,3 +687,48 @@ CREATE TABLE toots
                                      ON UPDATE CASCADE ON DELETE RESTRICT
 , toot              text            NOT NULL
  );
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/issues/1085
+
+BEGIN;
+
+    -- Create an api_keys table to track all api_keys a participant has
+    -- created over time.
+    CREATE TABLE api_keys
+    ( id                serial                      PRIMARY KEY
+    , ctime             timestamp with time zone    NOT NULL
+    , mtime             timestamp with time zone    NOT NULL
+                                                    DEFAULT CURRENT_TIMESTAMP
+    , participant       text                        NOT NULL
+                                                    REFERENCES participants
+                                                    ON UPDATE CASCADE
+                                                    ON DELETE RESTRICT
+    , api_key        text                        NOT NULL UNIQUE
+     );
+
+
+    --
+    ALTER TABLE participants ADD COLUMN api_key text DEFAULT NULL;
+
+
+    -- Create a rule to log changes to participant.api_key into api_keys.
+    CREATE RULE log_api_key_changes
+    AS ON UPDATE TO participants
+              WHERE (OLD.api_key IS NULL AND NOT NEW.api_key IS NULL)
+                 OR (NEW.api_key IS NULL AND NOT OLD.api_key IS NULL)
+                 OR NEW.api_key <> OLD.api_key
+                 DO
+        INSERT INTO api_keys
+                    (ctime, participant, api_key)
+             VALUES ( COALESCE (( SELECT ctime
+                                    FROM api_keys
+                                   WHERE participant=OLD.username
+                                   LIMIT 1
+                                 ), CURRENT_TIMESTAMP)
+                    , OLD.username
+                    , NEW.api_key
+                     );
+
+END;

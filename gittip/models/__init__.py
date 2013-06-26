@@ -7,6 +7,7 @@ from gittip.models.tip import Tip
 from gittip.models.transfer import Transfer
 from gittip.models.user import User
 from gittip.models.goal import Goal
+from gittip.models.api_key import APIKey
 
 
 # We actually don't want this one in here, because the only reason afaict for

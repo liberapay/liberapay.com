@@ -53,6 +53,7 @@ class Participant(db.Model):
     goal = Column(Numeric(precision=35, scale=2), default=None)
     balanced_account_uri = Column(Text)
     last_ach_result = Column(Text)
+    api_key = Column(Text)
     is_suspicious = Column(Boolean)
     type = Column(Enum('individual', 'group', 'open group', nullable=False))
 
@@ -426,3 +427,6 @@ class Participant(db.Model):
     def take_over(self, account_elsewhere, have_confirmation=False):
         OldParticipant(self.username).take_over(account_elsewhere,
                                                 have_confirmation)
+
+    def recreate_api_key(self):
+        return OldParticipant(self.username).recreate_api_key()
