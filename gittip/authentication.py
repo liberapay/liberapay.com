@@ -34,7 +34,7 @@ def inbound(request):
             request.headers.cookie['csrf_token'] = csrf_token
             request.headers['X-CSRF-TOKEN'] = csrf_token
             if 'Referer' not in request.headers:
-                request.headers['Referer'] = request.headers['Host']
+                request.headers['Referer'] = csrf._get_host(request)
 
     if user is None:
         user = User()
