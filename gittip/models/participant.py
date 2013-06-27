@@ -346,15 +346,6 @@ class Participant(db.Model):
 
         """, (self.username,)))
 
-    def compute_split(self):
-        if not self.IS_OPEN_GROUP:
-            return [{"username": self.username, "weight": "1.0"}]
-
-        members = self.get_members()
-        for member in members:
-            member['take'] /= 1000.0
-        return members
-
     def get_teams_membership(self):
         TAKE = "SELECT sum(take) FROM current_memberships WHERE team=%s"
         total_take = gittip.db.fetchone(TAKE, (self.username,))['sum']

@@ -1,8 +1,0 @@
-"""Endpoint to record identifications
-"""
-from gittip.utils import get_participant
-
-# ================= ^L
-
-participant = get_participant(request, restrict=False)
-response.body = participant.compute_split()
