@@ -7,6 +7,12 @@ Gittip.team.TeamCtrl = function($scope, $http)
         $scope.members = data;
     }
 
+    $scope.isCurrentUser = function(member)
+    {
+        console.log(member.is_current_user, member);
+        return member.is_current_user;
+    };
+
     $scope.doLookup = function()
     {
         if ($scope.query == '')
@@ -22,6 +28,18 @@ Gittip.team.TeamCtrl = function($scope, $http)
         $scope.lookup = [];
         $scope.query = '';
         jQuery('#query').focus();
+    };
+
+    var updateHandle = null;
+    $scope.doUpdate = function()
+    {
+        clearTimeout(updateHandle);
+        updateHandle = setTimeout(function()
+        {
+            if ($scope.take.search(/^\d+\.?\d*$/) !== 0)
+                return;
+            $scope.change($scope.member, $scope.take);
+        }, 500);
     };
 
     $scope.change = function(participant, take)
@@ -61,6 +79,7 @@ Gittip.team.TeamCtrl = function($scope, $http)
  */
 
 Gittip.team.directive('uiIf', [function () {
+    console.log('anything?');
   return {
     transclude: 'element',
     priority: 1000,

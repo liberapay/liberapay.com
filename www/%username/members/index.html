@@ -70,6 +70,9 @@ github_account, twitter_account, bitbucket_account, bountysource_account = \
           <tr ng-repeat="member in members">
             <td><a href="/&#123;{ member.username }}/">&#123;{ member.username }}</a></td>
             <td class="figure take">
+              <input tabindex="1" id="take"
+                     ng-model="take"
+                     ng-change="doUpdate()" />
               &#123;{ member.take | number:2 }}
             </td>
             <td class="figure balance">
