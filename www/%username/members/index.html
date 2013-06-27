@@ -39,6 +39,14 @@ github_account, twitter_account, bitbucket_account, bountysource_account = \
             <th class="figure">Balance ($)</th>
             <th class="figure">Take (%)</th>
           </tr>
+          <tr>
+            <td></td>
+            <td class="figure take"></td>
+            <td class="figure balance">
+              {{ participant.get_dollars_receiving() }}
+            </td>
+            <td class="figure percentage"></td>
+          </tr>
           {% if user == team %}
           <tr>
             <td colspan="2" id="lookup-container">
