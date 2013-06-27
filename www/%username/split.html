@@ -5,10 +5,10 @@ from gittip.utils import get_participant
 
 # ========================================================================== ^L
 
-participant = get_participant(request, restrict=False)
-if participant.type != 'open group':
+team = get_participant(request, restrict=False)
+if team.type != 'open group':
     request.redirect('./')
-allowed_to_vote_on = user.allowed_to_vote_on(participant)
+allowed_to_vote_on = user.member_of(team)
 locked = False
 tip_or_pledge = "tip"
 hero = "Profile"
@@ -28,7 +28,7 @@ github_account, twitter_account, bitbucket_account, bountysource_account = \
         document.write(unescape("%3Cscript src='/assets/angular-1.0.6.min.js'%3E%3C/script%3E"));
 </script>
 
-<script src="/assets/{{ __version__ }}/open_group.js"></script>
+<script src="/assets/{{ __version__ }}/gittip/team.js"></script>
 
 <div id="open_group" class="col0" ng-app="Gittip.open_group">
 
