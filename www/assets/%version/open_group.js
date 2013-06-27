@@ -33,7 +33,7 @@ Gittip.open_group.IdentificationsCtrl = function($scope, $http)
         console.log("changing", participant.username, "to", weight);
         var data = { member: participant.username
                    , weight: weight
-                   , csrf_token: Gittip.getCookie('csrf_token')
+                   , csrf_token: getCookie('csrf_token')
                     };
         // http://stackoverflow.com/questions/12190166/
         data = jQuery.param(data);
