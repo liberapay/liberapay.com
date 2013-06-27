@@ -358,7 +358,7 @@ class Participant(db.Model):
     def get_teams_membership(self):
         TAKE = "SELECT sum(take) FROM current_memberships WHERE team=%s"
         total_take = gittip.db.fetchone(TAKE, (self.username,))['sum']
-        team_take = self.get_dollars_receiving() - total_take
+        team_take = max(self.get_dollars_receiving() - total_take, 0)
         membership = { "ctime": None
                      , "mtime": None
                      , "username": self.username
@@ -375,9 +375,10 @@ class Participant(db.Model):
                 member['is_current_user'] = True
             take = member['take']
             member['take'] = take
-            balance -= take
+            amount = min(take, balance)
+            balance -= amount
             member['balance'] = balance
-            member['percentage'] = take / budget
+            member['percentage'] = (amount / budget) if budget > 0 else 0
         return members
 
 
