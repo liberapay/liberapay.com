@@ -313,7 +313,7 @@ class Participant(db.Model):
         """Given a Participant object, return a boolean.
         """
         for member in team.get_members():
-            if member == self.username:
+            if member['username'] == self.username:
                 return True
         return False
 
