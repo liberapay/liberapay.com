@@ -21,12 +21,25 @@
         padding-left: 18px;
         text-align: left;
     }
-    div.login {
+    .sign-in, .you-are {
         padding-top: 18px;
         position: absolute;
         top: 0;
         right: 0;
         font: normal 13px $Helvetica;
+        text-align: right;
+    }
+    .you-are {
+        padding-top: 4px;
+        .quick-stats {
+            font: normal 11px/13px $Helvetica;
+            a {
+                color: $brown;
+                &:hover {
+                    color: $green;
+                }
+            }
+        }
     }
 }
 

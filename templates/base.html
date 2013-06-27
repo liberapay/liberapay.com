@@ -56,18 +56,20 @@
             </td><td class="motto luxury">
             Distributed Genius Grants
         </td></tr></table>
-        <div class="login">
-            {% if user.ANON %}
-            <div id="you-are">
-                {% include sign-in-using.html %}
-            </div>
-            {% else %}
-            <div id="you-are">
-                You are <a href="/{{ user.username }}/">{{ user.username }}</a>.
-                <a href="/sign-out.html">Sign out</a>.
-            </div>
-            {% end %}
+        {% if user.ANON %}
+        <div class="sign-in">
+          {% include sign-in-using.html %}
         </div>
+        {% else %}
+        <div class="you-are">
+            <a href="/{{ user.username }}/">{{ user.username }}</a> &ndash;
+            <a href="/sign-out.html">sign out</a>
+            <div class="quick-stats">
+              Giving: <a href="/{{ user.username }}/giving/">${{ user.get_dollars_giving() }}/wk</a><br />
+              Receiving: <b>${{ user.get_dollars_receiving() }}/wk</b>
+            </div>
+        </div>
+        {% end %}
     </div></div>
 
     <div id="hero">
