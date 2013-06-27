@@ -1,0 +1,19 @@
+"""Endpoint to record identifications
+"""
+from aspen import Response
+from gittip.utils import get_participant
+
+# ================= ^L
+
+request.allow('GET')
+team = get_participant(request, restrict=False)
+if not team.type == 'open group':
+    raise Response(404)
+
+members = team.get_members()
+for member in members:
+    if member['username'] == user.username:
+        member['is_current_user'] = True
+    member['take'] = str(member['take'])
+
+response.body = members

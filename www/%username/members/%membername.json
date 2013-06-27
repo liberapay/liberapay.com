@@ -1,0 +1,60 @@
+"""Endpoint to record identifications
+"""
+from decimal import Decimal, InvalidOperation
+
+import gittip
+from aspen import Response
+from gittip.utils import get_participant
+from gittip.models.participant import Participant
+
+ZERO = Decimal('0.00')
+A_PENNY = Decimal('0.01')
+
+# ================= ^L
+
+request.allow('GET', 'POST')
+team = get_participant(request, restrict=False)
+if not team.type == 'open group':
+    raise Response(404)
+
+member = Participant.from_username(path['membername'])
+if member is None or member.is_suspicious:
+    raise Response(404)
+is_member = member.member_of(team)
+
+if POST:
+
+    if user not in (member, team):
+        raise Response(403)
+
+    try:
+        take = Decimal(body['take'])
+    except InvalidOperation:
+        raise Response(400, "bad take")
+
+    if member == team:
+        raise Response(400, "can't recurse")
+
+    if user == team:
+
+        # The team itself can only add new members, which means setting their
+        # take to a penny, and remove members, which means setting it to zero.
+        # Only members themselves can set their take to something greater than
+        # a penny.
+
+        if take not in (ZERO, A_PENNY):
+            raise Response(400, "bad team setting take")
+
+    elif not is_member:
+
+        # Only the team itself can add new members.
+
+        raise Response(403)
+
+    team.set_take_for(member, take)
+
+SQL = "SELECT ctime, mtime, member AS username, take::text " \
+      "FROM current_memberships WHERE team=%s AND member=%s"
+membership = gittip.db.fetchone(SQL, (team.username, member.username))
+
+response.body = membership
