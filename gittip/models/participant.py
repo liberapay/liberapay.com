@@ -87,6 +87,11 @@ class Participant(db.Model):
                              , foreign_keys="Transfer.tippee"
                               )
 
+    @classmethod
+    def from_username(cls, username):
+        # Note that User.from_username overrides this. It authenticates people!
+        return cls.query.filter_by(username_lower=username.lower()).one()
+
     def __eq__(self, other):
         return self.id == other.id
 
@@ -300,105 +305,72 @@ class Participant(db.Model):
             out = (now - self.claimed_time).total_seconds()
         return out
 
-    def allowed_to_vote_on(self, group):
+
+    # Participant as Team
+    # ===================
+
+    def member_of(self, team):
         """Given a Participant object, return a boolean.
         """
-        if self.ANON:           return False
-        if self.is_suspicious:  return False
-        if group == self:       return True
-        return self.username in group.get_voters()
+        for member in team.get_members():
+            if member['username'] == self.username:
+                return True
+        return False
 
-    def get_voters(self):
-        identifications = list(gittip.db.fetchall("""
+    def set_take_for(self, member, take):
+        typecheck(member, Participant, take, Decimal)
+        gittip.db.execute("""
 
-            SELECT member
-                 , weight
-                 , identified_by
-                 , mtime
-              FROM current_identifications
-             WHERE "group"=%s
-               AND weight > 0
-          ORDER BY mtime ASC
+            INSERT INTO memberships (ctime, member, team, take)
+             VALUES ( COALESCE (( SELECT ctime
+                                    FROM memberships
+                                   WHERE member=%s
+                                     AND team=%s
+                                   LIMIT 1
+                                 ), CURRENT_TIMESTAMP)
+                    , %s
+                    , %s
+                    , %s
+                     )
+
+        """, (member.username, self.username, member.username, self.username, \
+                                                                         take))
+
+    def get_members(self):
+        return list(gittip.db.fetchall("""
+
+            SELECT member AS username, take, ctime, mtime
+              FROM current_memberships
+             WHERE team=%s
+          ORDER BY ctime DESC
 
         """, (self.username,)))
 
-        voters = set()
-        vote_counts = defaultdict(int)
+    def get_teams_membership(self):
+        TAKE = "SELECT sum(take) FROM current_memberships WHERE team=%s"
+        total_take = gittip.db.fetchone(TAKE, (self.username,))['sum']
+        team_take = max(self.get_dollars_receiving() - total_take, 0)
+        membership = { "ctime": None
+                     , "mtime": None
+                     , "username": self.username
+                     , "take": team_take
+                      }
+        return membership
 
-        class Break(Exception): pass
-
-        while identifications:
-            try:
-                for i in range(len(identifications)):
-
-                    identification = identifications[i]
-                    identified_by = identification['identified_by']
-                    member = identification['member']
-
-                    def record():
-                        voters.add(member)
-                        identifications.pop(i)
-
-                    # Group participant itself has chosen.
-                    if identified_by == self.username:
-                        record()
-                        break
-
-                    # Group member has voted.
-                    elif identified_by in voters:
-                        vote_counts[member] += 1
-                        target = math.ceil(len(voters) * 0.667)
-                        if vote_counts[member] == target:
-                            record()
-                            break
-
-                else:
-                    # This pass through didn't find any new voters.
-                    raise Break
-            except Break:
-                break
-
-        voters = list(voters)
-        voters.sort()
-        return voters
-
-    def compute_split(self):
-        if not self.IS_OPEN_GROUP:
-            return [{"username": self.username, "weight": "1.0"}]
-
-        split = []
-
-        voters = self.get_voters()
-        identifications = gittip.db.fetchall("""
-
-            SELECT member
-                 , weight
-                 , identified_by
-                 , mtime
-              FROM current_identifications
-             WHERE "group"=%s
-               AND weight > 0
-          ORDER BY mtime ASC
-
-        """, (self.username,))
-
-        splitmap = defaultdict(int)
-        total = 0
-        for row in identifications:
-            if row['identified_by'] not in voters:
-                continue
-            splitmap[row['member']] += row['weight']
-            total += row['weight']
-
-        total = Decimal(total)
-        for username, weight in splitmap.items():
-            split.append({ "username": username
-                         , "weight": Decimal(weight) / total
-                          })
-
-        split.sort(key=lambda r: r['weight'], reverse=True)
-
-        return voters, split
+    def get_memberships(self, current_user):
+        members = self.get_members()
+        members.append(self.get_teams_membership())
+        budget = balance = self.get_dollars_receiving()
+        for member in members:
+            if member['username'] == current_user.username:
+                member['is_current_user'] = True
+            take = member['take']
+            member['take'] = take
+            amount = min(take, balance)
+            balance -= amount
+            member['balance'] = balance
+            member['percentage'] = (amount / budget) if budget > 0 else 0
+        return members
 
 
     # TODO: Move these queries into this class.

@@ -1,0 +1,86 @@
+"""Show information about a single participant. It might be you!
+"""
+from gittip import AMOUNTS
+from gittip.utils import get_participant
+
+# ========================================================================== ^L
+
+participant = team = get_participant(request, restrict=False)
+if team.type != 'open group':
+    request.redirect('../')
+locked = False
+tip_or_pledge = "tip"
+hero = "Members"
+title = team.username     # used in the title tag
+username = team.username  # used in footer shared with on/$platform/
+                                  # pages
+github_account, twitter_account, bitbucket_account, bountysource_account = \
+                                                  team.get_accounts_elsewhere()
+
+# ========================================================================== ^L
+{% extends templates/profile.html %}
+
+{% block page %}
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"></script>
+<script>
+    if (typeof angular === 'undefined')
+        document.write(unescape("%3Cscript src='/assets/angular-1.0.6.min.js'%3E%3C/script%3E"));
+</script>
+
+<script src="/assets/{{ __version__ }}/gittip/team.js"></script>
+
+<div id="team" class="col0" ng-app="Gittip.team">
+  <div class="group" ng-controller="Gittip.team.TeamCtrl">
+    <div id="split">
+      <table>
+          <tr>
+            <th>Member</th>
+            <th class="figure">Take ($)</th>
+            <th class="figure">Balance ($)</th>
+            <th class="figure">Take (%)</th>
+          </tr>
+          <tr>
+            <td></td>
+            <td class="figure take"></td>
+            <td class="figure balance">
+              {{ participant.get_dollars_receiving() }}
+            </td>
+            <td class="figure percentage"></td>
+          </tr>
+          {% if user == team %}
+          <tr>
+            <td colspan="2" id="lookup-container">
+              <form ng-submit="doAdd()">
+                  <input tabindex="1" id="query"
+                         autocomplete="off"
+                         placeholder="Enter a Gittip username"
+                         ng-model="query"
+                         ng-change="doLookup()"
+                     />&nbsp;<button type="submit"
+                                     tabindex="2">Add</button>
+              </form>
+              <ul id="lookup-results">
+                <li ng-repeat="participant in lookup">
+                  <span>&#123;{ participant.username }}</span>
+                </li>
+              </ul>
+            </td>
+          </tr>
+          {% end %}
+          <tr ng-repeat="member in members">
+            <td><a href="/&#123;{ member.username }}/">&#123;{ member.username }}</a></td>
+            <td class="figure take">
+              &#123;{ member.take | number:2 }}
+            </td>
+            <td class="figure balance">
+              &#123;{ member.balance | number:2 }}
+            </td>
+            <td class="figure percentage">
+              &#123;{ member.percentage * 100 | number:1 }}
+            </td>
+          </tr>
+      </table>
+    </div>
+  </div>
+<div>
+{% end %}

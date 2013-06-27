@@ -239,35 +239,30 @@ class Payday(object):
                 log("Pachinko done for %d participants." % i)
             if participant['type'] != 'open group':
                 continue
-            p = ORMParticipant.query.get(participant['username'])
-            voters, split = p.compute_split()
-            split.reverse()
-            top_receiver = split.pop()
+            team = ORMParticipant.query.get(participant['username'])
 
-            total = p.balance
-            given = 0
-            log("Pachinko $%s out from %s." % (total, p.username))
+            available = team.balance
+            log("Pachinko out from %s with $%s." % (team.username, available))
 
             def tip(member, amount):
                 tip = {}
-                tip['tipper'] = p.username
+                tip['tipper'] = team.username
                 tip['tippee'] = member['username']
                 tip['amount'] = amount
                 tip['claimed_time'] = ts_start
-                self.tip( {"username": p.username}
+                self.tip( {"username": team.username}
                         , tip
                         , ts_start
                         , pachinko=True
                          )
                 return tip['amount']
 
-            for member in split:
-                amount = p.balance * member['weight']
-                amount = amount.quantize(Decimal('0.00'), rounding=ROUND_UP)
-                given += tip(member, amount)
-
-            remainder = total - given
-            tip(top_receiver, remainder)
+            for member in team.get_members():
+                amount = min(member['take'], available)
+                available -= amount
+                tip(member, amount)
+                if available == 0:
+                    break
 
         log("Did pachinko for %d participants." % i)
 

@@ -22,7 +22,7 @@
     <a href="/{{ participant.username }}{{ slug }}"><button{% if slug.strip('/') == current_page %} class="selected"{% end %}>{{ name }}</button></a>
     {% end %}
     {% if participant.type == 'open group' %}
-    <a href="/{{ participant.username }}/split.html"><button{% if 'split.html' == current_page %} class="selected"{% end %}>Split</button></a>
+    <a href="/{{ participant.username }}/members/"><button{% if 'members' == current_page %} class="selected"{% end %}>Members</button></a>
     {% end %}
 </div>
 {% elif participant.type == 'open group' %}
@@ -30,7 +30,7 @@
     <h2>Navigation</h2>
     <a href="/{{ participant.username }}/"><button{% if '' == current_page %} class="selected"{% end %}>Profile</button></a>
     <a href="/{{ participant.username }}/horn/"><button{% if 'horn' == current_page %} class="selected"{% end %}>Horn</button></a>
-    <a href="/{{ participant.username }}/split.html"><button{% if 'split.html' == current_page %} class="selected"{% end %}>Split</button></a>
+    <a href="/{{ participant.username }}/members/"><button{% if 'members' == current_page %} class="selected"{% end %}>Members</button></a>
 </div>
 {% else %}
 <div class="nav level-2">

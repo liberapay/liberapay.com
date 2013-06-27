@@ -1,14 +1,10 @@
-Gittip.open_group = angular.module('Gittip.open_group', []);
+Gittip.team = angular.module('Gittip.team', []);
 
-Gittip.open_group.IdentificationsCtrl = function($scope, $http)
+Gittip.team.TeamCtrl = function($scope, $http)
 {
-    $scope.weights = [0, 1, 6, 12, 25, 50, 100];
-
     function updateMembers(data)
     {
-        $scope.identifications = data.identifications;
-        $scope.voters = data.voters;
-        $scope.split = data.split;
+        $scope.members = data;
     }
 
     $scope.doLookup = function()
@@ -22,28 +18,31 @@ Gittip.open_group.IdentificationsCtrl = function($scope, $http)
 
     $scope.doAdd = function()
     {
-        $scope.change({'username': $scope.query}, $scope.weights[1]);
+        $scope.change({'username': $scope.query}, '0.01');
         $scope.lookup = [];
         $scope.query = '';
         jQuery('#query').focus();
     };
 
-    $scope.change = function(participant, weight)
+    $scope.change = function(participant, take)
     {
-        console.log("changing", participant.username, "to", weight);
-        var data = { member: participant.username
-                   , weight: weight
+
+        // The members.json endpoint takes a list of member objects so that it
+        // can be updated programmatically in bulk (as with tips.json. From
+        // this UI we only ever change one at a time, however.
+
+        var data = { take: take
                    , csrf_token: getCookie('csrf_token')
                     };
         // http://stackoverflow.com/questions/12190166/
         data = jQuery.param(data);
         var content_type = 'application/x-www-form-urlencoded; charset=UTF-8';
         var config = {headers: {'Content-Type': content_type}};
-        $http.post("members.json", data, config)
+        $http.post(participant.username + ".json", data, config)
              .success(updateMembers);
     };
 
-    $http.get("members.json").success(updateMembers);
+    $http.get("index.json").success(updateMembers);
 
     // No good way in Angular yet:
     // http://stackoverflow.com/questions/14833326/
@@ -61,7 +60,7 @@ Gittip.open_group.IdentificationsCtrl = function($scope, $http)
  * https://github.com/tigbro/jquery-mobile-angular-adapter
  */
 
-Gittip.open_group.directive('uiIf', [function () {
+Gittip.team.directive('uiIf', [function () {
   return {
     transclude: 'element',
     priority: 1000,
