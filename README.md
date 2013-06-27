@@ -337,63 +337,73 @@ a reboot.
 API
 ===
 
-The Gittip API is comprised of these endpoints:
+The Gittip API is comprised of these four endpoints:
 
- - **[/about/paydays.json](https://www.gittip.com/about/paydays.json)**
-   ([source](https://github.com/gittip/www.gittip.com/tree/master/www/about/paydays.json))&mdash;Returns an array of
-    objects, one per week, showing aggregate numbers over time. The
-    [charts](https://www.gittip.com/about/charts.html) page uses this.
+**[/about/paydays.json](https://www.gittip.com/about/paydays.json)**
+([source](https://github.com/gittip/www.gittip.com/tree/master/www/about/paydays.json))&mdash;<i>public</i>&mdash;Returns
+an array of objects, one per week, showing aggregate numbers over time. The
+[charts](https://www.gittip.com/about/charts.html) page uses this.
 
- - **[/about/stats.json](https://www.gittip.com/about/stats.json)**
-   ([source](https://github.com/gittip/www.gittip.com/tree/master/www/about/stats))&mdash;Returns an object giving a
-    point-in-time snapshot of Gittip. The
-    [stats](https://www.gittip.com/about/stats.html) page displays the same
-    info.
+**[/about/stats.json](https://www.gittip.com/about/stats.json)**
+([source](https://github.com/gittip/www.gittip.com/tree/master/www/about/stats))&mdash;<i>public</i>&mdash;Returns
+an object giving a point-in-time snapshot of Gittip. The
+[stats](https://www.gittip.com/about/stats.html) page displays the same info.
 
- - **/`%username`/public.json**
-   ([example](https://www.gittip.com/whit537/public.json),
-    [source](https://github.com/gittip/www.gittip.com/tree/master/www/%25username/public.json))&mdash;Returns
-    an object with these keys:
+**/`%username`/public.json**
+([example](https://www.gittip.com/whit537/public.json),
+[source](https://github.com/gittip/www.gittip.com/tree/master/www/%25username/public.json))&mdash;<i>public</i>&mdash;Returns an object with these keys:
 
-    - "receiving"&mdash;an estimate of the amount the given participant will
-      receive this week
+  - "receiving"&mdash;an estimate of the amount the given participant will
+    receive this week
 
-    - "my_tip"&mdash;logged-in user's tip to the Gittip participant in
-      question; possible values are:
+  - "my_tip"&mdash;logged-in user's tip to the Gittip participant in
+    question; possible values are:
 
-        - `undefined` (key not present)&mdash;there is no logged-in user
-        - "self"&mdash;logged-in user is the participant in question
-        - `null`&mdash;user has never tipped this participant
-        - "0.00"&mdash;user used to tip this participant
-        - "3.00"&mdash;user tips this participant the given amount
-        <br><br>
+      - `undefined` (key not present)&mdash;there is no logged-in user
+      - "self"&mdash;logged-in user is the participant in question
+      - `null`&mdash;user has never tipped this participant
+      - "0.00"&mdash;user used to tip this participant
+      - "3.00"&mdash;user tips this participant the given amount
+      <br><br>
 
-    - "goal"&mdash;funding goal of the given participant; possible values are:
+  - "goal"&mdash;funding goal of the given participant; possible values are:
 
-        - `undefined` (key not present)&mdash;participant is a patron (or has 0 as the goal)
-        - `null`&mdash;participant is grateful for gifts, but doesn't have a specific funding goal
-        - "100.00"&mdash;participant's goal is to receive the given amount per week
-        <br><br>
+      - `undefined` (key not present)&mdash;participant is a patron (or has 0 as the goal)
+      - `null`&mdash;participant is grateful for gifts, but doesn't have a specific funding goal
+      - "100.00"&mdash;participant's goal is to receive the given amount per week
+      <br><br>
 
-    - "elsewhere"&mdash;participant's connected accounts elsewhere; returns an object with these keys:
+  - "elsewhere"&mdash;participant's connected accounts elsewhere; returns an object with these keys:
 
-        - "bitbucket"&mdash;participant's Bitbucket account; possible values are:
-            - `undefined` (key not present)&mdash;no Bitbucket account connected
-            - `https://bitbucket.org/api/1.0/users/%bitbucket_username`
-        - "github"&mdash;participant's GitHub account; possible values are:
-            - `undefined` (key not present)&mdash;no GitHub account connected
-            - `https://api.github.com/users/%github_username`
-        - "twitter"&mdash;participant's Twitter account; possible values are:
-            - `undefined` (key not present)&mdash;no Twitter account connected
-            - `https://api.twitter.com/1.1/users/show.json?id=%twitter_immutable_id&include_entities=1`
+      - "bitbucket"&mdash;participant's Bitbucket account; possible values are:
+          - `undefined` (key not present)&mdash;no Bitbucket account connected
+          - `https://bitbucket.org/api/1.0/users/%bitbucket_username`
+      - "github"&mdash;participant's GitHub account; possible values are:
+          - `undefined` (key not present)&mdash;no GitHub account connected
+          - `https://api.github.com/users/%github_username`
+      - "twitter"&mdash;participant's Twitter account; possible values are:
+          - `undefined` (key not present)&mdash;no Twitter account connected
+          - `https://api.twitter.com/1.1/users/show.json?id=%twitter_immutable_id&include_entities=1`
 
 
- - **/`%username`/tips.json**
-   ([source](https://github.com/gittip/www.gittip.com/tree/master/www/%25username/tips.json))&mdash;Responds
-    to `GET` with a list of objects representing your current tips. `POST` the 
-    same structure back in order to update tips in bulk. This endpoint requires
-    authentication.  Look for your API key on your profile page, and pass it as
-    the basic auth username.
+**/`%username`/tips.json**
+([source](https://github.com/gittip/www.gittip.com/tree/master/www/%25username/tips.json))&mdash;<i>private</i>&mdash;Responds
+to `GET` with an array of objects representing your current tips. `POST` the
+same structure back in order to update tips in bulk. You can `POST` a partial
+array to update a subset of your tips. The response to a `POST` will be only
+the subset you updated. If the `amount` is `"error"` then there will also be an
+`error` attribute with a one-word error code.
+
+This endpoint requires authentication. Look for your API key on your [profile
+page](https://www.gittip.com/about/me.html), and pass it as the basic auth
+username. E.g.:
+
+```
+curl https://www.gittip.com/${username}/tips.json \
+  -u ${api-key}: \
+  -X POST \
+  -d'[{"username":"jsfiddle", "platform":"gittip", "amount": "1.00"}]'
+```
 
 
 Glossary
