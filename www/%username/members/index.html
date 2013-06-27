@@ -33,6 +33,12 @@ github_account, twitter_account, bitbucket_account, bountysource_account = \
   <div class="group" ng-controller="Gittip.team.TeamCtrl">
     <div id="split">
       <table>
+          <tr>
+            <th>Member</th>
+            <th class="figure">Take ($)</th>
+            <th class="figure">Balance ($)</th>
+            <th class="figure">Take (%)</th>
+          </tr>
           {% if user == team %}
           <tr>
             <td colspan="2" id="lookup-container">
@@ -55,8 +61,14 @@ github_account, twitter_account, bitbucket_account, bountysource_account = \
           {% end %}
           <tr ng-repeat="member in members">
             <td><a href="/&#123;{ member.username }}/">&#123;{ member.username }}</a></td>
-            <td class="take">
-              $&#123;{ member.take }}
+            <td class="figure take">
+              &#123;{ member.take | number:2 }}
+            </td>
+            <td class="figure balance">
+              &#123;{ member.balance | number:2 }}
+            </td>
+            <td class="figure percentage">
+              &#123;{ member.percentage * 100 | number:1 }}
             </td>
           </tr>
       </table>

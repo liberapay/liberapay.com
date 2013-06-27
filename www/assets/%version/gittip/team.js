@@ -2,24 +2,6 @@ Gittip.team = angular.module('Gittip.team', []);
 
 Gittip.team.TeamCtrl = function($scope, $http)
 {
-    function addMember(data)
-    {
-        console.log(data);
-        $scope.members.splice(0, 0, data);
-    }
-
-    function updateMember(data)
-    {
-        for (var i=0, member; member = $scope.members[i]; i++)
-        {
-            if (member.username === data.username)
-            {
-                $scope.members[i] = data;
-                break;
-            }
-        }
-    }
-
     function updateMembers(data)
     {
         $scope.members = data;
@@ -36,13 +18,13 @@ Gittip.team.TeamCtrl = function($scope, $http)
 
     $scope.doAdd = function()
     {
-        $scope.change({'username': $scope.query}, '0.01', addMember);
+        $scope.change({'username': $scope.query}, '0.01');
         $scope.lookup = [];
         $scope.query = '';
         jQuery('#query').focus();
     };
 
-    $scope.change = function(participant, take, callback)
+    $scope.change = function(participant, take)
     {
 
         // The members.json endpoint takes a list of member objects so that it
@@ -57,7 +39,7 @@ Gittip.team.TeamCtrl = function($scope, $http)
         var content_type = 'application/x-www-form-urlencoded; charset=UTF-8';
         var config = {headers: {'Content-Type': content_type}};
         $http.post(participant.username + ".json", data, config)
-             .success(callback);
+             .success(updateMembers);
     };
 
     $http.get("index.json").success(updateMembers);

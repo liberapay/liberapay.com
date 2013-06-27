@@ -319,7 +319,7 @@ class Participant(db.Model):
 
     def set_take_for(self, member, take):
         typecheck(member, Participant, take, Decimal)
-        gittip.db.fetchone("""
+        gittip.db.execute("""
 
             INSERT INTO memberships (ctime, member, team, take)
              VALUES ( COALESCE (( SELECT ctime
@@ -353,6 +353,31 @@ class Participant(db.Model):
         members = self.get_members()
         for member in members:
             member['take'] /= 1000.0
+        return members
+
+    def get_teams_membership(self):
+        TAKE = "SELECT sum(take) FROM current_memberships WHERE team=%s"
+        total_take = gittip.db.fetchone(TAKE, (self.username,))['sum']
+        team_take = self.get_dollars_receiving() - total_take
+        membership = { "ctime": None
+                     , "mtime": None
+                     , "username": self.username
+                     , "take": team_take
+                      }
+        return membership
+
+    def get_memberships(self, current_user):
+        members = self.get_members()
+        members.append(self.get_teams_membership())
+        budget = balance = self.get_dollars_receiving()
+        for member in members:
+            if member['username'] == current_user.username:
+                member['is_current_user'] = True
+            take = member['take']
+            member['take'] = take
+            balance -= take
+            member['balance'] = balance
+            member['percentage'] = take / budget
         return members
 
 

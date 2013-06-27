@@ -4,9 +4,26 @@
         font: normal 10px $Helvetica;
         text-transform: uppercase;
     }
-
+    TABLE {
+        margin: 0 auto;
+    }
     TD {
         padding-right: 0.5em;
+    }
+    TD.figure {
+        font: normal 10pt/12pt $Mono;
+        text-align: right;
+        padding: 0 0 0 1em;
+    }
+    TH {
+        font: bold 14px $Helvetica;
+        text-transform: uppercase;
+        color: $brown;
+        padding: 0 0 6pt 0;
+    }
+    TH.figure {
+        text-align: right;
+        padding-left: 1em;
     }
 
 

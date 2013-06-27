@@ -52,9 +52,14 @@ if POST:
         raise Response(403)
 
     team.set_take_for(member, take)
+    out = team.get_memberships(user)
 
-SQL = "SELECT ctime, mtime, member AS username, take::text " \
-      "FROM current_memberships WHERE team=%s AND member=%s"
-membership = gittip.db.fetchone(SQL, (team.username, member.username))
+else:
+    if member == team:
+        out = team.get_teams_membership()
+    else:
+        SQL = "SELECT ctime, mtime, member AS username, take::text " \
+              "FROM current_memberships WHERE team=%s AND member=%s"
+        out = gittip.db.fetchone(SQL, (team.username, member.username))
 
-response.body = membership
+response.body = out
