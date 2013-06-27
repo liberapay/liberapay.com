@@ -17,6 +17,7 @@ There are three pieces of information for each participant related to billing:
 
 """
 from __future__ import unicode_literals
+from urllib import quote
 
 import gittip
 import balanced
@@ -33,8 +34,9 @@ def get_balanced_account(username, balanced_account_uri):
 
     # XXX Balanced requires an email address
     # https://github.com/balanced/balanced-api/issues/20
+    # quote to work around https://github.com/gittip/www.gittip.com/issues/781
+    email_address = '{}@gittip.com'.format(quote(username))
 
-    email_address = '{}@gittip.com'.format(username)
 
     if balanced_account_uri is None:
         try:
