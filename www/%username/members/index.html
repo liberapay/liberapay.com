@@ -21,7 +21,7 @@ github_account, twitter_account, bitbucket_account, bountysource_account = \
 {% extends templates/profile.html %}
 
 {% block page %}
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.js"></script>
 <script>
     if (typeof angular === 'undefined')
         document.write(unescape("%3Cscript src='/assets/angular-1.0.6.min.js'%3E%3C/script%3E"));
@@ -71,9 +71,12 @@ github_account, twitter_account, bitbucket_account, bountysource_account = \
             <td><a href="/&#123;{ member.username }}/">&#123;{ member.username }}</a></td>
             <td class="figure take">
               <input tabindex="1" id="take"
-                     ng-model="take"
-                     ng-change="doUpdate()" />
-              &#123;{ member.take | number:2 }}
+                     ng-if="member.editing_allowed"
+                     ng-model="member.take"
+                     ng-change="doUpdate(member)" />
+              <span ng-if="!member.editing_allowed">
+                &#123;{ member.take | number:2 }}
+              </span>
             </td>
             <td class="figure balance">
               &#123;{ member.balance | number:2 }}

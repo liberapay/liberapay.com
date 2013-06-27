@@ -4,14 +4,12 @@ Gittip.team.TeamCtrl = function($scope, $http)
 {
     function updateMembers(data)
     {
+        for (var i=0, member; member=data[i]; i++)
+            // The current user, but not the team itself.
+            member.editing_allowed = member.is_current_user &&
+                                     member.ctime !== null;
         $scope.members = data;
     }
-
-    $scope.isCurrentUser = function(member)
-    {
-        console.log(member.is_current_user, member);
-        return member.is_current_user;
-    };
 
     $scope.doLookup = function()
     {
@@ -24,26 +22,34 @@ Gittip.team.TeamCtrl = function($scope, $http)
 
     $scope.doAdd = function()
     {
-        $scope.change({'username': $scope.query}, '0.01');
+        $scope.change({'username': $scope.query}, '0.01', function() {
+            alert('Member added!');
+        });
         $scope.lookup = [];
         $scope.query = '';
         jQuery('#query').focus();
     };
 
     var updateHandle = null;
-    $scope.doUpdate = function()
+    $scope.doUpdate = function(member)
     {
+        console.log(member.username, member.take);
         clearTimeout(updateHandle);
         updateHandle = setTimeout(function()
         {
-            if ($scope.take.search(/^\d+\.?\d*$/) !== 0)
+            console.log('handling update');
+            if (member.take.search(/^\d+\.?\d*$/) !== 0)
                 return;
-            $scope.change($scope.member, $scope.take);
+            $scope.change(member, member.take, function()
+            {
+                alert('Updated your take!');
+            });
         }, 500);
     };
 
-    $scope.change = function(participant, take)
+    $scope.change = function(participant, take, callback)
     {
+        callback = callback || function() {};
 
         // The members.json endpoint takes a list of member objects so that it
         // can be updated programmatically in bulk (as with tips.json. From
@@ -56,8 +62,9 @@ Gittip.team.TeamCtrl = function($scope, $http)
         data = jQuery.param(data);
         var content_type = 'application/x-www-form-urlencoded; charset=UTF-8';
         var config = {headers: {'Content-Type': content_type}};
+        console.log('posting', participant.username, take);
         $http.post(participant.username + ".json", data, config)
-             .success(updateMembers);
+             .success(function() { callback(); updateMembers(); });
     };
 
     $http.get("index.json").success(updateMembers);
@@ -66,50 +73,3 @@ Gittip.team.TeamCtrl = function($scope, $http)
     // http://stackoverflow.com/questions/14833326/
     jQuery('#query').focus();
 };
-
-
-// :cry: Conditionals are a third-party thing. :/
-// http://stackoverflow.com/questions/14077471/
-// https://github.com/angular-ui/angular-ui/blob/31f82eaec5f07224b2a57607089ce8f8acffd48c/modules/directives/if/if.js
-
-/*
- * Defines the ui-if tag. This removes/adds an element from the dom depending on a condition
- * Originally created by @tigbro, for the @jquery-mobile-angular-adapter
- * https://github.com/tigbro/jquery-mobile-angular-adapter
- */
-
-Gittip.team.directive('uiIf', [function () {
-    console.log('anything?');
-  return {
-    transclude: 'element',
-    priority: 1000,
-    terminal: true,
-    restrict: 'A',
-    compile: function (element, attr, transclude) {
-      return function (scope, element, attr) {
-
-        var childElement;
-        var childScope;
-
-        scope.$watch(attr['uiIf'], function (newValue) {
-          if (childElement) {
-            childElement.remove();
-            childElement = undefined;
-          }
-          if (childScope) {
-            childScope.$destroy();
-            childScope = undefined;
-          }
-
-          if (newValue) {
-            childScope = scope.$new();
-            transclude(childScope, function (clone) {
-              childElement = clone;
-              element.after(clone);
-            });
-          }
-        });
-      };
-    }
-  };
-}]);
