@@ -349,6 +349,7 @@ class Participant(db.Model):
     def get_teams_membership(self):
         TAKE = "SELECT sum(take) FROM current_memberships WHERE team=%s"
         total_take = gittip.db.fetchone(TAKE, (self.username,))['sum']
+        total_take = 0 if total_take is None else total_take
         team_take = max(self.get_dollars_receiving() - total_take, 0)
         membership = { "ctime": None
                      , "mtime": None
