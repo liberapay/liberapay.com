@@ -124,8 +124,11 @@ Gittip.team = new function()
         , data: {take: take}
         , success: function(d) { callback(); drawRows(d); }
         , error: function(xhr) {
-            if (xhr.status === 404) alert("Unknown user!");
-            if (xhr.status !== 404) alert("Problem! " + xhr.status);
+            switch (xhr.status) {
+              case 404: alert("Unknown user!"); break;
+              case 450: alert("Too greedy!"); break;
+              default: alert("Problem! " + xhr.status);
+            }
           }
          });
   }

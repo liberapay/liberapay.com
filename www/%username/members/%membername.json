@@ -62,7 +62,10 @@ if POST:
         raise Response(403)
 
     if proceed:
-        team.set_take_for(member, take)
+        try:
+            team.set_take_for(member, take)
+        except Participant.TooGreedy:
+            raise Response(450)
     out = team.get_memberships(user)
 
 else:
