@@ -4,10 +4,11 @@ Gittip.team.TeamCtrl = function($scope, $http)
 {
     function updateMembers(data)
     {
+        console.log("Got data!", data);
         for (var i=0, member; member=data[i]; i++)
             // The current user, but not the team itself.
-            member.editing_allowed = member.is_current_user &&
-                                     member.ctime !== null;
+            member.editing_allowed = (member.is_current_user === true) &&
+                                     (member.ctime !== null);
         $scope.members = data;
     }
 
@@ -63,8 +64,12 @@ Gittip.team.TeamCtrl = function($scope, $http)
         var content_type = 'application/x-www-form-urlencoded; charset=UTF-8';
         var config = {headers: {'Content-Type': content_type}};
         console.log('posting', participant.username, take);
-        $http.post(participant.username + ".json", data, config)
-             .success(function() { callback(); updateMembers(); });
+        jQuery.ajax(
+                { type: 'POST'
+                , url: participant.username + ".json"
+                , data: {take: take}
+                , success: function(d) { callback(); updateMembers(d); }
+                 });
     };
 
     $http.get("index.json").success(updateMembers);

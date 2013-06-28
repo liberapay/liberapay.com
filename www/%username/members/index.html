@@ -70,10 +70,11 @@ github_account, twitter_account, bitbucket_account, bountysource_account = \
           <tr ng-repeat="member in members">
             <td><a href="/&#123;{ member.username }}/">&#123;{ member.username }}</a></td>
             <td class="figure take">
-              <input tabindex="1" id="take"
-                     ng-if="member.editing_allowed"
-                     ng-model="member.take"
-                     ng-change="doUpdate(member)" />
+              <div ng-if="member.editing_allowed">
+                <button ng-click="doUpdate(member)">Save</button>
+                <input tabindex="1" id="take"
+                       ng-model="member.take" />
+              </div>
               <span ng-if="!member.editing_allowed">
                 &#123;{ member.take | number:2 }}
               </span>
