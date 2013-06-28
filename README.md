@@ -392,7 +392,9 @@ to `GET` with an array of objects representing your current tips. `POST` the
 same structure back in order to update tips in bulk. You can `POST` a partial
 array to update a subset of your tips. The response to a `POST` will be only
 the subset you updated. If the `amount` is `"error"` then there will also be an
-`error` attribute with a one-word error code.
+`error` attribute with a one-word error code. If you include an `also_prune`
+key with a value of `yes`, `true`, or `1`, then any tips not in the array you
+`POST` will be zeroed out.
 
 This endpoint requires authentication. Look for your API key on your [profile
 page](https://www.gittip.com/about/me.html), and pass it as the basic auth
