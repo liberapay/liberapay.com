@@ -1,12 +1,9 @@
 Gittip.team = new function()
 {
-  var _ = Gittip;
-
   function init()
   {
     $('#lookup-container form').submit(add);
     $('#query').focus().keyup(lookup);
-
     jQuery.get("index.json").success(drawRows);
   };
 
@@ -17,20 +14,37 @@ Gittip.team = new function()
   function num(n) { return n.toFixed(2); }
   function perc(n) { return (n * 100).toFixed(1); }
 
+  function drawMemberTake(member)
+  {
+    var take = num(member.take);
+    if (member.editing_allowed)
+      return [ 'form', {'id': 'take'}
+             , ['input', { 'value': take
+                         , 'data-username': member.username
+                         , 'data-take': take // useful to reset form
+                         , 'tabindex': '1'
+                          }]
+              ];
+    else
+      return take;
+  };
+
   function drawRows(members)
   {
 
     var rows = [];
     for (var i=0, member; member = members[i]; i++)
-      rows.push(_.jsonml(
+      rows.push(Gittip.jsonml(
         [ 'tr'
         , ['td', ['a', {'href': '/'+member.username+'/'}, member.username]]
-        , ['td', {'class': 'figure take'}, num(member.take)]
+        , ['td', {'class': 'figure take'}, drawMemberTake(member)]
         , ['td', {'class': 'figure balance'}, num(member.balance)]
         , ['td', {'class': 'figure percentage'}, perc(member.percentage)]
          ]
       ));
     $('#members').html(rows);
+    $('#take').submit(doTake);
+    $('#take input').focus().keyup(maybeCancelTake);
   };
 
 
@@ -51,7 +65,7 @@ Gittip.team = new function()
     var items = [];
     for (var i=0, result; result = results[i]; i++)
     {
-      items.push(_.jsonml(
+      items.push(Gittip.jsonml(
         ['li', {"data-id": result.id}, result.username]
       ));
     }
@@ -73,6 +87,29 @@ Gittip.team = new function()
   // Take
   // ====
 
+  function maybeCancelTake(e)
+  {
+    if (e.which === 27)
+    {
+      var _ = $('#take input');
+      _.val(_.attr('data-take')).blur();
+    }
+  };
+
+  function doTake(e)
+  {
+    e.preventDefault();
+    e.stopPropagation();
+    var frm = $('#take'), _ = $('input', frm);
+    var username = _.attr('data-username'),
+        take = _.val();
+    if (take.search(/^\d+\.?\d*$/) !== 0)
+      alert("Bad input! Must be a number.");
+    else
+      setTake(username, take, function() { alert('Updated your take!'); });
+    return false;
+  };
+
   function setTake(username, take, callback)
   {
     callback = callback || function() {};
@@ -88,9 +125,10 @@ Gittip.team = new function()
         , success: function(d) { callback(); drawRows(d); }
         , error: function(xhr) {
             if (xhr.status === 404) alert("Unknown user!");
+            if (xhr.status !== 404) alert("Problem! " + xhr.status);
           }
          });
-  };
+  }
 
 
   // Export
@@ -98,36 +136,3 @@ Gittip.team = new function()
 
   return {init: init};
 }
-
-
-/*
-Gittip.team.TeamCtrl = function($scope, $http)
-{
-  function updateMembers(data)
-  {
-    console.log("Got data!", data);
-    for (var i=0, member; member=data[i]; i++)
-      // The current user, but not the team itself.
-      member.editing_allowed = (member.is_current_user === true) &&
-                   (member.ctime !== null);
-    $scope.members = data;
-  }
-
-  var updateHandle = null;
-  $scope.doUpdate = function(member)
-  {
-    console.log(member.username, member.take);
-    clearTimeout(updateHandle);
-    updateHandle = setTimeout(function()
-    {
-      console.log('handling update');
-      if (member.take.search(/^\d+\.?\d*$/) !== 0)
-        return;
-      $scope.change(member, member.take, function()
-      {
-        alert('Updated your take!');
-      });
-    }, 500);
-  };
-};
-*/

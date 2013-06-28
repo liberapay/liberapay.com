@@ -21,6 +21,7 @@ member = Participant.from_username(path['membername'])
 if member is None or member.is_suspicious:
     raise Response(404)
 is_member = member.member_of(team)
+proceed = True
 
 if POST:
 
@@ -44,6 +45,15 @@ if POST:
 
         if take not in (ZERO, A_PENNY):
             raise Response(400, "bad team setting take")
+        if take == ZERO:
+            if not is_member:
+                # This is a UI bug. How are they deleting a non-member?
+                raise Exception
+        if take == A_PENNY:
+            if is_member:
+                # Silently don't re-add existing members. We don't want to
+                # whack their take back to a penny!
+                proceed = False
 
     elif not is_member:
 
@@ -51,12 +61,8 @@ if POST:
 
         raise Response(403)
 
-    if not is_member:
-
-        # Don't add the member twice. You'll whack their take!
-
+    if proceed:
         team.set_take_for(member, take)
-
     out = team.get_memberships(user)
 
 else:

@@ -366,8 +366,12 @@ class Participant(db.Model):
         members.append(self.get_teams_membership())
         budget = balance = self.get_dollars_receiving()
         for member in members:
+            member['editing_allowed'] = False
             if member['username'] == current_user.username:
                 member['is_current_user'] = True
+                if member['ctime'] is not None:
+                    # current user, but not the team itself
+                    member['editing_allowed']= True
             take = member['take']
             member['take'] = take
             amount = min(take, balance)
