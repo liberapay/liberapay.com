@@ -10,7 +10,7 @@ import pytz
 from aspen.utils import typecheck
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import func
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, exc
 from sqlalchemy.schema import Column, CheckConstraint, UniqueConstraint, Sequence
 from sqlalchemy.types import Text, TIMESTAMP, Boolean, Numeric, BigInteger, Enum
 
@@ -90,7 +90,10 @@ class Participant(db.Model):
     @classmethod
     def from_username(cls, username):
         # Note that User.from_username overrides this. It authenticates people!
-        return cls.query.filter_by(username_lower=username.lower()).one()
+        try:
+            return cls.query.filter_by(username_lower=username.lower()).one()
+        except exc.NoResultFound:
+            return None
 
     def __eq__(self, other):
         return self.id == other.id

@@ -51,7 +51,12 @@ if POST:
 
         raise Response(403)
 
-    team.set_take_for(member, take)
+    if not is_member:
+
+        # Don't add the member twice. You'll whack their take!
+
+        team.set_take_for(member, take)
+
     out = team.get_memberships(user)
 
 else:

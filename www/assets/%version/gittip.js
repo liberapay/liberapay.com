@@ -10,3 +10,62 @@ Gittip.init = function()
 {
     Gittip.forms.initCSRF();
 };
+
+
+// each/jsoncss/jsonml
+// ===================
+// yanked from gttp.co/v1/api.js
+
+Gittip.each = function(a, fn)
+{
+    for (var i=0; i<a.length; i++)
+        fn(a[i], i, length);
+}
+
+Gittip.jsoncss = function(jsoncss)
+{
+    var out = '';
+
+    this.each(jsoncss, function(selector) {
+        if (typeof selector == 'string')
+            return out += selector + ';';
+
+        out += selector[0] + '{';
+
+        for (var i=1; i<selector.length; i++) {
+            for (var prop in selector[i])
+                out += prop + ':' + selector[i][prop] + ';';
+        }
+
+        out += '}';
+    });
+
+    return this.jsonml(['style', out]);
+};
+
+Gittip.jsonml = function(jsonml)
+{
+    var node  = document.createElement(jsonml[0]),
+        _     = this;
+
+    _.each(jsonml, function(v, j) {
+        if (j === 0 || typeof v === 'undefined') return;
+
+        switch (v.constructor) {
+            case Object:
+                for (var p in v)
+                    node.setAttribute(p, v[p]);
+                break;
+
+            case Array: node.appendChild(_.jsonml(v)); break;
+
+            case String: case Number:
+                node.appendChild(document.createTextNode(v));
+                break;
+
+            default: node.appendChild(v); break;
+        }
+    });
+
+    return node;
+};
