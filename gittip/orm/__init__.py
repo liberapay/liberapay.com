@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 import os
 
+import gittip
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session
@@ -51,6 +52,8 @@ class SQLAlchemy(object):
         return base
 
     def empty_tables(self):
+        gittip.db.execute("DELETE FROM memberships") # *sigh*
+        gittip.db.execute("DELETE FROM log_participant_type") # *sigh*
         tables = reversed(self.metadata.sorted_tables)
         for table in tables:
             try:

@@ -109,6 +109,7 @@ class Participant(db.Model):
     class UsernameAlreadyTaken(ProblemChangingUsername): pass
 
     class UnknownPlatform(Exception): pass
+    class TooGreedy(Exception): pass
 
     @property
     def IS_INDIVIDUAL(self):
@@ -312,15 +313,59 @@ class Participant(db.Model):
     # Participant as Team
     # ===================
 
+    def add_member(self, member):
+        """Add a member to this team.
+        """
+        assert self.IS_OPEN_GROUP
+        self.__set_take_for(member, Decimal('0.01'))
+
+    def remove_member(self, member):
+        """Remove a member from this team.
+        """
+        assert self.IS_OPEN_GROUP
+        self.__set_take_for(member, Decimal('0.00'))
+
     def member_of(self, team):
         """Given a Participant object, return a boolean.
         """
+        assert team.IS_OPEN_GROUP
         for member in team.get_members():
             if member['username'] == self.username:
                 return True
         return False
 
+    def get_take_for(self, member):
+        """Return a Decimal representation of the take for this member, or 0.
+        """
+        assert self.IS_OPEN_GROUP
+        rec = gittip.db.fetchone( "SELECT take FROM current_memberships "
+                                  "WHERE member=%s AND team=%s"
+                                , (member.username, self.username)
+                                 )
+        if rec is None:
+            return Decimal('0.00')
+        else:
+            return rec['take']
+
     def set_take_for(self, member, take):
+        """Sets member's take from the team pool.
+        """
+        assert self.IS_OPEN_GROUP
+        typecheck(member, Participant, take, Decimal)
+
+        current_take = self.get_take_for(member)
+        if current_take == 0:
+            raise self.TooGreedy
+        elif take > max(1, current_take * Decimal('1.1')):
+            raise self.TooGreedy
+        elif take > (self.get_dollars_receiving() * Decimal('0.5')):
+            raise self.TooGreedy
+
+        self.__set_take_for(member, take)
+
+    def __set_take_for(self, member, take):
+        assert self.IS_OPEN_GROUP
+        # XXX Factored out for testing purposes only! :O Use .set_take_for.
         typecheck(member, Participant, take, Decimal)
         gittip.db.execute("""
 
@@ -340,6 +385,7 @@ class Participant(db.Model):
                                                                          take))
 
     def get_members(self):
+        assert self.IS_OPEN_GROUP
         return list(gittip.db.fetchall("""
 
             SELECT member AS username, take, ctime, mtime
@@ -350,6 +396,7 @@ class Participant(db.Model):
         """, (self.username,)))
 
     def get_teams_membership(self):
+        assert self.IS_OPEN_GROUP
         TAKE = "SELECT sum(take) FROM current_memberships WHERE team=%s"
         total_take = gittip.db.fetchone(TAKE, (self.username,))['sum']
         total_take = 0 if total_take is None else total_take
@@ -362,6 +409,7 @@ class Participant(db.Model):
         return membership
 
     def get_memberships(self, current_user):
+        assert self.IS_OPEN_GROUP
         members = self.get_members()
         members.append(self.get_teams_membership())
         budget = balance = self.get_dollars_receiving()
