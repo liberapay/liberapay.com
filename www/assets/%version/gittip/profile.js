@@ -135,7 +135,6 @@ $(document).ready(function()
                       + '<div class="fine">with '
                       + nothers
                       + ' other' + (nothers === 1?'':'s')
-                      + ' | ' + '<span class="leave">leave</span>'
                       + '</div>'
                       + '</li>';
             } else {
