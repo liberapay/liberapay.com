@@ -349,7 +349,7 @@ class Participant(db.Model):
               FROM transfers
              WHERE tipper=%s AND tippee=%s
                AND timestamp >
-                    (SELECT ts_start FROM paydays ORDER BY ts_start LIMIT 1)
+                (SELECT ts_start FROM paydays ORDER BY ts_start DESC LIMIT 1)
           ORDER BY timestamp DESC LIMIT 1
 
         """, (self.username, membername))
