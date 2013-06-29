@@ -63,7 +63,7 @@
         {% else %}
         <div class="you-are">
             <a href="/{{ user.username }}/">{{ user.username }}</a> &ndash;
-            <a href="/sign-out.html">sign out</a>
+            <a id="sign-out" href="/sign-out.html">sign out</a>
             <div class="quick-stats">
               Giving: <a href="/{{ user.username }}/giving/">${{ user.get_dollars_giving() }}/wk</a><br />
               Receiving: <b>${{ user.get_dollars_receiving() }}/wk</b>

@@ -9,6 +9,7 @@ Gittip = {};
 Gittip.init = function()
 {
     Gittip.forms.initCSRF();
+    Gittip.signOut();
 };
 
 
@@ -68,4 +69,23 @@ Gittip.jsonml = function(jsonml)
     });
 
     return node;
+};
+
+
+Gittip.signOut = function()
+{
+    $('a#sign-out').click(function(e) {
+        e.preventDefault();
+
+        jQuery.ajax({
+            url: '/sign-out.html',
+            type: 'POST',
+            success: function() {
+                window.location.href = window.location.href;
+            },
+            error: function() {
+                alert('Failed to sign out');
+            }
+        });        
+    });
 };
