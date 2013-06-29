@@ -110,6 +110,7 @@ class Participant(db.Model):
 
     class UnknownPlatform(Exception): pass
     class TooGreedy(Exception): pass
+    class MemberLimitReached(Exception): pass
 
     @property
     def IS_INDIVIDUAL(self):
@@ -317,6 +318,8 @@ class Participant(db.Model):
         """Add a member to this team.
         """
         assert self.IS_OPEN_GROUP
+        if len(self.get_members()) == 149:
+            raise self.MemberLimitReached
         self.__set_take_for(member, Decimal('0.01'))
 
     def remove_member(self, member):
