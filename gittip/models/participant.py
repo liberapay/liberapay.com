@@ -334,6 +334,20 @@ class Participant(db.Model):
                 return True
         return False
 
+    def get_prior_take_for(self, member):
+        """What did the user actually take most recently? Used in throttling.
+        """
+        assert self.IS_OPEN_GROUP
+        rec = gittip.db.fetchone( "SELECT amount FROM transfers "
+                                  "WHERE tipper=%s AND tippee=%s "
+                                  "ORDER BY timestamp DESC LIMIT 1"
+                                , (self.username, member.username)
+                                 )
+        if rec is None:
+            return Decimal('0.00')
+        else:
+            return rec['amount']
+
     def get_take_for(self, member):
         """Return a Decimal representation of the take for this member, or 0.
         """
@@ -353,10 +367,10 @@ class Participant(db.Model):
         assert self.IS_OPEN_GROUP
         typecheck(member, Participant, take, Decimal)
 
-        current_take = self.get_take_for(member)
-        if current_take == 0:
+        prior_take = self.get_prior_take_for(member)
+        if prior_take == 0:
             raise self.TooGreedy
-        elif take > max(1, current_take * Decimal('1.1')):
+        elif take > max(1, prior_take * Decimal('1.1')):
             raise self.TooGreedy
         elif take > (self.get_dollars_receiving() * Decimal('0.5')):
             raise self.TooGreedy

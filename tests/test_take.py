@@ -1,5 +1,6 @@
 from decimal import Decimal as D
 
+import gittip
 from aspen.testing import assert_raises
 from gittip.testing import Harness
 from gittip.models.participant import Participant
@@ -17,6 +18,17 @@ class Tests(Harness):
 
         self.session.commit()
         return team
+
+    def make_participant(self, username, *arg, **kw):
+        participant = Harness.make_participant(self, username)
+        if username == 'alice':
+            prior_take = kw.get('prior_take', '40')
+            gittip.db.execute( "INSERT INTO transfers "
+                               "(timestamp, tipper, tippee, amount) "
+                               "VALUES (now(), 'Team', 'alice', %s)"
+                             , (prior_take,)
+                              )
+        return participant
 
     def test_we_can_make_an_open_group(self):
         team = self.make_team()
@@ -62,9 +74,20 @@ class Tests(Harness):
                      , D('44.01')
                       )
 
-    def test_can_take_up_to_half(self):
+    def test_increase_is_based_on_actual_prior_take(self):
         team = self.make_team('Team')
         alice = self.make_participant('alice')
+        team._Participant__set_take_for(alice, D('40.00'))
+        team.set_take_for(alice, D('44.00'))
+        assert_raises( Participant.TooGreedy
+                     , team.set_take_for
+                     , alice
+                     , D('44.01')
+                      )
+
+    def test_can_take_up_to_half(self):
+        team = self.make_team('Team')
+        alice = self.make_participant('alice', prior_take='48.00')
         team._Participant__set_take_for(alice, D('48.00'))
         team.set_take_for(alice, D('50.00'))
         assert team.get_take_for(alice) == 50
