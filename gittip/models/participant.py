@@ -382,7 +382,7 @@ class Participant(db.Model):
         gas = last_week * Decimal('1.5')
         brake = ( self.get_dollars_receiving()
                 - member.get_tip_to(self.username)
-                 ) * (Decimal(2)/len(self.get_members()))
+                 ) * (Decimal(10)/len(self.get_members()))
 
         if last_week == 0:
             take = min(1, take)

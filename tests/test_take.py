@@ -72,24 +72,22 @@ class Tests(Harness):
         team._Participant__set_take_for(alice, D('40.00'))
         assert team.set_take_for(alice, D('42.00')) == 30
 
-    def test_can_take_up_to_total_times_2_over_len_members(self):
+    def test_can_take_up_to_total_times_10_over_len_members(self):
         team = self.make_team('Team')
-        team.add_member(self.make_participant('bob'))
-        team.add_member(self.make_participant('charlie'))
-        team.add_member(self.make_participant('diane'))
-        team.add_member(self.make_participant('earl'))
+        for name in 'bcdefghijklmnopqrstuvwxyz':  # 25 more members = 26 total
+            team.add_member(self.make_participant(name))
         alice = self.make_participant('alice', take_last_week='38.00')
         team._Participant__set_take_for(alice, D('38.00'))
-        team.set_take_for(alice, D('40.00'))
-        assert team.get_take_for(alice) == 40
+        team.set_take_for(alice, D('38.46'))
+        actual = team.get_take_for(alice)
+        assert actual == D('38.46'), actual
 
     def test_cant_take_more_than_blah_blah_blah(self):
         team = self.make_team('Team')
-        team.add_member(self.make_participant('bob'))
-        team.add_member(self.make_participant('charlie'))
-        team.add_member(self.make_participant('diane'))
-        team.add_member(self.make_participant('earl'))
+        for name in 'bcdefghijklmnopqrstuvwxyz':  # 25 more members = 26 total
+            team.add_member(self.make_participant(name))
         alice = self.make_participant('alice', take_last_week='38.00')
         team._Participant__set_take_for(alice, D('38.00'))
-        team.set_take_for(alice, D('40.01'))
-        assert team.get_take_for(alice) == 40
+        team.set_take_for(alice, D('38.47'))
+        actual = team.get_take_for(alice)
+        assert actual == D('38.46'), actual
