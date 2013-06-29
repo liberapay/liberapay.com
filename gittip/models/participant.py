@@ -337,10 +337,12 @@ class Participant(db.Model):
                 return True
         return False
 
-    def get_take_last_week_for(self, membername):
+    def get_take_last_week_for(self, member):
         """What did the user actually take most recently? Used in throttling.
         """
         assert self.IS_OPEN_GROUP
+        membername = member.username if hasattr(member, 'username') \
+                                                        else member['username']
         rec = gittip.db.fetchone("""
 
             SELECT amount
@@ -376,7 +378,7 @@ class Participant(db.Model):
         assert self.IS_OPEN_GROUP
         typecheck(member, Participant, take, Decimal)
 
-        last_week = self.get_take_last_week_for(member.username)
+        last_week = self.get_take_last_week_for(member)
         gas = last_week * Decimal('1.5')
         brake = ( self.get_dollars_receiving()
                 - member.get_tip_to(self.username)
@@ -453,7 +455,7 @@ class Participant(db.Model):
             take = member['take']
             member['take'] = take
             member['last_week'] = \
-                                self.get_take_last_week_for(member['username'])
+                                self.get_take_last_week_for(member)
             amount = min(take, balance)
             balance -= amount
             member['balance'] = balance
