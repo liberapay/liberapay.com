@@ -28,13 +28,15 @@ github_account, twitter_account, bitbucket_account, bountysource_account = \
   <table>
       <tr>
         <th>Member</th>
-        <th class="figure">Take ($)</th>
-        <th class="figure">Balance ($)</th>
-        <th class="figure">Take (%)</th>
+        <th class="figure">Last<br />Week ($)</th>
+        <th class="figure">This<br />Week ($)</th>
+        <th class="figure">Team<br />Balance ($)</th>
+        <th class="figure">This<br />Week (%)</th>
       </tr>
       <tr>
         <td></td>
-        <td class="figure take"></td>
+        <td class="figure last_week"></td>
+        <td class="figure this_week"></td>
         <td class="figure balance">
           {{ participant.get_dollars_receiving() }}
         </td>

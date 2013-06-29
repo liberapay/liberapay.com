@@ -334,14 +334,14 @@ class Participant(db.Model):
                 return True
         return False
 
-    def get_prior_take_for(self, member):
+    def get_prior_take_for(self, membername):
         """What did the user actually take most recently? Used in throttling.
         """
         assert self.IS_OPEN_GROUP
         rec = gittip.db.fetchone( "SELECT amount FROM transfers "
                                   "WHERE tipper=%s AND tippee=%s "
                                   "ORDER BY timestamp DESC LIMIT 1"
-                                , (self.username, member.username)
+                                , (self.username, membername)
                                  )
         if rec is None:
             return Decimal('0.00')
@@ -367,13 +367,18 @@ class Participant(db.Model):
         assert self.IS_OPEN_GROUP
         typecheck(member, Participant, take, Decimal)
 
-        prior_take = self.get_prior_take_for(member)
-        if prior_take == 0:
-            raise self.TooGreedy
-        elif take > max(1, prior_take * Decimal('1.1')):
-            raise self.TooGreedy
-        elif take > (self.get_dollars_receiving() * Decimal('0.5')):
-            raise self.TooGreedy
+        last_week = self.get_prior_take_for(member.username)
+        max_this_week = last_week * Decimal('1.1')
+        one_third = ( self.get_dollars_receiving()
+                    - member.get_tip_to(self.username)
+                     ) * Decimal('0.3333')
+
+        if last_week == 0:
+            take = min(1, take)
+        elif take > max(1, max_this_week):
+            take = max_this_week
+        elif take > one_third:
+            take = one_third
 
         self.__set_take_for(member, take)
 
@@ -436,6 +441,7 @@ class Participant(db.Model):
                     member['editing_allowed']= True
             take = member['take']
             member['take'] = take
+            member['last_week'] = self.get_prior_take_for(member['username'])
             amount = min(take, balance)
             balance -= amount
             member['balance'] = balance

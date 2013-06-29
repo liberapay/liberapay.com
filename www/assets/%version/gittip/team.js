@@ -37,6 +37,7 @@ Gittip.team = new function()
       rows.push(Gittip.jsonml(
         [ 'tr'
         , ['td', ['a', {'href': '/'+member.username+'/'}, member.username]]
+        , ['td', {'class': 'figure last_week'}, num(member.last_week)]
         , ['td', {'class': 'figure take'}, drawMemberTake(member)]
         , ['td', {'class': 'figure balance'}, num(member.balance)]
         , ['td', {'class': 'figure percentage'}, perc(member.percentage)]
@@ -126,7 +127,6 @@ Gittip.team = new function()
         , error: function(xhr) {
             switch (xhr.status) {
               case 404: alert("Unknown user!"); break;
-              case 450: alert("Too greedy!"); break;
               default: alert("Problem! " + xhr.status);
             }
           }
