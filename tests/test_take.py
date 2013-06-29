@@ -22,11 +22,12 @@ class Tests(Harness):
     def make_participant(self, username, *arg, **kw):
         participant = Harness.make_participant(self, username)
         if username == 'alice':
-            prior_take = kw.get('prior_take', '40')
+            take_last_week = kw.get('take_last_week', '40')
+            gittip.db.execute("INSERT INTO paydays DEFAULT VALUES")
             gittip.db.execute( "INSERT INTO transfers "
                                "(timestamp, tipper, tippee, amount) "
                                "VALUES (now(), 'Team', 'alice', %s)"
-                             , (prior_take,)
+                             , (take_last_week,)
                               )
         return participant
 
@@ -49,56 +50,46 @@ class Tests(Harness):
         team = self.make_team('Team')
         alice = self.make_participant('alice')
         team._Participant__set_take_for(alice, D('40.00'))
+        assert team.set_take_for(alice, D('100.00')) == 60
 
-        assert_raises( Participant.TooGreedy
-                     , team.set_take_for
-                     , alice
-                     , D('100.00')
-                      )
-
-    def test_can_grow_tip_10_percent(self):
+    def test_can_grow_tip_50_percent(self):
         team = self.make_team('Team')
         alice = self.make_participant('alice')
         team._Participant__set_take_for(alice, D('40.00'))
-        team.set_take_for(alice, D('44.00'))
-        assert team.get_take_for(alice) == 44
+        team.set_take_for(alice, D('60.00'))
+        assert team.get_take_for(alice) == 60
 
-    def test_can_grow_tip_10_percent_but_not_a_penny_more(self):
+    def test_can_grow_tip_50_percent_but_not_a_penny_more(self):
         team = self.make_team('Team')
         alice = self.make_participant('alice')
         team._Participant__set_take_for(alice, D('40.00'))
+        actual = team.set_take_for(alice, D('60.01'))
+        assert actual == 60, actual
 
-        assert_raises( Participant.TooGreedy
-                     , team.set_take_for
-                     , alice
-                     , D('44.01')
-                      )
-
-    def test_increase_is_based_on_actual_prior_take(self):
+    def test_increase_is_based_on_actual_take_last_week(self):
         team = self.make_team('Team')
-        alice = self.make_participant('alice')
+        alice = self.make_participant('alice', take_last_week='20.00')
         team._Participant__set_take_for(alice, D('40.00'))
-        team.set_take_for(alice, D('44.00'))
-        assert_raises( Participant.TooGreedy
-                     , team.set_take_for
-                     , alice
-                     , D('44.01')
-                      )
+        assert team.set_take_for(alice, D('42.00')) == 30
 
-    def test_can_take_up_to_half(self):
+    def test_can_take_up_to_total_times_2_over_len_members(self):
         team = self.make_team('Team')
-        alice = self.make_participant('alice', prior_take='48.00')
-        team._Participant__set_take_for(alice, D('48.00'))
-        team.set_take_for(alice, D('50.00'))
-        assert team.get_take_for(alice) == 50
+        team.add_member(self.make_participant('bob'))
+        team.add_member(self.make_participant('charlie'))
+        team.add_member(self.make_participant('diane'))
+        team.add_member(self.make_participant('earl'))
+        alice = self.make_participant('alice', take_last_week='38.00')
+        team._Participant__set_take_for(alice, D('38.00'))
+        team.set_take_for(alice, D('40.00'))
+        assert team.get_take_for(alice) == 40
 
-    def test_cant_take_more_than_half(self):
+    def test_cant_take_more_than_blah_blah_blah(self):
         team = self.make_team('Team')
-        alice = self.make_participant('alice')
-        team._Participant__set_take_for(alice, D('48.00'))
-
-        assert_raises( Participant.TooGreedy
-                     , team.set_take_for
-                     , alice
-                     , D('50.01')
-                      )
+        team.add_member(self.make_participant('bob'))
+        team.add_member(self.make_participant('charlie'))
+        team.add_member(self.make_participant('diane'))
+        team.add_member(self.make_participant('earl'))
+        alice = self.make_participant('alice', take_last_week='38.00')
+        team._Participant__set_take_for(alice, D('38.00'))
+        team.set_take_for(alice, D('40.01'))
+        assert team.get_take_for(alice) == 40

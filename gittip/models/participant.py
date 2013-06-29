@@ -337,15 +337,21 @@ class Participant(db.Model):
                 return True
         return False
 
-    def get_prior_take_for(self, membername):
+    def get_take_last_week_for(self, membername):
         """What did the user actually take most recently? Used in throttling.
         """
         assert self.IS_OPEN_GROUP
-        rec = gittip.db.fetchone( "SELECT amount FROM transfers "
-                                  "WHERE tipper=%s AND tippee=%s "
-                                  "ORDER BY timestamp DESC LIMIT 1"
-                                , (self.username, membername)
-                                 )
+        rec = gittip.db.fetchone("""
+
+            SELECT amount
+              FROM transfers
+             WHERE tipper=%s AND tippee=%s
+               AND timestamp >
+                    (SELECT ts_start FROM paydays ORDER BY ts_start LIMIT 1)
+          ORDER BY timestamp DESC LIMIT 1
+
+        """, (self.username, membername))
+
         if rec is None:
             return Decimal('0.00')
         else:
@@ -370,7 +376,7 @@ class Participant(db.Model):
         assert self.IS_OPEN_GROUP
         typecheck(member, Participant, take, Decimal)
 
-        last_week = self.get_prior_take_for(member.username)
+        last_week = self.get_take_last_week_for(member.username)
         gas = last_week * Decimal('1.5')
         brake = ( self.get_dollars_receiving()
                 - member.get_tip_to(self.username)
@@ -385,6 +391,7 @@ class Participant(db.Model):
             take = brake
 
         self.__set_take_for(member, take)
+        return take
 
     def __set_take_for(self, member, take):
         assert self.IS_OPEN_GROUP
@@ -445,7 +452,8 @@ class Participant(db.Model):
                     member['editing_allowed']= True
             take = member['take']
             member['take'] = take
-            member['last_week'] = self.get_prior_take_for(member['username'])
+            member['last_week'] = \
+                                self.get_take_last_week_for(member['username'])
             amount = min(take, balance)
             balance -= amount
             member['balance'] = balance
