@@ -304,6 +304,21 @@ class Participant(db.Model):
             out = (now - self.claimed_time).total_seconds()
         return out
 
+    def get_teams(self):
+        """Return a list of teams this user is a member of.
+        """
+        return list(gittip.db.fetchall("""
+
+            SELECT team AS name
+                 , ( SELECT count(*)
+                       FROM current_memberships
+                      WHERE team=team
+                    ) AS nmembers
+              FROM current_memberships
+             WHERE member=%s;
+
+        """, (self.username,)))
+
 
     # Participant as Team
     # ===================

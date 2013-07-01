@@ -76,7 +76,7 @@ members get their own page on Gittip.</p>
 
     <h2>Viable Communities (N = {{ len(viable) }})</h2>
     <p class="help">At least {{ THRESHOLD }} members</p>
-    <ul class="community-memberships">
+    <ul class="community memberships">
         {% for community in viable %}
         <li>
             <a href="/for/{{ community['slug'] }}/">{{ community['name'] }}</a>

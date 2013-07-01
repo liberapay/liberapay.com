@@ -74,9 +74,11 @@ else:
         {% else %}
             <div class="col0">
         {% end %}
+            {% include "templates/team-listing.html" %}
+
             {% if communities %}
             <h2>Communities</h2>
-            <ul class="community-memberships">
+            <ul class="community memberships">
                 {% for community in communities %}
                 <li>
                     <a href="/for/{{ community['slug'] }}/">{{ community['name'] }}</a>
