@@ -372,6 +372,11 @@ class Participant(db.Model):
         else:
             return rec['take']
 
+    def compute_max_this_week(self, last_week):
+        """1.5x last week's take, but at least a dollar.
+        """
+        return max(last_week * Decimal('1.5'), Decimal('1.00'))
+
     def set_take_for(self, member, take):
         """Sets member's take from the team pool.
         """
@@ -379,7 +384,7 @@ class Participant(db.Model):
         typecheck(member, Participant, take, Decimal)
 
         last_week = self.get_take_last_week_for(member)
-        max_this_week = max(last_week * Decimal('1.5'), Decimal('1.00'))
+        max_this_week = self.compute_max_this_week(last_week)
         if take > max_this_week:
             take = max_this_week
 
@@ -445,8 +450,9 @@ class Participant(db.Model):
                     member['editing_allowed']= True
             take = member['take']
             member['take'] = take
-            member['last_week'] = \
-                                self.get_take_last_week_for(member)
+            member['last_week'] = last_week = \
+                                            self.get_take_last_week_for(member)
+            member['max_this_week'] = self.compute_max_this_week(last_week)
             amount = min(take, balance)
             balance -= amount
             member['balance'] = balance

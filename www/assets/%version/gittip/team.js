@@ -31,18 +31,43 @@ Gittip.team = new function()
 
   function drawRows(members)
   {
-
+    nmembers = members.length - 1; // includes the team itself, which we don't
+                                   // want to enumerate
     var rows = [];
     for (var i=0, member; member = members[i]; i++)
-      rows.push(Gittip.jsonml(
-        [ 'tr'
-        , ['td', ['a', {'href': '/'+member.username+'/'}, member.username]]
-        , ['td', {'class': 'figure last_week'}, num(member.last_week)]
-        , ['td', {'class': 'figure take'}, drawMemberTake(member)]
-        , ['td', {'class': 'figure balance'}, num(member.balance)]
-        , ['td', {'class': 'figure percentage'}, perc(member.percentage)]
-         ]
-      ));
+    {
+      var increase = '';
+
+      if (member.take > member.last_week)
+        increase = 'moderate';
+      if (member.take > (member.last_week * 1.25))
+        increase = 'high';
+      if (member.take === member.max_this_week)
+        increase = 'max';
+
+      if (i < nmembers)
+        rows.push(Gittip.jsonml(
+          [ 'tr'
+          , ['td', {'class': 'n'}, (i === nmembers ? '' : nmembers - i)]
+          , ['td', ['a', {'href': '/'+member.username+'/'}, member.username]]
+          , ['td', {'class': 'figure last_week'}, num(member.last_week)]
+          , ['td', {'class': 'figure take ' + increase}, drawMemberTake(member)]
+          , ['td', {'class': 'figure balance'}, num(member.balance)]
+          , ['td', {'class': 'figure percentage'}, perc(member.percentage)]
+           ]
+        ));
+      else
+        rows.push(Gittip.jsonml(
+          [ 'tr'
+          , ['td']
+          , ['td']
+          , ['td']
+          , ['td']
+          , ['td', {'class': 'figure balance'}, num(member.take)]
+          , ['td', {'class': 'figure percentage'}, perc(member.percentage)]
+           ]
+        ));
+    }
     $('#members').html(rows);
     $('#take').submit(doTake);
     $('#take input').focus().keyup(maybeCancelTake);
