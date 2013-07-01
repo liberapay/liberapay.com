@@ -816,5 +816,38 @@ SELECT * FROM (
 -------------------------------------------------------------------------------
 -- https://github.com/gittip/www.gittip.com/issues/1100
 
-UPDATE participants SET type='group' WHERE type='open group';
-DELETE FROM pg_enum WHERE enumlabel='open group';
+BEGIN;
+    CREATE TYPE participant_type_ AS ENUM ( 'individual'
+                                          , 'group'
+                                           );
+
+    ALTER TABLE participants ADD COLUMN type_ participant_type_
+        NOT NULL DEFAULT 'individual';
+    ALTER TABLE log_participant_type ADD COLUMN type_ participant_type_
+        NOT NULL DEFAULT 'individual';
+
+    UPDATE participants SET type_='group' WHERE type='group';
+    UPDATE log_participant_type SET type_='group' WHERE type='group';
+
+    DROP RULE log_participant_type ON participants;
+
+    ALTER TABLE participants DROP COLUMN type;
+    ALTER TABLE participants RENAME COLUMN type_ TO type;
+    ALTER TABLE log_participant_type DROP COLUMN type;
+    ALTER TABLE log_participant_type RENAME COLUMN type_ TO type;
+
+    CREATE RULE log_participant_type
+    AS ON UPDATE TO participants
+              WHERE NEW.type <> OLD.type
+                 DO
+        INSERT INTO log_participant_type
+                    (ctime, participant, type)
+             VALUES ( COALESCE (( SELECT ctime
+                                    FROM log_participant_type
+                                   WHERE participant=OLD.username
+                                   LIMIT 1
+                                 ), CURRENT_TIMESTAMP)
+                    , OLD.username
+                    , NEW.type
+                     );
+END;
