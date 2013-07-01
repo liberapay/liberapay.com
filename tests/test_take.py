@@ -8,7 +8,7 @@ class Tests(Harness):
 
     def make_team(self, name="Team"):
         team = self.make_participant(name)
-        team.type = "open group"
+        team.type = "group"
 
         warbucks = self.make_participant('Daddy Warbucks')
         warbucks.last_bill_result = ''
@@ -29,9 +29,9 @@ class Tests(Harness):
                               )
         return participant
 
-    def test_we_can_make_an_open_group(self):
+    def test_we_can_make_a_team(self):
         team = self.make_team()
-        assert team.IS_OPEN_GROUP
+        assert team.IS_GROUP
 
     def test_random_schmoe_is_not_member_of_team(self):
         team = self.make_team('Team')

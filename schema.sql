@@ -811,3 +811,10 @@ SELECT * FROM (
                   , mtime DESC
 
 ) AS anon WHERE take > 0;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/issues/1100
+
+UPDATE participants SET type='group' WHERE type='open group';
+DELETE FROM pg_enum WHERE enumlabel='open group';

@@ -53,7 +53,7 @@ class Participant(db.Model):
     last_ach_result = Column(Text)
     api_key = Column(Text)
     is_suspicious = Column(Boolean)
-    type = Column(Enum('individual', 'group', 'open group', nullable=False))
+    type = Column(Enum('individual', 'group', nullable=False))
 
     ### Relations ###
     accounts_elsewhere = relationship( "Elsewhere"
@@ -117,10 +117,6 @@ class Participant(db.Model):
     @property
     def IS_GROUP(self):
         return self.type == 'group'
-
-    @property
-    def IS_OPEN_GROUP(self):
-        return self.type == 'open group'
 
     @property
     def tips_giving(self):
@@ -312,10 +308,22 @@ class Participant(db.Model):
     # Participant as Team
     # ===================
 
+    def show_as_team(self, user):
+        """Return a boolean, whether to show this participant as a team.
+        """
+        if user.ADMIN:
+            return True
+        if not self.IS_GROUP:
+            return False
+        if not self.get_members():
+            if self != user:
+                return False
+        return True
+
     def add_member(self, member):
         """Add a member to this team.
         """
-        assert self.IS_OPEN_GROUP
+        assert self.IS_GROUP
         if len(self.get_members()) == 149:
             raise self.MemberLimitReached
         self.__set_take_for(member, Decimal('0.01'), self)
@@ -323,13 +331,13 @@ class Participant(db.Model):
     def remove_member(self, member):
         """Remove a member from this team.
         """
-        assert self.IS_OPEN_GROUP
+        assert self.IS_GROUP
         self.__set_take_for(member, Decimal('0.00'), self)
 
     def member_of(self, team):
         """Given a Participant object, return a boolean.
         """
-        assert team.IS_OPEN_GROUP
+        assert team.IS_GROUP
         for member in team.get_members():
             if member['username'] == self.username:
                 return True
@@ -338,7 +346,7 @@ class Participant(db.Model):
     def get_take_last_week_for(self, member):
         """What did the user actually take most recently? Used in throttling.
         """
-        assert self.IS_OPEN_GROUP
+        assert self.IS_GROUP
         membername = member.username if hasattr(member, 'username') \
                                                         else member['username']
         rec = gittip.db.fetchone("""
@@ -360,7 +368,7 @@ class Participant(db.Model):
     def get_take_for(self, member):
         """Return a Decimal representation of the take for this member, or 0.
         """
-        assert self.IS_OPEN_GROUP
+        assert self.IS_GROUP
         rec = gittip.db.fetchone( "SELECT take FROM current_memberships "
                                   "WHERE member=%s AND team=%s"
                                 , (member.username, self.username)
@@ -378,7 +386,7 @@ class Participant(db.Model):
     def set_take_for(self, member, take, recorder):
         """Sets member's take from the team pool.
         """
-        assert self.IS_OPEN_GROUP
+        assert self.IS_GROUP
         from gittip.models.user import User  # lazy to avoid circular import
         typecheck( member, Participant
                  , take, Decimal
@@ -394,7 +402,7 @@ class Participant(db.Model):
         return take
 
     def __set_take_for(self, member, take, recorder):
-        assert self.IS_OPEN_GROUP
+        assert self.IS_GROUP
         # XXX Factored out for testing purposes only! :O Use .set_take_for.
         gittip.db.execute("""
 
@@ -415,7 +423,7 @@ class Participant(db.Model):
                                                       take, recorder.username))
 
     def get_members(self):
-        assert self.IS_OPEN_GROUP
+        assert self.IS_GROUP
         return list(gittip.db.fetchall("""
 
             SELECT member AS username, take, ctime, mtime
@@ -426,7 +434,7 @@ class Participant(db.Model):
         """, (self.username,)))
 
     def get_teams_membership(self):
-        assert self.IS_OPEN_GROUP
+        assert self.IS_GROUP
         TAKE = "SELECT sum(take) FROM current_memberships WHERE team=%s"
         total_take = gittip.db.fetchone(TAKE, (self.username,))['sum']
         total_take = 0 if total_take is None else total_take
@@ -439,7 +447,7 @@ class Participant(db.Model):
         return membership
 
     def get_memberships(self, current_user):
-        assert self.IS_OPEN_GROUP
+        assert self.IS_GROUP
         members = self.get_members()
         members.append(self.get_teams_membership())
         budget = balance = self.get_dollars_receiving()

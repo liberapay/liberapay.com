@@ -6,8 +6,8 @@ from gittip.utils import get_participant
 # ========================================================================== ^L
 
 participant = team = get_participant(request, restrict=False)
-if team.type != 'open group':
-    request.redirect('../')
+if not team.show_as_team(user):
+  request.redirect('../')
 locked = False
 tip_or_pledge = "tip"
 hero = "Team Members"

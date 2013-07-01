@@ -7,7 +7,7 @@ from gittip.utils import get_participant
 
 request.allow('GET')
 team = get_participant(request, restrict=False)
-if not team.type == 'open group':
+if not team.show_as_team(user):
     raise Response(404)
 
 response.body = team.get_memberships(user)

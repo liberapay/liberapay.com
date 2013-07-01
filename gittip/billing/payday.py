@@ -131,7 +131,7 @@ class Payday(object):
         self.zero_out_pending(ts_start)
 
         self.payin(ts_start, self.genparticipants(ts_start, ts_start))
-        self.move_pending_to_balance_for_open_groups()
+        self.move_pending_to_balance_for_teams()
         self.pachinko(ts_start, self.genparticipants(ts_start, ts_start))
         self.clear_pending_to_balance()
         self.payout(ts_start, self.genparticipants(ts_start, False))
@@ -237,7 +237,7 @@ class Payday(object):
         for i, (participant, foo, bar) in enumerate(participants, start=1):
             if i % 100 == 0:
                 log("Pachinko done for %d participants." % i)
-            if participant['type'] != 'open group':
+            if participant['type'] != 'group':
                 continue
             team = ORMParticipant.query.get(participant['username'])
 
@@ -309,8 +309,8 @@ class Payday(object):
         self.mark_participant(nsuccessful_tips)
 
 
-    def move_pending_to_balance_for_open_groups(self):
-        """Transfer pending into balance for open groups.
+    def move_pending_to_balance_for_teams(self):
+        """Transfer pending into balance for teams.
 
         We do this because debit_participant operates against balance, not
         pending. This is because credit card charges go directly into balance
@@ -322,11 +322,11 @@ class Payday(object):
             UPDATE participants
                SET balance = (balance + pending)
                  , pending = 0
-             WHERE type='open group'
+             WHERE type='group'
 
         """)
         # "Moved" instead of "cleared" because we don't also set to null.
-        log("Moved pending to balance for open groups. Ready for pachinko.")
+        log("Moved pending to balance for teams. Ready for pachinko.")
 
 
     def clear_pending_to_balance(self):
