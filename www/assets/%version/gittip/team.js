@@ -42,11 +42,13 @@ Gittip.team = new function()
     var rows = [];
 
     if (nmembers === 0)
+    {
       rows.push(Gittip.jsonml(
         [ 'tr'
         , ['td', {'colspan': '6', 'class': 'no-members'}, "No members"]
          ]
       ));
+    }
 
     for (var i=0, member; member = members[i]; i++)
     {
@@ -70,7 +72,7 @@ Gittip.team = new function()
           , ['td', {'class': 'figure percentage'}, perc(member.percentage)]
            ]
         ));
-      else
+      else if (nmembers > 0)
         rows.push(Gittip.jsonml(
           [ 'tr'
           , ['td']
