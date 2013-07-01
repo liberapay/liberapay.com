@@ -379,18 +379,9 @@ class Participant(db.Model):
         typecheck(member, Participant, take, Decimal)
 
         last_week = self.get_take_last_week_for(member)
-        gas = last_week * Decimal('1.5')
-        brake = ( self.get_dollars_receiving()
-                - member.get_tip_to(self.username)
-                 ) * (Decimal(10)/len(self.get_members()))
-
-        if last_week == 0:
-            take = min(1, take)
-        elif take > max(1, gas):
-            take = gas
-
-        if take > brake:
-            take = brake
+        max_this_week = max(last_week * Decimal('1.5'), Decimal('1.00'))
+        if take > max_this_week:
+            take = max_this_week
 
         self.__set_take_for(member, take)
         return take

@@ -1,9 +1,7 @@
 from decimal import Decimal as D
 
 import gittip
-from aspen.testing import assert_raises
 from gittip.testing import Harness
-from gittip.models.participant import Participant
 
 
 class Tests(Harness):
@@ -72,22 +70,9 @@ class Tests(Harness):
         team._Participant__set_take_for(alice, D('40.00'))
         assert team.set_take_for(alice, D('42.00')) == 30
 
-    def test_can_take_up_to_total_times_10_over_len_members(self):
+    def test_if_last_week_is_less_than_a_dollar_can_increase_to_a_dollar(self):
         team = self.make_team('Team')
-        for name in 'bcdefghijklmnopqrstuvwxyz':  # 25 more members = 26 total
-            team.add_member(self.make_participant(name))
-        alice = self.make_participant('alice', take_last_week='38.00')
-        team._Participant__set_take_for(alice, D('38.00'))
-        team.set_take_for(alice, D('38.46'))
-        actual = team.get_take_for(alice)
-        assert actual == D('38.46'), actual
-
-    def test_cant_take_more_than_blah_blah_blah(self):
-        team = self.make_team('Team')
-        for name in 'bcdefghijklmnopqrstuvwxyz':  # 25 more members = 26 total
-            team.add_member(self.make_participant(name))
-        alice = self.make_participant('alice', take_last_week='38.00')
-        team._Participant__set_take_for(alice, D('38.00'))
-        team.set_take_for(alice, D('38.47'))
-        actual = team.get_take_for(alice)
-        assert actual == D('38.46'), actual
+        alice = self.make_participant('alice', take_last_week='0.01')
+        team.add_member(alice)
+        actual = team.set_take_for(alice, D('42.00'))
+        assert actual == 1, actual
