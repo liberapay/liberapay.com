@@ -37,6 +37,16 @@ website.bountysource_api_host = os.environ['BOUNTYSOURCE_API_HOST'].decode('ASCI
 website.bountysource_api_secret = os.environ['BOUNTYSOURCE_API_SECRET'].decode('ASCII')
 website.bountysource_callback = os.environ['BOUNTYSOURCE_CALLBACK'].decode('ASCII')
 
+
+# Up the threadpool size: https://github.com/gittip/www.gittip.com/issues/1098
+def up_minthreads(website):
+    # Discovered the following API by inspecting in pdb and browsing source.
+    # This requires network_engine.bind to have already been called.
+    website.network_engine.cheroot_server.requests.min = 100
+
+website.hooks.startup.insert(0, up_minthreads)
+
+
 website.hooks.inbound_early += [ gittip.canonize
                                , gittip.configure_payments
                                , gittip.authentication.inbound
