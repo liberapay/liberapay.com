@@ -784,3 +784,10 @@ BEGIN;
                   , mtime DESC;
 
 END;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/issues/1100
+
+ALTER TABLE memberships ADD COLUMN recorder text NOT NULL
+    REFERENCES participants(username) ON UPDATE CASCADE ON DELETE RESTRICT;

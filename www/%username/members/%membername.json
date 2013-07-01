@@ -64,7 +64,7 @@ if POST:
         raise Response(403)
 
     if proceed:
-        team.set_take_for(member, take)
+        team.set_take_for(member, take, user)
     out = team.get_memberships(user)
 
 else:

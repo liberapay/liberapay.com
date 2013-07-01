@@ -1,9 +1,7 @@
 from __future__ import unicode_literals
 
 import datetime
-import math
 import os
-from collections import defaultdict
 from decimal import Decimal
 
 import pytz
@@ -320,13 +318,13 @@ class Participant(db.Model):
         assert self.IS_OPEN_GROUP
         if len(self.get_members()) == 149:
             raise self.MemberLimitReached
-        self.__set_take_for(member, Decimal('0.01'))
+        self.__set_take_for(member, Decimal('0.01'), self)
 
     def remove_member(self, member):
         """Remove a member from this team.
         """
         assert self.IS_OPEN_GROUP
-        self.__set_take_for(member, Decimal('0.00'))
+        self.__set_take_for(member, Decimal('0.00'), self)
 
     def member_of(self, team):
         """Given a Participant object, return a boolean.
@@ -377,27 +375,30 @@ class Participant(db.Model):
         """
         return max(last_week * Decimal('1.5'), Decimal('1.00'))
 
-    def set_take_for(self, member, take):
+    def set_take_for(self, member, take, recorder):
         """Sets member's take from the team pool.
         """
         assert self.IS_OPEN_GROUP
-        typecheck(member, Participant, take, Decimal)
+        from gittip.models.user import User  # lazy to avoid circular import
+        typecheck( member, Participant
+                 , take, Decimal
+                 , recorder, (Participant, User)
+                  )
 
         last_week = self.get_take_last_week_for(member)
         max_this_week = self.compute_max_this_week(last_week)
         if take > max_this_week:
             take = max_this_week
 
-        self.__set_take_for(member, take)
+        self.__set_take_for(member, take, recorder)
         return take
 
-    def __set_take_for(self, member, take):
+    def __set_take_for(self, member, take, recorder):
         assert self.IS_OPEN_GROUP
         # XXX Factored out for testing purposes only! :O Use .set_take_for.
-        typecheck(member, Participant, take, Decimal)
         gittip.db.execute("""
 
-            INSERT INTO memberships (ctime, member, team, take)
+            INSERT INTO memberships (ctime, member, team, take, recorder)
              VALUES ( COALESCE (( SELECT ctime
                                     FROM memberships
                                    WHERE member=%s
@@ -407,10 +408,11 @@ class Participant(db.Model):
                     , %s
                     , %s
                     , %s
+                    , %s
                      )
 
         """, (member.username, self.username, member.username, self.username, \
-                                                                         take))
+                                                      take, recorder.username))
 
     def get_members(self):
         assert self.IS_OPEN_GROUP
