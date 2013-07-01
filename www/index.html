@@ -36,6 +36,7 @@ except ValueError:
     raise Response(400)
 
 new_participants = _wrap(db.fetchall("""
+-- new participants on homepage
 
     SELECT username, claimed_time FROM (
         SELECT DISTINCT ON (p.username)
@@ -54,6 +55,7 @@ new_participants = _wrap(db.fetchall("""
 """, (limit, offset)))
 
 givers = _wrap(db.fetchall("""
+-- top givers on homepage
 
     SELECT tipper AS username, anonymous, sum(amount) AS amount
       FROM (    SELECT DISTINCT ON (tipper, tippee)
@@ -82,6 +84,7 @@ givers = _wrap(db.fetchall("""
 # orphan accounts. See https://github.com/gittip/www.gittip.com/issues/650
 
 receivers = _wrap(db.fetchall("""
+-- top receivers on homepage
 
     SELECT tippee AS username, claimed_time, sum(amount) AS amount
       FROM (    SELECT DISTINCT ON (tipper, tippee)

@@ -103,6 +103,7 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
     # =========================
 
     new_participants = _wrap(query_cache.fetchall("""
+    -- new participants on community page
 
         SELECT username, claimed_time FROM (
             SELECT DISTINCT ON (p.username)
@@ -124,6 +125,7 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
     """, (community.slug, limit, offset)))
 
     givers = _wrap(query_cache.fetchall("""
+    -- top givers on community page
 
         SELECT tipper AS username, anonymous, sum(amount) AS amount
           FROM (    SELECT DISTINCT ON (tipper, tippee)
@@ -154,6 +156,7 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
     # orphan accounts. See https://github.com/gittip/www.gittip.com/issues/650
 
     receivers = _wrap(query_cache.fetchall("""
+    -- top receivers on community page
 
         SELECT tippee AS username, claimed_time, sum(amount) AS amount
           FROM (    SELECT DISTINCT ON (tipper, tippee)
