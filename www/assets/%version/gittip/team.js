@@ -17,6 +17,7 @@ Gittip.team = new function()
   function drawMemberTake(member)
   {
     var take = num(member.take);
+
     if (member.editing_allowed)
       return [ 'form', {'id': 'take'}
              , ['input', { 'value': take
@@ -25,8 +26,13 @@ Gittip.team = new function()
                          , 'tabindex': '1'
                           }]
               ];
-    else
-      return take;
+
+    if (member.removal_allowed)
+      return [ 'span', { 'class': 'remove'
+                       , 'data-username': member.username
+                        }, take];
+
+    return take;
   };
 
   function drawRows(members)
@@ -71,6 +77,7 @@ Gittip.team = new function()
     $('#members').html(rows);
     $('#take').submit(doTake);
     $('#take input').focus().keyup(maybeCancelTake);
+    $('#members .remove').click(remove);
   };
 
 
@@ -109,6 +116,16 @@ Gittip.team = new function()
     return false;
   }
 
+  function remove(e)
+  {
+    e.preventDefault();
+    e.stopPropagation();
+    var membername = $(e.target).attr('data-username');
+    if (confirm("Remove " + membername + " from this team?"))
+      setTake(membername, '0.00', function() { alert('Member removed!'); });
+    return false;
+  }
+
 
   // Take
   // ====
@@ -117,10 +134,15 @@ Gittip.team = new function()
   {
     if (e.which === 27)
     {
-      var _ = $('#take input');
-      _.val(_.attr('data-take')).blur();
+      resetTake();
     }
   };
+
+  function resetTake()
+  {
+    var _ = $('#take input');
+    _.val(_.attr('data-take')).blur();
+  }
 
   function doTake(e)
   {
@@ -132,7 +154,19 @@ Gittip.team = new function()
     if (take.search(/^\d+\.?\d*$/) !== 0)
       alert("Bad input! Must be a number.");
     else
-      setTake(username, take, function() { alert('Updated your take!'); });
+    {
+      var callback = function() { alert('Updated your take!'); };
+      if (parseFloat(take) === 0)
+      {
+        if (!confirm("Remove yourself from this team?"))
+        {
+          resetTake();
+          return false;
+        }
+        callback = function() { alert('Removed!'); };
+      }
+      setTake(username, take, callback);
+    }
     return false;
   };
 

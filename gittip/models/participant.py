@@ -444,6 +444,7 @@ class Participant(db.Model):
         members.append(self.get_teams_membership())
         budget = balance = self.get_dollars_receiving()
         for member in members:
+            member['removal_allowed'] = current_user == self
             member['editing_allowed'] = False
             if member['username'] == current_user.username:
                 member['is_current_user'] = True

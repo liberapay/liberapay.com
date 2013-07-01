@@ -791,3 +791,23 @@ END;
 
 ALTER TABLE memberships ADD COLUMN recorder text NOT NULL
     REFERENCES participants(username) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+-------------------------------------------------------------------------------
+-- Recreate the current_memberships view. It had been including participants
+-- who used to be members but weren't any longer.
+
+CREATE OR REPLACE VIEW current_memberships AS
+SELECT * FROM (
+
+    SELECT DISTINCT ON (member, team) m.*
+               FROM memberships m
+               JOIN participants p1 ON p1.username = member
+               JOIN participants p2 ON p2.username = team
+              WHERE p1.is_suspicious IS NOT TRUE
+                AND p2.is_suspicious IS NOT TRUE
+           ORDER BY member
+                  , team
+                  , mtime DESC
+
+) AS anon WHERE take > 0;
