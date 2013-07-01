@@ -9,8 +9,14 @@
     }
     TD {
         padding-right: 5px;
-        font-size: smaller;
         font: normal 12px/14px $Helvetica;
+    }
+    TD.no-members {
+        border: 1px solid $brown;
+        border-style: solid none;
+        text-align: center;
+        background: $lighter-gray;
+        padding: 5px 0;
     }
     TD.n {
         text-align: right;
@@ -50,10 +56,19 @@
         right: -2px;
     }
 
+    TD.lookup {
+        border: 1px solid $brown;
+        border-style: solid none;
+        background: $lighter-gray;
+        padding: 5px 0 5px 38px;
+        text-align: center;
+        vertical-align: middle;
+        font: normal 16px/16px $Helvetica;
+    }
     #lookup-container {
         position: relative;
-        vertical-align: middle;
         z-index: 3;
+        text-align: left;
 
         ::-webkit-input-placeholder { color: $light-brown; }
         ::-moz-placeholder { color: $light-brown; } /* firefox 19+ */

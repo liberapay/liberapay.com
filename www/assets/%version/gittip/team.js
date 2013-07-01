@@ -40,6 +40,14 @@ Gittip.team = new function()
     nmembers = members.length - 1; // includes the team itself, which we don't
                                    // want to enumerate
     var rows = [];
+
+    if (nmembers === 0)
+      rows.push(Gittip.jsonml(
+        [ 'tr'
+        , ['td', {'colspan': '6', 'class': 'no-members'}, "No members"]
+         ]
+      ));
+
     for (var i=0, member; member = members[i]; i++)
     {
       var increase = '';
