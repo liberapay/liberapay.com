@@ -326,10 +326,10 @@ class Participant(db.Model):
     def show_as_team(self, user):
         """Return a boolean, whether to show this participant as a team.
         """
-        if user.ADMIN:
-            return True
         if not self.IS_GROUP:
             return False
+        if user.ADMIN:
+            return True
         if not self.get_members():
             if self != user:
                 return False
