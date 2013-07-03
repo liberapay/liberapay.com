@@ -48,27 +48,27 @@ class Tests(Harness):
         team = self.make_team('Team')
         alice = self.make_participant('alice')
         team._Participant__set_take_for(alice, D('40.00'), team)
-        assert team.set_take_for(alice, D('100.00'), alice) == 60
+        assert team.set_take_for(alice, D('100.00'), alice) == 80
 
-    def test_can_grow_tip_50_percent(self):
+    def test_take_can_double(self):
         team = self.make_team('Team')
         alice = self.make_participant('alice')
         team._Participant__set_take_for(alice, D('40.00'), team)
-        team.set_take_for(alice, D('60.00'), alice)
-        assert team.get_take_for(alice) == 60
+        team.set_take_for(alice, D('80.00'), alice)
+        assert team.get_take_for(alice) == 80
 
-    def test_can_grow_tip_50_percent_but_not_a_penny_more(self):
+    def test_take_can_double_but_not_a_penny_more(self):
         team = self.make_team('Team')
         alice = self.make_participant('alice')
         team._Participant__set_take_for(alice, D('40.00'), team)
-        actual = team.set_take_for(alice, D('60.01'), alice)
-        assert actual == 60, actual
+        actual = team.set_take_for(alice, D('80.01'), alice)
+        assert actual == 80, actual
 
     def test_increase_is_based_on_actual_take_last_week(self):
         team = self.make_team('Team')
         alice = self.make_participant('alice', take_last_week='20.00')
-        team._Participant__set_take_for(alice, D('40.00'), team)
-        assert team.set_take_for(alice, D('42.00'), alice) == 30
+        team._Participant__set_take_for(alice, D('35.00'), team)
+        assert team.set_take_for(alice, D('42.00'), alice) == 40
 
     def test_if_last_week_is_less_than_a_dollar_can_increase_to_a_dollar(self):
         team = self.make_team('Team')

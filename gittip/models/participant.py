@@ -394,9 +394,9 @@ class Participant(db.Model):
             return rec['take']
 
     def compute_max_this_week(self, last_week):
-        """1.5x last week's take, but at least a dollar.
+        """2x last week's take, but at least a dollar.
         """
-        return max(last_week * Decimal('1.5'), Decimal('1.00'))
+        return max(last_week * Decimal('2'), Decimal('1.00'))
 
     def set_take_for(self, member, take, recorder):
         """Sets member's take from the team pool.
