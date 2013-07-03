@@ -7,8 +7,8 @@ if user.ANON:
     raise Response(400)
 tooter = user.username
 tootee = path['username']
-toot= body['toot']
-if len(toot) > 140:
+toot = body['toot'].strip()
+if len(toot) > 140 or len(toot) < 1:
     raise Response(400)
 db.execute( "INSERT INTO toots (tooter, tootee, toot) VALUES (%s, %s, %s)"
           , (tooter, tootee, toot)
