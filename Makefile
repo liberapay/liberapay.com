@@ -40,7 +40,7 @@ local.env:
 	cp default_local.env local.env
 
 cloud-db: env local.env
-	echo DATABASE_URL=`./$(env_bin)/python -c 'import requests; print requests.get("http://api.postgression.com/").text'` >> local.env
+	echo DATABASE_URL='postgres://gittip:gittip@localhost:5432/gittip' >> local.env
 
 schema: env local.env
 	./$(env_bin)/swaddle local.env ./recreate-schema.sh
