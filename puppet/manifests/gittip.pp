@@ -60,6 +60,9 @@ class postgres {
       makeuser:
         command => "psql -U postgres -f /tmp/add_gittip_user.sql",
         require => File['add_gittip_user.sql'];
+      makedb:
+        command => "/tmp/add_gittip_db.sh",
+        require => File['add_gittip_db.sh'];
     }
 
     ppa {
