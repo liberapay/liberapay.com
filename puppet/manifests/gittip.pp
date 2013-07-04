@@ -62,15 +62,9 @@ package {
     make:
       ensure => present,
       require => Exec[aptupdate];
-}
-
-package {
     python-software-properties:
       ensure => present,
       require => Exec[aptupdate];
-}
-
-package {
     python-dev:
       ensure => present,
       require => Exec[aptupdate];
