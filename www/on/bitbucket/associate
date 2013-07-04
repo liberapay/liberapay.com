@@ -29,10 +29,10 @@ try:
 except KeyError:
     request.redirect("/about/me.html")
 
-oauth_hook = OAuth1( token
+oauth_hook = OAuth1( website.bitbucket_consumer_key
+                   , website.bitbucket_consumer_secret
+                   , token
                    , secret
-                   , consumer_key=website.bitbucket_consumer_key
-                   , consumer_secret=website.bitbucket_consumer_secret
                     )
 response = requests.post( "https://bitbucket.org/api/1.0/oauth/access_token"
                         , data={"oauth_verifier": qs['oauth_verifier']}
@@ -44,10 +44,10 @@ reply = parse_qs(response.text)
 token = reply['oauth_token'][0]
 secret = reply['oauth_token_secret'][0]
 
-oauth_hook = OAuth1( token
+oauth_hook = OAuth1( website.bitbucket_consumer_key
+                   , website.bitbucket_consumer_secret
+                   , token
                    , secret
-                   , consumer_key=website.bitbucket_consumer_key
-                   , consumer_secret=website.bitbucket_consumer_secret
                     )
 response = requests.get( "https://bitbucket.org/api/1.0/user"
                        , auth=oauth_hook
