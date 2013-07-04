@@ -250,10 +250,11 @@ extension for unstructured data, and that isn't bundled with earlier
 versions than 9.1. If you're on a Mac, maybe try out Heroku's
 [Postgres.app](http://www.postgresql.org/download/). If installing using a
 package manager, you may need several packages. On Ubuntu and Debian, the
-required packages are: postgresql (base), libpq5-dev (includes headers needed
-to build the psycopg2 Python library), and postgresql-contrib (includes
-hstore).
+required packages are: `postgresql` (base), `libpq5-dev`/`libpq-dev`, (includes headers needed
+to build the `psycopg2` Python library), `postgresql-contrib` (includes
+hstore), `python-dev` (includes Python header files for `psycopg2`).
 
+If you are receiving issues from `psycopg2`, please [ensure their dependencies are met](http://initd.org/psycopg/docs/faq.html#problems-compiling-and-deploying-psycopg2).
 
 ### Authentication
 
