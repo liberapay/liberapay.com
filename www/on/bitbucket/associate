@@ -9,13 +9,13 @@ the Gittip community.
 from urlparse import parse_qs
 
 import requests
-from requests-oauthlib import OAuth1
+from requests_oauthlib import OAuth1
 from aspen import json, log, Response
 from aspen import resources
 from gittip import mixpanel
 from gittip.elsewhere import ACTIONS, bitbucket
 from gittip.participant import NeedConfirmation
-
+\
 # ========================== ^L
 
 if 'denied' in qs:
