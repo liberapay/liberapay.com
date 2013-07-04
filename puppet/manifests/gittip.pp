@@ -3,7 +3,7 @@
 # create gittip user in postgres
 
 group { "puppet":
-    ensure => "present", 
+    ensure => "present",
 }
 class {postgres: }
 
@@ -26,7 +26,7 @@ class postgres {
         ;
     }
 
-    file { 
+    file {
      'pg_hba.conf':
         path    => '/etc/postgresql/9.2/main/pg_hba.conf',
         ensure  => file,
@@ -37,6 +37,11 @@ class postgres {
         ensure => file,
         require => [Package['postgresql-9.2'], Exec[pgrestart]],
         source  => 'puppet:///modules/postgres/add_gittip_user.sql';
+      'add_gittip_db.sh':
+        path => '/tmp/add_gittip_db.sh',
+        ensure => file,
+        require => [Package['postgresql-9.2'], Exec[pgrestart], Exec[makeuser]],
+        source  => 'puppet:///modules/postgres/add_gittip_db.sh';
     }
 
     exec {
