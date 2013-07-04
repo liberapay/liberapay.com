@@ -59,9 +59,21 @@ exec {
 }
 
 package {
-    python-software-properties: 
+    make:
       ensure => present,
-      require => Exec[aptupdate]; 
+      require => Exec[aptupdate];
+}
+
+package {
+    python-software-properties:
+      ensure => present,
+      require => Exec[aptupdate];
+}
+
+package {
+    python-dev:
+      ensure => present,
+      require => Exec[aptupdate];
 }
 
 define ppa($ppa = "$title", $ensure = present) {
