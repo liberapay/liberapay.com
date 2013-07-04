@@ -21,6 +21,9 @@ class postgres {
       "postgresql-9.2":
         ensure => present,
         ;
+      "postgresql-contrib-9.2":
+        ensure => present,
+        ;
       "postgresql-server-dev-9.2":
         ensure => present,
         ;
@@ -40,7 +43,13 @@ class postgres {
       'add_gittip_db.sh':
         path => '/tmp/add_gittip_db.sh',
         ensure => file,
-        require => [Package['postgresql-9.2'], Exec[pgrestart], Exec[makeuser]],
+        require => [
+          Package['postgresql-9.2'],
+          Package['postgresql-contrib-9.2'],
+          Package['postgresql-server-dev-9.2'],
+          Exec[pgrestart],
+          Exec[makeuser]
+        ],
         source  => 'puppet:///modules/postgres/add_gittip_db.sh';
     }
 
