@@ -22,4 +22,8 @@ Vagrant::Config.run do |config|
         puppet.manifest_file  = "gittip.pp"
         puppet.facter = {"fqdn" => "precise64"}
     end
+
+    config.vm.provision :shell, :inline => "cd /vagrant && make db"
+    config.vm.provision :shell,
+        :inline => 'echo "Provision complete!"; echo "To start the app, inside of \'vagrant ssh\', run \'cd /vagrant && make run\'"'
 end
