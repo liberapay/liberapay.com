@@ -13,8 +13,7 @@ if user != participant:
 
 if POST:
     out = []
-
-    new_tips = json.loads(body.get('tips', '[]'))
+    new_tips = json.loads(body.raw)
     seen = set()
     for tip in new_tips:
         seen.add(tip['username'])
