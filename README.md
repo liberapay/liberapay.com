@@ -398,15 +398,19 @@ attribute with a one-word error code. If you include an `also_prune` key with a
 value of `yes`, `true`, or `1`, then any tips not in the array you `POST` will
 be zeroed out.
 
+NOTE: The amounts must be encoded as a string (rather than a number). Additionally,
+currently, the only supported platform is 'gittip'.
+
 This endpoint requires authentication. Look for your API key on your [profile
 page](https://www.gittip.com/about/me.html), and pass it as the basic auth
 username. E.g.:
 
 ```
-curl https://www.gittip.com/${username}/tips.json \
-  -u ${api-key}: \
-  -X POST \
-  -d'[{"username":"jsfiddle", "platform":"gittip", "amount": "1.00"}]'
+curl https://www.gittip.com/khanacademy/tips.json \
+    -u API_KEY: \
+    -X POST \
+    -d'[{"username":"jsfiddle", "platform":"gittip", "amount": "1.00"}]' \
+    -H"Content-Type: application/json
 ```
 
 
