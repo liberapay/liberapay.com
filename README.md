@@ -487,3 +487,4 @@ and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
  - [See.Me](https://www.see.me/) - sustainable crowdfunding for artists
  - [NoiseTrade](http://www.noisetrade.com/) - band mailing lists + tips
  - [YouTube Nonprofit Program](http://www.youtube.com/nonprofits) - puts donate buttons on your vids
+ - [Generous](http://genero.us/) - Pay-what-you-want platform
