@@ -3,7 +3,7 @@
 # create gittip user in postgres
 
 group { "puppet":
-    ensure => "present", 
+    ensure => "present",
 }
 class {postgres: }
 
@@ -21,12 +21,15 @@ class postgres {
       "postgresql-9.2":
         ensure => present,
         ;
+      "postgresql-contrib-9.2":
+        ensure => present,
+        ;
       "postgresql-server-dev-9.2":
         ensure => present,
         ;
     }
 
-    file { 
+    file {
      'pg_hba.conf':
         path    => '/etc/postgresql/9.2/main/pg_hba.conf',
         ensure  => file,
@@ -37,6 +40,17 @@ class postgres {
         ensure => file,
         require => [Package['postgresql-9.2'], Exec[pgrestart]],
         source  => 'puppet:///modules/postgres/add_gittip_user.sql';
+      'add_gittip_db.sh':
+        path => '/tmp/add_gittip_db.sh',
+        ensure => file,
+        require => [
+          Package['postgresql-9.2'],
+          Package['postgresql-contrib-9.2'],
+          Package['postgresql-server-dev-9.2'],
+          Exec[pgrestart],
+          Exec[makeuser]
+        ],
+        source  => 'puppet:///modules/postgres/add_gittip_db.sh';
     }
 
     exec {
@@ -46,6 +60,9 @@ class postgres {
       makeuser:
         command => "psql -U postgres -f /tmp/add_gittip_user.sql",
         require => File['add_gittip_user.sql'];
+      makedb:
+        command => "/tmp/add_gittip_db.sh",
+        require => File['add_gittip_db.sh'];
     }
 
     ppa {
@@ -59,9 +76,15 @@ exec {
 }
 
 package {
-    python-software-properties: 
+    make:
       ensure => present,
-      require => Exec[aptupdate]; 
+      require => Exec[aptupdate];
+    python-software-properties:
+      ensure => present,
+      require => Exec[aptupdate];
+    python-dev:
+      ensure => present,
+      require => Exec[aptupdate];
 }
 
 define ppa($ppa = "$title", $ensure = present) {
