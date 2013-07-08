@@ -18,6 +18,9 @@ $ make test-db
 $ make test
 ```
 
+We also include a
+[Vagrantfile](https://github.com/gittip/www.gittip.com/blob/master/Vagrantfile).
+
 
 Table of Contents
 =================
