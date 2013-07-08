@@ -23,7 +23,8 @@ Vagrant::Config.run do |config|
         puppet.facter = {"fqdn" => "precise64"}
     end
 
-    config.vm.provision :shell, :inline => "cd /vagrant && make db"
+    config.vm.provision :shell, :inline => "echo DATABASE_URL='postgres://gittip:gittip@localhost:5432/gittip' >> /vagrant/local.env"
+    config.vm.provision :shell, :inline => "cd /vagrant && make schema data"
     config.vm.provision :shell,
         :inline => 'echo "Provision complete!"; echo "To start the app, inside of \'vagrant ssh\', run \'cd /vagrant && make run\'"'
 end
