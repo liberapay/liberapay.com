@@ -491,3 +491,4 @@ and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
  - [NoiseTrade](http://www.noisetrade.com/) - band mailing lists + tips
  - [YouTube Nonprofit Program](http://www.youtube.com/nonprofits) - puts donate buttons on your vids
  - [Generous](http://genero.us/) - Pay-what-you-want platform
+ - [FundAnything](http://fundanything.com/) - Kickstarter knock-off, I guess?
