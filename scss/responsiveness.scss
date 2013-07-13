@@ -12,31 +12,25 @@
             float: none;
             margin: 0 auto;
         }
-        #leaderboard {
-            width: 600px;
-
-            > * {
-                width: 180px;
-            }
-
+    }
+    #leaderboard {
+        width: 600px;
+        > * {
+            width: 180px;
         }
     }
 }
 
 @media (max-width: 680px) {
-    #page {
-        #leaderboard {
-            width: 375px;
-
-            > * {
-                width: auto;
-                margin: 0;
-                float: none;
-            }
-
-            ul li.luxury {
-                display: none;
-            }
+    #leaderboard {
+        width: 375px;
+        > * {
+            width: auto;
+            margin: 0;
+            float: none;
+        }
+        ul li.luxury {
+            display: none;
         }
     }
 }
