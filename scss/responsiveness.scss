@@ -66,19 +66,21 @@
     .main-padding {
         padding: 0 26px;
     }
-    #hero h2.top {
-        font-size: 35px;
-        line-height: 1em;
-        padding: 50px 0 35px;
-        &:after {
-            margin-top: -17px;
+    #hero {
+        h2.top {
+            font-size: 35px;
+            line-height: 1em;
+            padding: 50px 0 35px;
+            &:after {
+                margin-top: -17px;
+            }
         }
-    }
-    #hero h1 {
-        font-size: 64px;
-        line-height: 1em;
-        letter-spacing: -3px;
-        padding: 0 0 20px;
+        h1 {
+            font-size: 64px;
+            line-height: 1em;
+            letter-spacing: -3px;
+            padding: 0 0 20px;
+        }
     }
 }
 @media (max-width: 580px) {
@@ -94,19 +96,21 @@
 }
 
 @media (max-width: 550px) {
-    #hero h2.top {
-        font-size: 31px;
-        line-height: 1em;
-        padding: 43px 0 29px;
-        &:after {
-            margin-top: -9px;
+    #hero {
+        h2.top {
+            font-size: 31px;
+            line-height: 1em;
+            padding: 43px 0 29px;
+            &:after {
+                margin-top: -9px;
+            }
         }
-    }
-    #hero h1 {
-        font-size: 57px;
-        line-height: 1em;
-        letter-spacing: -1px;
-        padding: 0 0 15px;
+        h1 {
+            font-size: 57px;
+            line-height: 1em;
+            letter-spacing: -1px;
+            padding: 0 0 15px;
+        }
     }
 }
 
@@ -144,19 +148,21 @@
     .main-padding {
         padding: 0 12px;
     }
-    #hero h2.top {
-        font-size: 27px;
-        line-height: 1em;
-        padding: 36px 0 23px;
-        &:after {
-            margin-top: -9px;
+    #hero {
+        h2.top {
+            font-size: 27px;
+            line-height: 1em;
+            padding: 36px 0 23px;
+            &:after {
+                margin-top: -9px;
+            }
         }
-    }
-    #hero h1 {
-        font-size: 50px;
-        line-height: 1em;
-        letter-spacing: -1px;
-        padding: 0 0 10px;
+        h1 {
+            font-size: 50px;
+            line-height: 1em;
+            letter-spacing: -1px;
+            padding: 0 0 10px;
+        }
     }
 }
 
@@ -211,87 +217,97 @@
     #header .luxury {
         display: none;
     }
-    #box table h2 {
-        font-size: 14px;
-        line-height: 1em;
-    }
-    #box table .pad-sign {
-        padding-left: 36px;
-    }
-    #box table .number {
-        font-size: 56px;
-        line-height: 1em;
-    }
-    #box table .unit {
-        font-size: 12px;
-        line-height: 1em;
+    #box table {
+        h2 {
+            font-size: 14px;
+            line-height: 1em;
+        }
+        .pad-sign {
+            padding-left: 36px;
+        }
+        .number {
+            font-size: 56px;
+            line-height: 1em;
+        }
+        .unit {
+            font-size: 12px;
+            line-height: 1em;
+        }
     }
 }
 
 @media (max-width: 450px) {
-    #hero h2.top {
-        font-size: 23px;
-        line-height: 1em;
-        padding: 29px 0 17px;
-        &:after {
-            margin-top: -9px;
+    #hero {
+        h2.top {
+            font-size: 23px;
+            line-height: 1em;
+            padding: 29px 0 17px;
+            &:after {
+                margin-top: -9px;
+            }
         }
-    }
-    #hero h1 {
-        font-size: 43px;
-        line-height: 1em;
-        letter-spacing: -1px;
-        padding: 0 0 5px;
+        h1 {
+            font-size: 43px;
+            line-height: 1em;
+            letter-spacing: -1px;
+            padding: 0 0 5px;
+        }
     }
 }
 
 @media (max-width: 420px) {
-    #box table h2 {
-        font-size: 13px;
-        line-height: 1em;
-    }
-    #box table .pad-sign {
-        padding-left: 30px;
-    }
-    #box table .number {
-        font-size: 48px;
-        line-height: 1em;
-    }
-    #box table .unit {
-        font-size: 11px;
-        line-height: 1em;
+    #box table {
+        h2 {
+            font-size: 13px;
+            line-height: 1em;
+        }
+        .pad-sign {
+            padding-left: 30px;
+        }
+        .number {
+            font-size: 48px;
+            line-height: 1em;
+        }
+        .unit {
+            font-size: 11px;
+            line-height: 1em;
+        }
     }
 }
 
 @media (max-width: 400px) {
-    #hero h2.top {
-        font-size: 19px;
-        line-height: 1em;
-        padding: 22px 0 11px;
-        &:after {
-            margin-top: -9px;
+    #hero {
+        h2.top {
+            font-size: 19px;
+            line-height: 1em;
+            padding: 22px 0 11px;
+            &:after {
+                margin-top: -9px;
+            }
         }
-    }
-    #hero h1 {
-        font-size: 36px;
-        line-height: 1em;
-        letter-spacing: -1px;
-        padding: 0;
+        h1 {
+            font-size: 36px;
+            line-height: 1em;
+            letter-spacing: -1px;
+            padding: 0;
+        }
     }
 }
 
 @media (max-width: 380px) {
-    #box table h2 {
-        /* Should these be the same value? */
-        font-size: 13px;
-        line-height: 12px;
-    }
-    #box table .pad-sign {
-        padding-left: 24px;
-    }
-    #box table .number {
-        font-size: 40px;
-        line-height: 1em;
+    #box table {
+        h2 {
+            /* Should these be the same value? */
+            font-size: 13px;
+            line-height: 12px;
+        }
+        .pad-sign {
+            padding-left: 24px;
+        }
+        .number {
+            font-size: 40px;
+            line-height: 1em;
+        }
     }
 }
 
@@ -304,37 +320,41 @@
 }
 
 @media (max-width: 350px) {
-    #hero h2.top {
-        font-size: 15px;
-        line-height: 1em;
-        padding: 15px 0 5px;
-        &:after {
-            margin-top: -9px;
+    #hero {
+        h2.top {
+            font-size: 15px;
+            line-height: 1em;
+            padding: 15px 0 5px;
+            &:after {
+                margin-top: -9px;
+            }
         }
-    }
-    #hero h1 {
-        font-size: 29px;
-        line-height: 1em;
-        letter-spacing: 0px;
-        padding: 0;
+        h1 {
+            font-size: 29px;
+            line-height: 1em;
+            letter-spacing: 0px;
+            padding: 0;
+        }
     }
 }
 
 @media (max-width: 340px) {
-    #box table h2 {
-        font-size: 11px;
-        line-height: 1em;
-    }
-    #box table .pad-sign {
-        padding-left: 18px;
-    }
-    #box table .number {
-        font-size: 32px;
-        line-height: 1em;
-    }
-    #box table .unit {
-        font-size: 10px;
-        line-height: 1em;
+    #box table {
+        h2 {
+            font-size: 11px;
+            line-height: 1em;
+        }
+        .pad-sign {
+            padding-left: 18px;
+        }
+        .number {
+            font-size: 32px;
+            line-height: 1em;
+        }
+        .unit {
+            font-size: 10px;
+            line-height: 1em;
+        }
     }
 }
 
@@ -345,20 +365,22 @@
 }
 
 @media (max-width: 300px) {
-    #box table h2 {
-        font-size: 10px;
-        line-height: 1em;
-    }
-    #box table .pad-sign {
-        padding-left: 12px;
-    }
-    #box table .number {
-        font-size: 24px;
-        line-height: 1em;
-    }
-    #box table .unit {
-        font-size: 9px;
-        line-height: 1em;
+    #box table {
+        h2 {
+            font-size: 10px;
+            line-height: 1em;
+        }
+        .pad-sign {
+            padding-left: 12px;
+        }
+        .number {
+            font-size: 24px;
+            line-height: 1em;
+        }
+        .unit {
+            font-size: 9px;
+            line-height: 1em;
+        }
     }
 }
 
