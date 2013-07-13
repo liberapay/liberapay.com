@@ -6,8 +6,6 @@
         width: auto;
         padding: 0 35px;
     }
-    #header {
-    }
     #page {
         .col, .col1, .col2 {
             width: 460px;
@@ -43,23 +41,43 @@
     }
 }
 
-@media (max-width: 670px) { .main-padding { padding: 0 34px; } }
-
-@media (max-width: 660px) { .main-padding { padding: 0 32px; } }
-
-@media (max-width: 640px) {
-    .main-padding { padding: 0 30px; }
-    #header .motto { visibility: hidden; }
+@media (max-width: 670px) {
+    .main-padding {
+        padding: 0 34px;
+    }
 }
 
-@media (max-width: 620px) { .main-padding { padding: 0 28px; } }
+@media (max-width: 660px) {
+    .main-padding {
+        padding: 0 32px;
+    }
+}
+
+@media (max-width: 640px) {
+    .main-padding {
+        padding: 0 30px;
+    }
+    #header .motto {
+        visibility: hidden;
+    }
+}
+
+@media (max-width: 620px) {
+    .main-padding {
+        padding: 0 28px;
+    }
+}
 
 @media (max-width: 600px) {
-    .main-padding { padding: 0 26px; }
+    .main-padding {
+        padding: 0 26px;
+    }
     #hero h2.top {
         font-size: 35px;
         line-height: 35px;
-        &:after { margin-top: -17px; }
+        &:after {
+            margin-top: -17px;
+        }
         padding: 50px 0 35px;
     }
     #hero h1 {
@@ -69,16 +87,25 @@
         padding: 0 0 20px;
     }
 }
-@media (max-width: 580px) { .main-padding { padding: 0 24px; } }
+@media (max-width: 580px) {
+    .main-padding {
+        padding: 0 24px;
+    }
+}
 
-@media (max-width: 560px) { .main-padding { padding: 0 22px; } }
-
+@media (max-width: 560px) {
+    .main-padding {
+        padding: 0 22px;
+    }
+}
 
 @media (max-width: 550px) {
     #hero h2.top {
         font-size: 31px;
         line-height: 31px;
-        &:after { margin-top: -9px; }
+        &:after {
+            margin-top: -9px;
+        }
         padding: 43px 0 29px;
     }
     #hero h1 {
@@ -90,7 +117,9 @@
 }
 
 @media (max-width: 540px) {
-    .main-padding { padding: 0 20px; }
+    .main-padding {
+        padding: 0 20px;
+    }
     body {
         font: normal 14px $Helvetica;
     }
@@ -99,14 +128,28 @@
     }
 }
 
-@media (max-width: 530px) { .main-padding { padding: 0 18px; } }
+@media (max-width: 530px) {
+    .main-padding {
+        padding: 0 18px;
+    }
+}
 
-@media (max-width: 520px) { .main-padding { padding: 0 16px; } }
+@media (max-width: 520px) {
+    .main-padding {
+        padding: 0 16px;
+    }
+}
 
-@media (max-width: 510px) { .main-padding { padding: 0 14px; } }
+@media (max-width: 510px) {
+    .main-padding {
+        padding: 0 14px;
+    }
+}
 
 @media (max-width: 500px) {
-    .main-padding { padding: 0 12px; }
+    .main-padding {
+        padding: 0 12px;
+    }
     #hero h2.top {
         font-size: 27px;
         line-height: 27px;
@@ -121,9 +164,17 @@
     }
 }
 
-@media (max-width: 494px) { #box { width: auto; } }
+@media (max-width: 494px) {
+    #box {
+        width: auto;
+    }
+}
 
-@media (max-width: 490px) { .main-padding { padding: 0 10px; } }
+@media (max-width: 490px) {
+    .main-padding {
+        padding: 0 10px;
+    }
+}
 
 @media (max-width: 480px) {
     .main-padding {
@@ -151,22 +202,40 @@
     }
 }
 
-@media (max-width: 470px) { .main-padding { padding: 0 6px; } }
+@media (max-width: 470px) {
+    .main-padding {
+        padding: 0 6px;
+    }
+}
 
 @media (max-width: 460px) {
-    .main-padding { padding: 0 4px; }
-    #header .luxury { display: none; }
-    #box table h2 { font-size: 14px; line-height: 14px; }
-    #box table .pad-sign { padding-left: 36px ! important; }
-    #box table .number { font-size: 56px; line-height: 56px; }
-    #box table .unit { font-size: 12px; line-height: 12px; }
+    .main-padding {
+        padding: 0 4px;
+    }
+    #header .luxury {
+        display: none;
+    }
+    #box table h2 {
+        font-size: 14px; line-height: 14px;
+    }
+    #box table .pad-sign {
+        padding-left: 36px ! important;
+    }
+    #box table .number {
+        font-size: 56px; line-height: 56px;
+    }
+    #box table .unit {
+        font-size: 12px; line-height: 12px;
+    }
 }
 
 @media (max-width: 450px) {
     #hero h2.top {
         font-size: 23px;
         line-height: 23px;
-        &:after { margin-top: -9px; }
+        &:after {
+            margin-top: -9px;
+        }
         padding: 29px 0 17px;
     }
     #hero h1 {
@@ -178,17 +247,27 @@
 }
 
 @media (max-width: 420px) {
-    #box table h2 { font-size: 13px; line-height: 13px; }
-    #box table .pad-sign { padding-left: 30px ! important; }
-    #box table .number { font-size: 48px; line-height: 48px; }
-    #box table .unit { font-size: 11px; line-height: 11px; }
+    #box table h2 {
+        font-size: 13px; line-height: 13px;
+    }
+    #box table .pad-sign {
+        padding-left: 30px ! important;
+    }
+    #box table .number {
+        font-size: 48px; line-height: 48px;
+    }
+    #box table .unit {
+        font-size: 11px; line-height: 11px;
+    }
 }
 
 @media (max-width: 400px) {
     #hero h2.top {
         font-size: 19px;
         line-height: 19px;
-        &:after { margin-top: -9px; }
+        &:after {
+            margin-top: -9px;
+        }
         padding: 22px 0 11px;
     }
     #hero h1 {
@@ -200,9 +279,15 @@
 }
 
 @media (max-width: 380px) {
-    #box table h2 { font-size: 13px; line-height: 12px; }
-    #box table .pad-sign { padding-left: 24px ! important; }
-    #box table .number { font-size: 40px; line-height: 40px; }
+    #box table h2 {
+        font-size: 13px; line-height: 12px;
+    }
+    #box table .pad-sign {
+        padding-left: 24px ! important;
+    }
+    #box table .number {
+        font-size: 40px; line-height: 40px;
+    }
 }
 
 @media (max-width: 360px) {
@@ -217,7 +302,9 @@
     #hero h2.top {
         font-size: 15px;
         line-height: 15px;
-        &:after { margin-top: -9px; }
+        &:after {
+            margin-top: -9px;
+        }
         padding: 15px 0 5px;
     }
     #hero h1 {
@@ -229,10 +316,18 @@
 }
 
 @media (max-width: 340px) {
-    #box table h2 { font-size: 11px; line-height: 11px; }
-    #box table .pad-sign { padding-left: 18px ! important; }
-    #box table .number { font-size: 32px; line-height: 32px; }
-    #box table .unit { font-size: 10px; line-height: 10px; }
+    #box table h2 {
+        font-size: 11px; line-height: 11px;
+    }
+    #box table .pad-sign {
+        padding-left: 18px ! important;
+    }
+    #box table .number {
+        font-size: 32px; line-height: 32px;
+    }
+    #box table .unit {
+        font-size: 10px; line-height: 10px;
+    }
 }
 
 @media (max-width: 320px) {
@@ -242,17 +337,31 @@
 }
 
 @media (max-width: 300px) {
-    #box table h2 { font-size: 10px; line-height: 10px; }
-    #box table .pad-sign { padding-left: 12px ! important; }
-    #box table .number { font-size: 24px; line-height: 24px; }
-    #box table .unit { font-size: 9px; line-height: 9px; }
+    #box table h2 {
+        font-size: 10px; line-height: 10px;
+    }
+    #box table .pad-sign {
+        padding-left: 12px ! important;
+    }
+    #box table .number {
+        font-size: 24px; line-height: 24px;
+    }
+    #box table .unit {
+        font-size: 9px; line-height: 9px;
+    }
 }
 
 @media (max-width: 240px) {
     #header {
-        .logo { padding-right: 0; }
-        .motto.luxury { display: none; }
-        .login .luxury { display: none; }
+        .logo {
+            padding-right: 0;
+        }
+        .motto.luxury {
+            display: none;
+        }
+        .login .luxury {
+            display: none;
+        }
     }
 }
 
