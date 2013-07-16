@@ -232,7 +232,7 @@ Gittip.payments.ba.handleResponse = function (response) {
                            + "\">payment processor's escalation process</a>."
                 ];
             }
-            Gittip.showFeedback(data.problem, messages);
+            Gittip.forms.showFeedback(data.problem, messages);
             $('BUTTON#save').text('Save');
         }
 
@@ -321,21 +321,21 @@ Gittip.payments.cc.submit = function(e)
     if (!balanced.card.isCardNumberValid(credit_card.card_number))
     {
         $('BUTTON#save').text('Save');
-        Gittip.showFeedback(null, ["Your card number is bad."]);
+        Gittip.forms.showFeedback(null, ["Your card number is bad."]);
     }
     else if (!balanced.card.isExpiryValid( credit_card.expiration_month
                                          , credit_card.expiration_year
                                           ))
     {
         $('BUTTON#save').text('Save');
-        Gittip.showFeedback(null, ["Your expiration date is bad."]);
+        Gittip.forms.showFeedback(null, ["Your expiration date is bad."]);
     }
     else if (!balanced.card.isSecurityCodeValid( credit_card.card_number
                                                , credit_card.security_code
                                                 ))
     {
         $('BUTTON#save').text('Save');
-        Gittip.showFeedback(null, ["Your CVV is bad."]);
+        Gittip.forms.showFeedback(null, ["Your CVV is bad."]);
     }
     else
     {
@@ -375,7 +375,7 @@ Gittip.payments.cc.handleResponse = function(response)
              }
         );
 
-        Gittip.showFeedback(null, [response.error.description]);
+        Gittip.forms.showFeedback(null, [response.error.description]);
     }
     else
     {
