@@ -43,7 +43,7 @@ website.bountysource_callback = os.environ['BOUNTYSOURCE_CALLBACK'].decode('ASCI
 def up_minthreads(website):
     # Discovered the following API by inspecting in pdb and browsing source.
     # This requires network_engine.bind to have already been called.
-    website.network_engine.cheroot_server.requests.min = 500
+    website.network_engine.cheroot_server.requests.min = 200
 
 website.hooks.startup.insert(0, up_minthreads)
 
