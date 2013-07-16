@@ -1,11 +1,3 @@
-import gittip
-^L
-team = gittip.db.fetchall("""
-
-SELECT * FROM current_memberships WHERE team='Gittip' ORDER BY lower(member);
-
-""")
-
 ^L
 {% extends templates/base.html %}
 {% block heading %}
@@ -36,18 +28,35 @@ SELECT * FROM current_memberships WHERE team='Gittip' ORDER BY lower(member);
   Gittip.</p>
 
 
-  <h2>Sources of Truth</h2>
+  <h2>How is work divided?</h2>
 
-  <p>Here's where Gittip gets defined, most important to least:</p>
+  <p>We have three departments:</p>
 
   <dl>
 
-    <dt>0. Oral Tradition</dt>
+    <dt><a href="business-development/">Business Development</a></dt>
 
-    <dd>The burning heart of Gittip is the <a href="/Gittip/members/">team of
-      people</a> that are building it together and the relationships we share
-    with one another. Join us by diving in as further described below! :-)</dd>
+    <dd>Find people and teams that want to use Gittip for funding. Find
+    companies and foundations that are interested in investing in people and
+    teams via Gittip.</dd>
 
+
+    <dt><a href="community-engagement/">Community Engagement</a></dt>
+
+    <dd>Engage people on Twitter and Facebook and other social media, and
+    manage our GitHub issue tracker.</dd>
+
+
+    <dt><a href="engineering/">Engineering</a></dt>
+
+    <dd>Build products for Gittip.</dd>
+
+  </dl>
+
+
+  <h2>Where does work happen?</h2>
+
+  <dl>
 
     <dt>1. IRC (Internet Relay Chat)</dt>
 
@@ -108,7 +117,13 @@ SELECT * FROM current_memberships WHERE team='Gittip' ORDER BY lower(member);
     audience is the general public.</dd>
 
 
-    <dt>7. Email / Text / Phone</dt>
+    <dt>7. In Person</dt>
+
+    <dd>We're predominantly a distributed team, but we do sometimes come
+    together at meetups and hackathons and conferences and whatnot.</dd>
+
+
+    <dt>8. Email / Text / Phone</dt>
 
     <dd>We don't have private conversations if we can help it, but we'd rather
     hear from you privately than not at all. If you're not ready to jump in on
@@ -116,6 +131,13 @@ SELECT * FROM current_memberships WHERE team='Gittip' ORDER BY lower(member);
     Whitacre or text/call him at +1-412-925-4220.</dd>
 
   </dl>
+
+
+  <h2>Where do I start?</h2>
+
+  <p>Tweet <a href="https://twitter.com/Gittip">@Gittip</a> indicating what
+  department you are interested in, and one of our community liaisons will help
+  you get started with your first project.</p>
 
 </div>
 {% end %}
