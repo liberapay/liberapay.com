@@ -6,91 +6,118 @@
         width: auto;
         padding: 0 35px;
     }
-    #header {
-    }
     #page {
         .col, .col1, .col2 {
             width: 460px;
             float: none;
             margin: 0 auto;
         }
-        #leaderboard {
-            width: 600px;
-
-            > * {
-                width: 180px;
-            }
-
+    }
+    #leaderboard {
+        width: 600px;
+        > * {
+            width: 180px;
         }
     }
 }
 
 @media (max-width: 680px) {
-    #page {
-        #leaderboard {
-            width: 375px;
-
-            > * {
-                width: auto;
-                margin: 0;
-                float: none;
-            }
-
-            ul li.luxury {
-                display: none;
-            }
+    #leaderboard {
+        width: 375px;
+        > * {
+            width: auto;
+            margin: 0;
+            float: none;
+        }
+        ul li.luxury {
+            display: none;
         }
     }
 }
 
-@media (max-width: 670px) { .main-padding { padding: 0 34px; } }
+@media (max-width: 670px) {
+    .main-padding {
+        padding: 0 34px;
+    }
+}
 
-@media (max-width: 660px) { .main-padding { padding: 0 32px; } }
+@media (max-width: 660px) {
+    .main-padding {
+        padding: 0 32px;
+    }
+}
 
 @media (max-width: 640px) {
-    .main-padding { padding: 0 30px; }
-    #header .motto { visibility: hidden; }
+    .main-padding {
+        padding: 0 30px;
+    }
+    #header .motto {
+        visibility: hidden;
+    }
 }
 
-@media (max-width: 620px) { .main-padding { padding: 0 28px; } }
+@media (max-width: 620px) {
+    .main-padding {
+        padding: 0 28px;
+    }
+}
 
 @media (max-width: 600px) {
-    .main-padding { padding: 0 26px; }
-    #hero h2.top {
-        font-size: 35px;
-        line-height: 35px;
-        &:after { margin-top: -17px; }
-        padding: 50px 0 35px;
+    .main-padding {
+        padding: 0 26px;
     }
-    #hero h1 {
-        font-size: 64px;
-        line-height: 64px;
-        letter-spacing: -3px;
-        padding: 0 0 20px;
+    #hero {
+        h2.top {
+            font-size: 35px;
+            line-height: 1em;
+            padding: 50px 0 35px;
+            &:after {
+                margin-top: -17px;
+            }
+        }
+        h1 {
+            font-size: 64px;
+            line-height: 1em;
+            letter-spacing: -3px;
+            padding: 0 0 20px;
+        }
     }
 }
-@media (max-width: 580px) { .main-padding { padding: 0 24px; } }
+@media (max-width: 580px) {
+    .main-padding {
+        padding: 0 24px;
+    }
+}
 
-@media (max-width: 560px) { .main-padding { padding: 0 22px; } }
-
+@media (max-width: 560px) {
+    .main-padding {
+        padding: 0 22px;
+    }
+}
 
 @media (max-width: 550px) {
-    #hero h2.top {
-        font-size: 31px;
-        line-height: 31px;
-        &:after { margin-top: -9px; }
-        padding: 43px 0 29px;
-    }
-    #hero h1 {
-        font-size: 57px;
-        line-height: 57px;
-        letter-spacing: -1px;
-        padding: 0 0 15px;
+    #hero {
+        h2.top {
+            font-size: 31px;
+            line-height: 1em;
+            padding: 43px 0 29px;
+            &:after {
+                margin-top: -9px;
+            }
+        }
+        h1 {
+            font-size: 57px;
+            line-height: 1em;
+            letter-spacing: -1px;
+            padding: 0 0 15px;
+        }
     }
 }
 
 @media (max-width: 540px) {
-    .main-padding { padding: 0 20px; }
+    .main-padding {
+        padding: 0 20px;
+    }
     body {
         font: normal 14px $Helvetica;
     }
@@ -99,31 +126,57 @@
     }
 }
 
-@media (max-width: 530px) { .main-padding { padding: 0 18px; } }
-
-@media (max-width: 520px) { .main-padding { padding: 0 16px; } }
-
-@media (max-width: 510px) { .main-padding { padding: 0 14px; } }
-
-@media (max-width: 500px) {
-    .main-padding { padding: 0 12px; }
-    #hero h2.top {
-        font-size: 27px;
-        line-height: 27px;
-        &:after { margin-top: -9px; }
-        padding: 36px 0 23px;
-    }
-    #hero h1 {
-        font-size: 50px;
-        line-height: 50px;
-        letter-spacing: -1px;
-        padding: 0 0 10px;
+@media (max-width: 530px) {
+    .main-padding {
+        padding: 0 18px;
     }
 }
 
-@media (max-width: 494px) { #box { width: auto; } }
+@media (max-width: 520px) {
+    .main-padding {
+        padding: 0 16px;
+    }
+}
 
-@media (max-width: 490px) { .main-padding { padding: 0 10px; } }
+@media (max-width: 510px) {
+    .main-padding {
+        padding: 0 14px;
+    }
+}
+
+@media (max-width: 500px) {
+    .main-padding {
+        padding: 0 12px;
+    }
+    #hero {
+        h2.top {
+            font-size: 27px;
+            line-height: 1em;
+            padding: 36px 0 23px;
+            &:after {
+                margin-top: -9px;
+            }
+        }
+        h1 {
+            font-size: 50px;
+            line-height: 1em;
+            letter-spacing: -1px;
+            padding: 0 0 10px;
+        }
+    }
+}
+
+@media (max-width: 494px) {
+    #box {
+        width: auto;
+    }
+}
+
+@media (max-width: 490px) {
+    .main-padding {
+        padding: 0 10px;
+    }
+}
 
 @media (max-width: 480px) {
     .main-padding {
@@ -151,58 +204,111 @@
     }
 }
 
-@media (max-width: 470px) { .main-padding { padding: 0 6px; } }
+@media (max-width: 470px) {
+    .main-padding {
+        padding: 0 6px;
+    }
+}
 
 @media (max-width: 460px) {
-    .main-padding { padding: 0 4px; }
-    #header .luxury { display: none; }
-    #box table h2 { font-size: 14px; line-height: 14px; }
-    #box table .pad-sign { padding-left: 36px ! important; }
-    #box table .number { font-size: 56px; line-height: 56px; }
-    #box table .unit { font-size: 12px; line-height: 12px; }
+    .main-padding {
+        padding: 0 4px;
+    }
+    #header .luxury {
+        display: none;
+    }
+    #box table {
+        h2 {
+            font-size: 14px;
+            line-height: 1em;
+        }
+        .pad-sign {
+            padding-left: 36px;
+        }
+        .number {
+            font-size: 56px;
+            line-height: 1em;
+        }
+        .unit {
+            font-size: 12px;
+            line-height: 1em;
+        }
+    }
 }
 
 @media (max-width: 450px) {
-    #hero h2.top {
-        font-size: 23px;
-        line-height: 23px;
-        &:after { margin-top: -9px; }
-        padding: 29px 0 17px;
-    }
-    #hero h1 {
-        font-size: 43px;
-        line-height: 43px;
-        letter-spacing: -1px;
-        padding: 0 0 5px;
+    #hero {
+        h2.top {
+            font-size: 23px;
+            line-height: 1em;
+            padding: 29px 0 17px;
+            &:after {
+                margin-top: -9px;
+            }
+        }
+        h1 {
+            font-size: 43px;
+            line-height: 1em;
+            letter-spacing: -1px;
+            padding: 0 0 5px;
+        }
     }
 }
 
 @media (max-width: 420px) {
-    #box table h2 { font-size: 13px; line-height: 13px; }
-    #box table .pad-sign { padding-left: 30px ! important; }
-    #box table .number { font-size: 48px; line-height: 48px; }
-    #box table .unit { font-size: 11px; line-height: 11px; }
+    #box table {
+        h2 {
+            font-size: 13px;
+            line-height: 1em;
+        }
+        .pad-sign {
+            padding-left: 30px;
+        }
+        .number {
+            font-size: 48px;
+            line-height: 1em;
+        }
+        .unit {
+            font-size: 11px;
+            line-height: 1em;
+        }
+    }
 }
 
 @media (max-width: 400px) {
-    #hero h2.top {
-        font-size: 19px;
-        line-height: 19px;
-        &:after { margin-top: -9px; }
-        padding: 22px 0 11px;
-    }
-    #hero h1 {
-        font-size: 36px;
-        line-height: 36px;
-        letter-spacing: -1px;
-        padding: 0;
+    #hero {
+        h2.top {
+            font-size: 19px;
+            line-height: 1em;
+            padding: 22px 0 11px;
+            &:after {
+                margin-top: -9px;
+            }
+        }
+        h1 {
+            font-size: 36px;
+            line-height: 1em;
+            letter-spacing: -1px;
+            padding: 0;
+        }
     }
 }
 
 @media (max-width: 380px) {
-    #box table h2 { font-size: 13px; line-height: 12px; }
-    #box table .pad-sign { padding-left: 24px ! important; }
-    #box table .number { font-size: 40px; line-height: 40px; }
+    #box table {
+        h2 {
+            /* Should these be the same value? */
+            font-size: 13px;
+            line-height: 12px;
+        }
+        .pad-sign {
+            padding-left: 24px;
+        }
+        .number {
+            font-size: 40px;
+            line-height: 1em;
+        }
+    }
 }
 
 @media (max-width: 360px) {
@@ -214,25 +320,42 @@
 }
 
 @media (max-width: 350px) {
-    #hero h2.top {
-        font-size: 15px;
-        line-height: 15px;
-        &:after { margin-top: -9px; }
-        padding: 15px 0 5px;
-    }
-    #hero h1 {
-        font-size: 29px;
-        line-height: 29px;
-        letter-spacing: 0px;
-        padding: 0;
+    #hero {
+        h2.top {
+            font-size: 15px;
+            line-height: 1em;
+            padding: 15px 0 5px;
+            &:after {
+                margin-top: -9px;
+            }
+        }
+        h1 {
+            font-size: 29px;
+            line-height: 1em;
+            letter-spacing: 0px;
+            padding: 0;
+        }
     }
 }
 
 @media (max-width: 340px) {
-    #box table h2 { font-size: 11px; line-height: 11px; }
-    #box table .pad-sign { padding-left: 18px ! important; }
-    #box table .number { font-size: 32px; line-height: 32px; }
-    #box table .unit { font-size: 10px; line-height: 10px; }
+    #box table {
+        h2 {
+            font-size: 11px;
+            line-height: 1em;
+        }
+        .pad-sign {
+            padding-left: 18px;
+        }
+        .number {
+            font-size: 32px;
+            line-height: 1em;
+        }
+        .unit {
+            font-size: 10px;
+            line-height: 1em;
+        }
+    }
 }
 
 @media (max-width: 320px) {
@@ -242,17 +365,36 @@
 }
 
 @media (max-width: 300px) {
-    #box table h2 { font-size: 10px; line-height: 10px; }
-    #box table .pad-sign { padding-left: 12px ! important; }
-    #box table .number { font-size: 24px; line-height: 24px; }
-    #box table .unit { font-size: 9px; line-height: 9px; }
+    #box table {
+        h2 {
+            font-size: 10px;
+            line-height: 1em;
+        }
+        .pad-sign {
+            padding-left: 12px;
+        }
+        .number {
+            font-size: 24px;
+            line-height: 1em;
+        }
+        .unit {
+            font-size: 9px;
+            line-height: 1em;
+        }
+    }
 }
 
 @media (max-width: 240px) {
     #header {
-        .logo { padding-right: 0; }
-        .motto.luxury { display: none; }
-        .login .luxury { display: none; }
+        .logo {
+            padding-right: 0;
+        }
+        .motto.luxury {
+            display: none;
+        }
+        .login .luxury {
+            display: none;
+        }
     }
 }
 
