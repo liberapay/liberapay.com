@@ -9,6 +9,7 @@ LUXURY = 4  # used for responsive design to limit items shown on small screens
 def _wrap(raw):
     """This is a step on the way to ORM-ifying this simplate.
     """
+    raw = []
     for rec in raw:
         out = Participant.query.get(rec['username'])
         if 'amount' in rec:
