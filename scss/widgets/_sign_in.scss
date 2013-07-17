@@ -16,6 +16,9 @@
       // margin-right: 8px;
     }
   }
+  .open .dropdown-toggle, .dropdown-toggle:hover {
+    background: $darker-green;
+  }
   .dropdown-menu {
     top: 24px;
     @include border-radius(3px);
@@ -44,7 +47,7 @@
       position: relative;
       font-size: 12px;
       &:hover {
-        background: darken($green, 5);
+        background: $darker-green;
       }
     }
   }

@@ -56,7 +56,7 @@ button.join-leave[data-is-member="true"] {
 }
 
 button.join-leave[data-is-member="false"] {
-    background: $green
+    @extend .selected;
 }
 .my-tip-range {
     .my-tip-range-range {
