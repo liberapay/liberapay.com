@@ -22,6 +22,8 @@
     <script src="/assets/chosen/chosen.jquery.min.js"></script>
     <style>@import url("/assets/chosen/chosen.css");</style>
 
+    <script src="/assets/{{ __version__ }}/vendor/bootstrap-dropdown.js"></script>
+
     <script src="/assets/{{ __version__ }}/utils.js"></script>
     <script src="/assets/{{ __version__ }}/gittip.js"></script>
     <script src="/assets/{{ __version__ }}/gittip/communities.js"></script>
@@ -57,9 +59,7 @@
             Distributed Genius Grants
         </td></tr></table>
         {% if user.ANON %}
-        <div class="sign-in">
           {% include sign-in-using.html %}
-        </div>
         {% else %}
         <div class="you-are">
             <a href="/{{ user.username }}/">{{ user.username }}</a> &ndash;

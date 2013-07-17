@@ -155,7 +155,9 @@ Gittip.tips.init = function()
     // For anonymous users we flash a login link.
 
     $('.my-tip-range.anon BUTTON').mouseover(
-        function() { $('.nav.level-1 .flash-me').addClass('highlight'); }
+        function() {
+            $('.sign-in-to-give .dropdown-toggle').addClass('highlight');
+        }
     );
     $('.my-tip-range.anon BUTTON').click(function()
     {
@@ -163,7 +165,7 @@ Gittip.tips.init = function()
         function flash()
         {
             if (i++ == 6) return;
-            $('.nav.level-1 .flash-me').toggleClass('highlight');
+            $('.sign-in-to-give .dropdown-toggle').toggleClass('highlight');
             setTimeout(flash, 100);
         }
         flash();

@@ -200,8 +200,8 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
 <div class="nav level-1">
     {% if user.ANON %}
     <div class="help with-padding">
-        {% include templates/sign-in-using.html %} to <br />
-        join the {{ community.name }} community on Gittip.
+        {% include templates/sign-in-using.html %}
+        to join the {{ community.name }} community on Gittip.
     </div>
     {% else %}
     {% set is_member = community.check_membership(user) %}
