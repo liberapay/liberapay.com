@@ -15,32 +15,23 @@ button::-moz-focus-inner {
 
 button {
     background: $gray;
-    // border: 3px solid rgba($gray, 0.33);
     border: 0;
     color: white;
     font: bold 12px $Helvetica;
-    // letter-spacing: 1px;
     margin: 0 0 0 1px;
     padding: 5px 8px;
-    // text-transform: uppercase;
     @include border-radius(3px);
     cursor: pointer;
     display: inline;
 }
 button:hover {
-    // border-color: $gray;
     background: $darker-gray;
-    color: white;
 }
 button.selected {
-    // border-color: rgba(#FFF, 0.9);
     background: $green;
-    color: white;
 }
 button.selected:hover, button.selected.drag {
-    // border-color: rgba($green, 0.5);
     background: $darker-green;
-    // color: $gray;
 }
 
 button.join-leave[data-is-member="true"] {

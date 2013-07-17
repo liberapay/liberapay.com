@@ -151,22 +151,5 @@ Gittip.tips.init = function()
         }
     });
 
-
-    // For anonymous users we flash a login link.
-
-    $('.my-tip-range.anon BUTTON').mouseover(
-        function() { $('.nav.level-1 .flash-me').addClass('highlight'); }
-    );
-    $('.my-tip-range.anon BUTTON').click(function()
-    {
-        var i = 0
-        function flash()
-        {
-            if (i++ == 6) return;
-            $('.nav.level-1 .flash-me').toggleClass('highlight');
-            setTimeout(flash, 100);
-        }
-        flash();
-    });
 };
 

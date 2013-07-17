@@ -85,3 +85,36 @@ $light-red: #F99;
     -moz-opacity: $op;
     opacity: $op;
 }
+
+@mixin animated {
+    -webkit-animation-fill-mode:both;
+    -moz-animation-fill-mode:both;
+    -ms-animation-fill-mode:both;
+    -o-animation-fill-mode:both;
+    animation-fill-mode:both;
+    -webkit-animation-duration:1s;
+    -moz-animation-duration:1s;
+    -ms-animation-duration:1s;
+    -o-animation-duration:1s;
+    animation-duration:1s;
+}
+
+@-webkit-keyframes flash {
+    0%, 50%, 100% {opacity: 1;}
+    25%, 75% {opacity: 0.6;}
+}
+
+@-moz-keyframes flash {
+    0%, 50%, 100% {opacity: 1;} 
+    25%, 75% {opacity: 0.6;}
+}
+
+@-o-keyframes flash {
+    0%, 50%, 100% {opacity: 1;} 
+    25%, 75% {opacity: 0.6;}
+}
+
+@keyframes flash {
+    0%, 50%, 100% {opacity: 1;} 
+    25%, 75% {opacity: 0.6;}
+}
