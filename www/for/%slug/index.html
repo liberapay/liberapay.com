@@ -88,6 +88,8 @@ if community is None:
 
     community = StubCommunity()
 
+# Set the page title based on the communities name.
+title = community.name + ' Community'
 
 if community.nmembers >= website.NMEMBERS_THRESHOLD:
 
