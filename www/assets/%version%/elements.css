@@ -1,0 +1,57 @@
+/*
+Syntax error: Undefined variable: "$black".
+        on line 5 of scss/elements.scss
+
+1: html, body {
+2:     background: #FFF;
+3: }
+4: body {
+5:     color: $black;
+6:     font: normal 16px $Helvetica;
+7:     text-rendering: optimizeLegibility;
+8: }
+9: .main-padding {
+10:     width: 960px;
+
+Backtrace:
+scss/elements.scss:5
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/script/variable.rb:39:in `_perform'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/script/node.rb:61:in `perform'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/prop_node.rb:132:in `perform!'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:305:in `_perform'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:213:in `perform'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:327:in `block in perform_children'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:327:in `map'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:327:in `perform_children'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:317:in `perform!'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/rule_node.rb:191:in `perform!'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:305:in `_perform'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:213:in `perform'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:327:in `block in perform_children'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:327:in `map'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:327:in `perform_children'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:317:in `perform!'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/root_node.rb:59:in `perform!'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:305:in `_perform'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:213:in `perform'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/root_node.rb:37:in `perform'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/root_node.rb:29:in `render'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/plugin.rb:223:in `update_stylesheet'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/plugin.rb:88:in `block (2 levels) in update_stylesheets'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/plugin.rb:81:in `each'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/plugin.rb:81:in `block in update_stylesheets'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/plugin.rb:79:in `each'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/plugin.rb:79:in `update_stylesheets'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/plugin.rb:142:in `watch'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/haml/exec.rb:457:in `watch_or_update'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/haml/exec.rb:360:in `process_result'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/haml/exec.rb:41:in `parse'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/haml/exec.rb:21:in `parse!'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/bin/sass:8:in `<top (required)>'
+/Users/jgn/.rbenv/versions/1.9.3-p327/bin/sass:23:in `load'
+/Users/jgn/.rbenv/versions/1.9.3-p327/bin/sass:23:in `<main>'
+*/
+body:before {
+  white-space: pre;
+  font-family: monospace;
+  content: "Syntax error: Undefined variable: \"$black\".\A         on line 5 of scss/elements.scss\A \A 1: html, body {\A 2:     background: #FFF;\A 3: }\A 4: body {\A 5:     color: $black;\A 6:     font: normal 16px $Helvetica;\A 7:     text-rendering: optimizeLegibility;\A 8: }\A 9: .main-padding {\A 10:     width: 960px;"; }

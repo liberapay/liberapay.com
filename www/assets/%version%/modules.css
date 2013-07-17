@@ -1,0 +1,58 @@
+/*
+Syntax error: Undefined mixin 'border-radius'.
+        on line 10 of scss/modules.scss, in `border-radius'
+        from line 10 of scss/modules.scss
+
+5:     display: block;
+6:     float: left;
+7:     width: 100%;
+8:     overflow: hidden;
+9:     border: 4px solid #DEE0E0;
+10:     @include border-radius(3px);
+11: 
+12:     span.inner {
+13:         border: 1px solid #B6B7B9;
+14:         display: block;
+15:         min-height: 50px;
+
+Backtrace:
+scss/modules.scss:10:in `border-radius'
+scss/modules.scss:10
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/mixin_node.rb:62:in `perform!'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:305:in `_perform'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:213:in `perform'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:327:in `block in perform_children'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:327:in `map'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:327:in `perform_children'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:317:in `perform!'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/rule_node.rb:191:in `perform!'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:305:in `_perform'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:213:in `perform'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:327:in `block in perform_children'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:327:in `map'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:327:in `perform_children'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:317:in `perform!'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/root_node.rb:59:in `perform!'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:305:in `_perform'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:213:in `perform'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/root_node.rb:37:in `perform'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/root_node.rb:29:in `render'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/plugin.rb:223:in `update_stylesheet'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/plugin.rb:88:in `block (2 levels) in update_stylesheets'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/plugin.rb:81:in `each'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/plugin.rb:81:in `block in update_stylesheets'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/plugin.rb:79:in `each'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/plugin.rb:79:in `update_stylesheets'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/plugin.rb:142:in `watch'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/haml/exec.rb:457:in `watch_or_update'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/haml/exec.rb:360:in `process_result'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/haml/exec.rb:41:in `parse'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/haml/exec.rb:21:in `parse!'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/bin/sass:8:in `<top (required)>'
+/Users/jgn/.rbenv/versions/1.9.3-p327/bin/sass:23:in `load'
+/Users/jgn/.rbenv/versions/1.9.3-p327/bin/sass:23:in `<main>'
+*/
+body:before {
+  white-space: pre;
+  font-family: monospace;
+  content: "Syntax error: Undefined mixin 'border-radius'.\A         on line 10 of scss/modules.scss, in `border-radius'\A         from line 10 of scss/modules.scss\A \A 5:     display: block;\A 6:     float: left;\A 7:     width: 100%;\A 8:     overflow: hidden;\A 9:     border: 4px solid #DEE0E0;\A 10:     @include border-radius(3px);\A 11: \A 12:     span.inner {\A 13:         border: 1px solid #B6B7B9;\A 14:         display: block;\A 15:         min-height: 50px;"; }

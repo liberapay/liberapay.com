@@ -1,0 +1,74 @@
+/*
+Syntax error: Undefined variable: "$Helvetica".
+        on line 28 of scss/profile-edit.scss
+
+23:             height: 126pt; /* 18pt * 7 rows; overriden in js */
+24:             padding: 1%;
+25:             margin-top: 8px;
+26:         }
+27:         .help {
+28:             font: normal 12px/12px $Helvetica;
+29:         }
+30:     }
+31:     .goal {
+32:         TABLE.edit {
+33:             display: none;
+
+Backtrace:
+scss/profile-edit.scss:28
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/script/variable.rb:39:in `_perform'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/script/node.rb:61:in `perform'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/script/operation.rb:67:in `_perform'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/script/node.rb:61:in `perform'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/prop_node.rb:132:in `perform!'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:305:in `_perform'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:213:in `perform'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:327:in `block in perform_children'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:327:in `map'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:327:in `perform_children'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:317:in `perform!'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/rule_node.rb:191:in `perform!'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:305:in `_perform'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:213:in `perform'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:327:in `block in perform_children'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:327:in `map'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:327:in `perform_children'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:317:in `perform!'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/rule_node.rb:191:in `perform!'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:305:in `_perform'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:213:in `perform'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:327:in `block in perform_children'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:327:in `map'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:327:in `perform_children'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:317:in `perform!'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/rule_node.rb:191:in `perform!'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:305:in `_perform'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:213:in `perform'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:327:in `block in perform_children'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:327:in `map'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:327:in `perform_children'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:317:in `perform!'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/root_node.rb:59:in `perform!'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:305:in `_perform'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:213:in `perform'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/root_node.rb:37:in `perform'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/root_node.rb:29:in `render'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/plugin.rb:223:in `update_stylesheet'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/plugin.rb:88:in `block (2 levels) in update_stylesheets'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/plugin.rb:81:in `each'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/plugin.rb:81:in `block in update_stylesheets'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/plugin.rb:79:in `each'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/plugin.rb:79:in `update_stylesheets'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/plugin.rb:142:in `watch'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/haml/exec.rb:457:in `watch_or_update'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/haml/exec.rb:360:in `process_result'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/haml/exec.rb:41:in `parse'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/haml/exec.rb:21:in `parse!'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/bin/sass:8:in `<top (required)>'
+/Users/jgn/.rbenv/versions/1.9.3-p327/bin/sass:23:in `load'
+/Users/jgn/.rbenv/versions/1.9.3-p327/bin/sass:23:in `<main>'
+*/
+body:before {
+  white-space: pre;
+  font-family: monospace;
+  content: "Syntax error: Undefined variable: \"$Helvetica\".\A         on line 28 of scss/profile-edit.scss\A \A 23:             height: 126pt; /* 18pt * 7 rows; overriden in js */\A 24:             padding: 1%;\A 25:             margin-top: 8px;\A 26:         }\A 27:         .help {\A 28:             font: normal 12px/12px $Helvetica;\A 29:         }\A 30:     }\A 31:     .goal {\A 32:         TABLE.edit {\A 33:             display: none;"; }

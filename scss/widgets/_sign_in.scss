@@ -1,0 +1,63 @@
+.sign-in {
+  display: inline-block;
+  .dropdown-toggle {
+    background: $green;
+    @include border-radius(3px);
+    color: #fff;
+    padding: 0 8px;
+    font-size: 12px;
+    display: block;
+    line-height: 25px;
+    .caret {
+      border-top: 4px solid #fff;
+      border-right: 4px solid transparent;
+      border-left: 4px solid transparent;
+      margin-top: 11px;
+      // margin-right: 8px;
+    }
+  }
+  .dropdown-menu {
+    top: 24px;
+    @include border-radius(3px);
+    border: 0;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    background: $green;
+    min-width: 100px;
+    li {
+      margin: 0;
+      &.twitter a {
+        @include has-icon("twitter");
+      }
+      &.github a {
+        @include has-icon("github");
+      }
+      &.bitbucket a {
+        @include has-icon("bitbucket");
+      }
+    }
+    a {
+      color: #fff;
+      padding: 3px 8px;
+      text-align: left;
+      position: relative;
+      font-size: 12px;
+      &:hover {
+        background: darken($green, 5);
+      }
+    }
+  }
+  #header & {
+    padding-top: 13px;
+    .dropdown-menu {
+      left: auto;
+      right: 0;
+    }
+    a:before {
+      position: absolute;
+      top: 4px;
+      right: 5px;
+    }
+  }
+}

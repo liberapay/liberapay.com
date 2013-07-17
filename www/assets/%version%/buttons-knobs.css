@@ -1,0 +1,58 @@
+/*
+Syntax error: Undefined variable: "$gray".
+        on line 17 of scss/buttons-knobs.scss
+
+12:     border: 0;
+13:     padding: 0;
+14: }
+15: 
+16: button {
+17:     background: $gray;
+18:     border: 3px solid rgba($gray, 0.33);
+19:     color: white;
+20:     font: bold 11px $Helvetica;
+21:     letter-spacing: 1px;
+22:     margin: 0 0 0 1px;
+
+Backtrace:
+scss/buttons-knobs.scss:17
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/script/variable.rb:39:in `_perform'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/script/node.rb:61:in `perform'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/prop_node.rb:132:in `perform!'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:305:in `_perform'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:213:in `perform'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:327:in `block in perform_children'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:327:in `map'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:327:in `perform_children'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:317:in `perform!'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/rule_node.rb:191:in `perform!'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:305:in `_perform'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:213:in `perform'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:327:in `block in perform_children'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:327:in `map'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:327:in `perform_children'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:317:in `perform!'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/root_node.rb:59:in `perform!'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:305:in `_perform'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/node.rb:213:in `perform'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/root_node.rb:37:in `perform'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/tree/root_node.rb:29:in `render'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/plugin.rb:223:in `update_stylesheet'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/plugin.rb:88:in `block (2 levels) in update_stylesheets'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/plugin.rb:81:in `each'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/plugin.rb:81:in `block in update_stylesheets'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/plugin.rb:79:in `each'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/plugin.rb:79:in `update_stylesheets'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/sass/plugin.rb:142:in `watch'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/haml/exec.rb:457:in `watch_or_update'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/haml/exec.rb:360:in `process_result'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/haml/exec.rb:41:in `parse'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/lib/haml/exec.rb:21:in `parse!'
+/Users/jgn/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/haml-3.0.25/bin/sass:8:in `<top (required)>'
+/Users/jgn/.rbenv/versions/1.9.3-p327/bin/sass:23:in `load'
+/Users/jgn/.rbenv/versions/1.9.3-p327/bin/sass:23:in `<main>'
+*/
+body:before {
+  white-space: pre;
+  font-family: monospace;
+  content: "Syntax error: Undefined variable: \"$gray\".\A         on line 17 of scss/buttons-knobs.scss\A \A 12:     border: 0;\A 13:     padding: 0;\A 14: }\A 15: \A 16: button {\A 17:     background: $gray;\A 18:     border: 3px solid rgba($gray, 0.33);\A 19:     color: white;\A 20:     font: bold 11px $Helvetica;\A 21:     letter-spacing: 1px;\A 22:     margin: 0 0 0 1px;"; }

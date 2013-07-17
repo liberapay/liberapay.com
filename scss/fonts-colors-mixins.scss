@@ -1,3 +1,5 @@
+@import "icons-mixins";
+
 // Fonts
 $Helvetica: 'Helvetica Neue', Helvetica, Arial, 'Liberation Sans', FreeSans, sans-serif;
 $Mensch: 'Mensch', $Helvetica;
@@ -79,4 +81,21 @@ $light-red: #F99;
     -khtml-opacity: $op;
     -moz-opacity: $op;
     opacity: $op;
+}
+
+@mixin clearfix {
+    &:before, &:after {
+        content: " "; /* 1 */
+        display: table; /* 2 */
+    }
+
+    &:after {
+        clear: both;
+    }
+
+    /**
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+    *zoom: 1;
 }
