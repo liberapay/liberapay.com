@@ -854,6 +854,8 @@ END;
 
 
 -------------------------------------------------------------------------------
--- https://github.com/gittip/www.gittip.com/issues/1151
+-- https://github.com/gittip/www.gittip.com/issues/659
 
-
+CREATE TABLE homepage_new_participants();
+CREATE TABLE homepage_top_givers();
+CREATE TABLE homepage_top_receivers();
