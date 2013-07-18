@@ -23,6 +23,15 @@ button {
     @include border-radius(3px);
     cursor: pointer;
     display: inline;
+
+    &:disabled {
+        opacity: .5;
+
+        &:hover {
+            background: $gray;
+            cursor: default;
+        }
+    }
 }
 button:hover {
     background: $darker-gray;
