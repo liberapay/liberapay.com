@@ -1,15 +1,22 @@
-<span class="nowrap">Sign in using</span>
-<span class="nowrap">
-  <a href="{{ twitter.oauth_url(website, u'opt-in', path.decoded) }}"
-    {{ 'class="flash-me"' if path.decoded.startswith('/on/twitter/') or not path.decoded.startswith('/on/') else '' }}
-    >Twitter</a>
-  <span class="luxury">or
-    <a href="{{ github.oauth_url(website, u'opt-in', path.decoded) }}"
-    {{ 'class="flash-me"' if path.decoded.startswith('/on/github/') else '' }}
-      >GitHub</a>
-    or
-    <a href="{{ bitbucket.oauth_url(website, u'opt-in', path.decoded) }}"
-    {{ 'class="flash-me"' if path.decoded.startswith('/on/bitbucket/') else '' }}
-      >Bitbucket</a>
-  </span>
-</span>
+<div class="sign-in">
+  <div class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Sign in <b class="caret"></b></a>
+    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+      <li class="twitter">
+        <a href="{{ twitter.oauth_url(website, u'opt-in', path.decoded) }}">
+          Twitter
+        </a>
+      </li>
+      <li class="github">
+        <a href="{{ github.oauth_url(website, u'opt-in', path.decoded) }}">
+          GitHub
+        </a>
+      </li>
+      <li class="bitbucket">
+        <a href="{{ bitbucket.oauth_url(website, u'opt-in', path.decoded) }}">
+          Bitbucket
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>

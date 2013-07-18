@@ -1,3 +1,5 @@
+@import "icons-mixins";
+
 // Fonts
 $Helvetica: 'Helvetica Neue', Helvetica, Arial, 'Liberation Sans', FreeSans, sans-serif;
 $Mensch: 'Mensch', $Helvetica;
@@ -5,12 +7,16 @@ $Mono: Monaco, "Lucida Mono", monospace;
 
 // Colors
 $green: #2A8F79;
+$darker-green: darken($green, 10);
+$lighter-green: lighten($green, 10);
 $brown: #614C3E;
 $light-brown: #B2A196;
 $gray: #58595B;
 $light-gray: #D0D2D3;
+$darker-gray: darken($gray, 10);
 $lighter-gray: #E6E6E6;
 $black: #231F20;
+$red: #c00;
 $light-red: #F99;
 
 @font-face {

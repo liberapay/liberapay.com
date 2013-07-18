@@ -3,7 +3,7 @@
 
 <head>
 
-    <title>{% if 'title' in globals() %}{{ title }} - {% end %}Gittip</title>
+    <title>{% if 'title' in globals() %}{{ escape(title) }} - {% end %}Gittip</title>
     <meta http-equiv="content-language" content="en"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/assets/reset.css"
@@ -21,6 +21,8 @@
     <!-- Used on the profile edit page for the community chooser. -->
     <script src="/assets/chosen/chosen.jquery.min.js"></script>
     <style>@import url("/assets/chosen/chosen.css");</style>
+
+    <script src="/assets/{{ __version__ }}/vendor/bootstrap-dropdown.js"></script>
 
     <script src="/assets/{{ __version__ }}/utils.js"></script>
     <script src="/assets/{{ __version__ }}/gittip.js"></script>
@@ -57,9 +59,7 @@
             Distributed Genius Grants
         </td></tr></table>
         {% if user.ANON %}
-        <div class="sign-in">
           {% include sign-in-using.html %}
-        </div>
         {% else %}
         <div class="you-are">
             <a href="/{{ user.username }}/">{{ user.username }}</a> &ndash;

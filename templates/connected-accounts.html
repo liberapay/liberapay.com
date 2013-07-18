@@ -123,7 +123,7 @@
 
             {% end %}
             <div class="account-type">{% if user.ADMIN and participant.balanced_account_uri %}
-                <a href="https://www.balancedpayments.com/{{ participant.balanced_account_uri[3:] }}"
+                <a href="https://dashboard.balancedpayments.com/#/{{ participant.balanced_account_uri[4:] }}"
                     >on Balanced Payments</a>{% else %}on Balanced Payments{% end %}</div>
         </td>
     </tr>
