@@ -21,11 +21,11 @@
                 {% end %}
             </div>
             <div class="unit pad-sign">per 
-                week{% if r > 0 %}, and receives ${{ receiving }}{% end %}
+                week{% if r > 0 %}, and receives $<span class="total-receiving">{{ receiving }}</span>{% end %}
             </div>
         {% elif r > 0 %}
             <h2 class="pad-sign">{{ participant.username }} receives</h2>
-            <div class="number">${{ receiving }}</div>
+            <div class="number">$<span class="total-receiving">{{ receiving }}</span></div>
             <div class="unit pad-sign">per 
                 week{% if g > 0 %}, and gives 
                 {% if participant.anonymous %}

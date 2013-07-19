@@ -3,49 +3,76 @@ Gittip.tips = {};
 Gittip.tips.init = function()
 {
     // For authenticated users we change the tip!
+    $('input.my-tip:not(.anon)').change(function() {
+        var $this     = $(this),
+            $parent   = $this.parents('[class^="my-tip"]'),
+            $confirm  = $parent.find('.confirm-tip'),
+            amount    = parseFloat($this.val(), 10),
+            oldAmount = parseFloat($this.data('old-amount'), 10);
 
-    $('INPUT.my-tip:not(.anon)').change(function()
-    {
-        // Define a closure that will be used to show/hide the payment prompt.
+        // force two decimal points on value
+        $this.val(amount.toFixed(2));
 
-        function changePaymentPrompt(amount)
-        {
-            if (amount === '0.00')
-                $('#payment-prompt.needed').removeClass('needed');
-            else
-                $('#payment-prompt').addClass('needed');
-        }
+        // dis/enables confirm button as needed
+        $confirm.prop('disabled', amount == oldAmount);
 
+        if (amount == oldAmount)
+            $parent.removeClass('changed');
+        else
+            $parent.addClass('changed');
 
-        // Go to work!
+        // show/hide the payment prompt
+        if (amount == 0)
+            $('#payment-prompt.needed').removeClass('needed');
+        else
+            $('#payment-prompt').addClass('needed');
+    });
 
-        var amount = $(this).val();
-        var oldAmount = $(this).attr('data-old-amount');
-        var tippee = $(this).attr('data-tippee');
+    $('.my-tip .cancel-tip').click(function(event) {
+        event.preventDefault();
 
-        if (oldAmount === amount)
+        var $this     = $(this),
+            $myTip    = $this.parents('[class^="my-tip"]').find('.my-tip'),
+            oldAmount = parseFloat($myTip.data('old-amount'), 10);
+
+        $myTip.val(oldAmount).change();
+    });
+
+    $('.my-tip .tip-suggestions a').click(function(event) {
+        event.preventDefault();
+
+        var $this  = $(this),
+            $myTip = $this.parents('[class^="my-tip"]').find('.my-tip');
+
+        $myTip.val($this.text().match(/\d+/).shift() / ($this.hasClass('cents') ? 100 : 1)).change();
+    });
+
+    $('.my-tip .confirm-tip').click(function() {
+        var $this     = $(this),
+            $myTip    = $this.parents('[class^="my-tip"]').find('.my-tip'),
+            amount    = parseFloat($myTip.val(), 10),
+            oldAmount = parseFloat($myTip.data('old-amount'), 10),
+            tippee    = $myTip.data('tippee');
+
+        if (amount == oldAmount)
             return;
 
-        changePaymentPrompt(amount);
+        $.post('/' + tippee + '/tip.json', { amount: amount }, function(data) {
+            // lock-in changes
+            $myTip.data('old-amount', amount).change();
 
-        jQuery.ajax(
-            { url: '/' + tippee + '/tip.json'
-            , data: {amount: amount}
-            , type: "POST"
-            , error: function(x,y,z) {
-                changePaymentPrompt(oldAmount);
-                alert("Sorry, something went wrong changing your tip. :(");
-                console.log(x,y,z);
-              }
-             }
-        )
-        .done(function(data) {
-            $('.total-giving').text(data['total_giving']);
-            alert('Tip changed to $' + amount + '!');
+            // update display
+            $('.total-giving').text(data.total_giving);
+            $('.total-receiving').text(data.total_receiving);
 
             // Log to mixpanel.
             if (data.first_time === true)
                 mixpanel.track("Explicitly Tip");
+        })
+        .fail(function() {
+            // change to old amount?
+            alert('Sorry, something went wrong while changing your tip. :(');
+            console.log.apply(console, arguments);
         });
     });
 
