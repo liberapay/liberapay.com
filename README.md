@@ -289,19 +289,10 @@ Reload Postgres using pg_ctl for changes to take effect.
 
 Once Postgres is set up, run:
 
-    $ ./makedb.sh
+    $ make schema
 
-That will create a new gittip superuser and a gittip database (with UTC as the
-default timezone), populated with structure from ./schema.sql. To change the
-name of the database and/or user, pass them on the command line (you'll
-need to modify the `DATABASE_URL` environment variable as well; see
-[Configuration](#configuration) below):
-
-    $ ./makedb.sh mygittip myuser
-
-If you only pass one argument it will be used for both dbname and owner role:
-
-    $ ./makedb.sh gittip-test
+That will populate the database named by DATABASE_URL with the Gittip schema,
+per ./schema.sql.
 
 The schema for the Gittip.com database is defined in schema.sql. It should be
 considered append-only. The idea is that this is the log of DDL that
