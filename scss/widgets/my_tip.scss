@@ -37,4 +37,14 @@ div.my-tip {
             font-size: 0.9em;
         }
     }
+
+    .cancel-tip {
+        opacity: 0.5;
+    }
+
+    &.changed {
+        .cancel-tip {
+            opacity: 1;
+        }
+    }
 }

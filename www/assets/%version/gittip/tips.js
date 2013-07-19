@@ -5,7 +5,8 @@ Gittip.tips.init = function()
     // For authenticated users we change the tip!
     $('input.my-tip:not(.anon)').change(function() {
         var $this     = $(this),
-            $confirm  = $this.parents('[class^="my-tip"]').find('.confirm-tip'),
+            $parent   = $this.parents('[class^="my-tip"]'),
+            $confirm  = $parent.find('.confirm-tip'),
             amount    = parseFloat($this.val(), 10),
             oldAmount = parseFloat($this.data('old-amount'), 10);
 
@@ -14,6 +15,11 @@ Gittip.tips.init = function()
 
         // dis/enables confirm button as needed
         $confirm.prop('disabled', amount == oldAmount);
+
+        if (amount == oldAmount)
+            $parent.removeClass('changed');
+        else
+            $parent.addClass('changed');
 
         // show/hide the payment prompt
         if (amount == 0)
@@ -53,8 +59,7 @@ Gittip.tips.init = function()
 
         $.post('/' + tippee + '/tip.json', { amount: amount }, function(data) {
             // lock-in changes
-            $this.prop('disabled', true);
-            $myTip.data('old-amount', amount);
+            $myTip.data('old-amount', amount).change();
 
             // update display
             $('.total-giving').text(data.total_giving);
