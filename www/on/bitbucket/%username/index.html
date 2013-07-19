@@ -225,7 +225,7 @@ title = username
                     {{ member['username'] }}</a>
             </th>
             <td>
-            <td>{% include "templates/my-tip-elsewhere.html" %}</td>
+            <td>{% include "templates/my-tip-bulk.html" %}</td>
             {% else %}
             <td>
                 <a href="/on/bitbucket/{{ member['username'] }}/"><img src="{{ member.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" />

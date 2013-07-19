@@ -80,7 +80,7 @@ first_time = qs.get('first_time') == '1'
     {% if my_tip > 0 %}
     <tr class="tip">
         <th><a href="/{{ tippee }}/">{{ tippee }}</a></th>
-        <td>{% include "templates/my-tip.html" %}</td>
+        <td>{% include "templates/my-tip-bulk.html" %}</td>
     </tr>
     {% end %}
     {% end %}
@@ -100,7 +100,7 @@ first_time = qs.get('first_time') == '1'
             <img class="platform-icon" src="/assets/icons/{{ tip['platform'] }}.12.png" />
             <a href="/{{ tippee }}/">{{ _extract_username(tip) }}</a>
         </th>
-        <td>{% include "templates/my-tip.html" %}</td>
+        <td>{% include "templates/my-tip-bulk.html" %}</td>
     </tr>
     {% end %}
     {% end %}
