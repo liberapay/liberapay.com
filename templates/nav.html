@@ -1,4 +1,8 @@
 {% for slug, name in pages %}
+{% if slug is None %}
+<br><br>
+{% else %}
 <a href="{{ nav_base }}{{ slug }}"><button{% if slug.strip('/') == current_page %}
         class="selected"{% end %}>{{ name }}</button></a>
+{% end %}
 {% end %}
