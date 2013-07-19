@@ -200,7 +200,7 @@ title = username
                 <a href="/on/github/{{ member['login'] }}/"><img src="{{ member.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" />
                     {{ member['login'] }}</a>
             </th>
-            <td>{% include "templates/my-tip.html" %}</td>
+            <td>{% include "templates/my-tip-elsewhere.html" %}</td>
             {% else %}
             <td>
                 <a href="/on/github/{{ member['login'] }}/"><img src="{{ member.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" />

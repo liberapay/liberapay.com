@@ -1,0 +1,9 @@
+<div class="my-tip{{ " anon" if user.ANON else "" }}">
+    <input type="number"
+           class="my-tip"
+           value="{{ my_tip }}"
+           data-tippee="{{ tippee }}"
+           data-old-amount="{{ my_tip }}">
+
+    <button class="confirm-tip" disabled>Confirm</button>
+</div>
