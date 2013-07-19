@@ -73,6 +73,10 @@ Gittip.tips.init = function()
             // change to old amount?
             alert('Sorry, something went wrong while changing your tip. :(');
             console.log.apply(console, arguments);
+        })
+        .done(function() {
+            // Confirm that tip changed.
+            alert("Tip changed to $" + amount + "!");
         });
     });
 
