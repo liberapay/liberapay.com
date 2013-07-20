@@ -33,13 +33,13 @@ class postgres {
         ensure  => file,
         path    => '/etc/postgresql/9.2/main/pg_hba.conf',
         require => Package['postgresql-9.2'],
-        source  => 'puppet:///modules/postgres/pg_hba.conf';
+        source  => 'puppet:///modules/postgres/pg_hba.conf',
     }
     file { 'add_gittip_user.sql':
         ensure  => file,
         path    => '/tmp/add_gittip_user.sql',
         require => [Package['postgresql-9.2'], Exec[pgrestart]],
-        source  => 'puppet:///modules/postgres/add_gittip_user.sql';
+        source  => 'puppet:///modules/postgres/add_gittip_user.sql',
     }
     file { 'add_gittip_db.sh':
         ensure  => file,
@@ -51,7 +51,7 @@ class postgres {
             Exec[pgrestart],
             Exec[makeuser]
         ],
-        source  => 'puppet:///modules/postgres/add_gittip_db.sh';
+        source  => 'puppet:///modules/postgres/add_gittip_db.sh',
     }
 
     exec { 'pgrestart':
@@ -64,27 +64,27 @@ class postgres {
     }
     exec { 'makedb':
         command => '/tmp/add_gittip_db.sh',
-        require => File['add_gittip_db.sh'];
+        require => File['add_gittip_db.sh'],
     }
 
     ppa { 'pitti/postgresql': }
 }
 
 exec { 'aptupdate':
-    command => 'apt-get update';
+    command => 'apt-get update',
 }
 
 package { 'make':
     ensure  => present,
-    require => Exec[aptupdate];
+    require => Exec[aptupdate],
 }
 package { 'python-software-properties':
     ensure  => present,
-    require => Exec[aptupdate];
+    require => Exec[aptupdate],
 }
 package { 'python-dev':
     ensure  => present,
-    require => Exec[aptupdate];
+    require => Exec[aptupdate],
 }
 
 define ppa($ppa = "${title}", $ensure = present) {
@@ -97,18 +97,18 @@ define ppa($ppa = "${title}", $ensure = present) {
         exec { $ppa:
             command => "add-apt-repository ppa:${ppa};apt-get update",
             require => Package['python-software-properties'],
-            unless  => "test -e /etc/apt/sources.list.d/${filename}";
+            unless  => "test -e /etc/apt/sources.list.d/${filename}",
         }
     }
 
     absent:  {
         package { 'ppa-purge':
-            ensure => present;
+            ensure => present,
         }
 
         exec { $ppa:
             command => "ppa-purge ppa:${ppa};apt-get update",
-            require => Package[ppa-purge];
+            require => Package[ppa-purge],
         }
     }
 
