@@ -2,10 +2,11 @@
 # custom pg_hba.conf
 # create gittip user in postgres
 
-group { "puppet":
-    ensure => "present",
+group { 'puppet':
+    ensure => 'present',
 }
-class {postgres: }
+
+class { 'postgres': }
 
 class dbschema {
   Exec { require => Class[postgres] }
@@ -15,34 +16,34 @@ class dbschema {
 Exec { path => '/usr/bin:/bin:/usr/sbin:/sbin' }
 
 class postgres {
-    Package {require => Ppa["pitti/postgresql"]}
+    Package {require => Ppa['pitti/postgresql']}
 
     package {
-      "postgresql-9.2":
+      'postgresql-9.2':
         ensure => present,
         ;
-      "postgresql-contrib-9.2":
+      'postgresql-contrib-9.2':
         ensure => present,
         ;
-      "postgresql-server-dev-9.2":
+      'postgresql-server-dev-9.2':
         ensure => present,
         ;
     }
 
     file {
-     'pg_hba.conf':
-        path    => '/etc/postgresql/9.2/main/pg_hba.conf',
+      'pg_hba.conf':
         ensure  => file,
+        path    => '/etc/postgresql/9.2/main/pg_hba.conf',
         require => Package['postgresql-9.2'],
         source  => 'puppet:///modules/postgres/pg_hba.conf';
       'add_gittip_user.sql':
-        path => '/tmp/add_gittip_user.sql',
-        ensure => file,
+        ensure  => file,
+        path    => '/tmp/add_gittip_user.sql',
         require => [Package['postgresql-9.2'], Exec[pgrestart]],
         source  => 'puppet:///modules/postgres/add_gittip_user.sql';
       'add_gittip_db.sh':
-        path => '/tmp/add_gittip_db.sh',
-        ensure => file,
+        ensure  => file,
+        path    => '/tmp/add_gittip_db.sh',
         require => [
           Package['postgresql-9.2'],
           Package['postgresql-contrib-9.2'],
@@ -54,66 +55,66 @@ class postgres {
     }
 
     exec {
-      pgrestart:
-        command => "/etc/init.d/postgresql restart",
+      'pgrestart':
+        command => '/etc/init.d/postgresql restart',
         require => File['pg_hba.conf'];
-      makeuser:
-        command => "psql -U postgres -f /tmp/add_gittip_user.sql",
+      'makeuser':
+        command => 'psql -U postgres -f /tmp/add_gittip_user.sql',
         require => File['add_gittip_user.sql'];
-      makedb:
-        command => "/tmp/add_gittip_db.sh",
+      'makedb':
+        command => '/tmp/add_gittip_db.sh',
         require => File['add_gittip_db.sh'];
     }
 
     ppa {
-      "pitti/postgresql":;
+      'pitti/postgresql':;
     }
 }
 
 exec {
-  aptupdate:
+  'aptupdate':
     command => 'apt-get update';
 }
 
 package {
-    make:
-      ensure => present,
+    'make':
+      ensure  => present,
       require => Exec[aptupdate];
-    python-software-properties:
-      ensure => present,
+    'python-software-properties':
+      ensure  => present,
       require => Exec[aptupdate];
-    python-dev:
-      ensure => present,
+    'python-dev':
+      ensure  => present,
       require => Exec[aptupdate];
 }
 
-define ppa($ppa = "$title", $ensure = present) {
+define ppa($ppa = "${title}", $ensure = present) {
 
   case $ensure {
     present: {
         $stupid_escapes = '\1-\2'
-        $filename = regsubst($ppa, '(^.*)/(.*$)', "$stupid_escapes-$lsbdistcodename.list")
+        $filename = regsubst($ppa, '(^.*)/(.*$)', "${stupid_escapes}-${::lsbdistcodename}.list")
 
         exec { $ppa:
-            command => "add-apt-repository ppa:$ppa;apt-get update",
-            require => Package["python-software-properties"],
-           	unless => "test -e /etc/apt/sources.list.d/$filename";
+            command => "add-apt-repository ppa:${ppa};apt-get update",
+            require => Package['python-software-properties'],
+            unless  => "test -e /etc/apt/sources.list.d/${filename}";
         }
     }
 
     absent:  {
         package {
-            ppa-purge: ensure => present;
+            'ppa-purge': ensure => present;
         }
 
         exec { $ppa:
-            command => "ppa-purge ppa:$ppa;apt-get update",
+            command => "ppa-purge ppa:${ppa};apt-get update",
             require => Package[ppa-purge];
         }
     }
 
     default: {
-      fail "Invalid 'ensure' value '$ensure' for ppa"
+      fail "Invalid 'ensure' value '${ensure}' for ppa"
     }
   }
 }
