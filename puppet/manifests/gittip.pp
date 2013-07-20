@@ -1,3 +1,4 @@
+# vim: set expandtab tabstop=4 shiftwidth=4:
 # install postgres
 # custom pg_hba.conf
 # create gittip user in postgres
