@@ -197,9 +197,9 @@ names = ['ncc', 'pcc', 'statements', 'transfer_volume',
          'tip_distribution_json', 'tip_n', 'nach', 'escrow',
          'ngivers', 'nreceivers', 'noverlap', 'nactive']
 
-^L application/json
+[----------------------------------------------------------] application/json
 {{ json.dumps({name: globals()[name] for name in names}) }}
-^L text/html
+[----------------------------------------------------------] text/html
 
 {% extends templates/about.html %}
 
