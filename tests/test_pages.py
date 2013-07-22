@@ -83,6 +83,11 @@ class TestPages(Harness):
         actual = self.get('/on/twitter/twitter/')
         assert expected in actual, actual
 
+    def test_bank_account_complete(self):
+        expected = "Page Not Found"
+        actual = self.get('/bank-account-complete.html')
+        assert expected in actual, actual
+
     def test_bank_account_json(self):
         expected = "Page Not Found"
         actual = self.get('/bank-account.json')
