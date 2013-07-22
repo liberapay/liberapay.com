@@ -9,7 +9,7 @@ from gittip import billing
 
 base_url = gittip.canonical_scheme + "://" + gittip.canonical_host
 
-#=========================================================================== ^L
+[-----------------------------------------------------------------------------]
 
 if user.ANON:
     raise Response(404)
