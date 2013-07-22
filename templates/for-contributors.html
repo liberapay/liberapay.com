@@ -1,14 +1,26 @@
 {% extends base.html %}
-{% block heading %}
-  <h2 class="top"><span>For Contributors</span></h2>
-{% end %}
-{% block box %}
+
+{% block head %}
+  <script src="/assets/jquery.pjax.js"></script>
+  <script>
+    $(document).ready(function()
+    {
+      $(document).pjax('.box .nav a', '#pjax')
+    });
+  </script>
   <style>
     .box .nav { padding: 10px 0; }
     .box { margin-top: -28px; }
     #hero { padding-bottom: 0; }
     #hero h2.top { padding-bottom: 67px; }
   </style>
+{% end %}
+
+{% block heading %}
+  <h2 class="top"><span>For Contributors</span></h2>
+{% end %}
+
+{% block box %}
   {% set current_page = path.raw.split('/')[3] %}
   {% set nav_base = "/for/contributors" %}
   <div class="nav">
@@ -25,3 +37,8 @@
   {% end %}
 {% end %}
 
+{% block page %}
+<div id="pjax">
+  {% block pjax %}{% end %}
+</div>
+{% end %}
