@@ -12,6 +12,9 @@ import gittip.models.participant
 from aspen import log_dammit
 
 
+website.renderer_default = "tornado"
+
+
 gittip.wireup.canonical()
 gittip.wireup.db()
 gittip.wireup.billing()

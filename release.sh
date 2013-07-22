@@ -69,7 +69,7 @@ if [ $1 ]; then
             # Bump the version.
             # =================
 
-            printf "$1" > www/version.txt
+            printf "$1\n" > www/version.txt
             git commit www/version.txt -m"Bump version to $1"
             git tag $1
 
@@ -90,7 +90,7 @@ if [ $1 ]; then
             # dev version following $whatever." We escape the dash for bash's
             # sake
 
-            printf "\055dev" >> www/version.txt
+            printf "\055dev\n" >> www/version.txt
             git commit www/version.txt -m"Bump version to $1-dev"
 
 

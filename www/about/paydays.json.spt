@@ -1,0 +1,30 @@
+from gittip import db
+[---]
+paydays = db.fetchall("""\
+
+    SELECT ts_start
+         , ts_end
+
+         , transfer_volume
+
+         , ncharges
+         , charge_volume
+         , charge_fees_volume
+
+         , nachs
+         , ach_volume
+         , ach_fees_volume
+
+         , nparticipants
+         , ntippers
+         , ntransfers
+
+         , ncc_missing
+         , ncc_failing
+      FROM paydays
+  ORDER BY ts_start DESC
+
+""")
+paydays = [] if paydays is None else list(paydays)
+response.body = paydays
+response.headers["Access-Control-Allow-Origin"] = "*"

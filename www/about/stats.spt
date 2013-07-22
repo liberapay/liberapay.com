@@ -1,0 +1,300 @@
+import datetime
+import locale
+from aspen import json
+from gittip import db, age, AMOUNTS
+
+CARDINALS = ["zero", "one", "two", "three", "four", "five", "six", "seven",
+             "eight", "nine"]
+WEDNESDAY = 2
+THURSDAY = 3
+FRIDAY = 4
+SATURDAY = 5
+
+def commaize(number, places=0):
+    return locale.format("%%.%df" % places, number, grouping=True)
+
+[--------------------------------------------------------]
+
+title = "Stats"
+yesterday = datetime.datetime.utcnow() - datetime.timedelta(hours=24)
+escrow = db.fetchone("SELECT sum(balance) FROM participants")['sum']
+escrow = 0 if escrow is None else escrow
+nach = db.fetchone("SELECT count(*) AS n FROM participants WHERE last_ach_result = '' AND is_suspicious IS NOT true")['n']
+nach = 0 if nach is None else nach
+if nach < 10:
+    nach = CARDINALS[nach].title()
+else:
+    nach = commaize(nach)
+payday = db.fetchone( "SELECT ts_start, ts_end FROM paydays WHERE ts_start > %s"
+                    , (yesterday,)
+                     )
+npeople = db.fetchone("SELECT count(*) AS n FROM participants WHERE claimed_time IS NOT NULL AND is_suspicious IS NOT true")['n']
+ncc = db.fetchone("SELECT count(*) AS n FROM participants WHERE last_bill_result = '' AND is_suspicious IS NOT true")['n']
+ncc = 0 if ncc is None else ncc
+pcc = "%5.1f" % ((ncc * 100.0) / npeople) if npeople > 0 else 0.0
+statements = db.fetchall("SELECT username, statement FROM participants WHERE statement != '' AND is_suspicious IS NOT true ORDER BY random(), username LIMIT 16")
+statements = [] if statements is None else list(statements)
+transfer_volume = db.fetchone("SELECT transfer_volume AS v FROM paydays ORDER BY ts_end DESC LIMIT 1")
+transfer_volume = 0 if transfer_volume is None else transfer_volume['v']
+tip_amounts = db.fetchone("""
+        SELECT avg(amount), sum(amount)
+         FROM (    SELECT DISTINCT ON (tipper, tippee) amount
+                     FROM tips
+                     JOIN participants p ON p.username = tipper
+                     JOIN participants p2 ON p2.username = tippee
+                    WHERE p.last_bill_result = ''
+                      AND p2.claimed_time IS NOT NULL
+                      AND p.is_suspicious IS NOT true
+                      AND p2.is_suspicious IS NOT true
+                 ORDER BY tipper, tippee, mtime DESC
+               ) AS foo;
+""")
+if tip_amounts is None:
+    average_tip = 0
+    total_backed_tips = 0
+else:
+    average_tip = tip_amounts['avg'] if tip_amounts['avg'] is not None else 0
+    total_backed_tips = tip_amounts['sum'] if tip_amounts['sum'] is not None else 0
+
+average_tippees = db.fetchone("""\
+        SELECT round(avg(ntippees))
+          FROM ( SELECT count(tippee) as NTIPPEES
+                   FROM ( SELECT DISTINCT ON (tipper, tippee)
+                                 tipper
+                               , tippee
+                               , amount
+                            FROM tips
+                            JOIN participants p ON p.username = tipper
+                            JOIN participants p2 on p2.username = tippee
+                           WHERE p.last_bill_result = ''
+                             AND p2.claimed_time IS NOT NULL
+                             AND NOT (p.is_suspicious IS true)
+                             AND NOT (p2.is_suspicious IS true)
+                        GROUP BY tipper, tippee, mtime, amount
+                        ORDER BY tipper, tippee, mtime DESC
+                         ) AS foo WHERE amount > 0 GROUP BY tipper) AS bar
+""")['round']
+average_tippees = 0 if average_tippees is None else int(average_tippees)
+
+word = "people"
+if average_tippees == 1:
+    word = "person"
+
+if average_tippees < 10:
+    number = CARDINALS[average_tippees]
+else:
+    number = str(average_tippees)
+
+other_people = "%s other %s" % (number, word)
+
+# Tip Distribution
+_tip_distribution = list(db.fetchall("""
+
+    SELECT amount, count(amount)
+      FROM (SELECT DISTINCT ON (tipper, tippee)
+                   amount
+              FROM tips
+              JOIN participants p ON p.username = tipper
+              JOIN participants p2 on p2.username = tippee
+             WHERE p.last_bill_result = ''
+               AND p2.claimed_time IS NOT NULL
+               AND NOT (p.is_suspicious IS true)
+               AND NOT (p2.is_suspicious IS true)
+               AND amount > 0
+          GROUP BY tipper, tippee, mtime, amount
+          ORDER BY tipper, tippee, mtime DESC
+                  ) AS foo
+     WHERE amount > 0
+  GROUP BY amount
+  ORDER BY amount
+
+"""))
+tip_n = sum([row['count'] for row in _tip_distribution if row['amount'] in AMOUNTS])
+
+all_amounts = AMOUNTS[1:]
+tip_distribution = {a: (0, 0.0) for a in all_amounts}  # prime it
+for row in _tip_distribution:
+    row['percentage'] = row['count'] * 1.0 / tip_n
+    tip_distribution[row['amount']] = (row['count'], row['percentage'])
+
+
+def part(s):
+    s = s.splitlines()[0]
+    if len(s) > 45:
+        s = s[:42].rsplit(None, 1)[0] + " ..."
+    return s
+
+
+ngivers = db.fetchone("select count(distinct tipper) from transfers "
+                      "where timestamp > (now() - interval '7 days')")['count']
+nreceivers = db.fetchone("select count(distinct tippee) from transfers "
+                         "where timestamp > (now() - interval '7 days')"
+                         )['count']
+noverlap = db.fetchone("""
+
+        select count(*) from (
+
+        select distinct tippee from transfers
+        where timestamp > (now() - interval '7 days')
+        intersect
+        select distinct tipper from transfers
+        where timestamp > (now() - interval '7 days')
+
+        ) as anon
+
+""")['count']
+nactive = db.fetchone("""
+
+        select count(*) from (
+
+        select distinct tippee from transfers
+        where timestamp > (now() - interval '7 days')
+        union
+        select distinct tipper from transfers
+        where timestamp > (now() - interval '7 days')
+
+        ) as anon
+
+""")['count']
+assert nactive == ngivers + nreceivers - noverlap
+
+
+# Adapt wording to payday status.
+# ===============================
+
+last_thursday = "last Thursday"
+this_thursday = "this Thursday"
+punc = "."
+future_processing_text = "is ready for"
+now = datetime.datetime.utcnow()
+if now.weekday() == WEDNESDAY:
+    this_thursday = "tomorrow"
+if now.weekday() == THURSDAY:
+    if payday is None or payday['ts_end'] is None:
+        # Payday hasn't started yet.
+        this_thursday = "today"
+    elif payday['ts_end'].year == 1970:
+        # Payday is going on right now.
+        future_processing_text = "is changing hands"
+        this_thursday = "right now!"
+        punc = ""
+    else:
+        # Payday is finished for today.
+        last_thursday = "today"
+        this_thursday = "next Thursday"
+elif now.weekday() == FRIDAY:
+    last_thursday = "yesterday"
+    this_thursday = "next Thursday"
+elif now.weekday() == SATURDAY:
+    last_thursday = "this past Thursday"
+    this_thursday = "this coming Thursday"
+
+
+tip_distribution_json = {str(k): v for k,v in tip_distribution.items()}
+names = ['ncc', 'pcc', 'statements', 'transfer_volume',
+         'last_thursday', 'this_thursday', 'punc', 'other_people',
+         'average_tip', 'average_tippees', 'total_backed_tips',
+         'tip_distribution_json', 'tip_n', 'nach', 'escrow',
+         'ngivers', 'nreceivers', 'noverlap', 'nactive']
+
+[----------------------------------------------------------] application/json
+{{ json.dumps({name: globals()[name] for name in names}) }}
+[----------------------------------------------------------] text/html
+
+{% extends templates/about.html %}
+
+{% block page %}
+<style>
+    .dollar-sign {
+        padding: 0 2pt 0 24pt;
+        text-align: right;
+    }
+    .amount {
+        padding: 0 6pt 0 0;
+        text-align: right;
+    }
+    .amount-change {
+        padding: 6pt 0 6pt 24pt;
+        text-align: left;
+    }
+    .count {
+        text-align: left;
+        white-space: nowrap;
+    }
+    .count SPAN.number {
+        font-size: 8pt;
+    }
+    .count SPAN.bar {
+        background: #B2A196;
+        display: inline-block;
+        margin-right: 3pt;
+        height: 9pt;
+        }
+    </style>
+
+<div class="col1">
+
+    <h1>Quick Facts</h1>
+
+    <p>Gittip is <b>{{ age() }}</b> old and has <b>{{ nactive }} active
+    users</b>.</p>
+
+    <p>
+        {{ ngivers }} participants gave money in the past week.<br />
+        {{ nreceivers }} received money.<br />
+        {{ noverlap }} did both.
+    </p>
+
+    <p><b>{{ commaize(npeople) }} people</b> have joined Gittip. Of those,
+    {{ pcc }}% ({{ commaize(ncc) }}) have a working credit card on
+    file.{% if user.last_bill_result == '' %} You're one of them.
+    {% elif not user.ANON %} You're not one of them.</p><p><b><a
+            href="/credit-card.html" class="highlight">Click here to set up a
+            credit card</a></b>.{% end %}</p>
+
+    <p><b>${{ commaize(escrow, 2) }}</b> is escrowed within Gittip.
+    {{ nach }} people have connected a bank account</a> for withdrawals.
+    {% if user.last_ach_result == '' %}You're one of them.
+    {% elif not user.ANON %} You're not one of them.</p><p><b><a
+    href="/bank-account.html" class="highlight">Click here to connect a bank
+    account</a></b>.{% end %}</p>
+
+    <p><b>${{ commaize(transfer_volume, 2) }}</b> changed hands
+        <b>{{ last_thursday }}</b>.</p>
+
+    <p><b>${{ commaize(total_backed_tips, 2) }}</b>
+        {{ future_processing_text }} <b>{{ this_thursday }}</b>{{ punc }}
+    </p>
+
+    <p>On average, people who tip, tip ${{ "%.2f" % average_tip }} each to
+    {{ other_people }}. Here's how tip amounts are distributed:</p>
+
+    <table id="tip-distribution">
+        {% for amount in all_amounts %}
+        <tr>
+            <td class="dollar-sign">$</td>
+            <td class="amount">{{ amount }}</td>
+            <td class="count">
+                <span class="bar" style="width: {{ tip_distribution[amount][1] * 300 }}pt"></span>
+                {{ "%5.1f" % (tip_distribution[amount][1] * 100) }}%
+                <span class="number">({{ tip_distribution[amount][0] }})</span>
+            </td>
+        </tr>
+        {% end %}
+    </table>
+
+</div>
+<div class="col2">
+
+    <h1>For Example</h1>
+
+    <p>How are Gittip participants <b>making the world better</b>?</p>
+
+    <p>
+    {% for statement in statements %}
+    <b><a href="/{{ statement['username'] }}/">{{ escape(statement['username']) }}</a></b>
+    is <span title="{{ escape(statement['statement']) }}">{{ escape(part(statement['statement'])) }}</span><br />
+    {% end %}
+    </p>
+</div>
+{% end %}

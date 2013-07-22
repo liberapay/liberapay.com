@@ -1,0 +1,75 @@
+"""Return an array of toots for this participant.
+
+If the user is the participant, then the toot stream will include toots
+referring to people they gave money to last week.
+
+"""
+from gittip import db
+from gittip.utils import get_participant
+
+SQL_SELF = """
+
+    SELECT id, ctime
+         , tooter = %s AS user_is_tooter
+         , tootee = %s AS user_is_tootee
+         , tooter = tootee AS tooter_is_tootee
+         , tooter, tootee, toot
+         , %s AS horn
+      FROM toots
+     WHERE (  tootee = %s
+           OR tootee IN ( SELECT tippee
+                            FROM transfers
+                           WHERE tipper=%s
+                             AND "timestamp" > (now() - interval '8 days')
+                        )
+             )
+       AND id > %s
+       AND id <= %s
+  ORDER BY id DESC
+     LIMIT %s
+
+"""
+
+SQL_OTHER = """
+
+    SELECT id, ctime
+         , tooter = %s AS user_is_tooter
+         , tootee = %s AS user_is_tootee
+         , tooter = tootee AS tooter_is_tootee
+         , tooter, tootee, toot
+         , %s AS horn
+      FROM toots
+     WHERE tootee = %s
+       AND id > %s
+       AND id <= %s
+  ORDER BY id DESC
+     LIMIT %s
+
+"""
+
+DEFAULT_LIMIT = 200
+[------------------------------]
+participant = get_participant(request, restrict=False)
+username = participant.username
+current_user = user.username
+
+try:
+    limit = min(int(qs.get('limit', DEFAULT_LIMIT)), DEFAULT_LIMIT)
+    since_id = long(qs.get('since_id', 0))
+    if user == participant:
+        # When you look at your own horn you also get toots from people you
+        # tip.
+        SQL = SQL_SELF
+        args = [current_user]*2 + [username]*3 + [since_id, limit]
+    else:
+        SQL = SQL_OTHER
+        args = [current_user]*2 + [username]*2 + [since_id, limit]
+
+    max_id = qs.get('max_id')
+    if max_id is None:
+        SQL = SQL.replace("AND id <= %s", "")
+    else:
+        args.insert(-1, long(max_id))
+except ValueError:  # cast to int/long failed
+    raise Response(400)
+response.body = list(db.fetchall(SQL, tuple(args)))

@@ -1,0 +1,140 @@
+from gittip import AMOUNTS
+from gittip.models import Participant
+[---]
+participant = Participant.query.get(path['username'])
+if user.ANON:
+    button_text = "Gittip"
+elif user == participant:
+    button_text = "You!"
+else:
+    button_text = user.get_tip_to(participant.username)
+    if button_text == 0:
+        button_text = "Gittip"
+[---]
+<!doctype html>
+<html>
+    <head>
+        <style>
+            BODY {
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+            }
+            BUTTON {
+                font: normal 12pt/12pt "Lato", sans-serif;
+                text-decoration: none;
+
+                width: auto;
+                overflow: visible;
+                display: inline-block;
+                cursor: pointer;
+
+                border: 1pt solid #999;
+                -moz-border-radius: 7pt;
+                -webkit-border-radius: 7pt;
+                -o-border-radius: 7pt;
+                -ms-border-radius: 7pt;
+                -khtml-border-radius: 7pt;
+                border-radius: 7pt;
+
+                background: #F7F7F6 url("/assets/button-bg.png") repeat-x bottom left;
+                background-image: -webkit-gradient( linear, 0% 0%, 0% 100%
+                                                  , from(#F7F7F6)
+                                                  , to(#999)
+                                                   );
+                background-image: -moz-linear-gradient(top, #F7F7F6, #CCC);
+                background-image: linear-gradient(top, #F7F7F6, #999);
+
+                padding: 4pt 12pt 6pt 11pt;
+                margin: 0;
+                vertical-align: middle;
+
+                -moz-background-clip: padding;
+                -webkit-background-clip: padding;
+                -o-background-clip: padding-box;
+                -ms-background-clip: padding-box;
+                -khtml-background-clip: padding-box;
+                background-clip: padding-box;
+            }
+
+            BUTTON.selected {
+                border: 1px solid #0A382E;
+                background: #2A8F79 url("/assets/button-bg.png") repeat-x bottom left;
+                background-image: -webkit-gradient( linear, 0% 0%, 0% 100%
+                                                  , from(#2A8F79)
+                                                  , to(#0D4035)
+                                                   );
+                background-image: -moz-linear-gradient(top, #2A8F79, #0D4035);
+                background-image: linear-gradient(top, #2A8F79, #0D4035);
+            }
+
+            BUTTON.small {
+                font: normal 9pt/9pt "Lato", sans-serif;
+                padding: 2pt 5pt 2.5pt;
+                -moz-border-radius: 3pt;
+                -webkit-border-radius: 3pt;
+                -o-border-radius: 3pt;
+                -ms-border-radius: 3pt;
+                -khtml-border-radius: 3pt;
+                border-radius: 3pt;
+            }
+
+            BUTTON::-moz-focus-inner {
+                border: none;
+                padding: 0;
+            }
+
+            BUTTON:focus {
+                outline: none;
+            }
+
+            BUTTON, BUTTON:visited {
+                color: #888;
+            }
+
+            BUTTON.selected, BUTTON.selected:visited,
+            BUTTON:hover, BUTTON:hover:visited,
+            BUTTON:focus, BUTTON:focus:visited,
+            BUTTON:active, BUTTON:active:visited {
+                color: white;
+            }
+
+            BUTTON:hover, BUTTON:focus {
+                border: 1px solid #0A382E;
+                background-image: url("/assets/button-bg.over.png");
+                background-image: -webkit-gradient( linear, 0% 0%, 0% 100%
+                                                  , from(#2A8F79)
+                                                  , to(#04221B)
+                                                   );
+                background-image: -moz-linear-gradient(top, #2A8F79, #04221B);
+                background-image: linear-gradient(top, #2A8F79, #04221B));
+            }
+            BUTTON:active {
+                /* http://somadesign.ca/demos/buttons-redux.html */
+                -moz-box-shadow
+                    :0 .33em 1em rgba(0,0,0,.67) inset,
+                    1px 1px 0 rgba(255,255,255,.25) inset,
+                    -1px -1px 0 rgba(255,255,255,.25) inset;
+                -webkit-box-shadow:
+                    0 .33em 2em rgba(0,0,0,.67) inset,
+                    1px 1px 0 rgba(255,255,255,.25) inset,
+                    -1px -1px 0 rgba(255,255,255,.25) inset;
+                box-shadow:
+                    0 .33em 2em rgba(0,0,0,.67) inset,
+                    1px 1px 0 rgba(255,255,255,.25) inset,
+                    -1px -1px 0 rgba(255,255,255,.25) inset;
+            }
+
+            BUTTON {
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <button class="small selected" onclick="javascript: window.open('./');">
+            {{ button_text }}
+        </button>
+    </body>
+</html>
