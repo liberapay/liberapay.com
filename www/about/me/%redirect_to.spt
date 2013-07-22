@@ -1,0 +1,5 @@
+[---]
+if user.username is None:
+    request.redirect('/')
+request.redirect(u'/' + user.username + u'/' + path['redirect_to'])
+^L text/plain

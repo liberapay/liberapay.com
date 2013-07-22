@@ -1,0 +1,185 @@
+import traceback
+
+import balanced
+from aspen import json, log, Response
+from gittip import billing
+from gittip.elsewhere import github
+from gittip.utils import COUNTRIES
+[-----------------------------------------------------------------------------]
+
+status = ". . ."
+balanced_account_uri = None
+
+if not user.ANON:
+    balanced_account_uri = user.balanced_account_uri
+    stripe_customer_id = user.stripe_customer_id
+
+    status = "missing"
+    if stripe_customer_id or balanced_account_uri:
+        if user.last_bill_result is not None:
+            status = "working" if user.last_bill_result == "" else "failing"
+
+    if balanced_account_uri:
+        card = billing.BalancedCard(balanced_account_uri)
+        assert balanced_account_uri == card['id']
+    else:
+        card = billing.StripeCard(stripe_customer_id)
+        assert stripe_customer_id == card['id']
+
+    username = user.username
+
+title = "Credit Card"
+
+[-----------------------------------------------------------------------------]
+{% extends templates/base.html %}
+
+{% block heading %}
+    <h2 class="top"><span>Your credit card is <em id="status">{{ status }}</em></span></h2>
+
+    <p>When you don't have enough money in your Gittip account to cover
+    your gifts, we {% if balanced_account_uri %}will{% else %}can{% end %}
+    attempt to pull money in using
+    {% if balanced_account_uri %}this{% else %}a{% end %} credit card.
+    If your credit card is missing or fails then your gifts won't go
+    through for that week.<p>
+
+{% end %}
+
+{% block box %}
+  {% if user.ANON %}
+    <div class="as-content">
+
+    {% include templates/sign-in-using.html %}
+    and then you'll be able to add<br> or change your credit card.</p>
+
+    <p>Thanks! :-)</p>
+
+    </div>
+
+  {% else %}
+    <script>
+        $(document).ready(function()
+        {
+            Gittip.payments.cc.init("{{ balanced.Marketplace.my_marketplace.uri }}", "{{ user.username }}");
+        });
+    </script>
+    <style>
+        {% if status == "missing" %}
+        #delete {
+            display: none;
+        }
+        {% end %}
+    </style>
+    <div class="on-form">
+        <form id="payment" autocomplete="off">
+            <div class="constrain-width group">
+
+                {% if status != "missing" %}
+                <h2>Current: {{ card['card_type'] }} {{ card['last4'] }}</h2>
+                {% end %}
+
+                <div id="feedback">{% if user.last_bill_result %}
+                <h2><span>Failure</span></h2>
+                <div class="details"><p>{{ user.last_bill_result }}</p></div>
+                  {% end %}</div>
+
+
+                <h2>Required</h2>
+
+                <div class="float card_number">
+                    <label for="card_number">Credit Card Number</label>
+                    <input id="card_number" />
+                </div>
+
+                <div class="float expiration not-first">
+                    <label for="expiration_month">Expiration</label>
+                    <input class="expiration_month" id="expiration_month" placeholder="MM"/>
+                    <input class="expiration_year" id="expiration_year" placeholder="YYYY"/>
+                </div>
+
+                <div class="float cvv not-first">
+                    <label for="cvv">CVV</label>
+                    <input id="cvv" />
+                </div>
+
+                <div class="clear"></div>
+
+
+                <h2>Optional</h2>
+
+                <label for="name">Full Name on Card</label>
+                <input id="name" value="{{ card['name'] }}" />
+
+                <div class="clear"></div>
+
+                <label for="address_1">Address 1</label>
+                <input id="address_1" value="{{ card['address_1'] }}" />
+
+
+
+                <label for="address_2">Address 2</label>
+                <input id="address_2" value="{{ card['address_2'] }}" />
+
+                <label for="city_town">City or Town</label>
+                <input id="city_town" value="{{ card['city_town'] }}" />
+
+
+
+                <div class="half left">
+                    <label for="state">State or Province</label>
+                    <input id="state" value="{{ card['state'] }}" />
+                </div>
+
+                <div class="half right">
+                    <label for="zip">ZIP or Postal Code</label>
+                    <input id="zip" value="{{ card['zip'] }}" />
+                </div>
+
+                <div class="clear"></div>
+
+                <label for="country">Country</label>
+
+                <select id="country" name="country">
+                {% for each in COUNTRIES %}
+                    {% if each[0] == card['country'] %}
+                      <option value="{{ each[0] }}" selected>{{ each[1] }}</option>
+                    {% else %}
+                      <option value="{{ each[0] }}">{{ each[1] }}</option>
+                    {% end %}
+                {% end %}
+                </select>
+
+            </div>
+
+            <div class="nav level-1">
+                <button class="selected larger" id="save"
+                    type="submit">Save</button>
+            </div>
+
+        </form>
+
+        <div id="delete" class="nav level-2">
+            <form action="credit-card.json" class="special" method="POST">
+                <input type="hidden" name="action" value="delete">
+                <button>Disconnect My Credit Card</button>
+            </form>
+        </div>
+    </div>
+{% end %}
+{% end %}
+
+{% block page %}
+<div class="col0 payment-footer">
+
+    <p>Credit card information is stored and processed by <a
+        href="https://www.balancedpayments.com/">Balanced Payments</a>.<br />
+
+    Here are their <a href="https://www.balancedpayments.com/terms">Terms of
+        Service</a> and <a
+        href="https://www.balancedpayments.com/privacy">Privacy Policy</a>.</p>
+
+    <a href="https://www.balancedpayments.com/"><img
+        src="/assets/{{ __version__ }}/balanced-with-cards.png" /></a>
+
+</div>
+{% end %}
