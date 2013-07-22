@@ -2,7 +2,7 @@ from aspen import Response
 from gittip import db
 
 title = "Fraud Review Dashboard"
-^L
+[---]
 if not user.ADMIN:
     raise Response(404)
 
@@ -21,7 +21,7 @@ if unreviewed is None:
     unreviewed = []
 unreviewed = list(unreviewed)
 
-^L
+[---]
 <script src="/assets/jquery-1.8.3.min.js"></script>
 <script src="/assets/-/utils.js"></script>
 <script src="/assets/-/gittip.js"></script>

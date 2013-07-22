@@ -64,7 +64,7 @@ def get_first_ten():
         first_ten[slug] = ORDINALS[i]
 
     return first_ten
-^L
+[---]
 
 _slug = path['slug']
 if name_pattern.match(_slug) is None:
@@ -183,7 +183,7 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
       OFFSET %s
 
     """, (community.slug, limit, offset)))
-^L
+[---]
 {% extends templates/base.html %}
 {% block heading %}
     <h2 class="top"><span>Community</span></h2>

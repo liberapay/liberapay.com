@@ -27,7 +27,7 @@ def _to_age(participant):
     for i, word in enumerate(words):
         age = age.replace(word, str(i))
     return age.replace(' ', ' <span class="unit">') + "</span>"
-^L
+[---]
 
 try:
     limit = min(int(qs.get('limit', 12)), 100)
@@ -64,7 +64,7 @@ receivers = _wrap(db.fetchall("""
     OFFSET %s
 
 """, (limit, offset)))
-^L
+[---]
 {% extends templates/base.html %}
 {% block head %}
     <meta name="description" content="Inspiring Generosity. Gittip is a weekly gift exchange. Support and thank your favorite people and projects and communities with small cash gifts." />

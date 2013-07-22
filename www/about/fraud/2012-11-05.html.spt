@@ -6,7 +6,7 @@ from decimal import Decimal
 from aspen import Response
 from gittip import db, CARDINALS
 
-^L
+[---]
 _suspicious = db.fetchall("""
 
     SELECT username
@@ -169,7 +169,7 @@ fmtdate = lambda d: str(d)[:10]
 
 title = "The Delpan Incident"
 
-^L
+[---]
 {% extends templates/base.html %}
 {% block box %}
 <div class="as-content left">

@@ -1,7 +1,7 @@
 if not user.ANON:
     request.redirect('/%s/' % user.username)
 title = "Sign In"
-^L
+[---]
 {% extends templates/base.html %}
 {% block box %}
     <div class="as-content">

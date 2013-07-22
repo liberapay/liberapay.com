@@ -1,6 +1,6 @@
 from gittip import AMOUNTS
 from gittip.models import Participant
-^L
+[---]
 participant = Participant.query.get(path['username'])
 if user.ANON:
     button_text = "Gittip"
@@ -10,7 +10,7 @@ else:
     button_text = user.get_tip_to(participant.username)
     if button_text == 0:
         button_text = "Gittip"
-^L
+[---]
 <!doctype html>
 <html>
     <head>

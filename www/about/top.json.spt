@@ -1,7 +1,7 @@
 """This is a horribly WET duplicate of www/index.html.
 """
 from gittip import db
-^L
+[---]
 try:
     limit = min(int(qs.get('limit', 10)), 100)
     offset = int(qs.get('offset', 0))
