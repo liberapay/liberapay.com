@@ -26,7 +26,7 @@ Gittip.forms.submit = function(url, data, success, error)
     {
         success = function()
         {
-            Gittip.showFeedback("Success!");
+            Gittip.forms.showFeedback("Success!");
         }
     }
 
@@ -34,7 +34,7 @@ Gittip.forms.submit = function(url, data, success, error)
     {
         error = function(data)
         {
-            Gittip.showFeedback(data.problem);
+            Gittip.forms.showFeedback(data.problem);
         };
     }
 
@@ -48,10 +48,10 @@ Gittip.forms.submit = function(url, data, success, error)
 
     function _error(xhr, foo, bar)
     {
-        Gittip.showFeedback( "So sorry!!"
-                           , ["There was a fairly drastic error with your "
-                             +"request."]
-                            );
+        Gittip.forms.showFeedback( "So sorry!!"
+                                 , ["There was a fairly drastic error with "
+                                   +"your request."]
+                                  );
         console.log("failed", xhr, foo, bar);
     }
 
