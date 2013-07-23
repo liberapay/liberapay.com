@@ -1,13 +1,6 @@
 {% extends base.html %}
 
 {% block head %}
-  <script src="/assets/jquery.pjax.js"></script>
-  <script>
-    $(document).ready(function()
-    {
-      $(document).pjax('.box .nav a', '#pjax')
-    });
-  </script>
   <style>
     .box .nav { padding: 10px 0; }
     .box { margin-top: -28px; }
@@ -35,10 +28,4 @@
     {% include nav.html %}
   </div>
   {% end %}
-{% end %}
-
-{% block page %}
-<div id="pjax">
-  {% block pjax %}{% end %}
-</div>
 {% end %}

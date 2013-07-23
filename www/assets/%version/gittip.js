@@ -9,6 +9,7 @@ Gittip = {};
 Gittip.init = function()
 {
     Gittip.forms.initCSRF();
+    $(document).pjax('a[data-pjax]', '#page');
     Gittip.signOut();
 };
 
@@ -86,6 +87,6 @@ Gittip.signOut = function()
             error: function() {
                 alert('Failed to sign out');
             }
-        });        
+        });
     });
 };
