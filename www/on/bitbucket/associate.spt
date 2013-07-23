@@ -89,7 +89,7 @@ elif action == 'connect':   # connect
 
         # XXX Eep! Internal redirect! Really?!
         request.internally_redirected_from = request.fs
-        request.fs = website.www_root + '/on/confirm.html'
+        request.fs = website.www_root + '/on/confirm.html.spt'
         request.resource = resources.get(request)
 
         raise request.resource.respond(request)
