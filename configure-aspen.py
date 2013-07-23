@@ -6,7 +6,6 @@ import gittip
 import gittip.wireup
 import gittip.authentication
 import gittip.orm
-import gittip.pjax
 import gittip.csrf
 import gittip.cache_static
 import gittip.models.participant
@@ -63,8 +62,7 @@ website.hooks.inbound_early += [ gittip.canonize
 
 #website.hooks.inbound_core += [gittip.cache_static.inbound]
 
-website.hooks.outbound += [ gittip.pjax.outbound
-                          , gittip.authentication.outbound
+website.hooks.outbound += [ gittip.authentication.outbound
                           , gittip.csrf.outbound
                           , gittip.orm.rollback
                           , gittip.cache_static.outbound

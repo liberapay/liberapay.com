@@ -9,7 +9,6 @@ Gittip = {};
 Gittip.init = function()
 {
     Gittip.forms.initCSRF();
-    $(document).pjax('a[data-pjax]', '#page');
     Gittip.signOut();
 };
 
