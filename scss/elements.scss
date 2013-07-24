@@ -49,6 +49,12 @@ ol {
 ol li {
     list-style: outside decimal;
 }
+ol.upper-roman li { list-style-type: upper-roman; }
+ol.upper-alpha li { list-style-type: upper-alpha; }
+ol.decimal li { list-style-type: decimal; }
+ol.lower-roman li { list-style-type: lower-roman; }
+ol.lower-alpha li { list-style-type: lower-alpha; }
+
 
 textarea {
     @include border-radius(3px);

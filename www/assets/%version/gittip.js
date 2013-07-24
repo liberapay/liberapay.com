@@ -86,6 +86,6 @@ Gittip.signOut = function()
             error: function() {
                 alert('Failed to sign out');
             }
-        });        
+        });
     });
 };
