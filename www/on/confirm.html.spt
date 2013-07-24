@@ -276,7 +276,7 @@ title = "Please Confirm"
                     {% if other_bountysource_account is not None and account.platform != 'bountysource' %}
                         <span class="account-elsewhere">
                             <img src="/assets/icons/bountysource.12.png" />
-                            {{ other_bountysource_account.user_info['screen_name'] }}<br />
+                            {{ other_bountysource_account.user_info['display_name'] }}<br />
                         </span>
                     {% end %}
 
