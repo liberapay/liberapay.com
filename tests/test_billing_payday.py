@@ -6,7 +6,6 @@ import mock
 from nose.tools import assert_equals, assert_raises
 from psycopg2 import IntegrityError
 
-import gittip
 from aspen.utils import typecheck, utcnow
 from gittip import billing
 from gittip.billing.payday import FEE_CHARGE, Payday
@@ -705,25 +704,23 @@ class TestBillingTransfer(Harness):
         assert_equals(actual, expected)
 
     def test_record_credit_updates_balance(self):
-        self.make_participant("alice")
+        alice = self.make_participant("alice")
         self.payday.record_credit( amount=Decimal("-1.00")
                                  , fee=Decimal("0.41")
                                  , error=""
                                  , username="alice"
                                   )
         expected = Decimal("0.59")
-        actual = gittip.db.fetchone("SELECT balance FROM participants "
-                                    "WHERE username='alice'")['balance']
+        actual = alice.balance
         assert_equals(actual, expected)
 
     def test_record_credit_doesnt_update_balance_if_error(self):
-        self.make_participant("alice")
+        alice = self.make_participant("alice")
         self.payday.record_credit( amount=Decimal("-1.00")
                                  , fee=Decimal("0.41")
                                  , error="SOME ERROR"
                                  , username="alice"
                                   )
         expected = Decimal("0.00")
-        actual = gittip.db.fetchone("SELECT balance FROM participants "
-                                    "WHERE username='alice'")['balance']
+        actual = alice.balance
         assert_equals(actual, expected)
