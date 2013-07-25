@@ -1,0 +1,9 @@
+import os
+import commands
+
+scss_root = os.path.join(website.project_root, 'scss', 'gittip.scss')
+[---]
+# scss performs some caching, storing it's cache in $project_root/.sass_cache
+css = commands.getoutput("scss -t compressed %s /dev/stdout" % scss_root)
+[---]
+{{ css }}
