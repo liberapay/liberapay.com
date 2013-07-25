@@ -99,4 +99,4 @@ def envvars(website):
     website.bountysource_api_secret = envvar('BOUNTYSOURCE_API_SECRET')
     website.bountysource_callback = envvar('BOUNTYSOURCE_CALLBACK')
 
-    website.css_href = envvar('CSS_HREF')
+    website.css_href = envvar('CSS_HREF').replace('%version', website.version)
