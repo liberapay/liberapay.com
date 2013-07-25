@@ -9,7 +9,6 @@ import gittip
 from aspen import Response
 from aspen.utils import typecheck
 from psycopg2 import IntegrityError
-from gittip.models import community
 
 
 ASCII_ALLOWED_IN_USERNAME = set("0123456789"
