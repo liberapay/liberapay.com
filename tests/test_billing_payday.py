@@ -710,9 +710,7 @@ class TestBillingTransfer(Harness):
                                  , error=""
                                  , username="alice"
                                   )
-        expected = Decimal("0.59")
-        actual = alice.balance
-        assert_equals(actual, expected)
+        assert_equals(alice.balance, Decimal("0.59"))
 
     def test_record_credit_doesnt_update_balance_if_error(self):
         alice = self.make_participant("alice")
@@ -721,6 +719,4 @@ class TestBillingTransfer(Harness):
                                  , error="SOME ERROR"
                                  , username="alice"
                                   )
-        expected = Decimal("0.00")
-        actual = alice.balance
-        assert_equals(actual, expected)
+        assert_equals(alice.balance, Decimal("0.00"))
