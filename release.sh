@@ -90,7 +90,7 @@ if [ $1 ]; then
             # dev version following $whatever." We escape the dash for bash's
             # sake
 
-            printf "\055dev\n" >> www/version.txt
+            printf "$1\055dev\n" > www/version.txt
             git commit www/version.txt -m"Bump version to $1-dev"
 
 
