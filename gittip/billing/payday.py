@@ -790,7 +790,7 @@ class Payday(object):
 
             if error:
                 last_ach_result = error
-                amount = Decimal('0.00')
+                credit = fee = Decimal('0.00')  # ensures balance won't change
                 self.mark_ach_failed(cursor)
             else:
                 last_ach_result = ''
