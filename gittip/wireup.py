@@ -74,3 +74,29 @@ def nmembers(website):
     from gittip.models import community
     community.NMEMBERS_THRESHOLD = int(os.environ['NMEMBERS_THRESHOLD'])
     website.NMEMBERS_THRESHOLD = community.NMEMBERS_THRESHOLD
+
+def envvars(website):
+
+    def envvar(key):
+        return os.environ[key].decode('ASCII')
+
+    website.bitbucket_consumer_key = envvar('BITBUCKET_CONSUMER_KEY')
+    website.bitbucket_consumer_secret = envvar('BITBUCKET_CONSUMER_SECRET')
+    website.bitbucket_callback = envvar('BITBUCKET_CALLBACK')
+
+    website.github_client_id = envvar('GITHUB_CLIENT_ID')
+    website.github_client_secret = envvar('GITHUB_CLIENT_SECRET')
+    website.github_callback = envvar('GITHUB_CALLBACK')
+
+    website.twitter_consumer_key = envvar('TWITTER_CONSUMER_KEY')
+    website.twitter_consumer_secret = envvar('TWITTER_CONSUMER_SECRET')
+    website.twitter_access_token = envvar('TWITTER_ACCESS_TOKEN')
+    website.twitter_access_token_secret = envvar('TWITTER_ACCESS_TOKEN_SECRET')
+    website.twitter_callback = envvar('TWITTER_CALLBACK')
+
+    website.bountysource_www_host = envvar('BOUNTYSOURCE_WWW_HOST')
+    website.bountysource_api_host = envvar('BOUNTYSOURCE_API_HOST')
+    website.bountysource_api_secret = envvar('BOUNTYSOURCE_API_SECRET')
+    website.bountysource_callback = envvar('BOUNTYSOURCE_CALLBACK')
+
+    website.css_href = envvar('CSS_HREF')
