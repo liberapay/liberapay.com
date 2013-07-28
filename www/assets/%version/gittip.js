@@ -9,6 +9,7 @@ Gittip = {};
 Gittip.init = function()
 {
     Gittip.forms.initCSRF();
+    Gittip.signIn();
     Gittip.signOut();
 };
 
@@ -71,6 +72,15 @@ Gittip.jsonml = function(jsonml)
     return node;
 };
 
+Gittip.signIn = function()
+{
+    $('.sign-in > .dropdown').mouseenter(function(e) {
+        $(this).addClass('open');
+    }).mouseleave(function(e) {
+        $(this).removeClass('open');
+    });
+    
+};
 
 Gittip.signOut = function()
 {
