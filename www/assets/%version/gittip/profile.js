@@ -338,28 +338,29 @@ $(document).ready(function()
     // Wire up API Key
     // ===============
     //
-    function hit_api_key(method)
-    {
-        return function()
-        {
-            jQuery.ajax(
-                { url: 'api-key.json'
-                , type: method
-                , dataType: 'json'
-                , data: {action: 'show'}
-                , success: function(d)
-                {
-                    $('.api-key span').text(d.api_key);
-                }
-                 }
-            );
-        }
-    }
+    $('.api-key')
+        .data('callback', function (data) {
+            $('.api-key span').text(data.api_key || 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx');
 
-    $('.api-key .show').click(hit_api_key('GET'));
-    $('.api-key .hide').click(function()
-    {
-        $('.api-key span').text('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx');
-    });
-    $('.api-key .recreate').click(hit_api_key('POST'));
+            if (data.api_key) {
+                $('.api-key').data('api-key', data.api_key);
+                $('.api-key .show')
+                    .text('Hide Key')
+                    .toggleClass('show hide');
+            }
+            else
+                $('.api-key .hide')
+                    .text('Show Key')
+                    .toggleClass('show hide');
+        })
+        .on('click', '.show', function () {
+            if ($('.api-key').data('api-key'))
+                return $('.api-key').data('callback')({ api_key: $('.api-key').data('api-key') });
+
+            $.get('api-key.json', { action: 'show' }, $('.api-key').data('callback'));
+        })
+        .on('click', '.hide', $('.api-key').data('callback'))
+        .on('click', '.recreate', function () {
+            $.post('api-key.json', { action: 'show' }, $('.api-key').data('callback'));
+        });
 });
