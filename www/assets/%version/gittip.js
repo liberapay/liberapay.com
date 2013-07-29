@@ -1,4 +1,3 @@
-
 /* Main namespace.
  * ===============
  * Individual modules are in the gittip/ directory.
@@ -75,11 +74,15 @@ Gittip.jsonml = function(jsonml)
 Gittip.signIn = function()
 {
     $('.sign-in > .dropdown').mouseenter(function(e) {
-        $(this).addClass('open');
+        clearTimeout($(this).data('timeoutId'));
+	    $(this).addClass('open');
     }).mouseleave(function(e) {
-        $(this).removeClass('open');
+	    var $this = $(this),
+		    timeoutId = setTimeout(function() {
+			    $this.removeClass('open');
+		    }, 100);
+	    $this.data('timeoutId', timeoutId);
     });
-    
 };
 
 Gittip.signOut = function()
