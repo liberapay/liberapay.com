@@ -1,8 +1,23 @@
 import os
 import commands
 
+from aspen import Response
+
 scss_root = os.path.join(website.project_root, 'scss', 'gittip.scss')
 [---]
+if path['version'] not in (website.version, '-'):
+
+    # Prevent the possibility of serving one version of a file as if it were
+    # another. You can work around it from your address bar using '-' as the
+    # version: /assets/-/gittip.css.
+
+    # If/when you do find yourself in a situation where you need to refresh the
+    # cache with a specific version of this resource, one idea would be to
+    # locally generate the version of the file you need and place it in an
+    # explicit X.Y.Z directory that's sibling to %version.
+
+    raise Response(404)
+
 # sass performs some caching, storing it's cache in ${project_root}/.sass_cache
 css = commands.getoutput("sass -t compressed %s " % scss_root)
 [---]
