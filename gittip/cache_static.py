@@ -12,7 +12,7 @@ from aspen import Response
 def version_is_available(request):
     path = request.line.uri.path
     version = request.context['__version__']
-    return ('version' in path) and path['version'] == version
+    return path['version'] == version if 'version' in path else True
 
 
 def version_is_dash(request):
