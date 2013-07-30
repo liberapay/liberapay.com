@@ -260,7 +260,7 @@ $(document).ready(function() {
 
 {% if community.slug in first_ten %}
 <div style="text-align: center;">
-    <h1>Congratulations!</h1>
+    <h1 class="congrats">Congratulations!</h1>
     <p>You're the {{ first_ten[community.slug] }} community on Gittip! :D</p>
 </div>
 {% end %}
