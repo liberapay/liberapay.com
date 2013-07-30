@@ -54,15 +54,30 @@ def inbound(request):
         raise Response(404)
 
     ims = request.headers.get('If-Modified-Since')
-    last_modified = get_last_modified(request.fs)
+    if not ims:
 
-    if ims:
-        ims = timegm(parsedate(ims))
-        if ims >= last_modified:
-            raise Response(304, headers={
-                'Last-Modified': format_date_time(last_modified),
-                'Cache-Control': 'no-cache'
-            })
+        # This client doesn't care about when the file was modified.
+
+        return request
+
+
+    ims = timegm(parsedate(ims))
+    last_modified = get_last_modified(request.fs)
+    if ims < last_modified:
+
+        # The file has been modified since. Serve the whole thing.
+
+        return request
+
+
+    # Huzzah!
+    # =======
+    # We can serve a 304! :D
+
+    response = Response(304)
+    response.headers['Last-Modified'] = format_date_time(last_modified)
+    response.headers['Cache-Control'] = 'no-cache'
+    raise response
 
 
 def outbound(response):
