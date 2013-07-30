@@ -34,7 +34,7 @@ def inbound(request):
     """
     uri = request.line.uri
 
-    if not uri.startswith('/assets'):
+    if not uri.startswith('/assets/'):
 
         # Only apply to the assets/ directory.
 
@@ -69,12 +69,11 @@ def outbound(response):
     """Set caching headers for resources under assets/.
     """
     request = response.request
-    uri = request.line.uri
 
     version = request.context['__version__']
     response.headers['X-Gittip-Version'] = version
 
-    if not uri.startswith('/assets'):
+    if not request.uri.startswith('/assets/'):
         return response
 
     response.headers.cookie.clear()
