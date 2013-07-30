@@ -3,6 +3,12 @@
 # This script gets run by heroku-buildpack-python during deployment.
 
 
+indent() {
+    sed -u 's/^/       /'
+}
+
+
+
 # Install SASS.
 # =============
 # Adapted from https://github.com/abhishekmunie/heroku-buildpack-static-css/blo
@@ -10,7 +16,7 @@
 
 echo "-----> Installing SASS..."
 mkdir /app/.gem
-gem install sass --no-rdoc --no-ri --install-dir /app/.gem 
+gem install sass --no-rdoc --no-ri --install-dir /app/.gem | indent
 
 
 # Set up environment variables.
