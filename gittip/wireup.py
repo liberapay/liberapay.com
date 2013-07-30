@@ -77,7 +77,12 @@ def nmembers(website):
 
 def envvars(website):
 
+    missing_keys = []
+
     def envvar(key):
+        if key not in os.environ:
+            missing_keys.append(key)
+            return ""
         return os.environ[key].decode('ASCII')
 
     website.bitbucket_consumer_key = envvar('BITBUCKET_CONSUMER_KEY')
@@ -100,3 +105,27 @@ def envvars(website):
     website.bountysource_callback = envvar('BOUNTYSOURCE_CALLBACK')
 
     website.css_href = envvar('CSS_HREF').replace('%version', website.version)
+
+    if missing_keys:
+        missing_keys.sort()
+        these = len(missing_keys) != 1 and 'these' or 'this'
+        plural = len(missing_keys) != 1 and 's' or ''
+        aspen.log_dammit("=" * 42)
+        aspen.log_dammit( "Oh no! Gittip.com needs %s missing " % these
+                        , "environment variable%s:" % plural
+                         )
+        aspen.log_dammit(" ")
+        for key in missing_keys:
+            aspen.log_dammit("  " + key)
+        aspen.log_dammit(" ")
+        aspen.log_dammit( "(Sorry, we must've started looking for "
+                        , "%s since you last updated Gittip!)" % these
+                         )
+        aspen.log_dammit(" ")
+        aspen.log_dammit("Running Gittip locally? Edit ./local.env.")
+        aspen.log_dammit("Running the test suite? Edit ./tests/env.")
+        aspen.log_dammit(" ")
+        aspen.log_dammit("See ./default_local.env for hints.")
+
+        aspen.log_dammit("=" * 42)
+        raise SystemExit
