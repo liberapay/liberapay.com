@@ -85,6 +85,9 @@ def envvars(website):
             return ""
         return os.environ[key].decode('ASCII')
 
+    def is_yesish(val):
+        return val.lower() in ('1', 'true', 'yes')
+
     website.bitbucket_consumer_key = envvar('BITBUCKET_CONSUMER_KEY')
     website.bitbucket_consumer_secret = envvar('BITBUCKET_CONSUMER_SECRET')
     website.bitbucket_callback = envvar('BITBUCKET_CALLBACK')
@@ -106,6 +109,7 @@ def envvars(website):
 
     website.css_href = envvar('GITTIP_CSS_HREF') \
                                           .replace('%version', website.version)
+    website.cache_static = is_yesish(envvar('GITTIP_CACHE_STATIC'))
 
     if missing_keys:
         missing_keys.sort()
