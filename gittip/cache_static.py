@@ -10,24 +10,27 @@ from aspen import Response
 
 
 def version_is_available(request):
+    """Return a boolean, whether we have the version they asked for.
+    """
     path = request.line.uri.path
     version = request.context['__version__']
     return path['version'] == version if 'version' in path else True
 
 
 def version_is_dash(request):
+    """Return a boolean, whether the version they asked for is -.
+    """
     return request.line.uri.path.get('version') == '-'
 
 
 def get_last_modified(fs_path):
+    """Get the last modified time, as int, of the file pointed to by fs_path.
+    """
     return int(os.path.getctime(fs_path))
 
 
 def inbound(request):
-    """
-    Checks the last modified time of a file against
-    an If-Modified-Since header and responds with
-    a 304 if appropriate.
+    """Try to serve a 304 for resources under assets/.
     """
     uri = request.line.uri
 
@@ -63,6 +66,8 @@ def inbound(request):
 
 
 def outbound(response):
+    """Set caching headers for resources under assets/.
+    """
     request = response.request
     uri = request.line.uri
 
@@ -79,7 +84,7 @@ def outbound(response):
         response.headers['Expires'] = 'Sun, 17 Jan 2038 19:14:07 GMT'
         response.headers['Cache-Control'] = 'public'
     else:
-        # Asset is not versioned. Don't cache it.
+        # Asset is not versioned. Don't cache it, but set Last-Modified.
         last_modified = get_last_modified(request.fs)
         response.headers['Last-Modified'] = format_date_time(last_modified)
         response.headers['Cache-Control'] = 'no-cache'
