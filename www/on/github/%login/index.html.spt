@@ -120,9 +120,11 @@ title = username
   {% if usertype == "user" %}
     {% include "templates/participant.tip.html" %}
   {% elif usertype == "organization" %}
-    <div class="nav level-1">
-      {% include "templates/sign-in-using-to-give.html" %}
-    </div>
+    {% if user.ANON %}
+      <div class="nav level-1">
+          {% include "templates/sign-in-using-to-give.html" %}
+      </div>
+    {% end %}
   {% end %}
 
 {% end %}
