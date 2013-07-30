@@ -93,8 +93,8 @@ def outbound(response):
 
     response.headers.cookie.clear()
 
-    if version_is_available(request):
-        # This specific asset is versioned, so it's fine to cache this forever
+    if 'version' in request.path:
+        # This specific asset is versioned, so it's fine to cache this forever.
         response.headers['Expires'] = 'Sun, 17 Jan 2038 19:14:07 GMT'
         response.headers['Cache-Control'] = 'public'
     else:
