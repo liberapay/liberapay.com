@@ -1,12 +1,26 @@
 """
 Handles caching of static resources.
 """
-from os import path
+import os
 from calendar import timegm
 from email.utils import parsedate
 from wsgiref.handlers import format_date_time
 
 from aspen import Response
+
+
+def version_is_available(request):
+    path = request.line.uri.path
+    version = request.context['__version__']
+    return ('version' in path) and path['version'] == version
+
+
+def version_is_dash(request):
+    return request.line.uri.path.get('version') == '-'
+
+
+def get_last_modified(fs_path):
+    return int(os.path.getctime(fs_path))
 
 
 def inbound(request):
@@ -16,16 +30,28 @@ def inbound(request):
     a 304 if appropriate.
     """
     uri = request.line.uri
-    version = request.context['__version__']
 
     if not uri.startswith('/assets'):
-        return request
-    elif not version.endswith('dev') and version in uri:
-        # These will be cached indefinitely in the outbound hook
+
+        # Only apply to the assets/ directory.
+
         return request
 
+    if not( version_is_available(request) or version_is_dash(request) ):
+
+        # Prevent the possibility of serving one version of a file as if it
+        # were another. You can work around it from your address bar using '-'
+        # as the version: /assets/-/gittip.css.
+
+        # If/when you do find yourself in a situation where you need to refresh
+        # the cache with a specific version of this resource, one idea would be
+        # to locally generate the version of the file you need and place it in
+        # an explicit X.Y.Z directory that's sibling to %version.
+
+        raise Response(404)
+
     ims = request.headers.get('If-Modified-Since')
-    last_modified = int(path.getctime(request.fs))
+    last_modified = get_last_modified(request.fs)
 
     if ims:
         ims = timegm(parsedate(ims))
@@ -39,18 +65,21 @@ def inbound(request):
 def outbound(response):
     request = response.request
     uri = request.line.uri
+
+    version = request.context['__version__']
+    response.headers['X-Gittip-Version'] = version
+
     if not uri.startswith('/assets'):
         return response
 
-    version = request.context['__version__']
-    if not version.endswith('dev') and version in uri:
-        # This specific asset is versioned, so
-        # it's fine to cache this forever
+    response.headers.cookie.clear()
+
+    if version_is_available(request):
+        # This specific asset is versioned, so it's fine to cache this forever
         response.headers['Expires'] = 'Sun, 17 Jan 2038 19:14:07 GMT'
         response.headers['Cache-Control'] = 'public'
-
     else:
-        # Asset is not versioned or dev version is running.
-        last_modified = int(path.getctime(request.fs))
+        # Asset is not versioned. Don't cache it.
+        last_modified = get_last_modified(request.fs)
         response.headers['Last-Modified'] = format_date_time(last_modified)
         response.headers['Cache-Control'] = 'no-cache'

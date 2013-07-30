@@ -47,7 +47,7 @@ website.hooks.inbound_early += [ gittip.canonize
                                , gittip.csrf.inbound
                                 ]
 
-#website.hooks.inbound_core += [gittip.cache_static.inbound]
+website.hooks.inbound_core += [gittip.cache_static.inbound]
 
 website.hooks.outbound += [ gittip.authentication.outbound
                           , gittip.csrf.outbound
