@@ -84,16 +84,17 @@ def outbound(response):
     """Set caching headers for resources under assets/.
     """
     request = response.request
+    uri = request.line.uri
 
     version = request.context['__version__']
     response.headers['X-Gittip-Version'] = version
 
-    if not request.uri.startswith('/assets/'):
+    if not uri.startswith('/assets/'):
         return response
 
     response.headers.cookie.clear()
 
-    if 'version' in request.path:
+    if 'version' in uri.path:
         # This specific asset is versioned, so it's fine to cache this forever.
         response.headers['Expires'] = 'Sun, 17 Jan 2038 19:14:07 GMT'
         response.headers['Cache-Control'] = 'public'
