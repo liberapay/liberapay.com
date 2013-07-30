@@ -22,7 +22,7 @@ username = participant.username
     <h2>Toot their horn!</h2>
     {% end %}
     <form id="toot-form">
-        <textarea id="toot"></textarea>
+        <textarea id="toot" {% if user != participant %} placeholder="You're doing good work, {{ participant.username }}!" {% end %}></textarea>
         <p class="help">
             <span>
             {% if user == participant %}
