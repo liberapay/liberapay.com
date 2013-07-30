@@ -1,4 +1,3 @@
-
 /* Main namespace.
  * ===============
  * Individual modules are in the gittip/ directory.
@@ -9,6 +8,7 @@ Gittip = {};
 Gittip.init = function()
 {
     Gittip.forms.initCSRF();
+    Gittip.signIn();
     Gittip.signOut();
 };
 
@@ -71,6 +71,19 @@ Gittip.jsonml = function(jsonml)
     return node;
 };
 
+Gittip.signIn = function()
+{
+    $('.sign-in > .dropdown').mouseenter(function(e) {
+        clearTimeout($(this).data('timeoutId'));
+	    $(this).addClass('open');
+    }).mouseleave(function(e) {
+	    var $this = $(this),
+		    timeoutId = setTimeout(function() {
+			    $this.removeClass('open');
+		    }, 100);
+	    $this.data('timeoutId', timeoutId);
+    });
+};
 
 Gittip.signOut = function()
 {
