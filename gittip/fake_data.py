@@ -1,11 +1,12 @@
 from faker import Factory
-from gittip import orm
+from gittip import orm, MAX_TIP, MIN_TIP
 from gittip.models.tip import Tip
 from gittip.models.participant import Participant
 from gittip.models.elsewhere import Elsewhere
-from gittip import AMOUNTS
-import string
+
+import decimal
 import random
+import string
 
 faker = Factory.create()
 
@@ -55,6 +56,14 @@ def fake_participant(is_admin=False, anonymous=False):
         number="singular"
     )
 
+def fake_tip_amount():
+    amount = ((decimal.Decimal(random.random()) * (MAX_TIP - MIN_TIP))
+            + MIN_TIP)
+    
+    decimal_amount = decimal.Decimal(amount).quantize(decimal.Decimal('.01'))
+
+    return decimal_amount
+
 
 def fake_tip(tipper, tippee):
     """
@@ -66,7 +75,7 @@ def fake_tip(tipper, tippee):
         mtime=faker.dateTimeThisMonth(),
         tipper=tipper.username,
         tippee=tippee.username,
-        amount=random.choice(AMOUNTS)
+        amount=fake_tip_amount()
     )
 
 
