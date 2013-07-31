@@ -1,7 +1,7 @@
 import datetime
 import locale
 from aspen import json
-from gittip import db, age, AMOUNTS
+from gittip import db, age
 
 CARDINALS = ["zero", "one", "two", "three", "four", "five", "six", "seven",
              "eight", "nine"]
@@ -109,9 +109,9 @@ _tip_distribution = list(db.fetchall("""
   ORDER BY amount
 
 """))
-tip_n = sum([row['count'] for row in _tip_distribution if row['amount'] in AMOUNTS])
+tip_n = sum([row['count'] for row in _tip_distribution])
 
-all_amounts = AMOUNTS[1:]
+all_amounts = sorted([row['amount'] for row in _tip_distribution], reverse=True)
 tip_distribution = {a: (0, 0.0) for a in all_amounts}  # prime it
 for row in _tip_distribution:
     row['percentage'] = row['count'] * 1.0 / tip_n

@@ -42,15 +42,6 @@ class TestChartOfReceiving(Harness):
         actual = Participant(u'bob').get_tip_distribution()
         assert_equals(actual, expected)
 
-    def test_get_tip_distribution_handles_a_non_standard_amount(self):
-        tip = Tip(tipper='alice', tippee='bob', amount='5.37', ctime=utcnow())
-        self.session.add(tip)
-        self.session.commit()
-        expected = ([[-1, 1, Decimal('5.37'), 1.0, Decimal('1')]],
-                    1.0, Decimal('5.37'))
-        actual = Participant(u'bob').get_tip_distribution()
-        assert_equals(actual, expected)
-
     def test_get_tip_distribution_handles_no_tips(self):
         expected = ([], 0.0, Decimal('0.00'))
         actual = Participant(u'foo').get_tip_distribution()
