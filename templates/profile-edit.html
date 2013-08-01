@@ -34,11 +34,11 @@
         <div class="edit">
             <select tabindex="201" name="number">
                 <option value="singular"
-                    {{ "selected" if participant.type == 'individual' else ''}}>
+                    {{ "selected" if participant.number == 'singular' else ''}}>
                     I am
                 </option>
                 <option value="plural"
-                    {{ "selected" if participant.type != 'individual' else ''}}>
+                    {{ "selected" if participant.number != 'singular' else ''}}>
                     We are
                 </option>
             </select>

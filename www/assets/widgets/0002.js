@@ -4,7 +4,7 @@
 	    baseURI  = script.getAttribute('data-gittip-base')
 	            || script.src.replace(/^((https?:)?\/\/[^\/]+).*$/, '$1'),
 	    username = script.getAttribute('data-gittip-username'),
-	    widget, receiving, type;
+	    widget, receiving, number;
 
 	// include css
 	$('head')[0].appendChild(
@@ -18,7 +18,7 @@
 	script.parentNode.insertBefore(_.ml(
 		['div', { 'class': 'gittip-widget gittip-0002' },
 			[ 'div', { 'class': 'gittip-inner' },
-				type = _.ml(['span']), ' receive ', ['br'],
+				number = _.ml(['span']), ' receive ', ['br'],
 				['a', { href: baseURI + '/' + username + '/' },
 					[ 'b', '$', receiving = _.ml(['span', '0.00'])] , ' / wk'
 				],
@@ -31,7 +31,7 @@
 	// display current receiving value
 	_.json(baseURI + '/' + username + '/public.json', function(data) {
 		receiving.innerHTML = data.receiving;
-		type.innerHTML = data.type === 'individual' ? 'I' : 'We';
+		number.innerHTML = data.number === 'singular' ? 'I' : 'We';
 	});
 })(function(q) { return document.querySelectorAll(q); }, {
 	ml: function(jsonml) {

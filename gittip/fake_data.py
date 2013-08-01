@@ -52,7 +52,7 @@ def fake_participant(is_admin=False, anonymous=False):
         is_suspicious=False,
         last_bill_result='',  # Needed to not be suspicious
         claimed_time=faker.dateTimeThisYear(),
-        type="individual"
+        number="singular"
     )
 
 

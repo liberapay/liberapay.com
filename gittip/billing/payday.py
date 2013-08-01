@@ -208,7 +208,7 @@ class Payday(object):
                  , balanced_account_uri
                  , stripe_customer_id
                  , is_suspicious
-                 , type
+                 , number
               FROM participants
              WHERE claimed_time IS NOT NULL
                AND claimed_time < %s
@@ -237,7 +237,7 @@ class Payday(object):
         for i, (participant, foo, bar) in enumerate(participants, start=1):
             if i % 100 == 0:
                 log("Pachinko done for %d participants." % i)
-            if participant['type'] != 'group':
+            if participant['number'] != 'plural':
                 continue
             team = ORMParticipant.query.get(participant['username'])
 
@@ -322,7 +322,7 @@ class Payday(object):
             UPDATE participants
                SET balance = (balance + pending)
                  , pending = 0
-             WHERE type='group'
+             WHERE number='plural'
 
         """)
         # "Moved" instead of "cleared" because we don't also set to null.
