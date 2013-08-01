@@ -188,7 +188,6 @@ elif now.weekday() == SATURDAY:
     last_thursday = "this past Thursday"
     this_thursday = "this coming Thursday"
 
-<<<<<<< HEAD
 tip_distribution_json = {str(k): v for k,v in tip_distribution.items()}
 names = ['ncc', 'pcc', 'statements', 'transfer_volume',
          'last_thursday', 'this_thursday', 'punc', 'other_people',
@@ -196,10 +195,8 @@ names = ['ncc', 'pcc', 'statements', 'transfer_volume',
          'tip_distribution_json', 'tip_n', 'nach', 'escrow',
          'ngivers', 'nreceivers', 'noverlap', 'nactive']
 
-=======
->>>>>>> c1d7bda8f1efbb333dede8c7cdd1a28021f62064
 [----------------------------------------------------------] application/json
-{{ json.dumps(sorted(tips)) }}
+{{ json.dumps({name: globals()[name] for name in names}) }}
 [----------------------------------------------------------] text/html
 
 {% extends templates/about.html %}
