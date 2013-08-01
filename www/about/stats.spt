@@ -278,14 +278,15 @@ elif now.weekday() == SATURDAY:
     <p><b>${{ commaize(total_backed_tips, 2) }}</b>
         {{ future_processing_text }} <b>{{ this_thursday }}</b>{{ punc }}
     </p>
-
     <p>On average, people who tip, tip ${{ "%.2f" % average_tip }} each to
     {{ other_people }}. </p>
-    <p>Here's how tip amounts are distributed, by number of tips:</p>
+    </br>
+    </br>
+    <p>Here's how tip amounts are distributed by number of tips:</p>
 
     <div id="distribution-by-number", class="distribution"></div>
 
-    <p>Here's how tip amounts are distributed, by total value of the tips:</p>
+    <p>Here's how tip amounts are distributed by total value of the tips:</p>
 
     <div id="distribution-by-value", class="distribution"></div>
 
@@ -321,7 +322,7 @@ elif now.weekday() == SATURDAY:
         
         var formatCount = d3.format(",.0f");
 
-        var margin = {top: 10, right: 30, bottom: 50, left: 5},
+        var margin = {top: 10, right: 30, bottom: 50, left: 20},
             width = 630 - margin.left - margin.right,
             height = 250 - margin.top - margin.bottom;
 
@@ -333,7 +334,7 @@ elif now.weekday() == SATURDAY:
             .bins(x.ticks(ticks))
             (tips);
 
-        var create_histogram = function(element, data){
+        var create_histogram = function(element, data, ylabel){
 
             var y = d3.scale.linear()
                 .domain([0, d3.max(data, function(d) { return d.y; })])
@@ -372,10 +373,26 @@ elif now.weekday() == SATURDAY:
                 .attr("transform", "translate(0," + height + ")")
                 .call(xAxis);
 
+            svg.append("text")
+                .attr("class", "x label")
+                .attr("text-anchor", "end")
+                .attr("x", width)
+                .attr("y", height + 30)
+                .text("tip amount in US dollars ($)");
+
+            svg.append("text")
+                .attr("class", "y label")
+                .attr("text-anchor", "end")
+                .attr("y", - 15)
+                .attr("dy", ".75em")
+                .attr("transform", "rotate(-90)")
+                .text(ylabel);
+
         }
 
-        create_histogram("#distribution-by-number", data);
-        create_histogram("#distribution-by-value", tips_by_value);
+        create_histogram("#distribution-by-number", data, "number of tips");
+        create_histogram("#distribution-by-value", tips_by_value, 
+          "total value of tips in US dollars ($)");
         
       });
 
