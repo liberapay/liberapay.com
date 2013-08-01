@@ -90,7 +90,7 @@ other_people = "%s other %s" % (number, word)
 # Tip Distribution
 _tip_distribution = list(db.fetchall("""
 
-    SELECT amount
+    SELECT amount, count(amount)
       FROM (SELECT DISTINCT ON (tipper, tippee)
                    amount
               FROM tips
@@ -105,12 +105,16 @@ _tip_distribution = list(db.fetchall("""
           ORDER BY tipper, tippee, mtime DESC
                   ) AS foo
      WHERE amount > 0
+  GROUP BY amount
   ORDER BY amount
 
 """))
-tips = [tip['amount'] for tip in _tip_distribution]
+tip_n = sum([row['count'] for row in _tip_distribution])
 
-
+tip_distribution = {}
+for row in _tip_distribution:
+    row['percentage'] = row['count'] * 1.0 / tip_n
+    tip_distribution[row['amount']] = (row['count'], row['percentage'])
 
 
 def part(s):
@@ -184,8 +188,15 @@ elif now.weekday() == SATURDAY:
     last_thursday = "this past Thursday"
     this_thursday = "this coming Thursday"
 
+tip_distribution_json = {str(k): v for k,v in tip_distribution.items()}
+names = ['ncc', 'pcc', 'statements', 'transfer_volume',
+         'last_thursday', 'this_thursday', 'punc', 'other_people',
+         'average_tip', 'average_tippees', 'total_backed_tips',
+         'tip_distribution_json', 'tip_n', 'nach', 'escrow',
+         'ngivers', 'nreceivers', 'noverlap', 'nactive']
+
 [----------------------------------------------------------] application/json
-{{ json.dumps(sorted(tips)) }}
+{{ json.dumps({name: globals()[name] for name in names}) }}
 [----------------------------------------------------------] text/html
 
 {% extends templates/about.html %}
@@ -294,7 +305,7 @@ elif now.weekday() == SATURDAY:
     <script>
 
 
-    d3.json("/about/stats.json", function(tips){
+    d3.json("/about/tips-distribution.json", function(tips){
 
         var ticks = 20;
         var max_tip = 100;
