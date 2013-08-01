@@ -14,12 +14,7 @@ number = request.body["number"]
 if number not in ("singular", "plural"):
     raise Response(400)
 
-if (number == 'plural') and (user.number == 'singular'):
-    db.execute( "UPDATE participants SET statement=%s, number=%s "
-                "WHERE username=%s"
-              , (statement, number, user.username)
-               )
-elif (number == 'singular') and (user.number != 'singular'):
+if number != user.number:
     db.execute( "UPDATE participants SET statement=%s, number=%s "
                 "WHERE username=%s"
               , (statement, number, user.username)
