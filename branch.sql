@@ -12,9 +12,7 @@ BEGIN;
     DROP RULE log_participant_type ON participants;
 
     ALTER TABLE participants DROP COLUMN type;
-    -- ALTER TABLE participants RENAME COLUMN type_ TO type;
     ALTER TABLE log_participant_type DROP COLUMN type;
-    -- ALTER TABLE log_participant_type RENAME COLUMN type_ TO type;
 
     ALTER TABLE log_participant_type RENAME TO log_participant_number;
 
