@@ -90,7 +90,7 @@ other_people = "%s other %s" % (number, word)
 # Tip Distribution
 _tip_distribution = list(db.fetchall("""
 
-    SELECT amount
+    SELECT amount, count(amount)
       FROM (SELECT DISTINCT ON (tipper, tippee)
                    amount
               FROM tips
@@ -105,6 +105,7 @@ _tip_distribution = list(db.fetchall("""
           ORDER BY tipper, tippee, mtime DESC
                   ) AS foo
      WHERE amount > 0
+  GROUP BY amount
   ORDER BY amount
 
 """))
@@ -305,11 +306,8 @@ names = ['ncc', 'pcc', 'statements', 'transfer_volume',
     <script>
 
 
-<<<<<<< HEAD
+
     d3.json("/about/tips-distribution.json", function(tips){
-=======
-    d3.json("/about/stats.json", function(tips){
->>>>>>> c1d7bda8f1efbb333dede8c7cdd1a28021f62064
 
         var ticks = 20;
         var max_tip = 100;
