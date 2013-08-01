@@ -1,7 +1,13 @@
 (function($, _) {
-	var s        = $('script'),
-	    script   = s[s.length - 1],
-	    baseURI  = script.getAttribute('data-gittip-base')
+	var s = $('script');
+	var script;
+	for (var i = s.length - 1; i >= 0; i--) {
+		if (s[i].getAttribute('data-gittip-username')) {
+			script = s[i];
+			break;
+		}
+	}
+	var baseURI  = script.getAttribute('data-gittip-base')
 	            || script.src.replace(/^((https?:)?\/\/[^\/]+).*$/, '$1'),
 	    username = script.getAttribute('data-gittip-username'),
 	    widget, receiving, number;
