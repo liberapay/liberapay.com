@@ -34,7 +34,7 @@ if not user.ANON:
         amount = user.get_tip_to(tippee)
 
     total_giving = user.get_dollars_giving()
-    total_receiving = Participant(tippee).get_dollars_receiving()
+    total_receiving = user.get_dollars_receiving()
 
     out = { "amount": str(amount)
           , "total_giving": str(total_giving)
