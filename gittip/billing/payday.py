@@ -9,10 +9,11 @@ Exchanges (moving money between Gittip and the outside world) and transfers
 payday. This event has duration (it's not punctiliar). It is started
 transactionally, and it ends transactionally, and inside of it, exchanges and
 transfers happen transactionally (though the link between our db and our
-processor's db could be tightened up; see #213). These exchanges and transfers
-accrue against a "pending" column in the database. Once the payday event has
-completed successfully, it ends with the pending column being applied to the
-balance column and reset to NULL in a single transaction.
+processor's db could be tightened up; see #213). Exchanges immediately affect
+the participant's balance, but transfers accrue against a "pending" column in
+the database. Once the payday event has completed successfully, it ends with
+the pending column being applied to the balance column and reset to NULL in a
+single transaction.
 
 """
 from __future__ import unicode_literals
