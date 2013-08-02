@@ -9,6 +9,7 @@ else:
     button_text = user.get_tip_to(participant.username)
     if button_text == 0:
         button_text = "Gittip"
+response.headers['X-Frame-Options'] = "ALLOWALL"
 [---]
 <!doctype html>
 <html>
