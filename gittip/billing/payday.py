@@ -40,7 +40,8 @@ from psycopg2.extras import RealDictRow
 FEE_CHARGE = ( Decimal("0.30")   # $0.30
              , Decimal("0.029")  #  2.9%
               )
-FEE_CREDIT = Decimal("0.25")
+FEE_CREDIT = Decimal("0.00")    # Balanced doesn't actually charge us for this,
+                                # because we were in the door early enough.
 
 MINIMUM_CHARGE = Decimal("9.41")
 MINIMUM_CREDIT = Decimal("10.00")
