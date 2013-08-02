@@ -1,13 +1,12 @@
-(function($, _) {
-	var s        = $('script'),
-	    script   = s[s.length - 1],
+(function(_) {
+	var script   = document.querySelector('script[data-gittip-username]'),
 	    baseURI  = script.getAttribute('data-gittip-base')
 	            || script.src.replace(/^((https?:)?\/\/[^\/]+).*$/, '$1'),
 	    username = script.getAttribute('data-gittip-username'),
 	    widget, receiving, number;
 
 	// include css
-	$('head')[0].appendChild(
+	document.querySelector('head').appendChild(
 		_.ml(['link', {
 			rel: 'stylesheet',
 			href: script.src.replace('.js', '.css').replace(/\?.+/, '')
@@ -33,7 +32,7 @@
 		receiving.innerHTML = data.receiving;
 		number.innerHTML = data.number === 'singular' ? 'I' : 'We';
 	});
-})(function(q) { return document.querySelectorAll(q); }, {
+})({
 	ml: function(jsonml) {
 		var i, p, v, node;
 
