@@ -8,7 +8,7 @@ from psycopg2 import IntegrityError
 
 from aspen.utils import typecheck, utcnow
 from gittip import billing
-from gittip.billing.payday import FEE_CHARGE, Payday
+from gittip.billing.payday import FEE_CHARGE, Payday, skim_credit
 from gittip.models import Payday as PaydayModel
 from gittip.participant import Participant
 from gittip.testing import Harness
@@ -626,6 +626,10 @@ class TestBillingTransfer(Harness):
             with self.assertRaises(IntegrityError):
                 self.payday.debit_participant(cur, subject.username, amount)
             conn.commit()
+
+    def test_skim_credit(self):
+        actual = skim_credit(Decimal('10.00'))
+        assert actual == (Decimal('10.00'), Decimal('0.00')), actual
 
     def test_credit_participant(self):
         amount = Decimal('1.00')
