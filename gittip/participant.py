@@ -256,9 +256,7 @@ class Participant(object):
             raise self.NoSelfTipping
 
         amount = Decimal(amount)  # May raise InvalidOperation
-        hi = gittip.AMOUNTS[0]
-        lo = gittip.AMOUNTS[-1]
-        if (amount < lo) or (amount > hi):
+        if (amount < gittip.MIN_TIP) or (amount > gittip.MAX_TIP):
             raise self.BadAmount
 
         NEW_TIP = """\
@@ -407,6 +405,24 @@ class Participant(object):
 
     @require_username
     def get_tip_distribution(self):
+        """
+            Returns a data structure in the form of:
+            [
+                [TIPAMOUNT1, TIPAMOUNT2...TIPAMOUNTN],
+                total_number_patrons_giving_to_me,
+                total_amount_received
+            ]
+
+            where each TIPAMOUNTN is in the form:
+
+            [amount,
+             number_of_tippers_for_this_amount,
+             total_amount_given_at_this_amount,
+             proportion_of_tips_at_this_amount,
+             proportion_of_total_amount_at_this_amount
+            ]
+
+        """        
         SQL = """
 
             SELECT amount
@@ -427,28 +443,24 @@ class Participant(object):
           ORDER BY amount
 
         """
+
+        tip_amounts = []
+
         npatrons = 0.0  # float to trigger float division
         contributed = Decimal('0.00')
-        other = [-1, 0, 0]  # accumulates old tip amounts
-        out = []
         for rec in gittip.db.fetchall(SQL, (self.username,)):
-            if rec['amount'] not in gittip.AMOUNTS:
-                other[1] += rec['ncontributing']
-                other[2] += rec['amount'] * rec['ncontributing']
-                contributed += rec['amount'] * rec['ncontributing']
-            else:
-                out.append([ rec['amount']
-                           , rec['ncontributing']
-                           , rec['amount'] * rec['ncontributing']
-                            ])
-                contributed += out[-1][2]
+            tip_amounts.append([ rec['amount']
+                       , rec['ncontributing']
+                       , rec['amount'] * rec['ncontributing']
+                        ])
+            contributed += tip_amounts[-1][2]
             npatrons += rec['ncontributing']
-        if other != [-1, 0, 0]:
-            out.append(other)
-        for row in out:
+
+        for row in tip_amounts:
             row.append((row[1] / npatrons) if npatrons > 0 else 0)
             row.append((row[2] / contributed) if contributed > 0 else 0)
-        return out, npatrons, contributed
+
+        return tip_amounts, npatrons, contributed
 
 
     @require_username

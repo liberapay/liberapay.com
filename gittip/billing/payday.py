@@ -9,10 +9,11 @@ Exchanges (moving money between Gittip and the outside world) and transfers
 payday. This event has duration (it's not punctiliar). It is started
 transactionally, and it ends transactionally, and inside of it, exchanges and
 transfers happen transactionally (though the link between our db and our
-processor's db could be tightened up; see #213). These exchanges and transfers
-accrue against a "pending" column in the database. Once the payday event has
-completed successfully, it ends with the pending column being applied to the
-balance column and reset to NULL in a single transaction.
+processor's db could be tightened up; see #213). Exchanges immediately affect
+the participant's balance, but transfers accrue against a "pending" column in
+the database. Once the payday event has completed successfully, it ends with
+the pending column being applied to the balance column and reset to NULL in a
+single transaction.
 
 """
 from __future__ import unicode_literals
@@ -40,7 +41,8 @@ from psycopg2.extras import RealDictRow
 FEE_CHARGE = ( Decimal("0.30")   # $0.30
              , Decimal("0.029")  #  2.9%
               )
-FEE_CREDIT = Decimal("0.25")
+FEE_CREDIT = Decimal("0.00")    # Balanced doesn't actually charge us for this,
+                                # because we were in the door early enough.
 
 MINIMUM_CHARGE = Decimal("9.41")
 MINIMUM_CREDIT = Decimal("10.00")
@@ -208,7 +210,7 @@ class Payday(object):
                  , balanced_account_uri
                  , stripe_customer_id
                  , is_suspicious
-                 , type
+                 , number
               FROM participants
              WHERE claimed_time IS NOT NULL
                AND claimed_time < %s
@@ -237,7 +239,7 @@ class Payday(object):
         for i, (participant, foo, bar) in enumerate(participants, start=1):
             if i % 100 == 0:
                 log("Pachinko done for %d participants." % i)
-            if participant['type'] != 'group':
+            if participant['number'] != 'plural':
                 continue
             team = ORMParticipant.query.get(participant['username'])
 
@@ -322,7 +324,7 @@ class Payday(object):
             UPDATE participants
                SET balance = (balance + pending)
                  , pending = 0
-             WHERE type='group'
+             WHERE number='plural'
 
         """)
         # "Moved" instead of "cleared" because we don't also set to null.

@@ -1,7 +1,7 @@
 import datetime
 import locale
 from aspen import json
-from gittip import db, age, AMOUNTS
+from gittip import db, age
 
 CARDINALS = ["zero", "one", "two", "three", "four", "five", "six", "seven",
              "eight", "nine"]
@@ -109,10 +109,10 @@ _tip_distribution = list(db.fetchall("""
   ORDER BY amount
 
 """))
-tip_n = sum([row['count'] for row in _tip_distribution if row['amount'] in AMOUNTS])
 
-all_amounts = AMOUNTS[1:]
-tip_distribution = {a: (0, 0.0) for a in all_amounts}  # prime it
+tip_n = sum([row['count'] for row in _tip_distribution])
+
+tip_distribution = {}
 for row in _tip_distribution:
     row['percentage'] = row['count'] * 1.0 / tip_n
     tip_distribution[row['amount']] = (row['count'], row['percentage'])
@@ -189,7 +189,6 @@ elif now.weekday() == SATURDAY:
     last_thursday = "this past Thursday"
     this_thursday = "this coming Thursday"
 
-
 tip_distribution_json = {str(k): v for k,v in tip_distribution.items()}
 names = ['ncc', 'pcc', 'statements', 'transfer_volume',
          'last_thursday', 'this_thursday', 'punc', 'other_people',
@@ -202,6 +201,13 @@ names = ['ncc', 'pcc', 'statements', 'transfer_volume',
 [----------------------------------------------------------] text/html
 
 {% extends templates/about.html %}
+
+{% block head %}
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<!--[if lt IE 9]>
+<script type="text/javascript" src="/assets/aight.min.js"></script>
+<![endif]-->
+{% end %}
 
 {% block page %}
 <style>
@@ -230,7 +236,26 @@ names = ['ncc', 'pcc', 'statements', 'transfer_volume',
         margin-right: 3pt;
         height: 9pt;
         }
-    </style>
+
+    .distribution {
+      font: 10px sans-serif;
+    }
+
+    .bar rect {
+      fill: #396;
+      shape-rendering: crispEdges;
+    }
+
+    .bar text {
+      fill: #fff;
+    }
+
+    .axis path, .axis line {
+      fill: none;
+      stroke: #000;
+      shape-rendering: crispEdges;
+    }
+</style>
 
 <div class="col1">
 
@@ -265,23 +290,126 @@ names = ['ncc', 'pcc', 'statements', 'transfer_volume',
     <p><b>${{ commaize(total_backed_tips, 2) }}</b>
         {{ future_processing_text }} <b>{{ this_thursday }}</b>{{ punc }}
     </p>
-
     <p>On average, people who tip, tip ${{ "%.2f" % average_tip }} each to
-    {{ other_people }}. Here's how tip amounts are distributed:</p>
+    {{ other_people }}. </p>
+    </br>
+    </br>
+    <p>Here's how tip amounts are distributed by number of tips:</p>
 
-    <table id="tip-distribution">
-        {% for amount in all_amounts %}
-        <tr>
-            <td class="dollar-sign">$</td>
-            <td class="amount">{{ amount }}</td>
-            <td class="count">
-                <span class="bar" style="width: {{ tip_distribution[amount][1] * 300 }}pt"></span>
-                {{ "%5.1f" % (tip_distribution[amount][1] * 100) }}%
-                <span class="number">({{ tip_distribution[amount][0] }})</span>
-            </td>
-        </tr>
-        {% end %}
-    </table>
+    <div id="distribution-by-number", class="distribution"></div>
+
+    <p>Here's how tip amounts are distributed by total value of the tips:</p>
+
+    <div id="distribution-by-value", class="distribution"></div>
+
+    <script src="/assets/d3.v2.min.js"></script>
+    <script>
+
+
+
+    d3.json("/about/tip-distribution.json", function(tips){
+
+        var ticks = 20;
+        var max_tip = 100;
+        var min_tip = 0;
+
+        var interval = max_tip/ticks;
+
+        var current_interval = interval;
+
+        tips_by_value = d3.range(ticks).map(function(tick){
+          return { x: tick*interval,
+              y: 0,
+              dx: 5}
+        });
+        
+        tips.map(function(tip){
+
+          var tick = Math.floor(tip/interval)
+          if (tick === 20){
+            tick = 19;
+          }
+          tips_by_value[tick].y += tip
+
+        });
+        
+        var formatCount = d3.format(",.0f");
+
+        var margin = {top: 10, right: 30, bottom: 50, left: 20},
+            width = 630 - margin.left - margin.right,
+            height = 250 - margin.top - margin.bottom;
+
+        var x = d3.scale.linear()
+            .domain([min_tip, max_tip])
+            .range([0, width]);
+
+        var data = d3.layout.histogram()
+            .bins(x.ticks(ticks))
+            (tips);
+
+        var create_histogram = function(element, data, ylabel){
+
+            var y = d3.scale.linear()
+                .domain([0, d3.max(data, function(d) { return d.y; })])
+                .range([height, 0]);
+
+            var xAxis = d3.svg.axis()
+                .scale(x)
+                .orient("bottom");
+
+            var svg = d3.select(element).append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+              .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            var bar = svg.selectAll(".bar")
+                .data(data)
+              .enter().append("g")
+                .attr("class", "bar")
+                .attr("transform", function(d) { return "translate(" + x(d.x) + "," + y(d.y) + ")"; });
+
+            bar.append("rect")
+                .attr("x", 1)
+                .attr("width", x(data[0].dx) - 1)
+                .attr("height", function(d) { return height - y(d.y); });
+
+            bar.append("text")
+                .attr("dy", ".75em")
+                .attr("y", 6)
+                .attr("x", x(data[0].dx) / 2)
+                .attr("text-anchor", "middle")
+                .text(function(d) { return formatCount(d.y); });
+
+            svg.append("g")
+                .attr("class", "x axis")
+                .attr("transform", "translate(0," + height + ")")
+                .call(xAxis);
+
+            svg.append("text")
+                .attr("class", "x label")
+                .attr("text-anchor", "end")
+                .attr("x", width)
+                .attr("y", height + 30)
+                .text("tip amount in US dollars ($)");
+
+            svg.append("text")
+                .attr("class", "y label")
+                .attr("text-anchor", "end")
+                .attr("y", - 15)
+                .attr("dy", ".75em")
+                .attr("transform", "rotate(-90)")
+                .text(ylabel);
+
+        }
+
+        create_histogram("#distribution-by-number", data, "number of tips");
+        create_histogram("#distribution-by-value", tips_by_value, 
+          "total value of tips in US dollars ($)");
+        
+      });
+
+    </script>
 
 </div>
 <div class="col2">

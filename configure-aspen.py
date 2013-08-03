@@ -56,16 +56,43 @@ website.hooks.outbound += [ gittip.authentication.outbound
                            ]
 
 
+# X-Frame-Origin
+# ==============
+# This is a security measure to prevent clickjacking:
+# http://en.wikipedia.org/wiki/Clickjacking
+
+def x_frame_options(response):
+    if 'X-Frame-Options' not in response.headers:
+        response.headers['X-Frame-Options'] = 'SAMEORIGIN'
+    elif response.headers['X-Frame-Options'] == 'ALLOWALL':
+
+        # ALLOWALL is non-standard. It's useful as a signal from a simplate
+        # that it doesn't want X-Frame-Options set at all, but because it's
+        # non-standard we don't send it. Instead we unset the header entirely,
+        # which has the desired effect of allowing framing indiscriminately.
+        #
+        # Refs.:
+        #
+        #   http://en.wikipedia.org/wiki/Clickjacking#X-Frame-Options
+        #   http://ipsec.pl/node/1094
+
+        del response.headers['X-Frame-Options']
+
+website.hooks.outbound += [x_frame_options]
+
+
+__version__ = open(os.path.join(website.www_root, 'version.txt')).read().strip()
+os.environ['__VERSION__'] = __version__
+
+
 def add_stuff(request):
     from gittip.elsewhere import bitbucket, github, twitter, bountysource
-    from gittip.utils import with_mine
     request.context['__version__'] = __version__
     request.context['username'] = None
     request.context['bitbucket'] = bitbucket
     request.context['github'] = github
     request.context['twitter'] = twitter
     request.context['bountysource'] = bountysource
-    request.context['with_mine'] = with_mine
 
 website.hooks.inbound_early += [add_stuff]
 

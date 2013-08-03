@@ -63,7 +63,14 @@ Gittip.tips.init = function()
 
             // update display
             $('.total-giving').text(data.total_giving);
-            $('.total-receiving').text(data.total_receiving);
+            $('.total-receiving').text(
+                // check and see if we are on our giving page or not
+                new RegExp('/' + tippee + '/').test(window.location.href) 
+                    ? data.total_receiving_tippee : data.total_receiving);
+
+            // update quick stats
+            $('.quick-stats')
+                .find('a').text('$' + data.total_giving + '/wk');
 
             // Log to mixpanel.
             if (data.first_time === true)

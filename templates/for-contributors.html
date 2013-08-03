@@ -17,7 +17,7 @@
   {% set current_page = path.raw.split('/')[3] %}
   {% set nav_base = "/for/contributors" %}
   <div class="nav">
-    {% set pages = [('/', 'Getting Started'), ('/where-we-work.html', 'Where We Work'), ('/ways-to-help/', 'Ways to Help')] %}
+    {% set pages = [('/', 'Getting Started'), ('/mission-statement.html', 'Mission Statement'), ('/where-we-work.html', 'Where We Work'), ('/ways-to-help/', 'Ways to Help')] %}
     {% include nav.html %}
   </div>
   {% if len(path.raw.split('/')) > 4 %}
