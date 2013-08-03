@@ -55,7 +55,7 @@ Gittip.horn.drawOne = function(toot)
              + (toot.horn === toot.tootee ? 'me' : 'them')
              + ' '
              + (toot.tooter_is_tootee ? 'own' : 'theirs')
-             + '"><div class="toot">' + escaped + '</div>'
+             + '"><div class="toot word-wrap">' + escaped + '</div>'
              + '<div class="nav level-1">'
 
              /* [someone] tooted [someone]'s horn
