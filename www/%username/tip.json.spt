@@ -34,11 +34,13 @@ if not user.ANON:
         amount = user.get_tip_to(tippee)
 
     total_giving = user.get_dollars_giving()
-    total_receiving = Participant(tippee).get_dollars_receiving()
+    total_receiving = user.get_dollars_receiving()
+    total_receiving_tippee = Participant(tippee).get_dollars_receiving()
 
     out = { "amount": str(amount)
           , "total_giving": str(total_giving)
           , "total_receiving": str(total_receiving)
+          , "total_receiving_tippee": str(total_receiving_tippee)
            }
     if first_time_tipper is not None:
         out["first_time"] = first_time_tipper
