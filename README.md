@@ -1,5 +1,8 @@
 This is [Gittip](https://www.gittip.com/), a weekly gift exchange.
 
+Ensure that you have `en_US.UTF-8` locale installed when working on a
+non-Windows machine. To find out how, see
+http://stackoverflow.com/q/14547631/321731.
 
 Quick Start
 ===========
