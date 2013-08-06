@@ -53,10 +53,10 @@ class Harness(unittest.TestCase):
     def tearDown(self):
         self.db.empty_tables()
 
-    def make_participant(self, username, **kw):
+    def make_participant(self, username, number='singular', **kw):
         participant = Participant( username=username
                                  , username_lower=username.lower()
-                                 , number='singular'
+                                 , number=number
                                  , **kw
                                   )
         self.session.add(participant)

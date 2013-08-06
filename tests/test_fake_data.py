@@ -15,9 +15,10 @@ class TestFakeData(Harness):
     def test_fake_data(self):
         num_participants = 5
         num_tips = 5
-        fake_data.populate_db(self.session, num_participants, num_tips)
+        num_teams = 1
+        fake_data.populate_db(self.session, num_participants, num_tips, num_teams)
         tips = Tip.query.all()
         participants = Participant.query.all()
         assert len(tips) == num_tips
-        assert len(participants) == num_participants
+        assert len(participants) == num_participants + num_teams
 

@@ -1,9 +1,10 @@
 from faker import Factory
-from gittip import orm, MAX_TIP, MIN_TIP
+from gittip import orm, wireup, MAX_TIP, MIN_TIP
 from gittip.models.tip import Tip
 from gittip.models.participant import Participant
 from gittip.models.elsewhere import Elsewhere
 
+import gittip
 import decimal
 import random
 import string
@@ -116,7 +117,7 @@ def fake_elsewhere(participant, platform=None):
     )
 
 
-def populate_db(session, num_participants=100, num_tips=50):
+def populate_db(session, num_participants=100, num_tips=50, num_teams=5):
     """
     Populate DB with fake data
     """
@@ -135,6 +136,19 @@ def populate_db(session, num_participants=100, num_tips=50):
             e = fake_elsewhere(p, platform_name)
             session.add(e)
 
+    #Make teams
+    teams = []
+    for i in xrange(num_teams):
+        t = fake_participant()
+        t.number = "plural"
+        session.add(t)
+        session.commit()
+        #Add 1 to 3 members to the team
+        members = random.sample(participants, random.randint(1, 3))
+        for p in members:
+            t.add_member(p)
+        teams.append(t)
+
     #Make the tips
     tips = []
     for i in xrange(num_tips):
@@ -148,6 +162,7 @@ def populate_db(session, num_participants=100, num_tips=50):
 def main():
     db = orm.db
     dbsession = db.session
+    gittip.db = wireup.db()
     populate_db(dbsession)
 
 if __name__ == '__main__':
