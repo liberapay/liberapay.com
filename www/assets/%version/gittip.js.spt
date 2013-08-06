@@ -1,0 +1,11 @@
+import os
+js_root = os.path.join(website.project_root, 'js')
+[---]
+catted = []
+for root, dirs, files in os.walk(js_root):
+    for filename in files:
+        if filename.endswith('.js'):
+            content = open(os.path.join(root, filename)).read()
+            catted.append(content)
+[---]
+{{ "".join(catted) }}
