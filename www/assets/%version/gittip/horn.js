@@ -5,6 +5,21 @@ Gittip.horn.init = function()
     Gittip.horn.since_id = undefined;
     $('#toot-form').submit(Gittip.horn.toot);
     Gittip.horn.update({limit: 20});
+
+    
+    $('#toot')
+        // setup toot button logic
+        // 141 because the easy counter plugin is strange
+        .keyup(function () {
+            $('#toot-button').attr('disabled', $(this).val().length === 0 || $(this).val().length > 141);
+        })
+        // setup character coutner
+        .jqEasyCounter({
+            maxChars: 140,
+            maxCharsWarning: 125,
+            msgWarnColor: '#f00',
+            msgAppendMethod: 'insertBefore'
+        });
 };
 
 Gittip.horn.update = function(data)
@@ -40,7 +55,7 @@ Gittip.horn.drawOne = function(toot)
              + (toot.horn === toot.tootee ? 'me' : 'them')
              + ' '
              + (toot.tooter_is_tootee ? 'own' : 'theirs')
-             + '"><div class="toot">' + escaped + '</div>'
+             + '"><div class="toot word-wrap">' + escaped + '</div>'
              + '<div class="nav level-1">'
 
              /* [someone] tooted [someone]'s horn
@@ -71,6 +86,12 @@ Gittip.horn.success = function(data)
     Gittip.horn.update(data);
 };
 
+Gittip.horn.error = function ()
+{
+    // temp alert for failure
+    alert('Failed to save toot. :(')
+};
+
 Gittip.horn.toot = function(e)
 {
     e.preventDefault();
@@ -82,6 +103,7 @@ Gittip.horn.toot = function(e)
         , url: "toot.json"
         , data: {toot: toot}
         , success: Gittip.horn.success
+        , error: Gittip.horn.error
          });
     return false;
 };

@@ -11,7 +11,6 @@ username = participant.username
 [-----------------------------------------------------------------------------]
 {% extends templates/profile.html %}
 {% block page %}
-<script>$(document).ready(Gittip.horn.init);</script>
 <div id="horn">
   <div class="toot-form-wrapper">
     {% if not user.ANON %}
@@ -30,7 +29,7 @@ username = participant.username
             Thank {{ participant.username }} for something!<br />
             {% end %}
             </span>
-            <button id="toot-button" type="submit">Toot</button>
+            <button id="toot-button" type="submit" disabled>Toot</button>
         </p>
         <div class="clear"></div>
     </form>
@@ -38,4 +37,6 @@ username = participant.username
   </div>
   <ul id="toots"></ul>
 </div>
+<script src="/assets/jquery.easy-char-counter-1.0.min.js"></script>
+<script>$(document).ready(Gittip.horn.init);</script>
 {% end %}
