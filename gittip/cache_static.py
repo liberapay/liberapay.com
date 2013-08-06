@@ -59,6 +59,15 @@ def inbound(request):
 
         return request
 
+    if request.fs.endswith('.spt'):
+
+        # This is a requests for a dynamic resource. Perhaps in the future
+        # we'll delegate to such resources to compute a sensible Last-Modified
+        # or E-Tag, but for now we punt. This is okay, because we expect to
+        # put our dynamic assets behind a CDN in production.
+
+        return request
+
 
     try:
         ims = timegm(parsedate(ims))
