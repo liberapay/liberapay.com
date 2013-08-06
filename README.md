@@ -324,7 +324,7 @@ production database as part of deployment.
 The gittip database created in the last step is empty. To populate it with
 some fake data, so that more of the site is functional, run this command:
 
-    $ make fake_data
+    $ make data
 
 ### Notes for Mac OS X users
 
