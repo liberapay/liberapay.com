@@ -20,7 +20,7 @@ github_account, twitter_account, bitbucket_account, bountysource_account = \
 {% extends templates/profile.html %}
 
 {% block page %}
-<script src="/assets/{{ __version__ }}/gittip/team.js"></script>
+<script src="/assets/{{ website.version }}/gittip/team.js"></script>
 <script>$(document).ready(Gittip.team.init);</script>
 
 <div id="team" class="col0">

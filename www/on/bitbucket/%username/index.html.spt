@@ -223,14 +223,14 @@ title = username
         <tr class="not-over"><td>
             {% if not user.ANON %}
             <th>
-                <a href="/on/bitbucket/{{ member['username'] }}/"><img src="{{ member.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" />
+                <a href="/on/bitbucket/{{ member['username'] }}/"><img src="{{ member.get('avatar_url', '/assets/%s/no-avatar.png' % website.version ) }}" />
                     {{ member['username'] }}</a>
             </th>
             <td>
             <td>{% include "templates/my-tip-bulk.html" %}</td>
             {% else %}
             <td>
-                <a href="/on/bitbucket/{{ member['username'] }}/"><img src="{{ member.get('avatar_url', '/assets/%s/no-avatar.png' % __version__) }}" />
+                <a href="/on/bitbucket/{{ member['username'] }}/"><img src="{{ member.get('avatar_url', '/assets/%s/no-avatar.png' % website.version ) }}" />
                     {{ member['username'] }}</a>
             </td>
             {% end %}

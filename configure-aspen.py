@@ -81,13 +81,8 @@ def x_frame_options(response):
 website.hooks.outbound += [x_frame_options]
 
 
-__version__ = open(os.path.join(website.www_root, 'version.txt')).read().strip()
-os.environ['__VERSION__'] = __version__
-
-
 def add_stuff(request):
     from gittip.elsewhere import bitbucket, github, twitter, bountysource
-    request.context['__version__'] = __version__
     request.context['username'] = None
     request.context['bitbucket'] = bitbucket
     request.context['github'] = github

@@ -13,7 +13,7 @@ def version_is_available(request):
     """Return a boolean, whether we have the version they asked for.
     """
     path = request.line.uri.path
-    version = request.context['__version__']
+    version = request.website.version
     return path['version'] == version if 'version' in path else True
 
 
@@ -102,7 +102,7 @@ def outbound(response):
     website = request.website
     uri = request.line.uri
 
-    version = request.context['__version__']
+    version = website.version
     response.headers['X-Gittip-Version'] = version
 
     if not uri.startswith('/assets/'):
