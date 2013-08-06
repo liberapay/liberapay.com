@@ -144,13 +144,9 @@ def populate_db(session, num_participants=100, num_tips=50, num_teams=5):
         session.add(t)
         session.commit()
         #Add 1 to 3 members to the team
-        num_members = random.randint(1, 3)
-        while num_members != 0:
-            #Grab an existing participant
-            p = Participant.from_username(participants[random.randint(0, len(participants) - 1)].username)
-            if not p.member_of(t):
-                t.add_member(p)
-                num_members -= 1
+        members = random.sample(participants, random.randint(1, 3))
+        for p in members:
+            t.add_member(p)
         teams.append(t)
 
     #Make the tips
