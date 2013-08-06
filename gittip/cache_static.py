@@ -60,7 +60,14 @@ def inbound(request):
         return request
 
 
-    ims = timegm(parsedate(ims))
+    try:
+        ims = timegm(parsedate(ims))
+    except:
+
+        # Malformed If-Modified-Since header. Proceed with the request.
+
+        return request
+
     last_modified = get_last_modified(request.fs)
     if ims < last_modified:
 
@@ -94,12 +101,19 @@ def outbound(response):
 
     response.headers.cookie.clear()
 
-    if 'version' in uri.path and website.cache_static:
-        # This specific asset is versioned, so it's fine to cache this forever.
-        response.headers['Expires'] = 'Sun, 17 Jan 2038 19:14:07 GMT'
+    if response.code == 304:
+        return response
+
+    if website.cache_static:
+
+        # https://developers.google.com/speed/docs/best-practices/caching
         response.headers['Cache-Control'] = 'public'
-    else:
-        # Asset is not versioned. Don't cache it, but set Last-Modified.
-        last_modified = get_last_modified(request.fs)
-        response.headers['Last-Modified'] = format_date_time(last_modified)
-        response.headers['Cache-Control'] = 'no-cache'
+        response.headers['Vary'] = 'accept-encoding'
+
+        if 'version' in uri.path:
+            # This specific asset is versioned, so it's fine to cache it.
+            response.headers['Expires'] = 'Sun, 17 Jan 2038 19:14:07 GMT'
+        else:
+            # Asset is not versioned. Don't cache it, but set Last-Modified.
+            last_modified = get_last_modified(request.fs)
+            response.headers['Last-Modified'] = format_date_time(last_modified)
