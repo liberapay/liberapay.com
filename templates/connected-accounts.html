@@ -15,7 +15,7 @@
             {% else %}
             <a rel="me" href="{{ escape(twitter_account.user_info.get('html_url', '')) }}"
                 ><img class="avatar"
-                src="{{ escape(twitter_account.user_info.get('profile_image_url_https', '/assets/%s/no-avatar.png' % __version__)) }}"
+                src="{{ escape(twitter_account.user_info.get('profile_image_url_https', '/assets/%s/no-avatar.png' % website.version )) }}"
                 />{{ escape(twitter_account.user_info.get('screen_name')) }}
                 {% if twitter_account.user_info.get('name') %}
                 ({{ escape(twitter_account.user_info.get('name')) }})
@@ -38,7 +38,7 @@
                 {% end %}
             {% else %}
             <a rel="me" href="{{ escape(github_account.user_info.get('html_url', '')) }}"
-                ><img class="avatar" src="{{ escape(github_account.user_info.get('avatar_url', '/assets/%s/no-avatar.png' % __version__)) }}"
+                ><img class="avatar" src="{{ escape(github_account.user_info.get('avatar_url', '/assets/%s/no-avatar.png' % website.version)) }}"
                 />{{ escape(github_account.user_info.get('login')) }}
                 {% if github_account.user_info.get('name') %}
                 ({{ escape(github_account.user_info.get('name')) }})
@@ -62,7 +62,7 @@
             {% else %}
             <a rel="me" href="{{ escape(bitbucket_account.user_info.get('html_url', '')) }}"
                 ><img class="avatar"
-                src="{{ escape(bitbucket_account.user_info.get('avatar', '/assets/%s/no-avatar.png' % __version__)) }}"
+                src="{{ escape(bitbucket_account.user_info.get('avatar', '/assets/%s/no-avatar.png' % website.version)) }}"
                 />{{ escape(bitbucket_account.user_info.get('username')) }}
                 {% if bitbucket_account.user_info.get('display_name') %}
                 ({{ escape(bitbucket_account.user_info.get('display_name')) }})
@@ -86,7 +86,7 @@
         {% else %}
             <a href="{{ escape(bountysource_account.user_info.get('frontend_url', 'https://www.bountysource.com')) }}"
                 ><img class="avatar"
-                      src="{{ escape(bountysource_account.user_info.get('image_url', '/assets/%s/no-avatar.png' % __version__)) }}"
+                      src="{{ escape(bountysource_account.user_info.get('image_url', '/assets/%s/no-avatar.png' % website.version)) }}"
             />{{ escape(bountysource_account.user_info.get('display_name')) }}
             {% if bountysource_account.user_info.get('display_name') %}
                 ({{ escape(bountysource_account.user_info.get('first_name')) }} {{ escape(bountysource_account.user_info.get('last_name')) }})

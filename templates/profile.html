@@ -1,7 +1,7 @@
 {% extends "participant.html" %}
 {% block head2 %}
-    <script src="/assets/{{ __version__ }}/gittip/profile.js"></script>
-    {% if user.ADMIN %}<script src="/assets/{{ __version__ }}/admin.js"></script>{% end %}
+    <script src="/assets/{{ website.version }}/gittip/profile.js"></script>
+    {% if user.ADMIN %}<script src="/assets/{{ website.version }}/admin.js"></script>{% end %}
     <script>$(document).ready(Gittip.tips.init)</script>
     <script>$(document).ready(function() {
       $('#goal-custom').on('click change', function() {
