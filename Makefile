@@ -31,7 +31,7 @@ $(env_bin)/swaddle:
 	./$(env_bin)/pip install -e ./
 
 clean:
-	rm -rf env *.egg *.egg-info tests/env gittip.css
+	rm -rf env *.egg *.egg-info tests/env
 	find . -name \*.pyc -delete
 
 local.env:
@@ -79,7 +79,3 @@ tests/env:
 	echo "Creating a tests/env file ..."
 	echo
 	cp default_tests.env tests/env
-
-css:
-	scss -t compressed scss/gittip.scss gittip.css
-	mv gittip.css www/assets/%version/gittip.css

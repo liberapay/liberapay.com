@@ -12,6 +12,11 @@ import gittip.models.participant
 from aspen import log_dammit
 
 
+version_file = os.path.join(website.www_root, 'version.txt')
+__version__ = open(version_file).read().strip()
+website.version = os.environ['__VERSION__'] = __version__
+
+
 website.renderer_default = "tornado"
 
 
@@ -23,33 +28,15 @@ gittip.wireup.sentry(website)
 gittip.wireup.mixpanel(website)
 gittip.wireup.nanswers()
 gittip.wireup.nmembers(website)
-
-
-website.bitbucket_consumer_key = os.environ['BITBUCKET_CONSUMER_KEY'].decode('ASCII')
-website.bitbucket_consumer_secret = os.environ['BITBUCKET_CONSUMER_SECRET'].decode('ASCII')
-website.bitbucket_callback = os.environ['BITBUCKET_CALLBACK'].decode('ASCII')
-
-website.github_client_id = os.environ['GITHUB_CLIENT_ID'].decode('ASCII')
-website.github_client_secret = os.environ['GITHUB_CLIENT_SECRET'].decode('ASCII')
-website.github_callback = os.environ['GITHUB_CALLBACK'].decode('ASCII')
-
-website.twitter_consumer_key = os.environ['TWITTER_CONSUMER_KEY'].decode('ASCII')
-website.twitter_consumer_secret = os.environ['TWITTER_CONSUMER_SECRET'].decode('ASCII')
-website.twitter_access_token = os.environ['TWITTER_ACCESS_TOKEN'].decode('ASCII')
-website.twitter_access_token_secret = os.environ['TWITTER_ACCESS_TOKEN_SECRET'].decode('ASCII')
-website.twitter_callback = os.environ['TWITTER_CALLBACK'].decode('ASCII')
-
-website.bountysource_www_host = os.environ['BOUNTYSOURCE_WWW_HOST'].decode('ASCII')
-website.bountysource_api_host = os.environ['BOUNTYSOURCE_API_HOST'].decode('ASCII')
-website.bountysource_api_secret = os.environ['BOUNTYSOURCE_API_SECRET'].decode('ASCII')
-website.bountysource_callback = os.environ['BOUNTYSOURCE_CALLBACK'].decode('ASCII')
+gittip.wireup.envvars(website)
 
 
 # Up the threadpool size: https://github.com/gittip/www.gittip.com/issues/1098
 def up_minthreads(website):
     # Discovered the following API by inspecting in pdb and browsing source.
     # This requires network_engine.bind to have already been called.
-    website.network_engine.cheroot_server.requests.min = int(os.environ['MIN_THREADS'])
+    website.network_engine.cheroot_server.requests.min = \
+                                                 int(os.environ['MIN_THREADS'])
 
 website.hooks.startup.insert(0, up_minthreads)
 
@@ -60,7 +47,7 @@ website.hooks.inbound_early += [ gittip.canonize
                                , gittip.csrf.inbound
                                 ]
 
-#website.hooks.inbound_core += [gittip.cache_static.inbound]
+website.hooks.inbound_core += [gittip.cache_static.inbound]
 
 website.hooks.outbound += [ gittip.authentication.outbound
                           , gittip.csrf.outbound

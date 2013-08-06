@@ -1,0 +1,11 @@
+import os
+import commands
+
+from aspen import Response
+
+scss_root = os.path.join(website.project_root, 'scss', 'gittip.scss')
+[---]
+# sass performs some caching, storing it's cache in ${project_root}/.sass_cache
+css = commands.getoutput("sass -t compressed %s " % scss_root)
+[---]
+{{ css }}
