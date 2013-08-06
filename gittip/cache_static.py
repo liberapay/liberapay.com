@@ -40,7 +40,7 @@ def inbound(request):
 
         return request
 
-    if not( version_is_available(request) or version_is_dash(request) ):
+    if not version_is_available(request) and not version_is_dash(request):
 
         # Prevent the possibility of serving one version of a file as if it
         # were another. You can work around it from your address bar using '-'
