@@ -40,16 +40,15 @@ def inbound(request):
 
         return request
 
-    if not version_is_available(request) and not version_is_dash(request):
+    if version_is_dash(request):
 
-        # Prevent the possibility of serving one version of a file as if it
-        # were another. You can work around it from your address bar using '-'
-        # as the version: /assets/-/gittip.css.
+        # Special-case a version of '-' to never 304/404 here.
 
-        # If/when you do find yourself in a situation where you need to refresh
-        # the cache with a specific version of this resource, one idea would be
-        # to locally generate the version of the file you need and place it in
-        # an explicit X.Y.Z directory that's sibling to %version.
+        return request
+
+    if not version_is_available(request):
+
+        # Don't serve one version of a file as if it were another.
 
         raise Response(404)
 
