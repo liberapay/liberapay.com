@@ -5,7 +5,12 @@ catted = []
 for root, dirs, files in os.walk(js_root):
     for filename in files:
         if filename.endswith('.js'):
+            base = root[len(js_root)+0:]
+            catted.append('/' + ('*'*70) + '/\n')
+            catted.append('/*' + (base + '/' + filename).center(68) + '*/\n')
+            catted.append('/' + ('*'*70) + '/' + '\n\n')
             content = open(os.path.join(root, filename)).read()
-            catted.append(content)
+            content = content.decode('ascii')
+            catted.append(content + '\n')
 [---]
 {{ "".join(catted) }}
