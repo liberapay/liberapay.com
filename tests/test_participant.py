@@ -113,6 +113,17 @@ class TestParticipant(Harness):
             twitter_account = TwitterAccount(idx, {'screen_name': username})
             Participant(username).take_over(twitter_account)
 
+    def test_bob_is_singular(self):
+        expected = True
+        actual = Participant('bob').is_singular()
+        assert_equals(actual, expected)
+
+    def test_john_is_plural(self):
+        expected = True
+        self.make_participant('john', 'plural')
+        actual = Participant('john').is_plural()
+        assert_equals(actual, expected)
+
     def test_cant_take_over_claimed_participant_without_confirmation(self):
         bob_twitter = StubAccount('twitter', '2')
         with assert_raises(NeedConfirmation):

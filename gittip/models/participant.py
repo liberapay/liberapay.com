@@ -111,14 +111,6 @@ class Participant(db.Model):
     class MemberLimitReached(Exception): pass
 
     @property
-    def IS_SINGULAR(self):
-        return self.number == 'singular'
-
-    @property
-    def IS_PLURAL(self):
-        return self.number == 'plural'
-
-    @property
     def tips_giving(self):
         return self._tips_giving.distinct("tips.tippee")\
                                 .order_by("tips.tippee, tips.mtime DESC")
@@ -487,6 +479,13 @@ class Participant(db.Model):
 
 
     # TODO: Move these queries into this class.
+    @property
+    def IS_SINGULAR(self):
+        return OldParticipant(self.username).is_singular() # self.number == 'singular'
+
+    @property
+    def IS_PLURAL(self):
+        return OldParticipant(self.username).is_plural() # self.number == 'plural'
 
     def set_tip_to(self, tippee, amount):
         return OldParticipant(self.username).set_tip_to(tippee, amount)

@@ -117,6 +117,19 @@ class Participant(object):
         """
         return gittip.db.fetchone(SELECT, (self.username,))
 
+    @require_username
+    def is_singular(self):
+        rec = gittip.db.fetchone("SELECT number FROM participants "
+                "WHERE username = %s", (self.username,))
+
+        return rec['number'] == 'singular'
+
+    @require_username
+    def is_plural(self):
+        rec = gittip.db.fetchone("SELECT number FROM participants "
+                "WHERE username = %s", (self.username,))
+
+        return rec['number'] == 'plural'
 
     # API Key
     # =======
