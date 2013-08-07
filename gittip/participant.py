@@ -47,7 +47,6 @@ class NeedConfirmation(Exception):
         A, B, C = self._all
         return A or C
 
-
 def gen_random_usernames():
     """Yield up to 100 random usernames.
     """
@@ -98,6 +97,13 @@ class Participant(object):
     class NoSelfTipping(Exception): pass
     class BadAmount(Exception): pass
 
+    # Username exceptions
+    class ProblemChangingUsername(Exception): pass
+    class UsernameTooLong(ProblemChangingUsername): pass
+    class UsernameContainsInvalidCharacters(ProblemChangingUsername): pass
+    class UsernameIsRestricted(ProblemChangingUsername): pass
+    class UsernameAlreadyTaken(ProblemChangingUsername): pass
+
 
     def __init__(self, username):
         typecheck(username, (unicode, None))
@@ -140,7 +146,6 @@ class Participant(object):
         SQL = "UPDATE participants SET api_key=%s WHERE username=%s"
         gittip.db.execute(SQL, (api_key, self.username))
         return api_key
-
 
     # Claiming
     # ========
@@ -207,26 +212,32 @@ class Participant(object):
         """
         for i, c in enumerate(suggested):
             if i == 32:
-                raise Response(413)  # Request Entity Too Large (more or less)
+                raise self.UsernameTooLong  # Request Entity Too Large (more or less)
             elif ord(c) < 128 and c not in ASCII_ALLOWED_IN_USERNAME:
-                raise Response(400)  # Yeah, no.
+                raise self.UsernameContainsInvalidCharacters  # Yeah, no.
             elif c not in ASCII_ALLOWED_IN_USERNAME:
-                raise Response(400)  # XXX Burned by an Aspen bug. :`-(
-                                     # https://github.com/whit537/aspen/issues/102
+                # XXX Burned by an Aspen bug. :`-(
+                # https://github.com/gittip/aspen/issues/102
+                raise self.UsernameContainsInvalidCharacters
 
-        if suggested in gittip.RESTRICTED_USERNAMES:
-            raise Response(400)
+        lowercased = suggested.lower()
+
+        if lowercased in gittip.RESTRICTED_USERNAMES:
+            raise self.UsernameIsRestricted
 
         if suggested != self.username:
-            # Will raise IntegrityError if the desired username is taken.
-            rec = gittip.db.fetchone("UPDATE participants "
-                                     "SET username=%s WHERE username=%s "
-                                     "RETURNING username",
-                                     (suggested, self.username))
+            try:
+                # Will raise IntegrityError if the desired username is taken.
+                rec = gittip.db.fetchone("UPDATE participants "
+                                         "SET username=%s, username_lower=%s WHERE username=%s "
+                                         "RETURNING username",
+                                         (suggested, lowercased, self.username))
 
-            assert rec is not None         # sanity check
-            assert suggested == rec['username']  # sanity check
-            self.username = suggested
+                assert rec is not None         # sanity check
+                assert suggested == rec['username']  # sanity check
+                self.username = suggested
+            except IntegrityError:
+                raise self.UsernameAlreadyTaken
 
 
     @require_username

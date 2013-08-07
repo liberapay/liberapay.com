@@ -39,25 +39,25 @@ class Tests(Harness):
         assert self.participant == actual, actual
 
     def test_changing_username_to_too_long(self):
-        with assert_raises(Participant.UsernameTooLong):
+        with assert_raises(OldParticipant.UsernameTooLong):
             self.participant.change_username('123456789012345678901234567890123')
 
     def test_changing_username_to_already_taken(self):
         self.make_participant('user2')
-        with assert_raises(Participant.UsernameAlreadyTaken):
+        with assert_raises(OldParticipant.UsernameAlreadyTaken):
             self.participant.change_username('user2')
 
     def test_changing_username_to_already_taken_is_case_insensitive(self):
         self.make_participant('UsEr2')
-        with assert_raises(Participant.UsernameAlreadyTaken):
+        with assert_raises(OldParticipant.UsernameAlreadyTaken):
             self.participant.change_username('uSeR2')
 
     def test_changing_username_to_invalid_characters(self):
-        with assert_raises(Participant.UsernameContainsInvalidCharacters):
+        with assert_raises(OldParticipant.UsernameContainsInvalidCharacters):
             self.participant.change_username(u"\u2603") # Snowman
 
     def test_changing_username_to_restricted_name(self):
-        with assert_raises(Participant.UsernameIsRestricted):
+        with assert_raises(OldParticipant.UsernameIsRestricted):
             self.participant.change_username(self.random_restricted_username())
 
     def test_getting_tips_actually_made(self):

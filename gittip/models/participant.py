@@ -167,43 +167,6 @@ class Participant(db.Model):
         db.session.add(self)
         db.session.commit()
 
-    def change_username(self, desired_username):
-        """Raise self.ProblemChangingUsername, or return None.
-
-        We want to be pretty loose with usernames. Unicode is allowed--XXX
-        aspen bug :(. So are spaces. Control characters aren't. We also limit
-        to 32 characters in length.
-
-        """
-        for i, c in enumerate(desired_username):
-            if i == 32:
-                raise self.UsernameTooLong  # Request Entity Too Large (more or less)
-            elif ord(c) < 128 and c not in ASCII_ALLOWED_IN_USERNAME:
-                raise self.UsernameContainsInvalidCharacters  # Yeah, no.
-            elif c not in ASCII_ALLOWED_IN_USERNAME:
-
-                # XXX Burned by an Aspen bug. :`-(
-                # https://github.com/gittip/aspen/issues/102
-
-                raise self.UsernameContainsInvalidCharacters
-
-        lowercased = desired_username.lower()
-
-        if lowercased in gittip.RESTRICTED_USERNAMES:
-            raise self.UsernameIsRestricted
-
-        if desired_username != self.username:
-            try:
-                self.username = desired_username
-                self.username_lower = lowercased
-                db.session.add(self)
-                db.session.commit()
-                # Will raise sqlalchemy.exc.IntegrityError if the
-                # desired_username is taken.
-            except IntegrityError:
-                db.session.rollback()
-                raise self.UsernameAlreadyTaken
-
     def get_accounts_elsewhere(self):
         github_account = twitter_account = bitbucket_account = \
                                                     bountysource_account = None
@@ -481,11 +444,14 @@ class Participant(db.Model):
     # TODO: Move these queries into this class.
     @property
     def IS_SINGULAR(self):
-        return OldParticipant(self.username).is_singular() # self.number == 'singular'
+        return OldParticipant(self.username).is_singular()
 
     @property
     def IS_PLURAL(self):
-        return OldParticipant(self.username).is_plural() # self.number == 'plural'
+        return OldParticipant(self.username).is_plural()
+
+    def change_username(self, desired_username):
+        OldParticipant(self.username).change_username(desired_username)
 
     def set_tip_to(self, tippee, amount):
         return OldParticipant(self.username).set_tip_to(tippee, amount)
