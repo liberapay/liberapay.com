@@ -259,10 +259,12 @@ class Participant(db.Model):
             if 'profile_image_url_https' in twitter.user_info:
                 src = twitter.user_info['profile_image_url_https']
 
-                # For Twitter, we don't have good control over size. We don't
-                # want the original, cause that can be huge. The next option is
-                # 73px(?!).
-                src = src.replace('_normal.', '_bigger.')
+                # For Twitter, we don't have good control over size. The
+                # biggest option is 73px(?!), but that's too small. Let's go
+                # with the original: even though it may be huge, that's
+                # preferrable to guaranteed blurriness. :-/
+
+                src = src.replace('_normal.', '.')
 
         return src
 
