@@ -59,21 +59,18 @@ def gen_random_usernames():
             raise StopIteration
 
 
-def reserve_a_random_username(db=None):
-    """Reserve and a random username.
+def reserve_a_random_username(txn):
+    """Reserve a random username.
 
     The returned value is guaranteed to have been reserved in the database.
 
     """
-    if db is None:  # During take_over we want to use our own transaction.
-        db = gittip.db
-
     for username in gen_random_usernames():
         try:
-            db.run( "INSERT INTO participants (username, username_lower) "
-                    "VALUES (%s, %s)"
-                  , (username, username.lower())
-                   )
+            txn.execute( "INSERT INTO participants (username, username_lower) "
+                         "VALUES (%s, %s)"
+                       , (username, username.lower())
+                        )
         except IntegrityError:  # Collision, try again with another value.
             pass
         else:
