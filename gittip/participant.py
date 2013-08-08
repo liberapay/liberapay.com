@@ -293,9 +293,8 @@ class Participant(object):
              LIMIT 1
 
         """
-        try:
-            rec = gittip.db.one(TIP, (self.username, tippee))
-        except TooFew:
+        rec = gittip.db.one(TIP, (self.username, tippee))
+        if rec is None:
             tip = Decimal('0.00')
         else:
             tip = rec['amount']
