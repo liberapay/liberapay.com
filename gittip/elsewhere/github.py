@@ -96,11 +96,11 @@ def get_user_info(login):
         A dictionary containing github specific information for the user.
     """
     typecheck(login, unicode)
-    rec = gittip.db.fetchone( "SELECT user_info FROM elsewhere "
-                              "WHERE platform='github' "
-                              "AND user_info->'login' = %s"
-                            , (login,)
-                             )
+    rec = gittip.db.one( "SELECT user_info FROM elsewhere "
+                         "WHERE platform='github' "
+                         "AND user_info->'login' = %s"
+                       , (login,)
+                        )
     if rec is not None:
         user_info = rec['user_info']
     else:

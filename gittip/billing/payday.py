@@ -161,11 +161,11 @@ class Payday(object):
 
         """
         try:
-            rec = self.db.fetchone("INSERT INTO paydays DEFAULT VALUES "
-                                   "RETURNING ts_start")
+            rec = self.db.one("INSERT INTO paydays DEFAULT VALUES "
+                              "RETURNING ts_start")
             log("Starting a new payday.")
         except IntegrityError:  # Collision, we have a Payday already.
-            rec = self.db.fetchone("""
+            rec = self.db.one("""
 
                 SELECT ts_start
                   FROM paydays
@@ -196,7 +196,7 @@ class Payday(object):
                AND claimed_time < %s
 
         """
-        self.db.execute(START_PENDING, (ts_start,))
+        self.db.run(START_PENDING, (ts_start,))
         log("Zeroed out the pending column.")
         return None
 
@@ -217,7 +217,7 @@ class Payday(object):
                AND is_suspicious IS NOT true
           ORDER BY claimed_time ASC
         """
-        participants = self.db.fetchall(PARTICIPANTS, (ts_start,))
+        participants = self.db.all(PARTICIPANTS, (ts_start,))
         log("Fetched participants.")
         return participants
 
@@ -319,7 +319,7 @@ class Payday(object):
         on the first (payin) loop.
 
         """
-        self.db.execute("""\
+        self.db.run("""\
 
             UPDATE participants
                SET balance = (balance + pending)
@@ -343,7 +343,7 @@ class Payday(object):
 
         """
 
-        self.db.execute("""\
+        self.db.run("""\
 
             UPDATE participants
                SET balance = (balance + pending)
@@ -356,7 +356,7 @@ class Payday(object):
 
 
     def end(self):
-        rec = self.db.fetchone("""\
+        rec = self.db.one("""\
 
             UPDATE paydays
                SET ts_end=now()
@@ -846,7 +846,7 @@ class Payday(object):
          RETURNING id
 
         """
-        self.assert_one_payday(self.db.fetchone(STATS))
+        self.assert_one_payday(self.db.one(STATS))
 
 
     def mark_charge_failed(self, cursor):
@@ -942,7 +942,7 @@ class Payday(object):
          RETURNING id
 
         """
-        self.assert_one_payday( self.db.fetchone( STATS
+        self.assert_one_payday( self.db.one( STATS
                                            , ( 1 if nsuccessful_tips > 0 else 0
                                              , nsuccessful_tips  # XXX bug?
                                               )

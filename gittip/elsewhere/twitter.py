@@ -37,11 +37,11 @@ def get_user_info(screen_name):
     """Given a unicode, return a dict.
     """
     typecheck(screen_name, unicode)
-    rec = gittip.db.fetchone( "SELECT user_info FROM elsewhere "
-                              "WHERE platform='twitter' "
-                              "AND user_info->'screen_name' = %s"
-                            , (screen_name,)
-                             )
+    rec = gittip.db.one( "SELECT user_info FROM elsewhere "
+                         "WHERE platform='twitter' "
+                         "AND user_info->'screen_name' = %s"
+                       , (screen_name,)
+                        )
     if rec is not None:
         user_info = rec['user_info']
     else:

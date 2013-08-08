@@ -24,13 +24,13 @@ def slugize(slug):
 
 def slug_to_name(slug):
     SQL = "SELECT name FROM community_summary WHERE slug=%s"
-    rec = gittip.db.fetchone(SQL, (slug,))
+    rec = gittip.db.one(SQL, (slug,))
     return None if rec is None else rec['name']
 
 
 def get_list_for(user):
     if user is None or (hasattr(user, 'ANON') and user.ANON):
-        return list(gittip.db.fetchall("""
+        return list(gittip.db.all("""
 
             SELECT max(name) AS name
                  , slug
@@ -41,7 +41,7 @@ def get_list_for(user):
 
         """))
     else:
-        return list(gittip.db.fetchall("""
+        return list(gittip.db.all("""
 
             SELECT max(name) AS name
                  , slug
@@ -62,7 +62,7 @@ class Community(db.Model):
     nmembers = Column(BigInteger)
 
     def check_membership(self, user):
-        return gittip.db.fetchone("""
+        return gittip.db.one("""
 
         SELECT * FROM current_communities WHERE slug=%s AND participant=%s
 

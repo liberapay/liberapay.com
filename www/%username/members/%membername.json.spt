@@ -73,6 +73,6 @@ else:
     else:
         SQL = "SELECT ctime, mtime, member AS username, take::text " \
               "FROM current_memberships WHERE team=%s AND member=%s"
-        out = gittip.db.fetchone(SQL, (team.username, member.username))
+        out = gittip.db.one(SQL, (team.username, member.username))
 
 response.body = out

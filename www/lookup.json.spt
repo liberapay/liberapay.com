@@ -12,7 +12,7 @@ if 'query' not in qs:
 else:
     query = qs['query']
     query_lower = query.lower()
-    out = list(db.fetchall(SQL, (query_lower + '%',)))
+    out = db.all(SQL, (query_lower + '%',))
     out.reverse()
     for rec in out:
         if query_lower == rec['username_lower']:

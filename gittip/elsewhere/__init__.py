@@ -14,7 +14,7 @@ def _resolve(platform, username_key, username):
     """Given three unicodes, return a username.
     """
     typecheck(platform, unicode, username_key, unicode, username, unicode)
-    rec = gittip.db.fetchone("""
+    rec = gittip.db.one("""
 
         SELECT participant
           FROM elsewhere
@@ -55,7 +55,7 @@ class AccountElsewhere(object):
 
 
     def set_is_locked(self, is_locked):
-        gittip.db.execute("""
+        gittip.db.run("""
 
             UPDATE elsewhere
                SET is_locked=%s
@@ -136,7 +136,7 @@ class AccountElsewhere(object):
             user_info[k] = unicode(v)
 
 
-        username = gittip.db.fetchone("""
+        username = gittip.db.one("""
 
             UPDATE elsewhere
                SET user_info=%s
@@ -149,7 +149,7 @@ class AccountElsewhere(object):
         # Get a little more info to return.
         # =================================
 
-        rec = gittip.db.fetchone("""
+        rec = gittip.db.one("""
 
             SELECT claimed_time, balance, is_locked
               FROM participants

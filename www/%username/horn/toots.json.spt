@@ -72,4 +72,4 @@ try:
         args.insert(-1, long(max_id))
 except ValueError:  # cast to int/long failed
     raise Response(400)
-response.body = list(db.fetchall(SQL, tuple(args)))
+response.body = db.all(SQL, tuple(args))

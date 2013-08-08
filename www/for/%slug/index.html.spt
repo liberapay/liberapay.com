@@ -40,7 +40,7 @@ THRESHOLD = website.NMEMBERS_THRESHOLD
 def get_first_ten():
     """Return a dictionary mapping community slugs to ordinal numbers.
     """
-    holy_heck = db.fetchall("SELECT * FROM communities ORDER BY mtime ASC")
+    holy_heck = db.all("SELECT * FROM communities ORDER BY mtime ASC")
     _first_ten = []
     communities = defaultdict(lambda: (defaultdict(set), defaultdict(int)))
     for detail in holy_heck:
@@ -104,7 +104,7 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
     # Run queries for listings.
     # =========================
 
-    new_participants = _wrap(query_cache.fetchall("""
+    new_participants = _wrap(query_cache.all("""
     -- new participants on community page
 
         SELECT username, claimed_time FROM (
@@ -126,7 +126,7 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
 
     """, (community.slug, limit, offset)))
 
-    givers = _wrap(query_cache.fetchall("""
+    givers = _wrap(query_cache.all("""
     -- top givers on community page
 
         SELECT tipper AS username, anonymous, sum(amount) AS amount
@@ -157,7 +157,7 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
     # XXX I'm nearly positive that one or both of givers and receivers can contain
     # orphan accounts. See https://github.com/gittip/www.gittip.com/issues/650
 
-    receivers = _wrap(query_cache.fetchall("""
+    receivers = _wrap(query_cache.all("""
     -- top receivers on community page
 
         SELECT tippee AS username, claimed_time, sum(amount) AS amount
