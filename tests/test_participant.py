@@ -9,6 +9,7 @@ from gittip.models import Absorption, Tip
 from gittip.participant import Participant, NeedConfirmation
 from gittip.testing import Harness
 from gittip.elsewhere.twitter import TwitterAccount
+from postgres import TooFew
 
 # TODO: Test that accounts elsewhere are not considered claimed by default
 
@@ -96,12 +97,12 @@ class TestAbsorptions(Harness):
 
     def test_attempts_to_change_archived_deadbeef_fail(self):
         participant = Participant(self.deadbeef_original_username)
-        with assert_raises(AssertionError):
+        with assert_raises(TooFew):
             participant.change_username('zombeef')
 
     def test_there_is_no_more_deadbeef(self):
-        actual = Participant('deadbeef').get_details()
-        assert actual is None, actual
+        with assert_raises(TooFew):
+            Participant('deadbeef').get_details()
 
 
 class TestParticipant(Harness):

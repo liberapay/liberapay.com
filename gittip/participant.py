@@ -9,6 +9,7 @@ import gittip
 from aspen import Response
 from aspen.utils import typecheck
 from psycopg2 import IntegrityError
+from postgres import TooFew
 
 
 ASCII_ALLOWED_IN_USERNAME = set("0123456789"
@@ -208,7 +209,7 @@ class Participant(object):
                                 "RETURNING username",
                                 (suggested, self.username))
 
-            assert rec is not None         # sanity check
+            assert rec is not None               # sanity check
             assert suggested == rec['username']  # sanity check
             self.username = suggested
 
@@ -292,8 +293,9 @@ class Participant(object):
              LIMIT 1
 
         """
-        rec = gittip.db.one(TIP, (self.username, tippee))
-        if rec is None:
+        try:
+            rec = gittip.db.one(TIP, (self.username, tippee))
+        except TooFew:
             tip = Decimal('0.00')
         else:
             tip = rec['amount']
