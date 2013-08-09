@@ -44,14 +44,14 @@ class TestPaydayCharge(TestBillingBase):
 
     def test_charge_without_cc_details_returns_None(self):
         self.make_participant('alice')
-        participant = self.postgres.fetchone("SELECT * FROM participants")
+        participant = self.postgres.one("SELECT * FROM participants")
         self.payday.start()
         actual = self.payday.charge(participant, Decimal('1.00'))
         assert actual is None, actual
 
     def test_charge_without_cc_marked_as_failure(self):
         self.make_participant('alice')
-        participant = self.postgres.fetchone("SELECT * FROM participants")
+        participant = self.postgres.one("SELECT * FROM participants")
         self.payday.start()
         self.payday.charge(participant, Decimal('1.00'))
         actual = self.get_numbers()
@@ -65,7 +65,7 @@ class TestPaydayCharge(TestBillingBase):
                               stripe_customer_id=self.STRIPE_CUSTOMER_ID,
                               is_suspicious=False)
 
-        participant = self.postgres.fetchone("SELECT * FROM participants")
+        participant = self.postgres.one("SELECT * FROM participants")
         self.payday.start()
         actual = self.payday.charge(participant, Decimal('1.00'))
         assert actual is None, actual
@@ -78,7 +78,7 @@ class TestPaydayCharge(TestBillingBase):
                               stripe_customer_id=self.STRIPE_CUSTOMER_ID,
                               is_suspicious=False)
 
-        participant = self.postgres.fetchone("SELECT * FROM participants")
+        participant = self.postgres.one("SELECT * FROM participants")
         self.payday.start()
         actual = self.payday.charge(participant, Decimal('1.00'))
         assert actual is None, actual
@@ -89,7 +89,7 @@ class TestPaydayCharge(TestBillingBase):
         bob = self.make_participant('bob', last_bill_result="failure",
                                     balanced_account_uri=self.balanced_account_uri,
                                     is_suspicious=False)
-        participant = self.postgres.fetchone("SELECT * FROM participants")
+        participant = self.postgres.one("SELECT * FROM participants")
         self.payday.start()
         self.payday.charge(participant, Decimal('1.00'))
         expected = {'balance': Decimal('9.32'), 'last_bill_result': ''}

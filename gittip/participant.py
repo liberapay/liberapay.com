@@ -9,6 +9,7 @@ import gittip
 from aspen import Response
 from aspen.utils import typecheck
 from psycopg2 import IntegrityError
+from postgres import TooFew
 
 
 ASCII_ALLOWED_IN_USERNAME = set("0123456789"
@@ -59,21 +60,18 @@ def gen_random_usernames():
             raise StopIteration
 
 
-def reserve_a_random_username(db=None):
-    """Reserve and a random username.
+def reserve_a_random_username(txn):
+    """Reserve a random username.
 
     The returned value is guaranteed to have been reserved in the database.
 
     """
-    if db is None:  # During take_over we want to use our own transaction.
-        db = gittip.db
-
     for username in gen_random_usernames():
         try:
-            db.execute( "INSERT INTO participants (username, username_lower) "
-                        "VALUES (%s, %s)"
-                      , (username, username.lower())
-                       )
+            txn.execute( "INSERT INTO participants (username, username_lower) "
+                         "VALUES (%s, %s)"
+                       , (username, username.lower())
+                        )
         except IntegrityError:  # Collision, try again with another value.
             pass
         else:
@@ -115,7 +113,7 @@ class Participant(object):
              WHERE username = %s
 
         """
-        return gittip.db.fetchone(SELECT, (self.username,))
+        return gittip.db.one(SELECT, (self.username,))
 
 
     # API Key
@@ -125,7 +123,7 @@ class Participant(object):
     def recreate_api_key(self):
         api_key = str(uuid.uuid4())
         SQL = "UPDATE participants SET api_key=%s WHERE username=%s"
-        gittip.db.execute(SQL, (api_key, self.username))
+        gittip.db.run(SQL, (api_key, self.username))
         return api_key
 
 
@@ -138,8 +136,8 @@ class Participant(object):
     def resolve_unclaimed(self):
         """Given a username, return an URL path.
         """
-        rec = gittip.db.fetchone("SELECT platform, user_info FROM elsewhere "
-                                 "WHERE participant = %s", (self.username,))
+        rec = gittip.db.one("SELECT platform, user_info FROM elsewhere "
+                            "WHERE participant = %s", (self.username,))
         if rec is None:
             out = None
         elif rec['platform'] == 'github':
@@ -159,12 +157,12 @@ class Participant(object):
                AND claimed_time IS NULL
 
         """
-        gittip.db.execute(CLAIM, (self.username,))
+        gittip.db.run(CLAIM, (self.username,))
 
     @require_username
     def insert_into_communities(self, is_member, name, slug):
         username = self.username
-        gittip.db.execute("""
+        gittip.db.run("""
 
             INSERT INTO communities
                         (ctime, name, slug, participant, is_member)
@@ -206,12 +204,12 @@ class Participant(object):
 
         if suggested != self.username:
             # Will raise IntegrityError if the desired username is taken.
-            rec = gittip.db.fetchone("UPDATE participants "
-                                     "SET username=%s WHERE username=%s "
-                                     "RETURNING username",
-                                     (suggested, self.username))
+            rec = gittip.db.one("UPDATE participants "
+                                "SET username=%s WHERE username=%s "
+                                "RETURNING username",
+                                (suggested, self.username))
 
-            assert rec is not None         # sanity check
+            assert rec is not None               # sanity check
             assert suggested == rec['username']  # sanity check
             self.username = suggested
 
@@ -223,7 +221,7 @@ class Participant(object):
         ACCOUNTS = """
             SELECT * FROM elsewhere WHERE participant=%s;
         """
-        accounts = gittip.db.fetchall(ACCOUNTS, (self.username,))
+        accounts = gittip.db.all(ACCOUNTS, (self.username,))
         assert accounts is not None
         twitter_account = None
         github_account = None
@@ -277,7 +275,7 @@ class Participant(object):
         args = (self.username, tippee, self.username, tippee, amount, \
                                                                  self.username)
         first_time_tipper = \
-                         gittip.db.fetchone(NEW_TIP, args)['first_time_tipper']
+                         gittip.db.one(NEW_TIP, args)['first_time_tipper']
         return amount, first_time_tipper
 
 
@@ -295,7 +293,7 @@ class Participant(object):
              LIMIT 1
 
         """
-        rec = gittip.db.fetchone(TIP, (self.username, tippee))
+        rec = gittip.db.one(TIP, (self.username, tippee))
         if rec is None:
             tip = Decimal('0.00')
         else:
@@ -324,7 +322,7 @@ class Participant(object):
                     ) AS foo
 
         """
-        rec = gittip.db.fetchone(BACKED, (self.username,))
+        rec = gittip.db.one(BACKED, (self.username,))
         if rec is None:
             amount = None
         else:
@@ -357,7 +355,7 @@ class Participant(object):
                     ) AS foo
 
         """
-        rec = gittip.db.fetchone(BACKED, (self.username,))
+        rec = gittip.db.one(BACKED, (self.username,))
         if rec is None:
             amount = None
         else:
@@ -391,7 +389,7 @@ class Participant(object):
              WHERE amount > 0
 
         """
-        rec = gittip.db.fetchone(BACKED, (self.username,))
+        rec = gittip.db.one(BACKED, (self.username,))
         if rec is None:
             nbackers = None
         else:
@@ -422,7 +420,7 @@ class Participant(object):
              proportion_of_total_amount_at_this_amount
             ]
 
-        """        
+        """
         SQL = """
 
             SELECT amount
@@ -448,7 +446,7 @@ class Participant(object):
 
         npatrons = 0.0  # float to trigger float division
         contributed = Decimal('0.00')
-        for rec in gittip.db.fetchall(SQL, (self.username,)):
+        for rec in gittip.db.all(SQL, (self.username,)):
             tip_amounts.append([ rec['amount']
                        , rec['ncontributing']
                        , rec['amount'] * rec['ncontributing']
@@ -497,7 +495,7 @@ class Participant(object):
                    , username_lower
 
         """
-        tips = list(db.fetchall(TIPS, (self.username,)))
+        tips = db.all(TIPS, (self.username,))
 
         UNCLAIMED_TIPS = """\
 
@@ -524,7 +522,7 @@ class Participant(object):
                    , lower(user_info->'login')
 
         """
-        unclaimed_tips = list(db.fetchall(UNCLAIMED_TIPS, (self.username,)))
+        unclaimed_tips = db.all(UNCLAIMED_TIPS, (self.username,))
 
 
         # Compute the total.
@@ -619,7 +617,7 @@ class Participant(object):
                    , tippee
 
         """ % (ts_filter, order_by)  # XXX, No injections here, right?!
-        tips = list(db.fetchall(TIPS, args))
+        tips = db.all(TIPS, args)
 
 
         # Compute the total.

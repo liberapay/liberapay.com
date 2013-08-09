@@ -16,10 +16,10 @@ else:
     raise Response(404)
 
 card = BalancedCard(participant.balanced_account_uri)
-exchange = db.fetchone( "SELECT * FROM exchanges "
-                        "WHERE id=%s AND participant=%s"
-                      , (path['exchange_id'], path['username'])
-                      )
+exchange = db.one( "SELECT * FROM exchanges "
+                   "WHERE id=%s AND participant=%s"
+                 , (path['exchange_id'], path['username'])
+                  )
 if exchange is None:
     raise Response(404)
 

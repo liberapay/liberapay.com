@@ -21,12 +21,12 @@ class Tests(Harness):
         participant = Harness.make_participant(self, username)
         if username == 'alice':
             take_last_week = kw.get('take_last_week', '40')
-            gittip.db.execute("INSERT INTO paydays DEFAULT VALUES")
-            gittip.db.execute( "INSERT INTO transfers "
-                               "(timestamp, tipper, tippee, amount) "
-                               "VALUES (now(), 'Team', 'alice', %s)"
-                             , (take_last_week,)
-                              )
+            gittip.db.run("INSERT INTO paydays DEFAULT VALUES")
+            gittip.db.run( "INSERT INTO transfers "
+                           "(timestamp, tipper, tippee, amount) "
+                           "VALUES (now(), 'Team', 'alice', %s)"
+                         , (take_last_week,)
+                          )
         return participant
 
     def test_we_can_make_a_team(self):

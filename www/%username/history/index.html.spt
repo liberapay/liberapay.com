@@ -10,19 +10,19 @@ class Paydays(object):
 
     def __init__(self, username, balance):
         self._username = username
-        self._paydays = list(db.fetchall("SELECT ts_start, ts_end FROM paydays "
-                                         "ORDER BY ts_end DESC"))
+        self._paydays = db.all("SELECT ts_start, ts_end FROM paydays "
+                               "ORDER BY ts_end DESC")
         self._npaydays = len(self._paydays)
-        self._exchanges = list(db.fetchall( "SELECT * FROM exchanges "
-                                            "WHERE participant=%s "
-                                            "ORDER BY timestamp ASC"
-                                          , (username,)
-                                           ))
-        self._transfers = list(db.fetchall( "SELECT * FROM transfers "
-                                            "WHERE tipper=%s OR tippee=%s "
-                                            "ORDER BY timestamp ASC"
-                                          , (username, username)
-                                          ))
+        self._exchanges = db.all( "SELECT * FROM exchanges "
+                                  "WHERE participant=%s "
+                                  "ORDER BY timestamp ASC"
+                                , (username,)
+                                 )
+        self._transfers = db.all( "SELECT * FROM transfers "
+                                  "WHERE tipper=%s OR tippee=%s "
+                                  "ORDER BY timestamp ASC"
+                                , (username, username)
+                                 )
         self._balance = balance
 
 

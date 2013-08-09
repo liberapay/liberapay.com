@@ -5,7 +5,7 @@ if user.ANON:
     raise Response(404)
 request.allow("GET", "POST")
 if POST:
-    rec = db.fetchone("""
+    rec = db.one("""
 
         UPDATE participants
            SET anonymous=not anonymous
@@ -14,7 +14,7 @@ if POST:
 
     """, (user.username,))
 else:
-    rec = db.fetchone("""
+    rec = db.one("""
 
         SELECT anonymous FROM participants WHERE username=%s
 

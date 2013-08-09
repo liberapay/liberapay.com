@@ -7,7 +7,7 @@ if not user.ADMIN:
     raise Response(404)
 
 
-unreviewed = db.fetchall("""
+unreviewed = db.all("""
 
     SELECT username
          , balance
@@ -17,9 +17,6 @@ unreviewed = db.fetchall("""
   ORDER BY claimed_time
 
 """)
-if unreviewed is None:
-    unreviewed = []
-unreviewed = list(unreviewed)
 
 [---]
 <script src="/assets/jquery-1.8.3.min.js"></script>

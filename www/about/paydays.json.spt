@@ -1,6 +1,6 @@
 from gittip import db
 [---]
-paydays = db.fetchall("""\
+paydays = db.all("""\
 
     SELECT ts_start
          , ts_end
@@ -25,6 +25,5 @@ paydays = db.fetchall("""\
   ORDER BY ts_start DESC
 
 """)
-paydays = [] if paydays is None else list(paydays)
 response.body = paydays
 response.headers["Access-Control-Allow-Origin"] = "*"
