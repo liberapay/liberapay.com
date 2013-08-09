@@ -10,7 +10,7 @@ up and make it nice! :-)
 
 :mod:`gittip` Package
 ---------------------
-.. automodule:: gittip.__init__
+.. automodule:: gittip
 
 :mod:`authentication` Module
 ----------------------------
