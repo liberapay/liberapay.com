@@ -52,8 +52,8 @@ class SQLAlchemy(object):
         return base
 
     def empty_tables(self):
-        gittip.db.execute("DELETE FROM memberships") # *sigh*
-        gittip.db.execute("DELETE FROM log_participant_number") # *sigh*
+        gittip.db.run("DELETE FROM memberships") # *sigh*
+        gittip.db.run("DELETE FROM log_participant_number") # *sigh*
         tables = reversed(self.metadata.sorted_tables)
         for table in tables:
             try:

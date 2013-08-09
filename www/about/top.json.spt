@@ -8,7 +8,7 @@ try:
 except ValueError:
     raise Response(400)
 
-givers = list(db.fetchall("""
+givers = db.all("""
 
     SELECT tipper AS username, anonymous, sum(amount) AS amount
       FROM (    SELECT DISTINCT ON (tipper, tippee)
@@ -31,12 +31,12 @@ givers = list(db.fetchall("""
   LIMIT %s
   OFFSET %s
 
-""", (limit, offset)))
+""", (limit, offset))
 
 # XXX I'm nearly positive that one or both of givers and receivers can contain
 # orphan accounts. See https://github.com/gittip/www.gittip.com/issues/650
 
-receivers = list(db.fetchall("""
+receivers = db.all("""
 
     SELECT tippee AS username, sum(amount) AS amount
       FROM (    SELECT DISTINCT ON (tipper, tippee)
@@ -58,7 +58,7 @@ receivers = list(db.fetchall("""
   LIMIT %s
   OFFSET %s
 
-""", (limit, offset)))
+""", (limit, offset))
 
 # anonymize
 for giver in givers:

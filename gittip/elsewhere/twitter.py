@@ -6,6 +6,7 @@ from aspen.utils import to_age, utc, typecheck
 from gittip.elsewhere import AccountElsewhere, _resolve
 from os import environ
 from requests_oauthlib import OAuth1
+from postgres import TooFew
 
 
 class TwitterAccount(AccountElsewhere):
@@ -37,11 +38,15 @@ def get_user_info(screen_name):
     """Given a unicode, return a dict.
     """
     typecheck(screen_name, unicode)
-    rec = gittip.db.fetchone( "SELECT user_info FROM elsewhere "
-                              "WHERE platform='twitter' "
-                              "AND user_info->'screen_name' = %s"
-                            , (screen_name,)
-                             )
+    try:
+        rec = gittip.db.one( "SELECT user_info FROM elsewhere "
+                             "WHERE platform='twitter' "
+                             "AND user_info->'screen_name' = %s"
+                           , (screen_name,)
+                            )
+    except TooFew:
+        rec = None
+
     if rec is not None:
         user_info = rec['user_info']
     else:

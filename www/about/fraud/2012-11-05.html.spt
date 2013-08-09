@@ -7,7 +7,7 @@ from aspen import Response
 from gittip import db, CARDINALS
 
 [---]
-_suspicious = db.fetchall("""
+_suspicious = db.all("""
 
     SELECT username
          , balance
@@ -24,7 +24,7 @@ if _suspicious is None:
 
 def suspicious():
     for person in _suspicious:
-        person['gives_to'] = db.fetchall("""
+        person['gives_to'] = db.all("""
 
             SELECT DISTINCT tippee AS username
                  , is_suspicious
@@ -38,7 +38,7 @@ def suspicious():
 
 
         """, (person['username'],))
-        person['receives_from'] = db.fetchall("""
+        person['receives_from'] = db.all("""
 
             SELECT DISTINCT tipper AS username
                  , is_suspicious
@@ -52,7 +52,7 @@ def suspicious():
 
         """, (person['username'],))
 
-        person['transfers'] = list(db.fetchall("""
+        person['transfers'] = db.all("""
 
             SELECT tippee
                  , tipper
@@ -64,9 +64,9 @@ def suspicious():
           ORDER BY timestamp
 
 
-        """, (person['username'], person['username'])))
+        """, (person['username'], person['username']))
 
-        person['exchanges'] = list(db.fetchall("""
+        person['exchanges'] = db.all("""
 
             SELECT amount, fee, timestamp
               FROM exchanges
@@ -75,7 +75,7 @@ def suspicious():
           ORDER BY timestamp
 
 
-        """, (person['username'],)))
+        """, (person['username'],))
 
         yield person
 suspicious = list(suspicious())
@@ -121,7 +121,7 @@ assert total_legit == total_charged - total_withdrawn - gittip_fees - balanced_f
 
 nweeks = CARDINALS[((latest.date() - earliest.date()).days / 7) + 1]
 
-overall = db.fetchone("""
+overall = db.one("""
 
     SELECT sum(amount + fee), count(amount)
       FROM exchanges
@@ -153,7 +153,7 @@ total_fraudulent = pad(total_fraudulent, w)[:-3] + ('&nbsp;' * 3)
 percentage_fraudulent = pad(percentage_fraudulent, w)
 
 
-bystander_balances = db.fetchall("""
+bystander_balances = db.all("""
 
     SELECT username, balance FROM participants WHERE username = ANY(%s)
 

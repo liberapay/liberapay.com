@@ -90,13 +90,13 @@ class QueryCache(object):
         self.pruner.start()
 
 
-    def fetchone(self, query, params, process=None):
-        return self._do_query(self.db.fetchone, query, params, process)
+    def one(self, query, params, process=None):
+        return self._do_query(self.db.one, query, params, process)
 
-    def fetchall(self, query, params, process=None):
+    def all(self, query, params, process=None):
         if process is None:
             process = lambda g: list(g)
-        return self._do_query(self.db.fetchall, query, params, process)
+        return self._do_query(self.db.all, query, params, process)
 
     def _do_query(self, fetchfunc, query, params, process):
         """Given a function, a SQL string, a tuple, and a function, return ???.

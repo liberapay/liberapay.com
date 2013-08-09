@@ -35,7 +35,7 @@ try:
 except ValueError:
     raise Response(400)
 
-new_participants = _wrap(db.fetchall("""
+new_participants = _wrap(db.all("""
 -- new participants on homepage
 
     SELECT * FROM homepage_new_participants
@@ -44,7 +44,7 @@ new_participants = _wrap(db.fetchall("""
 
 """, (limit, offset)))
 
-givers = _wrap(db.fetchall("""
+givers = _wrap(db.all("""
 -- top givers on homepage
 
     SELECT * FROM homepage_top_givers
@@ -56,7 +56,7 @@ givers = _wrap(db.fetchall("""
 # XXX I'm nearly positive that one or both of givers and receivers can contain
 # orphan accounts. See https://github.com/gittip/www.gittip.com/issues/650
 
-receivers = _wrap(db.fetchall("""
+receivers = _wrap(db.all("""
 -- top receivers on homepage
 
     SELECT * FROM homepage_top_receivers

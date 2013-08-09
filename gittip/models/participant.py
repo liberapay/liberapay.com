@@ -214,10 +214,12 @@ class Participant(db.Model):
             if 'profile_image_url_https' in twitter.user_info:
                 src = twitter.user_info['profile_image_url_https']
 
-                # For Twitter, we don't have good control over size. We don't
-                # want the original, cause that can be huge. The next option is
-                # 73px(?!).
-                src = src.replace('_normal.', '_bigger.')
+                # For Twitter, we don't have good control over size. The
+                # biggest option is 73px(?!), but that's too small. Let's go
+                # with the original: even though it may be huge, that's
+                # preferrable to guaranteed blurriness. :-/
+
+                src = src.replace('_normal.', '.')
 
         return src
 
@@ -262,7 +264,7 @@ class Participant(db.Model):
     def get_teams(self):
         """Return a list of teams this user is a member of.
         """
-        return list(gittip.db.fetchall("""
+        return list(gittip.db.all("""
 
             SELECT team AS name
                  , ( SELECT count(*)
@@ -319,7 +321,7 @@ class Participant(db.Model):
         assert self.IS_PLURAL
         membername = member.username if hasattr(member, 'username') \
                                                         else member['username']
-        rec = gittip.db.fetchone("""
+        rec = gittip.db.one("""
 
             SELECT amount
               FROM transfers
@@ -339,10 +341,10 @@ class Participant(db.Model):
         """Return a Decimal representation of the take for this member, or 0.
         """
         assert self.IS_PLURAL
-        rec = gittip.db.fetchone( "SELECT take FROM current_memberships "
-                                  "WHERE member=%s AND team=%s"
-                                , (member.username, self.username)
-                                 )
+        rec = gittip.db.one( "SELECT take FROM current_memberships "
+                             "WHERE member=%s AND team=%s"
+                           , (member.username, self.username)
+                            )
         if rec is None:
             return Decimal('0.00')
         else:
@@ -374,7 +376,7 @@ class Participant(db.Model):
     def __set_take_for(self, member, take, recorder):
         assert self.IS_PLURAL
         # XXX Factored out for testing purposes only! :O Use .set_take_for.
-        gittip.db.execute("""
+        gittip.db.run("""
 
             INSERT INTO memberships (ctime, member, team, take, recorder)
              VALUES ( COALESCE (( SELECT ctime
@@ -394,7 +396,7 @@ class Participant(db.Model):
 
     def get_members(self):
         assert self.IS_PLURAL
-        return list(gittip.db.fetchall("""
+        return list(gittip.db.all("""
 
             SELECT member AS username, take, ctime, mtime
               FROM current_memberships
@@ -406,7 +408,7 @@ class Participant(db.Model):
     def get_teams_membership(self):
         assert self.IS_PLURAL
         TAKE = "SELECT sum(take) FROM current_memberships WHERE team=%s"
-        total_take = gittip.db.fetchone(TAKE, (self.username,))['sum']
+        total_take = gittip.db.one(TAKE, (self.username,))['sum']
         total_take = 0 if total_take is None else total_take
         team_take = max(self.get_dollars_receiving() - total_take, 0)
         membership = { "ctime": None

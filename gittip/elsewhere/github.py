@@ -8,6 +8,7 @@ from aspen.website import Website
 from aspen.utils import typecheck
 from gittip import log
 from gittip.elsewhere import ACTIONS, AccountElsewhere, _resolve
+from postgres import TooFew
 
 
 class GitHubAccount(AccountElsewhere):
@@ -96,11 +97,15 @@ def get_user_info(login):
         A dictionary containing github specific information for the user.
     """
     typecheck(login, unicode)
-    rec = gittip.db.fetchone( "SELECT user_info FROM elsewhere "
-                              "WHERE platform='github' "
-                              "AND user_info->'login' = %s"
-                            , (login,)
-                             )
+    try:
+        rec = gittip.db.one( "SELECT user_info FROM elsewhere "
+                             "WHERE platform='github' "
+                             "AND user_info->'login' = %s"
+                           , (login,)
+                            )
+    except TooFew:
+        rec = None
+
     if rec is not None:
         user_info = rec['user_info']
     else:

@@ -51,7 +51,7 @@ def get_balanced_account(username, balanced_account_uri):
                  WHERE username=%s
 
         """
-        gittip.db.execute(BALANCED_ACCOUNT, (account.uri, username))
+        gittip.db.run(BALANCED_ACCOUNT, (account.uri, username))
         account.meta['username'] = username
         account.save()  # HTTP call under here
     else:
@@ -101,7 +101,7 @@ def associate(thing, username, balanced_account_uri, balanced_thing_uri):
         error = ''
     typecheck(error, unicode)
 
-    gittip.db.execute(SQL, (error, username))
+    gittip.db.run(SQL, (error, username))
     return error
 
 
@@ -140,7 +140,7 @@ def clear(thing, username, balanced_account_uri):
          WHERE username=%%s
 
     """ % ("bill" if thing == "credit card" else "ach")
-    gittip.db.execute(CLEAR, (username,))
+    gittip.db.run(CLEAR, (username,))
 
 
 def store_error(thing, username, msg):
@@ -153,7 +153,7 @@ def store_error(thing, username, msg):
          WHERE username=%%s
 
     """ % ("bill" if thing == "credit card" else "ach")
-    gittip.db.execute(ERROR, (msg, username))
+    gittip.db.run(ERROR, (msg, username))
 
 
 # Card
