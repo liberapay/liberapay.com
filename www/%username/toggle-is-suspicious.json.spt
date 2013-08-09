@@ -9,7 +9,7 @@ if not to in ('true', 'false', None):
     raise Response(400)
 
 if to is None:
-    rec = db.fetchone("""
+    rec = db.one("""
 
         UPDATE participants
            SET is_suspicious = (is_suspicious IS NULL) OR (is_suspicious IS false)
@@ -18,7 +18,7 @@ if to is None:
 
     """, (path['username'],))
 else:
-    rec = db.fetchone("""
+    rec = db.one("""
 
         UPDATE participants
            SET is_suspicious = %s

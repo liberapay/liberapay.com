@@ -80,7 +80,7 @@ class Tests(Harness):
         self.change_goal("custom", "300", alice)
         self.change_goal("null", "", alice)
         self.change_goal("custom", "400", alice)
-        actual = gittip.db.fetchone("SELECT goal FROM participants")['goal']
+        actual = gittip.db.one("SELECT goal FROM participants")['goal']
         assert actual == Decimal("400.00"), actual
 
     def test_all_goals_are_stored_in_goals_table(self):
@@ -90,7 +90,6 @@ class Tests(Harness):
         self.change_goal("custom", "300", alice)
         self.change_goal("null", "", alice)
         self.change_goal("custom", "400", alice)
-        goals = gittip.db.fetchall("SELECT goal FROM goals "
-                                   "ORDER BY mtime DESC")
+        goals = gittip.db.all("SELECT goal FROM goals ORDER BY mtime DESC")
         actual = [rec['goal'] for rec in goals]
         assert actual == [400, None, 300, 200, 100], actual

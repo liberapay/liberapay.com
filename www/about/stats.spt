@@ -17,26 +17,26 @@ def commaize(number, places=0):
 
 title = "Stats"
 yesterday = datetime.datetime.utcnow() - datetime.timedelta(hours=24)
-escrow = db.fetchone("SELECT sum(balance) FROM participants")['sum']
+escrow = db.one("SELECT sum(balance) FROM participants")['sum']
 escrow = 0 if escrow is None else escrow
-nach = db.fetchone("SELECT count(*) AS n FROM participants WHERE last_ach_result = '' AND is_suspicious IS NOT true")['n']
+nach = db.one("SELECT count(*) AS n FROM participants WHERE last_ach_result = '' AND is_suspicious IS NOT true")['n']
 nach = 0 if nach is None else nach
 if nach < 10:
     nach = CARDINALS[nach].title()
 else:
     nach = commaize(nach)
-payday = db.fetchone( "SELECT ts_start, ts_end FROM paydays WHERE ts_start > %s"
-                    , (yesterday,)
-                     )
-npeople = db.fetchone("SELECT count(*) AS n FROM participants WHERE claimed_time IS NOT NULL AND is_suspicious IS NOT true")['n']
-ncc = db.fetchone("SELECT count(*) AS n FROM participants WHERE last_bill_result = '' AND is_suspicious IS NOT true")['n']
+payday = db.one( "SELECT ts_start, ts_end FROM paydays WHERE ts_start > %s"
+               , (yesterday,)
+               , strict=False
+                )
+npeople = db.one("SELECT count(*) AS n FROM participants WHERE claimed_time IS NOT NULL AND is_suspicious IS NOT true")['n']
+ncc = db.one("SELECT count(*) AS n FROM participants WHERE last_bill_result = '' AND is_suspicious IS NOT true")['n']
 ncc = 0 if ncc is None else ncc
 pcc = "%5.1f" % ((ncc * 100.0) / npeople) if npeople > 0 else 0.0
-statements = db.fetchall("SELECT username, statement FROM participants WHERE statement != '' AND is_suspicious IS NOT true ORDER BY random(), username LIMIT 16")
-statements = [] if statements is None else list(statements)
-transfer_volume = db.fetchone("SELECT transfer_volume AS v FROM paydays ORDER BY ts_end DESC LIMIT 1")
+statements = db.all("SELECT username, statement FROM participants WHERE statement != '' AND is_suspicious IS NOT true ORDER BY random(), username LIMIT 16")
+transfer_volume = db.one("SELECT transfer_volume AS v FROM paydays ORDER BY ts_end DESC LIMIT 1", strict=False)
 transfer_volume = 0 if transfer_volume is None else transfer_volume['v']
-tip_amounts = db.fetchone("""
+tip_amounts = db.one("""
         SELECT avg(amount), sum(amount)
          FROM (    SELECT DISTINCT ON (tipper, tippee) amount
                      FROM tips
@@ -56,7 +56,7 @@ else:
     average_tip = tip_amounts['avg'] if tip_amounts['avg'] is not None else 0
     total_backed_tips = tip_amounts['sum'] if tip_amounts['sum'] is not None else 0
 
-average_tippees = db.fetchone("""\
+average_tippees = db.one("""\
         SELECT round(avg(ntippees))
           FROM ( SELECT count(tippee) as NTIPPEES
                    FROM ( SELECT DISTINCT ON (tipper, tippee)
@@ -88,7 +88,7 @@ else:
 other_people = "%s other %s" % (number, word)
 
 # Tip Distribution
-_tip_distribution = list(db.fetchall("""
+_tip_distribution = db.all("""
 
     SELECT amount, count(amount)
       FROM (SELECT DISTINCT ON (tipper, tippee)
@@ -108,7 +108,7 @@ _tip_distribution = list(db.fetchall("""
   GROUP BY amount
   ORDER BY amount
 
-"""))
+""")
 
 tip_n = sum([row['count'] for row in _tip_distribution])
 
@@ -125,12 +125,11 @@ def part(s):
     return s
 
 
-ngivers = db.fetchone("select count(distinct tipper) from transfers "
-                      "where timestamp > (now() - interval '7 days')")['count']
-nreceivers = db.fetchone("select count(distinct tippee) from transfers "
-                         "where timestamp > (now() - interval '7 days')"
-                         )['count']
-noverlap = db.fetchone("""
+ngivers = db.one("select count(distinct tipper) from transfers "
+                 "where timestamp > (now() - interval '7 days')")['count']
+nreceivers = db.one("select count(distinct tippee) from transfers "
+                    "where timestamp > (now() - interval '7 days')")['count']
+noverlap = db.one("""
 
         select count(*) from (
 
@@ -143,7 +142,7 @@ noverlap = db.fetchone("""
         ) as anon
 
 """)['count']
-nactive = db.fetchone("""
+nactive = db.one("""
 
         select count(*) from (
 

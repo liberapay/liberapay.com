@@ -35,7 +35,7 @@ DUMMY_BOUNTYSOURCE_JSON = u'{"slug": "6-corytheboyd","updated_at": "2013-05-24T0
 
 
 def create_schema(db):
-    db.execute(SCHEMA)
+    db.run(SCHEMA)
 
 
 class Harness(unittest.TestCase):
@@ -91,7 +91,7 @@ class GittipBaseDBTest(unittest.TestCase):
                  , 'absorptions'
                   ]
         for t in tables:
-            self.db.execute('truncate table %s cascade' % t)
+            self.db.run('truncate table %s cascade' % t)
 
 
 class GittipPaydayTest(GittipBaseDBTest):
@@ -211,10 +211,10 @@ def tip_graph(*a, **kw):
     context = load(*setup_tips(*a, **kw))
 
     def resolve_elsewhere(username):
-        recs = context.db.fetchall( "SELECT platform, user_id FROM elsewhere "
-                                    "WHERE participant=%s"
-                                  , (username,)
-                                   )
+        recs = context.db.all( "SELECT platform, user_id FROM elsewhere "
+                               "WHERE participant=%s"
+                             , (username,)
+                              )
         if recs is not None:
             recs = [(rec['platform'], rec['user_id']) for rec in recs]
         return recs
