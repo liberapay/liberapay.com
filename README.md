@@ -505,3 +505,5 @@ and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
  - [FundAnything](http://fundanything.com/) - Kickstarter knock-off, I guess?
  - [ShareTribe](https://www.sharetribe.com/) - Create your own community marketplace
  - [Subbable](https://subbable.com/) - What John and Hank Green wanted (cf. [#737](https://github.com/gittip/www.gittip.com/issues/737))
+ - [Pitch In](http://pitchinbox.com/) - Widget-centric project-based funding campaigns
+ - [Binpress](http://www.binpress.com/) - Binpress is the marketplace for commercial open-source projects.
