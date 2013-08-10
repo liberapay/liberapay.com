@@ -1,13 +1,18 @@
+"""Defines a Participant class.
+"""
 from __future__ import unicode_literals
 
 import datetime
 import os
+import random
+import uuid
 from decimal import Decimal
 
+import gittip
 import pytz
 from aspen.utils import typecheck
+from psycopg2 import IntegrityError
 
-import gittip
 
 ASCII_ALLOWED_IN_USERNAME = set("0123456789"
                                 "abcdefghijklmnopqrstuvwxyz"
@@ -15,7 +20,85 @@ ASCII_ALLOWED_IN_USERNAME = set("0123456789"
                                 ".,-_:@ ")
 NANSWERS_THRESHOLD = 0  # configured in wireup.py
 
+
+class NoParticipantId(Exception):
+    """Represent a bug where we treat an anonymous user as a participant.
+    """
+
+
+class NeedConfirmation(Exception):
+    """We need confirmation before we'll proceed.
+    """
+
+    def __init__(self, a, b, c):
+        self.other_is_a_real_participant = a
+        self.this_is_others_last_account_elsewhere = b
+        self.we_already_have_that_kind_of_account = c
+        self._all = (a, b, c)
+
+    def __repr__(self):
+        return "<NeedConfirmation: %r %r %r>" % self._all
+    __str__ = __repr__
+
+    def __eq__(self, other):
+        return self._all == other._all
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def __nonzero__(self):
+        # bool(need_confirmation)
+        A, B, C = self._all
+        return A or C
+
+def gen_random_usernames():
+    """Yield up to 100 random usernames.
+    """
+    seatbelt = 0
+    while 1:
+        yield hex(int(random.random() * 16**12))[2:].zfill(12).decode('ASCII')
+        seatbelt += 1
+        if seatbelt > 100:
+            raise StopIteration
+
+
+def reserve_a_random_username(txn):
+    """Reserve a random username.
+
+    The returned value is guaranteed to have been reserved in the database.
+
+    """
+    for username in gen_random_usernames():
+        try:
+            txn.execute( "INSERT INTO participants (username, username_lower) "
+                         "VALUES (%s, %s)"
+                       , (username, username.lower())
+                        )
+        except IntegrityError:  # Collision, try again with another value.
+            pass
+        else:
+            break
+
+    return username
+
+
+def require_username(func):
+    # XXX This should be done with a metaclass, maybe?
+    def wrapped(self, *a, **kw):
+        if self.username is None:
+            raise NoParticipantId("User does not participate, apparently.")
+        return func(self, *a, **kw)
+    return wrapped
+
+
 class Participant(object):
+    """Represent a Gittip participant.
+    """
+
+    ################################################################
+    ############### BEGIN COPY/PASTE OF ORM VERSION
+    ################################################################
+
 
     @classmethod
     def from_username(cls, username):
@@ -375,140 +458,11 @@ class Participant(object):
         return members
 
 
-    # TODO: Move these queries into this class.
-    @property
-    def IS_SINGULAR(self):
-        return OldParticipant(self.username).is_singular()
-
-    @property
-    def IS_PLURAL(self):
-        return OldParticipant(self.username).is_plural()
-
-    def change_username(self, desired_username):
-        OldParticipant(self.username).change_username(desired_username)
-
-    def set_tip_to(self, tippee, amount):
-        return OldParticipant(self.username).set_tip_to(tippee, amount)
-
-    def insert_into_communities(self, is_member, name, slug):
-        return OldParticipant(self.username).insert_into_communities( is_member
-                                                                    , name
-                                                                    , slug
-                                                                     )
-
-    def get_dollars_giving(self):
-        return OldParticipant(self.username).get_dollars_giving()
-
-    def get_tip_distribution(self):
-        return OldParticipant(self.username).get_tip_distribution()
-
-    def get_giving_for_profile(self, db=None):
-        return OldParticipant(self.username).get_giving_for_profile(db)
-
-    def get_tips_and_total(self, for_payday=False, db=None):
-        return OldParticipant(self.username).get_tips_and_total(for_payday, db)
-
-    def take_over(self, account_elsewhere, have_confirmation=False):
-        OldParticipant(self.username).take_over(account_elsewhere,
-                                                have_confirmation)
-
-    def recreate_api_key(self):
-        return OldParticipant(self.username).recreate_api_key()
 
 
-"""Defines a Participant class.
-"""
-import random
-import re
-import uuid
-from decimal import Decimal
-
-import gittip
-from aspen import Response
-from aspen.utils import typecheck
-from psycopg2 import IntegrityError
-from postgres import TooFew
-
-
-ASCII_ALLOWED_IN_USERNAME = set("0123456789"
-                                "abcdefghijklmnopqrstuvwxyz"
-                                "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                                ".,-_;:@ ")
-
-
-class NoParticipantId(Exception):
-    """Represent a bug where we treat an anonymous user as a participant.
-    """
-
-
-class NeedConfirmation(Exception):
-    """We need confirmation before we'll proceed.
-    """
-
-    def __init__(self, a, b, c):
-        self.other_is_a_real_participant = a
-        self.this_is_others_last_account_elsewhere = b
-        self.we_already_have_that_kind_of_account = c
-        self._all = (a, b, c)
-
-    def __repr__(self):
-        return "<NeedConfirmation: %r %r %r>" % self._all
-    __str__ = __repr__
-
-    def __eq__(self, other):
-        return self._all == other._all
-
-    def __ne__(self, other):
-        return not self.__eq__(other)
-
-    def __nonzero__(self):
-        # bool(need_confirmation)
-        A, B, C = self._all
-        return A or C
-
-def gen_random_usernames():
-    """Yield up to 100 random usernames.
-    """
-    seatbelt = 0
-    while 1:
-        yield hex(int(random.random() * 16**12))[2:].zfill(12).decode('ASCII')
-        seatbelt += 1
-        if seatbelt > 100:
-            raise StopIteration
-
-
-def reserve_a_random_username(txn):
-    """Reserve a random username.
-
-    The returned value is guaranteed to have been reserved in the database.
-
-    """
-    for username in gen_random_usernames():
-        try:
-            txn.execute( "INSERT INTO participants (username, username_lower) "
-                         "VALUES (%s, %s)"
-                       , (username, username.lower())
-                        )
-        except IntegrityError:  # Collision, try again with another value.
-            pass
-        else:
-            break
-
-    return username
-
-
-def require_username(func):
-    # XXX This should be done with a metaclass, maybe?
-    def wrapped(self, *a, **kw):
-        if self.username is None:
-            raise NoParticipantId("User does not participate, apparently.")
-        return func(self, *a, **kw)
-    return wrapped
-
-
-class Participant(object):
-    """Represent a Gittip participant.
-    """
+    ################################################################
+    ############### END COPY/PASTE OF ORM VERSION
+    ################################################################
 
     class NoSelfTipping(Exception): pass
     class BadAmount(Exception): pass
@@ -562,6 +516,7 @@ class Participant(object):
         SQL = "UPDATE participants SET api_key=%s WHERE username=%s"
         gittip.db.run(SQL, (api_key, self.username))
         return api_key
+
 
     # Claiming
     # ========
