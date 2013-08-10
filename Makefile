@@ -31,7 +31,7 @@ $(env_bin)/swaddle:
 	./$(env_bin)/pip install -e ./
 
 clean:
-	rm -rf env *.egg *.egg-info tests/env
+	rm -rf env *.egg *.egg-info
 	find . -name \*.pyc -delete
 
 local.env:
