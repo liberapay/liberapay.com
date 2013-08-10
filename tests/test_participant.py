@@ -6,7 +6,7 @@ from aspen.utils import utcnow
 from nose.tools import assert_raises, assert_equals
 
 from gittip.models import Absorption, Tip
-from gittip.participant import Participant, NeedConfirmation
+from gittip.models.participant import Participant, NeedConfirmation
 from gittip.testing import Harness
 from gittip.elsewhere.twitter import TwitterAccount
 

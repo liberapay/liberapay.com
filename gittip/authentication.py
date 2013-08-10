@@ -7,7 +7,6 @@ import time
 import pytz
 from aspen import Response
 from gittip import csrf
-from gittip.orm import db
 from gittip.models import User
 
 

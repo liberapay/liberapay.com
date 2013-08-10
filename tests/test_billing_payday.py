@@ -10,7 +10,7 @@ from aspen.utils import typecheck, utcnow
 from gittip import billing
 from gittip.billing.payday import FEE_CHARGE, Payday, skim_credit
 from gittip.models import Payday as PaydayModel
-from gittip.participant import Participant
+from gittip.models.participant import Participant
 from gittip.testing import Harness
 
 from test_billing import TestBillingBase
@@ -345,7 +345,7 @@ class TestBillingPayday(Harness):
         with assert_raises(AssertionError):
             self.payday.assert_one_payday([1, 2])
 
-    @mock.patch('gittip.participant.Participant.get_tips_and_total')
+    @mock.patch('gittip.models.participant.Participant.get_tips_and_total')
     def test_charge_and_or_transfer_no_tips(self, get_tips_and_total):
         alice = self.make_participant('alice', balance='1.00',
                                       balanced_account_uri=self.BALANCED_ACCOUNT_URI,
@@ -366,7 +366,7 @@ class TestBillingPayday(Harness):
         assert_equals(initial_payday['nparticipants'] + 1,
                       resulting_payday['nparticipants'])
 
-    @mock.patch('gittip.participant.Participant.get_tips_and_total')
+    @mock.patch('gittip.models.participant.Participant.get_tips_and_total')
     @mock.patch('gittip.billing.payday.Payday.tip')
     def test_charge_and_or_transfer(self, tip, get_tips_and_total):
         alice = self.make_participant('alice', balance='1.00',
@@ -404,7 +404,7 @@ class TestBillingPayday(Harness):
         assert_equals(initial_payday['nparticipants'] + 1,
                       resulting_payday['nparticipants'])
 
-    @mock.patch('gittip.participant.Participant.get_tips_and_total')
+    @mock.patch('gittip.models.participant.Participant.get_tips_and_total')
     @mock.patch('gittip.billing.payday.Payday.charge')
     def test_charge_and_or_transfer_short(self, charge, get_tips_and_total):
         alice = self.make_participant('alice', balance='1.00',

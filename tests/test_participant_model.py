@@ -9,7 +9,7 @@ from nose.tools import assert_raises
 
 from gittip.testing import Harness
 from gittip.models import Participant, Tip
-from gittip.participant import Participant as OldParticipant
+from gittip.models.participant import Participant as OldParticipant
 
 
 class Tests(Harness):

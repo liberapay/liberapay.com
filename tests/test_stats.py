@@ -8,7 +8,7 @@ from nose.tools import assert_equals
 from gittip import wireup
 from gittip.billing.payday import Payday
 from gittip.models import Tip
-from gittip.participant import Participant
+from gittip.models.participant import Participant
 from gittip.testing import Harness, load_simplate
 from gittip.testing.client import TestClient
 

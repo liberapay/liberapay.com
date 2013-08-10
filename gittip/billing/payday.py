@@ -25,8 +25,7 @@ import stripe
 import aspen.utils
 from aspen import log
 from aspen.utils import typecheck
-from gittip.participant import Participant
-from gittip.models.participant import Participant as ORMParticipant
+from gittip.models.participant import Participant
 from psycopg2 import IntegrityError
 from psycopg2.extras import RealDictRow
 
