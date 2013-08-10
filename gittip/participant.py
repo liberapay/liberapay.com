@@ -123,14 +123,14 @@ class Participant(object):
 
     @require_username
     def is_singular(self):
-        rec = gittip.db.fetchone("SELECT number FROM participants "
+        rec = gittip.db.one("SELECT number FROM participants "
                 "WHERE username = %s", (self.username,))
 
         return rec['number'] == 'singular'
 
     @require_username
     def is_plural(self):
-        rec = gittip.db.fetchone("SELECT number FROM participants "
+        rec = gittip.db.one("SELECT number FROM participants "
                 "WHERE username = %s", (self.username,))
 
         return rec['number'] == 'plural'
