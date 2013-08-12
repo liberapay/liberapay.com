@@ -1,19 +1,24 @@
-import uuid
-
-from gittip.participant import Participant
+from aspen.utils import typecheck
 
 
-class User(object):
-    """Represent a user of our website.
+class Visitor(object):
+    """Represent a website visitor.
     """
 
-    participant = None
+    def __init__(self, session):
+        """Takes a dict of user info.
+        """
+        typecheck(session, (RealDictRow, dict))
+        self.session = session
+        Participant.__init__(self, session.get('id'))  # sets self.id
 
     @classmethod
     def from_session_token(cls, token):
-        self = cls()
-        self.participant = Participant.from_session_token(token)
-        return self
+        SESSION = ("SELECT * FROM participants "
+                   "WHERE is_suspicious IS NOT true "
+                   "AND session_token=%s")
+        session = cls.load_session(SESSION, token)
+        return cls(session)
 
     @classmethod
     def from_id(cls, participant_id):
@@ -30,31 +35,12 @@ class User(object):
 
     @staticmethod
     def load_session(SESSION, val):
+        from gittip import db
         rec = db.fetchone(SESSION, (val,))
         out = {}
         if rec is not None:
             out = rec
         return out
-
-    @classmethod
-    def from_username(cls, username):
-        user = User.query.filter_by(username_lower=username.lower()).first()
-        if user is None or user.is_suspicious:
-            user = User()
-        else:
-            user.session_token = uuid.uuid4().hex
-            db.session.add(user)
-            db.session.commit()
-        return user
-
-    def sign_out(self):
-        token = self.session_token
-        if token is not None:
-            self.session_token = None
-            self.db.session.add(self)
-            self.db.session.commit()
-        return User()
-
 
     def __str__(self):
         return '<User: %s>' % getattr(self, 'id', 'Anonymous')
@@ -65,8 +51,9 @@ class User(object):
 
     @property
     def ADMIN(self):
-        return not self.ANON and self.participant.is_admin
+        return bool(self.session.get('is_admin', False))
 
     @property
     def ANON(self):
-        return self.participant is not None
+        return self.id is None
+

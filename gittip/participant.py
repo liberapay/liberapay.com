@@ -82,15 +82,6 @@ def reserve_a_random_username(txn):
     return username
 
 
-def require_username(func):
-    # XXX This should be done with a metaclass, maybe?
-    def wrapped(self, *a, **kw):
-        if self.username is None:
-            raise NoParticipantId("User does not participate, apparently.")
-        return func(self, *a, **kw)
-    return wrapped
-
-
 class Participant(object):
     """Represent a Gittip participant.
     """
@@ -480,7 +471,6 @@ class Participant(object):
         self.username = username
 
 
-    @require_username
     def get_details(self):
         """Return a dictionary.
         """
@@ -493,14 +483,41 @@ class Participant(object):
         """
         return gittip.db.one(SELECT, (self.username,))
 
-    @require_username
+
+    @classmethod
+    def from_session_token(cls, token):
+        SESSION = ("SELECT * FROM participants "
+                   "WHERE is_suspicious IS NOT true "
+                   "AND session_token=%s")
+        session = cls.load_session(SESSION, token)
+        return cls(session)
+
+    @classmethod
+    def from_id(cls, participant_id):
+        from gittip import db
+        SESSION = ("SELECT * FROM participants "
+                   "WHERE is_suspicious IS NOT true "
+                   "AND id=%s")
+        session = cls.load_session(SESSION, participant_id)
+        session['session_token'] = uuid.uuid4().hex
+        db.execute( "UPDATE participants SET session_token=%s WHERE id=%s"
+                  , (session['session_token'], participant_id)
+                   )
+        return cls(session)
+
+    @staticmethod
+    def load_session(SESSION, val):
+        from gittip import db
+        return db.one_or_zero(SESSION, (val,), zero={})
+        return out
+
+
     def is_singular(self):
         rec = gittip.db.one("SELECT number FROM participants "
                 "WHERE username = %s", (self.username,))
 
         return rec['number'] == 'singular'
 
-    @require_username
     def is_plural(self):
         rec = gittip.db.one("SELECT number FROM participants "
                 "WHERE username = %s", (self.username,))
@@ -510,7 +527,6 @@ class Participant(object):
     # API Key
     # =======
 
-    @require_username
     def recreate_api_key(self):
         api_key = str(uuid.uuid4())
         SQL = "UPDATE participants SET api_key=%s WHERE username=%s"
@@ -523,7 +539,6 @@ class Participant(object):
     # An unclaimed Participant is a stub that's created when someone pledges to
     # give to an AccountElsewhere that's not been connected on Gittip yet.
 
-    @require_username
     def resolve_unclaimed(self):
         """Given a username, return an URL path.
         """
@@ -538,7 +553,6 @@ class Participant(object):
             out = '/on/twitter/%s/' % rec['user_info']['screen_name']
         return out
 
-    @require_username
     def set_as_claimed(self):
         CLAIM = """\
 
@@ -550,7 +564,6 @@ class Participant(object):
         """
         gittip.db.run(CLAIM, (self.username,))
 
-    @require_username
     def insert_into_communities(self, is_member, name, slug):
         username = self.username
         gittip.db.run("""
@@ -572,7 +585,6 @@ class Participant(object):
 
         """, (username, slug, name, slug, username, is_member, username))
 
-    @require_username
     def change_username(self, suggested):
         """Raise Response or return None.
 
@@ -608,7 +620,6 @@ class Participant(object):
             self.username = suggested
 
 
-    @require_username
     def get_accounts_elsewhere(self):
         """Return a two-tuple of elsewhere dicts.
         """
@@ -628,7 +639,6 @@ class Participant(object):
         return (github_account, twitter_account)
 
 
-    @require_username
     def set_tip_to(self, tippee, amount):
         """Given participant id and amount as str, return a tuple.
 
@@ -673,7 +683,6 @@ class Participant(object):
         return amount, first_time_tipper
 
 
-    @require_username
     def get_tip_to(self, tippee):
         """Given two user ids, return a Decimal.
         """
@@ -695,7 +704,6 @@ class Participant(object):
         return tip
 
 
-    @require_username
     def get_dollars_receiving(self):
         """Return a Decimal.
         """
@@ -728,7 +736,6 @@ class Participant(object):
         return amount
 
 
-    @require_username
     def get_dollars_giving(self):
         """Return a Decimal.
         """
@@ -761,7 +768,6 @@ class Participant(object):
         return amount
 
 
-    @require_username
     def get_number_of_backers(self):
         """Given a unicode, return an int.
         """
@@ -795,7 +801,6 @@ class Participant(object):
         return nbackers
 
 
-    @require_username
     def get_tip_distribution(self):
         """
             Returns a data structure in the form of:
@@ -855,7 +860,6 @@ class Participant(object):
         return tip_amounts, npatrons, contributed
 
 
-    @require_username
     def get_giving_for_profile(self, db=None):
         """Given a participant id and a date, return a list and a Decimal.
 
@@ -939,7 +943,6 @@ class Participant(object):
         return tips, total, unclaimed_tips, unclaimed_total
 
 
-    @require_username
     def get_tips_and_total(self, for_payday=False, db=None):
         """Given a participant id and a date, return a list and a Decimal.
 
@@ -1039,7 +1042,6 @@ class Participant(object):
     # Accounts Elsewhere
     # ==================
 
-    @require_username
     def take_over(self, account_elsewhere, have_confirmation=False):
         """Given two unicodes, raise WontProceed or return None.
 

@@ -1,9 +1,6 @@
 import re
 
 import gittip
-from gittip.orm import db
-from sqlalchemy.schema import Column
-from sqlalchemy.types import Text, BigInteger
 
 
 name_pattern = re.compile(r'^[A-Za-z0-9,._ -]+$')
@@ -24,7 +21,7 @@ def slugize(slug):
 
 def slug_to_name(slug):
     SQL = "SELECT name FROM community_summary WHERE slug=%s"
-    rec = gittip.db.one(SQL, (slug,))
+    rec = gittip.db.one_or_zero(SQL, (slug,))
     return None if rec is None else rec['name']
 
 
@@ -54,15 +51,10 @@ def get_list_for(user):
         """, (user.username,)))
 
 
-class Community(db.Model):
-    __tablename__ = 'community_summary'
-
-    name = Column(Text)
-    slug = Column(Text, primary_key=True)
-    nmembers = Column(BigInteger)
+class Community(object):
 
     def check_membership(self, user):
-        return gittip.db.one("""
+        return gittip.db.one_or_zero("""
 
         SELECT * FROM current_communities WHERE slug=%s AND participant=%s
 

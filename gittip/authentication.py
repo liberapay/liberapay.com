@@ -7,7 +7,7 @@ import time
 import pytz
 from aspen import Response
 from gittip import csrf
-from gittip.models import User
+from gittip.user import User
 
 
 BEGINNING_OF_EPOCH = rfc822.formatdate(0)

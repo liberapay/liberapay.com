@@ -23,7 +23,7 @@ def canonical():
 def db():
     dburl = os.environ['DATABASE_URL']
     maxconn = int(os.environ['DATABASE_MAXCONN'])
-    gittip.db = Postgres(dburl, maxconn=maxconn, strict_one=False)
+    gittip.db = Postgres(dburl, maxconn=maxconn)
 
     # register hstore type (but don't use RealDictCursor)
     with gittip.db.get_connection() as conn:
@@ -67,11 +67,11 @@ def mixpanel(website):
     gittip.mixpanel.MIXPANEL_TOKEN = os.environ['MIXPANEL_TOKEN']
 
 def nanswers():
-    from gittip.models import participant
+    from gittip import participant
     participant.NANSWERS_THRESHOLD = int(os.environ['NANSWERS_THRESHOLD'])
 
 def nmembers(website):
-    from gittip.models import community
+    from gittip import community
     community.NMEMBERS_THRESHOLD = int(os.environ['NMEMBERS_THRESHOLD'])
     website.NMEMBERS_THRESHOLD = community.NMEMBERS_THRESHOLD
 
