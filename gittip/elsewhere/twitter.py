@@ -39,11 +39,11 @@ def get_user_info(screen_name):
     """
     typecheck(screen_name, unicode)
     try:
-        rec = gittip.db.one( "SELECT user_info FROM elsewhere "
-                             "WHERE platform='twitter' "
-                             "AND user_info->'screen_name' = %s"
-                           , (screen_name,)
-                            )
+        rec = gittip.db.one_or_zero( "SELECT user_info FROM elsewhere "
+                                     "WHERE platform='twitter' "
+                                     "AND user_info->'screen_name' = %s"
+                                   , (screen_name,)
+                                    )
     except TooFew:
         rec = None
 

@@ -121,7 +121,7 @@ assert total_legit == total_charged - total_withdrawn - gittip_fees - balanced_f
 
 nweeks = CARDINALS[((latest.date() - earliest.date()).days / 7) + 1]
 
-overall = db.one("""
+overall = db.one_or_zero("""
 
     SELECT sum(amount + fee), count(amount)
       FROM exchanges

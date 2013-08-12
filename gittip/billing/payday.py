@@ -160,11 +160,11 @@ class Payday(object):
 
         """
         try:
-            rec = self.db.one("INSERT INTO paydays DEFAULT VALUES "
-                              "RETURNING ts_start")
+            rec = self.db.one_or_zero("INSERT INTO paydays DEFAULT VALUES "
+                                      "RETURNING ts_start")
             log("Starting a new payday.")
         except IntegrityError:  # Collision, we have a Payday already.
-            rec = self.db.one("""
+            rec = self.db.one_or_zero("""
 
                 SELECT ts_start
                   FROM paydays
@@ -355,7 +355,7 @@ class Payday(object):
 
 
     def end(self):
-        rec = self.db.one("""\
+        rec = self.db.one_or_zero("""\
 
             UPDATE paydays
                SET ts_end=now()
@@ -845,7 +845,7 @@ class Payday(object):
          RETURNING id
 
         """
-        self.assert_one_payday(self.db.one(STATS))
+        self.assert_one_payday(self.db.one_or_zero(STATS))
 
 
     def mark_charge_failed(self, cursor):
@@ -941,12 +941,12 @@ class Payday(object):
          RETURNING id
 
         """
-        self.assert_one_payday( self.db.one( STATS
-                                           , ( 1 if nsuccessful_tips > 0 else 0
-                                             , nsuccessful_tips  # XXX bug?
-                                              )
-                                            )
-                               )
+        rec = self.db.one_or_zero( STATS
+                                 , ( 1 if nsuccessful_tips > 0 else 0
+                                   , nsuccessful_tips  # XXX bug?
+                                    )
+                                  )
+        self.assert_one_payday(rec)
 
 
     def assert_one_payday(self, payday):

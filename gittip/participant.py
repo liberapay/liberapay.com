@@ -327,7 +327,7 @@ class Participant(object):
         assert self.IS_PLURAL
         membername = member.username if hasattr(member, 'username') \
                                                         else member['username']
-        rec = gittip.db.one("""
+        rec = gittip.db.one_or_zero("""
 
             SELECT amount
               FROM transfers
@@ -347,10 +347,10 @@ class Participant(object):
         """Return a Decimal representation of the take for this member, or 0.
         """
         assert self.IS_PLURAL
-        rec = gittip.db.one( "SELECT take FROM current_memberships "
-                             "WHERE member=%s AND team=%s"
-                           , (member.username, self.username)
-                            )
+        rec = gittip.db.one_or_zero( "SELECT take FROM current_memberships "
+                                     "WHERE member=%s AND team=%s"
+                                   , (member.username, self.username)
+                                    )
         if rec is None:
             return Decimal('0.00')
         else:
@@ -414,7 +414,7 @@ class Participant(object):
     def get_teams_membership(self):
         assert self.IS_PLURAL
         TAKE = "SELECT sum(take) FROM current_memberships WHERE team=%s"
-        total_take = gittip.db.one(TAKE, (self.username,))['sum']
+        total_take = gittip.db.one_or_zero(TAKE, (self.username,))['sum']
         total_take = 0 if total_take is None else total_take
         team_take = max(self.get_dollars_receiving() - total_take, 0)
         membership = { "ctime": None
@@ -481,7 +481,7 @@ class Participant(object):
              WHERE username = %s
 
         """
-        return gittip.db.one(SELECT, (self.username,))
+        return gittip.db.one_or_zero(SELECT, (self.username,))
 
 
     @classmethod
@@ -508,19 +508,20 @@ class Participant(object):
     @staticmethod
     def load_session(SESSION, val):
         from gittip import db
+        # XXX All messed up. Fix me!
         return db.one_or_zero(SESSION, (val,), zero={})
         return out
 
 
     def is_singular(self):
-        rec = gittip.db.one("SELECT number FROM participants "
-                "WHERE username = %s", (self.username,))
+        rec = gittip.db.one_or_zero("SELECT number FROM participants "
+                                    "WHERE username = %s", (self.username,))
 
         return rec['number'] == 'singular'
 
     def is_plural(self):
-        rec = gittip.db.one("SELECT number FROM participants "
-                "WHERE username = %s", (self.username,))
+        rec = gittip.db.one_or_zero("SELECT number FROM participants "
+                                    "WHERE username = %s", (self.username,))
 
         return rec['number'] == 'plural'
 
@@ -542,8 +543,11 @@ class Participant(object):
     def resolve_unclaimed(self):
         """Given a username, return an URL path.
         """
-        rec = gittip.db.one("SELECT platform, user_info FROM elsewhere "
-                            "WHERE participant = %s", (self.username,))
+        rec = gittip.db.one_or_zero( "SELECT platform, user_info "
+                                     "FROM elsewhere "
+                                     "WHERE participant = %s"
+                                   , (self.username,)
+                                    )
         if rec is None:
             out = None
         elif rec['platform'] == 'github':
@@ -610,10 +614,11 @@ class Participant(object):
 
         if suggested != self.username:
             # Will raise IntegrityError if the desired username is taken.
-            rec = gittip.db.one("UPDATE participants "
-                                "SET username=%s WHERE username=%s "
-                                "RETURNING username",
-                                (suggested, self.username))
+            rec = gittip.db.one_or_zero( "UPDATE participants "
+                                         "SET username=%s WHERE username=%s "
+                                         "RETURNING username"
+                                       , (suggested, self.username)
+                                        )
 
             assert rec is not None               # sanity check
             assert suggested == rec['username']  # sanity check
@@ -679,7 +684,7 @@ class Participant(object):
         args = (self.username, tippee, self.username, tippee, amount, \
                                                                  self.username)
         first_time_tipper = \
-                         gittip.db.one(NEW_TIP, args)['first_time_tipper']
+                      gittip.db.one_or_zero(NEW_TIP, args)['first_time_tipper']
         return amount, first_time_tipper
 
 
@@ -696,7 +701,7 @@ class Participant(object):
              LIMIT 1
 
         """
-        rec = gittip.db.one(TIP, (self.username, tippee))
+        rec = gittip.db.one_or_zero(TIP, (self.username, tippee))
         if rec is None:
             tip = Decimal('0.00')
         else:
@@ -724,7 +729,7 @@ class Participant(object):
                     ) AS foo
 
         """
-        rec = gittip.db.one(BACKED, (self.username,))
+        rec = gittip.db.one_or_zero(BACKED, (self.username,))
         if rec is None:
             amount = None
         else:
@@ -756,7 +761,7 @@ class Participant(object):
                     ) AS foo
 
         """
-        rec = gittip.db.one(BACKED, (self.username,))
+        rec = gittip.db.one_or_zero(BACKED, (self.username,))
         if rec is None:
             amount = None
         else:
@@ -789,7 +794,7 @@ class Participant(object):
              WHERE amount > 0
 
         """
-        rec = gittip.db.one(BACKED, (self.username,))
+        rec = gittip.db.one_or_zero(BACKED, (self.username,))
         if rec is None:
             nbackers = None
         else:

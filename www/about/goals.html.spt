@@ -4,7 +4,8 @@ from gittip import db
 
 [-------]
 
-ngoals = db.one("SELECT count(id) FROM participants WHERE goal > 0")['count']
+ngoals = db.one_or_zero("SELECT count(id) FROM participants "
+                        "WHERE goal > 0")['count']
 goals = db.all("""
 
     SELECT *
