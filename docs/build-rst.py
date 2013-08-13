@@ -1,5 +1,15 @@
 #!/usr/bin/env python
-from __future__ import print_function
+"""Generate *.rst files to mirror *.py files in a Python library.
+
+This script is conceptually similar to the sphinx-apidoc script bundled with
+Sphinx:
+
+    http://sphinx-doc.org/man/sphinx-apidoc.html
+
+We produce different *.rst output, however.
+
+"""
+from __future__ import print_function, unicode_literals
 import os
 
 
@@ -23,7 +33,7 @@ def rst_for_module(toc_path):
 
 
 def rst_for_package(root, dirs, files):
-    """Given ../gittip/path/to/package and lists of dir/file names, write rst.
+    """Given ../mylib/path/to/package and lists of dir/file names, write rst.
     """
 
     doc_path = root[3:]
@@ -67,7 +77,8 @@ def rst_for_package(root, dirs, files):
 
 
 def main():
-    for root, dirs, files in os.walk('../gittip'):
+    library_root = os.environ['BUILD_RST_LIBRARY_ROOT']
+    for root, dirs, files in os.walk(library_root):
         rst_for_package(root, dirs, files)
 
 
