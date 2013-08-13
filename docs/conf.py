@@ -90,6 +90,13 @@ pygments_style = 'sphinx'
 #keep_warnings = False
 
 
+# -- Generate RST files -------------------------------------------------------
+
+# We do this in here instead of in the Makefile so that RTD picks this up.
+os.environ['AUTOLIB_LIBRARY_ROOT'] = '../gittip'
+os.system("./autolib.py")
+
+
 # -- Options for HTML output ---------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for

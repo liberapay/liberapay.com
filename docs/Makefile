@@ -30,9 +30,9 @@ clean:
 	rm -rf $(BUILDDIR)/*
 
 rst:
-	./build-rst.py
+	AUTOLIB_LIBRARY_ROOT=../gittip ./autolib.py
 
-html: rst
+html:
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."

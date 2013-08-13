@@ -77,7 +77,7 @@ def rst_for_package(root, dirs, files):
 
 
 def main():
-    library_root = os.environ['BUILD_RST_LIBRARY_ROOT']
+    library_root = os.environ['AUTOLIB_LIBRARY_ROOT']
     for root, dirs, files in os.walk(library_root):
         rst_for_package(root, dirs, files)
 
