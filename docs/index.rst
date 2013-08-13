@@ -2,7 +2,7 @@ www.gittip.com
 ==============
 
 Welcome! This is the documentation for programmers working on `www.gittip.com`_
-(not to be confused with programmers working with our `web API`_).
+(not to be confused with programmers working with Gittip's `web API`_).
 
 .. _www.gittip.com: https://github.com/gittip/www.gittip.com
 .. _web API: https://github.com/gittip/www.gittip.com#api
