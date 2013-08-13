@@ -12,5 +12,6 @@ Contents
 --------
 
 .. toctree::
+    :maxdepth: 2
 
     gittip Python library <gittip>
