@@ -3,10 +3,7 @@
 from __future__ import unicode_literals
 
 import datetime
-import copy
-import os
 import random
-import re
 import unittest
 from decimal import Decimal
 from os.path import join, dirname, realpath
@@ -15,10 +12,10 @@ import gittip
 from aspen import resources
 from aspen.testing import Website, StubRequest
 from aspen.utils import utcnow
-from gittip import orm, wireup
-from gittip.models.participant import Participant
-from gittip.authentication import User
+from gittip import wireup
 from gittip.billing.payday import Payday
+from gittip.models.participant import Participant
+from gittip.models.user import User
 
 
 TOP = join(realpath(dirname(dirname(__file__))), '..')
@@ -42,16 +39,13 @@ class Harness(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.db = orm.db
-        cls.session = orm.db.session
-        """ Assign gittip.db directly because wireup.db() is called earlier  """
-        cls.postgres = gittip.db
+        cls.db = gittip.db = wireup.db()
 
     def setUp(self):
         pass
 
     def tearDown(self):
-        self.db.empty_tables()
+        pass
 
     def make_participant(self, username, number='singular', **kw):
         participant = Participant( username=username
@@ -59,8 +53,6 @@ class Harness(unittest.TestCase):
                                  , number=number
                                  , **kw
                                   )
-        self.session.add(participant)
-        self.session.commit()
         return participant
 
 

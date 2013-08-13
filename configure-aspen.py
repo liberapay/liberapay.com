@@ -4,9 +4,9 @@ import time
 
 import gittip
 import gittip.wireup
-import gittip.authentication
-import gittip.csrf
-import gittip.cache_static
+import gittip.security.authentication
+import gittip.security.csrf
+import gittip.utils.cache_static
 from aspen import log_dammit
 
 
@@ -41,15 +41,15 @@ website.hooks.startup.insert(0, up_minthreads)
 
 website.hooks.inbound_early += [ gittip.canonize
                                , gittip.configure_payments
-                               , gittip.authentication.inbound
-                               , gittip.csrf.inbound
+                               , gittip.security.authentication.inbound
+                               , gittip.security.csrf.inbound
                                 ]
 
-website.hooks.inbound_core += [gittip.cache_static.inbound]
+website.hooks.inbound_core += [gittip.utils.cache_static.inbound]
 
-website.hooks.outbound += [ gittip.authentication.outbound
-                          , gittip.csrf.outbound
-                          , gittip.cache_static.outbound
+website.hooks.outbound += [ gittip.security.authentication.outbound
+                          , gittip.security.csrf.outbound
+                          , gittip.utils.cache_static.outbound
                            ]
 
 

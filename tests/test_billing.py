@@ -5,7 +5,8 @@ import mock
 from nose.tools import assert_equals, assert_raises
 
 import gittip
-from gittip import authentication, billing
+from gittip import billing
+from gittip.security import authentication
 from gittip.testing import Harness
 
 

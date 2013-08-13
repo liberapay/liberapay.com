@@ -19,6 +19,7 @@ from decimal import Decimal
 import gittip
 import pytz
 from psycopg2 import IntegrityError
+from aspen.utils import typecheck
 from gittip.models.team import Team
 
 
@@ -29,41 +30,13 @@ ASCII_ALLOWED_IN_USERNAME = set("0123456789"
 NANSWERS_THRESHOLD = 0  # configured in wireup.py
 
 
-class Participant(Team):
+class Participant(object):
     """Represent a Gittip participant.
     """
 
     ################################################################
     ############### BEGIN COPY/PASTE OF ORM VERSION
     ################################################################
-
-    @classmethod
-    def from_username(cls, username):
-        # Note that User.from_username overrides this. It authenticates people!
-        try:
-            return cls.query.filter_by(username_lower=username.lower()).one()
-        except exc.NoResultFound:
-            return None
-
-    def __eq__(self, other):
-        return self.id == other.id
-
-    def __ne__(self, other):
-        return self.id != other.id
-
-    @property
-    def tips_giving(self):
-        return self._tips_giving.distinct("tips.tippee")\
-                                .order_by("tips.tippee, tips.mtime DESC")
-
-    @property
-    def tips_receiving(self):
-        return self._tips_receiving.distinct("tips.tipper")\
-                                   .order_by("tips.tipper, tips.mtime DESC")
-
-    @property
-    def accepts_tips(self):
-        return (self.goal is None) or (self.goal >= 0)
 
     @property
     def valid_tips_receiving(self):
@@ -95,88 +68,6 @@ class Participant(Team):
                           , Participant.last_bill_result == ''
                            )
 
-    def resolve_unclaimed(self):
-        if self.accounts_elsewhere:
-            return self.accounts_elsewhere[0].resolve_unclaimed()
-        else:
-            return None
-
-    def set_as_claimed(self, claimed_at=None):
-        if claimed_at is None:
-            claimed_at = datetime.datetime.now(pytz.utc)
-        self.claimed_time = claimed_at
-        db.session.add(self)
-        db.session.commit()
-
-    def get_accounts_elsewhere(self):
-        github_account = twitter_account = bitbucket_account = \
-                                                    bountysource_account = None
-        for account in self.accounts_elsewhere.all():
-            if account.platform == "github":
-                github_account = account
-            elif account.platform == "twitter":
-                twitter_account = account
-            elif account.platform == "bitbucket":
-                bitbucket_account = account
-            elif account.platform == "bountysource":
-                bountysource_account = account
-            else:
-                raise self.UnknownPlatform(account.platform)
-        return ( github_account
-               , twitter_account
-               , bitbucket_account
-               , bountysource_account
-                )
-
-    def get_img_src(self, size=128):
-        """Return a value for <img src="..." />.
-
-        Until we have our own profile pics, delegate. XXX Is this an attack
-        vector? Can someone inject this value? Don't think so, but if you make
-        it happen, let me know, eh? Thanks. :)
-
-            https://www.gittip.com/security.txt
-
-        """
-        typecheck(size, int)
-
-        src = '/assets/%s/avatar-default.gif' % os.environ['__VERSION__']
-
-        github, twitter, bitbucket, bountysource = self.get_accounts_elsewhere()
-        if github is not None:
-            # GitHub -> Gravatar: http://en.gravatar.com/site/implement/images/
-            if 'gravatar_id' in github.user_info:
-                gravatar_hash = github.user_info['gravatar_id']
-                src = "https://www.gravatar.com/avatar/%s.jpg?s=%s"
-                src %= (gravatar_hash, size)
-
-        elif twitter is not None:
-            # https://dev.twitter.com/docs/api/1.1/get/users/show
-            if 'profile_image_url_https' in twitter.user_info:
-                src = twitter.user_info['profile_image_url_https']
-
-                # For Twitter, we don't have good control over size. The
-                # biggest option is 73px(?!), but that's too small. Let's go
-                # with the original: even though it may be huge, that's
-                # preferrable to guaranteed blurriness. :-/
-
-                src = src.replace('_normal.', '.')
-
-        return src
-
-    def get_tip_to(self, tippee):
-        tip = self.tips_giving.filter_by(tippee=tippee).first()
-
-        if tip:
-            amount = tip.amount
-        else:
-            amount = Decimal('0.00')
-
-        return amount
-
-    def get_dollars_receiving(self):
-        return sum(tip.amount for tip in self.valid_tips_receiving) + Decimal('0.00')
-
     def get_number_of_backers(self):
         amount_column = self.valid_tips_receiving.subquery().columns.amount
         count = func.count(amount_column)
@@ -202,9 +93,6 @@ class Participant(Team):
             out = (now - self.claimed_time).total_seconds()
         return out
 
-
-
-
     ################################################################
     ############### END COPY/PASTE OF ORM VERSION
     ################################################################
@@ -213,6 +101,12 @@ class Participant(Team):
     def __init__(self, username):
         typecheck(username, (unicode, None))
         self.username = username
+
+    def __eq__(self, other):
+        return self.username == other.username
+
+    def __ne__(self, other):
+        return self.username != other.username
 
 
     def get_details(self):
@@ -301,6 +195,14 @@ class Participant(Team):
     # An unclaimed Participant is a stub that's created when someone pledges to
     # give to an AccountElsewhere that's not been connected on Gittip yet.
 
+    # XXX
+
+    def resolve_unclaimed(self):
+        if self.accounts_elsewhere:
+            return self.accounts_elsewhere[0].resolve_unclaimed()
+        else:
+            return None
+
     def resolve_unclaimed(self):
         """Given a username, return an URL path.
         """
@@ -318,6 +220,16 @@ class Participant(Team):
             out = '/on/twitter/%s/' % rec['user_info']['screen_name']
         return out
 
+
+    # XXX
+
+    def set_as_claimed(self, claimed_at=None):
+        if claimed_at is None:
+            claimed_at = datetime.datetime.now(pytz.utc)
+        self.claimed_time = claimed_at
+        db.session.add(self)
+        db.session.commit()
+
     def set_as_claimed(self):
         CLAIM = """\
 
@@ -328,6 +240,9 @@ class Participant(Team):
 
         """
         gittip.db.run(CLAIM, (self.username,))
+
+
+
 
     def insert_into_communities(self, is_member, name, slug):
         username = self.username
@@ -386,6 +301,28 @@ class Participant(Team):
             self.username = suggested
 
 
+    # XXX
+
+    def get_accounts_elsewhere(self):
+        github_account = twitter_account = bitbucket_account = \
+                                                    bountysource_account = None
+        for account in self.accounts_elsewhere.all():
+            if account.platform == "github":
+                github_account = account
+            elif account.platform == "twitter":
+                twitter_account = account
+            elif account.platform == "bitbucket":
+                bitbucket_account = account
+            elif account.platform == "bountysource":
+                bountysource_account = account
+            else:
+                raise self.UnknownPlatform(account.platform)
+        return ( github_account
+               , twitter_account
+               , bitbucket_account
+               , bountysource_account
+                )
+
     def get_accounts_elsewhere(self):
         """Return a two-tuple of elsewhere dicts.
         """
@@ -403,6 +340,44 @@ class Participant(Team):
                 assert account['platform'] == 'twitter', account['platform']
                 twitter_account = account
         return (github_account, twitter_account)
+
+    def get_img_src(self, size=128):
+        """Return a value for <img src="..." />.
+
+        Until we have our own profile pics, delegate. XXX Is this an attack
+        vector? Can someone inject this value? Don't think so, but if you make
+        it happen, let me know, eh? Thanks. :)
+
+            https://www.gittip.com/security.txt
+
+        """
+        typecheck(size, int)
+
+        src = '/assets/%s/avatar-default.gif' % os.environ['__VERSION__']
+
+        github, twitter, bitbucket, bountysource = self.get_accounts_elsewhere()
+        if github is not None:
+            # GitHub -> Gravatar: http://en.gravatar.com/site/implement/images/
+            if 'gravatar_id' in github.user_info:
+                gravatar_hash = github.user_info['gravatar_id']
+                src = "https://www.gravatar.com/avatar/%s.jpg?s=%s"
+                src %= (gravatar_hash, size)
+
+        elif twitter is not None:
+            # https://dev.twitter.com/docs/api/1.1/get/users/show
+            if 'profile_image_url_https' in twitter.user_info:
+                src = twitter.user_info['profile_image_url_https']
+
+                # For Twitter, we don't have good control over size. The
+                # biggest option is 73px(?!), but that's too small. Let's go
+                # with the original: even though it may be huge, that's
+                # preferrable to guaranteed blurriness. :-/
+
+                src = src.replace('_normal.', '.')
+
+        return src
+
+
 
 
     def set_tip_to(self, tippee, amount):
@@ -449,6 +424,18 @@ class Participant(Team):
         return amount, first_time_tipper
 
 
+    # XXX
+
+    def get_tip_to(self, tippee):
+        tip = self.tips_giving.filter_by(tippee=tippee).first()
+
+        if tip:
+            amount = tip.amount
+        else:
+            amount = Decimal('0.00')
+
+        return amount
+
     def get_tip_to(self, tippee):
         """Given two user ids, return a Decimal.
         """
@@ -470,6 +457,11 @@ class Participant(Team):
         return tip
 
 
+
+    # XXX
+
+    def get_dollars_receiving(self):
+        return sum(tip.amount for tip in self.valid_tips_receiving) + Decimal('0.00')
     def get_dollars_receiving(self):
         """Return a Decimal.
         """

@@ -67,11 +67,11 @@ def mixpanel(website):
     gittip.utils.mixpanel.MIXPANEL_TOKEN = os.environ['MIXPANEL_TOKEN']
 
 def nanswers():
-    from gittip import participant
+    from gittip.models import participant
     participant.NANSWERS_THRESHOLD = int(os.environ['NANSWERS_THRESHOLD'])
 
 def nmembers(website):
-    from gittip import community
+    from gittip.models import community
     community.NMEMBERS_THRESHOLD = int(os.environ['NMEMBERS_THRESHOLD'])
     website.NMEMBERS_THRESHOLD = community.NMEMBERS_THRESHOLD
 

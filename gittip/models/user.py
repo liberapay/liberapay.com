@@ -1,6 +1,6 @@
 import uuid
 
-from gittip.participant import Participant
+from gittip.models.participant import Participant
 
 
 class User(object):
