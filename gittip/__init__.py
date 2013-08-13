@@ -1,3 +1,5 @@
+"""This is Gittip.
+"""
 import datetime
 import locale
 import os
