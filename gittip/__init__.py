@@ -1,4 +1,4 @@
-"""This is Gittip.
+"""This is the Python library behind www.gittip.com.
 """
 import datetime
 import locale
