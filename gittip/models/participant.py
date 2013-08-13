@@ -19,7 +19,7 @@ from decimal import Decimal
 import gittip
 import pytz
 from psycopg2 import IntegrityError
-from gittip.team import Team
+from gittip.models.team import Team
 
 
 ASCII_ALLOWED_IN_USERNAME = set("0123456789"

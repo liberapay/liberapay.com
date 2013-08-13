@@ -60,20 +60,20 @@ def rst_for_package(root, dirs, files):
         w(f, "    {}", toc_path)
         return os.path.join(parent, toc_path)
 
-    for name in sorted(dirs):
-        toc(doc_path, name)
+    for name in sorted(dirs + files):
+        if name in dirs:
+            toc(doc_path, name)
+        else:
+            if not name.endswith('.py'): continue
+            if name == '__init__.py': continue
 
-    for name in sorted(files):
-        if not name.endswith('.py'): continue
-        if name == '__init__.py': continue
-
-        toc_path = toc(doc_path, name)
+            toc_path = toc(doc_path, name)
 
 
-        # Write a rst file for each module.
-        # =================================
+            # Write a rst file for each module.
+            # =================================
 
-        rst_for_module(toc_path)
+            rst_for_module(toc_path)
 
 
 def main():
