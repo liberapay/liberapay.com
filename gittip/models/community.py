@@ -56,7 +56,7 @@ def get_list_for(user):
     """.format(member_test, sort_order), params)
 
 
-class Community(Model):
+class Community(object):
     """Model a community on Gittip.
     """
 
