@@ -21,6 +21,7 @@ from aspen import Response
 from psycopg2 import IntegrityError
 from postgres.orm import Model
 from gittip.models._mixin_elsewhere import MixinElsewhere
+from gittip.utils import canonicalize
 
 
 ASCII_ALLOWED_IN_USERNAME = set("0123456789"
@@ -804,26 +805,27 @@ def reserve_a_random_username(txn):
     return username
 
 
-def typecast(request, restrict=True):
+def typecast(request):
     """Given a Request, raise Response or return Participant.
 
     If user is not None then we'll restrict access to owners and admins.
 
     """
 
+    # XXX We can't use this yet because we don't have an inbound Aspen hook
+    # that fires after the first page of the simplate is exec'd.
+
     path = request.line.uri.path
     if 'username' not in path:
         return
 
     slug = path['username']
-    user = request.context['user']
 
-    if restrict:
-        if user.ANON:
-            request.redirect(u'/%s/' % slug)
-
-    participant = \
-           Participant.query.filter_by(username_lower=slug.lower()).first()
+    participant = gittip.db.one_or_zero( "SELECT participants.*::participants "
+                                         "FROM participants "
+                                         "WHERE username_lower=%s"
+                                       , (slug.lower())
+                                        )
 
     if participant is None:
         raise Response(404)
@@ -840,10 +842,5 @@ def typecast(request, restrict=True):
         if to is None:
             raise Response(404)
         request.redirect(to)
-
-    if restrict:
-        if participant != user:
-            if not user.ADMIN:
-                raise Response(403)
 
     path['participant'] = participant

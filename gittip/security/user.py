@@ -55,8 +55,8 @@ class User(object):
         self.participant = None
 
 
-    # Role Booleans
-    # =============
+    # Roles
+    # =====
 
     @property
     def ADMIN(self):
@@ -65,3 +65,26 @@ class User(object):
     @property
     def ANON(self):
         return self.participant is None
+
+    def get_highest_role(self, owner):
+        """Return a string representing the highest role this user has.
+
+        :param string owner: the username of the owner of the resource we're
+            concerned with, or None
+
+        """
+        def is_owner():
+            if self.participant is not None:
+                if owner is not None:
+                    if self.participant.username == owner:
+                        return True
+            return False
+
+        if self.ADMIN:
+            return 'admin'
+        elif is_owner():
+            return 'owner'
+        elif not self.ANON:
+            return 'authenticated'
+        else:
+            return 'anonymous'

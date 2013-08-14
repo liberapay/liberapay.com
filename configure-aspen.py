@@ -46,10 +46,10 @@ website.hooks.inbound_early += [ gittip.canonize
                                , gittip.security.csrf.inbound
                                 ]
 
-website.hooks.inbound_core += [gittip.utils.cache_static.inbound]
-
-website.hooks.inbound_late += [ participant.typecast
-                              , community.typecast
+website.hooks.inbound_late += [ gittip.utils.cache_static.inbound
+                              #, gittip.security.authentication.check_role
+                              #, participant.typecast
+                              #, community.typecast
                                ]
 
 website.hooks.outbound += [ gittip.security.authentication.outbound
