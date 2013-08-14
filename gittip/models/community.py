@@ -27,7 +27,7 @@ def slug_to_name(slug):
 
 def get_list_for(user):
     if user is None or (hasattr(user, 'ANON') and user.ANON):
-        return list(gittip.db.all("""
+        return gittip.db.all("""
 
             SELECT max(name) AS name
                  , slug
@@ -36,9 +36,9 @@ def get_list_for(user):
           GROUP BY slug
           ORDER BY nmembers DESC, slug
 
-        """))
+        """)
     else:
-        return list(gittip.db.all("""
+        return gittip.db.all("""
 
             SELECT max(name) AS name
                  , slug
@@ -48,7 +48,7 @@ def get_list_for(user):
           GROUP BY slug
           ORDER BY nmembers ASC, slug
 
-        """, (user.username,)))
+        """, (user.username,))
 
 
 class Community(object):
@@ -59,3 +59,7 @@ class Community(object):
         SELECT * FROM current_communities WHERE slug=%s AND participant=%s
 
         """, (self.slug, user.username)) is not None
+
+
+def typecast(request):
+    pass

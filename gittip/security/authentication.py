@@ -7,7 +7,7 @@ import time
 import pytz
 from aspen import Response
 from gittip.security import csrf
-from gittip.models.user import User
+from gittip.security.user import User
 
 
 BEGINNING_OF_EPOCH = rfc822.formatdate(0)
@@ -59,14 +59,11 @@ def outbound(response):
             response.headers.cookie['session'] = ''
             expires = 0
     else: # user is authenticated
-        user = User.from_session_token(user.session_token)
+        user = User.from_session_token(user.participant.session_token)
         response.headers['Expires'] = BEGINNING_OF_EPOCH # don't cache
-        response.headers.cookie['session'] = user.session_token
+        response.headers.cookie['session'] = user.participant.session_token
         expires = time.time() + TIMEOUT
-        user.session_expires = datetime.datetime.fromtimestamp(expires)\
-                                                .replace(tzinfo=pytz.utc)
-        db.session.add(user)
-        db.session.commit()
+        user.keep_signed_in_until(expires)
 
     cookie = response.headers.cookie['session']
     # I am not setting domain, because it is supposed to default to what we

@@ -1,5 +1,5 @@
 from faker import Factory
-from gittip import orm, wireup, MAX_TIP, MIN_TIP
+from gittip import wireup, MAX_TIP, MIN_TIP
 from gittip.models.tip import Tip
 from gittip.models.participant import Participant
 from gittip.models.elsewhere import Elsewhere
@@ -60,7 +60,7 @@ def fake_participant(is_admin=False, anonymous=False):
 def fake_tip_amount():
     amount = ((decimal.Decimal(random.random()) * (MAX_TIP - MIN_TIP))
             + MIN_TIP)
-    
+
     decimal_amount = decimal.Decimal(amount).quantize(decimal.Decimal('.01'))
 
     return decimal_amount

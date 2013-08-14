@@ -7,6 +7,7 @@ import gittip.wireup
 import gittip.security.authentication
 import gittip.security.csrf
 import gittip.utils.cache_static
+from gittip.models import community, participant
 from aspen import log_dammit
 
 
@@ -46,6 +47,10 @@ website.hooks.inbound_early += [ gittip.canonize
                                 ]
 
 website.hooks.inbound_core += [gittip.utils.cache_static.inbound]
+
+website.hooks.inbound_late += [ participant.typecast
+                              , community.typecast
+                               ]
 
 website.hooks.outbound += [ gittip.security.authentication.outbound
                           , gittip.security.csrf.outbound

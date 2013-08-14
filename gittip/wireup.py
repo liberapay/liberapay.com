@@ -12,6 +12,7 @@ import stripe
 import gittip.utils.mixpanel
 from postgres import Postgres
 from psycopg2.extensions import cursor as RegularCursor
+from gittip.models.participant import Participant
 
 
 def canonical():
@@ -23,14 +24,16 @@ def canonical():
 def db():
     dburl = os.environ['DATABASE_URL']
     maxconn = int(os.environ['DATABASE_MAXCONN'])
-    gittip.db = Postgres(dburl, maxconn=maxconn)
+    db = gittip.db = Postgres(dburl, maxconn=maxconn)
 
     # register hstore type (but don't use RealDictCursor)
-    with gittip.db.get_connection() as conn:
+    with db.get_connection() as conn:
         curs = conn.cursor(cursor_factory=RegularCursor)
         psycopg2.extras.register_hstore(curs, globally=True, unicode=True)
 
-    return gittip.db
+    db.register_model(Participant)
+
+    return db
 
 
 def billing():

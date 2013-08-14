@@ -1,7 +1,7 @@
 import os
 import md5
 import time
-from gittip.models import Participant
+from gittip.models.participant import Participant
 from gittip.elsewhere import AccountElsewhere, _resolve
 
 www_host = os.environ['BOUNTYSOURCE_WWW_HOST'].decode('ASCII')

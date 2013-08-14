@@ -18,9 +18,10 @@ from decimal import Decimal
 
 import gittip
 import pytz
-from psycopg2 import IntegrityError
+from aspen import Response
 from aspen.utils import typecheck
-from gittip.models.team import Team
+from psycopg2 import IntegrityError
+from postgres.orm import Model
 
 
 ASCII_ALLOWED_IN_USERNAME = set("0123456789"
@@ -30,77 +31,11 @@ ASCII_ALLOWED_IN_USERNAME = set("0123456789"
 NANSWERS_THRESHOLD = 0  # configured in wireup.py
 
 
-class Participant(object):
+class Participant(Model):
     """Represent a Gittip participant.
     """
 
-    ################################################################
-    ############### BEGIN COPY/PASTE OF ORM VERSION
-    ################################################################
-
-    @property
-    def valid_tips_receiving(self):
-        '''
-
-      SELECT count(anon_1.amount) AS count_1
-        FROM ( SELECT DISTINCT ON (tips.tipper)
-                      tips.id AS id
-                    , tips.ctime AS ctime
-                    , tips.mtime AS mtime
-                    , tips.tipper AS tipper
-                    , tips.tippee AS tippee
-                    , tips.amount AS amount
-                 FROM tips
-                 JOIN participants ON tips.tipper = participants.username
-                WHERE %(param_1)s = tips.tippee
-                  AND participants.is_suspicious IS NOT true
-                  AND participants.last_bill_result = %(last_bill_result_1)s
-             ORDER BY tips.tipper, tips.mtime DESC
-              ) AS anon_1
-       WHERE anon_1.amount > %(amount_1)s
-
-        '''
-        return self.tips_receiving \
-                   .join( Participant
-                        , Tip.tipper.op('=')(Participant.username)
-                         ) \
-                   .filter( 'participants.is_suspicious IS NOT true'
-                          , Participant.last_bill_result == ''
-                           )
-
-    def get_number_of_backers(self):
-        amount_column = self.valid_tips_receiving.subquery().columns.amount
-        count = func.count(amount_column)
-        nbackers = db.session.query(count).filter(amount_column > 0).one()[0]
-        return nbackers
-
-    def get_og_title(self):
-        out = self.username
-        receiving = self.get_dollars_receiving()
-        giving = self.get_dollars_giving()
-        if (giving > receiving) and not self.anonymous:
-            out += " gives $%.2f/wk" % giving
-        elif receiving > 0:
-            out += " receives $%.2f/wk" % receiving
-        else:
-            out += " is"
-        return out + " on Gittip"
-
-    def get_age_in_seconds(self):
-        out = -1
-        if self.claimed_time is not None:
-            now = datetime.datetime.now(self.claimed_time.tzinfo)
-            out = (now - self.claimed_time).total_seconds()
-        return out
-
-    ################################################################
-    ############### END COPY/PASTE OF ORM VERSION
-    ################################################################
-
-
-    def __init__(self, username):
-        typecheck(username, (unicode, None))
-        self.username = username
+    typname = 'participants'
 
     def __eq__(self, other):
         return self.username == other.username
@@ -109,47 +44,74 @@ class Participant(object):
         return self.username != other.username
 
 
-    def get_details(self):
-        """Return a dictionary.
-        """
-        SELECT = """
-
-            SELECT *
-              FROM participants
-             WHERE username = %s
-
-        """
-        return gittip.db.one_or_zero(SELECT, (self.username,))
-
+    # Additional Constructors
+    # =======================
 
     @classmethod
     def from_session_token(cls, token):
-        SESSION = ("SELECT * FROM participants "
-                   "WHERE is_suspicious IS NOT true "
-                   "AND session_token=%s")
-        session = cls.load_session(SESSION, token)
-        return cls(session)
+        return cls.db.one_or_zero("""
+
+            SELECT participants.*::participants
+              FROM participants
+             WHERE is_suspicious IS NOT true
+               AND session_token=%s
+
+        """, (token,))
 
     @classmethod
-    def from_id(cls, participant_id):
-        from gittip import db
-        SESSION = ("SELECT * FROM participants "
-                   "WHERE is_suspicious IS NOT true "
-                   "AND id=%s")
-        session = cls.load_session(SESSION, participant_id)
-        session['session_token'] = uuid.uuid4().hex
-        db.execute( "UPDATE participants SET session_token=%s WHERE id=%s"
-                  , (session['session_token'], participant_id)
-                   )
-        return cls(session)
+    def from_username(cls, username):
+        return cls.db.one_or_zero("""
 
-    @staticmethod
-    def load_session(SESSION, val):
-        from gittip import db
-        # XXX All messed up. Fix me!
-        return db.one_or_zero(SESSION, (val,), zero={})
-        return out
+            SELECT participants.*::participants
+              FROM participants
+             WHERE is_suspicious IS NOT true
+               AND username=%s
 
+        """, (username,))
+
+
+    # Session Management
+    # ==================
+
+    def start_new_session(self):
+        """Set ``session_token`` in the database to a new uuid.
+
+        :database: One UPDATE, one row
+
+        """
+        self._update_session_token(uuid.uuid4().hex)
+
+    def end_session(self):
+        """Set ``session_token`` in the database to ``NULL``.
+
+        :database: One UPDATE, one row
+
+        """
+        self._update_session_token(None)
+
+    def _update_session_token(self, new_token):
+        self.db.run( "UPDATE participants SET session_token=%s WHERE id=%s"
+                   , (new_token, self.id,)
+                    )
+        self.update_attributes(session_token=new_token)
+
+    def set_session_expires(self, expires):
+        """Set session_expires in the database.
+
+        :param float expires: A UNIX timestamp, which XXX we assume is UTC?
+        :database: One UPDATE, one row
+
+        """
+        session_expires = datetime.datetime.fromtimestamp(expires) \
+                                                      .replace(tzinfo=pytz.utc)
+        self.db.run( "UPDATE participants SET session_expires=%s WHERE id=%s"
+                   , (session_expires, self.id,)
+                    )
+        self.update_attributes(session_expires=session_expires)
+
+
+    # Number
+    # ======
 
     def is_singular(self):
         rec = gittip.db.one_or_zero("SELECT number FROM participants "
@@ -853,3 +815,113 @@ def reserve_a_random_username(txn):
             break
 
     return username
+
+
+
+    ################################################################
+    ############### BEGIN COPY/PASTE OF ORM VERSION
+    ################################################################
+
+    @property
+    def valid_tips_receiving(self):
+        '''
+
+      SELECT count(anon_1.amount) AS count_1
+        FROM ( SELECT DISTINCT ON (tips.tipper)
+                      tips.id AS id
+                    , tips.ctime AS ctime
+                    , tips.mtime AS mtime
+                    , tips.tipper AS tipper
+                    , tips.tippee AS tippee
+                    , tips.amount AS amount
+                 FROM tips
+                 JOIN participants ON tips.tipper = participants.username
+                WHERE %(param_1)s = tips.tippee
+                  AND participants.is_suspicious IS NOT true
+                  AND participants.last_bill_result = %(last_bill_result_1)s
+             ORDER BY tips.tipper, tips.mtime DESC
+              ) AS anon_1
+       WHERE anon_1.amount > %(amount_1)s
+
+        '''
+        return self.tips_receiving \
+                   .join( Participant
+                        , Tip.tipper.op('=')(Participant.username)
+                         ) \
+                   .filter( 'participants.is_suspicious IS NOT true'
+                          , Participant.last_bill_result == ''
+                           )
+
+    def get_number_of_backers(self):
+        amount_column = self.valid_tips_receiving.subquery().columns.amount
+        count = func.count(amount_column)
+        nbackers = db.session.query(count).filter(amount_column > 0).one()[0]
+        return nbackers
+
+    def get_og_title(self):
+        out = self.username
+        receiving = self.get_dollars_receiving()
+        giving = self.get_dollars_giving()
+        if (giving > receiving) and not self.anonymous:
+            out += " gives $%.2f/wk" % giving
+        elif receiving > 0:
+            out += " receives $%.2f/wk" % receiving
+        else:
+            out += " is"
+        return out + " on Gittip"
+
+    def get_age_in_seconds(self):
+        out = -1
+        if self.claimed_time is not None:
+            now = datetime.datetime.now(self.claimed_time.tzinfo)
+            out = (now - self.claimed_time).total_seconds()
+        return out
+
+    ################################################################
+    ############### END COPY/PASTE OF ORM VERSION
+    ################################################################
+
+
+def typecast(request, restrict=True):
+    """Given a Request, raise Response or return Participant.
+
+    If user is not None then we'll restrict access to owners and admins.
+
+    """
+
+    path = request.line.uri.path
+    if 'username' not in path:
+        return
+
+    slug = path['username']
+    user = request.context['user']
+
+    if restrict:
+        if user.ANON:
+            request.redirect(u'/%s/' % slug)
+
+    participant = \
+           Participant.query.filter_by(username_lower=slug.lower()).first()
+
+    if participant is None:
+        raise Response(404)
+
+    canonicalize(request.line.uri.path.raw, '/', participant.username, slug)
+
+    if participant.claimed_time is None:
+
+        # This is a stub participant record for someone on another platform
+        # who hasn't actually registered with Gittip yet. Let's bounce the
+        # viewer over to the appropriate platform page.
+
+        to = participant.resolve_unclaimed()
+        if to is None:
+            raise Response(404)
+        request.redirect(to)
+
+    if restrict:
+        if participant != user:
+            if not user.ADMIN:
+                raise Response(403)
+
+    path['participant'] = participant

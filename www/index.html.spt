@@ -2,7 +2,7 @@ from aspen import Response
 from aspen.utils import to_age
 from gittip import db
 from gittip.elsewhere import github
-from gittip.models.participant import Participant
+
 
 LUXURY = 4  # used for responsive design to limit items shown on small screens
 
@@ -10,10 +10,9 @@ def _wrap(raw):
     """This is a step on the way to ORM-ifying this simplate.
     """
     for rec in raw:
-        out = Participant.query.get(rec['username'])
         if 'amount' in rec:
-            out.amount = rec['amount']
-        yield out
+            rec.amount = rec['amount']
+        yield rec
 
 def _to_age(participant):
     # XXX I can't believe I'm doing this. Evolve aspen.utils.to_age!
