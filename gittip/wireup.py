@@ -10,9 +10,9 @@ import raven
 import psycopg2
 import stripe
 import gittip.utils.mixpanel
+from gittip.models.participant import Participant
 from postgres import Postgres
 from psycopg2.extensions import cursor as RegularCursor
-from gittip.models.participant import Participant
 
 
 def canonical():

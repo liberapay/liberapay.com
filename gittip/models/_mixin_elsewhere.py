@@ -77,3 +77,18 @@ class MixinElsewhere(object):
                 src = src.replace('_normal.', '.')
 
         return src
+
+
+# Utter Hack
+# ==========
+
+def utter_hack(records):
+    for rec in records:
+        yield UtterHack(rec)
+
+class UtterHack(MixinElsewhere):
+    def __init__(self, rec):
+        import gittip
+        self.db = gittip.db
+        for name in rec._fields:
+            setattr(self, name, getattr(rec, name))
