@@ -1,18 +1,22 @@
 from aspen import Response
 from aspen.utils import to_age
 from gittip import db
-from gittip.elsewhere import github
+from gittip.models._mixin_elsewhere import MixinElsewhere
 
 
 LUXURY = 4  # used for responsive design to limit items shown on small screens
 
 def _wrap(raw):
-    """This is a step on the way to ORM-ifying this simplate.
     """
+    """
+    class UtterHack(MixinElsewhere):
+        def __init__(self, rec):
+            self.db = db
+            for name in rec._fields:
+                setattr(self, name, getattr(rec, name))
+
     for rec in raw:
-        if 'amount' in rec:
-            rec.amount = rec['amount']
-        yield rec
+        yield UtterHack(rec)
 
 def _to_age(participant):
     # XXX I can't believe I'm doing this. Evolve aspen.utils.to_age!

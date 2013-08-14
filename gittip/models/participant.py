@@ -11,7 +11,6 @@ of participant, based on certain properties.
 from __future__ import unicode_literals
 
 import datetime
-import os
 import random
 import uuid
 from decimal import Decimal
@@ -19,9 +18,9 @@ from decimal import Decimal
 import gittip
 import pytz
 from aspen import Response
-from aspen.utils import typecheck
 from psycopg2 import IntegrityError
 from postgres.orm import Model
+from gittip.models._mixin_elsewhere import MixinElsewhere
 
 
 ASCII_ALLOWED_IN_USERNAME = set("0123456789"
@@ -31,7 +30,7 @@ ASCII_ALLOWED_IN_USERNAME = set("0123456789"
 NANSWERS_THRESHOLD = 0  # configured in wireup.py
 
 
-class Participant(Model):
+class Participant(Model, MixinElsewhere):
     """Represent a Gittip participant.
     """
 
@@ -261,84 +260,6 @@ class Participant(Model):
             assert rec is not None               # sanity check
             assert suggested == rec['username']  # sanity check
             self.username = suggested
-
-
-    # XXX
-
-    def get_accounts_elsewhere(self):
-        github_account = twitter_account = bitbucket_account = \
-                                                    bountysource_account = None
-        for account in self.accounts_elsewhere.all():
-            if account.platform == "github":
-                github_account = account
-            elif account.platform == "twitter":
-                twitter_account = account
-            elif account.platform == "bitbucket":
-                bitbucket_account = account
-            elif account.platform == "bountysource":
-                bountysource_account = account
-            else:
-                raise self.UnknownPlatform(account.platform)
-        return ( github_account
-               , twitter_account
-               , bitbucket_account
-               , bountysource_account
-                )
-
-    def get_accounts_elsewhere(self):
-        """Return a two-tuple of elsewhere dicts.
-        """
-        ACCOUNTS = """
-            SELECT * FROM elsewhere WHERE participant=%s;
-        """
-        accounts = gittip.db.all(ACCOUNTS, (self.username,))
-        assert accounts is not None
-        twitter_account = None
-        github_account = None
-        for account in accounts:
-            if account['platform'] == 'github':
-                github_account = account
-            else:
-                assert account['platform'] == 'twitter', account['platform']
-                twitter_account = account
-        return (github_account, twitter_account)
-
-    def get_img_src(self, size=128):
-        """Return a value for <img src="..." />.
-
-        Until we have our own profile pics, delegate. XXX Is this an attack
-        vector? Can someone inject this value? Don't think so, but if you make
-        it happen, let me know, eh? Thanks. :)
-
-            https://www.gittip.com/security.txt
-
-        """
-        typecheck(size, int)
-
-        src = '/assets/%s/avatar-default.gif' % os.environ['__VERSION__']
-
-        github, twitter, bitbucket, bountysource = self.get_accounts_elsewhere()
-        if github is not None:
-            # GitHub -> Gravatar: http://en.gravatar.com/site/implement/images/
-            if 'gravatar_id' in github.user_info:
-                gravatar_hash = github.user_info['gravatar_id']
-                src = "https://www.gravatar.com/avatar/%s.jpg?s=%s"
-                src %= (gravatar_hash, size)
-
-        elif twitter is not None:
-            # https://dev.twitter.com/docs/api/1.1/get/users/show
-            if 'profile_image_url_https' in twitter.user_info:
-                src = twitter.user_info['profile_image_url_https']
-
-                # For Twitter, we don't have good control over size. The
-                # biggest option is 73px(?!), but that's too small. Let's go
-                # with the original: even though it may be huge, that's
-                # preferrable to guaranteed blurriness. :-/
-
-                src = src.replace('_normal.', '.')
-
-        return src
-
 
 
 
@@ -758,65 +679,6 @@ class Participant(Model):
         return tips, total
 
 
-# Exceptions
-# ==========
-
-class ProblemChangingUsername(Exception): pass
-class UsernameTooLong(ProblemChangingUsername): pass
-class UsernameContainsInvalidCharacters(ProblemChangingUsername): pass
-class UsernameIsRestricted(ProblemChangingUsername): pass
-class UsernameAlreadyTaken(ProblemChangingUsername): pass
-
-class UnknownPlatform(Exception): pass
-class TooGreedy(Exception): pass
-class MemberLimitReached(Exception): pass
-class NoSelfTipping(Exception): pass
-class BadAmount(Exception): pass
-
-
-# Username Helpers
-# ================
-
-def gen_random_usernames():
-    """Yield up to 100 random 12-hex-digit unicodes.
-
-    We raise :py:exc:`StopIteration` after 100 usernames as a safety
-    precaution.
-
-    """
-    seatbelt = 0
-    while 1:
-        yield hex(int(random.random() * 16**12))[2:].zfill(12).decode('ASCII')
-        seatbelt += 1
-        if seatbelt > 100:
-            raise StopIteration
-
-
-def reserve_a_random_username(txn):
-    """Reserve a random username.
-
-    :param txn: a :py:class:`psycopg2.cursor` managed as a :py:mod:`postgres` transaction
-    :database: one ``INSERT`` on average
-    :returns: a 12-hex-digit unicode
-    :raises: :py:class:`StopIteration` if no acceptable username is found within 100 attempts
-
-    The returned value is guaranteed to have been reserved in the database.
-
-    """
-    for username in gen_random_usernames():
-        try:
-            txn.execute( "INSERT INTO participants (username, username_lower) "
-                         "VALUES (%s, %s)"
-                       , (username, username.lower())
-                        )
-        except IntegrityError:  # Collision, try again with another value.
-            pass
-        else:
-            break
-
-    return username
-
-
 
     ################################################################
     ############### BEGIN COPY/PASTE OF ORM VERSION
@@ -880,6 +742,66 @@ def reserve_a_random_username(txn):
     ################################################################
     ############### END COPY/PASTE OF ORM VERSION
     ################################################################
+
+
+# Exceptions
+# ==========
+
+class ProblemChangingUsername(Exception): pass
+class UsernameTooLong(ProblemChangingUsername): pass
+class UsernameContainsInvalidCharacters(ProblemChangingUsername): pass
+class UsernameIsRestricted(ProblemChangingUsername): pass
+class UsernameAlreadyTaken(ProblemChangingUsername): pass
+
+class TooGreedy(Exception): pass
+class MemberLimitReached(Exception): pass
+class NoSelfTipping(Exception): pass
+class BadAmount(Exception): pass
+
+
+# Username Helpers
+# ================
+
+def gen_random_usernames():
+    """Yield up to 100 random 12-hex-digit unicodes.
+
+    We raise :py:exc:`StopIteration` after 100 usernames as a safety
+    precaution.
+
+    """
+    seatbelt = 0
+    while 1:
+        yield hex(int(random.random() * 16**12))[2:].zfill(12).decode('ASCII')
+        seatbelt += 1
+        if seatbelt > 100:
+            raise StopIteration
+
+
+def reserve_a_random_username(txn):
+    """Reserve a random username.
+
+    :param txn: a :py:class:`psycopg2.cursor` managed as a :py:mod:`postgres`
+        transaction
+    :database: one ``INSERT`` on average
+    :returns: a 12-hex-digit unicode
+    :raises: :py:class:`StopIteration` if no acceptable username is found
+        within 100 attempts
+
+    The returned value is guaranteed to have been reserved in the database.
+
+    """
+    for username in gen_random_usernames():
+        try:
+            txn.execute( "INSERT INTO participants (username, username_lower) "
+                         "VALUES (%s, %s)"
+                       , (username, username.lower())
+                        )
+        except IntegrityError:  # Collision, try again with another value.
+            pass
+        else:
+            break
+
+    return username
 
 
 def typecast(request, restrict=True):
