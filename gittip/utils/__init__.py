@@ -1,3 +1,4 @@
+import gittip
 from aspen import Response
 from aspen.utils import typecheck
 from tornado.escape import linkify
@@ -275,3 +276,47 @@ def canonicalize(path, base, canonical, given):
 
 def plural(i, singular="", plural="s"):
     return singular if i == 1 else plural
+
+
+def get_participant(request, restrict=True):
+    """Given a Request, raise Response or return Participant.
+
+    If user is not None then we'll restrict access to owners and admins.
+
+    """
+    user = request.context['user']
+    slug = request.line.uri.path['username']
+
+    if restrict:
+        if user.ANON:
+            request.redirect(u'/%s/' % slug)
+
+    participant = gittip.db.one_or_zero( "SELECT participants.*::participants "
+                                         "FROM participants "
+                                         "WHERE username_lower=%s"
+                                       , (slug.lower(),)
+                                        )
+
+    if participant is None:
+        raise Response(404)
+
+    canonicalize(request.line.uri.path.raw, '/', participant.username, slug)
+
+    if participant.claimed_time is None:
+
+        # This is a stub participant record for someone on another platform who
+        # hasn't actually registered with Gittip yet. Let's bounce the viewer
+        # over to the appropriate platform page.
+
+        to = participant.resolve_unclaimed()
+        if to is None:
+            raise Response(404)
+        request.redirect(to)
+
+    if restrict:
+        if participant != user.participant:
+            if not user.ADMIN:
+                raise Response(403)
+
+    return participant
+

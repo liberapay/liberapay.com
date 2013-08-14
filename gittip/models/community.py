@@ -34,7 +34,7 @@ def get_list_for(user):
     :database: One SELECT, multiple rows
 
     """
-    if user is None or user.ANON:
+    if user is None:
         member_test = "false"
         sort_order = 'DESC'
         params = ()

@@ -1,11 +1,15 @@
 """Teams on Gittip are plural participants with members.
-
-
-
 """
+from decimal import Decimal
+
+from aspen.utils import typecheck
+from postgres import RealDictCursor
 
 
-class Team(object):
+class MemberLimitReached(Exception): pass
+
+
+class MixinTeam(object):
     """This class provides methods for working with a Participant as a Team.
 
     :param Participant participant: the underlying :py:class:`~gittip.participant.Participant` object for this team
@@ -20,12 +24,12 @@ class Team(object):
     def show_as_team(self, user):
         """Return a boolean, whether to show this participant as a team.
         """
-        if not self.participant.IS_PLURAL:
+        if not self.IS_PLURAL:
             return False
         if user.ADMIN:
             return True
         if not self.get_members():
-            if self != user:
+            if self != user.participant:
                 return False
         return True
 
@@ -34,7 +38,7 @@ class Team(object):
         """
         assert self.IS_PLURAL
         if len(self.get_members()) == 149:
-            raise self.MemberLimitReached
+            raise MemberLimitReached
         self.__set_take_for(member, Decimal('0.01'), self)
 
     def remove_member(self, member):
@@ -58,7 +62,7 @@ class Team(object):
         assert self.IS_PLURAL
         membername = member.username if hasattr(member, 'username') \
                                                         else member['username']
-        rec = gittip.db.one_or_zero("""
+        return self.db.one_or_zero("""
 
             SELECT amount
               FROM transfers
@@ -67,25 +71,17 @@ class Team(object):
                 (SELECT ts_start FROM paydays ORDER BY ts_start DESC LIMIT 1)
           ORDER BY timestamp DESC LIMIT 1
 
-        """, (self.username, membername))
-
-        if rec is None:
-            return Decimal('0.00')
-        else:
-            return rec['amount']
+        """, (self.username, membername), zero=Decimal('0.00'))
 
     def get_take_for(self, member):
         """Return a Decimal representation of the take for this member, or 0.
         """
         assert self.IS_PLURAL
-        rec = gittip.db.one_or_zero( "SELECT take FROM current_memberships "
-                                     "WHERE member=%s AND team=%s"
-                                   , (member.username, self.username)
-                                    )
-        if rec is None:
-            return Decimal('0.00')
-        else:
-            return rec['take']
+        return self.db.one_or_zero( "SELECT take FROM current_memberships "
+                                    "WHERE member=%s AND team=%s"
+                                  , (member.username, self.username)
+                                  , zero=Decimal('0.00')
+                                   )
 
     def compute_max_this_week(self, last_week):
         """2x last week's take, but at least a dollar.
@@ -96,7 +92,11 @@ class Team(object):
         """Sets member's take from the team pool.
         """
         assert self.IS_PLURAL
-        from gittip.models.user import User  # lazy to avoid circular import
+
+        # lazy import to avoid circular import
+        from gittip.security.user import User
+        from gittip.models.participant import Participant
+
         typecheck( member, Participant
                  , take, Decimal
                  , recorder, (Participant, User)
@@ -113,7 +113,7 @@ class Team(object):
     def __set_take_for(self, member, take, recorder):
         assert self.IS_PLURAL
         # XXX Factored out for testing purposes only! :O Use .set_take_for.
-        gittip.db.run("""
+        self.db.run("""
 
             INSERT INTO memberships (ctime, member, team, take, recorder)
              VALUES ( COALESCE (( SELECT ctime
@@ -133,19 +133,19 @@ class Team(object):
 
     def get_members(self):
         assert self.IS_PLURAL
-        return list(gittip.db.all("""
+        return self.db.all("""
 
             SELECT member AS username, take, ctime, mtime
               FROM current_memberships
              WHERE team=%s
           ORDER BY ctime DESC
 
-        """, (self.username,)))
+        """, (self.username,), cursor_factory=RealDictCursor)
 
     def get_teams_membership(self):
         assert self.IS_PLURAL
         TAKE = "SELECT sum(take) FROM current_memberships WHERE team=%s"
-        total_take = gittip.db.one_or_zero(TAKE, (self.username,))['sum']
+        total_take = self.db.one_or_zero(TAKE, (self.username,))['sum']
         total_take = 0 if total_take is None else total_take
         team_take = max(self.get_dollars_receiving() - total_take, 0)
         membership = { "ctime": None
@@ -178,6 +178,3 @@ class Team(object):
             member['balance'] = balance
             member['percentage'] = (amount / budget) if budget > 0 else 0
         return members
-
-
-

@@ -21,6 +21,7 @@ from aspen import Response
 from psycopg2 import IntegrityError
 from postgres.orm import Model
 from gittip.models._mixin_elsewhere import MixinElsewhere
+from gittip.models._mixin_team import MixinTeam
 from gittip.utils import canonicalize
 
 
@@ -31,16 +32,20 @@ ASCII_ALLOWED_IN_USERNAME = set("0123456789"
 NANSWERS_THRESHOLD = 0  # configured in wireup.py
 
 
-class Participant(Model, MixinElsewhere):
+class Participant(Model, MixinElsewhere, MixinTeam):
     """Represent a Gittip participant.
     """
 
     typname = 'participants'
 
     def __eq__(self, other):
+        if not isinstance(other, Participant):
+            return False
         return self.username == other.username
 
     def __ne__(self, other):
+        if not isinstance(other, Participant):
+            return False
         return self.username != other.username
 
 
@@ -113,17 +118,13 @@ class Participant(Model, MixinElsewhere):
     # Number
     # ======
 
-    def is_singular(self):
-        rec = gittip.db.one_or_zero("SELECT number FROM participants "
-                                    "WHERE username = %s", (self.username,))
+    @property
+    def IS_SINGULAR(self):
+        return self.number == 'singular'
 
-        return rec['number'] == 'singular'
-
-    def is_plural(self):
-        rec = gittip.db.one_or_zero("SELECT number FROM participants "
-                                    "WHERE username = %s", (self.username,))
-
-        return rec['number'] == 'plural'
+    @property
+    def IS_PLURAL(self):
+        return self.number == 'plural'
 
 
     def get_teams(self):
@@ -345,14 +346,12 @@ class Participant(Model, MixinElsewhere):
     # XXX
 
     def get_dollars_receiving(self):
-        return sum(tip.amount for tip in self.valid_tips_receiving) + Decimal('0.00')
-    def get_dollars_receiving(self):
         """Return a Decimal.
         """
 
         BACKED = """\
 
-            SELECT sum(amount) AS dollars_receiving
+            SELECT sum(amount)
               FROM ( SELECT DISTINCT ON (tipper)
                             amount
                           , tipper
@@ -366,16 +365,10 @@ class Participant(Model, MixinElsewhere):
                     ) AS foo
 
         """
-        rec = gittip.db.one_or_zero(BACKED, (self.username,))
-        if rec is None:
-            amount = None
-        else:
-            amount = rec['dollars_receiving']  # might be None
-
-        if amount is None:
-            amount = Decimal('0.00')
-
-        return amount
+        return self.db.one_or_zero( BACKED
+                                  , (self.username,)
+                                  , zero=Decimal('0.00')
+                                   )
 
 
     def get_dollars_giving(self):
@@ -384,7 +377,7 @@ class Participant(Model, MixinElsewhere):
 
         BACKED = """\
 
-            SELECT sum(amount) AS dollars_giving
+            SELECT sum(amount)
               FROM ( SELECT DISTINCT ON (tippee)
                             amount
                           , tippee
@@ -398,16 +391,10 @@ class Participant(Model, MixinElsewhere):
                     ) AS foo
 
         """
-        rec = gittip.db.one_or_zero(BACKED, (self.username,))
-        if rec is None:
-            amount = None
-        else:
-            amount = rec['dollars_giving']  # might be None
-
-        if amount is None:
-            amount = Decimal('0.00')
-
-        return amount
+        return self.db.one_or_zero( BACKED
+                                  , (self.username,)
+                                  , zero=Decimal('0.00')
+                                   )
 
 
     def get_number_of_backers(self):
@@ -755,7 +742,6 @@ class UsernameIsRestricted(ProblemChangingUsername): pass
 class UsernameAlreadyTaken(ProblemChangingUsername): pass
 
 class TooGreedy(Exception): pass
-class MemberLimitReached(Exception): pass
 class NoSelfTipping(Exception): pass
 class BadAmount(Exception): pass
 
