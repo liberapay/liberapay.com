@@ -145,8 +145,7 @@ class MixinTeam(object):
     def get_teams_membership(self):
         assert self.IS_PLURAL
         TAKE = "SELECT sum(take) FROM current_memberships WHERE team=%s"
-        total_take = self.db.one_or_zero(TAKE, (self.username,))['sum']
-        total_take = 0 if total_take is None else total_take
+        total_take = self.db.one_or_zero(TAKE, (self.username,), zero=0)
         team_take = max(self.get_dollars_receiving() - total_take, 0)
         membership = { "ctime": None
                      , "mtime": None
@@ -163,11 +162,12 @@ class MixinTeam(object):
         for member in members:
             member['removal_allowed'] = current_user == self
             member['editing_allowed'] = False
-            if member['username'] == current_user.username:
-                member['is_current_user'] = True
-                if member['ctime'] is not None:
-                    # current user, but not the team itself
-                    member['editing_allowed']= True
+            if current_user.participant is not None:
+                if member['username'] == current_user.participant.username:
+                    member['is_current_user'] = True
+                    if member['ctime'] is not None:
+                        # current user, but not the team itself
+                        member['editing_allowed']= True
             take = member['take']
             member['take'] = take
             member['last_week'] = last_week = \
