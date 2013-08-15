@@ -7,6 +7,7 @@ from psycopg2 import IntegrityError
 import gittip
 from gittip.security.user import User
 from gittip.models.participant import Participant, reserve_a_random_username
+from gittip.models.participant import ProblemChangingUsername
 
 
 ACTIONS = [u'opt-in', u'connect', u'lock', u'unlock']
@@ -76,11 +77,11 @@ class AccountElsewhere(object):
             newly_claimed = False
         else:
             newly_claimed = True
-            user.set_as_claimed()
+            user.participant.set_as_claimed()
             try:
-                user.change_username(desired_username)
-                user.username = self.username = desired_username
-            except user.ProblemChangingUsername:
+                user.participant.change_username(desired_username)
+                self.username = desired_username
+            except ProblemChangingUsername:
                 pass
         return user, newly_claimed
 

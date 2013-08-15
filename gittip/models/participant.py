@@ -222,6 +222,7 @@ class Participant(Model, MixinElsewhere, MixinTeam):
 
         """, (username, slug, name, slug, username, is_member, username))
 
+
     def change_username(self, suggested):
         """Raise Response or return None.
 
@@ -255,8 +256,7 @@ class Participant(Model, MixinElsewhere, MixinTeam):
 
             assert rec is not None               # sanity check
             assert suggested == rec['username']  # sanity check
-            self.username = suggested
-
+            self.update_attributes(username=suggested)
 
 
     def set_tip_to(self, tippee, amount):
@@ -317,14 +317,10 @@ class Participant(Model, MixinElsewhere, MixinTeam):
         """, (self.username, tippee), zero=Decimal('0.00'))
 
 
-
-    # XXX
-
     def get_dollars_receiving(self):
         """Return a Decimal.
         """
-
-        BACKED = """\
+        return self.db.one_or_zero("""\
 
             SELECT sum(amount)
               FROM ( SELECT DISTINCT ON (tipper)
@@ -339,18 +335,13 @@ class Participant(Model, MixinElsewhere, MixinTeam):
                           , mtime DESC
                     ) AS foo
 
-        """
-        return self.db.one_or_zero( BACKED
-                                  , (self.username,)
-                                  , zero=Decimal('0.00')
-                                   )
+        """, (self.username,), zero=Decimal('0.00'))
 
 
     def get_dollars_giving(self):
         """Return a Decimal.
         """
-
-        BACKED = """\
+        return self.db.one_or_zero("""\
 
             SELECT sum(amount)
               FROM ( SELECT DISTINCT ON (tippee)
@@ -365,11 +356,8 @@ class Participant(Model, MixinElsewhere, MixinTeam):
                           , mtime DESC
                     ) AS foo
 
-        """
-        return self.db.one_or_zero( BACKED
-                                  , (self.username,)
-                                  , zero=Decimal('0.00')
-                                   )
+        """, (self.username,), zero=Decimal('0.00'))
+
 
     def get_number_of_backers(self):
         """Given a unicode, return an int.

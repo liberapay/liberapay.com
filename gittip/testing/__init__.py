@@ -15,7 +15,7 @@ from aspen.utils import utcnow
 from gittip import wireup
 from gittip.billing.payday import Payday
 from gittip.models.participant import Participant
-from gittip.models.user import User
+from gittip.security.user import User
 
 
 TOP = join(realpath(dirname(dirname(__file__))), '..')

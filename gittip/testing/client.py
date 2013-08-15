@@ -4,7 +4,7 @@ from StringIO import StringIO
 from aspen.http.request import Request
 from aspen.testing import StubWSGIRequest
 
-from gittip.authentication import User
+from gittip.security.user import User
 from gittip.testing import test_website
 
 BOUNDARY = 'BoUnDaRyStRiNg'
