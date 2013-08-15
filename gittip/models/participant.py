@@ -54,25 +54,27 @@ class Participant(Model, MixinElsewhere, MixinTeam):
 
     @classmethod
     def from_session_token(cls, token):
-        return cls.db.one_or_zero("""
+        return cls._from_thing("session_token", token)
 
-            SELECT participants.*::participants
-              FROM participants
-             WHERE is_suspicious IS NOT true
-               AND session_token=%s
-
-        """, (token,))
+    @classmethod
+    def from_api_key(cls, api_key):
+        return cls._from_thing("api_key", api_key)
 
     @classmethod
     def from_username(cls, username):
+        return cls._from_thing("username", username)
+
+    @classmethod
+    def _from_thing(cls, thing, value):
         return cls.db.one_or_zero("""
 
             SELECT participants.*::participants
               FROM participants
              WHERE is_suspicious IS NOT true
-               AND username=%s
+               AND {}=%s
 
-        """, (username,))
+        """.format(thing), (value,))
+
 
 
     # Session Management
