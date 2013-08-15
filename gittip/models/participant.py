@@ -126,7 +126,6 @@ class Participant(Model, MixinElsewhere, MixinTeam):
     def IS_PLURAL(self):
         return self.number == 'plural'
 
-
     def get_teams(self):
         """Return a list of teams this user is a member of.
         """
@@ -205,6 +204,13 @@ class Participant(Model, MixinElsewhere, MixinTeam):
         gittip.db.run(CLAIM, (self.username,))
 
 
+
+    # Random Junk
+    # ===========
+
+    @property
+    def accepts_tips(self):
+        return (self.goal is None) or (self.goal >= 0)
 
 
     def insert_into_communities(self, is_member, name, slug):
@@ -308,22 +314,10 @@ class Participant(Model, MixinElsewhere, MixinTeam):
         return amount, first_time_tipper
 
 
-    # XXX
-
-    def get_tip_to(self, tippee):
-        tip = self.tips_giving.filter_by(tippee=tippee).first()
-
-        if tip:
-            amount = tip.amount
-        else:
-            amount = Decimal('0.00')
-
-        return amount
-
     def get_tip_to(self, tippee):
         """Given two user ids, return a Decimal.
         """
-        TIP = """\
+        return self.db.one_or_zero("""\
 
             SELECT amount
               FROM tips
@@ -332,13 +326,7 @@ class Participant(Model, MixinElsewhere, MixinTeam):
           ORDER BY mtime DESC
              LIMIT 1
 
-        """
-        rec = gittip.db.one_or_zero(TIP, (self.username, tippee))
-        if rec is None:
-            tip = Decimal('0.00')
-        else:
-            tip = rec['amount']
-        return tip
+        """, (self.username, tippee), zero=Decimal('0.00'))
 
 
 
