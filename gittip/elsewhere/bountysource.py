@@ -90,7 +90,7 @@ def get_participant_via_access_token(access_token):
     if access_token_valid(access_token):
         parts = access_token.split('.')
         participant_id = parts[0]
-        return Participant.query.filter_by(id=participant_id).one()
+        return Participant.from_id(participant_id)
 
 
 def filter_user_info(user_info):

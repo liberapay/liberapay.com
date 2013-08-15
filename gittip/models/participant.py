@@ -65,6 +65,10 @@ class Participant(Model, MixinElsewhere, MixinTeam):
         return cls._from_thing("username", username)
 
     @classmethod
+    def from_id(cls, id):
+        return cls._from_thing("id", id)
+
+    @classmethod
     def _from_thing(cls, thing, value):
         return cls.db.one_or_zero("""
 

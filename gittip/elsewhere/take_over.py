@@ -1,7 +1,10 @@
 """Provide functionality for merging accounts.
 """
+import gittip
 from aspen.utils import typecheck
 from psycopg2 import IntegrityError
+from gittip.models.participant import reserve_a_random_username
+from gittip.models.participant import gen_random_usernames
 
 
 class NeedConfirmation(Exception):
@@ -153,7 +156,7 @@ def take_over(participant, account_elsewhere, have_confirmation=False):
         rec = txn.fetchone()
         assert rec is not None          # sanity check
 
-        other_username = rec['participant']
+        other_username = rec.participant
 
 
         # Make sure we have user confirmation if needed.
@@ -175,14 +178,14 @@ def take_over(participant, account_elsewhere, have_confirmation=False):
         #       participant
 
         # other_is_a_real_participant
-        other_is_a_real_participant = not rec['is_stub']
+        other_is_a_real_participant = not rec.is_stub
 
         # this_is_others_last_account_elsewhere
         txn.execute( "SELECT count(*) AS nelsewhere FROM elsewhere "
                      "WHERE participant=%s"
                    , (other_username,)
                     )
-        nelsewhere = txn.fetchone()['nelsewhere']
+        nelsewhere = txn.fetchone().nelsewhere
         assert nelsewhere > 0           # sanity check
         this_is_others_last_account_elsewhere = nelsewhere == 1
 
@@ -191,7 +194,7 @@ def take_over(participant, account_elsewhere, have_confirmation=False):
                      "WHERE participant=%s AND platform=%s"
                    , (participant.username, platform)
                     )
-        nparticipants = txn.fetchone()['nparticipants']
+        nparticipants = txn.fetchone().nparticipants
         assert nparticipants in (0, 1)  # sanity check
         we_already_have_that_kind_of_account = nparticipants == 1
 
@@ -217,7 +220,7 @@ def take_over(participant, account_elsewhere, have_confirmation=False):
             new_stub_username = reserve_a_random_username(txn)
             txn.execute( "UPDATE elsewhere SET participant=%s "
                          "WHERE platform=%s AND participant=%s"
-                       , (new_stub_username, platform, self.username)
+                       , (new_stub_username, platform, participant.username)
                         )
 
 
@@ -230,7 +233,7 @@ def take_over(participant, account_elsewhere, have_confirmation=False):
 
         txn.execute( "UPDATE elsewhere SET participant=%s "
                      "WHERE platform=%s AND user_id=%s"
-                   , (self.username, platform, user_id)
+                   , (participant.username, platform, user_id)
                     )
 
 
@@ -243,7 +246,7 @@ def take_over(participant, account_elsewhere, have_confirmation=False):
             # Take over tips.
             # ===============
 
-            x, y = self.username, other_username
+            x, y = participant.username, other_username
             txn.execute(CONSOLIDATE_TIPS_RECEIVING, (x, x,y, x,y, x))
             txn.execute(CONSOLIDATE_TIPS_GIVING, (x, x,y, x,y, x))
             txn.execute(ZERO_OUT_OLD_TIPS_RECEIVING, (other_username,))
@@ -278,7 +281,7 @@ def take_over(participant, account_elsewhere, have_confirmation=False):
                               # XXX But can the UPDATE fail in other ways?
                 else:
                     assert rec is not None  # sanity checks
-                    assert rec['username'] == archive_username
+                    assert rec.username == archive_username
                     break
 
 
@@ -291,17 +294,3 @@ def take_over(participant, account_elsewhere, have_confirmation=False):
                          "VALUES (%s, %s, %s)"
                        , (other_username, participant.username, archive_username)
                         )
-
-
-        # Lastly, keep account_elsewhere in sync.
-        # =======================================
-        # Bandaid for
-        #
-        #   https://github.com/gittip/www.gittip.com/issues/421
-        #
-        # XXX This is why we're porting to SQLAlchemy:
-        #
-        #   https://github.com/gittip/www.gittip.com/issues/129
-
-        account_elsewhere.participant = participant.username
-
