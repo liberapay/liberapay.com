@@ -159,14 +159,6 @@ class Participant(Model, MixinElsewhere, MixinTeam):
     # An unclaimed Participant is a stub that's created when someone pledges to
     # give to an AccountElsewhere that's not been connected on Gittip yet.
 
-    # XXX
-
-    def resolve_unclaimed(self):
-        if self.accounts_elsewhere:
-            return self.accounts_elsewhere[0].resolve_unclaimed()
-        else:
-            return None
-
     def resolve_unclaimed(self):
         """Given a username, return an URL path.
         """
@@ -183,16 +175,6 @@ class Participant(Model, MixinElsewhere, MixinTeam):
             assert rec['platform'] == 'twitter'
             out = '/on/twitter/%s/' % rec['user_info']['screen_name']
         return out
-
-
-    # XXX
-
-    def set_as_claimed(self, claimed_at=None):
-        if claimed_at is None:
-            claimed_at = datetime.datetime.now(pytz.utc)
-        self.claimed_time = claimed_at
-        db.session.add(self)
-        db.session.commit()
 
     def set_as_claimed(self):
         CLAIM = """\
