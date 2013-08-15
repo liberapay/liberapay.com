@@ -3,7 +3,6 @@
 from decimal import Decimal
 
 from aspen.utils import typecheck
-from postgres import RealDictCursor
 
 
 class MemberLimitReached(Exception): pass
@@ -140,7 +139,7 @@ class MixinTeam(object):
              WHERE team=%s
           ORDER BY ctime DESC
 
-        """, (self.username,), cursor_factory=RealDictCursor)
+        """, (self.username,), cursor_factory=dict)
 
     def get_teams_membership(self):
         assert self.IS_PLURAL

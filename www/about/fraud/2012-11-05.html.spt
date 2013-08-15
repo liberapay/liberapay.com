@@ -5,7 +5,6 @@ from decimal import Decimal
 
 from aspen import Response
 from gittip import db, CARDINALS
-from postgres import RealDictCursor
 
 [---]
 _suspicious = db.all("""
@@ -18,7 +17,7 @@ _suspicious = db.all("""
        AND ctime < '2012-11-05'::timestamptz
   ORDER BY ctime
 
-""", cursor_factory=RealDictCursor)
+""", cursor_factory=dict)
 
 
 def suspicious():
@@ -36,7 +35,7 @@ def suspicious():
           ORDER BY tips.ctime
 
 
-        """, (person['username'],), cursor_factory=RealDictCursor)
+        """, (person['username'],), cursor_factory=dict)
         person['receives_from'] = db.all("""
 
             SELECT DISTINCT tipper AS username
@@ -49,7 +48,7 @@ def suspicious():
                AND tips.ctime < '2012-11-05'::timestamptz
           ORDER BY tips.ctime
 
-        """, (person['username'],), cursor_factory=RealDictCursor)
+        """, (person['username'],), cursor_factory=dict)
 
         person['transfers'] = db.all("""
 
@@ -64,7 +63,7 @@ def suspicious():
 
 
         """, (person['username'], person['username']), \
-                                                 cursor_factory=RealDictCursor)
+                                                 cursor_factory=dict)
 
         person['exchanges'] = db.all("""
 
@@ -75,7 +74,7 @@ def suspicious():
           ORDER BY timestamp
 
 
-        """, (person['username'],), cursor_factory=RealDictCursor)
+        """, (person['username'],), cursor_factory=dict)
 
         yield person
 suspicious = list(suspicious())
@@ -129,7 +128,7 @@ overall = db.one_or_zero("""
        AND timestamp > %s
        AND timestamp < '2012-11-01'::timestamptz
 
-""", (earliest.date(),), cursor_factory=RealDictCursor)
+""", (earliest.date(),), cursor_factory=dict)
 overall_volume = overall['sum']
 overall_transactions = overall['count']
 percentage_stolen = (total_charged / overall_volume) * 100
@@ -157,7 +156,7 @@ bystander_balances = db.all("""
 
     SELECT username, balance FROM participants WHERE username = ANY(%s)
 
-""", (list(bystanders),), cursor_factory=RealDictCursor)
+""", (list(bystanders),), cursor_factory=dict)
 if bystander_balances is None:
     bystander_balances = []
 for row in bystander_balances:

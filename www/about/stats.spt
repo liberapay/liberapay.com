@@ -2,7 +2,6 @@ import datetime
 import locale
 from aspen import json
 from gittip import db, age
-from postgres import RealDictCursor
 
 CARDINALS = ["zero", "one", "two", "three", "four", "five", "six", "seven",
              "eight", "nine"]
@@ -103,7 +102,7 @@ _tip_distribution = db.all("""
   GROUP BY amount
   ORDER BY amount
 
-""", cursor_factory=RealDictCursor)
+""", cursor_factory=dict)
 
 tip_n = sum([row['count'] for row in _tip_distribution])
 

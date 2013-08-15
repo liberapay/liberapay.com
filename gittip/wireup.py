@@ -26,7 +26,7 @@ def db():
     maxconn = int(os.environ['DATABASE_MAXCONN'])
     db = gittip.db = Postgres(dburl, maxconn=maxconn)
 
-    # register hstore type (but don't use RealDictCursor)
+    # register hstore type (but use a RegularCursor? I forget why. :( )
     with db.get_connection() as conn:
         curs = conn.cursor(cursor_factory=RegularCursor)
         psycopg2.extras.register_hstore(curs, globally=True, unicode=True)
