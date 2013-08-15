@@ -8,6 +8,7 @@ import gittip
 from gittip import billing
 from gittip.security import authentication
 from gittip.testing import Harness
+from gittip.models.participant import Participant
 
 
 class TestBillingBase(Harness):
@@ -214,7 +215,7 @@ class TestBillingAssociate(TestBillingBase):
         user = authentication.User.from_username('alice')
 
         # participant in db should be updated
-        assert user.last_ach_result == ''
+        assert user.participant.last_ach_result == ''
 
     @mock.patch('gittip.billing.balanced.Account.find')
     def test_associate_bank_account_invalid(self, find):
@@ -227,10 +228,10 @@ class TestBillingAssociate(TestBillingBase):
                          , self.balanced_destination_uri
                           )
 
-        user = authentication.User.from_username('alice')
-
         # participant in db should be updated
-        assert user.last_ach_result == 'errrrrror'
+        import pdb; pdb.set_trace()
+        alice = Participant.from_username('alice')
+        assert alice.last_ach_result == 'errrrrror'
 
 
 class TestBillingClear(TestBillingBase):
