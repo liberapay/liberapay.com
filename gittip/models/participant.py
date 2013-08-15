@@ -367,14 +367,12 @@ class Participant(Model, MixinElsewhere, MixinTeam):
                                   , zero=Decimal('0.00')
                                    )
 
-
     def get_number_of_backers(self):
         """Given a unicode, return an int.
         """
+        return gittip.db.one_or_zero("""\
 
-        BACKED = """\
-
-            SELECT count(amount) AS nbackers
+            SELECT count(amount)
               FROM ( SELECT DISTINCT ON (tipper)
                             amount
                           , tipper
@@ -388,17 +386,7 @@ class Participant(Model, MixinElsewhere, MixinTeam):
                     ) AS foo
              WHERE amount > 0
 
-        """
-        rec = gittip.db.one_or_zero(BACKED, (self.username,))
-        if rec is None:
-            nbackers = None
-        else:
-            nbackers = rec['nbackers']  # might be None
-
-        if nbackers is None:
-            nbackers = 0
-
-        return nbackers
+        """, (self.username,), zero=0)
 
 
     def get_tip_distribution(self):
@@ -642,42 +630,6 @@ class Participant(Model, MixinElsewhere, MixinTeam):
     ################################################################
     ############### BEGIN COPY/PASTE OF ORM VERSION
     ################################################################
-
-    @property
-    def valid_tips_receiving(self):
-        '''
-
-      SELECT count(anon_1.amount) AS count_1
-        FROM ( SELECT DISTINCT ON (tips.tipper)
-                      tips.id AS id
-                    , tips.ctime AS ctime
-                    , tips.mtime AS mtime
-                    , tips.tipper AS tipper
-                    , tips.tippee AS tippee
-                    , tips.amount AS amount
-                 FROM tips
-                 JOIN participants ON tips.tipper = participants.username
-                WHERE %(param_1)s = tips.tippee
-                  AND participants.is_suspicious IS NOT true
-                  AND participants.last_bill_result = %(last_bill_result_1)s
-             ORDER BY tips.tipper, tips.mtime DESC
-              ) AS anon_1
-       WHERE anon_1.amount > %(amount_1)s
-
-        '''
-        return self.tips_receiving \
-                   .join( Participant
-                        , Tip.tipper.op('=')(Participant.username)
-                         ) \
-                   .filter( 'participants.is_suspicious IS NOT true'
-                          , Participant.last_bill_result == ''
-                           )
-
-    def get_number_of_backers(self):
-        amount_column = self.valid_tips_receiving.subquery().columns.amount
-        count = func.count(amount_column)
-        nbackers = db.session.query(count).filter(amount_column > 0).one()[0]
-        return nbackers
 
     def get_og_title(self):
         out = self.username
