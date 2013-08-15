@@ -153,16 +153,16 @@ class MixinTeam(object):
                       }
         return membership
 
-    def get_memberships(self, current_user):
+    def get_memberships(self, current_participant):
         assert self.IS_PLURAL
         members = self.get_members()
         members.append(self.get_teams_membership())
         budget = balance = self.get_dollars_receiving()
         for member in members:
-            member['removal_allowed'] = current_user == self
+            member['removal_allowed'] = current_participant == self
             member['editing_allowed'] = False
-            if current_user.participant is not None:
-                if member['username'] == current_user.participant.username:
+            if current_participant is not None:
+                if member['username'] == current_participant.username:
                     member['is_current_user'] = True
                     if member['ctime'] is not None:
                         # current user, but not the team itself
