@@ -12,9 +12,9 @@ import requests
 from requests_oauthlib import OAuth1
 from aspen import json, log, Response
 from aspen import resources
-from gittip import mixpanel
+from gittip.utils import mixpanel
 from gittip.elsewhere import ACTIONS, bitbucket
-from gittip.participant import NeedConfirmation
+from gittip.elsewhere.take_over import NeedConfirmation
 \
 [-----------------------------]
 

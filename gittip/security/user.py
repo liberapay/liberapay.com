@@ -24,7 +24,7 @@ class User(object):
         """Find a participant based on username and return a User.
         """
         self = cls()
-        self.participant = Participant.from_id(username)
+        self.participant = Participant.from_username(username)
         return self
 
     def __str__(self):

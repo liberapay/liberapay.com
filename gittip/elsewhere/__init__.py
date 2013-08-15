@@ -145,7 +145,7 @@ class AccountElsewhere(object):
              WHERE platform=%s AND user_id=%s
          RETURNING participant
 
-        """, (user_info, self.platform, self.user_id))['participant']
+        """, (user_info, self.platform, self.user_id))
 
 
         # Get a little more info to return.
@@ -166,7 +166,7 @@ class AccountElsewhere(object):
 
 
         return ( username
-               , rec['claimed_time'] is not None
-               , rec['is_locked']
-               , rec['balance']
+               , rec.claimed_time is not None
+               , rec.is_locked
+               , rec.balance
                 )

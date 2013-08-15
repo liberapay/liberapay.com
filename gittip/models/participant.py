@@ -475,12 +475,12 @@ class Participant(Model, MixinElsewhere, MixinTeam):
         npatrons = 0.0  # float to trigger float division
         contributed = Decimal('0.00')
         for rec in gittip.db.all(SQL, (self.username,)):
-            tip_amounts.append([ rec['amount']
-                       , rec['ncontributing']
-                       , rec['amount'] * rec['ncontributing']
-                        ])
+            tip_amounts.append([ rec.amount
+                               , rec.ncontributing
+                               , rec.amount * rec.ncontributing
+                                ])
             contributed += tip_amounts[-1][2]
-            npatrons += rec['ncontributing']
+            npatrons += rec.ncontributing
 
         for row in tip_amounts:
             row.append((row[1] / npatrons) if npatrons > 0 else 0)
