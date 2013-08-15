@@ -304,8 +304,7 @@ class Participant(Model, MixinElsewhere, MixinTeam):
         """
         args = (self.username, tippee, self.username, tippee, amount, \
                                                                  self.username)
-        first_time_tipper = \
-                      gittip.db.one_or_zero(NEW_TIP, args)['first_time_tipper']
+        first_time_tipper = gittip.db.one_or_zero(NEW_TIP, args)
         return amount, first_time_tipper
 
 
@@ -560,12 +559,12 @@ class Participant(Model, MixinElsewhere, MixinTeam):
         # when someone *does* start accepting tips and all of a sudden they're
         # hit with bigger charges.
 
-        total = sum([t['amount'] for t in tips])
+        total = sum([t.amount for t in tips])
         if not total:
             # If tips is an empty list, total is int 0. We want a Decimal.
             total = Decimal('0.00')
 
-        unclaimed_total = sum([t['amount'] for t in unclaimed_tips])
+        unclaimed_total = sum([t.amount for t in unclaimed_tips])
         if not unclaimed_total:
             unclaimed_total = Decimal('0.00')
 
