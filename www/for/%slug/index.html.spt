@@ -71,7 +71,8 @@ try:
 except ValueError:
     raise Response(400)
 
-community = db.one_or_zero( "SELECT * FROM community_summary WHERE slug=%s"
+community = db.one_or_zero( "SELECT community_summary.*::community_summary "
+                            "FROM community_summary WHERE slug=%s"
                           , (slug,)
                            )
 if community is None:
@@ -198,7 +199,7 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
         to join the {{ community.name }} community on Gittip.
     </div>
     {% else %}
-    {% set is_member = community.check_membership(user) %}
+    {% set is_member = community.check_membership(user.participant) %}
     <button class="join-leave"
             data-name="{{ community.name }}"
             data-is-member="{{ 'true' if is_member else 'false' }}">

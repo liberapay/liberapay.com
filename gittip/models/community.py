@@ -1,6 +1,7 @@
 import re
 
 import gittip
+from postgres.orm import Model
 
 
 name_pattern = re.compile(r'^[A-Za-z0-9,._ -]+$')
@@ -34,14 +35,14 @@ def get_list_for(user):
     :database: One SELECT, multiple rows
 
     """
-    if user is None:
+    if user.ANON:
         member_test = "false"
         sort_order = 'DESC'
         params = ()
     else:
         member_test = "bool_or(participant = %s)"
         sort_order = 'ASC'
-        params = (user.username,)
+        params = (user.participant.username,)
 
     return gittip.db.all("""
 
@@ -56,16 +57,18 @@ def get_list_for(user):
     """.format(member_test, sort_order), params)
 
 
-class Community(object):
+class Community(Model):
     """Model a community on Gittip.
     """
 
-    def check_membership(self, user):
+    typname = "community_summary"
+
+    def check_membership(self, participant):
         return self.db.one_or_zero("""
 
         SELECT * FROM current_communities WHERE slug=%s AND participant=%s
 
-        """, (self.slug, user.username)) is not None
+        """, (self.slug, participant.username)) is not None
 
 
 def typecast(request):

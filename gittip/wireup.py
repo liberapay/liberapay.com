@@ -10,6 +10,7 @@ import raven
 import psycopg2
 import stripe
 import gittip.utils.mixpanel
+from gittip.models.community import Community
 from gittip.models.participant import Participant
 from postgres import Postgres
 from psycopg2.extensions import cursor as RegularCursor
@@ -31,6 +32,7 @@ def db():
         curs = conn.cursor(cursor_factory=RegularCursor)
         psycopg2.extras.register_hstore(curs, globally=True, unicode=True)
 
+    db.register_model(Community)
     db.register_model(Participant)
 
     return db
