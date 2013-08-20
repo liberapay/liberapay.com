@@ -100,10 +100,10 @@ website.hooks.inbound_early += [add_stuff]
 UPDATE_HOMEPAGE_EVERY = int(os.environ['UPDATE_HOMEPAGE_EVERY'])
 def update_homepage_queries():
     while 1:
-        with gittip.db.get_transaction() as txn:
+        with gittip.db.get_cursor() as cursor:
             log_dammit("updating homepage queries")
             start = time.time()
-            txn.execute("""
+            cursor.execute("""
 
             DROP TABLE IF EXISTS _homepage_new_participants;
             CREATE TABLE _homepage_new_participants AS

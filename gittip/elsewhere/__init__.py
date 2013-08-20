@@ -113,13 +113,13 @@ class AccountElsewhere(object):
         # participant we reserved for them is rolled back as well.
 
         try:
-            with gittip.db.get_transaction() as txn:
-                _username = reserve_a_random_username(txn)
-                txn.execute( "INSERT INTO elsewhere "
-                             "(platform, user_id, participant) "
-                             "VALUES (%s, %s, %s)"
-                           , (self.platform, self.user_id, _username)
-                            )
+            with gittip.db.get_cursor() as cursor:
+                _username = reserve_a_random_username(cursor)
+                cursor.execute( "INSERT INTO elsewhere "
+                                "(platform, user_id, participant) "
+                                "VALUES (%s, %s, %s)"
+                              , (self.platform, self.user_id, _username)
+                               )
         except IntegrityError:
             pass
 

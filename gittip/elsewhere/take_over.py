@@ -137,14 +137,14 @@ def take_over(participant, account_elsewhere, have_confirmation=False):
 
     """
 
-    with gittip.db.get_transaction() as txn:
+    with gittip.db.get_cursor() as cursor:
 
         # Load the existing connection.
         # =============================
         # Every account elsewhere has at least a stub participant account
         # on Gittip.
 
-        txn.execute("""
+        cursor.execute("""
 
             SELECT participant
                  , claimed_time IS NULL AS is_stub
@@ -153,7 +153,7 @@ def take_over(participant, account_elsewhere, have_confirmation=False):
              WHERE elsewhere.platform=%s AND elsewhere.user_id=%s
 
         """, (platform, user_id))
-        rec = txn.fetchone()
+        rec = cursor.fetchone()
         assert rec is not None          # sanity check
 
         other_username = rec.participant
@@ -181,20 +181,20 @@ def take_over(participant, account_elsewhere, have_confirmation=False):
         other_is_a_real_participant = not rec.is_stub
 
         # this_is_others_last_account_elsewhere
-        txn.execute( "SELECT count(*) AS nelsewhere FROM elsewhere "
-                     "WHERE participant=%s"
-                   , (other_username,)
-                    )
-        nelsewhere = txn.fetchone().nelsewhere
+        cursor.execute( "SELECT count(*) AS nelsewhere FROM elsewhere "
+                        "WHERE participant=%s"
+                      , (other_username,)
+                       )
+        nelsewhere = cursor.fetchone().nelsewhere
         assert nelsewhere > 0           # sanity check
         this_is_others_last_account_elsewhere = nelsewhere == 1
 
         # we_already_have_that_kind_of_account
-        txn.execute( "SELECT count(*) AS nparticipants FROM elsewhere "
-                     "WHERE participant=%s AND platform=%s"
-                   , (participant.username, platform)
-                    )
-        nparticipants = txn.fetchone().nparticipants
+        cursor.execute( "SELECT count(*) AS nparticipants FROM elsewhere "
+                        "WHERE participant=%s AND platform=%s"
+                      , (participant.username, platform)
+                       )
+        nparticipants = cursor.fetchone().nparticipants
         assert nparticipants in (0, 1)  # sanity check
         we_already_have_that_kind_of_account = nparticipants == 1
 
@@ -217,11 +217,11 @@ def take_over(participant, account_elsewhere, have_confirmation=False):
         # ====================================
 
         if we_already_have_that_kind_of_account:
-            new_stub_username = reserve_a_random_username(txn)
-            txn.execute( "UPDATE elsewhere SET participant=%s "
-                         "WHERE platform=%s AND participant=%s"
-                       , (new_stub_username, platform, participant.username)
-                        )
+            new_stub_username = reserve_a_random_username(cursor)
+            cursor.execute( "UPDATE elsewhere SET participant=%s "
+                            "WHERE platform=%s AND participant=%s"
+                          , (new_stub_username, platform, participant.username)
+                           )
 
 
         # Do the deal.
@@ -231,10 +231,10 @@ def take_over(participant, account_elsewhere, have_confirmation=False):
         # browsing sessions open from that account, they will stay open
         # until they expire (XXX Is that okay?)
 
-        txn.execute( "UPDATE elsewhere SET participant=%s "
-                     "WHERE platform=%s AND user_id=%s"
-                   , (participant.username, platform, user_id)
-                    )
+        cursor.execute( "UPDATE elsewhere SET participant=%s "
+                        "WHERE platform=%s AND user_id=%s"
+                      , (participant.username, platform, user_id)
+                       )
 
 
         # Fold the old participant into the new as appropriate.
@@ -247,10 +247,10 @@ def take_over(participant, account_elsewhere, have_confirmation=False):
             # ===============
 
             x, y = participant.username, other_username
-            txn.execute(CONSOLIDATE_TIPS_RECEIVING, (x, x,y, x,y, x))
-            txn.execute(CONSOLIDATE_TIPS_GIVING, (x, x,y, x,y, x))
-            txn.execute(ZERO_OUT_OLD_TIPS_RECEIVING, (other_username,))
-            txn.execute(ZERO_OUT_OLD_TIPS_GIVING, (other_username,))
+            cursor.execute(CONSOLIDATE_TIPS_RECEIVING, (x, x,y, x,y, x))
+            cursor.execute(CONSOLIDATE_TIPS_GIVING, (x, x,y, x,y, x))
+            cursor.execute(ZERO_OUT_OLD_TIPS_RECEIVING, (other_username,))
+            cursor.execute(ZERO_OUT_OLD_TIPS_GIVING, (other_username,))
 
 
             # Archive the old participant.
@@ -260,7 +260,7 @@ def take_over(participant, account_elsewhere, have_confirmation=False):
 
             for archive_username in gen_random_usernames():
                 try:
-                    txn.execute("""
+                    cursor.execute("""
 
                         UPDATE participants
                            SET username=%s
@@ -274,7 +274,7 @@ def take_over(participant, account_elsewhere, have_confirmation=False):
                          , archive_username.lower()
                          , other_username)
                           )
-                    rec = txn.fetchone()
+                    rec = cursor.fetchone()
                 except IntegrityError:
                     continue  # archive_username is already taken;
                               # extremely unlikely, but ...
@@ -289,8 +289,11 @@ def take_over(participant, account_elsewhere, have_confirmation=False):
             # ======================
             # This is for preservation of history.
 
-            txn.execute( "INSERT INTO absorptions "
-                         "(absorbed_was, absorbed_by, archived_as) "
-                         "VALUES (%s, %s, %s)"
-                       , (other_username, participant.username, archive_username)
-                        )
+            cursor.execute( "INSERT INTO absorptions "
+                            "(absorbed_was, absorbed_by, archived_as) "
+                            "VALUES (%s, %s, %s)"
+                          , ( other_username
+                            , participant.username
+                            , archive_username
+                             )
+                           )
