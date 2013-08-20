@@ -93,7 +93,6 @@ def outbound(response):
             response.headers.cookie['session'] = ''
             expires = 0
     else: # user is authenticated
-        user = User.from_session_token(user.participant.session_token)
         response.headers['Expires'] = BEGINNING_OF_EPOCH # don't cache
         response.headers.cookie['session'] = user.participant.session_token
         expires = time.time() + TIMEOUT
