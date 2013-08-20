@@ -17,21 +17,21 @@ def commaize(number, places=0):
 
 title = "Stats"
 yesterday = datetime.datetime.utcnow() - datetime.timedelta(hours=24)
-escrow = db.one_or_zero("SELECT sum(balance) FROM participants")
-nach = db.one_or_zero("SELECT count(*) FROM participants WHERE last_ach_result = '' AND is_suspicious IS NOT true")
+escrow = db.one("SELECT sum(balance) FROM participants")
+nach = db.one("SELECT count(*) FROM participants WHERE last_ach_result = '' AND is_suspicious IS NOT true")
 if nach < 10:
     nach = CARDINALS[nach].title()
 else:
     nach = commaize(nach)
-payday = db.one_or_zero( "SELECT ts_start, ts_end FROM paydays WHERE ts_start > %s"
+payday = db.one( "SELECT ts_start, ts_end FROM paydays WHERE ts_start > %s"
                        , (yesterday,)
                         )
-npeople = db.one_or_zero("SELECT count(*) FROM participants WHERE claimed_time IS NOT NULL AND is_suspicious IS NOT true")
-ncc = db.one_or_zero("SELECT count(*) FROM participants WHERE last_bill_result = '' AND is_suspicious IS NOT true")
+npeople = db.one("SELECT count(*) FROM participants WHERE claimed_time IS NOT NULL AND is_suspicious IS NOT true")
+ncc = db.one("SELECT count(*) FROM participants WHERE last_bill_result = '' AND is_suspicious IS NOT true")
 pcc = "%5.1f" % ((ncc * 100.0) / npeople) if npeople > 0 else 0.0
 statements = db.all("SELECT username, statement FROM participants WHERE statement != '' AND is_suspicious IS NOT true ORDER BY random(), username LIMIT 16")
-transfer_volume = db.one_or_zero("SELECT transfer_volume FROM paydays ORDER BY ts_end DESC LIMIT 1")
-tip_amounts = db.one_or_zero("""
+transfer_volume = db.one("SELECT transfer_volume FROM paydays ORDER BY ts_end DESC LIMIT 1")
+tip_amounts = db.one("""
         SELECT avg(amount), sum(amount)
          FROM (    SELECT DISTINCT ON (tipper, tippee) amount
                      FROM tips
@@ -51,7 +51,7 @@ else:
     average_tip = tip_amounts.avg if tip_amounts.avg is not None else 0
     total_backed_tips = tip_amounts.sum if tip_amounts.sum is not None else 0
 
-average_tippees = int(db.one_or_zero("""\
+average_tippees = int(db.one("""\
         SELECT round(avg(ntippees))
           FROM ( SELECT count(tippee) as NTIPPEES
                    FROM ( SELECT DISTINCT ON (tipper, tippee)
@@ -119,11 +119,11 @@ def part(s):
     return s
 
 
-ngivers = db.one_or_zero("select count(distinct tipper) from transfers "
+ngivers = db.one("select count(distinct tipper) from transfers "
                  "where timestamp > (now() - interval '7 days')")
-nreceivers = db.one_or_zero("select count(distinct tippee) from transfers "
+nreceivers = db.one("select count(distinct tippee) from transfers "
                     "where timestamp > (now() - interval '7 days')")
-noverlap = db.one_or_zero("""
+noverlap = db.one("""
 
         select count(*) from (
 
@@ -136,7 +136,7 @@ noverlap = db.one_or_zero("""
         ) as anon
 
 """)
-nactive = db.one_or_zero("""
+nactive = db.one("""
 
         select count(*) from (
 

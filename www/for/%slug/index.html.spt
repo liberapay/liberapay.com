@@ -71,10 +71,10 @@ try:
 except ValueError:
     raise Response(400)
 
-community = db.one_or_zero( "SELECT community_summary.*::community_summary "
-                            "FROM community_summary WHERE slug=%s"
-                          , (slug,)
-                           )
+community = db.one( "SELECT community_summary.*::community_summary "
+                    "FROM community_summary WHERE slug=%s"
+                  , (slug,)
+                   )
 if community is None:
     class StubCommunity:
         name = _slug
