@@ -36,7 +36,11 @@ class User(object):
         return self
 
     def __str__(self):
-        return '<User: %s>' % getattr(self, 'id', 'Anonymous')
+        if self.participant is None:
+            out = '<Anonymous>'
+        else:
+            out = '<User: %s>' % self.participant.username
+        return out
     __repr__ = __str__
 
 
