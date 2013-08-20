@@ -102,7 +102,7 @@ _tip_distribution = db.all("""
   GROUP BY amount
   ORDER BY amount
 
-""", cursor_factory=dict)
+""", back_as=dict)
 
 tip_n = sum([row['count'] for row in _tip_distribution])
 

@@ -139,7 +139,7 @@ class MixinTeam(object):
              WHERE team=%s
           ORDER BY ctime DESC
 
-        """, (self.username,), cursor_factory=dict)
+        """, (self.username,), back_as=dict)
 
     def get_teams_membership(self):
         assert self.IS_PLURAL
