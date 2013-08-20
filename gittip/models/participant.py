@@ -314,7 +314,7 @@ class Participant(Model, MixinElsewhere, MixinTeam):
           ORDER BY mtime DESC
              LIMIT 1
 
-        """, (self.username, tippee), zero=Decimal('0.00'))
+        """, (self.username, tippee), default=Decimal('0.00'))
 
 
     def get_dollars_receiving(self):
@@ -335,7 +335,7 @@ class Participant(Model, MixinElsewhere, MixinTeam):
                           , mtime DESC
                     ) AS foo
 
-        """, (self.username,), zero=Decimal('0.00'))
+        """, (self.username,), default=Decimal('0.00'))
 
 
     def get_dollars_giving(self):
@@ -356,7 +356,7 @@ class Participant(Model, MixinElsewhere, MixinTeam):
                           , mtime DESC
                     ) AS foo
 
-        """, (self.username,), zero=Decimal('0.00'))
+        """, (self.username,), default=Decimal('0.00'))
 
 
     def get_number_of_backers(self):
@@ -378,7 +378,7 @@ class Participant(Model, MixinElsewhere, MixinTeam):
                     ) AS foo
              WHERE amount > 0
 
-        """, (self.username,), zero=0)
+        """, (self.username,), default=0)
 
 
     def get_tip_distribution(self):

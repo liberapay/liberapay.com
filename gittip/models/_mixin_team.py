@@ -70,7 +70,7 @@ class MixinTeam(object):
                 (SELECT ts_start FROM paydays ORDER BY ts_start DESC LIMIT 1)
           ORDER BY timestamp DESC LIMIT 1
 
-        """, (self.username, membername), zero=Decimal('0.00'))
+        """, (self.username, membername), default=Decimal('0.00'))
 
     def get_take_for(self, member):
         """Return a Decimal representation of the take for this member, or 0.
@@ -79,7 +79,7 @@ class MixinTeam(object):
         return self.db.one( "SELECT take FROM current_memberships "
                             "WHERE member=%s AND team=%s"
                           , (member.username, self.username)
-                          , zero=Decimal('0.00')
+                          , default=Decimal('0.00')
                            )
 
     def compute_max_this_week(self, last_week):
@@ -144,7 +144,7 @@ class MixinTeam(object):
     def get_teams_membership(self):
         assert self.IS_PLURAL
         TAKE = "SELECT sum(take) FROM current_memberships WHERE team=%s"
-        total_take = self.db.one(TAKE, (self.username,), zero=0)
+        total_take = self.db.one(TAKE, (self.username,), default=0)
         team_take = max(self.get_dollars_receiving() - total_take, 0)
         membership = { "ctime": None
                      , "mtime": None
