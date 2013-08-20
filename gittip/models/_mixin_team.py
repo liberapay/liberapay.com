@@ -61,7 +61,7 @@ class MixinTeam(object):
         assert self.IS_PLURAL
         membername = member.username if hasattr(member, 'username') \
                                                         else member['username']
-        return self.db.one_or_zero("""
+        return self.db.one("""
 
             SELECT amount
               FROM transfers
@@ -76,11 +76,11 @@ class MixinTeam(object):
         """Return a Decimal representation of the take for this member, or 0.
         """
         assert self.IS_PLURAL
-        return self.db.one_or_zero( "SELECT take FROM current_memberships "
-                                    "WHERE member=%s AND team=%s"
-                                  , (member.username, self.username)
-                                  , zero=Decimal('0.00')
-                                   )
+        return self.db.one( "SELECT take FROM current_memberships "
+                            "WHERE member=%s AND team=%s"
+                          , (member.username, self.username)
+                          , zero=Decimal('0.00')
+                           )
 
     def compute_max_this_week(self, last_week):
         """2x last week's take, but at least a dollar.
@@ -144,7 +144,7 @@ class MixinTeam(object):
     def get_teams_membership(self):
         assert self.IS_PLURAL
         TAKE = "SELECT sum(take) FROM current_memberships WHERE team=%s"
-        total_take = self.db.one_or_zero(TAKE, (self.username,), zero=0)
+        total_take = self.db.one(TAKE, (self.username,), zero=0)
         team_take = max(self.get_dollars_receiving() - total_take, 0)
         membership = { "ctime": None
                      , "mtime": None

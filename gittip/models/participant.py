@@ -70,7 +70,7 @@ class Participant(Model, MixinElsewhere, MixinTeam):
 
     @classmethod
     def _from_thing(cls, thing, value):
-        return cls.db.one_or_zero("""
+        return cls.db.one("""
 
             SELECT participants.*::participants
               FROM participants
@@ -166,11 +166,11 @@ class Participant(Model, MixinElsewhere, MixinTeam):
     def resolve_unclaimed(self):
         """Given a username, return an URL path.
         """
-        rec = gittip.db.one_or_zero( "SELECT platform, user_info "
-                                     "FROM elsewhere "
-                                     "WHERE participant = %s"
-                                   , (self.username,)
-                                    )
+        rec = gittip.db.one( "SELECT platform, user_info "
+                             "FROM elsewhere "
+                             "WHERE participant = %s"
+                           , (self.username,)
+                            )
         if rec is None:
             out = None
         elif rec['platform'] == 'github':
@@ -248,11 +248,11 @@ class Participant(Model, MixinElsewhere, MixinTeam):
 
         if suggested != self.username:
             # Will raise IntegrityError if the desired username is taken.
-            rec = gittip.db.one_or_zero( "UPDATE participants "
-                                         "SET username=%s WHERE username=%s "
-                                         "RETURNING username"
-                                       , (suggested, self.username)
-                                        )
+            rec = gittip.db.one( "UPDATE participants "
+                                 "SET username=%s WHERE username=%s "
+                                 "RETURNING username"
+                               , (suggested, self.username)
+                                )
 
             assert rec is not None               # sanity check
             assert suggested == rec['username']  # sanity check
@@ -298,14 +298,14 @@ class Participant(Model, MixinElsewhere, MixinTeam):
         """
         args = (self.username, tippee, self.username, tippee, amount, \
                                                                  self.username)
-        first_time_tipper = gittip.db.one_or_zero(NEW_TIP, args)
+        first_time_tipper = gittip.db.one(NEW_TIP, args)
         return amount, first_time_tipper
 
 
     def get_tip_to(self, tippee):
         """Given two user ids, return a Decimal.
         """
-        return self.db.one_or_zero("""\
+        return self.db.one("""\
 
             SELECT amount
               FROM tips
@@ -320,7 +320,7 @@ class Participant(Model, MixinElsewhere, MixinTeam):
     def get_dollars_receiving(self):
         """Return a Decimal.
         """
-        return self.db.one_or_zero("""\
+        return self.db.one("""\
 
             SELECT sum(amount)
               FROM ( SELECT DISTINCT ON (tipper)
@@ -341,7 +341,7 @@ class Participant(Model, MixinElsewhere, MixinTeam):
     def get_dollars_giving(self):
         """Return a Decimal.
         """
-        return self.db.one_or_zero("""\
+        return self.db.one("""\
 
             SELECT sum(amount)
               FROM ( SELECT DISTINCT ON (tippee)
@@ -362,7 +362,7 @@ class Participant(Model, MixinElsewhere, MixinTeam):
     def get_number_of_backers(self):
         """Given a unicode, return an int.
         """
-        return gittip.db.one_or_zero("""\
+        return gittip.db.one("""\
 
             SELECT count(amount)
               FROM ( SELECT DISTINCT ON (tipper)
@@ -722,11 +722,11 @@ def typecast(request):
 
     slug = path['username']
 
-    participant = gittip.db.one_or_zero( "SELECT participants.*::participants "
-                                         "FROM participants "
-                                         "WHERE username_lower=%s"
-                                       , (slug.lower())
-                                        )
+    participant = gittip.db.one( "SELECT participants.*::participants "
+                                 "FROM participants "
+                                 "WHERE username_lower=%s"
+                               , (slug.lower())
+                                )
 
     if participant is None:
         raise Response(404)

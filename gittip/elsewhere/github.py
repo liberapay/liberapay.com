@@ -98,7 +98,7 @@ def get_user_info(login):
     """
     typecheck(login, unicode)
     try:
-        rec = gittip.db.one_or_zero( "SELECT user_info FROM elsewhere "
+        rec = gittip.db.one( "SELECT user_info FROM elsewhere "
                                      "WHERE platform='github' "
                                      "AND user_info->'login' = %s"
                                    , (login,)

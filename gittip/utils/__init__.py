@@ -291,7 +291,7 @@ def get_participant(request, restrict=True):
         if user.ANON:
             request.redirect(u'/%s/' % slug)
 
-    participant = gittip.db.one_or_zero( "SELECT participants.*::participants "
+    participant = gittip.db.one( "SELECT participants.*::participants "
                                          "FROM participants "
                                          "WHERE username_lower=%s"
                                        , (slug.lower(),)

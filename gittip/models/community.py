@@ -26,7 +26,7 @@ def slug_to_name(slug):
 
     """
     SQL = "SELECT name FROM community_summary WHERE slug=%s"
-    return gittip.db.one_or_zero(SQL, (slug,))
+    return gittip.db.one(SQL, (slug,))
 
 
 def get_list_for(user):
@@ -64,7 +64,7 @@ class Community(Model):
     typname = "community_summary"
 
     def check_membership(self, participant):
-        return self.db.one_or_zero("""
+        return self.db.one("""
 
         SELECT * FROM current_communities WHERE slug=%s AND participant=%s
 
