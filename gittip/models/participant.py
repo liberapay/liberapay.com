@@ -273,14 +273,17 @@ class Participant(Model, MixinElsewhere, MixinTeam):
             raise self.UsernameIsRestricted
 
         if suggested != self.username:
-            # Will raise IntegrityError if the desired username is taken.
-            actual = gittip.db.one( "UPDATE participants "
-                                    "SET username=%s, username_lower=%s "
-                                    "WHERE username=%s "
-                                    "RETURNING username, username_lower"
-                                  , (suggested, lowercased, self.username)
-                                  , back_as=tuple
-                                   )
+            try:
+                # Will raise IntegrityError if the desired username is taken.
+                actual = gittip.db.one( "UPDATE participants "
+                                        "SET username=%s, username_lower=%s "
+                                        "WHERE username=%s "
+                                        "RETURNING username, username_lower"
+                                      , (suggested, lowercased, self.username)
+                                      , back_as=tuple
+                                       )
+            except IntegrityError:
+                raise UsernameAlreadyTaken
 
             assert (suggested, lowercased) == actual  # sanity check
             self.set_attributes(username=suggested, username_lower=lowercased)

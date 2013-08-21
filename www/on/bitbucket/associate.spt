@@ -78,7 +78,6 @@ account = bitbucket.BitbucketAccount(username, user_info)
 if action == 'opt-in':      # opt in
     # set 'user' to give them a session :/
     user, newly_claimed = account.opt_in(username)
-    user.sign_in()
     if newly_claimed:
         mixpanel.alias_and_track(cookie, unicode(user.id))
 elif action == 'connect':   # connect

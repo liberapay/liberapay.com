@@ -1,6 +1,7 @@
 """This subpackage contains functionality for working with accounts elsewhere.
-
 """
+from __future__ import print_function, unicode_literals
+
 from aspen.utils import typecheck
 from psycopg2 import IntegrityError
 
@@ -17,7 +18,7 @@ def _resolve(platform, username_key, username):
     """Given three unicodes, return a username.
     """
     typecheck(platform, unicode, username_key, unicode, username, unicode)
-    rec = gittip.db.one("""
+    participant = gittip.db.one("""
 
         SELECT participant
           FROM elsewhere
@@ -27,11 +28,11 @@ def _resolve(platform, username_key, username):
     """, (platform, username_key, username,))
     # XXX Do we want a uniqueness constraint on $username_key? Can we do that?
 
-    if rec is None:
+    if participant is None:
         raise Exception( "User %s on %s isn't known to us."
                        % (username, platform)
                         )
-    return rec['participant']
+    return participant
 
 
 class AccountElsewhere(object):
@@ -71,7 +72,8 @@ class AccountElsewhere(object):
         """Given a desired username, return a User object.
         """
         self.set_is_locked(False)
-        user = User.from_username(self.participant)  # give them a session
+        user = User.from_username(self.participant)
+        user.sign_in()
         assert not user.ANON, self.participant  # sanity check
         if self.is_claimed:
             newly_claimed = False
