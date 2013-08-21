@@ -60,9 +60,6 @@ def oauth_dance(website, qs):
 
     log("Doing an OAuth dance with Github.")
 
-    if 'error' in qs:
-        raise Response(500, str(qs['error']))
-
     data = { 'code': qs['code'].encode('US-ASCII')
            , 'client_id': website.github_client_id
            , 'client_secret': website.github_client_secret
