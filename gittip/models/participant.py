@@ -289,6 +289,14 @@ class Participant(Model, MixinElsewhere, MixinTeam):
             self.set_attributes(username=suggested, username_lower=lowercased)
 
 
+    def update_goal(self, goal):
+        typecheck(goal, (Decimal, None))
+        self.db.run( "UPDATE participants SET goal=%s WHERE username=%s"
+                   , (goal, self.username)
+                    )
+        self.set_attributes(goal=goal)
+
+
     def set_tip_to(self, tippee, amount):
         """Given participant id and amount as str, return a tuple.
 
