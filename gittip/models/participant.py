@@ -8,7 +8,7 @@ of participant, based on certain properties.
  - *Teams* are plural participants with members
 
 """
-from __future__ import unicode_literals
+from __future__ import print_function, unicode_literals
 
 import datetime
 import random
@@ -18,6 +18,7 @@ from decimal import Decimal
 import gittip
 import pytz
 from aspen import Response
+from aspen.utils import typecheck
 from psycopg2 import IntegrityError
 from postgres.orm import Model
 from gittip.models._mixin_elsewhere import MixinElsewhere
@@ -49,36 +50,51 @@ class Participant(Model, MixinElsewhere, MixinTeam):
         return self.username != other.username
 
 
-    # Additional Constructors
-    # =======================
+    # Constructors
+    # ============
+
+    @classmethod
+    def with_random_username(cls):
+        """Return a new participant with a random username.
+        """
+        with cls.db.get_cursor() as cursor:
+            username = reserve_a_random_username(cursor)
+        return cls.from_username(username)
+
+    @classmethod
+    def from_id(cls, id):
+        """Return an existing participant based on id.
+        """
+        return cls._from_thing("id", id)
+
+    @classmethod
+    def from_username(cls, username):
+        """Return an existing participant based on username.
+        """
+        return cls._from_thing("username_lower", username.lower())
 
     @classmethod
     def from_session_token(cls, token):
+        """Return an existing participant based on session token.
+        """
         return cls._from_thing("session_token", token)
 
     @classmethod
     def from_api_key(cls, api_key):
+        """Return an existing participant based on API key.
+        """
         return cls._from_thing("api_key", api_key)
 
     @classmethod
-    def from_username(cls, username):
-        return cls._from_thing("username", username)
-
-    @classmethod
-    def from_id(cls, id):
-        return cls._from_thing("id", id)
-
-    @classmethod
     def _from_thing(cls, thing, value):
+        assert thing in ("id", "username_lower", "session_token", "api_key")
         return cls.db.one("""
 
             SELECT participants.*::participants
               FROM participants
-             WHERE is_suspicious IS NOT true
-               AND {}=%s
+             WHERE {}=%s
 
         """.format(thing), (value,))
-
 
 
     # Session Management
@@ -101,10 +117,11 @@ class Participant(Model, MixinElsewhere, MixinTeam):
         self._update_session_token(None)
 
     def _update_session_token(self, new_token):
-        self.db.run( "UPDATE participants SET session_token=%s WHERE id=%s"
+        self.db.run( "UPDATE participants SET session_token=%s "
+                     "WHERE id=%s AND is_suspicious IS NOT true"
                    , (new_token, self.id,)
                     )
-        self.update_attributes(session_token=new_token)
+        self.set_attributes(session_token=new_token)
 
     def set_session_expires(self, expires):
         """Set session_expires in the database.
@@ -115,10 +132,11 @@ class Participant(Model, MixinElsewhere, MixinTeam):
         """
         session_expires = datetime.datetime.fromtimestamp(expires) \
                                                       .replace(tzinfo=pytz.utc)
-        self.db.run( "UPDATE participants SET session_expires=%s WHERE id=%s"
+        self.db.run( "UPDATE participants SET session_expires=%s "
+                     "WHERE id=%s AND is_suspicious IS NOT true"
                    , (session_expires, self.id,)
                     )
-        self.update_attributes(session_expires=session_expires)
+        self.set_attributes(session_expires=session_expires)
 
 
     # Number
@@ -132,20 +150,12 @@ class Participant(Model, MixinElsewhere, MixinTeam):
     def IS_PLURAL(self):
         return self.number == 'plural'
 
-    def get_teams(self):
-        """Return a list of teams this user is a member of.
-        """
-        return gittip.db.all("""
-
-            SELECT team AS name
-                 , ( SELECT count(*)
-                       FROM current_memberships
-                      WHERE team=x.team
-                    ) AS nmembers
-              FROM current_memberships x
-             WHERE member=%s;
-
-        """, (self.username,))
+    def update_number(self, number):
+        assert number in ('singular', 'plural')
+        self.db.run( "UPDATE participants SET number=%s WHERE id=%s"
+                   , (number, self.id)
+                    )
+        self.set_attributes(number=number)
 
 
     # API Key
@@ -196,6 +206,21 @@ class Participant(Model, MixinElsewhere, MixinTeam):
     # Random Junk
     # ===========
 
+    def get_teams(self):
+        """Return a list of teams this user is a member of.
+        """
+        return gittip.db.all("""
+
+            SELECT team AS name
+                 , ( SELECT count(*)
+                       FROM current_memberships
+                      WHERE team=x.team
+                    ) AS nmembers
+              FROM current_memberships x
+             WHERE member=%s;
+
+        """, (self.username,))
+
     @property
     def accepts_tips(self):
         return (self.goal is None) or (self.goal >= 0)
@@ -231,6 +256,7 @@ class Participant(Model, MixinElsewhere, MixinTeam):
         32 characters in length.
 
         """
+        typecheck(suggested, unicode)
         for i, c in enumerate(suggested):
             if i == 32:
                 raise self.UsernameTooLong  # Request Entity Too Large (more or less)
@@ -248,15 +274,16 @@ class Participant(Model, MixinElsewhere, MixinTeam):
 
         if suggested != self.username:
             # Will raise IntegrityError if the desired username is taken.
-            rec = gittip.db.one( "UPDATE participants "
-                                 "SET username=%s WHERE username=%s "
-                                 "RETURNING username"
-                               , (suggested, self.username)
-                                )
+            actual = gittip.db.one( "UPDATE participants "
+                                    "SET username=%s, username_lower=%s "
+                                    "WHERE username=%s "
+                                    "RETURNING username, username_lower"
+                                  , (suggested, lowercased, self.username)
+                                  , back_as=tuple
+                                   )
 
-            assert rec is not None               # sanity check
-            assert suggested == rec['username']  # sanity check
-            self.update_attributes(username=suggested)
+            assert (suggested, lowercased) == actual  # sanity check
+            self.set_attributes(username=suggested, username_lower=lowercased)
 
 
     def set_tip_to(self, tippee, amount):
@@ -523,7 +550,7 @@ class Participant(Model, MixinElsewhere, MixinTeam):
         return tips, total, unclaimed_tips, unclaimed_total
 
 
-    def get_tips_and_total(self, for_payday=False, db=None):
+    def get_tips_and_total(self, for_payday=False):
         """Given a participant id and a date, return a list and a Decimal.
 
         This function is used by the payday function. If for_payday is not
@@ -533,11 +560,7 @@ class Participant(Model, MixinElsewhere, MixinTeam):
         requirements of the profile page. So this function keeps the for_payday
         parameter after all.
 
-        A half-injected dependency, that's what db is.
-
         """
-        if db is None:
-            from gittip import db
 
         if for_payday:
 
@@ -594,7 +617,7 @@ class Participant(Model, MixinElsewhere, MixinTeam):
                    , tippee
 
         """ % (ts_filter, order_by)  # XXX, No injections here, right?!
-        tips = db.all(TIPS, args)
+        tips = self.db.all(TIPS, args, back_as=dict)
 
 
         # Compute the total.

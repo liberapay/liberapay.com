@@ -336,15 +336,3 @@ class Tests(Harness):
         actual = alice.get_age_in_seconds()
         assert actual == -1, actual
 
-    # def get_details(self):
-    # def resolve_unclaimed(self):
-    # def set_as_claimed(self):
-    # def change_username(self, suggested):
-    # def get_accounts_elsewhere(self):
-    # def get_tip_to(self, tippee):
-    # def get_dollars_receiving(self):
-    # def get_dollars_giving(self):
-    # def get_chart_of_receiving(self):
-    # def get_giving_for_profile(self, db=None):
-    # def get_tips_and_total(self, for_payday=False, db=None):
-    # def take_over(self, account_elsewhere, have_confirmation=False):

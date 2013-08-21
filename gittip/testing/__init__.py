@@ -1,6 +1,6 @@
 """Helpers for testing Gittip.
 """
-from __future__ import unicode_literals
+from __future__ import print_function, unicode_literals
 
 import datetime
 import random
@@ -68,10 +68,6 @@ DUMMY_BOUNTYSOURCE_JSON = u'{"slug": "6-corytheboyd","updated_at": "2013-05-2'\
 # JSON data as returned from bountysource for corytheboyd! hello, whit537 ;)
 
 
-def create_schema(db):
-    db.run(SCHEMA)
-
-
 class Harness(unittest.TestCase):
 
     @classmethod
@@ -82,14 +78,22 @@ class Harness(unittest.TestCase):
         pass
 
     def tearDown(self):
-        pass
+        tablenames = self.db.all("SELECT tablename FROM pg_tables "
+                                 "WHERE schemaname='public'")
+        with self.db.get_cursor():
+            for tablename in tablenames:
+                self.db.run("DELETE FROM %s CASCADE" % tablename)
 
-    def make_participant(self, username, number='singular', **kw):
-        participant = Participant( username=username
-                                 , username_lower=username.lower()
-                                 , number=number
-                                 , **kw
-                                  )
+    def make_participant(self, username, **kw):
+        participant = Participant.with_random_username()
+        participant.change_username(username)
+
+        # brute force update for use in testing
+        for k,v in kw.items():
+            self.db.run("UPDATE participants SET {}=%s WHERE username=%s" \
+                        .format(k), (v, participant.username))
+        participant.set_attributes(**kw)
+
         return participant
 
 
