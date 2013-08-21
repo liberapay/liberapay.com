@@ -1,7 +1,7 @@
-from gittip.testing import Harness
+from __future__ import print_function, unicode_literals
+
 from gittip import fake_data
-from gittip.models.tip import Tip
-from gittip.models.participant import Participant
+from gittip.testing import Harness
 
 
 class TestFakeData(Harness):
@@ -17,8 +17,8 @@ class TestFakeData(Harness):
         num_tips = 5
         num_teams = 1
         fake_data.populate_db(self.session, num_participants, num_tips, num_teams)
-        tips = Tip.query.all()
-        participants = Participant.query.all()
+        tips =
+        participants =
         assert len(tips) == num_tips
         assert len(participants) == num_participants + num_teams
 

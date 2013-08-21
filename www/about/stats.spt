@@ -1,3 +1,5 @@
+from __future__ import print_function, unicode_literals
+
 import datetime
 import locale
 from aspen import json
@@ -17,20 +19,20 @@ def commaize(number, places=0):
 
 title = "Stats"
 yesterday = datetime.datetime.utcnow() - datetime.timedelta(hours=24)
-escrow = db.one("SELECT sum(balance) FROM participants")
+escrow = db.one("SELECT sum(balance) FROM participants", default=0)
 nach = db.one("SELECT count(*) FROM participants WHERE last_ach_result = '' AND is_suspicious IS NOT true")
 if nach < 10:
     nach = CARDINALS[nach].title()
 else:
     nach = commaize(nach)
 payday = db.one( "SELECT ts_start, ts_end FROM paydays WHERE ts_start > %s"
-                       , (yesterday,)
-                        )
+               , (yesterday,)
+                )
 npeople = db.one("SELECT count(*) FROM participants WHERE claimed_time IS NOT NULL AND is_suspicious IS NOT true")
 ncc = db.one("SELECT count(*) FROM participants WHERE last_bill_result = '' AND is_suspicious IS NOT true")
 pcc = "%5.1f" % ((ncc * 100.0) / npeople) if npeople > 0 else 0.0
 statements = db.all("SELECT username, statement FROM participants WHERE statement != '' AND is_suspicious IS NOT true ORDER BY random(), username LIMIT 16")
-transfer_volume = db.one("SELECT transfer_volume FROM paydays ORDER BY ts_end DESC LIMIT 1")
+transfer_volume = db.one("SELECT transfer_volume FROM paydays ORDER BY ts_end DESC LIMIT 1", default=0)
 tip_amounts = db.one("""
         SELECT avg(amount), sum(amount)
          FROM (    SELECT DISTINCT ON (tipper, tippee) amount
@@ -68,7 +70,7 @@ average_tippees = int(db.one("""\
                         GROUP BY tipper, tippee, mtime, amount
                         ORDER BY tipper, tippee, mtime DESC
                          ) AS foo WHERE amount > 0 GROUP BY tipper) AS bar
-"""))
+""", default=0))
 
 word = "people"
 if average_tippees == 1:
