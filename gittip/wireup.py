@@ -13,7 +13,6 @@ import gittip.utils.mixpanel
 from gittip.models.community import Community
 from gittip.models.participant import Participant
 from postgres import Postgres
-from psycopg2.extensions import cursor as RegularCursor
 
 
 def canonical():
@@ -28,9 +27,8 @@ def db():
     db = gittip.db = Postgres(dburl, maxconn=maxconn)
 
     # register hstore type (but use a RegularCursor? I forget why. :( )
-    with db.get_connection() as conn:
-        curs = conn.cursor(cursor_factory=RegularCursor)
-        psycopg2.extras.register_hstore(curs, globally=True, unicode=True)
+    with db.get_cursor() as cursor:
+        psycopg2.extras.register_hstore(cursor, globally=True, unicode=True)
 
     db.register_model(Community)
     db.register_model(Participant)

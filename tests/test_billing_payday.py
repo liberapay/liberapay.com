@@ -184,10 +184,8 @@ class TestBillingCharges(TestPaydayBase):
         before = self.fetch_payday()
         fail_count = before['ncc_failing']
 
-        with self.db.get_connection() as conn:
-            cur = conn.cursor()
-            self.payday.mark_charge_failed(cur)
-            conn.commit()
+        with self.db.get_cursor() as cursor:
+            self.payday.mark_charge_failed(cursor)
 
         after = self.fetch_payday()
         self.assertEqual(after['ncc_failing'], fail_count + 1)
@@ -196,10 +194,8 @@ class TestBillingCharges(TestPaydayBase):
         self.payday.start()
         charge_amount, fee = 4, 2
 
-        with self.db.get_connection() as conn:
-            cur = conn.cursor()
-            self.payday.mark_charge_success(cur, charge_amount, fee)
-            conn.commit()
+        with self.db.get_cursor() as cursor:
+            self.payday.mark_charge_success(cursor, charge_amount, fee)
 
         # verify paydays
         actual = self.fetch_payday()
@@ -645,7 +641,7 @@ class TestBillingTransfer(TestPaydayBase):
 
         initial_amount = subject.balance
 
-        with self.db.get_connection() as connection:
+        with self.db.get_cursor() as connection:
             cursor = connection.cursor()
 
             self.payday.debit_participant(cursor, subject.username, amount)
@@ -658,7 +654,7 @@ class TestBillingTransfer(TestPaydayBase):
         assert_equals(actual, expected)
 
         # this will fail because not enough balance
-        with self.db.get_connection() as conn:
+        with self.db.get_cursor() as cursor:
             cur = conn.cursor()
 
             with self.assertRaises(IntegrityError):
@@ -676,10 +672,8 @@ class TestBillingTransfer(TestPaydayBase):
 
         initial_amount = subject.pending
 
-        with self.db.get_connection() as conn:
-            cur = conn.cursor()
+        with self.db.get_cursor() as cursor:
             self.payday.credit_participant(cur, subject.username, amount)
-            conn.commit()
 
         subject = Participant.from_username('test_credit_participant') # reload
 
@@ -694,7 +688,7 @@ class TestBillingTransfer(TestPaydayBase):
         for subject in subjects:
             self.make_participant(subject, balance=1, pending=0)
 
-        with self.db.get_connection() as conn:
+        with self.db.get_cursor() as cursor:
             cur = conn.cursor()
 
             # Tip 'jim' twice
@@ -718,7 +712,7 @@ class TestBillingTransfer(TestPaydayBase):
     def test_record_transfer_invalid_participant(self):
         amount = Decimal('1.00')
 
-        with self.db.get_connection() as conn:
+        with self.db.get_cursor() as cursor:
             cur = conn.cursor()
             with assert_raises(IntegrityError):
                 self.payday.record_transfer(cur, 'idontexist', 'nori', amount)
@@ -730,10 +724,8 @@ class TestBillingTransfer(TestPaydayBase):
         # Forces a load with current state in dict
         before_transfer = self.fetch_payday()
 
-        with self.db.get_connection() as conn:
-            cur = conn.cursor()
-            self.payday.mark_transfer(cur, amount)
-            conn.commit()
+        with self.db.get_cursor() as cursor:
+            self.payday.mark_transfer(cursor, amount)
 
         # Forces a load with current state in dict
         after_transfer = self.fetch_payday()

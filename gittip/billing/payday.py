@@ -425,8 +425,7 @@ class Payday(object):
                  , amount, Decimal
                  , pachinko, bool
                   )
-        with self.db.get_connection() as conn:
-            cursor = conn.cursor()
+        with self.db.get_cursor() as cursor:
 
             try:
                 self.debit_participant(cursor, tipper, amount)
@@ -440,7 +439,6 @@ class Payday(object):
             else:
                 self.mark_transfer(cursor, amount)
 
-            conn.commit()
             return True
 
 
@@ -726,8 +724,7 @@ class Payday(object):
 
         """
 
-        with self.db.get_connection() as connection:
-            cursor = connection.cursor()
+        with self.db.get_cursor() as cursor:
 
             if error:
                 last_bill_result = error
@@ -761,9 +758,6 @@ class Payday(object):
             cursor.execute(RESULT, (last_bill_result, amount, username))
 
 
-            connection.commit()
-
-
     def record_credit(self, amount, fee, error, username):
         """Given a Bunch of Stuff, return None.
 
@@ -780,8 +774,7 @@ class Payday(object):
         credit = -amount  # From Gittip's POV this is money flowing out of the
                           # system.
 
-        with self.db.get_connection() as connection:
-            cursor = connection.cursor()
+        with self.db.get_cursor() as cursor:
 
             if error:
                 last_ach_result = error
@@ -815,8 +808,6 @@ class Payday(object):
                                    , credit - fee     # -10.00 - 0.30 = -10.30
                                    , username
                                     ))
-
-            connection.commit()
 
 
     def record_transfer(self, cursor, tipper, tippee, amount):
