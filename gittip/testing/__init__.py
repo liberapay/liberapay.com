@@ -78,14 +78,13 @@ class Harness(unittest.TestCase):
 
     def tearDown(self):
         tablenames = self._tablenames[:]
-        with self.db.get_cursor() as cursor:
-            while tablenames:
-                tablename = tablenames.pop()
-                try:
-                    # I tried TRUNCATE but that was way slower for me.
-                    cursor.run("DELETE FROM %s CASCADE" % tablename)
-                except IntegrityError:
-                    tablenames.insert(0, tablename)
+        while tablenames:
+            tablename = tablenames.pop()
+            try:
+                # I tried TRUNCATE but that was way slower for me.
+                self.db.run("DELETE FROM %s CASCADE" % tablename)
+            except IntegrityError:
+                tablenames.insert(0, tablename)
 
     def make_participant(self, username, **kw):
         participant = Participant.with_random_username()
