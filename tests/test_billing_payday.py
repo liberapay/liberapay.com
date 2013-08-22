@@ -641,11 +641,8 @@ class TestBillingTransfer(TestPaydayBase):
 
         initial_amount = subject.balance
 
-        with self.db.get_cursor() as connection:
-            cursor = connection.cursor()
-
+        with self.db.get_cursor() as cursor:
             self.payday.debit_participant(cursor, subject.username, amount)
-            connection.commit()
 
         subject = Participant.from_username('test_debit_participant')
 
@@ -655,11 +652,8 @@ class TestBillingTransfer(TestPaydayBase):
 
         # this will fail because not enough balance
         with self.db.get_cursor() as cursor:
-            cur = conn.cursor()
-
             with self.assertRaises(IntegrityError):
-                self.payday.debit_participant(cur, subject.username, amount)
-            conn.commit()
+                self.payday.debit_participant(cursor, subject.username, amount)
 
     def test_skim_credit(self):
         actual = skim_credit(Decimal('10.00'))
@@ -673,7 +667,7 @@ class TestBillingTransfer(TestPaydayBase):
         initial_amount = subject.pending
 
         with self.db.get_cursor() as cursor:
-            self.payday.credit_participant(cur, subject.username, amount)
+            self.payday.credit_participant(cursor, subject.username, amount)
 
         subject = Participant.from_username('test_credit_participant') # reload
 
@@ -689,16 +683,13 @@ class TestBillingTransfer(TestPaydayBase):
             self.make_participant(subject, balance=1, pending=0)
 
         with self.db.get_cursor() as cursor:
-            cur = conn.cursor()
-
             # Tip 'jim' twice
             for recipient in ['jim'] + subjects:
-                self.payday.record_transfer( cur
+                self.payday.record_transfer( cursor
                                            , self.tipper.username
                                            , recipient
                                            , amount
                                             )
-            conn.commit()
 
         for subject in subjects:
             # 'jim' is tipped twice
@@ -713,10 +704,12 @@ class TestBillingTransfer(TestPaydayBase):
         amount = Decimal('1.00')
 
         with self.db.get_cursor() as cursor:
-            cur = conn.cursor()
             with assert_raises(IntegrityError):
-                self.payday.record_transfer(cur, 'idontexist', 'nori', amount)
-            conn.commit()
+                self.payday.record_transfer( cursor
+                                           , 'idontexist'
+                                           , 'nori'
+                                           , amount
+                                            )
 
     def test_mark_transfer(self):
         amount = Decimal('1.00')
