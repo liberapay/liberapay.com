@@ -28,8 +28,9 @@ class MixinTeam(object):
         if user.ADMIN:
             return True
         if not self.get_members():
-            if self != user.participant:
-                return False
+            if self == user.participant:
+                return True
+            return False
         return True
 
     def add_member(self, member):
