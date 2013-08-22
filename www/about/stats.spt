@@ -165,10 +165,10 @@ now = datetime.datetime.utcnow()
 if now.weekday() == WEDNESDAY:
     this_thursday = "tomorrow"
 if now.weekday() == THURSDAY:
-    if payday is None or payday['ts_end'] is None:
+    if payday is None or payday.ts_end is None:
         # Payday hasn't started yet.
         this_thursday = "today"
-    elif payday['ts_end'].year == 1970:
+    elif payday.ts_end.year == 1970:
         # Payday is going on right now.
         future_processing_text = "is changing hands"
         this_thursday = "right now!"
