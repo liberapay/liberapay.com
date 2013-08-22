@@ -7,7 +7,6 @@ import gittip.wireup
 import gittip.security.authentication
 import gittip.security.csrf
 import gittip.utils.cache_static
-from gittip.models import community, participant
 from aspen import log_dammit
 
 

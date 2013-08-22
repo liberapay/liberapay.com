@@ -76,7 +76,7 @@ class User(object):
 
     @property
     def ANON(self):
-        return self.participant is None
+        return self.participant is None or self.participant.is_suspicious
 
     def get_highest_role(self, owner):
         """Return a string representing the highest role this user has.

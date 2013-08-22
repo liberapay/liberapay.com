@@ -12,10 +12,10 @@ import gittip
 from aspen import resources
 from aspen.testing import Website, StubRequest
 from aspen.utils import utcnow
-from gittip import wireup
 from gittip.billing.payday import Payday
 from gittip.models.participant import Participant
 from gittip.security.user import User
+from psycopg2 import IntegrityError
 
 
 TOP = join(realpath(dirname(dirname(__file__))), '..')
@@ -77,10 +77,15 @@ class Harness(unittest.TestCase):
                                      "WHERE schemaname='public'")
 
     def tearDown(self):
+        tablenames = self._tablenames[:]
         with self.db.get_cursor() as cursor:
-            for tablename in self._tablenames:
-                # I tried TRUNCATE but that was way slower for me.
-                cursor.run("DELETE FROM %s CASCADE" % tablename)
+            while tablenames:
+                tablename = tablenames.pop()
+                try:
+                    # I tried TRUNCATE but that was way slower for me.
+                    cursor.run("DELETE FROM %s CASCADE" % tablename)
+                except IntegrityError:
+                    tablenames.insert(0, tablename)
 
     def make_participant(self, username, **kw):
         participant = Participant.with_random_username()
