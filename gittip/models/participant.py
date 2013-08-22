@@ -191,15 +191,16 @@ class Participant(Model, MixinElsewhere, MixinTeam):
         return out
 
     def set_as_claimed(self):
-        CLAIM = """\
+        claimed_time = self.db.one("""\
 
             UPDATE participants
                SET claimed_time=CURRENT_TIMESTAMP
              WHERE username=%s
                AND claimed_time IS NULL
+         RETURNING claimed_time
 
-        """
-        gittip.db.run(CLAIM, (self.username,))
+        """, (self.username,))
+        self.set_attributes(claimed_time=claimed_time)
 
 
 

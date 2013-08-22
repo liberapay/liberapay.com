@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+
 import random
 import datetime
 from decimal import Decimal
@@ -8,8 +9,14 @@ import pytz
 from nose.tools import assert_raises
 
 from gittip.testing import Harness
-from gittip.models import Participant, Tip
-from gittip.models.participant import Participant as OldParticipant
+from gittip.models.participant import Participant
+from gittip.models.participant import ( UsernameTooLong
+                                      , UsernameAlreadyTaken
+                                      , UsernameContainsInvalidCharacters
+                                      , UsernameIsRestricted
+                                      , NoSelfTipping
+                                      , BadAmount
+                                       )
 
 
 class Tests(Harness):
@@ -28,44 +35,43 @@ class Tests(Harness):
 
 
     def test_claiming_participant(self):
-        expected = now = datetime.datetime.now(pytz.utc)
-        self.participant.set_as_claimed(claimed_at=now)
-        actual = self.participant.claimed_time
-        assert actual == expected, actual
+        now = datetime.datetime.now(pytz.utc)
+        self.participant.set_as_claimed()
+        actual = self.participant.claimed_time - now
+        expected = datetime.timedelta(seconds=0.1)
+        assert actual < expected, actual
 
     def test_changing_username_successfully(self):
         self.participant.change_username('user2')
-        actual = Participant.query.get('user2')
+        actual = Participant.from_username('user2')
         assert self.participant == actual, actual
 
     def test_changing_username_to_too_long(self):
-        with assert_raises(OldParticipant.UsernameTooLong):
+        with assert_raises(UsernameTooLong):
             self.participant.change_username('123456789012345678901234567890123')
 
     def test_changing_username_to_already_taken(self):
         self.make_participant('user2')
-        with assert_raises(OldParticipant.UsernameAlreadyTaken):
+        with assert_raises(UsernameAlreadyTaken):
             self.participant.change_username('user2')
 
     def test_changing_username_to_already_taken_is_case_insensitive(self):
         self.make_participant('UsEr2')
-        with assert_raises(OldParticipant.UsernameAlreadyTaken):
+        with assert_raises(UsernameAlreadyTaken):
             self.participant.change_username('uSeR2')
 
     def test_changing_username_to_invalid_characters(self):
-        with assert_raises(OldParticipant.UsernameContainsInvalidCharacters):
+        with assert_raises(UsernameContainsInvalidCharacters):
             self.participant.change_username(u"\u2603") # Snowman
 
     def test_changing_username_to_restricted_name(self):
-        with assert_raises(OldParticipant.UsernameIsRestricted):
+        with assert_raises(UsernameIsRestricted):
             self.participant.change_username(self.random_restricted_username())
 
     def test_getting_tips_actually_made(self):
         expected = Decimal('1.00')
         self.make_participant('user2')
-        self.session.add(Tip(tipper='user1', tippee='user2', amount=expected,
-                             ctime=datetime.datetime.now(pytz.utc)))
-        self.session.commit()
+        self.participant.set_tip_to('user2', expected)
         actual = self.participant.get_tip_to('user2')
         assert actual == expected, actual
 
@@ -108,7 +114,7 @@ class Tests(Harness):
 
     def test_stt_doesnt_allow_self_tipping(self):
         alice = self.make_participant('alice', last_bill_result='')
-        assert_raises( OldParticipant.NoSelfTipping
+        assert_raises( NoSelfTipping
                      , alice.set_tip_to
                      , 'alice'
                      , '1000000.00'
@@ -117,7 +123,7 @@ class Tests(Harness):
     def test_stt_doesnt_allow_just_any_ole_amount(self):
         alice = self.make_participant('alice', last_bill_result='')
         self.make_participant('bob')
-        assert_raises( OldParticipant.BadAmount
+        assert_raises( BadAmount
                      , alice.set_tip_to
                      , 'bob'
                      , '1000000.00'
@@ -139,7 +145,6 @@ class Tests(Harness):
         bob = self.make_participant('bob')
         alice.set_tip_to('bob', '12.00')
         alice.set_tip_to('bob', '3.00')
-        self.session.commit()
 
         expected = Decimal('3.00')
         actual = bob.get_dollars_receiving()
@@ -150,7 +155,6 @@ class Tests(Harness):
         alice = self.make_participant('alice', last_bill_result='')
         bob = self.make_participant('bob')
         alice.set_tip_to('bob', '3.00')
-        self.session.commit()
 
         expected = Decimal('3.00')
         actual = bob.get_dollars_receiving()
@@ -160,7 +164,6 @@ class Tests(Harness):
         alice = self.make_participant('alice', last_bill_result=None)
         bob = self.make_participant('bob')
         alice.set_tip_to('bob', '3.00')
-        self.session.commit()
 
         expected = Decimal('0.00')
         actual = bob.get_dollars_receiving()
@@ -170,7 +173,6 @@ class Tests(Harness):
         alice = self.make_participant('alice', last_bill_result="Fail!")
         bob = self.make_participant('bob')
         alice.set_tip_to('bob', '3.00')
-        self.session.commit()
 
         expected = Decimal('0.00')
         actual = bob.get_dollars_receiving()
@@ -184,7 +186,6 @@ class Tests(Harness):
                                       )
         bob = self.make_participant('bob')
         alice.set_tip_to('bob', '3.00')
-        self.session.commit()
 
         expected = Decimal('3.00')
         actual = bob.get_dollars_receiving()
@@ -197,7 +198,6 @@ class Tests(Harness):
                                       )
         bob = self.make_participant('bob')
         alice.set_tip_to('bob', '3.00')
-        self.session.commit()
 
         expected = Decimal('3.00')
         actual = bob.get_dollars_receiving()
@@ -210,7 +210,6 @@ class Tests(Harness):
                                       )
         bob = self.make_participant('bob')
         alice.set_tip_to('bob', '3.00')
-        self.session.commit()
 
         expected = Decimal('0.00')
         actual = bob.get_dollars_receiving()
@@ -227,8 +226,6 @@ class Tests(Harness):
         alice.set_tip_to('clancy', '3.00')
         bob.set_tip_to('clancy', '1.00')
 
-        self.session.commit()
-
         actual = clancy.get_number_of_backers()
         assert actual == 2, actual
 
@@ -237,7 +234,6 @@ class Tests(Harness):
         alice = self.make_participant('alice', last_bill_result='')
         bob = self.make_participant('bob')
         alice.set_tip_to('bob', '3.00')
-        self.session.commit()
 
         actual = bob.get_number_of_backers()
         assert actual == 1, actual
@@ -246,7 +242,6 @@ class Tests(Harness):
         alice = self.make_participant('alice', last_bill_result=None)
         bob = self.make_participant('bob')
         alice.set_tip_to('bob', '3.00')
-        self.session.commit()
 
         actual = bob.get_number_of_backers()
         assert actual == 0, actual
@@ -255,7 +250,6 @@ class Tests(Harness):
         alice = self.make_participant('alice', last_bill_result="Fail!")
         bob = self.make_participant('bob')
         alice.set_tip_to('bob', '3.00')
-        self.session.commit()
 
         actual = bob.get_number_of_backers()
         assert actual == 0, actual
@@ -268,7 +262,6 @@ class Tests(Harness):
                                       )
         bob = self.make_participant('bob')
         alice.set_tip_to('bob', '3.00')
-        self.session.commit()
 
         actual = bob.get_number_of_backers()
         assert actual == 1, actual
@@ -280,7 +273,6 @@ class Tests(Harness):
                                       )
         bob = self.make_participant('bob')
         alice.set_tip_to('bob', '3.00')
-        self.session.commit()
 
         actual = bob.get_number_of_backers()
         assert actual == 1, actual
@@ -292,7 +284,6 @@ class Tests(Harness):
                                       )
         bob = self.make_participant('bob')
         alice.set_tip_to('bob', '3.00')
-        self.session.commit()
 
         actual = bob.get_number_of_backers()
         assert actual == 0, actual
@@ -302,7 +293,6 @@ class Tests(Harness):
         alice = self.make_participant('alice', last_bill_result='')
         bob = self.make_participant('bob')
         alice.set_tip_to('bob', '0.00')
-        self.session.commit()
 
         actual = bob.get_number_of_backers()
         assert actual == 0, actual
@@ -316,8 +306,6 @@ class Tests(Harness):
         alice.set_tip_to('bob', '3.00')
         alice.set_tip_to('bob', '6.00')
         alice.set_tip_to('bob', '0.00')
-
-        self.session.commit()
 
         actual = bob.get_number_of_backers()
         assert actual == 0, actual
