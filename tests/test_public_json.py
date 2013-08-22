@@ -1,3 +1,5 @@
+from __future__ import print_function, unicode_literals
+
 import json
 import datetime
 from decimal import Decimal
@@ -45,41 +47,29 @@ class Tests(Harness):
         assert_equal(data['giving'], '1.00')
 
     def test_anonymous_gets_null_giving_if_user_anonymous(self):
-        alice = self.make_participant('alice', last_bill_result='')
+        alice = self.make_participant( 'alice'
+                                     , last_bill_result=''
+                                     , anonymous=True
+                                      )
         self.make_participant('bob')
-
-        alice.anonymous = True
         alice.set_tip_to('bob', '1.00')
-
         data = json.loads(TestClient().get('/alice/public.json').body)
 
         assert_equal(data['giving'], None)
 
     def test_anonymous_does_not_get_goal_if_user_regifts(self):
-        alice = self.make_participant('alice', last_bill_result='')
-
-        alice.goal = 0
-
+        self.make_participant('alice', last_bill_result='', goal=0)
         data = json.loads(TestClient().get('/alice/public.json').body)
-
         assert_equal(data.has_key('goal'), False)
 
-
-
     def test_anonymous_gets_null_goal_if_user_has_no_goal(self):
-        alice = self.make_participant('alice', last_bill_result='')
-
+        self.make_participant('alice', last_bill_result='')
         data = json.loads(TestClient().get('/alice/public.json').body)
-
         assert_equal(data['goal'], None)
 
     def test_anonymous_gets_user_goal_if_set(self):
-        alice = self.make_participant('alice', last_bill_result='')
-
-        alice.goal = Decimal('1.00')
-
+        self.make_participant('alice', last_bill_result='', goal=1)
         data = json.loads(TestClient().get('/alice/public.json').body)
-
         assert_equal(data['goal'], '1.00')
 
     def test_authenticated_user_gets_their_tip(self):
