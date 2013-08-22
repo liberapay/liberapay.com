@@ -1,10 +1,7 @@
 from faker import Factory
 from gittip import wireup, MAX_TIP, MIN_TIP
-from gittip.models.tip import Tip
 from gittip.models.participant import Participant
-from gittip.models.elsewhere import Elsewhere
 
-import gittip
 import decimal
 import random
 import string
@@ -14,48 +11,67 @@ faker = Factory.create()
 platforms = ['github', 'twitter', 'bitbucket']
 
 
+def _fake_thing(db, tablename, **kw):
+    column_names = []
+    column_value_placeholders = []
+    column_values = []
+
+    for k,v in kw.items():
+        column_names.append(k)
+        column_value_placeholders.append("%s")
+        column_values.append(v)
+
+    column_names = ", ".join(column_names)
+    column_value_placeholders = ", ".join(column_value_placeholders)
+
+    db.run( "INSERT INTO {} ({}) VALUES ({})"
+            .format(tablename, column_names, column_value_placeholders)
+          , column_values
+           )
+
+
 def fake_text_id(size=6, chars=string.ascii_lowercase + string.digits):
-    """
-    Create a random text id
+    """Create a random text id.
     """
     return ''.join(random.choice(chars) for x in range(size))
 
 
 def fake_balance(max_amount=100):
-    """
-    Return a random amount between 0 and max_amount
+    """Return a random amount between 0 and max_amount.
     """
     return random.random() * max_amount
 
+
 def fake_int_id(nmax=2 ** 31 -1):
-    """
-    Create a random int id
+    """Create a random int id.
     """
     return random.randint(0, nmax)
 
 
-def fake_participant(is_admin=False, anonymous=False):
-    """
-    Create a fake User
+def fake_participant(db, number="singular", is_admin=False, anonymous=False):
+    """Create a fake User.
     """
     username = faker.firstName() + fake_text_id(3)
-    return Participant(
-        id=fake_int_id(),
-        username=username,
-        username_lower=username.lower(),
-        statement=faker.sentence(),
-        ctime=faker.dateTimeThisYear(),
-        is_admin=is_admin,
-        balance=fake_balance(),
-        anonymous=anonymous,
-        goal=fake_balance(),
-        balanced_account_uri=faker.uri(),
-        last_ach_result='',
-        is_suspicious=False,
-        last_bill_result='',  # Needed to not be suspicious
-        claimed_time=faker.dateTimeThisYear(),
-        number="singular"
-    )
+    _fake_thing( db
+               , "participants"
+               , id=fake_int_id()
+               , username=username
+               , username_lower=username.lower()
+               , statement=faker.sentence()
+               , ctime=faker.dateTimeThisYear()
+               , is_admin=is_admin
+               , balance=fake_balance()
+               , anonymous=anonymous
+               , goal=fake_balance()
+               , balanced_account_uri=faker.uri()
+               , last_ach_result=''
+               , is_suspicious=False
+               , last_bill_result=''  # Needed to not be suspicious
+               , claimed_time=faker.dateTimeThisYear()
+               , number=number
+                )
+    return Participant.from_username(username)
+
 
 def fake_tip_amount():
     amount = ((decimal.Decimal(random.random()) * (MAX_TIP - MIN_TIP))
@@ -66,23 +82,22 @@ def fake_tip_amount():
     return decimal_amount
 
 
-def fake_tip(tipper, tippee):
+def fake_tip(db, tipper, tippee):
+    """Create a fake tip.
     """
-    Create a fake tip
-    """
-    return Tip(
-        id=fake_int_id(),
-        ctime=faker.dateTimeThisYear(),
-        mtime=faker.dateTimeThisMonth(),
-        tipper=tipper.username,
-        tippee=tippee.username,
-        amount=fake_tip_amount()
-    )
+    _fake_thing( db
+               , "tips"
+               , id=fake_int_id()
+               , ctime=faker.dateTimeThisYear()
+               , mtime=faker.dateTimeThisMonth()
+               , tipper=tipper.username
+               , tippee=tippee.username
+               , amount=fake_tip_amount()
+                )
 
 
-def fake_elsewhere(participant, platform=None):
-    """
-    Create a fake elsewhere
+def fake_elsewhere(db, participant, platform=None):
+    """Create a fake elsewhere.
     """
     if platform is None:
         platform = random.choice(platforms)
@@ -107,25 +122,24 @@ def fake_elsewhere(participant, platform=None):
         }
     }
 
-    return Elsewhere(
-        id=fake_int_id(),
-        platform=platform,
-        user_id=fake_text_id(),
-        is_locked=False,
-        participant=participant.username,
-        user_info=info_templates[platform]
-    )
+    _fake_thing( db
+               , "elsewhere"
+               , id=fake_int_id()
+               , platform=platform
+               , user_id=fake_text_id()
+               , is_locked=False
+               , participant=participant.username
+               , user_info=info_templates[platform]
+                )
 
 
-def populate_db(session, num_participants=100, num_tips=50, num_teams=5):
-    """
-    Populate DB with fake data
+def populate_db(db, num_participants=100, num_tips=50, num_teams=5):
+    """Populate DB with fake data.
     """
     #Make the participants
     participants = []
     for i in xrange(num_participants):
-        p = fake_participant()
-        session.add(p)
+        p = fake_participant(db)
         participants.append(p)
 
     #Make the "Elsewhere's"
@@ -133,37 +147,24 @@ def populate_db(session, num_participants=100, num_tips=50, num_teams=5):
         #All participants get between 1 and 3 elsewheres
         num_elsewheres = random.randint(1, 3)
         for platform_name in platforms[:num_elsewheres]:
-            e = fake_elsewhere(p, platform_name)
-            session.add(e)
+            fake_elsewhere(db, p, platform_name)
 
     #Make teams
-    teams = []
     for i in xrange(num_teams):
-        t = fake_participant()
-        t.number = "plural"
-        session.add(t)
-        session.commit()
+        t = fake_participant(db, number="plural")
         #Add 1 to 3 members to the team
         members = random.sample(participants, random.randint(1, 3))
         for p in members:
             t.add_member(p)
-        teams.append(t)
 
     #Make the tips
-    tips = []
     for i in xrange(num_tips):
         tipper, tippee = random.sample(participants, 2)
-        t = fake_tip(tipper, tippee)
-        tips.append(t)
-        session.add(t)
-    session.commit()
+        fake_tip(db, tipper, tippee)
 
 
 def main():
-    db = orm.db
-    dbsession = db.session
-    gittip.db = wireup.db()
-    populate_db(dbsession)
+    populate_db(wireup.db())
 
 if __name__ == '__main__':
     main()
