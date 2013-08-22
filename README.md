@@ -37,6 +37,7 @@ Table of Contents
  - [Testing](#testing-)
  - [Setting up a Database](#local-database-setup)
  - [API](#api)
+  - [Implementations](#api-implementations) 
  - [Glossary](#glossary)
  - [See Also](#see-also)
 
@@ -427,6 +428,14 @@ curl https://www.gittip.com/foobar/tips.json \
     -d'[{"username":"bazbuz", "platform":"gittip", "amount": "1.00"}]' \
     -H"Content-Type: application/json"
 ```
+
+API Implementations
+-------------------
+
+Below are some projects that use the Gittip APIs, that can serve as inspiration for your project!
+
+ - [Khan Academy giving spreadsheet and script](http://ejohn.org/blog/gittip-at-khan-academy/)
+ - [Drupal Gittip giving module](https://drupal.org/sandbox/davereid/2071491)
 
 
 Glossary
