@@ -6,7 +6,7 @@ from urllib import urlencode
 
 from aspen import resources, Response
 from gittip.elsewhere import bountysource
-from gittip.elsewhere.take_over import NeedConfirmation, take_over
+from gittip.models._mixin_elsewhere import NeedConfirmation
 
 [-----------------------------]
 
@@ -48,7 +48,7 @@ else:
 
     # associate with the Gittip participant
     try:
-        take_over(user.participant, account)
+        user.participant.take_over(account)
     except NeedConfirmation, obstacles:
 
         # XXX Eep! Internal redirect! Really?!
