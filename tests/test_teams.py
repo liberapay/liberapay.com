@@ -1,21 +1,13 @@
 from __future__ import unicode_literals
-import random
-import datetime
-from decimal import Decimal
-
-import psycopg2
-import pytz
-from nose.tools import assert_raises
 
 from gittip.testing import Harness
-from gittip.models import Participant, Tip
 
 
 class Tests(Harness):
 
     def setUp(self):
         super(Harness, self).setUp()
-        self.team = self.make_participant('team1', 'plural')  # Our team
+        self.team = self.make_participant('team1', number='plural')  # Our team
 
     def test_is_team(self):
         expeted = True
@@ -37,9 +29,9 @@ class Tests(Harness):
     def test_get_teams_for_member(self):
         user = self.make_participant('user1')
         user2 = self.make_participant('user2')
-        team = self.make_participant('team2', 'plural')
+        team = self.make_participant('team2', number='plural')
         self.team.add_member(user)
         team.add_member(user2)
         expected = 1
-        actual = user.get_teams().pop()['nmembers']
+        actual = user.get_teams().pop().nmembers
         assert actual == expected, actual
