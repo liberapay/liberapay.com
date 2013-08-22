@@ -259,18 +259,18 @@ class Participant(Model, MixinElsewhere, MixinTeam):
         typecheck(suggested, unicode)
         for i, c in enumerate(suggested):
             if i == 32:
-                raise self.UsernameTooLong  # Request Entity Too Large (more or less)
+                raise UsernameTooLong  # Request Entity Too Large (more or less)
             elif ord(c) < 128 and c not in ASCII_ALLOWED_IN_USERNAME:
-                raise self.UsernameContainsInvalidCharacters  # Yeah, no.
+                raise UsernameContainsInvalidCharacters  # Yeah, no.
             elif c not in ASCII_ALLOWED_IN_USERNAME:
                 # XXX Burned by an Aspen bug. :`-(
                 # https://github.com/gittip/aspen/issues/102
-                raise self.UsernameContainsInvalidCharacters
+                raise UsernameContainsInvalidCharacters
 
         lowercased = suggested.lower()
 
         if lowercased in gittip.RESTRICTED_USERNAMES:
-            raise self.UsernameIsRestricted
+            raise UsernameIsRestricted
 
         if suggested != self.username:
             try:
@@ -313,11 +313,11 @@ class Participant(Model, MixinElsewhere, MixinTeam):
         """
 
         if self.username == tippee:
-            raise self.NoSelfTipping
+            raise NoSelfTipping
 
         amount = Decimal(amount)  # May raise InvalidOperation
         if (amount < gittip.MIN_TIP) or (amount > gittip.MAX_TIP):
-            raise self.BadAmount
+            raise BadAmount
 
         NEW_TIP = """\
 
