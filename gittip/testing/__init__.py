@@ -75,14 +75,18 @@ class Harness(unittest.TestCase):
         cls.db = gittip.db
         cls._tablenames = cls.db.all("SELECT tablename FROM pg_tables "
                                      "WHERE schemaname='public'")
+        cls.clear_tables(cls.db, cls._tablenames[:])
 
     def tearDown(self):
-        tablenames = self._tablenames[:]
+        self.clear_tables(self.db, self._tablenames[:])
+
+    @staticmethod
+    def clear_tables(db, tablenames):
         while tablenames:
             tablename = tablenames.pop()
             try:
                 # I tried TRUNCATE but that was way slower for me.
-                self.db.run("DELETE FROM %s CASCADE" % tablename)
+                db.run("DELETE FROM %s CASCADE" % tablename)
             except IntegrityError:
                 tablenames.insert(0, tablename)
 

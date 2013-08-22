@@ -39,6 +39,14 @@ def age():
     return "%s month%s" % (nmonths, plural)
 
 
+class NotSane(Exception):
+    """This is used when a sanity check fails.
+
+    A sanity check is when it really seems like the logic shouldn't allow the
+    condition to arise, but you never know.
+
+    """
+
 db = None # This global is wired in wireup. It's an instance of
           # gittip.postgres.PostgresManager.
 

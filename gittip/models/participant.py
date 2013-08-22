@@ -284,7 +284,7 @@ class Participant(Model, MixinElsewhere, MixinTeam):
                                       , back_as=tuple
                                        )
             except IntegrityError:
-                raise UsernameAlreadyTaken
+                raise UsernameAlreadyTaken(suggested)
 
             assert (suggested, lowercased) == actual  # sanity check
             self.set_attributes(username=suggested, username_lower=lowercased)
@@ -685,11 +685,21 @@ class Participant(Model, MixinElsewhere, MixinTeam):
 # Exceptions
 # ==========
 
-class ProblemChangingUsername(Exception): pass
-class UsernameTooLong(ProblemChangingUsername): pass
-class UsernameContainsInvalidCharacters(ProblemChangingUsername): pass
-class UsernameIsRestricted(ProblemChangingUsername): pass
-class UsernameAlreadyTaken(ProblemChangingUsername): pass
+class ProblemChangingUsername(Exception):
+    def __str__(self):
+        return self.msg.format(self.args[0])
+
+class UsernameTooLong(ProblemChangingUsername):
+    msg = "The username '{}' is restricted."
+
+class UsernameContainsInvalidCharacters(ProblemChangingUsername):
+    msg = "The username '{}' contains invalid characters."
+
+class UsernameIsRestricted(ProblemChangingUsername):
+    msg = "The username '{}' is restricted."
+
+class UsernameAlreadyTaken(ProblemChangingUsername):
+    msg = "The username '{}' is already taken."
 
 class TooGreedy(Exception): pass
 class NoSelfTipping(Exception): pass

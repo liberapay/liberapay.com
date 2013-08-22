@@ -7,9 +7,10 @@ from decimal import Decimal
 import psycopg2
 import pytz
 from aspen.utils import utcnow
+from gittip import NotSane
 from gittip.elsewhere.twitter import TwitterAccount
-from gittip.models import Absorption, Tip
-from gittip.models.participant import Participant, NeedConfirmation
+from gittip.models._mixin_elsewhere import NeedConfirmation
+from gittip.models.participant import Participant
 from gittip.models.participant import ( UsernameTooLong
                                       , UsernameAlreadyTaken
                                       , UsernameContainsInvalidCharacters
@@ -63,55 +64,53 @@ class TestAbsorptions(Harness):
         now = utcnow()
         hour_ago = now - datetime.timedelta(hours=1)
         for username in ['alice', 'bob', 'carl']:
-            self.make_participant(username, claimed_time=hour_ago,
-                                  last_bill_result='')
+            self.make_participant( username
+                                 , claimed_time=hour_ago
+                                 , last_bill_result=''
+                                  )
         deadbeef = TwitterAccount('1', {'screen_name': 'deadbeef'})
         self.deadbeef_original_username = deadbeef.participant
 
-        Participant('carl').set_tip_to('bob', '1.00')
-        Participant('alice').set_tip_to(self.deadbeef_original_username, '1.00')
-        Participant('bob').take_over(deadbeef, have_confirmation=True)
+        Participant.from_username('carl').set_tip_to('bob', '1.00')
+        Participant.from_username('alice').set_tip_to(self.deadbeef_original_username, '1.00')
+        Participant.from_username('bob').take_over(deadbeef, have_confirmation=True)
 
     def test_participant_can_be_instantiated(self):
         expected = Participant
-        actual = Participant(None).__class__
+        actual = Participant.from_username('alice').__class__
         assert actual is expected, actual
 
     def test_bob_has_two_dollars_in_tips(self):
         expected = Decimal('2.00')
-        actual = Participant('bob').get_dollars_receiving()
+        actual = Participant.from_username('bob').get_dollars_receiving()
         assert_equals(actual, expected)
 
     def test_alice_gives_to_bob_now(self):
         expected = Decimal('1.00')
-        actual = Participant('alice').get_tip_to('bob')
+        actual = Participant.from_username('alice').get_tip_to('bob')
         assert_equals(actual, expected)
 
     def test_deadbeef_is_archived(self):
-        actual = Absorption.query\
-                           .filter_by(absorbed_by='bob',
-                                      absorbed_was=self.deadbeef_original_username)\
-                           .count()
+        actual = self.db.one( "SELECT count(*) FROM absorptions "
+                              "WHERE absorbed_by='bob' AND absorbed_was=%s"
+                            , (self.deadbeef_original_username,)
+                             )
         expected = 1
         assert_equals(actual, expected)
 
     def test_alice_doesnt_gives_to_deadbeef_anymore(self):
         expected = Decimal('0.00')
-        actual = Participant('alice').get_tip_to(self.deadbeef_original_username)
+        actual = Participant.from_username('alice').get_tip_to(self.deadbeef_original_username)
         assert actual == expected, actual
 
     def test_alice_doesnt_give_to_whatever_deadbeef_was_archived_as_either(self):
         expected = Decimal('0.00')
-        actual = Participant('alice').get_tip_to(self.deadbeef_original_username)
+        alice = Participant.from_username('alice')
+        actual = alice.get_tip_to(self.deadbeef_original_username)
         assert actual == expected, actual
 
-    def test_attempts_to_change_archived_deadbeef_fail(self):
-        participant = Participant(self.deadbeef_original_username)
-        with assert_raises(AssertionError):
-            participant.change_username('zombeef')
-
     def test_there_is_no_more_deadbeef(self):
-        actual = Participant('deadbeef').get_details()
+        actual = Participant.from_username('deadbeef')
         assert actual is None, actual
 
 
@@ -122,57 +121,57 @@ class TestParticipant(Harness):
         for idx, username in enumerate(['alice', 'bob', 'carl'], start=1):
             self.make_participant(username, claimed_time=now)
             twitter_account = TwitterAccount(idx, {'screen_name': username})
-            Participant(username).take_over(twitter_account)
+            Participant.from_username(username).take_over(twitter_account)
 
     def test_bob_is_singular(self):
         expected = True
-        actual = Participant('bob').is_singular()
+        actual = Participant.from_username('bob').IS_SINGULAR
         assert_equals(actual, expected)
 
     def test_john_is_plural(self):
         expected = True
-        self.make_participant('john', 'plural')
-        actual = Participant('john').is_plural()
+        self.make_participant('john', number='plural')
+        actual = Participant.from_username('john').IS_PLURAL
         assert_equals(actual, expected)
 
     def test_cant_take_over_claimed_participant_without_confirmation(self):
         bob_twitter = StubAccount('twitter', '2')
         with assert_raises(NeedConfirmation):
-            Participant('alice').take_over(bob_twitter)
+            Participant.from_username('alice').take_over(bob_twitter)
 
     def test_taking_over_yourself_sets_all_to_zero(self):
         bob_twitter = StubAccount('twitter', '2')
-        Participant('alice').set_tip_to('bob', '1.00')
-        Participant('alice').take_over(bob_twitter, have_confirmation=True)
+        Participant.from_username('alice').set_tip_to('bob', '1.00')
+        Participant.from_username('alice').take_over(bob_twitter, have_confirmation=True)
         expected = Decimal('0.00')
-        actual = Participant('alice').get_dollars_giving()
+        actual = Participant.from_username('alice').get_dollars_giving()
         assert_equals(actual, expected)
 
     def test_alice_ends_up_tipping_bob_two_dollars(self):
         carl_twitter = StubAccount('twitter', '3')
-        Participant('alice').set_tip_to('bob', '1.00')
-        Participant('alice').set_tip_to('carl', '1.00')
-        Participant('bob').take_over(carl_twitter, have_confirmation=True)
+        Participant.from_username('alice').set_tip_to('bob', '1.00')
+        Participant.from_username('alice').set_tip_to('carl', '1.00')
+        Participant.from_username('bob').take_over(carl_twitter, have_confirmation=True)
         expected = Decimal('2.00')
-        actual = Participant('alice').get_tip_to('bob')
+        actual = Participant.from_username('alice').get_tip_to('bob')
         assert_equals(actual, expected)
 
     def test_bob_ends_up_tipping_alice_two_dollars(self):
         carl_twitter = StubAccount('twitter', '3')
-        Participant('bob').set_tip_to('alice', '1.00')
-        Participant('carl').set_tip_to('alice', '1.00')
-        Participant('bob').take_over(carl_twitter, have_confirmation=True)
+        Participant.from_username('bob').set_tip_to('alice', '1.00')
+        Participant.from_username('carl').set_tip_to('alice', '1.00')
+        Participant.from_username('bob').take_over(carl_twitter, have_confirmation=True)
         expected = Decimal('2.00')
-        actual = Participant('bob').get_tip_to('alice')
+        actual = Participant.from_username('bob').get_tip_to('alice')
         assert_equals(actual, expected)
 
     def test_ctime_comes_from_the_older_tip(self):
         carl_twitter = StubAccount('twitter', '3')
-        Participant('alice').set_tip_to('bob', '1.00')
-        Participant('alice').set_tip_to('carl', '1.00')
-        Participant('bob').take_over(carl_twitter, have_confirmation=True)
+        Participant.from_username('alice').set_tip_to('bob', '1.00')
+        Participant.from_username('alice').set_tip_to('carl', '1.00')
+        Participant.from_username('bob').take_over(carl_twitter, have_confirmation=True)
 
-        tips = Tip.query.all()
+        tips = self.db.all("SELECT * FROM tips")
         first, second = tips[0], tips[1]
 
         # sanity checks (these don't count :)
@@ -181,13 +180,13 @@ class TestParticipant(Harness):
         assert second.tipper, second.tippee == ('alice', 'carl')
 
         expected = first.ctime
-        actual = Tip.query.first().ctime
+        actual = self.db.one("SELECT ctime FROM tips ORDER BY ctime LIMIT 1")
         assert_equals(actual, expected)
 
     def test_connecting_unknown_account_fails(self):
         unknown_account = StubAccount('github', 'jim')
-        with assert_raises(AssertionError):
-            Participant('bob').take_over(unknown_account)
+        with assert_raises(NotSane):
+            Participant.from_username('bob').take_over(unknown_account)
 
 
 class Tests(Harness):
