@@ -72,17 +72,15 @@ class Harness(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.db = gittip.db = wireup.db()
-
-    def setUp(self):
-        pass
+        cls.db = gittip.db
+        cls._tablenames = cls.db.all("SELECT tablename FROM pg_tables "
+                                     "WHERE schemaname='public'")
 
     def tearDown(self):
-        tablenames = self.db.all("SELECT tablename FROM pg_tables "
-                                 "WHERE schemaname='public'")
-        with self.db.get_cursor():
-            for tablename in tablenames:
-                self.db.run("DELETE FROM %s CASCADE" % tablename)
+        with self.db.get_cursor() as cursor:
+            for tablename in self._tablenames:
+                # I tried TRUNCATE but that was way slower for me.
+                cursor.run("DELETE FROM %s CASCADE" % tablename)
 
     def make_participant(self, username, **kw):
         participant = Participant.with_random_username()
@@ -97,37 +95,7 @@ class Harness(unittest.TestCase):
         return participant
 
 
-class GittipBaseDBTest(unittest.TestCase):
-    """
-
-    Will setup a db connection so we can perform db operations. Everything is
-    performed in a transaction and will be rolled back at the end of the test
-    so we don't clutter up the db.
-
-    """
-    def setUp(self):
-        self.conn = self.db.get_connection()
-
-    @classmethod
-    def setUpClass(cls):
-        cls.db = gittip.db = wireup.db()
-
-    def tearDown(self):
-        # TODO: rollback transaction here so we don't fill up test db.
-        # TODO: hack for now, truncate all tables.
-        tables = [ 'participants'
-                 , 'elsewhere'
-                 , 'tips'
-                 , 'transfers'
-                 , 'paydays'
-                 , 'exchanges'
-                 , 'absorptions'
-                  ]
-        for t in tables:
-            self.db.run('truncate table %s cascade' % t)
-
-
-class GittipPaydayTest(GittipBaseDBTest):
+class GittipPaydayTest(Harness):
 
     def setUp(self):
         super(GittipPaydayTest, self).setUp()
