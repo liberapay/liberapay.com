@@ -19,7 +19,7 @@ website.renderer_default = "tornado"
 
 
 gittip.wireup.canonical()
-gittip.wireup.db()
+website.db = gittip.wireup.db()
 gittip.wireup.billing()
 gittip.wireup.username_restrictions(website)
 gittip.wireup.sentry(website)
