@@ -17,11 +17,9 @@ if [ "$DATABASE_URL" = "" ]; then
     echo "Please set DATABASE_URL, perhaps by sourcing default_tests.env or something.";
 exit 1; fi
 
-# extract the protocol
-proto="`echo $DATABASE_URL | grep '://' | sed -e's,^\(.*://\).*,\1,g'`"
 # remove the protocol
-url=`echo $DATABASE_URL | sed -e s,$proto,,g`
- 
+url=`echo $DATABASE_URL | sed -e s,postgres://,,g`
+
 # extract the user (if any)
 userpass="`echo $url | grep @ | cut -d@ -f1`"
 pass=`echo $userpass | grep : | cut -d: -f2`
