@@ -432,10 +432,15 @@ curl https://www.gittip.com/foobar/tips.json \
 API Implementations
 -------------------
 
-Below are some projects that use the Gittip APIs, that can serve as inspiration for your project!
+Below are some projects that use the Gittip APIs, that can serve as inspiration
+for your project!
 
- - [Khan Academy giving spreadsheet and script](http://ejohn.org/blog/gittip-at-khan-academy/)
+ - [Khan Academy giving spreadsheet and
+   script](http://ejohn.org/blog/gittip-at-khan-academy/)
+
  - [Drupal Gittip giving module](https://drupal.org/sandbox/davereid/2071491)
+
+ - [Node.js client library](https://npmjs.org/package/gittip)
 
 
 Glossary
