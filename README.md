@@ -438,7 +438,10 @@ for your project!
  - [Khan Academy giving spreadsheet and
    script](http://ejohn.org/blog/gittip-at-khan-academy/)
 
- - [Drupal Gittip giving module](https://drupal.org/sandbox/davereid/2071491)
+ - [Drupal Gittip module](https://drupal.org/project/gittip) 
+
+   - Includes a Gittip giving field type to let you implement the Khan academy
+     model for users on your Drupal site.
 
  - [Node.js client library](https://npmjs.org/package/gittip)
 
