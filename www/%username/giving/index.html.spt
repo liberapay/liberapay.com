@@ -3,14 +3,14 @@ from gittip.utils import get_participant
 
 
 def _extract_username(tip):
-    if tip['platform'] == 'github':
+    if tip.platform == 'github':
         key = 'login'
-    elif tip['platform'] == 'bitbucket':
+    elif tip.platform == 'bitbucket':
         key = 'username'
     else:
-        assert tip['platform'] == 'twitter', tip  # sanity check
+        assert tip.platform == 'twitter', tip  # sanity check
         key = 'screen_name'
-    return tip['user_info'][key]
+    return tip.user_info[key]
 
 [-----------------------------------------------------------------------------]
 participant = get_participant(request, restrict=True)
@@ -74,8 +74,8 @@ first_time = qs.get('first_time') == '1'
         </td>
     </tr>
     {% for tip in tips %}
-    {% set my_tip = tip['amount'] %}
-    {% set tippee = tip['tippee'] %}
+    {% set my_tip = tip.amount %}
+    {% set tippee = tip.tippee %}
     {% if my_tip > 0 %}
     <tr class="tip">
         <th><a href="/{{ tippee }}/">{{ tippee }}</a></th>
@@ -91,12 +91,12 @@ first_time = qs.get('first_time') == '1'
     </tr>
     {% end %}
     {% for tip in unclaimed_tips %}
-    {% set my_tip = tip['amount'] %}
-    {% set tippee = tip['tippee'] %}
+    {% set my_tip = tip.amount %}
+    {% set tippee = tip.tippee %}
     {% if my_tip > 0 %}
     <tr class="pledge">
         <th>
-            <img class="platform-icon" src="/assets/icons/{{ tip['platform'] }}.12.png" />
+            <img class="platform-icon" src="/assets/icons/{{ tip.platform }}.12.png" />
             <a href="/{{ tippee }}/">{{ _extract_username(tip) }}</a>
         </th>
         <td>{% include "templates/my-tip-bulk.html" %}</td>

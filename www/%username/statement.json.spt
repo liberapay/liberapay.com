@@ -1,3 +1,5 @@
+from __future__ import print_function, unicode_literals
+
 from aspen import Response
 from gittip import db
 from gittip.utils import wrap
@@ -14,14 +16,14 @@ number = request.body["number"]
 if number not in ("singular", "plural"):
     raise Response(400)
 
-if number != user.number:
+if number != user.participant.number:
     db.run( "UPDATE participants SET statement=%s, number=%s "
             "WHERE username=%s"
-          , (statement, number, user.username)
+          , (statement, number, user.participant.username)
            )
 else:
     db.run( "UPDATE participants SET statement=%s WHERE username=%s"
-          , (statement, user.username)
+          , (statement, user.participant.username)
            )
 
 response.body = {"statement": wrap(statement), "number": wrap(number)}

@@ -17,8 +17,8 @@ if user.ANON:
 # Build params which are passed to Bountysource for creating a linked account.
 connect_params = {
     'redirect_url': website.bountysource_callback,
-    'external_access_token': bountysource.create_access_token(user),
-    'login': user.username
+    'external_access_token': bountysource.create_access_token(user.participant),
+    'login': user.participant.username
 }
 
 
@@ -28,7 +28,7 @@ connect_params = {
 # if present: email, first_name, last_name, avatar_url. These are used to
 # prefill the account creation screen on Bountysource.
 
-for account in user.get_accounts_elsewhere():
+for account in user.participant.get_accounts_elsewhere():
     # Note: returns None for accounts that haven't been linked yet
     if account is None:
         continue

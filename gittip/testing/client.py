@@ -4,7 +4,7 @@ from StringIO import StringIO
 from aspen.http.request import Request
 from aspen.testing import StubWSGIRequest
 
-from gittip.authentication import User
+from gittip.security.user import User
 from gittip.testing import test_website
 
 BOUNDARY = 'BoUnDaRyStRiNg'
@@ -58,8 +58,10 @@ class TestClient(object):
         request.website = test_website
         if user is not None:
             user = User.from_username(user)
+            user.sign_in()
             # Note that Cookie needs a bytestring.
-            request.headers.cookie[str('session')] = user.session_token
+            request.headers.cookie[str('session')] = \
+                                                 user.participant.session_token
 
         response = test_website.handle_safely(request)
         if response.headers.cookie:

@@ -5,7 +5,7 @@ from gittip import db
 
 if user.ANON:
     raise Response(400)
-tooter = user.username
+tooter = user.participant.username
 tootee = path['username']
 toot = body['toot'].strip()
 if len(toot) > 140 or len(toot) < 1:

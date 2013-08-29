@@ -20,17 +20,17 @@ out = {}
 redirect_to = base_url + '/bank-account-complete.html'
 
 if body.get('action') == 'delete':
-    billing.clear(u"bank account", user.username, user.balanced_account_uri)
+    billing.clear(u"bank account", user.participant.username, user.participant.balanced_account_uri)
 elif body.get('action') == 'store-error':
-    billing.store_error(u"bank account", user.username, body['msg'])
+    billing.store_error(u"bank account", user.participant.username, body['msg'])
 else:
 
     # Get a balanced account.
     # =======================
     # This will create one if user.balanced_account_uri is None.
 
-    balanced_account = billing.get_balanced_account( user.username
-                                                   , user.balanced_account_uri
+    balanced_account = billing.get_balanced_account( user.participant.username
+                                                   , user.participant.balanced_account_uri
                                                     )
 
 
@@ -63,12 +63,15 @@ else:
     if not out:
 
         # Clear out any old ones first.
-        billing.clear(u"bank account", user.username, balanced_account.uri)
+        billing.clear( u"bank account"
+                     , user.participant.username
+                     , balanced_account.uri
+                      )
 
         bank_account_uri = body['bank_account_uri']
         try:
             billing.associate( u"bank account"
-                             , user.username
+                             , user.participant.username
                              , balanced_account
                              , bank_account_uri
                               )

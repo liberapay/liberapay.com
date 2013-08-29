@@ -4,11 +4,9 @@ import time
 
 import gittip
 import gittip.wireup
-import gittip.authentication
-import gittip.orm
-import gittip.csrf
-import gittip.cache_static
-import gittip.models.participant
+import gittip.security.authentication
+import gittip.security.csrf
+import gittip.utils.cache_static
 from aspen import log_dammit
 
 
@@ -21,7 +19,7 @@ website.renderer_default = "tornado"
 
 
 gittip.wireup.canonical()
-gittip.wireup.db()
+website.db = gittip.wireup.db()
 gittip.wireup.billing()
 gittip.wireup.username_restrictions(website)
 gittip.wireup.sentry(website)
@@ -43,16 +41,19 @@ website.hooks.startup.insert(0, up_minthreads)
 
 website.hooks.inbound_early += [ gittip.canonize
                                , gittip.configure_payments
-                               , gittip.authentication.inbound
-                               , gittip.csrf.inbound
+                               , gittip.security.authentication.inbound
+                               , gittip.security.csrf.inbound
                                 ]
 
-website.hooks.inbound_core += [gittip.cache_static.inbound]
+website.hooks.inbound_late += [ gittip.utils.cache_static.inbound
+                              #, gittip.security.authentication.check_role
+                              #, participant.typecast
+                              #, community.typecast
+                               ]
 
-website.hooks.outbound += [ gittip.authentication.outbound
-                          , gittip.csrf.outbound
-                          , gittip.orm.rollback
-                          , gittip.cache_static.outbound
+website.hooks.outbound += [ gittip.security.authentication.outbound
+                          , gittip.security.csrf.outbound
+                          , gittip.utils.cache_static.outbound
                            ]
 
 
@@ -98,10 +99,10 @@ website.hooks.inbound_early += [add_stuff]
 UPDATE_HOMEPAGE_EVERY = int(os.environ['UPDATE_HOMEPAGE_EVERY'])
 def update_homepage_queries():
     while 1:
-        with gittip.db.get_transaction() as txn:
+        with gittip.db.get_cursor() as cursor:
             log_dammit("updating homepage queries")
             start = time.time()
-            txn.execute("""
+            cursor.execute("""
 
             DROP TABLE IF EXISTS _homepage_new_participants;
             CREATE TABLE _homepage_new_participants AS

@@ -1,3 +1,5 @@
+from __future__ import print_function, unicode_literals
+
 import datetime
 
 from mock import patch
@@ -74,13 +76,13 @@ class TestPages(Harness):
         requests.get().status_code = 200
         requests.get().text = GITHUB_USER_UNREGISTERED_LGTEST
         expected = "lgtest has not joined"
-        actual = self.get('/on/github/lgtest/')
+        actual = self.get('/on/github/lgtest/').decode('utf8')
         assert expected in actual, actual
 
     # This hits the network. XXX add a knob to skip this
     def test_twitter_proxy(self):
         expected = "Twitter has not joined"
-        actual = self.get('/on/twitter/twitter/')
+        actual = self.get('/on/twitter/twitter/').decode('utf8')
         assert expected in actual, actual
 
     def test_404(self):

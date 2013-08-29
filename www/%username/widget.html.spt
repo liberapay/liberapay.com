@@ -1,12 +1,12 @@
-from gittip.models import Participant
+from gittip.models.participant import Participant
 [---]
-participant = Participant.query.get(path['username'])
+participant = Participant.from_username(path['username'])
 if user.ANON:
     button_text = "Gittip"
-elif user == participant:
+elif user.participant == participant:
     button_text = "You!"
 else:
-    button_text = user.get_tip_to(participant.username)
+    button_text = user.participant.get_tip_to(participant.username)
     if button_text == 0:
         button_text = "Gittip"
 response.headers['X-Frame-Options'] = "ALLOWALL"

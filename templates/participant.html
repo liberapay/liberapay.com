@@ -14,7 +14,7 @@
         {% if g > r and not participant.anonymous %}
             <h2 class="pad-sign">{{ participant.username }} gives</h2>
             <div class="number">
-                {% if user == participant %}
+                {% if user.participant == participant %}
                 $<span class="total-giving">{{ giving }}</span>
                 {% else %}
                 ${{ giving }}
@@ -30,7 +30,7 @@
                 week{% if g > 0 %}, and gives 
                 {% if participant.anonymous %}
                 anonymously
-                {% elif user == participant %}
+                {% elif user.participant == participant %}
                 $<span class="total-giving">{{ giving }}</span>
                 {% else %}
                 ${{ giving }}
@@ -55,7 +55,7 @@
     </tr>
 </table>
 
-{% if (participant != user) and participant.accepts_tips %}
+{% if (participant != user.participant) and participant.accepts_tips %}
 {% include "participant.tip.html" %}
 {% end %}
 

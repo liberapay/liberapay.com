@@ -3,7 +3,7 @@
 from decimal import InvalidOperation
 
 from aspen import Response
-from gittip.participant import Participant
+from gittip.models.participant import Participant
 
 [-----------------------------------------------------------------------------]
 
@@ -15,8 +15,8 @@ if not user.ANON:
     # XXX We could/should enforce that tips cannot be pledged at all to locked
     # accounts.
 
-    tipper = user.username
-    tippee = path['username']
+    tipper = user.participant
+    tippee = Participant.from_username(path['username'])
 
 
     # Get and maybe set amount.
@@ -27,15 +27,17 @@ if not user.ANON:
         amount = None
     elif POST and 'amount' in body:
         try:
-            amount, first_time_tipper = user.set_tip_to(tippee, body['amount'])
+            amount, first_time_tipper = tipper.set_tip_to( tippee.username
+                                                         , body['amount']
+                                                          )
         except (InvalidOperation, ValueError):
             raise Response(400, "bad amount")
     else:
-        amount = user.get_tip_to(tippee)
+        amount = tipper.get_tip_to(tippee.username)
 
-    total_giving = user.get_dollars_giving()
-    total_receiving = user.get_dollars_receiving()
-    total_receiving_tippee = Participant(tippee).get_dollars_receiving()
+    total_giving = tipper.get_dollars_giving()
+    total_receiving = tipper.get_dollars_receiving()
+    total_receiving_tippee = tippee.get_dollars_receiving()
 
     out = { "amount": str(amount)
           , "total_giving": str(total_giving)

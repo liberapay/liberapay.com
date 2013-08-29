@@ -12,7 +12,7 @@ viable = []
 forming = []
 
 for community in communities:
-    if community['nmembers'] >= THRESHOLD:
+    if community.nmembers >= THRESHOLD:
         seq = viable
     else:
         seq = forming
@@ -79,8 +79,8 @@ members get their own page on Gittip.</p>
     <ul class="community memberships">
         {% for community in viable %}
         <li>
-            <a href="/for/{{ community['slug'] }}/">{{ community['name'] }}</a>
-            {% set n = community['nmembers'] %}
+            <a href="/for/{{ community.slug }}/">{{ community.name }}</a>
+            {% set n = community.nmembers %}
             <div class="fine">{{ n }} member{{ plural(n) }}</div>
         </li>
         {% end %}
@@ -92,8 +92,8 @@ members get their own page on Gittip.</p>
         <select data-placeholder="Find or add a community ..." tabindex="1">
             <option></option>
             {% for community in forming %}
-            <option value="{{ community['slug'] }}">{{ community['name'] }} -
-            {% set n = community['nmembers'] %}
+            <option value="{{ community.slug }}">{{ community.name }} -
+            {% set n = community.nmembers %}
             {{ n }} member{{ plural(n) }}
             </option>
             {% end %}

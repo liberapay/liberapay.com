@@ -3,7 +3,7 @@ from gittip import db
 
 [---]
 
-_tip_distribution = db.all("""
+response.body = db.all("""
 
     SELECT amount
       FROM (SELECT DISTINCT ON (tipper, tippee)
@@ -22,6 +22,4 @@ _tip_distribution = db.all("""
      WHERE amount > 0
   ORDER BY amount
 
-""")
-tips = [tip['amount'] for tip in _tip_distribution]
-response.body = sorted(tips)
+""", back_as=dict)

@@ -9,9 +9,10 @@ import gittip
 import raven
 import psycopg2
 import stripe
-import gittip.mixpanel
+import gittip.utils.mixpanel
+from gittip.models.community import Community
+from gittip.models.participant import Participant
 from postgres import Postgres
-from psycopg2.extensions import cursor as RegularCursor
 
 
 def canonical():
@@ -23,14 +24,16 @@ def canonical():
 def db():
     dburl = os.environ['DATABASE_URL']
     maxconn = int(os.environ['DATABASE_MAXCONN'])
-    gittip.db = Postgres(dburl, maxconn=maxconn, strict_one=False)
+    db = gittip.db = Postgres(dburl, maxconn=maxconn)
 
-    # register hstore type (but don't use RealDictCursor)
-    with gittip.db.get_connection() as conn:
-        curs = conn.cursor(cursor_factory=RegularCursor)
-        psycopg2.extras.register_hstore(curs, globally=True, unicode=True)
+    # register hstore type
+    with db.get_cursor() as cursor:
+        psycopg2.extras.register_hstore(cursor, globally=True, unicode=True)
 
-    return gittip.db
+    db.register_model(Community)
+    db.register_model(Participant)
+
+    return db
 
 
 def billing():
@@ -64,7 +67,7 @@ def sentry(website):
 
 def mixpanel(website):
     website.mixpanel_token = os.environ['MIXPANEL_TOKEN']
-    gittip.mixpanel.MIXPANEL_TOKEN = os.environ['MIXPANEL_TOKEN']
+    gittip.utils.mixpanel.MIXPANEL_TOKEN = os.environ['MIXPANEL_TOKEN']
 
 def nanswers():
     from gittip.models import participant

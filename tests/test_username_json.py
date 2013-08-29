@@ -1,3 +1,5 @@
+from __future__ import print_function, unicode_literals
+
 import json
 
 from gittip.testing import Harness
@@ -29,24 +31,24 @@ class Tests(Harness):
 
     def test_anonymous_gets_404(self):
         response = self.change_username("bob", user=None)
-        assert response.code == 404, response.code
+        assert response.code == 404, (response.code, response.body)
 
     def test_invalid_is_400(self):
-        response = self.change_username("\u2034")
-        assert response.code == 400, response.code
+        response = self.change_username("\u2034".encode('utf8'))
+        assert response.code == 400, (response.code, response.body)
 
     def test_restricted_username_is_400(self):
         response = self.change_username("assets")
-        assert response.code == 400, response.code
+        assert response.code == 400, (response.code, response.body)
 
     def test_unavailable_is_409(self):
         self.make_participant("bob")
         response = self.change_username("bob")
-        assert response.code == 409, response.code
+        assert response.code == 409, (response.code, response.body)
 
     def test_too_long_is_413(self):
         self.make_participant("bob")
         response = self.change_username("I am way too long, and you know it, "
                                         "and I know it, and the American "
                                         "people know it.")
-        assert response.code == 413, response.code
+        assert response.code == 413, (response.code, response.body)

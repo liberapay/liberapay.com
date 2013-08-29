@@ -1,7 +1,7 @@
+import gittip
 from aspen import Response
 from aspen.utils import typecheck
 from tornado.escape import linkify
-from gittip.models.participant import Participant
 
 COUNTRIES = (
     ('AF', u'Afghanistan'),
@@ -304,8 +304,11 @@ def get_participant(request, restrict=True):
         if user.ANON:
             request.redirect(u'/%s/' % slug)
 
-    participant = \
-           Participant.query.filter_by(username_lower=slug.lower()).first()
+    participant = gittip.db.one( "SELECT participants.*::participants "
+                                         "FROM participants "
+                                         "WHERE username_lower=%s"
+                                       , (slug.lower(),)
+                                        )
 
     if participant is None:
         raise Response(404)
@@ -324,7 +327,7 @@ def get_participant(request, restrict=True):
         request.redirect(to)
 
     if restrict:
-        if participant != user:
+        if participant != user.participant:
             if not user.ADMIN:
                 raise Response(403)
 
