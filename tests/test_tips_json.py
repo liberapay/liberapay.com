@@ -26,16 +26,25 @@ class TestTipsJson(Harness):
             {'username': 'test_tippee2', 'platform': 'gittip', 'amount': '2.00'}
         ]
 
-        response = client.post('/test_tipper/tips.json',
-            json.dumps(data),
-            user='test_tipper', content_type='application/json', HTTP_AUTHORIZATION='Basic ' + base64.b64encode(api_key + ':'))
+        response = client.post( '/test_tipper/tips.json'
+                              , json.dumps(data)
+                              , user='test_tipper'
+                              , content_type='application/json'
+                              , HTTP_AUTHORIZATION='Basic ' + base64.b64encode(api_key + ':')
+                               )
 
         assert_equal(response.code, 200)
         assert_equal(len(json.loads(response.body)), 2)
 
-        response = client.post('/test_tipper/tips.json?also_prune=' + also_prune,
-            json.dumps([{'username': 'test_tippee2', 'platform': 'gittip', 'amount': '1.00'}]),
-            user='test_tipper', content_type='application/json', HTTP_AUTHORIZATION='Basic ' + base64.b64encode(api_key + ':'))
+        response = client.post( '/test_tipper/tips.json?also_prune=' + also_prune
+                              , json.dumps([{ 'username': 'test_tippee2'
+                                            , 'platform': 'gittip'
+                                            , 'amount': '1.00'
+                                             }])
+                              , user='test_tipper'
+                              , content_type='application/json'
+                              , HTTP_AUTHORIZATION='Basic ' + base64.b64encode(api_key + ':')
+                               )
 
         assert_equal(response.code, 200)
 
@@ -51,7 +60,7 @@ class TestTipsJson(Harness):
 
         response = client.get('/test_tipper/tips.json', 'test_tipper')
 
-        assert_equal(response.code, 200) 
+        assert_equal(response.code, 200)
         assert_equal(len(json.loads(response.body)), 0) # empty array
 
     def test_get_response_with_tips(self):
@@ -75,7 +84,7 @@ class TestTipsJson(Harness):
 
         data = json.loads(response.body)[0]
 
-        assert_equal(response.code, 200) 
+        assert_equal(response.code, 200)
         assert_equal(data['username'], 'test_tippee1')
         assert_equal(data['amount'], '1.00')
 
@@ -88,9 +97,15 @@ class TestTipsJson(Harness):
 
         api_key = json.loads(client.get('/test_tipper/api-key.json', 'test_tipper').body)['api_key']
 
-        response = client.post('/test_tipper/tips.json',
-            json.dumps([{'username': 'test_tippee1', 'platform': 'badname', 'amount': '1.00'}]),
-            user='test_tipper', content_type='application/json', HTTP_AUTHORIZATION='Basic ' + base64.b64encode(api_key + ':'))
+        response = client.post( '/test_tipper/tips.json'
+                              , json.dumps([{ 'username': 'test_tippee1'
+                                            , 'platform': 'badname'
+                                            , 'amount': '1.00'
+                                             }])
+                              , user='test_tipper'
+                              , content_type='application/json'
+                              , HTTP_AUTHORIZATION='Basic ' + base64.b64encode(api_key + ':')
+                               )
 
         assert_equal(response.code, 200)
 
