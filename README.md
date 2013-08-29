@@ -410,9 +410,9 @@ same structure back in order to update tips in bulk (be sure to set
 `application/x-www-form-urlencoded`). You can `POST` a partial array to update
 a subset of your tips. The response to a `POST` will be only the subset you
 updated. If the `amount` is `"error"` then there will also be an `error`
-attribute with a one-word error code. If you include an `also_prune` key with a
-value of `yes`, `true`, or `1`, then any tips not in the array you `POST` will
-be zeroed out.
+attribute with a one-word error code. If you include an `also_prune` key in the
+querystring (not the body!) with a value of `yes`, `true`, or `1`, then any
+tips not in the array you `POST` will be zeroed out.
 
 NOTE: The amounts must be encoded as a string (rather than a number).
 Additionally, currently, the only supported platform is 'gittip'.
