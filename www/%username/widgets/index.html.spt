@@ -127,9 +127,9 @@ locked = False
 
     <p>Use this code to embed a Gittip button on your website:</p>
 
-    <pre>&lt;iframe style="border: 0; margin: 0; padding: 0;"
-        src="https://www.gittip.com/{{ participant.username }}/widget.html"
-        width="48pt" height="22pt"&gt;&lt;/iframe&gt;</pre>
+    <pre>&lt;script data-gittip-username="{{ participant.username }}"
+        data-gittip-widget="button"
+        src="//gttp.co/v1.js"&gt;&lt;/script&gt;</pre>
 
     <p>The button opens your profile on Gittip in a new tab or window.
     Here's what the text reads:</p>
@@ -149,9 +149,7 @@ locked = False
 
     <p>Here's an example using
         <a href="/whit537/">whit537</a>:
-        <iframe style="border: 0; margin: 0 0 -3pt 3pt; padding: 0;"
-            src="https://www.gittip.com/whit537/widget.html"
-            width="48pt" height="22pt"></iframe>
+        <script data-gittip-username="whit537" data-gittip-widget="button" src="//gttp.co/v1.js"></script>
     </p>
 </div>
 <div class="col2">
@@ -160,13 +158,12 @@ locked = False
 
     <p>Use this code to add a Gittip &ldquo;receiving&rdquo; widget on your website:</p>
 
-<pre>&lt;script data-gittip-username="{{ participant.username }}"
-src="https://www.gittip.com/assets/widgets/0002.js"&gt;
-&lt;/script&gt;</pre>
+    <pre>&lt;script data-gittip-username="{{ participant.username }}"
+        src="//gttp.co/v1.js"&gt;&lt;/script&gt;</pre>
 
     <p>Here's what it looks like:</p>
 
-    <script data-gittip-username="{{ participant.username }}" src="/assets/widgets/0002.js"></script>
+    <script data-gittip-username="{{ participant.username }}" src="//gttp.co/v1.js"></script>
 
 </div>
 {% end %}

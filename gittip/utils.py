@@ -266,11 +266,23 @@ def wrap(u):
     return u if u else '...'
 
 
-def canonicalize(path, base, canonical, given):
+def dict_to_querystring(mapping):
+    arguments = []
+    for key, values in mapping.iteritems():
+        for val in values:
+            arguments.append(u'='.join([key, val]))
+
+    return u'?' + u'&'.join(arguments)
+
+def canonicalize(path, base, canonical, given, arguments=None):
     if given != canonical:
         assert canonical.lower() == given.lower()  # sanity check
         remainder = path[len(base + given):]
-        newpath = base + canonical + remainder
+
+        if arguments:
+            arguments = dict_to_querystring(arguments)
+
+        newpath = base + canonical + remainder + arguments or ''
         raise Response(302, headers={"Location": newpath})
 
 
@@ -286,6 +298,7 @@ def get_participant(request, restrict=True):
     """
     user = request.context['user']
     slug = request.line.uri.path['username']
+    qs = request.line.uri.querystring
 
     if restrict:
         if user.ANON:
@@ -297,7 +310,7 @@ def get_participant(request, restrict=True):
     if participant is None:
         raise Response(404)
 
-    canonicalize(request.line.uri.path.raw, '/', participant.username, slug)
+    canonicalize(request.line.uri.path.raw, '/', participant.username, slug, qs)
 
     if participant.claimed_time is None:
 
