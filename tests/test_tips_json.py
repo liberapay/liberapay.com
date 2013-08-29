@@ -1,8 +1,9 @@
 import datetime
 import json
-from nose.tools import assert_equal
+from nose.tools import assert_equal, assert_true
 
 import pytz
+import base64
 
 from gittip.testing import Harness
 from gittip.testing.client import TestClient
@@ -53,11 +54,15 @@ class TestTipsJson(Harness):
         self.make_participant("test_tippee1", claimed_time=now)
         self.make_participant("test_tipper", claimed_time=now)
 
-        response = client.get('/')
-        csrf_token = response.request.context['csrf_token']
+        api_key = json.loads(client.get('/test_tipper/api-key.json', 'test_tipper').body)['api_key']
 
-        response1 = client.post('/test_tipper/tips.json',
-            {'0': {'username': 'test_tippee1', 'platform': 'github', 'amount': '1.00', 'csrf_token': csrf_token}},
-            user='test_tipper')
+        response = client.post('/test_tipper/tips.json',
+            json.dumps([{'username': 'test_tippee1', 'platform': 'badname', 'amount': '1.00'}]),
+            user='test_tipper', content_type='application/json', HTTP_AUTHORIZATION='Basic ' + base64.b64encode(api_key + ':'))
 
-        assert_equal(response1.body, "")
+        assert_equal(response.code, 200)
+
+        resp = json.loads(response.body)
+
+        for tip in resp:
+            assert_true('error' in tip)
