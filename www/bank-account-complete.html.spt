@@ -14,16 +14,16 @@ request.allow('GET')
 # no validation here, if any of this stuff errors out, it's because someone has
 # done something dodgy (or we f'd up)
 
-assert user.balanced_account_uri is not None, user.username
+assert user.participant.balanced_account_uri is not None, user.participant.username
 
-account = billing.get_balanced_account( user.username
-                                      , user.balanced_account_uri
+account = billing.get_balanced_account( user.participant.username
+                                      , user.participant.balanced_account_uri
                                        )
 account.merchant_uri = qs['merchant_uri']
 account.save()
 
 bank_account = account.bank_accounts.all()[-1]
-billing.associate(u"bank account", user.username, account, bank_account.uri)
+billing.associate(u"bank account", user.participant.username, account, bank_account.uri)
 request.redirect('/bank-account.html')
 
 [-----------------------------------------------------------------------------]

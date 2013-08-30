@@ -1,5 +1,5 @@
 [---]
-if user.username is None:
+if user.ANON:
     request.redirect('/')
-request.redirect(u'/' + user.username + u'/' + path['redirect_to'])
+request.redirect(u'/' + user.participant.username + u'/' + path['redirect_to'])
 ^L text/plain
