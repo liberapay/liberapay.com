@@ -338,7 +338,6 @@ def get_participant(request, restrict=True):
 
 
 def update_homepage_queries_once(db):
-    print("hello?")
     with db.get_cursor() as cursor:
         log_dammit("updating homepage queries")
         start = time.time()

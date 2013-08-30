@@ -120,7 +120,7 @@ receivers = utter_hack(db.all("""
         <ul class="group">
             {% for i, giver in enumerate(givers, start=1) %}
             <li{% if i > LUXURY %} class="luxury"{% end %}>
-                {% if giver.anonymous and not user.is_admin %}
+                {% if giver.anonymous and not user.ADMIN %}
                 <span class="mini-user">
                     <span class="inner">
                         <span class="avatar">
