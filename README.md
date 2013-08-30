@@ -257,27 +257,22 @@ Now, you need to setup the database.
 Local Database Setup
 --------------------
 
-For advanced development and testing databse changes, you need to configure
-authentication and set up a gittip database.
-
-You need [Postgres](http://www.postgresql.org/download/). We're working
-on [porting](https://github.com/gittip/www.gittip.com/issues?milestone=28&state=open)
-Gittip from raw SQL to a declarative ORM with SQLAlchemy. After that we may be
-able to remove the hard dependency on Postgres so you can use SQLite in
-development, but for now you need Postgres.
-
-The best version of Postgres to use is 9.2, because that's what is being
-run in production at Heroku. Version 9.1 is the second-best, because Gittip
-uses the [hstore](http://www.postgresql.org/docs/9.2/static/hstore.html)
-extension for unstructured data, and that isn't bundled with earlier
-versions than 9.1. If you're on a Mac, maybe try out Heroku's
+For advanced development and testing database changes, you need a local
+installation of [Postgres](http://www.postgresql.org/download/). The best
+version of Postgres to use is 9.1.9, because that's what we're using in
+production at Heroku. Gittip uses the
+[hstore](http://www.postgresql.org/docs/9.1/static/hstore.html) extension for
+unstructured data, and that isn't bundled with earlier versions than 9.1. If
+you're on a Mac, maybe try out Heroku's
 [Postgres.app](http://www.postgresql.org/download/). If installing using a
 package manager, you may need several packages. On Ubuntu and Debian, the
-required packages are: `postgresql` (base), `libpq5-dev`/`libpq-dev`, (includes headers needed
-to build the `psycopg2` Python library), `postgresql-contrib` (includes
-hstore), `python-dev` (includes Python header files for `psycopg2`).
+required packages are: `postgresql` (base), `libpq5-dev`/`libpq-dev`, (includes
+headers needed to build the `psycopg2` Python library), `postgresql-contrib`
+(includes hstore), `python-dev` (includes Python header files for `psycopg2`).
 
-If you are receiving issues from `psycopg2`, please [ensure their dependencies are met](http://initd.org/psycopg/docs/faq.html#problems-compiling-and-deploying-psycopg2).
+If you are receiving issues from `psycopg2`, please [ensure their its are
+met](http://initd.org/psycopg/docs/faq.html#problems-compiling-and-deploying-psycopg2).
+
 
 ### Authentication
 
@@ -320,12 +315,14 @@ we've run against the production database. You should never change
 commands that have already been run. New DDL will be (manually) run against the
 production database as part of deployment.
 
+
 ### Example data
 
 The gittip database created in the last step is empty. To populate it with
 some fake data, so that more of the site is functional, run this command:
 
     $ make data
+
 
 ### Notes for Mac OS X users
 
