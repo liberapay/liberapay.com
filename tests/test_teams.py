@@ -8,7 +8,7 @@ class Tests(Harness):
 
     def setUp(self):
         super(Harness, self).setUp()
-        self.team = self.make_participant('team1', number='plural')  # Our team
+        self.team = self.make_participant('A-Team', number='plural')
 
     def test_is_team(self):
         expeted = True
@@ -61,18 +61,18 @@ class Tests(Harness):
 
 
     def test_can_add_members(self):
-        user = self.make_participant('user1')
+        alice = self.make_participant('alice')
         expected = True
-        self.team.add_member(user)
-        actual = user.member_of(self.team)
+        self.team.add_member(alice)
+        actual = alice.member_of(self.team)
         assert actual == expected, actual
 
     def test_get_teams_for_member(self):
-        user = self.make_participant('user1')
-        user2 = self.make_participant('user2')
-        team = self.make_participant('team2', number='plural')
-        self.team.add_member(user)
-        team.add_member(user2)
+        alice = self.make_participant('alice')
+        bob = self.make_participant('bob')
+        team = self.make_participant('B-Team', number='plural')
+        self.team.add_member(alice)
+        team.add_member(bob)
         expected = 1
-        actual = user.get_teams().pop().nmembers
+        actual = alice.get_teams().pop().nmembers
         assert actual == expected, actual
