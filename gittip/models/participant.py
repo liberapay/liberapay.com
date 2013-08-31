@@ -653,11 +653,6 @@ class Participant(Model, MixinElsewhere, MixinTeam):
         return tips, total
 
 
-
-    ################################################################
-    ############### BEGIN COPY/PASTE OF ORM VERSION
-    ################################################################
-
     def get_og_title(self):
         out = self.username
         receiving = self.get_dollars_receiving()
@@ -670,16 +665,13 @@ class Participant(Model, MixinElsewhere, MixinTeam):
             out += " is"
         return out + " on Gittip"
 
+
     def get_age_in_seconds(self):
         out = -1
         if self.claimed_time is not None:
             now = datetime.datetime.now(self.claimed_time.tzinfo)
             out = (now - self.claimed_time).total_seconds()
         return out
-
-    ################################################################
-    ############### END COPY/PASTE OF ORM VERSION
-    ################################################################
 
 
 # Exceptions

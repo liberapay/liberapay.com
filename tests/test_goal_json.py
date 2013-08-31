@@ -14,10 +14,10 @@ class Tests(Harness):
     def make_alice(self):
         return self.make_participant('alice', claimed_time=utcnow())
 
-    def change_goal(self, goal, goal_custom="", user="alice"):
-        if isinstance(user, Participant):
-            user = user.username
-        else:
+    def change_goal(self, goal, goal_custom="", username="alice"):
+        if isinstance(username, Participant):
+            username = username.username
+        elif username == 'alice':
             self.make_alice()
 
         client = TestClient()
@@ -29,7 +29,7 @@ class Tests(Harness):
                                 , 'goal_custom': goal_custom
                                 , 'csrf_token': csrf_token
                                  }
-                              , user=user
+                              , user=username
                                )
         return response
 
@@ -60,7 +60,7 @@ class Tests(Harness):
         assert actual == "100,100.00", actual
 
     def test_anonymous_gets_404(self):
-        response = self.change_goal("100.00", user=None)
+        response = self.change_goal("100.00", username=None)
         assert response.code == 404, response.code
 
     def test_invalid_is_400(self):

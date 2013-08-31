@@ -81,7 +81,7 @@ if action == 'opt-in':      # opt in
     # set 'user' to give them a session :/
     user, newly_claimed = account.opt_in(screen_name)
     if newly_claimed:
-        mixpanel.alias_and_track(cookie, unicode(user.id))
+        mixpanel.alias_and_track(cookie, unicode(user.participant.id))
 elif action == 'connect':   # connect
     if user.ANON:
         raise Response(404)

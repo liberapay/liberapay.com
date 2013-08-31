@@ -7,7 +7,6 @@ import gittip.wireup
 import gittip.security.authentication
 import gittip.security.csrf
 import gittip.utils.cache_static
-from aspen import log_dammit
 
 
 version_file = os.path.join(website.www_root, 'version.txt')
@@ -98,83 +97,9 @@ website.hooks.inbound_early += [add_stuff]
 
 UPDATE_HOMEPAGE_EVERY = int(os.environ['UPDATE_HOMEPAGE_EVERY'])
 def update_homepage_queries():
+    from gittip import utils
     while 1:
-        with gittip.db.get_cursor() as cursor:
-            log_dammit("updating homepage queries")
-            start = time.time()
-            cursor.execute("""
-
-            DROP TABLE IF EXISTS _homepage_new_participants;
-            CREATE TABLE _homepage_new_participants AS
-                  SELECT username, claimed_time FROM (
-                      SELECT DISTINCT ON (p.username)
-                             p.username
-                           , claimed_time
-                        FROM participants p
-                        JOIN elsewhere e
-                          ON p.username = participant
-                       WHERE claimed_time IS NOT null
-                         AND is_suspicious IS NOT true
-                         ) AS foo
-                ORDER BY claimed_time DESC;
-
-            DROP TABLE IF EXISTS _homepage_top_givers;
-            CREATE TABLE _homepage_top_givers AS
-                SELECT tipper AS username, anonymous, sum(amount) AS amount
-                  FROM (    SELECT DISTINCT ON (tipper, tippee)
-                                   amount
-                                 , tipper
-                              FROM tips
-                              JOIN participants p ON p.username = tipper
-                              JOIN participants p2 ON p2.username = tippee
-                              JOIN elsewhere ON elsewhere.participant = tippee
-                             WHERE p.last_bill_result = ''
-                               AND p.is_suspicious IS NOT true
-                               AND p2.claimed_time IS NOT NULL
-                               AND elsewhere.is_locked = false
-                          ORDER BY tipper, tippee, mtime DESC
-                          ) AS foo
-                  JOIN participants p ON p.username = tipper
-                 WHERE is_suspicious IS NOT true
-              GROUP BY tipper, anonymous
-              ORDER BY amount DESC;
-
-            DROP TABLE IF EXISTS _homepage_top_receivers;
-            CREATE TABLE _homepage_top_receivers AS
-                SELECT tippee AS username, claimed_time, sum(amount) AS amount
-                  FROM (    SELECT DISTINCT ON (tipper, tippee)
-                                   amount
-                                 , tippee
-                              FROM tips
-                              JOIN participants p ON p.username = tipper
-                              JOIN elsewhere ON elsewhere.participant = tippee
-                             WHERE last_bill_result = ''
-                               AND elsewhere.is_locked = false
-                               AND is_suspicious IS NOT true
-                               AND claimed_time IS NOT null
-                          ORDER BY tipper, tippee, mtime DESC
-                          ) AS foo
-                  JOIN participants p ON p.username = tippee
-                 WHERE is_suspicious IS NOT true
-              GROUP BY tippee, claimed_time
-              ORDER BY amount DESC;
-
-            DROP TABLE IF EXISTS homepage_new_participants;
-            ALTER TABLE _homepage_new_participants
-              RENAME TO homepage_new_participants;
-
-            DROP TABLE IF EXISTS homepage_top_givers;
-            ALTER TABLE _homepage_top_givers
-              RENAME TO homepage_top_givers;
-
-            DROP TABLE IF EXISTS homepage_top_receivers;
-            ALTER TABLE _homepage_top_receivers
-              RENAME TO homepage_top_receivers;
-
-            """)
-            end = time.time()
-            elapsed = end - start
-            log_dammit("updated homepage queries in %.2f seconds" % elapsed)
+        utils.update_homepage_queries_once(website.db)
         time.sleep(UPDATE_HOMEPAGE_EVERY)
 
 homepage_updater = threading.Thread(target=update_homepage_queries)

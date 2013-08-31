@@ -9,6 +9,7 @@ from decimal import Decimal
 from os.path import join, dirname, realpath
 
 import gittip
+import pytz
 from aspen import resources
 from aspen.testing import Website, StubRequest
 from aspen.utils import utcnow
@@ -96,6 +97,9 @@ class Harness(unittest.TestCase):
 
         # brute force update for use in testing
         for k,v in kw.items():
+            if k == 'claimed_time':
+                if v == 'now':
+                    v = datetime.datetime.now(pytz.utc)
             self.db.run("UPDATE participants SET {}=%s WHERE username=%s" \
                         .format(k), (v, participant.username))
         participant.set_attributes(**kw)

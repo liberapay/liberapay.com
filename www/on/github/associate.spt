@@ -41,7 +41,7 @@ account = github.GitHubAccount(user_info['id'], user_info)
 if action == 'opt-in':      # opt in
     user, newly_claimed = account.opt_in(login)
     if newly_claimed:
-        mixpanel.alias_and_track(cookie, unicode(user.id))
+        mixpanel.alias_and_track(cookie, unicode(user.participant.id))
 elif action == 'connect':   # connect
     if user.ANON:
         raise Response(404)
