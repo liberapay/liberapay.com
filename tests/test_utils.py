@@ -23,3 +23,13 @@ class Tests(Harness):
             utils.get_participant(request, restrict=False)
         actual = cm.exception.code
         assert actual == 302, actual
+
+    def test_dict_to_querystring_converts_dict_to_querystring(self):
+        expected = "?foo=bar"
+        actual = utils.dict_to_querystring({"foo": ["bar"]})
+        assert actual == expected, actual
+
+    def test_dict_to_querystring_converts_empty_dict_to_querystring(self):
+        expected = ""
+        actual = utils.dict_to_querystring({})
+        assert actual == expected, actual

@@ -267,6 +267,9 @@ def wrap(u):
 
 
 def dict_to_querystring(mapping):
+    if not mapping:
+        return u''
+
     arguments = []
     for key, values in mapping.iteritems():
         for val in values:
