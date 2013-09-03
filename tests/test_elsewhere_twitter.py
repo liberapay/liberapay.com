@@ -5,6 +5,7 @@ from gittip.testing import Harness
 
 
 class TestElsewhereTwitter(Harness):
+
     def test_twitter_resolve_resolves(self):
         alice_on_twitter = twitter.TwitterAccount( "1"
                                                  , {'screen_name': 'alice'}

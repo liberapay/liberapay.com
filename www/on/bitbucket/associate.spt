@@ -78,6 +78,7 @@ account = bitbucket.BitbucketAccount(username, user_info)
 if action == 'opt-in':      # opt in
     # set 'user' to give them a session :/
     user, newly_claimed = account.opt_in(username)
+    del account
     if newly_claimed:
         mixpanel.alias_and_track(cookie, unicode(user.participant.id))
 elif action == 'connect':   # connect
@@ -93,6 +94,8 @@ elif action == 'connect':   # connect
         request.resource = resources.get(request)
 
         raise request.resource.respond(request)
+    else:
+        del account
 else:                       # lock or unlock
     if then != username:
 
@@ -109,9 +112,10 @@ else:                       # lock or unlock
 
         assert account.participant != username, username # sanity check
         account.set_is_locked(action == 'lock')
+        del account
 
 if then == u'':
-    then = u'/%s/' % account.participant
+    then = u'/%s/' % user.participant.username
 if not then.startswith(u'/'):
     # Interpret it as a Bitbucket username.
     then = u'/on/bitbucket/%s/' % then

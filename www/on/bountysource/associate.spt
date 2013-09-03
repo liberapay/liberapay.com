@@ -57,6 +57,8 @@ else:
         request.resource = resources.get(request)
 
         raise request.resource.respond(request)
+    else:
+        del account
 
     request.redirect('/%s/' % user.participant.username)
 

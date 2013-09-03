@@ -82,7 +82,6 @@ class AccountElsewhere(object):
             user.participant.set_as_claimed()
             try:
                 user.participant.change_username(desired_username)
-                self.username = desired_username
             except ProblemChangingUsername:
                 pass
         return user, newly_claimed
