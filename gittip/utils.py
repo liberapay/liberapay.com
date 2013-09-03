@@ -279,7 +279,7 @@ def canonicalize(path, base, canonical, given, arguments=None):
         assert canonical.lower() == given.lower()  # sanity check
         remainder = path[len(base + given):]
 
-        if arguments:
+        if arguments is not None:
             arguments = dict_to_querystring(arguments)
 
         newpath = base + canonical + remainder + arguments or ''

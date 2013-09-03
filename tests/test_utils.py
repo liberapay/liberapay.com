@@ -1,5 +1,6 @@
 from __future__ import division, print_function, unicode_literals
 
+from aspen import Response
 from gittip import utils
 from gittip.testing import Harness, load_request
 from gittip.elsewhere.twitter import TwitterAccount
@@ -18,5 +19,7 @@ class Tests(Harness):
         expected, ignored = TwitterAccount("alice", {}).opt_in("alice")
         request = load_request('/Alice/')
 
-        actual = utils.get_participant(request, restrict=False)
-        assert actual == expected, actual
+        with self.assertRaises(Response) as cm:
+            utils.get_participant(request, restrict=False)
+        actual = cm.exception.code
+        assert actual == 302, actual
