@@ -13,3 +13,10 @@ class Tests(Harness):
 
         actual = utils.get_participant(request, restrict=False)
         assert actual == expected, actual
+
+    def test_get_participant_canonicalizes(self):
+        expected, ignored = TwitterAccount("alice", {}).opt_in("alice")
+        request = load_request('/Alice/')
+
+        actual = utils.get_participant(request, restrict=False)
+        assert actual == expected, actual
