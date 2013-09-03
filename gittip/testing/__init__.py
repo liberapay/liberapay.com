@@ -243,8 +243,8 @@ def serve_request(path, user=None):
     response = test_website.handle_safely(request)
     return response
 
-def load_simplate(path):
-    """Given an URL path, return resource.
+def load_request(path):
+    """Given an URL path, return request.
     """
     request = StubRequest(path)
     request.website = test_website
@@ -256,4 +256,10 @@ def load_simplate(path):
     request.socket = sockets.get(request)
     test_website.hooks.run('inbound_late', request)
 
+    return request
+
+def load_simplate(path):
+    """Given an URL path, return resource.
+    """
+    request = load_request(path)
     return resources.get(request)
