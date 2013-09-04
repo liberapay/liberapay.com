@@ -93,8 +93,8 @@ def add_stuff(request):
         request.context['nactive'] = stats['nactive']
         request.context['transfer_volume'] = stats['transfer_volume']
     else:
-        request.context['nactive'] = 1
-        request.context['transfer_volume'] = 2
+        request.context['nactive'] = 0
+        request.context['transfer_volume'] = 0
 
 website.hooks.inbound_early += [add_stuff]
 
