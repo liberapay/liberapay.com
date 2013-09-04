@@ -30,7 +30,8 @@ Table of Contents
 
  - [Installation](#installation)
   - [Dependencies](#dependencies)
-  - [Building and Launching](#building-and-launching)
+  - [Building](#building)
+  - [Launching](#launching)
   - [Help!](#help)
  - [Configuration](#configuration)
  - [Modifying CSS](#modifying-css)
@@ -63,20 +64,20 @@ Building
 
 Create a local environment configuration file:
 
-    $make local.env
+    $ make local.env
 
-By default, gittip is configured to use a postgres instance in the cloud. If you
+By default, Gittip is configured to use a postgres instance in the cloud. If you
 want to use your local instance instead, just set the ```DATABASE_URL``` in local.env
 to ```postgres://username@host/gittip```
 
 Next, setup your environment:
 
-    $make env
+    $ make env
 
 Add the necessary schemas and insert dummy data into postgres:
 
-    $make schema
-    $make data
+    $ make schema
+    $ make data
 
 
 Launching
