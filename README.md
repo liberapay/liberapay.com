@@ -30,7 +30,8 @@ Table of Contents
 
  - [Installation](#installation)
   - [Dependencies](#dependencies)
-  - [Building and Launching](#building-and-launching)
+  - [Building](#building)
+  - [Launching](#launching)
   - [Help!](#help)
  - [Configuration](#configuration)
  - [Modifying CSS](#modifying-css)
@@ -58,9 +59,29 @@ The only hard requirement on your system is [Python
 All library dependencies are bundled in the repo (under `vendor/`) and by
 default the app is configured to use a Postgres instance in the cloud.
 
+Building
+--------
 
-Building and Launching
-----------------------
+Create a local environment configuration file:
+
+    $ make local.env
+
+By default, Gittip is configured to use a postgres instance in the cloud. If you
+want to use your local instance instead, just set the ```DATABASE_URL``` in local.env
+to ```postgres://username@host/gittip```
+
+Next, setup your environment:
+
+    $ make env
+
+Add the necessary schemas and insert dummy data into postgres:
+
+    $ make schema
+    $ make data
+
+
+Launching
+---------
 
 Once you've installed Python and Postgres and set up a database, you can use
 make to build and launch Gittip:
