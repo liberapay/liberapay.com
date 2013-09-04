@@ -88,6 +88,8 @@ def add_stuff(request):
     request.context['github'] = github
     request.context['twitter'] = twitter
     request.context['bountysource'] = bountysource
+    stats = gittip.db.one('SELECT nactive, transfer_volume FROM paydays ORDER BY ts_end DESC')
+    request.context.update(stats)
 
 website.hooks.inbound_early += [add_stuff]
 
