@@ -19,10 +19,7 @@ def inbound(request):
     """Authenticate from a cookie or an API key in basic auth.
     """
     user = None
-    if 'session' in request.headers.cookie:
-        token = request.headers.cookie['session'].value
-        user = User.from_session_token(token)
-    elif 'Authorization' in request.headers:
+    if 'Authorization' in request.headers:
         header = request.headers['authorization']
         if header.startswith('Basic '):
             creds = header[len('Basic '):].decode('base64')
@@ -36,6 +33,9 @@ def inbound(request):
             if 'Referer' not in request.headers:
                 request.headers['Referer'] = \
                                         'https://%s/' % csrf._get_host(request)
+    elif 'session' in request.headers.cookie:
+        token = request.headers.cookie['session'].value
+        user = User.from_session_token(token)
 
     if user is None:
         user = User()
