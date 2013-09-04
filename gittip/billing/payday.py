@@ -137,6 +137,7 @@ class Payday(object):
         self.pachinko(ts_start, self.genparticipants(ts_start, ts_start))
         self.clear_pending_to_balance()
         self.payout(ts_start, self.genparticipants(ts_start, False))
+        self.set_nactive(ts_start)
 
         self.end()
 
@@ -354,6 +355,21 @@ class Payday(object):
         # "Cleared" instead of "moved because we also set to null.
         log("Cleared pending to balance. Ready for payouts.")
 
+
+    def set_nactive(self, ts_start):
+        self.db.run("""\
+
+            UPDATE paydays
+               SET nactive=(
+                    SELECT count(DISTINCT foo.*) FROM (
+                        SELECT tipper FROM transfers WHERE "timestamp" >= %(ts_start)s
+                            UNION
+                        SELECT tippee FROM transfers WHERE "timestamp" >= %(ts_start)s
+                    ) AS foo
+                )
+             WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
+
+        """, {'ts_start': ts_start})
 
     def end(self):
         rec = self.db.one("""\
