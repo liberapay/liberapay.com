@@ -11,6 +11,7 @@ from aspen.utils import typecheck, utcnow
 from gittip import billing
 from gittip.billing.payday import Payday, skim_credit
 from gittip.models.participant import Participant
+from gittip.testing import Harness
 
 from test_billing import TestBillingBase
 
@@ -748,3 +749,24 @@ class TestBillingTransfer(TestPaydayBase):
                                   )
         alice = Participant.from_username('alice')
         assert_equals(alice.balance, Decimal("0.00"))
+
+
+class TestPachinko(Harness):
+
+    def setUp(self):
+        self.payday = Payday(self.db)
+
+        a_team = self.make_participant('a_team', claimed_time='now', number='plural', balance=20)
+        a_team.add_member(self.make_participant('alice', claimed_time='now'))
+        a_team.add_member(self.make_participant('bob', claimed_time='now'))
+
+        self.ts_start = self.payday.start()
+
+    def test_get_participants_gets_participants(self):
+        actual = [p.username for p in self.payday.get_participants(self.ts_start)]
+        expected = ['a_team', 'alice', 'bob']
+        assert actual == expected, actual
+
+    def test_pachinko_pachinkos(self):
+        participants = self.payday.genparticipants(self.ts_start, self.ts_start)
+        self.payday.pachinko(self.ts_start, participants)
