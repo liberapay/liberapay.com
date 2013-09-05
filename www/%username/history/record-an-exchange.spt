@@ -23,14 +23,16 @@ if not note:
     raise Response(400)
 
 
-with gittip.db.get_transaction() as txn:
+with gittip.db.get_cursor() as cursor:
+    params = (amount, fee, participant.username, user.participant.username, \
+                                                                          note)
     SQL = "INSERT INTO exchanges " \
           "(amount, fee, participant, recorder, note) " \
           "VALUES (%s, %s, %s, %s, %s)"
-    txn.execute(SQL, (amount, fee, participant.username, user.username, note))
+    cursor.execute(SQL, params)
 
     SQL = "UPDATE participants SET balance = balance + %s WHERE username=%s"
-    txn.execute(SQL, (amount, participant.username))
+    cursor.execute(SQL, (amount, participant.username))
 
 request.redirect('/%s/history/' % participant.username)
 

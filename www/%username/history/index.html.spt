@@ -11,17 +11,17 @@ class Paydays(object):
     def __init__(self, username, balance):
         self._username = username
         self._paydays = db.all("SELECT ts_start, ts_end FROM paydays "
-                               "ORDER BY ts_end DESC")
+                               "ORDER BY ts_end DESC", back_as=dict)
         self._npaydays = len(self._paydays)
         self._exchanges = db.all( "SELECT * FROM exchanges "
                                   "WHERE participant=%s "
                                   "ORDER BY timestamp ASC"
-                                , (username,)
+                                , (username,), back_as=dict
                                  )
         self._transfers = db.all( "SELECT * FROM transfers "
                                   "WHERE tipper=%s OR tippee=%s "
                                   "ORDER BY timestamp ASC"
-                                , (username, username)
+                                , (username, username), back_as=dict
                                  )
         self._balance = balance
 
@@ -159,12 +159,12 @@ locked = False
 
 <table id="history" class="centered">
     <tr><td colspan="7">
-        <h2>{{ participant.username == user.username and "You" or participant.username }} joined
+        <h2>{{ participant == user.participant and "You" or participant.username }} joined
         {{ to_age(participant.claimed_time) }}.</h2>
     </td></tr>
     <tr><td colspan="7">
 
-        <h2>{{ participant.username == user.username and "Your" or "Their" }} balance is
+        <h2>{{ participant == user.participant and "Your" or "Their" }} balance is
             ${{ participant.balance }}.</h2>
         {% if user.ADMIN %}
         <h2>Record an Exchange.</h2>
@@ -268,7 +268,7 @@ locked = False
         <td class="balance">{{ event['balance'] }}</td>
 
         {% if event['tippee'] == participant.username %}
-            {% if user.ADMIN and (participant.username != user.username or 'override' in qs) %}
+            {% if user.ADMIN and (participant != user.participant or 'override' in qs) %}
             <td class="notes">from <a href="/{{ event['tipper'] }}/history/">{{ event['tipper'] }}</a></td>
             {% else %}
             <td class="notes">from someone</td>

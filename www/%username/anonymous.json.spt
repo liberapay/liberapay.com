@@ -12,12 +12,12 @@ if POST:
          WHERE username=%s
      RETURNING anonymous
 
-    """, (user.username,))
+    """, (user.participant.username,))
 else:
     rec = db.one("""
 
         SELECT anonymous FROM participants WHERE username=%s
 
-    """, (user.username,))
+    """, (user.participant.username,))
 assert rec is not None
-response.body = {"anonymous": rec['anonymous']}
+response.body = {"anonymous": rec}

@@ -13,11 +13,11 @@ bank_account = None
 status = ". . ."
 
 if not user.ANON:
-    balanced_account_uri = user.balanced_account_uri
+    balanced_account_uri = user.participant.balanced_account_uri
 
     status = "not connected"
     if balanced_account_uri:
-        working = user.last_ach_result == ""
+        working = user.participant.last_ach_result == ""
         status = "connected" if working else "not connected"
         account = balanced.Account.find(balanced_account_uri)
 
@@ -33,7 +33,7 @@ if not user.ANON:
 
             assert balanced_account_uri == _bank_account_account_uri
 
-    username = user.username
+    username = user.participant.username
 
 title = "Bank Account"
 [-----------------------------------------------------------------------------]
@@ -66,7 +66,7 @@ title = "Bank Account"
     <script>
         $(document).ready(function()
         {
-            Gittip.payments.ba.init("{{ balanced.Marketplace.my_marketplace.uri }}", "{{ user.username }}");
+            Gittip.payments.ba.init("{{ balanced.Marketplace.my_marketplace.uri }}", "{{ user.participant.username }}");
         });
     </script>
     <style>
@@ -85,9 +85,9 @@ title = "Bank Account"
                 ******{{ bank_account['last_four'] }}</h2>
                 {% end %}
 
-                <div id="feedback">{% if user.last_ach_result %}
+                <div id="feedback">{% if user.participant.last_ach_result %}
                 <h2><span>Failure</span></h2>
-                <div class="details"><p>{{ user.last_ach_result }}</p></div>
+                <div class="details"><p>{{ user.participant.last_ach_result }}</p></div>
                   {% end %}</div>
 
                 {% if account and 'merchant' in account.roles %}

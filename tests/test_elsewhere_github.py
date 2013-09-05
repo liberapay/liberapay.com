@@ -1,19 +1,18 @@
+from __future__ import print_function, unicode_literals
+
 from mock import patch
 from nose.tools import assert_equal
 
 from gittip.elsewhere import github
-from gittip.models import Elsewhere
 from gittip.testing import Harness, DUMMY_GITHUB_JSON
 from gittip.testing.client import TestClient
 
 
 class TestElsewhereGithub(Harness):
+
     def test_github_resolve_resolves_correctly(self):
-        alice = self.make_participant('alice')
-        alice_on_github = Elsewhere(platform='github', user_id="1",
-                                    user_info={'login': 'alice'})
-        alice.accounts_elsewhere.append(alice_on_github)
-        self.session.commit()
+        alice_on_github = github.GitHubAccount("1", {'login': 'alice'})
+        alice_on_github.opt_in('alice')
 
         expected = 'alice'
         actual = github.resolve(u'alice')
@@ -32,5 +31,11 @@ class TestElsewhereGithub(Harness):
             requests.get().status_code = github_status
             requests.get().text = github_content
             response = client.get('/on/github/not-in-the-db/')
-            print response.code, expected_gittip_response, response.body
             assert_equal(response.code, expected_gittip_response)
+
+
+    def test_get_user_info_gets_user_info(self):
+        github.GitHubAccount("1", {'login': 'alice'}).opt_in('alice')
+        expected = {"login": "alice"}
+        actual = github.get_user_info('alice')
+        assert actual == expected, actual

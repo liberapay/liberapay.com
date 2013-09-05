@@ -6,7 +6,7 @@ from urllib import urlencode
 
 from aspen import resources, Response
 from gittip.elsewhere import bountysource
-from gittip.participant import NeedConfirmation
+from gittip.models._mixin_elsewhere import NeedConfirmation
 
 [-----------------------------]
 
@@ -26,12 +26,12 @@ token = qs.get('access_token', '')
 # it better be the logged in user, dammit.
 participant = bountysource.get_participant_via_access_token(token)
 
-if not participant or participant != user:
+if not participant or participant != user.participant:
 
     # This will be the case if the user clicks the 'Reject' button
     # on the Bountysource account authorize screen.
 
-    request.redirect('/%s/' % user.username)
+    request.redirect('/%s/' % user.participant.username)
 
 else:
 
@@ -48,7 +48,7 @@ else:
 
     # associate with the Gittip participant
     try:
-        user.take_over(account)
+        user.participant.take_over(account)
     except NeedConfirmation, obstacles:
 
         # XXX Eep! Internal redirect! Really?!
@@ -57,7 +57,9 @@ else:
         request.resource = resources.get(request)
 
         raise request.resource.respond(request)
+    else:
+        del account
 
-    request.redirect('/%s' % account.participant)
+    request.redirect('/%s/' % user.participant.username)
 
 [-----------------------------] text/plain
