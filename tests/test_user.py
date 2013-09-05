@@ -1,4 +1,6 @@
-from gittip.models.user import User
+from __future__ import print_function, unicode_literals
+
+from gittip.security.user import User
 from gittip.testing import Harness
 
 
@@ -19,7 +21,7 @@ class TestUser(Harness):
 
     def test_username_is_case_insensitive(self):
         self.make_participant('AlIcE')
-        actual = User.from_username('aLiCe').username_lower
+        actual = User.from_username('aLiCe').participant.username_lower
         assert actual == 'alice', actual
 
     def test_known_user_is_not_admin(self):
@@ -31,6 +33,24 @@ class TestUser(Harness):
         self.make_participant('alice', is_admin=True)
         alice = User.from_username('alice')
         assert alice.ADMIN
+
+
+    # ANON
+
+    def test_unreviewed_user_is_not_ANON(self):
+        self.make_participant('alice', is_suspicious=None)
+        alice = User.from_username('alice')
+        assert alice.ANON is False
+
+    def test_whitelisted_user_is_not_ANON(self):
+        self.make_participant('alice', is_suspicious=False)
+        alice = User.from_username('alice')
+        assert alice.ANON is False
+
+    def test_blacklisted_user_is_ANON(self):
+        self.make_participant('alice', is_suspicious=True)
+        alice = User.from_username('alice')
+        assert alice.ANON is True
 
 
     # session token
@@ -47,8 +67,10 @@ class TestUser(Harness):
 
     def test_user_can_be_loaded_from_session_token(self):
         self.make_participant('alice')
-        token = User.from_username('alice').session_token
-        actual = User.from_session_token(token).username
+        user = User.from_username('alice')
+        user.sign_in()
+        token = user.participant.session_token
+        actual = User.from_session_token(token).participant.username
         assert actual == 'alice', actual
 
 
@@ -67,7 +89,7 @@ class TestUser(Harness):
     def test_user_can_be_loaded_from_api_key(self):
         alice = self.make_participant('alice')
         api_key = alice.recreate_api_key()
-        actual = User.from_api_key(api_key).username
+        actual = User.from_api_key(api_key).participant.username
         assert actual == 'alice', actual
 
 
@@ -84,7 +106,5 @@ class TestUser(Harness):
         self.make_participant('alice')
         alice = User.from_username('alice')
         assert not alice.ANON
-        alice = alice.sign_out()
+        alice.sign_out()
         assert alice.ANON
-
-

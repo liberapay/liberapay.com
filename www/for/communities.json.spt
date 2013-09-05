@@ -20,7 +20,7 @@ if POST:
     is_member = is_member == 'true'
 
     # delegate
-    user.insert_into_communities(is_member, name, slug)
+    user.participant.insert_into_communities(is_member, name, slug)
 
 elif GET:
     response.headers["Access-Control-Allow-Origin"] = "*"

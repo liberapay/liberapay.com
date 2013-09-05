@@ -7,7 +7,7 @@ from aspen import json, Response, log
 from aspen.utils import to_age, utc
 from gittip import CARDINALS, db
 from gittip.elsewhere import twitter
-from gittip.models import Participant
+from gittip.models.participant import Participant
 [-----------------------------------------------------------------------------]
 
 # Try to load from Twitter.
@@ -28,7 +28,7 @@ if not name:
 url = user_info['html_url'] = "https://twitter.com/%s" % username
 
 account = twitter.TwitterAccount(user_info['id'], user_info)
-participant = Participant.query.get(account.participant)
+participant = Participant.from_username(account.participant)
 if account.is_claimed:
     request.redirect('/%s/' % participant.username)
 locked = account.is_locked

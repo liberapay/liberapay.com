@@ -24,7 +24,7 @@ if goal is not None:
         raise Response(400, "Bad input.")
 
 participant = get_participant(request)
-participant.goal = goal
+participant.update_goal(goal)
 
 if goal is not None:
     goal = locale.format("%.2f", goal, grouping=True)

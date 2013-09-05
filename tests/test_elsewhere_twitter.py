@@ -1,16 +1,24 @@
+from __future__ import print_function, unicode_literals
+
 from gittip.elsewhere import twitter
-from gittip.models import Elsewhere
 from gittip.testing import Harness
 
 
 class TestElsewhereTwitter(Harness):
+
     def test_twitter_resolve_resolves(self):
-        alice = self.make_participant('alice')
-        alice_on_twitter = Elsewhere(platform='twitter', user_id="1",
-                                     user_info={'screen_name': 'alice'})
-        alice.accounts_elsewhere.append(alice_on_twitter)
-        self.session.commit()
+        alice_on_twitter = twitter.TwitterAccount( "1"
+                                                 , {'screen_name': 'alice'}
+                                                  )
+        alice_on_twitter.opt_in('alice')
 
         expected = 'alice'
         actual = twitter.resolve(u'alice')
+        assert actual == expected, actual
+
+
+    def test_get_user_info_gets_user_info(self):
+        twitter.TwitterAccount("1", {'screen_name': 'alice'}).opt_in('alice')
+        expected = {"screen_name": "alice"}
+        actual = twitter.get_user_info('alice')
         assert actual == expected, actual

@@ -5,8 +5,10 @@ import mock
 from nose.tools import assert_equals, assert_raises
 
 import gittip
-from gittip import authentication, billing
+from gittip import billing
+from gittip.security import authentication
 from gittip.testing import Harness
+from gittip.models.participant import Participant
 
 
 class TestBillingBase(Harness):
@@ -16,7 +18,7 @@ class TestBillingBase(Harness):
 
     def setUp(self):
         super(Harness, self).setUp()
-        self.make_participant('alice')
+        self.alice = self.make_participant('alice')
 
 
 class TestBalancedCard(Harness):
@@ -191,7 +193,7 @@ class TestBillingAssociate(TestBillingBase):
         user = authentication.User.from_username('alice')
         # participant in db should be updated to reflect the error message of
         # last update
-        assert user.last_bill_result == error_message
+        assert user.participant.last_bill_result == error_message
         assert find.call_count
 
     @mock.patch('gittip.billing.balanced.Account.find')
@@ -213,23 +215,23 @@ class TestBillingAssociate(TestBillingBase):
         user = authentication.User.from_username('alice')
 
         # participant in db should be updated
-        assert user.last_ach_result == ''
+        assert user.participant.last_ach_result == ''
 
     @mock.patch('gittip.billing.balanced.Account.find')
     def test_associate_bank_account_invalid(self, find):
         ex = balanced.exc.HTTPError('errrrrror')
         find.return_value.add_bank_account.side_effect = ex
         find.return_value.uri = self.balanced_account_uri
+
         billing.associate( u"bank account"
                          , 'alice'
                          , self.balanced_account_uri
                          , self.balanced_destination_uri
                           )
 
-        user = authentication.User.from_username('alice')
-
         # participant in db should be updated
-        assert user.last_ach_result == 'errrrrror'
+        alice = Participant.from_username('alice')
+        assert alice.last_ach_result == 'errrrrror'
 
 
 class TestBillingClear(TestBillingBase):
@@ -259,8 +261,8 @@ class TestBillingClear(TestBillingBase):
         assert not invalid_card.save.call_count
 
         user = authentication.User.from_username('alice')
-        assert not user.last_bill_result
-        assert user.balanced_account_uri
+        assert not user.participant.last_bill_result
+        assert user.participant.balanced_account_uri
 
     @mock.patch('gittip.billing.balanced.Account')
     def test_clear_bank_account(self, b_account):
@@ -290,8 +292,8 @@ class TestBillingClear(TestBillingBase):
         assert not invalid_ba.save.call_count
 
         user = authentication.User.from_username('alice')
-        assert not user.last_ach_result
-        assert user.balanced_account_uri
+        assert not user.participant.last_ach_result
+        assert user.participant.balanced_account_uri
 
 
 class TestBillingStoreError(TestBillingBase):
@@ -300,7 +302,7 @@ class TestBillingStoreError(TestBillingBase):
         rec = gittip.db.one("select * from participants where "
                             "username='alice'")
         expected = "cheese is yummy"
-        actual = rec['last_bill_result']
+        actual = rec.last_bill_result
         assert actual == expected, actual
 
     def test_store_error_stores_ach_error(self):
@@ -308,4 +310,4 @@ class TestBillingStoreError(TestBillingBase):
             billing.store_error(u"bank account", 'alice', message)
             rec = gittip.db.one("select * from participants "
                                 "where username='alice'")
-            assert rec['last_ach_result'] == message
+            assert rec.last_ach_result == message

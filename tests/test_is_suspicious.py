@@ -1,7 +1,10 @@
+from __future__ import print_function, unicode_literals
+
 from nose.tools import assert_equals
 
 from gittip.testing import Harness
 from gittip.testing.client import TestClient
+from gittip.models.participant import Participant
 
 
 class TestIsSuspicious(Harness):
@@ -19,19 +22,19 @@ class TestIsSuspicious(Harness):
         assert_equals(actual, None)
 
     def test_toggling_NULL_gives_true(self):
-        foo = self.make_participant('foo')
+        self.make_participant('foo')
         self.toggle_is_suspicious()
-        actual = foo.is_suspicious
+        actual = Participant.from_username('foo').is_suspicious
         assert_equals(actual, True)
 
     def test_toggling_true_gives_false(self):
-        foo = self.make_participant('foo', is_suspicious=True)
+        self.make_participant('foo', is_suspicious=True)
         self.toggle_is_suspicious()
-        actual = foo.is_suspicious
+        actual = Participant.from_username('foo').is_suspicious
         assert_equals(actual, False)
 
     def test_toggling_false_gives_true(self):
-        foo = self.make_participant('foo', is_suspicious=False)
+        self.make_participant('foo', is_suspicious=False)
         self.toggle_is_suspicious()
-        actual = foo.is_suspicious
+        actual = Participant.from_username('foo').is_suspicious
         assert_equals(actual, True)

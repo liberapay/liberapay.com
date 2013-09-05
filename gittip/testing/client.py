@@ -1,14 +1,16 @@
+from __future__ import print_function, unicode_literals
+
 from Cookie import SimpleCookie
 from StringIO import StringIO
 
 from aspen.http.request import Request
 from aspen.testing import StubWSGIRequest
-
-from gittip.authentication import User
+from gittip.security.user import User
 from gittip.testing import test_website
 
-BOUNDARY = 'BoUnDaRyStRiNg'
-MULTIPART_CONTENT = 'multipart/form-data; boundary=%s' % BOUNDARY
+
+BOUNDARY = b'BoUnDaRyStRiNg'
+MULTIPART_CONTENT = b'multipart/form-data; boundary=%s' % BOUNDARY
 
 
 def encode_multipart(boundary, data):
@@ -24,17 +26,17 @@ def encode_multipart(boundary, data):
 
     for (key, value) in data.items():
         lines.extend([
-            '--' + boundary,
-            'Content-Disposition: form-data; name="%s"' % str(key),
-            '',
+            b'--' + boundary,
+            b'Content-Disposition: form-data; name="%s"' % str(key),
+            b'',
             str(value)
         ])
 
     lines.extend([
-        '--' + boundary + '--',
-        '',
+        b'--' + boundary + b'--',
+        b'',
     ])
-    return '\r\n'.join(lines)
+    return b'\r\n'.join(lines)
 
 
 # XXX TODO: Move the TestClient up into the Aspen code base so it can be shared
@@ -47,19 +49,22 @@ class TestClient(object):
 
     def get_request(self, path, method="GET", body=None,
                     **extra):
-        env = StubWSGIRequest(path)
-        env['REQUEST_METHOD'] = method
-        env['wsgi.input'] = StringIO(body)
-        env['HTTP_COOKIE'] = self.cookies.output(header='', sep='; ')
-        env.update(extra)
+        env = StubWSGIRequest(path.encode('utf8'))
+        env[b'REQUEST_METHOD'] = method.encode('utf8')
+        env[b'wsgi.input'] = StringIO(body)
+        env[b'HTTP_COOKIE'] = self.cookies.output(header='', sep='; ').encode('utf8')
+        for k,v in extra.items():
+            env[k.encode('utf8')] = v.encode('utf8')
         return Request.from_wsgi(env)
 
     def perform_request(self, request, user):
         request.website = test_website
         if user is not None:
             user = User.from_username(user)
+            user.sign_in()
             # Note that Cookie needs a bytestring.
-            request.headers.cookie[str('session')] = user.session_token
+            request.headers.cookie[str('session')] = \
+                                                 user.participant.session_token
 
         response = test_website.handle_safely(request)
         if response.headers.cookie:

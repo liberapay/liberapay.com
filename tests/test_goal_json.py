@@ -1,7 +1,8 @@
+from __future__ import print_function, unicode_literals
+
 import json
 from decimal import Decimal
 
-import gittip
 from aspen.utils import utcnow
 from gittip.testing import Harness
 from gittip.models.participant import Participant
@@ -13,10 +14,10 @@ class Tests(Harness):
     def make_alice(self):
         return self.make_participant('alice', claimed_time=utcnow())
 
-    def change_goal(self, goal, goal_custom="", user="alice"):
-        if isinstance(user, Participant):
-            user = user.username
-        else:
+    def change_goal(self, goal, goal_custom="", username="alice"):
+        if isinstance(username, Participant):
+            username = username.username
+        elif username == 'alice':
             self.make_alice()
 
         client = TestClient()
@@ -28,7 +29,7 @@ class Tests(Harness):
                                 , 'goal_custom': goal_custom
                                 , 'csrf_token': csrf_token
                                  }
-                              , user=user
+                              , user=username
                                )
         return response
 
@@ -59,7 +60,7 @@ class Tests(Harness):
         assert actual == "100,100.00", actual
 
     def test_anonymous_gets_404(self):
-        response = self.change_goal("100.00", user=None)
+        response = self.change_goal("100.00", username=None)
         assert response.code == 404, response.code
 
     def test_invalid_is_400(self):
@@ -80,7 +81,7 @@ class Tests(Harness):
         self.change_goal("custom", "300", alice)
         self.change_goal("null", "", alice)
         self.change_goal("custom", "400", alice)
-        actual = gittip.db.one("SELECT goal FROM participants")['goal']
+        actual = self.db.one("SELECT goal FROM participants")
         assert actual == Decimal("400.00"), actual
 
     def test_all_goals_are_stored_in_goals_table(self):
@@ -90,6 +91,5 @@ class Tests(Harness):
         self.change_goal("custom", "300", alice)
         self.change_goal("null", "", alice)
         self.change_goal("custom", "400", alice)
-        goals = gittip.db.all("SELECT goal FROM goals ORDER BY mtime DESC")
-        actual = [rec['goal'] for rec in goals]
+        actual = self.db.all("SELECT goal FROM goals ORDER BY mtime DESC")
         assert actual == [400, None, 300, 200, 100], actual

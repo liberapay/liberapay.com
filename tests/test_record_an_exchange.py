@@ -1,7 +1,6 @@
 from __future__ import unicode_literals
 from decimal import Decimal
 
-import gittip
 from aspen.utils import utcnow
 from gittip.testing import Harness
 from gittip.testing.client import TestClient
@@ -74,29 +73,29 @@ class TestRecordAnExchange(Harness):
 
     def test_success_records_exchange(self):
         self.record_an_exchange('10', '0.50', 'noted')
-        expected = [{ "amount": Decimal('10.00')
-                    , "fee": Decimal('0.50')
-                    , "participant": "bob"
-                    , "recorder": "alice"
-                    , "note": "noted"
-                     }]
+        expected = { "amount": Decimal('10.00')
+                   , "fee": Decimal('0.50')
+                   , "participant": "bob"
+                   , "recorder": "alice"
+                   , "note": "noted"
+                    }
         SQL = "SELECT amount, fee, participant, recorder, note " \
               "FROM exchanges"
-        actual = gittip.db.all(SQL)
+        actual = self.db.one(SQL, back_as=dict)
         assert actual == expected, actual
 
     def test_success_updates_balance(self):
         self.record_an_exchange('10', '0', 'noted')
-        expected = [{"balance": Decimal('10.00')}]
+        expected = Decimal('10.00')
         SQL = "SELECT balance FROM participants WHERE username='bob'"
-        actual = gittip.db.all(SQL)
+        actual = self.db.one(SQL)
         assert actual == expected, actual
 
     def test_withdrawals_work(self):
         self.make_participant('alice', claimed_time=utcnow(), is_admin=True)
         self.make_participant('bob', claimed_time=utcnow(), balance=20)
         self.record_an_exchange('-7', '0', 'noted', False)
-        expected = [{"balance": Decimal('13.00')}]
+        expected = Decimal('13.00')
         SQL = "SELECT balance FROM participants WHERE username='bob'"
-        actual = gittip.db.all(SQL)
+        actual = self.db.one(SQL)
         assert actual == expected, actual

@@ -51,7 +51,7 @@ DEFAULT_LIMIT = 200
 [------------------------------]
 participant = get_participant(request, restrict=False)
 username = participant.username
-current_user = user.username
+current_user = getattr(user.participant, 'username', None)
 
 try:
     limit = min(int(qs.get('limit', DEFAULT_LIMIT)), DEFAULT_LIMIT)

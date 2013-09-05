@@ -3,8 +3,8 @@
     <!-- Name and Anonymous -->
     <form class="username">
         <h2>You are
-            <span class="view">{{ escape(user.username) }}</span>
-            <input tabindex="100" name="username" value="{{ escape(user.username) }}"/>
+            <span class="view">{{ escape(user.participant.username) }}</span>
+            <input tabindex="100" name="username" value="{{ escape(user.participant.username) }}"/>
             <button tabindex="101" class="edit">Edit</button>
             <button tabindex="102" class="save" type="submit">Save</button>
             <button tabindex="103" class="cancel" type="cancel">Cancel</button>
@@ -75,13 +75,13 @@
             <button tabindex="402" class="cancel" type="cancel">Cancel</button>
         </h2>
         <div class="view">
-            {% if user.goal > 0 %}
+            {% if user.participant.goal > 0 %}
             <span class="my">{{ MY }}</span> goal is to receive
-            ${{ locale.format("%.2f", user.goal, grouping=True) }} per week on
+            ${{ locale.format("%.2f", user.participant.goal, grouping=True) }} per week on
             Gittip.
-            {% elif user.goal == 0 %}
+            {% elif user.participant.goal == 0 %}
             <span class="i-m">{{ I_M }}</span> here as a patron.
-            {% elif user.goal is None %}
+            {% elif user.participant.goal is None %}
             <span class="i-m">{{ I_M }}</span> grateful for gifts, but
             don't have a specific funding goal.
             {% else %}
@@ -92,27 +92,27 @@
         <table class="edit"><tr><td>
 
             <input tabindex="403" type="radio" name="goal" id="goal-yes" value="custom"
-            {% if user.goal > 0 %} checked="true"{% end %}/>
+            {% if user.participant.goal > 0 %} checked="true"{% end %}/>
             <label for="goal-yes"><span class="my">{{ MY }}</span> goal is to
                 receive $</label><input
                 name="goal_custom" id="goal-custom"
-            {% if (user.goal is None) or (user.goal <= 0) %}
+            {% if (user.participant.goal is None) or (user.participant.goal <= 0) %}
             {% else %}
-            value="{{ locale.format("%.2f", user.goal, grouping=True) }}"
+            value="{{ locale.format("%.2f", user.participant.goal, grouping=True) }}"
             {% end %} />
             <label for="goal-yes"> per week on Gittip.</label>
 
             <br />
 
             <input tabindex="404" type="radio" name="goal" id="goal-null" value="null"
-            {% if user.goal is None %} checked="true"{% end %}/>
+            {% if user.participant.goal is None %} checked="true"{% end %}/>
             <label for="goal-null"><span class="i-m">{{ I_M }}</span> grateful for
                 gifts, but don't have a specific funding goal.</label>
 
             <br />
 
             <input tabindex="405" type="radio" name="goal" id="goal-0" value="0.00"
-            {% if user.goal == 0 %} checked="true"{% end %}/>
+            {% if user.participant.goal == 0 %} checked="true"{% end %}/>
             <label for="goal-0"><span class="i-m">{{ I_M }}</span> here as a
                 patron.</label>
 
@@ -120,7 +120,7 @@
 
             <input tabindex="406" type="radio" name="goal" id="goal-negative"
                    value="-1"
-            {% if (user.goal is not None) and user.goal < 0 %} checked="true"{% end %}/>
+            {% if (user.participant.goal is not None) and user.participant.goal < 0 %} checked="true"{% end %}/>
             <label for="goal-negative"><span class="i-m">{{ I_M }}</span> here
                 as a patron, and politely decline to receive gifts.</label>
 

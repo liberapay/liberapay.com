@@ -1,14 +1,12 @@
 from aspen import Response
 
-from gittip.orm import db
-
 [-----------------------------------------------------------------------------]
 
-if user.id is None:
+if user.ANON is None:
     request.redirect('/')
 
 if POST:
-    user = user.sign_out()
+    user.sign_out()
 
     if 'back_to' in request.body:
         back_to = request.body['back_to']
@@ -28,6 +26,7 @@ if POST:
         <h1>Are you sure you wish to sign out?</h1>
         <form id="sign-out" method="POST">
             <input name="back_to" type="hidden" value="/" />
+            <input name="csrf_token" type="hidden" value="{{ cookie['csrf_token'].value }}" />
             <button type="submit">Yes!</button>
         </form>
     </div>

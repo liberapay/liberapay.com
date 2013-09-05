@@ -4,8 +4,8 @@
 <ul class="team memberships">
   {% for team in teams %}
   <li>
-    <a href="/{{ team['name'] }}/">{{ team['name'] }}</a>
-    {% set nothers = team['nmembers'] - 1 %}
+    <a href="/{{ team.name }}/">{{ team.name }}</a>
+    {% set nothers = team.nmembers - 1 %}
     <div class="fine">with {{ nothers }} other{{ plural(nothers) }}</div>
   </li>
   {% end %}

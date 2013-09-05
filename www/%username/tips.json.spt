@@ -40,11 +40,11 @@ else:
 
     out = []
     for tip in tips:
-        if tip['amount'] == 0:
+        if tip.amount == 0:
             continue
-        out.append({ "username": tip['tippee']
+        out.append({ "username": tip.tippee
                    , "platform": "gittip"
-                   , "amount": str(tip['amount'])
+                   , "amount": str(tip.amount)
                     })
 
 response.body = out
