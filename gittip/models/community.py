@@ -29,20 +29,20 @@ def slug_to_name(slug):
     return gittip.db.one(SQL, (slug,))
 
 
-def get_list_for(user):
+def get_list_for(username):
     """Return a listing of communities.
 
     :database: One SELECT, multiple rows
 
     """
-    if user is None or user.ANON:
+    if username is None:
         member_test = "false"
         sort_order = 'DESC'
         params = ()
     else:
         member_test = "bool_or(participant = %s)"
         sort_order = 'ASC'
-        params = (user.participant.username,)
+        params = (username,)
 
     return gittip.db.all("""
 
