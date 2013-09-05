@@ -67,8 +67,8 @@ elif usertype == "organization":
 
     """
     known = db.all(ON_GITTIP, (logins,))
-    known_map = {rec['login']: rec['participant'] for rec in known}
-    _on_gittip = [rec['login'] for rec in known]
+    known_map = {rec.login: rec.participant for rec in known}
+    _on_gittip = [rec.login for rec in known]
     on_gittip = []
     not_on_gittip = []
     for member in members:

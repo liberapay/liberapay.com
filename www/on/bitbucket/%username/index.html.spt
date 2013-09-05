@@ -86,8 +86,8 @@ elif is_team:
 
     """
     known = db.all(ON_GITTIP, (usernames,))
-    known_map = {rec['username']: rec['participant'] for rec in known}
-    _on_gittip = [rec['username'] for rec in known]
+    known_map = {rec.username: rec.participant for rec in known}
+    _on_gittip = [rec.username for rec in known]
     on_gittip = []
     not_on_gittip = []
     for member in members:
