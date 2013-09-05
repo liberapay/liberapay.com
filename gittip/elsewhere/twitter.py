@@ -44,7 +44,7 @@ def get_user_info(screen_name):
                         )
 
     if rec is not None:
-        user_info = rec.user_info
+        user_info = rec
     else:
         # Updated using Twython as a point of reference:
         # https://github.com/ryanmcgrath/twython/blob/master/twython/twython.py#L76

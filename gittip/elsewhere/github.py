@@ -100,7 +100,7 @@ def get_user_info(login):
                         )
 
     if rec is not None:
-        user_info = rec.user_info
+        user_info = rec
     else:
         url = "https://api.github.com/users/%s"
         user_info = requests.get(url % login, params={
