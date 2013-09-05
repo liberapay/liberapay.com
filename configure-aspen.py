@@ -90,8 +90,8 @@ def add_stuff(request):
     request.context['bountysource'] = bountysource
     stats = gittip.db.one('SELECT nactive, transfer_volume FROM paydays ORDER BY ts_end DESC')
     if stats:
-        request.context['nactive'] = stats['nactive']
-        request.context['transfer_volume'] = stats['transfer_volume']
+        request.context['nactive'] = stats[0]
+        request.context['transfer_volume'] = stats[0]
     else:
         request.context['nactive'] = 0
         request.context['transfer_volume'] = 0

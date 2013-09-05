@@ -29,10 +29,11 @@ class TestPaydayCharge(TestPaydayBase):
         self.payday = Payday(self.db)
 
     def get_numbers(self):
-        """Return a list of 9 ints:
+        """Return a list of 10 ints:
 
             nachs
             nach_failing
+            nactive
             ncc_failing
             ncc_missing
             ncharges
@@ -58,7 +59,7 @@ class TestPaydayCharge(TestPaydayBase):
         self.payday.start()
         self.payday.charge(alice, Decimal('1.00'))
         actual = self.get_numbers()
-        assert_equals(actual, [0, 0, 0, 1, 0, 0, 0, 0, 0, 0])
+        assert_equals(actual, [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0])
 
     @mock.patch('gittip.billing.payday.Payday.charge_on_balanced')
     def test_charge_failure_returns_None(self, cob):
