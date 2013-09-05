@@ -91,7 +91,7 @@ def add_stuff(request):
     request.context['bountysource'] = bountysource
     stats = gittip.db.one('SELECT nactive, transfer_volume FROM paydays ORDER BY ts_end DESC LIMIT 1', default=(0, 0.0))
     request.context['gnactive'] = locale.format("%d", stats[0], grouping=True)
-    request.context['gtransfer_volume'] = locale.format("%.2f", stats[1], grouping=True)
+    request.context['gtransfer_volume'] = locale.format("%d", round(stats[1], -2), grouping=True)
 
 website.hooks.inbound_early += [add_stuff]
 
