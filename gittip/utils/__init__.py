@@ -270,6 +270,9 @@ def wrap(u):
 
 
 def dict_to_querystring(mapping):
+    if not mapping:
+        return u''
+
     arguments = []
     for key, values in mapping.iteritems():
         for val in values:
@@ -282,7 +285,7 @@ def canonicalize(path, base, canonical, given, arguments=None):
         assert canonical.lower() == given.lower()  # sanity check
         remainder = path[len(base + given):]
 
-        if arguments:
+        if arguments is not None:
             arguments = dict_to_querystring(arguments)
 
         newpath = base + canonical + remainder + arguments or ''
