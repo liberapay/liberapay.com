@@ -20,4 +20,4 @@ else:
 
     """, (user.participant.username,))
 assert rec is not None
-response.body = {"anonymous": rec['anonymous']}
+response.body = {"anonymous": rec}
