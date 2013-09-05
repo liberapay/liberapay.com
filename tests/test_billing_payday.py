@@ -756,17 +756,23 @@ class TestPachinko(Harness):
     def setUp(self):
         self.payday = Payday(self.db)
 
+    def test_get_participants_gets_participants(self):
         a_team = self.make_participant('a_team', claimed_time='now', number='plural', balance=20)
         a_team.add_member(self.make_participant('alice', claimed_time='now'))
         a_team.add_member(self.make_participant('bob', claimed_time='now'))
 
-        self.ts_start = self.payday.start()
+        ts_start = self.payday.start()
 
-    def test_get_participants_gets_participants(self):
-        actual = [p.username for p in self.payday.get_participants(self.ts_start)]
+        actual = [p.username for p in self.payday.get_participants(ts_start)]
         expected = ['a_team', 'alice', 'bob']
         assert actual == expected, actual
 
     def test_pachinko_pachinkos(self):
-        participants = self.payday.genparticipants(self.ts_start, self.ts_start)
-        self.payday.pachinko(self.ts_start, participants)
+        a_team = self.make_participant('a_team', claimed_time='now', number='plural', balance=20, pending=0)
+        a_team.add_member(self.make_participant('alice', claimed_time='now', balance=0, pending=0))
+        a_team.add_member(self.make_participant('bob', claimed_time='now', balance=0, pending=0))
+
+        ts_start = self.payday.start()
+
+        participants = self.payday.genparticipants(ts_start, ts_start)
+        self.payday.pachinko(ts_start, participants)

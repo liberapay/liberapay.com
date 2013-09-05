@@ -246,7 +246,7 @@ class Payday(object):
                 tip['tippee'] = member['username']
                 tip['amount'] = amount
                 tip['claimed_time'] = ts_start
-                self.tip( {"username": participant.username}
+                self.tip( participant
                         , tip
                         , ts_start
                         , pachinko=True
@@ -902,7 +902,7 @@ class Payday(object):
              WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
          RETURNING id
 
-        """, default=NoPayday)
+        """, (amount,), default=NoPayday)
 
 
     def mark_participant(self, nsuccessful_tips):
