@@ -15,3 +15,10 @@ class TestElsewhereTwitter(Harness):
         expected = 'alice'
         actual = twitter.resolve(u'alice')
         assert actual == expected, actual
+
+
+    def test_get_user_info_gets_user_info(self):
+        twitter.TwitterAccount("1", {'screen_name': 'alice'}).opt_in('alice')
+        expected = {"screen_name": "alice"}
+        actual = twitter.get_user_info('alice')
+        assert actual == expected, actual
