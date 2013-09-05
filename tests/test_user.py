@@ -35,6 +35,24 @@ class TestUser(Harness):
         assert alice.ADMIN
 
 
+    # ANON
+
+    def test_unreviewed_user_is_not_ANON(self):
+        self.make_participant('alice', is_suspicious=None)
+        alice = User.from_username('alice')
+        assert alice.ANON is False
+
+    def test_whitelisted_user_is_not_ANON(self):
+        self.make_participant('alice', is_suspicious=False)
+        alice = User.from_username('alice')
+        assert alice.ANON is False
+
+    def test_blacklisted_user_is_ANON(self):
+        self.make_participant('alice', is_suspicious=True)
+        alice = User.from_username('alice')
+        assert alice.ANON is True
+
+
     # session token
 
     def test_user_from_bad_session_token_is_anonymous(self):
@@ -90,5 +108,3 @@ class TestUser(Harness):
         assert not alice.ANON
         alice.sign_out()
         assert alice.ANON
-
-
