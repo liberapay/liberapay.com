@@ -242,6 +242,7 @@ def tip_graph(*a, **kw):
 
 test_website = Website([ '--www_root', str(join(TOP, 'www'))
                        , '--project_root', str(TOP)
+                       , '--show_tracebacks', str('yes')
                         ])
 
 def serve_request(path, user=None):
