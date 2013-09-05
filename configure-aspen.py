@@ -1,3 +1,4 @@
+import locale
 import os
 import threading
 import time
@@ -88,13 +89,9 @@ def add_stuff(request):
     request.context['github'] = github
     request.context['twitter'] = twitter
     request.context['bountysource'] = bountysource
-    stats = gittip.db.one('SELECT nactive, transfer_volume FROM paydays ORDER BY ts_end DESC')
-    if stats:
-        request.context['nactive'] = stats[0]
-        request.context['transfer_volume'] = stats[1]
-    else:
-        request.context['nactive'] = 0
-        request.context['transfer_volume'] = 0
+    stats = gittip.db.one('SELECT nactive, transfer_volume FROM paydays ORDER BY ts_end DESC LIMIT 1', default=(0, 0.0))
+    request.context['gnactive'] = locale.format("%d", stats[0], grouping=True)
+    request.context['gtransfer_volume'] = locale.format("%.2f", stats[1], grouping=True)
 
 website.hooks.inbound_early += [add_stuff]
 
