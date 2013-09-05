@@ -456,7 +456,7 @@ class Payday(object):
 
         """
 
-        # This will fail with IntegrityError if the balanced goes below zero.
+        # This will fail with IntegrityError if the balance goes below zero.
         # We catch that and return false in our caller.
         cursor.execute(DECREMENT, (amount, participant))
 
