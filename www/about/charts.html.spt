@@ -93,10 +93,10 @@ title = "Charts"
 </div>
 
 <div class="chart-wrapper">
-    <a name="funders"></a>
-    <h2>Funders</h2>
-    <p class="note">People who gave money to other people within Gittip</p>
-    <div class="chart" id="funders-"></div>
+    <a name="active"></a>
+    <h2>Active Users</h2>
+    <p class="note">Users that gave and/or received money within Gittip</p>
+    <div class="chart" id="active-"></div>
     <div class="x-axis">weeks</div>
 </div>
 
@@ -147,7 +147,7 @@ title = "Charts"
         var Volume = $('#volume-');
         var Cumulative = $('#cumulative-');
         var Users = $('#users-');
-        var Funders = $('#funders-');
+        var Active = $('#active-');
 
         function mouseover()
         {
@@ -180,7 +180,7 @@ title = "Charts"
             // =======================
 
             var maxUsers = 0;
-            var maxFunders = 0;
+            var maxActive = 0;
             var maxGifts = 0;
             var maxCumulative = 0;
             var maxWithdrawals = 0;
@@ -193,8 +193,8 @@ title = "Charts"
                 maxUsers = Math.max( maxUsers
                                    , parseFloat(payday.nparticipants)
                                     );
-                maxFunders = Math.max( maxFunders
-                                     , parseFloat(payday.ntippers)
+                maxActive = Math.max( maxActive
+                                     , parseFloat(payday.nactive)
                                       );
                 maxCumulative += parseFloat(payday.transfer_volume);
                 maxGifts = Math.max( maxGifts
@@ -209,7 +209,7 @@ title = "Charts"
             }
 
             scaleUsers = Math.ceil(maxUsers / 100) * 100;
-            scaleFunders = Math.ceil(maxFunders / 100) * 100;
+            scaleActive = Math.ceil(maxActive / 100) * 100;
             scaleGifts = Math.ceil(maxGifts / 100) * 100;
             scaleCumulative = Math.ceil(maxCumulative / 100) * 100;
             scaleWithdrawals = Math.ceil(maxWithdrawals / 100) * 100;
@@ -262,10 +262,10 @@ title = "Charts"
                                  , payday.nparticipants
                                  , weekstamp
                                   ));
-                Funders.append(Week( i
-                                   , maxFunders
-                                   , scaleFunders
-                                   , payday.ntippers
+                Active.append(Week( i
+                                   , maxActive
+                                   , scaleActive
+                                   , payday.nactive
                                    , weekstamp
                                     ));
                 Volume.append(Week( i
