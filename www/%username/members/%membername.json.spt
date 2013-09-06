@@ -36,7 +36,7 @@ if POST:
     if member == team:
         raise Response(400, "can't recurse")
 
-    if user == team:
+    if user.participant == team:
 
         # The team itself can only add new members, which means setting their
         # take to a penny, and remove members, which means setting it to zero.

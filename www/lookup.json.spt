@@ -15,7 +15,7 @@ else:
     out = db.all(SQL, (query_lower + '%',))
     out.reverse()
     for rec in out:
-        if query_lower == rec['username_lower']:
+        if query_lower == rec.username_lower:
             break
     else:  # Heck yeah, baby. :^)
         if len(out) == 5:
