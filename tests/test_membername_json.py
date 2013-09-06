@@ -46,6 +46,42 @@ class TestMembernameJson(Harness):
         actual = response.code
         assert actual == 404, actual
 
+    def test_post_user_is_not_member_or_team_returns_403(self):
+        client, csrf_token = self.make_client_and_csrf()
+
+        self.make_team_and_participant()
+        self.make_participant("bob", claimed_time=utcnow(), number='plural')
+
+        response = client.post('/team/members/alice.json'
+            , {
+                'take': '0.01'
+              , 'csrf_token': csrf_token
+            }
+            , user='team'
+        )
+
+        actual = response.code
+        assert actual == 200, actual
+
+        response = client.post('/team/members/bob.json'
+            , {
+                'take': '0.01'
+              , 'csrf_token': csrf_token
+            }
+            , user='team'
+        )
+
+        actual = response.code
+        assert actual == 200, actual
+
+        response = client.post('/team/members/alice.json'
+            , { 'csrf_token': csrf_token }
+            , user='bob'
+        )
+
+        actual = response.code
+        assert actual == 403, actual
+
     def test_post_take_is_not_decimal_returns_400(self):
         client, csrf_token = self.make_client_and_csrf()
 
