@@ -194,8 +194,8 @@ title = "Charts"
                                    , parseFloat(payday.nparticipants)
                                     );
                 maxActive = Math.max( maxActive
-                                     , parseFloat(payday.nactive)
-                                      );
+                                    , parseFloat(payday.nactive)
+                                     );
                 maxCumulative += parseFloat(payday.transfer_volume);
                 maxGifts = Math.max( maxGifts
                                    , parseFloat(payday.transfer_volume)
@@ -263,11 +263,11 @@ title = "Charts"
                                  , weekstamp
                                   ));
                 Active.append(Week( i
-                                   , maxActive
-                                   , scaleActive
-                                   , payday.nactive
-                                   , weekstamp
-                                    ));
+                                  , maxActive
+                                  , scaleActive
+                                  , payday.nactive
+                                  , weekstamp
+                                   ));
                 Volume.append(Week( i
                                   , maxGifts
                                   , scaleGifts
