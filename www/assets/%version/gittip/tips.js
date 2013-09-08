@@ -7,7 +7,7 @@ Gittip.tips.init = function()
         var $this     = $(this),
             $parent   = $this.parents('[class^="my-tip"]'),
             $confirm  = $parent.find('.confirm-tip'),
-            amount    = parseFloat($this.val(), 10),
+            amount    = parseFloat($this.val(), 10) || 0,
             oldAmount = parseFloat($this.data('old-amount'), 10);
 
         // force two decimal points on value
