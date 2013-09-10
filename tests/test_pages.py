@@ -32,7 +32,7 @@ class TestPages(Harness):
         update_homepage_queries_once(self.db)
 
         actual = self.client.get('/').body
-        expected = "???"
+        expected = "Anonymous"
         assert expected in actual, actual
 
     def test_profile(self):
