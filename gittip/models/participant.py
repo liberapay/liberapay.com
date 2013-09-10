@@ -183,11 +183,13 @@ class Participant(Model, MixinElsewhere, MixinTeam):
                             )
         if rec is None:
             out = None
-        elif rec['platform'] == 'github':
-            out = '/on/github/%s/' % rec['user_info']['login']
+        elif rec.platform == 'bitbucket':
+            out = '/on/bitbucket/%s/' % rec.user_info['username']
+        elif rec.platform == 'github':
+            out = '/on/github/%s/' % rec.user_info['login']
         else:
-            assert rec['platform'] == 'twitter'
-            out = '/on/twitter/%s/' % rec['user_info']['screen_name']
+            assert rec.platform == 'twitter'
+            out = '/on/twitter/%s/' % rec.user_info['screen_name']
         return out
 
     def set_as_claimed(self):
