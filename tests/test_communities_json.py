@@ -109,3 +109,14 @@ class TestCommunitiesJson(Harness):
 
         actual = len(json.loads(response.body)['communities'])
         assert actual == 0, actual
+
+    def test_get_can_get_communities_when_anon(self):
+        client, csrf_token = self.make_client_and_csrf()
+
+        response = client.get('/for/communities.json')
+
+        actual = response.code
+        assert actual == 200, actual
+
+        actual = len(json.loads(response.body)['communities'])
+        assert actual == 0, actual
