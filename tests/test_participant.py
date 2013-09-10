@@ -18,6 +18,7 @@ from gittip.models.participant import ( UsernameTooLong
                                       , NoSelfTipping
                                       , BadAmount
                                        )
+from gittip.elsewhere.github import GitHubAccount
 from gittip.testing import Harness
 from nose.tools import assert_equals, assert_raises
 
@@ -493,3 +494,17 @@ class Tests(Harness):
         alice = self.make_participant('alice', claimed_time=None)
         actual = alice.get_age_in_seconds()
         assert actual == -1, actual
+
+
+
+    # resolve_unclaimed - ru
+
+    def test_ru_returns_None_for_orphaned_participant(self):
+        resolved = self.make_participant('alice').resolve_unclaimed()
+        assert resolved is None, resolved
+
+    def test_ru_returns_github_url_for_stub_from_github(self):
+        unclaimed = GitHubAccount('1234', {'login': 'alice'})
+        stub = Participant.from_username(unclaimed.participant)
+        actual = stub.resolve_unclaimed()
+        assert actual == "/on/github/alice/", actual
