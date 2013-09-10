@@ -90,7 +90,6 @@ class AccountElsewhere(object):
     def upsert(self, user_info):
         """Given a dict, return a tuple.
 
-        Platform is the name of a platform that we support (ASCII blah).
         User_id is an immutable unique identifier for the given user on the
         given platform.  Username is the user's login/username on the given
         platform. It is only used here for logging. Specifically, we don't
