@@ -463,7 +463,7 @@ for your project!
  
  - [WordPress: WP-Gittip](https://github.com/daankortenbach/WP-Gittip)
 
- - [Node.js: gittip](https://npmjs.org/package/gittip)
+ - [Node.js: Node-Gittip](https://npmjs.org/package/gittip)
 
  - [Ruby: gratitude](http://rubygems.org/gems/gratitude)
 
