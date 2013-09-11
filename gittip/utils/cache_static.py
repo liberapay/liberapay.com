@@ -113,7 +113,8 @@ def outbound(response):
     if response.code == 304:
 
         # https://github.com/gittip/www.gittip.com/issues/1308
-        del response.headers['Content-Type']
+        if 'Content-Type' in response.headers:
+            del response.headers['Content-Type']
 
         return response
 
