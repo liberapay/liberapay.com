@@ -463,6 +463,8 @@ for your project!
 
  - [Node.js client library](https://npmjs.org/package/gittip)
 
+ - [Ruby gem, gratitude](http://rubygems.org/gems/gratitude)
+
 
 Glossary
 ========
