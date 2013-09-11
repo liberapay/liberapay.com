@@ -456,14 +456,16 @@ for your project!
  - [Khan Academy giving spreadsheet and
    script](http://ejohn.org/blog/gittip-at-khan-academy/)
 
- - [Drupal Gittip module](https://drupal.org/project/gittip) 
+ - [Drupal: Gittip](https://drupal.org/project/gittip) 
 
    - Includes a Gittip giving field type to let you implement the Khan academy
      model for users on your Drupal site.
+ 
+ - [WordPress: WP-Gittip](https://github.com/daankortenbach/WP-Gittip)
 
- - [Node.js client library](https://npmjs.org/package/gittip)
+ - [Node.js: gittip](https://npmjs.org/package/gittip)
 
- - [Ruby gem, gratitude](http://rubygems.org/gems/gratitude)
+ - [Ruby: gratitude](http://rubygems.org/gems/gratitude)
 
 
 Glossary
