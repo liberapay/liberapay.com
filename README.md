@@ -453,10 +453,9 @@ API Implementations
 Below are some projects that use the Gittip APIs, that can serve as inspiration
 for your project!
 
- - [Drupal: Gittip](https://drupal.org/project/gittip) 
-
-   - Includes a Gittip giving field type to let you implement the Khan academy
-     model for users on your Drupal site.
+ - [Drupal: Gittip](https://drupal.org/project/gittip)&mdash;Includes a Gittip
+   giving field type to let you implement the Khan academy model for users on
+   your Drupal site.
 
  - [Node.js: Node-Gittip](https://npmjs.org/package/gittip) (also see [Khan
    Academy's setup](http://ejohn.org/blog/gittip-at-khan-academy/))
