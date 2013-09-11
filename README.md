@@ -453,19 +453,18 @@ API Implementations
 Below are some projects that use the Gittip APIs, that can serve as inspiration
 for your project!
 
- - [Khan Academy giving spreadsheet and
-   script](http://ejohn.org/blog/gittip-at-khan-academy/)
-
  - [Drupal: Gittip](https://drupal.org/project/gittip) 
 
    - Includes a Gittip giving field type to let you implement the Khan academy
      model for users on your Drupal site.
- 
- - [WordPress: WP-Gittip](https://github.com/daankortenbach/WP-Gittip)
 
- - [Node.js: Node-Gittip](https://npmjs.org/package/gittip)
+ - [Node.js: Node-Gittip](https://npmjs.org/package/gittip) (also see [Khan
+   Academy's setup](http://ejohn.org/blog/gittip-at-khan-academy/))
+
 
  - [Ruby: gratitude](http://rubygems.org/gems/gratitude)
+ 
+ - [WordPress: WP-Gittip](https://github.com/daankortenbach/WP-Gittip)
 
 
 Glossary
