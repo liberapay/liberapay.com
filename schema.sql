@@ -37,7 +37,6 @@ CREATE TABLE participants
 -- stored here as an optimization and sanity check.
 , balance               numeric(35,2)               DEFAULT 0.0
 , pending               numeric(35,2)               DEFAULT NULL
-, bitcoin_address       text                        DEFAULT NULL
  );
 
 CREATE TABLE social_network_users
@@ -913,3 +912,8 @@ UPDATE paydays SET nactive=(
         SELECT tippee FROM transfers WHERE "timestamp" >= ts_start AND "timestamp" < ts_end
         ) AS foo
 );
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/issues/1164
+
+ALTER TABLE participants ADD COLUMN bitcoin_address text DEFAULT NULL;
