@@ -34,7 +34,11 @@ title = "Bitcoin Receiving Address"
 
                 <div class="float bitcoin_address">
                     <label for="bitcoin_address">Bitcoin receiving address</label>
-                    <input id="bitcoin_address" value="{{ user.participant.bitcoin_address }}" />
+                    {% if user.participant.bitcoin_address %}
+                        <input id="bitcoin_address" value="{{ user.participant.bitcoin_address }}" />
+                    {% else %}
+                        <input id="bitcoin_address" />
+                    {% end %}
                 </div>
 
                 <div class="clear"></div>
