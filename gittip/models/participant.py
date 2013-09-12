@@ -253,22 +253,19 @@ class Participant(Model, MixinElsewhere, MixinTeam):
 
     def change_username(self, suggested):
         """Raise Response or return None.
-
-        We want to be pretty loose with usernames. Unicode is allowed--XXX
-        aspen bug :(. So are spaces.Control characters aren't. We also limit to
-        32 characters in length.
+        
+        Usernames are limited to alphanumeric characters, plus ".,-_:@ ",
+        and can only be 32 characters long.
 
         """
+        # TODO: reconsider allowing unicode usernames
         typecheck(suggested, unicode)
-        for i, c in enumerate(suggested):
-            if i == 32:
-                raise UsernameTooLong  # Request Entity Too Large (more or less)
-            elif ord(c) < 128 and c not in ASCII_ALLOWED_IN_USERNAME:
-                raise UsernameContainsInvalidCharacters  # Yeah, no.
-            elif c not in ASCII_ALLOWED_IN_USERNAME:
-                # XXX Burned by an Aspen bug. :`-(
-                # https://github.com/gittip/aspen/issues/102
-                raise UsernameContainsInvalidCharacters
+
+        if len(suggested) > 32:
+            raise UsernameTooLong
+
+        if set(suggested) - ASCII_ALLOWED_IN_USERNAME:
+            raise UsernameContainsInvalidCharacters
 
         lowercased = suggested.lower()
 
@@ -684,7 +681,7 @@ class ProblemChangingUsername(Exception):
         return self.msg.format(self.args[0])
 
 class UsernameTooLong(ProblemChangingUsername):
-    msg = "The username '{}' is restricted."
+    msg = "The username '{}' is too long."
 
 class UsernameContainsInvalidCharacters(ProblemChangingUsername):
     msg = "The username '{}' contains invalid characters."
