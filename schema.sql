@@ -37,6 +37,7 @@ CREATE TABLE participants
 -- stored here as an optimization and sanity check.
 , balance               numeric(35,2)               DEFAULT 0.0
 , pending               numeric(35,2)               DEFAULT NULL
+, bitcoin_address       text                        DEFAULT NULL
  );
 
 CREATE TABLE social_network_users
