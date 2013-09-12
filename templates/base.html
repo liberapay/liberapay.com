@@ -111,6 +111,7 @@
         <a href='/security.txt'>Security</a>
     </div></div>
 
+    {%if request.headers.host.split(':')[0].endswith('gittip.com') %}
     <script type="text/javascript">
 
       var _gaq = _gaq || [];
@@ -139,6 +140,7 @@
         s.parentNode.insertBefore(t, s);
       })();
     </script>
+    {% end %}
 
 </div></body>
 </html>
