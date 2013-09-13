@@ -20,20 +20,20 @@ if user.ANON:
 # This is a protection against unauthorized users taking over accounts.
 
 connect_token = uuid.uuid4().hex
-connect_key = (user.username, account.platform, account.user_id)
+connect_key = (user.participant.username, account.platform, account.user_id)
 website.connect_tokens[connect_key] = connect_token
 
 
 other = Participant.query.get(account.participant)
 
 user_github_account, user_twitter_account, user_bitbucket_account, \
-                      user_bountysource_account = user.get_accounts_elsewhere()
+                      user_bountysource_account = user.participant.get_accounts_elsewhere()
 other_github_account, other_twitter_account, other_bitbucket_account, \
                     other_bountysource_account = other.get_accounts_elsewhere()
 
 
-user_giving = user.get_dollars_giving()
-user_receiving = user.get_dollars_receiving()
+user_giving = user.participant.get_dollars_giving()
+user_receiving = user.participant.get_dollars_receiving()
 
 other_giving = other.get_dollars_giving()
 other_receiving = other.get_dollars_receiving()
@@ -69,7 +69,7 @@ title = "Please Confirm"
             <td>
                 <div class="participant">
                 <div class="participant-padding">
-                    <b>{{ user.username }}</b><br />
+                    <b>{{ user.participant.username }}</b><br />
                     <table>
                         <tr>
                             <th><i>Gives</i></th>
@@ -179,7 +179,7 @@ title = "Please Confirm"
             <td>
                 <div class="participant">
                 <div class="participant-padding">
-                    <b>{{ user.username }}</b><br />
+                    <b>{{ user.participant.username }}</b><br />
                     <table>
                         <tr>
                             {% if obstacles.this_is_others_last_account_elsewhere %}

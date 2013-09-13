@@ -12,17 +12,17 @@
             float: none;
             margin: 0 auto;
         }
-    }
-    #leaderboard {
-        width: 600px;
-        > * {
-            width: 180px;
+        #leaderboard {
+            width: 600px;
+            > * {
+                width: 180px;
+            }
         }
     }
 }
 
 @media (max-width: 680px) {
-    #leaderboard {
+    #page #leaderboard {
         width: 375px;
         > * {
             width: auto;
@@ -167,8 +167,8 @@
 }
 
 @media (max-width: 494px) {
-    #box {
-        width: auto;
+    .box {
+        width: auto !important ;
     }
 }
 
@@ -194,7 +194,7 @@
     body {
         font: normal 13px $Helvetica;
     }
-    #box #jump .luxury {
+    .box #jump .luxury {
         display: none;
     }
     #page {
@@ -217,7 +217,7 @@
     #header .luxury {
         display: none;
     }
-    #box table {
+    .box table {
         h2 {
             font-size: 14px;
             line-height: 1em;
@@ -256,7 +256,7 @@
 }
 
 @media (max-width: 420px) {
-    #box table {
+    .box table {
         h2 {
             font-size: 13px;
             line-height: 1em;
@@ -295,7 +295,7 @@
 }
 
 @media (max-width: 380px) {
-    #box table {
+    .box table {
         h2 {
             /* Should these be the same value? */
             font-size: 13px;
@@ -312,7 +312,7 @@
 }
 
 @media (max-width: 360px) {
-    #box {
+    .box {
         border-radius: 0;
         border-left-width: 1px;
         border-right-width: 1px;
@@ -339,7 +339,7 @@
 }
 
 @media (max-width: 340px) {
-    #box table {
+    .box table {
         h2 {
             font-size: 11px;
             line-height: 1em;
@@ -365,7 +365,7 @@
 }
 
 @media (max-width: 300px) {
-    #box table {
+    .box table {
         h2 {
             font-size: 10px;
             line-height: 1em;
@@ -399,7 +399,7 @@
 }
 
 @media (max-width: 200px) {
-    #box #jump input {
+    .box #jump input {
         width: 80%;
     }
 }

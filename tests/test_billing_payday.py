@@ -1,4 +1,5 @@
-from decimal import Decimal, ROUND_UP
+from __future__ import print_function, unicode_literals
+from decimal import Decimal
 from datetime import datetime, timedelta
 
 import balanced
@@ -8,79 +9,81 @@ from psycopg2 import IntegrityError
 
 from aspen.utils import typecheck, utcnow
 from gittip import billing
-from gittip.billing.payday import FEE_CHARGE, Payday, skim_credit
-from gittip.models import Payday as PaydayModel
-from gittip.participant import Participant
+from gittip.billing.payday import Payday, skim_credit
+from gittip.models.participant import Participant
 from gittip.testing import Harness
 
 from test_billing import TestBillingBase
 
 
-class TestPaydayCharge(TestBillingBase):
+class TestPaydayBase(TestBillingBase):
+
+    def fetch_payday(self):
+        return self.db.one("SELECT * FROM paydays", back_as=dict)
+
+
+class TestPaydayCharge(TestPaydayBase):
     STRIPE_CUSTOMER_ID = 'cus_deadbeef'
 
     def setUp(self):
         super(TestBillingBase, self).setUp()
-        self.payday = Payday(self.postgres)
+        self.payday = Payday(self.db)
 
     def get_numbers(self):
-        """Return a list of 9 ints:
+        """Return a list of 10 ints:
 
             nachs
             nach_failing
+            nactive
             ncc_failing
             ncc_missing
             ncharges
+            npachinko
             nparticipants
             ntippers
             ntips
             ntransfers
 
         """
-        payday = PaydayModel.query.first()  # There should be a single payday
-        attrs = payday.attrs_dict()
-        keys = [key for key in sorted(attrs) if key.startswith('n')]
-        return [attrs[key] for key in keys]
+        payday = self.fetch_payday()
+        keys = [key for key in sorted(payday) if key.startswith('n')]
+        return [payday[key] for key in keys]
 
     def test_charge_without_cc_details_returns_None(self):
-        self.make_participant('alice')
-        participant = self.postgres.one("SELECT * FROM participants")
+        alice = self.make_participant('alice')
         self.payday.start()
-        actual = self.payday.charge(participant, Decimal('1.00'))
+        actual = self.payday.charge(alice, Decimal('1.00'))
         assert actual is None, actual
 
     def test_charge_without_cc_marked_as_failure(self):
-        self.make_participant('alice')
-        participant = self.postgres.one("SELECT * FROM participants")
+        alice = self.make_participant('alice')
         self.payday.start()
-        self.payday.charge(participant, Decimal('1.00'))
+        self.payday.charge(alice, Decimal('1.00'))
         actual = self.get_numbers()
-        assert_equals(actual, [0, 0, 0, 1, 0, 0, 0, 0, 0])
+        assert_equals(actual, [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0])
 
     @mock.patch('gittip.billing.payday.Payday.charge_on_balanced')
     def test_charge_failure_returns_None(self, cob):
         cob.return_value = (Decimal('10.00'), Decimal('0.68'), 'FAILED')
-        self.make_participant('bob', last_bill_result="failure",
-                              balanced_account_uri=self.balanced_account_uri,
-                              stripe_customer_id=self.STRIPE_CUSTOMER_ID,
-                              is_suspicious=False)
+        bob = self.make_participant('bob', last_bill_result="failure",
+                                    balanced_account_uri=self.balanced_account_uri,
+                                    stripe_customer_id=self.STRIPE_CUSTOMER_ID,
+                                    is_suspicious=False)
 
-        participant = self.postgres.one("SELECT * FROM participants")
         self.payday.start()
-        actual = self.payday.charge(participant, Decimal('1.00'))
+        actual = self.payday.charge(bob, Decimal('1.00'))
         assert actual is None, actual
 
     @mock.patch('gittip.billing.payday.Payday.charge_on_balanced')
     def test_charge_success_returns_None(self, charge_on_balanced):
         charge_on_balanced.return_value = (Decimal('10.00'), Decimal('0.68'), "")
-        self.make_participant('bob', last_bill_result="failure",
-                              balanced_account_uri=self.balanced_account_uri,
-                              stripe_customer_id=self.STRIPE_CUSTOMER_ID,
-                              is_suspicious=False)
+        bob = self.make_participant('bob', last_bill_result="failure",
+                                    balanced_account_uri=self.balanced_account_uri,
+                                    stripe_customer_id=self.STRIPE_CUSTOMER_ID,
+                                    is_suspicious=False)
 
-        participant = self.postgres.one("SELECT * FROM participants")
         self.payday.start()
-        actual = self.payday.charge(participant, Decimal('1.00'))
+        actual = self.payday.charge(bob, Decimal('1.00'))
         assert actual is None, actual
 
     @mock.patch('gittip.billing.payday.Payday.charge_on_balanced')
@@ -89,9 +92,10 @@ class TestPaydayCharge(TestBillingBase):
         bob = self.make_participant('bob', last_bill_result="failure",
                                     balanced_account_uri=self.balanced_account_uri,
                                     is_suspicious=False)
-        participant = self.postgres.one("SELECT * FROM participants")
         self.payday.start()
-        self.payday.charge(participant, Decimal('1.00'))
+        self.payday.charge(bob, Decimal('1.00'))
+
+        bob = Participant.from_username('bob')
         expected = {'balance': Decimal('9.32'), 'last_bill_result': ''}
         actual = {'balance': bob.balance,
                   'last_bill_result': bob.last_bill_result}
@@ -108,8 +112,12 @@ class TestPaydayCharge(TestBillingBase):
                                      balanced_account_uri=self.balanced_account_uri,
                                      last_bill_result='',
                                      is_suspicious=False)
-        Participant(u'carl').set_tip_to('bob', '6.00')  # under $10!
+        carl.set_tip_to('bob', '6.00')  # under $10!
         self.payday.run()
+
+        bob = Participant.from_username('bob')
+        carl = Participant.from_username('carl')
+
         assert_equals(bob.balance, Decimal('6.00'))
         assert_equals(carl.balance, Decimal('3.32'))
 
@@ -124,8 +132,12 @@ class TestPaydayCharge(TestBillingBase):
                                      balanced_account_uri=self.balanced_account_uri,
                                      last_bill_result='',
                                      is_suspicious=True)
-        Participant(u'carl').set_tip_to('bob', '6.00')  # under $10!
+        carl.set_tip_to('bob', '6.00')  # under $10!
         self.payday.run()
+
+        bob = Participant.from_username('bob')
+        carl = Participant.from_username('carl')
+
         assert_equals(bob.balance, Decimal('0.00'))
         assert_equals(carl.balance, Decimal('0.00'))
 
@@ -140,56 +152,55 @@ class TestPaydayCharge(TestBillingBase):
                                      balanced_account_uri=self.balanced_account_uri,
                                      last_bill_result='',
                                      is_suspicious=False)
-        Participant(u'carl').set_tip_to('bob', '6.00')  # under $10!
+        carl.set_tip_to('bob', '6.00')  # under $10!
         self.payday.run()
+
+        bob = Participant.from_username('bob')
+        carl = Participant.from_username('carl')
+
         assert_equals(bob.balance, Decimal('0.00'))
         assert_equals(carl.balance, Decimal('0.00'))
 
 
-class TestBillingCharges(Harness):
+class TestBillingCharges(TestPaydayBase):
     BALANCED_ACCOUNT_URI = u'/v1/marketplaces/M123/accounts/A123'
     BALANCED_TOKEN = u'/v1/marketplaces/M123/accounts/A123/cards/C123'
     STRIPE_CUSTOMER_ID = u'cus_deadbeef'
 
     def setUp(self):
         super(TestBillingCharges, self).setUp()
-        self.payday = Payday(self.postgres)
-        self.alice = self.make_participant('alice')
+        self.payday = Payday(self.db)
 
     def test_mark_missing_funding(self):
         self.payday.start()
-        before = PaydayModel.query.first().attrs_dict()
+        before = self.fetch_payday()
         missing_count = before['ncc_missing']
 
         self.payday.mark_missing_funding()
 
-        after = PaydayModel.query.first().attrs_dict()
+        after = self.fetch_payday()
         self.assertEqual(after['ncc_missing'], missing_count + 1)
 
     def test_mark_charge_failed(self):
         self.payday.start()
-        before = PaydayModel.query.first().attrs_dict()
+        before = self.fetch_payday()
         fail_count = before['ncc_failing']
 
-        with self.postgres.get_connection() as conn:
-            cur = conn.cursor()
-            self.payday.mark_charge_failed(cur)
-            conn.commit()
+        with self.db.get_cursor() as cursor:
+            self.payday.mark_charge_failed(cursor)
 
-        after = PaydayModel.query.first().attrs_dict()
+        after = self.fetch_payday()
         self.assertEqual(after['ncc_failing'], fail_count + 1)
 
     def test_mark_charge_success(self):
         self.payday.start()
         charge_amount, fee = 4, 2
 
-        with self.postgres.get_connection() as conn:
-            cur = conn.cursor()
-            self.payday.mark_charge_success(cur, charge_amount, fee)
-            conn.commit()
+        with self.db.get_cursor() as cursor:
+            self.payday.mark_charge_success(cursor, charge_amount, fee)
 
         # verify paydays
-        actual = PaydayModel.query.first().attrs_dict()
+        actual = self.fetch_payday()
         self.assertEqual(actual['ncharges'], 1)
 
     @mock.patch('stripe.Charge')
@@ -253,11 +264,11 @@ class TestBillingCharges(Harness):
         assert_equals(msg, error_message)
 
 
-class TestPrepHit(Harness):
+class TestPrepHit(TestPaydayBase):
     # XXX Consider turning _prep_hit in to a class method
     @classmethod
     def setUpClass(cls):
-        Harness.setUpClass()
+        TestPaydayBase.setUpClass()
         cls.payday = Payday(mock.Mock())  # Mock out the DB connection
 
     def prep(self, amount):
@@ -332,46 +343,53 @@ class TestPrepHit(Harness):
         assert actual == expected, actual
 
 
-class TestBillingPayday(Harness):
+class TestBillingPayday(TestPaydayBase):
     BALANCED_ACCOUNT_URI = '/v1/marketplaces/M123/accounts/A123'
 
     def setUp(self):
         super(TestBillingPayday, self).setUp()
-        self.payday = Payday(self.postgres)
+        self.payday = Payday(self.db)
 
-    def test_assert_one_payday(self):
-        with assert_raises(AssertionError):
-            self.payday.assert_one_payday(None)
-        with assert_raises(AssertionError):
-            self.payday.assert_one_payday([1, 2])
-
-    @mock.patch('gittip.participant.Participant.get_tips_and_total')
+    @mock.patch('gittip.models.participant.Participant.get_tips_and_total')
     def test_charge_and_or_transfer_no_tips(self, get_tips_and_total):
-        alice = self.make_participant('alice', balance='1.00',
-                                      balanced_account_uri=self.BALANCED_ACCOUNT_URI,
-                                      is_suspicious=False)
+        self.db.run("""
+
+            UPDATE participants
+               SET balance=1
+                 , balanced_account_uri=%s
+                 , is_suspicious=False
+             WHERE username='alice'
+
+        """, (self.BALANCED_ACCOUNT_URI,))
+
         amount = Decimal('1.00')
 
         ts_start = self.payday.start()
 
         tips, total = [], amount
 
-        initial_payday = PaydayModel.query.first().attrs_dict()
-        self.payday.charge_and_or_transfer(ts_start, alice.attrs_dict(),
-                                           tips, total)
-        resulting_payday = PaydayModel.query.first().attrs_dict()
+        initial_payday = self.fetch_payday()
+        self.payday.charge_and_or_transfer(ts_start, self.alice, tips, total)
+        resulting_payday = self.fetch_payday()
 
         assert_equals(initial_payday['ntippers'], resulting_payday['ntippers'])
         assert_equals(initial_payday['ntips'], resulting_payday['ntips'])
         assert_equals(initial_payday['nparticipants'] + 1,
                       resulting_payday['nparticipants'])
 
-    @mock.patch('gittip.participant.Participant.get_tips_and_total')
+    @mock.patch('gittip.models.participant.Participant.get_tips_and_total')
     @mock.patch('gittip.billing.payday.Payday.tip')
     def test_charge_and_or_transfer(self, tip, get_tips_and_total):
-        alice = self.make_participant('alice', balance='1.00',
-                                      balanced_account_uri=self.BALANCED_ACCOUNT_URI,
-                                      is_suspicious=False)
+        self.db.run("""
+
+            UPDATE participants
+               SET balance=1
+                 , balanced_account_uri=%s
+                 , is_suspicious=False
+             WHERE username='alice'
+
+        """, (self.BALANCED_ACCOUNT_URI,))
+
         ts_start = self.payday.start()
         now = datetime.utcnow()
         amount = Decimal('1.00')
@@ -392,10 +410,9 @@ class TestBillingPayday(Harness):
 
         tip.side_effect = tip_return_values
 
-        initial_payday = PaydayModel.query.first().attrs_dict()
-        self.payday.charge_and_or_transfer(ts_start, alice.attrs_dict(), tips,
-                                           total)
-        resulting_payday = PaydayModel.query.first().attrs_dict()
+        initial_payday = self.fetch_payday()
+        self.payday.charge_and_or_transfer(ts_start, self.alice, tips, total)
+        resulting_payday = self.fetch_payday()
 
         assert_equals(initial_payday['ntippers'] + 1,
                       resulting_payday['ntippers'])
@@ -404,12 +421,19 @@ class TestBillingPayday(Harness):
         assert_equals(initial_payday['nparticipants'] + 1,
                       resulting_payday['nparticipants'])
 
-    @mock.patch('gittip.participant.Participant.get_tips_and_total')
+    @mock.patch('gittip.models.participant.Participant.get_tips_and_total')
     @mock.patch('gittip.billing.payday.Payday.charge')
     def test_charge_and_or_transfer_short(self, charge, get_tips_and_total):
-        alice = self.make_participant('alice', balance='1.00',
-                                      balanced_account_uri=self.BALANCED_ACCOUNT_URI,
-                                      is_suspicious=False)
+        self.db.run("""
+
+            UPDATE participants
+               SET balance=1
+                 , balanced_account_uri=%s
+                 , is_suspicious=False
+             WHERE username='alice'
+
+        """, (self.BALANCED_ACCOUNT_URI,))
+
         now = datetime.utcnow()
         amount = Decimal('1.00')
         like_a_tip = {'amount': amount, 'tippee': 'mjallday', 'ctime': now,
@@ -433,29 +457,34 @@ class TestBillingPayday(Harness):
 
         charge.side_effect = Exception()
         with self.assertRaises(Exception):
-            billing.charge_and_or_transfer(ts_start, alice.attrs_dict())
-        self.assertTrue(charge.called_with(alice.username,
+            billing.charge_and_or_transfer(ts_start, self.alice)
+        self.assertTrue(charge.called_with(self.alice.username,
                                            self.BALANCED_ACCOUNT_URI,
                                            amount))
 
     @mock.patch('gittip.billing.payday.Payday.transfer')
     @mock.patch('gittip.billing.payday.log')
     def test_tip(self, log, transfer):
-        alice = self.make_participant('alice', balance='1.00',
-                                      balanced_account_uri=self.BALANCED_ACCOUNT_URI,
-                                      is_suspicious=False)
-        participant = alice.attrs_dict()
+        self.db.run("""
+
+            UPDATE participants
+               SET balance=1
+                 , balanced_account_uri=%s
+                 , is_suspicious=False
+             WHERE username='alice'
+
+        """, (self.BALANCED_ACCOUNT_URI,))
         amount = Decimal('1.00')
         invalid_amount = Decimal('0.00')
         tip = { 'amount': amount
-              , 'tippee': alice.username
+              , 'tippee': self.alice.username
               , 'claimed_time': utcnow()
                }
         ts_start = utcnow()
 
-        result = self.payday.tip(participant, tip, ts_start)
+        result = self.payday.tip(self.alice, tip, ts_start)
         assert_equals(result, 1)
-        result = transfer.called_with(participant['username'], tip['tippee'],
+        result = transfer.called_with(self.alice.username, tip['tippee'],
                                       tip['amount'])
         self.assertTrue(result)
 
@@ -467,7 +496,7 @@ class TestBillingPayday(Harness):
         # XXX: We should have constants to compare the values to
         # invalid amount
         tip['amount'] = invalid_amount
-        result = self.payday.tip(participant, tip, ts_start)
+        result = self.payday.tip(self.alice, tip, ts_start)
         assert_equals(result, 0)
 
         tip['amount'] = amount
@@ -475,13 +504,13 @@ class TestBillingPayday(Harness):
         # XXX: We should have constants to compare the values to
         # not claimed
         tip['claimed_time'] = None
-        result = self.payday.tip(participant, tip, ts_start)
+        result = self.payday.tip(self.alice, tip, ts_start)
         assert_equals(result, 0)
 
         # XXX: We should have constants to compare the values to
         # claimed after payday
         tip['claimed_time'] = utcnow()
-        result = self.payday.tip(participant, tip, ts_start)
+        result = self.payday.tip(self.alice, tip, ts_start)
         assert_equals(result, 0)
 
         ts_start = utcnow()
@@ -489,20 +518,27 @@ class TestBillingPayday(Harness):
         # XXX: We should have constants to compare the values to
         # transfer failed
         transfer.return_value = False
-        result = self.payday.tip(participant, tip, ts_start)
+        result = self.payday.tip(self.alice, tip, ts_start)
         assert_equals(result, -1)
 
     @mock.patch('gittip.billing.payday.log')
     def test_start_zero_out_and_get_participants(self, log):
-        self.make_participant('alice', balance=0, claimed_time=None,
-                              pending=None,
-                              balanced_account_uri=self.BALANCED_ACCOUNT_URI)
         self.make_participant('bob', balance=10, claimed_time=None,
                               pending=1,
                               balanced_account_uri=self.BALANCED_ACCOUNT_URI)
         self.make_participant('carl', balance=10, claimed_time=utcnow(),
                               pending=1,
                               balanced_account_uri=self.BALANCED_ACCOUNT_URI)
+        self.db.run("""
+
+            UPDATE participants
+               SET balance=0
+                 , claimed_time=null
+                 , pending=null
+                 , balanced_account_uri=%s
+             WHERE username='alice'
+
+        """, (self.BALANCED_ACCOUNT_URI,))
 
         ts_start = self.payday.start()
 
@@ -551,8 +587,8 @@ class TestBillingPayday(Harness):
 
         # finishing the payday will set the ts_end date on this payday record
         # to now, so this will not return any result
-        result = PaydayModel.query.filter(PaydayModel.ts_end > '1970-01-01')\
-                                  .count()
+        result = self.db.one("SELECT count(*) FROM paydays "
+                             "WHERE ts_end > '1970-01-01'")
         assert_equals(result, 1)
 
     @mock.patch('gittip.billing.payday.log')
@@ -572,10 +608,10 @@ class TestBillingPayday(Harness):
         self.assertTrue(end.call_count)
 
 
-class TestBillingTransfer(Harness):
+class TestBillingTransfer(TestPaydayBase):
     def setUp(self):
-        super(Harness, self).setUp()
-        self.payday = Payday(self.postgres)
+        super(TestPaydayBase, self).setUp()
+        self.payday = Payday(self.db)
         self.payday.start()
         self.tipper = self.make_participant('lgtest')
         self.balanced_account_uri = '/v1/marketplaces/M123/accounts/A123'
@@ -607,25 +643,19 @@ class TestBillingTransfer(Harness):
 
         initial_amount = subject.balance
 
-        with self.postgres.get_connection() as connection:
-            cursor = connection.cursor()
-
+        with self.db.get_cursor() as cursor:
             self.payday.debit_participant(cursor, subject.username, amount)
-            connection.commit()
 
-        self.session.refresh(subject)
+        subject = Participant.from_username('test_debit_participant')
 
         expected = initial_amount - amount
         actual = subject.balance
         assert_equals(actual, expected)
 
         # this will fail because not enough balance
-        with self.postgres.get_connection() as conn:
-            cur = conn.cursor()
-
+        with self.db.get_cursor() as cursor:
             with self.assertRaises(IntegrityError):
-                self.payday.debit_participant(cur, subject.username, amount)
-            conn.commit()
+                self.payday.debit_participant(cursor, subject.username, amount)
 
     def test_skim_credit(self):
         actual = skim_credit(Decimal('10.00'))
@@ -638,66 +668,62 @@ class TestBillingTransfer(Harness):
 
         initial_amount = subject.pending
 
-        with self.postgres.get_connection() as conn:
-            cur = conn.cursor()
-            self.payday.credit_participant(cur, subject.username, amount)
-            conn.commit()
+        with self.db.get_cursor() as cursor:
+            self.payday.credit_participant(cursor, subject.username, amount)
 
-        self.session.refresh(subject)
+        subject = Participant.from_username('test_credit_participant') # reload
 
         expected = initial_amount + amount
         actual = subject.pending
         assert_equals(actual, expected)
 
     def test_record_transfer(self):
-        from gittip.models import Transfer
         amount = Decimal('1.00')
         subjects = ['jim', 'kate', 'bob']
 
         for subject in subjects:
             self.make_participant(subject, balance=1, pending=0)
 
-        with self.postgres.get_connection() as conn:
-            cur = conn.cursor()
-
+        with self.db.get_cursor() as cursor:
             # Tip 'jim' twice
             for recipient in ['jim'] + subjects:
-                self.payday.record_transfer( cur
+                self.payday.record_transfer( cursor
                                            , self.tipper.username
                                            , recipient
                                            , amount
                                             )
-            conn.commit()
 
         for subject in subjects:
             # 'jim' is tipped twice
             expected = amount * 2 if subject == 'jim' else amount
-            transfers = Transfer.query.filter_by(tippee=subject).all()
-            actual = sum(tip.amount for tip in transfers)
+            actual = self.db.one( "SELECT sum(amount) FROM transfers "
+                                  "WHERE tippee=%s"
+                                , (subject,)
+                                 )
             assert_equals(actual, expected)
 
     def test_record_transfer_invalid_participant(self):
         amount = Decimal('1.00')
 
-        with self.postgres.get_connection() as conn:
-            cur = conn.cursor()
+        with self.db.get_cursor() as cursor:
             with assert_raises(IntegrityError):
-                self.payday.record_transfer(cur, 'idontexist', 'nori', amount)
-            conn.commit()
+                self.payday.record_transfer( cursor
+                                           , 'idontexist'
+                                           , 'nori'
+                                           , amount
+                                            )
 
     def test_mark_transfer(self):
         amount = Decimal('1.00')
 
         # Forces a load with current state in dict
-        before_transfer = PaydayModel.query.first().attrs_dict()
+        before_transfer = self.fetch_payday()
 
-        with self.postgres.get_connection() as conn:
-            cur = conn.cursor()
-            self.payday.mark_transfer(cur, amount)
-            conn.commit()
+        with self.db.get_cursor() as cursor:
+            self.payday.mark_transfer(cursor, amount)
 
         # Forces a load with current state in dict
-        after_transfer = PaydayModel.query.first().attrs_dict()
+        after_transfer = self.fetch_payday()
 
         expected = before_transfer['ntransfers'] + 1
         actual = after_transfer['ntransfers']
@@ -708,19 +734,46 @@ class TestBillingTransfer(Harness):
         assert_equals(actual, expected)
 
     def test_record_credit_updates_balance(self):
-        alice = self.make_participant("alice")
         self.payday.record_credit( amount=Decimal("-1.00")
                                  , fee=Decimal("0.41")
                                  , error=""
                                  , username="alice"
                                   )
+        alice = Participant.from_username('alice')
         assert_equals(alice.balance, Decimal("0.59"))
 
     def test_record_credit_doesnt_update_balance_if_error(self):
-        alice = self.make_participant("alice")
         self.payday.record_credit( amount=Decimal("-1.00")
                                  , fee=Decimal("0.41")
                                  , error="SOME ERROR"
                                  , username="alice"
                                   )
+        alice = Participant.from_username('alice')
         assert_equals(alice.balance, Decimal("0.00"))
+
+
+class TestPachinko(Harness):
+
+    def setUp(self):
+        self.payday = Payday(self.db)
+
+    def test_get_participants_gets_participants(self):
+        a_team = self.make_participant('a_team', claimed_time='now', number='plural', balance=20)
+        a_team.add_member(self.make_participant('alice', claimed_time='now'))
+        a_team.add_member(self.make_participant('bob', claimed_time='now'))
+
+        ts_start = self.payday.start()
+
+        actual = [p.username for p in self.payday.get_participants(ts_start)]
+        expected = ['a_team', 'alice', 'bob']
+        assert actual == expected, actual
+
+    def test_pachinko_pachinkos(self):
+        a_team = self.make_participant('a_team', claimed_time='now', number='plural', balance=20, pending=0)
+        a_team.add_member(self.make_participant('alice', claimed_time='now', balance=0, pending=0))
+        a_team.add_member(self.make_participant('bob', claimed_time='now', balance=0, pending=0))
+
+        ts_start = self.payday.start()
+
+        participants = self.payday.genparticipants(ts_start, ts_start)
+        self.payday.pachinko(ts_start, participants)

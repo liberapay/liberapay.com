@@ -25,7 +25,7 @@ proceed = True
 
 if POST:
 
-    if user not in (member, team):
+    if user.participant not in (member, team):
         raise Response(403)
 
     try:
@@ -36,7 +36,7 @@ if POST:
     if member == team:
         raise Response(400, "can't recurse")
 
-    if user == team:
+    if user.participant == team:
 
         # The team itself can only add new members, which means setting their
         # take to a penny, and remove members, which means setting it to zero.
@@ -64,8 +64,8 @@ if POST:
         raise Response(403)
 
     if proceed:
-        team.set_take_for(member, take, user)
-    out = team.get_memberships(user)
+        team.set_take_for(member, take, user.participant)
+    out = team.get_memberships(user.participant)
 
 else:
     if member == team:

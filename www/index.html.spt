@@ -1,19 +1,10 @@
 from aspen import Response
 from aspen.utils import to_age
 from gittip import db
-from gittip.elsewhere import github
-from gittip.models.participant import Participant
+from gittip.models._mixin_elsewhere import utter_hack
+
 
 LUXURY = 4  # used for responsive design to limit items shown on small screens
-
-def _wrap(raw):
-    """This is a step on the way to ORM-ifying this simplate.
-    """
-    for rec in raw:
-        out = Participant.query.get(rec['username'])
-        if 'amount' in rec:
-            out.amount = rec['amount']
-        yield out
 
 def _to_age(participant):
     # XXX I can't believe I'm doing this. Evolve aspen.utils.to_age!
@@ -35,7 +26,7 @@ try:
 except ValueError:
     raise Response(400)
 
-new_participants = _wrap(db.all("""
+new_participants = utter_hack(db.all("""
 -- new participants on homepage
 
     SELECT * FROM homepage_new_participants
@@ -44,7 +35,7 @@ new_participants = _wrap(db.all("""
 
 """, (limit, offset)))
 
-givers = _wrap(db.all("""
+givers = utter_hack(db.all("""
 -- top givers on homepage
 
     SELECT * FROM homepage_top_givers
@@ -56,7 +47,7 @@ givers = _wrap(db.all("""
 # XXX I'm nearly positive that one or both of givers and receivers can contain
 # orphan accounts. See https://github.com/gittip/www.gittip.com/issues/650
 
-receivers = _wrap(db.all("""
+receivers = utter_hack(db.all("""
 -- top receivers on homepage
 
     SELECT * FROM homepage_top_receivers
@@ -115,7 +106,6 @@ receivers = _wrap(db.all("""
                         <span class="avatar"
                             style="background-image:
                                 url('{{ participant.get_img_src() }}')">
-                            <span class="rank">{{ i }}</span>
                         </span>
                         <span class="age">{{ _to_age(participant) }}</span>
                         <span class="name">{{ participant.username }}</span>
@@ -130,14 +120,13 @@ receivers = _wrap(db.all("""
         <ul class="group">
             {% for i, giver in enumerate(givers, start=1) %}
             <li{% if i > LUXURY %} class="luxury"{% end %}>
-                {% if giver.anonymous and not user.is_admin %}
+                {% if giver.anonymous and not user.ADMIN %}
                 <span class="mini-user">
                     <span class="inner">
                         <span class="avatar">
-                            <span class="rank">{{ i }}</span>
                         </span>
                         <span class="money">${{ giver.amount }}</span>
-                        <span class="name">???</span>
+                        <span class="name">Anonymous</span>
                     </span>
                 </span>
                 {% else %}
@@ -146,7 +135,6 @@ receivers = _wrap(db.all("""
                     <span class="inner">
                         <span class="avatar"
                             style="background-image: url('{{ giver.get_img_src() }}')">
-                            <span class="rank">{{ i }}</span>
                         </span>
                         <span class="money">${{ giver.amount }}</span>
                         <span class="name">{{ giver.username }}</span>
@@ -166,7 +154,6 @@ receivers = _wrap(db.all("""
                     <span class="inner">
                         <span class="avatar"
                             style="background-image: url('{{ receiver.get_img_src() }}')">
-                            <span class="rank">{{ i }}</span>
                         </span>
                         <span class="money">${{ receiver.amount }}</span>
                         <span class="name">{{ receiver.username }}</span>

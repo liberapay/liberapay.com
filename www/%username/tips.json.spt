@@ -28,7 +28,7 @@ if POST:
         one['amount'] = str(amount[0])
         out.append(one)
 
-    if body.get('also_prune', 'false').lower() in ('true', '1', 'yes'):
+    if qs.get('also_prune', 'false').lower() in ('true', '1', 'yes'):
         old_tips, __ignored = participant.get_tips_and_total()
         for tip in old_tips:
             if tip['tippee'] not in seen:
@@ -40,11 +40,11 @@ else:
 
     out = []
     for tip in tips:
-        if tip['amount'] == 0:
+        if tip.amount == 0:
             continue
-        out.append({ "username": tip['tippee']
+        out.append({ "username": tip.tippee
                    , "platform": "gittip"
-                   , "amount": str(tip['amount'])
+                   , "amount": str(tip.amount)
                     })
 
 response.body = out

@@ -1,3 +1,5 @@
+from __future__ import print_function, unicode_literals
+
 import datetime
 import locale
 from aspen import json
@@ -17,25 +19,20 @@ def commaize(number, places=0):
 
 title = "Stats"
 yesterday = datetime.datetime.utcnow() - datetime.timedelta(hours=24)
-escrow = db.one("SELECT sum(balance) FROM participants")['sum']
-escrow = 0 if escrow is None else escrow
-nach = db.one("SELECT count(*) AS n FROM participants WHERE last_ach_result = '' AND is_suspicious IS NOT true")['n']
-nach = 0 if nach is None else nach
+escrow = db.one("SELECT sum(balance) FROM participants", default=0)
+nach = db.one("SELECT count(*) FROM participants WHERE last_ach_result = '' AND is_suspicious IS NOT true")
 if nach < 10:
     nach = CARDINALS[nach].title()
 else:
     nach = commaize(nach)
 payday = db.one( "SELECT ts_start, ts_end FROM paydays WHERE ts_start > %s"
                , (yesterday,)
-               , strict=False
                 )
-npeople = db.one("SELECT count(*) AS n FROM participants WHERE claimed_time IS NOT NULL AND is_suspicious IS NOT true")['n']
-ncc = db.one("SELECT count(*) AS n FROM participants WHERE last_bill_result = '' AND is_suspicious IS NOT true")['n']
-ncc = 0 if ncc is None else ncc
+npeople = db.one("SELECT count(*) FROM participants WHERE claimed_time IS NOT NULL AND is_suspicious IS NOT true")
+ncc = db.one("SELECT count(*) FROM participants WHERE last_bill_result = '' AND is_suspicious IS NOT true")
 pcc = "%5.1f" % ((ncc * 100.0) / npeople) if npeople > 0 else 0.0
 statements = db.all("SELECT username, statement FROM participants WHERE statement != '' AND is_suspicious IS NOT true ORDER BY random(), username LIMIT 16")
-transfer_volume = db.one("SELECT transfer_volume AS v FROM paydays ORDER BY ts_end DESC LIMIT 1", strict=False)
-transfer_volume = 0 if transfer_volume is None else transfer_volume['v']
+transfer_volume = db.one("SELECT transfer_volume FROM paydays ORDER BY ts_end DESC LIMIT 1", default=0)
 tip_amounts = db.one("""
         SELECT avg(amount), sum(amount)
          FROM (    SELECT DISTINCT ON (tipper, tippee) amount
@@ -53,10 +50,10 @@ if tip_amounts is None:
     average_tip = 0
     total_backed_tips = 0
 else:
-    average_tip = tip_amounts['avg'] if tip_amounts['avg'] is not None else 0
-    total_backed_tips = tip_amounts['sum'] if tip_amounts['sum'] is not None else 0
+    average_tip = tip_amounts.avg if tip_amounts.avg is not None else 0
+    total_backed_tips = tip_amounts.sum if tip_amounts.sum is not None else 0
 
-average_tippees = db.one("""\
+average_tippees = int(db.one("""\
         SELECT round(avg(ntippees))
           FROM ( SELECT count(tippee) as NTIPPEES
                    FROM ( SELECT DISTINCT ON (tipper, tippee)
@@ -73,8 +70,7 @@ average_tippees = db.one("""\
                         GROUP BY tipper, tippee, mtime, amount
                         ORDER BY tipper, tippee, mtime DESC
                          ) AS foo WHERE amount > 0 GROUP BY tipper) AS bar
-""")['round']
-average_tippees = 0 if average_tippees is None else int(average_tippees)
+""", default=0))
 
 word = "people"
 if average_tippees == 1:
@@ -108,7 +104,7 @@ _tip_distribution = db.all("""
   GROUP BY amount
   ORDER BY amount
 
-""")
+""", back_as=dict)
 
 tip_n = sum([row['count'] for row in _tip_distribution])
 
@@ -125,36 +121,39 @@ def part(s):
     return s
 
 
+now = datetime.datetime.utcnow()
+last_payday = db.one("select ts_start, ts_end from paydays order by ts_end desc limit 1", 
+        back_as="dict", default={'ts_start':now, 'ts_end':now})
 ngivers = db.one("select count(distinct tipper) from transfers "
-                 "where timestamp > (now() - interval '7 days')")['count']
+                 "where timestamp > %(ts_start)s and timestamp < %(ts_end)s", last_payday)
 nreceivers = db.one("select count(distinct tippee) from transfers "
-                    "where timestamp > (now() - interval '7 days')")['count']
+                    "where timestamp > %(ts_start)s and timestamp < %(ts_end)s", last_payday)
 noverlap = db.one("""
 
         select count(*) from (
 
         select distinct tippee from transfers
-        where timestamp > (now() - interval '7 days')
+        where timestamp > %(ts_start)s and timestamp < %(ts_end)s
         intersect
         select distinct tipper from transfers
-        where timestamp > (now() - interval '7 days')
+        where timestamp > %(ts_start)s and timestamp < %(ts_end)s
 
         ) as anon
 
-""")['count']
+""", last_payday)
 nactive = db.one("""
 
         select count(*) from (
 
         select distinct tippee from transfers
-        where timestamp > (now() - interval '7 days')
+        where timestamp > %(ts_start)s and timestamp < %(ts_end)s
         union
         select distinct tipper from transfers
-        where timestamp > (now() - interval '7 days')
+        where timestamp > %(ts_start)s and timestamp < %(ts_end)s
 
         ) as anon
 
-""")['count']
+""", last_payday)
 assert nactive == ngivers + nreceivers - noverlap
 
 
@@ -165,14 +164,13 @@ last_thursday = "last Thursday"
 this_thursday = "this Thursday"
 punc = "."
 future_processing_text = "is ready for"
-now = datetime.datetime.utcnow()
 if now.weekday() == WEDNESDAY:
     this_thursday = "tomorrow"
 if now.weekday() == THURSDAY:
-    if payday is None or payday['ts_end'] is None:
+    if payday is None or payday.ts_end is None:
         # Payday hasn't started yet.
         this_thursday = "today"
-    elif payday['ts_end'].year == 1970:
+    elif payday.ts_end.year == 1970:
         # Payday is going on right now.
         future_processing_text = "is changing hands"
         this_thursday = "right now!"
@@ -271,17 +269,19 @@ names = ['ncc', 'pcc', 'statements', 'transfer_volume',
 
     <p><b>{{ commaize(npeople) }} people</b> have joined Gittip. Of those,
     {{ pcc }}% ({{ commaize(ncc) }}) have a working credit card on
-    file.{% if user.last_bill_result == '' %} You're one of them.
-    {% elif not user.ANON %} You're not one of them.</p><p><b><a
-            href="/credit-card.html" class="highlight">Click here to set up a
-            credit card</a></b>.{% end %}</p>
+    file.{% if not user.ANON and user.participant.last_bill_result == '' %}
+    You're one of them.{% elif not user.ANON %} You're not one of them.</p>
+
+    <p><b><a href="/credit-card.html" class="highlight">Click here to set up a
+        credit card</a></b>.{% end %}</p>
 
     <p><b>${{ commaize(escrow, 2) }}</b> is escrowed within Gittip.
     {{ nach }} people have connected a bank account</a> for withdrawals.
-    {% if user.last_ach_result == '' %}You're one of them.
-    {% elif not user.ANON %} You're not one of them.</p><p><b><a
-    href="/bank-account.html" class="highlight">Click here to connect a bank
-    account</a></b>.{% end %}</p>
+    {% if not user.ANON and user.participant.last_ach_result == '' %}You're one of them.
+    {% elif not user.ANON %}You're not one of them.</p>
+
+    <p><b><a href="/bank-account.html" class="highlight">Click here to connect
+        a bank account</a></b>.{% end %}</p>
 
     <p><b>${{ commaize(transfer_volume, 2) }}</b> changed hands
         <b>{{ last_thursday }}</b>.</p>
@@ -321,7 +321,7 @@ names = ['ncc', 'pcc', 'statements', 'transfer_volume',
               y: 0,
               dx: 5}
         });
-        
+
         tips.map(function(tip){
 
           var tick = Math.floor(tip/interval)
@@ -331,7 +331,7 @@ names = ['ncc', 'pcc', 'statements', 'transfer_volume',
           tips_by_value[tick].y += tip
 
         });
-        
+
         var formatCount = d3.format(",.0f");
 
         var margin = {top: 10, right: 30, bottom: 50, left: 20},
@@ -403,9 +403,9 @@ names = ['ncc', 'pcc', 'statements', 'transfer_volume',
         }
 
         create_histogram("#distribution-by-number", data, "number of tips");
-        create_histogram("#distribution-by-value", tips_by_value, 
+        create_histogram("#distribution-by-value", tips_by_value,
           "total value of tips in US dollars ($)");
-        
+
       });
 
     </script>
@@ -419,8 +419,8 @@ names = ['ncc', 'pcc', 'statements', 'transfer_volume',
 
     <p>
     {% for statement in statements %}
-    <b><a href="/{{ statement['username'] }}/">{{ escape(statement['username']) }}</a></b>
-    is <span title="{{ escape(statement['statement']) }}">{{ escape(part(statement['statement'])) }}</span><br />
+    <b><a href="/{{ statement.username }}/">{{ escape(statement.username) }}</a></b>
+    is <span title="{{ escape(statement.statement) }}">{{ escape(part(statement.statement)) }}</span><br />
     {% end %}
     </p>
 </div>

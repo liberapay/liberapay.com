@@ -52,7 +52,7 @@ def get_user_info(username):
                        , (username,)
                         )
     if rec is not None:
-        user_info = rec['user_info']
+        user_info = rec
     else:
         url = "%s/users/%s?pagelen=100"
         user_info = requests.get(url % (BASE_API_URL, username))

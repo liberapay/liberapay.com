@@ -8,7 +8,6 @@ from aspen.website import Website
 from aspen.utils import typecheck
 from gittip import log
 from gittip.elsewhere import ACTIONS, AccountElsewhere, _resolve
-from postgres import TooFew
 
 
 class GitHubAccount(AccountElsewhere):
@@ -60,9 +59,6 @@ def oauth_dance(website, qs):
 
     log("Doing an OAuth dance with Github.")
 
-    if 'error' in qs:
-        raise Response(500, str(qs['error']))
-
     data = { 'code': qs['code'].encode('US-ASCII')
            , 'client_id': website.github_client_id
            , 'client_secret': website.github_client_secret
@@ -97,17 +93,14 @@ def get_user_info(login):
         A dictionary containing github specific information for the user.
     """
     typecheck(login, unicode)
-    try:
-        rec = gittip.db.one( "SELECT user_info FROM elsewhere "
-                             "WHERE platform='github' "
-                             "AND user_info->'login' = %s"
-                           , (login,)
-                            )
-    except TooFew:
-        rec = None
+    rec = gittip.db.one( "SELECT user_info FROM elsewhere "
+                         "WHERE platform='github' "
+                         "AND user_info->'login' = %s"
+                       , (login,)
+                        )
 
     if rec is not None:
-        user_info = rec['user_info']
+        user_info = rec
     else:
         url = "https://api.github.com/users/%s"
         user_info = requests.get(url % login, params={

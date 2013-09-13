@@ -75,11 +75,11 @@ unreviewed = db.all("""
 </script>
 <h3>Unreviewed Accounts (N = {{ len(unreviewed) }})</h3>
 {% for account in unreviewed %}
-<div username="{{ account['username'] }}">
+<div username="{{ account.username }}">
     <button class="good small selected">Good</button>
     <button class="bad small">Bad</button>
     &nbsp;
-    <a href="/{{ account['username'] }}/" target="drill-down">{{ account['username'] }}</a>
+    <a href="/{{ account.username }}/" target="drill-down">{{ account.username }}</a>
 </div>
 {% end %}
 <iframe name="drill-down"></iframe>

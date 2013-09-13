@@ -4,23 +4,15 @@ from aspen import Response
 from aspen.utils import to_age
 from gittip import db, ORDINALS
 from gittip.elsewhere import github
-from gittip.models.community import Community, name_pattern, slugize
+from gittip.models.community import name_pattern, slugize
 from gittip.models.participant import Participant
-from gittip.query_cache import QueryCache
+from gittip.utils.query_cache import QueryCache
+from gittip.models._mixin_elsewhere import utter_hack
 
 LUXURY = 4
 
 query_cache = QueryCache(db, threshold=20)
 
-
-def _wrap(raw):
-    """This is a step on the way to ORM-ifying this simplate.
-    """
-    for rec in raw:
-        participant = Participant.query.get(rec['username'])
-        if 'amount' in rec:
-            participant.amount = rec['amount']
-        yield participant
 
 def _to_age(participant):
     # XXX I can't believe I'm doing this. Evolve aspen.utils.to_age!
@@ -44,14 +36,14 @@ def get_first_ten():
     _first_ten = []
     communities = defaultdict(lambda: (defaultdict(set), defaultdict(int)))
     for detail in holy_heck:
-        _slug = detail['slug']
+        _slug = detail.slug
         _members, _nmembers = communities[_slug]
-        if detail['is_member']:
-            if detail['participant'] not in _members[_slug]:
-                _members[_slug].add(detail['participant'])
+        if detail.is_member:
+            if detail.participant not in _members[_slug]:
+                _members[_slug].add(detail.participant)
                 _nmembers[_slug] += 1
             else:
-                _members[_slug].remove(detail['participant'])
+                _members[_slug].remove(detail.participant)
                 _nmembers[_slug] -= 1
 
         if _nmembers[_slug] == THRESHOLD:
@@ -79,7 +71,10 @@ try:
 except ValueError:
     raise Response(400)
 
-community = Community.query.filter_by(slug=slug).first()
+community = db.one( "SELECT community_summary.*::community_summary "
+                    "FROM community_summary WHERE slug=%s"
+                  , (slug,)
+                   )
 if community is None:
     class StubCommunity:
         name = _slug
@@ -104,7 +99,7 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
     # Run queries for listings.
     # =========================
 
-    new_participants = _wrap(query_cache.all("""
+    new_participants = utter_hack(query_cache.all("""
     -- new participants on community page
 
         SELECT username, claimed_time FROM (
@@ -126,7 +121,7 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
 
     """, (community.slug, limit, offset)))
 
-    givers = _wrap(query_cache.all("""
+    givers = utter_hack(query_cache.all("""
     -- top givers on community page
 
         SELECT tipper AS username, anonymous, sum(amount) AS amount
@@ -157,7 +152,7 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
     # XXX I'm nearly positive that one or both of givers and receivers can contain
     # orphan accounts. See https://github.com/gittip/www.gittip.com/issues/650
 
-    receivers = _wrap(query_cache.all("""
+    receivers = utter_hack(query_cache.all("""
     -- top receivers on community page
 
         SELECT tippee AS username, claimed_time, sum(amount) AS amount
@@ -204,7 +199,7 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
         to join the {{ community.name }} community on Gittip.
     </div>
     {% else %}
-    {% set is_member = community.check_membership(user) %}
+    {% set is_member = community.check_membership(user.participant) %}
     <button class="join-leave"
             data-name="{{ community.name }}"
             data-is-member="{{ 'true' if is_member else 'false' }}">
@@ -278,7 +273,6 @@ $(document).ready(function() {
                         <span class="avatar"
                             style="background-image:
                                 url('{{ participant.get_img_src() }}')">
-                            <span class="rank">{{ i }}</span>
                         </span>
                         <span class="age">{{ _to_age(participant) }}</span>
                         <span class="name">{{ participant.username }}</span>
@@ -293,11 +287,10 @@ $(document).ready(function() {
         <ul class="group">
             {% for i, giver in enumerate(givers, start=1) %}
             <li{% if i > LUXURY %} class="luxury"{% end %}>
-                {% if giver.anonymous and not user.is_admin %}
+                {% if giver.anonymous and not user.ADMIN %}
                 <span class="mini-user">
                     <span class="inner">
                         <span class="avatar">
-                            <span class="rank">{{ i }}</span>
                         </span>
                         <span class="money">${{ giver.amount }}</span>
                         <span class="name">???</span>
@@ -309,7 +302,6 @@ $(document).ready(function() {
                     <span class="inner">
                         <span class="avatar"
                             style="background-image: url('{{ giver.get_img_src() }}')">
-                            <span class="rank">{{ i }}</span>
                         </span>
                         <span class="money">${{ giver.amount }}</span>
                         <span class="name">{{ giver.username }}</span>
@@ -329,7 +321,6 @@ $(document).ready(function() {
                     <span class="inner">
                         <span class="avatar"
                             style="background-image: url('{{ receiver.get_img_src() }}')">
-                            <span class="rank">{{ i }}</span>
                         </span>
                         <span class="money">${{ receiver.amount }}</span>
                         <span class="name">{{ receiver.username }}</span>

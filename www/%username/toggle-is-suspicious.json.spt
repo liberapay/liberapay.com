@@ -1,5 +1,4 @@
 from aspen import Response
-from gittip import db
 [---]
 if not user.ADMIN:
     raise Response(400)
@@ -9,7 +8,7 @@ if not to in ('true', 'false', None):
     raise Response(400)
 
 if to is None:
-    rec = db.one("""
+    is_suspicious = website.db.one("""
 
         UPDATE participants
            SET is_suspicious = (is_suspicious IS NULL) OR (is_suspicious IS false)
@@ -18,7 +17,7 @@ if to is None:
 
     """, (path['username'],))
 else:
-    rec = db.one("""
+    is_suspicious = website.db.one("""
 
         UPDATE participants
            SET is_suspicious = %s
@@ -27,6 +26,4 @@ else:
 
     """, (to == 'true', path['username'],))
 
-assert rec is not None
-
-response.body = {"is_suspicious": rec['is_suspicious']}
+response.body = {"is_suspicious": is_suspicious}

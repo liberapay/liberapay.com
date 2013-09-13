@@ -28,7 +28,7 @@ username = participant.username   # used in footer shared with on/$platform/
 github_account, twitter_account, bitbucket_account, bountysource_account = \
                                            participant.get_accounts_elsewhere()
 long_statement = len(participant.statement) > LONG_STATEMENT
-communities = [c for c in community.get_list_for(participant) if c['is_member']]
+communities = [c for c in community.get_list_for(username) if c.is_member]
 if participant.number == 'singular':
     I_AM = "I am"
     I_M = "I'm"
@@ -55,7 +55,7 @@ else:
 {% end %}
 {% block page %}
 
-{% if user == participant %}
+{% if user.participant == participant %}
     <div id="profile-edit">
         {% include "templates/profile-edit.html" %}
     </div>
@@ -80,8 +80,8 @@ else:
             <ul class="community memberships">
                 {% for community in communities %}
                 <li>
-                    <a href="/for/{{ community['slug'] }}/">{{ community['name'] }}</a>
-                    {% set nothers = community['nmembers'] - 1 %}
+                    <a href="/for/{{ community.slug }}/">{{ community.name }}</a>
+                    {% set nothers = community.nmembers - 1 %}
                     <div class="fine">with {{ nothers }} other{{ plural(nothers) }}</div>
                 </li>
                 {% end %}

@@ -30,13 +30,15 @@ Table of Contents
 
  - [Installation](#installation)
   - [Dependencies](#dependencies)
-  - [Building and Launching](#building-and-launching)
+  - [Building](#building)
+  - [Launching](#launching)
   - [Help!](#help)
  - [Configuration](#configuration)
  - [Modifying CSS](#modifying-css)
  - [Testing](#testing-)
  - [Setting up a Database](#local-database-setup)
  - [API](#api)
+  - [Implementations](#api-implementations) 
  - [Glossary](#glossary)
  - [See Also](#see-also)
 
@@ -57,9 +59,29 @@ The only hard requirement on your system is [Python
 All library dependencies are bundled in the repo (under `vendor/`) and by
 default the app is configured to use a Postgres instance in the cloud.
 
+Building
+--------
 
-Building and Launching
-----------------------
+Create a local environment configuration file:
+
+    $ make local.env
+
+By default, Gittip is configured to use a postgres instance in the cloud. If you
+want to use your local instance instead, just set the ```DATABASE_URL``` in local.env
+to ```postgres://username@host/gittip```
+
+Next, setup your environment:
+
+    $ make env
+
+Add the necessary schemas and insert dummy data into postgres:
+
+    $ make schema
+    $ make data
+
+
+Launching
+---------
 
 Once you've installed Python and Postgres and set up a database, you can use
 make to build and launch Gittip:
@@ -256,27 +278,22 @@ Now, you need to setup the database.
 Local Database Setup
 --------------------
 
-For advanced development and testing databse changes, you need to configure
-authentication and set up a gittip database.
-
-You need [Postgres](http://www.postgresql.org/download/). We're working
-on [porting](https://github.com/gittip/www.gittip.com/issues?milestone=28&state=open)
-Gittip from raw SQL to a declarative ORM with SQLAlchemy. After that we may be
-able to remove the hard dependency on Postgres so you can use SQLite in
-development, but for now you need Postgres.
-
-The best version of Postgres to use is 9.2, because that's what is being
-run in production at Heroku. Version 9.1 is the second-best, because Gittip
-uses the [hstore](http://www.postgresql.org/docs/9.2/static/hstore.html)
-extension for unstructured data, and that isn't bundled with earlier
-versions than 9.1. If you're on a Mac, maybe try out Heroku's
+For advanced development and testing database changes, you need a local
+installation of [Postgres](http://www.postgresql.org/download/). The best
+version of Postgres to use is 9.1.9, because that's what we're using in
+production at Heroku. Gittip uses the
+[hstore](http://www.postgresql.org/docs/9.1/static/hstore.html) extension for
+unstructured data, and that isn't bundled with earlier versions than 9.1. If
+you're on a Mac, maybe try out Heroku's
 [Postgres.app](http://www.postgresql.org/download/). If installing using a
 package manager, you may need several packages. On Ubuntu and Debian, the
-required packages are: `postgresql` (base), `libpq5-dev`/`libpq-dev`, (includes headers needed
-to build the `psycopg2` Python library), `postgresql-contrib` (includes
-hstore), `python-dev` (includes Python header files for `psycopg2`).
+required packages are: `postgresql` (base), `libpq5-dev`/`libpq-dev`, (includes
+headers needed to build the `psycopg2` Python library), `postgresql-contrib`
+(includes hstore), `python-dev` (includes Python header files for `psycopg2`).
 
-If you are receiving issues from `psycopg2`, please [ensure their dependencies are met](http://initd.org/psycopg/docs/faq.html#problems-compiling-and-deploying-psycopg2).
+If you are receiving issues from `psycopg2`, please [ensure their its are
+met](http://initd.org/psycopg/docs/faq.html#problems-compiling-and-deploying-psycopg2).
+
 
 ### Authentication
 
@@ -319,12 +336,14 @@ we've run against the production database. You should never change
 commands that have already been run. New DDL will be (manually) run against the
 production database as part of deployment.
 
+
 ### Example data
 
 The gittip database created in the last step is empty. To populate it with
 some fake data, so that more of the site is functional, run this command:
 
     $ make data
+
 
 ### Notes for Mac OS X users
 
@@ -409,9 +428,9 @@ same structure back in order to update tips in bulk (be sure to set
 `application/x-www-form-urlencoded`). You can `POST` a partial array to update
 a subset of your tips. The response to a `POST` will be only the subset you
 updated. If the `amount` is `"error"` then there will also be an `error`
-attribute with a one-word error code. If you include an `also_prune` key with a
-value of `yes`, `true`, or `1`, then any tips not in the array you `POST` will
-be zeroed out.
+attribute with a one-word error code. If you include an `also_prune` key in the
+querystring (not the body!) with a value of `yes`, `true`, or `1`, then any
+tips not in the array you `POST` will be zeroed out.
 
 NOTE: The amounts must be encoded as a string (rather than a number).
 Additionally, currently, the only supported platform is 'gittip'.
@@ -427,6 +446,24 @@ curl https://www.gittip.com/foobar/tips.json \
     -d'[{"username":"bazbuz", "platform":"gittip", "amount": "1.00"}]' \
     -H"Content-Type: application/json"
 ```
+
+API Implementations
+-------------------
+
+Below are some projects that use the Gittip APIs, that can serve as inspiration
+for your project!
+
+ - [Drupal: Gittip](https://drupal.org/project/gittip)&mdash;Includes a Gittip
+   giving field type to let you implement the Khan academy model for users on
+   your Drupal site.
+
+ - [Node.js: Node-Gittip](https://npmjs.org/package/gittip) (also see [Khan
+   Academy's setup](http://ejohn.org/blog/gittip-at-khan-academy/))
+
+
+ - [Ruby: gratitude](http://rubygems.org/gems/gratitude)
+ 
+ - [WordPress: WP-Gittip](https://github.com/daankortenbach/WP-Gittip)
 
 
 Glossary
@@ -507,3 +544,4 @@ and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
  - [Subbable](https://subbable.com/) - What John and Hank Green wanted (cf. [#737](https://github.com/gittip/www.gittip.com/issues/737))
  - [Pitch In](http://pitchinbox.com/) - Widget-centric project-based funding campaigns
  - [Binpress](http://www.binpress.com/) - Binpress is the marketplace for commercial open-source projects.
+ - [TubeStart](https://www.tubestart.com/) - a crowdfunding platform dedicated exclusively to YouTube creators

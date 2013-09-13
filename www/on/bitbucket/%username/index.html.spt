@@ -8,7 +8,7 @@ import requests
 from aspen import json, Response
 from gittip import CARDINALS, db
 from gittip.elsewhere import bitbucket
-from gittip.models import Participant
+from gittip.models.participant import Participant
 
 
 [-----------------------------------------------------------------------------]
@@ -43,10 +43,10 @@ elif not is_team:
     if account.is_claimed:
         request.redirect('/%s/' % account.participant)
 
-    participant = Participant.query.get(account.participant)
+    participant = Participant.from_username(account.participant)
 
     if not user.ANON:
-        my_tip = user.get_tip_to(participant.username)
+        my_tip = user.participant.get_tip_to(participant.username)
 
     tip_or_pledge = "pledge"
     number = participant.get_number_of_backers()
@@ -86,8 +86,8 @@ elif is_team:
 
     """
     known = db.all(ON_GITTIP, (usernames,))
-    known_map = {rec['username']: rec['participant'] for rec in known}
-    _on_gittip = [rec['username'] for rec in known]
+    known_map = {rec.username: rec.participant for rec in known}
+    _on_gittip = [rec.username for rec in known]
     on_gittip = []
     not_on_gittip = []
     for member in members:
@@ -98,7 +98,7 @@ elif is_team:
             seq = not_on_gittip
             elsewhere = bitbucket.BitbucketAccount(member['username'], member)
             tippee = elsewhere.participant
-        tip_to = None if user.ANON else user.get_tip_to(tippee)
+        tip_to = None if user.ANON else user.participant.get_tip_to(tippee)
         seq.append((member, tippee, tip_to))
     can_tip = user.ANON
     number = len(members)

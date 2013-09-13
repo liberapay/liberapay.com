@@ -8,11 +8,14 @@ the Gittip community.
 """
 from aspen import log, Response
 from aspen import resources
-from gittip import mixpanel
 from gittip.elsewhere import ACTIONS, github
-from gittip.participant import NeedConfirmation
+from gittip.models._mixin_elsewhere import NeedConfirmation
+from gittip.utils import mixpanel
 
 [-----------------------------]
+
+if 'error' in qs:
+    request.redirect('/')
 
 # Load GitHub user info.
 user_info = github.oauth_dance(website, qs)
@@ -36,15 +39,15 @@ log(u"%s wants to %s" % (login, action))
 account = github.GitHubAccount(user_info['id'], user_info)
 
 if action == 'opt-in':      # opt in
-    # set 'user' to give them a session :/
     user, newly_claimed = account.opt_in(login)
+    del account
     if newly_claimed:
-        mixpanel.alias_and_track(cookie, unicode(user.id))
+        mixpanel.alias_and_track(cookie, unicode(user.participant.id))
 elif action == 'connect':   # connect
     if user.ANON:
         raise Response(404)
     try:
-        user.take_over(account)
+        user.participant.take_over(account)
     except NeedConfirmation, obstacles:
 
         # XXX Eep! Internal redirect! Really?!
@@ -53,6 +56,8 @@ elif action == 'connect':   # connect
         request.resource = resources.get(request)
 
         raise request.resource.respond(request)
+    else:
+        del account
 else:                       # lock or unlock
     if then != login:
 
@@ -69,9 +74,10 @@ else:                       # lock or unlock
         assert account.participant != login, login # sanity check
 
         account.set_is_locked(action == 'lock')
+        del account
 
 if then == u'':
-    then = u'/%s/' % account.participant
+    then = u'/%s/' % user.participant.username
 if not then.startswith(u'/'):
     # Interpret it as a GitHub login.
     then = u'/on/github/%s/' % then

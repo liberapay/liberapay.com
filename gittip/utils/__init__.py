@@ -1,7 +1,10 @@
-from aspen import Response
+import time
+
+import gittip
+from aspen import log_dammit, Response
 from aspen.utils import typecheck
 from tornado.escape import linkify
-from gittip.models.participant import Participant
+
 
 COUNTRIES = (
     ('AF', u'Afghanistan'),
@@ -266,11 +269,26 @@ def wrap(u):
     return u if u else '...'
 
 
-def canonicalize(path, base, canonical, given):
+def dict_to_querystring(mapping):
+    if not mapping:
+        return u''
+
+    arguments = []
+    for key, values in mapping.iteritems():
+        for val in values:
+            arguments.append(u'='.join([key, val]))
+
+    return u'?' + u'&'.join(arguments)
+
+def canonicalize(path, base, canonical, given, arguments=None):
     if given != canonical:
         assert canonical.lower() == given.lower()  # sanity check
         remainder = path[len(base + given):]
-        newpath = base + canonical + remainder
+
+        if arguments is not None:
+            arguments = dict_to_querystring(arguments)
+
+        newpath = base + canonical + remainder + arguments or ''
         raise Response(302, headers={"Location": newpath})
 
 
@@ -286,18 +304,22 @@ def get_participant(request, restrict=True):
     """
     user = request.context['user']
     slug = request.line.uri.path['username']
+    qs = request.line.uri.querystring
 
     if restrict:
         if user.ANON:
             request.redirect(u'/%s/' % slug)
 
-    participant = \
-           Participant.query.filter_by(username_lower=slug.lower()).first()
+    participant = gittip.db.one( "SELECT participants.*::participants "
+                                         "FROM participants "
+                                         "WHERE username_lower=%s"
+                                       , (slug.lower(),)
+                                        )
 
     if participant is None:
         raise Response(404)
 
-    canonicalize(request.line.uri.path.raw, '/', participant.username, slug)
+    canonicalize(request.line.uri.path.raw, '/', participant.username, slug, qs)
 
     if participant.claimed_time is None:
 
@@ -311,9 +333,87 @@ def get_participant(request, restrict=True):
         request.redirect(to)
 
     if restrict:
-        if participant != user:
+        if participant != user.participant:
             if not user.ADMIN:
                 raise Response(403)
 
     return participant
 
+
+def update_homepage_queries_once(db):
+    with db.get_cursor() as cursor:
+        log_dammit("updating homepage queries")
+        start = time.time()
+        cursor.execute("""
+
+        DROP TABLE IF EXISTS _homepage_new_participants;
+        CREATE TABLE _homepage_new_participants AS
+              SELECT username, claimed_time FROM (
+                  SELECT DISTINCT ON (p.username)
+                         p.username
+                       , claimed_time
+                    FROM participants p
+                    JOIN elsewhere e
+                      ON p.username = participant
+                   WHERE claimed_time IS NOT null
+                     AND is_suspicious IS NOT true
+                     ) AS foo
+            ORDER BY claimed_time DESC;
+
+        DROP TABLE IF EXISTS _homepage_top_givers;
+        CREATE TABLE _homepage_top_givers AS
+            SELECT tipper AS username, anonymous, sum(amount) AS amount
+              FROM (    SELECT DISTINCT ON (tipper, tippee)
+                               amount
+                             , tipper
+                          FROM tips
+                          JOIN participants p ON p.username = tipper
+                          JOIN participants p2 ON p2.username = tippee
+                          JOIN elsewhere ON elsewhere.participant = tippee
+                         WHERE p.last_bill_result = ''
+                           AND p.is_suspicious IS NOT true
+                           AND p2.claimed_time IS NOT NULL
+                           AND elsewhere.is_locked = false
+                      ORDER BY tipper, tippee, mtime DESC
+                      ) AS foo
+              JOIN participants p ON p.username = tipper
+             WHERE is_suspicious IS NOT true
+          GROUP BY tipper, anonymous
+          ORDER BY amount DESC;
+
+        DROP TABLE IF EXISTS _homepage_top_receivers;
+        CREATE TABLE _homepage_top_receivers AS
+            SELECT tippee AS username, claimed_time, sum(amount) AS amount
+              FROM (    SELECT DISTINCT ON (tipper, tippee)
+                               amount
+                             , tippee
+                          FROM tips
+                          JOIN participants p ON p.username = tipper
+                          JOIN elsewhere ON elsewhere.participant = tippee
+                         WHERE last_bill_result = ''
+                           AND elsewhere.is_locked = false
+                           AND is_suspicious IS NOT true
+                           AND claimed_time IS NOT null
+                      ORDER BY tipper, tippee, mtime DESC
+                      ) AS foo
+              JOIN participants p ON p.username = tippee
+             WHERE is_suspicious IS NOT true
+          GROUP BY tippee, claimed_time
+          ORDER BY amount DESC;
+
+        DROP TABLE IF EXISTS homepage_new_participants;
+        ALTER TABLE _homepage_new_participants
+          RENAME TO homepage_new_participants;
+
+        DROP TABLE IF EXISTS homepage_top_givers;
+        ALTER TABLE _homepage_top_givers
+          RENAME TO homepage_top_givers;
+
+        DROP TABLE IF EXISTS homepage_top_receivers;
+        ALTER TABLE _homepage_top_receivers
+          RENAME TO homepage_top_receivers;
+
+        """)
+        end = time.time()
+        elapsed = end - start
+        log_dammit("updated homepage queries in %.2f seconds" % elapsed)

@@ -42,11 +42,12 @@ github_account, twitter_account, bitbucket_account, bountysource_account = \
         </td>
         <td class="figure percentage"></td>
       </tr>
-      {% if user == team %}
+      {% if user.participant == team %}
       <tr>
         <td colspan="6" class="lookup">
           <div id="lookup-container">
             <form>
+              <input name="csrf_token" type="hidden" value="{{ cookie['csrf_token'].value }}" />
               <input tabindex="1" id="query"
                      autocomplete="off"
                      placeholder="Enter a Gittip username"

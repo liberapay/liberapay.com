@@ -17,9 +17,7 @@ _suspicious = db.all("""
        AND ctime < '2012-11-05'::timestamptz
   ORDER BY ctime
 
-""")
-if _suspicious is None:
-    _suspicious = []
+""", back_as=dict)
 
 
 def suspicious():
@@ -37,7 +35,7 @@ def suspicious():
           ORDER BY tips.ctime
 
 
-        """, (person['username'],))
+        """, (person['username'],), back_as=dict)
         person['receives_from'] = db.all("""
 
             SELECT DISTINCT tipper AS username
@@ -50,7 +48,7 @@ def suspicious():
                AND tips.ctime < '2012-11-05'::timestamptz
           ORDER BY tips.ctime
 
-        """, (person['username'],))
+        """, (person['username'],), back_as=dict)
 
         person['transfers'] = db.all("""
 
@@ -64,7 +62,8 @@ def suspicious():
           ORDER BY timestamp
 
 
-        """, (person['username'], person['username']))
+        """, (person['username'], person['username']), \
+                                                 back_as=dict)
 
         person['exchanges'] = db.all("""
 
@@ -75,7 +74,7 @@ def suspicious():
           ORDER BY timestamp
 
 
-        """, (person['username'],))
+        """, (person['username'],), back_as=dict)
 
         yield person
 suspicious = list(suspicious())
@@ -129,7 +128,7 @@ overall = db.one("""
        AND timestamp > %s
        AND timestamp < '2012-11-01'::timestamptz
 
-""", (earliest.date(),))
+""", (earliest.date(),), back_as=dict)
 overall_volume = overall['sum']
 overall_transactions = overall['count']
 percentage_stolen = (total_charged / overall_volume) * 100
@@ -157,7 +156,7 @@ bystander_balances = db.all("""
 
     SELECT username, balance FROM participants WHERE username = ANY(%s)
 
-""", (list(bystanders),))
+""", (list(bystanders),), back_as=dict)
 if bystander_balances is None:
     bystander_balances = []
 for row in bystander_balances:

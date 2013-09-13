@@ -10,4 +10,4 @@ team = get_participant(request, restrict=False)
 if not team.show_as_team(user):
     raise Response(404)
 
-response.body = team.get_memberships(user)
+response.body = team.get_memberships(user.participant)
