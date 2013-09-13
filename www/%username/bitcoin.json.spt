@@ -25,7 +25,7 @@ request.allow("POST")
 
 bitcoin_address = request.body['bitcoin_address'].strip()
 
-if check_bc(bitcoin_address):
+if check_bc(bitcoin_address) or bitcoin_address == '':
     db.run( "UPDATE participants SET bitcoin_address=%s "
             "WHERE username=%s"
           , (bitcoin_address, user.participant.username)

@@ -79,6 +79,8 @@ if not user.ANON:
 # https://github.com/gittip/www.gittip.com/issues/680
 
 github, twitter, bitbucket, bountysource = participant.get_accounts_elsewhere()
+bitcoin = None
+
 if bitbucket is not None:
     bitbucket = "https://bitbucket.org/api/1.0/users/%s" % \
                                                 bitbucket.user_info['username']
