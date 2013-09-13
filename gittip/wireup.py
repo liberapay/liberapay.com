@@ -112,6 +112,8 @@ def envvars(website):
 
     website.css_href = envvar('GITTIP_CSS_HREF') \
                                           .replace('%version', website.version)
+    website.js_src = envvar('GITTIP_JS_SRC') \
+                                          .replace('%version', website.version)
     website.cache_static = is_yesish(envvar('GITTIP_CACHE_STATIC'))
 
     if missing_keys:

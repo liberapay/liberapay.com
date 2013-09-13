@@ -22,9 +22,8 @@ Gittip.profile.toSingular = function()
     $('.my').text("My");
 };
 
-$(document).ready(function()
+Gittip.profile.init = function()
 {
-
     ////////////////////////////////////////////////////////////
     //                                                         /
     // XXX This is ripe for refactoring. I ran out of steam. :-/
@@ -106,63 +105,6 @@ $(document).ready(function()
         $('.username INPUT').hide();
         $('.username .warning').hide();
     }
-
-
-    // Wire up chosen box for communities.
-    // ===================================
-
-    var communityChooser = $('.communities SELECT')
-    var communityList = $('.communities UL')
-
-    function createOption(term)
-    {
-        Gittip.communities.join(term, updateDOM);
-    }
-
-    function updateDOM(data)
-    {
-        var itms = '';
-        var opts = '<option></option>'; // per Chosen docs, to get placeholder
-        for (var i=0, community; community = data.communities[i]; i++)
-        {
-            if (community.is_member)
-            {
-                var nothers = (community.nmembers - 1);
-                itms += '<li data-slug="' + community.slug + '">'
-                      + '<a href="/for/' + community.slug + '/">'
-                      + community.name
-                      + '</a>'
-                      + '<div class="fine">with '
-                      + nothers
-                      + ' other' + (nothers === 1?'':'s')
-                      + '</div>'
-                      + '</li>';
-            } else {
-                var nneeded = data.threshold - community.nmembers;
-                opts += '<option value="' + community.name + '">'
-                      + community.name + ' - ' + community.nmembers
-                      + ' member' + ((community.nmembers === 1) ? '' : 's')
-                      + (nneeded > 0 ? ' - ' + nneeded + ' more needed' : '')
-                      + '</option>';
-            }
-        }
-        communityList.html(itms);
-        communityChooser.html(opts).trigger('liszt:updated');
-        $('.leave', communityList).click(function()
-        {
-            var name = $('a', $(this).closest('li')).text();
-            Gittip.communities.leave(name, updateDOM);
-        });
-    }
-
-    var chosenOpts = { create_option: createOption
-                     , create_option_text: "Add a new community"
-                      };
-    communityChooser.chosen(chosenOpts).change(function() {
-        Gittip.communities.join(communityChooser.val(), updateDOM);
-    });
-
-    jQuery.get('/for/communities.json', updateDOM);
 
 
     // Wire up textarea for statement.
@@ -363,4 +305,4 @@ $(document).ready(function()
         .on('click', '.recreate', function () {
             $.post('api-key.json', { action: 'show' }, $('.api-key').data('callback'));
         });
-});
+}
