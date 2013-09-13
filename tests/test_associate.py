@@ -3,6 +3,7 @@ from __future__ import division, print_function, unicode_literals
 import mock
 from gittip.testing import Harness, test_website
 from gittip.testing.client import TestClient
+from gittip.elsewhere.twitter import TwitterAccount
 
 
 class Tests(Harness):
@@ -13,6 +14,7 @@ class Tests(Harness):
         self.client = TestClient()
 
     def tearDown(self):
+        Harness.tearDown(self)
         self.website.oauth_cache = {}
 
 
@@ -55,3 +57,24 @@ class Tests(Harness):
         rec = self.db.one("SELECT * FROM elsewhere")
         assert rec.participant == 'alice', rec
         assert rec.platform == 'twitter', rec
+
+
+    @mock.patch('requests.post')
+    @mock.patch('requests.get')
+    @mock.patch('gittip.utils.mixpanel.track')
+    def test_associate_confirms_on_connect(self, track, get, post):
+        TwitterAccount('1234', {'screen_name': 'alice'}).opt_in('alice')
+
+        self.make_participant('bob')
+        self.website.oauth_cache = {"deadbeef": ("deadbeef", "connect", "")}
+
+        post.return_value.status_code = 200
+        post.return_value.text = "oauth_token=foo&oauth_token_secret=foo&user_id=foo"
+
+        get.return_value.status_code = 200
+        get.return_value.text = '{"id": 1234, "screen_name": "alice"}'
+
+        self.client.get('/') # populates cookies['csrf_token']
+        response = self.client.get("/on/twitter/associate?oauth_token=deadbeef&"
+                                   "oauth_verifier=donald_trump", user="bob")
+        assert "Please Confirm" in response.body, response.body
