@@ -107,41 +107,6 @@ Gittip.profile.init = function()
     }
 
 
-    // Populate list of communities.
-    // =============================
-
-    var communityList = $('.communities UL')
-
-    function updateDOM(data)
-    {
-        var itms = '';
-        for (var i=0, community; community = data.communities[i]; i++)
-        {
-            if (community.is_member)
-            {
-                var nothers = (community.nmembers - 1);
-                itms += '<li data-slug="' + community.slug + '">'
-                      + '<a href="/for/' + community.slug + '/">'
-                      + community.name
-                      + '</a>'
-                      + '<div class="fine">with '
-                      + nothers
-                      + ' other' + (nothers === 1?'':'s')
-                      + '</div>'
-                      + '</li>';
-            }
-        }
-        communityList.html(itms);
-        $('.leave', communityList).click(function()
-        {
-            var name = $('a', $(this).closest('li')).text();
-            Gittip.communities.leave(name, updateDOM);
-        });
-    }
-
-    jQuery.get('/for/communities.json', updateDOM);
-
-
     // Wire up textarea for statement.
     // ===============================
 

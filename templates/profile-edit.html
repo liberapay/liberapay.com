@@ -58,24 +58,8 @@
 
     <!-- Memberships -->
     {% include "team-listing.html" %}
+    {% include "community-listing.html" %}
 
-    <form class="communities">
-        <h2>Communities</h2>
-        <ul class="community memberships">
-            {% for community in communities %}
-            <li>
-                <a href="/for/{{ community.slug }}/">{{ community.name }}</a>
-                <div class="fine">
-                    {% set nother = community.nmembers - 1 %}
-                    with
-                    {{ nothers }}
-                    other{{ '' if nothers == 1 else 's' }}
-                </div>
-            </li>
-            {% end %}
-        </ul>
-        <a href="/for/">Join Communities</a>
-    </form>
 
 </div>
 <div class="col2">
