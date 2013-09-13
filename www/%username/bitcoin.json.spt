@@ -1,0 +1,37 @@
+"""Save a bitcoin address.
+
+"""
+from aspen import Response
+from gittip import db
+from hashlib import sha256
+
+digits58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
+
+def decode_base58(bc, length):
+    n = 0
+    for char in bc:
+        n = n * 58 + digits58.index(char)
+    return bytearray( (n >> i*8) & 0xff for i in reversed(range(length)))
+
+def check_bc(bc):
+    bcbytes = decode_base58(bc, 25)
+    return bcbytes[-4:] == sha256(sha256(bcbytes[:-4]).digest()).digest()[:4]
+
+[---------------------------------------------------------------]
+
+if user.ANON:
+    raise Response(404)
+request.allow("POST")
+
+bitcoin_address = request.body['bitcoin_address'].strip()
+
+if check_bc(bitcoin_address):
+    db.run( "UPDATE participants SET bitcoin_address=%s "
+            "WHERE username=%s"
+          , (bitcoin_address, user.participant.username)
+          )
+else:
+    raise Response(400)
+
+response.body = { "bitcoin_address": bitcoin_address
+              , "username": user.participant.username }

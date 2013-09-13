@@ -138,12 +138,12 @@
                 </a>
                 <div class="account-type">Bitcoin address
                     {% if not user.ANON and user.participant == participant %}
-                        (<a href="/bitcoin.html">edit</a>)
+                        (<a href="/{{ participant.username }}/bitcoin.html">edit</a>)
                     {% end %}
                 </div>
             {% else %}
                 {% if not user.ANON and user.participant == participant %}
-                    Add a <a href="/bitcoin.html">Bitcoin address</a>.
+                    Add a <a href="/{{ participant.username }}/bitcoin.html">Bitcoin address</a>.
                 {% else %}
                     No Bitcoin receiving address.
                 {% end %}

@@ -355,6 +355,12 @@ $(document).ready(function()
             , type: "POST"
             , dataType: 'json'
             , success: success
+            , error: function() {
+                    $('#bitcoin BUTTON#save').text('Save');
+                    alert( "Invalid Bitcoin address. "
+                         + "Please try again."
+                         );
+            }
             , data: { bitcoin_address: $('#bitcoin_address').val() }
              }
         )
