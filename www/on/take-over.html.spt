@@ -27,8 +27,7 @@ connect_key = (user.participant.username, platform, user_id)
 expected = website.connect_tokens.pop(connect_key, None)
 actual = body.get('connect_token')
 if expected is None or actual != expected:
-    msg = str("Is %s gaming us? %s:%s"
-    msg %= (user.participant.username, expected, actual)
+    msg = str("Is %s gaming us? %s:%s" % (user.participant.username, expected, actual))
     raise Response(400, msg)
 
 

@@ -3,7 +3,7 @@
 import uuid
 
 from aspen import Response
-from gittip.models import Participant
+from gittip.models.participant import Participant
 
 website.connect_tokens = {}
 
@@ -24,7 +24,7 @@ connect_key = (user.participant.username, account.platform, account.user_id)
 website.connect_tokens[connect_key] = connect_token
 
 
-other = Participant.query.get(account.participant)
+other = Participant.from_username(account.participant)
 
 user_github_account, user_twitter_account, user_bitbucket_account, \
                       user_bountysource_account = user.participant.get_accounts_elsewhere()
