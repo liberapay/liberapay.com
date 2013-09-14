@@ -39,7 +39,7 @@ class TestPages(Harness):
         self.make_participant('cheese',
                               claimed_time=datetime.datetime.now(pytz.utc))
         expected = "I'm grateful for gifts"
-        actual = self.get('/cheese/')
+        actual = self.get('/cheese/').decode('utf8') # deal with cent sign
         assert expected in actual, actual
 
     def test_widget(self):

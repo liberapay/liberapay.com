@@ -55,8 +55,10 @@
     </tr>
 </table>
 
-{% if (participant != user.participant) and participant.accepts_tips %}
+{% if participant.accepts_tips %}
+{% if (user.ANON or (participant != user.participant)) %}
 {% include "participant.tip.html" %}
+{% end %}
 {% end %}
 
 {% block nav %}{% end %}
