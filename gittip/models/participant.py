@@ -261,6 +261,9 @@ class Participant(Model, MixinElsewhere, MixinTeam):
         # TODO: reconsider allowing unicode usernames
         typecheck(suggested, unicode)
 
+        if not suggested or suggested.isspace():
+            raise UsernameIsEmpty
+
         if len(suggested) > 32:
             raise UsernameTooLong
 
@@ -679,6 +682,9 @@ class Participant(Model, MixinElsewhere, MixinTeam):
 class ProblemChangingUsername(Exception):
     def __str__(self):
         return self.msg.format(self.args[0])
+
+class UsernameIsEmpty(ProblemChangingUsername):
+    msg = "You need to provide a username!"
 
 class UsernameTooLong(ProblemChangingUsername):
     msg = "The username '{}' is too long."
