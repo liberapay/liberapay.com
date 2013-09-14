@@ -78,3 +78,28 @@ class Tests(Harness):
         response = self.client.get("/on/twitter/associate?oauth_token=deadbeef&"
                                    "oauth_verifier=donald_trump", user="bob")
         assert "Please Confirm" in response.body, response.body
+
+
+    @mock.patch('requests.post')
+    @mock.patch('requests.get')
+    @mock.patch('gittip.utils.mixpanel.track')
+    def test_can_post_to_take_over(self, track, get, post):
+        TwitterAccount('1234', {'screen_name': 'alice'}).opt_in('alice')
+
+        self.make_participant('bob')
+        self.website.connect_tokens = {("bob", "twitter", "1234"): "deadbeef"}
+
+        csrf_token = self.client.get('/').request.context['csrf_token']
+        response = self.client.post( "/on/take-over.html"
+                                   , data={ "platform": "twitter"
+                                          , "user_id": "1234"
+                                          , "csrf_token": csrf_token
+                                          , "connect_token": "deadbeef"
+                                           }
+                                   , user="bob"
+                                    )
+
+        assert response.code == 302, response.body
+        expected = '/about/me.html'
+        actual = response.headers['Location']
+        assert actual == expected, actual
