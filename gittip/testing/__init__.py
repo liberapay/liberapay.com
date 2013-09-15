@@ -16,7 +16,7 @@ from aspen.utils import utcnow
 from gittip.billing.payday import Payday
 from gittip.models.participant import Participant
 from gittip.security.user import User
-from psycopg2 import IntegrityError
+from psycopg2 import IntegrityError, InternalError
 
 
 TOP = join(realpath(dirname(dirname(__file__))), '..')
@@ -88,7 +88,7 @@ class Harness(unittest.TestCase):
             try:
                 # I tried TRUNCATE but that was way slower for me.
                 db.run("DELETE FROM %s CASCADE" % tablename)
-            except IntegrityError:
+            except (IntegrityError, InternalError):
                 tablenames.insert(0, tablename)
 
     def make_participant(self, username, **kw):
