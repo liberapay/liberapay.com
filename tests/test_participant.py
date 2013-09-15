@@ -227,6 +227,11 @@ class Tests(Harness):
         with assert_raises(UsernameIsEmpty):
             self.participant.change_username('    ')
 
+    def test_changing_username_strips_spaces(self):
+        self.participant.change_username('  aaa  ')
+        actual = Participant.from_username('aaa')
+        assert self.participant == actual, actual
+
     def test_changing_username_to_too_long(self):
         with assert_raises(UsernameTooLong):
             self.participant.change_username('123456789012345678901234567890123')

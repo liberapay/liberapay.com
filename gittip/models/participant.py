@@ -260,20 +260,21 @@ class Participant(Model, MixinElsewhere, MixinTeam):
         """
         # TODO: reconsider allowing unicode usernames
         typecheck(suggested, unicode)
+        suggested = suggested.strip()
 
-        if not suggested or suggested.isspace():
-            raise UsernameIsEmpty
+        if not suggested:
+            raise UsernameIsEmpty(suggested)
 
         if len(suggested) > 32:
-            raise UsernameTooLong
+            raise UsernameTooLong(suggested)
 
         if set(suggested) - ASCII_ALLOWED_IN_USERNAME:
-            raise UsernameContainsInvalidCharacters
+            raise UsernameContainsInvalidCharacters(suggested)
 
         lowercased = suggested.lower()
 
         if lowercased in gittip.RESTRICTED_USERNAMES:
-            raise UsernameIsRestricted
+            raise UsernameIsRestricted(suggested)
 
         if suggested != self.username:
             try:
@@ -288,7 +289,7 @@ class Participant(Model, MixinElsewhere, MixinTeam):
             except IntegrityError:
                 raise UsernameAlreadyTaken(suggested)
 
-            assert (suggested, lowercased) == actual  # sanity check
+            assert (suggested, lowercased) == actual # sanity check
             self.set_attributes(username=suggested, username_lower=lowercased)
 
 
@@ -689,8 +690,10 @@ class UsernameIsEmpty(ProblemChangingUsername):
 class UsernameTooLong(ProblemChangingUsername):
     msg = "The username '{}' is too long."
 
+# Not passing the potentially unicode characters back because of:
+# https://github.com/gittip/aspen-python/issues/177
 class UsernameContainsInvalidCharacters(ProblemChangingUsername):
-    msg = "The username '{}' contains invalid characters."
+    msg = "That username contains invalid characters."
 
 class UsernameIsRestricted(ProblemChangingUsername):
     msg = "The username '{}' is restricted."

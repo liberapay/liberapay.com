@@ -1,10 +1,6 @@
 from aspen import Response, log_dammit
 from gittip.models.participant import Participant
-from gittip.models.participant import ( UsernameContainsInvalidCharacters
-                                      , UsernameIsRestricted
-                                      , UsernameAlreadyTaken
-                                      , UsernameTooLong
-                                       )
+from gittip.models.participant import ProblemChangingUsername
 
 
 [-----------------------------------------------------------------------------]
@@ -19,9 +15,5 @@ try:
     user.participant.change_username(new_username)
     response.body = {"username": new_username}
     log_dammit("user with username %s has become username %s" % (old_username, new_username))
-except (UsernameContainsInvalidCharacters, UsernameIsRestricted):
-    raise Response(400)
-except UsernameAlreadyTaken:
-    raise Response(409)
-except UsernameTooLong:
-    raise Response(413)
+except ProblemChangingUsername, e:
+    response = Response(400, {"error": str(e)})
