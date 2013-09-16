@@ -302,8 +302,8 @@ title = "Please Confirm"
             <input type="hidden" name="user_id" value="{{ account.user_id }}" />
             <input type="hidden" name="csrf_token" value="{{ cookie['csrf_token'].value }}" />
             <input type="hidden" name="connect_token" value="{{ connect_token }}" />
-            <button class="selected larger">Yes</button>
-            <a href="/about/me.html"><button>No</button></a>
+            <button name="should_reconnect" value="yes" class="selected larger">Yes</button>
+            <button name="should_reconnect" value="no" >No</button>
         </form>
     </div>
 

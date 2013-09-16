@@ -8,6 +8,9 @@ from gittip.elsewhere.bountysource import BountysourceAccount
 if user.ANON or not POST:
     raise Response(404)
 
+if body['should_reconnect'] != 'yes':
+    request.redirect('/about/me.html')
+
 platform = body['platform']
 if platform not in ('github', 'twitter', 'bitbucket', 'bountysource'):
     raise Response(400, "bad platform: %s" % platform)
