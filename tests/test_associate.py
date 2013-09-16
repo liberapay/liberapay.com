@@ -80,10 +80,7 @@ class Tests(Harness):
         assert "Please Confirm" in response.body, response.body
 
 
-    @mock.patch('requests.post')
-    @mock.patch('requests.get')
-    @mock.patch('gittip.utils.mixpanel.track')
-    def test_can_post_to_take_over(self, track, get, post):
+    def test_can_post_to_take_over(self):
         TwitterAccount('1234', {'screen_name': 'alice'}).opt_in('alice')
 
         self.make_participant('bob')
