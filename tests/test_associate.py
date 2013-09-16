@@ -115,6 +115,7 @@ class Tests(Harness):
                                           , "user_id": "1234"
                                           , "csrf_token": csrf_token
                                           , "connect_token": "deadbeef"
+                                          , "should_reconnect": "yes"
                                            }
                                    , user="bob"
                                     )
