@@ -1,7 +1,7 @@
 from __future__ import division, print_function, unicode_literals
 
 import mock
-from gittip.testing import Harness, test_website
+from gittip.testing import Harness, test_website as _test_website
 from gittip.testing.client import TestClient
 from gittip.elsewhere.bitbucket import BitbucketAccount
 from gittip.elsewhere.twitter import TwitterAccount
@@ -11,7 +11,7 @@ class Tests(Harness):
 
     def setUp(self):
         Harness.setUp(self)
-        self.website = test_website
+        self.website = _test_website
         self.client = TestClient()
 
     def tearDown(self):
