@@ -116,7 +116,8 @@ def envvars(website):
                                           .replace('%version', website.version)
     website.cache_static = is_yesish(envvar('GITTIP_CACHE_STATIC'))
 
-    website.analytics = is_yesish(envvar('ANALYTICS'))
+    website.google_analytics_id = envvar('GOOGLE_ANALYTICS_ID')
+    website.gauges_id = envvar('GAUGES_ID')
 
     if missing_keys:
         missing_keys.sort()

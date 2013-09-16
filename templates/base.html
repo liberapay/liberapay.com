@@ -104,11 +104,11 @@
         <a href='/security.txt'>Security</a>
     </div></div>
 
-    {%if website.analytics %}
+    {%if website.google_analytics_id %}
     <script type="text/javascript">
 
       var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-247427-33']);
+      _gaq.push(['_setAccount', '{{ website.google_analytics_id }}']);
       _gaq.push(['_setDomainName', '.gittip.com']);
       _gaq.push(['_trackPageview']);
 
@@ -119,7 +119,9 @@
       })();
 
     </script>
+    {% end %}
 
+    {%if website.gauges_id %}
     <script type="text/javascript">
       var _gauges = _gauges || [];
       (function() {
@@ -127,7 +129,7 @@
         t.type  = 'text/javascript';
         t.async = true;
         t.id    = 'gauges-tracker';
-        t.setAttribute('data-site-id', '5162d97cf5a1f55905000083');
+        t.setAttribute('data-site-id', '{{ website.gauges_id }}');
         t.src = '//secure.gaug.es/track.js';
         var s = document.getElementsByTagName('script')[0];
         s.parentNode.insertBefore(t, s);
