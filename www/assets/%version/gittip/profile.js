@@ -388,37 +388,6 @@ $(document).ready(function()
             return false;
         });
 
-    $('FORM#bitcoin').submit(function(e)
-    {
-        e.preventDefault();
-
-        $('#bitcoin BUTTON#save').text('Saving ...');
-
-        function success(d)
-        {
-            $('#bitcoin BUTTON#save').text('Saved successfully');
-            setTimeout(function() {
-                 window.location.href = "/" + d.username + "/";
-            }, 500);
-        }
-        jQuery.ajax(
-            { url: "bitcoin.json"
-            , type: "POST"
-            , dataType: 'json'
-            , success: success
-            , error: function() {
-                    $('#bitcoin BUTTON#save').text('Save');
-                    alert( "Invalid Bitcoin address. "
-                         + "Please try again."
-                         );
-            }
-            , data: { bitcoin_address: $('#bitcoin_address').val() }
-             }
-        )
-        return false;
-    });
-
-
     // Wire up API Key
     // ===============
     //

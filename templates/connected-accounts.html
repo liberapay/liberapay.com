@@ -133,7 +133,11 @@
         </td>
         <td class="account-details">
 
-            <div class="bitcoin">
+            {% if not user.ANON and user.participant == participant %}
+                <div class="bitcoin">
+            {% else %}
+                <div>
+            {% end %}
                 {% if participant.bitcoin_address %}
                     <a rel="me" href="http://blockchain.info/address/{{ participant.bitcoin_address }}">
                       {{ participant.bitcoin_address }}
