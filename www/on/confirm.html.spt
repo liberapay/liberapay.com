@@ -3,7 +3,7 @@
 import uuid
 
 from aspen import Response
-from gittip.models import Participant
+from gittip.models.participant import Participant
 
 website.connect_tokens = {}
 
@@ -24,7 +24,7 @@ connect_key = (user.participant.username, account.platform, account.user_id)
 website.connect_tokens[connect_key] = connect_token
 
 
-other = Participant.query.get(account.participant)
+other = Participant.from_username(account.participant)
 
 user_github_account, user_twitter_account, user_bitbucket_account, \
                       user_bountysource_account = user.participant.get_accounts_elsewhere()
@@ -261,16 +261,22 @@ title = "Please Confirm"
                     </table>
                     <br />
 
+                    {% if other_twitter_account is not None and account.platform != 'twitter' %}
+                        <span class="account-elsewhere">
+                            <img src="/assets/icons/twitter.12.png" />
+                            {{ other_twitter_account.user_info['screen_name'] }}<br />
+                        </span>
+                    {% end %}
                     {% if other_github_account is not None and account.platform != 'github' %}
                         <span class="account-elsewhere">
                             <img src="/assets/icons/github.12.png" />
                             {{ other_github_account.user_info['login'] }}<br />
                         </span>
                     {% end %}
-                    {% if other_twitter_account is not None and account.platform != 'twitter' %}
+                    {% if other_bitbucket_account is not None and account.platform != 'bitbucket' %}
                         <span class="account-elsewhere">
-                            <img src="/assets/icons/twitter.12.png" />
-                            {{ other_twitter_account.user_info['screen_name'] }}<br />
+                            <img src="/assets/icons/bitbucket.12.png" />
+                            {{ other_bitbucket_account.user_info['username'] }}<br />
                         </span>
                     {% end %}
                     {% if other_bountysource_account is not None and account.platform != 'bountysource' %}
@@ -296,8 +302,8 @@ title = "Please Confirm"
             <input type="hidden" name="user_id" value="{{ account.user_id }}" />
             <input type="hidden" name="csrf_token" value="{{ cookie['csrf_token'].value }}" />
             <input type="hidden" name="connect_token" value="{{ connect_token }}" />
-            <button class="selected larger">Yes</button>
-            <a href="/about/me.html"><button>No</button></a>
+            <button name="should_reconnect" value="yes" class="selected larger">Yes</button>
+            <button name="should_reconnect" value="no" >No</button>
         </form>
     </div>
 

@@ -8,6 +8,9 @@ from gittip.elsewhere.bountysource import BountysourceAccount
 if user.ANON or not POST:
     raise Response(404)
 
+if body['should_reconnect'] != 'yes':
+    request.redirect('/about/me.html')
+
 platform = body['platform']
 if platform not in ('github', 'twitter', 'bitbucket', 'bountysource'):
     raise Response(400, "bad platform: %s" % platform)
@@ -27,8 +30,7 @@ connect_key = (user.participant.username, platform, user_id)
 expected = website.connect_tokens.pop(connect_key, None)
 actual = body.get('connect_token')
 if expected is None or actual != expected:
-    msg = str("Is %s gaming us? %s:%s"
-    msg %= (user.participant.username, expected, actual)
+    msg = str("Is %s gaming us? %s:%s" % (user.participant.username, expected, actual))
     raise Response(400, msg)
 
 
