@@ -232,6 +232,10 @@ class Tests(Harness):
         actual = Participant.from_username('aaa')
         assert self.participant == actual, actual
 
+    def test_changing_username_returns_the_new_username(self):
+        returned = self.participant.change_username('  foo bar baz  ')
+        assert returned == 'foo bar baz', returned
+
     def test_changing_username_to_too_long(self):
         with assert_raises(UsernameTooLong):
             self.participant.change_username('123456789012345678901234567890123')

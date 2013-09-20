@@ -292,6 +292,8 @@ class Participant(Model, MixinElsewhere, MixinTeam):
             assert (suggested, lowercased) == actual # sanity check
             self.set_attributes(username=suggested, username_lower=lowercased)
 
+        return suggested
+
 
     def update_goal(self, goal):
         typecheck(goal, (Decimal, None))
