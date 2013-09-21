@@ -15,7 +15,7 @@ env: $(env_bin)/swaddle
 				--distribute \
 				./env/
 	./$(env_bin)/pip install -r requirements.txt
-	./$(env_bin)/pip install ./vendor/nose-1.1.2.tar.gz
+	./$(env_bin)/pip install ./vendor/pytest-2.3.4.zip
 	./$(env_bin)/pip install -e ./
 
 $(env_bin)/swaddle:
@@ -27,7 +27,7 @@ $(env_bin)/swaddle:
 				--distribute \
 				./env/
 	./$(env_bin)/pip install -r requirements.txt
-	./$(env_bin)/pip install ./vendor/nose-1.1.2.tar.gz
+	./$(env_bin)/pip install ./vendor/pytest-2.3.4.zip
 	./$(env_bin)/pip install -e ./
 
 clean:
@@ -67,7 +67,7 @@ test-schema: env tests/env
 test-db: test-cloud-db test-schema
 
 test: env tests/env test-schema
-	./$(env_bin)/swaddle tests/env ./$(env_bin)/nosetests ./tests/
+	./$(env_bin)/swaddle tests/env ./$(env_bin)/py.test ./tests/
 
 tests: test
 

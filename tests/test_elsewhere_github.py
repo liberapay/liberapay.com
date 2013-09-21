@@ -1,7 +1,6 @@
 from __future__ import print_function, unicode_literals
 
 from mock import patch
-from nose.tools import assert_equal
 
 from gittip.elsewhere import github
 from gittip.testing import Harness, DUMMY_GITHUB_JSON
@@ -31,7 +30,7 @@ class TestElsewhereGithub(Harness):
             requests.get().status_code = github_status
             requests.get().text = github_content
             response = client.get('/on/github/not-in-the-db/')
-            assert_equal(response.code, expected_gittip_response)
+            self.assertEquals(response.code, expected_gittip_response)
 
 
     def test_get_user_info_gets_user_info(self):

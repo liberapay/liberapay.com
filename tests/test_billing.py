@@ -2,7 +2,6 @@ from __future__ import unicode_literals
 
 import balanced
 import mock
-from nose.tools import assert_equals, assert_raises
 
 import gittip
 from gittip import billing
@@ -53,7 +52,7 @@ class TestBalancedCard(Harness):
         }
         card = billing.BalancedCard(self.balanced_account_uri)
         actual = dict([(name, card[name]) for name in expected])
-        assert_equals(actual, expected)
+        self.assertEquals(actual, expected)
 
     @mock.patch('balanced.Account')
     def test_balanced_card_gives_class_name_instead_of_KeyError(self, ba):
@@ -68,7 +67,7 @@ class TestBalancedCard(Harness):
 
         expected = mock.Mock.__name__
         actual = card['nothing'].__class__.__name__
-        assert_equals(actual, expected)
+        self.assertEquals(actual, expected)
 
 
 class TestStripeCard(Harness):
@@ -99,7 +98,7 @@ class TestStripeCard(Harness):
         }
         card = billing.StripeCard('deadbeef')
         actual = dict([(name, card[name]) for name in expected])
-        assert_equals(actual, expected)
+        self.assertEquals(actual, expected)
 
     @mock.patch('stripe.Customer')
     def test_stripe_card_gives_empty_string_instead_of_KeyError(self, sc):
@@ -109,7 +108,7 @@ class TestStripeCard(Harness):
 
         expected = ''
         actual = billing.StripeCard('deadbeef')['nothing']
-        assert_equals(actual, expected)
+        self.assertEquals(actual, expected)
 
 
 class TestBalancedBankAccount(Harness):
@@ -133,7 +132,7 @@ class TestBalancedBankAccount(Harness):
         assert b_b_account.find.called_with(self.balanced_bank_account_uri)
 
         assert b_b_b_account.is_setup
-        with assert_raises(IndexError):
+        with self.assertRaises(IndexError):
             b_b_b_account.__getitem__('invalid')
 
     @mock.patch('gittip.billing.balanced.Account')

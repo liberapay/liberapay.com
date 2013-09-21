@@ -1,5 +1,4 @@
 from __future__ import unicode_literals
-from nose.tools import assert_equal, assert_true
 
 import pytz
 import base64

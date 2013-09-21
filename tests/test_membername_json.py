@@ -1,5 +1,4 @@
 from __future__ import unicode_literals
-from nose.tools import assert_equal
 
 import json
 
