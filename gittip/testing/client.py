@@ -102,5 +102,5 @@ class TestClient(object):
         return self.perform_request(request, user)
 
     def get(self, path, user=None, **extra):
-        request = self.get_request(path, "GET")
+        request = self.get_request(path, "GET", **extra)
         return self.perform_request(request, user)
