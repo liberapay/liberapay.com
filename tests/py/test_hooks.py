@@ -78,3 +78,18 @@ class Tests(Harness):
                                    )
         assert response.code == 200
         assert '; secure' in response.headers.cookie['session'].output()
+
+
+    def test_session_cookie_not_set_under_API_key_auth(self):
+        alice = self.make_participant('alice', claimed_time='now')
+        api_key = alice.recreate_api_key()
+
+        auth_header = ('Basic ' + (api_key + ':').encode('base64')).strip()
+        response = self.client.GET( '/alice/public.json'
+                                  , HTTP_AUTHORIZATION=auth_header
+                                  , HTTP_X_FORWARDED_PROTO='https'
+                                  , HTTP_HOST='www.gittip.com'
+                                   )
+
+        assert response.code == 200
+        assert 'session' not in response.headers.cookie
