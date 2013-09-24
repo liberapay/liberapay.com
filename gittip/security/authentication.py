@@ -3,6 +3,7 @@
 import rfc822
 import time
 
+import gittip
 from aspen import Response
 from gittip.security import csrf
 from gittip.security.user import User
@@ -105,3 +106,5 @@ def outbound(response):
     cookie['path'] = '/'
     cookie['expires'] = rfc822.formatdate(expires)
     cookie['httponly'] = "Yes, please."
+    if gittip.canonical_scheme == 'https':
+        cookie['secure'] = "Yes, please."
