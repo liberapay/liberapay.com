@@ -27,12 +27,12 @@ class Tests(Harness):
     def test_participant_can_change_their_statement(self):
         response = self.change_statement('being awesome.')
         actual = json.loads(response.body)['statement']
-        assert actual == 'being awesome.', actual
+        assert actual == 'being awesome.'
 
     def test_participant_can_change_their_number(self):
         response = self.change_statement('', 'plural')
         actual = json.loads(response.body)['number']
-        assert actual == 'plural', actual
+        assert actual == 'plural'
 
     def test_anonymous_gets_404(self):
         response = self.change_statement('being awesome.', 'singular', user=None)

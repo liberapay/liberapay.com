@@ -10,4 +10,4 @@ class TestElsewhereBitbucket(Harness):
         bitbucket.BitbucketAccount("1", {'username': 'alice'}).opt_in('alice')
         expected = {"username": "alice"}
         actual = bitbucket.get_user_info('alice')
-        assert actual == expected, actual
+        assert actual == expected

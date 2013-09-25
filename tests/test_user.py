@@ -22,7 +22,7 @@ class TestUser(Harness):
     def test_username_is_case_insensitive(self):
         self.make_participant('AlIcE')
         actual = User.from_username('aLiCe').participant.username_lower
-        assert actual == 'alice', actual
+        assert actual == 'alice'
 
     def test_known_user_is_not_admin(self):
         self.make_participant('alice')
@@ -71,7 +71,7 @@ class TestUser(Harness):
         user.sign_in()
         token = user.participant.session_token
         actual = User.from_session_token(token).participant.username
-        assert actual == 'alice', actual
+        assert actual == 'alice'
 
 
     # key token
@@ -90,7 +90,7 @@ class TestUser(Harness):
         alice = self.make_participant('alice')
         api_key = alice.recreate_api_key()
         actual = User.from_api_key(api_key).participant.username
-        assert actual == 'alice', actual
+        assert actual == 'alice'
 
 
     def test_user_from_bad_id_is_anonymous(self):

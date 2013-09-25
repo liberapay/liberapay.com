@@ -30,7 +30,7 @@ class TestMembernameJson(Harness):
         )
 
         actual = response.code
-        assert actual == 404, actual
+        assert actual == 404
 
     def test_post_participant_doesnt_exist_returns_404(self):
         client, csrf_token = self.make_client_and_csrf()
@@ -43,7 +43,7 @@ class TestMembernameJson(Harness):
         )
 
         actual = response.code
-        assert actual == 404, actual
+        assert actual == 404
 
     def test_post_user_is_not_member_or_team_returns_403(self):
         client, csrf_token = self.make_client_and_csrf()
@@ -60,7 +60,7 @@ class TestMembernameJson(Harness):
         )
 
         actual = response.code
-        assert actual == 200, actual
+        assert actual == 200
 
         response = client.post('/team/members/bob.json'
             , {
@@ -71,7 +71,7 @@ class TestMembernameJson(Harness):
         )
 
         actual = response.code
-        assert actual == 200, actual
+        assert actual == 200
 
         response = client.post('/team/members/alice.json'
             , { 'csrf_token': csrf_token }
@@ -79,7 +79,7 @@ class TestMembernameJson(Harness):
         )
 
         actual = response.code
-        assert actual == 403, actual
+        assert actual == 403
 
     def test_post_take_is_not_decimal_returns_400(self):
         client, csrf_token = self.make_client_and_csrf()
@@ -95,7 +95,7 @@ class TestMembernameJson(Harness):
         )
 
         actual = response.code
-        assert actual == 400, actual
+        assert actual == 400
 
     def test_post_member_equals_team_returns_400(self):
         client, csrf_token = self.make_client_and_csrf()
@@ -111,7 +111,7 @@ class TestMembernameJson(Harness):
         )
 
         actual = response.code
-        assert actual == 400, actual
+        assert actual == 400
 
     def test_post_take_is_not_zero_or_penny_returns_400(self):
         client, csrf_token = self.make_client_and_csrf()
@@ -127,7 +127,7 @@ class TestMembernameJson(Harness):
         )
 
         actual = response.code
-        assert actual == 400, actual
+        assert actual == 400
 
     def test_post_zero_take_on_non_member_returns_500(self):
         client, csrf_token = self.make_client_and_csrf()
@@ -143,7 +143,7 @@ class TestMembernameJson(Harness):
         )
 
         actual = response.code
-        assert actual == 500, actual
+        assert actual == 500
 
     def test_post_can_add_member_to_team(self):
         client, csrf_token = self.make_client_and_csrf()
@@ -161,7 +161,7 @@ class TestMembernameJson(Harness):
         data = json.loads(response.body)
 
         actual = len(data)
-        assert actual == 2, actual
+        assert actual == 2
 
         for rec in data:
             assert rec['username'] in ('team', 'alice'), rec['username']
@@ -182,7 +182,7 @@ class TestMembernameJson(Harness):
         data = json.loads(response.body)
 
         actual = len(data)
-        assert actual == 2, actual
+        assert actual == 2
 
         for rec in data:
             assert rec['username'] in ('team', 'alice'), rec['username']
@@ -198,10 +198,10 @@ class TestMembernameJson(Harness):
         data = json.loads(response.body)
 
         actual = len(data)
-        assert actual == 1, actual
+        assert actual == 1
 
         actual = data[0]['username']
-        assert actual == 'team', actual
+        assert actual == 'team'
 
     def test_post_non_team_member_adds_member_returns_403(self):
         client, csrf_token = self.make_client_and_csrf()
@@ -218,7 +218,7 @@ class TestMembernameJson(Harness):
         )
 
         actual = response.code
-        assert actual == 200, actual
+        assert actual == 200
 
         response = client.post('/team/members/bob.json'
             , {
@@ -229,7 +229,7 @@ class TestMembernameJson(Harness):
         )
 
         actual = response.code
-        assert actual == 403, actual
+        assert actual == 403
 
     def test_get_team_when_team_equals_member(self):
         client, csrf_token = self.make_client_and_csrf()
@@ -241,10 +241,10 @@ class TestMembernameJson(Harness):
         data = json.loads(response.body)
 
         actual = response.code
-        assert actual == 200, actual
+        assert actual == 200
 
         actual = data['username']
-        assert actual == 'team', actual
+        assert actual == 'team'
 
     def test_get_team_member_returns_null_when_non_member(self):
         client, csrf_token = self.make_client_and_csrf()
@@ -254,10 +254,10 @@ class TestMembernameJson(Harness):
         response = client.get('/team/members/alice.json', 'team')
 
         actual = response.code
-        assert actual == 200, actual
+        assert actual == 200
 
         actual = response.body
-        assert actual == 'null', actual
+        assert actual == 'null'
 
     def test_get_team_members_returns_take_when_member(self):
         client, csrf_token = self.make_client_and_csrf()
@@ -273,17 +273,17 @@ class TestMembernameJson(Harness):
         )
 
         actual = response.code
-        assert actual == 200, actual
+        assert actual == 200
 
         response = client.get('/team/members/alice.json', 'team')
 
         data = json.loads(response.body)
 
         actual = response.code
-        assert actual == 200, actual
+        assert actual == 200
 
         actual = data['username']
-        assert actual == 'alice', actual
+        assert actual == 'alice'
 
         actual = data['take']
-        assert actual == '0.01', actual
+        assert actual == '0.01'

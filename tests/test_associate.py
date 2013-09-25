@@ -123,4 +123,4 @@ class Tests(Harness):
         assert response.code == 302, response.body
         expected = '/about/me.html'
         actual = response.headers['Location']
-        assert actual == expected, actual
+        assert actual == expected

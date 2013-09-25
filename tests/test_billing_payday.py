@@ -52,7 +52,7 @@ class TestPaydayCharge(TestPaydayBase):
         alice = self.make_participant('alice')
         self.payday.start()
         actual = self.payday.charge(alice, Decimal('1.00'))
-        assert actual is None, actual
+        assert actual is None
 
     def test_charge_without_cc_marked_as_failure(self):
         alice = self.make_participant('alice')
@@ -71,7 +71,7 @@ class TestPaydayCharge(TestPaydayBase):
 
         self.payday.start()
         actual = self.payday.charge(bob, Decimal('1.00'))
-        assert actual is None, actual
+        assert actual is None
 
     @mock.patch('gittip.billing.payday.Payday.charge_on_balanced')
     def test_charge_success_returns_None(self, charge_on_balanced):
@@ -83,7 +83,7 @@ class TestPaydayCharge(TestPaydayBase):
 
         self.payday.start()
         actual = self.payday.charge(bob, Decimal('1.00'))
-        assert actual is None, actual
+        assert actual is None
 
     @mock.patch('gittip.billing.payday.Payday.charge_on_balanced')
     def test_charge_success_updates_participant(self, cob):
@@ -287,59 +287,59 @@ class TestPrepHit(TestPaydayBase):
         expected = (2091,
                     u'Charging %s 2091 cents ($20.00 + $0.91 fee = $20.91) on %s ' u'... ',
                     Decimal('20.91'), Decimal('0.91'))
-        assert actual == expected, actual
+        assert actual == expected
 
     def test_prep_hit_full_in_rounded_case(self):
         actual = self.payday._prep_hit(Decimal('5.00'))
         expected = (1000,
                     u'Charging %s 1000 cents ($9.41 [rounded up from $5.00] + ' u'$0.59 fee = $10.00) on %s ... ',
                     Decimal('10.00'), Decimal('0.59'))
-        assert actual == expected, actual
+        assert actual == expected
 
     def test_prep_hit_at_ten_dollars(self):
         actual = self.prep(u'10.00')
         expected = (1061, Decimal('10.61'), Decimal('0.61'))
-        assert actual == expected, actual
+        assert actual == expected
 
     def test_prep_hit_at_forty_cents(self):
         actual = self.prep(u'0.40')
         expected = (1000, Decimal('10.00'), Decimal('0.59'))
-        assert actual == expected, actual
+        assert actual == expected
 
     def test_prep_hit_at_fifty_cents(self):
         actual = self.prep(u'0.50')
         expected = (1000, Decimal('10.00'), Decimal('0.59'))
-        assert actual == expected, actual
+        assert actual == expected
 
     def test_prep_hit_at_sixty_cents(self):
         actual = self.prep(u'0.60')
         expected = (1000, Decimal('10.00'), Decimal('0.59'))
-        assert actual == expected, actual
+        assert actual == expected
 
     def test_prep_hit_at_eighty_cents(self):
         actual = self.prep(u'0.80')
         expected = (1000, Decimal('10.00'), Decimal('0.59'))
-        assert actual == expected, actual
+        assert actual == expected
 
     def test_prep_hit_at_nine_fifteen(self):
         actual = self.prep(u'9.15')
         expected = (1000, Decimal('10.00'), Decimal('0.59'))
-        assert actual == expected, actual
+        assert actual == expected
 
     def test_prep_hit_at_nine_forty(self):
         actual = self.prep(u'9.40')
         expected = (1000, Decimal('10.00'), Decimal('0.59'))
-        assert actual == expected, actual
+        assert actual == expected
 
     def test_prep_hit_at_nine_forty_one(self):
         actual = self.prep(u'9.41')
         expected = (1000, Decimal('10.00'), Decimal('0.59'))
-        assert actual == expected, actual
+        assert actual == expected
 
     def test_prep_hit_at_nine_forty_two(self):
         actual = self.prep(u'9.42')
         expected = (1002, Decimal('10.02'), Decimal('0.60'))
-        assert actual == expected, actual
+        assert actual == expected
 
 
 class TestBillingPayday(TestPaydayBase):
@@ -658,7 +658,7 @@ class TestBillingTransfer(TestPaydayBase):
 
     def test_skim_credit(self):
         actual = skim_credit(Decimal('10.00'))
-        assert actual == (Decimal('10.00'), Decimal('0.00')), actual
+        assert actual == (Decimal('10.00'), Decimal('0.00'))
 
     def test_credit_participant(self):
         amount = Decimal('1.00')
@@ -765,7 +765,7 @@ class TestPachinko(Harness):
 
         actual = [p.username for p in self.payday.get_participants(ts_start)]
         expected = ['a_team', 'alice', 'bob']
-        assert actual == expected, actual
+        assert actual == expected
 
     def test_pachinko_pachinkos(self):
         a_team = self.make_participant('a_team', claimed_time='now', number='plural', balance=20, pending=0)

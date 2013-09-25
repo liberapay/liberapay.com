@@ -153,7 +153,7 @@ class TestBalancedBankAccount(Harness):
 
         expected = "Here I am!"
         actual = b_b_b_account['account_uri']
-        assert actual == expected, actual
+        assert actual == expected
 
     def test_balanced_bank_account_not_setup(self):
         bank_account = billing.BalancedBankAccount(None)
@@ -302,7 +302,7 @@ class TestBillingStoreError(TestBillingBase):
                             "username='alice'")
         expected = "cheese is yummy"
         actual = rec.last_bill_result
-        assert actual == expected, actual
+        assert actual == expected
 
     def test_store_error_stores_ach_error(self):
         for message in ['cheese is yummy', 'cheese smells like my vibrams']:

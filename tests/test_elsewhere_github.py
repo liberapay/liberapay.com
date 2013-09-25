@@ -15,7 +15,7 @@ class TestElsewhereGithub(Harness):
 
         expected = 'alice'
         actual = github.resolve(u'alice')
-        assert actual == expected, actual
+        assert actual == expected
 
     @patch('gittip.elsewhere.github.requests')
     def test_github_user_info_status_handling(self, requests):
@@ -37,4 +37,4 @@ class TestElsewhereGithub(Harness):
         github.GitHubAccount("1", {'login': 'alice'}).opt_in('alice')
         expected = {"login": "alice"}
         actual = github.get_user_info('alice')
-        assert actual == expected, actual
+        assert actual == expected

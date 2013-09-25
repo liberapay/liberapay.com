@@ -21,11 +21,11 @@ class TestCommaize(Harness):
 
     def test_commaize_commaizes(self):
         actual = self.commaize(1000.0)
-        assert actual == "1,000", actual
+        assert actual == "1,000"
 
     def test_commaize_commaizes_and_obeys_decimal_places(self):
         actual = self.commaize(1000, 4)
-        assert actual == "1,000.0000", actual
+        assert actual == "1,000.0000"
 
 
 class TestChartOfReceiving(Harness):

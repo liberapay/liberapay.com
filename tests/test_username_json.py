@@ -27,7 +27,7 @@ class Tests(Harness):
     def test_participant_can_change_their_username(self):
         response = self.change_username("bob")
         actual = json.loads(response.body)['username']
-        assert actual == "bob", actual
+        assert actual == "bob"
 
     def test_anonymous_gets_404(self):
         response = self.change_username("bob", user=None)
