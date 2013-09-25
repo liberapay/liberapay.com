@@ -15,7 +15,7 @@ env: $(env_bin)/swaddle
 				--distribute \
 				./env/
 	./$(env_bin)/pip install -r requirements.txt
-	./$(env_bin)/pip install ./vendor/pytest-2.3.4.zip
+	./$(env_bin)/pip install -r requirements_tests.txt
 	./$(env_bin)/pip install -e ./
 
 $(env_bin)/swaddle:
@@ -27,7 +27,7 @@ $(env_bin)/swaddle:
 				--distribute \
 				./env/
 	./$(env_bin)/pip install -r requirements.txt
-	./$(env_bin)/pip install ./vendor/pytest-2.3.4.zip
+	./$(env_bin)/pip install -r requirements_tests.txt
 	./$(env_bin)/pip install -e ./
 
 clean:
