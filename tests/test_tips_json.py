@@ -113,7 +113,7 @@ class TestTipsJson(Harness):
         resp = json.loads(response.body)
 
         for tip in resp:
-            self.assertTrue('error' in tip)
+            assert 'error' in tip
 
     def test_also_prune_as_1(self):
         self.also_prune_variant('1')

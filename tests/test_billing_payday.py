@@ -211,13 +211,11 @@ class TestBillingCharges(TestPaydayBase):
 
         assert charge_amount == amount_to_charge + fee
         assert fee == expected_fee
-        self.assertTrue(ba.find.called_with(self.STRIPE_CUSTOMER_ID))
+        assert ba.find.called_with(self.STRIPE_CUSTOMER_ID)
         customer = ba.find.return_value
-        self.assertTrue(
-            customer.debit.called_with( int(charge_amount * 100)
-                                      , self.alice.username
-                                       )
-        )
+        assert customer.debit.called_with( int(charge_amount * 100)
+                                         , self.alice.username
+                                          )
 
     @mock.patch('balanced.Account')
     def test_charge_on_balanced(self, ba):
@@ -227,13 +225,11 @@ class TestBillingCharges(TestPaydayBase):
             self.alice.username, self.BALANCED_ACCOUNT_URI, amount_to_charge)
         assert charge_amount == amount_to_charge + fee
         assert fee == expected_fee
-        self.assertTrue(ba.find.called_with(self.BALANCED_ACCOUNT_URI))
+        assert ba.find.called_with(self.BALANCED_ACCOUNT_URI)
         customer = ba.find.return_value
-        self.assertTrue(
-            customer.debit.called_with( int(charge_amount * 100)
-                                      , self.alice.username
-                                       )
-        )
+        assert customer.debit.called_with( int(charge_amount * 100)
+                                         , self.alice.username
+                                          )
 
     @mock.patch('balanced.Account')
     def test_charge_on_balanced_small_amount(self, ba):
@@ -247,11 +243,9 @@ class TestBillingCharges(TestPaydayBase):
         assert charge_amount == expected_amount
         assert fee == expected_fee
         customer = ba.find.return_value
-        self.assertTrue(
-            customer.debit.called_with( int(charge_amount * 100)
-                                      , self.alice.username
-                                       )
-        )
+        assert customer.debit.called_with( int(charge_amount * 100)
+                                         , self.alice.username
+                                          )
 
     @mock.patch('balanced.Account')
     def test_charge_on_balanced_failure(self, ba):
@@ -453,9 +447,9 @@ class TestBillingPayday(TestPaydayBase):
         charge.side_effect = Exception()
         with self.assertRaises(Exception):
             billing.charge_and_or_transfer(ts_start, self.alice)
-        self.assertTrue(charge.called_with(self.alice.username,
-                                           self.BALANCED_ACCOUNT_URI,
-                                           amount))
+        assert charge.called_with(self.alice.username,
+                                  self.BALANCED_ACCOUNT_URI,
+                                  amount)
 
     @mock.patch('gittip.billing.payday.Payday.transfer')
     @mock.patch('gittip.billing.payday.log')
@@ -481,9 +475,9 @@ class TestBillingPayday(TestPaydayBase):
         assert result == 1
         result = transfer.called_with(self.alice.username, tip['tippee'],
                                       tip['amount'])
-        self.assertTrue(result)
+        assert result
 
-        self.assertTrue(log.called_with('SUCCESS: $1 from mjallday to alice.'))
+        assert log.called_with('SUCCESS: $1 from mjallday to alice.')
 
         # XXX: Should these tests be broken down to a separate class with the
         # common setup factored in to a setUp method.
@@ -578,7 +572,7 @@ class TestBillingPayday(TestPaydayBase):
     def test_end(self, log):
         self.payday.start()
         self.payday.end()
-        self.assertTrue(log.called_with('Finished payday.'))
+        assert log.called_with('Finished payday.')
 
         # finishing the payday will set the ts_end date on this payday record
         # to now, so this will not return any result
@@ -597,10 +591,10 @@ class TestBillingPayday(TestPaydayBase):
 
         self.payday.run()
 
-        self.assertTrue(log.called_with(greeting))
-        self.assertTrue(init.call_count)
-        self.assertTrue(payin.called_with(init.return_value))
-        self.assertTrue(end.call_count)
+        assert log.called_with(greeting)
+        assert init.call_count
+        assert payin.called_with(init.return_value)
+        assert end.call_count
 
 
 class TestBillingTransfer(TestPaydayBase):
