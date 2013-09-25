@@ -47,7 +47,7 @@ class TestClient(object):
     def __init__(self):
         self.cookies = SimpleCookie()
 
-    def get_request(self, path, method="GET", body=None,
+    def get_request(self, path, method="GET", body=b'',
                     **extra):
         env = StubWSGIRequest(path.encode('utf8'))
         env[b'REQUEST_METHOD'] = method.encode('utf8')
@@ -102,5 +102,5 @@ class TestClient(object):
         return self.perform_request(request, user)
 
     def get(self, path, user=None, **extra):
-        request = self.get_request(path, "GET")
+        request = self.get_request(path, "GET", **extra)
         return self.perform_request(request, user)

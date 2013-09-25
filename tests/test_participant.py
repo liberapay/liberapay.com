@@ -13,7 +13,8 @@ from gittip.elsewhere.github import GitHubAccount
 from gittip.elsewhere.twitter import TwitterAccount
 from gittip.models._mixin_elsewhere import NeedConfirmation
 from gittip.models.participant import Participant
-from gittip.models.participant import ( UsernameTooLong
+from gittip.models.participant import ( UsernameIsEmpty
+                                      , UsernameTooLong
                                       , UsernameAlreadyTaken
                                       , UsernameContainsInvalidCharacters
                                       , UsernameIsRestricted
@@ -216,6 +217,23 @@ class Tests(Harness):
         self.participant.change_username('user2')
         actual = Participant.from_username('user2')
         assert self.participant == actual, actual
+
+    def test_changing_username_to_nothing(self):
+        with assert_raises(UsernameIsEmpty):
+            self.participant.change_username('')
+
+    def test_changing_username_to_all_spaces(self):
+        with assert_raises(UsernameIsEmpty):
+            self.participant.change_username('    ')
+
+    def test_changing_username_strips_spaces(self):
+        self.participant.change_username('  aaa  ')
+        actual = Participant.from_username('aaa')
+        assert self.participant == actual, actual
+
+    def test_changing_username_returns_the_new_username(self):
+        returned = self.participant.change_username('  foo bar baz  ')
+        assert returned == 'foo bar baz', returned
 
     def test_changing_username_to_too_long(self):
         with self.assertRaises(UsernameTooLong):

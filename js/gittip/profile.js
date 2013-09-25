@@ -52,8 +52,6 @@ Gittip.profile.init = function()
 
         $('#save-username').text('Saving ...');
 
-        var username = $('INPUT[name=username]').val();
-
         function success(d)
         {
             window.location.href = "/" + encodeURIComponent(d.username) + "/";
@@ -61,28 +59,14 @@ Gittip.profile.init = function()
         function error(e)
         {
             $('#save-username').text('Save');
-            if (e.status === 409)
-            {
-                alert("Sorry, that username is already taken.");
-            }
-            else if (e.status === 413)
-            {
-                alert( "Sorry, that username is too long (it can only "
-                     + "have 32 characters).");
-            }
-            else
-            {
-                alert( "Sorry, something went wrong. Either you used "
-                     + "disallowed characters or something broke on "
-                     + "our end.");
-            }
+            alert(JSON.parse(e.responseText).error)
         }
         jQuery.ajax(
             { url: "username.json"
             , type: "POST"
             , success: success
             , dataType: 'json'
-            , data: { username: username }
+            , data: { username: $('INPUT[name=username]').val() }
             , success: success
             , error: error
              }
