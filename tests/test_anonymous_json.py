@@ -34,15 +34,15 @@ class Tests(Harness):
     def test_participant_can_get_their_anonymity_setting(self):
         response = self.hit_anonymous('GET')
         actual = json.loads(response.body)['anonymous']
-        assert actual is False, actual
+        assert actual is False
 
     def test_participant_can_toggle_their_anonymity_setting(self):
         response = self.hit_anonymous('POST')
         actual = json.loads(response.body)['anonymous']
-        assert actual is True, actual
+        assert actual is True
 
     def test_participant_can_toggle_their_anonymity_setting_back(self):
         response = self.hit_anonymous('POST')
         response = self.hit_anonymous('POST')
         actual = json.loads(response.body)['anonymous']
-        assert actual is False, actual
+        assert actual is False

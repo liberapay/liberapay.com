@@ -29,7 +29,7 @@ class TestCommunitiesJson(Harness):
 
         actual = response.code
 
-        assert actual == 400, actual
+        assert actual == 400
 
     def test_post_is_member_not_bool_returns_400(self):
         client, csrf_token = self.make_client_and_csrf()
@@ -43,7 +43,7 @@ class TestCommunitiesJson(Harness):
 
         actual = response.code
 
-        assert actual == 400, actual
+        assert actual == 400
 
     def test_post_can_join_community(self):
         client, csrf_token = self.make_client_and_csrf()
@@ -54,7 +54,7 @@ class TestCommunitiesJson(Harness):
         response = client.get('/for/communities.json', 'alice')
 
         actual = len(json.loads(response.body)['communities'])
-        assert actual == 0, actual
+        assert actual == 0
 
         response = client.post('/for/communities.json'
             , { 'name': community
@@ -67,10 +67,10 @@ class TestCommunitiesJson(Harness):
         communities = json.loads(response.body)['communities']
 
         actual = len(communities)
-        assert actual == 1, actual
+        assert actual == 1
 
         actual = communities[0]['name']
-        assert actual == community, actual
+        assert actual == community
 
     def test_post_can_leave_community(self):
         client, csrf_token = self.make_client_and_csrf()
@@ -97,7 +97,7 @@ class TestCommunitiesJson(Harness):
         response = client.get('/for/communities.json', 'alice')
 
         actual = len(json.loads(response.body)['communities'])
-        assert actual == 0, actual
+        assert actual == 0
 
     def test_get_can_get_communities_for_user(self):
         client, csrf_token = self.make_client_and_csrf()
@@ -107,7 +107,7 @@ class TestCommunitiesJson(Harness):
         response = client.get('/for/communities.json', 'alice')
 
         actual = len(json.loads(response.body)['communities'])
-        assert actual == 0, actual
+        assert actual == 0
 
     def test_get_can_get_communities_when_anon(self):
         client, csrf_token = self.make_client_and_csrf()
@@ -115,7 +115,7 @@ class TestCommunitiesJson(Harness):
         response = client.get('/for/communities.json')
 
         actual = response.code
-        assert actual == 200, actual
+        assert actual == 200
 
         actual = len(json.loads(response.body)['communities'])
-        assert actual == 0, actual
+        assert actual == 0

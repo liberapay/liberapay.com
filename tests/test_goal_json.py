@@ -37,27 +37,27 @@ class Tests(Harness):
     def test_participant_can_set_their_goal_to_null(self):
         response = self.change_goal("null")
         actual = json.loads(response.body)['goal']
-        assert actual == None, actual
+        assert actual == None
 
     def test_participant_can_set_their_goal_to_zero(self):
         response = self.change_goal("0")
         actual = json.loads(response.body)['goal']
-        assert actual == "0.00", actual
+        assert actual == "0.00"
 
     def test_participant_can_set_their_goal_to_a_custom_amount(self):
         response = self.change_goal("custom", "100.00")
         actual = json.loads(response.body)['goal']
-        assert actual == "100.00", actual
+        assert actual == "100.00"
 
     def test_custom_amounts_can_include_comma(self):
         response = self.change_goal("custom", "1,100.00")
         actual = json.loads(response.body)['goal']
-        assert actual == "1,100.00", actual
+        assert actual == "1,100.00"
 
     def test_wonky_custom_amounts_are_standardized(self):
         response = self.change_goal("custom", ",100,100.00000")
         actual = json.loads(response.body)['goal']
-        assert actual == "100,100.00", actual
+        assert actual == "100,100.00"
 
     def test_anonymous_gets_404(self):
         response = self.change_goal("100.00", username=None)
@@ -82,7 +82,7 @@ class Tests(Harness):
         self.change_goal("null", "", alice)
         self.change_goal("custom", "400", alice)
         actual = self.db.one("SELECT goal FROM participants")
-        assert actual == Decimal("400.00"), actual
+        assert actual == Decimal("400.00")
 
     def test_all_goals_are_stored_in_goals_table(self):
         alice = self.make_alice()
@@ -92,4 +92,4 @@ class Tests(Harness):
         self.change_goal("null", "", alice)
         self.change_goal("custom", "400", alice)
         actual = self.db.all("SELECT goal FROM goals ORDER BY mtime DESC")
-        assert actual == [400, None, 300, 200, 100], actual
+        assert actual == [400, None, 300, 200, 100]

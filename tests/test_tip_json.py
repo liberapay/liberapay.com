@@ -38,7 +38,7 @@ class TestTipJson(Harness):
         # Confirm we get back the right amounts.
         first_data = json.loads(response1.body)
         second_data = json.loads(response2.body)
-        self.assertEquals(first_data['amount'], "1.00")
-        self.assertEquals(first_data['total_giving'], "1.00")
-        self.assertEquals(second_data['amount'], "3.00")
-        self.assertEquals(second_data['total_giving'], "4.00")
+        assert first_data['amount'] == "1.00"
+        assert first_data['total_giving'] == "1.00"
+        assert second_data['amount'] == "3.00"
+        assert second_data['total_giving'] == "4.00"

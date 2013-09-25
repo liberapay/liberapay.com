@@ -63,7 +63,7 @@ class Tests(Harness):
         alice = self.make_participant('alice')
         team._MixinTeam__set_take_for(alice, D('40.00'), team)
         actual = team.set_take_for(alice, D('80.01'), alice)
-        assert actual == 80, actual
+        assert actual == 80
 
     def test_increase_is_based_on_actual_take_last_week(self):
         team = self.make_team('Team')
@@ -76,4 +76,4 @@ class Tests(Harness):
         alice = self.make_participant('alice', take_last_week='0.01')
         team.add_member(alice)
         actual = team.set_take_for(alice, D('42.00'), team)
-        assert actual == 1, actual
+        assert actual == 1

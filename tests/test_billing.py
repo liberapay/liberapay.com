@@ -52,7 +52,7 @@ class TestBalancedCard(Harness):
         }
         card = billing.BalancedCard(self.balanced_account_uri)
         actual = dict([(name, card[name]) for name in expected])
-        self.assertEquals(actual, expected)
+        assert actual == expected
 
     @mock.patch('balanced.Account')
     def test_balanced_card_gives_class_name_instead_of_KeyError(self, ba):
@@ -67,7 +67,7 @@ class TestBalancedCard(Harness):
 
         expected = mock.Mock.__name__
         actual = card['nothing'].__class__.__name__
-        self.assertEquals(actual, expected)
+        assert actual == expected
 
 
 class TestStripeCard(Harness):
@@ -98,7 +98,7 @@ class TestStripeCard(Harness):
         }
         card = billing.StripeCard('deadbeef')
         actual = dict([(name, card[name]) for name in expected])
-        self.assertEquals(actual, expected)
+        assert actual == expected
 
     @mock.patch('stripe.Customer')
     def test_stripe_card_gives_empty_string_instead_of_KeyError(self, sc):
@@ -108,7 +108,7 @@ class TestStripeCard(Harness):
 
         expected = ''
         actual = billing.StripeCard('deadbeef')['nothing']
-        self.assertEquals(actual, expected)
+        assert actual == expected
 
 
 class TestBalancedBankAccount(Harness):
@@ -153,7 +153,7 @@ class TestBalancedBankAccount(Harness):
 
         expected = "Here I am!"
         actual = b_b_b_account['account_uri']
-        assert actual == expected, actual
+        assert actual == expected
 
     def test_balanced_bank_account_not_setup(self):
         bank_account = billing.BalancedBankAccount(None)
@@ -302,7 +302,7 @@ class TestBillingStoreError(TestBillingBase):
                             "username='alice'")
         expected = "cheese is yummy"
         actual = rec.last_bill_result
-        assert actual == expected, actual
+        assert actual == expected
 
     def test_store_error_stores_ach_error(self):
         for message in ['cheese is yummy', 'cheese smells like my vibrams']:

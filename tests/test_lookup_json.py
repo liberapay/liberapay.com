@@ -21,7 +21,7 @@ class TestLookupJson(Harness):
         response = client.get('/lookup.json')
 
         actual = response.code
-        assert actual == 400, actual
+        assert actual == 400
 
     def test_get_non_existent_user(self):
         client, csrf_token = self.make_client_and_csrf()
@@ -31,10 +31,10 @@ class TestLookupJson(Harness):
         data = json.loads(response.body)
 
         actual = len(data)
-        assert actual == 1, actual
+        assert actual == 1
 
         actual = data[0]['id']
-        assert actual == -1, actual
+        assert actual == -1
 
     def test_get_existing_user(self):
         client, csrf_token = self.make_client_and_csrf()
@@ -46,7 +46,7 @@ class TestLookupJson(Harness):
         data = json.loads(response.body)
 
         actual = len(data)
-        assert actual == 1, actual
+        assert actual == 1
 
         actual = data[0]['id']
-        assert actual != -1, actual
+        assert actual != -1

@@ -80,17 +80,17 @@ class TestAbsorptions(Harness):
     def test_participant_can_be_instantiated(self):
         expected = Participant
         actual = Participant.from_username('alice').__class__
-        assert actual is expected, actual
+        assert actual is expected
 
     def test_bob_has_two_dollars_in_tips(self):
         expected = Decimal('2.00')
         actual = Participant.from_username('bob').get_dollars_receiving()
-        self.assertEquals(actual, expected)
+        assert actual == expected
 
     def test_alice_gives_to_bob_now(self):
         expected = Decimal('1.00')
         actual = Participant.from_username('alice').get_tip_to('bob')
-        self.assertEquals(actual, expected)
+        assert actual == expected
 
     def test_deadbeef_is_archived(self):
         actual = self.db.one( "SELECT count(*) FROM absorptions "
@@ -98,22 +98,22 @@ class TestAbsorptions(Harness):
                             , (self.deadbeef_original_username,)
                              )
         expected = 1
-        self.assertEquals(actual, expected)
+        assert actual == expected
 
     def test_alice_doesnt_gives_to_deadbeef_anymore(self):
         expected = Decimal('0.00')
         actual = Participant.from_username('alice').get_tip_to(self.deadbeef_original_username)
-        assert actual == expected, actual
+        assert actual == expected
 
     def test_alice_doesnt_give_to_whatever_deadbeef_was_archived_as_either(self):
         expected = Decimal('0.00')
         alice = Participant.from_username('alice')
         actual = alice.get_tip_to(self.deadbeef_original_username)
-        assert actual == expected, actual
+        assert actual == expected
 
     def test_there_is_no_more_deadbeef(self):
         actual = Participant.from_username('deadbeef')
-        assert actual is None, actual
+        assert actual is None
 
 
 class TestParticipant(Harness):
@@ -128,13 +128,13 @@ class TestParticipant(Harness):
     def test_bob_is_singular(self):
         expected = True
         actual = Participant.from_username('bob').IS_SINGULAR
-        self.assertEquals(actual, expected)
+        assert actual == expected
 
     def test_john_is_plural(self):
         expected = True
         self.make_participant('john', number='plural')
         actual = Participant.from_username('john').IS_PLURAL
-        self.assertEquals(actual, expected)
+        assert actual == expected
 
     def test_cant_take_over_claimed_participant_without_confirmation(self):
         bob_twitter = StubAccount('twitter', '2')
@@ -147,7 +147,7 @@ class TestParticipant(Harness):
         Participant.from_username('alice').take_over(bob_twitter, have_confirmation=True)
         expected = Decimal('0.00')
         actual = Participant.from_username('alice').get_dollars_giving()
-        self.assertEquals(actual, expected)
+        assert actual == expected
 
     def test_alice_ends_up_tipping_bob_two_dollars(self):
         carl_twitter = StubAccount('twitter', '3')
@@ -156,7 +156,7 @@ class TestParticipant(Harness):
         Participant.from_username('bob').take_over(carl_twitter, have_confirmation=True)
         expected = Decimal('2.00')
         actual = Participant.from_username('alice').get_tip_to('bob')
-        self.assertEquals(actual, expected)
+        assert actual == expected
 
     def test_bob_ends_up_tipping_alice_two_dollars(self):
         carl_twitter = StubAccount('twitter', '3')
@@ -165,7 +165,7 @@ class TestParticipant(Harness):
         Participant.from_username('bob').take_over(carl_twitter, have_confirmation=True)
         expected = Decimal('2.00')
         actual = Participant.from_username('bob').get_tip_to('alice')
-        self.assertEquals(actual, expected)
+        assert actual == expected
 
     def test_ctime_comes_from_the_older_tip(self):
         carl_twitter = StubAccount('twitter', '3')
@@ -183,7 +183,7 @@ class TestParticipant(Harness):
 
         expected = first.ctime
         actual = self.db.one("SELECT ctime FROM tips ORDER BY ctime LIMIT 1")
-        self.assertEquals(actual, expected)
+        assert actual == expected
 
     def test_connecting_unknown_account_fails(self):
         unknown_account = StubAccount('github', 'jim')
@@ -211,12 +211,12 @@ class Tests(Harness):
         self.participant.set_as_claimed()
         actual = self.participant.claimed_time - now
         expected = datetime.timedelta(seconds=0.1)
-        assert actual < expected, actual
+        assert actual < expected
 
     def test_changing_username_successfully(self):
         self.participant.change_username('user2')
         actual = Participant.from_username('user2')
-        assert self.participant == actual, actual
+        assert self.participant == actual
 
     def test_changing_username_to_nothing(self):
         with self.assertRaises(UsernameIsEmpty):
@@ -229,7 +229,7 @@ class Tests(Harness):
     def test_changing_username_strips_spaces(self):
         self.participant.change_username('  aaa  ')
         actual = Participant.from_username('aaa')
-        assert self.participant == actual, actual
+        assert self.participant == actual
 
     def test_changing_username_returns_the_new_username(self):
         returned = self.participant.change_username('  foo bar baz  ')
@@ -262,20 +262,20 @@ class Tests(Harness):
         self.make_participant('user2')
         self.participant.set_tip_to('user2', expected)
         actual = self.participant.get_tip_to('user2')
-        assert actual == expected, actual
+        assert actual == expected
 
     def test_getting_tips_not_made(self):
         expected = Decimal('0.00')
         self.make_participant('user2')
         actual = self.participant.get_tip_to('user2')
-        assert actual == expected, actual
+        assert actual == expected
 
 
     # id
 
     def test_participant_gets_a_long_id(self):
         actual = type(self.make_participant('alice').id)
-        assert actual == long, actual
+        assert actual == long
 
 
     # set_tip_to - stt
@@ -286,20 +286,20 @@ class Tests(Harness):
         alice.set_tip_to('bob', '1.00')
 
         actual = alice.get_tip_to('bob')
-        assert actual == Decimal('1.00'), actual
+        assert actual == Decimal('1.00')
 
     def test_stt_returns_a_Decimal_and_a_boolean(self):
         alice = self.make_participant('alice', last_bill_result='')
         self.make_participant('bob')
         actual = alice.set_tip_to('bob', '1.00')
-        assert actual == (Decimal('1.00'), True), actual
+        assert actual == (Decimal('1.00'), True)
 
     def test_stt_returns_False_for_second_time_tipper(self):
         alice = self.make_participant('alice', last_bill_result='')
         self.make_participant('bob')
         alice.set_tip_to('bob', '1.00')
         actual = alice.set_tip_to('bob', '2.00')
-        assert actual == (Decimal('2.00'), False), actual
+        assert actual == (Decimal('2.00'), False)
 
     def test_stt_doesnt_allow_self_tipping(self):
         alice = self.make_participant('alice', last_bill_result='')
@@ -337,7 +337,7 @@ class Tests(Harness):
 
         expected = Decimal('3.00')
         actual = bob.get_dollars_receiving()
-        assert actual == expected, actual
+        assert actual == expected
 
 
     def test_gdr_includes_tips_from_accounts_with_a_working_card(self):
@@ -347,7 +347,7 @@ class Tests(Harness):
 
         expected = Decimal('3.00')
         actual = bob.get_dollars_receiving()
-        assert actual == expected, actual
+        assert actual == expected
 
     def test_gdr_ignores_tips_from_accounts_with_no_card_on_file(self):
         alice = self.make_participant('alice', last_bill_result=None)
@@ -356,7 +356,7 @@ class Tests(Harness):
 
         expected = Decimal('0.00')
         actual = bob.get_dollars_receiving()
-        assert actual == expected, actual
+        assert actual == expected
 
     def test_gdr_ignores_tips_from_accounts_with_a_failing_card_on_file(self):
         alice = self.make_participant('alice', last_bill_result="Fail!")
@@ -365,7 +365,7 @@ class Tests(Harness):
 
         expected = Decimal('0.00')
         actual = bob.get_dollars_receiving()
-        assert actual == expected, actual
+        assert actual == expected
 
 
     def test_gdr_includes_tips_from_whitelisted_accounts(self):
@@ -378,7 +378,7 @@ class Tests(Harness):
 
         expected = Decimal('3.00')
         actual = bob.get_dollars_receiving()
-        assert actual == expected, actual
+        assert actual == expected
 
     def test_gdr_includes_tips_from_unreviewed_accounts(self):
         alice = self.make_participant( 'alice'
@@ -390,7 +390,7 @@ class Tests(Harness):
 
         expected = Decimal('3.00')
         actual = bob.get_dollars_receiving()
-        assert actual == expected, actual
+        assert actual == expected
 
     def test_gdr_ignores_tips_from_blacklisted_accounts(self):
         alice = self.make_participant( 'alice'
@@ -402,7 +402,7 @@ class Tests(Harness):
 
         expected = Decimal('0.00')
         actual = bob.get_dollars_receiving()
-        assert actual == expected, actual
+        assert actual == expected
 
 
     # get_number_of_backers - gnob
@@ -416,7 +416,7 @@ class Tests(Harness):
         bob.set_tip_to('clancy', '1.00')
 
         actual = clancy.get_number_of_backers()
-        assert actual == 2, actual
+        assert actual == 2
 
 
     def test_gnob_includes_backers_with_a_working_card_on_file(self):
@@ -425,7 +425,7 @@ class Tests(Harness):
         alice.set_tip_to('bob', '3.00')
 
         actual = bob.get_number_of_backers()
-        assert actual == 1, actual
+        assert actual == 1
 
     def test_gnob_ignores_backers_with_no_card_on_file(self):
         alice = self.make_participant('alice', last_bill_result=None)
@@ -433,7 +433,7 @@ class Tests(Harness):
         alice.set_tip_to('bob', '3.00')
 
         actual = bob.get_number_of_backers()
-        assert actual == 0, actual
+        assert actual == 0
 
     def test_gnob_ignores_backers_with_a_failing_card_on_file(self):
         alice = self.make_participant('alice', last_bill_result="Fail!")
@@ -441,7 +441,7 @@ class Tests(Harness):
         alice.set_tip_to('bob', '3.00')
 
         actual = bob.get_number_of_backers()
-        assert actual == 0, actual
+        assert actual == 0
 
 
     def test_gnob_includes_whitelisted_backers(self):
@@ -453,7 +453,7 @@ class Tests(Harness):
         alice.set_tip_to('bob', '3.00')
 
         actual = bob.get_number_of_backers()
-        assert actual == 1, actual
+        assert actual == 1
 
     def test_gnob_includes_unreviewed_backers(self):
         alice = self.make_participant( 'alice'
@@ -464,7 +464,7 @@ class Tests(Harness):
         alice.set_tip_to('bob', '3.00')
 
         actual = bob.get_number_of_backers()
-        assert actual == 1, actual
+        assert actual == 1
 
     def test_gnob_ignores_blacklisted_backers(self):
         alice = self.make_participant( 'alice'
@@ -475,7 +475,7 @@ class Tests(Harness):
         alice.set_tip_to('bob', '3.00')
 
         actual = bob.get_number_of_backers()
-        assert actual == 0, actual
+        assert actual == 0
 
 
     def test_gnob_ignores_backers_where_tip_is_zero(self):
@@ -484,7 +484,7 @@ class Tests(Harness):
         alice.set_tip_to('bob', '0.00')
 
         actual = bob.get_number_of_backers()
-        assert actual == 0, actual
+        assert actual == 0
 
     def test_gnob_looks_at_latest_tip_only(self):
         alice = self.make_participant('alice', last_bill_result='')
@@ -497,7 +497,7 @@ class Tests(Harness):
         alice.set_tip_to('bob', '0.00')
 
         actual = bob.get_number_of_backers()
-        assert actual == 0, actual
+        assert actual == 0
 
 
     # get_age_in_seconds - gais
@@ -506,12 +506,12 @@ class Tests(Harness):
         now = datetime.datetime.now(pytz.utc)
         alice = self.make_participant('alice', claimed_time=now)
         actual = alice.get_age_in_seconds()
-        assert 0 < actual < 1, actual
+        assert 0 < actual < 1
 
     def test_gais_returns_negative_one_if_None(self):
         alice = self.make_participant('alice', claimed_time=None)
         actual = alice.get_age_in_seconds()
-        assert actual == -1, actual
+        assert actual == -1
 
 
     # resolve_unclaimed - ru
@@ -524,16 +524,16 @@ class Tests(Harness):
         unclaimed = BitbucketAccount('1234', {'username': 'alice'})
         stub = Participant.from_username(unclaimed.participant)
         actual = stub.resolve_unclaimed()
-        assert actual == "/on/bitbucket/alice/", actual
+        assert actual == "/on/bitbucket/alice/"
 
     def test_ru_returns_github_url_for_stub_from_github(self):
         unclaimed = GitHubAccount('1234', {'login': 'alice'})
         stub = Participant.from_username(unclaimed.participant)
         actual = stub.resolve_unclaimed()
-        assert actual == "/on/github/alice/", actual
+        assert actual == "/on/github/alice/"
 
     def test_ru_returns_twitter_url_for_stub_from_twitter(self):
         unclaimed = TwitterAccount('1234', {'screen_name': 'alice'})
         stub = Participant.from_username(unclaimed.participant)
         actual = stub.resolve_unclaimed()
-        assert actual == "/on/twitter/alice/", actual
+        assert actual == "/on/twitter/alice/"
