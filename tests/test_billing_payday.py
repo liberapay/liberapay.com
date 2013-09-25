@@ -178,7 +178,7 @@ class TestBillingCharges(TestPaydayBase):
         self.payday.mark_missing_funding()
 
         after = self.fetch_payday()
-        self.assertEqual(after['ncc_missing'], missing_count + 1)
+        self.assertEquals(after['ncc_missing'], missing_count + 1)
 
     def test_mark_charge_failed(self):
         self.payday.start()
@@ -189,7 +189,7 @@ class TestBillingCharges(TestPaydayBase):
             self.payday.mark_charge_failed(cursor)
 
         after = self.fetch_payday()
-        self.assertEqual(after['ncc_failing'], fail_count + 1)
+        self.assertEquals(after['ncc_failing'], fail_count + 1)
 
     def test_mark_charge_success(self):
         self.payday.start()
@@ -200,7 +200,7 @@ class TestBillingCharges(TestPaydayBase):
 
         # verify paydays
         actual = self.fetch_payday()
-        self.assertEqual(actual['ncharges'], 1)
+        self.assertEquals(actual['ncharges'], 1)
 
     @mock.patch('stripe.Charge')
     def test_charge_on_stripe(self, ba):
@@ -225,8 +225,8 @@ class TestBillingCharges(TestPaydayBase):
         expected_fee = Decimal('0.61')
         charge_amount, fee, msg = self.payday.charge_on_balanced(
             self.alice.username, self.BALANCED_ACCOUNT_URI, amount_to_charge)
-        self.assertEqual(charge_amount, amount_to_charge + fee)
-        self.assertEqual(fee, expected_fee)
+        self.assertEquals(charge_amount, amount_to_charge + fee)
+        self.assertEquals(fee, expected_fee)
         self.assertTrue(ba.find.called_with(self.BALANCED_ACCOUNT_URI))
         customer = ba.find.return_value
         self.assertTrue(
@@ -561,7 +561,7 @@ class TestBillingPayday(TestPaydayBase):
         self.payday.zero_out_pending(second_ts_start)
         second_participants = self.payday.get_participants(second_ts_start)
 
-        self.assertEqual(ts_start, second_ts_start)
+        self.assertEquals(ts_start, second_ts_start)
         participants = list(participants)
         second_participants = list(second_participants)
 
