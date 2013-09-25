@@ -219,11 +219,11 @@ class Tests(Harness):
         assert self.participant == actual, actual
 
     def test_changing_username_to_nothing(self):
-        with assert_raises(UsernameIsEmpty):
+        with self.assertRaises(UsernameIsEmpty):
             self.participant.change_username('')
 
     def test_changing_username_to_all_spaces(self):
-        with assert_raises(UsernameIsEmpty):
+        with self.assertRaises(UsernameIsEmpty):
             self.participant.change_username('    ')
 
     def test_changing_username_strips_spaces(self):
