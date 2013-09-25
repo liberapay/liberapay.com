@@ -34,8 +34,8 @@ class TestTipsJson(Harness):
                               , HTTP_AUTHORIZATION='Basic ' + base64.b64encode(api_key + ':')
                                )
 
-        self.assertEquals(response.code, 200)
-        self.assertEquals(len(json.loads(response.body)), 2)
+        assert response.code == 200
+        assert len(json.loads(response.body)) == 2
 
         response = client.post( '/test_tipper/tips.json?also_prune=' + also_prune
                               , json.dumps([{ 'username': 'test_tippee2'
@@ -47,11 +47,11 @@ class TestTipsJson(Harness):
                               , HTTP_AUTHORIZATION='Basic ' + base64.b64encode(api_key + ':')
                                )
 
-        self.assertEquals(response.code, 200)
+        assert response.code == 200
 
         response = client.get('/test_tipper/tips.json', 'test_tipper')
-        self.assertEquals(response.code, 200)
-        self.assertEquals(len(json.loads(response.body)), tippees)
+        assert response.code == 200
+        assert len(json.loads(response.body)) == tippees
 
     def test_get_response(self):
         client = TestClient()
@@ -61,8 +61,8 @@ class TestTipsJson(Harness):
 
         response = client.get('/test_tipper/tips.json', 'test_tipper')
 
-        self.assertEquals(response.code, 200)
-        self.assertEquals(len(json.loads(response.body)), 0) # empty array
+        assert response.code == 200
+        assert len(json.loads(response.body)) == 0 # empty array
 
     def test_get_response_with_tips(self):
         client = TestClient()
@@ -80,14 +80,14 @@ class TestTipsJson(Harness):
 
         response = client.get('/test_tipper/tips.json', 'test_tipper')
 
-        self.assertEquals(response1.code, 200)
-        self.assertEquals(json.loads(response1.body)['amount'], '1.00')
+        assert response1.code == 200
+        assert json.loads(response1.body)['amount'] == '1.00'
 
         data = json.loads(response.body)[0]
 
-        self.assertEquals(response.code, 200)
-        self.assertEquals(data['username'], 'test_tippee1')
-        self.assertEquals(data['amount'], '1.00')
+        assert response.code == 200
+        assert data['username'] == 'test_tippee1'
+        assert data['amount'] == '1.00'
 
     def test_post_bad_platform(self):
         client = TestClient()
@@ -108,7 +108,7 @@ class TestTipsJson(Harness):
                               , HTTP_AUTHORIZATION='Basic ' + base64.b64encode(api_key + ':')
                                )
 
-        self.assertEquals(response.code, 200)
+        assert response.code == 200
 
         resp = json.loads(response.body)
 

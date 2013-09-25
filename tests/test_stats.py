@@ -39,12 +39,12 @@ class TestChartOfReceiving(Harness):
         expected = ([[Decimal('3.00'), 1, Decimal('3.00'), 1.0, Decimal('1')]],
                     1.0, Decimal('3.00'))
         actual = Participant.from_username('bob').get_tip_distribution()
-        self.assertEquals(actual, expected)
+        assert actual == expected
 
     def test_get_tip_distribution_handles_no_tips(self):
         expected = ([], 0.0, Decimal('0.00'))
         actual = Participant.from_username('alice').get_tip_distribution()
-        self.assertEquals(actual, expected)
+        assert actual == expected
 
     def test_get_tip_distribution_handles_multiple_tips(self):
         self.make_participant('carl', last_bill_result='')
@@ -55,7 +55,7 @@ class TestChartOfReceiving(Harness):
             [Decimal('3.00'), 1L, Decimal('3.00'), 0.5, Decimal('0.75')]
         ], 2.0, Decimal('4.00'))
         actual = Participant.from_username('bob').get_tip_distribution()
-        self.assertEquals(actual, expected)
+        assert actual == expected
 
     def test_get_tip_distribution_ignores_bad_cc(self):
         self.make_participant('bad_cc', last_bill_result='Failure!')
@@ -64,7 +64,7 @@ class TestChartOfReceiving(Harness):
         expected = ([[Decimal('1.00'), 1L, Decimal('1.00'), 1, Decimal('1')]],
                     1.0, Decimal('1.00'))
         actual = Participant.from_username('bob').get_tip_distribution()
-        self.assertEquals(actual, expected)
+        assert actual == expected
 
     def test_get_tip_distribution_ignores_missing_cc(self):
         self.make_participant('missing_cc', last_bill_result=None)
@@ -73,7 +73,7 @@ class TestChartOfReceiving(Harness):
         expected = ([[Decimal('1.00'), 1L, Decimal('1.00'), 1, Decimal('1')]],
                     1.0, Decimal('1.00'))
         actual = Participant.from_username('bob').get_tip_distribution()
-        self.assertEquals(actual, expected)
+        assert actual == expected
 
 
 class TestRenderingStatsPage(Harness):

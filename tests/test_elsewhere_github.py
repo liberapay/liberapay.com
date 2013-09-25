@@ -30,7 +30,7 @@ class TestElsewhereGithub(Harness):
             requests.get().status_code = github_status
             requests.get().text = github_content
             response = client.get('/on/github/not-in-the-db/')
-            self.assertEquals(response.code, expected_gittip_response)
+            assert response.code == expected_gittip_response
 
 
     def test_get_user_info_gets_user_info(self):

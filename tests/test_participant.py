@@ -85,12 +85,12 @@ class TestAbsorptions(Harness):
     def test_bob_has_two_dollars_in_tips(self):
         expected = Decimal('2.00')
         actual = Participant.from_username('bob').get_dollars_receiving()
-        self.assertEquals(actual, expected)
+        assert actual == expected
 
     def test_alice_gives_to_bob_now(self):
         expected = Decimal('1.00')
         actual = Participant.from_username('alice').get_tip_to('bob')
-        self.assertEquals(actual, expected)
+        assert actual == expected
 
     def test_deadbeef_is_archived(self):
         actual = self.db.one( "SELECT count(*) FROM absorptions "
@@ -98,7 +98,7 @@ class TestAbsorptions(Harness):
                             , (self.deadbeef_original_username,)
                              )
         expected = 1
-        self.assertEquals(actual, expected)
+        assert actual == expected
 
     def test_alice_doesnt_gives_to_deadbeef_anymore(self):
         expected = Decimal('0.00')
@@ -128,13 +128,13 @@ class TestParticipant(Harness):
     def test_bob_is_singular(self):
         expected = True
         actual = Participant.from_username('bob').IS_SINGULAR
-        self.assertEquals(actual, expected)
+        assert actual == expected
 
     def test_john_is_plural(self):
         expected = True
         self.make_participant('john', number='plural')
         actual = Participant.from_username('john').IS_PLURAL
-        self.assertEquals(actual, expected)
+        assert actual == expected
 
     def test_cant_take_over_claimed_participant_without_confirmation(self):
         bob_twitter = StubAccount('twitter', '2')
@@ -147,7 +147,7 @@ class TestParticipant(Harness):
         Participant.from_username('alice').take_over(bob_twitter, have_confirmation=True)
         expected = Decimal('0.00')
         actual = Participant.from_username('alice').get_dollars_giving()
-        self.assertEquals(actual, expected)
+        assert actual == expected
 
     def test_alice_ends_up_tipping_bob_two_dollars(self):
         carl_twitter = StubAccount('twitter', '3')
@@ -156,7 +156,7 @@ class TestParticipant(Harness):
         Participant.from_username('bob').take_over(carl_twitter, have_confirmation=True)
         expected = Decimal('2.00')
         actual = Participant.from_username('alice').get_tip_to('bob')
-        self.assertEquals(actual, expected)
+        assert actual == expected
 
     def test_bob_ends_up_tipping_alice_two_dollars(self):
         carl_twitter = StubAccount('twitter', '3')
@@ -165,7 +165,7 @@ class TestParticipant(Harness):
         Participant.from_username('bob').take_over(carl_twitter, have_confirmation=True)
         expected = Decimal('2.00')
         actual = Participant.from_username('bob').get_tip_to('alice')
-        self.assertEquals(actual, expected)
+        assert actual == expected
 
     def test_ctime_comes_from_the_older_tip(self):
         carl_twitter = StubAccount('twitter', '3')
@@ -183,7 +183,7 @@ class TestParticipant(Harness):
 
         expected = first.ctime
         actual = self.db.one("SELECT ctime FROM tips ORDER BY ctime LIMIT 1")
-        self.assertEquals(actual, expected)
+        assert actual == expected
 
     def test_connecting_unknown_account_fails(self):
         unknown_account = StubAccount('github', 'jim')
