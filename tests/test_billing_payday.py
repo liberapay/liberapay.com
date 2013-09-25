@@ -373,8 +373,7 @@ class TestBillingPayday(TestPaydayBase):
 
         assert initial_payday['ntippers'] == resulting_payday['ntippers']
         assert initial_payday['ntips'] == resulting_payday['ntips']
-        self.assertEquals(initial_payday['nparticipants'] + 1,
-                      resulting_payday['nparticipants'])
+        assert initial_payday['nparticipants'] + 1 == resulting_payday['nparticipants']
 
     @mock.patch('gittip.models.participant.Participant.get_tips_and_total')
     @mock.patch('gittip.billing.payday.Payday.tip')
@@ -413,12 +412,9 @@ class TestBillingPayday(TestPaydayBase):
         self.payday.charge_and_or_transfer(ts_start, self.alice, tips, total)
         resulting_payday = self.fetch_payday()
 
-        self.assertEquals(initial_payday['ntippers'] + 1,
-                      resulting_payday['ntippers'])
-        self.assertEquals(initial_payday['ntips'] + 2,
-                      resulting_payday['ntips'])
-        self.assertEquals(initial_payday['nparticipants'] + 1,
-                      resulting_payday['nparticipants'])
+        assert initial_payday['ntippers'] + 1 == resulting_payday['ntippers']
+        assert initial_payday['ntips'] + 2 == resulting_payday['ntips']
+        assert initial_payday['nparticipants'] + 1 == resulting_payday['nparticipants']
 
     @mock.patch('gittip.models.participant.Participant.get_tips_and_total')
     @mock.patch('gittip.billing.payday.Payday.charge')
