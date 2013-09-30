@@ -2,7 +2,7 @@ from aspen import Response
 
 [-----------------------------------------------------------------------------]
 
-if user.ANON is None:
+if user.ANON:
     request.redirect('/')
 
 if POST:
