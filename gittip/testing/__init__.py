@@ -106,6 +106,25 @@ class Harness(unittest.TestCase):
 
         return participant
 
+    def make_payday(self, *transfers):
+
+        with self.db.get_cursor() as cursor:
+            last_end = datetime.datetime(year=2012, month=1, day=1)
+            last_end = cursor.one("SELECT ts_end FROM paydays ORDER BY ts_end DESC LIMIT 1", default=last_end)
+            ts_end = last_end + datetime.timedelta(days=7)
+            ts_start = ts_end - datetime.timedelta(hours=1)
+            transfer_volume = Decimal(0)
+            active = set()
+            for i, (f, t, amount) in enumerate(transfers):
+                cursor.run("INSERT INTO transfers (timestamp, tipper, tippee, amount)"
+                              "VALUES (%s, %s, %s, %s)",
+                              (ts_start + datetime.timedelta(seconds=i), f, t, amount))
+                transfer_volume += Decimal(amount)
+                active.add(f)
+                active.add(t)
+            cursor.run("INSERT INTO paydays (ts_start, ts_end, nactive, transfer_volume) VALUES (%s, %s, %s, %s)",
+                    (ts_start, ts_end, len(active), transfer_volume))
+
 
 class GittipPaydayTest(Harness):
 
