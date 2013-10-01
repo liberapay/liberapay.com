@@ -50,11 +50,11 @@ class GoogleProvider(ServiceElsewhere):
         typecheck(self.username, unicode)
 
         # Check to see if we've already imported these details
-        rec = gittip.db.fetchone( "SELECT user_info FROM elsewhere "
-                                  "WHERE platform='google' "
-                                  "AND user_info->'screen_name' = %s"
-                                , (self.username,)
-                                 )
+        rec = gittip.db.one( "SELECT user_info FROM elsewhere "
+                             "WHERE platform='google' "
+                             "AND user_info->'screen_name' = %s"
+                           , (self.username,)
+                            )
         if rec:
             # Use the record we have
             user_info = rec['user_info']
