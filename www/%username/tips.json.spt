@@ -1,0 +1,50 @@
+import re
+from aspen import json, Response
+from gittip.utils import get_participant
+
+callback_pattern = re.compile(r'^[_A-Za-z0-9.]+$')
+
+class BadPlatform(Exception): pass
+
+[-----------------------]
+participant = get_participant(request, restrict=True)
+if user != participant:
+    raise Response(403) # disallow admins
+
+if POST:
+    out = []
+    new_tips = json.loads(body.raw)
+    seen = set()
+    for tip in new_tips:
+        seen.add(tip['username'])
+        one = {"username": tip['username'], "platform": "gittip"}
+        try:
+            if tip['platform'] != 'gittip':
+                raise BadPlatform
+            amount = participant.set_tip_to(tip['username'], tip['amount'])
+        except Exception, exc:
+            amount = "error"
+            one['error'] = exc.__class__.__name__
+        one['amount'] = str(amount[0])
+        out.append(one)
+
+    if qs.get('also_prune', 'false').lower() in ('true', '1', 'yes'):
+        old_tips, __ignored = participant.get_tips_and_total()
+        for tip in old_tips:
+            if tip['tippee'] not in seen:
+                participant.set_tip_to(tip['tippee'], '0.00')
+
+else:
+    tips, total, unclaimed_tips, unclaimed_total = \
+                                           participant.get_giving_for_profile()
+
+    out = []
+    for tip in tips:
+        if tip.amount == 0:
+            continue
+        out.append({ "username": tip.tippee
+                   , "platform": "gittip"
+                   , "amount": str(tip.amount)
+                    })
+
+response.body = out

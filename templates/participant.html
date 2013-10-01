@@ -14,23 +14,23 @@
         {% if g > r and not participant.anonymous %}
             <h2 class="pad-sign">{{ participant.username }} gives</h2>
             <div class="number">
-                {% if user == participant %}
+                {% if user.participant == participant %}
                 $<span class="total-giving">{{ giving }}</span>
                 {% else %}
                 ${{ giving }}
                 {% end %}
             </div>
             <div class="unit pad-sign">per 
-                week{% if r > 0 %}, and receives ${{ receiving }}{% end %}
+                week{% if r > 0 %}, and receives $<span class="total-receiving">{{ receiving }}</span>{% end %}
             </div>
         {% elif r > 0 %}
             <h2 class="pad-sign">{{ participant.username }} receives</h2>
-            <div class="number">${{ receiving }}</div>
+            <div class="number">$<span class="total-receiving">{{ receiving }}</span></div>
             <div class="unit pad-sign">per 
                 week{% if g > 0 %}, and gives 
                 {% if participant.anonymous %}
                 anonymously
-                {% elif user == participant %}
+                {% elif user.participant == participant %}
                 $<span class="total-giving">{{ giving }}</span>
                 {% else %}
                 ${{ giving }}
@@ -55,8 +55,10 @@
     </tr>
 </table>
 
-{% if (participant != user) and participant.accepts_tips %}
+{% if participant.accepts_tips %}
+{% if (user.ANON or (participant != user.participant)) %}
 {% include "participant.tip.html" %}
+{% end %}
 {% end %}
 
 {% block nav %}{% end %}

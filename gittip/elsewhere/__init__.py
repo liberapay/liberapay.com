@@ -1,10 +1,14 @@
+"""This subpackage contains functionality for working with accounts elsewhere.
+"""
+from __future__ import print_function, unicode_literals
+
 from aspen.utils import typecheck
 from psycopg2 import IntegrityError
 
 import gittip
-from gittip.authentication import User
-from gittip.models.participant import Participant
-from gittip.participant import reserve_a_random_username
+from gittip.security.user import User
+from gittip.models.participant import Participant, reserve_a_random_username
+from gittip.models.participant import ProblemChangingUsername
 
 
 ACTIONS = [u'opt-in', u'connect', u'lock', u'unlock']
@@ -16,7 +20,7 @@ def _resolve(platform, username_key, username):
     """Given three unicodes, return a username.
     """
     typecheck(platform, unicode, username_key, unicode, username, unicode)
-    rec = gittip.db.fetchone("""
+    participant = gittip.db.one("""
 
         SELECT participant
           FROM elsewhere
@@ -26,11 +30,11 @@ def _resolve(platform, username_key, username):
     """, (platform, username_key, username,))
     # XXX Do we want a uniqueness constraint on $username_key? Can we do that?
 
-    if rec is None:
+    if participant is None:
         raise Exception( "User %s on %s isn't known to us."
                        % (username, platform)
                         )
-    return rec['participant']
+    return participant
 
 class ServiceElsewhere(object):
 
@@ -134,7 +138,7 @@ class AccountElsewhere(object):
 
 
     def set_is_locked(self, is_locked):
-        gittip.db.execute("""
+        gittip.db.run("""
 
             UPDATE elsewhere
                SET is_locked=%s
@@ -147,17 +151,17 @@ class AccountElsewhere(object):
         """Given a desired username, return a User object.
         """
         self.set_is_locked(False)
-        user = User.from_username(self.participant)  # give them a session
+        user = User.from_username(self.participant)
+        user.sign_in()
         assert not user.ANON, self.participant  # sanity check
         if self.is_claimed:
             newly_claimed = False
         else:
             newly_claimed = True
-            user.set_as_claimed()
+            user.participant.set_as_claimed()
             try:
-                user.change_username(desired_username)
-                user.username = self.username = desired_username
-            except user.ProblemChangingUsername:
+                user.participant.change_username(desired_username)
+            except ProblemChangingUsername:
                 pass
         return user, newly_claimed
 
@@ -165,7 +169,6 @@ class AccountElsewhere(object):
     def upsert(self, user_info):
         """Given a dict, return a tuple.
 
-        Platform is the name of a platform that we support (ASCII blah).
         User_id is an immutable unique identifier for the given user on the
         given platform.  Username is the user's login/username on the given
         platform. It is only used here for logging. Specifically, we don't
@@ -189,13 +192,13 @@ class AccountElsewhere(object):
         # participant we reserved for them is rolled back as well.
 
         try:
-            with gittip.db.get_transaction() as txn:
-                _username = reserve_a_random_username(txn)
-                txn.execute( "INSERT INTO elsewhere "
-                             "(platform, user_id, participant) "
-                             "VALUES (%s, %s, %s)"
-                           , (self.platform, self.user_id, _username)
-                            )
+            with gittip.db.get_cursor() as cursor:
+                _username = reserve_a_random_username(cursor)
+                cursor.execute( "INSERT INTO elsewhere "
+                                "(platform, user_id, participant) "
+                                "VALUES (%s, %s, %s)"
+                              , (self.platform, self.user_id, _username)
+                               )
         except IntegrityError:
             pass
 
@@ -215,20 +218,20 @@ class AccountElsewhere(object):
             user_info[k] = unicode(v)
 
 
-        username = gittip.db.fetchone("""
+        username = gittip.db.one("""
 
             UPDATE elsewhere
                SET user_info=%s
              WHERE platform=%s AND user_id=%s
          RETURNING participant
 
-        """, (user_info, self.platform, self.user_id))['participant']
+        """, (user_info, self.platform, self.user_id))
 
 
         # Get a little more info to return.
         # =================================
 
-        rec = gittip.db.fetchone("""
+        rec = gittip.db.one("""
 
             SELECT claimed_time, balance, is_locked
               FROM participants
@@ -243,7 +246,7 @@ class AccountElsewhere(object):
 
 
         return ( username
-               , rec['claimed_time'] is not None
-               , rec['is_locked']
-               , rec['balance']
+               , rec.claimed_time is not None
+               , rec.is_locked
+               , rec.balance
                 )

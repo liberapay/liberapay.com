@@ -49,4 +49,28 @@ ol {
 ol li {
     list-style: outside decimal;
 }
+ol.upper-roman li { list-style-type: upper-roman; }
+ol.upper-alpha li { list-style-type: upper-alpha; }
+ol.decimal li { list-style-type: decimal; }
+ol.lower-roman li { list-style-type: lower-roman; }
+ol.lower-alpha li { list-style-type: lower-alpha; }
 
+
+textarea {
+    @include border-radius(3px);
+    border: 1px solid $brown;
+}
+
+input {
+    &[type="text"], &[type="number"], &[type="password"] {
+        @include border-radius(3px);
+        height: 22px;
+        border: 1px solid $brown;
+        padding: 0 4px;
+        line-height: 22px;
+    }
+
+    &[type="number"] {
+        text-align: right;
+    }
+}

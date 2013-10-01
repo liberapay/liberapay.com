@@ -46,13 +46,13 @@ def get_user_info(username):
         A dictionary containing bitbucket specific information for the user.
     """
     typecheck(username, unicode)
-    rec = gittip.db.fetchone( "SELECT user_info FROM elsewhere "
-                              "WHERE platform='bitbucket' "
-                              "AND user_info->'username' = %s"
-                            , (username,)
-                             )
+    rec = gittip.db.one( "SELECT user_info FROM elsewhere "
+                         "WHERE platform='bitbucket' "
+                         "AND user_info->'username' = %s"
+                       , (username,)
+                        )
     if rec is not None:
-        user_info = rec['user_info']
+        user_info = rec
     else:
         url = "%s/users/%s?pagelen=100"
         user_info = requests.get(url % (BASE_API_URL, username))

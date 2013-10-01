@@ -2,11 +2,12 @@ from __future__ import unicode_literals
 
 import balanced
 import mock
-from nose.tools import assert_equals, assert_raises
 
 import gittip
-from gittip import authentication, billing
+from gittip import billing
+from gittip.security import authentication
 from gittip.testing import Harness
+from gittip.models.participant import Participant
 
 
 class TestBillingBase(Harness):
@@ -16,7 +17,7 @@ class TestBillingBase(Harness):
 
     def setUp(self):
         super(Harness, self).setUp()
-        self.make_participant('alice')
+        self.alice = self.make_participant('alice')
 
 
 class TestBalancedCard(Harness):
@@ -51,7 +52,7 @@ class TestBalancedCard(Harness):
         }
         card = billing.BalancedCard(self.balanced_account_uri)
         actual = dict([(name, card[name]) for name in expected])
-        assert_equals(actual, expected)
+        assert actual == expected
 
     @mock.patch('balanced.Account')
     def test_balanced_card_gives_class_name_instead_of_KeyError(self, ba):
@@ -66,7 +67,7 @@ class TestBalancedCard(Harness):
 
         expected = mock.Mock.__name__
         actual = card['nothing'].__class__.__name__
-        assert_equals(actual, expected)
+        assert actual == expected
 
 
 class TestStripeCard(Harness):
@@ -97,7 +98,7 @@ class TestStripeCard(Harness):
         }
         card = billing.StripeCard('deadbeef')
         actual = dict([(name, card[name]) for name in expected])
-        assert_equals(actual, expected)
+        assert actual == expected
 
     @mock.patch('stripe.Customer')
     def test_stripe_card_gives_empty_string_instead_of_KeyError(self, sc):
@@ -107,7 +108,7 @@ class TestStripeCard(Harness):
 
         expected = ''
         actual = billing.StripeCard('deadbeef')['nothing']
-        assert_equals(actual, expected)
+        assert actual == expected
 
 
 class TestBalancedBankAccount(Harness):
@@ -131,7 +132,7 @@ class TestBalancedBankAccount(Harness):
         assert b_b_account.find.called_with(self.balanced_bank_account_uri)
 
         assert b_b_b_account.is_setup
-        with assert_raises(IndexError):
+        with self.assertRaises(IndexError):
             b_b_b_account.__getitem__('invalid')
 
     @mock.patch('gittip.billing.balanced.Account')
@@ -152,7 +153,7 @@ class TestBalancedBankAccount(Harness):
 
         expected = "Here I am!"
         actual = b_b_b_account['account_uri']
-        assert actual == expected, actual
+        assert actual == expected
 
     def test_balanced_bank_account_not_setup(self):
         bank_account = billing.BalancedBankAccount(None)
@@ -191,7 +192,7 @@ class TestBillingAssociate(TestBillingBase):
         user = authentication.User.from_username('alice')
         # participant in db should be updated to reflect the error message of
         # last update
-        assert user.last_bill_result == error_message
+        assert user.participant.last_bill_result == error_message
         assert find.call_count
 
     @mock.patch('gittip.billing.balanced.Account.find')
@@ -213,23 +214,23 @@ class TestBillingAssociate(TestBillingBase):
         user = authentication.User.from_username('alice')
 
         # participant in db should be updated
-        assert user.last_ach_result == ''
+        assert user.participant.last_ach_result == ''
 
     @mock.patch('gittip.billing.balanced.Account.find')
     def test_associate_bank_account_invalid(self, find):
         ex = balanced.exc.HTTPError('errrrrror')
         find.return_value.add_bank_account.side_effect = ex
         find.return_value.uri = self.balanced_account_uri
+
         billing.associate( u"bank account"
                          , 'alice'
                          , self.balanced_account_uri
                          , self.balanced_destination_uri
                           )
 
-        user = authentication.User.from_username('alice')
-
         # participant in db should be updated
-        assert user.last_ach_result == 'errrrrror'
+        alice = Participant.from_username('alice')
+        assert alice.last_ach_result == 'errrrrror'
 
 
 class TestBillingClear(TestBillingBase):
@@ -250,7 +251,7 @@ class TestBillingClear(TestBillingBase):
              WHERE username=%s
 
         """
-        gittip.db.execute(MURKY, ('alice',))
+        gittip.db.run(MURKY, ('alice',))
 
         billing.clear(u"credit card", 'alice', self.balanced_account_uri)
 
@@ -259,8 +260,8 @@ class TestBillingClear(TestBillingBase):
         assert not invalid_card.save.call_count
 
         user = authentication.User.from_username('alice')
-        assert not user.last_bill_result
-        assert user.balanced_account_uri
+        assert not user.participant.last_bill_result
+        assert user.participant.balanced_account_uri
 
     @mock.patch('gittip.billing.balanced.Account')
     def test_clear_bank_account(self, b_account):
@@ -281,7 +282,7 @@ class TestBillingClear(TestBillingBase):
              WHERE username=%s
 
         """
-        gittip.db.execute(MURKY, ('alice',))
+        gittip.db.run(MURKY, ('alice',))
 
         billing.clear(u"bank account", 'alice', 'something')
 
@@ -290,22 +291,22 @@ class TestBillingClear(TestBillingBase):
         assert not invalid_ba.save.call_count
 
         user = authentication.User.from_username('alice')
-        assert not user.last_ach_result
-        assert user.balanced_account_uri
+        assert not user.participant.last_ach_result
+        assert user.participant.balanced_account_uri
 
 
 class TestBillingStoreError(TestBillingBase):
     def test_store_error_stores_bill_error(self):
         billing.store_error(u"credit card", "alice", "cheese is yummy")
-        rec = gittip.db.fetchone("select * from participants where "
-                                 "username='alice'")
+        rec = gittip.db.one("select * from participants where "
+                            "username='alice'")
         expected = "cheese is yummy"
-        actual = rec['last_bill_result']
-        assert actual == expected, actual
+        actual = rec.last_bill_result
+        assert actual == expected
 
     def test_store_error_stores_ach_error(self):
         for message in ['cheese is yummy', 'cheese smells like my vibrams']:
             billing.store_error(u"bank account", 'alice', message)
-            rec = gittip.db.fetchone("select * from participants "
-                                     "where username='alice'")
-            assert rec['last_ach_result'] == message
+            rec = gittip.db.one("select * from participants "
+                                "where username='alice'")
+            assert rec.last_ach_result == message

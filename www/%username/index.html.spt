@@ -1,0 +1,112 @@
+"""Show information about a single participant. It might be you!
+"""
+import locale
+
+from aspen import json, Response
+from aspen.utils import to_age
+from gittip.utils import get_participant, wrap, plural
+from gittip.models import community
+
+MAKING = "making the world better by"
+LONG_STATEMENT = 256
+
+def _clip(text, n):
+    text = text.replace('\n', ' ')
+    if len(text) > n:
+        text = text[:(n - 4)] + '...'
+    return text
+
+[-----------------------------------------------------------------------------]
+
+participant = get_participant(request, restrict=False)
+locked = False
+tip_or_pledge = "tip"
+hero = "Profile"
+title = participant.username      # used in the title tag
+username = participant.username   # used in footer shared with on/$platform/
+                                  # pages
+github_account, twitter_account, google_account, bitbucket_account, \
+                    bountysource_account = participant.get_accounts_elsewhere()
+long_statement = len(participant.statement) > LONG_STATEMENT
+communities = [c for c in community.get_list_for(username) if c.is_member]
+if participant.number == 'singular':
+    I_AM = "I am"
+    I_M = "I'm"
+    MY = "My"
+else:
+    I_AM = "We are"
+    I_M = "We're"
+    MY = "Our"
+
+[-----------------------------------------------------------------------------]
+{% extends templates/profile.html %}
+{% block head %}
+    <link rel="payment" type="text/html" title="Give weekly gift on Gittip" href="https://www.gittip.com/{{ username }}/" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="og:url" content="https://www.gittip.com/{{ username }}/" />
+    <meta name="og:type" content="website" />
+    <meta name="og:title" content="{{ participant.get_og_title() }}" />
+    {% if participant.statement %}
+    <meta name="og:description" content="{{ _clip(I_AM + " " + MAKING + " " + escape(participant.statement), 200) }}" />
+    {% else %}
+    <meta name="og:description" content="Gittip is a weekly gift exchange." />
+    {% end %}
+    <meta name="og:image" content="{{ participant.get_img_src() }}" />
+{% end %}
+{% block page %}
+
+{% if user.participant == participant %}
+    <div id="profile-edit">
+        {% include "templates/profile-edit.html" %}
+    </div>
+{% else %}
+    <div class="group">
+        {% if participant.statement %}
+            <div class="{% if long_statement %}col1{% else %}col0{% end %}">
+            <h2>Statement</h2>
+            <div class="statement">
+                {{ I_AM }}
+                {{ MAKING }} {{ wrap(participant.statement) }}
+            </div>
+            </div>
+            <div class="{% if long_statement %}col2{% else %}col0{% end %}">
+        {% else %}
+            <div class="col0">
+        {% end %}
+            {% include "templates/team-listing.html" %}
+
+            {% if communities %}
+            <h2>Communities</h2>
+            <ul class="community memberships">
+                {% for community in communities %}
+                <li>
+                    <a href="/for/{{ community.slug }}/">{{ community.name }}</a>
+                    {% set nothers = community.nmembers - 1 %}
+                    <div class="fine">with {{ nothers }} other{{ plural(nothers) }}</div>
+                </li>
+                {% end %}
+            </ul>
+            {% end %}
+
+            <h2>Funding Goal</h2>
+            <div class="goal">
+                {% if participant.goal is None %}
+                {{ I_M }} grateful for gifts, but don't have a specific funding
+                goal.
+                {% elif participant.goal == 0 %}
+                {{ I_M }} here as a patron.
+                {% elif participant.goal < 0 %}
+                {{ I_M }} here as a patron, and politely decline to receive
+                gifts.
+                {% else %}
+                {{ MY }} goal is to receive
+                ${{ locale.format("%.2f", participant.goal, grouping=True) }}
+                per week on Gittip.
+                {% end %}
+                </div>
+
+            {% include "templates/connected-accounts.html" %}
+        </div>
+    </div>
+{% end %}
+{% end %}

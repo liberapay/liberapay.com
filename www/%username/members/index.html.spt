@@ -1,0 +1,65 @@
+"""Show information about a single participant. It might be you!
+"""
+from gittip.utils import get_participant
+
+[-----------------------------------------------------------------------------]
+
+participant = team = get_participant(request, restrict=False)
+if not team.show_as_team(user):
+  request.redirect('../')
+locked = False
+tip_or_pledge = "tip"
+hero = "Team Members"
+title = team.username     # used in the title tag
+username = team.username  # used in footer shared with on/$platform/
+                                  # pages
+github_account, twitter_account, bitbucket_account, bountysource_account = \
+                                                  team.get_accounts_elsewhere()
+
+[-----------------------------------------------------------------------------]
+{% extends templates/profile.html %}
+
+{% block page %}
+<script>$(document).ready(Gittip.team.init);</script>
+
+<div id="team" class="col0">
+  <table>
+      <tr>
+        <th></th>
+        <th>Member</th>
+        <th class="figure">Last<br />Week ($)</th>
+        <th class="figure">This<br />Week ($)</th>
+        <th class="figure">Team<br />Balance ($)</th>
+        <th class="figure">This<br />Week (%)</th>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td class="figure last_week"></td>
+        <td class="figure this_week"></td>
+        <td class="figure balance">
+          {{ participant.get_dollars_receiving() }}
+        </td>
+        <td class="figure percentage"></td>
+      </tr>
+      {% if user.participant == team %}
+      <tr>
+        <td colspan="6" class="lookup">
+          <div id="lookup-container">
+            <form>
+              <input name="csrf_token" type="hidden" value="{{ cookie['csrf_token'].value }}" />
+              <input tabindex="1" id="query"
+                     autocomplete="off"
+                     placeholder="Enter a Gittip username"
+                 />&nbsp;<button type="submit"
+                                 tabindex="2">Add</button>
+              <ul id="lookup-results"></ul>
+            </form>
+          </div>
+        </td>
+      </tr>
+      {% end %}
+      <tbody id="members"></tbody>
+  </table>
+</div>
+{% end %}

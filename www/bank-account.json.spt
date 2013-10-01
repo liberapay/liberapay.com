@@ -1,0 +1,83 @@
+"""
+"""
+import balanced
+import urllib
+
+import gittip
+from aspen import Response
+from gittip import billing
+
+base_url = gittip.canonical_scheme + "://" + gittip.canonical_host
+
+[-----------------------------------------------------------------------------]
+
+if user.ANON:
+    raise Response(404)
+
+request.allow('POST')
+
+out = {}
+redirect_to = base_url + '/bank-account-complete.html'
+
+if body.get('action') == 'delete':
+    billing.clear(u"bank account", user.participant.username, user.participant.balanced_account_uri)
+elif body.get('action') == 'store-error':
+    billing.store_error(u"bank account", user.participant.username, body['msg'])
+else:
+
+    # Get a balanced account.
+    # =======================
+    # This will create one if user.balanced_account_uri is None.
+
+    balanced_account = billing.get_balanced_account( user.participant.username
+                                                   , user.participant.balanced_account_uri
+                                                    )
+
+
+    # Ensure the user is a merchant.
+    # ==============================
+    # This will possibly fail with 400 if formatted badly, or 300 if we cannot
+    # identify the merchant.
+
+    out = {}
+    if 'merchant' not in balanced_account.roles:
+        merchant_keys = ['type', 'street_address', 'postal_code', 'region',
+                         'dob', 'name', 'phone_number']
+        merchant_data = dict((key, body.get(key)) for key in merchant_keys)
+
+        try:
+            balanced_account.add_merchant(merchant_data)  # HTTP under here
+        except balanced.exc.MoreInformationRequiredError as mirerr:
+            out = { 'problem': 'More Info Needed'
+                  , 'error': 'Unable to verify your identity'
+                  , 'redirect_uri': mirerr.redirect_uri + '?' +
+                        urllib.urlencode([('redirect_uri', redirect_to)]) + '&'
+                   }
+        except balanced.exc.HTTPError as err:
+            out = {"problem": "Problem", "error": err.message}
+
+
+    # No errors? Great! Let's add the bank account.
+    # =============================================
+
+    if not out:
+
+        # Clear out any old ones first.
+        billing.clear( u"bank account"
+                     , user.participant.username
+                     , balanced_account.uri
+                      )
+
+        bank_account_uri = body['bank_account_uri']
+        try:
+            billing.associate( u"bank account"
+                             , user.participant.username
+                             , balanced_account
+                             , bank_account_uri
+                              )
+        except balanced.exc.HTTPError as err:
+            out = {"problem": "Problem", "error": err.message}
+        else:
+            out = {"problem": ""}
+
+response.body = out

@@ -18,18 +18,18 @@
 
     {% else %}
 
-        {% set my_tip = user.get_tip_to(participant.username) %}
+        {% set my_tip = user.participant.get_tip_to(participant.username) %}
         {% set tippee = participant.username %}
         <h2>Your Weekly {{ "Pledge" if path.decoded.startswith('/on/') else "Gift" }}</h2>
         {% include "my-tip.html" %}
 
-        {% if user.last_bill_result is None %}
+        {% if user.participant.last_bill_result is None %}
 
         <div id="payment-prompt" class="help{% if my_tip > 0 %} needed{% end %}">
         Back your gift with a <a href="/credit-card.html"
             class="highlight">credit card</a> to make sure it goes
         through!</div>
-        {% elif user.last_bill_result %}
+        {% elif user.participant.last_bill_result %}
         <div id="payment-prompt" class="help really-needed">Fix your <a
             href="/credit-card.html" class="highlight">credit
             card</a> to make sure your gifts go through!</div>

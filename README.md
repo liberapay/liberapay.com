@@ -1,5 +1,8 @@
 This is [Gittip](https://www.gittip.com/), a weekly gift exchange.
 
+Ensure that you have `en_US.UTF-8` locale installed when working on a
+non-Windows machine. To find out how, see
+http://stackoverflow.com/q/14547631/321731.
 
 Quick Start
 ===========
@@ -18,18 +21,24 @@ $ make test-db
 $ make test
 ```
 
+We also include a
+[Vagrantfile](https://github.com/gittip/www.gittip.com/blob/master/Vagrantfile).
+
 
 Table of Contents
 =================
 
  - [Installation](#installation)
   - [Dependencies](#dependencies)
-  - [Building and Launching](#building-and-launching)
+  - [Building](#building)
+  - [Launching](#launching)
   - [Help!](#help)
  - [Configuration](#configuration)
+ - [Modifying CSS](#modifying-css)
  - [Testing](#testing-)
  - [Setting up a Database](#local-database-setup)
  - [API](#api)
+  - [Implementations](#api-implementations) 
  - [Glossary](#glossary)
  - [See Also](#see-also)
 
@@ -50,9 +59,29 @@ The only hard requirement on your system is [Python
 All library dependencies are bundled in the repo (under `vendor/`) and by
 default the app is configured to use a Postgres instance in the cloud.
 
+Building
+--------
 
-Building and Launching
-----------------------
+Create a local environment configuration file:
+
+    $ make local.env
+
+By default, Gittip is configured to use a postgres instance in the cloud. If you
+want to use your local instance instead, just set the ```DATABASE_URL``` in local.env
+to ```postgres://username@host/gittip```
+
+Next, setup your environment:
+
+    $ make env
+
+Add the necessary schemas and insert dummy data into postgres:
+
+    $ make schema
+    $ make data
+
+
+Launching
+---------
 
 Once you've installed Python and Postgres and set up a database, you can use
 make to build and launch Gittip:
@@ -192,6 +221,21 @@ should change the `DATABASE_URL` using the following format:
     DATABASE_URL=postgres://<username>@localhost/<database name>
 
 
+Modifying CSS
+=============
+
+We use SCSS, with files stored in `scss/`. Out of the box, your Gittip
+installation will use the stylesheet from production, per the `GITTIP_CSS_HREF`
+setting in `local.env`. If you want to modify styles then you should install
+[sass](http://sass-lang.com/) and change `GITTIP_CSS_HREF` in your `local.env`
+to `/assets/-/gittip.css`. That will route to
+`www/assets/%version/gittip.css.spt`, which is a simplate that shells out to
+`sass` to dynamically generate the stylesheet on each request. The `-` prevents
+HTTP caching. Sass does its own caching on disk so it's performant enough for
+development (in production we route through a CDN so the origin only gets hit
+once per new version).
+
+
 Testing [![Testing](https://secure.travis-ci.org/gittip/www.gittip.com.png)](http://travis-ci.org/gittip/www.gittip.com)
 =======
 
@@ -234,25 +278,21 @@ Now, you need to setup the database.
 Local Database Setup
 --------------------
 
-For advanced development and testing databse changes, you need to configure
-authentication and set up a gittip database.
-
-You need [Postgres](http://www.postgresql.org/download/). We're working
-on [porting](https://github.com/gittip/www.gittip.com/issues?milestone=28&state=open)
-Gittip from raw SQL to a declarative ORM with SQLAlchemy. After that we may be
-able to remove the hard dependency on Postgres so you can use SQLite in
-development, but for now you need Postgres.
-
-The best version of Postgres to use is 9.2, because that's what is being
-run in production at Heroku. Version 9.1 is the second-best, because Gittip
-uses the [hstore](http://www.postgresql.org/docs/9.2/static/hstore.html)
-extension for unstructured data, and that isn't bundled with earlier
-versions than 9.1. If you're on a Mac, maybe try out Heroku's
+For advanced development and testing database changes, you need a local
+installation of [Postgres](http://www.postgresql.org/download/). The best
+version of Postgres to use is 9.1.9, because that's what we're using in
+production at Heroku. Gittip uses the
+[hstore](http://www.postgresql.org/docs/9.1/static/hstore.html) extension for
+unstructured data, and that isn't bundled with earlier versions than 9.1. If
+you're on a Mac, maybe try out Heroku's
 [Postgres.app](http://www.postgresql.org/download/). If installing using a
 package manager, you may need several packages. On Ubuntu and Debian, the
-required packages are: postgresql (base), libpq5-dev (includes headers needed
-to build the psycopg2 Python library), and postgresql-contrib (includes
-hstore).
+required packages are: `postgresql` (base), `libpq5-dev`/`libpq-dev`, (includes
+headers needed to build the `psycopg2` Python library), `postgresql-contrib`
+(includes hstore), `python-dev` (includes Python header files for `psycopg2`).
+
+If you are receiving issues from `psycopg2`, please [ensure their its are
+met](http://initd.org/psycopg/docs/faq.html#problems-compiling-and-deploying-psycopg2).
 
 
 ### Authentication
@@ -285,19 +325,10 @@ Reload Postgres using pg_ctl for changes to take effect.
 
 Once Postgres is set up, run:
 
-    $ ./makedb.sh
+    $ make schema
 
-That will create a new gittip superuser and a gittip database (with UTC as the
-default timezone), populated with structure from ./schema.sql. To change the
-name of the database and/or user, pass them on the command line (you'll
-need to modify the `DATABASE_URL` environment variable as well; see
-[Configuration](#configuration) below):
-
-    $ ./makedb.sh mygittip myuser
-
-If you only pass one argument it will be used for both dbname and owner role:
-
-    $ ./makedb.sh gittip-test
+That will populate the database named by DATABASE_URL with the Gittip schema,
+per ./schema.sql.
 
 The schema for the Gittip.com database is defined in schema.sql. It should be
 considered append-only. The idea is that this is the log of DDL that
@@ -305,12 +336,14 @@ we've run against the production database. You should never change
 commands that have already been run. New DDL will be (manually) run against the
 production database as part of deployment.
 
+
 ### Example data
 
 The gittip database created in the last step is empty. To populate it with
 some fake data, so that more of the site is functional, run this command:
 
-    $ make fake_data
+    $ make data
+
 
 ### Notes for Mac OS X users
 
@@ -334,58 +367,103 @@ take effect. Once restarted, the test suite should pass for you. These changes
 will not persist after a reboot, so you will have to set these again after
 a reboot.
 
+
 API
 ===
 
-The Gittip API is comprised of these endpoints:
+The Gittip API is comprised of these four endpoints:
 
- - **[/about/paydays.json](https://www.gittip.com/about/paydays.json)**
-   ([source](https://github.com/gittip/www.gittip.com/tree/master/www/about/paydays.json))&mdash;Returns an array of
-    objects, one per week, showing aggregate numbers over time. The
-    [charts](https://www.gittip.com/about/charts.html) page uses this.
+**[/about/paydays.json](https://www.gittip.com/about/paydays.json)**
+([source](https://github.com/gittip/www.gittip.com/tree/master/www/about/paydays.json))&mdash;<i>public</i>&mdash;Returns
+an array of objects, one per week, showing aggregate numbers over time. The
+[charts](https://www.gittip.com/about/charts.html) page uses this.
 
- - **[/about/stats.json](https://www.gittip.com/about/stats.json)**
-   ([source](https://github.com/gittip/www.gittip.com/tree/master/www/about/stats))&mdash;Returns an object giving a
-    point-in-time snapshot of Gittip. The
-    [stats](https://www.gittip.com/about/stats.html) page displays the same
-    info.
+**[/about/stats.json](https://www.gittip.com/about/stats.json)**
+([source](https://github.com/gittip/www.gittip.com/tree/master/www/about/stats))&mdash;<i>public</i>&mdash;Returns
+an object giving a point-in-time snapshot of Gittip. The
+[stats](https://www.gittip.com/about/stats.html) page displays the same info.
 
- - **/`%username`/public.json**
-   ([example](https://www.gittip.com/whit537/public.json),
-    [source](https://github.com/gittip/www.gittip.com/tree/master/www/%25username/public.json))&mdash;Returns
-    an object with these keys:
+**/`%username`/public.json**
+([example](https://www.gittip.com/whit537/public.json),
+[source](https://github.com/gittip/www.gittip.com/tree/master/www/%25username/public.json))&mdash;<i>public</i>&mdash;Returns an object with these keys:
 
-    - "receiving"&mdash;an estimate of the amount the given participant will
-      receive this week
+  - "receiving"&mdash;an estimate of the amount the given participant will
+    receive this week
 
-    - "my_tip"&mdash;logged-in user's tip to the Gittip participant in
-      question; possible values are:
+  - "my_tip"&mdash;logged-in user's tip to the Gittip participant in
+    question; possible values are:
 
-        - `undefined` (key not present)&mdash;there is no logged-in user
-        - "self"&mdash;logged-in user is the participant in question
-        - `null`&mdash;user has never tipped this participant
-        - "0.00"&mdash;user used to tip this participant
-        - "3.00"&mdash;user tips this participant the given amount
-        <br><br>
+      - `undefined` (key not present)&mdash;there is no logged-in user
+      - "self"&mdash;logged-in user is the participant in question
+      - `null`&mdash;user has never tipped this participant
+      - "0.00"&mdash;user used to tip this participant
+      - "3.00"&mdash;user tips this participant the given amount
+      <br><br>
 
-    - "goal"&mdash;funding goal of the given participant; possible values are:
+  - "goal"&mdash;funding goal of the given participant; possible values are:
 
-        - `undefined` (key not present)&mdash;participant is a patron (or has 0 as the goal)
-        - `null`&mdash;participant is grateful for gifts, but doesn't have a specific funding goal
-        - "100.00"&mdash;participant's goal is to receive the given amount per week
-        <br><br>
+      - `undefined` (key not present)&mdash;participant is a patron (or has 0 as the goal)
+      - `null`&mdash;participant is grateful for gifts, but doesn't have a specific funding goal
+      - "100.00"&mdash;participant's goal is to receive the given amount per week
+      <br><br>
 
-    - "elsewhere"&mdash;participant's connected accounts elsewhere; returns an object with these keys:
+  - "elsewhere"&mdash;participant's connected accounts elsewhere; returns an object with these keys:
 
-        - "bitbucket"&mdash;participant's Bitbucket account; possible values are:
-            - `undefined` (key not present)&mdash;no Bitbucket account connected
-            - `https://bitbucket.org/api/1.0/users/%bitbucket_username`
-        - "github"&mdash;participant's GitHub account; possible values are:
-            - `undefined` (key not present)&mdash;no GitHub account connected
-            - `https://api.github.com/users/%github_username`
-        - "twitter"&mdash;participant's Twitter account; possible values are:
-            - `undefined` (key not present)&mdash;no Twitter account connected
-            - `https://api.twitter.com/1.1/users/show.json?id=%twitter_immutable_id&include_entities=1`
+      - "bitbucket"&mdash;participant's Bitbucket account; possible values are:
+          - `undefined` (key not present)&mdash;no Bitbucket account connected
+          - `https://bitbucket.org/api/1.0/users/%bitbucket_username`
+      - "github"&mdash;participant's GitHub account; possible values are:
+          - `undefined` (key not present)&mdash;no GitHub account connected
+          - `https://api.github.com/users/%github_username`
+      - "twitter"&mdash;participant's Twitter account; possible values are:
+          - `undefined` (key not present)&mdash;no Twitter account connected
+          - `https://api.twitter.com/1.1/users/show.json?id=%twitter_immutable_id&include_entities=1`
+
+
+**/`%username`/tips.json**
+([source](https://github.com/gittip/www.gittip.com/tree/master/www/%25username/tips.json))&mdash;<i>private</i>&mdash;Responds
+to `GET` with an array of objects representing your current tips. `POST` the
+same structure back in order to update tips in bulk (be sure to set
+`Content-Type` to `application/json` instead of
+`application/x-www-form-urlencoded`). You can `POST` a partial array to update
+a subset of your tips. The response to a `POST` will be only the subset you
+updated. If the `amount` is `"error"` then there will also be an `error`
+attribute with a one-word error code. If you include an `also_prune` key in the
+querystring (not the body!) with a value of `yes`, `true`, or `1`, then any
+tips not in the array you `POST` will be zeroed out.
+
+NOTE: The amounts must be encoded as a string (rather than a number).
+Additionally, currently, the only supported platform is 'gittip'.
+
+This endpoint requires authentication. Look for your API key on your [profile
+page](https://www.gittip.com/about/me.html), and pass it as the basic auth
+username. E.g.:
+
+```
+curl https://www.gittip.com/foobar/tips.json \
+    -u API_KEY: \
+    -X POST \
+    -d'[{"username":"bazbuz", "platform":"gittip", "amount": "1.00"}]' \
+    -H"Content-Type: application/json"
+```
+
+API Implementations
+-------------------
+
+Below are some projects that use the Gittip APIs, that can serve as inspiration
+for your project!
+
+ - [Drupal: Gittip](https://drupal.org/project/gittip)&mdash;Includes a Gittip
+   giving field type to let you implement the Khan academy model for users on
+   your Drupal site.
+
+ - [Node.js: Node-Gittip](https://npmjs.org/package/gittip) (also see [Khan
+   Academy's setup](http://ejohn.org/blog/gittip-at-khan-academy/))
+
+
+ - [Ruby: gratitude](https://github.com/JohnKellyFerguson/gratitude): A ruby gem that wraps the Gittip API (currently in development and not feature complete).
+ 
+ - [WordPress: WP-Gittip](https://github.com/daankortenbach/WP-Gittip)
 
 
 Glossary
@@ -459,3 +537,11 @@ and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
  - [LoveMachine](http://web.archive.org/web/20110214110248/http://sendlove.us/trial/faq.php) - "the cool new employee recognition system" (supposedly came out of Linden Lab)
  - [See.Me](https://www.see.me/) - sustainable crowdfunding for artists
  - [NoiseTrade](http://www.noisetrade.com/) - band mailing lists + tips
+ - [YouTube Nonprofit Program](http://www.youtube.com/nonprofits) - puts donate buttons on your vids
+ - [Generous](http://genero.us/) - Pay-what-you-want platform
+ - [FundAnything](http://fundanything.com/) - Kickstarter knock-off, I guess?
+ - [ShareTribe](https://www.sharetribe.com/) - Create your own community marketplace
+ - [Subbable](https://subbable.com/) - What John and Hank Green wanted (cf. [#737](https://github.com/gittip/www.gittip.com/issues/737))
+ - [Pitch In](http://pitchinbox.com/) - Widget-centric project-based funding campaigns
+ - [Binpress](http://www.binpress.com/) - Binpress is the marketplace for commercial open-source projects.
+ - [TubeStart](https://www.tubestart.com/) - a crowdfunding platform dedicated exclusively to YouTube creators

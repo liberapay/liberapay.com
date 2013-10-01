@@ -1,7 +1,8 @@
+from __future__ import print_function, unicode_literals
+
 import json
 import datetime
 from decimal import Decimal
-from nose.tools import assert_equal
 
 import pytz
 from gittip.testing import Harness
@@ -22,7 +23,7 @@ class Tests(Harness):
 
         data = json.loads(TestClient().get('/bob/public.json').body)
 
-        assert_equal(data['receiving'], '1.00')
+        assert data['receiving'] == '1.00'
 
     def test_anonymous_does_not_get_my_tip(self):
         alice = self.make_participant('alice', last_bill_result='')
@@ -32,7 +33,7 @@ class Tests(Harness):
 
         data = json.loads(TestClient().get('/bob/public.json').body)
 
-        assert_equal(data.has_key('my_tip'), False)
+        assert data.has_key('my_tip') == False
 
     def test_anonymous_gets_giving(self):
         alice = self.make_participant('alice', last_bill_result='')
@@ -42,45 +43,33 @@ class Tests(Harness):
 
         data = json.loads(TestClient().get('/alice/public.json').body)
 
-        assert_equal(data['giving'], '1.00')
+        assert data['giving'] == '1.00'
 
     def test_anonymous_gets_null_giving_if_user_anonymous(self):
-        alice = self.make_participant('alice', last_bill_result='')
+        alice = self.make_participant( 'alice'
+                                     , last_bill_result=''
+                                     , anonymous=True
+                                      )
         self.make_participant('bob')
-
-        alice.anonymous = True
         alice.set_tip_to('bob', '1.00')
-
         data = json.loads(TestClient().get('/alice/public.json').body)
 
-        assert_equal(data['giving'], None)
+        assert data['giving'] == None
 
     def test_anonymous_does_not_get_goal_if_user_regifts(self):
-        alice = self.make_participant('alice', last_bill_result='')
-
-        alice.goal = 0
-
+        self.make_participant('alice', last_bill_result='', goal=0)
         data = json.loads(TestClient().get('/alice/public.json').body)
-
-        assert_equal(data.has_key('goal'), False)
-
-
+        assert data.has_key('goal') == False
 
     def test_anonymous_gets_null_goal_if_user_has_no_goal(self):
-        alice = self.make_participant('alice', last_bill_result='')
-
+        self.make_participant('alice', last_bill_result='')
         data = json.loads(TestClient().get('/alice/public.json').body)
-
-        assert_equal(data['goal'], None)
+        assert data['goal'] == None
 
     def test_anonymous_gets_user_goal_if_set(self):
-        alice = self.make_participant('alice', last_bill_result='')
-
-        alice.goal = Decimal('1.00')
-
+        self.make_participant('alice', last_bill_result='', goal=1)
         data = json.loads(TestClient().get('/alice/public.json').body)
-
-        assert_equal(data['goal'], '1.00')
+        assert data['goal'] == '1.00'
 
     def test_authenticated_user_gets_their_tip(self):
         alice = self.make_participant('alice', last_bill_result='')
@@ -92,8 +81,8 @@ class Tests(Harness):
 
         data = json.loads(raw)
 
-        assert_equal(data['receiving'], '1.00')
-        assert_equal(data['my_tip'], '1.00')
+        assert data['receiving'] == '1.00'
+        assert data['my_tip'] == '1.00'
 
     def test_authenticated_user_doesnt_get_other_peoples_tips(self):
         alice = self.make_participant('alice', last_bill_result='')
@@ -109,8 +98,8 @@ class Tests(Harness):
 
         data = json.loads(raw)
 
-        assert_equal(data['receiving'], '16.00')
-        assert_equal(data['my_tip'], '1.00')
+        assert data['receiving'] == '16.00'
+        assert data['my_tip'] == '1.00'
 
     def test_authenticated_user_gets_zero_if_they_dont_tip(self):
         self.make_participant('alice', last_bill_result='')
@@ -123,8 +112,8 @@ class Tests(Harness):
 
         data = json.loads(raw)
 
-        assert_equal(data['receiving'], '3.00')
-        assert_equal(data['my_tip'], '0.00')
+        assert data['receiving'] == '3.00'
+        assert data['my_tip'] == '0.00'
 
     def test_authenticated_user_gets_self_for_self(self):
         alice = self.make_participant('alice', last_bill_result='')
@@ -136,5 +125,5 @@ class Tests(Harness):
 
         data = json.loads(raw)
 
-        assert_equal(data['receiving'], '3.00')
-        assert_equal(data['my_tip'], 'self')
+        assert data['receiving'] == '3.00'
+        assert data['my_tip'] == 'self'

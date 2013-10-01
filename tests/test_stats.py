@@ -1,14 +1,13 @@
+from __future__ import print_function, unicode_literals
+
 from datetime import datetime
 from decimal import Decimal
 
-from aspen.utils import utcnow
 from mock import patch
-from nose.tools import assert_equals
 
 from gittip import wireup
 from gittip.billing.payday import Payday
-from gittip.models import Tip
-from gittip.participant import Participant
+from gittip.models.participant import Participant
 from gittip.testing import Harness, load_simplate
 from gittip.testing.client import TestClient
 
@@ -22,11 +21,11 @@ class TestCommaize(Harness):
 
     def test_commaize_commaizes(self):
         actual = self.commaize(1000.0)
-        assert actual == "1,000", actual
+        assert actual == "1,000"
 
     def test_commaize_commaizes_and_obeys_decimal_places(self):
         actual = self.commaize(1000, 4)
-        assert actual == "1,000.0000", actual
+        assert actual == "1,000.0000"
 
 
 class TestChartOfReceiving(Harness):
@@ -36,54 +35,45 @@ class TestChartOfReceiving(Harness):
             self.make_participant(participant, last_bill_result='')
 
     def test_get_tip_distribution_handles_a_tip(self):
-        Participant(u'alice').set_tip_to('bob', '3.00')
+        Participant.from_username('alice').set_tip_to('bob', '3.00')
         expected = ([[Decimal('3.00'), 1, Decimal('3.00'), 1.0, Decimal('1')]],
                     1.0, Decimal('3.00'))
-        actual = Participant(u'bob').get_tip_distribution()
-        assert_equals(actual, expected)
-
-    def test_get_tip_distribution_handles_a_non_standard_amount(self):
-        tip = Tip(tipper='alice', tippee='bob', amount='5.37', ctime=utcnow())
-        self.session.add(tip)
-        self.session.commit()
-        expected = ([[-1, 1, Decimal('5.37'), 1.0, Decimal('1')]],
-                    1.0, Decimal('5.37'))
-        actual = Participant(u'bob').get_tip_distribution()
-        assert_equals(actual, expected)
+        actual = Participant.from_username('bob').get_tip_distribution()
+        assert actual == expected
 
     def test_get_tip_distribution_handles_no_tips(self):
         expected = ([], 0.0, Decimal('0.00'))
-        actual = Participant(u'foo').get_tip_distribution()
-        assert_equals(actual, expected)
+        actual = Participant.from_username('alice').get_tip_distribution()
+        assert actual == expected
 
     def test_get_tip_distribution_handles_multiple_tips(self):
         self.make_participant('carl', last_bill_result='')
-        Participant(u'alice').set_tip_to('bob', '1.00')
-        Participant(u'carl').set_tip_to('bob', '3.00')
+        Participant.from_username('alice').set_tip_to('bob', '1.00')
+        Participant.from_username('carl').set_tip_to('bob', '3.00')
         expected = ([
             [Decimal('1.00'), 1L, Decimal('1.00'), 0.5, Decimal('0.25')],
             [Decimal('3.00'), 1L, Decimal('3.00'), 0.5, Decimal('0.75')]
         ], 2.0, Decimal('4.00'))
-        actual = Participant(u'bob').get_tip_distribution()
-        assert_equals(actual, expected)
+        actual = Participant.from_username('bob').get_tip_distribution()
+        assert actual == expected
 
     def test_get_tip_distribution_ignores_bad_cc(self):
         self.make_participant('bad_cc', last_bill_result='Failure!')
-        Participant(u'alice').set_tip_to('bob', '1.00')
-        Participant(u'bad_cc').set_tip_to('bob', '3.00')
+        Participant.from_username('alice').set_tip_to('bob', '1.00')
+        Participant.from_username('bad_cc').set_tip_to('bob', '3.00')
         expected = ([[Decimal('1.00'), 1L, Decimal('1.00'), 1, Decimal('1')]],
                     1.0, Decimal('1.00'))
-        actual = Participant(u'bob').get_tip_distribution()
-        assert_equals(actual, expected)
+        actual = Participant.from_username('bob').get_tip_distribution()
+        assert actual == expected
 
     def test_get_tip_distribution_ignores_missing_cc(self):
         self.make_participant('missing_cc', last_bill_result=None)
-        Participant(u'alice').set_tip_to('bob', '1.00')
-        Participant(u'missing_cc').set_tip_to('bob', '3.00')
+        Participant.from_username('alice').set_tip_to('bob', '1.00')
+        Participant.from_username('missing_cc').set_tip_to('bob', '3.00')
         expected = ([[Decimal('1.00'), 1L, Decimal('1.00'), 1, Decimal('1')]],
                     1.0, Decimal('1.00'))
-        actual = Participant(u'bob').get_tip_distribution()
-        assert_equals(actual, expected)
+        actual = Participant.from_username('bob').get_tip_distribution()
+        assert actual == expected
 
 
 class TestRenderingStatsPage(Harness):
@@ -101,7 +91,7 @@ class TestRenderingStatsPage(Harness):
         mock_datetime.utcnow.return_value = a_thursday
 
         wireup.billing()
-        payday = Payday(self.postgres)
+        payday = Payday(self.db)
         payday.start()
 
         body = self.get_stats_page()
@@ -114,7 +104,7 @@ class TestRenderingStatsPage(Harness):
         a_monday = datetime(2012, 8, 6, 11, 00, 01)
         mock_datetime.utcnow.return_value = a_monday
 
-        payday = Payday(self.postgres)
+        payday = Payday(self.db)
         payday.start()
 
         body = self.get_stats_page()

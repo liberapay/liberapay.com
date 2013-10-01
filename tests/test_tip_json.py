@@ -1,6 +1,7 @@
+from __future__ import print_function, unicode_literals
+
 import datetime
 import json
-from nose.tools import assert_equal
 
 import pytz
 
@@ -37,7 +38,7 @@ class TestTipJson(Harness):
         # Confirm we get back the right amounts.
         first_data = json.loads(response1.body)
         second_data = json.loads(response2.body)
-        assert_equal(first_data['amount'], "1.00")
-        assert_equal(first_data['total_giving'], "1.00")
-        assert_equal(second_data['amount'], "3.00")
-        assert_equal(second_data['total_giving'], "4.00")
+        assert first_data['amount'] == "1.00"
+        assert first_data['total_giving'] == "1.00"
+        assert second_data['amount'] == "3.00"
+        assert second_data['total_giving'] == "4.00"

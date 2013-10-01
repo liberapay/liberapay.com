@@ -15,6 +15,8 @@
 @import "modules";  // bigger than a knob, but used in multiple places
 @import "elements"; // specific HTML elements (body, p, etc.)
 
+@import "lib/dropdown"; // You guessed it... dropdowns.
+
 
 // Page layout styles
 
@@ -25,8 +27,12 @@
 
 @import "history";
 @import "horn";
-@import "open-group"; // a.k.a "team"
+@import "team";
 @import "profile-edit";
+
+@import "widgets/sign_in";
+
+@import "widgets/my_tip";
 
 
 // Group media queries together.

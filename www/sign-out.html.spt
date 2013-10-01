@@ -1,0 +1,33 @@
+from aspen import Response
+
+[-----------------------------------------------------------------------------]
+
+if user.ANON is None:
+    request.redirect('/')
+
+if POST:
+    user.sign_out()
+
+    if 'back_to' in request.body:
+        back_to = request.body['back_to']
+    else:
+        back_to = request.headers.get('referer', '/')
+
+    request.redirect(back_to)
+
+[-----------------------------------------------------------------------------]
+{% extends templates/base.html %}
+{% block heading %}
+    <h2 class="top"><span>Sign out</span></h2>
+{% end %}
+
+{% block box %}
+    <div class="as-content">
+        <h1>Are you sure you wish to sign out?</h1>
+        <form id="sign-out" method="POST">
+            <input name="back_to" type="hidden" value="/" />
+            <input name="csrf_token" type="hidden" value="{{ cookie['csrf_token'].value }}" />
+            <button type="submit">Yes!</button>
+        </form>
+    </div>
+{% end %}

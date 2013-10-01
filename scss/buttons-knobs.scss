@@ -15,50 +15,46 @@ button::-moz-focus-inner {
 
 button {
     background: $gray;
-    border: 3px solid rgba($gray, 0.33);
+    border: 0;
     color: white;
-    font: bold 11px $Helvetica;
-    letter-spacing: 1px;
+    font: bold 12px $Helvetica;
     margin: 0 0 0 1px;
-    padding: 4px 10px;
-    text-transform: uppercase;
+    padding: 5px 8px;
     @include border-radius(3px);
     cursor: pointer;
     display: inline;
+
+    &:disabled {
+        opacity: .5;
+
+        &:hover {
+            background: $gray;
+            cursor: default;
+        }
+    }
 }
 button:hover {
-    border-color: $gray;
-    background: $lighter-gray;
-    color: $gray;
+    background: $darker-gray;
 }
 button.selected {
-    border-color: rgba(#FFF, 0.9);
     background: $green;
-    color: white;
 }
 button.selected:hover, button.selected.drag {
-    border-color: rgba($green, 0.5);
-    background: $lighter-gray;
-    color: $gray;
+    background: $darker-green;
 }
 
 button.join-leave[data-is-member="true"] {
-    background: $light-red
+    font-weight: normal;
+    background: none;
+    color: $red;
+    text-decoration: underline;
+    &:hover {
+        background: $red;
+        color: white;
+        text-decoration: none;
+    }
 }
 
 button.join-leave[data-is-member="false"] {
-    background: $green
+    @extend .selected;
 }
-.my-tip-range {
-    .my-tip-range-range {
-        width: 175px;
-        background: url(/assets/range-bg.png) center repeat-x;
-        margin: 2px;
-        text-align: left;
-    }
-    .my-tip-range-handle {
-        width: 54px;
-        margin: 2px;
-    }
-}
-

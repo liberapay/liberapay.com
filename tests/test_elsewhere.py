@@ -1,4 +1,5 @@
-from __future__ import unicode_literals
+from __future__ import print_function, unicode_literals
+
 from aspen.website import Website
 from gittip.elsewhere.twitter import TwitterAccount
 from gittip.testing import Harness
@@ -13,15 +14,15 @@ class TestAccountElsewhere(Harness):
     def test_opt_in_can_change_username(self):
         account = TwitterAccount("alice", {})
         expected = "bob"
-        actual = account.opt_in("bob")[0].username
-        assert actual == expected, actual
+        actual = account.opt_in("bob")[0].participant.username
+        assert actual == expected
 
     def test_opt_in_doesnt_have_to_change_username(self):
         self.make_participant("bob")
         account = TwitterAccount("alice", {})
         expected = account.participant # A random one.
-        actual = account.opt_in("bob")[0].username
-        assert actual == expected, actual
+        actual = account.opt_in("bob")[0].participant.username
+        assert actual == expected
 
 
     # https://github.com/gittip/www.gittip.com/issues/1042
@@ -34,7 +35,7 @@ class TestAccountElsewhere(Harness):
                                   , action='opt-in'
                                   , then=self.xss
                                    )
-        assert actual == expected, actual
+        assert actual == expected
 
     def test_bitbucket_oauth_url_percent_encodes_then(self):
         expected = '/on/bitbucket/redirect?action=opt-in&then=L29uL3R3aXR0ZXIvIj48aW1nIHNyYz14IG9uZXJyb3I9cHJvbXB0KDEpOz4v'
@@ -42,7 +43,7 @@ class TestAccountElsewhere(Harness):
                                     , action='opt-in'
                                     , then=self.xss
                                      )
-        assert actual == expected, actual
+        assert actual == expected
 
     def test_github_oauth_url_not_susceptible_to_injection_attack(self):
         expected = 'https://github.com/login/oauth/authorize?client_id=cheese&redirect_uri=nuts?data=b3B0LWluLC9vbi90d2l0dGVyLyI+PGltZyBzcmM9eCBvbmVycm9yPXByb21wdCgxKTs+Lw=='
@@ -53,4 +54,4 @@ class TestAccountElsewhere(Harness):
                                  , action='opt-in'
                                  , then=self.xss
                                   )
-        assert actual == expected, actual
+        assert actual == expected

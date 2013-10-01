@@ -9,10 +9,11 @@ Exchanges (moving money between Gittip and the outside world) and transfers
 payday. This event has duration (it's not punctiliar). It is started
 transactionally, and it ends transactionally, and inside of it, exchanges and
 transfers happen transactionally (though the link between our db and our
-processor's db could be tightened up; see #213). These exchanges and transfers
-accrue against a "pending" column in the database. Once the payday event has
-completed successfully, it ends with the pending column being applied to the
-balance column and reset to NULL in a single transaction.
+processor's db could be tightened up; see #213). Exchanges immediately affect
+the participant's balance, but transfers accrue against a "pending" column in
+the database. Once the payday event has completed successfully, it ends with
+the pending column being applied to the balance column and reset to NULL in a
+single transaction.
 
 """
 from __future__ import unicode_literals
@@ -24,10 +25,8 @@ import stripe
 import aspen.utils
 from aspen import log
 from aspen.utils import typecheck
-from gittip.participant import Participant
-from gittip.models.participant import Participant as ORMParticipant
+from gittip.models.participant import Participant
 from psycopg2 import IntegrityError
-from psycopg2.extras import RealDictRow
 
 
 # Set fees and minimums.
@@ -40,7 +39,8 @@ from psycopg2.extras import RealDictRow
 FEE_CHARGE = ( Decimal("0.30")   # $0.30
              , Decimal("0.029")  #  2.9%
               )
-FEE_CREDIT = Decimal("0.25")
+FEE_CREDIT = Decimal("0.00")    # Balanced doesn't actually charge us for this,
+                                # because we were in the door early enough.
 
 MINIMUM_CHARGE = Decimal("9.41")
 MINIMUM_CREDIT = Decimal("10.00")
@@ -71,11 +71,16 @@ def is_whitelisted(participant):
     initial SELECT, so we should never see one here.
 
     """
-    assert participant['is_suspicious'] is not True, participant['username']
-    if participant['is_suspicious'] is None:
-        log("UNREVIEWED: %s" % participant['username'])
+    assert participant.is_suspicious is not True, participant.username
+    if participant.is_suspicious is None:
+        log("UNREVIEWED: %s" % participant.username)
         return False
     return True
+
+
+class NoPayday(Exception):
+    def __str__(self):
+        return "No payday found where one was expected."
 
 
 class Payday(object):
@@ -89,7 +94,7 @@ class Payday(object):
     """
 
     def __init__(self, db):
-        """Takes a gittip.postgres.PostgresManager instance.
+        """Takes a postgres.Postgres instance.
         """
         self.db = db
 
@@ -108,13 +113,10 @@ class Payday(object):
         That's okay.
 
         """
-        for deets in self.get_participants(ts_start):
-            participant = Participant(deets['username'])
-            tips, total = participant.get_tips_and_total( for_payday=for_payday
-                                                        , db=self.db
-                                                         )
+        for participant in self.get_participants(ts_start):
+            tips, total = participant.get_tips_and_total(for_payday=for_payday)
             typecheck(total, Decimal)
-            yield(deets, tips, total)
+            yield(participant, tips, total)
 
 
     def run(self):
@@ -131,10 +133,11 @@ class Payday(object):
         self.zero_out_pending(ts_start)
 
         self.payin(ts_start, self.genparticipants(ts_start, ts_start))
-        self.move_pending_to_balance_for_open_groups()
+        self.move_pending_to_balance_for_teams()
         self.pachinko(ts_start, self.genparticipants(ts_start, ts_start))
         self.clear_pending_to_balance()
         self.payout(ts_start, self.genparticipants(ts_start, False))
+        self.set_nactive(ts_start)
 
         self.end()
 
@@ -159,11 +162,11 @@ class Payday(object):
 
         """
         try:
-            rec = self.db.fetchone("INSERT INTO paydays DEFAULT VALUES "
+            ts_start = self.db.one("INSERT INTO paydays DEFAULT VALUES "
                                    "RETURNING ts_start")
             log("Starting a new payday.")
         except IntegrityError:  # Collision, we have a Payday already.
-            rec = self.db.fetchone("""
+            ts_start = self.db.one("""
 
                 SELECT ts_start
                   FROM paydays
@@ -171,9 +174,7 @@ class Payday(object):
 
             """)
             log("Picking up with an existing payday.")
-        assert rec is not None  # Must either create or recycle a Payday.
 
-        ts_start = rec['ts_start']
         log("Payday started at %s." % ts_start)
         return ts_start
 
@@ -194,7 +195,7 @@ class Payday(object):
                AND claimed_time < %s
 
         """
-        self.db.execute(START_PENDING, (ts_start,))
+        self.db.run(START_PENDING, (ts_start,))
         log("Zeroed out the pending column.")
         return None
 
@@ -203,19 +204,14 @@ class Payday(object):
         """Given a timestamp, return a list of participants dicts.
         """
         PARTICIPANTS = """\
-            SELECT username
-                 , balance
-                 , balanced_account_uri
-                 , stripe_customer_id
-                 , is_suspicious
-                 , type
+            SELECT participants.*::participants
               FROM participants
              WHERE claimed_time IS NOT NULL
                AND claimed_time < %s
                AND is_suspicious IS NOT true
           ORDER BY claimed_time ASC
         """
-        participants = self.db.fetchall(PARTICIPANTS, (ts_start,))
+        participants = self.db.all(PARTICIPANTS, (ts_start,))
         log("Fetched participants.")
         return participants
 
@@ -237,37 +233,33 @@ class Payday(object):
         for i, (participant, foo, bar) in enumerate(participants, start=1):
             if i % 100 == 0:
                 log("Pachinko done for %d participants." % i)
-            if participant['type'] != 'open group':
+            if participant.number != 'plural':
                 continue
-            p = ORMParticipant.query.get(participant['username'])
-            voters, split = p.compute_split()
-            split.reverse()
-            top_receiver = split.pop()
 
-            total = p.balance
-            given = 0
-            log("Pachinko $%s out from %s." % (total, p.username))
+            available = participant.balance
+            log("Pachinko out from %s with $%s." % ( participant.username
+                                                   , available
+                                                    ))
 
             def tip(member, amount):
                 tip = {}
-                tip['tipper'] = p.username
+                tip['tipper'] = participant.username
                 tip['tippee'] = member['username']
                 tip['amount'] = amount
                 tip['claimed_time'] = ts_start
-                self.tip( {"username": p.username}
+                self.tip( participant
                         , tip
                         , ts_start
                         , pachinko=True
                          )
                 return tip['amount']
 
-            for member in split:
-                amount = p.balance * member['weight']
-                amount = amount.quantize(Decimal('0.00'), rounding=ROUND_UP)
-                given += tip(member, amount)
-
-            remainder = total - given
-            tip(top_receiver, remainder)
+            for member in participant.get_members():
+                amount = min(member['take'], available)
+                available -= amount
+                tip(member, amount)
+                if available == 0:
+                    break
 
         log("Did pachinko for %d participants." % i)
 
@@ -291,7 +283,7 @@ class Payday(object):
         money between Gittip accounts.
 
         """
-        short = total - participant['balance']
+        short = total - participant.balance
         if short > 0:
 
             # The participant's Gittip account is short the amount needed to
@@ -314,24 +306,24 @@ class Payday(object):
         self.mark_participant(nsuccessful_tips)
 
 
-    def move_pending_to_balance_for_open_groups(self):
-        """Transfer pending into balance for open groups.
+    def move_pending_to_balance_for_teams(self):
+        """Transfer pending into balance for teams.
 
         We do this because debit_participant operates against balance, not
         pending. This is because credit card charges go directly into balance
         on the first (payin) loop.
 
         """
-        self.db.execute("""\
+        self.db.run("""\
 
             UPDATE participants
                SET balance = (balance + pending)
                  , pending = 0
-             WHERE type='open group'
+             WHERE number='plural'
 
         """)
         # "Moved" instead of "cleared" because we don't also set to null.
-        log("Moved pending to balance for open groups. Ready for pachinko.")
+        log("Moved pending to balance for teams. Ready for pachinko.")
 
 
     def clear_pending_to_balance(self):
@@ -346,7 +338,7 @@ class Payday(object):
 
         """
 
-        self.db.execute("""\
+        self.db.run("""\
 
             UPDATE participants
                SET balance = (balance + pending)
@@ -358,16 +350,30 @@ class Payday(object):
         log("Cleared pending to balance. Ready for payouts.")
 
 
+    def set_nactive(self, ts_start):
+        self.db.run("""\
+
+            UPDATE paydays
+               SET nactive=(
+                    SELECT count(DISTINCT foo.*) FROM (
+                        SELECT tipper FROM transfers WHERE "timestamp" >= %(ts_start)s
+                            UNION
+                        SELECT tippee FROM transfers WHERE "timestamp" >= %(ts_start)s
+                    ) AS foo
+                )
+             WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
+
+        """, {'ts_start': ts_start})
+
     def end(self):
-        rec = self.db.fetchone("""\
+        self.db.one("""\
 
             UPDATE paydays
                SET ts_end=now()
              WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
          RETURNING id
 
-        """)
-        self.assert_one_payday(rec)
+        """, default=NoPayday)
 
 
     # Move money between Gittip participants.
@@ -385,7 +391,7 @@ class Payday(object):
         """
         msg = "$%s from %s to %s%s."
         msg %= ( tip['amount']
-               , participant['username']
+               , participant.username
                , tip['tippee']
                , " (pachinko)" if pachinko else ""
                 )
@@ -409,7 +415,7 @@ class Payday(object):
             log("SKIPPED: %s" % msg)
             return 0
 
-        if not self.transfer(participant['username'], tip['tippee'], \
+        if not self.transfer(participant.username, tip['tippee'], \
                                              tip['amount'], pachinko=pachinko):
 
             # The transfer failed due to a lack of funds for the participant.
@@ -435,8 +441,7 @@ class Payday(object):
                  , amount, Decimal
                  , pachinko, bool
                   )
-        with self.db.get_connection() as conn:
-            cursor = conn.cursor()
+        with self.db.get_cursor() as cursor:
 
             try:
                 self.debit_participant(cursor, tipper, amount)
@@ -450,7 +455,6 @@ class Payday(object):
             else:
                 self.mark_transfer(cursor, amount)
 
-            conn.commit()
             return True
 
 
@@ -468,7 +472,7 @@ class Payday(object):
 
         """
 
-        # This will fail with IntegrityError if the balanced goes below zero.
+        # This will fail with IntegrityError if the balance goes below zero.
         # We catch that and return false in our caller.
         cursor.execute(DECREMENT, (amount, participant))
 
@@ -509,11 +513,11 @@ class Payday(object):
         function and add it to amount to end up with charge_amount.
 
         """
-        typecheck(participant, RealDictRow, amount, Decimal)
+        typecheck(participant, Participant, amount, Decimal)
 
-        username = participant['username']
-        balanced_account_uri = participant['balanced_account_uri']
-        stripe_customer_id = participant['stripe_customer_id']
+        username = participant.username
+        balanced_account_uri = participant.balanced_account_uri
+        stripe_customer_id = participant.stripe_customer_id
 
         typecheck( username, unicode
                  , balanced_account_uri, (unicode, None)
@@ -567,7 +571,7 @@ class Payday(object):
         # Leave money in Gittip to cover their obligations next week (as these
         # currently stand). Also reduce the amount by our service fee.
 
-        balance = participant['balance']
+        balance = participant.balance
         assert balance is not None, balance # sanity check
         amount = balance - total
 
@@ -584,7 +588,7 @@ class Payday(object):
                 also_log = " ($%s balance - $%s in obligations)"
                 also_log %= (balance, total)
             log("Minimum payout is $%s. %s is only due $%s%s."
-               % (MINIMUM_CREDIT, participant['username'], amount, also_log))
+               % (MINIMUM_CREDIT, participant.username, amount, also_log))
             return      # Participant owed too little.
 
         if not is_whitelisted(participant):
@@ -603,7 +607,7 @@ class Payday(object):
         else:
             also_log = "$%s" % amount
         msg = "Crediting %s %d cents (%s - $%s fee = $%s) on Balanced ... "
-        msg %= (participant['username'], cents, also_log, fee, credit_amount)
+        msg %= (participant.username, cents, also_log, fee, credit_amount)
 
 
         # Try to dance with Balanced.
@@ -611,15 +615,15 @@ class Payday(object):
 
         try:
 
-            balanced_account_uri = participant['balanced_account_uri']
+            balanced_account_uri = participant.balanced_account_uri
             if balanced_account_uri is None:
                 log("%s has no balanced_account_uri."
-                    % participant['username'])
+                    % participant.username)
                 return  # not in Balanced
 
             account = balanced.Account.find(balanced_account_uri)
             if 'merchant' not in account.roles:
-                log("%s is not a merchant." % participant['username'])
+                log("%s is not a merchant." % participant.username)
                 return  # not a merchant
 
             account.credit(cents)
@@ -630,7 +634,7 @@ class Payday(object):
             error = err.message
             log(msg + "failed: %s" % error)
 
-        self.record_credit(credit_amount, fee, error, participant['username'])
+        self.record_credit(credit_amount, fee, error, participant.username)
 
 
     def charge_on_balanced(self, username, balanced_account_uri, amount):
@@ -736,8 +740,7 @@ class Payday(object):
 
         """
 
-        with self.db.get_connection() as connection:
-            cursor = connection.cursor()
+        with self.db.get_cursor() as cursor:
 
             if error:
                 last_bill_result = error
@@ -771,9 +774,6 @@ class Payday(object):
             cursor.execute(RESULT, (last_bill_result, amount, username))
 
 
-            connection.commit()
-
-
     def record_credit(self, amount, fee, error, username):
         """Given a Bunch of Stuff, return None.
 
@@ -790,12 +790,11 @@ class Payday(object):
         credit = -amount  # From Gittip's POV this is money flowing out of the
                           # system.
 
-        with self.db.get_connection() as connection:
-            cursor = connection.cursor()
+        with self.db.get_cursor() as cursor:
 
             if error:
                 last_ach_result = error
-                amount = Decimal('0.00')
+                credit = fee = Decimal('0.00')  # ensures balance won't change
                 self.mark_ach_failed(cursor)
             else:
                 last_ach_result = ''
@@ -826,30 +825,26 @@ class Payday(object):
                                    , username
                                     ))
 
-            connection.commit()
-
 
     def record_transfer(self, cursor, tipper, tippee, amount):
-        RECORD = """\
+        cursor.run("""\
 
           INSERT INTO transfers
                       (tipper, tippee, amount)
                VALUES (%s, %s, %s)
 
-        """
-        cursor.execute(RECORD, (tipper, tippee, amount))
+        """, (tipper, tippee, amount))
 
 
     def mark_missing_funding(self):
-        STATS = """\
+        self.db.one("""\
 
             UPDATE paydays
                SET ncc_missing = ncc_missing + 1
              WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
          RETURNING id
 
-        """
-        self.assert_one_payday(self.db.fetchone(STATS))
+        """, default=NoPayday)
 
 
     def mark_charge_failed(self, cursor):
@@ -862,7 +857,7 @@ class Payday(object):
 
         """
         cursor.execute(STATS)
-        self.assert_one_payday(cursor.fetchone())
+        assert cursor.fetchone() is not None
 
     def mark_charge_success(self, cursor, amount, fee):
         STATS = """\
@@ -876,23 +871,21 @@ class Payday(object):
 
         """
         cursor.execute(STATS, (amount, fee))
-        self.assert_one_payday(cursor.fetchone())
+        assert cursor.fetchone() is not None
 
 
     def mark_ach_failed(self, cursor):
-        STATS = """\
+        cursor.one("""\
 
             UPDATE paydays
                SET nach_failing = nach_failing + 1
              WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
          RETURNING id
 
-        """
-        cursor.execute(STATS)
-        self.assert_one_payday(cursor.fetchone())
+        """, default=NoPayday)
 
     def mark_ach_success(self, cursor, amount, fee):
-        STATS = """\
+        cursor.one("""\
 
             UPDATE paydays
                SET nachs = nachs + 1
@@ -901,13 +894,11 @@ class Payday(object):
              WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
          RETURNING id
 
-        """
-        cursor.execute(STATS, (-amount, fee))
-        self.assert_one_payday(cursor.fetchone())
+        """, (-amount, fee), default=NoPayday)
 
 
     def mark_transfer(self, cursor, amount):
-        STATS = """\
+        cursor.one("""\
 
             UPDATE paydays
                SET ntransfers = ntransfers + 1
@@ -915,13 +906,11 @@ class Payday(object):
              WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
          RETURNING id
 
-        """
-        cursor.execute(STATS, (amount,))
-        self.assert_one_payday(cursor.fetchone())
+        """, (amount,), default=NoPayday)
 
 
     def mark_pachinko(self, cursor, amount):
-        STATS = """\
+        cursor.one("""\
 
             UPDATE paydays
                SET npachinko = npachinko + 1
@@ -929,13 +918,11 @@ class Payday(object):
              WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
          RETURNING id
 
-        """
-        cursor.execute(STATS, (amount,))
-        self.assert_one_payday(cursor.fetchone())
+        """, (amount,), default=NoPayday)
 
 
     def mark_participant(self, nsuccessful_tips):
-        STATS = """\
+        self.db.one("""\
 
             UPDATE paydays
                SET nparticipants = nparticipants + 1
@@ -944,18 +931,6 @@ class Payday(object):
              WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
          RETURNING id
 
-        """
-        self.assert_one_payday( self.db.fetchone( STATS
-                                           , ( 1 if nsuccessful_tips > 0 else 0
-                                             , nsuccessful_tips  # XXX bug?
-                                              )
-                                            )
-                               )
-
-
-    def assert_one_payday(self, payday):
-        """Given the result of a payday stats update, make sure it's okay.
-        """
-        assert payday is not None
-        payday = list(payday)
-        assert len(payday) == 1, payday
+        """, ( 1 if nsuccessful_tips > 0 else 0
+             , nsuccessful_tips  # XXX bug?
+              ), default=NoPayday)

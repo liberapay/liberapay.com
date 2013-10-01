@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+# This script gets run by heroku-buildpack-python during deployment.
+
+
+indent() {
+    sed -u 's/^/       /'
+}
+
+
+
+# Install SASS.
+# =============
+# Adapted from https://github.com/abhishekmunie/heroku-buildpack-static-css/blo
+#                        b/d5879d74e615bb25db0ed3d780dba71def661b0b/bin/compile
+
+echo "-----> Installing SASS..."
+mkdir /app/.gem
+gem install sass --no-rdoc --no-ri --install-dir /app/.gem | indent
+
+
+# Set up environment variables.
+# =============================
+# This is done with a script in .profile.d/:
+#
+#   https://devcenter.heroku.com/articles/profiled
+
+mkdir -p .profile.d
+cat << EOF > .profile.d/gittip-sass.sh
+export PATH=/app/.gem/bin:$PATH
+export GEM_PATH=/app/.gem:$GEM_PATH
+EOF

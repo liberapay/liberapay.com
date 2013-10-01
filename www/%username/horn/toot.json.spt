@@ -1,0 +1,16 @@
+from aspen import Response
+from gittip import db
+
+[--------------------------------]
+
+if user.ANON:
+    raise Response(400)
+tooter = user.participant.username
+tootee = path['username']
+toot = body['toot'].strip()
+if len(toot) > 140 or len(toot) < 1:
+    raise Response(400)
+db.run( "INSERT INTO toots (tooter, tootee, toot) VALUES (%s, %s, %s)"
+      , (tooter, tootee, toot)
+       )
+response.code = 204

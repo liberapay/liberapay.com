@@ -1,0 +1,50 @@
+"""Save a payment method token (balanced_account_uri) for a user.
+
+When the user fills out the payment details form in the UI, we send the new
+info to Balanced (using the balanced.js library). Balanced always gives us a
+single-use token in return, provided that the credit card info validated. This
+present script is called next. It takes the token and tries to associate it with
+a Balanced account object (creating one as needed).
+
+"""
+from aspen import Response
+from gittip import billing
+from gittip.utils import mixpanel
+
+[-----------------------------------------------------------------------------]
+
+if user.ANON:
+    raise Response(404)
+
+request.allow('POST')
+out = {}
+
+if body.get('action') == 'delete':
+    billing.clear( u"credit card"
+                 , user.participant.username
+                 , user.participant.balanced_account_uri
+                  )
+elif body.get('action') == 'store-error':
+    billing.store_error(u"credit card", user.participant.username, body['msg'])
+else:
+
+    # Associate the single-use token representing the credit card details (we
+    # call it "card_uri" here because that's how Balanced refers to it).
+    # Possible error codes would be 409 (this card cannot be associated with
+    # this account in this case).
+
+    card_uri = body['card_uri']
+
+    error = billing.associate( u"credit card"
+                             , user.participant.username
+                             , user.participant.balanced_account_uri
+                             , card_uri
+                              )
+
+    if error:
+        out = {"problem": "Problem", "error": error}
+    else:
+        out = {"problem": ""}
+    out["first_time"] = user.participant.last_bill_result is None
+
+response.body = out

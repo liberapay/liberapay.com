@@ -1,0 +1,25 @@
+from aspen import json
+from gittip import db
+
+[---]
+
+response.body = db.all("""
+
+    SELECT amount
+      FROM (SELECT DISTINCT ON (tipper, tippee)
+                   amount
+              FROM tips
+              JOIN participants p ON p.username = tipper
+              JOIN participants p2 on p2.username = tippee
+             WHERE p.last_bill_result = ''
+               AND p2.claimed_time IS NOT NULL
+               AND NOT (p.is_suspicious IS true)
+               AND NOT (p2.is_suspicious IS true)
+               AND amount > 0
+          GROUP BY tipper, tippee, mtime, amount
+          ORDER BY tipper, tippee, mtime DESC
+                  ) AS foo
+     WHERE amount > 0
+  ORDER BY amount
+
+""", back_as=dict)

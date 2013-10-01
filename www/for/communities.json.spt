@@ -1,0 +1,35 @@
+from aspen import Response
+from gittip.models import community
+
+[----------------------]
+
+if POST:
+
+    # name
+    name = body['name']
+    if community.name_pattern.match(name) is None:
+        raise Response(400)
+
+    # slug
+    slug = community.slugize(name)
+
+    # is_member
+    is_member = body['is_member']
+    if is_member not in ('true', 'false'):
+        raise Response(400)
+    is_member = is_member == 'true'
+
+    # delegate
+    user.participant.insert_into_communities(is_member, name, slug)
+
+elif GET:
+    response.headers["Access-Control-Allow-Origin"] = "*"
+
+communities = []
+
+if not user.ANON:
+    communities = community.get_list_for(user.participant.username)
+
+response.body = { "threshold": community.NMEMBERS_THRESHOLD
+                , "communities": communities
+                 }

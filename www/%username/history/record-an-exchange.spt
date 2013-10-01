@@ -1,0 +1,39 @@
+from decimal import Decimal, InvalidOperation
+from aspen import Response
+
+import gittip
+from gittip.utils import get_participant
+
+[---------------------------------------------]
+
+if not user.ADMIN:
+    raise Response(404)
+
+if not POST:
+    raise Response(405)
+
+participant = get_participant(request)
+try:
+    amount = Decimal(body['amount'])
+    fee = Decimal(body['fee'])
+except InvalidOperation:
+    raise Response(400)
+note = body['note'].strip()
+if not note:
+    raise Response(400)
+
+
+with gittip.db.get_cursor() as cursor:
+    params = (amount, fee, participant.username, user.participant.username, \
+                                                                          note)
+    SQL = "INSERT INTO exchanges " \
+          "(amount, fee, participant, recorder, note) " \
+          "VALUES (%s, %s, %s, %s, %s)"
+    cursor.execute(SQL, params)
+
+    SQL = "UPDATE participants SET balance = balance + %s WHERE username=%s"
+    cursor.execute(SQL, (amount, participant.username))
+
+request.redirect('/%s/history/' % participant.username)
+
+[---------------------------------------------] text/plain

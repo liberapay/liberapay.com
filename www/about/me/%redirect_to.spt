@@ -1,0 +1,5 @@
+[---]
+if user.ANON:
+    request.redirect('/')
+request.redirect(u'/' + user.participant.username + u'/' + path['redirect_to'])
+^L text/plain

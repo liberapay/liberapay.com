@@ -687,3 +687,228 @@ CREATE TABLE toots
                                      ON UPDATE CASCADE ON DELETE RESTRICT
 , toot              text            NOT NULL
  );
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/issues/1085
+
+BEGIN;
+
+    -- Create an api_keys table to track all api_keys a participant has
+    -- created over time.
+    CREATE TABLE api_keys
+    ( id                serial                      PRIMARY KEY
+    , ctime             timestamp with time zone    NOT NULL
+    , mtime             timestamp with time zone    NOT NULL
+                                                    DEFAULT CURRENT_TIMESTAMP
+    , participant       text                        NOT NULL
+                                                    REFERENCES participants
+                                                    ON UPDATE CASCADE
+                                                    ON DELETE RESTRICT
+    , api_key        text                        NOT NULL UNIQUE
+     );
+
+
+    --
+    ALTER TABLE participants ADD COLUMN api_key text DEFAULT NULL;
+
+
+    -- Create a rule to log changes to participant.api_key into api_keys.
+    CREATE RULE log_api_key_changes
+    AS ON UPDATE TO participants
+              WHERE (OLD.api_key IS NULL AND NOT NEW.api_key IS NULL)
+                 OR (NEW.api_key IS NULL AND NOT OLD.api_key IS NULL)
+                 OR NEW.api_key <> OLD.api_key
+                 DO
+        INSERT INTO api_keys
+                    (ctime, participant, api_key)
+             VALUES ( COALESCE (( SELECT ctime
+                                    FROM api_keys
+                                   WHERE participant=OLD.username
+                                   LIMIT 1
+                                 ), CURRENT_TIMESTAMP)
+                    , OLD.username
+                    , NEW.api_key
+                     );
+
+END;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/issues/1085
+
+BEGIN;
+
+    -- Whack identifications.
+    DROP TABLE identifications CASCADE;
+
+
+    -- Create a memberships table. Take is an int between 0 and 1000 inclusive,
+    -- and is the tenths of a percent that the given member is taking from the
+    -- given team. So if my take is 102 for gittip, that means I'm taking 10.2%
+    -- of Gittip's budget. The application layer is responsible for ensuring
+    -- that current takes sum to 1000 or less for a given team. Any shortfall
+    -- is the take for the team itself.
+
+    CREATE TABLE memberships
+    ( id                serial                      PRIMARY KEY
+    , ctime             timestamp with time zone    NOT NULL
+    , mtime             timestamp with time zone    NOT NULL
+                                                    DEFAULT CURRENT_TIMESTAMP
+    , member            text                        NOT NULL
+                                                    REFERENCES participants
+                                                    ON UPDATE CASCADE
+                                                    ON DELETE RESTRICT
+    , team              text                        NOT NULL
+                                                    REFERENCES participants
+                                                    ON UPDATE CASCADE
+                                                    ON DELETE RESTRICT
+    , take              numeric(35,2)               NOT NULL DEFAULT 0.0
+                                                    CONSTRAINT not_negative
+                                                    CHECK (take >= 0)
+    , CONSTRAINT no_team_recursion CHECK (team != member)
+     );
+
+
+    -- Create a current_memberships view.
+    CREATE OR REPLACE VIEW current_memberships AS
+    SELECT DISTINCT ON (member, team) m.*
+               FROM memberships m
+               JOIN participants p1 ON p1.username = member
+               JOIN participants p2 ON p2.username = team
+              WHERE p1.is_suspicious IS NOT TRUE
+                AND p2.is_suspicious IS NOT TRUE
+                AND take > 0
+           ORDER BY member
+                  , team
+                  , mtime DESC;
+
+END;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/issues/1100
+
+ALTER TABLE memberships ADD COLUMN recorder text NOT NULL
+    REFERENCES participants(username) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+-------------------------------------------------------------------------------
+-- Recreate the current_memberships view. It had been including participants
+-- who used to be members but weren't any longer.
+
+CREATE OR REPLACE VIEW current_memberships AS
+SELECT * FROM (
+
+    SELECT DISTINCT ON (member, team) m.*
+               FROM memberships m
+               JOIN participants p1 ON p1.username = member
+               JOIN participants p2 ON p2.username = team
+              WHERE p1.is_suspicious IS NOT TRUE
+                AND p2.is_suspicious IS NOT TRUE
+           ORDER BY member
+                  , team
+                  , mtime DESC
+
+) AS anon WHERE take > 0;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/issues/1100
+
+BEGIN;
+    CREATE TYPE participant_type_ AS ENUM ( 'individual'
+                                          , 'group'
+                                           );
+
+    ALTER TABLE participants ADD COLUMN type_ participant_type_
+        NOT NULL DEFAULT 'individual';
+    ALTER TABLE log_participant_type ADD COLUMN type_ participant_type_
+        NOT NULL DEFAULT 'individual';
+
+    UPDATE participants SET type_='group' WHERE type='group';
+    UPDATE log_participant_type SET type_='group' WHERE type='group';
+
+    DROP RULE log_participant_type ON participants;
+
+    ALTER TABLE participants DROP COLUMN type;
+    ALTER TABLE participants RENAME COLUMN type_ TO type;
+    ALTER TABLE log_participant_type DROP COLUMN type;
+    ALTER TABLE log_participant_type RENAME COLUMN type_ TO type;
+
+    CREATE RULE log_participant_type
+    AS ON UPDATE TO participants
+              WHERE NEW.type <> OLD.type
+                 DO
+        INSERT INTO log_participant_type
+                    (ctime, participant, type)
+             VALUES ( COALESCE (( SELECT ctime
+                                    FROM log_participant_type
+                                   WHERE participant=OLD.username
+                                   LIMIT 1
+                                 ), CURRENT_TIMESTAMP)
+                    , OLD.username
+                    , NEW.type
+                     );
+END;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/issues/659
+
+CREATE TABLE homepage_new_participants();
+CREATE TABLE homepage_top_givers();
+CREATE TABLE homepage_top_receivers();
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/pull/1274
+
+BEGIN;
+    CREATE TYPE participant_number AS ENUM ('singular', 'plural');
+
+    ALTER TABLE participants ADD COLUMN number participant_number
+        NOT NULL DEFAULT 'singular';
+    ALTER TABLE log_participant_type ADD COLUMN number participant_number
+        NOT NULL DEFAULT 'singular';
+
+    UPDATE participants SET number='plural' WHERE type='group';
+    UPDATE log_participant_type SET number='plural' WHERE type='group';
+
+    DROP RULE log_participant_type ON participants;
+
+    ALTER TABLE participants DROP COLUMN type;
+    ALTER TABLE log_participant_type DROP COLUMN type;
+
+    ALTER TABLE log_participant_type RENAME TO log_participant_number;
+
+    CREATE RULE log_participant_number
+    AS ON UPDATE TO participants
+              WHERE NEW.number <> OLD.number
+                 DO
+        INSERT INTO log_participant_number
+                    (ctime, participant, number)
+             VALUES ( COALESCE (( SELECT ctime
+                                    FROM log_participant_number
+                                   WHERE participant=OLD.username
+                                   LIMIT 1
+                                 ), CURRENT_TIMESTAMP)
+                    , OLD.username
+                    , NEW.number
+                     );
+END;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/issues/703
+
+ALTER TABLE paydays
+   ADD COLUMN nactive bigint DEFAULT 0;
+
+UPDATE paydays SET nactive=(
+    SELECT count(DISTINCT foo.*) FROM (
+        SELECT tipper FROM transfers WHERE "timestamp" >= ts_start AND "timestamp" < ts_end
+            UNION
+        SELECT tippee FROM transfers WHERE "timestamp" >= ts_start AND "timestamp" < ts_end
+        ) AS foo
+);

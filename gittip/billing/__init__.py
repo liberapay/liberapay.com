@@ -17,6 +17,7 @@ There are three pieces of information for each participant related to billing:
 
 """
 from __future__ import unicode_literals
+from urllib import quote
 
 import gittip
 import balanced
@@ -33,8 +34,9 @@ def get_balanced_account(username, balanced_account_uri):
 
     # XXX Balanced requires an email address
     # https://github.com/balanced/balanced-api/issues/20
+    # quote to work around https://github.com/gittip/www.gittip.com/issues/781
+    email_address = '{}@gittip.com'.format(quote(username))
 
-    email_address = '{}@gittip.com'.format(username)
 
     if balanced_account_uri is None:
         try:
@@ -49,7 +51,7 @@ def get_balanced_account(username, balanced_account_uri):
                  WHERE username=%s
 
         """
-        gittip.db.execute(BALANCED_ACCOUNT, (account.uri, username))
+        gittip.db.run(BALANCED_ACCOUNT, (account.uri, username))
         account.meta['username'] = username
         account.save()  # HTTP call under here
     else:
@@ -99,7 +101,7 @@ def associate(thing, username, balanced_account_uri, balanced_thing_uri):
         error = ''
     typecheck(error, unicode)
 
-    gittip.db.execute(SQL, (error, username))
+    gittip.db.run(SQL, (error, username))
     return error
 
 
@@ -138,7 +140,7 @@ def clear(thing, username, balanced_account_uri):
          WHERE username=%%s
 
     """ % ("bill" if thing == "credit card" else "ach")
-    gittip.db.execute(CLEAR, (username,))
+    gittip.db.run(CLEAR, (username,))
 
 
 def store_error(thing, username, msg):
@@ -151,7 +153,7 @@ def store_error(thing, username, msg):
          WHERE username=%%s
 
     """ % ("bill" if thing == "credit card" else "ach")
-    gittip.db.execute(ERROR, (msg, username))
+    gittip.db.run(ERROR, (msg, username))
 
 
 # Card
