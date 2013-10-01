@@ -3,13 +3,10 @@
 import datetime
 import decimal
 
-import requests
 from aspen import json, Response, log
 from aspen.utils import to_age, utc
 from gittip import CARDINALS, db
 from gittip.models.participant import Participant
-from gittip.elsewhere import github
-
 [-----------------------------------------------------------------------------]
 
 service = website.elsewhere[path['service']](website, path['username'])
@@ -61,9 +58,10 @@ title = account.service_name
 
     <h2>{{ service.display_name }} has opted out of Gittip.</h2>
 
-    <p>If you are <a href="{{ user_info.get('html_url', '') }}">{{ service.display_name }}</a>
-    on Google, you can unlock your account to allow people to pledge tips to
-    you on Gittip.</p>
+    <p>If you are <a
+    href="{{ user_info.get('html_url', '') }}">{{ service.display_name }}</a>
+    on {{ account.service_name }}, you can unlock your account to allow people
+    to pledge tips to you on Gittip.</p>
 
     <a href="{{ account.oauth_url }}"
         ><button>Unlock</button></a>
