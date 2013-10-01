@@ -10,7 +10,6 @@ import raven
 import psycopg2
 import stripe
 import gittip.utils.mixpanel
-from gittip.elsewhere.google import GoogleProvider
 from gittip.models.community import Community
 from gittip.models.participant import Participant
 from postgres import Postgres
@@ -80,9 +79,7 @@ def nmembers(website):
     website.NMEMBERS_THRESHOLD = community.NMEMBERS_THRESHOLD
 
 def elsewhere_providers(website):
-    website.elsewhere = {
-        'google': GoogleProvider
-    }
+    website.elsewhere = {}
 
 def envvars(website):
 
@@ -110,10 +107,6 @@ def envvars(website):
     website.twitter_access_token = envvar('TWITTER_ACCESS_TOKEN')
     website.twitter_access_token_secret = envvar('TWITTER_ACCESS_TOKEN_SECRET')
     website.twitter_callback = envvar('TWITTER_CALLBACK')
-
-    website.google_client_id = envvar('GOOGLE_CLIENT_ID')
-    website.google_client_secret = envvar('GOOGLE_CLIENT_SECRET')
-    website.google_callback = envvar('GOOGLE_CALLBACK')
 
     website.bountysource_www_host = envvar('BOUNTYSOURCE_WWW_HOST')
     website.bountysource_api_host = envvar('BOUNTYSOURCE_API_HOST')

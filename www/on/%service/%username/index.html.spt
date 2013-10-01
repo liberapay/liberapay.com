@@ -12,30 +12,6 @@ from gittip.elsewhere import github
 
 [-----------------------------------------------------------------------------]
 
-# # Try to load from Google.
-# # =========================
-
-# user_info = google.get_user_info(path['screen_name'])
-
-# # Try to load from Gittip.
-# # ========================
-
-# username = user_info['id']
-# name = user_info.get('displayName')
-# if not name:
-#     name = username
-# url = user_info.get('url')
-
-# account = google.GoogleAccount(user_info['id'], user_info)
-# participant = Participant.query.get(account.participant_id)
-# if account.is_claimed:
-#     request.redirect('/%s/' % participant.id)
-# locked = account.is_locked
-# lock_action = "unlock" if account.is_locked else "lock"
-
-# nbackers = participant.get_number_of_backers()
-# title = username
-
 service = website.elsewhere[path['service']](website, path['username'])
 
 url = ''

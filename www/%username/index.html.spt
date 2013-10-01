@@ -25,7 +25,7 @@ hero = "Profile"
 title = participant.username      # used in the title tag
 username = participant.username   # used in footer shared with on/$platform/
                                   # pages
-github_account, twitter_account, google_account, bitbucket_account, \
+github_account, twitter_account, bitbucket_account, \
                     bountysource_account = participant.get_accounts_elsewhere()
 long_statement = len(participant.statement) > LONG_STATEMENT
 communities = [c for c in community.get_list_for(username) if c.is_member]
