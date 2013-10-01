@@ -40,10 +40,6 @@ def up_minthreads(website):
 website.hooks.startup.insert(0, up_minthreads)
 
 
-website.google_client_id = os.environ['GOOGLE_CLIENT_ID'].decode('ASCII')
-website.google_client_secret = os.environ['GOOGLE_CLIENT_SECRET'].decode('ASCII')
-website.google_callback = os.environ['GOOGLE_CALLBACK'].decode('ASCII')
-
 website.hooks.inbound_early += [ gittip.canonize
                                , gittip.configure_payments
                                , gittip.security.authentication.inbound

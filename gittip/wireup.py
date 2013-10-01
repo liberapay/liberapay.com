@@ -111,6 +111,10 @@ def envvars(website):
     website.twitter_access_token_secret = envvar('TWITTER_ACCESS_TOKEN_SECRET')
     website.twitter_callback = envvar('TWITTER_CALLBACK')
 
+    website.google_client_id = envvar('GOOGLE_CLIENT_ID')
+    website.google_client_secret = envvar('GOOGLE_CLIENT_SECRET')
+    website.google_callback = envvar('GOOGLE_CALLBACK')
+
     website.bountysource_www_host = envvar('BOUNTYSOURCE_WWW_HOST')
     website.bountysource_api_host = envvar('BOUNTYSOURCE_API_HOST')
     website.bountysource_api_secret = envvar('BOUNTYSOURCE_API_SECRET')
