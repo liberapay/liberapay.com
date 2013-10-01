@@ -56,10 +56,10 @@ title = account.service_name
 <div class="col0">
   {% if account.is_locked %}
 
-    <h2>{{ service.display_name }} has opted out of Gittip.</h2>
+    <h2>{{ escape(service.display_name) }} has opted out of Gittip.</h2>
 
     <p>If you are <a
-    href="{{ user_info.get('html_url', '') }}">{{ service.display_name }}</a>
+    href="{{ user_info.get('html_url', '') }}">{{ escape(service.display_name) }}</a>
     on {{ account.service_name }}, you can unlock your account to allow people
     to pledge tips to you on Gittip.</p>
 
@@ -68,14 +68,14 @@ title = account.service_name
 
   {% else %}
     <script>
-        $(document).ready(Gittip.initTipButtons);
+        $(document).ready(Gittip.tips.init);
     </script>
 
-    <h2>{{ service.display_name }} has not joined Gittip.</h2>
+    <h2>{{ escape(service.display_name) }} has not joined Gittip.</h2>
 
     <p>Is this you?
     {% if user.ANON %}
-    <a href="../redirect?username={{ service.username }}">Click
+    <a href="{{ service.oauth_url(website, u'opt-in', username) }}">Click
         here</a> to opt in to Gittip. We never collect money for you until
     you do.
     {% else %}
@@ -94,11 +94,11 @@ title = account.service_name
 
     <h2>Don't like what you see?</h2>
 
-    <p>If you are {{ service.display_name }} you can explicitly opt out of Gittip by
-    locking this account. We don't allow new pledges to locked
+    <p>If you are {{ escape(service.display_name) }} you can explicitly opt out
+    of Gittip by locking this account. We don't allow new pledges to locked
     accounts.</p>
 
-    <a href="{{ account.oauth_url }}"
+    <a href="{{ service.oauth_url(website, u'lock', username) }}"
         ><button>Lock</button></a>
     {% end %}
 
