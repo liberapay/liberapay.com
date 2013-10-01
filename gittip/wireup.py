@@ -79,12 +79,11 @@ def nmembers(website):
     community.NMEMBERS_THRESHOLD = int(os.environ['NMEMBERS_THRESHOLD'])
     website.NMEMBERS_THRESHOLD = community.NMEMBERS_THRESHOLD
 
-<<<<<<< HEAD
 def elsewhere_providers(website):
     website.elsewhere = {
         'google': GoogleProvider
     }
-=======
+
 def envvars(website):
 
     missing_keys = []
@@ -149,4 +148,3 @@ def envvars(website):
 
         aspen.log_dammit("=" * 42)
         raise SystemExit
->>>>>>> master
