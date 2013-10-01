@@ -53,6 +53,7 @@ class MixinElsewhere(object):
         """
         github_account = None
         twitter_account = None
+        google_account = None
         bitbucket_account = None
         bountysource_account = None
 
@@ -64,6 +65,8 @@ class MixinElsewhere(object):
                 github_account = account
             elif account.platform == "twitter":
                 twitter_account = account
+            elif account.platform == "google":
+                google_account = account
             elif account.platform == "bitbucket":
                 bitbucket_account = account
             elif account.platform == "bountysource":
@@ -71,28 +74,6 @@ class MixinElsewhere(object):
             else:
                 raise UnknownPlatform(account.platform)
 
-        return ( github_account
-               , twitter_account
-               , bitbucket_account
-               , bountysource_account
-                )
-
-    def get_accounts_elsewhere(self):
-        github_account = twitter_account = google_account = \
-                                bitbucket_account = bountysource_account = None
-        for account in self.accounts_elsewhere.all():
-            if account.platform == "github":
-                github_account = account
-            elif account.platform == "twitter":
-                twitter_account = account
-            elif account.platform == "bitbucket":
-                bitbucket_account = account
-            elif account.platform == "bountysource":
-                bountysource_account = account
-            elif account.platform == "google":
-                google_account = account
-            else:
-                raise self.UnknownPlatform(account.platform)
         return ( github_account
                , twitter_account
                , google_account
