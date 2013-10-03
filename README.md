@@ -176,7 +176,8 @@ Configuration
 When using `make run`, Gittip's execution environment is defined in a
 `local.env` file, which is not included in the source code repo. If you `make
 run` you'll have one generated for you, which you can then tweak as needed.
-It's a copy of `default_local.env`.
+It's a copy of [default_local.env]
+(https://github.com/gittip/www.gittip.com/blob/master/default_local.env).
 
 The following text explains some of the content of that file:
 
