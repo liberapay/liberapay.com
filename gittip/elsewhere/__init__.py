@@ -13,8 +13,10 @@ from gittip.models.participant import ProblemChangingUsername
 
 ACTIONS = [u'opt-in', u'connect', u'lock', u'unlock']
 
+
 class AuthorizationFailure(Exception):
     pass
+
 
 def _resolve(platform, username_key, username):
     """Given three unicodes, return a username.
@@ -36,7 +38,10 @@ def _resolve(platform, username_key, username):
                         )
     return participant
 
+
 class Platform(object):
+    """This is a base class for third-party platforms we support connecting to.
+    """
 
     def __init__(self, website=None, username=None):
         self.username = username
