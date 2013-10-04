@@ -3,6 +3,7 @@ import logging
 import gittip
 import requests
 from aspen import json, log, Response
+from aspen.http.request import UnicodeWithParams
 from aspen.utils import typecheck
 from gittip.elsewhere import AccountElsewhere, _resolve
 
@@ -45,7 +46,7 @@ def get_user_info(username):
     :returns:
         A dictionary containing bitbucket specific information for the user.
     """
-    typecheck(username, unicode)
+    typecheck(username, (unicode, UnicodeWithParams))
     rec = gittip.db.one( "SELECT user_info FROM elsewhere "
                          "WHERE platform='bitbucket' "
                          "AND user_info->'username' = %s"
