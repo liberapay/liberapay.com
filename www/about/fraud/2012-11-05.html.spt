@@ -118,7 +118,7 @@ for person in suspicious:
         gittip_fees += fee - balanced_fee
 assert total_legit == total_charged - total_withdrawn - gittip_fees - balanced_fees - total_escrowed
 
-nweeks = CARDINALS[((latest.date() - earliest.date()).days / 7) + 1]
+nweeks = CARDINALS[((latest.date() - earliest.date()).days // 7) + 1]
 
 overall = db.one("""
 
