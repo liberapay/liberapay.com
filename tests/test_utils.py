@@ -10,14 +10,14 @@ class Tests(Harness):
 
     def test_get_participant_gets_participant(self):
         expected = TwitterAccount("alice", {}).opt_in("alice")[0].participant
-        request = load_request('/alice/')
+        request = load_request(b'/alice/')
 
         actual = utils.get_participant(request, restrict=False)
         assert actual == expected
 
     def test_get_participant_canonicalizes(self):
         expected, ignored = TwitterAccount("alice", {}).opt_in("alice")
-        request = load_request('/Alice/')
+        request = load_request(b'/Alice/')
 
         with self.assertRaises(Response) as cm:
             utils.get_participant(request, restrict=False)
