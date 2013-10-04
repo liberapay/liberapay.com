@@ -10,7 +10,10 @@ import raven
 import psycopg2
 import stripe
 import gittip.utils.mixpanel
+from gittip.elsewhere import PlatformRegistry
+from gittip.elsewhere.twitter import Twitter
 from gittip.models.community import Community
+from gittip.models.account_elsewhere import AccountElsewhere
 from gittip.models.participant import Participant
 from postgres import Postgres
 
@@ -31,6 +34,7 @@ def db():
         psycopg2.extras.register_hstore(cursor, globally=True, unicode=True)
 
     db.register_model(Community)
+    db.register_model(AccountElsewhere)
     db.register_model(Participant)
 
     return db
@@ -78,8 +82,10 @@ def nmembers(website):
     community.NMEMBERS_THRESHOLD = int(os.environ['NMEMBERS_THRESHOLD'])
     website.NMEMBERS_THRESHOLD = community.NMEMBERS_THRESHOLD
 
-def elsewhere_providers(website):
-    website.elsewhere = {}
+def elsewhere(website):
+    website.elsewhere = PlatformRegistry(website.db)
+    website.elsewhere.register(Twitter)
+
 
 def envvars(website):
 

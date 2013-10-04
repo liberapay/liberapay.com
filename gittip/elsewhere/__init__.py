@@ -3,192 +3,80 @@
 from __future__ import print_function, unicode_literals
 
 from aspen.utils import typecheck
+from aspen.http.request import UnicodeWithParams
+from gittip.models.participant import reserve_a_random_username
 from psycopg2 import IntegrityError
 
-import gittip
-from gittip.security.user import User
-from gittip.models.participant import Participant, reserve_a_random_username
-from gittip.models.participant import ProblemChangingUsername
+
+ACTIONS = ['opt-in', 'connect', 'lock', 'unlock']
 
 
-ACTIONS = [u'opt-in', u'connect', u'lock', u'unlock']
-
-
-class AuthorizationFailure(Exception):
+class UnknownAccountElsewhere(Exception):
     pass
 
 
-def _resolve(platform, username_key, username):
-    """Given three unicodes, return a username.
+class MissingAttributes(Exception):
+    def __str__(self):
+        return "The Platform subclass {} is missing one or more attributes: {}."\
+                .format(self.args[0], ','.join(self.args[1]))
+
+
+class PlatformRegistry(object):
+    """Registry of platforms we support connecting to your Gittip account.
     """
-    typecheck(platform, unicode, username_key, unicode, username, unicode)
-    participant = gittip.db.one("""
 
-        SELECT participant
-          FROM elsewhere
-         WHERE platform=%s
-           AND user_info->%s = %s
+    def __init__(self, db):
+        self.db = db
 
-    """, (platform, username_key, username,))
-    # XXX Do we want a uniqueness constraint on $username_key? Can we do that?
-
-    if participant is None:
-        raise Exception( "User %s on %s isn't known to us."
-                       % (username, platform)
-                        )
-    return participant
+    def register(self, Platform):
+        self.__dict__[Platform.name] = Platform(self.db)
 
 
 class Platform(object):
-    """This is a base class for third-party platforms we support connecting to.
-    """
 
-    def __init__(self, website=None, username=None):
-        self.username = username
-        self.website = website
-        if username:
-            self._get_user_info()
-
-    @property
-    def external_auth_url(self):
-        '''
-        Returns the URL to which the user should be directed to begin the OAuth
-        handshake.
-
-        If conditions must be met prior to the user being redirected, they
-        should be set up here. Example: Twitter requires a unique request token
-        for each handshake. The initial call to Twitter to get that token
-        should be implmented here.
-
-        '''
-        raise NotImplementedError()
-
-    @property
-    def external_profile_url(self):
-        '''
-        Returns a user's profile on the external platform, if such a beast
-        exists.
-
-        '''
-        raise NotImplementedError()
-
-    @property
-    def get_user_info(self, user_id=None, participant=None):
-        '''
-        Returns a dict containing the user's details on the other platform.
-        The following keys are required:
-
-        `user_id`
-            The ID of the user on the other platform
-        `token`
-            The long-term token used to access user data
-
-        :param user_id:
-            The ID of the participant, on the other platform
-        :param participant:
-            The participant ID
-
-        Note that overriding methods should handle the case where neither params
-        are provided by raising an appropriate excpetion.
-
-        '''
-        raise NotImplementedError()
-
-    _display_name = None
-
-    @property
-    def display_name(self):
-        '''
-        For most platforms, the name displayed should be `self.username`. For
-        Twitter, this would be the user's screen name. Other platforms may have
-        different user-facing strings - like Google, which uses email addresses.
-        To make this a bit more complex, the Google's email addresses are
-        mutable.
-
-        This method should be overridden only if the immutable ID from the
-        platform is not suitable to be displayed back to the user.
-        '''
-        return self._display_name or self.username
-
-    @display_name.setter
-    def display_name(self, val):
-        self._display_name = val
-
-    def get_oauth_init_url(self):
-        raise NotImplementedError()
+    def __init__(self, db):
+        self.db = db
 
 
+        # Make sure the subclass was implemented properly.
+        # ================================================
 
-class AccountElsewhere(object):
+        missing_attrs = []
+        for attr in ('name', 'username_key', 'user_id_key', 'hit_api'):
+            if not hasattr(self, attr):
+                missing_attrs.append(attr)
+        if missing_attrs:
+            raise MissingAttributes(self.__class__.__name__, missing_attrs)
 
-    platform = None  # set in subclass
 
-    def __init__(self, user_id, user_info=None):
-        """Takes a user_id and user_info, and updates the database.
+    def load(self, username):
+        """Given a unicode, return an AccountElsewhere object.
         """
-        typecheck(user_id, (int, unicode), user_info, (None, dict))
-        self.user_id = unicode(user_id)
-
-        if user_info is not None:
-            a,b,c,d  = self.upsert(user_info)
-
-            self.participant = a
-            self.is_claimed = b
-            self.is_locked = c
-            self.balance = d
+        typecheck(username, UnicodeWithParams)
+        try:
+            out = self.load_from_db(username)
+        except UnknownAccountElsewhere:
+            out = self.load_from_api(username)
+        return out
 
 
-    def get_participant(self):
-        return Participant.query.get(username=self.participant)
+    def load_from_db(self, username):
+        return self.db.one( "SELECT elsewhere.*::elsewhere "
+                            "FROM elsewhere "
+                            "WHERE platform=%s "
+                            "AND user_info->%s = %s"
+                          , (self.name, self.username_key, username)
+                          , default=UnknownAccountElsewhere
+                           )
 
 
-    def set_is_locked(self, is_locked):
-        gittip.db.run("""
+    def load_from_api(self, username):
 
-            UPDATE elsewhere
-               SET is_locked=%s
-             WHERE platform=%s AND user_id=%s
+        # Hit the platform's API to get user info.
+        # ========================================
 
-        """, (is_locked, self.platform, self.user_id))
-
-
-    def opt_in(self, desired_username):
-        """Given a desired username, return a User object.
-        """
-        self.set_is_locked(False)
-        user = User.from_username(self.participant)
-        user.sign_in()
-        assert not user.ANON, self.participant  # sanity check
-        if self.is_claimed:
-            newly_claimed = False
-        else:
-            newly_claimed = True
-            user.participant.set_as_claimed()
-            try:
-                user.participant.change_username(desired_username)
-            except ProblemChangingUsername:
-                pass
-        return user, newly_claimed
-
-
-    def upsert(self, user_info):
-        """Given a dict, return a tuple.
-
-        User_id is an immutable unique identifier for the given user on the
-        given platform.  Username is the user's login/username on the given
-        platform. It is only used here for logging. Specifically, we don't
-        reserve their username for them on Gittip if they're new here. We give
-        them a random username here, and they'll have a chance to change it
-        if/when they opt in. User_id and username may or may not be the same.
-        User_info is a dictionary of profile info per the named platform.  All
-        platform dicts must have an id key that corresponds to the primary key
-        in the underlying table in our own db.
-
-        The return value is a tuple: (username [unicode], is_claimed [boolean],
-        is_locked [boolean], balance [Decimal]).
-
-        """
-        typecheck(user_info, dict)
+        user_info = self.hit_api(username)
+        user_id = user_info[self.user_id_key]  # If this is KeyError, then what?
 
 
         # Insert the account if needed.
@@ -197,14 +85,17 @@ class AccountElsewhere(object):
         # participant we reserved for them is rolled back as well.
 
         try:
-            with gittip.db.get_cursor() as cursor:
-                _username = reserve_a_random_username(cursor)
+            with self.db.get_cursor() as cursor:
+                random_username = reserve_a_random_username(cursor)
                 cursor.execute( "INSERT INTO elsewhere "
                                 "(platform, user_id, participant) "
                                 "VALUES (%s, %s, %s)"
-                              , (self.platform, self.user_id, _username)
+                              , (self.name, user_id, random_username)
                                )
         except IntegrityError:
+
+            # We have a db-level uniqueness constraint on (platform, user_id)
+
             pass
 
 
@@ -223,35 +114,38 @@ class AccountElsewhere(object):
             user_info[k] = unicode(v)
 
 
-        username = gittip.db.one("""
+        username = self.db.one("""
 
             UPDATE elsewhere
                SET user_info=%s
              WHERE platform=%s AND user_id=%s
-         RETURNING participant
+         RETURNING user_info->%s AS username
 
-        """, (user_info, self.platform, self.user_id))
+        """, (user_info, self.name, user_id, self.username_key))
 
 
-        # Get a little more info to return.
-        # =================================
+        # Now delegate to load_from_db.
+        # =============================
 
-        rec = gittip.db.one("""
+        return self.load_from_db(username)
 
-            SELECT claimed_time, balance, is_locked
-              FROM participants
-              JOIN elsewhere
-                ON participants.username=participant
+
+    def resolve(self, username):
+        """Given a username elsewhere, return a username here.
+        """
+        typecheck(username, unicode)
+        participant = self.db.one("""
+
+            SELECT participant
+              FROM elsewhere
              WHERE platform=%s
-               AND participants.username=%s
+               AND user_info->%s = %s
 
-        """, (self.platform, username))
+        """, (self.name, self.username_key, username,))
+        # XXX Do we want a uniqueness constraint on $username_key? Can we do that?
 
-        assert rec is not None  # sanity check
-
-
-        return ( username
-               , rec.claimed_time is not None
-               , rec.is_locked
-               , rec.balance
-                )
+        if participant is None:
+            raise Exception( "User %s on %s isn't known to us."
+                           % (username, self.platform)
+                            )
+        return participant

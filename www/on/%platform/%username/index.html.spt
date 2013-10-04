@@ -9,22 +9,10 @@ from gittip import CARDINALS, db
 from gittip.models.participant import Participant
 [-----------------------------------------------------------------------------]
 
-platform = website.elsewhere[path['platform']](website, path['username'])
-
-url = ''
-
-nbackers = 0
-
-
-class account(object):
-    is_locked = False
-    username = 'External Username' #Chad's directive
-    oauth_url = 'oauth.url'
-    profile_url = 'profile.url'
-    platform_name = 'Other Platform'
-
-title = account.platform_name
-
+platform = website.elsewhere[path['platform']]
+username = path['screen_name']
+account = platform.load_account(username)
+title = username
 
 [-----------------------------------------------------------------------------]
 {% extends templates/base.html %}
@@ -39,7 +27,7 @@ title = account.platform_name
             <img src="{{ platform.avatar }}" />
         </td>
         <td class="ready">
-            <h2><a href="{{ url }}">{{ escape(platform.display_name) }}</a> has</h2>
+            <h2><a href="{{ url }}">{{ escape(account.display_name) }}</a> has</h2>
             <div class="number">{{ nbackers }}</div>
             <div class="unit">{{ 'person' if nbackers == 1 else 'people' }} ready to give</div>
         </td>
@@ -59,7 +47,7 @@ title = account.platform_name
     <h2>{{ escape(platform.display_name) }} has opted out of Gittip.</h2>
 
     <p>If you are <a
-    href="{{ user_info.get('html_url', '') }}">{{ escape(platform.display_name) }}</a>
+    href="{{ account.get_html_url() }}">{{ escape(platform.display_name) }}</a>
     on {{ account.platform_name }}, you can unlock your account to allow people
     to pledge tips to you on Gittip.</p>
 
