@@ -36,7 +36,7 @@ def _resolve(platform, username_key, username):
                         )
     return participant
 
-class ServiceElsewhere(object):
+class Platform(object):
 
     def __init__(self, website=None, username=None):
         self.username = username
@@ -70,16 +70,16 @@ class ServiceElsewhere(object):
     @property
     def get_user_info(self, user_id=None, participant=None):
         '''
-        Returns a dict containing the user's details on the external service.
+        Returns a dict containing the user's details on the other platform.
         The following keys are required:
 
         `user_id`
-            The ID of the user on the external service
+            The ID of the user on the other platform
         `token`
             The long-term token used to access user data
 
         :param user_id:
-            The ID of the participant, on the external service
+            The ID of the participant, on the other platform
         :param participant:
             The participant ID
 
@@ -94,14 +94,14 @@ class ServiceElsewhere(object):
     @property
     def display_name(self):
         '''
-        For most services, the name displayed should be `self.username`. For
-        Twitter, this would be the user's screen name. Other services may have
+        For most platforms, the name displayed should be `self.username`. For
+        Twitter, this would be the user's screen name. Other platforms may have
         different user-facing strings - like Google, which uses email addresses.
         To make this a bit more complex, the Google's email addresses are
         mutable.
 
         This method should be overridden only if the immutable ID from the
-        service provider is not suitable to be displayed back to the user.
+        platform is not suitable to be displayed back to the user.
         '''
         return self._display_name or self.username
 

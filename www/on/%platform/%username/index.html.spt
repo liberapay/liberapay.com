@@ -9,7 +9,7 @@ from gittip import CARDINALS, db
 from gittip.models.participant import Participant
 [-----------------------------------------------------------------------------]
 
-service = website.elsewhere[path['service']](website, path['username'])
+platform = website.elsewhere[path['platform']](website, path['username'])
 
 url = ''
 
@@ -21,25 +21,25 @@ class account(object):
     username = 'External Username' #Chad's directive
     oauth_url = 'oauth.url'
     profile_url = 'profile.url'
-    service_name = 'External Service'
+    platform_name = 'Other Platform'
 
-title = account.service_name
+title = account.platform_name
 
 
 [-----------------------------------------------------------------------------]
 {% extends templates/base.html %}
 
-{% block heading %}<h2 class="top"><span>{{ account.service_name }}</span></h2>{% end %}
+{% block heading %}<h2 class="top"><span>{{ account.platform_name }}</span></h2>{% end %}
 
 {% block box %}
 
 <table class="on-elsewhere">
     <tr>
         <td class="picture">
-            <img src="{{ service.avatar }}" />
+            <img src="{{ platform.avatar }}" />
         </td>
         <td class="ready">
-            <h2><a href="{{ url }}">{{ escape(service.display_name) }}</a> has</h2>
+            <h2><a href="{{ url }}">{{ escape(platform.display_name) }}</a> has</h2>
             <div class="number">{{ nbackers }}</div>
             <div class="unit">{{ 'person' if nbackers == 1 else 'people' }} ready to give</div>
         </td>
@@ -56,11 +56,11 @@ title = account.service_name
 <div class="col0">
   {% if account.is_locked %}
 
-    <h2>{{ escape(service.display_name) }} has opted out of Gittip.</h2>
+    <h2>{{ escape(platform.display_name) }} has opted out of Gittip.</h2>
 
     <p>If you are <a
-    href="{{ user_info.get('html_url', '') }}">{{ escape(service.display_name) }}</a>
-    on {{ account.service_name }}, you can unlock your account to allow people
+    href="{{ user_info.get('html_url', '') }}">{{ escape(platform.display_name) }}</a>
+    on {{ account.platform_name }}, you can unlock your account to allow people
     to pledge tips to you on Gittip.</p>
 
     <a href="{{ account.oauth_url }}"
@@ -71,11 +71,11 @@ title = account.service_name
         $(document).ready(Gittip.tips.init);
     </script>
 
-    <h2>{{ escape(service.display_name) }} has not joined Gittip.</h2>
+    <h2>{{ escape(platform.display_name) }} has not joined Gittip.</h2>
 
     <p>Is this you?
     {% if user.ANON %}
-    <a href="{{ service.oauth_url(website, u'opt-in', username) }}">Click
+    <a href="{{ platform.oauth_url(website, u'opt-in', username) }}">Click
         here</a> to opt in to Gittip. We never collect money for you until
     you do.
     {% else %}
@@ -94,11 +94,11 @@ title = account.service_name
 
     <h2>Don't like what you see?</h2>
 
-    <p>If you are {{ escape(service.display_name) }} you can explicitly opt out
+    <p>If you are {{ escape(platform.display_name) }} you can explicitly opt out
     of Gittip by locking this account. We don't allow new pledges to locked
     accounts.</p>
 
-    <a href="{{ service.oauth_url(website, u'lock', username) }}"
+    <a href="{{ platform.oauth_url(website, u'lock', username) }}"
         ><button>Lock</button></a>
     {% end %}
 
