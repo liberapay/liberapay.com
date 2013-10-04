@@ -4,8 +4,9 @@ import logging
 import requests
 import os
 from aspen import json, Response
-from aspen.website import Website
+from aspen.http.request import UnicodeWithParams
 from aspen.utils import typecheck
+from aspen.website import Website
 from gittip import log
 from gittip.elsewhere import ACTIONS, AccountElsewhere, _resolve
 
@@ -92,7 +93,7 @@ def get_user_info(login):
     :returns:
         A dictionary containing github specific information for the user.
     """
-    typecheck(login, unicode)
+    typecheck(login, (unicode, UnicodeWithParams))
     rec = gittip.db.one( "SELECT user_info FROM elsewhere "
                          "WHERE platform='github' "
                          "AND user_info->'login' = %s"
