@@ -13,6 +13,7 @@
 BEGIN;
 
     CREATE TYPE elsewhere_with_participant AS
+    -- If Postgres had type inheritance this would be even awesomer.
     ( id            integer
     , platform      text
     , user_id       text
