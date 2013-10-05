@@ -17,6 +17,9 @@ account = platform.load(path['username'])
 if account is None:
     raise Response(404)
 
+if account.participant.is_claimed:
+    request.redirect('/%s/' % account.participant.username)
+
 title = account.display_name
 locked = account.is_locked
 participant = account.participant

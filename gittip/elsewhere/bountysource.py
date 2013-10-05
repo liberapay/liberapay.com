@@ -2,7 +2,7 @@ import os
 import md5
 import time
 from gittip.models.participant import Participant
-from gittip.elsewhere import AccountElsewhere, _resolve
+from gittip.elsewhere import AccountElsewhere
 
 www_host = os.environ['BOUNTYSOURCE_WWW_HOST'].decode('ASCII')
 api_host = os.environ['BOUNTYSOURCE_API_HOST'].decode('ASCII')
@@ -13,10 +13,6 @@ class BountysourceAccount(AccountElsewhere):
     def get_url(self):
         url = "https://www.bountysource.com/#users/%s" % self.user_info["slug"]
         return url
-
-
-def resolve(login):
-    return _resolve(u'bountysource', u'login', login)
 
 
 def oauth_url(website, participant, redirect_url=None):

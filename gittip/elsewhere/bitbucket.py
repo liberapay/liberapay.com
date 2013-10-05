@@ -5,7 +5,7 @@ import requests
 from aspen import json, log, Response
 from aspen.http.request import UnicodeWithParams
 from aspen.utils import typecheck
-from gittip.elsewhere import AccountElsewhere, _resolve
+from gittip.elsewhere import AccountElsewhere
 
 
 BASE_API_URL = "https://bitbucket.org/api/1.0"
@@ -17,10 +17,6 @@ class BitbucketAccount(AccountElsewhere):
     def get_url(self):
         url = "https://bitbucket.org/%s" % self.user_info["username"]
         return url
-
-
-def resolve(login):
-    return _resolve(u'bitbucket', u'login', login)
 
 
 def oauth_url(website, action, then=""):

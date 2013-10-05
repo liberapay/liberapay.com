@@ -8,7 +8,7 @@ from aspen.http.request import UnicodeWithParams
 from aspen.utils import typecheck
 from aspen.website import Website
 from gittip import log
-from gittip.elsewhere import ACTIONS, AccountElsewhere, _resolve
+from gittip.elsewhere import ACTIONS, AccountElsewhere
 
 
 class GitHubAccount(AccountElsewhere):
@@ -16,10 +16,6 @@ class GitHubAccount(AccountElsewhere):
 
     def get_url(self):
         return self.user_info['html_url']
-
-
-def resolve(login):
-    return _resolve(u'github', u'login', login)
 
 
 def oauth_url(website, action, then=u""):

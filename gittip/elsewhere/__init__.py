@@ -29,13 +29,6 @@ class MissingAttributes(Exception):
                 .format(self.args[0], ','.join(self.args[1]))
 
 
-
-# XXX The old platform modules want this, but is it even used?
-def _resolve(*a, **kw):
-    return None
-
-
-
 # Platform Objects
 # ================
 
