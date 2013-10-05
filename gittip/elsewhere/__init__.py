@@ -50,7 +50,7 @@ class Platform(object):
 
 
     def load(self, username):
-        """Given a unicode, return an AccountElsewhere object.
+        """Given a username on the other platform, return an AccountElsewhere object.
         """
         typecheck(username, UnicodeWithParams)
         try:
@@ -61,16 +61,29 @@ class Platform(object):
 
 
     def load_from_db(self, username):
-        return self.db.one( "SELECT elsewhere.*::elsewhere "
-                            "FROM elsewhere "
-                            "WHERE platform=%s "
-                            "AND user_info->%s = %s"
-                          , (self.name, self.username_key, username)
-                          , default=UnknownAccountElsewhere
-                           )
+        """Given a username on the other platform, return an AccountElsewhere object.
+
+        If the account elsewhere is unknown to us, we raise UnknownAccountElsewhere.
+
+        """
+        return self.db.one("""
+
+            SELECT elsewhere.*::elsewhere_with_participant
+              FROM elsewhere
+             WHERE platform=%s
+               AND user_info->%s = %s
+
+        """, (self.name, self.username_key, username), default=UnknownAccountElsewhere)
 
 
     def load_from_api(self, username):
+        """Given a username on the other platform, return an AccountElsewhere object.
+
+        The first thing we do is hit the API of the other platform, then we use
+        that to upsert our own elsewhere table, before handing back off to
+        load_from_db.
+
+        """
 
         # Hit the platform's API to get user info.
         # ========================================

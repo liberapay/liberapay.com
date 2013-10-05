@@ -26,16 +26,17 @@ class TestElsewhereTwitter(Harness):
         assert actual == expected
 
 
-    def test_get_user_info_gets_user_info(self):
-        twitter.TwitterAccount("1", {'screen_name': 'alice'}).opt_in('alice')
-        expected = {"screen_name": "alice"}
-        actual = twitter.get_user_info('alice')
-        assert actual == expected
-
-
     @mock.patch('gittip.elsewhere.twitter.Twitter.hit_api')
     def test_can_load_account_elsewhere_from_twitter(self, hit_api):
         hit_api.return_value = {"id": "123", "screen_name": "alice"}
 
         alice_on_twitter = self.elsewhere.twitter.load(UnicodeWithParams('alice', {}))
         assert alice_on_twitter.user_id == "123"
+
+
+    @mock.patch('gittip.elsewhere.twitter.Twitter.hit_api')
+    def test_account_elsewhere_has_participant_object_on_it(self, hit_api):
+        hit_api.return_value = {"id": "123", "screen_name": "alice"}
+        alice_on_twitter = self.elsewhere.twitter.load(UnicodeWithParams('alice', {}))
+        import pdb; pdb.set_trace()
+        assert alice_on_twitter.participant.username == 'alice'

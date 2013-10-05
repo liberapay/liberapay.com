@@ -5,7 +5,7 @@ from postgres.orm import Model
 
 class AccountElsewhere(Model):
 
-    typname = "elsewhere"
+    typname = "elsewhere_with_participant"
 
 
     def get_html_url(self):
