@@ -144,12 +144,12 @@
                     </a>
                     <div class="account-type">Bitcoin address
                         {% if not user.ANON and user.participant == participant %}
-                            (<a href="javascript:;" class="bitcoin">edit</a>)
+                            (<a href="javascript:;" class="toggle-bitcoin">edit</a>)
                         {% end %}
                     </div>
                 {% else %}
                     {% if not user.ANON and user.participant == participant %}
-                        Add a <a href="javascript:;" class="bitcoin">Bitcoin address</a>.
+                        Add a <a href="javascript:;" class="toggle-bitcoin">Bitcoin address</a>.
                     {% else %}
                         No Bitcoin receiving address.
                     {% end %}

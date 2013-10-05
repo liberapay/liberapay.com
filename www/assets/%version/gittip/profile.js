@@ -337,7 +337,7 @@ $(document).ready(function()
     // Wire up bitcoin input.
     // ==============================
 
-    $('.bitcoin').on("click", "a", function()
+    $('.bitcoin').on("click", "a.toggle-bitcoin", function()
     {
         // "Add bitcoin address" text or existing
         // bitcoin address was clicked, show the text box
@@ -356,11 +356,12 @@ $(document).ready(function()
                 $('a.bitcoin').text(d.bitcoin_address);
                 $('.bitcoin').toggle();
                 if (d.bitcoin_address === '') {
-                    html = "Add a <a href=\"javascript:;\" class=\"bitcoin\">Bitcoin address</a>.";
+                    html = "Add a <a href=\"javascript:;\" class=\"toggle-bitcoin\">Bitcoin address</a>.";
                 } else {
                     html = "<a rel=\"me\" href=\"http://blockchain.info/address/";
                     html += d.bitcoin_address + "\">" + d.bitcoin_address + "</a>";
-                    html += "<div class=\"account-type\">Bitcoin address (<a href=\"javascript:;\" class=\"bitcoin\">edit</a>)</div>";
+                    html += "<div class=\"account-type\">Bitcoin address ";
+                    html += "(<a href=\"javascript:;\" class=\"toggle-bitcoin\">edit</a>)</div>";
                 }
                 $('div.bitcoin').html(html);
                 $this.text('Save');
