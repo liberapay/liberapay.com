@@ -7,14 +7,22 @@ from os import environ
 from aspen import json, log, Response
 from aspen.utils import to_age, utc
 from gittip.elsewhere import Platform
+from gittip.models.account_elsewhere import AccountElsewhere
 from requests_oauthlib import OAuth1
+
+
+class TwitterAccount(AccountElsewhere):
+
+    def get_html_url():
+        pass
 
 
 class Twitter(Platform):
 
     name = 'twitter'
-    username_key = 'screen_name'
+    account_elsewhere_subclass = TwitterAccount
     user_id_key= 'id'
+    username_key = 'screen_name'
 
 
     def hit_api(self, screen_name):

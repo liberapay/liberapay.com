@@ -39,3 +39,10 @@ class TestElsewhereTwitter(Harness):
         hit_api.return_value = {"id": "123", "screen_name": "alice"}
         alice_on_twitter = self.elsewhere.twitter.load(UnicodeWithParams('alice', {}))
         assert not alice_on_twitter.participant.is_claimed
+
+
+    @mock.patch('gittip.elsewhere.twitter.Twitter.hit_api')
+    def test_account_elsewhere_is_twitter_account_elsewhere(self, hit_api):
+        hit_api.return_value = {"id": "123", "screen_name": "alice"}
+        alice_on_twitter = self.elsewhere.twitter.load(UnicodeWithParams('alice', {}))
+        assert alice_on_twitter.__class__.__name__ == 'TwitterAccount'

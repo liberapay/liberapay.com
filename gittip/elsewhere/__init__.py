@@ -5,21 +5,33 @@ from __future__ import print_function, unicode_literals
 from aspen.utils import typecheck
 from aspen.http.request import UnicodeWithParams
 from gittip.models.participant import reserve_a_random_username
+from gittip.models.account_elsewhere import AccountElsewhere
 from psycopg2 import IntegrityError
 
 
 ACTIONS = ['opt-in', 'connect', 'lock', 'unlock']
 
 
+# Exceptions
+# ==========
+
 class UnknownAccountElsewhere(Exception):
     pass
 
+class BadAccountElsewhereSubclass(Exception):
+    def __str__(self):
+        return "The Platform subclass {} specifies an account_elsewhere_subclass that " \
+               "doesn't subclass AccountElsewhere.".format(self.args[0])
 
 class MissingAttributes(Exception):
     def __str__(self):
         return "The Platform subclass {} is missing one or more attributes: {}."\
                 .format(self.args[0], ','.join(self.args[1]))
 
+
+
+# Platform Objects
+# ================
 
 class PlatformRegistry(object):
     """Registry of platforms we support connecting to your Gittip account.
@@ -29,7 +41,9 @@ class PlatformRegistry(object):
         self.db = db
 
     def register(self, Platform):
-        self.__dict__[Platform.name] = Platform(self.db)
+        platform = Platform(self.db)
+        self.__dict__[platform.name] = platform
+        AccountElsewhere.subclasses[platform.name] = platform.account_elsewhere_subclass
 
 
 class Platform(object):
@@ -41,12 +55,21 @@ class Platform(object):
         # Make sure the subclass was implemented properly.
         # ================================================
 
+        expected_attrs = ( 'account_elsewhere_subclass'
+                         , 'hit_api'
+                         , 'name'
+                         , 'username_key'
+                         , 'user_id_key'
+                          )
         missing_attrs = []
-        for attr in ('name', 'username_key', 'user_id_key', 'hit_api'):
+        for attr in expected_attrs:
             if not hasattr(self, attr):
                 missing_attrs.append(attr)
         if missing_attrs:
             raise MissingAttributes(self.__class__.__name__, missing_attrs)
+
+        if not issubclass(self.account_elsewhere_subclass, AccountElsewhere):
+            raise BadAccountElsewhereSubclass(self.account_elsewhere_subclass)
 
 
     def load(self, username):

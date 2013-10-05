@@ -3,13 +3,24 @@ from gittip.security.user import User
 from postgres.orm import Model
 
 
+class UnknownPlatform(Exception):
+    def __str__(self):
+        return "Unknown platform for account elsewhere: {}.".format(self.args[0])
+
+
 class AccountElsewhere(Model):
 
     typname = "elsewhere_with_participant"
+    subclasses = {}  # populated in gittip.wireup.elsewhere
 
 
-    def get_html_url(self):
-        pass
+    def __new__(cls, record):
+        platform = record['platform']
+        cls = cls.subclasses.get(platform)
+        if cls is None:
+            raise UnknownPlatform(platform)
+        obj = super(AccountElsewhere, cls).__new__(cls, record)
+        return obj
 
 
     def set_is_locked(self, is_locked):
