@@ -1,8 +1,7 @@
-import requests
 import os
+from aspen import Response
 
-
-# ========================== ^L
+[-----------------------------]
 
 service = website.elsewhere[path['service']](website, qs.get('username'))
 
@@ -18,4 +17,4 @@ redirect_uri = '%s://%s%s' % (
 request.redirect(service.get_oauth_init_url(redirect_uri))
 
 
-# ========================== ^L text/plain
+[-----------------------------] text/plain

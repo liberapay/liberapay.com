@@ -97,7 +97,7 @@ class Twitter(Platform):
         return user_info
 
 
-    def oauth_url(website, action, then=""):
+    def oauth_url(self, action, then=""):
         """Return a URL to start oauth dancing with Twitter.
 
         For GitHub we can pass action and then through a querystring. For Twitter

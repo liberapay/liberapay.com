@@ -24,6 +24,7 @@ title = account.display_name
 locked = account.is_locked
 participant = account.participant
 nbackers = participant.get_number_of_backers()
+oauth_then = account.display_name
 
 [-----------------------------------------------------------------------------]
 {% extends templates/base.html %}
@@ -62,7 +63,7 @@ nbackers = participant.get_number_of_backers()
     on {{ platform.name }}, you can unlock your account to allow people
     to pledge tips to you on Gittip.</p>
 
-    <a href="{ platform.oauth_url('') }}"
+    <a href="{{ platform.oauth_url('unlock', oauth_then) }}"
         ><button>Unlock</button></a>
 
   {% else %}
@@ -74,7 +75,7 @@ nbackers = participant.get_number_of_backers()
 
     <p>Is this you?
     {% if user.ANON %}
-    <a href="{ platform.oauth_url(website, u'opt-in', username) }}">Click
+    <a href="{{ platform.oauth_url('opt-in', oauth_then) }}">Click
         here</a> to opt in to Gittip. We never collect money for you until
     you do.
     {% else %}
@@ -97,7 +98,7 @@ nbackers = participant.get_number_of_backers()
     of Gittip by locking this account. We don't allow new pledges to locked
     accounts.</p>
 
-    <a href="{ platform.oauth_url(website, u'lock', username) }}"
+    <a href="{{ platform.oauth_url('lock', oauth_then) }}"
         ><button>Lock</button></a>
     {% end %}
 

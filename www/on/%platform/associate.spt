@@ -1,11 +1,16 @@
+from aspen import Response
 
-# ========================== ^L
+[-----------------------------]
 
-service = website.elsewhere[path['service']](website, username)
+platform = website.elsewhere.get(path['platform'])
+if platform is None:
+    raise Response(404)
+
+](website, username)
 
 service.handle_oauth_callback(qs)
 
-# ========================== ^L text/plain
+[-----------------------------] text/plain
 
 Caught!
 
