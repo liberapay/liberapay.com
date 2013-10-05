@@ -30,6 +30,12 @@ class MissingAttributes(Exception):
 
 
 
+# XXX The old platform modules want this, but is it even used?
+def _resolve(*a, **kw):
+    return None
+
+
+
 # Platform Objects
 # ================
 
@@ -39,6 +45,9 @@ class PlatformRegistry(object):
 
     def __init__(self, db):
         self.db = db
+
+    def get(self, name, default=None):
+        return getattr(self, name, default)
 
     def register(self, Platform):
         platform = Platform(self.db)
@@ -112,7 +121,7 @@ class Platform(object):
         # ========================================
 
         user_info = self.hit_api(username)
-        user_id = user_info[self.user_id_key]  # If this is KeyError, then what?
+        user_id = unicode(user_info[self.user_id_key])  # If this is KeyError, then what?
 
 
         # Insert the account if needed.

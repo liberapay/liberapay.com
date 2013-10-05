@@ -13,8 +13,35 @@ from requests_oauthlib import OAuth1
 
 class TwitterAccount(AccountElsewhere):
 
-    def get_html_url():
-        pass
+    @property
+    def display_name(self):
+        return self.user_info['screen_name']
+
+    @property
+    def img_src(self):
+        src = ''
+
+        # https://dev.twitter.com/docs/api/1.1/get/users/show
+        if 'profile_image_url_https' in self.user_info:
+            src = self.user_info['profile_image_url_https']
+
+            # For Twitter, we don't have good control over size. The
+            # biggest option is 73px(?!), but that's too small. Let's go
+            # with the original: even though it may be huge, that's
+            # preferrable to guaranteed blurriness. :-/
+
+            src = src.replace('_normal.', '.')
+
+        return src
+
+    @property
+    def html_url(self):
+        return "https://twitter.com/{screen_name}".format(**self.user_info)
+
+
+    @property
+    def nbackers(self):
+        return 0
 
 
 class Twitter(Platform):
