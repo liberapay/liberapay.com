@@ -20,6 +20,7 @@ if account is None:
 title = account.display_name
 locked = account.is_locked
 participant = account.participant
+nbackers = participant.get_number_of_backers()
 
 [-----------------------------------------------------------------------------]
 {% extends templates/base.html %}
@@ -35,8 +36,8 @@ participant = account.participant
         </td>
         <td class="ready">
             <h2><a href="{{ account.html_url }}">{{ escape(account.display_name) }}</a> has</h2>
-            <div class="number">{{ account.nbackers }}</div>
-            <div class="unit">{{ 'person' if account.nbackers == 1 else 'people' }} ready to give</div>
+            <div class="number">{{ nbackers }}</div>
+            <div class="unit">{{ 'person' if nbackers == 1 else 'people' }} ready to give</div>
         </td>
         <td class="offset"></td>
     </tr>
