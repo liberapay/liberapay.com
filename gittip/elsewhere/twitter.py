@@ -39,11 +39,6 @@ class TwitterAccount(AccountElsewhere):
         return "https://twitter.com/{screen_name}".format(**self.user_info)
 
 
-    @property
-    def nbackers(self):
-        return 0
-
-
 class Twitter(Platform):
 
     name = 'twitter'
