@@ -13,14 +13,14 @@
 BEGIN;
 
     CREATE TYPE elsewhere_with_participant AS
-    -- If Postgres had type inheritance this would be even awesomer.
     ( id            integer
     , platform      text
     , user_id       text
     , user_info     hstore
     , is_locked     boolean
     , participant   participants
-     );
+     ); -- If Postgres had type inheritance this would be even awesomer.
+
 
     CREATE OR REPLACE FUNCTION load_participant_for_elsewhere (elsewhere)
     RETURNS elsewhere_with_participant
