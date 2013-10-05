@@ -139,6 +139,14 @@ class Participant(Model, MixinElsewhere, MixinTeam):
         self.set_attributes(session_expires=session_expires)
 
 
+    # Claimed-ness
+    # ============
+
+    @property
+    def is_claimed(self):
+        return self.claimed_time is not None
+
+
     # Number
     # ======
 

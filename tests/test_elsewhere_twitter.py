@@ -38,5 +38,4 @@ class TestElsewhereTwitter(Harness):
     def test_account_elsewhere_has_participant_object_on_it(self, hit_api):
         hit_api.return_value = {"id": "123", "screen_name": "alice"}
         alice_on_twitter = self.elsewhere.twitter.load(UnicodeWithParams('alice', {}))
-        import pdb; pdb.set_trace()
-        assert alice_on_twitter.participant.username == 'alice'
+        assert not alice_on_twitter.participant.is_claimed
