@@ -42,6 +42,12 @@ class PlatformRegistry(object):
     def get(self, name, default=None):
         return getattr(self, name, default)
 
+    def __getitem__(self, name):
+        platform = self.get(name)
+        if platform is None:
+            raise KeyError(name)
+        return platform
+
     def register(self, Platform):
         platform = Platform(self.db)
         self.__dict__[platform.name] = platform
@@ -74,18 +80,18 @@ class Platform(object):
             raise BadAccountElsewhereSubclass(self.account_elsewhere_subclass)
 
 
-    def load(self, username):
+    def get_account(self, username):
         """Given a username on the other platform, return an AccountElsewhere object.
         """
         typecheck(username, UnicodeWithParams)
         try:
-            out = self.load_from_db(username)
+            out = self.fetch_from_db(username)
         except UnknownAccountElsewhere:
-            out = self.load_from_api(username)
+            out = self.fetch_from_api(username)
         return out
 
 
-    def load_from_db(self, username):
+    def fetch_from_db(self, username):
         """Given a username on the other platform, return an AccountElsewhere object.
 
         If the account elsewhere is unknown to us, we raise UnknownAccountElsewhere.
@@ -101,21 +107,23 @@ class Platform(object):
         """, (self.name, self.username_key, username), default=UnknownAccountElsewhere)
 
 
-    def load_from_api(self, username):
+    def fetch_from_api(self, username):
         """Given a username on the other platform, return an AccountElsewhere object.
-
-        The first thing we do is hit the API of the other platform, then we use
-        that to upsert our own elsewhere table, before handing back off to
-        load_from_db.
-
         """
+        user_id, user_info = self._fetch_from_api(username)
+        return self.upsert(user_id, user_info)
 
-        # Hit the platform's API to get user info.
-        # ========================================
 
+    def _fetch_from_api(self, username):
+        # Factored out so we can call upsert without hitting API for testing.
         user_info = self.hit_api(username)
         user_id = unicode(user_info[self.user_id_key])  # If this is KeyError, then what?
+        return user_id, user_info
 
+
+    def upsert(self, user_id, user_info):
+        """Given a string and a dict, dance with our db and return an AccountElsewhere.
+        """
 
         # Insert the account if needed.
         # =============================
@@ -162,10 +170,10 @@ class Platform(object):
         """, (user_info, self.name, user_id, self.username_key))
 
 
-        # Now delegate to load_from_db.
-        # =============================
+        # Now delegate to fetch_from_db.
+        # ==============================
 
-        return self.load_from_db(username)
+        return self.fetch_from_db(username)
 
 
     def resolve(self, username):

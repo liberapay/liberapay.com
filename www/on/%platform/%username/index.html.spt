@@ -13,7 +13,7 @@ platform = website.platforms.get(path['platform'])
 if platform is None:
     raise Response(404)
 
-account = platform.load(path['username'])
+account = platform.get_account(path['username'])
 if account is None:
     raise Response(404)
 

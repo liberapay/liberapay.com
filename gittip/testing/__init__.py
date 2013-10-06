@@ -13,6 +13,7 @@ import pytz
 from aspen import resources
 from aspen.testing import Website, StubRequest
 from aspen.utils import utcnow
+from gittip import wireup
 from gittip.billing.payday import Payday
 from gittip.models.participant import Participant
 from gittip.security.user import User
@@ -74,6 +75,7 @@ class Harness(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.db = gittip.db
+        wireup.platforms(cls)
         cls._tablenames = cls.db.all("SELECT tablename FROM pg_tables "
                                      "WHERE schemaname='public'")
         cls.clear_tables(cls.db, cls._tablenames[:])
@@ -90,6 +92,10 @@ class Harness(unittest.TestCase):
                 db.run("DELETE FROM %s CASCADE" % tablename)
             except (IntegrityError, InternalError):
                 tablenames.insert(0, tablename)
+
+    def make_elsewhere(self, platform, user_id, user_info):
+        platform = self.platforms[platform]
+        return platform.upsert(user_id, user_info)
 
     def make_participant(self, username, **kw):
         participant = Participant.with_random_username()

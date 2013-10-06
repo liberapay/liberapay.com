@@ -2,18 +2,12 @@ from __future__ import print_function, unicode_literals
 
 import mock
 from aspen.http.request import UnicodeWithParams
-from gittip import wireup
 from gittip.elsewhere import twitter
 from gittip.testing import Harness
 
 
 
 class TestElsewhereTwitter(Harness):
-
-
-    def setUp(self):
-        wireup.platforms(self)
-
 
     def test_twitter_resolve_resolves(self):
         alice_on_twitter = twitter.TwitterAccount( "1"
