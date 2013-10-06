@@ -9,7 +9,7 @@ from gittip import CARDINALS, db
 from gittip.models.participant import Participant
 [-----------------------------------------------------------------------------]
 
-platform = website.elsewhere.get(path['platform'])
+platform = website.platforms.get(path['platform'])
 if platform is None:
     raise Response(404)
 

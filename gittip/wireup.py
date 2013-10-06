@@ -82,9 +82,9 @@ def nmembers(website):
     community.NMEMBERS_THRESHOLD = int(os.environ['NMEMBERS_THRESHOLD'])
     website.NMEMBERS_THRESHOLD = community.NMEMBERS_THRESHOLD
 
-def elsewhere(website):
-    website.elsewhere = PlatformRegistry(website.db)
-    website.elsewhere.register(Twitter)
+def platforms(website):
+    website.platforms = PlatformRegistry(website.db)
+    website.platforms.register(Twitter)
 
 
 def envvars(website):

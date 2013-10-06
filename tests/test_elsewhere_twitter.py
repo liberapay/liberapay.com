@@ -12,7 +12,7 @@ class TestElsewhereTwitter(Harness):
 
 
     def setUp(self):
-        wireup.elsewhere(self)
+        wireup.platforms(self)
 
 
     def test_twitter_resolve_resolves(self):

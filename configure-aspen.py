@@ -26,7 +26,7 @@ gittip.wireup.sentry(website)
 gittip.wireup.mixpanel(website)
 gittip.wireup.nanswers()
 gittip.wireup.nmembers(website)
-gittip.wireup.elsewhere(website)
+gittip.wireup.platforms(website)
 gittip.wireup.envvars(website)
 
 
