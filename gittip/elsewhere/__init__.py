@@ -86,13 +86,13 @@ class Platform(object):
         """
         typecheck(username, UnicodeWithParams)
         try:
-            out = self.fetch_from_db(username)
+            out = self.get_account_from_db(username)
         except UnknownAccountElsewhere:
-            out = self.fetch_from_api(username)
+            out = self.get_account_from_api(username)
         return out
 
 
-    def fetch_from_db(self, username):
+    def get_account_from_db(self, username):
         """Given a username on the other platform, return an AccountElsewhere object.
 
         If the account elsewhere is unknown to us, we raise UnknownAccountElsewhere.
@@ -108,14 +108,17 @@ class Platform(object):
         """, (self.name, self.username_key, username), default=UnknownAccountElsewhere)
 
 
-    def fetch_from_api(self, username):
+    def get_account_from_api(self, username):
         """Given a username on the other platform, return an AccountElsewhere object.
+
+        This method always hits the API and updates our database.
+
         """
-        user_id, user_info = self._fetch_from_api(username)
+        user_id, user_info = self._hit_api(username)
         return self.upsert(user_id, user_info)
 
 
-    def _fetch_from_api(self, username):
+    def _get_account_from_api(self, username):
         # Factored out so we can call upsert without hitting API for testing.
         user_info = self.get_user_info(username)
         user_id = unicode(user_info[self.user_id_key])  # If this is KeyError, then what?
@@ -123,7 +126,7 @@ class Platform(object):
 
 
     def upsert(self, user_id, user_info):
-        """Given a string and a dict, dance with our db and return an AccountElsewhere.
+        """Given a unicode and a dict, dance with our db and return an AccountElsewhere.
         """
         typecheck(user_id, unicode, user_info, dict)
 
