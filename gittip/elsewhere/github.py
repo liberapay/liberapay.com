@@ -1,104 +1,122 @@
-from __future__ import division
-import gittip
+from __future__ import absolute_import, division, print_function, unicode_literals
+
 import logging
-import requests
 import os
+
+import requests
 from aspen import json, Response
 from aspen.http.request import UnicodeWithParams
 from aspen.utils import typecheck
 from aspen.website import Website
 from gittip import log
-from gittip.elsewhere import ACTIONS, AccountElsewhere
+from gittip.elsewhere import ACTIONS, AccountElsewhere, Platform
 
 
 class GitHubAccount(AccountElsewhere):
-    platform = u'github'
 
-    def get_url(self):
+    @property
+    def display_name(self):
+        return self.user_info['login']
+
+    @property
+    def img_src(self):
+        src = ''
+
+        # GitHub -> Gravatar: http://en.gravatar.com/site/implement/images/
+        if 'gravatar_id' in self.user_info:
+            gravatar_hash = self.user_info['gravatar_id']
+            src = "https://www.gravatar.com/avatar/%s.jpg?s=%s"
+            src %= (gravatar_hash, 128)
+
+        return src
+
+    @property
+    def html_url(self):
         return self.user_info['html_url']
 
 
-def oauth_url(website, action, then=u""):
-    """Given a website object and a string, return a URL string.
 
-    `action' is one of 'opt-in', 'lock' and 'unlock'
+class GitHub(Platform):
 
-    `then' is either a github username or an URL starting with '/'. It's
-        where we'll send the user after we get the redirect back from
-        GitHub.
-
-    """
-    typecheck(website, Website, action, unicode, then, unicode)
-    assert action in ACTIONS
-    url = u"https://github.com/login/oauth/authorize?client_id=%s&redirect_uri=%s"
-    url %= (website.github_client_id, website.github_callback)
-
-    # Pack action,then into data and base64-encode. Querystring isn't
-    # available because it's consumed by the initial GitHub request.
-
-    data = u'%s,%s' % (action, then)
-    data = data.encode('UTF-8').encode('base64').strip().decode('US-ASCII')
-    url += u'?data=%s' % data
-    return url
+    name = 'github'
+    account_elsewhere_subclass = GitHubAccount
+    username_key = 'login'
+    user_id_key = 'id'
 
 
-def oauth_dance(website, qs):
-    """Given a querystring, return a dict of user_info.
+    def oauth_url(website, action, then=u""):
+        """Given a website object and a string, return a URL string.
 
-    The querystring should be the querystring that we get from GitHub when
-    we send the user to the return value of oauth_url above.
+        `action' is one of 'opt-in', 'lock' and 'unlock'
 
-    See also:
+        `then' is either a github username or an URL starting with '/'. It's
+            where we'll send the user after we get the redirect back from
+            GitHub.
 
-        http://developer.github.com/v3/oauth/
+        """
+        typecheck(website, Website, action, unicode, then, unicode)
+        assert action in ACTIONS
+        url = u"https://github.com/login/oauth/authorize?client_id=%s&redirect_uri=%s"
+        url %= (website.github_client_id, website.github_callback)
 
-    """
+        # Pack action,then into data and base64-encode. Querystring isn't
+        # available because it's consumed by the initial GitHub request.
 
-    log("Doing an OAuth dance with Github.")
-
-    data = { 'code': qs['code'].encode('US-ASCII')
-           , 'client_id': website.github_client_id
-           , 'client_secret': website.github_client_secret
-            }
-    r = requests.post("https://github.com/login/oauth/access_token", data=data)
-    assert r.status_code == 200, (r.status_code, r.text)
-
-    back = dict([pair.split('=') for pair in r.text.split('&')]) # XXX
-    if 'error' in back:
-        raise Response(400, back['error'].encode('utf-8'))
-    assert back.get('token_type', '') == 'bearer', back
-    access_token = back['access_token']
-
-    r = requests.get( "https://api.github.com/user"
-                    , headers={'Authorization': 'token %s' % access_token}
-                     )
-    assert r.status_code == 200, (r.status_code, r.text)
-    user_info = json.loads(r.text)
-    log("Done with OAuth dance with Github for %s (%s)."
-        % (user_info['login'], user_info['id']))
-
-    return user_info
+        data = u'%s,%s' % (action, then)
+        data = data.encode('UTF-8').encode('base64').strip().decode('US-ASCII')
+        url += u'?data=%s' % data
+        return url
 
 
-def get_user_info(login):
-    """Get the given user's information from the DB or failing that, github.
+    def oauth_dance(website, qs):
+        """Given a querystring, return a dict of user_info.
 
-    :param login:
-        A unicode string representing a username in github.
+        The querystring should be the querystring that we get from GitHub when
+        we send the user to the return value of oauth_url above.
 
-    :returns:
-        A dictionary containing github specific information for the user.
-    """
-    typecheck(login, (unicode, UnicodeWithParams))
-    rec = gittip.db.one( "SELECT user_info FROM elsewhere "
-                         "WHERE platform='github' "
-                         "AND user_info->'login' = %s"
-                       , (login,)
-                        )
+        See also:
 
-    if rec is not None:
-        user_info = rec
-    else:
+            http://developer.github.com/v3/oauth/
+
+        """
+
+        log("Doing an OAuth dance with Github.")
+
+        data = { 'code': qs['code'].encode('US-ASCII')
+               , 'client_id': website.github_client_id
+               , 'client_secret': website.github_client_secret
+                }
+        r = requests.post("https://github.com/login/oauth/access_token", data=data)
+        assert r.status_code == 200, (r.status_code, r.text)
+
+        back = dict([pair.split('=') for pair in r.text.split('&')]) # XXX
+        if 'error' in back:
+            raise Response(400, back['error'].encode('utf-8'))
+        assert back.get('token_type', '') == 'bearer', back
+        access_token = back['access_token']
+
+        r = requests.get( "https://api.github.com/user"
+                        , headers={'Authorization': 'token %s' % access_token}
+                         )
+        assert r.status_code == 200, (r.status_code, r.text)
+        user_info = json.loads(r.text)
+        log("Done with OAuth dance with Github for %s (%s)."
+            % (user_info['login'], user_info['id']))
+
+        return user_info
+
+
+    def hit_api(self, login):
+        """Get the given user's information from the DB or failing that, github.
+
+        :param login:
+            A unicode string representing a username in github.
+
+        :returns:
+            A dictionary containing github specific information for the user.
+        """
+        typecheck(login, (unicode, UnicodeWithParams))
+
         url = "https://api.github.com/users/%s"
         user_info = requests.get(url % login, params={
             'client_id': os.environ.get('GITHUB_CLIENT_ID'),
@@ -140,4 +158,4 @@ def get_user_info(login):
                 level=logging.WARNING)
             raise Response(502, "GitHub lookup failed with %d." % status)
 
-    return user_info
+        return user_info

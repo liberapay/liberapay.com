@@ -8,7 +8,6 @@ import psycopg2
 import pytz
 from aspen.utils import utcnow
 from gittip import NotSane
-from gittip.elsewhere.bitbucket import BitbucketAccount
 from gittip.elsewhere.github import GitHubAccount
 from gittip.elsewhere.twitter import TwitterAccount
 from gittip.models._mixin_elsewhere import NeedConfirmation
@@ -522,18 +521,18 @@ class Tests(Harness):
 
     def test_ru_returns_bitbucket_url_for_stub_from_bitbucket(self):
         unclaimed = self.make_elsewhere('bitbucket', '1234', {'username': 'alice'})
-        stub = Participant.from_username(unclaimed.participant)
+        stub = Participant.from_username(unclaimed.participant.username)
         actual = stub.resolve_unclaimed()
         assert actual == "/on/bitbucket/alice/"
 
     def test_ru_returns_github_url_for_stub_from_github(self):
-        unclaimed = GitHubAccount('1234', {'login': 'alice'})
-        stub = Participant.from_username(unclaimed.participant)
+        unclaimed = self.make_elsewhere('github', '1234', {'login': 'alice'})
+        stub = Participant.from_username(unclaimed.participant.username)
         actual = stub.resolve_unclaimed()
         assert actual == "/on/github/alice/"
 
     def test_ru_returns_twitter_url_for_stub_from_twitter(self):
-        unclaimed = TwitterAccount('1234', {'screen_name': 'alice'})
-        stub = Participant.from_username(unclaimed.participant)
+        unclaimed = self.make_elsewhere('twitter', '1234', {'screen_name': 'alice'})
+        stub = Participant.from_username(unclaimed.participant.username)
         actual = stub.resolve_unclaimed()
         assert actual == "/on/twitter/alice/"

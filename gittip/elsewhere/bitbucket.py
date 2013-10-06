@@ -1,56 +1,66 @@
+from __future__ import absolute_import, division, print_function, unicode_literals
+
 import logging
 
-import gittip
 import requests
 from aspen import json, log, Response
 from aspen.http.request import UnicodeWithParams
 from aspen.utils import typecheck
-from gittip.elsewhere import AccountElsewhere
+from gittip.elsewhere import AccountElsewhere, Platform
 
 
 BASE_API_URL = "https://bitbucket.org/api/1.0"
 
 
 class BitbucketAccount(AccountElsewhere):
-    platform = u'bitbucket'
 
-    def get_url(self):
-        url = "https://bitbucket.org/%s" % self.user_info["username"]
-        return url
+    @property
+    def display_name(self):
+        return self.user_info['username']
 
+    @property
+    def img_src(self):
+        src = ''
+        # XXX Um ... ?
+        return src
 
-def oauth_url(website, action, then=""):
-    """Return a URL to start oauth dancing with Bitbucket.
-
-    For GitHub we can pass action and then through a querystring. For Bitbucket
-    we can't, so we send people through a local URL first where we stash this
-    info in an in-memory cache (eep! needs refactoring to scale).
-
-    Not sure why website is here. Vestige from GitHub forebear?
-
-    """
-    then = then.encode('base64').strip()
-    return "/on/bitbucket/redirect?action=%s&then=%s" % (action, then)
+    @property
+    def html_url(self):
+        return "https://bitbucket.org/{username}".format(**self.user_info)
 
 
-def get_user_info(username):
-    """Get the given user's information from the DB or failing that, bitbucket.
+class Bitbucket(Platform):
 
-    :param username:
-        A unicode string representing a username in bitbucket.
+    name = 'bitbucket'
+    account_elsewhere_subclass = BitbucketAccount
+    username_key = 'username'
+    user_id_key = 'username'  # No immutable id. :-/
 
-    :returns:
-        A dictionary containing bitbucket specific information for the user.
-    """
-    typecheck(username, (unicode, UnicodeWithParams))
-    rec = gittip.db.one( "SELECT user_info FROM elsewhere "
-                         "WHERE platform='bitbucket' "
-                         "AND user_info->'username' = %s"
-                       , (username,)
-                        )
-    if rec is not None:
-        user_info = rec
-    else:
+
+    def oauth_url(self, action, then=""):
+        """Return a URL to start oauth dancing with Bitbucket.
+
+        For GitHub we can pass action and then through a querystring. For Bitbucket
+        we can't, so we send people through a local URL first where we stash this
+        info in an in-memory cache (eep! needs refactoring to scale).
+
+        Not sure why website is here. Vestige from GitHub forebear?
+
+        """
+        then = then.encode('base64').strip()
+        return "/on/bitbucket/redirect?action=%s&then=%s" % (action, then)
+
+
+    def hit_api(self, username):
+        """Get the given user's information from the DB or failing that, bitbucket.
+
+        :param username:
+            A unicode string representing a username in bitbucket.
+
+        :returns:
+            A dictionary containing bitbucket specific information for the user.
+        """
+        typecheck(username, (unicode, UnicodeWithParams))
         url = "%s/users/%s?pagelen=100"
         user_info = requests.get(url % (BASE_API_URL, username))
         status = user_info.status_code
@@ -65,4 +75,4 @@ def get_user_info(username):
                 level=logging.WARNING)
             raise Response(502, "Bitbucket lookup failed with %d." % status)
 
-    return user_info
+        return user_info

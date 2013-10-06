@@ -25,8 +25,8 @@ class BadAccountElsewhereSubclass(Exception):
 
 class MissingAttributes(Exception):
     def __str__(self):
-        return "The Platform subclass {} is missing one or more attributes: {}."\
-                .format(self.args[0], ','.join(self.args[1]))
+        return "The Platform subclass {} is missing: {}."\
+                .format(self.args[0], ', '.join(self.args[1]))
 
 
 # Platform Objects
@@ -48,10 +48,11 @@ class PlatformRegistry(object):
             raise KeyError(name)
         return platform
 
-    def register(self, Platform):
-        platform = Platform(self.db)
-        self.__dict__[platform.name] = platform
-        AccountElsewhere.subclasses[platform.name] = platform.account_elsewhere_subclass
+    def register(self, *Platforms):
+        for Platform in Platforms:
+            platform = Platform(self.db)
+            self.__dict__[platform.name] = platform
+            AccountElsewhere.subclasses[platform.name] = platform.account_elsewhere_subclass
 
 
 class Platform(object):

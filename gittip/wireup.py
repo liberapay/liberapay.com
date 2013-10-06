@@ -11,6 +11,8 @@ import psycopg2
 import stripe
 import gittip.utils.mixpanel
 from gittip.elsewhere import PlatformRegistry
+from gittip.elsewhere.bitbucket import Bitbucket
+from gittip.elsewhere.github import GitHub
 from gittip.elsewhere.twitter import Twitter
 from gittip.models.community import Community
 from gittip.models.account_elsewhere import AccountElsewhere
@@ -84,7 +86,7 @@ def nmembers(website):
 
 def platforms(website):
     website.platforms = PlatformRegistry(website.db)
-    website.platforms.register(Twitter)
+    website.platforms.register(Bitbucket, GitHub, Twitter)
 
 
 def envvars(website):
