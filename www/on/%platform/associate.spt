@@ -2,13 +2,11 @@ from aspen import Response
 
 [-----------------------------]
 
-platform = website.elsewhere.get(path['platform'])
+platform = website.platforms.get(path['platform'])
 if platform is None:
     raise Response(404)
 
-](website, username)
-
-service.handle_oauth_callback(qs)
+platform.handle_oauth_callback(qs)
 
 [-----------------------------] text/plain
 

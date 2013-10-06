@@ -3,8 +3,6 @@ from __future__ import division, print_function, unicode_literals
 import mock
 from gittip.testing import Harness, test_website as _test_website
 from gittip.testing.client import TestClient
-from gittip.elsewhere.bitbucket import BitbucketAccount
-from gittip.elsewhere.twitter import TwitterAccount
 
 
 class Tests(Harness):
@@ -64,7 +62,7 @@ class Tests(Harness):
     @mock.patch('requests.get')
     @mock.patch('gittip.utils.mixpanel.track')
     def test_associate_confirms_on_connect(self, track, get, post):
-        TwitterAccount('1234', {'screen_name': 'alice'}).opt_in('alice')
+        self.make_user('alice', user_info={'id': 1234})
 
         self.make_participant('bob')
         self.website.oauth_cache = {"deadbeef": ("deadbeef", "connect", "")}
