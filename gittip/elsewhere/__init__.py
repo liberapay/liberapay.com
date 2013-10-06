@@ -65,7 +65,7 @@ class Platform(object):
         # ================================================
 
         expected_attrs = ( 'account_elsewhere_subclass'
-                         , 'hit_api'
+                         , 'get_user_info'
                          , 'name'
                          , 'username_key'
                          , 'user_id_key'
@@ -117,7 +117,7 @@ class Platform(object):
 
     def _fetch_from_api(self, username):
         # Factored out so we can call upsert without hitting API for testing.
-        user_info = self.hit_api(username)
+        user_info = self.get_user_info(username)
         user_id = unicode(user_info[self.user_id_key])  # If this is KeyError, then what?
         return user_id, user_info
 

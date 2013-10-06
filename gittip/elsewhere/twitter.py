@@ -47,7 +47,7 @@ class Twitter(Platform):
     username_key = 'screen_name'
 
 
-    def hit_api(self, screen_name):
+    def get_user_info(self, screen_name):
         """
         """
         # Updated using Twython as a point of reference:

@@ -51,7 +51,7 @@ class Bitbucket(Platform):
         return "/on/bitbucket/redirect?action=%s&then=%s" % (action, then)
 
 
-    def hit_api(self, username):
+    def get_user_info(self, username):
         """Get the given user's information from the DB or failing that, bitbucket.
 
         :param username:

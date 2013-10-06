@@ -106,7 +106,7 @@ class GitHub(Platform):
         return user_info
 
 
-    def hit_api(self, login):
+    def get_user_info(self, login):
         """Get the given user's information from the DB or failing that, github.
 
         :param login:
