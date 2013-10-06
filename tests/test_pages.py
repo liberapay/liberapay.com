@@ -117,3 +117,10 @@ class TestPages(Harness):
         expected = "Page Not Found"
         actual = self.get('/credit-card.json')
         assert expected in actual
+
+    def test_anonymous_sign_out_redirects(self):
+        response = self.client.get('/')
+        csrf_token = response.request.context['csrf_token']
+        response = self.client.post('/sign-out.html', {'csrf_token': csrf_token})
+        assert response.code == 302
+        assert response.headers['Location'] == '/'
