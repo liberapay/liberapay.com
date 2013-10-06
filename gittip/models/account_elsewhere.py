@@ -1,3 +1,5 @@
+from __future__ import absolute_import, division, print_function, unicode_literals
+
 from gittip.models.participant import ProblemChangingUsername
 from gittip.security.user import User
 from postgres.orm import Model
@@ -37,10 +39,10 @@ class AccountElsewhere(Model):
         """Given a desired username, return a User object.
         """
         self.set_is_locked(False)
-        user = User.from_username(self.participant)
+        user = User.from_username(self.participant.username)
         user.sign_in()
         assert not user.ANON, self.participant  # sanity check
-        if self.is_claimed:
+        if self.participant.is_claimed:
             newly_claimed = False
         else:
             newly_claimed = True

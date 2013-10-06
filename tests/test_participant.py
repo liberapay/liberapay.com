@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+from __future__ import absolute_import, division, print_function, unicode_literals
 
 import datetime
 import random
@@ -8,8 +8,6 @@ import psycopg2
 import pytz
 from aspen.utils import utcnow
 from gittip import NotSane
-from gittip.elsewhere.github import GitHubAccount
-from gittip.elsewhere.twitter import TwitterAccount
 from gittip.models._mixin_elsewhere import NeedConfirmation
 from gittip.models.participant import Participant
 from gittip.models.participant import ( UsernameIsEmpty
@@ -119,9 +117,9 @@ class TestParticipant(Harness):
     def setUp(self):
         super(Harness, self).setUp()
         now = utcnow()
-        for idx, username in enumerate(['alice', 'bob', 'carl'], start=1):
+        for i, username in enumerate(['alice', 'bob', 'carl'], start=1):
             self.make_participant(username, claimed_time=now)
-            twitter_account = self.make_elsewhere('twitter', str(idx), {'screen_name': username})
+            twitter_account = self.make_elsewhere('twitter', unicode(i), {'screen_name': username})
             Participant.from_username(username).take_over(twitter_account)
 
     def test_bob_is_singular(self):

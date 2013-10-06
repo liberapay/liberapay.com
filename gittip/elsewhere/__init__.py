@@ -125,6 +125,8 @@ class Platform(object):
     def upsert(self, user_id, user_info):
         """Given a string and a dict, dance with our db and return an AccountElsewhere.
         """
+        typecheck(user_id, unicode, user_info, dict)
+
 
         # Insert the account if needed.
         # =============================

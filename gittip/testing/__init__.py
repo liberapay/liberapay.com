@@ -1,6 +1,6 @@
 """Helpers for testing Gittip.
 """
-from __future__ import print_function, unicode_literals
+from __future__ import absolute_import, division, print_function, unicode_literals
 
 import datetime
 import random
@@ -93,8 +93,14 @@ class Harness(unittest.TestCase):
             except (IntegrityError, InternalError):
                 tablenames.insert(0, tablename)
 
-    def make_elsewhere(self, platform, user_id, user_info):
+    def make_elsewhere(self, platform, user_id, user_info=None):
         platform = self.platforms[platform]
+        if user_info is None:
+            user_info = {}
+        if platform.user_id_key not in user_info:
+            user_info[platform.user_id_key] = user_id
+        if platform.username_key not in user_info:
+            user_info[platform.username_key] = user_id
         return platform.upsert(user_id, user_info)
 
     def make_participant(self, username, **kw):
