@@ -42,3 +42,23 @@ class TestTipJson(Harness):
         assert first_data['total_giving'] == "1.00"
         assert second_data['amount'] == "3.00"
         assert second_data['total_giving'] == "4.00"
+
+    def test_set_tip_out_of_range(self):
+        client = TestClient()
+        now = datetime.datetime.now(pytz.utc)
+        self.make_participant("alice", claimed_time=now)
+        self.make_participant("bob", claimed_time=now)
+
+        response = client.get('/')
+        csrf_token = response.request.context['csrf_token']
+        response = client.post("/alice/tip.json",
+                                {'amount': "110.00", 'csrf_token': csrf_token},
+                                user='bob')
+        assert response.code == 400
+        assert "bad amount" in response
+        
+        response = client.post("/alice/tip.json",
+                                {'amount': "-1.00", 'csrf_token': csrf_token},
+                                user='bob')
+        assert response.code == 400
+        assert "bad amount" in response
