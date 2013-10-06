@@ -54,11 +54,11 @@ class TestTipJson(Harness):
         response = client.post("/alice/tip.json",
                                 {'amount': "110.00", 'csrf_token': csrf_token},
                                 user='bob')
+        assert "bad amount" in response.body
         assert response.code == 400
-        assert "bad amount" in response
         
         response = client.post("/alice/tip.json",
                                 {'amount': "-1.00", 'csrf_token': csrf_token},
                                 user='bob')
+        assert "bad amount" in response.body
         assert response.code == 400
-        assert "bad amount" in response

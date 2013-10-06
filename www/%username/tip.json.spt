@@ -3,7 +3,7 @@
 from decimal import InvalidOperation
 
 from aspen import Response
-from gittip.models.participant import Participant
+from gittip.models.participant import Participant, BadAmount
 
 [-----------------------------------------------------------------------------]
 
@@ -30,7 +30,7 @@ if not user.ANON:
             amount, first_time_tipper = tipper.set_tip_to( tippee.username
                                                          , body['amount']
                                                           )
-        except (InvalidOperation, ValueError):
+        except (InvalidOperation, ValueError, BadAmount):
             raise Response(400, "bad amount")
     else:
         amount = tipper.get_tip_to(tippee.username)
