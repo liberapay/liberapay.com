@@ -118,6 +118,11 @@ class Harness(unittest.TestCase):
 
         return participant
 
+    def make_user(self, username, platform='twitter', user_info=None):
+        elsewhere = self.make_elsewhere(platform, username)
+        user, newly_claimed = elsewhere.opt_in(username)
+        return user
+
     def make_payday(self, *transfers):
 
         with self.db.get_cursor() as cursor:

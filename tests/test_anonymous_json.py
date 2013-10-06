@@ -2,7 +2,6 @@ from __future__ import print_function, unicode_literals
 
 from aspen import json
 
-from gittip.elsewhere.twitter import TwitterAccount
 from gittip.testing import Harness
 from gittip.testing.client import TestClient
 
@@ -10,7 +9,7 @@ from gittip.testing.client import TestClient
 class Tests(Harness):
 
     def hit_anonymous(self, method='GET', expected_code=200):
-        user, ignored = TwitterAccount('alice', {}).opt_in('alice')
+        self.make_user('alice')
 
         client = TestClient()
         response = client.get('/')
