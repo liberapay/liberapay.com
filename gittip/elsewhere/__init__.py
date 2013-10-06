@@ -114,7 +114,7 @@ class Platform(object):
         This method always hits the API and updates our database.
 
         """
-        user_id, user_info = self._hit_api(username)
+        user_id, user_info = self._get_account_from_api(username)
         return self.upsert(user_id, user_info)
 
 
@@ -176,10 +176,10 @@ class Platform(object):
         """, (user_info, self.name, user_id, self.username_key))
 
 
-        # Now delegate to fetch_from_db.
-        # ==============================
+        # Now delegate to get_account_from_db.
+        # ====================================
 
-        return self.fetch_from_db(username)
+        return self.get_account_from_db(username)
 
 
     def resolve(self, username):
