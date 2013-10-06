@@ -3,7 +3,7 @@ from __future__ import print_function, unicode_literals
 from aspen.website import Website
 from gittip.elsewhere.twitter import TwitterAccount
 from gittip.testing import Harness
-from gittip.elsewhere import bitbucket, github, twitter
+from gittip.elsewhere import bitbucket, github, twitter, openstreetmap
 
 # I ended up using TwitterAccount to test even though this is generic
 # functionality, because the base class is too abstract.
@@ -54,4 +54,12 @@ class TestAccountElsewhere(Harness):
                                  , action='opt-in'
                                  , then=self.xss
                                   )
+        assert actual == expected
+
+    def test_openstreetmap_oauth_url_percent_encodes_then(self):
+        expected = '/on/openstreetmap/redirect?action=opt-in&then=L29uL3R3aXR0ZXIvIj48aW1nIHNyYz14IG9uZXJyb3I9cHJvbXB0KDEpOz4v'
+        actual = openstreetmap.oauth_url( website=None
+                                    , action='opt-in'
+                                    , then=self.xss
+                                     )
         assert actual == expected

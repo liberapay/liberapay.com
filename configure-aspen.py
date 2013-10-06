@@ -83,12 +83,13 @@ website.hooks.outbound += [x_frame_options]
 
 
 def add_stuff(request):
-    from gittip.elsewhere import bitbucket, github, twitter, bountysource
+    from gittip.elsewhere import bitbucket, github, twitter, bountysource, openstreetmap
     request.context['username'] = None
     request.context['bitbucket'] = bitbucket
     request.context['github'] = github
     request.context['twitter'] = twitter
     request.context['bountysource'] = bountysource
+    request.context['openstreetmap'] = openstreetmap
     stats = gittip.db.one( "SELECT nactive, transfer_volume FROM paydays "
                            "ORDER BY ts_end DESC LIMIT 1"
                          , default=(0, 0.0)

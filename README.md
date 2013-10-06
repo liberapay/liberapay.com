@@ -418,6 +418,9 @@ an object giving a point-in-time snapshot of Gittip. The
       - "twitter"&mdash;participant's Twitter account; possible values are:
           - `undefined` (key not present)&mdash;no Twitter account connected
           - `https://api.twitter.com/1.1/users/show.json?id=%twitter_immutable_id&include_entities=1`
+      - "openstreetmap"&mdash;participant's OpenStreetMap account; possible values are:
+          - `undefined` (key not present)&mdash;no OpenStreetMap account connected
+          - `%OPENSTREETMAP_API/user/%openstreetmap_username`
 
 
 **/`%username`/tips.json**

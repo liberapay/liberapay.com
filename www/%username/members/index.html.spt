@@ -13,8 +13,8 @@ hero = "Team Members"
 title = team.username     # used in the title tag
 username = team.username  # used in footer shared with on/$platform/
                                   # pages
-github_account, twitter_account, bitbucket_account, bountysource_account = \
-                                                  team.get_accounts_elsewhere()
+github_account, twitter_account, bitbucket_account, bountysource_account, \
+                          openstreetmap_account = team.get_accounts_elsewhere()
 
 [-----------------------------------------------------------------------------]
 {% extends templates/profile.html %}

@@ -11,6 +11,7 @@ from gittip import NotSane
 from gittip.elsewhere.bitbucket import BitbucketAccount
 from gittip.elsewhere.github import GitHubAccount
 from gittip.elsewhere.twitter import TwitterAccount
+from gittip.elsewhere.openstreetmap import OpenStreetMapAccount
 from gittip.models._mixin_elsewhere import NeedConfirmation
 from gittip.models.participant import Participant
 from gittip.models.participant import ( UsernameIsEmpty
@@ -537,3 +538,15 @@ class Tests(Harness):
         stub = Participant.from_username(unclaimed.participant)
         actual = stub.resolve_unclaimed()
         assert actual == "/on/twitter/alice/"
+
+    def test_ru_returns_openstreetmap_url_for_stub_from_openstreetmap(self):
+        user_info = {
+            'osm_id': '1'
+            , 'username': 'alice'
+            , 'img_src': 'http://example.com'
+            , 'html_url': 'http://example.net'
+        }
+        unclaimed = OpenStreetMapAccount('1234', user_info)
+        stub = Participant.from_username(unclaimed.participant)
+        actual = stub.resolve_unclaimed()
+        assert actual == "/on/openstreetmap/alice/"

@@ -3,6 +3,7 @@ from gittip.elsewhere.bitbucket import BitbucketAccount
 from gittip.elsewhere.github import GitHubAccount
 from gittip.elsewhere.twitter import TwitterAccount
 from gittip.elsewhere.bountysource import BountysourceAccount
+from gittip.elsewhere.openstreetmap import OpenStreetMapAccount
 
 [---------]
 if user.ANON or not POST:
@@ -12,7 +13,7 @@ if body['should_reconnect'] != 'yes':
     request.redirect('/about/me.html')
 
 platform = body['platform']
-if platform not in ('github', 'twitter', 'bitbucket', 'bountysource'):
+if platform not in ('github', 'twitter', 'bitbucket', 'bountysource', 'openstreetmap'):
     raise Response(400, "bad platform: %s" % platform)
 
 user_id = body['user_id']
@@ -42,6 +43,8 @@ elif platform == 'twitter':
     Account = TwitterAccount
 elif platform == 'bountysource':
     Account = BountysourceAccount
+elif platform == 'openstreetmap':
+    Account = OpenStreetMapAccount
 
 account = Account(user_id)
 user.participant.take_over(account, have_confirmation=True)

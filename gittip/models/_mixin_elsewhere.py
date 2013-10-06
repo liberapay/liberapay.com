@@ -55,6 +55,7 @@ class MixinElsewhere(object):
         twitter_account = None
         bitbucket_account = None
         bountysource_account = None
+        openstreetmap_account = None
 
         ACCOUNTS = "SELECT * FROM elsewhere WHERE participant=%s"
         accounts = self.db.all(ACCOUNTS, (self.username,))
@@ -68,6 +69,8 @@ class MixinElsewhere(object):
                 bitbucket_account = account
             elif account.platform == "bountysource":
                 bountysource_account = account
+            elif account.platform == "openstreetmap":
+                openstreetmap_account = account
             else:
                 raise UnknownPlatform(account.platform)
 
@@ -75,6 +78,7 @@ class MixinElsewhere(object):
                , twitter_account
                , bitbucket_account
                , bountysource_account
+               , openstreetmap_account
                 )
 
 
@@ -92,7 +96,7 @@ class MixinElsewhere(object):
 
         src = '/assets/%s/avatar-default.gif' % os.environ['__VERSION__']
 
-        github, twitter, bitbucket, bountysource = \
+        github, twitter, bitbucket, bountysource, openstreetmap = \
                                                   self.get_accounts_elsewhere()
         if github is not None:
             # GitHub -> Gravatar: http://en.gravatar.com/site/implement/images/
@@ -112,6 +116,10 @@ class MixinElsewhere(object):
                 # preferrable to guaranteed blurriness. :-/
 
                 src = src.replace('_normal.', '.')
+
+        elif openstreetmap is not None:
+            if 'img_src' in openstreetmap.user_info:
+                src = openstreetmap.user_info['img_src']
 
         return src
 

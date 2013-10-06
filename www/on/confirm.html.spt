@@ -27,9 +27,10 @@ website.connect_tokens[connect_key] = connect_token
 other = Participant.from_username(account.participant)
 
 user_github_account, user_twitter_account, user_bitbucket_account, \
-                      user_bountysource_account = user.participant.get_accounts_elsewhere()
+                                    user_bountysource_account, user_openstreetmap_account \
+                                                = user.participant.get_accounts_elsewhere()
 other_github_account, other_twitter_account, other_bitbucket_account, \
-                    other_bountysource_account = other.get_accounts_elsewhere()
+   other_bountysource_account, other_openstreetmap_account = other.get_accounts_elsewhere()
 
 
 user_giving = user.participant.get_dollars_giving()
@@ -50,6 +51,8 @@ elif account.platform == 'bitbucket':
     username = user_info['username']
 elif account.platform == 'bountysource':
     username = user_info['display_name']
+elif account.platform == 'openstreetmap':
+    username = user_info['username']
 
 title = "Please Confirm"
 [--------]
@@ -97,6 +100,10 @@ title = "Please Confirm"
                         <img src="/assets/icons/bountysource.12.png" />
                         {{ user_bountysource_account.user_info['display_name'] }}<br />
                     {% end %}
+                    {% if user_openstreetmap_account is not None %}
+                        <img src="/assets/icons/openstreetmap.12.png" />
+                        {{ user_openstreetmap_account.user_info['username'] }}<br />
+                    {% end %}
                 </div>
                 </div>
             </td>
@@ -139,6 +146,12 @@ title = "Please Confirm"
                         {{ other_bountysource_account.user_info['display_name'] }}<br />
                         {% if account.platform == 'bountysource' %}</span>{% end %}
                     {% end %}
+                    {% if other_openstreetmap_account is not None %}
+                        <img src="/assets/icons/openstreetmap.12.png" />
+                        {% if account.platform == 'openstreetmap' %}<span class="highlight">{% end %}
+                        {{ other_openstreetmap_account.user_info['username'] }}<br />
+                        {% if account.platform == 'openstreetmap' %}</span>{% end %}
+                    {% end %}
                 </div>
                 </div>
             </td>
@@ -173,6 +186,12 @@ title = "Please Confirm"
                     <span class="account-elsewhere">
                         <img src="/assets/icons/bountysource.12.png" />
                         {{ user_bountysource_account.user_info['display_name'] }}<br />
+                    </span>
+                {% end %}
+                {% if account.platform == 'openstreetmap' and user_openstreetmap_account is not None %}
+                    <span class="account-elsewhere">
+                        <img src="/assets/icons/openstreetmap.12.png" />
+                        {{ user_openstreetmap_account.user_info['username'] }}<br />
                     </span>
                 {% end %}
             </td>
@@ -223,6 +242,12 @@ title = "Please Confirm"
                         <span class="account-elsewhere">
                             <img src="/assets/icons/bountysource.12.png" />
                             {{ user_bountysource_account.user_info['display_name'] }}<br />
+                        </span>
+                    {% end %}
+                    {% if user_openstreetmap_account is not None %}
+                        <span class="account-elsewhere">
+                            <img src="/assets/icons/openstreetmap.12.png" />
+                            {{ user_openstreetmap_account.user_info['username'] }}<br />
                         </span>
                     {% end %}
 
@@ -283,6 +308,12 @@ title = "Please Confirm"
                         <span class="account-elsewhere">
                             <img src="/assets/icons/bountysource.12.png" />
                             {{ other_bountysource_account.user_info['display_name'] }}<br />
+                        </span>
+                    {% end %}
+                    {% if other_openstreetmap_account is not None and account.platform != 'openstreetmap' %}
+                        <span class="account-elsewhere">
+                            <img src="/assets/icons/openstreetmap.12.png" />
+                            {{ other_openstreetmap_account.user_info['username'] }}<br />
                         </span>
                     {% end %}
 

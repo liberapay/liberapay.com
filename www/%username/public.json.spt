@@ -78,7 +78,8 @@ if not user.ANON:
 #
 # https://github.com/gittip/www.gittip.com/issues/680
 
-github, twitter, bitbucket, bountysource = participant.get_accounts_elsewhere()
+github, twitter, bitbucket, bountysource, openstreetmap \
+                                         = participant.get_accounts_elsewhere()
 if bitbucket is not None:
     bitbucket = "https://bitbucket.org/api/1.0/users/%s" % \
                                                 bitbucket.user_info['username']
@@ -91,10 +92,15 @@ if bountysource is not None:
     bountysource = "https://api.bountysource.com/users/%s" % \
                                          bountysource.user_info['display_name']
 
+if openstreetmap is not None:
+    openstreetmap = "%s/api/0.6/user/%s" % \
+               (website.openstreetmap_api, openstreetmap.user_info['username'])
+
 output['elsewhere'] = { 'bitbucket': bitbucket
                       , 'github': github
                       , 'twitter': twitter
                       , 'bountysource': bountysource
+                      , 'openstreetmap' : openstreetmap
                        }
 
 response.body = output

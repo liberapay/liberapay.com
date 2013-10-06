@@ -9,8 +9,9 @@ title = "Sign In"
     <p>Sign in using
     <a href="{{ twitter.oauth_url(website, u'opt-in', u'/about/me.html') }}">Twitter</a>, 
     <a href="{{ github.oauth_url(website, u'opt-in', u'/about/me.html') }}">GitHub</a>, 
+    <a href="{{ bitbucket.oauth_url(website, u'opt-in', u'/about/me.html') }}">Bitbucket</a> 
     or
-    <a href="{{ bitbucket.oauth_url(website, u'opt-in', u'/about/me.html') }}">Bitbucket</a>,
+    <a href="{{ openstreetmap.oauth_url(website, u'opt-in', u'/about/me.html') }}">OpenStreetMap</a>
     and this page will redirect you to your profile.</p>
 
     <p>Thanks! :-)</p>

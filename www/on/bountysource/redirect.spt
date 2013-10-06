@@ -79,6 +79,22 @@ for account in user.participant.get_accounts_elsewhere():
         if not connect_params.get('last_name'):
             connect_params['last_name'] = account.user_info.get('last_name')
 
+    # from OpenStreetMap
+    if account.platform == 'openstreetmap':
+        # split single name string into parts
+        name_parts = re.split('/s+', account.user_info.get('username').strip())
+        
+        if not connect_params.get('login'):
+            connect_params['login'] = account.user_info.get('username')
+        if not connect_params.get('avatar_url'):
+            connect_params['avatar_url'] = account.user_info.get('img_src')
+        if not connect_params.get('first_name'):
+            if name_parts:
+                connect_params['first_name'] = name_parts[0]
+        if not connect_params.get('last_name'):
+            if len(name_parts) >= 2:
+                connect_params['last_name'] = name_parts[-1]
+        
 # build redirect URL to Bountysource from collected data
 auth_url = "%s#auth/gittip/confirm?%s" % ( bountysource.www_host
                                          , urlencode(connect_params)

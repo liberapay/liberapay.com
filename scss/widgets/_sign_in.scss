@@ -31,7 +31,7 @@
     -moz-box-shadow: none;
     box-shadow: none;
     background: $green;
-    min-width: 100px;
+    min-width: 120px;
     li {
       margin: 0;
       &.twitter a {
@@ -42,6 +42,9 @@
       }
       &.bitbucket a {
         @include has-icon("bitbucket");
+      }
+      &.openstreetmap a {
+        @include has-icon("openstreetmap");
       }
     }
     a {

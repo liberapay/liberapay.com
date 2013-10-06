@@ -98,6 +98,27 @@
     </tr>
     <tr>
         <td class="account-type">
+            <img src="/assets/openstreetmap.png" />
+        </td>
+        <td class="account-details">
+            {% if openstreetmap_account is None %}
+                {% if not user.ANON and user.participant == participant %}
+                    Connect a <a href="{{ openstreetmap.oauth_url(website, u'connect') }}">OpenStreetMap account</a>.
+                {% else %}
+                    No OpenStreetMap account connected.
+                {% end %}
+            {% else %}
+            <a rel="me" href="{{ escape(openstreetmap_account.user_info.get('html_url', '')) }}"
+                ><img class="avatar"
+                src="{{ escape(openstreetmap_account.user_info.get('img_src', '/assets/%s/no-avatar.png' % website.version)) }}"
+                />{{ escape(openstreetmap_account.user_info.get('username')) }}
+            </a>
+            <div class="account-type">on OpenStreetMap</div>
+            {% end %}
+        </td>
+    </tr>
+    <tr>
+        <td class="account-type">
             <img src="/assets/balanced-avatar.png" />
         </td>
         <td class="account-details">

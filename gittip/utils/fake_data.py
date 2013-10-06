@@ -8,7 +8,7 @@ import string
 
 faker = Factory.create()
 
-platforms = ['github', 'twitter', 'bitbucket']
+platforms = ['github', 'twitter', 'bitbucket', 'openstreetmap']
 
 
 def _fake_thing(db, tablename, **kw):
@@ -119,6 +119,10 @@ def fake_elsewhere(db, participant, platform=None):
             "username": participant.username,
             "is_team": "False",
             "html_url": "https://bitbucket.org/" + participant.username,
+        },
+        "openstreetmap": {
+            "username": participant.username,
+            "html_url": "https://openstreetmap/user/" + participant.username,
         }
     }
 
