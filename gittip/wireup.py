@@ -52,13 +52,15 @@ def sentry(website):
         sentry = raven.Client(sentry_dsn)
         def tell_sentry(request):
             cls, response = sys.exc_info()[:2]
+            response_code = "n/a"
             if cls is aspen.Response:
-                if response.code < 500:
-                    return
+                response_code = str(response.code // 100) + 'xx'
 
-            kw = {'extra': { "filepath": request.fs
-                           , "request": str(request).splitlines()
-                            }}
+            kw = { 'extra': { "filepath": request.fs
+                            , "request": str(request).splitlines()
+                             }
+                 , 'tags': {'Response Code': response_code}
+                  }
             exc = sentry.captureException(**kw)
             ident = sentry.get_ident(exc)
             aspen.log_dammit("Exception reference: " + ident)
