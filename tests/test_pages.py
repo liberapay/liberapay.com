@@ -124,3 +124,10 @@ class TestPages(Harness):
         response = self.client.post('/sign-out.html', {'csrf_token': csrf_token})
         assert response.code == 302
         assert response.headers['Location'] == '/'
+
+    def test_receipts_signed_in(self):
+        alice = self.make_participant('alice',
+                              claimed_time=datetime.datetime.now(pytz.utc))
+        self.db.run("INSERT INTO exchanges (id, participant, amount, fee) VALUES(100,'alice',1,0.1)")
+        request = self.client.get("/alice/receipts/100.html", "alice")
+        assert request.code == 200

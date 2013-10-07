@@ -8,7 +8,7 @@ from gittip.billing import BalancedCard
 participant = get_participant(request, restrict=False)
 
 # Do our own restriction.
-if user == participant:
+if user.participant == participant:
     pass
 elif user.ADMIN:
     pass
@@ -19,7 +19,7 @@ card = BalancedCard(participant.balanced_account_uri)
 exchange = db.one( "SELECT * FROM exchanges "
                    "WHERE id=%s AND participant=%s"
                  , (path['exchange_id'], path['username'])
-                  )
+                 , back_as=dict)
 if exchange is None:
     raise Response(404)
 
