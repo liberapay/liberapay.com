@@ -118,11 +118,12 @@ def sentry(website):
 
         # Set level.
         # ==========
-        # Sentry takes a string for level, and uses it as a tag in the UI and
-        # also (for now) to color-code the dots on the stream view. The
+        # Sentry takes an int for level, which it converts to a string and uses
+        # as a tag in the UI and also (for now) to color-code events. The
         # Exception event handler hard-wires level to 40 (logging.ERROR). We
-        # want to vary it based on the response code, which is why we're not
-        # using sentry.captureException or sentry.capture.
+        # want to vary it based on the response code, but we don't have a hook
+        # to override it if we use sentry.captureException, so we've unrolled
+        # that here.
 
         data['level'] = (response_code // 100) * 10
 
