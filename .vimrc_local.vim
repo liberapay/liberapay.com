@@ -26,6 +26,11 @@ if &filetype == 'python' || bufname("%") =~? '\.spt$'
   setl shiftwidth=4 tabstop=4
 endif
 
+" Use 4-width tabs in makefiles, and don't expand tabs
+if &filetype == 'make'
+  setl noexpandtab shiftwidth=4 tabstop=4
+endif
+
 " Make .spt files look like Python
 if bufname("%") =~? '\.spt$'
   " Later we can have this `set filetype=aspen` and set an `au FileType aspen`
