@@ -47,24 +47,101 @@ def username_restrictions(website):
 
 
 def sentry(website):
-    sentry_dsn = os.environ.get('SENTRY_DSN')
-    if sentry_dsn is not None:
-        sentry = raven.Client(sentry_dsn)
-        def tell_sentry(request):
-            cls, response = sys.exc_info()[:2]
-            response_code = "n/a"
-            if cls is aspen.Response:
-                response_code = str(response.code // 100) + 'xx'
+    if not website.sentry_dsn:
+        aspen.log_dammit("Won't log to Sentry (SENTRY_DSN is empty).")
+        return
 
-            kw = { 'extra': { "filepath": request.fs
-                            , "request": str(request).splitlines()
-                             }
-                 , 'tags': {'Response Code': response_code}
-                  }
-            exc = sentry.captureException(**kw)
-            ident = sentry.get_ident(exc)
-            aspen.log_dammit("Exception reference: " + ident)
-        website.hooks.error_early += [tell_sentry]
+    sentry = raven.Client(website.sentry_dsn)
+
+    def tell_sentry(request):
+        cls, response = sys.exc_info()[:2]
+
+
+        # Tag by HTTP response code.
+        # ==========================
+
+        if cls is aspen.Response:
+            response_code = response.code
+        else:
+
+            # Any non-Response exception we see here is going to result in
+            # a 500 to the user, so let's report it as that. See discussion
+            # at:
+
+            # https://github.com/gittip/www.gittip.com/pull/1560#issuecomment-25913549
+
+            response_code = 500
+
+
+        # Tag by username.
+        # ================
+        # | is disallowed in usernames, so we can use it here to indicate
+        # situations in which we can't get a username.
+
+        request_context = getattr(request, 'context', None)
+        if request_context is None:
+            username = '| no context'
+        else:
+            user = request.context.get('user', None)
+            if user is None:
+                username = '| no user'
+            else:
+                is_anon = getattr(user, 'ANON', None)
+                if is_anon is None:
+                    username = '| no ANON'
+                elif is_anon:
+                    username = '| anonymous'
+                else:
+                    participant = getattr(user, 'participant', None)
+                    if participant is None:
+                        username = '| no participant'
+                    else:
+                        username = getattr(user.participant, 'username', None)
+                        if username is None:
+                            username = '| no username'
+
+
+        # Build the message.
+        # ==================
+
+        tags = { 'response code': response_code
+               , 'username': username
+                }
+        extra = { 'filepath': request.fs
+                , 'request': str(request).splitlines()
+                 }
+        data = sentry.build_msg( 'raven.events.Exception'
+                               , exc_info=None
+                               , tags=tags
+                               , extra=extra
+                                )
+
+        # Set level.
+        # ==========
+        # Sentry takes a string for level, and uses it as a tag in the UI and
+        # also (for now) to color-code the dots on the stream view. The
+        # Exception event handler hard-wires level to 40 (logging.ERROR). We
+        # want to vary it based on the response code, which is why we're not
+        # using sentry.captureException or sentry.capture.
+
+        data['level'] = (response_code // 100) * 10
+
+
+        # Send it off.
+        # ============
+
+        sentry.send(**data)  # HTTP under here
+
+
+        # Emit a single reference string on stdout.
+        # =========================================
+        # We don't log any tracebacks.
+
+        ident = sentry.get_ident((data['event_id'], data['checksum']))
+        aspen.log_dammit('Exception reference: ' + ident)
+
+
+    website.hooks.error_early += [tell_sentry]
 
 
 def mixpanel(website):

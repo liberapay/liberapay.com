@@ -30,6 +30,8 @@ ASCII_ALLOWED_IN_USERNAME = set("0123456789"
                                 "abcdefghijklmnopqrstuvwxyz"
                                 "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                 ".,-_:@ ")
+# We use | in Sentry logging, so don't make that allowable. :-)
+
 NANSWERS_THRESHOLD = 0  # configured in wireup.py
 
 
