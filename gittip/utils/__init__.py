@@ -346,8 +346,8 @@ def update_homepage_queries_once(db):
         start = time.time()
         cursor.execute("""
 
-        DROP TABLE IF EXISTS _homepage_new_participants;
-        CREATE TABLE _homepage_new_participants AS
+        DELETE FROM homepage_new_participants;
+        INSERT INTO homepage_new_participants
               SELECT username, claimed_time FROM (
                   SELECT DISTINCT ON (p.username)
                          p.username
@@ -361,7 +361,8 @@ def update_homepage_queries_once(db):
             ORDER BY claimed_time DESC;
 
         DROP TABLE IF EXISTS _homepage_top_givers;
-        CREATE TABLE _homepage_top_givers AS
+        DELETE FROM homepage_top_givers;
+        INSERT INTO homepage_top_givers
             SELECT tipper AS username, anonymous, sum(amount) AS amount
               FROM (    SELECT DISTINCT ON (tipper, tippee)
                                amount
@@ -381,8 +382,8 @@ def update_homepage_queries_once(db):
           GROUP BY tipper, anonymous
           ORDER BY amount DESC;
 
-        DROP TABLE IF EXISTS _homepage_top_receivers;
-        CREATE TABLE _homepage_top_receivers AS
+        DELETE FROM homepage_top_receivers;
+        INSERT INTO homepage_top_receivers
             SELECT tippee AS username, claimed_time, sum(amount) AS amount
               FROM (    SELECT DISTINCT ON (tipper, tippee)
                                amount
@@ -400,18 +401,6 @@ def update_homepage_queries_once(db):
              WHERE is_suspicious IS NOT true
           GROUP BY tippee, claimed_time
           ORDER BY amount DESC;
-
-        DROP TABLE IF EXISTS homepage_new_participants;
-        ALTER TABLE _homepage_new_participants
-          RENAME TO homepage_new_participants;
-
-        DROP TABLE IF EXISTS homepage_top_givers;
-        ALTER TABLE _homepage_top_givers
-          RENAME TO homepage_top_givers;
-
-        DROP TABLE IF EXISTS homepage_top_receivers;
-        ALTER TABLE _homepage_top_receivers
-          RENAME TO homepage_top_receivers;
 
         """)
         end = time.time()
