@@ -57,20 +57,28 @@ def sentry(website):
         cls, response = sys.exc_info()[:2]
 
 
-        # Tag by HTTP response code.
-        # ==========================
+        # Infer response_code and level.
+        # ==============================
 
         if cls is aspen.Response:
+
+            # This is probably a 3xx or a 4xx. If we raised it, then we
+            # expected it and it's not an emergency. We want it available for
+            # debugging but we don't need to get an email about it.
+
             response_code = response.code
+            level = 'debug'
+
         else:
 
-            # Any non-Response exception we see here is going to result in
-            # a 500 to the user, so let's report it as that. See discussion
-            # at:
+            # Any non-Response exception we see here is unexpected and we need
+            # to find out about it. It's going to result in a 500 to the user,
+            # so let's report it as that. See discussion on:
 
-            # https://github.com/gittip/www.gittip.com/pull/1560#issuecomment-25913549
+            # https://github.com/gittip/www.gittip.com/pull/1560.
 
             response_code = 500
+            level = 'fatal'
 
 
         # Tag by username.
@@ -118,14 +126,14 @@ def sentry(website):
 
         # Set level.
         # ==========
-        # Sentry takes an int for level, which it converts to a string and uses
-        # as a tag in the UI and also (for now) to color-code events. The
-        # Exception event handler hard-wires level to 40 (logging.ERROR). We
-        # want to vary it based on the response code, but we don't have a hook
-        # to override it if we use sentry.captureException, so we've unrolled
-        # that here.
+        # Sentry takes an int for level, which it converts to one of five
+        # strings and uses as a tag in the UI and also (for now) to color-code
+        # events. The Exception event handler hard-wires level to 40
+        # (logging.ERROR). We want to vary it based on whether the exception
+        # was a Response, but we don't have a hook to override it if we use
+        # sentry.captureException, so we've unrolled that here.
 
-        data['level'] = (response_code // 100) * 10
+        data['level'] = level
 
 
         # Send it off.
