@@ -176,21 +176,10 @@ Configuration
 When using `make run`, Gittip's execution environment is defined in a
 `local.env` file, which is not included in the source code repo. If you `make
 run` you'll have one generated for you, which you can then tweak as needed.
-Here's the default, which is also contained in default_local.env:
+It's a copy of [default_local.env]
+(https://github.com/gittip/www.gittip.com/blob/master/default_local.env).
 
-    CANONICAL_HOST=
-    CANONICAL_SCHEME=http
-    DATABASE_URL=postgres://gittip@localhost/gittip
-    DATABASE_MAXCONN=10
-    STRIPE_SECRET_API_KEY=1
-    STRIPE_PUBLISHABLE_API_KEY=1
-    BALANCED_API_SECRET=90bb3648ca0a11e1a977026ba7e239a9
-    GITHUB_CLIENT_ID=3785a9ac30df99feeef5
-    GITHUB_CLIENT_SECRET=e69825fafa163a0b0b6d2424c107a49333d46985
-    GITHUB_CALLBACK=http://localhost:8537/on/github/associate
-    TWITTER_CONSUMER_KEY=QBB9vEhxO4DFiieRF68zTA
-    TWITTER_CONSUMER_SECRET=mUymh1hVMiQdMQbduQFYRi79EYYVeOZGrhj27H59H78
-    TWITTER_CALLBACK=http://127.0.0.1:8537/on/twitter/associate
+The following text explains some of the content of that file:
 
 The `BALANCED_API_SECRET` is a test marketplace. To generate a new secret for
 your own testing run this command:
