@@ -120,6 +120,7 @@ def envvars(website):
 
     website.google_analytics_id = envvar('GOOGLE_ANALYTICS_ID')
     website.gauges_id = envvar('GAUGES_ID')
+    website.sentry_dsn = envvar('SENTRY_DSN')
 
     if missing_keys:
         missing_keys.sort()
