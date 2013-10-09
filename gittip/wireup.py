@@ -50,12 +50,12 @@ def username_restrictions(website):
 def request_metrics(website):
     def add_start_timestamp(request):
         request.x_start = time.time()
-    def log_request_duration_and_count(response):
-        duration = time.time() - response.request.x_start
-        print("measure#request_duration={}ms".format(duration * 1000))
+    def log_request_count_and_response_time(response):
         print("count#requests=1")
+        response_time = time.time() - response.request.x_start
+        print("measure#response_time={}ms".format(response_time * 1000))
     website.hooks.inbound_early.insert(0, add_start_timestamp)
-    website.hooks.outbound += [log_request_duration_and_count]
+    website.hooks.outbound += [log_request_count_and_response_time]
 
 
 def sentry(website):
