@@ -29,7 +29,8 @@ module.exports = function(grunt) {
           Gittip: true,
           _gttp: true,
           jQuery: true,
-          $: true
+          $: true,
+          mixpanel: true
         }
       }
     }
