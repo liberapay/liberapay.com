@@ -57,36 +57,29 @@ def sentry(website):
         cls, response = sys.exc_info()[:2]
 
 
-        # Infer response_code and level.
-        # ==============================
+        # Decide if we care.
+        # ==================
 
         if cls is aspen.Response:
 
-            # This is probably a 3xx or a 4xx. If we raised it, then we
-            # expected it and it's not an emergency. We want it available for
-            # debugging but we don't need to get an email about it.
+            if response.code < 500:
 
-            response_code = response.code
-            level = 'debug'
+                # Only log server errors to Sentry. For responses < 500 we use
+                # stream-/line-based access logging. See discussion on:
 
-        else:
+                # https://github.com/gittip/www.gittip.com/pull/1560.
 
-            # Any non-Response exception we see here is unexpected and we need
-            # to find out about it. It's going to result in a 500 to the user,
-            # so let's report it as that. See discussion on:
-
-            # https://github.com/gittip/www.gittip.com/pull/1560.
-
-            response_code = 500
-            level = 'fatal'
+                return
 
 
-        # Tag by username.
-        # ================
+        # Find a user.
+        # ============
         # | is disallowed in usernames, so we can use it here to indicate
         # situations in which we can't get a username.
 
         request_context = getattr(request, 'context', None)
+        user = {}
+        user_id = 'n/a'
         if request_context is None:
             username = '| no context'
         else:
@@ -107,46 +100,34 @@ def sentry(website):
                         username = getattr(user.participant, 'username', None)
                         if username is None:
                             username = '| no username'
+                        else:
+                            user_id = user.participant.id
+                            username = username.encode('utf8')
+                            user = { 'id': user_id
+                                   , 'is_admin': user.participant.is_admin
+                                   , 'is_suspicious': user.participant.is_suspicious
+                                   , 'claimed_time': user.participant.claimed_time.isoformat()
+                                   , 'url': 'https://www.gittip.com/{}/'.format(username)
+                                    }
 
 
-        # Build the message.
-        # ==================
+        # Fire off a Sentry call.
+        # =======================
 
-        tags = { 'response code': response_code
-               , 'username': username
+        tags = { 'username': username
+               , 'user_id': user_id
                 }
         extra = { 'filepath': request.fs
                 , 'request': str(request).splitlines()
+                , 'user': user
                  }
-        data = sentry.build_msg( 'raven.events.Exception'
-                               , exc_info=None
-                               , tags=tags
-                               , extra=extra
-                                )
-
-        # Set level.
-        # ==========
-        # Sentry takes an int for level, which it converts to one of five
-        # strings and uses as a tag in the UI and also (for now) to color-code
-        # events. The Exception event handler hard-wires level to 40
-        # (logging.ERROR). We want to vary it based on whether the exception
-        # was a Response, but we don't have a hook to override it if we use
-        # sentry.captureException, so we've unrolled that here.
-
-        data['level'] = level
+        result = sentry.captureException(tags=tags, extra=extra)
 
 
-        # Send it off.
-        # ============
+        # Emit a reference string to stdout.
+        # ==================================
 
-        sentry.send(**data)  # HTTP under here
-
-
-        # Emit a single reference string on stdout.
-        # =========================================
-        # We don't log any tracebacks.
-
-        ident = sentry.get_ident((data['event_id'], data['checksum']))
+        ident = sentry.get_ident(result)
         aspen.log_dammit('Exception reference: ' + ident)
 
 
