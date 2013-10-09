@@ -46,6 +46,12 @@ def username_restrictions(website):
     gittip.RESTRICTED_USERNAMES = os.listdir(website.www_root)
 
 
+def librato(website):
+    def log_for_librato(response):
+        print("count#requests=1")
+    website.hooks.outbound += [log_for_librato]
+
+
 def sentry(website):
     sentry_dsn = os.environ.get('SENTRY_DSN')
     if sentry_dsn is not None:

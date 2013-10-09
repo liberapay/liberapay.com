@@ -27,6 +27,7 @@ gittip.wireup.mixpanel(website)
 gittip.wireup.nanswers()
 gittip.wireup.nmembers(website)
 gittip.wireup.envvars(website)
+gittip.wireup.librato(website)
 
 
 # Up the threadpool size: https://github.com/gittip/www.gittip.com/issues/1098
