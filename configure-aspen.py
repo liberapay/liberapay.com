@@ -27,7 +27,6 @@ gittip.wireup.mixpanel(website)
 gittip.wireup.nanswers()
 gittip.wireup.nmembers(website)
 gittip.wireup.envvars(website)
-gittip.wireup.librato(website)
 
 
 # Up the threadpool size: https://github.com/gittip/www.gittip.com/issues/1098
@@ -113,3 +112,7 @@ def update_homepage_queries():
 homepage_updater = threading.Thread(target=update_homepage_queries)
 homepage_updater.daemon = True
 homepage_updater.start()
+
+
+# Do this last so we get accurate times.
+gittip.wireup.request_metrics(website)

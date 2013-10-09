@@ -2,6 +2,7 @@
 """
 import os
 import sys
+import time
 
 import aspen
 import balanced
@@ -46,10 +47,15 @@ def username_restrictions(website):
     gittip.RESTRICTED_USERNAMES = os.listdir(website.www_root)
 
 
-def librato(website):
-    def log_for_librato(response):
+def request_metrics(website):
+    def add_start_timestamp(request):
+        request.x_start = time.time()
+    def log_request_duration_and_count(response):
+        duration = time.time() - response.request.x_start
+        print("measure#request_duration={}ms".format(duration * 1000))
         print("count#requests=1")
-    website.hooks.outbound += [log_for_librato]
+    website.hooks.inbound_early.insert(0, add_start_timestamp)
+    website.hooks.outbound += [log_request_duration_and_count]
 
 
 def sentry(website):
