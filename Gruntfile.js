@@ -36,13 +36,15 @@ module.exports = function(grunt) {
         strict: false,
         node: true,
         browser: true,
+        jquery: true,
+        devel: true,
 
         globals: {
           Gittip: true,
           _gttp: true,
-          jQuery: true,
-          $: true,
-          mixpanel: true
+          gttpURI: true,
+          mixpanel: true,
+          alert: true
         }
       }
     }
