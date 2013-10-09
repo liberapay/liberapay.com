@@ -69,11 +69,16 @@ test-db: test-cloud-db test-schema
 test: env tests/env test-schema
 	./$(env_bin)/swaddle tests/env ./$(env_bin)/py.test ./tests/
 
-tests: test
+tests: test jstest
 
-jstest:
-	./node_modules/.bin/karma start karma-unit.conf.js
-	./$(env_bin)/python jstests/scripts/e2e_runner.py
+node_modules: package.json
+	npm install
+	@if [ -d node_modules ]; then touch node_modules; fi
+
+jstest: node_modules
+	./node_modules/.bin/grunt test
+	#./node_modules/.bin/karma start karma-unit.conf.js
+	#./$(env_bin)/python jstests/scripts/e2e_runner.py
 
 tests/env:
 	echo "Creating a tests/env file ..."
