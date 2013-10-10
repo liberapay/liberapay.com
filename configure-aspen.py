@@ -112,3 +112,7 @@ def update_homepage_queries():
 homepage_updater = threading.Thread(target=update_homepage_queries)
 homepage_updater.daemon = True
 homepage_updater.start()
+
+
+# Do this last so we get accurate times.
+gittip.wireup.request_metrics(website)
