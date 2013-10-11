@@ -59,22 +59,91 @@ def request_metrics(website):
 
 
 def sentry(website):
-    sentry_dsn = os.environ.get('SENTRY_DSN')
-    if sentry_dsn is not None:
-        sentry = raven.Client(sentry_dsn)
-        def tell_sentry(request):
-            cls, response = sys.exc_info()[:2]
-            if cls is aspen.Response:
-                if response.code < 500:
-                    return
+    if not website.sentry_dsn:
+        aspen.log_dammit("Won't log to Sentry (SENTRY_DSN is empty).")
+        return
 
-            kw = {'extra': { "filepath": request.fs
-                           , "request": str(request).splitlines()
-                            }}
-            exc = sentry.captureException(**kw)
-            ident = sentry.get_ident(exc)
-            aspen.log_dammit("Exception reference: " + ident)
-        website.hooks.error_early += [tell_sentry]
+    sentry = raven.Client(website.sentry_dsn)
+
+    def tell_sentry(request):
+        cls, response = sys.exc_info()[:2]
+
+
+        # Decide if we care.
+        # ==================
+
+        if cls is aspen.Response:
+
+            if response.code < 500:
+
+                # Only log server errors to Sentry. For responses < 500 we use
+                # stream-/line-based access logging. See discussion on:
+
+                # https://github.com/gittip/www.gittip.com/pull/1560.
+
+                return
+
+
+        # Find a user.
+        # ============
+        # | is disallowed in usernames, so we can use it here to indicate
+        # situations in which we can't get a username.
+
+        request_context = getattr(request, 'context', None)
+        user = {}
+        user_id = 'n/a'
+        if request_context is None:
+            username = '| no context'
+        else:
+            user = request.context.get('user', None)
+            if user is None:
+                username = '| no user'
+            else:
+                is_anon = getattr(user, 'ANON', None)
+                if is_anon is None:
+                    username = '| no ANON'
+                elif is_anon:
+                    username = '| anonymous'
+                else:
+                    participant = getattr(user, 'participant', None)
+                    if participant is None:
+                        username = '| no participant'
+                    else:
+                        username = getattr(user.participant, 'username', None)
+                        if username is None:
+                            username = '| no username'
+                        else:
+                            user_id = user.participant.id
+                            username = username.encode('utf8')
+                            user = { 'id': user_id
+                                   , 'is_admin': user.participant.is_admin
+                                   , 'is_suspicious': user.participant.is_suspicious
+                                   , 'claimed_time': user.participant.claimed_time.isoformat()
+                                   , 'url': 'https://www.gittip.com/{}/'.format(username)
+                                    }
+
+
+        # Fire off a Sentry call.
+        # =======================
+
+        tags = { 'username': username
+               , 'user_id': user_id
+                }
+        extra = { 'filepath': request.fs
+                , 'request': str(request).splitlines()
+                , 'user': user
+                 }
+        result = sentry.captureException(tags=tags, extra=extra)
+
+
+        # Emit a reference string to stdout.
+        # ==================================
+
+        ident = sentry.get_ident(result)
+        aspen.log_dammit('Exception reference: ' + ident)
+
+
+    website.hooks.error_early += [tell_sentry]
 
 
 def mixpanel(website):
@@ -130,6 +199,7 @@ def envvars(website):
 
     website.google_analytics_id = envvar('GOOGLE_ANALYTICS_ID')
     website.gauges_id = envvar('GAUGES_ID')
+    website.sentry_dsn = envvar('SENTRY_DSN')
 
     if missing_keys:
         missing_keys.sort()

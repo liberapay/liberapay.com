@@ -22,11 +22,11 @@ gittip.wireup.canonical()
 website.db = gittip.wireup.db()
 gittip.wireup.billing()
 gittip.wireup.username_restrictions(website)
-gittip.wireup.sentry(website)
 gittip.wireup.mixpanel(website)
 gittip.wireup.nanswers()
 gittip.wireup.nmembers(website)
 gittip.wireup.envvars(website)
+gittip.wireup.sentry(website)
 
 
 # Up the threadpool size: https://github.com/gittip/www.gittip.com/issues/1098
