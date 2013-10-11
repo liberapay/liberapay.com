@@ -1,14 +1,20 @@
 #!/usr/bin/env python
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-import os
 import csv
+import datetime
+import getpass
+import os
 from decimal import Decimal as D, ROUND_UP
 
 import requests
 
 
-gittip_api_key = os.environ['GITTIP_API_KEY']
+os.chdir('../masspay')
+ts = datetime.datetime.now().strftime('%Y-%m-%d')
+INPUT_CSV = '{}.input.csv'.format(ts)
+PAYPAL_CSV = '{}.output.paypal.csv'.format(ts)
+GITTIP_CSV = '{}.output.gittip.csv'.format(ts)
 
 
 def round_(d):
@@ -17,9 +23,9 @@ def round_(d):
 def round_up(d):
     return d.quantize(D('0.01'), ROUND_UP)
 
+def print_rule():
+    print("-" * 53)
 
-gittip = requests.session()
-total_gross = total_fees = total_net = D('0.00')
 
 class Payee(object):
     username = None
@@ -36,66 +42,100 @@ class Payee(object):
         self.net = self.gross
 
     def assess_fee(self, fee):
-        payee.fee += fee
-        payee.net -= fee
+        self.fee += fee
+        self.net -= fee
 
-infile = open('owed.csv')
-outfile = open('masspay.csv', 'w+')
 
-payees = [Payee(rec) for rec in csv.reader(infile)]
-payees.sort(key=lambda o: o.gross)
+def compute_output_csvs():
+    total_gross = total_fees = total_net = D('0.00')
 
-total_gross = sum([p.gross for p in payees])
-total_fees = total_gross - round_(total_gross / D('1.02'))  # 2% fee
-total_net = 0
+    payees = [Payee(rec) for rec in csv.reader(open(INPUT_CSV))]
+    payees.sort(key=lambda o: o.gross)
 
-for payee in payees:
-    payee.gross_perc = payee.gross / total_gross
-    payee.assess_fee(round_(total_fees * payee.gross_perc))
+    total_gross = sum([p.gross for p in payees])
+    total_fees = total_gross - round_(total_gross / D('1.02'))  # 2% fee
+    total_net = 0
 
-fee_check = sum([p.fee for p in payees])
-if fee_check != total_fees:
+    for payee in payees:
+        payee.gross_perc = payee.gross / total_gross
+        payee.assess_fee(round_(total_fees * payee.gross_perc))
 
-    # Up to one penny per payee is okay.
-    fee_difference = total_fees - fee_check
-    fee_tolerance = D('0.0{}'.format(len((payees)))) # one penny per payee
-    print("-"*78)
-    print()
-    print("Fee rounding error tolerance:   {}".format(fee_tolerance))
-    print("Accumulated fee rounding error: {}".format(fee_difference))
-    print()
-    assert fee_difference < fee_tolerance
+    fee_check = sum([p.fee for p in payees])
+    if fee_check != total_fees:
 
-    # Distribute rounding errors.
-    for payee in reversed(payees):
-        allotment = round_up(fee_difference * payee.gross_perc)
-        payee.assess_fee(allotment)
-        print("  {} => {}".format(allotment, payee.email))
+        # Up to one penny per payee is okay.
+        fee_difference = total_fees - fee_check
+        fee_tolerance = D('0.0{}'.format(len((payees)))) # one penny per payee
+        print_rule()
+        print()
+        print("Fee rounding error tolerance:   {}".format(fee_tolerance))
+        print("Accumulated fee rounding error: {}".format(fee_difference))
+        print()
+        assert fee_difference < fee_tolerance
 
-        fee_difference -= allotment
-        if fee_difference == 0:
-            break
-    print()
+        # Distribute rounding errors.
+        for payee in reversed(payees):
+            allotment = round_up(fee_difference * payee.gross_perc)
+            payee.assess_fee(allotment)
+            print("  {} => {}".format(allotment, payee.email))
 
-total_net = sum([p.net for p in payees])
-fee_check = sum([p.fee for p in payees])
-assert fee_check == total_fees
-assert total_net + total_fees == total_gross
+            fee_difference -= allotment
+            if fee_difference == 0:
+                break
+        print()
 
-out = csv.writer(outfile)
-print("-"*78)
-print("{:<32} {:^6} {:^6} {:^6}".format("email", "gross", "fee", "net"))
-print("-" * 78)
-for payee in payees:
-    out.writerow((payee.email, payee.net, "usd"))
-    requests.post( 'https://www.gittip.com/{}/history/record-an-exchange'.format(payee.username)
-                 , auth=(gittip_api_key, '')
-                 , data={ 'amount': str(payee.net)
-                        , 'fee': str(payee.fee)
-                        , 'note': 'PayPal MassPay of ${} to {}'.format(payee.gross, payee.email)
-                         }
-                  )
-    print("{email:<32} {gross:>6} {fee:>6} {net:>6}".format(**payee.__dict__))
+    total_net = sum([p.net for p in payees])
+    fee_check = sum([p.fee for p in payees])
+    assert fee_check == total_fees
+    assert total_net + total_fees == total_gross
 
-print(" "*32, "-"*20)
-print("{:>39} {:>6} {:>6}".format(total_gross, total_fees, total_net))
+    paypal_csv = csv.writer(open(PAYPAL_CSV, 'w+'))
+    gittip_csv = csv.writer(open(GITTIP_CSV, 'w+'))
+    print_rule()
+    print("{:<32} {:^6} {:^6} {:^6}".format("email", "gross", "fee", "net"))
+    print_rule()
+    for payee in payees:
+        paypal_csv.writerow((payee.email, payee.net, "usd"))
+        gittip_csv.writerow(( payee.username
+                            , payee.email
+                            , payee.gross
+                            , payee.fee
+                            , payee.net
+                             ))
+        print("{email:<32} {gross:>6} {fee:>6} {net:>6}".format(**payee.__dict__))
+
+    print(" "*32, "-"*20)
+    print("{:>39} {:>6} {:>6}".format(total_gross, total_fees, total_net))
+
+
+def record_exchanges_in_gittip():
+
+    try:
+        gittip_api_key = os.environ['GITTIP_API_KEY']
+    except KeyError:
+        gittip_api_key = getpass.getpass("Gittip API key: ")
+
+    for username, email, gross, fee, net in csv.reader(open(GITTIP_CSV)):
+        url = 'https://www.gittip.com/{}/history/record-an-exchange'.format(username)
+        note = 'PayPal MassPay to {}.'.format(gross, email)
+        data = {'amount': '-' + net, 'fee': fee, 'note': note}
+        requests.post(url, auth=(gittip_api_key, ''), data=data)
+        print(note)
+
+
+def main():
+    print("Looking for files for {} ...".format(ts))
+    for filename in (INPUT_CSV, PAYPAL_CSV, GITTIP_CSV):
+        print("  [{}] {}".format('x' if os.path.exists(filename) else ' ', filename))
+
+    if raw_input("\nCompute output CSVs? [y/N] ") == 'y':
+        compute_output_csvs()
+    if raw_input("\nRecord exchanges in Gittip? [y/N] ") == 'y':
+        record_exchanges_in_gittip()
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except KeyboardInterrupt:
+        print()
