@@ -912,3 +912,14 @@ UPDATE paydays SET nactive=(
         SELECT tippee FROM transfers WHERE "timestamp" >= ts_start AND "timestamp" < ts_end
         ) AS foo
 );
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/pull/1547
+
+DROP TABLE homepage_new_participants;
+DROP TABLE homepage_top_givers;
+DROP TABLE homepage_top_receivers;
+CREATE TABLE homepage_new_participants(username text, claimed_time timestamp with time zone);
+CREATE TABLE homepage_top_givers(username text, anonymous boolean, amount numeric);
+CREATE TABLE homepage_top_receivers(username text, claimed_time timestamp with time zone, amount numeric);
