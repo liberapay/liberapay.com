@@ -128,8 +128,13 @@ def record_exchanges_in_gittip():
     except KeyError:
         gittip_api_key = getpass.getpass("Gittip API key: ")
 
+    try:
+        gittip_base_url = os.environ['GITTIP_BASE_URL']
+    except KeyError:
+        gittip_base_url = 'https://www.gittip.com'
+
     for username, email, gross, fee, net in csv.reader(open(GITTIP_CSV)):
-        url = 'https://www.gittip.com/{}/history/record-an-exchange'.format(username)
+        url = '{}/{}/history/record-an-exchange'.format(gittip_base_url, username)
         note = 'PayPal MassPay to {}.'.format(gross, email)
         data = {'amount': '-' + net, 'fee': fee, 'note': note}
         requests.post(url, auth=(gittip_api_key, ''), data=data)
