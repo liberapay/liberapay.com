@@ -47,14 +47,12 @@ class Payee(object):
 
 
 def compute_output_csvs():
-    total_gross = total_fees = total_net = D('0.00')
-
     payees = [Payee(rec) for rec in csv.reader(open(INPUT_CSV))]
     payees.sort(key=lambda o: o.gross)
 
     total_gross = sum([p.gross for p in payees])
     total_fees = total_gross - round_(total_gross / D('1.02'))  # 2% fee
-    total_net = 0
+    total_net = D('0.00')
 
     for payee in payees:
         payee.gross_perc = payee.gross / total_gross
