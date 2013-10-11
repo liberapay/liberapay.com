@@ -1,4 +1,19 @@
 #!/usr/bin/env python
+"""This is a script for managing MassPay each week.
+
+Most of our payouts are handled by Balanced, but they're limited to people in
+the U.S. We need to payout to people outside the U.S. (#126), and while we work
+on a long-term solution, we are using PayPal. However, we've grown past the
+point that PayPal's Instant Transfer feature is workable. This script is for
+interfacing with PayPal's MassPay feature. Given a file at:
+
+    ../masspay/YYYY-MM-DD.input.csv
+
+This script provides for computing two output CSVs (one to upload to PayPal,
+the second to use for POSTing the exchanges back to Gittip), and for POSTing
+the exchanges back to Gittip.
+
+"""
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import csv
