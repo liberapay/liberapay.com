@@ -1,3 +1,5 @@
+from __future__ import division
+
 import locale
 import os
 import threading
@@ -29,14 +31,41 @@ gittip.wireup.envvars(website)
 gittip.wireup.sentry(website)
 
 
-# Up the threadpool size: https://github.com/gittip/www.gittip.com/issues/1098
 def up_minthreads(website):
+    # https://github.com/gittip/www.gittip.com/issues/1098
     # Discovered the following API by inspecting in pdb and browsing source.
     # This requires network_engine.bind to have already been called.
-    website.network_engine.cheroot_server.requests.min = \
-                                                 int(os.environ['MIN_THREADS'])
+    request_queue = website.network_engine.cheroot_server.requests
+    request_queue.min = website.min_threads
+
+
+def setup_utilization_logging(website):
+    # https://github.com/gittip/www.gittip.com/issues/1572
+    log_every = website.log_utilization_every
+    if log_every == 0:
+        return
+
+    pool = website.network_engine.cheroot_server.requests
+    def log_request_queue_size():
+        while 1:
+
+            # Use pool.min and not pool.max because of the semantics of these
+            # inside of Cheroot. Max is a hard limit used only when pool.grow
+            # is called, and it's never called except when the pool starts up,
+            # when it's called with pool.min.
+
+            nbusy = pool.min - pool.idle
+            utilization = (nbusy / pool.min) * 100
+            print("sample#utilization={}".format(utilization))
+            time.sleep(log_every)
+
+    thread = threading.Thread(target=log_request_queue_size)
+    thread.daemon = True
+    thread.start()
+
 
 website.hooks.startup.insert(0, up_minthreads)
+website.hooks.startup.append(setup_utilization_logging)
 
 
 website.hooks.inbound_early += [ gittip.canonize
