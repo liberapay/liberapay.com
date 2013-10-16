@@ -2,6 +2,7 @@
 """
 import os
 import sys
+import threading
 import time
 
 import aspen
@@ -162,12 +163,21 @@ def nmembers(website):
 def envvars(website):
 
     missing_keys = []
+    malformed_values = []
 
-    def envvar(key):
+    def envvar(key, cast=None):
         if key not in os.environ:
             missing_keys.append(key)
             return ""
-        return os.environ[key].decode('ASCII')
+        value = os.environ[key].decode('ASCII')
+        if cast is not None:
+            try:
+                value = cast(value)
+            except:
+                err = str(sys.exc_info()[1])
+                malformed_values.append((key, err))
+                return ""
+        return value
 
     def is_yesish(val):
         return val.lower() in ('1', 'true', 'yes')
@@ -200,6 +210,26 @@ def envvars(website):
     website.google_analytics_id = envvar('GOOGLE_ANALYTICS_ID')
     website.gauges_id = envvar('GAUGES_ID')
     website.sentry_dsn = envvar('SENTRY_DSN')
+
+    website.min_threads = envvar('MIN_THREADS', int)
+    website.log_utilization_every = envvar('LOG_UTILIZATION_EVERY', int)
+
+    if malformed_values:
+        malformed_values.sort()
+        these = len(malformed_values) != 1 and 'these' or 'this'
+        plural = len(malformed_values) != 1 and 's' or ''
+        aspen.log_dammit("=" * 42)
+        aspen.log_dammit( "Oh no! Gittip.com couldn't understand %s " % these
+                        , "environment variable%s:" % plural
+                         )
+        aspen.log_dammit(" ")
+        for key, err in malformed_values:
+            aspen.log_dammit("  {} ({})".format(key, err))
+        aspen.log_dammit(" ")
+        aspen.log_dammit("See ./default_local.env for hints.")
+
+        aspen.log_dammit("=" * 42)
+        raise SystemExit
 
     if missing_keys:
         missing_keys.sort()
