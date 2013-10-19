@@ -94,7 +94,7 @@ class TestPages(Harness):
 
     # This hits the network. XXX add a knob to skip this
     def test_twitter_proxy(self):
-        expected = "Twitter has not joined"
+        expected = "twitter has not joined"
         actual = self.get('/on/twitter/twitter/').decode('utf8')
         assert expected in actual
 
