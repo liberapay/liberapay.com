@@ -28,7 +28,7 @@ gittip.wireup.mixpanel(website)
 gittip.wireup.nanswers()
 gittip.wireup.nmembers(website)
 gittip.wireup.envvars(website)
-gittip.wireup.sentry(website)
+tell_sentry = gittip.wireup.sentry(website)
 
 
 def up_minthreads(website):
@@ -135,7 +135,10 @@ UPDATE_HOMEPAGE_EVERY = int(os.environ['UPDATE_HOMEPAGE_EVERY'])
 def update_homepage_queries():
     from gittip import utils
     while 1:
-        utils.update_homepage_queries_once(website.db)
+        try:
+            utils.update_homepage_queries_once(website.db)
+        except:
+            tell_sentry(None)
         time.sleep(UPDATE_HOMEPAGE_EVERY)
 
 homepage_updater = threading.Thread(target=update_homepage_queries)
