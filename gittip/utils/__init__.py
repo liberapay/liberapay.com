@@ -344,9 +344,9 @@ def update_homepage_queries_once(db):
     with db.get_cursor() as cursor:
         log_dammit("updating homepage queries")
         start = time.time()
+        cursor.execute("DELETE FROM homepage_top_givers")
         cursor.execute("""
 
-        DELETE FROM homepage_top_givers;
         INSERT INTO homepage_top_givers
             SELECT tipper AS username, anonymous, sum(amount) AS amount
               FROM (    SELECT DISTINCT ON (tipper, tippee)
@@ -367,7 +367,11 @@ def update_homepage_queries_once(db):
           GROUP BY tipper, anonymous
           ORDER BY amount DESC;
 
-        DELETE FROM homepage_top_receivers;
+        """.strip())
+
+        cursor.execute("DELETE FROM homepage_top_receivers")
+        cursor.execute("""
+
         INSERT INTO homepage_top_receivers
             SELECT tippee AS username, claimed_time, sum(amount) AS amount
               FROM (    SELECT DISTINCT ON (tipper, tippee)
@@ -387,7 +391,7 @@ def update_homepage_queries_once(db):
           GROUP BY tippee, claimed_time
           ORDER BY amount DESC;
 
-        """)
+        """.strip())
         end = time.time()
         elapsed = end - start
         log_dammit("updated homepage queries in %.2f seconds" % elapsed)
