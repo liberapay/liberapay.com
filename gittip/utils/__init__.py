@@ -346,21 +346,6 @@ def update_homepage_queries_once(db):
         start = time.time()
         cursor.execute("""
 
-        DELETE FROM homepage_new_participants;
-        INSERT INTO homepage_new_participants
-              SELECT username, claimed_time FROM (
-                  SELECT DISTINCT ON (p.username)
-                         p.username
-                       , claimed_time
-                    FROM participants p
-                    JOIN elsewhere e
-                      ON p.username = participant
-                   WHERE claimed_time IS NOT null
-                     AND is_suspicious IS NOT true
-                     ) AS foo
-            ORDER BY claimed_time DESC;
-
-        DROP TABLE IF EXISTS _homepage_top_givers;
         DELETE FROM homepage_top_givers;
         INSERT INTO homepage_top_givers
             SELECT tipper AS username, anonymous, sum(amount) AS amount

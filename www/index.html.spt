@@ -29,7 +29,11 @@ except ValueError:
 new_participants = utter_hack(db.all("""
 -- new participants on homepage
 
-    SELECT * FROM homepage_new_participants
+    SELECT username, claimed_time FROM participants p
+     WHERE EXISTS (SELECT * FROM elsewhere e WHERE p.username = e.participant)
+       AND claimed_time IS NOT null
+       AND is_suspicious IS NOT true
+  ORDER BY claimed_time DESC
      LIMIT %s
     OFFSET %s
 
