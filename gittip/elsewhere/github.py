@@ -44,7 +44,7 @@ class GitHub(Platform):
     user_id_key = 'id'
 
 
-    def oauth_url(website, action, then=u""):
+    def oauth_url(self, website, action, then=u""):
         """Given a website object and a string, return a URL string.
 
         `action' is one of 'opt-in', 'lock' and 'unlock'
