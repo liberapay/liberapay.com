@@ -60,12 +60,12 @@ class TestPages(Harness):
         assert expected in actual
 
     def test_github_associate(self):
-        expected = "Bad request, program!"
+        expected = "Forbidden, program!"
         actual = self.get('/on/github/associate')
         assert expected in actual
 
     def test_twitter_associate(self):
-        expected = "Bad request, program!"
+        expected = "Forbidden, program!"
         actual = self.get('/on/twitter/associate')
         assert expected in actual
 
