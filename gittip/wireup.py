@@ -110,6 +110,7 @@ def envvars(website):
     website.github_client_secret = envvar('GITHUB_CLIENT_SECRET')
     website.github_callback = envvar('GITHUB_CALLBACK')
 
+    website.twitter_api_url = envvar('TWITTER_API_URL')
     website.twitter_consumer_key = envvar('TWITTER_CONSUMER_KEY')
     website.twitter_consumer_secret = envvar('TWITTER_CONSUMER_SECRET')
     website.twitter_access_token = envvar('TWITTER_ACCESS_TOKEN')

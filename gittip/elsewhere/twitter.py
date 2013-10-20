@@ -6,7 +6,7 @@ from os import environ
 
 from aspen import json, log, Response
 from aspen.utils import to_age, utc
-from gittip.elsewhere import Platform
+from gittip.elsewhere import PlatformOAuth1
 from gittip.models.account_elsewhere import AccountElsewhere
 from requests_oauthlib import OAuth1
 
@@ -39,17 +39,21 @@ class TwitterAccount(AccountElsewhere):
         return "https://twitter.com/{screen_name}".format(**self.user_info)
 
 
-class Twitter(Platform):
+class Twitter(PlatformOAuth1):
 
     name = 'twitter'
     account_elsewhere_subclass = TwitterAccount
     user_id_key= 'id'
     username_key = 'screen_name'
+    api_url = environ['TWITTER_API_URL']
 
 
-    def get_user_info(self, screen_name):
+    def get_user_info(self, screen_name, token=None, secret=None):
         """
         """
+        if token is None or secret is None:
+            token = environ['TWITTER_ACCESS_TOKEN']
+            secret = environ['TWITTER_ACCESS_TOKEN_SECRET']
         # Updated using Twython as a point of reference:
         # https://github.com/ryanmcgrath/twython/blob/master/twython/twython.py#L76
         oauth = OAuth1(
@@ -57,8 +61,8 @@ class Twitter(Platform):
             # so let's grab the details from the env
             environ['TWITTER_CONSUMER_KEY'],
             environ['TWITTER_CONSUMER_SECRET'],
-            environ['TWITTER_ACCESS_TOKEN'],
-            environ['TWITTER_ACCESS_TOKEN_SECRET'],
+            token,
+            secret,
         )
 
         url = "https://api.twitter.com/1.1/users/show.json?screen_name=%s"
@@ -93,6 +97,9 @@ class Twitter(Platform):
         else:
             log("Twitter lookup failed with %d." % user_info.status_code)
             raise Response(404)
+        
+        # Add user page url.
+        user_info['html_url'] = "https://twitter.com/" + screen_name
 
         return user_info
 
