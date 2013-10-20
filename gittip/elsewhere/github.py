@@ -9,7 +9,7 @@ from aspen.http.request import UnicodeWithParams
 from aspen.utils import typecheck
 from aspen.website import Website
 from gittip import log
-from gittip.elsewhere import ACTIONS, AccountElsewhere, Platform
+from gittip.elsewhere import ACTIONS, AccountElsewhere, PlatformOAuth2
 
 
 class GitHubAccount(AccountElsewhere):
@@ -36,7 +36,7 @@ class GitHubAccount(AccountElsewhere):
 
 
 
-class GitHub(Platform):
+class GitHub(PlatformOAuth2):
 
     name = 'github'
     account_elsewhere_subclass = GitHubAccount
@@ -68,7 +68,7 @@ class GitHub(Platform):
         return url
 
 
-    def oauth_dance(website, qs):
+    def oauth_dance(self, website, qs):
         """Given a querystring, return a dict of user_info.
 
         The querystring should be the querystring that we get from GitHub when
