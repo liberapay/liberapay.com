@@ -207,76 +207,9 @@ class Platform(object):
                             )
         return participant
 
-class PlatformOAuth1(Platform):
-
-    def get_oauth_init_url(self, redirect_uri, qs, website):
-        oauth_hook = OAuth1(
-            getattr(website, '%s_consumer_key' % self.name),
-            getattr(website, '%s_consumer_secret' % self.name),
-        )
-
-        response = requests.post(
-            "%s/oauth/request_token" % self.api_url,
-            auth=oauth_hook,
-        )
-
-        assert response.status_code == 200, response.status_code  # safety check
-
-        reply = parse_qs(response.text)
-
-        token = reply['oauth_token'][0]
-        secret = reply['oauth_token_secret'][0]
-        assert reply['oauth_callback_confirmed'][0] == "true"  # sanity check
-
-        action = qs.get('action', 'opt-in')
-        then = qs.get('then', '')
-        website.oauth_cache = {}  # XXX What happens to someone who was half-authed
-                                  # when we bounced the server?
-        website.oauth_cache[token] = (secret, action, then)
-
-        url = "%s/oauth/authenticate?oauth_token=%s&oauth_callback=%s"
-        return url % (self.api_url, token, redirect_uri)
-
-    def handle_oauth_callback(self, request, website, user):
-        qs = request.line.uri.querystring
+    def user_action(self, request, website, user, then, action, user_info):
         cookie = request.headers.cookie
 
-        if 'denied' in qs or not ('oauth_token' in qs and 'oauth_verifier' in qs):
-            raise Response(403)
-
-        token = qs['oauth_token']
-        try:
-            secret, action, then = website.oauth_cache.pop(token)
-            then = then.decode('base64')
-        except KeyError:
-            return '/about/me.html', user
-        
-        if action not in ACTIONS:
-            raise Response(400)
-
-        if action == 'connect' and user.ANON:
-            raise Response(404)
-
-        oauth = OAuth1(
-            getattr(website, '%s_consumer_key' % self.name),
-            getattr(website, '%s_consumer_secret' % self.name),
-            token,
-            secret,
-        )
-        response = requests.post(
-            "%s/oauth/access_token" % self.api_url,
-            data={"oauth_verifier": qs['oauth_verifier']},
-            auth=oauth,
-        )
-        assert response.status_code == 200, response.status_code
-
-        reply = parse_qs(response.text)
-        token = reply['oauth_token'][0]
-        secret = reply['oauth_token_secret'][0]
-        username = reply[self.username_key][0]
-
-        user_info = self.get_user_info(username, token, secret)
-        
         # Make sure we have a Platform username.
         username = user_info.get(self.username_key)
         if username is None:
@@ -332,3 +265,96 @@ class PlatformOAuth1(Platform):
             # Interpret it as a Platform username.
             then = u'/on/%s/%s/' % (self.name, then)
         return then, user
+
+class PlatformOAuth1(Platform):
+
+    def get_oauth_init_url(self, redirect_uri, qs, website):
+        oauth_hook = OAuth1(
+            getattr(website, '%s_consumer_key' % self.name),
+            getattr(website, '%s_consumer_secret' % self.name),
+        )
+
+        response = requests.post(
+            "%s/oauth/request_token" % self.api_url,
+            auth=oauth_hook,
+        )
+
+        assert response.status_code == 200, response.status_code  # safety check
+
+        reply = parse_qs(response.text)
+
+        token = reply['oauth_token'][0]
+        secret = reply['oauth_token_secret'][0]
+        assert reply['oauth_callback_confirmed'][0] == "true"  # sanity check
+
+        action = qs.get('action', 'opt-in')
+        then = qs.get('then', '')
+        website.oauth_cache = {}  # XXX What happens to someone who was half-authed
+                                  # when we bounced the server?
+        website.oauth_cache[token] = (secret, action, then)
+
+        url = "%s/oauth/authenticate?oauth_token=%s&oauth_callback=%s"
+        return url % (self.api_url, token, redirect_uri)
+
+    def handle_oauth_callback(self, request, website, user):
+        qs = request.line.uri.querystring
+
+        if 'denied' in qs or not ('oauth_token' in qs and 'oauth_verifier' in qs):
+            raise Response(403)
+
+        token = qs['oauth_token']
+        try:
+            secret, action, then = website.oauth_cache.pop(token)
+            then = then.decode('base64')
+        except KeyError:
+            return '/about/me.html', user
+        
+        if action not in ACTIONS:
+            raise Response(400)
+
+        if action == 'connect' and user.ANON:
+            raise Response(404)
+
+        oauth = OAuth1(
+            getattr(website, '%s_consumer_key' % self.name),
+            getattr(website, '%s_consumer_secret' % self.name),
+            token,
+            secret,
+        )
+        response = requests.post(
+            "%s/oauth/access_token" % self.api_url,
+            data={"oauth_verifier": qs['oauth_verifier']},
+            auth=oauth,
+        )
+        assert response.status_code == 200, response.status_code
+
+        reply = parse_qs(response.text)
+        token = reply['oauth_token'][0]
+        secret = reply['oauth_token_secret'][0]
+        username = reply[self.username_key][0]
+
+        user_info = self.get_user_info(username, token, secret)
+
+        return self.user_action(request, website, user, then, action, user_info)
+
+class PlatformOAuth2(Platform):
+
+    def handle_oauth_callback(self, request, website, user):
+        qs = request.line.uri.querystring
+
+        if 'error' in qs or not ('code' in qs and 'data' in qs):
+            raise Response(403)
+        
+        # Determine what we're supposed to do.
+        data = qs['data'].decode('base64').decode('UTF-8')
+        action, then = data.split(',', 1)
+        if action not in ACTIONS:
+            raise Response(400)
+
+        if action == 'connect' and user.ANON:
+            raise Response(404)
+
+        # Load user info.
+        user_info = self.oauth_dance(website, qs)
+        
+        return self.user_action(request, website, user, then, action, user_info)
