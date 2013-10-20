@@ -6,7 +6,9 @@ platform = website.platforms.get(path['platform'])
 if platform is None:
     raise Response(404)
 
-platform.handle_oauth_callback(qs)
+then, user = platform.handle_oauth_callback(request, website, user)
+if then is not None:
+    request.redirect(then)
 
 [-----------------------------] text/plain
 

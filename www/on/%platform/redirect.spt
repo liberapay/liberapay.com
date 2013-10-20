@@ -3,7 +3,7 @@ from aspen import Response
 
 [-----------------------------]
 
-service = website.elsewhere[path['service']](website, qs.get('username'))
+platform = website.platforms[path['platform']]
 
 host = os.getenv('CANONICAL_HOST')
 scheme = os.getenv('CANONICAL_SCHEME')
@@ -11,10 +11,10 @@ scheme = os.getenv('CANONICAL_SCHEME')
 redirect_uri = '%s://%s%s' % (
     scheme,
     host,
-    '/on/%s/associate' % service.service_name
+    '/on/%s/associate' % platform.name
 )
 
-request.redirect(service.get_oauth_init_url(redirect_uri))
+request.redirect(platform.get_oauth_init_url(redirect_uri, qs, website))
 
 
 [-----------------------------] text/plain

@@ -7,6 +7,11 @@ from aspen.http.request import UnicodeWithParams
 from gittip.models.participant import reserve_a_random_username
 from gittip.models.account_elsewhere import AccountElsewhere
 from psycopg2 import IntegrityError
+from aspen import json, log, Response
+from requests_oauthlib import OAuth1
+import requests
+from urlparse import parse_qs
+from gittip.utils import mixpanel
 
 
 ACTIONS = ['opt-in', 'connect', 'lock', 'unlock']
@@ -201,3 +206,129 @@ class Platform(object):
                            % (username, self.platform)
                             )
         return participant
+
+class PlatformOAuth1(Platform):
+
+    def get_oauth_init_url(self, redirect_uri, qs, website):
+        oauth_hook = OAuth1(
+            getattr(website, '%s_consumer_key' % self.name),
+            getattr(website, '%s_consumer_secret' % self.name),
+        )
+
+        response = requests.post(
+            "%s/oauth/request_token" % self.api_url,
+            auth=oauth_hook,
+        )
+
+        assert response.status_code == 200, response.status_code  # safety check
+
+        reply = parse_qs(response.text)
+
+        token = reply['oauth_token'][0]
+        secret = reply['oauth_token_secret'][0]
+        assert reply['oauth_callback_confirmed'][0] == "true"  # sanity check
+
+        action = qs.get('action', 'opt-in')
+        then = qs.get('then', '')
+        website.oauth_cache = {}  # XXX What happens to someone who was half-authed
+                                  # when we bounced the server?
+        website.oauth_cache[token] = (secret, action, then)
+
+        url = "%s/oauth/authenticate?oauth_token=%s&oauth_callback=%s"
+        return url % (self.api_url, token, redirect_uri)
+
+    def handle_oauth_callback(self, request, website, user):
+        qs = request.line.uri.querystring
+        cookie = request.headers.cookie
+
+        if 'denied' in qs or not ('oauth_token' in qs and 'oauth_verifier' in qs):
+            raise Response(403)
+
+        token = qs['oauth_token']
+        try:
+            secret, action, then = website.oauth_cache.pop(token)
+            then = then.decode('base64')
+        except KeyError:
+            return '/about/me.html', user
+        
+        if action not in ACTIONS:
+            raise Response(400)
+
+        if action == 'connect' and user.ANON:
+            raise Response(404)
+
+        oauth = OAuth1(
+            getattr(website, '%s_consumer_key' % self.name),
+            getattr(website, '%s_consumer_secret' % self.name),
+            token,
+            secret,
+        )
+        response = requests.post(
+            "%s/oauth/access_token" % self.api_url,
+            data={"oauth_verifier": qs['oauth_verifier']},
+            auth=oauth,
+        )
+        assert response.status_code == 200, response.status_code
+
+        reply = parse_qs(response.text)
+        token = reply['oauth_token'][0]
+        secret = reply['oauth_token_secret'][0]
+        username = reply[self.username_key][0]
+
+        user_info = self.get_user_info(username, token, secret)
+        
+        # Make sure we have a Platform username.
+        username = user_info.get(self.username_key)
+        if username is None:
+            log(u"We got a user_info from %s with no username (%s) [%s, %s]"
+                % (self.name, self.username_key, action, then))
+            raise Response(400)
+
+        # Do something.
+        log(u"%s wants to %s" % (username, action))
+
+        account = self.get_account_from_api(username)
+
+        if action == 'opt-in':      # opt in
+            # set 'user' to give them a session :/
+            user, newly_claimed = account.opt_in(username)
+            del account
+            if newly_claimed:
+                mixpanel.alias_and_track(cookie, unicode(user.participant.id))
+        elif action == 'connect':   # connect
+            try:
+                user.participant.take_over(account)
+            except NeedConfirmation, obstacles:
+
+                # XXX Eep! Internal redirect! Really?!
+                request.internally_redirected_from = request.fs
+                request.fs = website.www_root + '/on/confirm.html.spt'
+                request.resource = resources.get(request)
+
+                raise request.resource.respond(request)
+            else:
+                del account
+        else:                       # lock or unlock
+            if then != username:
+
+                # The user could spoof `then' to match their username, but the most
+                # they can do is lock/unlock their own Platform account in a convoluted
+                # way.
+
+                then = u'/on/%s/%s/lock-fail.html' % (self.name, then)
+
+            else:
+
+                # Associate the Platform username with a randomly-named, unclaimed
+                # Gittip participant.
+
+                assert account.participant != username, username # sanity check
+                account.set_is_locked(action == 'lock')
+                del account
+
+        if then == u'':
+            then = u'/%s/' % user.participant.username
+        if not then.startswith(u'/'):
+            # Interpret it as a Platform username.
+            then = u'/on/%s/%s/' % (self.name, then)
+        return then, user
