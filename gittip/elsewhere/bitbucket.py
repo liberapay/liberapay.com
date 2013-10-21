@@ -6,7 +6,9 @@ import requests
 from aspen import json, log, Response
 from aspen.http.request import UnicodeWithParams
 from aspen.utils import typecheck
-from gittip.elsewhere import AccountElsewhere, Platform
+from gittip.elsewhere import AccountElsewhere, PlatformOAuth1
+from os import environ
+from requests_oauthlib import OAuth1
 
 
 BASE_API_URL = "https://bitbucket.org/api/1.0"
@@ -29,12 +31,13 @@ class BitbucketAccount(AccountElsewhere):
         return "https://bitbucket.org/{username}".format(**self.user_info)
 
 
-class Bitbucket(Platform):
+class Bitbucket(PlatformOAuth1):
 
     name = 'bitbucket'
     account_elsewhere_subclass = BitbucketAccount
     username_key = 'username'
     user_id_key = 'username'  # No immutable id. :-/
+    api_url = environ['BITBUCKET_API_URL']
 
 
     def oauth_url(self, action, then=""):
@@ -51,15 +54,24 @@ class Bitbucket(Platform):
         return "/on/bitbucket/redirect?action=%s&then=%s" % (action, then)
 
 
-    def get_user_info(self, username):
+    def get_user_info(self, username, token=None, secret=None):
         """Get the given user's information from the DB or failing that, bitbucket.
 
         :param username:
             A unicode string representing a username in bitbucket.
 
+	:param token:
+            OAuth1 token.
+
+        :param secret:
+            OAuth1 secret.
+
         :returns:
             A dictionary containing bitbucket specific information for the user.
         """
+        if not username and token and secret:
+            return self.get_user_info_with_oauth(token, secret)
+
         typecheck(username, (unicode, UnicodeWithParams))
         url = "%s/users/%s?pagelen=100"
         user_info = requests.get(url % (BASE_API_URL, username))
@@ -74,5 +86,25 @@ class Bitbucket(Platform):
             log("Bitbucket api responded with {0}: {1}".format(status, content),
                 level=logging.WARNING)
             raise Response(502, "Bitbucket lookup failed with %d." % status)
+
+        return user_info
+
+    def get_user_info_with_oauth(self, token, secret):
+        oauth_hook = OAuth1(
+            environ['BITBUCKET_CONSUMER_KEY'],
+            environ['BITBUCKET_CONSUMER_SECRET'],
+            token,
+            secret,
+        )
+        response = requests.get(
+            "%s/user" % self.api_url,
+            auth=oauth_hook,
+        )
+        user_info = json.loads(response.text)['user']
+        assert response.status_code == 200, response.status_code
+
+        assert 'html_url' not in user_info
+        # Add user page url.
+        user_info['html_url'] = "https://bitbucket.org/" + user_info[self.username_key]
 
         return user_info

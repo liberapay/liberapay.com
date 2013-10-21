@@ -102,6 +102,7 @@ def envvars(website):
     def is_yesish(val):
         return val.lower() in ('1', 'true', 'yes')
 
+    website.bitbucket_api_url = envvar('BITBUCKET_API_URL')
     website.bitbucket_consumer_key = envvar('BITBUCKET_CONSUMER_KEY')
     website.bitbucket_consumer_secret = envvar('BITBUCKET_CONSUMER_SECRET')
     website.bitbucket_callback = envvar('BITBUCKET_CALLBACK')
