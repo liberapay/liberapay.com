@@ -7,11 +7,12 @@ from aspen.http.request import UnicodeWithParams
 from gittip.models.participant import reserve_a_random_username
 from gittip.models.account_elsewhere import AccountElsewhere
 from psycopg2 import IntegrityError
-from aspen import json, log, Response
+from aspen import json, log, Response, resources
 from requests_oauthlib import OAuth1
 import requests
 from urlparse import parse_qs
 from gittip.utils import mixpanel
+from gittip.models._mixin_elsewhere import NeedConfirmation
 
 
 ACTIONS = ['opt-in', 'connect', 'lock', 'unlock']
