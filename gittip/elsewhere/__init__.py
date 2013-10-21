@@ -276,6 +276,7 @@ class PlatformOAuth1(Platform):
 
         response = requests.post(
             "%s/oauth/request_token" % self.api_url,
+            data={'oauth_callback': redirect_uri},
             auth=oauth_hook,
         )
 
@@ -293,8 +294,8 @@ class PlatformOAuth1(Platform):
                                   # when we bounced the server?
         website.oauth_cache[token] = (secret, action, then)
 
-        url = "%s/oauth/authenticate?oauth_token=%s&oauth_callback=%s"
-        return url % (self.api_url, token, redirect_uri)
+        url = "%s/oauth/authenticate?oauth_token=%s"
+        return url % (self.api_url, token)
 
     def handle_oauth_callback(self, request, website, user):
         qs = request.line.uri.querystring
@@ -331,7 +332,10 @@ class PlatformOAuth1(Platform):
         reply = parse_qs(response.text)
         token = reply['oauth_token'][0]
         secret = reply['oauth_token_secret'][0]
-        username = reply[self.username_key][0]
+        if self.username_key in reply:
+            username = reply[self.username_key][0]
+        else:
+            username = None
 
         user_info = self.get_user_info(username, token, secret)
 
