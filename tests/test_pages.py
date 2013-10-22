@@ -9,6 +9,7 @@ from gittip.elsewhere.twitter import TwitterAccount
 from gittip.testing import GITHUB_USER_UNREGISTERED_LGTEST, Harness
 from gittip.testing.client import TestClient
 from gittip.utils import update_homepage_queries_once
+from aspen.http.request import UnicodeWithParams
 
 
 class TestPages(Harness):
@@ -26,7 +27,7 @@ class TestPages(Harness):
         assert expected in actual
 
     def test_homepage_with_anonymous_giver(self):
-        TwitterAccount("bob", {}).opt_in("bob")
+        self.platforms.twitter.get_account(UnicodeWithParams('bob', {})).opt_in("bob")
         alice = self.make_participant('alice', anonymous=True, last_bill_result='')
         alice.set_tip_to('bob', 1)
         update_homepage_queries_once(self.db)
