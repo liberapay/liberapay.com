@@ -8,7 +8,7 @@
         <td class="account-details">
             {% if twitter_account is None %}
                 {% if not user.ANON and user.participant == participant %}
-                    Connect a <a href="{{ website.platforms.get('twitter').oauth_url(website, u'connect') }}">Twitter account</a>.
+                    Connect a <a href="{{ website.platforms.get('twitter').oauth_url(u'connect') }}">Twitter account</a>.
                 {% else %}
                     No Twitter account connected.
                 {% end %}
@@ -55,7 +55,7 @@
         <td class="account-details">
             {% if bitbucket_account is None %}
                 {% if not user.ANON and user.participant == participant %}
-                    Connect a <a href="{{ website.platforms.get('bitbucket').oauth_url(website, u'connect') }}">Bitbucket account</a>.
+                    Connect a <a href="{{ website.platforms.get('bitbucket').oauth_url(u'connect') }}">Bitbucket account</a>.
                 {% else %}
                     No Bitbucket account connected.
                 {% end %}
