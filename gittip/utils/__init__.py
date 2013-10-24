@@ -368,6 +368,24 @@ def update_homepage_queries_once(db):
           ORDER BY amount DESC;
 
         """.strip())
+        cursor.execute("""
+
+        UPDATE homepage_top_givers
+           SET gravatar_id = ( SELECT user_info->'gravatar_id'
+                                 FROM elsewhere
+                                WHERE participant=username
+                                  AND platform='github'
+                              )
+        """)
+        cursor.execute("""
+
+        UPDATE homepage_top_givers
+           SET twitter_pic = ( SELECT user_info->'profile_image_url_https'
+                                 FROM elsewhere
+                                WHERE participant=username
+                                  AND platform='twitter'
+                              )
+        """)
 
         cursor.execute("DELETE FROM homepage_top_receivers")
         cursor.execute("""
@@ -392,6 +410,24 @@ def update_homepage_queries_once(db):
           ORDER BY amount DESC;
 
         """.strip())
+        cursor.execute("""
+
+        UPDATE homepage_top_receivers
+           SET gravatar_id = ( SELECT user_info->'gravatar_id'
+                                 FROM elsewhere
+                                WHERE participant=username
+                                  AND platform='github'
+                              )
+        """)
+        cursor.execute("""
+
+        UPDATE homepage_top_receivers
+           SET twitter_pic = ( SELECT user_info->'profile_image_url_https'
+                                 FROM elsewhere
+                                WHERE participant=username
+                                  AND platform='twitter'
+                              )
+        """)
         end = time.time()
         elapsed = end - start
         log_dammit("updated homepage queries in %.2f seconds" % elapsed)
