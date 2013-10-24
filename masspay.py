@@ -175,7 +175,7 @@ def record_exchanges_in_gittip():
 
     for username, email, gross, fee, net in csv.reader(open(GITTIP_CSV)):
         url = '{}/{}/history/record-an-exchange'.format(gittip_base_url, username)
-        note = 'PayPal MassPay to {}.'.format(gross, email)
+        note = 'PayPal MassPay to {}.'.format(email)
         data = {'amount': '-' + net, 'fee': fee, 'note': note}
         requests.post(url, auth=(gittip_api_key, ''), data=data)
         print(note)
