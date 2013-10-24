@@ -24,6 +24,7 @@ import csv
 import datetime
 import getpass
 import os
+import sys
 from decimal import Decimal as D, ROUND_UP
 
 import requests
@@ -179,12 +180,21 @@ def main():
     for filename in (INPUT_CSV, PAYPAL_CSV, GITTIP_CSV):
         print("  [{}] {}".format('x' if os.path.exists(filename) else ' ', filename))
 
-    if raw_input("\nCompute input CSV? [y/N] ") == 'y':
-        compute_input_csv()
-    if raw_input("\nCompute output CSVs? [y/N] ") == 'y':
-        compute_output_csvs()
-    if raw_input("\nRecord exchanges in Gittip? [y/N] ") == 'y':
-        record_exchanges_in_gittip()
+    if not sys.argv[1:]:
+        if raw_input("\nCompute input CSV? [y/N] ") == 'y':
+            compute_input_csv()
+        if raw_input("\nCompute output CSVs? [y/N] ") == 'y':
+            compute_output_csvs()
+        if raw_input("\nRecord exchanges in Gittip? [y/N] ") == 'y':
+            record_exchanges_in_gittip()
+
+    else:
+        if '-i' in sys.argv:
+            compute_input_csv()
+        if '-o' in sys.argv:
+            compute_output_csvs()
+        if '-r' in sys.argv:
+            record_exchanges_in_gittip()
 
 
 if __name__ == '__main__':
