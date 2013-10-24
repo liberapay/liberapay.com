@@ -23,12 +23,12 @@ setl shiftwidth=4 tabstop=4
 
 " Use tabs in makefiles (Makefile requirement)
 if &filetype == 'make'
-  setl noexpandtab
+    setl noexpandtab
 endif
 
 " Make .spt files look like Python
 if bufname("%") =~? '\.spt$'
-  " Later we can have this `set filetype=aspen` and set an `au FileType aspen`
-  " earlier in our rc to load our syntax file (which shouldn't cause problems)
-  setl filetype=python
+    " Later we can have this `set filetype=aspen` and set an `au FileType aspen`
+    " earlier in our rc to load our syntax file (which shouldn't cause problems)
+    setl filetype=python
 endif
