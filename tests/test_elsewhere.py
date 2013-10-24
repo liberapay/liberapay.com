@@ -50,8 +50,9 @@ class TestAccountElsewhere(Harness):
         website = Website([])
         website.github_client_id = 'cheese'
         website.github_callback= 'nuts'
-        actual = github.oauth_url( website=website
-                                 , action='opt-in'
-                                 , then=self.xss
-                                  )
+        actual = self.platforms.github.oauth_url(
+            website=website,
+            action='opt-in',
+            then=self.xss,
+        )
         assert actual == expected
