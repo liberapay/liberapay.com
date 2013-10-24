@@ -213,7 +213,7 @@ def envvars(website):
     website.sentry_dsn = envvar('SENTRY_DSN')
 
     website.min_threads = envvar('MIN_THREADS', int)
-    website.log_utilization_every = envvar('LOG_UTILIZATION_EVERY', int)
+    website.log_busy_threads_every = envvar('LOG_BUSY_THREADS_EVERY', int)
 
     if malformed_values:
         malformed_values.sort()

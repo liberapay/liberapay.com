@@ -74,6 +74,10 @@ Next, setup your environment:
 
     $ make env
 
+If you haven't run Gittip for a while, you should reinstall the dependencies:
+
+    $ make clean env
+
 Add the necessary schemas and insert dummy data into postgres:
 
     $ make schema
