@@ -86,6 +86,8 @@ def compute_input_csv():
     for participant in participants:
         tips, total = participant.get_tips_and_total(for_payday=False)
         amount = participant.balance - total
+        if amount <= 0:
+            continue
         total_gross += amount
         print("{:<24}{:<32} {:>7} {:>7} {:>7}".format( participant.username
                                                      , participant.paypal_email
@@ -95,7 +97,7 @@ def compute_input_csv():
                                                       ))
         row = (participant.username, participant.paypal_email, amount)
         writer.writerow(row)
-    print(" "*75, "-"*7)
+    print(" "*72, "-"*7)
     print("{:>80}".format(total_gross))
 
 
