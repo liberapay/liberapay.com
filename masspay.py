@@ -84,7 +84,7 @@ def compute_input_csv():
     print_rule()
     total_gross = 0
     for participant in participants:
-        tips, total = participant.get_tips_and_total(datetime.datetime.now())
+        tips, total = participant.get_tips_and_total(for_payday=False)
         amount = participant.balance - total
         total_gross += amount
         print("{:<24}{:<32} {:>7} {:>7} {:>7}".format( participant.username
