@@ -344,24 +344,9 @@ def update_homepage_queries_once(db):
     with db.get_cursor() as cursor:
         log_dammit("updating homepage queries")
         start = time.time()
+        cursor.execute("DELETE FROM homepage_top_givers")
         cursor.execute("""
 
-        DELETE FROM homepage_new_participants;
-        INSERT INTO homepage_new_participants
-              SELECT username, claimed_time FROM (
-                  SELECT DISTINCT ON (p.username)
-                         p.username
-                       , claimed_time
-                    FROM participants p
-                    JOIN elsewhere e
-                      ON p.username = participant
-                   WHERE claimed_time IS NOT null
-                     AND is_suspicious IS NOT true
-                     ) AS foo
-            ORDER BY claimed_time DESC;
-
-        DROP TABLE IF EXISTS _homepage_top_givers;
-        DELETE FROM homepage_top_givers;
         INSERT INTO homepage_top_givers
             SELECT tipper AS username, anonymous, sum(amount) AS amount
               FROM (    SELECT DISTINCT ON (tipper, tippee)
@@ -382,7 +367,29 @@ def update_homepage_queries_once(db):
           GROUP BY tipper, anonymous
           ORDER BY amount DESC;
 
-        DELETE FROM homepage_top_receivers;
+        """.strip())
+        cursor.execute("""
+
+        UPDATE homepage_top_givers
+           SET gravatar_id = ( SELECT user_info->'gravatar_id'
+                                 FROM elsewhere
+                                WHERE participant=username
+                                  AND platform='github'
+                              )
+        """)
+        cursor.execute("""
+
+        UPDATE homepage_top_givers
+           SET twitter_pic = ( SELECT user_info->'profile_image_url_https'
+                                 FROM elsewhere
+                                WHERE participant=username
+                                  AND platform='twitter'
+                              )
+        """)
+
+        cursor.execute("DELETE FROM homepage_top_receivers")
+        cursor.execute("""
+
         INSERT INTO homepage_top_receivers
             SELECT tippee AS username, claimed_time, sum(amount) AS amount
               FROM (    SELECT DISTINCT ON (tipper, tippee)
@@ -402,6 +409,24 @@ def update_homepage_queries_once(db):
           GROUP BY tippee, claimed_time
           ORDER BY amount DESC;
 
+        """.strip())
+        cursor.execute("""
+
+        UPDATE homepage_top_receivers
+           SET gravatar_id = ( SELECT user_info->'gravatar_id'
+                                 FROM elsewhere
+                                WHERE participant=username
+                                  AND platform='github'
+                              )
+        """)
+        cursor.execute("""
+
+        UPDATE homepage_top_receivers
+           SET twitter_pic = ( SELECT user_info->'profile_image_url_https'
+                                 FROM elsewhere
+                                WHERE participant=username
+                                  AND platform='twitter'
+                              )
         """)
         end = time.time()
         elapsed = end - start

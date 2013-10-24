@@ -130,7 +130,7 @@ def sentry(website):
         tags = { 'username': username
                , 'user_id': user_id
                 }
-        extra = { 'filepath': request.fs
+        extra = { 'filepath': getattr(request, 'fs', None)
                 , 'request': str(request).splitlines()
                 , 'user': user
                  }
@@ -145,6 +145,7 @@ def sentry(website):
 
 
     website.hooks.error_early += [tell_sentry]
+    return tell_sentry
 
 
 def mixpanel(website):
