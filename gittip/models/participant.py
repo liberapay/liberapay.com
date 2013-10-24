@@ -30,6 +30,8 @@ ASCII_ALLOWED_IN_USERNAME = set("0123456789"
                                 "abcdefghijklmnopqrstuvwxyz"
                                 "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                 ".,-_:@ ")
+# We use | in Sentry logging, so don't make that allowable. :-)
+
 NANSWERS_THRESHOLD = 0  # configured in wireup.py
 
 
@@ -253,7 +255,7 @@ class Participant(Model, MixinElsewhere, MixinTeam):
 
     def change_username(self, suggested):
         """Raise Response or return None.
-        
+
         Usernames are limited to alphanumeric characters, plus ".,-_:@ ",
         and can only be 32 characters long.
 
