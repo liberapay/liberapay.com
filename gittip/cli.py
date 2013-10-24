@@ -1,10 +1,22 @@
 """This is installed as `payday`.
 """
+import os
 from gittip import wireup
 
 
 def payday():
+
+    # Wire things up.
+    # ===============
+    # Manually override max db connections so that we only have one connection.
+    # Our db access is serialized right now anyway, and with only one
+    # connection it's easier to trust changes to statement_timeout. The point
+    # here is that we want to turn off statement_timeout for payday.
+
+    os.environ['DATABASE_MAXCONN'] = '1'
     db = wireup.db()
+    db.run("SET statement_timeout = 0")
+
     wireup.billing()
     wireup.nanswers()
 
