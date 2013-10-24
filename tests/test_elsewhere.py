@@ -30,10 +30,10 @@ class TestAccountElsewhere(Harness):
     xss = '/on/twitter/"><img src=x onerror=prompt(1);>/'
     def test_twitter_oauth_url_percent_encodes_then(self):
         expected = '/on/twitter/redirect?action=opt-in&then=L29uL3R3aXR0ZXIvIj48aW1nIHNyYz14IG9uZXJyb3I9cHJvbXB0KDEpOz4v'
-        actual = twitter.oauth_url( website=None
-                                  , action='opt-in'
-                                  , then=self.xss
-                                   )
+        actual = self.platforms.twitter.oauth_url(
+            action='opt-in',
+            then=self.xss,
+        )
         assert actual == expected
 
     def test_bitbucket_oauth_url_percent_encodes_then(self):
