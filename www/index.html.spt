@@ -21,7 +21,7 @@ def _to_age(participant):
     return age.replace(' ', ' <span class="unit">') + "</span>"
 
 def _get_img_src(someone):
-    src = '/assets/%s/avatar-default.gif' % os.environ['__VERSION__']
+    src = '/assets/%s/avatar-default.gif' % website.version
     if someone.gravatar_id:
         src = "https://www.gravatar.com/avatar/%s.jpg?s=%s"
         src %= (someone.gravatar_id, 128)
