@@ -5,13 +5,17 @@ Most of our payouts are handled by Balanced, but they're limited to people in
 the U.S. We need to payout to people outside the U.S. (#126), and while we work
 on a long-term solution, we are using PayPal. However, we've grown past the
 point that PayPal's Instant Transfer feature is workable. This script is for
-interfacing with PayPal's MassPay feature. Given a file at:
+interfacing with PayPal's MassPay feature.
 
-    ../masspay/YYYY-MM-DD.input.csv
+This script provides for:
 
-This script provides for computing two output CSVs (one to upload to PayPal,
-the second to use for POSTing the exchanges back to Gittip), and for POSTing
-the exchanges back to Gittip.
+  1. Computing an input CSV by hitting the Gittip database directly.
+  2. Computing two output CSVs (one to upload to PayPal, the second to use for POSTing
+      the exchanges back to Gittip)
+  3. POSTing the exchanges back to Gittip via the HTTP API.
+
+The idea is that you run steps 1 and 2, then run through the MassPay UI on the
+PayPal website using the appropriate CSV from step 2, then run step 3.
 
 """
 from __future__ import absolute_import, division, print_function, unicode_literals
@@ -61,9 +65,38 @@ class Payee(object):
         self.net -= fee
 
 
+def compute_input_csv():
+    from gittip import wireup
+    db = wireup.db()
+    participants = db.all("""
+
+        SELECT participants.*::participants
+          FROM participants
+         WHERE paypal_email IS NOT null
+           AND balance > 0
+      ORDER BY balance DESC
+
+    """)
+    writer = csv.writer(open(INPUT_CSV, 'w+'))
+    print_rule()
+    print("{:<32} {} {:^5} {:^6}".format("email", "balance", "tips", "amount"))
+    print_rule()
+    total_gross = 0
+    for participant in participants:
+        tips, total = participant.get_tips_and_total(datetime.datetime.now())
+        amount = participant.balance - total
+        total_gross += amount
+        print("{:<32} {:>6} {:>6} {:>6}"
+              .format(participant.paypal_email, participant.balance, total, amount))
+        row = (participant.username, participant.paypal_email, amount)
+        writer.writerow(row)
+    print(" "*46, "-"*6)
+    print("{:>53}".format(total_gross))
+
+
 def compute_output_csvs():
     payees = [Payee(rec) for rec in csv.reader(open(INPUT_CSV))]
-    payees.sort(key=lambda o: o.gross)
+    payees.sort(key=lambda o: o.gross, reverse=True)
 
     total_gross = sum([p.gross for p in payees])
     total_fees = total_gross - round_(total_gross / D('1.02'))  # 2% fee
@@ -146,6 +179,8 @@ def main():
     for filename in (INPUT_CSV, PAYPAL_CSV, GITTIP_CSV):
         print("  [{}] {}".format('x' if os.path.exists(filename) else ' ', filename))
 
+    if raw_input("\nCompute input CSV? [y/N] ") == 'y':
+        compute_input_csv()
     if raw_input("\nCompute output CSVs? [y/N] ") == 'y':
         compute_output_csvs()
     if raw_input("\nRecord exchanges in Gittip? [y/N] ") == 'y':
