@@ -39,10 +39,10 @@ class TestAccountElsewhere(Harness):
 
     def test_bitbucket_oauth_url_percent_encodes_then(self):
         expected = '/on/bitbucket/redirect?action=opt-in&then=L29uL3R3aXR0ZXIvIj48aW1nIHNyYz14IG9uZXJyb3I9cHJvbXB0KDEpOz4v'
-        actual = bitbucket.oauth_url( website=None
-                                    , action='opt-in'
-                                    , then=self.xss
-                                     )
+        actual = self.platforms.bitbucket.oauth_url(
+            action='opt-in',
+            then=self.xss,
+        )
         assert actual == expected
 
     def test_github_oauth_url_not_susceptible_to_injection_attack(self):
