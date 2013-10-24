@@ -44,7 +44,7 @@ def round_up(d):
     return d.quantize(D('0.01'), ROUND_UP)
 
 def print_rule():
-    print("-" * 53)
+    print("-" * 80)
 
 
 class Payee(object):
@@ -80,19 +80,23 @@ def compute_input_csv():
     """)
     writer = csv.writer(open(INPUT_CSV, 'w+'))
     print_rule()
-    print("{:<32} {} {:^5} {:^6}".format("email", "balance", "tips", "amount"))
+    print("{:<24}{:<32} {:^7} {:^7} {:^7}".format("username", "email", "balance", "tips", "amount"))
     print_rule()
     total_gross = 0
     for participant in participants:
         tips, total = participant.get_tips_and_total(datetime.datetime.now())
         amount = participant.balance - total
         total_gross += amount
-        print("{:<32} {:>6} {:>6} {:>6}"
-              .format(participant.paypal_email, participant.balance, total, amount))
+        print("{:<24}{:<32} {:>7} {:>7} {:>7}".format( participant.username
+                                                     , participant.paypal_email
+                                                     , participant.balance
+                                                     , total
+                                                     , amount
+                                                      ))
         row = (participant.username, participant.paypal_email, amount)
         writer.writerow(row)
-    print(" "*46, "-"*6)
-    print("{:>53}".format(total_gross))
+    print(" "*75, "-"*7)
+    print("{:>80}".format(total_gross))
 
 
 def compute_output_csvs():
@@ -139,7 +143,7 @@ def compute_output_csvs():
     paypal_csv = csv.writer(open(PAYPAL_CSV, 'w+'))
     gittip_csv = csv.writer(open(GITTIP_CSV, 'w+'))
     print_rule()
-    print("{:<32} {:^6} {:^6} {:^6}".format("email", "gross", "fee", "net"))
+    print("{:<24}{:<32} {:^7} {:^7} {:^7}".format("username", "email", "gross", "fee", "net"))
     print_rule()
     for payee in payees:
         paypal_csv.writerow((payee.email, payee.net, "usd"))
@@ -149,10 +153,10 @@ def compute_output_csvs():
                             , payee.fee
                             , payee.net
                              ))
-        print("{email:<32} {gross:>6} {fee:>6} {net:>6}".format(**payee.__dict__))
+        print("{username:<24}{email:<32} {gross:>7} {fee:>7} {net:>7}".format(**payee.__dict__))
 
-    print(" "*32, "-"*20)
-    print("{:>39} {:>6} {:>6}".format(total_gross, total_fees, total_net))
+    print(" "*56, "-"*23)
+    print("{:>64} {:>7} {:>7}".format(total_gross, total_fees, total_net))
 
 
 def record_exchanges_in_gittip():
