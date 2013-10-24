@@ -24,7 +24,7 @@ class Tests(Harness):
         self.website.oauth_cache = {"deadbeef": ("deadbeef", "opt-in", "")}
 
         post.return_value.status_code = 200
-        post.return_value.text = "oauth_token=foo&oauth_token_secret=foo&user_id=foo"
+        post.return_value.text = "oauth_token=foo&oauth_token_secret=foo&screen_name=foo"
 
         get.return_value.status_code = 200
         get.return_value.text = '{"id": 1234, "screen_name": "alice"}'
@@ -43,7 +43,7 @@ class Tests(Harness):
         self.website.oauth_cache = {"deadbeef": ("deadbeef", "connect", "")}
 
         post.return_value.status_code = 200
-        post.return_value.text = "oauth_token=foo&oauth_token_secret=foo&user_id=foo"
+        post.return_value.text = "oauth_token=foo&oauth_token_secret=foo&screen_name=foo"
 
         get.return_value.status_code = 200
         get.return_value.text = '{"id": 1234, "screen_name": "alice"}'
@@ -68,7 +68,7 @@ class Tests(Harness):
         self.website.oauth_cache = {"deadbeef": ("deadbeef", "connect", "")}
 
         post.return_value.status_code = 200
-        post.return_value.text = "oauth_token=foo&oauth_token_secret=foo&user_id=foo"
+        post.return_value.text = "oauth_token=foo&oauth_token_secret=foo&screen_name=foo"
 
         get.return_value.status_code = 200
         get.return_value.text = '{"id": 1234, "screen_name": "alice"}'
@@ -90,7 +90,7 @@ class Tests(Harness):
         self.website.oauth_cache = {"deadbeef": ("deadbeef", "connect", "")}
 
         post.return_value.status_code = 200
-        post.return_value.text = "oauth_token=foo&oauth_token_secret=foo&user_id=foo"
+        post.return_value.text = "oauth_token=foo&oauth_token_secret=foo&screen_name=foo"
 
         get.return_value.status_code = 200
         get.return_value.text = '{"id": 1234, "screen_name": "alice"}'
