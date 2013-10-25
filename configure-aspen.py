@@ -30,6 +30,8 @@ gittip.wireup.nmembers(website)
 gittip.wireup.envvars(website)
 tell_sentry = gittip.wireup.sentry(website)
 
+gnactive = ''
+gtransfer_volume = ''
 
 def up_minthreads(website):
     # https://github.com/gittip/www.gittip.com/issues/1098
@@ -118,15 +120,20 @@ def add_stuff(request):
     request.context['github'] = github
     request.context['twitter'] = twitter
     request.context['bountysource'] = bountysource
+    request.context['gnactive'] = gnactive
+    request.context['gtransfer_volume'] = gtransfer_volume
+
+website.hooks.inbound_early += [add_stuff]
+
+def gstats():
+    global gnactive
+    global gtransfer_volume
     stats = gittip.db.one( "SELECT nactive, transfer_volume FROM paydays "
                            "ORDER BY ts_end DESC LIMIT 1"
                          , default=(0, 0.0)
                           )
-    request.context['gnactive'] = locale.format("%d", round(stats[0], -2), grouping=True)
-    request.context['gtransfer_volume'] = locale.format("%d", round(stats[1], -2), grouping=True)
-
-website.hooks.inbound_early += [add_stuff]
-
+    gnactive = locale.format("%d", round(stats[0], -2), grouping=True)
+    gtransfer_volume = locale.format("%d", round(stats[1], -2), grouping=True)
 
 # The homepage wants expensive queries. Let's periodically select into an
 # intermediate table.
@@ -136,6 +143,7 @@ def update_homepage_queries():
     from gittip import utils
     while 1:
         try:
+            gstats()
             utils.update_homepage_queries_once(website.db)
         except:
             tell_sentry(None)
