@@ -1,3 +1,4 @@
+import locale
 import time
 
 import gittip
@@ -338,6 +339,15 @@ def get_participant(request, restrict=True):
                 raise Response(403)
 
     return participant
+
+
+def update_global_stats(website):
+    stats = gittip.db.one( "SELECT nactive, transfer_volume FROM paydays "
+                           "ORDER BY ts_end DESC LIMIT 1"
+                         , default=(0, 0.0)
+                          )
+    website.gnactive = locale.format("%d", round(stats[0], -2), grouping=True)
+    website.gtransfer_volume = locale.format("%d", round(stats[1], -2), grouping=True)
 
 
 def update_homepage_queries_once(db):
