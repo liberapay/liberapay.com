@@ -538,3 +538,4 @@ and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
  - [Pitch In](http://pitchinbox.com/) - Widget-centric project-based funding campaigns
  - [Binpress](http://www.binpress.com/) - Binpress is the marketplace for commercial open-source projects.
  - [TubeStart](https://www.tubestart.com/) - a crowdfunding platform dedicated exclusively to YouTube creators
+ - [Fundit](http://www.fundit.ie/) - An Ireland-wide initiative
