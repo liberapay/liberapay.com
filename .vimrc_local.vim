@@ -18,22 +18,17 @@
 " Expand tabs
 setl expandtab
 
-" Use 2-space indentation
-setl shiftwidth=2 tabstop=2
+" Use 4-space indentation
+setl shiftwidth=4 tabstop=4
 
-" Use 4-space indentation for Python and Simplates
-if &filetype == 'python' || bufname("%") =~? '\.spt$'
-  setl shiftwidth=4 tabstop=4
-endif
-
-" Use 4-width tabs in makefiles, and don't expand tabs
+" Use tabs in makefiles (Makefile requirement)
 if &filetype == 'make'
-  setl noexpandtab shiftwidth=4 tabstop=4
+    setl noexpandtab
 endif
 
 " Make .spt files look like Python
 if bufname("%") =~? '\.spt$'
-  " Later we can have this `set filetype=aspen` and set an `au FileType aspen`
-  " earlier in our rc to load our syntax file (which shouldn't cause problems)
-  setl filetype=python
+    " Later we can have this `set filetype=aspen` and set an `au FileType aspen`
+    " earlier in our rc to load our syntax file (which shouldn't cause problems)
+    setl filetype=python
 endif
