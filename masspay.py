@@ -5,13 +5,17 @@ Most of our payouts are handled by Balanced, but they're limited to people in
 the U.S. We need to payout to people outside the U.S. (#126), and while we work
 on a long-term solution, we are using PayPal. However, we've grown past the
 point that PayPal's Instant Transfer feature is workable. This script is for
-interfacing with PayPal's MassPay feature. Given a file at:
+interfacing with PayPal's MassPay feature.
 
-    ../masspay/YYYY-MM-DD.input.csv
+This script provides for:
 
-This script provides for computing two output CSVs (one to upload to PayPal,
-the second to use for POSTing the exchanges back to Gittip), and for POSTing
-the exchanges back to Gittip.
+  1. Computing an input CSV by hitting the Gittip database directly.
+  2. Computing two output CSVs (one to upload to PayPal, the second to use for POSTing
+      the exchanges back to Gittip)
+  3. POSTing the exchanges back to Gittip via the HTTP API.
+
+The idea is that you run steps 1 and 2, then run through the MassPay UI on the
+PayPal website using the appropriate CSV from step 2, then run step 3.
 
 """
 from __future__ import absolute_import, division, print_function, unicode_literals
@@ -20,6 +24,7 @@ import csv
 import datetime
 import getpass
 import os
+import sys
 from decimal import Decimal as D, ROUND_UP
 
 import requests
@@ -39,7 +44,7 @@ def round_up(d):
     return d.quantize(D('0.01'), ROUND_UP)
 
 def print_rule():
-    print("-" * 53)
+    print("-" * 80)
 
 
 class Payee(object):
@@ -61,9 +66,44 @@ class Payee(object):
         self.net -= fee
 
 
+def compute_input_csv():
+    from gittip import wireup
+    db = wireup.db()
+    participants = db.all("""
+
+        SELECT participants.*::participants
+          FROM participants
+         WHERE paypal_email IS NOT null
+           AND balance > 0
+      ORDER BY balance DESC
+
+    """)
+    writer = csv.writer(open(INPUT_CSV, 'w+'))
+    print_rule()
+    print("{:<24}{:<32} {:^7} {:^7} {:^7}".format("username", "email", "balance", "tips", "amount"))
+    print_rule()
+    total_gross = 0
+    for participant in participants:
+        tips, total = participant.get_tips_and_total(for_payday=False)
+        amount = participant.balance - total
+        if amount <= 0:
+            continue
+        total_gross += amount
+        print("{:<24}{:<32} {:>7} {:>7} {:>7}".format( participant.username
+                                                     , participant.paypal_email
+                                                     , participant.balance
+                                                     , total
+                                                     , amount
+                                                      ))
+        row = (participant.username, participant.paypal_email, amount)
+        writer.writerow(row)
+    print(" "*72, "-"*7)
+    print("{:>80}".format(total_gross))
+
+
 def compute_output_csvs():
     payees = [Payee(rec) for rec in csv.reader(open(INPUT_CSV))]
-    payees.sort(key=lambda o: o.gross)
+    payees.sort(key=lambda o: o.gross, reverse=True)
 
     total_gross = sum([p.gross for p in payees])
     total_fees = total_gross - round_(total_gross / D('1.02'))  # 2% fee
@@ -105,7 +145,7 @@ def compute_output_csvs():
     paypal_csv = csv.writer(open(PAYPAL_CSV, 'w+'))
     gittip_csv = csv.writer(open(GITTIP_CSV, 'w+'))
     print_rule()
-    print("{:<32} {:^6} {:^6} {:^6}".format("email", "gross", "fee", "net"))
+    print("{:<24}{:<32} {:^7} {:^7} {:^7}".format("username", "email", "gross", "fee", "net"))
     print_rule()
     for payee in payees:
         paypal_csv.writerow((payee.email, payee.net, "usd"))
@@ -115,10 +155,10 @@ def compute_output_csvs():
                             , payee.fee
                             , payee.net
                              ))
-        print("{email:<32} {gross:>6} {fee:>6} {net:>6}".format(**payee.__dict__))
+        print("{username:<24}{email:<32} {gross:>7} {fee:>7} {net:>7}".format(**payee.__dict__))
 
-    print(" "*32, "-"*20)
-    print("{:>39} {:>6} {:>6}".format(total_gross, total_fees, total_net))
+    print(" "*56, "-"*23)
+    print("{:>64} {:>7} {:>7}".format(total_gross, total_fees, total_net))
 
 
 def record_exchanges_in_gittip():
@@ -135,7 +175,7 @@ def record_exchanges_in_gittip():
 
     for username, email, gross, fee, net in csv.reader(open(GITTIP_CSV)):
         url = '{}/{}/history/record-an-exchange'.format(gittip_base_url, username)
-        note = 'PayPal MassPay to {}.'.format(gross, email)
+        note = 'PayPal MassPay to {}.'.format(email)
         data = {'amount': '-' + net, 'fee': fee, 'note': note}
         requests.post(url, auth=(gittip_api_key, ''), data=data)
         print(note)
@@ -146,10 +186,21 @@ def main():
     for filename in (INPUT_CSV, PAYPAL_CSV, GITTIP_CSV):
         print("  [{}] {}".format('x' if os.path.exists(filename) else ' ', filename))
 
-    if raw_input("\nCompute output CSVs? [y/N] ") == 'y':
-        compute_output_csvs()
-    if raw_input("\nRecord exchanges in Gittip? [y/N] ") == 'y':
-        record_exchanges_in_gittip()
+    if not sys.argv[1:]:
+        if raw_input("\nCompute input CSV? [y/N] ") == 'y':
+            compute_input_csv()
+        if raw_input("\nCompute output CSVs? [y/N] ") == 'y':
+            compute_output_csvs()
+        if raw_input("\nRecord exchanges in Gittip? [y/N] ") == 'y':
+            record_exchanges_in_gittip()
+
+    else:
+        if '-i' in sys.argv:
+            compute_input_csv()
+        if '-o' in sys.argv:
+            compute_output_csvs()
+        if '-r' in sys.argv:
+            record_exchanges_in_gittip()
 
 
 if __name__ == '__main__':
