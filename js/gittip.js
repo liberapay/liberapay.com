@@ -5,8 +5,7 @@
 
 Gittip = {};
 
-Gittip.init = function()
-{
+Gittip.init = function() {
     Gittip.forms.initCSRF();
     Gittip.signIn();
     Gittip.signOut();
@@ -17,14 +16,12 @@ Gittip.init = function()
 // ===================
 // yanked from gttp.co/v1/api.js
 
-Gittip.each = function(a, fn)
-{
+Gittip.each = function(a, fn) {
     for (var i=0; i<a.length; i++)
         fn(a[i], i, length);
-}
+};
 
-Gittip.jsoncss = function(jsoncss)
-{
+Gittip.jsoncss = function(jsoncss) {
     var out = '';
 
     this.each(jsoncss, function(selector) {
@@ -44,8 +41,7 @@ Gittip.jsoncss = function(jsoncss)
     return this.jsonml(['style', out]);
 };
 
-Gittip.jsonml = function(jsonml)
-{
+Gittip.jsonml = function(jsonml) {
     var node  = document.createElement(jsonml[0]),
         _     = this;
 
@@ -71,22 +67,20 @@ Gittip.jsonml = function(jsonml)
     return node;
 };
 
-Gittip.signIn = function()
-{
+Gittip.signIn = function() {
     $('.sign-in > .dropdown').mouseenter(function(e) {
         clearTimeout($(this).data('timeoutId'));
-	    $(this).addClass('open');
+        $(this).addClass('open');
     }).mouseleave(function(e) {
-	    var $this = $(this),
-		    timeoutId = setTimeout(function() {
-			    $this.removeClass('open');
-		    }, 100);
-	    $this.data('timeoutId', timeoutId);
+        var $this = $(this),
+            timeoutId = setTimeout(function() {
+                $this.removeClass('open');
+            }, 100);
+        $this.data('timeoutId', timeoutId);
     });
 };
 
-Gittip.signOut = function()
-{
+Gittip.signOut = function() {
     $('a#sign-out').click(function(e) {
         e.preventDefault();
 

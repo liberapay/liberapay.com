@@ -17,13 +17,11 @@ Gittip.payments.havePayments = false;
 
 Gittip.payments.processorAttempts = 0;
 
-Gittip.payments.submitDeleteForm = function(e)
-{
+Gittip.payments.submitDeleteForm = function(e) {
     var item = $("#payout").length ? "bank account" : "credit card";
     var slug = $("#payout").length ? "bank-account" : "credit-card";
     var msg = "Really disconnect your " + item + "?";
-    if (!confirm(msg))
-    {
+    if (!confirm(msg)) {
         e.stopPropagation();
         e.preventDefault();
         return false;
@@ -52,16 +50,14 @@ Gittip.payments.submitDeleteForm = function(e)
 
 Gittip.payments.ba = {};
 
-Gittip.payments.ba.init = function(balanced_uri, participantId)
-{
+Gittip.payments.ba.init = function(balanced_uri, participantId) {
     Gittip.participantId = participantId;
     $('#delete FORM').submit(Gittip.payments.submitDeleteForm);
     $('#payout').submit(Gittip.payments.ba.submit);
 
     // Lazily depend on Balanced.
     var balanced_js = "https://js.balancedpayments.com/v1/balanced.js";
-    jQuery.getScript(balanced_js, function()
-    {
+    jQuery.getScript(balanced_js, function() {
         balanced.init(balanced_uri);
         Gittip.havePayouts = true;
         $('INPUT[type!="hidden"]').eq(0).focus();
@@ -113,20 +109,16 @@ Gittip.payments.ba.submit = function (e) {
         account_number: 'Your bank account number is required.',
         routing_number: 'A routing number is required.'
     };
-    for (var field in requiredFields)
-    {
+    for (var field in requiredFields) {
         var $f = $('#' + field);
         if (!$f.length)  // Only validate if it's on the page.
             continue;
         var value = $f.val();
 
-        if (!value)
-        {
+        if (!value) {
             $f.closest('div').addClass('error');
             errors.push(requiredFields[field]);
-        }
-        else
-        {
+        } else {
             $f.closest('div').removeClass('error');
         }
     }
@@ -137,8 +129,7 @@ Gittip.payments.ba.submit = function (e) {
     // This might not be on the page if they've already verified their
     // identity.
 
-    if (dobs[0] !== undefined)
-    {
+    if (dobs[0] !== undefined) {
         var d = new Date(dobs[0], dobs[1] - 1, dobs[2]);
         // (1900, 2, 31) gives 3 march :P
         if (d.getMonth() !== dobs[1] - 1)
@@ -150,27 +141,20 @@ Gittip.payments.ba.submit = function (e) {
     // ========================
 
     var $rn = $('#routing_number');
-    if (bankAccount.bank_code)
-    {
-        if (!balanced.bankAccount.validateRoutingNumber(bankAccount.bank_code))
-        {
+    if (bankAccount.bank_code) {
+        if (!balanced.bankAccount.validateRoutingNumber(bankAccount.bank_code)) {
             $rn.closest('div').addClass('error');
             errors.push("That routing number is invalid.");
-        }
-        else
-        {
+        } else {
             $rn.closest('div').removeClass('error');
         }
     }
 
 
-    if (errors.length)
-    {
+    if (errors.length) {
         $('BUTTON#save').text('Save');
         Gittip.forms.showFeedback(null, errors);
-    }
-    else
-    {
+    } else {
         balanced.bankAccount.create( bankAccount
                                    , Gittip.payments.ba.handleResponse
                                     );
@@ -179,8 +163,7 @@ Gittip.payments.ba.submit = function (e) {
 
 Gittip.payments.ba.handleResponse = function (response) {
     console.log('bank account response', response);
-    if (response.status != 201)
-    {
+    if (response.status != 201) {
         $('BUTTON#save').text('Save');
         var msg = response.status.toString() + " " + response.error.description;
         jQuery.ajax(
@@ -191,9 +174,7 @@ Gittip.payments.ba.handleResponse = function (response) {
         );
 
         Gittip.forms.showFeedback(null, [response.error.description]);
-    }
-    else
-    {
+    } else {
 
         /* The request to tokenize the bank account succeeded. Now we need to
          * validate the merchant information. We'll submit it to
@@ -201,8 +182,7 @@ Gittip.payments.ba.handleResponse = function (response) {
          * on there.
          */
 
-        function success()
-        {
+        function success() {
             $('#status').text('connected').addClass('highlight');
             setTimeout(function() {
                 $('#status').removeClass('highlight');
@@ -215,21 +195,20 @@ Gittip.payments.ba.handleResponse = function (response) {
             }, 1000);
         }
 
-        function detailedFeedback(data)
-        {
+        function detailedFeedback(data) {
             $('#status').text('failing');
             $('#delete').show();
             var messages = [data.error];
             if (data.problem == 'More Info Needed') {
                 var redirect_uri = data.redirect_uri;
                 for (var key in Gittip.payments.ba.merchantData) {
-                    redirect_uri += 'merchant[' + encodeURIComponent(key) + ']'
-                        + '=' + encodeURIComponent((Gittip.payments.ba.merchantData[key])) + '&';
+                    redirect_uri += 'merchant[' + encodeURIComponent(key) + ']' +
+                          '=' + encodeURIComponent((Gittip.payments.ba.merchantData[key])) + '&';
                 }
-                messages = [ "Sorry, we couldn't verify your identity. Please "
-                           + "check, correct, and resubmit your details, or "
-                           + "step through our <a href=\"" + redirect_uri
-                           + "\">payment processor's escalation process</a>."
+                messages = [ "Sorry, we couldn't verify your identity. Please " +
+                             "check, correct, and resubmit your details, or " +
+                             "step through our <a href=\"" + redirect_uri +
+                             "\">payment processor's escalation process</a>."
                 ];
             }
             Gittip.forms.showFeedback(data.problem, messages);
@@ -253,36 +232,32 @@ Gittip.payments.ba.handleResponse = function (response) {
 
 Gittip.payments.cc = {};
 
-Gittip.payments.cc.init = function(balanced_uri, participantId)
-{
+Gittip.payments.cc.init = function(balanced_uri, participantId) {
     Gittip.participantId = participantId;
     $('#delete FORM').submit(Gittip.payments.submitDeleteForm);
     $('FORM#payment').submit(Gittip.payments.cc.submit);
 
     // Lazily depend on Balanced.
     var balanced_js = "https://js.balancedpayments.com/v1/balanced.js";
-    jQuery.getScript(balanced_js, function()
-    {
+    jQuery.getScript(balanced_js, function() {
         balanced.init(balanced_uri);
         Gittip.havePayments = true;
         $('INPUT[type!="hidden"]').eq(0).focus();
     });
 };
 
-Gittip.payments.cc.submit = function(e)
-{
+Gittip.payments.cc.submit = function(e) {
 
     e.stopPropagation();
     e.preventDefault();
     $('BUTTON#save').text('Saving ...');
     Gittip.forms.clearFeedback();
 
-    if (!Gittip.havePayments)
-    {
+    if (!Gittip.havePayments) {
         if (Gittip.paymentProcessorAttempts++ === 50)
-            alert( "Gah! Apparently we suck. If you're really motivated, call "
-                   +"me (Chad) at 412-925-4220 and we'll figure this out. "
-                   +"Sorry. :-("
+            alert( "Gah! Apparently we suck. If you're really motivated, call " +
+                   "me (Chad) at 412-925-4220 and we'll figure this out. " +
+                   "Sorry. :-("
                   );
         else
             setTimeout(Gittip.submitPaymentForm, 200);
@@ -292,8 +267,7 @@ Gittip.payments.cc.submit = function(e)
 
     // Adapt our form lingo to balanced nomenclature.
 
-    function val(field)
-    {
+    function val(field) {
         return $('FORM#payment INPUT[id="' + field + '"]').val();
     }
 
@@ -318,35 +292,27 @@ Gittip.payments.cc.submit = function(e)
     credit_card.expiration_month = val('expiration_month');
     credit_card.expiration_year = val('expiration_year');
 
-    if (!balanced.card.isCardNumberValid(credit_card.card_number))
-    {
+    if (!balanced.card.isCardNumberValid(credit_card.card_number)) {
         $('BUTTON#save').text('Save');
         Gittip.forms.showFeedback(null, ["Your card number is bad."]);
-    }
-    else if (!balanced.card.isExpiryValid( credit_card.expiration_month
+    } else if (!balanced.card.isExpiryValid( credit_card.expiration_month
                                          , credit_card.expiration_year
-                                          ))
-    {
+                                          )) {
         $('BUTTON#save').text('Save');
         Gittip.forms.showFeedback(null, ["Your expiration date is bad."]);
-    }
-    else if (!balanced.card.isSecurityCodeValid( credit_card.card_number
+    } else if (!balanced.card.isSecurityCodeValid( credit_card.card_number
                                                , credit_card.security_code
-                                                ))
-    {
+                                                )) {
         $('BUTTON#save').text('Save');
         Gittip.forms.showFeedback(null, ["Your CVV is bad."]);
-    }
-    else
-    {
+    } else {
         balanced.card.create(credit_card, Gittip.payments.cc.handleResponse);
     }
 
     return false;
 };
 
-Gittip.payments.cc.handleResponse = function(response)
-{
+Gittip.payments.cc.handleResponse = function(response) {
 
     /* If status !== 201 then response.error will contain information about the
      * error, in this form:
@@ -363,8 +329,7 @@ Gittip.payments.cc.handleResponse = function(response)
      *
      */
 
-    if (response.status !== 201)
-    {   // The request to create the token failed. Store the failure message in
+    if (response.status !== 201) {   // The request to create the token failed. Store the failure message in
         // our db.
         $('BUTTON#save').text('Save');
         var msg = response.status.toString() + " " + response.error.description;
@@ -376,9 +341,7 @@ Gittip.payments.cc.handleResponse = function(response)
         );
 
         Gittip.forms.showFeedback(null, [response.error.description]);
-    }
-    else
-    {
+    } else {
 
         /* The request to create the token succeeded. We now have a single-use
          * token associated with the credit card info. This token can be
@@ -388,8 +351,7 @@ Gittip.payments.cc.handleResponse = function(response)
          * card is good.
          */
 
-        function success(data)
-        {
+        function success(data) {
             $('#status').text('working').addClass('highlight');
             setTimeout(function() {
                 $('#status').removeClass('highlight');
@@ -406,8 +368,7 @@ Gittip.payments.cc.handleResponse = function(response)
                 mixpanel.track("Add Credit Card");
         }
 
-        function detailedFeedback(data)
-        {
+        function detailedFeedback(data) {
             $('#status').text('failing');
             $('#delete').show();
             var details = [];
