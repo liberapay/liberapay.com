@@ -69,7 +69,7 @@ test-db: test-cloud-db test-schema
 test: env tests/env test-schema
 	./$(env_bin)/swaddle tests/env ./$(env_bin)/py.test ./tests/
 
-tests: test jstest
+tests: test
 
 node_modules: package.json
 	npm install
