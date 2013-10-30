@@ -35,7 +35,8 @@ Gittip.horn.update = function(data) {
 };
 
 Gittip.horn.draw = function(toots) {
-    for (var i=toots.length-1, toot; toot = toots[i]; i--) {
+    for (var i=toots.length-1; i>0; i--) {
+        var toot = toots[i];
         Gittip.horn.since_id = toot.id;
         Gittip.horn.drawOne(toot);
     }

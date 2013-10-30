@@ -174,56 +174,56 @@ Gittip.payments.ba.handleResponse = function (response) {
         );
 
         Gittip.forms.showFeedback(null, [response.error.description]);
-    } else {
-
-        /* The request to tokenize the bank account succeeded. Now we need to
-         * validate the merchant information. We'll submit it to
-         * /bank-accounts.json and check the response code to see what's going
-         * on there.
-         */
-
-        function success() {
-            $('#status').text('connected').addClass('highlight');
-            setTimeout(function() {
-                $('#status').removeClass('highlight');
-            }, 8000);
-            $('#delete').show();
-            Gittip.forms.clearFeedback();
-            $('BUTTON#save').text('Save');
-            setTimeout(function() {
-                window.location.href = '/' + Gittip.participantId + '/';
-            }, 1000);
-        }
-
-        function detailedFeedback(data) {
-            $('#status').text('failing');
-            $('#delete').show();
-            var messages = [data.error];
-            if (data.problem == 'More Info Needed') {
-                var redirect_uri = data.redirect_uri;
-                for (var key in Gittip.payments.ba.merchantData) {
-                    redirect_uri += 'merchant[' + encodeURIComponent(key) + ']' +
-                          '=' + encodeURIComponent((Gittip.payments.ba.merchantData[key])) + '&';
-                }
-                messages = [ "Sorry, we couldn't verify your identity. Please " +
-                             "check, correct, and resubmit your details, or " +
-                             "step through our <a href=\"" + redirect_uri +
-                             "\">payment processor's escalation process</a>."
-                ];
-            }
-            Gittip.forms.showFeedback(data.problem, messages);
-            $('BUTTON#save').text('Save');
-        }
-
-        var detailsToSubmit = Gittip.payments.ba.merchantData;
-        detailsToSubmit.bank_account_uri = response.data.uri;
-
-        Gittip.forms.submit( "/bank-account.json"
-                           , detailsToSubmit
-                           , success
-                           , detailedFeedback
-                            );
+        return;
     }
+
+    /* The request to tokenize the bank account succeeded. Now we need to
+     * validate the merchant information. We'll submit it to
+     * /bank-accounts.json and check the response code to see what's going
+     * on there.
+     */
+
+    function success() {
+        $('#status').text('connected').addClass('highlight');
+        setTimeout(function() {
+            $('#status').removeClass('highlight');
+        }, 8000);
+        $('#delete').show();
+        Gittip.forms.clearFeedback();
+        $('BUTTON#save').text('Save');
+        setTimeout(function() {
+            window.location.href = '/' + Gittip.participantId + '/';
+        }, 1000);
+    }
+
+    function detailedFeedback(data) {
+        $('#status').text('failing');
+        $('#delete').show();
+        var messages = [data.error];
+        if (data.problem == 'More Info Needed') {
+            var redirect_uri = data.redirect_uri;
+            for (var key in Gittip.payments.ba.merchantData) {
+                redirect_uri += 'merchant[' + encodeURIComponent(key) + ']' +
+                      '=' + encodeURIComponent((Gittip.payments.ba.merchantData[key])) + '&';
+            }
+            messages = [ "Sorry, we couldn't verify your identity. Please " +
+                         "check, correct, and resubmit your details, or " +
+                         "step through our <a href=\"" + redirect_uri +
+                         "\">payment processor's escalation process</a>."
+            ];
+        }
+        Gittip.forms.showFeedback(data.problem, messages);
+        $('BUTTON#save').text('Save');
+    }
+
+    var detailsToSubmit = Gittip.payments.ba.merchantData;
+    detailsToSubmit.bank_account_uri = response.data.uri;
+
+    Gittip.forms.submit( "/bank-account.json"
+                       , detailsToSubmit
+                       , success
+                       , detailedFeedback
+                        );
 };
 
 
@@ -341,45 +341,45 @@ Gittip.payments.cc.handleResponse = function(response) {
         );
 
         Gittip.forms.showFeedback(null, [response.error.description]);
-    } else {
-
-        /* The request to create the token succeeded. We now have a single-use
-         * token associated with the credit card info. This token can be
-         * used to associate the card with a customer. We want to do the
-         * latter, and that happens on the server side. When the card is
-         * tokenized Balanced performs card validation, so we alredy know the
-         * card is good.
-         */
-
-        function success(data) {
-            $('#status').text('working').addClass('highlight');
-            setTimeout(function() {
-                $('#status').removeClass('highlight');
-            }, 8000);
-            $('#delete').show();
-            Gittip.forms.clearFeedback();
-            $('BUTTON#save').text('Save');
-            setTimeout(function() {
-                window.location.href = '/' + Gittip.participantId + '/';
-            }, 1000);
-
-            // Log to mixpanel.
-            if (data.first_time === true)
-                mixpanel.track("Add Credit Card");
-        }
-
-        function detailedFeedback(data) {
-            $('#status').text('failing');
-            $('#delete').show();
-            var details = [];
-            Gittip.forms.showFeedback(data.problem, [data.error]);
-            $('BUTTON#save').text('Save');
-        }
-
-        Gittip.forms.submit( "/credit-card.json"
-                           , {card_uri: response.data.uri}
-                           , success
-                           , detailedFeedback
-                            );
+        return;
     }
+
+    /* The request to create the token succeeded. We now have a single-use
+     * token associated with the credit card info. This token can be
+     * used to associate the card with a customer. We want to do the
+     * latter, and that happens on the server side. When the card is
+     * tokenized Balanced performs card validation, so we alredy know the
+     * card is good.
+     */
+
+    function success(data) {
+        $('#status').text('working').addClass('highlight');
+        setTimeout(function() {
+            $('#status').removeClass('highlight');
+        }, 8000);
+        $('#delete').show();
+        Gittip.forms.clearFeedback();
+        $('BUTTON#save').text('Save');
+        setTimeout(function() {
+            window.location.href = '/' + Gittip.participantId + '/';
+        }, 1000);
+
+        // Log to mixpanel.
+        if (data.first_time === true)
+            mixpanel.track("Add Credit Card");
+    }
+
+    function detailedFeedback(data) {
+        $('#status').text('failing');
+        $('#delete').show();
+        var details = [];
+        Gittip.forms.showFeedback(data.problem, [data.error]);
+        $('BUTTON#save').text('Save');
+    }
+
+    Gittip.forms.submit( "/credit-card.json"
+                       , {card_uri: response.data.uri}
+                       , success
+                       , detailedFeedback
+                        );
 };

@@ -1,4 +1,4 @@
-Gittip.team = new function() {
+Gittip.team = function() {
     function init() {
         $('#lookup-container form').submit(add);
         $('#query').focus().keyup(lookup);
@@ -45,7 +45,8 @@ Gittip.team = new function() {
             ));
         }
 
-        for (var i=0, member; member = members[i]; i++) {
+        for (var i=0; i<members.length; i++) {
+            var member = members[i];
             var increase = '';
 
             if (member.take > member.last_week)
@@ -98,7 +99,8 @@ Gittip.team = new function() {
 
     function drawLookupResults(results) {
         var items = [];
-        for (var i=0, result; result = results[i]; i++) {
+        for (var i=0; i<results.length; i++) {
+            var result = results[i];
             items.push(Gittip.jsonml(
                 ['li', {"data-id": result.id}, result.username]
             ));
