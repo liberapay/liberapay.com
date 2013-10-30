@@ -1,4 +1,4 @@
-Gittip.team = function() {
+Gittip.team = (function() {
     function init() {
         $('#lookup-container form').submit(add);
         $('#query').focus().keyup(lookup);
@@ -191,4 +191,4 @@ Gittip.team = function() {
     // ======
 
     return {init: init};
-};
+})();
