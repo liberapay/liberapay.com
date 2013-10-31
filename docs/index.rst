@@ -8,6 +8,18 @@ Welcome! This is the documentation for programmers working on `www.gittip.com`_
 .. _web API: https://github.com/gittip/www.gittip.com#api
 
 
+DB Schema
+---------
+
+is_suspipicous on participant can be None, True or False. It represents unknown,
+blacklisted or whitelisted user.
+
+    * whitelisted can transfer money out of gittip
+    * unknown can move money within gittip
+    * blacklisted cannot do anything
+
+
+
 Contents
 --------
 

@@ -4,8 +4,6 @@ import time
 from gittip.models.participant import Participant
 from gittip.elsewhere import AccountElsewhere, _resolve
 
-www_host = os.environ['BOUNTYSOURCE_WWW_HOST'].decode('ASCII')
-api_host = os.environ['BOUNTYSOURCE_API_HOST'].decode('ASCII')
 
 class BountysourceAccount(AccountElsewhere):
     platform = u'bountysource'
@@ -54,6 +52,7 @@ def create_access_token(participant):
 
 def hash_access_token(user_id, time_now):
     """Create hash for access token.
+
     :param user_id:
         ID of the user.
 

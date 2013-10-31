@@ -146,7 +146,7 @@ def start_payday(*data):
 
 
 def setup_tips(*recs):
-    """Setup some participants and tips. recs is a list of:
+    """Setup some participants and tips. recs is a list of::
 
         ("tipper", "tippee", '2.00', True, False, True, "github", "12345")
                                        ^     ^      ^

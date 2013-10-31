@@ -25,9 +25,9 @@ def resolve(login):
 def oauth_url(website, action, then=u""):
     """Given a website object and a string, return a URL string.
 
-    `action' is one of 'opt-in', 'lock' and 'unlock'
+    'action' is one of 'opt-in', 'lock' and 'unlock'
 
-    `then' is either a github username or an URL starting with '/'. It's
+    'then' is either a github username or an URL starting with '/'. It's
         where we'll send the user after we get the redirect back from
         GitHub.
 
