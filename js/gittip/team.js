@@ -45,7 +45,7 @@ Gittip.team = (function() {
             ));
         }
 
-        for (var i=0; i<members.length; i++) {
+        for (var i=0, len=members.length; i<len; i++) {
             var member = members[i];
             var increase = '';
 
@@ -99,7 +99,7 @@ Gittip.team = (function() {
 
     function drawLookupResults(results) {
         var items = [];
-        for (var i=0; i<results.length; i++) {
+        for (var i=0, len=results.length; i<len; i++) {
             var result = results[i];
             items.push(Gittip.jsonml(
                 ['li', {"data-id": result.id}, result.username]
