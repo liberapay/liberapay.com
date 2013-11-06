@@ -8,6 +8,7 @@ Gittip.modal = {};
  *          message: 'Error.',
  *          yes: 'Yes', // optional
  *          no: 'No', // optional
+ *          selected: 'yes', // optional, one of yes/no
  *          callback: function(confirmed) {
  *              if (confirmed) {
  *                  // user clicked `yes`
@@ -24,12 +25,13 @@ Gittip.modal.confirm = function(options) {
     var callback = options.callback;
     var yesText = options.yes || 'Yes';
     var noText = options.no || 'No';
+    var selected = (options.selected || 'yes').toLowerCase();
 
     var dialog = Gittip.jsonml(['div', { class: 'modal modal-confirm' },
         ['p', message],
 
         ['div', { class: 'controls' },
-            ['button', { class: 'dialog-yes selected' }, yesText], ' ',
+            ['button', { class: 'dialog-yes' }, yesText], ' ',
             ['button', { class: 'dialog-no' }, noText],
         ],
     ]);
@@ -46,5 +48,5 @@ Gittip.modal.confirm = function(options) {
 
     $('#modal-bg').before(dialog);
 
-    $(dialog).find('.dialog-yes').focus();
+    $(dialog).find('.dialog-' + selected).addClass('selected').focus();
 };
