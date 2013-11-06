@@ -6,7 +6,7 @@
 Gittip.notification = function(text, type) {
     type = type || 'notice';
 
-    var dialog = Gittip.jsonml(['div', { class: 'notification notification-' + type }, text]);
+    var dialog = Gittip.jsonml(['div', { 'class': 'notification notification-' + type }, text]);
 
     if (!$('#notification-area').length)
         $('body').prepend('<div id="notification-area"></div>');
