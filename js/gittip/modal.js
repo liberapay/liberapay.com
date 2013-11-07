@@ -27,12 +27,12 @@ Gittip.modal.confirm = function(options) {
     var noText = options.no || 'No';
     var selected = (options.selected || 'yes').toLowerCase();
 
-    var dialog = Gittip.jsonml(['div', { class: 'modal modal-confirm' },
+    var dialog = Gittip.jsonml(['div', { 'class': 'modal modal-confirm' },
         ['p', message],
 
-        ['div', { class: 'controls' },
-            ['button', { class: 'dialog-yes' }, yesText], ' ',
-            ['button', { class: 'dialog-no' }, noText],
+        ['div', { 'class': 'controls' },
+            ['button', { 'class': 'dialog-yes' }, yesText], ' ',
+            ['button', { 'class': 'dialog-no' }, noText],
         ],
     ]);
 
