@@ -47,12 +47,12 @@ Gittip.horn.drawOne = function(toot) {
     var escaped = $('<div>').text(toot.toot).html();
     var TOOTER = '<a href="/' + toot.tooter + '/">' + toot.tooter + '</a>';
     var TOOTEE = '<a href="/' + toot.tootee + '/">' + toot.tootee + '</a>';
-    var html = '<li class="box ' +
-               (toot.horn === toot.tootee ? 'me' : 'them') +
-               ' ' +
-               (toot.tooter_is_tootee ? 'own' : 'theirs') +
-               '"><div class="toot word-wrap">' + escaped + '</div>' +
-               '<div class="nav level-1">' +
+    var html = '<li class="box '
+             + (toot.horn === toot.tootee ? 'me' : 'them')
+             + ' '
+             + (toot.tooter_is_tootee ? 'own' : 'theirs')
+             + '"><div class="toot word-wrap">' + escaped + '</div>'
+             + '<div class="nav level-1">'
 
              /* [someone] tooted [someone]'s horn
               *
@@ -64,14 +64,15 @@ Gittip.horn.drawOne = function(toot) {
               *
               */
 
-               ( toot.user_is_tooter ? 'You' : TOOTER) +
-               ' tooted ' +
-               ( toot.user_is_tootee ?
-                 (toot.user_is_tooter ? 'your own' : 'your') :
-                 (toot.tooter_is_tootee ? 'their own' : TOOTEE + "'s")
-                ) +
-               ' horn</div>' +
-               '</li>';
+             + ( toot.user_is_tooter ? 'You' : TOOTER)
+             + ' tooted '
+             + ( toot.user_is_tootee
+               ? (toot.user_is_tooter ? 'your own' : 'your')
+               : (toot.tooter_is_tootee ? 'their own' : TOOTEE + "'s")
+                )
+             + ' horn</div>'
+             + '</li>';
+
     $('#toots').prepend(html);
 };
 

@@ -203,13 +203,13 @@ Gittip.payments.ba.handleResponse = function (response) {
         if (data.problem == 'More Info Needed') {
             var redirect_uri = data.redirect_uri;
             for (var key in Gittip.payments.ba.merchantData) {
-                redirect_uri += 'merchant[' + encodeURIComponent(key) + ']' +
-                      '=' + encodeURIComponent((Gittip.payments.ba.merchantData[key])) + '&';
+                redirect_uri += 'merchant[' + encodeURIComponent(key) + ']'
+                    + '=' + encodeURIComponent((Gittip.payments.ba.merchantData[key])) + '&';
             }
-            messages = [ "Sorry, we couldn't verify your identity. Please " +
-                         "check, correct, and resubmit your details, or " +
-                         "step through our <a href=\"" + redirect_uri +
-                         "\">payment processor's escalation process</a>."
+            messages = [ "Sorry, we couldn't verify your identity. Please "
+                       + "check, correct, and resubmit your details, or "
+                       + "step through our <a href=\"" + redirect_uri
+                       + "\">payment processor's escalation process</a>."
             ];
         }
         Gittip.forms.showFeedback(data.problem, messages);
@@ -255,9 +255,9 @@ Gittip.payments.cc.submit = function(e) {
 
     if (!Gittip.havePayments) {
         if (Gittip.paymentProcessorAttempts++ === 50)
-            alert( "Gah! Apparently we suck. If you're really motivated, call " +
-                   "me (Chad) at 412-925-4220 and we'll figure this out. " +
-                   "Sorry. :-("
+            alert( "Gah! Apparently we suck. If you're really motivated, call "
+                 + "me (Chad) at 412-925-4220 and we'll figure this out. "
+                 + "Sorry. :-("
                   );
         else
             setTimeout(Gittip.submitPaymentForm, 200);
