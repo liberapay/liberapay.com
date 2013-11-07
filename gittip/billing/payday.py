@@ -384,9 +384,9 @@ class Payday(object):
 
         Return values:
 
-             0 if no valid tip available or tip has not been claimed
-             1 if tip is valid
-            -1 if transfer fails and we cannot continue
+            | 0 if no valid tip available or tip has not been claimed
+            | 1 if tip is valid
+            | -1 if transfer fails and we cannot continue
 
         """
         msg = "$%s from %s to %s%s."
@@ -729,7 +729,7 @@ class Payday(object):
 
         For Balanced, this could be automated by generating an ID locally and
         commiting that to the db and then passing that through in the meta
-        field.* Then syncing would be a case of simply:
+        field.* Then syncing would be a case of simply::
 
             for payment in unresolved_payments:
                 payment_in_balanced = balanced.Transaction.query.filter(

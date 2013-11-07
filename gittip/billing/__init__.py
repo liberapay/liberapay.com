@@ -2,18 +2,18 @@
 
 There are three pieces of information for each participant related to billing:
 
-    balanced_account_uri    NULL - This participant has never been billed.
-                            'deadbeef' - This participant has had a Balanced
-                                account created for them, either by adding a
-                                credit card or a bank account.
-    last_bill_result        NULL - This participant has not had their credit
-                                card charged yet.
-                            '' - This participant has a working card.
-                            <message> - An error message.
-    last_ach_result         NULL - This participant has not wired up a bank
-                                account yet.
-                            '' - This participant has a working bank account.
-                            <message> - An error message.
+    balanced_account_uri
+        * NULL - This participant has never been billed.
+        * 'deadbeef' - This participant has had a Balanced account created for
+          them, either by adding a credit card or a bank account.
+    last_bill_result
+        * NULL - This participant has not had their credit card charged yet.
+        * '' - This participant has a working card.
+        * <message> - An error message.
+    last_ach_result
+        * NULL - This participant has not wired up a bank account yet.
+        * '' - This participant has a working bank account.
+        * <message> - An error message.
 
 """
 from __future__ import unicode_literals
