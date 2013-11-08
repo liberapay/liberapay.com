@@ -99,3 +99,10 @@ class TestRecordAnExchange(Harness):
         SQL = "SELECT balance FROM participants WHERE username='bob'"
         actual = self.db.one(SQL)
         assert actual == expected
+
+    def test_withdrawals_take_fee_out_of_balance(self):
+        self.make_participant('alice', claimed_time=utcnow(), is_admin=True)
+        self.make_participant('bob', claimed_time=utcnow(), balance=20)
+        self.record_an_exchange('-7', '1.13', 'noted', False)
+        SQL = "SELECT balance FROM participants WHERE username='bob'"
+        assert self.db.one(SQL) == Decimal('11.87')
