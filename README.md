@@ -540,3 +540,4 @@ and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
  - [TubeStart](https://www.tubestart.com/) - a crowdfunding platform dedicated exclusively to YouTube creators
  - [Fundit](http://www.fundit.ie/) - An Ireland-wide initiative
  - [Snowdrift.coop](https://snowdrift.coop/) - a new sustainable patronage system
+ - [PieTrust](http://www.pietrust.com/) - an "open company" developing a secure reputation system for sharing credit.
