@@ -541,3 +541,4 @@ and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
  - [Fundit](http://www.fundit.ie/) - An Ireland-wide initiative
  - [Snowdrift.coop](https://snowdrift.coop/) - a new sustainable patronage system
  - [PieTrust](http://www.pietrust.com/) - an "open company" developing a secure reputation system for sharing credit.
+ - [BountyOSS](https://bountyoss.com/) - Where crowdfunding means business
