@@ -453,11 +453,11 @@ for your project!
  - [Node.js: Node-Gittip](https://npmjs.org/package/gittip) (also see [Khan
    Academy's setup](http://ejohn.org/blog/gittip-at-khan-academy/))
 
-
  - [Ruby: gratitude](https://github.com/JohnKellyFerguson/gratitude): A ruby gem that wraps the Gittip API (currently in development and not feature complete).
  
  - [WordPress: WP-Gittip](https://github.com/daankortenbach/WP-Gittip)
 
+ - [hubot-gittip](https://github.com/myplanetdigital/hubot-gittip): A Hubot script for interacting with a shared Gittip account.
 
 Glossary
 ========
