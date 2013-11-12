@@ -4,10 +4,8 @@
 
 Gittip.jump = {};
 
-Gittip.jump.init = function()
-{
-    function jump(e)
-    {
+Gittip.jump.init = function() {
+    function jump(e) {
         var platform = $('#jump SELECT').val().trim();
         var val = $('#jump INPUT').val().trim();
         e.preventDefault();

@@ -1,7 +1,6 @@
 Gittip.tips = {};
 
-Gittip.tips.init = function()
-{
+Gittip.tips.init = function() {
     // For authenticated users we change the tip!
     $('input.my-tip:not(.anon)').change(function() {
         var $this     = $(this),
@@ -22,7 +21,7 @@ Gittip.tips.init = function()
             $parent.addClass('changed');
 
         // show/hide the payment prompt
-        if (amount == 0)
+        if (amount === 0)
             $('#payment-prompt.needed').removeClass('needed');
         else
             $('#payment-prompt').addClass('needed');
@@ -65,8 +64,8 @@ Gittip.tips.init = function()
             $('.total-giving').text(data.total_giving);
             $('.total-receiving').text(
                 // check and see if we are on our giving page or not
-                new RegExp('/' + tippee + '/').test(window.location.href) 
-                    ? data.total_receiving_tippee : data.total_receiving);
+                new RegExp('/' + tippee + '/').test(window.location.href) ?
+                    data.total_receiving_tippee : data.total_receiving);
 
             // update quick stats
             $('.quick-stats')
@@ -90,21 +89,16 @@ Gittip.tips.init = function()
 
     // For anonymous users we flash a login link.
 
-    $('.my-tip-range.anon BUTTON').mouseover(
-        function() {
-            $('.sign-in-to-give .dropdown-toggle').addClass('highlight');
-        }
-    );
-    $('.my-tip-range.anon BUTTON').click(function()
-    {
-        var i = 0
-        function flash()
-        {
+    $('.my-tip-range.anon BUTTON').mouseover(function() {
+        $('.sign-in-to-give .dropdown-toggle').addClass('highlight');
+    });
+    $('.my-tip-range.anon BUTTON').click(function() {
+        var i = 0;
+        (function flash() {
             if (i++ == 6) return;
             $('.sign-in-to-give .dropdown-toggle').toggleClass('highlight');
             setTimeout(flash, 100);
-        }
-        flash();
+        })();
     });
 };
 
