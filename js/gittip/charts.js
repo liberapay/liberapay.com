@@ -55,8 +55,7 @@ Gittip.charts.make = function(series) {
     // Draw weeks.
     // ===========
 
-    function Week(n, max, N, y, title)
-    {
+    function Week(n, max, N, y, title) {
         var x = nweeks - n;
         var create = function(x) { return document.createElement(x); };
         var week = $(create('div')).addClass('week');
@@ -86,8 +85,7 @@ Gittip.charts.make = function(series) {
         return week;
     }
 
-    for (var i=0, point; point = series[i]; i++)
-    {
+    for (var i=0, point; point = series[i]; i++) {
         var point = series[i];
 
         for (var j=0, chart; chart = charts[j]; j++) {
@@ -110,21 +108,18 @@ Gittip.charts.make = function(series) {
     // Wire up behaviors.
     // ==================
 
-    function mouseover()
-    {
+    function mouseover() {
         var x = $(this).attr('x');
         var y = $(this).attr('y');
 
         $(this).addClass('hover');
     }
 
-    function mouseout()
-    {
+    function mouseout() {
         $(this).removeClass('hover');
     }
 
-    $('.week').click(function()
-    {
+    $('.week').click(function() {
         $(this).toggleClass('flagged');
         if ($(this).hasClass('flagged'))
             $(this).removeClass('hover');
