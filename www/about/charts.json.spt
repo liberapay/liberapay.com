@@ -3,12 +3,16 @@ from gittip import db
 charts = db.all("""\
 
     SELECT ts_start::date   AS date
-         , charge_volume    AS charges
-         , abs(ach_volume)  AS withdrawals
          , nparticipants    AS total_users
          , nactive          AS active_users
+         , ( SELECT sum(ntransfers)
+               FROM paydays
+              WHERE ts_start <= p.ts_start
+                   )        AS total_gifts
          , ntransfers       AS weekly_gifts
-      FROM paydays
+         , charge_volume    AS charges
+         , abs(ach_volume)  AS withdrawals
+      FROM paydays p
   ORDER BY ts_start DESC
 
 """)
