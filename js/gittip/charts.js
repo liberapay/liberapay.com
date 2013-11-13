@@ -27,7 +27,7 @@ Gittip.charts.make = function(series) {
 
     var H = $('.chart').height();
     var W = $('.chart').width();
-    var nweeks = series.length; // don't show Gittip #0
+    var nweeks = series.length;
     var w = Math.floor((W - 20) / nweeks);
     var W = w * nweeks;
 
