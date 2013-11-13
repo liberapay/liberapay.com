@@ -1,0 +1,14 @@
+from gittip import db
+[---]
+charts = db.all("""\
+
+    SELECT date_trunc('day', timestamp)::date AS date
+         , sum(amount) AS weekly_gifts
+      FROM transfers
+     WHERE tippee=%s
+  GROUP BY date_trunc('day', timestamp)
+  ORDER BY date_trunc('day', timestamp) DESC
+
+""", (path['username'],))
+response.body = charts
+response.headers["Access-Control-Allow-Origin"] = "*"

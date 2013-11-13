@@ -109,4 +109,20 @@ else:
         </div>
     </div>
 {% end %}
+
+<div class="col0">
+    <div class="chart-wrapper">
+        <a name="gifts"></a>
+        <h2>Weekly Gifts ($)</h2>
+        <p class="note">Money received on Gittip (per week)</p>
+        <div class="chart" id="chart_weekly_gifts"></div>
+        <div class="x-axis">weeks</div>
+    </div>
+</div>
+<script>
+$(document).ready(function() {
+    jQuery.get('./charts.json', Gittip.charts.make);
+});
+</script>
+
 {% end %}
