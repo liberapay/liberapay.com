@@ -9,8 +9,10 @@ Gittip.charts.make = function(series) {
     }
 
 
-    // Gather charts on the page that advertise an ability to visualize the
-    // information available in the time series.
+    // Gather charts.
+    // ==============
+    // We find charts based on the variable names from the first element in the
+    // time series.
 
     var first = series[0];
     var charts = [];
