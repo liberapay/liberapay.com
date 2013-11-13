@@ -4,7 +4,7 @@ from gittip import db
 paydays = db.all("""
 
     SELECT ts_start::date   AS date
-         , 0                AS weekly_gifts
+         , 0                AS weekly_receipts
       FROM paydays
   ORDER BY ts_start DESC
 
@@ -13,7 +13,7 @@ paydays = db.all("""
 receipts = db.all("""\
 
     SELECT date_trunc('day', timestamp)::date AS date
-         , sum(amount) AS weekly_gifts
+         , sum(amount) AS weekly_receipts
       FROM transfers
      WHERE tippee=%s
   GROUP BY date_trunc('day', timestamp)
