@@ -4,7 +4,7 @@ from gittip import db
 paydays = db.all("""
 
     SELECT ts_start::date   AS date
-         , 0                AS weekly_receipts
+         , 0                AS receipts
          , 0                AS npatrons
       FROM paydays
   ORDER BY ts_start DESC
@@ -14,7 +14,7 @@ paydays = db.all("""
 receipts = db.all("""\
 
     SELECT date_trunc('day', timestamp)::date   AS date
-         , sum(amount)                          AS weekly_receipts
+         , sum(amount)                          AS receipts
          , count(tipper)                        AS npatrons
       FROM transfers
      WHERE tippee=%s
