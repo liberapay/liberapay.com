@@ -55,8 +55,8 @@ Gittip.charts.make = function(series) {
     // Draw weeks.
     // ===========
 
-    function Week(n, max, N, y, title) {
-        var x = nweeks - n;
+    function Week(i, j, max, N, y, title) {
+        var x = nweeks - i;
         var create = function(x) { return document.createElement(x); };
         var week = $(create('div')).addClass('week');
         var shaded = $(create('div')).addClass('shaded');
@@ -73,14 +73,16 @@ Gittip.charts.make = function(series) {
         if ((x % 5) === 0)
             xTick.addClass('on');
         week.append(xTick);
-        if (y === max)
+        if (y === max) {
+            maxes[j] = NaN; // only show one max flag
             week.addClass('flagged');
+        }
 
         var y = parseFloat(y);
         var h = Math.ceil(((y / N) * H));
         week.height(H);
         week.width(w);
-        week.css({"left": w * (nweeks - n - 1)});
+        week.css({"left": w * (nweeks - i - 1)});
         shaded.css({"height": h});
         return week;
     }
@@ -93,6 +95,7 @@ Gittip.charts.make = function(series) {
             var chart = charts[j];
 
             chart.append(Week( i
+                             , j
                              , maxes[j]
                              , scales[j]
                              , point[charts[j].varname]
