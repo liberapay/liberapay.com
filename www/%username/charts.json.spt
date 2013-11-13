@@ -1,6 +1,16 @@
 from gittip import db
 [---]
-charts = db.all("""\
+
+paydays = db.all("""
+
+    SELECT ts_start::date   AS date
+         , 0                AS weekly_gifts
+      FROM paydays
+  ORDER BY ts_start DESC
+
+""")
+
+receipts = db.all("""\
 
     SELECT date_trunc('day', timestamp)::date AS date
          , sum(amount) AS weekly_gifts
@@ -10,5 +20,8 @@ charts = db.all("""\
   ORDER BY date_trunc('day', timestamp) DESC
 
 """, (path['username'],))
+
+charts = receipts + paydays[len(receipts):]
+
 response.body = charts
 response.headers["Access-Control-Allow-Origin"] = "*"
