@@ -1,0 +1,16 @@
+from gittip import db
+[---]
+charts = db.all("""\
+
+    SELECT ts_start::date   AS date
+         , charge_volume    AS charges
+         , abs(ach_volume)  AS withdrawals
+         , nparticipants    AS total_users
+         , nactive          AS active_users
+         , ntransfers       AS weekly_gifts
+      FROM paydays
+  ORDER BY ts_start DESC
+
+""")
+response.body = charts
+response.headers["Access-Control-Allow-Origin"] = "*"

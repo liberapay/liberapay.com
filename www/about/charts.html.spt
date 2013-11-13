@@ -6,7 +6,7 @@ title = "Charts"
     <a name="users"></a>
     <h2>Total Users</h2>
     <p class="note">Anyone who's ever created an account on Gittip</p>
-    <div class="chart" id="chart-nparticipants"></div>
+    <div class="chart" id="chart_total_users"></div>
     <div class="x-axis">weeks</div>
 </div>
 
@@ -14,7 +14,7 @@ title = "Charts"
     <a name="active"></a>
     <h2>Active Users</h2>
     <p class="note">Users that gave and/or received money within Gittip (per week)</p>
-    <div class="chart" id="chart-nactive"></div>
+    <div class="chart" id="chart_active_users"></div>
     <div class="x-axis">weeks</div>
 </div>
 
@@ -22,7 +22,7 @@ title = "Charts"
     <a name="cumulative-gifts"></a>
     <h2>Total Gifts ($)</h2>
     <p class="note">Money transferred within Gittip (cumulative)</p>
-    <div class="chart" id="cumulative-"></div>
+    <div class="chart" id="chart_total_gifts"></div>
     <div class="x-axis">weeks</div>
 </div>
 
@@ -30,7 +30,7 @@ title = "Charts"
     <a name="gifts"></a>
     <h2>Weekly Gifts ($)</h2>
     <p class="note">Money transferred within Gittip (per week)</p>
-    <div class="chart" id="chart-transfer_volume"></div>
+    <div class="chart" id="chart_weekly_gifts"></div>
     <div class="x-axis">weeks</div>
 </div>
 
@@ -41,7 +41,7 @@ title = "Charts"
     charge <a
         href="http://blog.gittip.com/post/28158537529/why-were-you-charged-10">upped</a>
     to $10 in week 8)</p>
-    <div class="chart" id="chart-charge_volume"></div>
+    <div class="chart" id="chart_charges"></div>
     <div class="x-axis">weeks</div>
 </div>
 
@@ -53,13 +53,13 @@ title = "Charts"
         href="http://blog.gittip.com/post/30116848405/with-payouts-gittip-is-minimally-viable">added</a>
     in week 12)</p>
 
-    <div class="chart" id="chart-ach_volume"></div>
+    <div class="chart" id="chart_withdrawals"></div>
     <div class="x-axis">weeks</div>
 </div>
 
 <script>
 $(document).ready(function() {
-    jQuery.get('/about/paydays.json', Gittip.charts.make);
+    jQuery.get('/about/charts.json', Gittip.charts.make);
 });
 </script>
 {% end %}

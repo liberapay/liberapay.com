@@ -15,7 +15,7 @@ Gittip.charts.make = function(series) {
     var charts = [];
 
     for (var varname in first) {
-        var chart = $('#chart-'+varname);
+        var chart = $('#chart_'+varname);
         if (chart.length) {
             chart.varname = varname;
             charts.push(chart);
@@ -90,7 +90,6 @@ Gittip.charts.make = function(series) {
     for (var i=0, point; point = series[i]; i++)
     {
         var point = series[i];
-        var weekstamp = point.ts_start.slice(0, 10);
 
         for (var j=0, chart; chart = charts[j]; j++) {
 
@@ -100,7 +99,7 @@ Gittip.charts.make = function(series) {
                              , maxes[j]
                              , scales[j]
                              , point[charts[j].varname]
-                             , weekstamp
+                             , point.date
                               ));
             /*
             Cumulative.append(Week( i
