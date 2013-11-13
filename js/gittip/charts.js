@@ -45,9 +45,6 @@ Gittip.charts.make = function(series) {
         for (var j=0, chart; chart = charts[j]; j++) {
             maxes[j] = Math.max(maxes[j] || 0, point[chart.varname]);
         }
-        /*
-        maxCumulative += parseFloat(point.transfer_volume);
-        */
     }
 
     for (var i=0, len=maxes.length; i < len; i++) {
@@ -89,7 +86,6 @@ Gittip.charts.make = function(series) {
         return week;
     }
 
-    //var cumulative = maxCumulative;
     for (var i=0, point; point = series[i]; i++)
     {
         var point = series[i];
@@ -104,15 +100,6 @@ Gittip.charts.make = function(series) {
                              , point[charts[j].varname]
                              , point.date
                               ));
-            /*
-            Cumulative.append(Week( i
-                                  , maxCumulative
-                                  , scaleCumulative
-                                  , cumulative
-                                  , weekstamp
-                                   ));
-            cumulative -= parseFloat(point.transfer_volume);
-            */
         }
     }
 
