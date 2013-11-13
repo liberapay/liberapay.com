@@ -21,7 +21,10 @@ receipts = db.all("""\
 
 """, (path['username'],))
 
-charts = receipts + paydays[len(receipts):]
+if not receipts:
+    charts = []
+else:
+    charts = receipts + paydays[len(receipts):]
 
-response.body = charts
+response.body = charts[:-1]  # Don't show Gittip #0.
 response.headers["Access-Control-Allow-Origin"] = "*"

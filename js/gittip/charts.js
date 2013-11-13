@@ -3,7 +3,8 @@ Gittip.charts = {};
 Gittip.charts.make = function(series) {
     // Takes an array of time series data.
 
-    if (!series) {
+    if (!series.length) {
+        $('.chart-wrapper').remove();
         return;
     }
 
@@ -24,7 +25,7 @@ Gittip.charts.make = function(series) {
 
     var H = $('.chart').height();
     var W = $('.chart').width();
-    var nweeks = series.length - 1; // don't show Gittip #0
+    var nweeks = series.length; // don't show Gittip #0
     var w = Math.floor((W - 20) / nweeks);
     var W = w * nweeks;
 
