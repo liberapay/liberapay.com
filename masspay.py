@@ -59,8 +59,9 @@ class Payee(object):
         self.net = self.gross
 
     def assess_fee(self):
-        fee = self.gross - round_(self.gross / D('1.02'))  # 2% fee
-        self.fee += fee
+        fee = self.gross - round_(self.gross / D('1.02'))   # 2% fee
+        fee = min(fee, D('20.00'))                          # capped at $20
+        self.fee += fee                                     #  XXX or $1 for U.S. :/
         self.net -= fee
         if self.net % 1 in (D('0.25'), D('0.75')):
 
