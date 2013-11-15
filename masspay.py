@@ -51,6 +51,7 @@ class Payee(object):
     gross_perc = None
     fee = None
     net = None
+    additional_note = ""
 
     def __init__(self, rec):
         self.username, self.email, amount = rec
@@ -93,6 +94,7 @@ class Payee(object):
 
             self.gross -= D('0.01')
             self.net -= D('0.01')
+            self.additional_note = "Penny remaining due to PayPal rounding limitation."
         return fee
 
 
@@ -152,6 +154,7 @@ def compute_output_csvs():
                             , payee.gross
                             , payee.fee
                             , payee.net
+                            , payee.additional_note
                              ))
         print("{username:<24}{email:<32} {gross:>7} {fee:>7} {net:>7}".format(**payee.__dict__))
 
@@ -171,9 +174,11 @@ def record_exchanges_in_gittip():
     except KeyError:
         gittip_base_url = 'https://www.gittip.com'
 
-    for username, email, gross, fee, net in csv.reader(open(GITTIP_CSV)):
+    for username, email, gross, fee, net, additional_note in csv.reader(open(GITTIP_CSV)):
         url = '{}/{}/history/record-an-exchange'.format(gittip_base_url, username)
         note = 'PayPal MassPay to {}.'.format(email)
+        if additional_note:
+            note += " " + additional_note
         data = {'amount': '-' + net, 'fee': fee, 'note': note}
         requests.post(url, auth=(gittip_api_key, ''), data=data)
         print(note)
