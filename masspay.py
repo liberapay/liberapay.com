@@ -25,7 +25,7 @@ import datetime
 import getpass
 import os
 import sys
-from decimal import Decimal as D, ROUND_UP
+from decimal import Decimal as D
 
 import requests
 
@@ -39,9 +39,6 @@ GITTIP_CSV = '{}.output.gittip.csv'.format(ts)
 
 def round_(d):
     return d.quantize(D('0.01'))
-
-def round_up(d):
-    return d.quantize(D('0.01'), ROUND_UP)
 
 def print_rule():
     print("-" * 80)
@@ -61,9 +58,41 @@ class Payee(object):
         self.fee = D(0)
         self.net = self.gross
 
-    def assess_fee(self, fee):
+    def assess_fee(self):
+        fee = self.gross - round_(self.gross / D('1.02'))  # 2% fee
         self.fee += fee
         self.net -= fee
+        if self.net % 1 in (D('0.25'), D('0.75')):
+
+            # Prevent an escrow leak. It's complicated, but it goes something
+            # like this:
+            #
+            #   1. We want to pass PayPal's fees through to each payee.
+            #
+            #   2. There is no option to have the receiver pay the fee, as
+            #       there is with Instant Transfer.
+            #
+            #   3. We have to subtract the fee before uploading the spreadsheet
+            #       to PayPal.
+            #
+            #   4. If we upload 15.24, PayPal upcharges to 15.54.
+            #
+            #   6. If we upload 15.25, PayPal upcharges to 15.56.
+            #
+            #   7. They only accept whole cents. We can't upload 15.245.
+            #
+            #   8. What if we want to hit 15.55?
+            #
+            #   9. We can't.
+            #
+            #  10. Our solution is to leave a penny behind in Gittip for
+            #       affected payees.
+            #
+            # See also: https://github.com/gittip/www.gittip.com/issues/1673.
+
+            self.gross -= D('0.01')
+            self.net -= D('0.01')
+        return fee
 
 
 def compute_input_csv():
@@ -105,42 +134,10 @@ def compute_output_csvs():
     payees = [Payee(rec) for rec in csv.reader(open(INPUT_CSV))]
     payees.sort(key=lambda o: o.gross, reverse=True)
 
-    total_gross = sum([p.gross for p in payees])
-    total_fees = total_gross - round_(total_gross / D('1.02'))  # 2% fee
-    total_net = D('0.00')
-
-    for payee in payees:
-        payee.gross_perc = payee.gross / total_gross
-        payee.assess_fee(round_(total_fees * payee.gross_perc))
-
-    fee_check = sum([p.fee for p in payees])
-    if fee_check != total_fees:
-
-        # Up to one penny per payee is okay.
-        fee_difference = total_fees - fee_check
-        fee_tolerance = D('0.0{}'.format(len((payees)))) # one penny per payee
-        print_rule()
-        print()
-        print("Fee rounding error tolerance:   {}".format(fee_tolerance))
-        print("Accumulated fee rounding error: {}".format(fee_difference))
-        print()
-        assert fee_difference < fee_tolerance
-
-        # Distribute rounding errors.
-        for payee in reversed(payees):
-            allotment = round_up(fee_difference * payee.gross_perc)
-            payee.assess_fee(allotment)
-            print("  {} => {}".format(allotment, payee.email))
-
-            fee_difference -= allotment
-            if fee_difference == 0:
-                break
-        print()
-
+    total_fees = sum([payee.assess_fee() for payee in payees])  # side-effective!
     total_net = sum([p.net for p in payees])
-    fee_check = sum([p.fee for p in payees])
-    assert fee_check == total_fees
-    assert total_net + total_fees == total_gross
+    total_gross = sum([p.gross for p in payees])
+    assert total_fees + total_net == total_gross
 
     paypal_csv = csv.writer(open(PAYPAL_CSV, 'w+'))
     gittip_csv = csv.writer(open(GITTIP_CSV, 'w+'))
