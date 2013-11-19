@@ -106,36 +106,37 @@ def add_stuff_to_context(request):
     request.context['bountysource'] = bountysource
 
 
-website.algorithm.functions = [ website.algorithm.get_function('parse_environ_into_request')
+algorithm = website.algorithm
+algorithm.functions = [ algorithm.get_function('parse_environ_into_request')
 
-                              , start_timer
+                      , timer.start
 
-                              , website.algorithm.get_function('tack_website_onto_request')
-                              , website.algorithm.get_function('raise_200_for_OPTIONS')
+                      , algorithm.get_function('tack_website_onto_request')
+                      , algorithm.get_function('raise_200_for_OPTIONS')
 
-                              , canonize
-                              , configure_payments
-                              , authentication.inbound
-                              , csrf.inbound
-                              , add_stuff_to_context
+                      , canonize
+                      , configure_payments
+                      , authentication.inbound
+                      , csrf.inbound
+                      , add_stuff_to_context
 
-                              , website.algorithm.get_function('dispatch_request_to_filesystem')
+                      , algorithm.get_function('dispatch_request_to_filesystem')
 
-                              , cache_static.inbound
+                      , cache_static.inbound
 
-                              , website.algorithm.get_function('get_response_for_socket')
-                              , website.algorithm.get_function('get_response_for_resource')
-                              , website.algorithm.get_function('get_response_for_exception')
+                      , algorithm.get_function('get_response_for_socket')
+                      , algorithm.get_function('get_response_for_resource')
+                      , algorithm.get_function('get_response_for_exception')
 
-                              , authentication.outbound
-                              , csrf.outbound
-                              , cache_static.outbound
-                              , x_frame_options
+                      , authentication.outbound
+                      , csrf.outbound
+                      , cache_static.outbound
+                      , x_frame_options
 
-                              , website.algorithm.get_function('log_traceback_for_5xx')
-                              , website.algorithm.get_function('delegate_error_to_simplate')
-                              , website.algorithm.get_function('log_traceback_for_exception')
-                              , website.algorithm.get_function('log_result_of_request')
+                      , algorithm.get_function('log_traceback_for_5xx')
+                      , algorithm.get_function('delegate_error_to_simplate')
+                      , algorithm.get_function('log_traceback_for_exception')
+                      , algorithm.get_function('log_result_of_request')
 
-                              , log_request_count_and_response_time
-                               ]
+                      , timer.end
+                       ]
