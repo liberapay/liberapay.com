@@ -82,6 +82,11 @@ title = "Charts"
         line-height: 10pt;
         padding-bottom: 12pt;
     }
+    @media screen and (min-width: 1030px) {
+        .chart-wrapper:nth-child(odd) .note {
+            padding-left: 15pt;
+        }
+    }
 </style>
 
 <div class="chart-wrapper">
