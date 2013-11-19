@@ -17,7 +17,7 @@
                 ><img class="avatar"
                 src="{{ escape(twitter_account.user_info.get('profile_image_url_https', '/assets/%s/no-avatar.png' % website.version )) }}"
                 />{{ escape(twitter_account.user_info.get('screen_name')) }}
-                {% if twitter_account.user_info.get('name') %}
+                {% if twitter_account.user_info.get('name') and twitter_account.user_info.get('name') != twitter_account.user_info.get('screen_name') %}
                 ({{ escape(twitter_account.user_info.get('name')) }})
                 {% end %}
             </a>
@@ -40,7 +40,7 @@
             <a rel="me" href="{{ escape(github_account.user_info.get('html_url', '')) }}"
                 ><img class="avatar" src="{{ escape(github_account.user_info.get('avatar_url', '/assets/%s/no-avatar.png' % website.version)) }}"
                 />{{ escape(github_account.user_info.get('login')) }}
-                {% if github_account.user_info.get('name') %}
+                {% if github_account.user_info.get('name') and github_account.user_info.get('name') != github_account.user_info.get('login') %}
                 ({{ escape(github_account.user_info.get('name')) }})
                 {% end %}
             </a>
@@ -64,7 +64,7 @@
                 ><img class="avatar"
                 src="{{ escape(bitbucket_account.user_info.get('avatar', '/assets/%s/no-avatar.png' % website.version)) }}"
                 />{{ escape(bitbucket_account.user_info.get('username')) }}
-                {% if bitbucket_account.user_info.get('display_name') %}
+                {% if bitbucket_account.user_info.get('display_name') and bitbucket_account.user_info.get('display_name') != bitbucket_account.user_info.get('username') %}
                 ({{ escape(bitbucket_account.user_info.get('display_name')) }})
                 {% end %}
             </a>
