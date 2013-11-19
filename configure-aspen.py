@@ -6,9 +6,10 @@ import time
 
 import gittip
 import gittip.wireup
-import gittip.security.authentication
-import gittip.security.csrf
-import gittip.utils.cache_static
+from gittip import canonize
+from gittip import configure_payments
+from gittip.security import authentication, csrf, x_frame_options
+from gittip.utils import cache_static
 
 
 version_file = os.path.join(website.www_root, 'version.txt')
@@ -87,11 +88,6 @@ homepage_updater.start()
 
 # Algorithm
 # =========
-from gittip import canonize
-from gittip import configure_payments
-from gittip.security import authentication, csrf
-from gittip.utils import cache_static
-
 
 def start_timer():
     return {'start_time': time.time()}
@@ -108,29 +104,6 @@ def add_stuff_to_context(request):
     request.context['github'] = github
     request.context['twitter'] = twitter
     request.context['bountysource'] = bountysource
-
-def x_frame_options(response):
-    """ X-Frame-Origin
-
-    This is a security measure to prevent clickjacking:
-    http://en.wikipedia.org/wiki/Clickjacking
-
-    """
-    if 'X-Frame-Options' not in response.headers:
-        response.headers['X-Frame-Options'] = 'SAMEORIGIN'
-    elif response.headers['X-Frame-Options'] == 'ALLOWALL':
-
-        # ALLOWALL is non-standard. It's useful as a signal from a simplate
-        # that it doesn't want X-Frame-Options set at all, but because it's
-        # non-standard we don't send it. Instead we unset the header entirely,
-        # which has the desired effect of allowing framing indiscriminately.
-        #
-        # Refs.:
-        #
-        #   http://en.wikipedia.org/wiki/Clickjacking#X-Frame-Options
-        #   http://ipsec.pl/node/1094
-
-        del response.headers['X-Frame-Options']
 
 
 website.algorithm.functions = [ website.algorithm.get_function('parse_environ_into_request')
