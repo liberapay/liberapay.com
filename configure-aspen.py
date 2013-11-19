@@ -6,11 +6,13 @@ import time
 
 import gittip
 import gittip.wireup
-from gittip import canonize
-from gittip import configure_payments
+from gittip import canonize, configure_payments
 from gittip.security import authentication, csrf, x_frame_options
-from gittip.utils import cache_static
+from gittip.utils import cache_static, timer
 
+
+# Wireup Algorithm
+# ================
 
 version_file = os.path.join(website.www_root, 'version.txt')
 __version__ = open(version_file).read().strip()
@@ -29,6 +31,29 @@ gittip.wireup.nanswers()
 gittip.wireup.nmembers(website)
 gittip.wireup.envvars(website)
 tell_sentry = gittip.wireup.make_sentry_teller(website)
+
+
+# The homepage wants expensive queries. Let's periodically select into an
+# intermediate table.
+
+UPDATE_HOMEPAGE_EVERY = int(os.environ['UPDATE_HOMEPAGE_EVERY'])
+def update_homepage_queries():
+    from gittip import utils
+    while 1:
+        try:
+            utils.update_global_stats(website)
+            utils.update_homepage_queries_once(website.db)
+        except:
+            tell_sentry(None)
+        time.sleep(UPDATE_HOMEPAGE_EVERY)
+
+homepage_updater = threading.Thread(target=update_homepage_queries)
+homepage_updater.daemon = True
+homepage_updater.start()
+
+
+# Server Algorithm
+# ================
 
 def up_minthreads(website):
     # https://github.com/gittip/www.gittip.com/issues/1098
@@ -67,35 +92,8 @@ website.server_algorithm.insert_before('start', up_minthreads)
 website.server_algorithm.insert_before('start', setup_busy_threads_logging)
 
 
-# The homepage wants expensive queries. Let's periodically select into an
-# intermediate table.
-
-UPDATE_HOMEPAGE_EVERY = int(os.environ['UPDATE_HOMEPAGE_EVERY'])
-def update_homepage_queries():
-    from gittip import utils
-    while 1:
-        try:
-            utils.update_global_stats(website)
-            utils.update_homepage_queries_once(website.db)
-        except:
-            tell_sentry(None)
-        time.sleep(UPDATE_HOMEPAGE_EVERY)
-
-homepage_updater = threading.Thread(target=update_homepage_queries)
-homepage_updater.daemon = True
-homepage_updater.start()
-
-
-# Algorithm
-# =========
-
-def start_timer():
-    return {'start_time': time.time()}
-
-def log_request_count_and_response_time(start_time):
-    print("count#requests=1")
-    response_time = time.time() - start_time
-    print("measure#response_time={}ms".format(response_time * 1000))
+# Website Algorithm
+# =================
 
 def add_stuff_to_context(request):
     from gittip.elsewhere import bitbucket, github, twitter, bountysource
