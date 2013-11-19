@@ -105,10 +105,8 @@ def add_stuff_to_context(request):
 
 
 algorithm = website.algorithm
-algorithm.functions = [ algorithm.get_function('parse_environ_into_request')
-
-                      , timer.start
-
+algorithm.functions = [ timer.start
+                      , algorithm.get_function('parse_environ_into_request')
                       , algorithm.get_function('tack_website_onto_request')
                       , algorithm.get_function('raise_200_for_OPTIONS')
 
