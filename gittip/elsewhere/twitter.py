@@ -2,7 +2,7 @@ import datetime
 import gittip
 import requests
 from aspen import json, log, Response
-from aspen.http.request import UnicodeWithParams
+from aspen.http.request import PathPart
 from aspen.utils import to_age, utc, typecheck
 from gittip.elsewhere import AccountElsewhere, _resolve
 from os import environ
@@ -37,7 +37,7 @@ def oauth_url(website, action, then=""):
 def get_user_info(screen_name):
     """Given a unicode, return a dict.
     """
-    typecheck(screen_name, (unicode, UnicodeWithParams))
+    typecheck(screen_name, (unicode, PathPart))
     rec = gittip.db.one( "SELECT user_info FROM elsewhere "
                          "WHERE platform='twitter' "
                          "AND user_info->'screen_name' = %s"

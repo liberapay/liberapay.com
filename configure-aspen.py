@@ -27,7 +27,7 @@ gittip.wireup.mixpanel(website)
 gittip.wireup.nanswers()
 gittip.wireup.nmembers(website)
 gittip.wireup.envvars(website)
-tell_sentry = gittip.wireup.sentry(website)
+tell_sentry = gittip.wireup.make_sentry_teller(website)
 
 def up_minthreads(website):
     # https://github.com/gittip/www.gittip.com/issues/1098
@@ -62,62 +62,9 @@ def setup_busy_threads_logging(website):
     thread.start()
 
 
-website.hooks.startup.insert(0, up_minthreads)
-website.hooks.startup.append(setup_busy_threads_logging)
+website.server_algorithm.insert_before('start', up_minthreads)
+website.server_algorithm.insert_before('start', setup_busy_threads_logging)
 
-
-website.hooks.inbound_early += [ gittip.canonize
-                               , gittip.configure_payments
-                               , gittip.security.authentication.inbound
-                               , gittip.security.csrf.inbound
-                                ]
-
-website.hooks.inbound_late += [ gittip.utils.cache_static.inbound
-                              #, gittip.security.authentication.check_role
-                              #, participant.typecast
-                              #, community.typecast
-                               ]
-
-website.hooks.outbound += [ gittip.security.authentication.outbound
-                          , gittip.security.csrf.outbound
-                          , gittip.utils.cache_static.outbound
-                           ]
-
-
-# X-Frame-Origin
-# ==============
-# This is a security measure to prevent clickjacking:
-# http://en.wikipedia.org/wiki/Clickjacking
-
-def x_frame_options(response):
-    if 'X-Frame-Options' not in response.headers:
-        response.headers['X-Frame-Options'] = 'SAMEORIGIN'
-    elif response.headers['X-Frame-Options'] == 'ALLOWALL':
-
-        # ALLOWALL is non-standard. It's useful as a signal from a simplate
-        # that it doesn't want X-Frame-Options set at all, but because it's
-        # non-standard we don't send it. Instead we unset the header entirely,
-        # which has the desired effect of allowing framing indiscriminately.
-        #
-        # Refs.:
-        #
-        #   http://en.wikipedia.org/wiki/Clickjacking#X-Frame-Options
-        #   http://ipsec.pl/node/1094
-
-        del response.headers['X-Frame-Options']
-
-website.hooks.outbound += [x_frame_options]
-
-
-def add_stuff(request):
-    from gittip.elsewhere import bitbucket, github, twitter, bountysource
-    request.context['username'] = None
-    request.context['bitbucket'] = bitbucket
-    request.context['github'] = github
-    request.context['twitter'] = twitter
-    request.context['bountysource'] = bountysource
-
-website.hooks.inbound_early += [add_stuff]
 
 # The homepage wants expensive queries. Let's periodically select into an
 # intermediate table.
@@ -138,5 +85,84 @@ homepage_updater.daemon = True
 homepage_updater.start()
 
 
-# Do this last so we get accurate times.
-gittip.wireup.request_metrics(website)
+# Algorithm
+# =========
+from gittip import canonize
+from gittip import configure_payments
+from gittip.security import authentication, csrf
+from gittip.utils import cache_static
+
+
+def start_timer():
+    return {'start_time': time.time()}
+
+def log_request_count_and_response_time(start_time):
+    print("count#requests=1")
+    response_time = time.time() - start_time
+    print("measure#response_time={}ms".format(response_time * 1000))
+
+def add_stuff_to_context(request):
+    from gittip.elsewhere import bitbucket, github, twitter, bountysource
+    request.context['username'] = None
+    request.context['bitbucket'] = bitbucket
+    request.context['github'] = github
+    request.context['twitter'] = twitter
+    request.context['bountysource'] = bountysource
+
+def x_frame_options(response):
+    """ X-Frame-Origin
+
+    This is a security measure to prevent clickjacking:
+    http://en.wikipedia.org/wiki/Clickjacking
+
+    """
+    if 'X-Frame-Options' not in response.headers:
+        response.headers['X-Frame-Options'] = 'SAMEORIGIN'
+    elif response.headers['X-Frame-Options'] == 'ALLOWALL':
+
+        # ALLOWALL is non-standard. It's useful as a signal from a simplate
+        # that it doesn't want X-Frame-Options set at all, but because it's
+        # non-standard we don't send it. Instead we unset the header entirely,
+        # which has the desired effect of allowing framing indiscriminately.
+        #
+        # Refs.:
+        #
+        #   http://en.wikipedia.org/wiki/Clickjacking#X-Frame-Options
+        #   http://ipsec.pl/node/1094
+
+        del response.headers['X-Frame-Options']
+
+
+website.algorithm.functions = [ website.algorithm.get_function('parse_environ_into_request')
+
+                              , start_timer
+
+                              , website.algorithm.get_function('tack_website_onto_request')
+                              , website.algorithm.get_function('raise_200_for_OPTIONS')
+
+                              , canonize
+                              , configure_payments
+                              , authentication.inbound
+                              , csrf.inbound
+                              , add_stuff_to_context
+
+                              , website.algorithm.get_function('dispatch_request_to_filesystem')
+
+                              , cache_static.inbound
+
+                              , website.algorithm.get_function('get_response_for_socket')
+                              , website.algorithm.get_function('get_response_for_resource')
+                              , website.algorithm.get_function('get_response_for_exception')
+
+                              , authentication.outbound
+                              , csrf.outbound
+                              , cache_static.outbound
+                              , x_frame_options
+
+                              , website.algorithm.get_function('log_traceback_for_5xx')
+                              , website.algorithm.get_function('delegate_error_to_simplate')
+                              , website.algorithm.get_function('log_traceback_for_exception')
+                              , website.algorithm.get_function('log_result_of_request')
+
+                              , log_request_count_and_response_time
+                               ]
