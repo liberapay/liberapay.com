@@ -1,23 +1,27 @@
 from __future__ import division, print_function, unicode_literals
 
-from aspen import Response
+from aspen.http.response import Response
 from gittip import utils
-from gittip.testing import Harness, load_request
-from gittip.elsewhere.twitter import TwitterAccount
+from gittip.testing import Harness
 
 
 class Tests(Harness):
 
     def test_get_participant_gets_participant(self):
-        expected = TwitterAccount("alice", {}).opt_in("alice")[0].participant
-        request = load_request(b'/alice/')
-
+        expected = self.make_participant('alice', claimed_time='now')
+        request = self.harness.GET( '/alice/'
+                                  , run_through='dispatch_request_to_filesystem'
+                                  , want='request'
+                                   )
         actual = utils.get_participant(request, restrict=False)
         assert actual == expected
 
     def test_get_participant_canonicalizes(self):
-        expected, ignored = TwitterAccount("alice", {}).opt_in("alice")
-        request = load_request(b'/Alice/')
+        self.make_participant('alice', claimed_time='now')
+        request = self.harness.GET( '/Alice/'
+                                  , run_through='dispatch_request_to_filesystem'
+                                  , want='request'
+                                   )
 
         with self.assertRaises(Response) as cm:
             utils.get_participant(request, restrict=False)

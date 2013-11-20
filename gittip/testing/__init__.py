@@ -11,15 +11,14 @@ from os.path import join, dirname, realpath
 import gittip
 import pytz
 from aspen import resources
-from aspen.testing import Website, StubRequest
+from aspen.testing.harness import Harness as AspenHarness
 from aspen.utils import utcnow
 from gittip.billing.payday import Payday
 from gittip.models.participant import Participant
-from gittip.security.user import User
 from psycopg2 import IntegrityError, InternalError
 
 
-TOP = join(realpath(dirname(dirname(__file__))), '..')
+TOP = realpath(join(dirname(dirname(__file__)), '..'))
 SCHEMA = open(join(TOP, "schema.sql")).read()
 
 DUMMY_GITHUB_JSON = u'{"html_url":"https://github.com/whit537","type":"User",'\
@@ -73,7 +72,10 @@ class Harness(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.db = gittip.db
+        www_root = str(realpath(join(TOP, 'www')))
+        project_root = str(TOP)
+        cls.harness = AspenHarness(www_root, project_root)
+        cls.db = gittip.db  # populated underneath AspenHarness
         cls._tablenames = cls.db.all("SELECT tablename FROM pg_tables "
                                      "WHERE schemaname='public'")
         cls.clear_tables(cls.db, cls._tablenames[:])
@@ -255,44 +257,9 @@ def tip_graph(*a, **kw):
 
     return context
 
-
-# Helpers for testing simplates.
-# ==============================
-
-test_website = Website([ '--www_root', str(join(TOP, 'www'))
-                       , '--project_root', str(TOP)
-                       , '--show_tracebacks', str('yes')
-                        ])
-
-def serve_request(path, user=None):
-    """Given an URL path, return response.
-    """
-    request = StubRequest(path)
-    request.website = test_website
-    if user is not None:
-        user = User.from_username(user)
-        # Note that Cookie needs a bytestring.
-        request.headers.cookie[str('session')] = user.session_token
-    response = test_website.handle_safely(request)
-    return response
-
-def load_request(path):
-    """Given an URL path, return request.
-    """
-    request = StubRequest(path)
-    request.website = test_website
-
-    # XXX HACK - aspen.website should be refactored
-    from aspen import dispatcher, sockets
-    test_website.hooks.run('inbound_early', request)
-    dispatcher.dispatch(request)  # sets request.fs
-    request.socket = sockets.get(request)
-    test_website.hooks.run('inbound_late', request)
-
-    return request
-
 def load_simplate(path):
     """Given an URL path, return resource.
     """
-    request = load_request(path)
+    from aspen.http.request import Request
+    request = Request(uri=path)
     return resources.get(request)
