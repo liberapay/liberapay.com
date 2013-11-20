@@ -109,9 +109,9 @@ def add_stuff_to_context(request):
 
 algorithm = website.algorithm
 algorithm.functions = [ timer.start
-                      , algorithm.get_function('parse_environ_into_request')
-                      , algorithm.get_function('tack_website_onto_request')
-                      , algorithm.get_function('raise_200_for_OPTIONS')
+                      , algorithm['parse_environ_into_request']
+                      , algorithm['tack_website_onto_request']
+                      , algorithm['raise_200_for_OPTIONS']
 
                       , canonize
                       , configure_payments
@@ -119,23 +119,23 @@ algorithm.functions = [ timer.start
                       , csrf.inbound
                       , add_stuff_to_context
 
-                      , algorithm.get_function('dispatch_request_to_filesystem')
+                      , algorithm['dispatch_request_to_filesystem']
 
                       , cache_static.inbound
 
-                      , algorithm.get_function('get_response_for_socket')
-                      , algorithm.get_function('get_response_for_resource')
-                      , algorithm.get_function('get_response_for_exception')
+                      , algorithm['get_response_for_socket']
+                      , algorithm['get_response_for_resource']
+                      , algorithm['get_response_for_exception']
 
                       , authentication.outbound
                       , csrf.outbound
                       , cache_static.outbound
                       , x_frame_options
 
-                      , algorithm.get_function('log_traceback_for_5xx')
-                      , algorithm.get_function('delegate_error_to_simplate')
-                      , algorithm.get_function('log_traceback_for_exception')
-                      , algorithm.get_function('log_result_of_request')
+                      , algorithm['log_traceback_for_5xx']
+                      , algorithm['delegate_error_to_simplate']
+                      , algorithm['log_traceback_for_exception']
+                      , algorithm['log_result_of_request']
 
                       , timer.end
                        ]
