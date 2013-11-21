@@ -36,18 +36,23 @@ tell_sentry = gittip.wireup.make_sentry_teller(website)
 # The homepage wants expensive queries. Let's periodically select into an
 # intermediate table.
 
+def update_homepage_queries_once():
+    from gittip import utils
+    try:
+        utils.update_global_stats(website)
+        utils.update_homepage_queries_once(website.db)
+    except:
+        tell_sentry(None)
+
+update_homepage_queries_once()
+
 UPDATE_HOMEPAGE_EVERY = os.environ['UPDATE_HOMEPAGE_EVERY']
 def update_homepage_queries():
-    from gittip import utils
     if UPDATE_HOMEPAGE_EVERY == '':
         return
     update_homepage_every = int(UPDATE_HOMEPAGE_EVERY)
     while 1:
-        try:
-            utils.update_global_stats(website)
-            utils.update_homepage_queries_once(website.db)
-        except:
-            tell_sentry(None)
+        update_homepage_queries_once()
         time.sleep(update_homepage_every)
 
 homepage_updater = threading.Thread(target=update_homepage_queries)
