@@ -350,6 +350,7 @@ class TestBillingPayday(TestPaydayBase):
         assert actual == 5
 
     def test_move_pending_to_balance_for_teams_ignores_new_teams(self):
+        # See https://github.com/gittip/www.gittip.com/issues/1684
         self.make_participant('A', number='plural', balance=0, pending=None)
         self.payday.move_pending_to_balance_for_teams()
         actual = self.db.one("SELECT balance FROM participants WHERE username='A'")
