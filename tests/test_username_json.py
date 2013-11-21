@@ -3,7 +3,6 @@ from __future__ import print_function, unicode_literals
 import json
 
 from gittip.testing import Harness
-from gittip.testing.client import TestClient
 
 
 class Tests(Harness):
@@ -11,16 +10,16 @@ class Tests(Harness):
     def change_username(self, new_username, user='alice'):
         self.make_participant('alice')
 
-        client = TestClient()
-        response = client.get('/')
-        csrf_token = response.request.context['csrf_token']
+        request = self.client.GET('/', want='request')
+        csrf_token = request.context['csrf_token']
+        import pdb; pdb.set_trace()
 
-        response = client.post( "/alice/username.json"
-                              , { 'username': new_username
-                                , 'csrf_token': csrf_token
-                                 }
-                              , user=user
-                               )
+        response = self.client.POST( "/alice/username.json"
+                                   , { 'username': new_username
+                                     , 'csrf_token': csrf_token
+                                      }
+                                   , user=user
+                                    )
         return response
 
 

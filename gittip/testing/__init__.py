@@ -74,7 +74,7 @@ class Harness(unittest.TestCase):
     def setUpClass(cls):
         www_root = str(realpath(join(TOP, 'www')))
         project_root = str(TOP)
-        cls.harness = AspenHarness(www_root, project_root)
+        cls.client = AspenHarness(www_root, project_root)
         cls.db = gittip.db  # populated underneath AspenHarness
         cls._tablenames = cls.db.all("SELECT tablename FROM pg_tables "
                                      "WHERE schemaname='public'")
