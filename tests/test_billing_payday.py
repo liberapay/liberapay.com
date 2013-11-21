@@ -349,6 +349,12 @@ class TestBillingPayday(TestPaydayBase):
         actual = self.db.one("SELECT balance FROM participants WHERE username='A'")
         assert actual == 5
 
+    def test_move_pending_to_balance_for_teams_ignores_new_teams(self):
+        self.make_participant('A', number='plural', balance=0, pending=None)
+        self.payday.move_pending_to_balance_for_teams()
+        actual = self.db.one("SELECT balance FROM participants WHERE username='A'")
+        assert actual == 0
+
     @mock.patch('gittip.models.participant.Participant.get_tips_and_total')
     def test_charge_and_or_transfer_no_tips(self, get_tips_and_total):
         self.db.run("""
