@@ -319,7 +319,8 @@ class Payday(object):
             UPDATE participants
                SET balance = (balance + pending)
                  , pending = 0
-             WHERE number='plural'
+             WHERE pending IS NOT NULL
+               AND number='plural'
 
         """)
         # "Moved" instead of "cleared" because we don't also set to null.
