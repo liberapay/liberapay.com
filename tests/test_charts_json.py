@@ -26,7 +26,6 @@ class Tests(Harness):
 
     def test_no_payday_returns_empty_list(self):
         self.make_participants_and_tips()
-        self.run_payday()
         assert json.loads(TestClient().get('/carl/charts.json').body) == []
 
     def test_one_payday_returns_empty_list(self):
