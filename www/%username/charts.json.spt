@@ -41,6 +41,15 @@ transfers = website.db.all("""\
 """, (path['username'],), back_as=dict)
 
 
+if not transfers:
+
+    # This user has never received money.
+    # ===================================
+    # Send out an empty array, to trigger no charts.
+
+    paydays = []
+
+
 if paydays:
 
     # Set up a generator to cursor through paydays.
