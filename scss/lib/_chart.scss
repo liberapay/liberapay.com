@@ -30,9 +30,10 @@
     .week SPAN.x-tick {
         position: absolute;
         bottom: -12pt;
-        padding: 5pt 0 0 0.5pt;
+        right: 0;
+        padding: 5pt 0.5pt 0 0;
         border: 1pt solid #630;
-        border-style: none none none solid;
+        border-style: none solid none none;
         display: none;
         color: #630;
     }
@@ -45,15 +46,17 @@
         border-color: #630;
         color: #630;
     }
-    .week SPAN.y-label {
+    .week SPAN.y-label {    // This is the flag.
         display: none;
         position: absolute;
         top: -17pt;
+        right: 0;
+        z-index: 1;         // Wants to be over the bars.
         text-align: center;
         background: white;
         color: #630;
         border: 2pt solid #630;
-        border-radius: 0 3pt 3pt 0;
+        border-radius: 3pt 0 0 3pt;
         padding: 2pt 3pt;
     }
     .week.max SPAN.y-label {
