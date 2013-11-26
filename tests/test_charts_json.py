@@ -130,3 +130,15 @@ class Tests(Harness):
         actual = json.loads(TestClient().get('/carl/charts.json').body)
 
         assert actual == expected
+
+    def test_never_received_gives_empty_array(self):
+        alice, bob = self.make_participants_and_tips()
+        self.run_payday()   # zeroeth, ignored
+        self.run_payday()   # first
+        self.run_payday()   # second
+        self.run_payday()   # third
+
+        expected = []
+        actual = json.loads(TestClient().get('/alice/charts.json').body)
+
+        assert actual == expected
