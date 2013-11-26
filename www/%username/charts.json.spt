@@ -1,32 +1,73 @@
-from gittip import db
+"""Return an array of objects with interesting data for the user.
+
+We want one object per payday, but the user probably didn't participate in
+every payday. Our solution is to fetch all paydays and all of the user's
+transfers, and then loop through transfers and aggregate into the relevant
+payday object.
+
+We specifically don't worry about double-counting npatrons for out-of-band
+transfers. That's a rare case right now, pretty much only when someone
+deactivates their account and distributes their balance as a final gift. It
+coult become much more common if/when we land one-off payments, depending on
+how that gets implemented.
+
+"""
 [---]
 
-paydays = db.all("""
 
-    SELECT ts_start::date   AS date
-         , 0                AS receipts
-         , 0                AS npatrons
-      FROM paydays
-  ORDER BY ts_start DESC
+# Fetch data from the database.
+# =============================
 
-""")
+paydays = website.db.all("""
 
-receipts = db.all("""\
+      SELECT p.ts_start
+           , p.ts_start::date   AS date
+           , 0                  AS npatrons
+           , 0.00               AS receipts
+        FROM paydays p
+    ORDER BY ts_start DESC
 
-    SELECT date_trunc('day', timestamp)::date   AS date
-         , sum(amount)                          AS receipts
-         , count(tipper)                        AS npatrons
-      FROM transfers
-     WHERE tippee=%s
-  GROUP BY date_trunc('day', timestamp)
-  ORDER BY date_trunc('day', timestamp) DESC
+""", back_as=dict)
 
-""", (path['username'],))
+transfers = website.db.all("""\
 
-if not receipts:
-    charts = []
-else:
-    charts = receipts + paydays[len(receipts):]
+   SELECT timestamp
+        , amount
+        , tipper
+     FROM transfers
+    WHERE tippee=%s
+ ORDER BY timestamp DESC
 
-response.body = charts[:-1]  # Don't show Gittip #0.
+""", (path['username'],), back_as=dict)
+
+
+if paydays:
+
+    # Set up a generator to cursor through paydays.
+    # =============================================
+
+    def genpaydays():
+        for payday in paydays:
+            yield payday
+    paydaygen = genpaydays()
+
+    curpayday = next(paydaygen)
+
+
+    # Loop through transfers, advancing payday cursor as appropriate.
+    # ===============================================================
+
+    for transfer in transfers:
+        while transfer['timestamp'] < curpayday['ts_start']:
+            del curpayday['ts_start']   # done with it, don't want it in output
+            curpayday = next(paydaygen)
+
+        curpayday['npatrons'] += 1
+        curpayday['receipts'] += transfer['amount']
+
+
+# Prepare response.
+# =================
+
+response.body = paydays[:-1]  # don't show Gittip #0
 response.headers["Access-Control-Allow-Origin"] = "*"
