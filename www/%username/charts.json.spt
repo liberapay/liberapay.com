@@ -5,11 +5,14 @@ every payday. Our solution is to fetch all paydays and all of the user's
 transfers, and then loop through transfers and aggregate into the relevant
 payday object.
 
+If the user has never received, we return an empty array. Client code can take
+this to mean, "no chart."
+
 We specifically don't worry about double-counting npatrons for out-of-band
 transfers. That's a rare case right now, pretty much only when someone
 deactivates their account and distributes their balance as a final gift. It
-coult become much more common if/when we land one-off payments, depending on
-how that gets implemented.
+could become much more common in a one-off payments world, depending on how the
+implementation.
 
 """
 [---]
@@ -39,6 +42,15 @@ transfers = website.db.all("""\
  ORDER BY timestamp DESC
 
 """, (path['username'],), back_as=dict)
+
+
+if not transfers:
+
+    # This user has never received money.
+    # ===================================
+    # Send out an empty array, to trigger no charts.
+
+    paydays = []
 
 
 if paydays:
