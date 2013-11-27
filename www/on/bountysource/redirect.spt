@@ -22,9 +22,9 @@ connect_params = {
 }
 
 # build redirect URL to Bountysource from collected data
-auth_url = "{}/#auth/gittip/confirm?{}".format( bountysource.www_host
-                                              , urlencode(connect_params)
-                                               )
+auth_url = "{}/auth/gittip/confirm?{}".format( website.bountysource_www_host
+                                             , urlencode(connect_params)
+                                              )
 
 log("Redirect to Bountysource for authorization: %s" % connect_params)
 request.redirect(auth_url)

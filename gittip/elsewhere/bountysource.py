@@ -5,14 +5,15 @@ from gittip.models.participant import Participant
 from gittip.elsewhere import AccountElsewhere, _resolve
 
 
-www_host = 'https://www.bountysource.com'
-
 class BountysourceAccount(AccountElsewhere):
     platform = u'bountysource'
 
     def get_url(self):
-        url = "{}/#users/{}".format(www_host, self.user_info["slug"])
-        return url
+
+        # I don't see that we actually use this. Leaving as a stub pending
+        # https://github.com/gittip/www.gittip.com/pull/1369.
+
+        raise NotImplementedError
 
 
 def resolve(login):
