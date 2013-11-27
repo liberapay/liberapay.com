@@ -3,16 +3,13 @@
 from __future__ import print_function, unicode_literals
 
 import datetime
-import random
 import unittest
 from decimal import Decimal
 from os.path import join, dirname, realpath
 
-import gittip
 import pytz
 from aspen import resources
 from aspen.testing import AspenHarness
-from aspen.utils import utcnow
 from gittip.billing.payday import Payday
 from gittip.models.participant import Participant
 from psycopg2 import IntegrityError, InternalError
@@ -140,125 +137,6 @@ class GittipPaydayTest(Harness):
 
 # Helpers for managing test data.
 # ===============================
-
-def start_payday(*data):
-    context = load(*data)
-    context.payday = Payday(gittip.db)
-    ts_start = context.payday.start()
-    context.payday.zero_out_pending(ts_start)
-    context.ts_start = ts_start
-    return context
-
-
-def setup_tips(*recs):
-    """Setup some participants and tips. recs is a list of::
-
-        ("tipper", "tippee", '2.00', True, False, True, "github", "12345")
-                                       ^     ^      ^
-                                       |     |      |
-                                       |     |      -- claimed?
-                                       |     -- is_suspicious?
-                                       |-- good cc?
-
-    tipper must be a unicode
-    tippee can be None or unicode
-    amount can be None or unicode
-    good_cc can be True, False, or None
-    is_suspicious can be True, False, or None
-    claimed can be True or False
-    platform can be unicode
-    user_id can be unicode
-
-    """
-    tips = []
-
-    _participants = {}
-    randid = lambda: unicode(random.randint(1, 1000000))
-
-    for rec in recs:
-        good_cc, is_suspicious, claimed, platform, user_id = \
-                                        (True, False, True, "github", randid())
-
-        if len(rec) == 3:
-            tipper, tippee, amount = rec
-        elif len(rec) == 4:
-            tipper, tippee, amount, good_cc = rec
-            is_suspicious, claimed = (False, True)
-        elif len(rec) == 5:
-            tipper, tippee, amount, good_cc, is_suspicious = rec
-            claimed = True
-        elif len(rec) == 6:
-            tipper, tippee, amount, good_cc, is_suspicious, claimed = rec
-        elif len(rec) == 7:
-            tipper, tippee, amount, good_cc, is_suspicious, claimed, platform \
-                                                                          = rec
-        elif len(rec) == 8:
-            tipper, tippee, amount, good_cc, is_suspicious, claimed, \
-                                                        platform, user_id = rec
-        else:
-            raise Exception(rec)
-
-        assert good_cc in (True, False, None), good_cc
-        assert is_suspicious in (True, False, None), is_suspicious
-        _participants[tipper] = \
-                              (good_cc, is_suspicious, True, platform, user_id)
-
-        if tippee is None:
-            continue
-        assert claimed in (True, False), claimed  # refers to tippee
-        if tippee not in _participants:
-            _participants[tippee] = (None, False, claimed, "github", randid())
-        now = utcnow()
-        tips.append({ "ctime": now
-                    , "mtime": now
-                    , "tipper": tipper
-                    , "tippee": tippee
-                    , "amount": Decimal(amount)
-                     })
-
-    then = utcnow() - datetime.timedelta(seconds=3600)
-
-    participants = []
-    elsewhere = []
-    for username, crap in _participants.items():
-        (good_cc, is_suspicious, claimed, platform, user_id) = crap
-        username_key = "login" if platform == 'github' else "screen_name"
-        elsewhere.append({ "platform": platform
-                         , "user_id": user_id
-                         , "participant": username
-                         , "user_info": { "id": user_id
-                                        , username_key: username
-                                         }
-                          })
-        rec = {"username": username}
-        if good_cc is not None:
-            rec["last_bill_result"] = "" if good_cc else "Failure!"
-            rec["balanced_account_uri"] = "/v1/blah/blah/" + username
-        rec["is_suspicious"] = is_suspicious
-        if claimed:
-            rec["claimed_time"] = then
-        participants.append(rec)
-
-    return ["participants"] + participants \
-         + ["tips"] + tips \
-         + ["elsewhere"] + elsewhere
-
-
-def tip_graph(*a, **kw):
-    context = load(*setup_tips(*a, **kw))
-
-    def resolve_elsewhere(username):
-        recs = context.db.all( "SELECT platform, user_id FROM elsewhere "
-                               "WHERE participant=%s"
-                             , (username,)
-                              )
-        if recs is not None:
-            recs = [(rec['platform'], rec['user_id']) for rec in recs]
-        return recs
-
-    context.resolve_elsewhere = resolve_elsewhere  # Wheeee! :D
-
-    return context
 
 def load_simplate(path):
     """Given an URL path, return resource.
