@@ -1,0 +1,84 @@
+.chart-wrapper {
+
+    width: 480px;
+    float: left;
+
+    &.newline {
+        clear: left;
+    }
+    H2 {
+        padding-top: 12pt;
+    }
+    .chart {
+        position: relative;
+        height: 100px;
+    }
+    .week {
+        position: absolute;
+        top: 0;
+        left: 0;
+        cursor: pointer;
+    }
+    .shaded {
+        position: absolute;
+        background: #396;
+        bottom: 0;
+    }
+    .week SPAN, .x-axis {
+        font: normal 7pt/7pt "Lucida Mono", Monaco, monospace;
+    }
+    .week SPAN.x-tick {
+        position: absolute;
+        bottom: -12pt;
+        right: 0;
+        padding: 5pt 0.5pt 0 0;
+        border: 1pt solid #630;
+        border-style: none solid none none;
+        display: none;
+        color: #630;
+    }
+    .week SPAN.x-tick.on {
+        border-color: #B2A196;
+        color: #B2A196;
+    }
+    .week.flagged SPAN.x-tick.on,
+    .week.hover SPAN.x-tick.on {
+        border-color: #630;
+        color: #630;
+    }
+    .week SPAN.y-label {    // This is the flag.
+        display: none;
+        position: absolute;
+        top: -17pt;
+        right: 0;
+        z-index: 1;         // Wants to be over the bars.
+        text-align: center;
+        background: white;
+        color: #630;
+        border: 2pt solid #630;
+        border-radius: 3pt 0 0 3pt;
+        padding: 2pt 3pt;
+    }
+    .week.max SPAN.y-label {
+        display: block;
+    }
+    .week.flagged SPAN.y-label,
+    .week.flagged SPAN.x-tick,
+    .week.hover SPAN.y-label,
+    .week.hover SPAN.x-tick {
+        display: block;
+    }
+    .week.hover SPAN.y-label {
+        z-index: 2
+    }
+    .x-axis {
+        text-align: center;
+        padding-top: 14pt;
+    }
+    .note {
+        font-style: italic;
+        font-size: 8pt;
+        line-height: 10pt;
+        padding-bottom: 12pt;
+    }
+}
