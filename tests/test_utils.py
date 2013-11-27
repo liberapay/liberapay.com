@@ -9,19 +9,19 @@ class Tests(Harness):
 
     def test_get_participant_gets_participant(self):
         expected = self.make_participant('alice', claimed_time='now')
-        request = self.harness.GET( '/alice/'
-                                  , run_through='dispatch_request_to_filesystem'
-                                  , want='request'
-                                   )
+        request = self.GET( '/alice/'
+                          , run_through='dispatch_request_to_filesystem'
+                          , want='request'
+                           )
         actual = utils.get_participant(request, restrict=False)
         assert actual == expected
 
     def test_get_participant_canonicalizes(self):
         self.make_participant('alice', claimed_time='now')
-        request = self.harness.GET( '/Alice/'
-                                  , run_through='dispatch_request_to_filesystem'
-                                  , want='request'
-                                   )
+        request = self.GET( '/Alice/'
+                          , run_through='dispatch_request_to_filesystem'
+                          , want='request'
+                           )
 
         with self.assertRaises(Response) as cm:
             utils.get_participant(request, restrict=False)

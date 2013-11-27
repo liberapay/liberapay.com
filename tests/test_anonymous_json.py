@@ -4,7 +4,6 @@ from aspen import json
 
 from gittip.elsewhere.twitter import TwitterAccount
 from gittip.testing import Harness
-from gittip.testing.client import TestClient
 
 
 class Tests(Harness):
@@ -12,20 +11,17 @@ class Tests(Harness):
     def hit_anonymous(self, method='GET', expected_code=200):
         user, ignored = TwitterAccount('alice', {}).opt_in('alice')
 
-        client = TestClient()
-        response = client.get('/')
+        response = self.GET('/')
         csrf_token = response.request.context['csrf_token']
 
         if method == 'GET':
-            response = client.get( "/alice/anonymous.json"
-                                 , user='alice'
-                                  )
+            response = self.GET("/alice/anonymous.json", user='alice')
         else:
             assert method == 'POST'
-            response = client.post( "/alice/anonymous.json"
-                                  , {'csrf_token': csrf_token}
-                                  , user='alice'
-                                   )
+            response = self.POST( "/alice/anonymous.json"
+                                , {'csrf_token': csrf_token}
+                                , user='alice'
+                                 )
         if response.code != expected_code:
             print(response.body)
         return response

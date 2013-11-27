@@ -11,7 +11,7 @@ from os.path import join, dirname, realpath
 import gittip
 import pytz
 from aspen import resources
-from aspen.testing.harness import Harness as AspenHarness
+from aspen.testing import AspenHarness
 from aspen.utils import utcnow
 from gittip.billing.payday import Payday
 from gittip.models.participant import Participant
@@ -68,17 +68,20 @@ DUMMY_BOUNTYSOURCE_JSON = u'{"slug": "6-corytheboyd","updated_at": "2013-05-2'\
 # JSON data as returned from bountysource for corytheboyd! hello, whit537 ;)
 
 
-class Harness(unittest.TestCase):
+class Harness(AspenHarness, unittest.TestCase):
 
-    @classmethod
-    def setUpClass(cls):
-        www_root = str(realpath(join(TOP, 'www')))
-        project_root = str(TOP)
-        cls.client = AspenHarness(www_root, project_root)
-        cls.db = gittip.db  # populated underneath AspenHarness
-        cls._tablenames = cls.db.all("SELECT tablename FROM pg_tables "
-                                     "WHERE schemaname='public'")
-        cls.clear_tables(cls.db, cls._tablenames[:])
+    def __init__(self, *a, **kw):
+        unittest.TestCase.__init__(self, *a, **kw)
+        AspenHarness.__init__( self
+                             , www_root=str(realpath(join(TOP, 'www')))
+                             , project_root=str(TOP)
+                              )
+
+    def setUp(self):
+        self.db = self.website.db
+        self._tablenames = self.db.all("SELECT tablename FROM pg_tables "
+                                       "WHERE schemaname='public'")
+        self.clear_tables(self.db, self._tablenames[:])
 
     def tearDown(self):
         self.clear_tables(self.db, self._tablenames[:])
