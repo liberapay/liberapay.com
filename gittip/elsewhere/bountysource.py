@@ -9,8 +9,11 @@ class BountysourceAccount(AccountElsewhere):
     platform = u'bountysource'
 
     def get_url(self):
-        url = "https://www.bountysource.com/#users/%s" % self.user_info["slug"]
-        return url
+
+        # I don't see that we actually use this. Leaving as a stub pending
+        # https://github.com/gittip/www.gittip.com/pull/1369.
+
+        raise NotImplementedError
 
 
 def resolve(login):
