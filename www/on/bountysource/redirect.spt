@@ -80,9 +80,9 @@ for account in user.participant.get_accounts_elsewhere():
             connect_params['last_name'] = account.user_info.get('last_name')
 
 # build redirect URL to Bountysource from collected data
-auth_url = "%s#auth/gittip/confirm?%s" % ( bountysource.www_host
-                                         , urlencode(connect_params)
-                                          )
+auth_url = "{}/#auth/gittip/confirm?{}".format( bountysource.www_host
+                                              , urlencode(connect_params)
+                                               )
 
 log("Redirect to Bountysource for authorization: %s" % connect_params)
 request.redirect(auth_url)

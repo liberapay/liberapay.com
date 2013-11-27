@@ -5,11 +5,13 @@ from gittip.models.participant import Participant
 from gittip.elsewhere import AccountElsewhere, _resolve
 
 
+www_host = 'https://www.bountysource.com'
+
 class BountysourceAccount(AccountElsewhere):
     platform = u'bountysource'
 
     def get_url(self):
-        url = "https://www.bountysource.com/#users/%s" % self.user_info["slug"]
+        url = "{}/#users/{}".format(www_host, self.user_info["slug"])
         return url
 
 
