@@ -102,15 +102,15 @@ receivers = utter_hack(db.all("""
     <div class="as-content">
         <h1>Who inspires you?</h1>
         <form id="jump">
-            <span class="luxury">Enter a</span> <select>
+            <span class="luxury">Enter a </span> 
+            <select>
                 <option value="twitter">Twitter</option>
                 <option value="github">GitHub</option>
                 <option value="bitbucket">Bitbucket</option>
-            </select> username:
-            <span class="nowrap">
-                <input placeholder="" />
-                <button type="submit">Go</button>
-            </span>
+            </select> 
+            <span class="luxury"> username: </span>
+            <input placeholder="username" /> 
+            <button type="submit">Go</button>
         </form>
     </div>
 
@@ -122,7 +122,7 @@ receivers = utter_hack(db.all("""
 
 <div id="leaderboard">
 
-    <div class="new-participants">
+    <div class="people">
         <h2>New Participants</h2>
         <ul class="group">
             {% for i, participant in enumerate(new_participants, start=1) %}
@@ -141,7 +141,7 @@ receivers = utter_hack(db.all("""
             {% end %}
         </ul>
     </div>
-    <div class="top-givers">
+    <div class="people">
         <h2>Top Givers</h2>
         <ul class="group">
             {% for i, giver in enumerate(givers, start=1) %}
@@ -171,7 +171,7 @@ receivers = utter_hack(db.all("""
             {% end %}
         </ul>
     </div>
-    <div class="top-receivers">
+    <div class="people">
         <h2>Top Receivers</h2>
         <ul class="group">
             {% for i, receiver in enumerate(receivers, start=1) %}

@@ -1,13 +1,20 @@
+* {
+    box-sizing: border-box;
+}
+
 html, body {
     background: #FFF;
 }
 body {
     color: $black;
     font: normal 16px $Helvetica;
+    min-width: 320px;
     text-rendering: optimizeLegibility;
 }
-.main-padding {
+.container {
+    @include clearfix;
     width: 960px;
+    max-width: 90%;
     margin: 0 auto;
     position: relative;
 }
