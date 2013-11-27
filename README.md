@@ -367,18 +367,18 @@ API
 The Gittip API is comprised of these four endpoints:
 
 **[/about/paydays.json](https://www.gittip.com/about/paydays.json)**
-([source](https://github.com/gittip/www.gittip.com/tree/master/www/about/paydays.json))&mdash;<i>public</i>&mdash;Returns
+([source](https://github.com/gittip/www.gittip.com/tree/master/www/about/paydays.json.spt))&mdash;<i>public</i>&mdash;Returns
 an array of objects, one per week, showing aggregate numbers over time. The
 [charts](https://www.gittip.com/about/charts.html) page uses this.
 
 **[/about/stats.json](https://www.gittip.com/about/stats.json)**
-([source](https://github.com/gittip/www.gittip.com/tree/master/www/about/stats))&mdash;<i>public</i>&mdash;Returns
+([source](https://github.com/gittip/www.gittip.com/tree/master/www/about/stats.spt))&mdash;<i>public</i>&mdash;Returns
 an object giving a point-in-time snapshot of Gittip. The
-[stats](https://www.gittip.com/about/stats.html) page displays the same info.
+[stats](https://www.gittip.com/about/stats.html.spt) page displays the same info.
 
 **/`%username`/public.json**
 ([example](https://www.gittip.com/whit537/public.json),
-[source](https://github.com/gittip/www.gittip.com/tree/master/www/%25username/public.json))&mdash;<i>public</i>&mdash;Returns an object with these keys:
+[source](https://github.com/gittip/www.gittip.com/tree/master/www/%25username/public.json.spt))&mdash;<i>public</i>&mdash;Returns an object with these keys:
 
   - "receiving"&mdash;an estimate of the amount the given participant will
     receive this week
@@ -414,7 +414,7 @@ an object giving a point-in-time snapshot of Gittip. The
 
 
 **/`%username`/tips.json**
-([source](https://github.com/gittip/www.gittip.com/tree/master/www/%25username/tips.json))&mdash;<i>private</i>&mdash;Responds
+([source](https://github.com/gittip/www.gittip.com/tree/master/www/%25username/tips.json.spt))&mdash;<i>private</i>&mdash;Responds
 to `GET` with an array of objects representing your current tips. `POST` the
 same structure back in order to update tips in bulk (be sure to set
 `Content-Type` to `application/json` instead of
