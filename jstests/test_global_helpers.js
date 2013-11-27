@@ -1,3 +1,5 @@
+var should = require('should');
+
 describe('Test the global helper functions', function () {
 
     it('should mock console if it is not supported by the browser', function () {
@@ -8,7 +10,7 @@ describe('Test the global helper functions', function () {
         window.console = null;
         mock_console();
 
-        expect(console).not.toBeNull();
+        should(console).not.equal(null);
 
         var consoleCmds = ['log', 'debug', 'info', 'warn', 'error', 'assert', 'dir',
             'dirxml', 'group', 'groupEnd', 'time', 'timeEnd', 'count',
@@ -16,12 +18,10 @@ describe('Test the global helper functions', function () {
 
         // Ensure real list is the same length as our test list. If the real
         // list contains more items we should be testing for those too.
-        expect(Object.keys(console).length).toEqual(consoleCmds.length);
+        Object.keys(console).length .should.be.exactly(consoleCmds.length);
 
         // Check there are no missing items.
-        for (var i = 0; i < consoleCmds.length; i++) {
-            expect(console[consoleCmds[i]]).toBeDefined();
-        }
+        console.should.have.keys(consoleCmds);
     });
 
 });
