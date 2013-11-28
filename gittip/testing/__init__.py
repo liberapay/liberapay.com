@@ -12,6 +12,8 @@ from aspen import resources
 from aspen.testing import AspenHarness
 from gittip.billing.payday import Payday
 from gittip.models.participant import Participant
+from gittip.security.user import User
+from gittip import wireup
 from psycopg2 import IntegrityError, InternalError
 
 
@@ -75,13 +77,19 @@ class Harness(AspenHarness, unittest.TestCase):
                               )
 
     def setUp(self):
-        self.db = self.website.db
+        # reset
+        self.short_circuit = True
+        self.argv = []
+
+        self.db = wireup.db()
         self._tablenames = self.db.all("SELECT tablename FROM pg_tables "
                                        "WHERE schemaname='public'")
         self.clear_tables(self.db, self._tablenames[:])
 
+
     def tearDown(self):
         self.clear_tables(self.db, self._tablenames[:])
+
 
     @staticmethod
     def clear_tables(db, tablenames):
@@ -92,6 +100,22 @@ class Harness(AspenHarness, unittest.TestCase):
                 db.run("DELETE FROM %s CASCADE" % tablename)
             except (IntegrityError, InternalError):
                 tablenames.insert(0, tablename)
+
+
+    def build_wsgi_environ(self, *a, **kw):
+        """Extend base class to support authenticating as a certain user.
+        """
+        auth_as = kw.pop('auth_as', None)
+        if auth_as is None:
+            if b'session' in self.cookie:
+                del self.cookie[b'session']
+        else:
+            user = User.from_username(auth_as)
+            user.sign_in()
+            self.cookie[b'session'] = user.participant.session_token
+
+        return AspenHarness.build_wsgi_environ(self, *a, **kw)
+
 
     def make_participant(self, username, **kw):
         participant = Participant.with_random_username()
@@ -107,6 +131,7 @@ class Harness(AspenHarness, unittest.TestCase):
         participant.set_attributes(**kw)
 
         return participant
+
 
     def make_payday(self, *transfers):
 
