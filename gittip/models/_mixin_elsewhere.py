@@ -210,9 +210,14 @@ class MixinElsewhere(object):
 
             INSERT INTO tips (ctime, tipper, tippee, amount)
 
-                 SELECT DISTINCT ON (tipper) ctime, tipper, tippee, 0 AS amount
-                   FROM tips
-                  WHERE tippee=%s
+                SELECT ctime, tipper, tippee, 0 AS amount
+                  FROM (
+                     SELECT DISTINCT ON (tipper, tippee) ctime, tipper, tippee, amount
+                       FROM tips
+                      WHERE tippee=%s
+                   ORDER BY tipper, tippee, mtime DESC
+                        ) AS foo
+                 WHERE foo.amount > 0
 
         """
 
@@ -220,9 +225,14 @@ class MixinElsewhere(object):
 
             INSERT INTO tips (ctime, tipper, tippee, amount)
 
-                 SELECT DISTINCT ON (tippee) ctime, tipper, tippee, 0 AS amount
-                   FROM tips
-                  WHERE tipper=%s
+              SELECT ctime, tipper, tippee, 0 AS amount
+                FROM (
+                   SELECT DISTINCT ON (tipper, tippee) ctime, tipper, tippee, amount
+                     FROM tips
+                    WHERE tipper=%s
+                 ORDER BY tipper, tippee, mtime DESC
+                      ) AS foo
+                WHERE foo.amount > 0
 
         """
 

@@ -188,7 +188,7 @@ class TestBugInTakeOver(Harness):
         #self.show_table('tips')
         #self.show_table('absorptions')
         ntips = self.db.one("select count(*) from tips")
-        assert 3 == ntips
+        assert 2 == ntips
         self.self_test()
 
     def test_do_not_take_over_zero_tips_receiving(self):
@@ -206,7 +206,7 @@ class TestBugInTakeOver(Harness):
         #self.show_table('tips')
         #self.show_table('absorptions')
         ntips = self.db.one("select count(*) from tips")
-        assert 3 == ntips
+        assert 2 == ntips
         self.self_test()
 
 
