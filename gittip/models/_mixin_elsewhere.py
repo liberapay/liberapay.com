@@ -165,19 +165,26 @@ class MixinElsewhere(object):
         platform = account_elsewhere.platform
         user_id = account_elsewhere.user_id
 
+        # creates new set of merged tips with the 'live' account as receiver/giver
+        # * first condition includes all tips to/from the two users
+        #   to merge them together with sum() and group by
+        # * second condition filters out tips between the two accounts involved
+        #   to remove self tipping
+        # * third skips tips that were already zero
+
         CONSOLIDATE_TIPS_RECEIVING = """
 
             INSERT INTO tips (ctime, tipper, tippee, amount)
 
-                 SELECT min(ctime), tipper, %s AS tippee, sum(amount)
+                 SELECT min(ctime), tipper, %(live)s AS tippee, sum(amount)
                    FROM (   SELECT DISTINCT ON (tipper, tippee)
                                    ctime, tipper, tippee, amount
                               FROM tips
                           ORDER BY tipper, tippee, mtime DESC
                          ) AS unique_tips
-                  WHERE (tippee=%s OR tippee=%s)
-                AND NOT (tipper=%s AND tippee=%s)
-                AND NOT (tipper=%s)
+                  WHERE (tippee = %(dead)s OR tippee = %(live)s)
+                AND NOT (tipper = %(dead)s OR tipper = %(live)s)
+                    AND amount > 0
                GROUP BY tipper
 
         """
@@ -186,15 +193,15 @@ class MixinElsewhere(object):
 
             INSERT INTO tips (ctime, tipper, tippee, amount)
 
-                 SELECT min(ctime), %s AS tipper, tippee, sum(amount)
+                 SELECT min(ctime), %(live)s AS tipper, tippee, sum(amount)
                    FROM (   SELECT DISTINCT ON (tipper, tippee)
                                    ctime, tipper, tippee, amount
                               FROM tips
                           ORDER BY tipper, tippee, mtime DESC
                          ) AS unique_tips
-                  WHERE (tipper=%s OR tipper=%s)
-                AND NOT (tipper=%s AND tippee=%s)
-                AND NOT (tippee=%s)
+                  WHERE (tipper = %(dead)s OR tipper = %(live)s)
+                AND NOT (tippee = %(dead)s OR tippee = %(live)s)
+                    AND amount > 0
                GROUP BY tippee
 
         """
@@ -325,8 +332,8 @@ class MixinElsewhere(object):
                 # ===============
 
                 x, y = self.username, other_username
-                cursor.run(CONSOLIDATE_TIPS_RECEIVING, (x, x,y, x,y, x))
-                cursor.run(CONSOLIDATE_TIPS_GIVING, (x, x,y, x,y, x))
+                cursor.run(CONSOLIDATE_TIPS_RECEIVING, dict(live=x, dead=y))
+                cursor.run(CONSOLIDATE_TIPS_GIVING, dict(live=x, dead=y))
                 cursor.run(ZERO_OUT_OLD_TIPS_RECEIVING, (other_username,))
                 cursor.run(ZERO_OUT_OLD_TIPS_GIVING, (other_username,))
 
