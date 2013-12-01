@@ -517,26 +517,32 @@
         text-transform: uppercase;
         margin: 35px 0 8px;
     }
-
-    .col {
-        width: auto;
-        margin: 0 auto;
-    }
-
-    .col0, .col1, .col2 {
-         
-        max-width: 460px;       
-    }
-    .col0 {
-        margin: 0 auto;
-    }
-    .col1 {
-        float: left;
-    }
-    .col2 {
-        float: right;
-    }
 }
+
+.col {
+    width: auto;
+    margin: 0 auto;
+}
+
+.col0, .col1, .col2 {
+    width: 50%;
+    max-width: 100%;
+}
+
+.col0 {
+    margin: 0 auto;
+}
+
+.col1 {
+    float: left;
+    padding-right: 3%;
+}
+
+.col2 {
+    float: right;
+    padding-left: 3%;
+}
+
 #footer {
     margin: 4em 0 1em;
     border-top: 1px solid $black;
