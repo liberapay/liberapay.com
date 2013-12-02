@@ -544,13 +544,33 @@
 }
 
 #footer {
+    @include clearfix;
     margin: 4em 0 1em;
     border-top: 1px solid $black;
-    padding: 0.5em 0 0;
+    padding: 1em 0 0;
     text-align: right;
-    font: normal 12px/16px $Helvetica;
+    font-size: 13px;
+    line-height: 13px;
 
     .social {
         float: left;
+    }
+
+    ul {
+        float: right;
+        @include clearfix;
+    }
+    li {
+        float: left;
+        margin: 0;
+
+        &:before {
+            content: "|";
+            padding: 0 0.4em;
+        }
+
+        &:first-child:before {
+            content: none;
+        }
     }
 }

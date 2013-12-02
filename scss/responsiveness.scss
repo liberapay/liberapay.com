@@ -1,6 +1,8 @@
 // /* A Special Responsive Hell */
 // /*****************************/
 
+
+// Small screens/tablets
 @media (max-width: 940px) {
     // 2 column sections
     #leaderboard {
@@ -19,6 +21,7 @@
     }
 }
 
+// Smaller tablets in portrait/landscape phones
 @media (max-width: 700px) {
     .luxury {
         display: none !important;  
@@ -47,8 +50,35 @@
             }
         }
     }
+
+    #footer {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 100%;
+        text-align: left;
+        width: 480px;
+        
+        .social, ul, li {
+            float: none;
+        }
+
+        li, .social a, li a {
+            display: block;
+        }
+
+        li {
+            margin: 0.25em 0;
+            padding: 0.25em 0;
+            border-top: 1px solid #eee;
+
+            &:before {
+                content: none;
+            }
+        }
+    }
 }
 
+// Portrait phones
 @media (max-width: 479px) {
     body {
         font-size: 14px;
@@ -110,9 +140,4 @@
             }
         }
     }
-
-}
-
-@media (max-width: 320px) {
-
 }
