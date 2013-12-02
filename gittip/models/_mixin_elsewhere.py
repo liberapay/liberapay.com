@@ -182,9 +182,17 @@ class MixinElsewhere(object):
                               FROM tips
                           ORDER BY tipper, tippee, mtime DESC
                          ) AS unique_tips
+
+-- Old condition:
+--                  WHERE (tippee=%(live)s OR tippee=%(dead)s)
+--                AND NOT (tipper=%(live)s AND tippee=%(dead)s)
+--                AND NOT (tipper=%(live)s)
+
+-- New condition:
                   WHERE (tippee = %(dead)s OR tippee = %(live)s)
                 AND NOT (tipper = %(dead)s OR tipper = %(live)s)
                     AND amount > 0
+
                GROUP BY tipper
 
         """
@@ -199,9 +207,17 @@ class MixinElsewhere(object):
                               FROM tips
                           ORDER BY tipper, tippee, mtime DESC
                          ) AS unique_tips
+
+-- Old condition:
+--                  WHERE (tipper=%(live)s OR tipper=%(dead)s)
+--                AND NOT (tipper=%(live)s AND tippee=%(dead)s)
+--                AND NOT (tippee=%(live)s)
+
+-- New condition:
                   WHERE (tipper = %(dead)s OR tipper = %(live)s)
                 AND NOT (tippee = %(dead)s OR tippee = %(live)s)
                     AND amount > 0
+
                GROUP BY tippee
 
         """
