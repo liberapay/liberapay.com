@@ -25,10 +25,6 @@ first_time = qs.get('first_time') == '1'
 {% extends "templates/profile.html" %}
 {% block page %}
 <style>
-    #matrix {
-        margin: 0 auto;
-        width: 1px;
-    }
     #matrix td {
         text-align: left;
         height: 30px;

@@ -42,33 +42,35 @@
 
 </head>
 <body>
-    <div class="main-padding"><div id="header">
-        <table><tr><td class="logo">
-            <h1>
-                <a href="/">
-                    <img src="/assets/{{ website.version }}/logo.png"
-                         alt="Gittip" />
-                </a>
-            </h1>
-            </td><td class="motto luxury">
-	    <a href='/about/charts.html'>{{ website.gnactive }} users exchanging ${{ website.gtransfer_volume }} per week</a>
-        </td></tr></table>
-        {% if user.ANON %}
-          {% include sign-in-using.html %}
-        {% else %}
-        <div class="you-are">
-            <a href="/{{ user.participant.username }}/">{{ user.participant.username }}</a> &ndash;
-            <a id="sign-out" href="/sign-out.html">sign out</a>
-            <div class="quick-stats">
-              Giving: <a href="/{{ user.participant.username }}/giving/">${{ user.participant.get_dollars_giving() }}/wk</a><br />
-              Receiving: <b>${{ user.participant.get_dollars_receiving() }}/wk</b>
+    <div class="container">
+        <div id="header">
+            <table><tr><td class="logo">
+                <h1>
+                    <a href="/">
+                        <img src="/assets/{{ website.version }}/logo.png"
+                             alt="Gittip" />
+                    </a>
+                </h1>
+                </td><td class="motto luxury">
+            <a href='/about/charts.html'>{{ website.gnactive }} users exchanging ${{ website.gtransfer_volume }} per week</a>
+            </td></tr></table>
+            {% if user.ANON %}
+              {% include sign-in-using.html %}
+            {% else %}
+            <div class="you-are">
+                <a href="/{{ user.participant.username }}/">{{ user.participant.username }}</a> &ndash;
+                <a id="sign-out" href="/sign-out.html">sign out</a>
+                <div class="quick-stats">
+                  Giving: <a href="/{{ user.participant.username }}/giving/">${{ user.participant.get_dollars_giving() }}/wk</a><br />
+                  Receiving: <b>${{ user.participant.get_dollars_receiving() }}/wk</b>
+                </div>
             </div>
+            {% end %}
         </div>
-        {% end %}
-    </div></div>
+    </div>
 
     <div id="hero">
-        <div class="main-padding">
+        <div class="container">
             {% block heading %}
             {% if 'title' in globals() %}
             <h2 class="top"><span>{{ title }}</span></h2>
@@ -77,7 +79,7 @@
         </div>
     </div>
 
-    <div class="main-padding"><div id="box-page">
+    <div class="container">
         {% block killbox %}
         <div class="box">
             {% block box %}{% end %}
@@ -86,23 +88,24 @@
         <div id="page" class="group">
             {% block page %}{% end %}
         </div>
-    </div></div>
 
-    <div class="main-padding"><div id="footer">
-        <div class="social">
-            <a href="https://twitter.com/gittip"><img src="/assets/icons/twitter.16.png" /></a>
+        <div id="footer">
+            <div class="social">
+                <a href="https://twitter.com/gittip"><img src="/assets/icons/twitter.16.png" /></a>
+            </div>
+            <ul>
+                <li><a href='http://blog.gittip.com/'>Blog</a></li>
+                <li><a href="/about/">About</a></li>
+                <li><a href="https://github.com/gittip/www.gittip.com">Source</a></li>
+                <li><a href='/about/faq.html'>FAQ</a></li>
+                <li><a href='/about/stats.html'>Stats</a></li>
+                <li><a href='/about/charts.html'>Charts</a></li>
+                <li><a href="/about/terms/">Terms</a></li>
+                <li><a href="/about/privacy/">Privacy</a></li>
+                <li><a href='/about/fraud/'>Fraud</a></li>
+                <li><a href='/security.txt'>Security</a></li>
+            </ul>
         </div>
-        <a href='http://blog.gittip.com/'>Blog</a> |
-        <a href="/about/">About</a> |
-        <a href="https://github.com/gittip/www.gittip.com">Source</a> |
-        <a href='/about/faq.html'>FAQ</a> |
-        <a href='/about/stats.html'>Stats</a> |
-        <a href='/about/charts.html'>Charts</a> |
-        <a href="/about/terms/">Terms</a> |
-        <a href="/about/privacy/">Privacy</a> |
-        <a href='/about/fraud/'>Fraud</a> |
-        <a href='/security.txt'>Security</a>
-    </div></div>
 
     {%if website.google_analytics_id %}
     <script type="text/javascript">
@@ -137,5 +140,6 @@
     </script>
     {% end %}
 
-</div></body>
+    </div>
+</body>
 </html>
