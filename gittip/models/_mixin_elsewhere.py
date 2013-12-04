@@ -165,6 +165,19 @@ class MixinElsewhere(object):
         platform = account_elsewhere.platform
         user_id = account_elsewhere.user_id
 
+        CREATE_TEMP_TABLE_FOR_UNIQUE_TIPS = """
+
+        -- Get all the latest tips from everyone to everyone.
+
+        CREATE TEMP TABLE __temp_unique_tips ON COMMIT drop AS
+
+            SELECT DISTINCT ON (tipper, tippee)
+                   ctime, tipper, tippee, amount
+              FROM tips
+          ORDER BY tipper, tippee, mtime DESC;
+
+        """
+
         CONSOLIDATE_TIPS_RECEIVING = """
 
             -- Create a new set of tips, one for each current tip *to* either
@@ -176,15 +189,7 @@ class MixinElsewhere(object):
 
                  SELECT min(ctime), tipper, %(live)s AS tippee, sum(amount)
 
-                   FROM (   -- Get all the latest tips from everyone to
-                            -- everyone.
-
-                            SELECT DISTINCT ON (tipper, tippee)
-                                   ctime, tipper, tippee, amount
-                              FROM tips
-                          ORDER BY tipper, tippee, mtime DESC
-
-                         ) AS unique_tips
+                   FROM __temp_unique_tips
 
                   WHERE (tippee = %(dead)s OR tippee = %(live)s)
                         -- Include tips *to* either the dead or live account.
@@ -212,15 +217,7 @@ class MixinElsewhere(object):
 
                  SELECT min(ctime), %(live)s AS tipper, tippee, sum(amount)
 
-                   FROM (   -- Get all the latest tips from everyone to
-                            -- everyone.
-
-                            SELECT DISTINCT ON (tipper, tippee)
-                                   ctime, tipper, tippee, amount
-                              FROM tips
-                          ORDER BY tipper, tippee, mtime DESC
-
-                         ) AS unique_tips
+                   FROM __temp_unique_tips
 
                   WHERE (tipper = %(dead)s OR tipper = %(live)s)
                         -- Include tips *from* either the dead or live account.
@@ -242,13 +239,8 @@ class MixinElsewhere(object):
             INSERT INTO tips (ctime, tipper, tippee, amount)
 
                 SELECT ctime, tipper, tippee, 0 AS amount
-                  FROM (
-                     SELECT DISTINCT ON (tipper, tippee) ctime, tipper, tippee, amount
-                       FROM tips
-                      WHERE tippee=%s
-                   ORDER BY tipper, tippee, mtime DESC
-                        ) AS foo
-                 WHERE foo.amount > 0
+                  FROM __temp_unique_tips
+                 WHERE tippee=%s AND amount > 0
 
         """
 
@@ -256,14 +248,9 @@ class MixinElsewhere(object):
 
             INSERT INTO tips (ctime, tipper, tippee, amount)
 
-              SELECT ctime, tipper, tippee, 0 AS amount
-                FROM (
-                   SELECT DISTINCT ON (tipper, tippee) ctime, tipper, tippee, amount
-                     FROM tips
-                    WHERE tipper=%s
-                 ORDER BY tipper, tippee, mtime DESC
-                      ) AS foo
-                WHERE foo.amount > 0
+                SELECT ctime, tipper, tippee, 0 AS amount
+                  FROM __temp_unique_tips
+                 WHERE tipper=%s AND amount > 0
 
         """
 
@@ -373,6 +360,7 @@ class MixinElsewhere(object):
                 # ===============
 
                 x, y = self.username, other_username
+                cursor.run(CREATE_TEMP_TABLE_FOR_UNIQUE_TIPS)
                 cursor.run(CONSOLIDATE_TIPS_RECEIVING, dict(live=x, dead=y))
                 cursor.run(CONSOLIDATE_TIPS_GIVING, dict(live=x, dead=y))
                 cursor.run(ZERO_OUT_OLD_TIPS_RECEIVING, (other_username,))
