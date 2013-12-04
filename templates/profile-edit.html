@@ -16,10 +16,15 @@
 
     </form>
     <p>
-        <label tabindex="104" class="anonymous">
+        <label tabindex="104" class="anonymous-giving">
             <input type="checkbox"
-                {% if participant.anonymous %}checked="true"{% endif %} />
+                {% if participant.anonymous_giving %}checked="true"{% endif %} />
                 Hide total giving from others.
+        </label>
+        <label tabindex="105" class="anonymous-receiving">
+            <input type="checkbox"
+                {% if participant.anonymous_receiving %}checked="true"{% endif %} />
+                Hide total receiving from others.
         </label>
     </p>
 

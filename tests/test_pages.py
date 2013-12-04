@@ -15,7 +15,18 @@ class TestPages(Harness):
 
     def test_homepage_with_anonymous_giver(self):
         TwitterAccount(self.db, "bob", {}).opt_in("bob")
-        alice = self.make_participant('alice', anonymous=True, last_bill_result='')
+        alice = self.make_participant('alice', anonymous_giving=True, last_bill_result='')
+        alice.set_tip_to('bob', 1)
+        update_homepage_queries_once(self.db)
+
+        actual = self.client.GET('/').body
+        expected = "Anonymous"
+        assert expected in actual
+
+    def test_homepage_with_anonymous_receiver(self):
+        bob, _ = TwitterAccount(self.db, "bob", {}).opt_in("bob")
+        self.update_participant(bob.participant, anonymous_receiving=True, last_bill_result='')
+        alice = self.make_participant('alice', last_bill_result='', claimed_time='now')
         alice.set_tip_to('bob', 1)
         update_homepage_queries_once(self.db)
 

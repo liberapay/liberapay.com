@@ -215,13 +215,34 @@ Gittip.profile.init = function() {
     // Wire up aggregate giving knob.
     // ==============================
 
-    $('.anonymous input').click(function() {
+    $('.anonymous-giving input').click(function() {
         jQuery.ajax(
             { url: 'anonymous.json'
             , type: 'POST'
+            , data: {toggle: 'giving'}
             , dataType: 'json'
             , success: function(data) {
-                $('.anonymous input').attr('checked', data.anonymous);
+                $('.anonymous-giving input').attr('checked', data.giving);
+            }
+            , error: function() {
+                    alert("Failed to change your anonymity preference. Please try again.");
+                }
+             }
+        );
+    });
+
+
+    // Wire up aggregate receiving knob.
+    // ==============================
+
+    $('.anonymous-receiving input').click(function() {
+        jQuery.ajax(
+            { url: 'anonymous.json'
+            , type: 'POST'
+            , data: {toggle: 'receiving'}
+            , dataType: 'json'
+            , success: function(data) {
+                $('.anonymous-receiving input').attr('checked', data.receiving);
             }
             , error: function() {
                     alert("Failed to change your anonymity preference. Please try again.");

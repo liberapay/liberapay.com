@@ -124,7 +124,7 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
     givers = utter_hack(website.db, query_cache.all("""
     -- top givers on community page
 
-        SELECT tipper AS username, anonymous, sum(amount) AS amount
+        SELECT tipper AS username, anonymous_giving, sum(amount) AS amount
           FROM (    SELECT DISTINCT ON (tipper, tippee)
                            amount
                          , tipper
@@ -142,7 +142,7 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
                   ) AS foo
           JOIN participants p ON p.username = tipper
          WHERE is_suspicious IS NOT true
-      GROUP BY tipper, anonymous
+      GROUP BY tipper, anonymous_giving
       ORDER BY amount DESC
       LIMIT %s
       OFFSET %s
@@ -155,7 +155,7 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
     receivers = utter_hack(website.db, query_cache.all("""
     -- top receivers on community page
 
-        SELECT tippee AS username, claimed_time, sum(amount) AS amount
+        SELECT tippee AS username, anonymous_receiving, claimed_time, sum(amount) AS amount
           FROM (    SELECT DISTINCT ON (tipper, tippee)
                            amount
                          , tippee
@@ -172,7 +172,7 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
                   ) AS foo
           JOIN participants p ON p.username = tippee
          WHERE is_suspicious IS NOT true
-      GROUP BY tippee, claimed_time
+      GROUP BY tippee, claimed_time, anonymous_receiving
       ORDER BY amount DESC
       LIMIT %s
       OFFSET %s
@@ -317,7 +317,18 @@ $(document).ready(function() {
         <ul class="group">
             {% for i, receiver in enumerate(receivers, start=1) %}
             <li{% if i > LUXURY %} class="luxury"{% endif %}>
-                <a href="/{{ receiver.username }}/" class="mini-user">
+                {% if receiver.anonymous and not user.ADMIN %}
+                <span class="mini-user">
+                    <span class="inner">
+                        <span class="avatar">
+                        </span>
+                        <span class="money">${{ receiver.amount }}</span>
+                        <span class="name">???</span>
+                    </span>
+                </span>
+                {% else %}
+                <a href="/{{ receiver.username }}/"
+                   class="mini-user{{ ' anonymous' if giver.anonymous else '' }}">
                     <span class="inner">
                         <span class="avatar"
                             style="background-image: url('{{ receiver.get_img_src() }}')">
@@ -326,6 +337,7 @@ $(document).ready(function() {
                         <span class="name">{{ receiver.username }}</span>
                     </span>
                 </a>
+                {% endif %}
             </li>
             {% endfor %}
         </ul>

@@ -12,11 +12,9 @@ callback_pattern = re.compile(r'^[_A-Za-z0-9.]+$')
 [-----------------------------------------------------------------------------]
 
 participant = get_participant(request, restrict=False)
-receiving = participant.get_dollars_receiving()
 
 output = { "id": participant.id
          , "username": participant.username
-         , "receiving": str(receiving)
          , "avatar": participant.get_img_src()
          , "number": participant.number
           }
@@ -38,6 +36,20 @@ if participant.goal != 0:
     output["goal"] = goal
 
 
+# Generate receiving key
+# ===================
+# Display values:
+#
+#   null - user is receiving anonymously
+#   3.00 - user receives this amount in tips
+
+if not participant.anonymous_receiving:
+    receiving = str(participant.get_dollars_receiving())
+else:
+    receiving = None
+output["receiving"] = receiving
+
+
 # Generate giving key
 # ===================
 # Display values:
@@ -45,7 +57,7 @@ if participant.goal != 0:
 #   null - user is giving anonymously
 #   3.00 - user gives this amount in tips
 
-if not participant.anonymous:
+if not participant.anonymous_giving:
     giving = str(participant.get_dollars_giving())
 else:
     giving = None

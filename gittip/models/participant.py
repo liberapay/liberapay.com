@@ -674,9 +674,9 @@ class Participant(Model, MixinElsewhere, MixinTeam):
         out = self.username
         receiving = self.get_dollars_receiving()
         giving = self.get_dollars_giving()
-        if (giving > receiving) and not self.anonymous:
+        if (giving > receiving) and not self.anonymous_giving:
             out += " gives $%.2f/wk" % giving
-        elif receiving > 0:
+        elif receiving > 0 and not self.anonymous_receiving:
             out += " receives $%.2f/wk" % receiving
         else:
             out += " is"

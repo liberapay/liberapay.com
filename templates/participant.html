@@ -11,7 +11,10 @@
         {% set giving = participant.get_dollars_giving() %}
         {% set receiving = participant.get_dollars_receiving() %}
 
-        {% if giving > receiving and not participant.anonymous %}
+        {% if participant.anonymous_giving and participant.anonymous_receiving %}
+            <h2 class="pad-sign">{{ participant.username }}</h2>
+            <div class="unit pad-sign">gives and receives anonymously</div>
+        {% elif g > r and not participant.anonymous_giving %}
             <h2 class="pad-sign">{{ participant.username }} gives</h2>
             <div class="number">
                 {% if user.participant == participant %}
@@ -20,21 +23,25 @@
                 ${{ giving }}
                 {% endif %}
             </div>
-            <div class="unit pad-sign">per 
-                week{% if receiving > 0 %}, and receives $<span class="total-receiving">{{ receiving }}</span>{% endif %}
+            <div class="unit pad-sign">per week 
+                {% if r > 0 %}, and receives 
+                    {% if participant.anonymous_receiving %}
+                    anonymously
+                    {% else %}
+                    ${{ receiving }}
+                    {% endif %}
+                {% endif %}
             </div>
         {% elif receiving > 0 %}
             <h2 class="pad-sign">{{ participant.username }} receives</h2>
             <div class="number">$<span class="total-receiving">{{ receiving }}</span></div>
-            <div class="unit pad-sign">per 
-                week{% if giving > 0 %}, and gives 
-                {% if participant.anonymous %}
-                anonymously
-                {% elif user.participant == participant %}
-                $<span class="total-giving">{{ giving }}</span>
-                {% else %}
-                ${{ giving }}
-                {% endif %}
+            <div class="unit pad-sign">per week 
+                {% if g > 0 %}, and gives 
+                    {% if participant.anonymous_giving %}
+                    anonymously
+                    {% else %}
+                    ${{ giving }}
+                    {% endif %}
                 {% endif %}
             </div>
         {% else %}

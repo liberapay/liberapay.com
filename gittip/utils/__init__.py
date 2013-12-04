@@ -365,8 +365,8 @@ def update_homepage_queries_once(db):
         cursor.execute("DELETE FROM homepage_top_givers")
         cursor.execute("""
 
-        INSERT INTO homepage_top_givers
-            SELECT tipper AS username, anonymous, sum(amount) AS amount
+        INSERT INTO homepage_top_givers (username, anonymous, amount)
+            SELECT tipper, anonymous_giving, sum(amount) AS amount
               FROM (    SELECT DISTINCT ON (tipper, tippee)
                                amount
                              , tipper
@@ -382,7 +382,7 @@ def update_homepage_queries_once(db):
                       ) AS foo
               JOIN participants p ON p.username = tipper
              WHERE is_suspicious IS NOT true
-          GROUP BY tipper, anonymous
+          GROUP BY tipper, anonymous_giving
           ORDER BY amount DESC;
 
         """.strip())
@@ -408,8 +408,8 @@ def update_homepage_queries_once(db):
         cursor.execute("DELETE FROM homepage_top_receivers")
         cursor.execute("""
 
-        INSERT INTO homepage_top_receivers
-            SELECT tippee AS username, claimed_time, sum(amount) AS amount
+        INSERT INTO homepage_top_receivers (username, anonymous, amount, claimed_time)
+            SELECT tippee, anonymous_receiving, sum(amount) AS amount, claimed_time
               FROM (    SELECT DISTINCT ON (tipper, tippee)
                                amount
                              , tippee
@@ -424,7 +424,7 @@ def update_homepage_queries_once(db):
                       ) AS foo
               JOIN participants p ON p.username = tippee
              WHERE is_suspicious IS NOT true
-          GROUP BY tippee, claimed_time
+          GROUP BY tippee, anonymous_receiving, claimed_time
           ORDER BY amount DESC;
 
         """.strip())
