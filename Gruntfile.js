@@ -1,5 +1,8 @@
 var http = require('http');
 var spawn = require('child_process').spawn;
+var fs = require('fs');
+var ini = require('ini');
+var env = ini.parse(fs.readFileSync('local.env', 'utf8'));
 
 module.exports = function(grunt) {
     'use strict';
@@ -56,7 +59,7 @@ module.exports = function(grunt) {
                 reporters: 'dots',
                 frameworks: ['mocha', 'browserify'],
                 urlRoot: '/karma/',
-                proxies: { '/': 'http://127.0.0.1:8537/' },
+                proxies: { '/': 'http://' + env.CANONICAL_HOST + '/' },
                 files: [
                     'www/assets/jquery-1.8.3.min.js',
                     'www/assets/%version/utils.js',
@@ -81,7 +84,7 @@ module.exports = function(grunt) {
     grunt.registerTask('gittip:start', 'Start Gittip test server (if necessary)', function gittipStart() {
         var done = this.async();
 
-        http.get('http://127.0.0.1:8537/', function(res) {
+        http.get('http://' + env.CANONICAL_HOST + '/', function(res) {
             grunt.log.writeln('Gittip seems to be running already. Doing nothing.');
             done();
         })
