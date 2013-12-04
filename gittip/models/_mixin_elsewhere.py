@@ -165,13 +165,6 @@ class MixinElsewhere(object):
         platform = account_elsewhere.platform
         user_id = account_elsewhere.user_id
 
-        # creates new set of merged tips with the 'live' account as receiver/giver
-        # * first condition includes all tips to/from the two users
-        #   to merge them together with sum() and group by
-        # * second condition filters out tips between the two accounts involved
-        #   to remove self tipping
-        # * third skips tips that were already zero
-
         CONSOLIDATE_TIPS_RECEIVING = """
 
             -- Create a new set of tips, one for each current tip *to* either
@@ -182,6 +175,7 @@ class MixinElsewhere(object):
             INSERT INTO tips (ctime, tipper, tippee, amount)
 
                  SELECT min(ctime), tipper, %(live)s AS tippee, sum(amount)
+
                    FROM (   -- Get all the latest tips from everyone to
                             -- everyone.
 
@@ -189,25 +183,19 @@ class MixinElsewhere(object):
                                    ctime, tipper, tippee, amount
                               FROM tips
                           ORDER BY tipper, tippee, mtime DESC
+
                          ) AS unique_tips
-
--- Old condition:
---                  WHERE (tippee=%(live)s OR tippee=%(dead)s)
---                AND NOT (tipper=%(live)s AND tippee=%(dead)s)
---                AND NOT (tipper=%(live)s)
-
--- New condition:
 
                   WHERE (tippee = %(dead)s OR tippee = %(live)s)
                         -- Include tips *to* either the dead or live account.
 
                 AND NOT (tipper = %(dead)s OR tipper = %(live)s)
-                        -- Don't include tips *from* the dead or live account
-                        -- (no self-tipping).
+                        -- Don't include tips *from* the dead or live account,
+                        -- lest we convert cross-tipping to self-tipping.
 
                     AND amount > 0
-                        -- Don't include zeroed out tips.
-
+                        -- Don't include zeroed out tips, so we avoid a no-op
+                        -- zero tip entry.
 
                GROUP BY tipper
 
@@ -215,24 +203,35 @@ class MixinElsewhere(object):
 
         CONSOLIDATE_TIPS_GIVING = """
 
+            -- Create a new set of tips, one for each current tip *from* either
+            -- the dead or the live account. If both the dead and the live
+            -- account were tipping a given user, then we create one new
+            -- combined tip from the live account (via the GROUP BY and sum()).
+
             INSERT INTO tips (ctime, tipper, tippee, amount)
 
                  SELECT min(ctime), %(live)s AS tipper, tippee, sum(amount)
-                   FROM (   SELECT DISTINCT ON (tipper, tippee)
+
+                   FROM (   -- Get all the latest tips from everyone to
+                            -- everyone.
+
+                            SELECT DISTINCT ON (tipper, tippee)
                                    ctime, tipper, tippee, amount
                               FROM tips
                           ORDER BY tipper, tippee, mtime DESC
+
                          ) AS unique_tips
 
--- Old condition:
---                  WHERE (tipper=%(live)s OR tipper=%(dead)s)
---                AND NOT (tipper=%(live)s AND tippee=%(dead)s)
---                AND NOT (tippee=%(live)s)
-
--- New condition:
                   WHERE (tipper = %(dead)s OR tipper = %(live)s)
+                        -- Include tips *from* either the dead or live account.
+
                 AND NOT (tippee = %(dead)s OR tippee = %(live)s)
+                        -- Don't include tips *to* the dead or live account,
+                        -- lest we convert cross-tipping to self-tipping.
+
                     AND amount > 0
+                        -- Don't include zeroed out tips, so we avoid a no-op
+                        -- zero tip entry.
 
                GROUP BY tippee
 
