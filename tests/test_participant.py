@@ -116,22 +116,6 @@ class TestAbsorptions(Harness):
         assert actual is None
 
 class TestBugInTakeOver(Harness):
-    def show_table(self, table):
-        print('\n{:=^80}'.format(table))
-        data = self.db.all('select * from '+table, back_as='namedtuple')
-        if len(data) == 0:
-            return
-        widths = list(len(k) for k in data[0]._fields)
-        for row in data:
-            for i, v in enumerate(row):
-                widths[i] = max(widths[i], len(unicode(v)))
-        for k, w in zip(data[0]._fields, widths):
-            print("{0:{width}}".format(unicode(k), width=w), end=' | ')
-        print()
-        for row in data:
-            for v, w in zip(row, widths):
-                print("{0:{width}}".format(unicode(v), width=w), end=' | ')
-            print()
 
     def self_test(self):
         a = self.db.one("""
@@ -152,11 +136,7 @@ class TestBugInTakeOver(Harness):
         alice_participant = alice.opt_in('alice')[0].participant
         bob_participant = bob.opt_in('bob')[0].participant
         alice_participant.set_tip_to('bob', '1.00')
-        #self.show_table('tips')
-        #self.show_table('absorptions')
         bob_participant.take_over(alice, have_confirmation=True)
-        #self.show_table('tips')
-        #self.show_table('absorptions')
         self.self_test()
 
     def test_take_over_self_tip_zero(self):
@@ -166,11 +146,7 @@ class TestBugInTakeOver(Harness):
         bob_participant = bob.opt_in('bob')[0].participant
         alice_participant.set_tip_to('bob', '1.00')
         alice_participant.set_tip_to('bob', '0.00')
-        #self.show_table('tips')
-        #self.show_table('absorptions')
         bob_participant.take_over(alice, have_confirmation=True)
-        #self.show_table('tips')
-        #self.show_table('absorptions')
         self.self_test()
 
     def test_do_not_take_over_zero_tips_giving(self):
@@ -182,11 +158,7 @@ class TestBugInTakeOver(Harness):
         carl_participant  = carl.opt_in('carl')[0].participant
         carl_participant.set_tip_to('bob', '1.00')
         carl_participant.set_tip_to('bob', '0.00')
-        #self.show_table('tips')
-        #self.show_table('absorptions')
         alice_participant.take_over(carl, have_confirmation=True)
-        #self.show_table('tips')
-        #self.show_table('absorptions')
         ntips = self.db.one("select count(*) from tips")
         assert 2 == ntips
         self.self_test()
@@ -200,11 +172,7 @@ class TestBugInTakeOver(Harness):
         carl_participant  = carl.opt_in('carl')[0].participant
         bob_participant.set_tip_to('carl', '1.00')
         bob_participant.set_tip_to('carl', '0.00')
-        #self.show_table('tips')
-        #self.show_table('absorptions')
         alice_participant.take_over(carl, have_confirmation=True)
-        #self.show_table('tips')
-        #self.show_table('absorptions')
         ntips = self.db.one("select count(*) from tips")
         assert 2 == ntips
         self.self_test()
