@@ -1,3 +1,6 @@
+var http = require('http');
+var spawn = require('child_process').spawn;
+
 module.exports = function(grunt) {
     'use strict';
 
@@ -73,5 +76,34 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-karma');
 
     grunt.registerTask('default', ['test']);
-    grunt.registerTask('test', ['jshint', 'karma:singlerun']);
+    grunt.registerTask('test', ['jshint', 'gittip:start', 'karma:singlerun']);
+
+    grunt.registerTask('gittip:start', 'Start Gittip test server (if necessary)', function gittipStart() {
+        var done = this.async();
+
+        http.get('http://127.0.0.1:8537/', function(res) {
+            grunt.log.writeln('Gittip seems to be running already. Doing nothing.');
+            done();
+        })
+        .on('error', function(e) {
+            grunt.log.write('Starting Gittip server...');
+
+            var started = false;
+            var gittip = spawn('make', ['run']);
+
+            gittip.stdout.setEncoding('utf8');
+
+            gittip.stdout.on('data', function(data) {
+                if (!started && /Greetings, program! Welcome to port 8537\./.test(data)) {
+                    started = true;
+                    grunt.log.writeln('started.');
+                    done();
+                }
+            });
+
+            process.on('exit', function() {
+                gittip.kill();
+            });
+        });
+    });
 };
