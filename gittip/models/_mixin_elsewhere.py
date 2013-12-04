@@ -167,9 +167,9 @@ class MixinElsewhere(object):
 
         CREATE_TEMP_TABLE_FOR_UNIQUE_TIPS = """
 
-        -- Get all the latest tips from everyone to everyone.
-
         CREATE TEMP TABLE __temp_unique_tips ON COMMIT drop AS
+
+            -- Get all the latest tips from everyone to everyone.
 
             SELECT DISTINCT ON (tipper, tippee)
                    ctime, tipper, tippee, amount
