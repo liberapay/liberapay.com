@@ -117,7 +117,7 @@ class MixinElsewhere(object):
 
 
     def take_over(self, account_elsewhere, have_confirmation=False):
-        """Given two objects and a bool, raise NeedConfirmation or return None.
+        """Given an AccountElsewhere and a bool, raise NeedConfirmation or return None.
 
         This method associates an account on another platform (GitHub, Twitter,
         etc.) with the given Gittip participant. Every account elsewhere has an
