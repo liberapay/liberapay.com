@@ -117,7 +117,7 @@ class MixinElsewhere(object):
 
 
     def take_over(self, account_elsewhere, have_confirmation=False):
-        """Given two objects and a bool, raise NeedConfirmation or return None.
+        """Given an AccountElsewhere and a bool, raise NeedConfirmation or return None.
 
         This method associates an account on another platform (GitHub, Twitter,
         etc.) with the given Gittip participant. Every account elsewhere has an
@@ -165,36 +165,71 @@ class MixinElsewhere(object):
         platform = account_elsewhere.platform
         user_id = account_elsewhere.user_id
 
+        CREATE_TEMP_TABLE_FOR_UNIQUE_TIPS = """
+
+        CREATE TEMP TABLE __temp_unique_tips ON COMMIT drop AS
+
+            -- Get all the latest tips from everyone to everyone.
+
+            SELECT DISTINCT ON (tipper, tippee)
+                   ctime, tipper, tippee, amount
+              FROM tips
+          ORDER BY tipper, tippee, mtime DESC;
+
+        """
+
         CONSOLIDATE_TIPS_RECEIVING = """
+
+            -- Create a new set of tips, one for each current tip *to* either
+            -- the dead or the live account. If a user was tipping both the
+            -- dead and the live account, then we create one new combined tip
+            -- to the live account (via the GROUP BY and sum()).
 
             INSERT INTO tips (ctime, tipper, tippee, amount)
 
-                 SELECT min(ctime), tipper, %s AS tippee, sum(amount)
-                   FROM (   SELECT DISTINCT ON (tipper, tippee)
-                                   ctime, tipper, tippee, amount
-                              FROM tips
-                          ORDER BY tipper, tippee, mtime DESC
-                         ) AS unique_tips
-                  WHERE (tippee=%s OR tippee=%s)
-                AND NOT (tipper=%s AND tippee=%s)
-                AND NOT (tipper=%s)
+                 SELECT min(ctime), tipper, %(live)s AS tippee, sum(amount)
+
+                   FROM __temp_unique_tips
+
+                  WHERE (tippee = %(dead)s OR tippee = %(live)s)
+                        -- Include tips *to* either the dead or live account.
+
+                AND NOT (tipper = %(dead)s OR tipper = %(live)s)
+                        -- Don't include tips *from* the dead or live account,
+                        -- lest we convert cross-tipping to self-tipping.
+
+                    AND amount > 0
+                        -- Don't include zeroed out tips, so we avoid a no-op
+                        -- zero tip entry.
+
                GROUP BY tipper
 
         """
 
         CONSOLIDATE_TIPS_GIVING = """
 
+            -- Create a new set of tips, one for each current tip *from* either
+            -- the dead or the live account. If both the dead and the live
+            -- account were tipping a given user, then we create one new
+            -- combined tip from the live account (via the GROUP BY and sum()).
+
             INSERT INTO tips (ctime, tipper, tippee, amount)
 
-                 SELECT min(ctime), %s AS tipper, tippee, sum(amount)
-                   FROM (   SELECT DISTINCT ON (tipper, tippee)
-                                   ctime, tipper, tippee, amount
-                              FROM tips
-                          ORDER BY tipper, tippee, mtime DESC
-                         ) AS unique_tips
-                  WHERE (tipper=%s OR tipper=%s)
-                AND NOT (tipper=%s AND tippee=%s)
-                AND NOT (tippee=%s)
+                 SELECT min(ctime), %(live)s AS tipper, tippee, sum(amount)
+
+                   FROM __temp_unique_tips
+
+                  WHERE (tipper = %(dead)s OR tipper = %(live)s)
+                        -- Include tips *from* either the dead or live account.
+
+                AND NOT (tippee = %(dead)s OR tippee = %(live)s)
+                        -- Don't include tips *to* the dead or live account,
+                        -- lest we convert cross-tipping to self-tipping.
+
+                    AND amount > 0
+                        -- Don't include zeroed out tips, so we avoid a no-op
+                        -- zero tip entry.
+
                GROUP BY tippee
 
         """
@@ -203,9 +238,9 @@ class MixinElsewhere(object):
 
             INSERT INTO tips (ctime, tipper, tippee, amount)
 
-                 SELECT DISTINCT ON (tipper) ctime, tipper, tippee, 0 AS amount
-                   FROM tips
-                  WHERE tippee=%s
+                SELECT ctime, tipper, tippee, 0 AS amount
+                  FROM __temp_unique_tips
+                 WHERE tippee=%s AND amount > 0
 
         """
 
@@ -213,9 +248,9 @@ class MixinElsewhere(object):
 
             INSERT INTO tips (ctime, tipper, tippee, amount)
 
-                 SELECT DISTINCT ON (tippee) ctime, tipper, tippee, 0 AS amount
-                   FROM tips
-                  WHERE tipper=%s
+                SELECT ctime, tipper, tippee, 0 AS amount
+                  FROM __temp_unique_tips
+                 WHERE tipper=%s AND amount > 0
 
         """
 
@@ -325,8 +360,9 @@ class MixinElsewhere(object):
                 # ===============
 
                 x, y = self.username, other_username
-                cursor.run(CONSOLIDATE_TIPS_RECEIVING, (x, x,y, x,y, x))
-                cursor.run(CONSOLIDATE_TIPS_GIVING, (x, x,y, x,y, x))
+                cursor.run(CREATE_TEMP_TABLE_FOR_UNIQUE_TIPS)
+                cursor.run(CONSOLIDATE_TIPS_RECEIVING, dict(live=x, dead=y))
+                cursor.run(CONSOLIDATE_TIPS_GIVING, dict(live=x, dead=y))
                 cursor.run(ZERO_OUT_OLD_TIPS_RECEIVING, (other_username,))
                 cursor.run(ZERO_OUT_OLD_TIPS_GIVING, (other_username,))
 
