@@ -115,7 +115,8 @@ class TestAbsorptions(Harness):
         actual = Participant.from_username('deadbeef')
         assert actual is None
 
-class TestBugInTakeOver(Harness):
+
+class TestTakeOver(Harness):
 
     def self_test(self):
         a = self.db.one("""
@@ -130,7 +131,7 @@ class TestBugInTakeOver(Harness):
                      """)
         assert a == 0
 
-    def test_take_over_self_tip(self):
+    def test_cross_tip_doesnt_become_self_tip(self):
         alice = TwitterAccount(1, dict(screen_name='alice'))
         bob   = TwitterAccount(2, dict(screen_name='bob'))
         alice_participant = alice.opt_in('alice')[0].participant
@@ -139,7 +140,7 @@ class TestBugInTakeOver(Harness):
         bob_participant.take_over(alice, have_confirmation=True)
         self.self_test()
 
-    def test_take_over_self_tip_zero(self):
+    def test_zero_cross_tip_doesnt_become_self_tip(self):
         alice = TwitterAccount(1, dict(screen_name='alice'))
         bob   = TwitterAccount(2, dict(screen_name='bob'))
         alice_participant = alice.opt_in('alice')[0].participant
