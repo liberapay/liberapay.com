@@ -64,7 +64,7 @@ first_time = qs.get('first_time') == '1'
 
             {% endif %}
             {% if participant == user %}
-            <h2>You give $<span class="total-giving">{{ total }}</span> per
+            <h2>You give <span class="my-total-giving">${{ total }}</span> per
                 week</h2>
             {% else %}
             <h2>{{ participant.username }} gives ${{ total }} per week</h2>

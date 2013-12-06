@@ -187,9 +187,7 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
 {% block box %}
 <div class="on-community">
     <h2 class="pad-sign">{{ community.name }}</h2>
-    <div class="number">
-        <span class="total-giving">{{ community.nmembers }}</span>
-    </div>
+    <div class="number">{{ community.nmembers }}</div>
     <div class="unit pad-sign">member{{ '' if community.nmembers == 1 else 's' }}</div>
 </div>
 <div class="nav level-1">

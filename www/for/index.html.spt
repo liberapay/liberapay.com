@@ -31,9 +31,7 @@ members get their own page on Gittip.</p>
 {% block box %}
 <div class="on-community">
     <h2 class="pad-sign">There are</h2>
-    <div class="number">
-        <span class="total-giving">{{ ncommunities }}</span>
-    </div>
+    <div class="number">{{ ncommunities }}</div>
     <div class="unit pad-sign">
         communit{{ plural(ncommunities, 'y', 'ies') }} on Gittip.
     </div>
