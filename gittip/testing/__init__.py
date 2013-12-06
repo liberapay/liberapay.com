@@ -73,7 +73,7 @@ class Harness(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.db = gittip.db
+        cls.db = test_website.db
         cls._tablenames = cls.db.all("SELECT tablename FROM pg_tables "
                                      "WHERE schemaname='public'")
         cls.clear_tables(cls.db, cls._tablenames[:])
@@ -155,7 +155,7 @@ class GittipPaydayTest(Harness):
 
 def start_payday(*data):
     context = load(*data)
-    context.payday = Payday(gittip.db)
+    context.payday = Payday(test_website.db)
     ts_start = context.payday.start()
     context.payday.zero_out_pending(ts_start)
     context.ts_start = ts_start

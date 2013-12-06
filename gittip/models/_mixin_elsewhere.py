@@ -419,7 +419,5 @@ def utter_hack(records):
 
 class UtterHack(MixinElsewhere):
     def __init__(self, rec):
-        import gittip
-        self.db = gittip.db
         for name in rec._fields:
             setattr(self, name, getattr(rec, name))
