@@ -130,7 +130,8 @@ def update_homepage_queries():
             utils.update_global_stats(website)
             utils.update_homepage_queries_once(website.db)
         except:
-            tell_sentry(None)
+            if tell_sentry:
+                tell_sentry(None)
         time.sleep(UPDATE_HOMEPAGE_EVERY)
 
 homepage_updater = threading.Thread(target=update_homepage_queries)
