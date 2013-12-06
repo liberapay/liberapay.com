@@ -124,7 +124,7 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
     givers = utter_hack(website.db, query_cache.all("""
     -- top givers on community page
 
-        SELECT tipper AS username, anonymous_giving, sum(amount) AS amount
+        SELECT tipper AS username, anonymous_giving AS anonymous, sum(amount) AS amount
           FROM (    SELECT DISTINCT ON (tipper, tippee)
                            amount
                          , tipper
@@ -155,7 +155,7 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
     receivers = utter_hack(website.db, query_cache.all("""
     -- top receivers on community page
 
-        SELECT tippee AS username, anonymous_receiving, claimed_time, sum(amount) AS amount
+        SELECT tippee AS username, anonymous_receiving AS anonymous, claimed_time, sum(amount) AS amount
           FROM (    SELECT DISTINCT ON (tipper, tippee)
                            amount
                          , tippee
