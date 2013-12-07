@@ -33,7 +33,9 @@
                 <span class="total-receiving">{{ receiving }}</span>
             </div>
             <div class="unit pad-sign">
-                per week{% if g > 0 %}, and gives {{ giving }}{% endif %}
+                per week{% if g > 0 %}, and gives
+                    <span class="{{prefix}}total-giving">{{ giving }}</span>
+                {% endif %}
             </div>
         {% else %}
             {% set age = participant.get_age_in_seconds() %}
