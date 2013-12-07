@@ -70,7 +70,7 @@ class TestAbsorptions(Harness):
                                  , claimed_time=hour_ago
                                  , last_bill_result=''
                                   )
-        deadbeef = TwitterAccount('1', {'screen_name': 'deadbeef'})
+        deadbeef = TwitterAccount(self.db, '1', {'screen_name': 'deadbeef'})
         self.deadbeef_original_username = deadbeef.participant
 
         Participant.from_username('carl').set_tip_to('bob', '1.00')
@@ -132,8 +132,8 @@ class TestTakeOver(Harness):
         assert a == 0
 
     def test_cross_tip_doesnt_become_self_tip(self):
-        alice = TwitterAccount(1, dict(screen_name='alice'))
-        bob   = TwitterAccount(2, dict(screen_name='bob'))
+        alice = TwitterAccount(self.db, 1, dict(screen_name='alice'))
+        bob   = TwitterAccount(self.db, 2, dict(screen_name='bob'))
         alice_participant = alice.opt_in('alice')[0].participant
         bob_participant = bob.opt_in('bob')[0].participant
         alice_participant.set_tip_to('bob', '1.00')
@@ -141,8 +141,8 @@ class TestTakeOver(Harness):
         self.self_test()
 
     def test_zero_cross_tip_doesnt_become_self_tip(self):
-        alice = TwitterAccount(1, dict(screen_name='alice'))
-        bob   = TwitterAccount(2, dict(screen_name='bob'))
+        alice = TwitterAccount(self.db, 1, dict(screen_name='alice'))
+        bob   = TwitterAccount(self.db, 2, dict(screen_name='bob'))
         alice_participant = alice.opt_in('alice')[0].participant
         bob_participant = bob.opt_in('bob')[0].participant
         alice_participant.set_tip_to('bob', '1.00')
@@ -151,9 +151,9 @@ class TestTakeOver(Harness):
         self.self_test()
 
     def test_do_not_take_over_zero_tips_giving(self):
-        alice = TwitterAccount(1, dict(screen_name='alice'))
-        bob   = TwitterAccount(2, dict(screen_name='bob'))
-        carl  = TwitterAccount(3, dict(screen_name='carl'))
+        alice = TwitterAccount(self.db, 1, dict(screen_name='alice'))
+        bob   = TwitterAccount(self.db, 2, dict(screen_name='bob'))
+        carl  = TwitterAccount(self.db, 3, dict(screen_name='carl'))
         alice_participant = alice.opt_in('alice')[0].participant
         bob_participant   = bob.opt_in('bob')[0].participant
         carl_participant  = carl.opt_in('carl')[0].participant
@@ -165,9 +165,9 @@ class TestTakeOver(Harness):
         self.self_test()
 
     def test_do_not_take_over_zero_tips_receiving(self):
-        alice = TwitterAccount(1, dict(screen_name='alice'))
-        bob   = TwitterAccount(2, dict(screen_name='bob'))
-        carl  = TwitterAccount(3, dict(screen_name='carl'))
+        alice = TwitterAccount(self.db, 1, dict(screen_name='alice'))
+        bob   = TwitterAccount(self.db, 2, dict(screen_name='bob'))
+        carl  = TwitterAccount(self.db, 3, dict(screen_name='carl'))
         alice_participant = alice.opt_in('alice')[0].participant
         bob_participant   = bob.opt_in('bob')[0].participant
         carl_participant  = carl.opt_in('carl')[0].participant
@@ -185,7 +185,7 @@ class TestParticipant(Harness):
         now = utcnow()
         for idx, username in enumerate(['alice', 'bob', 'carl'], start=1):
             self.make_participant(username, claimed_time=now)
-            twitter_account = TwitterAccount(idx, {'screen_name': username})
+            twitter_account = TwitterAccount(self.db, idx, {'screen_name': username})
             Participant.from_username(username).take_over(twitter_account)
 
     def test_bob_is_singular(self):
@@ -584,19 +584,19 @@ class Tests(Harness):
         assert resolved is None, resolved
 
     def test_ru_returns_bitbucket_url_for_stub_from_bitbucket(self):
-        unclaimed = BitbucketAccount('1234', {'username': 'alice'})
+        unclaimed = BitbucketAccount(self.db, '1234', {'username': 'alice'})
         stub = Participant.from_username(unclaimed.participant)
         actual = stub.resolve_unclaimed()
         assert actual == "/on/bitbucket/alice/"
 
     def test_ru_returns_github_url_for_stub_from_github(self):
-        unclaimed = GitHubAccount('1234', {'login': 'alice'})
+        unclaimed = GitHubAccount(self.db, '1234', {'login': 'alice'})
         stub = Participant.from_username(unclaimed.participant)
         actual = stub.resolve_unclaimed()
         assert actual == "/on/github/alice/"
 
     def test_ru_returns_twitter_url_for_stub_from_twitter(self):
-        unclaimed = TwitterAccount('1234', {'screen_name': 'alice'})
+        unclaimed = TwitterAccount(self.db, '1234', {'screen_name': 'alice'})
         stub = Participant.from_username(unclaimed.participant)
         actual = stub.resolve_unclaimed()
         assert actual == "/on/twitter/alice/"

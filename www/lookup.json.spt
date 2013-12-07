@@ -1,4 +1,3 @@
-from gittip import db
 SQL = "SELECT username, username_lower, id FROM participants " \
       "WHERE username_lower LIKE %s " \
       "ORDER BY username_lower LIMIT 5"
@@ -12,7 +11,7 @@ if 'query' not in qs:
 else:
     query = qs['query']
     query_lower = query.lower()
-    out = db.all(SQL, (query_lower + '%',))
+    out = website.db.all(SQL, (query_lower + '%',))
     out.reverse()
     for rec in out:
         if query_lower == rec.username_lower:

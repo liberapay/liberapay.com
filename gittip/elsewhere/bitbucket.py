@@ -5,7 +5,7 @@ import requests
 from aspen import json, log, Response
 from aspen.http.request import UnicodeWithParams
 from aspen.utils import typecheck
-from gittip.elsewhere import AccountElsewhere, _resolve
+from gittip.elsewhere import AccountElsewhere
 
 
 BASE_API_URL = "https://bitbucket.org/api/1.0"
@@ -17,10 +17,6 @@ class BitbucketAccount(AccountElsewhere):
     def get_url(self):
         url = "https://bitbucket.org/%s" % self.user_info["username"]
         return url
-
-
-def resolve(login):
-    return _resolve(u'bitbucket', u'login', login)
 
 
 def oauth_url(website, action, then=""):
@@ -37,7 +33,7 @@ def oauth_url(website, action, then=""):
     return "/on/bitbucket/redirect?action=%s&then=%s" % (action, then)
 
 
-def get_user_info(username):
+def get_user_info(db, username):
     """Get the given user's information from the DB or failing that, bitbucket.
 
     :param username:
@@ -47,7 +43,7 @@ def get_user_info(username):
         A dictionary containing bitbucket specific information for the user.
     """
     typecheck(username, (unicode, UnicodeWithParams))
-    rec = gittip.db.one( "SELECT user_info FROM elsewhere "
+    rec = db.one( "SELECT user_info FROM elsewhere "
                          "WHERE platform='bitbucket' "
                          "AND user_info->'username' = %s"
                        , (username,)

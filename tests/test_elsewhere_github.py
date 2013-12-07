@@ -9,14 +9,6 @@ from gittip.testing.client import TestClient
 
 class TestElsewhereGithub(Harness):
 
-    def test_github_resolve_resolves_correctly(self):
-        alice_on_github = github.GitHubAccount("1", {'login': 'alice'})
-        alice_on_github.opt_in('alice')
-
-        expected = 'alice'
-        actual = github.resolve(u'alice')
-        assert actual == expected
-
     @patch('gittip.elsewhere.github.requests')
     def test_github_user_info_status_handling(self, requests):
         client = TestClient()
@@ -34,7 +26,7 @@ class TestElsewhereGithub(Harness):
 
 
     def test_get_user_info_gets_user_info(self):
-        github.GitHubAccount("1", {'login': 'alice'}).opt_in('alice')
+        github.GitHubAccount(self.db, "1", {'login': 'alice'}).opt_in('alice')
         expected = {"login": "alice"}
-        actual = github.get_user_info('alice')
+        actual = github.get_user_info(self.db, 'alice')
         assert actual == expected

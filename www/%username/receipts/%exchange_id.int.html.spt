@@ -1,5 +1,4 @@
 from aspen import Response
-from gittip import db
 from gittip.utils import get_participant, COUNTRIES_MAP
 from gittip.billing import BalancedCard
 
@@ -16,7 +15,7 @@ else:
     raise Response(404)
 
 card = BalancedCard(participant.balanced_account_uri)
-exchange = db.one( "SELECT * FROM exchanges "
+exchange = website.db.one( "SELECT * FROM exchanges "
                    "WHERE id=%s AND participant=%s"
                  , (path['exchange_id'], path['username'])
                  , back_as=dict)

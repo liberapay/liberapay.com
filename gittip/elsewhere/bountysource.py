@@ -2,7 +2,7 @@ import os
 import md5
 import time
 from gittip.models.participant import Participant
-from gittip.elsewhere import AccountElsewhere, _resolve
+from gittip.elsewhere import AccountElsewhere
 
 
 class BountysourceAccount(AccountElsewhere):
@@ -14,10 +14,6 @@ class BountysourceAccount(AccountElsewhere):
         # https://github.com/gittip/www.gittip.com/pull/1369.
 
         raise NotImplementedError
-
-
-def resolve(login):
-    return _resolve(u'bountysource', u'login', login)
 
 
 def oauth_url(website, participant, redirect_url=None):

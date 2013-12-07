@@ -488,17 +488,13 @@ class Participant(Model, MixinElsewhere, MixinTeam):
         return tip_amounts, npatrons, contributed
 
 
-    def get_giving_for_profile(self, db=None):
+    def get_giving_for_profile(self):
         """Given a participant id and a date, return a list and a Decimal.
 
         This function is used to populate a participant's page for their own
         viewing pleasure.
 
-        A half-injected dependency, that's what db is.
-
         """
-        if db is None:
-            from gittip import db
 
         TIPS = """\
 
@@ -521,7 +517,7 @@ class Participant(Model, MixinElsewhere, MixinTeam):
                    , username_lower
 
         """
-        tips = db.all(TIPS, (self.username,))
+        tips = self.db.all(TIPS, (self.username,))
 
         UNCLAIMED_TIPS = """\
 
@@ -548,7 +544,7 @@ class Participant(Model, MixinElsewhere, MixinTeam):
                    , lower(user_info->'login')
 
         """
-        unclaimed_tips = db.all(UNCLAIMED_TIPS, (self.username,))
+        unclaimed_tips = self.db.all(UNCLAIMED_TIPS, (self.username,))
 
 
         # Compute the total.

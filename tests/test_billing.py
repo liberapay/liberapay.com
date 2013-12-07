@@ -254,7 +254,7 @@ class TestBillingClear(TestBillingBase):
              WHERE username=%s
 
         """
-        gittip.db.run(MURKY, ('alice',))
+        self.db.run(MURKY, ('alice',))
 
         billing.clear(self.db, u"credit card", 'alice', self.balanced_account_uri)
 
@@ -285,7 +285,7 @@ class TestBillingClear(TestBillingBase):
              WHERE username=%s
 
         """
-        gittip.db.run(MURKY, ('alice',))
+        self.db.run(MURKY, ('alice',))
 
         billing.clear(self.db, u"bank account", 'alice', 'something')
 
@@ -301,7 +301,7 @@ class TestBillingClear(TestBillingBase):
 class TestBillingStoreError(TestBillingBase):
     def test_store_error_stores_bill_error(self):
         billing.store_error(self.db, u"credit card", "alice", "cheese is yummy")
-        rec = gittip.db.one("select * from participants where "
+        rec = self.db.one("select * from participants where "
                             "username='alice'")
         expected = "cheese is yummy"
         actual = rec.last_bill_result
@@ -310,6 +310,6 @@ class TestBillingStoreError(TestBillingBase):
     def test_store_error_stores_ach_error(self):
         for message in ['cheese is yummy', 'cheese smells like my vibrams']:
             billing.store_error(self.db, u"bank account", 'alice', message)
-            rec = gittip.db.one("select * from participants "
+            rec = self.db.one("select * from participants "
                                 "where username='alice'")
             assert rec.last_ach_result == message
