@@ -4,10 +4,10 @@ from collections import defaultdict
 from decimal import Decimal
 
 from aspen import Response
-from gittip import db, CARDINALS
+from gittip import CARDINALS
 
 [---]
-_suspicious = db.all("""
+_suspicious = website.db.all("""
 
     SELECT username
          , balance
@@ -22,7 +22,7 @@ _suspicious = db.all("""
 
 def suspicious():
     for person in _suspicious:
-        person['gives_to'] = db.all("""
+        person['gives_to'] = website.db.all("""
 
             SELECT DISTINCT tippee AS username
                  , is_suspicious
@@ -36,7 +36,7 @@ def suspicious():
 
 
         """, (person['username'],), back_as=dict)
-        person['receives_from'] = db.all("""
+        person['receives_from'] = website.db.all("""
 
             SELECT DISTINCT tipper AS username
                  , is_suspicious
@@ -50,7 +50,7 @@ def suspicious():
 
         """, (person['username'],), back_as=dict)
 
-        person['transfers'] = db.all("""
+        person['transfers'] = website.db.all("""
 
             SELECT tippee
                  , tipper
@@ -65,7 +65,7 @@ def suspicious():
         """, (person['username'], person['username']), \
                                                  back_as=dict)
 
-        person['exchanges'] = db.all("""
+        person['exchanges'] = website.db.all("""
 
             SELECT amount, fee, timestamp
               FROM exchanges
@@ -120,7 +120,7 @@ assert total_legit == total_charged - total_withdrawn - gittip_fees - balanced_f
 
 nweeks = CARDINALS[((latest.date() - earliest.date()).days // 7) + 1]
 
-overall = db.one("""
+overall = website.db.one("""
 
     SELECT sum(amount + fee), count(amount)
       FROM exchanges
@@ -152,7 +152,7 @@ total_fraudulent = pad(total_fraudulent, w)[:-3] + ('&nbsp;' * 3)
 percentage_fraudulent = pad(percentage_fraudulent, w)
 
 
-bystander_balances = db.all("""
+bystander_balances = website.db.all("""
 
     SELECT username, balance FROM participants WHERE username = ANY(%s)
 

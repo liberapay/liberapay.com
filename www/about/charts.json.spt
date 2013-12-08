@@ -1,6 +1,4 @@
-from gittip import db
-[---]
-charts = db.all("""\
+charts = website.db.all("""\
 
     SELECT ts_start::date   AS date
          , nparticipants    AS total_users

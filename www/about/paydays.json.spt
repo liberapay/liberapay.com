@@ -1,6 +1,4 @@
-from gittip import db
-[---]
-paydays = db.all("""\
+paydays = website.db.all("""\
 
     SELECT ts_start
          , ts_end

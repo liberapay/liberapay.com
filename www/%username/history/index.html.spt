@@ -2,8 +2,9 @@ from decimal import Decimal
 
 from aspen import Response, log
 from aspen.utils import to_age
-from gittip import db
 from gittip.utils import get_participant
+
+db = website.db
 
 
 class Paydays(object):

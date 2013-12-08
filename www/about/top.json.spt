@@ -1,6 +1,5 @@
 """This is a horribly WET duplicate of www/index.html.
 """
-from gittip import db
 [---]
 try:
     limit = min(int(qs.get('limit', 10)), 100)
@@ -8,7 +7,7 @@ try:
 except ValueError:
     raise Response(400)
 
-givers = db.all("""
+givers = website.db.all("""
 
     SELECT tipper AS username, anonymous, sum(amount) AS amount
       FROM (    SELECT DISTINCT ON (tipper, tippee)
@@ -36,7 +35,7 @@ givers = db.all("""
 # XXX I'm nearly positive that one or both of givers and receivers can contain
 # orphan accounts. See https://github.com/gittip/www.gittip.com/issues/650
 
-receivers = db.all("""
+receivers = website.db.all("""
 
     SELECT tippee AS username, sum(amount) AS amount
       FROM (    SELECT DISTINCT ON (tipper, tippee)

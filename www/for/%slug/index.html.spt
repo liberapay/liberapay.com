@@ -2,7 +2,7 @@ from collections import defaultdict
 
 from aspen import Response
 from aspen.utils import to_age
-from gittip import db, ORDINALS
+from gittip import ORDINALS
 from gittip.elsewhere import github
 from gittip.models.community import name_pattern, slugize
 from gittip.models.participant import Participant
@@ -11,7 +11,7 @@ from gittip.models._mixin_elsewhere import utter_hack
 
 LUXURY = 4
 
-query_cache = QueryCache(db, threshold=20)
+query_cache = QueryCache(website.db, threshold=20)
 
 
 def _to_age(participant):
@@ -32,7 +32,7 @@ THRESHOLD = website.NMEMBERS_THRESHOLD
 def get_first_ten():
     """Return a dictionary mapping community slugs to ordinal numbers.
     """
-    holy_heck = db.all("SELECT * FROM communities ORDER BY mtime ASC")
+    holy_heck = website.db.all("SELECT * FROM communities ORDER BY mtime ASC")
     _first_ten = []
     communities = defaultdict(lambda: (defaultdict(set), defaultdict(int)))
     for detail in holy_heck:
@@ -71,10 +71,10 @@ try:
 except ValueError:
     raise Response(400)
 
-community = db.one( "SELECT community_summary.*::community_summary "
-                    "FROM community_summary WHERE slug=%s"
-                  , (slug,)
-                   )
+community = website.db.one( "SELECT community_summary.*::community_summary "
+                            "FROM community_summary WHERE slug=%s"
+                          , (slug,)
+                          )
 if community is None:
     class StubCommunity:
         name = _slug
