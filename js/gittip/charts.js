@@ -47,8 +47,15 @@ Gittip.charts.make = function(series) {
     var H = $('.chart').height();
     var W = $('.chart').width();
     var nweeks = series.length;
-    var w = W / nweeks;
-    if(!subpixel) w = Math.floor(w);
+
+    var w, wstr;
+    if(subpixel) {
+        w    = 1 / nweeks * 100;
+        wstr = w.toFixed(10) + '%';
+    } else {
+        w    = Math.floor(W / nweeks)
+        wstr = w.toString() + 'px';
+    }
 
     $('.n-weeks').text(nweeks);
 
@@ -97,11 +104,14 @@ Gittip.charts.make = function(series) {
         }
 
         var y = parseFloat(y);
-        var h = Math.ceil(((y / N) * H));
-        week.height(H);
-        week.width(w);
-        week.css({"left": w * (nweeks - i - 1)});
-        shaded.css({"height": h});
+        var h = Math.ceil(y / N * H);
+        var n = nweeks - i - 1;
+        week.css({
+            height: H,
+            width: wstr,
+            left: subpixel ? 'calc('+ wstr +' * '+ n +')' : w * n
+        });
+        shaded.css({height: h});
         return week;
     }
 
@@ -121,10 +131,6 @@ Gittip.charts.make = function(series) {
                               ));
         }
     }
-
-    $('.week').width(w);
-    $('.shaded').width(w);
-
 
     // Wire up behaviors.
     // ==================
