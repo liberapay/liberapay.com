@@ -15,7 +15,7 @@ from gittip.models.participant import Participant
 
 if path['screen_name'].startswith('@'):
     request.redirect('../'+path['screen_name'][1:]+'/')
-user_info = twitter.get_user_info(path['screen_name'])
+user_info = twitter.get_user_info(website.db, path['screen_name'])
 
 
 # Try to load from Gittip.
@@ -27,7 +27,7 @@ if not name:
     name = username
 url = user_info['html_url'] = "https://twitter.com/%s" % username
 
-account = twitter.TwitterAccount(user_info['id'], user_info)
+account = twitter.TwitterAccount(website.db, user_info['id'], user_info)
 participant = Participant.from_username(account.participant)
 if account.is_claimed:
     request.redirect('/%s/' % participant.username)

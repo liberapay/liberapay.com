@@ -10,7 +10,7 @@ from gittip.testing.client import TestClient
 class Tests(Harness):
 
     def hit_anonymous(self, method='GET', expected_code=200):
-        user, ignored = TwitterAccount('alice', {}).opt_in('alice')
+        user, ignored = TwitterAccount(self.db, 'alice', {}).opt_in('alice')
 
         client = TestClient()
         response = client.get('/')

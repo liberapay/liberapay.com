@@ -8,13 +8,13 @@ from gittip.testing import Harness
 class TestElsewhereBitbucket(Harness):
 
     def test_get_user_info_gets_user_info(self):
-        bitbucket.BitbucketAccount("1", {'username': 'alice'}).opt_in('alice')
+        bitbucket.BitbucketAccount(self.db, "1", {'username': 'alice'}).opt_in('alice')
         expected = {"username": "alice"}
-        actual = bitbucket.get_user_info('alice')
+        actual = bitbucket.get_user_info(self.db, 'alice')
         assert actual == expected
 
     def test_get_user_info_gets_user_info_from_UnicodeWithParams(self):
-        bitbucket.BitbucketAccount("1", {'username': 'alice'}).opt_in('alice')
+        bitbucket.BitbucketAccount(self.db, "1", {'username': 'alice'}).opt_in('alice')
         expected = {"username": "alice"}
-        actual = bitbucket.get_user_info(UnicodeWithParams('alice', {}))
+        actual = bitbucket.get_user_info(self.db, UnicodeWithParams('alice', {}))
         assert actual == expected

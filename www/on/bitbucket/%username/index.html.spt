@@ -16,7 +16,7 @@ from gittip.models.participant import Participant
 # Try to load from Bitbucket.
 # ===========================
 
-user_info = bitbucket.get_user_info(path['username'])
+user_info = bitbucket.get_user_info(website.db, path['username'])
 
 # Try to load from Gittip.
 # ========================
@@ -37,7 +37,7 @@ if is_team is None:
     img_src = "/assets/-/avatar-default.gif"
 elif not is_team:
     usertype = "user"
-    account = bitbucket.BitbucketAccount(unicode(username), user_info)
+    account = bitbucket.BitbucketAccount(website.db, unicode(username), user_info)
     locked = account.is_locked
     lock_action = "unlock" if account.is_locked else "lock"
     if account.is_claimed:
@@ -96,7 +96,7 @@ elif is_team:
             tippee = known_map[member['username']]
         else:
             seq = not_on_gittip
-            elsewhere = bitbucket.BitbucketAccount(member['username'], member)
+            elsewhere = bitbucket.BitbucketAccount(website.db, member['username'], member)
             tippee = elsewhere.participant
         tip_to = None if user.ANON else user.participant.get_tip_to(tippee)
         seq.append((member, tippee, tip_to))

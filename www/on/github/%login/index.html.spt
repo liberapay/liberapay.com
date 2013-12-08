@@ -15,7 +15,7 @@ from gittip.models.participant import Participant
 # Try to load from GitHub.
 # ========================
 
-user_info = github.get_user_info(path['login'])
+user_info = github.get_user_info(website.db, path['login'])
 
 
 # Try to load from Gittip.
@@ -29,7 +29,7 @@ if not name:
 
 usertype = user_info.get("type", "unknown type of account").lower()
 if usertype == "user":
-    account = github.GitHubAccount(user_info['id'], user_info)
+    account = github.GitHubAccount(website.db, user_info['id'], user_info)
     locked = account.is_locked
     lock_action = "unlock" if account.is_locked else "lock"
     if account.is_claimed:
@@ -77,7 +77,7 @@ elif usertype == "organization":
             tippee = known_map[member['login']]
         else:
             seq = not_on_gittip
-            elsewhere = github.GitHubAccount(member['id'], member)
+            elsewhere = github.GitHubAccount(website.db, member['id'], member)
             tippee = elsewhere.participant
         tip_to = None if user.ANON else user.participant.get_tip_to(tippee)
         seq.append((member, tippee, tip_to))

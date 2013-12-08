@@ -25,7 +25,7 @@ import stripe
 from aspen.utils import typecheck
 
 
-def get_balanced_account(username, balanced_account_uri):
+def get_balanced_account(db, username, balanced_account_uri):
     """Find or create a balanced.Account.
     """
     typecheck( username, unicode
@@ -51,7 +51,7 @@ def get_balanced_account(username, balanced_account_uri):
                  WHERE username=%s
 
         """
-        gittip.db.run(BALANCED_ACCOUNT, (account.uri, username))
+        db.run(BALANCED_ACCOUNT, (account.uri, username))
         account.meta['username'] = username
         account.save()  # HTTP call under here
     else:
@@ -59,7 +59,7 @@ def get_balanced_account(username, balanced_account_uri):
     return account
 
 
-def associate(thing, username, balanced_account_uri, balanced_thing_uri):
+def associate(db, thing, username, balanced_account_uri, balanced_thing_uri):
     """Given four unicodes, return a unicode.
 
     This function attempts to associate the credit card or bank account details
@@ -79,7 +79,8 @@ def associate(thing, username, balanced_account_uri, balanced_thing_uri):
     if isinstance(balanced_account_uri, balanced.Account):
         balanced_account = balanced_account_uri
     else:
-        balanced_account = get_balanced_account( username
+        balanced_account = get_balanced_account( db
+                                               , username
                                                , balanced_account_uri
                                                 )
     invalidate_on_balanced(thing, balanced_account.uri)
@@ -101,7 +102,7 @@ def associate(thing, username, balanced_account_uri, balanced_thing_uri):
         error = ''
     typecheck(error, unicode)
 
-    gittip.db.run(SQL, (error, username))
+    db.run(SQL, (error, username))
     return error
 
 
@@ -126,7 +127,7 @@ def invalidate_on_balanced(thing, balanced_account_uri):
             _thing.save()
 
 
-def clear(thing, username, balanced_account_uri):
+def clear(db, thing, username, balanced_account_uri):
     typecheck( thing, unicode
              , username, unicode
              , balanced_account_uri, unicode
@@ -140,10 +141,10 @@ def clear(thing, username, balanced_account_uri):
          WHERE username=%%s
 
     """ % ("bill" if thing == "credit card" else "ach")
-    gittip.db.run(CLEAR, (username,))
+    db.run(CLEAR, (username,))
 
 
-def store_error(thing, username, msg):
+def store_error(db, thing, username, msg):
     typecheck(thing, unicode, username, unicode, msg, unicode)
     assert thing in ("credit card", "bank account"), thing
     ERROR = """\
@@ -153,7 +154,7 @@ def store_error(thing, username, msg):
          WHERE username=%%s
 
     """ % ("bill" if thing == "credit card" else "ach")
-    gittip.db.run(ERROR, (msg, username))
+    db.run(ERROR, (msg, username))
 
 
 # Card
