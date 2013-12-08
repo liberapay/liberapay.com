@@ -1,5 +1,29 @@
 Gittip.charts = {};
 
+
+// Some modern browsers (Safari) don't properly support subpixel rendering,
+// which means that it's impossible for elements to have fractional pixel
+// widths and have them render flush against one another. That's important
+// for graphs, so we feature-detect this behavior.
+//
+// Adapted from: http://stackoverflow.com/a/12709683/2651774
+//
+Gittip.subpixel_rendering_supported = function() {
+    var test = $(
+      '<div style="width: 200px">' +
+        '<div style="float: left; width: 100.5px">a</div>' +
+        '<div style="float: left; width: 100.5px">b</div>' +
+      '</div>'
+    ).appendTo('body');
+
+    var children  = test.children();
+    var supported = children[0].offsetTop !== children[1].offsetTop;
+    test.remove();
+
+    return supported;
+}
+
+
 Gittip.charts.make = function(series) {
     // Takes an array of time series data.
 
@@ -7,6 +31,8 @@ Gittip.charts.make = function(series) {
         $('.chart-wrapper').remove();
         return;
     }
+
+    var subpixel = Gittip.subpixel_rendering_supported();
 
 
     // Gather charts.
@@ -28,11 +54,17 @@ Gittip.charts.make = function(series) {
     var H = $('.chart').height();
     var W = $('.chart').width();
     var nweeks = series.length;
-    var w = Math.floor((W - 20) / nweeks);
-    var W = w * nweeks;
+
+    var w, wstr;
+    if(subpixel) {
+        w    = 1 / nweeks * 100;
+        wstr = w.toFixed(10) + '%';
+    } else {
+        w    = Math.floor(W / nweeks)
+        wstr = w.toString() + 'px';
+    }
 
     $('.n-weeks').text(nweeks);
-    $('.chart').width(W);
 
 
     // Compute maxes and scales.
@@ -79,11 +111,14 @@ Gittip.charts.make = function(series) {
         }
 
         var y = parseFloat(y);
-        var h = Math.ceil(((y / N) * H));
-        week.height(H);
-        week.width(w);
-        week.css({"left": w * (nweeks - i - 1)});
-        shaded.css({"height": h});
+        var h = Math.ceil(y / N * H);
+        var n = nweeks - i - 1;
+        week.css({
+            height: H,
+            width: wstr,
+            left: subpixel ? 'calc('+ wstr +' * '+ n +')' : w * n
+        });
+        shaded.css({height: h});
         return week;
     }
 
@@ -103,10 +138,6 @@ Gittip.charts.make = function(series) {
                               ));
         }
     }
-
-    $('.week').width(w);
-    $('.shaded').width(w);
-
 
     // Wire up behaviors.
     // ==================
