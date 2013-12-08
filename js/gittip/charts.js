@@ -1,6 +1,13 @@
 Gittip.charts = {};
 
 
+// Some modern browsers (Safari) don't properly support subpixel rendering,
+// which means that it's impossible for elements to have fractional pixel
+// widths and have them render flush against one another. That's important
+// for graphs, so we feature-detect this behavior.
+//
+// Adapted from: http://stackoverflow.com/a/12709683/2651774
+//
 Gittip.subpixel_rendering_supported = function() {
     var test = $(
       '<div style="width: 200px">' +
