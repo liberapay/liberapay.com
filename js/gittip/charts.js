@@ -1,5 +1,22 @@
 Gittip.charts = {};
 
+
+Gittip.subpixel_rendering_supported = function() {
+    var test = $(
+      '<div style="width: 200px">' +
+        '<div style="float: left; width: 100.5px">a</div>' +
+        '<div style="float: left; width: 100.5px">b</div>' +
+      '</div>'
+    ).appendTo('body');
+
+    var children  = test.children();
+    var supported = children[0].offsetTop !== children[1].offsetTop;
+    test.remove();
+
+    return supported;
+}
+
+
 Gittip.charts.make = function(series) {
     // Takes an array of time series data.
 
@@ -7,6 +24,8 @@ Gittip.charts.make = function(series) {
         $('.chart-wrapper').remove();
         return;
     }
+
+    var subpixel = Gittip.subpixel_rendering_supported();
 
 
     // Gather charts.
@@ -28,7 +47,8 @@ Gittip.charts.make = function(series) {
     var H = $('.chart').height();
     var W = $('.chart').width();
     var nweeks = series.length;
-    var w = Math.floor(W / nweeks);
+    var w = W / nweeks;
+    if(!subpixel) w = Math.floor(w);
 
     $('.n-weeks').text(nweeks);
 
