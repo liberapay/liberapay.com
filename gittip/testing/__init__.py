@@ -1,6 +1,6 @@
 """Helpers for testing Gittip.
 """
-from __future__ import print_function, unicode_literals
+from __future__ import absolute_import, division, print_function, unicode_literals
 
 import datetime
 import unittest
@@ -9,7 +9,7 @@ from os.path import join, dirname, realpath
 
 import pytz
 from aspen import resources
-from aspen.testing import AspenHarness
+from aspen.testing.client import Client
 from gittip.billing.payday import Payday
 from gittip.models.participant import Participant
 from gittip.security.user import User
@@ -19,6 +19,9 @@ from psycopg2 import IntegrityError, InternalError
 
 TOP = realpath(join(dirname(dirname(__file__)), '..'))
 SCHEMA = open(join(TOP, "schema.sql")).read()
+WWW_ROOT = str(realpath(join(TOP, 'www')))
+PROJECT_ROOT = str(TOP)
+
 
 DUMMY_GITHUB_JSON = u'{"html_url":"https://github.com/whit537","type":"User",'\
 '"public_repos":25,"blog":"http://whit537.org/","gravatar_id":"fb054b407a6461'\
@@ -67,21 +70,28 @@ DUMMY_BOUNTYSOURCE_JSON = u'{"slug": "6-corytheboyd","updated_at": "2013-05-2'\
 # JSON data as returned from bountysource for corytheboyd! hello, whit537 ;)
 
 
-class Harness(AspenHarness, unittest.TestCase):
+class ClientWithAuth(Client):
 
-    def __init__(self, *a, **kw):
-        unittest.TestCase.__init__(self, *a, **kw)
-        AspenHarness.__init__( self
-                             , www_root=str(realpath(join(TOP, 'www')))
-                             , project_root=str(TOP)
-                              )
+    def build_wsgi_environ(self, *a, **kw):
+        """Extend base class to support authenticating as a certain user.
+        """
+        auth_as = kw.pop('auth_as', None)
+        if auth_as is None:
+            if b'session' in self.cookie:
+                del self.cookie[b'session']
+        else:
+            user = User.from_username(auth_as)
+            user.sign_in()
+            self.cookie[b'session'] = user.participant.session_token
+
+        return Client.build_wsgi_environ(self, *a, **kw)
+
+
+class Harness(unittest.TestCase):
 
     def setUp(self):
-        # reset
-        self.short_circuit = True
-        self.argv = []
-
-        self.db = wireup.db()
+        self.client = ClientWithAuth(www_root=WWW_ROOT, project_root=PROJECT_ROOT)
+        self.db = self.client.website.db
         self._tablenames = self.db.all("SELECT tablename FROM pg_tables "
                                        "WHERE schemaname='public'")
         self.clear_tables(self.db, self._tablenames[:])
@@ -89,6 +99,7 @@ class Harness(AspenHarness, unittest.TestCase):
 
     def tearDown(self):
         self.clear_tables(self.db, self._tablenames[:])
+        self.db.pool.closeall()
 
 
     @staticmethod
@@ -120,22 +131,8 @@ class Harness(AspenHarness, unittest.TestCase):
             print()
 
 
-    def build_wsgi_environ(self, *a, **kw):
-        """Extend base class to support authenticating as a certain user.
-        """
-        auth_as = kw.pop('auth_as', None)
-        if auth_as is None:
-            if b'session' in self.cookie:
-                del self.cookie[b'session']
-        else:
-            user = User.from_username(auth_as)
-            user.sign_in()
-            self.cookie[b'session'] = user.participant.session_token
-
-        return AspenHarness.build_wsgi_environ(self, *a, **kw)
-
-
     def make_participant(self, username, **kw):
+        self.client.hydrate_website()
         participant = Participant.with_random_username()
         participant.change_username(username)
 

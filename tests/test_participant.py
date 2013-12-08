@@ -62,7 +62,7 @@ class TestNeedConfirmation(Harness):
 class TestAbsorptions(Harness):
     # TODO: These tests should probably be moved to absorptions tests
     def setUp(self):
-        super(Harness, self).setUp()
+        Harness.setUp(self)
         now = utcnow()
         hour_ago = now - datetime.timedelta(hours=1)
         for username in ['alice', 'bob', 'carl']:
@@ -181,7 +181,7 @@ class TestTakeOver(Harness):
 
 class TestParticipant(Harness):
     def setUp(self):
-        super(Harness, self).setUp()
+        Harness.setUp(self)
         now = utcnow()
         for idx, username in enumerate(['alice', 'bob', 'carl'], start=1):
             self.make_participant(username, claimed_time=now)
@@ -265,7 +265,7 @@ class Tests(Harness):
         return random_item
 
     def setUp(self):
-        super(Harness, self).setUp()
+        Harness.setUp(self)
         self.participant = self.make_participant('user1')  # Our protagonist
 
 
