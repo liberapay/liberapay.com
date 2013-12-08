@@ -28,11 +28,9 @@ Gittip.charts.make = function(series) {
     var H = $('.chart').height();
     var W = $('.chart').width();
     var nweeks = series.length;
-    var w = Math.floor((W - 20) / nweeks);
-    var W = w * nweeks;
+    var w = Math.floor(W / nweeks);
 
     $('.n-weeks').text(nweeks);
-    $('.chart').width(W);
 
 
     // Compute maxes and scales.
