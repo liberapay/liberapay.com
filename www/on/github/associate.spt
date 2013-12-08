@@ -36,7 +36,7 @@ if login is None:
 # Do something.
 log(u"%s wants to %s" % (login, action))
 
-account = github.GitHubAccount(user_info['id'], user_info)
+account = github.GitHubAccount(website.db, user_info['id'], user_info)
 
 if action == 'opt-in':      # opt in
     user, newly_claimed = account.opt_in(login)

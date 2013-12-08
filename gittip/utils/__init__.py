@@ -311,7 +311,7 @@ def get_participant(request, restrict=True):
         if user.ANON:
             request.redirect(u'/%s/' % slug)
 
-    participant = gittip.db.one( "SELECT participants.*::participants "
+    participant = request.website.db.one( "SELECT participants.*::participants "
                                          "FROM participants "
                                          "WHERE username_lower=%s"
                                        , (slug.lower(),)
@@ -342,7 +342,7 @@ def get_participant(request, restrict=True):
 
 
 def update_global_stats(website):
-    stats = gittip.db.one( "SELECT nactive, transfer_volume FROM paydays "
+    stats = website.db.one( "SELECT nactive, transfer_volume FROM paydays "
                            "ORDER BY ts_end DESC LIMIT 1"
                          , default=(0, 0.0)
                           )

@@ -13,7 +13,6 @@ from aspen.testing.client import Client
 from gittip.billing.payday import Payday
 from gittip.models.participant import Participant
 from gittip.security.user import User
-from gittip import wireup
 from psycopg2 import IntegrityError, InternalError
 
 

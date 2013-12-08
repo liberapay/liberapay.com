@@ -25,7 +25,7 @@ def canonical():
 def db():
     dburl = os.environ['DATABASE_URL']
     maxconn = int(os.environ['DATABASE_MAXCONN'])
-    db = gittip.db = Postgres(dburl, maxconn=maxconn)
+    db = Postgres(dburl, maxconn=maxconn)
 
     # register hstore type
     with db.get_cursor() as cursor:

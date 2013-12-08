@@ -26,7 +26,7 @@ class TestPages(Harness):
         assert expected in actual
 
     def test_homepage_with_anonymous_giver(self):
-        TwitterAccount("bob", {}).opt_in("bob")
+        TwitterAccount(self.db, "bob", {}).opt_in("bob")
         alice = self.make_participant('alice', anonymous=True, last_bill_result='')
         alice.set_tip_to('bob', 1)
         update_homepage_queries_once(self.db)

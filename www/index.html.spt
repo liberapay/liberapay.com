@@ -1,7 +1,6 @@
 import os
 from aspen import Response
 from aspen.utils import to_age
-from gittip import db
 from gittip.models._mixin_elsewhere import utter_hack
 
 
@@ -38,7 +37,7 @@ try:
 except ValueError:
     raise Response(400)
 
-new_participants = utter_hack(db.all("""
+new_participants = utter_hack(website.db.all("""
 -- new participants on homepage
 
     SELECT username, claimed_time, (SELECT user_info->'gravatar_id'
@@ -59,7 +58,7 @@ new_participants = utter_hack(db.all("""
 
 """, (limit, offset)))
 
-givers = utter_hack(db.all("""
+givers = utter_hack(website.db.all("""
 -- top givers on homepage
 
     SELECT * FROM homepage_top_givers
@@ -72,7 +71,7 @@ givers = utter_hack(db.all("""
 # XXX I'm nearly positive that one or both of givers and receivers can contain
 # orphan accounts. See https://github.com/gittip/www.gittip.com/issues/650
 
-receivers = utter_hack(db.all("""
+receivers = utter_hack(website.db.all("""
 -- top receivers on homepage
 
     SELECT * FROM homepage_top_receivers

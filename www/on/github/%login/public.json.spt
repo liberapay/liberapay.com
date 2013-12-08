@@ -22,7 +22,7 @@ def stringify_qs(qs, prefix='?'):
 
 response.body = None
 try:
-    user_info = github.get_user_info(path['login'])
+    user_info = github.get_user_info(website.db, path['login'])
 except Response, res:
     if res.code == 404:
         pass
@@ -31,7 +31,7 @@ except Response, res:
 else:
     usertype = user_info.get("type", "unknown type of account").lower()
     if usertype == "user":
-        account = github.GitHubAccount(user_info['id'], user_info)
+        account = github.GitHubAccount(website.db, user_info['id'], user_info)
         if account.is_claimed:
             next_url = '/%s/public.json' % account.participant
             next_url += stringify_qs(qs)

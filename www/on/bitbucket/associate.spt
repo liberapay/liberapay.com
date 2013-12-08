@@ -73,7 +73,7 @@ user_info['html_url'] = "https://bitbucket.org/" + username
 # Do something.
 log(u"%s wants to %s" % (username, action))
 
-account = bitbucket.BitbucketAccount(username, user_info)
+account = bitbucket.BitbucketAccount(website.db, username, user_info)
 
 if action == 'opt-in':      # opt in
     # set 'user' to give them a session :/

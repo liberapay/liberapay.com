@@ -3,7 +3,7 @@ from __future__ import print_function, unicode_literals
 import datetime
 import locale
 from aspen import json
-from gittip import db, age
+from gittip import age
 
 CARDINALS = ["zero", "one", "two", "three", "four", "five", "six", "seven",
              "eight", "nine"]
@@ -19,6 +19,7 @@ def commaize(number, places=0):
 
 title = "Stats"
 yesterday = datetime.datetime.utcnow() - datetime.timedelta(hours=24)
+db = website.db
 escrow = db.one("SELECT sum(balance) FROM participants", default=0)
 nach = db.one("SELECT count(*) FROM participants WHERE last_ach_result = '' AND is_suspicious IS NOT true")
 if nach < 10:
