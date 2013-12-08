@@ -51,6 +51,12 @@ def fake_int_id(nmax=2 ** 31 -1):
     return random.randint(0, nmax)
 
 
+def fake_sentence(start=1, stop=100):
+    """Create a sentence of random length.
+    """
+    return faker.sentence(random.randrange(start,stop))
+
+
 def fake_participant(db, number="singular", is_admin=False, anonymous=False):
     """Create a fake User.
     """
@@ -60,7 +66,7 @@ def fake_participant(db, number="singular", is_admin=False, anonymous=False):
                , id=fake_int_id()
                , username=username
                , username_lower=username.lower()
-               , statement=faker.sentence()
+               , statement=fake_sentence()
                , ctime=faker.dateTimeThisYear()
                , is_admin=is_admin
                , balance=fake_balance()
@@ -148,7 +154,7 @@ def fake_transfer(db, tipper, tippee):
                 )
 
 
-def populate_db(db, num_participants=300, num_tips=200, num_teams=5, num_transfers=300):
+def populate_db(db, num_participants=100, num_tips=200, num_teams=5, num_transfers=5000):
     """Populate DB with fake data.
     """
     #Make the participants
@@ -180,7 +186,7 @@ def populate_db(db, num_participants=300, num_tips=200, num_teams=5, num_transfe
 
     #Make the transfers
     transfers = []
-    for i in xrange(num_tips):
+    for i in xrange(num_transfers):
         tipper, tippee = random.sample(participants, 2)
         transfers.append(fake_transfer(db, tipper, tippee))
 
