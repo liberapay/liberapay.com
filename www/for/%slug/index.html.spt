@@ -99,7 +99,7 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
     # Run queries for listings.
     # =========================
 
-    new_participants = utter_hack(query_cache.all("""
+    new_participants = utter_hack(website.db, query_cache.all("""
     -- new participants on community page
 
         SELECT username, claimed_time FROM (
@@ -121,7 +121,7 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
 
     """, (community.slug, limit, offset)))
 
-    givers = utter_hack(query_cache.all("""
+    givers = utter_hack(website.db, query_cache.all("""
     -- top givers on community page
 
         SELECT tipper AS username, anonymous, sum(amount) AS amount
@@ -152,7 +152,7 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
     # XXX I'm nearly positive that one or both of givers and receivers can contain
     # orphan accounts. See https://github.com/gittip/www.gittip.com/issues/650
 
-    receivers = utter_hack(query_cache.all("""
+    receivers = utter_hack(website.db, query_cache.all("""
     -- top receivers on community page
 
         SELECT tippee AS username, claimed_time, sum(amount) AS amount

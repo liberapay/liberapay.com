@@ -413,11 +413,12 @@ class MixinElsewhere(object):
 # Utter Hack
 # ==========
 
-def utter_hack(records):
+def utter_hack(db, records):
     for rec in records:
-        yield UtterHack(rec)
+        yield UtterHack(db, rec)
 
 class UtterHack(MixinElsewhere):
-    def __init__(self, rec):
+    def __init__(self, db, rec):
+        self.db = db
         for name in rec._fields:
             setattr(self, name, getattr(rec, name))
