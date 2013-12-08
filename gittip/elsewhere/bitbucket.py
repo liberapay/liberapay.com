@@ -43,11 +43,11 @@ def get_user_info(db, username):
         A dictionary containing bitbucket specific information for the user.
     """
     typecheck(username, (unicode, UnicodeWithParams))
-    rec = db.one( "SELECT user_info FROM elsewhere "
-                         "WHERE platform='bitbucket' "
-                         "AND user_info->'username' = %s"
-                       , (username,)
-                        )
+    rec = db.one("""
+        SELECT user_info FROM elsewhere
+        WHERE platform='bitbucket'
+        AND user_info->'username' = %s
+    """, (username,))
     if rec is not None:
         user_info = rec
     else:
