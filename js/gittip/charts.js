@@ -14,13 +14,13 @@ Gittip.charts.make = function(series) {
 
     // Gather charts.
     // ==============
-    // We find charts based on the variable names from the first element in the
-    // time series.
+    // We build a chart for every data point available. This step grabs one
+    // element and determines what those data points are.
 
-    var first = series[0];
+    var point  = series[0];
     var charts = [];
 
-    for (var varname in first) {
+    for (var varname in point) {
         var chart = $('#chart_'+varname);
         if (chart.length) {
             chart.varname = varname;
@@ -38,7 +38,7 @@ Gittip.charts.make = function(series) {
     // Compute maxes and scales.
     // =========================
 
-    var maxes = [];
+    var maxes  = [];
     var scales = [];
 
     for (var i=0, point; point = series[i]; i++) {
@@ -56,68 +56,46 @@ Gittip.charts.make = function(series) {
     // ===========
 
     function Week(i, j, max, N, y, title) {
-        var create = function(x) { return document.createElement(x); };
-        var week = $(create('div')).addClass('week');
-        var shaded = $(create('div')).addClass('shaded');
-        shaded.html( '<span class="y-label">'
-                   + parseInt(y, 10)
-                   + '</span>'
-                    );
+        var week   = $(document.createElement('div')).addClass('week');
+        var shaded = $(document.createElement('div')).addClass('shaded');
+        shaded.html('<span class="y-label">'+ y.toFixed() +'</span>');
         week.append(shaded);
-        week.attr({x: x, y: y});
 
-        var xTick = $(create('span')).addClass('x-tick');
-        xTick.text(i);
-        xTick.attr('title', title);
+        var xTick = $(document.createElement('span')).addClass('x-tick');
+        xTick.text(i).attr('title', title);
         week.append(xTick);
-        if (y === max) {
-            maxes[j] = NaN; // only show one max flag
-            week.addClass('flagged');
-        }
 
-        var y = parseFloat(y);
-        var h = Math.ceil(y / N * H);
-        shaded.css('height', h);
+        if (y === max) // only show one max flag
+            delete maxes[j] && week.addClass('flagged');
+
         week.css('width', w);
+        shaded.css('height', y / N * H);
         return week;
     }
 
     for (var i=0, point; point = series[i]; i++) {
-        var point = series[i];
-
         for (var j=0, chart; chart = charts[j]; j++) {
-
-            var chart = charts[j];
-
-            chart.append(Week( i
-                             , j
-                             , maxes[j]
-                             , scales[j]
-                             , point[charts[j].varname]
-                             , point.date
-                              ));
+            chart.append(
+                Week(i, j, maxes[j], scales[j], point[chart.varname], point.date)
+            );
         }
     }
 
     // Wire up behaviors.
     // ==================
 
-    function mouseover() {
-        var x = $(this).attr('x');
-        var y = $(this).attr('y');
-
-        $(this).addClass('hover');
-    }
-
-    function mouseout() {
-        $(this).removeClass('hover');
-    }
 
     $('.week').click(function() {
         $(this).toggleClass('flagged');
         if ($(this).hasClass('flagged'))
             $(this).removeClass('hover');
     });
-    $('.week').mouseover(mouseover);
-    $('.week').mouseout(mouseout);
+
+    $('.week').mouseover(function() {
+        $(this).addClass('hover');
+    });
+
+    $('.week').mouseout(function() {
+        $(this).removeClass('hover');
+    });
 };
