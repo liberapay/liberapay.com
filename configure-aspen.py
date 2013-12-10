@@ -3,6 +3,7 @@ from __future__ import division
 import os
 import threading
 import time
+import traceback
 
 import gittip
 import gittip.wireup
@@ -10,6 +11,7 @@ import gittip.security.authentication
 import gittip.security.csrf
 import gittip.utils.cache_static
 
+from aspen import log_dammit
 
 version_file = os.path.join(website.www_root, 'version.txt')
 __version__ = open(version_file).read().strip()
@@ -130,7 +132,11 @@ def update_homepage_queries():
             utils.update_global_stats(website)
             utils.update_homepage_queries_once(website.db)
         except:
-            tell_sentry(None)
+            if tell_sentry:
+                tell_sentry(None)
+            else:
+                tb = traceback.format_exc().strip()
+                log_dammit(tb)
         time.sleep(UPDATE_HOMEPAGE_EVERY)
 
 homepage_updater = threading.Thread(target=update_homepage_queries)
