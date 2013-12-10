@@ -139,9 +139,13 @@ def update_homepage_queries():
                 log_dammit(tb)
         time.sleep(UPDATE_HOMEPAGE_EVERY)
 
-homepage_updater = threading.Thread(target=update_homepage_queries)
-homepage_updater.daemon = True
-homepage_updater.start()
+if UPDATE_HOMEPAGE_EVERY > 0:
+    homepage_updater = threading.Thread(target=update_homepage_queries)
+    homepage_updater.daemon = True
+    homepage_updater.start()
+else:
+    from gittip import utils
+    utils.update_global_stats(website)
 
 
 # Do this last so we get accurate times.
