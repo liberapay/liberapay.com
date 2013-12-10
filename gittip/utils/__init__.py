@@ -5,6 +5,7 @@ import gittip
 from aspen import log_dammit, Response
 from aspen.utils import typecheck
 from tornado.escape import linkify
+from postgres.cursors import SimpleCursorBase
 
 
 COUNTRIES = (
@@ -441,3 +442,19 @@ def update_homepage_queries_once(db):
         end = time.time()
         elapsed = end - start
         log_dammit("updated homepage queries in %.2f seconds" % elapsed)
+
+
+def _execute(this, sql, params=[]):
+    print(sql.strip(), params)
+    super(SimpleCursorBase, this).execute(sql, params)
+
+def log_cursor(f):
+    "Prints sql and params to stdout. Works globaly so watch for threaded use."
+    def wrapper(*a, **kw):
+        try:
+            SimpleCursorBase.execute = _execute
+            ret = f(*a, **kw)
+        finally:
+            del SimpleCursorBase.execute
+        return ret
+    return wrapper
