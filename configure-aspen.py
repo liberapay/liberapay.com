@@ -149,4 +149,5 @@ else:
 
 
 # Do this last so we get accurate times.
-gittip.wireup.request_metrics(website)
+if website.log_metrics:
+    gittip.wireup.request_metrics(website)

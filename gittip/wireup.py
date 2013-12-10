@@ -1,5 +1,6 @@
 """Wireup
 """
+from __future__ import absolute_import, division, print_function, unicode_literals
 import os
 import sys
 import threading
@@ -214,6 +215,7 @@ def envvars(website):
 
     website.min_threads = envvar('MIN_THREADS', int)
     website.log_busy_threads_every = envvar('LOG_BUSY_THREADS_EVERY', int)
+    website.log_metrics = is_yesish(envvar('LOG_METRICS'))
 
     if malformed_values:
         malformed_values.sort()
