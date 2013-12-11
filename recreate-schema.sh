@@ -1,5 +1,6 @@
 #!/bin/sh
 
+# Exit if any subcommands or pipeline returns a non-zero status.
 set -e
 
 # Make a database for Gittip.
@@ -10,7 +11,12 @@ set -e
 # Configure the Postgres environment.
 # ===================================
 
-export `./configure-pg-env.sh`
+# Store ./configure-pg-env.sh output in a variable, so if it fails, it'll exit
+# before running `export` (export with no args will print all exported variables).
+ENV=`./configure-pg-env.sh`
+
+# If we successfully got a result in $ENV, export it.
+export $ENV
 
 
 
