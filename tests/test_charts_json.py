@@ -5,7 +5,6 @@ import json
 
 from gittip.billing.payday import Payday
 from gittip.testing import Harness
-from gittip.testing.client import TestClient
 
 
 class Tests(Harness):
@@ -26,12 +25,12 @@ class Tests(Harness):
 
     def test_no_payday_returns_empty_list(self):
         self.make_participants_and_tips()
-        assert json.loads(TestClient().get('/carl/charts.json').body) == []
+        assert json.loads(self.client.GET('/carl/charts.json').body) == []
 
     def test_zeroth_payday_is_ignored(self):
         self.make_participants_and_tips()
         self.run_payday()   # zeroeth
-        assert json.loads(TestClient().get('/carl/charts.json').body) == []
+        assert json.loads(self.client.GET('/carl/charts.json').body) == []
 
     def test_first_payday_comes_through(self):
         alice, bob = self.make_participants_and_tips()
@@ -43,7 +42,7 @@ class Tests(Harness):
                      , "receipts": 3.00
                       }
                     ]
-        actual = json.loads(TestClient().get('/carl/charts.json').body)
+        actual = json.loads(self.client.GET('/carl/charts.json').body)
 
         assert actual == expected
 
@@ -66,7 +65,7 @@ class Tests(Harness):
                      , "receipts": 3.00
                       }
                     ]
-        actual = json.loads(TestClient().get('/carl/charts.json').body)
+        actual = json.loads(self.client.GET('/carl/charts.json').body)
 
         assert actual == expected
 
@@ -97,7 +96,7 @@ class Tests(Harness):
                      , "receipts": 3.00
                       }
                     ]
-        actual = json.loads(TestClient().get('/carl/charts.json').body)
+        actual = json.loads(self.client.GET('/carl/charts.json').body)
 
         assert actual == expected
 
@@ -127,7 +126,7 @@ class Tests(Harness):
                      , "receipts": 3.00
                       }
                     ]
-        actual = json.loads(TestClient().get('/carl/charts.json').body)
+        actual = json.loads(self.client.GET('/carl/charts.json').body)
 
         assert actual == expected
 
@@ -139,6 +138,6 @@ class Tests(Harness):
         self.run_payday()   # third
 
         expected = []
-        actual = json.loads(TestClient().get('/alice/charts.json').body)
+        actual = json.loads(self.client.GET('/alice/charts.json').body)
 
         assert actual == expected

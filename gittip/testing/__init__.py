@@ -13,6 +13,7 @@ from aspen.testing.client import Client
 from gittip.billing.payday import Payday
 from gittip.models.participant import Participant
 from gittip.security.user import User
+from gittip import wireup
 from psycopg2 import IntegrityError, InternalError
 
 
@@ -74,6 +75,12 @@ class ClientWithAuth(Client):
     def build_wsgi_environ(self, *a, **kw):
         """Extend base class to support authenticating as a certain user.
         """
+
+        # csrf - for both anon and authenticated
+        self.cookie[b'csrf_token'] = b'sotokeny'
+        kw[b'HTTP_X-CSRF-TOKEN'] = b'sotokeny'
+
+        # user authentication
         auth_as = kw.pop('auth_as', None)
         if auth_as is None:
             if b'session' in self.cookie:
@@ -90,15 +97,24 @@ class Harness(unittest.TestCase):
 
     def setUp(self):
         self.client = ClientWithAuth(www_root=WWW_ROOT, project_root=PROJECT_ROOT)
-        self.db = self.client.website.db
-        self._tablenames = self.db.all("SELECT tablename FROM pg_tables "
-                                       "WHERE schemaname='public'")
-        self.clear_tables(self.db, self._tablenames[:])
+
+        # Call wireup.db() directly to avoid hydrating website.
+        db = wireup.db()
+        self._tablenames = db.all("SELECT tablename FROM pg_tables "
+                                  "WHERE schemaname='public'")
+        self.clear_tables(db, self._tablenames[:])
 
 
     def tearDown(self):
-        self.clear_tables(self.db, self._tablenames[:])
-        self.db.pool.closeall()
+        resources.__cache__ = {}  # Clear the simplate cache.
+        db = wireup.db()  # Again with the hydration avoidance.
+        self.clear_tables(db, self._tablenames[:])
+
+
+    @property
+    def db(self):
+        # Now we'll hydrate (self.client.website is lazily evaluated).
+        return self.client.website.db
 
 
     @staticmethod
@@ -131,7 +147,9 @@ class Harness(unittest.TestCase):
 
 
     def make_participant(self, username, **kw):
-        self.client.hydrate_website()
+        # At this point wireup.db() has been called, but not ...
+        wireup.username_restrictions(self.client.website)
+
         participant = Participant.with_random_username()
         participant.change_username(username)
 
@@ -172,14 +190,3 @@ class GittipPaydayTest(Harness):
     def setUp(self):
         super(GittipPaydayTest, self).setUp()
         self.payday = Payday(self.db)
-
-
-# Helpers for managing test data.
-# ===============================
-
-def load_simplate(path):
-    """Given an URL path, return resource.
-    """
-    from aspen.http.request import Request
-    request = Request(uri=path)
-    return resources.get(request)

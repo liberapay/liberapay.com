@@ -129,6 +129,7 @@ algorithm.functions = [ timer.start
                       , cache_static.inbound
 
                       , algorithm['get_response_for_socket']
+                      , algorithm['get_resource_for_request']
                       , algorithm['get_response_for_resource']
                       , algorithm['get_response_for_exception']
 

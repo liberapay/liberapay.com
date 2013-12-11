@@ -2,7 +2,6 @@
 """
 import os
 import sys
-import time
 
 import aspen
 import balanced
@@ -22,19 +21,23 @@ def canonical():
 
 
 # wireup.db() should only ever be called once by the application
+# But in testing we call it a ton. :-/
+_db = None
 def db():
-    dburl = os.environ['DATABASE_URL']
-    maxconn = int(os.environ['DATABASE_MAXCONN'])
-    db = Postgres(dburl, maxconn=maxconn)
+    global _db
+    if _db == None:
+        dburl = os.environ['DATABASE_URL']
+        maxconn = int(os.environ['DATABASE_MAXCONN'])
+        _db = Postgres(dburl, maxconn=maxconn)
 
-    # register hstore type
-    with db.get_cursor() as cursor:
-        psycopg2.extras.register_hstore(cursor, globally=True, unicode=True)
+        # register hstore type
+        with _db.get_cursor() as cursor:
+            psycopg2.extras.register_hstore(cursor, globally=True, unicode=True)
 
-    db.register_model(Community)
-    db.register_model(Participant)
+        _db.register_model(Community)
+        _db.register_model(Participant)
 
-    return db
+    return _db
 
 
 def billing():
@@ -44,7 +47,8 @@ def billing():
 
 
 def username_restrictions(website):
-    gittip.RESTRICTED_USERNAMES = os.listdir(website.www_root)
+    if not hasattr(gittip, 'RESTRICTED_USERNAMES'):
+        gittip.RESTRICTED_USERNAMES = os.listdir(website.www_root)
 
 
 def make_sentry_teller(website):
