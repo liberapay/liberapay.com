@@ -15,7 +15,7 @@ class TestCommaize(Harness):
     # XXX This really ought to be in helper methods test file
     def setUp(self):
         Harness.setUp(self)
-        simplate = self.client.load_simplate(b'/about/stats.html')
+        simplate = self.client.load_resource(b'/about/stats.html')
         self.commaize = simplate.pages[0]['commaize']
 
     def test_commaize_commaizes(self):
