@@ -106,48 +106,43 @@ If Gittip launches successfully it will look like this:
 ```
 $ make run
 ./env/bin/swaddle local.env ./env/bin/aspen \
-                --www_root=www/ \
-                --project_root=.. \
-                --show_tracebacks=yes \
-                --changes_reload=yes \
-                --network_address=:8537
-[SWADDLE] Skipping line: .
-[SWADDLE] Skipping line: .
-[SWADDLE] Skipping line: .
-[SWADDLE] Skipping line: .
-[SWADDLE] Skipping line: .
+        --www_root=www/ \
+        --project_root=. \
+        --show_tracebacks=yes \
+        --changes_reload=yes \
+        --network_address=:8537
 pid-12508 thread-140735090330816 (MainThread) Reading configuration from defaults, environment, and command line.
 pid-12508 thread-140735090330816 (MainThread)   changes_reload         False                          default
 pid-12508 thread-140735090330816 (MainThread)   changes_reload         True                           command line option --changes_reload=yes
 pid-12508 thread-140735090330816 (MainThread)   charset_dynamic        UTF-8                          default
 pid-12508 thread-140735090330816 (MainThread)   charset_static         None                           default
 pid-12508 thread-140735090330816 (MainThread)   configuration_scripts  []                             default
-pid-12508 thread-140735090330816 (MainThread)   indices                [u'index.html', u'index.json', u'index'] default
+pid-12508 thread-140735090330816 (MainThread)   indices                [u'index.html', u'index.json', u'index', u'index.html.spt', u'index.json.spt', u'index.spt'] default
 pid-12508 thread-140735090330816 (MainThread)   list_directories       False                          default
 pid-12508 thread-140735090330816 (MainThread)   logging_threshold      0                              default
 pid-12508 thread-140735090330816 (MainThread)   media_type_default     text/plain                     default
 pid-12508 thread-140735090330816 (MainThread)   media_type_json        application/json               default
 pid-12508 thread-140735090330816 (MainThread)   network_address        ((u'0.0.0.0', 8080), 2)        default
 pid-12508 thread-140735090330816 (MainThread)   network_address        ((u'0.0.0.0', 8537), 2)        command line option --network_address=:8537
-pid-12508 thread-140735090330816 (MainThread)   network_engine         cherrypy                       default
+pid-12508 thread-140735090330816 (MainThread)   network_engine         cheroot                        default
 pid-12508 thread-140735090330816 (MainThread)   project_root           None                           default
-pid-12508 thread-140735090330816 (MainThread)   project_root           ..                             command line option --project_root=..
-pid-12508 thread-140735090330816 (MainThread)   renderer_default       tornado                        default
+pid-12508 thread-140735090330816 (MainThread)   project_root           .                              command line option --project_root=.
+pid-12508 thread-140735090330816 (MainThread)   renderer_default       stdlib_percent                 default
 pid-12508 thread-140735090330816 (MainThread)   show_tracebacks        False                          default
 pid-12508 thread-140735090330816 (MainThread)   show_tracebacks        True                           command line option --show_tracebacks=yes
-pid-12508 thread-140735090330816 (MainThread)   unavailable            0                              default
 pid-12508 thread-140735090330816 (MainThread)   www_root               None                           default
 pid-12508 thread-140735090330816 (MainThread)   www_root               www/                           command line option --www_root=www/
-pid-12508 thread-140735090330816 (MainThread) project_root is relative: '..'.
+pid-12508 thread-140735090330816 (MainThread) project_root is relative to CWD: '.'.
 pid-12508 thread-140735090330816 (MainThread) project_root set to /Your/path/to/www.gittip.com.
+pid-12508 thread-140735090330816 (MainThread) Found plugin for renderer 'tornado'
+pid-12508 thread-140735090330816 (MainThread) Won't log to Sentry (SENTRY_DSN is empty).
+pid-12508 thread-140735090330816 (MainThread) Loading configuration file '/Your/path/to/www.gittip.com/configure-aspen.py' (possibly changing settings)
 pid-12508 thread-140735090330816 (MainThread) Renderers (*ed are unavailable, CAPS is default):
-pid-12508 thread-140735090330816 (MainThread)   TORNADO
-pid-12508 thread-140735090330816 (MainThread)  *pystache         ImportError: No module named pystache
-pid-12508 thread-140735090330816 (MainThread)   stdlib_template
-pid-12508 thread-140735090330816 (MainThread)   stdlib_format
-pid-12508 thread-140735090330816 (MainThread)  *jinja2           ImportError: No module named jinja2
-pid-12508 thread-140735090330816 (MainThread)   stdlib_percent
-pid-12508 thread-140735090330816 (MainThread) Starting cherrypy engine.
+pid-12508 thread-140735090330816 (MainThread)   stdlib_percent   
+pid-12508 thread-140735090330816 (MainThread)   TORNADO          
+pid-12508 thread-140735090330816 (MainThread)   stdlib_format    
+pid-12508 thread-140735090330816 (MainThread)   stdlib_template  
+pid-12508 thread-140735090330816 (MainThread) Starting cheroot engine.
 pid-12508 thread-140735090330816 (MainThread) Greetings, program! Welcome to port 8537.
 pid-12508 thread-140735090330816 (MainThread) Aspen will restart when configuration scripts or Python modules change.
 pid-12508 thread-140735090330816 (MainThread) Starting up Aspen website.
