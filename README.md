@@ -554,3 +554,4 @@ and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
  - [PieTrust](http://www.pietrust.com/) - an "open company" developing a secure reputation system for sharing credit.
  - [BountyOSS](https://bountyoss.com/) - Where crowdfunding means business
  - [Suprmasv](https://www.suprmasv.com/) - Empowering the Hacker Class.
+ - [Tip4Commit](https://www.tip4commit.com/) - Donate bitcoins to open source projects or make commits and get tips for it.
