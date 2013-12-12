@@ -9,8 +9,12 @@ Gittip.charts.make = function(series) {
         return;
     }
 
-    // Sort the series in increasing date order
+
+    // Sort the series in increasing date order.
+    // =========================================
+
     series.sort(function(a,b) { return a.date > b.date ? 1 : -1 });
+
 
     // Gather charts.
     // ==============
@@ -82,9 +86,9 @@ Gittip.charts.make = function(series) {
         }
     }
 
+
     // Wire up behaviors.
     // ==================
-
 
     $('.week').click(function() {
         $(this).toggleClass('flagged');
