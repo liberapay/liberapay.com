@@ -66,7 +66,7 @@ Gittip.charts.make = function(series) {
         week.append(shaded);
 
         var xTick = $(document.createElement('span')).addClass('x-tick');
-        xTick.text(i).attr('title', title);
+        xTick.text(i+1).attr('title', title);
         week.append(xTick);
 
         // Display a max flag (only once)
