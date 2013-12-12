@@ -18,8 +18,9 @@ Gittip.charts.make = function(series) {
 
     // Gather charts.
     // ==============
-    // We build a chart for every data point available. This step grabs one
-    // element and determines what those data points are.
+    // Sniff the first element to determine what data points are available, and
+    // then search the page for chart containers matching each data point
+    // variable name.
 
     var point  = series[0];
     var charts = [];
