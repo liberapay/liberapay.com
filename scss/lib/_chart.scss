@@ -1,22 +1,15 @@
 .chart-wrapper {
 
-    width: 100%;
-    float: left;
-
-    &.newline {
-        clear: left;
-    }
     H2 {
         padding-top: 12pt;
     }
     .chart {
-        position: relative;
         height: 100px;
     }
     .week {
-        position: absolute;
-        top: 0;
-        left: 0;
+        height: 100%;
+        float: left;
+        position: relative;
         cursor: pointer;
     }
     .shaded {
@@ -39,6 +32,7 @@
         color: #630;
     }
     .week SPAN.x-tick.on {
+        display: block;
         border-color: #B2A196;
         color: #B2A196;
     }
