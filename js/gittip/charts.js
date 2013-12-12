@@ -65,8 +65,13 @@ Gittip.charts.make = function(series) {
         xTick.text(i).attr('title', title);
         week.append(xTick);
 
-        if (y === max) // only show one max flag
+        // Display a max flag (only once)
+        if (y === max)
             delete maxes[j] && week.addClass('flagged');
+
+        // Set up the X axis so we have a sense of scale
+        if (i % 5 === 0)
+            xTick.addClass('on');
 
         week.css('width', w);
         shaded.css('height', y / N * H);
