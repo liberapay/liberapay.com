@@ -183,10 +183,8 @@ class TestParticipant(Harness):
     def setUp(self):
         super(Harness, self).setUp()
         now = utcnow()
-        for idx, username in enumerate(['alice', 'bob', 'carl'], start=1):
-            self.make_participant(username, claimed_time=now)
-            twitter_account = TwitterAccount(self.db, idx, {'screen_name': username})
-            Participant.from_username(username).take_over(twitter_account)
+        for username in ['alice', 'bob', 'carl']:
+            self.make_participant(username, claimed_time=now, elsewhere='twitter')
 
     def test_bob_is_singular(self):
         expected = True

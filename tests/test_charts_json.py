@@ -14,6 +14,12 @@ class Tests(Harness):
         alice = self.make_participant('alice', balance=10, claimed_time='now')
         bob = self.make_participant('bob', balance=10, claimed_time='now')
         self.make_participant('carl', claimed_time='now')
+        self.db.run("""
+            INSERT INTO EXCHANGES
+                (amount, fee, participant) VALUES
+                (10.00, 0.00, 'alice'),
+                (10.00, 0.00, 'bob')
+        """)
 
         alice.set_tip_to('carl', '1.00')
         bob.set_tip_to('carl', '2.00')
