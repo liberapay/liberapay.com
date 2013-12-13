@@ -35,7 +35,7 @@ Gittip.charts.make = function(series) {
 
     var H = $('.chart').height();
     var nweeks = series.length;
-    var w = 'calc(100% / '+ nweeks +')';
+    var w = (1 / nweeks * 100).toFixed(10) + '%';
 
     $('.n-weeks').text(nweeks);
 
