@@ -1,6 +1,6 @@
 .chart-wrapper {
 
-    H2 {
+    h2 {
         padding-top: 12pt;
     }
     .chart {
@@ -18,10 +18,10 @@
         bottom: 0;
         width: 100%;
     }
-    .week SPAN, .x-axis {
+    .week span, .x-axis {
         font: normal 7pt/7pt "Lucida Mono", Monaco, monospace;
     }
-    .week SPAN.x-tick {
+    .week span.x-tick {
         position: absolute;
         bottom: -12pt;
         right: 0;
@@ -31,7 +31,7 @@
         display: none;
         color: #630;
     }
-    .week SPAN.y-label {    // This is the flag.
+    .week span.y-label {    // This is the flag.
         display: none;
         position: absolute;
         top: -17pt;
@@ -44,16 +44,16 @@
         border-radius: 3pt 0 0 3pt;
         padding: 2pt 3pt;
     }
-    .week.max SPAN.y-label {
+    .week.max span.y-label {
         display: block;
     }
-    .week.flagged SPAN.y-label,
-    .week.flagged SPAN.x-tick,
-    .week.hover SPAN.y-label,
-    .week.hover SPAN.x-tick {
+    .week.flagged span.y-label,
+    .week.flagged span.x-tick,
+    .week.hover span.y-label,
+    .week.hover span.x-tick {
         display: block;
     }
-    .week.hover SPAN.y-label {
+    .week.hover span.y-label {
         z-index: 2
     }
     .x-axis {

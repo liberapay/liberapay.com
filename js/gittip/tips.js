@@ -89,10 +89,10 @@ Gittip.tips.init = function() {
 
     // For anonymous users we flash a login link.
 
-    $('.my-tip-range.anon BUTTON').mouseover(function() {
+    $('.my-tip-range.anon button').mouseover(function() {
         $('.sign-in-to-give .dropdown-toggle').addClass('highlight');
     });
-    $('.my-tip-range.anon BUTTON').click(function() {
+    $('.my-tip-range.anon button').click(function() {
         var i = 0;
         (function flash() {
             if (i++ == 6) return;

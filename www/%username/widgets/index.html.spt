@@ -12,7 +12,7 @@ locked = False
 {% block page %}
 <style>
     /* Copied and pasted from %username/widget.html */
-    .button-examples BUTTON.old-widget-style {
+    .button-examples button.old-widget-style {
         font: normal 12pt/12pt "Lato", sans-serif;
         text-decoration: none;
 
@@ -54,7 +54,7 @@ locked = False
         background-clip: padding-box;
     }
 
-    .button-examples BUTTON.old-widget-style { /* .selected */
+    .button-examples button.old-widget-style { /* .selected */
         border: 1px solid #0A382E;
         background: #2A8F79 url("/assets/button-bg.png") repeat-x bottom left;
         background-image: -webkit-gradient( linear, 0% 0%, 0% 100%
@@ -65,7 +65,7 @@ locked = False
         background-image: linear-gradient(top, #2A8F79, #0D4035);
     }
 
-    .button-examples BUTTON.old-widget-style { /* .small */
+    .button-examples button.old-widget-style { /* .small */
         font: normal 9pt/9pt "Lato", sans-serif;
         padding: 2pt 5pt 2.5pt;
         -moz-border-radius: 3pt;
@@ -76,29 +76,29 @@ locked = False
         border-radius: 3pt;
     }
 
-    .button-examples BUTTON.old-widget-style::-moz-focus-inner {
+    .button-examples button.old-widget-style::-moz-focus-inner {
         border: none;
         padding: 0;
     }
 
-    .button-examples BUTTON.old-widget-style:focus {
+    .button-examples button.old-widget-style:focus {
         outline: none;
     }
 
-    .button-examples BUTTON.old-widget-style, .button-examples BUTTON.old-widget-style:visited {
+    .button-examples button.old-widget-style, .button-examples button.old-widget-style:visited {
         color: #888;
     }
 
-    .button-examples BUTTON.old-widget-style.selected, .button-examples BUTTON.old-widget-style.selected:visited,
-    .button-examples BUTTON.old-widget-style:hover, .button-examples BUTTON.old-widget-style:hover:visited,
-    .button-examples BUTTON.old-widget-style:focus, .button-examples BUTTON.old-widget-style:focus:visited,
-    .button-examples BUTTON.old-widget-style:active, .button-examples BUTTON.old-widget-style:active:visited {
+    .button-examples button.old-widget-style.selected, .button-examples button.old-widget-style.selected:visited,
+    .button-examples button.old-widget-style:hover, .button-examples button.old-widget-style:hover:visited,
+    .button-examples button.old-widget-style:focus, .button-examples button.old-widget-style:focus:visited,
+    .button-examples button.old-widget-style:active, .button-examples button.old-widget-style:active:visited {
         color: white;
     }
 
-    .button-examples BUTTON.old-widget-style:hover, .button-examples BUTTON.old-widget-style:focus {
+    .button-examples button.old-widget-style:hover, .button-examples button.old-widget-style:focus {
         border: 1px solid #0A382E;
-        background-image: url("/assets/.button-examples BUTTON.old-widget-style-bg.over.png");
+        background-image: url("/assets/.button-examples button.old-widget-style-bg.over.png");
         background-image: -webkit-gradient( linear, 0% 0%, 0% 100%
                                           , from(#2A8F79)
                                           , to(#04221B)
@@ -106,8 +106,8 @@ locked = False
         background-image: -moz-linear-gradient(top, #2A8F79, #04221B);
         background-image: linear-gradient(top, #2A8F79, #04221B));
     }
-    .button-examples BUTTON.old-widget-style:active {
-        /* http://somadesign.ca/demos/.button-examples BUTTON.old-widget-styles-redux.html */
+    .button-examples button.old-widget-style:active {
+        /* http://somadesign.ca/demos/.button-examples button.old-widget-styles-redux.html */
         -moz-box-shadow
             :0 .33em 1em rgba(0,0,0,.67) inset,
             1px 1px 0 rgba(255,255,255,.25) inset,
