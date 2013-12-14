@@ -118,19 +118,6 @@ class TestAbsorptions(Harness):
 
 class TestTakeOver(Harness):
 
-    def self_test(self):
-        a = self.db.one("""
-                SELECT count(*)
-                  FROM (
-                          SELECT * FROM tips
-                          EXCEPT
-                          SELECT DISTINCT ON(tipper, tippee, mtime) *
-                            FROM tips
-                        ORDER BY tipper, tippee, mtime
-                        ) AS foo
-                     """)
-        assert a == 0
-
     def test_cross_tip_doesnt_become_self_tip(self):
         alice = TwitterAccount(self.db, 1, dict(screen_name='alice'))
         bob   = TwitterAccount(self.db, 2, dict(screen_name='bob'))
@@ -138,7 +125,7 @@ class TestTakeOver(Harness):
         bob_participant = bob.opt_in('bob')[0].participant
         alice_participant.set_tip_to('bob', '1.00')
         bob_participant.take_over(alice, have_confirmation=True)
-        self.self_test()
+        self.db.self_check()
 
     def test_zero_cross_tip_doesnt_become_self_tip(self):
         alice = TwitterAccount(self.db, 1, dict(screen_name='alice'))
@@ -148,7 +135,7 @@ class TestTakeOver(Harness):
         alice_participant.set_tip_to('bob', '1.00')
         alice_participant.set_tip_to('bob', '0.00')
         bob_participant.take_over(alice, have_confirmation=True)
-        self.self_test()
+        self.db.self_check()
 
     def test_do_not_take_over_zero_tips_giving(self):
         alice = TwitterAccount(self.db, 1, dict(screen_name='alice'))
@@ -162,7 +149,7 @@ class TestTakeOver(Harness):
         alice_participant.take_over(carl, have_confirmation=True)
         ntips = self.db.one("select count(*) from tips")
         assert 2 == ntips
-        self.self_test()
+        self.db.self_check()
 
     def test_do_not_take_over_zero_tips_receiving(self):
         alice = TwitterAccount(self.db, 1, dict(screen_name='alice'))
@@ -176,7 +163,7 @@ class TestTakeOver(Harness):
         alice_participant.take_over(carl, have_confirmation=True)
         ntips = self.db.one("select count(*) from tips")
         assert 2 == ntips
-        self.self_test()
+        self.db.self_check()
 
 
 class TestParticipant(Harness):
