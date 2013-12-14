@@ -131,6 +131,7 @@ def update_homepage_queries():
         try:
             utils.update_global_stats(website)
             utils.update_homepage_queries_once(website.db)
+            website.db.self_check()
         except:
             if tell_sentry:
                 tell_sentry(None)

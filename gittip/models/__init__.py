@@ -97,10 +97,30 @@ class GittipDB(Postgres):
 
         https://github.com/gittip/www.gittip.com/issues/617
         """
-        e = self.one("""
-            select count((username, ctime, claimed_time))
+        orphans = self.all("""
+            select username
                from participants
               where not exists (select * from elsewhere where elsewhere.participant=username)
                 and not exists (select * from absorptions where archived_as=username)
         """)
-        assert e == 0, "missing elsewheres: {}".format(e)
+        known = set((
+            "4c46cc22afdd",
+            "82b0d81fe9e8",
+            "6b6527ac6c02",
+            "cbde8c31c11c",
+            "bcfc65158eaf",
+            "31d54a0c19ae",
+            "afbddadaac3c",
+            "a78c4e42bb93",
+            "42eb93b3ab89",
+            "b1bc5e47fe8e",
+            "3ac515cc8da6",
+            "14a79340c40d",
+            "14d60c6884e7",
+            "0c783dee50ed",
+            "e2020536ef6d",
+            "60a5099d49c7",
+            "64f4f959b322"
+        ))
+        real = set(orphans) - known
+        assert len(real) == 0, "missing elsewheres: {}".format(len(real))
