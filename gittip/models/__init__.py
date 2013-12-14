@@ -43,43 +43,47 @@ class GittipDB(Postgres):
 
         https://github.com/gittip/www.gittip.com/issues/1118
         """
-        b = self.one("""
-            select count(*)
-              from (
-                select username, sum(a) as balance
+        with self.get_cursor() as cursor:
+            if cursor.one("select exists (select * from paydays where ts_end < ts_start) as running"):
+                # payday is running and the query bellow does not account for pending
+                return
+            b = cursor.one("""
+                select count(*)
                   from (
-                          select participant as username, sum(amount) as a
-                            from exchanges
-                           where amount > 0
-                        group by participant
+                    select username, sum(a) as balance
+                      from (
+                              select participant as username, sum(amount) as a
+                                from exchanges
+                               where amount > 0
+                            group by participant
 
-                           union
+                               union
 
-                          select participant as username, sum(amount-fee) as a
-                            from exchanges
-                           where amount < 0
-                        group by participant
+                              select participant as username, sum(amount-fee) as a
+                                from exchanges
+                               where amount < 0
+                            group by participant
 
-                           union
+                               union
 
-                          select tipper as username, sum(-amount) as a
-                            from transfers
-                        group by tipper
+                              select tipper as username, sum(-amount) as a
+                                from transfers
+                            group by tipper
 
-                           union
+                               union
 
-                          select tippee as username, sum(amount) as a
-                            from transfers
-                        group by tippee
-                        ) as foo
-                group by username
+                              select tippee as username, sum(amount) as a
+                                from transfers
+                            group by tippee
+                            ) as foo
+                    group by username
 
-                except
+                    except
 
-                select username, balance
-                from participants
-              ) as foo2
-        """)
+                    select username, balance
+                    from participants
+                  ) as foo2
+            """)
         assert b == 0, "conflicting balances: {}".format(b)
 
     def _check_orphans(self):
