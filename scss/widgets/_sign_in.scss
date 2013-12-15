@@ -13,7 +13,6 @@
       border-right: 4px solid transparent;
       border-left: 4px solid transparent;
       margin-top: 11px;
-      // margin-right: 8px;
     }
     &.highlight {
       @include box-shadow(0, 0, 8px, $green);
@@ -27,8 +26,6 @@
     top: 24px;
     @include border-radius(3px);
     border: 0;
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
     box-shadow: none;
     background: $green;
     min-width: 100px;

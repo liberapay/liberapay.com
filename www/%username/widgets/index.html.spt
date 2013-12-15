@@ -27,11 +27,6 @@ locked = False
         cursor: pointer;
 
         border: 1pt solid #999;
-        -moz-border-radius: 7pt;
-        -webkit-border-radius: 7pt;
-        -o-border-radius: 7pt;
-        -ms-border-radius: 7pt;
-        -khtml-border-radius: 7pt;
         border-radius: 7pt;
 
         background: #F7F7F6 url("/assets/button-bg.png") repeat-x bottom left;
@@ -45,12 +40,6 @@ locked = False
         padding: 4pt 12pt 6pt 11pt;
         margin: 0;
         vertical-align: middle;
-
-        -moz-background-clip: padding;
-        -webkit-background-clip: padding;
-        -o-background-clip: padding-box;
-        -ms-background-clip: padding-box;
-        -khtml-background-clip: padding-box;
         background-clip: padding-box;
     }
 
@@ -68,11 +57,6 @@ locked = False
     .button-examples button.old-widget-style { /* .small */
         font: normal 9pt/9pt "Lato", sans-serif;
         padding: 2pt 5pt 2.5pt;
-        -moz-border-radius: 3pt;
-        -webkit-border-radius: 3pt;
-        -o-border-radius: 3pt;
-        -ms-border-radius: 3pt;
-        -khtml-border-radius: 3pt;
         border-radius: 3pt;
     }
 
@@ -98,7 +82,7 @@ locked = False
 
     .button-examples button.old-widget-style:hover, .button-examples button.old-widget-style:focus {
         border: 1px solid #0A382E;
-        background-image: url("/assets/.button-examples button.old-widget-style-bg.over.png");
+        background-image: url("/assets/button-bg.over.png");
         background-image: -webkit-gradient( linear, 0% 0%, 0% 100%
                                           , from(#2A8F79)
                                           , to(#04221B)
@@ -107,15 +91,7 @@ locked = False
         background-image: linear-gradient(top, #2A8F79, #04221B));
     }
     .button-examples button.old-widget-style:active {
-        /* http://somadesign.ca/demos/.button-examples button.old-widget-styles-redux.html */
-        -moz-box-shadow
-            :0 .33em 1em rgba(0,0,0,.67) inset,
-            1px 1px 0 rgba(255,255,255,.25) inset,
-            -1px -1px 0 rgba(255,255,255,.25) inset;
-        -webkit-box-shadow:
-            0 .33em 2em rgba(0,0,0,.67) inset,
-            1px 1px 0 rgba(255,255,255,.25) inset,
-            -1px -1px 0 rgba(255,255,255,.25) inset;
+        /* http://somadesign.ca/demos/buttons-redux.html */
         box-shadow:
             0 .33em 2em rgba(0,0,0,.67) inset,
             1px 1px 0 rgba(255,255,255,.25) inset,
