@@ -208,6 +208,7 @@ def envvars(website):
     website.js_src = envvar('GITTIP_JS_SRC') \
                                           .replace('%version', website.version)
     website.cache_static = is_yesish(envvar('GITTIP_CACHE_STATIC'))
+    website.compress_assets = is_yesish(envvar('GITTIP_COMPRESS_ASSETS'))
 
     website.google_analytics_id = envvar('GOOGLE_ANALYTICS_ID')
     website.gauges_id = envvar('GAUGES_ID')
