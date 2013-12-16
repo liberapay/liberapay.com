@@ -17,6 +17,7 @@ class GittipDB(Postgres):
         self._check_balances()
         self._check_tips()
         self._check_orphans()
+        self._check_orphans_no_tips()
 
     def _check_tips(self):
         """
@@ -128,3 +129,23 @@ class GittipDB(Postgres):
         ))
         real = set(orphans) - known
         assert len(real) == 0, "missing elsewheres: {}".format(len(real))
+
+    def _check_orphans_no_tips(self):
+        tips_with_orphans = self.all("""
+            WITH orphans AS (
+                SELECT username FROM participants
+                WHERE NOT EXISTS (SELECT 1 FROM elsewhere WHERE participant=username)
+            ), valid_tips AS (
+                  SELECT * FROM (
+                            SELECT DISTINCT ON (tipper, tippee) *
+                              FROM tips
+                          ORDER BY tipper, tippee, mtime DESC
+                      ) AS foo
+                  WHERE amount > 0
+            )
+            SELECT * FROM valid_tips
+            WHERE tipper IN (SELECT * FROM orphans)
+            OR tippee IN (SELECT * FROM orphans)
+        """)
+        assert len(tips_with_orphans) == 0, tips_with_orphans
+#
