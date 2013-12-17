@@ -487,9 +487,9 @@ and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
  - [GumRoad](https://gumroad.com/)
  - [MacHeist](http://macheist.com/)
  - [Prosper](http://www.prosper.com/) - peer-to-peer lending
- - [discontinued] Togather
+ - [discontinued] [Togather](http://togather.me/)
  - [PaySwarm](http://payswarm.com/) - open payment protocol
- - [discontinued] Gitbo - another implementation of the bounty model
+ - [discontinued] [Gitbo](http://git.bo/) - another implementation of the bounty model
  - [Affero](http://www.affero.com/) - old skool attempt &ldquo;to bring a culture of patronage to the Internet&rdquo;
  - [ShareAGift](http://www.shareagift.com) - one-off, crowd-sourced cash gifts
  - [GoFundMe](http://www.gofundme.com/) - derpy-looking platform that [reaches normal people](http://pittsburgh.cbslocal.com/2013/02/19/crowdfunding-growing-in-popularity-as-fundraising-tool/) (my dad emailed this link to me)
@@ -501,7 +501,7 @@ and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
  - [IssueHunter](http://issuehunter.co/) - FOSS bounty site
  - [TinyPass](http://www.tinypass.com/) - Soft paywall, used by e.g. [Daily Dish](http://dish.andrewsullivan.com/)
  - [Patreon](http://www.patreon.com/) - Patronage model for content creators(!)
- - [WhyNotMe](http://www.whynotme.me/) - "Give as a group to any non-profit in America"
+ - [discontinued] [WhyNotMe](http://www.whynotme.me/) - "Give as a group to any non-profit in America"
  - [LoveMachine](http://web.archive.org/web/20110214110248/http://sendlove.us/trial/faq.php) - "the cool new employee recognition system" (supposedly came out of Linden Lab)
  - [See.Me](https://www.see.me/) - sustainable crowdfunding for artists
  - [NoiseTrade](http://www.noisetrade.com/) - band mailing lists + tips
