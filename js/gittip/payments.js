@@ -363,10 +363,6 @@ Gittip.payments.cc.handleResponse = function(response) {
         setTimeout(function() {
             window.location.href = '/' + Gittip.participantId + '/';
         }, 1000);
-
-        // Log to mixpanel.
-        if (data.first_time === true)
-            mixpanel.track("Add Credit Card");
     }
 
     function detailedFeedback(data) {

@@ -70,10 +70,6 @@ Gittip.tips.init = function() {
             // update quick stats
             $('.quick-stats')
                 .find('a').text('$' + data.total_giving + '/wk');
-
-            // Log to mixpanel.
-            if (data.first_time === true)
-                mixpanel.track("Explicitly Tip");
         })
         .fail(function() {
             // change to old amount?

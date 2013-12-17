@@ -39,7 +39,6 @@ module.exports = function(grunt) {
                     Gittip: true,
                     _gttp: true,
                     gttpURI: true,
-                    mixpanel: true,
                     alert: true
                 }
             }

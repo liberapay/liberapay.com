@@ -21,8 +21,7 @@ class Tests(Harness):
 
     @mock.patch('requests.post')
     @mock.patch('requests.get')
-    @mock.patch('gittip.utils.mixpanel.track')
-    def test_associate_opts_in(self, track, get, post):
+    def test_associate_opts_in(self, get, post):
         self.website.oauth_cache = {"deadbeef": ("deadbeef", "opt-in", "")}
 
         post.return_value.status_code = 200
@@ -39,8 +38,7 @@ class Tests(Harness):
 
     @mock.patch('requests.post')
     @mock.patch('requests.get')
-    @mock.patch('gittip.utils.mixpanel.track')
-    def test_associate_connects(self, track, get, post):
+    def test_associate_connects(self, get, post):
         self.make_participant('alice')
         self.website.oauth_cache = {"deadbeef": ("deadbeef", "connect", "")}
 
@@ -62,8 +60,7 @@ class Tests(Harness):
 
     @mock.patch('requests.post')
     @mock.patch('requests.get')
-    @mock.patch('gittip.utils.mixpanel.track')
-    def test_associate_confirms_on_connect(self, track, get, post):
+    def test_associate_confirms_on_connect(self, get, post):
         TwitterAccount(self.db, '1234', {'screen_name': 'alice'}).opt_in('alice')
 
         self.make_participant('bob')
@@ -83,8 +80,7 @@ class Tests(Harness):
 
     @mock.patch('requests.post')
     @mock.patch('requests.get')
-    @mock.patch('gittip.utils.mixpanel.track')
-    def test_confirmation_properly_displays_remaining_bitbucket(self, track, get, post):
+    def test_confirmation_properly_displays_remaining_bitbucket(self, get, post):
         alice, foo = TwitterAccount(self.db, '1234', {'screen_name': 'alice'}).opt_in('alice')
         alice.participant.take_over(BitbucketAccount(self.db, '1234', {'username': 'alice_bb'}))
 
