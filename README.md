@@ -482,11 +482,11 @@ and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
  - [AnyFu](http://anyfu.com/) - hire an expert for one-on-one, screen-share work sessions
  - [OpenOfficeHours](http://ohours.org/)
  - [VideoVivoApp](http://videovivoapp.com/)
- - [TipJoy](http://techcrunch.com/2009/08/20/tipjoy-heads-to-the-deadpool/) [discontinued]
+ - [discontinued] [TipJoy](http://techcrunch.com/2009/08/20/tipjoy-heads-to-the-deadpool/)
  - [HopeMob](http://hopemob.org/)
  - [AwesomeFoundation](http://www.awesomefoundation.org/)
  - [CrowdRise](http://www.crowdrise.com/)
- - [ChipIn](http://www.chipin.com/)
+ - [discontinued] [ChipIn](http://www.chipin.com/)
  - [Fundable](http://www.fundable.com/) - fund start-up companies
  - [ModestNeeds](https://www.modestneeds.org/) - crowdfunding campaigns in support of the &ldquo;working poor&rdquo;
  - [FreedomSponsors](http://www.freedomsponsors.org/) - Crowdfunding Free Software, one issue at a time
