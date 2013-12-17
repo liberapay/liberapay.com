@@ -106,48 +106,43 @@ If Gittip launches successfully it will look like this:
 ```
 $ make run
 ./env/bin/swaddle local.env ./env/bin/aspen \
-                --www_root=www/ \
-                --project_root=.. \
-                --show_tracebacks=yes \
-                --changes_reload=yes \
-                --network_address=:8537
-[SWADDLE] Skipping line: .
-[SWADDLE] Skipping line: .
-[SWADDLE] Skipping line: .
-[SWADDLE] Skipping line: .
-[SWADDLE] Skipping line: .
+        --www_root=www/ \
+        --project_root=. \
+        --show_tracebacks=yes \
+        --changes_reload=yes \
+        --network_address=:8537
 pid-12508 thread-140735090330816 (MainThread) Reading configuration from defaults, environment, and command line.
 pid-12508 thread-140735090330816 (MainThread)   changes_reload         False                          default
 pid-12508 thread-140735090330816 (MainThread)   changes_reload         True                           command line option --changes_reload=yes
 pid-12508 thread-140735090330816 (MainThread)   charset_dynamic        UTF-8                          default
 pid-12508 thread-140735090330816 (MainThread)   charset_static         None                           default
 pid-12508 thread-140735090330816 (MainThread)   configuration_scripts  []                             default
-pid-12508 thread-140735090330816 (MainThread)   indices                [u'index.html', u'index.json', u'index'] default
+pid-12508 thread-140735090330816 (MainThread)   indices                [u'index.html', u'index.json', u'index', u'index.html.spt', u'index.json.spt', u'index.spt'] default
 pid-12508 thread-140735090330816 (MainThread)   list_directories       False                          default
 pid-12508 thread-140735090330816 (MainThread)   logging_threshold      0                              default
 pid-12508 thread-140735090330816 (MainThread)   media_type_default     text/plain                     default
 pid-12508 thread-140735090330816 (MainThread)   media_type_json        application/json               default
 pid-12508 thread-140735090330816 (MainThread)   network_address        ((u'0.0.0.0', 8080), 2)        default
 pid-12508 thread-140735090330816 (MainThread)   network_address        ((u'0.0.0.0', 8537), 2)        command line option --network_address=:8537
-pid-12508 thread-140735090330816 (MainThread)   network_engine         cherrypy                       default
+pid-12508 thread-140735090330816 (MainThread)   network_engine         cheroot                        default
 pid-12508 thread-140735090330816 (MainThread)   project_root           None                           default
-pid-12508 thread-140735090330816 (MainThread)   project_root           ..                             command line option --project_root=..
-pid-12508 thread-140735090330816 (MainThread)   renderer_default       tornado                        default
+pid-12508 thread-140735090330816 (MainThread)   project_root           .                              command line option --project_root=.
+pid-12508 thread-140735090330816 (MainThread)   renderer_default       stdlib_percent                 default
 pid-12508 thread-140735090330816 (MainThread)   show_tracebacks        False                          default
 pid-12508 thread-140735090330816 (MainThread)   show_tracebacks        True                           command line option --show_tracebacks=yes
-pid-12508 thread-140735090330816 (MainThread)   unavailable            0                              default
 pid-12508 thread-140735090330816 (MainThread)   www_root               None                           default
 pid-12508 thread-140735090330816 (MainThread)   www_root               www/                           command line option --www_root=www/
-pid-12508 thread-140735090330816 (MainThread) project_root is relative: '..'.
+pid-12508 thread-140735090330816 (MainThread) project_root is relative to CWD: '.'.
 pid-12508 thread-140735090330816 (MainThread) project_root set to /Your/path/to/www.gittip.com.
+pid-12508 thread-140735090330816 (MainThread) Found plugin for renderer 'tornado'
+pid-12508 thread-140735090330816 (MainThread) Won't log to Sentry (SENTRY_DSN is empty).
+pid-12508 thread-140735090330816 (MainThread) Loading configuration file '/Your/path/to/www.gittip.com/configure-aspen.py' (possibly changing settings)
 pid-12508 thread-140735090330816 (MainThread) Renderers (*ed are unavailable, CAPS is default):
-pid-12508 thread-140735090330816 (MainThread)   TORNADO
-pid-12508 thread-140735090330816 (MainThread)  *pystache         ImportError: No module named pystache
-pid-12508 thread-140735090330816 (MainThread)   stdlib_template
-pid-12508 thread-140735090330816 (MainThread)   stdlib_format
-pid-12508 thread-140735090330816 (MainThread)  *jinja2           ImportError: No module named jinja2
-pid-12508 thread-140735090330816 (MainThread)   stdlib_percent
-pid-12508 thread-140735090330816 (MainThread) Starting cherrypy engine.
+pid-12508 thread-140735090330816 (MainThread)   stdlib_percent   
+pid-12508 thread-140735090330816 (MainThread)   TORNADO          
+pid-12508 thread-140735090330816 (MainThread)   stdlib_format    
+pid-12508 thread-140735090330816 (MainThread)   stdlib_template  
+pid-12508 thread-140735090330816 (MainThread) Starting cheroot engine.
 pid-12508 thread-140735090330816 (MainThread) Greetings, program! Welcome to port 8537.
 pid-12508 thread-140735090330816 (MainThread) Aspen will restart when configuration scripts or Python modules change.
 pid-12508 thread-140735090330816 (MainThread) Starting up Aspen website.
@@ -481,21 +476,20 @@ and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
  - [NetworkForGood](http://www1.networkforgood.org/)
  - [AnyFu](http://anyfu.com/) - hire an expert for one-on-one, screen-share work sessions
  - [OpenOfficeHours](http://ohours.org/)
- - [VideoVivoApp](http://videovivoapp.com/)
- - [TipJoy](http://techcrunch.com/2009/08/20/tipjoy-heads-to-the-deadpool/) [discontinued]
+ - [discontinued] [TipJoy](http://techcrunch.com/2009/08/20/tipjoy-heads-to-the-deadpool/)
  - [HopeMob](http://hopemob.org/)
  - [AwesomeFoundation](http://www.awesomefoundation.org/)
  - [CrowdRise](http://www.crowdrise.com/)
- - [ChipIn](http://www.chipin.com/)
+ - [discontinued] [ChipIn](http://www.chipin.com/)
  - [Fundable](http://www.fundable.com/) - fund start-up companies
  - [ModestNeeds](https://www.modestneeds.org/) - crowdfunding campaigns in support of the &ldquo;working poor&rdquo;
  - [FreedomSponsors](http://www.freedomsponsors.org/) - Crowdfunding Free Software, one issue at a time
  - [GumRoad](https://gumroad.com/)
  - [MacHeist](http://macheist.com/)
  - [Prosper](http://www.prosper.com/) - peer-to-peer lending
- - [Togather](http://togather.me/)
+ - [discontinued] [Togather](http://togather.me/)
  - [PaySwarm](http://payswarm.com/) - open payment protocol
- - [Gitbo](http://git.bo/) - another implementation of the bounty model
+ - [discontinued] [Gitbo](http://git.bo/) - another implementation of the bounty model
  - [Affero](http://www.affero.com/) - old skool attempt &ldquo;to bring a culture of patronage to the Internet&rdquo;
  - [ShareAGift](http://www.shareagift.com) - one-off, crowd-sourced cash gifts
  - [GoFundMe](http://www.gofundme.com/) - derpy-looking platform that [reaches normal people](http://pittsburgh.cbslocal.com/2013/02/19/crowdfunding-growing-in-popularity-as-fundraising-tool/) (my dad emailed this link to me)
@@ -507,7 +501,7 @@ and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
  - [IssueHunter](http://issuehunter.co/) - FOSS bounty site
  - [TinyPass](http://www.tinypass.com/) - Soft paywall, used by e.g. [Daily Dish](http://dish.andrewsullivan.com/)
  - [Patreon](http://www.patreon.com/) - Patronage model for content creators(!)
- - [WhyNotMe](http://www.whynotme.me/) - "Give as a group to any non-profit in America"
+ - [discontinued] [WhyNotMe](http://www.whynotme.me/) - "Give as a group to any non-profit in America"
  - [LoveMachine](http://web.archive.org/web/20110214110248/http://sendlove.us/trial/faq.php) - "the cool new employee recognition system" (supposedly came out of Linden Lab)
  - [See.Me](https://www.see.me/) - sustainable crowdfunding for artists
  - [NoiseTrade](http://www.noisetrade.com/) - band mailing lists + tips
@@ -524,5 +518,5 @@ and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
  - [PieTrust](http://www.pietrust.com/) - an "open company" developing a secure reputation system for sharing credit.
  - [BountyOSS](https://bountyoss.com/) - Where crowdfunding means business
  - [Suprmasv](https://www.suprmasv.com/) - Empowering the Hacker Class.
- - [Tip4Commit](https://www.tip4commit.com/) - Donate bitcoins to open source projects or make commits and get tips for it.
+ - [Tip4Commit](http://tip4commit.com/) - Donate bitcoins to open source projects or make commits and get tips for it.
  - [BitHub](https://whispersystems.org/blog/bithub/) - An experiment in funding privacy OSS. 
