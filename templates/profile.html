@@ -30,10 +30,5 @@
     <a href="/{{ participant.username }}/"><button{% if '' == current_page %} class="selected"{% end %}>Profile</button></a>
     <a href="/{{ participant.username }}/members/"><button{% if 'members' == current_page %} class="selected"{% end %}>Members</button></a>
 </div>
-{% else %}
-<div class="nav level-2">
-    <h2>Navigation</h2>
-    <a href="/{{ participant.username }}/"><button{% if '' == current_page %} class="selected"{% end %}>Profile</button></a>
-</div>
 {% end %}
 {% end %}
