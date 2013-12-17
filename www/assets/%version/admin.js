@@ -16,7 +16,7 @@ $(document).ready(function()
                     $(".on-profile").addClass('is-suspicious');
                 else
                     $(".on-profile").removeClass('is-suspicious');
-                $('INPUT.is-suspicious-knob').attr( 'checked'
+                $('input.is-suspicious-knob').attr( 'checked'
                                                   , data.is_suspicious
                                                    );
             }

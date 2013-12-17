@@ -1,9 +1,9 @@
 #profile-edit {
-    BUTTON.save, BUTTON.cancel {
+    button.save, button.cancel {
         display: none;
     }
     .username {
-        INPUT {
+        input {
             width: 6em;
             display: none;
         }
@@ -15,10 +15,10 @@
         }
     }
     .statement {
-        DIV.edit {
+        div.edit {
             display: none;
         }
-        TEXTAREA {
+        textarea {
             width: 98%;
             height: 126pt; /* 18pt * 7 rows; overriden in js */
             padding: 1%;
@@ -29,17 +29,17 @@
         }
     }
     .goal {
-        TABLE.edit {
+        table.edit {
             display: none;
         }
-        TD {
+        td {
             text-align: left;
         }
         #goal-custom {
             text-align: right;
             width: 6pc;
         }
-        LI {
+        li {
             margin-bottom: 1em;
         }
     }

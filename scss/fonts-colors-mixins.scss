@@ -33,21 +33,13 @@ $light-red: #F99;
 
 // Mixins
 @mixin border-radius($radius: 5px) {
-    -webkit-background-clip: padding-box;
-    -webkit-border-radius: $radius;
-    -moz-background-clip: padding-box;
-    -moz-border-radius: $radius;
     border-radius: $radius;
     background-clip: padding-box;
 }
 @mixin box-shadow($horizontal: 0px, $vertical: 1px, $blur: 2px, $color: #CCC) {
-  -webkit-box-shadow: $horizontal $vertical $blur $color;
-  -moz-box-shadow: $horizontal $vertical $blur $color;
   box-shadow: $horizontal $vertical $blur $color;
 }
 @mixin inset-box-shadow($horizontal: 0px, $vertical: 1px, $blur: 2px, $color: #CCC) {
-  -webkit-box-shadow: inset $horizontal $vertical $blur $color;
-  -moz-box-shadow: inset $horizontal $vertical $blur $color;
   box-shadow: inset $horizontal $vertical $blur $color;
 }
 @mixin multi-color-border($top, $sides, $bottom) {
@@ -57,14 +49,6 @@ $light-red: #F99;
     border-bottom: 1px solid $bottom;
 }
 @mixin multi-border-radius($topLeft: 5px, $topRight: 5px, $bottomRight: 5px, $bottomLeft: 5px) {
-    -webkit-border-top-left-radius: $topLeft;
-    -webkit-border-top-right-radius: $topRight;
-    -webkit-border-bottom-right-radius: $bottomRight;
-    -webkit-border-bottom-left-radius: $bottomLeft;
-    -moz-border-radius-topleft: $topLeft;
-    -moz-border-radius-topright: $topRight;
-    -moz-border-radius-bottomright: $bottomRight;
-    -moz-border-radius-bottomleft: $bottomLeft;
     border-top-left-radius: $topLeft;
     border-top-right-radius: $topRight;
     border-bottom-right-radius: $bottomRight;
@@ -82,7 +66,5 @@ $light-red: #F99;
     background: $image, -moz-gradient(center top, $start 0%, $stop 100%);
 }
 @mixin opacity($op) {
-    -khtml-opacity: $op;
-    -moz-opacity: $op;
     opacity: $op;
 }

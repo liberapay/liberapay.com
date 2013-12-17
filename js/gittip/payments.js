@@ -52,7 +52,7 @@ Gittip.payments.ba = {};
 
 Gittip.payments.ba.init = function(balanced_uri, participantId) {
     Gittip.participantId = participantId;
-    $('#delete FORM').submit(Gittip.payments.submitDeleteForm);
+    $('#delete form').submit(Gittip.payments.submitDeleteForm);
     $('#payout').submit(Gittip.payments.ba.submit);
 
     // Lazily depend on Balanced.
@@ -60,14 +60,14 @@ Gittip.payments.ba.init = function(balanced_uri, participantId) {
     jQuery.getScript(balanced_js, function() {
         balanced.init(balanced_uri);
         Gittip.havePayouts = true;
-        $('INPUT[type!="hidden"]').eq(0).focus();
+        $('input[type!="hidden"]').eq(0).focus();
     });
 };
 
 Gittip.payments.ba.submit = function (e) {
     e.preventDefault();
 
-    $('BUTTON#save').text('Saving ...');
+    $('button#save').text('Saving ...');
     Gittip.forms.clearFeedback();
 
     var bankAccount = {
@@ -152,7 +152,7 @@ Gittip.payments.ba.submit = function (e) {
 
 
     if (errors.length) {
-        $('BUTTON#save').text('Save');
+        $('button#save').text('Save');
         Gittip.forms.showFeedback(null, errors);
     } else {
         balanced.bankAccount.create( bankAccount
@@ -164,7 +164,7 @@ Gittip.payments.ba.submit = function (e) {
 Gittip.payments.ba.handleResponse = function (response) {
     console.log('bank account response', response);
     if (response.status != 201) {
-        $('BUTTON#save').text('Save');
+        $('button#save').text('Save');
         var msg = response.status.toString() + " " + response.error.description;
         jQuery.ajax(
             { type: "POST"
@@ -190,7 +190,7 @@ Gittip.payments.ba.handleResponse = function (response) {
         }, 8000);
         $('#delete').show();
         Gittip.forms.clearFeedback();
-        $('BUTTON#save').text('Save');
+        $('button#save').text('Save');
         setTimeout(function() {
             window.location.href = '/' + Gittip.participantId + '/';
         }, 1000);
@@ -213,7 +213,7 @@ Gittip.payments.ba.handleResponse = function (response) {
             ];
         }
         Gittip.forms.showFeedback(data.problem, messages);
-        $('BUTTON#save').text('Save');
+        $('button#save').text('Save');
     }
 
     var detailsToSubmit = Gittip.payments.ba.merchantData;
@@ -234,15 +234,15 @@ Gittip.payments.cc = {};
 
 Gittip.payments.cc.init = function(balanced_uri, participantId) {
     Gittip.participantId = participantId;
-    $('#delete FORM').submit(Gittip.payments.submitDeleteForm);
-    $('FORM#payment').submit(Gittip.payments.cc.submit);
+    $('#delete form').submit(Gittip.payments.submitDeleteForm);
+    $('form#payment').submit(Gittip.payments.cc.submit);
 
     // Lazily depend on Balanced.
     var balanced_js = "https://js.balancedpayments.com/v1/balanced.js";
     jQuery.getScript(balanced_js, function() {
         balanced.init(balanced_uri);
         Gittip.havePayments = true;
-        $('INPUT[type!="hidden"]').eq(0).focus();
+        $('input[type!="hidden"]').eq(0).focus();
     });
 };
 
@@ -250,7 +250,7 @@ Gittip.payments.cc.submit = function(e) {
 
     e.stopPropagation();
     e.preventDefault();
-    $('BUTTON#save').text('Saving ...');
+    $('button#save').text('Saving ...');
     Gittip.forms.clearFeedback();
 
     if (!Gittip.havePayments) {
@@ -268,7 +268,7 @@ Gittip.payments.cc.submit = function(e) {
     // Adapt our form lingo to balanced nomenclature.
 
     function val(field) {
-        return $('FORM#payment INPUT[id="' + field + '"]').val();
+        return $('form#payment input[id="' + field + '"]').val();
     }
 
     var credit_card = {};   // holds CC info
@@ -293,17 +293,17 @@ Gittip.payments.cc.submit = function(e) {
     credit_card.expiration_year = val('expiration_year');
 
     if (!balanced.card.isCardNumberValid(credit_card.card_number)) {
-        $('BUTTON#save').text('Save');
+        $('button#save').text('Save');
         Gittip.forms.showFeedback(null, ["Your card number is bad."]);
     } else if (!balanced.card.isExpiryValid( credit_card.expiration_month
                                          , credit_card.expiration_year
                                           )) {
-        $('BUTTON#save').text('Save');
+        $('button#save').text('Save');
         Gittip.forms.showFeedback(null, ["Your expiration date is bad."]);
     } else if (!balanced.card.isSecurityCodeValid( credit_card.card_number
                                                , credit_card.security_code
                                                 )) {
-        $('BUTTON#save').text('Save');
+        $('button#save').text('Save');
         Gittip.forms.showFeedback(null, ["Your CVV is bad."]);
     } else {
         balanced.card.create(credit_card, Gittip.payments.cc.handleResponse);
@@ -331,7 +331,7 @@ Gittip.payments.cc.handleResponse = function(response) {
 
     if (response.status !== 201) {   // The request to create the token failed. Store the failure message in
         // our db.
-        $('BUTTON#save').text('Save');
+        $('button#save').text('Save');
         var msg = response.status.toString() + " " + response.error.description;
         jQuery.ajax(
             { type: "POST"
@@ -359,7 +359,7 @@ Gittip.payments.cc.handleResponse = function(response) {
         }, 8000);
         $('#delete').show();
         Gittip.forms.clearFeedback();
-        $('BUTTON#save').text('Save');
+        $('button#save').text('Save');
         setTimeout(function() {
             window.location.href = '/' + Gittip.participantId + '/';
         }, 1000);
@@ -370,7 +370,7 @@ Gittip.payments.cc.handleResponse = function(response) {
         $('#delete').show();
         var details = [];
         Gittip.forms.showFeedback(data.problem, [data.error]);
-        $('BUTTON#save').text('Save');
+        $('button#save').text('Save');
     }
 
     Gittip.forms.submit( "/credit-card.json"
