@@ -1,1 +1,1 @@
-DROP TABLE toots cascade;;
+DROP TABLE toots cascade;
