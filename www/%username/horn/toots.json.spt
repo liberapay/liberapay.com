@@ -4,7 +4,6 @@ If the user is the participant, then the toot stream will include toots
 referring to people they gave money to last week.
 
 """
-from gittip import db
 from gittip.utils import get_participant
 
 SQL_SELF = """
@@ -72,4 +71,4 @@ try:
         args.insert(-1, long(max_id))
 except ValueError:  # cast to int/long failed
     raise Response(400)
-response.body = db.all(SQL, tuple(args))
+response.body = website.db.all(SQL, tuple(args))

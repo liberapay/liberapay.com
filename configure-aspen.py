@@ -3,6 +3,7 @@ from __future__ import division
 import os
 import threading
 import time
+import traceback
 
 import gittip
 import gittip.wireup
@@ -10,6 +11,7 @@ from gittip import canonize, configure_payments
 from gittip.security import authentication, csrf, x_frame_options
 from gittip.utils import cache_static, timer
 
+from aspen import log_dammit
 
 # Wireup Algorithm
 # ================
@@ -36,28 +38,28 @@ tell_sentry = gittip.wireup.make_sentry_teller(website)
 # The homepage wants expensive queries. Let's periodically select into an
 # intermediate table.
 
-def update_homepage_queries_once():
-    from gittip import utils
-    try:
-        utils.update_global_stats(website)
-        utils.update_homepage_queries_once(website.db)
-    except:
-        tell_sentry(None)
-
-update_homepage_queries_once()
-
-UPDATE_HOMEPAGE_EVERY = os.environ['UPDATE_HOMEPAGE_EVERY']
+UPDATE_HOMEPAGE_EVERY = int(os.environ['UPDATE_HOMEPAGE_EVERY'])
 def update_homepage_queries():
-    if UPDATE_HOMEPAGE_EVERY == '':
-        return
-    update_homepage_every = int(UPDATE_HOMEPAGE_EVERY)
+    from gittip import utils
     while 1:
-        update_homepage_queries_once()
-        time.sleep(update_homepage_every)
+        try:
+            utils.update_global_stats(website)
+            utils.update_homepage_queries_once(website.db)
+        except:
+            if tell_sentry:
+                tell_sentry(None)
+            else:
+                tb = traceback.format_exc().strip()
+                log_dammit(tb)
+        time.sleep(UPDATE_HOMEPAGE_EVERY)
 
-homepage_updater = threading.Thread(target=update_homepage_queries)
-homepage_updater.daemon = True
-homepage_updater.start()
+if UPDATE_HOMEPAGE_EVERY > 0:
+    homepage_updater = threading.Thread(target=update_homepage_queries)
+    homepage_updater.daemon = True
+    homepage_updater.start()
+else:
+    from gittip import utils
+    utils.update_global_stats(website)
 
 
 # Server Algorithm

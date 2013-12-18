@@ -5,6 +5,7 @@ import gittip
 from aspen import log_dammit, Response
 from aspen.utils import typecheck
 from tornado.escape import linkify
+from postgres.cursors import SimpleCursorBase
 
 
 COUNTRIES = (
@@ -311,11 +312,11 @@ def get_participant(request, restrict=True):
         if user.ANON:
             request.redirect(u'/%s/' % slug)
 
-    participant = request.website.db.one( "SELECT participants.*::participants "
-                                         "FROM participants "
-                                         "WHERE username_lower=%s"
-                                       , (slug.lower(),)
-                                        )
+    participant = request.website.db.one("""
+        SELECT participants.*::participants
+        FROM participants
+        WHERE username_lower=%s
+    """, (slug.lower(),))
 
     if participant is None:
         raise Response(404)
@@ -342,10 +343,10 @@ def get_participant(request, restrict=True):
 
 
 def update_global_stats(website):
-    stats = website.db.one( "SELECT nactive, transfer_volume FROM paydays "
-                           "ORDER BY ts_end DESC LIMIT 1"
-                         , default=(0, 0.0)
-                          )
+    stats = website.db.one("""
+        SELECT nactive, transfer_volume FROM paydays
+        ORDER BY ts_end DESC LIMIT 1
+    """, default=(0, 0.0))
     website.gnactive = locale.format("%d", round(stats[0], -2), grouping=True)
     website.gtransfer_volume = locale.format("%d", round(stats[1], -2), grouping=True)
 
@@ -441,3 +442,19 @@ def update_homepage_queries_once(db):
         end = time.time()
         elapsed = end - start
         log_dammit("updated homepage queries in %.2f seconds" % elapsed)
+
+
+def _execute(this, sql, params=[]):
+    print(sql.strip(), params)
+    super(SimpleCursorBase, this).execute(sql, params)
+
+def log_cursor(f):
+    "Prints sql and params to stdout. Works globaly so watch for threaded use."
+    def wrapper(*a, **kw):
+        try:
+            SimpleCursorBase.execute = _execute
+            ret = f(*a, **kw)
+        finally:
+            del SimpleCursorBase.execute
+        return ret
+    return wrapper

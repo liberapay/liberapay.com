@@ -213,20 +213,13 @@ should change the `DATABASE_URL` using the following format:
 
     DATABASE_URL=postgres://<username>@localhost/<database name>
 
-
 Modifying CSS
 =============
 
-We use SCSS, with files stored in `scss/`. Out of the box, your Gittip
-installation will use the stylesheet from production, per the `GITTIP_CSS_HREF`
-setting in `local.env`. If you want to modify styles then you should install
-[sass](http://sass-lang.com/) and change `GITTIP_CSS_HREF` in your `local.env`
-to `/assets/-/gittip.css`. That will route to
+We use SCSS, with files stored in `scss/`. Out of the box, Gittip provides 
 `www/assets/%version/gittip.css.spt`, which is a simplate that shells out to
-`sass` to dynamically generate the stylesheet on each request. The `-` prevents
-HTTP caching. Sass does its own caching on disk so it's performant enough for
-development (in production we route through a CDN so the origin only gets hit
-once per new version).
+`libsass` to dynamically generate the stylesheet on each request. The `-` prevents
+HTTP caching.
 
 
 Testing [![Testing](https://secure.travis-ci.org/gittip/www.gittip.com.png)](http://travis-ci.org/gittip/www.gittip.com)

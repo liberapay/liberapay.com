@@ -6,7 +6,6 @@ import re
 
 import requests
 from aspen import json, Response
-from gittip import CARDINALS, db
 from gittip.elsewhere import bitbucket
 from gittip.models.participant import Participant
 
@@ -85,7 +84,7 @@ elif is_team:
            AND p.claimed_time IS NOT NULL
 
     """
-    known = db.all(ON_GITTIP, (usernames,))
+    known = website.db.all(ON_GITTIP, (usernames,))
     known_map = {rec.username: rec.participant for rec in known}
     _on_gittip = [rec.username for rec in known]
     on_gittip = []

@@ -769,11 +769,11 @@ def typecast(request):
 
     slug = path['username']
 
-    participant = request.website.db.one( "SELECT participants.*::participants "
-                                 "FROM participants "
-                                 "WHERE username_lower=%s"
-                               , (slug.lower())
-                                )
+    participant = request.website.db.one( """
+        SELECT participants.*::participants
+        FROM participants
+        WHERE username_lower=%s
+    """, (slug.lower()))
 
     if participant is None:
         raise Response(404)

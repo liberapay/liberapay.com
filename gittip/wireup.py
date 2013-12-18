@@ -1,5 +1,6 @@
 """Wireup
 """
+from __future__ import absolute_import, division, print_function, unicode_literals
 import os
 import sys
 
@@ -198,6 +199,7 @@ def envvars(website):
     website.js_src = envvar('GITTIP_JS_SRC') \
                                           .replace('%version', website.version)
     website.cache_static = is_yesish(envvar('GITTIP_CACHE_STATIC'))
+    website.compress_assets = is_yesish(envvar('GITTIP_COMPRESS_ASSETS'))
 
     website.google_analytics_id = envvar('GOOGLE_ANALYTICS_ID')
     website.gauges_id = envvar('GAUGES_ID')
@@ -205,6 +207,7 @@ def envvars(website):
 
     website.min_threads = envvar('MIN_THREADS', int)
     website.log_busy_threads_every = envvar('LOG_BUSY_THREADS_EVERY', int)
+    website.log_metrics = is_yesish(envvar('LOG_METRICS'))
 
     if malformed_values:
         malformed_values.sort()

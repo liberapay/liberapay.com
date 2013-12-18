@@ -5,7 +5,7 @@ THRESHOLD = website.NMEMBERS_THRESHOLD
 
 [-----------------------------]
 
-communities = community.get_list_for(None)
+communities = community.get_list_for(website.db, None)
 ncommunities = len(communities)
 
 viable = []

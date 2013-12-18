@@ -1,5 +1,6 @@
 Gittip.charts = {};
 
+
 Gittip.charts.make = function(series) {
     // Takes an array of time series data.
 
@@ -9,15 +10,22 @@ Gittip.charts.make = function(series) {
     }
 
 
+    // Sort the series in increasing date order.
+    // =========================================
+
+    series.sort(function(a,b) { return a.date > b.date ? 1 : -1 });
+
+
     // Gather charts.
     // ==============
-    // We find charts based on the variable names from the first element in the
-    // time series.
+    // Sniff the first element to determine what data points are available, and
+    // then search the page for chart containers matching each data point
+    // variable name.
 
-    var first = series[0];
+    var point  = series[0];
     var charts = [];
 
-    for (var varname in first) {
+    for (var varname in point) {
         var chart = $('#chart_'+varname);
         if (chart.length) {
             chart.varname = varname;
@@ -26,19 +34,16 @@ Gittip.charts.make = function(series) {
     }
 
     var H = $('.chart').height();
-    var W = $('.chart').width();
     var nweeks = series.length;
-    var w = Math.floor((W - 20) / nweeks);
-    var W = w * nweeks;
+    var w = (1 / nweeks * 100).toFixed(10) + '%';
 
     $('.n-weeks').text(nweeks);
-    $('.chart').width(W);
 
 
     // Compute maxes and scales.
     // =========================
 
-    var maxes = [];
+    var maxes  = [];
     var scales = [];
 
     for (var i=0, point; point = series[i]; i++) {
@@ -56,77 +61,47 @@ Gittip.charts.make = function(series) {
     // ===========
 
     function Week(i, j, max, N, y, title) {
-        var x = nweeks - i;
-        var create = function(x) { return document.createElement(x); };
-        var week = $(create('div')).addClass('week');
-        var shaded = $(create('div')).addClass('shaded');
-        shaded.html( '<span class="y-label">'
-                   + parseInt(y, 10)
-                   + '</span>'
-                    );
+        var week   = $(document.createElement('div')).addClass('week');
+        var shaded = $(document.createElement('div')).addClass('shaded');
+        shaded.html('<span class="y-label">'+ y.toFixed() +'</span>');
         week.append(shaded);
-        week.attr({x: x, y: y});
 
-        var xTick = $(create('span')).addClass('x-tick');
-        xTick.text(x);
-        xTick.attr('title', title);
-        if ((x % 5) === 0)
-            xTick.addClass('on');
+        var xTick = $(document.createElement('span')).addClass('x-tick');
+        xTick.text(i+1).attr('title', title);
         week.append(xTick);
-        if (y === max) {
-            maxes[j] = NaN; // only show one max flag
-            week.addClass('flagged');
-        }
 
-        var y = parseFloat(y);
-        var h = Math.ceil(((y / N) * H));
-        week.height(H);
-        week.width(w);
-        week.css({"left": w * (nweeks - i - 1)});
-        shaded.css({"height": h});
+        // Display a max flag (only once)
+        if (y === max)
+            delete maxes[j] && week.addClass('flagged');
+
+        week.css('width', w);
+        shaded.css('height', y / N * H);
         return week;
     }
 
     for (var i=0, point; point = series[i]; i++) {
-        var point = series[i];
-
         for (var j=0, chart; chart = charts[j]; j++) {
-
-            var chart = charts[j];
-
-            chart.append(Week( i
-                             , j
-                             , maxes[j]
-                             , scales[j]
-                             , point[charts[j].varname]
-                             , point.date
-                              ));
+            chart.append(
+                Week(i, j, maxes[j], scales[j], point[chart.varname], point.date)
+            );
         }
     }
-
-    $('.week').width(w);
-    $('.shaded').width(w);
 
 
     // Wire up behaviors.
     // ==================
-
-    function mouseover() {
-        var x = $(this).attr('x');
-        var y = $(this).attr('y');
-
-        $(this).addClass('hover');
-    }
-
-    function mouseout() {
-        $(this).removeClass('hover');
-    }
 
     $('.week').click(function() {
         $(this).toggleClass('flagged');
         if ($(this).hasClass('flagged'))
             $(this).removeClass('hover');
     });
-    $('.week').mouseover(mouseover);
-    $('.week').mouseout(mouseout);
+
+    $('.week').mouseover(function() {
+        $(this).addClass('hover');
+    });
+
+    $('.week').mouseout(function() {
+        $(this).removeClass('hover');
+    });
 };

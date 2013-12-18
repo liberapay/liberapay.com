@@ -5,7 +5,6 @@ import os
 
 import requests
 from aspen import json, Response
-from gittip import CARDINALS, db
 from gittip.elsewhere import github
 from gittip.models.participant import Participant
 
@@ -66,7 +65,7 @@ elif usertype == "organization":
            AND p.claimed_time IS NOT NULL
 
     """
-    known = db.all(ON_GITTIP, (logins,))
+    known = website.db.all(ON_GITTIP, (logins,))
     known_map = {rec.login: rec.participant for rec in known}
     _on_gittip = [rec.login for rec in known]
     on_gittip = []

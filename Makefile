@@ -69,6 +69,9 @@ test-db: test-cloud-db test-schema
 test: env tests/env test-schema
 	./$(env_bin)/swaddle tests/env ./$(env_bin)/py.test ./tests/
 
+retest: env tests/env
+	./$(env_bin)/swaddle tests/env ./$(env_bin)/py.test ./tests/ --lf
+
 tests: test
 
 node_modules: package.json
