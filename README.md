@@ -211,11 +211,9 @@ should change the `DATABASE_URL` using the following format:
 Modifying CSS
 =============
 
-We use SCSS, with files stored in `scss/`. Out of the box, Gittip provides 
-`www/assets/%version/gittip.css.spt`, which is a simplate that shells out to
-`libsass` to dynamically generate the stylesheet on each request. The `-` prevents
-HTTP caching.
-
+We use SCSS, with files stored in `scss/`. All of the individual files are
+combined in `scss/gittip.scss` which itself is compiled by `libsass` in
+`www/assets/%version/gittip.css.spt` on each request.
 
 Testing [![Testing](https://secure.travis-ci.org/gittip/www.gittip.com.png)](http://travis-ci.org/gittip/www.gittip.com)
 =======
