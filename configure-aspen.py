@@ -126,6 +126,7 @@ algorithm.functions = [ timer.start
                       , add_stuff_to_context
 
                       , algorithm['dispatch_request_to_filesystem']
+                      , algorithm['apply_typecasters_to_path']
 
                       , cache_static.inbound
 
