@@ -11,7 +11,6 @@ class Tests(Harness):
     @mock.patch('requests.post')
     @mock.patch('requests.get')
     def test_associate_opts_in(self, get, post):
-        print(id(self.client))
         self.client.website.oauth_cache = {"deadbeef": ("deadbeef", "opt-in", "")}
 
         post.return_value.status_code = 200
@@ -30,7 +29,6 @@ class Tests(Harness):
     @mock.patch('requests.get')
     def test_associate_connects(self, get, post):
         self.make_participant('alice')
-        print(id(self.client))
         self.client.website.oauth_cache = {"deadbeef": ("deadbeef", "connect", "")}
 
         post.return_value.status_code = 200
