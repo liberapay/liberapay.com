@@ -16,7 +16,7 @@
 {% if user.participant == participant or user.ADMIN %}
 <div class="nav level-2">
     <h2>Navigation</h2>
-    {% set pages = [('/', 'Profile'), ('/horn/', 'Horn'), ('/giving/', 'Giving'), ('/history/', 'History'), ('/widgets/', 'Widgets')] %}
+    {% set pages = [('/', 'Profile'), ('/giving/', 'Giving'), ('/history/', 'History'), ('/widgets/', 'Widgets')] %}
     {% for slug, name in pages %}
     <a href="/{{ participant.username }}{{ slug }}"><button{% if slug.strip('/') == current_page %} class="selected"{% end %}>{{ name }}</button></a>
     {% end %}
@@ -28,14 +28,7 @@
 <div class="nav level-2">
     <h2>Navigation</h2>
     <a href="/{{ participant.username }}/"><button{% if '' == current_page %} class="selected"{% end %}>Profile</button></a>
-    <a href="/{{ participant.username }}/horn/"><button{% if 'horn' == current_page %} class="selected"{% end %}>Horn</button></a>
     <a href="/{{ participant.username }}/members/"><button{% if 'members' == current_page %} class="selected"{% end %}>Members</button></a>
-</div>
-{% else %}
-<div class="nav level-2">
-    <h2>Navigation</h2>
-    <a href="/{{ participant.username }}/"><button{% if '' == current_page %} class="selected"{% end %}>Profile</button></a>
-    <a href="/{{ participant.username }}/horn/"><button{% if 'horn' == current_page %} class="selected"{% end %}>Horn</button></a>
 </div>
 {% end %}
 {% end %}

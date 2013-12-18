@@ -10,7 +10,6 @@ import gittip
 import raven
 import psycopg2
 import stripe
-import gittip.utils.mixpanel
 from gittip.models.community import Community
 from gittip.models.participant import Participant
 from postgres import Postgres
@@ -139,11 +138,6 @@ def make_sentry_teller(website):
 
     return tell_sentry
 
-
-def mixpanel(website):
-    website.mixpanel_token = os.environ['MIXPANEL_TOKEN']
-    gittip.utils.mixpanel.MIXPANEL_TOKEN = os.environ['MIXPANEL_TOKEN']
-
 def nanswers():
     from gittip.models import participant
     participant.NANSWERS_THRESHOLD = int(os.environ['NANSWERS_THRESHOLD'])
@@ -202,7 +196,6 @@ def envvars(website):
     website.compress_assets = is_yesish(envvar('GITTIP_COMPRESS_ASSETS'))
 
     website.google_analytics_id = envvar('GOOGLE_ANALYTICS_ID')
-    website.gauges_id = envvar('GAUGES_ID')
     website.sentry_dsn = envvar('SENTRY_DSN')
 
     website.min_threads = envvar('MIN_THREADS', int)

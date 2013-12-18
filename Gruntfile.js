@@ -39,7 +39,6 @@ module.exports = function(grunt) {
                     Gittip: true,
                     _gttp: true,
                     gttpURI: true,
-                    mixpanel: true,
                     alert: true
                 }
             }
@@ -61,7 +60,7 @@ module.exports = function(grunt) {
                 urlRoot: '/karma/',
                 proxies: { '/': 'http://' + env.CANONICAL_HOST + '/' },
                 files: [
-                    'www/assets/jquery-1.8.3.min.js',
+                    'www/assets/jquery-1.10.2.min.js',
                     'www/assets/%version/utils.js',
                     'jstests/**/test_*.js',
                 ],

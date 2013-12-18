@@ -15,12 +15,12 @@ response.headers['X-Frame-Options'] = "ALLOWALL"
 <html>
     <head>
         <style>
-            BODY {
+            body {
                 margin: 0;
                 padding: 0;
                 overflow: hidden;
             }
-            BUTTON {
+            button {
                 font: normal 12pt/12pt "Lato", sans-serif;
                 text-decoration: none;
 
@@ -30,11 +30,6 @@ response.headers['X-Frame-Options'] = "ALLOWALL"
                 cursor: pointer;
 
                 border: 1pt solid #999;
-                -moz-border-radius: 7pt;
-                -webkit-border-radius: 7pt;
-                -o-border-radius: 7pt;
-                -ms-border-radius: 7pt;
-                -khtml-border-radius: 7pt;
                 border-radius: 7pt;
 
                 background: #F7F7F6 url("/assets/button-bg.png") repeat-x bottom left;
@@ -48,18 +43,12 @@ response.headers['X-Frame-Options'] = "ALLOWALL"
                 padding: 4pt 12pt 6pt 11pt;
                 margin: 0;
                 vertical-align: middle;
-
-                -moz-background-clip: padding;
-                -webkit-background-clip: padding;
-                -o-background-clip: padding-box;
-                -ms-background-clip: padding-box;
-                -khtml-background-clip: padding-box;
                 background-clip: padding-box;
             }
 
-            BUTTON.selected {
                 border: 1px solid #0A382E;
                 background: #2A8F79 url("/assets/button-bg.png") repeat-x bottom left;
+            button.selected {
                 background-image: -webkit-gradient( linear, 0% 0%, 0% 100%
                                                   , from(#2A8F79)
                                                   , to(#0D4035)
@@ -68,39 +57,34 @@ response.headers['X-Frame-Options'] = "ALLOWALL"
                 background-image: linear-gradient(top, #2A8F79, #0D4035);
             }
 
-            BUTTON.small {
+            button.small {
                 font: normal 9pt/9pt "Lato", sans-serif;
                 padding: 2pt 5pt 2.5pt;
-                -moz-border-radius: 3pt;
-                -webkit-border-radius: 3pt;
-                -o-border-radius: 3pt;
-                -ms-border-radius: 3pt;
-                -khtml-border-radius: 3pt;
                 border-radius: 3pt;
             }
 
-            BUTTON::-moz-focus-inner {
+            button::-moz-focus-inner {
                 border: none;
                 padding: 0;
             }
 
-            BUTTON:focus {
+            button:focus {
                 outline: none;
             }
 
-            BUTTON, BUTTON:visited {
+            button, button:visited {
                 color: #888;
             }
 
-            BUTTON.selected, BUTTON.selected:visited,
-            BUTTON:hover, BUTTON:hover:visited,
-            BUTTON:focus, BUTTON:focus:visited,
-            BUTTON:active, BUTTON:active:visited {
+            button.selected, button.selected:visited,
+            button:hover, button:hover:visited,
+            button:focus, button:focus:visited,
+            button:active, button:active:visited {
                 color: white;
             }
 
-            BUTTON:hover, BUTTON:focus {
                 border: 1px solid #0A382E;
+            button:hover, button:focus {
                 background-image: url("/assets/button-bg.over.png");
                 background-image: -webkit-gradient( linear, 0% 0%, 0% 100%
                                                   , from(#2A8F79)
@@ -109,23 +93,15 @@ response.headers['X-Frame-Options'] = "ALLOWALL"
                 background-image: -moz-linear-gradient(top, #2A8F79, #04221B);
                 background-image: linear-gradient(top, #2A8F79, #04221B));
             }
-            BUTTON:active {
+            button:active {
                 /* http://somadesign.ca/demos/buttons-redux.html */
-                -moz-box-shadow
-                    :0 .33em 1em rgba(0,0,0,.67) inset,
-                    1px 1px 0 rgba(255,255,255,.25) inset,
-                    -1px -1px 0 rgba(255,255,255,.25) inset;
-                -webkit-box-shadow:
-                    0 .33em 2em rgba(0,0,0,.67) inset,
-                    1px 1px 0 rgba(255,255,255,.25) inset,
-                    -1px -1px 0 rgba(255,255,255,.25) inset;
                 box-shadow:
                     0 .33em 2em rgba(0,0,0,.67) inset,
                     1px 1px 0 rgba(255,255,255,.25) inset,
                     -1px -1px 0 rgba(255,255,255,.25) inset;
             }
 
-            BUTTON {
+            button {
                 position: absolute;
                 top: 0;
                 left: 0;

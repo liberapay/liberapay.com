@@ -320,7 +320,7 @@
         .scenario {
             margin: 0 auto;
         }
-        .scenario TD {
+        .scenario td {
             padding: 6pt;
             width: 33%;
         }
@@ -346,16 +346,16 @@
             display: block;
             padding: 6pt 0 6pt 9pt;
         }
-        .participant IMG, IMG.platform-icon {
+        .participant img, img.platform-icon {
             margin-bottom: -1pt;
         }
-        .participant B {
+        .participant b {
             font-size: 11pt;
         }
-        .participant TD {
+        .participant td {
             padding: 0;
         }
-        .participant TH {
+        .participant th {
             font-weight: normal;
         }
         .other, .abandoned {
@@ -368,7 +368,7 @@
         .nix {
             border-color: $light-brown;
         }
-        .other B {
+        .other b {
             font-size: 9pt;
         }
     }
@@ -412,14 +412,14 @@
         .right {
             float: left;
         }
-        LABEL {
+        label {
             display: block;
             font: normal 10px $Helvetica;
             margin: 8px 0 0;
             padding: 0;
             text-transform: uppercase;
         }
-        INPUT {
+        input {
             font: normal 11pt/14pt $Helvetica;
             width: 292px;
             margin: 0;
@@ -427,32 +427,32 @@
             border: 1px solid $light-brown;
             outline: none;
         }
-        INPUT.disabled {
+        input.disabled {
             color: $light-brown;
         }
 
-        .half INPUT {
+        .half input {
             width: 137px;
         }
-        .right.half LABEL,
-        .right.half INPUT {
+        .right.half label,
+        .right.half input {
             margin-left: 5px;
         }
-        INPUT:focus {
+        input:focus {
             border-color: $green;
         }
         .float {
             float: left;
         }
-        .city          INPUT { width: 137px; }
-        .state         INPUT { width: 43px; }
-        .zip           INPUT { width: 75px; }
-        .card_number   INPUT { width: 139px; }
-        .cvv           INPUT { width: 43px; }
-        INPUT.expiration_month { width: 25px; }
-        INPUT.expiration_year  { width: 42px; margin-left: 1px ! important; }
-        .not-first LABEL,
-        .not-first INPUT {
+        .city          input { width: 137px; }
+        .state         input { width: 43px; }
+        .zip           input { width: 75px; }
+        .card_number   input { width: 139px; }
+        .cvv           input { width: 43px; }
+        input.expiration_month { width: 25px; }
+        input.expiration_year  { width: 42px; margin-left: 1px ! important; }
+        .not-first label,
+        .not-first input {
             margin-left: 10px;
         }
         .nav {

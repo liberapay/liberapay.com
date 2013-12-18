@@ -213,7 +213,7 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
 <script>
 $(document).ready(function() {
 
-    $('BUTTON.join-leave').click(function()
+    $('button.join-leave').click(function()
     {
         var button = $(this);
         var name = button.attr('data-name');
