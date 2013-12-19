@@ -1,4 +1,4 @@
-{% extends "participant.html" %}
+{% extends "templates/participant.html" %}
 {% block head2 %}
     {% if user.ADMIN %}<script src="/assets/{{ website.version }}/admin.js"></script>{% endif %}
     <script>$(document).ready(Gittip.tips.init)</script>
