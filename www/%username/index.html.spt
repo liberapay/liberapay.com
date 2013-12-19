@@ -39,7 +39,7 @@ else:
     MY = "Our"
 
 [-----------------------------------------------------------------------------]
-{% extends templates/profile.html %}
+{% extends "templates/profile.html" %}
 {% block head %}
     <link rel="payment" type="text/html" title="Give weekly gift on Gittip" href="https://www.gittip.com/{{ username }}/" />
     <meta name="twitter:card" content="summary" />
@@ -50,9 +50,9 @@ else:
     <meta name="og:description" content="{{ _clip(I_AM + " " + MAKING + " " + escape(participant.statement), 200) }}" />
     {% else %}
     <meta name="og:description" content="Gittip is a weekly gift exchange." />
-    {% end %}
+    {% endif %}
     <meta name="og:image" content="{{ participant.get_img_src() }}" />
-{% end %}
+{% endblock %}
 {% block page %}
 
 {% if user.participant == participant %}
@@ -62,17 +62,17 @@ else:
 {% else %}
     <div class="group">
         {% if participant.statement %}
-            <div class="{% if long_statement %}col1{% else %}col0{% end %}">
+            <div class="{% if long_statement %}col1{% else %}col0{% endif %}">
             <h2>Statement</h2>
             <div class="statement">
                 {{ I_AM }}
                 {{ MAKING }} {{ wrap(participant.statement) }}
             </div>
             </div>
-            <div class="{% if long_statement %}col2{% else %}col0{% end %}">
+            <div class="{% if long_statement %}col2{% else %}col0{% endif %}">
         {% else %}
             <div class="col0">
-        {% end %}
+        {% endif %}
             {% include "templates/team-listing.html" %}
 
             {% if communities %}
@@ -84,13 +84,13 @@ else:
                     {% set nothers = community.nmembers - 1 %}
                     <div class="fine">with {{ nothers }} other{{ plural(nothers) }}</div>
                 </li>
-                {% end %}
+                {% endfor %}
             </ul>
-            {% end %}
+            {% endif %}
 
             <h2>Funding Goal</h2>
             <div class="goal">
-                {% if participant.goal is None %}
+                {% if participant.goal == None %}
                 {{ I_M }} grateful for gifts, but don't have a specific funding
                 goal.
                 {% elif participant.goal == 0 %}
@@ -102,7 +102,7 @@ else:
                 {{ MY }} goal is to receive
                 ${{ locale.format("%.2f", participant.goal, grouping=True) }}
                 per week on Gittip.
-                {% end %}
+                {% endif %}
             </div>
 
             {% include "templates/charts-for-user.html" %}
@@ -110,7 +110,7 @@ else:
             {% include "templates/connected-accounts.html" %}
         </div>
     </div>
-{% end %}
+{% endif %}
 
 <script>
 $(document).ready(function() {
@@ -118,4 +118,4 @@ $(document).ready(function() {
 });
 </script>
 
-{% end %}
+{% endblock %}
