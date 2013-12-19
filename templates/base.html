@@ -2,8 +2,8 @@
 <html lang="en">
 
 <head>
-
-    <title>{% if 'title' in globals() %}{{ escape(title) }} - {% end %}Gittip</title>
+{{ hi }}
+    <title>{% if 'title' in globals() %}{{ escape(title) }} - {% endif %}Gittip</title>
     <meta http-equiv="content-language" content="en"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/assets/reset.css"
@@ -28,8 +28,8 @@
     <script src="{{ website.js_src }}"></script>
     <script>$(document).ready(Gittip.init);</script>
 
-    {% block head %}{% end %}
-    {% block head2 %}{% end %}
+    {% block head %}{% endblock %}
+    {% block head2 %}{% endblock %}
 
 </head>
 <body>
@@ -56,7 +56,7 @@
                   Receiving: <b>${{ user.participant.get_dollars_receiving() }}/wk</b>
                 </div>
             </div>
-            {% end %}
+            {% endif %}
         </div>
     </div>
 
@@ -65,19 +65,19 @@
             {% block heading %}
             {% if 'title' in globals() %}
             <h2 class="top"><span>{{ title }}</span></h2>
-            {% end %}
-            {% end %}
+            {% endif %}
+            {% endblock %}
         </div>
     </div>
 
     <div class="container">
         {% block killbox %}
         <div class="box">
-            {% block box %}{% end %}
+            {% block box %}{% endblock %}
         </div>
-        {% end %}
+        {% endblock %}
         <div id="page" class="group">
-            {% block page %}{% end %}
+            {% block page %}{% endblock %}
         </div>
 
         <div id="footer">
@@ -113,7 +113,7 @@
       })();
 
     </script>
-    {% end %}
+    {% endif %}
 
     </div>
 </body>

@@ -18,7 +18,7 @@ __version__ = open(version_file).read().strip()
 website.version = os.environ['__VERSION__'] = __version__
 
 
-website.renderer_default = "tornado"
+website.renderer_default = "jinja2"
 
 
 gittip.wireup.canonical()
