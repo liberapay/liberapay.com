@@ -156,6 +156,10 @@ def nmembers(website):
     community.NMEMBERS_THRESHOLD = int(os.environ['NMEMBERS_THRESHOLD'])
     website.NMEMBERS_THRESHOLD = community.NMEMBERS_THRESHOLD
 
+
+class BadEnvironment(SystemExit):
+    pass
+
 def envvars(website):
 
     missing_keys = []
@@ -226,7 +230,8 @@ def envvars(website):
         aspen.log_dammit("See ./default_local.env for hints.")
 
         aspen.log_dammit("=" * 42)
-        raise SystemExit
+        keys = ', '.join([key for key in malformed_values])
+        raise BadEnvironment("Malformed envvar{}: {}.".format(plural, keys))
 
     if missing_keys:
         missing_keys.sort()
@@ -250,4 +255,5 @@ def envvars(website):
         aspen.log_dammit("See ./default_local.env for hints.")
 
         aspen.log_dammit("=" * 42)
-        raise SystemExit
+        keys = ', '.join([key for key in missing_keys])
+        raise BadEnvironment("Missing envvar{}: {}.".format(plural, keys))
