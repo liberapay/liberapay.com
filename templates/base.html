@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <title>{% if 'title' in globals %}{{ escape(title) }} - {% endif %}Gittip</title>
+    <title>{% if title %}{{ title|e }} - {% endif %}Gittip</title>
     <meta http-equiv="content-language" content="en"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/assets/reset.css"
@@ -62,7 +61,7 @@
     <div id="hero">
         <div class="container">
             {% block heading %}
-            {% if 'title' in globals %}
+            {% if title %}
             <h2 class="top"><span>{{ title }}</span></h2>
             {% endif %}
             {% endblock %}
