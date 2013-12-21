@@ -194,19 +194,18 @@ names = ['ncc', 'pcc', 'statements', 'transfer_volume',
          'average_tip', 'average_tippees', 'total_backed_tips',
          'tip_distribution_json', 'tip_n', 'nach', 'escrow',
          'ngivers', 'nreceivers', 'noverlap', 'nactive']
-
 [----------------------------------------------------------] application/json
 {{ json.dumps({name: globals()[name] for name in names}) }}
 [----------------------------------------------------------] text/html
 
-{% extends templates/about.html %}
+{% extends "templates/about.html" %}
 
 {% block head %}
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
 <!--[if lt IE 9]>
 <script type="text/javascript" src="/assets/aight.min.js"></script>
 <![endif]-->
-{% end %}
+{% endblock %}
 
 {% block page %}
 <style>
@@ -275,7 +274,7 @@ names = ['ncc', 'pcc', 'statements', 'transfer_volume',
     You're one of them.{% elif not user.ANON %} You're not one of them.</p>
 
     <p><b><a href="/credit-card.html" class="highlight">Click here to set up a
-        credit card</a></b>.{% end %}</p>
+        credit card</a></b>.{% endif %}</p>
 
     <p><b>${{ commaize(escrow, 2) }}</b> is escrowed within Gittip.
     {{ nach }} people have connected a bank account</a> for withdrawals.
@@ -283,7 +282,7 @@ names = ['ncc', 'pcc', 'statements', 'transfer_volume',
     {% elif not user.ANON %}You're not one of them.</p>
 
     <p><b><a href="/bank-account.html" class="highlight">Click here to connect
-        a bank account</a></b>.{% end %}</p>
+        a bank account</a></b>.{% endif %}</p>
 
     <p><b>${{ commaize(transfer_volume, 2) }}</b> changed hands
         <b>{{ last_thursday }}</b>.</p>
