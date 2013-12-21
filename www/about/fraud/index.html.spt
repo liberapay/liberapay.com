@@ -1,6 +1,6 @@
 title = "Fraud"
 [---]
-{% extends templates/about.html %}
+{% extends "templates/about.html" %}
 {% block page %}
 
 <div class="col0">
@@ -14,4 +14,4 @@ title = "Fraud"
     <p>If you suspect fraud, please report it to <a href="/whit537/">Chad
         Whitacre</a>.</p>
 </div>
-{% end %}
+{% endblock %}

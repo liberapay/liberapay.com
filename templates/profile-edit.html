@@ -4,8 +4,8 @@
     <!-- Name and Anonymous -->
     <form class="username">
         <h2>You are
-            <span class="view">{{ user.participant.username }}</span>
-            <input tabindex="100" name="username" value="{{ user.participant.username }}"/>
+            <span class="view">{{ user.participant.username|e }}</span>
+            <input tabindex="100" name="username" value="{{ user.participant.username|e }}"/>
             <button tabindex="101" class="edit">Edit</button>
             <button tabindex="102" class="save" type="submit">Save</button>
             <button tabindex="103" class="cancel" type="cancel">Cancel</button>
@@ -44,14 +44,14 @@
                 </option>
             </select>
             making the world better by ...
-            <textarea tabindex="202">{{ participant.statement }}</textarea>
+            <textarea tabindex="202">{{ participant.statement|e }}</textarea>
             <span class="help">Newlines and links are converted to HTML.</span>
         </div>
 
         <div class="view">
             <span class="i-am">{{ I_AM }}</span>
             {{ MAKING }}
-            <span>{{ wrap(participant.statement) }}</span>
+            <span>{{ wrap(participant.statement)|e }}</span>
         </div>
     </form>
 

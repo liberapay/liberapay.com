@@ -62,7 +62,7 @@
     <div id="hero">
         <div class="container">
             {% block heading %}
-            {% if 'title' in globals() %}
+            {% if 'title' in globals %}
             <h2 class="top"><span>{{ title }}</span></h2>
             {% endif %}
             {% endblock %}

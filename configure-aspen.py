@@ -20,6 +20,14 @@ website.version = os.environ['__VERSION__'] = __version__
 
 website.renderer_default = "jinja2"
 
+website.renderer_factories['jinja2'].Renderer.context = {
+    range: range,
+    unicode: unicode,
+    enumerate: enumerate,
+    len: len,
+    globals: globals
+}
+
 
 gittip.wireup.canonical()
 website.db = gittip.wireup.db()

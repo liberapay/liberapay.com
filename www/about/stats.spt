@@ -1,4 +1,5 @@
-from __future__ import print_function, unicode_literals
+from __future__ import print_function
+from __future__ import unicode_literals
 
 import datetime
 import locale
@@ -420,9 +421,9 @@ names = ['ncc', 'pcc', 'statements', 'transfer_volume',
 
     <p>
     {% for statement in statements %}
-    <b><a href="/{{ statement.username }}/">{{ escape(statement.username) }}</a></b>
-    is <span title="{{ escape(statement.statement) }}">{{ escape(part(statement.statement)) }}</span><br />
-    {% end %}
+    <b><a href="/{{ statement.username|e }}/">{{ statement.username|e }}</a></b>
+    is <span title="{{ statement.statement|e }}">{{ part(statement.statement)|e }}</span><br />
+    {% endfor %}
     </p>
 </div>
-{% end %}
+{% endblock %}

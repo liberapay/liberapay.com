@@ -57,7 +57,7 @@
 
 {% if participant.accepts_tips %}
 {% if (user.ANON or (participant != user.participant)) %}
-{% include "participant.tip.html" %}
+{% include "templates/participant.tip.html" %}
 {% endif %}
 {% endif %}
 

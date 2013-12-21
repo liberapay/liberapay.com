@@ -47,7 +47,7 @@ else:
     <meta name="og:type" content="website" />
     <meta name="og:title" content="{{ participant.get_og_title() }}" />
     {% if participant.statement %}
-    <meta name="og:description" content="{{ _clip(I_AM + " " + MAKING + " " + escape(participant.statement), 200) }}" />
+    <meta name="og:description" content="{{ _clip(I_AM + " " + MAKING + " " + participant.statement, 200)|e }}" />
     {% else %}
     <meta name="og:description" content="Gittip is a weekly gift exchange." />
     {% endif %}
