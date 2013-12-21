@@ -231,7 +231,7 @@ locked = False
         <td class="notes">automatic withdrawal</td>
         {% else %}
         <td class="notes">
-            &ldquo;{{ escape(event['note']) }}&rdquo;&mdash;<a
+            &ldquo;{{ event['note']|e }}&rdquo;&mdash;<a
             href="/{{ event['recorder'] }}/">{{ event['recorder'] }}</a>
         </td>
         {% endif %}
@@ -246,7 +246,7 @@ locked = False
         <td class="balance">{{ event['balance'] }}</td>
         <td class="notes">
             {% if event['recorder'] == None %}automatic charge{% else %}
-            &ldquo;{{ escape(event['note']) }}&rdquo;&mdash;<a
+            &ldquo;{{ event['note']|e }}&rdquo;&mdash;<a
             href="/{{ event['recorder'] }}/">{{ event['recorder'] }}</a>
             {% endif %}
             (<a href="../receipts/{{ event['id'] }}.html">receipt</a>)

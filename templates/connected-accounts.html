@@ -7,17 +7,17 @@
         <td class="account-details">
             {% if twitter_account == None %}
                 {% if not user.ANON and user.participant == participant %}
-                    Connect a <a href="{{ twitter.oauth_url(website, unicode('connect')) }}">Twitter account</a>.
+                    Connect a <a href="{{ twitter.oauth_url(website, unicode('connect'))|e }}">Twitter account</a>.
                 {% else %}
                     No Twitter account connected.
                 {% endif %}
             {% else %}
-            <a rel="me" href="{{ twitter_account.user_info.get('html_url', '') }}"
+            <a rel="me" href="{{ twitter_account.user_info.get('html_url', '')|e }}"
                 ><img class="avatar"
-                src="{{ twitter_account.user_info.get('profile_image_url_https', '/assets/%s/no-avatar.png' % website.version ) }}"
-                />{{ twitter_account.user_info.get('screen_name') }}
+                src="{{ twitter_account.user_info.get('profile_image_url_https', '/assets/%s/no-avatar.png' % website.version )|e }}"
+                />{{ twitter_account.user_info.get('screen_name')|e }}
                 {% if twitter_account.user_info.get('name') and twitter_account.user_info.get('name') != twitter_account.user_info.get('screen_name') %}
-                ({{ twitter_account.user_info.get('name') }})
+                ({{ twitter_account.user_info.get('name')|e }})
                 {% endif %}
             </a>
             <div class="account-type">on Twitter</div>
@@ -31,16 +31,16 @@
         <td class="account-details">
             {% if github_account == None %}
                 {% if not user.ANON and user.participant == participant %}
-                    Connect a <a href="{{ github.oauth_url(website, unicode('connect')) }}">GitHub account</a>.
+                    Connect a <a href="{{ github.oauth_url(website, unicode('connect'))|e }}">GitHub account</a>.
                 {% else %}
                     No GitHub account connected.
                 {% endif %}
             {% else %}
-            <a rel="me" href="{{ github_account.user_info.get('html_url', '') }}"
-                ><img class="avatar" src="{{ github_account.user_info.get('avatar_url', '/assets/%s/no-avatar.png' % website.version) }}"
-                />{{ github_account.user_info.get('login') }}
+            <a rel="me" href="{{ github_account.user_info.get('html_url', '')|e }}"
+                ><img class="avatar" src="{{ github_account.user_info.get('avatar_url', '/assets/%s/no-avatar.png' % website.version)|e }}"
+                />{{ github_account.user_info.get('login')|e }}
                 {% if github_account.user_info.get('name') and github_account.user_info.get('name') != github_account.user_info.get('login') %}
-                ({{ github_account.user_info.get('name') }})
+                ({{ github_account.user_info.get('name')|e }})
                 {% endif %}
             </a>
             <div class="account-type">on GitHub</div>
@@ -54,17 +54,17 @@
         <td class="account-details">
             {% if bitbucket_account == None %}
                 {% if not user.ANON and user.participant == participant %}
-                    Connect a <a href="{{ bitbucket.oauth_url(website, unicode('connect')) }}">Bitbucket account</a>.
+                    Connect a <a href="{{ bitbucket.oauth_url(website, unicode('connect'))|e }}">Bitbucket account</a>.
                 {% else %}
                     No Bitbucket account connected.
                 {% endif %}
             {% else %}
-            <a rel="me" href="{{ bitbucket_account.user_info.get('html_url', '') }}"
+            <a rel="me" href="{{ bitbucket_account.user_info.get('html_url', '')|e }}"
                 ><img class="avatar"
-                src="{{ bitbucket_account.user_info.get('avatar', '/assets/%s/no-avatar.png' % website.version) }}"
+                src="{{ bitbucket_account.user_info.get('avatar', '/assets/%s/no-avatar.png' % website.version)|e }}"
                 />{{ bitbucket_account.user_info.get('username') }}
                 {% if bitbucket_account.user_info.get('display_name') and bitbucket_account.user_info.get('display_name') != bitbucket_account.user_info.get('username') %}
-                ({{ bitbucket_account.user_info.get('display_name') }})
+                ({{ bitbucket_account.user_info.get('display_name')|e }})
                 {% endif %}
             </a>
             <div class="account-type">on Bitbucket</div>
@@ -78,17 +78,17 @@
       <td class="account-details">
         {% if bountysource_account == None %}
             {% if not user.ANON and user.participant == participant %}
-                Connect a <a href="{{ bountysource.oauth_url(website, participant) }}">Bountysource account</a>.
+                Connect a <a href="{{ bountysource.oauth_url(website, participant)|e }}">Bountysource account</a>.
             {% else %}
                 No Bountysource account connected.
             {% endif %}
         {% else %}
-            <a href="{{ bountysource_account.user_info.get('frontend_url', 'https://www.bountysource.com') }}"
+            <a href="{{ bountysource_account.user_info.get('frontend_url', 'https://www.bountysource.com')|e }}"
                 ><img class="avatar"
-                      src="{{ bountysource_account.user_info.get('image_url', '/assets/%s/no-avatar.png' % website.version) }}"
+                      src="{{ bountysource_account.user_info.get('image_url', '/assets/%s/no-avatar.png' % website.version)|e }}"
             />{{ bountysource_account.user_info.get('display_name') }}
             {% if bountysource_account.user_info.get('display_name') %}
-                ({{ bountysource_account.user_info.get('first_name') }} {{ bountysource_account.user_info.get('last_name') }})
+                ({{ bountysource_account.user_info.get('first_name')|e }} {{ bountysource_account.user_info.get('last_name')|e }})
             {% endif %}
             </a>
             <div class="account-type">on Bountysource</div>
