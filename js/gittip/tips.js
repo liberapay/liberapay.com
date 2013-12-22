@@ -4,7 +4,7 @@ Gittip.tips.init = function() {
     // For authenticated users we change the tip!
     $('input.my-tip:not(.anon)').change(function() {
         var $this     = $(this),
-            $parent   = $this.parents('[class^="my-tip"]'),
+            $parent   = $this.parents('.my-tip'),
             $confirm  = $parent.find('.confirm-tip'),
             amount    = parseFloat($this.val(), 10) || 0,
             oldAmount = parseFloat($this.data('old-amount'), 10);
@@ -22,7 +22,7 @@ Gittip.tips.init = function() {
 
         // show/hide the payment prompt
         if (amount === 0)
-            $('#payment-prompt.needed').removeClass('needed');
+            $('#payment-prompt').removeClass('needed');
         else
             $('#payment-prompt').addClass('needed');
     });
@@ -30,25 +30,23 @@ Gittip.tips.init = function() {
     $('.my-tip .cancel-tip').click(function(event) {
         event.preventDefault();
 
-        var $this     = $(this),
-            $myTip    = $this.parents('[class^="my-tip"]').find('.my-tip'),
-            oldAmount = parseFloat($myTip.data('old-amount'), 10);
+        var $myTip = $(this).parents('.my-tip').find('.my-tip');
 
-        $myTip.val(oldAmount).change();
+        $myTip.val($myTip.data('old-amount')).change();
     });
 
     $('.my-tip .tip-suggestions a').click(function(event) {
         event.preventDefault();
 
         var $this  = $(this),
-            $myTip = $this.parents('[class^="my-tip"]').find('.my-tip');
+            $myTip = $this.parents('.my-tip').find('.my-tip');
 
-        $myTip.val($this.text().match(/\d+/).shift() / ($this.hasClass('cents') ? 100 : 1)).change();
+        $myTip.val($this.text().match(/\d+/)[0] / ($this.hasClass('cents') ? 100 : 1)).change();
     });
 
     $('.my-tip .confirm-tip').click(function() {
         var $this     = $(this),
-            $myTip    = $this.parents('[class^="my-tip"]').find('.my-tip'),
+            $myTip    = $this.parents('.my-tip').find('.my-tip'),
             amount    = parseFloat($myTip.val(), 10),
             oldAmount = parseFloat($myTip.data('old-amount'), 10),
             tippee    = $myTip.data('tippee');
@@ -68,18 +66,14 @@ Gittip.tips.init = function() {
                     data.total_receiving_tippee : data.total_receiving);
 
             // update quick stats
-            $('.quick-stats')
-                .find('a').text('$' + data.total_giving + '/wk');
+            $('.quick-stats a').text('$' + data.total_giving + '/wk');
+
+            alert("Tip changed to $" + amount + "!");
         })
         .fail(function() {
-            // change to old amount?
             alert('Sorry, something went wrong while changing your tip. :(');
             console.log.apply(console, arguments);
         })
-        .success(function() {
-            // Confirm that tip changed.
-            alert("Tip changed to $" + amount + "!");
-        });
     });
 
 
