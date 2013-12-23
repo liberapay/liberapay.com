@@ -1,8 +1,24 @@
 Gittip.tips = {};
 
 Gittip.tips.init = function() {
-    // For authenticated users we change the tip!
-    $('input.my-tip:not(.anon)').change(function() {
+
+    // Check the tip value on change, or a second after the user stops typing.
+    // If the user types enter or escape, confirm or cancel the tip as appropriate.
+    var timer;
+    $('input.my-tip:not(.anon)').change(checkTip).keyup(function(e) {
+        if (e.keyCode === 13)                          // enter
+            $(this).parents('.my-tip').find('.confirm-tip').focus().click();
+        else if (e.keyCode === 27)                     // escape
+            $(this).parents('.my-tip').find('.cancel-tip').focus().click();
+        else if (e.keyCode === 38 || e.keyCode === 40) // up & down
+            return; // causes inc/decrement in HTML5, triggering the change event
+        else {
+            clearTimeout(timer);
+            timer = setTimeout(checkTip.bind(this), 1000);
+        }
+    });
+
+    function checkTip() {
         var $this     = $(this),
             $parent   = $this.parents('.my-tip'),
             $confirm  = $parent.find('.confirm-tip'),
@@ -15,7 +31,7 @@ Gittip.tips.init = function() {
         // dis/enables confirm button as needed
         $confirm.prop('disabled', amount == oldAmount);
 
-        if (amount == oldAmount)
+        if (amount === oldAmount)
             $parent.removeClass('changed');
         else
             $parent.addClass('changed');
@@ -25,7 +41,7 @@ Gittip.tips.init = function() {
             $('#payment-prompt').removeClass('needed');
         else
             $('#payment-prompt').addClass('needed');
-    });
+    }
 
     $('.my-tip .cancel-tip').click(function(event) {
         event.preventDefault();
