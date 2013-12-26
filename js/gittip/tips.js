@@ -2,36 +2,40 @@ Gittip.tips = {};
 
 Gittip.tips.init = function() {
 
-    // Check the tip value on change, or a second after the user stops typing.
+    // Check the tip value on change, or 0.7 seconds after the user stops typing.
     // If the user types enter or escape, confirm or cancel the tip as appropriate.
     var timer;
     $('input.my-tip:not(.anon)').change(checkTip).keyup(function(e) {
         if (e.keyCode === 13)                          // enter
-            $(this).parents('.my-tip').find('.confirm-tip').focus().click();
+            checkTip.call(this, e, 'confirm')
         else if (e.keyCode === 27)                     // escape
-            $(this).parents('.my-tip').find('.cancel-tip').focus().click();
+            checkTip.call(this, e, 'cancel')
         else if (e.keyCode === 38 || e.keyCode === 40) // up & down
             return; // causes inc/decrement in HTML5, triggering the change event
         else {
             clearTimeout(timer);
-            timer = setTimeout(checkTip.bind(this), 1000);
+            timer = setTimeout(checkTip.bind(this, e), 700);
         }
     });
 
-    function checkTip() {
+    function checkTip(e, endAction) {
         var $this     = $(this),
             $parent   = $this.parents('.my-tip'),
             $confirm  = $parent.find('.confirm-tip'),
             amount    = parseFloat($this.val(), 10) || 0,
-            oldAmount = parseFloat($this.data('old-amount'), 10);
+            oldAmount = parseFloat($this.data('old-amount'), 10),
+            max       = parseFloat($this.prop('max')),
+            min       = parseFloat($this.prop('min')),
+            inBounds  = amount <= max && amount >= min,
+            same      = amount === oldAmount;
 
         // force two decimal points on value
         $this.val(amount.toFixed(2));
 
         // dis/enables confirm button as needed
-        $confirm.prop('disabled', amount == oldAmount);
+        $confirm.prop('disabled', inBounds ? same : true);
 
-        if (amount === oldAmount)
+        if (same)
             $parent.removeClass('changed');
         else
             $parent.addClass('changed');
@@ -41,6 +45,9 @@ Gittip.tips.init = function() {
             $('#payment-prompt').removeClass('needed');
         else
             $('#payment-prompt').addClass('needed');
+
+        if (inBounds ? endAction : endAction === 'cancel')
+            $parent.find('.'+endAction+'-tip').click();
     }
 
     $('.my-tip .cancel-tip').click(function(event) {
