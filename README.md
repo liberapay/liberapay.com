@@ -518,3 +518,4 @@ and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
  - [Suprmasv](https://www.suprmasv.com/) - Empowering the Hacker Class.
  - [Tip4Commit](http://tip4commit.com/) - Donate bitcoins to open source projects or make commits and get tips for it.
  - [BitHub](https://whispersystems.org/blog/bithub/) - An experiment in funding privacy OSS. 
+ - [Fundly](https://fundly.com/) - Crowdfund Anything
