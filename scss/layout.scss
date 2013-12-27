@@ -449,8 +449,8 @@
         .zip           input { width: 75px; }
         .card_number   input { width: 139px; }
         .cvv           input { width: 43px; }
-        input.expiration_month { width: 25px; }
-        input.expiration_year  { width: 42px; margin-left: 1px ! important; }
+        input.expiration_month { width: 35px; }
+        input.expiration_year  { width: 49px; margin-left: 1px !important; }
         .not-first label,
         .not-first input {
             margin-left: 10px;
@@ -465,6 +465,9 @@
                 text-indent: -2em;
                 font: normal 12px $Helvetica;
             }
+        }
+        select {
+            font-size: 12.15px; // hack for Chosen to get a 292px width
         }
     }
 }

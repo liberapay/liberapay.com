@@ -62,6 +62,7 @@ title = "Credit Card"
         $(document).ready(function()
         {
             Gittip.payments.cc.init("{{ balanced.Marketplace.my_marketplace.uri }}", "{{ user.participant.username }}");
+            $('#country').chosen();
         });
     </script>
     <style>
@@ -140,7 +141,8 @@ title = "Credit Card"
 
                 <label for="country">Country</label>
 
-                <select id="country" name="country">
+                <select id="country" name="country" data-placeholder="Choose a country...">
+                    <option value=""></option>
                 {% for each in COUNTRIES %}
                     {% if each[0] == card['country'] %}
                       <option value="{{ each[0] }}" selected>{{ each[1] }}</option>
