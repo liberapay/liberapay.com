@@ -9,7 +9,6 @@ from postgres.cursors import SimpleCursorBase
 
 
 COUNTRIES = (
-    ('US', u'United States'),
     ('AF', u'Afghanistan'),
     ('AX', u'\xc5land Islands'),
     ('AL', u'Albania'),
