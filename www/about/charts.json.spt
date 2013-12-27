@@ -4,7 +4,7 @@ charts = website.db.all("""\
     SELECT ts_start::date   AS date
          , nparticipants    AS total_users
          , nactive          AS active_users
-         , ( SELECT sum(ntransfers)
+         , ( SELECT sum(transfer_volume)
                FROM paydays
               WHERE ts_start <= p.ts_start
                    )        AS total_gifts
