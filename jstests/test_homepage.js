@@ -4,6 +4,7 @@ var $body, $iframe = $('<iframe/>').appendTo('body');
 describe('Test the homepage', function () {
 
     beforeEach(function (done) {
+        this.timeout(10000);
         $iframe.attr('src', '/')
             .one('load', function() {
                 $body = $(this.contentDocument.body);
