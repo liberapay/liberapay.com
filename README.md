@@ -342,7 +342,7 @@ an array of objects, one per week, showing aggregate numbers over time. The
 **[/about/stats.json](https://www.gittip.com/about/stats.json)**
 ([source](https://github.com/gittip/www.gittip.com/tree/master/www/about/stats.spt))&mdash;<i>public</i>&mdash;Returns
 an object giving a point-in-time snapshot of Gittip. The
-[stats](https://www.gittip.com/about/stats.html.spt) page displays the same info.
+[stats](https://www.gittip.com/about/stats.html) page displays the same info.
 
 **/`%username`/charts.json**
 ([example](https://www.gittip.com/Gittip/charts.json),
@@ -518,3 +518,4 @@ and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
  - [Suprmasv](https://www.suprmasv.com/) - Empowering the Hacker Class.
  - [Tip4Commit](http://tip4commit.com/) - Donate bitcoins to open source projects or make commits and get tips for it.
  - [BitHub](https://whispersystems.org/blog/bithub/) - An experiment in funding privacy OSS. 
+ - [Fundly](https://fundly.com/) - Crowdfund Anything
