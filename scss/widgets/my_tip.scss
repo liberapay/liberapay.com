@@ -40,11 +40,13 @@ form.my-tip {
 
     .cancel-tip {
         opacity: 0.5;
+        cursor: default;
     }
 
     &.changed {
         .cancel-tip {
             opacity: 1;
+            cursor: pointer;
         }
     }
 }

@@ -3,25 +3,26 @@ Gittip.tips = {};
 Gittip.tips.init = function() {
 
     // Check the tip value on change, or 0.7 seconds after the user stops typing.
-    // If the user types enter or escape, confirm or cancel the tip as appropriate.
+    // If the user presses enter, the browser should natively submit the form.
+    // If the user presses cancel, we reset the form to its previous state.
     var timer;
-    $('input.my-tip:not(.anon)').change(checkTip).keyup(function(e) {
-        if (e.keyCode === 27)                     // escape
-            checkTip.call(this, e, 'cancel')
+    $('input.my-tip').change(checkTip).keyup(function(e) {
+        if (e.keyCode === 27)                          // escape
+            $(this).parents('form').trigger('reset');
         else if (e.keyCode === 38 || e.keyCode === 40) // up & down
             return; // causes inc/decrement in HTML5, triggering the change event
         else {
             clearTimeout(timer);
-            timer = setTimeout(checkTip.bind(this, e), 700);
+            timer = setTimeout(checkTip.bind(this), 700);
         }
     });
 
-    function checkTip(e, endAction) {
+    function checkTip() {
         var $this     = $(this),
-            $parent   = $this.parents('.my-tip'),
+            $parent   = $this.parents('form'),
             $confirm  = $parent.find('.confirm-tip'),
             amount    = parseFloat($this.val(), 10) || 0,
-            oldAmount = parseFloat($this.data('old-amount'), 10),
+            oldAmount = parseFloat(this.defaultValue, 10),
             max       = parseFloat($this.prop('max')),
             min       = parseFloat($this.prop('min')),
             inBounds  = amount <= max && amount >= min,
@@ -43,40 +44,36 @@ Gittip.tips.init = function() {
             $('#payment-prompt').removeClass('needed');
         else
             $('#payment-prompt').addClass('needed');
-
-        if (inBounds ? endAction : endAction === 'cancel'){
-            if(endAction==='cancel')
-                $parent.find('.'+endAction+'-tip').click();
-            else
-                $parent.submit();
-        }
     }
 
     $('.my-tip .cancel-tip').click(function(event) {
         event.preventDefault();
 
-        var $myTip = $(this).parents('.my-tip').find('.my-tip');
-
-        $myTip.val($myTip.data('old-amount')).change();
+        $(this).parents('form').trigger('reset');
     });
 
     $('.my-tip .tip-suggestions a').click(function(event) {
         event.preventDefault();
 
         var $this  = $(this),
-            $myTip = $this.parents('.my-tip').find('.my-tip');
+            $myTip = $this.parents('form').find('.my-tip');
 
         $myTip.val($this.text().match(/\d+/)[0] / ($this.hasClass('cents') ? 100 : 1)).change();
     });
 
-    $('form.my-tip').submit(function(ev) {
-        ev.preventDefault();
+    $('form.my-tip').on('reset', function() {
+        $(this).removeClass('changed');
+        $(this).find('.confirm-tip').prop('disabled', true);
+    });
+
+    $('form.my-tip').submit(function(event) {
+        event.preventDefault();
         var $this     = $(this),
             $myTip    = $this.find('.my-tip'),
             amount    = parseFloat($myTip.val(), 10),
-            oldAmount = parseFloat($myTip.data('old-amount'), 10),
+            oldAmount = parseFloat($myTip[0].defaultValue, 10),
             tippee    = $myTip.data('tippee'),
-            isAnon    = $($this).hasClass("anon");
+            isAnon    = $this.hasClass('anon');
 
         if (amount == oldAmount)
             return;
@@ -87,7 +84,8 @@ Gittip.tips.init = function() {
             // send request to change tip
             $.post('/' + tippee + '/tip.json', { amount: amount }, function(data) {
                 // lock-in changes
-                $myTip.data('old-amount', amount).change();
+                $myTip[0].defaultValue = amount;
+                $myTip.change();
 
                 // update display
                 $('.total-giving').text(data.total_giving);
