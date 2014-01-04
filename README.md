@@ -50,14 +50,16 @@ Thanks for hacking on Gittip! Be sure to review
 [CONTRIBUTING](https://github.com/gittip/www.gittip.com/blob/master/CONTRIBUTING.md#readme)
 as well if that's what you're planning to do.
 
+
 Dependencies
 ------------
 
-The only hard requirement on your system is [Python
-2.7](http://python.org/download/releases/2.7.4/).
+Building `www.gittip.com` requires [Python
+2.7](http://python.org/download/releases/2.7.4/), and a gcc/make toolchain.
 
 All library dependencies are bundled in the repo (under `vendor/`) and by
 default the app is configured to use a Postgres instance in the cloud.
+
 
 Building
 --------
