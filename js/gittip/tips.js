@@ -28,9 +28,6 @@ Gittip.tips.init = function() {
             inBounds  = amount <= max && amount >= min,
             same      = amount === oldAmount;
 
-        // force two decimal points on value
-        $this.val(amount.toFixed(2));
-
         // dis/enables confirm button as needed
         $confirm.prop('disabled', inBounds ? same : true);
 
@@ -40,10 +37,10 @@ Gittip.tips.init = function() {
             $parent.addClass('changed');
 
         // show/hide the payment prompt
-        if (amount === 0)
-            $('#payment-prompt').removeClass('needed');
-        else
+        if (amount)
             $('#payment-prompt').addClass('needed');
+        else
+            $('#payment-prompt').removeClass('needed');
     }
 
     $('.my-tip .cancel-tip').click(function(event) {
