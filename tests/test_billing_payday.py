@@ -29,7 +29,7 @@ class TestPaydayCharge(TestPaydayBase):
         self.payday = Payday(self.db)
 
     def get_numbers(self):
-        """Return a list of 10 ints:
+        """Return a list of 11 ints:
 
             nachs
             nach_failing

@@ -127,6 +127,46 @@
                     >on Balanced Payments</a>{% else %}on Balanced Payments{% end %}</div>
         </td>
     </tr>
+    <tr>
+        <td class="account-type">
+            <img src="/assets/bitcoin.png" />
+        </td>
+        <td class="account-details">
+
+            {% if not user.ANON and user.participant == participant %}
+                <div class="bitcoin">
+            {% else %}
+                <div>
+            {% end %}
+                {% if participant.bitcoin_address %}
+                    <a rel="me" href="http://blockchain.info/address/{{ participant.bitcoin_address }}">
+                      {{ participant.bitcoin_address }}
+                    </a>
+                    <div class="account-type">Bitcoin address
+                        {% if not user.ANON and user.participant == participant %}
+                            (<a href="javascript:;" class="toggle-bitcoin">edit</a>)
+                        {% end %}
+                    </div>
+                {% else %}
+                    {% if not user.ANON and user.participant == participant %}
+                        Add a <a href="javascript:;" class="toggle-bitcoin">Bitcoin address</a>.
+                    {% else %}
+                        No Bitcoin receiving address.
+                    {% end %}
+                {% end %}
+            </div>
+            <form class="bitcoin-submit">
+                <input type="text" class="bitcoin hidden"
+                    {% if participant.bitcoin_address %}
+                        value="{{ participant.bitcoin_address }}"
+                    {% end %}
+                >
+                <button type="submit" class="bitcoin hidden">Save</button>
+                <button type="cancel" class="bitcoin cancel hidden">Cancel</button>
+            </form>
+
+        </td>
+    </tr>
 </table>
 
 

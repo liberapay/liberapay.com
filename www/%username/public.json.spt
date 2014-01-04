@@ -79,6 +79,8 @@ if not user.ANON:
 # https://github.com/gittip/www.gittip.com/issues/680
 
 github, twitter, bitbucket, bountysource = participant.get_accounts_elsewhere()
+bitcoin = None
+
 if bitbucket is not None:
     bitbucket = "https://bitbucket.org/api/1.0/users/%s" % \
                                                 bitbucket.user_info['username']
@@ -91,10 +93,14 @@ if bountysource is not None:
     bountysource = "https://api.bountysource.com/users/%s" % \
                                          bountysource.user_info['display_name']
 
+if participant.bitcoin_address is not None:
+    bitcoin = "http://blockchain.info/address/%s" % participant.bitcoin_address
+
 output['elsewhere'] = { 'bitbucket': bitbucket
                       , 'github': github
                       , 'twitter': twitter
                       , 'bountysource': bountysource
+                      , 'bitcoin': bitcoin
                        }
 
 response.body = output
