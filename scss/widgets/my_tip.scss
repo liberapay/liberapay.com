@@ -1,4 +1,4 @@
-div.my-tip {
+form.my-tip {
     line-height: 1.7em;
     overflow: hidden;
 
@@ -40,11 +40,13 @@ div.my-tip {
 
     .cancel-tip {
         opacity: 0.5;
+        cursor: default;
     }
 
     &.changed {
         .cancel-tip {
             opacity: 1;
+            cursor: pointer;
         }
     }
 }
