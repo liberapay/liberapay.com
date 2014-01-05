@@ -125,12 +125,21 @@ class GittipDB(Postgres):
             "0c783dee50ed",
             "e2020536ef6d",
             "60a5099d49c7",
-            "64f4f959b322"
+            "64f4f959b322",
+            "0bdf90d51786"
         ))
         real = set(orphans) - known
-        assert len(real) == 0, "missing elsewheres: {}".format(len(real))
+        assert len(real) == 0, "missing elsewheres: {}".format(list(real))
 
     def _check_orphans_no_tips(self):
+        """
+        Finds participants
+            * without elsewhere account attached
+            * having non zero outstanding tip
+
+        This should not happen because when we remove the last elsewhere account
+        in take_over we also zero out all tips.
+        """
         tips_with_orphans = self.all("""
             WITH orphans AS (
                 SELECT username FROM participants
