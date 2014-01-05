@@ -1,8 +1,8 @@
 {% for slug, name in pages %}
-{% if slug is None %}
+{% if slug == None %}
 <br><br>
 {% else %}
 <a href="{{ nav_base }}{{ slug }}" data-pjax="#pjax"><button{% if slug.strip('/') == current_page %}
-        class="selected"{% end %}>{{ name }}</button></a>
-{% end %}
-{% end %}
+        class="selected"{% endif %}>{{ name }}</button></a>
+{% endif %}
+{% endfor %}

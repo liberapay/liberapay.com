@@ -80,5 +80,5 @@ unreviewed = website.db.all("""
     &nbsp;
     <a href="/{{ account.username }}/" target="drill-down">{{ account.username }}</a>
 </div>
-{% end %}
+{% endfor %}
 <iframe name="drill-down"></iframe>

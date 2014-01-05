@@ -32,25 +32,25 @@ if not user.ANON:
 title = "Credit Card"
 
 [-----------------------------------------------------------------------------]
-{% extends templates/base.html %}
+{% extends "templates/base.html" %}
 
 {% block heading %}
     <h2 class="top"><span>Your credit card is <em id="status">{{ status }}</em></span></h2>
 
     <p>When you don't have enough money in your Gittip account to cover
-    your gifts, we {% if balanced_account_uri %}will{% else %}can{% end %}
+    your gifts, we {% if balanced_account_uri %}will{% else %}can{% endif %}
     attempt to pull money in using
-    {% if balanced_account_uri %}this{% else %}a{% end %} credit card.
+    {% if balanced_account_uri %}this{% else %}a{% endif %} credit card.
     If your credit card is missing or fails then your gifts won't go
     through for that week.<p>
 
-{% end %}
+{% endblock %}
 
 {% block box %}
   {% if user.ANON %}
     <div class="as-content">
 
-    {% include templates/sign-in-using.html %}
+    {% include "templates/sign-in-using.html" %}
     and then you'll be able to add<br> or change your credit card.</p>
 
     <p>Thanks! :-)</p>
@@ -70,7 +70,7 @@ title = "Credit Card"
         #delete {
             display: none;
         }
-        {% end %}
+        {% endif %}
     </style>
     <div class="on-form">
         <form id="payment" autocomplete="off">
@@ -78,12 +78,12 @@ title = "Credit Card"
 
                 {% if status != "missing" %}
                 <h2>Current: {{ card['card_type'] }} {{ card['last4'] }}</h2>
-                {% end %}
+                {% endif %}
 
                 <div id="feedback">{% if user.participant.last_bill_result %}
                 <h2><span>Failure</span></h2>
                 <div class="details"><p>{{ user.participant.last_bill_result }}</p></div>
-                  {% end %}</div>
+                  {% endif %}</div>
 
 
                 <h2>Required</h2>
@@ -148,8 +148,8 @@ title = "Credit Card"
                       <option value="{{ each[0] }}" selected>{{ each[1] }}</option>
                     {% else %}
                       <option value="{{ each[0] }}">{{ each[1] }}</option>
-                    {% end %}
-                {% end %}
+                    {% endif %}
+                {% endfor %}
                 </select>
 
             </div>
@@ -168,8 +168,8 @@ title = "Credit Card"
             </form>
         </div>
     </div>
-{% end %}
-{% end %}
+{% endif %}
+{% endblock %}
 
 {% block page %}
 <div class="col0 payment-footer">
@@ -185,4 +185,4 @@ title = "Credit Card"
         src="/assets/{{ website.version }}/balanced-with-cards.png" /></a>
 
 </div>
-{% end %}
+{% endblock %}

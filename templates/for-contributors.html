@@ -1,4 +1,4 @@
-{% extends base.html %}
+{% extends "templates/base.html" %}
 
 {% block head %}
   <style>
@@ -7,18 +7,18 @@
     #hero { padding-bottom: 0; }
     #hero h2.top { padding-bottom: 67px; }
   </style>
-{% end %}
+{% endblock %}
 
 {% block heading %}
   <h2 class="top"><span>For Contributors</span></h2>
-{% end %}
+{% endblock %}
 
 {% block box %}
   {% set current_page = path.raw.split('/')[3] %}
   {% set nav_base = "/for/contributors" %}
   <div class="nav">
     {% set pages = [('/', 'Getting Started'), ('/mission-statement.html', 'Mission Statement'), ('/where-we-work.html', 'Where We Work'), ('/ways-to-help/', 'Ways to Help')] %}
-    {% include nav.html %}
+    {% include "templates/nav.html" %}
   </div>
   {% if len(path.raw.split('/')) > 4 %}
   {% set current_page = path.raw.split('/')[4] %}
@@ -27,5 +27,5 @@
     {% set pages = [('/tell-people-about-gittip.html', 'Tell People About Gittip'), ('/support-users.html', 'Support Users'), (None, None), ('/build-gittip.html', 'Build Gittip'), ('/train-new-contributors.html', 'Train New Contributors')] %}
     {% include nav.html %}
   </div>
-  {% end %}
-{% end %}
+  {% endif %}
+{% endblock %}

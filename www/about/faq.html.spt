@@ -1,6 +1,6 @@
 title = "Frequently Asked Questions"
 [---]
-{% extends templates/about.html %}
+{% extends "templates/about.html" %}
 {% block page %}
 <div class="col1">
     <dl>
@@ -154,4 +154,4 @@ title = "Frequently Asked Questions"
 
     </dl>
 </div>
-{% end %}
+{% endblock %}

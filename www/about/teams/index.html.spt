@@ -1,6 +1,6 @@
 title = "About teams"
 [---]
-{% extends templates/about.html %}
+{% extends "templates/about.html" %}
 {% block page %}
 <div class="col0">
 
@@ -120,4 +120,4 @@ However, even the team owner can’t otherwise set takes. Only a member can chan
 their own take.</p>
 
 </div>
-{% end %}
+{% endblock %}
