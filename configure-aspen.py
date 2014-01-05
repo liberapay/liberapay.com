@@ -27,7 +27,8 @@ website.renderer_factories['jinja2'].Renderer.global_context = {
     'enumerate': enumerate,   
     'len': len,
     'float': float,
-    'type': type
+    'type': type,
+    'str': str
 }
 
 
