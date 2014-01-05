@@ -54,7 +54,7 @@ def username_restrictions(website):
 def make_sentry_teller(website):
     if not website.sentry_dsn:
         aspen.log_dammit("Won't log to Sentry (SENTRY_DSN is empty).")
-        return lambda x: None
+        return None
 
     sentry = raven.Client(website.sentry_dsn)
 
