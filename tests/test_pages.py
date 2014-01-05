@@ -108,6 +108,15 @@ class TestPages(Harness):
         actual = self.get('/bank-account-complete.html')
         assert expected in actual
 
+    def test_ways_to_help(self):
+        actual = self.get('/for/contributors/ways-to-help/')
+        assert 'Ways to Help' in actual
+
+        # The regression I'm seeing in #1824 actually has 'Ways to Help' in the
+        # traceback, so let's also test 'For Contributors'.
+
+        assert 'For Contributors' in actual
+
     def test_bank_account_json(self):
         expected = "Page Not Found"
         actual = self.get('/bank-account.json')
