@@ -2,10 +2,11 @@ import locale
 import time
 
 import gittip
+import re
 from aspen import log_dammit, Response
 from aspen.utils import typecheck
 from postgres.cursors import SimpleCursorBase
-
+from jinja2 import escape
 
 COUNTRIES = (
     ('AF', u'Afghanistan'),
@@ -265,9 +266,17 @@ def wrap(u):
     """Given a unicode, return a unicode.
     """
     typecheck(u, unicode)
-    u = u.replace(u'\r\n', u'<br />\r\n').replace(u'\n', u'<br />\n')
-    return u if u else '...'
+    linkified = linkify(u)  # Do this first, because it calls xthml_escape.
+    out = linkified.replace(u'\r\n', u'<br />\r\n').replace(u'\n', u'<br />\n')
+    return out if out else '...'
 
+def linkify(u):
+    escaped = escape(u)
+
+    urls = re.compile(r"((https?):((//)|(\\\\))+[\w\d:#@%/;$()~_?\+-=\\\.&]*)", re.MULTILINE|re.UNICODE)
+    value = urls.sub(r'<a href="\1" target="_blank">\1</a>', str(escaped))
+
+    return value
 
 def dict_to_querystring(mapping):
     if not mapping:
