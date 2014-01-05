@@ -21,7 +21,7 @@ website.version = os.environ['__VERSION__'] = __version__
 website.renderer_default = "jinja2"
 website.default_renderers_by_media_type['application/json'] = 'stdlib_format'
 
-website.renderer_factories['jinja2'].Renderer.ctx = {
+website.renderer_factories['jinja2'].Renderer.global_context = {
     'range': range,
     'unicode': unicode,
     'enumerate': enumerate,   
