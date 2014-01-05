@@ -44,14 +44,14 @@
                 </option>
             </select>
             making the world better by ...
-            <textarea tabindex="202">{{ participant.statement|e }}</textarea>
+            <textarea tabindex="202">{{ participant.statement }}</textarea>
             <span class="help">Newlines and links are converted to HTML.</span>
         </div>
 
         <div class="view">
             <span class="i-am">{{ I_AM }}</span>
             {{ MAKING }}
-            <span>{{ wrap(participant.statement)|e }}</span>
+            <span>{{ wrap(participant.statement) }}</span>
         </div>
     </form>
 
