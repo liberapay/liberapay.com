@@ -91,6 +91,11 @@ Gittip.tips.init = function() {
                     new RegExp('/' + tippee + '/').test(window.location.href) ?
                         data.total_receiving_tippee : data.total_receiving);
 
+                // Increment an elsewhere receiver's "people ready to give"
+                if(!oldAmount)
+                    $('.on-elsewhere .ready .number').text(
+                        parseInt($('.on-elsewhere .ready .number').text(),10) + 1);
+
                 // update quick stats
                 $('.quick-stats a').text('$' + data.total_giving + '/wk');
 
