@@ -20,24 +20,19 @@ def canonical():
     gittip.canonical_host = os.environ['CANONICAL_HOST']
 
 
-# wireup.db() should only ever be called once by the application
-# But in testing we call it a ton. :-/
-_db = None
 def db():
-    global _db
-    if _db == None:
-        dburl = os.environ['DATABASE_URL']
-        maxconn = int(os.environ['DATABASE_MAXCONN'])
-        _db = Postgres(dburl, maxconn=maxconn)
+    dburl = os.environ['DATABASE_URL']
+    maxconn = int(os.environ['DATABASE_MAXCONN'])
+    db = Postgres(dburl, maxconn=maxconn)
 
-        # register hstore type
-        with _db.get_cursor() as cursor:
-            psycopg2.extras.register_hstore(cursor, globally=True, unicode=True)
+    # register hstore type
+    with db.get_cursor() as cursor:
+        psycopg2.extras.register_hstore(cursor, globally=True, unicode=True)
 
-        _db.register_model(Community)
-        _db.register_model(Participant)
+    db.register_model(Community)
+    db.register_model(Participant)
 
-    return _db
+    return db
 
 
 def billing():

@@ -72,6 +72,10 @@ DUMMY_BOUNTYSOURCE_JSON = u'{"slug": "6-corytheboyd","updated_at": "2013-05-2'\
 
 class ClientWithAuth(Client):
 
+    def __init__(self, *a, **kw):
+        Client.__init__(self, *a, **kw)
+        Client.website = Client.hydrate_website(self)
+
     def build_wsgi_environ(self, *a, **kw):
         """Extend base class to support authenticating as a certain user.
         """
@@ -95,35 +99,30 @@ class ClientWithAuth(Client):
 
 class Harness(unittest.TestCase):
 
-    def setUp(self):
-        self.client = ClientWithAuth(www_root=WWW_ROOT, project_root=PROJECT_ROOT)
+    @classmethod
+    def setUpClass(cls):
+        cls.client = ClientWithAuth(www_root=WWW_ROOT, project_root=PROJECT_ROOT)
+        cls.db = cls.client.website.db
+        cls.tablenames = cls.db.all("SELECT tablename FROM pg_tables "
+                                    "WHERE schemaname='public'")
 
-        # Call wireup.db() directly to avoid hydrating website.
-        db = wireup.db()
-        self._tablenames = db.all("SELECT tablename FROM pg_tables "
-                                  "WHERE schemaname='public'")
-        self.clear_tables(db, self._tablenames[:])
+
+    def setUp(self):
+        self.clear_tables()
 
 
     def tearDown(self):
         resources.__cache__ = {}  # Clear the simplate cache.
-        db = wireup.db()  # Again with the hydration avoidance.
-        self.clear_tables(db, self._tablenames[:])
+        self.clear_tables()
 
 
-    @property
-    def db(self):
-        # Now we'll hydrate (self.client.website is lazily evaluated).
-        return self.client.website.db
-
-
-    @staticmethod
-    def clear_tables(db, tablenames):
+    def clear_tables(self):
+        tablenames = self.tablenames[:]
         while tablenames:
             tablename = tablenames.pop()
             try:
                 # I tried TRUNCATE but that was way slower for me.
-                db.run("DELETE FROM %s CASCADE" % tablename)
+                self.db.run("DELETE FROM %s CASCADE" % tablename)
             except (IntegrityError, InternalError):
                 tablenames.insert(0, tablename)
 
