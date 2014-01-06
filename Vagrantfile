@@ -17,7 +17,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Install dependencies
   config.vm.provision :shell, :inline => "sudo apt-get update"
-  config.vm.provision :shell, :inline => "sudo apt-get -y install make python-dev python-software-properties g++ git postgresql postgresql-contrib postgresql-server-dev-9.1"
+  config.vm.provision :shell, :inline => "sudo apt-get -y install make git build-essential python-software-properties postgresql postgresql-contrib libpq-dev python-dev"
 
   # Warn if Windows newlines are detected and try to fix the problem
   config.vm.provision :shell, :inline => <<-eos
