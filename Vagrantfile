@@ -5,7 +5,6 @@
 VAGRANTFILE_API_VERSION = "2"
 
 PROJECT_DIRECTORY = 'www.gittip.com'
-DATABASE_URL = 'postgres://gittip:gittip@localhost:5432/gittip'
 POSTGRES_VERSION = '9.1'
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
@@ -50,15 +49,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     fi
   eos
 
-  # Create local environment
-  config.vm.provision :shell, :inline => <<-eos
-    cd #{PROJECT_DIRECTORY}
-    if [ ! -f local.env ]; then
-      make local.env
-      echo DATABASE_URL=#{DATABASE_URL} >> local.env
-    fi
-  eos
-
-  # Set up environment, the database, and run Gittip
-  config.vm.provision :shell, :inline => "cd #{PROJECT_DIRECTORY} && make env schema data run"
+  # Set up the environment, the database, and run Gittip
+  config.vm.provision :shell, :inline => "cd #{PROJECT_DIRECTORY} && make local.env env schema data run"
 end
