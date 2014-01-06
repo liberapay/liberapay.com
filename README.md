@@ -220,13 +220,12 @@ combined in `scss/gittip.scss` which itself is compiled by `libsass` in
 Testing [![Testing](https://secure.travis-ci.org/gittip/www.gittip.com.png)](http://travis-ci.org/gittip/www.gittip.com)
 =======
 
-Please write unit tests for all new code and all code you change.
-Gittip's test suite is designed for the nosetests test runner (maybe it
-also works with py.test?), and uses module-level test functions, with a context
-manager for managing testing state. As a rule of thumb, each test case should
-perform one assertion.
+Please write unit tests for all new code and all code you change.  Gittip's
+test suite uses the py.test test runner, which will be installed into the
+virtualenv you get by running `make env`. As a rule of thumb, each test case
+should perform one assertion.
 
-Assuming you have make, the easiest way to run the test suite is:
+The easiest way to run the test suite is:
 
     $ make test
 
@@ -245,7 +244,7 @@ Of course, they could also remove the check in the same or even a different
 commit. Of course, they could also sneak in whatever the heck code they wanted
 to try to sneak in.
 
-To invoke nosetests directly you should use the `swaddle` utility that comes
+To invoke py.test directly you should use the `swaddle` utility that comes
 with Aspen. First `make tests/env`, edit it as noted above, and then:
 
     [gittip] $ cd tests/
