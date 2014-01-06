@@ -53,5 +53,19 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   eos
 
   # Set up the environment, the database, and run Gittip
-  config.vm.provision :shell, :inline => "cd #{PROJECT_DIRECTORY} && make local.env env schema data run"
+  config.vm.provision :shell, :inline => "cd #{PROJECT_DIRECTORY} && make local.env env schema data"
+
+  # Add run script
+  config.vm.provision :shell, :inline => <<-eos
+    echo "#!/bin/sh" > run
+    echo "sudo pkill aspen" >> run
+    echo "cd #{PROJECT_DIRECTORY}" >> run
+    echo "make run" >> run
+    chmod +x run
+
+    echo
+    echo 'Gittip installed! To run,'
+    echo '$ vagrant ssh'
+    echo '$ ./run'
+  eos
 end
