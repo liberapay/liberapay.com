@@ -55,10 +55,6 @@ class MixinElsewhere(object):
     def get_accounts_elsewhere(self):
         """Return an AccountsTuple of elsewhere Records.
         """
-        github_account = None
-        twitter_account = None
-        bitbucket_account = None
-        bountysource_account = None
 
         ACCOUNTS = "SELECT * FROM elsewhere WHERE participant=%s"
         accounts = self.db.all(ACCOUNTS, (self.username,))
@@ -66,6 +62,8 @@ class MixinElsewhere(object):
         accounts_dict = {a_type: None for a_type in _account_types}
 
         for account in accounts:
+            if account.platform not in _account_types:
+                raise UnknownPlatform(account.platform)
             accounts_dict[account.platform] = account
 
         return AccountsTuple(**accounts_dict)
