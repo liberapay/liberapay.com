@@ -8,6 +8,6 @@
     {% set nothers = team.nmembers - 1 %}
     <div class="fine">with {{ nothers }} other{{ plural(nothers) }}</div>
   </li>
-  {% end %}
+  {% endfor %}
 </ul>
-{% end %}
+{% endif %}

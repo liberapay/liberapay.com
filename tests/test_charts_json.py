@@ -5,8 +5,9 @@ import json
 
 from gittip.billing.payday import Payday
 from gittip.testing import Harness
-from gittip.testing.client import TestClient
 
+def today():
+    return datetime.datetime.utcnow().date().strftime('%Y-%m-%d')
 
 class Tests(Harness):
 
@@ -20,6 +21,7 @@ class Tests(Harness):
                 (10.00, 0.00, 'alice'),
                 (10.00, 0.00, 'bob')
         """)
+        self.make_participant('notactive', claimed_time='now')
 
         alice.set_tip_to('carl', '1.00')
         bob.set_tip_to('carl', '2.00')
@@ -32,24 +34,24 @@ class Tests(Harness):
 
     def test_no_payday_returns_empty_list(self):
         self.make_participants_and_tips()
-        assert json.loads(TestClient().get('/carl/charts.json').body) == []
+        assert json.loads(self.client.GET('/carl/charts.json').body) == []
 
     def test_zeroth_payday_is_ignored(self):
         self.make_participants_and_tips()
         self.run_payday()   # zeroeth
-        assert json.loads(TestClient().get('/carl/charts.json').body) == []
+        assert json.loads(self.client.GET('/carl/charts.json').body) == []
 
     def test_first_payday_comes_through(self):
         alice, bob = self.make_participants_and_tips()
         self.run_payday()   # zeroeth, ignored
         self.run_payday()   # first
 
-        expected = [ { "date": datetime.date.today().strftime('%Y-%m-%d')
+        expected = [ { "date": today()
                      , "npatrons": 2
                      , "receipts": 3.00
                       }
                     ]
-        actual = json.loads(TestClient().get('/carl/charts.json').body)
+        actual = json.loads(self.client.GET('/carl/charts.json').body)
 
         assert actual == expected
 
@@ -63,16 +65,16 @@ class Tests(Harness):
 
         self.run_payday()   # second
 
-        expected = [ { "date": datetime.date.today().strftime('%Y-%m-%d')
+        expected = [ { "date": today()
                      , "npatrons": 1 # most recent first
                      , "receipts": 5.00
                       }
-                   , { "date": datetime.date.today().strftime('%Y-%m-%d')
+                   , { "date": today()
                      , "npatrons": 2
                      , "receipts": 3.00
                       }
                     ]
-        actual = json.loads(TestClient().get('/carl/charts.json').body)
+        actual = json.loads(self.client.GET('/carl/charts.json').body)
 
         assert actual == expected
 
@@ -90,20 +92,20 @@ class Tests(Harness):
         alice.set_tip_to('carl', '5.00')
         self.run_payday()   # third
 
-        expected = [ { "date": datetime.date.today().strftime('%Y-%m-%d')
+        expected = [ { "date": today()
                      , "npatrons": 1 # most recent first
                      , "receipts": 5.00
                       }
-                   , { "date": datetime.date.today().strftime('%Y-%m-%d')
+                   , { "date": today()
                      , "npatrons": 0
                      , "receipts": 0.00
                       }
-                   , { "date": datetime.date.today().strftime('%Y-%m-%d')
+                   , { "date": today()
                      , "npatrons": 2
                      , "receipts": 3.00
                       }
                     ]
-        actual = json.loads(TestClient().get('/carl/charts.json').body)
+        actual = json.loads(self.client.GET('/carl/charts.json').body)
 
         assert actual == expected
 
@@ -120,20 +122,20 @@ class Tests(Harness):
 
         self.run_payday()   # third
 
-        expected = [ { "date": datetime.date.today().strftime('%Y-%m-%d')
+        expected = [ { "date": today()
                      , "npatrons": 2 # most recent first
                      , "receipts": 3.00
                       }
-                   , { "date": datetime.date.today().strftime('%Y-%m-%d')
+                   , { "date": today()
                      , "npatrons": 3  # Since this is rare, don't worry that we double-count alice.
                      , "receipts": 7.00
                       }
-                   , { "date": datetime.date.today().strftime('%Y-%m-%d')
+                   , { "date": today()
                      , "npatrons": 2
                      , "receipts": 3.00
                       }
                     ]
-        actual = json.loads(TestClient().get('/carl/charts.json').body)
+        actual = json.loads(self.client.GET('/carl/charts.json').body)
 
         assert actual == expected
 
@@ -145,6 +147,23 @@ class Tests(Harness):
         self.run_payday()   # third
 
         expected = []
-        actual = json.loads(TestClient().get('/alice/charts.json').body)
+        actual = json.loads(self.client.GET('/alice/charts.json').body)
+
+        assert actual == expected
+
+    def test_transfer_volume(self):
+        self.make_participants_and_tips()
+        self.run_payday()
+        self.run_payday()
+
+        expected = { "date": today()
+                   , "weekly_gifts": 3.0
+                   , "charges": 0.0
+                   , "withdrawals": 0.0
+                   , "active_users": 3
+                   , "total_users": 4
+                   , "total_gifts": 6.0
+                    }
+        actual = json.loads(self.client.GET('/about/charts.json').body)[0]
 
         assert actual == expected

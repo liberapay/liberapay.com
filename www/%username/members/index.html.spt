@@ -17,7 +17,7 @@ github_account, twitter_account, bitbucket_account, bountysource_account = \
                                                   team.get_accounts_elsewhere()
 
 [-----------------------------------------------------------------------------]
-{% extends templates/profile.html %}
+{% extends "templates/profile.html" %}
 
 {% block page %}
 <script>$(document).ready(Gittip.team.init);</script>
@@ -58,8 +58,8 @@ github_account, twitter_account, bitbucket_account, bountysource_account = \
           </div>
         </td>
       </tr>
-      {% end %}
+      {% endif %}
       <tbody id="members"></tbody>
   </table>
 </div>
-{% end %}
+{% endblock %}

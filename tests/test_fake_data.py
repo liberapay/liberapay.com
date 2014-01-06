@@ -9,9 +9,6 @@ class TestFakeData(Harness):
     Ensure the fake_data script doesn't throw any exceptions
     """
 
-    def setUp(self):
-        super(Harness, self).setUp()
-
     def test_fake_data(self):
         num_participants = 5
         num_tips = 5

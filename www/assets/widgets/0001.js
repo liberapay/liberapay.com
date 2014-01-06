@@ -59,7 +59,7 @@ GittipWidget0001.setup = function()
 
     // Once jQuery is loaded, proceed.
 
-    $('SPAN.gittip-0001[gittip-username]').each(GittipWidget0001.setupOneWidget);
+    $('span.gittip-0001[gittip-username]').each(GittipWidget0001.setupOneWidget);
 };
 
 

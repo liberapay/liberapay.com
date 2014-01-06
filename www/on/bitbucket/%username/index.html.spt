@@ -107,9 +107,9 @@ elif is_team:
 url = "https://bitbucket.org/%s" % username
 title = username
 [-----------------------------------------------------------------------------]
-{% extends templates/base.html %}
+{% extends "templates/base.html" %}
 
-{% block heading %}<h2 class="top"><span>Bitbucket</span></h2>{% end %}
+{% block heading %}<h2 class="top"><span>Bitbucket</span></h2>{% endblock %}
 
 {% block box %}
   <table class="on-elsewhere">
@@ -118,13 +118,13 @@ title = username
               <img src="{{ img_src }}" />
           </td>
           <td class="ready">
-              <h2><a href="{{ url }}">{{ escape(username) }}</a> has</h2>
+              <h2><a href="{{ url }}">{{ username|e }}</a> has</h2>
               <div class="number">{{ number }}</div>
               {% if usertype == "user" %}
               <div class="unit">{{ 'person' if number == 1 else 'people' }} ready to give</div>
               {% elif usertype == "organization" %}
               <div class="unit">public member{{ '' if number == 1 else 's' }}</div>
-              {% end %}
+              {% endif %}
           </td>
           <td class="offset"></td>
       </tr>
@@ -137,9 +137,9 @@ title = username
       <div class="nav level-1">
           {% include "templates/sign-in-using-to-give.html" %}
       </div>
-    {% end %}
-  {% end %}
-{% end %}
+    {% endif %}
+  {% endif %}
+{% endblock %}
 
 {% block page %}
 
@@ -147,37 +147,37 @@ title = username
     <div class="col0">
       {% if account.is_locked %}
 
-        <h2>{{ escape(username) }} has opted out of Gittip.</h2>
+        <h2>{{ username|e }} has opted out of Gittip.</h2>
 
         <p>If you are <a
-        href="{{ user_info.get('html_url', '') }}">{{ escape(username) }}</a>
+        href="{{ user_info.get('html_url', '') }}">{{ username|e }}</a>
         on Bitbucket, you can unlock your account to allow people to pledge
         tips to you on Gittip.</p>
 
         {% if 0 %}
-        <a href="{{ bitbucket.oauth_url(website, u'unlock', username) }}"
+        <a href="{{ bitbucket.oauth_url(website, unicode('unlock'), username) }}"
             ><button>Unlock</button></a>
-        {% end %}
+        {% endif %}
 
       {% else %}
         <script>$(document).ready(Gittip.tips.init);</script>
 
-        <h2>{{ escape(name) }} has not joined Gittip.</h2>
+        <h2>{{ name|e }} has not joined Gittip.</h2>
 
         <p>Is this you?
         {% if user.ANON %}
 
         {% if 0 %}
-        <a href="{{ bitbucket.oauth_url(website, u'opt-in', username) }}">Click
+        <a href="{{ bitbucket.oauth_url(website, unicode('opt-in'), username) }}">Click
             here</a> to opt in to Gittip. We never collect money for you until
         you do.
-        {% end %}
+        {% endif %}
 
 
         {% else %}
         <a href="/sign-out.html">Sign out</a> and sign back in
         to claim this account
-        {% end %}
+        {% endif %}
         </p>
 
         {% if user.ANON %}
@@ -190,17 +190,17 @@ title = username
 
         <h2>Don't like what you see?</h2>
 
-        <p>If you are {{ escape(username) }} you can explicitly opt out of
+        <p>If you are {{ username|e }} you can explicitly opt out of
         Gittip by locking this account. We don't allow new pledges to locked
         accounts.</p>
 
         {% if 0 %}
-        <a href="{{ bitbucket.oauth_url(website, u'lock', username) }}"
+        <a href="{{ bitbucket.oauth_url(website, unicode('lock'), username) }}"
             ><button>Lock</button></a>
-        {% end %}
-        {% end %}
+        {% endif %}
+        {% endif %}
 
-      {% end %}
+      {% endif %}
     </div>
   {% elif usertype == "organization"  %}
 
@@ -213,29 +213,29 @@ title = username
                 <h2>{{ nsequence }}
                     {% if number > 0 %}
                     ({{ "%.1f" % (nsequence * 100 / float(number)) }}%)
-                    {% end %}
+                    {% endif %}
                     {{ 'is' if nsequence == 1 else 'are' }}
                     {{ i == 0 and "also on" or "not on" }} Gittip</h2>
         </td></tr>
-        {% end %}
+        {% endif %}
         {% for member, tippee, my_tip in sequence %}
         <tr class="not-over"><td>
             {% if not user.ANON %}
             <th>
-                <a href="/on/bitbucket/{{ member['username'] }}/"><img src="{{ member.get('avatar_url', '/assets/%s/no-avatar.png' % website.version ) }}" />
-                    {{ member['username'] }}</a>
+                <a href="/on/bitbucket/{{ member['username']|e }}/"><img src="{{ member.get('avatar_url', '/assets/%s/no-avatar.png' % website.version ) }}" />
+                    {{ member['username']|e }}</a>
             </th>
             <td>
             <td>{% include "templates/my-tip-bulk.html" %}</td>
             {% else %}
             <td>
-                <a href="/on/bitbucket/{{ member['username'] }}/"><img src="{{ member.get('avatar_url', '/assets/%s/no-avatar.png' % website.version ) }}" />
-                    {{ member['username'] }}</a>
+                <a href="/on/bitbucket/{{ member['username']|e }}/"><img src="{{ member.get('avatar_url', '/assets/%s/no-avatar.png' % website.version ) }}" />
+                    {{ member['username']|e }}</a>
             </td>
-            {% end %}
+            {% endif %}
         </td></tr>
-        {% end %}
-      {% end %}
+        {% endfor %}
+      {% endfor %}
     </table>
 
     {% else %}
@@ -245,5 +245,5 @@ title = username
     I don't recognize the &ldquo;{{ usertype }}&rdquo; type of user on Bitbucket.<br />
     Sorry. :-(
 
-  {% end %}
-{% end %}
+  {% endif %}
+{% endblock %}

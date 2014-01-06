@@ -15,6 +15,15 @@ could become much more common in a one-off payments world, depending on how the
 implementation.
 
 """
+import re
+
+from aspen import json
+from gittip.utils import get_participant
+
+
+callback_pattern = re.compile(r'^[_A-Za-z0-9.]+$')
+
+
 [---]
 
 
@@ -83,3 +92,13 @@ if paydays:
 
 response.body = paydays[:-1]  # don't show Gittip #0
 response.headers["Access-Control-Allow-Origin"] = "*"
+
+# JSONP - see https://github.com/gittip/aspen-python/issues/138
+callback = qs.get('callback')
+if callback is not None:
+    if callback_pattern.match(callback) is None:
+        response.code = 400
+        response.body = {"error": "bad callback"}
+    else:
+        response.body = "%s(%s)" % (callback, json.dumps(response.body))
+        response.headers['Content-Type'] = 'application/javascript'
