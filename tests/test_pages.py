@@ -89,7 +89,7 @@ class TestPages(Harness):
         assert self.client.GxT('/bank-account-complete.html').code == 404
 
     def test_ways_to_help(self):
-        actual = self.get('/for/contributors/ways-to-help/')
+        actual = self.client.GET('/for/contributors/ways-to-help/').body.decode('utf8')
         assert 'Ways to Help' in actual
 
         # The regression I'm seeing in #1824 actually has 'Ways to Help' in the
