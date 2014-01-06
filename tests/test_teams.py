@@ -7,7 +7,7 @@ from gittip.security.user import User
 class Tests(Harness):
 
     def setUp(self):
-        super(Harness, self).setUp()
+        Harness.setUp(self)
         self.team = self.make_participant('A-Team', number='plural')
 
     def test_is_team(self):

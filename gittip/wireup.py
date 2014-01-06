@@ -3,8 +3,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 import os
 import sys
-import threading
-import time
 
 import aspen
 import balanced
@@ -22,7 +20,6 @@ def canonical():
     gittip.canonical_host = os.environ['CANONICAL_HOST']
 
 
-# wireup.db() should only ever be called once by the application
 def db():
     dburl = os.environ['DATABASE_URL']
     maxconn = int(os.environ['DATABASE_MAXCONN'])
@@ -45,24 +42,14 @@ def billing():
 
 
 def username_restrictions(website):
-    gittip.RESTRICTED_USERNAMES = os.listdir(website.www_root)
+    if not hasattr(gittip, 'RESTRICTED_USERNAMES'):
+        gittip.RESTRICTED_USERNAMES = os.listdir(website.www_root)
 
 
-def request_metrics(website):
-    def add_start_timestamp(request):
-        request.x_start = time.time()
-    def log_request_count_and_response_time(response):
-        print("count#requests=1")
-        response_time = time.time() - response.request.x_start
-        print("measure#response_time={}ms".format(response_time * 1000))
-    website.hooks.inbound_early.insert(0, add_start_timestamp)
-    website.hooks.outbound += [log_request_count_and_response_time]
-
-
-def sentry(website):
+def make_sentry_teller(website):
     if not website.sentry_dsn:
         aspen.log_dammit("Won't log to Sentry (SENTRY_DSN is empty).")
-        return
+        return None
 
     sentry = raven.Client(website.sentry_dsn)
 
@@ -144,7 +131,6 @@ def sentry(website):
         aspen.log_dammit('Exception reference: ' + ident)
 
 
-    website.hooks.error_early += [tell_sentry]
     return tell_sentry
 
 def nanswers():

@@ -149,9 +149,9 @@ def inbound(request):
             raise Response(403, REASON_BAD_TOKEN)
 
 
-def outbound(response):
+def outbound(request, response):
 
-    csrf_token = response.request.context.get('csrf_token')
+    csrf_token = request.context.get('csrf_token')
 
 
     # If csrf_token is unset, then inbound was never called, probaby because

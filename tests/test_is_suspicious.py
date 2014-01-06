@@ -1,18 +1,16 @@
 from __future__ import print_function, unicode_literals
 
 from gittip.testing import Harness
-from gittip.testing.client import TestClient
 from gittip.models.participant import Participant
 
 
 class TestIsSuspicious(Harness):
     def setUp(self):
-        super(Harness, self).setUp()
+        Harness.setUp(self)
         self.make_participant('bar', is_admin=True)
 
     def toggle_is_suspicious(self):
-        client = TestClient()
-        client.get('/foo/toggle-is-suspicious.json', user='bar')
+        self.client.GET('/foo/toggle-is-suspicious.json', auth_as='bar')
 
     def test_that_is_suspicious_defaults_to_None(self):
         foo = self.make_participant('foo')

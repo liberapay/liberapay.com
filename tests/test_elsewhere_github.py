@@ -4,14 +4,12 @@ from mock import patch
 
 from gittip.elsewhere import github
 from gittip.testing import Harness, DUMMY_GITHUB_JSON
-from gittip.testing.client import TestClient
 
 
 class TestElsewhereGithub(Harness):
 
     @patch('gittip.elsewhere.github.requests')
     def test_github_user_info_status_handling(self, requests):
-        client = TestClient()
         # Check that different possible github statuses are handled correctly
         for (github_status, github_content), expected_gittip_response in [
                 ((200, DUMMY_GITHUB_JSON), 200),
@@ -21,7 +19,8 @@ class TestElsewhereGithub(Harness):
 
             requests.get().status_code = github_status
             requests.get().text = github_content
-            response = client.get('/on/github/not-in-the-db/')
+            method = self.client.GET if expected_gittip_response == 200 else self.client.GxT
+            response = method('/on/github/not-in-the-ab/')
             assert response.code == expected_gittip_response
 
 
