@@ -108,7 +108,8 @@ receivers = utter_hack(website.db, website.db.all("""
                 <option value="bitbucket">Bitbucket</option>
             </select>
             <span class="luxury"> username: </span>
-            <input placeholder="username" />
+            <input placeholder="username" autocomplete="off" autocorrect="off"
+                autocapitalize="off" spellcheck="false"/>
             <button type="submit">Go</button>
         </form>
     </div>
