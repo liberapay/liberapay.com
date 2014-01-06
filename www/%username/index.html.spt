@@ -25,8 +25,14 @@ hero = "Profile"
 title = participant.username      # used in the title tag
 username = participant.username   # used in footer shared with on/$platform/
                                   # pages
-github_account, twitter_account, bitbucket_account, bountysource_account = \
-                                           participant.get_accounts_elsewhere()
+
+accounts = participant.get_accounts_elsewhere()
+github_account = accounts.github
+bitbucket_account = accounts.bitbucket
+twitter_account = accounts.twitter
+bountysource_account = accounts.bountysource
+
+
 long_statement = len(participant.statement) > LONG_STATEMENT
 communities = [c for c in community.get_list_for(website.db, username) if c.is_member]
 if participant.number == 'singular':

@@ -26,10 +26,19 @@ website.connect_tokens[connect_key] = connect_token
 
 other = Participant.from_username(account.participant)
 
-user_github_account, user_twitter_account, user_bitbucket_account, \
-                      user_bountysource_account = user.participant.get_accounts_elsewhere()
-other_github_account, other_twitter_account, other_bitbucket_account, \
-                    other_bountysource_account = other.get_accounts_elsewhere()
+user_accounts = user.participant.get_accounts_elsewhere()
+
+user_github_account = user_accounts.github
+user_twitter_account = user_accounts.twitter
+user_bitbucket_account = user_accounts.bitbucket
+user_bountysource_account = user_accounts.bountysource
+
+other_accounts = other.get_accounts_elsewhere()
+
+other_github_account = other_accounts.github
+other_twitter_account = other_accounts.twitter
+other_bitbucket_account = other_accounts.bitbucket
+other_bountysource_account = other_accounts.bountysource
 
 
 user_giving = user.participant.get_dollars_giving()
