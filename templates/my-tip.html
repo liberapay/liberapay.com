@@ -1,7 +1,7 @@
-<div class="my-tip{{ " anon" if user.ANON else "" }}">
+<form class="my-tip{{ " anon" if user.ANON else "" }}">
     <div class="tip-controls">
         <div class="tip-amount">
-            $ <input type="number" class="my-tip" min="0" max="100" step="0.25" value="{{ my_tip }}" data-tippee="{{ tippee }}" data-old-amount="{{ my_tip }}"> / week
+            $ <input type="number" class="my-tip" min="0" max="100" step="0.01" value="{{ my_tip }}" data-tippee="{{ tippee }}"> / week
         </div>
 
         <ul class="tip-suggestions">
@@ -15,6 +15,6 @@
 
     <div class="tip-actions">
         <button class="confirm-tip" disabled>Confirm</button><br>
-        <a href="#" class="cancel-tip">Cancel</button>
+        <a href="#" class="cancel-tip">Cancel</a>
     </div>
-</div>
+</form>
