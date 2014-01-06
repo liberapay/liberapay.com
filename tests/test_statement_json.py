@@ -3,25 +3,19 @@ from __future__ import print_function, unicode_literals
 import json
 
 from gittip.testing import Harness
-from gittip.testing.client import TestClient
 
 
 class Tests(Harness):
 
-    def change_statement(self, statement, number='singular', user='alice'):
+    def change_statement(self, statement, number='singular', auth_as='alice',
+            expecting_error=False):
         self.make_participant('alice')
 
-        client = TestClient()
-        response = client.get('/')
-        csrf_token = response.request.context['csrf_token']
-
-        response = client.post( "/alice/statement.json"
-                              , { 'statement': statement
-                                , 'number': number
-                                , 'csrf_token': csrf_token
-                                 }
-                              , user=user
-                               )
+        method = self.client.POST if not expecting_error else self.client.PxST
+        response = method( "/alice/statement.json"
+                         , {'statement': statement, 'number': number}
+                         , auth_as=auth_as
+                          )
         return response
 
     def test_participant_can_change_their_statement(self):
@@ -35,9 +29,13 @@ class Tests(Harness):
         assert actual == 'plural'
 
     def test_anonymous_gets_404(self):
-        response = self.change_statement('being awesome.', 'singular', user=None)
+        response = self.change_statement( 'being awesome.'
+                                        , 'singular'
+                                        , auth_as=None
+                                        , expecting_error=True
+                                         )
         assert response.code == 404, response.code
 
     def test_invalid_is_400(self):
-        response = self.change_statement('', 'none')
+        response = self.change_statement('', 'none', expecting_error=True)
         assert response.code == 400, response.code

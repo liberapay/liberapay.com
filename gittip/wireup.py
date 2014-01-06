@@ -3,8 +3,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 import os
 import sys
-import threading
-import time
 
 import aspen
 import balanced
@@ -12,7 +10,6 @@ import gittip
 import raven
 import psycopg2
 import stripe
-import gittip.utils.mixpanel
 from gittip.models.community import Community
 from gittip.models.participant import Participant
 from gittip.models import GittipDB
@@ -23,7 +20,6 @@ def canonical():
     gittip.canonical_host = os.environ['CANONICAL_HOST']
 
 
-# wireup.db() should only ever be called once by the application
 def db():
     dburl = os.environ['DATABASE_URL']
     maxconn = int(os.environ['DATABASE_MAXCONN'])
@@ -46,24 +42,14 @@ def billing():
 
 
 def username_restrictions(website):
-    gittip.RESTRICTED_USERNAMES = os.listdir(website.www_root)
+    if not hasattr(gittip, 'RESTRICTED_USERNAMES'):
+        gittip.RESTRICTED_USERNAMES = os.listdir(website.www_root)
 
 
-def request_metrics(website):
-    def add_start_timestamp(request):
-        request.x_start = time.time()
-    def log_request_count_and_response_time(response):
-        print("count#requests=1")
-        response_time = time.time() - response.request.x_start
-        print("measure#response_time={}ms".format(response_time * 1000))
-    website.hooks.inbound_early.insert(0, add_start_timestamp)
-    website.hooks.outbound += [log_request_count_and_response_time]
-
-
-def sentry(website):
+def make_sentry_teller(website):
     if not website.sentry_dsn:
         aspen.log_dammit("Won't log to Sentry (SENTRY_DSN is empty).")
-        return
+        return None
 
     sentry = raven.Client(website.sentry_dsn)
 
@@ -145,13 +131,7 @@ def sentry(website):
         aspen.log_dammit('Exception reference: ' + ident)
 
 
-    website.hooks.error_early += [tell_sentry]
     return tell_sentry
-
-
-def mixpanel(website):
-    website.mixpanel_token = os.environ['MIXPANEL_TOKEN']
-    gittip.utils.mixpanel.MIXPANEL_TOKEN = os.environ['MIXPANEL_TOKEN']
 
 def nanswers():
     from gittip.models import participant
@@ -161,6 +141,10 @@ def nmembers(website):
     from gittip.models import community
     community.NMEMBERS_THRESHOLD = int(os.environ['NMEMBERS_THRESHOLD'])
     website.NMEMBERS_THRESHOLD = community.NMEMBERS_THRESHOLD
+
+
+class BadEnvironment(SystemExit):
+    pass
 
 def envvars(website):
 
@@ -208,9 +192,9 @@ def envvars(website):
     website.js_src = envvar('GITTIP_JS_SRC') \
                                           .replace('%version', website.version)
     website.cache_static = is_yesish(envvar('GITTIP_CACHE_STATIC'))
+    website.compress_assets = is_yesish(envvar('GITTIP_COMPRESS_ASSETS'))
 
     website.google_analytics_id = envvar('GOOGLE_ANALYTICS_ID')
-    website.gauges_id = envvar('GAUGES_ID')
     website.sentry_dsn = envvar('SENTRY_DSN')
 
     website.min_threads = envvar('MIN_THREADS', int)
@@ -232,7 +216,8 @@ def envvars(website):
         aspen.log_dammit("See ./default_local.env for hints.")
 
         aspen.log_dammit("=" * 42)
-        raise SystemExit
+        keys = ', '.join([key for key in malformed_values])
+        raise BadEnvironment("Malformed envvar{}: {}.".format(plural, keys))
 
     if missing_keys:
         missing_keys.sort()
@@ -256,4 +241,5 @@ def envvars(website):
         aspen.log_dammit("See ./default_local.env for hints.")
 
         aspen.log_dammit("=" * 42)
-        raise SystemExit
+        keys = ', '.join([key for key in missing_keys])
+        raise BadEnvironment("Missing envvar{}: {}.".format(plural, keys))

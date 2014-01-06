@@ -37,25 +37,25 @@ if not user.ANON:
 
 title = "Bank Account"
 [-----------------------------------------------------------------------------]
-{% extends templates/base.html %}
+{% extends "templates/base.html" %}
 
 {% block heading %}
 
     <h2 class="top"><span>Your bank account is <em id="status">{{ status }}</em></span></h2>
 
     <p>When you receive money on Gittip we
-    {% if bank_account and bank_account.is_setup %}will{% else %}can{% end %}
+    {% if bank_account and bank_account.is_setup %}will{% else %}can{% endif %}
     automatically deposit it into your bank account. If you don't connect
     a bank account then your money will accumulate within Gittip unless you
     regift it to others.<p>
 
-{% end %}
+{% endblock %}
 
 {% block box %}
   {% if user.ANON %}
     <div class="as-content">
 
-    {% include templates/sign-in-using.html %}
+    {% include "templates/sign-in-using.html" %}
     and then you'll be able to add<br> or change your bank account.</p>
 
     <p>Thanks! :-)</p>
@@ -74,7 +74,7 @@ title = "Bank Account"
         #delete {
             display: none;
         }
-        {% end %}
+        {% endif %}
     </style>
     <div class="on-form">
         <form id="payout" autocomplete="off">
@@ -83,17 +83,17 @@ title = "Bank Account"
                 {% if bank_account and bank_account.is_setup %}
                 <h2>Current: {{ bank_account['bank_name'] }}
                 ******{{ bank_account['last_four'] }}</h2>
-                {% end %}
+                {% endif %}
 
                 <div id="feedback">{% if user.participant.last_ach_result %}
                 <h2><span>Failure</span></h2>
                 <div class="details"><p>{{ user.participant.last_ach_result }}</p></div>
-                  {% end %}</div>
+                  {% endif %}</div>
 
                 {% if account and 'merchant' in account.roles %}
                 <h2>Identity Verification &nbsp; <span>&#x2714;</span></h2>
                 <h2>Routing Information</h2>
-                {% end %}
+                {% endif %}
 
 
                 {% if not account or 'merchant' not in account.roles %}
@@ -144,17 +144,17 @@ title = "Bank Account"
                     <select id="dob-month">
                         {% for i in range(1, 13) %}
                         <option value="{{ i }}">{{ MONTHS[i] }}</option>
-                        {% end %}
+                        {% endfor %}
                     </select>
                     <select id="dob-day">
                         {% for i in range(1, 32) %}
                         <option value="{{ i }}">{{ i }}</option>
-                        {% end %}
+                        {% endfor %}
                     </select>
                     <select id="dob-year">
                     {% for i in range(1900, datetime.utcnow().year - 17) %}
                         <option value="{{ i }}" {{ 'selected="selected"' if i == 1990 else '' }}>{{ i }}</option>
-                    {% end %}
+                    {% endfor %}
                     </select>
                 </div>
 
@@ -162,7 +162,7 @@ title = "Bank Account"
 
 
                 <h2>Routing Information</h2>
-                {% end %}
+                {% endif %}
 
 
                 <div class="float">
@@ -197,11 +197,11 @@ title = "Bank Account"
                 <button>Disconnect My Bank Account</button>
             </form>
         </div>
-        {% end %}
+        {% endif %}
 
     </div>
-  {% end %}
-{% end %}
+  {% endif %}
+{% endblock %}
 
 {% block page %}
 <div class="col0 payment-footer">
@@ -217,4 +217,4 @@ title = "Bank Account"
         src="/assets/{{ website.version }}/balanced.png" /></a>
 
 </div>
-{% end %}
+{% endblock %}

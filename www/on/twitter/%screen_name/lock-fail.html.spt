@@ -1,12 +1,12 @@
 username = path['screen_name']
 [---]
-{% extends templates/base.html %}
-{% block heading %}<h2 class="top"><span>Failure</span></h2>{% end %}
+{% extends "templates/base.html" %}
+{% block heading %}<h2 class="top"><span>Failure</span></h2>{% endblock %}
 {% block box %}
 
 <div class="as-content">
 
-    <h1>Are you really {{ username }}?</h1>
+    <h1>Are you really {{ username|e }}?</h1>
 
     <p>Your attempt to lock or unlock this account failed because you're
     logged into Twitter as someone else. Please <a href="https://twitter.com/logout"
@@ -15,4 +15,4 @@ username = path['screen_name']
 
 </div>
 
-{% end %}
+{% endblock %}

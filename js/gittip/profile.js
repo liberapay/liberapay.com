@@ -30,18 +30,18 @@ Gittip.profile.init = function() {
     // Wire up username knob.
     // ======================
 
-    $('FORM.username BUTTON.edit').click(function(e) {
+    $('form.username button.edit').click(function(e) {
         e.preventDefault();
         e.stopPropagation();
-        $('.username BUTTON.edit').hide();
-        $('.username BUTTON.save').show();
-        $('.username BUTTON.cancel').show();
-        $('.username SPAN.view').hide();
-        $('.username INPUT').show().focus();
+        $('.username button.edit').hide();
+        $('.username button.save').show();
+        $('.username button.cancel').show();
+        $('.username span.view').hide();
+        $('.username input').show().focus();
         $('.username .warning').show();
         return false;
     });
-    $('FORM.username').submit(function(e) {
+    $('form.username').submit(function(e) {
         e.preventDefault();
 
         $('#save-username').text('Saving ...');
@@ -57,25 +57,25 @@ Gittip.profile.init = function() {
             { url: "username.json"
             , type: "POST"
             , dataType: 'json'
-            , data: { username: $('INPUT[name=username]').val() }
+            , data: { username: $('input[name=username]').val() }
             , success: success
             , error: error
              }
         );
         return false;
     });
-    $('.username BUTTON.cancel').click(function(e) {
+    $('.username button.cancel').click(function(e) {
         e.preventDefault();
         e.stopPropagation();
         finish_editing_username();
         return false;
     });
     function finish_editing_username() {
-        $('.username BUTTON.edit').show();
-        $('.username BUTTON.save').hide();
-        $('.username BUTTON.cancel').hide();
-        $('.username SPAN.view').show();
-        $('.username INPUT').hide();
+        $('.username button.edit').show();
+        $('.username button.save').hide();
+        $('.username button.cancel').hide();
+        $('.username span.view').show();
+        $('.username input').hide();
         $('.username .warning').hide();
     }
 
@@ -83,37 +83,37 @@ Gittip.profile.init = function() {
     // Wire up textarea for statement.
     // ===============================
 
-    $('TEXTAREA').focus();
+    $('textarea').focus();
     function start_editing_statement() {
-        var h = $('.statement DIV.view').height();
+        var h = $('.statement div.view').height();
         h = Math.max(h, 128);
-        $('.statement TEXTAREA').height(h);
+        $('.statement textarea').height(h);
 
-        $('.statement BUTTON.edit').hide();
-        $('.statement BUTTON.save').show();
-        $('.statement BUTTON.cancel').show();
-        $('.statement DIV.view').hide();
-        $('.statement DIV.edit').show(0, function() {
-            $('.statement TEXTAREA').focus();
+        $('.statement button.edit').hide();
+        $('.statement button.save').show();
+        $('.statement button.cancel').show();
+        $('.statement div.view').hide();
+        $('.statement div.edit').show(0, function() {
+            $('.statement textarea').focus();
         });
     }
-    if ($('.statement TEXTAREA').val() === '') {
+    if ($('.statement textarea').val() === '') {
         start_editing_statement();
     }
-    $('.statement BUTTON.edit').click(function(e) {
+    $('.statement button.edit').click(function(e) {
         e.preventDefault();
         e.stopPropagation();
         start_editing_statement();
         return false;
     });
-    $('FORM.statement').submit(function(e) {
+    $('form.statement').submit(function(e) {
         e.preventDefault();
 
-        $('.statement BUTTON.save').text('Saving ...');
+        $('.statement button.save').text('Saving ...');
 
         function success(d) {
-            $('.statement .view SPAN').html(d.statement);
-            var number = $('.statement SELECT').val();
+            $('.statement .view span').html(d.statement);
+            var number = $('.statement select').val();
             Gittip.profile.toNumber(number);
             finish_editing_statement();
         }
@@ -121,25 +121,25 @@ Gittip.profile.init = function() {
             { url: "statement.json"
             , type: "POST"
             , success: success
-            , data: { statement: $('.statement TEXTAREA').val()
-                    , number: $('.statement SELECT').val()
+            , data: { statement: $('.statement textarea').val()
+                    , number: $('.statement select').val()
                      }
              }
         );
         return false;
     });
-    $('.statement BUTTON.cancel').click(function(e) {
+    $('.statement button.cancel').click(function(e) {
         e.preventDefault();
         e.stopPropagation();
         finish_editing_statement();
         return false;
     });
     function finish_editing_statement() {
-        $('.statement BUTTON.edit').show();
-        $('.statement BUTTON.save').hide().text('Save');
-        $('.statement BUTTON.cancel').hide();
-        $('.statement DIV.view').show();
-        $('.statement DIV.edit').hide();
+        $('.statement button.edit').show();
+        $('.statement button.save').hide().text('Save');
+        $('.statement button.cancel').hide();
+        $('.statement div.view').show();
+        $('.statement div.edit').hide();
         $('.statement .warning').hide();
     }
 
@@ -147,25 +147,25 @@ Gittip.profile.init = function() {
     // Wire up goal knob.
     // ==================
 
-    $('.goal BUTTON.edit').click(function(e) {
+    $('.goal button.edit').click(function(e) {
         e.preventDefault();
         e.stopPropagation();
-        $('.goal DIV.view').hide();
-        $('.goal TABLE.edit').show();
-        $('.goal BUTTON.edit').hide();
-        $('.goal BUTTON.save').show();
-        $('.goal BUTTON.cancel').show();
+        $('.goal div.view').hide();
+        $('.goal table.edit').show();
+        $('.goal button.edit').hide();
+        $('.goal button.save').show();
+        $('.goal button.cancel').show();
         return false;
     });
-    $('FORM.goal').submit(function(e) {
+    $('form.goal').submit(function(e) {
         e.preventDefault();
 
-        $('.goal BUTTON.save').text('Saving ...');
+        $('.goal button.save').text('Saving ...');
 
-        var goal = $('INPUT[name=goal]:checked');
+        var goal = $('input[name=goal]:checked');
 
         function success(d) {
-            var label = $('LABEL[for=' + goal.attr('id') + ']');
+            var label = $('label[for=' + goal.attr('id') + ']');
             var newtext = '';
             if (label.length === 1)
                 newtext = label.html();
@@ -177,8 +177,8 @@ Gittip.profile.init = function() {
             }
 
             if (parseFloat(d.goal) > 0)
-                $('INPUT[name=goal_custom]').val(d.goal);
-            $('.goal DIV.view').html(newtext);
+                $('input[name=goal_custom]').val(d.goal);
+            $('.goal div.view').html(newtext);
             finish_editing_goal();
         }
         jQuery.ajax(
@@ -190,38 +190,38 @@ Gittip.profile.init = function() {
                      }
             , success: success
             , error: function() {
-                    $('.goal BUTTON.save').text('Save');
+                    $('.goal button.save').text('Save');
                     alert("Failed to change your funding goal. Please try again.");
                 }
              }
         );
         return false;
     });
-    $('.goal BUTTON.cancel').click(function(e) {
+    $('.goal button.cancel').click(function(e) {
         e.preventDefault();
         e.stopPropagation();
         finish_editing_goal();
         return false;
     });
     function finish_editing_goal() {
-        $('.goal DIV.view').show();
-        $('.goal TABLE.edit').hide();
-        $('.goal BUTTON.edit').show();
-        $('.goal BUTTON.save').hide().text('Save');
-        $('.goal BUTTON.cancel').hide();
+        $('.goal div.view').show();
+        $('.goal table.edit').hide();
+        $('.goal button.edit').show();
+        $('.goal button.save').hide().text('Save');
+        $('.goal button.cancel').hide();
     }
 
 
     // Wire up aggregate giving knob.
     // ==============================
 
-    $('.anonymous INPUT').click(function() {
+    $('.anonymous input').click(function() {
         jQuery.ajax(
             { url: 'anonymous.json'
             , type: 'POST'
             , dataType: 'json'
             , success: function(data) {
-                $('.anonymous INPUT').attr('checked', data.anonymous);
+                $('.anonymous input').attr('checked', data.anonymous);
             }
             , error: function() {
                     alert("Failed to change your anonymity preference. Please try again.");

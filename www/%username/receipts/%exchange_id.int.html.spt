@@ -97,8 +97,8 @@ if exchange is None:
         {{ card['address_1'] }}<br />
         {% if card['address_2'] %}
         {{ card['address_2'] }}<br />
-        {% end %}
-        {{ card['city_town'] }}{% if card['city_town'] %},{% end %}
+        {% endif %}
+        {{ card['city_town'] }}{% if card['city_town'] %},{% endif %}
         {{ card['state'] }}
         {{ card['zip'] }}<br />
         {{ COUNTRIES_MAP.get(card['country'], '') }}

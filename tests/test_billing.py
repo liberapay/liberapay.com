@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 import balanced
 import mock
 
-import gittip
 from gittip import billing
 from gittip.security import authentication
 from gittip.testing import Harness
@@ -16,7 +15,7 @@ class TestBillingBase(Harness):
     card_uri = '/v1/marketplaces/M123/accounts/A123/cards/C123'
 
     def setUp(self):
-        super(Harness, self).setUp()
+        Harness.setUp(self)
         self.alice = self.make_participant('alice', elsewhere='github')
 
 

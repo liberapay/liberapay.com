@@ -81,11 +81,11 @@ receivers = utter_hack(website.db, website.db.all("""
 
 """, (limit, offset)))
 [---]
-{% extends templates/base.html %}
+{% extends "templates/base.html" %}
 {% block head %}
     <meta name="description" content="Inspiring Generosity. Gittip is a weekly gift exchange. Support and thank your favorite people and projects and communities with small cash gifts." />
     <script>$(document).ready(Gittip.jump.init);</script>
-{% end %}
+{% endblock %}
 {% block heading %}
     <h2 class="top"><span>Sustainable Crowdfunding</span></h2>
     <h1>
@@ -96,7 +96,7 @@ receivers = utter_hack(website.db, website.db.all("""
             <a href="/about/"><button class="selected">About</button></a>
         </span>
     </h2>
-{% end %}
+{% endblock %}
 {% block box %}
     <div class="as-content">
         <h1>Who inspires you?</h1>
@@ -116,7 +116,7 @@ receivers = utter_hack(website.db, website.db.all("""
     <div class="nav level-1">Or browse <a
             href="/for/">communities on Gittip ...</a></div>
 
-{% end %}
+{% endblock %}
 {% block page %}
 
 <div id="leaderboard">
@@ -125,7 +125,7 @@ receivers = utter_hack(website.db, website.db.all("""
         <h2>New Participants</h2>
         <ul class="group">
             {% for i, participant in enumerate(new_participants, start=1) %}
-            <li{% if i > LUXURY %} class="luxury"{% end %}>
+            <li{% if i > LUXURY %} class="luxury"{% endif %}>
                 <a href="/{{ participant.username }}/" class="mini-user">
                     <span class="inner">
                         <span class="avatar"
@@ -137,14 +137,14 @@ receivers = utter_hack(website.db, website.db.all("""
                     </span>
                 </a>
             </li>
-            {% end %}
+            {% endfor %}
         </ul>
     </div>
     <div class="people">
         <h2>Top Givers</h2>
         <ul class="group">
             {% for i, giver in enumerate(givers, start=1) %}
-            <li{% if i > LUXURY %} class="luxury"{% end %}>
+            <li{% if i > LUXURY %} class="luxury"{% endif %}>
                 {% if giver.anonymous and not user.ADMIN %}
                 <span class="mini-user">
                     <span class="inner">
@@ -165,16 +165,16 @@ receivers = utter_hack(website.db, website.db.all("""
                         <span class="name">{{ giver.username }}</span>
                     </span>
                 </a>
-                {% end %}
+                {% endif %}
             </li>
-            {% end %}
+            {% endfor %}
         </ul>
     </div>
     <div class="people">
         <h2>Top Receivers</h2>
         <ul class="group">
             {% for i, receiver in enumerate(receivers, start=1) %}
-            <li{% if i > LUXURY %} class="luxury"{% end %}>
+            <li{% if i > LUXURY %} class="luxury"{% endif %}>
                 <a href="/{{ receiver.username }}/" class="mini-user">
                     <span class="inner">
                         <span class="avatar"
@@ -185,10 +185,10 @@ receivers = utter_hack(website.db, website.db.all("""
                     </span>
                 </a>
             </li>
-            {% end %}
+            {% endfor %}
         </ul>
     </div>
 
 </div>
 
-{% end %}
+{% endblock %}

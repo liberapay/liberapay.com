@@ -179,11 +179,11 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
 
     """, (community.slug, limit, offset)))
 [---]
-{% extends templates/base.html %}
+{% extends "templates/base.html" %}
 {% block heading %}
     <h2 class="top"><span>Community</span></h2>
     <p>Browse <a href="/for/">All Communities</a></p>
-{% end %}
+{% endblock %}
 {% block box %}
 <div class="on-community">
     <h2 class="pad-sign">{{ community.name }}</h2>
@@ -195,7 +195,7 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
 <div class="nav level-1">
     {% if user.ANON %}
     <div class="help with-padding">
-        {% include templates/sign-in-using.html %}
+        {% include "templates/sign-in-using.html" %}
         to join the {{ community.name }} community on Gittip.
     </div>
     {% else %}
@@ -205,15 +205,15 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
             data-is-member="{{ 'true' if is_member else 'false' }}">
         <span>{{ "Leave" if is_member else "Join" }}</span>
     </button>
-    {% end %}
+    {% endif %}
 </div>
 
-{% end %}
+{% endblock %}
 {% block page %}
 <script>
 $(document).ready(function() {
 
-    $('BUTTON.join-leave').click(function()
+    $('button.join-leave').click(function()
     {
         var button = $(this);
         var name = button.attr('data-name');
@@ -236,7 +236,7 @@ $(document).ready(function() {
     {% set nneeded = website.NMEMBERS_THRESHOLD - community.nmembers %}
     <h2>{{ nneeded }} more
         member{{ '' if nneeded == 1 else 's' }} needed!</h2>
-    {% end %}
+    {% endif %}
 
     <p>Communities on Gittip are self-organized. Once this community reaches
     {{ website.NMEMBERS_THRESHOLD }}
@@ -258,7 +258,7 @@ $(document).ready(function() {
     <h1 class="congrats">Congratulations!</h1>
     <p>You're the {{ first_ten[community.slug] }} community on Gittip! :D</p>
 </div>
-{% end %}
+{% endif %}
 
 
 <div id="leaderboard">
@@ -267,7 +267,7 @@ $(document).ready(function() {
         <h2>New Members</h2>
         <ul class="group">
             {% for i, participant in enumerate(new_participants, start=1) %}
-            <li{% if i > LUXURY %} class="luxury"{% end %}>
+            <li{% if i > LUXURY %} class="luxury"{% endif %}>
                 <a href="/{{ participant.username }}/" class="mini-user">
                     <span class="inner">
                         <span class="avatar"
@@ -279,14 +279,14 @@ $(document).ready(function() {
                     </span>
                 </a>
             </li>
-            {% end %}
+            {% endfor %}
         </ul>
     </div>
     <div class="people">
         <h2>Top Givers</h2>
         <ul class="group">
             {% for i, giver in enumerate(givers, start=1) %}
-            <li{% if i > LUXURY %} class="luxury"{% end %}>
+            <li{% if i > LUXURY %} class="luxury"{% endif %}>
                 {% if giver.anonymous and not user.ADMIN %}
                 <span class="mini-user">
                     <span class="inner">
@@ -307,16 +307,16 @@ $(document).ready(function() {
                         <span class="name">{{ giver.username }}</span>
                     </span>
                 </a>
-                {% end %}
+                {% endif %}
             </li>
-            {% end %}
+            {% endfor %}
         </ul>
     </div>
     <div class="people">
         <h2>Top Receivers</h2>
         <ul class="group">
             {% for i, receiver in enumerate(receivers, start=1) %}
-            <li{% if i > LUXURY %} class="luxury"{% end %}>
+            <li{% if i > LUXURY %} class="luxury"{% endif %}>
                 <a href="/{{ receiver.username }}/" class="mini-user">
                     <span class="inner">
                         <span class="avatar"
@@ -327,11 +327,11 @@ $(document).ready(function() {
                     </span>
                 </a>
             </li>
-            {% end %}
+            {% endfor %}
         </ul>
     </div>
 
 </div>
-{% end %}
+{% endif %}
 
-{% end %}
+{% endblock %}
