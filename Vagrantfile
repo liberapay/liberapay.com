@@ -5,7 +5,6 @@
 VAGRANTFILE_API_VERSION = "2"
 
 PROJECT_DIRECTORY = 'www.gittip.com'
-POSTGRES_VERSION = '9.1'
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "precise64"
@@ -19,7 +18,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Install dependencies
   config.vm.provision :shell, :inline => "sudo apt-get update"
-  config.vm.provision :shell, :inline => "sudo apt-get -y install make git build-essential python-software-properties postgresql-#{POSTGRES_VERSION} postgresql-contrib-#{POSTGRES_VERSION} libpq-dev python-dev"
+  config.vm.provision :shell, :inline => "sudo apt-get -y install make git build-essential python-software-properties postgresql-9.1 postgresql-contrib-9.1 libpq-dev python-dev"
 
   # Warn if Windows newlines are detected and try to fix the problem
   config.vm.provision :shell, :inline => <<-eos
