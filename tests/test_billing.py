@@ -16,7 +16,7 @@ class TestBillingBase(Harness):
 
     def setUp(self):
         Harness.setUp(self)
-        self.alice = self.make_participant('alice')
+        self.alice = self.make_participant('alice', elsewhere='github')
 
 
 class TestBalancedCard(Harness):

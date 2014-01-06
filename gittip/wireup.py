@@ -12,7 +12,7 @@ import psycopg2
 import stripe
 from gittip.models.community import Community
 from gittip.models.participant import Participant
-from postgres import Postgres
+from gittip.models import GittipDB
 
 
 def canonical():
@@ -23,7 +23,7 @@ def canonical():
 def db():
     dburl = os.environ['DATABASE_URL']
     maxconn = int(os.environ['DATABASE_MAXCONN'])
-    db = Postgres(dburl, maxconn=maxconn)
+    db = GittipDB(dburl, maxconn=maxconn)
 
     # register hstore type
     with db.get_cursor() as cursor:

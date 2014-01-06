@@ -105,6 +105,7 @@ class Harness(unittest.TestCase):
         cls.db = cls.client.website.db
         cls.tablenames = cls.db.all("SELECT tablename FROM pg_tables "
                                     "WHERE schemaname='public'")
+        cls.seq = 0
 
 
     def setUp(self):
@@ -151,6 +152,13 @@ class Harness(unittest.TestCase):
 
         participant = Participant.with_random_username()
         participant.change_username(username)
+
+        if 'elsewhere' in kw or 'claimed_time' in kw:
+            platform = kw.pop('elsewhere', 'github')
+            user_info = dict(login=username)
+            self.seq += 1
+            self.db.run("INSERT INTO elsewhere (platform, user_id, participant, user_info) "
+                        "VALUES (%s,%s,%s,%s)", (platform, self.seq, username, user_info))
 
         # brute force update for use in testing
         for k,v in kw.items():

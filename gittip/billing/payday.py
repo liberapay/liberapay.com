@@ -127,6 +127,8 @@ class Payday(object):
         crashes.
 
         """
+        self.db.self_check()
+
         _start = aspen.utils.utcnow()
         log("Greetings, program! It's PAYDAY!!!!")
         ts_start = self.start()
@@ -140,6 +142,8 @@ class Payday(object):
         self.set_nactive(ts_start)
 
         self.end()
+
+        self.db.self_check()
 
         _end = aspen.utils.utcnow()
         _delta = _end - _start

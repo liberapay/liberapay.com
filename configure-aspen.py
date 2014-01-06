@@ -27,7 +27,7 @@ website.default_renderers_by_media_type['application/json'] = 'stdlib_format'
 website.renderer_factories['jinja2'].Renderer.global_context = {
     'range': range,
     'unicode': unicode,
-    'enumerate': enumerate,   
+    'enumerate': enumerate,
     'len': len,
     'float': float,
     'type': type,
@@ -55,6 +55,7 @@ def update_homepage_queries():
         try:
             utils.update_global_stats(website)
             utils.update_homepage_queries_once(website.db)
+            website.db.self_check()
         except:
             if tell_sentry:
                 tell_sentry(None)
