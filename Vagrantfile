@@ -20,9 +20,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision :shell, :inline => "sudo apt-get update"
   config.vm.provision :shell, :inline => "sudo apt-get -y install make git build-essential python-software-properties postgresql-9.1 postgresql-contrib-9.1 libpq-dev python-dev"
 
+  # Configure Postgres
+  config.vm.provision :shell, :inline => "sudo su - postgres -c 'psql -U postgres -qf /home/vagrant/#{PROJECT_DIRECTORY}/create_db.sql'"
+
   # Warn if Windows newlines are detected and try to fix the problem
   config.vm.provision :shell, :inline => <<-eos
     cd #{PROJECT_DIRECTORY}
+
     if egrep -ql $'\r'\$ README.md; then
       echo
       echo '*** WARNING ***'
