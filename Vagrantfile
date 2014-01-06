@@ -6,6 +6,7 @@ VAGRANTFILE_API_VERSION = "2"
 
 PROJECT_DIRECTORY = 'www.gittip.com'
 DATABASE_URL = 'postgres://gittip:gittip@localhost:5432/gittip'
+POSTGRES_VERSION = '9.1'
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "precise64"
@@ -15,9 +16,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.synced_folder ".", "/home/vagrant/#{PROJECT_DIRECTORY}"
   config.vm.network :forwarded_port, guest: 8537, host: 8537
 
+  # TODO: Pin apt-get packages to the same versions Heroku uses
+
   # Install dependencies
   config.vm.provision :shell, :inline => "sudo apt-get update"
-  config.vm.provision :shell, :inline => "sudo apt-get -y install make git build-essential python-software-properties postgresql postgresql-contrib libpq-dev python-dev"
+  config.vm.provision :shell, :inline => "sudo apt-get -y install make git build-essential python-software-properties postgresql-#{POSTGRES_VERSION} postgresql-contrib-#{POSTGRES_VERSION} libpq-dev python-dev"
 
   # Warn if Windows newlines are detected and try to fix the problem
   config.vm.provision :shell, :inline => <<-eos
