@@ -158,6 +158,6 @@ class Tests(Harness):
                    , "total_users": 4
                    , "total_gifts": 6.0
                     }
-        actual = json.loads(TestClient().get('/about/charts.json').body)[0]
+        actual = json.loads(self.client.GET('/about/charts.json').body)[0]
 
         assert actual == expected
