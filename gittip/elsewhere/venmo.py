@@ -24,7 +24,7 @@ def oauth_url(website):
 def oauth_dance(website, qs):
     data = {
         'code': qs['code'].encode('US-ASCII'),
-        'client_id': website.venmo,
+        'client_id': website.venmo_client_id,
         'client_secret': website.venmo_client_secret
     }
     r = requests.post("https://github.com/login/oauth/access_token", data=data)
