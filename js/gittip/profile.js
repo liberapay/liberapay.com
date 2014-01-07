@@ -259,4 +259,58 @@ Gittip.profile.init = function() {
         .on('click', '.recreate', function () {
             $.post('api-key.json', { action: 'show' }, $('.api-key').data('callback'));
         });
+
+
+    $('.bitcoin').on("click", "a.toggle-bitcoin", function()
+    {
+        // "Add bitcoin address" text or existing
+        // bitcoin address was clicked, show the text box
+        $('.bitcoin').toggle();
+        $('input.bitcoin').focus();
+    });
+
+    // Wire up bitcoin input.
+    $('.bitcoin-submit')
+        .on('click', '[type=submit]', function () {
+            var $this = $(this);
+
+            $this.text('Saving...');
+
+            function success(d) {
+                $('a.bitcoin').text(d.bitcoin_address);
+                $('.bitcoin').toggle();
+                if (d.bitcoin_address === '') {
+                    html = "Add a <a href=\"javascript:;\" class=\"toggle-bitcoin\">Bitcoin address</a>.";
+                } else {
+                    html = "<a rel=\"me\" href=\"http://blockchain.info/address/";
+                    html += d.bitcoin_address + "\">" + d.bitcoin_address + "</a>";
+                    html += "<div class=\"account-type\">Bitcoin address ";
+                    html += "(<a href=\"javascript:;\" class=\"toggle-bitcoin\">edit</a>)</div>";
+                }
+                $('div.bitcoin').html(html);
+                $this.text('Save');
+            }
+
+            jQuery.ajax({
+                    url: "bitcoin.json",
+                    type: "POST",
+                    dataType: 'json',
+                    success: success,
+                    error: function () {
+                        $this.text('Save');
+                        alert("Invalid Bitcoin address. Please try again." );
+                    },
+                    data: {
+                        bitcoin_address: $('input.bitcoin').val()
+                    }
+                }
+            )
+
+            return false;
+        })
+        .on('click', '[type=cancel]', function () {
+            $('.bitcoin').toggle();
+
+            return false;
+        });
 };
