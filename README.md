@@ -50,14 +50,16 @@ Thanks for hacking on Gittip! Be sure to review
 [CONTRIBUTING](https://github.com/gittip/www.gittip.com/blob/master/CONTRIBUTING.md#readme)
 as well if that's what you're planning to do.
 
+
 Dependencies
 ------------
 
-The only hard requirement on your system is [Python
-2.7](http://python.org/download/releases/2.7.4/).
+Building `www.gittip.com` requires [Python
+2.7](http://python.org/download/releases/2.7.4/), and a gcc/make toolchain.
 
-All library dependencies are bundled in the repo (under `vendor/`) and by
-default the app is configured to use a Postgres instance in the cloud.
+All Python library dependencies are bundled in the repo (under `vendor/`) and
+by default the app is configured to use a Postgres instance in the cloud.
+
 
 Building
 --------
@@ -73,6 +75,10 @@ to ```postgres://username@host/gittip```
 Next, setup your environment:
 
     $ make env
+
+If you haven't run Gittip for a while, you should reinstall the dependencies:
+
+    $ make clean env
 
 Add the necessary schemas and insert dummy data into postgres:
 
@@ -102,48 +108,43 @@ If Gittip launches successfully it will look like this:
 ```
 $ make run
 ./env/bin/swaddle local.env ./env/bin/aspen \
-                --www_root=www/ \
-                --project_root=.. \
-                --show_tracebacks=yes \
-                --changes_reload=yes \
-                --network_address=:8537
-[SWADDLE] Skipping line: .
-[SWADDLE] Skipping line: .
-[SWADDLE] Skipping line: .
-[SWADDLE] Skipping line: .
-[SWADDLE] Skipping line: .
+        --www_root=www/ \
+        --project_root=. \
+        --show_tracebacks=yes \
+        --changes_reload=yes \
+        --network_address=:8537
 pid-12508 thread-140735090330816 (MainThread) Reading configuration from defaults, environment, and command line.
 pid-12508 thread-140735090330816 (MainThread)   changes_reload         False                          default
 pid-12508 thread-140735090330816 (MainThread)   changes_reload         True                           command line option --changes_reload=yes
 pid-12508 thread-140735090330816 (MainThread)   charset_dynamic        UTF-8                          default
 pid-12508 thread-140735090330816 (MainThread)   charset_static         None                           default
 pid-12508 thread-140735090330816 (MainThread)   configuration_scripts  []                             default
-pid-12508 thread-140735090330816 (MainThread)   indices                [u'index.html', u'index.json', u'index'] default
+pid-12508 thread-140735090330816 (MainThread)   indices                [u'index.html', u'index.json', u'index', u'index.html.spt', u'index.json.spt', u'index.spt'] default
 pid-12508 thread-140735090330816 (MainThread)   list_directories       False                          default
 pid-12508 thread-140735090330816 (MainThread)   logging_threshold      0                              default
 pid-12508 thread-140735090330816 (MainThread)   media_type_default     text/plain                     default
 pid-12508 thread-140735090330816 (MainThread)   media_type_json        application/json               default
 pid-12508 thread-140735090330816 (MainThread)   network_address        ((u'0.0.0.0', 8080), 2)        default
 pid-12508 thread-140735090330816 (MainThread)   network_address        ((u'0.0.0.0', 8537), 2)        command line option --network_address=:8537
-pid-12508 thread-140735090330816 (MainThread)   network_engine         cherrypy                       default
+pid-12508 thread-140735090330816 (MainThread)   network_engine         cheroot                        default
 pid-12508 thread-140735090330816 (MainThread)   project_root           None                           default
-pid-12508 thread-140735090330816 (MainThread)   project_root           ..                             command line option --project_root=..
-pid-12508 thread-140735090330816 (MainThread)   renderer_default       tornado                        default
+pid-12508 thread-140735090330816 (MainThread)   project_root           .                              command line option --project_root=.
+pid-12508 thread-140735090330816 (MainThread)   renderer_default       stdlib_percent                 default
 pid-12508 thread-140735090330816 (MainThread)   show_tracebacks        False                          default
 pid-12508 thread-140735090330816 (MainThread)   show_tracebacks        True                           command line option --show_tracebacks=yes
-pid-12508 thread-140735090330816 (MainThread)   unavailable            0                              default
 pid-12508 thread-140735090330816 (MainThread)   www_root               None                           default
 pid-12508 thread-140735090330816 (MainThread)   www_root               www/                           command line option --www_root=www/
-pid-12508 thread-140735090330816 (MainThread) project_root is relative: '..'.
+pid-12508 thread-140735090330816 (MainThread) project_root is relative to CWD: '.'.
 pid-12508 thread-140735090330816 (MainThread) project_root set to /Your/path/to/www.gittip.com.
+pid-12508 thread-140735090330816 (MainThread) Found plugin for renderer 'tornado'
+pid-12508 thread-140735090330816 (MainThread) Won't log to Sentry (SENTRY_DSN is empty).
+pid-12508 thread-140735090330816 (MainThread) Loading configuration file '/Your/path/to/www.gittip.com/configure-aspen.py' (possibly changing settings)
 pid-12508 thread-140735090330816 (MainThread) Renderers (*ed are unavailable, CAPS is default):
-pid-12508 thread-140735090330816 (MainThread)   TORNADO
-pid-12508 thread-140735090330816 (MainThread)  *pystache         ImportError: No module named pystache
-pid-12508 thread-140735090330816 (MainThread)   stdlib_template
-pid-12508 thread-140735090330816 (MainThread)   stdlib_format
-pid-12508 thread-140735090330816 (MainThread)  *jinja2           ImportError: No module named jinja2
-pid-12508 thread-140735090330816 (MainThread)   stdlib_percent
-pid-12508 thread-140735090330816 (MainThread) Starting cherrypy engine.
+pid-12508 thread-140735090330816 (MainThread)   stdlib_percent   
+pid-12508 thread-140735090330816 (MainThread)   TORNADO          
+pid-12508 thread-140735090330816 (MainThread)   stdlib_format    
+pid-12508 thread-140735090330816 (MainThread)   stdlib_template  
+pid-12508 thread-140735090330816 (MainThread) Starting cheroot engine.
 pid-12508 thread-140735090330816 (MainThread) Greetings, program! Welcome to port 8537.
 pid-12508 thread-140735090330816 (MainThread) Aspen will restart when configuration scripts or Python modules change.
 pid-12508 thread-140735090330816 (MainThread) Starting up Aspen website.
@@ -176,21 +177,10 @@ Configuration
 When using `make run`, Gittip's execution environment is defined in a
 `local.env` file, which is not included in the source code repo. If you `make
 run` you'll have one generated for you, which you can then tweak as needed.
-Here's the default, which is also contained in default_local.env:
+It's a copy of [default_local.env]
+(https://github.com/gittip/www.gittip.com/blob/master/default_local.env).
 
-    CANONICAL_HOST=
-    CANONICAL_SCHEME=http
-    DATABASE_URL=postgres://gittip@localhost/gittip
-    DATABASE_MAXCONN=10
-    STRIPE_SECRET_API_KEY=1
-    STRIPE_PUBLISHABLE_API_KEY=1
-    BALANCED_API_SECRET=90bb3648ca0a11e1a977026ba7e239a9
-    GITHUB_CLIENT_ID=3785a9ac30df99feeef5
-    GITHUB_CLIENT_SECRET=e69825fafa163a0b0b6d2424c107a49333d46985
-    GITHUB_CALLBACK=http://localhost:8537/on/github/associate
-    TWITTER_CONSUMER_KEY=QBB9vEhxO4DFiieRF68zTA
-    TWITTER_CONSUMER_SECRET=mUymh1hVMiQdMQbduQFYRi79EYYVeOZGrhj27H59H78
-    TWITTER_CALLBACK=http://127.0.0.1:8537/on/twitter/associate
+The following text explains some of the content of that file:
 
 The `BALANCED_API_SECRET` is a test marketplace. To generate a new secret for
 your own testing run this command:
@@ -220,32 +210,22 @@ should change the `DATABASE_URL` using the following format:
 
     DATABASE_URL=postgres://<username>@localhost/<database name>
 
-
 Modifying CSS
 =============
 
-We use SCSS, with files stored in `scss/`. Out of the box, your Gittip
-installation will use the stylesheet from production, per the `GITTIP_CSS_HREF`
-setting in `local.env`. If you want to modify styles then you should install
-[sass](http://sass-lang.com/) and change `GITTIP_CSS_HREF` in your `local.env`
-to `/assets/-/gittip.css`. That will route to
-`www/assets/%version/gittip.css.spt`, which is a simplate that shells out to
-`sass` to dynamically generate the stylesheet on each request. The `-` prevents
-HTTP caching. Sass does its own caching on disk so it's performant enough for
-development (in production we route through a CDN so the origin only gets hit
-once per new version).
-
+We use SCSS, with files stored in `scss/`. All of the individual files are
+combined in `scss/gittip.scss` which itself is compiled by `libsass` in
+`www/assets/%version/gittip.css.spt` on each request.
 
 Testing [![Testing](https://secure.travis-ci.org/gittip/www.gittip.com.png)](http://travis-ci.org/gittip/www.gittip.com)
 =======
 
-Please write unit tests for all new code and all code you change.
-Gittip's test suite is designed for the nosetests test runner (maybe it
-also works with py.test?), and uses module-level test functions, with a context
-manager for managing testing state. As a rule of thumb, each test case should
-perform one assertion.
+Please write unit tests for all new code and all code you change.  Gittip's
+test suite uses the py.test test runner, which will be installed into the
+virtualenv you get by running `make env`. As a rule of thumb, each test case
+should perform one assertion.
 
-Assuming you have make, the easiest way to run the test suite is:
+The easiest way to run the test suite is:
 
     $ make test
 
@@ -264,7 +244,7 @@ Of course, they could also remove the check in the same or even a different
 commit. Of course, they could also sneak in whatever the heck code they wanted
 to try to sneak in.
 
-To invoke nosetests directly you should use the `swaddle` utility that comes
+To invoke py.test directly you should use the `swaddle` utility that comes
 with Aspen. First `make tests/env`, edit it as noted above, and then:
 
     [gittip] $ cd tests/
@@ -345,47 +325,35 @@ some fake data, so that more of the site is functional, run this command:
     $ make data
 
 
-### Notes for Mac OS X users
-
-If when running the tests you see errors of the form:
-
-    psycopg2.OperationalError: FATAL:  sorry, too many clients already
-
-You will need to configure Postgres to accept more connections. You can do this
-by editing your `postgresql.conf`, and setting:
-
-    max_connections = 40
-
-To get this to work you will also need to change your kernel's shared memory
-parameters. You can do this by running these shell commands:
-
-    sudo sysctl -w kern.sysv.shmmax=8388608
-    sudo sysctl -w kern.sysv.shmall=2048
-
-You will need to restart Postgres for the max_connections parameter to
-take effect. Once restarted, the test suite should pass for you. These changes
-will not persist after a reboot, so you will have to set these again after
-a reboot.
-
-
 API
 ===
 
-The Gittip API is comprised of these four endpoints:
+The Gittip API is comprised of these six endpoints:
 
-**[/about/paydays.json](https://www.gittip.com/about/paydays.json)**
-([source](https://github.com/gittip/www.gittip.com/tree/master/www/about/paydays.json))&mdash;<i>public</i>&mdash;Returns
+**[/about/charts.json](https://www.gittip.com/about/charts.json)**
+([source](https://github.com/gittip/www.gittip.com/tree/master/www/about/charts.json.spt))&mdash;<i>public</i>&mdash;Returns
 an array of objects, one per week, showing aggregate numbers over time. The
 [charts](https://www.gittip.com/about/charts.html) page uses this.
 
+**[/about/paydays.json](https://www.gittip.com/about/paydays.json)**
+([source](https://github.com/gittip/www.gittip.com/tree/master/www/about/paydays.json.spt))&mdash;<i>public</i>&mdash;Returns
+an array of objects, one per week, showing aggregate numbers over time. The
+[charts](https://www.gittip.com/about/charts.html) page used to use this.
+
 **[/about/stats.json](https://www.gittip.com/about/stats.json)**
-([source](https://github.com/gittip/www.gittip.com/tree/master/www/about/stats))&mdash;<i>public</i>&mdash;Returns
+([source](https://github.com/gittip/www.gittip.com/tree/master/www/about/stats.spt))&mdash;<i>public</i>&mdash;Returns
 an object giving a point-in-time snapshot of Gittip. The
 [stats](https://www.gittip.com/about/stats.html) page displays the same info.
 
+**/`%username`/charts.json**
+([example](https://www.gittip.com/Gittip/charts.json),
+[source](https://github.com/gittip/www.gittip.com/tree/master/www/%25username/charts.json.spt))&mdash;<i>public</i>&mdash;Returns
+an array of objects, one per week, showing aggregate numbers over time for the
+given user.
+
 **/`%username`/public.json**
-([example](https://www.gittip.com/whit537/public.json),
-[source](https://github.com/gittip/www.gittip.com/tree/master/www/%25username/public.json))&mdash;<i>public</i>&mdash;Returns an object with these keys:
+([example](https://www.gittip.com/Gittip/public.json),
+[source](https://github.com/gittip/www.gittip.com/tree/master/www/%25username/public.json.spt))&mdash;<i>public</i>&mdash;Returns an object with these keys:
 
   - "receiving"&mdash;an estimate of the amount the given participant will
     receive this week
@@ -424,7 +392,7 @@ an object giving a point-in-time snapshot of Gittip. The
 
 
 **/`%username`/tips.json**
-([source](https://github.com/gittip/www.gittip.com/tree/master/www/%25username/tips.json))&mdash;<i>private</i>&mdash;Responds
+([source](https://github.com/gittip/www.gittip.com/tree/master/www/%25username/tips.json.spt))&mdash;<i>private</i>&mdash;Responds
 to `GET` with an array of objects representing your current tips. `POST` the
 same structure back in order to update tips in bulk (be sure to set
 `Content-Type` to `application/json` instead of
@@ -463,11 +431,11 @@ for your project!
  - [Node.js: Node-Gittip](https://npmjs.org/package/gittip) (also see [Khan
    Academy's setup](http://ejohn.org/blog/gittip-at-khan-academy/))
 
-
  - [Ruby: gratitude](https://github.com/JohnKellyFerguson/gratitude): A ruby gem that wraps the Gittip API (currently in development and not feature complete).
  
  - [WordPress: WP-Gittip](https://github.com/daankortenbach/WP-Gittip)
 
+ - [hubot-gittip](https://github.com/myplanetdigital/hubot-gittip): A Hubot script for interacting with a shared Gittip account.
 
 Glossary
 ========
@@ -510,21 +478,20 @@ and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
  - [NetworkForGood](http://www1.networkforgood.org/)
  - [AnyFu](http://anyfu.com/) - hire an expert for one-on-one, screen-share work sessions
  - [OpenOfficeHours](http://ohours.org/)
- - [VideoVivoApp](http://videovivoapp.com/)
- - [TipJoy](http://techcrunch.com/2009/08/20/tipjoy-heads-to-the-deadpool/) [discontinued]
+ - [discontinued] [TipJoy](http://techcrunch.com/2009/08/20/tipjoy-heads-to-the-deadpool/)
  - [HopeMob](http://hopemob.org/)
  - [AwesomeFoundation](http://www.awesomefoundation.org/)
  - [CrowdRise](http://www.crowdrise.com/)
- - [ChipIn](http://www.chipin.com/)
+ - [discontinued] [ChipIn](http://www.chipin.com/)
  - [Fundable](http://www.fundable.com/) - fund start-up companies
  - [ModestNeeds](https://www.modestneeds.org/) - crowdfunding campaigns in support of the &ldquo;working poor&rdquo;
  - [FreedomSponsors](http://www.freedomsponsors.org/) - Crowdfunding Free Software, one issue at a time
  - [GumRoad](https://gumroad.com/)
  - [MacHeist](http://macheist.com/)
  - [Prosper](http://www.prosper.com/) - peer-to-peer lending
- - [Togather](http://togather.me/)
+ - [discontinued] [Togather](http://togather.me/)
  - [PaySwarm](http://payswarm.com/) - open payment protocol
- - [Gitbo](http://git.bo/) - another implementation of the bounty model
+ - [discontinued] [Gitbo](http://git.bo/) - another implementation of the bounty model
  - [Affero](http://www.affero.com/) - old skool attempt &ldquo;to bring a culture of patronage to the Internet&rdquo;
  - [ShareAGift](http://www.shareagift.com) - one-off, crowd-sourced cash gifts
  - [GoFundMe](http://www.gofundme.com/) - derpy-looking platform that [reaches normal people](http://pittsburgh.cbslocal.com/2013/02/19/crowdfunding-growing-in-popularity-as-fundraising-tool/) (my dad emailed this link to me)
@@ -536,7 +503,7 @@ and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
  - [IssueHunter](http://issuehunter.co/) - FOSS bounty site
  - [TinyPass](http://www.tinypass.com/) - Soft paywall, used by e.g. [Daily Dish](http://dish.andrewsullivan.com/)
  - [Patreon](http://www.patreon.com/) - Patronage model for content creators(!)
- - [WhyNotMe](http://www.whynotme.me/) - "Give as a group to any non-profit in America"
+ - [discontinued] [WhyNotMe](http://www.whynotme.me/) - "Give as a group to any non-profit in America"
  - [LoveMachine](http://web.archive.org/web/20110214110248/http://sendlove.us/trial/faq.php) - "the cool new employee recognition system" (supposedly came out of Linden Lab)
  - [See.Me](https://www.see.me/) - sustainable crowdfunding for artists
  - [NoiseTrade](http://www.noisetrade.com/) - band mailing lists + tips
@@ -548,3 +515,11 @@ and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
  - [Pitch In](http://pitchinbox.com/) - Widget-centric project-based funding campaigns
  - [Binpress](http://www.binpress.com/) - Binpress is the marketplace for commercial open-source projects.
  - [TubeStart](https://www.tubestart.com/) - a crowdfunding platform dedicated exclusively to YouTube creators
+ - [Fundit](http://www.fundit.ie/) - An Ireland-wide initiative
+ - [Snowdrift.coop](https://snowdrift.coop/) - a new sustainable patronage system
+ - [PieTrust](http://www.pietrust.com/) - an "open company" developing a secure reputation system for sharing credit.
+ - [BountyOSS](https://bountyoss.com/) - Where crowdfunding means business
+ - [Suprmasv](https://www.suprmasv.com/) - Empowering the Hacker Class.
+ - [Tip4Commit](http://tip4commit.com/) - Donate bitcoins to open source projects or make commits and get tips for it.
+ - [BitHub](https://whispersystems.org/blog/bithub/) - An experiment in funding privacy OSS. 
+ - [Fundly](https://fundly.com/) - Crowdfund Anything

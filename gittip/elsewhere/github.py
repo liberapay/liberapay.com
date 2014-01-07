@@ -4,11 +4,11 @@ import logging
 import requests
 import os
 from aspen import json, Response
-from aspen.http.request import UnicodeWithParams
+from aspen.http.request import PathPart
 from aspen.utils import typecheck
 from aspen.website import Website
 from gittip import log
-from gittip.elsewhere import ACTIONS, AccountElsewhere, _resolve
+from gittip.elsewhere import ACTIONS, AccountElsewhere
 
 
 class GitHubAccount(AccountElsewhere):
@@ -18,16 +18,12 @@ class GitHubAccount(AccountElsewhere):
         return self.user_info['html_url']
 
 
-def resolve(login):
-    return _resolve(u'github', u'login', login)
-
-
 def oauth_url(website, action, then=u""):
     """Given a website object and a string, return a URL string.
 
-    `action' is one of 'opt-in', 'lock' and 'unlock'
+    'action' is one of 'opt-in', 'lock' and 'unlock'
 
-    `then' is either a github username or an URL starting with '/'. It's
+    'then' is either a github username or an URL starting with '/'. It's
         where we'll send the user after we get the redirect back from
         GitHub.
 
@@ -84,7 +80,7 @@ def oauth_dance(website, qs):
     return user_info
 
 
-def get_user_info(login):
+def get_user_info(db, login):
     """Get the given user's information from the DB or failing that, github.
 
     :param login:
@@ -93,12 +89,12 @@ def get_user_info(login):
     :returns:
         A dictionary containing github specific information for the user.
     """
-    typecheck(login, (unicode, UnicodeWithParams))
-    rec = gittip.db.one( "SELECT user_info FROM elsewhere "
-                         "WHERE platform='github' "
-                         "AND user_info->'login' = %s"
-                       , (login,)
-                        )
+    typecheck(login, (unicode, PathPart))
+    rec = db.one("""
+        SELECT user_info FROM elsewhere
+        WHERE platform='github'
+        AND user_info->'login' = %s
+    """, (login,))
 
     if rec is not None:
         user_info = rec

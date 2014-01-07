@@ -2,21 +2,18 @@ import os
 import md5
 import time
 from gittip.models.participant import Participant
-from gittip.elsewhere import AccountElsewhere, _resolve
+from gittip.elsewhere import AccountElsewhere
 
-www_host = os.environ['BOUNTYSOURCE_WWW_HOST'].decode('ASCII')
-api_host = os.environ['BOUNTYSOURCE_API_HOST'].decode('ASCII')
 
 class BountysourceAccount(AccountElsewhere):
     platform = u'bountysource'
 
     def get_url(self):
-        url = "https://www.bountysource.com/#users/%s" % self.user_info["slug"]
-        return url
 
+        # I don't see that we actually use this. Leaving as a stub pending
+        # https://github.com/gittip/www.gittip.com/pull/1369.
 
-def resolve(login):
-    return _resolve(u'bountysource', u'login', login)
+        raise NotImplementedError
 
 
 def oauth_url(website, participant, redirect_url=None):
@@ -54,6 +51,7 @@ def create_access_token(participant):
 
 def hash_access_token(user_id, time_now):
     """Create hash for access token.
+
     :param user_id:
         ID of the user.
 

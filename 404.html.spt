@@ -1,11 +1,11 @@
 [---]
-{% extends templates/base.html %}
+{% extends "templates/base.html" %}
 
 {% block heading %}
     <h2 class="top">
         <span>Page Not Found</span>
     </h2>
-{% end %}
+{% endblock %}
 {% block box %}
 
 <p class="as-content">
@@ -14,4 +14,4 @@
 
 <div class="nav level-1"><a href="/"><button>Home</button></a></div>
 
-{% end %}
+{% endblock %}

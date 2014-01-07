@@ -5,7 +5,6 @@ import os
 
 import requests
 from aspen import json, Response
-from gittip import CARDINALS, db
 from gittip.elsewhere import github
 from gittip.models.participant import Participant
 
@@ -15,7 +14,7 @@ from gittip.models.participant import Participant
 # Try to load from GitHub.
 # ========================
 
-user_info = github.get_user_info(path['login'])
+user_info = github.get_user_info(website.db, path['login'])
 
 
 # Try to load from Gittip.
@@ -29,7 +28,7 @@ if not name:
 
 usertype = user_info.get("type", "unknown type of account").lower()
 if usertype == "user":
-    account = github.GitHubAccount(user_info['id'], user_info)
+    account = github.GitHubAccount(website.db, user_info['id'], user_info)
     locked = account.is_locked
     lock_action = "unlock" if account.is_locked else "lock"
     if account.is_claimed:
@@ -66,7 +65,7 @@ elif usertype == "organization":
            AND p.claimed_time IS NOT NULL
 
     """
-    known = db.all(ON_GITTIP, (logins,))
+    known = website.db.all(ON_GITTIP, (logins,))
     known_map = {rec.login: rec.participant for rec in known}
     _on_gittip = [rec.login for rec in known]
     on_gittip = []
@@ -77,7 +76,7 @@ elif usertype == "organization":
             tippee = known_map[member['login']]
         else:
             seq = not_on_gittip
-            elsewhere = github.GitHubAccount(member['id'], member)
+            elsewhere = github.GitHubAccount(website.db, member['id'], member)
             tippee = elsewhere.participant
         tip_to = None if user.ANON else user.participant.get_tip_to(tippee)
         seq.append((member, tippee, tip_to))
@@ -91,9 +90,9 @@ else:
 url = user_info['html_url']
 title = username
 [-----------------------------------------------------------------------------]
-{% extends templates/base.html %}
+{% extends "templates/base.html" %}
 
-{% block heading %}<h2 class="top"><span>GitHub</span></h2>{% end %}
+{% block heading %}<h2 class="top"><span>GitHub</span></h2>{% endblock %}
 
 {% block box %}
 
@@ -103,7 +102,7 @@ title = username
               <img src="{{ img_src }}" />
           </td>
           <td class="ready">
-              <h2><a href="{{ url }}">{{ escape(username) }}</a> has</h2>
+              <h2><a href="{{ url }}">{{ username|e }}</a> has</h2>
               <div class="number">{{ number }}</div>
               {% if usertype == "user" %}
               <div class="unit">{{ 'person' if number == 1 else 'people' }}
@@ -111,7 +110,7 @@ title = username
               {% elif usertype == "organization" %}
               <div class="unit">public
                 member{{ '' if number == 1 else 's' }}</div>
-              {% end %}
+              {% endif %}
           </td>
           <td class="offset"></td>
       </tr>
@@ -124,10 +123,10 @@ title = username
       <div class="nav level-1">
           {% include "templates/sign-in-using-to-give.html" %}
       </div>
-    {% end %}
-  {% end %}
+    {% endif %}
+  {% endif %}
 
-{% end %}
+{% endblock %}
 
 {% block page %}
 
@@ -135,29 +134,29 @@ title = username
     <div class="col0">
       {% if account.is_locked %}
 
-        <h2>{{ escape(username) }} has opted out of Gittip.</h2>
+        <h2>{{ username|e }} has opted out of Gittip.</h2>
 
-        <p>If you are <a href="{{ user_info.get('html_url', '') }}">{{ escape(username) }}</a>
+        <p>If you are <a href="{{ user_info.get('html_url', '') }}">{{ username|e }}</a>
         on GitHub, you can unlock your account to allow people to pledge tips
         to you on Gittip.</p>
 
-        <a href="{{ github.oauth_url(website, u'unlock', username) }}"
+        <a href="{{ github.oauth_url(website, unicode('unlock'), username) }}"
             ><button>Unlock</button></a>
 
       {% else %}
         <script>$(document).ready(Gittip.tips.init);</script>
 
-        <h2>{{ escape(name) }} has not joined Gittip.</h2>
+        <h2>{{ name|e }} has not joined Gittip.</h2>
 
         <p>Is this you?
         {% if user.ANON %}
-        <a href="{{ github.oauth_url(website, u'opt-in', username) }}">Click
+        <a href="{{ github.oauth_url(website, unicode('opt-in'), username) }}">Click
             here</a> to opt in to Gittip. We never collect money for you until
         you do.
         {% else %}
         <a href="/sign-out.html">Sign out</a> and sign back in
         to claim this account
-        {% end %}
+        {% endif %}
         </p>
 
         {% if user.ANON %}
@@ -170,15 +169,15 @@ title = username
 
         <h2>Don't like what you see?</h2>
 
-        <p>If you are {{ escape(username) }} you can explicitly opt out of
+        <p>If you are {{ username }} you can explicitly opt out of
         Gittip by locking this account. We don't allow new pledges to locked
         accounts.</p>
 
-        <a href="{{ github.oauth_url(website, u'lock', username) }}"
+        <a href="{{ github.oauth_url(website, unicode('lock'), username) }}"
             ><button>Lock</button></a>
-        {% end %}
+        {% endif %}
 
-      {% end %}
+      {% endif %}
     </div>
   {% elif usertype == "organization"  %}
     <script>$(document).ready(Gittip.tips.init);</script>
@@ -190,36 +189,36 @@ title = username
                 <h2>{{ nsequence }}
                     {% if number > 0 %}
                     ({{ "%.1f" % (nsequence * 100 / float(number)) }}%)
-                    {% end %}
+                    {% endif %}
                     {{ 'is' if nsequence == 1 else 'are' }}
                     {{ i == 0 and "also on" or "not on" }} Gittip</h2>
         </td></tr>
-        {% end %}
+        {% endif %}
         {% for member, tippee, my_tip in sequence %}
         <tr class="not-over"><td>
             {% if not user.ANON %}
             <th>
-                <a href="/on/github/{{ member['login'] }}/"><img src="{{ member.get('avatar_url', '/assets/%s/no-avatar.png' % website.version) }}" />
-                    {{ member['login'] }}</a>
+                <a href="/on/github/{{ member['login']|e }}/"><img src="{{ member.get('avatar_url', '/assets/%s/no-avatar.png' % website.version) }}" />
+                    {{ member['login']|e }}</a>
             </th>
             <td>{% include "templates/my-tip-bulk.html" %}</td>
             {% else %}
             <td>
-                <a href="/on/github/{{ member['login'] }}/"><img src="{{ member.get('avatar_url', '/assets/%s/no-avatar.png' % website.version) }}" />
-                    {{ member['login'] }}</a>
+                <a href="/on/github/{{ member['login']|e }}/"><img src="{{ member.get('avatar_url', '/assets/%s/no-avatar.png' % website.version) }}" />
+                    {{ member['login']|e }}</a>
             </td>
-            {% end %}
+            {% endif %}
         </td></tr>
-        {% end %}
-      {% end %}
+        {% endfor %}
+      {% endfor %}
     </table>
 
     {% else %}
 
-    <h2>Not sure what to do with {{ name }}.</h2>
+    <h2>Not sure what to do with {{ name|e }}.</h2>
 
     I don't recognize the &ldquo;{{ usertype }}&rdquo; type of user on GitHub.<br />
     Sorry. :-(
 
-  {% end %}
-{% end %}
+  {% endif %}
+{% endblock %}

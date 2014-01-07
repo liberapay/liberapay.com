@@ -1,0 +1,69 @@
+.chart-wrapper {
+
+    h2 {
+        padding-top: 12pt;
+    }
+    .chart {
+        height: 100px;
+    }
+    .week {
+        height: 100%;
+        float: left;
+        position: relative;
+        cursor: pointer;
+    }
+    .shaded {
+        position: absolute;
+        background: #396;
+        bottom: 0;
+        width: 100%;
+    }
+    .week span, .x-axis {
+        font: normal 7pt/7pt "Lucida Mono", Monaco, monospace;
+    }
+    .week span.x-tick {
+        position: absolute;
+        bottom: -12pt;
+        right: 0;
+        padding: 5pt 0.5pt 0 0;
+        border: 1pt solid #630;
+        border-style: none solid none none;
+        display: none;
+        color: #630;
+    }
+    .week span.y-label {    // This is the flag.
+        display: none;
+        position: absolute;
+        top: -17pt;
+        right: 0;
+        z-index: 1;         // Wants to be over the bars.
+        text-align: center;
+        background: white;
+        color: #630;
+        border: 2pt solid #630;
+        border-radius: 3pt 0 0 3pt;
+        padding: 2pt 3pt;
+    }
+    .week.max span.y-label {
+        display: block;
+    }
+    .week.flagged span.y-label,
+    .week.flagged span.x-tick,
+    .week.hover span.y-label,
+    .week.hover span.x-tick {
+        display: block;
+    }
+    .week.hover span.y-label {
+        z-index: 2
+    }
+    .x-axis {
+        text-align: center;
+        padding-top: 14pt;
+    }
+    .note {
+        font-style: italic;
+        font-size: 8pt;
+        line-height: 10pt;
+        padding-bottom: 12pt;
+    }
+}

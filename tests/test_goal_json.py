@@ -3,34 +3,26 @@ from __future__ import print_function, unicode_literals
 import json
 from decimal import Decimal
 
-from aspen.utils import utcnow
 from gittip.testing import Harness
 from gittip.models.participant import Participant
-from gittip.testing.client import TestClient
 
 
 class Tests(Harness):
 
     def make_alice(self):
-        return self.make_participant('alice', claimed_time=utcnow())
+        return self.make_participant('alice', claimed_time='now')
 
-    def change_goal(self, goal, goal_custom="", username="alice"):
+    def change_goal(self, goal, goal_custom="", username="alice", expecting_error=False):
         if isinstance(username, Participant):
             username = username.username
         elif username == 'alice':
             self.make_alice()
 
-        client = TestClient()
-        response = client.get('/')
-        csrf_token = response.request.context['csrf_token']
-
-        response = client.post( "/alice/goal.json"
-                              , { 'goal': goal
-                                , 'goal_custom': goal_custom
-                                , 'csrf_token': csrf_token
-                                 }
-                              , user=username
-                               )
+        method = self.client.POST if not expecting_error else self.client.PxST
+        response = method( "/alice/goal.json"
+                         , {'goal': goal, 'goal_custom': goal_custom}
+                         , auth_as=username
+                          )
         return response
 
 
@@ -60,15 +52,15 @@ class Tests(Harness):
         assert actual == "100,100.00"
 
     def test_anonymous_gets_404(self):
-        response = self.change_goal("100.00", username=None)
+        response = self.change_goal("100.00", username=None, expecting_error=True)
         assert response.code == 404, response.code
 
     def test_invalid_is_400(self):
-        response = self.change_goal("cheese")
+        response = self.change_goal("cheese", expecting_error=True)
         assert response.code == 400, response.code
 
     def test_invalid_custom_amount_is_400(self):
-        response = self.change_goal("custom", "cheese")
+        response = self.change_goal("custom", "cheese", expecting_error=True)
         assert response.code == 400, response.code
 
 

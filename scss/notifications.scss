@@ -1,0 +1,31 @@
+#notification-area {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+
+    $transparency: 0.15;
+
+    .notification {
+        text-align: center;
+        padding: 10px;
+        border-bottom: 1px solid #fff;
+        border-bottom-color: rgba(255, 255, 255, .6);
+    }
+
+    .notification-notice {
+        background: $darker-gray;
+        background: transparentize($darker-gray, $transparency);
+    }
+
+    .notification-success {
+        background: $lighter-green;
+        background: transparentize($lighter-green, $transparency);
+    }
+
+    .notification-error {
+        background: $light-red;
+        background: transparentize($light-red, $transparency);
+    }
+}

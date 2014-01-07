@@ -5,7 +5,7 @@ THRESHOLD = website.NMEMBERS_THRESHOLD
 
 [-----------------------------]
 
-communities = community.get_list_for(None)
+communities = community.get_list_for(website.db, None)
 ncommunities = len(communities)
 
 viable = []
@@ -20,14 +20,14 @@ for community in communities:
 
 title = "Browse Communities"
 [-----------------------------]
-{% extends templates/base.html %}
+{% extends "templates/base.html" %}
 {% block heading %}
 <h2 class="top"><span>Communities</span></h2>
 
 <p>Self-organized communities of {{ THRESHOLD }} or more<br />
 members get their own page on Gittip.</p>
 
-{% end %}
+{% endblock %}
 {% block box %}
 <div class="on-community">
     <h2 class="pad-sign">There are</h2>
@@ -38,7 +38,7 @@ members get their own page on Gittip.</p>
         communit{{ plural(ncommunities, 'y', 'ies') }} on Gittip.
     </div>
 </div>
-{% end %}
+{% endblock %}
 {% block page %}
 <style>
     .help {
@@ -50,8 +50,8 @@ members get their own page on Gittip.</p>
     $(document).ready(function()
     {
 
-        var communityChooser = $('.communities SELECT')
-        var communityList = $('.communities UL')
+        var communityChooser = $('.communities select')
+        var communityList = $('.communities ul')
 
 
         function createOption(term)
@@ -66,7 +66,7 @@ members get their own page on Gittip.</p>
         var chosenOpts = { create_option: createOption
                          , create_option_text: "Add a new community"
                           };
-        {% end %}
+        {% endif %}
         communityChooser.chosen(chosenOpts).change(function() {
             Gittip.communities.jumpTo(communityChooser.val());
         });
@@ -83,7 +83,7 @@ members get their own page on Gittip.</p>
             {% set n = community.nmembers %}
             <div class="fine">{{ n }} member{{ plural(n) }}</div>
         </li>
-        {% end %}
+        {% endfor %}
     </ul>
 
     <h2>Communities in Formation (N = {{ len(forming) }})</h2>
@@ -96,8 +96,8 @@ members get their own page on Gittip.</p>
             {% set n = community.nmembers %}
             {{ n }} member{{ plural(n) }}
             </option>
-            {% end %}
+            {% endfor %}
         </select>
     </form>
 </div>
-{% end %}
+{% endblock %}

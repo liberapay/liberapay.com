@@ -912,3 +912,40 @@ UPDATE paydays SET nactive=(
         SELECT tippee FROM transfers WHERE "timestamp" >= ts_start AND "timestamp" < ts_end
         ) AS foo
 );
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/pull/1547
+
+DROP TABLE homepage_new_participants;
+DROP TABLE homepage_top_givers;
+DROP TABLE homepage_top_receivers;
+CREATE TABLE homepage_new_participants(username text, claimed_time timestamp with time zone);
+CREATE TABLE homepage_top_givers(username text, anonymous boolean, amount numeric);
+CREATE TABLE homepage_top_receivers(username text, claimed_time timestamp with time zone, amount numeric);
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/pull/1582
+
+ALTER TABLE participants ADD COLUMN paypal_email text DEFAULT NULL;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/pull/1610
+
+CREATE INDEX participants_claimed_time ON participants (claimed_time DESC)
+  WHERE is_suspicious IS NOT TRUE
+    AND claimed_time IS NOT null;
+
+ALTER TABLE homepage_top_receivers ADD COLUMN gravatar_id text;
+ALTER TABLE homepage_top_receivers ADD COLUMN twitter_pic text;
+
+ALTER TABLE homepage_top_givers ADD COLUMN gravatar_id text;
+ALTER TABLE homepage_top_givers ADD COLUMN twitter_pic text;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/pull/1610
+
+DROP TABLE homepage_new_participants;

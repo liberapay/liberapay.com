@@ -14,7 +14,6 @@ from aspen import json, log, Response
 from aspen import resources
 from gittip.elsewhere import ACTIONS, twitter
 from gittip.models._mixin_elsewhere import NeedConfirmation
-from gittip.utils import mixpanel
 
 [-----------------------------]
 
@@ -75,14 +74,12 @@ user_info['html_url'] = "https://twitter.com/" + screen_name
 # Do something.
 log(u"%s wants to %s" % (screen_name, action))
 
-account = twitter.TwitterAccount(user_info['id'], user_info)
+account = twitter.TwitterAccount(website.db, user_info['id'], user_info)
 
 if action == 'opt-in':      # opt in
     # set 'user' to give them a session :/
     user, newly_claimed = account.opt_in(screen_name)
     del account
-    if newly_claimed:
-        mixpanel.alias_and_track(cookie, unicode(user.participant.id))
 elif action == 'connect':   # connect
     if user.ANON:
         raise Response(404)

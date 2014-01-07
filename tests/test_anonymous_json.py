@@ -1,31 +1,17 @@
 from __future__ import print_function, unicode_literals
 
 from aspen import json
-
-from gittip.elsewhere.twitter import TwitterAccount
 from gittip.testing import Harness
-from gittip.testing.client import TestClient
 
 
 class Tests(Harness):
 
+    def setUp(self):
+        Harness.setUp(self)
+        self.make_participant('alice')
+
     def hit_anonymous(self, method='GET', expected_code=200):
-        user, ignored = TwitterAccount('alice', {}).opt_in('alice')
-
-        client = TestClient()
-        response = client.get('/')
-        csrf_token = response.request.context['csrf_token']
-
-        if method == 'GET':
-            response = client.get( "/alice/anonymous.json"
-                                 , user='alice'
-                                  )
-        else:
-            assert method == 'POST'
-            response = client.post( "/alice/anonymous.json"
-                                  , {'csrf_token': csrf_token}
-                                  , user='alice'
-                                   )
+        response = self.client.hit(method, "/alice/anonymous.json", auth_as='alice')
         if response.code != expected_code:
             print(response.body)
         return response

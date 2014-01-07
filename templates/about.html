@@ -1,17 +1,17 @@
-{% extends base.html %}
+{% extends "templates/base.html" %}
 {% block box %}
     {% set current_page = path.raw.split('/')[2] %}
     {% set nav_base = "/about" %}
     <div class="nav">
         {% set pages = [('/', 'About'), ('/faq.html', 'FAQ'), ('/teams/', 'Teams')] %}
-        {% include nav.html %}
+        {% include "templates/nav.html" %}
     </div>
     <div class="nav level-1">
         {% set pages = [('/stats.html', 'Stats'), ('/charts.html', 'Charts')] %}
-        {% include nav.html %}
+        {% include "templates/nav.html" %}
     </div>
     <div class="nav level-2">
         {% set pages = [('/terms/', 'Terms'), ('/privacy/', 'Privacy'), ('/fraud/', 'Fraud')] %}
-        {% include nav.html %}
+        {% include "templates/nav.html" %}
     </div>
-{% end %}
+{% endblock %}

@@ -14,36 +14,16 @@ from gittip.models.participant import ProblemChangingUsername
 ACTIONS = [u'opt-in', u'connect', u'lock', u'unlock']
 
 
-def _resolve(platform, username_key, username):
-    """Given three unicodes, return a username.
-    """
-    typecheck(platform, unicode, username_key, unicode, username, unicode)
-    participant = gittip.db.one("""
-
-        SELECT participant
-          FROM elsewhere
-         WHERE platform=%s
-           AND user_info->%s = %s
-
-    """, (platform, username_key, username,))
-    # XXX Do we want a uniqueness constraint on $username_key? Can we do that?
-
-    if participant is None:
-        raise Exception( "User %s on %s isn't known to us."
-                       % (username, platform)
-                        )
-    return participant
-
-
 class AccountElsewhere(object):
 
     platform = None  # set in subclass
 
-    def __init__(self, user_id, user_info=None):
+    def __init__(self, db, user_id, user_info=None):
         """Takes a user_id and user_info, and updates the database.
         """
         typecheck(user_id, (int, unicode), user_info, (None, dict))
         self.user_id = unicode(user_id)
+        self.db = db
 
         if user_info is not None:
             a,b,c,d  = self.upsert(user_info)
@@ -59,7 +39,7 @@ class AccountElsewhere(object):
 
 
     def set_is_locked(self, is_locked):
-        gittip.db.run("""
+        self.db.run("""
 
             UPDATE elsewhere
                SET is_locked=%s
@@ -113,7 +93,7 @@ class AccountElsewhere(object):
         # participant we reserved for them is rolled back as well.
 
         try:
-            with gittip.db.get_cursor() as cursor:
+            with self.db.get_cursor() as cursor:
                 _username = reserve_a_random_username(cursor)
                 cursor.execute( "INSERT INTO elsewhere "
                                 "(platform, user_id, participant) "
@@ -139,7 +119,7 @@ class AccountElsewhere(object):
             user_info[k] = unicode(v)
 
 
-        username = gittip.db.one("""
+        username = self.db.one("""
 
             UPDATE elsewhere
                SET user_info=%s
@@ -152,7 +132,7 @@ class AccountElsewhere(object):
         # Get a little more info to return.
         # =================================
 
-        rec = gittip.db.one("""
+        rec = self.db.one("""
 
             SELECT claimed_time, balance, is_locked
               FROM participants

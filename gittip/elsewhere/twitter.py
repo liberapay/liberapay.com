@@ -2,9 +2,9 @@ import datetime
 import gittip
 import requests
 from aspen import json, log, Response
-from aspen.http.request import UnicodeWithParams
+from aspen.http.request import PathPart
 from aspen.utils import to_age, utc, typecheck
-from gittip.elsewhere import AccountElsewhere, _resolve
+from gittip.elsewhere import AccountElsewhere
 from os import environ
 from requests_oauthlib import OAuth1
 
@@ -14,10 +14,6 @@ class TwitterAccount(AccountElsewhere):
 
     def get_url(self):
         return "https://twitter.com/" + self.user_info['screen_name']
-
-
-def resolve(screen_name):
-    return _resolve(u'twitter', u'screen_name', screen_name)
 
 
 def oauth_url(website, action, then=""):
@@ -34,15 +30,15 @@ def oauth_url(website, action, then=""):
     return "/on/twitter/redirect?action=%s&then=%s" % (action, then)
 
 
-def get_user_info(screen_name):
+def get_user_info(db, screen_name):
     """Given a unicode, return a dict.
     """
-    typecheck(screen_name, (unicode, UnicodeWithParams))
-    rec = gittip.db.one( "SELECT user_info FROM elsewhere "
-                         "WHERE platform='twitter' "
-                         "AND user_info->'screen_name' = %s"
-                       , (screen_name,)
-                        )
+    typecheck(screen_name, (unicode, PathPart))
+    rec = db.one("""
+        SELECT user_info FROM elsewhere
+        WHERE platform='twitter'
+        AND user_info->'screen_name' = %s
+    """, (screen_name,))
 
     if rec is not None:
         user_info = rec

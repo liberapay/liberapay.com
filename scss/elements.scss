@@ -1,20 +1,27 @@
+* {
+    box-sizing: border-box;
+}
+
 html, body {
     background: #FFF;
 }
 body {
     color: $black;
     font: normal 16px $Helvetica;
+    line-height: 130%;
+    min-width: 320px;
     text-rendering: optimizeLegibility;
 }
-.main-padding {
+.container {
+    @include clearfix;
     width: 960px;
+    max-width: 90%;
     margin: 0 auto;
     position: relative;
 }
 * {
     box-sizing: border-box;
     -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
 }
 a {
     color: $green;
@@ -27,7 +34,6 @@ a img {
 p, dd {
     margin: 0;
     padding: 0 0 1em;
-    line-height: 130%;
 }
 dt {
     font-weight: bold;

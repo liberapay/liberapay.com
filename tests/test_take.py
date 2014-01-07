@@ -2,7 +2,6 @@ from __future__ import unicode_literals
 
 from decimal import Decimal as D
 
-import gittip
 from gittip.testing import Harness
 
 
@@ -22,8 +21,8 @@ class Tests(Harness):
         take_last_week = kw.pop('take_last_week', '40')
         participant = Harness.make_participant(self, username, **kw)
         if username == 'alice':
-            gittip.db.run("INSERT INTO paydays DEFAULT VALUES")
-            gittip.db.run( "INSERT INTO transfers "
+            self.db.run("INSERT INTO paydays DEFAULT VALUES")
+            self.db.run( "INSERT INTO transfers "
                            "(timestamp, tipper, tippee, amount) "
                            "VALUES (now(), 'Team', 'alice', %s)"
                          , (take_last_week,)

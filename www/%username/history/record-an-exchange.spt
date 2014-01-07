@@ -23,7 +23,7 @@ if not note:
     raise Response(400)
 
 
-with gittip.db.get_cursor() as cursor:
+with website.db.get_cursor() as cursor:
     params = (amount, fee, participant.username, user.participant.username, \
                                                                           note)
     SQL = "INSERT INTO exchanges " \
@@ -31,8 +31,16 @@ with gittip.db.get_cursor() as cursor:
           "VALUES (%s, %s, %s, %s, %s)"
     cursor.execute(SQL, params)
 
+    if amount < 0:
+        # For payouts, we need to take the fee out of their Gittip balance.
+        balance_adjustment = amount - fee
+    else:
+        # For payins, we don't have to worry about the fee relative to their
+        # balance, because the amount is already less the fee.
+        balance_adjustment = amount
+
     SQL = "UPDATE participants SET balance = balance + %s WHERE username=%s"
-    cursor.execute(SQL, (amount, participant.username))
+    cursor.execute(SQL, (balance_adjustment, participant.username))
 
 request.redirect('/%s/history/' % participant.username)
 

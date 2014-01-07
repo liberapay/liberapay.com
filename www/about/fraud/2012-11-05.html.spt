@@ -4,10 +4,10 @@ from collections import defaultdict
 from decimal import Decimal
 
 from aspen import Response
-from gittip import db, CARDINALS
+from gittip import CARDINALS
 
 [---]
-_suspicious = db.all("""
+_suspicious = website.db.all("""
 
     SELECT username
          , balance
@@ -22,7 +22,7 @@ _suspicious = db.all("""
 
 def suspicious():
     for person in _suspicious:
-        person['gives_to'] = db.all("""
+        person['gives_to'] = website.db.all("""
 
             SELECT DISTINCT tippee AS username
                  , is_suspicious
@@ -36,7 +36,7 @@ def suspicious():
 
 
         """, (person['username'],), back_as=dict)
-        person['receives_from'] = db.all("""
+        person['receives_from'] = website.db.all("""
 
             SELECT DISTINCT tipper AS username
                  , is_suspicious
@@ -50,7 +50,7 @@ def suspicious():
 
         """, (person['username'],), back_as=dict)
 
-        person['transfers'] = db.all("""
+        person['transfers'] = website.db.all("""
 
             SELECT tippee
                  , tipper
@@ -65,7 +65,7 @@ def suspicious():
         """, (person['username'], person['username']), \
                                                  back_as=dict)
 
-        person['exchanges'] = db.all("""
+        person['exchanges'] = website.db.all("""
 
             SELECT amount, fee, timestamp
               FROM exchanges
@@ -120,7 +120,7 @@ assert total_legit == total_charged - total_withdrawn - gittip_fees - balanced_f
 
 nweeks = CARDINALS[((latest.date() - earliest.date()).days // 7) + 1]
 
-overall = db.one("""
+overall = website.db.one("""
 
     SELECT sum(amount + fee), count(amount)
       FROM exchanges
@@ -152,7 +152,7 @@ total_fraudulent = pad(total_fraudulent, w)[:-3] + ('&nbsp;' * 3)
 percentage_fraudulent = pad(percentage_fraudulent, w)
 
 
-bystander_balances = db.all("""
+bystander_balances = website.db.all("""
 
     SELECT username, balance FROM participants WHERE username = ANY(%s)
 
@@ -169,7 +169,7 @@ fmtdate = lambda d: str(d)[:10]
 title = "The Delpan Incident"
 
 [---]
-{% extends templates/base.html %}
+{% extends "templates/base.html" %}
 {% block box %}
 <div class="as-content left">
 
@@ -219,29 +219,29 @@ title = "The Delpan Incident"
     </ul>
 
 </div>
-{% end %}
+{% endblock %}
 {% block page %}
 <style>
-    TH {
+    th {
         font-weight: normal;
         text-align: center;
         padding: 0;
     }
-    TD {
+    td {
         text-align: left;
         vertical-align: top;
     }
-    .summary TH {
+    .summary th {
         text-align: left;
         padding-right: 12pt;
     }
-    .summary B {
+    .summary b {
         display: block;
         padding-bottom: 12pt;
     }
-    .details TH { vertical-align: bottom; }
-    .details TD { vertical-align: top; }
-    .details TD, .details TH {
+    .details th { vertical-align: bottom; }
+    .details td { vertical-align: top; }
+    .details td, .details th {
         text-align: left;
         border-bottom: 1px solid #B2A196;
         white-space: nowrap;
@@ -318,18 +318,18 @@ occured over a period of <b>{{ nweeks }} weeks</b>, from
 incident.</p>
 
 <table class="summary">
-    <tr><th></th><th>Received</th>{% if user.ADMIN %}<th>Balance</th>{% end %}</tr>
+    <tr><th></th><th>Received</th>{% if user.ADMIN %}<th>Balance</th>{% endif %}</tr>
     {% for name, (amount, balance) in bystanders %}
     <tr>
         <th><a href="/{{ name }}/">{{ name }}</a></th>
         <td class="amount">${{ pad(amount, 9) }}</td>
-        {% if user.ADMIN %}<td class="amount">${{ pad(balance, 7) }}</td>{% end %}
+        {% if user.ADMIN %}<td class="amount">${{ pad(balance, 7) }}</td>{% endif %}
     </tr>
-    {% end %}
+    {% endfor %}
     <tr>
         <td><b>Total</b></td>
         <td class="amount"><b>${{ total_legit }}</b></td>
-        {% if user.ADMIN %}<td></td>{% end %}
+        {% if user.ADMIN %}<td></td>{% endif %}
     </tr>
 </table>
 </div>
@@ -355,32 +355,32 @@ incident.</p>
         <td class="balance amount">{{ pad(row['balance'], 5) }}</td>
         <td class="tips">
             {% for person in row['gives_to'] %}
-                &rarr;<a href="/{{ person['username'] }}/"{% if person['is_suspicious'] %} class="suspicious"{% end %}>{{ person['username'] }}</a><br />
-            {% end %}
+                &rarr;<a href="/{{ person['username'] }}/"{% if person['is_suspicious'] %} class="suspicious"{% endif %}>{{ person['username'] }}</a><br />
+            {% endfor %}
             {% for person in row['receives_from'] %}
-                &larr;<a href="/{{ person['username'] }}/"{% if person['is_suspicious'] %} class="suspicious"{% end %}>{{ person['username'] }}</a><br />
-            {% end %}
+                &larr;<a href="/{{ person['username'] }}/"{% if person['is_suspicious'] %} class="suspicious"{% endif %}>{{ person['username'] }}</a><br />
+            {% endfor %}
         </td>
         <td class="transfers">
             {% for transfer in row['transfers'] %}
             {% if row['username'] == transfer['tipper'] %}
             <span class="amount">{{ pad(transfer['amount'], 5)}}</span>&rarr;
             <a href="/{{ transfer['tippee'] }}/"{% if transfer['tippee'] in names %}
-                class="suspicious"{% end %}>{{ transfer['tippee'] }}</a>
+                class="suspicious"{% endif %}>{{ transfer['tippee'] }}</a>
             {% else %}
             <span class="amount">{{ pad(transfer['amount'], 5) }}</span>&larr;
             <a href="/{{ transfer['tipper'] }}/"{% if transfer['tipper'] in names %}
-                class="suspicious"{% end %}>{{ transfer['tipper'] }}</a>
-            {% end %}
+                class="suspicious"{% endif %}>{{ transfer['tipper'] }}</a>
+            {% endif %}
             <span class="date">
                 {{ str(transfer['timestamp'])[:10] }}
             </span>
             <br />
-            {% end %}
+            {% endfor %}
         </td>
         <td class="exchanges">
             {% for exchange in row['exchanges'] %}
-            <span class="amount{% if exchange['amount'] < 0 %} charge{% end %}">
+            <span class="amount{% if exchange['amount'] < 0 %} charge{% endif %}">
                 {{ pad(exchange['amount'], 6) }}
                 {{ pad(exchange['fee'], 4) }}
             </span>
@@ -388,9 +388,9 @@ incident.</p>
                 {{ str(exchange['timestamp'])[:10] }}
             </span>
             <br />
-            {% end %}
+            {% endfor %}
         </td>
     </tr>
-    {% end %}
+    {% endfor %}
 </table>
-{% end %}
+{% endblock %}

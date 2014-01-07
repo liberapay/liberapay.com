@@ -44,7 +44,7 @@ else:
     user_info = bountysource.filter_user_info(qs)
 
     # create a linked account
-    account = bountysource.BountysourceAccount(user_info['id'], user_info)
+    account = bountysource.BountysourceAccount(website.db, user_info['id'], user_info)
 
     # associate with the Gittip participant
     try:

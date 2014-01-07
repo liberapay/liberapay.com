@@ -2,8 +2,9 @@ from decimal import Decimal
 
 from aspen import Response, log
 from aspen.utils import to_age
-from gittip import db
 from gittip.utils import get_participant
+
+db = website.db
 
 
 class Paydays(object):
@@ -154,7 +155,7 @@ title = "%s - %s" % (participant.username, hero)
 locked = False
 
 [-----------------------------------------------------------------------------]
-{% extends templates/profile.html %}
+{% extends "templates/profile.html" %}
 {% block page %}
 
 <table id="history" class="centered">
@@ -177,7 +178,7 @@ locked = False
             <input name="note" placeholder="note" style="width: 230px" />
             <button type="submit">Submit</button>
         </form>
-        {% end %}
+        {% endif %}
     </td></tr>
     {% for event in paydays %}
     {% if event['event'] == 'payday-start' %}
@@ -226,14 +227,14 @@ locked = False
         <td class="credits"></td>
         <td class="debits">{{ -event['amount'] + event['fee'] }}</td>
         <td class="balance">{{ event['balance'] }}</td>
-        {% if event['recorder'] is None %}
+        {% if event['recorder'] == None %}
         <td class="notes">automatic withdrawal</td>
         {% else %}
         <td class="notes">
-            &ldquo;{{ escape(event['note']) }}&rdquo;&mdash;<a
+            &ldquo;{{ event['note']|e }}&rdquo;&mdash;<a
             href="/{{ event['recorder'] }}/">{{ event['recorder'] }}</a>
         </td>
-        {% end %}
+        {% endif %}
     </tr>
     {% elif event['event'] == 'charge' %}
     <tr>
@@ -244,10 +245,10 @@ locked = False
         <td class="debits"></td>
         <td class="balance">{{ event['balance'] }}</td>
         <td class="notes">
-            {% if event['recorder'] is None %}automatic charge{% else %}
-            &ldquo;{{ escape(event['note']) }}&rdquo;&mdash;<a
+            {% if event['recorder'] == None %}automatic charge{% else %}
+            &ldquo;{{ event['note']|e }}&rdquo;&mdash;<a
             href="/{{ event['recorder'] }}/">{{ event['recorder'] }}</a>
-            {% end %}
+            {% endif %}
             (<a href="../receipts/{{ event['id'] }}.html">receipt</a>)
         </td>
     </tr>
@@ -263,7 +264,7 @@ locked = False
         {% else %}
         <td class="credits"></td>
         <td class="debits">{{ event['amount'] }}</td>
-        {% end %}
+        {% endif %}
 
         <td class="balance">{{ event['balance'] }}</td>
 
@@ -272,7 +273,7 @@ locked = False
             <td class="notes">from <a href="/{{ event['tipper'] }}/history/">{{ event['tipper'] }}</a></td>
             {% else %}
             <td class="notes">from someone</td>
-            {% end %}
+            {% endif %}
         {% else %}
             {% if user.ADMIN %}
             <td class="notes">to
@@ -280,12 +281,12 @@ locked = False
             {% else %}
             <td class="notes">to
                 <a href="/{{ event['tippee'] }}/">{{ event['tippee'] }}</a></td>
-            {% end %}
-        {% end %}
+            {% endif %}
+        {% endif %}
 
     </tr>
-    {% end %}
-{% end %}
+    {% endif %}
+{% endfor %}
 </table>
 
-{% end %}
+{% endblock %}

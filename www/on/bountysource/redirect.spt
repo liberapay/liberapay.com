@@ -21,84 +21,10 @@ connect_params = {
     'login': user.participant.username
 }
 
-
-# Collect extra params from accounts elsewhere.
-# =============================================
-# The following attributes will be added to connect_params from linked accounts
-# if present: email, first_name, last_name, avatar_url. These are used to
-# prefill the account creation screen on Bountysource.
-
-for account in user.participant.get_accounts_elsewhere():
-    # Note: returns None for accounts that haven't been linked yet
-    if account is None:
-        continue
-
-    # from Github
-    if account.platform == 'github':
-        # split single name string into parts
-        name_parts = re.split('\s+', account.user_info.get('name', '').strip())
-
-        if not connect_params.get('login'):
-            connect_params['login'] = account.user_info.get('login')
-        if not connect_params.get('email'):
-            connect_params['email'] = account.user_info.get('email')
-        if not connect_params.get('avatar_url'):
-            connect_params['avatar_url'] = account.user_info.get('avatar_url')
-        if not connect_params.get('first_name'):
-            if len(name_parts) >= 1:
-                connect_params['first_name'] = name_parts[0]
-        if not connect_params.get('last_name'):
-            if len(name_parts) >= 2:
-                connect_params['last_name'] = name_parts[-1]
-
-    # from Twitter
-    if account.platform == 'twitter':
-        # split single name string into parts
-        name_parts = re.split('/s+', account.user_info.get('name').strip())
-
-        if not connect_params.get('login'):
-            connect_params['login'] = account.user_info.get('screen_name')
-        if not connect_params.get('avatar_url'):
-            connect_params['avatar_url'] = \
-                               account.user_info.get('profile_image_url_https')
-        if not connect_params.get('first_name'):
-            if name_parts:
-                connect_params['first_name'] = name_parts[0]
-        if not connect_params.get('last_name'):
-            if len(name_parts) >= 2:
-                connect_params['last_name'] = name_parts[-1]
-
-    # from Bitbucket
-    if account.platform == 'bitbucket':
-        if not connect_params.get('login'):
-            connect_params['login'] = account.user_info.get('username')
-        if not connect_params.get('avatar_url'):
-            connect_params['avatar_url'] = account.user_info.get('avatar')
-        if not connect_params.get('first_name'):
-            connect_params['first_name'] = account.user_info.get('first_name')
-        if not connect_params.get('last_name'):
-            connect_params['last_name'] = account.user_info.get('last_name')
-
-    # from OpenStreetMap
-    if account.platform == 'openstreetmap':
-        # split single name string into parts
-        name_parts = re.split('/s+', account.user_info.get('username').strip())
-        
-        if not connect_params.get('login'):
-            connect_params['login'] = account.user_info.get('username')
-        if not connect_params.get('avatar_url'):
-            connect_params['avatar_url'] = account.user_info.get('img_src')
-        if not connect_params.get('first_name'):
-            if name_parts:
-                connect_params['first_name'] = name_parts[0]
-        if not connect_params.get('last_name'):
-            if len(name_parts) >= 2:
-                connect_params['last_name'] = name_parts[-1]
-        
 # build redirect URL to Bountysource from collected data
-auth_url = "%s#auth/gittip/confirm?%s" % ( bountysource.www_host
-                                         , urlencode(connect_params)
-                                          )
+auth_url = "{}/auth/gittip/confirm?{}".format( website.bountysource_www_host
+                                             , urlencode(connect_params)
+                                              )
 
 log("Redirect to Bountysource for authorization: %s" % connect_params)
 request.redirect(auth_url)

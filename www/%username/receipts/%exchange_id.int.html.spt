@@ -1,5 +1,4 @@
 from aspen import Response
-from gittip import db
 from gittip.utils import get_participant, COUNTRIES_MAP
 from gittip.billing import BalancedCard
 
@@ -8,7 +7,7 @@ from gittip.billing import BalancedCard
 participant = get_participant(request, restrict=False)
 
 # Do our own restriction.
-if user == participant:
+if user.participant == participant:
     pass
 elif user.ADMIN:
     pass
@@ -16,10 +15,10 @@ else:
     raise Response(404)
 
 card = BalancedCard(participant.balanced_account_uri)
-exchange = db.one( "SELECT * FROM exchanges "
+exchange = website.db.one( "SELECT * FROM exchanges "
                    "WHERE id=%s AND participant=%s"
                  , (path['exchange_id'], path['username'])
-                  )
+                 , back_as=dict)
 if exchange is None:
     raise Response(404)
 
@@ -98,8 +97,8 @@ if exchange is None:
         {{ card['address_1'] }}<br />
         {% if card['address_2'] %}
         {{ card['address_2'] }}<br />
-        {% end %}
-        {{ card['city_town'] }}{% if card['city_town'] %},{% end %}
+        {% endif %}
+        {{ card['city_town'] }}{% if card['city_town'] %},{% endif %}
         {{ card['state'] }}
         {{ card['zip'] }}<br />
         {{ COUNTRIES_MAP.get(card['country'], '') }}

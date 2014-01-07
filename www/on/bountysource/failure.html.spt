@@ -1,8 +1,8 @@
 msg = 'Unable to link Bountysource account at this time.'
 msg = qs.get('msg', msg)
 [---]
-{% extends templates/base.html %}
-{% block heading %}<h2 class="top"><span>Failure</span></h2>{% end %}
+{% extends "templates/base.html" %}
+{% block heading %}<h2 class="top"><span>Failure</span></h2>{% endblock %}
 {% block box %}
 
 <div class="as-content">
@@ -10,8 +10,8 @@ msg = qs.get('msg', msg)
     <p>Your attempt to link your Bountysource<br />
     account failed with this message:</p>
 
-    <p><b>{{ escape(msg) }}</b></p>
+    <p><b>{{ msg|e }}</b></p>
 
 </div>
 
-{% end %}
+{% endblock %}

@@ -1,21 +1,22 @@
 /*
-
-    This is the top of the Gittip CSS tree. This gets compiled to a single
-    compressed CSS file by `make css`, and that is stored in the repo so new
-    devs can get up and running quickly.
-
+    This is the top of the Gittip CSS tree.
 */
 
 
 // Define some basic things that are used throughout the site.
 
+@import "variables";
+@import "layout-mixins";
 @import "fonts-colors-mixins";
 @import "utils";
 @import "buttons-knobs";
+@import "modals";
+@import "notifications";
 @import "modules";  // bigger than a knob, but used in multiple places
 @import "elements"; // specific HTML elements (body, p, etc.)
 
 @import "lib/dropdown"; // You guessed it... dropdowns.
+@import "lib/chart";
 
 
 // Page layout styles
@@ -26,7 +27,6 @@
 // Styles specific to certain pages. 
 
 @import "history";
-@import "horn";
 @import "team";
 @import "profile-edit";
 

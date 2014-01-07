@@ -7,7 +7,7 @@
 # I committed this but @pjz wrote it: https://gist.github.com/pjz/5855367.
 
 if [ "$DATABASE_URL" = "" ]; then 
-    echo "Please set DATABASE_URL, perhaps by sourcing default_tests.env or something.";
+    echo "Please set DATABASE_URL, perhaps by sourcing default_tests.env or something." 1>&2;
 exit 1; fi
 
 # remove the protocol

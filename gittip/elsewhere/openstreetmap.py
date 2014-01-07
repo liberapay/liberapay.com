@@ -3,9 +3,9 @@ import logging
 import gittip
 import requests
 from aspen import json, log, Response
-from aspen.http.request import UnicodeWithParams
+from aspen.http.request import PathPart
 from aspen.utils import typecheck
-from gittip.elsewhere import AccountElsewhere, _resolve
+from gittip.elsewhere import AccountElsewhere
 
 
 
@@ -14,10 +14,6 @@ class OpenStreetMapAccount(AccountElsewhere):
 
     def get_url(self):
         return self.user_info['html_url']
-
-
-def resolve(login):
-    return _resolve(u'openstreetmap', u'login', login)
 
 
 def oauth_url(website, action, then=""):
@@ -34,7 +30,7 @@ def oauth_url(website, action, then=""):
     return "/on/openstreetmap/redirect?action=%s&then=%s" % (action, then)
 
 
-def get_user_info(username, osm_api_url):
+def get_user_info(db, username, osm_api_url):
     """Get the given user's information from the DB or failing that, openstreetmap.
 
     :param username:
@@ -46,12 +42,12 @@ def get_user_info(username, osm_api_url):
     :returns:
         A dictionary containing OpenStreetMap specific information for the user.
     """
-    typecheck(username, (unicode, UnicodeWithParams))
-    rec = gittip.db.one( "SELECT user_info FROM elsewhere "
-                         "WHERE platform='openstreetmap' "
-                         "AND user_info->'username' = %s"
-                       , (username,)
-                        )
+    typecheck(username, (unicode, PathPart))
+    rec = db.one("""
+        SELECT user_info FROM elsewhere
+        WHERE platform='openstreetmap'
+        AND user_info->'username' = %s
+    """, (username,))
     if rec is not None:
         user_info = rec
     else:

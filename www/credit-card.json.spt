@@ -9,7 +9,6 @@ a Balanced account object (creating one as needed).
 """
 from aspen import Response
 from gittip import billing
-from gittip.utils import mixpanel
 
 [-----------------------------------------------------------------------------]
 
@@ -20,12 +19,13 @@ request.allow('POST')
 out = {}
 
 if body.get('action') == 'delete':
-    billing.clear( u"credit card"
+    billing.clear( website.db
+                 , u"credit card"
                  , user.participant.username
                  , user.participant.balanced_account_uri
                   )
 elif body.get('action') == 'store-error':
-    billing.store_error(u"credit card", user.participant.username, body['msg'])
+    billing.store_error(website.db, u"credit card", user.participant.username, body['msg'])
 else:
 
     # Associate the single-use token representing the credit card details (we
@@ -35,7 +35,8 @@ else:
 
     card_uri = body['card_uri']
 
-    error = billing.associate( u"credit card"
+    error = billing.associate( website.db
+                             , u"credit card"
                              , user.participant.username
                              , user.participant.balanced_account_uri
                              , card_uri

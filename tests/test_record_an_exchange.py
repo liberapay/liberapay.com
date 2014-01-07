@@ -1,9 +1,10 @@
 from __future__ import unicode_literals
 from decimal import Decimal
 
+import pytest
 from aspen.utils import utcnow
+from psycopg2 import IntegrityError
 from gittip.testing import Harness
-from gittip.testing.client import TestClient
 
 
 class TestRecordAnExchange(Harness):
@@ -11,24 +12,14 @@ class TestRecordAnExchange(Harness):
     # fixture
     # =======
 
-    def setUp(self):
-        super(Harness, self).setUp()
-        self.client = TestClient()
-
-    def get_csrf_token(self):
-        response = self.client.get('/')
-        return response.request.context['csrf_token']
-
     def record_an_exchange(self, amount, fee, note, make_participants=True):
         if make_participants:
             now = utcnow()
             self.make_participant('alice', claimed_time=now, is_admin=True)
             self.make_participant('bob', claimed_time=now)
-        return self.client.post( '/bob/history/record-an-exchange'
-                               , { 'amount': amount, 'fee': fee, 'note': note
-                                 , 'csrf_token': self.get_csrf_token()
-                                  }
-                               , 'alice'
+        return self.client.PxST( '/bob/history/record-an-exchange'
+                               , {'amount': amount, 'fee': fee, 'note': note}
+                               , auth_as='alice'
                                 )
 
     # tests
@@ -47,8 +38,9 @@ class TestRecordAnExchange(Harness):
     def test_non_post_is_405(self):
         self.make_participant('alice', claimed_time=utcnow(), is_admin=True)
         self.make_participant('bob', claimed_time=utcnow())
-        actual = \
-               self.client.get('/bob/history/record-an-exchange', 'alice').code
+        actual = self.client.GxT( '/bob/history/record-an-exchange'
+                                , auth_as='alice'
+                                 ).code
         assert actual == 405
 
     def test_bad_amount_is_400(self):
@@ -67,9 +59,8 @@ class TestRecordAnExchange(Harness):
         actual = self.record_an_exchange('10', '0', '    ').code
         assert actual == 400
 
-    def test_dropping_balance_below_zero_is_500(self):
-        actual = self.record_an_exchange('-10', '0', 'noted').code
-        assert actual == 500
+    def test_dropping_balance_below_zero_raises_IntegrityError(self):
+        pytest.raises(IntegrityError, self.record_an_exchange, '-10', '0', 'noted')
 
     def test_success_records_exchange(self):
         self.record_an_exchange('10', '0.50', 'noted')
@@ -99,3 +90,10 @@ class TestRecordAnExchange(Harness):
         SQL = "SELECT balance FROM participants WHERE username='bob'"
         actual = self.db.one(SQL)
         assert actual == expected
+
+    def test_withdrawals_take_fee_out_of_balance(self):
+        self.make_participant('alice', claimed_time=utcnow(), is_admin=True)
+        self.make_participant('bob', claimed_time=utcnow(), balance=20)
+        self.record_an_exchange('-7', '1.13', 'noted', False)
+        SQL = "SELECT balance FROM participants WHERE username='bob'"
+        assert self.db.one(SQL) == Decimal('11.87')

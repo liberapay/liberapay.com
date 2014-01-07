@@ -46,7 +46,7 @@ elif platform == 'bountysource':
 elif platform == 'openstreetmap':
     Account = OpenStreetMapAccount
 
-account = Account(user_id)
+account = Account(website.db, user_id)
 user.participant.take_over(account, have_confirmation=True)
 request.redirect('/about/me.html')
 

@@ -17,16 +17,16 @@ from test_billing import TestBillingBase
 
 class TestPaydayBase(TestBillingBase):
 
+    def setUp(self):
+        TestBillingBase.setUp(self)
+        self.payday = Payday(self.db)
+
     def fetch_payday(self):
         return self.db.one("SELECT * FROM paydays", back_as=dict)
 
 
 class TestPaydayCharge(TestPaydayBase):
     STRIPE_CUSTOMER_ID = 'cus_deadbeef'
-
-    def setUp(self):
-        super(TestBillingBase, self).setUp()
-        self.payday = Payday(self.db)
 
     def get_numbers(self):
         """Return a list of 10 ints:
@@ -49,15 +49,13 @@ class TestPaydayCharge(TestPaydayBase):
         return [payday[key] for key in keys]
 
     def test_charge_without_cc_details_returns_None(self):
-        alice = self.make_participant('alice')
         self.payday.start()
-        actual = self.payday.charge(alice, Decimal('1.00'))
+        actual = self.payday.charge(self.alice, Decimal('1.00'))
         assert actual is None
 
     def test_charge_without_cc_marked_as_failure(self):
-        alice = self.make_participant('alice')
         self.payday.start()
-        self.payday.charge(alice, Decimal('1.00'))
+        self.payday.charge(self.alice, Decimal('1.00'))
         actual = self.get_numbers()
         assert actual == [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0]
 
@@ -166,10 +164,6 @@ class TestBillingCharges(TestPaydayBase):
     BALANCED_TOKEN = u'/v1/marketplaces/M123/accounts/A123/cards/C123'
     STRIPE_CUSTOMER_ID = u'cus_deadbeef'
 
-    def setUp(self):
-        super(TestBillingCharges, self).setUp()
-        self.payday = Payday(self.db)
-
     def test_mark_missing_funding(self):
         self.payday.start()
         before = self.fetch_payday()
@@ -258,11 +252,12 @@ class TestBillingCharges(TestPaydayBase):
 
 
 class TestPrepHit(TestPaydayBase):
-    # XXX Consider turning _prep_hit in to a class method
-    @classmethod
-    def setUpClass(cls):
-        TestPaydayBase.setUpClass()
-        cls.payday = Payday(mock.Mock())  # Mock out the DB connection
+
+    ## XXX Consider turning _prep_hit in to a class method
+    #@classmethod
+    #def setUpClass(cls):
+    #    TestPaydayBase.setUpClass()
+    #    cls.payday = Payday(mock.Mock())  # Mock out the DB connection
 
     def prep(self, amount):
         """Given a dollar amount as a string, return a 3-tuple.
@@ -339,9 +334,18 @@ class TestPrepHit(TestPaydayBase):
 class TestBillingPayday(TestPaydayBase):
     BALANCED_ACCOUNT_URI = '/v1/marketplaces/M123/accounts/A123'
 
-    def setUp(self):
-        super(TestBillingPayday, self).setUp()
-        self.payday = Payday(self.db)
+    def test_move_pending_to_balance_for_teams_does_so(self):
+        self.make_participant('A', number='plural', balance=2, pending=3)
+        self.payday.move_pending_to_balance_for_teams()
+        actual = self.db.one("SELECT balance FROM participants WHERE username='A'")
+        assert actual == 5
+
+    def test_move_pending_to_balance_for_teams_ignores_new_teams(self):
+        # See https://github.com/gittip/www.gittip.com/issues/1684
+        self.make_participant('A', number='plural', balance=0, pending=None)
+        self.payday.move_pending_to_balance_for_teams()
+        actual = self.db.one("SELECT balance FROM participants WHERE username='A'")
+        assert actual == 0
 
     @mock.patch('gittip.models.participant.Participant.get_tips_and_total')
     def test_charge_and_or_transfer_no_tips(self, get_tips_and_total):
@@ -599,8 +603,7 @@ class TestBillingPayday(TestPaydayBase):
 
 class TestBillingTransfer(TestPaydayBase):
     def setUp(self):
-        super(TestPaydayBase, self).setUp()
-        self.payday = Payday(self.db)
+        TestPaydayBase.setUp(self)
         self.payday.start()
         self.tipper = self.make_participant('lgtest')
         self.balanced_account_uri = '/v1/marketplaces/M123/accounts/A123'
@@ -744,6 +747,7 @@ class TestBillingTransfer(TestPaydayBase):
 class TestPachinko(Harness):
 
     def setUp(self):
+        Harness.setUp(self)
         self.payday = Payday(self.db)
 
     def test_get_participants_gets_participants(self):
