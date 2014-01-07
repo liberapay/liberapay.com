@@ -80,10 +80,8 @@ title = username
         on OpenStreetMap, you can unlock your account to allow people to pledge
         tips to you on Gittip.</p>
 
-        {% if 0 %}
         <a href="{{ openstreetmap.oauth_url(website, u'unlock', username) }}"
             ><button>Unlock</button></a>
-        {% end %}
 
       {% else %}
         <script>$(document).ready(Gittip.tips.init);</script>
