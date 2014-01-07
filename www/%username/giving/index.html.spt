@@ -9,7 +9,7 @@ def _extract_username(tip):
         key = 'username'
     elif tip.platform == 'twitter':
         key = 'screen_name'
-    else
+    else:
         assert tip.platform == 'openstreetmap', tip  # sanity check
         key = 'username'
     return tip.user_info[key]
