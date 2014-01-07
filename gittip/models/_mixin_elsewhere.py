@@ -5,6 +5,9 @@ from gittip import NotSane
 from aspen.utils import typecheck
 from psycopg2 import IntegrityError
 
+from gittip.utils.username import reserve_a_random_username, gen_random_usernames
+from gittip.elsewhere import platform_classes
+
 
 # Exceptions
 # ==========
@@ -148,9 +151,6 @@ class MixinElsewhere(object):
         This is done in one transaction.
 
         """
-        # Lazy imports to dodge circular imports.
-        from gittip.models.participant import reserve_a_random_username
-        from gittip.models.participant import gen_random_usernames
 
         platform = account_elsewhere.platform
         user_id = account_elsewhere.user_id
