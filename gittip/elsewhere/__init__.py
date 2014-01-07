@@ -12,14 +12,7 @@ from gittip.models.participant import ProblemChangingUsername
 
 
 ACTIONS = [u'opt-in', u'connect', u'lock', u'unlock']
-_platform_classes = {}  # updated by _RegisterPlatformMeta
-
-def get_class_for_platform(platform):
-    """Given a platform like 'github', return its AccountElsewhere subclass.
-
-    Raise KeyError if platform does not have an associated class."""
-
-    return _platform_classes[platform]
+platform_classes = {}  # updated by _RegisterPlatformMeta
 
 class _RegisterPlatformMeta(type):
     """Tied to AccountElsewhere to enable registration by the platform field.
@@ -30,7 +23,7 @@ class _RegisterPlatformMeta(type):
 
         c_platform = getattr(c, 'platform')
         if c_platform is not None:
-            _platform_classes[c_platform] = c
+            platform_classes[c_platform] = c
 
         return c
 
