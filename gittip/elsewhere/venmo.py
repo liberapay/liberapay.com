@@ -1,5 +1,6 @@
 from gittip.elsewhere import AccountElsewhere
 from urllib import urlencode
+from aspen import json, Response
 import requests
 
 
@@ -36,7 +37,7 @@ def oauth_dance(website, qs):
     res_dict = r.json()
 
     if 'error' in res_dict:
-        raise Response(400, res_dict['error'].encode('utf-8'))
+        raise Response(400, res_dict['error']['message'].encode('utf-8'))
 
     assert r.status_code == 200, (r.status_code, r.text)
 

@@ -151,3 +151,15 @@ class AccountElsewhere(object):
                , rec.is_locked
                , rec.balance
                 )
+
+    def set_oauth_tokens(self, access_token, refresh_token, expires):
+        """
+        Updates the elsewhere row with the given access token, refresh token, and Python datetime
+        """
+
+        self.db.run("""
+            UPDATE elsewhere 
+            SET (access_token, refresh_token, expires) 
+            = (%s, %s, %s) 
+            WHERE platform=%s AND user_id=%s
+        """, (access_token, refresh_token, expires, self.platform, self.user_id))

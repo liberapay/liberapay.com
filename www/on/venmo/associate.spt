@@ -1,6 +1,10 @@
 """OAuth authentication callback for Venmo
 """
 
+import time
+import datetime
+import pytz
+
 from aspen import resources, Response
 from gittip.elsewhere import venmo
 
@@ -9,15 +13,13 @@ from gittip.elsewhere import venmo
 if user.ANON:
     raise Response(404)
 
-user_info = venmo.oauth_dance(website, qs)
+data = venmo.oauth_dance(website, qs)
 
-# flatten to single dictionary
-user_subdict = user_info['user']
-del user_info['user']
-user_info.update(user_subdict)
+account = venmo.VenmoAccount(website.db, data['user']['id'], data['user'])
 
-account = venmo.VenmoAccount(website.db, user_info['id'], user_info)
-# TODO: handle NeedsConfirmation
+expires = datetime.datetime.utcnow() + datetime.timedelta(seconds=data['expires_in'])
+account.set_oauth_tokens(data['access_token'], data['refresh_token'], expires)
+
 user.participant.take_over(account)
 
 [-----------------------------] text/plain
