@@ -2,15 +2,23 @@
 """
 
 from aspen import resources, Response
+from gittip.elsewhere import venmo
 
 [-----------------------------]
 
 if user.ANON:
     raise Response(404)
 
-# TODO: errors
-
 user_info = venmo.oauth_dance(website, qs)
+
+# flatten to single dictionary
+user_subdict = user_info['user']
+del user_info['user']
+user_info.update(user_subdict)
+
+account = venmo.VenmoAccount(website.db, user_info['id'], user_info)
+# TODO: handle NeedsConfirmation
+user.participant.take_over(account)
 
 [-----------------------------] text/plain
 
