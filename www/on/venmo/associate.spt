@@ -1,0 +1,17 @@
+"""OAuth authentication callback for Venmo
+"""
+
+from aspen import resources, Response
+
+[-----------------------------]
+
+if user.ANON:
+    raise Response(404)
+
+# TODO: errors
+
+user_info = venmo.oauth_dance(website, qs)
+
+[-----------------------------] text/plain
+
+HELLO
