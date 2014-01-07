@@ -43,7 +43,7 @@ class NeedConfirmation(Exception):
 # Mixin
 # =====
 
-_account_types = ('github', 'twitter', 'bitbucket', 'bountysource')
+_account_types = ('github', 'twitter', 'bitbucket', 'bountysource', 'venmo')
 AccountsTuple = namedtuple('AccountsTuple', _account_types)
 
 class MixinElsewhere(object):
