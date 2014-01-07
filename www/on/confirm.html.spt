@@ -27,20 +27,7 @@ website.connect_tokens[connect_key] = connect_token
 other = Participant.from_username(account.participant)
 
 user_accounts = user.participant.get_accounts_elsewhere()
-
-user_github_account = user_accounts.github
-user_twitter_account = user_accounts.twitter
-user_bitbucket_account = user_accounts.bitbucket
-user_bountysource_account = user_accounts.bountysource
-# TODO: add venmo to this page
-
 other_accounts = other.get_accounts_elsewhere()
-
-other_github_account = other_accounts.github
-other_twitter_account = other_accounts.twitter
-other_bitbucket_account = other_accounts.bitbucket
-other_bountysource_account = other_accounts.bountysource
-
 
 user_giving = user.participant.get_dollars_giving()
 user_receiving = user.participant.get_dollars_receiving()
@@ -91,21 +78,21 @@ title = "Please Confirm"
                         </tr>
                     </table>
                     <br />
-                    {% if user_twitter_account != None %}
+                    {% if user_accounts.twitter != None %}
                         <img src="/assets/icons/twitter.12.png" />
-                        {{ user_twitter_account.user_info['screen_name'] }}<br />
+                        {{ user_accounts.twitter.user_info['screen_name'] }}<br />
                     {% endif %}
-                    {% if user_github_account != None %}
+                    {% if user_accounts.github != None %}
                         <img src="/assets/icons/github.12.png" />
-                        {{ user_github_account.user_info['login'] }}<br />
+                        {{ user_accounts.github.user_info['login'] }}<br />
                     {% endif %}
-                    {% if user_bitbucket_account != None %}
+                    {% if user_accounts.bitbucket != None %}
                         <img src="/assets/icons/bitbucket.12.png" />
-                        {{ user_bitbucket_account.user_info['username'] }}<br />
+                        {{ user_accounts.bitbucket.user_info['username'] }}<br />
                     {% endif %}
-                    {% if user_bountysource_account != None %}
+                    {% if user_accounts.bountysource != None %}
                         <img src="/assets/icons/bountysource.12.png" />
-                        {{ user_bountysource_account.user_info['display_name'] }}<br />
+                        {{ user_accounts.bountysource.user_info['display_name'] }}<br />
                     {% endif %}
                 </div>
                 </div>
@@ -125,28 +112,28 @@ title = "Please Confirm"
                         </tr>
                     </table>
                     <br />
-                    {% if other_twitter_account != None %}
+                    {% if other_accounts.twitter != None %}
                         <img src="/assets/icons/twitter.12.png" />
                         {% if account.platform == 'twitter' %}<span class="highlight">{% endif %}
-                        {{ other_twitter_account.user_info['screen_name'] }}<br />
+                        {{ other_accounts.twitter.user_info['screen_name'] }}<br />
                         {% if account.platform == 'twitter' %}</span>{% endif %}
                     {% endif %}
-                    {% if other_github_account != None %}
+                    {% if other_accounts.github != None %}
                         <img src="/assets/icons/github.12.png" />
                         {% if account.platform == 'github' %}<span class="highlight">{% endif %}
-                        {{ other_github_account.user_info['login'] }}<br />
+                        {{ other_accounts.github.user_info['login'] }}<br />
                         {% if account.platform == 'github' %}</span>{% endif %}
                     {% endif %}
-                    {% if other_bitbucket_account != None %}
+                    {% if other_accounts.bitbucket != None %}
                         <img src="/assets/icons/bitbucket.12.png" />
                         {% if account.platform == 'bitbucket' %}<span class="highlight">{% endif %}
-                        {{ other_bitbucket_account.user_info['username'] }}<br />
+                        {{ other_accounts.bitbucket.user_info['username'] }}<br />
                         {% if account.platform == 'bitbucket' %}</span>{% endif %}
                     {% endif %}
-                    {% if other_bountysource_account != None %}
+                    {% if other_accounts.bountysource != None %}
                         <img src="/assets/icons/bountysource.12.png" />
                         {% if account.platform == 'bountysource' %}<span class="highlight">{% endif %}
-                        {{ other_bountysource_account.user_info['display_name'] }}<br />
+                        {{ other_accounts.bountysource.user_info['display_name'] }}<br />
                         {% if account.platform == 'bountysource' %}</span>{% endif %}
                     {% endif %}
                 </div>
@@ -161,28 +148,28 @@ title = "Please Confirm"
     <table class="scenario">
         <tr>
             <td class="abandoned">
-                {% if account.platform == 'twitter' and user_twitter_account != None %}
+                {% if account.platform == 'twitter' and user_accounts.twitter != None %}
                     <span class="account-elsewhere">
                         <img src="/assets/icons/twitter.12.png" />
-                        {{ user_twitter_account.user_info['screen_name'] }}<br />
+                        {{ user_accounts.twitter.user_info['screen_name'] }}<br />
                     </span>
                 {% endif %}
-                {% if account.platform == 'github' and user_github_account != None %}
+                {% if account.platform == 'github' and user_accounts.github != None %}
                     <span class="account-elsewhere">
                         <img src="/assets/icons/github.12.png" />
-                        {{ user_github_account.user_info['login'] }}<br />
+                        {{ user_accounts.github.user_info['login'] }}<br />
                     </span>
                 {% endif %}
-                {% if account.platform == 'bitbucket' and user_bitbucket_account != None %}
+                {% if account.platform == 'bitbucket' and user_accounts.bitbucket != None %}
                     <span class="account-elsewhere">
                         <img src="/assets/icons/bitbucket.12.png" />
-                        {{ user_bitbucket_account.user_info['username'] }}<br />
+                        {{ user_accounts.bitbucket.user_info['username'] }}<br />
                     </span>
                 {% endif %}
-                {% if account.platform == 'bountysource' and user_bountysource_account != None %}
+                {% if account.platform == 'bountysource' and user_accounts.bountysource != None %}
                     <span class="account-elsewhere">
                         <img src="/assets/icons/bountysource.12.png" />
-                        {{ user_bountysource_account.user_info['display_name'] }}<br />
+                        {{ user_accounts.bountysource.user_info['display_name'] }}<br />
                     </span>
                 {% endif %}
             </td>
@@ -211,28 +198,28 @@ title = "Please Confirm"
                     </table>
                     <br />
 
-                    {% if user_twitter_account != None %}
+                    {% if user_accounts.twitter != None %}
                         <span class="account-elsewhere">
                             <img src="/assets/icons/twitter.12.png" />
-                            {{ user_twitter_account.user_info['screen_name'] }}<br />
+                            {{ user_accounts.twitter.user_info['screen_name'] }}<br />
                         </span>
                     {% endif %}
-                    {% if user_github_account != None %}
+                    {% if user_accounts.github != None %}
                         <span class="account-elsewhere">
                             <img src="/assets/icons/github.12.png" />
-                            {{ user_github_account.user_info['login'] }}<br />
+                            {{ user_accounts.github.user_info['login'] }}<br />
                         </span>
                     {% endif %}
-                    {% if user_bitbucket_account != None %}
+                    {% if user_accounts.bitbucket != None %}
                         <span class="account-elsewhere">
                             <img src="/assets/icons/bitbucket.12.png" />
-                            {{ user_bitbucket_account.user_info['username'] }}<br />
+                            {{ user_accounts.bitbucket.user_info['username'] }}<br />
                         </span>
                     {% endif %}
-                    {% if user_bountysource_account != None %}
+                    {% if user_accounts.bountysource != None %}
                         <span class="account-elsewhere">
                             <img src="/assets/icons/bountysource.12.png" />
-                            {{ user_bountysource_account.user_info['display_name'] }}<br />
+                            {{ user_accounts.bountysource.user_info['display_name'] }}<br />
                         </span>
                     {% endif %}
 
@@ -271,28 +258,28 @@ title = "Please Confirm"
                     </table>
                     <br />
 
-                    {% if other_twitter_account != None and account.platform != 'twitter' %}
+                    {% if other_accounts.twitter != None and account.platform != 'twitter' %}
                         <span class="account-elsewhere">
                             <img src="/assets/icons/twitter.12.png" />
-                            {{ other_twitter_account.user_info['screen_name'] }}<br />
+                            {{ other_accounts.twitter.user_info['screen_name'] }}<br />
                         </span>
                     {% endif %}
-                    {% if other_github_account != None and account.platform != 'github' %}
+                    {% if other_accounts.github != None and account.platform != 'github' %}
                         <span class="account-elsewhere">
                             <img src="/assets/icons/github.12.png" />
-                            {{ other_github_account.user_info['login'] }}<br />
+                            {{ other_accounts.github.user_info['login'] }}<br />
                         </span>
                     {% endif %}
-                    {% if other_bitbucket_account != None and account.platform != 'bitbucket' %}
+                    {% if other_accounts.bitbucket != None and account.platform != 'bitbucket' %}
                         <span class="account-elsewhere">
                             <img src="/assets/icons/bitbucket.12.png" />
-                            {{ other_bitbucket_account.user_info['username'] }}<br />
+                            {{ other_accounts.bitbucket.user_info['username'] }}<br />
                         </span>
                     {% endif %}
-                    {% if other_bountysource_account != None and account.platform != 'bountysource' %}
+                    {% if other_accounts.bountysource != None and account.platform != 'bountysource' %}
                         <span class="account-elsewhere">
                             <img src="/assets/icons/bountysource.12.png" />
-                            {{ other_bountysource_account.user_info['display_name'] }}<br />
+                            {{ other_accounts.bountysource.user_info['display_name'] }}<br />
                         </span>
                     {% endif %}
 
