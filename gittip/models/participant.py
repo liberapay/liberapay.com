@@ -21,6 +21,16 @@ from aspen import Response
 from aspen.utils import typecheck
 from psycopg2 import IntegrityError
 from postgres.orm import Model
+from gittip.exceptions import (
+    UsernameIsEmpty,
+    UsernameTooLong,
+    UsernameContainsInvalidCharacters,
+    UsernameIsRestricted,
+    UsernameAlreadyTaken,
+    NoSelfTipping,
+    BadAmount,
+)
+
 from gittip.models._mixin_elsewhere import MixinElsewhere
 from gittip.models._mixin_team import MixinTeam
 from gittip.utils import canonicalize
@@ -677,35 +687,6 @@ class Participant(Model, MixinElsewhere, MixinTeam):
             now = datetime.datetime.now(self.claimed_time.tzinfo)
             out = (now - self.claimed_time).total_seconds()
         return out
-
-
-# Exceptions
-# ==========
-
-class ProblemChangingUsername(Exception):
-    def __str__(self):
-        return self.msg.format(self.args[0])
-
-class UsernameIsEmpty(ProblemChangingUsername):
-    msg = "You need to provide a username!"
-
-class UsernameTooLong(ProblemChangingUsername):
-    msg = "The username '{}' is too long."
-
-# Not passing the potentially unicode characters back because of:
-# https://github.com/gittip/aspen-python/issues/177
-class UsernameContainsInvalidCharacters(ProblemChangingUsername):
-    msg = "That username contains invalid characters."
-
-class UsernameIsRestricted(ProblemChangingUsername):
-    msg = "The username '{}' is restricted."
-
-class UsernameAlreadyTaken(ProblemChangingUsername):
-    msg = "The username '{}' is already taken."
-
-class TooGreedy(Exception): pass
-class NoSelfTipping(Exception): pass
-class BadAmount(Exception): pass
 
 
 # Username Helpers

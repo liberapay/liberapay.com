@@ -3,7 +3,8 @@
 from decimal import InvalidOperation
 
 from aspen import Response
-from gittip.models.participant import Participant, BadAmount
+from gittip.exceptions import BadAmount
+from gittip.models.participant import Participant
 
 [-----------------------------------------------------------------------------]
 
