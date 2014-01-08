@@ -1,9 +1,6 @@
 from psycopg2 import IntegrityError
 import random
 
-# Username Helpers
-# ================
-
 def gen_random_usernames():
     """Yield up to 100 random 12-hex-digit unicodes.
 
