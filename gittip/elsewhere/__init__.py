@@ -12,9 +12,24 @@ from gittip.models.participant import ProblemChangingUsername
 
 
 ACTIONS = [u'opt-in', u'connect', u'lock', u'unlock']
+platform_classes = {}  # updated by _RegisterPlatformMeta
 
+class _RegisterPlatformMeta(type):
+    """Tied to AccountElsewhere to enable registration by the platform field.
+    """
+
+    def __new__(cls, name, bases, dct):
+        c = super(_RegisterPlatformMeta, cls).__new__(cls, name, bases, dct)
+
+        c_platform = getattr(c, 'platform')
+        if c_platform is not None:
+            platform_classes[c_platform] = c
+
+        return c
 
 class AccountElsewhere(object):
+
+    __metaclass__ = _RegisterPlatformMeta
 
     platform = None  # set in subclass
 
