@@ -1,17 +1,35 @@
 """This subpackage contains functionality for working with accounts elsewhere.
 """
 from __future__ import print_function, unicode_literals
+from collections import OrderedDict
 
 from aspen.utils import typecheck
 from psycopg2 import IntegrityError
 
 import gittip
+from gittip.exceptions import ProblemChangingUsername, UnknownPlatform
 from gittip.utils.username import reserve_a_random_username
-from gittip.exceptions import ProblemChangingUsername
 
 
 ACTIONS = [u'opt-in', u'connect', u'lock', u'unlock']
-platform_classes = {}  # updated by _RegisterPlatformMeta
+
+
+# when adding a new platform, add its name to this list.
+# its class will automatically be set in platform_classes at import-time.
+# the ordering of this list defines the ordering of platform_classes.items().
+_platforms_ordered = (
+    'twitter',
+    'github',
+    'bitbucket',
+    'bountysource',
+    'venmo',
+)
+
+# init-time setup is necessary for two reasons:
+#   1) to allow for deterministic iter order in templates
+#   2) to allow the use of platform_classes.keys() at import-time
+# note that OrderedDicts retain ordering of keys after they are replaced.
+platform_classes = OrderedDict([(platform, None) for platform in _platforms_ordered])
 
 
 class _RegisterPlatformMeta(type):
@@ -21,8 +39,13 @@ class _RegisterPlatformMeta(type):
     def __new__(cls, name, bases, dct):
         c = super(_RegisterPlatformMeta, cls).__new__(cls, name, bases, dct)
 
+        # register the platform and verify it was added at init-time
         c_platform = getattr(c, 'platform')
-        if c_platform is not None:
+        if name == 'AccountElsewhere':
+            pass
+        elif c_platform not in platform_classes:
+            raise UnknownPlatform(c_platform)  # has it been added to platform_classes init?
+        else:
             platform_classes[c_platform] = c
 
         return c

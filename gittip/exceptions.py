@@ -5,7 +5,8 @@ This module contains exceptions shared across application code.
 from __future__ import print_function, unicode_literals
 
 
-# originally from gittip.models.participant
+
+class UnknownPlatform(Exception): pass
 
 class ProblemChangingUsername(Exception):
     def __str__(self):
