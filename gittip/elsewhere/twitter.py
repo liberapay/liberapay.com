@@ -15,6 +15,9 @@ class TwitterAccount(AccountElsewhere):
     def get_url(self):
         return "https://twitter.com/" + self.user_info['screen_name']
 
+    def get_display_name(self):
+        return self.user_info['display_name']
+
 
 def oauth_url(website, action, then=""):
     """Return a URL to start oauth dancing with Twitter.

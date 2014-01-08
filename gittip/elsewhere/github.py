@@ -17,6 +17,9 @@ class GitHubAccount(AccountElsewhere):
     def get_url(self):
         return self.user_info['html_url']
 
+    def get_display_name(self):
+        return self.user_info['login']
+
 
 def oauth_url(website, action, then=u""):
     """Given a website object and a string, return a URL string.

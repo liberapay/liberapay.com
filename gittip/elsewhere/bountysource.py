@@ -15,6 +15,9 @@ class BountysourceAccount(AccountElsewhere):
 
         raise NotImplementedError
 
+    def get_display_name(self):
+        return self.user_info['display_name']
+
 
 def oauth_url(website, participant, redirect_url=None):
     """Return a URL to authenticate with Bountysource.

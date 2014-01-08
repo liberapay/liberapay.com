@@ -18,6 +18,9 @@ class BitbucketAccount(AccountElsewhere):
         url = "https://bitbucket.org/%s" % self.user_info["username"]
         return url
 
+    def get_display_name(self):
+        return self.user_info['username']
+
 
 def oauth_url(website, action, then=""):
     """Return a URL to start oauth dancing with Bitbucket.

@@ -13,6 +13,7 @@ from gittip.exceptions import ProblemChangingUsername
 ACTIONS = [u'opt-in', u'connect', u'lock', u'unlock']
 platform_classes = {}  # updated by _RegisterPlatformMeta
 
+
 class _RegisterPlatformMeta(type):
     """Tied to AccountElsewhere to enable registration by the platform field.
     """
@@ -32,8 +33,12 @@ class AccountElsewhere(object):
 
     platform = None  # set in subclass
 
-    def __init__(self, db, user_id, user_info=None):
-        """Takes a user_id and user_info, and updates the database.
+    def __init__(self, db, user_id, user_info=None, existing_record=None):
+        """Either:
+        - Takes a user_id and user_info, and updates the database.
+
+        Or:
+        - Takes a user_id and existing_record, and constructs a "model" object out of the record
         """
         typecheck(user_id, (int, unicode), user_info, (None, dict))
         self.user_id = unicode(user_id)
@@ -47,6 +52,11 @@ class AccountElsewhere(object):
             self.is_locked = c
             self.balance = d
 
+        # hack to make this into a weird pseudo-model that can share convenience methods
+        elif existing_record is not None:
+            self.participant = existing_record.participant
+            self.is_claimed, self.is_locked, self.balance = self.get_misc_info(self.participant)
+            self.user_info = existing_record.user_info
 
 
     def set_is_locked(self, is_locked):
@@ -141,10 +151,9 @@ class AccountElsewhere(object):
 
         """, (user_info, self.platform, self.user_id))
 
+        return (username,) + self.get_misc_info(username)
 
-        # Get a little more info to return.
-        # =================================
-
+    def get_misc_info(self, username):
         rec = self.db.one("""
 
             SELECT claimed_time, balance, is_locked
@@ -158,9 +167,7 @@ class AccountElsewhere(object):
 
         assert rec is not None  # sanity check
 
-
-        return ( username
-               , rec.claimed_time is not None
+        return ( rec.claimed_time is not None
                , rec.is_locked
                , rec.balance
                 )

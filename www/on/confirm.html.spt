@@ -4,10 +4,12 @@ import uuid
 
 from aspen import Response
 from gittip.models.participant import Participant
+from gittip.elsewhere import platform_classes
 
 website.connect_tokens = {}
 
 [--------]
+
 if not getattr(request, 'internally_redirected_from', None):
     raise Response(404)
 
@@ -39,17 +41,13 @@ combined_giving = user_giving + other_giving
 combined_receiving = user_receiving + other_receiving
 
 fmt = lambda x: '$' + str(int(round(x))) if x > 0 else '-'
-if account.platform == 'twitter':
-    username = user_info['screen_name']
-elif account.platform == 'github':
-    username = user_info['login']
-elif account.platform == 'bitbucket':
-    username = user_info['username']
-elif account.platform == 'bountysource':
-    username = user_info['display_name']
+
+username = account.get_display_name()
 
 title = "Please Confirm"
+
 [--------]
+
 {% extends "templates/base.html" %}
 {% block box %}
 <div class="on-confirm">
@@ -78,22 +76,12 @@ title = "Please Confirm"
                         </tr>
                     </table>
                     <br />
-                    {% if user_accounts.twitter != None %}
-                        <img src="/assets/icons/twitter.12.png" />
-                        {{ user_accounts.twitter.user_info['screen_name'] }}<br />
-                    {% endif %}
-                    {% if user_accounts.github != None %}
-                        <img src="/assets/icons/github.12.png" />
-                        {{ user_accounts.github.user_info['login'] }}<br />
-                    {% endif %}
-                    {% if user_accounts.bitbucket != None %}
-                        <img src="/assets/icons/bitbucket.12.png" />
-                        {{ user_accounts.bitbucket.user_info['username'] }}<br />
-                    {% endif %}
-                    {% if user_accounts.bountysource != None %}
-                        <img src="/assets/icons/bountysource.12.png" />
-                        {{ user_accounts.bountysource.user_info['display_name'] }}<br />
-                    {% endif %}
+
+                    {% for account in user_accounts %}
+                        {% if account != None %}
+                            {{ account.get_display_name() }}<br />
+                        {% endif %}
+                    {% endfor %}
                 </div>
                 </div>
             </td>

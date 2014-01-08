@@ -67,7 +67,7 @@ class MixinElsewhere(object):
         for account in accounts:
             if account.platform not in _account_types:
                 raise UnknownPlatform(account.platform)
-            accounts_dict[account.platform] = account
+            accounts_dict[account.platform] = platform_classes[account.platform](self.db, account.user_id, existing_record=account)
 
         return AccountsTuple(**accounts_dict)
 

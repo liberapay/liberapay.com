@@ -7,6 +7,8 @@ import pytz
 
 from aspen import resources, Response
 from gittip.elsewhere import venmo
+from gittip.utils import redirect_confirmation
+from gittip.models._mixin_elsewhere import NeedConfirmation
 
 [-----------------------------]
 
@@ -20,7 +22,10 @@ account = venmo.VenmoAccount(website.db, data['user']['id'], data['user'])
 expires = datetime.datetime.utcnow() + datetime.timedelta(seconds=data['expires_in'])
 account.set_oauth_tokens(data['access_token'], data['refresh_token'], expires)
 
-user.participant.take_over(account)
+try:
+    user.participant.take_over(account)
+except NeedConfirmation, obstacles:
+    redirect_confirmation(website, request)
 
 [-----------------------------] text/plain
 
