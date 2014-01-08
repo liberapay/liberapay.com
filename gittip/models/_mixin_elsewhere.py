@@ -47,6 +47,8 @@ class NeedConfirmation(Exception):
 # =====
 
 _account_types = ('github', 'twitter', 'bitbucket', 'bountysource', 'venmo')
+#TODO(simonweber): use platform_classes
+
 AccountsTuple = namedtuple('AccountsTuple', _account_types)
 
 class MixinElsewhere(object):
