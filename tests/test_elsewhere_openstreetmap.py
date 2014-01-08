@@ -17,7 +17,8 @@ class TestElsewhereOpenStreetMap(Harness):
         }
         openstreetmap.OpenStreetMapAccount(self.db, "1", user_info).opt_in('alice')
         expected = user_info
-        actual = openstreetmap.get_user_info(self.db, 'alice', os.environ.get('OPENSRTEETMAP_API'))
+        actual = openstreetmap.get_user_info(self.db, 'alice',
+                self.client.website.openstreetmap_api)
         assert actual == expected
 
     def test_get_user_info_gets_user_info_from_PathPart(self):
@@ -29,5 +30,6 @@ class TestElsewhereOpenStreetMap(Harness):
         }
         openstreetmap.OpenStreetMapAccount(self.db, "1", user_info).opt_in('alice')
         expected = user_info
-        actual = openstreetmap.get_user_info(self.db, PathPart('alice', {}), os.environ.get('OPENSRTEETMAP_API'))
+        actual = openstreetmap.get_user_info(self.db, PathPart('alice', {}),
+                self.client.website.openstreetmap_api)
         assert actual == expected
