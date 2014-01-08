@@ -186,6 +186,11 @@ def envvars(website):
     website.bountysource_api_host = envvar('BOUNTYSOURCE_API_HOST')
     website.bountysource_api_secret = envvar('BOUNTYSOURCE_API_SECRET')
     website.bountysource_callback = envvar('BOUNTYSOURCE_CALLBACK')
+   
+    website.openstreetmap_api = envvar('OPENSTREETMAP_API')
+    website.openstreetmap_consumer_key = envvar('OPENSTREETMAP_CONSUMER_KEY')
+    website.openstreetmap_consumer_secret = envvar('OPENSTREETMAP_CONSUMER_SECRET')
+    website.openstreetmap_callback = envvar('OPENSTREETMAP_CALLBACK')
 
     website.css_href = envvar('GITTIP_CSS_HREF') \
                                           .replace('%version', website.version)

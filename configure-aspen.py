@@ -117,12 +117,13 @@ website.server_algorithm.insert_before('start', setup_busy_threads_logging)
 # =================
 
 def add_stuff_to_context(request):
-    from gittip.elsewhere import bitbucket, github, twitter, bountysource
+    from gittip.elsewhere import bitbucket, github, twitter, bountysource, openstreetmap
     request.context['username'] = None
     request.context['bitbucket'] = bitbucket
     request.context['github'] = github
     request.context['twitter'] = twitter
     request.context['bountysource'] = bountysource
+    request.context['openstreetmap'] = openstreetmap
 
 
 algorithm = website.algorithm

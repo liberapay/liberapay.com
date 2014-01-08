@@ -199,9 +199,11 @@ class Participant(Model, MixinElsewhere, MixinTeam):
             out = '/on/bitbucket/%s/' % rec.user_info['username']
         elif rec.platform == 'github':
             out = '/on/github/%s/' % rec.user_info['login']
-        else:
-            assert rec.platform == 'twitter'
+        elif rec.platform == 'twitter':
             out = '/on/twitter/%s/' % rec.user_info['screen_name']
+        else:
+            assert rec.platform == 'openstreetmap'
+            out = '/on/openstreetmap/%s/' % rec.user_info['username']
         return out
 
     def set_as_claimed(self):

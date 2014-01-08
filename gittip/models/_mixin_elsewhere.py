@@ -43,7 +43,7 @@ class NeedConfirmation(Exception):
 # Mixin
 # =====
 
-_account_types = ('github', 'twitter', 'bitbucket', 'bountysource')
+_account_types = ('github', 'twitter', 'bitbucket', 'bountysource', 'openstreetmap')
 AccountsTuple = namedtuple('AccountsTuple', _account_types)
 
 class MixinElsewhere(object):
@@ -102,6 +102,10 @@ class MixinElsewhere(object):
                 # preferrable to guaranteed blurriness. :-/
 
                 src = src.replace('_normal.', '.')
+
+        elif accounts.openstreetmap is not None:
+            if 'img_src' in accounts.openstreetmap.user_info:
+                src = accounts.openstreetmap.user_info['img_src']
 
         return src
 
