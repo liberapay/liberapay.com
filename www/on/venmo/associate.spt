@@ -15,6 +15,10 @@ from gittip.models._mixin_elsewhere import NeedConfirmation
 if user.ANON:
     raise Response(404)
 
+if 'error' in qs:
+    # :(
+    request.redirect('/')
+
 data = venmo.oauth_dance(website, qs)
 
 account = venmo.VenmoAccount(website.db, data['user']['id'], data['user'])
@@ -26,6 +30,9 @@ try:
     user.participant.take_over(account)
 except NeedConfirmation, obstacles:
     redirect_confirmation(website, request)
+
+then = u'/%s/' % user.participant.username
+request.redirect(then)
 
 [-----------------------------] text/plain
 

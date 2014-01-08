@@ -52,11 +52,14 @@ class AccountElsewhere(object):
             self.is_locked = c
             self.balance = d
 
+            self.user_info = user_info
+
         # hack to make this into a weird pseudo-model that can share convenience methods
         elif existing_record is not None:
             self.participant = existing_record.participant
             self.is_claimed, self.is_locked, self.balance = self.get_misc_info(self.participant)
             self.user_info = existing_record.user_info
+            self.record = existing_record
 
 
     def set_is_locked(self, is_locked):

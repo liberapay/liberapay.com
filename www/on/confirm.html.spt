@@ -42,7 +42,7 @@ combined_receiving = user_receiving + other_receiving
 
 fmt = lambda x: '$' + str(int(round(x))) if x > 0 else '-'
 
-username = account.get_display_name()
+username = account.get_user_name()
 
 title = "Please Confirm"
 
@@ -52,7 +52,7 @@ title = "Please Confirm"
 {% block box %}
 <div class="on-confirm">
 
-    <div><img class="platform-icon" src="/assets/icons/{{ account.platform }}.12.png"
+    <div><img class="platform-icon" src="{{ account.get_platform_icon() }}"
     /> <span class="highlight">{{ username }}</span> is connected<br />to
     <b>{{ other.username }}</b> on Gittip.<br />Reconnect it?</div>
 
@@ -79,7 +79,9 @@ title = "Please Confirm"
 
                     {% for account in user_accounts %}
                         {% if account != None %}
-                            {{ account.get_display_name() }}<br />
+                            <img src="{{ account.get_platform_icon() }}" alt="{{ account.platform }}"
+                                class="platform-icon" />
+                            {{ account.get_user_name() }}<br />
                         {% endif %}
                     {% endfor %}
                 </div>
@@ -100,30 +102,15 @@ title = "Please Confirm"
                         </tr>
                     </table>
                     <br />
-                    {% if other_accounts.twitter != None %}
-                        <img src="/assets/icons/twitter.12.png" />
-                        {% if account.platform == 'twitter' %}<span class="highlight">{% endif %}
-                        {{ other_accounts.twitter.user_info['screen_name'] }}<br />
-                        {% if account.platform == 'twitter' %}</span>{% endif %}
-                    {% endif %}
-                    {% if other_accounts.github != None %}
-                        <img src="/assets/icons/github.12.png" />
-                        {% if account.platform == 'github' %}<span class="highlight">{% endif %}
-                        {{ other_accounts.github.user_info['login'] }}<br />
-                        {% if account.platform == 'github' %}</span>{% endif %}
-                    {% endif %}
-                    {% if other_accounts.bitbucket != None %}
-                        <img src="/assets/icons/bitbucket.12.png" />
-                        {% if account.platform == 'bitbucket' %}<span class="highlight">{% endif %}
-                        {{ other_accounts.bitbucket.user_info['username'] }}<br />
-                        {% if account.platform == 'bitbucket' %}</span>{% endif %}
-                    {% endif %}
-                    {% if other_accounts.bountysource != None %}
-                        <img src="/assets/icons/bountysource.12.png" />
-                        {% if account.platform == 'bountysource' %}<span class="highlight">{% endif %}
-                        {{ other_accounts.bountysource.user_info['display_name'] }}<br />
-                        {% if account.platform == 'bountysource' %}</span>{% endif %}
-                    {% endif %}
+                    {% for other_account in other_accounts %}
+                        {% if other_account != None %}
+                            <img src="{{ other_account.get_platform_icon() }}" alt="{{ other_account.platform }}"
+                                class="platform-icon" />
+                            <span {% if other_account.platform == account.platform %}class="highlight"{% endif %}>
+                                {{ other_account.get_user_name() }}<br />
+                            </span>
+                        {% endif %}
+                    {% endfor %}
                 </div>
                 </div>
             </td>
@@ -186,36 +173,23 @@ title = "Please Confirm"
                     </table>
                     <br />
 
-                    {% if user_accounts.twitter != None %}
-                        <span class="account-elsewhere">
-                            <img src="/assets/icons/twitter.12.png" />
-                            {{ user_accounts.twitter.user_info['screen_name'] }}<br />
-                        </span>
-                    {% endif %}
-                    {% if user_accounts.github != None %}
-                        <span class="account-elsewhere">
-                            <img src="/assets/icons/github.12.png" />
-                            {{ user_accounts.github.user_info['login'] }}<br />
-                        </span>
-                    {% endif %}
-                    {% if user_accounts.bitbucket != None %}
-                        <span class="account-elsewhere">
-                            <img src="/assets/icons/bitbucket.12.png" />
-                            {{ user_accounts.bitbucket.user_info['username'] }}<br />
-                        </span>
-                    {% endif %}
-                    {% if user_accounts.bountysource != None %}
-                        <span class="account-elsewhere">
-                            <img src="/assets/icons/bountysource.12.png" />
-                            {{ user_accounts.bountysource.user_info['display_name'] }}<br />
-                        </span>
-                    {% endif %}
+                    {% for user_account in user_accounts %}
+                        {% if user_account != None %}
+                            <span class="account-elsewhere">
+                                <img src="{{ user_account.get_platform_icon() }}" alt="{{ user_account.platform }}"
+                                    class="platform-icon" />
+                                {{ user_account.get_user_name() }}<br />
+                            </span>
+                        {% endif %}
+                    {% endfor %}
 
                     <span class="account-elsewhere">
-                        <img src="/assets/icons/{{ account.platform }}.12.png" />
-                        <span class="highlight">{{ username }}</span>
+                        <img src="{{ account.get_platform_icon() }}" alt="{{ account.platform }}"
+                            class="platform-icon" />
+                        <span class="highlight">
+                            {{ account.get_user_name() }}<br />
+                        </span>
                     </span>
-
                 </div>
                 </div>
             </td>
@@ -246,30 +220,15 @@ title = "Please Confirm"
                     </table>
                     <br />
 
-                    {% if other_accounts.twitter != None and account.platform != 'twitter' %}
-                        <span class="account-elsewhere">
-                            <img src="/assets/icons/twitter.12.png" />
-                            {{ other_accounts.twitter.user_info['screen_name'] }}<br />
-                        </span>
-                    {% endif %}
-                    {% if other_accounts.github != None and account.platform != 'github' %}
-                        <span class="account-elsewhere">
-                            <img src="/assets/icons/github.12.png" />
-                            {{ other_accounts.github.user_info['login'] }}<br />
-                        </span>
-                    {% endif %}
-                    {% if other_accounts.bitbucket != None and account.platform != 'bitbucket' %}
-                        <span class="account-elsewhere">
-                            <img src="/assets/icons/bitbucket.12.png" />
-                            {{ other_accounts.bitbucket.user_info['username'] }}<br />
-                        </span>
-                    {% endif %}
-                    {% if other_accounts.bountysource != None and account.platform != 'bountysource' %}
-                        <span class="account-elsewhere">
-                            <img src="/assets/icons/bountysource.12.png" />
-                            {{ other_accounts.bountysource.user_info['display_name'] }}<br />
-                        </span>
-                    {% endif %}
+                    {% for other_account in other_accounts %}
+                        {% if other_account != None and other_account.platform != account.platform %}
+                            <span class="account-elsewhere">
+                                <img src="{{ other_account.get_platform_icon() }}" alt="{{ other_account.platform }}"
+                                    class="platform-icon" />
+                                {{ other_account.get_user_name() }}<br />
+                            </span>
+                        {% endif %}
+                    {% endfor %}
 
                 </div>
                 </div>

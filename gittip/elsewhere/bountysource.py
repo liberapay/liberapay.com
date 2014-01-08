@@ -15,8 +15,11 @@ class BountysourceAccount(AccountElsewhere):
 
         raise NotImplementedError
 
-    def get_display_name(self):
+    def get_user_name(self):
         return self.user_info['display_name']
+
+    def get_platform_icon(self):
+        return "/assets/icons/bountysource.12.png"
 
 
 def oauth_url(website, participant, redirect_url=None):
