@@ -107,6 +107,12 @@
                 No Venmo account connected.
             {% endif %}
         {% else %}
+            <a href="{{ venmo_account.get_url() }}">
+              <img class="avatar" src="{{ venmo_account.get_profile_image() }}">
+              {{ venmo_account.get_user_name() }}
+              ({{ venmo_account.get_display_name() }})
+            </a>
+            <div class="account-type">on Venmo</div>
         {% endif %}
       </td>
     </tr>

@@ -10,6 +10,18 @@ class VenmoAccount(AccountElsewhere):
     def get_url(self):
         return "https://venmo.com/" + self.user_info['username']
 
+    def get_profile_image(self):
+        return self.user_info['profile_picture_url']
+
+    def get_user_name(self):
+        return self.user_info['username']
+
+    def get_display_name(self):
+        return self.user_info['display_name']
+
+    def get_platform_icon(self):
+        return "/assets/icons/venmo.16.png"
+
 def oauth_url(website):
     connect_params = {
         'client_id': website.venmo_client_id,

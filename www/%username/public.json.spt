@@ -80,7 +80,7 @@ if not user.ANON:
 
 accounts = participant.get_accounts_elsewhere()
 
-output['elsewhere'] = accounts._asdict()
+output['elsewhere'] = {account.platform: account.record for account in accounts if account is not None}
 
 if accounts.bitbucket is not None:
     output['bitbucket'] = "https://bitbucket.org/api/1.0/users/%s" % \
