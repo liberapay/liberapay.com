@@ -6,7 +6,8 @@ from aspen.utils import typecheck
 from psycopg2 import IntegrityError
 
 import gittip
-from gittip.utils.username import reserve_a_random_username, ProblemChangingUsername
+from gittip.utils.username import reserve_a_random_username
+from gittip.exceptions import ProblemChangingUsername
 
 
 ACTIONS = [u'opt-in', u'connect', u'lock', u'unlock']
