@@ -6,9 +6,7 @@ from aspen.utils import typecheck
 from psycopg2 import IntegrityError
 
 import gittip
-from gittip.security.user import User
-from gittip.models.participant import Participant, reserve_a_random_username
-from gittip.models.participant import ProblemChangingUsername
+from gittip.utils.username import reserve_a_random_username, ProblemChangingUsername
 
 
 ACTIONS = [u'opt-in', u'connect', u'lock', u'unlock']
@@ -49,9 +47,6 @@ class AccountElsewhere(object):
             self.balance = d
 
 
-    def get_participant(self):
-        return Participant.query.get(username=self.participant)
-
 
     def set_is_locked(self, is_locked):
         self.db.run("""
@@ -66,6 +61,8 @@ class AccountElsewhere(object):
     def opt_in(self, desired_username):
         """Given a desired username, return a User object.
         """
+        from gittip.security.user import User
+
         self.set_is_locked(False)
         user = User.from_username(self.participant)
         user.sign_in()
