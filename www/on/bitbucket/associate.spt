@@ -10,7 +10,7 @@ from urlparse import parse_qs
 
 import requests
 from requests_oauthlib import OAuth1
-from aspen import json, log, Response
+from aspen import log, Response
 from aspen import resources
 from gittip.elsewhere import ACTIONS, bitbucket
 from gittip.models._mixin_elsewhere import NeedConfirmation
@@ -51,7 +51,7 @@ oauth_hook = OAuth1( website.bitbucket_consumer_key
 response = requests.get( "https://bitbucket.org/api/1.0/user"
                        , auth=oauth_hook
                         )
-user_info = json.loads(response.text)['user']
+user_info = response.json()['user']
 assert response.status_code == 200, response.status_code
 
 
