@@ -12,16 +12,17 @@ from gittip.elsewhere.bitbucket import BitbucketAccount
 from gittip.elsewhere.github import GitHubAccount
 from gittip.elsewhere.twitter import TwitterAccount
 from gittip.elsewhere.openstreetmap import OpenStreetMapAccount
+from gittip.exceptions import (
+    UsernameIsEmpty,
+    UsernameTooLong,
+    UsernameAlreadyTaken,
+    UsernameContainsInvalidCharacters,
+    UsernameIsRestricted,
+    NoSelfTipping,
+    BadAmount,
+)
 from gittip.models._mixin_elsewhere import NeedConfirmation
 from gittip.models.participant import Participant
-from gittip.models.participant import ( UsernameIsEmpty
-                                      , UsernameTooLong
-                                      , UsernameAlreadyTaken
-                                      , UsernameContainsInvalidCharacters
-                                      , UsernameIsRestricted
-                                      , NoSelfTipping
-                                      , BadAmount
-                                       )
 from gittip.testing import Harness
 
 
