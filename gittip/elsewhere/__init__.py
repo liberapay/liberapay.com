@@ -4,6 +4,7 @@ from __future__ import print_function, unicode_literals
 from collections import OrderedDict
 
 from aspen.utils import typecheck
+from aspen import json
 from psycopg2 import IntegrityError
 
 import gittip
@@ -39,7 +40,9 @@ class _RegisterPlatformMeta(type):
     def __new__(cls, name, bases, dct):
         c = super(_RegisterPlatformMeta, cls).__new__(cls, name, bases, dct)
 
-        # register the platform and verify it was added at init-time
+        # * register the platform 
+        # * verify it was added at init-time
+        # * register the subclass's json encoder with aspen
         c_platform = getattr(c, 'platform')
         if name == 'AccountElsewhere':
             pass
@@ -48,6 +51,10 @@ class _RegisterPlatformMeta(type):
         else:
             platform_classes[c_platform] = c
 
+            # aspen's json encoder registry does not take class hierarchies into account,
+            #  so we need to register the subclasses explicitly.
+            json.register_encoder(c, c.to_json_compatible_object)
+
         return c
 
 class AccountElsewhere(object):
@@ -55,6 +62,11 @@ class AccountElsewhere(object):
     __metaclass__ = _RegisterPlatformMeta
 
     platform = None  # set in subclass
+
+    # only fields in this set will be encoded
+    json_encode_field_whitelist = set([
+        'id', 'is_locked', 'participant', 'platform', 'user_id', 'user_info',
+    ])
 
     def __init__(self, db, user_id, user_info=None, existing_record=None):
         """Either:
@@ -84,6 +96,17 @@ class AccountElsewhere(object):
             self.user_info = existing_record.user_info
             self.record = existing_record
 
+    def to_json_compatible_object(self):
+        """
+        This is registered as an aspen.json encoder in configure-aspen
+        for all subclasses of this class.
+
+        It only exports fields in the whitelist.
+        """
+        output = {k: v for (k,v) in self.record._asdict().items()
+                  if k in self.json_encode_field_whitelist}
+
+        return output
 
     def set_is_locked(self, is_locked):
         self.db.run("""
