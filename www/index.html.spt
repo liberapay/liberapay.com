@@ -187,7 +187,7 @@ receivers = utter_hack(website.db, website.db.all("""
                 </span>
                 {% else %}
                 <a href="/{{ receiver.username }}/"
-                   class="mini-user{{ ' anonymous' if giver.anonymous else '' }}">
+                   class="mini-user{{ ' anonymous' if receiver.anonymous else '' }}">
                     <span class="inner">
                         <span class="avatar"
                             style="background-image: url('{{ _get_img_src(receiver) }}')">
