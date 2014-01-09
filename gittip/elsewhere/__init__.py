@@ -15,10 +15,13 @@ from gittip.utils.username import reserve_a_random_username
 ACTIONS = [u'opt-in', u'connect', u'lock', u'unlock']
 
 
-# when adding a new platform, add its name to this list.
-# its class will automatically be set in platform_classes at import-time.
-# the ordering of this list defines the ordering of platform_classes.items().
-_platforms_ordered = (
+# to add a new elsewhere/platform:
+#  1) add its name (also the name of its module) to this list.
+#     it's best to append it; this ordering is used in templates.
+#  2) inherit from AccountElsewhere in the platform class
+#
+# platform_modules will populate the platform class automatically in configure-aspen.
+platforms_ordered = (
     'twitter',
     'github',
     'bitbucket',
@@ -26,11 +29,9 @@ _platforms_ordered = (
     'venmo',
 )
 
-# init-time setup is necessary for two reasons:
-#   1) to allow for deterministic iter order in templates
-#   2) to allow the use of platform_classes.keys() at import-time
-# note that OrderedDicts retain ordering of keys after they are replaced.
-platform_classes = OrderedDict([(platform, None) for platform in _platforms_ordered])
+# init-time key setup ensures the future ordering of platform_classes will match
+# platforms_ordered, since overwriting entries will maintain their order.
+platform_classes = OrderedDict([(platform, None) for platform in platforms_ordered])
 
 
 class _RegisterPlatformMeta(type):
@@ -40,7 +41,7 @@ class _RegisterPlatformMeta(type):
     def __new__(cls, name, bases, dct):
         c = super(_RegisterPlatformMeta, cls).__new__(cls, name, bases, dct)
 
-        # * register the platform 
+        # * register the platform
         # * verify it was added at init-time
         # * register the subclass's json encoder with aspen
         c_platform = getattr(c, 'platform')
