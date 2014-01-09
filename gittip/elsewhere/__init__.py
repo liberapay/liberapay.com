@@ -27,6 +27,7 @@ platforms_ordered = (
     'bitbucket',
     'bountysource',
     'venmo',
+    'openstreetmap'
 )
 
 # init-time key setup ensures the future ordering of platform_classes will match
