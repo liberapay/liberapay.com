@@ -1,6 +1,7 @@
 from __future__ import division
 
 import os
+import sys
 import threading
 import time
 import traceback
@@ -57,11 +58,10 @@ def update_homepage_queries():
             utils.update_homepage_queries_once(website.db)
             website.db.self_check()
         except:
-            if tell_sentry:
-                tell_sentry(None)
-            else:
-                tb = traceback.format_exc().strip()
-                log_dammit(tb)
+            exception = sys.exc_info()[0]
+            tell_sentry(exception)
+            tb = traceback.format_exc().strip()
+            log_dammit(tb)
         time.sleep(UPDATE_HOMEPAGE_EVERY)
 
 if UPDATE_HOMEPAGE_EVERY > 0:
@@ -146,6 +146,8 @@ algorithm.functions = [ timer.start
                       , algorithm['get_response_for_socket']
                       , algorithm['get_resource_for_request']
                       , algorithm['get_response_for_resource']
+
+                      , tell_sentry
                       , algorithm['get_response_for_exception']
 
                       , authentication.outbound
@@ -155,8 +157,10 @@ algorithm.functions = [ timer.start
 
                       , algorithm['log_traceback_for_5xx']
                       , algorithm['delegate_error_to_simplate']
+                      , tell_sentry
                       , algorithm['log_traceback_for_exception']
                       , algorithm['log_result_of_request']
 
                       , timer.end
+                      , tell_sentry
                        ]
