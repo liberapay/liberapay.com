@@ -43,7 +43,6 @@ combined_receiving = user_receiving + other_receiving
 fmt = lambda x: '$' + str(int(round(x))) if x > 0 else '-'
 
 username = account.get_user_name()
-
 title = "Please Confirm"
 
 [--------]
@@ -147,6 +146,12 @@ title = "Please Confirm"
                         {{ user_accounts.bountysource.user_info['display_name'] }}<br />
                     </span>
                 {% endif %}
+                {% if account.platform == 'openstreetmap' and user_openstreetmap_account != None %}
+                    <span class="account-elsewhere">
+                        <img src="/assets/icons/openstreetmap.12.png" />
+                        {{ user_openstreetmap_account.user_info['username'] }}<br />
+                    </span>
+                {% endif %}
             </td>
             <td>
                 <div class="participant">
@@ -229,7 +234,6 @@ title = "Please Confirm"
                             </span>
                         {% endif %}
                     {% endfor %}
-
                 </div>
                 </div>
             </td>

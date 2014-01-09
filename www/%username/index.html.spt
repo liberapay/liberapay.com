@@ -32,7 +32,7 @@ bitbucket_account = accounts.bitbucket
 twitter_account = accounts.twitter
 bountysource_account = accounts.bountysource
 venmo_account = accounts.venmo
-
+openstreetmap_account = accounts.openstreetmap
 
 long_statement = len(participant.statement) > LONG_STATEMENT
 communities = [c for c in community.get_list_for(website.db, username) if c.is_member]

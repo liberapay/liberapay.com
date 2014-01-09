@@ -7,9 +7,11 @@ def _extract_username(tip):
         key = 'login'
     elif tip.platform == 'bitbucket':
         key = 'username'
-    else:
-        assert tip.platform == 'twitter', tip  # sanity check
+    elif tip.platform == 'twitter':
         key = 'screen_name'
+    else:
+        assert tip.platform == 'openstreetmap', tip  # sanity check
+        key = 'username'
     return tip.user_info[key]
 
 [-----------------------------------------------------------------------------]

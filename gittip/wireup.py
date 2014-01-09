@@ -190,6 +190,11 @@ def envvars(website):
     website.venmo_client_id = envvar('VENMO_CLIENT_ID')
     website.venmo_client_secret = envvar('VENMO_CLIENT_SECRET')
     website.venmo_callback = envvar('VENMO_CALLBACK')
+   
+    website.openstreetmap_api = envvar('OPENSTREETMAP_API')
+    website.openstreetmap_consumer_key = envvar('OPENSTREETMAP_CONSUMER_KEY')
+    website.openstreetmap_consumer_secret = envvar('OPENSTREETMAP_CONSUMER_SECRET')
+    website.openstreetmap_callback = envvar('OPENSTREETMAP_CALLBACK')
 
     website.css_href = envvar('GITTIP_CSS_HREF') \
                                           .replace('%version', website.version)

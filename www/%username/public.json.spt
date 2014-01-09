@@ -104,6 +104,10 @@ if accounts.bountysource is not None:
     output['bountysource'] = "https://api.bountysource.com/users/%s" % \
                                          accounts.bountysource.user_info['display_name']
 
+if accounts.openstreetmap is not None:
+    output['openstreetmap'] = "%s/api/0.6/user/%s" % \
+               (website.openstreetmap_api, openstreetmap.user_info['username'])
+
 response.body = output
 
 # CORS - see https://github.com/gittip/aspen-python/issues/138

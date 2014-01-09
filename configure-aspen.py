@@ -129,7 +129,6 @@ def add_stuff_to_context(request):
     request.context['username'] = None
     request.context.update(platform_modules)
 
-
 algorithm = website.algorithm
 algorithm.functions = [ timer.start
                       , algorithm['parse_environ_into_request']

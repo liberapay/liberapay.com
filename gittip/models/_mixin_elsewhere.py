@@ -108,6 +108,10 @@ class MixinElsewhere(object):
 
                 src = src.replace('_normal.', '.')
 
+        elif accounts.openstreetmap is not None:
+            if 'img_src' in accounts.openstreetmap.user_info:
+                src = accounts.openstreetmap.user_info['img_src']
+
         return src
 
 

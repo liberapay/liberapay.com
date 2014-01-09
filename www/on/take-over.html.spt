@@ -35,6 +35,7 @@ if expected is None or actual != expected:
     raise Response(400, msg)
 
 Account = platform_classes[platform]
+
 account = Account(website.db, user_id)
 
 user.participant.take_over(account, have_confirmation=True)
