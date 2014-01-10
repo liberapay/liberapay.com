@@ -6,6 +6,17 @@ bin_dir := $(shell $(python) -c 'import sys; bin = "Scripts" if sys.platform == 
 env_bin := env/$(bin_dir)
 venv := "./vendor/virtualenv-1.9.1.py"
 
+postgression_api_url := http://api.postgression.com/
+
+define postgression_database
+$(shell ./$(env_bin)/python -c '
+import requests
+response=requests.get("$(postgression_api_url)")
+if response.status_code == 200:
+	print "\"DATABASE_URL=%s\\n\"" % response.text
+')
+endef
+
 env: $(env_bin)/swaddle
 	$(python)  $(venv)\
 				--unzip-setuptools \
@@ -40,7 +51,7 @@ local.env:
 	cp default_local.env local.env
 
 cloud-db: env local.env
-	echo DATABASE_URL=`./$(env_bin)/python -c 'import requests; print requests.get("http://api.postgression.com/").text'` >> local.env
+	echo -n $(postgression_database) >> local.env
 
 schema: env local.env
 	./$(env_bin)/swaddle local.env ./recreate-schema.sh
@@ -59,7 +70,7 @@ run: env local.env
 		--network_address=:8537
 
 test-cloud-db: env tests/env
-	echo DATABASE_URL=`./$(env_bin)/python -c 'import requests; print requests.get("http://api.postgression.com/").text'` >> tests/env
+	echo -n $(postgression_database) >> tests/env
 
 test-schema: env tests/env
 	./$(env_bin)/swaddle tests/env ./recreate-schema.sh
