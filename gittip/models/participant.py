@@ -33,7 +33,7 @@ from gittip.exceptions import (
 from gittip.models._mixin_elsewhere import MixinElsewhere
 from gittip.models._mixin_team import MixinTeam
 from gittip.utils import canonicalize
-from gittip.utils.username import reserve_a_random_username, ProblemChangingUsername
+from gittip.utils.username import reserve_a_random_username
 
 
 ASCII_ALLOWED_IN_USERNAME = set("0123456789"

@@ -41,8 +41,3 @@ def reserve_a_random_username(txn):
             break
 
     return username
-
-
-class ProblemChangingUsername(Exception):
-    def __str__(self):
-        return self.msg.format(self.args[0])
