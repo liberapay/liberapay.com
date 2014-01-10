@@ -126,7 +126,8 @@ class GittipDB(Postgres):
             "e2020536ef6d",
             "60a5099d49c7",
             "64f4f959b322",
-            "0bdf90d51786"
+            "0bdf90d51786",
+            "880ac6873f7f"
         ))
         real = set(orphans) - known
         assert len(real) == 0, "missing elsewheres: {}".format(list(real))

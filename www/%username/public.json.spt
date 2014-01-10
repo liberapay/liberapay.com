@@ -111,7 +111,7 @@ if accounts.bountysource is not None:
 
 if accounts.openstreetmap is not None:
     output['openstreetmap'] = "%s/api/0.6/user/%s" % \
-               (website.openstreetmap_api, openstreetmap.user_info['username'])
+               (website.openstreetmap_api, accounts.openstreetmap.user_info['username'])
 
 response.body = output
 

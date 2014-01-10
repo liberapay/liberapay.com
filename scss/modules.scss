@@ -107,11 +107,11 @@ a.mini-user:hover {
     margin-bottom: 12pt;
     margin: 0 auto;
 
-    TD {
+    td {
         padding: 0 0 0.5em 0;
         text-align: left;
     }
-    IMG {
+    img {
         width: 18pt;
         height: 18pt;
         margin-right: 6pt;
@@ -141,48 +141,51 @@ a.mini-user:hover {
         text-align: left;
         white-space: nowrap;
     }
-    .count SPAN.number {
+    .count span.number {
         font-size: 8pt;
     }
-    .count SPAN.bar {
+    .count span.bar {
         background: $light-brown;
         display: inline-block;
         margin-right: 3pt;
         height: 9pt;
     }
-    .count SPAN.bar.green {
+    .count span.bar.green {
         background: $green;
     }
 }
 
-UL.memberships {
+ul.memberships {
     margin: 0 0 2em;
     padding: 0;
     float: left;
     width: 100%;
 
-    LI {
+    li {
         padding: 0;
         margin: 0;
         width: 33%;
         float: left;
 
-        DIV.fine {
+        div.fine {
             display: block;
             font-size: 9pt;
             line-height: 9pt;
             padding-bottom: 6pt;
 
-            SPAN.leave {
+            span.leave {
                 cursor: pointer;
                 color: $green;
                 text-decoration: underline;
             }
         }
     }
+    li:nth-child(3n+1) {
+        clear: both;
+    }
 }
 .communities {
-    SELECT {
+    select {
         width: 98%;
     }
 }
