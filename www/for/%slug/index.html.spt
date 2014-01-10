@@ -326,7 +326,7 @@ $(document).ready(function() {
                 </span>
                 {% else %}
                 <a href="/{{ receiver.username }}/"
-                   class="mini-user{{ ' anonymous' if giver.anonymous else '' }}">
+                   class="mini-user{{ ' anonymous' if receiver.anonymous else '' }}">
                     <span class="inner">
                         <span class="avatar"
                             style="background-image: url('{{ receiver.get_img_src() }}')">
