@@ -12,7 +12,6 @@ import gittip.wireup
 from gittip import canonize, configure_payments
 from gittip.security import authentication, csrf, x_frame_options
 from gittip.utils import cache_static, timer
-from gittip.elsewhere import platforms_ordered
 from gittip.elsewhere import platform_classes
 
 
