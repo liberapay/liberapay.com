@@ -5,11 +5,13 @@ from gittip import NotSane
 from aspen.utils import typecheck
 from psycopg2 import IntegrityError
 
+from gittip.exceptions import UnknownPlatform
+from gittip.elsewhere import platform_classes
+from gittip.utils.username import reserve_a_random_username, gen_random_usernames
+
 
 # Exceptions
 # ==========
-
-class UnknownPlatform(Exception): pass
 
 class NeedConfirmation(Exception):
     """Represent the case where we need user confirmation during a merge.
@@ -43,8 +45,8 @@ class NeedConfirmation(Exception):
 # Mixin
 # =====
 
-_account_types = ('github', 'twitter', 'bitbucket', 'bountysource', 'openstreetmap')
-AccountsTuple = namedtuple('AccountsTuple', _account_types)
+# note that the ordering of these fields is defined by platform_classes
+AccountsTuple = namedtuple('AccountsTuple', platform_classes.keys())
 
 class MixinElsewhere(object):
     """We use this as a mixin for Participant, and in a hackish way on the
@@ -53,18 +55,21 @@ class MixinElsewhere(object):
     """
 
     def get_accounts_elsewhere(self):
-        """Return an AccountsTuple of elsewhere Records.
+        """Return an AccountsTuple of AccountElsewhere instances.
         """
 
         ACCOUNTS = "SELECT * FROM elsewhere WHERE participant=%s"
         accounts = self.db.all(ACCOUNTS, (self.username,))
 
-        accounts_dict = {a_type: None for a_type in _account_types}
+        accounts_dict = {platform: None for platform in platform_classes}
 
         for account in accounts:
-            if account.platform not in _account_types:
+            if account.platform not in platform_classes:
                 raise UnknownPlatform(account.platform)
-            accounts_dict[account.platform] = account
+
+            account_cls = platform_classes[account.platform]
+            accounts_dict[account.platform] = \
+                account_cls(self.db, account.user_id, existing_record=account)
 
         return AccountsTuple(**accounts_dict)
 
@@ -152,9 +157,6 @@ class MixinElsewhere(object):
         This is done in one transaction.
 
         """
-        # Lazy imports to dodge circular imports.
-        from gittip.models.participant import reserve_a_random_username
-        from gittip.models.participant import gen_random_usernames
 
         platform = account_elsewhere.platform
         user_id = account_elsewhere.user_id

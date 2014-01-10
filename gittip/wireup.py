@@ -186,7 +186,11 @@ def envvars(website):
     website.bountysource_api_host = envvar('BOUNTYSOURCE_API_HOST')
     website.bountysource_api_secret = envvar('BOUNTYSOURCE_API_SECRET')
     website.bountysource_callback = envvar('BOUNTYSOURCE_CALLBACK')
-
+    
+    website.venmo_client_id = envvar('VENMO_CLIENT_ID')
+    website.venmo_client_secret = envvar('VENMO_CLIENT_SECRET')
+    website.venmo_callback = envvar('VENMO_CALLBACK')
+   
     website.openstreetmap_api = envvar('OPENSTREETMAP_API')
     website.openstreetmap_consumer_key = envvar('OPENSTREETMAP_CONSUMER_KEY')
     website.openstreetmap_consumer_secret = envvar('OPENSTREETMAP_CONSUMER_SECRET')

@@ -465,3 +465,11 @@ def log_cursor(f):
             del SimpleCursorBase.execute
         return ret
     return wrapper
+
+def redirect_confirmation(website, request):
+    from aspen import resources
+    request.internally_redirected_from = request.fs
+    request.fs = website.www_root + '/on/confirm.html.spt'
+    request.resource = resources.get(request)
+
+    raise request.resource.respond(request)

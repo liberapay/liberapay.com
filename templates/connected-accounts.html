@@ -96,6 +96,27 @@
       </td>
     </tr>
     <tr>
+      <td class="account-type">
+        <img src="/assets/venmo.png" />
+      </td>
+      <td class="account-details">
+        {% if venmo_account == None %}
+            {% if not user.ANON and user.participant == participant %}
+                Connect a <a href="{{ venmo.oauth_url(website) }}">Venmo account</a>.
+            {% else %}
+                No Venmo account connected.
+            {% endif %}
+        {% else %}
+            <a href="{{ venmo_account.get_url() }}">
+              <img class="avatar" src="{{ venmo_account.get_profile_image() }}">
+              {{ venmo_account.get_user_name() }}
+              ({{ venmo_account.get_display_name() }})
+            </a>
+            <div class="account-type">on Venmo</div>
+        {% endif %}
+      </td>
+    </tr>
+    <tr>
         <td class="account-type">
             <img src="/assets/openstreetmap.png" />
         </td>

@@ -1,25 +1,81 @@
 """This subpackage contains functionality for working with accounts elsewhere.
 """
 from __future__ import print_function, unicode_literals
+from collections import OrderedDict
 
 from aspen.utils import typecheck
+from aspen import json
 from psycopg2 import IntegrityError
 
 import gittip
-from gittip.exceptions import ProblemChangingUsername
-from gittip.security.user import User
-from gittip.models.participant import Participant, reserve_a_random_username
+from gittip.exceptions import ProblemChangingUsername, UnknownPlatform
+from gittip.utils.username import reserve_a_random_username
 
 
 ACTIONS = [u'opt-in', u'connect', u'lock', u'unlock']
 
 
+# to add a new elsewhere/platform:
+#  1) add its name (also the name of its module) to this list.
+#     it's best to append it; this ordering is used in templates.
+#  2) inherit from AccountElsewhere in the platform class
+#
+# platform_modules will populate the platform class automatically in configure-aspen.
+platforms_ordered = (
+    'twitter',
+    'github',
+    'bitbucket',
+    'bountysource',
+    'venmo',
+    'openstreetmap'
+)
+
+# init-time key setup ensures the future ordering of platform_classes will match
+# platforms_ordered, since overwriting entries will maintain their order.
+platform_classes = OrderedDict([(platform, None) for platform in platforms_ordered])
+
+
+class _RegisterPlatformMeta(type):
+    """Tied to AccountElsewhere to enable registration by the platform field.
+    """
+
+    def __new__(cls, name, bases, dct):
+        c = super(_RegisterPlatformMeta, cls).__new__(cls, name, bases, dct)
+
+        # * register the platform
+        # * verify it was added at init-time
+        # * register the subclass's json encoder with aspen
+        c_platform = getattr(c, 'platform')
+        if name == 'AccountElsewhere':
+            pass
+        elif c_platform not in platform_classes:
+            raise UnknownPlatform(c_platform)  # has it been added to platform_classes init?
+        else:
+            platform_classes[c_platform] = c
+
+            # aspen's json encoder registry does not take class hierarchies into account,
+            #  so we need to register the subclasses explicitly.
+            json.register_encoder(c, c.to_json_compatible_object)
+
+        return c
+
 class AccountElsewhere(object):
+
+    __metaclass__ = _RegisterPlatformMeta
 
     platform = None  # set in subclass
 
-    def __init__(self, db, user_id, user_info=None):
-        """Takes a user_id and user_info, and updates the database.
+    # only fields in this set will be encoded
+    json_encode_field_whitelist = set([
+        'id', 'is_locked', 'participant', 'platform', 'user_id', 'user_info',
+    ])
+
+    def __init__(self, db, user_id, user_info=None, existing_record=None):
+        """Either:
+        - Takes a user_id and user_info, and updates the database.
+
+        Or:
+        - Takes a user_id and existing_record, and constructs a "model" object out of the record
         """
         typecheck(user_id, (int, unicode), user_info, (None, dict))
         self.user_id = unicode(user_id)
@@ -33,10 +89,26 @@ class AccountElsewhere(object):
             self.is_locked = c
             self.balance = d
 
+            self.user_info = user_info
 
-    def get_participant(self):
-        return Participant.query.get(username=self.participant)
+        # hack to make this into a weird pseudo-model that can share convenience methods
+        elif existing_record is not None:
+            self.participant = existing_record.participant
+            self.is_claimed, self.is_locked, self.balance = self.get_misc_info(self.participant)
+            self.user_info = existing_record.user_info
+            self.record = existing_record
 
+    def to_json_compatible_object(self):
+        """
+        This is registered as an aspen.json encoder in configure-aspen
+        for all subclasses of this class.
+
+        It only exports fields in the whitelist.
+        """
+        output = {k: v for (k,v) in self.record._asdict().items()
+                  if k in self.json_encode_field_whitelist}
+
+        return output
 
     def set_is_locked(self, is_locked):
         self.db.run("""
@@ -51,6 +123,8 @@ class AccountElsewhere(object):
     def opt_in(self, desired_username):
         """Given a desired username, return a User object.
         """
+        from gittip.security.user import User
+
         self.set_is_locked(False)
         user = User.from_username(self.participant)
         user.sign_in()
@@ -128,10 +202,9 @@ class AccountElsewhere(object):
 
         """, (user_info, self.platform, self.user_id))
 
+        return (username,) + self.get_misc_info(username)
 
-        # Get a little more info to return.
-        # =================================
-
+    def get_misc_info(self, username):
         rec = self.db.one("""
 
             SELECT claimed_time, balance, is_locked
@@ -145,9 +218,19 @@ class AccountElsewhere(object):
 
         assert rec is not None  # sanity check
 
-
-        return ( username
-               , rec.claimed_time is not None
+        return ( rec.claimed_time is not None
                , rec.is_locked
                , rec.balance
                 )
+
+    def set_oauth_tokens(self, access_token, refresh_token, expires):
+        """
+        Updates the elsewhere row with the given access token, refresh token, and Python datetime
+        """
+
+        self.db.run("""
+            UPDATE elsewhere 
+            SET (access_token, refresh_token, expires) 
+            = (%s, %s, %s) 
+            WHERE platform=%s AND user_id=%s
+        """, (access_token, refresh_token, expires, self.platform, self.user_id))
