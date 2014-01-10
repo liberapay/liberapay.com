@@ -49,20 +49,20 @@ def username_restrictions(website):
 def make_sentry_teller(website):
     if not website.sentry_dsn:
         aspen.log_dammit("Won't log to Sentry (SENTRY_DSN is empty).")
-        return None
+        def noop(exception, request=None):
+            pass
+        return noop
 
     sentry = raven.Client(website.sentry_dsn)
 
-    def tell_sentry(request):
-        cls, response = sys.exc_info()[:2]
-
+    def tell_sentry(exception, request=None):
 
         # Decide if we care.
         # ==================
 
-        if cls is aspen.Response:
+        if exception.__class__ is aspen.Response:
 
-            if response.code < 500:
+            if exception.code < 500:
 
                 # Only log server errors to Sentry. For responses < 500 we use
                 # stream-/line-based access logging. See discussion on:
@@ -130,8 +130,8 @@ def make_sentry_teller(website):
         ident = sentry.get_ident(result)
         aspen.log_dammit('Exception reference: ' + ident)
 
-
     return tell_sentry
+
 
 def nanswers():
     from gittip.models import participant

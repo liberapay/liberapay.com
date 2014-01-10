@@ -2,6 +2,7 @@ from __future__ import division
 
 from importlib import import_module
 import os
+import sys
 import threading
 import time
 import traceback
@@ -66,11 +67,10 @@ def update_homepage_queries():
             utils.update_homepage_queries_once(website.db)
             website.db.self_check()
         except:
-            if tell_sentry:
-                tell_sentry(None)
-            else:
-                tb = traceback.format_exc().strip()
-                log_dammit(tb)
+            exception = sys.exc_info()[0]
+            tell_sentry(exception)
+            tb = traceback.format_exc().strip()
+            log_dammit(tb)
         time.sleep(UPDATE_HOMEPAGE_EVERY)
 
 if UPDATE_HOMEPAGE_EVERY > 0:
@@ -129,6 +129,25 @@ def add_stuff_to_context(request):
     request.context['username'] = None
     request.context.update(platform_modules)
 
+def scab_body_onto_response(response):
+
+    # This is a workaround for a Cheroot bug, where the connection is closed
+    # too early if there is no body:
+    #
+    # https://bitbucket.org/cherrypy/cheroot/issue/1/fail-if-passed-zero-bytes
+    #
+    # This Cheroot bug is manifesting because of a change in Aspen's behavior
+    # with the algorithm.py refactor in 0.27+: Aspen no longer sets a body for
+    # 302s as it used to. This means that all redirects are breaking
+    # intermittently (sometimes the client seems not to care that the
+    # connection is closed too early, so I guess there's some timing
+    # involved?), which is affecting a number of parts of Gittip, notably
+    # around logging in (#1859).
+
+    if not response.body:
+        response.body = '*sigh*'
+
+
 algorithm = website.algorithm
 algorithm.functions = [ timer.start
                       , algorithm['parse_environ_into_request']
@@ -149,6 +168,8 @@ algorithm.functions = [ timer.start
                       , algorithm['get_response_for_socket']
                       , algorithm['get_resource_for_request']
                       , algorithm['get_response_for_resource']
+
+                      , tell_sentry
                       , algorithm['get_response_for_exception']
 
                       , authentication.outbound
@@ -158,8 +179,11 @@ algorithm.functions = [ timer.start
 
                       , algorithm['log_traceback_for_5xx']
                       , algorithm['delegate_error_to_simplate']
+                      , tell_sentry
                       , algorithm['log_traceback_for_exception']
                       , algorithm['log_result_of_request']
 
+                      , scab_body_onto_response
                       , timer.end
+                      , tell_sentry
                        ]
