@@ -15,6 +15,12 @@ class OpenStreetMapAccount(AccountElsewhere):
     def get_url(self):
         return self.user_info['html_url']
 
+    def get_user_name(self):
+        return self.user_info['username']
+
+    def get_platform_icon(self):
+        return "/assets/icons/openstreetmap.12.png"
+
 
 def oauth_url(website, action, then=""):
     """Return a URL to start oauth dancing with OpenStreetMap.

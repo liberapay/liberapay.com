@@ -146,7 +146,7 @@ title = "Please Confirm"
                         {{ user_accounts.bountysource.user_info['display_name'] }}<br />
                     </span>
                 {% endif %}
-                {% if account.platform == 'openstreetmap' and user_openstreetmap_account != None %}
+                {% if account.platform == 'openstreetmap' and user_accounts.openstreetmap != None %}
                     <span class="account-elsewhere">
                         <img src="/assets/icons/openstreetmap.12.png" />
                         {{ user_openstreetmap_account.user_info['username'] }}<br />
