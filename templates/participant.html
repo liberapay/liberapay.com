@@ -17,8 +17,7 @@
         </td>
         <td class="giving-receiving">
         {% if anon_giving and anon_receiving %}
-            <h2 class="pad-sign">{{ participant.username }}</h2>
-            <div class="unit pad-sign">gives and receives anonymously</div>
+            <h2>{{ participant.username }} gives and receives anonymously</h2>
         {% elif not anon_giving and g > 0 and (g > r or anon_receiving) %}
             <h2 class="pad-sign">{{ participant.username }} gives</h2>
             <div class="number">
