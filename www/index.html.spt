@@ -84,8 +84,13 @@ receivers = utter_hack(website.db, website.db.all("""
 {% extends "templates/base.html" %}
 {% block head %}
     <meta name="description" content="Inspiring Generosity. Gittip is a weekly gift exchange. Support and thank your favorite people and projects and communities with small cash gifts." />
-    <script>$(document).ready(Gittip.jump.init);</script>
 {% endblock %}
+
+{% block scripts %}
+<script>$(document).ready(Gittip.jump.init);</script>
+{{ super() }}
+{% endblock %}
+
 {% block heading %}
     <h2 class="top"><span>Sustainable Crowdfunding</span></h2>
     <h1>

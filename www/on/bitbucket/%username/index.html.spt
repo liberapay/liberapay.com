@@ -160,7 +160,10 @@ title = username
         {% endif %}
 
       {% else %}
+        {% block scripts %}
         <script>$(document).ready(Gittip.tips.init);</script>
+        {{ super() }}
+        {% endblock %}
 
         <h2>{{ name|e }} has not joined Gittip.</h2>
 
@@ -203,8 +206,10 @@ title = username
       {% endif %}
     </div>
   {% elif usertype == "organization"  %}
-
+    {% block scripts %}
     <script>$(document).ready(Gittip.tips.init);</script>
+    {{ super() }}
+    {% endblock %}
 
     <table id="members" class="centered">
       {% for i, sequence in enumerate([on_gittip, not_on_gittip]) %}

@@ -2,33 +2,13 @@
 <html lang="en">
 <head>
     <title>{% if title %}{{ title|e }} - {% endif %}Gittip</title>
-    <meta http-equiv="content-language" content="en"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/assets/reset.css"
-            type="text/css" charset="utf-8" />
-    <link rel="stylesheet" href="{{ website.css_href }}"
-            type="text/css" charset="utf-8" />
-
-    <!-- http://css-tricks.com/snippets/jquery/fallback-for-cdn-hosted-jquery/ -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script>
-        if (typeof jQuery === 'undefined')
-            document.write(unescape("%3Cscript src='/assets/jquery-1.10.2.min.js'%3E%3C/script%3E"));
-    </script>
-
-    <!-- Used on the profile edit page for the community chooser. -->
-    <script src="/assets/chosen/chosen.jquery.min.js"></script>
-    <style>@import url("/assets/chosen/chosen.css");</style>
-
-    <script src="/assets/{{ website.version }}/vendor/bootstrap-dropdown.js"></script>
-
-    <script src="/assets/{{ website.version }}/utils.js"></script>
-    <script src="{{ website.js_src }}"></script>
-    <script>$(document).ready(Gittip.init);</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ website.asset_url }}/reset.css" type="text/css">
+    <link rel="stylesheet" href="{{ website.asset_version_url }}/gittip.css" type="text/css">
+    <link rel="stylesheet" href="{{ website.asset_url }}/chosen/chosen.css" type="text/css">
 
     {% block head %}{% endblock %}
     {% block head2 %}{% endblock %}
-
 </head>
 <body>
     <div class="container">
@@ -98,6 +78,7 @@
                 <li><a href='/security.txt'>Security</a></li>
             </ul>
         </div>
+    </div>
 
     {%if website.google_analytics_id %}
     <script type="text/javascript">
@@ -116,6 +97,18 @@
     </script>
     {% endif %}
 
-    </div>
+    <script src="{{ website.asset_url }}/jquery-1.10.2.min.js"></script>
+
+    <!-- Used on the profile edit page for the community chooser. -->
+    <script src="{{ website.asset_url }}/chosen/chosen.jquery.min.js"></script>
+
+    <script src="{{ website.asset_version_url }}/vendor/bootstrap-dropdown.js"></script>
+
+    <script src="{{ website.asset_version_url }}/utils.js"></script>
+    <script src="{{ website.asset_version_url }}/gittip.js"></script>
+    <script>$(document).ready(Gittip.init);</script>
+    {% block scripts %}
+
+    {% endblock %}
 </body>
 </html>

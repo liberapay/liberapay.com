@@ -196,10 +196,9 @@ def envvars(website):
     website.openstreetmap_consumer_secret = envvar('OPENSTREETMAP_CONSUMER_SECRET')
     website.openstreetmap_callback = envvar('OPENSTREETMAP_CALLBACK')
 
-    website.css_href = envvar('GITTIP_CSS_HREF') \
-                                          .replace('%version', website.version)
-    website.js_src = envvar('GITTIP_JS_SRC') \
-                                          .replace('%version', website.version)
+    website.asset_version_url = envvar('GITTIP_ASSET_VERSION_URL') \
+                                      .replace('%version', website.version)
+    website.asset_url = envvar('GITTIP_ASSET_URL')
     website.cache_static = is_yesish(envvar('GITTIP_CACHE_STATIC'))
     website.compress_assets = is_yesish(envvar('GITTIP_COMPRESS_ASSETS'))
 

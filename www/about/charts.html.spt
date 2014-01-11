@@ -1,6 +1,16 @@
 title = "Charts"
 [---]
 {% extends "templates/about.html" %}
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+    jQuery.get('/about/charts.json', Gittip.charts.make);
+});
+</script>
+{{ super() }}
+{% endblock %}
+
 {% block page %}
 <div class="two-column">
     <div class="chart-wrapper">
@@ -59,9 +69,4 @@ title = "Charts"
     </div>
 </div>
 
-<script>
-$(document).ready(function() {
-    jQuery.get('/about/charts.json', Gittip.charts.make);
-});
-</script>
 {% endblock %}

@@ -63,12 +63,16 @@ title = "Bank Account"
     </div>
 
   {% else %}
+    {% block scripts %}
     <script>
         $(document).ready(function()
         {
             Gittip.payments.ba.init("{{ balanced.Marketplace.my_marketplace.uri }}", "{{ user.participant.username }}");
         });
     </script>
+    {{ super() }}
+    {% endblock %}
+
     <style>
         {% if not balanced_account_uri %}
         #delete {

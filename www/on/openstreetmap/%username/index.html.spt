@@ -83,7 +83,10 @@ title = username
             ><button>Unlock</button></a>
 
       {% else %}
+        {% block scripts %}
         <script>$(document).ready(Gittip.tips.init);</script>
+        {{ super() }}
+        {% endblock %}
 
         <h2>{{ username|e }} has not joined Gittip.</h2>
 

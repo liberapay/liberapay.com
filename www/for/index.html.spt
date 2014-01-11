@@ -37,13 +37,8 @@ members get their own page on Gittip.</p>
     </div>
 </div>
 {% endblock %}
-{% block page %}
-<style>
-    .help {
-        font-size: 10px;
-        text-transform: uppercase;
-    }
-</style>
+
+{% block scripts %}
 <script>
     $(document).ready(function()
     {
@@ -70,6 +65,16 @@ members get their own page on Gittip.</p>
         });
     });
 </script>
+{{ super() }}
+{% endblock %}
+
+{% block page %}
+<style>
+    .help {
+        font-size: 10px;
+        text-transform: uppercase;
+    }
+</style>
 <div class="col0">
 
     <h2>Viable Communities (N = {{ len(viable) }})</h2>
