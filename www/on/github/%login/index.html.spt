@@ -94,6 +94,18 @@ title = username
 
 {% block heading %}<h2 class="top"><span>GitHub</span></h2>{% endblock %}
 
+{% block scripts %}
+
+{% if usertype == "user" and account.locked is False %} 
+<script>$(document).ready(Gittip.tips.init);</script>
+{% elif usertype == "orginzation" %}
+<script>$(document).ready(Gittip.tips.init);</script>
+{% endif %}
+
+{{ super() }}
+{% endblock %}
+
+
 {% block box %}
 
   <table class="on-elsewhere">
@@ -144,11 +156,6 @@ title = username
             ><button>Unlock</button></a>
 
       {% else %}
-        {% block scripts %}
-        <script>$(document).ready(Gittip.tips.init);</script>
-        {{ super() }}
-        {% endblock %}
-
         <h2>{{ name|e }} has not joined Gittip.</h2>
 
         <p>Is this you?
@@ -183,11 +190,6 @@ title = username
       {% endif %}
     </div>
   {% elif usertype == "organization"  %}
-    {% block scripts %}
-    <script>$(document).ready(Gittip.tips.init);</script>
-    {{ super() }}
-    {% endblock %}
-
     <table id="members" class="centered">
       {% for i, sequence in enumerate([on_gittip, not_on_gittip]) %}
         {% set nsequence = len(sequence) %}

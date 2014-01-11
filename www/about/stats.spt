@@ -252,7 +252,7 @@ json = json.dumps({name: globals()[name] for name in names})
 </style>
 {% endblock %}
 
-{$ block scripts %}
+{% block scripts %}
 <!--[if lt IE 9]>
 <script type="text/javascript" src="/assets/aight.min.js"></script>
 <![endif]-->
