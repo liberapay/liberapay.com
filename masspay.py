@@ -28,6 +28,7 @@ import sys
 from decimal import Decimal as D
 
 import requests
+from httplib import IncompleteRead
 
 
 os.chdir('../masspay')
@@ -179,9 +180,21 @@ def record_exchanges_in_gittip():
         note = 'PayPal MassPay to {}.'.format(email)
         if additional_note:
             note += " " + additional_note
-        data = {'amount': '-' + net, 'fee': fee, 'note': note}
-        requests.post(url, auth=(gittip_api_key, ''), data=data)
         print(note)
+
+        data = {'amount': '-' + net, 'fee': fee, 'note': note}
+        try:
+            response = requests.post(url, auth=(gittip_api_key, ''), data=data)
+        except IncompleteRead:
+            print('IncompleteRead, proceeding (but double-check!)')
+        else:
+            if response.status_code != 200:
+                if response.status_code == 404:
+                    print('Got 404, is your API key good? {}'.format(gittip_api_key))
+                else:
+                    print('... resulted in a {} response:'.format(response.status_code))
+                    print(response.text)
+                raise SystemExit
 
 
 def main():

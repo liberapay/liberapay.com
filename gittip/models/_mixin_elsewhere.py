@@ -1,14 +1,17 @@
 import os
+from collections import namedtuple
 
 from gittip import NotSane
 from aspen.utils import typecheck
 from psycopg2 import IntegrityError
 
+from gittip.exceptions import UnknownPlatform
+from gittip.elsewhere import platform_classes
+from gittip.utils.username import reserve_a_random_username, gen_random_usernames
+
 
 # Exceptions
 # ==========
-
-class UnknownPlatform(Exception): pass
 
 class NeedConfirmation(Exception):
     """Represent the case where we need user confirmation during a merge.
@@ -42,6 +45,9 @@ class NeedConfirmation(Exception):
 # Mixin
 # =====
 
+# note that the ordering of these fields is defined by platform_classes
+AccountsTuple = namedtuple('AccountsTuple', platform_classes.keys())
+
 class MixinElsewhere(object):
     """We use this as a mixin for Participant, and in a hackish way on the
     homepage and community pages.
@@ -49,34 +55,23 @@ class MixinElsewhere(object):
     """
 
     def get_accounts_elsewhere(self):
-        """Return a four-tuple of elsewhere Records.
+        """Return an AccountsTuple of AccountElsewhere instances.
         """
-        github_account = None
-        twitter_account = None
-        bitbucket_account = None
-        bountysource_account = None
 
         ACCOUNTS = "SELECT * FROM elsewhere WHERE participant=%s"
         accounts = self.db.all(ACCOUNTS, (self.username,))
 
+        accounts_dict = {platform: None for platform in platform_classes}
+
         for account in accounts:
-            if account.platform == "github":
-                github_account = account
-            elif account.platform == "twitter":
-                twitter_account = account
-            elif account.platform == "bitbucket":
-                bitbucket_account = account
-            elif account.platform == "bountysource":
-                bountysource_account = account
-            else:
+            if account.platform not in platform_classes:
                 raise UnknownPlatform(account.platform)
 
-        return ( github_account
-               , twitter_account
-               , bitbucket_account
-               , bountysource_account
-                )
+            account_cls = platform_classes[account.platform]
+            accounts_dict[account.platform] = \
+                account_cls(self.db, account.user_id, existing_record=account)
 
+        return AccountsTuple(**accounts_dict)
 
     def get_img_src(self, size=128):
         """Return a value for <img src="..." />.
@@ -92,19 +87,19 @@ class MixinElsewhere(object):
 
         src = '/assets/%s/avatar-default.gif' % os.environ['__VERSION__']
 
-        github, twitter, bitbucket, bountysource = \
-                                                  self.get_accounts_elsewhere()
-        if github is not None:
+        accounts = self.get_accounts_elsewhere()
+
+        if accounts.github is not None:
             # GitHub -> Gravatar: http://en.gravatar.com/site/implement/images/
-            if 'gravatar_id' in github.user_info:
-                gravatar_hash = github.user_info['gravatar_id']
+            if 'gravatar_id' in accounts.github.user_info:
+                gravatar_hash = accounts.github.user_info['gravatar_id']
                 src = "https://www.gravatar.com/avatar/%s.jpg?s=%s"
                 src %= (gravatar_hash, size)
 
-        elif twitter is not None:
+        elif accounts.twitter is not None:
             # https://dev.twitter.com/docs/api/1.1/get/users/show
-            if 'profile_image_url_https' in twitter.user_info:
-                src = twitter.user_info['profile_image_url_https']
+            if 'profile_image_url_https' in accounts.twitter.user_info:
+                src = accounts.twitter.user_info['profile_image_url_https']
 
                 # For Twitter, we don't have good control over size. The
                 # biggest option is 73px(?!), but that's too small. Let's go
@@ -112,6 +107,10 @@ class MixinElsewhere(object):
                 # preferrable to guaranteed blurriness. :-/
 
                 src = src.replace('_normal.', '.')
+
+        elif accounts.openstreetmap is not None:
+            if 'img_src' in accounts.openstreetmap.user_info:
+                src = accounts.openstreetmap.user_info['img_src']
 
         return src
 
@@ -158,9 +157,6 @@ class MixinElsewhere(object):
         This is done in one transaction.
 
         """
-        # Lazy imports to dodge circular imports.
-        from gittip.models.participant import reserve_a_random_username
-        from gittip.models.participant import gen_random_usernames
 
         platform = account_elsewhere.platform
         user_id = account_elsewhere.user_id

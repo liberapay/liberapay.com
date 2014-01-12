@@ -11,7 +11,6 @@ of participant, based on certain properties.
 from __future__ import print_function, unicode_literals
 
 import datetime
-import random
 import uuid
 from decimal import Decimal
 
@@ -21,9 +20,20 @@ from aspen import Response
 from aspen.utils import typecheck
 from psycopg2 import IntegrityError
 from postgres.orm import Model
+from gittip.exceptions import (
+    UsernameIsEmpty,
+    UsernameTooLong,
+    UsernameContainsInvalidCharacters,
+    UsernameIsRestricted,
+    UsernameAlreadyTaken,
+    NoSelfTipping,
+    BadAmount,
+)
+
 from gittip.models._mixin_elsewhere import MixinElsewhere
 from gittip.models._mixin_team import MixinTeam
 from gittip.utils import canonicalize
+from gittip.utils.username import reserve_a_random_username
 
 
 ASCII_ALLOWED_IN_USERNAME = set("0123456789"
@@ -189,9 +199,11 @@ class Participant(Model, MixinElsewhere, MixinTeam):
             out = '/on/bitbucket/%s/' % rec.user_info['username']
         elif rec.platform == 'github':
             out = '/on/github/%s/' % rec.user_info['login']
-        else:
-            assert rec.platform == 'twitter'
+        elif rec.platform == 'twitter':
             out = '/on/twitter/%s/' % rec.user_info['screen_name']
+        else:
+            assert rec.platform == 'openstreetmap'
+            out = '/on/openstreetmap/%s/' % rec.user_info['username']
         return out
 
     def set_as_claimed(self):
@@ -662,9 +674,9 @@ class Participant(Model, MixinElsewhere, MixinTeam):
         out = self.username
         receiving = self.get_dollars_receiving()
         giving = self.get_dollars_giving()
-        if (giving > receiving) and not self.anonymous:
+        if (giving > receiving) and not self.anonymous_giving:
             out += " gives $%.2f/wk" % giving
-        elif receiving > 0:
+        elif receiving > 0 and not self.anonymous_receiving:
             out += " receives $%.2f/wk" % receiving
         else:
             out += " is"
@@ -677,80 +689,6 @@ class Participant(Model, MixinElsewhere, MixinTeam):
             now = datetime.datetime.now(self.claimed_time.tzinfo)
             out = (now - self.claimed_time).total_seconds()
         return out
-
-
-# Exceptions
-# ==========
-
-class ProblemChangingUsername(Exception):
-    def __str__(self):
-        return self.msg.format(self.args[0])
-
-class UsernameIsEmpty(ProblemChangingUsername):
-    msg = "You need to provide a username!"
-
-class UsernameTooLong(ProblemChangingUsername):
-    msg = "The username '{}' is too long."
-
-# Not passing the potentially unicode characters back because of:
-# https://github.com/gittip/aspen-python/issues/177
-class UsernameContainsInvalidCharacters(ProblemChangingUsername):
-    msg = "That username contains invalid characters."
-
-class UsernameIsRestricted(ProblemChangingUsername):
-    msg = "The username '{}' is restricted."
-
-class UsernameAlreadyTaken(ProblemChangingUsername):
-    msg = "The username '{}' is already taken."
-
-class TooGreedy(Exception): pass
-class NoSelfTipping(Exception): pass
-class BadAmount(Exception): pass
-
-
-# Username Helpers
-# ================
-
-def gen_random_usernames():
-    """Yield up to 100 random 12-hex-digit unicodes.
-
-    We raise :py:exc:`StopIteration` after 100 usernames as a safety
-    precaution.
-
-    """
-    seatbelt = 0
-    while 1:
-        yield hex(int(random.random() * 16**12))[2:].zfill(12).decode('ASCII')
-        seatbelt += 1
-        if seatbelt > 100:
-            raise StopIteration
-
-
-def reserve_a_random_username(txn):
-    """Reserve a random username.
-
-    :param txn: a :py:class:`psycopg2.cursor` managed as a :py:mod:`postgres`
-        transaction
-    :database: one ``INSERT`` on average
-    :returns: a 12-hex-digit unicode
-    :raises: :py:class:`StopIteration` if no acceptable username is found
-        within 100 attempts
-
-    The returned value is guaranteed to have been reserved in the database.
-
-    """
-    for username in gen_random_usernames():
-        try:
-            txn.execute( "INSERT INTO participants (username, username_lower) "
-                         "VALUES (%s, %s)"
-                       , (username, username.lower())
-                        )
-        except IntegrityError:  # Collision, try again with another value.
-            pass
-        else:
-            break
-
-    return username
 
 
 def typecast(request):

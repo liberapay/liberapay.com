@@ -4,6 +4,7 @@ import re
 
 from aspen import json
 from gittip.utils import get_participant
+from gittip.elsewhere import platform_classes
 
 
 callback_pattern = re.compile(r'^[_A-Za-z0-9.]+$')
@@ -12,11 +13,9 @@ callback_pattern = re.compile(r'^[_A-Za-z0-9.]+$')
 [-----------------------------------------------------------------------------]
 
 participant = get_participant(request, restrict=False)
-receiving = participant.get_dollars_receiving()
 
 output = { "id": participant.id
          , "username": participant.username
-         , "receiving": str(receiving)
          , "avatar": participant.get_img_src()
          , "number": participant.number
           }
@@ -38,6 +37,20 @@ if participant.goal != 0:
     output["goal"] = goal
 
 
+# Generate receiving key
+# ===================
+# Display values:
+#
+#   null - user is receiving anonymously
+#   3.00 - user receives this amount in tips
+
+if not participant.anonymous_receiving:
+    receiving = str(participant.get_dollars_receiving())
+else:
+    receiving = None
+output["receiving"] = receiving
+
+
 # Generate giving key
 # ===================
 # Display values:
@@ -45,7 +58,7 @@ if participant.goal != 0:
 #   null - user is giving anonymously
 #   3.00 - user gives this amount in tips
 
-if not participant.anonymous:
+if not participant.anonymous_giving:
     giving = str(participant.get_dollars_giving())
 else:
     giving = None
@@ -78,30 +91,38 @@ if not user.ANON:
 #
 # https://github.com/gittip/www.gittip.com/issues/680
 
-github, twitter, bitbucket, bountysource = participant.get_accounts_elsewhere()
-bitcoin = None
 
-if bitbucket is not None:
-    bitbucket = "https://bitbucket.org/api/1.0/users/%s" % \
-                                                bitbucket.user_info['username']
-if github is not None:
-    github = "https://api.github.com/users/%s" % github.user_info['login']
-if twitter is not None:
-    twitter = "https://api.twitter.com/1.1/users/show.json?id=%s" \
-                                        "&include_entities=1" % twitter.user_id
-if bountysource is not None:
-    bountysource = "https://api.bountysource.com/users/%s" % \
-                                         bountysource.user_info['display_name']
+accounts = participant.get_accounts_elsewhere()
+
+# elsewhere contains eg 'github': <github data> or null.
+# these AccountElsewheres are encoded using their custom encoder.
+output['elsewhere'] = {platform: None for platform in platform_classes}
+for account in (account for account in accounts
+                if account is not None):
+    output['elsewhere'][account.platform] = account
+
+#TODO pull this out
+if accounts.bitbucket is not None:
+    output['bitbucket'] = "https://bitbucket.org/api/1.0/users/%s" % \
+                                                accounts.bitbucket.user_info['username']
+
+if accounts.github is not None:
+    output['github'] = "https://api.github.com/users/%s" % accounts.github.user_info['login']
+
+if accounts.twitter is not None:
+    output['twitter'] = "https://api.twitter.com/1.1/users/show.json?id=%s" \
+                                        "&include_entities=1" % accounts.twitter.user_id
+
+if accounts.bountysource is not None:
+    output['bountysource'] = "https://api.bountysource.com/users/%s" % \
+                                         accounts.bountysource.user_info['display_name']
+
+if accounts.openstreetmap is not None:
+    output['openstreetmap'] = "%s/api/0.6/user/%s" % \
+               (website.openstreetmap_api, accounts.openstreetmap.user_info['username'])
 
 if participant.bitcoin_address is not None:
-    bitcoin = "http://blockchain.info/address/%s" % participant.bitcoin_address
-
-output['elsewhere'] = { 'bitbucket': bitbucket
-                      , 'github': github
-                      , 'twitter': twitter
-                      , 'bountysource': bountysource
-                      , 'bitcoin': bitcoin
-                       }
+    output['bitcoin'] = "http://blockchain.info/address/%s" % participant.bitcoin_address
 
 response.body = output
 

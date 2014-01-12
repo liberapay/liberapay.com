@@ -46,13 +46,24 @@ class Tests(Harness):
     def test_anonymous_gets_null_giving_if_user_anonymous(self):
         alice = self.make_participant( 'alice'
                                      , last_bill_result=''
-                                     , anonymous=True
-                                      )
+                                     , anonymous_giving=True
+                                     )
         self.make_participant('bob')
         alice.set_tip_to('bob', '1.00')
         data = json.loads(self.client.GET('/alice/public.json').body)
 
         assert data['giving'] == None
+
+    def test_anonymous_gets_null_receiving_if_user_anonymous(self):
+        alice = self.make_participant( 'alice'
+                                     , last_bill_result=''
+                                     , anonymous_receiving=True
+                                     )
+        self.make_participant('bob')
+        alice.set_tip_to('bob', '1.00')
+        data = json.loads(self.client.GET('/alice/public.json').body)
+
+        assert data['receiving'] == None
 
     def test_anonymous_does_not_get_goal_if_user_regifts(self):
         self.make_participant('alice', last_bill_result='', goal=0)

@@ -15,6 +15,12 @@ class TwitterAccount(AccountElsewhere):
     def get_url(self):
         return "https://twitter.com/" + self.user_info['screen_name']
 
+    def get_user_name(self):
+        return self.user_info['screen_name']
+
+    def get_platform_icon(self):
+        return "/assets/icons/twitter.12.png"
+
 
 def oauth_url(website, action, then=""):
     """Return a URL to start oauth dancing with Twitter.

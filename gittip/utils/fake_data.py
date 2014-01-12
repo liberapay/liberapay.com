@@ -10,7 +10,7 @@ import datetime
 
 faker = Factory.create()
 
-platforms = ['github', 'twitter', 'bitbucket']
+platforms = ['github', 'twitter', 'bitbucket', 'openstreetmap']
 
 
 def _fake_thing(db, tablename, **kw):
@@ -57,26 +57,27 @@ def fake_sentence(start=1, stop=100):
     return faker.sentence(random.randrange(start,stop))
 
 
-def fake_participant(db, number="singular", is_admin=False, anonymous=False):
+def fake_participant(db, number="singular", is_admin=False):
     """Create a fake User.
     """
-    username = faker.firstName() + fake_text_id(3)
+    username = faker.first_name() + fake_text_id(3)
     d = _fake_thing( db
                , "participants"
                , id=fake_int_id()
                , username=username
                , username_lower=username.lower()
                , statement=fake_sentence()
-               , ctime=faker.dateTimeThisYear()
+               , ctime=faker.date_time_this_year()
                , is_admin=is_admin
                , balance=fake_balance()
-               , anonymous=anonymous
+               , anonymous_giving=(random.randrange(5) == 0)
+               , anonymous_receiving=(random.randrange(5) == 0)
                , goal=fake_balance()
                , balanced_account_uri=faker.uri()
                , last_ach_result=''
                , is_suspicious=False
                , last_bill_result=''  # Needed to not be suspicious
-               , claimed_time=faker.dateTimeThisYear()
+               , claimed_time=faker.date_time_this_year()
                , number=number
                 )
     #Call participant constructor to perform other DB initialization
@@ -99,8 +100,8 @@ def fake_tip(db, tipper, tippee):
     return _fake_thing( db
                , "tips"
                , id=fake_int_id()
-               , ctime=faker.dateTimeThisYear()
-               , mtime=faker.dateTimeThisMonth()
+               , ctime=faker.date_time_this_year()
+               , mtime=faker.date_time_this_month()
                , tipper=tipper.username
                , tippee=tippee.username
                , amount=fake_tip_amount()
@@ -130,6 +131,10 @@ def fake_elsewhere(db, participant, platform=None):
             "username": participant.username,
             "is_team": "False",
             "html_url": "https://bitbucket.org/" + participant.username,
+        },
+        "openstreetmap": {
+            "username": participant.username,
+            "html_url": "https://openstreetmap/user/" + participant.username,
         }
     }
 
@@ -147,7 +152,7 @@ def fake_transfer(db, tipper, tippee):
         return _fake_thing( db
                , "transfers"
                , id=fake_int_id()
-               , timestamp=faker.dateTimeThisYear()
+               , timestamp=faker.date_time_this_year()
                , tipper=tipper.username
                , tippee=tippee.username
                , amount=fake_tip_amount()

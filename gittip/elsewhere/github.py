@@ -17,6 +17,12 @@ class GitHubAccount(AccountElsewhere):
     def get_url(self):
         return self.user_info['html_url']
 
+    def get_user_name(self):
+        return self.user_info['login']
+
+    def get_platform_icon(self):
+        return "/assets/icons/github.12.png"
+
 
 def oauth_url(website, action, then=u""):
     """Given a website object and a string, return a URL string.

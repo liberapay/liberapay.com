@@ -260,7 +260,7 @@ Local Database Setup
 
 For advanced development and testing database changes, you need a local
 installation of [Postgres](http://www.postgresql.org/download/). The best
-version of Postgres to use is 9.1.9, because that's what we're using in
+version of Postgres to use is 9.1.11, because that's what we're using in
 production at Heroku. Gittip uses the
 [hstore](http://www.postgresql.org/docs/9.1/static/hstore.html) extension for
 unstructured data, and that isn't bundled with earlier versions than 9.1. If
@@ -386,6 +386,9 @@ given user.
       - "twitter"&mdash;participant's Twitter account; possible values are:
           - `undefined` (key not present)&mdash;no Twitter account connected
           - `https://api.twitter.com/1.1/users/show.json?id=%twitter_immutable_id&include_entities=1`
+      - "openstreetmap"&mdash;participant's OpenStreetMap account; possible values are:
+          - `undefined` (key not present)&mdash;no OpenStreetMap account connected
+          - `%OPENSTREETMAP_API/user/%openstreetmap_username`
 
 
 **/`%username`/tips.json**

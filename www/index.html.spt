@@ -106,9 +106,11 @@ receivers = utter_hack(website.db, website.db.all("""
                 <option value="twitter">Twitter</option>
                 <option value="github">GitHub</option>
                 <option value="bitbucket">Bitbucket</option>
+                <option value="openstreetmap">OpenStreetMap</option>
             </select>
             <span class="luxury"> username: </span>
-            <input placeholder="username" />
+            <input placeholder="username" autocomplete="off" autocorrect="off"
+                autocapitalize="off" spellcheck="false"/>
             <button type="submit">Go</button>
         </form>
     </div>
@@ -175,7 +177,18 @@ receivers = utter_hack(website.db, website.db.all("""
         <ul class="group">
             {% for i, receiver in enumerate(receivers, start=1) %}
             <li{% if i > LUXURY %} class="luxury"{% endif %}>
-                <a href="/{{ receiver.username }}/" class="mini-user">
+                {% if receiver.anonymous and not user.ADMIN %}
+                <span class="mini-user">
+                    <span class="inner">
+                        <span class="avatar">
+                        </span>
+                        <span class="money">${{ receiver.amount }}</span>
+                        <span class="name">Anonymous</span>
+                    </span>
+                </span>
+                {% else %}
+                <a href="/{{ receiver.username }}/"
+                   class="mini-user{{ ' anonymous' if receiver.anonymous else '' }}">
                     <span class="inner">
                         <span class="avatar"
                             style="background-image: url('{{ _get_img_src(receiver) }}')">
@@ -184,6 +197,7 @@ receivers = utter_hack(website.db, website.db.all("""
                         <span class="name">{{ receiver.username }}</span>
                     </span>
                 </a>
+                {% endif %}
             </li>
             {% endfor %}
         </ul>

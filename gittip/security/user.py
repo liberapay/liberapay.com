@@ -1,6 +1,5 @@
 from gittip.models.participant import Participant
 
-
 class User(object):
     """Represent a user of our website.
     """

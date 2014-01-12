@@ -152,8 +152,12 @@ class Harness(unittest.TestCase):
 
         participant = Participant.with_random_username()
         participant.change_username(username)
+        return self.update_participant(participant, **kw)
 
+
+    def update_participant(self, participant, **kw):
         if 'elsewhere' in kw or 'claimed_time' in kw:
+            username = participant.username
             platform = kw.pop('elsewhere', 'github')
             user_info = dict(login=username)
             self.seq += 1

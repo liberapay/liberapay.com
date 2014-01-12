@@ -50,7 +50,10 @@
                 <a href="/{{ user.participant.username }}/">{{ user.participant.username }}</a> &ndash;
                 <a id="sign-out" href="/sign-out.html">sign out</a>
                 <div class="quick-stats">
-                  Giving: <a href="/{{ user.participant.username }}/giving/">${{ user.participant.get_dollars_giving() }}/wk</a><br />
+                  Giving: <a href="/{{ user.participant.username }}/giving/">
+                              <span class="my-total-giving">${{ user.participant.get_dollars_giving() }}<span>/wk
+                          </a>
+                  <br />
                   Receiving: <b>${{ user.participant.get_dollars_receiving() }}/wk</b>
                 </div>
             </div>
