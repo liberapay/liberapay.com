@@ -17,15 +17,16 @@
         </td>
         <td class="giving-receiving">
         {% if anon_giving and anon_receiving %}
-            <h2 class="pad-sign">{{ participant.username }}</h2>
-            <div class="unit pad-sign">gives and receives anonymously</div>
+            <h2>{{ participant.username }} gives and receives anonymously</h2>
         {% elif not anon_giving and g > 0 and (g > r or anon_receiving) %}
             <h2 class="pad-sign">{{ participant.username }} gives</h2>
             <div class="number">
                 <span class="{{prefix}}total-giving">{{ giving }}</span>
             </div>
             <div class="unit pad-sign">
-                per week{% if r > 0 %}, and receives {{ receiving }}{% endif %}
+                per week{% if r > 0 or anon_receiving %}, and receives
+                    {{ receiving }}
+                {% endif %}
             </div>
         {% elif not anon_receiving and r > 0 and (r >= g or anon_giving) %}
             <h2 class="pad-sign">{{ participant.username }} receives</h2>
@@ -33,7 +34,7 @@
                 <span class="total-receiving">{{ receiving }}</span>
             </div>
             <div class="unit pad-sign">
-                per week{% if g > 0 %}, and gives
+                per week{% if g > 0 or anon_giving %}, and gives
                     <span class="{{prefix}}total-giving">{{ giving }}</span>
                 {% endif %}
             </div>
