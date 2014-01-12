@@ -183,11 +183,17 @@
                     <a rel="me" href="http://blockchain.info/address/{{ participant.bitcoin_address }}">
                       {{ participant.bitcoin_address }}
                     </a>
-                    <div class="account-type">Bitcoin address
-                        {% if not user.ANON and user.participant == participant %}
-                            (<a href="javascript:;" class="toggle-bitcoin">edit</a>)
-                        {% endif %}
+                    {% if not user.ANON and user.participant == participant %}
+                    <div class="edit-bitcoin">
+                        (<a href="javascript:;" class="toggle-bitcoin">Edit</a>) Bitcoin address
                     </div>
+                    {% else %}
+                    <div class="account-type">
+                        Bitcoin address
+                    </div>
+
+                    {% endif %}
+
                 {% else %}
                     {% if not user.ANON and user.participant == participant %}
                         Add a <a href="javascript:;" class="toggle-bitcoin">Bitcoin address</a>.

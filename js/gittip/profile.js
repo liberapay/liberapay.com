@@ -305,8 +305,8 @@ Gittip.profile.init = function() {
                 } else {
                     html = "<a rel=\"me\" href=\"http://blockchain.info/address/";
                     html += d.bitcoin_address + "\">" + d.bitcoin_address + "</a>";
-                    html += "<div class=\"account-type\">Bitcoin address ";
-                    html += "(<a href=\"javascript:;\" class=\"toggle-bitcoin\">edit</a>)</div>";
+                    html += "<div class=\"edit-bitcoin\"><a href=\"javascript:;\" class=\"toggle-bitcoin\">Edit</a> bitcoin address ";
+                    html += "</div>";
                 }
                 $('div.bitcoin').html(html);
                 $this.text('Save');
