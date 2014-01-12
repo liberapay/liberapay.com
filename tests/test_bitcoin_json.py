@@ -3,27 +3,26 @@ from __future__ import print_function, unicode_literals
 import json
 
 from gittip.testing import Harness
-from gittip.testing.client import TestClient
 
 
 class Tests(Harness):
-    def change_bitcoin_address(self, address, user='alice'):
+    def change_bitcoin_address(self, address, user='alice', should_fail=True):
         self.make_participant('alice')
-
-        client = TestClient()
-        response = client.get('/')
-        csrf_token = response.request.context['csrf_token']
-
-        response = client.post("/alice/bitcoin.json",
-                               {'bitcoin_address': address,
-                                'csrf_token': csrf_token},
-                                user=user
-        )
+        if should_fail:
+            response = self.client.PxST("/alice/bitcoin.json",
+                               {'bitcoin_address': address,},
+                                auth_as=user
+            )
+        else:
+            response = self.client.POST("/alice/bitcoin.json",
+                               {'bitcoin_address': address,},
+                                auth_as=user
+            )
         return response
 
     def test_participant_can_change_their_address(self):
         response = self.change_bitcoin_address(
-            '17NdbrSGoUotzeGCcMMCqnFkEvLymoou9j')
+            '17NdbrSGoUotzeGCcMMCqnFkEvLymoou9j', should_fail=False)
         actual = json.loads(response.body)['bitcoin_address']
         assert actual == '17NdbrSGoUotzeGCcMMCqnFkEvLymoou9j', actual
 
