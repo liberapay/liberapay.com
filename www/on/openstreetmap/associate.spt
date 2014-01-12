@@ -54,7 +54,7 @@ response = requests.get( "%s/api/0.6/user/details" % website.openstreetmap_api
                         )
 assert response.status_code == 200, response.status_code
 
-osm_et = ET.fromstring(response.text)
+osm_et = ET.fromstring(response.content)
 user_info = {}
 user_info['osm_id'] = unicode(osm_et.find('user').get('id'))
 user_info['username'] = unicode(osm_et.find('user').get('display_name'))
