@@ -1,6 +1,6 @@
 username = path['login']
 [---]
-{% extends templates/base.html %}
+{% extends "templates/base.html" %}
 {% block heading %}<h2 class="top"><span>Failure</span></h2>{% endblock %}
 {% block box %}
 
