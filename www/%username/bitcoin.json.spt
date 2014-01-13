@@ -1,0 +1,23 @@
+"""Save a bitcoin address.
+
+"""
+from aspen import Response
+import bitcoinaddress
+
+[---------------------------------------------------------------]
+
+if user.ANON:
+    raise Response(404)
+request.allow("POST")
+
+bit_address = request.body['bitcoin_address'].strip()
+if bitcoinaddress.validate(bit_address) or bit_address == '':
+    website.db.run( "UPDATE participants SET bitcoin_address=%s "
+            "WHERE username=%s"
+          , (bit_address, user.participant.username)
+          )
+else:
+    raise Response(400)
+
+response.body = { "bitcoin_address": bit_address
+              , "username": user.participant.username }

@@ -951,6 +951,7 @@ ALTER TABLE homepage_top_givers ADD COLUMN twitter_pic text;
 DROP TABLE homepage_new_participants;
 
 -------------------------------------------------------------------------------
+
 -- https://github.com/gittip/www.gittip.com/issues/1683
 
 BEGIN;

@@ -168,6 +168,56 @@
                     >on Balanced Payments</a>{% else %}on Balanced Payments{% endif %}</div>
         </td>
     </tr>
+    <tr>
+        <td class="account-type">
+            <img src="/assets/bitcoin.png" />
+        </td>
+        <td class="account-details">
+
+            {% if not user.ANON and user.participant == participant %}
+                <div class="bitcoin">
+            {% else %}
+                <div>
+            {% endif %}
+                {% if participant.bitcoin_address %}
+                    <a rel="me" href="http://blockchain.info/address/{{ participant.bitcoin_address }}">
+                      {{ participant.bitcoin_address }}
+                    </a>
+                    {% if not user.ANON and user.participant == participant %}
+                    <div class="edit-bitcoin">
+                        (<a href="javascript:;" class="toggle-bitcoin">Edit</a>) Bitcoin address
+                    </div>
+                    {% else %}
+                    <div class="account-type">
+                        Bitcoin address
+                    </div>
+
+                    {% endif %}
+
+                {% else %}
+                    {% if not user.ANON and user.participant == participant %}
+                        Add a <a href="javascript:;" class="toggle-bitcoin">Bitcoin address</a>.
+                    {% else %}
+                        No Bitcoin receiving address.
+                    {% endif %}
+                {% endif %}
+            </div>
+            <form class="bitcoin-submit">
+                <div class="address">
+                    <input type="text" class="bitcoin hidden"
+                        {% if participant.bitcoin_address %}
+                            value="{{ participant.bitcoin_address }}"
+                        {% endif %}
+                    >
+                </div>
+                <div class="buttons">
+                    <button type="submit" class="bitcoin hidden">Save</button>
+                    <button type="cancel" class="bitcoin cancel hidden">Cancel</button>
+                </div>
+            </form>
+
+        </td>
+    </tr>
 </table>
 
 
