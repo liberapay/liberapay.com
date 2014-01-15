@@ -269,6 +269,10 @@ class MixinElsewhere(object):
 
             other_username = rec.participant
 
+            if self.username == other_username:
+                # this is a no op - trying to take over itself
+                return
+
 
             # Make sure we have user confirmation if needed.
             # ==============================================

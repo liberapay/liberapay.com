@@ -167,6 +167,14 @@ class TestTakeOver(Harness):
         assert 2 == ntips
         self.db.self_check()
 
+    def test_idempotent(self):
+        alice = TwitterAccount(self.db, 1, dict(screen_name='alice'))
+        bob   = GitHubAccount(self.db, 2, dict(screen_name='bob'))
+        alice_participant = alice.opt_in('alice')[0].participant
+        alice_participant.take_over(bob, have_confirmation=True)
+        alice_participant.take_over(bob, have_confirmation=True)
+        self.db.self_check()
+
 
 class TestParticipant(Harness):
     def setUp(self):
