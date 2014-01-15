@@ -91,8 +91,6 @@ node_modules: package.json
 
 jstest: node_modules
 	./node_modules/.bin/grunt test
-	#./node_modules/.bin/karma start karma-unit.conf.js
-	#./$(env_bin)/python jstests/scripts/e2e_runner.py
 
 tests/env:
 	echo "Creating a tests/env file ..."
