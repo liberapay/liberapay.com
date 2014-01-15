@@ -87,7 +87,7 @@
                 ><img class="avatar"
                       src="{{ bountysource_account.user_info.get('image_url', '/assets/%s/no-avatar.png' % website.version)|e }}"
             />{{ bountysource_account.user_info.get('display_name') }}
-            {% if bountysource_account.user_info.get('display_name') %}
+            {% if bountysource_account.user_info.get('first_name') and bountysource_account.user_info.get('last_name') %}
                 ({{ bountysource_account.user_info.get('first_name')|e }} {{ bountysource_account.user_info.get('last_name')|e }})
             {% endif %}
             </a>
