@@ -30,6 +30,17 @@ class Tests(Harness):
         assert html.count('alice') == 4  # entries in both New Participants and Givers
         assert 'bob' not in html
 
+    def test_givers_dont_show_up_if_they_give_zero(self):
+
+        # Alice tips bob.
+        self.make_participant("bob", claimed_time='now')
+        self.alice.set_tip_to('bob', '1.00')
+        self.alice.set_tip_to('bob', '0.00')
+
+        html = self.client.GET('/for/something/', want='response.body')
+        assert html.count('alice') == 2  # entry in New Participants only
+        assert 'bob' not in html
+
     def test_receivers_show_up_on_community_page(self):
 
         # Bob tips alice.
