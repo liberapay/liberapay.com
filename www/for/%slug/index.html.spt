@@ -105,7 +105,6 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
                   ) AS foo
           JOIN participants p ON p.username = tipper
          WHERE is_suspicious IS NOT true
-           AND amount > 0
       GROUP BY tipper, anonymous_giving
       ORDER BY amount DESC
       LIMIT %s
@@ -136,7 +135,6 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
                   ) AS foo
           JOIN participants p ON p.username = tippee
          WHERE is_suspicious IS NOT true
-           AND amount > 0
       GROUP BY tippee, claimed_time, anonymous_receiving
       ORDER BY amount DESC
       LIMIT %s
