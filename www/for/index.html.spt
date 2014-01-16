@@ -21,6 +21,12 @@ for community in communities:
 title = "Browse Communities"
 [-----------------------------]
 {% extends "templates/base.html" %}
+{% block head %}
+    <!-- Otherwise we're getting Indonesian. :-/ -->
+    <!-- https://github.com/gittip/www.gittip.com/issues/953 -->
+    <meta name="google" value="notranslate">
+{% endblock %}
+
 {% block heading %}
 <h2 class="top"><span>Communities</span></h2>
 
