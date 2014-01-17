@@ -45,9 +45,10 @@ except ValueError:
 community = website.db.one( "SELECT community_summary.*::community_summary "
                             "FROM community_summary WHERE slug=%s"
                           , (slug,)
-                          )
+                           )
 if community is None:
     class StubCommunity:
+        slug = _slug
         name = _slug
         nmembers = 0
         check_membership = lambda a, b: False
@@ -190,6 +191,19 @@ $(document).ready(function() {
 </script>
 
 
+{% if community.nmembers == 0 %}
+
+<div class="col0">
+
+    <h2>You're the first one here!</h2>
+
+    <p>Bring the {{ community.name }} community to Gittip to find like-minded
+    people to give to.</p>
+
+</div>
+
+{% else %}
+
 <div id="leaderboard">
 
     <div class="people">
@@ -274,4 +288,5 @@ $(document).ready(function() {
 
 </div>
 
+{% endif %}
 {% endblock %}
