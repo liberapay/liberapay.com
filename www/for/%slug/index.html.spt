@@ -48,6 +48,7 @@ community = website.db.one( "SELECT community_summary.*::community_summary "
                           )
 if community is None:
     class StubCommunity:
+        slug = _slug
         name = _slug
         nmembers = 0
         check_membership = lambda a, b: False
