@@ -60,3 +60,7 @@ class Tests(Harness):
         html = self.client.GET('/for/something/', want='response.body')
         assert html.count('alice') == 2  # entry in New Participants only
         assert 'bob' not in html
+
+    def test_community_listing_works_for_pristine_community(self):
+        html = self.client.GET('/for/pristine/', want='response.body')
+        assert 'pristine Community - Gittip' in html
