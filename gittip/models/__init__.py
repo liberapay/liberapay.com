@@ -18,6 +18,7 @@ class GittipDB(Postgres):
         self._check_tips()
         self._check_orphans()
         self._check_orphans_no_tips()
+        self._check_paydays_volumes()
 
     def _check_tips(self):
         """
@@ -138,4 +139,72 @@ class GittipDB(Postgres):
         known = set([25206]) # '4c074000c7bc', 'naderman', '3.00'
         real = set(tips_with_orphans) - known
         assert len(real) == 0, real
+
+    def _check_paydays_volumes(self):
+        """
+        Recalculate *_volume fields in paydays table using exchanges table.
+        """
+        charge_volume = self.all("""
+            select * from (
+                select id, ts_start, charge_volume, (
+                        select sum(amount+fee)
+                        from exchanges
+                        where timestamp > ts_start
+                        and timestamp < ts_end
+                        and amount > 0
+                    ) as ref
+                from paydays
+                order by id
+            ) as foo
+            where charge_volume != ref
+        """)
+        assert len(charge_volume) == 0
+
+        charge_fees_volume = self.all("""
+            select * from (
+                select id, ts_start, charge_fees_volume, (
+                        select sum(fee)
+                        from exchanges
+                        where timestamp > ts_start
+                        and timestamp < ts_end
+                        and amount > 0
+                    ) as ref
+                from paydays
+                order by id
+            ) as foo
+            where charge_fees_volume != ref
+        """)
+        assert len(charge_fees_volume) == 0
+
+        ach_volume = self.all("""
+            select * from (
+                select id, ts_start, ach_volume, (
+                        select sum(amount)
+                        from exchanges
+                        where timestamp > ts_start
+                        and timestamp < ts_end
+                        and amount < 0
+                    ) as ref
+                from paydays
+                order by id
+            ) as foo
+            where ach_volume != ref
+        """)
+        assert len(ach_volume) == 0
+
+        ach_fees_volume = self.all("""
+            select * from (
+                select id, ts_start, ach_fees_volume, (
+                        select sum(fee)
+                        from exchanges
+                        where timestamp > ts_start
+                        and timestamp < ts_end
+                        and amount < 0
+                    ) as ref
+                from paydays
+                order by id
+            ) as foo
+            where ach_fees_volume != ref
+        """)
+        assert len(ach_fees_volume) == 0
 #
