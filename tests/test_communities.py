@@ -7,7 +7,6 @@ class Tests(Harness):
 
     def setUp(self):
         Harness.setUp(self)
-        self.client.website.NMEMBERS_THRESHOLD = 1
 
         # Alice joins a community.
         self.alice = self.make_participant("alice", claimed_time='now', last_bill_result='')

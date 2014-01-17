@@ -57,92 +57,91 @@ if community is None:
 # Set the page title based on the communities name.
 title = community.name + ' Community'
 
-if community.nmembers >= website.NMEMBERS_THRESHOLD:
 
-    # Run queries for listings.
-    # =========================
+# Run queries for listings.
+# =========================
 
-    new_participants = utter_hack(website.db, query_cache.all("""
-    -- new participants on community page
+new_participants = utter_hack(website.db, query_cache.all("""
+-- new participants on community page
 
-        SELECT username, claimed_time FROM (
-            SELECT DISTINCT ON (p.username)
-                   p.username
-                 , claimed_time
-              FROM participants p
-              JOIN elsewhere e
-                ON p.username = e.participant
-              JOIN current_communities cc
-                ON p.username = cc.participant
-             WHERE claimed_time IS NOT null
-               AND is_suspicious IS NOT true
-               AND cc.slug = %s AND cc.is_member
-               ) AS foo
-      ORDER BY claimed_time DESC
-         LIMIT %s
-        OFFSET %s
+    SELECT username, claimed_time FROM (
+        SELECT DISTINCT ON (p.username)
+               p.username
+             , claimed_time
+          FROM participants p
+          JOIN elsewhere e
+            ON p.username = e.participant
+          JOIN current_communities cc
+            ON p.username = cc.participant
+         WHERE claimed_time IS NOT null
+           AND is_suspicious IS NOT true
+           AND cc.slug = %s AND cc.is_member
+           ) AS foo
+  ORDER BY claimed_time DESC
+     LIMIT %s
+    OFFSET %s
 
-    """, (community.slug, limit, offset)))
+""", (community.slug, limit, offset)))
 
-    givers = utter_hack(website.db, query_cache.all("""
-    -- top givers on community page
+givers = utter_hack(website.db, query_cache.all("""
+-- top givers on community page
 
-        SELECT tipper AS username, anonymous_giving AS anonymous, sum(amount) AS amount
-          FROM (    SELECT DISTINCT ON (tipper, tippee)
-                           amount
-                         , tipper
-                      FROM tips
-                      JOIN participants p ON p.username = tipper
-                      JOIN participants p2 ON p2.username = tippee
-                      JOIN elsewhere ON elsewhere.participant = tippee
-                      JOIN current_communities cc ON cc.participant = tipper
-                     WHERE p.last_bill_result = ''
-                       AND p.is_suspicious IS NOT true
-                       AND p2.claimed_time IS NOT NULL
-                       AND elsewhere.is_locked = false
-                       AND cc.slug = %s and cc.is_member
-                  ORDER BY tipper, tippee, tips.mtime DESC
-                  ) AS foo
-          JOIN participants p ON p.username = tipper
-         WHERE is_suspicious IS NOT true
-           AND amount > 0
-      GROUP BY tipper, anonymous_giving
-      ORDER BY amount DESC
-      LIMIT %s
-      OFFSET %s
+    SELECT tipper AS username, anonymous_giving AS anonymous, sum(amount) AS amount
+      FROM (    SELECT DISTINCT ON (tipper, tippee)
+                       amount
+                     , tipper
+                  FROM tips
+                  JOIN participants p ON p.username = tipper
+                  JOIN participants p2 ON p2.username = tippee
+                  JOIN elsewhere ON elsewhere.participant = tippee
+                  JOIN current_communities cc ON cc.participant = tipper
+                 WHERE p.last_bill_result = ''
+                   AND p.is_suspicious IS NOT true
+                   AND p2.claimed_time IS NOT NULL
+                   AND elsewhere.is_locked = false
+                   AND cc.slug = %s and cc.is_member
+              ORDER BY tipper, tippee, tips.mtime DESC
+              ) AS foo
+      JOIN participants p ON p.username = tipper
+     WHERE is_suspicious IS NOT true
+       AND amount > 0
+  GROUP BY tipper, anonymous_giving
+  ORDER BY amount DESC
+  LIMIT %s
+  OFFSET %s
 
-    """, (community.slug, limit, offset)))
+""", (community.slug, limit, offset)))
 
-    # XXX I'm nearly positive that one or both of givers and receivers can contain
-    # orphan accounts. See https://github.com/gittip/www.gittip.com/issues/650
+# XXX I'm nearly positive that one or both of givers and receivers can contain
+# orphan accounts. See https://github.com/gittip/www.gittip.com/issues/650
 
-    receivers = utter_hack(website.db, query_cache.all("""
-    -- top receivers on community page
+receivers = utter_hack(website.db, query_cache.all("""
+-- top receivers on community page
 
-        SELECT tippee AS username, anonymous_receiving AS anonymous, claimed_time, sum(amount) AS amount
-          FROM (    SELECT DISTINCT ON (tipper, tippee)
-                           amount
-                         , tippee
-                      FROM tips
-                      JOIN participants p ON p.username = tipper
-                      JOIN elsewhere ON elsewhere.participant = tippee
-                      JOIN current_communities cc ON cc.participant = tippee
-                     WHERE last_bill_result = ''
-                       AND elsewhere.is_locked = false
-                       AND is_suspicious IS NOT true
-                       AND claimed_time IS NOT null
-                       AND cc.slug = %s and cc.is_member
-                  ORDER BY tipper, tippee, tips.mtime DESC
-                  ) AS foo
-          JOIN participants p ON p.username = tippee
-         WHERE is_suspicious IS NOT true
-           AND amount > 0
-      GROUP BY tippee, claimed_time, anonymous_receiving
-      ORDER BY amount DESC
-      LIMIT %s
-      OFFSET %s
+    SELECT tippee AS username, anonymous_receiving AS anonymous, claimed_time, sum(amount) AS amount
+      FROM (    SELECT DISTINCT ON (tipper, tippee)
+                       amount
+                     , tippee
+                  FROM tips
+                  JOIN participants p ON p.username = tipper
+                  JOIN elsewhere ON elsewhere.participant = tippee
+                  JOIN current_communities cc ON cc.participant = tippee
+                 WHERE last_bill_result = ''
+                   AND elsewhere.is_locked = false
+                   AND is_suspicious IS NOT true
+                   AND claimed_time IS NOT null
+                   AND cc.slug = %s and cc.is_member
+              ORDER BY tipper, tippee, tips.mtime DESC
+              ) AS foo
+      JOIN participants p ON p.username = tippee
+     WHERE is_suspicious IS NOT true
+       AND amount > 0
+  GROUP BY tippee, claimed_time, anonymous_receiving
+  ORDER BY amount DESC
+  LIMIT %s
+  OFFSET %s
 
-    """, (community.slug, limit, offset)))
+""", (community.slug, limit, offset)))
 [---]
 {% extends "templates/base.html" %}
 {% block heading %}
@@ -189,32 +188,6 @@ $(document).ready(function() {
 
 });
 </script>
-
-{% if community.nmembers < website.NMEMBERS_THRESHOLD %}
-<div class="col0">
-
-    {% if community.nmembers == 0 %}
-    <h2>Bring the {{ community.name }} community to Gittip!</h2>
-    {% else %}
-    {% set nneeded = website.NMEMBERS_THRESHOLD - community.nmembers %}
-    <h2>{{ nneeded }} more
-        member{{ '' if nneeded == 1 else 's' }} needed!</h2>
-    {% endif %}
-
-    <p>Communities on Gittip are self-organized. Once this community reaches
-    {{ website.NMEMBERS_THRESHOLD }}
-    member{{ '' if website.NMEMBERS_THRESHOLD == '1' else 's' }},
-    we'll start showing stats and info here. Check out <a href="/for/">other
-        communities</a> for examples.</p>
-
-    <h2>What is Gittip?</h2>
-
-    <p>Gittip is a weekly gift exchange. It's a way to support and thank people
-    and projects whose work you admire. <a href="/about/">Learn more
-        ...</a></p>
-
-</div>
-{% else %}
 
 
 <div id="leaderboard">
@@ -300,6 +273,5 @@ $(document).ready(function() {
     </div>
 
 </div>
-{% endif %}
 
 {% endblock %}
