@@ -63,4 +63,4 @@ class Tests(Harness):
 
     def test_community_listing_works_for_pristine_community(self):
         html = self.client.GET('/for/pristine/', want='response.body')
-        assert 'pristine Community - Gittip' in html
+        assert 'first one here' in html
