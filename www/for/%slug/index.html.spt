@@ -27,35 +27,6 @@ def _to_age(participant):
         age = age.replace(word, str(i))
     return age.replace(' ', ' <span class="unit">') + "</span>"
 
-THRESHOLD = website.NMEMBERS_THRESHOLD
-
-def get_first_ten():
-    """Return a dictionary mapping community slugs to ordinal numbers.
-    """
-    holy_heck = website.db.all("SELECT * FROM communities ORDER BY mtime ASC")
-    _first_ten = []
-    communities = defaultdict(lambda: (defaultdict(set), defaultdict(int)))
-    for detail in holy_heck:
-        _slug = detail.slug
-        _members, _nmembers = communities[_slug]
-        if detail.is_member:
-            if detail.participant not in _members[_slug]:
-                _members[_slug].add(detail.participant)
-                _nmembers[_slug] += 1
-            else:
-                _members[_slug].remove(detail.participant)
-                _nmembers[_slug] -= 1
-
-        if _nmembers[_slug] == THRESHOLD:
-            _first_ten.append(_slug)
-            if len(_first_ten) == 10:
-                break
-
-    first_ten = {}
-    for i, slug in enumerate(_first_ten, start=1):
-        first_ten[slug] = ORDINALS[i]
-
-    return first_ten
 [---]
 
 _slug = path['slug']
@@ -74,9 +45,10 @@ except ValueError:
 community = website.db.one( "SELECT community_summary.*::community_summary "
                             "FROM community_summary WHERE slug=%s"
                           , (slug,)
-                          )
+                           )
 if community is None:
     class StubCommunity:
+        slug = _slug
         name = _slug
         nmembers = 0
         check_membership = lambda a, b: False
@@ -86,104 +58,121 @@ if community is None:
 # Set the page title based on the communities name.
 title = community.name + ' Community'
 
-if community.nmembers >= website.NMEMBERS_THRESHOLD:
 
-    # Compute a dict of the first ten communities.
-    # ============================================
-    # We want to reward the first ten communities on Gittip with a message
-    # saying they were the first.
+# Run queries for listings.
+# =========================
 
-    first_ten = get_first_ten()
+new_participants = utter_hack(website.db, query_cache.all("""
+-- new participants on community page
 
+    SELECT username, claimed_time FROM (
+        SELECT DISTINCT ON (p.username)
+               p.username
+             , claimed_time
+          FROM participants p
+          JOIN elsewhere e
+            ON p.username = e.participant
+          JOIN current_communities cc
+            ON p.username = cc.participant
+         WHERE claimed_time IS NOT null
+           AND is_suspicious IS NOT true
+           AND cc.slug = %s AND cc.is_member
+           ) AS foo
+  ORDER BY claimed_time DESC
+     LIMIT %s
+    OFFSET %s
 
-    # Run queries for listings.
-    # =========================
+""", (community.slug, limit, offset)))
 
-    new_participants = utter_hack(website.db, query_cache.all("""
-    -- new participants on community page
+givers = utter_hack(website.db, query_cache.all("""
+-- top givers on community page
 
-        SELECT username, claimed_time FROM (
-            SELECT DISTINCT ON (p.username)
-                   p.username
-                 , claimed_time
-              FROM participants p
-              JOIN elsewhere e
-                ON p.username = e.participant
-              JOIN current_communities cc
-                ON p.username = cc.participant
-             WHERE claimed_time IS NOT null
-               AND is_suspicious IS NOT true
-               AND cc.slug = %s AND cc.is_member
-               ) AS foo
-      ORDER BY claimed_time DESC
-         LIMIT %s
-        OFFSET %s
+    SELECT tipper AS username, anonymous_giving AS anonymous, sum(amount) AS amount
+      FROM (    SELECT DISTINCT ON (tipper, tippee)
+                       amount
+                     , tipper
+                  FROM tips
+                  JOIN participants p ON p.username = tipper
+                  JOIN participants p2 ON p2.username = tippee
+                  JOIN elsewhere ON elsewhere.participant = tippee
+                  JOIN current_communities cc ON cc.participant = tipper
+                 WHERE p.last_bill_result = ''
+                   AND p.is_suspicious IS NOT true
+                   AND p2.claimed_time IS NOT NULL
+                   AND elsewhere.is_locked = false
+                   AND cc.slug = %s and cc.is_member
+              ORDER BY tipper, tippee, tips.mtime DESC
+              ) AS foo
+      JOIN participants p ON p.username = tipper
+     WHERE is_suspicious IS NOT true
+       AND amount > 0
+  GROUP BY tipper, anonymous_giving
+  ORDER BY amount DESC
+  LIMIT %s
+  OFFSET %s
 
-    """, (community.slug, limit, offset)))
+""", (community.slug, limit, offset)))
 
-    givers = utter_hack(website.db, query_cache.all("""
-    -- top givers on community page
+# XXX I'm nearly positive that one or both of givers and receivers can contain
+# orphan accounts. See https://github.com/gittip/www.gittip.com/issues/650
 
-        SELECT tipper AS username, anonymous_giving AS anonymous, sum(amount) AS amount
-          FROM (    SELECT DISTINCT ON (tipper, tippee)
-                           amount
-                         , tipper
-                      FROM tips
-                      JOIN participants p ON p.username = tipper
-                      JOIN participants p2 ON p2.username = tippee
-                      JOIN elsewhere ON elsewhere.participant = tippee
-                      JOIN current_communities cc ON cc.participant = tipper
-                     WHERE p.last_bill_result = ''
-                       AND p.is_suspicious IS NOT true
-                       AND p2.claimed_time IS NOT NULL
-                       AND elsewhere.is_locked = false
-                       AND cc.slug = %s and cc.is_member
-                  ORDER BY tipper, tippee, tips.mtime DESC
-                  ) AS foo
-          JOIN participants p ON p.username = tipper
-         WHERE is_suspicious IS NOT true
-      GROUP BY tipper, anonymous_giving
-      ORDER BY amount DESC
-      LIMIT %s
-      OFFSET %s
+receivers = utter_hack(website.db, query_cache.all("""
+-- top receivers on community page
 
-    """, (community.slug, limit, offset)))
+    SELECT tippee AS username, anonymous_receiving AS anonymous, claimed_time, sum(amount) AS amount
+      FROM (    SELECT DISTINCT ON (tipper, tippee)
+                       amount
+                     , tippee
+                  FROM tips
+                  JOIN participants p ON p.username = tipper
+                  JOIN elsewhere ON elsewhere.participant = tippee
+                  JOIN current_communities cc ON cc.participant = tippee
+                 WHERE last_bill_result = ''
+                   AND elsewhere.is_locked = false
+                   AND is_suspicious IS NOT true
+                   AND claimed_time IS NOT null
+                   AND cc.slug = %s and cc.is_member
+              ORDER BY tipper, tippee, tips.mtime DESC
+              ) AS foo
+      JOIN participants p ON p.username = tippee
+     WHERE is_suspicious IS NOT true
+       AND amount > 0
+  GROUP BY tippee, claimed_time, anonymous_receiving
+  ORDER BY amount DESC
+  LIMIT %s
+  OFFSET %s
 
-    # XXX I'm nearly positive that one or both of givers and receivers can contain
-    # orphan accounts. See https://github.com/gittip/www.gittip.com/issues/650
-
-    receivers = utter_hack(website.db, query_cache.all("""
-    -- top receivers on community page
-
-        SELECT tippee AS username, anonymous_receiving AS anonymous, claimed_time, sum(amount) AS amount
-          FROM (    SELECT DISTINCT ON (tipper, tippee)
-                           amount
-                         , tippee
-                      FROM tips
-                      JOIN participants p ON p.username = tipper
-                      JOIN elsewhere ON elsewhere.participant = tippee
-                      JOIN current_communities cc ON cc.participant = tippee
-                     WHERE last_bill_result = ''
-                       AND elsewhere.is_locked = false
-                       AND is_suspicious IS NOT true
-                       AND claimed_time IS NOT null
-                       AND cc.slug = %s and cc.is_member
-                  ORDER BY tipper, tippee, tips.mtime DESC
-                  ) AS foo
-          JOIN participants p ON p.username = tippee
-         WHERE is_suspicious IS NOT true
-      GROUP BY tippee, claimed_time, anonymous_receiving
-      ORDER BY amount DESC
-      LIMIT %s
-      OFFSET %s
-
-    """, (community.slug, limit, offset)))
+""", (community.slug, limit, offset)))
 [---]
 {% extends "templates/base.html" %}
+
 {% block heading %}
     <h2 class="top"><span>Community</span></h2>
     <p>Browse <a href="/for/">All Communities</a></p>
 {% endblock %}
+
+{% block scripts %}
+
+<script>
+$(document).ready(function() {
+
+    $('button.join-leave').click(function()
+    {
+        var button = $(this);
+        var name = button.attr('data-name');
+        var is_member = button.attr('data-is-member') === 'true';
+        Gittip.communities.update(name, !is_member, function()
+        {
+            window.location.reload();
+        });
+    });
+
+});
+</script>
+
+{{ super() }}
+{% endblock %}
+
 {% block box %}
 <div class="on-community">
     <h2 class="pad-sign">{{ community.name }}</h2>
@@ -207,62 +196,20 @@ if community.nmembers >= website.NMEMBERS_THRESHOLD:
 </div>
 
 {% endblock %}
-
-{% block scripts %}
-<script>
-$(document).ready(function() {
-
-    $('button.join-leave').click(function()
-    {
-        var button = $(this);
-        var name = button.attr('data-name');
-        var is_member = button.attr('data-is-member') === 'true';
-        Gittip.communities.update(name, !is_member, function()
-        {
-            window.location.reload();
-        });
-    });
-
-});
-</script>
-
-{{ super() }}
-{% endblock %}
-
 {% block page %}
-{% if community.nmembers < website.NMEMBERS_THRESHOLD %}
+
+{% if community.nmembers == 0 %}
+
 <div class="col0">
 
-    {% if community.nmembers == 0 %}
-    <h2>Bring the {{ community.name }} community to Gittip!</h2>
-    {% else %}
-    {% set nneeded = website.NMEMBERS_THRESHOLD - community.nmembers %}
-    <h2>{{ nneeded }} more
-        member{{ '' if nneeded == 1 else 's' }} needed!</h2>
-    {% endif %}
+    <h2>You're the first one here!</h2>
 
-    <p>Communities on Gittip are self-organized. Once this community reaches
-    {{ website.NMEMBERS_THRESHOLD }}
-    member{{ '' if website.NMEMBERS_THRESHOLD == '1' else 's' }},
-    we'll start showing stats and info here. Check out <a href="/for/">other
-        communities</a> for examples.</p>
-
-    <h2>What is Gittip?</h2>
-
-    <p>Gittip is a weekly gift exchange. It's a way to support and thank people
-    and projects whose work you admire. <a href="/about/">Learn more
-        ...</a></p>
+    <p>Bring the {{ community.name }} community to Gittip to find like-minded
+    people to give to.</p>
 
 </div>
+
 {% else %}
-
-{% if community.slug in first_ten %}
-<div style="text-align: center;">
-    <h1 class="congrats">Congratulations!</h1>
-    <p>You're the {{ first_ten[community.slug] }} community on Gittip! :D</p>
-</div>
-{% endif %}
-
 
 <div id="leaderboard">
 
@@ -347,6 +294,6 @@ $(document).ready(function() {
     </div>
 
 </div>
-{% endif %}
 
+{% endif %}
 {% endblock %}
