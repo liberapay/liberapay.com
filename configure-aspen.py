@@ -44,7 +44,6 @@ website.db = gittip.wireup.db()
 gittip.wireup.billing()
 gittip.wireup.username_restrictions(website)
 gittip.wireup.nanswers()
-gittip.wireup.nmembers(website)
 gittip.wireup.envvars(website)
 tell_sentry = gittip.wireup.make_sentry_teller(website)
 
@@ -171,6 +170,7 @@ algorithm.functions = [ timer.start
                       , tell_sentry
                       , algorithm['get_response_for_exception']
 
+                      , gittip.outbound
                       , authentication.outbound
                       , csrf.outbound
                       , cache_static.outbound

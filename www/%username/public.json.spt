@@ -91,6 +91,7 @@ if not user.ANON:
 #
 # https://github.com/gittip/www.gittip.com/issues/680
 
+
 accounts = participant.get_accounts_elsewhere()
 
 # elsewhere contains eg 'github': <github data> or null.
@@ -119,6 +120,9 @@ if accounts.bountysource is not None:
 if accounts.openstreetmap is not None:
     output['openstreetmap'] = "%s/api/0.6/user/%s" % \
                (website.openstreetmap_api, accounts.openstreetmap.user_info['username'])
+
+if participant.bitcoin_address is not None:
+    output['bitcoin'] = "http://blockchain.info/address/%s" % participant.bitcoin_address
 
 response.body = output
 

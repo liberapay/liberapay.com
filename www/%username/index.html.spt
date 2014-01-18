@@ -80,31 +80,21 @@ $(document).ready(function() {
 {% else %}
     <div class="group">
         {% if participant.statement %}
-            <div class="{% if long_statement %}col1{% else %}col0{% endif %}">
+        <div class="{% if long_statement %}col1{% else %}col0{% endif %}">
             <h2>Statement</h2>
             <div class="statement">
                 {{ I_AM }}
                 {{ MAKING }} {{ wrap(participant.statement) }}
             </div>
-            </div>
-            <div class="{% if long_statement %}col2{% else %}col0{% endif %}">
-        {% else %}
-            <div class="col0">
-        {% endif %}
             {% include "templates/team-listing.html" %}
-
-            {% if communities %}
-            <h2>Communities</h2>
-            <ul class="community memberships">
-                {% for community in communities %}
-                <li>
-                    <a href="/for/{{ community.slug }}/">{{ community.name }}</a>
-                    {% set nothers = community.nmembers - 1 %}
-                    <div class="fine">with {{ nothers }} other{{ plural(nothers) }}</div>
-                </li>
-                {% endfor %}
-            </ul>
-            {% endif %}
+            {% include "templates/community-listing.html" %}
+        </div>
+        <div class="{% if long_statement %}col2{% else %}col0{% endif %}">
+        {% else %}
+        <div class="col0">
+            {% include "templates/team-listing.html" %}
+            {% include "templates/community-listing.html" %}
+        {% endif %}
 
             <h2>Funding Goal</h2>
             <div class="goal">
@@ -124,7 +114,6 @@ $(document).ready(function() {
             </div>
 
             {% include "templates/charts-for-user.html" %}
-
             {% include "templates/connected-accounts.html" %}
         </div>
     </div>

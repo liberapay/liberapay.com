@@ -67,7 +67,14 @@
     <!-- Memberships -->
     {% include "templates/team-listing.html" %}
     {% include "templates/community-listing.html" %}
-
+    {% if not communities %}
+    {#
+        Still show the communities heading in this case. Otherwise it's set in
+        community-listing.html. See https://github.com/gittip/www.gittip.com/pull/1916.
+    #}
+    <h2>Communities</h2>
+    {% endif %}
+    <a href="/for/">Join Communities</a>
 
 </div>
 <div class="col2">
