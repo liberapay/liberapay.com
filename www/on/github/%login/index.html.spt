@@ -98,7 +98,7 @@ title = username
 
 {% if usertype == "user" and account.locked == False %} 
 <script>$(document).ready(Gittip.tips.init);</script>
-{% elif usertype == "orginzation" %}
+{% elif usertype == "organization" %}
 <script>$(document).ready(Gittip.tips.init);</script>
 {% endif %}
 

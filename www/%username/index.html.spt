@@ -68,6 +68,10 @@ $(document).ready(function() {
 });
 </script>
 
+{% if user.participant == participant %}
+<script>$(document).ready(Gittip.profile.init);</script>
+{% endif %}
+
 {{ super() }}
 {% endblock %}
 

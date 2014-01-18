@@ -44,6 +44,7 @@ title = "Browse Communities"
                 Gittip.communities.jumpTo(term);
             });
         }
+        // TODO: in future
         {% if user.ANON %}
         var chosenOpts = {};
         {% else %}
@@ -56,6 +57,7 @@ title = "Browse Communities"
         });
     });
 </script>
+
 {{ super() }}
 {% endblock %}
 

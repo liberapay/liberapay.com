@@ -46,6 +46,21 @@ title = "Credit Card"
 
 {% endblock %}
 
+{% block scripts %}
+
+{% if not user.ANON %}
+<script>
+    $(document).ready(function()
+    {
+        Gittip.payments.cc.init("{{ balanced.Marketplace.my_marketplace.uri }}", "{{ user.participant.username }}");
+        $('#country').chosen();
+    });
+</script>
+{% endif %}
+
+{{ super() }}
+{% endblock %}
+
 {% block box %}
   {% if user.ANON %}
     <div class="as-content">
@@ -58,16 +73,7 @@ title = "Credit Card"
     </div>
 
   {% else %}
-    {% block scripts %}
-    <script>
-        $(document).ready(function()
-        {
-            Gittip.payments.cc.init("{{ balanced.Marketplace.my_marketplace.uri }}", "{{ user.participant.username }}");
-            $('#country').chosen();
-        });
-    </script>
-    {{ super() }}
-    {% endblock %}
+
 
     <style>
         {% if status == "missing" %}
