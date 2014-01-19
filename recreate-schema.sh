@@ -7,19 +7,6 @@ set -e
 #
 #   usage: DATABASE_URL=postgres://foo:bar@baz:5234/buz recreate-schema.sh
 
-
-# Configure the Postgres environment.
-# ===================================
-
-# Store ./configure-pg-env.sh output in a variable, so if it fails, it'll exit
-# before running `export` (export with no args will print all exported variables).
-ENV=`./configure-pg-env.sh`
-
-# If we successfully got a result in $ENV, export it.
-export $ENV
-
-
-
 echo "=============================================================================="
 
 # I got the idea for dropping the schema as a way to clear out the db from
@@ -28,16 +15,16 @@ echo "==========================================================================
 # whole.
 
 echo "Recreating public schema ... "
-echo "DROP SCHEMA public CASCADE" | psql
-echo "CREATE SCHEMA public" | psql
+echo "DROP SCHEMA public CASCADE" | psql $DATABASE_URL
+echo "CREATE SCHEMA public" | psql $DATABASE_URL
 
 
 echo "=============================================================================="
 echo "Applying schema.sql ..."
 echo 
 
-psql < enforce-utc.sql
-psql < schema.sql
+psql $DATABASE_URL < enforce-utc.sql
+psql $DATABASE_URL < schema.sql
 
 
 echo "=============================================================================="
@@ -45,7 +32,7 @@ echo "Looking for branch.sql ..."
 echo 
 
 if [ -f branch.sql ]
-then psql < branch.sql
+then psql $DATABASE_URL < branch.sql
 else echo "None found."
 fi
 
