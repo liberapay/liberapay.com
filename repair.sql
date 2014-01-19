@@ -1,6 +1,6 @@
 update paydays
 set charge_fees_volume = (
-    select sum(fee) 
+    select coalesce(sum(fee), 0)
     from exchanges 
     where timestamp > ts_start 
     and timestamp < ts_end 
@@ -9,7 +9,7 @@ set charge_fees_volume = (
 
 update paydays
 set ach_volume = (
-    select sum(amount) 
+    select coalesce(sum(amount), 0)
     from exchanges 
     where timestamp > ts_start 
     and timestamp < ts_end 
