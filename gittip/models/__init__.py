@@ -147,7 +147,7 @@ class GittipDB(Postgres):
         charge_volume = self.all("""
             select * from (
                 select id, ts_start, charge_volume, (
-                        select sum(amount+fee)
+                        select coalesce(sum(amount+fee), 0)
                         from exchanges
                         where timestamp > ts_start
                         and timestamp < ts_end
@@ -163,7 +163,7 @@ class GittipDB(Postgres):
         charge_fees_volume = self.all("""
             select * from (
                 select id, ts_start, charge_fees_volume, (
-                        select sum(fee)
+                        select coalesce(sum(fee), 0)
                         from exchanges
                         where timestamp > ts_start
                         and timestamp < ts_end
@@ -179,7 +179,7 @@ class GittipDB(Postgres):
         ach_volume = self.all("""
             select * from (
                 select id, ts_start, ach_volume, (
-                        select sum(amount)
+                        select coalesce(sum(amount), 0)
                         from exchanges
                         where timestamp > ts_start
                         and timestamp < ts_end
@@ -195,7 +195,7 @@ class GittipDB(Postgres):
         ach_fees_volume = self.all("""
             select * from (
                 select id, ts_start, ach_fees_volume, (
-                        select sum(fee)
+                        select coalesce(sum(fee), 0)
                         from exchanges
                         where timestamp > ts_start
                         and timestamp < ts_end
