@@ -51,6 +51,20 @@ title = "Bank Account"
 
 {% endblock %}
 
+{% block scripts %}
+
+{% if not user.ANON %}
+<script>
+    $(document).ready(function()
+    {
+        Gittip.payments.ba.init("{{ balanced.Marketplace.my_marketplace.uri }}", "{{ user.participant.username }}");
+    });
+</script>
+{% endif %}
+
+{{ super() }}
+{% endblock %}
+
 {% block box %}
   {% if user.ANON %}
     <div class="as-content">
@@ -63,12 +77,8 @@ title = "Bank Account"
     </div>
 
   {% else %}
-    <script>
-        $(document).ready(function()
-        {
-            Gittip.payments.ba.init("{{ balanced.Marketplace.my_marketplace.uri }}", "{{ user.participant.username }}");
-        });
-    </script>
+
+
     <style>
         {% if not balanced_account_uri %}
         #delete {

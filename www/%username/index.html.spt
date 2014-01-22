@@ -60,6 +60,21 @@ else:
     {% endif %}
     <meta name="og:image" content="{{ participant.get_img_src() }}" />
 {% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+    jQuery.get('./charts.json', Gittip.charts.make);
+});
+</script>
+
+{% if user.participant == participant %}
+<script>$(document).ready(Gittip.profile.init);</script>
+{% endif %}
+
+{{ super() }}
+{% endblock %}
+
 {% block page %}
 
 {% if user.participant == participant %}
@@ -107,11 +122,5 @@ else:
         </div>
     </div>
 {% endif %}
-
-<script>
-$(document).ready(function() {
-    jQuery.get('./charts.json', Gittip.charts.make);
-});
-</script>
 
 {% endblock %}

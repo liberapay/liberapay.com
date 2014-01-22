@@ -41,6 +41,14 @@ title = username
 
 {% block heading %}<h2 class="top"><span>Twitter</span></h2>{% endblock %}
 
+{% block scripts %}
+<script>
+    $(document).ready(Gittip.tips.init);
+</script>
+
+{{ super() }}
+{% endblock %}
+
 {% block box %}
 
 <table class="on-elsewhere">
@@ -76,9 +84,7 @@ title = username
         ><button>Unlock</button></a>
 
   {% else %}
-    <script>
-        $(document).ready(Gittip.tips.init);
-    </script>
+
 
     <h2>{{ name|e }} has not joined Gittip.</h2>
 

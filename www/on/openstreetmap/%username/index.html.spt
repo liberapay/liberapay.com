@@ -48,6 +48,15 @@ title = username
 
 {% block heading %}<h2 class="top"><span>OpenStreetMap</span></h2>{% endblock %}
 
+{% block scripts %}
+
+{% if not locked %}
+<script>$(document).ready(Gittip.tips.init);</script>
+{% endif %}
+
+{{ super() }}
+{% endblock %}
+
 {% block box %}
   <table class="on-elsewhere">
       <tr>
@@ -83,7 +92,6 @@ title = username
             ><button>Unlock</button></a>
 
       {% else %}
-        <script>$(document).ready(Gittip.tips.init);</script>
 
         <h2>{{ username|e }} has not joined Gittip.</h2>
 

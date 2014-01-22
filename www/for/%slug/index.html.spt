@@ -145,10 +145,34 @@ receivers = utter_hack(website.db, query_cache.all("""
 """, (community.slug, limit, offset)))
 [---]
 {% extends "templates/base.html" %}
+
 {% block heading %}
     <h2 class="top"><span>Community</span></h2>
     <p>Browse <a href="/for/">All Communities</a></p>
 {% endblock %}
+
+{% block scripts %}
+
+<script>
+$(document).ready(function() {
+
+    $('button.join-leave').click(function()
+    {
+        var button = $(this);
+        var name = button.attr('data-name');
+        var is_member = button.attr('data-is-member') === 'true';
+        Gittip.communities.update(name, !is_member, function()
+        {
+            window.location.reload();
+        });
+    });
+
+});
+</script>
+
+{{ super() }}
+{% endblock %}
+
 {% block box %}
 <div class="on-community">
     <h2 class="pad-sign">{{ community.name }}</h2>
@@ -173,23 +197,6 @@ receivers = utter_hack(website.db, query_cache.all("""
 
 {% endblock %}
 {% block page %}
-<script>
-$(document).ready(function() {
-
-    $('button.join-leave').click(function()
-    {
-        var button = $(this);
-        var name = button.attr('data-name');
-        var is_member = button.attr('data-is-member') === 'true';
-        Gittip.communities.update(name, !is_member, function()
-        {
-            window.location.reload();
-        });
-    });
-
-});
-</script>
-
 
 {% if community.nmembers == 0 %}
 

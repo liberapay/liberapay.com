@@ -28,13 +28,8 @@ title = "Browse Communities"
     </div>
 </div>
 {% endblock %}
-{% block page %}
-<style>
-    .help {
-        font-size: 10px;
-        text-transform: uppercase;
-    }
-</style>
+
+{% block scripts %}
 <script>
     $(document).ready(function()
     {
@@ -49,6 +44,7 @@ title = "Browse Communities"
                 Gittip.communities.jumpTo(term);
             });
         }
+        // TODO: in future
         {% if user.ANON %}
         var chosenOpts = {};
         {% else %}
@@ -61,6 +57,17 @@ title = "Browse Communities"
         });
     });
 </script>
+
+{{ super() }}
+{% endblock %}
+
+{% block page %}
+<style>
+    .help {
+        font-size: 10px;
+        text-transform: uppercase;
+    }
+</style>
 <div class="col0">
 
     <h2>Large Communities</h2>

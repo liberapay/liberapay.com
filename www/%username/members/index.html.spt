@@ -25,8 +25,13 @@ openstreetmap_account = accounts.openstreetmap
 [-----------------------------------------------------------------------------]
 {% extends "templates/profile.html" %}
 
-{% block page %}
+{% block scripts %}
 <script>$(document).ready(Gittip.team.init);</script>
+
+{{ super() }}
+{% endblock %}
+
+{% block page %}
 
 <div id="team" class="col0">
   <table>
