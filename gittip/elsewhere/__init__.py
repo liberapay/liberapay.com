@@ -77,7 +77,7 @@ class AccountElsewhere(object):
         Or:
         - Takes a user_id and existing_record, and constructs a "model" object out of the record
         """
-        typecheck(user_id, (int, unicode), user_info, (None, dict))
+        typecheck(user_id, (int, unicode, long), user_info, (None, dict))
         self.user_id = unicode(user_id)
         self.db = db
 
