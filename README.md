@@ -260,18 +260,18 @@ Local Database Setup
 
 For advanced development and testing database changes, you need a local
 installation of [Postgres](http://www.postgresql.org/download/). The best
-version of Postgres to use is 9.1.11, because that's what we're using in
-production at Heroku. Gittip uses the
-[hstore](http://www.postgresql.org/docs/9.1/static/hstore.html) extension for
-unstructured data, and that isn't bundled with earlier versions than 9.1. If
-you're on a Mac, maybe try out Heroku's
+version of Postgres to use is 9.3.2, because that's what we're using in
+production at Heroku. You need at least 9.2, because we depend on being able to
+specify a URI to `psql`, and that was added in 9.2.
+
+If you're on a Mac, maybe try out Heroku's
 [Postgres.app](http://www.postgresql.org/download/). If installing using a
 package manager, you may need several packages. On Ubuntu and Debian, the
 required packages are: `postgresql` (base), `libpq5-dev`/`libpq-dev`, (includes
 headers needed to build the `psycopg2` Python library), `postgresql-contrib`
 (includes hstore), `python-dev` (includes Python header files for `psycopg2`).
 
-If you are receiving issues from `psycopg2`, please [ensure their its are
+If you are receiving issues from `psycopg2`, please [ensure that its are
 met](http://initd.org/psycopg/docs/faq.html#problems-compiling-and-deploying-psycopg2).
 
 
