@@ -271,7 +271,7 @@ required packages are: `postgresql` (base), `libpq5-dev`/`libpq-dev`, (includes
 headers needed to build the `psycopg2` Python library), `postgresql-contrib`
 (includes hstore), `python-dev` (includes Python header files for `psycopg2`).
 
-If you are receiving issues from `psycopg2`, please [ensure that its are
+If you are receiving issues from `psycopg2`, please [ensure that its needs are
 met](http://initd.org/psycopg/docs/faq.html#problems-compiling-and-deploying-psycopg2).
 
 
