@@ -524,3 +524,4 @@ and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
  - [BitHub](https://whispersystems.org/blog/bithub/) - An experiment in funding privacy OSS. 
  - [Fundly](https://fundly.com/) - Crowdfund Anything
  - [I Love Open Source](http://www.iloveopensource.io/) - Simple recognition for open source developers
+ - [Razoo](http://www.razoo.com/) - Create online fundraisers for anything and everything that matters to you.
