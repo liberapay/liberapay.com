@@ -1,6 +1,6 @@
 title = "About"
 [---]
-{% extends templates/about.html %}
+{% extends "templates/about.html" %}
 {% block page %}
 <div class="col">
     <h2>What Is Gittip?</h2>
@@ -108,4 +108,4 @@ title = "About"
     <p>Learn about <a href="/for/contributors/">becoming a contributor</a>.</p>
 
 </div>
-{% end %}
+{% endblock %}

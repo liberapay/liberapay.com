@@ -259,3 +259,9 @@ texinfo_documents = [
 intersphinx_mapping = {'http://docs.python.org/': None}
 
 autodoc_default_flags = ['members', 'member-order: bysource']
+
+import mock
+
+MOCK_MODULES = ['scipy', 'scipy.sparse']
+for mod_name in MOCK_MODULES:
+    sys.modules[mod_name] = mock.Mock()

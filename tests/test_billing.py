@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 import balanced
 import mock
 
-import gittip
 from gittip import billing
 from gittip.security import authentication
 from gittip.testing import Harness
@@ -16,8 +15,8 @@ class TestBillingBase(Harness):
     card_uri = '/v1/marketplaces/M123/accounts/A123/cards/C123'
 
     def setUp(self):
-        super(Harness, self).setUp()
-        self.alice = self.make_participant('alice')
+        Harness.setUp(self)
+        self.alice = self.make_participant('alice', elsewhere='github')
 
 
 class TestBalancedCard(Harness):
@@ -169,7 +168,7 @@ class TestBillingAssociate(TestBillingBase):
         gba.return_value.uri = self.balanced_account_uri
 
         # first time through, payment processor account is None
-        billing.associate(u"credit card", 'alice', None, self.card_uri)
+        billing.associate(self.db, u"credit card", 'alice', None, self.card_uri)
 
         assert gba.call_count == 1
         assert gba.return_value.add_card.call_count == 1
@@ -184,7 +183,8 @@ class TestBillingAssociate(TestBillingBase):
 
         # second time through, payment processor account is balanced
         # account_uri
-        billing.associate( u"credit card"
+        billing.associate( self.db
+                         , u"credit card"
                          , 'alice'
                          , self.balanced_account_uri
                          , self.card_uri
@@ -199,7 +199,8 @@ class TestBillingAssociate(TestBillingBase):
     def test_associate_bank_account_valid(self, find):
 
         find.return_value.uri = self.balanced_account_uri
-        billing.associate( u"bank account"
+        billing.associate( self.db
+                         , u"bank account"
                          , 'alice'
                          , self.balanced_account_uri
                          , self.balanced_destination_uri
@@ -222,7 +223,8 @@ class TestBillingAssociate(TestBillingBase):
         find.return_value.add_bank_account.side_effect = ex
         find.return_value.uri = self.balanced_account_uri
 
-        billing.associate( u"bank account"
+        billing.associate( self.db
+                         , u"bank account"
                          , 'alice'
                          , self.balanced_account_uri
                          , self.balanced_destination_uri
@@ -251,9 +253,9 @@ class TestBillingClear(TestBillingBase):
              WHERE username=%s
 
         """
-        gittip.db.run(MURKY, ('alice',))
+        self.db.run(MURKY, ('alice',))
 
-        billing.clear(u"credit card", 'alice', self.balanced_account_uri)
+        billing.clear(self.db, u"credit card", 'alice', self.balanced_account_uri)
 
         assert not valid_card.is_valid
         assert valid_card.save.call_count
@@ -282,9 +284,9 @@ class TestBillingClear(TestBillingBase):
              WHERE username=%s
 
         """
-        gittip.db.run(MURKY, ('alice',))
+        self.db.run(MURKY, ('alice',))
 
-        billing.clear(u"bank account", 'alice', 'something')
+        billing.clear(self.db, u"bank account", 'alice', 'something')
 
         assert not valid_ba.is_valid
         assert valid_ba.save.call_count
@@ -297,8 +299,8 @@ class TestBillingClear(TestBillingBase):
 
 class TestBillingStoreError(TestBillingBase):
     def test_store_error_stores_bill_error(self):
-        billing.store_error(u"credit card", "alice", "cheese is yummy")
-        rec = gittip.db.one("select * from participants where "
+        billing.store_error(self.db, u"credit card", "alice", "cheese is yummy")
+        rec = self.db.one("select * from participants where "
                             "username='alice'")
         expected = "cheese is yummy"
         actual = rec.last_bill_result
@@ -306,7 +308,7 @@ class TestBillingStoreError(TestBillingBase):
 
     def test_store_error_stores_ach_error(self):
         for message in ['cheese is yummy', 'cheese smells like my vibrams']:
-            billing.store_error(u"bank account", 'alice', message)
-            rec = gittip.db.one("select * from participants "
+            billing.store_error(self.db, u"bank account", 'alice', message)
+            rec = self.db.one("select * from participants "
                                 "where username='alice'")
             assert rec.last_ach_result == message

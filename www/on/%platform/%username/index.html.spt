@@ -5,7 +5,6 @@ import decimal
 
 from aspen import json, Response, log
 from aspen.utils import to_age, utc
-from gittip import CARDINALS, db
 from gittip.models.participant import Participant
 [-----------------------------------------------------------------------------]
 
@@ -27,9 +26,17 @@ nbackers = participant.get_number_of_backers()
 oauth_then = account.display_name
 
 [-----------------------------------------------------------------------------]
-{% extends templates/base.html %}
+{% extends "templates/base.html" %}
 
 {% block heading %}<h2 class="top"><span>{{ platform.name }}</span></h2>{% end %}
+
+{% block scripts %}
+<script>
+    $(document).ready(Gittip.tips.init);
+</script>
+
+{{ super() }}
+{% endblock %}
 
 {% block box %}
 
@@ -39,7 +46,7 @@ oauth_then = account.display_name
             <img src="{{ account.img_src }}" />
         </td>
         <td class="ready">
-            <h2><a href="{{ account.html_url }}">{{ escape(account.display_name) }}</a> has</h2>
+            <h2><a href="{{ account.html_url }}">{{ account.display_name|e }}</a> has</h2>
             <div class="number">{{ nbackers }}</div>
             <div class="unit">{{ 'person' if nbackers == 1 else 'people' }} ready to give</div>
         </td>
@@ -49,17 +56,16 @@ oauth_then = account.display_name
 
 {% include "templates/participant.tip.html" %}
 
-{% end %}
+{% endblock %}
 
 {% block page %}
 
 <div class="col0">
   {% if locked %}
 
-    <h2>{{ escape(account.display_name) }} has opted out of Gittip.</h2>
+    <h2>{{ account.display_name|e }} has opted out of Gittip.</h2>
 
-    <p>If you are <a
-    href="{{ account.html_url }}">{{ escape(account.display_name) }}</a>
+    <p>If you are <a href="{{ account.html_url }}">{{ account.display_name|e }}</a>
     on {{ platform.name }}, you can unlock your account to allow people
     to pledge tips to you on Gittip.</p>
 
@@ -67,11 +73,8 @@ oauth_then = account.display_name
         ><button>Unlock</button></a>
 
   {% else %}
-    <script>
-        $(document).ready(Gittip.tips.init);
-    </script>
 
-    <h2>{{ escape(account.display_name) }} has not joined Gittip.</h2>
+    <h2>{{ account.display_name|e }} has not joined Gittip.</h2>
 
     <p>Is this you?
     {% if user.ANON %}
@@ -81,7 +84,7 @@ oauth_then = account.display_name
     {% else %}
     <a href="/sign-out.html">Sign out</a> and sign back in
     to claim this account
-    {% end %}
+    {% endif %}
     </p>
 
     {% if user.ANON %}
@@ -94,14 +97,14 @@ oauth_then = account.display_name
 
     <h2>Don't like what you see?</h2>
 
-    <p>If you are {{ escape(account.display_name) }} you can explicitly opt out
+    <p>If you are {{ account.display_name|e }} you can explicitly opt out
     of Gittip by locking this account. We don't allow new pledges to locked
     accounts.</p>
 
     <a href="{{ platform.oauth_url('lock', oauth_then) }}"
         ><button>Lock</button></a>
-    {% end %}
+    {% endif %}
 
-  {% end %}
+  {% endif %}
 </div>
-{% end %}
+{% endblock %}

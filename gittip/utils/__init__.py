@@ -1,10 +1,12 @@
+import locale
 import time
 
 import gittip
+import re
 from aspen import log_dammit, Response
 from aspen.utils import typecheck
-from tornado.escape import linkify
-
+from postgres.cursors import SimpleCursorBase
+from jinja2 import escape
 
 COUNTRIES = (
     ('AF', u'Afghanistan'),
@@ -264,10 +266,17 @@ def wrap(u):
     """Given a unicode, return a unicode.
     """
     typecheck(u, unicode)
-    u = linkify(u)  # Do this first, because it calls xthml_escape.
-    u = u.replace(u'\r\n', u'<br />\r\n').replace(u'\n', u'<br />\n')
-    return u if u else '...'
+    linkified = linkify(u)  # Do this first, because it calls xthml_escape.
+    out = linkified.replace(u'\r\n', u'<br />\r\n').replace(u'\n', u'<br />\n')
+    return out if out else '...'
 
+def linkify(u):
+    escaped = unicode(escape(u))
+
+    urls = re.compile(r"((?:https?://|www\.)[\w\d.-]*\w(?:/(?:\S*\(\S*[^\s.,;:'\"]|\S*[^\s.,;:'\"()])*)?)", re.MULTILINE|re.UNICODE)
+    value = urls.sub(r'<a href="\1" target="_blank">\1</a>', escaped)
+
+    return value
 
 def dict_to_querystring(mapping):
     if not mapping:
@@ -310,11 +319,11 @@ def get_participant(request, restrict=True):
         if user.ANON:
             request.redirect(u'/%s/' % slug)
 
-    participant = gittip.db.one( "SELECT participants.*::participants "
-                                         "FROM participants "
-                                         "WHERE username_lower=%s"
-                                       , (slug.lower(),)
-                                        )
+    participant = request.website.db.one("""
+        SELECT participants.*::participants
+        FROM participants
+        WHERE username_lower=%s
+    """, (slug.lower(),))
 
     if participant is None:
         raise Response(404)
@@ -340,29 +349,24 @@ def get_participant(request, restrict=True):
     return participant
 
 
+def update_global_stats(website):
+    stats = website.db.one("""
+        SELECT nactive, transfer_volume FROM paydays
+        ORDER BY ts_end DESC LIMIT 1
+    """, default=(0, 0.0))
+    website.gnactive = locale.format("%d", round(stats[0], -2), grouping=True)
+    website.gtransfer_volume = locale.format("%d", round(stats[1], -2), grouping=True)
+
+
 def update_homepage_queries_once(db):
     with db.get_cursor() as cursor:
         log_dammit("updating homepage queries")
         start = time.time()
+        cursor.execute("DELETE FROM homepage_top_givers")
         cursor.execute("""
 
-        DROP TABLE IF EXISTS _homepage_new_participants;
-        CREATE TABLE _homepage_new_participants AS
-              SELECT username, claimed_time FROM (
-                  SELECT DISTINCT ON (p.username)
-                         p.username
-                       , claimed_time
-                    FROM participants p
-                    JOIN elsewhere e
-                      ON p.username = participant
-                   WHERE claimed_time IS NOT null
-                     AND is_suspicious IS NOT true
-                     ) AS foo
-            ORDER BY claimed_time DESC;
-
-        DROP TABLE IF EXISTS _homepage_top_givers;
-        CREATE TABLE _homepage_top_givers AS
-            SELECT tipper AS username, anonymous, sum(amount) AS amount
+        INSERT INTO homepage_top_givers (username, anonymous, amount)
+            SELECT tipper, anonymous_giving, sum(amount) AS amount
               FROM (    SELECT DISTINCT ON (tipper, tippee)
                                amount
                              , tipper
@@ -378,12 +382,34 @@ def update_homepage_queries_once(db):
                       ) AS foo
               JOIN participants p ON p.username = tipper
              WHERE is_suspicious IS NOT true
-          GROUP BY tipper, anonymous
+          GROUP BY tipper, anonymous_giving
           ORDER BY amount DESC;
 
-        DROP TABLE IF EXISTS _homepage_top_receivers;
-        CREATE TABLE _homepage_top_receivers AS
-            SELECT tippee AS username, claimed_time, sum(amount) AS amount
+        """.strip())
+        cursor.execute("""
+
+        UPDATE homepage_top_givers
+           SET gravatar_id = ( SELECT user_info->'gravatar_id'
+                                 FROM elsewhere
+                                WHERE participant=username
+                                  AND platform='github'
+                              )
+        """)
+        cursor.execute("""
+
+        UPDATE homepage_top_givers
+           SET twitter_pic = ( SELECT user_info->'profile_image_url_https'
+                                 FROM elsewhere
+                                WHERE participant=username
+                                  AND platform='twitter'
+                              )
+        """)
+
+        cursor.execute("DELETE FROM homepage_top_receivers")
+        cursor.execute("""
+
+        INSERT INTO homepage_top_receivers (username, anonymous, amount, claimed_time)
+            SELECT tippee, anonymous_receiving, sum(amount) AS amount, claimed_time
               FROM (    SELECT DISTINCT ON (tipper, tippee)
                                amount
                              , tippee
@@ -398,22 +424,52 @@ def update_homepage_queries_once(db):
                       ) AS foo
               JOIN participants p ON p.username = tippee
              WHERE is_suspicious IS NOT true
-          GROUP BY tippee, claimed_time
+          GROUP BY tippee, anonymous_receiving, claimed_time
           ORDER BY amount DESC;
 
-        DROP TABLE IF EXISTS homepage_new_participants;
-        ALTER TABLE _homepage_new_participants
-          RENAME TO homepage_new_participants;
+        """.strip())
+        cursor.execute("""
 
-        DROP TABLE IF EXISTS homepage_top_givers;
-        ALTER TABLE _homepage_top_givers
-          RENAME TO homepage_top_givers;
+        UPDATE homepage_top_receivers
+           SET gravatar_id = ( SELECT user_info->'gravatar_id'
+                                 FROM elsewhere
+                                WHERE participant=username
+                                  AND platform='github'
+                              )
+        """)
+        cursor.execute("""
 
-        DROP TABLE IF EXISTS homepage_top_receivers;
-        ALTER TABLE _homepage_top_receivers
-          RENAME TO homepage_top_receivers;
-
+        UPDATE homepage_top_receivers
+           SET twitter_pic = ( SELECT user_info->'profile_image_url_https'
+                                 FROM elsewhere
+                                WHERE participant=username
+                                  AND platform='twitter'
+                              )
         """)
         end = time.time()
         elapsed = end - start
         log_dammit("updated homepage queries in %.2f seconds" % elapsed)
+
+
+def _execute(this, sql, params=[]):
+    print(sql.strip(), params)
+    super(SimpleCursorBase, this).execute(sql, params)
+
+def log_cursor(f):
+    "Prints sql and params to stdout. Works globaly so watch for threaded use."
+    def wrapper(*a, **kw):
+        try:
+            SimpleCursorBase.execute = _execute
+            ret = f(*a, **kw)
+        finally:
+            del SimpleCursorBase.execute
+        return ret
+    return wrapper
+
+def redirect_confirmation(website, request):
+    from aspen import resources
+    request.internally_redirected_from = request.fs
+    request.fs = website.www_root + '/on/confirm.html.spt'
+    request.resource = resources.get(request)
+
+    raise request.resource.respond(request)

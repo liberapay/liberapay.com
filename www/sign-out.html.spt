@@ -2,7 +2,7 @@ from aspen import Response
 
 [-----------------------------------------------------------------------------]
 
-if user.ANON is None:
+if user.ANON:
     request.redirect('/')
 
 if POST:
@@ -16,10 +16,10 @@ if POST:
     request.redirect(back_to)
 
 [-----------------------------------------------------------------------------]
-{% extends templates/base.html %}
+{% extends "templates/base.html" %}
 {% block heading %}
     <h2 class="top"><span>Sign out</span></h2>
-{% end %}
+{% endblock %}
 
 {% block box %}
     <div class="as-content">
@@ -30,4 +30,4 @@ if POST:
             <button type="submit">Yes!</button>
         </form>
     </div>
-{% end %}
+{% endblock %}

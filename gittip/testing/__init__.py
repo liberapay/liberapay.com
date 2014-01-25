@@ -3,25 +3,25 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import datetime
-import random
 import unittest
 from decimal import Decimal
 from os.path import join, dirname, realpath
 
-import gittip
 import pytz
 from aspen import resources
-from aspen.testing import Website, StubRequest
-from aspen.utils import utcnow
-from gittip import wireup
+from aspen.testing.client import Client
 from gittip.billing.payday import Payday
 from gittip.models.participant import Participant
 from gittip.security.user import User
+from gittip import wireup
 from psycopg2 import IntegrityError, InternalError
 
 
-TOP = join(realpath(dirname(dirname(__file__))), '..')
+TOP = realpath(join(dirname(dirname(__file__)), '..'))
 SCHEMA = open(join(TOP, "schema.sql")).read()
+WWW_ROOT = str(realpath(join(TOP, 'www')))
+PROJECT_ROOT = str(TOP)
+
 
 DUMMY_GITHUB_JSON = u'{"html_url":"https://github.com/whit537","type":"User",'\
 '"public_repos":25,"blog":"http://whit537.org/","gravatar_id":"fb054b407a6461'\
@@ -70,28 +70,64 @@ DUMMY_BOUNTYSOURCE_JSON = u'{"slug": "6-corytheboyd","updated_at": "2013-05-2'\
 # JSON data as returned from bountysource for corytheboyd! hello, whit537 ;)
 
 
+class ClientWithAuth(Client):
+
+    def __init__(self, *a, **kw):
+        Client.__init__(self, *a, **kw)
+        Client.website = Client.hydrate_website(self)
+
+    def build_wsgi_environ(self, *a, **kw):
+        """Extend base class to support authenticating as a certain user.
+        """
+
+        # csrf - for both anon and authenticated
+        self.cookie[b'csrf_token'] = b'sotokeny'
+        kw[b'HTTP_X-CSRF-TOKEN'] = b'sotokeny'
+
+        # user authentication
+        auth_as = kw.pop('auth_as', None)
+        if auth_as is None:
+            if b'session' in self.cookie:
+                del self.cookie[b'session']
+        else:
+            user = User.from_username(auth_as)
+            user.sign_in()
+            self.cookie[b'session'] = user.participant.session_token
+
+        return Client.build_wsgi_environ(self, *a, **kw)
+
+
 class Harness(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.db = gittip.db
-        wireup.platforms(cls)
-        cls._tablenames = cls.db.all("SELECT tablename FROM pg_tables "
-                                     "WHERE schemaname='public'")
-        cls.clear_tables(cls.db, cls._tablenames[:])
+        cls.client = ClientWithAuth(www_root=WWW_ROOT, project_root=PROJECT_ROOT)
+        cls.db = cls.client.website.db
+        cls.platforms = cls.client.website.platforms
+        cls.tablenames = cls.db.all("SELECT tablename FROM pg_tables "
+                                    "WHERE schemaname='public'")
+        cls.seq = 0
+
+
+    def setUp(self):
+        self.clear_tables()
+
 
     def tearDown(self):
-        self.clear_tables(self.db, self._tablenames[:])
+        resources.__cache__ = {}  # Clear the simplate cache.
+        self.clear_tables()
 
-    @staticmethod
-    def clear_tables(db, tablenames):
+
+    def clear_tables(self):
+        tablenames = self.tablenames[:]
         while tablenames:
             tablename = tablenames.pop()
             try:
                 # I tried TRUNCATE but that was way slower for me.
-                db.run("DELETE FROM %s CASCADE" % tablename)
+                self.db.run("DELETE FROM %s CASCADE" % tablename)
             except (IntegrityError, InternalError):
                 tablenames.insert(0, tablename)
+
 
     def make_elsewhere(self, platform, user_id, user_info=None):
         platform = self.platforms[platform]
@@ -103,9 +139,42 @@ class Harness(unittest.TestCase):
             user_info[platform.username_key] = user_id
         return platform.upsert(user_id, user_info)
 
+
+    def show_table(self, table):
+        print('\n{:=^80}'.format(table))
+        data = self.db.all('select * from '+table, back_as='namedtuple')
+        if len(data) == 0:
+            return
+        widths = list(len(k) for k in data[0]._fields)
+        for row in data:
+            for i, v in enumerate(row):
+                widths[i] = max(widths[i], len(unicode(v)))
+        for k, w in zip(data[0]._fields, widths):
+            print("{0:{width}}".format(unicode(k), width=w), end=' | ')
+        print()
+        for row in data:
+            for v, w in zip(row, widths):
+                print("{0:{width}}".format(unicode(v), width=w), end=' | ')
+            print()
+
+
     def make_participant(self, username, **kw):
+        # At this point wireup.db() has been called, but not ...
+        wireup.username_restrictions(self.client.website)
+
         participant = Participant.with_random_username()
         participant.change_username(username)
+        return self.update_participant(participant, **kw)
+
+
+    def update_participant(self, participant, **kw):
+        if 'elsewhere' in kw or 'claimed_time' in kw:
+            username = participant.username
+            platform = kw.pop('elsewhere', 'github')
+            user_info = dict(login=username)
+            self.seq += 1
+            self.db.run("INSERT INTO elsewhere (platform, user_id, participant, user_info) "
+                        "VALUES (%s,%s,%s,%s)", (platform, self.seq, username, user_info))
 
         # brute force update for use in testing
         for k,v in kw.items():
@@ -118,10 +187,6 @@ class Harness(unittest.TestCase):
 
         return participant
 
-    def make_user(self, username, platform='twitter', user_info=None):
-        elsewhere = self.make_elsewhere(platform, username)
-        user, newly_claimed = elsewhere.opt_in(username)
-        return user
 
     def make_payday(self, *transfers):
 
@@ -148,168 +213,3 @@ class GittipPaydayTest(Harness):
     def setUp(self):
         super(GittipPaydayTest, self).setUp()
         self.payday = Payday(self.db)
-
-
-# Helpers for managing test data.
-# ===============================
-
-def start_payday(*data):
-    context = load(*data)
-    context.payday = Payday(gittip.db)
-    ts_start = context.payday.start()
-    context.payday.zero_out_pending(ts_start)
-    context.ts_start = ts_start
-    return context
-
-
-def setup_tips(*recs):
-    """Setup some participants and tips. recs is a list of:
-
-        ("tipper", "tippee", '2.00', True, False, True, "github", "12345")
-                                       ^     ^      ^
-                                       |     |      |
-                                       |     |      -- claimed?
-                                       |     -- is_suspicious?
-                                       |-- good cc?
-
-    tipper must be a unicode
-    tippee can be None or unicode
-    amount can be None or unicode
-    good_cc can be True, False, or None
-    is_suspicious can be True, False, or None
-    claimed can be True or False
-    platform can be unicode
-    user_id can be unicode
-
-    """
-    tips = []
-
-    _participants = {}
-    randid = lambda: unicode(random.randint(1, 1000000))
-
-    for rec in recs:
-        good_cc, is_suspicious, claimed, platform, user_id = \
-                                        (True, False, True, "github", randid())
-
-        if len(rec) == 3:
-            tipper, tippee, amount = rec
-        elif len(rec) == 4:
-            tipper, tippee, amount, good_cc = rec
-            is_suspicious, claimed = (False, True)
-        elif len(rec) == 5:
-            tipper, tippee, amount, good_cc, is_suspicious = rec
-            claimed = True
-        elif len(rec) == 6:
-            tipper, tippee, amount, good_cc, is_suspicious, claimed = rec
-        elif len(rec) == 7:
-            tipper, tippee, amount, good_cc, is_suspicious, claimed, platform \
-                                                                          = rec
-        elif len(rec) == 8:
-            tipper, tippee, amount, good_cc, is_suspicious, claimed, \
-                                                        platform, user_id = rec
-        else:
-            raise Exception(rec)
-
-        assert good_cc in (True, False, None), good_cc
-        assert is_suspicious in (True, False, None), is_suspicious
-        _participants[tipper] = \
-                              (good_cc, is_suspicious, True, platform, user_id)
-
-        if tippee is None:
-            continue
-        assert claimed in (True, False), claimed  # refers to tippee
-        if tippee not in _participants:
-            _participants[tippee] = (None, False, claimed, "github", randid())
-        now = utcnow()
-        tips.append({ "ctime": now
-                    , "mtime": now
-                    , "tipper": tipper
-                    , "tippee": tippee
-                    , "amount": Decimal(amount)
-                     })
-
-    then = utcnow() - datetime.timedelta(seconds=3600)
-
-    participants = []
-    elsewhere = []
-    for username, crap in _participants.items():
-        (good_cc, is_suspicious, claimed, platform, user_id) = crap
-        username_key = "login" if platform == 'github' else "screen_name"
-        elsewhere.append({ "platform": platform
-                         , "user_id": user_id
-                         , "participant": username
-                         , "user_info": { "id": user_id
-                                        , username_key: username
-                                         }
-                          })
-        rec = {"username": username}
-        if good_cc is not None:
-            rec["last_bill_result"] = "" if good_cc else "Failure!"
-            rec["balanced_account_uri"] = "/v1/blah/blah/" + username
-        rec["is_suspicious"] = is_suspicious
-        if claimed:
-            rec["claimed_time"] = then
-        participants.append(rec)
-
-    return ["participants"] + participants \
-         + ["tips"] + tips \
-         + ["elsewhere"] + elsewhere
-
-
-def tip_graph(*a, **kw):
-    context = load(*setup_tips(*a, **kw))
-
-    def resolve_elsewhere(username):
-        recs = context.db.all( "SELECT platform, user_id FROM elsewhere "
-                               "WHERE participant=%s"
-                             , (username,)
-                              )
-        if recs is not None:
-            recs = [(rec['platform'], rec['user_id']) for rec in recs]
-        return recs
-
-    context.resolve_elsewhere = resolve_elsewhere  # Wheeee! :D
-
-    return context
-
-
-# Helpers for testing simplates.
-# ==============================
-
-test_website = Website([ '--www_root', str(join(TOP, 'www'))
-                       , '--project_root', str(TOP)
-                       , '--show_tracebacks', str('yes')
-                        ])
-
-def serve_request(path, user=None):
-    """Given an URL path, return response.
-    """
-    request = StubRequest(path)
-    request.website = test_website
-    if user is not None:
-        user = User.from_username(user)
-        # Note that Cookie needs a bytestring.
-        request.headers.cookie[str('session')] = user.session_token
-    response = test_website.handle_safely(request)
-    return response
-
-def load_request(path):
-    """Given an URL path, return request.
-    """
-    request = StubRequest(path)
-    request.website = test_website
-
-    # XXX HACK - aspen.website should be refactored
-    from aspen import dispatcher, sockets
-    test_website.hooks.run('inbound_early', request)
-    dispatcher.dispatch(request)  # sets request.fs
-    request.socket = sockets.get(request)
-    test_website.hooks.run('inbound_late', request)
-
-    return request
-
-def load_simplate(path):
-    """Given an URL path, return resource.
-    """
-    request = load_request(path)
-    return resources.get(request)

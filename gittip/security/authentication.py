@@ -76,9 +76,9 @@ def check_role(request):
         request.redirect('..')
 
 
-def outbound(response):
-    if 'user' in response.request.context:
-        user = response.request.context['user']
+def outbound(request, response):
+    if 'user' in request.context:
+        user = request.context['user']
         if not isinstance(user, User):
             raise Response(400, "If you define 'user' in a simplate it has to "
                                 "be a User instance.")
@@ -86,7 +86,7 @@ def outbound(response):
         user = User()
 
     if user.ANON: # user is anonymous
-        if 'session' not in response.request.headers.cookie:
+        if 'session' not in request.headers.cookie:
             # no cookie in the request, don't set one on response
             return
         else:

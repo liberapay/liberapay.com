@@ -65,7 +65,6 @@ get_filepath () {
 # Work
 # ====
 
-require foreman
 require heroku
 require pg_dump
 
@@ -80,7 +79,5 @@ fi
 confirm "Backup the Gittip database to $FILEPATH?"
 if [ $? -eq 0 ]; then
     export PGSSLMODE=require
-    heroku config -s -a gittip \
-        | foreman run -e /dev/stdin ./configure-pg-env.sh \
-        | foreman run -e /dev/stdin pg_dump > $FILEPATH
+    pg_dump `heroku config:get DATABASE_URL -a gittip` > $FILEPATH
 fi

@@ -1,24 +1,28 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from aspen import Response
+from aspen.http.response import Response
 from gittip import utils
-from gittip.testing import Harness, load_request
+from gittip.testing import Harness
 
 
 class Tests(Harness):
 
     def test_get_participant_gets_participant(self):
-        elsewhere = self.make_elsewhere("twitter", "alice")
-        expected = elsewhere.opt_in("alice")[0].participant
-
-        request = load_request(b'/alice/')
+        expected = self.make_participant('alice', claimed_time='now')
+        request = self.client.GET( '/alice/'
+                                 , return_after='dispatch_request_to_filesystem'
+                                 , want='request'
+                                  )
         actual = utils.get_participant(request, restrict=False)
         assert actual == expected
 
     def test_get_participant_canonicalizes(self):
-        self.make_elsewhere("twitter", "alice").opt_in("alice")
+        self.make_participant('alice', claimed_time='now')
+        request = self.client.GET( '/Alice/'
+                                 , return_after='dispatch_request_to_filesystem'
+                                 , want='request'
+                                  )
 
-        request = load_request(b'/Alice/')
         with self.assertRaises(Response) as cm:
             utils.get_participant(request, restrict=False)
         actual = cm.exception.code

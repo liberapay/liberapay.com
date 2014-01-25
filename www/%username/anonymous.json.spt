@@ -1,23 +1,28 @@
 from aspen import Response
-from gittip import db
 [---]
 if user.ANON:
     raise Response(404)
 request.allow("GET", "POST")
 if POST:
-    rec = db.one("""
+    field = body.get("toggle", "giving")
+    if field not in ["giving", "receiving"]:
+        raise Response(400)
+    rec = website.db.one("""
 
         UPDATE participants
-           SET anonymous=not anonymous
+           SET anonymous_{0}=not anonymous_{0}
          WHERE username=%s
-     RETURNING anonymous
+     RETURNING anonymous_{0}
 
-    """, (user.participant.username,))
+    """.format(field), (user.participant.username,))
+    assert rec is not None
+    response.body = {field: rec}
 else:
-    rec = db.one("""
+    rec = website.db.one("""
 
-        SELECT anonymous FROM participants WHERE username=%s
+        SELECT anonymous_giving AS giving, anonymous_receiving AS receiving
+        FROM participants WHERE username=%s
 
-    """, (user.participant.username,))
-assert rec is not None
-response.body = {"anonymous": rec}
+    """, (user.participant.username,), back_as=dict)
+    assert rec is not None
+    response.body = rec

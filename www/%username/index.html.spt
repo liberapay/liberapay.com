@@ -25,10 +25,17 @@ hero = "Profile"
 title = participant.username      # used in the title tag
 username = participant.username   # used in footer shared with on/$platform/
                                   # pages
-github_account, twitter_account, bitbucket_account, \
-                    bountysource_account = participant.get_accounts_elsewhere()
+
+accounts = participant.get_accounts_elsewhere()
+github_account = accounts.github
+bitbucket_account = accounts.bitbucket
+twitter_account = accounts.twitter
+bountysource_account = accounts.bountysource
+venmo_account = accounts.venmo
+openstreetmap_account = accounts.openstreetmap
+
 long_statement = len(participant.statement) > LONG_STATEMENT
-communities = [c for c in community.get_list_for(username) if c.is_member]
+communities = [c for c in community.get_list_for(website.db, username) if c.is_member]
 if participant.number == 'singular':
     I_AM = "I am"
     I_M = "I'm"
@@ -39,7 +46,7 @@ else:
     MY = "Our"
 
 [-----------------------------------------------------------------------------]
-{% extends templates/profile.html %}
+{% extends "templates/profile.html" %}
 {% block head %}
     <link rel="payment" type="text/html" title="Give weekly gift on Gittip" href="https://www.gittip.com/{{ username }}/" />
     <meta name="twitter:card" content="summary" />
@@ -47,12 +54,27 @@ else:
     <meta name="og:type" content="website" />
     <meta name="og:title" content="{{ participant.get_og_title() }}" />
     {% if participant.statement %}
-    <meta name="og:description" content="{{ _clip(I_AM + " " + MAKING + " " + escape(participant.statement), 200) }}" />
+    <meta name="og:description" content="{{ _clip(I_AM + " " + MAKING + " " + participant.statement, 200)|e }}" />
     {% else %}
     <meta name="og:description" content="Gittip is a weekly gift exchange." />
-    {% end %}
+    {% endif %}
     <meta name="og:image" content="{{ participant.get_img_src() }}" />
-{% end %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+    jQuery.get('./charts.json', Gittip.charts.make);
+});
+</script>
+
+{% if user.participant == participant %}
+<script>$(document).ready(Gittip.profile.init);</script>
+{% endif %}
+
+{{ super() }}
+{% endblock %}
+
 {% block page %}
 
 {% if user.participant == participant %}
@@ -62,35 +84,25 @@ else:
 {% else %}
     <div class="group">
         {% if participant.statement %}
-            <div class="{% if long_statement %}col1{% else %}col0{% end %}">
+        <div class="{% if long_statement %}col1{% else %}col0{% endif %}">
             <h2>Statement</h2>
             <div class="statement">
                 {{ I_AM }}
                 {{ MAKING }} {{ wrap(participant.statement) }}
             </div>
-            </div>
-            <div class="{% if long_statement %}col2{% else %}col0{% end %}">
-        {% else %}
-            <div class="col0">
-        {% end %}
             {% include "templates/team-listing.html" %}
-
-            {% if communities %}
-            <h2>Communities</h2>
-            <ul class="community memberships">
-                {% for community in communities %}
-                <li>
-                    <a href="/for/{{ community.slug }}/">{{ community.name }}</a>
-                    {% set nothers = community.nmembers - 1 %}
-                    <div class="fine">with {{ nothers }} other{{ plural(nothers) }}</div>
-                </li>
-                {% end %}
-            </ul>
-            {% end %}
+            {% include "templates/community-listing.html" %}
+        </div>
+        <div class="{% if long_statement %}col2{% else %}col0{% endif %}">
+        {% else %}
+        <div class="col0">
+            {% include "templates/team-listing.html" %}
+            {% include "templates/community-listing.html" %}
+        {% endif %}
 
             <h2>Funding Goal</h2>
             <div class="goal">
-                {% if participant.goal is None %}
+                {% if participant.goal == None %}
                 {{ I_M }} grateful for gifts, but don't have a specific funding
                 goal.
                 {% elif participant.goal == 0 %}
@@ -102,11 +114,13 @@ else:
                 {{ MY }} goal is to receive
                 ${{ locale.format("%.2f", participant.goal, grouping=True) }}
                 per week on Gittip.
-                {% end %}
-                </div>
+                {% endif %}
+            </div>
 
+            {% include "templates/charts-for-user.html" %}
             {% include "templates/connected-accounts.html" %}
         </div>
     </div>
-{% end %}
-{% end %}
+{% endif %}
+
+{% endblock %}

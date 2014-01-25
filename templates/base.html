@@ -1,108 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+    <title>{% if title %}{{ title|e }} - {% endif %}Gittip</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ website.asset_url }}/reset.css" type="text/css">
+    <link rel="stylesheet" href="{{ website.asset_version_url }}/gittip.css" type="text/css">
+    <link rel="stylesheet" href="{{ website.asset_url }}/chosen/chosen.css" type="text/css">
 
-    <title>{% if 'title' in globals() %}{{ escape(title) }} - {% end %}Gittip</title>
-    <meta http-equiv="content-language" content="en"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/assets/reset.css"
-            type="text/css" charset="utf-8" />
-    <link rel="stylesheet" href="{{ website.css_href }}"
-            type="text/css" charset="utf-8" />
-
-    <!-- http://css-tricks.com/snippets/jquery/fallback-for-cdn-hosted-jquery/ -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-    <script>
-        if (typeof jQuery === 'undefined')
-            document.write(unescape("%3Cscript src='/assets/jquery-1.8.3.min.js'%3E%3C/script%3E"));
-    </script>
-
-    <!-- Used on the profile edit page for the community chooser. -->
-    <script src="/assets/chosen/chosen.jquery.min.js"></script>
-    <style>@import url("/assets/chosen/chosen.css");</style>
-
-    <script src="/assets/{{ website.version }}/vendor/bootstrap-dropdown.js"></script>
-
-    <script src="/assets/{{ website.version }}/utils.js"></script>
-    <script src="{{ website.js_src }}"></script>
-    <script>$(document).ready(Gittip.init);</script>
-
-    <!-- start Mixpanel -->
-    <script type="text/javascript">
-        (function(e,b){if(!b.__SV){var a,f,i,g;window.mixpanel=b;a=e.createElement("script");a.type="text/javascript";a.async=!0;a.src=("https:"===e.location.protocol?"https:":"http:")+'//cdn.mxpnl.com/libs/mixpanel-2.2.min.js';f=e.getElementsByTagName("script")[0];f.parentNode.insertBefore(a,f);b._i=[];b.init=function(a,e,d){function f(b,h){var a=h.split(".");2==a.length&&(b=b[a[0]],h=a[1]);b[h]=function(){b.push([h].concat(Array.prototype.slice.call(arguments,0)))}}var c=b;"undefined"!== typeof d?c=b[d]=[]:d="mixpanel";c.people=c.people||[];c.toString=function(b){var a="mixpanel";"mixpanel"!==d&&(a+="."+d);b||(a+=" (stub)");return a};c.people.toString=function(){return c.toString(1)+".people (stub)"};i="disable track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config people.set people.increment people.append people.track_charge people.clear_charges people.delete_user".split(" ");for(g=0;g<i.length;g++)f(c,i[g]);b._i.push([a, e,d])};b.__SV=1.2}})(document,window.mixpanel||[]);
-        mixpanel.init("{{ website.mixpanel_token }}");
-        {% if not user.ANON %}mixpanel.alias("{{ user.participant.id }}");
-        mixpanel.identify("{{ user.participant.id }}");{% end %}
-    </script>
-    <!-- end Mixpanel -->
-
-    {% block head %}{% end %}
-    {% block head2 %}{% end %}
-
+    {% block head %}{% endblock %}
 </head>
 <body>
-    <div class="main-padding"><div id="header">
-        <table><tr><td class="logo">
-            <h1>
-                <a href="/">
-                    <img src="/assets/{{ website.version }}/logo.png"
-                         alt="Gittip" />
-                </a>
-            </h1>
-            </td><td class="motto luxury">
-	    <a href='/about/charts.html'>{{ gnactive }} users exchanging ${{ gtransfer_volume }} per week</a>
-        </td></tr></table>
-        {% if user.ANON %}
-          {% include sign-in-using.html %}
-        {% else %}
-        <div class="you-are">
-            <a href="/{{ user.participant.username }}/">{{ user.participant.username }}</a> &ndash;
-            <a id="sign-out" href="/sign-out.html">sign out</a>
-            <div class="quick-stats">
-              Giving: <a href="/{{ user.participant.username }}/giving/">${{ user.participant.get_dollars_giving() }}/wk</a><br />
-              Receiving: <b>${{ user.participant.get_dollars_receiving() }}/wk</b>
+    <div class="container">
+        <div id="header">
+            <table><tr><td class="logo">
+                <h1>
+                    <a href="/">
+                        <img src="/assets/{{ website.version }}/logo.png"
+                             alt="Gittip" />
+                    </a>
+                </h1>
+                </td><td class="motto luxury">
+            <a href='/about/charts.html'>{{ website.gnactive }} users exchanging ${{ website.gtransfer_volume }} per week</a>
+            </td></tr></table>
+            {% if user.ANON %}
+              {% include "templates/sign-in-using.html" %}
+            {% else %}
+            <div class="you-are">
+                <a href="/{{ user.participant.username }}/">{{ user.participant.username }}</a> &ndash;
+                <a id="sign-out" href="/sign-out.html">sign out</a>
+                <div class="quick-stats">
+                  Giving: <a href="/{{ user.participant.username }}/giving/">
+                              <span class="my-total-giving">${{ user.participant.get_dollars_giving() }}<span>/wk
+                          </a>
+                  <br />
+                  Receiving: <b>${{ user.participant.get_dollars_receiving() }}/wk</b>
+                </div>
             </div>
-        </div>
-        {% end %}
-    </div></div>
-
-    <div id="hero">
-        <div class="main-padding">
-            {% block heading %}
-            {% if 'title' in globals() %}
-            <h2 class="top"><span>{{ title }}</span></h2>
-            {% end %}
-            {% end %}
+            {% endif %}
         </div>
     </div>
 
-    <div class="main-padding"><div id="box-page">
+    <div id="hero">
+        <div class="container">
+            {% block heading %}
+            {% if title %}
+            <h2 class="top"><span>{{ title }}</span></h2>
+            {% endif %}
+            {% endblock %}
+        </div>
+    </div>
+
+    <div class="container">
         {% block killbox %}
         <div class="box">
-            {% block box %}{% end %}
+            {% block box %}{% endblock %}
         </div>
-        {% end %}
+        {% endblock %}
         <div id="page" class="group">
-            {% block page %}{% end %}
+            {% block page %}{% endblock %}
         </div>
-    </div></div>
 
-    <div class="main-padding"><div id="footer">
-        <div class="social">
-            <a href="https://twitter.com/gittip"><img src="/assets/icons/twitter.16.png" /></a>
+        <div id="footer">
+            <div class="social">
+                <a href="https://twitter.com/gittip"><img src="/assets/icons/twitter.16.png" /></a>
+            </div>
+            <ul>
+                <li><a href='http://blog.gittip.com/'>Blog</a></li>
+                <li><a href="/about/">About</a></li>
+                <li><a href="https://github.com/gittip/www.gittip.com">Source</a></li>
+                <li><a href='/about/faq.html'>FAQ</a></li>
+                <li><a href='/about/stats.html'>Stats</a></li>
+                <li><a href='/about/charts.html'>Charts</a></li>
+                <li><a href="/about/terms/">Terms</a></li>
+                <li><a href="/about/privacy/">Privacy</a></li>
+                <li><a href='/about/fraud/'>Fraud</a></li>
+                <li><a href='/security.txt'>Security</a></li>
+            </ul>
         </div>
-        <a href='http://blog.gittip.com/'>Blog</a> |
-        <a href="/about/">About</a> |
-        <a href="https://github.com/gittip/www.gittip.com">Source</a> |
-        <a href='/about/faq.html'>FAQ</a> |
-        <a href='/about/stats.html'>Stats</a> |
-        <a href='/about/charts.html'>Charts</a> |
-        <a href="/about/terms/">Terms</a> |
-        <a href="/about/privacy/">Privacy</a> |
-        <a href='/about/fraud/'>Fraud</a> |
-        <a href='/security.txt'>Security</a>
-    </div></div>
+    </div>
 
     {%if website.google_analytics_id %}
     <script type="text/javascript">
@@ -119,23 +94,20 @@
       })();
 
     </script>
-    {% end %}
+    {% endif %}
 
-    {%if website.gauges_id %}
-    <script type="text/javascript">
-      var _gauges = _gauges || [];
-      (function() {
-        var t   = document.createElement('script');
-        t.type  = 'text/javascript';
-        t.async = true;
-        t.id    = 'gauges-tracker';
-        t.setAttribute('data-site-id', '{{ website.gauges_id }}');
-        t.src = '//secure.gaug.es/track.js';
-        var s = document.getElementsByTagName('script')[0];
-        s.parentNode.insertBefore(t, s);
-      })();
-    </script>
-    {% end %}
+    <script src="{{ website.asset_url }}/jquery-1.10.2.min.js"></script>
 
-</div></body>
+    <!-- Used on the profile edit page for the community chooser. -->
+    <script src="{{ website.asset_url }}/chosen/chosen.jquery.min.js"></script>
+
+    <script src="{{ website.asset_version_url }}/vendor/bootstrap-dropdown.js"></script>
+
+    <script src="{{ website.asset_version_url }}/utils.js"></script>
+    <script src="{{ website.asset_version_url }}/gittip.js"></script>
+    <script>$(document).ready(Gittip.init);</script>
+    {% block scripts %}
+
+    {% endblock %}
+</body>
 </html>

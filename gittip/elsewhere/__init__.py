@@ -2,18 +2,20 @@
 """
 from __future__ import print_function, unicode_literals
 
-from aspen.utils import typecheck
-from aspen.http.request import UnicodeWithParams
-from gittip.models.participant import reserve_a_random_username
-from gittip.models.account_elsewhere import AccountElsewhere
-from psycopg2 import IntegrityError
-from aspen import json, log, Response, resources
-from requests_oauthlib import OAuth1
-import requests
+from collections import OrderedDict
 from urlparse import parse_qs
-from gittip.utils import mixpanel
-from gittip.models._mixin_elsewhere import NeedConfirmation
 
+from aspen import json, log, Response, resources
+from aspen.utils import typecheck
+from psycopg2 import IntegrityError
+import requests
+from requests_oauthlib import OAuth1
+
+import gittip
+from gittip.exceptions import ProblemChangingUsername, UnknownPlatform
+from gittip.models._mixin_elsewhere import NeedConfirmation
+from gittip.models.account_elsewhere import AccountElsewhere
+from gittip.utils.username import reserve_a_random_username
 
 ACTIONS = ['opt-in', 'connect', 'lock', 'unlock']
 
@@ -66,7 +68,6 @@ class Platform(object):
     def __init__(self, db):
         self.db = db
 
-
         # Make sure the subclass was implemented properly.
         # ================================================
 
@@ -86,17 +87,16 @@ class Platform(object):
         if not issubclass(self.account_elsewhere_subclass, AccountElsewhere):
             raise BadAccountElsewhereSubclass(self.account_elsewhere_subclass)
 
+        return output
 
     def get_account(self, username):
         """Given a username on the other platform, return an AccountElsewhere object.
         """
-        typecheck(username, UnicodeWithParams)
         try:
             out = self.get_account_from_db(username)
         except UnknownAccountElsewhere:
             out = self.get_account_from_api(username)
         return out
-
 
     def get_account_from_db(self, username):
         """Given a username on the other platform, return an AccountElsewhere object.
@@ -113,7 +113,6 @@ class Platform(object):
 
         """, (self.name, self.username_key, username), default=UnknownAccountElsewhere)
 
-
     def get_account_from_api(self, username):
         """Given a username on the other platform, return an AccountElsewhere object.
 
@@ -123,25 +122,21 @@ class Platform(object):
         user_id, user_info = self._get_account_from_api(username)
         return self.upsert(user_id, user_info)
 
-
     def _get_account_from_api(self, username):
         # Factored out so we can call upsert without hitting API for testing.
         user_info = self.get_user_info(username)
         user_id = unicode(user_info[self.user_id_key])  # If this is KeyError, then what?
         return user_id, user_info
 
-
     def upsert(self, user_id, user_info):
         """Given a unicode and a dict, dance with our db and return an AccountElsewhere.
         """
         typecheck(user_id, unicode, user_info, dict)
 
-
         # Insert the account if needed.
         # =============================
         # Do this with a transaction so that if the insert fails, the
         # participant we reserved for them is rolled back as well.
-
         try:
             with self.db.get_cursor() as cursor:
                 random_username = reserve_a_random_username(cursor)
@@ -151,11 +146,8 @@ class Platform(object):
                               , (self.name, user_id, random_username)
                                )
         except IntegrityError:
-
             # We have a db-level uniqueness constraint on (platform, user_id)
-
             pass
-
 
         # Update their user_info.
         # =======================
@@ -167,10 +159,8 @@ class Platform(object):
         #
         # XXX This clobbers things, of course, such as booleans. See
         # /on/bitbucket/%username/index.html
-
         for k, v in user_info.items():
             user_info[k] = unicode(v)
-
 
         username = self.db.one("""
 
@@ -181,12 +171,8 @@ class Platform(object):
 
         """, (user_info, self.name, user_id, self.username_key))
 
-
-        # Now delegate to get_account_from_db.
-        # ====================================
-
+        # Now delegate to get_account_from_db
         return self.get_account_from_db(username)
-
 
     def resolve(self, username):
         """Given a username elsewhere, return a username here.
@@ -227,8 +213,6 @@ class Platform(object):
             # set 'user' to give them a session :/
             user, newly_claimed = account.opt_in(username)
             del account
-            if newly_claimed:
-                mixpanel.alias_and_track(cookie, unicode(user.participant.id))
         elif action == 'connect':   # connect
             try:
                 user.participant.take_over(account)
@@ -266,6 +250,7 @@ class Platform(object):
             # Interpret it as a Platform username.
             then = u'/on/%s/%s/' % (self.name, then)
         return then, user
+
 
 class PlatformOAuth1(Platform):
 
@@ -310,7 +295,7 @@ class PlatformOAuth1(Platform):
             then = then.decode('base64')
         except KeyError:
             return '/about/me.html', user
-        
+
         if action not in ACTIONS:
             raise Response(400)
 
@@ -342,6 +327,7 @@ class PlatformOAuth1(Platform):
 
         return self.user_action(request, website, user, then, action, user_info)
 
+
 class PlatformOAuth2(Platform):
 
     def handle_oauth_callback(self, request, website, user):
@@ -349,7 +335,7 @@ class PlatformOAuth2(Platform):
 
         if 'error' in qs or not ('code' in qs and 'data' in qs):
             raise Response(403)
-        
+
         # Determine what we're supposed to do.
         data = qs['data'].decode('base64').decode('UTF-8')
         action, then = data.split(',', 1)
@@ -361,5 +347,17 @@ class PlatformOAuth2(Platform):
 
         # Load user info.
         user_info = self.oauth_dance(website, qs)
-        
+
         return self.user_action(request, website, user, then, action, user_info)
+
+    def set_oauth_tokens(self, access_token, refresh_token, expires):
+        """
+        Updates the elsewhere row with the given access token, refresh token, and Python datetime
+        """
+
+        self.db.run("""
+            UPDATE elsewhere 
+            SET (access_token, refresh_token, expires) 
+            = (%s, %s, %s) 
+            WHERE platform=%s AND user_id=%s
+        """, (access_token, refresh_token, expires, self.platform, self.user_id))

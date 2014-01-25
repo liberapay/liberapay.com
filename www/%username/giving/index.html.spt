@@ -7,9 +7,11 @@ def _extract_username(tip):
         key = 'login'
     elif tip.platform == 'bitbucket':
         key = 'username'
-    else:
-        assert tip.platform == 'twitter', tip  # sanity check
+    elif tip.platform == 'twitter':
         key = 'screen_name'
+    else:
+        assert tip.platform == 'openstreetmap', tip  # sanity check
+        key = 'username'
     return tip.user_info[key]
 
 [-----------------------------------------------------------------------------]
@@ -25,10 +27,6 @@ first_time = qs.get('first_time') == '1'
 {% extends "templates/profile.html" %}
 {% block page %}
 <style>
-    #matrix {
-        margin: 0 auto;
-        width: 1px;
-    }
     #matrix td {
         text-align: left;
         height: 30px;
@@ -64,13 +62,13 @@ first_time = qs.get('first_time') == '1'
                     about you.</li>
             </ol>
 
-            {% end %}
-            {% if participant == user %}
-            <h2>You give $<span class="total-giving">{{ total }}</span> per
+            {% endif %}
+            {% if participant == user.participant %}
+            <h2>You give <span class="my-total-giving">${{ total }}</span> per
                 week</h2>
             {% else %}
             <h2>{{ participant.username }} gives ${{ total }} per week</h2>
-            {% end %}
+            {% endif %}
         </td>
     </tr>
     {% for tip in tips %}
@@ -81,15 +79,15 @@ first_time = qs.get('first_time') == '1'
         <th><a href="/{{ tippee }}/">{{ tippee }}</a></th>
         <td>{% include "templates/my-tip-bulk.html" %}</td>
     </tr>
-    {% end %}
-    {% end %}
+    {% endif %}
+    {% endfor %}
     {% if unclaimed_total > 0 %}
     <tr>
         <td colspan="2">
             <h2>Another ${{ unclaimed_total }} per week goes unclaimed</h2>
         </td>
     </tr>
-    {% end %}
+    {% endif %}
     {% for tip in unclaimed_tips %}
     {% set my_tip = tip.amount %}
     {% set tippee = tip.tippee %}
@@ -101,7 +99,7 @@ first_time = qs.get('first_time') == '1'
         </th>
         <td>{% include "templates/my-tip-bulk.html" %}</td>
     </tr>
-    {% end %}
-    {% end %}
+    {% endif %}
+    {% endfor %}
 </table>
-{% end %}
+{% endblock %}

@@ -1,41 +1,34 @@
-{% extends "participant.html" %}
-{% block head2 %}
-    {% if user.ADMIN %}<script src="/assets/{{ website.version }}/admin.js"></script>{% end %}
+{% extends "templates/participant.html" %}
+{% block scripts %}
+    {% if user.ADMIN %}<script src="{{ website.asset_version_url }}/admin.js"></script>{% endif %}
     <script>$(document).ready(Gittip.tips.init)</script>
     <script>$(document).ready(function() {
       $('#goal-custom').on('click change', function() {
         $('#goal-yes').attr('checked', true)
       })
     })</script>
-{% end %}
+{% endblock %}
 
-{% block heading %}<h2 class="top"><span>{{ hero }}</span></h2>{% end %}
+{% block heading %}<h2 class="top"><span>{{ hero }}</span></h2>{% endblock %}
 
 {% block nav %}
 {% set current_page = path.raw.split('/')[2] %}
 {% if user.participant == participant or user.ADMIN %}
 <div class="nav level-2">
     <h2>Navigation</h2>
-    {% set pages = [('/', 'Profile'), ('/horn/', 'Horn'), ('/giving/', 'Giving'), ('/history/', 'History'), ('/widgets/', 'Widgets')] %}
+    {% set pages = [('/', 'Profile'), ('/giving/', 'Giving'), ('/history/', 'History'), ('/widgets/', 'Widgets')] %}
     {% for slug, name in pages %}
-    <a href="/{{ participant.username }}{{ slug }}"><button{% if slug.strip('/') == current_page %} class="selected"{% end %}>{{ name }}</button></a>
-    {% end %}
+    <a href="/{{ participant.username }}{{ slug }}"><button{% if slug.strip('/') == current_page %} class="selected"{% endif %}>{{ name }}</button></a>
+    {% endfor %}
     {% if participant.show_as_team(user) %}
-    <a href="/{{ participant.username }}/members/"><button{% if 'members' == current_page %} class="selected"{% end %}>Members</button></a>
-    {% end %}
+    <a href="/{{ participant.username }}/members/"><button{% if 'members' == current_page %} class="selected"{% endif %}>Members</button></a>
+    {% endif %}
 </div>
 {% elif participant.show_as_team(user) %}
 <div class="nav level-2">
     <h2>Navigation</h2>
-    <a href="/{{ participant.username }}/"><button{% if '' == current_page %} class="selected"{% end %}>Profile</button></a>
-    <a href="/{{ participant.username }}/horn/"><button{% if 'horn' == current_page %} class="selected"{% end %}>Horn</button></a>
-    <a href="/{{ participant.username }}/members/"><button{% if 'members' == current_page %} class="selected"{% end %}>Members</button></a>
+    <a href="/{{ participant.username }}/"><button{% if '' == current_page %} class="selected"{% endif %}>Profile</button></a>
+    <a href="/{{ participant.username }}/members/"><button{% if 'members' == current_page %} class="selected"{% endif %}>Members</button></a>
 </div>
-{% else %}
-<div class="nav level-2">
-    <h2>Navigation</h2>
-    <a href="/{{ participant.username }}/"><button{% if '' == current_page %} class="selected"{% end %}>Profile</button></a>
-    <a href="/{{ participant.username }}/horn/"><button{% if 'horn' == current_page %} class="selected"{% end %}>Horn</button></a>
-</div>
-{% end %}
-{% end %}
+{% endif %}
+{% endblock %}

@@ -2,10 +2,10 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import logging
 import os
-
 import requests
+
 from aspen import json, Response
-from aspen.http.request import UnicodeWithParams
+from aspen.http.request import PathPart
 from aspen.utils import typecheck
 from aspen.website import Website
 from gittip import log
@@ -15,8 +15,15 @@ from gittip.elsewhere import ACTIONS, AccountElsewhere, PlatformOAuth2
 class GitHubAccount(AccountElsewhere):
 
     @property
+    def html_url(self):
+        return self.user_info['html_url']
+
+    @property
     def display_name(self):
         return self.user_info['login']
+
+    def get_platform_icon(self):
+        return "/assets/icons/github.12.png"
 
     @property
     def img_src(self):
@@ -29,11 +36,6 @@ class GitHubAccount(AccountElsewhere):
             src %= (gravatar_hash, 128)
 
         return src
-
-    @property
-    def html_url(self):
-        return self.user_info['html_url']
-
 
 
 class GitHub(PlatformOAuth2):
@@ -115,7 +117,6 @@ class GitHub(PlatformOAuth2):
         :returns:
             A dictionary containing github specific information for the user.
         """
-        typecheck(login, (unicode, UnicodeWithParams))
 
         url = "https://api.github.com/users/%s"
         user_info = requests.get(url % login, params={

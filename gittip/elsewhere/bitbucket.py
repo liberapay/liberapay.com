@@ -1,13 +1,13 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import logging
+from os import environ
 
-import requests
 from aspen import json, log, Response
-from aspen.http.request import UnicodeWithParams
+from aspen.http.request import PathPart
 from aspen.utils import typecheck
 from gittip.elsewhere import AccountElsewhere, PlatformOAuth1
-from os import environ
+import requests
 from requests_oauthlib import OAuth1
 
 
@@ -17,18 +17,21 @@ BASE_API_URL = "https://bitbucket.org/api/1.0"
 class BitbucketAccount(AccountElsewhere):
 
     @property
+    def html_url(self):
+        return "https://bitbucket.org/{username}".format(**self.user_info)
+
+    @property
     def display_name(self):
         return self.user_info['username']
+
+    def get_platform_icon(self):
+        return "/assets/icons/bitbucket.12.png"
 
     @property
     def img_src(self):
         src = ''
         # XXX Um ... ?
         return src
-
-    @property
-    def html_url(self):
-        return "https://bitbucket.org/{username}".format(**self.user_info)
 
 
 class Bitbucket(PlatformOAuth1):
@@ -46,9 +49,6 @@ class Bitbucket(PlatformOAuth1):
         For GitHub we can pass action and then through a querystring. For Bitbucket
         we can't, so we send people through a local URL first where we stash this
         info in an in-memory cache (eep! needs refactoring to scale).
-
-        Not sure why website is here. Vestige from GitHub forebear?
-
         """
         then = then.encode('base64').strip()
         return "/on/bitbucket/redirect?action=%s&then=%s" % (action, then)
@@ -60,7 +60,7 @@ class Bitbucket(PlatformOAuth1):
         :param username:
             A unicode string representing a username in bitbucket.
 
-	:param token:
+        :param token:
             OAuth1 token.
 
         :param secret:
@@ -72,7 +72,6 @@ class Bitbucket(PlatformOAuth1):
         if not username and token and secret:
             return self.get_user_info_with_oauth(token, secret)
 
-        typecheck(username, (unicode, UnicodeWithParams))
         url = "%s/users/%s?pagelen=100"
         user_info = requests.get(url % (BASE_API_URL, username))
         status = user_info.status_code

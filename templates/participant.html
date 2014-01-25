@@ -1,67 +1,66 @@
-{% extends base.html %}
+{% extends "templates/base.html" %}
 
 {% block box %}
 
-<table class="on-profile{% if participant.is_suspicious %} is-suspicious{% end %}">
+{% set prefix = user.participant == participant and "my-" or "" %}
+{% set anon_giving = participant.anonymous_giving %}
+{% set g = participant.get_dollars_giving() %}
+{% set giving = anon_giving and "anonymously" or "$"+str(g) %}
+{% set anon_receiving = participant.anonymous_receiving %}
+{% set r = participant.get_dollars_receiving() %}
+{% set receiving = anon_receiving and "anonymously" or "$"+str(r) %}
+
+<table class="on-profile{% if participant.is_suspicious %} is-suspicious{% endif %}">
     <tr>
         <td class="picture">
             <a href="/{{ participant.username }}/"><img src="{{ participant.get_img_src(128) }}" /></a>
         </td>
         <td class="giving-receiving">
-        {% set g = giving = participant.get_dollars_giving() %}
-        {% set r = receiving = participant.get_dollars_receiving() %}
-
-        {% if g > r and not participant.anonymous %}
+        {% if anon_giving and anon_receiving %}
+            <h2>{{ participant.username }} gives and receives anonymously</h2>
+        {% elif not anon_giving and g > 0 and (g > r or anon_receiving) %}
             <h2 class="pad-sign">{{ participant.username }} gives</h2>
             <div class="number">
-                {% if user.participant == participant %}
-                $<span class="total-giving">{{ giving }}</span>
-                {% else %}
-                ${{ giving }}
-                {% end %}
+                <span class="{{prefix}}total-giving">{{ giving }}</span>
             </div>
-            <div class="unit pad-sign">per 
-                week{% if r > 0 %}, and receives $<span class="total-receiving">{{ receiving }}</span>{% end %}
+            <div class="unit pad-sign">
+                per week{% if r > 0 or anon_receiving %}, and receives
+                    {{ receiving }}
+                {% endif %}
             </div>
-        {% elif r > 0 %}
+        {% elif not anon_receiving and r > 0 and (r >= g or anon_giving) %}
             <h2 class="pad-sign">{{ participant.username }} receives</h2>
-            <div class="number">$<span class="total-receiving">{{ receiving }}</span></div>
-            <div class="unit pad-sign">per 
-                week{% if g > 0 %}, and gives 
-                {% if participant.anonymous %}
-                anonymously
-                {% elif user.participant == participant %}
-                $<span class="total-giving">{{ giving }}</span>
-                {% else %}
-                ${{ giving }}
-                {% end %}
-                {% end %}
+            <div class="number">
+                <span class="total-receiving">{{ receiving }}</span>
+            </div>
+            <div class="unit pad-sign">
+                per week{% if g > 0 or anon_giving %}, and gives
+                    <span class="{{prefix}}total-giving">{{ giving }}</span>
+                {% endif %}
             </div>
         {% else %}
             {% set age = participant.get_age_in_seconds() %}
             <h2>{{ participant.username }}
-                {% if g > 0 %}
-                gives anonymously
-                {% elif age < 60 %}
+                {% if age < 60 %}
                 just joined Gittip! :D
                 {% elif age < (60 * 60 * 24 * 7) %}
                 joined recently
                 {% else %}
-                is lurking
-                {% end %}
+                is quietly watching the Gittip world
+                {% endif %}
             </h2>
-        {% end %}
+        {% endif %}
         </td>
     </tr>
 </table>
 
 {% if participant.accepts_tips %}
 {% if (user.ANON or (participant != user.participant)) %}
-{% include "participant.tip.html" %}
-{% end %}
-{% end %}
+{% include "templates/participant.tip.html" %}
+{% endif %}
+{% endif %}
 
-{% block nav %}{% end %}
+{% block nav %}{% endblock %}
 
 {% if participant.username == 'aaronsw' %}
 <div class="nav level-3">
@@ -77,19 +76,19 @@ first time three days before he committed suicide:
 :`(
 
 -->
-{% end %}
+{% endif %}
 
 {% if user.ADMIN %}
 <label class="is-suspicious-knob" data-username="{{ participant.username }}">
     Suspicious
     <input type="checkbox"
-        {% if participant.is_suspicious %}checked="true"{% end %} />
+        {% if participant.is_suspicious %}checked="true"{% endif %} />
 </label>
 {% elif participant.is_suspicious %}
 <div class="is-suspicious-indicator">Suspicious</div>
-{% end %}
+{% endif %}
 
-{% end %}
+{% endblock %}
 
 
 {% block body %}
@@ -126,4 +125,4 @@ first time three days before he committed suicide:
               })();
             </script>
 
-{% end %}
+{% endblock %}

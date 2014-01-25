@@ -95,16 +95,11 @@ def inbound(request):
     raise response
 
 
-def outbound(response):
+def outbound(request, response, website):
     """Set caching headers for resources under assets/.
     """
-    request = response.request
-    website = request.website
     uri = request.line.uri
-
-    version = website.version
-    response.headers['X-Gittip-Version'] = version
-
+    
     if not uri.startswith('/assets/'):
         return response
 

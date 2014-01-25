@@ -1,99 +1,58 @@
-import locale
+from __future__ import division
+
+from importlib import import_module
 import os
+import sys
 import threading
 import time
+import traceback
 
 import gittip
 import gittip.wireup
-import gittip.security.authentication
-import gittip.security.csrf
-import gittip.utils.cache_static
+from gittip import canonize, configure_payments
+from gittip.security import authentication, csrf, x_frame_options
+from gittip.utils import cache_static, timer
+from gittip.elsewhere import platform_classes
 
+
+from aspen import log_dammit
+
+# Wireup Algorithm
+# ================
 
 version_file = os.path.join(website.www_root, 'version.txt')
 __version__ = open(version_file).read().strip()
 website.version = os.environ['__VERSION__'] = __version__
 
 
-website.renderer_default = "tornado"
+website.renderer_default = "jinja2"
+website.default_renderers_by_media_type['application/json'] = 'stdlib_format'
+
+website.renderer_factories['jinja2'].Renderer.global_context = {
+    'range': range,
+    'unicode': unicode,
+    'enumerate': enumerate,
+    'len': len,
+    'float': float,
+    'type': type,
+    'str': str
+}
 
 
 gittip.wireup.canonical()
 website.db = gittip.wireup.db()
 gittip.wireup.billing()
 gittip.wireup.username_restrictions(website)
-gittip.wireup.sentry(website)
-gittip.wireup.mixpanel(website)
 gittip.wireup.nanswers()
-gittip.wireup.nmembers(website)
-gittip.wireup.platforms(website)
 gittip.wireup.envvars(website)
+gittip.wireup.platforms(website)
+tell_sentry = gittip.wireup.make_sentry_teller(website)
 
-
-# Up the threadpool size: https://github.com/gittip/www.gittip.com/issues/1098
-def up_minthreads(website):
-    # Discovered the following API by inspecting in pdb and browsing source.
-    # This requires network_engine.bind to have already been called.
-    website.network_engine.cheroot_server.requests.min = \
-                                                 int(os.environ['MIN_THREADS'])
-
-website.hooks.startup.insert(0, up_minthreads)
-
-
-website.hooks.inbound_early += [ gittip.canonize
-                               , gittip.configure_payments
-                               , gittip.security.authentication.inbound
-                               , gittip.security.csrf.inbound
-                                ]
-
-website.hooks.inbound_late += [ gittip.utils.cache_static.inbound
-                              #, gittip.security.authentication.check_role
-                              #, participant.typecast
-                              #, community.typecast
-                               ]
-
-website.hooks.outbound += [ gittip.security.authentication.outbound
-                          , gittip.security.csrf.outbound
-                          , gittip.utils.cache_static.outbound
-                           ]
-
-
-# X-Frame-Origin
-# ==============
-# This is a security measure to prevent clickjacking:
-# http://en.wikipedia.org/wiki/Clickjacking
-
-def x_frame_options(response):
-    if 'X-Frame-Options' not in response.headers:
-        response.headers['X-Frame-Options'] = 'SAMEORIGIN'
-    elif response.headers['X-Frame-Options'] == 'ALLOWALL':
-
-        # ALLOWALL is non-standard. It's useful as a signal from a simplate
-        # that it doesn't want X-Frame-Options set at all, but because it's
-        # non-standard we don't send it. Instead we unset the header entirely,
-        # which has the desired effect of allowing framing indiscriminately.
-        #
-        # Refs.:
-        #
-        #   http://en.wikipedia.org/wiki/Clickjacking#X-Frame-Options
-        #   http://ipsec.pl/node/1094
-
-        del response.headers['X-Frame-Options']
-
-website.hooks.outbound += [x_frame_options]
-
-
-def add_stuff(request):
-    request.context['username'] = None
-    stats = gittip.db.one( "SELECT nactive, transfer_volume FROM paydays "
-                           "ORDER BY ts_end DESC LIMIT 1"
-                         , default=(0, 0.0)
-                          )
-    request.context['gnactive'] = locale.format("%d", round(stats[0], -2), grouping=True)
-    request.context['gtransfer_volume'] = locale.format("%d", round(stats[1], -2), grouping=True)
-
-website.hooks.inbound_early += [add_stuff]
-
+# this serves two purposes:
+#  1) ensure all platform classes are created (and thus added to platform_classes)
+#  2) keep the platform modules around to be added to the context below
+platform_modules = {platform: import_module("gittip.elsewhere.%s" % platform)
+                    for platform in platform_classes}
 
 # The homepage wants expensive queries. Let's periodically select into an
 # intermediate table.
@@ -102,9 +61,129 @@ UPDATE_HOMEPAGE_EVERY = int(os.environ['UPDATE_HOMEPAGE_EVERY'])
 def update_homepage_queries():
     from gittip import utils
     while 1:
-        utils.update_homepage_queries_once(website.db)
+        try:
+            utils.update_global_stats(website)
+            utils.update_homepage_queries_once(website.db)
+            website.db.self_check()
+        except:
+            exception = sys.exc_info()[0]
+            tell_sentry(exception)
+            tb = traceback.format_exc().strip()
+            log_dammit(tb)
         time.sleep(UPDATE_HOMEPAGE_EVERY)
 
-homepage_updater = threading.Thread(target=update_homepage_queries)
-homepage_updater.daemon = True
-homepage_updater.start()
+if UPDATE_HOMEPAGE_EVERY > 0:
+    homepage_updater = threading.Thread(target=update_homepage_queries)
+    homepage_updater.daemon = True
+    homepage_updater.start()
+else:
+    from gittip import utils
+    utils.update_global_stats(website)
+
+
+# Server Algorithm
+# ================
+
+def up_minthreads(website):
+    # https://github.com/gittip/www.gittip.com/issues/1098
+    # Discovered the following API by inspecting in pdb and browsing source.
+    # This requires network_engine.bind to have already been called.
+    request_queue = website.network_engine.cheroot_server.requests
+    request_queue.min = website.min_threads
+
+
+def setup_busy_threads_logging(website):
+    # https://github.com/gittip/www.gittip.com/issues/1572
+    log_every = website.log_busy_threads_every
+    if log_every == 0:
+        return
+
+    pool = website.network_engine.cheroot_server.requests
+    def log_busy_threads():
+        time.sleep(0.5)  # without this we get a single log message where all threads are busy
+        while 1:
+
+            # Use pool.min and not pool.max because of the semantics of these
+            # inside of Cheroot. (Max is a hard limit used only when pool.grow
+            # is called, and it's never called except when the pool starts up,
+            # when it's called with pool.min.)
+
+            nbusy_threads = pool.min - pool.idle
+            print("sample#aspen.busy_threads={}".format(nbusy_threads))
+            time.sleep(log_every)
+
+    thread = threading.Thread(target=log_busy_threads)
+    thread.daemon = True
+    thread.start()
+
+
+website.server_algorithm.insert_before('start', up_minthreads)
+website.server_algorithm.insert_before('start', setup_busy_threads_logging)
+
+
+# Website Algorithm
+# =================
+
+def add_stuff_to_context(request):
+    request.context['username'] = None
+    request.context.update(platform_modules)
+
+def scab_body_onto_response(response):
+
+    # This is a workaround for a Cheroot bug, where the connection is closed
+    # too early if there is no body:
+    #
+    # https://bitbucket.org/cherrypy/cheroot/issue/1/fail-if-passed-zero-bytes
+    #
+    # This Cheroot bug is manifesting because of a change in Aspen's behavior
+    # with the algorithm.py refactor in 0.27+: Aspen no longer sets a body for
+    # 302s as it used to. This means that all redirects are breaking
+    # intermittently (sometimes the client seems not to care that the
+    # connection is closed too early, so I guess there's some timing
+    # involved?), which is affecting a number of parts of Gittip, notably
+    # around logging in (#1859).
+
+    if not response.body:
+        response.body = '*sigh*'
+
+
+algorithm = website.algorithm
+algorithm.functions = [ timer.start
+                      , algorithm['parse_environ_into_request']
+                      , algorithm['tack_website_onto_request']
+                      , algorithm['raise_200_for_OPTIONS']
+
+                      , canonize
+                      , configure_payments
+                      , authentication.inbound
+                      , csrf.inbound
+                      , add_stuff_to_context
+
+                      , algorithm['dispatch_request_to_filesystem']
+                      , algorithm['apply_typecasters_to_path']
+
+                      , cache_static.inbound
+
+                      , algorithm['get_response_for_socket']
+                      , algorithm['get_resource_for_request']
+                      , algorithm['get_response_for_resource']
+
+                      , tell_sentry
+                      , algorithm['get_response_for_exception']
+
+                      , gittip.outbound
+                      , authentication.outbound
+                      , csrf.outbound
+                      , cache_static.outbound
+                      , x_frame_options
+
+                      , algorithm['log_traceback_for_5xx']
+                      , algorithm['delegate_error_to_simplate']
+                      , tell_sentry
+                      , algorithm['log_traceback_for_exception']
+                      , algorithm['log_result_of_request']
+
+                      , scab_body_onto_response
+                      , timer.end
+                      , tell_sentry
+                       ]

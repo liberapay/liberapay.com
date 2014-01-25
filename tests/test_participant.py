@@ -1,4 +1,4 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
+from __future__ import print_function, unicode_literals
 
 import datetime
 import random
@@ -8,16 +8,17 @@ import psycopg2
 import pytz
 from aspen.utils import utcnow
 from gittip import NotSane
+from gittip.exceptions import (
+    UsernameIsEmpty,
+    UsernameTooLong,
+    UsernameAlreadyTaken,
+    UsernameContainsInvalidCharacters,
+    UsernameIsRestricted,
+    NoSelfTipping,
+    BadAmount,
+)
 from gittip.models._mixin_elsewhere import NeedConfirmation
 from gittip.models.participant import Participant
-from gittip.models.participant import ( UsernameIsEmpty
-                                      , UsernameTooLong
-                                      , UsernameAlreadyTaken
-                                      , UsernameContainsInvalidCharacters
-                                      , UsernameIsRestricted
-                                      , NoSelfTipping
-                                      , BadAmount
-                                       )
 from gittip.testing import Harness
 
 
@@ -59,7 +60,7 @@ class TestNeedConfirmation(Harness):
 class TestAbsorptions(Harness):
     # TODO: These tests should probably be moved to absorptions tests
     def setUp(self):
-        super(Harness, self).setUp()
+        Harness.setUp(self)
         now = utcnow()
         hour_ago = now - datetime.timedelta(hours=1)
         for username in ['alice', 'bob', 'carl']:
@@ -113,14 +114,70 @@ class TestAbsorptions(Harness):
         assert actual is None
 
 
+class TestTakeOver(Harness):
+
+    def test_cross_tip_doesnt_become_self_tip(self):
+        alice = self.make_elsewhere('twitter', 1, dict(screen_name='alice'))
+        bob   = self.make_elsewhere('twitter', 2, dict(screen_name='bob'))
+        alice_participant = alice.opt_in('alice')[0].participant
+        bob_participant = bob.opt_in('bob')[0].participant
+        alice_participant.set_tip_to('bob', '1.00')
+        bob_participant.take_over(alice, have_confirmation=True)
+        self.db.self_check()
+
+    def test_zero_cross_tip_doesnt_become_self_tip(self):
+        alice = self.make_elsewhere('twitter', 1, dict(screen_name='alice'))
+        bob   = self.make_elsewhere('twitter', 2, dict(screen_name='bob'))
+        alice_participant = alice.opt_in('alice')[0].participant
+        bob_participant = bob.opt_in('bob')[0].participant
+        alice_participant.set_tip_to('bob', '1.00')
+        alice_participant.set_tip_to('bob', '0.00')
+        bob_participant.take_over(alice, have_confirmation=True)
+        self.db.self_check()
+
+    def test_do_not_take_over_zero_tips_giving(self):
+        alice = self.make_elsewhere('twitter', 1, dict(screen_name='alice'))
+        bob   = self.make_elsewhere('twitter', 2, dict(screen_name='bob'))
+        carl  = self.make_elsewhere('twitter', 3, dict(screen_name='carl'))
+        alice_participant = alice.opt_in('alice')[0].participant
+        bob_participant   = bob.opt_in('bob')[0].participant
+        carl_participant  = carl.opt_in('carl')[0].participant
+        carl_participant.set_tip_to('bob', '1.00')
+        carl_participant.set_tip_to('bob', '0.00')
+        alice_participant.take_over(carl, have_confirmation=True)
+        ntips = self.db.one("select count(*) from tips")
+        assert 2 == ntips
+        self.db.self_check()
+
+    def test_do_not_take_over_zero_tips_receiving(self):
+        alice = self.make_elsewhere('twitter', 1, dict(screen_name='alice'))
+        bob   = self.make_elsewhere('twitter', 2, dict(screen_name='bob'))
+        carl  = self.make_elsewhere('twitter', 3, dict(screen_name='carl'))
+        alice_participant = alice.opt_in('alice')[0].participant
+        bob_participant   = bob.opt_in('bob')[0].participant
+        carl_participant  = carl.opt_in('carl')[0].participant
+        bob_participant.set_tip_to('carl', '1.00')
+        bob_participant.set_tip_to('carl', '0.00')
+        alice_participant.take_over(carl, have_confirmation=True)
+        ntips = self.db.one("select count(*) from tips")
+        assert 2 == ntips
+        self.db.self_check()
+
+    def test_idempotent(self):
+        alice = self.make_elsewhere('twitter', 1, dict(screen_name='alice'))
+        bob   = self.make_elsewhere('github', 2, dict(screen_name='bob'))
+        alice_participant = alice.opt_in('alice')[0].participant
+        alice_participant.take_over(bob, have_confirmation=True)
+        alice_participant.take_over(bob, have_confirmation=True)
+        self.db.self_check()
+
+
 class TestParticipant(Harness):
     def setUp(self):
-        super(Harness, self).setUp()
+        Harness.setUp(self)
         now = utcnow()
-        for i, username in enumerate(['alice', 'bob', 'carl'], start=1):
-            self.make_participant(username, claimed_time=now)
-            twitter_account = self.make_elsewhere('twitter', unicode(i), {'screen_name': username})
-            Participant.from_username(username).take_over(twitter_account)
+        for username in ['alice', 'bob', 'carl']:
+            self.make_participant(username, claimed_time=now, elsewhere='twitter')
 
     def test_bob_is_singular(self):
         expected = True
@@ -199,7 +256,7 @@ class Tests(Harness):
         return random_item
 
     def setUp(self):
-        super(Harness, self).setUp()
+        Harness.setUp(self)
         self.participant = self.make_participant('user1')  # Our protagonist
 
 
@@ -534,3 +591,15 @@ class Tests(Harness):
         stub = Participant.from_username(unclaimed.participant.username)
         actual = stub.resolve_unclaimed()
         assert actual == "/on/twitter/alice/"
+
+    def test_ru_returns_openstreetmap_url_for_stub_from_openstreetmap(self):
+        user_info = {
+            'osm_id': '1'
+            , 'username': 'alice'
+            , 'img_src': 'http://example.com'
+            , 'html_url': 'http://example.net'
+        }
+        unclaimed = self.make_elsewhere('openstreetmap', '1234', user_info)
+        stub = Participant.from_username(unclaimed.participant.username)
+        actual = stub.resolve_unclaimed()
+        assert actual == "/on/openstreetmap/alice/"

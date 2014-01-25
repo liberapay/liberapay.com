@@ -4,16 +4,15 @@ import time
 from gittip.models.participant import Participant
 from gittip.elsewhere import AccountElsewhere
 
-www_host = os.environ['BOUNTYSOURCE_WWW_HOST'].decode('ASCII')
-api_host = os.environ['BOUNTYSOURCE_API_HOST'].decode('ASCII')
 
 class BountysourceAccount(AccountElsewhere):
     platform = u'bountysource'
 
-    def get_url(self):
-        url = "https://www.bountysource.com/#users/%s" % self.user_info["slug"]
-        return url
+    def get_user_name(self):
+        return self.user_info['display_name']
 
+    def get_platform_icon(self):
+        return "/assets/icons/bountysource.12.png"
 
 def oauth_url(website, participant, redirect_url=None):
     """Return a URL to authenticate with Bountysource.
@@ -50,6 +49,7 @@ def create_access_token(participant):
 
 def hash_access_token(user_id, time_now):
     """Create hash for access token.
+
     :param user_id:
         ID of the user.
 

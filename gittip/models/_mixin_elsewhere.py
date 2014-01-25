@@ -1,14 +1,17 @@
 import os
+from collections import namedtuple
 
 from gittip import NotSane
 from aspen.utils import typecheck
 from psycopg2 import IntegrityError
 
+from gittip.exceptions import UnknownPlatform
+from gittip.elsewhere import platform_classes
+from gittip.utils.username import reserve_a_random_username, gen_random_usernames
+
 
 # Exceptions
 # ==========
-
-class UnknownPlatform(Exception): pass
 
 class NeedConfirmation(Exception):
     """Represent the case where we need user confirmation during a merge.
@@ -42,6 +45,9 @@ class NeedConfirmation(Exception):
 # Mixin
 # =====
 
+# note that the ordering of these fields is defined by platform_classes
+AccountsTuple = namedtuple('AccountsTuple', platform_classes.keys())
+
 class MixinElsewhere(object):
     """We use this as a mixin for Participant, and in a hackish way on the
     homepage and community pages.
@@ -49,34 +55,23 @@ class MixinElsewhere(object):
     """
 
     def get_accounts_elsewhere(self):
-        """Return a four-tuple of elsewhere Records.
+        """Return an AccountsTuple of AccountElsewhere instances.
         """
-        github_account = None
-        twitter_account = None
-        bitbucket_account = None
-        bountysource_account = None
 
         ACCOUNTS = "SELECT * FROM elsewhere WHERE participant=%s"
         accounts = self.db.all(ACCOUNTS, (self.username,))
 
+        accounts_dict = {platform: None for platform in platform_classes}
+
         for account in accounts:
-            if account.platform == "github":
-                github_account = account
-            elif account.platform == "twitter":
-                twitter_account = account
-            elif account.platform == "bitbucket":
-                bitbucket_account = account
-            elif account.platform == "bountysource":
-                bountysource_account = account
-            else:
+            if account.platform not in platform_classes:
                 raise UnknownPlatform(account.platform)
 
-        return ( github_account
-               , twitter_account
-               , bitbucket_account
-               , bountysource_account
-                )
+            account_cls = platform_classes[account.platform]
+            accounts_dict[account.platform] = \
+                account_cls(self.db, account.user_id, existing_record=account)
 
+        return AccountsTuple(**accounts_dict)
 
     def get_img_src(self, size=128):
         """Return a value for <img src="..." />.
@@ -92,19 +87,19 @@ class MixinElsewhere(object):
 
         src = '/assets/%s/avatar-default.gif' % os.environ['__VERSION__']
 
-        github, twitter, bitbucket, bountysource = \
-                                                  self.get_accounts_elsewhere()
-        if github is not None:
+        accounts = self.get_accounts_elsewhere()
+
+        if accounts.github is not None:
             # GitHub -> Gravatar: http://en.gravatar.com/site/implement/images/
-            if 'gravatar_id' in github.user_info:
-                gravatar_hash = github.user_info['gravatar_id']
+            if 'gravatar_id' in accounts.github.user_info:
+                gravatar_hash = accounts.github.user_info['gravatar_id']
                 src = "https://www.gravatar.com/avatar/%s.jpg?s=%s"
                 src %= (gravatar_hash, size)
 
-        elif twitter is not None:
+        elif accounts.twitter is not None:
             # https://dev.twitter.com/docs/api/1.1/get/users/show
-            if 'profile_image_url_https' in twitter.user_info:
-                src = twitter.user_info['profile_image_url_https']
+            if 'profile_image_url_https' in accounts.twitter.user_info:
+                src = accounts.twitter.user_info['profile_image_url_https']
 
                 # For Twitter, we don't have good control over size. The
                 # biggest option is 73px(?!), but that's too small. Let's go
@@ -113,11 +108,15 @@ class MixinElsewhere(object):
 
                 src = src.replace('_normal.', '.')
 
+        elif accounts.openstreetmap is not None:
+            if 'img_src' in accounts.openstreetmap.user_info:
+                src = accounts.openstreetmap.user_info['img_src']
+
         return src
 
 
     def take_over(self, account_elsewhere, have_confirmation=False):
-        """Given two objects and a bool, raise NeedConfirmation or return None.
+        """Given an AccountElsewhere and a bool, raise NeedConfirmation or return None.
 
         This method associates an account on another platform (GitHub, Twitter,
         etc.) with the given Gittip participant. Every account elsewhere has an
@@ -158,43 +157,75 @@ class MixinElsewhere(object):
         This is done in one transaction.
 
         """
-        # Lazy imports to dodge circular imports.
-        from gittip.models.participant import reserve_a_random_username
-        from gittip.models.participant import gen_random_usernames
 
         platform = account_elsewhere.platform
         user_id = account_elsewhere.user_id
 
+        CREATE_TEMP_TABLE_FOR_UNIQUE_TIPS = """
+
+        CREATE TEMP TABLE __temp_unique_tips ON COMMIT drop AS
+
+            -- Get all the latest tips from everyone to everyone.
+
+            SELECT DISTINCT ON (tipper, tippee)
+                   ctime, tipper, tippee, amount
+              FROM tips
+          ORDER BY tipper, tippee, mtime DESC;
+
+        """
+
         CONSOLIDATE_TIPS_RECEIVING = """
+
+            -- Create a new set of tips, one for each current tip *to* either
+            -- the dead or the live account. If a user was tipping both the
+            -- dead and the live account, then we create one new combined tip
+            -- to the live account (via the GROUP BY and sum()).
 
             INSERT INTO tips (ctime, tipper, tippee, amount)
 
-                 SELECT min(ctime), tipper, %s AS tippee, sum(amount)
-                   FROM (   SELECT DISTINCT ON (tipper, tippee)
-                                   ctime, tipper, tippee, amount
-                              FROM tips
-                          ORDER BY tipper, tippee, mtime DESC
-                         ) AS unique_tips
-                  WHERE (tippee=%s OR tippee=%s)
-                AND NOT (tipper=%s AND tippee=%s)
-                AND NOT (tipper=%s)
+                 SELECT min(ctime), tipper, %(live)s AS tippee, sum(amount)
+
+                   FROM __temp_unique_tips
+
+                  WHERE (tippee = %(dead)s OR tippee = %(live)s)
+                        -- Include tips *to* either the dead or live account.
+
+                AND NOT (tipper = %(dead)s OR tipper = %(live)s)
+                        -- Don't include tips *from* the dead or live account,
+                        -- lest we convert cross-tipping to self-tipping.
+
+                    AND amount > 0
+                        -- Don't include zeroed out tips, so we avoid a no-op
+                        -- zero tip entry.
+
                GROUP BY tipper
 
         """
 
         CONSOLIDATE_TIPS_GIVING = """
 
+            -- Create a new set of tips, one for each current tip *from* either
+            -- the dead or the live account. If both the dead and the live
+            -- account were tipping a given user, then we create one new
+            -- combined tip from the live account (via the GROUP BY and sum()).
+
             INSERT INTO tips (ctime, tipper, tippee, amount)
 
-                 SELECT min(ctime), %s AS tipper, tippee, sum(amount)
-                   FROM (   SELECT DISTINCT ON (tipper, tippee)
-                                   ctime, tipper, tippee, amount
-                              FROM tips
-                          ORDER BY tipper, tippee, mtime DESC
-                         ) AS unique_tips
-                  WHERE (tipper=%s OR tipper=%s)
-                AND NOT (tipper=%s AND tippee=%s)
-                AND NOT (tippee=%s)
+                 SELECT min(ctime), %(live)s AS tipper, tippee, sum(amount)
+
+                   FROM __temp_unique_tips
+
+                  WHERE (tipper = %(dead)s OR tipper = %(live)s)
+                        -- Include tips *from* either the dead or live account.
+
+                AND NOT (tippee = %(dead)s OR tippee = %(live)s)
+                        -- Don't include tips *to* the dead or live account,
+                        -- lest we convert cross-tipping to self-tipping.
+
+                    AND amount > 0
+                        -- Don't include zeroed out tips, so we avoid a no-op
+                        -- zero tip entry.
+
                GROUP BY tippee
 
         """
@@ -203,9 +234,9 @@ class MixinElsewhere(object):
 
             INSERT INTO tips (ctime, tipper, tippee, amount)
 
-                 SELECT DISTINCT ON (tipper) ctime, tipper, tippee, 0 AS amount
-                   FROM tips
-                  WHERE tippee=%s
+                SELECT ctime, tipper, tippee, 0 AS amount
+                  FROM __temp_unique_tips
+                 WHERE tippee=%s AND amount > 0
 
         """
 
@@ -213,9 +244,9 @@ class MixinElsewhere(object):
 
             INSERT INTO tips (ctime, tipper, tippee, amount)
 
-                 SELECT DISTINCT ON (tippee) ctime, tipper, tippee, 0 AS amount
-                   FROM tips
-                  WHERE tipper=%s
+                SELECT ctime, tipper, tippee, 0 AS amount
+                  FROM __temp_unique_tips
+                 WHERE tipper=%s AND amount > 0
 
         """
 
@@ -237,6 +268,10 @@ class MixinElsewhere(object):
             """, (platform, user_id), default=NotSane)
 
             other_username = rec.participant
+
+            if self.username == other_username:
+                # this is a no op - trying to take over itself
+                return
 
 
             # Make sure we have user confirmation if needed.
@@ -325,8 +360,9 @@ class MixinElsewhere(object):
                 # ===============
 
                 x, y = self.username, other_username
-                cursor.run(CONSOLIDATE_TIPS_RECEIVING, (x, x,y, x,y, x))
-                cursor.run(CONSOLIDATE_TIPS_GIVING, (x, x,y, x,y, x))
+                cursor.run(CREATE_TEMP_TABLE_FOR_UNIQUE_TIPS)
+                cursor.run(CONSOLIDATE_TIPS_RECEIVING, dict(live=x, dead=y))
+                cursor.run(CONSOLIDATE_TIPS_GIVING, dict(live=x, dead=y))
                 cursor.run(ZERO_OUT_OLD_TIPS_RECEIVING, (other_username,))
                 cursor.run(ZERO_OUT_OLD_TIPS_GIVING, (other_username,))
 
@@ -377,13 +413,12 @@ class MixinElsewhere(object):
 # Utter Hack
 # ==========
 
-def utter_hack(records):
+def utter_hack(db, records):
     for rec in records:
-        yield UtterHack(rec)
+        yield UtterHack(db, rec)
 
 class UtterHack(MixinElsewhere):
-    def __init__(self, rec):
-        import gittip
-        self.db = gittip.db
+    def __init__(self, db, rec):
+        self.db = db
         for name in rec._fields:
             setattr(self, name, getattr(rec, name))

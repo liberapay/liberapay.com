@@ -1,6 +1,6 @@
 from __future__ import print_function, unicode_literals
 
-from datetime import datetime
+import datetime
 from decimal import Decimal
 
 from mock import patch
@@ -8,15 +8,14 @@ from mock import patch
 from gittip import wireup
 from gittip.billing.payday import Payday
 from gittip.models.participant import Participant
-from gittip.testing import Harness, load_simplate
-from gittip.testing.client import TestClient
+from gittip.testing import Harness
 
 
 class TestCommaize(Harness):
     # XXX This really ought to be in helper methods test file
     def setUp(self):
-        super(Harness, self).setUp()
-        simplate = load_simplate(b'/about/stats.html')
+        Harness.setUp(self)
+        simplate = self.client.load_resource(b'/about/stats.html')
         self.commaize = simplate.pages[0]['commaize']
 
     def test_commaize_commaizes(self):
@@ -30,7 +29,7 @@ class TestCommaize(Harness):
 
 class TestChartOfReceiving(Harness):
     def setUp(self):
-        super(Harness, self).setUp()
+        Harness.setUp(self)
         for participant in ['alice', 'bob']:
             self.make_participant(participant, last_bill_result='')
 
@@ -78,35 +77,43 @@ class TestChartOfReceiving(Harness):
 
 class TestRenderingStatsPage(Harness):
     def get_stats_page(self):
-        return TestClient().get('/about/stats.html').body
+        return self.client.GET('/about/stats.html').body
 
-    @patch('datetime.datetime')
-    def test_stats_description_accurate_during_payday_run(self, mock_datetime):
+    def test_stats_description_accurate_during_payday_run(self):
         """Test that stats page takes running payday into account.
 
         This test was originally written to expose the fix required for
         https://github.com/gittip/www.gittip.com/issues/92.
         """
-        a_thursday = datetime(2012, 8, 9, 11, 00, 01)
-        mock_datetime.utcnow.return_value = a_thursday
 
-        wireup.billing()
-        payday = Payday(self.db)
-        payday.start()
+        # Hydrating a website requires a functioning datetime module.
+        self.client.hydrate_website()
 
-        body = self.get_stats_page()
-        assert "is changing hands <b>right now!</b>" in body, body
-        payday.end()
+        a_thursday = datetime.datetime(2012, 8, 9, 11, 00, 01)
+        with patch.object(datetime, 'datetime') as mock_datetime:
+            mock_datetime.utcnow.return_value = a_thursday
 
-    @patch('datetime.datetime')
-    def test_stats_description_accurate_outside_of_payday(self, mock_datetime):
+            wireup.billing()
+            payday = Payday(self.db)
+            payday.start()
+
+            body = self.get_stats_page()
+            assert "is changing hands <b>right now!</b>" in body, body
+            payday.end()
+
+    def test_stats_description_accurate_outside_of_payday(self):
         """Test stats page outside of the payday running"""
-        a_monday = datetime(2012, 8, 6, 11, 00, 01)
-        mock_datetime.utcnow.return_value = a_monday
 
-        payday = Payday(self.db)
-        payday.start()
+        # Hydrating a website requires a functioning datetime module.
+        self.client.hydrate_website()
 
-        body = self.get_stats_page()
-        assert "is ready for <b>this Thursday</b>" in body, body
-        payday.end()
+        a_monday = datetime.datetime(2012, 8, 6, 11, 00, 01)
+        with patch.object(datetime, 'datetime') as mock_datetime:
+            mock_datetime.utcnow.return_value = a_monday
+
+            payday = Payday(self.db)
+            payday.start()
+
+            body = self.get_stats_page()
+            assert "is ready for <b>this Thursday</b>" in body, body
+            payday.end()

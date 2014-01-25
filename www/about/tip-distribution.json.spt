@@ -1,9 +1,8 @@
 from aspen import json
-from gittip import db
 
 [---]
 
-response.body = db.all("""
+response.body = website.db.all("""
 
     SELECT amount
       FROM (SELECT DISTINCT ON (tipper, tippee)

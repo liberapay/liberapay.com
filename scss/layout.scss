@@ -50,14 +50,11 @@
     background: transparent url('hero-bg.png') top left repeat;
     border: 1px solid $light-gray;
     border-style: solid none;
+    color: $black;
     padding-bottom: 100px;
     text-align: center;
     position: relative;
     z-index: 1;
-
-    .main-padding {
-        color: $black;
-    }
 
     h2 {
         span {
@@ -66,13 +63,10 @@
             padding: 0 10px;
         }
     }
-    p {
-        padding: 0 20%;
-    }
     h2.top {
         letter-spacing: -2px;
-        font: normal 35px $Mensch;
-        padding: 50px 0 35px 0;
+        font: normal 36px $Mensch;
+        padding: 1.5em 0 1em 0;
 
         span {
             background: transparent url('hero-bg.png') top left repeat;
@@ -84,13 +78,13 @@
             content: "";
             display: block;
             height: 1px;
-            margin-top: -17px;
+            margin-top: -0.5em;
         }
     }
     h1 {
         letter-spacing: -3px;
-        font: normal 64px/64px $Mensch;
-        padding-bottom: 20px;
+        font: normal 64px $Mensch;
+        padding-bottom: 0.375em;
     }
     h2.bottom {
         padding-bottom: 20px;
@@ -117,7 +111,7 @@
     margin: -80px auto 0;
     border: 5px solid rgba($brown, 0.4);
     width: 480px;
-    min-width: 240px;
+    max-width: 100%;
     @include border-radius(3px);
     position: relative;
     z-index: 2;
@@ -152,6 +146,7 @@
         }
 
         input {
+            padding: 2px;
             width: 8em;
         }
     }
@@ -325,7 +320,7 @@
         .scenario {
             margin: 0 auto;
         }
-        .scenario TD {
+        .scenario td {
             padding: 6pt;
             width: 33%;
         }
@@ -351,16 +346,17 @@
             display: block;
             padding: 6pt 0 6pt 9pt;
         }
-        .participant IMG, IMG.platform-icon {
-            margin-bottom: -1pt;
+        .participant img, img.platform-icon {
+            width: 12px;
+            height: 12px;
         }
-        .participant B {
+        .participant b {
             font-size: 11pt;
         }
-        .participant TD {
+        .participant td {
             padding: 0;
         }
-        .participant TH {
+        .participant th {
             font-weight: normal;
         }
         .other, .abandoned {
@@ -373,7 +369,7 @@
         .nix {
             border-color: $light-brown;
         }
-        .other B {
+        .other b {
             font-size: 9pt;
         }
     }
@@ -417,14 +413,14 @@
         .right {
             float: left;
         }
-        LABEL {
+        label {
             display: block;
             font: normal 10px $Helvetica;
             margin: 8px 0 0;
             padding: 0;
             text-transform: uppercase;
         }
-        INPUT {
+        input {
             font: normal 11pt/14pt $Helvetica;
             width: 292px;
             margin: 0;
@@ -432,32 +428,32 @@
             border: 1px solid $light-brown;
             outline: none;
         }
-        INPUT.disabled {
+        input.disabled {
             color: $light-brown;
         }
 
-        .half INPUT {
+        .half input {
             width: 137px;
         }
-        .right.half LABEL,
-        .right.half INPUT {
+        .right.half label,
+        .right.half input {
             margin-left: 5px;
         }
-        INPUT:focus {
+        input:focus {
             border-color: $green;
         }
         .float {
             float: left;
         }
-        .city          INPUT { width: 137px; }
-        .state         INPUT { width: 43px; }
-        .zip           INPUT { width: 75px; }
-        .card_number   INPUT { width: 137px; }
-        .cvv           INPUT { width: 43px; }
-        INPUT.expiration_month { width: 24px; }
-        INPUT.expiration_year  { width: 39px; margin-left: 1px ! important; }
-        .not-first LABEL,
-        .not-first INPUT {
+        .city          input { width: 137px; }
+        .state         input { width: 43px; }
+        .zip           input { width: 75px; }
+        .card_number   input { width: 139px; }
+        .cvv           input { width: 43px; }
+        input.expiration_month { width: 35px; }
+        input.expiration_year  { width: 49px; margin-left: 1px !important; }
+        .not-first label,
+        .not-first input {
             margin-left: 10px;
         }
         .nav {
@@ -471,44 +467,41 @@
                 font: normal 12px $Helvetica;
             }
         }
+        select {
+            font-size: 12.15px; // hack for Chosen to get a 292px width
+        }
     }
 }
 .payment-footer {
     font: normal 12px $Helvetica;
     text-align: center;
 }
-#page #leaderboard {
 
-    overflow: hidden;
+#leaderboard {
+    @include clearfix;
+    width: leaderboard-width(3);
     margin: 0 auto;
-    width: 870px;
+}
+
+.people {
+    width: $people-column-width * 3;
+    margin-left: $people-column-gutter;
+    float: left;
+    
+    &:first-child {
+        margin: 0;
+    }
 
     ul {
-        margin: 0 0 20px 0;
-
         li {
-            display: block;
             float: left;
             margin: 0;
-            min-width: 90px;
             padding: 2px;
-            width: 10%;
+            width: $people-column-width;
         }
-
-        overflow: hidden;
-        margin: 0 auto;
-    }
-    
-    > * {
-        width: 270px;
-        float: left;
-        margin-right: 30px;
-    }
-
-    > *:last-child {
-        margin-right: 0;
     }
 }
+
 #page {
     padding: 20px 0 0;
     background: white;
@@ -528,32 +521,60 @@
         text-transform: uppercase;
         margin: 35px 0 8px;
     }
-
-    .col {
-        width: auto;
-        margin: 0 auto;
-    }
-    .col0 {
-        width: 460px;
-        margin: 0 auto;
-    }
-    .col1 {
-        width: 460px;
-        float: left;
-    }
-    .col2 {
-        width: 460px;
-        float: right;
-    }
 }
+
+.col {
+    width: auto;
+    margin: 0 auto;
+}
+
+.col0, .col1, .col2 {
+    width: 50%;
+    max-width: 100%;
+}
+
+.col0 {
+    margin: 0 auto;
+}
+
+.col1 {
+    float: left;
+    padding-right: 3%;
+}
+
+.col2 {
+    float: right;
+    padding-left: 3%;
+}
+
 #footer {
+    @include clearfix;
     margin: 4em 0 1em;
     border-top: 1px solid $black;
-    padding: 0.5em 0 0;
+    padding: 1em 0 0;
     text-align: right;
-    font: normal 12px/16px $Helvetica;
+    font-size: 13px;
+    line-height: 13px;
 
     .social {
         float: left;
+    }
+
+    ul {
+        float: right;
+        @include clearfix;
+    }
+    li {
+        float: left;
+        margin: 0;
+
+        &:before {
+            content: "|";
+            padding: 0 0.4em;
+        }
+
+        &:first-child:before {
+            content: none;
+        }
     }
 }

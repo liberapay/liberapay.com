@@ -2,7 +2,6 @@ from __future__ import print_function, unicode_literals
 
 from aspen.website import Website
 from gittip.testing import Harness
-from aspen.http.request import UnicodeWithParams
 
 # I ended up using TwitterAccount to test even though this is generic
 # functionality, because the base class is too abstract.
@@ -11,14 +10,14 @@ from aspen.http.request import UnicodeWithParams
 class TestAccountElsewhere(Harness):
 
     def test_opt_in_can_change_username(self):
-        account = self.platforms.twitter.get_account(UnicodeWithParams("alice", {}))
+        account = TwitterAccount(self.db, "alice", {})
         expected = "bob"
         actual = account.opt_in("bob")[0].participant.username
         assert actual == expected
 
     def test_opt_in_doesnt_have_to_change_username(self):
         self.make_participant("bob")
-        account = TwitterAccount("alice", {})
+        account = TwitterAccount(self.db, "alice", {})
         expected = account.participant # A random one.
         actual = account.opt_in("bob")[0].participant.username
         assert actual == expected
@@ -54,4 +53,12 @@ class TestAccountElsewhere(Harness):
             action='opt-in',
             then=self.xss,
         )
+        assert actual == expected
+
+    def test_openstreetmap_oauth_url_percent_encodes_then(self):
+        expected = '/on/openstreetmap/redirect?action=opt-in&then=L29uL3R3aXR0ZXIvIj48aW1nIHNyYz14IG9uZXJyb3I9cHJvbXB0KDEpOz4v'
+        actual = self.platforms.openstreetmap.oauth_url( website=None
+                                    , action='opt-in'
+                                    , then=self.xss
+                                     )
         assert actual == expected

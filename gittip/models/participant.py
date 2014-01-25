@@ -11,7 +11,6 @@ of participant, based on certain properties.
 from __future__ import print_function, unicode_literals
 
 import datetime
-import random
 import uuid
 from decimal import Decimal
 
@@ -21,15 +20,28 @@ from aspen import Response
 from aspen.utils import typecheck
 from psycopg2 import IntegrityError
 from postgres.orm import Model
+from gittip.exceptions import (
+    UsernameIsEmpty,
+    UsernameTooLong,
+    UsernameContainsInvalidCharacters,
+    UsernameIsRestricted,
+    UsernameAlreadyTaken,
+    NoSelfTipping,
+    BadAmount,
+)
+
 from gittip.models._mixin_elsewhere import MixinElsewhere
 from gittip.models._mixin_team import MixinTeam
 from gittip.utils import canonicalize
+from gittip.utils.username import reserve_a_random_username
 
 
 ASCII_ALLOWED_IN_USERNAME = set("0123456789"
                                 "abcdefghijklmnopqrstuvwxyz"
                                 "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                 ".,-_:@ ")
+# We use | in Sentry logging, so don't make that allowable. :-)
+
 NANSWERS_THRESHOLD = 0  # configured in wireup.py
 
 
@@ -172,7 +184,7 @@ class Participant(Model, MixinElsewhere, MixinTeam):
     def recreate_api_key(self):
         api_key = str(uuid.uuid4())
         SQL = "UPDATE participants SET api_key=%s WHERE username=%s"
-        gittip.db.run(SQL, (api_key, self.username))
+        self.db.run(SQL, (api_key, self.username))
         return api_key
 
 
@@ -184,7 +196,7 @@ class Participant(Model, MixinElsewhere, MixinTeam):
     def resolve_unclaimed(self):
         """Given a username, return an URL path.
         """
-        rec = gittip.db.one( "SELECT platform, user_info "
+        rec = self.db.one( "SELECT platform, user_info "
                              "FROM elsewhere "
                              "WHERE participant = %s"
                            , (self.username,)
@@ -195,9 +207,11 @@ class Participant(Model, MixinElsewhere, MixinTeam):
             out = '/on/bitbucket/%s/' % rec.user_info['username']
         elif rec.platform == 'github':
             out = '/on/github/%s/' % rec.user_info['login']
-        else:
-            assert rec.platform == 'twitter'
+        elif rec.platform == 'twitter':
             out = '/on/twitter/%s/' % rec.user_info['screen_name']
+        else:
+            assert rec.platform == 'openstreetmap'
+            out = '/on/openstreetmap/%s/' % rec.user_info['username']
         return out
 
     def set_as_claimed(self):
@@ -220,7 +234,7 @@ class Participant(Model, MixinElsewhere, MixinTeam):
     def get_teams(self):
         """Return a list of teams this user is a member of.
         """
-        return gittip.db.all("""
+        return self.db.all("""
 
             SELECT team AS name
                  , ( SELECT count(*)
@@ -239,7 +253,7 @@ class Participant(Model, MixinElsewhere, MixinTeam):
 
     def insert_into_communities(self, is_member, name, slug):
         username = self.username
-        gittip.db.run("""
+        self.db.run("""
 
             INSERT INTO communities
                         (ctime, name, slug, participant, is_member)
@@ -287,7 +301,7 @@ class Participant(Model, MixinElsewhere, MixinTeam):
         if suggested != self.username:
             try:
                 # Will raise IntegrityError if the desired username is taken.
-                actual = gittip.db.one( "UPDATE participants "
+                actual = self.db.one( "UPDATE participants "
                                         "SET username=%s, username_lower=%s "
                                         "WHERE username=%s "
                                         "RETURNING username, username_lower"
@@ -350,7 +364,7 @@ class Participant(Model, MixinElsewhere, MixinTeam):
         """
         args = (self.username, tippee, self.username, tippee, amount, \
                                                                  self.username)
-        first_time_tipper = gittip.db.one(NEW_TIP, args)
+        first_time_tipper = self.db.one(NEW_TIP, args)
         return amount, first_time_tipper
 
 
@@ -414,7 +428,7 @@ class Participant(Model, MixinElsewhere, MixinTeam):
     def get_number_of_backers(self):
         """Given a unicode, return an int.
         """
-        return gittip.db.one("""\
+        return self.db.one("""\
 
             SELECT count(amount)
               FROM ( SELECT DISTINCT ON (tipper)
@@ -435,21 +449,23 @@ class Participant(Model, MixinElsewhere, MixinTeam):
 
     def get_tip_distribution(self):
         """
-            Returns a data structure in the form of:
-            [
-                [TIPAMOUNT1, TIPAMOUNT2...TIPAMOUNTN],
-                total_number_patrons_giving_to_me,
-                total_amount_received
-            ]
+            Returns a data structure in the form of::
 
-            where each TIPAMOUNTN is in the form:
+                [
+                    [TIPAMOUNT1, TIPAMOUNT2...TIPAMOUNTN],
+                    total_number_patrons_giving_to_me,
+                    total_amount_received
+                ]
 
-            [amount,
-             number_of_tippers_for_this_amount,
-             total_amount_given_at_this_amount,
-             proportion_of_tips_at_this_amount,
-             proportion_of_total_amount_at_this_amount
-            ]
+            where each TIPAMOUNTN is in the form::
+
+                [
+                    amount,
+                    number_of_tippers_for_this_amount,
+                    total_amount_given_at_this_amount,
+                    proportion_of_tips_at_this_amount,
+                    proportion_of_total_amount_at_this_amount
+                ]
 
         """
         SQL = """
@@ -477,7 +493,7 @@ class Participant(Model, MixinElsewhere, MixinTeam):
 
         npatrons = 0.0  # float to trigger float division
         contributed = Decimal('0.00')
-        for rec in gittip.db.all(SQL, (self.username,)):
+        for rec in self.db.all(SQL, (self.username,)):
             tip_amounts.append([ rec.amount
                                , rec.ncontributing
                                , rec.amount * rec.ncontributing
@@ -492,17 +508,13 @@ class Participant(Model, MixinElsewhere, MixinTeam):
         return tip_amounts, npatrons, contributed
 
 
-    def get_giving_for_profile(self, db=None):
+    def get_giving_for_profile(self):
         """Given a participant id and a date, return a list and a Decimal.
 
         This function is used to populate a participant's page for their own
         viewing pleasure.
 
-        A half-injected dependency, that's what db is.
-
         """
-        if db is None:
-            from gittip import db
 
         TIPS = """\
 
@@ -525,7 +537,7 @@ class Participant(Model, MixinElsewhere, MixinTeam):
                    , username_lower
 
         """
-        tips = db.all(TIPS, (self.username,))
+        tips = self.db.all(TIPS, (self.username,))
 
         UNCLAIMED_TIPS = """\
 
@@ -552,7 +564,7 @@ class Participant(Model, MixinElsewhere, MixinTeam):
                    , lower(user_info->'login')
 
         """
-        unclaimed_tips = db.all(UNCLAIMED_TIPS, (self.username,))
+        unclaimed_tips = self.db.all(UNCLAIMED_TIPS, (self.username,))
 
 
         # Compute the total.
@@ -670,9 +682,9 @@ class Participant(Model, MixinElsewhere, MixinTeam):
         out = self.username
         receiving = self.get_dollars_receiving()
         giving = self.get_dollars_giving()
-        if (giving > receiving) and not self.anonymous:
+        if (giving > receiving) and not self.anonymous_giving:
             out += " gives $%.2f/wk" % giving
-        elif receiving > 0:
+        elif receiving > 0 and not self.anonymous_receiving:
             out += " receives $%.2f/wk" % receiving
         else:
             out += " is"
@@ -685,80 +697,6 @@ class Participant(Model, MixinElsewhere, MixinTeam):
             now = datetime.datetime.now(self.claimed_time.tzinfo)
             out = (now - self.claimed_time).total_seconds()
         return out
-
-
-# Exceptions
-# ==========
-
-class ProblemChangingUsername(Exception):
-    def __str__(self):
-        return self.msg.format(self.args[0])
-
-class UsernameIsEmpty(ProblemChangingUsername):
-    msg = "You need to provide a username!"
-
-class UsernameTooLong(ProblemChangingUsername):
-    msg = "The username '{}' is too long."
-
-# Not passing the potentially unicode characters back because of:
-# https://github.com/gittip/aspen-python/issues/177
-class UsernameContainsInvalidCharacters(ProblemChangingUsername):
-    msg = "That username contains invalid characters."
-
-class UsernameIsRestricted(ProblemChangingUsername):
-    msg = "The username '{}' is restricted."
-
-class UsernameAlreadyTaken(ProblemChangingUsername):
-    msg = "The username '{}' is already taken."
-
-class TooGreedy(Exception): pass
-class NoSelfTipping(Exception): pass
-class BadAmount(Exception): pass
-
-
-# Username Helpers
-# ================
-
-def gen_random_usernames():
-    """Yield up to 100 random 12-hex-digit unicodes.
-
-    We raise :py:exc:`StopIteration` after 100 usernames as a safety
-    precaution.
-
-    """
-    seatbelt = 0
-    while 1:
-        yield hex(int(random.random() * 16**12))[2:].zfill(12).decode('ASCII')
-        seatbelt += 1
-        if seatbelt > 100:
-            raise StopIteration
-
-
-def reserve_a_random_username(txn):
-    """Reserve a random username.
-
-    :param txn: a :py:class:`psycopg2.cursor` managed as a :py:mod:`postgres`
-        transaction
-    :database: one ``INSERT`` on average
-    :returns: a 12-hex-digit unicode
-    :raises: :py:class:`StopIteration` if no acceptable username is found
-        within 100 attempts
-
-    The returned value is guaranteed to have been reserved in the database.
-
-    """
-    for username in gen_random_usernames():
-        try:
-            txn.execute( "INSERT INTO participants (username, username_lower) "
-                         "VALUES (%s, %s)"
-                       , (username, username.lower())
-                        )
-        except IntegrityError:  # Collision, try again with another value.
-            pass
-        else:
-            break
-
-    return username
 
 
 def typecast(request):
@@ -777,11 +715,11 @@ def typecast(request):
 
     slug = path['username']
 
-    participant = gittip.db.one( "SELECT participants.*::participants "
-                                 "FROM participants "
-                                 "WHERE username_lower=%s"
-                               , (slug.lower())
-                                )
+    participant = request.website.db.one( """
+        SELECT participants.*::participants
+        FROM participants
+        WHERE username_lower=%s
+    """, (slug.lower()))
 
     if participant is None:
         raise Response(404)

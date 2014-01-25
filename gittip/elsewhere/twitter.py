@@ -1,21 +1,28 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import datetime
-import requests
 from os import environ
 
 from aspen import json, log, Response
 from aspen.utils import to_age, utc
 from gittip.elsewhere import PlatformOAuth1
 from gittip.models.account_elsewhere import AccountElsewhere
+import requests
 from requests_oauthlib import OAuth1
 
 
 class TwitterAccount(AccountElsewhere):
 
     @property
+    def html_url(self):
+        return "https://twitter.com/" + self.user_info['screen_name']
+
+    @property
     def display_name(self):
         return self.user_info['screen_name']
+
+    def get_platform_icon(self):
+        return "/assets/icons/twitter.12.png"
 
     @property
     def img_src(self):
@@ -34,10 +41,6 @@ class TwitterAccount(AccountElsewhere):
 
         return src
 
-    @property
-    def html_url(self):
-        return "https://twitter.com/{screen_name}".format(**self.user_info)
-
 
 class Twitter(PlatformOAuth1):
 
@@ -46,6 +49,17 @@ class Twitter(PlatformOAuth1):
     user_id_key= 'id'
     username_key = 'screen_name'
     api_url = environ['TWITTER_API_URL']
+
+
+    def oauth_url(self, action, then=""):
+        """Return a URL to start oauth dancing with Twitter.
+
+        For GitHub we can pass action and then through a querystring. For Twitter
+        we can't, so we send people through a local URL first where we stash this
+        info in an in-memory cache (eep! needs refactoring to scale).
+        """
+        then = then.encode('base64').strip()
+        return "/on/twitter/redirect?action=%s&then=%s" % (action, then)
 
 
     def get_user_info(self, screen_name, token=None, secret=None):
@@ -97,22 +111,8 @@ class Twitter(PlatformOAuth1):
         else:
             log("Twitter lookup failed with %d." % user_info.status_code)
             raise Response(404)
-        
+
         # Add user page url.
         user_info['html_url'] = "https://twitter.com/" + screen_name
 
         return user_info
-
-
-    def oauth_url(self, action, then=""):
-        """Return a URL to start oauth dancing with Twitter.
-
-        For GitHub we can pass action and then through a querystring. For Twitter
-        we can't, so we send people through a local URL first where we stash this
-        info in an in-memory cache (eep! needs refactoring to scale).
-
-        Not sure why website is here. Vestige from GitHub forebear?
-
-        """
-        then = then.encode('base64').strip()
-        return "/on/twitter/redirect?action=%s&then=%s" % (action, then)

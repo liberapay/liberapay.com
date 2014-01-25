@@ -1,14 +1,14 @@
 title = "Frequently Asked Questions"
 [---]
-{% extends templates/about.html %}
+{% extends "templates/about.html" %}
 {% block page %}
 <div class="col1">
     <dl>
 
         <dt>What is Gittip?</dt>
 
-        <dd>Gittip is a platform for sustainable crowd-funding. Use it to set 
-        up a weekly anonymous gift to someone you think does great work.</dd>
+        <dd>Gittip is a way to give money every week to people and teams you
+        believe in.</dd>
 
 
         <dt>Who is Gittip?</dt>
@@ -41,56 +41,73 @@ title = "Frequently Asked Questions"
         the first week.</dd>
 
 
-        <dt>I'm not in the U.S., can I still give gifts using Gittip?</dt>
+        <dt>I'm not in the U.S., can I still use Gittip?</dt>
 
-        <dd>Absolutely! We're able to accept international credit card
-        payments. If you encounter any issues giving and you are outside the
-        U.S., please let us know.</dd>
+        <dd>Yes, but moving funds takes more time and the fees are higher.</dd>
 
 
-        <dt>I'm not in the U.S., can I still receive gifts using Gittip?</dt>
+        <dt>How do I add funds to Gittip?</dt>
 
-        <dd>Absolutely! We're working on a long-term solution for automated
-        withdrawals outside the U.S. (details <a
-            href="https://github.com/gittip/www.gittip.com/issues/126">here</a>),
-        and in the mean time we are happy to make manual PayPal payments when
-        you'd like to withdraw your funds from Gittip&mdash;<a
-            href="/about/#contact-us">get in touch</a> as needed.</dd>
+        <dd>There are two ways to add funds to Gittip:
+
+        <ol>
+
+            <li><a href="/credit-card.html">Connect a credit card</a>. We will
+            charge you every Thursday to fund the gifts you have set up ($10
+            minimum; 2.9% + 30&cent; fee, with additional fees from non-U.S.
+            banks).</li>
+
+            <li><a
+                href="mailto:support@gittip.com?subject=bitcoin%20payin">Email
+            us</a> to request a one-time bitcoin payin (1% + 15&cent;
+        fee).</li>
+
+        </ol>
+
+        </dd>
 
 
         <dt>How do I withdraw funds from Gittip?</dt>
 
-        <dd>Participants in the U.S. can <a
-        href="https://www.gittip.com/bank-account.html">connect a bank
-        account</a> to have funds deposited every Friday. Participants outside
-        the U.S. can <a href="/about/#contact-us">contact us</a> to set up a
-        manual PayPal payment, less PayPal's fee, while we work on a long-term
-        <a
-        href="https://github.com/gittip/www.gittip.com/issues/126">solution</a>.</dd>
+        <dd>There are three ways to withdraw funds from Gittip:
 
-        <dt>Is there a minimum or maximum amount I can give or receive?</dt>
+        <ol>
 
-        <dd>There are no restrictions on the total amount you can give
-        or receive. The minimum individual weekly gift is 1¢. The maximum
-        individual weekly gift is $100. This maximum helps reduce volatity
-        by reducing how dependant your income is on a few large gifters.
-        The maximum may change in the future.</dd>
+            <li><a href="https://www.gittip.com/bank-account.html">Connect a
+                bank account</a>. Funds will be deposited every Friday (no fee;
+            U.S.-only).</li>
+
+            <li><a
+                href="mailto:support@gittip.com?subject=configuring%20PayPal">Email
+            us</a> to set up a weekly PayPal payout (2% fee, capped at
+            $20).</li>
+
+            <li><a
+                href="mailto:support@gittip.com?subject=bitcoin%20payout">Email
+            us</a> to request a one-time bitcoin payout (1% + 15&cent;
+            fee).</li>
+
+        </ol>
+
+        </dd>
 
     </dl>
 </div>
 <div class="col2">
     <dl>
 
-        <dt>Can I use bitcoin?</dt>
+        <dt>Is there a minimum or maximum amount I can give or receive?</dt>
 
-        <dd>Sort of. We currently support manual payouts using Coinbase. 
-        However, you cannot use bitcoin to pay in. The challenges with bitcoin 
-        are handling recurring payments,
-        and transparently converting to and from fiat currency. You're welcome
-        to join the conversation around bitcoin for <a
-            href="https://github.com/gittip/www.gittip.com/issues/14">payins</a>
-        and <a
-            href="https://github.com/gittip/www.gittip.com/issues/310">payouts</a>.</dd>
+        <dd>There are no restrictions on the total amount you can give
+        or receive.</dd>
+
+        <dd>The minimum you can give any one person is 1¢ per week. To minimize
+        processing fees, we charge your credit card at least $10 at a time (any
+        extra stays in Gittip to use in future weeks).</dd>
+
+        <dd>The maximum you can give any one person is $100 per week. This
+        helps reduce volatity by reducing how dependant income is on a few
+        large patrons.</dd>
 
 
         <dt>Can I use Gittip to support organizations?</dt>
@@ -100,19 +117,10 @@ title = "Frequently Asked Questions"
 
         <dt>What's the point of communities?</dt>
 
-        <dd><a href="/for/">Communities</a> let you identify with large groups 
+        <dd><a href="/for/">Communities</a> let you identify with groups
         of people that share your interests, such as <a href="/for/python/">
-        programming languages</a> and <a href="/for/korea/">geographical 
+        programming languages</a> and <a href="/for/korea/">geographical
         regions</a>.
-
-
-        <dt>Why the 150 minimum on communities?</dt>
-
-        <dd>Because it's 
-        <a href="http://en.wikipedia.org/wiki/Dunbar's_number">Dunbar's
-        number</a>, the biggest a group can get where you still know everyone 
-        personally. Communities help you identify with something bigger.
-        </dd>
 
 
         <dt>How do I know my gifts are being received by the right person?</dt>
@@ -137,10 +145,10 @@ title = "Frequently Asked Questions"
         <dt>I don't want to receive gifts, I just want to give them. What should
         I do?</dt>
 
-        <dd>Please select &ldquo;I'm here as a patron.&rdquo; as your personal
-        funding goal. We won't show gift buttons to others on your
-        profile.</dd>
+        <dd>Please select &ldquo;I'm here as a patron, and politely decline to
+        receive gifts.&rdquo; as your personal funding goal. We won't show gift
+        buttons to others on your profile.</dd>
 
     </dl>
 </div>
-{% end %}
+{% endblock %}

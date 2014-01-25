@@ -19,17 +19,17 @@ def slugize(slug):
     return slug
 
 
-def slug_to_name(slug):
+def slug_to_name(db, slug):
     """Given a slug like ``python``, return a name like ``Python``.
 
     :database: One SELECT, one row
 
     """
     SQL = "SELECT name FROM community_summary WHERE slug=%s"
-    return gittip.db.one(SQL, (slug,))
+    return db.one(SQL, (slug,))
 
 
-def get_list_for(username):
+def get_list_for(db, username):
     """Return a listing of communities.
 
     :database: One SELECT, multiple rows
@@ -44,7 +44,7 @@ def get_list_for(username):
         sort_order = 'ASC'
         params = (username,)
 
-    return gittip.db.all("""
+    return db.all("""
 
         SELECT max(name) AS name
              , slug

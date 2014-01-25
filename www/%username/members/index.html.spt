@@ -13,14 +13,25 @@ hero = "Team Members"
 title = team.username     # used in the title tag
 username = team.username  # used in footer shared with on/$platform/
                                   # pages
-github_account, twitter_account, bitbucket_account, bountysource_account = \
-                                                  team.get_accounts_elsewhere()
+accounts = team.get_accounts_elsewhere()
+github_account = accounts.github
+twitter_account = accounts.twitter
+bitbucket_account = accounts.bitbucket
+bountysource_account = accounts.bountysource
+venmo_account = accounts.venmo
+openstreetmap_account = accounts.openstreetmap
+
 
 [-----------------------------------------------------------------------------]
-{% extends templates/profile.html %}
+{% extends "templates/profile.html" %}
+
+{% block scripts %}
+<script>$(document).ready(Gittip.team.init);</script>
+
+{{ super() }}
+{% endblock %}
 
 {% block page %}
-<script>$(document).ready(Gittip.team.init);</script>
 
 <div id="team" class="col0">
   <table>
@@ -58,8 +69,8 @@ github_account, twitter_account, bitbucket_account, bountysource_account = \
           </div>
         </td>
       </tr>
-      {% end %}
+      {% endif %}
       <tbody id="members"></tbody>
   </table>
 </div>
-{% end %}
+{% endblock %}

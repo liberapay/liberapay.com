@@ -127,6 +127,8 @@ class Payday(object):
         crashes.
 
         """
+        self.db.self_check()
+
         _start = aspen.utils.utcnow()
         log("Greetings, program! It's PAYDAY!!!!")
         ts_start = self.start()
@@ -140,6 +142,8 @@ class Payday(object):
         self.set_nactive(ts_start)
 
         self.end()
+
+        self.db.self_check()
 
         _end = aspen.utils.utcnow()
         _delta = _end - _start
@@ -319,7 +323,8 @@ class Payday(object):
             UPDATE participants
                SET balance = (balance + pending)
                  , pending = 0
-             WHERE number='plural'
+             WHERE pending IS NOT NULL
+               AND number='plural'
 
         """)
         # "Moved" instead of "cleared" because we don't also set to null.
@@ -384,9 +389,9 @@ class Payday(object):
 
         Return values:
 
-             0 if no valid tip available or tip has not been claimed
-             1 if tip is valid
-            -1 if transfer fails and we cannot continue
+            | 0 if no valid tip available or tip has not been claimed
+            | 1 if tip is valid
+            | -1 if transfer fails and we cannot continue
 
         """
         msg = "$%s from %s to %s%s."
@@ -729,7 +734,7 @@ class Payday(object):
 
         For Balanced, this could be automated by generating an ID locally and
         commiting that to the db and then passing that through in the meta
-        field.* Then syncing would be a case of simply:
+        field.* Then syncing would be a case of simply::
 
             for payment in unresolved_payments:
                 payment_in_balanced = balanced.Transaction.query.filter(

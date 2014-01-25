@@ -1,3 +1,4 @@
+{% if communities %}
 <h2>Communities</h2>
 <ul class="community memberships">
     {% for community in communities %}
@@ -8,6 +9,6 @@
             with {{ nothers }} other{{ plural(nothers) }}
         </div>
     </li>
-    {% end %}
+    {% endfor %}
 </ul>
-<a href="/for/">Join Communities</a>
+{% endif %}
