@@ -3,7 +3,7 @@ Gittip.upgrade = {};
 Gittip.upgrade.init = function () {
 
     var userAgent = navigator.userAgent.toLowerCase();
-    var browser = (userAgent.indexOf('msie') != -1) ? parseInt(userAgent.split('msie')[1]) : -1;
+    var browser = (userAgent.indexOf('msie') != -1) ? parseInt(userAgent.split('msie')[1], 10) : -1;
 
     if(browser != -1 && browser < 9) {
         var message = '' +
