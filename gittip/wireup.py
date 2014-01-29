@@ -60,7 +60,7 @@ def make_sentry_teller(website):
         # Decide if we care.
         # ==================
 
-        if exception.__class__ is aspen.Response:
+        if isinstance(exception, aspen.Response):
 
             if exception.code < 500:
 
