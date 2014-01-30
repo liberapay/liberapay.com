@@ -104,13 +104,9 @@ def outbound(request, response, website):
         return response
 
     response.headers.cookie.clear()
+    response.headers.pop('Vary')
 
-    if response.code == 304:
-
-        # https://github.com/gittip/www.gittip.com/issues/1308
-        if 'Content-Type' in response.headers:
-            del response.headers['Content-Type']
-
+    if response.code != 200:
         return response
 
     if website.cache_static:
