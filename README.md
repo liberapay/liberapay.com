@@ -1,4 +1,4 @@
-# Welcome to Gittip [<img height="26px" src="www/assets/gittip.opengraph.png"/>](https://www.gittip.com)
+# Welcome to Gittip [<img height="26px" src="www/assets/gittip.opengraph.png"/>](https://www.gittip.com/)
 
 Gittip is a weekly gift exchange, helping to create a culture of generosity.
 If you'd like to learn more, check out <https://gittip.com/about>.
