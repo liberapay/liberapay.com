@@ -525,3 +525,5 @@ and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
  - [Fundly](https://fundly.com/) - Crowdfund Anything
  - [I Love Open Source](http://www.iloveopensource.io/) - Simple recognition for open source developers
  - [Razoo](http://www.razoo.com/) - Create online fundraisers for anything and everything that matters to you.
+ - [CoinGiving](http://coingiving.com/) - Personified Bitcoin Donations
+ - [Bittip](http://bittip.it/) - Bitcoin Microdonations - Like Flattr, but with Btc
