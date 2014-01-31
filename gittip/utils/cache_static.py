@@ -115,10 +115,10 @@ def outbound(request, response, website):
         response.headers['Cache-Control'] = 'public'
         response.headers['Vary'] = 'accept-encoding'
 
-        if 'version' in uri.path:
-            # This specific asset is versioned, so it's fine to cache it.
-            response.headers['Expires'] = 'Sun, 17 Jan 2038 19:14:07 GMT'
-        else:
-            # Asset is not versioned. Don't cache it, but set Last-Modified.
-            last_modified = get_last_modified(request.fs)
-            response.headers['Last-Modified'] = format_date_time(last_modified)
+        # all assets are versioned, so it's fine to cache all of them
+        # a) using %version in url (gittip version)
+        # b) using their own version embeded in url (jquery-1.10.2.min.js)
+
+        response.headers['Expires'] = 'Sun, 17 Jan 2038 19:14:07 GMT'
+        last_modified = get_last_modified(request.fs)
+        response.headers['Last-Modified'] = format_date_time(last_modified)
