@@ -17,20 +17,8 @@ if response.status_code == 200:
 ')
 endef
 
-env: $(env_bin)/swaddle
+env:
 	$(python)  $(venv)\
-				--unzip-setuptools \
-				--prompt="[gittip] " \
-				--never-download \
-				--extra-search-dir=./vendor/ \
-				--distribute \
-				./env/
-	./$(env_bin)/pip install -r requirements.txt
-	./$(env_bin)/pip install -r requirements_tests.txt
-	./$(env_bin)/pip install -e ./
-
-$(env_bin)/swaddle:
-	$(python) $(venv)\
 				--unzip-setuptools \
 				--prompt="[gittip] " \
 				--never-download \
@@ -48,21 +36,21 @@ clean:
 local.env:
 	echo "Creating a local.env file ..."
 	echo
-	cp default_local.env local.env
+	> local.env
 
 cloud-db: env local.env
 	echo -n $(postgression_database) >> local.env
 
 schema: env local.env
-	./$(env_bin)/swaddle local.env ./recreate-schema.sh
+	./$(env_bin)/honcho -e default_local.env,local.env run ./recreate-schema.sh
 
 data:
-	./$(env_bin)/swaddle local.env ./$(env_bin)/fake_data fake_data
+	./$(env_bin)/honcho -e default_local.env,local.env run ./$(env_bin)/fake_data fake_data
 
 db: cloud-db schema data
 
 run: env local.env
-	./$(env_bin)/swaddle local.env ./$(env_bin)/aspen \
+	./$(env_bin)/honcho -e default_local.env,local.env run ./$(env_bin)/aspen \
 		--www_root=www/ \
 		--project_root=. \
 		--show_tracebacks=yes \
@@ -73,15 +61,15 @@ test-cloud-db: env tests/env
 	echo -n $(postgression_database) >> tests/env
 
 test-schema: env tests/env
-	./$(env_bin)/swaddle tests/env ./recreate-schema.sh
+	./$(env_bin)/honcho -e default_tests.env,tests/env run ./recreate-schema.sh
 
 test-db: test-cloud-db test-schema
 
 test: env tests/env test-schema
-	./$(env_bin)/swaddle tests/env ./$(env_bin)/py.test ./tests/
+	./$(env_bin)/honcho -e default_tests.env,tests/env run ./$(env_bin)/py.test ./tests/
 
 retest: env tests/env
-	./$(env_bin)/swaddle tests/env ./$(env_bin)/py.test ./tests/ --lf
+	./$(env_bin)/honcho -e default_tests.env,tests/env run ./$(env_bin)/py.test ./tests/ --lf
 
 tests: test
 
@@ -95,4 +83,4 @@ jstest: node_modules
 tests/env:
 	echo "Creating a tests/env file ..."
 	echo
-	cp default_tests.env tests/env
+	> tests/env
