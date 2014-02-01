@@ -136,7 +136,7 @@ class GittipDB(Postgres):
             WHERE tipper IN (SELECT * FROM orphans)
             OR tippee IN (SELECT * FROM orphans)
         """)
-        known = set([25206]) # '4c074000c7bc', 'naderman', '3.00'
+        known = set([25206, 46266]) # '4c074000c7bc', 'naderman', '3.00'
         real = set(tips_with_orphans) - known
         assert len(real) == 0, real
 
