@@ -6,6 +6,7 @@ from decimal import Decimal
 
 import psycopg2
 import pytz
+import pytest
 from aspen.utils import utcnow
 from gittip import NotSane
 from gittip.elsewhere.bitbucket import BitbucketAccount
@@ -21,7 +22,7 @@ from gittip.exceptions import (
     NoSelfTipping,
     BadAmount,
 )
-from gittip.models._mixin_elsewhere import NeedConfirmation
+from gittip.models._mixin_elsewhere import NeedConfirmation, LastElsewhere, NonexistingElsewhere
 from gittip.models.participant import Participant
 from gittip.testing import Harness
 
@@ -247,6 +248,31 @@ class TestParticipant(Harness):
         unknown_account = StubAccount('github', 'jim')
         with self.assertRaises(NotSane):
             Participant.from_username('bob').take_over(unknown_account)
+
+    def test_delete_elsewhere_last(self):
+        alice = Participant.from_username('alice')
+        with pytest.raises(LastElsewhere):
+            alice.delete_elsewhere('twitter', 1)
+
+    def test_delete_elsewhere_nonexisting(self):
+        alice = Participant.from_username('alice')
+        with pytest.raises(NonexistingElsewhere):
+            alice.delete_elsewhere('github', 1)
+
+    def test_delete_elsewhere(self):
+        g = GitHubAccount(self.db, 1, dict(login='alice'))
+        alice = Participant.from_username('alice')
+        alice.take_over(g)
+        # test preconditions
+        accounts = alice.get_accounts_elsewhere()
+        assert accounts.twitter != None and accounts.github != None
+        # do the thing
+        alice.delete_elsewhere('twitter', 1)
+        # unit test
+        accounts = alice.get_accounts_elsewhere()
+        assert accounts.twitter == None and accounts.github != None
+
+
 
 
 class Tests(Harness):

@@ -6,7 +6,7 @@ from aspen.utils import typecheck
 from psycopg2 import IntegrityError
 
 from gittip.exceptions import UnknownPlatform
-from gittip.elsewhere import platform_classes
+from gittip.elsewhere import platform_classes, platform_required
 from gittip.utils.username import reserve_a_random_username, gen_random_usernames
 
 
@@ -41,6 +41,11 @@ class NeedConfirmation(Exception):
         A, B, C = self._all
         return A or C
 
+class LastElsewhere(Exception):
+    pass
+
+class NonexistingElsewhere(Exception):
+    pass
 
 # Mixin
 # =====
@@ -114,6 +119,27 @@ class MixinElsewhere(object):
 
         return src
 
+    def delete_elsewhere(self, platform, user_id):
+        """Deletes account elsewhere unless the user would not be able
+        to log in anymore.
+        """
+        user_id = unicode(user_id)
+        with self.db.get_cursor(back_as=namedtuple) as cursor:
+            ACCOUNTS = "SELECT platform, user_id FROM elsewhere WHERE participant=%s AND platform IN %s"
+            accounts = cursor.all(ACCOUNTS, (self.username, platform_required))
+            assert len(accounts) > 0
+            if platform in platform_required and len(accounts) == 1 and accounts[0].platform == platform:
+                raise LastElsewhere()
+            d = cursor.all("""
+                DELETE FROM elsewhere
+                WHERE participant=%s
+                AND platform=%s
+                AND user_id=%s
+                RETURNING participant
+            """, (self.username, platform, user_id))
+            assert len(d) <= 1
+            if len(d) == 0:
+                raise NonexistingElsewhere()
 
     def take_over(self, account_elsewhere, have_confirmation=False):
         """Given an AccountElsewhere and a bool, raise NeedConfirmation or return None.

@@ -30,6 +30,13 @@ platforms_ordered = (
     'openstreetmap'
 )
 
+# participant must have one of these accounts to be able to sign in
+platform_required = (
+    'twitter',
+    'github',
+    'openstreetmap'
+)
+
 # init-time key setup ensures the future ordering of platform_classes will match
 # platforms_ordered, since overwriting entries will maintain their order.
 platform_classes = OrderedDict([(platform, None) for platform in platforms_ordered])
