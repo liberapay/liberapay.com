@@ -255,10 +255,10 @@ json_dump = lambda: json.dumps({name: globals()[name] for name in names})
 
 {% block scripts %}
 <!--[if lt IE 9]>
-<script type="text/javascript" src="/assets/aight.min.js"></script>
+<script type="text/javascript" src="{{ website.asset_url }}/aight.min.js"></script>
 <![endif]-->
 
-<script src="/assets/d3.v2.min.js"></script>
+<script src="{{ website.asset_url }}/d3.v2.min.js"></script>
 <script>
 d3.json("/about/tip-distribution.json", function(tips){
 

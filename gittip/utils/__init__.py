@@ -448,9 +448,7 @@ def log_cursor(f):
 
 
 def get_avatar_url(obj):
-    if not obj.avatar_url:
-        return '/assets/-/avatar-default.png'
-    return obj.avatar_url
+    return obj.avatar_url or '%s/avatar-default.png' % website.asset_version_url
 
 def _to_age(participant):
     # XXX I can't believe I'm doing this. Evolve aspen.utils.to_age!

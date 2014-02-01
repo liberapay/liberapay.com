@@ -20,7 +20,6 @@ class Bountysource(Platform):
     name = 'bountysource'
     display_name = 'Bountysource'
     account_url = '{platform_data.auth_url}/people/{user_id}'
-    icon = '/assets/icons/bountysource.12.png'
 
     # API attributes
     api_format = 'json'

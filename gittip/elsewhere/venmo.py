@@ -10,7 +10,6 @@ class Venmo(PlatformOAuth2):
     name = 'venmo'
     display_name = 'Venmo'
     account_url = 'https://venmo.com/{user_name}'
-    icon = '/assets/icons/venmo.16.png'
 
     # PlatformOAuth2 attributes
     auth_url = 'https://api.venmo.com/v1/oauth'

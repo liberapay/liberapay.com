@@ -59,7 +59,7 @@ else:
     {% if participant.avatar_url %}
     <meta name="og:image" content="{{ participant.avatar_url|e }}" />
     {% endif %}
-    <meta name="og:image" content="/assets/gittip.opengraph.png" />
+    <meta name="og:image" content="{{ website.asset_url }}/gittip.opengraph.png" />
 {% endblock %}
 
 {% block scripts %}

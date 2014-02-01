@@ -11,7 +11,6 @@ class Bitbucket(PlatformOAuth1):
     name = 'bitbucket'
     display_name = 'Bitbucket'
     account_url = 'https://bitbucket.org/{user_name}'
-    icon = '/assets/icons/bitbucket.12.png'
 
     # Auth attributes
     auth_url = 'https://bitbucket.org/api/1.0'

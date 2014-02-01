@@ -76,7 +76,7 @@ receivers = website.db.all("""
     <meta name="og:type" content="website" />
     <meta name="og:url" content="https://www.gittip.com/" />
     <meta name="og:title" content="Gittip" />
-    <meta name="og:image" content="/assets/gittip.opengraph.png" />
+    <meta name="og:image" content="{{ website.asset_url }}/gittip.opengraph.png" />
 {% endblock %}
 
 {% block scripts %}

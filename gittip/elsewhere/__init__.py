@@ -74,7 +74,6 @@ class Platform(object):
 
     required_attrs = ( 'account_url'
                      , 'display_name'
-                     , 'icon'
                      , 'name'
                      )
 
@@ -98,6 +97,9 @@ class Platform(object):
             self.api_parser = lambda r: ET.fromstring(r.content)
         elif api_format:
             raise ValueError('unknown API format: '+str(api_format))
+
+        # TODO: make this use website.asset_url!
+        self.icon = '/assets/icons/%s.16.png' % self.name
 
         # Make sure the subclass was implemented properly.
         missing_attrs = [a for a in self.required_attrs if not hasattr(self, a)]
