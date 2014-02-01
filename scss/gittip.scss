@@ -2,6 +2,8 @@
     This is the top of the Gittip CSS tree.
 */
 
+// include plain css files to reduce the number of http requests
+@import "reset.css";
 
 // Define some basic things that are used throughout the site.
 
@@ -42,3 +44,6 @@
 // Group media queries together.
 
 @import "responsiveness";
+
+// include plain css files to reduce the number of http requests
+@import "chosen.css";
