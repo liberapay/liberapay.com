@@ -5,10 +5,10 @@ before_script:
  - echo "DATABASE_URL=postgres://postgres@localhost/gittip-test" >> tests/env
  - psql -U postgres -c 'CREATE DATABASE "gittip-test";'
  - make test-schema
-script: make test
+script: make test jstest
 notifications:
   email: false
-  irc: 
+  irc:
     channels:
       - "irc.freenode.org#gittip"
     on_success: change
