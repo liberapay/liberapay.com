@@ -1,0 +1,18 @@
+from aspen import Response
+from gittip.models._mixin_elsewhere import LastElsewhere, NonexistingElsewhere
+[-----------------------------------------------------------------------------]
+if user.ANON:
+    raise Response(404)
+request.allow("POST")
+
+platform = request.body["platform"]
+user_id = request.body["user_id"]
+
+try:
+    user.participant.delete_elsewhere(platform, user_id)
+    response.body = { "msg": "OK" }
+except LastElsewhere:
+    raise Response(400, { "error": "Cannot delete last login account." } )
+except NonexistingElsewhere:
+    raise Response(400, { "error" : "Account does not exist." } )
+

@@ -12,6 +12,9 @@
                     No Twitter account connected.
                 {% endif %}
             {% else %}
+                {% if user.participant == participant %}
+                    <div class="account-delete" data-platform="twitter" data-user_id="{{ twitter_account.user_id }}">✕</div>
+                {% endif %}
             <a rel="me" href="{{ twitter_account.user_info.get('html_url', '')|e }}"
                 ><img class="avatar"
                 src="{{ twitter_account.user_info.get('profile_image_url_https', '/assets/%s/no-avatar.png' % website.version )|e }}"
@@ -36,6 +39,9 @@
                     No GitHub account connected.
                 {% endif %}
             {% else %}
+                {% if user.participant == participant %}
+                    <div class="account-delete" data-platform="github" data-user_id="{{ github_account.user_id }}">✕</div>
+                {% endif %}
             <a rel="me" href="{{ github_account.user_info.get('html_url', '')|e }}"
                 ><img class="avatar" src="{{ github_account.user_info.get('avatar_url', '/assets/%s/no-avatar.png' % website.version)|e }}"
                 />{{ github_account.user_info.get('login')|e }}
@@ -59,6 +65,9 @@
                     No Bitbucket account connected.
                 {% endif %}
             {% else %}
+                {% if user.participant == participant %}
+                    <div class="account-delete" data-platform="bitbucket" data-user_id="{{ bitbucket_account.user_id }}">✕</div>
+                {% endif %}
             <a rel="me" href="{{ bitbucket_account.user_info.get('html_url', '')|e }}"
                 ><img class="avatar"
                 src="{{ bitbucket_account.user_info.get('avatar', '/assets/%s/no-avatar.png' % website.version)|e }}"
@@ -83,6 +92,9 @@
                 No Bountysource account connected.
             {% endif %}
         {% else %}
+                {% if user.participant == participant %}
+                    <div class="account-delete" data-platform="bountysource" data-user_id="{{ bountysource_account.user_id }}">✕</div>
+                {% endif %}
             <a href="{{ bountysource_account.user_info.get('frontend_url', 'https://www.bountysource.com')|e }}"
                 ><img class="avatar"
                       src="{{ bountysource_account.user_info.get('image_url', '/assets/%s/no-avatar.png' % website.version)|e }}"
@@ -107,6 +119,9 @@
                 No Venmo account connected.
             {% endif %}
         {% else %}
+                {% if user.participant == participant %}
+                    <div class="account-delete" data-platform="venmo" data-user_id="{{ venmo_account.user_id }}">✕</div>
+                {% endif %}
             <a href="{{ venmo_account.get_url() }}">
               <img class="avatar" src="{{ venmo_account.get_profile_image() }}">
               {{ venmo_account.get_user_name() }}
@@ -128,6 +143,9 @@
                     No OpenStreetMap account connected.
                 {% endif %}
             {% else %}
+                {% if user.participant == participant %}
+                    <div class="account-delete" data-platform="openstreetmap" data-user_id="{{ openstreetmap_account.user_id }}">✕</div>
+                {% endif %}
             <a rel="me" href="{{ openstreetmap_account.user_info.get('html_url', '')|e }}"
                 ><img class="avatar"
                 src="{{ openstreetmap_account.user_info.get('img_src', '/assets/%s/no-avatar.png' % website.version)|e }}"

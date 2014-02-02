@@ -334,4 +334,26 @@ Gittip.profile.init = function() {
 
             return false;
         });
+    $('.account-delete').on('click', function () {
+        var $this = $(this);
+
+        jQuery.ajax({
+            url: "elsewhere.json",
+            type: "POST",
+            dataType: "json",
+            success: function ( ) {
+                location.reload();
+            },
+            error: function (e) {
+                try {
+                    alert(JSON.parse(e.responseText).error);
+                } catch(e) {
+                    alert("Some error occured.")
+                }
+            },
+            data: { platform: this.dataset.platform, user_id: this.dataset.user_id }
+        });
+
+        return false;
+    });
 };
