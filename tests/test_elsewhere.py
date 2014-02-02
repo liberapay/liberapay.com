@@ -1,5 +1,7 @@
 from __future__ import print_function, unicode_literals
 
+import json
+
 from aspen.website import Website
 from gittip.elsewhere.twitter import TwitterAccount
 from gittip.testing import Harness
@@ -7,7 +9,6 @@ from gittip.elsewhere import bitbucket, github, twitter, openstreetmap
 
 # I ended up using TwitterAccount to test even though this is generic
 # functionality, because the base class is too abstract.
-
 
 class TestAccountElsewhere(Harness):
 
@@ -63,3 +64,40 @@ class TestAccountElsewhere(Harness):
                                     , then=self.xss
                                      )
         assert actual == expected
+
+class TestJson(Harness):
+
+    def test_delete_nonexistent(self):
+        self.make_participant('alice', claimed_time='now', elsewhere='twitter')
+        response = self.client.PxST('/alice/elsewhere.json', {'platform': 'twitter', 'user_id': 'nonexistent'}, auth_as='alice')
+        assert response.code == 400
+        error = json.loads(response.body)['error']
+        assert "not exist" in error
+
+    def test_delete_last(self):
+        alice = self.make_participant('alice', claimed_time='now', elsewhere='twitter')
+        user_id = alice.get_accounts_elsewhere().twitter.user_id
+        response = self.client.PxST('/alice/elsewhere.json', {'platform': 'twitter', 'user_id': user_id }, auth_as='alice')
+        assert response.code == 400
+        error = json.loads(response.body)['error']
+        assert "last login" in error
+
+    def test_delete_last_login(self):
+        alice = self.make_participant('alice', claimed_time='now', elsewhere='twitter')
+        bob = self.make_participant('bob', claimed_time='now', elsewhere='bitbucket')
+        user_id = alice.get_accounts_elsewhere().twitter.user_id
+        response = self.client.PxST('/alice/elsewhere.json', {'platform': 'twitter', 'user_id': user_id }, auth_as='alice')
+        assert response.code == 400
+        error = json.loads(response.body)['error']
+        assert "last login" in error
+
+    def test_delete_200(self):
+        alice = self.make_participant('alice', claimed_time='now', elsewhere='twitter')
+        bob = self.make_participant('bob', claimed_time='now', elsewhere='github')
+        alice.take_over(bob.get_accounts_elsewhere().github, True)
+        user_id = alice.get_accounts_elsewhere().twitter.user_id
+        response = self.client.POST('/alice/elsewhere.json', {'platform': 'twitter', 'user_id': user_id }, auth_as='alice')
+        assert response.code == 200
+        msg = json.loads(response.body)['msg']
+        assert "OK" in msg
+

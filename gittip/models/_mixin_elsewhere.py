@@ -128,7 +128,7 @@ class MixinElsewhere(object):
             ACCOUNTS = "SELECT platform, user_id FROM elsewhere WHERE participant=%s AND platform IN %s"
             accounts = cursor.all(ACCOUNTS, (self.username, platform_required))
             assert len(accounts) > 0
-            if platform in platform_required and len(accounts) == 1 and accounts[0].platform == platform:
+            if platform in platform_required and len(accounts) == 1 and accounts[0].platform == platform and accounts[0].user_id == user_id:
                 raise LastElsewhere()
             d = cursor.all("""
                 DELETE FROM elsewhere
