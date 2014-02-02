@@ -124,7 +124,7 @@ def part(s):
 
 
 now = datetime.datetime.utcnow()
-last_payday = db.one("select ts_start, ts_end from paydays order by ts_end desc limit 1", 
+last_payday = db.one("select ts_start, ts_end from paydays order by ts_end desc limit 1",
         back_as="dict", default={'ts_start':now, 'ts_end':now})
 ngivers = db.one("select count(distinct tipper) from transfers "
                  "where timestamp > %(ts_start)s and timestamp < %(ts_end)s", last_payday)
@@ -195,9 +195,10 @@ names = ['ncc', 'pcc', 'statements', 'transfer_volume',
          'tip_distribution_json', 'tip_n', 'nach', 'escrow',
          'ngivers', 'nreceivers', 'noverlap', 'nactive']
 
-json = json.dumps({name: globals()[name] for name in names})
+json_dump = lambda: json.dumps({name: globals()[name] for name in names})
+
 [----------------------------------------------------------] application/json
-%json
+{{ json_dump() }}
 [----------------------------------------------------------] text/html
 
 {% extends "templates/about.html" %}

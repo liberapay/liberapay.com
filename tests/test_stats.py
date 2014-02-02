@@ -2,6 +2,7 @@ from __future__ import print_function, unicode_literals
 
 import datetime
 from decimal import Decimal
+import json
 
 from mock import patch
 
@@ -74,6 +75,13 @@ class TestChartOfReceiving(Harness):
         actual = Participant.from_username('bob').get_tip_distribution()
         assert actual == expected
 
+class TestJson(Harness):
+
+    def test_200(self):
+        response = self.client.GET('/about/stats.json')
+        assert response.code == 200
+        body = json.loads(response.body)
+        assert len(body) > 0
 
 class TestRenderingStatsPage(Harness):
     def get_stats_page(self):
