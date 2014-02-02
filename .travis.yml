@@ -1,4 +1,7 @@
 language: python
+before_install:
+ - node --version
+install: make env node_modules
 before_script:
  - make local.env tests/env
  - echo "YES_PLEASE_DELETE_ALL_MY_DATA_VERY_OFTEN=Pretty please, with sugar on top." >> tests/env
