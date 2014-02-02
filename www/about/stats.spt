@@ -195,9 +195,10 @@ names = ['ncc', 'pcc', 'statements', 'transfer_volume',
          'tip_distribution_json', 'tip_n', 'nach', 'escrow',
          'ngivers', 'nreceivers', 'noverlap', 'nactive']
 
-json = json.dumps({name: globals()[name] for name in names})
+json_dumped = json.dumps({name: globals()[name] for name in names})
+
 [----------------------------------------------------------] application/json
-%json
+{{ json_dumped }}
 [----------------------------------------------------------] text/html
 
 {% extends "templates/about.html" %}
