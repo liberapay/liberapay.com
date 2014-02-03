@@ -62,7 +62,7 @@ module.exports = function(grunt) {
                 files: [
                     'www/assets/jquery-1.10.2.min.js',
                     'www/assets/%version/utils.js',
-                    'jstests/**/test_*.js',
+                    'jstests/**/*.js',
                 ],
 
                 browserify: { watch: true },
