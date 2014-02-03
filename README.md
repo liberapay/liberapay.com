@@ -11,7 +11,7 @@ Quick Start
 $ git clone git@github.com:gittip/www.gittip.com.git
 $ cd www.gittip.com
 $ sudo -u postgres createuser --superuser $USER
-$ createdb $USER
+$ createdb gittip
 $ make schema
 $ make run
 ```
@@ -65,11 +65,11 @@ by issuing `make cloud-db` (it is somewhat slow for regular development).
 To configure local Postgres create default role and database:
 
     $ sudo -u postgres createuser --superuser $USER
-    $ createdb $USER
+    $ createdb gittip
 
 On Debian or Ubuntu you will need the following packages:
-`libpq5-dev`/`libpq-dev`, (includes headers needed to build the `psycopg2` Python library), 
-`python-dev` (includes Python header files for `psycopg2`).
+`libpq5-dev`/`libpq-dev`, (includes headers needed to build the `psycopg2` Python library)
+and `python-dev` (includes Python header files for `psycopg2`).
 
 If you are receiving issues from `psycopg2`, please [ensure that its needs are
 met](http://initd.org/psycopg/docs/faq.html#problems-compiling-and-deploying-psycopg2).
@@ -258,7 +258,7 @@ The tests will try to use `gittip-test` database of the current $USER.
 Local Database Setup
 --------------------
 
-For best development experience you need a local
+For the best development experience, you need a local
 installation of [Postgres](http://www.postgresql.org/download/). The best
 version of Postgres to use is 9.3.2, because that's what we're using in
 production at Heroku. You need at least 9.2, because we depend on being able to
@@ -267,7 +267,7 @@ specify a URI to `psql`, and that was added in 9.2.
 If you're on a Mac, maybe try out Heroku's
 [Postgres.app](http://www.postgresql.org/download/). If installing using a
 package manager, you may need several packages. On Ubuntu and Debian, the
-required packages are: `postgresql` (base), `postgresql-contrib` (includes hstore), 
+required packages are: `postgresql` (base) and `postgresql-contrib` (includes hstore),
 
 To setup the instance for gittip's needs run:
 
