@@ -33,43 +33,38 @@ clean:
 	rm -rf env *.egg *.egg-info
 	find . -name \*.pyc -delete
 
-local.env:
-	echo "Creating a local.env file ..."
-	echo
-	> local.env
-
-cloud-db: env local.env
+cloud-db: env
 	echo -n $(postgression_database) >> local.env
 
-schema: env local.env
-	./$(env_bin)/honcho -e default_local.env,local.env run ./recreate-schema.sh
+schema: env
+	./$(env_bin)/honcho -e defaults.env,local.env run ./recreate-schema.sh
 
 data:
-	./$(env_bin)/honcho -e default_local.env,local.env run ./$(env_bin)/fake_data fake_data
+	./$(env_bin)/honcho -e defaults.env,local.env run ./$(env_bin)/fake_data fake_data
 
 db: cloud-db schema data
 
-run: env local.env
-	./$(env_bin)/honcho -e default_local.env,local.env run ./$(env_bin)/aspen \
+run: env
+	./$(env_bin)/honcho -e defaults.env,local.env run ./$(env_bin)/aspen \
 		--www_root=www/ \
 		--project_root=. \
 		--show_tracebacks=yes \
 		--changes_reload=yes \
 		--network_address=:8537
 
-test-cloud-db: env tests/env
-	echo -n $(postgression_database) >> tests/env
+test-cloud-db: env
+	echo -n $(postgression_database) >> tests/local.env
 
-test-schema: env tests/env
-	./$(env_bin)/honcho -e default_tests.env,tests/env run ./recreate-schema.sh
+test-schema: env
+	./$(env_bin)/honcho -e tests/defaults.env,tests/local.env run ./recreate-schema.sh
 
 test-db: test-cloud-db test-schema
 
-test: env tests/env test-schema
-	./$(env_bin)/honcho -e default_tests.env,tests/env run ./$(env_bin)/py.test ./tests/
+test: env test-schema
+	./$(env_bin)/honcho -e tests/defaults.env,tests/local.env run ./$(env_bin)/py.test ./tests/
 
-retest: env tests/env
-	./$(env_bin)/honcho -e default_tests.env,tests/env run ./$(env_bin)/py.test ./tests/ --lf
+retest: env
+	./$(env_bin)/honcho -e tests/defaults.env,tests/local.env run ./$(env_bin)/py.test ./tests/ --lf
 
 tests: test
 
@@ -80,7 +75,3 @@ node_modules: package.json
 jstest: node_modules
 	./node_modules/.bin/grunt test
 
-tests/env:
-	echo "Creating a tests/env file ..."
-	echo
-	> tests/env
