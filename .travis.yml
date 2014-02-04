@@ -3,7 +3,8 @@ before_install:
  - node --version
 install: make env node_modules
 before_script:
- - psql -U postgres -c 'CREATE DATABASE "gittip-test";'
+ - echo "DATABASE_URL=dbname=gittip" | tee -a tests/local.env local.env
+ - psql -U postgres -c 'CREATE DATABASE "gittip";'
 script: make test jstest
 notifications:
   email: false
