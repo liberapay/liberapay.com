@@ -267,7 +267,7 @@ specify a URI to `psql`, and that was added in 9.2.
 If you're on a Mac, maybe try out Heroku's
 [Postgres.app](http://www.postgresql.org/download/). If installing using a
 package manager, you may need several packages. On Ubuntu and Debian, the
-required packages are: `postgresql` (base) and `postgresql-contrib` (includes hstore),
+required packages are: `postgresql` (base) and `postgresql-contrib` (includes hstore).
 
 To setup the instance for gittip's needs run:
 
