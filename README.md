@@ -527,3 +527,4 @@ and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
  - [Razoo](http://www.razoo.com/) - Create online fundraisers for anything and everything that matters to you.
  - [CoinGiving](http://coingiving.com/) - Personified Bitcoin Donations
  - [Bittip](http://bittip.it/) - Bitcoin Microdonations - Like Flattr, but with Btc
+ - [MedStartr](http://www.medstartr.com/) - Fund the medical breakthroughs and innovations you care about
