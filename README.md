@@ -85,10 +85,6 @@ time.
 The included `Makefile` contains several targets. Configuration options
 are stored in default_local.env file while overrides are in local.env.
 
-To create a local environment configuration file:
-
-    $ make local.env
-
 To create virtualenv enviroment with all python dependencies installed
 in a sandbox:
 
