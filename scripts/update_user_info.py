@@ -18,7 +18,7 @@ oauth = OAuth1( os.environ['TWITTER_CONSUMER_KEY']
               , os.environ['TWITTER_ACCESS_TOKEN']
               , os.environ['TWITTER_ACCESS_TOKEN_SECRET']
                )
-elsewhere = db.all("SELECT user_id FROM ELSEWHERE WHERE platform='twitter';")
+elsewhere = db.all("SELECT user_id FROM ELSEWHERE WHERE platform='twitter' ORDER BY id;")
 url = "https://api.twitter.com/1.1/users/show.json?user_id=%s"
 
 for user_id in elsewhere:
@@ -44,13 +44,18 @@ for user_id in elsewhere:
     db.run("UPDATE elsewhere SET user_info=%s WHERE user_id=%s", (user_info, user_id))
 
 
+    # Emit a log line.
+    # ================
+
+    print response.headers['X-RATE-LIMIT-REMAINING'], user_id, user_info['screen_name']
+
+
     # Stay under our rate limit.
     # =========================
     # We get 180 per 15 minutes for the users/show endpoint, per:
     #
     #   https://dev.twitter.com/docs/rate-limiting/1.1/limits
 
-    print response.headers['X-RATE-LIMIT-REMAINING']
     nremaining = int(response.headers['X-RATE-LIMIT-REMAINING'])
     sleep_for = 5
     if nremaining == 0:
