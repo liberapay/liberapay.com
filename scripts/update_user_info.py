@@ -27,6 +27,8 @@ for user_id in elsewhere:
     if response.status_code != 200:
         # Who knows what happened? Bail.
         # (Supposedly we shouldn't hit 429, at least).
+        print response.status_code
+        print response.text
         raise SystemExit
 
 
