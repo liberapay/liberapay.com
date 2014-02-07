@@ -24,30 +24,35 @@ url = "https://api.twitter.com/1.1/users/show.json?user_id=%s"
 for user_id in elsewhere:
     response = requests.get(url % user_id, auth=oauth)
 
+
     if response.status_code != 200:
-        # Who knows what happened? Bail.
-        # (Supposedly we shouldn't hit 429, at least).
-        print response.status_code
-        print response.text
-        raise SystemExit
 
+        # Who knows what happened?
+        # ========================
+        # Supposedly we shouldn't hit 429, at least.
 
-    # Update!
-    # =======
+        msg = "{} {}".format(response.status_code, response.text)
 
-    user_info = response.json()
+    else:
 
-    # flatten per upsert method in gittip/elsewhere/__init__.py
-    for k, v in user_info.items():
-        user_info[k] = unicode(v)
+        # Update!
+        # =======
 
-    db.run("UPDATE elsewhere SET user_info=%s WHERE user_id=%s", (user_info, user_id))
+        user_info = response.json()
+
+        # flatten per upsert method in gittip/elsewhere/__init__.py
+        for k, v in user_info.items():
+            user_info[k] = unicode(v)
+
+        db.run("UPDATE elsewhere SET user_info=%s WHERE user_id=%s", (user_info, user_id))
+
+        msg = user_info['screen_name']
 
 
     # Emit a log line.
     # ================
 
-    print response.headers['X-RATE-LIMIT-REMAINING'], user_id, user_info['screen_name']
+    print response.headers['X-RATE-LIMIT-REMAINING'], user_id, msg
 
 
     # Stay under our rate limit.
