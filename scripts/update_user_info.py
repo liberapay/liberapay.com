@@ -52,7 +52,10 @@ for user_id in elsewhere:
     # Emit a log line.
     # ================
 
-    print response.headers['X-RATE-LIMIT-REMAINING'], user_id, msg
+    nremaining = int(response.headers['X-RATE-LIMIT-REMAINING'])
+    reset = int(response.headers['X-RATE-LIMIT-RESET'])
+
+    print nremaining, reset, time.time(), user_id, msg
 
 
     # Stay under our rate limit.
@@ -61,10 +64,8 @@ for user_id in elsewhere:
     #
     #   https://dev.twitter.com/docs/rate-limiting/1.1/limits
 
-    nremaining = int(response.headers['X-RATE-LIMIT-REMAINING'])
     sleep_for = 5
     if nremaining == 0:
-        reset = int(response.headers['X-RATE-LIMIT-RESET'])
         sleep_for = reset - time.time()
         sleep_for += 10  # Account for potential clock skew between us and Twitter.
     time.sleep(sleep_for)
