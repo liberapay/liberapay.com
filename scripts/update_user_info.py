@@ -19,7 +19,7 @@ oauth = OAuth1( os.environ['TWITTER_CONSUMER_KEY']
               , os.environ['TWITTER_ACCESS_TOKEN']
               , os.environ['TWITTER_ACCESS_TOKEN_SECRET']
                )
-elsewhere = db.all("SELECT user_id FROM ELSEWHERE WHERE platform='twitter' ORDER BY id LIMIT 120;")
+elsewhere = db.all("SELECT user_id FROM ELSEWHERE WHERE platform='twitter' ORDER BY id;")
 url = "https://api.twitter.com/1.1/users/lookup.json"
 
 while elsewhere:
