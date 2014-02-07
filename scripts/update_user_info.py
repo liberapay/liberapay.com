@@ -54,4 +54,5 @@ for user_id in elsewhere:
     if nremaining < 180:
         reset = int(response.headers['X-RATE-LIMIT-RESET'])
         sleep_for = reset - time.time()
+        sleep_for += 10  # Account for potential clock skew between us and Twitter.
     time.sleep(sleep_for)
