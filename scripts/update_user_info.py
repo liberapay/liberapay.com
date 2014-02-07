@@ -5,7 +5,6 @@ This could be generalized for #900.
 
 """
 import os
-import sys
 import time
 
 import requests
