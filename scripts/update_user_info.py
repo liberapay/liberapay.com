@@ -53,7 +53,7 @@ for user_id in elsewhere:
     print response.headers['X-RATE-LIMIT-REMAINING']
     nremaining = int(response.headers['X-RATE-LIMIT-REMAINING'])
     sleep_for = 5
-    if nremaining < 180:
+    if nremaining == 0:
         reset = int(response.headers['X-RATE-LIMIT-RESET'])
         sleep_for = reset - time.time()
         sleep_for += 10  # Account for potential clock skew between us and Twitter.
