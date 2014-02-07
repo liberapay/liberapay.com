@@ -5,6 +5,7 @@ This could be generalized for #900.
 
 """
 import os
+import sys
 import time
 
 import requests
@@ -18,11 +19,23 @@ oauth = OAuth1( os.environ['TWITTER_CONSUMER_KEY']
               , os.environ['TWITTER_ACCESS_TOKEN']
               , os.environ['TWITTER_ACCESS_TOKEN_SECRET']
                )
-elsewhere = db.all("SELECT user_id FROM ELSEWHERE WHERE platform='twitter' ORDER BY id;")
-url = "https://api.twitter.com/1.1/users/show.json?user_id=%s"
+elsewhere = db.all("SELECT user_id FROM ELSEWHERE WHERE platform='twitter' ORDER BY id LIMIT 120;")
+url = "https://api.twitter.com/1.1/users/lookup.json"
 
-for user_id in elsewhere:
-    response = requests.get(url % user_id, auth=oauth)
+while elsewhere:
+    batch = elsewhere[:100]
+    elsewhere = elsewhere[100:]
+    user_ids = ','.join([str(user_id) for user_id in batch])
+
+    response = requests.post(url, data={'user_id': user_ids}, auth=oauth)
+
+
+    # Log the rate-limit.
+    # ===================
+
+    nremaining = int(response.headers['X-RATE-LIMIT-REMAINING'])
+    reset = int(response.headers['X-RATE-LIMIT-RESET'])
+    print nremaining, reset, time.time()
 
 
     if response.status_code != 200:
@@ -31,36 +44,31 @@ for user_id in elsewhere:
         # ========================
         # Supposedly we shouldn't hit 429, at least.
 
-        msg = "{} {}".format(response.status_code, response.text)
+        print response.status_code, response.text
 
     else:
 
         # Update!
         # =======
 
-        user_info = response.json()
+        users = response.json()
 
-        # flatten per upsert method in gittip/elsewhere/__init__.py
-        for k, v in user_info.items():
-            user_info[k] = unicode(v)
+        for user_info in users:
 
-        db.run("UPDATE elsewhere SET user_info=%s WHERE user_id=%s", (user_info, user_id))
+            # flatten per upsert method in gittip/elsewhere/__init__.py
+            for k, v in user_info.items():
+                user_info[k] = unicode(v)
 
-        msg = user_info['screen_name']
+            user_id = user_info['id']
 
+            db.run("UPDATE elsewhere SET user_info=%s WHERE user_id=%s", (user_info, user_id))
 
-    # Emit a log line.
-    # ================
-
-    nremaining = int(response.headers['X-RATE-LIMIT-REMAINING'])
-    reset = int(response.headers['X-RATE-LIMIT-RESET'])
-
-    print nremaining, reset, time.time(), user_id, msg
+            print "updated {} ({})".format(user_info['screen_name'], user_id)
 
 
     # Stay under our rate limit.
     # =========================
-    # We get 180 per 15 minutes for the users/show endpoint, per:
+    # We get 180 per 15 minutes for the users/lookup endpoint, per:
     #
     #   https://dev.twitter.com/docs/rate-limiting/1.1/limits
 
