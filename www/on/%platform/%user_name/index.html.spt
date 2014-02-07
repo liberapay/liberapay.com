@@ -1,34 +1,32 @@
 """External user page on Gittip.
 """
-import datetime
-import decimal
 
-from aspen import json, Response, log
-from aspen.utils import to_age, utc
-from gittip.models.participant import Participant
+from aspen import Response
+
 [-----------------------------------------------------------------------------]
 
-platform = website.platforms.get(path['platform'])
+platform = getattr(website.platforms, path['platform'], None)
 if platform is None:
     raise Response(404)
 
-account = platform.get_account(path['username'])
+account = platform.get_account(path['user_name'])
 if account is None:
     raise Response(404)
 
 if account.participant.is_claimed:
     request.redirect('/%s/' % account.participant.username)
 
-title = account.display_name
+title = user_name = account.user_name
 locked = account.is_locked
 participant = account.participant
 nbackers = participant.get_number_of_backers()
-oauth_then = account.display_name
 
 [-----------------------------------------------------------------------------]
 {% extends "templates/base.html" %}
 
-{% block heading %}<h2 class="top"><span>{{ platform.name }}</span></h2>{% end %}
+{% block heading %}
+    <h2 class="top"><span>{{ platform.name }}</span></h2>
+{% endblock %}
 
 {% block scripts %}
 <script>
@@ -43,10 +41,10 @@ oauth_then = account.display_name
 <table class="on-elsewhere">
     <tr>
         <td class="picture">
-            <img src="{{ account.img_src }}" />
+            <img src="{{ account.avatar_url|e }}" />
         </td>
         <td class="ready">
-            <h2><a href="{{ account.html_url }}">{{ account.display_name|e }}</a> has</h2>
+            <h2><a href="{{ account.html_url|e}}">{{ user_name|e }}</a> has</h2>
             <div class="number">{{ nbackers }}</div>
             <div class="unit">{{ 'person' if nbackers == 1 else 'people' }} ready to give</div>
         </td>
@@ -60,30 +58,36 @@ oauth_then = account.display_name
 
 {% block page %}
 
+{% from 'templates/auth.html' import auth_button with context %}
+
 <div class="col0">
   {% if locked %}
 
-    <h2>{{ account.display_name|e }} has opted out of Gittip.</h2>
+    <h2>{{ user_name|e }} has opted out of Gittip.</h2>
 
-    <p>If you are <a href="{{ account.html_url }}">{{ account.display_name|e }}</a>
+    <p>If you are <a href="{{ account.html_url|e}}">{{ user_name|e }}</a>
     on {{ platform.name }}, you can unlock your account to allow people
     to pledge tips to you on Gittip.</p>
 
-    <a href="{{ platform.oauth_url('unlock', oauth_then) }}"
-        ><button>Unlock</button></a>
+    {% call auth_button(platform.name, 'unlock', path['user_name']) %}
+        Unlock
+    {% endcall %}
 
   {% else %}
 
-    <h2>{{ account.display_name|e }} has not joined Gittip.</h2>
+    <h2>{{ user_name|e }} has not joined Gittip.</h2>
 
     <p>Is this you?
     {% if user.ANON %}
-    <a href="{{ platform.oauth_url('opt-in', oauth_then) }}">Click
-        here</a> to opt in to Gittip. We never collect money for you until
-    you do.
+        {% call auth_button(platform.name, 'opt-in', path['user_name']) %}
+            Opt in
+        {% endcall %}
+        to Gittip. We never collect money for you until you do.
     {% else %}
-    <a href="/sign-out.html">Sign out</a> and sign back in
-    to claim this account
+        {% call auth_button(platform.name, 'connect', path['user_name']) %}
+            Connect this {{ platform.display_name }} account
+        {% endcall %}
+        to your gittip account.
     {% endif %}
     </p>
 
@@ -97,12 +101,12 @@ oauth_then = account.display_name
 
     <h2>Don't like what you see?</h2>
 
-    <p>If you are {{ account.display_name|e }} you can explicitly opt out
-    of Gittip by locking this account. We don't allow new pledges to locked
-    accounts.</p>
+    <p>If you are {{ user_name|e }} you can explicitly opt out of Gittip by
+    locking this account. We don't allow new pledges to locked accounts.</p>
 
-    <a href="{{ platform.oauth_url('lock', oauth_then) }}"
-        ><button>Lock</button></a>
+    {% call auth_button(platform.name, 'lock', path['user_name']) %}
+        Lock
+    {% endcall %}
     {% endif %}
 
   {% endif %}

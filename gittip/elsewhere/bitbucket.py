@@ -1,109 +1,30 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import logging
-from os import environ
 
-from aspen import json, log, Response
-from aspen.http.request import PathPart
-from aspen.utils import typecheck
-from gittip.elsewhere import AccountElsewhere, PlatformOAuth1
+from aspen import log, Response
 import requests
 from requests_oauthlib import OAuth1
 
-
-BASE_API_URL = "https://bitbucket.org/api/1.0"
-
-
-class BitbucketAccount(AccountElsewhere):
-
-    @property
-    def html_url(self):
-        return "https://bitbucket.org/{username}".format(**self.user_info)
-
-    @property
-    def display_name(self):
-        return self.user_info['username']
-
-    def get_platform_icon(self):
-        return "/assets/icons/bitbucket.12.png"
-
-    @property
-    def img_src(self):
-        src = ''
-        # XXX Um ... ?
-        return src
+from gittip.elsewhere import PlatformOAuth1, key, not_available
 
 
 class Bitbucket(PlatformOAuth1):
 
+    # Platform attributes
     name = 'bitbucket'
-    account_elsewhere_subclass = BitbucketAccount
-    username_key = 'username'
-    user_id_key = 'username'  # No immutable id. :-/
-    api_url = environ['BITBUCKET_API_URL']
+    display_name = 'Bitbucket'
+    account_url = 'https://bitbucket.org/{user_name}'
+    icon = '/assets/icons/bitbucket.12.png'
 
-
-    def oauth_url(self, action, then=""):
-        """Return a URL to start oauth dancing with Bitbucket.
-
-        For GitHub we can pass action and then through a querystring. For Bitbucket
-        we can't, so we send people through a local URL first where we stash this
-        info in an in-memory cache (eep! needs refactoring to scale).
-        """
-        then = then.encode('base64').strip()
-        return "/on/bitbucket/redirect?action=%s&then=%s" % (action, then)
-
-
-    def get_user_info(self, username, token=None, secret=None):
-        """Get the given user's information from the DB or failing that, bitbucket.
-
-        :param username:
-            A unicode string representing a username in bitbucket.
-
-        :param token:
-            OAuth1 token.
-
-        :param secret:
-            OAuth1 secret.
-
-        :returns:
-            A dictionary containing bitbucket specific information for the user.
-        """
-        if not username and token and secret:
-            return self.get_user_info_with_oauth(token, secret)
-
-        url = "%s/users/%s?pagelen=100"
-        user_info = requests.get(url % (BASE_API_URL, username))
-        status = user_info.status_code
-        content = user_info.content
-        if status == 200:
-            user_info = json.loads(content)['user']
-        elif status == 404:
-            raise Response(404,
-                           "Bitbucket identity '{0}' not found.".format(username))
-        else:
-            log("Bitbucket api responded with {0}: {1}".format(status, content),
-                level=logging.WARNING)
-            raise Response(502, "Bitbucket lookup failed with %d." % status)
-
-        return user_info
-
-    def get_user_info_with_oauth(self, token, secret):
-        oauth_hook = OAuth1(
-            environ['BITBUCKET_CONSUMER_KEY'],
-            environ['BITBUCKET_CONSUMER_SECRET'],
-            token,
-            secret,
-        )
-        response = requests.get(
-            "%s/user" % self.api_url,
-            auth=oauth_hook,
-        )
-        user_info = json.loads(response.text)['user']
-        assert response.status_code == 200, response.status_code
-
-        assert 'html_url' not in user_info
-        # Add user page url.
-        user_info['html_url'] = "https://bitbucket.org/" + user_info[self.username_key]
-
-        return user_info
+    # API attributes
+    api_format = 'json'
+    api_url = 'https://bitbucket.org/api/1.0'
+    api_user_info_path = '/users/{user_name}?pagelen=100'
+    api_user_self_info_path = '/user'
+    x_user_info = key('user')
+    x_user_id = key('username')  # No immutable id. :-/
+    x_user_name = key('username')
+    x_display_name = key('display_name')
+    x_email = not_available
+    x_avatar_url = key('avatar')

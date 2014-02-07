@@ -1,43 +1,30 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from gittip.models.participant import ProblemChangingUsername
-from gittip.security.user import User
 from postgres.orm import Model
 
-
-class UnknownPlatform(Exception):
-    def __str__(self):
-        return "Unknown platform for account elsewhere: {}.".format(self.args[0])
+from gittip.exceptions import ProblemChangingUsername
 
 
 class AccountElsewhere(Model):
 
     typname = "elsewhere_with_participant"
-    subclasses = {}  # populated in gittip.wireup.elsewhere
 
+    def __init__(self, *args, **kwargs):
+        super(AccountElsewhere, self).__init__(*args, **kwargs)
+        self.platform_data = getattr(self.platforms, self.platform)
 
-    def __new__(cls, record):
-        platform = record['platform']
-        cls = cls.subclasses.get(platform)
-        if cls is None:
-            raise UnknownPlatform(platform)
-        obj = super(AccountElsewhere, cls).__new__(cls, record)
-        return obj
-
-
-    def set_is_locked(self, is_locked):
-        self.db.run("""
-
-            UPDATE elsewhere
-               SET is_locked=%s
-             WHERE platform=%s AND user_id=%s
-
-        """, (is_locked, self.platform, self.user_id))
-
+    @property
+    def html_url(self):
+        return self.platform_data.account_url.format(
+            user_id=self.user_id,
+            user_name=self.user_name,
+            platform_data=self.platform_data
+        )
 
     def opt_in(self, desired_username):
         """Given a desired username, return a User object.
         """
+        from gittip.security.user import User
         self.set_is_locked(False)
         user = User.from_username(self.participant.username)
         user.sign_in()
@@ -52,3 +39,12 @@ class AccountElsewhere(Model):
             except ProblemChangingUsername:
                 pass
         return user, newly_claimed
+
+    def set_is_locked(self, is_locked):
+        self.db.run("""
+
+            UPDATE elsewhere
+               SET is_locked=%s
+             WHERE platform=%s AND user_id=%s
+
+        """, (is_locked, self.platform, self.user_id))

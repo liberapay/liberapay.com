@@ -4,7 +4,6 @@ import uuid
 
 from aspen import Response
 from gittip.models.participant import Participant
-from gittip.elsewhere import platform_classes
 
 website.connect_tokens = {}
 
@@ -16,7 +15,6 @@ if not getattr(request, 'internally_redirected_from', None):
 if user.ANON:
     raise Response(404)
 
-
 # Compute and store a connect_token.
 # ==================================
 # This is a protection against unauthorized users taking over accounts.
@@ -26,10 +24,13 @@ connect_key = (user.participant.username, account.platform, account.user_id)
 website.connect_tokens[connect_key] = connect_token
 
 
-other = Participant.from_username(account.participant)
+other = Participant.from_username(account.participant.username)
 
-user_accounts = user.participant.get_accounts_elsewhere()
-other_accounts = other.get_accounts_elsewhere()
+user_accounts_dict = user.participant.get_accounts_elsewhere()
+user_accounts = user_accounts_dict.values()
+other_accounts = other.get_accounts_elsewhere().values()
+
+abandoned_account = user_accounts_dict.get(account.platform, None)
 
 user_giving = user.participant.get_dollars_giving()
 user_receiving = user.participant.get_dollars_receiving()
@@ -42,7 +43,7 @@ combined_receiving = user_receiving + other_receiving
 
 fmt = lambda x: '$' + str(int(round(x))) if x > 0 else '-'
 
-username = account.get_user_name()
+user_name = account.user_name
 title = "Please Confirm"
 
 [--------]
@@ -51,8 +52,8 @@ title = "Please Confirm"
 {% block box %}
 <div class="on-confirm">
 
-    <div><img class="platform-icon" src="{{ account.get_platform_icon() }}"
-    /> <span class="highlight">{{ username }}</span> is connected<br />to
+    <div><img class="platform-icon" src="{{ platform.icon }}"
+    /> <span class="highlight">{{ user_name }}</span> is connected<br />to
     <b>{{ other.username }}</b> on Gittip.<br />Reconnect it?</div>
 
     <h2>Now</h2>
@@ -77,11 +78,10 @@ title = "Please Confirm"
                     <br />
 
                     {% for account in user_accounts %}
-                        {% if account != None %}
-                            <img src="{{ account.get_platform_icon() }}" alt="{{ account.platform }}"
-                                class="platform-icon" />
-                            {{ account.get_user_name() }}<br />
-                        {% endif %}
+                        <img src="{{ account.platform_data.icon }}"
+                             alt="{{ account.platform }}"
+                             class="platform-icon" />
+                        {{ account.user_name }}<br />
                     {% endfor %}
                 </div>
                 </div>
@@ -102,13 +102,12 @@ title = "Please Confirm"
                     </table>
                     <br />
                     {% for other_account in other_accounts %}
-                        {% if other_account != None %}
-                            <img src="{{ other_account.get_platform_icon() }}" alt="{{ other_account.platform }}"
-                                class="platform-icon" />
-                            <span {% if other_account.platform == account.platform %}class="highlight"{% endif %}>
-                                {{ other_account.get_user_name() }}<br />
-                            </span>
-                        {% endif %}
+                        <img src="{{ other_account.platform_data.icon }}"
+                             alt="{{ other_account.platform }}"
+                             class="platform-icon" />
+                        <span {% if other_account.platform == account.platform %}class="highlight"{% endif %}>
+                            {{ other_account.user_name }}<br />
+                        </span>
                     {% endfor %}
                 </div>
                 </div>
@@ -122,34 +121,10 @@ title = "Please Confirm"
     <table class="scenario">
         <tr>
             <td class="abandoned">
-                {% if account.platform == 'twitter' and user_accounts.twitter != None %}
+                {% if abandoned_account %}
                     <span class="account-elsewhere">
-                        <img src="/assets/icons/twitter.12.png" />
-                        {{ user_accounts.twitter.user_info['screen_name'] }}<br />
-                    </span>
-                {% endif %}
-                {% if account.platform == 'github' and user_accounts.github != None %}
-                    <span class="account-elsewhere">
-                        <img src="/assets/icons/github.12.png" />
-                        {{ user_accounts.github.user_info['login'] }}<br />
-                    </span>
-                {% endif %}
-                {% if account.platform == 'bitbucket' and user_accounts.bitbucket != None %}
-                    <span class="account-elsewhere">
-                        <img src="/assets/icons/bitbucket.12.png" />
-                        {{ user_accounts.bitbucket.user_info['username'] }}<br />
-                    </span>
-                {% endif %}
-                {% if account.platform == 'bountysource' and user_accounts.bountysource != None %}
-                    <span class="account-elsewhere">
-                        <img src="/assets/icons/bountysource.12.png" />
-                        {{ user_accounts.bountysource.user_info['display_name'] }}<br />
-                    </span>
-                {% endif %}
-                {% if account.platform == 'openstreetmap' and user_accounts.openstreetmap != None %}
-                    <span class="account-elsewhere">
-                        <img src="/assets/icons/openstreetmap.12.png" />
-                        {{ user_openstreetmap_account.user_info['username'] }}<br />
+                        <img src="{{ abandoned_account.platform_data.icon }}" />
+                        {{ abandoned_account.user_name }}<br />
                     </span>
                 {% endif %}
             </td>
@@ -179,20 +154,19 @@ title = "Please Confirm"
                     <br />
 
                     {% for user_account in user_accounts %}
-                        {% if user_account != None %}
-                            <span class="account-elsewhere">
-                                <img src="{{ user_account.get_platform_icon() }}" alt="{{ user_account.platform }}"
-                                    class="platform-icon" />
-                                {{ user_account.get_user_name() }}<br />
-                            </span>
-                        {% endif %}
+                        <span class="account-elsewhere">
+                            <img src="{{ user_account.platform_data.icon }}"
+                                 alt="{{ user_account.platform }}"
+                                 class="platform-icon" />
+                            {{ user_account.user_name }}<br />
+                        </span>
                     {% endfor %}
 
                     <span class="account-elsewhere">
-                        <img src="{{ account.get_platform_icon() }}" alt="{{ account.platform }}"
+                        <img src="{{ platform.icon }}" alt="{{ account.platform }}"
                             class="platform-icon" />
                         <span class="highlight">
-                            {{ account.get_user_name() }}<br />
+                            {{ account.user_name }}<br />
                         </span>
                     </span>
                 </div>
@@ -226,11 +200,12 @@ title = "Please Confirm"
                     <br />
 
                     {% for other_account in other_accounts %}
-                        {% if other_account != None and other_account.platform != account.platform %}
+                        {% if other_account.platform != account.platform %}
                             <span class="account-elsewhere">
-                                <img src="{{ other_account.get_platform_icon() }}" alt="{{ other_account.platform }}"
-                                    class="platform-icon" />
-                                {{ other_account.get_user_name() }}<br />
+                                <img src="{{ other_account.platform_data.icon }}"
+                                     alt="{{ other_account.platform }}"
+                                     class="platform-icon" />
+                                {{ other_account.user_name }}<br />
                             </span>
                         {% endif %}
                     {% endfor %}
@@ -248,7 +223,7 @@ title = "Please Confirm"
         <form action="/on/take-over.html" method="POST">
             <input type="hidden" name="platform" value="{{ account.platform }}" />
             <input type="hidden" name="user_id" value="{{ account.user_id }}" />
-            <input type="hidden" name="csrf_token" value="{{ cookie['csrf_token'].value }}" />
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
             <input type="hidden" name="connect_token" value="{{ connect_token }}" />
             <button name="should_reconnect" value="yes" class="selected larger">Yes</button>
             <button name="should_reconnect" value="no" >No</button>

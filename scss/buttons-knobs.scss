@@ -58,3 +58,16 @@ button.join-leave[data-is-member="true"] {
 button.join-leave[data-is-member="false"] {
     @extend .selected;
 }
+
+form.auth-button {
+    display: inline-block;
+    & > button {
+        margin: 0;
+        padding: 0;
+        color: $green;
+        background: none;
+        border: none;
+        font: inherit;
+        font-weight: bold;
+    }
+}

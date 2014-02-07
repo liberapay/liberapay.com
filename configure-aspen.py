@@ -12,7 +12,6 @@ import gittip.wireup
 from gittip import canonize, configure_payments
 from gittip.security import authentication, csrf, x_frame_options
 from gittip.utils import cache_static, timer
-from gittip.elsewhere import platform_classes
 
 
 from aspen import log_dammit
@@ -45,14 +44,7 @@ gittip.wireup.billing()
 gittip.wireup.username_restrictions(website)
 gittip.wireup.nanswers()
 gittip.wireup.envvars(website)
-gittip.wireup.platforms(website)
 tell_sentry = gittip.wireup.make_sentry_teller(website)
-
-# this serves two purposes:
-#  1) ensure all platform classes are created (and thus added to platform_classes)
-#  2) keep the platform modules around to be added to the context below
-platform_modules = {platform: import_module("gittip.elsewhere.%s" % platform)
-                    for platform in platform_classes}
 
 # The homepage wants expensive queries. Let's periodically select into an
 # intermediate table.
@@ -126,7 +118,6 @@ website.server_algorithm.insert_before('start', setup_busy_threads_logging)
 
 def add_stuff_to_context(request):
     request.context['username'] = None
-    request.context.update(platform_modules)
 
 def scab_body_onto_response(response):
 

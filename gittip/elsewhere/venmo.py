@@ -1,56 +1,34 @@
-from gittip.elsewhere import AccountElsewhere
+from __future__ import absolute_import, division, print_function, unicode_literals
+
 from urllib import urlencode
-from aspen import json, Response
+
 import requests
 
+from aspen import Response
 
-class VenmoAccount(AccountElsewhere):
-    platform = u'venmo'
+from gittip.elsewhere import PlatformOAuth2, key, not_available
 
-    def get_url(self):
-        return "https://venmo.com/" + self.user_info['username']
 
-    def get_profile_image(self):
-        return self.user_info['profile_picture_url']
+class Venmo(PlatformOAuth2):
 
-    def get_user_name(self):
-        return self.user_info['username']
+    # Platform attributes
+    name = 'venmo'
+    display_name = 'Venmo'
+    account_url = 'https://venmo.com/{user_name}'
+    icon = '/assets/icons/venmo.16.png'
 
-    def get_display_name(self):
-        return self.user_info['display_name']
+    # PlatformOAuth2 attributes
+    auth_url = 'https://api.venmo.com/v1/oauth'
+    oauth_email_scope = 'access_email'
+    oauth_payment_scope = 'make_payments'
 
-    def get_platform_icon(self):
-        return "/assets/icons/venmo.16.png"
-
-def oauth_url(website):
-    connect_params = {
-        'client_id': website.venmo_client_id,
-        'scope': 'make_payments',
-        'redirect_uri': website.venmo_callback,
-        'response_type': 'code'
-    }
-    url = u"https://api.venmo.com/v1/oauth/authorize?{}".format(
-        urlencode(connect_params)
-    )
-    return url
-
-def oauth_dance(website, qs):
-    """Return a dictionary of the Venmo response.
-
-    There's an example at: https://developer.venmo.com/docs/authentication
-    """
-
-    data = {
-        'code': qs['code'].encode('US-ASCII'),
-        'client_id': website.venmo_client_id,
-        'client_secret': website.venmo_client_secret
-    }
-    r = requests.post('https://api.venmo.com/v1/oauth/access_token', data=data)
-    res_dict = r.json()
-
-    if 'error' in res_dict:
-        raise Response(400, res_dict['error']['message'].encode('utf-8'))
-
-    assert r.status_code == 200, (r.status_code, r.text)
-
-    return res_dict
+    # API attributes
+    api_format = 'json'
+    api_url = 'https://api.venmo.com/v1'
+    api_user_info_path = '/users/{user_id}'
+    api_user_self_info_path = '/me'
+    x_user_id = key('id')
+    x_user_name = key('username')
+    x_display_name = key('display_name')
+    x_email = key('email')
+    x_avatar_url = key('profile_picture_url')

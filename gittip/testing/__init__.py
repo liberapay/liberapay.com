@@ -129,15 +129,11 @@ class Harness(unittest.TestCase):
                 tablenames.insert(0, tablename)
 
 
-    def make_elsewhere(self, platform, user_id, user_info=None):
-        platform = self.platforms[platform]
-        if user_info is None:
-            user_info = {}
-        if platform.user_id_key not in user_info:
-            user_info[platform.user_id_key] = user_id
-        if platform.username_key not in user_info:
-            user_info[platform.username_key] = user_id
-        return platform.upsert(user_id, user_info)
+    def make_elsewhere(self, platform, user_id, user_name, display_name=None,
+                       email=None, avatar_url=None, extra_info=None):
+        platform = getattr(self.platforms, platform)
+        return platform.upsert(unicode(user_id), user_name, display_name, email,
+                               avatar_url, extra_info)
 
 
     def show_table(self, table):
@@ -164,17 +160,16 @@ class Harness(unittest.TestCase):
 
         participant = Participant.with_random_username()
         participant.change_username(username)
-        return self.update_participant(participant, **kw)
 
-
-    def update_participant(self, participant, **kw):
         if 'elsewhere' in kw or 'claimed_time' in kw:
             username = participant.username
             platform = kw.pop('elsewhere', 'github')
-            user_info = dict(login=username)
             self.seq += 1
-            self.db.run("INSERT INTO elsewhere (platform, user_id, participant, user_info) "
-                        "VALUES (%s,%s,%s,%s)", (platform, self.seq, username, user_info))
+            self.db.run("""
+                INSERT INTO elsewhere
+                            (platform, user_id, user_name, participant)
+                     VALUES (%s,%s,%s,%s)
+            """, (platform, self.seq, username, username))
 
         # brute force update for use in testing
         for k,v in kw.items():
