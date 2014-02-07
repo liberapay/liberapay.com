@@ -30,6 +30,7 @@ from gittip.exceptions import (
     BadAmount,
 )
 
+from gittip.models import add_event
 from gittip.models._mixin_elsewhere import MixinElsewhere
 from gittip.models._mixin_team import MixinTeam
 from gittip.utils import canonicalize
@@ -207,16 +208,18 @@ class Participant(Model, MixinElsewhere, MixinTeam):
         return out
 
     def set_as_claimed(self):
-        claimed_time = self.db.one("""\
+        with self.db.get_cursor() as c:
+            add_event(c, self.id, None, 'participant.claim', dict())
+            claimed_time = c.one("""\
 
-            UPDATE participants
-               SET claimed_time=CURRENT_TIMESTAMP
-             WHERE username=%s
-               AND claimed_time IS NULL
-         RETURNING claimed_time
+                UPDATE participants
+                   SET claimed_time=CURRENT_TIMESTAMP
+                 WHERE username=%s
+                   AND claimed_time IS NULL
+             RETURNING claimed_time
 
-        """, (self.username,))
-        self.set_attributes(claimed_time=claimed_time)
+            """, (self.username,))
+            self.set_attributes(claimed_time=claimed_time)
 
 
 

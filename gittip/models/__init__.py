@@ -7,6 +7,7 @@ everything on Gittip.
 
 """
 from postgres import Postgres
+import psycopg2.extras
 
 class GittipDB(Postgres):
 
@@ -211,4 +212,12 @@ class GittipDB(Postgres):
                 where ach_fees_volume != ref
             """)
             assert len(ach_fees_volume) == 0
+
+def add_event(c, pid1, pid2, action, params):
+    SQL = """
+        INSERT INTO events (pid1, pid2, action, params)
+        VALUES (%s, %s, %s, %s)
+    """
+    c.run(SQL, (pid1, pid2, action, psycopg2.extras.Json(params)))
+
 #
