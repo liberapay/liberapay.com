@@ -12,7 +12,7 @@
                     No Twitter account connected.
                 {% endif %}
             {% else %}
-            <a rel="me" href="{{ twitter_account.user_info.get('html_url', '')|e }}"
+            <a rel="me" href="{{ twitter_account.get_url() }}"
                 ><img class="avatar"
                 src="{{ twitter_account.user_info.get('profile_image_url_https', '/assets/%s/no-avatar.png' % website.version )|e }}"
                 />{{ twitter_account.user_info.get('screen_name')|e }}

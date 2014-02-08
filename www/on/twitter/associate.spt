@@ -69,7 +69,6 @@ if screen_name is None:
     log(u"We got a user_info from Twitter with no screen_name [%s, %s]"
         % (action, then))
     raise Response(400)
-user_info['html_url'] = "https://twitter.com/" + screen_name
 
 # Do something.
 log(u"%s wants to %s" % (screen_name, action))

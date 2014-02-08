@@ -24,7 +24,6 @@ username = user_info['screen_name']
 name = user_info.get('name')
 if not name:
     name = username
-url = user_info['html_url'] = "https://twitter.com/%s" % username
 
 account = twitter.TwitterAccount(website.db, user_info['id'], user_info)
 participant = Participant.from_username(account.participant)
@@ -57,7 +56,7 @@ title = username
             <img src="{{ participant.get_img_src(128) }}" />
         </td>
         <td class="ready">
-            <h2><a href="{{ url }}">{{ username|e }}</a> has</h2>
+            <h2><a href="{{ account.get_url() }}">{{ username|e }}</a> has</h2>
             <div class="number">{{ nbackers }}</div>
             <div class="unit">{{ 'person' if nbackers == 1 else 'people' }} ready to give</div>
         </td>
@@ -76,7 +75,7 @@ title = username
 
     <h2>{{ username|e }} has opted out of Gittip.</h2>
 
-    <p>If you are <a href="{{ user_info.get('html_url', '') }}">{{ username|e }}</a>
+    <p>If you are <a href="{{ account.get_url() }}">{{ username|e }}</a>
     on Twitter, you can unlock your account to allow people to pledge tips to
     you on Gittip.</p>
 
