@@ -273,7 +273,7 @@ def wrap(u):
 def linkify(u):
     escaped = unicode(escape(u))
 
-    urls = re.compile(r"((?:https?://|www\.)[\w\d.-]*\w(?:/(?:\S*\(\S*[^\s.,;:'\"]|\S*[^\s.,;:'\"()])*)?)", re.MULTILINE|re.UNICODE)
+    urls = re.compile(r"((?:https?://|www\.)[\w\d.-]*\w(?:/(?:\S*\(\S*[^\s.,;:'\"]|\S*[^\s.,;:'\"()])*)?)", re.MULTILINE|re.UNICODE|re.IGNORECASE)
     value = urls.sub(r'<a href="\1" target="_blank">\1</a>', escaped)
 
     return value
