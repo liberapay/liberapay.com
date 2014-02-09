@@ -1,11 +1,5 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-import logging
-
-from aspen import log, Response
-import requests
-from requests_oauthlib import OAuth1
-
 from gittip.elsewhere import PlatformOAuth1, key, not_available
 
 

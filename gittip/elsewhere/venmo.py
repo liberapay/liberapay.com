@@ -1,12 +1,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from urllib import urlencode
-
-import requests
-
-from aspen import Response
-
-from gittip.elsewhere import PlatformOAuth2, key, not_available
+from gittip.elsewhere import PlatformOAuth2, key
 
 
 class Venmo(PlatformOAuth2):

@@ -1,12 +1,5 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-import datetime
-
-import requests
-from requests_oauthlib import OAuth1
-
-from aspen import log, Response
-from aspen.utils import to_age, utc
 from gittip.elsewhere import PlatformOAuth1, key, not_available
 
 

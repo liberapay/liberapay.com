@@ -10,7 +10,6 @@ from urlparse import parse_qs, urlparse
 import requests
 
 from gittip.elsewhere import Platform, key, not_available
-from gittip.models.participant import Participant
 
 
 class Bountysource(Platform):

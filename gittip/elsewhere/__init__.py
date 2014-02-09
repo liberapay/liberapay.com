@@ -7,17 +7,14 @@ from datetime import datetime
 import hashlib
 import json
 import logging
-from urllib import quote
 import xml.etree.ElementTree as ET
 
 from aspen import log, Response
 from aspen.utils import to_age, typecheck, utc
 from psycopg2 import IntegrityError
-import requests
 from requests_oauthlib import OAuth1Session, OAuth2Session
 import xmltodict
 
-import gittip
 from gittip.utils.username import reserve_a_random_username
 from gittip.elsewhere._extractors import *
 
