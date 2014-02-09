@@ -38,3 +38,19 @@ class Tests(Harness):
         expected = ""
         actual = utils.dict_to_querystring({})
         assert actual == expected
+
+    def test_linkify_linkifies_url_with_www(self):
+        expected = '<a href="http://www.example.com" target="_blank">http://www.example.com</a>'
+        actual = utils.linkify('http://www.example.com')
+        assert actual == expected
+
+    def test_linkify_linkifies_url_without_www(self):
+        expected = '<a href="http://example.com" target="_blank">http://example.com</a>'
+        actual = utils.linkify('http://example.com')
+        assert actual == expected
+
+    def test_linkify_linkifies_url_with_uppercase_letters(self):
+        expected = '<a href="Http://Www.Example.Com" target="_blank">Http://Www.Example.Com</a>'
+        actual = utils.linkify('Http://Www.Example.Com')
+        assert actual == expected
+

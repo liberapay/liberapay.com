@@ -119,7 +119,9 @@ def compute_input_csv():
     for participant in participants:
         tips, total = participant.get_tips_and_total(for_payday=False)
         amount = participant.balance - total
-        if amount <= 0:
+        if amount < 0.50:
+            # Minimum payout of 50 cents. I think that otherwise PayPal upcharges to a penny.
+            # See https://github.com/gittip/www.gittip.com/issues/1958.
             continue
         total_gross += amount
         print("{:<24}{:<32} {:>7} {:>7} {:>7}".format( participant.username

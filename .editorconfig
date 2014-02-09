@@ -1,0 +1,17 @@
+# EditorConfig is awesome: http://EditorConfig.org
+root = true
+
+# All defaulty with the four-space things
+[*]
+indent_style = space
+indent_size = 4
+trim_trailing_whitespace = true
+
+# Makefiles require us to use tabs, so we're gonna keep tabs with Makefiles
+[Makefile]
+indent_style = tab
+
+# These files are generated programmatically, so we're going to keep with the
+# program
+[{package,bower}.json]
+indent_size = 2

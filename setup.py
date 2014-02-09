@@ -14,7 +14,6 @@ setup( name='gittip'
      , packages=find_packages()
      , entry_points = { 'console_scripts'
                       : [ 'payday=gittip.cli:payday'
-                        , 'swaddle=gittip.utils.swaddle:main'
                         , 'fake_data=gittip.utils.fake_data:main'
                          ]
                        }

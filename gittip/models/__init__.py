@@ -136,7 +136,7 @@ class GittipDB(Postgres):
             WHERE tipper IN (SELECT * FROM orphans)
             OR tippee IN (SELECT * FROM orphans)
         """)
-        known = set([25206]) # '4c074000c7bc', 'naderman', '3.00'
+        known = set([25206, 46266]) # '4c074000c7bc', 'naderman', '3.00'
         real = set(tips_with_orphans) - known
         assert len(real) == 0, real
 
@@ -144,67 +144,71 @@ class GittipDB(Postgres):
         """
         Recalculate *_volume fields in paydays table using exchanges table.
         """
-        charge_volume = self.all("""
-            select * from (
-                select id, ts_start, charge_volume, (
-                        select coalesce(sum(amount+fee), 0)
-                        from exchanges
-                        where timestamp > ts_start
-                        and timestamp < ts_end
-                        and amount > 0
-                    ) as ref
-                from paydays
-                order by id
-            ) as foo
-            where charge_volume != ref
-        """)
-        assert len(charge_volume) == 0
+        with self.get_cursor() as cursor:
+            if cursor.one("select exists (select * from paydays where ts_end < ts_start) as running"):
+                # payday is running
+                return
+            charge_volume = cursor.all("""
+                select * from (
+                    select id, ts_start, charge_volume, (
+                            select coalesce(sum(amount+fee), 0)
+                            from exchanges
+                            where timestamp > ts_start
+                            and timestamp < ts_end
+                            and amount > 0
+                        ) as ref
+                    from paydays
+                    order by id
+                ) as foo
+                where charge_volume != ref
+            """)
+            assert len(charge_volume) == 0
 
-        charge_fees_volume = self.all("""
-            select * from (
-                select id, ts_start, charge_fees_volume, (
-                        select coalesce(sum(fee), 0)
-                        from exchanges
-                        where timestamp > ts_start
-                        and timestamp < ts_end
-                        and amount > 0
-                    ) as ref
-                from paydays
-                order by id
-            ) as foo
-            where charge_fees_volume != ref
-        """)
-        assert len(charge_fees_volume) == 0
+            charge_fees_volume = cursor.all("""
+                select * from (
+                    select id, ts_start, charge_fees_volume, (
+                            select coalesce(sum(fee), 0)
+                            from exchanges
+                            where timestamp > ts_start
+                            and timestamp < ts_end
+                            and amount > 0
+                        ) as ref
+                    from paydays
+                    order by id
+                ) as foo
+                where charge_fees_volume != ref
+            """)
+            assert len(charge_fees_volume) == 0
 
-        ach_volume = self.all("""
-            select * from (
-                select id, ts_start, ach_volume, (
-                        select coalesce(sum(amount), 0)
-                        from exchanges
-                        where timestamp > ts_start
-                        and timestamp < ts_end
-                        and amount < 0
-                    ) as ref
-                from paydays
-                order by id
-            ) as foo
-            where ach_volume != ref
-        """)
-        assert len(ach_volume) == 0
+            ach_volume = cursor.all("""
+                select * from (
+                    select id, ts_start, ach_volume, (
+                            select coalesce(sum(amount), 0)
+                            from exchanges
+                            where timestamp > ts_start
+                            and timestamp < ts_end
+                            and amount < 0
+                        ) as ref
+                    from paydays
+                    order by id
+                ) as foo
+                where ach_volume != ref
+            """)
+            assert len(ach_volume) == 0
 
-        ach_fees_volume = self.all("""
-            select * from (
-                select id, ts_start, ach_fees_volume, (
-                        select coalesce(sum(fee), 0)
-                        from exchanges
-                        where timestamp > ts_start
-                        and timestamp < ts_end
-                        and amount < 0
-                    ) as ref
-                from paydays
-                order by id
-            ) as foo
-            where ach_fees_volume != ref
-        """)
-        assert len(ach_fees_volume) == 0
+            ach_fees_volume = cursor.all("""
+                select * from (
+                    select id, ts_start, ach_fees_volume, (
+                            select coalesce(sum(fee), 0)
+                            from exchanges
+                            where timestamp > ts_start
+                            and timestamp < ts_end
+                            and amount < 0
+                        ) as ref
+                    from paydays
+                    order by id
+                ) as foo
+                where ach_fees_volume != ref
+            """)
+            assert len(ach_fees_volume) == 0
 #

@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# see https://github.com/gittip/www.gittip.com/issues/1771
+
+dump=${1-`ls -r ~/gittip-dumps/????-??-??.dump | head -1`}
+cores=`grep -c ^processor /proc/cpuinfo`
+echo "Clearing '$USER' database..."
+psql -q -c "drop schema public cascade; create schema public;" 2> /dev/null
+echo "Restoring $dump..."
+pg_restore --jobs $cores --no-acl --no-owner -d $USER $dump
+
