@@ -1,4 +1,6 @@
 language: python
+addons:
+  postgresql: 9.3
 before_install:
  - node --version
 install: make env node_modules
