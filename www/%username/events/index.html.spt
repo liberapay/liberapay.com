@@ -1,0 +1,42 @@
+from decimal import Decimal
+
+from aspen import Response, log
+from aspen.utils import to_age
+from gittip.utils import get_participant
+
+db = website.db
+
+[-----------------------------------------------------------------------------]
+
+participant = get_participant(request, restrict=True)
+hero = "Events"
+title = "%s - %s" % (participant.username, hero)
+locked = False
+
+SQL = """
+    SELECT * FROM events WHERE pid1 = %s ORDER BY ctime ASC
+"""
+
+events = db.all(SQL, (participant.id,))
+
+[-----------------------------------------------------------------------------]
+{% extends "templates/profile.html" %}
+{% block page %}
+
+<style>
+    td { padding: 4px; }
+</style>
+<table id="events" class="centered">
+
+    {% for e in events %}
+    <tr>
+        <td>{{ e.ctime }}</td>
+        <td>{{ e.action }}</td>
+        <td>{{ e.params }}</td>
+
+    </tr>
+    {% endfor %}
+
+</table>
+
+{% endblock %}

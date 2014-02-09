@@ -296,13 +296,14 @@ class Participant(Model, MixinElsewhere, MixinTeam):
         if suggested != self.username:
             try:
                 # Will raise IntegrityError if the desired username is taken.
-                actual = self.db.one( "UPDATE participants "
-                                        "SET username=%s, username_lower=%s "
-                                        "WHERE username=%s "
-                                        "RETURNING username, username_lower"
-                                      , (suggested, lowercased, self.username)
-                                      , back_as=tuple
-                                       )
+                with self.db.get_cursor(back_as=tuple) as c:
+                    add_event(c, self.id, None, 'participant.set', dict(username=suggested))
+                    actual = c.one( "UPDATE participants "
+                                    "SET username=%s, username_lower=%s "
+                                    "WHERE username=%s "
+                                    "RETURNING username, username_lower"
+                                   , (suggested, lowercased, self.username)
+                                   )
             except IntegrityError:
                 raise UsernameAlreadyTaken(suggested)
 

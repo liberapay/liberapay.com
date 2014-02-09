@@ -23,6 +23,9 @@
     {% if participant.show_as_team(user) %}
     <a href="/{{ participant.username }}/members/"><button{% if 'members' == current_page %} class="selected"{% endif %}>Members</button></a>
     {% endif %}
+    {% if user.ADMIN %}
+    <a href="/{{ participant.username }}/events/"><button{% if 'events' == current_page %} class="selected"{% endif %}>Events</button></a>
+    {% endif %}
 </div>
 {% elif participant.show_as_team(user) %}
 <div class="nav level-2">

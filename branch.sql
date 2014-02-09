@@ -25,5 +25,16 @@ BEGIN;
         WHERE claimed_time IS NOT NULL
         ORDER BY ctime ASC;
 
+    -- username
+    INSERT INTO events (ctime, pid1, pid2, action, params)
+        SELECT (p.claimed_time + interval '0.01 second') AT TIME ZONE 'UTC' as ctime
+             , p.id AS pid1
+             , NULL AS pid2
+             , 'participant.set' AS action
+             , to_json(hstore('username', p.username)) AS params
+        FROM participants p
+        WHERE claimed_time IS NOT NULL
+        ORDER BY ctime ASC;
+
 END;
 
