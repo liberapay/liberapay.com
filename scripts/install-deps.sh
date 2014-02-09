@@ -40,6 +40,7 @@ db_exists() {
 if ! db_exists gittip-test;
 then
     createdb gittip-test
+    psql -q gittip-test -c 'alter database "gittip-test" set synchronous_commit to off'
 fi
 
 if ! db_exists gittip;
