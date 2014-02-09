@@ -33,7 +33,7 @@ confirm () {
     proceed=""
     while [ "$proceed" != "y" ]; do
         read -p"$1 (y/N) " proceed
-        if [ "$proceed" == "n" -o "$proceed" == "N" -o "$proceed" == "" ]
+        if [ "$proceed" = "n" -o "$proceed" = "N" -o "$proceed" = "" ]
         then
             return 1
         fi
@@ -44,7 +44,7 @@ confirm () {
 require () {
     if [ ! `which $1` ]; then
         echo "The '$1' command was not found."
-        return 1 
+        return 1
     fi
     return 0
 }
@@ -57,7 +57,7 @@ if [ $1 ]; then
 
     require git
     if [ $? -eq 1 ]; then
-        exit 
+        exit
     fi
 
     if [ "`git tag | grep $1`" ]; then
@@ -76,7 +76,7 @@ if [ $1 ]; then
 
             # Deploy to Heroku.
             # =================
-            # If this fails we still want to bump the version again, so modify 
+            # If this fails we still want to bump the version again, so modify
             # bash error handling around this call.
 
             set +e
@@ -96,7 +96,7 @@ if [ $1 ]; then
 
             # Push to GitHub.
             # ===============
-            # This will break if we didn't pull before releasing. We should do 
+            # This will break if we didn't pull before releasing. We should do
             # that.
 
             git push
