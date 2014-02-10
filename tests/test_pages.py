@@ -1,5 +1,7 @@
 from __future__ import print_function, unicode_literals
 
+import json
+
 from mock import patch
 from gittip.testing import GITHUB_USER_UNREGISTERED_LGTEST, Harness
 from gittip.utils import update_homepage_queries_once
@@ -77,10 +79,10 @@ class TestPages(Harness):
         actual = self.client.GET('/about/charts.html').body
         assert expected in actual
 
-    @patch('gittip.elsewhere.github.requests')
-    def test_github_proxy(self, requests):
-        requests.get().status_code = 200
-        requests.get().text = GITHUB_USER_UNREGISTERED_LGTEST
+    @patch('gittip.elsewhere.Platform.get')
+    def test_github_proxy(self, get):
+        get().status_code = 200
+        get().json = lambda: json.loads(GITHUB_USER_UNREGISTERED_LGTEST)
         expected = "lgtest has not joined"
         actual = self.client.GET('/on/github/lgtest/').body.decode('utf8')
         assert expected in actual
