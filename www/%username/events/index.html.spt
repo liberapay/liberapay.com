@@ -14,10 +14,10 @@ title = "%s - %s" % (participant.username, hero)
 locked = False
 
 SQL = """
-    SELECT * FROM events WHERE pid1 = %s ORDER BY ctime ASC
+    SELECT * FROM events WHERE type = 'participant' AND payload->>'id' = %s ORDER BY ts ASC
 """
 
-events = db.all(SQL, (participant.id,))
+events = db.all(SQL, (unicode(participant.id),))
 
 [-----------------------------------------------------------------------------]
 {% extends "templates/profile.html" %}
@@ -30,9 +30,9 @@ events = db.all(SQL, (participant.id,))
 
     {% for e in events %}
     <tr>
-        <td>{{ e.ctime }}</td>
-        <td>{{ e.action }}</td>
-        <td>{{ e.params }}</td>
+        <td>{{ e.ts }}</td>
+        <td>{{ e.type }}</td>
+        <td>{{ e.payload }}</td>
 
     </tr>
     {% endfor %}

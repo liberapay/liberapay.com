@@ -213,11 +213,11 @@ class GittipDB(Postgres):
             """)
             assert len(ach_fees_volume) == 0
 
-def add_event(c, pid1, pid2, action, params):
+def add_event(c, type, payload):
     SQL = """
-        INSERT INTO events (pid1, pid2, action, params)
-        VALUES (%s, %s, %s, %s)
+        INSERT INTO events (type, payload)
+        VALUES (%s, %s)
     """
-    c.run(SQL, (pid1, pid2, action, psycopg2.extras.Json(params)))
+    c.run(SQL, (type, psycopg2.extras.Json(payload)))
 
 #

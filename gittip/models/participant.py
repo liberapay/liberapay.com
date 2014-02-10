@@ -177,7 +177,9 @@ class Participant(Model, MixinElsewhere, MixinTeam):
     def recreate_api_key(self):
         api_key = str(uuid.uuid4())
         SQL = "UPDATE participants SET api_key=%s WHERE username=%s"
-        self.db.run(SQL, (api_key, self.username))
+        with self.db.get_cursor() as c:
+            add_event(c, 'participant', dict(action='set', id=self.id, values=dict(api_key=api_key)))
+            c.run(SQL, (api_key, self.username))
         return api_key
 
 
@@ -209,7 +211,7 @@ class Participant(Model, MixinElsewhere, MixinTeam):
 
     def set_as_claimed(self):
         with self.db.get_cursor() as c:
-            add_event(c, self.id, None, 'participant.claim', dict())
+            add_event(c, 'participant', dict(id=self.id, action='claim'))
             claimed_time = c.one("""\
 
                 UPDATE participants
@@ -297,7 +299,7 @@ class Participant(Model, MixinElsewhere, MixinTeam):
             try:
                 # Will raise IntegrityError if the desired username is taken.
                 with self.db.get_cursor(back_as=tuple) as c:
-                    add_event(c, self.id, None, 'participant.set', dict(username=suggested))
+                    add_event(c, 'participant', dict(id=self.id, action='set', values=dict(username=suggested)))
                     actual = c.one( "UPDATE participants "
                                     "SET username=%s, username_lower=%s "
                                     "WHERE username=%s "
@@ -315,9 +317,12 @@ class Participant(Model, MixinElsewhere, MixinTeam):
 
     def update_goal(self, goal):
         typecheck(goal, (Decimal, None))
-        self.db.run( "UPDATE participants SET goal=%s WHERE username=%s"
-                   , (goal, self.username)
-                    )
+        with self.db.get_cursor() as c:
+            tmp = goal if goal is None else unicode(goal)
+            add_event(c, 'participant', dict(id=self.id, action='set', values=dict(goal=tmp)))
+            c.one( "UPDATE participants SET goal=%s WHERE username=%s RETURNING id"
+                 , (goal, self.username)
+                  )
         self.set_attributes(goal=goal)
 
 
