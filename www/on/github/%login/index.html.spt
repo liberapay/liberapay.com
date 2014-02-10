@@ -95,16 +95,12 @@ title = username
 {% block heading %}<h2 class="top"><span>GitHub</span></h2>{% endblock %}
 
 {% block scripts %}
+  {% if not locked %}
+    <script>$(document).ready(Gittip.tips.init);</script>
+  {% endif %}
 
-{% if usertype == "user" and not locked %}
-<script>$(document).ready(Gittip.tips.init);</script>
-{% elif usertype == "organization" %}
-<script>$(document).ready(Gittip.tips.init);</script>
-{% endif %}
-
-{{ super() }}
+  {{ super() }}
 {% endblock %}
-
 
 {% block box %}
 

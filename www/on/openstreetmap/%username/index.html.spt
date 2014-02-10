@@ -49,12 +49,11 @@ title = username
 {% block heading %}<h2 class="top"><span>OpenStreetMap</span></h2>{% endblock %}
 
 {% block scripts %}
+  {% if not locked %}
+    <script>$(document).ready(Gittip.tips.init);</script>
+  {% endif %}
 
-{% if not locked %}
-<script>$(document).ready(Gittip.tips.init);</script>
-{% endif %}
-
-{{ super() }}
+  {{ super() }}
 {% endblock %}
 
 {% block box %}
