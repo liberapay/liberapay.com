@@ -7,6 +7,7 @@ from datetime import datetime
 import hashlib
 import json
 import logging
+from urllib import quote
 import xml.etree.ElementTree as ET
 
 from aspen import log, Response
