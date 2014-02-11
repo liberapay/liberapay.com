@@ -13,23 +13,9 @@ BEGIN;
     UPDATE elsewhere SET user_name = user_info->'username' WHERE platform = 'openstreetmap';
     UPDATE elsewhere SET user_name = user_info->'screen_name' WHERE platform = 'twitter';
     UPDATE elsewhere SET user_name = user_info->'username' WHERE platform = 'venmo';
-    -- Remove duplicates
-    DELETE FROM elsewhere
-          WHERE (platform, user_name) IN (
-                    SELECT platform, user_name FROM elsewhere
-                  GROUP BY platform, user_name HAVING count(*) > 1
-                )
-            AND id NOT IN (
-                    SELECT max(id) FROM elsewhere
-                  GROUP BY platform, user_name HAVING count(*) > 1
-                );
-    DELETE FROM participants WHERE username NOT IN (
-        SELECT participant FROM elsewhere GROUP BY participant
-    );
     -- Update constraints
     ALTER TABLE elsewhere ALTER COLUMN user_name SET NOT NULL,
-                          ALTER COLUMN user_name DROP DEFAULT,
-                          ADD UNIQUE (platform, user_name);
+                          ALTER COLUMN user_name DROP DEFAULT;
 
 
     -- Extract display_name from user_info
