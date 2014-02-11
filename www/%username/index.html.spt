@@ -25,6 +25,10 @@ hero = "Profile"
 title = participant.username      # used in the title tag
 username = participant.username   # used in footer shared with on/$platform/
                                   # pages
+show_charts = True
+if participant.anonymous_receiving:
+    if user.ANON or user.participant.username != username and not user.ADMIN:
+        show_charts = False
 
 accounts = participant.get_accounts_elsewhere()
 
@@ -56,11 +60,13 @@ else:
 {% endblock %}
 
 {% block scripts %}
+{% if show_charts %}
 <script>
 $(document).ready(function() {
     jQuery.get('./charts.json', Gittip.charts.make);
 });
 </script>
+{% endif %}
 
 {% if user.participant == participant %}
 <script>$(document).ready(Gittip.profile.init);</script>

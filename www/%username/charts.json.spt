@@ -18,13 +18,27 @@ implementation.
 import re
 
 from aspen import json
-from gittip.utils import get_participant
 
 
 callback_pattern = re.compile(r'^[_A-Za-z0-9.]+$')
 
 
 [---]
+
+username = path['username']
+
+anonymous = website.db.one("""
+
+    SELECT anonymous_receiving
+      FROM participants
+     WHERE username = %s
+
+""", (username,))
+
+if anonymous:
+    if user.ANON or user.participant.username != username and not user.ADMIN:
+        response.body = {'error': 'unauthorized'}
+        raise response
 
 
 # Fetch data from the database.
@@ -50,7 +64,7 @@ transfers = website.db.all("""\
     WHERE tippee=%s
  ORDER BY timestamp DESC
 
-""", (path['username'],), back_as=dict)
+""", (username,), back_as=dict)
 
 
 if not transfers:

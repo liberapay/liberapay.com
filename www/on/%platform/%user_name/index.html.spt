@@ -29,11 +29,11 @@ nbackers = participant.get_number_of_backers()
 {% endblock %}
 
 {% block scripts %}
-<script>
-    $(document).ready(Gittip.tips.init);
-</script>
+  {% if not locked %}
+    <script>$(document).ready(Gittip.tips.init);</script>
+  {% endif %}
 
-{{ super() }}
+  {{ super() }}
 {% endblock %}
 
 {% block box %}
