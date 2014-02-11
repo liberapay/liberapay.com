@@ -27,35 +27,9 @@ BEGIN;
     UPDATE elsewhere SET display_name = user_info->'display_name' WHERE platform = 'venmo';
     UPDATE elsewhere SET display_name = NULL WHERE display_name = 'None';
 
-    -- Add columns for email addresses
-    ALTER TABLE elsewhere ADD COLUMN email text;
-    ALTER TABLE participants ADD COLUMN email text;
-    -- Create a function and a trigger to automatically propagate email
-    -- addresses to the participants table when they are inserted of updated
-    -- in the elsewhere table
-    CREATE FUNCTION propagate_email() RETURNS trigger AS $$
-        DECLARE
-            participant_username text;
-            new_email text;
-        BEGIN
-            participant_username := NEW.participant;
-            new_email := (
-                SELECT max(email) FROM elsewhere
-                 WHERE participant = participant_username
-            );
-            IF (new_email IS NOT NULL) THEN
-                UPDATE participants p
-                   SET email = new_email
-                 WHERE p.username = participant_username;
-            END IF;
-            RETURN NULL;
-         END;
-    $$ LANGUAGE plpgsql;
-    CREATE TRIGGER propagate_email
-        AFTER INSERT OR UPDATE OF email ON elsewhere
-        FOR EACH ROW
-        EXECUTE PROCEDURE propagate_email();
+
     -- Extract available email addresses
+    ALTER TABLE elsewhere ADD COLUMN email text;
     UPDATE elsewhere SET email = user_info->'email' WHERE user_info->'email' LIKE '%@%';
 
 
