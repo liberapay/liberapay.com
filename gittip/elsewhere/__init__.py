@@ -8,6 +8,7 @@ import hashlib
 import json
 import logging
 from urllib import quote
+from urlparse import urlsplit, urlunsplit
 import xml.etree.ElementTree as ET
 
 from aspen import log, Response
@@ -186,9 +187,19 @@ class Platform(object):
         """
         typecheck(user_id, unicode)
 
+        # Clean up avatar_url
+        if avatar_url:
+            scheme, netloc, path, query, fragment = urlsplit(avatar_url)
+            fragment = ''
+            if netloc.endswith('gravatar.com'):
+                query = 's=128'
+            avatar_url = urlunsplit((scheme, netloc, path, query, fragment))
+
+        # Serialize extra_info
         if isinstance(extra_info, ET.Element):
             extra_info = xmltodict.parse(ET.tostring(extra_info))
         extra_info = json.dumps(extra_info)
+
         cols = 'user_id, user_name, display_name, email, avatar_url, extra_info'
         args = (user_id, user_name, display_name, email, avatar_url, extra_info)
 
@@ -197,19 +208,34 @@ class Platform(object):
             # We do this with a transaction so that if the insert fails, the
             # participant we reserved for them is rolled back as well.
             with self.db.get_cursor() as cursor:
-                random_username = reserve_a_random_username(cursor)
+                username = reserve_a_random_username(cursor)
                 cursor.execute("""
                     INSERT INTO elsewhere
                                 (participant, platform, {0})
                          VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-                """.format(cols), (random_username, self.name)+args)
+                """.format(cols), (username, self.name)+args)
         except IntegrityError:
             # The account is already in the DB, update it instead
-            self.db.run("""
+            username = self.db.one("""
                 UPDATE elsewhere
                    SET ({0}) = (%s, %s, %s, %s, %s, %s)
                  WHERE platform=%s AND user_id=%s
+             RETURNING participant
             """.format(cols), args+(self.name, user_id))
+
+        # Propagate avatar_url to participant
+        self.db.run("""
+            UPDATE participants p
+               SET avatar_url = (
+                       SELECT avatar_url
+                         FROM elsewhere
+                        WHERE participant = p.username
+                     ORDER BY platform = 'github' DESC,
+                              avatar_url LIKE '%%gravatar.com%%' DESC
+                        LIMIT 1
+                   )
+             WHERE p.username = %s
+        """, (username,))
 
         # Now delegate to get_account_from_db
         return self.get_account_from_db(user_name)

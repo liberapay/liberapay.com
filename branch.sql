@@ -33,49 +33,8 @@ BEGIN;
     UPDATE elsewhere SET email = user_info->'email' WHERE user_info->'email' LIKE '%@%';
 
 
-    -- Add columns for avatar URLs
-    ALTER TABLE elsewhere ADD COLUMN avatar_url text;
-    ALTER TABLE participants ADD COLUMN avatar_url text;
-    -- Create a function and a trigger to automatically clean up avatar URLs
-    CREATE FUNCTION clean_avatar_url() RETURNS trigger AS $$
-        BEGIN
-            IF (NEW.avatar_url LIKE '%gravatar.com%') THEN
-                NEW.avatar_url := concat(substring(NEW.avatar_url from '^([^?#]+)'),
-                                         '?s=128');
-            END IF;
-            RETURN NEW;
-         END;
-    $$ LANGUAGE plpgsql;
-    CREATE TRIGGER clean_avatar_url
-        BEFORE INSERT OR UPDATE OF avatar_url ON elsewhere
-        FOR EACH ROW
-        EXECUTE PROCEDURE clean_avatar_url();
-    -- Create a function and a trigger to automatically propagate avatar URLs
-    -- to the participants table when they are inserted of updated in the
-    -- elsewhere table
-    CREATE FUNCTION propagate_avatar_url() RETURNS trigger AS $$
-        DECLARE
-            participant_username text;
-        BEGIN
-            participant_username := NEW.participant;
-            UPDATE participants p
-               SET avatar_url = (
-                       SELECT avatar_url
-                         FROM elsewhere
-                        WHERE participant = p.username AND avatar_url != 'None'
-                     ORDER BY platform = 'github' DESC,
-                              avatar_url LIKE '%gravatar.com%' DESC
-                        LIMIT 1
-                   )
-             WHERE p.username = participant_username;
-            RETURN NULL;
-         END;
-    $$ LANGUAGE plpgsql;
-    CREATE TRIGGER propagate_avatar_url
-        AFTER INSERT OR UPDATE OF avatar_url ON elsewhere
-        FOR EACH ROW
-        EXECUTE PROCEDURE propagate_avatar_url();
     -- Extract available avatar URLs
+    ALTER TABLE elsewhere ADD COLUMN avatar_url text;
     UPDATE elsewhere SET avatar_url = concat('https://www.gravatar.com/avatar/',
                                              user_info->'gravatar_id')
                    WHERE platform = 'github'
@@ -96,6 +55,17 @@ BEGIN;
                    WHERE platform = 'twitter';
     UPDATE elsewhere SET avatar_url = user_info->'profile_picture_url' WHERE platform = 'venmo';
     UPDATE elsewhere SET avatar_url = NULL WHERE avatar_url = 'None';
+    -- Propagate avatar_url to participants
+    ALTER TABLE participants ADD COLUMN avatar_url text;
+    UPDATE participants p
+       SET avatar_url = (
+               SELECT avatar_url
+                 FROM elsewhere
+                WHERE participant = p.username
+             ORDER BY platform = 'github' DESC,
+                      avatar_url LIKE '%gravatar.com%' DESC
+                LIMIT 1
+           );
 
 
     -- Replace the column by a new one of type json (instead of hstore)
