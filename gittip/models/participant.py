@@ -661,11 +661,7 @@ class Participant(Model, MixinElsewhere, MixinTeam):
             to_total = [t for t in tips if t['claimed_time'] is not None]
         else:
             to_total = tips
-        total = sum([t['amount'] for t in to_total])
-
-        if not total:
-            # If to_total is an empty list, total is int 0. We want a Decimal.
-            total = Decimal('0.00')
+        total = sum([t['amount'] for t in to_total], Decimal('0.00'))
 
         return tips, total
 
