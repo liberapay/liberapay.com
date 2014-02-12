@@ -411,7 +411,7 @@ for your project!
 
  - [hubot-gittip](https://github.com/myplanetdigital/hubot-gittip): A Hubot script for interacting with a shared Gittip account.
 
- - [gittip-collab](https://github.com/engineyard/gittip-collab): a Kahn-style tool for managing a Gittip account as a team.
+ - [gittip-collab](https://github.com/engineyard/gittip-collab): A Khan-style tool for managing a Gittip account as a team.
 
 Glossary
 ========
