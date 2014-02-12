@@ -1,9 +1,6 @@
 from __future__ import print_function, unicode_literals
 
-import json
-
-from mock import patch
-from gittip.testing import GITHUB_USER_UNREGISTERED_LGTEST, Harness
+from gittip.testing import Harness
 from gittip.utils import update_homepage_queries_once
 
 
@@ -77,20 +74,6 @@ class TestPages(Harness):
     def test_about_charts(self):
         expected = "Money transferred"
         actual = self.client.GET('/about/charts.html').body
-        assert expected in actual
-
-    @patch('gittip.elsewhere.Platform.get')
-    def test_github_proxy(self, get):
-        get().status_code = 200
-        get().json = lambda: json.loads(GITHUB_USER_UNREGISTERED_LGTEST)
-        expected = "lgtest has not joined"
-        actual = self.client.GET('/on/github/lgtest/').body.decode('utf8')
-        assert expected in actual
-
-    # This hits the network. XXX add a knob to skip this
-    def test_twitter_proxy(self):
-        expected = "twitter has not joined"
-        actual = self.client.GET('/on/twitter/twitter/').body.decode('utf8')
         assert expected in actual
 
     def test_404(self):

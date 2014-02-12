@@ -17,7 +17,7 @@ class Bitbucket(PlatformOAuth1):
     api_user_info_path = '/users/{user_name}?pagelen=100'
     api_user_self_info_path = '/user'
     x_user_info = key('user')
-    x_user_id = key('username')  # No immutable id. :-/
+    x_user_id = not_available  # No immutable id. :-/
     x_user_name = key('username')
     x_display_name = key('display_name')
     x_email = not_available

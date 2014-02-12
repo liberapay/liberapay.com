@@ -13,7 +13,7 @@ class OpenStreetMap(PlatformOAuth1):
 
     # API attributes
     api_format = 'xml'
-    api_user_info_path = '/user/{user_name}'
+    api_user_info_path = '/user/{user_id}'
     api_user_self_info_path = '/user/details'
     x_user_id = xpath('./user', attr='id')
     x_user_name = xpath('./user', attr='display_name')

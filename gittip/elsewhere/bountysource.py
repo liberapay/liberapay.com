@@ -56,9 +56,6 @@ class Bountysource(Platform):
             raise Response(400, 'Invalid hash in access_token')
         return querystring['query_id']
 
-    def get_user_info(self, sess):
-        raise NotImplementedError()
-
     def get_user_self_info(self, sess):
         querystring = urlparse(sess._callback_url).query
         info = {k: v[0] if len(v) == 1 else v

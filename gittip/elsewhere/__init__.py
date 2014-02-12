@@ -141,7 +141,10 @@ class Platform(object):
         """, (self.name, user_name), default=UnknownAccountElsewhere)
 
     def get_user_info(self, user_name, sess=None):
-        path = self.api_user_info_path.format(user_name=quote(user_name))
+        try:
+            path = self.api_user_info_path.format(user_name=quote(user_name))
+        except KeyError:
+            raise Response(404)
         response = self.get(path, sess=sess)
         return self.parse_user_info(response)
 
@@ -160,8 +163,11 @@ class Platform(object):
 
     def extract_user_info(self, info):
         info = self.x_user_info(info)
-        user_id = unicode(self.x_user_id(info))
         user_name = self.x_user_name(info)
+        if self.x_user_id is not_available:
+            user_id = user_name
+        else:
+            user_id = unicode(self.x_user_id(info))
         display_name = self.x_display_name(info, None)
         email = self.x_email(info, None)
         gravatar_id = self.x_gravatar_id(info, None)
