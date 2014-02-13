@@ -54,15 +54,16 @@ while elsewhere:
 
         for user_info in users:
 
-            # flatten per upsert method in gittip/elsewhere/__init__.py
-            for k, v in user_info.items():
-                user_info[k] = unicode(v)
+            with db.get_cursor() as c:
+                # flatten per upsert method in gittip/elsewhere/__init__.py
+                for k, v in user_info.items():
+                    user_info[k] = unicode(v)
 
-            user_id = user_info['id']
+                user_id = user_info['id']
 
-            db.run("UPDATE elsewhere SET user_info=%s WHERE user_id=%s", (user_info, user_id))
+                c.one("UPDATE elsewhere SET user_info=%s WHERE user_id=%s AND platform='twitter' RETURNING id", (user_info, user_id))
 
-            print "updated {} ({})".format(user_info['screen_name'], user_id)
+                print "updated {} ({})".format(user_info['screen_name'], user_id)
 
 
     # Stay under our rate limit.
