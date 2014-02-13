@@ -17,8 +17,8 @@ from psycopg2 import IntegrityError
 from requests_oauthlib import OAuth1Session, OAuth2Session
 import xmltodict
 
+from gittip.elsewhere._extractors import not_available
 from gittip.utils.username import reserve_a_random_username
-from gittip.elsewhere._extractors import *
 
 
 ACTIONS = {'opt-in', 'connect', 'lock', 'unlock'}
@@ -83,7 +83,7 @@ class Platform(object):
         if status == 404:
             raise Response(404)
         elif status != 200:
-            log('{} api responded with {}:\n{}'.format(self.name, status, content)
+            log('{} api responded with {}:\n{}'.format(self.name, status, response.text)
                , level=logging.ERROR)
             raise Response(500, '{} lookup failed with {}'.format(self.name, status))
 
@@ -264,7 +264,7 @@ class PlatformOAuth1(Platform):
 
     def handle_auth_callback(self, url, token, token_secret):
         sess = self.get_auth_session(token=token, token_secret=token_secret)
-        r = sess.parse_authorization_response(url)
+        sess.parse_authorization_response(url)
         sess.fetch_access_token(self.auth_url+'/oauth/access_token')
         return sess
 

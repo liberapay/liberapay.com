@@ -1,6 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from gittip.elsewhere import PlatformOAuth1, not_available, xpath
+from gittip.elsewhere import PlatformOAuth1
+from gittip.elsewhere._extractors import not_available, xpath
 
 
 class OpenStreetMap(PlatformOAuth1):

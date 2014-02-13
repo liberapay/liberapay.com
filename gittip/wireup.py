@@ -8,7 +8,6 @@ import aspen
 import balanced
 import gittip
 import raven
-import psycopg2
 import stripe
 from gittip.elsewhere import PlatformRegistry
 from gittip.elsewhere.bitbucket import Bitbucket

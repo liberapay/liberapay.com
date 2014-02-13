@@ -1,6 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from gittip.elsewhere import PlatformOAuth1, key, not_available
+from gittip.elsewhere import PlatformOAuth1
+from gittip.elsewhere._extractors import key, not_available
 
 
 class Bitbucket(PlatformOAuth1):

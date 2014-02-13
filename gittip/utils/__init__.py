@@ -1,7 +1,6 @@
 import locale
 import time
 
-import gittip
 import re
 from aspen import log_dammit, Response
 from aspen.utils import typecheck

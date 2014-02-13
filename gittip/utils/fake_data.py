@@ -60,7 +60,7 @@ def fake_participant(db, number="singular", is_admin=False):
     """Create a fake User.
     """
     username = faker.first_name() + fake_text_id(3)
-    d = _fake_thing( db
+    _fake_thing( db
                , "participants"
                , id=fake_int_id()
                , username=username

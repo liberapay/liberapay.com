@@ -1,6 +1,5 @@
 from __future__ import division
 
-from importlib import import_module
 import os
 import sys
 import threading

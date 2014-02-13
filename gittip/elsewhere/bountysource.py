@@ -9,7 +9,9 @@ from urlparse import parse_qs, urlparse
 
 import requests
 
-from gittip.elsewhere import Platform, key, not_available
+from aspen import Response
+from gittip.elsewhere import Platform
+from gittip.elsewhere._extractors import key, not_available
 
 
 class Bountysource(Platform):
