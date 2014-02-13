@@ -12,6 +12,9 @@ class Bitbucket(PlatformOAuth1):
     account_url = 'https://bitbucket.org/{user_name}'
     icon = '/assets/icons/bitbucket.12.png'
 
+    # Auth attributes
+    authorize_path = '/oauth/authenticate'
+
     # API attributes
     api_format = 'json'
     api_url = 'https://bitbucket.org/api/1.0'
