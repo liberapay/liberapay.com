@@ -77,19 +77,21 @@ nbackers = participant.get_number_of_backers()
 
     <h2>{{ user_name|e }} has not joined Gittip.</h2>
 
-    <p>Is this you?
-    {% if user.ANON %}
-        {% call auth_button(platform.name, 'opt-in', path['user_name']) %}
-            Opt in
-        {% endcall %}
-        to Gittip. We never collect money for you until you do.
-    {% else %}
-        {% call auth_button(platform.name, 'connect', path['user_name']) %}
-            Connect this {{ platform.display_name }} account
-        {% endcall %}
-        to your Gittip account.
+    {% if platform in website.signin_platforms or not user.ANON %}
+        <p>Is this you?
+        {% if user.ANON %}
+            {% call auth_button(platform.name, 'opt-in', path['user_name']) %}
+                Opt in
+            {% endcall %}
+            to Gittip. We never collect money for you until you do.
+        {% else %}
+            {% call auth_button(platform.name, 'connect', path['user_name']) %}
+                Connect this {{ platform.display_name }} account
+            {% endcall %}
+            to your Gittip account.
+        {% endif %}
+        </p>
     {% endif %}
-    </p>
 
     {% if user.ANON %}
     <h2>What is Gittip?</h2>
