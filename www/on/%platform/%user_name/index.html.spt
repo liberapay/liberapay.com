@@ -2,6 +2,7 @@
 """
 
 from aspen import Response
+from gittip.utils import get_avatar_url
 
 [-----------------------------------------------------------------------------]
 
@@ -41,7 +42,7 @@ nbackers = participant.get_number_of_backers()
 <table class="on-elsewhere">
     <tr>
         <td class="picture">
-            <img src="{{ account.avatar_url|e }}" />
+            <img src="{{ get_avatar_url(account)|e }}" />
         </td>
         <td class="ready">
             <h2><a href="{{ account.html_url|e}}">{{ user_name|e }}</a> has</h2>

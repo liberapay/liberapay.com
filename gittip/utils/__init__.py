@@ -431,3 +431,9 @@ def log_cursor(f):
             del SimpleCursorBase.execute
         return ret
     return wrapper
+
+
+def get_avatar_url(obj):
+    if not obj.avatar_url:
+        return '/assets/-/avatar-default.gif'
+    return obj.avatar_url

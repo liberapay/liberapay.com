@@ -19,7 +19,7 @@
                 {% endif %}
             {% else %}
                 <a rel="me" href="{{ account.html_url|e }}"
-                    ><img class="avatar" src="{{ account.avatar_url|e }}"
+                    ><img class="avatar" src="{{ get_avatar_url(account)|e }}"
                     />{{ account.user_name|e }}
                     {% if account.display_name and account.display_name != account.user_name %}
                         ({{ account.display_name|e }})
