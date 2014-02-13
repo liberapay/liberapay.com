@@ -281,14 +281,9 @@ class PlatformOAuth2(Platform):
     oauth_email_scope = None
     oauth_payment_scope = None
 
-    def __init__(self, *args, **kw):
-        super(PlatformOAuth2, self).__init__(*args, **kw)
-        scope = [self.oauth_email_scope, self.oauth_payment_scope]
-        self.scope = list(filter(None, scope))
-
     def get_auth_session(self, state=None, token=None):
         return OAuth2Session(self.api_key, state=state, token=token,
-                             redirect_uri=self.callback_url, scope=self.scope)
+                             redirect_uri=self.callback_url)
 
     def get_auth_url(self, **kw):
         sess = self.get_auth_session()
