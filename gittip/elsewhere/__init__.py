@@ -34,6 +34,9 @@ class PlatformRegistry(object):
     def __init__(self, platforms):
         self.__dict__ = OrderedDict((p.name, p) for p in platforms)
 
+    def __contains__(self, platform):
+        return platform.name in self.__dict__
+
     def __iter__(self):
         return iter(self.__dict__.values())
 

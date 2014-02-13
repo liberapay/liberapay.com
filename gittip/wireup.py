@@ -196,7 +196,7 @@ def envvars(website):
             envvar('OPENSTREETMAP_AUTH_URL'),
         ),
     ]
-    website.signin_platforms = signin_platforms
+    website.signin_platforms = PlatformRegistry(signin_platforms)
     other_platforms =  [
         Bountysource(
             website.db,
