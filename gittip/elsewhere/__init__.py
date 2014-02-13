@@ -65,7 +65,7 @@ class Platform(object):
         if auth_url:
             self.auth_url = auth_url
         elif not getattr(self, 'auth_url', None):
-            self.auth_url = api_url
+            self.auth_url = self.api_url
         # Make sure the subclass was implemented properly.
         missing_attrs = [a for a in self.required_attrs if not hasattr(self, a)]
         if missing_attrs:
