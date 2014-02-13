@@ -87,7 +87,7 @@ nbackers = participant.get_number_of_backers()
         {% call auth_button(platform.name, 'connect', path['user_name']) %}
             Connect this {{ platform.display_name }} account
         {% endcall %}
-        to your gittip account.
+        to your Gittip account.
     {% endif %}
     </p>
 
