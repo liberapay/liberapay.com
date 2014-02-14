@@ -580,7 +580,6 @@ class Payday(object):
         assert balance is not None, balance # sanity check
         amount = balance - total
 
-
         # Do some last-minute checks.
         # ===========================
 
@@ -632,7 +631,7 @@ class Payday(object):
 
             customer.bank_accounts.one()\
                                   .credit(amount=cents,
-                                          description=participan.username)
+                                          description=participant.username)
 
             error = ""
             log(msg + "succeeded.")

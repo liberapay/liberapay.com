@@ -158,6 +158,43 @@ class TestPaydayCharge(TestPaydayBase):
         assert bob.balance == Decimal('0.00')
         assert carl.balance == Decimal('0.00')
 
+    def test_payday_moves_money_with_balanced(self):
+        day_ago = utcnow() - timedelta(days=1)
+        paying_customer = balanced.Customer().save()
+        balanced.Card.fetch(self.card_href)\
+                     .associate_to_customer(paying_customer)
+        balanced.BankAccount.fetch(self.bank_account_href)\
+                            .associate_to_customer(self.balanced_customer_href)
+        bob = self.make_participant('bob', claimed_time=day_ago,
+                                    balanced_account_uri=self.balanced_customer_href,
+                                    last_bill_result='',
+                                    is_suspicious=False)
+        carl = self.make_participant('carl', claimed_time=day_ago,
+                                     balanced_account_uri=paying_customer.href,
+                                     last_bill_result='',
+                                     is_suspicious=False)
+        carl.set_tip_to('bob', '15.00')
+        self.payday.run()
+
+        bob = Participant.from_username('bob')
+        carl = Participant.from_username('carl')
+
+        assert bob.balance == Decimal('0.00')
+        assert carl.balance == Decimal('0.00')
+
+        bob_customer = balanced.Customer.fetch(bob.balanced_account_uri)
+        carl_customer = balanced.Customer.fetch(carl.balanced_account_uri)
+
+        bob_credits = bob_customer.credits.all()
+        assert len(bob_credits) == 1
+        assert bob_credits[0].amount == 1500
+        assert bob_credits[0].description == 'bob'
+
+        carl_debits = carl_customer.debits.all()
+        assert len(carl_debits) == 1
+        assert carl_debits[0].amount == 1576  # base amount + fee
+        assert carl_debits[0].description == 'carl'
+
 
 class TestBillingCharges(TestPaydayBase):
     BALANCED_CUSTOMER_HREF = '/customers/CU123123123'
