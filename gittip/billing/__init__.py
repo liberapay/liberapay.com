@@ -32,19 +32,10 @@ def get_balanced_account(db, username, balanced_account_uri):
              , balanced_account_uri, (unicode, None)
               )
 
-    # XXX Balanced requires an email address
-    # https://github.com/balanced/balanced-api/issues/20
-    # quote to work around https://github.com/gittip/www.gittip.com/issues/781
-    # emails are not required for customers any more
-    email_address = '{}@gittip.com'.format(quote(username))
-
-
     if balanced_account_uri is None:
-        try:
-            customer = \
-               balanced.Customer.query.filter(email=email_address).one()
-        except balanced.exc.NoResultFound:
-            customer = balanced.Customer(email=email_address).save()
+        customer = balanced.Customer(meta={
+            'username': username,
+        }).save()
         BALANCED_ACCOUNT = """\
 
                 UPDATE participants
@@ -53,8 +44,6 @@ def get_balanced_account(db, username, balanced_account_uri):
 
         """
         db.run(BALANCED_ACCOUNT, (customer.href, username))
-        customer.meta['username'] = username
-        customer.save()  # HTTP call under here
     else:
         customer = balanced.Customer.fetch(balanced_account_uri)
     return customer

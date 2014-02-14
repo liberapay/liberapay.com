@@ -56,7 +56,7 @@ Gittip.payments.ba.init = function(balanced_uri, participantId) {
     $('#payout').submit(Gittip.payments.ba.submit);
 
     // Lazily depend on Balanced.
-    var balanced_js = "https://js.balancedpayments.com/1.1/balanced.js";
+    var balanced_js = "https://js.balancedpayments.com/1.1/balanced.min.js";
     jQuery.getScript(balanced_js, function() {
         Gittip.havePayouts = true;
         $('input[type!="hidden"]').eq(0).focus();
@@ -237,7 +237,7 @@ Gittip.payments.cc.init = function(balanced_uri, participantId) {
     $('form#payment').submit(Gittip.payments.cc.submit);
 
     // Lazily depend on Balanced.
-    var balanced_js = "https://js.balancedpayments.com/1.1/balanced.js";
+    var balanced_js = "https://js.balancedpayments.com/1.1/balanced.min.js";
     jQuery.getScript(balanced_js, function() {
         Gittip.havePayments = true;
         $('input[type!="hidden"]').eq(0).focus();
@@ -284,9 +284,9 @@ Gittip.payments.cc.submit = function(e) {
                         };
 
     credit_card.address = { 'postal_code': val('zip')
-			  , 'line1': val('address_1')
-			  , 'state': val('state')
-			   };
+                          , 'line1': val('address_1')
+                          , 'state': val('state')
+                           };
 
     credit_card.expiration_month = val('expiration_month');
     credit_card.expiration_year = val('expiration_year');
@@ -300,7 +300,7 @@ Gittip.payments.cc.submit = function(e) {
         $('button#save').text('Save');
         Gittip.forms.showFeedback(null, ["Your expiration date is bad."]);
     } else if (!balanced.card.isSecurityCodeValid( credit_card.number
-                                               , credit_card.security_code
+                                               , credit_card.cvv
                                                 )) {
         $('button#save').text('Save');
         Gittip.forms.showFeedback(null, ["Your CVV is bad."]);
@@ -328,7 +328,7 @@ Gittip.payments.cc.handleResponse = function(response) {
      *
      */
 
-    if (response.status !== 201) {   // The request to create the token failed. Store the failure message in
+    if (response.status_code !== 201) {   // The request to create the token failed. Store the failure message in
         // our db.
         $('button#save').text('Save');
         var msg = response.status.toString() + " " + response.error.description;
