@@ -63,7 +63,7 @@ class TestPaydayCharge(TestPaydayBase):
     def test_charge_failure_returns_None(self, cob):
         cob.return_value = (Decimal('10.00'), Decimal('0.68'), 'FAILED')
         bob = self.make_participant('bob', last_bill_result="failure",
-                                    balanced_account_uri=self.balanced_account_uri,
+                                    balanced_account_uri=self.balanced_customer_href,
                                     stripe_customer_id=self.STRIPE_CUSTOMER_ID,
                                     is_suspicious=False)
 
@@ -75,7 +75,7 @@ class TestPaydayCharge(TestPaydayBase):
     def test_charge_success_returns_None(self, charge_on_balanced):
         charge_on_balanced.return_value = (Decimal('10.00'), Decimal('0.68'), "")
         bob = self.make_participant('bob', last_bill_result="failure",
-                                    balanced_account_uri=self.balanced_account_uri,
+                                    balanced_account_uri=self.balanced_customer_href,
                                     stripe_customer_id=self.STRIPE_CUSTOMER_ID,
                                     is_suspicious=False)
 
@@ -87,7 +87,7 @@ class TestPaydayCharge(TestPaydayBase):
     def test_charge_success_updates_participant(self, cob):
         cob.return_value = (Decimal('10.00'), Decimal('0.68'), "")
         bob = self.make_participant('bob', last_bill_result="failure",
-                                    balanced_account_uri=self.balanced_account_uri,
+                                    balanced_account_uri=self.balanced_customer_href,
                                     is_suspicious=False)
         self.payday.start()
         self.payday.charge(bob, Decimal('1.00'))
@@ -106,7 +106,7 @@ class TestPaydayCharge(TestPaydayBase):
                                     last_bill_result='',
                                     is_suspicious=False)
         carl = self.make_participant('carl', claimed_time=day_ago,
-                                     balanced_account_uri=self.balanced_account_uri,
+                                     balanced_account_uri=self.balanced_customer_href,
                                      last_bill_result='',
                                      is_suspicious=False)
         carl.set_tip_to('bob', '6.00')  # under $10!
@@ -126,7 +126,7 @@ class TestPaydayCharge(TestPaydayBase):
                                     last_bill_result='',
                                     is_suspicious=False)
         carl = self.make_participant('carl', claimed_time=day_ago,
-                                     balanced_account_uri=self.balanced_account_uri,
+                                     balanced_account_uri=self.balanced_customer_href,
                                      last_bill_result='',
                                      is_suspicious=True)
         carl.set_tip_to('bob', '6.00')  # under $10!
@@ -146,7 +146,7 @@ class TestPaydayCharge(TestPaydayBase):
                                     last_bill_result='',
                                     is_suspicious=True)
         carl = self.make_participant('carl', claimed_time=day_ago,
-                                     balanced_account_uri=self.balanced_account_uri,
+                                     balanced_account_uri=self.balanced_customer_href,
                                      last_bill_result='',
                                      is_suspicious=False)
         carl.set_tip_to('bob', '6.00')  # under $10!
@@ -613,7 +613,7 @@ class TestBillingTransfer(TestPaydayBase):
         TestPaydayBase.setUp(self)
         self.payday.start()
         self.tipper = self.make_participant('lgtest')
-        self.balanced_account_uri = '/v1/marketplaces/M123/accounts/A123'
+        #self.balanced_account_uri = '/v1/marketplaces/M123/accounts/A123'
 
     def test_transfer(self):
         amount = Decimal('1.00')
