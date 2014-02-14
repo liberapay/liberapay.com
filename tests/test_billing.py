@@ -103,6 +103,24 @@ class TestBalancedCard(Harness):
 
         assert actual == expected
 
+    def test_balanced_works_with_old_urls(self):
+        # gittip will have a combination of old style from v1
+        # and new urls from v1.1
+        balanced.Card.fetch(self.card_href).associate_to_customer(
+            self.balanced_customer_href
+        )
+        # do not actually do this in any real system
+        # but construct the url using the id from the
+        # customer and marketplace on the new api
+        # to match the format of that of the old one
+        url_user = '/v1/marketplaces/{}/accounts/{}'.format(
+            self.balanced_marketplace.id,
+            self.balanced_customer_href.split('/customers/')[1])
+
+        card = billing.BalancedCard(url_user)
+
+        assert card._thing.href == self.card_href
+
 
 class TestStripeCard(Harness):
     @mock.patch('stripe.Customer')
