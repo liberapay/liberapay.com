@@ -35,15 +35,16 @@ def get_balanced_account(db, username, balanced_account_uri):
     # XXX Balanced requires an email address
     # https://github.com/balanced/balanced-api/issues/20
     # quote to work around https://github.com/gittip/www.gittip.com/issues/781
+    # emails are not required for customers any more
     email_address = '{}@gittip.com'.format(quote(username))
 
 
     if balanced_account_uri is None:
         try:
-            account = \
-               balanced.Account.query.filter(email_address=email_address).one()
+            customer = \
+               balanced.customers.query.filter(email=email_address).one()
         except balanced.exc.NoResultFound:
-            account = balanced.Account(email_address=email_address).save()
+            customer = balanced.Customer(email=email_address).save()
         BALANCED_ACCOUNT = """\
 
                 UPDATE participants
@@ -52,11 +53,11 @@ def get_balanced_account(db, username, balanced_account_uri):
 
         """
         db.run(BALANCED_ACCOUNT, (account.uri, username))
-        account.meta['username'] = username
-        account.save()  # HTTP call under here
+        customer.meta['username'] = username
+        customer.save()  # HTTP call under here
     else:
-        account = balanced.Account.find(balanced_account_uri)
-    return account
+        customer = balanced.Customer.fetch(balanced_account_uri)
+    return customer
 
 
 def associate(db, thing, username, balanced_account_uri, balanced_thing_uri):
@@ -118,13 +119,11 @@ def invalidate_on_balanced(thing, balanced_account_uri):
     assert thing in ("credit card", "bank account")
     typecheck(balanced_account_uri, unicode)
 
-    account = balanced.Account.find(balanced_account_uri)
-    things = account.cards if thing == "credit card" else account.bank_accounts
+    customer = balanced.Customer.fetch(balanced_account_uri)
+    things = customer.cards if thing == "credit card" else customer.bank_accounts
 
     for _thing in things:
-        if _thing.is_valid:
-            _thing.is_valid = False
-            _thing.save()
+        _thing.unstore()
 
 
 def clear(db, thing, username, balanced_account_uri):
@@ -209,9 +208,30 @@ class BalancedThing(object):
 
     thing_type = None
 
-    _account = None     # underlying balanced.Account object
+    _customer = None    # underlying balanced.Customer object
     _thing = None       # underlying balanced.{BankAccount,Card} object
 
+    def _get(self, name, default=""):
+        """Given a name, return a unicode.
+        """
+        out = None
+        if self._customer is not None and self._thing is not None:
+            #try:
+                #out = getattr(self._thing, name, None)
+            out = self._thing
+            for val in name.split('.'):
+                if type(out) is dict:
+                    out = out.get(val)
+                else:
+                    out = getattr(out, val)
+                if out is None:
+                    break
+
+            #except IndexError:  # ?? still needed
+            #    pass
+        if out is None:
+            out = default
+        return out
 
     def __init__(self, balanced_account_uri):
         """Given a Balanced account_uri, load data from Balanced.
@@ -222,10 +242,12 @@ class BalancedThing(object):
         # XXX Indexing is borken. See:
         # https://github.com/balanced/balanced-python/issues/10
 
-        self._account = balanced.Account.find(balanced_account_uri)
+        self._customer = balanced.Customer.fetch(balanced_account_uri)
 
-        things = getattr(self._account, self.thing_type+'s').all()
-        things = [thing for thing in things if thing.is_valid]
+        things = getattr(self._customer, self.thing_type+'s').filter(is_valid=True).all()
+
+        #things = getattr(self._customer, self.thing_type+'s').all()
+        #things = [thing for thing in things if thing.is_valid]
         nvalid = len(things)
 
         if nvalid == 0:
@@ -237,6 +259,10 @@ class BalancedThing(object):
             msg %= (balanced_account_uri, len(things), self.thing_type)
             raise RuntimeError(msg)
 
+    @property
+    def is_setup(self):
+        return self._thing is not None
+
 
 class BalancedCard(BalancedThing):
     """This is a dict-like wrapper around a Balanced Account.
@@ -244,49 +270,50 @@ class BalancedCard(BalancedThing):
 
     thing_type = 'card'
 
-    def _get(self, name, default=""):
-        """Given a name, return a unicode.
-        """
-        out = None
-        if self._account is not None:
-            try:
-                out = getattr(self._thing, name, None)
-            except IndexError:  # no cards associated
-                pass
-        if out is None:
-            out = default
-        return out
-
     def __getitem__(self, name):
         """Given a name, return a string.
         """
+        #import ipdb; ipdb.set_trace()
+
         if name == 'id':
-            out = self._account.uri if self._account is not None else None
-        elif name == 'last4':
-            out = self._get('last_four')
-            if out:
-                out = "************" + unicode(out)
-        elif name == 'address_2':
-            out = self._get('meta', {}).get('address_2', '')
-
-        elif name == 'country':
-            out = self._get('meta', {}).get('country', '')
-
-        elif name == 'city_town':
-            out = self._get('meta', {}).get('city_town', '')
-
-        elif name == 'state':
-            out = self._get('region')
-            if not out:
-                # There's a bug in balanced where the region does get persisted
-                # but doesn't make it back out. This is a workaround until such
-                # time as that's fixed.
-                out = self._get('meta', {}).get('region', '')
+            out = self._customer.href if self._customer is not None else None
         else:
-            name = { 'address_1': 'street_address'
-                   , 'zip': 'postal_code'
-                    }.get(name, name)
+            name = {
+                'address_1': 'address.line1',
+                'address_2': 'meta.address_2',
+                'country': 'meta.country',
+                'city_town': 'meta.city_town',
+                'zip': 'address.postal_code',
+                'state': 'meta.region',  # 'address.state', # noted error bellow, are the saving it in both places?
+                'last4': 'number',
+                'last_four': 'number',
+            }.get(name, name)
             out = self._get(name)
+
+        # elif name == 'last4':
+        #     out = self._get('number')
+
+        # elif name == 'address_2':
+        #     out = self._get('meta', {}).get('address_2', '')
+
+        # elif name == 'country':
+        #     out = self._get('meta', {}).get('country', '')
+
+        # elif name == 'city_town':
+        #     out = self._get('meta', {}).get('city_town', '')
+
+        # elif name == 'state':
+        #     out = self._get('region')
+        #     if not out:
+        #         # There's a bug in balanced where the region does get persisted
+        #         # but doesn't make it back out. This is a workaround until such
+        #         # time as that's fixed.
+        #         out = self._get('meta', {}).get('region', '')
+        # else:
+        #     name = { 'address_1': 'street_address'
+        #            , 'zip': 'postal_code'
+        #             }.get(name, name)
+        #     out = self._get(name)
         return out
 
 
@@ -297,9 +324,11 @@ class BalancedBankAccount(BalancedThing):
     thing_type = 'bank_account'
 
     def __getitem__(self, item):
+        #import ipdb; ipdb.set_trace()
         mapper = {
-            'id': 'uri',
-            'account_uri': 'account.uri',
+            'id': 'href',
+            'customer_href': 'customer.href',
+            'account_uri': 'customer.href',  # TODO: remove
             'bank_name': 'bank_name',
             'last_four': 'last_four',
         }
@@ -315,13 +344,9 @@ class BalancedBankAccount(BalancedThing):
         #     _item = getattr(self._thing, 'account')
         #     _item = getattr(_item, 'uri')
 
-        _item = self._thing
-        for val in mapper[item].split('.'):
-            _item = getattr(_item, val)
+        return self._get(mapper[item])
 
-
-        return _item
-
-    @property
-    def is_setup(self):
-        return self._thing is not None
+        # _item = self._thing
+        # for val in mapper[item].split('.'):
+        #     _item = getattr(_item, val)
+        # return _item

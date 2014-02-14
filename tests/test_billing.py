@@ -9,60 +9,114 @@ from gittip.testing import Harness
 from gittip.models.participant import Participant
 
 
+def setUp_balanced(o):
+    o.balanced_api_key = balanced.APIKey().save().secret
+    balanced.configure(o.balanced_api_key)
+    mp = balanced.Marketplace.my_marketplace
+    if not mp:
+        mp = balanced.Marketplace().save()
+    o.balanced_marketplace = mp
+
+
+def setUp_balanced_resources(o):
+    o.balanced_customer_href = balanced.Customer().save().href
+    o.card_href = balanced.Card(
+        number='4111111111111111',
+        expiration_month=10,
+        expiration_year=2020,
+        address={
+            'line1': "123 Main Street",
+            'state': 'Confusion',
+            'postal_code': '90210',
+        },
+        # the current gittip system stores some of the address data
+        # in the meta fields, continue using them to support backwards
+        # compatibility
+        meta={
+            'address_2': 'Box 2',
+            'city_town': '',
+            'region': 'Confusion',
+        }
+    ).save().href
+    o.bank_account_href = balanced.BankAccount(
+        name='Homer Jay',
+        account_number='112233a',
+        routing_number='121042882',
+    ).save().href
+
+
 class TestBillingBase(Harness):
-    balanced_account_uri = '/v1/marketplaces/M123/accounts/A123'
-    balanced_destination_uri = '/v1/bank_accounts/X'
-    card_uri = '/v1/marketplaces/M123/accounts/A123/cards/C123'
+    #balanced_account_uri = '/v1/marketplaces/M123/accounts/A123'
+    #balanced_destination_uri = '/v1/bank_accounts/X'
+    #card_uri = '/v1/marketplaces/M123/accounts/A123/cards/C123'
+
+    @classmethod
+    def setUpClass(cls):
+        super(TestBillingBase, cls).setUpClass()
+        setUp_balanced(cls)
 
     def setUp(self):
         Harness.setUp(self)
+        setUp_balanced_resources(self)
         self.alice = self.make_participant('alice', elsewhere='github')
 
 
 class TestBalancedCard(Harness):
-    balanced_account_uri = '/v1/marketplaces/M123/accounts/A123'
 
-    @mock.patch('balanced.Account')
-    def test_balanced_card_basically_works(self, ba):
-        card = mock.Mock()
-        card.last_four = 1234
-        card.expiration_month = 10
-        card.expiration_year = 2020
-        card.street_address = "123 Main Street"
-        card.meta = {"address_2": "Box 2"}
-        card.region = "Confusion"
-        card.postal_code = "90210"
+    #balanced_customer_href = '/customers/CU123123'
+    #balanced_account_uri = '/v1/marketplaces/M123/accounts/A123'
 
-        balanced_account = ba.find.return_value
-        balanced_account.uri = self.balanced_account_uri
-        balanced_account.cards = mock.Mock()
-        balanced_account.cards.all.return_value = [card]
+    @classmethod
+    def setUpClass(cls):
+        super(TestBalancedCard, cls).setUpClass()
+        setUp_balanced(cls)
+
+    def setUp(self):
+        Harness.setUp(self)
+        setUp_balanced_resources(self)
+
+    def test_balanced_card_basically_works(self):
+        balanced.Card.fetch(self.card_href) \
+                     .associate_to_customer(self.balanced_customer_href)
+        # card = mock.Mock()
+        # card.number = 'xxxxxxxxxxxx1234'
+        # card.expiration_month = 10
+        # card.expiration_year = 2020
+        # card.street_address = "123 Main Street"
+        # card.meta = {"address_2": "Box 2"}
+        # card.region = "Confusion"
+        # card.postal_code = "90210"
+
+        # balanced_account = ba.find.return_value
+        # balanced_account.uri = self.balanced_customer_href
+        # balanced_account.cards = mock.Mock()
+        # balanced_account.cards.all.return_value = [card]
 
         expected = {
-            'id': '/v1/marketplaces/M123/accounts/A123',
-            'last_four': 1234,
-            'last4': '************1234',
+            'id': self.balanced_customer_href,
+            'last_four': 'xxxxxxxxxxxx1111',
+            'last4': 'xxxxxxxxxxxx1111',
             'expiration_month': 10,
             'expiration_year': 2020,
             'address_1': '123 Main Street',
             'address_2': 'Box 2',
             'state': 'Confusion',
-            'zip': '90210'
+            'zip': '90210',
         }
-        card = billing.BalancedCard(self.balanced_account_uri)
+        card = billing.BalancedCard(self.balanced_customer_href)
         actual = dict([(name, card[name]) for name in expected])
         assert actual == expected
 
-    @mock.patch('balanced.Account')
+    @mock.patch('balanced.Customer')
     def test_balanced_card_gives_class_name_instead_of_KeyError(self, ba):
         card = mock.Mock()
 
         balanced_account = ba.find.return_value
-        balanced_account.uri = self.balanced_account_uri
+        balanced_account.href = self.balanced_customer_href
         balanced_account.cards = mock.Mock()
         balanced_account.cards.all.return_value = [card]
 
-        card = billing.BalancedCard(self.balanced_account_uri)
+        card = billing.BalancedCard(self.balanced_customer_href)
 
         expected = mock.Mock.__name__
         actual = card['nothing'].__class__.__name__
@@ -111,32 +165,48 @@ class TestStripeCard(Harness):
 
 
 class TestBalancedBankAccount(Harness):
-    balanced_account_uri = '/v1/marketplaces/M123/accounts/A123'
-    balanced_bank_account_uri = balanced_account_uri + '/bank_accounts/B123'
+    #balanced_account_uri = '/v1/marketplaces/M123/accounts/A123'
+    # balanced_bank_account_uri = balanced_account_uri + '/bank_accounts/B123'
 
-    @mock.patch('gittip.billing.balanced.Account')
-    @mock.patch('gittip.billing.balanced.BankAccount')
-    def test_balanced_bank_account(self, b_b_account, b_account):
-        # b_account = balanced.Account
+    @classmethod
+    def setUpClass(cls):
+        super(TestBalancedBankAccount, cls).setUpClass()
+        setUp_balanced(cls)
+
+    def setUp(self):
+        Harness.setUp(self)
+        setUp_balanced_resources(self)
+
+    #@mock.patch('gittip.billing.balanced.Customer')
+    #@mock.patch('gittip.billing.balanced.BankAccount')
+    def test_balanced_bank_account(self): #, b_b_account, b_account):
+        balanced.BankAccount.fetch(self.bank_account_href).associate_to_customer(self.balanced_customer_href)
+        # b_account = balanced.Customer
         # b_b_account = balanced.BankAccount
         # b_b_b_account = billing.BalancedBankAccount
         # got it?
-        bank_account = mock.Mock()
-        bank_account.is_valid = True
-        b_account.find.return_value\
-                 .bank_accounts.all.return_value = [bank_account]
+        #bank_account = mock.Mock()
+        #bank_account.is_valid = True
 
-        b_b_b_account = billing.BalancedBankAccount(self.balanced_account_uri)
-        assert b_account.find.called_with(self.balanced_account_uri)
-        assert b_b_account.find.called_with(self.balanced_bank_account_uri)
+        #b_account.find.return_value\
+        #         .bank_accounts.all.return_value = [bank_account]
 
-        assert b_b_b_account.is_setup
+        ba_account = billing.BalancedBankAccount(self.balanced_customer_href)
+
+        assert ba_account.is_setup
+
+        # b_b_b_account = billing.BalancedBankAccount(self.balanced_account_uri)
+
+        # assert b_account.find.called_with(self.balanced_account_uri)
+        # assert b_b_account.find.called_with(self.balanced_bank_account_uri)
+
+        # assert b_b_b_account.is_setup
         with self.assertRaises(IndexError):
-            b_b_b_account.__getitem__('invalid')
+            ba_account.__getitem__('invalid')
 
-    @mock.patch('gittip.billing.balanced.Account')
-    @mock.patch('gittip.billing.balanced.BankAccount')
-    def test_balanced_bank_account_account_uri(self, b_b_account, b_account):
+    #@mock.patch('gittip.billing.balanced.Customer')
+    #@mock.patch('gittip.billing.balanced.BankAccount')
+    def test_balanced_bank_account_account_uri(self) :#, b_b_account, b_account):
         # b_account = balanced.Account
         # b_b_account = balanced.BankAccount
         # b_b_b_account = billing.BalancedBankAccount
@@ -148,7 +218,7 @@ class TestBalancedBankAccount(Harness):
         b_account.uri = "Here I am!"
         bank_account.account = b_account
 
-        b_b_b_account = billing.BalancedBankAccount(self.balanced_account_uri)
+        b_b_b_account = billing.BalancedBankAccount(self.balanced_customer_href)
 
         expected = "Here I am!"
         actual = b_b_b_account['account_uri']
@@ -161,7 +231,7 @@ class TestBalancedBankAccount(Harness):
 
 
 class TestBillingAssociate(TestBillingBase):
-    @mock.patch('gittip.billing.balanced.Account.find')
+    @mock.patch('gittip.billing.balanced.Customer.fetch')
     @mock.patch('gittip.billing.get_balanced_account')
     def test_associate_valid_card(self, gba, find):
         find.return_value.uri = self.balanced_account_uri
@@ -174,7 +244,7 @@ class TestBillingAssociate(TestBillingBase):
         assert gba.return_value.add_card.call_count == 1
         assert gba.return_value.add_bank_account.call_count == 0
 
-    @mock.patch('balanced.Account.find')
+    @mock.patch('balanced.Customer.fetch')
     def test_associate_invalid_card(self, find):
         error_message = 'Something terrible'
         not_found = balanced.exc.HTTPError(error_message)
@@ -195,7 +265,7 @@ class TestBillingAssociate(TestBillingBase):
         assert user.participant.last_bill_result == error_message
         assert find.call_count
 
-    @mock.patch('gittip.billing.balanced.Account.find')
+    @mock.patch('gittip.billing.balanced.Customer.find')
     def test_associate_bank_account_valid(self, find):
 
         find.return_value.uri = self.balanced_account_uri
@@ -217,7 +287,7 @@ class TestBillingAssociate(TestBillingBase):
         # participant in db should be updated
         assert user.participant.last_ach_result == ''
 
-    @mock.patch('gittip.billing.balanced.Account.find')
+    @mock.patch('gittip.billing.balanced.Customer.find')
     def test_associate_bank_account_invalid(self, find):
         ex = balanced.exc.HTTPError('errrrrror')
         find.return_value.add_bank_account.side_effect = ex
@@ -236,7 +306,8 @@ class TestBillingAssociate(TestBillingBase):
 
 
 class TestBillingClear(TestBillingBase):
-    @mock.patch('balanced.Account.find')
+
+    @mock.patch('balanced.Customer.find')
     def test_clear(self, find):
         valid_card = mock.Mock()
         valid_card.is_valid = True
