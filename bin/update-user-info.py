@@ -55,9 +55,10 @@ def update_twitter():
 
             users = response.json()
 
-            for user_info in users:
+            with db.get_cursor() as c:
 
-                with db.get_cursor() as c:
+                for user_info in users:
+
                     # flatten per upsert method in gittip/elsewhere/__init__.py
                     for k, v in user_info.items():
                         user_info[k] = unicode(v)
@@ -67,6 +68,15 @@ def update_twitter():
                     c.one("UPDATE elsewhere SET user_info=%s WHERE user_id=%s AND platform='twitter' RETURNING id", (user_info, user_id))
 
                     print("updated {} ({})".format(user_info['screen_name'], user_id))
+
+                # find deleted users
+                existing = set(u['id'] for u in users)
+                deleted = existing - set(batch)
+
+                for user_id in deleted:
+
+                    c.one("UPDATE elsewhere SET user_info=NULL WHERE user_id=%s AND platform='twitter' RETURNING id", (user_id,))
+                    print("orphan found: {}".format(user_id))
 
 
         # Stay under our rate limit.
@@ -119,6 +129,7 @@ def update_github():
             print("updated {} ({})".format(user_info['login'], user_id))
 
         elif status == 404:
+            db.one("UPDATE elsewhere SET user_info=NULL WHERE user_id=%s AND platform='github' RETURNING id", (user_id,))
             print("orphan found: {}".format(user_id))
         else:
             # some other problem
