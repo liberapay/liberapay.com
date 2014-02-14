@@ -3,23 +3,30 @@
 
 BEGIN;
 
-    -- Extract user_name from user_info
+
+-- Add new columns
+
     -- Note: using "user_name" instead of "username" avoids having the same
     --       column name in the participants and elsewhere tables.
     ALTER TABLE elsewhere ADD COLUMN user_name text;
+    ALTER TABLE elsewhere ADD COLUMN display_name text;
+    ALTER TABLE elsewhere ADD COLUMN email text;
+    ALTER TABLE elsewhere ADD COLUMN avatar_url text;
+    ALTER TABLE participants ADD COLUMN avatar_url text;
+
+
+
+-- Extract info
+
+    -- Extract user_name from user_info
     UPDATE elsewhere SET user_name = user_id WHERE platform = 'bitbucket';
     UPDATE elsewhere SET user_name = user_info->'display_name' WHERE platform = 'bountysource';
     UPDATE elsewhere SET user_name = user_info->'login' WHERE platform = 'github';
     UPDATE elsewhere SET user_name = user_info->'username' WHERE platform = 'openstreetmap';
     UPDATE elsewhere SET user_name = user_info->'screen_name' WHERE platform = 'twitter';
     UPDATE elsewhere SET user_name = user_info->'username' WHERE platform = 'venmo';
-    -- Update constraints
-    ALTER TABLE elsewhere ALTER COLUMN user_name SET NOT NULL,
-                          ALTER COLUMN user_name DROP DEFAULT;
-
 
     -- Extract display_name from user_info
-    ALTER TABLE elsewhere ADD COLUMN display_name text;
     UPDATE elsewhere SET display_name = user_info->'display_name' WHERE platform = 'bitbucket';
     UPDATE elsewhere SET display_name = user_info->'name' WHERE platform = 'github';
     UPDATE elsewhere SET display_name = user_info->'username' WHERE platform = 'openstreetmap';
@@ -27,14 +34,10 @@ BEGIN;
     UPDATE elsewhere SET display_name = user_info->'display_name' WHERE platform = 'venmo';
     UPDATE elsewhere SET display_name = NULL WHERE display_name = 'None';
 
-
     -- Extract available email addresses
-    ALTER TABLE elsewhere ADD COLUMN email text;
     UPDATE elsewhere SET email = user_info->'email' WHERE user_info->'email' LIKE '%@%';
 
-
     -- Extract available avatar URLs
-    ALTER TABLE elsewhere ADD COLUMN avatar_url text;
     UPDATE elsewhere SET avatar_url = concat('https://www.gravatar.com/avatar/',
                                              user_info->'gravatar_id')
                    WHERE platform = 'github'
@@ -56,7 +59,6 @@ BEGIN;
     UPDATE elsewhere SET avatar_url = user_info->'profile_picture_url' WHERE platform = 'venmo';
     UPDATE elsewhere SET avatar_url = NULL WHERE avatar_url = 'None';
     -- Propagate avatar_url to participants
-    ALTER TABLE participants ADD COLUMN avatar_url text;
     UPDATE participants p
        SET avatar_url = (
                SELECT avatar_url
@@ -68,11 +70,17 @@ BEGIN;
            );
 
 
-    -- Replace the column by a new one of type json (instead of hstore)
+
+-- Drop old columns and add new ones
+
+    -- Update user_name constraints
+    ALTER TABLE elsewhere ALTER COLUMN user_name SET NOT NULL,
+                          ALTER COLUMN user_name DROP DEFAULT;
+
+    -- Replace user_info by a new column of type json (instead of hstore)
     ALTER TABLE elsewhere DROP COLUMN user_info,
                           ADD COLUMN extra_info json;
     DROP EXTENSION hstore;
-
 
     -- Simplify homepage_top_* tables
     ALTER TABLE homepage_top_givers DROP COLUMN gravatar_id,
@@ -82,7 +90,6 @@ BEGIN;
                                        DROP COLUMN gravatar_id,
                                        DROP COLUMN twitter_pic,
                                        ADD COLUMN avatar_url text;
-
 
     -- The following lets us cast queries to elsewhere_with_participant to get the
     -- participant data dereferenced and returned in a composite type along with
