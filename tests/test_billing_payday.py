@@ -160,7 +160,6 @@ class TestPaydayCharge(TestPaydayBase):
 
 
 class TestBillingCharges(TestPaydayBase):
-    #BALANCED_ACCOUNT_URI = u'/v1/marketplaces/M123/accounts/A123'
     BALANCED_CUSTOMER_HREF = '/customers/CU123123123'
     BALANCED_TOKEN = u'/cards/CU123123123'
 
@@ -243,8 +242,8 @@ class TestBillingCharges(TestPaydayBase):
                                          , self.alice.username
                                           )
 
-    #@mock.patch('balanced.Customer')
-    def test_charge_on_balanced_failure(self): #, ba):
+
+    def test_charge_on_balanced_failure(self):
         balanced.Card(
             number='4444444444444448',
             expiration_year=2020,
@@ -339,7 +338,6 @@ class TestPrepHit(TestPaydayBase):
 
 class TestBillingPayday(TestPaydayBase):
     BALANCED_CUSTOMER_HREF = '/customers/CU123123123'
-    #BALANCED_ACCOUNT_URI = '/v1/marketplaces/M123/accounts/A123'
 
     def test_move_pending_to_balance_for_teams_does_so(self):
         self.make_participant('A', number='plural', balance=2, pending=3)

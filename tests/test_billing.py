@@ -29,9 +29,8 @@ def setUp_balanced_resources(o):
             'state': 'Confusion',
             'postal_code': '90210',
         },
-        # the current gittip system stores some of the address data
-        # in the meta fields, continue using them to support backwards
-        # compatibility
+        # gittip stores some of the address data in the meta fields,
+        # continue using them to support backwards compatibility
         meta={
             'address_2': 'Box 2',
             'city_town': '',
@@ -46,9 +45,6 @@ def setUp_balanced_resources(o):
 
 
 class TestBillingBase(Harness):
-    #balanced_account_uri = '/v1/marketplaces/M123/accounts/A123'
-    #balanced_destination_uri = '/v1/bank_accounts/X'
-    #card_uri = '/v1/marketplaces/M123/accounts/A123/cards/C123'
 
     @classmethod
     def setUpClass(cls):
@@ -63,9 +59,6 @@ class TestBillingBase(Harness):
 
 class TestBalancedCard(Harness):
 
-    #balanced_customer_href = '/customers/CU123123'
-    #balanced_account_uri = '/v1/marketplaces/M123/accounts/A123'
-
     @classmethod
     def setUpClass(cls):
         super(TestBalancedCard, cls).setUpClass()
@@ -78,19 +71,6 @@ class TestBalancedCard(Harness):
     def test_balanced_card_basically_works(self):
         balanced.Card.fetch(self.card_href) \
                      .associate_to_customer(self.balanced_customer_href)
-        # card = mock.Mock()
-        # card.number = 'xxxxxxxxxxxx1234'
-        # card.expiration_month = 10
-        # card.expiration_year = 2020
-        # card.street_address = "123 Main Street"
-        # card.meta = {"address_2": "Box 2"}
-        # card.region = "Confusion"
-        # card.postal_code = "90210"
-
-        # balanced_account = ba.find.return_value
-        # balanced_account.uri = self.balanced_customer_href
-        # balanced_account.cards = mock.Mock()
-        # balanced_account.cards.all.return_value = [card]
 
         expected = {
             'id': self.balanced_customer_href,
@@ -166,8 +146,6 @@ class TestStripeCard(Harness):
 
 
 class TestBalancedBankAccount(Harness):
-    #balanced_account_uri = '/v1/marketplaces/M123/accounts/A123'
-    # balanced_bank_account_uri = balanced_account_uri + '/bank_accounts/B123'
 
     @classmethod
     def setUpClass(cls):
@@ -178,19 +156,9 @@ class TestBalancedBankAccount(Harness):
         Harness.setUp(self)
         setUp_balanced_resources(self)
 
-    #@mock.patch('gittip.billing.balanced.Customer')
-    #@mock.patch('gittip.billing.balanced.BankAccount')
-    def test_balanced_bank_account(self): #, b_b_account, b_account):
-        balanced.BankAccount.fetch(self.bank_account_href).associate_to_customer(self.balanced_customer_href)
-        # b_account = balanced.Customer
-        # b_b_account = balanced.BankAccount
-        # b_b_b_account = billing.BalancedBankAccount
-        # got it?
-        #bank_account = mock.Mock()
-        #bank_account.is_valid = True
-
-        #b_account.find.return_value\
-        #         .bank_accounts.all.return_value = [bank_account]
+    def test_balanced_bank_account(self):
+        balanced.BankAccount.fetch(self.bank_account_href)\
+                            .associate_to_customer(self.balanced_customer_href)
 
         ba_account = billing.BalancedBankAccount(self.balanced_customer_href)
 
@@ -198,37 +166,12 @@ class TestBalancedBankAccount(Harness):
 
         # b_b_b_account = billing.BalancedBankAccount(self.balanced_account_uri)
 
-        # assert b_account.find.called_with(self.balanced_account_uri)
-        # assert b_b_account.find.called_with(self.balanced_bank_account_uri)
-
-        # assert b_b_b_account.is_setup
         with self.assertRaises(IndexError):
             ba_account.__getitem__('invalid')
 
         actual = ba_account['account_uri']
         expected = self.balanced_customer_href
         assert actual == expected
-
-
-    # #@mock.patch('gittip.billing.balanced.Customer')
-    # #@mock.patch('gittip.billing.balanced.BankAccount')
-    # def test_balanced_bank_account_account_uri(self) :#, b_b_account, b_account):
-    #     # b_account = balanced.Account
-    #     # b_b_account = balanced.BankAccount
-    #     # b_b_b_account = billing.BalancedBankAccount
-    #     # got it?
-    #     bank_account = mock.Mock()
-    #     bank_account.is_valid = True
-    #     b_account.find.return_value\
-    #              .bank_accounts.all.return_value = [bank_account]
-    #     b_account.uri = "Here I am!"
-    #     bank_account.account = b_account
-
-    #     b_b_b_account = billing.BalancedBankAccount(self.balanced_customer_href)
-
-    #     expected = "Here I am!"
-    #     actual = b_b_b_account['account_uri']
-    #     assert actual == expected
 
     def test_balanced_bank_account_not_setup(self):
         bank_account = billing.BalancedBankAccount(None)
@@ -237,13 +180,8 @@ class TestBalancedBankAccount(Harness):
 
 
 class TestBillingAssociate(TestBillingBase):
-    #@mock.patch('gittip.billing.balanced.Customer.fetch')
-    #@mock.patch('gittip.billing.get_balanced_account')
-    def test_associate_valid_card(self):  #, gba, find):
-        # find.return_value.uri = self.balanced_account_uri
-        # gba.return_value.uri = self.balanced_account_uri
 
-        # first time through, payment processor account is None
+    def test_associate_valid_card(self):
         billing.associate(self.db, u"credit card", 'alice', None, self.card_href)
 
         user = authentication.User.from_username('alice')
@@ -251,22 +189,9 @@ class TestBillingAssociate(TestBillingBase):
         cards = customer.cards.all()
         assert len(cards) == 1
         assert cards[0].href == self.card_href
-        #import ipdb; ipdb.set_trace()
 
-
-        #assert gba.call_count == 1
-        #assert gba.return_value.add_card.call_count == 1
-        #assert gba.return_value.add_bank_account.call_count == 0
-
-    #@mock.patch('balanced.Customer.fetch')
     def test_associate_invalid_card(self): #, find):
-        # error_message = 'Something terrible'
-        # not_found = balanced.exc.HTTPError(error_message)
-        # find.return_value.add_card.side_effect = not_found
-        # find.return_value.uri = self.balanced_account_uri
 
-        # second time through, payment processor account is balanced
-        # account_uri
         billing.associate( self.db
                          , u"credit card"
                          , 'alice'
@@ -278,11 +203,8 @@ class TestBillingAssociate(TestBillingBase):
         # last update
         assert user.participant.last_bill_result == '404 Client Error: NOT FOUND'
 
-    #@mock.patch('gittip.billing.balanced.Customer.fetch')
-    def test_associate_bank_account_valid(self):  # , find):
+    def test_associate_bank_account_valid(self):
 
-        #find.return_value.href = self.balanced_customer_href
-        #import ipdb; ipdb.set_trace()
         billing.associate( self.db
                          , u"bank account"
                          , 'alice'
@@ -291,13 +213,8 @@ class TestBillingAssociate(TestBillingBase):
                           )
 
         #args, _ = find.call_args
-        #assert args == (self.balanced_customer_href,)
-
-        #args, _ = find.return_value.add_bank_account.call_args
-        #assert args == (self.bank_account_href,)
 
         customer = balanced.Customer.fetch(self.balanced_customer_href)
-        #import ipdb; ipdb.set_trace()
         bank_accounts = customer.bank_accounts.all()
         assert len(bank_accounts) == 1
         assert bank_accounts[0].href == self.bank_account_href
@@ -308,11 +225,7 @@ class TestBillingAssociate(TestBillingBase):
         # participant in db should be updated
         assert user.participant.last_ach_result == ''
 
-        #@mock.patch('gittip.billing.balanced.Customer.find')
-    def test_associate_bank_account_invalid(self): #, find):
-        # ex = balanced.exc.HTTPError('errrrrror')
-        # find.return_value.add_bank_account.side_effect = ex
-        # find.return_value.uri = self.balanced_account_uri
+    def test_associate_bank_account_invalid(self):
 
         billing.associate( self.db
                          , u"bank account"
@@ -328,17 +241,10 @@ class TestBillingAssociate(TestBillingBase):
 
 class TestBillingClear(TestBillingBase):
 
-    #@mock.patch('balanced.Customer.find')
-    def test_clear(self): # , find):
+    def test_clear(self):
 
-        balanced.Card.fetch(self.card_href).associate_to_customer(self.balanced_customer_href)
-
-        # valid_card = mock.Mock()
-        # valid_card.is_valid = True
-        # invalid_card = mock.Mock()
-        # invalid_card.is_valid = False
-        # card_collection = [valid_card, invalid_card]
-        # find.return_value.cards = card_collection
+        balanced.Card.fetch(self.card_href)\
+                     .associate_to_customer(self.balanced_customer_href)
 
         MURKY = """\
 
@@ -356,25 +262,13 @@ class TestBillingClear(TestBillingBase):
         cards = customer.cards.all()
         assert len(cards) == 0
 
-        # assert not valid_card.is_valid
-        # assert valid_card.save.call_count
-        # assert not invalid_card.save.call_count
-
         user = authentication.User.from_username('alice')
         assert not user.participant.last_bill_result
         assert user.participant.balanced_account_uri
 
-    #@mock.patch('gittip.billing.balanced.Account')
-    def test_clear_bank_account(self): #, b_account):
-        balanced.BankAccount.fetch(self.bank_account_href).associate_to_customer(self.balanced_customer_href)
-        # valid_ba = mock.Mock()
-        # valid_ba.is_valid = True
-        # invalid_ba = mock.Mock()
-        # invalid_ba.is_valid = False
-        # ba_collection = [
-        #     valid_ba, invalid_ba
-        # ]
-        # b_account.find.return_value.bank_accounts = ba_collection
+    def test_clear_bank_account(self):
+        balanced.BankAccount.fetch(self.bank_account_href)\
+                            .associate_to_customer(self.balanced_customer_href)
 
         MURKY = """\
 
@@ -388,9 +282,6 @@ class TestBillingClear(TestBillingBase):
 
         billing.clear(self.db, u"bank account", 'alice', self.balanced_customer_href)
 
-        # assert not valid_ba.is_valid
-        # assert valid_ba.save.call_count
-        # assert not invalid_ba.save.call_count
         customer = balanced.Customer.fetch(self.balanced_customer_href)
         bank_accounts = customer.bank_accounts.all()
         assert len(bank_accounts) == 0

@@ -619,8 +619,7 @@ class Payday(object):
         # ===========================
 
         try:
-            import ipdb; ipdb.set_trace()
-            balanced_customer_href= participant.balanced_account_uri
+            balanced_customer_href = participant.balanced_account_uri
             if balanced_customer_href is None:
                 log("%s has no balanced_customer_href."
                     % participant.username)
@@ -631,7 +630,9 @@ class Payday(object):
                 log("%s is not a merchant." % participant.username)
                 return  # not a merchant
 
-            customer.cards.one().credit(amount=cents, description=participan.username)
+            customer.bank_accounts.one()\
+                                  .credit(amount=cents,
+                                          description=participan.username)
 
             error = ""
             log(msg + "succeeded.")

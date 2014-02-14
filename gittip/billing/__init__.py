@@ -218,8 +218,6 @@ class BalancedThing(object):
         """
         out = None
         if self._customer is not None and self._thing is not None:
-            #try:
-                #out = getattr(self._thing, name, None)
             out = self._thing
             for val in name.split('.'):
                 if type(out) is dict:
@@ -228,9 +226,6 @@ class BalancedThing(object):
                     out = getattr(out, val)
                 if out is None:
                     break
-
-            #except IndexError:  # ?? still needed
-            #    pass
         if out is None:
             out = default
         return out
@@ -246,10 +241,8 @@ class BalancedThing(object):
 
         self._customer = balanced.Customer.fetch(balanced_account_uri)
 
-        things = getattr(self._customer, self.thing_type+'s').filter(is_valid=True).all()
-
-        #things = getattr(self._customer, self.thing_type+'s').all()
-        #things = [thing for thing in things if thing.is_valid]
+        things = getattr(self._customer, self.thing_type+'s')\
+            .filter(is_valid=True).all()
         nvalid = len(things)
 
         if nvalid == 0:
@@ -275,7 +268,6 @@ class BalancedCard(BalancedThing):
     def __getitem__(self, name):
         """Given a name, return a string.
         """
-        #import ipdb; ipdb.set_trace()
 
         if name == 'id':
             out = self._customer.href if self._customer is not None else None
@@ -286,36 +278,14 @@ class BalancedCard(BalancedThing):
                 'country': 'meta.country',
                 'city_town': 'meta.city_town',
                 'zip': 'address.postal_code',
-                'state': 'meta.region',  # 'address.state', # noted error bellow, are the saving it in both places?
+                # gittip is saving the state in the meta field
+                # for compatibility with legacy customers
+                'state': 'meta.region',
                 'last4': 'number',
                 'last_four': 'number',
             }.get(name, name)
             out = self._get(name)
 
-        # elif name == 'last4':
-        #     out = self._get('number')
-
-        # elif name == 'address_2':
-        #     out = self._get('meta', {}).get('address_2', '')
-
-        # elif name == 'country':
-        #     out = self._get('meta', {}).get('country', '')
-
-        # elif name == 'city_town':
-        #     out = self._get('meta', {}).get('city_town', '')
-
-        # elif name == 'state':
-        #     out = self._get('region')
-        #     if not out:
-        #         # There's a bug in balanced where the region does get persisted
-        #         # but doesn't make it back out. This is a workaround until such
-        #         # time as that's fixed.
-        #         out = self._get('meta', {}).get('region', '')
-        # else:
-        #     name = { 'address_1': 'street_address'
-        #            , 'zip': 'postal_code'
-        #             }.get(name, name)
-        #     out = self._get(name)
         return out
 
 
@@ -326,7 +296,6 @@ class BalancedBankAccount(BalancedThing):
     thing_type = 'bank_account'
 
     def __getitem__(self, item):
-        #import ipdb; ipdb.set_trace()
         mapper = {
             'id': 'href',
             'customer_href': 'customer.href',
@@ -339,16 +308,4 @@ class BalancedBankAccount(BalancedThing):
         if not self._thing:
             return None
 
-
-        # Do goofiness to support 'account.uri' in mapper.
-        # ================================================
-        # An account.uri access unrolls to:
-        #     _item = getattr(self._thing, 'account')
-        #     _item = getattr(_item, 'uri')
-
         return self._get(mapper[item])
-
-        # _item = self._thing
-        # for val in mapper[item].split('.'):
-        #     _item = getattr(_item, val)
-        # return _item
