@@ -65,7 +65,13 @@ def update_twitter():
 
                     user_id = user_info['id']
 
-                    c.one("UPDATE elsewhere SET user_info=%s WHERE user_id=%s AND platform='twitter' RETURNING id", (user_info, user_id))
+                    c.one("""
+                        UPDATE elsewhere
+                        SET user_info=%s
+                        WHERE user_id=%s
+                        AND platform='twitter'
+                        RETURNING id
+                    """, (user_info, user_id))
 
                     print("updated {} ({})".format(user_info['screen_name'], user_id))
 
@@ -75,7 +81,14 @@ def update_twitter():
 
                 for user_id in deleted:
 
-                    c.one("UPDATE elsewhere SET user_info=NULL WHERE user_id=%s AND platform='twitter' RETURNING id", (user_id,))
+                    c.one("""
+                        UPDATE elsewhere
+                        SET user_info=NULL
+                        WHERE user_id=%s
+                        AND platform='twitter'
+                        RETURNING id
+                    """, (user_id,))
+
                     print("orphan found: {}".format(user_id))
 
 
@@ -124,12 +137,26 @@ def update_github():
 
             assert user_id == user_info['id']
 
-            db.one("UPDATE elsewhere SET user_info=%s WHERE user_id=%s AND platform='github' RETURNING id", (user_info, user_id))
+            db.one("""
+                UPDATE elsewhere
+                SET user_info=%s
+                WHERE user_id=%s
+                AND platform='github'
+                RETURNING id
+            """, (user_info, user_id))
 
             print("updated {} ({})".format(user_info['login'], user_id))
 
         elif status == 404:
-            db.one("UPDATE elsewhere SET user_info=NULL WHERE user_id=%s AND platform='github' RETURNING id", (user_id,))
+
+            db.one("""
+                UPDATE elsewhere
+                SET user_info=NULL
+                WHERE user_id=%s
+                AND platform='github'
+                RETURNING id
+            """, (user_id,))
+
             print("orphan found: {}".format(user_id))
         else:
             # some other problem
