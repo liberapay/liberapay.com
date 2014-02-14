@@ -56,9 +56,8 @@ Gittip.payments.ba.init = function(balanced_uri, participantId) {
     $('#payout').submit(Gittip.payments.ba.submit);
 
     // Lazily depend on Balanced.
-    var balanced_js = "https://js.balancedpayments.com/v1/balanced.js";
+    var balanced_js = "https://js.balancedpayments.com/1.1/balanced.js";
     jQuery.getScript(balanced_js, function() {
-        balanced.init(balanced_uri);
         Gittip.havePayouts = true;
         $('input[type!="hidden"]').eq(0).focus();
     });
@@ -73,7 +72,7 @@ Gittip.payments.ba.submit = function (e) {
     var bankAccount = {
         name: $('#account_name').val(),
         account_number: $('#account_number').val(),
-        bank_code: $('#routing_number').val()
+        routing_number: $('#routing_number').val()
     };
 
     var dobs = [
@@ -141,8 +140,8 @@ Gittip.payments.ba.submit = function (e) {
     // ========================
 
     var $rn = $('#routing_number');
-    if (bankAccount.bank_code) {
-        if (!balanced.bankAccount.validateRoutingNumber(bankAccount.bank_code)) {
+    if (bankAccount.routing_number) {
+        if (!balanced.bankAccount.validateRoutingNumber(bankAccount.routing_number)) {
             $rn.closest('div').addClass('error');
             errors.push("That routing number is invalid.");
         } else {
@@ -217,7 +216,7 @@ Gittip.payments.ba.handleResponse = function (response) {
     }
 
     var detailsToSubmit = Gittip.payments.ba.merchantData;
-    detailsToSubmit.bank_account_uri = response.data.uri;
+    detailsToSubmit.bank_account_uri = response.bank_accounts[0].href;
 
     Gittip.forms.submit( "/bank-account.json"
                        , detailsToSubmit
@@ -238,9 +237,8 @@ Gittip.payments.cc.init = function(balanced_uri, participantId) {
     $('form#payment').submit(Gittip.payments.cc.submit);
 
     // Lazily depend on Balanced.
-    var balanced_js = "https://js.balancedpayments.com/v1/balanced.js";
+    var balanced_js = "https://js.balancedpayments.com/1.1/balanced.js";
     jQuery.getScript(balanced_js, function() {
-        balanced.init(balanced_uri);
         Gittip.havePayments = true;
         $('input[type!="hidden"]').eq(0).focus();
     });
@@ -273,13 +271,11 @@ Gittip.payments.cc.submit = function(e) {
 
     var credit_card = {};   // holds CC info
 
-    credit_card.card_number = val('card_number');
-    if (credit_card.card_number.search('[*]') !== -1)
-        credit_card.card_number = '';  // don't send if it's the **** version
-    credit_card.security_code = val('cvv');
+    credit_card.number = val('card_number');
+    if (credit_card.number.search('[*]') !== -1)
+        credit_card.number = '';  // don't send if it's the **** version
+    credit_card.cvv = val('cvv');
     credit_card.name = val('name');
-    credit_card.street_address = val('address_1');
-    credit_card.region = val('state');
     country = $('select[id="country"]').val();
     credit_card.meta = { 'address_2': val('address_2')
                        , 'region': credit_card.region // workaround
@@ -287,12 +283,15 @@ Gittip.payments.cc.submit = function(e) {
                        , 'country': country
                         };
 
-    credit_card.postal_code = val('zip');
+    credit_card.address = { 'postal_code': val('zip')
+			  , 'line1': val('address_1')
+			  , 'state': val('state')
+			   };
 
     credit_card.expiration_month = val('expiration_month');
     credit_card.expiration_year = val('expiration_year');
 
-    if (!balanced.card.isCardNumberValid(credit_card.card_number)) {
+    if (!balanced.card.isCardNumberValid(credit_card.number)) {
         $('button#save').text('Save');
         Gittip.forms.showFeedback(null, ["Your card number is bad."]);
     } else if (!balanced.card.isExpiryValid( credit_card.expiration_month
@@ -300,7 +299,7 @@ Gittip.payments.cc.submit = function(e) {
                                           )) {
         $('button#save').text('Save');
         Gittip.forms.showFeedback(null, ["Your expiration date is bad."]);
-    } else if (!balanced.card.isSecurityCodeValid( credit_card.card_number
+    } else if (!balanced.card.isSecurityCodeValid( credit_card.number
                                                , credit_card.security_code
                                                 )) {
         $('button#save').text('Save');
@@ -374,7 +373,7 @@ Gittip.payments.cc.handleResponse = function(response) {
     }
 
     Gittip.forms.submit( "/credit-card.json"
-                       , {card_uri: response.data.uri}
+                       , {card_uri: response.cards[0].href}
                        , success
                        , detailedFeedback
                         );
