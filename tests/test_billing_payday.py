@@ -221,9 +221,9 @@ class TestBillingCharges(TestPaydayBase):
             self.alice.username, self.BALANCED_CUSTOMER_HREF, amount_to_charge)
         assert charge_amount == amount_to_charge + fee
         assert fee == expected_fee
-        assert ba.find.called_with(self.BALANCED_CUSTOMER_HREF)
-        customer = ba.find.return_value
-        assert customer.debit.called_with( int(charge_amount * 100)
+        assert ba.fetch.called_with(self.BALANCED_CUSTOMER_HREF)
+        customer = ba.fetch.return_value
+        assert customer.bank_accounts.one.debit.called_with( int(charge_amount * 100)
                                          , self.alice.username
                                           )
 
@@ -243,18 +243,18 @@ class TestBillingCharges(TestPaydayBase):
                                          , self.alice.username
                                           )
 
-    @mock.patch('balanced.Customer')
-    def test_charge_on_balanced_failure(self, ba):
+    #@mock.patch('balanced.Customer')
+    def test_charge_on_balanced_failure(self): #, ba):
+        balanced.Card(
+            number='4444444444444448',
+            expiration_year=2020,
+            expiration_month=12
+        ).save().associate_to_customer(self.balanced_customer_href)
+
         amount_to_charge = Decimal('0.06')  # $0.06 USD
-        class err:
-            class response:
-                status_code = 400
-                error_message = 'Woah, crazy'
-        import ipdb; ipdb.set_trace()
-        ba.fetch.side_effect = balanced.exc.HTTPError(err) #error_message)
         charge_amount, fee, msg = self.payday.charge_on_balanced(
-            self.alice.username, self.BALANCED_ACCOUNT_URI, amount_to_charge)
-        assert msg == err.response.error_message
+            self.alice.username, self.balanced_customer_href, amount_to_charge)
+        assert msg == '402 Client Error: PAYMENT REQUIRED'
 
 
 class TestPrepHit(TestPaydayBase):
@@ -459,7 +459,7 @@ class TestBillingPayday(TestPaydayBase):
         with self.assertRaises(Exception):
             billing.charge_and_or_transfer(ts_start, self.alice)
         assert charge.called_with(self.alice.username,
-                                  self.BALANCED_ACCOUNT_URI,
+                                  self.BALANCED_CUSTOMER_HREF,
                                   amount)
 
     @mock.patch('gittip.billing.payday.Payday.transfer')

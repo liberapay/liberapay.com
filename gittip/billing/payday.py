@@ -659,7 +659,7 @@ class Payday(object):
             log(msg + "succeeded.")
             error = ""
         except balanced.exc.HTTPError as err:
-            error = err.message
+            error = err.message.message
             log(msg + "failed: %s" % error)
 
         return charge_amount, fee, error

@@ -42,7 +42,7 @@ def get_balanced_account(db, username, balanced_account_uri):
     if balanced_account_uri is None:
         try:
             customer = \
-               balanced.customers.query.filter(email=email_address).one()
+               balanced.Customer.query.filter(email=email_address).one()
         except balanced.exc.NoResultFound:
             customer = balanced.Customer(email=email_address).save()
         BALANCED_ACCOUNT = """\
@@ -52,7 +52,7 @@ def get_balanced_account(db, username, balanced_account_uri):
                  WHERE username=%s
 
         """
-        db.run(BALANCED_ACCOUNT, (account.uri, username))
+        db.run(BALANCED_ACCOUNT, (customer.href, username))
         customer.meta['username'] = username
         customer.save()  # HTTP call under here
     else:
@@ -72,33 +72,35 @@ def associate(db, thing, username, balanced_account_uri, balanced_thing_uri):
 
     """
     typecheck( username, unicode
-             , balanced_account_uri, (unicode, None, balanced.Account)
-             , balanced_thing_uri, unicode
-             , thing, unicode
+               , balanced_account_uri, (unicode, None, balanced.Customer)
+               , balanced_thing_uri, unicode
+               , thing, unicode
               )
 
-    if isinstance(balanced_account_uri, balanced.Account):
+    if isinstance(balanced_account_uri, balanced.Customer):
         balanced_account = balanced_account_uri
     else:
         balanced_account = get_balanced_account( db
                                                , username
                                                , balanced_account_uri
                                                 )
-    invalidate_on_balanced(thing, balanced_account.uri)
+    invalidate_on_balanced(thing, balanced_account.href)
     SQL = "UPDATE participants SET last_%s_result=%%s WHERE username=%%s"
-
-    if thing == "credit card":
-        add = balanced_account.add_card
-        SQL %= "bill"
-    else:
-        assert thing == "bank account", thing # sanity check
-        add = balanced_account.add_bank_account
-        SQL %= "ach"
-
     try:
-        add(balanced_thing_uri)
+        if thing == "credit card":
+            SQL %= "bill"
+            obj = balanced.Card.fetch(balanced_thing_uri)
+            #add = balanced_account.add_card
+
+        else:
+            assert thing == "bank account", thing # sanity check
+            SQL %= "ach"
+            obj = balanced.BankAccount.fetch(balanced_thing_uri)
+            #add = balanced_account.add_bank_account
+
+        obj.associate_to_customer(balanced_account)
     except balanced.exc.HTTPError as err:
-        error = err.message.decode('UTF-8')  # XXX UTF-8?
+        error = err.message.message.decode('UTF-8')  # XXX UTF-8?
     else:
         error = ''
     typecheck(error, unicode)
@@ -117,7 +119,7 @@ def invalidate_on_balanced(thing, balanced_account_uri):
 
     """
     assert thing in ("credit card", "bank account")
-    typecheck(balanced_account_uri, unicode)
+    typecheck(balanced_account_uri, (str, unicode))
 
     customer = balanced.Customer.fetch(balanced_account_uri)
     things = customer.cards if thing == "credit card" else customer.bank_accounts
