@@ -167,7 +167,7 @@ class Platform(object):
     def extract_user_info(self, info):
         info = self.x_user_info(info)
         user_name = self.x_user_name(info)
-        if self.x_user_id is not_available:
+        if self.x_user_id.__func__ is not_available:
             user_id = user_name
         else:
             user_id = unicode(self.x_user_id(info))
