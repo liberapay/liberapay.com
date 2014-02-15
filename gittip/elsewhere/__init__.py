@@ -278,12 +278,14 @@ class PlatformOAuth1(Platform):
 
 class PlatformOAuth2(Platform):
 
+    oauth_default_scope = None
     oauth_email_scope = None
     oauth_payment_scope = None
 
     def get_auth_session(self, state=None, token=None):
         return OAuth2Session(self.api_key, state=state, token=token,
-                             redirect_uri=self.callback_url)
+                             redirect_uri=self.callback_url,
+                             scope=self.oauth_default_scope)
 
     def get_auth_url(self, **kw):
         sess = self.get_auth_session()
