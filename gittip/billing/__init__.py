@@ -120,7 +120,7 @@ def invalidate_on_balanced(thing, balanced_account_uri):
 def clear(db, thing, username, balanced_account_uri):
     typecheck( thing, unicode
              , username, unicode
-             , balanced_account_uri, unicode
+             , balanced_account_uri, (unicode, str)
               )
     assert thing in ("credit card", "bank account"), thing
     invalidate_on_balanced(thing, balanced_account_uri)
@@ -288,7 +288,6 @@ class BalancedBankAccount(BalancedThing):
         mapper = {
             'id': 'href',
             'customer_href': 'customer.href',
-            'account_uri': 'customer.href',  # TODO: remove
             'bank_name': 'bank_name',
             'last_four': 'last_four',
         }

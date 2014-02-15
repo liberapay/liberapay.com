@@ -75,19 +75,15 @@ Gittip.payments.ba.submit = function (e) {
         routing_number: $('#routing_number').val()
     };
 
-    var dobs = [
-        $('#dob-year').val(),
-        $('#dob-month').val(),
-        $('#dob-day').val()
-    ];
-
     Gittip.payments.ba.merchantData = {
-        type: 'person',  // Oooh, may need to vary this some day?
+        //type: 'person',  // Oooh, may need to vary this some day?
         street_address: $('#address_1').val(),
         postal_code: $('#zip').val(),
         phone_number: $('#phone_number').val(),
         region: $('#state').val(),
-        dob: dobs.join('-'),
+        dob_month: $('#dob-month').val(),
+        dob_year: $('#dob-year').val(),
+        dob_day: $('#dob-day').val(),
         name: $('#name').val()
     };
     var errors = [];
@@ -123,19 +119,6 @@ Gittip.payments.ba.submit = function (e) {
     }
 
 
-    // Validate date of birth.
-    // =======================
-    // This might not be on the page if they've already verified their
-    // identity.
-
-    if (dobs[0] !== undefined) {
-        var d = new Date(dobs[0], dobs[1] - 1, dobs[2]);
-        // (1900, 2, 31) gives 3 march :P
-        if (d.getMonth() !== dobs[1] - 1)
-            errors.push('Invalid date of birth.');
-    }
-
-
     // Validate routing number.
     // ========================
 
@@ -162,7 +145,7 @@ Gittip.payments.ba.submit = function (e) {
 
 Gittip.payments.ba.handleResponse = function (response) {
     console.log('bank account response', response);
-    if (response.status != 201) {
+    if (response.status_code !== 201) {
         $('button#save').text('Save');
         var msg = response.status.toString() + " " + response.error.description;
         jQuery.ajax(
@@ -200,15 +183,8 @@ Gittip.payments.ba.handleResponse = function (response) {
         $('#delete').show();
         var messages = [data.error];
         if (data.problem == 'More Info Needed') {
-            var redirect_uri = data.redirect_uri;
-            for (var key in Gittip.payments.ba.merchantData) {
-                redirect_uri += 'merchant[' + encodeURIComponent(key) + ']'
-                    + '=' + encodeURIComponent((Gittip.payments.ba.merchantData[key])) + '&';
-            }
             messages = [ "Sorry, we couldn't verify your identity. Please "
-                       + "check, correct, and resubmit your details, or "
-                       + "step through our <a href=\"" + redirect_uri
-                       + "\">payment processor's escalation process</a>."
+                       + "check, correct, and resubmit your details."
             ];
         }
         Gittip.forms.showFeedback(data.problem, messages);
