@@ -41,6 +41,12 @@ Gittip.tips.init = function() {
             $('#payment-prompt').addClass('needed');
         else
             $('#payment-prompt').removeClass('needed');
+
+        // prompt the user if they try leaving the page before confirming their tip
+        window.onbeforeunload = same ? null : function() {
+            var action = oldAmount ? 'changed your' : 'entered a'
+            return "You've "+action+" tip but it hasn't been confirmed. Are you sure you want to leave?";
+        };
     }
 
     $('.my-tip .cancel-tip').click(function(event) {
