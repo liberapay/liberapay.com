@@ -187,7 +187,7 @@ class TestBalancedBankAccount(Harness):
         with self.assertRaises(IndexError):
             ba_account.__getitem__('invalid')
 
-        actual = ba_account['account_uri']
+        actual = ba_account['customer_href']
         expected = self.balanced_customer_href
         assert actual == expected
 
