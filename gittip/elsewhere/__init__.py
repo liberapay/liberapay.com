@@ -170,7 +170,10 @@ class Platform(object):
         if self.x_user_id.__func__ is not_available:
             user_id = user_name
         else:
-            user_id = unicode(self.x_user_id(info))
+            user_id = self.x_user_id(info)
+        assert user_id is not None
+        user_id = unicode(user_id)
+        assert len(user_id) > 0
         display_name = self.x_display_name(info, None)
         email = self.x_email(info, None)
         gravatar_id = self.x_gravatar_id(info, None)

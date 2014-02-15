@@ -21,7 +21,9 @@ class Tests(Harness):
             r = platform.extract_user_info(user_info)
             assert len(r) == 6
             assert r[0] is not None
+            assert len(r[0]) > 0
             assert r[1] is not None
+            assert len(r[1]) > 0
 
     def test_opt_in_can_change_username(self):
         account = self.make_elsewhere('twitter', 1, 'alice')

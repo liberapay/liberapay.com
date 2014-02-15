@@ -27,10 +27,8 @@ def key(k, clean=lambda a: a):
     return f
 
 
-def not_available(self, info, *default):
-    if default:
-        return default[0]
-    return None
+def not_available(self, info, default):
+    return default
 
 
 def xpath(path, attr=None, clean=lambda a: a):
