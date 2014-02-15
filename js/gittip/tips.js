@@ -43,10 +43,13 @@ Gittip.tips.init = function() {
             $('#payment-prompt').removeClass('needed');
 
         // prompt the user if they try leaving the page before confirming their tip
-        window.onbeforeunload = same ? null : function() {
-            var action = oldAmount ? 'changed your' : 'entered a'
-            return "You've "+action+" tip but it hasn't been confirmed. Are you sure you want to leave?";
-        };
+        if (same)
+            $(window).off('beforeunload.tips');
+        else
+            $(window).on('beforeunload.tips', function() {
+                var action = oldAmount ? 'changed your' : 'entered a';
+                return "You "+action+" tip but it hasn't been confirmed. Are you sure you want to leave?";
+            });
     }
 
     $('.my-tip .cancel-tip').click(function(event) {
@@ -67,6 +70,7 @@ Gittip.tips.init = function() {
     $('form.my-tip').on('reset', function() {
         $(this).removeClass('changed');
         $(this).find('.confirm-tip').prop('disabled', true);
+        $(window).off('beforeunload.tips');
     });
 
     $('form.my-tip').submit(function(event) {
