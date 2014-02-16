@@ -76,7 +76,14 @@ class Platform(object):
             msg %= self.__class__.__name__, ', '.join(missing_attrs)
             raise AttributeError(msg)
 
-    def get(self, path, sess=None, **kw):
+    def api_get(self, path, sess=None, **kw):
+        """
+        Given a `path` (e.g. /users/foo), this function sends a GET request to
+        the platform's API (e.g. https://api.github.com/users/foo).
+
+        The response is returned, after checking its status code and ratelimit
+        headers.
+        """
         if not sess:
             sess = self.get_auth_session()
         response = sess.get(self.api_url+path, **kw)
@@ -127,6 +134,9 @@ class Platform(object):
             return self.get_account_from_api(user_name)
 
     def get_account_from_api(self, user_name):
+        """Given a user_name on the platform, get the user's info from the API,
+        insert it into the database, and return an AccountElsewhere object.
+        """
         return self.upsert(*self.get_user_info(user_name))
 
     def get_account_from_db(self, user_name):
@@ -144,18 +154,25 @@ class Platform(object):
         """, (self.name, user_name), default=UnknownAccountElsewhere)
 
     def get_user_info(self, user_name, sess=None):
+        """Given a user_name on the platform, get the user's info from the API.
+        """
         try:
             path = self.api_user_info_path.format(user_name=quote(user_name))
         except KeyError:
             raise Response(404)
-        response = self.get(path, sess=sess)
+        response = self.api_get(path, sess=sess)
         return self.parse_user_info(response)
 
     def get_user_self_info(self, sess):
-        response = self.get(self.api_user_self_info_path, sess=sess)
+        """Get the authenticated user's info from the API.
+        """
+        response = self.api_get(self.api_user_self_info_path, sess=sess)
         return self.parse_user_info(response)
 
     def parse_user_info(self, response):
+        """Parse an API Response object using `self.api_format` to determine
+        the appropriate parser.
+        """
         if self.api_format == 'json':
             info = response.json()
         elif self.api_format == 'xml':
@@ -165,6 +182,14 @@ class Platform(object):
         return self.extract_user_info(info)
 
     def extract_user_info(self, info):
+        """
+        Given a user_info object of variable type (depending on the platform),
+        extract the relevant information by calling the platform's extractors
+        (`x_user_name`, `x_user_id`, etc).
+
+        Returns a 6-tuple. The first two elements (`user_id` and `user_name`)
+        are the only ones guaranteed to have non-empty values.
+        """
         info = self.x_user_info(info)
         user_name = self.x_user_name(info)
         if self.x_user_id.__func__ is not_available:
