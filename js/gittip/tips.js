@@ -52,6 +52,25 @@ Gittip.tips.init = function() {
             });
     }
 
+    // Restore the tip value if stored
+    if (localStorage.tipAfterSignIn) {
+        var data = JSON.parse(localStorage.tipAfterSignIn);
+        localStorage.removeItem('tipAfterSignIn');
+
+        if (window.location.pathname === '/'+data.tippee+'/')
+            $('input.my-tip').val(data.val);
+    }
+
+    // Store the tip value if the user hasn't signed in
+    if ($('.sign-in').length)
+        $(window).on('unload.tips', function() {
+            var tip = $('input.my-tip');
+            if (tip.hasClass('changed'))
+                localStorage.tipAfterSignIn = JSON.stringify({
+                    tippee: tip.data('tippee'), val: tip.val()
+                });
+        });
+
     $('.my-tip .cancel-tip').click(function(event) {
         event.preventDefault();
 
