@@ -79,7 +79,7 @@ nbackers = participant.get_number_of_backers()
     <h2>{{ user_name|e }} has not joined Gittip.</h2>
 
     {% if platform in website.signin_platforms or not user.ANON %}
-        <p>Is this you?
+        Is this you?
         {% if user.ANON %}
             {% call auth_button(platform.name, 'opt-in', path['user_name']) %}
                 Opt in
@@ -91,7 +91,6 @@ nbackers = participant.get_number_of_backers()
             {% endcall %}
             to your Gittip account.
         {% endif %}
-        </p>
     {% endif %}
 
     {% if user.ANON %}
