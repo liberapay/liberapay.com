@@ -63,6 +63,7 @@ else:
     <meta name="og:description" content="Gittip is a weekly gift exchange." />
     {% endif %}
     <meta name="og:image" content="{{ participant.get_img_src(200) }}" />
+    <meta name="og:image" content="/assets/gittip.opengraph.png" />
 {% endblock %}
 
 {% block scripts %}
