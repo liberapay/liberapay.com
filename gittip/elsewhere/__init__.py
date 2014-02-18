@@ -41,6 +41,25 @@ class PlatformRegistry(object):
         return iter(self.__dict__.values())
 
 
+class UserInfo(object):
+    """A simple container for a user's info.
+
+    Accessing a non-existing attribute returns `None`.
+    """
+
+    def __init__(self, **kw):
+        self.__dict__.update(kw)
+
+    def __getattr__(self, key):
+        return self.__dict__.get(key, None)
+
+    def __setattr__(self, key, value):
+        if value is None:
+            self.__dict__.pop(key, None)
+        else:
+            self.__dict__[key] = value
+
+
 class Platform(object):
 
     # "x" stands for "extract"
@@ -137,7 +156,7 @@ class Platform(object):
         """Given a user_name on the platform, get the user's info from the API,
         insert it into the database, and return an AccountElsewhere object.
         """
-        return self.upsert(*self.get_user_info(user_name))
+        return self.upsert(self.get_user_info(user_name))
 
     def get_account_from_db(self, user_name):
         """Given a user_name on the platform, return an AccountElsewhere object.
@@ -187,28 +206,30 @@ class Platform(object):
         extract the relevant information by calling the platform's extractors
         (`x_user_name`, `x_user_id`, etc).
 
-        Returns a 6-tuple. The first two elements (`user_id` and `user_name`)
-        are the only ones guaranteed to have non-empty values.
+        Returns a `UserInfo`. The `user_id` and `user_name` attributes are
+        guaranteed to have non-empty values.
         """
+        r = UserInfo()
         info = self.x_user_info(info)
-        user_name = self.x_user_name(info)
+        r.user_name = self.x_user_name(info)
         if self.x_user_id.__func__ is not_available:
-            user_id = user_name
+            r.user_id = r.user_name
         else:
-            user_id = self.x_user_id(info)
-        assert user_id is not None
-        user_id = unicode(user_id)
-        assert len(user_id) > 0
-        display_name = self.x_display_name(info, None)
-        email = self.x_email(info, None)
+            r.user_id = self.x_user_id(info)
+        assert r.user_id is not None
+        r.user_id = unicode(r.user_id)
+        assert len(r.user_id) > 0
+        r.display_name = self.x_display_name(info, None)
+        r.email = self.x_email(info, None)
         gravatar_id = self.x_gravatar_id(info, None)
-        if email and not gravatar_id:
+        if r.email and not gravatar_id:
             gravatar_id = hashlib.md5(email.strip().lower()).hexdigest()
         if gravatar_id:
-            avatar_url = 'https://www.gravatar.com/avatar/'+gravatar_id
+            r.avatar_url = 'https://www.gravatar.com/avatar/'+gravatar_id
         else:
-            avatar_url = self.x_avatar_url(info, None)
-        return user_id, user_name, display_name, email, avatar_url, info
+            r.avatar_url = self.x_avatar_url(info, None)
+        r.extra_info = info
+        return r
 
     def save_token(self, user_id, token, refresh_token=None, expires=None):
         """Saves the given access token in the database.
@@ -219,26 +240,26 @@ class Platform(object):
             WHERE platform=%s AND user_id=%s
         """, (token, refresh_token, expires, self.name, user_id))
 
-    def upsert(self, user_id, user_name, display_name, email, avatar_url, extra_info):
+    def upsert(self, i):
         """Insert or update the user's info.
         """
-        typecheck(user_id, unicode)
 
         # Clean up avatar_url
-        if avatar_url:
-            scheme, netloc, path, query, fragment = urlsplit(avatar_url)
+        if i.avatar_url:
+            scheme, netloc, path, query, fragment = urlsplit(i.avatar_url)
             fragment = ''
             if netloc.endswith('gravatar.com'):
                 query = 's=128'
-            avatar_url = urlunsplit((scheme, netloc, path, query, fragment))
+            i.avatar_url = urlunsplit((scheme, netloc, path, query, fragment))
 
         # Serialize extra_info
-        if isinstance(extra_info, ET.Element):
-            extra_info = xmltodict.parse(ET.tostring(extra_info))
-        extra_info = json.dumps(extra_info)
+        if isinstance(i.extra_info, ET.Element):
+            i.extra_info = xmltodict.parse(ET.tostring(i.extra_info))
+        i.extra_info = json.dumps(i.extra_info)
 
-        cols = 'user_id, user_name, display_name, email, avatar_url, extra_info'
-        args = (user_id, user_name, display_name, email, avatar_url, extra_info)
+        cols, vals = zip(*i.__dict__.items())
+        cols = ', '.join(cols)
+        placeholders = ', '.join(['%s']*len(vals))
 
         try:
             # Try to insert the account
@@ -249,16 +270,16 @@ class Platform(object):
                 cursor.execute("""
                     INSERT INTO elsewhere
                                 (participant, platform, {0})
-                         VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-                """.format(cols), (username, self.name)+args)
+                         VALUES (%s, %s, {1})
+                """.format(cols, placeholders), (username, self.name)+vals)
         except IntegrityError:
             # The account is already in the DB, update it instead
             username = self.db.one("""
                 UPDATE elsewhere
-                   SET ({0}) = (%s, %s, %s, %s, %s, %s)
+                   SET ({0}) = ({1})
                  WHERE platform=%s AND user_id=%s
              RETURNING participant
-            """.format(cols), args+(self.name, user_id))
+            """.format(cols, placeholders), vals+(self.name, i.user_id))
 
         # Propagate avatar_url to participant
         self.db.run("""
@@ -275,7 +296,7 @@ class Platform(object):
         """, (username,))
 
         # Now delegate to get_account_from_db
-        return self.get_account_from_db(user_name)
+        return self.get_account_from_db(i.user_name)
 
 
 class PlatformOAuth1(Platform):

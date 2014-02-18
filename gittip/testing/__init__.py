@@ -11,6 +11,7 @@ import pytz
 from aspen import resources
 from aspen.testing.client import Client
 from gittip.billing.payday import Payday
+from gittip.elsewhere import UserInfo
 from gittip.models.participant import Participant
 from gittip.security.user import User
 from gittip import wireup
@@ -82,11 +83,10 @@ class Harness(unittest.TestCase):
                 tablenames.insert(0, tablename)
 
 
-    def make_elsewhere(self, platform, user_id, user_name, display_name=None,
-                       email=None, avatar_url=None, extra_info=None):
+    def make_elsewhere(self, platform, user_id, user_name, **kw):
         platform = getattr(self.platforms, platform)
-        return platform.upsert(unicode(user_id), user_name, display_name, email,
-                               avatar_url, extra_info)
+        info = UserInfo(user_id=unicode(user_id), user_name=user_name, **kw)
+        return platform.upsert(info)
 
 
     def show_table(self, table):

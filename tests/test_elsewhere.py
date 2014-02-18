@@ -4,6 +4,7 @@ import json
 
 from mock import patch
 
+from gittip.elsewhere import UserInfo
 from gittip.models.account_elsewhere import AccountElsewhere
 from gittip.testing import Harness
 import gittip.testing.elsewhere as user_info_examples
@@ -19,11 +20,11 @@ class Tests(Harness):
         for platform in self.platforms:
             user_info = getattr(user_info_examples, platform.name)()
             r = platform.extract_user_info(user_info)
-            assert len(r) == 6
-            assert r[0] is not None
-            assert len(r[0]) > 0
-            assert r[1] is not None
-            assert len(r[1]) > 0
+            assert isinstance(r, UserInfo)
+            assert r.user_id is not None
+            assert len(r.user_id) > 0
+            assert r.user_name is not None
+            assert len(r.user_name) > 0
 
     def test_opt_in_can_change_username(self):
         account = self.make_elsewhere('twitter', 1, 'alice')
@@ -54,12 +55,13 @@ class Tests(Harness):
     def test_upsert(self):
         for platform in self.platforms:
             user_info = getattr(user_info_examples, platform.name)()
-            account = platform.upsert(*platform.extract_user_info(user_info))
+            account = platform.upsert(platform.extract_user_info(user_info))
             assert isinstance(account, AccountElsewhere)
 
     def test_user_pages(self):
+        alice = UserInfo(user_id='0', user_name='alice', is_team=False)
         for platform in self.platforms:
-            platform.get_user_info = lambda *a: ('0', 'alice', None, None, None, None)
+            platform.get_user_info = lambda *a: alice
             response = self.client.GET('/on/%s/alice/' % platform.name)
             assert response.code == 200
             assert 'has not joined' in response.body.decode('utf8')
