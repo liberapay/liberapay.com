@@ -13,6 +13,7 @@ BEGIN;
     ALTER TABLE elsewhere ADD COLUMN email text;
     ALTER TABLE elsewhere ADD COLUMN avatar_url text;
     ALTER TABLE participants ADD COLUMN avatar_url text;
+    ALTER TABLE elsewhere ADD COLUMN is_team boolean NOT NULL DEFAULT FALSE;
 
 
 
@@ -69,6 +70,10 @@ BEGIN;
                 LIMIT 1
            );
 
+    -- Extract is_team from user_info
+    UPDATE elsewhere SET is_team = true WHERE platform = 'bitbucket' AND user_info->'is_team' = 'True';
+    UPDATE elsewhere SET is_team = true WHERE platform = 'github' AND lower(user_info->'type') = 'organization';
+
 
 
 -- Drop old columns and add new ones
@@ -108,6 +113,7 @@ BEGIN;
     , avatar_url    text
     , extra_info    json
     , is_locked     boolean
+    , is_team       boolean
     , participant   participants
      ); -- If Postgres had type inheritance this would be even awesomer.
 
@@ -123,6 +129,7 @@ BEGIN;
              , $1.avatar_url
              , $1.extra_info
              , $1.is_locked
+             , $1.is_team
              , participants.*::participants
           FROM participants
          WHERE participants.username = $1.participant

@@ -70,6 +70,7 @@ class Platform(object):
     x_email = not_available
     x_gravatar_id = not_available
     x_avatar_url = not_available
+    x_is_team = not_available
 
     required_attrs = ( 'account_url'
                      , 'display_name'
@@ -228,6 +229,7 @@ class Platform(object):
             r.avatar_url = 'https://www.gravatar.com/avatar/'+gravatar_id
         else:
             r.avatar_url = self.x_avatar_url(info, None)
+        r.is_team = self.x_is_team(info, False)
         r.extra_info = info
         return r
 

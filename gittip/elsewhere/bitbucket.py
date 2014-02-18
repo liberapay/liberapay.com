@@ -26,3 +26,4 @@ class Bitbucket(PlatformOAuth1):
     x_display_name = key('display_name')
     x_email = not_available
     x_avatar_url = key('avatar')
+    x_is_team = key('is_team')
