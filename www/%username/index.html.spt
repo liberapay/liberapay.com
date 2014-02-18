@@ -55,7 +55,7 @@ else:
     <link rel="payment" type="text/html" title="Give weekly gift on Gittip" href="https://www.gittip.com/{{ username }}/" />
     <meta name="twitter:card" content="summary" />
     <meta name="og:url" content="https://www.gittip.com/{{ username }}/" />
-    <meta name="og:type" content="website" />
+    <meta name="og:type" content="profile" />
     <meta name="og:title" content="{{ participant.get_og_title() }}" />
     {% if participant.statement %}
     <meta name="og:description" content="{{ _clip(I_AM + " " + MAKING + " " + participant.statement, 200)|e }}" />
