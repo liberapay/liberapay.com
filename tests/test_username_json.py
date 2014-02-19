@@ -7,45 +7,45 @@ from gittip.testing import Harness
 
 class Tests(Harness):
 
-    def change_username(self, new_username, auth_as='alice', expecting_error=False):
+    def change_username(self, new_username, auth_as='alice', as_json=True):
         self.make_participant('alice') if auth_as is not None else ''
-        method = self.client.POST if not expecting_error else self.client.PxST
-        return method("/alice/username.json", {'username': new_username}, auth_as=auth_as)
-
+        r = self.client.POST('/alice/username.json', {'username': new_username},
+                                                     auth_as=auth_as,
+                                                     raise_immediately=False)
+        return r.code, json.loads(r.body) if as_json else r.body
 
     def test_participant_can_change_their_username(self):
-        response = self.change_username("bob")
-        actual = json.loads(response.body)['username']
-        assert actual == "bob"
+        code, body = self.change_username("bob")
+        assert code == 200
+        assert body['username'] == "bob"
 
     def test_anonymous_gets_404(self):
-        response = self.change_username("bob", auth_as=None, expecting_error=True)
-        assert response.code == 404
+        code, body = self.change_username("bob", auth_as=None, as_json=False)
+        assert code == 404
 
     def test_empty(self):
-        response = self.change_username('      ', expecting_error=True)
-        assert response.code == 400
-        assert response.body == "You need to provide a username!"
+        code, body = self.change_username('      ')
+        assert code == 400
+        assert body['error_message_long'] == "You need to provide a username!"
 
     def test_invalid(self):
-        response = self.change_username("§".encode('utf8'), expecting_error=True)
-        assert response.code == 400
-        assert response.body == "The username '§' contains invalid characters."
+        code, body = self.change_username("§".encode('utf8'))
+        assert code == 400
+        assert body['error_message_long'] == "The username '§' contains invalid characters."
 
     def test_restricted_username(self):
-        response = self.change_username("assets", expecting_error=True)
-        assert response.code == 400
-        assert response.body == "The username 'assets' is restricted."
+        code, body = self.change_username("assets")
+        assert code == 400
+        assert body['error_message_long'] == "The username 'assets' is restricted."
 
     def test_unavailable(self):
         self.make_participant("bob")
-        response = self.change_username("bob", expecting_error=True)
-        assert response.code == 400
-        assert response.body == "The username 'bob' is already taken."
+        code, body = self.change_username("bob")
+        assert code == 400
+        assert body['error_message_long'] == "The username 'bob' is already taken."
 
     def test_too_long(self):
-        self.make_participant("bob")
         username = "I am way too long, and you know it, and the American people know it."
-        response = self.change_username(username, expecting_error=True)
-        assert response.code == 400
-        assert response.body == "The username '%s' is too long." % username
+        code, body = self.change_username(username)
+        assert code == 400
+        assert body['error_message_long'] == "The username '%s' is too long." % username
