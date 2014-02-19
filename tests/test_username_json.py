@@ -25,23 +25,27 @@ class Tests(Harness):
     def test_empty(self):
         response = self.change_username('      ', expecting_error=True)
         assert response.code == 400
+        assert response.body == "You need to provide a username!"
 
     def test_invalid(self):
-        response = self.change_username("\u2034".encode('utf8'), expecting_error=True)
+        response = self.change_username("§".encode('utf8'), expecting_error=True)
         assert response.code == 400
+        assert response.body == "The username '§' contains invalid characters."
 
     def test_restricted_username(self):
         response = self.change_username("assets", expecting_error=True)
         assert response.code == 400
+        assert response.body == "The username 'assets' is restricted."
 
     def test_unavailable(self):
         self.make_participant("bob")
         response = self.change_username("bob", expecting_error=True)
         assert response.code == 400
+        assert response.body == "The username 'bob' is already taken."
 
     def test_too_long(self):
         self.make_participant("bob")
-        response = self.change_username("I am way too long, and you know it, "
-                                        "and I know it, and the American "
-                                        "people know it.", expecting_error=True)
+        username = "I am way too long, and you know it, and the American people know it."
+        response = self.change_username(username, expecting_error=True)
         assert response.code == 400
+        assert response.body == "The username '%s' is too long." % username
