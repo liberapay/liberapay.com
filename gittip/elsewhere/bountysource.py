@@ -26,6 +26,8 @@ class Bountysource(Platform):
     api_format = 'json'
     api_user_info_path = '/users/{user_id}'
     api_user_self_info_path = '/user'
+
+    # User info extractors
     x_user_id = key('id')
     x_user_name = key('display_name')
     x_display_name = not_available

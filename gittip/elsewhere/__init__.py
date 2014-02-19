@@ -155,6 +155,38 @@ class Platform(object):
 
         return response
 
+    def extract_user_info(self, info):
+        """
+        Given a user_info object of variable type (depending on the platform),
+        extract the relevant information by calling the platform's extractors
+        (`x_user_name`, `x_user_id`, etc).
+
+        Returns a `UserInfo`. The `user_id` and `user_name` attributes are
+        guaranteed to have non-empty values.
+        """
+        r = UserInfo()
+        info = self.x_user_info(info)
+        r.user_name = self.x_user_name(info)
+        if self.x_user_id.__func__ is not_available:
+            r.user_id = r.user_name
+        else:
+            r.user_id = self.x_user_id(info)
+        assert r.user_id is not None
+        r.user_id = unicode(r.user_id)
+        assert len(r.user_id) > 0
+        r.display_name = self.x_display_name(info, None)
+        r.email = self.x_email(info, None)
+        gravatar_id = self.x_gravatar_id(info, None)
+        if r.email and not gravatar_id:
+            gravatar_id = hashlib.md5(email.strip().lower()).hexdigest()
+        if gravatar_id:
+            r.avatar_url = 'https://www.gravatar.com/avatar/'+gravatar_id
+        else:
+            r.avatar_url = self.x_avatar_url(info, None)
+        r.is_team = self.x_is_team(info, False)
+        r.extra_info = info
+        return r
+
     def get_account(self, user_name):
         """Given a user_name on the platform, return an AccountElsewhere object.
         """
@@ -198,38 +230,6 @@ class Platform(object):
         """
         r = self.api_get(self.api_user_self_info_path, sess=sess)
         return self.extract_user_info(self.api_parser(r))
-
-    def extract_user_info(self, info):
-        """
-        Given a user_info object of variable type (depending on the platform),
-        extract the relevant information by calling the platform's extractors
-        (`x_user_name`, `x_user_id`, etc).
-
-        Returns a `UserInfo`. The `user_id` and `user_name` attributes are
-        guaranteed to have non-empty values.
-        """
-        r = UserInfo()
-        info = self.x_user_info(info)
-        r.user_name = self.x_user_name(info)
-        if self.x_user_id.__func__ is not_available:
-            r.user_id = r.user_name
-        else:
-            r.user_id = self.x_user_id(info)
-        assert r.user_id is not None
-        r.user_id = unicode(r.user_id)
-        assert len(r.user_id) > 0
-        r.display_name = self.x_display_name(info, None)
-        r.email = self.x_email(info, None)
-        gravatar_id = self.x_gravatar_id(info, None)
-        if r.email and not gravatar_id:
-            gravatar_id = hashlib.md5(email.strip().lower()).hexdigest()
-        if gravatar_id:
-            r.avatar_url = 'https://www.gravatar.com/avatar/'+gravatar_id
-        else:
-            r.avatar_url = self.x_avatar_url(info, None)
-        r.is_team = self.x_is_team(info, False)
-        r.extra_info = info
-        return r
 
     def save_token(self, user_id, token, refresh_token=None, expires=None):
         """Saves the given access token in the database.

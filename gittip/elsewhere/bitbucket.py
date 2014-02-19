@@ -20,6 +20,8 @@ class Bitbucket(PlatformOAuth1):
     api_url = 'https://bitbucket.org/api/1.0'
     api_user_info_path = '/users/{user_name}?pagelen=100'
     api_user_self_info_path = '/user'
+
+    # User info extractors
     x_user_info = key('user')
     x_user_id = not_available  # No immutable id. :-/
     x_user_name = key('username')

@@ -23,6 +23,8 @@ class Venmo(PlatformOAuth2):
     api_url = 'https://api.venmo.com/v1'
     api_user_info_path = '/users/{user_id}'
     api_user_self_info_path = '/me'
+
+    # User info extractors
     x_user_id = key('id')
     x_user_name = key('username')
     x_display_name = key('display_name')

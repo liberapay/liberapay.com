@@ -16,6 +16,8 @@ class OpenStreetMap(PlatformOAuth1):
     api_format = 'xml'
     api_user_info_path = '/user/{user_id}'
     api_user_self_info_path = '/user/details'
+
+    # User info extractors
     x_user_id = xpath('./user', attr='id')
     x_user_name = xpath('./user', attr='display_name')
     x_display_name = x_user_name

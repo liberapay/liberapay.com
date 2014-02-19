@@ -21,6 +21,8 @@ class Twitter(PlatformOAuth1):
     api_user_info_path = '/users/show.json?screen_name={user_name}'
     api_user_self_info_path = '/account/verify_credentials.json'
     ratelimit_headers_prefix = 'x-rate-limit-'
+
+    # User info extractors
     x_user_id = key('id')
     x_user_name = key('screen_name')
     x_display_name = key('name')

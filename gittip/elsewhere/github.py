@@ -22,6 +22,8 @@ class GitHub(PlatformOAuth2):
     api_user_info_path = '/users/{user_name}'
     api_user_self_info_path = '/user'
     ratelimit_headers_prefix = 'x-ratelimit-'
+
+    # User info extractors
     x_user_id = key('id')
     x_user_name = key('login')
     x_display_name = key('name')
