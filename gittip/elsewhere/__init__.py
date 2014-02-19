@@ -89,6 +89,16 @@ class Platform(object):
             self.auth_url = auth_url
         elif not getattr(self, 'auth_url', None):
             self.auth_url = self.api_url
+
+        # Determine the appropriate response parser using `self.api_format`
+        api_format = getattr(self, 'api_format', None)
+        if api_format == 'json':
+            self.api_parser = lambda r: r.json()
+        elif api_format == 'xml':
+            self.api_parser = lambda r: ET.fromstring(r.content)
+        elif api_format:
+            raise ValueError('unknown API format: '+str(api_format))
+
         # Make sure the subclass was implemented properly.
         missing_attrs = [a for a in self.required_attrs if not hasattr(self, a)]
         if missing_attrs:
@@ -180,26 +190,14 @@ class Platform(object):
             path = self.api_user_info_path.format(user_name=quote(user_name))
         except KeyError:
             raise Response(404)
-        response = self.api_get(path, sess=sess)
-        return self.parse_user_info(response)
+        info = self.api_parser(self.api_get(path, sess=sess))
+        return self.extract_user_info(info)
 
     def get_user_self_info(self, sess):
         """Get the authenticated user's info from the API.
         """
-        response = self.api_get(self.api_user_self_info_path, sess=sess)
-        return self.parse_user_info(response)
-
-    def parse_user_info(self, response):
-        """Parse an API Response object using `self.api_format` to determine
-        the appropriate parser.
-        """
-        if self.api_format == 'json':
-            info = response.json()
-        elif self.api_format == 'xml':
-            info = ET.fromstring(response.content)
-        else:
-            raise ValueError('unknown API format: %(api_format)s' % self)
-        return self.extract_user_info(info)
+        r = self.api_get(self.api_user_self_info_path, sess=sess)
+        return self.extract_user_info(self.api_parser(r))
 
     def extract_user_info(self, info):
         """
