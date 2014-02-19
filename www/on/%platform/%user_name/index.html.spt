@@ -17,7 +17,7 @@ if account is None:
 if account.participant.is_claimed:
     request.redirect('/%s/' % account.participant.username)
 
-title = user_name = account.user_name
+title = username = user_name = account.user_name
 locked = account.is_locked
 participant = account.participant
 nbackers = participant.get_number_of_backers()
