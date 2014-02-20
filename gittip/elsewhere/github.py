@@ -2,6 +2,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from gittip.elsewhere import PlatformOAuth2
 from gittip.elsewhere._extractors import key
+from gittip.elsewhere._paginators import header_links_paginator
 
 
 class GitHub(PlatformOAuth2):
@@ -18,6 +19,7 @@ class GitHub(PlatformOAuth2):
 
     # API attributes
     api_format = 'json'
+    api_paginator = header_links_paginator()
     api_url = 'https://api.github.com'
     api_user_info_path = '/users/{user_name}'
     api_user_self_info_path = '/user'

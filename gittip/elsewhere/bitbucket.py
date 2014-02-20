@@ -2,6 +2,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from gittip.elsewhere import PlatformOAuth1
 from gittip.elsewhere._extractors import key, not_available
+from gittip.elsewhere._paginators import keys_paginator
 
 
 class Bitbucket(PlatformOAuth1):
@@ -17,6 +18,7 @@ class Bitbucket(PlatformOAuth1):
 
     # API attributes
     api_format = 'json'
+    api_paginator = keys_paginator(prev='previous')
     api_url = 'https://bitbucket.org/api/1.0'
     api_user_info_path = '/users/{user_name}?pagelen=100'
     api_user_self_info_path = '/user'
