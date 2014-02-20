@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+from __future__ import absolute_import, division, print_function, unicode_literals
 
 import balanced
 import mock
@@ -6,68 +6,11 @@ import mock
 from gittip import billing
 from gittip.security import authentication
 from gittip.testing import Harness
+from gittip.testing.balanced import BalancedHarness
 from gittip.models.participant import Participant
 
 
-def setUp_balanced(o):
-    o.balanced_api_key = balanced.APIKey().save().secret
-    balanced.configure(o.balanced_api_key)
-    mp = balanced.Marketplace.my_marketplace
-    if not mp:
-        mp = balanced.Marketplace().save()
-    o.balanced_marketplace = mp
-
-
-def setUp_balanced_resources(o):
-    o.balanced_customer_href = unicode(balanced.Customer().save().href)
-    o.card_href = unicode(balanced.Card(
-        number='4111111111111111',
-        expiration_month=10,
-        expiration_year=2020,
-        address={
-            'line1': "123 Main Street",
-            'state': 'Confusion',
-            'postal_code': '90210',
-        },
-        # gittip stores some of the address data in the meta fields,
-        # continue using them to support backwards compatibility
-        meta={
-            'address_2': 'Box 2',
-            'city_town': '',
-            'region': 'Confusion',
-        }
-    ).save().href)
-    o.bank_account_href = unicode(balanced.BankAccount(
-        name='Homer Jay',
-        account_number='112233a',
-        routing_number='121042882',
-    ).save().href)
-
-
-class TestBillingBase(Harness):
-
-    @classmethod
-    def setUpClass(cls):
-        super(TestBillingBase, cls).setUpClass()
-        setUp_balanced(cls)
-
-    def setUp(self):
-        Harness.setUp(self)
-        setUp_balanced_resources(self)
-        self.alice = self.make_participant('alice', elsewhere='github')
-
-
-class TestBalancedCard(Harness):
-
-    @classmethod
-    def setUpClass(cls):
-        super(TestBalancedCard, cls).setUpClass()
-        setUp_balanced(cls)
-
-    def setUp(self):
-        Harness.setUp(self)
-        setUp_balanced_resources(self)
-
+class TestBalancedCard(BalancedHarness):
 
     def test_balanced_card_basically_works(self):
         balanced.Card.fetch(self.card_href) \
@@ -124,6 +67,7 @@ class TestBalancedCard(Harness):
 
 
 class TestStripeCard(Harness):
+
     @mock.patch('stripe.Customer')
     def test_stripe_card_basically_works(self, sc):
         active_card = {}
@@ -164,17 +108,7 @@ class TestStripeCard(Harness):
         assert actual == expected
 
 
-class TestBalancedBankAccount(Harness):
-
-    @classmethod
-    def setUpClass(cls):
-        super(TestBalancedBankAccount, cls).setUpClass()
-        setUp_balanced(cls)
-
-    def setUp(self):
-        Harness.setUp(self)
-        setUp_balanced_resources(self)
-
+class TestBalancedBankAccount(BalancedHarness):
 
     def test_balanced_bank_account(self):
         balanced.BankAccount.fetch(self.bank_account_href)\
@@ -197,7 +131,7 @@ class TestBalancedBankAccount(Harness):
         assert not bank_account['id']
 
 
-class TestBillingAssociate(TestBillingBase):
+class TestBillingAssociate(BalancedHarness):
 
     def test_associate_valid_card(self):
         billing.associate(self.db, u"credit card", 'alice', None, self.card_href)
@@ -257,7 +191,7 @@ class TestBillingAssociate(TestBillingBase):
         assert alice.last_ach_result == '404 Client Error: NOT FOUND'
 
 
-class TestBillingClear(TestBillingBase):
+class TestBillingClear(BalancedHarness):
 
     def test_clear(self):
 
@@ -309,7 +243,8 @@ class TestBillingClear(TestBillingBase):
         assert user.participant.balanced_account_uri
 
 
-class TestBillingStoreError(TestBillingBase):
+class TestBillingStoreError(BalancedHarness):
+
     def test_store_error_stores_bill_error(self):
         billing.store_error(self.db, u"credit card", "alice", "cheese is yummy")
         rec = self.db.one("select * from participants where "
