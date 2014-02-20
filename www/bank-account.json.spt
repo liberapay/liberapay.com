@@ -20,18 +20,18 @@ out = {}
 redirect_to = base_url + '/bank-account-complete.html'
 
 if body.get('action') == 'delete':
-    billing.clear(website.db, u"bank account", user.participant.username, user.participant.balanced_account_uri)
+    billing.clear(website.db, u"bank account", user.participant.username, user.participant.balanced_customer_href)
 elif body.get('action') == 'store-error':
     billing.store_error(website.db, u"bank account", user.participant.username, body['msg'])
 else:
 
     # Get a balanced account.
     # =======================
-    # This will create one if user.balanced_account_uri is None.
+    # This will create one if user.balanced_customer_href is None.
 
     balanced_account = billing.get_balanced_account( website.db
                                                    , user.participant.username
-                                                   , user.participant.balanced_account_uri
+                                                   , user.participant.balanced_customer_href
                                                     )
 
 

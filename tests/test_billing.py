@@ -230,7 +230,7 @@ class TestBillingAssociate(TestBillingBase):
         billing.associate(self.db, u"credit card", 'alice', None, self.card_href)
 
         user = authentication.User.from_username('alice')
-        customer = balanced.Customer.fetch(user.participant.balanced_account_uri)
+        customer = balanced.Customer.fetch(user.participant.balanced_customer_href)
         cards = customer.cards.all()
         assert len(cards) == 1
         assert cards[0].href == self.card_href
@@ -294,7 +294,7 @@ class TestBillingClear(TestBillingBase):
         MURKY = """\
 
             UPDATE participants
-               SET balanced_account_uri='not null'
+               SET balanced_customer_href='not null'
                  , last_bill_result='ooga booga'
              WHERE username=%s
 
@@ -309,7 +309,7 @@ class TestBillingClear(TestBillingBase):
 
         user = authentication.User.from_username('alice')
         assert not user.participant.last_bill_result
-        assert user.participant.balanced_account_uri
+        assert user.participant.balanced_customer_href
 
     def test_clear_bank_account(self):
         balanced.BankAccount.fetch(self.bank_account_href)\
@@ -318,7 +318,7 @@ class TestBillingClear(TestBillingBase):
         MURKY = """\
 
             UPDATE participants
-               SET balanced_account_uri='not null'
+               SET balanced_customer_href='not null'
                  , last_ach_result='ooga booga'
              WHERE username=%s
 
@@ -333,7 +333,7 @@ class TestBillingClear(TestBillingBase):
 
         user = authentication.User.from_username('alice')
         assert not user.participant.last_ach_result
-        assert user.participant.balanced_account_uri
+        assert user.participant.balanced_customer_href
 
 
 class TestBillingStoreError(TestBillingBase):

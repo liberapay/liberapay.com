@@ -73,7 +73,7 @@ def fake_participant(db, number="singular", is_admin=False):
                , anonymous_giving=(random.randrange(5) == 0)
                , anonymous_receiving=(random.randrange(5) == 0)
                , goal=fake_balance()
-               , balanced_account_uri=faker.uri()
+               , balanced_customer_href=faker.uri()
                , last_ach_result=''
                , is_suspicious=False
                , last_bill_result=''  # Needed to not be suspicious

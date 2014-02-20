@@ -7,20 +7,20 @@ from gittip import billing, MONTHS
 from gittip.elsewhere import github
 
 [-----------------------------------------------------------------------------]
-balanced_account_uri = None
+balanced_customer_href = None
 account = None
 bank_account = None
 status = ". . ."
 
 if not user.ANON:
-    balanced_account_uri = user.participant.balanced_account_uri
+    balanced_customer_href = user.participant.balanced_customer_href
 
     status = "not connected"
-    if balanced_account_uri:
+    if balanced_customer_href:
         working = user.participant.last_ach_result == ""
         status = "connected" if working else "not connected"
 
-        bank_account = billing.BalancedBankAccount(balanced_account_uri)
+        bank_account = billing.BalancedBankAccount(balanced_customer_href)
 
     username = user.participant.username
 
@@ -69,7 +69,7 @@ title = "Bank Account"
 
 
     <style>
-        {% if not balanced_account_uri %}
+        {% if not balanced_customer_href %}
         #delete {
             display: none;
         }
