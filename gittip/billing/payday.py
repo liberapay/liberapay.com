@@ -626,10 +626,6 @@ class Payday(object):
                 return  # not in Balanced
 
             customer = balanced.Customer.fetch(balanced_customer_href)
-            if customer.merchant_status == 'underwritten':
-                log("%s is not a merchant." % participant.username)
-                return  # not a merchant
-
             customer.bank_accounts.one()\
                                   .credit(amount=cents,
                                           description=participant.username)
