@@ -243,6 +243,35 @@ class TestPaydayChargeOnBalanced(PaydayHarness):
                                                 )
         assert actual == (D('10.61'), D('0.61'), '402 Client Error: PAYMENT REQUIRED')
 
+    def test_charge_on_balanced_handles_MultipleFoundError(self):
+        card = balanced.Card(
+            number='4242424242424242',
+            expiration_year=2020,
+            expiration_month=12
+        ).save()
+        card.associate_to_customer(self.balanced_customer_href)
+
+        card = balanced.Card(
+            number='4242424242424242',
+            expiration_year=2030,
+            expiration_month=12
+        ).save()
+        card.associate_to_customer(self.balanced_customer_href)
+
+        actual = self.payday.charge_on_balanced( 'whatever username'
+                                               , self.balanced_customer_href
+                                               , D('10.00')
+                                                )
+        assert actual == (D('10.61'), D('0.61'), 'MultipleResultsFound()')
+
+    def test_charge_on_balanced_handles_NotFoundError(self):
+        customer_with_no_card = unicode(balanced.Customer().save().href)
+        actual = self.payday.charge_on_balanced( 'whatever username'
+                                               , customer_with_no_card
+                                               , D('10.00')
+                                                )
+        assert actual == (D('10.61'), D('0.61'), 'NoResultFound()')
+
 
 class TestBillingCharges(PaydayHarness):
     BALANCED_CUSTOMER_HREF = '/customers/CU123123123'
