@@ -1,4 +1,5 @@
-from __future__ import print_function, unicode_literals
+from __future__ import absolute_import, division, print_function, unicode_literals
+
 from decimal import Decimal
 from datetime import datetime, timedelta
 
@@ -11,21 +12,20 @@ from gittip import billing
 from gittip.billing.payday import Payday, skim_credit
 from gittip.models.participant import Participant
 from gittip.testing import Harness
+from gittip.testing.balanced import BalancedHarness
 
-from test_billing import TestBillingBase
 
-
-class TestPaydayBase(TestBillingBase):
+class PaydayHarness(BalancedHarness):
 
     def setUp(self):
-        TestBillingBase.setUp(self)
+        BalancedHarness.setUp(self)
         self.payday = Payday(self.db)
 
     def fetch_payday(self):
         return self.db.one("SELECT * FROM paydays", back_as=dict)
 
 
-class TestPaydayCharge(TestPaydayBase):
+class TestPaydayCharge(PaydayHarness):
     STRIPE_CUSTOMER_ID = 'cus_deadbeef'
 
     def get_numbers(self):
@@ -196,7 +196,7 @@ class TestPaydayCharge(TestPaydayBase):
         assert carl_debits[0].description == 'carl'
 
 
-class TestBillingCharges(TestPaydayBase):
+class TestBillingCharges(PaydayHarness):
     BALANCED_CUSTOMER_HREF = '/customers/CU123123123'
     BALANCED_TOKEN = u'/cards/CU123123123'
 
@@ -293,12 +293,12 @@ class TestBillingCharges(TestPaydayBase):
         assert msg == '402 Client Error: PAYMENT REQUIRED'
 
 
-class TestPrepHit(TestPaydayBase):
+class TestPrepHit(PaydayHarness):
 
     ## XXX Consider turning _prep_hit in to a class method
     #@classmethod
     #def setUpClass(cls):
-    #    TestPaydayBase.setUpClass()
+    #    PaydayHarness.setUpClass()
     #    cls.payday = Payday(mock.Mock())  # Mock out the DB connection
 
     def prep(self, amount):
@@ -373,7 +373,7 @@ class TestPrepHit(TestPaydayBase):
         assert actual == expected
 
 
-class TestBillingPayday(TestPaydayBase):
+class TestBillingPayday(PaydayHarness):
     BALANCED_CUSTOMER_HREF = '/customers/CU123123123'
 
     def test_move_pending_to_balance_for_teams_does_so(self):
@@ -643,9 +643,9 @@ class TestBillingPayday(TestPaydayBase):
         assert end.call_count
 
 
-class TestBillingTransfer(TestPaydayBase):
+class TestBillingTransfer(PaydayHarness):
     def setUp(self):
-        TestPaydayBase.setUp(self)
+        PaydayHarness.setUp(self)
         self.payday.start()
         self.tipper = self.make_participant('lgtest')
         #self.balanced_account_uri = '/v1/marketplaces/M123/accounts/A123'
