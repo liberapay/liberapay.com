@@ -39,7 +39,8 @@ class BalancedHarness(Harness):
                 'city_town': '',
                 'region': 'Confusion',
             }
-        ).save().href)
+        ).save().href) # XXX Why don't we actually associate this with the customer? See XXX in
+                       # test_billing_payday.TestPaydayChargeOnBalanced.
         self.bank_account_href = unicode(balanced.BankAccount(
             name='Homer Jay',
             account_number='112233a',
