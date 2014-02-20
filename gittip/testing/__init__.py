@@ -8,6 +8,7 @@ from decimal import Decimal
 from os.path import join, dirname, realpath
 
 import pytz
+import vcr
 from aspen import resources
 from aspen.testing.client import Client
 from gittip.billing.payday import Payday
@@ -21,6 +22,7 @@ TOP = realpath(join(dirname(dirname(__file__)), '..'))
 SCHEMA = open(join(TOP, "schema.sql")).read()
 WWW_ROOT = str(realpath(join(TOP, 'www')))
 PROJECT_ROOT = str(TOP)
+FIXTURES_ROOT = join(TOP, 'tests', 'fixtures')
 
 
 DUMMY_GITHUB_JSON = u'{"html_url":"https://github.com/whit537","type":"User",'\
@@ -106,6 +108,32 @@ class Harness(unittest.TestCase):
         cls.tablenames = cls.db.all("SELECT tablename FROM pg_tables "
                                     "WHERE schemaname='public'")
         cls.seq = 0
+        cls.setUpVCR()
+
+
+    @classmethod
+    def setUpVCR(cls):
+        """Set up VCR.
+
+        We use the VCR library to freeze API calls. Frozen calls are stored in
+        tests/fixtures/ for your convenience (otherwise your first test run
+        would take fooooorrr eeeevvveeerrrr). If you find that an API call has
+        drifted from our frozen version of it, simply remove that fixture file
+        and rerun. The VCR library should recreate the fixture with the new
+        information, and you can commit that with your updated tests.
+
+        """
+        cls.vcr = vcr.VCR(
+            cassette_library_dir = FIXTURES_ROOT,
+            record_mode = 'once',
+            match_on = ['url', 'method'],
+        )
+        cls.vcr_cassette = cls.vcr.use_cassette('{}.yml'.format(cls.__name__)).__enter__()
+
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.vcr_cassette.__exit__(None, None, None)
 
 
     def setUp(self):

@@ -1,10 +1,7 @@
 from __future__ import unicode_literals
 
-import os
-
 import balanced
 import mock
-import vcr
 
 from gittip import billing
 from gittip.security import authentication
@@ -13,12 +10,6 @@ from gittip.models.participant import Participant
 
 
 def setUp_balanced(o):
-    o.vcr = vcr.VCR(
-        cassette_library_dir = os.path.dirname(os.path.realpath(__file__)) + '/fixtures/',
-        record_mode = 'once',
-        match_on = ['url', 'method'],
-    )
-    o.vcr_cassette = o.vcr.use_cassette('{}.yml'.format(o.__name__)).__enter__()
     o.balanced_api_key = balanced.APIKey().save().secret
     balanced.configure(o.balanced_api_key)
     mp = balanced.Marketplace.my_marketplace
@@ -53,21 +44,12 @@ def setUp_balanced_resources(o):
     ).save().href)
 
 
-def tearDown_balanced(o):
-    o.vcr_cassette.__exit__(None, None, None)
-
-
 class TestBillingBase(Harness):
 
     @classmethod
     def setUpClass(cls):
         super(TestBillingBase, cls).setUpClass()
         setUp_balanced(cls)
-
-    @classmethod
-    def tearDownClass(cls):
-        tearDown_balanced(cls)
-        super(TestBillingBase, cls).tearDownClass()
 
     def setUp(self):
         Harness.setUp(self)
@@ -86,10 +68,6 @@ class TestBalancedCard(Harness):
         Harness.setUp(self)
         setUp_balanced_resources(self)
 
-    @classmethod
-    def tearDownClass(cls):
-        tearDown_balanced(cls)
-        super(TestBalancedCard, cls).tearDownClass()
 
     def test_balanced_card_basically_works(self):
         balanced.Card.fetch(self.card_href) \
@@ -196,11 +174,6 @@ class TestBalancedBankAccount(Harness):
     def setUp(self):
         Harness.setUp(self)
         setUp_balanced_resources(self)
-
-    @classmethod
-    def tearDownClass(cls):
-        tearDown_balanced(cls)
-        super(TestBalancedBankAccount, cls).tearDownClass()
 
 
     def test_balanced_bank_account(self):
