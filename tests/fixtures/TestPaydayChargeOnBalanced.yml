@@ -14,25 +14,25 @@
     protocol: https
   response:
     body: {string: "{\n  \"links\": {},\n  \"api_keys\": [\n    {\n      \"links\":
-        {},\n      \"created_at\": \"2014-02-20T18:20:04.124726Z\",\n      \"secret\":
-        \"ak-test-16bOtWlngu3TNUiob5rINU4284rqQkyuP\",\n      \"href\": \"/api_keys/AK4ORMviF1nPjrTnBCUlLsxF\",\n
-        \     \"meta\": {},\n      \"id\": \"AK4ORMviF1nPjrTnBCUlLsxF\"\n    }\n  ]\n}"}
-    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:20:04
-        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHM9e598cb49a5b11e3aed402a1fe52a36c\r\n",
-      "x-balanced-host: balanced-api-06\r\n", "x-balanced-marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
+        {},\n      \"created_at\": \"2014-02-20T18:50:20.577326Z\",\n      \"secret\":
+        \"ak-test-1UfxkpB6R8pMvC594jfyjsT2USB86W0Dw\",\n      \"href\": \"/api_keys/AK6BCtB7slo3kaWvJpkNrRk4\",\n
+        \     \"meta\": {},\n      \"id\": \"AK6BCtB7slo3kaWvJpkNrRk4\"\n    }\n  ]\n}"}
+    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:50:20
+        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMd90a3a309a5f11e3a40502a1fe52a36c\r\n",
+      "x-balanced-host: balanced-api-01\r\n", "x-balanced-marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
       "x-balanced-merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "x-balanced-revision:
         1.1\r\n", "x-balanced-software-build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
-      "X-Midlr-Version: 2\r\n", "x-newrelic-app-data: PxQFWFNXCQYTVVhWAwQDVUYdFhE1AwE2QgNWEVlbQFtcCxYxSBVbDQoZVA4IF0pcXAgEEBhQRw87WlNKEUgAEFUDTAcaFBQCH0UJTwNYBFdRBQdXVFcLCwlSVVoDHRdUSBEUAlICUlsFBA4BDVwGUVBTAUMdQVUDCEVSPA==\r\n",
+      "X-Midlr-Version: 2\r\n", "x-newrelic-app-data: PxQFWFNXCQYTVVhWAwQDVUYdFhE1AwE2QgNWEVlbQFtcCxYxSBVbDQoZVA4IF0pcXAgEEBhQRw87WlNKEUgAEFUDTAcaFBQCH0UJTwNUAFRSBw9WVloNBQRWUVsbEQVKRBNVClpRBQYIVA5VCAABBQZWG00RB1IOF1Nq\r\n",
       "Content-Length: 290\r\n", "Connection: keep-alive\r\n"]
     status: {code: 201, message: CREATED}
 - request: !!python/object:vcr.request.Request
     body: null
     headers: !!python/object/apply:__builtin__.frozenset
-    - - !!python/tuple [content-type, !!python/unicode application/json;revision=1.1]
-      - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
+    - - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xVWZ4a3BCNlI4cE12QzU5NGpmeWpzVDJVU0I4NlcwRHc6Tm9uZQ==]
+      - !!python/tuple [content-type, !!python/unicode application/json;revision=1.1]
       - !!python/tuple [accept, !!python/unicode application/vnd.api+json;revision=1.1]
       - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
-      - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xNmJPdFdsbmd1M1ROVWlvYjVySU5VNDI4NHJxUWt5dVA6Tm9uZQ==]
+      - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
     host: api.balancedpayments.com
     method: GET
     path: /marketplaces?limit=25&offset=0
@@ -43,7 +43,7 @@
         \   \"next\": null,\n    \"href\": \"/marketplaces?limit=25&offset=0\",\n
         \   \"limit\": 25,\n    \"offset\": 0,\n    \"previous\": null,\n    \"total\":
         1,\n    \"first\": \"/marketplaces?limit=25&offset=0\"\n  },\n  \"marketplaces\":
-        [\n    {\n      \"in_escrow\": 15211,\n      \"domain_url\": \"example.com\",\n
+        [\n    {\n      \"in_escrow\": 31897,\n      \"domain_url\": \"example.com\",\n
         \     \"name\": \"Gittip Test Marketplace\",\n      \"links\": {\n        \"owner_customer\":
         \"AC4pC0WmyRfrgT2Efuh8ZUCt\"\n      },\n      \"href\": \"/marketplaces/TEST-MP4pdETrZYO1CKZBA29bC1QJ\",\n
         \     \"created_at\": \"2012-07-09T21:10:52.894048Z\",\n      \"support_email_address\":
@@ -58,9 +58,9 @@
         \"/transactions\",\n    \"marketplaces.bank_accounts\": \"/bank_accounts\",\n
         \   \"marketplaces.callbacks\": \"/callbacks\",\n    \"marketplaces.events\":
         \"/events\"\n  }\n}"}
-    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:20:04
-        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHM9edc29bc9a5b11e39573026ba7c1aba6\r\n",
-      "X-Balanced-Host: balanced-api-04\r\n", "X-Balanced-Marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
+    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:50:21
+        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMd984ca709a5f11e39317026ba7cac9da\r\n",
+      "X-Balanced-Host: balanced-api-05\r\n", "X-Balanced-Marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
       "X-Balanced-Merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "X-Balanced-Revision:
         1.1\r\n", "X-Balanced-Software-Build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
       "Content-Length: 1415\r\n", "Connection: keep-alive\r\n"]
@@ -69,11 +69,11 @@
     body: '{}'
     headers: !!python/object/apply:__builtin__.frozenset
     - - !!python/tuple [Content-Length, !!python/unicode 2]
+      - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xVWZ4a3BCNlI4cE12QzU5NGpmeWpzVDJVU0I4NlcwRHc6Tm9uZQ==]
       - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
       - !!python/tuple [Content-Type, !!python/unicode application/json]
       - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
       - !!python/tuple [accept, !!python/unicode application/vnd.api+json;revision=1.1]
-      - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xNmJPdFdsbmd1M1ROVWlvYjVySU5VNDI4NHJxUWt5dVA6Tm9uZQ==]
     host: api.balancedpayments.com
     method: POST
     path: /customers
@@ -82,9 +82,9 @@
   response:
     body: {string: "{\n  \"customers\": [\n    {\n      \"name\": null,\n      \"links\":
         {\n        \"source\": null,\n        \"destination\": null\n      },\n      \"updated_at\":
-        \"2014-02-20T18:20:05.823834Z\",\n      \"created_at\": \"2014-02-20T18:20:05.529155Z\",\n
-        \     \"dob_month\": null,\n      \"id\": \"CU4Qs4q2RTWD491fm4mCfj5M\",\n
-        \     \"phone\": null,\n      \"href\": \"/customers/CU4Qs4q2RTWD491fm4mCfj5M\",\n
+        \"2014-02-20T18:50:22.148290Z\",\n      \"created_at\": \"2014-02-20T18:50:21.958433Z\",\n
+        \     \"dob_month\": null,\n      \"id\": \"CU6DaKRTrgtbB0UxCqYj7ExW\",\n
+        \     \"phone\": null,\n      \"href\": \"/customers/CU6DaKRTrgtbB0UxCqYj7ExW\",\n
         \     \"merchant_status\": \"no-match\",\n      \"meta\": {},\n      \"dob_year\":
         null,\n      \"address\": {\n        \"city\": null,\n        \"line2\": null,\n
         \       \"line1\": null,\n        \"state\": null,\n        \"postal_code\":
@@ -99,12 +99,12 @@
         \   \"customers.refunds\": \"/customers/{customers.id}/refunds\",\n    \"customers.reversals\":
         \"/customers/{customers.id}/reversals\",\n    \"customers.orders\": \"/customers/{customers.id}/orders\",\n
         \   \"customers.credits\": \"/customers/{customers.id}/credits\"\n  }\n}"}
-    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:20:05
-        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHM9f327a749a5b11e3ac3202a1fe52a36c\r\n",
-      "x-balanced-host: balanced-api-05\r\n", "x-balanced-marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
+    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:50:22
+        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMd9df7f569a5f11e38f3a02a1fe53e539\r\n",
+      "x-balanced-host: balanced-api-02\r\n", "x-balanced-marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
       "x-balanced-merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "x-balanced-revision:
         1.1\r\n", "x-balanced-software-build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
-      "X-Midlr-Version: 2\r\n", "x-newrelic-app-data: PxQFWFNXCQYTVVhWAwQDVUYdFhE1AwE2QgNWEVlbQFtcCxYxSBVbDQoZVA4IF0pcXAgEEBhSQhUQXltWEBVNAUIHWRZdGhgSA0kZUR9VClVTBwFYVlAOCwZRU1EDBRtGVh0WEQZSVVQDVw9UDl4GA1dTDgMTTRMEBVpEBDs=\r\n",
+      "X-Midlr-Version: 2\r\n", "x-newrelic-app-data: PxQFWFNXCQYTVVhWAwQDVUYdFhE1AwE2QgNWEVlbQFtcCxYxSBVbDQoZVA4IF0pcXAgEEBhSQhUQXltWEBVNAUIHWRZdGhgSA0kZUR9SBFFcDw9RVFoLAQdXWFABHRdUSBEUCwdTWlNSAVoDCF1WAgYHDUMdQVUDCEVSPA==\r\n",
       "Content-Length: 1447\r\n", "Connection: keep-alive\r\n"]
     status: {code: 201, message: CREATED}
 - request: !!python/object:vcr.request.Request
@@ -113,12 +113,12 @@
       "address": {"state": "Confusion", "postal_code": "90210", "line1": "123 Main
       Street"}}'
     headers: !!python/object/apply:__builtin__.frozenset
-    - - !!python/tuple [Content-Length, !!python/unicode 238]
+    - - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xVWZ4a3BCNlI4cE12QzU5NGpmeWpzVDJVU0I4NlcwRHc6Tm9uZQ==]
+      - !!python/tuple [Content-Length, !!python/unicode 238]
       - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
       - !!python/tuple [Content-Type, !!python/unicode application/json]
       - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
       - !!python/tuple [accept, !!python/unicode application/vnd.api+json;revision=1.1]
-      - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xNmJPdFdsbmd1M1ROVWlvYjVySU5VNDI4NHJxUWt5dVA6Tm9uZQ==]
     host: api.balancedpayments.com
     method: POST
     path: /cards
@@ -128,12 +128,12 @@
     body: {string: "{\n  \"cards\": [\n    {\n      \"cvv_match\": null,\n      \"links\":
         {\n        \"customer\": null\n      },\n      \"name\": null,\n      \"expiration_year\":
         2020,\n      \"avs_street_match\": \"yes\",\n      \"is_verified\": true,\n
-        \     \"created_at\": \"2014-02-20T18:20:07.228577Z\",\n      \"cvv_result\":
+        \     \"created_at\": \"2014-02-20T18:50:23.590242Z\",\n      \"cvv_result\":
         null,\n      \"brand\": \"Visa\",\n      \"number\": \"xxxxxxxxxxxx1111\",\n
-        \     \"updated_at\": \"2014-02-20T18:20:07.228580Z\",\n      \"id\": \"CC4SlHFNvyZBD51Iwbxup4IS\",\n
+        \     \"updated_at\": \"2014-02-20T18:50:23.590245Z\",\n      \"id\": \"CC6EZMMFXDjU7UZijH2SF3Be\",\n
         \     \"expiration_month\": 10,\n      \"cvv\": null,\n      \"meta\": {\n
         \       \"region\": \"Confusion\",\n        \"city_town\": \"\",\n        \"address_2\":
-        \"Box 2\"\n      },\n      \"href\": \"/cards/CC4SlHFNvyZBD51Iwbxup4IS\",\n
+        \"Box 2\"\n      },\n      \"href\": \"/cards/CC6EZMMFXDjU7UZijH2SF3Be\",\n
         \     \"address\": {\n        \"city\": \"Balo Alto\",\n        \"line2\":
         null,\n        \"line1\": \"123 Main Street\",\n        \"state\": null,\n
         \       \"postal_code\": \"90210\",\n        \"country_code\": null\n      },\n
@@ -144,24 +144,24 @@
         \   \"cards.debits\": \"/cards/{cards.id}/debits\"\n  }\n}"}
     headers: ["access-control-allow-headers: Content-Type\r\n", "access-control-allow-methods:
         POST, OPTIONS\r\n", "access-control-allow-origin: *\r\n", "Content-Type: application/json\r\n",
-      "Date: Thu, 20 Feb 2014 18:20:07 GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n",
-      "X-Balanced-Guru: OHM9fd684b69a5b11e38f3a02a1fe53e539\r\n", "x-balanced-host:
-        balanced-api-04\r\n", "x-balanced-marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
+      "Date: Thu, 20 Feb 2014 18:50:23 GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n",
+      "X-Balanced-Guru: OHMda821a549a5f11e3a40502a1fe52a36c\r\n", "x-balanced-host:
+        balanced-api-01\r\n", "x-balanced-marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
       "x-balanced-merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "x-balanced-revision:
         1.1\r\n", "x-balanced-software-build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
-      "X-Midlr-Version: 2\r\n", "x-newrelic-app-data: PxQFWFNXCQYTVVhWAwQDVUYdFhE1AwE2QgNWEVlbQFtcCxYxSBVbDQoZVA4IF0pcXAgEEBhSVhQAQhhQEAMCFlVAFEIIFBQCHV0IUwBTClJWBgFYVloJCxxEUlUPHRdEAggHAQMHB1EBWl1UDQgDVxFJGQdQDUAHOQ==\r\n",
+      "X-Midlr-Version: 2\r\n", "x-newrelic-app-data: PxQFWFNXCQYTVVhWAwQDVUYdFhE1AwE2QgNWEVlbQFtcCxYxSBVbDQoZVA4IF0pcXAgEEBhSVhQAQhhQEAMCFlVAFEIIFBQCHVMAUghZBFNXBwZQXlQPBwRIQVEACRtGRlMEUVVVAQRRVA5RCQ9XAlJHFUFXAF8RAWs=\r\n",
       "Content-Length: 1216\r\n", "Connection: keep-alive\r\n"]
     status: {code: 201, message: CREATED}
 - request: !!python/object:vcr.request.Request
     body: '{"routing_number": "121042882", "account_number": "112233a", "name": "Homer
       Jay"}'
     headers: !!python/object/apply:__builtin__.frozenset
-    - - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
+    - - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xVWZ4a3BCNlI4cE12QzU5NGpmeWpzVDJVU0I4NlcwRHc6Tm9uZQ==]
+      - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
       - !!python/tuple [Content-Type, !!python/unicode application/json]
       - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
       - !!python/tuple [accept, !!python/unicode application/vnd.api+json;revision=1.1]
       - !!python/tuple [Content-Length, !!python/unicode 81]
-      - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xNmJPdFdsbmd1M1ROVWlvYjVySU5VNDI4NHJxUWt5dVA6Tm9uZQ==]
     host: api.balancedpayments.com
     method: POST
     path: /bank_accounts
@@ -172,13 +172,13 @@
         \     \"bank_name\": \"WELLS FARGO BANK NA\",\n      \"account_type\": \"checking\",\n
         \     \"name\": \"Homer Jay\",\n      \"links\": {\n        \"customer\":
         null,\n        \"bank_account_verification\": null\n      },\n      \"can_credit\":
-        true,\n      \"created_at\": \"2014-02-20T18:20:08.971228Z\",\n      \"fingerprint\":
+        true,\n      \"created_at\": \"2014-02-20T18:50:24.820808Z\",\n      \"fingerprint\":
         \"dac6514d9dd3a1cd7ac925d5749e0308c2c65fa27c506aefb0c9b21611ff9969\",\n      \"updated_at\":
-        \"2014-02-20T18:20:08.971231Z\",\n      \"href\": \"/bank_accounts/BA4UjVhp4bNhhju1D581buIe\",\n
+        \"2014-02-20T18:50:24.820812Z\",\n      \"href\": \"/bank_accounts/BA6Go7piLlS2PHCV7T9l9xFc\",\n
         \     \"meta\": {},\n      \"account_number\": \"xxx233a\",\n      \"address\":
         {\n        \"city\": null,\n        \"line2\": null,\n        \"line1\": null,\n
         \       \"state\": null,\n        \"postal_code\": null,\n        \"country_code\":
-        null\n      },\n      \"can_debit\": false,\n      \"id\": \"BA4UjVhp4bNhhju1D581buIe\"\n
+        null\n      },\n      \"can_debit\": false,\n      \"id\": \"BA6Go7piLlS2PHCV7T9l9xFc\"\n
         \   }\n  ],\n  \"links\": {\n    \"bank_accounts.credits\": \"/bank_accounts/{bank_accounts.id}/credits\",\n
         \   \"bank_accounts.bank_account_verifications\": \"/bank_accounts/{bank_accounts.id}/verifications\",\n
         \   \"bank_accounts.customer\": \"/customers/{bank_accounts.customer}\",\n
@@ -187,23 +187,23 @@
         \ }\n}"}
     headers: ["access-control-allow-headers: Content-Type\r\n", "access-control-allow-methods:
         POST, OPTIONS\r\n", "access-control-allow-origin: *\r\n", "Content-Type: application/json\r\n",
-      "Date: Thu, 20 Feb 2014 18:20:09 GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n",
-      "X-Balanced-Guru: OHMa107b9cc9a5b11e38f3a02a1fe53e539\r\n", "x-balanced-host:
+      "Date: Thu, 20 Feb 2014 18:50:24 GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n",
+      "X-Balanced-Guru: OHMdb4bdb149a5f11e38f7f02a1fe53e539\r\n", "x-balanced-host:
         balanced-api-04\r\n", "x-balanced-marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
       "x-balanced-merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "x-balanced-revision:
         1.1\r\n", "x-balanced-software-build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
-      "X-Midlr-Version: 2\r\n", "x-newrelic-app-data: PxQFWFNXCQYTVVhWAwQDVUYdFhE1AwE2QgNWEVlbQFtcCxYxSBVbDQoZVA4IF0pcXAgEEBhTVggPbldQAQkWDEQRFgFKXVVGVkcVQQFNE1JKAg5UU1oBAwNVVVYPAgFSVgcaE1NeW04QQFoAAQEHUwpTCVAJUVVaUFIVTUYFWV9DATw=\r\n",
+      "X-Midlr-Version: 2\r\n", "x-newrelic-app-data: PxQFWFNXCQYTVVhWAwQDVUYdFhE1AwE2QgNWEVlbQFtcCxYxSBVbDQoZVA4IF0pcXAgEEBhTVggPbldQAQkWDEQRFgFKXVVGVkcVQQFNE1JKAAdWVFsLCwNUV1YFBgdWVh0WAlpeT0ISBg5bD1pSAVdUDlAHVVZSVxQbQQACVEBVOQ==\r\n",
       "Content-Length: 1281\r\n", "Connection: keep-alive\r\n"]
     status: {code: 201, message: CREATED}
 - request: !!python/object:vcr.request.Request
     body: '{}'
     headers: !!python/object/apply:__builtin__.frozenset
     - - !!python/tuple [Content-Length, !!python/unicode 2]
+      - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xVWZ4a3BCNlI4cE12QzU5NGpmeWpzVDJVU0I4NlcwRHc6Tm9uZQ==]
       - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
       - !!python/tuple [Content-Type, !!python/unicode application/json]
       - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
       - !!python/tuple [accept, !!python/unicode application/vnd.api+json;revision=1.1]
-      - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xNmJPdFdsbmd1M1ROVWlvYjVySU5VNDI4NHJxUWt5dVA6Tm9uZQ==]
     host: api.balancedpayments.com
     method: POST
     path: /customers
@@ -212,9 +212,9 @@
   response:
     body: {string: "{\n  \"customers\": [\n    {\n      \"name\": null,\n      \"links\":
         {\n        \"source\": null,\n        \"destination\": null\n      },\n      \"updated_at\":
-        \"2014-02-20T18:20:09.891502Z\",\n      \"created_at\": \"2014-02-20T18:20:09.647368Z\",\n
-        \     \"dob_month\": null,\n      \"id\": \"CU4V5fEO5dDls6ylzdE25RLW\",\n
-        \     \"phone\": null,\n      \"href\": \"/customers/CU4V5fEO5dDls6ylzdE25RLW\",\n
+        \"2014-02-20T18:50:25.743330Z\",\n      \"created_at\": \"2014-02-20T18:50:25.546861Z\",\n
+        \     \"dob_month\": null,\n      \"id\": \"CU6HcFXirgpsi1oeZH8qYR6D\",\n
+        \     \"phone\": null,\n      \"href\": \"/customers/CU6HcFXirgpsi1oeZH8qYR6D\",\n
         \     \"merchant_status\": \"no-match\",\n      \"meta\": {},\n      \"dob_year\":
         null,\n      \"address\": {\n        \"city\": null,\n        \"line2\": null,\n
         \       \"line1\": null,\n        \"state\": null,\n        \"postal_code\":
@@ -229,37 +229,37 @@
         \   \"customers.refunds\": \"/customers/{customers.id}/refunds\",\n    \"customers.reversals\":
         \"/customers/{customers.id}/reversals\",\n    \"customers.orders\": \"/customers/{customers.id}/orders\",\n
         \   \"customers.credits\": \"/customers/{customers.id}/credits\"\n  }\n}"}
-    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:20:10
-        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMa1a7f7b69a5b11e39a7302a1fe53e539\r\n",
-      "x-balanced-host: balanced-api-01\r\n", "x-balanced-marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
+    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:50:25
+        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMdc0476b09a5f11e3836102a1fe53e539\r\n",
+      "x-balanced-host: balanced-api-06\r\n", "x-balanced-marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
       "x-balanced-merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "x-balanced-revision:
         1.1\r\n", "x-balanced-software-build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
-      "X-Midlr-Version: 2\r\n", "x-newrelic-app-data: PxQFWFNXCQYTVVhWAwQDVUYdFhE1AwE2QgNWEVlbQFtcCxYxSBVbDQoZVA4IF0pcXAgEEBhSQhUQXltWEBVNAUIHWRZdGhgSA0kZUR9VAlBcBwZRUlMABAhWWFcOHRdUSBEUV1VSVFVRVAsACloCClAHAUMdQVUDCEVSPA==\r\n",
+      "X-Midlr-Version: 2\r\n", "x-newrelic-app-data: PxQFWFNXCQYTVVhWAwQDVUYdFhE1AwE2QgNWEVlbQFtcCxYxSBVbDQoZVA4IF0pcXAgEEBhSQhUQXltWEBVNAUIHWRZdGhgSA0kZUR9VA1BVDg5RV1ULBwJVV1EGHRdUSBEUUlMDWgcCW10AWQEMUwdUXUMdQVUDCEVSPA==\r\n",
       "Content-Length: 1447\r\n", "Connection: keep-alive\r\n"]
     status: {code: 201, message: CREATED}
 - request: !!python/object:vcr.request.Request
     body: null
     headers: !!python/object/apply:__builtin__.frozenset
-    - - !!python/tuple [content-type, !!python/unicode application/json;revision=1.1]
-      - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
+    - - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xVWZ4a3BCNlI4cE12QzU5NGpmeWpzVDJVU0I4NlcwRHc6Tm9uZQ==]
+      - !!python/tuple [content-type, !!python/unicode application/json;revision=1.1]
       - !!python/tuple [accept, !!python/unicode application/vnd.api+json;revision=1.1]
       - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
-      - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xNmJPdFdsbmd1M1ROVWlvYjVySU5VNDI4NHJxUWt5dVA6Tm9uZQ==]
+      - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
     host: api.balancedpayments.com
     method: GET
-    path: /cards/CC4SlHFNvyZBD51Iwbxup4IS
+    path: /cards/CC6EZMMFXDjU7UZijH2SF3Be
     port: 443
     protocol: https
   response:
     body: {string: "{\n  \"cards\": [\n    {\n      \"cvv_match\": null,\n      \"links\":
         {\n        \"customer\": null\n      },\n      \"name\": null,\n      \"expiration_year\":
         2020,\n      \"avs_street_match\": \"yes\",\n      \"is_verified\": true,\n
-        \     \"created_at\": \"2014-02-20T18:20:07.228577Z\",\n      \"cvv_result\":
+        \     \"created_at\": \"2014-02-20T18:50:23.590242Z\",\n      \"cvv_result\":
         null,\n      \"brand\": \"Visa\",\n      \"number\": \"xxxxxxxxxxxx1111\",\n
-        \     \"updated_at\": \"2014-02-20T18:20:07.228580Z\",\n      \"id\": \"CC4SlHFNvyZBD51Iwbxup4IS\",\n
+        \     \"updated_at\": \"2014-02-20T18:50:23.590245Z\",\n      \"id\": \"CC6EZMMFXDjU7UZijH2SF3Be\",\n
         \     \"expiration_month\": 10,\n      \"cvv\": null,\n      \"meta\": {\n
         \       \"region\": \"Confusion\",\n        \"city_town\": \"\",\n        \"address_2\":
-        \"Box 2\"\n      },\n      \"href\": \"/cards/CC4SlHFNvyZBD51Iwbxup4IS\",\n
+        \"Box 2\"\n      },\n      \"href\": \"/cards/CC6EZMMFXDjU7UZijH2SF3Be\",\n
         \     \"address\": {\n        \"city\": \"Balo Alto\",\n        \"line2\":
         null,\n        \"line1\": \"123 Main Street\",\n        \"state\": null,\n
         \       \"postal_code\": \"90210\",\n        \"country_code\": null\n      },\n
@@ -268,47 +268,47 @@
         and postal code do not match.\"\n    }\n  ],\n  \"links\": {\n    \"cards.card_holds\":
         \"/cards/{cards.id}/card_holds\",\n    \"cards.customer\": \"/customers/{cards.customer}\",\n
         \   \"cards.debits\": \"/cards/{cards.id}/debits\"\n  }\n}"}
-    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:20:10
-        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMa238ef969a5b11e39317026ba7cac9da\r\n",
-      "X-Balanced-Host: balanced-api-05\r\n", "X-Balanced-Marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
+    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:50:26
+        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMdca01b889a5f11e3b3e9026ba7cd33d0\r\n",
+      "X-Balanced-Host: balanced-api-02\r\n", "X-Balanced-Marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
       "X-Balanced-Merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "X-Balanced-Revision:
         1.1\r\n", "X-Balanced-Software-Build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
       "Content-Length: 1216\r\n", "Connection: keep-alive\r\n"]
     status: {code: 200, message: OK}
 - request: !!python/object:vcr.request.Request
-    body: '{"cvv_match": null, "created_at": "2014-02-20T18:20:07.228577Z", "name":
-      null, "links": {"customer": "/customers/CU4V5fEO5dDls6ylzdE25RLW"}, "avs_street_match":
+    body: '{"cvv_match": null, "created_at": "2014-02-20T18:50:23.590242Z", "name":
+      null, "links": {"customer": "/customers/CU6HcFXirgpsi1oeZH8qYR6D"}, "avs_street_match":
       "yes", "expiration_year": 2020, "brand": "Visa", "cvv_result": null, "number":
-      "xxxxxxxxxxxx1111", "updated_at": "2014-02-20T18:20:07.228580Z", "expiration_month":
+      "xxxxxxxxxxxx1111", "updated_at": "2014-02-20T18:50:23.590245Z", "expiration_month":
       10, "cvv": null, "meta": {"region": "Confusion", "city_town": "", "address_2":
       "Box 2"}, "avs_result": "Street address and postal code do not match.", "fingerprint":
       "8c7f0423365af88c3e36cf02746eca64fdcf36ddc2e1f398c7ec9f3ffd05a267", "is_verified":
-      true, "avs_postal_match": "no", "id": "CC4SlHFNvyZBD51Iwbxup4IS", "address":
+      true, "avs_postal_match": "no", "id": "CC6EZMMFXDjU7UZijH2SF3Be", "address":
       {"city": "Balo Alto", "line2": null, "line1": "123 Main Street", "state": null,
       "postal_code": "90210", "country_code": null}}'
     headers: !!python/object/apply:__builtin__.frozenset
-    - - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
+    - - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xVWZ4a3BCNlI4cE12QzU5NGpmeWpzVDJVU0I4NlcwRHc6Tm9uZQ==]
+      - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
       - !!python/tuple [Content-Type, !!python/unicode application/json]
       - !!python/tuple [Content-Length, !!python/unicode 777]
       - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
       - !!python/tuple [accept, !!python/unicode application/vnd.api+json;revision=1.1]
-      - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xNmJPdFdsbmd1M1ROVWlvYjVySU5VNDI4NHJxUWt5dVA6Tm9uZQ==]
     host: api.balancedpayments.com
     method: PUT
-    path: /cards/CC4SlHFNvyZBD51Iwbxup4IS
+    path: /cards/CC6EZMMFXDjU7UZijH2SF3Be
     port: 443
     protocol: https
   response:
     body: {string: "{\n  \"cards\": [\n    {\n      \"cvv_match\": null,\n      \"links\":
-        {\n        \"customer\": \"CU4V5fEO5dDls6ylzdE25RLW\"\n      },\n      \"name\":
+        {\n        \"customer\": \"CU6HcFXirgpsi1oeZH8qYR6D\"\n      },\n      \"name\":
         null,\n      \"expiration_year\": 2020,\n      \"avs_street_match\": \"yes\",\n
-        \     \"is_verified\": true,\n      \"created_at\": \"2014-02-20T18:20:07.228577Z\",\n
+        \     \"is_verified\": true,\n      \"created_at\": \"2014-02-20T18:50:23.590242Z\",\n
         \     \"cvv_result\": null,\n      \"brand\": \"Visa\",\n      \"number\":
-        \"xxxxxxxxxxxx1111\",\n      \"updated_at\": \"2014-02-20T18:20:11.184124Z\",\n
-        \     \"id\": \"CC4SlHFNvyZBD51Iwbxup4IS\",\n      \"expiration_month\": 10,\n
+        \"xxxxxxxxxxxx1111\",\n      \"updated_at\": \"2014-02-20T18:50:27.134200Z\",\n
+        \     \"id\": \"CC6EZMMFXDjU7UZijH2SF3Be\",\n      \"expiration_month\": 10,\n
         \     \"cvv\": null,\n      \"meta\": {\n        \"region\": \"Confusion\",\n
         \       \"city_town\": \"\",\n        \"address_2\": \"Box 2\"\n      },\n
-        \     \"href\": \"/cards/CC4SlHFNvyZBD51Iwbxup4IS\",\n      \"address\": {\n
+        \     \"href\": \"/cards/CC6EZMMFXDjU7UZijH2SF3Be\",\n      \"address\": {\n
         \       \"city\": \"Balo Alto\",\n        \"line2\": null,\n        \"line1\":
         \"123 Main Street\",\n        \"state\": null,\n        \"postal_code\": \"90210\",\n
         \       \"country_code\": null\n      },\n      \"fingerprint\": \"8c7f0423365af88c3e36cf02746eca64fdcf36ddc2e1f398c7ec9f3ffd05a267\",\n
@@ -316,9 +316,9 @@
         and postal code do not match.\"\n    }\n  ],\n  \"links\": {\n    \"cards.card_holds\":
         \"/cards/{cards.id}/card_holds\",\n    \"cards.customer\": \"/customers/{cards.customer}\",\n
         \   \"cards.debits\": \"/cards/{cards.id}/debits\"\n  }\n}"}
-    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:20:11
-        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMa299938c9a5b11e39a8a026ba7f8ec28\r\n",
-      "X-Balanced-Host: balanced-api-01\r\n", "X-Balanced-Marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
+    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:50:27
+        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMdcfddf8e9a5f11e38a08026ba7c1aba6\r\n",
+      "X-Balanced-Host: balanced-api-04\r\n", "X-Balanced-Marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
       "X-Balanced-Merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "X-Balanced-Revision:
         1.1\r\n", "X-Balanced-Software-Build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
       "Content-Length: 1238\r\n", "Connection: keep-alive\r\n"]
@@ -326,22 +326,22 @@
 - request: !!python/object:vcr.request.Request
     body: null
     headers: !!python/object/apply:__builtin__.frozenset
-    - - !!python/tuple [content-type, !!python/unicode application/json;revision=1.1]
-      - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
+    - - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xVWZ4a3BCNlI4cE12QzU5NGpmeWpzVDJVU0I4NlcwRHc6Tm9uZQ==]
+      - !!python/tuple [content-type, !!python/unicode application/json;revision=1.1]
       - !!python/tuple [accept, !!python/unicode application/vnd.api+json;revision=1.1]
       - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
-      - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xNmJPdFdsbmd1M1ROVWlvYjVySU5VNDI4NHJxUWt5dVA6Tm9uZQ==]
+      - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
     host: api.balancedpayments.com
     method: GET
-    path: /customers/CU4V5fEO5dDls6ylzdE25RLW
+    path: /customers/CU6HcFXirgpsi1oeZH8qYR6D
     port: 443
     protocol: https
   response:
     body: {string: "{\n  \"customers\": [\n    {\n      \"name\": null,\n      \"links\":
         {\n        \"source\": null,\n        \"destination\": null\n      },\n      \"updated_at\":
-        \"2014-02-20T18:20:09.891502Z\",\n      \"created_at\": \"2014-02-20T18:20:09.647368Z\",\n
-        \     \"dob_month\": null,\n      \"id\": \"CU4V5fEO5dDls6ylzdE25RLW\",\n
-        \     \"phone\": null,\n      \"href\": \"/customers/CU4V5fEO5dDls6ylzdE25RLW\",\n
+        \"2014-02-20T18:50:25.743330Z\",\n      \"created_at\": \"2014-02-20T18:50:25.546861Z\",\n
+        \     \"dob_month\": null,\n      \"id\": \"CU6HcFXirgpsi1oeZH8qYR6D\",\n
+        \     \"phone\": null,\n      \"href\": \"/customers/CU6HcFXirgpsi1oeZH8qYR6D\",\n
         \     \"merchant_status\": \"no-match\",\n      \"meta\": {},\n      \"dob_year\":
         null,\n      \"address\": {\n        \"city\": null,\n        \"line2\": null,\n
         \       \"line1\": null,\n        \"state\": null,\n        \"postal_code\":
@@ -356,8 +356,8 @@
         \   \"customers.refunds\": \"/customers/{customers.id}/refunds\",\n    \"customers.reversals\":
         \"/customers/{customers.id}/reversals\",\n    \"customers.orders\": \"/customers/{customers.id}/orders\",\n
         \   \"customers.credits\": \"/customers/{customers.id}/credits\"\n  }\n}"}
-    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:20:12
-        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMa31b5d0e9a5b11e39f63026ba7cd33d0\r\n",
+    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:50:28
+        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMdd848a8e9a5f11e390f8026ba7cd33d0\r\n",
       "X-Balanced-Host: balanced-api-02\r\n", "X-Balanced-Marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
       "X-Balanced-Merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "X-Balanced-Revision:
         1.1\r\n", "X-Balanced-Software-Build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
@@ -366,42 +366,42 @@
 - request: !!python/object:vcr.request.Request
     body: null
     headers: !!python/object/apply:__builtin__.frozenset
-    - - !!python/tuple [content-type, !!python/unicode application/json;revision=1.1]
-      - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
+    - - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xVWZ4a3BCNlI4cE12QzU5NGpmeWpzVDJVU0I4NlcwRHc6Tm9uZQ==]
+      - !!python/tuple [content-type, !!python/unicode application/json;revision=1.1]
       - !!python/tuple [accept, !!python/unicode application/vnd.api+json;revision=1.1]
       - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
-      - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xNmJPdFdsbmd1M1ROVWlvYjVySU5VNDI4NHJxUWt5dVA6Tm9uZQ==]
+      - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
     host: api.balancedpayments.com
     method: GET
-    path: /customers/CU4V5fEO5dDls6ylzdE25RLW/cards?limit=10&offset=0
+    path: /customers/CU6HcFXirgpsi1oeZH8qYR6D/cards?limit=10&offset=0
     port: 443
     protocol: https
   response:
     body: {string: "{\n  \"cards\": [\n    {\n      \"cvv_match\": null,\n      \"links\":
-        {\n        \"customer\": \"CU4V5fEO5dDls6ylzdE25RLW\"\n      },\n      \"name\":
+        {\n        \"customer\": \"CU6HcFXirgpsi1oeZH8qYR6D\"\n      },\n      \"name\":
         null,\n      \"expiration_year\": 2020,\n      \"avs_street_match\": \"yes\",\n
-        \     \"is_verified\": true,\n      \"created_at\": \"2014-02-20T18:20:07.228577Z\",\n
+        \     \"is_verified\": true,\n      \"created_at\": \"2014-02-20T18:50:23.590242Z\",\n
         \     \"cvv_result\": null,\n      \"brand\": \"Visa\",\n      \"number\":
-        \"xxxxxxxxxxxx1111\",\n      \"updated_at\": \"2014-02-20T18:20:11.184124Z\",\n
-        \     \"id\": \"CC4SlHFNvyZBD51Iwbxup4IS\",\n      \"expiration_month\": 10,\n
+        \"xxxxxxxxxxxx1111\",\n      \"updated_at\": \"2014-02-20T18:50:27.134200Z\",\n
+        \     \"id\": \"CC6EZMMFXDjU7UZijH2SF3Be\",\n      \"expiration_month\": 10,\n
         \     \"cvv\": null,\n      \"meta\": {\n        \"region\": \"Confusion\",\n
         \       \"city_town\": \"\",\n        \"address_2\": \"Box 2\"\n      },\n
-        \     \"href\": \"/cards/CC4SlHFNvyZBD51Iwbxup4IS\",\n      \"address\": {\n
+        \     \"href\": \"/cards/CC6EZMMFXDjU7UZijH2SF3Be\",\n      \"address\": {\n
         \       \"city\": \"Balo Alto\",\n        \"line2\": null,\n        \"line1\":
         \"123 Main Street\",\n        \"state\": null,\n        \"postal_code\": \"90210\",\n
         \       \"country_code\": null\n      },\n      \"fingerprint\": \"8c7f0423365af88c3e36cf02746eca64fdcf36ddc2e1f398c7ec9f3ffd05a267\",\n
         \     \"avs_postal_match\": \"no\",\n      \"avs_result\": \"Street address
         and postal code do not match.\"\n    }\n  ],\n  \"meta\": {\n    \"last\":
-        \"/customers/CU4V5fEO5dDls6ylzdE25RLW/cards?limit=10&offset=0\",\n    \"next\":
-        null,\n    \"href\": \"/customers/CU4V5fEO5dDls6ylzdE25RLW/cards?limit=10&offset=0\",\n
+        \"/customers/CU6HcFXirgpsi1oeZH8qYR6D/cards?limit=10&offset=0\",\n    \"next\":
+        null,\n    \"href\": \"/customers/CU6HcFXirgpsi1oeZH8qYR6D/cards?limit=10&offset=0\",\n
         \   \"limit\": 10,\n    \"offset\": 0,\n    \"previous\": null,\n    \"total\":
-        1,\n    \"first\": \"/customers/CU4V5fEO5dDls6ylzdE25RLW/cards?limit=10&offset=0\"\n
+        1,\n    \"first\": \"/customers/CU6HcFXirgpsi1oeZH8qYR6D/cards?limit=10&offset=0\"\n
         \ },\n  \"links\": {\n    \"cards.debits\": \"/cards/{cards.id}/debits\",\n
         \   \"cards.customer\": \"/customers/{cards.customer}\",\n    \"cards.card_holds\":
         \"/cards/{cards.id}/card_holds\"\n  }\n}"}
-    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:20:12
-        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMa36f6cc89a5b11e393dc026ba7d31e6f\r\n",
-      "X-Balanced-Host: balanced-api-06\r\n", "X-Balanced-Marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
+    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:50:28
+        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMddd97a769a5f11e395aa026ba7cd33d0\r\n",
+      "X-Balanced-Host: balanced-api-02\r\n", "X-Balanced-Marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
       "X-Balanced-Merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "X-Balanced-Revision:
         1.1\r\n", "X-Balanced-Software-Build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
       "Content-Length: 1570\r\n", "Connection: keep-alive\r\n"]
@@ -410,33 +410,33 @@
     body: '{"amount": 1061, "description": "whatever username"}'
     headers: !!python/object/apply:__builtin__.frozenset
     - - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
+      - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xVWZ4a3BCNlI4cE12QzU5NGpmeWpzVDJVU0I4NlcwRHc6Tm9uZQ==]
       - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
       - !!python/tuple [Content-Type, !!python/unicode application/json]
       - !!python/tuple [Content-Length, !!python/unicode 52]
       - !!python/tuple [accept, !!python/unicode application/vnd.api+json;revision=1.1]
-      - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xNmJPdFdsbmd1M1ROVWlvYjVySU5VNDI4NHJxUWt5dVA6Tm9uZQ==]
     host: api.balancedpayments.com
     method: POST
-    path: /cards/CC4SlHFNvyZBD51Iwbxup4IS/debits
+    path: /cards/CC6EZMMFXDjU7UZijH2SF3Be/debits
     port: 443
     protocol: https
   response:
     body: {string: "{\n  \"debits\": [\n    {\n      \"status\": \"succeeded\",\n
         \     \"description\": \"whatever username\",\n      \"links\": {\n        \"customer\":
-        \"CU4V5fEO5dDls6ylzdE25RLW\",\n        \"source\": \"CC4SlHFNvyZBD51Iwbxup4IS\",\n
+        \"CU6HcFXirgpsi1oeZH8qYR6D\",\n        \"source\": \"CC6EZMMFXDjU7UZijH2SF3Be\",\n
         \       \"order\": null,\n        \"dispute\": null\n      },\n      \"updated_at\":
-        \"2014-02-20T18:20:14.599267Z\",\n      \"created_at\": \"2014-02-20T18:20:13.279539Z\",\n
-        \     \"transaction_number\": \"W488-750-0858\",\n      \"failure_reason\":
+        \"2014-02-20T18:50:30.398952Z\",\n      \"created_at\": \"2014-02-20T18:50:29.240831Z\",\n
+        \     \"transaction_number\": \"W672-097-3523\",\n      \"failure_reason\":
         null,\n      \"currency\": \"USD\",\n      \"amount\": 1061,\n      \"failure_reason_code\":
-        null,\n      \"meta\": {},\n      \"href\": \"/debits/WD4Za8K0XYLDW3WjTfQ1wDPk\",\n
-        \     \"appears_on_statement_as\": \"BAL*example.com\",\n      \"id\": \"WD4Za8K0XYLDW3WjTfQ1wDPk\"\n
+        null,\n      \"meta\": {},\n      \"href\": \"/debits/WD6LmfacZTnd2kGL7gT8ylyW\",\n
+        \     \"appears_on_statement_as\": \"BAL*example.com\",\n      \"id\": \"WD6LmfacZTnd2kGL7gT8ylyW\"\n
         \   }\n  ],\n  \"links\": {\n    \"debits.customer\": \"/customers/{debits.customer}\",\n
         \   \"debits.dispute\": \"/disputes/{debits.dispute}\",\n    \"debits.source\":
         \"/resources/{debits.source}\",\n    \"debits.order\": \"/orders/{debits.order}\",\n
         \   \"debits.refunds\": \"/debits/{debits.id}/refunds\",\n    \"debits.events\":
         \"/debits/{debits.id}/events\"\n  }\n}"}
-    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:20:14
-        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMa4009d9c9a5b11e39317026ba7cac9da\r\n",
+    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:50:30
+        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMde5f73e29a5f11e386ae026ba7cac9da\r\n",
       "X-Balanced-Host: balanced-api-05\r\n", "X-Balanced-Marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
       "X-Balanced-Merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "X-Balanced-Revision:
         1.1\r\n", "X-Balanced-Software-Build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
@@ -446,11 +446,11 @@
     body: '{}'
     headers: !!python/object/apply:__builtin__.frozenset
     - - !!python/tuple [Content-Length, !!python/unicode 2]
+      - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xVWZ4a3BCNlI4cE12QzU5NGpmeWpzVDJVU0I4NlcwRHc6Tm9uZQ==]
       - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
       - !!python/tuple [Content-Type, !!python/unicode application/json]
       - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
       - !!python/tuple [accept, !!python/unicode application/vnd.api+json;revision=1.1]
-      - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xNmJPdFdsbmd1M1ROVWlvYjVySU5VNDI4NHJxUWt5dVA6Tm9uZQ==]
     host: api.balancedpayments.com
     method: POST
     path: /customers
@@ -459,9 +459,9 @@
   response:
     body: {string: "{\n  \"customers\": [\n    {\n      \"name\": null,\n      \"links\":
         {\n        \"source\": null,\n        \"destination\": null\n      },\n      \"updated_at\":
-        \"2014-02-20T18:20:15.732174Z\",\n      \"created_at\": \"2014-02-20T18:20:15.488497Z\",\n
-        \     \"dob_month\": null,\n      \"id\": \"CU51EcsyaAFTpu6h4P59V85N\",\n
-        \     \"phone\": null,\n      \"href\": \"/customers/CU51EcsyaAFTpu6h4P59V85N\",\n
+        \"2014-02-20T18:50:31.574564Z\",\n      \"created_at\": \"2014-02-20T18:50:31.341959Z\",\n
+        \     \"dob_month\": null,\n      \"id\": \"CU6NJ99Eh2DbFyzBBIDw3AmW\",\n
+        \     \"phone\": null,\n      \"href\": \"/customers/CU6NJ99Eh2DbFyzBBIDw3AmW\",\n
         \     \"merchant_status\": \"no-match\",\n      \"meta\": {},\n      \"dob_year\":
         null,\n      \"address\": {\n        \"city\": null,\n        \"line2\": null,\n
         \       \"line1\": null,\n        \"state\": null,\n        \"postal_code\":
@@ -476,12 +476,12 @@
         \   \"customers.refunds\": \"/customers/{customers.id}/refunds\",\n    \"customers.reversals\":
         \"/customers/{customers.id}/reversals\",\n    \"customers.orders\": \"/customers/{customers.id}/orders\",\n
         \   \"customers.credits\": \"/customers/{customers.id}/credits\"\n  }\n}"}
-    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:20:15
-        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMa5233b6c9a5b11e39a7302a1fe53e539\r\n",
-      "x-balanced-host: balanced-api-06\r\n", "x-balanced-marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
+    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:50:31
+        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMdf78f2ee9a5f11e3a40502a1fe52a36c\r\n",
+      "x-balanced-host: balanced-api-04\r\n", "x-balanced-marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
       "x-balanced-merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "x-balanced-revision:
         1.1\r\n", "x-balanced-software-build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
-      "X-Midlr-Version: 2\r\n", "x-newrelic-app-data: PxQFWFNXCQYTVVhWAwQDVUYdFhE1AwE2QgNWEVlbQFtcCxYxSBVbDQoZVA4IF0pcXAgEEBhSQhUQXltWEBVNAUIHWRZdGhgSA0kZUR9VAFpTDwJRXloPAQFSVlsAHRdUSBEUAgAEU1BTB1pSWV4DUwYAX0MdQVUDCEVSPA==\r\n",
+      "X-Midlr-Version: 2\r\n", "x-newrelic-app-data: PxQFWFNXCQYTVVhWAwQDVUYdFhE1AwE2QgNWEVlbQFtcCxYxSBVbDQoZVA4IF0pcXAgEEBhSQhUQXltWEBVNAUIHWRZdGhgSA0kZUR9VA1NVBwdZXlQNAQdQV1cPHRdUSBEUBwZVAlNWVg0BDg4NBQtUAEMdQVUDCEVSPA==\r\n",
       "Content-Length: 1447\r\n", "Connection: keep-alive\r\n"]
     status: {code: 201, message: CREATED}
 - request: !!python/object:vcr.request.Request
@@ -490,12 +490,12 @@
       "address": {"state": "Confusion", "postal_code": "90210", "line1": "123 Main
       Street"}}'
     headers: !!python/object/apply:__builtin__.frozenset
-    - - !!python/tuple [Content-Length, !!python/unicode 238]
+    - - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xVWZ4a3BCNlI4cE12QzU5NGpmeWpzVDJVU0I4NlcwRHc6Tm9uZQ==]
+      - !!python/tuple [Content-Length, !!python/unicode 238]
       - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
       - !!python/tuple [Content-Type, !!python/unicode application/json]
       - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
       - !!python/tuple [accept, !!python/unicode application/vnd.api+json;revision=1.1]
-      - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xNmJPdFdsbmd1M1ROVWlvYjVySU5VNDI4NHJxUWt5dVA6Tm9uZQ==]
     host: api.balancedpayments.com
     method: POST
     path: /cards
@@ -505,12 +505,12 @@
     body: {string: "{\n  \"cards\": [\n    {\n      \"cvv_match\": null,\n      \"links\":
         {\n        \"customer\": null\n      },\n      \"name\": null,\n      \"expiration_year\":
         2020,\n      \"avs_street_match\": \"yes\",\n      \"is_verified\": true,\n
-        \     \"created_at\": \"2014-02-20T18:20:17.044937Z\",\n      \"cvv_result\":
+        \     \"created_at\": \"2014-02-20T18:50:32.880404Z\",\n      \"cvv_result\":
         null,\n      \"brand\": \"Visa\",\n      \"number\": \"xxxxxxxxxxxx1111\",\n
-        \     \"updated_at\": \"2014-02-20T18:20:17.044940Z\",\n      \"id\": \"CC53nCi6LRnAbgqZnGd1cwKC\",\n
+        \     \"updated_at\": \"2014-02-20T18:50:32.880407Z\",\n      \"id\": \"CC6Prd2GG1gyOqwvVZ9k4GKq\",\n
         \     \"expiration_month\": 10,\n      \"cvv\": null,\n      \"meta\": {\n
         \       \"region\": \"Confusion\",\n        \"city_town\": \"\",\n        \"address_2\":
-        \"Box 2\"\n      },\n      \"href\": \"/cards/CC53nCi6LRnAbgqZnGd1cwKC\",\n
+        \"Box 2\"\n      },\n      \"href\": \"/cards/CC6Prd2GG1gyOqwvVZ9k4GKq\",\n
         \     \"address\": {\n        \"city\": \"Balo Alto\",\n        \"line2\":
         null,\n        \"line1\": \"123 Main Street\",\n        \"state\": null,\n
         \       \"postal_code\": \"90210\",\n        \"country_code\": null\n      },\n
@@ -521,24 +521,24 @@
         \   \"cards.debits\": \"/cards/{cards.id}/debits\"\n  }\n}"}
     headers: ["access-control-allow-headers: Content-Type\r\n", "access-control-allow-methods:
         POST, OPTIONS\r\n", "access-control-allow-origin: *\r\n", "Content-Type: application/json\r\n",
-      "Date: Thu, 20 Feb 2014 18:20:17 GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n",
-      "X-Balanced-Guru: OHMa5bbe31c9a5b11e3aed402a1fe52a36c\r\n", "x-balanced-host:
-        balanced-api-05\r\n", "x-balanced-marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
+      "Date: Thu, 20 Feb 2014 18:50:32 GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n",
+      "X-Balanced-Guru: OHMe00d4d7c9a5f11e39a7302a1fe53e539\r\n", "x-balanced-host:
+        balanced-api-04\r\n", "x-balanced-marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
       "x-balanced-merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "x-balanced-revision:
         1.1\r\n", "x-balanced-software-build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
-      "X-Midlr-Version: 2\r\n", "x-newrelic-app-data: PxQFWFNXCQYTVVhWAwQDVUYdFhE1AwE2QgNWEVlbQFtcCxYxSBVbDQoZVA4IF0pcXAgEEBhSVhQAQhhQEAMCFlVAFEIIFBQCHVMPVAlZBVpTDg5XUVEABgJIQVEACRtGRlVUBFsEB1FVVFpWDAAFCwFHFUFXAF8RAWs=\r\n",
+      "X-Midlr-Version: 2\r\n", "x-newrelic-app-data: PxQFWFNXCQYTVVhWAwQDVUYdFhE1AwE2QgNWEVlbQFtcCxYxSBVbDQoZVA4IF0pcXAgEEBhSVhQAQhhQEAMCFlVAFEIIFBQCHVMPWQFYAlVTBQ5ZUFsJBQRIQVEACRtGRgcHUltXBgQEVghXWllVVABHFUFXAF8RAWs=\r\n",
       "Content-Length: 1216\r\n", "Connection: keep-alive\r\n"]
     status: {code: 201, message: CREATED}
 - request: !!python/object:vcr.request.Request
     body: '{"routing_number": "121042882", "account_number": "112233a", "name": "Homer
       Jay"}'
     headers: !!python/object/apply:__builtin__.frozenset
-    - - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
+    - - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xVWZ4a3BCNlI4cE12QzU5NGpmeWpzVDJVU0I4NlcwRHc6Tm9uZQ==]
+      - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
       - !!python/tuple [Content-Type, !!python/unicode application/json]
       - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
       - !!python/tuple [accept, !!python/unicode application/vnd.api+json;revision=1.1]
       - !!python/tuple [Content-Length, !!python/unicode 81]
-      - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xNmJPdFdsbmd1M1ROVWlvYjVySU5VNDI4NHJxUWt5dVA6Tm9uZQ==]
     host: api.balancedpayments.com
     method: POST
     path: /bank_accounts
@@ -549,13 +549,13 @@
         \     \"bank_name\": \"WELLS FARGO BANK NA\",\n      \"account_type\": \"checking\",\n
         \     \"name\": \"Homer Jay\",\n      \"links\": {\n        \"customer\":
         null,\n        \"bank_account_verification\": null\n      },\n      \"can_credit\":
-        true,\n      \"created_at\": \"2014-02-20T18:20:18.161505Z\",\n      \"fingerprint\":
+        true,\n      \"created_at\": \"2014-02-20T18:50:33.978161Z\",\n      \"fingerprint\":
         \"dac6514d9dd3a1cd7ac925d5749e0308c2c65fa27c506aefb0c9b21611ff9969\",\n      \"updated_at\":
-        \"2014-02-20T18:20:18.161510Z\",\n      \"href\": \"/bank_accounts/BA54EmCIHY2mPxGlZLQmvFnh\",\n
+        \"2014-02-20T18:50:33.978165Z\",\n      \"href\": \"/bank_accounts/BA6QGG4oUWkG1WdJMTySyj72\",\n
         \     \"meta\": {},\n      \"account_number\": \"xxx233a\",\n      \"address\":
         {\n        \"city\": null,\n        \"line2\": null,\n        \"line1\": null,\n
         \       \"state\": null,\n        \"postal_code\": null,\n        \"country_code\":
-        null\n      },\n      \"can_debit\": false,\n      \"id\": \"BA54EmCIHY2mPxGlZLQmvFnh\"\n
+        null\n      },\n      \"can_debit\": false,\n      \"id\": \"BA6QGG4oUWkG1WdJMTySyj72\"\n
         \   }\n  ],\n  \"links\": {\n    \"bank_accounts.credits\": \"/bank_accounts/{bank_accounts.id}/credits\",\n
         \   \"bank_accounts.bank_account_verifications\": \"/bank_accounts/{bank_accounts.id}/verifications\",\n
         \   \"bank_accounts.customer\": \"/customers/{bank_accounts.customer}\",\n
@@ -564,23 +564,23 @@
         \ }\n}"}
     headers: ["access-control-allow-headers: Content-Type\r\n", "access-control-allow-methods:
         POST, OPTIONS\r\n", "access-control-allow-origin: *\r\n", "Content-Type: application/json\r\n",
-      "Date: Thu, 20 Feb 2014 18:20:18 GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n",
-      "X-Balanced-Guru: OHMa676969e9a5b11e3ba1302a1fe53e539\r\n", "x-balanced-host:
-        balanced-api-06\r\n", "x-balanced-marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
+      "Date: Thu, 20 Feb 2014 18:50:34 GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n",
+      "X-Balanced-Guru: OHMe0c90b709a5f11e3992602a1fe52a36c\r\n", "x-balanced-host:
+        balanced-api-02\r\n", "x-balanced-marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
       "x-balanced-merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "x-balanced-revision:
         1.1\r\n", "x-balanced-software-build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
-      "X-Midlr-Version: 2\r\n", "x-newrelic-app-data: PxQFWFNXCQYTVVhWAwQDVUYdFhE1AwE2QgNWEVlbQFtcCxYxSBVbDQoZVA4IF0pcXAgEEBhTVggPbldQAQkWDEQRFgFKXVVGVkcVQQFNE1JKAwVYVVEIAwBVV1IFAABUXR0WAlpeT0ISAQ0BXAhVVFBWW1gEBFcHVxQbQQACVEBVOQ==\r\n",
+      "X-Midlr-Version: 2\r\n", "x-newrelic-app-data: PxQFWFNXCQYTVVhWAwQDVUYdFhE1AwE2QgNWEVlbQFtcCxYxSBVbDQoZVA4IF0pcXAgEEBhTVggPbldQAQkWDEQRFgFKXVVGVkcVQQFNE1JKAwBQVVMNCglUU1MOAAZQVh0WAlpeT0ISUV5WCw9WBwVUAFICU1JRARQbQQACVEBVOQ==\r\n",
       "Content-Length: 1281\r\n", "Connection: keep-alive\r\n"]
     status: {code: 201, message: CREATED}
 - request: !!python/object:vcr.request.Request
     body: '{}'
     headers: !!python/object/apply:__builtin__.frozenset
     - - !!python/tuple [Content-Length, !!python/unicode 2]
+      - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xVWZ4a3BCNlI4cE12QzU5NGpmeWpzVDJVU0I4NlcwRHc6Tm9uZQ==]
       - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
       - !!python/tuple [Content-Type, !!python/unicode application/json]
       - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
       - !!python/tuple [accept, !!python/unicode application/vnd.api+json;revision=1.1]
-      - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xNmJPdFdsbmd1M1ROVWlvYjVySU5VNDI4NHJxUWt5dVA6Tm9uZQ==]
     host: api.balancedpayments.com
     method: POST
     path: /customers
@@ -589,9 +589,9 @@
   response:
     body: {string: "{\n  \"customers\": [\n    {\n      \"name\": null,\n      \"links\":
         {\n        \"source\": null,\n        \"destination\": null\n      },\n      \"updated_at\":
-        \"2014-02-20T18:20:19.091853Z\",\n      \"created_at\": \"2014-02-20T18:20:18.847035Z\",\n
-        \     \"dob_month\": null,\n      \"id\": \"CU55qLMcI2S189Nlgjl3U2HC\",\n
-        \     \"phone\": null,\n      \"href\": \"/customers/CU55qLMcI2S189Nlgjl3U2HC\",\n
+        \"2014-02-20T18:50:34.999094Z\",\n      \"created_at\": \"2014-02-20T18:50:34.763742Z\",\n
+        \     \"dob_month\": null,\n      \"id\": \"CU6RzLa5UMjie8WTakgY9C6y\",\n
+        \     \"phone\": null,\n      \"href\": \"/customers/CU6RzLa5UMjie8WTakgY9C6y\",\n
         \     \"merchant_status\": \"no-match\",\n      \"meta\": {},\n      \"dob_year\":
         null,\n      \"address\": {\n        \"city\": null,\n        \"line2\": null,\n
         \       \"line1\": null,\n        \"state\": null,\n        \"postal_code\":
@@ -606,12 +606,12 @@
         \   \"customers.refunds\": \"/customers/{customers.id}/refunds\",\n    \"customers.reversals\":
         \"/customers/{customers.id}/reversals\",\n    \"customers.orders\": \"/customers/{customers.id}/orders\",\n
         \   \"customers.credits\": \"/customers/{customers.id}/credits\"\n  }\n}"}
-    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:20:19
-        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMa72253d09a5b11e3a40502a1fe52a36c\r\n",
-      "x-balanced-host: balanced-api-01\r\n", "x-balanced-marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
+    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:50:35
+        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMe18322d09a5f11e3a40502a1fe52a36c\r\n",
+      "x-balanced-host: balanced-api-04\r\n", "x-balanced-marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
       "x-balanced-merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "x-balanced-revision:
         1.1\r\n", "x-balanced-software-build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
-      "X-Midlr-Version: 2\r\n", "x-newrelic-app-data: PxQFWFNXCQYTVVhWAwQDVUYdFhE1AwE2QgNWEVlbQFtcCxYxSBVbDQoZVA4IF0pcXAgEEBhSQhUQXltWEBVNAUIHWRZdGhgSA0kZUR9VBldQDgdRX1sPAQRXV1cFAhtGVh0WEQQHVFsGUQsGD14FVgVUWFITTRMEBVpEBDs=\r\n",
+      "X-Midlr-Version: 2\r\n", "x-newrelic-app-data: PxQFWFNXCQYTVVhWAwQDVUYdFhE1AwE2QgNWEVlbQFtcCxYxSBVbDQoZVA4IF0pcXAgEEBhSQhUQXltWEBVNAUIHWRZdGhgSA0kZUR9SCltcBANZU1QPAgFTWFAbEQVKRBMGAwRRUFAAWg8ACloAAwNQG00RB1IOF1Nq\r\n",
       "Content-Length: 1447\r\n", "Connection: keep-alive\r\n"]
     status: {code: 201, message: CREATED}
 - request: !!python/object:vcr.request.Request
@@ -619,11 +619,11 @@
       2020}'
     headers: !!python/object/apply:__builtin__.frozenset
     - - !!python/tuple [Content-Length, !!python/unicode 79]
+      - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xVWZ4a3BCNlI4cE12QzU5NGpmeWpzVDJVU0I4NlcwRHc6Tm9uZQ==]
       - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
       - !!python/tuple [Content-Type, !!python/unicode application/json]
       - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
       - !!python/tuple [accept, !!python/unicode application/vnd.api+json;revision=1.1]
-      - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xNmJPdFdsbmd1M1ROVWlvYjVySU5VNDI4NHJxUWt5dVA6Tm9uZQ==]
     host: api.balancedpayments.com
     method: POST
     path: /cards
@@ -633,11 +633,11 @@
     body: {string: "{\n  \"cards\": [\n    {\n      \"cvv_match\": null,\n      \"links\":
         {\n        \"customer\": null\n      },\n      \"name\": null,\n      \"expiration_year\":
         2020,\n      \"avs_street_match\": null,\n      \"is_verified\": true,\n      \"created_at\":
-        \"2014-02-20T18:20:20.413031Z\",\n      \"cvv_result\": null,\n      \"brand\":
+        \"2014-02-20T18:50:36.287941Z\",\n      \"cvv_result\": null,\n      \"brand\":
         \"Visa\",\n      \"number\": \"xxxxxxxxxxxx4448\",\n      \"updated_at\":
-        \"2014-02-20T18:20:20.413034Z\",\n      \"id\": \"CC57bIoi4PYiq43KJPt8bHXi\",\n
+        \"2014-02-20T18:50:36.287944Z\",\n      \"id\": \"CC6ThNGHeXungVeLe0vTLZ3a\",\n
         \     \"expiration_month\": 12,\n      \"cvv\": null,\n      \"meta\": {},\n
-        \     \"href\": \"/cards/CC57bIoi4PYiq43KJPt8bHXi\",\n      \"address\": {\n
+        \     \"href\": \"/cards/CC6ThNGHeXungVeLe0vTLZ3a\",\n      \"address\": {\n
         \       \"city\": null,\n        \"line2\": null,\n        \"line1\": null,\n
         \       \"state\": null,\n        \"postal_code\": null,\n        \"country_code\":
         null\n      },\n      \"fingerprint\": \"9ea2b317b53183f5a93ba23a594a0b8a0f2183ea9cc338e0964755cd9df71b99\",\n
@@ -647,44 +647,44 @@
         \"/cards/{cards.id}/debits\"\n  }\n}"}
     headers: ["access-control-allow-headers: Content-Type\r\n", "access-control-allow-methods:
         POST, OPTIONS\r\n", "access-control-allow-origin: *\r\n", "Content-Type: application/json\r\n",
-      "Date: Thu, 20 Feb 2014 18:20:20 GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n",
-      "X-Balanced-Guru: OHMa7bc8afe9a5b11e38f3a02a1fe53e539\r\n", "x-balanced-host:
+      "Date: Thu, 20 Feb 2014 18:50:36 GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n",
+      "X-Balanced-Guru: OHMe221b54e9a5f11e3ac3202a1fe52a36c\r\n", "x-balanced-host:
         balanced-api-02\r\n", "x-balanced-marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
       "x-balanced-merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "x-balanced-revision:
         1.1\r\n", "x-balanced-software-build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
-      "X-Midlr-Version: 2\r\n", "x-newrelic-app-data: PxQFWFNXCQYTVVhWAwQDVUYdFhE1AwE2QgNWEVlbQFtcCxYxSBVbDQoZVA4IF0pcXAgEEBhSVhQAQhhQEAMCFlVAFEIIFBQCHVMOUglXBVJXBQJUUlMPBAFIQVMABhtGRggABFpWAgdSAwsAXFtXBwBHFUFXAF8RAWs=\r\n",
+      "X-Midlr-Version: 2\r\n", "x-newrelic-app-data: PxQFWFNXCQYTVVhWAwQDVUYdFhE1AwE2QgNWEVlbQFtcCxYxSBVbDQoZVA4IF0pcXAgEEBhSVhQAQhhQEAMCFlVAFEIIFBQCHVMIUwNZAVtdBwNRX1AIAghIQVMABhtGRgUOVgZRWlRWWlxbAABXUAFHFUFXAF8RAWs=\r\n",
       "Content-Length: 1058\r\n", "Connection: keep-alive\r\n"]
     status: {code: 201, message: CREATED}
 - request: !!python/object:vcr.request.Request
     body: '{"cvv_match": null, "avs_postal_match": null, "name": null, "links": {"customer":
-      "/customers/CU55qLMcI2S189Nlgjl3U2HC"}, "avs_street_match": null, "expiration_year":
+      "/customers/CU6RzLa5UMjie8WTakgY9C6y"}, "avs_street_match": null, "expiration_year":
       2020, "brand": "Visa", "cvv_result": null, "number": "xxxxxxxxxxxx4448", "updated_at":
-      "2014-02-20T18:20:20.413034Z", "expiration_month": 12, "cvv": null, "meta":
+      "2014-02-20T18:50:36.287944Z", "expiration_month": 12, "cvv": null, "meta":
       {}, "avs_result": null, "fingerprint": "9ea2b317b53183f5a93ba23a594a0b8a0f2183ea9cc338e0964755cd9df71b99",
-      "created_at": "2014-02-20T18:20:20.413031Z", "is_verified": true, "id": "CC57bIoi4PYiq43KJPt8bHXi",
+      "created_at": "2014-02-20T18:50:36.287941Z", "is_verified": true, "id": "CC6ThNGHeXungVeLe0vTLZ3a",
       "address": {"city": null, "line2": null, "line1": null, "state": null, "postal_code":
       null, "country_code": null}}'
     headers: !!python/object/apply:__builtin__.frozenset
-    - - !!python/tuple [Content-Length, !!python/unicode 651]
+    - - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xVWZ4a3BCNlI4cE12QzU5NGpmeWpzVDJVU0I4NlcwRHc6Tm9uZQ==]
+      - !!python/tuple [Content-Length, !!python/unicode 651]
       - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
       - !!python/tuple [Content-Type, !!python/unicode application/json]
       - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
       - !!python/tuple [accept, !!python/unicode application/vnd.api+json;revision=1.1]
-      - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xNmJPdFdsbmd1M1ROVWlvYjVySU5VNDI4NHJxUWt5dVA6Tm9uZQ==]
     host: api.balancedpayments.com
     method: PUT
-    path: /cards/CC57bIoi4PYiq43KJPt8bHXi
+    path: /cards/CC6ThNGHeXungVeLe0vTLZ3a
     port: 443
     protocol: https
   response:
     body: {string: "{\n  \"cards\": [\n    {\n      \"cvv_match\": null,\n      \"links\":
-        {\n        \"customer\": \"CU55qLMcI2S189Nlgjl3U2HC\"\n      },\n      \"name\":
+        {\n        \"customer\": \"CU6RzLa5UMjie8WTakgY9C6y\"\n      },\n      \"name\":
         null,\n      \"expiration_year\": 2020,\n      \"avs_street_match\": null,\n
-        \     \"is_verified\": true,\n      \"created_at\": \"2014-02-20T18:20:20.413031Z\",\n
+        \     \"is_verified\": true,\n      \"created_at\": \"2014-02-20T18:50:36.287941Z\",\n
         \     \"cvv_result\": null,\n      \"brand\": \"Visa\",\n      \"number\":
-        \"xxxxxxxxxxxx4448\",\n      \"updated_at\": \"2014-02-20T18:20:21.137550Z\",\n
-        \     \"id\": \"CC57bIoi4PYiq43KJPt8bHXi\",\n      \"expiration_month\": 12,\n
-        \     \"cvv\": null,\n      \"meta\": {},\n      \"href\": \"/cards/CC57bIoi4PYiq43KJPt8bHXi\",\n
+        \"xxxxxxxxxxxx4448\",\n      \"updated_at\": \"2014-02-20T18:50:37.049376Z\",\n
+        \     \"id\": \"CC6ThNGHeXungVeLe0vTLZ3a\",\n      \"expiration_month\": 12,\n
+        \     \"cvv\": null,\n      \"meta\": {},\n      \"href\": \"/cards/CC6ThNGHeXungVeLe0vTLZ3a\",\n
         \     \"address\": {\n        \"city\": null,\n        \"line2\": null,\n
         \       \"line1\": null,\n        \"state\": null,\n        \"postal_code\":
         null,\n        \"country_code\": null\n      },\n      \"fingerprint\": \"9ea2b317b53183f5a93ba23a594a0b8a0f2183ea9cc338e0964755cd9df71b99\",\n
@@ -692,8 +692,8 @@
         \ \"links\": {\n    \"cards.card_holds\": \"/cards/{cards.id}/card_holds\",\n
         \   \"cards.customer\": \"/customers/{cards.customer}\",\n    \"cards.debits\":
         \"/cards/{cards.id}/debits\"\n  }\n}"}
-    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:20:21
-        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMa8886df49a5b11e38a08026ba7c1aba6\r\n",
+    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:50:37
+        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMe2e6d45a9a5f11e38a08026ba7c1aba6\r\n",
       "X-Balanced-Host: balanced-api-04\r\n", "X-Balanced-Marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
       "X-Balanced-Merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "X-Balanced-Revision:
         1.1\r\n", "X-Balanced-Software-Build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
@@ -702,22 +702,22 @@
 - request: !!python/object:vcr.request.Request
     body: null
     headers: !!python/object/apply:__builtin__.frozenset
-    - - !!python/tuple [content-type, !!python/unicode application/json;revision=1.1]
-      - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
+    - - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xVWZ4a3BCNlI4cE12QzU5NGpmeWpzVDJVU0I4NlcwRHc6Tm9uZQ==]
+      - !!python/tuple [content-type, !!python/unicode application/json;revision=1.1]
       - !!python/tuple [accept, !!python/unicode application/vnd.api+json;revision=1.1]
       - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
-      - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xNmJPdFdsbmd1M1ROVWlvYjVySU5VNDI4NHJxUWt5dVA6Tm9uZQ==]
+      - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
     host: api.balancedpayments.com
     method: GET
-    path: /customers/CU55qLMcI2S189Nlgjl3U2HC
+    path: /customers/CU6RzLa5UMjie8WTakgY9C6y
     port: 443
     protocol: https
   response:
     body: {string: "{\n  \"customers\": [\n    {\n      \"name\": null,\n      \"links\":
         {\n        \"source\": null,\n        \"destination\": null\n      },\n      \"updated_at\":
-        \"2014-02-20T18:20:19.091853Z\",\n      \"created_at\": \"2014-02-20T18:20:18.847035Z\",\n
-        \     \"dob_month\": null,\n      \"id\": \"CU55qLMcI2S189Nlgjl3U2HC\",\n
-        \     \"phone\": null,\n      \"href\": \"/customers/CU55qLMcI2S189Nlgjl3U2HC\",\n
+        \"2014-02-20T18:50:34.999094Z\",\n      \"created_at\": \"2014-02-20T18:50:34.763742Z\",\n
+        \     \"dob_month\": null,\n      \"id\": \"CU6RzLa5UMjie8WTakgY9C6y\",\n
+        \     \"phone\": null,\n      \"href\": \"/customers/CU6RzLa5UMjie8WTakgY9C6y\",\n
         \     \"merchant_status\": \"no-match\",\n      \"meta\": {},\n      \"dob_year\":
         null,\n      \"address\": {\n        \"city\": null,\n        \"line2\": null,\n
         \       \"line1\": null,\n        \"state\": null,\n        \"postal_code\":
@@ -732,9 +732,9 @@
         \   \"customers.refunds\": \"/customers/{customers.id}/refunds\",\n    \"customers.reversals\":
         \"/customers/{customers.id}/reversals\",\n    \"customers.orders\": \"/customers/{customers.id}/orders\",\n
         \   \"customers.credits\": \"/customers/{customers.id}/credits\"\n  }\n}"}
-    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:20:21
-        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMa90a04ea9a5b11e394a9026ba7f8ec28\r\n",
-      "X-Balanced-Host: balanced-api-01\r\n", "X-Balanced-Marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
+    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:50:37
+        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMe36e8e729a5f11e3b3e9026ba7cd33d0\r\n",
+      "X-Balanced-Host: balanced-api-02\r\n", "X-Balanced-Marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
       "X-Balanced-Merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "X-Balanced-Revision:
         1.1\r\n", "X-Balanced-Software-Build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
       "Content-Length: 1447\r\n", "Connection: keep-alive\r\n"]
@@ -742,39 +742,39 @@
 - request: !!python/object:vcr.request.Request
     body: null
     headers: !!python/object/apply:__builtin__.frozenset
-    - - !!python/tuple [content-type, !!python/unicode application/json;revision=1.1]
-      - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
+    - - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xVWZ4a3BCNlI4cE12QzU5NGpmeWpzVDJVU0I4NlcwRHc6Tm9uZQ==]
+      - !!python/tuple [content-type, !!python/unicode application/json;revision=1.1]
       - !!python/tuple [accept, !!python/unicode application/vnd.api+json;revision=1.1]
       - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
-      - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xNmJPdFdsbmd1M1ROVWlvYjVySU5VNDI4NHJxUWt5dVA6Tm9uZQ==]
+      - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
     host: api.balancedpayments.com
     method: GET
-    path: /customers/CU55qLMcI2S189Nlgjl3U2HC/cards?limit=10&offset=0
+    path: /customers/CU6RzLa5UMjie8WTakgY9C6y/cards?limit=10&offset=0
     port: 443
     protocol: https
   response:
     body: {string: "{\n  \"cards\": [\n    {\n      \"cvv_match\": null,\n      \"links\":
-        {\n        \"customer\": \"CU55qLMcI2S189Nlgjl3U2HC\"\n      },\n      \"name\":
+        {\n        \"customer\": \"CU6RzLa5UMjie8WTakgY9C6y\"\n      },\n      \"name\":
         null,\n      \"expiration_year\": 2020,\n      \"avs_street_match\": null,\n
-        \     \"is_verified\": true,\n      \"created_at\": \"2014-02-20T18:20:20.413031Z\",\n
+        \     \"is_verified\": true,\n      \"created_at\": \"2014-02-20T18:50:36.287941Z\",\n
         \     \"cvv_result\": null,\n      \"brand\": \"Visa\",\n      \"number\":
-        \"xxxxxxxxxxxx4448\",\n      \"updated_at\": \"2014-02-20T18:20:21.137550Z\",\n
-        \     \"id\": \"CC57bIoi4PYiq43KJPt8bHXi\",\n      \"expiration_month\": 12,\n
-        \     \"cvv\": null,\n      \"meta\": {},\n      \"href\": \"/cards/CC57bIoi4PYiq43KJPt8bHXi\",\n
+        \"xxxxxxxxxxxx4448\",\n      \"updated_at\": \"2014-02-20T18:50:37.049376Z\",\n
+        \     \"id\": \"CC6ThNGHeXungVeLe0vTLZ3a\",\n      \"expiration_month\": 12,\n
+        \     \"cvv\": null,\n      \"meta\": {},\n      \"href\": \"/cards/CC6ThNGHeXungVeLe0vTLZ3a\",\n
         \     \"address\": {\n        \"city\": null,\n        \"line2\": null,\n
         \       \"line1\": null,\n        \"state\": null,\n        \"postal_code\":
         null,\n        \"country_code\": null\n      },\n      \"fingerprint\": \"9ea2b317b53183f5a93ba23a594a0b8a0f2183ea9cc338e0964755cd9df71b99\",\n
         \     \"avs_postal_match\": null,\n      \"avs_result\": null\n    }\n  ],\n
-        \ \"meta\": {\n    \"last\": \"/customers/CU55qLMcI2S189Nlgjl3U2HC/cards?limit=10&offset=0\",\n
-        \   \"next\": null,\n    \"href\": \"/customers/CU55qLMcI2S189Nlgjl3U2HC/cards?limit=10&offset=0\",\n
+        \ \"meta\": {\n    \"last\": \"/customers/CU6RzLa5UMjie8WTakgY9C6y/cards?limit=10&offset=0\",\n
+        \   \"next\": null,\n    \"href\": \"/customers/CU6RzLa5UMjie8WTakgY9C6y/cards?limit=10&offset=0\",\n
         \   \"limit\": 10,\n    \"offset\": 0,\n    \"previous\": null,\n    \"total\":
-        1,\n    \"first\": \"/customers/CU55qLMcI2S189Nlgjl3U2HC/cards?limit=10&offset=0\"\n
+        1,\n    \"first\": \"/customers/CU6RzLa5UMjie8WTakgY9C6y/cards?limit=10&offset=0\"\n
         \ },\n  \"links\": {\n    \"cards.debits\": \"/cards/{cards.id}/debits\",\n
         \   \"cards.customer\": \"/customers/{cards.customer}\",\n    \"cards.card_holds\":
         \"/cards/{cards.id}/card_holds\"\n  }\n}"}
-    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:20:22
-        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMa95b0dc29a5b11e390f8026ba7cd33d0\r\n",
-      "X-Balanced-Host: balanced-api-02\r\n", "X-Balanced-Marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
+    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:50:38
+        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMe3bba0549a5f11e3ab13026ba7d31e6f\r\n",
+      "X-Balanced-Host: balanced-api-06\r\n", "X-Balanced-Marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
       "X-Balanced-Merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "X-Balanced-Revision:
         1.1\r\n", "X-Balanced-Software-Build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
       "Content-Length: 1412\r\n", "Connection: keep-alive\r\n"]
@@ -783,40 +783,40 @@
     body: '{"amount": 1061, "description": "whatever username"}'
     headers: !!python/object/apply:__builtin__.frozenset
     - - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
+      - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xVWZ4a3BCNlI4cE12QzU5NGpmeWpzVDJVU0I4NlcwRHc6Tm9uZQ==]
       - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
       - !!python/tuple [Content-Type, !!python/unicode application/json]
       - !!python/tuple [Content-Length, !!python/unicode 52]
       - !!python/tuple [accept, !!python/unicode application/vnd.api+json;revision=1.1]
-      - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xNmJPdFdsbmd1M1ROVWlvYjVySU5VNDI4NHJxUWt5dVA6Tm9uZQ==]
     host: api.balancedpayments.com
     method: POST
-    path: /cards/CC57bIoi4PYiq43KJPt8bHXi/debits
+    path: /cards/CC6ThNGHeXungVeLe0vTLZ3a/debits
     port: 443
     protocol: https
   response:
     body: {string: "{\n  \"errors\": [\n    {\n      \"status\": \"Payment Required\",\n
         \     \"category_code\": \"card-declined\",\n      \"additional\": \"Account
         Frozen\",\n      \"status_code\": 402,\n      \"category_type\": \"banking\",\n
-        \     \"extras\": {},\n      \"request_id\": \"OHMa9e837d89a5b11e394a9026ba7f8ec28\",\n
-        \     \"description\": \"R758: Account Frozen. Your request id is OHMa9e837d89a5b11e394a9026ba7f8ec28.\"\n
+        \     \"extras\": {},\n      \"request_id\": \"OHMe461e87e9a5f11e3acb0026ba7c1aba6\",\n
+        \     \"description\": \"R758: Account Frozen. Your request id is OHMe461e87e9a5f11e3acb0026ba7c1aba6.\"\n
         \   }\n  ],\n  \"links\": {\n    \"debits.customer\": \"/customers/{debits.customer}\",\n
         \   \"debits.dispute\": \"/disputes/{debits.dispute}\",\n    \"debits.source\":
         \"/resources/{debits.source}\",\n    \"debits.order\": \"/orders/{debits.order}\",\n
         \   \"debits.refunds\": \"/debits/{debits.id}/refunds\",\n    \"debits.events\":
         \"/debits/{debits.id}/events\"\n  },\n  \"debits\": [\n    {\n      \"status\":
         \"failed\",\n      \"description\": \"whatever username\",\n      \"links\":
-        {\n        \"customer\": \"CU55qLMcI2S189Nlgjl3U2HC\",\n        \"source\":
-        \"CC57bIoi4PYiq43KJPt8bHXi\",\n        \"order\": null,\n        \"dispute\":
-        null\n      },\n      \"updated_at\": \"2014-02-20T18:20:23.755848Z\",\n      \"created_at\":
-        \"2014-02-20T18:20:23.211028Z\",\n      \"transaction_number\": \"W293-754-7424\",\n
+        {\n        \"customer\": \"CU6RzLa5UMjie8WTakgY9C6y\",\n        \"source\":
+        \"CC6ThNGHeXungVeLe0vTLZ3a\",\n        \"order\": null,\n        \"dispute\":
+        null\n      },\n      \"updated_at\": \"2014-02-20T18:50:39.938714Z\",\n      \"created_at\":
+        \"2014-02-20T18:50:39.235288Z\",\n      \"transaction_number\": \"W637-541-9578\",\n
         \     \"failure_reason\": \"R758: Account Frozen.\",\n      \"currency\":
         \"USD\",\n      \"amount\": 1061,\n      \"failure_reason_code\": \"card-declined\",\n
-        \     \"meta\": {},\n      \"href\": \"/debits/WD5akGnmx90Je7hRNSYsfcSs\",\n
-        \     \"appears_on_statement_as\": \"BAL*example.com\",\n      \"id\": \"WD5akGnmx90Je7hRNSYsfcSs\"\n
+        \     \"meta\": {},\n      \"href\": \"/debits/WD6WB4LURQyrnHGIcq1jEalo\",\n
+        \     \"appears_on_statement_as\": \"BAL*example.com\",\n      \"id\": \"WD6WB4LURQyrnHGIcq1jEalo\"\n
         \   }\n  ]\n}"}
-    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:20:23
-        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMa9e837d89a5b11e394a9026ba7f8ec28\r\n",
-      "X-Balanced-Host: balanced-api-01\r\n", "X-Balanced-Marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
+    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:50:40
+        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMe461e87e9a5f11e3acb0026ba7c1aba6\r\n",
+      "X-Balanced-Host: balanced-api-04\r\n", "X-Balanced-Marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
       "X-Balanced-Merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "X-Balanced-Revision:
         1.1\r\n", "X-Balanced-Software-Build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
       "Content-Length: 1426\r\n", "Connection: keep-alive\r\n"]
@@ -825,11 +825,11 @@
     body: '{}'
     headers: !!python/object/apply:__builtin__.frozenset
     - - !!python/tuple [Content-Length, !!python/unicode 2]
+      - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xVWZ4a3BCNlI4cE12QzU5NGpmeWpzVDJVU0I4NlcwRHc6Tm9uZQ==]
       - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
       - !!python/tuple [Content-Type, !!python/unicode application/json]
       - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
       - !!python/tuple [accept, !!python/unicode application/vnd.api+json;revision=1.1]
-      - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xNmJPdFdsbmd1M1ROVWlvYjVySU5VNDI4NHJxUWt5dVA6Tm9uZQ==]
     host: api.balancedpayments.com
     method: POST
     path: /customers
@@ -838,9 +838,9 @@
   response:
     body: {string: "{\n  \"customers\": [\n    {\n      \"name\": null,\n      \"links\":
         {\n        \"source\": null,\n        \"destination\": null\n      },\n      \"updated_at\":
-        \"2014-02-20T18:20:24.821759Z\",\n      \"created_at\": \"2014-02-20T18:20:24.607831Z\",\n
-        \     \"dob_month\": null,\n      \"id\": \"CU5bUuQoJCzwWrlAycYRN0PU\",\n
-        \     \"phone\": null,\n      \"href\": \"/customers/CU5bUuQoJCzwWrlAycYRN0PU\",\n
+        \"2014-02-20T18:50:41.259008Z\",\n      \"created_at\": \"2014-02-20T18:50:41.069529Z\",\n
+        \     \"dob_month\": null,\n      \"id\": \"CU6YFqqJoWW75QCYmhuXhkfS\",\n
+        \     \"phone\": null,\n      \"href\": \"/customers/CU6YFqqJoWW75QCYmhuXhkfS\",\n
         \     \"merchant_status\": \"no-match\",\n      \"meta\": {},\n      \"dob_year\":
         null,\n      \"address\": {\n        \"city\": null,\n        \"line2\": null,\n
         \       \"line1\": null,\n        \"state\": null,\n        \"postal_code\":
@@ -855,12 +855,12 @@
         \   \"customers.refunds\": \"/customers/{customers.id}/refunds\",\n    \"customers.reversals\":
         \"/customers/{customers.id}/reversals\",\n    \"customers.orders\": \"/customers/{customers.id}/orders\",\n
         \   \"customers.credits\": \"/customers/{customers.id}/credits\"\n  }\n}"}
-    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:20:24
-        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMaa91b98e9a5b11e3b33602a1fe52a36c\r\n",
-      "x-balanced-host: balanced-api-05\r\n", "x-balanced-marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
+    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:50:41
+        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMe54002809a5f11e3ac3202a1fe52a36c\r\n",
+      "x-balanced-host: balanced-api-02\r\n", "x-balanced-marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
       "x-balanced-merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "x-balanced-revision:
         1.1\r\n", "x-balanced-software-build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
-      "X-Midlr-Version: 2\r\n", "x-newrelic-app-data: PxQFWFNXCQYTVVhWAwQDVUYdFhE1AwE2QgNWEVlbQFtcCxYxSBVbDQoZVA4IF0pcXAgEEBhSQhUQXltWEBVNAUIHWRZdGhgSA0kZUR9VAlJXAwJRX1IICgRdVlIAHRdUSBEUC1cFWwNTAQxXXgBRVgdWAUMdQVUDCEVSPA==\r\n",
+      "X-Midlr-Version: 2\r\n", "x-newrelic-app-data: PxQFWFNXCQYTVVhWAwQDVUYdFhE1AwE2QgNWEVlbQFtcCxYxSBVbDQoZVA4IF0pcXAgEEBhSQhUQXltWEBVNAUIHWRZdGhgSA0kZUR9SC1tVDwBQV1IJAQlTV1IABRtGVh0WEQBWU1NWAQgBWQAGAgBUDFITTRMEBVpEBDs=\r\n",
       "Content-Length: 1447\r\n", "Connection: keep-alive\r\n"]
     status: {code: 201, message: CREATED}
 - request: !!python/object:vcr.request.Request
@@ -869,12 +869,12 @@
       "address": {"state": "Confusion", "postal_code": "90210", "line1": "123 Main
       Street"}}'
     headers: !!python/object/apply:__builtin__.frozenset
-    - - !!python/tuple [Content-Length, !!python/unicode 238]
+    - - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xVWZ4a3BCNlI4cE12QzU5NGpmeWpzVDJVU0I4NlcwRHc6Tm9uZQ==]
+      - !!python/tuple [Content-Length, !!python/unicode 238]
       - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
       - !!python/tuple [Content-Type, !!python/unicode application/json]
       - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
       - !!python/tuple [accept, !!python/unicode application/vnd.api+json;revision=1.1]
-      - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xNmJPdFdsbmd1M1ROVWlvYjVySU5VNDI4NHJxUWt5dVA6Tm9uZQ==]
     host: api.balancedpayments.com
     method: POST
     path: /cards
@@ -884,12 +884,12 @@
     body: {string: "{\n  \"cards\": [\n    {\n      \"cvv_match\": null,\n      \"links\":
         {\n        \"customer\": null\n      },\n      \"name\": null,\n      \"expiration_year\":
         2020,\n      \"avs_street_match\": \"yes\",\n      \"is_verified\": true,\n
-        \     \"created_at\": \"2014-02-20T18:20:26.056966Z\",\n      \"cvv_result\":
+        \     \"created_at\": \"2014-02-20T18:50:42.705579Z\",\n      \"cvv_result\":
         null,\n      \"brand\": \"Visa\",\n      \"number\": \"xxxxxxxxxxxx1111\",\n
-        \     \"updated_at\": \"2014-02-20T18:20:26.056969Z\",\n      \"id\": \"CC5dxesRkaDNoCkdmXUzbfo2\",\n
+        \     \"updated_at\": \"2014-02-20T18:50:42.705582Z\",\n      \"id\": \"CC70uEozTtQV2Yf3DfGIEUCY\",\n
         \     \"expiration_month\": 10,\n      \"cvv\": null,\n      \"meta\": {\n
         \       \"region\": \"Confusion\",\n        \"city_town\": \"\",\n        \"address_2\":
-        \"Box 2\"\n      },\n      \"href\": \"/cards/CC5dxesRkaDNoCkdmXUzbfo2\",\n
+        \"Box 2\"\n      },\n      \"href\": \"/cards/CC70uEozTtQV2Yf3DfGIEUCY\",\n
         \     \"address\": {\n        \"city\": \"Balo Alto\",\n        \"line2\":
         null,\n        \"line1\": \"123 Main Street\",\n        \"state\": null,\n
         \       \"postal_code\": \"90210\",\n        \"country_code\": null\n      },\n
@@ -900,24 +900,24 @@
         \   \"cards.debits\": \"/cards/{cards.id}/debits\"\n  }\n}"}
     headers: ["access-control-allow-headers: Content-Type\r\n", "access-control-allow-methods:
         POST, OPTIONS\r\n", "access-control-allow-origin: *\r\n", "Content-Type: application/json\r\n",
-      "Date: Thu, 20 Feb 2014 18:20:26 GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n",
-      "X-Balanced-Guru: OHMab2824d29a5b11e3ba1302a1fe53e539\r\n", "x-balanced-host:
-        balanced-api-04\r\n", "x-balanced-marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
+      "Date: Thu, 20 Feb 2014 18:50:42 GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n",
+      "X-Balanced-Guru: OHMe5d9d7349a5f11e39a7302a1fe53e539\r\n", "x-balanced-host:
+        balanced-api-02\r\n", "x-balanced-marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
       "x-balanced-merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "x-balanced-revision:
         1.1\r\n", "x-balanced-software-build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
-      "X-Midlr-Version: 2\r\n", "x-newrelic-app-data: PxQFWFNXCQYTVVhWAwQDVUYdFhE1AwE2QgNWEVlbQFtcCxYxSBVbDQoZVA4IF0pcXAgEEBhSVhQAQhhQEAMCFlVAFEIIFBQCHVAOWAFUA1JSAgdZUFoJBwFIQVEACRtGRlMHUlVXBlUHVABTXFwCAAVHFUFXAF8RAWs=\r\n",
+      "X-Midlr-Version: 2\r\n", "x-newrelic-app-data: PxQFWFNXCQYTVVhWAwQDVUYdFhE1AwE2QgNWEVlbQFtcCxYxSBVbDQoZVA4IF0pcXAgEEBhSVhQAQhhQEAMCFlVAFEIIFBQCHVIAVgRRC1JUBwRTUVYJBwZIQVEACRtGRldQAAZSBgAAA1lbC1oEBFdHFUFXAF8RAWs=\r\n",
       "Content-Length: 1216\r\n", "Connection: keep-alive\r\n"]
     status: {code: 201, message: CREATED}
 - request: !!python/object:vcr.request.Request
     body: '{"routing_number": "121042882", "account_number": "112233a", "name": "Homer
       Jay"}'
     headers: !!python/object/apply:__builtin__.frozenset
-    - - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
+    - - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xVWZ4a3BCNlI4cE12QzU5NGpmeWpzVDJVU0I4NlcwRHc6Tm9uZQ==]
+      - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
       - !!python/tuple [Content-Type, !!python/unicode application/json]
       - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
       - !!python/tuple [accept, !!python/unicode application/vnd.api+json;revision=1.1]
       - !!python/tuple [Content-Length, !!python/unicode 81]
-      - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xNmJPdFdsbmd1M1ROVWlvYjVySU5VNDI4NHJxUWt5dVA6Tm9uZQ==]
     host: api.balancedpayments.com
     method: POST
     path: /bank_accounts
@@ -928,13 +928,13 @@
         \     \"bank_name\": \"WELLS FARGO BANK NA\",\n      \"account_type\": \"checking\",\n
         \     \"name\": \"Homer Jay\",\n      \"links\": {\n        \"customer\":
         null,\n        \"bank_account_verification\": null\n      },\n      \"can_credit\":
-        true,\n      \"created_at\": \"2014-02-20T18:20:27.126983Z\",\n      \"fingerprint\":
+        true,\n      \"created_at\": \"2014-02-20T18:50:43.934507Z\",\n      \"fingerprint\":
         \"dac6514d9dd3a1cd7ac925d5749e0308c2c65fa27c506aefb0c9b21611ff9969\",\n      \"updated_at\":
-        \"2014-02-20T18:20:27.126986Z\",\n      \"href\": \"/bank_accounts/BA5eJYbC2yMVmGQExNS6f1Ii\",\n
+        \"2014-02-20T18:50:43.934509Z\",\n      \"href\": \"/bank_accounts/BA71SGY598p22jsqMAAUx49V\",\n
         \     \"meta\": {},\n      \"account_number\": \"xxx233a\",\n      \"address\":
         {\n        \"city\": null,\n        \"line2\": null,\n        \"line1\": null,\n
         \       \"state\": null,\n        \"postal_code\": null,\n        \"country_code\":
-        null\n      },\n      \"can_debit\": false,\n      \"id\": \"BA5eJYbC2yMVmGQExNS6f1Ii\"\n
+        null\n      },\n      \"can_debit\": false,\n      \"id\": \"BA71SGY598p22jsqMAAUx49V\"\n
         \   }\n  ],\n  \"links\": {\n    \"bank_accounts.credits\": \"/bank_accounts/{bank_accounts.id}/credits\",\n
         \   \"bank_accounts.bank_account_verifications\": \"/bank_accounts/{bank_accounts.id}/verifications\",\n
         \   \"bank_accounts.customer\": \"/customers/{bank_accounts.customer}\",\n
@@ -943,23 +943,284 @@
         \ }\n}"}
     headers: ["access-control-allow-headers: Content-Type\r\n", "access-control-allow-methods:
         POST, OPTIONS\r\n", "access-control-allow-origin: *\r\n", "Content-Type: application/json\r\n",
-      "Date: Thu, 20 Feb 2014 18:20:27 GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n",
-      "X-Balanced-Guru: OHMabd691709a5b11e3aed402a1fe52a36c\r\n", "x-balanced-host:
-        balanced-api-04\r\n", "x-balanced-marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
+      "Date: Thu, 20 Feb 2014 18:50:44 GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n",
+      "X-Balanced-Guru: OHMe6a931509a5f11e3992602a1fe52a36c\r\n", "x-balanced-host:
+        balanced-api-06\r\n", "x-balanced-marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
       "x-balanced-merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "x-balanced-revision:
         1.1\r\n", "x-balanced-software-build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
-      "X-Midlr-Version: 2\r\n", "x-newrelic-app-data: PxQFWFNXCQYTVVhWAwQDVUYdFhE1AwE2QgNWEVlbQFtcCxYxSBVbDQoZVA4IF0pcXAgEEBhTVggPbldQAQkWDEQRFgFKXVVGVkcVQQFNE1JKAwdXXlEICgFTUFAOBAZQUh0WAlpeT0ISUQEBCV4BClVTCFEIUQZXBRQbQQACVEBVOQ==\r\n",
+      "X-Midlr-Version: 2\r\n", "x-newrelic-app-data: PxQFWFNXCQYTVVhWAwQDVUYdFhE1AwE2QgNWEVlbQFtcCxYxSBVbDQoZVA4IF0pcXAgEEBhTVggPbldQAQkWDEQRFgFKXVVGVkcVQQFNE1JKAANVUVUPAwRRWFUDBgRXUB0WAlpeT0ISUQwGCAgFCwpWDVZXWQoHABQbQQACVEBVOQ==\r\n",
       "Content-Length: 1281\r\n", "Connection: keep-alive\r\n"]
     status: {code: 201, message: CREATED}
 - request: !!python/object:vcr.request.Request
-    body: '{}'
+    body: '{"expiration_month": 12, "number": "4242424242424242", "expiration_year":
+      2020}'
     headers: !!python/object/apply:__builtin__.frozenset
-    - - !!python/tuple [Content-Length, !!python/unicode 2]
+    - - !!python/tuple [Content-Length, !!python/unicode 79]
+      - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xVWZ4a3BCNlI4cE12QzU5NGpmeWpzVDJVU0I4NlcwRHc6Tm9uZQ==]
       - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
       - !!python/tuple [Content-Type, !!python/unicode application/json]
       - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
       - !!python/tuple [accept, !!python/unicode application/vnd.api+json;revision=1.1]
-      - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xNmJPdFdsbmd1M1ROVWlvYjVySU5VNDI4NHJxUWt5dVA6Tm9uZQ==]
+    host: api.balancedpayments.com
+    method: POST
+    path: /cards
+    port: 443
+    protocol: https
+  response:
+    body: {string: "{\n  \"cards\": [\n    {\n      \"cvv_match\": null,\n      \"links\":
+        {\n        \"customer\": null\n      },\n      \"name\": null,\n      \"expiration_year\":
+        2020,\n      \"avs_street_match\": null,\n      \"is_verified\": true,\n      \"created_at\":
+        \"2014-02-20T18:50:45.284590Z\",\n      \"cvv_result\": null,\n      \"brand\":
+        \"Visa\",\n      \"number\": \"xxxxxxxxxxxx4242\",\n      \"updated_at\":
+        \"2014-02-20T18:50:45.284593Z\",\n      \"id\": \"CC73paBsmd8A0RtfwoCqGFLW\",\n
+        \     \"expiration_month\": 12,\n      \"cvv\": null,\n      \"meta\": {},\n
+        \     \"href\": \"/cards/CC73paBsmd8A0RtfwoCqGFLW\",\n      \"address\": {\n
+        \       \"city\": null,\n        \"line2\": null,\n        \"line1\": null,\n
+        \       \"state\": null,\n        \"postal_code\": null,\n        \"country_code\":
+        null\n      },\n      \"fingerprint\": \"1e2c425a579a1c7f27a037f0662b855035ceadbff18a0adbe785fb07e2afe1cc\",\n
+        \     \"avs_postal_match\": null,\n      \"avs_result\": null\n    }\n  ],\n
+        \ \"links\": {\n    \"cards.card_holds\": \"/cards/{cards.id}/card_holds\",\n
+        \   \"cards.customer\": \"/customers/{cards.customer}\",\n    \"cards.debits\":
+        \"/cards/{cards.id}/debits\"\n  }\n}"}
+    headers: ["access-control-allow-headers: Content-Type\r\n", "access-control-allow-methods:
+        POST, OPTIONS\r\n", "access-control-allow-origin: *\r\n", "Content-Type: application/json\r\n",
+      "Date: Thu, 20 Feb 2014 18:50:45 GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n",
+      "X-Balanced-Guru: OHMe76e9d1e9a5f11e3836102a1fe53e539\r\n", "x-balanced-host:
+        balanced-api-02\r\n", "x-balanced-marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
+      "x-balanced-merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "x-balanced-revision:
+        1.1\r\n", "x-balanced-software-build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
+      "X-Midlr-Version: 2\r\n", "x-newrelic-app-data: PxQFWFNXCQYTVVhWAwQDVUYdFhE1AwE2QgNWEVlbQFtcCxYxSBVbDQoZVA4IF0pcXAgEEBhSVhQAQhhQEAMCFlVAFEIIFBQCHVIJUwFVB1tSBQ9SUFUOCglIQVMABhtGRlIOCgRSW1tTAw5RWQ9RBAZHFUFXAF8RAWs=\r\n",
+      "Content-Length: 1058\r\n", "Connection: keep-alive\r\n"]
+    status: {code: 201, message: CREATED}
+- request: !!python/object:vcr.request.Request
+    body: '{"cvv_match": null, "avs_postal_match": null, "name": null, "links": {"customer":
+      "/customers/CU6YFqqJoWW75QCYmhuXhkfS"}, "avs_street_match": null, "expiration_year":
+      2020, "brand": "Visa", "cvv_result": null, "number": "xxxxxxxxxxxx4242", "updated_at":
+      "2014-02-20T18:50:45.284593Z", "expiration_month": 12, "cvv": null, "meta":
+      {}, "avs_result": null, "fingerprint": "1e2c425a579a1c7f27a037f0662b855035ceadbff18a0adbe785fb07e2afe1cc",
+      "created_at": "2014-02-20T18:50:45.284590Z", "is_verified": true, "id": "CC73paBsmd8A0RtfwoCqGFLW",
+      "address": {"city": null, "line2": null, "line1": null, "state": null, "postal_code":
+      null, "country_code": null}}'
+    headers: !!python/object/apply:__builtin__.frozenset
+    - - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xVWZ4a3BCNlI4cE12QzU5NGpmeWpzVDJVU0I4NlcwRHc6Tm9uZQ==]
+      - !!python/tuple [Content-Length, !!python/unicode 651]
+      - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
+      - !!python/tuple [Content-Type, !!python/unicode application/json]
+      - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
+      - !!python/tuple [accept, !!python/unicode application/vnd.api+json;revision=1.1]
+    host: api.balancedpayments.com
+    method: PUT
+    path: /cards/CC73paBsmd8A0RtfwoCqGFLW
+    port: 443
+    protocol: https
+  response:
+    body: {string: "{\n  \"cards\": [\n    {\n      \"cvv_match\": null,\n      \"links\":
+        {\n        \"customer\": \"CU6YFqqJoWW75QCYmhuXhkfS\"\n      },\n      \"name\":
+        null,\n      \"expiration_year\": 2020,\n      \"avs_street_match\": null,\n
+        \     \"is_verified\": true,\n      \"created_at\": \"2014-02-20T18:50:45.284590Z\",\n
+        \     \"cvv_result\": null,\n      \"brand\": \"Visa\",\n      \"number\":
+        \"xxxxxxxxxxxx4242\",\n      \"updated_at\": \"2014-02-20T18:50:46.068420Z\",\n
+        \     \"id\": \"CC73paBsmd8A0RtfwoCqGFLW\",\n      \"expiration_month\": 12,\n
+        \     \"cvv\": null,\n      \"meta\": {},\n      \"href\": \"/cards/CC73paBsmd8A0RtfwoCqGFLW\",\n
+        \     \"address\": {\n        \"city\": null,\n        \"line2\": null,\n
+        \       \"line1\": null,\n        \"state\": null,\n        \"postal_code\":
+        null,\n        \"country_code\": null\n      },\n      \"fingerprint\": \"1e2c425a579a1c7f27a037f0662b855035ceadbff18a0adbe785fb07e2afe1cc\",\n
+        \     \"avs_postal_match\": null,\n      \"avs_result\": null\n    }\n  ],\n
+        \ \"links\": {\n    \"cards.card_holds\": \"/cards/{cards.id}/card_holds\",\n
+        \   \"cards.customer\": \"/customers/{cards.customer}\",\n    \"cards.debits\":
+        \"/cards/{cards.id}/debits\"\n  }\n}"}
+    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:50:46
+        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMe8470a469a5f11e39317026ba7cac9da\r\n",
+      "X-Balanced-Host: balanced-api-05\r\n", "X-Balanced-Marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
+      "X-Balanced-Merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "X-Balanced-Revision:
+        1.1\r\n", "X-Balanced-Software-Build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
+      "Content-Length: 1080\r\n", "Connection: keep-alive\r\n"]
+    status: {code: 200, message: OK}
+- request: !!python/object:vcr.request.Request
+    body: '{"expiration_month": 12, "number": "4242424242424242", "expiration_year":
+      2030}'
+    headers: !!python/object/apply:__builtin__.frozenset
+    - - !!python/tuple [Content-Length, !!python/unicode 79]
+      - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xVWZ4a3BCNlI4cE12QzU5NGpmeWpzVDJVU0I4NlcwRHc6Tm9uZQ==]
+      - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
+      - !!python/tuple [Content-Type, !!python/unicode application/json]
+      - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
+      - !!python/tuple [accept, !!python/unicode application/vnd.api+json;revision=1.1]
+    host: api.balancedpayments.com
+    method: POST
+    path: /cards
+    port: 443
+    protocol: https
+  response:
+    body: {string: "{\n  \"cards\": [\n    {\n      \"cvv_match\": null,\n      \"links\":
+        {\n        \"customer\": null\n      },\n      \"name\": null,\n      \"expiration_year\":
+        2030,\n      \"avs_street_match\": null,\n      \"is_verified\": true,\n      \"created_at\":
+        \"2014-02-20T18:50:47.584227Z\",\n      \"cvv_result\": null,\n      \"brand\":
+        \"Visa\",\n      \"number\": \"xxxxxxxxxxxx4242\",\n      \"updated_at\":
+        \"2014-02-20T18:50:47.584231Z\",\n      \"id\": \"CC75ZyfxJC9NKSWwQvvxo4aK\",\n
+        \     \"expiration_month\": 12,\n      \"cvv\": null,\n      \"meta\": {},\n
+        \     \"href\": \"/cards/CC75ZyfxJC9NKSWwQvvxo4aK\",\n      \"address\": {\n
+        \       \"city\": null,\n        \"line2\": null,\n        \"line1\": null,\n
+        \       \"state\": null,\n        \"postal_code\": null,\n        \"country_code\":
+        null\n      },\n      \"fingerprint\": \"d34d613121ae61ae732d86eaf09929617bd3f5ccc60f7364d32ae1afc5f81745\",\n
+        \     \"avs_postal_match\": null,\n      \"avs_result\": null\n    }\n  ],\n
+        \ \"links\": {\n    \"cards.card_holds\": \"/cards/{cards.id}/card_holds\",\n
+        \   \"cards.customer\": \"/customers/{cards.customer}\",\n    \"cards.debits\":
+        \"/cards/{cards.id}/debits\"\n  }\n}"}
+    headers: ["access-control-allow-headers: Content-Type\r\n", "access-control-allow-methods:
+        POST, OPTIONS\r\n", "access-control-allow-origin: *\r\n", "Content-Type: application/json\r\n",
+      "Date: Thu, 20 Feb 2014 18:50:47 GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n",
+      "X-Balanced-Guru: OHMe8d8de809a5f11e3a40502a1fe52a36c\r\n", "x-balanced-host:
+        balanced-api-05\r\n", "x-balanced-marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
+      "x-balanced-merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "x-balanced-revision:
+        1.1\r\n", "x-balanced-software-build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
+      "X-Midlr-Version: 2\r\n", "x-newrelic-app-data: PxQFWFNXCQYTVVhWAwQDVUYdFhE1AwE2QgNWEVlbQFtcCxYxSBVbDQoZVA4IF0pcXAgEEBhSVhQAQhhQEAMCFlVAFEIIFBQCHVMNVANTB1JdAgRYVlsOCgFIQVMABhtGRlVXUAFUUwEFVgoGXABRUwFHFUFXAF8RAWs=\r\n",
+      "Content-Length: 1058\r\n", "Connection: keep-alive\r\n"]
+    status: {code: 201, message: CREATED}
+- request: !!python/object:vcr.request.Request
+    body: '{"cvv_match": null, "avs_postal_match": null, "name": null, "links": {"customer":
+      "/customers/CU6YFqqJoWW75QCYmhuXhkfS"}, "avs_street_match": null, "expiration_year":
+      2030, "brand": "Visa", "cvv_result": null, "number": "xxxxxxxxxxxx4242", "updated_at":
+      "2014-02-20T18:50:47.584231Z", "expiration_month": 12, "cvv": null, "meta":
+      {}, "avs_result": null, "fingerprint": "d34d613121ae61ae732d86eaf09929617bd3f5ccc60f7364d32ae1afc5f81745",
+      "created_at": "2014-02-20T18:50:47.584227Z", "is_verified": true, "id": "CC75ZyfxJC9NKSWwQvvxo4aK",
+      "address": {"city": null, "line2": null, "line1": null, "state": null, "postal_code":
+      null, "country_code": null}}'
+    headers: !!python/object/apply:__builtin__.frozenset
+    - - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xVWZ4a3BCNlI4cE12QzU5NGpmeWpzVDJVU0I4NlcwRHc6Tm9uZQ==]
+      - !!python/tuple [Content-Length, !!python/unicode 651]
+      - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
+      - !!python/tuple [Content-Type, !!python/unicode application/json]
+      - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
+      - !!python/tuple [accept, !!python/unicode application/vnd.api+json;revision=1.1]
+    host: api.balancedpayments.com
+    method: PUT
+    path: /cards/CC75ZyfxJC9NKSWwQvvxo4aK
+    port: 443
+    protocol: https
+  response:
+    body: {string: "{\n  \"cards\": [\n    {\n      \"cvv_match\": null,\n      \"links\":
+        {\n        \"customer\": \"CU6YFqqJoWW75QCYmhuXhkfS\"\n      },\n      \"name\":
+        null,\n      \"expiration_year\": 2030,\n      \"avs_street_match\": null,\n
+        \     \"is_verified\": true,\n      \"created_at\": \"2014-02-20T18:50:47.584227Z\",\n
+        \     \"cvv_result\": null,\n      \"brand\": \"Visa\",\n      \"number\":
+        \"xxxxxxxxxxxx4242\",\n      \"updated_at\": \"2014-02-20T18:50:48.466734Z\",\n
+        \     \"id\": \"CC75ZyfxJC9NKSWwQvvxo4aK\",\n      \"expiration_month\": 12,\n
+        \     \"cvv\": null,\n      \"meta\": {},\n      \"href\": \"/cards/CC75ZyfxJC9NKSWwQvvxo4aK\",\n
+        \     \"address\": {\n        \"city\": null,\n        \"line2\": null,\n
+        \       \"line1\": null,\n        \"state\": null,\n        \"postal_code\":
+        null,\n        \"country_code\": null\n      },\n      \"fingerprint\": \"d34d613121ae61ae732d86eaf09929617bd3f5ccc60f7364d32ae1afc5f81745\",\n
+        \     \"avs_postal_match\": null,\n      \"avs_result\": null\n    }\n  ],\n
+        \ \"links\": {\n    \"cards.card_holds\": \"/cards/{cards.id}/card_holds\",\n
+        \   \"cards.customer\": \"/customers/{cards.customer}\",\n    \"cards.debits\":
+        \"/cards/{cards.id}/debits\"\n  }\n}"}
+    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:50:48
+        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMe9b4cd3c9a5f11e38a08026ba7c1aba6\r\n",
+      "X-Balanced-Host: balanced-api-04\r\n", "X-Balanced-Marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
+      "X-Balanced-Merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "X-Balanced-Revision:
+        1.1\r\n", "X-Balanced-Software-Build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
+      "Content-Length: 1080\r\n", "Connection: keep-alive\r\n"]
+    status: {code: 200, message: OK}
+- request: !!python/object:vcr.request.Request
+    body: null
+    headers: !!python/object/apply:__builtin__.frozenset
+    - - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xVWZ4a3BCNlI4cE12QzU5NGpmeWpzVDJVU0I4NlcwRHc6Tm9uZQ==]
+      - !!python/tuple [content-type, !!python/unicode application/json;revision=1.1]
+      - !!python/tuple [accept, !!python/unicode application/vnd.api+json;revision=1.1]
+      - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
+      - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
+    host: api.balancedpayments.com
+    method: GET
+    path: /customers/CU6YFqqJoWW75QCYmhuXhkfS
+    port: 443
+    protocol: https
+  response:
+    body: {string: "{\n  \"customers\": [\n    {\n      \"name\": null,\n      \"links\":
+        {\n        \"source\": null,\n        \"destination\": null\n      },\n      \"updated_at\":
+        \"2014-02-20T18:50:41.259008Z\",\n      \"created_at\": \"2014-02-20T18:50:41.069529Z\",\n
+        \     \"dob_month\": null,\n      \"id\": \"CU6YFqqJoWW75QCYmhuXhkfS\",\n
+        \     \"phone\": null,\n      \"href\": \"/customers/CU6YFqqJoWW75QCYmhuXhkfS\",\n
+        \     \"merchant_status\": \"no-match\",\n      \"meta\": {},\n      \"dob_year\":
+        null,\n      \"address\": {\n        \"city\": null,\n        \"line2\": null,\n
+        \       \"line1\": null,\n        \"state\": null,\n        \"postal_code\":
+        null,\n        \"country_code\": null\n      },\n      \"business_name\":
+        null,\n      \"ssn_last4\": null,\n      \"email\": null,\n      \"ein\":
+        null\n    }\n  ],\n  \"links\": {\n    \"customers.source\": \"/resources/{customers.source}\",\n
+        \   \"customers.card_holds\": \"/customers/{customers.id}/card_holds\",\n
+        \   \"customers.bank_accounts\": \"/customers/{customers.id}/bank_accounts\",\n
+        \   \"customers.debits\": \"/customers/{customers.id}/debits\",\n    \"customers.destination\":
+        \"/resources/{customers.destination}\",\n    \"customers.cards\": \"/customers/{customers.id}/cards\",\n
+        \   \"customers.transactions\": \"/customers/{customers.id}/transactions\",\n
+        \   \"customers.refunds\": \"/customers/{customers.id}/refunds\",\n    \"customers.reversals\":
+        \"/customers/{customers.id}/reversals\",\n    \"customers.orders\": \"/customers/{customers.id}/orders\",\n
+        \   \"customers.credits\": \"/customers/{customers.id}/credits\"\n  }\n}"}
+    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:50:49
+        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMea3288269a5f11e3ba8d026ba7f8ec28\r\n",
+      "X-Balanced-Host: balanced-api-01\r\n", "X-Balanced-Marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
+      "X-Balanced-Merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "X-Balanced-Revision:
+        1.1\r\n", "X-Balanced-Software-Build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
+      "Content-Length: 1447\r\n", "Connection: keep-alive\r\n"]
+    status: {code: 200, message: OK}
+- request: !!python/object:vcr.request.Request
+    body: null
+    headers: !!python/object/apply:__builtin__.frozenset
+    - - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xVWZ4a3BCNlI4cE12QzU5NGpmeWpzVDJVU0I4NlcwRHc6Tm9uZQ==]
+      - !!python/tuple [content-type, !!python/unicode application/json;revision=1.1]
+      - !!python/tuple [accept, !!python/unicode application/vnd.api+json;revision=1.1]
+      - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
+      - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
+    host: api.balancedpayments.com
+    method: GET
+    path: /customers/CU6YFqqJoWW75QCYmhuXhkfS/cards?limit=10&offset=0
+    port: 443
+    protocol: https
+  response:
+    body: {string: "{\n  \"cards\": [\n    {\n      \"cvv_match\": null,\n      \"links\":
+        {\n        \"customer\": \"CU6YFqqJoWW75QCYmhuXhkfS\"\n      },\n      \"name\":
+        null,\n      \"expiration_year\": 2030,\n      \"avs_street_match\": null,\n
+        \     \"is_verified\": true,\n      \"created_at\": \"2014-02-20T18:50:47.584227Z\",\n
+        \     \"cvv_result\": null,\n      \"brand\": \"Visa\",\n      \"number\":
+        \"xxxxxxxxxxxx4242\",\n      \"updated_at\": \"2014-02-20T18:50:48.466734Z\",\n
+        \     \"id\": \"CC75ZyfxJC9NKSWwQvvxo4aK\",\n      \"expiration_month\": 12,\n
+        \     \"cvv\": null,\n      \"meta\": {},\n      \"href\": \"/cards/CC75ZyfxJC9NKSWwQvvxo4aK\",\n
+        \     \"address\": {\n        \"city\": null,\n        \"line2\": null,\n
+        \       \"line1\": null,\n        \"state\": null,\n        \"postal_code\":
+        null,\n        \"country_code\": null\n      },\n      \"fingerprint\": \"d34d613121ae61ae732d86eaf09929617bd3f5ccc60f7364d32ae1afc5f81745\",\n
+        \     \"avs_postal_match\": null,\n      \"avs_result\": null\n    },\n    {\n
+        \     \"cvv_match\": null,\n      \"links\": {\n        \"customer\": \"CU6YFqqJoWW75QCYmhuXhkfS\"\n
+        \     },\n      \"name\": null,\n      \"expiration_year\": 2020,\n      \"avs_street_match\":
+        null,\n      \"is_verified\": true,\n      \"created_at\": \"2014-02-20T18:50:45.284590Z\",\n
+        \     \"cvv_result\": null,\n      \"brand\": \"Visa\",\n      \"number\":
+        \"xxxxxxxxxxxx4242\",\n      \"updated_at\": \"2014-02-20T18:50:46.068420Z\",\n
+        \     \"id\": \"CC73paBsmd8A0RtfwoCqGFLW\",\n      \"expiration_month\": 12,\n
+        \     \"cvv\": null,\n      \"meta\": {},\n      \"href\": \"/cards/CC73paBsmd8A0RtfwoCqGFLW\",\n
+        \     \"address\": {\n        \"city\": null,\n        \"line2\": null,\n
+        \       \"line1\": null,\n        \"state\": null,\n        \"postal_code\":
+        null,\n        \"country_code\": null\n      },\n      \"fingerprint\": \"1e2c425a579a1c7f27a037f0662b855035ceadbff18a0adbe785fb07e2afe1cc\",\n
+        \     \"avs_postal_match\": null,\n      \"avs_result\": null\n    }\n  ],\n
+        \ \"meta\": {\n    \"last\": \"/customers/CU6YFqqJoWW75QCYmhuXhkfS/cards?limit=10&offset=0\",\n
+        \   \"next\": null,\n    \"href\": \"/customers/CU6YFqqJoWW75QCYmhuXhkfS/cards?limit=10&offset=0\",\n
+        \   \"limit\": 10,\n    \"offset\": 0,\n    \"previous\": null,\n    \"total\":
+        2,\n    \"first\": \"/customers/CU6YFqqJoWW75QCYmhuXhkfS/cards?limit=10&offset=0\"\n
+        \ },\n  \"links\": {\n    \"cards.card_holds\": \"/cards/{cards.id}/card_holds\",\n
+        \   \"cards.customer\": \"/customers/{cards.customer}\",\n    \"cards.debits\":
+        \"/cards/{cards.id}/debits\"\n  }\n}"}
+    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:50:49
+        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMea7ecb969a5f11e3ab0c026ba7d31e6f\r\n",
+      "X-Balanced-Host: balanced-api-06\r\n", "X-Balanced-Marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
+      "X-Balanced-Merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "X-Balanced-Revision:
+        1.1\r\n", "X-Balanced-Software-Build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
+      "Content-Length: 2299\r\n", "Connection: keep-alive\r\n"]
+    status: {code: 200, message: OK}
+- request: !!python/object:vcr.request.Request
+    body: '{}'
+    headers: !!python/object/apply:__builtin__.frozenset
+    - - !!python/tuple [Content-Length, !!python/unicode 2]
+      - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xVWZ4a3BCNlI4cE12QzU5NGpmeWpzVDJVU0I4NlcwRHc6Tm9uZQ==]
+      - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
+      - !!python/tuple [Content-Type, !!python/unicode application/json]
+      - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
+      - !!python/tuple [accept, !!python/unicode application/vnd.api+json;revision=1.1]
     host: api.balancedpayments.com
     method: POST
     path: /customers
@@ -968,9 +1229,9 @@
   response:
     body: {string: "{\n  \"customers\": [\n    {\n      \"name\": null,\n      \"links\":
         {\n        \"source\": null,\n        \"destination\": null\n      },\n      \"updated_at\":
-        \"2014-02-20T18:20:28.074754Z\",\n      \"created_at\": \"2014-02-20T18:20:27.871241Z\",\n
-        \     \"dob_month\": null,\n      \"id\": \"CU5fA44In6oCLPNBGcAXpIYW\",\n
-        \     \"phone\": null,\n      \"href\": \"/customers/CU5fA44In6oCLPNBGcAXpIYW\",\n
+        \"2014-02-20T18:50:50.903981Z\",\n      \"created_at\": \"2014-02-20T18:50:50.512241Z\",\n
+        \     \"dob_month\": null,\n      \"id\": \"CU79hT4tLxtleDrZT0zCagi4\",\n
+        \     \"phone\": null,\n      \"href\": \"/customers/CU79hT4tLxtleDrZT0zCagi4\",\n
         \     \"merchant_status\": \"no-match\",\n      \"meta\": {},\n      \"dob_year\":
         null,\n      \"address\": {\n        \"city\": null,\n        \"line2\": null,\n
         \       \"line1\": null,\n        \"state\": null,\n        \"postal_code\":
@@ -985,37 +1246,41 @@
         \   \"customers.refunds\": \"/customers/{customers.id}/refunds\",\n    \"customers.reversals\":
         \"/customers/{customers.id}/reversals\",\n    \"customers.orders\": \"/customers/{customers.id}/orders\",\n
         \   \"customers.credits\": \"/customers/{customers.id}/credits\"\n  }\n}"}
-    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:20:28
-        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMac7a01669a5b11e3836102a1fe53e539\r\n",
-      "x-balanced-host: balanced-api-05\r\n", "x-balanced-marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
+    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:50:51
+        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMeae40baa9a5f11e3992602a1fe52a36c\r\n",
+      "x-balanced-host: balanced-api-02\r\n", "x-balanced-marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
       "x-balanced-merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "x-balanced-revision:
         1.1\r\n", "x-balanced-software-build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
-      "X-Midlr-Version: 2\r\n", "x-newrelic-app-data: PxQFWFNXCQYTVVhWAwQDVUYdFhE1AwE2QgNWEVlbQFtcCxYxSBVbDQoZVA4IF0pcXAgEEBhSQhUQXltWEBVNAUIHWRZdGhgSA0kZUR9SClBQAgFYX1cPCwFQWFYGBRtGVh0WEQRUV1EJVAxWCw4MBFJUCQMTTRMEBVpEBDs=\r\n",
+      "X-Midlr-Version: 2\r\n", "x-newrelic-app-data: PxQFWFNXCQYTVVhWAwQDVUYdFhE1AwE2QgNWEVlbQFtcCxYxSBVbDQoZVA4IF0pcXAgEEBhSQhUQXltWEBVNAUIHWRZdGhgSA0kZUR9WA1RdBgFRXlMKBwVdVlMAHRdUSBEUAFFTAgYDAFxRXgAMUVIDCkMdQVUDCEVSPA==\r\n",
       "Content-Length: 1447\r\n", "Connection: keep-alive\r\n"]
     status: {code: 201, message: CREATED}
 - request: !!python/object:vcr.request.Request
-    body: null
+    body: '{"expiration_month": 10, "meta": {"region": "Confusion", "city_town": "",
+      "address_2": "Box 2"}, "number": "4111111111111111", "expiration_year": 2020,
+      "address": {"state": "Confusion", "postal_code": "90210", "line1": "123 Main
+      Street"}}'
     headers: !!python/object/apply:__builtin__.frozenset
-    - - !!python/tuple [content-type, !!python/unicode application/json;revision=1.1]
+    - - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xVWZ4a3BCNlI4cE12QzU5NGpmeWpzVDJVU0I4NlcwRHc6Tm9uZQ==]
+      - !!python/tuple [Content-Length, !!python/unicode 238]
+      - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
+      - !!python/tuple [Content-Type, !!python/unicode application/json]
       - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
       - !!python/tuple [accept, !!python/unicode application/vnd.api+json;revision=1.1]
-      - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
-      - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xNmJPdFdsbmd1M1ROVWlvYjVySU5VNDI4NHJxUWt5dVA6Tm9uZQ==]
     host: api.balancedpayments.com
-    method: GET
-    path: /cards/CC5dxesRkaDNoCkdmXUzbfo2
+    method: POST
+    path: /cards
     port: 443
     protocol: https
   response:
     body: {string: "{\n  \"cards\": [\n    {\n      \"cvv_match\": null,\n      \"links\":
         {\n        \"customer\": null\n      },\n      \"name\": null,\n      \"expiration_year\":
         2020,\n      \"avs_street_match\": \"yes\",\n      \"is_verified\": true,\n
-        \     \"created_at\": \"2014-02-20T18:20:26.056966Z\",\n      \"cvv_result\":
+        \     \"created_at\": \"2014-02-20T18:50:52.400770Z\",\n      \"cvv_result\":
         null,\n      \"brand\": \"Visa\",\n      \"number\": \"xxxxxxxxxxxx1111\",\n
-        \     \"updated_at\": \"2014-02-20T18:20:26.056969Z\",\n      \"id\": \"CC5dxesRkaDNoCkdmXUzbfo2\",\n
+        \     \"updated_at\": \"2014-02-20T18:50:52.400773Z\",\n      \"id\": \"CC7boJ9SPUh3Qu1q1yPVD9xe\",\n
         \     \"expiration_month\": 10,\n      \"cvv\": null,\n      \"meta\": {\n
         \       \"region\": \"Confusion\",\n        \"city_town\": \"\",\n        \"address_2\":
-        \"Box 2\"\n      },\n      \"href\": \"/cards/CC5dxesRkaDNoCkdmXUzbfo2\",\n
+        \"Box 2\"\n      },\n      \"href\": \"/cards/CC7boJ9SPUh3Qu1q1yPVD9xe\",\n
         \     \"address\": {\n        \"city\": \"Balo Alto\",\n        \"line2\":
         null,\n        \"line1\": \"123 Main Street\",\n        \"state\": null,\n
         \       \"postal_code\": \"90210\",\n        \"country_code\": null\n      },\n
@@ -1024,80 +1289,79 @@
         and postal code do not match.\"\n    }\n  ],\n  \"links\": {\n    \"cards.card_holds\":
         \"/cards/{cards.id}/card_holds\",\n    \"cards.customer\": \"/customers/{cards.customer}\",\n
         \   \"cards.debits\": \"/cards/{cards.id}/debits\"\n  }\n}"}
-    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:20:28
-        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMad0c758c9a5b11e3ab0c026ba7d31e6f\r\n",
-      "X-Balanced-Host: balanced-api-06\r\n", "X-Balanced-Marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
-      "X-Balanced-Merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "X-Balanced-Revision:
-        1.1\r\n", "X-Balanced-Software-Build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
+    headers: ["access-control-allow-headers: Content-Type\r\n", "access-control-allow-methods:
+        POST, OPTIONS\r\n", "access-control-allow-origin: *\r\n", "Content-Type: application/json\r\n",
+      "Date: Thu, 20 Feb 2014 18:50:52 GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n",
+      "X-Balanced-Guru: OHMebb5d5229a5f11e3aed402a1fe52a36c\r\n", "x-balanced-host:
+        balanced-api-01\r\n", "x-balanced-marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
+      "x-balanced-merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "x-balanced-revision:
+        1.1\r\n", "x-balanced-software-build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
+      "X-Midlr-Version: 2\r\n", "x-newrelic-app-data: PxQFWFNXCQYTVVhWAwQDVUYdFhE1AwE2QgNWEVlbQFtcCxYxSBVbDQoZVA4IF0pcXAgEEBhSVhQAQhhQEAMCFlVAFEIIFBQCHVMNUAZUAVJUAgFTVVcJAAFIQVEACRtGRgNQBVEFW1IHUV5WXFoBBFVHFUFXAF8RAWs=\r\n",
       "Content-Length: 1216\r\n", "Connection: keep-alive\r\n"]
-    status: {code: 200, message: OK}
+    status: {code: 201, message: CREATED}
 - request: !!python/object:vcr.request.Request
-    body: '{"cvv_match": null, "created_at": "2014-02-20T18:20:26.056966Z", "name":
-      null, "links": {"customer": "/customers/CU5fA44In6oCLPNBGcAXpIYW"}, "avs_street_match":
-      "yes", "expiration_year": 2020, "brand": "Visa", "cvv_result": null, "number":
-      "xxxxxxxxxxxx1111", "updated_at": "2014-02-20T18:20:26.056969Z", "expiration_month":
-      10, "cvv": null, "meta": {"region": "Confusion", "city_town": "", "address_2":
-      "Box 2"}, "avs_result": "Street address and postal code do not match.", "fingerprint":
-      "8c7f0423365af88c3e36cf02746eca64fdcf36ddc2e1f398c7ec9f3ffd05a267", "is_verified":
-      true, "avs_postal_match": "no", "id": "CC5dxesRkaDNoCkdmXUzbfo2", "address":
-      {"city": "Balo Alto", "line2": null, "line1": "123 Main Street", "state": null,
-      "postal_code": "90210", "country_code": null}}'
+    body: '{"routing_number": "121042882", "account_number": "112233a", "name": "Homer
+      Jay"}'
     headers: !!python/object/apply:__builtin__.frozenset
-    - - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
+    - - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xVWZ4a3BCNlI4cE12QzU5NGpmeWpzVDJVU0I4NlcwRHc6Tm9uZQ==]
+      - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
       - !!python/tuple [Content-Type, !!python/unicode application/json]
-      - !!python/tuple [Content-Length, !!python/unicode 777]
       - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
       - !!python/tuple [accept, !!python/unicode application/vnd.api+json;revision=1.1]
-      - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xNmJPdFdsbmd1M1ROVWlvYjVySU5VNDI4NHJxUWt5dVA6Tm9uZQ==]
+      - !!python/tuple [Content-Length, !!python/unicode 81]
     host: api.balancedpayments.com
-    method: PUT
-    path: /cards/CC5dxesRkaDNoCkdmXUzbfo2
+    method: POST
+    path: /bank_accounts
     port: 443
     protocol: https
   response:
-    body: {string: "{\n  \"cards\": [\n    {\n      \"cvv_match\": null,\n      \"links\":
-        {\n        \"customer\": \"CU5fA44In6oCLPNBGcAXpIYW\"\n      },\n      \"name\":
-        null,\n      \"expiration_year\": 2020,\n      \"avs_street_match\": \"yes\",\n
-        \     \"is_verified\": true,\n      \"created_at\": \"2014-02-20T18:20:26.056966Z\",\n
-        \     \"cvv_result\": null,\n      \"brand\": \"Visa\",\n      \"number\":
-        \"xxxxxxxxxxxx1111\",\n      \"updated_at\": \"2014-02-20T18:20:29.375877Z\",\n
-        \     \"id\": \"CC5dxesRkaDNoCkdmXUzbfo2\",\n      \"expiration_month\": 10,\n
-        \     \"cvv\": null,\n      \"meta\": {\n        \"region\": \"Confusion\",\n
-        \       \"city_town\": \"\",\n        \"address_2\": \"Box 2\"\n      },\n
-        \     \"href\": \"/cards/CC5dxesRkaDNoCkdmXUzbfo2\",\n      \"address\": {\n
-        \       \"city\": \"Balo Alto\",\n        \"line2\": null,\n        \"line1\":
-        \"123 Main Street\",\n        \"state\": null,\n        \"postal_code\": \"90210\",\n
-        \       \"country_code\": null\n      },\n      \"fingerprint\": \"8c7f0423365af88c3e36cf02746eca64fdcf36ddc2e1f398c7ec9f3ffd05a267\",\n
-        \     \"avs_postal_match\": \"no\",\n      \"avs_result\": \"Street address
-        and postal code do not match.\"\n    }\n  ],\n  \"links\": {\n    \"cards.card_holds\":
-        \"/cards/{cards.id}/card_holds\",\n    \"cards.customer\": \"/customers/{cards.customer}\",\n
-        \   \"cards.debits\": \"/cards/{cards.id}/debits\"\n  }\n}"}
-    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:20:29
-        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMad7161549a5b11e39204026ba7f8ec28\r\n",
-      "X-Balanced-Host: balanced-api-01\r\n", "X-Balanced-Marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
-      "X-Balanced-Merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "X-Balanced-Revision:
-        1.1\r\n", "X-Balanced-Software-Build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
-      "Content-Length: 1238\r\n", "Connection: keep-alive\r\n"]
-    status: {code: 200, message: OK}
+    body: {string: "{\n  \"bank_accounts\": [\n    {\n      \"routing_number\": \"121042882\",\n
+        \     \"bank_name\": \"WELLS FARGO BANK NA\",\n      \"account_type\": \"checking\",\n
+        \     \"name\": \"Homer Jay\",\n      \"links\": {\n        \"customer\":
+        null,\n        \"bank_account_verification\": null\n      },\n      \"can_credit\":
+        true,\n      \"created_at\": \"2014-02-20T18:50:53.440976Z\",\n      \"fingerprint\":
+        \"dac6514d9dd3a1cd7ac925d5749e0308c2c65fa27c506aefb0c9b21611ff9969\",\n      \"updated_at\":
+        \"2014-02-20T18:50:53.440979Z\",\n      \"href\": \"/bank_accounts/BA7czXShjByYjSoZkBNKSJAu\",\n
+        \     \"meta\": {},\n      \"account_number\": \"xxx233a\",\n      \"address\":
+        {\n        \"city\": null,\n        \"line2\": null,\n        \"line1\": null,\n
+        \       \"state\": null,\n        \"postal_code\": null,\n        \"country_code\":
+        null\n      },\n      \"can_debit\": false,\n      \"id\": \"BA7czXShjByYjSoZkBNKSJAu\"\n
+        \   }\n  ],\n  \"links\": {\n    \"bank_accounts.credits\": \"/bank_accounts/{bank_accounts.id}/credits\",\n
+        \   \"bank_accounts.bank_account_verifications\": \"/bank_accounts/{bank_accounts.id}/verifications\",\n
+        \   \"bank_accounts.customer\": \"/customers/{bank_accounts.customer}\",\n
+        \   \"bank_accounts.debits\": \"/bank_accounts/{bank_accounts.id}/debits\",\n
+        \   \"bank_accounts.bank_account_verification\": \"/verifications/{bank_accounts.bank_account_verification}\"\n
+        \ }\n}"}
+    headers: ["access-control-allow-headers: Content-Type\r\n", "access-control-allow-methods:
+        POST, OPTIONS\r\n", "access-control-allow-origin: *\r\n", "Content-Type: application/json\r\n",
+      "Date: Thu, 20 Feb 2014 18:50:53 GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n",
+      "X-Balanced-Guru: OHMec6bc24c9a5f11e3ac3202a1fe52a36c\r\n", "x-balanced-host:
+        balanced-api-05\r\n", "x-balanced-marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
+      "x-balanced-merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "x-balanced-revision:
+        1.1\r\n", "x-balanced-software-build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
+      "X-Midlr-Version: 2\r\n", "x-newrelic-app-data: PxQFWFNXCQYTVVhWAwQDVUYdFhE1AwE2QgNWEVlbQFtcCxYxSBVbDQoZVA4IF0pcXAgEEBhTVggPbldQAQkWDEQRFgFKXVVGVkcVQQFNE1JKAg9ZVFAPAgRWVFQFCQFQVh0WAlpeT0ISBg0HCwxQBgIDCFMFUQsABRQbQQACVEBVOQ==\r\n",
+      "Content-Length: 1281\r\n", "Connection: keep-alive\r\n"]
+    status: {code: 201, message: CREATED}
 - request: !!python/object:vcr.request.Request
-    body: null
+    body: '{}'
     headers: !!python/object/apply:__builtin__.frozenset
-    - - !!python/tuple [content-type, !!python/unicode application/json;revision=1.1]
+    - - !!python/tuple [Content-Length, !!python/unicode 2]
+      - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xVWZ4a3BCNlI4cE12QzU5NGpmeWpzVDJVU0I4NlcwRHc6Tm9uZQ==]
+      - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
+      - !!python/tuple [Content-Type, !!python/unicode application/json]
       - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
       - !!python/tuple [accept, !!python/unicode application/vnd.api+json;revision=1.1]
-      - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
-      - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xNmJPdFdsbmd1M1ROVWlvYjVySU5VNDI4NHJxUWt5dVA6Tm9uZQ==]
     host: api.balancedpayments.com
-    method: GET
-    path: /customers/CU5fA44In6oCLPNBGcAXpIYW
+    method: POST
+    path: /customers
     port: 443
     protocol: https
   response:
     body: {string: "{\n  \"customers\": [\n    {\n      \"name\": null,\n      \"links\":
         {\n        \"source\": null,\n        \"destination\": null\n      },\n      \"updated_at\":
-        \"2014-02-20T18:20:28.074754Z\",\n      \"created_at\": \"2014-02-20T18:20:27.871241Z\",\n
-        \     \"dob_month\": null,\n      \"id\": \"CU5fA44In6oCLPNBGcAXpIYW\",\n
-        \     \"phone\": null,\n      \"href\": \"/customers/CU5fA44In6oCLPNBGcAXpIYW\",\n
+        \"2014-02-20T18:50:54.523336Z\",\n      \"created_at\": \"2014-02-20T18:50:54.277670Z\",\n
+        \     \"dob_month\": null,\n      \"id\": \"CU7dwuMxsGbpXYyNJi3onUZq\",\n
+        \     \"phone\": null,\n      \"href\": \"/customers/CU7dwuMxsGbpXYyNJi3onUZq\",\n
         \     \"merchant_status\": \"no-match\",\n      \"meta\": {},\n      \"dob_year\":
         null,\n      \"address\": {\n        \"city\": null,\n        \"line2\": null,\n
         \       \"line1\": null,\n        \"state\": null,\n        \"postal_code\":
@@ -1112,9 +1376,50 @@
         \   \"customers.refunds\": \"/customers/{customers.id}/refunds\",\n    \"customers.reversals\":
         \"/customers/{customers.id}/reversals\",\n    \"customers.orders\": \"/customers/{customers.id}/orders\",\n
         \   \"customers.credits\": \"/customers/{customers.id}/credits\"\n  }\n}"}
-    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:20:30
-        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMadfc77f89a5b11e39039026ba7c1aba6\r\n",
-      "X-Balanced-Host: balanced-api-04\r\n", "X-Balanced-Marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
+    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:50:54
+        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMed2402589a5f11e3836102a1fe53e539\r\n",
+      "x-balanced-host: balanced-api-01\r\n", "x-balanced-marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
+      "x-balanced-merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "x-balanced-revision:
+        1.1\r\n", "x-balanced-software-build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
+      "X-Midlr-Version: 2\r\n", "x-newrelic-app-data: PxQFWFNXCQYTVVhWAwQDVUYdFhE1AwE2QgNWEVlbQFtcCxYxSBVbDQoZVA4IF0pcXAgEEBhSQhUQXltWEBVNAUIHWRZdGhgSA0kZUR9VAldWDwBRVVIMAwJRWVUOHRdUSBEUVgRSUFMIAwxQW1tQAlcEC0MdQVUDCEVSPA==\r\n",
+      "Content-Length: 1447\r\n", "Connection: keep-alive\r\n"]
+    status: {code: 201, message: CREATED}
+- request: !!python/object:vcr.request.Request
+    body: null
+    headers: !!python/object/apply:__builtin__.frozenset
+    - - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xVWZ4a3BCNlI4cE12QzU5NGpmeWpzVDJVU0I4NlcwRHc6Tm9uZQ==]
+      - !!python/tuple [content-type, !!python/unicode application/json;revision=1.1]
+      - !!python/tuple [accept, !!python/unicode application/vnd.api+json;revision=1.1]
+      - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
+      - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
+    host: api.balancedpayments.com
+    method: GET
+    path: /customers/CU7dwuMxsGbpXYyNJi3onUZq
+    port: 443
+    protocol: https
+  response:
+    body: {string: "{\n  \"customers\": [\n    {\n      \"name\": null,\n      \"links\":
+        {\n        \"source\": null,\n        \"destination\": null\n      },\n      \"updated_at\":
+        \"2014-02-20T18:50:54.523336Z\",\n      \"created_at\": \"2014-02-20T18:50:54.277670Z\",\n
+        \     \"dob_month\": null,\n      \"id\": \"CU7dwuMxsGbpXYyNJi3onUZq\",\n
+        \     \"phone\": null,\n      \"href\": \"/customers/CU7dwuMxsGbpXYyNJi3onUZq\",\n
+        \     \"merchant_status\": \"no-match\",\n      \"meta\": {},\n      \"dob_year\":
+        null,\n      \"address\": {\n        \"city\": null,\n        \"line2\": null,\n
+        \       \"line1\": null,\n        \"state\": null,\n        \"postal_code\":
+        null,\n        \"country_code\": null\n      },\n      \"business_name\":
+        null,\n      \"ssn_last4\": null,\n      \"email\": null,\n      \"ein\":
+        null\n    }\n  ],\n  \"links\": {\n    \"customers.source\": \"/resources/{customers.source}\",\n
+        \   \"customers.card_holds\": \"/customers/{customers.id}/card_holds\",\n
+        \   \"customers.bank_accounts\": \"/customers/{customers.id}/bank_accounts\",\n
+        \   \"customers.debits\": \"/customers/{customers.id}/debits\",\n    \"customers.destination\":
+        \"/resources/{customers.destination}\",\n    \"customers.cards\": \"/customers/{customers.id}/cards\",\n
+        \   \"customers.transactions\": \"/customers/{customers.id}/transactions\",\n
+        \   \"customers.refunds\": \"/customers/{customers.id}/refunds\",\n    \"customers.reversals\":
+        \"/customers/{customers.id}/reversals\",\n    \"customers.orders\": \"/customers/{customers.id}/orders\",\n
+        \   \"customers.credits\": \"/customers/{customers.id}/credits\"\n  }\n}"}
+    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:50:55
+        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMedbf5a8c9a5f11e395aa026ba7cd33d0\r\n",
+      "X-Balanced-Host: balanced-api-02\r\n", "X-Balanced-Marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
       "X-Balanced-Merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "X-Balanced-Revision:
         1.1\r\n", "X-Balanced-Software-Build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
       "Content-Length: 1447\r\n", "Connection: keep-alive\r\n"]
@@ -1122,41 +1427,365 @@
 - request: !!python/object:vcr.request.Request
     body: null
     headers: !!python/object/apply:__builtin__.frozenset
-    - - !!python/tuple [content-type, !!python/unicode application/json;revision=1.1]
-      - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
+    - - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xVWZ4a3BCNlI4cE12QzU5NGpmeWpzVDJVU0I4NlcwRHc6Tm9uZQ==]
+      - !!python/tuple [content-type, !!python/unicode application/json;revision=1.1]
       - !!python/tuple [accept, !!python/unicode application/vnd.api+json;revision=1.1]
       - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
-      - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xNmJPdFdsbmd1M1ROVWlvYjVySU5VNDI4NHJxUWt5dVA6Tm9uZQ==]
+      - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
     host: api.balancedpayments.com
     method: GET
-    path: /customers/CU5fA44In6oCLPNBGcAXpIYW/cards?limit=10&offset=0
+    path: /customers/CU7dwuMxsGbpXYyNJi3onUZq/cards?limit=10&offset=0
+    port: 443
+    protocol: https
+  response:
+    body: {string: "{\n  \"meta\": {\n    \"last\": \"/customers/CU7dwuMxsGbpXYyNJi3onUZq/cards?limit=10&offset=0\",\n
+        \   \"next\": null,\n    \"href\": \"/customers/CU7dwuMxsGbpXYyNJi3onUZq/cards?limit=10&offset=0\",\n
+        \   \"limit\": 10,\n    \"offset\": 0,\n    \"previous\": null,\n    \"total\":
+        0,\n    \"first\": \"/customers/CU7dwuMxsGbpXYyNJi3onUZq/cards?limit=10&offset=0\"\n
+        \ },\n  \"links\": {}\n}"}
+    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:50:55
+        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMee0cc0b09a5f11e386ae026ba7cac9da\r\n",
+      "X-Balanced-Host: balanced-api-05\r\n", "X-Balanced-Marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
+      "X-Balanced-Merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "X-Balanced-Revision:
+        1.1\r\n", "X-Balanced-Software-Build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
+      "Content-Length: 349\r\n", "Connection: keep-alive\r\n"]
+    status: {code: 200, message: OK}
+- request: !!python/object:vcr.request.Request
+    body: '{}'
+    headers: !!python/object/apply:__builtin__.frozenset
+    - - !!python/tuple [Content-Length, !!python/unicode 2]
+      - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xVWZ4a3BCNlI4cE12QzU5NGpmeWpzVDJVU0I4NlcwRHc6Tm9uZQ==]
+      - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
+      - !!python/tuple [Content-Type, !!python/unicode application/json]
+      - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
+      - !!python/tuple [accept, !!python/unicode application/vnd.api+json;revision=1.1]
+    host: api.balancedpayments.com
+    method: POST
+    path: /customers
+    port: 443
+    protocol: https
+  response:
+    body: {string: "{\n  \"customers\": [\n    {\n      \"name\": null,\n      \"links\":
+        {\n        \"source\": null,\n        \"destination\": null\n      },\n      \"updated_at\":
+        \"2014-02-20T18:50:56.662873Z\",\n      \"created_at\": \"2014-02-20T18:50:56.427015Z\",\n
+        \     \"dob_month\": null,\n      \"id\": \"CU7fWmJDFq8092dhrTEslevm\",\n
+        \     \"phone\": null,\n      \"href\": \"/customers/CU7fWmJDFq8092dhrTEslevm\",\n
+        \     \"merchant_status\": \"no-match\",\n      \"meta\": {},\n      \"dob_year\":
+        null,\n      \"address\": {\n        \"city\": null,\n        \"line2\": null,\n
+        \       \"line1\": null,\n        \"state\": null,\n        \"postal_code\":
+        null,\n        \"country_code\": null\n      },\n      \"business_name\":
+        null,\n      \"ssn_last4\": null,\n      \"email\": null,\n      \"ein\":
+        null\n    }\n  ],\n  \"links\": {\n    \"customers.source\": \"/resources/{customers.source}\",\n
+        \   \"customers.card_holds\": \"/customers/{customers.id}/card_holds\",\n
+        \   \"customers.bank_accounts\": \"/customers/{customers.id}/bank_accounts\",\n
+        \   \"customers.debits\": \"/customers/{customers.id}/debits\",\n    \"customers.destination\":
+        \"/resources/{customers.destination}\",\n    \"customers.cards\": \"/customers/{customers.id}/cards\",\n
+        \   \"customers.transactions\": \"/customers/{customers.id}/transactions\",\n
+        \   \"customers.refunds\": \"/customers/{customers.id}/refunds\",\n    \"customers.reversals\":
+        \"/customers/{customers.id}/reversals\",\n    \"customers.orders\": \"/customers/{customers.id}/orders\",\n
+        \   \"customers.credits\": \"/customers/{customers.id}/credits\"\n  }\n}"}
+    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:50:56
+        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMee6cffe89a5f11e3ac3202a1fe52a36c\r\n",
+      "x-balanced-host: balanced-api-01\r\n", "x-balanced-marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
+      "x-balanced-merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "x-balanced-revision:
+        1.1\r\n", "x-balanced-software-build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
+      "X-Midlr-Version: 2\r\n", "x-newrelic-app-data: PxQFWFNXCQYTVVhWAwQDVUYdFhE1AwE2QgNWEVlbQFtcCxYxSBVbDQoZVA4IF0pcXAgEEBhSQhUQXltWEBVNAUIHWRZdGhgSA0kZUR9VAlpXDg9QVFsKCwBSUlsBBBtGVh0WEQRSVQYDWggGCwAFUwMBAQUTTRMEBVpEBDs=\r\n",
+      "Content-Length: 1447\r\n", "Connection: keep-alive\r\n"]
+    status: {code: 201, message: CREATED}
+- request: !!python/object:vcr.request.Request
+    body: '{"expiration_month": 10, "meta": {"region": "Confusion", "city_town": "",
+      "address_2": "Box 2"}, "number": "4111111111111111", "expiration_year": 2020,
+      "address": {"state": "Confusion", "postal_code": "90210", "line1": "123 Main
+      Street"}}'
+    headers: !!python/object/apply:__builtin__.frozenset
+    - - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xVWZ4a3BCNlI4cE12QzU5NGpmeWpzVDJVU0I4NlcwRHc6Tm9uZQ==]
+      - !!python/tuple [Content-Length, !!python/unicode 238]
+      - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
+      - !!python/tuple [Content-Type, !!python/unicode application/json]
+      - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
+      - !!python/tuple [accept, !!python/unicode application/vnd.api+json;revision=1.1]
+    host: api.balancedpayments.com
+    method: POST
+    path: /cards
     port: 443
     protocol: https
   response:
     body: {string: "{\n  \"cards\": [\n    {\n      \"cvv_match\": null,\n      \"links\":
-        {\n        \"customer\": \"CU5fA44In6oCLPNBGcAXpIYW\"\n      },\n      \"name\":
+        {\n        \"customer\": null\n      },\n      \"name\": null,\n      \"expiration_year\":
+        2020,\n      \"avs_street_match\": \"yes\",\n      \"is_verified\": true,\n
+        \     \"created_at\": \"2014-02-20T18:50:58.058263Z\",\n      \"cvv_result\":
+        null,\n      \"brand\": \"Visa\",\n      \"number\": \"xxxxxxxxxxxx1111\",\n
+        \     \"updated_at\": \"2014-02-20T18:50:58.058265Z\",\n      \"id\": \"CC7hL2m4uFLu2diODL5fe4Uq\",\n
+        \     \"expiration_month\": 10,\n      \"cvv\": null,\n      \"meta\": {\n
+        \       \"region\": \"Confusion\",\n        \"city_town\": \"\",\n        \"address_2\":
+        \"Box 2\"\n      },\n      \"href\": \"/cards/CC7hL2m4uFLu2diODL5fe4Uq\",\n
+        \     \"address\": {\n        \"city\": \"Balo Alto\",\n        \"line2\":
+        null,\n        \"line1\": \"123 Main Street\",\n        \"state\": null,\n
+        \       \"postal_code\": \"90210\",\n        \"country_code\": null\n      },\n
+        \     \"fingerprint\": \"8c7f0423365af88c3e36cf02746eca64fdcf36ddc2e1f398c7ec9f3ffd05a267\",\n
+        \     \"avs_postal_match\": \"no\",\n      \"avs_result\": \"Street address
+        and postal code do not match.\"\n    }\n  ],\n  \"links\": {\n    \"cards.card_holds\":
+        \"/cards/{cards.id}/card_holds\",\n    \"cards.customer\": \"/customers/{cards.customer}\",\n
+        \   \"cards.debits\": \"/cards/{cards.id}/debits\"\n  }\n}"}
+    headers: ["access-control-allow-headers: Content-Type\r\n", "access-control-allow-methods:
+        POST, OPTIONS\r\n", "access-control-allow-origin: *\r\n", "Content-Type: application/json\r\n",
+      "Date: Thu, 20 Feb 2014 18:50:58 GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n",
+      "X-Balanced-Guru: OHMef0ef6e09a5f11e3992602a1fe52a36c\r\n", "x-balanced-host:
+        balanced-api-05\r\n", "x-balanced-marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
+      "x-balanced-merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "x-balanced-revision:
+        1.1\r\n", "x-balanced-software-build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
+      "X-Midlr-Version: 2\r\n", "x-newrelic-app-data: PxQFWFNXCQYTVVhWAwQDVUYdFhE1AwE2QgNWEVlbQFtcCxYxSBVbDQoZVA4IF0pcXAgEEBhSVhQAQhhQEAMCFlVAFEIIFBQCHVIJUwZQCltWAA9SUlIIBQRIQVEACRtGRlICUVNVVVADUVsBXFwCUFJHFUFXAF8RAWs=\r\n",
+      "Content-Length: 1216\r\n", "Connection: keep-alive\r\n"]
+    status: {code: 201, message: CREATED}
+- request: !!python/object:vcr.request.Request
+    body: '{"routing_number": "121042882", "account_number": "112233a", "name": "Homer
+      Jay"}'
+    headers: !!python/object/apply:__builtin__.frozenset
+    - - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xVWZ4a3BCNlI4cE12QzU5NGpmeWpzVDJVU0I4NlcwRHc6Tm9uZQ==]
+      - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
+      - !!python/tuple [Content-Type, !!python/unicode application/json]
+      - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
+      - !!python/tuple [accept, !!python/unicode application/vnd.api+json;revision=1.1]
+      - !!python/tuple [Content-Length, !!python/unicode 81]
+    host: api.balancedpayments.com
+    method: POST
+    path: /bank_accounts
+    port: 443
+    protocol: https
+  response:
+    body: {string: "{\n  \"bank_accounts\": [\n    {\n      \"routing_number\": \"121042882\",\n
+        \     \"bank_name\": \"WELLS FARGO BANK NA\",\n      \"account_type\": \"checking\",\n
+        \     \"name\": \"Homer Jay\",\n      \"links\": {\n        \"customer\":
+        null,\n        \"bank_account_verification\": null\n      },\n      \"can_credit\":
+        true,\n      \"created_at\": \"2014-02-20T18:50:59.484488Z\",\n      \"fingerprint\":
+        \"dac6514d9dd3a1cd7ac925d5749e0308c2c65fa27c506aefb0c9b21611ff9969\",\n      \"updated_at\":
+        \"2014-02-20T18:50:59.484491Z\",\n      \"href\": \"/bank_accounts/BA7jnlGexDwcaifuNfwvqngQ\",\n
+        \     \"meta\": {},\n      \"account_number\": \"xxx233a\",\n      \"address\":
+        {\n        \"city\": null,\n        \"line2\": null,\n        \"line1\": null,\n
+        \       \"state\": null,\n        \"postal_code\": null,\n        \"country_code\":
+        null\n      },\n      \"can_debit\": false,\n      \"id\": \"BA7jnlGexDwcaifuNfwvqngQ\"\n
+        \   }\n  ],\n  \"links\": {\n    \"bank_accounts.credits\": \"/bank_accounts/{bank_accounts.id}/credits\",\n
+        \   \"bank_accounts.bank_account_verifications\": \"/bank_accounts/{bank_accounts.id}/verifications\",\n
+        \   \"bank_accounts.customer\": \"/customers/{bank_accounts.customer}\",\n
+        \   \"bank_accounts.debits\": \"/bank_accounts/{bank_accounts.id}/debits\",\n
+        \   \"bank_accounts.bank_account_verification\": \"/verifications/{bank_accounts.bank_account_verification}\"\n
+        \ }\n}"}
+    headers: ["access-control-allow-headers: Content-Type\r\n", "access-control-allow-methods:
+        POST, OPTIONS\r\n", "access-control-allow-origin: *\r\n", "Content-Type: application/json\r\n",
+      "Date: Thu, 20 Feb 2014 18:50:59 GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n",
+      "X-Balanced-Guru: OHMefda5d129a5f11e39a7302a1fe53e539\r\n", "x-balanced-host:
+        balanced-api-02\r\n", "x-balanced-marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
+      "x-balanced-merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "x-balanced-revision:
+        1.1\r\n", "x-balanced-software-build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
+      "X-Midlr-Version: 2\r\n", "x-newrelic-app-data: PxQFWFNXCQYTVVhWAwQDVUYdFhE1AwE2QgNWEVlbQFtcCxYxSBVbDQoZVA4IF0pcXAgEEBhTVggPbldQAQkWDEQRFgFKXVVGVkcVQQFNE1JKDgZQXlQKCgVdUFEBCAFUXR0WAlpeT0ISVwlXCAxWBQRcXVgEBwsEVhQbQQACVEBVOQ==\r\n",
+      "Content-Length: 1281\r\n", "Connection: keep-alive\r\n"]
+    status: {code: 201, message: CREATED}
+- request: !!python/object:vcr.request.Request
+    body: '{}'
+    headers: !!python/object/apply:__builtin__.frozenset
+    - - !!python/tuple [Content-Length, !!python/unicode 2]
+      - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xVWZ4a3BCNlI4cE12QzU5NGpmeWpzVDJVU0I4NlcwRHc6Tm9uZQ==]
+      - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
+      - !!python/tuple [Content-Type, !!python/unicode application/json]
+      - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
+      - !!python/tuple [accept, !!python/unicode application/vnd.api+json;revision=1.1]
+    host: api.balancedpayments.com
+    method: POST
+    path: /customers
+    port: 443
+    protocol: https
+  response:
+    body: {string: "{\n  \"customers\": [\n    {\n      \"name\": null,\n      \"links\":
+        {\n        \"source\": null,\n        \"destination\": null\n      },\n      \"updated_at\":
+        \"2014-02-20T18:51:00.513934Z\",\n      \"created_at\": \"2014-02-20T18:51:00.283245Z\",\n
+        \     \"dob_month\": null,\n      \"id\": \"CU7khj5Kl7t5ctyU9AGxzxJ4\",\n
+        \     \"phone\": null,\n      \"href\": \"/customers/CU7khj5Kl7t5ctyU9AGxzxJ4\",\n
+        \     \"merchant_status\": \"no-match\",\n      \"meta\": {},\n      \"dob_year\":
+        null,\n      \"address\": {\n        \"city\": null,\n        \"line2\": null,\n
+        \       \"line1\": null,\n        \"state\": null,\n        \"postal_code\":
+        null,\n        \"country_code\": null\n      },\n      \"business_name\":
+        null,\n      \"ssn_last4\": null,\n      \"email\": null,\n      \"ein\":
+        null\n    }\n  ],\n  \"links\": {\n    \"customers.source\": \"/resources/{customers.source}\",\n
+        \   \"customers.card_holds\": \"/customers/{customers.id}/card_holds\",\n
+        \   \"customers.bank_accounts\": \"/customers/{customers.id}/bank_accounts\",\n
+        \   \"customers.debits\": \"/customers/{customers.id}/debits\",\n    \"customers.destination\":
+        \"/resources/{customers.destination}\",\n    \"customers.cards\": \"/customers/{customers.id}/cards\",\n
+        \   \"customers.transactions\": \"/customers/{customers.id}/transactions\",\n
+        \   \"customers.refunds\": \"/customers/{customers.id}/refunds\",\n    \"customers.reversals\":
+        \"/customers/{customers.id}/reversals\",\n    \"customers.orders\": \"/customers/{customers.id}/orders\",\n
+        \   \"customers.credits\": \"/customers/{customers.id}/credits\"\n  }\n}"}
+    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:51:00
+        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMf0b8935c9a5f11e38f7f02a1fe53e539\r\n",
+      "x-balanced-host: balanced-api-04\r\n", "x-balanced-marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
+      "x-balanced-merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "x-balanced-revision:
+        1.1\r\n", "x-balanced-software-build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
+      "X-Midlr-Version: 2\r\n", "x-newrelic-app-data: PxQFWFNXCQYTVVhWAwQDVUYdFhE1AwE2QgNWEVlbQFtcCxYxSBVbDQoZVA4IF0pcXAgEEBhSQhUQXltWEBVNAUIHWRZdGhgSA0kZUR9SCltTBwBRX1ENAgRUUloGHRdUSBEUVlIDB1EDU11XAAoEV1AAWkMdQVUDCEVSPA==\r\n",
+      "Content-Length: 1447\r\n", "Connection: keep-alive\r\n"]
+    status: {code: 201, message: CREATED}
+- request: !!python/object:vcr.request.Request
+    body: null
+    headers: !!python/object/apply:__builtin__.frozenset
+    - - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xVWZ4a3BCNlI4cE12QzU5NGpmeWpzVDJVU0I4NlcwRHc6Tm9uZQ==]
+      - !!python/tuple [content-type, !!python/unicode application/json;revision=1.1]
+      - !!python/tuple [accept, !!python/unicode application/vnd.api+json;revision=1.1]
+      - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
+      - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
+    host: api.balancedpayments.com
+    method: GET
+    path: /cards/CC7hL2m4uFLu2diODL5fe4Uq
+    port: 443
+    protocol: https
+  response:
+    body: {string: "{\n  \"cards\": [\n    {\n      \"cvv_match\": null,\n      \"links\":
+        {\n        \"customer\": null\n      },\n      \"name\": null,\n      \"expiration_year\":
+        2020,\n      \"avs_street_match\": \"yes\",\n      \"is_verified\": true,\n
+        \     \"created_at\": \"2014-02-20T18:50:58.058263Z\",\n      \"cvv_result\":
+        null,\n      \"brand\": \"Visa\",\n      \"number\": \"xxxxxxxxxxxx1111\",\n
+        \     \"updated_at\": \"2014-02-20T18:50:58.058265Z\",\n      \"id\": \"CC7hL2m4uFLu2diODL5fe4Uq\",\n
+        \     \"expiration_month\": 10,\n      \"cvv\": null,\n      \"meta\": {\n
+        \       \"region\": \"Confusion\",\n        \"city_town\": \"\",\n        \"address_2\":
+        \"Box 2\"\n      },\n      \"href\": \"/cards/CC7hL2m4uFLu2diODL5fe4Uq\",\n
+        \     \"address\": {\n        \"city\": \"Balo Alto\",\n        \"line2\":
+        null,\n        \"line1\": \"123 Main Street\",\n        \"state\": null,\n
+        \       \"postal_code\": \"90210\",\n        \"country_code\": null\n      },\n
+        \     \"fingerprint\": \"8c7f0423365af88c3e36cf02746eca64fdcf36ddc2e1f398c7ec9f3ffd05a267\",\n
+        \     \"avs_postal_match\": \"no\",\n      \"avs_result\": \"Street address
+        and postal code do not match.\"\n    }\n  ],\n  \"links\": {\n    \"cards.card_holds\":
+        \"/cards/{cards.id}/card_holds\",\n    \"cards.customer\": \"/customers/{cards.customer}\",\n
+        \   \"cards.debits\": \"/cards/{cards.id}/debits\"\n  }\n}"}
+    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:51:01
+        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMf15322dc9a5f11e3acb0026ba7c1aba6\r\n",
+      "X-Balanced-Host: balanced-api-04\r\n", "X-Balanced-Marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
+      "X-Balanced-Merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "X-Balanced-Revision:
+        1.1\r\n", "X-Balanced-Software-Build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
+      "Content-Length: 1216\r\n", "Connection: keep-alive\r\n"]
+    status: {code: 200, message: OK}
+- request: !!python/object:vcr.request.Request
+    body: '{"cvv_match": null, "created_at": "2014-02-20T18:50:58.058263Z", "name":
+      null, "links": {"customer": "/customers/CU7khj5Kl7t5ctyU9AGxzxJ4"}, "avs_street_match":
+      "yes", "expiration_year": 2020, "brand": "Visa", "cvv_result": null, "number":
+      "xxxxxxxxxxxx1111", "updated_at": "2014-02-20T18:50:58.058265Z", "expiration_month":
+      10, "cvv": null, "meta": {"region": "Confusion", "city_town": "", "address_2":
+      "Box 2"}, "avs_result": "Street address and postal code do not match.", "fingerprint":
+      "8c7f0423365af88c3e36cf02746eca64fdcf36ddc2e1f398c7ec9f3ffd05a267", "is_verified":
+      true, "avs_postal_match": "no", "id": "CC7hL2m4uFLu2diODL5fe4Uq", "address":
+      {"city": "Balo Alto", "line2": null, "line1": "123 Main Street", "state": null,
+      "postal_code": "90210", "country_code": null}}'
+    headers: !!python/object/apply:__builtin__.frozenset
+    - - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xVWZ4a3BCNlI4cE12QzU5NGpmeWpzVDJVU0I4NlcwRHc6Tm9uZQ==]
+      - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
+      - !!python/tuple [Content-Type, !!python/unicode application/json]
+      - !!python/tuple [Content-Length, !!python/unicode 777]
+      - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
+      - !!python/tuple [accept, !!python/unicode application/vnd.api+json;revision=1.1]
+    host: api.balancedpayments.com
+    method: PUT
+    path: /cards/CC7hL2m4uFLu2diODL5fe4Uq
+    port: 443
+    protocol: https
+  response:
+    body: {string: "{\n  \"cards\": [\n    {\n      \"cvv_match\": null,\n      \"links\":
+        {\n        \"customer\": \"CU7khj5Kl7t5ctyU9AGxzxJ4\"\n      },\n      \"name\":
         null,\n      \"expiration_year\": 2020,\n      \"avs_street_match\": \"yes\",\n
-        \     \"is_verified\": true,\n      \"created_at\": \"2014-02-20T18:20:26.056966Z\",\n
+        \     \"is_verified\": true,\n      \"created_at\": \"2014-02-20T18:50:58.058263Z\",\n
         \     \"cvv_result\": null,\n      \"brand\": \"Visa\",\n      \"number\":
-        \"xxxxxxxxxxxx1111\",\n      \"updated_at\": \"2014-02-20T18:20:29.375877Z\",\n
-        \     \"id\": \"CC5dxesRkaDNoCkdmXUzbfo2\",\n      \"expiration_month\": 10,\n
+        \"xxxxxxxxxxxx1111\",\n      \"updated_at\": \"2014-02-20T18:51:01.928757Z\",\n
+        \     \"id\": \"CC7hL2m4uFLu2diODL5fe4Uq\",\n      \"expiration_month\": 10,\n
         \     \"cvv\": null,\n      \"meta\": {\n        \"region\": \"Confusion\",\n
         \       \"city_town\": \"\",\n        \"address_2\": \"Box 2\"\n      },\n
-        \     \"href\": \"/cards/CC5dxesRkaDNoCkdmXUzbfo2\",\n      \"address\": {\n
+        \     \"href\": \"/cards/CC7hL2m4uFLu2diODL5fe4Uq\",\n      \"address\": {\n
+        \       \"city\": \"Balo Alto\",\n        \"line2\": null,\n        \"line1\":
+        \"123 Main Street\",\n        \"state\": null,\n        \"postal_code\": \"90210\",\n
+        \       \"country_code\": null\n      },\n      \"fingerprint\": \"8c7f0423365af88c3e36cf02746eca64fdcf36ddc2e1f398c7ec9f3ffd05a267\",\n
+        \     \"avs_postal_match\": \"no\",\n      \"avs_result\": \"Street address
+        and postal code do not match.\"\n    }\n  ],\n  \"links\": {\n    \"cards.card_holds\":
+        \"/cards/{cards.id}/card_holds\",\n    \"cards.customer\": \"/customers/{cards.customer}\",\n
+        \   \"cards.debits\": \"/cards/{cards.id}/debits\"\n  }\n}"}
+    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:51:02
+        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMf1bc960e9a5f11e39570026ba7c1aba6\r\n",
+      "X-Balanced-Host: balanced-api-04\r\n", "X-Balanced-Marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
+      "X-Balanced-Merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "X-Balanced-Revision:
+        1.1\r\n", "X-Balanced-Software-Build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
+      "Content-Length: 1238\r\n", "Connection: keep-alive\r\n"]
+    status: {code: 200, message: OK}
+- request: !!python/object:vcr.request.Request
+    body: null
+    headers: !!python/object/apply:__builtin__.frozenset
+    - - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xVWZ4a3BCNlI4cE12QzU5NGpmeWpzVDJVU0I4NlcwRHc6Tm9uZQ==]
+      - !!python/tuple [content-type, !!python/unicode application/json;revision=1.1]
+      - !!python/tuple [accept, !!python/unicode application/vnd.api+json;revision=1.1]
+      - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
+      - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
+    host: api.balancedpayments.com
+    method: GET
+    path: /customers/CU7khj5Kl7t5ctyU9AGxzxJ4
+    port: 443
+    protocol: https
+  response:
+    body: {string: "{\n  \"customers\": [\n    {\n      \"name\": null,\n      \"links\":
+        {\n        \"source\": null,\n        \"destination\": null\n      },\n      \"updated_at\":
+        \"2014-02-20T18:51:00.513934Z\",\n      \"created_at\": \"2014-02-20T18:51:00.283245Z\",\n
+        \     \"dob_month\": null,\n      \"id\": \"CU7khj5Kl7t5ctyU9AGxzxJ4\",\n
+        \     \"phone\": null,\n      \"href\": \"/customers/CU7khj5Kl7t5ctyU9AGxzxJ4\",\n
+        \     \"merchant_status\": \"no-match\",\n      \"meta\": {},\n      \"dob_year\":
+        null,\n      \"address\": {\n        \"city\": null,\n        \"line2\": null,\n
+        \       \"line1\": null,\n        \"state\": null,\n        \"postal_code\":
+        null,\n        \"country_code\": null\n      },\n      \"business_name\":
+        null,\n      \"ssn_last4\": null,\n      \"email\": null,\n      \"ein\":
+        null\n    }\n  ],\n  \"links\": {\n    \"customers.source\": \"/resources/{customers.source}\",\n
+        \   \"customers.card_holds\": \"/customers/{customers.id}/card_holds\",\n
+        \   \"customers.bank_accounts\": \"/customers/{customers.id}/bank_accounts\",\n
+        \   \"customers.debits\": \"/customers/{customers.id}/debits\",\n    \"customers.destination\":
+        \"/resources/{customers.destination}\",\n    \"customers.cards\": \"/customers/{customers.id}/cards\",\n
+        \   \"customers.transactions\": \"/customers/{customers.id}/transactions\",\n
+        \   \"customers.refunds\": \"/customers/{customers.id}/refunds\",\n    \"customers.reversals\":
+        \"/customers/{customers.id}/reversals\",\n    \"customers.orders\": \"/customers/{customers.id}/orders\",\n
+        \   \"customers.credits\": \"/customers/{customers.id}/credits\"\n  }\n}"}
+    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:51:03
+        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMf286260e9a5f11e395aa026ba7cd33d0\r\n",
+      "X-Balanced-Host: balanced-api-02\r\n", "X-Balanced-Marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
+      "X-Balanced-Merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "X-Balanced-Revision:
+        1.1\r\n", "X-Balanced-Software-Build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
+      "Content-Length: 1447\r\n", "Connection: keep-alive\r\n"]
+    status: {code: 200, message: OK}
+- request: !!python/object:vcr.request.Request
+    body: null
+    headers: !!python/object/apply:__builtin__.frozenset
+    - - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xVWZ4a3BCNlI4cE12QzU5NGpmeWpzVDJVU0I4NlcwRHc6Tm9uZQ==]
+      - !!python/tuple [content-type, !!python/unicode application/json;revision=1.1]
+      - !!python/tuple [accept, !!python/unicode application/vnd.api+json;revision=1.1]
+      - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
+      - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
+    host: api.balancedpayments.com
+    method: GET
+    path: /customers/CU7khj5Kl7t5ctyU9AGxzxJ4/cards?limit=10&offset=0
+    port: 443
+    protocol: https
+  response:
+    body: {string: "{\n  \"cards\": [\n    {\n      \"cvv_match\": null,\n      \"links\":
+        {\n        \"customer\": \"CU7khj5Kl7t5ctyU9AGxzxJ4\"\n      },\n      \"name\":
+        null,\n      \"expiration_year\": 2020,\n      \"avs_street_match\": \"yes\",\n
+        \     \"is_verified\": true,\n      \"created_at\": \"2014-02-20T18:50:58.058263Z\",\n
+        \     \"cvv_result\": null,\n      \"brand\": \"Visa\",\n      \"number\":
+        \"xxxxxxxxxxxx1111\",\n      \"updated_at\": \"2014-02-20T18:51:01.928757Z\",\n
+        \     \"id\": \"CC7hL2m4uFLu2diODL5fe4Uq\",\n      \"expiration_month\": 10,\n
+        \     \"cvv\": null,\n      \"meta\": {\n        \"region\": \"Confusion\",\n
+        \       \"city_town\": \"\",\n        \"address_2\": \"Box 2\"\n      },\n
+        \     \"href\": \"/cards/CC7hL2m4uFLu2diODL5fe4Uq\",\n      \"address\": {\n
         \       \"city\": \"Balo Alto\",\n        \"line2\": null,\n        \"line1\":
         \"123 Main Street\",\n        \"state\": null,\n        \"postal_code\": \"90210\",\n
         \       \"country_code\": null\n      },\n      \"fingerprint\": \"8c7f0423365af88c3e36cf02746eca64fdcf36ddc2e1f398c7ec9f3ffd05a267\",\n
         \     \"avs_postal_match\": \"no\",\n      \"avs_result\": \"Street address
         and postal code do not match.\"\n    }\n  ],\n  \"meta\": {\n    \"last\":
-        \"/customers/CU5fA44In6oCLPNBGcAXpIYW/cards?limit=10&offset=0\",\n    \"next\":
-        null,\n    \"href\": \"/customers/CU5fA44In6oCLPNBGcAXpIYW/cards?limit=10&offset=0\",\n
+        \"/customers/CU7khj5Kl7t5ctyU9AGxzxJ4/cards?limit=10&offset=0\",\n    \"next\":
+        null,\n    \"href\": \"/customers/CU7khj5Kl7t5ctyU9AGxzxJ4/cards?limit=10&offset=0\",\n
         \   \"limit\": 10,\n    \"offset\": 0,\n    \"previous\": null,\n    \"total\":
-        1,\n    \"first\": \"/customers/CU5fA44In6oCLPNBGcAXpIYW/cards?limit=10&offset=0\"\n
+        1,\n    \"first\": \"/customers/CU7khj5Kl7t5ctyU9AGxzxJ4/cards?limit=10&offset=0\"\n
         \ },\n  \"links\": {\n    \"cards.debits\": \"/cards/{cards.id}/debits\",\n
         \   \"cards.customer\": \"/customers/{cards.customer}\",\n    \"cards.card_holds\":
         \"/cards/{cards.id}/card_holds\"\n  }\n}"}
-    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:20:30
-        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMae4c83249a5b11e390d7026ba7cac9da\r\n",
+    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:51:03
+        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMf2dbb8c69a5f11e39317026ba7cac9da\r\n",
       "X-Balanced-Host: balanced-api-05\r\n", "X-Balanced-Marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
       "X-Balanced-Merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "X-Balanced-Revision:
         1.1\r\n", "X-Balanced-Software-Build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
@@ -1166,33 +1795,33 @@
     body: '{"amount": 1000, "description": "whatever username"}'
     headers: !!python/object/apply:__builtin__.frozenset
     - - !!python/tuple [User-Agent, !!python/unicode balanced-python/1.0.1beta2]
+      - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xVWZ4a3BCNlI4cE12QzU5NGpmeWpzVDJVU0I4NlcwRHc6Tm9uZQ==]
       - !!python/tuple [Accept-Encoding, 'gzip, deflate, compress']
       - !!python/tuple [Content-Type, !!python/unicode application/json]
       - !!python/tuple [Content-Length, !!python/unicode 52]
       - !!python/tuple [accept, !!python/unicode application/vnd.api+json;revision=1.1]
-      - !!python/tuple [Authorization, !!python/unicode Basic YWstdGVzdC0xNmJPdFdsbmd1M1ROVWlvYjVySU5VNDI4NHJxUWt5dVA6Tm9uZQ==]
     host: api.balancedpayments.com
     method: POST
-    path: /cards/CC5dxesRkaDNoCkdmXUzbfo2/debits
+    path: /cards/CC7hL2m4uFLu2diODL5fe4Uq/debits
     port: 443
     protocol: https
   response:
     body: {string: "{\n  \"debits\": [\n    {\n      \"status\": \"succeeded\",\n
         \     \"description\": \"whatever username\",\n      \"links\": {\n        \"customer\":
-        \"CU5fA44In6oCLPNBGcAXpIYW\",\n        \"source\": \"CC5dxesRkaDNoCkdmXUzbfo2\",\n
+        \"CU7khj5Kl7t5ctyU9AGxzxJ4\",\n        \"source\": \"CC7hL2m4uFLu2diODL5fe4Uq\",\n
         \       \"order\": null,\n        \"dispute\": null\n      },\n      \"updated_at\":
-        \"2014-02-20T18:20:32.805863Z\",\n      \"created_at\": \"2014-02-20T18:20:31.511231Z\",\n
-        \     \"transaction_number\": \"W319-235-9997\",\n      \"failure_reason\":
+        \"2014-02-20T18:51:05.886504Z\",\n      \"created_at\": \"2014-02-20T18:51:04.549816Z\",\n
+        \     \"transaction_number\": \"W379-082-0961\",\n      \"failure_reason\":
         null,\n      \"currency\": \"USD\",\n      \"amount\": 1000,\n      \"failure_reason_code\":
-        null,\n      \"meta\": {},\n      \"href\": \"/debits/WD5jF3y6zqani4isW8aekA7J\",\n
-        \     \"appears_on_statement_as\": \"BAL*example.com\",\n      \"id\": \"WD5jF3y6zqani4isW8aekA7J\"\n
+        null,\n      \"meta\": {},\n      \"href\": \"/debits/WD7p43uRlY7jad3FDbxB6MLd\",\n
+        \     \"appears_on_statement_as\": \"BAL*example.com\",\n      \"id\": \"WD7p43uRlY7jad3FDbxB6MLd\"\n
         \   }\n  ],\n  \"links\": {\n    \"debits.customer\": \"/customers/{debits.customer}\",\n
         \   \"debits.dispute\": \"/disputes/{debits.dispute}\",\n    \"debits.source\":
         \"/resources/{debits.source}\",\n    \"debits.order\": \"/orders/{debits.order}\",\n
         \   \"debits.refunds\": \"/debits/{debits.id}/refunds\",\n    \"debits.events\":
         \"/debits/{debits.id}/events\"\n  }\n}"}
-    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:20:33
-        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMaed61f309a5b11e3ab0c026ba7d31e6f\r\n",
+    headers: ["Content-Type: application/json\r\n", "Date: Thu, 20 Feb 2014 18:51:06
+        GMT\r\n", "Server: ngx_openresty/1.2.6.3\r\n", "X-Balanced-Guru: OHMf37f51ca9a5f11e3ab0c026ba7d31e6f\r\n",
       "X-Balanced-Host: balanced-api-06\r\n", "X-Balanced-Marketplace: TEST-MP4pdETrZYO1CKZBA29bC1QJ\r\n",
       "X-Balanced-Merchant: TEST-MR4oMv3Sk7Oj9Ye1sjtY6aEx\r\n", "X-Balanced-Revision:
         1.1\r\n", "X-Balanced-Software-Build: 51f5173dd0a71a62a767ef91b5ce2d2e87eb865c\r\n",
