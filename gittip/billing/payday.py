@@ -580,7 +580,6 @@ class Payday(object):
         assert balance is not None, balance # sanity check
         amount = balance - total
 
-
         # Do some last-minute checks.
         # ===========================
 
@@ -619,19 +618,20 @@ class Payday(object):
         # ===========================
 
         try:
-
-            balanced_account_uri = participant.balanced_account_uri
-            if balanced_account_uri is None:
-                log("%s has no balanced_account_uri."
+            balanced_customer_href = participant.balanced_account_uri
+            if balanced_customer_href is None:
+                log("%s has no balanced_customer_href."
                     % participant.username)
                 return  # not in Balanced
 
-            account = balanced.Account.find(balanced_account_uri)
-            if 'merchant' not in account.roles:
+            customer = balanced.Customer.fetch(balanced_customer_href)
+            if customer.merchant_status == 'underwritten':
                 log("%s is not a merchant." % participant.username)
                 return  # not a merchant
 
-            account.credit(cents)
+            customer.bank_accounts.one()\
+                                  .credit(amount=cents,
+                                          description=participant.username)
 
             error = ""
             log(msg + "succeeded.")
@@ -642,11 +642,11 @@ class Payday(object):
         self.record_credit(credit_amount, fee, error, participant.username)
 
 
-    def charge_on_balanced(self, username, balanced_account_uri, amount):
+    def charge_on_balanced(self, username, balanced_customer_href, amount):
         """We have a purported balanced_account_uri. Try to use it.
         """
         typecheck( username, unicode
-                 , balanced_account_uri, unicode
+                 , balanced_customer_href, unicode
                  , amount, Decimal
                   )
 
@@ -654,12 +654,12 @@ class Payday(object):
         msg = msg % (username, "Balanced")
 
         try:
-            customer = balanced.Account.find(balanced_account_uri)
-            customer.debit(cents, description=username)
+            customer = balanced.Customer.fetch(balanced_customer_href)
+            customer.cards.one().debit(amount=cents, description=username)
             log(msg + "succeeded.")
             error = ""
         except balanced.exc.HTTPError as err:
-            error = err.message
+            error = err.message.message
             log(msg + "failed: %s" % error)
 
         return charge_amount, fee, error

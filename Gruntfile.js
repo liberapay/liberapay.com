@@ -100,7 +100,9 @@ module.exports = function(grunt) {
                 if (!started && /Greetings, program! Welcome to port 8537\./.test(data)) {
                     started = true;
                     grunt.log.writeln('started.');
-                    done();
+                    setTimeout(done, 1000);
+                } else if (started && /Is something already running on port 8537/.test(data)) {
+                    started = false;
                 } else
                     stdout.push(data);
             });
