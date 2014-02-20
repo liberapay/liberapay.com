@@ -262,7 +262,7 @@ class TestPaydayChargeOnBalanced(PaydayHarness):
                                                , self.balanced_customer_href
                                                , D('10.00')
                                                 )
-        assert actual == (D('10.61'), D('0.61'), 'MultipleFoundError')
+        assert actual == (D('10.61'), D('0.61'), 'MultipleResultsFound()')
 
     def test_charge_on_balanced_handles_NotFoundError(self):
         customer_with_no_card = unicode(balanced.Customer().save().href)
@@ -270,7 +270,7 @@ class TestPaydayChargeOnBalanced(PaydayHarness):
                                                , customer_with_no_card
                                                , D('10.00')
                                                 )
-        assert actual == (D('10.61'), D('0.61'), 'NotFoundError')
+        assert actual == (D('10.61'), D('0.61'), 'NoResultFound()')
 
 
 class TestBillingCharges(PaydayHarness):

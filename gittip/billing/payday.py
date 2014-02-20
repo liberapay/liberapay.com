@@ -18,6 +18,7 @@ single transaction.
 """
 from __future__ import unicode_literals
 
+import sys
 from decimal import Decimal, ROUND_UP
 
 import balanced
@@ -633,10 +634,14 @@ class Payday(object):
                                   .credit(amount=cents,
                                           description=participant.username)
 
-            error = ""
             log(msg + "succeeded.")
+            error = ""
         except balanced.exc.HTTPError as err:
-            error = err.message
+            error = err.message.message
+        except:
+            error = repr(sys.exc_info()[1])
+
+        if error:
             log(msg + "failed: %s" % error)
 
         self.record_credit(credit_amount, fee, error, participant.username)
@@ -660,6 +665,10 @@ class Payday(object):
             error = ""
         except balanced.exc.HTTPError as err:
             error = err.message.message
+        except:
+            error = repr(sys.exc_info()[1])
+
+        if error:
             log(msg + "failed: %s" % error)
 
         return charge_amount, fee, error
