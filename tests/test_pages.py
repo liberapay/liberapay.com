@@ -85,7 +85,6 @@ class TestPages(Harness):
         actual = self.client.GET('/on/github/lgtest/').body.decode('utf8')
         assert expected in actual
 
-    # This hits the network. XXX add a knob to skip this
     def test_twitter_proxy(self):
         expected = "Twitter has not joined"
         actual = self.client.GET('/on/twitter/twitter/').body.decode('utf8')
