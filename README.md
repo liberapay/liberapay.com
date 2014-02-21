@@ -505,3 +505,4 @@ and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
  - [Bittip](http://bittip.it/) - Bitcoin Microdonations - Like Flattr, but with Btc
  - [MedStartr](http://www.medstartr.com/) - Fund the medical breakthroughs and innovations you care about
  - [Upstart](https://www.upstart.com/) - Raise money from your future self
+ - [Gitcoin](http://www.gitcoin.co/) - Give bitcoin donations to your favorite projects.
