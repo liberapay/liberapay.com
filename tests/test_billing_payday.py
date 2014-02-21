@@ -63,7 +63,7 @@ class TestPaydayCharge(PaydayHarness):
     def test_charge_failure_returns_None(self, cob):
         cob.return_value = (D('10.00'), D('0.68'), 'FAILED')
         bob = self.make_participant('bob', last_bill_result="failure",
-                                    balanced_account_uri=self.balanced_customer_href,
+                                    balanced_customer_href=self.balanced_customer_href,
                                     stripe_customer_id=self.STRIPE_CUSTOMER_ID,
                                     is_suspicious=False)
 
@@ -75,7 +75,7 @@ class TestPaydayCharge(PaydayHarness):
     def test_charge_success_returns_None(self, charge_on_balanced):
         charge_on_balanced.return_value = (D('10.00'), D('0.68'), "")
         bob = self.make_participant('bob', last_bill_result="failure",
-                                    balanced_account_uri=self.balanced_customer_href,
+                                    balanced_customer_href=self.balanced_customer_href,
                                     stripe_customer_id=self.STRIPE_CUSTOMER_ID,
                                     is_suspicious=False)
 
@@ -87,7 +87,7 @@ class TestPaydayCharge(PaydayHarness):
     def test_charge_success_updates_participant(self, cob):
         cob.return_value = (D('10.00'), D('0.68'), "")
         bob = self.make_participant('bob', last_bill_result="failure",
-                                    balanced_account_uri=self.balanced_customer_href,
+                                    balanced_customer_href=self.balanced_customer_href,
                                     is_suspicious=False)
         self.payday.start()
         self.payday.charge(bob, D('1.00'))
@@ -106,7 +106,7 @@ class TestPaydayCharge(PaydayHarness):
                                     last_bill_result='',
                                     is_suspicious=False)
         carl = self.make_participant('carl', claimed_time=day_ago,
-                                     balanced_account_uri=self.balanced_customer_href,
+                                     balanced_customer_href=self.balanced_customer_href,
                                      last_bill_result='',
                                      is_suspicious=False)
         carl.set_tip_to('bob', '6.00')  # under $10!
@@ -126,7 +126,7 @@ class TestPaydayCharge(PaydayHarness):
                                     last_bill_result='',
                                     is_suspicious=False)
         carl = self.make_participant('carl', claimed_time=day_ago,
-                                     balanced_account_uri=self.balanced_customer_href,
+                                     balanced_customer_href=self.balanced_customer_href,
                                      last_bill_result='',
                                      is_suspicious=True)
         carl.set_tip_to('bob', '6.00')  # under $10!
@@ -146,7 +146,7 @@ class TestPaydayCharge(PaydayHarness):
                                     last_bill_result='',
                                     is_suspicious=True)
         carl = self.make_participant('carl', claimed_time=day_ago,
-                                     balanced_account_uri=self.balanced_customer_href,
+                                     balanced_customer_href=self.balanced_customer_href,
                                      last_bill_result='',
                                      is_suspicious=False)
         carl.set_tip_to('bob', '6.00')  # under $10!
@@ -166,11 +166,11 @@ class TestPaydayCharge(PaydayHarness):
         balanced.BankAccount.fetch(self.bank_account_href)\
                             .associate_to_customer(self.balanced_customer_href)
         bob = self.make_participant('bob', claimed_time=day_ago,
-                                    balanced_account_uri=self.balanced_customer_href,
+                                    balanced_customer_href=self.balanced_customer_href,
                                     last_bill_result='',
                                     is_suspicious=False)
         carl = self.make_participant('carl', claimed_time=day_ago,
-                                     balanced_account_uri=paying_customer.href,
+                                     balanced_customer_href=paying_customer.href,
                                      last_bill_result='',
                                      is_suspicious=False)
         carl.set_tip_to('bob', '15.00')
@@ -182,8 +182,8 @@ class TestPaydayCharge(PaydayHarness):
         assert bob.balance == D('0.00')
         assert carl.balance == D('0.00')
 
-        bob_customer = balanced.Customer.fetch(bob.balanced_account_uri)
-        carl_customer = balanced.Customer.fetch(carl.balanced_account_uri)
+        bob_customer = balanced.Customer.fetch(bob.balanced_customer_href)
+        carl_customer = balanced.Customer.fetch(carl.balanced_customer_href)
 
         bob_credits = bob_customer.credits.all()
         assert len(bob_credits) == 1
@@ -429,7 +429,7 @@ class TestBillingPayday(PaydayHarness):
 
             UPDATE participants
                SET balance=1
-                 , balanced_account_uri=%s
+                 , balanced_customer_href=%s
                  , is_suspicious=False
              WHERE username='alice'
 
@@ -456,7 +456,7 @@ class TestBillingPayday(PaydayHarness):
 
             UPDATE participants
                SET balance=1
-                 , balanced_account_uri=%s
+                 , balanced_customer_href=%s
                  , is_suspicious=False
              WHERE username='alice'
 
@@ -497,7 +497,7 @@ class TestBillingPayday(PaydayHarness):
 
             UPDATE participants
                SET balance=1
-                 , balanced_account_uri=%s
+                 , balanced_customer_href=%s
                  , is_suspicious=False
              WHERE username='alice'
 
@@ -538,7 +538,7 @@ class TestBillingPayday(PaydayHarness):
 
             UPDATE participants
                SET balance=1
-                 , balanced_account_uri=%s
+                 , balanced_customer_href=%s
                  , is_suspicious=False
              WHERE username='alice'
 
@@ -594,17 +594,17 @@ class TestBillingPayday(PaydayHarness):
     def test_start_zero_out_and_get_participants(self, log):
         self.make_participant('bob', balance=10, claimed_time=None,
                               pending=1,
-                              balanced_account_uri=self.BALANCED_CUSTOMER_HREF)
+                              balanced_customer_href=self.BALANCED_CUSTOMER_HREF)
         self.make_participant('carl', balance=10, claimed_time=utcnow(),
                               pending=1,
-                              balanced_account_uri=self.BALANCED_CUSTOMER_HREF)
+                              balanced_customer_href=self.BALANCED_CUSTOMER_HREF)
         self.db.run("""
 
             UPDATE participants
                SET balance=0
                  , claimed_time=null
                  , pending=null
-                 , balanced_account_uri=%s
+                 , balanced_customer_href=%s
              WHERE username='alice'
 
         """, (self.BALANCED_CUSTOMER_HREF,))
@@ -682,7 +682,7 @@ class TestBillingTransfer(PaydayHarness):
         PaydayHarness.setUp(self)
         self.payday.start()
         self.tipper = self.make_participant('lgtest')
-        #self.balanced_account_uri = '/v1/marketplaces/M123/accounts/A123'
+        #self.balanced_customer_href = '/v1/marketplaces/M123/accounts/A123'
 
     def test_transfer(self):
         amount = D('1.00')

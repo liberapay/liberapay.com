@@ -2,7 +2,7 @@
 
 There are three pieces of information for each participant related to billing:
 
-    balanced_account_uri
+    balanced_customer_href
         * NULL - This participant has never been billed.
         * 'deadbeef' - This participant has had a Balanced account created for
           them, either by adding a credit card or a bank account.
@@ -25,53 +25,53 @@ import stripe
 from aspen.utils import typecheck
 
 
-def get_balanced_account(db, username, balanced_account_uri):
+def get_balanced_account(db, username, balanced_customer_href):
     """Find or create a balanced.Account.
     """
     typecheck( username, unicode
-             , balanced_account_uri, (unicode, None)
+             , balanced_customer_href, (unicode, None)
               )
 
-    if balanced_account_uri is None:
+    if balanced_customer_href is None:
         customer = balanced.Customer(meta={
             'username': username,
         }).save()
         BALANCED_ACCOUNT = """\
 
                 UPDATE participants
-                   SET balanced_account_uri=%s
+                   SET balanced_customer_href=%s
                  WHERE username=%s
 
         """
         db.run(BALANCED_ACCOUNT, (customer.href, username))
     else:
-        customer = balanced.Customer.fetch(balanced_account_uri)
+        customer = balanced.Customer.fetch(balanced_customer_href)
     return customer
 
 
-def associate(db, thing, username, balanced_account_uri, balanced_thing_uri):
+def associate(db, thing, username, balanced_customer_href, balanced_thing_uri):
     """Given four unicodes, return a unicode.
 
     This function attempts to associate the credit card or bank account details
     referenced by balanced_thing_uri with a Balanced Account. If it fails we
     log and return a unicode describing the failure. Even for failure we keep
-    balanced_account_uri; we don't reset it to None/NULL. It's useful for
+    balanced_customer_href; we don't reset it to None/NULL. It's useful for
     loading the previous (bad) info from Balanced in order to prepopulate the
     form.
 
     """
     typecheck( username, unicode
-               , balanced_account_uri, (unicode, None, balanced.Customer)
+               , balanced_customer_href, (unicode, None, balanced.Customer)
                , balanced_thing_uri, unicode
                , thing, unicode
               )
 
-    if isinstance(balanced_account_uri, balanced.Customer):
-        balanced_account = balanced_account_uri
+    if isinstance(balanced_customer_href, balanced.Customer):
+        balanced_account = balanced_customer_href
     else:
         balanced_account = get_balanced_account( db
                                                , username
-                                               , balanced_account_uri
+                                               , balanced_customer_href
                                                 )
     invalidate_on_balanced(thing, balanced_account.href)
     SQL = "UPDATE participants SET last_%s_result=%%s WHERE username=%%s"
@@ -98,7 +98,7 @@ def associate(db, thing, username, balanced_account_uri, balanced_thing_uri):
     return error
 
 
-def invalidate_on_balanced(thing, balanced_account_uri):
+def invalidate_on_balanced(thing, balanced_customer_href):
     """XXX Things in balanced cannot be deleted at the moment.
 
     Instead we mark all valid cards as invalid which will restrict against
@@ -108,22 +108,22 @@ def invalidate_on_balanced(thing, balanced_account_uri):
 
     """
     assert thing in ("credit card", "bank account")
-    typecheck(balanced_account_uri, (str, unicode))
+    typecheck(balanced_customer_href, (str, unicode))
 
-    customer = balanced.Customer.fetch(balanced_account_uri)
+    customer = balanced.Customer.fetch(balanced_customer_href)
     things = customer.cards if thing == "credit card" else customer.bank_accounts
 
     for _thing in things:
         _thing.unstore()
 
 
-def clear(db, thing, username, balanced_account_uri):
+def clear(db, thing, username, balanced_customer_href):
     typecheck( thing, unicode
              , username, unicode
-             , balanced_account_uri, (unicode, str)
+             , balanced_customer_href, (unicode, str)
               )
     assert thing in ("credit card", "bank account"), thing
-    invalidate_on_balanced(thing, balanced_account_uri)
+    invalidate_on_balanced(thing, balanced_customer_href)
     CLEAR = """\
 
         UPDATE participants
@@ -219,16 +219,16 @@ class BalancedThing(object):
             out = default
         return out
 
-    def __init__(self, balanced_account_uri):
+    def __init__(self, balanced_customer_href):
         """Given a Balanced account_uri, load data from Balanced.
         """
-        if balanced_account_uri is None:
+        if balanced_customer_href is None:
             return
 
         # XXX Indexing is borken. See:
         # https://github.com/balanced/balanced-python/issues/10
 
-        self._customer = balanced.Customer.fetch(balanced_account_uri)
+        self._customer = balanced.Customer.fetch(balanced_customer_href)
 
         things = getattr(self._customer, self.thing_type+'s')\
             .filter(is_valid=True).all()
@@ -240,7 +240,7 @@ class BalancedThing(object):
             self._thing = things[0]
         else:
             msg = "%s has %d valid %ss"
-            msg %= (balanced_account_uri, len(things), self.thing_type)
+            msg %= (balanced_customer_href, len(things), self.thing_type)
             raise RuntimeError(msg)
 
     @property

@@ -522,11 +522,11 @@ class Payday(object):
         typecheck(participant, Participant, amount, Decimal)
 
         username = participant.username
-        balanced_account_uri = participant.balanced_account_uri
+        balanced_customer_href = participant.balanced_customer_href
         stripe_customer_id = participant.stripe_customer_id
 
         typecheck( username, unicode
-                 , balanced_account_uri, (unicode, None)
+                 , balanced_customer_href, (unicode, None)
                  , stripe_customer_id, (unicode, None)
                   )
 
@@ -534,7 +534,7 @@ class Payday(object):
         # Perform some last-minute checks.
         # ================================
 
-        if balanced_account_uri is None and stripe_customer_id is None:
+        if balanced_customer_href is None and stripe_customer_id is None:
             self.mark_missing_funding()
             return      # Participant has no funding source.
 
@@ -545,9 +545,9 @@ class Payday(object):
         # Go to Balanced or Stripe.
         # =========================
 
-        if balanced_account_uri is not None:
+        if balanced_customer_href is not None:
             things = self.charge_on_balanced( username
-                                            , balanced_account_uri
+                                            , balanced_customer_href
                                             , amount
                                              )
             charge_amount, fee, error = things
@@ -619,7 +619,7 @@ class Payday(object):
         # ===========================
 
         try:
-            balanced_customer_href = participant.balanced_account_uri
+            balanced_customer_href = participant.balanced_customer_href
             if balanced_customer_href is None:
                 log("%s has no balanced_customer_href."
                     % participant.username)
@@ -644,7 +644,7 @@ class Payday(object):
 
 
     def charge_on_balanced(self, username, balanced_customer_href, amount):
-        """We have a purported balanced_account_uri. Try to use it.
+        """We have a purported balanced_customer_href. Try to use it.
         """
         typecheck( username, unicode
                  , balanced_customer_href, unicode
