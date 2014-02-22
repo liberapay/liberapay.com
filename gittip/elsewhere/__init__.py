@@ -206,6 +206,7 @@ class Platform(object):
 
         If the account is unknown to us, we raise UnknownAccountElsewhere.
         """
+        exception = UnknownAccountElsewhere(self.name, user_name)
         return self.db.one("""
 
             SELECT elsewhere.*::elsewhere_with_participant
@@ -213,7 +214,7 @@ class Platform(object):
              WHERE platform = %s
                AND user_name = %s
 
-        """, (self.name, user_name), default=UnknownAccountElsewhere)
+        """, (self.name, user_name), default=exception)
 
     def get_user_info(self, user_name, sess=None):
         """Given a user_name on the platform, get the user's info from the API.
