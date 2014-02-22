@@ -8,24 +8,25 @@ from gittip.utils import COUNTRIES
 [-----------------------------------------------------------------------------]
 
 status = ". . ."
-balanced_account_uri = None
+balanced_customer_href = None
 
 if not user.ANON:
-    balanced_account_uri = user.participant.balanced_account_uri
+    balanced_customer_href = user.participant.balanced_customer_href
     stripe_customer_id = user.participant.stripe_customer_id
 
     status = "missing"
-    if stripe_customer_id or balanced_account_uri:
+    if stripe_customer_id or balanced_customer_href:
         if user.participant.last_bill_result is not None:
             status = "working" if user.participant.last_bill_result == "" \
                                                                  else "failing"
-
-    if balanced_account_uri:
-        card = billing.BalancedCard(balanced_account_uri)
-        assert balanced_account_uri == card['id']
+    if balanced_customer_href:
+        card = billing.BalancedCard(balanced_customer_href)
+        # the id on the card might not match unless the db
+        # is updated to use the new style of urls
     else:
         card = billing.StripeCard(stripe_customer_id)
         assert stripe_customer_id == card['id']
+
 
     username = user.participant.username
 
@@ -38,9 +39,9 @@ title = "Credit Card"
     <h2 class="top"><span>Your credit card is <em id="status">{{ status }}</em></span></h2>
 
     <p>When you don't have enough money in your Gittip account to cover
-    your gifts, we {% if balanced_account_uri %}will{% else %}can{% endif %}
+    your gifts, we {% if balanced_customer_href %}will{% else %}can{% endif %}
     attempt to pull money in using
-    {% if balanced_account_uri %}this{% else %}a{% endif %} credit card.
+    {% if balanced_customer_href %}this{% else %}a{% endif %} credit card.
     If your credit card is missing or fails then your gifts won't go
     through for that week.<p>
 
@@ -87,7 +88,7 @@ title = "Credit Card"
             <div class="constrain-width group">
 
                 {% if status != "missing" %}
-                <h2>Current: {{ card['card_type'] }} {{ card['last4'] }}</h2>
+                <h2>Current: {{ card['brand'] }} {{ card['number'][-4:] }}</h2>
                 {% endif %}
 
                 <div id="feedback">{% if user.participant.last_bill_result %}

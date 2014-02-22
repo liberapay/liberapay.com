@@ -1000,3 +1000,11 @@ BEGIN;
     ALTER TABLE elsewhere ADD COLUMN refresh_token text DEFAULT NULL;
     ALTER TABLE elsewhere ADD COLUMN expires timestamp with time zone DEFAULT NULL;
 END;
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/pull/2056
+
+BEGIN;
+
+    ALTER TABLE participants RENAME COLUMN balanced_account_uri TO balanced_customer_href;
+
+END;

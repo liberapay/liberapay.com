@@ -20,18 +20,18 @@ out = {}
 redirect_to = base_url + '/bank-account-complete.html'
 
 if body.get('action') == 'delete':
-    billing.clear(website.db, u"bank account", user.participant.username, user.participant.balanced_account_uri)
+    billing.clear(website.db, u"bank account", user.participant.username, user.participant.balanced_customer_href)
 elif body.get('action') == 'store-error':
     billing.store_error(website.db, u"bank account", user.participant.username, body['msg'])
 else:
 
     # Get a balanced account.
     # =======================
-    # This will create one if user.balanced_account_uri is None.
+    # This will create one if user.balanced_customer_href is None.
 
     balanced_account = billing.get_balanced_account( website.db
                                                    , user.participant.username
-                                                   , user.participant.balanced_account_uri
+                                                   , user.participant.balanced_customer_href
                                                     )
 
 
@@ -41,21 +41,27 @@ else:
     # identify the merchant.
 
     out = {}
-    if 'merchant' not in balanced_account.roles:
-        merchant_keys = ['type', 'street_address', 'postal_code', 'region',
-                         'dob', 'name', 'phone_number']
-        merchant_data = dict((key, body.get(key)) for key in merchant_keys)
+    if balanced_account.merchant_status != 'underwritten':
+
+        balanced_account.name = body.get('name')
+        balanced_account.address['line1'] = body.get('street_address')
+        balanced_account.address['postal_code'] = body.get('postal_code')
+        balanced_account.address['state'] = body.get('region')
+        balanced_account.phone = body.get('phone_number')
+        balanced_account.dob_month = body.get('dob_month')
+        balanced_account.dob_year = body.get('dob_year')
+        balanced_account.meta['dob_day'] = body.get('dob_day')
+        balanced_account.ssn_last4 = body.get('ssn_last4')
 
         try:
-            balanced_account.add_merchant(merchant_data)  # HTTP under here
-        except balanced.exc.MoreInformationRequiredError as mirerr:
-            out = { 'problem': 'More Info Needed'
-                  , 'error': 'Unable to verify your identity'
-                  , 'redirect_uri': mirerr.redirect_uri + '?' +
-                        urllib.urlencode([('redirect_uri', redirect_to)]) + '&'
-                   }
+            balanced_account.save()
         except balanced.exc.HTTPError as err:
             out = {"problem": "Problem", "error": err.message}
+
+        if balanced_account.merchant_status != 'underwritten':
+            out = { 'problem': 'More Info Needed'
+                  , 'error': 'Unable to verify your identity'
+                   }
 
 
     # No errors? Great! Let's add the bank account.
@@ -67,7 +73,7 @@ else:
         billing.clear( website.db
                      , u"bank account"
                      , user.participant.username
-                     , balanced_account.uri
+                     , balanced_account.href
                       )
 
         bank_account_uri = body['bank_account_uri']

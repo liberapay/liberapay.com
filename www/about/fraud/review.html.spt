@@ -12,7 +12,7 @@ unreviewed = website.db.all("""
          , balance
       FROM participants
      WHERE is_suspicious IS NULL
-       AND balanced_account_uri IS NOT NULL
+       AND balanced_customer_href IS NOT NULL
   ORDER BY claimed_time
 
 """)

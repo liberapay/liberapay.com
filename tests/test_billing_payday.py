@@ -1,5 +1,6 @@
-from __future__ import print_function, unicode_literals
-from decimal import Decimal
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+from decimal import Decimal as D
 from datetime import datetime, timedelta
 
 import balanced
@@ -11,21 +12,20 @@ from gittip import billing
 from gittip.billing.payday import Payday, skim_credit
 from gittip.models.participant import Participant
 from gittip.testing import Harness
+from gittip.testing.balanced import BalancedHarness
 
-from test_billing import TestBillingBase
 
-
-class TestPaydayBase(TestBillingBase):
+class PaydayHarness(BalancedHarness):
 
     def setUp(self):
-        TestBillingBase.setUp(self)
+        BalancedHarness.setUp(self)
         self.payday = Payday(self.db)
 
     def fetch_payday(self):
         return self.db.one("SELECT * FROM paydays", back_as=dict)
 
 
-class TestPaydayCharge(TestPaydayBase):
+class TestPaydayCharge(PaydayHarness):
     STRIPE_CUSTOMER_ID = 'cus_deadbeef'
 
     def get_numbers(self):
@@ -50,63 +50,63 @@ class TestPaydayCharge(TestPaydayBase):
 
     def test_charge_without_cc_details_returns_None(self):
         self.payday.start()
-        actual = self.payday.charge(self.alice, Decimal('1.00'))
+        actual = self.payday.charge(self.alice, D('1.00'))
         assert actual is None
 
     def test_charge_without_cc_marked_as_failure(self):
         self.payday.start()
-        self.payday.charge(self.alice, Decimal('1.00'))
+        self.payday.charge(self.alice, D('1.00'))
         actual = self.get_numbers()
         assert actual == [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0]
 
     @mock.patch('gittip.billing.payday.Payday.charge_on_balanced')
     def test_charge_failure_returns_None(self, cob):
-        cob.return_value = (Decimal('10.00'), Decimal('0.68'), 'FAILED')
+        cob.return_value = (D('10.00'), D('0.68'), 'FAILED')
         bob = self.make_participant('bob', last_bill_result="failure",
-                                    balanced_account_uri=self.balanced_account_uri,
+                                    balanced_customer_href=self.balanced_customer_href,
                                     stripe_customer_id=self.STRIPE_CUSTOMER_ID,
                                     is_suspicious=False)
 
         self.payday.start()
-        actual = self.payday.charge(bob, Decimal('1.00'))
+        actual = self.payday.charge(bob, D('1.00'))
         assert actual is None
 
     @mock.patch('gittip.billing.payday.Payday.charge_on_balanced')
     def test_charge_success_returns_None(self, charge_on_balanced):
-        charge_on_balanced.return_value = (Decimal('10.00'), Decimal('0.68'), "")
+        charge_on_balanced.return_value = (D('10.00'), D('0.68'), "")
         bob = self.make_participant('bob', last_bill_result="failure",
-                                    balanced_account_uri=self.balanced_account_uri,
+                                    balanced_customer_href=self.balanced_customer_href,
                                     stripe_customer_id=self.STRIPE_CUSTOMER_ID,
                                     is_suspicious=False)
 
         self.payday.start()
-        actual = self.payday.charge(bob, Decimal('1.00'))
+        actual = self.payday.charge(bob, D('1.00'))
         assert actual is None
 
     @mock.patch('gittip.billing.payday.Payday.charge_on_balanced')
     def test_charge_success_updates_participant(self, cob):
-        cob.return_value = (Decimal('10.00'), Decimal('0.68'), "")
+        cob.return_value = (D('10.00'), D('0.68'), "")
         bob = self.make_participant('bob', last_bill_result="failure",
-                                    balanced_account_uri=self.balanced_account_uri,
+                                    balanced_customer_href=self.balanced_customer_href,
                                     is_suspicious=False)
         self.payday.start()
-        self.payday.charge(bob, Decimal('1.00'))
+        self.payday.charge(bob, D('1.00'))
 
         bob = Participant.from_username('bob')
-        expected = {'balance': Decimal('9.32'), 'last_bill_result': ''}
+        expected = {'balance': D('9.32'), 'last_bill_result': ''}
         actual = {'balance': bob.balance,
                   'last_bill_result': bob.last_bill_result}
         assert actual == expected
 
     @mock.patch('gittip.billing.payday.Payday.charge_on_balanced')
     def test_payday_moves_money(self, charge_on_balanced):
-        charge_on_balanced.return_value = (Decimal('10.00'), Decimal('0.68'), "")
+        charge_on_balanced.return_value = (D('10.00'), D('0.68'), "")
         day_ago = utcnow() - timedelta(days=1)
         bob = self.make_participant('bob', claimed_time=day_ago,
                                     last_bill_result='',
                                     is_suspicious=False)
         carl = self.make_participant('carl', claimed_time=day_ago,
-                                     balanced_account_uri=self.balanced_account_uri,
+                                     balanced_customer_href=self.balanced_customer_href,
                                      last_bill_result='',
                                      is_suspicious=False)
         carl.set_tip_to('bob', '6.00')  # under $10!
@@ -115,18 +115,18 @@ class TestPaydayCharge(TestPaydayBase):
         bob = Participant.from_username('bob')
         carl = Participant.from_username('carl')
 
-        assert bob.balance == Decimal('6.00')
-        assert carl.balance == Decimal('3.32')
+        assert bob.balance == D('6.00')
+        assert carl.balance == D('3.32')
 
     @mock.patch('gittip.billing.payday.Payday.charge_on_balanced')
     def test_payday_doesnt_move_money_from_a_suspicious_account(self, charge_on_balanced):
-        charge_on_balanced.return_value = (Decimal('10.00'), Decimal('0.68'), "")
+        charge_on_balanced.return_value = (D('10.00'), D('0.68'), "")
         day_ago = utcnow() - timedelta(days=1)
         bob = self.make_participant('bob', claimed_time=day_ago,
                                     last_bill_result='',
                                     is_suspicious=False)
         carl = self.make_participant('carl', claimed_time=day_ago,
-                                     balanced_account_uri=self.balanced_account_uri,
+                                     balanced_customer_href=self.balanced_customer_href,
                                      last_bill_result='',
                                      is_suspicious=True)
         carl.set_tip_to('bob', '6.00')  # under $10!
@@ -135,18 +135,18 @@ class TestPaydayCharge(TestPaydayBase):
         bob = Participant.from_username('bob')
         carl = Participant.from_username('carl')
 
-        assert bob.balance == Decimal('0.00')
-        assert carl.balance == Decimal('0.00')
+        assert bob.balance == D('0.00')
+        assert carl.balance == D('0.00')
 
     @mock.patch('gittip.billing.payday.Payday.charge_on_balanced')
     def test_payday_doesnt_move_money_to_a_suspicious_account(self, charge_on_balanced):
-        charge_on_balanced.return_value = (Decimal('10.00'), Decimal('0.68'), "")
+        charge_on_balanced.return_value = (D('10.00'), D('0.68'), "")
         day_ago = utcnow() - timedelta(days=1)
         bob = self.make_participant('bob', claimed_time=day_ago,
                                     last_bill_result='',
                                     is_suspicious=True)
         carl = self.make_participant('carl', claimed_time=day_ago,
-                                     balanced_account_uri=self.balanced_account_uri,
+                                     balanced_customer_href=self.balanced_customer_href,
                                      last_bill_result='',
                                      is_suspicious=False)
         carl.set_tip_to('bob', '6.00')  # under $10!
@@ -155,13 +155,128 @@ class TestPaydayCharge(TestPaydayBase):
         bob = Participant.from_username('bob')
         carl = Participant.from_username('carl')
 
-        assert bob.balance == Decimal('0.00')
-        assert carl.balance == Decimal('0.00')
+        assert bob.balance == D('0.00')
+        assert carl.balance == D('0.00')
+
+    def test_payday_moves_money_with_balanced(self):
+        day_ago = utcnow() - timedelta(days=1)
+        paying_customer = balanced.Customer().save()
+        balanced.Card.fetch(self.card_href)\
+                     .associate_to_customer(paying_customer)
+        balanced.BankAccount.fetch(self.bank_account_href)\
+                            .associate_to_customer(self.balanced_customer_href)
+        bob = self.make_participant('bob', claimed_time=day_ago,
+                                    balanced_customer_href=self.balanced_customer_href,
+                                    last_bill_result='',
+                                    is_suspicious=False)
+        carl = self.make_participant('carl', claimed_time=day_ago,
+                                     balanced_customer_href=paying_customer.href,
+                                     last_bill_result='',
+                                     is_suspicious=False)
+        carl.set_tip_to('bob', '15.00')
+        self.payday.run()
+
+        bob = Participant.from_username('bob')
+        carl = Participant.from_username('carl')
+
+        assert bob.balance == D('0.00')
+        assert carl.balance == D('0.00')
+
+        bob_customer = balanced.Customer.fetch(bob.balanced_customer_href)
+        carl_customer = balanced.Customer.fetch(carl.balanced_customer_href)
+
+        bob_credits = bob_customer.credits.all()
+        assert len(bob_credits) == 1
+        assert bob_credits[0].amount == 1500
+        assert bob_credits[0].description == 'bob'
+
+        carl_debits = carl_customer.debits.all()
+        assert len(carl_debits) == 1
+        assert carl_debits[0].amount == 1576  # base amount + fee
+        assert carl_debits[0].description == 'carl'
 
 
-class TestBillingCharges(TestPaydayBase):
-    BALANCED_ACCOUNT_URI = u'/v1/marketplaces/M123/accounts/A123'
-    BALANCED_TOKEN = u'/v1/marketplaces/M123/accounts/A123/cards/C123'
+class TestPaydayChargeOnBalanced(PaydayHarness):
+
+    def setUp(self):
+        PaydayHarness.setUp(self)
+
+
+    def test_charge_on_balanced(self):
+
+        # XXX Why can't we do this in BalancedHarness.setUp? Understand VCR!
+        balanced_customer_href = unicode(balanced.Customer().save().href)
+        balanced.Card.fetch(self.card_href) \
+                     .associate_to_customer(balanced_customer_href)
+
+        actual = self.payday.charge_on_balanced( 'whatever username'
+                                               , balanced_customer_href
+                                               , D('10.00') # $10.00 USD
+                                                )
+        assert actual == (D('10.61'), D('0.61'), '')
+
+    def test_charge_on_balanced_small_amount(self):
+
+        # XXX Why can't we do this in BalancedHarness.setUp? Understand VCR!
+        balanced_customer_href = unicode(balanced.Customer().save().href)
+        balanced.Card.fetch(self.card_href) \
+                     .associate_to_customer(balanced_customer_href)
+
+        actual = self.payday.charge_on_balanced( 'whatever username'
+                                               , balanced_customer_href
+                                               , D('0.06')  # $0.06 USD
+                                                )
+        assert actual == (D('10.00'), D('0.59'), '')
+
+    def test_charge_on_balanced_failure(self):
+        customer_with_bad_card = unicode(balanced.Customer().save().href)
+        card = balanced.Card(
+            number='4444444444444448',
+            expiration_year=2020,
+            expiration_month=12
+        ).save()
+        card.associate_to_customer(customer_with_bad_card)
+
+        actual = self.payday.charge_on_balanced( 'whatever username'
+                                               , customer_with_bad_card
+                                               , D('10.00')
+                                                )
+        assert actual == (D('10.61'), D('0.61'), '402 Client Error: PAYMENT REQUIRED')
+
+    def test_charge_on_balanced_handles_MultipleFoundError(self):
+        card = balanced.Card(
+            number='4242424242424242',
+            expiration_year=2020,
+            expiration_month=12
+        ).save()
+        card.associate_to_customer(self.balanced_customer_href)
+
+        card = balanced.Card(
+            number='4242424242424242',
+            expiration_year=2030,
+            expiration_month=12
+        ).save()
+        card.associate_to_customer(self.balanced_customer_href)
+
+        actual = self.payday.charge_on_balanced( 'whatever username'
+                                               , self.balanced_customer_href
+                                               , D('10.00')
+                                                )
+        assert actual == (D('10.61'), D('0.61'), 'MultipleResultsFound()')
+
+    def test_charge_on_balanced_handles_NotFoundError(self):
+        customer_with_no_card = unicode(balanced.Customer().save().href)
+        actual = self.payday.charge_on_balanced( 'whatever username'
+                                               , customer_with_no_card
+                                               , D('10.00')
+                                                )
+        assert actual == (D('10.61'), D('0.61'), 'NoResultFound()')
+
+
+class TestBillingCharges(PaydayHarness):
+    BALANCED_CUSTOMER_HREF = '/customers/CU123123123'
+    BALANCED_TOKEN = u'/cards/CU123123123'
+
     STRIPE_CUSTOMER_ID = u'cus_deadbeef'
 
     def test_mark_missing_funding(self):
@@ -198,8 +313,8 @@ class TestBillingCharges(TestPaydayBase):
 
     @mock.patch('stripe.Charge')
     def test_charge_on_stripe(self, ba):
-        amount_to_charge = Decimal('10.00')  # $10.00 USD
-        expected_fee = Decimal('0.61')
+        amount_to_charge = D('10.00')  # $10.00 USD
+        expected_fee = D('0.61')
         charge_amount, fee, msg = self.payday.charge_on_stripe(
             self.alice.username, self.STRIPE_CUSTOMER_ID, amount_to_charge)
 
@@ -211,52 +326,13 @@ class TestBillingCharges(TestPaydayBase):
                                          , self.alice.username
                                           )
 
-    @mock.patch('balanced.Account')
-    def test_charge_on_balanced(self, ba):
-        amount_to_charge = Decimal('10.00')  # $10.00 USD
-        expected_fee = Decimal('0.61')
-        charge_amount, fee, msg = self.payday.charge_on_balanced(
-            self.alice.username, self.BALANCED_ACCOUNT_URI, amount_to_charge)
-        assert charge_amount == amount_to_charge + fee
-        assert fee == expected_fee
-        assert ba.find.called_with(self.BALANCED_ACCOUNT_URI)
-        customer = ba.find.return_value
-        assert customer.debit.called_with( int(charge_amount * 100)
-                                         , self.alice.username
-                                          )
 
-    @mock.patch('balanced.Account')
-    def test_charge_on_balanced_small_amount(self, ba):
-        amount_to_charge = Decimal('0.06')  # $0.06 USD
-        expected_fee = Decimal('0.59')
-        expected_amount = Decimal('10.00')
-        charge_amount, fee, msg = \
-            self.payday.charge_on_balanced(self.alice.username,
-                                           self.BALANCED_ACCOUNT_URI,
-                                           amount_to_charge)
-        assert charge_amount == expected_amount
-        assert fee == expected_fee
-        customer = ba.find.return_value
-        assert customer.debit.called_with( int(charge_amount * 100)
-                                         , self.alice.username
-                                          )
-
-    @mock.patch('balanced.Account')
-    def test_charge_on_balanced_failure(self, ba):
-        amount_to_charge = Decimal('0.06')  # $0.06 USD
-        error_message = 'Woah, crazy'
-        ba.find.side_effect = balanced.exc.HTTPError(error_message)
-        charge_amount, fee, msg = self.payday.charge_on_balanced(
-            self.alice.username, self.BALANCED_ACCOUNT_URI, amount_to_charge)
-        assert msg == error_message
-
-
-class TestPrepHit(TestPaydayBase):
+class TestPrepHit(PaydayHarness):
 
     ## XXX Consider turning _prep_hit in to a class method
     #@classmethod
     #def setUpClass(cls):
-    #    TestPaydayBase.setUpClass()
+    #    PaydayHarness.setUpClass()
     #    cls.payday = Payday(mock.Mock())  # Mock out the DB connection
 
     def prep(self, amount):
@@ -267,72 +343,72 @@ class TestPrepHit(TestPaydayBase):
 
         """
         typecheck(amount, unicode)
-        out = list(self.payday._prep_hit(Decimal(amount)))
+        out = list(self.payday._prep_hit(D(amount)))
         out = [out[0]] + out[2:]
         return tuple(out)
 
     def test_prep_hit_basically_works(self):
-        actual = self.payday._prep_hit(Decimal('20.00'))
+        actual = self.payday._prep_hit(D('20.00'))
         expected = (2091,
                     u'Charging %s 2091 cents ($20.00 + $0.91 fee = $20.91) on %s ' u'... ',
-                    Decimal('20.91'), Decimal('0.91'))
+                    D('20.91'), D('0.91'))
         assert actual == expected
 
     def test_prep_hit_full_in_rounded_case(self):
-        actual = self.payday._prep_hit(Decimal('5.00'))
+        actual = self.payday._prep_hit(D('5.00'))
         expected = (1000,
                     u'Charging %s 1000 cents ($9.41 [rounded up from $5.00] + ' u'$0.59 fee = $10.00) on %s ... ',
-                    Decimal('10.00'), Decimal('0.59'))
+                    D('10.00'), D('0.59'))
         assert actual == expected
 
     def test_prep_hit_at_ten_dollars(self):
         actual = self.prep(u'10.00')
-        expected = (1061, Decimal('10.61'), Decimal('0.61'))
+        expected = (1061, D('10.61'), D('0.61'))
         assert actual == expected
 
     def test_prep_hit_at_forty_cents(self):
         actual = self.prep(u'0.40')
-        expected = (1000, Decimal('10.00'), Decimal('0.59'))
+        expected = (1000, D('10.00'), D('0.59'))
         assert actual == expected
 
     def test_prep_hit_at_fifty_cents(self):
         actual = self.prep(u'0.50')
-        expected = (1000, Decimal('10.00'), Decimal('0.59'))
+        expected = (1000, D('10.00'), D('0.59'))
         assert actual == expected
 
     def test_prep_hit_at_sixty_cents(self):
         actual = self.prep(u'0.60')
-        expected = (1000, Decimal('10.00'), Decimal('0.59'))
+        expected = (1000, D('10.00'), D('0.59'))
         assert actual == expected
 
     def test_prep_hit_at_eighty_cents(self):
         actual = self.prep(u'0.80')
-        expected = (1000, Decimal('10.00'), Decimal('0.59'))
+        expected = (1000, D('10.00'), D('0.59'))
         assert actual == expected
 
     def test_prep_hit_at_nine_fifteen(self):
         actual = self.prep(u'9.15')
-        expected = (1000, Decimal('10.00'), Decimal('0.59'))
+        expected = (1000, D('10.00'), D('0.59'))
         assert actual == expected
 
     def test_prep_hit_at_nine_forty(self):
         actual = self.prep(u'9.40')
-        expected = (1000, Decimal('10.00'), Decimal('0.59'))
+        expected = (1000, D('10.00'), D('0.59'))
         assert actual == expected
 
     def test_prep_hit_at_nine_forty_one(self):
         actual = self.prep(u'9.41')
-        expected = (1000, Decimal('10.00'), Decimal('0.59'))
+        expected = (1000, D('10.00'), D('0.59'))
         assert actual == expected
 
     def test_prep_hit_at_nine_forty_two(self):
         actual = self.prep(u'9.42')
-        expected = (1002, Decimal('10.02'), Decimal('0.60'))
+        expected = (1002, D('10.02'), D('0.60'))
         assert actual == expected
 
 
-class TestBillingPayday(TestPaydayBase):
-    BALANCED_ACCOUNT_URI = '/v1/marketplaces/M123/accounts/A123'
+class TestBillingPayday(PaydayHarness):
+    BALANCED_CUSTOMER_HREF = '/customers/CU123123123'
 
     def test_move_pending_to_balance_for_teams_does_so(self):
         self.make_participant('A', number='plural', balance=2, pending=3)
@@ -353,13 +429,13 @@ class TestBillingPayday(TestPaydayBase):
 
             UPDATE participants
                SET balance=1
-                 , balanced_account_uri=%s
+                 , balanced_customer_href=%s
                  , is_suspicious=False
              WHERE username='alice'
 
-        """, (self.BALANCED_ACCOUNT_URI,))
+        """, (self.BALANCED_CUSTOMER_HREF,))
 
-        amount = Decimal('1.00')
+        amount = D('1.00')
 
         ts_start = self.payday.start()
 
@@ -380,15 +456,15 @@ class TestBillingPayday(TestPaydayBase):
 
             UPDATE participants
                SET balance=1
-                 , balanced_account_uri=%s
+                 , balanced_customer_href=%s
                  , is_suspicious=False
              WHERE username='alice'
 
-        """, (self.BALANCED_ACCOUNT_URI,))
+        """, (self.BALANCED_CUSTOMER_HREF,))
 
         ts_start = self.payday.start()
         now = datetime.utcnow()
-        amount = Decimal('1.00')
+        amount = D('1.00')
         like_a_tip = {'amount': amount, 'tippee': 'mjallday', 'ctime': now,
                       'claimed_time': now}
 
@@ -421,14 +497,14 @@ class TestBillingPayday(TestPaydayBase):
 
             UPDATE participants
                SET balance=1
-                 , balanced_account_uri=%s
+                 , balanced_customer_href=%s
                  , is_suspicious=False
              WHERE username='alice'
 
-        """, (self.BALANCED_ACCOUNT_URI,))
+        """, (self.BALANCED_CUSTOMER_HREF,))
 
         now = datetime.utcnow()
-        amount = Decimal('1.00')
+        amount = D('1.00')
         like_a_tip = {'amount': amount, 'tippee': 'mjallday', 'ctime': now,
                       'claimed_time': now}
 
@@ -452,7 +528,7 @@ class TestBillingPayday(TestPaydayBase):
         with self.assertRaises(Exception):
             billing.charge_and_or_transfer(ts_start, self.alice)
         assert charge.called_with(self.alice.username,
-                                  self.BALANCED_ACCOUNT_URI,
+                                  self.BALANCED_CUSTOMER_HREF,
                                   amount)
 
     @mock.patch('gittip.billing.payday.Payday.transfer')
@@ -462,13 +538,13 @@ class TestBillingPayday(TestPaydayBase):
 
             UPDATE participants
                SET balance=1
-                 , balanced_account_uri=%s
+                 , balanced_customer_href=%s
                  , is_suspicious=False
              WHERE username='alice'
 
-        """, (self.BALANCED_ACCOUNT_URI,))
-        amount = Decimal('1.00')
-        invalid_amount = Decimal('0.00')
+        """, (self.BALANCED_CUSTOMER_HREF,))
+        amount = D('1.00')
+        invalid_amount = D('0.00')
         tip = { 'amount': amount
               , 'tippee': self.alice.username
               , 'claimed_time': utcnow()
@@ -518,20 +594,20 @@ class TestBillingPayday(TestPaydayBase):
     def test_start_zero_out_and_get_participants(self, log):
         self.make_participant('bob', balance=10, claimed_time=None,
                               pending=1,
-                              balanced_account_uri=self.BALANCED_ACCOUNT_URI)
+                              balanced_customer_href=self.BALANCED_CUSTOMER_HREF)
         self.make_participant('carl', balance=10, claimed_time=utcnow(),
                               pending=1,
-                              balanced_account_uri=self.BALANCED_ACCOUNT_URI)
+                              balanced_customer_href=self.BALANCED_CUSTOMER_HREF)
         self.db.run("""
 
             UPDATE participants
                SET balance=0
                  , claimed_time=null
                  , pending=null
-                 , balanced_account_uri=%s
+                 , balanced_customer_href=%s
              WHERE username='alice'
 
-        """, (self.BALANCED_ACCOUNT_URI,))
+        """, (self.BALANCED_CUSTOMER_HREF,))
 
         ts_start = self.payday.start()
 
@@ -601,15 +677,15 @@ class TestBillingPayday(TestPaydayBase):
         assert end.call_count
 
 
-class TestBillingTransfer(TestPaydayBase):
+class TestBillingTransfer(PaydayHarness):
     def setUp(self):
-        TestPaydayBase.setUp(self)
+        PaydayHarness.setUp(self)
         self.payday.start()
         self.tipper = self.make_participant('lgtest')
-        self.balanced_account_uri = '/v1/marketplaces/M123/accounts/A123'
+        #self.balanced_customer_href = '/v1/marketplaces/M123/accounts/A123'
 
     def test_transfer(self):
-        amount = Decimal('1.00')
+        amount = D('1.00')
         sender = self.make_participant('test_transfer_sender', pending=0,
                                        balance=1)
         recipient = self.make_participant('test_transfer_recipient', pending=0,
@@ -629,7 +705,7 @@ class TestBillingTransfer(TestPaydayBase):
         assert result == False
 
     def test_debit_participant(self):
-        amount = Decimal('1.00')
+        amount = D('1.00')
         subject = self.make_participant('test_debit_participant', pending=0,
                                         balance=1)
 
@@ -650,11 +726,11 @@ class TestBillingTransfer(TestPaydayBase):
                 self.payday.debit_participant(cursor, subject.username, amount)
 
     def test_skim_credit(self):
-        actual = skim_credit(Decimal('10.00'))
-        assert actual == (Decimal('10.00'), Decimal('0.00'))
+        actual = skim_credit(D('10.00'))
+        assert actual == (D('10.00'), D('0.00'))
 
     def test_credit_participant(self):
-        amount = Decimal('1.00')
+        amount = D('1.00')
         subject = self.make_participant('test_credit_participant', pending=0,
                                         balance=1)
 
@@ -670,7 +746,7 @@ class TestBillingTransfer(TestPaydayBase):
         assert actual == expected
 
     def test_record_transfer(self):
-        amount = Decimal('1.00')
+        amount = D('1.00')
         subjects = ['jim', 'kate', 'bob']
 
         for subject in subjects:
@@ -695,7 +771,7 @@ class TestBillingTransfer(TestPaydayBase):
             assert actual == expected
 
     def test_record_transfer_invalid_participant(self):
-        amount = Decimal('1.00')
+        amount = D('1.00')
 
         with self.db.get_cursor() as cursor:
             with self.assertRaises(IntegrityError):
@@ -706,7 +782,7 @@ class TestBillingTransfer(TestPaydayBase):
                                             )
 
     def test_mark_transfer(self):
-        amount = Decimal('1.00')
+        amount = D('1.00')
 
         # Forces a load with current state in dict
         before_transfer = self.fetch_payday()
@@ -726,22 +802,22 @@ class TestBillingTransfer(TestPaydayBase):
         assert actual == expected
 
     def test_record_credit_updates_balance(self):
-        self.payday.record_credit( amount=Decimal("-1.00")
-                                 , fee=Decimal("0.41")
+        self.payday.record_credit( amount=D("-1.00")
+                                 , fee=D("0.41")
                                  , error=""
                                  , username="alice"
                                   )
         alice = Participant.from_username('alice')
-        assert alice.balance == Decimal("0.59")
+        assert alice.balance == D("0.59")
 
     def test_record_credit_doesnt_update_balance_if_error(self):
-        self.payday.record_credit( amount=Decimal("-1.00")
-                                 , fee=Decimal("0.41")
+        self.payday.record_credit( amount=D("-1.00")
+                                 , fee=D("0.41")
                                  , error="SOME ERROR"
                                  , username="alice"
                                   )
         alice = Participant.from_username('alice')
-        assert alice.balance == Decimal("0.00")
+        assert alice.balance == D("0.00")
 
 
 class TestPachinko(Harness):

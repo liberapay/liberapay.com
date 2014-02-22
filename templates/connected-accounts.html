@@ -56,8 +56,8 @@
             <span>{% if participant.last_ach_result != "" %}&#x2718;{% else %}&#x2714;{% endif %}</span>
 
             {% endif %}
-            <div class="account-type">{% if user.ADMIN and participant.balanced_account_uri %}
-                <a href="https://dashboard.balancedpayments.com/#/{{ participant.balanced_account_uri[4:] }}"
+            <div class="account-type">{% if user.ADMIN and participant.balanced_customer_href %}
+                <a href="https://dashboard.balancedpayments.com/#/{{ participant.balanced_customer_href[4:] }}"
                     >on Balanced Payments</a>{% else %}on Balanced Payments{% endif %}</div>
         </td>
     </tr>

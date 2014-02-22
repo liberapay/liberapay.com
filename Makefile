@@ -66,6 +66,9 @@ test: env test-schema
 retest: env
 	./$(env_bin)/honcho -e tests/defaults.env,tests/local.env run ./$(env_bin)/py.test ./tests/ --lf
 
+test-cov: env test-schema
+	./$(env_bin)/honcho -e tests/defaults.env,tests/local.env run ./$(env_bin)/py.test --cov gittip ./tests/
+
 tests: test
 
 node_modules: package.json
