@@ -63,7 +63,7 @@ class UserInfo(object):
 class Platform(object):
 
     # "x" stands for "extract"
-    x_user_info = lambda self, info: info
+    x_user_info = not_available
     x_user_id = not_available
     x_user_name = not_available
     x_display_name = not_available
@@ -165,7 +165,7 @@ class Platform(object):
         guaranteed to have non-empty values.
         """
         r = UserInfo()
-        info = self.x_user_info(info)
+        info = self.x_user_info(info, info)
         r.user_name = self.x_user_name(info)
         if self.x_user_id.__func__ is not_available:
             r.user_id = r.user_name
@@ -215,6 +215,28 @@ class Platform(object):
                AND user_name = %s
 
         """, (self.name, user_name), default=exception)
+
+    def get_team_members(self, team_name, page_url=None):
+        """Given a team_name on the platform, get the team's membership list
+        from the API and return corresponding `AccountElsewhere`s.
+        """
+        default_url = self.api_team_members_path.format(user_name=quote(team_name))
+        r = self.api_get(page_url or default_url)
+        members, count, pages_urls = self.api_paginator(r, self.api_parser(r))
+        members = [self.extract_user_info(m) for m in members]
+        accounts = self.db.all("""\
+
+            SELECT elsewhere.*::elsewhere_with_participant
+              FROM elsewhere
+             WHERE platform = %s
+               AND user_name = any(%s)
+
+        """, (self.name, [m.user_name for m in members]))
+        found_user_names = set(a.user_name for a in accounts)
+        for member in members:
+            if member.user_name not in found_user_names:
+                accounts.append(self.upsert(member))
+        return accounts, count, pages_urls
 
     def get_user_info(self, user_name, sess=None):
         """Given a user_name on the platform, get the user's info from the API.
