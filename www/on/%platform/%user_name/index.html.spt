@@ -111,7 +111,7 @@ else:
 
     {% for member in members %}
         {% set on_gittip = member.participant.is_claimed %}
-        {% set declines_gifts = member.participant.goal == 0 or member.is_locked %}
+        {% set declines_gifts = not member.participant.accepts_tips or member.is_locked %}
         <tr class="{{ 'declines' if declines_gifts }} {{ 'not-on-gittip' if not on_gittip }}">
             {% if on_gittip %}
                 <td>
@@ -121,7 +121,7 @@ else:
                     </a>
                 </td>
                 <td>
-                    {% if member.participant.goal == 0 %}
+                    {% if declines_gifts %}
                         declines gifts (is a patron)
                     {% else %}
                         accepts gifts
