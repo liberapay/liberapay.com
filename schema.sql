@@ -950,6 +950,7 @@ ALTER TABLE homepage_top_givers ADD COLUMN twitter_pic text;
 
 DROP TABLE homepage_new_participants;
 
+
 -------------------------------------------------------------------------------
 -- https://github.com/gittip/www.gittip.com/issues/1683
 
@@ -958,6 +959,7 @@ BEGIN;
     ALTER TABLE participants ADD COLUMN anonymous_receiving bool NOT NULL DEFAULT FALSE;
     ALTER TABLE homepage_top_receivers ADD COLUMN anonymous boolean;
 END;
+
 
 -------------------------------------------------------------------------------
 -- https://github.com/gittip/www.gittip.com/issues/1164
@@ -992,6 +994,7 @@ BEGIN;
 
 END;
 
+
 -------------------------------------------------------------------------------
 -- https://github.com/gittip/www.gittip.com/pull/1857
 
@@ -1000,6 +1003,8 @@ BEGIN;
     ALTER TABLE elsewhere ADD COLUMN refresh_token text DEFAULT NULL;
     ALTER TABLE elsewhere ADD COLUMN expires timestamp with time zone DEFAULT NULL;
 END;
+
+
 -------------------------------------------------------------------------------
 -- https://github.com/gittip/www.gittip.com/pull/2056
 
