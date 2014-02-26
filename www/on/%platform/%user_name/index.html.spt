@@ -188,17 +188,16 @@ else:
     <h2>{{ user_name|e }} has not joined Gittip.</h2>
 
     {% if platform in website.signin_platforms or not user.ANON %}
-        Is this you?
         {% if user.ANON %}
+            <p>Is this you? We never collect money for you unless you join.</p>
             {% call auth_button(platform.name, 'opt-in', path['user_name']) %}
-                Opt in
+                Join Gittip
             {% endcall %}
-            to Gittip. We never collect money for you until you do.
         {% else %}
+            <p>Is this yours? Connect it to your Gittip account.</p>
             {% call auth_button(platform.name, 'connect', path['user_name']) %}
-                Connect this {{ platform.display_name }} account
+                Connect
             {% endcall %}
-            to your Gittip account.
         {% endif %}
     {% endif %}
 
