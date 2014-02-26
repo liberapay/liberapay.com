@@ -1,0 +1,224 @@
+"""External user page on Gittip.
+"""
+
+from base64 import b64decode, b64encode
+
+from aspen import Response
+from gittip.utils import get_avatar_url
+
+[-----------------------------------------------------------------------------]
+
+platform = getattr(website.platforms, path['platform'], None)
+if platform is None:
+    raise Response(404)
+
+account = platform.get_account(path['user_name'])
+if account is None:
+    raise Response(404)
+
+if account.participant.is_claimed:
+    request.redirect('/%s/' % account.participant.username)
+
+title = username = user_name = account.user_name
+locked = account.is_locked
+participant = account.participant
+is_team = account.is_team
+
+if locked:
+    number = -2
+    description = 'has opted out of Gittip.'
+elif is_team:
+    page_url = b64decode(qs.get('page', ''))
+    members, number, pages_urls = platform.get_team_members(user_name, page_url)
+    if number == -1:
+        description = 'is a big team.'
+    elif number < 2:
+        description = 'is an organization with'
+    else:
+        description = 'is a team with'
+else:
+    number = participant.get_number_of_backers()
+    description = 'has'
+
+[-----------------------------------------------------------------------------]
+{% extends "templates/base.html" %}
+
+{% block heading %}
+    <h2 class="top"><span>{{ platform.name }}</span></h2>
+{% endblock %}
+
+{% block scripts %}
+  {% if not locked %}
+    <script>$(document).ready(Gittip.tips.init);</script>
+  {% endif %}
+
+  {{ super() }}
+{% endblock %}
+
+{% block box %}
+
+<table class="on-elsewhere">
+    <tr>
+        <td class="picture">
+            <img src="{{ get_avatar_url(account)|e }}" />
+        </td>
+        <td class="ready">
+            <h2>
+                <a href="{{ account.html_url|e}}">{{ user_name|e }}</a>
+                {{ description }}
+            </h2>
+            {% if number >= 0 %}
+                <div class="number">{{ number }}</div>
+                <div class="unit">
+                    {% if is_team %}
+                        public member{{ '' if number == 1 else 's' }}
+                    {% else %}
+                        {{ 'person' if number == 1 else 'people' }} ready to give
+                    {% endif %}
+                </div>
+            {% endif %}
+        </td>
+        <td class="offset"></td>
+    </tr>
+</table>
+
+{% if not locked and not is_team %}
+    {% include "templates/participant.tip.html" %}
+{% endif %}
+
+{% endblock %}
+
+{% block page %}
+
+{% from 'templates/auth.html' import auth_button with context %}
+
+<div class="col0">
+  {% if locked %}
+
+    <p>If you are <a href="{{ account.html_url|e}}">{{ user_name|e }}</a>
+    on {{ platform.name }}, you can unlock your account to allow people
+    to pledge tips to you on Gittip.</p>
+
+    {% call auth_button(platform.name, 'unlock', path['user_name']) %}
+        Unlock
+    {% endcall %}
+
+  {% elif is_team %}
+
+    <table id="members">
+    <thead><tr><th>Member</th><th>Status</th></tr></thead>
+    <tbody>
+
+    {% for member in members %}
+        {% set on_gittip = member.participant.is_claimed %}
+        {% set declines_gifts = not member.participant.accepts_tips or member.is_locked %}
+        <tr class="{{ 'declines' if declines_gifts }} {{ 'not-on-gittip' if not on_gittip }}">
+            {% if on_gittip %}
+                <td>
+                    <a href="/{{ member.participant.username }}/">
+                        <img src="{{ get_avatar_url(member.participant)|e }}" />
+                        {{member.participant.username|e}}
+                    </a>
+                </td>
+                <td>
+                    {% if declines_gifts %}
+                        declines gifts (is a patron)
+                    {% else %}
+                        accepts gifts
+                    {% endif %}
+                </td>
+            {% else %}
+                <td>
+                    <a href="/on/{{platform.name}}/{{member.user_name|e}}/">
+                        <img src="{{ get_avatar_url(member)|e }}" />
+                        {{member.user_name|e}}
+                    </a>
+                </td>
+                <td>
+                    {% if member.is_locked %}
+                        declines gifts (opted out)
+                    {% else %}
+                        hasn't joined Gittip yet
+                    {% endif %}
+                </td>
+            {% endif %}
+        </tr>
+    {% endfor %}
+
+    {% if pages_urls %}
+        <tr>
+            <td>
+                {% if pages_urls.get('prev') %}
+                    <a href="?page={{ b64encode(pages_urls['prev']) }}">
+                        ⇠ Previous
+                    </a>
+                {% endif %}
+            </td>
+            <td style="text-align: right">
+                {% if pages_urls.get('next') %}
+                    <a href="?page={{ b64encode(pages_urls['next']) }}">
+                        Next ⇢
+                    </a>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {% if pages_urls.get('first') %}
+                    <a href="?page={{ b64encode(pages_urls['first']) }}">
+                        ⇤ First
+                    </a>
+                {% endif %}
+            </td>
+            <td style="text-align: right">
+                {% if pages_urls.get('last') %}
+                    <a href="?page={{ b64encode(pages_urls['last']) }}">
+                        Last ⇥
+                    </a>
+                {% endif %}
+            </td>
+        </tr>
+    {% endif %}
+
+    </tbody>
+    </table>
+
+  {% else %}
+
+    <h2>{{ user_name|e }} has not joined Gittip.</h2>
+
+    {% if platform in website.signin_platforms or not user.ANON %}
+        {% if user.ANON %}
+            <p>Is this you? We never collect money for you unless you join.</p>
+            {% call auth_button(platform.name, 'opt-in', path['user_name']) %}
+                Join Gittip
+            {% endcall %}
+        {% else %}
+            <p>Is this yours? Connect it to your Gittip account.</p>
+            {% call auth_button(platform.name, 'connect', path['user_name']) %}
+                Connect
+            {% endcall %}
+        {% endif %}
+    {% endif %}
+
+    {% if user.ANON %}
+    <h2>What is Gittip?</h2>
+
+    <p>Gittip is a way to thank and support your favorite artists, musicians,
+    writers, programmers, etc. by setting up a small weekly cash gift to them.
+    <a href="/about/">Read more ...</a></p>
+
+
+    <h2>Don't like what you see?</h2>
+
+    <p>If you are {{ user_name|e }} you can explicitly opt out of Gittip by
+    locking this account. We don't allow new pledges to locked accounts.</p>
+
+    {% call auth_button(platform.name, 'lock', path['user_name']) %}
+        Lock
+    {% endcall %}
+    {% endif %}
+
+  {% endif %}
+</div>
+{% endblock %}

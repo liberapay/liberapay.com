@@ -13,7 +13,7 @@
 <table class="on-profile{% if participant.is_suspicious %} is-suspicious{% endif %}">
     <tr>
         <td class="picture">
-            <a href="/{{ participant.username }}/"><img src="{{ participant.get_img_src(128) }}" /></a>
+            <a href="/{{ participant.username }}/"><img src="{{ get_avatar_url(participant)|e }}" /></a>
         </td>
         <td class="giving-receiving">
         {% if anon_giving and anon_receiving %}

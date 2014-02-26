@@ -4,7 +4,7 @@ import locale
 
 from aspen import json, Response
 from aspen.utils import to_age
-from gittip.utils import get_participant, wrap, plural
+from gittip.utils import get_avatar_url, get_participant, wrap, plural
 from gittip.models import community
 
 MAKING = "making the world better by"
@@ -31,12 +31,6 @@ if participant.anonymous_receiving:
         show_charts = False
 
 accounts = participant.get_accounts_elsewhere()
-github_account = accounts.github
-bitbucket_account = accounts.bitbucket
-twitter_account = accounts.twitter
-bountysource_account = accounts.bountysource
-venmo_account = accounts.venmo
-openstreetmap_account = accounts.openstreetmap
 
 long_statement = len(participant.statement) > LONG_STATEMENT
 communities = [c for c in community.get_list_for(website.db, username) if c.is_member]
@@ -62,7 +56,9 @@ else:
     {% else %}
     <meta name="og:description" content="Gittip is a weekly gift exchange." />
     {% endif %}
-    <meta name="og:image" content="{{ participant.get_img_src(200) }}" />
+    {% if participant.avatar_url %}
+    <meta name="og:image" content="{{ participant.avatar_url|e }}" />
+    {% endif %}
     <meta name="og:image" content="/assets/gittip.opengraph.png" />
 {% endblock %}
 

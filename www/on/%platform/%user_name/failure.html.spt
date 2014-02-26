@@ -1,0 +1,33 @@
+from aspen import Response
+
+[---]
+
+platform = getattr(website.platforms, path['platform'], None)
+if platform is None:
+    raise Response(404)
+
+if not path['user_name']:
+    raise Response(400, '%user_name is empty')
+
+try:
+    action = qs['action']
+except KeyError:
+    raise Response(400)
+
+[---]
+
+{% extends "templates/base.html" %}
+{% block heading %}<h2 class="top"><span>Failure</span></h2>{% endblock %}
+{% block box %}
+
+<div class="as-content">
+
+    <h1>Are you really {{ path['user_name']|e }}?</h1>
+
+    <p>Your attempt to {{ action|e }} this account failed because you're
+    logged into {{ platform.display_name }} as someone else. Please sign out
+    and <a href="./">try again</a>.</p>
+
+</div>
+
+{% endblock %}

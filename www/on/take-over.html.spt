@@ -1,19 +1,16 @@
 from aspen import Response
-from gittip.elsewhere.bitbucket import BitbucketAccount
-from gittip.elsewhere.github import GitHubAccount
-from gittip.elsewhere.twitter import TwitterAccount
-from gittip.elsewhere.bountysource import BountysourceAccount
-from gittip.elsewhere import platform_classes
 
 [---------]
-if user.ANON or not POST:
+if user.ANON:
     raise Response(404)
+if not POST:
+    raise Response(405)
 
 if body['should_reconnect'] != 'yes':
     request.redirect('/about/me.html')
 
 platform = body['platform']
-if platform not in platform_classes:
+if not hasattr(website.platforms, platform):
     raise Response(400, "bad platform: %s" % platform)
 
 user_id = body['user_id']
@@ -34,11 +31,7 @@ if expected is None or actual != expected:
     msg = str("Is %s gaming us? %s:%s" % (user.participant.username, expected, actual))
     raise Response(400, msg)
 
-Account = platform_classes[platform]
-
-account = Account(website.db, user_id)
-
-user.participant.take_over(account, have_confirmation=True)
+user.participant.take_over((platform, user_id), have_confirmation=True)
 request.redirect('/about/me.html')
 
 [---------]
