@@ -12,7 +12,7 @@ from urlparse import urlsplit, urlunsplit
 import xml.etree.ElementTree as ET
 
 from aspen import log, Response
-from aspen.utils import to_age, typecheck, utc
+from aspen.utils import to_age, utc
 from psycopg2 import IntegrityError
 from requests_oauthlib import OAuth1Session, OAuth2Session
 import xmltodict
@@ -178,7 +178,7 @@ class Platform(object):
         r.email = self.x_email(info, None)
         gravatar_id = self.x_gravatar_id(info, None)
         if r.email and not gravatar_id:
-            gravatar_id = hashlib.md5(email.strip().lower()).hexdigest()
+            gravatar_id = hashlib.md5(r.email.strip().lower()).hexdigest()
         if gravatar_id:
             r.avatar_url = 'https://www.gravatar.com/avatar/'+gravatar_id
         else:
