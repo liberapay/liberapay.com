@@ -16,7 +16,7 @@ class Venmo(PlatformOAuth2):
     auth_url = 'https://api.venmo.com/v1/oauth'
     oauth_email_scope = 'access_email'
     oauth_payment_scope = 'make_payments'
-    oauth_default_scope = [oauth_payment_scope]
+    oauth_default_scope = ['access_profile']
 
     # API attributes
     api_format = 'json'
@@ -25,6 +25,7 @@ class Venmo(PlatformOAuth2):
     api_user_self_info_path = '/me'
 
     # User info extractors
+    x_user_info = key('data')
     x_user_id = key('id')
     x_user_name = key('username')
     x_display_name = key('display_name')
