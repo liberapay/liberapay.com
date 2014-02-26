@@ -7,12 +7,15 @@ from gittip.testing import Harness
 
 class Tests(Harness):
 
-    def change_username(self, new_username, auth_as='alice', as_json=True):
-        self.make_participant('alice') if auth_as is not None else ''
-        r = self.client.POST('/alice/username.json', {'username': new_username},
-                                                     auth_as=auth_as,
-                                                     raise_immediately=False)
-        return r.code, json.loads(r.body) if as_json else r.body
+    def change_username(self, new_username, auth_as='alice', weird=False):
+        if auth_as:
+            self.make_participant('alice')
+
+        post, args = [self.client.PxST, {}] if weird else [self.client.POST, {'raise_immediately': False}]
+
+        r = post('/alice/username.json', {'username': new_username},
+                                         auth_as=auth_as, **args)
+        return r.code, r.body if weird else json.loads(r.body)
 
     def test_participant_can_change_their_username(self):
         code, body = self.change_username("bob")
@@ -20,7 +23,7 @@ class Tests(Harness):
         assert body['username'] == "bob"
 
     def test_anonymous_gets_404(self):
-        code, body = self.change_username("bob", auth_as=None, as_json=False)
+        code, body = self.change_username("bob", auth_as=None, weird=True)
         assert code == 404
 
     def test_empty(self):
