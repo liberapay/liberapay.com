@@ -25,7 +25,7 @@ class Venmo(PlatformOAuth2):
     api_user_self_info_path = '/me'
 
     # User info extractors
-    x_user_info = key('data', clean=lambda d: key('user')(d, d))
+    x_user_info = key('data', clean=lambda d: d.pop('user', d))
     x_user_id = key('id')
     x_user_name = key('username')
     x_display_name = key('display_name')
