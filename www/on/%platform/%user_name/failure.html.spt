@@ -22,7 +22,7 @@ except KeyError:
 
 <div class="as-content">
 
-    <h1>Are you really {{ path['user_name']|e }} ?</h1>
+    <h1>Are you really {{ path['user_name']|e }}?</h1>
 
     <p>Your attempt to {{ action|e }} this account failed because you're
     logged into {{ platform.display_name }} as someone else. Please sign out
