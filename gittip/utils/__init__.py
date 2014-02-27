@@ -3,7 +3,7 @@ import time
 
 import re
 from aspen import log_dammit, Response
-from aspen.utils import typecheck
+from aspen.utils import typecheck, to_age
 from postgres.cursors import SimpleCursorBase
 from jinja2 import escape
 
@@ -437,3 +437,20 @@ def get_avatar_url(obj):
     if not obj.avatar_url:
         return '/assets/-/avatar-default.gif'
     return obj.avatar_url
+
+def _to_age(participant):
+    # XXX I can't believe I'm doing this. Evolve aspen.utils.to_age!
+    age = to_age(participant.claimed_time, fmt_past="%(age)s")
+    age = age.replace('just a moment', 'just now')
+    age = age.replace('an ', '1 ').replace('a ', '1 ')
+    if age.endswith(' seconds'):
+        age = '1 minute'
+    words = ('zero', 'one', 'two','three', 'four', 'five', 'six', 'seven',
+                                                               'eight', 'nine')
+    for i, word in enumerate(words):
+        age = age.replace(word, str(i))
+    return age.replace(' ', ' <span class="unit">') + "</span>"
+
+def format_money(money):
+    format = '%.2f' if money < 1000 else '%.0f'
+    return format % money

@@ -1,30 +1,11 @@
 from aspen import Response
-from aspen.utils import to_age
 from gittip.models.community import name_pattern, slugize
-from gittip.utils import get_avatar_url
+from gittip.utils import get_avatar_url, _to_age, format_money
 from gittip.utils.query_cache import QueryCache
 
 LUXURY = 4
 
 query_cache = QueryCache(website.db, threshold=20)
-
-
-def _to_age(participant):
-    # XXX I can't believe I'm doing this. Evolve aspen.utils.to_age!
-    age = to_age(participant.claimed_time, fmt_past="%(age)s")
-    age = age.replace('just a moment', 'just now')
-    age = age.replace('an ', '1 ').replace('a ', '1 ')
-    if age.endswith(' seconds'):
-        age = '1 minute'
-    words = ('zero', 'one', 'two','three', 'four', 'five', 'six', 'seven',
-                                                               'eight', 'nine')
-    for i, word in enumerate(words):
-        age = age.replace(word, str(i))
-    return age.replace(' ', ' <span class="unit">') + "</span>"
-
-def format_money(money):
-    format = '%.2f' if money < 1000 else '%.0f'
-    return format % money
 
 [---]
 
