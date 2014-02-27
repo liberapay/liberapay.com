@@ -15,10 +15,8 @@ class UsernameIsEmpty(ProblemChangingUsername):
 class UsernameTooLong(ProblemChangingUsername):
     msg = "The username '{}' is too long."
 
-# Not passing the potentially unicode characters back because of:
-# https://github.com/gittip/aspen-python/issues/177
 class UsernameContainsInvalidCharacters(ProblemChangingUsername):
-    msg = "That username contains invalid characters."
+    msg = "The username '{}' contains invalid characters."
 
 class UsernameIsRestricted(ProblemChangingUsername):
     msg = "The username '{}' is restricted."
