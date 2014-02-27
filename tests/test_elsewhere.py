@@ -1,9 +1,5 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-import json
-
-from mock import patch
-
 from gittip.elsewhere import UserInfo
 from gittip.models.account_elsewhere import AccountElsewhere
 from gittip.testing import Harness
