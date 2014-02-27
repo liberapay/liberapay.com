@@ -17,7 +17,6 @@ There are three pieces of information for each participant related to billing:
 
 """
 from __future__ import unicode_literals
-from urllib import quote
 
 import balanced
 import stripe

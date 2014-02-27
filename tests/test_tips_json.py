@@ -4,7 +4,6 @@ import datetime
 import json
 
 import pytz
-import base64
 
 from gittip.testing import Harness
 
