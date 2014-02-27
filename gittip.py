@@ -109,20 +109,9 @@ def install_requirements():
     open(requirements_installed_path, 'w').close()
 
 
-def run_server(host=None, port=None):
-    if host is None:
-        host = 'localhost'
-    if port is None:
-        port = default_port
-
+def run_server():
     # TODO: Wait for Aspen to quit before exiting
-
-    shell(swaddle_path, config_path, aspen_path,
-          '--www_root=www/',
-          '--project_root=.',
-          '--show_tracebacks=yes',
-          '--changes_reload=yes',
-          '--network_address=%s:%s' % (host, port))
+    shell(swaddle_path, config_path, aspen_path)
 
 
 def shell(*args, **kwargs):

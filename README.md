@@ -116,15 +116,10 @@ If Gittip launches successfully it will look like this:
 
 ```
 $ make run
-./env/bin/honcho -e default_local.env,local.env run ./env/bin/aspen \
-		--www_root=www/ \
-		--project_root=. \
-		--show_tracebacks=yes \
-		--changes_reload=yes \
-		--network_address=:8537
+./env/bin/honcho -e default_local.env,local.env run ./env/bin/aspen
 pid-27937 thread-47041048338176 (MainThread) Reading configuration from defaults, environment, and command line.
 pid-27937 thread-47041048338176 (MainThread)   changes_reload         False                          default
-pid-27937 thread-47041048338176 (MainThread)   changes_reload         True                           command line option --changes_reload=yes
+pid-27937 thread-47041048338176 (MainThread)   changes_reload         True                           environment variable ASPEN_CHANGES_RELOAD=1
 pid-27937 thread-47041048338176 (MainThread)   charset_dynamic        UTF-8                          default
 pid-27937 thread-47041048338176 (MainThread)   charset_static         None                           default
 pid-27937 thread-47041048338176 (MainThread)   configuration_scripts  []                             default
@@ -134,15 +129,15 @@ pid-27937 thread-47041048338176 (MainThread)   logging_threshold      0         
 pid-27937 thread-47041048338176 (MainThread)   media_type_default     text/plain                     default
 pid-27937 thread-47041048338176 (MainThread)   media_type_json        application/json               default
 pid-27937 thread-47041048338176 (MainThread)   network_address        ((u'0.0.0.0', 8080), 2)        default
-pid-27937 thread-47041048338176 (MainThread)   network_address        ((u'0.0.0.0', 8537), 2)        command line option --network_address=:8537
+pid-27937 thread-47041048338176 (MainThread)   network_address        ((u'0.0.0.0', 8537), 2)        environment variable ASPEN_NETWORK_ADDRESS=:8537
 pid-27937 thread-47041048338176 (MainThread)   network_engine         cheroot                        default
 pid-27937 thread-47041048338176 (MainThread)   project_root           None                           default
-pid-27937 thread-47041048338176 (MainThread)   project_root           .                              command line option --project_root=.
+pid-27937 thread-47041048338176 (MainThread)   project_root           .                              environment variable ASPEN_PROJECT_ROOT=.
 pid-27937 thread-47041048338176 (MainThread)   renderer_default       stdlib_percent                 default
 pid-27937 thread-47041048338176 (MainThread)   show_tracebacks        False                          default
-pid-27937 thread-47041048338176 (MainThread)   show_tracebacks        True                           command line option --show_tracebacks=yes
+pid-27937 thread-47041048338176 (MainThread)   show_tracebacks        True                           environment variable ASPEN_SHOW_TRACEBACKS=1
 pid-27937 thread-47041048338176 (MainThread)   www_root               None                           default
-pid-27937 thread-47041048338176 (MainThread)   www_root               www/                           command line option --www_root=www/
+pid-27937 thread-47041048338176 (MainThread)   www_root               www/                           environment variable ASPEN_WWW_ROOT=www/
 pid-27937 thread-47041048338176 (MainThread) project_root is relative to CWD: '.'.
 pid-27937 thread-47041048338176 (MainThread) project_root set to /home/zbynek/www.gittip.com.
 pid-27937 thread-47041048338176 (MainThread) Found plugin for renderer 'jinja2'
