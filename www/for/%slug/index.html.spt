@@ -22,6 +22,10 @@ def _to_age(participant):
         age = age.replace(word, str(i))
     return age.replace(' ', ' <span class="unit">') + "</span>"
 
+def format_money(money):
+    format = '%.2f' if money < 1000 else '%.0f'
+    return format % money
+
 [---]
 
 _slug = path['slug']
@@ -247,7 +251,7 @@ $(document).ready(function() {
                     <span class="inner">
                         <span class="avatar">
                         </span>
-                        <span class="money">${{ giver.amount }}</span>
+                        <span class="money">${{ format_money(giver.amount) }}</span>
                         <span class="name">Anonymous</span>
                     </span>
                 </span>
@@ -258,7 +262,7 @@ $(document).ready(function() {
                         <span class="avatar"
                             style="background-image: url('{{ get_avatar_url(giver)|e}}')">
                         </span>
-                        <span class="money">${{ giver.amount }}</span>
+                        <span class="money">${{ format_money(giver.amount) }}</span>
                         <span class="name">{{ giver.username }}</span>
                     </span>
                 </a>
@@ -277,7 +281,7 @@ $(document).ready(function() {
                     <span class="inner">
                         <span class="avatar">
                         </span>
-                        <span class="money">${{ receiver.amount }}</span>
+                        <span class="money">${{ format_money(receiver.amount) }}</span>
                         <span class="name">Anonymous</span>
                     </span>
                 </span>
@@ -288,7 +292,7 @@ $(document).ready(function() {
                         <span class="avatar"
                             style="background-image: url('{{ get_avatar_url(receiver)|e}}')">
                         </span>
-                        <span class="money">${{ receiver.amount }}</span>
+                        <span class="money">${{ format_money(receiver.amount) }}</span>
                         <span class="name">{{ receiver.username }}</span>
                     </span>
                 </a>
