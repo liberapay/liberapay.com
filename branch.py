@@ -36,7 +36,7 @@ def main():
         for event in heapq.merge(claimed, usernames, api_keys, goals):
             payload = dict(action=event.action, id=event.id)
             if event.action == 'set':
-                payload['values'] = { event.__dict__.keys()[-1]: event[-1] }
+                payload['values'] = { event._fields[-1]: event[-1] }
             c.run("""
                 INSERT INTO events (ts, type, payload)
                 VALUES (%s, %s, %s)
