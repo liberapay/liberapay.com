@@ -51,7 +51,7 @@ Gittip.profile.init = function() {
         }
         function error(e) {
             $('#save-username').text('Save');
-            alert(JSON.parse(e.responseText).error);
+            alert(JSON.parse(e.responseText).error_message_long);
         }
         jQuery.ajax(
             { url: "username.json"
