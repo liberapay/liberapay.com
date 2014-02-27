@@ -92,8 +92,10 @@ a.mini-user:hover {
         color: $light-brown;
     }
     .account-details {
-        position: relative;
         padding-left: 6pt;
+        > a {
+            line-height: 24pt;
+        }
     }
     img.avatar {
         width: 24pt;
