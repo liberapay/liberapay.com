@@ -14,4 +14,4 @@ try:
     response.body = {"username": new_username}
     log_dammit("user with username %s has become username %s" % (old_username, new_username))
 except ProblemChangingUsername, e:
-    raise Response(400, {"error": str(e)})
+    raise Response(400, unicode(e))

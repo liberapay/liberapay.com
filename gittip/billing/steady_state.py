@@ -42,12 +42,12 @@ class SteadyState:
             Converges to the steady state.
         """
         if not issparse(payouts):
-            raise ArgumentError("Please provide a sparse matrix")
+            raise ValueError("Please provide a sparse matrix")
 
         (n_rows, n_cols) = payouts.shape
 
         if n_rows != n_cols:
-            raise ArgumentError("The payout matrix must be square")
+            raise ValueError("The payout matrix must be square")
 
         payouts_d = lil_matrix((n_rows, n_cols))
         payouts_d.setdiag(payouts.diagonal())

@@ -1,18 +1,5 @@
 from aspen import Response
-from gittip.utils import get_participant
-
-
-def _extract_username(tip):
-    if tip.platform == 'github':
-        key = 'login'
-    elif tip.platform == 'bitbucket':
-        key = 'username'
-    elif tip.platform == 'twitter':
-        key = 'screen_name'
-    else:
-        assert tip.platform == 'openstreetmap', tip  # sanity check
-        key = 'username'
-    return tip.user_info[key]
+from gittip.utils import get_participant, get_avatar_url
 
 [-----------------------------------------------------------------------------]
 participant = get_participant(request, restrict=True)
@@ -95,7 +82,7 @@ first_time = qs.get('first_time') == '1'
     <tr class="pledge">
         <th>
             <img class="platform-icon" src="/assets/icons/{{ tip.platform }}.12.png" />
-            <a href="/{{ tippee }}/">{{ _extract_username(tip) }}</a>
+            <a href="/{{ tippee }}/">{{ tip.user_name }}</a>
         </th>
         <td>{% include "templates/my-tip-bulk.html" %}</td>
     </tr>

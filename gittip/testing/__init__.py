@@ -8,9 +8,11 @@ from decimal import Decimal
 from os.path import join, dirname, realpath
 
 import pytz
+import vcr
 from aspen import resources
 from aspen.testing.client import Client
 from gittip.billing.payday import Payday
+from gittip.elsewhere import UserInfo
 from gittip.models.participant import Participant
 from gittip.security.user import User
 from gittip import wireup
@@ -21,53 +23,7 @@ TOP = realpath(join(dirname(dirname(__file__)), '..'))
 SCHEMA = open(join(TOP, "schema.sql")).read()
 WWW_ROOT = str(realpath(join(TOP, 'www')))
 PROJECT_ROOT = str(TOP)
-
-
-DUMMY_GITHUB_JSON = u'{"html_url":"https://github.com/whit537","type":"User",'\
-'"public_repos":25,"blog":"http://whit537.org/","gravatar_id":"fb054b407a6461'\
-'e417ee6b6ae084da37","public_gists":29,"following":15,"updated_at":"2013-01-1'\
-'4T13:43:23Z","company":"Gittip","events_url":"https://api.github.com/users/w'\
-'hit537/events{/privacy}","repos_url":"https://api.github.com/users/whit537/r'\
-'epos","gists_url":"https://api.github.com/users/whit537/gists{/gist_id}","em'\
-'ail":"chad@zetaweb.com","organizations_url":"https://api.github.com/users/wh'\
-'it537/orgs","hireable":false,"received_events_url":"https://api.github.com/u'\
-'sers/whit537/received_events","starred_url":"https://api.github.com/users/wh'\
-'it537/starred{/owner}{/repo}","login":"whit537","created_at":"2009-10-03T02:'\
-'47:57Z","bio":"","url":"https://api.github.com/users/whit537","avatar_url":"'\
-'https://secure.gravatar.com/avatar/fb054b407a6461e417ee6b6ae084da37?d=https:'\
-'//a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-user-4'\
-'20.png","followers":90,"name":"Chad Whitacre","followers_url":"https://api.g'\
-'ithub.com/users/whit537/followers","following_url":"https://api.github.com/u'\
-'sers/whit537/following","id":134455,"location":"Pittsburgh, PA","subscriptio'\
-'ns_url":"https://api.github.com/users/whit537/subscriptions"}'
-# JSON data as returned from github for whit537 ;)
-
-GITHUB_USER_UNREGISTERED_LGTEST = u'{"public_repos":0,"html_url":"https://git'\
-'hub.com/lgtest","type":"User","repos_url":"https://api.github.com/users/lgte'\
-'st/repos","gravatar_id":"d41d8cd98f00b204e9800998ecf8427e","following":0,"pu'\
-'blic_gists":0,"updated_at":"2013-01-04T17:24:57Z","received_events_url":"htt'\
-'ps://api.github.com/users/lgtest/received_events","gists_url":"https://api.g'\
-'ithub.com/users/lgtest/gists{/gist_id}","events_url":"https://api.github.com'\
-'/users/lgtest/events{/privacy}","organizations_url":"https://api.github.com/'\
-'users/lgtest/orgs","avatar_url":"https://secure.gravatar.com/avatar/d41d8cd9'\
-'8f00b204e9800998ecf8427e?d=https://a248.e.akamai.net/assets.github.com%2Fima'\
-'ges%2Fgravatars%2Fgravatar-user-420.png","login":"lgtest","created_at":"2012'\
-'-05-24T20:09:07Z","starred_url":"https://api.github.com/users/lgtest/starred'\
-'{/owner}{/repo}","url":"https://api.github.com/users/lgtest","followers":0,"'\
-'followers_url":"https://api.github.com/users/lgtest/followers","following_ur'\
-'l":"https://api.github.com/users/lgtest/following","id":1775515,"subscriptio'\
-'ns_url":"https://api.github.com/users/lgtest/subscriptions"}'
-# JSON data as returned from github for unregistered user ``lgtest``
-
-DUMMY_BOUNTYSOURCE_JSON = u'{"slug": "6-corytheboyd","updated_at": "2013-05-2'\
-'4T01:45:20Z","last_name": "Boyd","id": 6,"last_seen_at": "2013-05-24T01:45:2'\
-'0Z","email": "corytheboyd@gmail.com","fundraisers": [],"frontend_path": "#us'\
-'ers/6-corytheboyd","display_name": "corytheboyd","frontend_url": "https://ww'\
-'w.bountysource.com/#users/6-corytheboyd","created_at": "2012-09-14T03:28:07Z'\
-'","first_name": "Cory","bounties": [],"image_url": "https://secure.gravatar.'\
-'com/avatar/bdeaea505d059ccf23d8de5714ae7f73?d=https://a248.e.akamai.net/asse'\
-'ts.github.com%2Fimages%2Fgravatars%2Fgravatar-user-420.png"}'
-# JSON data as returned from bountysource for corytheboyd! hello, whit537 ;)
+FIXTURES_ROOT = join(TOP, 'tests', 'fixtures')
 
 
 class ClientWithAuth(Client):
@@ -103,9 +59,36 @@ class Harness(unittest.TestCase):
     def setUpClass(cls):
         cls.client = ClientWithAuth(www_root=WWW_ROOT, project_root=PROJECT_ROOT)
         cls.db = cls.client.website.db
+        cls.platforms = cls.client.website.platforms
         cls.tablenames = cls.db.all("SELECT tablename FROM pg_tables "
                                     "WHERE schemaname='public'")
         cls.seq = 0
+        cls.setUpVCR()
+
+
+    @classmethod
+    def setUpVCR(cls):
+        """Set up VCR.
+
+        We use the VCR library to freeze API calls. Frozen calls are stored in
+        tests/fixtures/ for your convenience (otherwise your first test run
+        would take fooooorrr eeeevvveeerrrr). If you find that an API call has
+        drifted from our frozen version of it, simply remove that fixture file
+        and rerun. The VCR library should recreate the fixture with the new
+        information, and you can commit that with your updated tests.
+
+        """
+        cls.vcr = vcr.VCR(
+            cassette_library_dir = FIXTURES_ROOT,
+            record_mode = 'once',
+            match_on = ['url', 'method'],
+        )
+        cls.vcr_cassette = cls.vcr.use_cassette('{}.yml'.format(cls.__name__)).__enter__()
+
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.vcr_cassette.__exit__(None, None, None)
 
 
     def setUp(self):
@@ -126,6 +109,12 @@ class Harness(unittest.TestCase):
                 self.db.run("DELETE FROM %s CASCADE" % tablename)
             except (IntegrityError, InternalError):
                 tablenames.insert(0, tablename)
+
+
+    def make_elsewhere(self, platform, user_id, user_name, **kw):
+        platform = getattr(self.platforms, platform)
+        info = UserInfo(user_id=unicode(user_id), user_name=user_name, **kw)
+        return platform.upsert(info)
 
 
     def show_table(self, table):
@@ -152,17 +141,16 @@ class Harness(unittest.TestCase):
 
         participant = Participant.with_random_username()
         participant.change_username(username)
-        return self.update_participant(participant, **kw)
 
-
-    def update_participant(self, participant, **kw):
         if 'elsewhere' in kw or 'claimed_time' in kw:
             username = participant.username
             platform = kw.pop('elsewhere', 'github')
-            user_info = dict(login=username)
             self.seq += 1
-            self.db.run("INSERT INTO elsewhere (platform, user_id, participant, user_info) "
-                        "VALUES (%s,%s,%s,%s)", (platform, self.seq, username, user_info))
+            self.db.run("""
+                INSERT INTO elsewhere
+                            (platform, user_id, user_name, participant)
+                     VALUES (%s,%s,%s,%s)
+            """, (platform, self.seq, username, username))
 
         # brute force update for use in testing
         for k,v in kw.items():

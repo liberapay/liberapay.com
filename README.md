@@ -39,7 +39,7 @@ Table of Contents
  - [Testing](#testing-)
  - [Setting up a Database](#local-database-setup)
  - [API](#api)
-  - [Implementations](#api-implementations) 
+  - [Implementations](#api-implementations)
  - [Glossary](#glossary)
  - [See Also](#see-also)
 
@@ -123,25 +123,25 @@ $ make run
 		--changes_reload=yes \
 		--network_address=:8537
 pid-27937 thread-47041048338176 (MainThread) Reading configuration from defaults, environment, and command line.
-pid-27937 thread-47041048338176 (MainThread)   changes_reload         False                          default                 
+pid-27937 thread-47041048338176 (MainThread)   changes_reload         False                          default
 pid-27937 thread-47041048338176 (MainThread)   changes_reload         True                           command line option --changes_reload=yes
-pid-27937 thread-47041048338176 (MainThread)   charset_dynamic        UTF-8                          default                 
-pid-27937 thread-47041048338176 (MainThread)   charset_static         None                           default                 
-pid-27937 thread-47041048338176 (MainThread)   configuration_scripts  []                             default                 
-pid-27937 thread-47041048338176 (MainThread)   indices                [u'index.html', u'index.json', u'index', u'index.html.spt', u'index.json.spt', u'index.spt'] default                 
-pid-27937 thread-47041048338176 (MainThread)   list_directories       False                          default                 
-pid-27937 thread-47041048338176 (MainThread)   logging_threshold      0                              default                 
-pid-27937 thread-47041048338176 (MainThread)   media_type_default     text/plain                     default                 
-pid-27937 thread-47041048338176 (MainThread)   media_type_json        application/json               default                 
-pid-27937 thread-47041048338176 (MainThread)   network_address        ((u'0.0.0.0', 8080), 2)        default                 
+pid-27937 thread-47041048338176 (MainThread)   charset_dynamic        UTF-8                          default
+pid-27937 thread-47041048338176 (MainThread)   charset_static         None                           default
+pid-27937 thread-47041048338176 (MainThread)   configuration_scripts  []                             default
+pid-27937 thread-47041048338176 (MainThread)   indices                [u'index.html', u'index.json', u'index', u'index.html.spt', u'index.json.spt', u'index.spt'] default
+pid-27937 thread-47041048338176 (MainThread)   list_directories       False                          default
+pid-27937 thread-47041048338176 (MainThread)   logging_threshold      0                              default
+pid-27937 thread-47041048338176 (MainThread)   media_type_default     text/plain                     default
+pid-27937 thread-47041048338176 (MainThread)   media_type_json        application/json               default
+pid-27937 thread-47041048338176 (MainThread)   network_address        ((u'0.0.0.0', 8080), 2)        default
 pid-27937 thread-47041048338176 (MainThread)   network_address        ((u'0.0.0.0', 8537), 2)        command line option --network_address=:8537
-pid-27937 thread-47041048338176 (MainThread)   network_engine         cheroot                        default                 
-pid-27937 thread-47041048338176 (MainThread)   project_root           None                           default                 
+pid-27937 thread-47041048338176 (MainThread)   network_engine         cheroot                        default
+pid-27937 thread-47041048338176 (MainThread)   project_root           None                           default
 pid-27937 thread-47041048338176 (MainThread)   project_root           .                              command line option --project_root=.
-pid-27937 thread-47041048338176 (MainThread)   renderer_default       stdlib_percent                 default                 
-pid-27937 thread-47041048338176 (MainThread)   show_tracebacks        False                          default                 
+pid-27937 thread-47041048338176 (MainThread)   renderer_default       stdlib_percent                 default
+pid-27937 thread-47041048338176 (MainThread)   show_tracebacks        False                          default
 pid-27937 thread-47041048338176 (MainThread)   show_tracebacks        True                           command line option --show_tracebacks=yes
-pid-27937 thread-47041048338176 (MainThread)   www_root               None                           default                 
+pid-27937 thread-47041048338176 (MainThread)   www_root               None                           default
 pid-27937 thread-47041048338176 (MainThread)   www_root               www/                           command line option --www_root=www/
 pid-27937 thread-47041048338176 (MainThread) project_root is relative to CWD: '.'.
 pid-27937 thread-47041048338176 (MainThread) project_root set to /home/zbynek/www.gittip.com.
@@ -149,10 +149,10 @@ pid-27937 thread-47041048338176 (MainThread) Found plugin for renderer 'jinja2'
 pid-27937 thread-47041048338176 (MainThread) Won't log to Sentry (SENTRY_DSN is empty).
 pid-27937 thread-47041048338176 (MainThread) Loading configuration file '/home/zbynek/www.gittip.com/configure-aspen.py' (possibly changing settings)
 pid-27937 thread-47041048338176 (MainThread) Renderers (*ed are unavailable, CAPS is default):
-pid-27937 thread-47041048338176 (MainThread)   stdlib_percent   
-pid-27937 thread-47041048338176 (MainThread)   stdlib_format    
-pid-27937 thread-47041048338176 (MainThread)   JINJA2           
-pid-27937 thread-47041048338176 (MainThread)   stdlib_template  
+pid-27937 thread-47041048338176 (MainThread)   stdlib_percent
+pid-27937 thread-47041048338176 (MainThread)   stdlib_format
+pid-27937 thread-47041048338176 (MainThread)   JINJA2
+pid-27937 thread-47041048338176 (MainThread)   stdlib_template
 pid-27937 thread-47041048338176 (MainThread) Starting cheroot engine.
 pid-27937 thread-47041048338176 (MainThread) Greetings, program! Welcome to port 8537.
 pid-27937 thread-47041048338176 (MainThread) Aspen will restart when configuration scripts or Python modules change.
@@ -268,8 +268,12 @@ required packages are: `postgresql` (base) and `postgresql-contrib` (includes hs
 To setup the instance for gittip's needs run:
 
     $ sudo -u postgres createuser --superuser $USER
-    $ createdb $USER
+    $ createdb gittip
     $ createdb gittip-test
+
+You can speed up the test suite when using a regular HDD by running:
+
+    $ psql -q gittip-test -c 'alter database "gittip-test" set synchronous_commit to off'
 
 ### Schema
 
@@ -402,10 +406,12 @@ for your project!
    Academy's setup](http://ejohn.org/blog/gittip-at-khan-academy/))
 
  - [Ruby: gratitude](https://github.com/JohnKellyFerguson/gratitude): A ruby gem that wraps the Gittip API (currently in development and not feature complete).
- 
+
  - [WordPress: WP-Gittip](https://github.com/daankortenbach/WP-Gittip)
 
  - [hubot-gittip](https://github.com/myplanetdigital/hubot-gittip): A Hubot script for interacting with a shared Gittip account.
+
+ - [gittip-collab](https://github.com/engineyard/gittip-collab): A Khan-style tool for managing a Gittip account as a team.
 
 Glossary
 ========
@@ -491,10 +497,13 @@ and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
  - [BountyOSS](https://bountyoss.com/) - Where crowdfunding means business
  - [Suprmasv](https://www.suprmasv.com/) - Empowering the Hacker Class.
  - [Tip4Commit](http://tip4commit.com/) - Donate bitcoins to open source projects or make commits and get tips for it.
- - [BitHub](https://whispersystems.org/blog/bithub/) - An experiment in funding privacy OSS. 
+ - [BitHub](https://whispersystems.org/blog/bithub/) - An experiment in funding privacy OSS.
  - [Fundly](https://fundly.com/) - Crowdfund Anything
  - [I Love Open Source](http://www.iloveopensource.io/) - Simple recognition for open source developers
  - [Razoo](http://www.razoo.com/) - Create online fundraisers for anything and everything that matters to you.
  - [CoinGiving](http://coingiving.com/) - Personified Bitcoin Donations
  - [Bittip](http://bittip.it/) - Bitcoin Microdonations - Like Flattr, but with Btc
  - [MedStartr](http://www.medstartr.com/) - Fund the medical breakthroughs and innovations you care about
+ - [Upstart](https://www.upstart.com/) - Raise money from your future self
+ - [Gitcoin](http://www.gitcoin.co/) - Give bitcoin donations to your favorite projects.
+ - [Patronism](http://patronism.com/) - Become a patron of your favorite band.

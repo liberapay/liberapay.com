@@ -20,6 +20,7 @@ class GittipDB(Postgres):
         self._check_orphans()
         self._check_orphans_no_tips()
         self._check_paydays_volumes()
+        self._check_claimed_not_locked()
 
     def _check_tips(self):
         """
@@ -213,11 +214,23 @@ class GittipDB(Postgres):
             """)
             assert len(ach_fees_volume) == 0
 
+    def _check_claimed_not_locked(self):
+        locked = self.all("""
+            SELECT participant
+            FROM elsewhere
+            WHERE EXISTS (
+                SELECT *
+                FROM participants
+                WHERE username=participant
+                AND claimed_time IS NOT NULL
+            ) AND is_locked
+        """)
+        assert len(locked) == 0
+
+
 def add_event(c, type, payload):
     SQL = """
         INSERT INTO events (type, payload)
         VALUES (%s, %s)
     """
     c.run(SQL, (type, psycopg2.extras.Json(payload)))
-
-#

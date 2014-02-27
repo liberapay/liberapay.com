@@ -8,10 +8,6 @@ import psycopg2
 import pytz
 from aspen.utils import utcnow
 from gittip import NotSane
-from gittip.elsewhere.bitbucket import BitbucketAccount
-from gittip.elsewhere.github import GitHubAccount
-from gittip.elsewhere.twitter import TwitterAccount
-from gittip.elsewhere.openstreetmap import OpenStreetMapAccount
 from gittip.exceptions import (
     UsernameIsEmpty,
     UsernameTooLong,
@@ -21,18 +17,11 @@ from gittip.exceptions import (
     NoSelfTipping,
     BadAmount,
 )
-from gittip.models._mixin_elsewhere import NeedConfirmation
-from gittip.models.participant import Participant
+from gittip.models.participant import NeedConfirmation, Participant
 from gittip.testing import Harness
 
 
 # TODO: Test that accounts elsewhere are not considered claimed by default
-
-
-class StubAccount(object):
-    def __init__(self, platform, user_id):
-        self.platform = platform
-        self.user_id = user_id
 
 
 class TestNeedConfirmation(Harness):
@@ -72,8 +61,8 @@ class TestAbsorptions(Harness):
                                  , claimed_time=hour_ago
                                  , last_bill_result=''
                                   )
-        deadbeef = TwitterAccount(self.db, '1', {'screen_name': 'deadbeef'})
-        self.deadbeef_original_username = deadbeef.participant
+        deadbeef = self.make_elsewhere('twitter', '1', 'deadbeef')
+        self.deadbeef_original_username = deadbeef.participant.username
 
         Participant.from_username('carl').set_tip_to('bob', '1.00')
         Participant.from_username('alice').set_tip_to(self.deadbeef_original_username, '1.00')
@@ -121,8 +110,8 @@ class TestAbsorptions(Harness):
 class TestTakeOver(Harness):
 
     def test_cross_tip_doesnt_become_self_tip(self):
-        alice = TwitterAccount(self.db, 1, dict(screen_name='alice'))
-        bob   = TwitterAccount(self.db, 2, dict(screen_name='bob'))
+        alice = self.make_elsewhere('twitter', 1, 'alice')
+        bob   = self.make_elsewhere('twitter', 2, 'bob')
         alice_participant = alice.opt_in('alice')[0].participant
         bob_participant = bob.opt_in('bob')[0].participant
         alice_participant.set_tip_to('bob', '1.00')
@@ -130,8 +119,8 @@ class TestTakeOver(Harness):
         self.db.self_check()
 
     def test_zero_cross_tip_doesnt_become_self_tip(self):
-        alice = TwitterAccount(self.db, 1, dict(screen_name='alice'))
-        bob   = TwitterAccount(self.db, 2, dict(screen_name='bob'))
+        alice = self.make_elsewhere('twitter', 1, 'alice')
+        bob   = self.make_elsewhere('twitter', 2, 'bob')
         alice_participant = alice.opt_in('alice')[0].participant
         bob_participant = bob.opt_in('bob')[0].participant
         alice_participant.set_tip_to('bob', '1.00')
@@ -140,12 +129,11 @@ class TestTakeOver(Harness):
         self.db.self_check()
 
     def test_do_not_take_over_zero_tips_giving(self):
-        alice = TwitterAccount(self.db, 1, dict(screen_name='alice'))
-        bob   = TwitterAccount(self.db, 2, dict(screen_name='bob'))
-        carl  = TwitterAccount(self.db, 3, dict(screen_name='carl'))
+        alice = self.make_elsewhere('twitter', 1, 'alice')
+        self.make_elsewhere('twitter', 2, 'bob').opt_in('bob')
+        carl  = self.make_elsewhere('twitter', 3, 'carl')
         alice_participant = alice.opt_in('alice')[0].participant
-        bob_participant   = bob.opt_in('bob')[0].participant
-        carl_participant  = carl.opt_in('carl')[0].participant
+        carl_participant = carl.opt_in('carl')[0].participant
         carl_participant.set_tip_to('bob', '1.00')
         carl_participant.set_tip_to('bob', '0.00')
         alice_participant.take_over(carl, have_confirmation=True)
@@ -154,12 +142,12 @@ class TestTakeOver(Harness):
         self.db.self_check()
 
     def test_do_not_take_over_zero_tips_receiving(self):
-        alice = TwitterAccount(self.db, 1, dict(screen_name='alice'))
-        bob   = TwitterAccount(self.db, 2, dict(screen_name='bob'))
-        carl  = TwitterAccount(self.db, 3, dict(screen_name='carl'))
+        alice = self.make_elsewhere('twitter', 1, 'alice')
+        bob   = self.make_elsewhere('twitter', 2, 'bob')
+        carl  = self.make_elsewhere('twitter', 3, 'carl')
         alice_participant = alice.opt_in('alice')[0].participant
         bob_participant   = bob.opt_in('bob')[0].participant
-        carl_participant  = carl.opt_in('carl')[0].participant
+        carl.opt_in('carl')
         bob_participant.set_tip_to('carl', '1.00')
         bob_participant.set_tip_to('carl', '0.00')
         alice_participant.take_over(carl, have_confirmation=True)
@@ -168,8 +156,8 @@ class TestTakeOver(Harness):
         self.db.self_check()
 
     def test_idempotent(self):
-        alice = TwitterAccount(self.db, 1, dict(screen_name='alice'))
-        bob   = GitHubAccount(self.db, 2, dict(screen_name='bob'))
+        alice = self.make_elsewhere('twitter', 1, 'alice')
+        bob   = self.make_elsewhere('github', 2, 'bob')
         alice_participant = alice.opt_in('alice')[0].participant
         alice_participant.take_over(bob, have_confirmation=True)
         alice_participant.take_over(bob, have_confirmation=True)
@@ -195,12 +183,12 @@ class TestParticipant(Harness):
         assert actual == expected
 
     def test_cant_take_over_claimed_participant_without_confirmation(self):
-        bob_twitter = StubAccount('twitter', '2')
+        bob_twitter = self.make_elsewhere('twitter', '2', 'bob')
         with self.assertRaises(NeedConfirmation):
             Participant.from_username('alice').take_over(bob_twitter)
 
     def test_taking_over_yourself_sets_all_to_zero(self):
-        bob_twitter = StubAccount('twitter', '2')
+        bob_twitter = self.make_elsewhere('twitter', '2', 'bob')
         Participant.from_username('alice').set_tip_to('bob', '1.00')
         Participant.from_username('alice').take_over(bob_twitter, have_confirmation=True)
         expected = Decimal('0.00')
@@ -208,7 +196,7 @@ class TestParticipant(Harness):
         assert actual == expected
 
     def test_alice_ends_up_tipping_bob_two_dollars(self):
-        carl_twitter = StubAccount('twitter', '3')
+        carl_twitter = self.make_elsewhere('twitter', '3', 'carl')
         Participant.from_username('alice').set_tip_to('bob', '1.00')
         Participant.from_username('alice').set_tip_to('carl', '1.00')
         Participant.from_username('bob').take_over(carl_twitter, have_confirmation=True)
@@ -217,7 +205,7 @@ class TestParticipant(Harness):
         assert actual == expected
 
     def test_bob_ends_up_tipping_alice_two_dollars(self):
-        carl_twitter = StubAccount('twitter', '3')
+        carl_twitter = self.make_elsewhere('twitter', '3', 'carl')
         Participant.from_username('bob').set_tip_to('alice', '1.00')
         Participant.from_username('carl').set_tip_to('alice', '1.00')
         Participant.from_username('bob').take_over(carl_twitter, have_confirmation=True)
@@ -226,7 +214,7 @@ class TestParticipant(Harness):
         assert actual == expected
 
     def test_ctime_comes_from_the_older_tip(self):
-        carl_twitter = StubAccount('twitter', '3')
+        carl_twitter = self.make_elsewhere('twitter', '3', 'carl')
         Participant.from_username('alice').set_tip_to('bob', '1.00')
         Participant.from_username('alice').set_tip_to('carl', '1.00')
         Participant.from_username('bob').take_over(carl_twitter, have_confirmation=True)
@@ -244,9 +232,8 @@ class TestParticipant(Harness):
         assert actual == expected
 
     def test_connecting_unknown_account_fails(self):
-        unknown_account = StubAccount('github', 'jim')
         with self.assertRaises(NotSane):
-            Participant.from_username('bob').take_over(unknown_account)
+            Participant.from_username('bob').take_over(('github', 'jim'))
 
 
 class Tests(Harness):
@@ -579,31 +566,25 @@ class Tests(Harness):
         assert resolved is None, resolved
 
     def test_ru_returns_bitbucket_url_for_stub_from_bitbucket(self):
-        unclaimed = BitbucketAccount(self.db, '1234', {'username': 'alice'})
-        stub = Participant.from_username(unclaimed.participant)
+        unclaimed = self.make_elsewhere('bitbucket', '1234', 'alice')
+        stub = Participant.from_username(unclaimed.participant.username)
         actual = stub.resolve_unclaimed()
         assert actual == "/on/bitbucket/alice/"
 
     def test_ru_returns_github_url_for_stub_from_github(self):
-        unclaimed = GitHubAccount(self.db, '1234', {'login': 'alice'})
-        stub = Participant.from_username(unclaimed.participant)
+        unclaimed = self.make_elsewhere('github', '1234', 'alice')
+        stub = Participant.from_username(unclaimed.participant.username)
         actual = stub.resolve_unclaimed()
         assert actual == "/on/github/alice/"
 
     def test_ru_returns_twitter_url_for_stub_from_twitter(self):
-        unclaimed = TwitterAccount(self.db, '1234', {'screen_name': 'alice'})
-        stub = Participant.from_username(unclaimed.participant)
+        unclaimed = self.make_elsewhere('twitter', '1234', 'alice')
+        stub = Participant.from_username(unclaimed.participant.username)
         actual = stub.resolve_unclaimed()
         assert actual == "/on/twitter/alice/"
 
     def test_ru_returns_openstreetmap_url_for_stub_from_openstreetmap(self):
-        user_info = {
-            'osm_id': '1'
-            , 'username': 'alice'
-            , 'img_src': 'http://example.com'
-            , 'html_url': 'http://example.net'
-        }
-        unclaimed = OpenStreetMapAccount(self.db, '1234', user_info)
-        stub = Participant.from_username(unclaimed.participant)
+        unclaimed = self.make_elsewhere('openstreetmap', '1', 'alice')
+        stub = Participant.from_username(unclaimed.participant.username)
         actual = stub.resolve_unclaimed()
         assert actual == "/on/openstreetmap/alice/"

@@ -1,16 +1,15 @@
 from faker import Factory
 from gittip import wireup, MAX_TIP, MIN_TIP
+from gittip.elsewhere import PLATFORMS
 from gittip.models.participant import Participant
 
+import datetime
 import decimal
 import random
 import string
-import datetime
 
 
 faker = Factory.create()
-
-platforms = ['github', 'twitter', 'bitbucket', 'openstreetmap']
 
 
 def _fake_thing(db, tablename, **kw):
@@ -61,7 +60,7 @@ def fake_participant(db, number="singular", is_admin=False):
     """Create a fake User.
     """
     username = faker.first_name() + fake_text_id(3)
-    d = _fake_thing( db
+    _fake_thing( db
                , "participants"
                , id=fake_int_id()
                , username=username
@@ -73,7 +72,7 @@ def fake_participant(db, number="singular", is_admin=False):
                , anonymous_giving=(random.randrange(5) == 0)
                , anonymous_receiving=(random.randrange(5) == 0)
                , goal=fake_balance()
-               , balanced_account_uri=faker.uri()
+               , balanced_customer_href=faker.uri()
                , last_ach_result=''
                , is_suspicious=False
                , last_bill_result=''  # Needed to not be suspicious
@@ -108,45 +107,20 @@ def fake_tip(db, tipper, tippee):
                 )
 
 
-def fake_elsewhere(db, participant, platform=None):
+def fake_elsewhere(db, participant, platform):
     """Create a fake elsewhere.
     """
-    if platform is None:
-        platform = random.choice(platforms)
-
-    info_templates = {
-        "github": {
-            "name": participant.username,
-            "html_url": "https://github.com/" + participant.username,
-            "type": "User",
-            "login": participant.username
-        },
-        "twitter": {
-            "name": participant.username,
-            "html_url": "https://twitter.com/" + participant.username,
-            "screen_name": participant.username
-        },
-        "bitbucket": {
-            "display_name": participant.username,
-            "username": participant.username,
-            "is_team": "False",
-            "html_url": "https://bitbucket.org/" + participant.username,
-        },
-        "openstreetmap": {
-            "username": participant.username,
-            "html_url": "https://openstreetmap/user/" + participant.username,
-        }
-    }
-
     _fake_thing( db
                , "elsewhere"
                , id=fake_int_id()
                , platform=platform
                , user_id=fake_text_id()
+               , user_name=participant.username
                , is_locked=False
                , participant=participant.username
-               , user_info=info_templates[platform]
+               , extra_info=None
                 )
+
 
 def fake_transfer(db, tipper, tippee):
         return _fake_thing( db
@@ -171,7 +145,7 @@ def populate_db(db, num_participants=100, num_tips=200, num_teams=5, num_transfe
     for p in participants:
         #All participants get between 1 and 3 elsewheres
         num_elsewheres = random.randint(1, 3)
-        for platform_name in platforms[:num_elsewheres]:
+        for platform_name in random.sample(PLATFORMS, num_elsewheres):
             fake_elsewhere(db, p, platform_name)
 
     #Make teams

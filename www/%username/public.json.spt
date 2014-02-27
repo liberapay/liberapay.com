@@ -4,7 +4,6 @@ import re
 
 from aspen import json
 from gittip.utils import get_participant
-from gittip.elsewhere import platform_classes
 
 
 callback_pattern = re.compile(r'^[_A-Za-z0-9.]+$')
@@ -16,7 +15,7 @@ participant = get_participant(request, restrict=False)
 
 output = { "id": participant.id
          , "username": participant.username
-         , "avatar": participant.get_img_src()
+         , "avatar": participant.avatar_url
          , "number": participant.number
           }
 
@@ -93,33 +92,10 @@ if not user.ANON:
 
 
 accounts = participant.get_accounts_elsewhere()
-
-# elsewhere contains eg 'github': <github data> or null.
-# these AccountElsewheres are encoded using their custom encoder.
-output['elsewhere'] = {platform: None for platform in platform_classes}
-for account in (account for account in accounts
-                if account is not None):
-    output['elsewhere'][account.platform] = account
-
-#TODO pull this out
-if accounts.bitbucket is not None:
-    output['bitbucket'] = "https://bitbucket.org/api/1.0/users/%s" % \
-                                                accounts.bitbucket.user_info['username']
-
-if accounts.github is not None:
-    output['github'] = "https://api.github.com/users/%s" % accounts.github.user_info['login']
-
-if accounts.twitter is not None:
-    output['twitter'] = "https://api.twitter.com/1.1/users/show.json?id=%s" \
-                                        "&include_entities=1" % accounts.twitter.user_id
-
-if accounts.bountysource is not None:
-    output['bountysource'] = "https://api.bountysource.com/users/%s" % \
-                                         accounts.bountysource.user_info['display_name']
-
-if accounts.openstreetmap is not None:
-    output['openstreetmap'] = "%s/api/0.6/user/%s" % \
-               (website.openstreetmap_api, accounts.openstreetmap.user_info['username'])
+elsewhere = output['elsewhere'] = {}
+for platform, account in accounts.items():
+    fields = ['id', 'user_id', 'user_name']
+    elsewhere[platform] = {k: getattr(account, k, None) for k in fields}
 
 if participant.bitcoin_address is not None:
     output['bitcoin'] = "http://blockchain.info/address/%s" % participant.bitcoin_address

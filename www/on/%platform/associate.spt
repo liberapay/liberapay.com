@@ -1,0 +1,65 @@
+from base64 import b64decode
+import json
+
+from aspen import log, resources, Response
+
+from gittip import canonical_scheme, canonical_host
+from gittip.models.participant import NeedConfirmation
+
+[-----------------------------]
+
+platform = getattr(website.platforms, path['platform'], None)
+if platform is None:
+    raise Response(404)
+
+# Get the query id from the querystring
+query_id = platform.get_query_id(qs)
+
+# Check that we have a cookie that matches the query id (CSRF prevention)
+cookie_name = (platform.name+'_'+query_id).encode('ascii')
+try:
+    query_data, action, then, action_user_name = \
+        json.loads(b64decode(request.headers.cookie[cookie_name].value))
+except KeyError:
+    raise Response(400, 'Missing cookie')
+
+# Finish the auth process, the returned session is ready to use
+url = canonical_scheme+'://'+canonical_host+request.line.uri.raw
+sess = platform.handle_auth_callback(url, query_id, query_data)
+
+# Get the user's info from the platform's API and upsert it in the DB
+account = platform.upsert(platform.get_user_self_info(sess))
+
+if action_user_name and account.user_name != action_user_name:
+    then = '/on/%s/%s/failure.html?action=%s'
+    request.redirect(then % (platform.name, action_user_name, action))
+
+log('%s user "%s" wants to %s' % (platform.name, account.user_name, action))
+
+if action == 'opt-in':
+    if platform not in website.signin_platforms:
+        raise Response(400)
+    # set 'user' to give them a session :/
+    user, newly_claimed = account.opt_in(account.user_name)
+
+elif action == 'connect':
+    if user.ANON:
+        raise Response(403)
+    try:
+        user.participant.take_over((platform.name, account.user_id))
+    except NeedConfirmation, obstacles:
+        # XXX Eep! Internal redirect! Really?!
+        request.internally_redirected_from = request.fs
+        request.fs = website.www_root + '/on/confirm.html.spt'
+        request.resource = resources.get(request)
+        raise request.resource.respond(request)
+
+elif action in {'lock', 'unlock'}:
+    account.set_is_locked(action == 'lock')
+
+else:
+    raise Response(400)
+
+request.redirect(then)
+
+[-----------------------------] text/plain

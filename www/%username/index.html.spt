@@ -4,7 +4,7 @@ import locale
 
 from aspen import json, Response
 from aspen.utils import to_age
-from gittip.utils import get_participant, wrap, plural
+from gittip.utils import get_avatar_url, get_participant, wrap, plural
 from gittip.models import community
 
 MAKING = "making the world better by"
@@ -25,14 +25,12 @@ hero = "Profile"
 title = participant.username      # used in the title tag
 username = participant.username   # used in footer shared with on/$platform/
                                   # pages
+show_charts = True
+if participant.anonymous_receiving:
+    if user.ANON or user.participant.username != username and not user.ADMIN:
+        show_charts = False
 
 accounts = participant.get_accounts_elsewhere()
-github_account = accounts.github
-bitbucket_account = accounts.bitbucket
-twitter_account = accounts.twitter
-bountysource_account = accounts.bountysource
-venmo_account = accounts.venmo
-openstreetmap_account = accounts.openstreetmap
 
 long_statement = len(participant.statement) > LONG_STATEMENT
 communities = [c for c in community.get_list_for(website.db, username) if c.is_member]
@@ -51,22 +49,27 @@ else:
     <link rel="payment" type="text/html" title="Give weekly gift on Gittip" href="https://www.gittip.com/{{ username }}/" />
     <meta name="twitter:card" content="summary" />
     <meta name="og:url" content="https://www.gittip.com/{{ username }}/" />
-    <meta name="og:type" content="website" />
+    <meta name="og:type" content="profile" />
     <meta name="og:title" content="{{ participant.get_og_title() }}" />
     {% if participant.statement %}
     <meta name="og:description" content="{{ _clip(I_AM + " " + MAKING + " " + participant.statement, 200)|e }}" />
     {% else %}
     <meta name="og:description" content="Gittip is a weekly gift exchange." />
     {% endif %}
-    <meta name="og:image" content="{{ participant.get_img_src() }}" />
+    {% if participant.avatar_url %}
+    <meta name="og:image" content="{{ participant.avatar_url|e }}" />
+    {% endif %}
+    <meta name="og:image" content="/assets/gittip.opengraph.png" />
 {% endblock %}
 
 {% block scripts %}
+{% if show_charts %}
 <script>
 $(document).ready(function() {
     jQuery.get('./charts.json', Gittip.charts.make);
 });
 </script>
+{% endif %}
 
 {% if user.participant == participant %}
 <script>$(document).ready(Gittip.profile.init);</script>

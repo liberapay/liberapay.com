@@ -60,11 +60,19 @@ test-schema: env
 
 test-db: test-cloud-db test-schema
 
+pyflakes: env
+	./$(env_bin)/pyflakes bin gittip tests
+
 test: env test-schema
 	./$(env_bin)/honcho -e tests/defaults.env,tests/local.env run ./$(env_bin)/py.test ./tests/
+	@$(MAKE) --no-print-directory pyflakes
 
 retest: env
 	./$(env_bin)/honcho -e tests/defaults.env,tests/local.env run ./$(env_bin)/py.test ./tests/ --lf
+	@$(MAKE) --no-print-directory pyflakes
+
+test-cov: env test-schema
+	./$(env_bin)/honcho -e tests/defaults.env,tests/local.env run ./$(env_bin)/py.test --cov gittip ./tests/
 
 tests: test
 

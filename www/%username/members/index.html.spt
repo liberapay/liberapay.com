@@ -1,6 +1,6 @@
 """Show information about a single participant. It might be you!
 """
-from gittip.utils import get_participant
+from gittip.utils import get_participant, get_avatar_url
 
 [-----------------------------------------------------------------------------]
 
@@ -11,15 +11,7 @@ locked = False
 tip_or_pledge = "tip"
 hero = "Team Members"
 title = team.username     # used in the title tag
-username = team.username  # used in footer shared with on/$platform/
-                                  # pages
-accounts = team.get_accounts_elsewhere()
-github_account = accounts.github
-twitter_account = accounts.twitter
-bitbucket_account = accounts.bitbucket
-bountysource_account = accounts.bountysource
-venmo_account = accounts.venmo
-openstreetmap_account = accounts.openstreetmap
+username = team.username  # used in footer shared with on/%platform/ pages
 
 
 [-----------------------------------------------------------------------------]
@@ -58,7 +50,7 @@ openstreetmap_account = accounts.openstreetmap
         <td colspan="6" class="lookup">
           <div id="lookup-container">
             <form>
-              <input name="csrf_token" type="hidden" value="{{ cookie['csrf_token'].value }}" />
+              <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
               <input tabindex="1" id="query"
                      autocomplete="off"
                      placeholder="Enter a Gittip username"

@@ -103,13 +103,24 @@ a.mini-user:hover {
 }
 
 #members { /* used on accounts elsewhere for GitHub org = Bitbucket team */
-    list-style: none;
-    margin-bottom: 12pt;
-    margin: 0 auto;
+    margin: 1em auto 1em;
 
-    td {
-        padding: 0 0 0.5em 0;
+    td, th {
+        padding: 0 6px 6px;
         text-align: left;
+        vertical-align: baseline;
+    }
+    .declines, .not-on-gittip {
+        font-size: 75%;
+        a {
+            font-weight: normal;
+        }
+    }
+    .declines {
+        color: #aaa;
+        a {
+            color: $darker-green;
+        }
     }
     img {
         width: 18pt;

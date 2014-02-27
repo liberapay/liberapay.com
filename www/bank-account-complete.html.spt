@@ -14,11 +14,11 @@ request.allow('GET')
 # no validation here, if any of this stuff errors out, it's because someone has
 # done something dodgy (or we f'd up)
 
-assert user.participant.balanced_account_uri is not None, user.participant.username
+assert user.participant.balanced_customer_href is not None, user.participant.username
 
 account = billing.get_balanced_account( website.db
                                       , user.participant.username
-                                      , user.participant.balanced_account_uri
+                                      , user.participant.balanced_customer_href
                                        )
 account.merchant_uri = qs['merchant_uri']
 account.save()

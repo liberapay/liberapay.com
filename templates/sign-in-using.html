@@ -1,27 +1,16 @@
+{% from 'templates/auth.html' import auth_button with context %}
+
 <div class="sign-in">
   <div class="dropdown">
-    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Sign in <b class="caret"></b></a>
+    <button class="dropdown-toggle" data-toggle="dropdown">Sign in <b class="caret"></b></button>
     <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-      <li class="twitter">
-        <a href="{{ twitter.oauth_url(website, unicode('opt-in'), path.decoded) }}">
-          Twitter
-        </a>
+    {% for platform in website.signin_platforms %}
+      <li class="{{ platform.name }}">
+        {% call auth_button(platform.name, 'opt-in') %}
+            {{ platform.display_name }}
+        {% endcall %}
       </li>
-      <li class="github">
-        <a href="{{ github.oauth_url(website, unicode('opt-in'), path.decoded) }}">
-          GitHub
-        </a>
-      </li>
-      <li class="bitbucket">
-        <a href="{{ bitbucket.oauth_url(website, unicode('opt-in'), path.decoded) }}">
-          Bitbucket
-        </a>
-      </li>
-      <li class="openstreetmap">
-        <a href="{{ openstreetmap.oauth_url(website, unicode('opt-in'), path.decoded) }}">
-          OpenStreetMap
-        </a>
-      </li>
+    {% endfor %}
     </ul>
   </div>
 </div>
