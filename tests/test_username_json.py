@@ -9,9 +9,12 @@ class Tests(Harness):
 
     def change_username(self, new_username, auth_as='alice', weird=False):
         if auth_as:
-            self.make_participant('alice')
+            self.make_participant(auth_as)
 
-        post, args = [self.client.PxST, {}] if weird else [self.client.POST, {'raise_immediately': False}]
+        if weird:
+            post, args = self.client.PxST, {}
+        else:
+            post, args = self.client.POST, {'raise_immediately': False}
 
         r = post('/alice/username.json', {'username': new_username},
                                          auth_as=auth_as, **args)
