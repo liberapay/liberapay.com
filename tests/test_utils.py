@@ -54,3 +54,7 @@ class Tests(Harness):
         actual = utils.linkify('Http://Www.Example.Com')
         assert actual == expected
 
+    def test_linkify_works_without_protocol(self):
+        expected = '<a href="http://www.example.com" target="_blank">www.example.com</a>'
+        actual = utils.linkify('www.example.com')
+        assert actual == expected
