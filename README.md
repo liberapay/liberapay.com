@@ -1,5 +1,8 @@
 # Welcome to Gittip [<img height="26px" src="www/assets/gittip.opengraph.png"/>](https://www.gittip.com/)
 
+[![HuBoard
+badge](http://img.shields.io/badge/Hu-Board-7965cc.svg)](https://huboard.com/gittip/www.gittip.com)
+
 Gittip is a weekly gift exchange, helping to create a culture of generosity.
 If you'd like to learn more, check out <https://gittip.com/about>.
 If you'd like to contribute to Gittip, the best first reference is <https://gittip.com/for/contributors>.
