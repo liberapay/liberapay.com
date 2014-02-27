@@ -3,6 +3,7 @@ import json
 
 from aspen import log, resources, Response
 
+from gittip import canonical_scheme, canonical_host
 from gittip.models.participant import NeedConfirmation
 
 [-----------------------------]
@@ -23,7 +24,8 @@ except KeyError:
     raise Response(400, 'Missing cookie')
 
 # Finish the auth process, the returned session is ready to use
-sess = platform.handle_auth_callback(request.line.uri.raw, query_id, query_data)
+url = canonical_scheme+'://'+canonical_host+request.line.uri.raw
+sess = platform.handle_auth_callback(url, query_id, query_data)
 
 # Get the user's info from the platform's API and upsert it in the DB
 account = platform.upsert(platform.get_user_self_info(sess))
