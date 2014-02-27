@@ -1012,8 +1012,8 @@ class Participant(Model, MixinTeam):
         to log in anymore.
         """
         user_id = unicode(user_id)
-        with self.db.get_cursor() as cursor:
-            accounts = cursor.all("""
+        with self.db.get_cursor() as c:
+            accounts = c.all("""
                 SELECT platform, user_id
                   FROM elsewhere
                  WHERE participant=%s
@@ -1024,13 +1024,14 @@ class Participant(Model, MixinTeam):
                 raise NonexistingElsewhere()
             if len(accounts) == 1:
                 raise LastElsewhere()
-            cursor.one("""
+            c.one("""
                 DELETE FROM elsewhere
                 WHERE participant=%s
                 AND platform=%s
                 AND user_id=%s
                 RETURNING participant
             """, (self.username, platform, user_id))
+            add_event(c, 'participant', dict(id=self.id, action='disconnect', values=dict(platform=platform, user_id=user_id)))
 
 
 class NeedConfirmation(Exception):
