@@ -11,8 +11,7 @@ class Tests(Harness):
         self.make_participant('alice', claimed_time='now', elsewhere='twitter')
         response = self.client.PxST('/alice/elsewhere.json', {'platform': 'twitter', 'user_id': 'nonexistent'}, auth_as='alice')
         assert response.code == 400
-        error = json.loads(response.body)['error']
-        assert "not exist" in error
+        assert "not exist" in response.body
 
     def test_delete_last(self):
         platform, user_id = 'twitter', '1'
@@ -20,8 +19,7 @@ class Tests(Harness):
         data = dict(platform=platform, user_id=user_id)
         response = self.client.PxST('/alice/elsewhere.json', data, auth_as='alice')
         assert response.code == 400
-        error = json.loads(response.body)['error']
-        assert "last login" in error
+        assert "last login" in response.body
 
     def test_delete_last_login(self):
         platform, user_id = 'twitter', '1'
@@ -31,8 +29,7 @@ class Tests(Harness):
         data = dict(platform=platform, user_id=user_id)
         response = self.client.PxST('/alice/elsewhere.json', data, auth_as='alice')
         assert response.code == 400
-        error = json.loads(response.body)['error']
-        assert "last login" in error
+        assert "last login" in response.body
 
     def test_delete_200(self):
         platform, user_id = 'twitter', '1'
