@@ -31,6 +31,8 @@ from gittip.exceptions import (
     NoSelfTipping,
     BadAmount,
 )
+
+from gittip.models import add_event
 from gittip.models._mixin_team import MixinTeam
 from gittip.models.account_elsewhere import AccountElsewhere
 from gittip.utils import canonicalize
@@ -185,7 +187,9 @@ class Participant(Model, MixinTeam):
     def recreate_api_key(self):
         api_key = str(uuid.uuid4())
         SQL = "UPDATE participants SET api_key=%s WHERE username=%s"
-        self.db.run(SQL, (api_key, self.username))
+        with self.db.get_cursor() as c:
+            add_event(c, 'participant', dict(action='set', id=self.id, values=dict(api_key=api_key)))
+            c.run(SQL, (api_key, self.username))
         return api_key
 
 
@@ -207,16 +211,18 @@ class Participant(Model, MixinTeam):
         return '/on/%s/%s/' % (rec.platform, rec.user_name)
 
     def set_as_claimed(self):
-        claimed_time = self.db.one("""\
+        with self.db.get_cursor() as c:
+            add_event(c, 'participant', dict(id=self.id, action='claim'))
+            claimed_time = c.one("""\
 
-            UPDATE participants
-               SET claimed_time=CURRENT_TIMESTAMP
-             WHERE username=%s
-               AND claimed_time IS NULL
-         RETURNING claimed_time
+                UPDATE participants
+                   SET claimed_time=CURRENT_TIMESTAMP
+                 WHERE username=%s
+                   AND claimed_time IS NULL
+             RETURNING claimed_time
 
-        """, (self.username,))
-        self.set_attributes(claimed_time=claimed_time)
+            """, (self.username,))
+            self.set_attributes(claimed_time=claimed_time)
 
 
 
@@ -292,13 +298,14 @@ class Participant(Model, MixinTeam):
         if suggested != self.username:
             try:
                 # Will raise IntegrityError if the desired username is taken.
-                actual = self.db.one( "UPDATE participants "
-                                        "SET username=%s, username_lower=%s "
-                                        "WHERE username=%s "
-                                        "RETURNING username, username_lower"
-                                      , (suggested, lowercased, self.username)
-                                      , back_as=tuple
-                                       )
+                with self.db.get_cursor(back_as=tuple) as c:
+                    add_event(c, 'participant', dict(id=self.id, action='set', values=dict(username=suggested)))
+                    actual = c.one( "UPDATE participants "
+                                    "SET username=%s, username_lower=%s "
+                                    "WHERE username=%s "
+                                    "RETURNING username, username_lower"
+                                   , (suggested, lowercased, self.username)
+                                   )
             except IntegrityError:
                 raise UsernameAlreadyTaken(suggested)
 
@@ -310,9 +317,12 @@ class Participant(Model, MixinTeam):
 
     def update_goal(self, goal):
         typecheck(goal, (Decimal, None))
-        self.db.run( "UPDATE participants SET goal=%s WHERE username=%s"
-                   , (goal, self.username)
-                    )
+        with self.db.get_cursor() as c:
+            tmp = goal if goal is None else unicode(goal)
+            add_event(c, 'participant', dict(id=self.id, action='set', values=dict(goal=tmp)))
+            c.one( "UPDATE participants SET goal=%s WHERE username=%s RETURNING id"
+                 , (goal, self.username)
+                  )
         self.set_attributes(goal=goal)
 
 

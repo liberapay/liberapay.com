@@ -7,6 +7,7 @@ everything on Gittip.
 
 """
 from postgres import Postgres
+import psycopg2.extras
 
 class GittipDB(Postgres):
 
@@ -226,4 +227,10 @@ class GittipDB(Postgres):
         """)
         assert len(locked) == 0
 
-#
+
+def add_event(c, type, payload):
+    SQL = """
+        INSERT INTO events (type, payload)
+        VALUES (%s, %s)
+    """
+    c.run(SQL, (type, psycopg2.extras.Json(payload)))

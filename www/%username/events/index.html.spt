@@ -1,0 +1,42 @@
+from decimal import Decimal
+
+from aspen import Response, log
+from aspen.utils import to_age
+from gittip.utils import get_participant, get_avatar_url
+
+db = website.db
+
+[-----------------------------------------------------------------------------]
+
+participant = get_participant(request, restrict=True)
+hero = "Events"
+title = "%s - %s" % (participant.username, hero)
+locked = False
+
+SQL = """
+    SELECT * FROM events WHERE type = 'participant' AND payload->>'id' = %s ORDER BY ts ASC
+"""
+
+events = db.all(SQL, (unicode(participant.id),))
+
+[-----------------------------------------------------------------------------]
+{% extends "templates/profile.html" %}
+{% block page %}
+
+<style>
+    td { padding: 4px; }
+</style>
+<table id="events" class="centered">
+
+    {% for e in events %}
+    <tr>
+        <td>{{ e.ts }}</td>
+        <td>{{ e.type }}</td>
+        <td>{{ e.payload }}</td>
+
+    </tr>
+    {% endfor %}
+
+</table>
+
+{% endblock %}
