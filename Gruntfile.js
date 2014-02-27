@@ -62,7 +62,7 @@ module.exports = function(grunt) {
                 files: [
                     'www/assets/jquery-1.10.2.min.js',
                     'www/assets/%version/utils.js',
-                    'jstests/**/test_*.js',
+                    'jstests/**/*.js',
                 ],
 
                 browserify: { watch: true },
@@ -90,8 +90,9 @@ module.exports = function(grunt) {
         .on('error', function(e) {
             grunt.log.write('Starting Gittip server...');
 
-            var started = false;
-            var gittip = spawn('make', ['run']);
+            var started = false,
+                stdout  = [],
+                gittip  = spawn('make', ['run']);
 
             gittip.stdout.setEncoding('utf8');
 
@@ -99,7 +100,17 @@ module.exports = function(grunt) {
                 if (!started && /Greetings, program! Welcome to port 8537\./.test(data)) {
                     started = true;
                     grunt.log.writeln('started.');
-                    done();
+                    setTimeout(done, 1000);
+                } else if (started && /Is something already running on port 8537/.test(data)) {
+                    started = false;
+                } else
+                    stdout.push(data);
+            });
+
+            gittip.on('exit', function() {
+                if (!started) {
+                    grunt.log.writeln(stdout);
+                    grunt.fail.fatal('Something went wrong when starting the Gittip server :<');
                 }
             });
 

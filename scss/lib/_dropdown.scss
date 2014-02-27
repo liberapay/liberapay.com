@@ -21,7 +21,7 @@
 .open .dropdown-toggle {
   outline: 0;
 }
-a.dropdown-toggle{
+button.dropdown-toggle{
   width: 75px;
   text-align: center;
 }
@@ -68,7 +68,7 @@ a.dropdown-toggle{
   background-color: #e5e5e5;
   border-bottom: 1px solid #ffffff;
 }
-.dropdown-menu > li > a {
+.dropdown-menu > li button {
   display: block;
   padding: 3px 20px;
   clear: both;
@@ -77,10 +77,10 @@ a.dropdown-toggle{
   color: #333333;
   white-space: nowrap;
 }
-.dropdown-menu > li > a:hover,
-.dropdown-menu > li > a:focus,
-.dropdown-submenu:hover > a,
-.dropdown-submenu:focus > a {
+.dropdown-menu > li button:hover,
+.dropdown-menu > li button:focus,
+.dropdown-submenu:hover button,
+.dropdown-submenu:focus button {
   text-decoration: none;
   color: #ffffff;
   background-color: #0081c2;
@@ -92,9 +92,9 @@ a.dropdown-toggle{
   background-repeat: repeat-x;
   filter: unquote("progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0077b3', GradientType=0)");
 }
-.dropdown-menu > .active > a,
-.dropdown-menu > .active > a:hover,
-.dropdown-menu > .active > a:focus {
+.dropdown-menu > .active button,
+.dropdown-menu > .active button:hover,
+.dropdown-menu > .active button:focus {
   color: #ffffff;
   text-decoration: none;
   outline: 0;
@@ -107,13 +107,13 @@ a.dropdown-toggle{
   background-repeat: repeat-x;
   filter: unquote("progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0077b3', GradientType=0)");
 }
-.dropdown-menu > .disabled > a,
-.dropdown-menu > .disabled > a:hover,
-.dropdown-menu > .disabled > a:focus {
+.dropdown-menu > .disabled button,
+.dropdown-menu > .disabled button:hover,
+.dropdown-menu > .disabled button:focus {
   color: #999999;
 }
-.dropdown-menu > .disabled > a:hover,
-.dropdown-menu > .disabled > a:focus {
+.dropdown-menu > .disabled button:hover,
+.dropdown-menu > .disabled button:focus {
   text-decoration: none;
   background-color: transparent;
   background-image: none;
@@ -167,7 +167,7 @@ a.dropdown-toggle{
   margin-bottom: -2px;
   border-radius: 5px 5px 5px 0;
 }
-.dropdown-submenu > a:after {
+.dropdown-submenu button:after {
   display: block;
   content: " ";
   float: right;
@@ -180,7 +180,7 @@ a.dropdown-toggle{
   margin-top: 5px;
   margin-right: -10px;
 }
-.dropdown-submenu:hover > a:after {
+.dropdown-submenu:hover button:after {
   border-left-color: #ffffff;
 }
 .dropdown-submenu.pull-left {

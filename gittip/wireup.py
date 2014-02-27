@@ -8,8 +8,15 @@ import aspen
 import balanced
 import gittip
 import raven
-import psycopg2
 import stripe
+from gittip.elsewhere import PlatformRegistry
+from gittip.elsewhere.bitbucket import Bitbucket
+from gittip.elsewhere.bountysource import Bountysource
+from gittip.elsewhere.github import GitHub
+from gittip.elsewhere.openstreetmap import OpenStreetMap
+from gittip.elsewhere.twitter import Twitter
+from gittip.elsewhere.venmo import Venmo
+from gittip.models.account_elsewhere import AccountElsewhere
 from gittip.models.community import Community
 from gittip.models.participant import Participant
 from gittip.models import GittipDB
@@ -25,11 +32,8 @@ def db():
     maxconn = int(os.environ['DATABASE_MAXCONN'])
     db = GittipDB(dburl, maxconn=maxconn)
 
-    # register hstore type
-    with db.get_cursor() as cursor:
-        psycopg2.extras.register_hstore(cursor, globally=True, unicode=True)
-
     db.register_model(Community)
+    db.register_model(AccountElsewhere)
     db.register_model(Participant)
 
     return db
@@ -141,6 +145,7 @@ def nanswers():
 class BadEnvironment(SystemExit):
     pass
 
+
 def envvars(website):
 
     missing_keys = []
@@ -163,33 +168,54 @@ def envvars(website):
     def is_yesish(val):
         return val.lower() in ('1', 'true', 'yes')
 
-    website.bitbucket_consumer_key = envvar('BITBUCKET_CONSUMER_KEY')
-    website.bitbucket_consumer_secret = envvar('BITBUCKET_CONSUMER_SECRET')
-    website.bitbucket_callback = envvar('BITBUCKET_CALLBACK')
-
-    website.github_client_id = envvar('GITHUB_CLIENT_ID')
-    website.github_client_secret = envvar('GITHUB_CLIENT_SECRET')
-    website.github_callback = envvar('GITHUB_CALLBACK')
-
-    website.twitter_consumer_key = envvar('TWITTER_CONSUMER_KEY')
-    website.twitter_consumer_secret = envvar('TWITTER_CONSUMER_SECRET')
-    website.twitter_access_token = envvar('TWITTER_ACCESS_TOKEN')
-    website.twitter_access_token_secret = envvar('TWITTER_ACCESS_TOKEN_SECRET')
-    website.twitter_callback = envvar('TWITTER_CALLBACK')
-
-    website.bountysource_www_host = envvar('BOUNTYSOURCE_WWW_HOST')
-    website.bountysource_api_host = envvar('BOUNTYSOURCE_API_HOST')
-    website.bountysource_api_secret = envvar('BOUNTYSOURCE_API_SECRET')
-    website.bountysource_callback = envvar('BOUNTYSOURCE_CALLBACK')
-
-    website.venmo_client_id = envvar('VENMO_CLIENT_ID')
-    website.venmo_client_secret = envvar('VENMO_CLIENT_SECRET')
-    website.venmo_callback = envvar('VENMO_CALLBACK')
-
-    website.openstreetmap_api = envvar('OPENSTREETMAP_API')
-    website.openstreetmap_consumer_key = envvar('OPENSTREETMAP_CONSUMER_KEY')
-    website.openstreetmap_consumer_secret = envvar('OPENSTREETMAP_CONSUMER_SECRET')
-    website.openstreetmap_callback = envvar('OPENSTREETMAP_CALLBACK')
+    signin_platforms = [
+        Twitter(
+            website.db,
+            envvar('TWITTER_CONSUMER_KEY'),
+            envvar('TWITTER_CONSUMER_SECRET'),
+            envvar('TWITTER_CALLBACK'),
+        ),
+        GitHub(
+            website.db,
+            envvar('GITHUB_CLIENT_ID'),
+            envvar('GITHUB_CLIENT_SECRET'),
+            envvar('GITHUB_CALLBACK'),
+        ),
+        Bitbucket(
+            website.db,
+            envvar('BITBUCKET_CONSUMER_KEY'),
+            envvar('BITBUCKET_CONSUMER_SECRET'),
+            envvar('BITBUCKET_CALLBACK'),
+        ),
+        OpenStreetMap(
+            website.db,
+            envvar('OPENSTREETMAP_CONSUMER_KEY'),
+            envvar('OPENSTREETMAP_CONSUMER_SECRET'),
+            envvar('OPENSTREETMAP_CALLBACK'),
+            envvar('OPENSTREETMAP_API_URL'),
+            envvar('OPENSTREETMAP_AUTH_URL'),
+        ),
+    ]
+    website.signin_platforms = PlatformRegistry(signin_platforms)
+    AccountElsewhere.signin_platforms_names = tuple(p.name for p in signin_platforms)
+    other_platforms =  [
+        Bountysource(
+            website.db,
+            None,
+            envvar('BOUNTYSOURCE_API_SECRET'),
+            envvar('BOUNTYSOURCE_CALLBACK'),
+            envvar('BOUNTYSOURCE_API_HOST'),
+            envvar('BOUNTYSOURCE_WWW_HOST'),
+        ),
+        Venmo(
+            website.db,
+            envvar('VENMO_CLIENT_ID'),
+            envvar('VENMO_CLIENT_SECRET'),
+            envvar('VENMO_CALLBACK'),
+        ),
+    ]
+    platforms = signin_platforms + other_platforms
+    website.platforms = AccountElsewhere.platforms = PlatformRegistry(platforms)
 
     website.asset_version_url = envvar('GITTIP_ASSET_VERSION_URL') \
                                       .replace('%version', website.version)

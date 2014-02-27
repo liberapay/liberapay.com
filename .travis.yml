@@ -1,14 +1,17 @@
 language: python
+addons:
+  postgresql: 9.3
+before_install:
+ - node --version
+install: make env node_modules
 before_script:
- - make tests/env
- - echo "YES_PLEASE_DELETE_ALL_MY_DATA_VERY_OFTEN=Pretty please, with sugar on top." >> tests/env
- - echo "DATABASE_URL=postgres://postgres@localhost/gittip-test" >> tests/env
- - psql -U postgres -c 'CREATE DATABASE "gittip-test";'
- - make test-schema
+ - echo "DATABASE_URL=dbname=gittip" | tee -a tests/local.env local.env
+ - psql -U postgres -c 'CREATE DATABASE "gittip";'
+ - rm -rf tests/fixtures
 script: make test
 notifications:
   email: false
-  irc: 
+  irc:
     channels:
       - "irc.freenode.org#gittip"
     on_success: change

@@ -7,31 +7,20 @@ from gittip import billing, MONTHS
 from gittip.elsewhere import github
 
 [-----------------------------------------------------------------------------]
-balanced_account_uri = None
+balanced_customer_href = None
 account = None
 bank_account = None
 status = ". . ."
 
 if not user.ANON:
-    balanced_account_uri = user.participant.balanced_account_uri
+    balanced_customer_href = user.participant.balanced_customer_href
 
     status = "not connected"
-    if balanced_account_uri:
+    if balanced_customer_href:
         working = user.participant.last_ach_result == ""
         status = "connected" if working else "not connected"
-        account = balanced.Account.find(balanced_account_uri)
 
-        bank_account = billing.BalancedBankAccount(balanced_account_uri)
-        if bank_account.is_setup:
-
-            # Factored out to aid debugging. This extra var will show up in the
-            # context on Sentry so we can compare the two values. See:
-            #
-            #   https://github.com/gittip/www.gittip.com/issues/791
-
-            _bank_account_account_uri = bank_account['account_uri']
-
-            assert balanced_account_uri == _bank_account_account_uri
+        bank_account = billing.BalancedBankAccount(balanced_customer_href)
 
     username = user.participant.username
 
@@ -80,7 +69,7 @@ title = "Bank Account"
 
 
     <style>
-        {% if not balanced_account_uri %}
+        {% if not balanced_customer_href %}
         #delete {
             display: none;
         }
@@ -92,7 +81,7 @@ title = "Bank Account"
 
                 {% if bank_account and bank_account.is_setup %}
                 <h2>Current: {{ bank_account['bank_name'] }}
-                ******{{ bank_account['last_four'] }}</h2>
+                ******{{ bank_account['account_number'][-4:] }}</h2>
                 {% endif %}
 
                 <div id="feedback">{% if user.participant.last_ach_result %}
@@ -166,6 +155,13 @@ title = "Bank Account"
                         <option value="{{ i }}" {{ 'selected="selected"' if i == 1990 else '' }}>{{ i }}</option>
                     {% endfor %}
                     </select>
+                </div>
+
+                <div class="clear"></div>
+
+                <div class="half left">
+                    <label for="ssn_last4">Last four SSN digits (Not required)</label>
+                    <input id="ssn_last4" value="" />
                 </div>
 
                 <div class="clear"></div>

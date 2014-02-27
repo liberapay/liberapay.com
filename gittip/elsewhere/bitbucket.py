@@ -1,74 +1,35 @@
-import logging
+from __future__ import absolute_import, division, print_function, unicode_literals
 
-import gittip
-import requests
-from aspen import json, log, Response
-from aspen.http.request import PathPart
-from aspen.utils import typecheck
-from gittip.elsewhere import AccountElsewhere
+from gittip.elsewhere import PlatformOAuth1
+from gittip.elsewhere._extractors import key, not_available
+from gittip.elsewhere._paginators import keys_paginator
 
 
-BASE_API_URL = "https://bitbucket.org/api/1.0"
+class Bitbucket(PlatformOAuth1):
 
+    # Platform attributes
+    name = 'bitbucket'
+    display_name = 'Bitbucket'
+    account_url = 'https://bitbucket.org/{user_name}'
+    icon = '/assets/icons/bitbucket.12.png'
 
-class BitbucketAccount(AccountElsewhere):
-    platform = u'bitbucket'
+    # Auth attributes
+    auth_url = 'https://bitbucket.org/api/1.0'
+    authorize_path = '/oauth/authenticate'
 
-    def get_url(self):
-        url = "https://bitbucket.org/%s" % self.user_info["username"]
-        return url
+    # API attributes
+    api_format = 'json'
+    api_paginator = keys_paginator(prev='previous')
+    api_url = 'https://bitbucket.org/api'
+    api_user_info_path = '/1.0/users/{user_name}'
+    api_user_self_info_path = '/1.0/user'
+    api_team_members_path = '/2.0/teams/{user_name}/members'
 
-    def get_user_name(self):
-        return self.user_info['username']
-
-    def get_platform_icon(self):
-        return "/assets/icons/bitbucket.12.png"
-
-
-def oauth_url(website, action, then=""):
-    """Return a URL to start oauth dancing with Bitbucket.
-
-    For GitHub we can pass action and then through a querystring. For Bitbucket
-    we can't, so we send people through a local URL first where we stash this
-    info in an in-memory cache (eep! needs refactoring to scale).
-
-    Not sure why website is here. Vestige from GitHub forebear?
-
-    """
-    then = then.encode('base64').strip()
-    return "/on/bitbucket/redirect?action=%s&then=%s" % (action, then)
-
-
-def get_user_info(db, username):
-    """Get the given user's information from the DB or failing that, bitbucket.
-
-    :param username:
-        A unicode string representing a username in bitbucket.
-
-    :returns:
-        A dictionary containing bitbucket specific information for the user.
-    """
-    typecheck(username, (unicode, PathPart))
-    rec = db.one("""
-        SELECT user_info FROM elsewhere
-        WHERE platform='bitbucket'
-        AND user_info->'username' = %s
-    """, (username,))
-    if rec is not None:
-        user_info = rec
-    else:
-        url = "%s/users/%s?pagelen=100"
-        user_info = requests.get(url % (BASE_API_URL, username))
-        status = user_info.status_code
-        content = user_info.content
-        if status == 200:
-            user_info = json.loads(content)['user']
-        elif status == 404:
-            raise Response(404,
-                           "Bitbucket identity '{0}' not found.".format(username))
-        else:
-            log("Bitbucket api responded with {0}: {1}".format(status, content),
-                level=logging.WARNING)
-            raise Response(502, "Bitbucket lookup failed with %d." % status)
-
-    return user_info
+    # User info extractors
+    x_user_info = key('user')
+    x_user_id = not_available  # No immutable id. :-/
+    x_user_name = key('username')
+    x_display_name = key('display_name')
+    x_email = not_available
+    x_avatar_url = key('avatar')
+    x_is_team = key('is_team')

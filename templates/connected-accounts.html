@@ -1,160 +1,40 @@
+{% from 'templates/auth.html' import auth_button with context %}
+
 <h2>Connected Accounts</h2>
 <table id="accounts">
+{% for platform in website.platforms %}
+    {% set account = accounts.get(platform.name, None) %}
     <tr>
         <td class="account-type">
-            <img src="/assets/twitter.png" />
+            <img src="/assets/{{ platform.name }}.png" />
         </td>
         <td class="account-details">
-            {% if twitter_account == None %}
+            {% if account == None %}
                 {% if not user.ANON and user.participant == participant %}
-                    Connect a <a href="{{ twitter.oauth_url(website, unicode('connect'))|e }}">Twitter account</a>.
+                    {% call auth_button(platform.name, 'connect') %}
+                        Connect a {{ platform.display_name }} account
+                    {% endcall %}
                 {% else %}
-                    No Twitter account connected.
+                    No {{ platform.display_name }} account connected.
                 {% endif %}
             {% else %}
                 {% if user.participant == participant %}
-                    <div class="account-delete" data-platform="twitter" data-user_id="{{ twitter_account.user_id }}">✕</div>
+                    <div class="account-delete"
+                         data-platform="{{ platform.name }}"
+                         data-user_id="{{ account.user_id }}">✕</div>
                 {% endif %}
-            <a rel="me" href="{{ twitter_account.user_info.get('html_url', '')|e }}"
-                ><img class="avatar"
-                src="{{ twitter_account.user_info.get('profile_image_url_https', '/assets/%s/no-avatar.png' % website.version )|e }}"
-                />{{ twitter_account.user_info.get('screen_name')|e }}
-                {% if twitter_account.user_info.get('name') and twitter_account.user_info.get('name') != twitter_account.user_info.get('screen_name') %}
-                ({{ twitter_account.user_info.get('name')|e }})
-                {% endif %}
-            </a>
-            <div class="account-type">on Twitter</div>
+                <a rel="me" href="{{ account.html_url|e }}"
+                    ><img class="avatar" src="{{ get_avatar_url(account)|e }}"
+                    />{{ account.user_name|e }}
+                    {% if account.display_name and account.display_name != account.user_name %}
+                        ({{ account.display_name|e }})
+                    {% endif %}
+                </a>
+                <div class="account-type">on {{ platform.display_name }}</div>
             {% endif %}
         </td>
     </tr>
-    <tr>
-        <td class="account-type">
-            <img src="/assets/octocat.png" />
-        </td>
-        <td class="account-details">
-            {% if github_account == None %}
-                {% if not user.ANON and user.participant == participant %}
-                    Connect a <a href="{{ github.oauth_url(website, unicode('connect'))|e }}">GitHub account</a>.
-                {% else %}
-                    No GitHub account connected.
-                {% endif %}
-            {% else %}
-                {% if user.participant == participant %}
-                    <div class="account-delete" data-platform="github" data-user_id="{{ github_account.user_id }}">✕</div>
-                {% endif %}
-            <a rel="me" href="{{ github_account.user_info.get('html_url', '')|e }}"
-                ><img class="avatar" src="{{ github_account.user_info.get('avatar_url', '/assets/%s/no-avatar.png' % website.version)|e }}"
-                />{{ github_account.user_info.get('login')|e }}
-                {% if github_account.user_info.get('name') and github_account.user_info.get('name') != github_account.user_info.get('login') %}
-                ({{ github_account.user_info.get('name')|e }})
-                {% endif %}
-            </a>
-            <div class="account-type">on GitHub</div>
-            {% endif %}
-        </td>
-    </tr>
-    <tr>
-        <td class="account-type">
-            <img src="/assets/bitbucket.png" />
-        </td>
-        <td class="account-details">
-            {% if bitbucket_account == None %}
-                {% if not user.ANON and user.participant == participant %}
-                    Connect a <a href="{{ bitbucket.oauth_url(website, unicode('connect'))|e }}">Bitbucket account</a>.
-                {% else %}
-                    No Bitbucket account connected.
-                {% endif %}
-            {% else %}
-                {% if user.participant == participant %}
-                    <div class="account-delete" data-platform="bitbucket" data-user_id="{{ bitbucket_account.user_id }}">✕</div>
-                {% endif %}
-            <a rel="me" href="{{ bitbucket_account.user_info.get('html_url', '')|e }}"
-                ><img class="avatar"
-                src="{{ bitbucket_account.user_info.get('avatar', '/assets/%s/no-avatar.png' % website.version)|e }}"
-                />{{ bitbucket_account.user_info.get('username') }}
-                {% if bitbucket_account.user_info.get('display_name') and bitbucket_account.user_info.get('display_name') != bitbucket_account.user_info.get('username') %}
-                ({{ bitbucket_account.user_info.get('display_name')|e }})
-                {% endif %}
-            </a>
-            <div class="account-type">on Bitbucket</div>
-            {% endif %}
-        </td>
-    </tr>
-    <tr>
-      <td class="account-type">
-        <img src="/assets/bountysource.png" />
-      </td>
-      <td class="account-details">
-        {% if bountysource_account == None %}
-            {% if not user.ANON and user.participant == participant %}
-                Connect a <a href="{{ bountysource.oauth_url(website, participant)|e }}">Bountysource account</a>.
-            {% else %}
-                No Bountysource account connected.
-            {% endif %}
-        {% else %}
-                {% if user.participant == participant %}
-                    <div class="account-delete" data-platform="bountysource" data-user_id="{{ bountysource_account.user_id }}">✕</div>
-                {% endif %}
-            <a href="{{ bountysource_account.user_info.get('frontend_url', 'https://www.bountysource.com')|e }}"
-                ><img class="avatar"
-                      src="{{ bountysource_account.user_info.get('image_url', '/assets/%s/no-avatar.png' % website.version)|e }}"
-            />{{ bountysource_account.user_info.get('display_name') }}
-            {% if bountysource_account.user_info.get('first_name') and bountysource_account.user_info.get('last_name') %}
-                ({{ bountysource_account.user_info.get('first_name')|e }} {{ bountysource_account.user_info.get('last_name')|e }})
-            {% endif %}
-            </a>
-            <div class="account-type">on Bountysource</div>
-        {% endif %}
-      </td>
-    </tr>
-    <tr>
-      <td class="account-type">
-        <img src="/assets/venmo.png" />
-      </td>
-      <td class="account-details">
-        {% if venmo_account == None %}
-            {% if not user.ANON and user.participant == participant %}
-                Connect a <a href="{{ venmo.oauth_url(website) }}">Venmo account</a>.
-            {% else %}
-                No Venmo account connected.
-            {% endif %}
-        {% else %}
-                {% if user.participant == participant %}
-                    <div class="account-delete" data-platform="venmo" data-user_id="{{ venmo_account.user_id }}">✕</div>
-                {% endif %}
-            <a href="{{ venmo_account.get_url() }}">
-              <img class="avatar" src="{{ venmo_account.get_profile_image() }}">
-              {{ venmo_account.get_user_name() }}
-              ({{ venmo_account.get_display_name() }})
-            </a>
-            <div class="account-type">on Venmo</div>
-        {% endif %}
-      </td>
-    </tr>
-    <tr>
-        <td class="account-type">
-            <img src="/assets/openstreetmap.png" />
-        </td>
-        <td class="account-details">
-            {% if openstreetmap_account == None %}
-                {% if not user.ANON and user.participant == participant %}
-                    Connect a <a href="{{ openstreetmap.oauth_url(website, unicode('connect'))|e }}">OpenStreetMap account</a>.
-                {% else %}
-                    No OpenStreetMap account connected.
-                {% endif %}
-            {% else %}
-                {% if user.participant == participant %}
-                    <div class="account-delete" data-platform="openstreetmap" data-user_id="{{ openstreetmap_account.user_id }}">✕</div>
-                {% endif %}
-            <a rel="me" href="{{ openstreetmap_account.user_info.get('html_url', '')|e }}"
-                ><img class="avatar"
-                src="{{ openstreetmap_account.user_info.get('img_src', '/assets/%s/no-avatar.png' % website.version)|e }}"
-                />{{ openstreetmap_account.user_info.get('username')|e }}
-            </a>
-            <div class="account-type">on OpenStreetMap</div>
-            {% endif %}
-        </td>
-    </tr>
+{% endfor %}
     <tr>
         <td class="account-type">
             <img src="/assets/balanced-avatar.png" />
@@ -181,8 +61,8 @@
             <span>{% if participant.last_ach_result != "" %}&#x2718;{% else %}&#x2714;{% endif %}</span>
 
             {% endif %}
-            <div class="account-type">{% if user.ADMIN and participant.balanced_account_uri %}
-                <a href="https://dashboard.balancedpayments.com/#/{{ participant.balanced_account_uri[4:] }}"
+            <div class="account-type">{% if user.ADMIN and participant.balanced_customer_href %}
+                <a href="https://dashboard.balancedpayments.com/#/{{ participant.balanced_customer_href[4:] }}"
                     >on Balanced Payments</a>{% else %}on Balanced Payments{% endif %}</div>
         </td>
     </tr>

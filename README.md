@@ -10,14 +10,15 @@ Quick Start
 ```
 $ git clone git@github.com:gittip/www.gittip.com.git
 $ cd www.gittip.com
-$ make db
+$ sudo -u postgres createuser --superuser $USER
+$ createdb gittip
+$ make schema
 $ make run
 ```
 
 And/or:
 
 ```
-$ make test-db
 $ make test
 ```
 
@@ -38,7 +39,7 @@ Table of Contents
  - [Testing](#testing-)
  - [Setting up a Database](#local-database-setup)
  - [API](#api)
-  - [Implementations](#api-implementations) 
+  - [Implementations](#api-implementations)
  - [Glossary](#glossary)
  - [See Also](#see-also)
 
@@ -58,25 +59,38 @@ Building `www.gittip.com` requires [Python
 2.7](http://python.org/download/releases/2.7.4/), and a gcc/make toolchain.
 
 All Python library dependencies are bundled in the repo (under `vendor/`) and
-by default the app is configured to use a Postgres instance in the cloud.
+if you do not want to install Postgres locally you can try to use a cloud instance
+by issuing `make cloud-db` (it is somewhat slow for regular development).
 
+To configure local Postgres create default role and database:
+
+    $ sudo -u postgres createuser --superuser $USER
+    $ createdb gittip
+
+On Debian or Ubuntu you will need the following packages:
+`libpq5-dev`/`libpq-dev`, (includes headers needed to build the `psycopg2` Python library)
+and `python-dev` (includes Python header files for `psycopg2`).
+
+If you are receiving issues from `psycopg2`, please [ensure that its needs are
+met](http://initd.org/psycopg/docs/faq.html#problems-compiling-and-deploying-psycopg2).
 
 Building
 --------
 
-Create a local environment configuration file:
+All Python dependencies (including virtualenv) are bundled with Gittip in the
+vendor/ directory. Gittip is designed so that you don't manage its
+virtualenv directly and you don't download its dependencies at build
+time.
 
-    $ make local.env
+The included `Makefile` contains several targets. Configuration options
+are stored in default_local.env file while overrides are in local.env.
 
-By default, Gittip is configured to use a postgres instance in the cloud. If you
-want to use your local instance instead, just set the ```DATABASE_URL``` in local.env
-to ```postgres://username@host/gittip```
-
-Next, setup your environment:
+To create virtualenv enviroment with all python dependencies installed
+in a sandbox:
 
     $ make env
 
-If you haven't run Gittip for a while, you should reinstall the dependencies:
+If you haven't run Gittip for a while, you can reinstall the dependencies:
 
     $ make clean env
 
@@ -98,56 +112,51 @@ If you don't have make, look at the Makefile to see what steps you need
 to perform to build and launch Gittip. The Makefile is pretty simple and
 straightforward.
 
-All Python dependencies (including virtualenv) are bundled with Gittip in the
-vendor/ directory. Gittip is designed so that you don't manage its
-virtualenv directly and you don't download its dependencies at build
-time.
-
 If Gittip launches successfully it will look like this:
 
 ```
 $ make run
-./env/bin/swaddle local.env ./env/bin/aspen \
-        --www_root=www/ \
-        --project_root=. \
-        --show_tracebacks=yes \
-        --changes_reload=yes \
-        --network_address=:8537
-pid-12508 thread-140735090330816 (MainThread) Reading configuration from defaults, environment, and command line.
-pid-12508 thread-140735090330816 (MainThread)   changes_reload         False                          default
-pid-12508 thread-140735090330816 (MainThread)   changes_reload         True                           command line option --changes_reload=yes
-pid-12508 thread-140735090330816 (MainThread)   charset_dynamic        UTF-8                          default
-pid-12508 thread-140735090330816 (MainThread)   charset_static         None                           default
-pid-12508 thread-140735090330816 (MainThread)   configuration_scripts  []                             default
-pid-12508 thread-140735090330816 (MainThread)   indices                [u'index.html', u'index.json', u'index', u'index.html.spt', u'index.json.spt', u'index.spt'] default
-pid-12508 thread-140735090330816 (MainThread)   list_directories       False                          default
-pid-12508 thread-140735090330816 (MainThread)   logging_threshold      0                              default
-pid-12508 thread-140735090330816 (MainThread)   media_type_default     text/plain                     default
-pid-12508 thread-140735090330816 (MainThread)   media_type_json        application/json               default
-pid-12508 thread-140735090330816 (MainThread)   network_address        ((u'0.0.0.0', 8080), 2)        default
-pid-12508 thread-140735090330816 (MainThread)   network_address        ((u'0.0.0.0', 8537), 2)        command line option --network_address=:8537
-pid-12508 thread-140735090330816 (MainThread)   network_engine         cheroot                        default
-pid-12508 thread-140735090330816 (MainThread)   project_root           None                           default
-pid-12508 thread-140735090330816 (MainThread)   project_root           .                              command line option --project_root=.
-pid-12508 thread-140735090330816 (MainThread)   renderer_default       stdlib_percent                 default
-pid-12508 thread-140735090330816 (MainThread)   show_tracebacks        False                          default
-pid-12508 thread-140735090330816 (MainThread)   show_tracebacks        True                           command line option --show_tracebacks=yes
-pid-12508 thread-140735090330816 (MainThread)   www_root               None                           default
-pid-12508 thread-140735090330816 (MainThread)   www_root               www/                           command line option --www_root=www/
-pid-12508 thread-140735090330816 (MainThread) project_root is relative to CWD: '.'.
-pid-12508 thread-140735090330816 (MainThread) project_root set to /Your/path/to/www.gittip.com.
-pid-12508 thread-140735090330816 (MainThread) Found plugin for renderer 'tornado'
-pid-12508 thread-140735090330816 (MainThread) Won't log to Sentry (SENTRY_DSN is empty).
-pid-12508 thread-140735090330816 (MainThread) Loading configuration file '/Your/path/to/www.gittip.com/configure-aspen.py' (possibly changing settings)
-pid-12508 thread-140735090330816 (MainThread) Renderers (*ed are unavailable, CAPS is default):
-pid-12508 thread-140735090330816 (MainThread)   stdlib_percent   
-pid-12508 thread-140735090330816 (MainThread)   TORNADO          
-pid-12508 thread-140735090330816 (MainThread)   stdlib_format    
-pid-12508 thread-140735090330816 (MainThread)   stdlib_template  
-pid-12508 thread-140735090330816 (MainThread) Starting cheroot engine.
-pid-12508 thread-140735090330816 (MainThread) Greetings, program! Welcome to port 8537.
-pid-12508 thread-140735090330816 (MainThread) Aspen will restart when configuration scripts or Python modules change.
-pid-12508 thread-140735090330816 (MainThread) Starting up Aspen website.
+./env/bin/honcho -e default_local.env,local.env run ./env/bin/aspen \
+		--www_root=www/ \
+		--project_root=. \
+		--show_tracebacks=yes \
+		--changes_reload=yes \
+		--network_address=:8537
+pid-27937 thread-47041048338176 (MainThread) Reading configuration from defaults, environment, and command line.
+pid-27937 thread-47041048338176 (MainThread)   changes_reload         False                          default
+pid-27937 thread-47041048338176 (MainThread)   changes_reload         True                           command line option --changes_reload=yes
+pid-27937 thread-47041048338176 (MainThread)   charset_dynamic        UTF-8                          default
+pid-27937 thread-47041048338176 (MainThread)   charset_static         None                           default
+pid-27937 thread-47041048338176 (MainThread)   configuration_scripts  []                             default
+pid-27937 thread-47041048338176 (MainThread)   indices                [u'index.html', u'index.json', u'index', u'index.html.spt', u'index.json.spt', u'index.spt'] default
+pid-27937 thread-47041048338176 (MainThread)   list_directories       False                          default
+pid-27937 thread-47041048338176 (MainThread)   logging_threshold      0                              default
+pid-27937 thread-47041048338176 (MainThread)   media_type_default     text/plain                     default
+pid-27937 thread-47041048338176 (MainThread)   media_type_json        application/json               default
+pid-27937 thread-47041048338176 (MainThread)   network_address        ((u'0.0.0.0', 8080), 2)        default
+pid-27937 thread-47041048338176 (MainThread)   network_address        ((u'0.0.0.0', 8537), 2)        command line option --network_address=:8537
+pid-27937 thread-47041048338176 (MainThread)   network_engine         cheroot                        default
+pid-27937 thread-47041048338176 (MainThread)   project_root           None                           default
+pid-27937 thread-47041048338176 (MainThread)   project_root           .                              command line option --project_root=.
+pid-27937 thread-47041048338176 (MainThread)   renderer_default       stdlib_percent                 default
+pid-27937 thread-47041048338176 (MainThread)   show_tracebacks        False                          default
+pid-27937 thread-47041048338176 (MainThread)   show_tracebacks        True                           command line option --show_tracebacks=yes
+pid-27937 thread-47041048338176 (MainThread)   www_root               None                           default
+pid-27937 thread-47041048338176 (MainThread)   www_root               www/                           command line option --www_root=www/
+pid-27937 thread-47041048338176 (MainThread) project_root is relative to CWD: '.'.
+pid-27937 thread-47041048338176 (MainThread) project_root set to /home/zbynek/www.gittip.com.
+pid-27937 thread-47041048338176 (MainThread) Found plugin for renderer 'jinja2'
+pid-27937 thread-47041048338176 (MainThread) Won't log to Sentry (SENTRY_DSN is empty).
+pid-27937 thread-47041048338176 (MainThread) Loading configuration file '/home/zbynek/www.gittip.com/configure-aspen.py' (possibly changing settings)
+pid-27937 thread-47041048338176 (MainThread) Renderers (*ed are unavailable, CAPS is default):
+pid-27937 thread-47041048338176 (MainThread)   stdlib_percent
+pid-27937 thread-47041048338176 (MainThread)   stdlib_format
+pid-27937 thread-47041048338176 (MainThread)   JINJA2
+pid-27937 thread-47041048338176 (MainThread)   stdlib_template
+pid-27937 thread-47041048338176 (MainThread) Starting cheroot engine.
+pid-27937 thread-47041048338176 (MainThread) Greetings, program! Welcome to port 8537.
+pid-27937 thread-47041048338176 (MainThread) Aspen will restart when configuration scripts or Python modules change.
+pid-27937 thread-47041048338176 (MainThread) Starting up Aspen website.
 ```
 
 You should then find this in your browser at
@@ -174,11 +183,12 @@ Thanks for installing Gittip! :smiley:
 Configuration
 =============
 
-When using `make run`, Gittip's execution environment is defined in a
-`local.env` file, which is not included in the source code repo. If you `make
-run` you'll have one generated for you, which you can then tweak as needed.
-It's a copy of [default_local.env]
-(https://github.com/gittip/www.gittip.com/blob/master/default_local.env).
+When using `make run`, Gittip's execution environment is defined in an
+environment files [default_local.env]
+(https://github.com/gittip/www.gittip.com/blob/master/default_local.env)
+`local.env`. The former contains all variables needed to run successfully.
+The later allows for easy overrides since it is not included in the source
+code repo.
 
 The following text explains some of the content of that file:
 
@@ -230,35 +240,21 @@ The easiest way to run the test suite is:
     $ make test
 
 However, the test suite deletes data in all tables in the public schema of the
-database configured in your testing environment, and as a safety precaution, we
-require the following key and value to be set in said environment:
+database configured in your testing environment.
 
-    YES_PLEASE_DELETE_ALL_MY_DATA_VERY_OFTEN=Pretty please, with sugar on top.
-
-`make test` will not set this for you. Run `make tests/env` and then edit that
-file and manually add that key=value, then `make test` will work. Even just
-importing the gittip.testing module will trigger deletion of all data. Without
-this safety precaution, an attacker could try sneaking `import gittip.testing`
-into a commit. Once their changeset was deployed, we would have ... problems.
-Of course, they could also remove the check in the same or even a different
-commit. Of course, they could also sneak in whatever the heck code they wanted
-to try to sneak in.
-
-To invoke py.test directly you should use the `swaddle` utility that comes
-with Aspen. First `make tests/env`, edit it as noted above, and then:
+To invoke py.test directly you should use the `honcho` utility that comes
+with the install. First `make tests/env`, activate the virtualenv and then:
 
     [gittip] $ cd tests/
-    [gittip] $ swaddle env ../env/bin/nosetests
+    [gittip] $ honcho -e ../default_tests.env,env py.test
 
-
-
-Now, you need to setup the database.
+The tests will try to use `gittip-test` database of the current $USER.
 
 
 Local Database Setup
 --------------------
 
-For advanced development and testing database changes, you need a local
+For the best development experience, you need a local
 installation of [Postgres](http://www.postgresql.org/download/). The best
 version of Postgres to use is 9.3.2, because that's what we're using in
 production at Heroku. You need at least 9.2, because we depend on being able to
@@ -267,39 +263,17 @@ specify a URI to `psql`, and that was added in 9.2.
 If you're on a Mac, maybe try out Heroku's
 [Postgres.app](http://www.postgresql.org/download/). If installing using a
 package manager, you may need several packages. On Ubuntu and Debian, the
-required packages are: `postgresql` (base), `libpq5-dev`/`libpq-dev`, (includes
-headers needed to build the `psycopg2` Python library), `postgresql-contrib`
-(includes hstore), `python-dev` (includes Python header files for `psycopg2`).
+required packages are: `postgresql` (base) and `postgresql-contrib` (includes hstore).
 
-If you are receiving issues from `psycopg2`, please [ensure that its needs are
-met](http://initd.org/psycopg/docs/faq.html#problems-compiling-and-deploying-psycopg2).
-
-
-### Authentication
-
-If you already have a &ldquo;role&rdquo; (Postgres user) that you'd like
-to use, you can do so by editing `DATABASE_URL` in the generated local.env
-file. You can also change the database name there. See
-[Configuration](#configuration) for more information.
-
-Otherwise, you should add a role that matches your OS username, and make sure
-it's a superuser role and has login privileges. Here's a sample
-invocation of the createuser executable that comes with Postgres that will do
-this for you, assuming that a &ldquo;postgres&rdquo; superuser was already
-created as part of initial installation:
+To setup the instance for gittip's needs run:
 
     $ sudo -u postgres createuser --superuser $USER
+    $ createdb gittip
+    $ createdb gittip-test
 
-Set the authentication method to &ldquo;trust&rdquo; in pg_hba.conf for all
-local connections and host connections from localhost. For this, ensure that
-the file contains these lines:
+You can speed up the test suite when using a regular HDD by running:
 
-    local   all             all                                     trust
-    host    all             all             127.0.0.1/32            trust
-    host    all             all             ::1/128                 trust
-
-Reload Postgres using pg_ctl for changes to take effect.
-
+    $ psql -q gittip-test -c 'alter database "gittip-test" set synchronous_commit to off'
 
 ### Schema
 
@@ -432,10 +406,12 @@ for your project!
    Academy's setup](http://ejohn.org/blog/gittip-at-khan-academy/))
 
  - [Ruby: gratitude](https://github.com/JohnKellyFerguson/gratitude): A ruby gem that wraps the Gittip API (currently in development and not feature complete).
- 
+
  - [WordPress: WP-Gittip](https://github.com/daankortenbach/WP-Gittip)
 
  - [hubot-gittip](https://github.com/myplanetdigital/hubot-gittip): A Hubot script for interacting with a shared Gittip account.
+
+ - [gittip-collab](https://github.com/engineyard/gittip-collab): A Khan-style tool for managing a Gittip account as a team.
 
 Glossary
 ========
@@ -521,9 +497,13 @@ and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
  - [BountyOSS](https://bountyoss.com/) - Where crowdfunding means business
  - [Suprmasv](https://www.suprmasv.com/) - Empowering the Hacker Class.
  - [Tip4Commit](http://tip4commit.com/) - Donate bitcoins to open source projects or make commits and get tips for it.
- - [BitHub](https://whispersystems.org/blog/bithub/) - An experiment in funding privacy OSS. 
+ - [BitHub](https://whispersystems.org/blog/bithub/) - An experiment in funding privacy OSS.
  - [Fundly](https://fundly.com/) - Crowdfund Anything
  - [I Love Open Source](http://www.iloveopensource.io/) - Simple recognition for open source developers
  - [Razoo](http://www.razoo.com/) - Create online fundraisers for anything and everything that matters to you.
  - [CoinGiving](http://coingiving.com/) - Personified Bitcoin Donations
  - [Bittip](http://bittip.it/) - Bitcoin Microdonations - Like Flattr, but with Btc
+ - [MedStartr](http://www.medstartr.com/) - Fund the medical breakthroughs and innovations you care about
+ - [Upstart](https://www.upstart.com/) - Raise money from your future self
+ - [Gitcoin](http://www.gitcoin.co/) - Give bitcoin donations to your favorite projects.
+ - [Patronism](http://patronism.com/) - Become a patron of your favorite band.

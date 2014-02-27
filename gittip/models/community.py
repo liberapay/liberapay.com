@@ -1,6 +1,5 @@
 import re
 
-import gittip
 from postgres.orm import Model
 
 

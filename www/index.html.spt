@@ -1,7 +1,22 @@
+"""## Information Architecture
+
+This is where we document all the pages on our website, with their purpose and
+the most important thing on each page.
+
+
+### Homepage
+
+https://www.gittip.com/
+
+This is the homepage. The most important thing is to give a good first
+impression of Gittip and help people take the next step, whatever that might be
+for them.
+
+"""
 import os
 from aspen import Response
 from aspen.utils import to_age
-from gittip.models._mixin_elsewhere import utter_hack
+from gittip.utils import get_avatar_url
 
 
 LUXURY = 4  # used for responsive design to limit items shown on small screens
@@ -19,16 +34,6 @@ def _to_age(participant):
         age = age.replace(word, str(i))
     return age.replace(' ', ' <span class="unit">') + "</span>"
 
-def _get_img_src(someone):
-    src = '/assets/%s/avatar-default.gif' % website.version
-    if someone.gravatar_id:
-        src = "https://www.gravatar.com/avatar/%s.jpg?s=%s"
-        src %= (someone.gravatar_id, 128)
-    elif someone.twitter_pic:
-        src = someone.twitter_pic
-        src = src.replace('_normal.', '.')
-    return src
-
 [---]
 
 try:
@@ -37,17 +42,10 @@ try:
 except ValueError:
     raise Response(400)
 
-new_participants = utter_hack(website.db, website.db.all("""
+new_participants = website.db.all("""
 -- new participants on homepage
 
-    SELECT username, claimed_time, (SELECT user_info->'gravatar_id'
-                                      FROM elsewhere
-                                     WHERE participant=username
-                                       AND platform='github') as gravatar_id
-                                 , (SELECT user_info->'profile_image_url_https'
-                                      FROM elsewhere
-                                     WHERE participant=username
-                                       AND platform='twitter') as twitter_pic
+    SELECT username, claimed_time, avatar_url
       FROM participants p
      WHERE EXISTS (SELECT * FROM elsewhere e WHERE p.username = e.participant)
        AND claimed_time IS NOT null
@@ -56,9 +54,9 @@ new_participants = utter_hack(website.db, website.db.all("""
      LIMIT %s
     OFFSET %s
 
-""", (limit, offset)))
+""", (limit, offset))
 
-givers = utter_hack(website.db, website.db.all("""
+givers = website.db.all("""
 -- top givers on homepage
 
     SELECT * FROM homepage_top_givers
@@ -66,12 +64,12 @@ givers = utter_hack(website.db, website.db.all("""
      LIMIT %s
     OFFSET %s
 
-""", (limit, offset)))
+""", (limit, offset))
 
 # XXX I'm nearly positive that one or both of givers and receivers can contain
 # orphan accounts. See https://github.com/gittip/www.gittip.com/issues/650
 
-receivers = utter_hack(website.db, website.db.all("""
+receivers = website.db.all("""
 -- top receivers on homepage
 
     SELECT * FROM homepage_top_receivers
@@ -79,11 +77,17 @@ receivers = utter_hack(website.db, website.db.all("""
      LIMIT %s
     OFFSET %s
 
-""", (limit, offset)))
+""", (limit, offset))
 [---]
 {% extends "templates/base.html" %}
 {% block head %}
+    <link rel="publisher" href="https://plus.google.com/110591317655791133884">
     <meta name="description" content="Inspiring Generosity. Gittip is a weekly gift exchange. Support and thank your favorite people and projects and communities with small cash gifts." />
+    <meta name="fb:app_id" content="229465400522758" />
+    <meta name="og:type" content="website" />
+    <meta name="og:url" content="https://www.gittip.com/" />
+    <meta name="og:title" content="Gittip" />
+    <meta name="og:image" content="/assets/gittip.opengraph.png" />
 {% endblock %}
 
 {% block scripts %}
@@ -111,7 +115,6 @@ receivers = utter_hack(website.db, website.db.all("""
                 <option value="twitter">Twitter</option>
                 <option value="github">GitHub</option>
                 <option value="bitbucket">Bitbucket</option>
-                <option value="openstreetmap">OpenStreetMap</option>
             </select>
             <span class="luxury"> username: </span>
             <input placeholder="username" autocomplete="off" autocorrect="off"
@@ -137,7 +140,7 @@ receivers = utter_hack(website.db, website.db.all("""
                     <span class="inner">
                         <span class="avatar"
                             style="background-image:
-                                url('{{ _get_img_src(participant) }}')">
+                                url('{{ get_avatar_url(participant)|e }}')">
                         </span>
                         <span class="age">{{ _to_age(participant) }}</span>
                         <span class="name">{{ participant.username }}</span>
@@ -166,7 +169,7 @@ receivers = utter_hack(website.db, website.db.all("""
                    class="mini-user{{ ' anonymous' if giver.anonymous else '' }}">
                     <span class="inner">
                         <span class="avatar"
-                            style="background-image: url('{{ _get_img_src(giver) }}')">
+                            style="background-image: url('{{ get_avatar_url(giver)|e }}')">
                         </span>
                         <span class="money">${{ giver.amount }}</span>
                         <span class="name">{{ giver.username }}</span>
@@ -196,7 +199,7 @@ receivers = utter_hack(website.db, website.db.all("""
                    class="mini-user{{ ' anonymous' if receiver.anonymous else '' }}">
                     <span class="inner">
                         <span class="avatar"
-                            style="background-image: url('{{ _get_img_src(receiver) }}')">
+                            style="background-image: url('{{ get_avatar_url(receiver)|e }}')">
                         </span>
                         <span class="money">${{ receiver.amount }}</span>
                         <span class="name">{{ receiver.username }}</span>

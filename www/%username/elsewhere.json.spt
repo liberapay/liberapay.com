@@ -1,5 +1,5 @@
 from aspen import Response
-from gittip.models._mixin_elsewhere import LastElsewhere, NonexistingElsewhere
+from gittip.models.participant import LastElsewhere, NonexistingElsewhere
 [-----------------------------------------------------------------------------]
 if user.ANON:
     raise Response(404)

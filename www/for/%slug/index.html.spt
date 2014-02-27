@@ -1,13 +1,8 @@
-from collections import defaultdict
-
 from aspen import Response
 from aspen.utils import to_age
-from gittip import ORDINALS
-from gittip.elsewhere import github
 from gittip.models.community import name_pattern, slugize
-from gittip.models.participant import Participant
+from gittip.utils import get_avatar_url
 from gittip.utils.query_cache import QueryCache
-from gittip.models._mixin_elsewhere import utter_hack
 
 LUXURY = 4
 
@@ -62,13 +57,17 @@ title = community.name + ' Community'
 # Run queries for listings.
 # =========================
 
-new_participants = utter_hack(website.db, query_cache.all("""
+new_participants = query_cache.all("""
 -- new participants on community page
 
-    SELECT username, claimed_time FROM (
+    SELECT username
+         , claimed_time
+         , avatar_url
+      FROM (
         SELECT DISTINCT ON (p.username)
                p.username
              , claimed_time
+             , p.avatar_url
           FROM participants p
           JOIN elsewhere e
             ON p.username = e.participant
@@ -82,12 +81,15 @@ new_participants = utter_hack(website.db, query_cache.all("""
      LIMIT %s
     OFFSET %s
 
-""", (community.slug, limit, offset)))
+""", (community.slug, limit, offset))
 
-givers = utter_hack(website.db, query_cache.all("""
+givers = query_cache.all("""
 -- top givers on community page
 
-    SELECT tipper AS username, anonymous_giving AS anonymous, sum(amount) AS amount
+    SELECT tipper AS username
+         , anonymous_giving AS anonymous
+         , sum(amount) AS amount
+         , avatar_url
       FROM (    SELECT DISTINCT ON (tipper, tippee)
                        amount
                      , tipper
@@ -106,20 +108,23 @@ givers = utter_hack(website.db, query_cache.all("""
       JOIN participants p ON p.username = tipper
      WHERE is_suspicious IS NOT true
        AND amount > 0
-  GROUP BY tipper, anonymous_giving
+  GROUP BY tipper, anonymous_giving, avatar_url
   ORDER BY amount DESC
   LIMIT %s
   OFFSET %s
 
-""", (community.slug, limit, offset)))
+""", (community.slug, limit, offset))
 
 # XXX I'm nearly positive that one or both of givers and receivers can contain
 # orphan accounts. See https://github.com/gittip/www.gittip.com/issues/650
 
-receivers = utter_hack(website.db, query_cache.all("""
+receivers = query_cache.all("""
 -- top receivers on community page
 
-    SELECT tippee AS username, anonymous_receiving AS anonymous, claimed_time, sum(amount) AS amount
+    SELECT tippee AS username
+         , anonymous_receiving AS anonymous
+         , sum(amount) AS amount
+         , avatar_url
       FROM (    SELECT DISTINCT ON (tipper, tippee)
                        amount
                      , tippee
@@ -137,12 +142,12 @@ receivers = utter_hack(website.db, query_cache.all("""
       JOIN participants p ON p.username = tippee
      WHERE is_suspicious IS NOT true
        AND amount > 0
-  GROUP BY tippee, claimed_time, anonymous_receiving
+  GROUP BY tippee, anonymous_receiving, avatar_url
   ORDER BY amount DESC
   LIMIT %s
   OFFSET %s
 
-""", (community.slug, limit, offset)))
+""", (community.slug, limit, offset))
 [---]
 {% extends "templates/base.html" %}
 
@@ -222,7 +227,7 @@ $(document).ready(function() {
                     <span class="inner">
                         <span class="avatar"
                             style="background-image:
-                                url('{{ participant.get_img_src() }}')">
+                                url('{{ get_avatar_url(participant)|e}}')">
                         </span>
                         <span class="age">{{ _to_age(participant) }}</span>
                         <span class="name">{{ participant.username }}</span>
@@ -251,7 +256,7 @@ $(document).ready(function() {
                    class="mini-user{{ ' anonymous' if giver.anonymous else '' }}">
                     <span class="inner">
                         <span class="avatar"
-                            style="background-image: url('{{ giver.get_img_src() }}')">
+                            style="background-image: url('{{ get_avatar_url(giver)|e}}')">
                         </span>
                         <span class="money">${{ giver.amount }}</span>
                         <span class="name">{{ giver.username }}</span>
@@ -281,7 +286,7 @@ $(document).ready(function() {
                    class="mini-user{{ ' anonymous' if receiver.anonymous else '' }}">
                     <span class="inner">
                         <span class="avatar"
-                            style="background-image: url('{{ receiver.get_img_src() }}')">
+                            style="background-image: url('{{ get_avatar_url(receiver)|e}}')">
                         </span>
                         <span class="money">${{ receiver.amount }}</span>
                         <span class="name">{{ receiver.username }}</span>

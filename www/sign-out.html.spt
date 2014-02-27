@@ -26,7 +26,7 @@ if POST:
         <h1>Are you sure you wish to sign out?</h1>
         <form id="sign-out" method="POST">
             <input name="back_to" type="hidden" value="/" />
-            <input name="csrf_token" type="hidden" value="{{ cookie['csrf_token'].value }}" />
+            <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
             <button type="submit">Yes!</button>
         </form>
     </div>

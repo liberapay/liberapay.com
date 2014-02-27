@@ -1,5 +1,6 @@
 .sign-in {
   display: inline-block;
+  vertical-align: middle;
   .dropdown-toggle {
     background: $green;
     @include border-radius(3px);
@@ -31,28 +32,44 @@
     min-width: 120px;
     li {
       margin: 0;
-      &.twitter a {
+      &.twitter button {
         @include has-icon("twitter");
       }
-      &.github a {
+      &.github button {
         @include has-icon("github");
       }
-      &.bitbucket a {
+      &.bitbucket button {
         @include has-icon("bitbucket");
       }
-      &.openstreetmap a {
+      &.openstreetmap button {
         @include has-icon("openstreetmap");
       }
+      &:hover button {
+        background: $darker-green;
+      }
     }
-    a {
+    button {
       color: #fff;
+      display: block;
+      width: 100%;
       padding: 3px 8px;
+      margin: 0;
       text-align: left;
       position: relative;
       font-size: 12px;
-      &:hover {
-        background: $darker-green;
-      }
+      border: none;
+      @include border-radius(0);
+      background: none;
+    }
+    button:before {
+      position: absolute;
+      top: 4px;
+      right: 5px;
+    }
+    form {
+      display: block;
+      margin: 0;
+      padding: 0;
     }
   }
   #header & {
@@ -60,11 +77,6 @@
     .dropdown-menu {
       left: auto;
       right: 0;
-    }
-    a:before {
-      position: absolute;
-      top: 4px;
-      right: 5px;
     }
   }
 }

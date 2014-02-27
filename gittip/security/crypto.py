@@ -83,7 +83,7 @@ def salted_hmac(key_salt, value, secret=None):
     """
     if secret is None:
         raise NotImplementedError
-        secret = settings.SECRET_KEY
+        #secret = settings.SECRET_KEY
 
     # We need to generate a derived key from our base key.  We can do this by
     # passing the key_salt and our base key through a pseudo-random function and

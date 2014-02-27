@@ -1,0 +1,47 @@
+from base64 import b64encode
+from Cookie import SimpleCookie
+from email.utils import formatdate
+import json
+from time import time
+
+from aspen import Response
+import gittip
+from gittip.elsewhere import ACTIONS
+
+[-----------------------------]
+
+if not POST:
+    raise Response(405)
+
+platform = getattr(website.platforms, path['platform'], None)
+if platform is None:
+    raise Response(404)
+
+try:
+    action, then, user_name = body['action'], body['then'], body['user_name']
+except KeyError:
+    raise Response(400)
+
+if action not in ACTIONS:
+    raise Response(400)
+
+url, query_id, query_data = platform.get_auth_url(user=user)
+
+headers = {}
+
+C = SimpleCookie()
+cookie_name = (platform.name+'_'+query_id).encode('ascii')
+cookie_value = b64encode(json.dumps([query_data, action, then, user_name]))
+C[cookie_name] = cookie_value
+C[cookie_name]['path'] = '/'
+C[cookie_name]['expires'] = formatdate(time()+120, False, True)
+C[cookie_name]['httponly'] = 'Yes, please.'
+if gittip.canonical_scheme == 'https':
+    C[cookie_name]['secure'] = 'Yes, please.'
+
+headers['Set-Cookie'] = C[cookie_name].OutputString()
+headers['Location'] = url
+
+raise Response(302, headers=headers)
+
+[-----------------------------] text/plain

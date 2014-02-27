@@ -1,8 +1,6 @@
 from __future__ import print_function, unicode_literals
 
-from mock import patch
-from gittip.elsewhere.twitter import TwitterAccount
-from gittip.testing import GITHUB_USER_UNREGISTERED_LGTEST, Harness
+from gittip.testing import Harness
 from gittip.utils import update_homepage_queries_once
 
 
@@ -14,8 +12,9 @@ class TestPages(Harness):
         assert expected in actual
 
     def test_homepage_with_anonymous_giver(self):
-        TwitterAccount(self.db, "bob", {}).opt_in("bob")
-        alice = self.make_participant('alice', anonymous_giving=True, last_bill_result='')
+        self.make_participant('bob', elsewhere='twitter', claimed_time='now')
+        alice = self.make_participant('alice', anonymous_giving=True, last_bill_result='',
+                                      elsewhere='twitter', claimed_time='now')
         alice.set_tip_to('bob', 1)
         update_homepage_queries_once(self.db)
 
@@ -24,8 +23,8 @@ class TestPages(Harness):
         assert expected in actual
 
     def test_homepage_with_anonymous_receiver(self):
-        bob, _ = TwitterAccount(self.db, "bob", {}).opt_in("bob")
-        self.update_participant(bob.participant, anonymous_receiving=True, last_bill_result='')
+        self.make_participant('bob', anonymous_receiving=True, last_bill_result='',
+                              elsewhere='twitter', claimed_time='now')
         alice = self.make_participant('alice', last_bill_result='', claimed_time='now')
         alice.set_tip_to('bob', 1)
         update_homepage_queries_once(self.db)
@@ -75,20 +74,6 @@ class TestPages(Harness):
     def test_about_charts(self):
         expected = "Money transferred"
         actual = self.client.GET('/about/charts.html').body
-        assert expected in actual
-
-    @patch('gittip.elsewhere.github.requests')
-    def test_github_proxy(self, requests):
-        requests.get().status_code = 200
-        requests.get().text = GITHUB_USER_UNREGISTERED_LGTEST
-        expected = "lgtest has not joined"
-        actual = self.client.GET('/on/github/lgtest/').body.decode('utf8')
-        assert expected in actual
-
-    # This hits the network. XXX add a knob to skip this
-    def test_twitter_proxy(self):
-        expected = "Twitter has not joined"
-        actual = self.client.GET('/on/twitter/twitter/').body.decode('utf8')
         assert expected in actual
 
     def test_404(self):

@@ -11,15 +11,17 @@ of participant, based on certain properties.
 from __future__ import print_function, unicode_literals
 
 import datetime
-import uuid
 from decimal import Decimal
+import uuid
 
-import gittip
-import pytz
 from aspen import Response
 from aspen.utils import typecheck
-from psycopg2 import IntegrityError
 from postgres.orm import Model
+from psycopg2 import IntegrityError
+import pytz
+
+import gittip
+from gittip import NotSane
 from gittip.exceptions import (
     UsernameIsEmpty,
     UsernameTooLong,
@@ -29,11 +31,10 @@ from gittip.exceptions import (
     NoSelfTipping,
     BadAmount,
 )
-
-from gittip.models._mixin_elsewhere import MixinElsewhere
 from gittip.models._mixin_team import MixinTeam
+from gittip.models.account_elsewhere import AccountElsewhere
 from gittip.utils import canonicalize
-from gittip.utils.username import reserve_a_random_username
+from gittip.utils.username import gen_random_usernames, reserve_a_random_username
 
 
 ASCII_ALLOWED_IN_USERNAME = set("0123456789"
@@ -45,7 +46,7 @@ ASCII_ALLOWED_IN_USERNAME = set("0123456789"
 NANSWERS_THRESHOLD = 0  # configured in wireup.py
 
 
-class Participant(Model, MixinElsewhere, MixinTeam):
+class Participant(Model, MixinTeam):
     """Represent a Gittip participant.
     """
 
@@ -151,6 +152,14 @@ class Participant(Model, MixinElsewhere, MixinTeam):
         self.set_attributes(session_expires=session_expires)
 
 
+    # Claimed-ness
+    # ============
+
+    @property
+    def is_claimed(self):
+        return self.claimed_time is not None
+
+
     # Number
     # ======
 
@@ -188,23 +197,14 @@ class Participant(Model, MixinElsewhere, MixinTeam):
     def resolve_unclaimed(self):
         """Given a username, return an URL path.
         """
-        rec = self.db.one( "SELECT platform, user_info "
-                             "FROM elsewhere "
-                             "WHERE participant = %s"
+        rec = self.db.one( "SELECT platform, user_name "
+                           "FROM elsewhere "
+                           "WHERE participant = %s"
                            , (self.username,)
                             )
         if rec is None:
-            out = None
-        elif rec.platform == 'bitbucket':
-            out = '/on/bitbucket/%s/' % rec.user_info['username']
-        elif rec.platform == 'github':
-            out = '/on/github/%s/' % rec.user_info['login']
-        elif rec.platform == 'twitter':
-            out = '/on/twitter/%s/' % rec.user_info['screen_name']
-        else:
-            assert rec.platform == 'openstreetmap'
-            out = '/on/openstreetmap/%s/' % rec.user_info['username']
-        return out
+            return
+        return '/on/%s/%s/' % (rec.platform, rec.user_name)
 
     def set_as_claimed(self):
         claimed_time = self.db.one("""\
@@ -273,7 +273,6 @@ class Participant(Model, MixinElsewhere, MixinTeam):
 
         """
         # TODO: reconsider allowing unicode usernames
-        typecheck(suggested, unicode)
         suggested = suggested.strip()
 
         if not suggested:
@@ -540,7 +539,7 @@ class Participant(Model, MixinElsewhere, MixinTeam):
                      , t.ctime
                      , p.claimed_time
                      , e.platform
-                     , e.user_info
+                     , e.user_name
                   FROM tips t
                   JOIN participants p ON p.username = t.tippee
                   JOIN elsewhere e ON e.participant = t.tippee
@@ -551,9 +550,7 @@ class Participant(Model, MixinElsewhere, MixinTeam):
                      , t.mtime DESC
             ) AS foo
             ORDER BY amount DESC
-                   , lower(user_info->'screen_name')
-                   , lower(user_info->'username')
-                   , lower(user_info->'login')
+                   , lower(user_name)
 
         """
         unclaimed_tips = self.db.all(UNCLAIMED_TIPS, (self.username,))
@@ -661,11 +658,7 @@ class Participant(Model, MixinElsewhere, MixinTeam):
             to_total = [t for t in tips if t['claimed_time'] is not None]
         else:
             to_total = tips
-        total = sum([t['amount'] for t in to_total])
-
-        if not total:
-            # If to_total is an empty list, total is int 0. We want a Decimal.
-            total = Decimal('0.00')
+        total = sum([t['amount'] for t in to_total], Decimal('0.00'))
 
         return tips, total
 
@@ -689,6 +682,378 @@ class Participant(Model, MixinElsewhere, MixinTeam):
             now = datetime.datetime.now(self.claimed_time.tzinfo)
             out = (now - self.claimed_time).total_seconds()
         return out
+
+
+    def get_accounts_elsewhere(self):
+        """Return a dict of AccountElsewhere instances.
+        """
+        accounts = self.db.all("""
+
+            SELECT elsewhere.*::elsewhere_with_participant
+              FROM elsewhere
+             WHERE participant=%s
+
+        """, (self.username,))
+        accounts_dict = {account.platform: account for account in accounts}
+        return accounts_dict
+
+
+    def take_over(self, account, have_confirmation=False):
+        """Given an AccountElsewhere or a tuple (platform_name, user_id),
+        associate an elsewhere account.
+
+        Returns None or raises NeedConfirmation.
+
+        This method associates an account on another platform (GitHub, Twitter,
+        etc.) with the given Gittip participant. Every account elsewhere has an
+        associated Gittip participant account, even if its only a stub
+        participant (it allows us to track pledges to that account should they
+        ever decide to join Gittip).
+
+        In certain circumstances, we want to present the user with a
+        confirmation before proceeding to reconnect the account elsewhere to
+        the new Gittip account; NeedConfirmation is the signal to request
+        confirmation. If it was the last account elsewhere connected to the old
+        Gittip account, then we absorb the old Gittip account into the new one,
+        effectively archiving the old account.
+
+        Here's what absorbing means:
+
+            - consolidated tips to and fro are set up for the new participant
+
+                Amounts are summed, so if alice tips bob $1 and carl $1, and
+                then bob absorbs carl, then alice tips bob $2(!) and carl $0.
+
+                And if bob tips alice $1 and carl tips alice $1, and then bob
+                absorbs carl, then bob tips alice $2(!) and carl tips alice $0.
+
+                The ctime of each new consolidated tip is the older of the two
+                tips that are being consolidated.
+
+                If alice tips bob $1, and alice absorbs bob, then alice tips
+                bob $0.
+
+                If alice tips bob $1, and bob absorbs alice, then alice tips
+                bob $0.
+
+            - all tips to and from the other participant are set to zero
+            - the absorbed username is released for reuse
+            - the absorption is recorded in an absorptions table
+
+        This is done in one transaction.
+        """
+
+        if isinstance(account, AccountElsewhere):
+            platform, user_id = account.platform, account.user_id
+        else:
+            platform, user_id = account
+
+        CREATE_TEMP_TABLE_FOR_UNIQUE_TIPS = """
+
+        CREATE TEMP TABLE __temp_unique_tips ON COMMIT drop AS
+
+            -- Get all the latest tips from everyone to everyone.
+
+            SELECT DISTINCT ON (tipper, tippee)
+                   ctime, tipper, tippee, amount
+              FROM tips
+          ORDER BY tipper, tippee, mtime DESC;
+
+        """
+
+        CONSOLIDATE_TIPS_RECEIVING = """
+
+            -- Create a new set of tips, one for each current tip *to* either
+            -- the dead or the live account. If a user was tipping both the
+            -- dead and the live account, then we create one new combined tip
+            -- to the live account (via the GROUP BY and sum()).
+
+            INSERT INTO tips (ctime, tipper, tippee, amount)
+
+                 SELECT min(ctime), tipper, %(live)s AS tippee, sum(amount)
+
+                   FROM __temp_unique_tips
+
+                  WHERE (tippee = %(dead)s OR tippee = %(live)s)
+                        -- Include tips *to* either the dead or live account.
+
+                AND NOT (tipper = %(dead)s OR tipper = %(live)s)
+                        -- Don't include tips *from* the dead or live account,
+                        -- lest we convert cross-tipping to self-tipping.
+
+                    AND amount > 0
+                        -- Don't include zeroed out tips, so we avoid a no-op
+                        -- zero tip entry.
+
+               GROUP BY tipper
+
+        """
+
+        CONSOLIDATE_TIPS_GIVING = """
+
+            -- Create a new set of tips, one for each current tip *from* either
+            -- the dead or the live account. If both the dead and the live
+            -- account were tipping a given user, then we create one new
+            -- combined tip from the live account (via the GROUP BY and sum()).
+
+            INSERT INTO tips (ctime, tipper, tippee, amount)
+
+                 SELECT min(ctime), %(live)s AS tipper, tippee, sum(amount)
+
+                   FROM __temp_unique_tips
+
+                  WHERE (tipper = %(dead)s OR tipper = %(live)s)
+                        -- Include tips *from* either the dead or live account.
+
+                AND NOT (tippee = %(dead)s OR tippee = %(live)s)
+                        -- Don't include tips *to* the dead or live account,
+                        -- lest we convert cross-tipping to self-tipping.
+
+                    AND amount > 0
+                        -- Don't include zeroed out tips, so we avoid a no-op
+                        -- zero tip entry.
+
+               GROUP BY tippee
+
+        """
+
+        ZERO_OUT_OLD_TIPS_RECEIVING = """
+
+            INSERT INTO tips (ctime, tipper, tippee, amount)
+
+                SELECT ctime, tipper, tippee, 0 AS amount
+                  FROM __temp_unique_tips
+                 WHERE tippee=%s AND amount > 0
+
+        """
+
+        ZERO_OUT_OLD_TIPS_GIVING = """
+
+            INSERT INTO tips (ctime, tipper, tippee, amount)
+
+                SELECT ctime, tipper, tippee, 0 AS amount
+                  FROM __temp_unique_tips
+                 WHERE tipper=%s AND amount > 0
+
+        """
+
+        with self.db.get_cursor() as cursor:
+
+            # Load the existing connection.
+            # =============================
+            # Every account elsewhere has at least a stub participant account
+            # on Gittip.
+
+            rec = cursor.one("""
+
+                SELECT participant
+                     , claimed_time IS NULL AS is_stub
+                  FROM elsewhere
+                  JOIN participants ON participant=participants.username
+                 WHERE elsewhere.platform=%s AND elsewhere.user_id=%s
+
+            """, (platform, user_id), default=NotSane)
+
+            other_username = rec.participant
+
+            if self.username == other_username:
+                # this is a no op - trying to take over itself
+                return
+
+
+            # Make sure we have user confirmation if needed.
+            # ==============================================
+            # We need confirmation in whatever combination of the following
+            # three cases:
+            #
+            #   - the other participant is not a stub; we are taking the
+            #       account elsewhere away from another viable Gittip
+            #       participant
+            #
+            #   - the other participant has no other accounts elsewhere; taking
+            #       away the account elsewhere will leave the other Gittip
+            #       participant without any means of logging in, and it will be
+            #       archived and its tips absorbed by us
+            #
+            #   - we already have an account elsewhere connected from the given
+            #       platform, and it will be handed off to a new stub
+            #       participant
+
+            # other_is_a_real_participant
+            other_is_a_real_participant = not rec.is_stub
+
+            # this_is_others_last_account_elsewhere
+            nelsewhere = cursor.one( "SELECT count(*) FROM elsewhere "
+                                     "WHERE participant=%s"
+                                   , (other_username,)
+                                    )
+            assert nelsewhere > 0           # sanity check
+            this_is_others_last_account_elsewhere = (nelsewhere == 1)
+
+            # we_already_have_that_kind_of_account
+            nparticipants = cursor.one( "SELECT count(*) FROM elsewhere "
+                                        "WHERE participant=%s AND platform=%s"
+                                      , (self.username, platform)
+                                       )
+            assert nparticipants in (0, 1)  # sanity check
+            we_already_have_that_kind_of_account = nparticipants == 1
+
+            need_confirmation = NeedConfirmation( other_is_a_real_participant
+                                                , this_is_others_last_account_elsewhere
+                                                , we_already_have_that_kind_of_account
+                                                 )
+            if need_confirmation and not have_confirmation:
+                raise need_confirmation
+
+
+            # We have user confirmation. Proceed.
+            # ===================================
+            # There is a race condition here. The last person to call this will
+            # win. XXX: I'm not sure what will happen to the DB and UI for the
+            # loser.
+
+
+            # Move any old account out of the way.
+            # ====================================
+
+            if we_already_have_that_kind_of_account:
+                new_stub_username = reserve_a_random_username(cursor)
+                cursor.run( "UPDATE elsewhere SET participant=%s "
+                            "WHERE platform=%s AND participant=%s"
+                          , (new_stub_username, platform, self.username)
+                           )
+
+
+            # Do the deal.
+            # ============
+            # If other_is_not_a_stub, then other will have the account
+            # elsewhere taken away from them with this call. If there are other
+            # browsing sessions open from that account, they will stay open
+            # until they expire (XXX Is that okay?)
+
+            cursor.run( "UPDATE elsewhere SET participant=%s "
+                        "WHERE platform=%s AND user_id=%s"
+                      , (self.username, platform, user_id)
+                       )
+
+
+            # Fold the old participant into the new as appropriate.
+            # =====================================================
+            # We want to do this whether or not other is a stub participant.
+
+            if this_is_others_last_account_elsewhere:
+
+                # Take over tips.
+                # ===============
+
+                x, y = self.username, other_username
+                cursor.run(CREATE_TEMP_TABLE_FOR_UNIQUE_TIPS)
+                cursor.run(CONSOLIDATE_TIPS_RECEIVING, dict(live=x, dead=y))
+                cursor.run(CONSOLIDATE_TIPS_GIVING, dict(live=x, dead=y))
+                cursor.run(ZERO_OUT_OLD_TIPS_RECEIVING, (other_username,))
+                cursor.run(ZERO_OUT_OLD_TIPS_GIVING, (other_username,))
+
+
+                # Archive the old participant.
+                # ============================
+                # We always give them a new, random username. We sign out
+                # the old participant.
+
+                for archive_username in gen_random_usernames():
+                    try:
+                        username = cursor.one("""
+
+                            UPDATE participants
+                               SET username=%s
+                                 , username_lower=%s
+                                 , session_token=NULL
+                                 , session_expires=now()
+                             WHERE username=%s
+                         RETURNING username
+
+                        """, ( archive_username
+                             , archive_username.lower()
+                             , other_username
+                              ), default=NotSane)
+                    except IntegrityError:
+                        continue  # archive_username is already taken;
+                                  # extremely unlikely, but ...
+                                  # XXX But can the UPDATE fail in other ways?
+                    else:
+                        assert username == archive_username
+                        break
+
+
+                # Record the absorption.
+                # ======================
+                # This is for preservation of history.
+
+                cursor.run( "INSERT INTO absorptions "
+                            "(absorbed_was, absorbed_by, archived_as) "
+                            "VALUES (%s, %s, %s)"
+                          , ( other_username
+                            , self.username
+                            , archive_username
+                             )
+                           )
+
+    def delete_elsewhere(self, platform, user_id):
+        """Deletes account elsewhere unless the user would not be able
+        to log in anymore.
+        """
+        user_id = unicode(user_id)
+        with self.db.get_cursor() as cursor:
+            accounts = cursor.all("""
+                SELECT platform, user_id
+                  FROM elsewhere
+                 WHERE participant=%s
+                   AND platform IN %s
+            """, (self.username, AccountElsewhere.signin_platforms_names))
+            assert len(accounts) > 0
+            if not [a for a in accounts if a == (platform, user_id)]:
+                raise NonexistingElsewhere()
+            if len(accounts) == 1:
+                raise LastElsewhere()
+            cursor.one("""
+                DELETE FROM elsewhere
+                WHERE participant=%s
+                AND platform=%s
+                AND user_id=%s
+                RETURNING participant
+            """, (self.username, platform, user_id))
+
+
+class NeedConfirmation(Exception):
+    """Represent the case where we need user confirmation during a merge.
+
+    This is used in the workflow for merging one participant into another.
+
+    """
+
+    def __init__(self, a, b, c):
+        self.other_is_a_real_participant = a
+        self.this_is_others_last_account_elsewhere = b
+        self.we_already_have_that_kind_of_account = c
+        self._all = (a, b, c)
+
+    def __repr__(self):
+        return "<NeedConfirmation: %r %r %r>" % self._all
+    __str__ = __repr__
+
+    def __eq__(self, other):
+        return self._all == other._all
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def __nonzero__(self):
+        # bool(need_confirmation)
+        A, B, C = self._all
+        return A or C
+
+class LastElsewhere(Exception): pass
+
+class NonexistingElsewhere(Exception): pass
 
 
 def typecast(request):

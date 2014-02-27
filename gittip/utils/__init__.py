@@ -1,7 +1,6 @@
 import locale
 import time
 
-import gittip
 import re
 from aspen import log_dammit, Response
 from aspen.utils import typecheck
@@ -273,7 +272,7 @@ def wrap(u):
 def linkify(u):
     escaped = unicode(escape(u))
 
-    urls = re.compile(r"((?:https?://|www\.)[\w\d.-]*\w(?:/(?:\S*\(\S*[^\s.,;:'\"]|\S*[^\s.,;:'\"()])*)?)", re.MULTILINE|re.UNICODE)
+    urls = re.compile(r"((?:https?://|www\.)[\w\d.-]*\w(?:/(?:\S*\(\S*[^\s.,;:'\"]|\S*[^\s.,;:'\"()])*)?)", re.MULTILINE|re.UNICODE|re.IGNORECASE)
     value = urls.sub(r'<a href="\1" target="_blank">\1</a>', escaped)
 
     return value
@@ -365,8 +364,8 @@ def update_homepage_queries_once(db):
         cursor.execute("DELETE FROM homepage_top_givers")
         cursor.execute("""
 
-        INSERT INTO homepage_top_givers (username, anonymous, amount)
-            SELECT tipper, anonymous_giving, sum(amount) AS amount
+        INSERT INTO homepage_top_givers (username, anonymous, amount, avatar_url)
+            SELECT tipper, anonymous_giving, sum(amount) AS amount, avatar_url
               FROM (    SELECT DISTINCT ON (tipper, tippee)
                                amount
                              , tipper
@@ -382,34 +381,17 @@ def update_homepage_queries_once(db):
                       ) AS foo
               JOIN participants p ON p.username = tipper
              WHERE is_suspicious IS NOT true
-          GROUP BY tipper, anonymous_giving
-          ORDER BY amount DESC;
+          GROUP BY tipper, anonymous_giving, avatar_url
+          ORDER BY amount DESC
+             LIMIT 100;
 
         """.strip())
-        cursor.execute("""
-
-        UPDATE homepage_top_givers
-           SET gravatar_id = ( SELECT user_info->'gravatar_id'
-                                 FROM elsewhere
-                                WHERE participant=username
-                                  AND platform='github'
-                              )
-        """)
-        cursor.execute("""
-
-        UPDATE homepage_top_givers
-           SET twitter_pic = ( SELECT user_info->'profile_image_url_https'
-                                 FROM elsewhere
-                                WHERE participant=username
-                                  AND platform='twitter'
-                              )
-        """)
 
         cursor.execute("DELETE FROM homepage_top_receivers")
         cursor.execute("""
 
-        INSERT INTO homepage_top_receivers (username, anonymous, amount, claimed_time)
-            SELECT tippee, anonymous_receiving, sum(amount) AS amount, claimed_time
+        INSERT INTO homepage_top_receivers (username, anonymous, amount, avatar_url)
+            SELECT tippee, anonymous_receiving, sum(amount) AS amount, avatar_url
               FROM (    SELECT DISTINCT ON (tipper, tippee)
                                amount
                              , tippee
@@ -424,28 +406,12 @@ def update_homepage_queries_once(db):
                       ) AS foo
               JOIN participants p ON p.username = tippee
              WHERE is_suspicious IS NOT true
-          GROUP BY tippee, anonymous_receiving, claimed_time
-          ORDER BY amount DESC;
+          GROUP BY tippee, anonymous_receiving, avatar_url
+          ORDER BY amount DESC
+             LIMIT 100;
 
         """.strip())
-        cursor.execute("""
 
-        UPDATE homepage_top_receivers
-           SET gravatar_id = ( SELECT user_info->'gravatar_id'
-                                 FROM elsewhere
-                                WHERE participant=username
-                                  AND platform='github'
-                              )
-        """)
-        cursor.execute("""
-
-        UPDATE homepage_top_receivers
-           SET twitter_pic = ( SELECT user_info->'profile_image_url_https'
-                                 FROM elsewhere
-                                WHERE participant=username
-                                  AND platform='twitter'
-                              )
-        """)
         end = time.time()
         elapsed = end - start
         log_dammit("updated homepage queries in %.2f seconds" % elapsed)
@@ -466,10 +432,8 @@ def log_cursor(f):
         return ret
     return wrapper
 
-def redirect_confirmation(website, request):
-    from aspen import resources
-    request.internally_redirected_from = request.fs
-    request.fs = website.www_root + '/on/confirm.html.spt'
-    request.resource = resources.get(request)
 
-    raise request.resource.respond(request)
+def get_avatar_url(obj):
+    if not obj.avatar_url:
+        return '/assets/-/avatar-default.gif'
+    return obj.avatar_url

@@ -1,4 +1,4 @@
-"""Save a payment method token (balanced_account_uri) for a user.
+"""Save a payment method token (balanced_customer_href) for a user.
 
 When the user fills out the payment details form in the UI, we send the new
 info to Balanced (using the balanced.js library). Balanced always gives us a
@@ -22,7 +22,7 @@ if body.get('action') == 'delete':
     billing.clear( website.db
                  , u"credit card"
                  , user.participant.username
-                 , user.participant.balanced_account_uri
+                 , user.participant.balanced_customer_href
                   )
 elif body.get('action') == 'store-error':
     billing.store_error(website.db, u"credit card", user.participant.username, body['msg'])
@@ -38,7 +38,7 @@ else:
     error = billing.associate( website.db
                              , u"credit card"
                              , user.participant.username
-                             , user.participant.balanced_account_uri
+                             , user.participant.balanced_customer_href
                              , card_uri
                               )
 
