@@ -25,6 +25,13 @@
                         ({{ account.display_name|e }})
                     {% endif %}
                 </a>
+                {% if user.participant == participant %}
+                    <button class="account-delete"
+                            data-platform="{{ platform.name }}"
+                            data-user_id="{{ account.user_id }}">
+                        Disconnect
+                    </button>
+                {% endif %}
                 <div class="account-type">on {{ platform.display_name }}</div>
             {% endif %}
         </td>

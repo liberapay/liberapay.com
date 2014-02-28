@@ -197,6 +197,7 @@ def envvars(website):
         ),
     ]
     website.signin_platforms = PlatformRegistry(signin_platforms)
+    AccountElsewhere.signin_platforms_names = tuple(p.name for p in signin_platforms)
     other_platforms =  [
         Bountysource(
             website.db,
