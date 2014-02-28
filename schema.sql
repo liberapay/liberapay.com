@@ -1159,3 +1159,37 @@ BEGIN;
         WITH FUNCTION load_participant_for_elsewhere(elsewhere);
 
 END;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/pull/2006
+
+BEGIN;
+    CREATE TABLE events
+    ( id        serial      PRIMARY KEY
+    , ts        timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP
+    , type      text        NOT NULL
+    , payload   json
+     );
+
+    CREATE INDEX events_ts ON events(ts ASC);
+    CREATE INDEX events_type ON events(type);
+
+    /* ran branch.py here, took forever :-/ */
+
+    DROP RULE log_api_key_changes ON participants;
+    DROP RULE log_goal_changes ON participants;
+    DROP TABLE goals, api_keys;
+
+END;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/pull/1675
+
+BEGIN;
+    ALTER TABLE participants ADD COLUMN paypal_fee_cap numeric(35,2);
+
+    -- Update not needed in dev.
+    -- UPDATE participants SET paypal_fee_cap=20 WHERE paypal_email IS NOT NULL;
+END;
