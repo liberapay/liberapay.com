@@ -209,20 +209,19 @@ def main():
         print("  [{}] {}".format('x' if os.path.exists(filename) else ' ', filename))
 
     if not sys.argv[1:]:
-        if raw_input("\nCompute input CSV? [y/N] ") == 'y':
-            compute_input_csv()
-        if raw_input("\nCompute output CSVs? [y/N] ") == 'y':
-            compute_output_csvs()
-        if raw_input("\nPost back to Gittip? [y/N] ") == 'y':
-            post_back_to_gittip()
-
-    else:
-        if '-i' in sys.argv:
-            compute_input_csv()
-        if '-o' in sys.argv:
-            compute_output_csvs()
-        if '-p' in sys.argv:
-            post_back_to_gittip()
+        print("Looking for files for {} ...".format(ts))
+        for filename in (INPUT_CSV, PAYPAL_CSV, GITTIP_CSV):
+            print("  [{}] {}".format('x' if os.path.exists(filename) else ' ', filename))
+        print("Rerun with one of these options:")
+        print("  -i - hits db to generate input CSV (needs envvars via heroku + honcho)")
+        print("  -o - computes output CSVs (doesn't need anything but input CSV)")
+        print("  -p - posts back to Gittip (prompts for API key)")
+    elif '-i' in sys.argv:
+        compute_input_csv()
+    elif '-o' in sys.argv:
+        compute_output_csvs()
+    elif '-p' in sys.argv:
+        post_back_to_gittip()
 
 
 if __name__ == '__main__':
