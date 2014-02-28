@@ -64,7 +64,7 @@ class Tests(Harness):
         assert response.code == 400, response.code
 
 
-    # Exercise the log_goal_changes rule.
+    # Exercise the event logging for goal changes.
 
     def test_last_goal_is_stored_in_participants_table(self):
         alice = self.make_alice()
@@ -76,12 +76,13 @@ class Tests(Harness):
         actual = self.db.one("SELECT goal FROM participants")
         assert actual == Decimal("400.00")
 
-    def test_all_goals_are_stored_in_goals_table(self):
+    def test_all_goals_are_stored_in_events_table(self):
         alice = self.make_alice()
         self.change_goal("custom", "100", alice)
         self.change_goal("custom", "200", alice)
         self.change_goal("custom", "300", alice)
         self.change_goal("null", "", alice)
         self.change_goal("custom", "400", alice)
-        actual = self.db.all("SELECT goal FROM goals ORDER BY mtime DESC")
-        assert actual == [400, None, 300, 200, 100]
+        actual = self.db.all("SELECT (payload->'values'->>'goal')::int AS goal "
+                             "FROM events ORDER BY ts DESC")
+        assert actual == [400, None, 300, 200, 100, None]
