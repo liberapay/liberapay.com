@@ -41,8 +41,8 @@ GITTIP_CSV = '{}.output.gittip.csv'.format(ts)
 def round_(d):
     return d.quantize(D('0.01'))
 
-def print_rule():
-    print("-" * 80)
+def print_rule(w=80):
+    print("-" * w)
 
 
 class Payee(object):
@@ -55,16 +55,17 @@ class Payee(object):
     additional_note = ""
 
     def __init__(self, rec):
-        self.username, self.email, amount = rec
+        self.username, self.email, fee_cap, amount = rec
         self.gross = D(amount)
         self.fee = D(0)
+        self.fee_cap = D(fee_cap)
         self.net = self.gross
 
     def assess_fee(self):
         fee = self.gross - round_(self.gross / D('1.02'))   # 2% fee
-        fee = min(fee, D('20.00'))                          # capped at $20
-        self.fee += fee                                     #  XXX or $1 for U.S. :/
-        self.net -= fee                                     #  XXX See #1675.
+        fee = min(fee, self.fee_cap)                        # capped at $20, or $1 for U.S.
+        self.fee += fee
+        self.net -= fee
         if self.net % 1 == D('0.25'):
 
             # Prevent an escrow leak. It's complicated, but it goes something
@@ -113,9 +114,10 @@ def compute_input_csv():
 
     """)
     writer = csv.writer(open(INPUT_CSV, 'w+'))
-    print_rule()
-    print("{:<24}{:<32} {:^7} {:^7} {:^7}".format("username", "email", "balance", "tips", "amount"))
-    print_rule()
+    print_rule(88)
+    headers = "username", "email", "fee cap", "balance", "tips", "amount"
+    print("{:<24}{:<32} {:^7} {:^7} {:^7} {:^7}".format(*headers))
+    print_rule(88)
     total_gross = 0
     for participant in participants:
         tips, total = participant.get_tips_and_total(for_payday=False)
@@ -125,16 +127,17 @@ def compute_input_csv():
             # See https://github.com/gittip/www.gittip.com/issues/1958.
             continue
         total_gross += amount
-        print("{:<24}{:<32} {:>7} {:>7} {:>7}".format( participant.username
-                                                     , participant.paypal_email
-                                                     , participant.balance
-                                                     , total
-                                                     , amount
-                                                      ))
-        row = (participant.username, participant.paypal_email, amount)
+        print("{:<24}{:<32} {:>7} {:>7} {:>7} {:>7}".format( participant.username
+                                                           , participant.paypal_email
+                                                           , participant.paypal_fee_cap
+                                                           , participant.balance
+                                                           , total
+                                                           , amount
+                                                            ))
+        row = (participant.username, participant.paypal_email, participant.paypal_fee_cap, amount)
         writer.writerow(row)
-    print(" "*72, "-"*7)
-    print("{:>80}".format(total_gross))
+    print(" "*80, "-"*7)
+    print("{:>88}".format(total_gross))
 
 
 def compute_output_csvs():
