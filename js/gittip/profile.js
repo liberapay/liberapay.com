@@ -338,7 +338,7 @@ Gittip.profile.init = function() {
         var $this = $(this);
 
         jQuery.ajax({
-            url: "elsewhere.json",
+            url: "delete-elsewhere.json",
             type: "POST",
             dataType: "json",
             success: function ( ) {
