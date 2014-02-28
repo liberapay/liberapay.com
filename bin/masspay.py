@@ -169,7 +169,7 @@ def compute_output_csvs():
     print("{:>64} {:>7} {:>7}".format(total_gross, total_fees, total_net))
 
 
-def record_exchanges_in_gittip():
+def post_back_to_gittip():
 
     try:
         gittip_api_key = os.environ['GITTIP_API_KEY']
@@ -213,16 +213,16 @@ def main():
             compute_input_csv()
         if raw_input("\nCompute output CSVs? [y/N] ") == 'y':
             compute_output_csvs()
-        if raw_input("\nRecord exchanges in Gittip? [y/N] ") == 'y':
-            record_exchanges_in_gittip()
+        if raw_input("\nPost back to Gittip? [y/N] ") == 'y':
+            post_back_to_gittip()
 
     else:
         if '-i' in sys.argv:
             compute_input_csv()
         if '-o' in sys.argv:
             compute_output_csvs()
-        if '-r' in sys.argv:
-            record_exchanges_in_gittip()
+        if '-p' in sys.argv:
+            post_back_to_gittip()
 
 
 if __name__ == '__main__':
