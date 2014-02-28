@@ -203,11 +203,37 @@ def post_back_to_gittip():
                 raise SystemExit
 
 
-def main():
-    print("Looking for files for {} ...".format(ts))
-    for filename in (INPUT_CSV, PAYPAL_CSV, GITTIP_CSV):
-        print("  [{}] {}".format('x' if os.path.exists(filename) else ' ', filename))
+def run_report():
+    """Print a report to help Determine how much escrow we should store in PayPal.
+    """
+    totals = []
+    max_masspay = max_weekly_growth = D(0)
+    for filename in os.listdir('.'):
+        if not filename.endswith('.input.csv'):
+            continue
 
+        datestamp = filename.split('.')[0]
+
+        totals.append(D(0))
+        for rec in csv.reader(open(filename)):
+            amount = rec[-1]
+            totals[-1] += D(amount)
+
+        max_masspay = max(max_masspay, totals[-1])
+        if len(totals) == 1:
+            print("{} {:8}".format(datestamp, totals[-1]))
+        else:
+            weekly_growth = totals[-1] / totals[-2]
+            max_weekly_growth = max(max_weekly_growth, weekly_growth)
+            print("{} {:8} {:4.1f}".format(datestamp, totals[-1], weekly_growth))
+
+    print()
+    print("Max Withdrawal:    ${:9,.2f}".format(max_masspay))
+    print("Max Weekly Growth:  {:8.1f}".format(max_weekly_growth))
+    print("5x Current:        ${:9,.2f}".format(5 * totals[-1]))
+
+
+def main():
     if not sys.argv[1:]:
         print("Looking for files for {} ...".format(ts))
         for filename in (INPUT_CSV, PAYPAL_CSV, GITTIP_CSV):
