@@ -1013,24 +1013,21 @@ class Participant(Model, MixinTeam):
         """
         user_id = unicode(user_id)
         with self.db.get_cursor() as c:
-            accounts = c.all("""
-                SELECT platform, user_id
-                  FROM elsewhere
-                 WHERE participant=%s
-                   AND platform IN %s
-            """, (self.username, AccountElsewhere.signin_platforms_names))
+            ACCOUNTS = "SELECT platform, user_id FROM elsewhere WHERE participant=%s AND platform IN %s"
+            accounts = c.all(ACCOUNTS, (self.username, AccountElsewhere.signin_platforms_names))
             assert len(accounts) > 0
-            if not [a for a in accounts if a == (platform, user_id)]:
-                raise NonexistingElsewhere()
-            if len(accounts) == 1:
+            if len(accounts) == 1 and accounts[0].platform == platform and accounts[0].user_id == user_id:
                 raise LastElsewhere()
-            c.one("""
+            d = c.all("""
                 DELETE FROM elsewhere
                 WHERE participant=%s
                 AND platform=%s
                 AND user_id=%s
                 RETURNING participant
             """, (self.username, platform, user_id))
+            assert len(d) <= 1
+            if len(d) == 0:
+                raise NonexistingElsewhere()
             add_event(c, 'participant', dict(id=self.id, action='disconnect', values=dict(platform=platform, user_id=user_id)))
 
 
