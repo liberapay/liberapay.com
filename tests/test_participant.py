@@ -243,6 +243,22 @@ class TestParticipant(Harness):
         with pytest.raises(LastElsewhere):
             alice.delete_elsewhere('twitter', 1)
 
+    def test_delete_elsewhere_last_signin(self):
+        alice = Participant.from_username('alice')
+        self.make_elsewhere('bountysource', alice.id, 'alice')
+        with pytest.raises(LastElsewhere):
+            alice.delete_elsewhere('twitter', 1)
+
+    def test_delete_elsewhere_nonsignin(self):
+        g = self.make_elsewhere('bountysource', 1, 'alice')
+        alice = Participant.from_username('alice')
+        alice.take_over(g)
+        accounts = alice.get_accounts_elsewhere()
+        assert accounts['twitter'] and accounts['bountysource']
+        alice.delete_elsewhere('bountysource', 1)
+        accounts = alice.get_accounts_elsewhere()
+        assert accounts['twitter'] and accounts.get('bountysource') is None
+
     def test_delete_elsewhere_nonexisting(self):
         alice = Participant.from_username('alice')
         with pytest.raises(NonexistingElsewhere):
