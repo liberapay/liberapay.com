@@ -1020,9 +1020,7 @@ class Participant(Model, MixinTeam):
                    AND platform IN %s
             """, (self.username, AccountElsewhere.signin_platforms_names))
             assert len(accounts) > 0
-            if not [a for a in accounts if a == (platform, user_id)]:
-                raise NonexistingElsewhere()
-            if len(accounts) == 1:
+            if len(accounts) == 1 and accounts[0] == (platform, user_id):
                 raise LastElsewhere()
             c.one("""
                 DELETE FROM elsewhere
@@ -1030,7 +1028,7 @@ class Participant(Model, MixinTeam):
                 AND platform=%s
                 AND user_id=%s
                 RETURNING participant
-            """, (self.username, platform, user_id))
+            """, (self.username, platform, user_id), default=NonexistingElsewhere)
             add_event(c, 'participant', dict(id=self.id, action='disconnect', values=dict(platform=platform, user_id=user_id)))
 
 
