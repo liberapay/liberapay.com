@@ -272,10 +272,24 @@ def wrap(u):
 def linkify(u):
     escaped = unicode(escape(u))
 
-    urls = re.compile(r"((?:https?://|www\.)[\w\d.-]*\w(?:/(?:\S*\(\S*[^\s.,;:'\"]|\S*[^\s.,;:'\"()])*)?)", re.MULTILINE|re.UNICODE|re.IGNORECASE)
-    value = urls.sub(r'<a href="\1" target="_blank">\1</a>', escaped)
+    urls = re.compile(r"""
+        (                         # capture the entire URL
+            (?:(https?://)|www\.) # capture the protocol or match www.
+            [\w\d.-]*\w           # the domain
+            (?:/                  # the path
+                (?:\S*\(
+                    \S*[^\s.,;:'\"]|
+                    \S*[^\s.,;:'\"()]
+                )*
+            )?
+        )
+    """, re.VERBOSE|re.MULTILINE|re.UNICODE|re.IGNORECASE)
 
-    return value
+    return urls.sub(lambda m:
+        '<a href="%s" target="_blank">%s</a>' % (
+            m.group(1) if m.group(2) else 'http://'+m.group(1), m.group(1)
+        )
+    , escaped)
 
 def dict_to_querystring(mapping):
     if not mapping:
