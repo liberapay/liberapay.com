@@ -1007,6 +1007,30 @@ class Participant(Model, MixinTeam):
                              )
                            )
 
+    def delete_elsewhere(self, platform, user_id):
+        """Deletes account elsewhere unless the user would not be able
+        to log in anymore.
+        """
+        user_id = unicode(user_id)
+        with self.db.get_cursor() as c:
+            accounts = c.all("""
+                SELECT platform, user_id
+                  FROM elsewhere
+                 WHERE participant=%s
+                   AND platform IN %s
+            """, (self.username, AccountElsewhere.signin_platforms_names))
+            assert len(accounts) > 0
+            if len(accounts) == 1 and accounts[0] == (platform, user_id):
+                raise LastElsewhere()
+            c.one("""
+                DELETE FROM elsewhere
+                WHERE participant=%s
+                AND platform=%s
+                AND user_id=%s
+                RETURNING participant
+            """, (self.username, platform, user_id), default=NonexistingElsewhere)
+            add_event(c, 'participant', dict(id=self.id, action='disconnect', values=dict(platform=platform, user_id=user_id)))
+
 
 class NeedConfirmation(Exception):
     """Represent the case where we need user confirmation during a merge.
@@ -1035,6 +1059,10 @@ class NeedConfirmation(Exception):
         # bool(need_confirmation)
         A, B, C = self._all
         return A or C
+
+class LastElsewhere(Exception): pass
+
+class NonexistingElsewhere(Exception): pass
 
 
 def typecast(request):

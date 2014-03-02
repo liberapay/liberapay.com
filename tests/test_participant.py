@@ -6,6 +6,7 @@ from decimal import Decimal
 
 import psycopg2
 import pytz
+import pytest
 from aspen.utils import utcnow
 from gittip import NotSane
 from gittip.exceptions import (
@@ -17,7 +18,9 @@ from gittip.exceptions import (
     NoSelfTipping,
     BadAmount,
 )
-from gittip.models.participant import NeedConfirmation, Participant
+from gittip.models.participant import (
+    LastElsewhere, NeedConfirmation, NonexistingElsewhere, Participant
+)
 from gittip.testing import Harness
 
 
@@ -234,6 +237,47 @@ class TestParticipant(Harness):
     def test_connecting_unknown_account_fails(self):
         with self.assertRaises(NotSane):
             Participant.from_username('bob').take_over(('github', 'jim'))
+
+    def test_delete_elsewhere_last(self):
+        alice = Participant.from_username('alice')
+        with pytest.raises(LastElsewhere):
+            alice.delete_elsewhere('twitter', 1)
+
+    def test_delete_elsewhere_last_signin(self):
+        alice = Participant.from_username('alice')
+        self.make_elsewhere('bountysource', alice.id, 'alice')
+        with pytest.raises(LastElsewhere):
+            alice.delete_elsewhere('twitter', 1)
+
+    def test_delete_elsewhere_nonsignin(self):
+        g = self.make_elsewhere('bountysource', 1, 'alice')
+        alice = Participant.from_username('alice')
+        alice.take_over(g)
+        accounts = alice.get_accounts_elsewhere()
+        assert accounts['twitter'] and accounts['bountysource']
+        alice.delete_elsewhere('bountysource', 1)
+        accounts = alice.get_accounts_elsewhere()
+        assert accounts['twitter'] and accounts.get('bountysource') is None
+
+    def test_delete_elsewhere_nonexisting(self):
+        alice = Participant.from_username('alice')
+        with pytest.raises(NonexistingElsewhere):
+            alice.delete_elsewhere('github', 1)
+
+    def test_delete_elsewhere(self):
+        g = self.make_elsewhere('github', 1, 'alice')
+        alice = Participant.from_username('alice')
+        alice.take_over(g)
+        # test preconditions
+        accounts = alice.get_accounts_elsewhere()
+        assert accounts['twitter'] and accounts['github']
+        # do the thing
+        alice.delete_elsewhere('twitter', 1)
+        # unit test
+        accounts = alice.get_accounts_elsewhere()
+        assert accounts.get('twitter') is None and accounts['github']
+
+
 
 
 class Tests(Harness):
