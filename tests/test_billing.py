@@ -130,6 +130,13 @@ class TestBalancedBankAccount(BalancedHarness):
         assert not bank_account.is_setup
         assert not bank_account['id']
 
+    def test_balanced_bank_has_an_account_number(self):
+        balanced.BankAccount.fetch(self.bank_account_href)\
+                            .associate_to_customer(self.balanced_customer_href)
+
+        bank_account = billing.BalancedBankAccount(self.balanced_customer_href)
+        assert bank_account.account_number == 1
+
 
 class TestBillingAssociate(BalancedHarness):
 
