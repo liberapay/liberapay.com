@@ -45,12 +45,7 @@ data:
 db: cloud-db schema data
 
 run: env
-	./$(env_bin)/honcho -e defaults.env,local.env run ./$(env_bin)/aspen \
-		--www_root=www/ \
-		--project_root=. \
-		--show_tracebacks=yes \
-		--changes_reload=yes \
-		--network_address=:8537
+	./$(env_bin)/honcho -e defaults.env,local.env run ./$(env_bin)/aspen
 
 test-cloud-db: env
 	echo -n $(postgression_database) >> tests/local.env
