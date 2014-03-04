@@ -1,6 +1,6 @@
 # Welcome to Gittip [<img height="26px" src="www/assets/gittip.opengraph.png"/>](https://www.gittip.com/)
 
-[![Build Status](https://travis-ci.org/gittip/www.gittip.com.png?branch=master)](https://travis-ci.org/gittip/www.gittip.com)
+[![Build Status](http://img.shields.io/travis/gittip/www.gittip.com/master.svg)](https://travis-ci.org/gittip/www.gittip.com)
 [![HuBoard badge](http://img.shields.io/badge/Hu-Board-7965cc.svg)](https://huboard.com/gittip/www.gittip.com)
 
 Gittip is a weekly gift exchange, helping to create a culture of generosity.
@@ -225,7 +225,7 @@ We use SCSS, with files stored in `scss/`. All of the individual files are
 combined in `scss/gittip.scss` which itself is compiled by `libsass` in
 `www/assets/%version/gittip.css.spt` on each request.
 
-Testing [![Testing](https://secure.travis-ci.org/gittip/www.gittip.com.png)](http://travis-ci.org/gittip/www.gittip.com)
+Testing [![Build Status](http://img.shields.io/travis/gittip/www.gittip.com/master.svg)](https://travis-ci.org/gittip/www.gittip.com)
 =======
 
 Please write unit tests for all new code and all code you change.  Gittip's
