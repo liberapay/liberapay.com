@@ -216,7 +216,7 @@ class BalancedThing(object):
             out = self._thing
             for val in attr_path.split('.'):
                 if type(out) is dict:
-                    # this let's us reach into the meta dict
+                    # this lets us reach into the meta dict
                     out = out.get(val)
                 else:
                     try:
