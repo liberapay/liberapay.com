@@ -201,7 +201,7 @@ class BalancedThing(object):
     _customer = None    # underlying balanced.Customer object
     _thing = None       # underlying balanced.{BankAccount,Card} object
 
-    def __getitem__(self, key, default=""):
+    def __getitem__(self, key):
         """Given a name, return a unicode.
 
         Allow subclasses to provide a flat set of keys, which, under the hood,
@@ -225,8 +225,6 @@ class BalancedThing(object):
                         raise KeyError("{} not found".format(val))
                 if out is None:
                     break
-        if out is None:
-            out = default
         return out
 
     def __init__(self, balanced_customer_href):
