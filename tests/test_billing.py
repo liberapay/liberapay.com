@@ -118,7 +118,7 @@ class TestBalancedBankAccount(BalancedHarness):
 
         assert ba_account.is_setup
 
-        with self.assertRaises(IndexError):
+        with self.assertRaises(KeyError):
             ba_account.__getitem__('invalid')
 
         actual = ba_account['customer_href']
@@ -129,6 +129,13 @@ class TestBalancedBankAccount(BalancedHarness):
         bank_account = billing.BalancedBankAccount(None)
         assert not bank_account.is_setup
         assert not bank_account['id']
+
+    def test_balanced_bank_has_an_account_number(self):
+        balanced.BankAccount.fetch(self.bank_account_href)\
+                            .associate_to_customer(self.balanced_customer_href)
+
+        bank_account = billing.BalancedBankAccount(self.balanced_customer_href)
+        assert bank_account['account_number'] == 'xxx233a'
 
 
 class TestBillingAssociate(BalancedHarness):
