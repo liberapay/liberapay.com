@@ -168,54 +168,67 @@ def envvars(website):
     def is_yesish(val):
         return val.lower() in ('1', 'true', 'yes')
 
-    signin_platforms = [
-        Twitter(
-            website.db,
-            envvar('TWITTER_CONSUMER_KEY'),
-            envvar('TWITTER_CONSUMER_SECRET'),
-            envvar('TWITTER_CALLBACK'),
-        ),
-        GitHub(
-            website.db,
-            envvar('GITHUB_CLIENT_ID'),
-            envvar('GITHUB_CLIENT_SECRET'),
-            envvar('GITHUB_CALLBACK'),
-        ),
-        Bitbucket(
-            website.db,
-            envvar('BITBUCKET_CONSUMER_KEY'),
-            envvar('BITBUCKET_CONSUMER_SECRET'),
-            envvar('BITBUCKET_CALLBACK'),
-        ),
-        OpenStreetMap(
-            website.db,
-            envvar('OPENSTREETMAP_CONSUMER_KEY'),
-            envvar('OPENSTREETMAP_CONSUMER_SECRET'),
-            envvar('OPENSTREETMAP_CALLBACK'),
-            envvar('OPENSTREETMAP_API_URL'),
-            envvar('OPENSTREETMAP_AUTH_URL'),
-        ),
-    ]
+
+    # Accounts Elsewhere
+    # ==================
+
+    twitter = Twitter(
+        website.db,
+        envvar('TWITTER_CONSUMER_KEY'),
+        envvar('TWITTER_CONSUMER_SECRET'),
+        envvar('TWITTER_CALLBACK'),
+    )
+    github = GitHub(
+        website.db,
+        envvar('GITHUB_CLIENT_ID'),
+        envvar('GITHUB_CLIENT_SECRET'),
+        envvar('GITHUB_CALLBACK'),
+    )
+    bitbucket = Bitbucket(
+        website.db,
+        envvar('BITBUCKET_CONSUMER_KEY'),
+        envvar('BITBUCKET_CONSUMER_SECRET'),
+        envvar('BITBUCKET_CALLBACK'),
+    )
+    openstreetmap = OpenStreetMap(
+        website.db,
+        envvar('OPENSTREETMAP_CONSUMER_KEY'),
+        envvar('OPENSTREETMAP_CONSUMER_SECRET'),
+        envvar('OPENSTREETMAP_CALLBACK'),
+        envvar('OPENSTREETMAP_API_URL'),
+        envvar('OPENSTREETMAP_AUTH_URL'),
+    )
+    bountysource = Bountysource(
+        website.db,
+        None,
+        envvar('BOUNTYSOURCE_API_SECRET'),
+        envvar('BOUNTYSOURCE_CALLBACK'),
+        envvar('BOUNTYSOURCE_API_HOST'),
+        envvar('BOUNTYSOURCE_WWW_HOST'),
+    )
+    venmo = Venmo(
+        website.db,
+        envvar('VENMO_CLIENT_ID'),
+        envvar('VENMO_CLIENT_SECRET'),
+        envvar('VENMO_CALLBACK'),
+    )
+
+    # For signing in.
+    signin_platforms = [twitter, github, bitbucket, openstreetmap]
     website.signin_platforms = PlatformRegistry(signin_platforms)
     AccountElsewhere.signin_platforms_names = tuple(p.name for p in signin_platforms)
-    other_platforms =  [
-        Bountysource(
-            website.db,
-            None,
-            envvar('BOUNTYSOURCE_API_SECRET'),
-            envvar('BOUNTYSOURCE_CALLBACK'),
-            envvar('BOUNTYSOURCE_API_HOST'),
-            envvar('BOUNTYSOURCE_WWW_HOST'),
-        ),
-        Venmo(
-            website.db,
-            envvar('VENMO_CLIENT_ID'),
-            envvar('VENMO_CLIENT_SECRET'),
-            envvar('VENMO_CALLBACK'),
-        ),
-    ]
-    platforms = signin_platforms + other_platforms
-    website.platforms = AccountElsewhere.platforms = PlatformRegistry(platforms)
+
+    # For displaying "Connected Accounts"
+    website.social_profiles = [twitter, github, bitbucket, openstreetmap, bountysource]
+    website.aaaaaaand_venmo = venmo
+
+    # For ... what? Something, probably.
+    all_platforms = signin_platforms + [bountysource, venmo]
+    website.platforms = AccountElsewhere.platforms = PlatformRegistry(all_platforms)
+
+
+    # Other Stuff
+    # ===========
 
     website.asset_version_url = envvar('GITTIP_ASSET_VERSION_URL') \
                                       .replace('%version', website.version)
@@ -229,6 +242,10 @@ def envvars(website):
     website.min_threads = envvar('MIN_THREADS', int)
     website.log_busy_threads_every = envvar('LOG_BUSY_THREADS_EVERY', int)
     website.log_metrics = is_yesish(envvar('LOG_METRICS'))
+
+
+    # Error Checking
+    # ==============
 
     if malformed_values:
         malformed_values.sort()
