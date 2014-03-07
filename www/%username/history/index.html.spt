@@ -169,6 +169,12 @@ locked = False
             ${{ participant.balance }}.</h2>
         {% if user.ADMIN %}
         <h2>Record an Exchange.</h2>
+        <p style="text-align: left">
+            <b>Amount</b> is a black number. Positive for payins ("Credits"),
+            negative for payouts ("Bank").<br>
+            <b>Fee</b> is always positive.<br>
+            <b>Note</b> is required.
+        </p>
         <form style="text-align: left;" action="record-an-exchange"
             method="POST">
             <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
