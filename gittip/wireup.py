@@ -220,7 +220,6 @@ def envvars(website):
 
     # For displaying "Connected Accounts"
     website.social_profiles = [twitter, github, bitbucket, openstreetmap, bountysource]
-    website.aaaaaaand_venmo = venmo
 
     # For ... what? Something, probably.
     all_platforms = signin_platforms + [bountysource, venmo]
