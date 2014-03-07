@@ -213,7 +213,6 @@ def envvars(website):
         envvar('VENMO_CALLBACK'),
     )
 
-    # For signing in.
     signin_platforms = [twitter, github, bitbucket, openstreetmap]
     website.signin_platforms = PlatformRegistry(signin_platforms)
     AccountElsewhere.signin_platforms_names = tuple(p.name for p in signin_platforms)
@@ -221,7 +220,6 @@ def envvars(website):
     # For displaying "Connected Accounts"
     website.social_profiles = [twitter, github, bitbucket, openstreetmap, bountysource]
 
-    # For ... what? Something, probably.
     all_platforms = signin_platforms + [bountysource, venmo]
     website.platforms = AccountElsewhere.platforms = PlatformRegistry(all_platforms)
 
