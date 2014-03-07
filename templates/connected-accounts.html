@@ -3,41 +3,13 @@
 
 <h2>Connected Accounts</h2>
 <table id="accounts">
-{% for platform in website.platforms %}
-    {% set account = accounts.get(platform.name, None) %}
-    {{ account_row(platform, account, auth_button) }}
-{% endfor %}
-    <tr>
-        <td class="account-type">
-            <img src="/assets/balanced-avatar.png" />
-        </td>
-        <td class="account-details">
-            {% if user.participant == participant %}
 
-            <a href="/credit-card.html">Credit card</a>:
-            <!--
-            These spans are here because otherwise Chrome effs up the
-            unicode(?!)
-            -->
-            <span>{% if participant.last_bill_result != "" %}&#x2718;{% else %}&#x2714;{% endif %}</span>
-            &nbsp; &nbsp; &nbsp;
-            <a href="/bank-account.html">Bank account</a>:
-            <span>{% if participant.last_ach_result != "" %}&#x2718;{% else %}&#x2714;{% endif %}</span>
+    <!-- social profiles -->
+    {% for platform in website.social_profiles %}
+    {{ account_row(platform, accounts, auth_button) }}
+    {% endfor %}
 
-            {% else %}
-
-            Credit card:
-            <span>{% if participant.last_bill_result != "" %}&#x2718;{% else %}&#x2714;{% endif %}</span>
-            &nbsp; &nbsp; &nbsp;
-            Bank account:
-            <span>{% if participant.last_ach_result != "" %}&#x2718;{% else %}&#x2714;{% endif %}</span>
-
-            {% endif %}
-            <div class="account-type">{% if user.ADMIN and participant.balanced_customer_href %}
-                <a href="https://dashboard.balancedpayments.com/#/{{ participant.balanced_customer_href[4:] }}"
-                    >on Balanced Payments</a>{% else %}on Balanced Payments{% endif %}</div>
-        </td>
-    </tr>
+    <!-- one-off receiving options -->
     <tr>
         <td class="account-type">
             <img src="/assets/bitcoin.png" />
@@ -85,6 +57,40 @@
                     <button type="cancel" class="bitcoin cancel hidden">Cancel</button>
                 </div>
             </form>
+        </td>
+    </tr>
+    {{ account_row(website.platforms.venmo, accounts, auth_button) }}
+
+    <!-- add/withdraw money (recurring) -->
+    <tr>
+        <td class="account-type">
+            <img src="/assets/balanced-avatar.png" />
+        </td>
+        <td class="account-details">
+            {% if user.participant == participant %}
+
+            <a href="/credit-card.html">Credit card</a>:
+            <!--
+            These spans are here because otherwise Chrome effs up the
+            unicode(?!)
+            -->
+            <span>{% if participant.last_bill_result != "" %}&#x2718;{% else %}&#x2714;{% endif %}</span>
+            &nbsp; &nbsp; &nbsp;
+            <a href="/bank-account.html">Bank account</a>:
+            <span>{% if participant.last_ach_result != "" %}&#x2718;{% else %}&#x2714;{% endif %}</span>
+
+            {% else %}
+
+            Credit card:
+            <span>{% if participant.last_bill_result != "" %}&#x2718;{% else %}&#x2714;{% endif %}</span>
+            &nbsp; &nbsp; &nbsp;
+            Bank account:
+            <span>{% if participant.last_ach_result != "" %}&#x2718;{% else %}&#x2714;{% endif %}</span>
+
+            {% endif %}
+            <div class="account-type">{% if user.ADMIN and participant.balanced_customer_href %}
+                <a href="https://dashboard.balancedpayments.com/#/{{ participant.balanced_customer_href[4:] }}"
+                    >on Balanced Payments</a>{% else %}on Balanced Payments{% endif %}</div>
         </td>
     </tr>
 </table>
