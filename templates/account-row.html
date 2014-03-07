@@ -1,4 +1,5 @@
-{% macro account_row(platform, account, auth_button) %}
+{% macro account_row(platform, accounts, auth_button) %}
+    {% set account = accounts.get(platform.name, None) %}
     <tr>
         <td class="account-type">
             <img src="/assets/{{ platform.name }}.png" />
