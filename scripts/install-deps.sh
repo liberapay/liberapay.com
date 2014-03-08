@@ -11,7 +11,7 @@ pkgmissing() {
 }
 
 if pkgmissing postgresql-9.3; then
-    if [ ! dpkg -l postgresql-9.3 ];
+    if ! dpkg -l postgresql-9.3
     then
         echo " configuring apt for postgres-9.3"
         codename=`lsb_release -cs`
@@ -58,7 +58,7 @@ for package in $dependencies; do
 done
 
 if [ -n "$pkgtoinstall" ]; then
-    echo sudo apt-get install -y $pkgtoinstall;
+    sudo apt-get install -y $pkgtoinstall;
 fi;
 
 echo "done"
