@@ -22,6 +22,7 @@ if pkgmissing postgresql-9.3; then
         sudo apt-get update
     fi
     sudo apt-get install -y postgresql-9.3 postgresql-contrib
+    sudo service postgresql start
 fi;
 
 if [ -z ""`psql template1 -tAc "select usename from pg_user where usename='$USER'"` ];
@@ -48,7 +49,7 @@ then
     createdb gittip
 fi
 
-dependencies="git make libpq-dev python-dev g++"
+dependencies="git make libpq-dev python-dev g++ language-pack-en"
 
 for package in $dependencies; do
     if pkgmissing $package; then
