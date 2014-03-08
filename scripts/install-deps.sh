@@ -2,6 +2,10 @@
 
 set -e # exit when any command fails
 
+# Install base dependencies
+sudo apt-get install -y g++ git language-pack-en libpq-dev make python-dev wget
+
+# Get Postgres installed and running
 pkgmissing() {
     if dpkg -l | grep 'ii  '$1' ' > /dev/null;
     then
@@ -23,7 +27,7 @@ if pkgmissing postgresql-9.3; then
     fi
     sudo apt-get install -y postgresql-9.3 postgresql-contrib
     sudo service postgresql start
-fi;
+fi
 
 if [ -z ""`psql template1 -tAc "select usename from pg_user where usename='$USER'"` ];
 then
@@ -48,18 +52,5 @@ if ! db_exists gittip;
 then
     createdb gittip
 fi
-
-dependencies="git make libpq-dev python-dev g++ language-pack-en"
-
-for package in $dependencies; do
-    if pkgmissing $package; then
-        echo "missing:" $package
-        pkgtoinstall=$pkgtoinstall" "$package
-    fi
-done
-
-if [ -n "$pkgtoinstall" ]; then
-    sudo apt-get install -y $pkgtoinstall;
-fi;
 
 echo "done"
