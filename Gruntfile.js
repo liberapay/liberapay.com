@@ -2,7 +2,7 @@ var http = require('http');
 var spawn = require('child_process').spawn;
 var fs = require('fs');
 var ini = require('ini');
-var env = ini.parse(fs.readFileSync('local.env', 'utf8'));
+var env = ini.parse(fs.readFileSync('defaults.env', 'utf8'));
 
 module.exports = function(grunt) {
     'use strict';
