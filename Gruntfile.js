@@ -82,7 +82,7 @@ module.exports = function(grunt) {
     grunt.registerTask('default', ['test']);
     grunt.registerTask('test', ['jshint', 'aspen:start', 'karma:singlerun']);
 
-    grunt.registerTask('aspen:start', 'Start Aspen (if necessary)', function gittipStart() {
+    grunt.registerTask('aspen:start', 'Start Aspen (if necessary)', function aspenStart() {
         var done = this.async();
 
         grunt.config.requires('env.CANONICAL_HOST');
