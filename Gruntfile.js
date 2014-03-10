@@ -2,6 +2,7 @@ var http = require('http');
 var spawn = require('child_process').spawn;
 var fs = require('fs');
 var ini = require('ini');
+var yaml = require('js-yaml');
 
 module.exports = function(grunt) {
     'use strict';
@@ -96,7 +97,15 @@ module.exports = function(grunt) {
 
             var started = false;
             var stdout = [];
-            var child = spawn('make', ['run']);
+
+            var aspen = yaml.safeLoad(fs.readFileSync('Procfile', 'utf8')).web
+                            .replace('$PORT', canonicalHost.match(/\d+$/)[0])
+                            .split(' ');
+
+            var bin = 'env/' + (process.platform == 'win32' ? 'Scripts' : 'bin');
+            var child = spawn(bin + '/' + aspen.shift(), aspen, {
+                env: grunt.config.get('env')
+            });
 
             child.stdout.setEncoding('utf8');
 
