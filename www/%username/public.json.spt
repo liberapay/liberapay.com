@@ -18,6 +18,7 @@ output = { "id": participant.id
          , "avatar": participant.avatar_url
          , "number": participant.number
          , "on": "gittip"
+         , "npatrons": participant.get_number_of_backers()
           }
 
 
