@@ -10,7 +10,7 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
-        env: ini.parse(fs.readFileSync('defaults.env', 'utf8')),
+        env: ini.parse(fs.readFileSync('tests/defaults.env', 'utf8')),
 
         watch: {
             gruntfile: {
@@ -60,7 +60,7 @@ module.exports = function(grunt) {
                 reporters: 'dots',
                 frameworks: ['mocha', 'browserify'],
                 urlRoot: '/karma/',
-                proxies: { '/': 'http://<%= env.CANONICAL_HOST %>/' },
+                proxies: { '/': 'http://<%= env.CANONICAL_HOST || "localhost:8537" %>/' },
                 files: [
                     'www/assets/jquery-1.10.2.min.js',
                     'www/assets/%version/utils.js',
@@ -86,7 +86,7 @@ module.exports = function(grunt) {
         var done = this.async();
 
         grunt.config.requires('env.CANONICAL_HOST');
-        var canonicalHost = grunt.config.get('env.CANONICAL_HOST');
+        var canonicalHost = grunt.config.get('env.CANONICAL_HOST') || 'localhost:8537';
 
         http.get('http://' + canonicalHost + '/', function(res) {
             grunt.log.writeln('Aspen seems to be running already. Doing nothing.');
@@ -112,11 +112,11 @@ module.exports = function(grunt) {
             child.stdout.on('data', function(data) {
                 stdout.push(data);
 
-                if (!started && /Greetings, program! Welcome to port 8537\./.test(data)) {
+                if (!started && /Greetings, program! Welcome to port \d+\./.test(data)) {
                     started = true;
                     grunt.log.writeln('started.');
                     setTimeout(done, 1000);
-                } else if (started && /Is something already running on port 8537/.test(data)) {
+                } else if (started && /Is something already running on port \d+/.test(data)) {
                     started = false;
                 }
             });
