@@ -24,12 +24,12 @@ module.exports = function(grunt) {
 
             js: {
                 files: '<%= jshint.js %>',
-                tasks: ['jshint:js', 'karma:tests:run']
+                tasks: ['jshint:js', 'dalek']
             },
 
             tests: {
                 files: '<%= jshint.tests %>',
-                tasks: ['jshint:tests', 'karma:tests:run']
+                tasks: ['jshint:tests', 'dalek']
             }
         },
 
@@ -50,41 +50,17 @@ module.exports = function(grunt) {
             }
         },
 
-        karma: {
-            tests: {
-                hostname: '0.0.0.0'
-            },
-
-            singlerun: {
-                singleRun: true
-            },
-
-            options: {
-                browsers: ['PhantomJS'],
-                reporters: 'dots',
-                frameworks: ['mocha', 'browserify'],
-                urlRoot: '/karma/',
-                proxies: { '/': 'http://<%= env.CANONICAL_HOST || "localhost:8537" %>/' },
-                files: [
-                    'www/assets/jquery-1.10.2.min.js',
-                    'www/assets/%version/utils.js',
-                    'jstests/**/*.js',
-                ],
-
-                browserify: { watch: true },
-                preprocessors: {
-                    'jstests/**/*.js': ['browserify']
-                }
-            }
+        dalek: {
+            tests: 'jstests/**/test_*.js'
         }
     });
 
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-karma');
+    grunt.loadNpmTasks('grunt-dalek');
 
     grunt.registerTask('default', ['test']);
-    grunt.registerTask('test', ['jshint', 'aspen:start', 'karma:singlerun']);
+    grunt.registerTask('test', ['jshint', 'aspen:start', 'dalek']);
 
     grunt.registerTask('aspen:start', 'Start Aspen (if necessary)', function aspenStart() {
         var done = this.async();
