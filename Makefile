@@ -58,7 +58,9 @@ test-db: test-cloud-db test-schema
 pyflakes: env
 	./$(env_bin)/pyflakes bin gittip tests
 
-test: env test-schema
+test: pytest jstest
+
+pytest: env test-schema
 	./$(env_bin)/honcho -e tests/defaults.env,tests/local.env run ./$(env_bin)/py.test ./tests/py/
 	@$(MAKE) --no-print-directory pyflakes
 
