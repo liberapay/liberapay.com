@@ -505,3 +505,4 @@ and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
  - [Upstart](https://www.upstart.com/) - Raise money from your future self
  - [Gitcoin](http://www.gitcoin.co/) - Give bitcoin donations to your favorite projects.
  - [Patronism](http://patronism.com/) - Become a patron of your favorite band.
+ - [Beacon](http://www.beaconreader.com/) - Fund one writer for $5 a month
