@@ -10,7 +10,11 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
-        env: ini.parse(fs.readFileSync('tests/defaults.env', 'utf8')),
+        env: ini.parse(
+            fs.readFileSync('tests/defaults.env', 'utf8') +
+            (fs.existsSync('tests/local.env') ?
+                fs.readFileSync('tests/local.env', 'utf8') : '')
+        ),
 
         watch: {
             gruntfile: {
