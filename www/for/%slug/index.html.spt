@@ -286,7 +286,7 @@ $(document).ready(function() {
 </div>
 
 <div class="more-container">
-    <a href="/for/{{ community.slug }}/?limit=24"><button class="selected">More</button></a>
+    <a href="/for/{{ community.slug }}/?limit={{ limit + 12 }}"><button class="selected">More</button></a>
 </div>
 
 {% endif %}
