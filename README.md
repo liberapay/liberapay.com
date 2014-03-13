@@ -77,6 +77,10 @@ and `python-dev` (includes Python header files for `psycopg2`).
 If you are receiving issues from `psycopg2`, please [ensure that its needs are
 met](http://initd.org/psycopg/docs/faq.html#problems-compiling-and-deploying-psycopg2).
 
+If you are getting an error about `unknown argument: '-mno-fused-madd'` when running `make`, then add `Wno-error=unused-command-line-argument-hard-error-in-future` to your `ARCHFLAGS` environment variable and try again (see [this Stack Overflow answer for more information](http://stackoverflow.com/a/22355874/347246):
+
+    $ ARCHFLAGS=-Wno-error=unused-command-line-argument-hard-error-in-future
+
 Building
 --------
 
