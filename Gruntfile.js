@@ -36,7 +36,7 @@ module.exports = function(grunt) {
         jshint: {
             gruntfile: 'Gruntfile.js',
             js: 'js/**/*.{js,json}',
-            tests: 'jstests/**/*.js',
+            tests: 'tests/js/**/*.js',
 
             options: {
                 jshintrc: '.jshintrc',
@@ -51,7 +51,7 @@ module.exports = function(grunt) {
         },
 
         dalek: {
-            tests: 'jstests/**/test_*.js'
+            tests: 'tests/js/**/test_*.js'
         }
     });
 
