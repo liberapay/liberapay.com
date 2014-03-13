@@ -1,14 +1,25 @@
-describe('The homepage', function() {
+module.exports = {
 
-    it('should render copy correctly', function() {
-        body.find('h2.top span').text().should.contain('Sustainable Crowdfunding');
-        body.find('h1 span').text().should.contain('Inspiring Generosity');
-    });
+    'Copy should render correctly': function(test) {
+        test.expect(2);
 
-    describe('Jump Box (Who inspires you?)', function() {
-        it('should let you search for users through their connected accounts');
-        it('should strip obviously invalid characters before submitting');
-        it('should strip leading and trailing whitespace before submitting');
-    });
+        test.open('http://localhost:8537')
+            .assert.text('h2.top span').is('Sustainable Crowdfunding')
+            .assert.text('h1 span').is('Inspiring Generosity')
+            .done();
+    },
 
-});
+    'Jump Box (Who inspires you?)': function(test) {
+        test.expect(1);
+
+        test.open('http://localhost:8537')
+            .type('#jump input', '˚aø¶')
+            .submit('#jump')
+            .assert.url().is('http://localhost:8537/on/twitter/a/')
+            .done();
+    },
+
+    //'should strip leading and trailing whitespace before submitting': function(test) {},
+    //'should let you search for users through their connected accounts': function(test) {},
+
+};
