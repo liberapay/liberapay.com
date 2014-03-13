@@ -23,7 +23,7 @@ TOP = realpath(join(dirname(dirname(__file__)), '..'))
 SCHEMA = open(join(TOP, "schema.sql")).read()
 WWW_ROOT = str(realpath(join(TOP, 'www')))
 PROJECT_ROOT = str(TOP)
-FIXTURES_ROOT = join(TOP, 'tests', 'fixtures')
+FIXTURES_ROOT = join(TOP, 'tests', 'py', 'fixtures')
 
 
 class ClientWithAuth(Client):
