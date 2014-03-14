@@ -18,6 +18,10 @@
         }
     }
 
+    #accounts {
+        width: 100%;
+    }
+
     .col0, .col1, .col2 {
         float: none;
         margin: auto;
@@ -29,7 +33,7 @@
 // Smaller tablets in portrait/landscape phones
 @media (max-width: 700px) {
     .luxury {
-        display: none !important;  
+        display: none !important;
     }
 
     #hero {
@@ -62,7 +66,7 @@
         max-width: 100%;
         text-align: left;
         width: 480px;
-        
+
         .social, ul, li {
             float: none;
         }
@@ -113,7 +117,7 @@
     #leaderboard {
         .people {
             width: $people-column-width * 3;
-            
+
             li:nth-child(4n) {
                 display: none;
             }

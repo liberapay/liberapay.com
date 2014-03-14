@@ -5,30 +5,28 @@
             <img src="/assets/{{ platform.name }}.png" />
         </td>
         <td class="account-details">
+            <div class="account-type">{{ platform.display_name }}</div>
             {% if account == None %}
+                <span class="none">None</span>
                 {% if not user.ANON and user.participant == participant %}
                     {% call auth_button(platform.name, 'connect') %}
-                        Connect a {{ platform.display_name }} account
+                        + Add
                     {% endcall %}
-                {% else %}
-                    No {{ platform.display_name }} account connected.
                 {% endif %}
             {% else %}
-                <a rel="me" href="{{ account.html_url|e }}"
-                    ><img class="avatar" src="{{ get_avatar_url(account)|e }}"
-                    />{{ account.user_name|e }}
+                <img class="avatar" src="{{ get_avatar_url(account)|e }}"/>
+                <a class="account-username" rel="me" href="{{ account.html_url|e }}"
+                    >{{ account.user_name|e }}
                     {% if account.display_name and account.display_name != account.user_name %}
                         ({{ account.display_name|e }})
                     {% endif %}
                 </a>
                 {% if user.participant == participant %}
-                    <button class="account-delete"
+                    <div class="account-delete close" title="Disconnect"
                             data-platform="{{ platform.name }}"
                             data-user_id="{{ account.user_id }}">
-                        Disconnect
-                    </button>
+                    </div>
                 {% endif %}
-                <div class="account-type">on {{ platform.display_name }}</div>
             {% endif %}
         </td>
     </tr>
