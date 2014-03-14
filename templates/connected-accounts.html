@@ -59,9 +59,13 @@
             <img src="/assets/balanced-avatar.png" />
         </td>
         <td class="account-details">
-            <div class="account-type">{% if user.ADMIN and participant.balanced_customer_href %}
-                <a href="https://dashboard.balancedpayments.com/#/{{ participant.balanced_customer_href[4:] }}"
-                    >on Balanced Payments</a>{% else %}on Balanced Payments{% endif %}</div>
+            <div class="account-type">
+                Balanced Payments
+                {% if user.ADMIN and participant.balanced_customer_href %}
+                (<a href="https://dashboard.balancedpayments.com/#/{{ participant.balanced_customer_href[4:] }}"
+                    >view on dashboard</a>)
+                {% endif %}
+            </div>
             {% if user.participant == participant %}
 
             <a href="/credit-card.html">Credit card</a>:
