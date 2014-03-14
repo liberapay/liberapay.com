@@ -12,8 +12,6 @@
                     {% call auth_button(platform.name, 'connect') %}
                         + Add
                     {% endcall %}
-                {% else %}
-                    No {{ platform.display_name }} account connected.
                 {% endif %}
             {% else %}
                 <img class="avatar" src="{{ get_avatar_url(account)|e }}"/>
