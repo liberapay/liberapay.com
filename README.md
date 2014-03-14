@@ -514,3 +514,4 @@ and [crowdsourcing.org's](http://www.crowdsourcing.org/directory)*
  - [Gitcoin](http://www.gitcoin.co/) - Give bitcoin donations to your favorite projects.
  - [Patronism](http://patronism.com/) - Become a patron of your favorite band.
  - [Beacon](http://www.beaconreader.com/) - Fund one writer for $5 a month
+ - [ChangeTip](https://www.changetip.com/) - A love button for the Internet
