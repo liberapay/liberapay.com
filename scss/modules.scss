@@ -71,15 +71,40 @@ a.mini-user:hover {
 #accounts {
     margin-bottom: 12pt;
     width: 400px;
+    span.none {
+        font-style: italic;
+        color: $gray;
+    }
+    #cc-delete, #cb-delete, #ba-delete {
+        display: inline-block;
+        float: right;
+        margin-top: -13px;
+    }
+    .auth-button, .account-delete {
+        float: right;
+        margin-top: -13px;
+    }
+    table {
+        width: 100%;
+    }
+    tr {
+        border-top: 1px solid $light-gray;
+
+        &:last-of-type {
+            border-bottom: 1px solid $light-gray;
+        }
+    }
     td {
         text-align: left;
         vertical-align: middle;
+        vertical-align: -webkit-baseline-middle;
         line-height: 100%;
 
         &.account-type {
-            border-right: 1pt solid #B2A196;
             padding: 6pt 6pt 6pt 0;
             width: 49px;
+            margin-bottom: 3px;
+
             img {
                 width: 36pt;
                 height: 36pt;
@@ -87,11 +112,37 @@ a.mini-user:hover {
         }
     }
     div.account-type {
-        font-size: x-small;
+        font-size: 12px;
         clear: both;
-        color: $light-brown;
+        color: $gray;
+        text-transform: uppercase;
+        padding: 3px 0;
     }
     .account-details {
+        padding: 10px;
+        position: relative;
+    }
+    .close {
+        position: absolute;
+        background-image: url("/assets/close_button.png");
+        background-size: cover;
+        width: 15px;
+        height: 15px;
+        top: 25px;
+        right: 20px;
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+    .payments-by {
+        background-image: url("/assets/payments-by.png");
+        background-size: cover;
+        width: 200px;
+        height: 24px;
+        display: inline-block;
+        float: right;
+        margin-bottom: 5px;
         padding-left: 6pt;
         > a {
             line-height: 24pt;
