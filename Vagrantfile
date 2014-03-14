@@ -7,6 +7,10 @@ VAGRANTFILE_API_VERSION = "2"
 PROJECT_DIRECTORY = 'www.gittip.com'
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.provider "virtualbox" do |v|
+    v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+  end
+
   config.vm.box = "precise64"
   config.vm.box_url = "http://files.vagrantup.com/precise64.box"
 
@@ -17,11 +21,19 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # TODO: Pin apt-get packages to the same versions Heroku uses
 
   # Install dependencies
-  config.vm.provision :shell, :inline => "sudo apt-get update"
-  config.vm.provision :shell, :inline => "sudo apt-get -y install make git build-essential python-software-properties postgresql-9.1 postgresql-contrib-9.1 libpq-dev python-dev"
+  config.vm.provision :shell, :inline => <<-eos
+    echo 'deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main' > /etc/apt/sources.list.d/postgresql.list
+    wget -qO- https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
+    apt-get update
+    apt-get -y install make git build-essential python-software-properties postgresql-9.3 postgresql-contrib-9.3 libpq-dev python-dev
+  eos
 
   # Configure Postgres
-  config.vm.provision :shell, :inline => "sudo su - postgres -c 'psql -U postgres -qf /home/vagrant/#{PROJECT_DIRECTORY}/create_db.sql'"
+  config.vm.provision :shell, :inline => <<-eos
+    sudo -u postgres psql -U postgres -qf /home/vagrant/#{PROJECT_DIRECTORY}/create_db.sql
+    sudo -u postgres createuser --superuser root
+    sudo -u postgres createuser --superuser vagrant
+  eos
 
   # Warn if Windows newlines are detected and try to fix the problem
   config.vm.provision :shell, :inline => <<-eos
@@ -53,19 +65,17 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   eos
 
   # Set up the environment, the database, and run Gittip
-  config.vm.provision :shell, :inline => "cd #{PROJECT_DIRECTORY} && make local.env env schema data"
+  config.vm.provision :shell, :inline => "cd #{PROJECT_DIRECTORY} && make env schema data"
 
-  # Add run script
+  # add run script
   config.vm.provision :shell, :inline => <<-eos
-    echo "#!/bin/sh" > run
-    echo "sudo pkill aspen" >> run
-    echo "cd #{PROJECT_DIRECTORY}" >> run
-    echo "make run" >> run
-    chmod +x run
+    echo >> .profile
+    echo '# Added for your convienience"' >> .profile
+    echo "cd #{PROJECT_DIRECTORY}" >> .profile
 
     echo
     echo 'Gittip installed! To run,'
     echo '$ vagrant ssh'
-    echo '$ ./run'
+    echo '$ make run'
   eos
 end
