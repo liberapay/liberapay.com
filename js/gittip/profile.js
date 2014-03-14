@@ -282,7 +282,7 @@ Gittip.profile.init = function() {
         });
 
 
-    $('.bitcoin').on("click", "a.toggle-bitcoin", function()
+    $('.bitcoin').on("click", ".toggle-bitcoin", function()
     {
         // "Add bitcoin address" text or existing
         // bitcoin address was clicked, show the text box
@@ -301,12 +301,12 @@ Gittip.profile.init = function() {
                 $('a.bitcoin').text(d.bitcoin_address);
                 $('.bitcoin').toggle();
                 if (d.bitcoin_address === '') {
-                    html = "Add a <a href=\"javascript:;\" class=\"toggle-bitcoin\">Bitcoin address</a>.";
+                    html = "<span class=\"none\">None</span>"
+                    html += "<button class=\"toggle-bitcoin\">+ Add</button>";
                 } else {
-                    html = "<a rel=\"me\" href=\"http://blockchain.info/address/";
+                    html = "<a class=\"address\" rel=\"me\" href=\"http://blockchain.info/address/";
                     html += d.bitcoin_address + "\">" + d.bitcoin_address + "</a>";
-                    html += "<div class=\"edit-bitcoin\"><a href=\"javascript:;\" class=\"toggle-bitcoin\">Edit</a> bitcoin address ";
-                    html += "</div>";
+                    html += "<button class=\"toggle-bitcoin\">Edit</button>";
                 }
                 $('div.bitcoin').html(html);
                 $this.text('Save');

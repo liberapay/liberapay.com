@@ -15,30 +15,24 @@
             <img src="/assets/bitcoin.png" />
         </td>
         <td class="account-details">
-
+            <div class="account-type">Bitcoin</div>
             {% if not user.ANON and user.participant == participant %}
                 <div class="bitcoin">
             {% else %}
                 <div>
             {% endif %}
                 {% if participant.bitcoin_address %}
-                    <a rel="me" href="http://blockchain.info/address/{{ participant.bitcoin_address }}">
+                    <a class="address" rel="me" href="http://blockchain.info/address/{{ participant.bitcoin_address }}">
                       {{ participant.bitcoin_address }}
                     </a>
                     {% if not user.ANON and user.participant == participant %}
-                    <div class="edit-bitcoin">
-                        (<a href="javascript:;" class="toggle-bitcoin">Edit</a>) Bitcoin address
-                    </div>
-                    {% else %}
-                    <div class="account-type">
-                        Bitcoin address
-                    </div>
-
+                    <button class="toggle-bitcoin">Edit</button>
                     {% endif %}
 
                 {% else %}
+                    <span class="none">None</span>
                     {% if not user.ANON and user.participant == participant %}
-                        Add a <a href="javascript:;" class="toggle-bitcoin">Bitcoin address</a>.
+                        <button class="toggle-bitcoin">+ Add</button>
                     {% else %}
                         No Bitcoin receiving address.
                     {% endif %}
