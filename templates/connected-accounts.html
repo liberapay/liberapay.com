@@ -18,8 +18,6 @@
             <div class="account-type">Bitcoin</div>
             {% if not user.ANON and user.participant == participant %}
                 <div class="bitcoin">
-            {% else %}
-                <div>
             {% endif %}
                 {% if participant.bitcoin_address %}
                     <a class="address" rel="me" href="http://blockchain.info/address/{{ participant.bitcoin_address }}">
