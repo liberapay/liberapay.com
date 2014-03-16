@@ -10,7 +10,11 @@
     {% endfor %}
 </table>
 
-<h2>Other Giving/Receiving Options</h2>
+{% if not user.ANON and user.participant == participant %}
+<h2>Other Receiving Options</h2>
+{% else %}
+<h2>Other Giving Options</h2>
+{% endif %}
 <table class="accounts">
 
     <!-- one-off receiving options -->
