@@ -1,13 +1,21 @@
 {% from 'templates/auth.html' import auth_button with context %}
 {% from 'templates/account-row.html' import account_row with context %}
 
-<h2>Connected Accounts</h2>
-<table id="accounts">
+<h2>Social Profiles</h2>
+<table class="accounts">
 
     <!-- social profiles -->
     {% for platform in website.social_profiles %}
     {{ account_row(platform, accounts, auth_button) }}
     {% endfor %}
+</table>
+
+{% if not user.ANON and user.participant == participant %}
+<h2>Other Receiving Options</h2>
+{% else %}
+<h2>Other Giving Options</h2>
+{% endif %}
+<table class="accounts">
 
     <!-- one-off receiving options -->
     <tr>
@@ -52,6 +60,10 @@
         </td>
     </tr>
     {{ account_row(website.platforms.venmo, accounts, auth_button) }}
+</table>
+
+<h2>Moving Money Every Week</h2>
+<table class="accounts">
 
     <!-- add/withdraw money (recurring) -->
     <tr>
