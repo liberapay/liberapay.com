@@ -141,5 +141,15 @@ locked = False
 
     <script data-gittip-username="{{ participant.username }}" src="//gttp.co/v1.js"></script>
 
+    <h2>Widget #3</h2>
+
+    <pre>&lt;script data-gittip-username="{{ participant.username }}"
+        data-gittip-widget="giving"
+        src="//gttp.co/v1.js"&gt;&lt;/script&gt;</pre>
+
+    <p>Here's what it looks like:</p>
+
+    <script data-gittip-username="{{ participant.username }}" data-gittip-widget="giving" src="//gttp.co/v1.js"></script>
+
 </div>
 {% endblock %}
