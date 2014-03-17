@@ -139,7 +139,17 @@ locked = False
 
     <p>Here's what it looks like:</p>
 
-    <script data-gittip-username="{{ participant.username }}" src="//gttp.co/v1.js"></script>
+    <p><script data-gittip-username="{{ participant.username }}" src="//gttp.co/v1.js"></script></p>
+
+    <p>Or, if you'd like to include a &ldquo;giving&rdquo; widget, you can add the <pre>data-gittip-widget="giving"</pre> attribute:</p>
+
+    <pre>&lt;script data-gittip-username="{{ participant.username }}"
+        data-gittip-widget="giving"
+        src="//gttp.co/v1.js"&gt;&lt;/script&gt;</pre>
+
+    <p>Here's what it looks like:</p>
+
+    <p><script data-gittip-username="{{ participant.username }}" data-gittip-widget="giving" src="//gttp.co/v1.js"></script></p>
 
 </div>
 {% endblock %}
