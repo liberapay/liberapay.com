@@ -225,6 +225,11 @@ class BalancedThing(object):
                         raise KeyError("{} not found".format(val))
                 if out is None:
                     break
+
+        if out is None:
+            # Default to ''; see https://github.com/gittip/www.gittip.com/issues/2161.
+            out = ''
+
         return out
 
     def __init__(self, balanced_customer_href):

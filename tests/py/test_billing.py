@@ -31,6 +31,37 @@ class TestBalancedCard(BalancedHarness):
         actual = dict([(name, card[name]) for name in expected])
         assert actual == expected
 
+    def test_credit_card_page_shows_card_missing(self):
+        expected = 'Your credit card is <em id="status">missing'
+        actual = self.client.GET('/credit-card.html', auth_as='alice').body.decode('utf8')
+        assert expected in actual
+
+    def test_credit_card_page_loads_when_there_is_a_card(self):
+        self.db.run( "UPDATE participants SET balanced_customer_href=%s WHERE username='alice'"
+                   , (self.balanced_customer_href,)
+                    )
+        billing.associate( self.db
+                         , 'credit card'
+                         , 'alice'
+                         , self.balanced_customer_href
+                         , self.card_href
+                          )
+
+        expected = 'Your credit card is <em id="status">working'
+        actual = self.client.GET('/credit-card.html', auth_as='alice').body.decode('utf8')
+        assert expected in actual
+
+    def test_credit_card_page_loads_when_there_is_an_account_but_no_card(self):
+        self.db.run( "UPDATE participants "
+                     "SET balanced_customer_href=%s, last_bill_result='NoResultFound()'"
+                     "WHERE username='alice'"
+                   , (self.balanced_customer_href,)
+                    )
+
+        expected = 'Your credit card is <em id="status">failing'
+        actual = self.client.GET('/credit-card.html', auth_as='alice').body.decode('utf8')
+        assert expected in actual
+
     @mock.patch('balanced.Customer')
     def test_balanced_card_gives_class_name_instead_of_KeyError(self, ba):
         card = mock.Mock()
