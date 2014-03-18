@@ -13,6 +13,12 @@ class Tests(Harness):
         kw['claimed_time'] = datetime.datetime.now(pytz.utc)
         return Harness.make_participant(self, *a, **kw)
 
+    def test_on_key_gives_gittip(self):
+        self.make_participant('alice', last_bill_result='')
+        data = json.loads(self.client.GET('/alice/public.json').body)
+
+        assert data['on'] == 'gittip'
+
     def test_anonymous_gets_receiving(self):
         alice = self.make_participant('alice', last_bill_result='')
         self.make_participant('bob')
