@@ -1,0 +1,80 @@
+"""JSON endpoint for a Gittip widget.
+"""
+import re
+
+from aspen import json
+from aspen import Response
+from urllib import urlencode
+from base64 import b64decode, b64encode
+from gittip.utils import get_avatar_url
+
+
+callback_pattern = re.compile(r'^[_A-Za-z0-9.]+$')
+
+
+def stringify_qs(qs, prefix='?'):
+    # XXX Upstream to Aspen
+    tupled = []
+    for k, vals in qs.items():
+        for v in vals:
+            tupled.append((k, v))
+    return prefix + urlencode(tupled) if tupled else ""
+
+
+[-----------------------------------------------------------------------------]
+
+platform = getattr(website.platforms, path['platform'], None)
+if platform is None:
+    raise Response(404)
+
+account = platform.get_account(path['user_name'])
+if account is None:
+    raise Response(404)
+
+if account.participant.is_claimed:
+    next_url = '/%s/public.json' % account.participant.username
+    next_url += stringify_qs(qs)
+    request.redirect(next_url)
+
+
+participant = account.participant
+
+output = { "on": path['platform']
+         , "avatar": participant.avatar_url
+         , "npatrons": participant.get_number_of_backers()
+          }
+
+
+
+# Generate my_tip key
+# ===================
+# Display values:
+#
+#   undefined - user is not authenticated
+#   "self" - user == participant
+#   null - user has never tipped this person
+#   0.00 - user used to tip this person but now doesn't
+#   3.00 - user tips this person this amount
+
+if not user.ANON:
+    if user.participant.username == participant.username:
+        my_tip = "self"
+    else:
+        my_tip = user.participant.get_tip_to(participant.username)
+    output["my_tip"] = str(my_tip)
+
+
+response.body = output
+
+# CORS - see https://github.com/gittip/aspen-python/issues/138
+response.headers["Access-Control-Allow-Origin"] = "*"
+
+# JSONP - see https://github.com/gittip/aspen-python/issues/138
+callback = qs.get('callback')
+if callback is not None:
+    if callback_pattern.match(callback) is None:
+        response.code = 400
+        response.body = {"error": "bad callback"}
+    else:
+        response.body = "%s(%s)" % (callback, json.dumps(response.body))
+        response.headers['Content-Type'] = 'application/javascript'
