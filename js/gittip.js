@@ -78,6 +78,11 @@ Gittip.signIn = function() {
             }, 100);
         $this.data('timeoutId', timeoutId);
     });
+
+    // disable the tip-changed prompt when trying to sign in
+    $('form.auth-button').submit(function() {
+        $(window).off('beforeunload.tips');
+    });
 };
 
 Gittip.signOut = function() {

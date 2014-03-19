@@ -41,7 +41,35 @@ Gittip.tips.init = function() {
             $('#payment-prompt').addClass('needed');
         else
             $('#payment-prompt').removeClass('needed');
+
+        // prompt the user if they try leaving the page before confirming their tip
+        if (same)
+            $(window).off('beforeunload.tips');
+        else
+            $(window).on('beforeunload.tips', function() {
+                var action = oldAmount ? 'changed your' : 'entered a';
+                return "You "+action+" tip but it hasn't been confirmed. Are you sure you want to leave?";
+            });
     }
+
+    // Restore the tip value if stored
+    if (localStorage.tipAfterSignIn) {
+        var data = JSON.parse(localStorage.tipAfterSignIn);
+        localStorage.removeItem('tipAfterSignIn');
+
+        if (window.location.pathname === '/'+data.tippee+'/')
+            $('input.my-tip').val(data.val).change();
+    }
+
+    // Store the tip value if the user hasn't signed in
+    if ($('.sign-in').length)
+        $(window).on('unload.tips', function() {
+            var tip = $('input.my-tip');
+            if (tip.parents('form').hasClass('changed'))
+                localStorage.tipAfterSignIn = JSON.stringify({
+                    tippee: tip.data('tippee'), val: tip.val()
+                });
+        });
 
     $('.my-tip .cancel-tip').click(function(event) {
         event.preventDefault();
@@ -61,6 +89,7 @@ Gittip.tips.init = function() {
     $('form.my-tip').on('reset', function() {
         $(this).removeClass('changed');
         $(this).find('.confirm-tip').prop('disabled', true);
+        $(window).off('beforeunload.tips');
     });
 
     $('form.my-tip').submit(function(event) {
