@@ -80,7 +80,7 @@ Gittip.signIn = function() {
     });
 
     // disable the tip-changed prompt when trying to sign in
-    $('.sign-in a').click(function() {
+    $('form.auth-button').submit(function() {
         $(window).off('beforeunload.tips');
     });
 };
