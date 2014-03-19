@@ -58,7 +58,7 @@ Gittip.tips.init = function() {
         localStorage.removeItem('tipAfterSignIn');
 
         if (window.location.pathname === '/'+data.tippee+'/')
-            $('input.my-tip').val(data.val);
+            $('input.my-tip').val(data.val).change();
     }
 
     // Store the tip value if the user hasn't signed in
