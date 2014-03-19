@@ -65,7 +65,7 @@ Gittip.tips.init = function() {
     if ($('.sign-in').length)
         $(window).on('unload.tips', function() {
             var tip = $('input.my-tip');
-            if (tip.hasClass('changed'))
+            if (tip.parents('form').hasClass('changed'))
                 localStorage.tipAfterSignIn = JSON.stringify({
                     tippee: tip.data('tippee'), val: tip.val()
                 });
