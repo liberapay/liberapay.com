@@ -54,7 +54,7 @@ title = "Please Confirm"
 
     <div><img class="platform-icon" src="{{ platform.icon }}"
     /> <span class="highlight">{{ user_name }}</span> is connected<br />to
-    <b>{{ other.username }}</b> on Gittip.<br />Reconnect it?</div>
+    <b>{{ other.username }}</b> on Gittip.<br />Transfer it?</div>
 
     <h2>Now</h2>
 
@@ -116,7 +116,7 @@ title = "Please Confirm"
     </table>
 
 
-    <h2>After Reconnect</h2>
+    <h2>After Transfer</h2>
 
     <table class="scenario">
         <tr>
@@ -218,15 +218,15 @@ title = "Please Confirm"
 
 
     <div class="nav level-2">
-        <h2>Reconnect?</h2>
+        <h2>Transfer it?</h2>
 
         <form action="/on/take-over.html" method="POST">
             <input type="hidden" name="platform" value="{{ account.platform }}" />
             <input type="hidden" name="user_id" value="{{ account.user_id }}" />
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
             <input type="hidden" name="connect_token" value="{{ connect_token }}" />
-            <button name="should_reconnect" value="yes" class="selected larger">Yes</button>
-            <button name="should_reconnect" value="no" >No</button>
+            <button name="should_transfer" value="yes" class="selected larger">Yes</button>
+            <button name="should_transfer" value="no" >No</button>
         </form>
     </div>
 
