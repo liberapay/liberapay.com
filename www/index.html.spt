@@ -80,7 +80,7 @@ receivers = website.db.all("""
 <script>
     $(document).ready(function () {
         $('.mini-user').tipr();
-        Gittip.jump.init;
+        Gittip.jump.init();
     });
 </script>
 {{ super() }}
