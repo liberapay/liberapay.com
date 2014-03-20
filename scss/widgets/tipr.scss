@@ -1,0 +1,86 @@
+
+/*
+Tipr 1.0.1
+Copyright (c) 2013 Tipue
+Tipr is released under the MIT License
+http://www.tipue.com/tipr
+*/
+
+
+.tipr_content
+{
+     font: 13px/1.7 'Helvetica Neue', Helvetica, Arial, sans-serif;
+     color: #333;
+     background-color: #fff;
+     color: #333;
+     padding: 9px 17px;
+     max-width: 300px;
+}
+.tipr_container_bottom
+{
+     display: none;
+     position: absolute;
+     margin-top: 13px;
+     z-index: 1000;
+}
+.tipr_container_top
+{
+     display: none;
+     position: absolute;
+     margin-top: -75px;
+     z-index: 1000;
+}
+.tipr_point_top, .tipr_point_bottom
+{
+     position: relative;
+    background: #fff;
+    border: 1px solid #dcdcdc;
+}
+.tipr_point_top:after, .tipr_point_top:before
+{
+    position: absolute;
+    pointer-events: none;
+    border: solid transparent;
+    top: 100%;
+    content: "";
+    height: 0;
+    width: 0;
+}
+.tipr_point_top:after
+{
+    border-top-color: #fff;
+    border-width: 8px;
+    left: 50%;
+    margin-left: -8px;
+}
+.tipr_point_top:before
+{
+    border-top-color: #dcdcdc;
+    border-width: 9px;
+    left: 50%;
+    margin-left: -9px;
+}
+.tipr_point_bottom:after, .tipr_point_bottom:before
+{
+    position: absolute;
+    pointer-events: none;
+    border: solid transparent;
+    bottom: 100%;
+    content: "";
+    height: 0;
+    width: 0;
+}
+.tipr_point_bottom:after
+{
+    border-bottom-color: #fff;
+    border-width: 8px;
+    left: 50%;
+    margin-left: -8px;
+}
+.tipr_point_bottom:before
+{
+    border-bottom-color: #dcdcdc;
+    border-width: 9px;
+    left: 50%;
+    margin-left: -9px;
+}
