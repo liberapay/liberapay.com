@@ -31,7 +31,7 @@ except ValueError:
 new_participants = website.db.all("""
 -- new participants on homepage
 
-    SELECT username, claimed_time, avatar_url
+    SELECT username, claimed_time, avatar_url, statement
       FROM participants p
      WHERE EXISTS (SELECT * FROM elsewhere e WHERE p.username = e.participant)
        AND claimed_time IS NOT null
@@ -77,7 +77,12 @@ receivers = website.db.all("""
 {% endblock %}
 
 {% block scripts %}
-<script>$(document).ready(Gittip.jump.init);</script>
+<script>
+    $(document).ready(function () {
+        $('.mini-user').tipr();
+        Gittip.jump.init;
+    });
+</script>
 {{ super() }}
 {% endblock %}
 
@@ -122,7 +127,7 @@ receivers = website.db.all("""
         <ul class="group">
             {% for i, participant in enumerate(new_participants, start=1) %}
             <li{% if i > LUXURY %} class="luxury"{% endif %}>
-                <a href="/{{ participant.username }}/" class="mini-user">
+                <a href="/{{ participant.username }}/" class="mini-user tip" data-tip="{{ participant.statement }}">
                     <span class="inner">
                         <span class="avatar"
                             style="background-image:
