@@ -34,7 +34,10 @@ if account is None:
 if account.participant.is_claimed:
     next_url = '/%s/public.json' % account.participant.username
     next_url += stringify_qs(qs)
-    request.redirect(next_url)
+    headers = {}
+    headers["Access-Control-Allow-Origin"] = "*"
+    headers["Location"] = next_url
+    raise Response(302, body='*barrel roll*', headers=headers)
 
 
 participant = account.participant
