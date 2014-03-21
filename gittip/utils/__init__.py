@@ -469,8 +469,11 @@ def format_money(money):
     format = '%.2f' if money < 1000 else '%.0f'
     return format % money
 
-def truncate(string, length=140, end='...'):
-    if len(string) <= length:
-        return string
+def to_statement(prepend, string, length=140, append='...'):
+    statement = prepend + string
+    if len(string) > length:
+        return statement[:length] + append
+    elif len(string) > 0:
+        return statement
     else:
-        return string[:length] + end
+        return string
