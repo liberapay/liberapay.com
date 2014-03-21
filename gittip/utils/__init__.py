@@ -468,3 +468,9 @@ def _to_age(participant):
 def format_money(money):
     format = '%.2f' if money < 1000 else '%.0f'
     return format % money
+
+def truncate(string, length=140, end='...'):
+    if len(string) <= length:
+        return string
+    else:
+        return string[:length] + end
