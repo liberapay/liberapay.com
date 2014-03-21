@@ -79,7 +79,7 @@ receivers = website.db.all("""
 {% block scripts %}
 <script>
     $(document).ready(function () {
-        $('.mini-user').tipr();
+        $(".mini-user:not([data-tip=''])").tipr();
         Gittip.jump.init();
     });
 </script>
