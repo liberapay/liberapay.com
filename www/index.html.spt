@@ -163,7 +163,9 @@ receivers = website.db.all("""
                 </span>
                 {% else %}
                 <a href="/{{ giver.username }}/"
-                   class="mini-user{{ ' anonymous' if giver.anonymous else '' }}">
+                   class="mini-user{{ ' anonymous' if giver.anonymous else '' }} tip"
+                   data-tip="{{ to_statement((I_AM if giver.number == 'singular' else WE_ARE) + ' ' + MAKING + ' ',
+                   giver.statement) }}">
                     <span class="inner">
                         <span class="avatar"
                             style="background-image: url('{{ get_avatar_url(giver)|e }}')">
@@ -193,7 +195,9 @@ receivers = website.db.all("""
                 </span>
                 {% else %}
                 <a href="/{{ receiver.username }}/"
-                   class="mini-user{{ ' anonymous' if receiver.anonymous else '' }}">
+                   class="mini-user{{ ' anonymous' if receiver.anonymous else '' }} tip"
+                   data-tip="{{ to_statement((I_AM if receiver.number == 'singular' else WE_ARE) + ' ' + MAKING + ' ',
+                   receiver.statement) }}">
                     <span class="inner">
                         <span class="avatar"
                             style="background-image: url('{{ get_avatar_url(receiver)|e }}')">
