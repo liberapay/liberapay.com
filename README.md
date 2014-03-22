@@ -189,14 +189,10 @@ Thanks for installing Gittip! :smiley:
 Configuration
 =============
 
-When using `make run`, Gittip's execution environment is defined in an
-environment files [default_local.env]
-(https://github.com/gittip/www.gittip.com/blob/master/default_local.env)
-`local.env`. The former contains all variables needed to run successfully.
-The later allows for easy overrides since it is not included in the source
-code repo.
+Gittip's default configuration lives in [`defaults.env`](https://github.com/gittip/www.gittip.com/blob/master/defaults.env).
+If you'd like to override some settings, create a file named `local.env` to store them.
 
-The following text explains some of the content of that file:
+The following explains some of the content of that file:
 
 The `BALANCED_API_SECRET` is a test marketplace. To generate a new secret for
 your own testing run this command:
@@ -216,11 +212,6 @@ on Github. It points back to localhost:8537, which is where Gittip will be
 running if you start it locally with `make run`. Similarly with the TWITTER_*
 keys, but there they required us to spell it `127.0.0.1`.
 
-You probably don't need it, but at one point I had to set this to get
-psycopg2 working on Mac OS with EnterpriseDB's Postgres 9.1 installer:
-
-    DYLD_LIBRARY_PATH=/Library/PostgreSQL/9.1/lib
-
 If you wish to use different username or database name for the database, you
 should change the `DATABASE_URL` using the following format:
 
@@ -236,7 +227,7 @@ combined in `scss/gittip.scss` which itself is compiled by `libsass` in
 Testing [![Build Status](http://img.shields.io/travis/gittip/www.gittip.com/master.svg)](https://travis-ci.org/gittip/www.gittip.com)
 =======
 
-Please write unit tests for all new code and all code you change.  Gittip's
+Please write unit tests for all new code and all code you change. Gittip's
 test suite uses the py.test test runner, which will be installed into the
 virtualenv you get by running `make env`. As a rule of thumb, each test case
 should perform one assertion.
@@ -252,10 +243,7 @@ To invoke py.test directly you should use the `honcho` utility that comes
 with the install. First `make tests/env`, activate the virtualenv and then:
 
     [gittip] $ cd tests/
-    [gittip] $ honcho -e ../default_tests.env,env py.test
-
-The tests will try to use `gittip-test` database of the current $USER.
-
+    [gittip] $ honcho -e defaults.env,local.env run py.test
 
 Local Database Setup
 --------------------
@@ -266,10 +254,8 @@ version of Postgres to use is 9.3.2, because that's what we're using in
 production at Heroku. You need at least 9.2, because we depend on being able to
 specify a URI to `psql`, and that was added in 9.2.
 
-If you're on a Mac, maybe try out Heroku's
-[Postgres.app](http://www.postgresql.org/download/). If installing using a
-package manager, you may need several packages. On Ubuntu and Debian, the
-required packages are: `postgresql` (base) and `postgresql-contrib` (includes hstore).
++ Mac: use Homerew: `brew install postgres`
++ Ubuntu: use Apt: `apt-get install postgresql postgresql-contrib libpq-dev`
 
 To setup the instance for gittip's needs run:
 
@@ -287,12 +273,10 @@ Once Postgres is set up, run:
 
     $ make schema
 
-That will populate the database named by DATABASE_URL with the Gittip schema,
-per ./schema.sql.
+Which populates the database named by `DATABASE_URL` with the schema from `schema.sql`.
 
-The schema for the Gittip.com database is defined in schema.sql. It should be
-considered append-only. The idea is that this is the log of DDL that
-we've run against the production database. You should never change
+The `schema.sql` file should be considered append-only. The idea is that it's the log
+of DDL that we've run against the production database. You should never change
 commands that have already been run. New DDL will be (manually) run against the
 production database as part of deployment.
 
