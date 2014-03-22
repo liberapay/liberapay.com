@@ -152,7 +152,20 @@ Gittip.team = (function() {
             alert("Bad input! Must be a number.");
         else
         {
-            var callback = function() { alert('Updated your take!'); };
+            var callback = function(d) {
+                var newTake;
+                for (var row in d) {
+                    if(username == d[row].username)
+                    {
+                        newTake = d[row].take;
+                        break;
+                    }
+                }
+                if ( take == newTake)
+                    alert('Updated your take!');
+                else
+                    alert('You cannot exceed double of last week. Updated your take to ' + newTake + '.');
+            };
             if (parseFloat(take) === 0) {
                 if (!confirm("Remove yourself from this team?")) {
                     resetTake();
@@ -176,7 +189,7 @@ Gittip.team = (function() {
                 { type: 'POST'
                 , url: username + ".json"
                 , data: {take: take}
-                , success: function(d) { callback(); drawRows(d); }
+                , success: function(d) { callback(d); drawRows(d); }
                 , error: function(xhr) {
                         switch (xhr.status) {
                             case 404: alert("Unknown user!"); break;
