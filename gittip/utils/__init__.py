@@ -470,10 +470,13 @@ def format_money(money):
     return format % money
 
 def to_statement(prepend, string, length=140, append='...'):
-    statement = prepend + string
-    if len(string) > length:
-        return statement[:length] + append
-    elif len(string) > 0:
-        return statement
+    if prepend and string:
+        statement = prepend + string
+        if len(string) > length:
+            return statement[:length] + append
+        elif len(string) > 0:
+            return statement
+        else:
+            return string
     else:
-        return string
+        return ''
