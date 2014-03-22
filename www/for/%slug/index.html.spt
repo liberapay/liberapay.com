@@ -82,6 +82,8 @@ givers = query_cache.all("""
          , anonymous_giving AS anonymous
          , sum(amount) AS amount
          , avatar_url
+         , statement
+         , number
       FROM (    SELECT DISTINCT ON (tipper, tippee)
                        amount
                      , tipper
@@ -100,7 +102,7 @@ givers = query_cache.all("""
       JOIN participants p ON p.username = tipper
      WHERE is_suspicious IS NOT true
        AND amount > 0
-  GROUP BY tipper, anonymous_giving, avatar_url
+  GROUP BY tipper, anonymous_giving, avatar_url, statement, number
   ORDER BY amount DESC
   LIMIT %s
   OFFSET %s
@@ -117,6 +119,8 @@ receivers = query_cache.all("""
          , anonymous_receiving AS anonymous
          , sum(amount) AS amount
          , avatar_url
+         , statement
+         , number
       FROM (    SELECT DISTINCT ON (tipper, tippee)
                        amount
                      , tippee
@@ -134,7 +138,7 @@ receivers = query_cache.all("""
       JOIN participants p ON p.username = tippee
      WHERE is_suspicious IS NOT true
        AND amount > 0
-  GROUP BY tippee, anonymous_receiving, avatar_url
+  GROUP BY tippee, anonymous_receiving, avatar_url, statement, number
   ORDER BY amount DESC
   LIMIT %s
   OFFSET %s
@@ -248,7 +252,9 @@ $(document).ready(function() {
                 </span>
                 {% else %}
                 <a href="/{{ giver.username }}/"
-                   class="mini-user{{ ' anonymous' if giver.anonymous else '' }}">
+                   class="mini-user{{ ' anonymous' if giver.anonymous else '' }} tip"
+                   data-tip="{{ to_statement((I_AM if giver.number == 'singular' else WE_ARE) + ' ' + MAKING + ' ',
+                   giver.statement) }}">
                     <span class="inner">
                         <span class="avatar"
                             style="background-image: url('{{ get_avatar_url(giver)|e}}')">
@@ -278,7 +284,9 @@ $(document).ready(function() {
                 </span>
                 {% else %}
                 <a href="/{{ receiver.username }}/"
-                   class="mini-user{{ ' anonymous' if receiver.anonymous else '' }}">
+                   class="mini-user{{ ' anonymous' if receiver.anonymous else '' }} tip"
+                   data-tip="{{ to_statement((I_AM if receiver.number == 'singular' else WE_ARE) + ' ' + MAKING + ' ',
+                   receiver.statement) }}">
                     <span class="inner">
                         <span class="avatar"
                             style="background-image: url('{{ get_avatar_url(receiver)|e}}')">
