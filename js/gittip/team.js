@@ -153,14 +153,7 @@ Gittip.team = (function() {
         else
         {
             var callback = function(d) {
-                var newTake;
-                for (var row in d) {
-                    if(username == d[row].username)
-                    {
-                        newTake = d[row].take;
-                        break;
-                    }
-                }
+                var newTake = $.grep(d, function(row) { return row.username == username })[0].take;
                 if ( take == newTake)
                     alert('Updated your take!');
                 else
