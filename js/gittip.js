@@ -79,6 +79,16 @@ Gittip.signIn = function() {
         $this.data('timeoutId', timeoutId);
     });
 
+    $('.dropdown-toggle').click(function(e) {
+        if ($('.sign-in > .dropdown').hasClass('open')) {
+            e.preventDefault();
+            return false;
+        }
+        else {
+            $(this).addClass('open');
+        }
+    });
+
     // disable the tip-changed prompt when trying to sign in
     $('form.auth-button').submit(function() {
         $(window).off('beforeunload.tips');
