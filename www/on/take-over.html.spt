@@ -6,7 +6,7 @@ if user.ANON:
 if not POST:
     raise Response(405)
 
-if body['should_reconnect'] != 'yes':
+if body['should_transfer'] != 'yes':
     request.redirect('/about/me.html')
 
 platform = body['platform']

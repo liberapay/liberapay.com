@@ -721,7 +721,7 @@ class Participant(Model, MixinTeam):
         ever decide to join Gittip).
 
         In certain circumstances, we want to present the user with a
-        confirmation before proceeding to reconnect the account elsewhere to
+        confirmation before proceeding to transfer the account elsewhere to
         the new Gittip account; NeedConfirmation is the signal to request
         confirmation. If it was the last account elsewhere connected to the old
         Gittip account, then we absorb the old Gittip account into the new one,
