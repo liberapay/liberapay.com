@@ -80,8 +80,13 @@ Gittip.signIn = function() {
     });
 
     $('.dropdown-toggle').click(function(e) {
-        e.preventDefault();
-        return false;
+        if ($('.sign-in > .dropdown').hasClass('open')) {
+            e.preventDefault();
+            return false;
+        }
+        else {
+            $(this).addClass('open');
+        }
     });
 
     // disable the tip-changed prompt when trying to sign in
