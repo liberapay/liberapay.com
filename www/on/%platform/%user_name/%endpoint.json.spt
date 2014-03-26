@@ -8,6 +8,7 @@ from urllib import urlencode
 from base64 import b64decode, b64encode
 from gittip.utils import get_avatar_url
 
+whitelisted_endpoints = ['public', 'charts']
 
 callback_pattern = re.compile(r'^[_A-Za-z0-9.]+$')
 
@@ -27,12 +28,16 @@ platform = getattr(website.platforms, path['platform'], None)
 if platform is None:
     raise Response(404)
 
+endpoint = path['endpoint']
+if not endpoint in whitelisted_endpoints:
+    raise Response(404)
+
 account = platform.get_account(path['user_name'])
 if account is None:
     raise Response(404)
 
 if account.participant.is_claimed:
-    next_url = '/%s/public.json' % account.participant.username
+    next_url = '/%s/%s.json' % (account.participant.username, endpoint)
     next_url += stringify_qs(qs)
     headers = {}
     headers["Access-Control-Allow-Origin"] = "*"
