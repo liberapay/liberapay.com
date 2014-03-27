@@ -1193,3 +1193,15 @@ BEGIN;
     -- Update not needed in dev.
     -- UPDATE participants SET paypal_fee_cap=20 WHERE paypal_email IS NOT NULL;
 END;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/pull/2172
+
+BEGIN;
+    ALTER TABLE homepage_top_receivers ADD COLUMN statement text;
+    ALTER TABLE homepage_top_receivers ADD COLUMN number text;
+
+    ALTER TABLE homepage_top_givers ADD COLUMN statement text;
+    ALTER TABLE homepage_top_givers ADD COLUMN number text;
+END;
