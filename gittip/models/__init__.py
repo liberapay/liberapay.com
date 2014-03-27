@@ -61,20 +61,20 @@ class GittipDB(Postgres):
                                where amount > 0
                             group by participant
 
-                               union
+                               union all
 
                               select participant as username, sum(amount-fee) as a
                                 from exchanges
                                where amount < 0
                             group by participant
 
-                               union
+                               union all
 
                               select tipper as username, sum(-amount) as a
                                 from transfers
                             group by tipper
 
-                               union
+                               union all
 
                               select tippee as username, sum(amount) as a
                                 from transfers
