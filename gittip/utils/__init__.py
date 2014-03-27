@@ -378,8 +378,8 @@ def update_homepage_queries_once(db):
         cursor.execute("DELETE FROM homepage_top_givers")
         cursor.execute("""
 
-        INSERT INTO homepage_top_givers (username, anonymous, amount, avatar_url)
-            SELECT tipper, anonymous_giving, sum(amount) AS amount, avatar_url
+        INSERT INTO homepage_top_givers (username, anonymous, amount, avatar_url, statement, number)
+            SELECT tipper, anonymous_giving, sum(amount) AS amount, avatar_url, statement, number
               FROM (    SELECT DISTINCT ON (tipper, tippee)
                                amount
                              , tipper
@@ -395,7 +395,7 @@ def update_homepage_queries_once(db):
                       ) AS foo
               JOIN participants p ON p.username = tipper
              WHERE is_suspicious IS NOT true
-          GROUP BY tipper, anonymous_giving, avatar_url
+          GROUP BY tipper, anonymous_giving, avatar_url, statement, number
           ORDER BY amount DESC
              LIMIT 100;
 
@@ -404,8 +404,8 @@ def update_homepage_queries_once(db):
         cursor.execute("DELETE FROM homepage_top_receivers")
         cursor.execute("""
 
-        INSERT INTO homepage_top_receivers (username, anonymous, amount, avatar_url)
-            SELECT tippee, anonymous_receiving, sum(amount) AS amount, avatar_url
+        INSERT INTO homepage_top_receivers (username, anonymous, amount, avatar_url, statement, number)
+            SELECT tippee, anonymous_receiving, sum(amount) AS amount, avatar_url, statement, number
               FROM (    SELECT DISTINCT ON (tipper, tippee)
                                amount
                              , tippee
@@ -420,7 +420,7 @@ def update_homepage_queries_once(db):
                       ) AS foo
               JOIN participants p ON p.username = tippee
              WHERE is_suspicious IS NOT true
-          GROUP BY tippee, anonymous_receiving, avatar_url
+          GROUP BY tippee, anonymous_receiving, avatar_url, statement, number
           ORDER BY amount DESC
              LIMIT 100;
 
@@ -468,3 +468,15 @@ def _to_age(participant):
 def format_money(money):
     format = '%.2f' if money < 1000 else '%.0f'
     return format % money
+
+def to_statement(prepend, string, length=140, append='...'):
+    if prepend and string:
+        statement = prepend + string
+        if len(string) > length:
+            return statement[:length] + append
+        elif len(string) > 0:
+            return statement
+        else:
+            return string
+    else:
+        return ''

@@ -15,10 +15,13 @@ for them.
 """
 import os
 from aspen import Response
-from gittip.utils import get_avatar_url, _to_age, format_money
+from gittip.utils import get_avatar_url, _to_age, format_money, to_statement
 
 
 LUXURY = 4  # used for responsive design to limit items shown on small screens
+MAKING = "making the world better by"
+I_AM = "I am"
+WE_ARE = "We are"
 
 [---]
 
@@ -31,7 +34,7 @@ except ValueError:
 new_participants = website.db.all("""
 -- new participants on homepage
 
-    SELECT username, claimed_time, avatar_url
+    SELECT username, claimed_time, avatar_url, statement, number
       FROM participants p
      WHERE EXISTS (SELECT * FROM elsewhere e WHERE p.username = e.participant)
        AND claimed_time IS NOT null
@@ -77,7 +80,12 @@ receivers = website.db.all("""
 {% endblock %}
 
 {% block scripts %}
-<script>$(document).ready(Gittip.jump.init);</script>
+<script>
+    $(document).ready(function () {
+        $("a.mini-user:not([data-tip=''])").tipr();
+        Gittip.jump.init();
+    });
+</script>
 {{ super() }}
 {% endblock %}
 
@@ -122,7 +130,10 @@ receivers = website.db.all("""
         <ul class="group">
             {% for i, participant in enumerate(new_participants, start=1) %}
             <li{% if i > LUXURY %} class="luxury"{% endif %}>
-                <a href="/{{ participant.username }}/" class="mini-user">
+                <a href="/{{ participant.username }}/"
+                    class="mini-user tip"
+                    data-tip="{{ to_statement((I_AM if participant.number == 'singular' else WE_ARE) + ' ' + MAKING + ' ',
+                    participant.statement) }}">
                     <span class="inner">
                         <span class="avatar"
                             style="background-image:
@@ -152,7 +163,9 @@ receivers = website.db.all("""
                 </span>
                 {% else %}
                 <a href="/{{ giver.username }}/"
-                   class="mini-user{{ ' anonymous' if giver.anonymous else '' }}">
+                   class="mini-user{{ ' anonymous' if giver.anonymous else '' }} tip"
+                   data-tip="{{ to_statement((I_AM if giver.number == 'singular' else WE_ARE) + ' ' + MAKING + ' ',
+                   giver.statement) }}">
                     <span class="inner">
                         <span class="avatar"
                             style="background-image: url('{{ get_avatar_url(giver)|e }}')">
@@ -182,7 +195,9 @@ receivers = website.db.all("""
                 </span>
                 {% else %}
                 <a href="/{{ receiver.username }}/"
-                   class="mini-user{{ ' anonymous' if receiver.anonymous else '' }}">
+                   class="mini-user{{ ' anonymous' if receiver.anonymous else '' }} tip"
+                   data-tip="{{ to_statement((I_AM if receiver.number == 'singular' else WE_ARE) + ' ' + MAKING + ' ',
+                   receiver.statement) }}">
                     <span class="inner">
                         <span class="avatar"
                             style="background-image: url('{{ get_avatar_url(receiver)|e }}')">

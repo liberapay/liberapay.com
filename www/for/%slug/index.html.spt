@@ -1,9 +1,12 @@
 from aspen import Response
 from gittip.models.community import name_pattern, slugize
-from gittip.utils import get_avatar_url, _to_age, format_money
+from gittip.utils import get_avatar_url, _to_age, format_money, to_statement
 from gittip.utils.query_cache import QueryCache
 
 LUXURY = 4
+MAKING = "making the world better by"
+I_AM = "I am"
+WE_ARE = "We are"
 
 query_cache = QueryCache(website.db, threshold=20)
 
@@ -48,11 +51,15 @@ new_participants = query_cache.all("""
     SELECT username
          , claimed_time
          , avatar_url
+         , statement
+         , number
       FROM (
         SELECT DISTINCT ON (p.username)
                p.username
              , claimed_time
              , p.avatar_url
+             , p.statement
+             , p.number
           FROM participants p
           JOIN elsewhere e
             ON p.username = e.participant
@@ -75,6 +82,8 @@ givers = query_cache.all("""
          , anonymous_giving AS anonymous
          , sum(amount) AS amount
          , avatar_url
+         , statement
+         , number
       FROM (    SELECT DISTINCT ON (tipper, tippee)
                        amount
                      , tipper
@@ -93,7 +102,7 @@ givers = query_cache.all("""
       JOIN participants p ON p.username = tipper
      WHERE is_suspicious IS NOT true
        AND amount > 0
-  GROUP BY tipper, anonymous_giving, avatar_url
+  GROUP BY tipper, anonymous_giving, avatar_url, statement, number
   ORDER BY amount DESC
   LIMIT %s
   OFFSET %s
@@ -110,6 +119,8 @@ receivers = query_cache.all("""
          , anonymous_receiving AS anonymous
          , sum(amount) AS amount
          , avatar_url
+         , statement
+         , number
       FROM (    SELECT DISTINCT ON (tipper, tippee)
                        amount
                      , tippee
@@ -127,7 +138,7 @@ receivers = query_cache.all("""
       JOIN participants p ON p.username = tippee
      WHERE is_suspicious IS NOT true
        AND amount > 0
-  GROUP BY tippee, anonymous_receiving, avatar_url
+  GROUP BY tippee, anonymous_receiving, avatar_url, statement, number
   ORDER BY amount DESC
   LIMIT %s
   OFFSET %s
@@ -145,6 +156,7 @@ receivers = query_cache.all("""
 
 <script>
 $(document).ready(function() {
+    $("a.mini-user:not([data-tip=''])").tipr();
 
     $('button.join-leave').click(function()
     {
@@ -208,7 +220,9 @@ $(document).ready(function() {
         <ul class="group">
             {% for i, participant in enumerate(new_participants, start=1) %}
             <li{% if i > LUXURY %} class="luxury"{% endif %}>
-                <a href="/{{ participant.username }}/" class="mini-user">
+                <a href="/{{ participant.username }}/" class="mini-user tip"
+                data-tip="{{ to_statement((I_AM if participant.number == 'singular' else WE_ARE) + ' ' + MAKING + ' ',
+                participant.statement) }}">
                     <span class="inner">
                         <span class="avatar"
                             style="background-image:
@@ -238,7 +252,9 @@ $(document).ready(function() {
                 </span>
                 {% else %}
                 <a href="/{{ giver.username }}/"
-                   class="mini-user{{ ' anonymous' if giver.anonymous else '' }}">
+                   class="mini-user{{ ' anonymous' if giver.anonymous else '' }} tip"
+                   data-tip="{{ to_statement((I_AM if giver.number == 'singular' else WE_ARE) + ' ' + MAKING + ' ',
+                   giver.statement) }}">
                     <span class="inner">
                         <span class="avatar"
                             style="background-image: url('{{ get_avatar_url(giver)|e}}')">
@@ -268,7 +284,9 @@ $(document).ready(function() {
                 </span>
                 {% else %}
                 <a href="/{{ receiver.username }}/"
-                   class="mini-user{{ ' anonymous' if receiver.anonymous else '' }}">
+                   class="mini-user{{ ' anonymous' if receiver.anonymous else '' }} tip"
+                   data-tip="{{ to_statement((I_AM if receiver.number == 'singular' else WE_ARE) + ' ' + MAKING + ' ',
+                   receiver.statement) }}">
                     <span class="inner">
                         <span class="avatar"
                             style="background-image: url('{{ get_avatar_url(receiver)|e}}')">
