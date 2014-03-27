@@ -1,0 +1,66 @@
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+from aspen import json
+from aspen.http import status_strings
+
+try:
+    from pygments.lexers import PythonTracebackLexer
+    from pygments.formatters import HtmlFormatter
+    from StringIO import StringIO
+    pygmentize = True
+except ImportError:
+    from aspen.logging import log
+    import sys
+    exc = sys.exc_info()[1]
+    log("Cannot import pygments: " + str(exc))
+    pygmentize = False
+
+[----------------------------------------]
+
+style = ''
+msg = status_strings.get(response.code, 'Sorry').title()
+err = response.body
+if request.website.show_tracebacks and pygmentize:
+    sio = StringIO()
+    formatter = HtmlFormatter()
+    tokens = PythonTracebackLexer().get_tokens(response.body)
+    formatter.format(tokens, sio)
+    sio.seek(0)
+    err = sio.read()
+    style = formatter.get_style_defs()
+
+[----------------------------------------] text/html
+<html>
+    <head>
+        <title>{{response.code}} {{msg|e}}</title>
+        <style>
+            {{style}}
+            BODY {
+                margin: 0;
+                padding: 200px 0 0;
+                text-align: center;
+                font: normal 18pt/18pt Georgia, serif;
+            }
+            PRE {
+                text-align: left;
+                font: normal 10pt/12pt monospace;
+                margin: 50px 200px 0;
+            }
+        </style>
+    </head>
+    <body>
+        {{msg|e}}, program!
+        <pre>{{err|e}}</pre>
+    </body>
+</html>
+[----------------------------------------] application/json
+{{
+json.dumps({
+    "error_code": response.code,
+    "error_message_short": msg,
+    "error_message_long": err
+})
+}}
+[----------------------------------------] text/plain
+{{msg}}, program!
+{{err}}
