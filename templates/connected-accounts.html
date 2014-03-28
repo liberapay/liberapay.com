@@ -6,7 +6,9 @@
 
     <!-- social profiles -->
     {% for platform in website.social_profiles %}
-    {{ account_row(platform, accounts, auth_button) }}
+        {% if accounts[platform.name] or user.participant == participant %}
+            {{ account_row(platform, accounts, auth_button) }}
+        {% endif %}
     {% endfor %}
 </table>
 
