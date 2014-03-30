@@ -66,7 +66,7 @@ class Payee(object):
         fee = min(fee, self.fee_cap)                        # capped at $20, or $1 for U.S.
         self.fee += fee
         self.net -= fee
-        if self.net % 1 == D('0.25'):
+        if self.net % 1 in (D('0.25'), D('0.75')):
 
             # Prevent an escrow leak. It's complicated, but it goes something
             # like this:
@@ -94,6 +94,8 @@ class Payee(object):
             #
             # See also: https://github.com/gittip/www.gittip.com/issues/1673
             #           https://github.com/gittip/www.gittip.com/issues/2029
+            #           https://github.com/gittip/www.gittip.com/issues/2198
+            #           https://github.com/gittip/www.gittip.com/pull/2209
 
             self.gross -= D('0.01')
             self.net -= D('0.01')
