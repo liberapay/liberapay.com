@@ -24,8 +24,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision :shell, :inline => <<-eos
     echo 'deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main' > /etc/apt/sources.list.d/postgresql.list
     wget -qO- https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
+    echo 'deb http://ppa.launchpad.net/chris-lea/node.js/ubuntu precise main' > /etc/apt/sources.list.d/chrislea-nodejs.list
+    wget -qO- 'http://keyserver.ubuntu.com:11371/pks/lookup?op=get&search=0xB9316A7BC7917B12' | apt-key add -
     apt-get update
-    apt-get -y install make git build-essential python-software-properties postgresql-9.3 postgresql-contrib-9.3 libpq-dev python-dev
+    apt-get -y install make git build-essential python-software-properties postgresql-9.3 postgresql-contrib-9.3 libpq-dev python-dev nodejs
   eos
 
   # Configure Postgres
