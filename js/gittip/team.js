@@ -1,8 +1,20 @@
 Gittip.team = (function() {
     function init() {
+        var $team = $('#team');
+
+        var $indicator = $('<div class="loading-indicator"/>');
+        $indicator.appendTo($('#page'));
+
         $('#lookup-container form').submit(add);
         $('#query').focus().keyup(lookup);
-        jQuery.get("index.json").success(drawRows);
+
+        $team.css('opacity', 0);
+
+        jQuery.get("index.json").success(function(members) {
+            $team.css('opacity', 1);
+            $indicator.remove();
+            drawRows(members);
+        });
     }
 
 
