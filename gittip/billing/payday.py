@@ -835,7 +835,7 @@ class Payday(object):
                                     ))
 
 
-    def record_transfer(self, cursor, tipper, tippee, amount, as_team_member):
+    def record_transfer(self, cursor, tipper, tippee, amount, as_team_member=False):
         cursor.run("""\
 
           INSERT INTO transfers
