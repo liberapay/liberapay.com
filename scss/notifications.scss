@@ -8,10 +8,17 @@
     $transparency: 0.15;
 
     .notification {
+        box-sizing: border-box;
         text-align: center;
-        padding: 10px;
         border-bottom: 1px solid #fff;
         border-bottom-color: rgba(255, 255, 255, .6);
+        overflow: hidden;
+
+        @include animation(fadein 0.5s 1 ease-in);
+
+        div {
+            padding: 10px;
+        }
     }
 
     .notification-notice {
@@ -27,5 +34,17 @@
     .notification-error {
         background: $light-red;
         background: transparentize($light-red, $transparency);
+    }
+}
+
+@include keyframes(fadein) {
+    0% {
+        opacity: 0;
+        max-height: 0;
+    }
+
+    100% {
+        opacity: 1;
+        max-height: 150px;
     }
 }

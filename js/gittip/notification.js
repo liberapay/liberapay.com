@@ -6,12 +6,12 @@
 Gittip.notification = function(text, type) {
     type = type || 'notice';
 
-    var dialog = Gittip.jsonml(['div', { 'class': 'notification notification-' + type }, text]);
+    var dialog = Gittip.jsonml(['div', { 'class': 'notification notification-' + type }, [ 'div', text ]]);
 
     if (!$('#notification-area').length)
         $('body').prepend('<div id="notification-area"></div>');
 
     $('#notification-area').prepend(dialog);
 
-    setTimeout(function() { $(dialog).remove(); }, 15000);
+    setTimeout(function() { $(dialog).fadeOut(); }, 15000);
 };
