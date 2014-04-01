@@ -105,7 +105,7 @@ Gittip.tips.init = function() {
             return;
 
         if(isAnon)
-            alert("Please sign in first");
+            Gittip.notification("Please sign in first", 'error');
         else {
             // send request to change tip
             $.post('/' + tippee + '/tip.json', { amount: amount }, function(data) {
@@ -128,10 +128,10 @@ Gittip.tips.init = function() {
                 // update quick stats
                 $('.quick-stats a').text('$' + data.total_giving + '/wk');
 
-                alert("Tip changed to $" + amount + "!");
+                Gittip.notification("Tip changed to $" + amount + "!", 'success');
             })
             .fail(function() {
-                alert('Sorry, something went wrong while changing your tip. :(');
+                Gittip.notification('Sorry, something went wrong while changing your tip. :(', 'error');
                 console.log.apply(console, arguments);
             })
         }

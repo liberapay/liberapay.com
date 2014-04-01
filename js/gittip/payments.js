@@ -36,7 +36,7 @@ Gittip.payments.submitDeleteForm = function(e) {
           }
         , error: function(x,y,z) {
             select(cur);
-            alert("Sorry, something went wrong deleting your " + item + ". :(");
+            Gittip.notification("Sorry, something went wrong deleting your " + item + ". :(", 'error');
             console.log(x,y,z);
           }
          }
@@ -229,7 +229,7 @@ Gittip.payments.cc.submit = function(e) {
 
     if (!Gittip.havePayments) {
         if (Gittip.paymentProcessorAttempts++ === 50)
-            alert( "Gah! Apparently we suck. If you're really motivated, call "
+            Gittip.notification( "Gah! Apparently we suck. If you're really motivated, call "
                  + "me (Chad) at 412-925-4220 and we'll figure this out. "
                  + "Sorry. :-("
                   );

@@ -51,7 +51,7 @@ Gittip.profile.init = function() {
         }
         function error(e) {
             $('#save-username').text('Save');
-            alert(JSON.parse(e.responseText).error_message_long);
+            Gittip.notification(JSON.parse(e.responseText).error_message_long, 'error');
         }
         jQuery.ajax(
             { url: "username.json"
@@ -191,7 +191,7 @@ Gittip.profile.init = function() {
             , success: success
             , error: function() {
                     $('.goal button.save').text('Save');
-                    alert("Failed to change your funding goal. Please try again.");
+                    Gittip.notification("Failed to change your funding goal. Please try again.", 'error');
                 }
              }
         );
@@ -225,7 +225,7 @@ Gittip.profile.init = function() {
                 $('.anonymous-giving input').attr('checked', data.giving);
             }
             , error: function() {
-                    alert("Failed to change your anonymity preference. Please try again.");
+                    Gittip.notification("Failed to change your anonymity preference. Please try again.", 'error');
                 }
              }
         );
@@ -245,7 +245,7 @@ Gittip.profile.init = function() {
                 $('.anonymous-receiving input').attr('checked', data.receiving);
             }
             , error: function() {
-                    alert("Failed to change your anonymity preference. Please try again.");
+                    Gittip.notification("Failed to change your anonymity preference. Please try again.", 'error');
                 }
              }
         );
@@ -319,7 +319,7 @@ Gittip.profile.init = function() {
                     success: success,
                     error: function () {
                         $this.text('Save');
-                        alert("Invalid Bitcoin address. Please try again." );
+                        Gittip.notification("Invalid Bitcoin address. Please try again.", 'error');
                     },
                     data: {
                         bitcoin_address: $('input.bitcoin').val()
@@ -346,9 +346,9 @@ Gittip.profile.init = function() {
             },
             error: function (e) {
                 try {
-                    alert(JSON.parse(e.responseText).error_message_long);
+                    Gittip.notification(JSON.parse(e.responseText).error_message_long, 'error');
                 } catch(exception) {
-                    alert("Some error occured: "+exception)
+                    Gittip.notification("Some error occured: "+exception, 'error')
                 }
             },
             data: { platform: this.dataset.platform, user_id: this.dataset.user_id }

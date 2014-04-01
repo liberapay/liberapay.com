@@ -106,7 +106,7 @@ Gittip.signOut = function() {
                 window.location.href = window.location.href;
             },
             error: function() {
-                alert('Failed to sign out');
+                Gittip.notification('Failed to sign out', 'error');
             }
         });
     });
