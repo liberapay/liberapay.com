@@ -2,13 +2,13 @@
 """
 from __future__ import absolute_import, division, print_function, unicode_literals
 import os
-import sys
 
 import aspen
 import balanced
 import gittip
 import raven
 import stripe
+from environment import Environment, is_yesish
 from gittip.elsewhere import PlatformRegistry
 from gittip.elsewhere.bitbucket import Bitbucket
 from gittip.elsewhere.bountysource import Bountysource
@@ -147,26 +147,7 @@ class BadEnvironment(SystemExit):
 
 
 def envvars(website):
-
-    missing_keys = []
-    malformed_values = []
-
-    def envvar(key, cast=None):
-        if key not in os.environ:
-            missing_keys.append(key)
-            return ""
-        value = os.environ[key].decode('ASCII')
-        if cast is not None:
-            try:
-                value = cast(value)
-            except:
-                err = str(sys.exc_info()[1])
-                malformed_values.append((key, err))
-                return ""
-        return value
-
-    def is_yesish(val):
-        return val.lower() in ('1', 'true', 'yes')
+    env = _env()
 
 
     # Accounts Elsewhere
@@ -174,43 +155,43 @@ def envvars(website):
 
     twitter = Twitter(
         website.db,
-        envvar('TWITTER_CONSUMER_KEY'),
-        envvar('TWITTER_CONSUMER_SECRET'),
-        envvar('TWITTER_CALLBACK'),
+        env.twitter_consumer_key,
+        env.twitter_consumer_secret,
+        env.twitter_callback,
     )
     github = GitHub(
         website.db,
-        envvar('GITHUB_CLIENT_ID'),
-        envvar('GITHUB_CLIENT_SECRET'),
-        envvar('GITHUB_CALLBACK'),
+        env.github_client_id,
+        env.github_client_secret,
+        env.github_callback,
     )
     bitbucket = Bitbucket(
         website.db,
-        envvar('BITBUCKET_CONSUMER_KEY'),
-        envvar('BITBUCKET_CONSUMER_SECRET'),
-        envvar('BITBUCKET_CALLBACK'),
+        env.bitbucket_consumer_key,
+        env.bitbucket_consumer_secret,
+        env.bitbucket_callback,
     )
     openstreetmap = OpenStreetMap(
         website.db,
-        envvar('OPENSTREETMAP_CONSUMER_KEY'),
-        envvar('OPENSTREETMAP_CONSUMER_SECRET'),
-        envvar('OPENSTREETMAP_CALLBACK'),
-        envvar('OPENSTREETMAP_API_URL'),
-        envvar('OPENSTREETMAP_AUTH_URL'),
+        env.openstreetmap_consumer_key,
+        env.openstreetmap_consumer_secret,
+        env.openstreetmap_callback,
+        env.openstreetmap_api_url,
+        env.openstreetmap_auth_url,
     )
     bountysource = Bountysource(
         website.db,
         None,
-        envvar('BOUNTYSOURCE_API_SECRET'),
-        envvar('BOUNTYSOURCE_CALLBACK'),
-        envvar('BOUNTYSOURCE_API_HOST'),
-        envvar('BOUNTYSOURCE_WWW_HOST'),
+        env.bountysource_api_secret,
+        env.bountysource_callback,
+        env.bountysource_api_host,
+        env.bountysource_www_host,
     )
     venmo = Venmo(
         website.db,
-        envvar('VENMO_CLIENT_ID'),
-        envvar('VENMO_CLIENT_SECRET'),
-        envvar('VENMO_CALLBACK'),
+        env.venmo_client_id,
+        env.venmo_client_secret,
+        env.venmo_callback,
     )
 
     signin_platforms = [twitter, github, bitbucket, openstreetmap]
@@ -227,51 +208,93 @@ def envvars(website):
     # Other Stuff
     # ===========
 
-    website.asset_version_url = envvar('GITTIP_ASSET_VERSION_URL') \
-                                      .replace('%version', website.version)
-    website.asset_url = envvar('GITTIP_ASSET_URL')
-    website.cache_static = is_yesish(envvar('GITTIP_CACHE_STATIC'))
-    website.compress_assets = is_yesish(envvar('GITTIP_COMPRESS_ASSETS'))
+    website.asset_version_url = env.gittip_asset_version_url.replace('%version', website.version)
+    website.asset_url = env.gittip_asset_url
+    website.cache_static = env.gittip_cache_static
+    website.compress_assets = env.gittip_compress_assets
 
-    website.google_analytics_id = envvar('GOOGLE_ANALYTICS_ID')
-    website.sentry_dsn = envvar('SENTRY_DSN')
+    website.google_analytics_id = env.google_analytics_id
+    website.sentry_dsn = env.sentry_dsn
 
-    website.min_threads = envvar('MIN_THREADS', int)
-    website.log_busy_threads_every = envvar('LOG_BUSY_THREADS_EVERY', int)
-    website.log_metrics = is_yesish(envvar('LOG_METRICS'))
+    website.min_threads = env.min_threads
+    website.log_busy_threads_every = env.log_busy_threads_every
+    website.log_metrics = env.log_metrics
+
+
+def _env():
+    env = Environment(
+        DATABASE_URL                    = unicode,
+        CANONICAL_HOST                  = unicode,
+        CANONICAL_SCHEME                = unicode,
+        MIN_THREADS                     = int,
+        DATABASE_MAXCONN                = unicode,
+        GITTIP_ASSET_VERSION_URL        = unicode,
+        GITTIP_ASSET_URL                = unicode,
+        GITTIP_CACHE_STATIC             = is_yesish,
+        GITTIP_COMPRESS_ASSETS          = is_yesish,
+        STRIPE_SECRET_API_KEY           = unicode,
+        STRIPE_PUBLISHABLE_API_KEY      = unicode,
+        BALANCED_API_SECRET             = unicode,
+        DEBUG                           = unicode,
+        GITHUB_CLIENT_ID                = unicode,
+        GITHUB_CLIENT_SECRET            = unicode,
+        GITHUB_CALLBACK                 = unicode,
+        BITBUCKET_CONSUMER_KEY          = unicode,
+        BITBUCKET_CONSUMER_SECRET       = unicode,
+        BITBUCKET_CALLBACK              = unicode,
+        TWITTER_CONSUMER_KEY            = unicode,
+        TWITTER_CONSUMER_SECRET         = unicode,
+        TWITTER_CALLBACK                = unicode,
+        BOUNTYSOURCE_API_SECRET         = unicode,
+        BOUNTYSOURCE_CALLBACK           = unicode,
+        BOUNTYSOURCE_API_HOST           = unicode,
+        BOUNTYSOURCE_WWW_HOST           = unicode,
+        VENMO_CLIENT_ID                 = unicode,
+        VENMO_CLIENT_SECRET             = unicode,
+        VENMO_CALLBACK                  = unicode,
+        OPENSTREETMAP_CONSUMER_KEY      = unicode,
+        OPENSTREETMAP_CONSUMER_SECRET   = unicode,
+        OPENSTREETMAP_CALLBACK          = unicode,
+        OPENSTREETMAP_API_URL           = unicode,
+        OPENSTREETMAP_AUTH_URL          = unicode,
+        NANSWERS_THRESHOLD              = unicode,
+        UPDATE_HOMEPAGE_EVERY           = unicode,
+        GOOGLE_ANALYTICS_ID             = unicode,
+        SENTRY_DSN                      = unicode,
+        LOG_BUSY_THREADS_EVERY          = int,
+        LOG_METRICS                     = is_yesish,
+    )
 
 
     # Error Checking
     # ==============
 
-    if malformed_values:
-        malformed_values.sort()
-        these = len(malformed_values) != 1 and 'these' or 'this'
-        plural = len(malformed_values) != 1 and 's' or ''
+    if env.malformed:
+        these = len(env.malformed) != 1 and 'these' or 'this'
+        plural = len(env.malformed) != 1 and 's' or ''
         aspen.log_dammit("=" * 42)
         aspen.log_dammit( "Oh no! Gittip.com couldn't understand %s " % these
                         , "environment variable%s:" % plural
                          )
         aspen.log_dammit(" ")
-        for key, err in malformed_values:
+        for key, err in env.malformed:
             aspen.log_dammit("  {} ({})".format(key, err))
         aspen.log_dammit(" ")
         aspen.log_dammit("See ./default_local.env for hints.")
 
         aspen.log_dammit("=" * 42)
-        keys = ', '.join([key for key in malformed_values])
+        keys = ', '.join([key for key in env.malformed])
         raise BadEnvironment("Malformed envvar{}: {}.".format(plural, keys))
 
-    if missing_keys:
-        missing_keys.sort()
-        these = len(missing_keys) != 1 and 'these' or 'this'
-        plural = len(missing_keys) != 1 and 's' or ''
+    if env.missing:
+        these = len(env.missing) != 1 and 'these' or 'this'
+        plural = len(env.missing) != 1 and 's' or ''
         aspen.log_dammit("=" * 42)
         aspen.log_dammit( "Oh no! Gittip.com needs %s missing " % these
                         , "environment variable%s:" % plural
                          )
         aspen.log_dammit(" ")
-        for key in missing_keys:
+        for key in env.missing:
             aspen.log_dammit("  " + key)
         aspen.log_dammit(" ")
         aspen.log_dammit( "(Sorry, we must've started looking for "
@@ -284,5 +307,7 @@ def envvars(website):
         aspen.log_dammit("See ./default_local.env for hints.")
 
         aspen.log_dammit("=" * 42)
-        keys = ', '.join([key for key in missing_keys])
+        keys = ', '.join([key for key in env.missing])
         raise BadEnvironment("Missing envvar{}: {}.".format(plural, keys))
+
+    return env
