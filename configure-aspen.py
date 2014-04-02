@@ -20,8 +20,7 @@ from aspen import log_dammit
 # ================
 
 version_file = os.path.join(website.www_root, 'version.txt')
-__version__ = open(version_file).read().strip()
-website.version = os.environ['__VERSION__'] = __version__
+website.version = open(version_file).read().strip()
 
 
 website.renderer_default = "jinja2"
@@ -50,7 +49,7 @@ tell_sentry = gittip.wireup.make_sentry_teller(website)
 # The homepage wants expensive queries. Let's periodically select into an
 # intermediate table.
 
-UPDATE_HOMEPAGE_EVERY = int(os.environ['UPDATE_HOMEPAGE_EVERY'])
+UPDATE_HOMEPAGE_EVERY = env.update_homepage_every
 def update_homepage_queries():
     from gittip import utils
     while 1:
