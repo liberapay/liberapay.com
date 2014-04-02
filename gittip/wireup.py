@@ -39,10 +39,10 @@ def db(env):
     return db
 
 
-def billing():
-    stripe.api_key= os.environ['STRIPE_SECRET_API_KEY']
-    stripe.publishable_api_key= os.environ['STRIPE_PUBLISHABLE_API_KEY']
-    balanced.configure(os.environ['BALANCED_API_SECRET'])
+def billing(env):
+    stripe.api_key = env.stripe_secret_api_key
+    stripe.publishable_api_key = env.stripe_publishable_api_key
+    balanced.configure(env.balanced_api_secret)
 
 
 def username_restrictions(website):

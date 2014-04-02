@@ -101,7 +101,8 @@ class TestRenderingStatsPage(Harness):
         with patch.object(datetime, 'datetime') as mock_datetime:
             mock_datetime.utcnow.return_value = a_thursday
 
-            wireup.billing()
+            env = wireup.env()
+            wireup.billing(env)
             payday = Payday(self.db)
             payday.start()
 

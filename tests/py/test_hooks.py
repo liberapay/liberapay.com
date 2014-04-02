@@ -11,8 +11,8 @@ class Tests(Harness):
     def setUp(self):
         Harness.setUp(self)
 
-        # Grab configuration from os.environ, storing for later.
-        env = Environment(CANONICAL_SCHEME=unicode, CANONICAL_HOST=unicode)
+        # Grab configuration from the environment, storing for later.
+        env = wireup.env()
         self.environ = env.environ
 
         # Change env, doesn't change self.environ.

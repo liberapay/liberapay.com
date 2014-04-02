@@ -39,7 +39,7 @@ website.renderer_factories['jinja2'].Renderer.global_context = {
 env = website.env = gittip.wireup.env()
 gittip.wireup.canonical(env)
 website.db = gittip.wireup.db(env)
-gittip.wireup.billing()
+gittip.wireup.billing(env)
 gittip.wireup.username_restrictions(website)
 gittip.wireup.nanswers(env)
 gittip.wireup.accounts_elsewhere(website, env)
