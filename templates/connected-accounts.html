@@ -76,7 +76,7 @@
             <div class="account-type">
                 Balanced Payments
                 {% if user.ADMIN and participant.balanced_customer_href %}
-                (<a href="https://dashboard.balancedpayments.com/#/{{ participant.balanced_customer_href[4:] }}"
+                (<a href="https://dashboard.balancedpayments.com/#/marketplaces/MP12Xw5lL6iaILtqImIoroDL{{ participant.balanced_customer_href }}"
                     >view on dashboard</a>)
                 {% endif %}
             </div>
