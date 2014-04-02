@@ -1,6 +1,5 @@
 """This is installed as `payday`.
 """
-import os
 from gittip import wireup
 
 
@@ -13,8 +12,9 @@ def payday():
     # connection it's easier to trust changes to statement_timeout. The point
     # here is that we want to turn off statement_timeout for payday.
 
-    os.environ['DATABASE_MAXCONN'] = '1'
-    db = wireup.db()
+    env = wireup.env()
+    env.database_maxconn = 1
+    db = wireup.db(env)
     db.run("SET statement_timeout = 0")
 
     wireup.billing()
