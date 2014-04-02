@@ -137,9 +137,9 @@ def make_sentry_teller(website):
     return tell_sentry
 
 
-def nanswers():
+def nanswers(env):
     from gittip.models import participant
-    participant.NANSWERS_THRESHOLD = int(os.environ['NANSWERS_THRESHOLD'])
+    participant.NANSWERS_THRESHOLD = env.nanswers_threshold
 
 
 class BadEnvironment(SystemExit):
@@ -250,7 +250,7 @@ def env():
         OPENSTREETMAP_CALLBACK          = unicode,
         OPENSTREETMAP_API_URL           = unicode,
         OPENSTREETMAP_AUTH_URL          = unicode,
-        NANSWERS_THRESHOLD              = unicode,
+        NANSWERS_THRESHOLD              = int,
         UPDATE_HOMEPAGE_EVERY           = int,
         GOOGLE_ANALYTICS_ID             = unicode,
         SENTRY_DSN                      = unicode,
