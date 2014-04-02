@@ -146,12 +146,7 @@ class BadEnvironment(SystemExit):
     pass
 
 
-def envvars(website):
-    env = _env()
-
-
-    # Accounts Elsewhere
-    # ==================
+def accounts_elsewhere(website, env):
 
     twitter = Twitter(
         website.db,
@@ -205,9 +200,7 @@ def envvars(website):
     website.platforms = AccountElsewhere.platforms = PlatformRegistry(all_platforms)
 
 
-    # Other Stuff
-    # ===========
-
+def other_stuff(website, env):
     website.asset_version_url = env.gittip_asset_version_url.replace('%version', website.version)
     website.asset_url = env.gittip_asset_url
     website.cache_static = env.gittip_cache_static
@@ -221,7 +214,7 @@ def envvars(website):
     website.log_metrics = env.log_metrics
 
 
-def _env():
+def env():
     env = Environment(
         DATABASE_URL                    = unicode,
         CANONICAL_HOST                  = unicode,

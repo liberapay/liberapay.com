@@ -15,6 +15,7 @@ from gittip.utils import cache_static, timer
 
 from aspen import log_dammit
 
+
 # Wireup Algorithm
 # ================
 
@@ -36,12 +37,14 @@ website.renderer_factories['jinja2'].Renderer.global_context = {
 }
 
 
+env = gittip.wireup.env()
 gittip.wireup.canonical()
 website.db = gittip.wireup.db()
 gittip.wireup.billing()
 gittip.wireup.username_restrictions(website)
 gittip.wireup.nanswers()
-gittip.wireup.envvars(website)
+gittip.wireup.accounts_elsewhere(website, env)
+gittip.wireup.other_stuff(website, env)
 tell_sentry = gittip.wireup.make_sentry_teller(website)
 
 # The homepage wants expensive queries. Let's periodically select into an
