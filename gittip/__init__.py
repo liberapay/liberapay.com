@@ -2,7 +2,6 @@
 """
 import datetime
 import locale
-import os
 from decimal import Decimal
 
 import aspen
@@ -91,12 +90,6 @@ def canonize(request):
             # For non-idempotent methods, redirect to homepage.
             url += '/'
         request.redirect(url)
-
-
-def configure_payments(request):
-    # Work-around for https://github.com/balanced/balanced-python/issues/5
-    import balanced
-    balanced.configure(os.environ['BALANCED_API_SECRET'])
 
 
 def outbound(request, response, website):

@@ -8,7 +8,7 @@ import traceback
 
 import gittip
 import gittip.wireup
-from gittip import canonize, configure_payments
+from gittip import canonize
 from gittip.security import authentication, csrf, x_frame_options
 from gittip.utils import cache_static, timer
 
@@ -145,7 +145,6 @@ algorithm.functions = [ timer.start
                       , algorithm['raise_200_for_OPTIONS']
 
                       , canonize
-                      , configure_payments
                       , authentication.inbound
                       , csrf.inbound
                       , add_stuff_to_context
