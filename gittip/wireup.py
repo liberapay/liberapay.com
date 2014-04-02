@@ -27,9 +27,9 @@ def canonical(env):
     gittip.canonical_host = env.canonical_host
 
 
-def db():
-    dburl = os.environ['DATABASE_URL']
-    maxconn = int(os.environ['DATABASE_MAXCONN'])
+def db(env):
+    dburl = env.database_url
+    maxconn = env.database_maxconn
     db = GittipDB(dburl, maxconn=maxconn)
 
     db.register_model(Community)
@@ -220,7 +220,7 @@ def env():
         CANONICAL_HOST                  = unicode,
         CANONICAL_SCHEME                = unicode,
         MIN_THREADS                     = int,
-        DATABASE_MAXCONN                = unicode,
+        DATABASE_MAXCONN                = int,
         GITTIP_ASSET_VERSION_URL        = unicode,
         GITTIP_ASSET_URL                = unicode,
         GITTIP_CACHE_STATIC             = is_yesish,
