@@ -228,7 +228,7 @@ def env():
         STRIPE_SECRET_API_KEY           = unicode,
         STRIPE_PUBLISHABLE_API_KEY      = unicode,
         BALANCED_API_SECRET             = unicode,
-        DEBUG                           = unicode,
+        #DEBUG                           = unicode,
         GITHUB_CLIENT_ID                = unicode,
         GITHUB_CLIENT_SECRET            = unicode,
         GITHUB_CALLBACK                 = unicode,
