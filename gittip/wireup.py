@@ -22,9 +22,9 @@ from gittip.models.participant import Participant
 from gittip.models import GittipDB
 
 
-def canonical():
-    gittip.canonical_scheme = os.environ['CANONICAL_SCHEME']
-    gittip.canonical_host = os.environ['CANONICAL_HOST']
+def canonical(env):
+    gittip.canonical_scheme = env.canonical_scheme
+    gittip.canonical_host = env.canonical_host
 
 
 def db():

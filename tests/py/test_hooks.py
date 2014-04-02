@@ -1,9 +1,9 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-import os
 from gittip import wireup
 from gittip.testing import Harness
 from gittip.models.participant import Participant
+from environment import Environment
 
 
 class Tests(Harness):
@@ -11,18 +11,20 @@ class Tests(Harness):
     def setUp(self):
         Harness.setUp(self)
 
-        self._blech = ( os.environ['CANONICAL_SCHEME']
-                      , os.environ['CANONICAL_HOST']
-                       )
-        os.environ['CANONICAL_SCHEME'] = 'https'
-        os.environ['CANONICAL_HOST'] = 'www.gittip.com'
-        wireup.canonical()
+        # Grab configuration from os.environ, storing for later.
+        env = Environment(CANONICAL_SCHEME=unicode, CANONICAL_HOST=unicode)
+        self.environ = env.environ
+
+        # Change env, doesn't change self.environ.
+        env.canonical_scheme = 'https'
+        env.canonical_host = 'www.gittip.com'
+
+        wireup.canonical(env)
 
     def tearDown(self):
         Harness.tearDown(self)
-        os.environ['CANONICAL_SCHEME'] = self._blech[0]
-        os.environ['CANONICAL_HOST'] = self._blech[1]
-        wireup.canonical()
+        reset = Environment(CANONICAL_SCHEME=unicode, CANONICAL_HOST=unicode, environ=self.environ)
+        wireup.canonical(reset)
 
 
     def test_canonize_canonizes(self):
