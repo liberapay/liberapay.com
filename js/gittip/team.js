@@ -170,6 +170,14 @@ Gittip.team = (function() {
                     alert('Updated your take!');
                 else
                     alert('You cannot exceed double of last week. Updated your take to ' + newTake + '.');
+
+                // Have a little fun if updating the user's take results in the team balance
+                // equaling $0.01 or $1.00
+                var balance = $('.figure.balance').last().text();
+                if (localStorage && !localStorage.lastSushi && (balance == '0.01' || balance == '1.00')) {
+                    Gittip.notification('Achievement Unlocked: The Last Sushi Roll', 'success');
+                    localStorage.lastSushi = true;
+                }
             };
             if (parseFloat(take) === 0) {
                 if (!confirm("Remove yourself from this team?")) {
@@ -194,7 +202,7 @@ Gittip.team = (function() {
                 { type: 'POST'
                 , url: username + ".json"
                 , data: {take: take}
-                , success: function(d) { callback(d); drawRows(d); }
+                , success: function(d) { drawRows(d); callback(d); }
                 , error: function(xhr) {
                         switch (xhr.status) {
                             case 404: alert("Unknown user!"); break;
