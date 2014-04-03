@@ -5,6 +5,7 @@ python := "$(shell { command -v python2.7 || command -v python; } 2>/dev/null)"
 bin_dir := $(shell $(python) -c 'import sys; bin = "Scripts" if sys.platform == "win32" else "bin"; print(bin)')
 env_bin := env/$(bin_dir)
 venv := "./vendor/virtualenv-1.9.1.py"
+py_test := ./$(env_bin)/honcho -e tests/defaults.env,tests/local.env run ./$(env_bin)/py.test
 
 postgression_api_url := http://api.postgression.com/
 
@@ -61,15 +62,15 @@ pyflakes: env
 test: pytest jstest
 
 pytest: env test-schema
-	./$(env_bin)/honcho -e tests/defaults.env,tests/local.env run ./$(env_bin)/py.test ./tests/py/
+	$(py_test) ./tests/py/
 	@$(MAKE) --no-print-directory pyflakes
 
 retest: env
-	./$(env_bin)/honcho -e tests/defaults.env,tests/local.env run ./$(env_bin)/py.test ./tests/py/ --lf
+	$(py_test) ./tests/py/ --lf
 	@$(MAKE) --no-print-directory pyflakes
 
 test-cov: env test-schema
-	./$(env_bin)/honcho -e tests/defaults.env,tests/local.env run ./$(env_bin)/py.test --cov gittip ./tests/py/
+	$(py_test) --cov gittip ./tests/py/
 
 tests: test
 
