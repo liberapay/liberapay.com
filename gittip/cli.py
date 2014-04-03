@@ -17,8 +17,8 @@ def payday():
     db = wireup.db(env)
     db.run("SET statement_timeout = 0")
 
-    wireup.billing()
-    wireup.nanswers()
+    wireup.billing(env)
+    wireup.nanswers(env)
 
 
     # Lazily import the billing module.
