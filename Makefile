@@ -5,7 +5,8 @@ python := "$(shell { command -v python2.7 || command -v python; } 2>/dev/null)"
 bin_dir := $(shell $(python) -c 'import sys; bin = "Scripts" if sys.platform == "win32" else "bin"; print(bin)')
 env_bin := env/$(bin_dir)
 venv := "./vendor/virtualenv-1.9.1.py"
-py_test := ./$(env_bin)/honcho -e tests/defaults.env,tests/local.env run ./$(env_bin)/py.test
+test_env_files := defaults.env,tests/test.env,tests/local.env
+py_test := ./$(env_bin)/honcho -e $(test_env_files) run ./$(env_bin)/py.test
 
 postgression_api_url := http://api.postgression.com/
 
@@ -52,7 +53,7 @@ test-cloud-db: env
 	echo -n $(postgression_database) >> tests/local.env
 
 test-schema: env
-	./$(env_bin)/honcho -e tests/defaults.env,tests/local.env run ./recreate-schema.sh
+	./$(env_bin)/honcho -e $(test_env_files) run ./recreate-schema.sh
 
 test-db: test-cloud-db test-schema
 

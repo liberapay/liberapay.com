@@ -11,7 +11,8 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),
 
         env: ini.parse(
-            fs.readFileSync('tests/defaults.env', 'utf8') +
+            fs.readFileSync('defaults.env', 'utf8') +
+            fs.readFileSync('tests/test.env', 'utf8') +
             (fs.existsSync('tests/local.env') ?
                 fs.readFileSync('tests/local.env', 'utf8') : '')
         ),
