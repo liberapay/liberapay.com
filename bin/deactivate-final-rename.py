@@ -9,7 +9,7 @@ this script will report the problem and abort without making any update.
 
 Usage:
 
-    [gittip] $ heroku config -s -a gittip | foreman run -e /dev/stdin ./env/bin/python ./scripts/deactivate-final-rename.py "username" [first-eight-of-api-key]
+    [gittip] $ heroku config -s -a gittip | foreman run -e /dev/stdin ./env/bin/python ./bin/deactivate-final-rename.py "username" [first-eight-of-api-key]
 
 """
 from __future__ import print_function
