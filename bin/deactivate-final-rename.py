@@ -26,7 +26,7 @@ if len(sys.argv) < 3:
 else:
     first_eight = sys.argv[2]
 
-db = wireup.db()
+db = wireup.db(wireup.env())
 
 target = Participant.from_username(username)
 

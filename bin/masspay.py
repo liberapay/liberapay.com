@@ -102,7 +102,7 @@ class Payee(object):
 
 def compute_input_csv():
     from gittip import wireup
-    db = wireup.db()
+    db = wireup.db(wireup.env())
     participants = db.all("""
 
         SELECT participants.*::participants

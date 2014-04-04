@@ -13,7 +13,7 @@ import requests
 from gittip import wireup
 from requests_oauthlib import OAuth1
 
-db = wireup.db()
+db = wireup.db(wireup.env())
 
 def update_twitter():
     oauth = OAuth1( os.environ['TWITTER_CONSUMER_KEY']

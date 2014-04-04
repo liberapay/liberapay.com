@@ -14,7 +14,7 @@ from decimal import ROUND_DOWN, Decimal as D
 from gittip import wireup
 from gittip.models.participant import Participant
 
-db = wireup.db()
+db = wireup.db(wireup.env())
 
 username = sys.argv[1] # will fail with KeyError if missing
 tipper = Participant.from_username(username)
