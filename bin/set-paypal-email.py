@@ -24,7 +24,7 @@ if len(sys.argv) < 4:
 else:
     first_eight = sys.argv[3]
 
-db = wireup.db()
+db = wireup.db(wireup.env())
 
 FIELDS = """
         SELECT username, api_key, paypal_email

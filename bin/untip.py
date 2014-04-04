@@ -15,7 +15,7 @@ from gittip import wireup
 
 tippee = sys.argv[1] # will fail with KeyError if missing
 
-db = wireup.db()
+db = wireup.db(wireup.env())
 
 tips = db.all("""
 
