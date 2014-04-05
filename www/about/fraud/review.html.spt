@@ -18,9 +18,9 @@ unreviewed = website.db.all("""
 """)
 
 [---]
-<script src="{{ website.asset_version_url }}/jquery.min.js"></script>
-<script src="{{ website.asset_version_url }}/utils.js"></script>
-<script src="{{ website.asset_version_url }}/gittip.js"></script>
+<script src="{{ website.asset_url }}/jquery.min.js"></script>
+<script src="{{ website.asset_url }}/utils.js"></script>
+<script src="{{ website.asset_url }}/gittip.js"></script>
 <style>
     table {
         width: auto;
