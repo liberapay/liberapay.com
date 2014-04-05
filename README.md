@@ -15,7 +15,7 @@ $ git clone git@github.com:gittip/www.gittip.com.git
 $ cd www.gittip.com
 $ sudo -u postgres createuser --superuser $USER
 $ createdb gittip
-$ make schema
+$ make schema data
 $ make run
 ```
 
