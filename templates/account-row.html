@@ -2,7 +2,7 @@
     {% set account = accounts.get(platform.name, None) %}
     <tr>
         <td class="account-type">
-            <img src="{{ website.asset_url }}/{{ platform.name }}.png" />
+            <img src="{{ website.asset_version_url }}/{{ platform.name }}.png" />
         </td>
         <td class="account-details">
             <div class="account-type">{{ platform.display_name }}</div>

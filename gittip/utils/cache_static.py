@@ -100,7 +100,7 @@ def outbound(request, response, website):
     """
     uri = request.line.uri
     
-    if not uri.startswith('/assets/'):
+    if not uri.startswith('/assets/%s' % website.version):
         return response
 
     response.headers.cookie.clear()
@@ -115,9 +115,7 @@ def outbound(request, response, website):
         response.headers['Cache-Control'] = 'public'
         response.headers['Vary'] = 'accept-encoding'
 
-        # all assets are versioned, so it's fine to cache all of them
-        # a) using %version in url (gittip version)
-        # b) using their own version embeded in url (jquery-1.10.2.min.js)
+        # all assets are versioned, so it's fine to cache them
 
         response.headers['Expires'] = 'Sun, 17 Jan 2038 19:14:07 GMT'
         last_modified = get_last_modified(request.fs)

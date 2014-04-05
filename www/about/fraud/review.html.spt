@@ -18,7 +18,7 @@ unreviewed = website.db.all("""
 """)
 
 [---]
-<script src="{{ website.asset_url }}/jquery-1.10.2.min.js"></script>
+<script src="{{ website.asset_version_url }}/jquery.min.js"></script>
 <script src="{{ website.asset_version_url }}/utils.js"></script>
 <script src="{{ website.asset_version_url }}/gittip.js"></script>
 <style>
