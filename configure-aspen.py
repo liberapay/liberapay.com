@@ -42,8 +42,8 @@ website.db = gittip.wireup.db(env)
 gittip.wireup.billing(env)
 gittip.wireup.username_restrictions(website)
 gittip.wireup.nanswers(env)
-gittip.wireup.accounts_elsewhere(website, env)
 gittip.wireup.other_stuff(website, env)
+gittip.wireup.accounts_elsewhere(website, env)
 tell_sentry = gittip.wireup.make_sentry_teller(website)
 
 # The homepage wants expensive queries. Let's periodically select into an
