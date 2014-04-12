@@ -447,9 +447,6 @@ def log_cursor(f):
     return wrapper
 
 
-def get_avatar_url(obj):
-    return obj.avatar_url or '%s/avatar-default.png' % website.asset_url
-
 def _to_age(participant):
     # XXX I can't believe I'm doing this. Evolve aspen.utils.to_age!
     age = to_age(participant.claimed_time, fmt_past="%(age)s")

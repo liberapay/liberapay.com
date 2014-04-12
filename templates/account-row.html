@@ -1,3 +1,5 @@
+{% from 'templates/avatar-url.html' import avatar_url with context %}
+
 {% macro account_row(platform, accounts, auth_button) %}
     {% set account = accounts.get(platform.name, None) %}
     <tr>
@@ -14,7 +16,7 @@
                     {% endcall %}
                 {% endif %}
             {% else %}
-                <img class="avatar" src="{{ get_avatar_url(account)|e }}"/>
+                <img class="avatar" src="{{ avatar_url(account) }}"/>
                 <a class="account-username" rel="me" href="{{ account.html_url|e }}"
                     >{{ account.user_name|e }}
                     {% if account.display_name and account.display_name != account.user_name %}

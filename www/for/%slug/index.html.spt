@@ -1,6 +1,6 @@
 from aspen import Response
 from gittip.models.community import name_pattern, slugize
-from gittip.utils import get_avatar_url, _to_age, format_money, to_statement
+from gittip.utils import _to_age, format_money, to_statement
 from gittip.utils.query_cache import QueryCache
 
 LUXURY = 4
@@ -145,6 +145,8 @@ receivers = query_cache.all("""
 
 """, (community.slug, limit, offset))
 [---]
+{% from 'templates/avatar-url.html' import avatar_url with context %}
+
 {% extends "templates/base.html" %}
 
 {% block heading %}
@@ -225,8 +227,7 @@ $(document).ready(function() {
                 participant.statement) }}">
                     <span class="inner">
                         <span class="avatar"
-                            style="background-image:
-                                url('{{ get_avatar_url(participant)|e}}')">
+                            style="background-image: url('{{ avatar_url(participant) }}')">
                         </span>
                         <span class="age">{{ _to_age(participant) }}</span>
                         <span class="name">{{ participant.username }}</span>
@@ -256,8 +257,7 @@ $(document).ready(function() {
                    data-tip="{{ to_statement((I_AM if giver.number == 'singular' else WE_ARE) + ' ' + MAKING + ' ',
                    giver.statement) }}">
                     <span class="inner">
-                        <span class="avatar"
-                            style="background-image: url('{{ get_avatar_url(giver)|e}}')">
+                        <span class="avatar" style="background-image: url('{{ avatar_url(giver) }}')">
                         </span>
                         <span class="money">${{ format_money(giver.amount) }}</span>
                         <span class="name">{{ giver.username }}</span>
@@ -289,7 +289,7 @@ $(document).ready(function() {
                    receiver.statement) }}">
                     <span class="inner">
                         <span class="avatar"
-                            style="background-image: url('{{ get_avatar_url(receiver)|e}}')">
+                            style="background-image: url('{{ avatar_url(receiver) }}')">
                         </span>
                         <span class="money">${{ format_money(receiver.amount) }}</span>
                         <span class="name">{{ receiver.username }}</span>
