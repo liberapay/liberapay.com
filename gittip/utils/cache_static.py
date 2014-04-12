@@ -100,7 +100,7 @@ def outbound(request, response, website):
     """
     uri = request.line.uri
     
-    if not uri.startswith(website.asset_url):
+    if not uri.startswith('/assets/'):
         return response
 
     response.headers.cookie.clear()
