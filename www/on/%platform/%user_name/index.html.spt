@@ -4,7 +4,6 @@
 from base64 import b64decode, b64encode
 
 from aspen import Response
-from gittip.utils import get_avatar_url
 
 [-----------------------------------------------------------------------------]
 
@@ -41,6 +40,8 @@ else:
     description = 'has'
 
 [-----------------------------------------------------------------------------]
+{% from 'templates/avatar-url.html' import avatar_url with context %}
+
 {% extends "templates/base.html" %}
 
 {% block heading %}
@@ -60,7 +61,7 @@ else:
 <table class="on-elsewhere">
     <tr>
         <td class="picture">
-            <img src="{{ get_avatar_url(account)|e }}" />
+            <img src="{{ avatar_url(account) }}" />
         </td>
         <td class="ready">
             <h2>
@@ -116,7 +117,7 @@ else:
             {% if on_gittip %}
                 <td>
                     <a href="/{{ member.participant.username }}/">
-                        <img src="{{ get_avatar_url(member.participant)|e }}" />
+                        <img src="{{ avatar_url(member.participant) }}" />
                         {{member.participant.username|e}}
                     </a>
                 </td>
@@ -130,7 +131,7 @@ else:
             {% else %}
                 <td>
                     <a href="/on/{{platform.name}}/{{member.user_name|e}}/">
-                        <img src="{{ get_avatar_url(member)|e }}" />
+                        <img src="{{ avatar_url(member) }}" />
                         {{member.user_name|e}}
                     </a>
                 </td>

@@ -1,4 +1,4 @@
-# Welcome to Gittip [<img height="26px" src="www/assets/gittip.opengraph.png"/>](https://www.gittip.com/)
+# Welcome to Gittip [<img height="26px" src="www/assets/%version/gittip.opengraph.png"/>](https://www.gittip.com/)
 
 [![Build Status](http://img.shields.io/travis/gittip/www.gittip.com/master.svg)](https://travis-ci.org/gittip/www.gittip.com)
 [![HuBoard badge](http://img.shields.io/badge/Hu-Board-7965cc.svg)](https://huboard.com/gittip/www.gittip.com)

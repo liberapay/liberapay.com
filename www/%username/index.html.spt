@@ -4,7 +4,7 @@ import locale
 
 from aspen import json, Response
 from aspen.utils import to_age
-from gittip.utils import get_avatar_url, get_participant, wrap, plural
+from gittip.utils import get_participant, wrap, plural
 from gittip.models import community
 
 MAKING = "making the world better by"
@@ -59,7 +59,7 @@ else:
     {% if participant.avatar_url %}
     <meta name="og:image" content="{{ participant.avatar_url|e }}" />
     {% endif %}
-    <meta name="og:image" content="/assets/gittip.opengraph.png" />
+    <meta name="og:image" content="{{ website.asset_url }}/gittip.opengraph.png" />
 {% endblock %}
 
 {% block scripts %}

@@ -150,24 +150,28 @@ def accounts_elsewhere(website, env):
 
     twitter = Twitter(
         website.db,
+        website.asset_url,
         env.twitter_consumer_key,
         env.twitter_consumer_secret,
         env.twitter_callback,
     )
     github = GitHub(
         website.db,
+        website.asset_url,
         env.github_client_id,
         env.github_client_secret,
         env.github_callback,
     )
     bitbucket = Bitbucket(
         website.db,
+        website.asset_url,
         env.bitbucket_consumer_key,
         env.bitbucket_consumer_secret,
         env.bitbucket_callback,
     )
     openstreetmap = OpenStreetMap(
         website.db,
+        website.asset_url,
         env.openstreetmap_consumer_key,
         env.openstreetmap_consumer_secret,
         env.openstreetmap_callback,
@@ -176,6 +180,7 @@ def accounts_elsewhere(website, env):
     )
     bountysource = Bountysource(
         website.db,
+        website.asset_url,
         None,
         env.bountysource_api_secret,
         env.bountysource_callback,
@@ -184,6 +189,7 @@ def accounts_elsewhere(website, env):
     )
     venmo = Venmo(
         website.db,
+        website.asset_url,
         env.venmo_client_id,
         env.venmo_client_secret,
         env.venmo_callback,
@@ -201,8 +207,7 @@ def accounts_elsewhere(website, env):
 
 
 def other_stuff(website, env):
-    website.asset_version_url = env.gittip_asset_version_url.replace('%version', website.version)
-    website.asset_url = env.gittip_asset_url
+    website.asset_url = env.gittip_asset_url.replace('%version', website.version)
     website.cache_static = env.gittip_cache_static
     website.compress_assets = env.gittip_compress_assets
 
@@ -221,7 +226,6 @@ def env():
         CANONICAL_SCHEME                = unicode,
         MIN_THREADS                     = int,
         DATABASE_MAXCONN                = int,
-        GITTIP_ASSET_VERSION_URL        = unicode,
         GITTIP_ASSET_URL                = unicode,
         GITTIP_CACHE_STATIC             = is_yesish,
         GITTIP_COMPRESS_ASSETS          = is_yesish,

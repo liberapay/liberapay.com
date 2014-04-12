@@ -74,12 +74,12 @@ class Platform(object):
 
     required_attrs = ( 'account_url'
                      , 'display_name'
-                     , 'icon'
                      , 'name'
                      )
 
-    def __init__(self, db, api_key, api_secret, callback_url, api_url=None, auth_url=None):
+    def __init__(self, db, asset_url, api_key, api_secret, callback_url, api_url=None, auth_url=None):
         self.db = db
+        self.icon = '%s/icons/%s.16.png' % (asset_url, self.name)
         self.api_key = api_key
         self.api_secret = api_secret
         self.callback_url = callback_url

@@ -3,9 +3,7 @@
 <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb#">
     <title>{% if title %}{{ title|e }} - {% endif %}Gittip</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ website.asset_url }}/reset.css" type="text/css">
-    <link rel="stylesheet" href="{{ website.asset_version_url }}/gittip.css" type="text/css">
-    <link rel="stylesheet" href="{{ website.asset_url }}/chosen/chosen.css" type="text/css">
+    <link rel="stylesheet" href="{{ website.asset_url }}/gittip.css" type="text/css">
     <link rel="apple-touch-icon-precomposed" href="{{ website.asset_url }}/touch/icon-60x60.png">
     <link rel="apple-touch-icon-precomposed" href="{{ website.asset_url }}/touch/icon-76x76.png" sizes="76x76">
     <link rel="apple-touch-icon-precomposed" href="{{ website.asset_url }}/touch/icon-120x120.png" sizes="120x120">
@@ -19,7 +17,7 @@
             <table><tr><td class="logo">
                 <h1>
                     <a href="/">
-                        <img src="/assets/{{ website.version }}/logo.png"
+                        <img src="{{ website.asset_url }}/logo.png"
                              alt="Gittip" />
                     </a>
                 </h1>
@@ -66,7 +64,7 @@
 
         <div id="footer">
             <div class="social">
-                <a href="https://twitter.com/gittip"><img src="/assets/icons/twitter.16.png" /></a>
+                <a href="https://twitter.com/gittip"><img src="{{ website.asset_url }}/icons/twitter.16.png" /></a>
             </div>
             <ul>
                 <li><a href='http://blog.gittip.com/'>Blog</a></li>
@@ -100,17 +98,17 @@
     </script>
     {% endif %}
 
-    <script src="{{ website.asset_url }}/jquery-1.10.2.min.js"></script>
+    <script src="{{ website.asset_url }}/jquery.min.js"></script>
 
     <!-- Used on the profile edit page for the community chooser. -->
-    <script src="{{ website.asset_url }}/chosen/chosen.jquery.min.js"></script>
+    <script src="{{ website.asset_url }}/chosen.jquery.min.js"></script>
 
     <script src="{{ website.asset_url }}/tipr.min.js"></script>
 
-    <script src="{{ website.asset_version_url }}/vendor/bootstrap-dropdown.js"></script>
+    <script src="{{ website.asset_url }}/bootstrap-dropdown.js"></script>
 
-    <script src="{{ website.asset_version_url }}/utils.js"></script>
-    <script src="{{ website.asset_version_url }}/gittip.js"></script>
+    <script src="{{ website.asset_url }}/utils.js"></script>
+    <script src="{{ website.asset_url }}/gittip.js"></script>
     <script>$(document).ready(Gittip.init);</script>
     {% block scripts %}
 

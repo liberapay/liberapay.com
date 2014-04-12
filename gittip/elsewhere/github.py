@@ -11,7 +11,6 @@ class GitHub(PlatformOAuth2):
     name = 'github'
     display_name = 'GitHub'
     account_url = 'https://github.com/{user_name}'
-    icon = '/assets/icons/github.12.png'
 
     # Auth attributes
     auth_url = 'https://github.com/login/oauth'

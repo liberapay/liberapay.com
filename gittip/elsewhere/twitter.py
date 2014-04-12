@@ -10,7 +10,6 @@ class Twitter(PlatformOAuth1):
     name = 'twitter'
     display_name = 'Twitter'
     account_url = 'https://twitter.com/{user_name}'
-    icon = '/assets/icons/twitter.12.png'
 
     # Auth attributes
     auth_url = 'https://api.twitter.com'

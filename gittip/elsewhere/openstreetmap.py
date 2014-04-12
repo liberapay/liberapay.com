@@ -10,7 +10,6 @@ class OpenStreetMap(PlatformOAuth1):
     name = 'openstreetmap'
     display_name = 'OpenStreetMap'
     account_url = 'http://www.openstreetmap.org/user/{user_name}'
-    icon = '/assets/icons/openstreetmap.12.png'
 
     # API attributes
     api_format = 'xml'
