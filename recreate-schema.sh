@@ -33,7 +33,9 @@ echo
 
 if [ -f branch.sql ]
 then psql $DATABASE_URL < branch.sql
-else echo "None found."
+else 
+    echo "None found. That's cool. You only need a branch.sql file if you want to include"
+    echo "schema changes with your pull request."
 fi
 
 echo 
