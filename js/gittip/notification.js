@@ -13,5 +13,8 @@ Gittip.notification = function(text, type) {
 
     $('#notification-area').prepend(dialog);
 
-    setTimeout(function() { $(dialog).fadeOut(); }, 15000);
+    $(dialog).on('click', function() {
+      $(this).fadeOut();
+    });
+    setTimeout(function() { $(dialog).fadeOut(); }, 5000);
 };
