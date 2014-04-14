@@ -67,7 +67,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   eos
 
   # Set up the environment, the database, and run Gittip
-  config.vm.provision :shell, :inline => "cd #{PROJECT_DIRECTORY} && make env schema data"
+  config.vm.provision :shell, :inline => "cd #{PROJECT_DIRECTORY} && make clean env schema data"
 
   # add run script
   config.vm.provision :shell, :inline => <<-eos
