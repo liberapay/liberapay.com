@@ -73,7 +73,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision :shell, :inline => <<-eos
     echo >> .profile
     echo '# Added for your convienience"' >> .profile
-    echo "cd #{PROJECT_DIRECTORY}" >> .profile
+    echo "cd /home/vagrant/#{PROJECT_DIRECTORY}" >> .profile
 
     echo
     echo 'Gittip installed! To run,'
