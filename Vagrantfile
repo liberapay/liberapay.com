@@ -11,8 +11,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
   end
 
-  config.vm.box = "precise64"
-  config.vm.box_url = "http://files.vagrantup.com/precise64.box"
+  #For now we have a custom built vagrant image. It was built in the following manner:
+  #-Use 'precise64' as a base.
+  #-perform a 'vagrant up' using this vagrantfile: https://github.com/gittip/www.gittip.com/blob/83312e60c6b31c298ffca61036baa9849044c75e/Vagrantfile
+  #-drop database gittip
+  #-drop role gittip
+  config.vm.box = "gittip"
+  config.vm.box_url =  File.exist?("gittip.box") ? "file://gittip.box" : "http://downloads.gittipllc.netdna-cdn.com/gittip.box"
 
   # Sync the project directory and expose the app
   config.vm.synced_folder ".", "/home/vagrant/#{PROJECT_DIRECTORY}"
@@ -20,21 +25,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # TODO: Pin apt-get packages to the same versions Heroku uses
 
-  # Install dependencies
-  config.vm.provision :shell, :inline => <<-eos
-    echo 'deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main' > /etc/apt/sources.list.d/postgresql.list
-    wget -qO- https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
-    echo 'deb http://ppa.launchpad.net/chris-lea/node.js/ubuntu precise main' > /etc/apt/sources.list.d/chrislea-nodejs.list
-    wget -qO- 'http://keyserver.ubuntu.com:11371/pks/lookup?op=get&search=0xB9316A7BC7917B12' | apt-key add -
-    apt-get update
-    apt-get -y install make git build-essential python-software-properties postgresql-9.3 postgresql-contrib-9.3 libpq-dev python-dev nodejs
-  eos
+  # Installed dependencies are already part of the base image now
 
   # Configure Postgres
   config.vm.provision :shell, :inline => <<-eos
     sudo -u postgres psql -U postgres -qf /home/vagrant/#{PROJECT_DIRECTORY}/create_db.sql
-    sudo -u postgres createuser --superuser root
-    sudo -u postgres createuser --superuser vagrant
+    # Root  and vagrant users are now part of the base image
   eos
 
   # Warn if Windows newlines are detected and try to fix the problem
