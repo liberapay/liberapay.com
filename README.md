@@ -44,7 +44,6 @@ Table of Contents
  - [API](#api)
   - [Implementations](#api-implementations)
  - [Glossary](#glossary)
- - [See Also](#see-also)
 
 
 Installation
