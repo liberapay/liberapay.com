@@ -27,7 +27,7 @@ class MixinTeam(object):
             return False
         if user.ADMIN:
             return True
-        if not self.get_members():
+        if not self.get_current_takes():
             if self == user.participant:
                 return True
             return False
@@ -37,7 +37,7 @@ class MixinTeam(object):
         """Add a member to this team.
         """
         assert self.IS_PLURAL
-        if len(self.get_members()) == 149:
+        if len(self.get_current_takes()) == 149:
             raise MemberLimitReached
         self.__set_take_for(member, Decimal('0.01'), self)
 
@@ -51,8 +51,8 @@ class MixinTeam(object):
         """Given a Participant object, return a boolean.
         """
         assert team.IS_PLURAL
-        for member in team.get_members():
-            if member['username'] == self.username:
+        for take in team.get_current_takes():
+            if take['member'] == self.username:
                 return True
         return False
 
@@ -77,7 +77,7 @@ class MixinTeam(object):
         """Return a Decimal representation of the take for this member, or 0.
         """
         assert self.IS_PLURAL
-        return self.db.one( "SELECT take FROM current_memberships "
+        return self.db.one( "SELECT amount FROM current_takes "
                             "WHERE member=%s AND team=%s"
                           , (member.username, self.username)
                           , default=Decimal('0.00')
@@ -110,14 +110,14 @@ class MixinTeam(object):
         self.__set_take_for(member, take, recorder)
         return take
 
-    def __set_take_for(self, member, take, recorder):
+    def __set_take_for(self, member, amount, recorder):
         assert self.IS_PLURAL
         # XXX Factored out for testing purposes only! :O Use .set_take_for.
         self.db.run("""
 
-            INSERT INTO memberships (ctime, member, team, take, recorder)
+            INSERT INTO takes (ctime, member, team, amount, recorder)
              VALUES ( COALESCE (( SELECT ctime
-                                    FROM memberships
+                                    FROM takes
                                    WHERE member=%s
                                      AND team=%s
                                    LIMIT 1
@@ -129,52 +129,63 @@ class MixinTeam(object):
                      )
 
         """, (member.username, self.username, member.username, self.username, \
-                                                      take, recorder.username))
+                                                      amount, recorder.username))
 
-    def get_members(self):
+    def get_current_takes(self):
+        """Return a list of member takes for a team.
+        """
         assert self.IS_PLURAL
         return self.db.all("""
 
-            SELECT member AS username, take, ctime, mtime
-              FROM current_memberships
+            SELECT member, amount, ctime, mtime
+              FROM current_takes
              WHERE team=%s
           ORDER BY ctime DESC
 
         """, (self.username,), back_as=dict)
 
-    def get_teams_membership(self):
+    def get_team_take(self):
+        """Return a single take for a team, the team itself's take.
+        """
         assert self.IS_PLURAL
-        TAKE = "SELECT sum(take) FROM current_memberships WHERE team=%s"
+        TAKE = "SELECT sum(amount) FROM current_takes WHERE team=%s"
         total_take = self.db.one(TAKE, (self.username,), default=0)
         team_take = max(self.get_dollars_receiving() - total_take, 0)
         membership = { "ctime": None
                      , "mtime": None
-                     , "username": self.username
-                     , "take": team_take
+                     , "member": self.username
+                     , "amount": team_take
                       }
         return membership
 
-    def get_memberships(self, current_participant):
+    def get_members(self, current_participant):
+        """Return a list of member dicts.
+        """
         assert self.IS_PLURAL
-        members = self.get_members()
-        members.append(self.get_teams_membership())
+        takes = self.get_current_takes()
+        takes.append(self.get_team_take())
         budget = balance = self.get_dollars_receiving()
-        for member in members:
+        members = []
+        for take in takes:
+            member = {}
+            member['username'] = take['member']
+            member['take'] = take['amount']
+
             member['removal_allowed'] = current_participant == self
             member['editing_allowed'] = False
+            member['is_current_user'] = False
             if current_participant is not None:
                 if member['username'] == current_participant.username:
                     member['is_current_user'] = True
-                    if member['ctime'] is not None:
+                    if take['ctime'] is not None:
                         # current user, but not the team itself
                         member['editing_allowed']= True
-            take = member['take']
-            member['take'] = take
-            member['last_week'] = last_week = \
-                                            self.get_take_last_week_for(member)
+
+            member['last_week'] = last_week = self.get_take_last_week_for(member)
             member['max_this_week'] = self.compute_max_this_week(last_week)
             amount = min(take, balance)
             balance -= amount
             member['balance'] = balance
             member['percentage'] = (amount / budget) if budget > 0 else 0
+            members.append(member)
         return members

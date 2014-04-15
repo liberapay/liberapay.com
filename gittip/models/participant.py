@@ -236,10 +236,10 @@ class Participant(Model, MixinTeam):
 
             SELECT team AS name
                  , ( SELECT count(*)
-                       FROM current_memberships
+                       FROM current_takes
                       WHERE team=x.team
                     ) AS nmembers
-              FROM current_memberships x
+              FROM current_takes x
              WHERE member=%s;
 
         """, (self.username,))

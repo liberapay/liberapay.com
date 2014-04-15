@@ -1,4 +1,4 @@
-"""Endpoint to record identifications
+"""Endpoint to list team members.
 """
 from aspen import Response
 from gittip.utils import get_participant
@@ -10,4 +10,4 @@ team = get_participant(request, restrict=False)
 if not team.show_as_team(user):
     raise Response(404)
 
-response.body = team.get_memberships(user.participant)
+response.body = team.get_members(user.participant)

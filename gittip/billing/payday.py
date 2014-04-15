@@ -246,10 +246,10 @@ class Payday(object):
                                                    , available
                                                     ))
 
-            def tip(member, amount):
+            def tip(tippee, amount):
                 tip = {}
                 tip['tipper'] = participant.username
-                tip['tippee'] = member['username']
+                tip['tippee'] = tippee
                 tip['amount'] = amount
                 tip['claimed_time'] = ts_start
                 self.tip( participant
@@ -257,12 +257,11 @@ class Payday(object):
                         , ts_start
                         , pachinko=True
                          )
-                return tip['amount']
 
-            for member in participant.get_members():
-                amount = min(member['take'], available)
+            for take in participant.get_current_takes():
+                amount = min(take['amount'], available)
                 available -= amount
-                tip(member, amount)
+                tip(take['member'], amount)
                 if available == 0:
                     break
 

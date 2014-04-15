@@ -88,6 +88,7 @@ class TestMembernameJson(Harness):
         data = json.loads(response.body)
         assert response.code == 200
         assert data['username'] == 'team'
+        assert data['take'] == '0.00'
 
     def test_get_team_member_returns_null_when_non_member(self):
         response = self.client.GET('/team/members/alice.json', auth_as='team')

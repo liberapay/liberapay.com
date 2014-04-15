@@ -1,4 +1,4 @@
-"""Endpoint to record identifications
+"""Endpoint to record team memberships.
 """
 from decimal import Decimal, InvalidOperation
 
@@ -65,14 +65,16 @@ if POST:
 
     if proceed:
         team.set_take_for(member, take, user.participant)
-    out = team.get_memberships(user.participant)
+    out = team.get_members(user.participant)
 
 else:
     if member == team:
-        out = team.get_teams_membership()
+        out = team.get_team_take()
+        out['username'] = out.pop('member')
+        out['take'] = unicode(out.pop('amount'))
     else:
-        SQL = "SELECT ctime, mtime, member AS username, take::text " \
-              "FROM current_memberships WHERE team=%s AND member=%s"
+        SQL = "SELECT ctime, mtime, member AS username, amount::text as take " \
+              "FROM current_takes WHERE team=%s AND member=%s"
         out = website.db.one(SQL, (team.username, member.username))
 
 response.body = out
