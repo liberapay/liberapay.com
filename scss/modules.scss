@@ -116,9 +116,45 @@ a.mini-user:hover {
             width: 49px;
             margin-bottom: 3px;
 
+            // Width and height of the avatar.
+            // The images and whitespace surrounding them scale to based on this.
+            $AvatarSize: 36pt;
+
+            // Width and height of the platform icon. 70% of avatar size.
+            $PlatformImageSize: round($AvatarSize * 0.7);
+
+            // Right/bottom offset of the platform icon.
+            $PlatformImageOffset: $PlatformImageSize - round($PlatformImageSize * 0.5);
+
+            // The amount of the platform icon that overflows into surrounding content.
+            $PlatformImageOverflow: $PlatformImageSize - $PlatformImageOffset;
+
+            .sanity-preserving-wrapper {
+                position: relative;
+                margin-right: $PlatformImageOverflow;
+                // The 3pt is not an *entirely* magic number:
+                // it is somehow related to the padding-bottom, and proves to
+                // always be the correct value to use, even when scaling the
+                // avatar size.
+                margin-bottom: $PlatformImageOverflow - 3pt;
+            }
+
             img {
-                width: 36pt;
-                height: 36pt;
+                &.avatar {
+                    width: $AvatarSize;
+                    height: $AvatarSize;
+                }
+
+                &.platform {
+                    width: $PlatformImageSize;
+                    height: $PlatformImageSize;
+                    position: absolute;
+                    bottom: -$PlatformImageOffset;
+                    right: -$PlatformImageOffset;
+                    border-radius: 3em;
+                    border: 2px solid #FFFFFF;
+                    background-color: #D7E4DE;
+                }
             }
         }
     }
@@ -149,12 +185,6 @@ a.mini-user:hover {
         &:hover {
             cursor: pointer;
         }
-    }
-    img.avatar {
-        width: 16pt;
-        height: 16pt;
-        float: left;
-        margin-right: 3pt;
     }
 }
 

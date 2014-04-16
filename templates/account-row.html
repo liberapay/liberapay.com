@@ -4,7 +4,14 @@
     {% set account = accounts.get(platform.name, None) %}
     <tr>
         <td class="account-type">
-            <img src="{{ website.asset_url }}/{{ platform.name }}.png" />
+            <div class="sanity-preserving-wrapper">
+                {% if account != None %}
+                    <img class="avatar" src="{{ avatar_url(account) }}"/>
+                {% else %}
+                    <img class="avatar" src="{{ website.asset_url }}/avatar-default.png"/>
+                {% endif %}
+              <img class="platform" src="{{ website.asset_url }}/{{ platform.name }}.png" />
+            </div>
         </td>
         <td class="account-details">
             <div class="account-type">{{ platform.display_name }}</div>
@@ -16,7 +23,6 @@
                     {% endcall %}
                 {% endif %}
             {% else %}
-                <img class="avatar" src="{{ avatar_url(account) }}"/>
                 <a class="account-username" rel="me" href="{{ account.html_url|e }}"
                     >{{ account.user_name|e }}
                     {% if account.display_name and account.display_name != account.user_name %}
