@@ -1205,3 +1205,12 @@ BEGIN;
     ALTER TABLE homepage_top_givers ADD COLUMN statement text;
     ALTER TABLE homepage_top_givers ADD COLUMN number text;
 END;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/issues/1417
+
+CREATE INDEX transfers_tipper_tippee_timestamp_idx
+  ON transfers
+  USING btree
+  (tipper, tippee, timestamp DESC);
