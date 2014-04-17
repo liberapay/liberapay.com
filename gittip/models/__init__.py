@@ -158,6 +158,7 @@ class GittipDB(Postgres):
                             where timestamp > ts_start
                             and timestamp < ts_end
                             and amount > 0
+                            and recorder is null
                         ) as ref
                     from paydays
                     order by id
@@ -174,6 +175,7 @@ class GittipDB(Postgres):
                             where timestamp > ts_start
                             and timestamp < ts_end
                             and amount > 0
+                            and recorder is null
                         ) as ref
                     from paydays
                     order by id
@@ -190,6 +192,7 @@ class GittipDB(Postgres):
                             where timestamp > ts_start
                             and timestamp < ts_end
                             and amount < 0
+                            and recorder is null
                         ) as ref
                     from paydays
                     order by id
@@ -206,6 +209,7 @@ class GittipDB(Postgres):
                             where timestamp > ts_start
                             and timestamp < ts_end
                             and amount < 0
+                            and recorder is null
                         ) as ref
                     from paydays
                     order by id
