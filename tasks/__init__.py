@@ -1,23 +1,28 @@
 from __future__ import print_function
 
-from invoke import task
+from invoke import run, task
 
 import sys
+import os
 
 from gittip import wireup
 
-@task(help={
-    'username': "Gittip username. (required)",
-    'email':    "PayPal email address. (required)",
-    'api-key-fragment': "First 8 characters of user's API key.",
-    'overwrite': "Override existing PayPal email?",
-    })
+@task(
+    help={
+        'username': "Gittip username. (required)",
+        'email':    "PayPal email address. (required)",
+        'api-key-fragment': "First 8 characters of user's API key.",
+        'overwrite': "Override existing PayPal email?",
+    }
+)
 def set_paypal_email(username='', email='', api_key_fragment='', overwrite=False):
     """
     Usage:
 
-    [gittip] $ heroku config -s -a gittip | foreman run -e /dev/stdin ./env/bin/invoke set_paypal_email -u username -p user@example.com [-a 12e4s678] [--overwrite]
+    [gittip] $ env/bin/invoke set_paypal_email -u username -p user@example.com [-a 12e4s678] [--overwrite]
     """
+
+    load_prod_envvars()
 
     if not username or not email:
         print(set_paypal_email.__doc__)
@@ -67,3 +72,18 @@ def set_paypal_email(username='', email='', api_key_fragment='', overwrite=False
     db.run(SET_EMAIL, (email, username))
 
     print("All done.")
+
+@task
+def load_prod_envvars():
+    print("Loading production environment variables...")
+
+    warn = False
+    hide = True
+    output = run("heroku config --shell --app=gittip", warn, hide)
+    envvars = output.stdout.split("\n")
+
+    for envvar in envvars:
+        if envvar:
+            key, val = envvar.split("=")
+            os.environ[key] = val
+            print("Loaded " + key + ".")
