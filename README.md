@@ -10,6 +10,24 @@ If you'd like to contribute to Gittip, the best first reference is <https://gitt
 Quick Start
 ===========
 
+Vagrant
+-------
+
+If you have vagrant installed, you can run gittip merely by running
+`vagrant up` from the project directory. Please note that if you ever
+switch between running gittip on your own machine to vagrant or vice
+versa, you will need to run `make clean`.
+
+The Vagrantfile will download a custom made image from the internet. If you have a slow internet connection, you can download a local copy of this file, by running:
+
+`curl http://downloads.gittipllc.netdna-cdn.com/gittip.box`
+
+Once downloaded, vagrant will use this local file automatically when you run `vagrant up`
+
+
+Manual Quick Start
+------------------
+If you'd prefer to run on your machine directly, you can run these commands:
 ```
 $ git clone git@github.com:gittip/www.gittip.com.git
 $ cd www.gittip.com
@@ -171,10 +189,6 @@ You should then find this in your browser at
 
 Congratulations! Sign in using Twitter or GitHub and you're off and
 running. At some point, try [running the test suite](#testing-).
-
-Vagrant
--------
-If you have vagrant installed, you can run gittip merely by running `vagrant up` from the project directory. Please note that if you ever switch between running gittip on your own machine to vagrant or vice versa, you will need to run `make clean`.
 
 
 Help!
