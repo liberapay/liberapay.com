@@ -25,6 +25,26 @@ The Vagrantfile will download a custom made image from the internet. If you have
 Once downloaded, vagrant will use this local file automatically when you run `vagrant up`
 
 
+Docker
+-------
+
+Run 
+
+```
+docker build -t gittip .
+```
+
+to build a Docker Image from the included Dockerfile and 
+
+```
+docker run -p 8537:8537 gittip
+```
+
+to use it.
+
+[Read more about Docker support and usage](#docker-1).
+
+
 Manual Quick Start
 ------------------
 If you'd prefer to run on your machine directly, you can run these commands:
@@ -54,6 +74,7 @@ Table of Contents
   - [Dependencies](#dependencies)
   - [Building](#building)
   - [Launching](#launching)
+  - [Docker](#docker)  
   - [Help!](#help)
  - [Configuration](#configuration)
  - [Modifying CSS](#modifying-css)
@@ -101,6 +122,8 @@ running `make`, then add
 for more information](http://stackoverflow.com/a/22355874/347246)):
 
     $ ARCHFLAGS=-Wno-error=unused-command-line-argument-hard-error-in-future
+    
+    
 
 Building
 --------
@@ -189,6 +212,68 @@ You should then find this in your browser at
 
 Congratulations! Sign in using Twitter or GitHub and you're off and
 running. At some point, try [running the test suite](#testing-).
+
+Vagrant
+-------
+If you have vagrant installed, you can run gittip merely by running `vagrant up` from the project directory. Please note that if you ever switch between running gittip on your own machine to vagrant or vice versa, you will need to run `make clean`.
+
+Docker
+------------
+
+You can also install/run Gittip with Docker.
+
+Either pull the image from the Docker Index:
+
+```
+$ docker pull citruspi/gittip
+```
+
+or build it with the included Dockerfile:
+
+```
+$ git clone git@github.com:gittip/www.gittip.com.git
+$ cd www.gittip.com
+$ docker build -t gittip .
+```
+
+Once you have the image, get the Image ID with
+
+```
+$ docker images
+```
+
+
+You can then run it in the foreground:
+
+```
+$ docker run -p 8537:8537 [image_id]
+```
+
+or in the background:
+
+```
+$ docker run -d -p 8537:8537 [image_id]
+```
+
+Check it out at [localhost:8537](localhost:8537)!
+
+If you run it in the background, you can get the Container ID with
+
+```
+$ docker ps
+```
+
+With that, you can view the logs:
+
+```
+$ docker logs [container_id]
+```
+
+or kill the detached container with:
+
+```
+$ docker kill [container_id]
+```
 
 
 Help!
