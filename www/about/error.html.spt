@@ -1,19 +1,5 @@
 import os
 from aspen import Response
-from environment import Environment, is_yesish
-env = Environment('GITTIP_', TEST_ERROR_HANDLING=is_yesish)
 [---]
-if 'TEST_ERROR_HANDLING' in env.missing:
-    if env.test_error_handling:
-        raise Response(int(qs['code']))
+raise Response(int(qs['code']))
 [---]
-<style>
-    body, table, td { margin: 0; padding: 0; }
-    table { width: 100%; height: 100%
-          ; border-spacing: 0; border-collapse: collapse
-           }
-    td { text-align: center; vertical-align: middle
-       ; font-size: 128pt;
-        }
-</style>
-<table><td>&check;</td></table>
