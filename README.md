@@ -25,6 +25,26 @@ The Vagrantfile will download a custom made image from the internet. If you have
 Once downloaded, vagrant will use this local file automatically when you run `vagrant up`
 
 
+Docker
+-------
+
+Run 
+
+```
+docker build -t gittip .
+```
+
+to build a Docker Image from the included Dockerfile and 
+
+```
+docker run -p 8537:8537 gittip
+```
+
+to use it.
+
+[Read more about Docker support and usage](#docker).
+
+
 Manual Quick Start
 ------------------
 If you'd prefer to run on your machine directly, you can run these commands:
