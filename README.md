@@ -42,7 +42,7 @@ docker run -p 8537:8537 gittip
 
 to use it.
 
-[Read more about Docker support and usage](#docker).
+[Read more about Docker support and usage](#docker-1).
 
 
 Manual Quick Start
