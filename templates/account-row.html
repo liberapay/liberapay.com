@@ -7,8 +7,6 @@
             <div class="sanity-preserving-wrapper">
                 {% if account != None %}
                     <img class="avatar" src="{{ avatar_url(account) }}"/>
-                {% else %}
-                    <img class="avatar" src="{{ website.asset_url }}/avatar-default.png"/>
                 {% endif %}
               <img class="platform" src="{{ website.asset_url }}/{{ platform.name }}.png" />
             </div>

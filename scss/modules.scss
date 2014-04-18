@@ -139,22 +139,20 @@ a.mini-user:hover {
                 margin-bottom: $PlatformImageOverflow - 3pt;
             }
 
-            img {
-                &.avatar {
-                    width: $AvatarSize;
-                    height: $AvatarSize;
-                }
+            img.avatar, img.platform {
+                width: $AvatarSize;
+                height: $AvatarSize;
+            }
 
-                &.platform {
-                    width: $PlatformImageSize;
-                    height: $PlatformImageSize;
-                    position: absolute;
-                    bottom: -$PlatformImageOffset;
-                    right: -$PlatformImageOffset;
-                    border-radius: 3em;
-                    border: 2px solid #FFFFFF;
-                    background-color: #D7E4DE;
-                }
+            img.avatar ~ img.platform {
+                width: $PlatformImageSize;
+                height: $PlatformImageSize;
+                position: absolute;
+                bottom: -$PlatformImageOffset;
+                right: -$PlatformImageOffset;
+                border-radius: 3em;
+                border: 2px solid #FFFFFF;
+                background-color: #D7E4DE;
             }
         }
     }
