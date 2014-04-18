@@ -111,8 +111,14 @@ a.mini-user:hover {
         vertical-align: -webkit-baseline-middle;
         line-height: 100%;
 
+        /*
+         * 15pt is for top/bottom padding; it makes it so the platform icon will
+         * fit in the empty space.
+         * TODO: This should be calculated from $AvatarSize and related variables.
+         */
+        padding: 15pt 6pt 15pt 0;
+
         &.account-type {
-            padding: 6pt 6pt 6pt 0;
             width: 49px;
             margin-bottom: 3px;
 
@@ -132,11 +138,6 @@ a.mini-user:hover {
             .sanity-preserving-wrapper {
                 position: relative;
                 margin-right: $PlatformImageOverflow;
-                // The 3pt is not an *entirely* magic number:
-                // it is somehow related to the padding-bottom, and proves to
-                // always be the correct value to use, even when scaling the
-                // avatar size.
-                margin-bottom: $PlatformImageOverflow - 3pt;
             }
 
             img.avatar, img.platform {
