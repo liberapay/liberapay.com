@@ -77,9 +77,7 @@ def set_paypal_email(username='', email='', api_key_fragment='', overwrite=False
 def load_prod_envvars():
     print("Loading production environment variables...")
 
-    warn = False
-    hide = True
-    output = run("heroku config --shell --app=gittip", warn, hide)
+    output = run("heroku config --shell --app=gittip", warn=False, hide=True)
     envvars = output.stdout.split("\n")
 
     for envvar in envvars:
