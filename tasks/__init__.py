@@ -73,7 +73,6 @@ def set_paypal_email(username='', email='', api_key_fragment='', overwrite=False
 
     print("All done.")
 
-@task
 def load_prod_envvars():
     print("Loading production environment variables...")
 
