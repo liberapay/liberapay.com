@@ -25,7 +25,7 @@ import datetime
 import getpass
 import os
 import sys
-from decimal import Decimal as D
+from decimal import Decimal as D, ROUND_HALF_UP
 
 import requests
 from httplib import IncompleteRead
@@ -39,7 +39,7 @@ GITTIP_CSV = '{}.output.gittip.csv'.format(ts)
 
 
 def round_(d):
-    return d.quantize(D('0.01'))
+    return d.quantize(D('0.01'), rounding=ROUND_HALF_UP)
 
 def print_rule(w=80):
     print("-" * w)
@@ -62,44 +62,57 @@ class Payee(object):
         self.net = self.gross
 
     def assess_fee(self):
-        fee = self.gross - round_(self.gross / D('1.02'))   # 2% fee
-        fee = min(fee, self.fee_cap)                        # capped at $20, or $1 for U.S.
-        self.fee += fee
-        self.net -= fee
-        if self.net % 1 in (D('0.25'), D('0.75')):
 
-            # Prevent an escrow leak. It's complicated, but it goes something
-            # like this:
-            #
-            #   1. We want to pass PayPal's fees through to each payee.
-            #
-            #   2. There is no option to have the receiver pay the fee, as
-            #       there is with Instant Transfer.
-            #
-            #   3. We have to subtract the fee before uploading the spreadsheet
-            #       to PayPal.
-            #
-            #   4. If we upload 15.24, PayPal upcharges to 15.54.
-            #
-            #   6. If we upload 15.25, PayPal upcharges to 15.56.
-            #
-            #   7. They only accept whole cents. We can't upload 15.245.
-            #
-            #   8. What if we want to hit 15.55?
-            #
-            #   9. We can't.
-            #
-            #  10. Our solution is to leave a penny behind in Gittip for
-            #       affected payees.
-            #
-            # See also: https://github.com/gittip/www.gittip.com/issues/1673
-            #           https://github.com/gittip/www.gittip.com/issues/2029
-            #           https://github.com/gittip/www.gittip.com/issues/2198
-            #           https://github.com/gittip/www.gittip.com/pull/2209
+        # In order to avoid slowly leaking escrow, we need to be careful about
+        # how we compute the fee. It's complicated, but it goes something like
+        # this:
+        #
+        #   1. We want to pass PayPal's fees through to each payee.
+        #
+        #   2. With MassPay there is no option to have the receiver pay the fee,
+        #       as there is with Instant Transfer.
+        #
+        #   3. We have to subtract the fee before uploading the spreadsheet
+        #       to PayPal.
+        #
+        #   4. If we upload 15.24, PayPal upcharges to 15.54.
+        #
+        #   6. If we upload 15.25, PayPal upcharges to 15.56.
+        #
+        #   7. They only accept whole cents. We can't upload 15.245.
+        #
+        #   8. What if we want to hit 15.55?
+        #
+        #   9. We can't.
+        #
+        #  10. Our solution is to leave a penny behind in Gittip for
+        #       affected payees.
+        #
+        #  11. BUT ... if we upload 1.25, PayPal upcharges to 1.28. Think about
+        #       it.
+        #
+        # See also: https://github.com/gittip/www.gittip.com/issues/1673
+        #           https://github.com/gittip/www.gittip.com/issues/2029
+        #           https://github.com/gittip/www.gittip.com/issues/2198
+        #           https://github.com/gittip/www.gittip.com/pull/2209
+        #           https://github.com/gittip/www.gittip.com/issues/2296
 
-            self.gross -= D('0.01')
-            self.net -= D('0.01')
-            self.additional_note = "Penny remaining due to PayPal rounding limitation."
+        target = net = self.gross
+        while 1:
+            net -= D('0.01')
+            fee = round_(net * D('0.02'))
+            gross = net + fee
+            if gross <= target:
+                break
+        self.gross = gross
+        self.net = net
+        self.fee = fee
+
+        remainder = target - gross
+        if remainder > 0:
+            n = "{:.2} remaining due to PayPal rounding limitation.".format(remainder)
+            self.additional_note = n
+
         return fee
 
 
