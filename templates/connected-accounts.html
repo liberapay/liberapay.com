@@ -26,7 +26,6 @@
             <img src="{{ website.asset_url }}/bitcoin.png" />
         </td>
         <td class="account-details">
-            <div class="account-type">Bitcoin</div>
             {% if not user.ANON and user.participant == participant %}
                 <div class="bitcoin">
             {% else %}
@@ -43,7 +42,9 @@
                 {% else %}
                     <span class="none">None</span>
                     {% if not user.ANON and user.participant == participant %}
-                        <button class="toggle-bitcoin">+ Add</button>
+                        <div class="auth-button">
+                            <button class="toggle-bitcoin">+ Add</button>
+                        </div>
                     {% endif %}
                 {% endif %}
             </div>
@@ -60,6 +61,8 @@
                     <button type="cancel" class="bitcoin cancel hidden">Cancel</button>
                 </div>
             </form>
+
+            <div class="account-type">Bitcoin</div>
         </td>
     </tr>
     {{ account_row(website.platforms.venmo, accounts, auth_button) }}
