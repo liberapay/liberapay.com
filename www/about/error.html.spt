@@ -1,7 +1,9 @@
 import os
 from aspen import Response
+from environment import Environment, is_yesish
+env = Environment('GITTIP_', TEST_ERROR_HANDLING=is_yesish)
 [---]
-if os.environ.get('GITTIP_TEST_ERROR_HANDLING') is not None:
+if env.test_error_handling:
     raise Response(int(qs['code']))
 [---]
 <style>
