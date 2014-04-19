@@ -67,7 +67,19 @@ a.mini-user:hover {
         border-color: $brown;
     }
 }
-
+.payments-by {
+    background-image: url("payments-by.png");
+    background-size: cover;
+    width: 200px;
+    height: 24px;
+    display: inline-block;
+    float: right;
+    margin-bottom: 5px;
+    padding-left: 6pt;
+    > a {
+        line-height: 24pt;
+    }
+}
 .accounts {
     margin-bottom: 12pt;
     width: 400px;
