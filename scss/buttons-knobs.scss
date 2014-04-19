@@ -13,7 +13,8 @@ button::-moz-focus-inner {
     padding: 0;
 }
 
-button {
+button,
+.button {
     background: $gray;
     border: 0;
     color: white;
@@ -33,17 +34,21 @@ button {
         }
     }
 }
-button:hover {
+button:hover,
+.button:hover {
     background: $darker-gray;
 }
-button.selected {
+button.selected,
+.button.selected {
     background: $green;
 }
-button.selected:hover, button.selected.drag {
+button.selected:hover, button.selected.drag,
+.button.selected:hover, .button.selected.drag {
     background: $darker-green;
 }
 
-button.join-leave[data-is-member="true"] {
+button.join-leave[data-is-member="true"],
+.button.join-leave[data-is-member="true"] {
     font-weight: normal;
     background: none;
     color: $red;
@@ -55,6 +60,7 @@ button.join-leave[data-is-member="true"] {
     }
 }
 
-button.join-leave[data-is-member="false"] {
+button.join-leave[data-is-member="false"],
+.button.join-leave[data-is-member="false"] {
     @extend .selected;
 }
