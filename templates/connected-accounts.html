@@ -100,6 +100,36 @@
     </tr>
 </table>
 
+<h2>Withdrawing Money
+    {% if user.ADMIN and participant.balanced_customer_href %}
+        <a href="https://dashboard.balancedpayments.com/#/{{ participant.balanced_customer_href }}" title="Go to Balanced Dashboard"><div class="payments-by"></div></a>
+    {% else %}
+        <div class="payments-by"></div>
+    {% endif %}
+</h2>
+<table class="accounts">
+    <tr>
+        <td class="account-type">
+            <img src="{{ website.asset_url }}/bank_account_icon.jpg" />
+        </td>
+        <td class="account-details">
+            <div class="account-type">Bank account</div>
+            {% if participant.last_ach_result != "" %}
+                <span class="none">none</span>
+                <a class="button auth-button" href="/credit-card.html">+ Add</a>
+            {% else %}
+                {{ bank_account['bank_name'] }}
+                <div id="ba-delete">
+                    <form action="bank-account.json" class="special" method="POST">
+                        <input type="hidden" name="action" value="delete">
+                        <div id="delete-ba" class="close" title="Delete card"></div>
+                    </form>
+                </div>
+            {% endif %}
+        </td>
+    </tr>
+</table>
+
 <h2>Moving Money Every Week</h2>
 <table class="accounts">
 
