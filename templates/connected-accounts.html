@@ -88,13 +88,7 @@
                 {% endif %}
             {% else %}
                 {{ card['brand'] }} {{ card['number'][-4:] }}
-                    <div id="cc-delete">
-                        <form action="credit-card.json" class="special" method="POST">
-                            <input type="hidden" name="action" value="delete">
-                            <div id="delete-cc" class="close" title="Delete card"></div>
-                        </form>
-                    </div>
-
+                <a class="button auth-button" href="/credit-card.html">Edit</a>
             {% endif %}
         </td>
     </tr>
@@ -115,16 +109,11 @@
         <td class="account-details">
             <div class="account-type">Bank account</div>
             {% if participant.last_ach_result != "" %}
-                <span class="none">none</span>
+                <span class="none">None</span>
                 <a class="button auth-button" href="/credit-card.html">+ Add</a>
             {% else %}
                 {{ bank_account['bank_name'] }}
-                <div id="ba-delete">
-                    <form action="bank-account.json" class="special" method="POST">
-                        <input type="hidden" name="action" value="delete">
-                        <div id="delete-ba" class="close" title="Delete card"></div>
-                    </form>
-                </div>
+                <a class="button auth-button" href="/credit-card.html">Edit</a>
             {% endif %}
         </td>
     </tr>
