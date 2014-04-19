@@ -66,9 +66,9 @@
 
 <h2>Adding Money
     {% if user.ADMIN and participant.balanced_customer_href %}
-        <a href="https://dashboard.balancedpayments.com/#/{{ participant.balanced_customer_href }}" title="Go to Balanced Dashboard"><div class="payments-by"></div></a>
+        <a href="https://dashboard.balancedpayments.com/#/{{ participant.balanced_customer_href }}" title="Go to Balanced Dashboard"><span class="payments-by"></span></a>
     {% else %}
-        <div class="payments-by"></div>
+        <span class="payments-by"></span>
     {% endif %}
 </h2>
 <table class="accounts">
