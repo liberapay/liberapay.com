@@ -356,4 +356,51 @@ Gittip.profile.init = function() {
 
         return false;
     });
+
+    // Wire up email address input.
+    // ============================
+    $('.email').on("click", ".toggle-email", function()
+    {
+        // "Add bitcoin address" text or existing
+        // bitcoin address was clicked, show the text box
+        $('.email').toggle();
+        $('input.email').focus();
+    });
+
+    // Wire up email form.
+    $('.email-submit')
+        .on('click', '[type=submit]', function () {
+            var $this = $(this);
+
+            $this.text('Saving...');
+
+            function success(data) {
+                $('.email-address').text(data.email);
+                $('.email').toggle();
+                $this.text('Save');
+            }
+
+            $.ajax({
+                    url: "email.json",
+                    type: "POST",
+                    dataType: 'json',
+                    success: success,
+                    error: function (data) {
+                        $this.text('Save');
+                        Gittip.notification('Failed to save your email address. '
+                                          + 'Please try again.', 'error');
+                    },
+                    data: {
+                        email: $('input.email').val()
+                    }
+                }
+            )
+
+            return false;
+        })
+        .on('click', '[type=cancel]', function () {
+            $('.email').toggle();
+
+            return false;
+        });
 };

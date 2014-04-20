@@ -19,6 +19,7 @@ from gittip.elsewhere.venmo import Venmo
 from gittip.models.account_elsewhere import AccountElsewhere
 from gittip.models.community import Community
 from gittip.models.participant import Participant
+from gittip.models.email_address_with_confirmation import EmailAddressWithConfirmation
 from gittip.models import GittipDB
 
 
@@ -35,6 +36,7 @@ def db(env):
     db.register_model(Community)
     db.register_model(AccountElsewhere)
     db.register_model(Participant)
+    db.register_model(EmailAddressWithConfirmation)
 
     return db
 
