@@ -361,8 +361,6 @@ Gittip.profile.init = function() {
     // ============================
     $('.email').on("click", ".toggle-email", function()
     {
-        // "Add bitcoin address" text or existing
-        // bitcoin address was clicked, show the text box
         $('.email').toggle();
         $('input.email').focus();
     });
