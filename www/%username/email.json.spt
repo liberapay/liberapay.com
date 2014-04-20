@@ -9,32 +9,18 @@ from aspen import Response
 
 [-----------------------------------------]
 
-if not POST:
-    body = {'error': 'HTTP method must be POST'}
-    response = Response(405, json.dumps(body))
-    # We can't raise() this response obj because
-    # aspen will ignore our custom body.
-    # We must ensure it's named response at the end of the file
-    # (see raising responses http://aspen.io/api/response/)
+if user.ANON:
+    raise Response(404)
+request.allow("POST")
 
-elif user.ANON:
-    body = {"error": "You're not authenticated"}
-    response = Response(401, json.dumps(body))
+address = request.body['email']
 
-elif 'email' not in request.body:
-    body = {'error': 'Missing required parameters'}
-    response = Response(400, json.dumps(body))
-
+# This checks for exactly one @ and at least one . after @
+# The real validation will happen when we send the email
+if not re.match(r"[^@]+@[^@]+\.[^@]+", address):
+    raise Response(400)
 else:
-    address = request.body['email']
+    # Woohoo! valid request, store it!
+    user.participant.update_email(address)
 
-    # This checks for exactly one @ and at least one . after @
-    # The real validation will happen when we send the email
-    if not re.match(r"[^@]+@[^@]+\.[^@]+", address):
-        body = {'error': 'invalid email address'}
-        response = Response(400, json.dumps(body))
-    else:
-        # Woohoo! valid request, store it!
-        user.participant.update_email(address)
-
-        response.body = {'email': address}
+    response.body = {'email': address}

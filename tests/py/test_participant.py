@@ -193,9 +193,8 @@ class TestParticipant(Harness):
 
     def test_can_confirm_email(self):
         Participant.from_username('alice').update_email('alice@gittip.com', True)
-        expected = 'alice@gittip.com'
         actual = Participant.from_username('alice').email.confirmed
-        assert actual == expected
+        assert actual == True
 
     def test_cant_take_over_claimed_participant_without_confirmation(self):
         bob_twitter = self.make_elsewhere('twitter', '2', 'bob')

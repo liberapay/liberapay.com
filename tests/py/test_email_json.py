@@ -2,101 +2,38 @@ from __future__ import unicode_literals
 
 import json
 
-from aspen.utils import utcnow
 from gittip.testing import Harness
-from gittip.testing.client import TestClient
 
 class TestMembernameJson(Harness):
 
-    def make_client_and_csrf(self):
-        client = TestClient()
+    def change_email_address(self, address, user='alice', should_fail=True):
+        self.make_participant("alice")
 
-        csrf_token = client.get('/').request.context['csrf_token']
+        if should_fail:
+            response = self.client.PxST("/alice/email.json"
+                , {'email': address,}
+                , auth_as=user
+            )
+        else:
+            response = self.client.POST("/alice/email.json"
+                , {'email': address,}
+                , auth_as=user
+            )
+        return response
 
-        return client, csrf_token
-
-
-    def test_get_returns_405(self):
-        client, csrf_token = self.make_client_and_csrf()
-
-        self.make_participant("alice", claimed_time=utcnow())
-
-        response = client.get('/alice/email.json')
-
-        actual = response.code
-        assert actual == 405, actual
-
-    def test_post_anon_returns_401(self):
-        client, csrf_token = self.make_client_and_csrf()
-
-        self.make_participant("alice", claimed_time=utcnow())
-
-        response = client.post('/alice/email.json'
-            , { 'csrf_token': csrf_token })
-
-        actual = response.code
-        assert actual == 401, actual
-
-    def test_post_with_no_email_returns_400(self):
-        client, csrf_token = self.make_client_and_csrf()
-
-        self.make_participant("alice", claimed_time=utcnow())
-
-        response = client.post('/alice/email.json'
-            , { 'csrf_token': csrf_token }
-            , user='alice'
-        )
-
-        actual = response.code
-        assert actual == 400, actual
-
-    def test_post_with_no_at_in_email_returns_400(self):
-        client, csrf_token = self.make_client_and_csrf()
-
-        self.make_participant("alice", claimed_time=utcnow())
-
-        response = client.post('/alice/email.json'
-            , {
-                'csrf_token': csrf_token
-              , 'email': 'bademail.com'
-            }
-            , user='alice'
-        )
-
-        actual = response.code
-        assert actual == 400, actual
-
-    def test_post_with_no_dot_in_email_returns_400(self):
-        client, csrf_token = self.make_client_and_csrf()
-
-        self.make_participant("alice", claimed_time=utcnow())
-
-        response = client.post('/alice/email.json'
-            , {
-                'csrf_token': csrf_token
-              , 'email': 'bad@emailcom'
-            }
-            , user='alice'
-        )
-
-        actual = response.code
-        assert actual == 400, actual
-
-    def test_post_with_good_email_is_success(self):
-        client, csrf_token = self.make_client_and_csrf()
-
-        self.make_participant("alice", claimed_time=utcnow())
-
-        response = client.post('/alice/email.json'
-            , {
-                'csrf_token': csrf_token
-              , 'email': 'good@gittip.com'
-            }
-            , user='alice'
-        )
-
-        actual = response.code
-        assert actual == 200, actual
-
+    def test_participant_can_change_email(self):
+        response = self.change_email_address('alice@gittip.com', should_fail=False)
         actual = json.loads(response.body)['email']
-        assert actual == 'good@gittip.com', actual
+        assert actual == 'alice@gittip.com', actual
+
+    def test_post_anon_returns_404(self):
+        response = self.change_email_address('anon@gittip.com', user=None)
+        assert response.code == 404, response.code
+
+    def test_post_with_no_at_symbol_is_400(self):
+        response = self.change_email_address('gittip.com')
+        assert response.code == 400, response.code
+
+    def test_post_with_no_period_symbol_is_400(self):
+        response = self.change_email_address('test@gittip')
+        assert response.code == 400, response.code
