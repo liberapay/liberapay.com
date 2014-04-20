@@ -30,7 +30,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Configure Postgres
   config.vm.provision :shell, :inline => <<-eos
     sudo -u postgres psql -U postgres -qf /home/vagrant/#{PROJECT_DIRECTORY}/create_db.sql
-    # Root  and vagrant users are now part of the base image
+    sudo -u postgres psql -U postgres -qf /home/vagrant/#{PROJECT_DIRECTORY}/create_test_db.sql
   eos
 
   # Warn if Windows newlines are detected and try to fix the problem

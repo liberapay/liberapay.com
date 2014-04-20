@@ -8,17 +8,6 @@ venv := "./vendor/virtualenv-1.9.1.py"
 test_env_files := defaults.env,tests/test.env,tests/local.env
 py_test := ./$(env_bin)/honcho -e $(test_env_files) run ./$(env_bin)/py.test
 
-postgression_api_url := http://api.postgression.com/
-
-define postgression_database
-$(shell ./$(env_bin)/python -c '
-import requests
-response=requests.get("$(postgression_api_url)")
-if response.status_code == 200:
-	print "\"DATABASE_URL=%s\\n\"" % response.text
-')
-endef
-
 env:
 	$(python)  $(venv)\
 				--unzip-setuptools \
@@ -35,27 +24,17 @@ clean:
 	rm -rf env *.egg *.egg-info
 	find . -name \*.pyc -delete
 
-cloud-db: env
-	echo -n $(postgression_database) >> local.env
-
 schema: env
 	./$(env_bin)/honcho -e defaults.env,local.env run ./recreate-schema.sh
 
 data:
 	./$(env_bin)/honcho -e defaults.env,local.env run ./$(env_bin)/fake_data fake_data
 
-db: cloud-db schema data
-
 run: env
 	./$(env_bin)/honcho -e defaults.env,local.env run ./$(env_bin)/aspen
 
-test-cloud-db: env
-	echo -n $(postgression_database) >> tests/local.env
-
 test-schema: env
 	./$(env_bin)/honcho -e $(test_env_files) run ./recreate-schema.sh
-
-test-db: test-cloud-db test-schema
 
 pyflakes: env
 	./$(env_bin)/pyflakes bin gittip tests
