@@ -30,15 +30,11 @@ schema: env
 data:
 	./$(env_bin)/honcho -e defaults.env,local.env run ./$(env_bin)/fake_data fake_data
 
-db: schema data
-
 run: env
 	./$(env_bin)/honcho -e defaults.env,local.env run ./$(env_bin)/aspen
 
 test-schema: env
 	./$(env_bin)/honcho -e $(test_env_files) run ./recreate-schema.sh
-
-test-db: test-schema
 
 pyflakes: env
 	./$(env_bin)/pyflakes bin gittip tests
