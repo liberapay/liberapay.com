@@ -99,7 +99,7 @@
 {% if not user.ANON and user.participant == participant %}
     <h2>Withdrawing Money
         {% if user.ADMIN and participant.balanced_customer_href %}
-            <a href="https://dashboard.balancedpayments.com/#/{{ participant.balanced_customer_href }}" title="Go to Balanced Dashboard"><div class="payments-by"></div></a>
+            <a href="https://dashboard.balancedpayments.com/#/marketplaces/MP12Xw5lL6iaILtqImIoroDL{{ participant.balanced_customer_href }}" title="Go to Balanced Dashboard"><div class="payments-by"></div></a>
         {% else %}
             <div class="payments-by"></div>
         {% endif %}
@@ -122,44 +122,3 @@
         </tr>
     </table>
 {% endif %}
-
-<h2>Moving Money Every Week</h2>
-<table class="accounts">
-
-    <!-- add/withdraw money (recurring) -->
-    <tr>
-        <td class="account-type">
-            <img src="{{ website.asset_url }}/balanced-avatar.png" />
-        </td>
-        <td class="account-details">
-            <div class="account-type">
-                Balanced Payments
-                {% if user.ADMIN and participant.balanced_customer_href %}
-                (<a href="https://dashboard.balancedpayments.com/#/marketplaces/MP12Xw5lL6iaILtqImIoroDL{{ participant.balanced_customer_href }}"
-                    >view on dashboard</a>)
-                {% endif %}
-            </div>
-            {% if user.participant == participant %}
-
-            <a href="/credit-card.html">Credit card</a>:
-            <!--
-            These spans are here because otherwise Chrome effs up the
-            unicode(?!)
-            -->
-            <span>{% if participant.last_bill_result != "" %}&#x2718;{% else %}&#x2714;{% endif %}</span>
-            &nbsp; &nbsp; &nbsp;
-            <a href="/bank-account.html">Bank account</a>:
-            <span>{% if participant.last_ach_result != "" %}&#x2718;{% else %}&#x2714;{% endif %}</span>
-
-            {% else %}
-
-            Credit card:
-            <span>{% if participant.last_bill_result != "" %}&#x2718;{% else %}&#x2714;{% endif %}</span>
-            &nbsp; &nbsp; &nbsp;
-            Bank account:
-            <span>{% if participant.last_ach_result != "" %}&#x2718;{% else %}&#x2714;{% endif %}</span>
-
-            {% endif %}
-        </td>
-    </tr>
-</table>
