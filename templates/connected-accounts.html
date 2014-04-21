@@ -88,7 +88,7 @@
                         <a class="btn small disabled">+ Add</a>
                     {% endif %}
                 {% else %}
-                    <span class="none">Added</span>
+                    <a class="account-username" href="/credit-card.html">Added</a>
                     <a class="button auth-button" href="/credit-card.html">Edit</a>
                 {% endif %}
             </td>
@@ -113,10 +113,10 @@
                 <div class="account-type">Bank account</div>
                 {% if participant.last_ach_result != "" %}
                     <span class="none">None</span>
-                    <a class="button auth-button" href="/credit-card.html">+ Add</a>
+                    <a class="button auth-button" href="/bank-account.html">+ Add</a>
                 {% else %}
-                    <span class="none">Added</span>
-                    <a class="button auth-button" href="/credit-card.html">Edit</a>
+                    <a class="account-username" href="/bank-account.html">Added</a>
+                    <a class="button auth-button" href="/bank-account.html">Edit</a>
                 {% endif %}
             </td>
         </tr>
