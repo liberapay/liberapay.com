@@ -1,1 +1,1 @@
-CREATE DATABASE gittip-test WITH OWNER = gittip;
+CREATE DATABASE "gittip-test" WITH OWNER = gittip;
