@@ -375,6 +375,14 @@ Gittip.profile.init = function() {
             function success(data) {
                 $('.email-address').text(data.email);
                 $('.email').toggle();
+                if (data.email === '') {
+                    html = "<span class=\"none\">None</span>"
+                    html += "<button class=\"toggle-email\">+ Add</button>";
+                } else {
+                    html = "<a class=\"email-address\" href=\"javascript:;\">" + data.email + "</a>";
+                    html += "<button class=\"toggle-email\">Edit</button>";
+                }
+                $('div.email').html(html);
                 $this.text('Save');
             }
 
