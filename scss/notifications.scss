@@ -1,11 +1,20 @@
 #notification-area {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-
     $transparency: 0.15;
+
+    .notifications-fixed {
+        position: fixed;
+    }
+
+    &, & .notifications-fixed {
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+    }
+
+    > .notification {
+        opacity: 0;
+    }
 
     .notification {
         box-sizing: border-box;
@@ -15,6 +24,12 @@
         overflow: hidden;
 
         @include animation(fadein 0.5s 1 ease-in);
+
+        &.fade-out {
+            @include animation(fadeout 0.5s 1 ease-out);
+            opacity: 0;
+            max-height: 0;
+        }
 
         div {
             padding: 10px;
@@ -46,5 +61,17 @@
     100% {
         opacity: 1;
         max-height: 150px;
+    }
+}
+
+@include keyframes(fadeout) {
+    0% {
+        opacity: 1;
+        max-height: 150px;
+    }
+
+    100% {
+        opacity: 0;
+        max-height: 0;
     }
 }

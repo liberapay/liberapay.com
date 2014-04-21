@@ -6,15 +6,22 @@
 Gittip.notification = function(text, type) {
     type = type || 'notice';
 
-    var dialog = Gittip.jsonml(['div', { 'class': 'notification notification-' + type }, [ 'div', text ]]);
+    var dialog = ['div', { 'class': 'notification notification-' + type }, [ 'div', text ]];
+    var $dialog = $([
+        Gittip.jsonml(dialog),
+        Gittip.jsonml(dialog)
+    ]);
 
     if (!$('#notification-area').length)
-        $('body').prepend('<div id="notification-area"></div>');
+        $('body').prepend('<div id="notification-area"><div class="notifications-fixed"></div></div>');
 
-    $('#notification-area').prepend(dialog);
+    $('#notification-area').prepend($dialog.get(0));
+    $('#notification-area .notifications-fixed').prepend($dialog.get(1));
 
-    $(dialog).on('click', function() {
-      $(this).fadeOut();
-    });
-    setTimeout(function() { $(dialog).fadeOut(); }, 5000);
+    function fadeOut() {
+        $dialog.addClass('fade-out');
+    }
+
+    $dialog.on('click', fadeOut);
+    setTimeout(fadeOut, 5000);
 };
