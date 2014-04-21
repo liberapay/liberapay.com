@@ -64,60 +64,64 @@
     {{ account_row(website.platforms.venmo, accounts, auth_button) }}
 </table>
 
-<h2>Adding Money
-    {% if user.ADMIN and participant.balanced_customer_href %}
-        <a href="https://dashboard.balancedpayments.com/#/{{ participant.balanced_customer_href }}" title="Go to Balanced Dashboard"><span class="payments-by"></span></a>
-    {% else %}
-        <span class="payments-by"></span>
-    {% endif %}
-</h2>
-<table class="accounts">
-    <tr>
-        <td class="account-type">
-            <img src="{{ website.asset_url }}/card_icon.jpg" />
-        </td>
-        <td class="account-details">
-            <div class="account-type">Credit card</div>
-            {% if participant.last_bill_result != "" %}
-                {% if participant.last_coinbase_result != "" %}
+{% if not user.ANON and user.participant == participant %}
+    <h2>Adding Money
+        {% if user.ADMIN and participant.balanced_customer_href %}
+            <a href="https://dashboard.balancedpayments.com/#/{{ participant.balanced_customer_href }}" title="Go to Balanced Dashboard"><span class="payments-by"></span></a>
+        {% else %}
+            <span class="payments-by"></span>
+        {% endif %}
+    </h2>
+    <table class="accounts">
+        <tr>
+            <td class="account-type">
+                <img src="{{ website.asset_url }}/card_icon.jpg" />
+            </td>
+            <td class="account-details">
+                <div class="account-type">Credit card</div>
+                {% if participant.last_bill_result != "" %}
+                    {% if participant.last_coinbase_result != "" %}
+                        <span class="none">None</span>
+                        <a class="button auth-button" href="/credit-card.html">+ Add</a>
+                    {% else %}
+                        <span class="none">Delete your coinbase account first.</span>
+                        <a class="btn small disabled">+ Add</a>
+                    {% endif %}
+                {% else %}
+                    <span class="none">Added</span>
+                    <a class="button auth-button" href="/credit-card.html">Edit</a>
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+{% endif %}
+
+{% if not user.ANON and user.participant == participant %}
+    <h2>Withdrawing Money
+        {% if user.ADMIN and participant.balanced_customer_href %}
+            <a href="https://dashboard.balancedpayments.com/#/{{ participant.balanced_customer_href }}" title="Go to Balanced Dashboard"><div class="payments-by"></div></a>
+        {% else %}
+            <div class="payments-by"></div>
+        {% endif %}
+    </h2>
+    <table class="accounts">
+        <tr>
+            <td class="account-type">
+                <img src="{{ website.asset_url }}/bank_account_icon.jpg" />
+            </td>
+            <td class="account-details">
+                <div class="account-type">Bank account</div>
+                {% if participant.last_ach_result != "" %}
                     <span class="none">None</span>
                     <a class="button auth-button" href="/credit-card.html">+ Add</a>
                 {% else %}
-                    <span class="none">Delete your coinbase account first.</span>
-                    <a class="btn small disabled">+ Add</a>
+                    <span class="none">Added</span>
+                    <a class="button auth-button" href="/credit-card.html">Edit</a>
                 {% endif %}
-            {% else %}
-                {{ card['brand'] }} {{ card['number'][-4:] }}
-                <a class="button auth-button" href="/credit-card.html">Edit</a>
-            {% endif %}
-        </td>
-    </tr>
-</table>
-
-<h2>Withdrawing Money
-    {% if user.ADMIN and participant.balanced_customer_href %}
-        <a href="https://dashboard.balancedpayments.com/#/{{ participant.balanced_customer_href }}" title="Go to Balanced Dashboard"><div class="payments-by"></div></a>
-    {% else %}
-        <div class="payments-by"></div>
-    {% endif %}
-</h2>
-<table class="accounts">
-    <tr>
-        <td class="account-type">
-            <img src="{{ website.asset_url }}/bank_account_icon.jpg" />
-        </td>
-        <td class="account-details">
-            <div class="account-type">Bank account</div>
-            {% if participant.last_ach_result != "" %}
-                <span class="none">None</span>
-                <a class="button auth-button" href="/credit-card.html">+ Add</a>
-            {% else %}
-                {{ bank_account['bank_name'] }}
-                <a class="button auth-button" href="/credit-card.html">Edit</a>
-            {% endif %}
-        </td>
-    </tr>
-</table>
+            </td>
+        </tr>
+    </table>
+{% endif %}
 
 <h2>Moving Money Every Week</h2>
 <table class="accounts">
