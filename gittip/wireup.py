@@ -8,6 +8,7 @@ import balanced
 import gittip
 import raven
 import stripe
+import mandrill
 from environment import Environment, is_yesish
 from gittip.elsewhere import PlatformRegistry
 from gittip.elsewhere.bitbucket import Bitbucket
@@ -40,6 +41,10 @@ def db(env):
 
     return db
 
+def mail(env):
+    mandrill_client = mandrill.Mandrill(env.mandrill_key)
+
+    return mandrill_client
 
 def billing(env):
     stripe.api_key = env.stripe_secret_api_key
@@ -262,6 +267,7 @@ def env():
         SENTRY_DSN                      = unicode,
         LOG_BUSY_THREADS_EVERY          = int,
         LOG_METRICS                     = is_yesish,
+        MANDRILL_KEY                    = unicode,
     )
 
 
