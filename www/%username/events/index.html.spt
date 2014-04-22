@@ -14,7 +14,7 @@ title = "%s - %s" % (participant.username, hero)
 locked = False
 
 SQL = """
-    SELECT * FROM events WHERE type = 'participant' AND payload->>'id' = %s ORDER BY ts ASC
+    SELECT * FROM events WHERE type = 'participant' AND payload->>'id' = %s ORDER BY ts DESC
 """
 
 events = db.all(SQL, (unicode(participant.id),))
