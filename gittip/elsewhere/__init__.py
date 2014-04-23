@@ -271,7 +271,8 @@ class Platform(object):
         if i.avatar_url:
             scheme, netloc, path, query, fragment = urlsplit(i.avatar_url)
             fragment = ''
-            if netloc.endswith('gravatar.com'):
+            if netloc.endswith('githubusercontent.com') or \
+               netloc.endswith('gravatar.com'):
                 query = 's=128'
             i.avatar_url = urlunsplit((scheme, netloc, path, query, fragment))
 
