@@ -22,7 +22,7 @@ The Vagrantfile will download a custom made image from the internet. If you have
 
 `curl http://downloads.gittipllc.netdna-cdn.com/gittip.box`
 
-Once downloaded, vagrant will use this local file automatically when you run `vagrant up`
+Once downloaded, vagrant will use this local file automatically when you run `vagrant up`. Vagrant is setup to use key based SSH authentication, if you're prompted for a password please use `vagrant`.
 
 
 Docker
