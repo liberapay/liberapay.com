@@ -13,36 +13,21 @@ Quick Start
 Vagrant
 -------
 
-If you have vagrant installed, you can run gittip by running
-`vagrant up` from the project directory. Please note that if you ever
-switch between running gittip on your own machine to vagrant or vice
-versa, you will need to run `make clean`.
+```
+$ vagrant up
+```
 
-The Vagrantfile will download a custom made image from the internet. If you have a slow internet connection, you can download a local copy of this file, by running:
-
-`curl http://downloads.gittipllc.netdna-cdn.com/gittip.box`
-
-Once downloaded, vagrant will use this local file automatically when you run `vagrant up`. Vagrant is setup to use key based SSH authentication, if you're prompted for a password please use `vagrant`.
-
+[Read more](#vagrant-1).
 
 Docker
 -------
 
-Run 
-
 ```
-docker build -t gittip .
-```
-
-to build a Docker Image from the included Dockerfile and 
-
-```
-docker run -p 8537:8537 gittip
+$ docker build -t gittip .
+$ docker run -p 8537:8537 gittip
 ```
 
-to use it.
-
-[Read more about Docker support and usage](#docker-1).
+[Read more](#docker-1).
 
 
 Manual Quick Start
@@ -214,6 +199,12 @@ running. At some point, try [running the test suite](#testing-).
 Vagrant
 -------
 If you have vagrant installed, you can run gittip by running `vagrant up` from the project directory. Please note that if you ever switch between running gittip on your own machine to vagrant or vice versa, you will need to run `make clean`.
+
+The Vagrantfile will download a custom made image from the internet. If you have a slow internet connection, you can download a local copy of this file, by running:
+
+`curl http://downloads.gittipllc.netdna-cdn.com/gittip.box`
+
+Once downloaded, vagrant will use this local file automatically when you run `vagrant up`. Vagrant is setup to use key based SSH authentication, if you're prompted for a password please use `vagrant`.
 
 Docker
 ------------
