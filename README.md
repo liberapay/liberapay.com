@@ -13,7 +13,7 @@ Quick Start
 Vagrant
 -------
 
-If you have vagrant installed, you can run gittip merely by running
+If you have vagrant installed, you can run gittip by running
 `vagrant up` from the project directory. Please note that if you ever
 switch between running gittip on your own machine to vagrant or vice
 versa, you will need to run `make clean`.
@@ -213,7 +213,7 @@ running. At some point, try [running the test suite](#testing-).
 
 Vagrant
 -------
-If you have vagrant installed, you can run gittip merely by running `vagrant up` from the project directory. Please note that if you ever switch between running gittip on your own machine to vagrant or vice versa, you will need to run `make clean`.
+If you have vagrant installed, you can run gittip by running `vagrant up` from the project directory. Please note that if you ever switch between running gittip on your own machine to vagrant or vice versa, you will need to run `make clean`.
 
 Docker
 ------------
