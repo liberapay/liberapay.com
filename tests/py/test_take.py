@@ -80,3 +80,14 @@ class Tests(Harness):
         team.add_member(alice)
         actual = team.set_take_for(alice, D('42.00'), team)
         assert actual == 1
+
+    def test_get_members(self):
+        team = self.make_team()
+        alice = self.make_participant('alice')
+        team.add_member(alice)
+        team.set_take_for(alice, D('42.00'), team)
+        members = team.get_members(alice)
+        assert len(members) == 2
+        assert members[0]['username'] == 'alice'
+        assert members[0]['take'] == 42
+        assert members[0]['balance'] == 58
