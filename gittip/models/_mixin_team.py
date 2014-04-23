@@ -183,7 +183,7 @@ class MixinTeam(object):
 
             member['last_week'] = last_week = self.get_take_last_week_for(member)
             member['max_this_week'] = self.compute_max_this_week(last_week)
-            amount = min(take, balance)
+            amount = min(take['amount'], balance)
             balance -= amount
             member['balance'] = balance
             member['percentage'] = (amount / budget) if budget > 0 else 0
