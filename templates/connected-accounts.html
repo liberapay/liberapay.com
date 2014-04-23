@@ -67,7 +67,10 @@
 {% if not user.ANON and user.participant == participant %}
     <h2>Adding Money
         {% if user.ADMIN and participant.balanced_customer_href %}
-            <a href="https://dashboard.balancedpayments.com/#/{{ participant.balanced_customer_href }}" title="Go to Balanced Dashboard"><span class="payments-by"></span></a>
+            <a href="https://dashboard.balancedpayments.com/#/{{ participant.balanced_customer_href }}"
+               title="Go to Balanced Dashboard">
+                <span class="payments-by"></span>
+            </a>
         {% else %}
             <span class="payments-by"></span>
         {% endif %}
@@ -94,7 +97,10 @@
 {% if not user.ANON and user.participant == participant %}
     <h2>Withdrawing Money
         {% if user.ADMIN and participant.balanced_customer_href %}
-            <a href="https://dashboard.balancedpayments.com/#/marketplaces/MP12Xw5lL6iaILtqImIoroDL{{ participant.balanced_customer_href }}" title="Go to Balanced Dashboard"><div class="payments-by"></div></a>
+            <a href="https://dashboard.balancedpayments.com/#/marketplaces/MP12Xw5lL6iaILtqImIoroDL{{ participant.balanced_customer_href }}"
+               title="Go to Balanced Dashboard">
+                <div class="payments-by"></div>
+            </a>
         {% else %}
             <div class="payments-by"></div>
         {% endif %}
