@@ -184,6 +184,15 @@ else:
     </tbody>
     </table>
 
+    {% if platform.is_team_admin and user.participant.IS_PLURAL %}
+        <h2>{{ user_name|e }} has not joined Gittip.</h2>
+        <p>Are you an administrator of this {{ platform.display_name }} team
+        account? Connect it to your Gittip account.</p>
+        {% call auth_button(platform.name, 'connect', path['user_name']) %}
+            Connect team account
+        {% endcall %}
+    {% endif %}
+
   {% else %}
 
     <h2>{{ user_name|e }} has not joined Gittip.</h2>
@@ -202,13 +211,19 @@ else:
         {% endif %}
     {% endif %}
 
-    {% if user.ANON %}
+  {% endif %}
+
+  {% if user.ANON %}
+
     <h2>What is Gittip?</h2>
 
     <p>Gittip is a way to thank and support your favorite artists, musicians,
     writers, programmers, etc. by setting up a small weekly cash gift to them.
     <a href="/about/">Read more ...</a></p>
 
+  {% endif %}
+
+  {% if user.ANON and not locked and not is_team %}
 
     <h2>Don't like what you see?</h2>
 
@@ -218,7 +233,6 @@ else:
     {% call auth_button(platform.name, 'lock', path['user_name']) %}
         Lock
     {% endcall %}
-    {% endif %}
 
   {% endif %}
 </div>
