@@ -99,9 +99,7 @@ Dependencies
 Building `www.gittip.com` requires [Python
 2.7](http://python.org/download/releases/2.7.4/), and a gcc/make toolchain.
 
-All Python library dependencies are bundled in the repo (under `vendor/`) and
-if you do not want to install Postgres locally you can try to use a cloud instance
-by issuing `make cloud-db` (it is somewhat slow for regular development).
+All Python library dependencies are bundled in the repo (under `vendor/`).
 
 To configure local Postgres create default role and database:
 
