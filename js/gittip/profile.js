@@ -304,7 +304,7 @@ Gittip.profile.init = function() {
                     html = "<span class=\"none\">None</span>"
                     html += "<button class=\"toggle-bitcoin\">+ Add</button>";
                 } else {
-                    html = "<a class=\"address\" rel=\"me\" href=\"http://blockchain.info/address/";
+                    html = "<a class=\"address\" rel=\"me\" href=\"https://blockchain.info/address/";
                     html += d.bitcoin_address + "\">" + d.bitcoin_address + "</a>";
                     html += "<button class=\"toggle-bitcoin\">Edit</button>";
                 }

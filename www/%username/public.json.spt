@@ -100,7 +100,7 @@ for platform, account in accounts.items():
     elsewhere[platform] = {k: getattr(account, k, None) for k in fields}
 
 if participant.bitcoin_address is not None:
-    output['bitcoin'] = "http://blockchain.info/address/%s" % participant.bitcoin_address
+    output['bitcoin'] = "https://blockchain.info/address/%s" % participant.bitcoin_address
 
 response.body = output
 
