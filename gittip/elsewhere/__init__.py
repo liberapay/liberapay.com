@@ -176,13 +176,13 @@ class Platform(object):
         assert len(r.user_id) > 0
         r.display_name = self.x_display_name(info, None)
         r.email = self.x_email(info, None)
-        gravatar_id = self.x_gravatar_id(info, None)
-        if r.email and not gravatar_id:
-            gravatar_id = hashlib.md5(r.email.strip().lower()).hexdigest()
-        if gravatar_id:
-            r.avatar_url = 'https://www.gravatar.com/avatar/'+gravatar_id
-        else:
-            r.avatar_url = self.x_avatar_url(info, None)
+        r.avatar_url = self.x_avatar_url(info, None)
+        if not r.avatar_url:
+            gravatar_id = self.x_gravatar_id(info, None)
+            if r.email and not gravatar_id:
+                gravatar_id = hashlib.md5(r.email.strip().lower()).hexdigest()
+            if gravatar_id:
+                r.avatar_url = 'https://www.gravatar.com/avatar/'+gravatar_id
         r.is_team = self.x_is_team(info, False)
         r.extra_info = info
         return r
@@ -271,7 +271,8 @@ class Platform(object):
         if i.avatar_url:
             scheme, netloc, path, query, fragment = urlsplit(i.avatar_url)
             fragment = ''
-            if netloc.endswith('gravatar.com'):
+            if netloc.endswith('githubusercontent.com') or \
+               netloc.endswith('gravatar.com'):
                 query = 's=128'
             i.avatar_url = urlunsplit((scheme, netloc, path, query, fragment))
 
