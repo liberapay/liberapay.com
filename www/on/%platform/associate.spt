@@ -61,8 +61,6 @@ elif action == 'connect':
         raise request.resource.respond(request)
 
 elif action in {'lock', 'unlock'}:
-    if account.is_team:
-        raise Response(400)
     account.set_is_locked(action == 'lock')
 
 else:

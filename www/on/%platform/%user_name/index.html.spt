@@ -22,19 +22,25 @@ title = username = user_name = account.user_name
 locked = account.is_locked
 participant = account.participant
 is_team = account.is_team
+allow_pledges = not locked and (not is_team or hasattr(platform, 'is_team_admin'))
+
+if is_team:
+    page_url = b64decode(qs.get('page', ''))
+    members, nmembers, pages_urls = platform.get_team_members(user_name, page_url)
+    if not members:
+        nmembers = 0
+        team_description = 'is a private team'
+    elif nmembers == -1:
+        team_description = 'is a big team'
+    else:
+        team_description = 'is a team with'
 
 if locked:
     number = -2
     description = 'has opted out of Gittip.'
-elif is_team:
-    page_url = b64decode(qs.get('page', ''))
-    members, number, pages_urls = platform.get_team_members(user_name, page_url)
-    if number == -1:
-        description = 'is a big team.'
-    elif number < 2:
-        description = 'is an organization with'
-    else:
-        description = 'is a team with'
+elif is_team and not allow_pledges:
+    number = nmembers
+    description = team_description
 else:
     number = participant.get_number_of_backers()
     description = 'has'
@@ -49,7 +55,7 @@ else:
 {% endblock %}
 
 {% block scripts %}
-  {% if not locked %}
+  {% if allow_pledges %}
     <script>$(document).ready(Gittip.tips.init);</script>
   {% endif %}
 
@@ -71,10 +77,10 @@ else:
             {% if number >= 0 %}
                 <div class="number">{{ number }}</div>
                 <div class="unit">
-                    {% if is_team %}
-                        public member{{ '' if number == 1 else 's' }}
-                    {% else %}
+                    {% if allow_pledges %}
                         {{ 'person' if number == 1 else 'people' }} ready to give
+                    {% else %}
+                        public member{{ '' if number == 1 else 's' }}
                     {% endif %}
                 </div>
             {% endif %}
@@ -83,7 +89,7 @@ else:
     </tr>
 </table>
 
-{% if not locked and not is_team %}
+{% if allow_pledges %}
     {% include "templates/participant.tip.html" %}
 {% endif %}
 
@@ -96,9 +102,15 @@ else:
 <div class="col0">
   {% if locked %}
 
-    <p>If you are <a href="{{ account.html_url|e}}">{{ user_name|e }}</a>
-    on {{ platform.name }}, you can unlock your account to allow people
-    to pledge tips to you on Gittip.</p>
+    {% if is_team %}
+        <p>If you are an administrator of this {{ platform.display_name }} team
+        account, you can unlock it to allow people to pledge tips to your team
+        on Gittip.</p>
+    {% else %}
+        <p>If you are <a href="{{ account.html_url|e}}">{{ user_name|e }}</a>
+        on {{ platform.name }}, you can unlock your account to allow people
+        to pledge tips to you on Gittip.</p>
+    {% endif %}
 
     {% call auth_button(platform.name, 'unlock', path['user_name']) %}
         Unlock
@@ -106,6 +118,16 @@ else:
 
   {% elif is_team %}
 
+    {% if allow_pledges %}
+        <h2 style="text-align: center">
+            {{ user_name|e }} {{ team_description }}
+            {% if nmembers > 0 %}
+                {{ nmembers }} public member{{ '' if nmembers == 1 else 's' }}
+            {% endif %}
+        </h2>
+    {% endif %}
+
+    {% if members %}
     <table id="members">
     <thead><tr><th>Member</th><th>Status</th></tr></thead>
     <tbody>
@@ -183,6 +205,7 @@ else:
 
     </tbody>
     </table>
+    {% endif %}
 
     {% if platform.is_team_admin and user.participant.IS_PLURAL %}
         <h2>{{ user_name|e }} has not joined Gittip.</h2>
@@ -223,12 +246,13 @@ else:
 
   {% endif %}
 
-  {% if user.ANON and not locked and not is_team %}
+  {% if user.ANON and allow_pledges %}
 
     <h2>Don't like what you see?</h2>
 
-    <p>If you are {{ user_name|e }} you can explicitly opt out of Gittip by
-    locking this account. We don't allow new pledges to locked accounts.</p>
+    <p>If you are an owner of this {{ platform.display_name }} account, you can
+    explicitly opt out of Gittip by locking it. We don't allow new pledges to
+    locked accounts.</p>
 
     {% call auth_button(platform.name, 'lock', path['user_name']) %}
         Lock
