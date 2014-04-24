@@ -64,7 +64,7 @@
     {{ account_row(website.platforms.venmo, accounts, auth_button) }}
 </table>
 
-{% if not user.ANON and user.participant == participant %}
+{% if not user.ANON and (user.ADMIN or user.participant == participant) %}
     <h2>Adding Money
         {% if user.ADMIN and participant.balanced_customer_href %}
             <a href="https://dashboard.balancedpayments.com/#/{{ participant.balanced_customer_href }}"
@@ -92,9 +92,7 @@
             </td>
         </tr>
     </table>
-{% endif %}
 
-{% if not user.ANON and user.participant == participant %}
     <h2>Withdrawing Money
         {% if user.ADMIN and participant.balanced_customer_href %}
             <a href="https://dashboard.balancedpayments.com/#/marketplaces/MP12Xw5lL6iaILtqImIoroDL{{ participant.balanced_customer_href }}"
