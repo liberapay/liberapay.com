@@ -11,45 +11,6 @@
         {% endif %}
     {% endfor %}
 
-    {% if user.participant == participant or user.ADMIN %}
-    <tr>
-        <td class="account-type">
-            <img src="{{ website.asset_url }}/email.png" /><!-- This needs to change -->
-        </td>
-        <td class="account-details">
-            <div class="account-type">Email Address (Private)</div>
-            {% if not user.ANON and user.participant == participant %}
-                <div class="email">
-            {% else %}
-                <div>
-            {% endif %}
-                {% if participant.email %}
-                    <a class="address email-address" href="javascript:;">
-                      {{ participant.email.address }}
-                    </a>
-                    <button class="toggle-email">Edit</button>
-                {% else %}
-                    <span class="none">None</span>
-                    <button class="toggle-email">+ Add</button>
-                {% endif %}
-            </div>
-
-            <form class="email-submit">
-                <div class="address">
-                   <input type="email" class="email hidden"
-                        {% if participant.email %}
-                            value="{{ participant.email.address }}"
-                        {% endif %}
-                    >
-                </div>
-                <div class="buttons">
-                    <button type="submit" class="email hidden">Save</button>
-                    <button type="cancel" class="email cancel hidden">Cancel</button>
-                </div>
-            </form>
-        </td>
-    </tr>
-    {% endif %}
 </table>
 
 {% if not user.ANON and user.participant == participant %}
