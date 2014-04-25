@@ -59,6 +59,7 @@ Table of Contents
   - [Dependencies](#dependencies)
   - [Building](#building)
   - [Launching](#launching)
+  - [Vagrant](#vagrant)
   - [Docker](#docker)
   - [Help!](#help)
  - [Configuration](#configuration)
