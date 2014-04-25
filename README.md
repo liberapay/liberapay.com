@@ -59,7 +59,7 @@ Table of Contents
   - [Dependencies](#dependencies)
   - [Building](#building)
   - [Launching](#launching)
-  - [Docker](#docker)  
+  - [Docker](#docker)
   - [Help!](#help)
  - [Configuration](#configuration)
  - [Modifying CSS](#modifying-css)
@@ -105,8 +105,6 @@ running `make`, then add
 for more information](http://stackoverflow.com/a/22355874/347246)):
 
     $ ARCHFLAGS=-Wno-error=unused-command-line-argument-hard-error-in-future
-    
-    
 
 Building
 --------
@@ -199,6 +197,8 @@ running. At some point, try [running the test suite](#testing-).
 Vagrant
 -------
 If you have vagrant installed, you can run gittip by running `vagrant up` from the project directory. Please note that if you ever switch between running gittip on your own machine to vagrant or vice versa, you will need to run `make clean`.
+
+If you're using Vagrant for the first time you'll need [Vagrant](http://www.vagrantup.com/) and [VirtualBox](https://www.virtualbox.org/) installed. If you're on Linux you'll need to install `nfs-kernel-server`.
 
 The Vagrantfile will download a custom made image from the internet. If you have a slow internet connection, you can download a local copy of this file, by running:
 
