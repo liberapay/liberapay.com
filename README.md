@@ -207,6 +207,11 @@ The Vagrantfile will download a custom made image from the internet. If you have
 
 Once downloaded, vagrant will use this local file automatically when you run `vagrant up`. Vagrant is setup to use key based SSH authentication, if you're prompted for a password please use `vagrant`.
 
+**Ubuntu users:** If you experience problems, please see [this
+issue](https://github.com/gittip/www.gittip.com/pull/2321#issuecomment-41455169).
+As mentioned, you will also need to be wary of projects that are nested
+in encrypted directories.
+
 Docker
 ------------
 
