@@ -6,8 +6,8 @@ set -e
 echo "cd /vagrant" > /etc/profile.d/login-directory.sh
 
 # Configure Postgres
-sudo -u postgres psql -U postgres -qf /vagrant/create_db.sql
-sudo -u postgres psql -U postgres -qf /vagrant/create_test_db.sql
+sudo -u postgres psql -U postgres -qf /vagrant/scripts/create_db.sql
+sudo -u postgres psql -U postgres -qf /vagrant/scripts/create_test_db.sql
 
 cd /vagrant
 
