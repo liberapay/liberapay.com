@@ -305,22 +305,10 @@ class Platform(object):
              RETURNING participant
             """.format(cols, placeholders), vals+(self.name, i.user_id))
 
-        # Propagate avatar_url to participant
-        self.db.run("""
-            UPDATE participants p
-               SET avatar_url = (
-                       SELECT avatar_url
-                         FROM elsewhere
-                        WHERE participant = p.username
-                     ORDER BY platform = 'github' DESC,
-                              avatar_url LIKE '%%gravatar.com%%' DESC
-                        LIMIT 1
-                   )
-             WHERE p.username = %s
-        """, (username,))
-
-        # Now delegate to get_account_from_db
-        return self.get_account_from_db(i.user_name)
+        # Return account after propagating avatar_url to participant
+        account = self.get_account_from_db(i.user_name)
+        account.participant.update_avatar()
+        return account
 
 
 class PlatformOAuth1(Platform):
