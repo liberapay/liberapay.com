@@ -118,11 +118,7 @@ locked = False
                 </td>
                 <td class="account-details">
                     <div class="account-type">Email Address (Private)</div>
-                    {% if not user.ANON and user.participant == participant %}
-                        <div class="email">
-                    {% else %}
-                        <div>
-                    {% endif %}
+                    <div class="email">
                         {% if participant.email %}
                             <a class="address email-address" href="javascript:;">
                               {{ participant.email.address }}
