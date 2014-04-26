@@ -91,12 +91,11 @@ def inbound(request):
         csrf_token = request.headers.cookie.get('csrf_token')
         csrf_token = '' if csrf_token is None else csrf_token.value
         csrf_token = _sanitize_token(csrf_token)
-        # Use same token next time
+
         request.context['csrf_token'] = csrf_token
     except KeyError:
         csrf_token = None
-        # Generate token and store it in the request, so it's
-        # available to the view.
+
         request.context['csrf_token'] = _get_new_csrf_key()
 
     # Assume that anything not defined as 'safe' by RC2616 needs protection
@@ -122,7 +121,6 @@ def inbound(request):
             if referer is None:
                 raise Response(403, REASON_NO_REFERER)
 
-            # Note that get_host() includes the port.
             good_referer = 'https://%s/' % _get_host(request)
             if not same_origin(referer, good_referer):
                 reason = REASON_BAD_REFERER % (referer, good_referer)
@@ -130,9 +128,6 @@ def inbound(request):
                 raise Response(403, reason)
 
         if csrf_token is None:
-            # No CSRF cookie. For POST requests, we insist on a CSRF cookie,
-            # and in this way we can avoid all CSRF attacks, including login
-            # CSRF.
             raise Response(403, REASON_NO_CSRF_COOKIE)
 
         # Check non-cookie token for match.
@@ -150,28 +145,15 @@ def inbound(request):
 
 
 def outbound(request, response):
-
+    """Store the latest CSRF token as a cookie.
+    """
     csrf_token = request.context.get('csrf_token')
 
+    if csrf_token:
+        response.headers.cookie['csrf_token'] = csrf_token
+        cookie = response.headers.cookie['csrf_token']
+        cookie['path'] = '/'
+        cookie['expires'] = rfc822.formatdate(time.time() + TIMEOUT)
 
-    # If csrf_token is unset, then inbound was never called, probaby because
-    # another inbound hook short-circuited.
-
-    if csrf_token is None:
-        return response
-
-
-    # Set the CSRF cookie even if it's already set, so we renew
-    # the expiry timer.
-
-    response.headers.cookie['csrf_token'] = csrf_token
-    cookie = response.headers.cookie['csrf_token']
-    # I am not setting domain, because it is supposed to default to what we
-    # want: the domain of the object requested.
-    #cookie['domain']
-    cookie['path'] = '/'
-    cookie['expires'] = rfc822.formatdate(time.time() + TIMEOUT)
-    #cookie['httponly'] = "Yes, please."  Want js access for this.
-
-    # Content varies with the CSRF cookie, so set the Vary header.
-    patch_vary_headers(response, ('Cookie',))
+        # Content varies with the CSRF cookie, so set the Vary header.
+        patch_vary_headers(response, ('Cookie',))
