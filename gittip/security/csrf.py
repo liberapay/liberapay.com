@@ -91,12 +91,10 @@ def inbound(request):
         csrf_token = request.headers.cookie.get('csrf_token')
         csrf_token = '' if csrf_token is None else csrf_token.value
         csrf_token = _sanitize_token(csrf_token)
-
-        request.context['csrf_token'] = csrf_token
     except KeyError:
-        csrf_token = None
+        csrf_token = _get_new_csrf_key()
 
-        request.context['csrf_token'] = _get_new_csrf_key()
+    request.context['csrf_token'] = csrf_token
 
     # Assume that anything not defined as 'safe' by RC2616 needs protection
     if request.line.method not in ('GET', 'HEAD', 'OPTIONS', 'TRACE'):
