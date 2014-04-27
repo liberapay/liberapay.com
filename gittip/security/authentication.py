@@ -36,25 +36,21 @@ def inbound(request):
     request.context['user'] = user or User()
 
 def outbound(request, response):
-    if 'user' in request.context:
-        user = request.context['user']
-        if not isinstance(user, User):
-            raise Response(400, "If you define 'user' in a simplate it has to "
-                                "be a User instance.")
+    response.headers['Expires'] = BEGINNING_OF_EPOCH # don't cache
 
+    user = request.context['user'] if request.context else User()
+    if not isinstance(user, User):
+        raise Response(400, "If you define 'user' in a simplate it has to "
+                            "be a User instance.")
+
+    if not user.ANON:
         response.headers.cookie['session'] = user.participant.session_token
         expires = time.time() + TIMEOUT
         user.keep_signed_in_until(expires)
-    elif 'session' in request.headers.cookie:
-        response.headers.cookie['session'] = ''
-        expires = 0
-    else: return
 
-    response.headers['Expires'] = BEGINNING_OF_EPOCH # don't cache
-
-    cookie = response.headers.cookie['session']
-    cookie['path'] = '/'
-    cookie['expires'] = rfc822.formatdate(expires)
-    cookie['httponly'] = "Yes, please."
-    if gittip.canonical_scheme == 'https':
-        cookie['secure'] = "Yes, please."
+        cookie = response.headers.cookie['session']
+        cookie['path'] = '/'
+        cookie['expires'] = rfc822.formatdate(expires)
+        cookie['httponly'] = 'Yes, please.'
+        if gittip.canonical_scheme == 'https':
+            cookie['secure'] = 'Yes, please.'
