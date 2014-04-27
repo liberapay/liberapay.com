@@ -147,8 +147,9 @@ def inbound(request):
 def outbound(request, response):
     """Store the latest CSRF token as a cookie.
     """
-    csrf_token = request.context.get('csrf_token')
+    if request.line.uri.startswith('/assets/'): return
 
+    csrf_token = request.context.get('csrf_token')
     if csrf_token:
         response.headers.cookie['csrf_token'] = csrf_token
         cookie = response.headers.cookie['csrf_token']

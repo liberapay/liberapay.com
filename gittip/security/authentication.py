@@ -14,6 +14,8 @@ TIMEOUT = 60 * 60 * 24 * 7 # one week
 def inbound(request):
     """Authenticate from a cookie or an API key in basic auth.
     """
+    if request.line.uri.startswith('/assets/'): return
+
     user = None
     if 'Authorization' in request.headers:
         header = request.headers['authorization']
@@ -36,6 +38,8 @@ def inbound(request):
     request.context['user'] = user or User()
 
 def outbound(request, response):
+    if request.line.uri.startswith('/assets/'): return
+
     response.headers['Expires'] = BEGINNING_OF_EPOCH # don't cache
 
     user = request.context['user'] if request.context else User()
