@@ -86,6 +86,7 @@ def _get_host(request):
 def inbound(request):
     """Given a Request object, reject it if it's a forgery.
     """
+    if request.line.uri.startswith('/assets/'): return
 
     try:
         csrf_token = request.headers.cookie.get('csrf_token')
@@ -145,8 +146,6 @@ def inbound(request):
 def outbound(request, response):
     """Store the latest CSRF token as a cookie.
     """
-    if request.line.uri.startswith('/assets/'): return
-
     csrf_token = request.context.get('csrf_token')
     if csrf_token:
         response.headers.cookie['csrf_token'] = csrf_token
