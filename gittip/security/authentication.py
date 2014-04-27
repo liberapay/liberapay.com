@@ -42,7 +42,7 @@ def outbound(request, response):
 
     response.headers['Expires'] = BEGINNING_OF_EPOCH # don't cache
 
-    user = request.context['user'] if request.context else User()
+    user = request.context.get('user') or User()
     if not isinstance(user, User):
         raise Response(400, "If you define 'user' in a simplate it has to "
                             "be a User instance.")
