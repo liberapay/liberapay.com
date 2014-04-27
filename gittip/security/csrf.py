@@ -54,7 +54,7 @@ REASON_NO_CSRF_COOKIE = "CSRF cookie not set."
 REASON_BAD_TOKEN = "CSRF token missing or incorrect."
 
 TOKEN_LENGTH = 32
-TIMEOUT = 60 * 60 * 24 * 7 * 52
+TIMEOUT = 60 * 60 * 24 * 7
 
 
 def _get_new_csrf_key():

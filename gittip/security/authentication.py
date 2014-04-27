@@ -9,7 +9,7 @@ from gittip.security import csrf
 from gittip.security.user import User
 
 BEGINNING_OF_EPOCH = rfc822.formatdate(0)
-TIMEOUT = 60 * 60 * 24 * 7 # one week
+TIMEOUT = 60 * 60 * 24 * 7
 
 def inbound(request):
     """Authenticate from a cookie or an API key in basic auth.
