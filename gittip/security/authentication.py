@@ -44,7 +44,7 @@ def outbound(request, response):
 
     user = request.context.get('user') or User()
     if not isinstance(user, User):
-        raise Response(400, "If you define 'user' in a simplate it has to "
+        raise Response(500, "If you define 'user' in a simplate it has to "
                             "be a User instance.")
 
     if not user.ANON:
