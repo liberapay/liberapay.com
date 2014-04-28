@@ -14,7 +14,7 @@ cd /vagrant
 # Warn if Windows newlines are detected and try to fix the problem
 if grep --quiet --binary --binary-files=without-match $(printf '\r') README.md; then
     echo
-    cat development/scripts/crlf-warning.txt
+    cat scripts/crlf-warning.txt
     echo
 
     echo 'Running "git config core.autocrlf false"'
