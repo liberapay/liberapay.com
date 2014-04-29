@@ -134,12 +134,9 @@ a.mini-user:hover {
             // Right offset of the platform icon.
             $PlatformImageOffset: round($PlatformImageSize * 0.5);
 
-            // The amount of the platform icon that overflows into surrounding content.
-            $PlatformImageOverflow: $PlatformImageSize - $PlatformImageOffset;
-
             .sanity-preserving-wrapper {
                 position: relative;
-                margin-right: $PlatformImageOverflow;
+                margin-right: $PlatformImageOffset - 4pt;
             }
 
             img {
