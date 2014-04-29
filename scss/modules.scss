@@ -86,9 +86,22 @@ a.mini-user:hover {
         font-style: italic;
         color: $gray;
     }
-    .auth-button, .account-delete, .toggle-bitcoin, .toggle-email {
+    .auth-button, .account-delete {
         float: right;
-        margin-top: -13px;
+        margin-top: 8px;
+    }
+    .toggle-bitcoin, .toggle-email {
+        position: absolute;
+        right: 0;
+    }
+    .toggle-bitcoin {
+        margin-top: 8px;
+    }
+    .account-type ~ .auth-button, .toggle-email {
+        margin-top: -1.25em;
+    }
+    td > div {
+        position: relative;
     }
     table {
         width: 100%;
@@ -103,15 +116,9 @@ a.mini-user:hover {
     td {
         text-align: left;
         vertical-align: middle;
-        vertical-align: -webkit-baseline-middle;
         line-height: 100%;
 
-        /*
-         * 15pt is for top/bottom padding; it makes it so the platform icon will
-         * fit in the empty space.
-         * TODO: This should be calculated from $AvatarSize and related variables.
-         */
-        padding: 15pt 6pt 15pt 0;
+        padding: 6pt 0;
 
         &.account-type {
             width: 49px;
@@ -124,8 +131,8 @@ a.mini-user:hover {
             // Width and height of the platform icon. 70% of avatar size.
             $PlatformImageSize: round($AvatarSize * 0.7);
 
-            // Right/bottom offset of the platform icon.
-            $PlatformImageOffset: $PlatformImageSize - round($PlatformImageSize * 0.5);
+            // Right offset of the platform icon.
+            $PlatformImageOffset: round($PlatformImageSize * 0.5);
 
             // The amount of the platform icon that overflows into surrounding content.
             $PlatformImageOverflow: $PlatformImageSize - $PlatformImageOffset;
@@ -144,7 +151,7 @@ a.mini-user:hover {
                 width: $PlatformImageSize;
                 height: $PlatformImageSize;
                 position: absolute;
-                bottom: -$PlatformImageOffset;
+                bottom: -6pt;
                 right: -$PlatformImageOffset;
                 border-radius: 3em;
                 border: 2px solid #FFFFFF;
@@ -152,29 +159,32 @@ a.mini-user:hover {
             }
         }
     }
+    tr.has-avatar > td {
+        vertical-align: bottom;
+    }
     div.account-type {
         font-size: 12px;
-        clear: both;
         color: $gray;
         text-transform: uppercase;
-        padding: 3px 0;
+        &:first-child {
+            padding-bottom: 3px;
+        }
+        &:last-child {
+            padding-top: 3px;
+        }
     }
     .account-details {
-        padding: 10px;
-        position: relative;
+        padding: 6pt;
         word-break: break-all;
     }
-    .account-username {
+    .account-username, span.none {
         line-height: 16pt;
     }
-    .close {
-        position: absolute;
+    .account-delete {
         background-image: url("close-button.png");
         background-size: cover;
         width: 15px;
         height: 15px;
-        top: 39px;
-        right: 10px;
 
         &:hover {
             cursor: pointer;

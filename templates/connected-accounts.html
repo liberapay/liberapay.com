@@ -42,9 +42,7 @@
                 {% else %}
                     <span class="none">None</span>
                     {% if not user.ANON and user.participant == participant %}
-                        <div class="auth-button">
-                            <button class="toggle-bitcoin">+ Add</button>
-                        </div>
+                        <button class="toggle-bitcoin">+ Add</button>
                     {% endif %}
                 {% endif %}
             </div>

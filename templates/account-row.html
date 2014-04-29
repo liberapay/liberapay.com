@@ -2,7 +2,7 @@
 
 {% macro account_row(platform, accounts, auth_button) %}
     {% set account = accounts.get(platform.name, None) %}
-    <tr>
+    <tr class="{{ 'has-avatar' if account }}">
         <td class="account-type">
             <div class="sanity-preserving-wrapper">
                 {% if account != None %}
@@ -27,7 +27,7 @@
                     {% endif %}
                 </a>
                 {% if user.participant == participant %}
-                    <div class="account-delete close" title="Disconnect"
+                    <div class="account-delete" title="Disconnect"
                             data-platform="{{ platform.name }}"
                             data-user_id="{{ account.user_id }}">
                     </div>
