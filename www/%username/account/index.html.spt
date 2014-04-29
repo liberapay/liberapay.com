@@ -1,0 +1,164 @@
+
+from gittip.utils import get_participant
+
+[-----------------------------------------------------------------------------]
+
+participant = get_participant(request, restrict=True)
+hero = "Account"
+title = participant.username      # used in the title tag
+username = participant.username   # used in footer shared with on/$platform/
+                                  # pages
+locked = False
+
+
+[-----------------------------------------------------------------------------]
+{% extends "templates/profile.html" %}
+
+{% block scripts %}
+<script>$(document).ready(Gittip.account.init);</script>
+
+{{ super() }}
+{% endblock %}
+
+{% block page %}
+<div id="profile-edit">
+    <div class="col0">
+
+        <!-- Name and Anonymous -->
+        <form class="username">
+            <h2>You are
+                <span class="view">{{ user.participant.username|e }}</span>
+                <input tabindex="100" name="username" value="{{ user.participant.username|e }}"/>
+                <button tabindex="101" class="edit">Edit</button>
+                <button tabindex="102" class="save" type="submit">Save</button>
+                <button tabindex="103" class="cancel" type="cancel">Cancel</button>
+            </h2>
+
+            <h2 class="warning">Have you linked to your Gittip profile from other
+                websites? Be sure to update those links!</h2>
+
+        </form>
+        <p>
+            <label tabindex="104" class="anonymous-giving">
+                <input type="checkbox"
+                    {% if participant.anonymous_giving %}checked="true"{% endif %} />
+                    Hide total giving from others.
+            </label>
+            <br />
+            <label tabindex="105" class="anonymous-receiving">
+                <input type="checkbox"
+                    {% if participant.anonymous_receiving %}checked="true"{% endif %} />
+                    Hide total receiving from others.
+            </label>
+        </p>
+
+        {% if not user.ANON and (user.ADMIN or user.participant == participant) %}
+            <h2>Adding Money
+                {% if user.ADMIN and participant.balanced_customer_href %}
+                    <a href="https://dashboard.balancedpayments.com/#/{{ participant.balanced_customer_href }}"
+                       title="Go to Balanced Dashboard">
+                        <span class="payments-by"></span>
+                    </a>
+                {% else %}
+                    <span class="payments-by"></span>
+                {% endif %}
+            </h2>
+            <table class="accounts">
+                <tr>
+                    <td class="account-type">
+                        <img src="{{ website.asset_url }}/card_icon.jpg" />
+                    </td>
+                    <td class="account-details">
+                        <div class="account-type">Credit card</div>
+                        {% if participant.last_bill_result != "" %}
+                            <span class="none">None</span>
+                            <a class="button auth-button" href="/credit-card.html">+ Add</a>
+                        {% else %}
+                            <a class="account-username" href="/credit-card.html">Added</a>
+                            <a class="button auth-button" href="/credit-card.html">Edit</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            </table>
+
+            <h2>Withdrawing Money
+                {% if user.ADMIN and participant.balanced_customer_href %}
+                    <a href="https://dashboard.balancedpayments.com/#/marketplaces/MP12Xw5lL6iaILtqImIoroDL{{ participant.balanced_customer_href }}"
+                       title="Go to Balanced Dashboard">
+                        <div class="payments-by"></div>
+                    </a>
+                {% else %}
+                    <div class="payments-by"></div>
+                {% endif %}
+            </h2>
+            <table class="accounts">
+                <tr>
+                    <td class="account-type">
+                        <img src="{{ website.asset_url }}/bank_account_icon.jpg" />
+                    </td>
+                    <td class="account-details">
+                        <div class="account-type">Bank account</div>
+                        {% if participant.last_ach_result != "" %}
+                            <span class="none">None</span>
+                            <a class="button auth-button" href="/bank-account.html">+ Add</a>
+                        {% else %}
+                            <a class="account-username" href="/bank-account.html">Added</a>
+                            <a class="button auth-button" href="/bank-account.html">Edit</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            </table>
+        {% endif %}
+
+        <h2>Email Settings</h2>
+        <table class="accounts">
+            <tr>
+                <td class="account-type">
+                    <img src="{{ website.asset_url }}/email.png" />
+                </td>
+                <td class="account-details">
+                    <div class="account-type">Email Address (Private)</div>
+                    <div class="email">
+                        {% if participant.email %}
+                            <a class="address email-address" href="javascript:;">
+                              {{ participant.email.address }}
+                            </a>
+                            <button class="toggle-email">Edit</button>
+                        {% else %}
+                            <span class="none">None</span>
+                            <button class="toggle-email">+ Add</button>
+                        {% endif %}
+                    </div>
+
+                    <form class="email-submit">
+                        <div class="address">
+                           <input type="email" class="email hidden"
+                                {% if participant.email %}
+                                    value="{{ participant.email.address }}"
+                                {% endif %}
+                            >
+                        </div>
+                        <div class="buttons">
+                            <button type="submit" class="email hidden">Save</button>
+                            <button type="cancel" class="email cancel hidden">Cancel</button>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+        </table>
+
+
+        <!-- API  -->
+        <div class="api-key">
+          <h2>API Key</h2>
+          <div><span>xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</span></div>
+          <div class="buttons">
+            <button class="show">Show Key</button>
+            <button class="recreate">Recreate</button>
+          </div>
+          <a href="https://github.com/gittip/www.gittip.com#api">API docs</a>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
