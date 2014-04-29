@@ -29,7 +29,7 @@ Gittip.account.init = function() {
             Gittip.notification(JSON.parse(e.responseText).error_message_long, 'error');
         }
         jQuery.ajax(
-            { url: "username.json"
+            { url: "../username.json"
             , type: "POST"
             , dataType: 'json'
             , data: { username: $('input[name=username]').val() }
@@ -59,7 +59,7 @@ Gittip.account.init = function() {
 
     $('.anonymous-giving input').click(function() {
         jQuery.ajax(
-            { url: 'anonymous.json'
+            { url: '../anonymous.json'
             , type: 'POST'
             , data: {toggle: 'giving'}
             , dataType: 'json'
@@ -78,7 +78,7 @@ Gittip.account.init = function() {
 
     $('.anonymous-receiving input').click(function() {
         jQuery.ajax(
-            { url: 'anonymous.json'
+            { url: '../anonymous.json'
             , type: 'POST'
             , data: {toggle: 'receiving'}
             , dataType: 'json'
@@ -108,11 +108,11 @@ Gittip.account.init = function() {
         if ($('.api-key').data('api-key'))
             callback({api_key: $('.api-key').data('api-key')});
         else
-            $.get('api-key.json', {action: 'show'}, callback);
+            $.get('../api-key.json', {action: 'show'}, callback);
     })
     .on('click', '.hide', callback)
     .on('click', '.recreate', function() {
-        $.post('api-key.json', {action: 'show'}, callback);
+        $.post('../api-key.json', {action: 'show'}, callback);
     });
 
     // Wire up email address input.
@@ -143,7 +143,7 @@ Gittip.account.init = function() {
         }
 
         $.ajax({
-            url: 'email.json',
+            url: '../email.json',
             type: 'POST',
             dataType: 'json',
             success: success,
