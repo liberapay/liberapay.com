@@ -2,12 +2,16 @@
 
 {% macro account_row(platform, accounts, auth_button) %}
     {% set account = accounts.get(platform.name, None) %}
-    <tr>
+    <tr class="{{ 'has-avatar' if account }}">
         <td class="account-type">
-            <img src="{{ website.asset_url }}/{{ platform.name }}.png" />
+            <div class="sanity-preserving-wrapper">
+                {% if account != None %}
+                    <img class="avatar" src="{{ avatar_url(account) }}"/>
+                {% endif %}
+              <img class="platform" src="{{ website.asset_url }}/{{ platform.name }}.png" />
+            </div>
         </td>
         <td class="account-details">
-            <div class="account-type">{{ platform.display_name }}</div>
             {% if account == None %}
                 <span class="none">None</span>
                 {% if not user.ANON and user.participant == participant %}
@@ -16,7 +20,6 @@
                     {% endcall %}
                 {% endif %}
             {% else %}
-                <img class="avatar" src="{{ avatar_url(account) }}"/>
                 <a class="account-username" rel="me" href="{{ account.html_url|e }}"
                     >{{ account.user_name|e }}
                     {% if account.display_name and account.display_name != account.user_name %}
@@ -24,12 +27,14 @@
                     {% endif %}
                 </a>
                 {% if user.participant == participant %}
-                    <div class="account-delete close" title="Disconnect"
+                    <div class="account-delete" title="Disconnect"
                             data-platform="{{ platform.name }}"
                             data-user_id="{{ account.user_id }}">
                     </div>
                 {% endif %}
             {% endif %}
+
+            <div class="account-type">{{ platform.display_name }}</div>
         </td>
     </tr>
 {% endmacro %}
