@@ -14,10 +14,10 @@ TIMEOUT = 60 * 60 * 24 * 7
 def inbound(request):
     """Authenticate from a cookie or an API key in basic auth.
     """
-    if request.line.uri.startswith('/assets/'): return
-
     user = None
-    if 'Authorization' in request.headers:
+    if request.line.uri.startswith('/assets/'):
+        pass
+    elif 'Authorization' in request.headers:
         header = request.headers['authorization']
         if header.startswith('Basic '):
             creds = header[len('Basic '):].decode('base64')
