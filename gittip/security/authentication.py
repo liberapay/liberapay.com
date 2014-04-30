@@ -8,27 +8,14 @@ from aspen import Response
 from gittip.security import csrf
 from gittip.security.user import User
 
-
 BEGINNING_OF_EPOCH = rfc822.formatdate(0)
-TIMEOUT = 60 * 60 * 24 * 7 # one week
-ROLES = ['anonymous', 'authenticated', 'owner', 'admin']
-ROLES_SHOULD_BE = "It should be one of: {}.".format(', '.join(ROLES))
-
-
-class NoMinimumRoleSpecified(Exception):
-    def __str__(self):
-        return "There is no minimum_role specified in the simplate at {}. {}" \
-               .format(self.args[0], ROLES_SHOULD_BE)
-
-class BadMinimumRole(Exception):
-    def __str__(self):
-        return "The minimum_role specific in {} is bad: {}. {}" \
-               .format(self.args[0], self.args[1], ROLES_SHOULD_BE)
-
+TIMEOUT = 60 * 60 * 24 * 7
 
 def inbound(request):
     """Authenticate from a cookie or an API key in basic auth.
     """
+    if request.line.uri.startswith('/assets/'): return
+
     user = None
     if 'Authorization' in request.headers:
         header = request.headers['authorization']
@@ -48,63 +35,26 @@ def inbound(request):
         token = request.headers.cookie['session'].value
         user = User.from_session_token(token)
 
-    if user is None:
-        user = User()
-    request.context['user'] = user
-
-
-def check_role(request):
-    """Given a request object, possibly raise Response(403).
-    """
-
-    # XXX We can't use this yet because we don't have an inbound Aspen hook
-    # that fires after the first page of the simplate is exec'd.
-
-    context = request.context
-    path = request.line.uri.path
-
-    if 'minimum_role' not in context:
-        raise NoMinimumRoleSpecified(request.fs)
-
-    minimum_role = context['minimum_role']
-    if minimum_role not in ROLES:
-        raise BadMinimumRole(request.fs, minimum_role)
-
-    user = context['user']
-    highest_role = user.get_highest_role(path.get('username', None))
-    if ROLES.index(highest_role) < ROLES.index(minimum_role):
-        request.redirect('..')
-
+    request.context['user'] = user or User()
 
 def outbound(request, response):
-    if 'user' in request.context:
-        user = request.context['user']
-        if not isinstance(user, User):
-            raise Response(400, "If you define 'user' in a simplate it has to "
-                                "be a User instance.")
-    else:
-        user = User()
+    if request.line.uri.startswith('/assets/'): return
 
-    if user.ANON: # user is anonymous
-        if 'session' not in request.headers.cookie:
-            # no cookie in the request, don't set one on response
-            return
-        else:
-            # expired cookie in the request, instruct browser to delete it
-            response.headers.cookie['session'] = ''
-            expires = 0
-    else: # user is authenticated
-        response.headers['Expires'] = BEGINNING_OF_EPOCH # don't cache
+    response.headers['Expires'] = BEGINNING_OF_EPOCH # don't cache
+
+    user = request.context.get('user') or User()
+    if not isinstance(user, User):
+        raise Response(500, "If you define 'user' in a simplate it has to "
+                            "be a User instance.")
+
+    if not user.ANON:
         response.headers.cookie['session'] = user.participant.session_token
         expires = time.time() + TIMEOUT
         user.keep_signed_in_until(expires)
 
-    cookie = response.headers.cookie['session']
-    # I am not setting domain, because it is supposed to default to what we
-    # want: the domain of the object requested.
-    #cookie['domain']
-    cookie['path'] = '/'
-    cookie['expires'] = rfc822.formatdate(expires)
-    cookie['httponly'] = "Yes, please."
-    if gittip.canonical_scheme == 'https':
-        cookie['secure'] = "Yes, please."
+        cookie = response.headers.cookie['session']
+        cookie['path'] = '/'
+        cookie['expires'] = rfc822.formatdate(expires)
+        cookie['httponly'] = 'Yes, please.'
+        if gittip.canonical_scheme == 'https':
+            cookie['secure'] = 'Yes, please.'

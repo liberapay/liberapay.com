@@ -103,9 +103,6 @@ def outbound(request, response, website):
     if not uri.startswith('/assets/'):
         return response
 
-    response.headers.cookie.clear()
-    response.headers.pop('Vary')
-
     if response.code != 200:
         return response
 
