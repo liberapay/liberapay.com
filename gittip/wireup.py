@@ -218,7 +218,7 @@ def other_stuff(website, env):
     website.cache_static = env.gittip_cache_static
     website.compress_assets = env.gittip_compress_assets
 
-    website.google_analytics_id = env.google_analytics_id
+    website.segment_key = env.segment_key
     website.sentry_dsn = env.sentry_dsn
 
     website.min_threads = env.min_threads
@@ -263,7 +263,7 @@ def env():
         OPENSTREETMAP_AUTH_URL          = unicode,
         NANSWERS_THRESHOLD              = int,
         UPDATE_HOMEPAGE_EVERY           = int,
-        GOOGLE_ANALYTICS_ID             = unicode,
+        SEGMENT_KEY                     = unicode,
         SENTRY_DSN                      = unicode,
         LOG_BUSY_THREADS_EVERY          = int,
         LOG_METRICS                     = is_yesish,
