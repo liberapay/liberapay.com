@@ -1301,3 +1301,11 @@ BEGIN;
     ) AS anon WHERE amount > 0;
 
 END;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/pull/2173
+
+BEGIN;
+    ALTER TABLE transfers ADD COLUMN as_team_member boolean NOT NULL DEFAULT false;
+END;
