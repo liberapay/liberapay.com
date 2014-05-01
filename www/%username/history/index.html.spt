@@ -275,8 +275,10 @@ locked = False
         <td class="balance">{{ event['balance'] }}</td>
 
         {% if event['tippee'] == participant.username %}
-            {% if event['as_team_member'] or user.ADMIN and (participant != user.participant or 'override' in qs) %}
+            {% if user.ADMIN and (participant != user.participant or 'override' in qs) %}
             <td class="notes">from <a href="/{{ event['tipper'] }}/history/">{{ event['tipper'] }}</a></td>
+            {% elif event['as_team_member'] %}
+            <td class="notes">from <a href="/{{ event['tipper'] }}/">{{ event['tipper'] }}</a></td>
             {% else %}
             <td class="notes">from someone</td>
             {% endif %}
