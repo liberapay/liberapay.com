@@ -13,14 +13,19 @@ Quick Start
 Vagrant
 -------
 
+Given VirtualBox 4.3 and Vagrant 1.5.4:
+
 ```
 $ vagrant up
 ```
 
 [Read more](#vagrant-1).
 
+
 Docker
 -------
+
+Given some version(?) of Docker:
 
 ```
 $ docker build -t gittip .
@@ -30,9 +35,11 @@ $ docker run -p 8537:8537 gittip
 [Read more](#docker-1).
 
 
-Manual Quick Start
-------------------
-If you'd prefer to run on your machine directly, you can run these commands:
+Local 
+-----
+
+Given Python 2.7, Postgres 9.3, a C/make toolchain:
+
 ```
 $ git clone git@github.com:gittip/www.gittip.com.git
 $ cd www.gittip.com
@@ -47,9 +54,6 @@ And/or:
 ```
 $ make test
 ```
-
-We also include a
-[Vagrantfile](https://github.com/gittip/www.gittip.com/blob/master/Vagrantfile).
 
 
 Table of Contents
