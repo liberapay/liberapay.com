@@ -321,7 +321,7 @@ def plural(i, singular="", plural="s"):
 def get_participant(request, restrict=True):
     """Given a Request, raise Response or return Participant.
 
-    If user is not None then we'll restrict access to owners and admins.
+    If restrict is True then we'll restrict access to owners and admins.
 
     """
     user = request.context['user']
