@@ -38,7 +38,7 @@ $ docker run -p 8537:8537 gittip
 Local 
 -----
 
-Given Python 2.7, Postgres 9.3, a C/make toolchain:
+Given Python 2.7, Postgres 9.3, and a C/make toolchain:
 
 ```
 $ git clone git@github.com:gittip/www.gittip.com.git
