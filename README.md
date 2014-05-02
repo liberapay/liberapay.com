@@ -66,7 +66,7 @@ Table of Contents
   - [Vagrant](#vagrant)
   - [Docker](#docker)
   - [Help!](#help)
- - [Configuration](wiki/Configuration)
+ - [Configuration](https://github.com/gittip/www.gittip.com/wiki/Configuration)
  - [Modifying CSS](#modifying-css)
  - [Testing](#testing-)
  - [Setting up a Database](#local-database-setup)
