@@ -1,4 +1,6 @@
 from aspen import Response
+from gittip.models import add_event
+from gittip.utils import get_participant
 [---]
 if not user.ADMIN:
     raise Response(400)
@@ -7,23 +9,27 @@ to = body.get('to')
 if not to in ('true', 'false', None):
     raise Response(400)
 
-if to is None:
-    is_suspicious = website.db.one("""
+with website.db.get_cursor() as c:
+    if to is None:
+        is_suspicious = website.db.one("""
 
-        UPDATE participants
-           SET is_suspicious = (is_suspicious IS NULL) OR (is_suspicious IS false)
-         WHERE username=%s
-     RETURNING is_suspicious
+            UPDATE participants
+               SET is_suspicious = (is_suspicious IS NULL) OR (is_suspicious IS false)
+             WHERE username=%s
+         RETURNING is_suspicious
 
-    """, (path['username'],))
-else:
-    is_suspicious = website.db.one("""
+        """, (path['username'],))
+    else:
+        is_suspicious = website.db.one("""
 
-        UPDATE participants
-           SET is_suspicious = %s
-         WHERE username=%s
-     RETURNING is_suspicious
+            UPDATE participants
+               SET is_suspicious = %s
+             WHERE username=%s
+         RETURNING is_suspicious
 
-    """, (to == 'true', path['username'],))
+        """, (to == 'true', path['username'],))
+
+    add_event(c, 'participant', dict(id=get_participant(request).id, recorder=dict(id=user.participant.id, username=user.participant.username),
+	action='set', values=dict(is_suspicious=is_suspicious)))
 
 response.body = {"is_suspicious": is_suspicious}
