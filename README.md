@@ -280,9 +280,7 @@ Help!
 
 If you get stuck somewhere along the way, you can find help in the #gittip
 channel on [Freenode](http://webchat.freenode.net/) or in the [issue
-tracker](/gittip/www.gittip.com/issues/new) here on GitHub. If all else fails
-ping [@whit537](https://twitter.com/whit537) on Twitter or email
-[chad@gittip.com](mailto:chad@gittip.com).
+tracker](/gittip/www.gittip.com/issues/new) here on GitHub.
 
 Thanks for installing Gittip! :smiley:
 
