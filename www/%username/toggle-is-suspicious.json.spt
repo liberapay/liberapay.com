@@ -29,7 +29,10 @@ with website.db.get_cursor() as c:
 
         """, (to == 'true', path['username'],))
 
-    add_event(c, 'participant', dict(id=get_participant(request).id, recorder=dict(id=user.participant.id, username=user.participant.username),
-	action='set', values=dict(is_suspicious=is_suspicious)))
+    add_event(c, 'participant', dict(
+        id=get_participant(request).id,
+        recorder=dict(id=user.participant.id, username=user.participant.username),
+        action='set', values=dict(is_suspicious=is_suspicious)
+    ))
 
 response.body = {"is_suspicious": is_suspicious}
