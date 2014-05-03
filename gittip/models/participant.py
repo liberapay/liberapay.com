@@ -368,7 +368,7 @@ class Participant(Model, MixinTeam):
 
         """, (self.username,))
         for tippee in tippees:
-            self.set_tip_to(tippee, '0.00', cursor=cursor)
+            self.set_tip_to(tippee, '0.00', update_self=False, cursor=cursor)
 
     def clear_tips_receiving(self, cursor):
         """Zero out tips to a given user. This is a workaround for #1469.
@@ -385,7 +385,7 @@ class Participant(Model, MixinTeam):
 
         """, (self.username,))
         for tipper in tippers:
-            tipper.set_tip_to(self, '0.00', cursor=cursor)
+            tipper.set_tip_to(self, '0.00', update_tippee=False, cursor=cursor)
 
 
     def clear_personal_information(self, cursor):
@@ -417,7 +417,10 @@ class Participant(Model, MixinTeam):
                  , number='singular'
                  , avatar_url=NULL
                  , email=NULL
-            WHERE username=%(username)s;
+                 , giving=0
+                 , pledging=0
+                 , receiving=0
+             WHERE username=%(username)s;
 
         """, dict(username=self.username))
         self.set_attributes( statement=''
@@ -571,8 +574,60 @@ class Participant(Model, MixinTeam):
             if ctx is not None:
                 ctx.__exit__(None, None, None)
 
+    def update_giving(self, cursor=None):
+        giving = (cursor or self.db).one("""
+            UPDATE participants p
+               SET giving = COALESCE((
+                       SELECT sum(amount)
+                         FROM current_tips
+                         JOIN participants p2 ON p2.username = tippee
+                        WHERE tipper = p.username
+                          AND p2.claimed_time IS NOT NULL
+                          AND p2.is_suspicious IS NOT true
+                     GROUP BY tipper
+                   ), 0)
+             WHERE p.username = %s
+         RETURNING giving
+        """, (self.username,))
+        self.set_attributes(giving=giving)
 
-    def set_tip_to(self, tippee, amount, cursor=None):
+    def update_pledging(self, cursor=None):
+        pledging = (cursor or self.db).one("""
+            UPDATE participants p
+               SET pledging = COALESCE((
+                       SELECT sum(amount)
+                         FROM current_tips
+                         JOIN participants p2 ON p2.username = tippee
+                         JOIN elsewhere ON elsewhere.participant = tippee
+                        WHERE tipper = p.username
+                          AND p2.claimed_time IS NULL
+                          AND elsewhere.is_locked = false
+                          AND p2.is_suspicious IS NOT true
+                     GROUP BY tipper
+                   ), 0)
+             WHERE p.username = %s
+         RETURNING pledging
+        """, (self.username,))
+        self.set_attributes(pledging=pledging)
+
+    def update_receiving(self, cursor=None):
+        receiving = (cursor or self.db).one("""
+            UPDATE participants p
+               SET receiving = COALESCE((
+                       SELECT sum(amount)
+                         FROM current_tips
+                         JOIN participants p2 ON p2.username = tipper
+                        WHERE tippee = p.username
+                          AND p2.is_suspicious IS NOT true
+                          AND p2.last_bill_result = ''
+                     GROUP BY tippee
+                   ), 0)
+             WHERE p.username = %s
+         RETURNING receiving
+        """, (self.username,))
+        self.set_attributes(receiving=receiving)
+
+    def set_tip_to(self, tippee, amount, update_self=True, update_tippee=True, cursor=None):
         """Given a Participant or username, and amount as str, return a tuple.
 
         We INSERT instead of UPDATE, so that we have history to explore. The
@@ -599,6 +654,7 @@ class Participant(Model, MixinTeam):
         if (amount < gittip.MIN_TIP) or (amount > max_tip):
             raise BadAmount
 
+        # Insert tip
         NEW_TIP = """\
 
             INSERT INTO tips
@@ -616,6 +672,17 @@ class Participant(Model, MixinTeam):
         """
         args = dict(tipper=self.username, tippee=tippee.username, amount=amount)
         first_time_tipper = (cursor or self.db).one(NEW_TIP, args)
+
+        if update_self:
+            # Update giving/pledging amount of tipper
+            if tippee.is_claimed:
+                self.update_giving(cursor)
+            else:
+                self.update_pledging(cursor)
+        if update_tippee:
+            # Update receiving amount of tippee
+            tippee.update_receiving(cursor)
+
         return amount, first_time_tipper
 
 
@@ -976,10 +1043,8 @@ class Participant(Model, MixinTeam):
         INCOMING = "SELECT count(*) FROM current_tips WHERE tippee = %s AND amount > 0"
         if cursor.one(INCOMING, (self.username,)) > 0:
             raise self.StillReceivingTips
-
         if self.balance != 0:
             raise self.BalanceIsNotZero
-
 
         # Do it!
         # ======
@@ -1293,6 +1358,9 @@ class Participant(Model, MixinTeam):
                            )
 
         self.update_avatar()
+        self.update_giving()
+        self.update_pledging()
+        self.update_receiving()
 
     def delete_elsewhere(self, platform, user_id):
         """Deletes account elsewhere unless the user would not be able
