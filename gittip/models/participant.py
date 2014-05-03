@@ -543,7 +543,7 @@ class Participant(Model, MixinTeam):
 
 
     def set_tip_to(self, tippee, amount):
-        """Given participant id and amount as str, return a tuple.
+        """Given a Participant or username, and amount as str, return a tuple.
 
         We INSERT instead of UPDATE, so that we have history to explore. The
         COALESCE function returns the first of its arguments that is not NULL.
@@ -556,13 +556,13 @@ class Participant(Model, MixinTeam):
         that as part of our conversion funnel).
 
         """
+        if not isinstance(tippee, Participant):
+            tippee, u = Participant.from_username(tippee), tippee
+            if not tippee:
+                raise NoTippee(u)
 
-        if self.username == tippee:
+        if self.username == tippee.username:
             raise NoSelfTipping
-
-        tippee = Participant.from_username(tippee)
-        if tippee is None:
-            raise NoTippee
 
         amount = Decimal(amount)  # May raise InvalidOperation
         max_tip = gittip.MAX_TIP_PLURAL if tippee.IS_PLURAL else gittip.MAX_TIP_SINGULAR
@@ -575,17 +575,16 @@ class Participant(Model, MixinTeam):
                         (ctime, tipper, tippee, amount)
                  VALUES ( COALESCE (( SELECT ctime
                                         FROM tips
-                                       WHERE (tipper=%s AND tippee=%s)
+                                       WHERE (tipper=%(tipper)s AND tippee=%(tippee)s)
                                        LIMIT 1
                                       ), CURRENT_TIMESTAMP)
-                        , %s, %s, %s
+                        , %(tipper)s, %(tippee)s, %(amount)s
                          )
-              RETURNING ( SELECT count(*) = 0 FROM tips WHERE tipper=%s )
+              RETURNING ( SELECT count(*) = 0 FROM tips WHERE tipper=%(tipper)s )
                      AS first_time_tipper
 
         """
-        args = (self.username, tippee.username, self.username, tippee.username, amount, \
-                                                                                     self.username)
+        args = dict(tipper=self.username, tippee=tippee.username, amount=amount)
         first_time_tipper = self.db.one(NEW_TIP, args)
         return amount, first_time_tipper
 
