@@ -28,7 +28,7 @@ if not user.ANON:
         amount = None
     elif POST and 'amount' in body:
         try:
-            amount, first_time_tipper = tipper.set_tip_to( tippee.username
+            amount, first_time_tipper = tipper.set_tip_to( tippee
                                                          , body['amount']
                                                           )
         except (InvalidOperation, ValueError, BadAmount):
@@ -36,9 +36,9 @@ if not user.ANON:
     else:
         amount = tipper.get_tip_to(tippee.username)
 
-    total_giving = tipper.get_dollars_giving()
-    total_receiving = tipper.get_dollars_receiving()
-    total_receiving_tippee = tippee.get_dollars_receiving()
+    total_giving = tipper.giving
+    total_receiving = tipper.receiving
+    total_receiving_tippee = tippee.receiving
 
     out = { "amount": str(amount)
           , "total_giving": str(total_giving)

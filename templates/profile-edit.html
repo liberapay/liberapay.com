@@ -116,7 +116,7 @@
 </div>
 <div class="clear"></div>
 
-{% if participant.get_dollars_receiving() > 0 %}
+{% if participant.receiving > 0 %}
 {% set tip_distribution = participant.get_tip_distribution()[0] %}
 <div class="col1">
     <h2>Tips Received, by Number of Tips</h2>

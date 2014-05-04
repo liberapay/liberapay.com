@@ -32,11 +32,11 @@ other_accounts = other.get_accounts_elsewhere().values()
 
 abandoned_account = user_accounts_dict.get(account.platform, None)
 
-user_giving = user.participant.get_dollars_giving()
-user_receiving = user.participant.get_dollars_receiving()
+user_giving = user.participant.giving
+user_receiving = user.participant.receiving
 
-other_giving = other.get_dollars_giving()
-other_receiving = other.get_dollars_receiving()
+other_giving = other.giving
+other_receiving = other.receiving
 
 combined_giving = user_giving + other_giving
 combined_receiving = user_receiving + other_receiving

@@ -16,7 +16,7 @@ class Tests(Harness):
         warbucks = self.make_participant( 'Daddy Warbucks'
                                         , last_bill_result=''
                                          )
-        warbucks.set_tip_to(name, '100')
+        warbucks.set_tip_to(team, '100')
 
         return team
 
