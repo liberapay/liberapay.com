@@ -384,24 +384,11 @@ def update_homepage_queries_once(db):
         cursor.execute("""
 
         INSERT INTO homepage_top_givers (username, anonymous, amount, avatar_url, statement, number)
-            SELECT tipper, anonymous_giving, sum(amount) AS amount, avatar_url, statement, number
-              FROM (    SELECT DISTINCT ON (tipper, tippee)
-                               amount
-                             , tipper
-                          FROM tips
-                          JOIN participants p ON p.username = tipper
-                          JOIN participants p2 ON p2.username = tippee
-                          JOIN elsewhere ON elsewhere.participant = tippee
-                         WHERE p.last_bill_result = ''
-                           AND p.is_suspicious IS NOT true
-                           AND p2.claimed_time IS NOT NULL
-                           AND elsewhere.is_locked = false
-                      ORDER BY tipper, tippee, mtime DESC
-                      ) AS foo
-              JOIN participants p ON p.username = tipper
+            SELECT username, anonymous_giving, giving, avatar_url, statement, number
+              FROM participants
              WHERE is_suspicious IS NOT true
-          GROUP BY tipper, anonymous_giving, avatar_url, statement, number
-          ORDER BY amount DESC
+               AND last_bill_result = ''
+          ORDER BY giving DESC
              LIMIT 100;
 
         """.strip())
@@ -410,23 +397,11 @@ def update_homepage_queries_once(db):
         cursor.execute("""
 
         INSERT INTO homepage_top_receivers (username, anonymous, amount, avatar_url, statement, number)
-            SELECT tippee, anonymous_receiving, sum(amount) AS amount, avatar_url, statement, number
-              FROM (    SELECT DISTINCT ON (tipper, tippee)
-                               amount
-                             , tippee
-                          FROM tips
-                          JOIN participants p ON p.username = tipper
-                          JOIN elsewhere ON elsewhere.participant = tippee
-                         WHERE last_bill_result = ''
-                           AND elsewhere.is_locked = false
-                           AND is_suspicious IS NOT true
-                           AND claimed_time IS NOT null
-                      ORDER BY tipper, tippee, mtime DESC
-                      ) AS foo
-              JOIN participants p ON p.username = tippee
+            SELECT username, anonymous_receiving, receiving, avatar_url, statement, number
+              FROM participants
              WHERE is_suspicious IS NOT true
-          GROUP BY tippee, anonymous_receiving, avatar_url, statement, number
-          ORDER BY amount DESC
+               AND claimed_time IS NOT NULL
+          ORDER BY receiving DESC
              LIMIT 100;
 
         """.strip())
