@@ -11,10 +11,12 @@ def today():
 
 class Tests(Harness):
 
-    def make_participants_and_tips(self):
-        alice = self.make_participant('alice', balance=10, claimed_time='now')
-        bob = self.make_participant('bob', balance=10, claimed_time='now')
-        self.make_participant('carl', claimed_time='now')
+    def setUp(self):
+        Harness.setUp(self)
+
+        self.alice = self.make_participant('alice', balance=10, claimed_time='now')
+        self.bob = self.make_participant('bob', balance=10, claimed_time='now')
+        self.carl = self.make_participant('carl', claimed_time='now')
         self.db.run("""
             INSERT INTO EXCHANGES
                 (amount, fee, participant) VALUES
@@ -23,26 +25,21 @@ class Tests(Harness):
         """)
         self.make_participant('notactive', claimed_time='now')
 
-        alice.set_tip_to('carl', '1.00')
-        bob.set_tip_to('carl', '2.00')
-
-        return alice, bob
+        self.alice.set_tip_to(self.carl, '1.00')
+        self.bob.set_tip_to(self.carl, '2.00')
 
     def run_payday(self):
         Payday(self.db).run()
 
 
     def test_no_payday_returns_empty_list(self):
-        self.make_participants_and_tips()
         assert json.loads(self.client.GET('/carl/charts.json').body) == []
 
     def test_zeroth_payday_is_ignored(self):
-        self.make_participants_and_tips()
         self.run_payday()   # zeroeth
         assert json.loads(self.client.GET('/carl/charts.json').body) == []
 
     def test_first_payday_comes_through(self):
-        alice, bob = self.make_participants_and_tips()
         self.run_payday()   # zeroeth, ignored
         self.run_payday()   # first
 
@@ -56,12 +53,11 @@ class Tests(Harness):
         assert actual == expected
 
     def test_second_payday_comes_through(self):
-        alice, bob = self.make_participants_and_tips()
         self.run_payday()   # zeroth, ignored
         self.run_payday()   # first
 
-        alice.set_tip_to('carl', '5.00')
-        bob.set_tip_to('carl', '0.00')
+        self.alice.set_tip_to(self.carl, '5.00')
+        self.bob.set_tip_to(self.carl, '0.00')
 
         self.run_payday()   # second
 
@@ -79,17 +75,16 @@ class Tests(Harness):
         assert actual == expected
 
     def test_sandwiched_tipless_payday_comes_through(self):
-        alice, bob = self.make_participants_and_tips()
         self.run_payday()   # zeroth, ignored
         self.run_payday()   # first
 
         # Oops! Sorry, Carl. :-(
-        alice.set_tip_to('carl', '0.00')
-        bob.set_tip_to('carl', '0.00')
+        self.alice.set_tip_to(self.carl, '0.00')
+        self.bob.set_tip_to(self.carl, '0.00')
         self.run_payday()   # second
 
         # Bouncing back ...
-        alice.set_tip_to('carl', '5.00')
+        self.alice.set_tip_to(self.carl, '5.00')
         self.run_payday()   # third
 
         expected = [ { "date": today()
@@ -110,7 +105,6 @@ class Tests(Harness):
         assert actual == expected
 
     def test_out_of_band_transfer_gets_included_with_prior_payday(self):
-        alice, bob = self.make_participants_and_tips()
         self.run_payday()   # zeroth, ignored
         self.run_payday()   # first
         self.run_payday()   # second
@@ -140,7 +134,6 @@ class Tests(Harness):
         assert actual == expected
 
     def test_never_received_gives_empty_array(self):
-        alice, bob = self.make_participants_and_tips()
         self.run_payday()   # zeroeth, ignored
         self.run_payday()   # first
         self.run_payday()   # second
@@ -152,7 +145,6 @@ class Tests(Harness):
         assert actual == expected
 
     def test_transfer_volume(self):
-        self.make_participants_and_tips()
         self.run_payday()
         self.run_payday()
 

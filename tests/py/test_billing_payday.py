@@ -111,7 +111,7 @@ class TestPaydayCharge(PaydayHarness):
                                      balanced_customer_href=self.balanced_customer_href,
                                      last_bill_result='',
                                      is_suspicious=False)
-        carl.set_tip_to('bob', '6.00')  # under $10!
+        carl.set_tip_to(bob, '6.00')  # under $10!
         self.payday.run()
 
         bob = Participant.from_username('bob')
@@ -131,7 +131,7 @@ class TestPaydayCharge(PaydayHarness):
                                      balanced_customer_href=self.balanced_customer_href,
                                      last_bill_result='',
                                      is_suspicious=True)
-        carl.set_tip_to('bob', '6.00')  # under $10!
+        carl.set_tip_to(bob, '6.00')  # under $10!
         self.payday.run()
 
         bob = Participant.from_username('bob')
@@ -151,7 +151,7 @@ class TestPaydayCharge(PaydayHarness):
                                      balanced_customer_href=self.balanced_customer_href,
                                      last_bill_result='',
                                      is_suspicious=False)
-        carl.set_tip_to('bob', '6.00')  # under $10!
+        carl.set_tip_to(bob, '6.00')  # under $10!
         self.payday.run()
 
         bob = Participant.from_username('bob')
@@ -175,7 +175,7 @@ class TestPaydayCharge(PaydayHarness):
                                      balanced_customer_href=paying_customer.href,
                                      last_bill_result='',
                                      is_suspicious=False)
-        carl.set_tip_to('bob', '15.00')
+        carl.set_tip_to(bob, '15.00')
         self.payday.run()
 
         bob = Participant.from_username('bob')
