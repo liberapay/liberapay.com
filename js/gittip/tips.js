@@ -128,7 +128,7 @@ Gittip.tips.init = function() {
                 // update quick stats
                 $('.quick-stats a').text('$' + data.total_giving + '/wk');
 
-                Gittip.notification("Tip changed to $" + amount + "!", 'success');
+                Gittip.notification("Tip changed to $" + amount.toFixed(2) + "!", 'success');
             })
             .fail(function() {
                 Gittip.notification('Sorry, something went wrong while changing your tip. :(', 'error');
