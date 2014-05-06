@@ -463,16 +463,15 @@ class Tests(Harness):
         self.assertRaises(NoTippee, alice.set_tip_to, 'bob', '1.00')
 
 
-    def test_receiving_only_counts_latest_tip(self):
+    # giving and receiving
+
+    def test_giving_and_receiving_only_count_latest_tip(self):
         alice = self.make_participant('alice', last_bill_result='')
-        bob = self.make_participant('bob')
+        bob = self.make_participant('bob', claimed_time='now')
         alice.set_tip_to(bob, '12.00')
         alice.set_tip_to(bob, '3.00')
-
-        expected = Decimal('3.00')
-        actual = bob.receiving
-        assert actual == expected
-
+        assert alice.giving == Decimal('3.00')
+        assert bob.receiving == Decimal('3.00')
 
     def test_receiving_includes_tips_from_accounts_with_a_working_card(self):
         alice = self.make_participant('alice', last_bill_result='')
@@ -500,7 +499,6 @@ class Tests(Harness):
         expected = Decimal('0.00')
         actual = bob.receiving
         assert actual == expected
-
 
     def test_receiving_includes_tips_from_whitelisted_accounts(self):
         alice = self.make_participant( 'alice'
@@ -537,6 +535,22 @@ class Tests(Harness):
         expected = Decimal('0.00')
         actual = bob.receiving
         assert actual == expected
+
+
+    # pledging
+
+    def test_pledging_only_counts_latest_tip(self):
+        alice = self.make_participant('alice', last_bill_result='')
+        bob = self.make_elsewhere('github', 1, 'bob').participant
+        alice.set_tip_to(bob, '12.00')
+        alice.set_tip_to(bob, '3.00')
+        assert alice.pledging == Decimal('3.00')
+
+    def test_pledging_isnt_giving(self):
+        alice = self.make_participant('alice', last_bill_result='')
+        bob = self.make_elsewhere('github', 1, 'bob').participant
+        alice.set_tip_to(bob, '3.00')
+        assert alice.giving == Decimal('0.00')
 
 
     # get_number_of_backers - gnob
