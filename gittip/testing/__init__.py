@@ -156,14 +156,19 @@ class Harness(unittest.TestCase):
                      VALUES (%s,%s,%s,%s)
             """, (platform, self.seq, username, username))
 
-        # brute force update for use in testing
-        for k,v in kw.items():
-            if k == 'claimed_time':
-                if v == 'now':
-                    v = datetime.datetime.now(pytz.utc)
-            self.db.run("UPDATE participants SET {}=%s WHERE username=%s" \
-                        .format(k), (v, participant.username))
-        participant.set_attributes(**kw)
+        # Update participant
+        if kw:
+            if kw.get('claimed_time') == 'now':
+                kw['claimed_time'] = datetime.datetime.now(pytz.utc)
+            cols, vals = zip(*kw.items())
+            cols = ', '.join(cols)
+            placeholders = ', '.join(['%s']*len(vals))
+            participant = self.db.one("""
+                UPDATE participants
+                   SET ({0}) = ({1})
+                 WHERE username=%s
+             RETURNING participants.*::participants
+            """.format(cols, placeholders), vals+(participant.username,))
 
         return participant
 

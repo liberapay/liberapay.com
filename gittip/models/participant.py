@@ -540,10 +540,10 @@ class Participant(Model, MixinTeam):
     def update_email(self, email, confirmed=False):
         with self.db.get_cursor() as c:
             add_event(c, 'participant', dict(id=self.id, action='set', values=dict(current_email=email)))
-            c.one("UPDATE participants SET email = ROW(%s, %s) WHERE username=%s RETURNING id"
-                 , (email, confirmed, self.username)
-                  )
-        self.set_attributes(email=(email, confirmed))
+            r = c.one("UPDATE participants SET email = ROW(%s, %s) WHERE username=%s RETURNING email"
+                     , (email, confirmed, self.username)
+                      )
+            self.set_attributes(email=r)
 
     def update_goal(self, goal):
         typecheck(goal, (Decimal, None))
