@@ -80,12 +80,12 @@ class TestAbsorptions(Harness):
 
     def test_bob_has_two_dollars_in_tips(self):
         expected = Decimal('2.00')
-        actual = Participant.from_username('bob').receiving
+        actual = self.bob.receiving
         assert actual == expected
 
     def test_alice_gives_to_bob_now(self):
         expected = Decimal('1.00')
-        actual = Participant.from_username('alice').get_tip_to('bob')
+        actual = self.alice.get_tip_to('bob')
         assert actual == expected
 
     def test_deadbeef_is_archived(self):
@@ -98,13 +98,12 @@ class TestAbsorptions(Harness):
 
     def test_alice_doesnt_gives_to_deadbeef_anymore(self):
         expected = Decimal('0.00')
-        actual = Participant.from_username('alice').get_tip_to(self.deadbeef_original_username)
+        actual = self.alice.get_tip_to(self.deadbeef_original_username)
         assert actual == expected
 
     def test_alice_doesnt_give_to_whatever_deadbeef_was_archived_as_either(self):
         expected = Decimal('0.00')
-        alice = Participant.from_username('alice')
-        actual = alice.get_tip_to(self.deadbeef_original_username)
+        actual = self.alice.get_tip_to(self.deadbeef_original_username)
         assert actual == expected
 
     def test_there_is_no_more_deadbeef(self):
@@ -192,7 +191,7 @@ class TestParticipant(Harness):
 
     def test_bob_is_singular(self):
         expected = True
-        actual = Participant.from_username('bob').IS_SINGULAR
+        actual = self.bob.IS_SINGULAR
         assert actual == expected
 
     def test_john_is_plural(self):
@@ -202,52 +201,52 @@ class TestParticipant(Harness):
         assert actual == expected
 
     def test_can_change_email(self):
-        Participant.from_username('alice').update_email('alice@gittip.com')
+        self.alice.update_email('alice@gittip.com')
         expected = 'alice@gittip.com'
-        actual = Participant.from_username('alice').email.address
+        actual = self.alice.email.address
         assert actual == expected
 
     def test_can_confirm_email(self):
-        Participant.from_username('alice').update_email('alice@gittip.com', True)
-        actual = Participant.from_username('alice').email.confirmed
+        self.alice.update_email('alice@gittip.com', True)
+        actual = self.alice.email.confirmed
         assert actual == True
 
     def test_cant_take_over_claimed_participant_without_confirmation(self):
         bob_twitter = self.make_elsewhere('twitter', '2', 'bob')
         with self.assertRaises(NeedConfirmation):
-            Participant.from_username('alice').take_over(bob_twitter)
+            self.alice.take_over(bob_twitter)
 
     def test_taking_over_yourself_sets_all_to_zero(self):
         bob_twitter = self.make_elsewhere('twitter', '2', 'bob')
-        Participant.from_username('alice').set_tip_to(self.bob, '1.00')
-        Participant.from_username('alice').take_over(bob_twitter, have_confirmation=True)
+        self.alice.set_tip_to(self.bob, '1.00')
+        self.alice.take_over(bob_twitter, have_confirmation=True)
         expected = Decimal('0.00')
-        actual = Participant.from_username('alice').giving
+        actual = self.alice.giving
         assert actual == expected
 
     def test_alice_ends_up_tipping_bob_two_dollars(self):
         carl_twitter = self.make_elsewhere('twitter', '3', 'carl')
-        Participant.from_username('alice').set_tip_to(self.bob, '1.00')
-        Participant.from_username('alice').set_tip_to(self.carl, '1.00')
-        Participant.from_username('bob').take_over(carl_twitter, have_confirmation=True)
+        self.alice.set_tip_to(self.bob, '1.00')
+        self.alice.set_tip_to(self.carl, '1.00')
+        self.bob.take_over(carl_twitter, have_confirmation=True)
         expected = Decimal('2.00')
-        actual = Participant.from_username('alice').get_tip_to('bob')
+        actual = self.alice.get_tip_to('bob')
         assert actual == expected
 
     def test_bob_ends_up_tipping_alice_two_dollars(self):
         carl_twitter = self.make_elsewhere('twitter', '3', 'carl')
-        Participant.from_username('bob').set_tip_to(self.alice, '1.00')
-        Participant.from_username('carl').set_tip_to(self.alice, '1.00')
-        Participant.from_username('bob').take_over(carl_twitter, have_confirmation=True)
+        self.bob.set_tip_to(self.alice, '1.00')
+        self.carl.set_tip_to(self.alice, '1.00')
+        self.bob.take_over(carl_twitter, have_confirmation=True)
         expected = Decimal('2.00')
-        actual = Participant.from_username('bob').get_tip_to('alice')
+        actual = self.bob.get_tip_to('alice')
         assert actual == expected
 
     def test_ctime_comes_from_the_older_tip(self):
         carl_twitter = self.make_elsewhere('twitter', '3', 'carl')
-        Participant.from_username('alice').set_tip_to(self.bob, '1.00')
-        Participant.from_username('alice').set_tip_to(self.carl, '1.00')
-        Participant.from_username('bob').take_over(carl_twitter, have_confirmation=True)
+        self.alice.set_tip_to(self.bob, '1.00')
+        self.alice.set_tip_to(self.carl, '1.00')
+        self.bob.take_over(carl_twitter, have_confirmation=True)
 
         tips = self.db.all("SELECT * FROM tips")
         first, second = tips[0], tips[1]
@@ -263,22 +262,20 @@ class TestParticipant(Harness):
 
     def test_connecting_unknown_account_fails(self):
         with self.assertRaises(NotSane):
-            Participant.from_username('bob').take_over(('github', 'jim'))
+            self.bob.take_over(('github', 'jim'))
 
     def test_delete_elsewhere_last(self):
-        alice = Participant.from_username('alice')
         with pytest.raises(LastElsewhere):
-            alice.delete_elsewhere('twitter', 1)
+            self.alice.delete_elsewhere('twitter', 1)
 
     def test_delete_elsewhere_last_signin(self):
-        alice = Participant.from_username('alice')
-        self.make_elsewhere('bountysource', alice.id, 'alice')
+        self.make_elsewhere('bountysource', self.alice.id, 'alice')
         with pytest.raises(LastElsewhere):
-            alice.delete_elsewhere('twitter', 1)
+            self.alice.delete_elsewhere('twitter', 1)
 
     def test_delete_elsewhere_nonsignin(self):
         g = self.make_elsewhere('bountysource', 1, 'alice')
-        alice = Participant.from_username('alice')
+        alice = self.alice
         alice.take_over(g)
         accounts = alice.get_accounts_elsewhere()
         assert accounts['twitter'] and accounts['bountysource']
@@ -287,13 +284,12 @@ class TestParticipant(Harness):
         assert accounts['twitter'] and accounts.get('bountysource') is None
 
     def test_delete_elsewhere_nonexisting(self):
-        alice = Participant.from_username('alice')
         with pytest.raises(NonexistingElsewhere):
-            alice.delete_elsewhere('github', 1)
+            self.alice.delete_elsewhere('github', 1)
 
     def test_delete_elsewhere(self):
         g = self.make_elsewhere('github', 1, 'alice')
-        alice = Participant.from_username('alice')
+        alice = self.alice
         alice.take_over(g)
         # test preconditions
         accounts = alice.get_accounts_elsewhere()
