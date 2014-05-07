@@ -1,0 +1,48 @@
+{% from 'templates/avatar-url.html' import avatar_url with context %}
+
+{% set account = accounts.get('venmo', None) %}
+<tr class="{{ 'has-avatar' if account }}">
+    <td class="account-type">
+        <div class="sanity-preserving-wrapper">
+            {% if account != None %}
+                <img class="avatar" src="{{ avatar_url(account) }}"/>
+            {% endif %}
+          <img class="platform" src="{{ website.asset_url }}/venmo.png" />
+        </div>
+    </td>
+    <td class="account-details">
+        {% if account == None %}
+            <span class="none">None</span>
+            {% if not user.ANON and user.participant == participant %}
+                {% call auth_button('venmo', 'connect') %}
+                    + Add
+                {% endcall %}
+            {% endif %}
+        {% else %}
+            <a class="account-username" rel="me" href="{{ account.html_url|e }}"
+                >{{ account.user_name|e }}
+                {% if account.display_name and account.display_name != account.user_name %}
+                    ({{ account.display_name|e }})
+                {% endif %}
+            </a>
+            {% if user.participant == participant %}
+                <div class="account-delete" title="Disconnect"
+                        data-platform="venmo"
+                        data-user_id="{{ account.user_id }}">
+                </div>
+            {% else %}
+            <div class="venmo-button">
+                <!-- TODO: use venmo.js -->
+                <iframe
+                    src="http://platform.venmo.com/index.html#payment-widget?recipient_id={{account.user_id}}"
+                    scrolling="no"
+                    frameborder="0"
+                    style="border: none; width: 130px; height: 33px;">
+                </iframe>
+            </div>
+            {% endif %}
+        {% endif %}
+
+        <div class="account-type">Venmo</div>
+    </td>
+</tr>
