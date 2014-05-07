@@ -38,16 +38,12 @@
                         data-user_id="{{ account.user_id }}">
                 </div>
             {% else %}
-            <div class="venmo-button">
-                <!-- TODO: use venmo.js -->
-                <iframe
-                    src="http://platform.venmo.com/index.html#payment-widget?recipient_id={{account.user_id}}"
-                    scrolling="no"
-                    frameborder="0"
-                    style="border: none; width: 130px; height: 33px;">
-                </iframe>
-            </div>
+                <div class="venmo-button">
+                    <a class="venmo-pay-button" data-recipient-id="{{account.user_id}}"></a>
+                </div>
             {% endif %}
         {% endif %}
     </td>
 </tr>
+
+<script src="https://platform.venmo.com/sdk.js"></script>
