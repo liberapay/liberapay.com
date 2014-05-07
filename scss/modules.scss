@@ -87,25 +87,26 @@ a.mini-user:hover {
         color: $gray;
     }
 
-    .auth-button, .venmo-button, .account-delete {
-        float: right;
-    }
-    .auth-button {
-        margin-top: 8px;
-    }
-    .venmo-button {
-        margin-top: 3px;
-    }
-    .account-delete {
-        margin-top: 12px;
+    .account-action {
+        padding-right: 8px;
+        vertical-align: middle;
+        text-align: right;
+
+        .account-delete {
+            display: inline-block;
+        }
     }
 
+    .email {
+        position: relative;
+    }
     .toggle-bitcoin, .toggle-email {
         position: absolute;
-        right: 8px;
+        right: 0;
     }
     .toggle-bitcoin {
         margin-top: 8px;
+        right: 8px;
     }
     .account-type ~ .auth-button, .toggle-email {
         margin-top: -1.25em;

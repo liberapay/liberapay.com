@@ -13,11 +13,6 @@
     <td class="account-details">
         {% if account == None %}
             <span class="none">None</span>
-            {% if not user.ANON and user.participant == participant %}
-                {% call auth_button('venmo', 'connect') %}
-                    + Add
-                {% endcall %}
-            {% endif %}
         {% else %}
             <a class="account-username" rel="me" href="{{ account.html_url|e }}"
                 >{{ account.user_name|e }}
@@ -25,6 +20,18 @@
                     ({{ account.display_name|e }})
                 {% endif %}
             </a>
+        {% endif %}
+
+        <div class="account-type">Venmo</div>
+    </td>
+    <td class="account-action">
+        {% if account == None %}
+            {% if not user.ANON and user.participant == participant %}
+                {% call auth_button('venmo', 'connect') %}
+                    + Add
+                {% endcall %}
+            {% endif %}
+        {% else %}
             {% if user.participant == participant %}
                 <div class="account-delete" title="Disconnect"
                         data-platform="venmo"
@@ -42,7 +49,5 @@
             </div>
             {% endif %}
         {% endif %}
-
-        <div class="account-type">Venmo</div>
     </td>
 </tr>
