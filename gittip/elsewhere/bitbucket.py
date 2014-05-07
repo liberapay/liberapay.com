@@ -1,7 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 from gittip.elsewhere import PlatformOAuth1
-from gittip.elsewhere._extractors import key, not_available
+from gittip.elsewhere._extractors import any_key, key, not_available
 from gittip.elsewhere._paginators import keys_paginator
 
 
@@ -30,5 +30,5 @@ class Bitbucket(PlatformOAuth1):
     x_user_name = key('username')
     x_display_name = key('display_name')
     x_email = not_available
-    x_avatar_url = key('avatar')
+    x_avatar_url = any_key('avatar', ('links', 'avatar', 'href'))
     x_is_team = key('is_team')
