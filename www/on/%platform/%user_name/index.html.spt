@@ -34,6 +34,13 @@ if is_team:
         team_description = 'is a big team'
     else:
         team_description = 'is a team with'
+    allow_team_connect = hasattr(platform, 'is_team_admin')
+    if user.ANON or not user.participant.IS_PLURAL:
+        allow_team_connect = False
+    if allow_team_connect:
+        user_accounts = user.participant.get_accounts_elsewhere()
+        if len(user_accounts) == 1 and platform.name in user_accounts:
+            allow_team_connect = False
 
 if locked:
     number = -2
@@ -207,7 +214,7 @@ else:
     </table>
     {% endif %}
 
-    {% if platform.is_team_admin and user.participant.IS_PLURAL %}
+    {% if allow_team_connect %}
         <h2>{{ user_name|e }} has not joined Gittip.</h2>
         <p>Are you an administrator of this {{ platform.display_name }} team
         account? Connect it to your Gittip account.</p>
