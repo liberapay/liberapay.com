@@ -89,6 +89,14 @@
         window.analytics.load("{{ website.segment_key }}");
         window.analytics.page();
     </script>
+    <script type="text/javascript">
+    {% if user.ANON %}
+        // Automatic tracking based on anonymous session ID.
+        // See: https://segment.io/docs/tracking-api/identify/#anonymous-id
+    {% else %}
+        analytics.identify('{{ user.participant.id }}', {});
+    {% endif %}
+    </script>
     {% endif %}
 
     <script src="{{ website.asset_url }}/jquery.min.js"></script>
