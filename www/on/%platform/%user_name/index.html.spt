@@ -125,7 +125,62 @@ else:
 
   {% elif is_team %}
 
-    {% if allow_pledges %}
+    {% if allow_team_connect %}
+        <h2>{{ user_name|e }} has not joined Gittip.</h2>
+        <p>Are you an administrator of this {{ platform.display_name }} team
+        account? Connect it to your Gittip account.</p>
+        {% call auth_button(platform.name, 'connect', path['user_name']) %}
+            Connect team account
+        {% endcall %}
+    {% endif %}
+
+  {% else %}
+
+    <h2>{{ user_name|e }} has not joined Gittip.</h2>
+
+    {% if platform in website.signin_platforms or not user.ANON %}
+        {% if user.ANON %}
+            <p>Is this you? We never collect money for you unless you join.</p>
+            {% call auth_button(platform.name, 'opt-in', path['user_name']) %}
+                Join Gittip
+            {% endcall %}
+        {% else %}
+            <p>Is this yours? Connect it to your Gittip account.</p>
+            {% call auth_button(platform.name, 'connect', path['user_name']) %}
+                Connect
+            {% endcall %}
+        {% endif %}
+    {% endif %}
+
+  {% endif %}
+
+  {% if user.ANON %}
+
+    <h2>What is Gittip?</h2>
+
+    <p>Gittip is a way to thank and support your favorite artists, musicians,
+    writers, programmers, etc. by setting up a small weekly cash gift to them.
+    <a href="/about/">Read more ...</a></p>
+
+  {% endif %}
+
+  {% if user.ANON and allow_pledges %}
+
+    <h2>Don't like what you see?</h2>
+
+    <p>If you are an owner of this {{ platform.display_name }} account, you can
+    explicitly opt out of Gittip by locking it. We don't allow new pledges to
+    locked accounts.</p>
+
+    {% call auth_button(platform.name, 'lock', path['user_name']) %}
+        Lock
+    {% endcall %}
+
+  {% endif %}
+
+  {% if is_team and not locked %}
+
+    {% if allow_pledges and members %}
         <h2 style="text-align: center">
             {{ user_name|e }} {{ team_description }}
             {% if nmembers > 0 %}
@@ -213,57 +268,6 @@ else:
     </tbody>
     </table>
     {% endif %}
-
-    {% if allow_team_connect %}
-        <h2>{{ user_name|e }} has not joined Gittip.</h2>
-        <p>Are you an administrator of this {{ platform.display_name }} team
-        account? Connect it to your Gittip account.</p>
-        {% call auth_button(platform.name, 'connect', path['user_name']) %}
-            Connect team account
-        {% endcall %}
-    {% endif %}
-
-  {% else %}
-
-    <h2>{{ user_name|e }} has not joined Gittip.</h2>
-
-    {% if platform in website.signin_platforms or not user.ANON %}
-        {% if user.ANON %}
-            <p>Is this you? We never collect money for you unless you join.</p>
-            {% call auth_button(platform.name, 'opt-in', path['user_name']) %}
-                Join Gittip
-            {% endcall %}
-        {% else %}
-            <p>Is this yours? Connect it to your Gittip account.</p>
-            {% call auth_button(platform.name, 'connect', path['user_name']) %}
-                Connect
-            {% endcall %}
-        {% endif %}
-    {% endif %}
-
-  {% endif %}
-
-  {% if user.ANON %}
-
-    <h2>What is Gittip?</h2>
-
-    <p>Gittip is a way to thank and support your favorite artists, musicians,
-    writers, programmers, etc. by setting up a small weekly cash gift to them.
-    <a href="/about/">Read more ...</a></p>
-
-  {% endif %}
-
-  {% if user.ANON and allow_pledges %}
-
-    <h2>Don't like what you see?</h2>
-
-    <p>If you are an owner of this {{ platform.display_name }} account, you can
-    explicitly opt out of Gittip by locking it. We don't allow new pledges to
-    locked accounts.</p>
-
-    {% call auth_button(platform.name, 'lock', path['user_name']) %}
-        Lock
-    {% endcall %}
 
   {% endif %}
 </div>
