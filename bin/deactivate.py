@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""The final rename and clear step for deactivating an account.
+"""The final rename and clear step for canceling an account.
 
 If the account has a balance or is involved in active tips,
 this script will report the problem and abort without making any update.
@@ -9,7 +9,7 @@ this script will report the problem and abort without making any update.
 
 Usage:
 
-    [gittip] $ heroku config -s -a gittip | foreman run -e /dev/stdin ./env/bin/python ./bin/deactivate-final-rename.py "username" [first-eight-of-api-key]
+    [gittip] $ heroku config -s -a gittip | foreman run -e /dev/stdin ./env/bin/python ./bin/deactivate.py "username" [first-eight-of-api-key]
 
 """
 from __future__ import print_function
