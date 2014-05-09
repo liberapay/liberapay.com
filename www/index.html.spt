@@ -31,17 +31,6 @@ try:
 except ValueError:
     raise Response(400)
 
-# Implement Do Not Track universal opt-out
-DoNotTrackHeader = "DNT"
-DoNotTrackValue = "1"
-
-aspenHeader = DoNotTrackHeader.capitalize()
-
-if (aspenHeader in request.headers) and (request.headers[aspenHeader] == DoNotTrackValue):
-    request.dnt = True
-else:
-    request.dnt = False
-
 new_participants = website.db.all("""
 -- new participants on homepage
 
