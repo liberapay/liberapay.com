@@ -137,7 +137,7 @@ class Payday(object):
 
         self.payin(ts_start, self.genparticipants(ts_start, ts_start))
         self.move_pending_to_balance_for_teams()
-        self.pachinko(ts_start, self.genparticipants(ts_start, ts_start))
+        self.pachinko(ts_start, self.get_participants(ts_start))
         self.clear_pending_to_balance()
         self.payout(ts_start, self.genparticipants(ts_start, False))
         self.set_nactive(ts_start)
@@ -235,7 +235,7 @@ class Payday(object):
 
     def pachinko(self, ts_start, participants):
         i = 0
-        for i, (participant, foo, bar) in enumerate(participants, start=1):
+        for i, participant in enumerate(participants, start=1):
             if i % 100 == 0:
                 log("Pachinko done for %d participants." % i)
             if participant.number != 'plural':

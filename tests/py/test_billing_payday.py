@@ -844,5 +844,5 @@ class TestPachinko(Harness):
 
         ts_start = self.payday.start()
 
-        participants = self.payday.genparticipants(ts_start, ts_start)
+        participants = self.payday.get_participants(ts_start)
         self.payday.pachinko(ts_start, participants)
