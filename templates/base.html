@@ -93,8 +93,9 @@
     {% if user.ANON %}
         // Automatic tracking based on anonymous session ID.
         // See: https://segment.io/docs/tracking-api/identify/#anonymous-id
+        analytics.identify({});
     {% else %}
-        analytics.identify('{{ user.participant.id }}', {});
+        analytics.identify('{{ user.participant.id }}', function(){});
     {% endif %}
     </script>
     {% endif %}
