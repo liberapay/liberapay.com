@@ -86,7 +86,7 @@ if [ $1 ]; then
     if [ $? -eq 0 ]; then
         if [ "$2" == "" ]; then
             start
-            foreman run -e local.env ./env/bin/payday >> $LOG 2>&1
+            honcho run -e defaults.env,local.env ./env/bin/payday >> $LOG 2>&1
         else 
             if [ "$2" == "for_real_please" ]; then
                 confirm "$RUN payday #$1 FOR REAL?!?!?!??!?!?"
