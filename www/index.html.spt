@@ -35,9 +35,9 @@ except ValueError:
 DoNotTrackHeader = "DNT"
 DoNotTrackValue = "1"
 
-pyHeader = "HTTP_%(header)s" % {"header": DoNotTrackHeader}
+aspenHeader = DoNotTrackHeader.capitalize()
 
-if (pyHeader in request.headers) and (request.headers[pyHeader] == DoNotTrackValue):
+if (aspenHeader in request.headers) and (request.headers[aspenHeader] == DoNotTrackValue):
     request.dnt = True
 else:
     request.dnt = False
