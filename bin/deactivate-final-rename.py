@@ -28,6 +28,10 @@ else:
 
 db = wireup.db(wireup.env())
 
+
+# Ensure that balance and tips have been dealt with.
+# ==================================================
+
 target = Participant.from_username(username)
 
 INCOMING = """
@@ -43,7 +47,6 @@ FIELDS = """
          WHERE username = %s
 """
 
-
 incoming = db.one(INCOMING, (username,))
 fields = db.one(FIELDS, (username,))
 
@@ -57,6 +60,10 @@ if fields.api_key == None:
     assert first_eight == "None"
 else:
     assert fields.api_key[0:8] == first_eight
+
+
+# Archive the participant record.
+# ===============================
 
 deactivated_name = "deactivated-" + username
 print("Renaming " + username + " to " + deactivated_name)
