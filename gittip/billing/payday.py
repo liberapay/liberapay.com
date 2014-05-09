@@ -258,8 +258,10 @@ class Payday(object):
                         , pachinko=True
                          )
 
+            # Get the takes for this team, as they were before ts_start,
+            # filtering out the ones we've already transferred (in case payday
+            # is interrupted and restarted).
             takes = self.db.all("""
-
                 SELECT member, amount, ctime, mtime
                   FROM (
                          SELECT DISTINCT ON (member) t.*
@@ -280,7 +282,6 @@ class Payday(object):
                             AND timestamp >= %(ts_start)s
                         ) IS NULL
               ORDER BY ctime DESC
-
             """, dict(team=participant.username, ts_start=ts_start), back_as=dict)
 
             for take in takes:
