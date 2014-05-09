@@ -238,7 +238,7 @@ class Payday(object):
         for i, participant in enumerate(participants, start=1):
             if i % 100 == 0:
                 log("Pachinko done for %d participants." % i)
-            if participant.number != 'plural':
+            if participant.number != 'plural' or participant.is_suspicious:
                 continue
 
             available = participant.balance
@@ -258,7 +258,32 @@ class Payday(object):
                         , pachinko=True
                          )
 
-            for take in participant.get_current_takes():
+            takes = self.db.all("""
+
+                SELECT member, amount, ctime, mtime
+                  FROM (
+                         SELECT DISTINCT ON (member) t.*
+                           FROM takes t
+                           JOIN participants p1 ON p1.username = member
+                          WHERE team=%(team)s
+                            AND mtime < %(ts_start)s
+                            AND p1.is_suspicious IS NOT TRUE
+                       ORDER BY member
+                              , mtime DESC
+                        ) t
+                 WHERE amount > 0
+                   AND ( SELECT id
+                           FROM transfers
+                          WHERE tipper=t.team
+                            AND tippee=t.member
+                            AND as_team_member IS true
+                            AND timestamp >= %(ts_start)s
+                        ) IS NULL
+              ORDER BY ctime DESC
+
+            """, dict(team=participant.username, ts_start=ts_start), back_as=dict)
+
+            for take in takes:
                 amount = min(take['amount'], available)
                 available -= amount
                 tip(take['member'], amount)
