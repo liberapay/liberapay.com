@@ -10,7 +10,7 @@ import gittip
 import gittip.wireup
 from gittip import canonize
 from gittip.security import authentication, csrf, x_frame_options
-from gittip.utils import cache_static, timer, do_not_track
+from gittip.utils import cache_static, timer
 
 
 from aspen import log_dammit
@@ -147,7 +147,6 @@ algorithm.functions = [ timer.start
 
                       , canonize
                       , authentication.inbound
-                      , do_not_track.inbound
                       , csrf.inbound
                       , add_stuff_to_context
 
