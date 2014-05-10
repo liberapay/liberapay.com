@@ -1,0 +1,5 @@
+BEGIN;
+
+ALTER TABLE participants ALTER COLUMN session_expires SET DEFAULT CURRENT_TIMESTAMP + INTERVAL '6 hours';
+
+END;

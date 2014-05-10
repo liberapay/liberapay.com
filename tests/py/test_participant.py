@@ -643,3 +643,16 @@ class Tests(Harness):
         stub = Participant.from_username(unclaimed.participant.username)
         actual = stub.resolve_unclaimed()
         assert actual == "/on/openstreetmap/alice/"
+
+
+    # participant session
+
+    def test_no_participant_from_expired_session(self):
+        self.participant.start_new_session()
+        token = self.participant.session_token
+
+        # Session has expired long time ago
+        self.participant.set_session_expires(0)
+        actual = Participant.from_session_token(token)
+
+        assert actual is None
