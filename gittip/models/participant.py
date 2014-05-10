@@ -92,7 +92,11 @@ class Participant(Model, MixinTeam):
     def from_session_token(cls, token):
         """Return an existing participant based on session token.
         """
-        return cls._from_thing("session_token", token)
+        participant = cls._from_thing("session_token", token)
+        if participant and participant.session_expires < pytz.utc.localize(datetime.datetime.utcnow()):
+            participant = None
+
+        return participant
 
     @classmethod
     def from_api_key(cls, api_key):
