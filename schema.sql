@@ -1309,3 +1309,11 @@ END;
 BEGIN;
     ALTER TABLE transfers ADD COLUMN as_team_member boolean NOT NULL DEFAULT false;
 END;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/pull/2377
+
+BEGIN;
+    ALTER TABLE participants ALTER COLUMN session_expires SET DEFAULT CURRENT_TIMESTAMP + INTERVAL '6 hours';
+END;
