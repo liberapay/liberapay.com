@@ -279,6 +279,8 @@ class BalancedCard(BalancedThing):
         'state': 'meta.region',
         'last4': 'number',
         'last_four': 'number',
+        "expiration_month": "expiration_month",
+        "expiration_year": "expiration_year",
     }
 
 

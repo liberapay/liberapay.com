@@ -37,6 +37,8 @@ from gittip.models._mixin_team import MixinTeam
 from gittip.models.account_elsewhere import AccountElsewhere
 from gittip.utils import canonicalize
 from gittip.utils.username import gen_random_usernames, reserve_a_random_username
+from gittip import billing
+from gittip.utils import is_card_expiring
 
 
 ASCII_ALLOWED_IN_USERNAME = set("0123456789"
@@ -1060,6 +1062,19 @@ class Participant(Model, MixinTeam):
             """, (self.username, platform, user_id), default=NonexistingElsewhere)
             add_event(c, 'participant', dict(id=self.id, action='disconnect', values=dict(platform=platform, user_id=user_id)))
         self.update_avatar()
+
+    def credit_card_expiring(self):
+        if self.balanced_customer_href:
+            card = billing.BalancedCard(self.balanced_customer_href)
+        else:
+            card = billing.StripeCard(self.stripe_customer_id)
+
+        expiration_year = card['expiration_year']
+        expiration_month= card['expiration_month']
+        if expiration_year and expiration_month:
+            return is_card_expiring(int(expiration_year), int(expiration_month))
+        else:
+            return False
 
 
 class NeedConfirmation(Exception):
