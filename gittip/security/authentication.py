@@ -1,14 +1,13 @@
 """Defines website authentication helpers.
 """
-import rfc822
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 from aspen import Response
-from aspen.utils import utcnow
+from aspen.utils import utcnow, to_rfc822
 from gittip.security import csrf
 from gittip.security.user import User
 
-BEGINNING_OF_EPOCH = rfc822.formatdate(0)
+BEGINNING_OF_EPOCH = to_rfc822(datetime(1970, 1, 1))
 TIMEOUT = timedelta(days=7)
 
 def inbound(request):
