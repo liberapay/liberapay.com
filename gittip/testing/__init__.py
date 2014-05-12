@@ -15,7 +15,7 @@ from gittip.billing.payday import Payday
 from gittip.elsewhere import UserInfo
 from gittip.models.account_elsewhere import AccountElsewhere
 from gittip.models.participant import Participant
-from gittip.security.user import User
+from gittip.security.user import User, SESSION
 from gittip import wireup
 from psycopg2 import IntegrityError, InternalError
 
@@ -44,12 +44,11 @@ class ClientWithAuth(Client):
         # user authentication
         auth_as = kw.pop('auth_as', None)
         if auth_as is None:
-            if b'session' in self.cookie:
-                del self.cookie[b'session']
+            if SESSION in self.cookie:
+                del self.cookie[SESSION]
         else:
             user = User.from_username(auth_as)
-            user.sign_in()
-            self.cookie[b'session'] = user.participant.session_token
+            user.sign_in(self.cookie)
 
         return Client.build_wsgi_environ(self, *a, **kw)
 

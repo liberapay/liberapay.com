@@ -723,16 +723,3 @@ class Tests(Harness):
         payload = self.db.one("SELECT * FROM events WHERE payload->>'action' = 'archive'").payload
         assert payload['values']['old_username'] == 'alice'
         assert payload['values']['new_username'] == archived_as
-
-
-    # participant session
-
-    def test_no_participant_from_expired_session(self):
-        self.participant.start_new_session()
-        token = self.participant.session_token
-
-        # Session has expired just now
-        self.participant.set_session_expires(datetime.datetime.utcnow())
-        actual = Participant.from_session_token(token)
-
-        assert actual is None

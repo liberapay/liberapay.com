@@ -46,8 +46,8 @@ log('%s user "%s" wants to %s' % (platform.name, account.user_name, action))
 if action == 'opt-in':
     if platform not in website.signin_platforms or account.is_team:
         raise Response(400)
-    # set 'user' to give them a session :/
     user, newly_claimed = account.opt_in(account.user_name)
+    user.sign_in(response.headers.cookie)
 
 elif action == 'connect':
     if user.ANON:
@@ -67,6 +67,6 @@ elif action in {'lock', 'unlock'}:
 else:
     raise Response(400)
 
-request.redirect(then)
+response.redirect(then)
 
 [-----------------------------] text/plain

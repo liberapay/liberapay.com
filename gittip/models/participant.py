@@ -121,28 +121,20 @@ class Participant(Model, MixinTeam):
     # Session Management
     # ==================
 
-    def start_new_session(self):
-        """Set ``session_token`` in the database to a new uuid.
+    def update_session(self, new_token, expires):
+        """Set ``session_token`` and ``session_expires``.
 
         :database: One UPDATE, one row
 
         """
-        self._update_session_token(uuid.uuid4().hex)
-
-    def end_session(self):
-        """Set ``session_token`` in the database to ``NULL``.
-
-        :database: One UPDATE, one row
-
-        """
-        self._update_session_token(None)
-
-    def _update_session_token(self, new_token):
-        self.db.run( "UPDATE participants SET session_token=%s "
-                     "WHERE id=%s AND is_suspicious IS NOT true"
-                   , (new_token, self.id,)
-                    )
-        self.set_attributes(session_token=new_token)
+        self.db.run("""
+            UPDATE participants
+               SET session_token=%s
+                 , session_expires=%s
+             WHERE id=%s
+               AND is_suspicious IS NOT true
+        """, (new_token, expires, self.id))
+        self.set_attributes(session_token=new_token, session_expires=expires)
 
     def set_session_expires(self, expires):
         """Set ``session_expires`` to the given datetime.

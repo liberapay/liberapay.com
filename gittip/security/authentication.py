@@ -1,14 +1,12 @@
 """Defines website authentication helpers.
 """
-from datetime import datetime, timedelta
+from datetime import datetime
 
-from aspen import Response
-from aspen.utils import utcnow, to_rfc822
+from aspen.utils import to_rfc822
 from gittip.security import csrf
-from gittip.security.user import User
+from gittip.security.user import User, SESSION
 
 BEGINNING_OF_EPOCH = to_rfc822(datetime(1970, 1, 1))
-TIMEOUT = timedelta(days=7)
 
 def inbound(request):
     """Authenticate from a cookie or an API key in basic auth.
@@ -30,8 +28,8 @@ def inbound(request):
             if 'Referer' not in request.headers:
                 request.headers['Referer'] = \
                                         'https://%s/' % csrf._get_host(request)
-    elif 'session' in request.headers.cookie:
-        token = request.headers.cookie['session'].value
+    elif SESSION in request.headers.cookie:
+        token = request.headers.cookie[SESSION].value
         user = User.from_session_token(token)
 
     request.context['user'] = user or User()
@@ -41,11 +39,7 @@ def outbound(request, response):
 
     response.headers['Expires'] = BEGINNING_OF_EPOCH # don't cache
 
-    user = request.context.get('user') or User()
-    if not isinstance(user, User):
-        raise Response(500, "If you define 'user' in a simplate it has to "
-                            "be a User instance.")
-
-    if not user.ANON:
-        user.keep_signed_in_until(utcnow() + TIMEOUT)
-        response.set_cookie('session', user.participant.session_token, expires=TIMEOUT)
+    if SESSION in request.headers.cookie:
+        user = request.context.get('user') or User()
+        if not user.ANON:
+            user.keep_signed_in(response.headers.cookie)
