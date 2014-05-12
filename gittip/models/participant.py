@@ -10,12 +10,11 @@ of participant, based on certain properties.
 """
 from __future__ import print_function, unicode_literals
 
-import datetime
 from decimal import Decimal, ROUND_DOWN
 import uuid
 
 import aspen
-from aspen.utils import typecheck, utc, utcnow
+from aspen.utils import typecheck, utcnow
 from postgres.orm import Model
 from psycopg2 import IntegrityError
 
@@ -146,19 +145,16 @@ class Participant(Model, MixinTeam):
         self.set_attributes(session_token=new_token)
 
     def set_session_expires(self, expires):
-        """Set session_expires in the database.
+        """Set ``session_expires`` to the given datetime.
 
-        :param float expires: A UNIX timestamp, which XXX we assume is UTC?
         :database: One UPDATE, one row
 
         """
-        session_expires = datetime.datetime.fromtimestamp(expires) \
-                                                      .replace(tzinfo=utc)
         self.db.run( "UPDATE participants SET session_expires=%s "
                      "WHERE id=%s AND is_suspicious IS NOT true"
-                   , (session_expires, self.id,)
+                   , (expires, self.id,)
                     )
-        self.set_attributes(session_expires=session_expires)
+        self.set_attributes(session_expires=expires)
 
 
     # Claimed-ness

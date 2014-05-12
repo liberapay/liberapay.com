@@ -7,9 +7,9 @@ See also:
     https://github.com/gittip/www.gittip.com/issues/88
 
 """
-import rfc822
+
+from datetime import timedelta
 import re
-import time
 import urlparse
 from aspen import log_dammit
 
@@ -54,7 +54,7 @@ REASON_NO_CSRF_COOKIE = "CSRF cookie not set."
 REASON_BAD_TOKEN = "CSRF token missing or incorrect."
 
 TOKEN_LENGTH = 32
-TIMEOUT = 60 * 60 * 24 * 7
+CSRF_TIMEOUT = timedelta(days=7)
 
 
 def _get_new_csrf_key():
@@ -148,10 +148,7 @@ def outbound(request, response):
     """
     csrf_token = request.context.get('csrf_token')
     if csrf_token:
-        response.headers.cookie['csrf_token'] = csrf_token
-        cookie = response.headers.cookie['csrf_token']
-        cookie['path'] = '/'
-        cookie['expires'] = rfc822.formatdate(time.time() + TIMEOUT)
+        response.set_cookie('csrf_token', csrf_token, expires=CSRF_TIMEOUT)
 
         # Content varies with the CSRF cookie, so set the Vary header.
         patch_vary_headers(response, ('Cookie',))

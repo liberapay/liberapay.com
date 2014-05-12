@@ -1,15 +1,15 @@
 """Defines website authentication helpers.
 """
 import rfc822
-import time
+from datetime import timedelta
 
-import gittip
 from aspen import Response
+from aspen.utils import utcnow
 from gittip.security import csrf
 from gittip.security.user import User
 
 BEGINNING_OF_EPOCH = rfc822.formatdate(0)
-TIMEOUT = 60 * 60 * 24 * 7
+TIMEOUT = timedelta(days=7)
 
 def inbound(request):
     """Authenticate from a cookie or an API key in basic auth.
@@ -48,13 +48,5 @@ def outbound(request, response):
                             "be a User instance.")
 
     if not user.ANON:
-        response.headers.cookie['session'] = user.participant.session_token
-        expires = time.time() + TIMEOUT
-        user.keep_signed_in_until(expires)
-
-        cookie = response.headers.cookie['session']
-        cookie['path'] = '/'
-        cookie['expires'] = rfc822.formatdate(expires)
-        cookie['httponly'] = 'Yes, please.'
-        if gittip.canonical_scheme == 'https':
-            cookie['secure'] = 'Yes, please.'
+        user.keep_signed_in_until(utcnow() + TIMEOUT)
+        response.set_cookie('session', user.participant.session_token, expires=TIMEOUT)

@@ -10,10 +10,25 @@ import gittip
 import gittip.wireup
 from gittip import canonize
 from gittip.security import authentication, csrf, x_frame_options
-from gittip.utils import cache_static, timer
+from gittip.utils import cache_static, set_cookie, timer
 
 
+import aspen
 from aspen import log_dammit
+
+
+# Monkey patch aspen.Response
+# ===========================
+
+def _redirect(response, url):
+    response.code = 302
+    response.headers['Location'] = url
+    raise response
+aspen.Response.redirect = _redirect
+
+def _set_cookie(response, *args, **kw):
+    set_cookie(response.headers.cookie, *args, **kw)
+aspen.Response.set_cookie = _set_cookie
 
 
 # Wireup Algorithm

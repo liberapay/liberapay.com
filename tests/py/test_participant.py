@@ -731,8 +731,8 @@ class Tests(Harness):
         self.participant.start_new_session()
         token = self.participant.session_token
 
-        # Session has expired long time ago
-        self.participant.set_session_expires(0)
+        # Session has expired just now
+        self.participant.set_session_expires(datetime.datetime.utcnow())
         actual = Participant.from_session_token(token)
 
         assert actual is None
