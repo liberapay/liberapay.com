@@ -68,7 +68,3 @@ class Community(Model):
         SELECT * FROM current_communities WHERE slug=%s AND participant=%s
 
         """, (self.slug, participant.username)) is not None
-
-
-def typecast(request):
-    pass
