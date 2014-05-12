@@ -15,10 +15,9 @@ from decimal import Decimal, ROUND_DOWN
 import uuid
 
 import aspen
-from aspen.utils import typecheck
+from aspen.utils import typecheck, utc, utcnow
 from postgres.orm import Model
 from psycopg2 import IntegrityError
-import pytz
 
 import gittip
 from gittip import NotSane
@@ -97,7 +96,7 @@ class Participant(Model, MixinTeam):
         """Return an existing participant based on session token.
         """
         participant = cls._from_thing("session_token", token)
-        if participant and participant.session_expires < pytz.utc.localize(datetime.datetime.utcnow()):
+        if participant and participant.session_expires < utcnow():
             participant = None
 
         return participant
@@ -154,7 +153,7 @@ class Participant(Model, MixinTeam):
 
         """
         session_expires = datetime.datetime.fromtimestamp(expires) \
-                                                      .replace(tzinfo=pytz.utc)
+                                                      .replace(tzinfo=utc)
         self.db.run( "UPDATE participants SET session_expires=%s "
                      "WHERE id=%s AND is_suspicious IS NOT true"
                    , (session_expires, self.id,)
@@ -965,7 +964,7 @@ class Participant(Model, MixinTeam):
     def get_age_in_seconds(self):
         out = -1
         if self.claimed_time is not None:
-            now = datetime.datetime.now(self.claimed_time.tzinfo)
+            now = utcnow()
             out = (now - self.claimed_time).total_seconds()
         return out
 
