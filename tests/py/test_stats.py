@@ -11,6 +11,10 @@ from gittip.billing.payday import Payday
 from gittip.testing import Harness
 
 
+class DateTime(datetime.datetime): pass
+datetime.datetime = DateTime
+
+
 class TestCommaize(Harness):
     # XXX This really ought to be in helper methods test file
     def setUp(self):
@@ -99,42 +103,39 @@ class TestRenderingStatsPage(Harness):
     def get_stats_page(self):
         return self.client.GET('/about/stats.html').body
 
-    def test_stats_description_accurate_during_payday_run(self):
+    @patch.object(DateTime, 'utcnow')
+    def test_stats_description_accurate_during_payday_run(self, utcnow):
         """Test that stats page takes running payday into account.
 
         This test was originally written to expose the fix required for
         https://github.com/gittip/www.gittip.com/issues/92.
         """
+        a_thursday = DateTime(2012, 8, 9, 11, 00, 01)
+        utcnow.return_value = a_thursday
 
-        # Hydrating a website requires a functioning datetime module.
         self.client.hydrate_website()
 
-        a_thursday = datetime.datetime(2012, 8, 9, 11, 00, 01)
-        with patch.object(datetime, 'datetime') as mock_datetime:
-            mock_datetime.utcnow.return_value = a_thursday
+        env = wireup.env()
+        wireup.billing(env)
+        payday = Payday(self.db)
+        payday.start()
 
-            env = wireup.env()
-            wireup.billing(env)
-            payday = Payday(self.db)
-            payday.start()
+        body = self.get_stats_page()
+        assert "is changing hands <b>right now!</b>" in body, body
+        payday.end()
 
-            body = self.get_stats_page()
-            assert "is changing hands <b>right now!</b>" in body, body
-            payday.end()
-
-    def test_stats_description_accurate_outside_of_payday(self):
+    @patch.object(DateTime, 'utcnow')
+    def test_stats_description_accurate_outside_of_payday(self, utcnow):
         """Test stats page outside of the payday running"""
 
-        # Hydrating a website requires a functioning datetime module.
+        a_monday = DateTime(2012, 8, 6, 11, 00, 01)
+        utcnow.return_value = a_monday
+
         self.client.hydrate_website()
 
-        a_monday = datetime.datetime(2012, 8, 6, 11, 00, 01)
-        with patch.object(datetime, 'datetime') as mock_datetime:
-            mock_datetime.utcnow.return_value = a_monday
+        payday = Payday(self.db)
+        payday.start()
 
-            payday = Payday(self.db)
-            payday.start()
-
-            body = self.get_stats_page()
-            assert "is ready for <b>this Thursday</b>" in body, body
-            payday.end()
+        body = self.get_stats_page()
+        assert "is ready for <b>this Thursday</b>" in body, body
+        payday.end()
