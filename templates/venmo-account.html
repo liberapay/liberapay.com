@@ -1,0 +1,49 @@
+{% from 'templates/avatar-url.html' import avatar_url with context %}
+
+{% set account = accounts.get('venmo', None) %}
+<tr class="{{ 'has-avatar' if account }}">
+    <td class="account-type">
+        <div class="sanity-preserving-wrapper">
+            {% if account != None %}
+                <img class="avatar" src="{{ avatar_url(account) }}"/>
+            {% endif %}
+          <img class="platform" src="{{ website.asset_url }}/venmo.png" />
+        </div>
+    </td>
+    <td class="account-details">
+        {% if account == None %}
+            <span class="none">None</span>
+        {% else %}
+            <a class="account-username" rel="me" href="{{ account.html_url|e }}"
+                >{{ account.user_name|e }}
+                {% if account.display_name and account.display_name != account.user_name %}
+                    ({{ account.display_name|e }})
+                {% endif %}
+            </a>
+        {% endif %}
+
+        <div class="account-type">Venmo</div>
+    </td>
+    <td class="account-action">
+        {% if account == None %}
+            {% if not user.ANON and user.participant == participant %}
+                {% call auth_button('venmo', 'connect') %}
+                    + Add
+                {% endcall %}
+            {% endif %}
+        {% else %}
+            {% if user.participant == participant %}
+                <div class="account-delete" title="Disconnect"
+                        data-platform="venmo"
+                        data-user_id="{{ account.user_id }}">
+                </div>
+            {% else %}
+                <div class="venmo-button">
+                    <a class="venmo-pay-button" data-recipient-id="{{account.user_id}}"></a>
+                </div>
+            {% endif %}
+        {% endif %}
+    </td>
+</tr>
+
+<script src="https://platform.venmo.com/sdk.js"></script>

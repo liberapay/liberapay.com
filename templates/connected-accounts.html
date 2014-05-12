@@ -29,7 +29,7 @@
         <td class="account-type">
             <img src="{{ website.asset_url }}/bitcoin.png" />
         </td>
-        <td class="account-details">
+        <td class="account-details" colspan="2">
             {% if not user.ANON and own_account %}
                 <div class="bitcoin">
             {% else %}
@@ -70,7 +70,7 @@
     {% endif %}
 
     {% if accounts[website.platforms.venmo.name] or own_account %}
-        {{ account_row(website.platforms.venmo, accounts, auth_button) }}
+        {% include "templates/venmo-account.html" %}
     {% endif %}
 </table>
 
