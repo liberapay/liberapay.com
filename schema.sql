@@ -1317,3 +1317,11 @@ END;
 BEGIN;
     ALTER TABLE participants ALTER COLUMN session_expires SET DEFAULT CURRENT_TIMESTAMP + INTERVAL '6 hours';
 END;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/pull/2378
+
+BEGIN;
+    ALTER TABLE participants ADD CONSTRAINT participants_api_key UNIQUE (api_key);
+END;
