@@ -470,19 +470,17 @@ class Payday(object):
         DECREMENT = """\
 
            UPDATE participants
-              SET balance=(balance - %s)
-            WHERE username=%s
-              AND pending IS NOT NULL
-        RETURNING balance
+              SET balance = (balance - %(amount)s)
+            WHERE username = %(participant)s
+              AND balance >= %(amount)s
+        RETURNING pending
 
         """
-
-        # This will fail with IntegrityError if the balance goes below zero.
-        # We catch that and return false in our caller.
-        cursor.execute(DECREMENT, (amount, participant))
-
-        rec = cursor.fetchone()
-        assert rec is not None, (amount, participant)  # sanity check
+        args = dict(amount=amount, participant=participant)
+        r = cursor.one(DECREMENT, args, default=False)
+        if r is False:
+            raise IntegrityError('balance would become negative')
+        assert r is not None, (amount, participant)  # sanity check
 
 
     def credit_participant(self, cursor, participant, amount):

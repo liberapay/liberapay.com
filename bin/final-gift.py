@@ -13,6 +13,7 @@ from decimal import ROUND_DOWN, Decimal as D
 
 from gittip import wireup
 from gittip.models.participant import Participant
+from psycopg2 import IntegrityError
 
 db = wireup.db(wireup.env())
 
@@ -68,9 +69,14 @@ if diff != 0:
 with db.get_cursor() as cursor:
     for tippee, amount in transfers:
         assert amount > 0
-        cursor.run( "UPDATE participants SET balance=balance - %s WHERE username=%s"
-                  , (amount, tipper.username)
-                   )
+        balance = cursor.one("""
+            UPDATE participants
+               SET balance = balance - %s
+             WHERE username = %s
+         RETURNING balance
+        """, (amount, tipper.username))
+        if balance < 0:
+            raise IntegrityError('balance would become negative')
         cursor.run( "UPDATE participants SET balance=balance + %s WHERE username=%s"
                   , (amount, tippee)
                    )
