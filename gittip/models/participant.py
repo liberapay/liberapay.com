@@ -49,6 +49,7 @@ ASCII_ALLOWED_IN_USERNAME = set("0123456789"
 
 NANSWERS_THRESHOLD = 0  # configured in wireup.py
 
+NOTIFIED_ABOUT_EXPIRATION = 'notifiedAboutExpiration'
 
 class Participant(Model, MixinTeam):
     """Represent a Gittip participant.
@@ -1063,7 +1064,14 @@ class Participant(Model, MixinTeam):
             add_event(c, 'participant', dict(id=self.id, action='disconnect', values=dict(platform=platform, user_id=user_id)))
         self.update_avatar()
 
-    def credit_card_expiring(self):
+    def credit_card_expiring(self, request, response):
+        card_expiring = False
+
+        if NOTIFIED_ABOUT_EXPIRATION in request.headers.cookie:
+            cookie = request.headers.cookie[NOTIFIED_ABOUT_EXPIRATION]
+            if cookie.value == self.session_token:
+                return False
+
         if self.balanced_customer_href:
             card = billing.BalancedCard(self.balanced_customer_href)
         else:
@@ -1072,9 +1080,10 @@ class Participant(Model, MixinTeam):
         expiration_year = card['expiration_year']
         expiration_month= card['expiration_month']
         if expiration_year and expiration_month:
-            return is_card_expiring(int(expiration_year), int(expiration_month))
-        else:
-            return False
+            card_expiring = is_card_expiring(int(expiration_year), int(expiration_month))
+
+        response.headers.cookie[str(NOTIFIED_ABOUT_EXPIRATION)] = self.session_token
+        return card_expiring
 
 
 class NeedConfirmation(Exception):
