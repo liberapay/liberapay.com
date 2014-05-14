@@ -131,18 +131,47 @@ class MixinTeam(object):
         """, (member.username, self.username, member.username, self.username, \
                                                       amount, recorder.username))
 
-    def get_current_takes(self):
+    def get_current_takes(self, for_payday=False):
         """Return a list of member takes for a team.
+
+        This is implemented parallel to Participant.get_tips_and_total. See
+        over there for an explanation of for_payday.
+
         """
         assert self.IS_PLURAL
-        return self.db.all("""
+
+        args = dict(team=self.username)
+        ts_filter = ""
+
+        if for_payday:
+            args['ts_start'] = for_payday
+
+            # Get the takes for this team, as they were before ts_start,
+            # filtering out the ones we've already transferred (in case payday
+            # is interrupted and restarted).
+
+            ts_filter = """
+                AND mtime < %(ts_start)s
+                AND ( SELECT id
+                        FROM transfers
+                       WHERE tipper=t.team
+                         AND tippee=t.member
+                         AND as_team_member IS true
+                         AND timestamp >= %(ts_start)s
+                     ) IS NULL
+            """
+
+        TAKES = """\
 
             SELECT member, amount, ctime, mtime
               FROM current_takes
-             WHERE team=%s
+             WHERE team=%(team)s
+                   {}
           ORDER BY ctime DESC
 
-        """, (self.username,), back_as=dict)
+        """.format(ts_filter)
+
+        return self.db.all(TAKES, args, back_as=dict)
 
     def get_team_take(self):
         """Return a single take for a team, the team itself's take.

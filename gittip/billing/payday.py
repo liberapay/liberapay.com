@@ -84,6 +84,9 @@ class NoPayday(Exception):
         return "No payday found where one was expected."
 
 
+LOOP_PAYIN, LOOP_PACHINKO, LOOP_PAYOUT = range(3)
+
+
 class Payday(object):
     """Represent an abstract event during which money is moved.
 
@@ -100,24 +103,30 @@ class Payday(object):
         self.db = db
 
 
-    def genparticipants(self, ts_start, for_payday):
-        """Generator to yield participants with tips and total.
+    def genparticipants(self, ts_start, loop):
+        """Generator to yield participants with extra info.
 
-        We re-fetch participants each time, because the second time through
-        we want to use the total obligations they have for next week, and
-        if we pass a non-False for_payday to get_tips_and_total then we
-        only get unfulfilled tips from prior to that timestamp, which is
-        none of them by definition.
-
-        If someone changes tips after payout starts, and we crash during
-        payout, then their new tips_and_total will be used on the re-run.
-        That's okay.
+        If someone changes tips or takes after payout starts, and we crash
+        during payout, then their new tips_and_total or takes will be used on
+        the re-run. That's okay. Why not?
 
         """
         for participant in self.get_participants(ts_start):
-            tips, total = participant.get_tips_and_total(for_payday=for_payday)
-            typecheck(total, Decimal)
-            yield(participant, tips, total)
+            if loop == LOOP_PAYIN:
+                extra = participant.get_tips_and_total(for_payday=ts_start)
+            elif loop == LOOP_PACHINKO:
+                extra = participant.get_current_takes(for_payday=ts_start)
+            elif loop == LOOP_PAYOUT:
+
+                # On the payout loop we want to use the total obligations they
+                # have for next week, and if we pass a non-False for_payday to
+                # get_tips_and_total then we only get unfulfilled tips from
+                # prior to that timestamp, which is none of them by definition.
+
+                extra = participant.get_tips_and_totals()
+            else:
+                raise Exception  # sanity check
+            yield(participant, extra)
 
 
     def run(self):
@@ -135,11 +144,11 @@ class Payday(object):
         ts_start = self.start()
         self.zero_out_pending(ts_start)
 
-        self.payin(ts_start, self.genparticipants(ts_start, ts_start))
+        self.payin(ts_start, self.genparticipants(ts_start, loop=LOOP_PAYIN))
         self.move_pending_to_balance_for_teams()
-        self.pachinko(ts_start, self.get_participants(ts_start))
+        self.pachinko(ts_start, self.genparticipants(ts_start, loop=LOOP_PACHINKO))
         self.clear_pending_to_balance()
-        self.payout(ts_start, self.genparticipants(ts_start, False))
+        self.payout(ts_start, self.genparticipants(ts_start, loop=LOOP_PAYOUT))
         self.set_nactive(ts_start)
 
         self.end()
@@ -226,7 +235,7 @@ class Payday(object):
         """
         i = 0
         log("Starting payin loop.")
-        for i, (participant, tips, total) in enumerate(participants, start=1):
+        for i, (participant, (tips, total)) in enumerate(participants, start=1):
             if i % 100 == 0:
                 log("Payin done for %d participants." % i)
             self.charge_and_or_transfer(ts_start, participant, tips, total)
@@ -235,7 +244,7 @@ class Payday(object):
 
     def pachinko(self, ts_start, participants):
         i = 0
-        for i, participant in enumerate(participants, start=1):
+        for i, (participant, takes) in enumerate(participants, start=1):
             if i % 100 == 0:
                 log("Pachinko done for %d participants." % i)
             if participant.number != 'plural' or participant.is_suspicious:
@@ -258,32 +267,6 @@ class Payday(object):
                         , pachinko=True
                          )
 
-            # Get the takes for this team, as they were before ts_start,
-            # filtering out the ones we've already transferred (in case payday
-            # is interrupted and restarted).
-            takes = self.db.all("""
-                SELECT member, amount, ctime, mtime
-                  FROM (
-                         SELECT DISTINCT ON (member) t.*
-                           FROM takes t
-                           JOIN participants p1 ON p1.username = member
-                          WHERE team=%(team)s
-                            AND mtime < %(ts_start)s
-                            AND p1.is_suspicious IS NOT TRUE
-                       ORDER BY member
-                              , mtime DESC
-                        ) t
-                 WHERE amount > 0
-                   AND ( SELECT id
-                           FROM transfers
-                          WHERE tipper=t.team
-                            AND tippee=t.member
-                            AND as_team_member IS true
-                            AND timestamp >= %(ts_start)s
-                        ) IS NULL
-              ORDER BY ctime DESC
-            """, dict(team=participant.username, ts_start=ts_start), back_as=dict)
-
             for take in takes:
                 amount = min(take['amount'], available)
                 available -= amount
@@ -299,7 +282,7 @@ class Payday(object):
         """
         i = 0
         log("Starting payout loop.")
-        for i, (participant, tips, total) in enumerate(participants, start=1):
+        for i, (participant, (tips, total)) in enumerate(participants, start=1):
             if i % 100 == 0:
                 log("Payout done for %d participants." % i)
             self.ach_credit(ts_start, participant, tips, total)
