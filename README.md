@@ -463,13 +463,21 @@ for your project!
  - [Node.js: Node-Gittip](https://npmjs.org/package/gittip) (also see [Khan
    Academy's setup](http://ejohn.org/blog/gittip-at-khan-academy/))
 
- - [Ruby: gratitude](https://github.com/JohnKellyFerguson/gratitude): A ruby gem that wraps the Gittip API (currently in development and not feature complete).
+ - [Ruby: gratitude](https://github.com/JohnKellyFerguson/gratitude): A ruby
+   gem that wraps the Gittip API (currently in development and not feature
+   complete).
 
  - [WordPress: WP-Gittip](https://github.com/daankortenbach/WP-Gittip)
 
- - [hubot-gittip](https://github.com/myplanetdigital/hubot-gittip): A Hubot script for interacting with a shared Gittip account.
+ - [hubot-gittip](https://github.com/myplanetdigital/hubot-gittip): A Hubot
+   script for interacting with a shared Gittip account.
 
- - [gittip-collab](https://github.com/engineyard/gittip-collab): A Khan-style tool for managing a Gittip account as a team.
+ - [gittip-collab](https://github.com/engineyard/gittip-collab): A Khan-style
+   tool for managing a Gittip account as a team.
+
+ - [WWW::Gittip](https://metacpan.org/release/SZABGAB/WWW-Gittip-0.01): A Perl module
+   implementing the Gittip API more or less
+
 
 Glossary
 ========
