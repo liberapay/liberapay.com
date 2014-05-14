@@ -115,5 +115,13 @@
     {% block scripts %}
 
     {% endblock %}
+
+    {% if not user.ANON and user.participant.credit_card_expiring(request, response) %}
+    <script>
+        $(document).ready(function () {
+            Gittip.notification("Your credit card is about to expire!", "error")
+        });
+    </script>
+    {% endif %}
 </body>
 </html>

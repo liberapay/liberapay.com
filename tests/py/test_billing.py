@@ -103,8 +103,8 @@ class TestStripeCard(Harness):
     def test_stripe_card_basically_works(self, sc):
         active_card = {}
         active_card['last4'] = '1234'
-        active_card['expiration_month'] = 10
-        active_card['expiration_year'] = 2020
+        active_card['exp_month'] = 10
+        active_card['exp_year'] = 2020
         active_card['address_line1'] = "123 Main Street"
         active_card['address_line2'] = "Box 2"
         active_card['address_state'] = "Confusion"
