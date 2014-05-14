@@ -49,7 +49,7 @@ ASCII_ALLOWED_IN_USERNAME = set("0123456789"
 
 NANSWERS_THRESHOLD = 0  # configured in wireup.py
 
-NOTIFIED_ABOUT_EXPIRATION = 'notifiedAboutExpiration'
+NOTIFIED_ABOUT_EXPIRATION = b'notifiedAboutExpiration'
 
 class Participant(Model, MixinTeam):
     """Represent a Gittip participant.
@@ -1082,7 +1082,7 @@ class Participant(Model, MixinTeam):
         if expiration_year and expiration_month:
             card_expiring = is_card_expiring(int(expiration_year), int(expiration_month))
 
-        response.headers.cookie[str(NOTIFIED_ABOUT_EXPIRATION)] = self.session_token
+        response.headers.cookie[NOTIFIED_ABOUT_EXPIRATION] = self.session_token
         return card_expiring
 
 
