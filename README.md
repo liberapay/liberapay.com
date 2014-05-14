@@ -475,7 +475,7 @@ for your project!
  - [gittip-collab](https://github.com/engineyard/gittip-collab): A Khan-style
    tool for managing a Gittip account as a team.
 
- - [WWW::Gittip](https://metacpan.org/release/SZABGAB/WWW-Gittip-0.01): A Perl module
+ - [WWW::Gittip](https://metacpan.org/pod/WWW::Gittip): A Perl module
    implementing the Gittip API more or less
 
 
