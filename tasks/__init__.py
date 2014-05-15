@@ -15,14 +15,17 @@ from gittip import wireup
         'overwrite': "Override existing PayPal email?",
     }
 )
-def set_paypal_email(username='', email='', api_key_fragment='', overwrite=False):
+def set_paypal_email(username='', email='', api_key_fragment='', overwrite=False, heroku=False):
     """
     Usage:
 
-    [gittip] $ env/bin/invoke set_paypal_email -u username -p user@example.com [-a 12e4s678] [--overwrite]
+    [gittip] $ env/bin/invoke set_paypal_email --username=username --email=user@example.com [--api-key-fragment=12e4s678] [--overwrite] [--heroku]
+
+    Use --heroku when running directly on heroku
     """
 
-    load_prod_envvars()
+    if not Heroku:
+        load_prod_envvars()
 
     if not username or not email:
         print(set_paypal_email.__doc__)
