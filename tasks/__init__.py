@@ -24,7 +24,7 @@ def set_paypal_email(username='', email='', api_key_fragment='', overwrite=False
     Use --heroku when running directly on heroku
     """
 
-    if not Heroku:
+    if not heroku:
         load_prod_envvars()
 
     if not username or not email:
