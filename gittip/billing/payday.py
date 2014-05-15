@@ -111,7 +111,8 @@ class Payday(object):
         the re-run. That's okay. Why not?
 
         """
-        for participant in self.get_participants(ts_start):
+        teams_only = (loop == LOOP_PACHINKO)
+        for participant in self.get_participants(ts_start, teams_only):
             if loop == LOOP_PAYIN:
                 extra = participant.get_tips_and_total(for_payday=ts_start)
             elif loop == LOOP_PACHINKO:
@@ -123,7 +124,7 @@ class Payday(object):
                 # get_tips_and_total then we only get unfulfilled tips from
                 # prior to that timestamp, which is none of them by definition.
 
-                extra = participant.get_tips_and_totals()
+                extra = participant.get_tips_and_total()
             else:
                 raise Exception  # sanity check
             yield(participant, extra)
@@ -214,7 +215,7 @@ class Payday(object):
         return None
 
 
-    def get_participants(self, ts_start):
+    def get_participants(self, ts_start, teams_only=False):
         """Given a timestamp, return a list of participants dicts.
         """
         PARTICIPANTS = """\
@@ -223,8 +224,9 @@ class Payday(object):
              WHERE claimed_time IS NOT NULL
                AND claimed_time < %s
                AND is_suspicious IS NOT true
+               {}
           ORDER BY claimed_time ASC
-        """
+        """.format(teams_only and "AND number = 'plural'" or '')
         participants = self.db.all(PARTICIPANTS, (ts_start,))
         log("Fetched participants.")
         return participants
@@ -247,8 +249,6 @@ class Payday(object):
         for i, (participant, takes) in enumerate(participants, start=1):
             if i % 100 == 0:
                 log("Pachinko done for %d participants." % i)
-            if participant.number != 'plural' or participant.is_suspicious:
-                continue
 
             available = participant.balance
             log("Pachinko out from %s with $%s." % ( participant.username
