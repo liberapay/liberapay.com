@@ -116,7 +116,7 @@ class Payday(object):
             if loop == LOOP_PAYIN:
                 extra = participant.get_tips_and_total(for_payday=ts_start)
             elif loop == LOOP_PACHINKO:
-                extra = participant.get_current_takes(for_payday=ts_start)
+                extra = participant.get_takes(for_payday=ts_start)
             elif loop == LOOP_PAYOUT:
 
                 # On the payout loop we want to use the total obligations they
