@@ -13,6 +13,7 @@ from gittip import wireup
         'email':    "PayPal email address. (required)",
         'api-key-fragment': "First 8 characters of user's API key.",
         'overwrite': "Override existing PayPal email?",
+        'heroku': "Configure task for running directly via `heroku run`.",
     }
 )
 def set_paypal_email(username='', email='', api_key_fragment='', overwrite=False, heroku=False):
