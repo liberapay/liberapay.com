@@ -106,9 +106,8 @@ class Payday(object):
     def genparticipants(self, ts_start, loop):
         """Generator to yield participants with extra info.
 
-        If someone changes tips or takes after payout starts, and we crash
-        during payout, then their new tips_and_total or takes will be used on
-        the re-run. That's okay. Why not?
+        The extra info varies depending on which loop we're in: tips/total for
+        payin and payout, takes for pachinko.
 
         """
         teams_only = (loop == LOOP_PACHINKO)
@@ -122,7 +121,8 @@ class Payday(object):
                 # On the payout loop we want to use the total obligations they
                 # have for next week, and if we pass a non-False for_payday to
                 # get_tips_and_total then we only get unfulfilled tips from
-                # prior to that timestamp, which is none of them by definition.
+                # prior to that timestamp, which is none of them by definition
+                # at this point since we just recently finished payin.
 
                 extra = participant.get_tips_and_total()
             else:
