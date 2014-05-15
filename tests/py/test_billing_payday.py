@@ -838,7 +838,8 @@ class TestPachinko(Harness):
         assert actual == expected
 
     def test_pachinko_pachinkos(self):
-        a_team = self.make_participant('a_team', claimed_time='now', number='plural', balance=20, pending=0)
+        a_team = self.make_participant('a_team', claimed_time='now', number='plural', balance=20, \
+                                                                                         pending=0)
         a_team.add_member(self.make_participant('alice', claimed_time='now', balance=0, pending=0))
         a_team.add_member(self.make_participant('bob', claimed_time='now', balance=0, pending=0))
 
@@ -846,3 +847,51 @@ class TestPachinko(Harness):
 
         participants = self.payday.genparticipants(ts_start, LOOP_PACHINKO)
         self.payday.pachinko(ts_start, participants)
+
+        assert Participant.from_username('alice').pending == D('0.01')
+        assert Participant.from_username('bob').pending == D('0.01')
+
+    def test_pachinko_sees_current_take(self):
+        a_team = self.make_participant('a_team', claimed_time='now', number='plural', balance=20, \
+                                                                                         pending=0)
+        alice = self.make_participant('alice', claimed_time='now', balance=0, pending=0)
+        a_team.add_member(alice)
+        a_team.set_take_for(alice, D('1.00'), alice)
+
+        ts_start = self.payday.start()
+
+        participants = self.payday.genparticipants(ts_start, LOOP_PACHINKO)
+        self.payday.pachinko(ts_start, participants)
+
+        assert Participant.from_username('alice').pending == D('1.00')
+
+    def test_pachinko_ignores_take_set_after_payday_starts(self):
+        a_team = self.make_participant('a_team', claimed_time='now', number='plural', balance=20, \
+                                                                                         pending=0)
+        alice = self.make_participant('alice', claimed_time='now', balance=0, pending=0)
+        a_team.add_member(alice)
+        a_team.set_take_for(alice, D('0.33'), alice)
+
+        ts_start = self.payday.start()
+        a_team.set_take_for(alice, D('1.00'), alice)
+
+        participants = self.payday.genparticipants(ts_start, LOOP_PACHINKO)
+        self.payday.pachinko(ts_start, participants)
+
+        assert Participant.from_username('alice').pending == D('0.33')
+
+    def test_pachinko_ignores_take_thats_already_been_processed(self):
+        a_team = self.make_participant('a_team', claimed_time='now', number='plural', balance=20, \
+                                                                                         pending=0)
+        alice = self.make_participant('alice', claimed_time='now', balance=0, pending=0)
+        a_team.add_member(alice)
+        a_team.set_take_for(alice, D('0.33'), alice)
+
+        ts_start = self.payday.start()
+        a_team.set_take_for(alice, D('1.00'), alice)
+
+        for i in range(4):
+            participants = self.payday.genparticipants(ts_start, LOOP_PACHINKO)
+            self.payday.pachinko(ts_start, participants)
+
+        assert Participant.from_username('alice').pending == D('0.33')
