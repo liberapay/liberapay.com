@@ -14,7 +14,6 @@ import datetime
 from decimal import Decimal
 import uuid
 
-from aspen import Response
 from aspen.utils import typecheck
 from postgres.orm import Model
 from psycopg2 import IntegrityError
@@ -35,7 +34,6 @@ from gittip.exceptions import (
 from gittip.models import add_event
 from gittip.models._mixin_team import MixinTeam
 from gittip.models.account_elsewhere import AccountElsewhere
-from gittip.utils import canonicalize
 from gittip.utils.username import gen_random_usernames, reserve_a_random_username
 from gittip import billing
 from gittip.utils import is_card_expiring
@@ -1117,44 +1115,3 @@ class NeedConfirmation(Exception):
 class LastElsewhere(Exception): pass
 
 class NonexistingElsewhere(Exception): pass
-
-
-def typecast(request):
-    """Given a Request, raise Response or return Participant.
-
-    If user is not None then we'll restrict access to owners and admins.
-
-    """
-
-    # XXX We can't use this yet because we don't have an inbound Aspen hook
-    # that fires after the first page of the simplate is exec'd.
-
-    path = request.line.uri.path
-    if 'username' not in path:
-        return
-
-    slug = path['username']
-
-    participant = request.website.db.one( """
-        SELECT participants.*::participants
-        FROM participants
-        WHERE username_lower=%s
-    """, (slug.lower()))
-
-    if participant is None:
-        raise Response(404)
-
-    canonicalize(request.line.uri.path.raw, '/', participant.username, slug)
-
-    if participant.claimed_time is None:
-
-        # This is a stub participant record for someone on another platform
-        # who hasn't actually registered with Gittip yet. Let's bounce the
-        # viewer over to the appropriate platform page.
-
-        to = participant.resolve_unclaimed()
-        if to is None:
-            raise Response(404)
-        request.redirect(to)
-
-    path['participant'] = participant
