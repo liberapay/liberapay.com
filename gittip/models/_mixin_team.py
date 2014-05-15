@@ -141,7 +141,6 @@ class MixinTeam(object):
         assert self.IS_PLURAL
 
         args = dict(team=self.username)
-        ts_filter = ""
 
         if for_payday:
             args['ts_start'] = for_payday
@@ -149,6 +148,18 @@ class MixinTeam(object):
             # Get the takes for this team, as they were before ts_start,
             # filtering out the ones we've already transferred (in case payday
             # is interrupted and restarted).
+
+            from_ = """(
+                 SELECT DISTINCT ON (member) t.*
+                   FROM takes t
+                   JOIN participants p1 ON p1.username = member
+                  WHERE team=%(team)s
+                    AND mtime < %(ts_start)s
+                    AND p1.is_suspicious IS NOT TRUE
+               ORDER BY member
+                      , mtime DESC
+            ) t
+            """
 
             ts_filter = """
                 AND mtime < %(ts_start)s
@@ -160,16 +171,19 @@ class MixinTeam(object):
                          AND timestamp >= %(ts_start)s
                      ) IS NULL
             """
+        else:
+            from_ = 'current_takes'
+            ts_filter = ""
 
         TAKES = """\
 
             SELECT member, amount, ctime, mtime
-              FROM current_takes
+              FROM {}
              WHERE team=%(team)s
                    {}
           ORDER BY ctime DESC
 
-        """.format(ts_filter)
+        """.format(from_, ts_filter)
 
         return self.db.all(TAKES, args, back_as=dict)
 
