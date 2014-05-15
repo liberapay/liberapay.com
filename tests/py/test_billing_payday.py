@@ -9,7 +9,7 @@ from psycopg2 import IntegrityError
 
 from aspen.utils import typecheck, utcnow
 from gittip import billing
-from gittip.billing.payday import Payday, skim_credit
+from gittip.billing.payday import Payday, skim_credit, LOOP_PACHINKO
 from gittip.models.participant import Participant
 from gittip.testing import Harness
 from gittip.testing.balanced import BalancedHarness
@@ -844,5 +844,5 @@ class TestPachinko(Harness):
 
         ts_start = self.payday.start()
 
-        participants = self.payday.get_participants(ts_start)
+        participants = self.payday.genparticipants(ts_start, LOOP_PACHINKO)
         self.payday.pachinko(ts_start, participants)
