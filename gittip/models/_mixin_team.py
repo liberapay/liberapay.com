@@ -149,41 +149,36 @@ class MixinTeam(object):
             # filtering out the ones we've already transferred (in case payday
             # is interrupted and restarted).
 
-            from_ = """(
-                 SELECT DISTINCT ON (member) t.*
-                   FROM takes t
-                   JOIN participants p1 ON p1.username = member
-                  WHERE team=%(team)s
-                    AND mtime < %(ts_start)s
-                    AND p1.is_suspicious IS NOT TRUE
-               ORDER BY member
-                      , mtime DESC
-            ) t
-            """
+            TAKES = """\
 
-            ts_filter = """
-                AND mtime < %(ts_start)s
-                AND ( SELECT id
-                        FROM transfers
-                       WHERE tipper=t.team
-                         AND tippee=t.member
-                         AND as_team_member IS true
-                         AND timestamp >= %(ts_start)s
-                     ) IS NULL
+                SELECT * FROM (
+                     SELECT DISTINCT ON (member) t.*
+                       FROM takes t
+                       JOIN participants p ON p.username = member
+                      WHERE team=%(team)s
+                        AND mtime < %(ts_start)s
+                        AND p.is_suspicious IS NOT true
+                        AND ( SELECT id
+                                FROM transfers
+                               WHERE tipper=t.team
+                                 AND tippee=t.member
+                                 AND as_team_member IS true
+                                 AND timestamp >= %(ts_start)s
+                             ) IS NULL
+                   ORDER BY member, mtime DESC
+                ) AS foo
+                ORDER BY ctime DESC
+
             """
         else:
-            from_ = 'current_takes'
-            ts_filter = ""
+            TAKES = """\
 
-        TAKES = """\
+                SELECT member, amount, ctime, mtime
+                  FROM current_takes
+                 WHERE team=%(team)s
+              ORDER BY ctime DESC
 
-            SELECT member, amount, ctime, mtime
-              FROM {}
-             WHERE team=%(team)s
-                   {}
-          ORDER BY ctime DESC
-
-        """.format(from_, ts_filter)
+            """
 
         return self.db.all(TAKES, args, back_as=dict)
 
