@@ -13,6 +13,7 @@ from gittip import wireup
         'email':    "PayPal email address. (required)",
         'api-key-fragment': "First 8 characters of user's API key.",
         'overwrite': "Override existing PayPal email?",
+        'heroku': "Configure task for running directly via `heroku run`.",
     }
 )
 def set_paypal_email(username='', email='', api_key_fragment='', overwrite=False, heroku=False):
@@ -24,7 +25,7 @@ def set_paypal_email(username='', email='', api_key_fragment='', overwrite=False
     Use --heroku when running directly on heroku
     """
 
-    if not Heroku:
+    if not heroku:
         load_prod_envvars()
 
     if not username or not email:
@@ -52,11 +53,19 @@ def set_paypal_email(username='', email='', api_key_fragment='', overwrite=False
         print("No Gittip participant found with username '" + username + "'")
         sys.exit(2)
 
+    # PayPal caps the MassPay fee at $20 for users outside the U.S., and $1 for
+    # users inside the U.S. Most Gittip users using PayPal are outside the U.S.
+    # so we set to $20 and I'll manually adjust to $1 when running MassPay and
+    # noticing that something is off.
+    FEE_CAP = ', paypal_fee_cap=20'
+
     if fields.paypal_email != None:
         print("PayPal email is already set to: " + fields.paypal_email)
         if not overwrite:
             print("Not overwriting existing PayPal email.")
             sys.exit(3)
+        else:
+            FEE_CAP = ''  # Don't overwrite fee_cap when overwriting email address.
 
     if fields.api_key == None:
         assert first_eight == "None"
@@ -67,9 +76,9 @@ def set_paypal_email(username='', email='', api_key_fragment='', overwrite=False
 
     SET_EMAIL = """
             UPDATE participants
-               SET paypal_email=%s
+               SET paypal_email=%s{}
              WHERE username=%s;
-    """
+    """.format(FEE_CAP)
     print(SET_EMAIL % (email, username))
 
     db.run(SET_EMAIL, (email, username))
