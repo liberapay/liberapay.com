@@ -163,4 +163,14 @@ Gittip.account.init = function() {
         return false;
     });
 
+
+    // Wire up cancel knob.
+    // ====================
+
+    $('.cancel form').submit(function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        if (confirm("Really cancel account!? This can't be undone!"))
+            window.location.href = './cancel';
+    });
 };

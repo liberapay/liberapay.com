@@ -184,6 +184,17 @@ locked = False
                 </td>
             </tr>
         </table>
+
+        <!-- Cancel Account! -->
+        <div class="cancel">
+          <h2>Cancel</h2>
+          <form action="./cancel" method="GET">
+            <div class="buttons">
+              <button class="cancel-account" type="submit">Cancel Account</button>
+            </div>
+          </form>
+        </div>
+
     </div>
 </div>
 {% endblock %}

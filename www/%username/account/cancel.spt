@@ -1,0 +1,57 @@
+from gittip.utils import get_participant
+[---]
+participant = get_participant(request, restrict=True)
+hero = "Cancel Account"
+title = participant.username      # used in the title tag
+username = participant.username   # used in footer shared with on/$platform/
+                                  # pages
+
+can_upstream = participant.get_dollars_receiving() > 0
+can_downstream = participant.get_dollars_giving() > 0
+
+if POST:
+    final_disbursement_option = request.body['final_disbursement_option']
+    participant.cancel(final_disbursement_option)
+    request.redirect('/')
+[---] text/html
+{% extends "templates/base.html" %}
+
+{% block heading %}
+    <h2 class="top"><span>Cancel Account</span></h2>
+{% endblock %}
+
+{% block box %}
+    <div class="on-form">
+        <form method="POST">
+            <div class="constrain-width group" style="margin-top: 35px;">
+                {% if participant.balance > 0 %}
+                <p>You have a balance of ${{ participant.balance }}.
+                   What should we do with it?</p>
+
+                <ul>
+                    <li><input type="radio" name="final_disbursement_option" id="r2"
+                         value="bank" checked />
+                        <label for="r2">Send it to my bank account</label></li>
+                    <li><input type="radio" name="final_disbursement_option" id="r3"
+                         value="upstream" {{ 'disabled' if not can_upstream }} />
+                        <label for="r3">Refund it to my patrons</label></li>
+                    <li><input type="radio" name="final_disbursement_option" id="r4"
+                         value="downstream" {{ 'disabled' if not can_downstream }} />
+                        <label for="r4">Give it to my tippees</label></li>
+                </ul>
+                {% endif %}
+                <p>Here's what we'll do when you cancel your account:</p>
+                <ul>
+                    <li>Turn off all tips you are currently receiving.</li>
+                    <li>Zero out all tips you are currently receiving.</li>
+                    <li>Make it so there are no more you are currently receiving.</li>
+                </ul>
+            </div>
+            <div class="nav level-1">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <button class="selected larger cancel-account" id="save"
+                    type="submit">Cancel My Gittip Account</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
