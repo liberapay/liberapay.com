@@ -84,14 +84,12 @@ class TestPages(Harness):
     def test_bank_account_complete(self):
         assert self.client.GxT('/bank-account-complete.html').code == 404
 
-    def test_ways_to_help(self):
-        actual = self.client.GET('/for/contributors/ways-to-help/').body.decode('utf8')
-        assert 'Ways to Help' in actual
+    def test_for_contributors_redirects_to_building_gittip(self):
+        assert self.client.GxT('/for/contributors/').headers['Location'] == \
+                                                                      'http://building.gittip.com/'
 
-        # The regression I'm seeing in #1824 actually has 'Ways to Help' in the
-        # traceback, so let's also test 'For Contributors'.
-
-        assert 'For Contributors' in actual
+    def test_mission_statement_also_redirects(self):
+        assert self.client.GxT('/for/contributors/mission-statement.html').code == 302
 
     def test_bank_account_json(self):
         assert self.client.GxT('/bank-account.json').code == 404
