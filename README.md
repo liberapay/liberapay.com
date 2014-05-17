@@ -464,8 +464,7 @@ for your project!
    Academy's setup](http://ejohn.org/blog/gittip-at-khan-academy/))
 
  - [Ruby: gratitude](https://github.com/JohnKellyFerguson/gratitude): A ruby
-   gem that wraps the Gittip API (currently in development and not feature
-   complete).
+   gem that wraps the Gittip API.
 
  - [WordPress: WP-Gittip](https://github.com/daankortenbach/WP-Gittip)
 
