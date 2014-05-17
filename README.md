@@ -477,6 +477,8 @@ for your project!
  - [WWW::Gittip](https://metacpan.org/pod/WWW::Gittip): A Perl module
    implementing the Gittip API more or less
 
+ - [php-curl-class](https://github.com/php-curl-class/php-curl-class/blob/master/examples/gittip_send_tip.php): A php class to tip using the Gittip API.
+
 
 Glossary
 ========
