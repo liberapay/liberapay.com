@@ -7,6 +7,8 @@ from aspen import Response
 from urllib import urlencode
 from base64 import b64decode, b64encode
 
+from gittip.models.account_elsewhere import get_account_elsewhere
+
 whitelisted_endpoints = ['public', 'charts']
 
 callback_pattern = re.compile(r'^[_A-Za-z0-9.]+$')
@@ -23,17 +25,11 @@ def stringify_qs(qs, prefix='?'):
 
 [-----------------------------------------------------------------------------]
 
-platform = getattr(website.platforms, path['platform'], None)
-if platform is None:
-    raise Response(404)
-
 endpoint = path['endpoint']
 if not endpoint in whitelisted_endpoints:
     raise Response(404)
 
-account = platform.get_account(path['user_name'])
-if account is None:
-    raise Response(404)
+platform, account = get_account_elsewhere(request)
 
 if account.participant.is_claimed:
     next_url = '/%s/%s.json' % (account.participant.username, endpoint)

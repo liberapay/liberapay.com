@@ -4,6 +4,7 @@ import json
 from aspen import log, resources, Response
 
 from gittip import canonical_scheme, canonical_host
+from gittip.models.account_elsewhere import AccountElsewhere
 from gittip.models.participant import NeedConfirmation
 
 [-----------------------------]
@@ -28,7 +29,7 @@ url = canonical_scheme+'://'+canonical_host+request.line.uri.raw
 sess = platform.handle_auth_callback(url, query_id, query_data)
 
 # Get the user's info from the platform's API and upsert it in the DB
-account = platform.upsert(platform.get_user_self_info(sess))
+account = AccountElsewhere.upsert(platform.get_user_self_info(sess))
 
 if action_user_name and account.user_name != action_user_name:
     claimed_account = platform.upsert(platform.get_user_info(action_user_name))
