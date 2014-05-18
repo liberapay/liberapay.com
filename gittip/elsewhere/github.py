@@ -11,6 +11,7 @@ class GitHub(PlatformOAuth2):
     name = 'github'
     display_name = 'GitHub'
     account_url = 'https://github.com/{user_name}'
+    allows_team_connect = True
 
     # Auth attributes
     auth_url = 'https://github.com/login/oauth'

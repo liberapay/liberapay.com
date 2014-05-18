@@ -22,7 +22,7 @@ title = username = user_name = account.user_name
 locked = account.is_locked
 participant = account.participant
 is_team = account.is_team
-allow_pledges = not locked and (not is_team or hasattr(platform, 'is_team_admin'))
+allow_pledges = not locked and (not is_team or platform.allows_team_connect)
 
 if is_team:
     page_url = b64decode(qs.get('page', ''))
@@ -34,7 +34,7 @@ if is_team:
         team_description = 'is a big team'
     else:
         team_description = 'is a team with'
-    allow_team_connect = hasattr(platform, 'is_team_admin')
+    allow_team_connect = platform.allows_team_connect
     if user.ANON or not user.participant.IS_PLURAL:
         allow_team_connect = False
     if allow_team_connect:

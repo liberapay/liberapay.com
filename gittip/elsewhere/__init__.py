@@ -62,6 +62,8 @@ class UserInfo(object):
 
 class Platform(object):
 
+    allows_team_connect = False
+
     # "x" stands for "extract"
     x_user_info = not_available
     x_user_id = not_available
