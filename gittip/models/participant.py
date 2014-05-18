@@ -939,7 +939,7 @@ class Participant(Model, MixinTeam):
 
             if rec.is_team and we_already_have_that_kind_of_account:
                 if len(self.get_accounts_elsewhere()) == 1:
-                    raise Response(400)
+                    raise TeamCantBeOnlyAuth
 
             need_confirmation = NeedConfirmation( other_is_a_real_participant
                                                 , this_is_others_last_account_elsewhere
@@ -1121,3 +1121,5 @@ class NeedConfirmation(Exception):
 class LastElsewhere(Exception): pass
 
 class NonexistingElsewhere(Exception): pass
+
+class TeamCantBeOnlyAuth(Exception): pass
