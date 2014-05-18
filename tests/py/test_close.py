@@ -331,12 +331,12 @@ class TestClosing(Harness):
         bob = self.make_participant('bob', claimed_time='now')
         team.add_member(bob)
 
-        assert len(team.get_takes()) == 2  # sanity check
+        assert len(team.get_current_takes()) == 2  # sanity check
 
         with self.db.get_cursor() as cursor:
             alice.clear_personal_information(cursor)
 
-        assert len(team.get_takes()) == 1
+        assert len(team.get_current_takes()) == 1
 
 
     # uic = update_is_closed
