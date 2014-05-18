@@ -158,6 +158,9 @@ Gittip.profile.init = function() {
     }
 
 
+    // Wire up bitcoin input.
+    // ======================
+
     $('.bitcoin').on("click", ".toggle-bitcoin", function()
     {
         // "Add bitcoin address" text or existing
@@ -165,8 +168,6 @@ Gittip.profile.init = function() {
         $('.bitcoin').toggle();
         $('input.bitcoin').focus();
     });
-
-    // Wire up bitcoin input.
     $('.bitcoin-submit')
         .on('click', '[type=submit]', function () {
             var $this = $(this);
@@ -231,6 +232,15 @@ Gittip.profile.init = function() {
         });
 
         return false;
+    });
+
+    // Wire up user_name_prompt
+    // ========================
+
+    $('.user_name_prompt').on('click', function () {
+        var user_name = prompt('Please enter the name of the GitHub account you would like to connect:');
+        if(!user_name) return false;
+        $(this).children('[name="user_name"]').val(user_name);
     });
 
 };

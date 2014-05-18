@@ -886,6 +886,7 @@ class Participant(Model, MixinTeam):
 
                 SELECT participant
                      , claimed_time IS NULL AS is_stub
+                     , is_team
                   FROM elsewhere
                   JOIN participants ON participant=participants.username
                  WHERE elsewhere.platform=%s AND elsewhere.user_id=%s
@@ -935,6 +936,10 @@ class Participant(Model, MixinTeam):
                                        )
             assert nparticipants in (0, 1)  # sanity check
             we_already_have_that_kind_of_account = nparticipants == 1
+
+            if rec.is_team and we_already_have_that_kind_of_account:
+                if len(self.get_accounts_elsewhere()) == 1:
+                    raise Response(400)
 
             need_confirmation = NeedConfirmation( other_is_a_real_participant
                                                 , this_is_others_last_account_elsewhere
@@ -1048,6 +1053,7 @@ class Participant(Model, MixinTeam):
                   FROM elsewhere
                  WHERE participant=%s
                    AND platform IN %s
+                   AND NOT is_team
             """, (self.username, AccountElsewhere.signin_platforms_names))
             assert len(accounts) > 0
             if len(accounts) == 1 and accounts[0] == (platform, user_id):

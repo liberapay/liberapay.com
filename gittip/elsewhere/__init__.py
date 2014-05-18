@@ -62,6 +62,8 @@ class UserInfo(object):
 
 class Platform(object):
 
+    allows_team_connect = False
+
     # "x" stands for "extract"
     x_user_info = not_available
     x_user_id = not_available
@@ -296,6 +298,13 @@ class Platform(object):
                                 (participant, platform, {0})
                          VALUES (%s, %s, {1})
                 """.format(cols, placeholders), (username, self.name)+vals)
+                # Propagate elsewhere.is_team to participants.number
+                if i.is_team:
+                    cursor.execute("""
+                        UPDATE participants
+                           SET number = 'plural'::participant_number
+                         WHERE username = %s
+                    """, (username,))
         except IntegrityError:
             # The account is already in the DB, update it instead
             username = self.db.one("""

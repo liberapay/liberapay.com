@@ -31,13 +31,19 @@ sess = platform.handle_auth_callback(url, query_id, query_data)
 account = platform.upsert(platform.get_user_self_info(sess))
 
 if action_user_name and account.user_name != action_user_name:
-    then = '/on/%s/%s/failure.html?action=%s'
-    request.redirect(then % (platform.name, action_user_name, action))
+    claimed_account = platform.upsert(platform.get_user_info(action_user_name))
+    if not claimed_account.is_team:
+        then = '/on/%s/%s/failure.html?action=%s'
+        request.redirect(then % (platform.name, action_user_name, action))
+    if not platform.is_team_admin(claimed_account.user_name, sess):
+        then = '/on/%s/%s/failure.html?action=%s&team=true'
+        request.redirect(then % (platform.name, action_user_name, action))
+    account = claimed_account
 
 log('%s user "%s" wants to %s' % (platform.name, account.user_name, action))
 
 if action == 'opt-in':
-    if platform not in website.signin_platforms:
+    if platform not in website.signin_platforms or account.is_team:
         raise Response(400)
     # set 'user' to give them a session :/
     user, newly_claimed = account.opt_in(account.user_name)

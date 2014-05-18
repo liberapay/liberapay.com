@@ -11,10 +11,12 @@ class GitHub(PlatformOAuth2):
     name = 'github'
     display_name = 'GitHub'
     account_url = 'https://github.com/{user_name}'
+    allows_team_connect = True
 
     # Auth attributes
     auth_url = 'https://github.com/login/oauth'
     oauth_email_scope = 'user:email'
+    oauth_default_scope = ['read:org']
 
     # API attributes
     api_format = 'json'
@@ -33,3 +35,9 @@ class GitHub(PlatformOAuth2):
     x_gravatar_id = key('gravatar_id')
     x_avatar_url = key('avatar_url')
     x_is_team = key('type', clean=lambda t: t.lower() == 'organization')
+
+    def is_team_admin(self, team_name, sess):
+        user_teams = self.api_parser(self.api_get('/user/teams', sess=sess))
+        return any(team.get('organization', {}).get('login') == team_name and
+                   team.get('permission') == 'admin'
+                   for team in user_teams)
