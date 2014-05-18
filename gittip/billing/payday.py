@@ -160,11 +160,6 @@ class Payday(object):
         _end = aspen.utils.utcnow()
         _delta = _end - _start
         fmt_past = "Script ran for {age} (%s)." % _delta
-
-        # XXX For some reason newer versions of aspen use old string
-        # formatting, so if/when we upgrade this will break. Why do we do that
-        # in aspen, anyway?
-
         log(aspen.utils.to_age(_start, fmt_past=fmt_past))
 
 
