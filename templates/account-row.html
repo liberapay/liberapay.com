@@ -16,7 +16,7 @@
                 <span class="none">None</span>
             {% else %}
                 <a class="account-username" rel="me" href="{{ account.html_url|e }}"
-                    >{{ account.user_name|e }}
+                    >{{ (account.user_name or account.user_id)|e }}
                     {% if account.display_name and account.display_name != account.user_name %}
                         ({{ account.display_name|e }})
                     {% endif %}

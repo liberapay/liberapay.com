@@ -5,15 +5,11 @@ from base64 import b64decode, b64encode
 
 from aspen import Response
 
+from gittip.models.account_elsewhere import *
+
 [-----------------------------------------------------------------------------]
 
-platform = getattr(website.platforms, path['platform'], None)
-if platform is None:
-    raise Response(404)
-
-account = platform.get_account(path['user_name'])
-if account is None:
-    raise Response(404)
+platform, account = get_account_elsewhere(request)
 
 if account.participant.is_claimed:
     request.redirect('/%s/' % account.participant.username)
@@ -27,6 +23,7 @@ allow_pledges = not locked and (not is_team or platform.allows_team_connect)
 if is_team:
     page_url = b64decode(qs.get('page', ''))
     members, nmembers, pages_urls = platform.get_team_members(user_name, page_url)
+    members = AccountElsewhere.get_many(platform.name, members)
     if not members:
         nmembers = 0
         team_description = 'is a private team'
