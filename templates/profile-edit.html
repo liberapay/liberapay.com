@@ -113,22 +113,6 @@
     <!-- Connected Accounts -->
     {% include "templates/connected-accounts.html" %}
 
-    <h2>Privacy</h2>
-    <table id="dnt">
-        <tr>
-            <td class="dnt-label">
-                <a href="/about/privacy/#dnt">DNT</a>
-            </td>
-            <td class="dnt-value">
-                {% if request.headers.get('DNT') == '1' %}
-                ON
-                {% else %}
-                OFF
-                {% endif %}
-            </td>
-        </tr>
-    </table>
-
 </div>
 <div class="clear"></div>
 
