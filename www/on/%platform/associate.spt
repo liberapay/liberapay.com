@@ -32,7 +32,7 @@ sess = platform.handle_auth_callback(url, query_id, query_data)
 account = AccountElsewhere.upsert(platform.get_user_self_info(sess))
 
 if action_user_name and account.user_name != action_user_name:
-    claimed_account = platform.upsert(platform.get_user_info(action_user_name))
+    claimed_account = AccountElsewhere.upsert(platform.get_user_info(action_user_name))
     if not claimed_account.is_team:
         then = '/on/%s/%s/failure.html?action=%s'
         request.redirect(then % (platform.name, action_user_name, action))
