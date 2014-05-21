@@ -1325,3 +1325,11 @@ END;
 BEGIN;
     ALTER TABLE participants ADD CONSTRAINT participants_api_key UNIQUE (api_key);
 END;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/pull/2418
+
+BEGIN;
+    ALTER TABLE elsewhere ALTER COLUMN user_name DROP NOT NULL;
+END;
