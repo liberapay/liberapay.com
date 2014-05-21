@@ -106,10 +106,10 @@ met](http://initd.org/psycopg/docs/faq.html#problems-compiling-and-deploying-psy
 If you are getting an error about `unknown argument: '-mno-fused-madd'` when
 running `make`, then add
 `Wno-error=unused-command-line-argument-hard-error-in-future` to your
-`ARCHFLAGS` environment variable and try again (see [this Stack Overflow answer
+`ARCHFLAGS` environment variable and run `make clean env` again (see [this Stack Overflow answer
 for more information](http://stackoverflow.com/a/22355874/347246)):
 
-    $ ARCHFLAGS=-Wno-error=unused-command-line-argument-hard-error-in-future
+    $ ARCHFLAGS=-Wno-error=unused-command-line-argument-hard-error-in-future make clean env
 
 Building
 --------
