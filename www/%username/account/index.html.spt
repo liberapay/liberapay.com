@@ -169,6 +169,21 @@ locked = False
           <a href="https://github.com/gittip/www.gittip.com#api">API docs</a>
         </div>
 
+        <h2>Privacy</h2>
+        <table id="dnt">
+            <tr>
+                <td class="dnt-label">
+                    <a href="/about/privacy/#dnt">Do Not Track</a>
+                </td>
+                <td class="dnt-value">
+                    {% if request.headers.get('DNT') == '1' %}
+                    ON
+                    {% else %}
+                    OFF
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
     </div>
 </div>
 {% endblock %}
