@@ -116,7 +116,7 @@ else:
         to pledge tips to you on Gittip.</p>
     {% endif %}
 
-    {% call auth_button(platform.name, 'unlock', path['user_name']) %}
+    {% call auth_button(platform.name, 'unlock', user_name) %}
         Unlock
     {% endcall %}
 
@@ -126,7 +126,7 @@ else:
         <h2>{{ user_name|e }} has not joined Gittip.</h2>
         <p>Are you an administrator of this {{ platform.display_name }} team
         account? Connect it to your Gittip account.</p>
-        {% call auth_button(platform.name, 'connect', path['user_name']) %}
+        {% call auth_button(platform.name, 'connect', user_name) %}
             Connect team account
         {% endcall %}
     {% endif %}
@@ -138,12 +138,12 @@ else:
     {% if platform in website.signin_platforms or not user.ANON %}
         {% if user.ANON %}
             <p>Is this you? We never collect money for you unless you join.</p>
-            {% call auth_button(platform.name, 'opt-in', path['user_name']) %}
+            {% call auth_button(platform.name, 'opt-in', user_name) %}
                 Join Gittip
             {% endcall %}
         {% else %}
             <p>Is this yours? Connect it to your Gittip account.</p>
-            {% call auth_button(platform.name, 'connect', path['user_name']) %}
+            {% call auth_button(platform.name, 'connect', user_name) %}
                 Connect
             {% endcall %}
         {% endif %}
@@ -169,7 +169,7 @@ else:
     explicitly opt out of Gittip by locking it. We don't allow new pledges to
     locked accounts.</p>
 
-    {% call auth_button(platform.name, 'lock', path['user_name']) %}
+    {% call auth_button(platform.name, 'lock', user_name) %}
         Lock
     {% endcall %}
 
