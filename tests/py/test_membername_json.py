@@ -105,3 +105,9 @@ class TestMembernameJson(Harness):
         assert response.code == 200
         assert data['username'] == 'alice'
         assert data['take'] == '0.01'
+
+    def test_preclude_adding_stub_participants(self):
+        self.make_participant("stub")
+        response = self.client.PxST('/team/members/stub.json', {'take': '0.01'}, auth_as='team')
+
+        assert response.code == 403

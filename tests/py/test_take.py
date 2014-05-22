@@ -44,7 +44,7 @@ class Tests(Harness):
 
     def test_team_member_is_team_member(self):
         team = self.make_team()
-        alice = self.make_participant('alice')
+        alice = self.make_participant('alice', claimed_time='now')
         team.add_member(alice)
         assert alice.member_of(team)
 
@@ -76,14 +76,14 @@ class Tests(Harness):
 
     def test_if_last_week_is_less_than_a_dollar_can_increase_to_a_dollar(self):
         team = self.make_team()
-        alice = self.make_participant('alice', take_last_week='0.01')
+        alice = self.make_participant('alice', take_last_week='0.01', claimed_time='now')
         team.add_member(alice)
         actual = team.set_take_for(alice, D('42.00'), team)
         assert actual == 1
 
     def test_get_members(self):
         team = self.make_team()
-        alice = self.make_participant('alice')
+        alice = self.make_participant('alice', claimed_time='now')
         team.add_member(alice)
         team.set_take_for(alice, D('42.00'), team)
         members = team.get_members(alice)

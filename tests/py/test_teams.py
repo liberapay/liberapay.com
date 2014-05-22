@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+from gittip.models._mixin_team import StubParticipantAdded
 
 from gittip.testing import Harness
 from gittip.security.user import User
@@ -22,19 +23,19 @@ class Tests(Harness):
 
     def test_show_as_team_to_team_member(self):
         self.make_participant('alice')
-        self.team.add_member(self.make_participant('bob'))
+        self.team.add_member(self.make_participant('bob', claimed_time='now'))
         user = User.from_username('bob')
         assert self.team.show_as_team(user)
 
     def test_show_as_team_to_non_team_member(self):
         self.make_participant('alice')
-        self.team.add_member(self.make_participant('bob'))
+        self.team.add_member(self.make_participant('bob', claimed_time='now'))
         user = User.from_username('alice')
         assert self.team.show_as_team(user)
 
     def test_show_as_team_to_anon(self):
         self.make_participant('alice')
-        self.team.add_member(self.make_participant('bob'))
+        self.team.add_member(self.make_participant('bob', claimed_time='now'))
         assert self.team.show_as_team(User())
 
     def test_dont_show_individuals_as_team(self):
@@ -59,20 +60,24 @@ class Tests(Harness):
         self.make_participant('Admin', is_admin=True)
         assert group.show_as_team(User.from_username('Admin'))
 
-
     def test_can_add_members(self):
-        alice = self.make_participant('alice')
+        alice = self.make_participant('alice', claimed_time='now')
         expected = True
         self.team.add_member(alice)
         actual = alice.member_of(self.team)
         assert actual == expected
 
     def test_get_teams_for_member(self):
-        alice = self.make_participant('alice')
-        bob = self.make_participant('bob')
+        alice = self.make_participant('alice', claimed_time='now')
+        bob = self.make_participant('bob', claimed_time='now')
         team = self.make_participant('B-Team', number='plural')
         self.team.add_member(alice)
         team.add_member(bob)
         expected = 1
         actual = alice.get_teams().pop().nmembers
         assert actual == expected
+
+    def test_preclude_adding_stub_participant(self):
+        stub_participant = self.make_participant('stub')
+        with self.assertRaises(StubParticipantAdded):
+            self.team.add_member(stub_participant)

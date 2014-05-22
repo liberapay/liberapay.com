@@ -26,3 +26,11 @@ class TestLookupJson(Harness):
 
         assert len(data) == 1
         assert data[0]['id'] != -1
+
+    def test_get_stub_user(self):
+        self.make_participant("alice")
+        response = self.client.GET('/lookup.json?query={}'.format('a'))
+        data = json.loads(response.body)
+
+        assert len(data) == 1
+        assert data[0]['id'] == -1
