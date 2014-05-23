@@ -22,12 +22,14 @@ import pytz
 import gittip
 from gittip import NotSane
 from gittip.exceptions import (
+    HasBigTips,
     UsernameIsEmpty,
     UsernameTooLong,
     UsernameContainsInvalidCharacters,
     UsernameIsRestricted,
     UsernameAlreadyTaken,
     NoSelfTipping,
+    NoTippee,
     BadAmount,
 )
 
@@ -180,10 +182,24 @@ class Participant(Model, MixinTeam):
 
     def update_number(self, number):
         assert number in ('singular', 'plural')
+        if number == 'singular':
+            nbigtips = self.db.one("""\
+                SELECT count(*) FROM current_tips WHERE tippee=%s AND amount > %s
+            """, (self.username, gittip.MAX_TIP_SINGULAR))
+            if nbigtips > 0:
+                raise HasBigTips
         self.db.run( "UPDATE participants SET number=%s WHERE id=%s"
                    , (number, self.id)
                     )
         self.set_attributes(number=number)
+
+
+    # Statement
+    # =========
+
+    def update_statement(self, statement):
+        self.db.run("UPDATE participants SET statement=%s WHERE id=%s", (statement, self.id))
+        self.set_attributes(statement=statement)
 
 
     # API Key
@@ -372,8 +388,13 @@ class Participant(Model, MixinTeam):
         if self.username == tippee:
             raise NoSelfTipping
 
+        tippee = Participant.from_username(tippee)
+        if tippee is None:
+            raise NoTippee
+
         amount = Decimal(amount)  # May raise InvalidOperation
-        if (amount < gittip.MIN_TIP) or (amount > gittip.MAX_TIP):
+        max_tip = gittip.MAX_TIP_PLURAL if tippee.IS_PLURAL else gittip.MAX_TIP_SINGULAR
+        if (amount < gittip.MIN_TIP) or (amount > max_tip):
             raise BadAmount
 
         NEW_TIP = """\
@@ -391,8 +412,8 @@ class Participant(Model, MixinTeam):
                      AS first_time_tipper
 
         """
-        args = (self.username, tippee, self.username, tippee, amount, \
-                                                                 self.username)
+        args = (self.username, tippee.username, self.username, tippee.username, amount, \
+                                                                                     self.username)
         first_time_tipper = self.db.one(NEW_TIP, args)
         return amount, first_time_tipper
 
@@ -554,6 +575,7 @@ class Participant(Model, MixinTeam):
                      , t.ctime
                      , p.claimed_time
                      , p.username_lower
+                     , p.number
                   FROM tips t
                   JOIN participants p ON p.username = t.tippee
                  WHERE tipper = %s

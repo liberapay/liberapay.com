@@ -63,10 +63,15 @@ Gittip.profile.init = function() {
             Gittip.profile.toNumber(number);
             finish_editing_statement();
         }
+        function error(e) {
+            $('.statement button.save').text('Save');
+            Gittip.notification(JSON.parse(e.responseText).error_message_long, 'error');
+        }
         jQuery.ajax(
             { url: "statement.json"
             , type: "POST"
             , success: success
+            , error: error
             , data: { statement: $('.statement textarea').val()
                     , number: $('.statement select').val()
                      }
