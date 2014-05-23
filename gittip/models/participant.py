@@ -182,6 +182,10 @@ class Participant(Model, MixinTeam):
 
     def update_number(self, number):
         assert number in ('singular', 'plural')
+        tips_receiving = self.get_tip_distribution()[0]
+        if tips_receiving:
+            if tips_receiving[-1][0] > gittip.MAX_TIP_SINGULAR:
+                raise HasBigTips
         self.db.run( "UPDATE participants SET number=%s WHERE id=%s"
                    , (number, self.id)
                     )
