@@ -182,14 +182,24 @@ class Participant(Model, MixinTeam):
 
     def update_number(self, number):
         assert number in ('singular', 'plural')
-        tips_receiving = self.get_tip_distribution()[0]
-        if tips_receiving:
-            if tips_receiving[-1][0] > gittip.MAX_TIP_SINGULAR:
+        if number == 'singular':
+            nbigtips = self.db.one("""\
+                SELECT count(*) FROM current_tips WHERE tippee=%s AND amount > %s
+            """, (self.username, gittip.MAX_TIP_SINGULAR))
+            if nbigtips > 0:
                 raise HasBigTips
         self.db.run( "UPDATE participants SET number=%s WHERE id=%s"
                    , (number, self.id)
                     )
         self.set_attributes(number=number)
+
+
+    # Statement
+    # =========
+
+    def update_statement(self, statement):
+        self.db.run("UPDATE participants SET statement=%s WHERE id=%s", (statement, self.id))
+        self.set_attributes(statement=statement)
 
 
     # API Key

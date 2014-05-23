@@ -16,13 +16,7 @@ if number not in ("singular", "plural"):
     raise Response(400)
 
 if number != user.participant.number:
-    website.db.run( "UPDATE participants SET statement=%s, number=%s "
-            "WHERE username=%s"
-          , (statement, number, user.participant.username)
-           )
-else:
-    website.db.run( "UPDATE participants SET statement=%s WHERE username=%s"
-          , (statement, user.participant.username)
-           )
+    user.participant.update_number(number)
+user.participant.update_statement(statement)
 
 response.body = {"statement": wrap(statement), "number": wrap(number)}

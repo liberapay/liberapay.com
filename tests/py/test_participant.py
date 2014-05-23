@@ -384,6 +384,8 @@ class Tests(Harness):
     def test_cant_go_singular_with_big_tips(self):
         alice = self.make_participant('alice', last_bill_result='')
         bob = self.make_participant('bob', number='plural')
+        carl = self.make_participant('carl')
+        carl.set_tip_to('bob', '100.00')
         alice.set_tip_to('bob', '1000.00')
         pytest.raises(HasBigTips, bob.update_number, 'singular')
 
