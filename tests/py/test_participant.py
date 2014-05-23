@@ -406,7 +406,7 @@ class Tests(Harness):
         self.assertRaises( NoSelfTipping
                          , alice.set_tip_to
                          , 'alice'
-                         , '1000000.00'
+                         , '10.00'
                           )
 
     def test_stt_doesnt_allow_just_any_ole_amount(self):
