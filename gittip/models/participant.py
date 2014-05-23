@@ -22,6 +22,7 @@ import pytz
 import gittip
 from gittip import NotSane
 from gittip.exceptions import (
+    HasBigTips,
     UsernameIsEmpty,
     UsernameTooLong,
     UsernameContainsInvalidCharacters,

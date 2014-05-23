@@ -9,6 +9,7 @@ import pytest
 from aspen.utils import utcnow
 from gittip import NotSane
 from gittip.exceptions import (
+    HasBigTips,
     UsernameIsEmpty,
     UsernameTooLong,
     UsernameAlreadyTaken,
@@ -376,6 +377,15 @@ class Tests(Harness):
     def test_participant_gets_a_long_id(self):
         actual = type(self.make_participant('alice').id)
         assert actual == long
+
+
+    # number
+
+    def test_cant_go_singular_with_big_tips(self):
+        alice = self.make_participant('alice', last_bill_result='')
+        bob = self.make_participant('bob', number='plural')
+        alice.set_tip_to('bob', '1000.00')
+        pytest.raises(HasBigTips, bob.update_number, 'singular')
 
 
     # set_tip_to - stt
