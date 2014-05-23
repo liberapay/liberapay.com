@@ -415,7 +415,22 @@ class Tests(Harness):
         self.assertRaises( BadAmount
                          , alice.set_tip_to
                          , 'bob'
-                         , '1000000.00'
+                         , '1000.00'
+                          )
+
+    def test_stt_allows_higher_tip_to_plural_receiver(self):
+        alice = self.make_participant('alice', last_bill_result='')
+        self.make_participant('bob', number='plural')
+        actual = alice.set_tip_to('bob', '1000.00')
+        assert actual == (Decimal('1000.00'), False)
+
+    def test_stt_still_caps_tips_to_plural_receivers(self):
+        alice = self.make_participant('alice', last_bill_result='')
+        self.make_participant('bob', number='plural')
+        self.assertRaises( BadAmount
+                         , alice.set_tip_to
+                         , 'bob'
+                         , '1000.01'
                           )
 
     def test_stt_fails_to_tip_unknown_people(self):
