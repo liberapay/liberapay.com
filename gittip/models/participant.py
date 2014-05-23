@@ -28,6 +28,7 @@ from gittip.exceptions import (
     UsernameIsRestricted,
     UsernameAlreadyTaken,
     NoSelfTipping,
+    NoTippee,
     BadAmount,
 )
 
@@ -372,8 +373,13 @@ class Participant(Model, MixinTeam):
         if self.username == tippee:
             raise NoSelfTipping
 
+        tippee = Participant.from_username(tippee)
+        if tippee is None:
+            raise NoTippee
+
         amount = Decimal(amount)  # May raise InvalidOperation
-        if (amount < gittip.MIN_TIP) or (amount > gittip.MAX_TIP):
+        max_tip = gittip.MAX_TIP_PLURAL if tippee.IS_PLURAL else gittip.MAX_TIP_SINGULAR
+        if (amount < gittip.MIN_TIP) or (amount > max_tip):
             raise BadAmount
 
         NEW_TIP = """\
@@ -391,8 +397,8 @@ class Participant(Model, MixinTeam):
                      AS first_time_tipper
 
         """
-        args = (self.username, tippee, self.username, tippee, amount, \
-                                                                 self.username)
+        args = (self.username, tippee.username, self.username, tippee.username, amount, \
+                                                                                     self.username)
         first_time_tipper = self.db.one(NEW_TIP, args)
         return amount, first_time_tipper
 

@@ -26,4 +26,5 @@ class UsernameAlreadyTaken(ProblemChangingUsername):
 
 class TooGreedy(Exception): pass
 class NoSelfTipping(Exception): pass
+class NoTippee(Exception): pass
 class BadAmount(Exception): pass

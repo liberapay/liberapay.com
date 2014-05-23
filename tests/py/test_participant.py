@@ -4,7 +4,6 @@ import datetime
 import random
 from decimal import Decimal
 
-import psycopg2
 import pytz
 import pytest
 from aspen.utils import utcnow
@@ -16,6 +15,7 @@ from gittip.exceptions import (
     UsernameContainsInvalidCharacters,
     UsernameIsRestricted,
     NoSelfTipping,
+    NoTippee,
     BadAmount,
 )
 from gittip.models.participant import (
@@ -403,43 +403,27 @@ class Tests(Harness):
 
     def test_stt_doesnt_allow_self_tipping(self):
         alice = self.make_participant('alice', last_bill_result='')
-        self.assertRaises( NoSelfTipping
-                         , alice.set_tip_to
-                         , 'alice'
-                         , '10.00'
-                          )
+        self.assertRaises(NoSelfTipping, alice.set_tip_to, 'alice', '10.00')
 
     def test_stt_doesnt_allow_just_any_ole_amount(self):
         alice = self.make_participant('alice', last_bill_result='')
         self.make_participant('bob')
-        self.assertRaises( BadAmount
-                         , alice.set_tip_to
-                         , 'bob'
-                         , '1000.00'
-                          )
+        self.assertRaises(BadAmount, alice.set_tip_to, 'bob', '1000.00')
 
     def test_stt_allows_higher_tip_to_plural_receiver(self):
         alice = self.make_participant('alice', last_bill_result='')
         self.make_participant('bob', number='plural')
         actual = alice.set_tip_to('bob', '1000.00')
-        assert actual == (Decimal('1000.00'), False)
+        assert actual == (Decimal('1000.00'), True)
 
     def test_stt_still_caps_tips_to_plural_receivers(self):
         alice = self.make_participant('alice', last_bill_result='')
         self.make_participant('bob', number='plural')
-        self.assertRaises( BadAmount
-                         , alice.set_tip_to
-                         , 'bob'
-                         , '1000.01'
-                          )
+        self.assertRaises(BadAmount, alice.set_tip_to, 'bob', '1000.01')
 
     def test_stt_fails_to_tip_unknown_people(self):
         alice = self.make_participant('alice', last_bill_result='')
-        self.assertRaises( psycopg2.IntegrityError
-                         , alice.set_tip_to
-                         , 'bob'
-                         , '1.00'
-                          )
+        self.assertRaises(NoTippee, alice.set_tip_to, 'bob', '1.00')
 
 
     # get_dollars_receiving - gdr
