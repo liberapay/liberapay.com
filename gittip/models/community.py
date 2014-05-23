@@ -2,6 +2,7 @@ import re
 
 from postgres.orm import Model
 
+from gittip.models.participant import Participant
 
 name_pattern = re.compile(r'^[A-Za-z0-9,._ -]+$')
 
@@ -55,7 +56,6 @@ def get_list_for(db, username):
 
     """.format(member_test, sort_order), params)
 
-
 class Community(Model):
     """Model a community on Gittip.
     """
@@ -64,10 +64,14 @@ class Community(Model):
 
     @classmethod
     def from_slug(cls, db, slug):
-        return db.one( "SELECT community_summary.*::community_summary "
-                    "FROM community_summary WHERE slug=%s"
-                  , (slug,)
-                   )
+        return db.one( """
+                SELECT community_summary.*::community_summary
+                FROM community_summary WHERE slug=%s;
+
+                """, (slug,))
+
+    def get_members(self):
+        return Participant.get_members_of_community(self.name)
 
     def check_membership(self, participant):
         return self.db.one("""

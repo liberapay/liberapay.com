@@ -1,0 +1,38 @@
+from aspen import Response
+from gittip.models.community import name_pattern, slugize, Community
+import gittip.utils.json
+
+[----------------------]
+
+if not GET:
+
+    # Method not allowed
+
+    raise Response(405)
+
+
+_slug = path['slug']
+if name_pattern.match(_slug) is None:
+    raise Response(404)
+slug = slugize(_slug)
+#if slug != _slug:
+#    request.redirect('../' + slug + '/')
+
+
+community = Community.from_slug(website.db, slug)
+
+if not community:
+
+    # Community not found
+
+    raise Response(404)
+
+members = [gittip.utils.json.from_participant(user, None, member) for member in community.get_members()]
+
+response.body = {
+    "name": community.name,
+    "slug": community.slug,
+    "members": members
+}
+
+
