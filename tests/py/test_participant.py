@@ -404,27 +404,27 @@ class Tests(Harness):
     def test_stt_doesnt_allow_self_tipping(self):
         alice = self.make_participant('alice', last_bill_result='')
         self.assertRaises( NoSelfTipping
-                     , alice.set_tip_to
-                     , 'alice'
-                     , '1000000.00'
-                      )
+                         , alice.set_tip_to
+                         , 'alice'
+                         , '10.00'
+                          )
 
     def test_stt_doesnt_allow_just_any_ole_amount(self):
         alice = self.make_participant('alice', last_bill_result='')
         self.make_participant('bob')
         self.assertRaises( BadAmount
-                     , alice.set_tip_to
-                     , 'bob'
-                     , '1000000.00'
-                      )
+                         , alice.set_tip_to
+                         , 'bob'
+                         , '1000000.00'
+                          )
 
     def test_stt_fails_to_tip_unknown_people(self):
         alice = self.make_participant('alice', last_bill_result='')
         self.assertRaises( psycopg2.IntegrityError
-                     , alice.set_tip_to
-                     , 'bob'
-                     , '1.00'
-                      )
+                         , alice.set_tip_to
+                         , 'bob'
+                         , '1.00'
+                          )
 
 
     # get_dollars_receiving - gdr
