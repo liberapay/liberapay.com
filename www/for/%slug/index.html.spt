@@ -1,5 +1,5 @@
 from aspen import Response
-from gittip.models.community import name_pattern, slugize
+from gittip.models.community import name_pattern, slugize, Community
 from gittip.utils import _to_age, format_money, to_statement
 from gittip.utils.query_cache import QueryCache
 
@@ -25,10 +25,8 @@ try:
 except ValueError:
     raise Response(400)
 
-community = website.db.one( "SELECT community_summary.*::community_summary "
-                            "FROM community_summary WHERE slug=%s"
-                          , (slug,)
-                           )
+community = Community.from_slug(website.db, slug)
+
 if community is None:
     class StubCommunity:
         slug = _slug

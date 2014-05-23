@@ -62,6 +62,13 @@ class Community(Model):
 
     typname = "community_summary"
 
+    @classmethod
+    def from_slug(cls, db, slug):
+        return db.one( "SELECT community_summary.*::community_summary "
+                    "FROM community_summary WHERE slug=%s"
+                  , (slug,)
+                   )
+
     def check_membership(self, participant):
         return self.db.one("""
 
