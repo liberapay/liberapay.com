@@ -5,11 +5,9 @@ This module contains exceptions shared across application code.
 from __future__ import print_function, unicode_literals
 
 
-class ProblemChangingThing(Exception):
+class ProblemChangingUsername(Exception):
     def __str__(self):
         return self.msg.format(self.args[0])
-
-class ProblemChangingUsername(ProblemChangingThing): pass
 
 class UsernameIsEmpty(ProblemChangingUsername):
     msg = "You need to provide a username!"
@@ -27,7 +25,9 @@ class UsernameAlreadyTaken(ProblemChangingUsername):
     msg = "The username '{}' is already taken."
 
 
-class ProblemChangingNumber(ProblemChangingThing): pass
+class ProblemChangingNumber(Exception):
+    def __str__(self):
+        return self.msg
 
 class HasBigTips(ProblemChangingNumber):
     msg = "You receive tips too large for an individual. Please contact support@gittip.com."
