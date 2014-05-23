@@ -560,6 +560,7 @@ class Participant(Model, MixinTeam):
                      , t.ctime
                      , p.claimed_time
                      , p.username_lower
+                     , p.number
                   FROM tips t
                   JOIN participants p ON p.username = t.tippee
                  WHERE tipper = %s
