@@ -3,7 +3,7 @@ from decimal import Decimal, InvalidOperation
 from aspen import Response
 import gittip
 from gittip.utils import get_participant
-from psycopg2 import IntegrityError
+from gittip.exceptions import NegativeBalance
 
 [---------------------------------------------]
 
@@ -43,7 +43,7 @@ with website.db.get_cursor() as cursor:
     SQL = "UPDATE participants SET balance = balance + %s WHERE username=%s RETURNING balance"
     balance = cursor.one(SQL, (balance_adjustment, participant.username))
     if balance < 0:
-        raise IntegrityError('balance would become negative')
+        raise NegativeBalance
 
 request.redirect('/%s/history/' % participant.username)
 

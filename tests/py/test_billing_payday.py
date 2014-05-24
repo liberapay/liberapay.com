@@ -10,6 +10,7 @@ from psycopg2 import IntegrityError
 from aspen.utils import typecheck, utcnow
 from gittip import billing
 from gittip.billing.payday import Payday, skim_credit, LOOP_PACHINKO
+from gittip.exceptions import NegativeBalance
 from gittip.models.participant import Participant
 from gittip.testing import Harness
 from gittip.testing.balanced import BalancedHarness
@@ -722,7 +723,7 @@ class TestBillingTransfer(PaydayHarness):
 
         # this will fail because not enough balance
         with self.db.get_cursor() as cursor:
-            with self.assertRaises(IntegrityError):
+            with self.assertRaises(NegativeBalance):
                 self.payday.debit_participant(cursor, subject.username, amount)
 
     def test_skim_credit(self):

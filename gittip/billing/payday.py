@@ -27,6 +27,7 @@ import aspen.utils
 from aspen import log
 from aspen.utils import typecheck
 from gittip.models.participant import Participant
+from gittip.exceptions import NegativeBalance
 from psycopg2 import IntegrityError
 
 
@@ -459,7 +460,7 @@ class Payday(object):
 
             try:
                 self.debit_participant(cursor, tipper, amount)
-            except IntegrityError:
+            except NegativeBalance:
                 return False
 
             self.credit_participant(cursor, tippee, amount)
@@ -488,7 +489,7 @@ class Payday(object):
         args = dict(amount=amount, participant=participant)
         r = cursor.one(DECREMENT, args, default=False)
         if r is False:
-            raise IntegrityError('balance would become negative')
+            raise NegativeBalance
         assert r is not None, (amount, participant)  # sanity check
 
 

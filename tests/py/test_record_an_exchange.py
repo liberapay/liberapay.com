@@ -3,7 +3,7 @@ from decimal import Decimal
 
 import pytest
 from aspen.utils import utcnow
-from psycopg2 import IntegrityError
+from gittip.exceptions import NegativeBalance
 from gittip.testing import Harness
 
 
@@ -59,8 +59,8 @@ class TestRecordAnExchange(Harness):
         actual = self.record_an_exchange('10', '0', '    ').code
         assert actual == 400
 
-    def test_dropping_balance_below_zero_raises_IntegrityError(self):
-        pytest.raises(IntegrityError, self.record_an_exchange, '-10', '0', 'noted')
+    def test_dropping_balance_below_zero_raises_NegativeBalance(self):
+        pytest.raises(NegativeBalance, self.record_an_exchange, '-10', '0', 'noted')
 
     def test_success_records_exchange(self):
         self.record_an_exchange('10', '0.50', 'noted')
