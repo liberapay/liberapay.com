@@ -14,6 +14,8 @@ try:
 except KeyError:
     raise Response(400)
 
+team = qs.get('team', '').lower() == 'true'
+
 [---]
 
 {% extends "templates/base.html" %}
@@ -22,11 +24,24 @@ except KeyError:
 
 <div class="as-content">
 
+    {% if team %}
+
+    <h1>Are you really an administrator of the {{ path['user_name']|e }} team?</h1>
+
+    <p>Your attempt to {{ action|e }} this account failed because you're
+    logged into {{ platform.display_name }} as someone who isn't an
+    administrator of the {{ path['user_name']|e }} team. Please sign out
+    and <a href="./">try again</a>.</p>
+
+    {% else %}
+
     <h1>Are you really {{ path['user_name']|e }}?</h1>
 
     <p>Your attempt to {{ action|e }} this account failed because you're
     logged into {{ platform.display_name }} as someone else. Please sign out
     and <a href="./">try again</a>.</p>
+
+    {% endif %}
 
 </div>
 

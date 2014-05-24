@@ -14,7 +14,6 @@ import datetime
 from decimal import Decimal
 import uuid
 
-from aspen import Response
 from aspen.utils import typecheck
 from postgres.orm import Model
 from psycopg2 import IntegrityError
@@ -23,20 +22,23 @@ import pytz
 import gittip
 from gittip import NotSane
 from gittip.exceptions import (
+    HasBigTips,
     UsernameIsEmpty,
     UsernameTooLong,
     UsernameContainsInvalidCharacters,
     UsernameIsRestricted,
     UsernameAlreadyTaken,
     NoSelfTipping,
+    NoTippee,
     BadAmount,
 )
 
 from gittip.models import add_event
 from gittip.models._mixin_team import MixinTeam
 from gittip.models.account_elsewhere import AccountElsewhere
-from gittip.utils import canonicalize
 from gittip.utils.username import gen_random_usernames, reserve_a_random_username
+from gittip import billing
+from gittip.utils import is_card_expiring
 
 
 ASCII_ALLOWED_IN_USERNAME = set("0123456789"
@@ -47,6 +49,7 @@ ASCII_ALLOWED_IN_USERNAME = set("0123456789"
 
 NANSWERS_THRESHOLD = 0  # configured in wireup.py
 
+NOTIFIED_ABOUT_EXPIRATION = b'notifiedAboutExpiration'
 
 class Participant(Model, MixinTeam):
     """Represent a Gittip participant.
@@ -179,10 +182,24 @@ class Participant(Model, MixinTeam):
 
     def update_number(self, number):
         assert number in ('singular', 'plural')
+        if number == 'singular':
+            nbigtips = self.db.one("""\
+                SELECT count(*) FROM current_tips WHERE tippee=%s AND amount > %s
+            """, (self.username, gittip.MAX_TIP_SINGULAR))
+            if nbigtips > 0:
+                raise HasBigTips
         self.db.run( "UPDATE participants SET number=%s WHERE id=%s"
                    , (number, self.id)
                     )
         self.set_attributes(number=number)
+
+
+    # Statement
+    # =========
+
+    def update_statement(self, statement):
+        self.db.run("UPDATE participants SET statement=%s WHERE id=%s", (statement, self.id))
+        self.set_attributes(statement=statement)
 
 
     # API Key
@@ -371,8 +388,13 @@ class Participant(Model, MixinTeam):
         if self.username == tippee:
             raise NoSelfTipping
 
+        tippee = Participant.from_username(tippee)
+        if tippee is None:
+            raise NoTippee
+
         amount = Decimal(amount)  # May raise InvalidOperation
-        if (amount < gittip.MIN_TIP) or (amount > gittip.MAX_TIP):
+        max_tip = gittip.MAX_TIP_PLURAL if tippee.IS_PLURAL else gittip.MAX_TIP_SINGULAR
+        if (amount < gittip.MIN_TIP) or (amount > max_tip):
             raise BadAmount
 
         NEW_TIP = """\
@@ -390,8 +412,8 @@ class Participant(Model, MixinTeam):
                      AS first_time_tipper
 
         """
-        args = (self.username, tippee, self.username, tippee, amount, \
-                                                                 self.username)
+        args = (self.username, tippee.username, self.username, tippee.username, amount, \
+                                                                                     self.username)
         first_time_tipper = self.db.one(NEW_TIP, args)
         return amount, first_time_tipper
 
@@ -553,6 +575,7 @@ class Participant(Model, MixinTeam):
                      , t.ctime
                      , p.claimed_time
                      , p.username_lower
+                     , p.number
                   FROM tips t
                   JOIN participants p ON p.username = t.tippee
                  WHERE tipper = %s
@@ -885,6 +908,7 @@ class Participant(Model, MixinTeam):
 
                 SELECT participant
                      , claimed_time IS NULL AS is_stub
+                     , is_team
                   FROM elsewhere
                   JOIN participants ON participant=participants.username
                  WHERE elsewhere.platform=%s AND elsewhere.user_id=%s
@@ -934,6 +958,10 @@ class Participant(Model, MixinTeam):
                                        )
             assert nparticipants in (0, 1)  # sanity check
             we_already_have_that_kind_of_account = nparticipants == 1
+
+            if rec.is_team and we_already_have_that_kind_of_account:
+                if len(self.get_accounts_elsewhere()) == 1:
+                    raise TeamCantBeOnlyAuth
 
             need_confirmation = NeedConfirmation( other_is_a_real_participant
                                                 , this_is_others_last_account_elsewhere
@@ -1047,6 +1075,7 @@ class Participant(Model, MixinTeam):
                   FROM elsewhere
                  WHERE participant=%s
                    AND platform IN %s
+                   AND NOT is_team
             """, (self.username, AccountElsewhere.signin_platforms_names))
             assert len(accounts) > 0
             if len(accounts) == 1 and accounts[0] == (platform, user_id):
@@ -1060,6 +1089,27 @@ class Participant(Model, MixinTeam):
             """, (self.username, platform, user_id), default=NonexistingElsewhere)
             add_event(c, 'participant', dict(id=self.id, action='disconnect', values=dict(platform=platform, user_id=user_id)))
         self.update_avatar()
+
+    def credit_card_expiring(self, request, response):
+        card_expiring = False
+
+        if NOTIFIED_ABOUT_EXPIRATION in request.headers.cookie:
+            cookie = request.headers.cookie[NOTIFIED_ABOUT_EXPIRATION]
+            if cookie.value == self.session_token:
+                return False
+
+        if self.balanced_customer_href:
+            card = billing.BalancedCard(self.balanced_customer_href)
+        else:
+            card = billing.StripeCard(self.stripe_customer_id)
+
+        expiration_year = card['expiration_year']
+        expiration_month= card['expiration_month']
+        if expiration_year and expiration_month:
+            card_expiring = is_card_expiring(int(expiration_year), int(expiration_month))
+
+        response.headers.cookie[NOTIFIED_ABOUT_EXPIRATION] = self.session_token
+        return card_expiring
 
 
 class NeedConfirmation(Exception):
@@ -1094,43 +1144,4 @@ class LastElsewhere(Exception): pass
 
 class NonexistingElsewhere(Exception): pass
 
-
-def typecast(request):
-    """Given a Request, raise Response or return Participant.
-
-    If user is not None then we'll restrict access to owners and admins.
-
-    """
-
-    # XXX We can't use this yet because we don't have an inbound Aspen hook
-    # that fires after the first page of the simplate is exec'd.
-
-    path = request.line.uri.path
-    if 'username' not in path:
-        return
-
-    slug = path['username']
-
-    participant = request.website.db.one( """
-        SELECT participants.*::participants
-        FROM participants
-        WHERE username_lower=%s
-    """, (slug.lower()))
-
-    if participant is None:
-        raise Response(404)
-
-    canonicalize(request.line.uri.path.raw, '/', participant.username, slug)
-
-    if participant.claimed_time is None:
-
-        # This is a stub participant record for someone on another platform
-        # who hasn't actually registered with Gittip yet. Let's bounce the
-        # viewer over to the appropriate platform page.
-
-        to = participant.resolve_unclaimed()
-        if to is None:
-            raise Response(404)
-        request.redirect(to)
-
-    path['participant'] = participant
+class TeamCantBeOnlyAuth(Exception): pass

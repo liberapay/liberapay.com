@@ -1,29 +1,3 @@
-title = "Ways to Help"
 [---]
-{% extends "templates/for-contributors.html" %}
-{% block page %}
-<style>
-  #types-nav li {
-    margin: 0;
-    padding: 5px 0;
-  }
-</style>
-<div class="col0">
-
-  <h2>Ways to Help</h2>
-
-  <p>If you're a new contributor, tweet &ldquo;I want to help!&rdquo; to <a
-    href="https://twitter.com/Gittip">@Gittip</a> and someone will help you
-  get started.</p>
-
-  <ol class="upper-alpha">
-
-    <li><a href="tell-people-about-gittip.html">Tell People About Gittip</a></li>
-    <li><a href="support-users.html">Support Users</a></li>
-    <li><a href="build-gittip.html">Build Gittip</a></li>
-    <li><a href="train-new-contributors.html">Train New Contributors</a></li>
-
-  </ol>
-
-</div>
-{% endblock %}
+request.redirect('http://building.gittip.com/')
+[---]

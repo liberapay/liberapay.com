@@ -106,10 +106,10 @@ met](http://initd.org/psycopg/docs/faq.html#problems-compiling-and-deploying-psy
 If you are getting an error about `unknown argument: '-mno-fused-madd'` when
 running `make`, then add
 `Wno-error=unused-command-line-argument-hard-error-in-future` to your
-`ARCHFLAGS` environment variable and try again (see [this Stack Overflow answer
+`ARCHFLAGS` environment variable and run `make clean env` again (see [this Stack Overflow answer
 for more information](http://stackoverflow.com/a/22355874/347246)):
 
-    $ ARCHFLAGS=-Wno-error=unused-command-line-argument-hard-error-in-future
+    $ ARCHFLAGS=-Wno-error=unused-command-line-argument-hard-error-in-future make clean env
 
 Building
 --------
@@ -463,13 +463,22 @@ for your project!
  - [Node.js: Node-Gittip](https://npmjs.org/package/gittip) (also see [Khan
    Academy's setup](http://ejohn.org/blog/gittip-at-khan-academy/))
 
- - [Ruby: gratitude](https://github.com/JohnKellyFerguson/gratitude): A ruby gem that wraps the Gittip API (currently in development and not feature complete).
+ - [Ruby: gratitude](https://github.com/JohnKellyFerguson/gratitude): A ruby
+   gem that wraps the Gittip API.
 
  - [WordPress: WP-Gittip](https://github.com/daankortenbach/WP-Gittip)
 
- - [hubot-gittip](https://github.com/myplanetdigital/hubot-gittip): A Hubot script for interacting with a shared Gittip account.
+ - [hubot-gittip](https://github.com/myplanetdigital/hubot-gittip): A Hubot
+   script for interacting with a shared Gittip account.
 
- - [gittip-collab](https://github.com/engineyard/gittip-collab): A Khan-style tool for managing a Gittip account as a team.
+ - [gittip-collab](https://github.com/engineyard/gittip-collab): A Khan-style
+   tool for managing a Gittip account as a team.
+
+ - [WWW::Gittip](https://metacpan.org/pod/WWW::Gittip): A Perl module
+   implementing the Gittip API more or less
+
+ - [php-curl-class](https://github.com/php-curl-class/php-curl-class/blob/master/examples/gittip_send_tip.php): A php class to tip using the Gittip API.
+
 
 Glossary
 ========

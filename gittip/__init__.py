@@ -50,7 +50,8 @@ db = None # This global is wired in wireup. It's an instance of
           # gittip.postgres.PostgresManager.
 
 
-MAX_TIP = Decimal('100.00')
+MAX_TIP_SINGULAR = Decimal('100.00')
+MAX_TIP_PLURAL = Decimal('1000.00')
 MIN_TIP = Decimal('0.00')
 
 RESTRICTED_IDS = None

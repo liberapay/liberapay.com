@@ -3,7 +3,8 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from aspen.http.response import Response
 from gittip import utils
 from gittip.testing import Harness
-
+from datetime import datetime
+from datetime import timedelta
 
 class Tests(Harness):
 
@@ -58,3 +59,13 @@ class Tests(Harness):
         expected = '<a href="http://www.example.com" target="_blank">www.example.com</a>'
         actual = utils.linkify('www.example.com')
         assert actual == expected
+
+    def test_short_difference_is_expiring(self):
+        expiring = datetime.utcnow() + timedelta(days = 1)
+        expiring = utils.is_card_expiring(expiring.year, expiring.month)
+        assert expiring
+
+    def test_long_difference_not_expiring(self):
+        expiring = datetime.utcnow() + timedelta(days = 100)
+        expiring = utils.is_card_expiring(expiring.year, expiring.month)
+        assert not expiring

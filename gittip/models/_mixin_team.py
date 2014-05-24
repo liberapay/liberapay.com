@@ -27,7 +27,7 @@ class MixinTeam(object):
             return False
         if user.ADMIN:
             return True
-        if not self.get_current_takes():
+        if not self.get_takes():
             if self == user.participant:
                 return True
             return False
@@ -37,7 +37,7 @@ class MixinTeam(object):
         """Add a member to this team.
         """
         assert self.IS_PLURAL
-        if len(self.get_current_takes()) == 149:
+        if len(self.get_takes()) == 149:
             raise MemberLimitReached
         self.__set_take_for(member, Decimal('0.01'), self)
 
@@ -51,7 +51,7 @@ class MixinTeam(object):
         """Given a Participant object, return a boolean.
         """
         assert team.IS_PLURAL
-        for take in team.get_current_takes():
+        for take in team.get_takes():
             if take['member'] == self.username:
                 return True
         return False
@@ -131,18 +131,56 @@ class MixinTeam(object):
         """, (member.username, self.username, member.username, self.username, \
                                                       amount, recorder.username))
 
-    def get_current_takes(self):
+    def get_takes(self, for_payday=False):
         """Return a list of member takes for a team.
+
+        This is implemented parallel to Participant.get_tips_and_total. See
+        over there for an explanation of for_payday.
+
         """
         assert self.IS_PLURAL
-        return self.db.all("""
 
-            SELECT member, amount, ctime, mtime
-              FROM current_takes
-             WHERE team=%s
-          ORDER BY ctime DESC
+        args = dict(team=self.username)
 
-        """, (self.username,), back_as=dict)
+        if for_payday:
+            args['ts_start'] = for_payday
+
+            # Get the takes for this team, as they were before ts_start,
+            # filtering out the ones we've already transferred (in case payday
+            # is interrupted and restarted).
+
+            TAKES = """\
+
+                SELECT * FROM (
+                     SELECT DISTINCT ON (member) t.*
+                       FROM takes t
+                       JOIN participants p ON p.username = member
+                      WHERE team=%(team)s
+                        AND mtime < %(ts_start)s
+                        AND p.is_suspicious IS NOT true
+                        AND ( SELECT id
+                                FROM transfers
+                               WHERE tipper=t.team
+                                 AND tippee=t.member
+                                 AND as_team_member IS true
+                                 AND timestamp >= %(ts_start)s
+                             ) IS NULL
+                   ORDER BY member, mtime DESC
+                ) AS foo
+                ORDER BY ctime DESC
+
+            """
+        else:
+            TAKES = """\
+
+                SELECT member, amount, ctime, mtime
+                  FROM current_takes
+                 WHERE team=%(team)s
+              ORDER BY ctime DESC
+
+            """
+
+        return self.db.all(TAKES, args, back_as=dict)
 
     def get_team_take(self):
         """Return a single take for a team, the team itself's take.
@@ -162,7 +200,7 @@ class MixinTeam(object):
         """Return a list of member dicts.
         """
         assert self.IS_PLURAL
-        takes = self.get_current_takes()
+        takes = self.get_takes()
         takes.append(self.get_team_take())
         budget = balance = self.get_dollars_receiving()
         members = []

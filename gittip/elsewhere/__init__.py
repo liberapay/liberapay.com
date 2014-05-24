@@ -5,20 +5,15 @@ from __future__ import division, print_function, unicode_literals
 from collections import OrderedDict
 from datetime import datetime
 import hashlib
-import json
 import logging
 from urllib import quote
-from urlparse import urlsplit, urlunsplit
 import xml.etree.ElementTree as ET
 
 from aspen import log, Response
 from aspen.utils import to_age, utc
-from psycopg2 import IntegrityError
 from requests_oauthlib import OAuth1Session, OAuth2Session
-import xmltodict
 
 from gittip.elsewhere._extractors import not_available
-from gittip.utils.username import reserve_a_random_username
 
 
 ACTIONS = {'opt-in', 'connect', 'lock', 'unlock'}
@@ -62,6 +57,8 @@ class UserInfo(object):
 
 class Platform(object):
 
+    allows_team_connect = False
+
     # "x" stands for "extract"
     x_user_info = not_available
     x_user_id = not_available
@@ -77,8 +74,7 @@ class Platform(object):
                      , 'name'
                      )
 
-    def __init__(self, db, asset_url, api_key, api_secret, callback_url, api_url=None, auth_url=None):
-        self.db = db
+    def __init__(self, asset_url, api_key, api_secret, callback_url, api_url=None, auth_url=None):
         self.icon = '%s/icons/%s.16.png' % (asset_url, self.name)
         self.api_key = api_key
         self.api_secret = api_secret
@@ -161,12 +157,12 @@ class Platform(object):
         extract the relevant information by calling the platform's extractors
         (`x_user_name`, `x_user_id`, etc).
 
-        Returns a `UserInfo`. The `user_id` and `user_name` attributes are
-        guaranteed to have non-empty values.
+        Returns a `UserInfo`. The `user_id` attribute is guaranteed to have a
+        unique non-empty value.
         """
-        r = UserInfo()
+        r = UserInfo(platform=self.name)
         info = self.x_user_info(info, info)
-        r.user_name = self.x_user_name(info)
+        r.user_name = self.x_user_name(info, None)
         if self.x_user_id.__func__ is not_available:
             r.user_id = r.user_name
         else:
@@ -187,56 +183,15 @@ class Platform(object):
         r.extra_info = info
         return r
 
-    def get_account(self, user_name):
-        """Given a user_name on the platform, return an AccountElsewhere object.
-        """
-        try:
-            return self.get_account_from_db(user_name)
-        except UnknownAccountElsewhere:
-            return self.get_account_from_api(user_name)
-
-    def get_account_from_api(self, user_name):
-        """Given a user_name on the platform, get the user's info from the API,
-        insert it into the database, and return an AccountElsewhere object.
-        """
-        return self.upsert(self.get_user_info(user_name))
-
-    def get_account_from_db(self, user_name):
-        """Given a user_name on the platform, return an AccountElsewhere object.
-
-        If the account is unknown to us, we raise UnknownAccountElsewhere.
-        """
-        exception = UnknownAccountElsewhere(self.name, user_name)
-        return self.db.one("""
-
-            SELECT elsewhere.*::elsewhere_with_participant
-              FROM elsewhere
-             WHERE platform = %s
-               AND user_name = %s
-
-        """, (self.name, user_name), default=exception)
-
     def get_team_members(self, team_name, page_url=None):
-        """Given a team_name on the platform, get the team's membership list
-        from the API and return corresponding `AccountElsewhere`s.
+        """Given a team_name on the platform, return the team's membership list
+        from the API.
         """
         default_url = self.api_team_members_path.format(user_name=quote(team_name))
         r = self.api_get(page_url or default_url)
         members, count, pages_urls = self.api_paginator(r, self.api_parser(r))
         members = [self.extract_user_info(m) for m in members]
-        accounts = self.db.all("""\
-
-            SELECT elsewhere.*::elsewhere_with_participant
-              FROM elsewhere
-             WHERE platform = %s
-               AND user_name = any(%s)
-
-        """, (self.name, [m.user_name for m in members]))
-        found_user_names = set(a.user_name for a in accounts)
-        for member in members:
-            if member.user_name not in found_user_names:
-                accounts.append(self.upsert(member))
-        return accounts, count, pages_urls
+        return members, count, pages_urls
 
     def get_user_info(self, user_name, sess=None):
         """Given a user_name on the platform, get the user's info from the API.
@@ -253,62 +208,6 @@ class Platform(object):
         """
         r = self.api_get(self.api_user_self_info_path, sess=sess)
         return self.extract_user_info(self.api_parser(r))
-
-    def save_token(self, user_id, token, refresh_token=None, expires=None):
-        """Saves the given access token in the database.
-        """
-        self.db.run("""
-            UPDATE elsewhere
-            SET (access_token, refresh_token, expires) = (%s, %s, %s)
-            WHERE platform=%s AND user_id=%s
-        """, (token, refresh_token, expires, self.name, user_id))
-
-    def upsert(self, i):
-        """Insert or update the user's info.
-        """
-
-        # Clean up avatar_url
-        if i.avatar_url:
-            scheme, netloc, path, query, fragment = urlsplit(i.avatar_url)
-            fragment = ''
-            if netloc.endswith('githubusercontent.com') or \
-               netloc.endswith('gravatar.com'):
-                query = 's=128'
-            i.avatar_url = urlunsplit((scheme, netloc, path, query, fragment))
-
-        # Serialize extra_info
-        if isinstance(i.extra_info, ET.Element):
-            i.extra_info = xmltodict.parse(ET.tostring(i.extra_info))
-        i.extra_info = json.dumps(i.extra_info)
-
-        cols, vals = zip(*i.__dict__.items())
-        cols = ', '.join(cols)
-        placeholders = ', '.join(['%s']*len(vals))
-
-        try:
-            # Try to insert the account
-            # We do this with a transaction so that if the insert fails, the
-            # participant we reserved for them is rolled back as well.
-            with self.db.get_cursor() as cursor:
-                username = reserve_a_random_username(cursor)
-                cursor.execute("""
-                    INSERT INTO elsewhere
-                                (participant, platform, {0})
-                         VALUES (%s, %s, {1})
-                """.format(cols, placeholders), (username, self.name)+vals)
-        except IntegrityError:
-            # The account is already in the DB, update it instead
-            username = self.db.one("""
-                UPDATE elsewhere
-                   SET ({0}) = ({1})
-                 WHERE platform=%s AND user_id=%s
-             RETURNING participant
-            """.format(cols, placeholders), vals+(self.name, i.user_id))
-
-        # Return account after propagating avatar_url to participant
-        account = self.get_account_from_db(i.user_name)
-        account.participant.update_avatar()
-        return account
 
 
 class PlatformOAuth1(Platform):

@@ -156,28 +156,24 @@ class BadEnvironment(SystemExit):
 def accounts_elsewhere(website, env):
 
     twitter = Twitter(
-        website.db,
         website.asset_url,
         env.twitter_consumer_key,
         env.twitter_consumer_secret,
         env.twitter_callback,
     )
     github = GitHub(
-        website.db,
         website.asset_url,
         env.github_client_id,
         env.github_client_secret,
         env.github_callback,
     )
     bitbucket = Bitbucket(
-        website.db,
         website.asset_url,
         env.bitbucket_consumer_key,
         env.bitbucket_consumer_secret,
         env.bitbucket_callback,
     )
     openstreetmap = OpenStreetMap(
-        website.db,
         website.asset_url,
         env.openstreetmap_consumer_key,
         env.openstreetmap_consumer_secret,
@@ -186,7 +182,6 @@ def accounts_elsewhere(website, env):
         env.openstreetmap_auth_url,
     )
     bountysource = Bountysource(
-        website.db,
         website.asset_url,
         None,
         env.bountysource_api_secret,
@@ -195,7 +190,6 @@ def accounts_elsewhere(website, env):
         env.bountysource_www_host,
     )
     venmo = Venmo(
-        website.db,
         website.asset_url,
         env.venmo_client_id,
         env.venmo_client_secret,

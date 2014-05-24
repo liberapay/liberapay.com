@@ -2,7 +2,7 @@
     $ <input type="number"
            class="my-tip"
            min="0"
-           max="100"
+           max="{{ tip.number == 'plural' and '1000' or '100' }}"
            step="0.01"
            value="{{ my_tip }}"
            data-tippee="{{ tippee }}"> / week
