@@ -5,11 +5,13 @@ from datetime import datetime, timedelta
 
 import balanced
 import mock
+import pytest
 from psycopg2 import IntegrityError
 
 from aspen.utils import typecheck, utcnow
 from gittip import billing
 from gittip.billing.payday import Payday, skim_credit, LOOP_PACHINKO
+from gittip.exceptions import NegativeBalance
 from gittip.models.participant import Participant
 from gittip.testing import Harness
 from gittip.testing.balanced import BalancedHarness
@@ -722,7 +724,7 @@ class TestBillingTransfer(PaydayHarness):
 
         # this will fail because not enough balance
         with self.db.get_cursor() as cursor:
-            with self.assertRaises(IntegrityError):
+            with self.assertRaises(NegativeBalance):
                 self.payday.debit_participant(cursor, subject.username, amount)
 
     def test_skim_credit(self):
@@ -809,6 +811,15 @@ class TestBillingTransfer(PaydayHarness):
                                   )
         alice = Participant.from_username('alice')
         assert alice.balance == D("0.59")
+
+    def test_record_credit_fails_if_negative_balance(self):
+        pytest.raises( NegativeBalance
+                     , self.payday.record_credit
+                     , amount=D("10.00")
+                     , fee=D("0.41")
+                     , error=""
+                     , username="alice"
+                      )
 
     def test_record_credit_doesnt_update_balance_if_error(self):
         self.payday.record_credit( amount=D("-1.00")

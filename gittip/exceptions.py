@@ -37,3 +37,8 @@ class TooGreedy(Exception): pass
 class NoSelfTipping(Exception): pass
 class NoTippee(Exception): pass
 class BadAmount(Exception): pass
+
+
+class NegativeBalance(Exception):
+    def __str__(self):
+        return "Negative balance not allowed in this context."

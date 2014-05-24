@@ -27,6 +27,7 @@ import aspen.utils
 from aspen import log
 from aspen.utils import typecheck
 from gittip.models.participant import Participant
+from gittip.exceptions import NegativeBalance
 from psycopg2 import IntegrityError
 
 
@@ -459,7 +460,7 @@ class Payday(object):
 
             try:
                 self.debit_participant(cursor, tipper, amount)
-            except IntegrityError:
+            except NegativeBalance:
                 return False
 
             self.credit_participant(cursor, tippee, amount)
@@ -479,19 +480,17 @@ class Payday(object):
         DECREMENT = """\
 
            UPDATE participants
-              SET balance=(balance - %s)
-            WHERE username=%s
-              AND pending IS NOT NULL
-        RETURNING balance
+              SET balance = (balance - %(amount)s)
+            WHERE username = %(participant)s
+              AND balance >= %(amount)s
+        RETURNING pending
 
         """
-
-        # This will fail with IntegrityError if the balance goes below zero.
-        # We catch that and return false in our caller.
-        cursor.execute(DECREMENT, (amount, participant))
-
-        rec = cursor.fetchone()
-        assert rec is not None, (amount, participant)  # sanity check
+        args = dict(amount=amount, participant=participant)
+        r = cursor.one(DECREMENT, args, default=False)
+        if r is False:
+            raise NegativeBalance
+        assert r is not None, (amount, participant)  # sanity check
 
 
     def credit_participant(self, cursor, participant, amount):
@@ -836,12 +835,15 @@ class Payday(object):
                SET last_ach_result=%s
                  , balance=(balance + %s)
              WHERE username=%s
+         RETURNING balance
 
             """
-            cursor.execute(RESULT, ( last_ach_result
-                                   , credit - fee     # -10.00 - 0.30 = -10.30
-                                   , username
-                                    ))
+            balance = cursor.one(RESULT, ( last_ach_result
+                                         , credit - fee     # -10.00 - 0.30 = -10.30
+                                         , username
+                                          ))
+            if balance < 0:
+                raise NegativeBalance
 
 
     def record_transfer(self, cursor, tipper, tippee, amount, as_team_member=False):
