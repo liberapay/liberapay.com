@@ -1333,3 +1333,11 @@ END;
 BEGIN;
     ALTER TABLE elsewhere ALTER COLUMN user_name DROP NOT NULL;
 END;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/pull/2434
+
+BEGIN;
+    ALTER TABLE participants DROP CONSTRAINT min_balance;
+END;
