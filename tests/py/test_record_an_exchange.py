@@ -1,9 +1,7 @@
 from __future__ import unicode_literals
 from decimal import Decimal
 
-import pytest
 from aspen.utils import utcnow
-from gittip.exceptions import NegativeBalance
 from gittip.testing import Harness
 
 
@@ -59,8 +57,10 @@ class TestRecordAnExchange(Harness):
         actual = self.record_an_exchange('10', '0', '    ').code
         assert actual == 400
 
-    def test_dropping_balance_below_zero_raises_NegativeBalance(self):
-        pytest.raises(NegativeBalance, self.record_an_exchange, '-10', '0', 'noted')
+    def test_dropping_balance_below_zero_is_allowed_in_this_context(self):
+        self.record_an_exchange('-10', '0', 'noted')
+        actual = self.db.one("SELECT balance FROM participants WHERE username='bob'")
+        assert actual == Decimal('-10.00')
 
     def test_success_records_exchange(self):
         self.record_an_exchange('10', '0.50', 'noted')
