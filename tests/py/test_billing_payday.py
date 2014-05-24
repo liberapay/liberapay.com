@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 
 import balanced
 import mock
+import pytest
 from psycopg2 import IntegrityError
 
 from aspen.utils import typecheck, utcnow
@@ -812,13 +813,13 @@ class TestBillingTransfer(PaydayHarness):
         assert alice.balance == D("0.59")
 
     def test_record_credit_fails_if_negative_balance(self):
-        self.payday.record_credit( amount=D("-10.00")
-                                 , fee=D("0.41")
-                                 , error=""
-                                 , username="alice"
-                                  )
-        alice = Participant.from_username('alice')
-        assert alice.balance == D("0.59")
+        pytest.raises( NegativeBalance
+                     , self.payday.record_credit
+                     , amount=D("10.00")
+                     , fee=D("0.41")
+                     , error=""
+                     , username="alice"
+                      )
 
     def test_record_credit_doesnt_update_balance_if_error(self):
         self.payday.record_credit( amount=D("-1.00")

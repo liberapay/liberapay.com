@@ -835,12 +835,15 @@ class Payday(object):
                SET last_ach_result=%s
                  , balance=(balance + %s)
              WHERE username=%s
+         RETURNING balance
 
             """
-            cursor.execute(RESULT, ( last_ach_result
-                                   , credit - fee     # -10.00 - 0.30 = -10.30
-                                   , username
-                                    ))
+            balance = cursor.one(RESULT, ( last_ach_result
+                                         , credit - fee     # -10.00 - 0.30 = -10.30
+                                         , username
+                                          ))
+            if balance < 0:
+                raise NegativeBalance
 
 
     def record_transfer(self, cursor, tipper, tippee, amount, as_team_member=False):
