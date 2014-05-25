@@ -43,6 +43,15 @@ Gittip.profile.init = function() {
             $('.statement textarea').focus();
         });
     }
+
+    function update_members_button(is_plural) {
+        if (is_plural) {
+            $("#members-button").removeClass("hidden")
+        } else {
+            $("#members-button").addClass("hidden")
+        }
+    }
+
     if ($('.statement textarea').val() === '') {
         start_editing_statement();
     }
@@ -55,6 +64,7 @@ Gittip.profile.init = function() {
     $('form.statement').submit(function(e) {
         e.preventDefault();
 
+        var is_plural = jQuery("#statement-select").val() === "plural";
         $('.statement button.save').text('Saving ...');
 
         function success(d) {
@@ -62,6 +72,7 @@ Gittip.profile.init = function() {
             var number = $('.statement select').val();
             Gittip.profile.toNumber(number);
             finish_editing_statement();
+            update_members_button(is_plural);
         }
         function error(e) {
             $('.statement button.save').text('Save');
