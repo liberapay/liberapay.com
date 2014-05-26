@@ -439,7 +439,7 @@ NOTE: The amounts must be encoded as a string (rather than a number).
 Additionally, currently, the only supported platform is 'gittip'.
 
 This endpoint requires authentication. Look for your API key on your [profile
-page](https://www.gittip.com/about/me.html), and pass it as the basic auth
+page](https://www.gittip.com/about/me/account), and pass it as the basic auth
 username. E.g.:
 
 ```
