@@ -30,6 +30,7 @@
         border-style: none solid none none;
         display: none;
         color: #630;
+        background: white;
     }
     .week span.y-label {    // This is the flag.
         display: none;
@@ -53,7 +54,8 @@
     .week.hover span.x-tick {
         display: block;
     }
-    .week.hover span.y-label {
+    .week.hover span.y-label,
+    .week.hover span.x-tick {
         z-index: 2
     }
     .x-axis {
