@@ -456,7 +456,7 @@ API Implementations
 Below are some projects that use the Gittip APIs, that can serve as inspiration
 for your project!
 
- - [Drupal: Gittip](https://drupal.org/project/gittip)&mdash;Includes a Gittip
+ - [Drupal: Gittip](https://drupal.org/project/gittip): Includes a Gittip
    giving field type to let you implement the Khan academy model for users on
    your Drupal site.
 
@@ -478,6 +478,9 @@ for your project!
    implementing the Gittip API more or less
 
  - [php-curl-class](https://github.com/php-curl-class/php-curl-class/blob/master/examples/gittip_send_tip.php): A php class to tip using the Gittip API.
+
+ - [gittip-twisted](https://github.com/TigerND/gittip-twisted): Gittip client
+   for the Twisted framework
 
 
 Glossary
