@@ -268,7 +268,7 @@ Gittip.payments.cc.submit = function(e) {
                           , 'city': val('city_town')
                           , 'state': val('state')
                           , 'postal_code': val('zip')
-                          , 'country': country
+                          , 'country_code': country
                            };
 
     credit_card.expiration_month = val('expiration_month');
