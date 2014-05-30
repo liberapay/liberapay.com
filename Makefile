@@ -33,6 +33,9 @@ data:
 run: env
 	./$(env_bin)/honcho -e defaults.env,local.env run ./$(env_bin)/aspen
 
+py: env
+	./$(env_bin)/honcho -e defaults.env,local.env run ./$(env_bin)/python
+
 test-schema: env
 	./$(env_bin)/honcho -e $(test_env_files) run ./recreate-schema.sh
 
