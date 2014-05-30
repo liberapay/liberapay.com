@@ -259,9 +259,16 @@ Gittip.payments.cc.submit = function(e) {
                        , 'country': country
                         };
 
-    credit_card.address = { 'postal_code': val('zip')
-                          , 'line1': val('address_1')
+    // XXX We're duping some of this info in both meta and address due to
+    // evolution of the Balanced API and our stepwise keeping-up. See:
+    // https://github.com/gittip/www.gittip.com/issues/2446 and links from
+    // there.
+    credit_card.address = { 'line1': val('address_1')
+                          , 'line2': val('address_2')
+                          , 'city': val('city_town')
                           , 'state': val('state')
+                          , 'postal_code': val('zip')
+                          , 'country': country
                            };
 
     credit_card.expiration_month = val('expiration_month');
