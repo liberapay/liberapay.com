@@ -1292,24 +1292,25 @@ class Participant(Model, MixinTeam):
         self.update_avatar()
 
     def credit_card_expiring(self, request, response):
-        card_expiring = False
-
         if NOTIFIED_ABOUT_EXPIRATION in request.headers.cookie:
             cookie = request.headers.cookie[NOTIFIED_ABOUT_EXPIRATION]
             if cookie.value == self.session_token:
                 return False
 
-        if self.balanced_customer_href:
-            card = billing.BalancedCard(self.balanced_customer_href)
-        else:
-            card = billing.StripeCard(self.stripe_customer_id)
-
-        expiration_year = card['expiration_year']
-        expiration_month= card['expiration_month']
-        if expiration_year and expiration_month:
-            card_expiring = is_card_expiring(int(expiration_year), int(expiration_month))
-
         response.headers.cookie[NOTIFIED_ABOUT_EXPIRATION] = self.session_token
+
+        card_expiring = False
+        try:
+            if self.balanced_customer_href:
+                card = billing.BalancedCard(self.balanced_customer_href)
+            else:
+                card = billing.StripeCard(self.stripe_customer_id)
+
+            year, month = card['expiration_year'], card['expiration_month']
+            if year and month:
+                card_expiring = is_card_expiring(int(year), int(month))
+        except:
+            pass
         return card_expiring
 
 
