@@ -2,6 +2,7 @@
 
 [![Build Status](http://img.shields.io/travis/gittip/www.gittip.com/master.svg)](https://travis-ci.org/gittip/www.gittip.com)
 [![HuBoard badge](http://img.shields.io/badge/Hu-Board-7965cc.svg)](https://huboard.com/gittip/www.gittip.com)
+[![Open Bounties](https://api.bountysource.com/badge/team?team_id=423&style=bounties_received)](https://www.bountysource.com/teams/gittip/issues)
 
 Gittip is a weekly gift exchange, helping to create a culture of generosity.
 If you'd like to learn more, check out <https://gittip.com/about>.
