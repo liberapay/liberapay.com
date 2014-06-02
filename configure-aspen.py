@@ -93,46 +93,6 @@ else:
     utils.update_global_stats(website)
 
 
-# Server Algorithm
-# ================
-
-def up_minthreads(website):
-    # https://github.com/gittip/www.gittip.com/issues/1098
-    # Discovered the following API by inspecting in pdb and browsing source.
-    # This requires network_engine.bind to have already been called.
-    request_queue = website.network_engine.cheroot_server.requests
-    request_queue.min = website.min_threads
-
-
-def setup_busy_threads_logging(website):
-    # https://github.com/gittip/www.gittip.com/issues/1572
-    log_every = website.log_busy_threads_every
-    if log_every == 0:
-        return
-
-    pool = website.network_engine.cheroot_server.requests
-    def log_busy_threads():
-        time.sleep(0.5)  # without this we get a single log message where all threads are busy
-        while 1:
-
-            # Use pool.min and not pool.max because of the semantics of these
-            # inside of Cheroot. (Max is a hard limit used only when pool.grow
-            # is called, and it's never called except when the pool starts up,
-            # when it's called with pool.min.)
-
-            nbusy_threads = pool.min - pool.idle
-            print("sample#aspen.busy_threads={}".format(nbusy_threads))
-            time.sleep(log_every)
-
-    thread = threading.Thread(target=log_busy_threads)
-    thread.daemon = True
-    thread.start()
-
-
-website.server_algorithm.insert_before('start', up_minthreads)
-website.server_algorithm.insert_before('start', setup_busy_threads_logging)
-
-
 # Website Algorithm
 # =================
 
@@ -174,7 +134,6 @@ algorithm.functions = [ timer.start
 
                       , cache_static.inbound
 
-                      , algorithm['get_response_for_socket']
                       , algorithm['get_resource_for_request']
                       , algorithm['get_response_for_resource']
 

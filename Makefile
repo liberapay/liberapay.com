@@ -31,7 +31,7 @@ data:
 	./$(env_bin)/honcho -e defaults.env,local.env run ./$(env_bin)/fake_data fake_data
 
 run: env
-	./$(env_bin)/honcho -e defaults.env,local.env run ./$(env_bin)/aspen
+	./$(env_bin)/honcho -e defaults.env,local.env run web 
 
 py: env
 	./$(env_bin)/honcho -e defaults.env,local.env run ./$(env_bin)/python
