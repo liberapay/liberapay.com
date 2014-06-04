@@ -6,7 +6,7 @@
 
 Gittip is a weekly gift exchange, helping to create a culture of generosity.
 If you'd like to learn more, check out <https://gittip.com/about>.
-If you'd like to contribute to Gittip, the best first reference is <https://gittip.com/for/contributors>.
+If you'd like to contribute to Gittip, check out <http://building.gittip.com>.
 
 Quick Start
 ===========
