@@ -701,6 +701,12 @@ class Tests(Harness):
         with self.db.get_cursor() as cursor:
             pytest.raises(alice.BalanceIsNotZero, alice.archive, cursor)
 
+    def test_archive_clears_claimed_time(self):
+        alice = self.make_participant('alice')
+        with self.db.get_cursor() as cursor:
+            archived_as = alice.archive(cursor)
+        assert Participant.from_username(archived_as).claimed_time is None
+
 
     # participant session
 

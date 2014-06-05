@@ -859,6 +859,7 @@ class Participant(Model, MixinTeam):
                 UPDATE participants
                    SET username=%s
                      , username_lower=%s
+                     , claimed_time=NULL
                      , session_token=NULL
                      , session_expires=now()
                  WHERE username=%s
