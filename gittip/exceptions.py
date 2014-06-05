@@ -38,6 +38,7 @@ class NoSelfTipping(Exception): pass
 class NoTippee(Exception): pass
 class BadAmount(Exception): pass
 
+class FailedToReserveUsername(Exception): pass
 
 class NegativeBalance(Exception):
     def __str__(self):
