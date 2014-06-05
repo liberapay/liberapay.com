@@ -248,7 +248,15 @@ class Participant(Model, MixinTeam):
 
     # Canceling
     # =========
-    # XXX Not done yet, building up in pieces.
+
+    def cancel(self):
+        """Cancel the participant's account.
+        """
+        with self.db.get_cursor() as cursor:
+            self.clear_tips_receiving(cursor)
+            self.distribute_balance_as_final_gift(cursor)
+            return self.archive(cursor)
+
 
     class NoOneToGiveFinalGiftTo(Exception): pass
 
@@ -290,6 +298,9 @@ class Participant(Model, MixinTeam):
             cursor.run( "INSERT INTO transfers (tipper, tippee, amount) VALUES (%s, %s, %s)"
                       , (self.username, tippee, amount)
                        )
+
+        assert balance == 0
+        self.set_attributes(balance=balance)
 
 
     def clear_tips_receiving(self, cursor):

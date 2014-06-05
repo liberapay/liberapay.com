@@ -9,6 +9,23 @@ from gittip.testing import Harness
 
 class Tests(Harness):
 
+    # cancel
+
+    def test_cancel_cancels(self):
+        alice = self.make_participant('alice', balance=D('10.00'))
+        self.make_participant('bob', claimed_time='now')
+        carl = self.make_participant('carl')
+
+        alice.set_tip_to('bob', D('3.00'))
+        carl.set_tip_to('alice', D('2.00'))
+
+        archived_as = alice.cancel()
+
+        deadbeef = Participant.from_username(archived_as)
+        assert carl.get_tip_to('alice') == 0
+        assert deadbeef.balance == 0
+
+
     # dbafg - distribute_balance_as_final_gift
 
     def test_dbafg_distributes_balance_as_final_gift(self):
