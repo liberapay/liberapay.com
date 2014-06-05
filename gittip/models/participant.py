@@ -786,6 +786,9 @@ class Participant(Model, MixinTeam):
         return accounts_dict
 
 
+    class StillReceivingTips(Exception): pass
+    class BalanceIsNotZero(Exception): pass
+
     def archive(self, cursor):
         """Given a cursor, use it to archive ourself.
 
@@ -793,6 +796,21 @@ class Participant(Model, MixinTeam):
         using is released. We also sign them out.
 
         """
+
+        # Sanity-check that balance and tips have been dealt with.
+        # ========================================================
+
+        INCOMING = "SELECT count(*) FROM current_tips WHERE tippee = %s AND amount > 0"
+        if cursor.one(INCOMING, (self.username,)) > 0:
+            raise self.StillReceivingTips
+
+        if self.balance != 0:
+            raise self.BalanceIsNotZero
+
+
+        # Do it!
+        # ======
+
         def reserve(cursor, username):
             check = cursor.one("""
 
