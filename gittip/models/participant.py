@@ -11,7 +11,7 @@ of participant, based on certain properties.
 from __future__ import print_function, unicode_literals
 
 import datetime
-from decimal import Decimal
+from decimal import Decimal, ROUND_DOWN
 import uuid
 
 from aspen.utils import typecheck
@@ -249,6 +249,48 @@ class Participant(Model, MixinTeam):
     # Canceling
     # =========
     # XXX Not done yet, building up in pieces.
+
+    class NoOneToGiveFinalGiftTo(Exception): pass
+
+    def distribute_balance_as_final_gift(self, cursor):
+        """Distribute a balance as a final gift.
+        """
+        if self.balance == 0:
+            return
+
+        claimed_tips, claimed_total, _, _= self.get_giving_for_profile()
+        transfers = []
+        distributed = Decimal('0.00')
+
+        for tip in claimed_tips:
+            if tip.amount == 0:
+                continue
+            rate = tip.amount / claimed_total
+            pro_rated = (self.balance * rate).quantize(Decimal('0.01'), ROUND_DOWN)
+            distributed += pro_rated
+            transfers.append([tip.tippee, pro_rated])
+
+        if not transfers:
+            raise self.NoOneToGiveFinalGiftTo
+
+        diff = self.balance - distributed
+        if diff != 0:
+            transfers[0][1] += diff  # Give it to the highest receiver.
+
+        for tippee, amount in transfers:
+            assert amount > 0
+            balance = cursor.one( "UPDATE participants SET balance=balance - %s "
+                                  "WHERE username=%s RETURNING balance"
+                                , (amount, self.username)
+                                 )
+            assert balance >= 0  # sanity check
+            cursor.run( "UPDATE participants SET balance=balance + %s WHERE username=%s"
+                      , (amount, tippee)
+                       )
+            cursor.run( "INSERT INTO transfers (tipper, tippee, amount) VALUES (%s, %s, %s)"
+                      , (self.username, tippee, amount)
+                       )
+
 
     def clear_tips_receiving(self):
         """Zero out tips to a given user. This is a workaround for #1469.
