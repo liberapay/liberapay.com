@@ -292,11 +292,11 @@ class Participant(Model, MixinTeam):
                        )
 
 
-    def clear_tips_receiving(self):
+    def clear_tips_receiving(self, cursor):
         """Zero out tips to a given user. This is a workaround for #1469.
         """
 
-        tips = self.db.all("""
+        tips = cursor.all("""
 
             SELECT amount
                  , ( SELECT participants.*::participants
