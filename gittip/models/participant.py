@@ -786,6 +786,40 @@ class Participant(Model, MixinTeam):
         return accounts_dict
 
 
+    def archive(self, cursor):
+        """Given a cursor, use it to archive ourself.
+
+        Archiving means changing to a random username so the username they were
+        using is released. We also sign them out.
+
+        """
+        for archive_username in gen_random_usernames():
+            try:
+                username = cursor.one("""
+
+                    UPDATE participants
+                       SET username=%s
+                         , username_lower=%s
+                         , session_token=NULL
+                         , session_expires=now()
+                     WHERE username=%s
+                 RETURNING username
+
+                """, ( archive_username
+                     , archive_username.lower()
+                     , self.username
+                      ), default=NotSane)
+            except IntegrityError:
+                continue  # archive_username is already taken;
+                          # extremely unlikely, but ...
+                          # XXX But can the UPDATE fail in other ways?
+            else:
+                assert username == archive_username
+                break
+
+        return archive_username
+
+
     def take_over(self, account, have_confirmation=False):
         """Given an AccountElsewhere or a tuple (platform_name, user_id),
         associate an elsewhere account.
@@ -932,20 +966,18 @@ class Participant(Model, MixinTeam):
             # Every account elsewhere has at least a stub participant account
             # on Gittip.
 
-            rec = cursor.one("""
+            elsewhere = cursor.one("""
 
-                SELECT participant
-                     , claimed_time IS NULL AS is_stub
-                     , is_team
+                SELECT elsewhere.*::elsewhere_with_participant
                   FROM elsewhere
                   JOIN participants ON participant=participants.username
                  WHERE elsewhere.platform=%s AND elsewhere.user_id=%s
 
             """, (platform, user_id), default=NotSane)
+            other = elsewhere.participant
 
-            other_username = rec.participant
 
-            if self.username == other_username:
+            if self.username == other.username:
                 # this is a no op - trying to take over itself
                 return
 
@@ -969,12 +1001,12 @@ class Participant(Model, MixinTeam):
             #       participant
 
             # other_is_a_real_participant
-            other_is_a_real_participant = not rec.is_stub
+            other_is_a_real_participant = other.is_claimed
 
             # this_is_others_last_account_elsewhere
             nelsewhere = cursor.one( "SELECT count(*) FROM elsewhere "
                                      "WHERE participant=%s"
-                                   , (other_username,)
+                                   , (other.username,)
                                     )
             assert nelsewhere > 0           # sanity check
             this_is_others_last_account_elsewhere = (nelsewhere == 1)
@@ -987,7 +1019,7 @@ class Participant(Model, MixinTeam):
             assert nparticipants in (0, 1)  # sanity check
             we_already_have_that_kind_of_account = nparticipants == 1
 
-            if rec.is_team and we_already_have_that_kind_of_account:
+            if elsewhere.is_team and we_already_have_that_kind_of_account:
                 if len(self.get_accounts_elsewhere()) == 1:
                     raise TeamCantBeOnlyAuth
 
@@ -1039,12 +1071,12 @@ class Participant(Model, MixinTeam):
                 # Take over tips.
                 # ===============
 
-                x, y = self.username, other_username
+                x, y = self.username, other.username
                 cursor.run(CREATE_TEMP_TABLE_FOR_UNIQUE_TIPS)
                 cursor.run(CONSOLIDATE_TIPS_RECEIVING, dict(live=x, dead=y))
                 cursor.run(CONSOLIDATE_TIPS_GIVING, dict(live=x, dead=y))
-                cursor.run(ZERO_OUT_OLD_TIPS_RECEIVING, (other_username,))
-                cursor.run(ZERO_OUT_OLD_TIPS_GIVING, (other_username,))
+                cursor.run(ZERO_OUT_OLD_TIPS_RECEIVING, (other.username,))
+                cursor.run(ZERO_OUT_OLD_TIPS_GIVING, (other.username,))
 
 
                 # Archive the old participant.
@@ -1052,29 +1084,7 @@ class Participant(Model, MixinTeam):
                 # We always give them a new, random username. We sign out
                 # the old participant.
 
-                for archive_username in gen_random_usernames():
-                    try:
-                        username = cursor.one("""
-
-                            UPDATE participants
-                               SET username=%s
-                                 , username_lower=%s
-                                 , session_token=NULL
-                                 , session_expires=now()
-                             WHERE username=%s
-                         RETURNING username
-
-                        """, ( archive_username
-                             , archive_username.lower()
-                             , other_username
-                              ), default=NotSane)
-                    except IntegrityError:
-                        continue  # archive_username is already taken;
-                                  # extremely unlikely, but ...
-                                  # XXX But can the UPDATE fail in other ways?
-                    else:
-                        assert username == archive_username
-                        break
+                archive_username = other.archive(cursor)
 
 
                 # Record the absorption.
@@ -1084,7 +1094,7 @@ class Participant(Model, MixinTeam):
                 cursor.run( "INSERT INTO absorptions "
                             "(absorbed_was, absorbed_by, archived_as) "
                             "VALUES (%s, %s, %s)"
-                          , ( other_username
+                          , ( other.username
                             , self.username
                             , archive_username
                              )
