@@ -871,7 +871,14 @@ class Participant(Model, MixinTeam):
                   ), default=NotSane)
             return check
 
-        return safely_reserve_a_username(cursor, reserve=reserve)
+        archived_as = safely_reserve_a_username(cursor, reserve=reserve)
+        add_event(cursor, 'participant', dict( id=self.id
+                                             , action='archive'
+                                             , values=dict( new_username=archived_as
+                                                          , old_username=self.username
+                                                           )
+                                              ))
+        return archived_as
 
 
     def take_over(self, account, have_confirmation=False):

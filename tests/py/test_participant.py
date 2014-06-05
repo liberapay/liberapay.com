@@ -707,6 +707,14 @@ class Tests(Harness):
             archived_as = alice.archive(cursor)
         assert Participant.from_username(archived_as).claimed_time is None
 
+    def test_archive_records_an_event(self):
+        alice = self.make_participant('alice')
+        with self.db.get_cursor() as cursor:
+            archived_as = alice.archive(cursor)
+        payload = self.db.one("SELECT * FROM events WHERE payload->>'action' = 'archive'").payload
+        assert payload['values']['old_username'] == 'alice'
+        assert payload['values']['new_username'] == archived_as
+
 
     # participant session
 
