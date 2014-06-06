@@ -9,11 +9,11 @@ from gittip.models.participant import Participant
 from gittip.testing import Harness
 
 
-class TestCanceling(Harness):
+class TestClosing(Harness):
 
-    # cancel
+    # close
 
-    def test_cancel_cancels(self):
+    def test_close_closes(self):
         alice = self.make_participant('alice', balance=D('10.00'))
         bob = self.make_participant('bob', claimed_time='now')
         carl = self.make_participant('carl')
@@ -21,16 +21,16 @@ class TestCanceling(Harness):
         alice.set_tip_to(bob, D('3.00'))
         carl.set_tip_to(alice, D('2.00'))
 
-        archived_as = alice.cancel('downstream')
+        archived_as = alice.close('downstream')
 
         deadbeef = Participant.from_username(archived_as)
         assert carl.get_tip_to('alice') == 0
         assert deadbeef.balance == 0
 
-    def test_cancel_raises_for_unknown_disbursement_strategy(self):
+    def test_close_raises_for_unknown_disbursement_strategy(self):
         alice = self.make_participant('alice', balance=D('0.00'))
         with pytest.raises(alice.UnknownDisbursementStrategy):
-            alice.cancel('cheese')
+            alice.close('cheese')
 
 
     # wbtba - withdraw_balance_to_bank_account
@@ -50,7 +50,7 @@ class TestCanceling(Harness):
                                      , balanced_customer_href=customer.href
                                       )
 
-        alice.cancel('bank')
+        alice.close('bank')
 
     def test_wbtba_raises_NoBalancedCustomerHref_if_no_balanced_customer_href(self):
         alice = self.make_participant('alice', balance=D('10.00'), is_suspicious=False)

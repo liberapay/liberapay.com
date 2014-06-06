@@ -164,13 +164,13 @@ Gittip.account.init = function() {
     });
 
 
-    // Wire up cancel knob.
-    // ====================
+    // Wire up close knob.
+    // ===================
 
-    $('.cancel form').submit(function(e) {
+    $('.close form').submit(function(e) {
         e.stopPropagation();
         e.preventDefault();
-        if (confirm("Really cancel account!? This can't be undone!"))
-            window.location.href = './cancel';
+        if (confirm("Really close account!? This can't be undone!"))
+            window.location.href = './close';
     });
 };

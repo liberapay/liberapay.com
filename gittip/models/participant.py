@@ -249,13 +249,13 @@ class Participant(Model, MixinTeam):
             self.set_attributes(claimed_time=claimed_time)
 
 
-    # Canceling
-    # =========
+    # Closing
+    # =======
 
     class UnknownDisbursementStrategy(Exception): pass
 
-    def cancel(self, disbursement_strategy):
-        """Cancel the participant's account.
+    def close(self, disbursement_strategy):
+        """Close the participant's account.
         """
         with self.db.get_cursor() as cursor:
             if disbursement_strategy == None:

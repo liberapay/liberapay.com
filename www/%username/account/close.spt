@@ -1,7 +1,7 @@
 from gittip.utils import get_participant
 [---]
 participant = get_participant(request, restrict=True)
-hero = "Cancel Account"
+hero = "Close Account"
 title = participant.username      # used in the title tag
 username = participant.username   # used in footer shared with on/$platform/
                                   # pages
@@ -11,13 +11,13 @@ can_downstream = participant.get_dollars_giving() > 0
 
 if POST:
     disbursement_strategy = request.body.get('disbursement_strategy')
-    participant.cancel(disbursement_strategy)
+    participant.close(disbursement_strategy)
     request.redirect('/')
 [---] text/html
 {% extends "templates/base.html" %}
 
 {% block heading %}
-    <h2 class="top"><span>Cancel Account</span></h2>
+    <h2 class="top"><span>Close Account</span></h2>
 {% endblock %}
 
 {% block box %}
@@ -42,9 +42,9 @@ if POST:
                 </ul>
 
                 <p>If neither option works for you, please <a
-                href="mailto:support@gittip.com?subject=cancelation%20request">contact
+                href="mailto:support@gittip.com?subject=close%20account">contact
                 support</a> to otherwise deal with your balance before
-                canceling your account.</p>
+                closing your account.</p>
 
                 {% endif %}
 
@@ -52,7 +52,7 @@ if POST:
                 <h2>Username</h2>
 
                 <p>We may give your username to someone else if they ask for
-                it, but not for at least a year after you cancel.</p>
+                it, but not for at least a year after you close your account.</p>
 
                 <p>Though if we determine that you've been infringing a
                 trademark, we may give your username away sooner.</p>
@@ -68,7 +68,7 @@ if POST:
                 statement, the tips you're receiving, the tips you're giving,
                 any bank account or credit card, and any linked accounts that
                 aren't used for sign-in. You'll also be removed from any
-                communities and teams you were a part of. If you're canceling a
+                communities and teams you were a part of. If you're closing a
                 team account, then all team members will be removed from the
                 team.</p>
 
@@ -77,8 +77,8 @@ if POST:
                 equally to other users (the ones you gave to and received
                 from).</p>
 
-                <p>After you cancel, your profile page will say, "Account
-                canceled."</p>
+                <p>After you close your account, your profile page will say,
+                "Account closed by user."</p>
 
 
                 <h2>Remember</h2>
@@ -95,8 +95,8 @@ if POST:
             </div>
             <div class="nav level-1">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                <button class="selected larger cancel-account" id="save"
-                    type="submit">Yes, Cancel My Gittip Account</button>
+                <button class="selected larger close-account" id="save"
+                    type="submit">Yes, Close My Gittip Account</button>
             </div>
         </form>
     </div>
