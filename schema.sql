@@ -1341,3 +1341,19 @@ END;
 BEGIN;
     ALTER TABLE participants DROP CONSTRAINT min_balance;
 END;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/pull/2358
+
+BEGIN;
+
+    DROP RULE bitcoin_addresses ON participants;
+    DROP RULE log_email_changes ON participants;
+    DROP RULE log_participant_number ON participants;
+
+    DROP TABLE bitcoin_addresses;
+    DROP TABLE emails;
+    DROP TABLE log_participant_number;
+
+END;
