@@ -1,10 +1,16 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+from datetime import datetime
+from datetime import timedelta
+
+import pytest
 from aspen.http.response import Response
 from gittip import utils
 from gittip.testing import Harness
-from datetime import datetime
-from datetime import timedelta
+from gittip.utils.username import safely_reserve_a_username, FailedToReserveUsername, \
+                                                                           RanOutOfUsernameAttempts
+from psycopg2 import IntegrityError
+
 
 class Tests(Harness):
 
@@ -69,3 +75,66 @@ class Tests(Harness):
         expiring = datetime.utcnow() + timedelta(days = 100)
         expiring = utils.is_card_expiring(expiring.year, expiring.month)
         assert not expiring
+
+
+    # sru - safely_reserve_a_username
+
+    def test_srau_safely_reserves_a_username(self):
+        def gen_test_username():
+            yield 'deadbeef'
+        def reserve(cursor, username):
+            return 'deadbeef'
+        with self.db.get_cursor() as cursor:
+            username = safely_reserve_a_username(cursor, gen_test_username, reserve)
+        assert username == 'deadbeef'
+        assert self.db.one('SELECT username FROM participants') is None
+
+    def test_srau_inserts_a_participant_by_default(self):
+        def gen_test_username():
+            yield 'deadbeef'
+        with self.db.get_cursor() as cursor:
+            username = safely_reserve_a_username(cursor, gen_test_username)
+        assert username == 'deadbeef'
+        assert self.db.one('SELECT username FROM participants') == 'deadbeef'
+
+    def test_srau_wears_a_seatbelt(self):
+        def gen_test_username():
+            for i in range(101):
+                yield 'deadbeef'
+        def reserve(cursor, username):
+            raise IntegrityError
+        with self.db.get_cursor() as cursor:
+            with pytest.raises(FailedToReserveUsername):
+                safely_reserve_a_username(cursor, gen_test_username, reserve)
+
+    def test_srau_seatbelt_goes_to_100(self):
+        def gen_test_username():
+            for i in range(100):
+                yield 'deadbeef'
+        def reserve(cursor, username):
+            raise IntegrityError
+        with self.db.get_cursor() as cursor:
+            with pytest.raises(RanOutOfUsernameAttempts):
+                safely_reserve_a_username(cursor, gen_test_username, reserve)
+
+    @pytest.mark.xfail
+    def test_srau_retries_work_with_db(self):
+        # XXX This is raising InternalError because the transaction is ended or something.
+        self.make_participant('deadbeef')
+        def gen_test_username():
+            yield 'deadbeef'
+            yield 'deafbeef'
+        with self.db.get_cursor() as cursor:
+            username = safely_reserve_a_username(cursor, gen_test_username)
+            assert username == 'deafbeef'
+
+    @pytest.mark.xfail
+    def test_srau_retries_cheese(self):
+        # XXX This is a simplified case of the above test.
+        with self.db.get_cursor() as cursor:
+            cursor.execute("INSERT INTO participants (username, username_lower) VALUES ('c', 'c')")
+            try:
+                cursor.execute("INSERT INTO participants (username, username_lower) VALUES ('c', 'c')")
+            except:
+                pass
+            cursor.execute("INSERT INTO participants (username, username_lower) VALUES ('c', 'c')")

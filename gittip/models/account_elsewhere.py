@@ -9,7 +9,7 @@ import xmltodict
 
 from aspen import Response
 from gittip.exceptions import ProblemChangingUsername
-from gittip.utils.username import reserve_a_random_username
+from gittip.utils.username import safely_reserve_a_username
 
 
 class UnknownAccountElsewhere(Exception): pass
@@ -96,7 +96,7 @@ class AccountElsewhere(Model):
             # We do this with a transaction so that if the insert fails, the
             # participant we reserved for them is rolled back as well.
             with cls.db.get_cursor() as cursor:
-                username = reserve_a_random_username(cursor)
+                username = safely_reserve_a_username(cursor)
                 cursor.execute("""
                     INSERT INTO elsewhere
                                 (participant, {0})

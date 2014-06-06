@@ -36,7 +36,7 @@ from gittip.exceptions import (
 from gittip.models import add_event
 from gittip.models._mixin_team import MixinTeam
 from gittip.models.account_elsewhere import AccountElsewhere
-from gittip.utils.username import gen_random_usernames, reserve_a_random_username
+from gittip.utils.username import safely_reserve_a_username
 from gittip import billing
 from gittip.utils import is_card_expiring
 
@@ -76,7 +76,7 @@ class Participant(Model, MixinTeam):
         """Return a new participant with a random username.
         """
         with cls.db.get_cursor() as cursor:
-            username = reserve_a_random_username(cursor)
+            username = safely_reserve_a_username(cursor)
         return cls.from_username(username)
 
     @classmethod
@@ -793,31 +793,24 @@ class Participant(Model, MixinTeam):
         using is released. We also sign them out.
 
         """
-        for archive_username in gen_random_usernames():
-            try:
-                username = cursor.one("""
+        def reserve(cursor, username):
+            check = cursor.one("""
 
-                    UPDATE participants
-                       SET username=%s
-                         , username_lower=%s
-                         , session_token=NULL
-                         , session_expires=now()
-                     WHERE username=%s
-                 RETURNING username
+                UPDATE participants
+                   SET username=%s
+                     , username_lower=%s
+                     , session_token=NULL
+                     , session_expires=now()
+                 WHERE username=%s
+             RETURNING username
 
-                """, ( archive_username
-                     , archive_username.lower()
-                     , self.username
-                      ), default=NotSane)
-            except IntegrityError:
-                continue  # archive_username is already taken;
-                          # extremely unlikely, but ...
-                          # XXX But can the UPDATE fail in other ways?
-            else:
-                assert username == archive_username
-                break
+            """, ( username
+                 , username.lower()
+                 , self.username
+                  ), default=NotSane)
+            return check
 
-        return archive_username
+        return safely_reserve_a_username(cursor, reserve=reserve)
 
 
     def take_over(self, account, have_confirmation=False):
@@ -1042,7 +1035,7 @@ class Participant(Model, MixinTeam):
             # ====================================
 
             if we_already_have_that_kind_of_account:
-                new_stub_username = reserve_a_random_username(cursor)
+                new_stub_username = safely_reserve_a_username(cursor)
                 cursor.run( "UPDATE elsewhere SET participant=%s "
                             "WHERE platform=%s AND participant=%s"
                           , (new_stub_username, platform, self.username)
