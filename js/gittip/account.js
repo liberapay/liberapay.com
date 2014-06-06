@@ -167,10 +167,7 @@ Gittip.account.init = function() {
     // Wire up close knob.
     // ===================
 
-    $('.close form').submit(function(e) {
-        e.stopPropagation();
-        e.preventDefault();
-        if (confirm("Really close account!? This can't be undone!"))
-            window.location.href = './close';
+    $('button.close-account').click(function() {
+        window.location.href = './close';
     });
 };
