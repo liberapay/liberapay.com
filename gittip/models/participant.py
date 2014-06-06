@@ -188,9 +188,11 @@ class Participant(Model, MixinTeam):
             """, (self.username, gittip.MAX_TIP_SINGULAR))
             if nbigtips > 0:
                 raise HasBigTips
-        self.db.run( "UPDATE participants SET number=%s WHERE id=%s"
-                   , (number, self.id)
-                    )
+        with self.db.get_cursor() as c:
+            add_event(c, 'participant', dict(action='set', id=self.id, values=dict(number=number)))
+            c.execute( "UPDATE participants SET number=%s WHERE id=%s"
+                     , (number, self.id)
+                      )
         self.set_attributes(number=number)
 
 
