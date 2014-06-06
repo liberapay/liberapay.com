@@ -20,7 +20,7 @@ from gittip.exceptions import (
     BadAmount,
 )
 from gittip.models.participant import (
-    LastElsewhere, NeedConfirmation, NonexistingElsewhere, Participant
+    LastElsewhere, NeedConfirmation, NonexistingElsewhere, Participant, TeamCantBeOnlyAuth
 )
 from gittip.testing import Harness
 
@@ -158,6 +158,19 @@ class TestTakeOver(Harness):
         ntips = self.db.one("select count(*) from tips")
         assert 2 == ntips
         self.db.self_check()
+
+    def test_take_over_fails_if_it_would_result_in_just_a_team_account(self):
+        alice_github = self.make_elsewhere('github', 2, 'alice')
+        alice = alice_github.opt_in('alice')[0].participant
+
+        a_team_github = self.make_elsewhere('github', 1, 'a_team', is_team=True)
+        a_team_github.opt_in('a_team')
+
+        pytest.raises( TeamCantBeOnlyAuth
+                     , alice.take_over
+                     , a_team_github
+                     , have_confirmation=True
+                      )
 
     def test_idempotent(self):
         alice_twitter = self.make_elsewhere('twitter', 1, 'alice')
