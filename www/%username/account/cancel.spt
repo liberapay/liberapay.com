@@ -10,8 +10,8 @@ can_upstream = participant.get_dollars_receiving() > 0
 can_downstream = participant.get_dollars_giving() > 0
 
 if POST:
-    final_disbursement_option = request.body['final_disbursement_option']
-    participant.cancel(final_disbursement_option)
+    disbursement_strategy = request.body.get('disbursement_strategy')
+    participant.cancel(disbursement_strategy)
     request.redirect('/')
 [---] text/html
 {% extends "templates/base.html" %}
@@ -25,32 +25,33 @@ if POST:
         <form method="POST">
             <div class="constrain-width group" style="margin-top: 35px;">
                 {% if participant.balance > 0 %}
-                <p>You have a balance of ${{ participant.balance }}.
+                <h2>Balance</h2>
+                <p>You have a balance of <b>${{ participant.balance }}</b>.<br>
                    What should we do with it?</p>
 
                 <ul>
-                    <li><input type="radio" name="final_disbursement_option" id="r2"
+                    <li><input type="radio" name="disbursement_strategy" id="r1"
                          value="bank" checked />
-                        <label for="r2">Send it to my bank account</label></li>
-                    <li><input type="radio" name="final_disbursement_option" id="r3"
-                         value="upstream" {{ 'disabled' if not can_upstream }} />
-                        <label for="r3">Refund it to my patrons</label></li>
-                    <li><input type="radio" name="final_disbursement_option" id="r4"
+                        <label for="r1">Send it to my <a href="/bank-account.html">bank
+                        account</a></label></li>
+                    <li><input type="radio" name="disbursement_strategy" id="r2"
                          value="downstream" {{ 'disabled' if not can_downstream }} />
-                        <label for="r4">Give it to my tippees</label></li>
+                        <label for="r2">Give it to the <a href="../giving/">people I
+                        tip</a></label></li>
                 </ul>
+
+                <p>If neither option works, please <a
+                href="mailto:support@gittip.com?subject=cancelation%20request">contact
+                support</a>.</p>
+
                 {% endif %}
-                <p>Here's what we'll do when you cancel your account:</p>
-                <ul>
-                    <li>Turn off all tips you are currently receiving.</li>
-                    <li>Zero out all tips you are currently receiving.</li>
-                    <li>Make it so there are no more you are currently receiving.</li>
-                </ul>
+
+                <h2>Really cancel your account?</h2>
             </div>
             <div class="nav level-1">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                 <button class="selected larger cancel-account" id="save"
-                    type="submit">Cancel My Gittip Account</button>
+                    type="submit">Yes, Cancel My Gittip Account</button>
             </div>
         </form>
     </div>

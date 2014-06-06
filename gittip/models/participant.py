@@ -258,7 +258,6 @@ class Participant(Model, MixinTeam):
         """Cancel the participant's account.
         """
         with self.db.get_cursor() as cursor:
-
             if disbursement_strategy == None:
                 pass  # No balance, supposedly. archive will check.
             elif disbursement_strategy == 'bank':
