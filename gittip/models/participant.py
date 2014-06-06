@@ -262,8 +262,6 @@ class Participant(Model, MixinTeam):
                 pass  # No balance, supposedly. archive will check.
             elif disbursement_strategy == 'bank':
                 self.withdraw_balance_to_bank_account(cursor)
-            elif disbursement_strategy == 'upstream':
-                self.refund_to_patrons(cursor)
             elif disbursement_strategy == 'downstream':
                 # This in particular needs to come before clear_tips_giving.
                 self.distribute_balance_as_final_gift(cursor)
@@ -301,10 +299,6 @@ class Participant(Model, MixinTeam):
                        , total=Decimal('0.00')          # don't withold anything
                        , minimum_credit=Decimal('0.00') # send it all
                         ) # XXX Records the exchange using a different cursor. :-/
-
-
-    def refund_balance_to_patrons(self, cursor):
-        raise NotImplementedError
 
 
     class NoOneToGiveFinalGiftTo(Exception): pass
