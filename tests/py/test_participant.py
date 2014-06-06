@@ -683,6 +683,25 @@ class Tests(Harness):
         assert actual == "/on/openstreetmap/alice/"
 
 
+    # archive
+
+    def test_archive_fails_if_ctr_not_run(self):
+        alice = self.make_participant('alice')
+        self.make_participant('bob').set_tip_to('alice', Decimal('1.00'))
+        with self.db.get_cursor() as cursor:
+            pytest.raises(alice.StillReceivingTips, alice.archive, cursor)
+
+    def test_archive_fails_if_balance_is_positive(self):
+        alice = self.make_participant('alice', balance=2)
+        with self.db.get_cursor() as cursor:
+            pytest.raises(alice.BalanceIsNotZero, alice.archive, cursor)
+
+    def test_archive_fails_if_balance_is_negative(self):
+        alice = self.make_participant('alice', balance=-2)
+        with self.db.get_cursor() as cursor:
+            pytest.raises(alice.BalanceIsNotZero, alice.archive, cursor)
+
+
     # participant session
 
     def test_no_participant_from_expired_session(self):
