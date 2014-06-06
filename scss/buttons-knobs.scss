@@ -49,11 +49,11 @@ button.selected:hover, button.selected.drag,
 
 button.join-leave[data-is-member="true"],
 .button.join-leave[data-is-member="true"],
-button.cancel-account {
+button.close-account {
     font-weight: normal;
     background: none;
     color: $red;
-    text-decoration: underline;
+    border: 1px solid $red;
     &:hover {
         background: $red;
         color: white;
