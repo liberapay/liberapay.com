@@ -246,6 +246,34 @@ class Participant(Model, MixinTeam):
             self.set_attributes(claimed_time=claimed_time)
 
 
+    # Canceling
+    # =========
+    # XXX Not done yet, building up in pieces.
+
+    def clear_tips_receiving(self):
+        """Zero out tips to a given user. This is a workaround for #1469.
+        """
+
+        tips = self.db.all("""
+
+            SELECT amount
+                 , ( SELECT participants.*::participants
+                       FROM participants
+                      WHERE username=tipper
+                    ) AS tipper
+                 , ( SELECT participants.*::participants
+                       FROM participants
+                      WHERE username=tippee
+                    ) AS tippee
+              FROM current_tips
+             WHERE tippee = %s
+               AND amount > 0
+          ORDER BY amount DESC
+
+        """, (self.username,))
+        for tip in tips:
+            tip.tipper.set_tip_to(tip.tippee.username, '0.00')
+
 
     # Random Junk
     # ===========
