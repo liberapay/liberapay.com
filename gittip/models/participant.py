@@ -272,6 +272,7 @@ class Participant(Model, MixinTeam):
 
             self.clear_tips_giving(cursor)
             self.clear_tips_receiving(cursor)
+            self.clear_personal_information(cursor)
 
             return self.archive(cursor)
 
@@ -390,6 +391,32 @@ class Participant(Model, MixinTeam):
         """.format(filter_on), (self.username,))
         for tip in tips:
             tip.tipper.set_tip_to(tip.tippee.username, '0.00')
+
+
+    def clear_personal_information(self, cursor):
+        """Clear personal information such as statement and goal.
+        """
+        cursor.run("""
+
+            UPDATE participants
+               SET statement=''
+                 , goal=NULL
+                 , anonymous_giving=False
+                 , anonymous_receiving=False
+                 , number='singular'
+                 , avatar_url=NULL
+                 , email=NULL
+            WHERE username=%s
+
+        """, (self.username,))
+        self.set_attributes( statement=''
+                           , goal=None
+                           , anonymous_giving=False
+                           , anonymous_receiving=False
+                           , number='singular'
+                           , avatar_url=None
+                           , email=None
+                            )
 
 
     # Random Junk
