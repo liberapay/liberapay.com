@@ -24,6 +24,7 @@ if POST:
     <div class="on-form">
         <form method="POST">
             <div class="constrain-width group" style="margin-top: 35px;">
+
                 {% if participant.balance > 0 %}
                 <h2>Balance</h2>
                 <p>You have a balance of <b>${{ participant.balance }}</b>.<br>
@@ -40,13 +41,55 @@ if POST:
                         tip</a></label></li>
                 </ul>
 
-                <p>If neither option works, please <a
+                <p>If neither option works for you, please <a
                 href="mailto:support@gittip.com?subject=cancelation%20request">contact
-                support</a>.</p>
+                support</a> to otherwise deal with your balance before
+                canceling your account.</p>
 
                 {% endif %}
 
-                <h2>Really cancel your account?</h2>
+
+                <h2>Username</h2>
+
+                <p>We may give your username to someone else if they ask for
+                it, but not for at least a year after you cancel.</p>
+
+                <p>Though if we determine that you've been infringing a
+                trademark, we may give your username away sooner.</p>
+
+                <p>Until we give your username to someone else, you can use it
+                again if you ever decide to rejoin Gittip. Simply sign in.</p>
+
+
+                <h2>Personal Information</h2>
+
+                <p>Most of your personal information will be deleted
+                immediately, including your "making the world better"
+                statement, the tips you're receiving, and the tips you're
+                giving. You'll also be removed from any communities and teams
+                you were a part of. If you're canceling a team account, then
+                all team members will be removed from the team.</p>
+
+                <p>We <i>won't</i> delete your past giving and receiving
+                history on the site, because that information also belongs
+                equally to other users (the ones you gave to and received
+                from).</p>
+
+                <p>After you cancel, your profile page will say, "Account
+                canceled."</p>
+
+
+                <h2>Remember</h2>
+
+                <p>We have no control over links to your profile from other
+                places on the Internet.</p>
+
+                <p>We have no control over content indexed by search engines
+                like Google.</p>
+
+
+                <h2>Ready?</h2>
+
             </div>
             <div class="nav level-1">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
