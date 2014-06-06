@@ -148,6 +148,52 @@ class TestCanceling(Harness):
         assert Participant.from_username('alice').balance == D('0.00')
 
 
+    # ctg - clear_tips_giving
+
+    def test_ctg_clears_tips_giving(self):
+        alice = self.make_participant('alice', last_bill_result='')
+        alice.set_tip_to(self.make_participant('bob', claimed_time='now').username, D('1.00'))
+        ntips = lambda: self.db.one("SELECT count(*) FROM current_tips "
+                                    "WHERE tipper='alice' AND amount > 0")
+        assert ntips() == 1
+        with self.db.get_cursor() as cursor:
+            alice.clear_tips_giving(cursor)
+        assert ntips() == 0
+
+    def test_ctg_doesnt_duplicate_zero_tips(self):
+        alice = self.make_participant('alice')
+        self.make_participant('bob')
+        alice.set_tip_to('bob', D('1.00'))
+        alice.set_tip_to('bob', D('0.00'))
+        ntips = lambda: self.db.one("SELECT count(*) FROM tips WHERE tipper='alice'")
+        assert ntips() == 2
+        with self.db.get_cursor() as cursor:
+            alice.clear_tips_giving(cursor)
+        assert ntips() == 2
+
+    def test_ctg_doesnt_zero_when_theres_no_tip(self):
+        alice = self.make_participant('alice')
+        ntips = lambda: self.db.one("SELECT count(*) FROM tips WHERE tipper='alice'")
+        assert ntips() == 0
+        with self.db.get_cursor() as cursor:
+            alice.clear_tips_giving(cursor)
+        assert ntips() == 0
+
+    def test_ctg_clears_multiple_tips_giving(self):
+        alice = self.make_participant('alice')
+        alice.set_tip_to(self.make_participant('bob', claimed_time='now').username, D('1.00'))
+        alice.set_tip_to(self.make_participant('carl', claimed_time='now').username, D('1.00'))
+        alice.set_tip_to(self.make_participant('darcy', claimed_time='now').username, D('1.00'))
+        alice.set_tip_to(self.make_participant('evelyn', claimed_time='now').username, D('1.00'))
+        alice.set_tip_to(self.make_participant('francis', claimed_time='now').username, D('1.00'))
+        ntips = lambda: self.db.one("SELECT count(*) FROM current_tips "
+                                    "WHERE tipper='alice' AND amount > 0")
+        assert ntips() == 5
+        with self.db.get_cursor() as cursor:
+            alice.clear_tips_giving(cursor)
+        assert ntips() == 0
+
+
     # ctr - clear_tips_receiving
 
     def test_ctr_clears_tips_receiving(self):
