@@ -248,7 +248,15 @@ class Participant(Model, MixinTeam):
 
     # Canceling
     # =========
-    # XXX Not done yet, building up in pieces.
+
+    def cancel(self):
+        """Cancel the participant's account.
+        """
+        with self.db.get_cursor() as cursor:
+            self.clear_tips_receiving(cursor)
+            self.distribute_balance_as_final_gift(cursor)
+            return self.archive(cursor)
+
 
     class NoOneToGiveFinalGiftTo(Exception): pass
 
@@ -291,12 +299,15 @@ class Participant(Model, MixinTeam):
                       , (self.username, tippee, amount)
                        )
 
+        assert balance == 0
+        self.set_attributes(balance=balance)
 
-    def clear_tips_receiving(self):
+
+    def clear_tips_receiving(self, cursor):
         """Zero out tips to a given user. This is a workaround for #1469.
         """
 
-        tips = self.db.all("""
+        tips = cursor.all("""
 
             SELECT amount
                  , ( SELECT participants.*::participants
@@ -859,6 +870,7 @@ class Participant(Model, MixinTeam):
                 UPDATE participants
                    SET username=%s
                      , username_lower=%s
+                     , claimed_time=NULL
                      , session_token=NULL
                      , session_expires=now()
                  WHERE username=%s
@@ -870,7 +882,14 @@ class Participant(Model, MixinTeam):
                   ), default=NotSane)
             return check
 
-        return safely_reserve_a_username(cursor, reserve=reserve)
+        archived_as = safely_reserve_a_username(cursor, reserve=reserve)
+        add_event(cursor, 'participant', dict( id=self.id
+                                             , action='archive'
+                                             , values=dict( new_username=archived_as
+                                                          , old_username=self.username
+                                                           )
+                                              ))
+        return archived_as
 
 
     def take_over(self, account, have_confirmation=False):

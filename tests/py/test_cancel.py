@@ -9,6 +9,23 @@ from gittip.testing import Harness
 
 class Tests(Harness):
 
+    # cancel
+
+    def test_cancel_cancels(self):
+        alice = self.make_participant('alice', balance=D('10.00'))
+        self.make_participant('bob', claimed_time='now')
+        carl = self.make_participant('carl')
+
+        alice.set_tip_to('bob', D('3.00'))
+        carl.set_tip_to('alice', D('2.00'))
+
+        archived_as = alice.cancel()
+
+        deadbeef = Participant.from_username(archived_as)
+        assert carl.get_tip_to('alice') == 0
+        assert deadbeef.balance == 0
+
+
     # dbafg - distribute_balance_as_final_gift
 
     def test_dbafg_distributes_balance_as_final_gift(self):
@@ -95,7 +112,8 @@ class Tests(Harness):
         ntips = lambda: self.db.one("SELECT count(*) FROM current_tips "
                                     "WHERE tippee='alice' AND amount > 0")
         assert ntips() == 1
-        alice.clear_tips_receiving()
+        with self.db.get_cursor() as cursor:
+            alice.clear_tips_receiving(cursor)
         assert ntips() == 0
 
     def test_ctr_doesnt_duplicate_zero_tips(self):
@@ -105,14 +123,16 @@ class Tests(Harness):
         bob.set_tip_to('alice', D('0.00'))
         ntips = lambda: self.db.one("SELECT count(*) FROM tips WHERE tippee='alice'")
         assert ntips() == 2
-        alice.clear_tips_receiving()
+        with self.db.get_cursor() as cursor:
+            alice.clear_tips_receiving(cursor)
         assert ntips() == 2
 
     def test_ctr_doesnt_zero_when_theres_no_tip(self):
         alice = self.make_participant('alice')
         ntips = lambda: self.db.one("SELECT count(*) FROM tips WHERE tippee='alice'")
         assert ntips() == 0
-        alice.clear_tips_receiving()
+        with self.db.get_cursor() as cursor:
+            alice.clear_tips_receiving(cursor)
         assert ntips() == 0
 
     def test_ctr_clears_multiple_tips_receiving(self):
@@ -125,5 +145,6 @@ class Tests(Harness):
         ntips = lambda: self.db.one("SELECT count(*) FROM current_tips "
                                     "WHERE tippee='alice' AND amount > 0")
         assert ntips() == 5
-        alice.clear_tips_receiving()
+        with self.db.get_cursor() as cursor:
+            alice.clear_tips_receiving(cursor)
         assert ntips() == 0
