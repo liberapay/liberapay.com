@@ -2,12 +2,13 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from decimal import Decimal as D
 
+import balanced
 import pytest
 from gittip.models.participant import Participant
 from gittip.testing import Harness
 
 
-class Tests(Harness):
+class TestCanceling(Harness):
 
     # cancel
 
@@ -19,11 +20,54 @@ class Tests(Harness):
         alice.set_tip_to('bob', D('3.00'))
         carl.set_tip_to('alice', D('2.00'))
 
-        archived_as = alice.cancel()
+        archived_as = alice.cancel('downstream')
 
         deadbeef = Participant.from_username(archived_as)
         assert carl.get_tip_to('alice') == 0
         assert deadbeef.balance == 0
+
+    def test_cancel_raises_for_unknown_disbursement_strategy(self):
+        alice = self.make_participant('alice', balance=D('0.00'))
+        with pytest.raises(alice.UnknownDisbursementStrategy):
+            alice.cancel('cheese')
+
+
+    # wbtba - withdraw_balance_to_bank_account
+
+    def test_wbtba_withdraws_balance_to_bank_account(self):
+        customer = balanced.Customer().save()
+        bank_account = balanced.BankAccount( name='Alice G. Krebs'
+                                           , routing_number='321174851'
+                                           , account_number='9900000001'
+                                           , account_type='checking'
+                                            ).save()
+        bank_account.associate_to_customer(customer.href)
+
+        alice = self.make_participant( 'alice'
+                                     , balance=D('10.00')
+                                     , is_suspicious=False
+                                     , balanced_customer_href=customer.href
+                                      )
+
+        alice.cancel('bank')
+
+    def test_wbtba_raises_NoBalancedCustomerHref_if_no_balanced_customer_href(self):
+        alice = self.make_participant('alice', balance=D('10.00'), is_suspicious=False)
+        with self.db.get_cursor() as cursor:
+            with pytest.raises(alice.NoBalancedCustomerHref):
+                alice.withdraw_balance_to_bank_account(cursor)
+
+    def test_wbtba_raises_NotWhitelisted_if_not_whitelisted(self):
+        alice = self.make_participant('alice', balance=D('10.00'))
+        with self.db.get_cursor() as cursor:
+            with pytest.raises(alice.NotWhitelisted):
+                alice.withdraw_balance_to_bank_account(cursor)
+
+    def test_wbtba_raises_NotWhitelisted_if_blacklisted(self):
+        alice = self.make_participant('alice', balance=D('10.00'), is_suspicious=True)
+        with self.db.get_cursor() as cursor:
+            with pytest.raises(alice.NotWhitelisted):
+                alice.withdraw_balance_to_bank_account(cursor)
 
 
     # dbafg - distribute_balance_as_final_gift

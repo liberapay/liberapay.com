@@ -577,7 +577,7 @@ class Payday(object):
                            )
 
 
-    def ach_credit(self, ts_start, participant, tips, total):
+    def ach_credit(self, ts_start, participant, tips, total, minimum_credit=MINIMUM_CREDIT):
 
         # Compute the amount to credit them.
         # ==================================
@@ -594,13 +594,13 @@ class Payday(object):
         if amount <= 0:
             return      # Participant not owed anything.
 
-        if amount < MINIMUM_CREDIT:
+        if amount < minimum_credit:
             also_log = ""
             if total > 0:
                 also_log = " ($%s balance - $%s in obligations)"
                 also_log %= (balance, total)
             log("Minimum payout is $%s. %s is only due $%s%s."
-               % (MINIMUM_CREDIT, participant.username, amount, also_log))
+               % (minimum_credit, participant.username, amount, also_log))
             return      # Participant owed too little.
 
         if not is_whitelisted(participant):

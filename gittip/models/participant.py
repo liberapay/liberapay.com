@@ -249,13 +249,51 @@ class Participant(Model, MixinTeam):
     # Canceling
     # =========
 
-    def cancel(self):
+    class UnknownDisbursementStrategy(Exception): pass
+
+    def cancel(self, disbursement_strategy):
         """Cancel the participant's account.
         """
         with self.db.get_cursor() as cursor:
             self.clear_tips_receiving(cursor)
-            self.distribute_balance_as_final_gift(cursor)
+            if disbursement_strategy == 'bank':
+                self.withdraw_balance_to_bank_account(cursor)
+            elif disbursement_strategy == 'upstream':
+                self.refund_to_patrons(cursor)
+            elif disbursement_strategy == 'downstream':
+                self.distribute_balance_as_final_gift(cursor)
+            else:
+                raise self.UnknownDisbursementStrategy
             return self.archive(cursor)
+
+
+    class NotWhitelisted(Exception): pass
+    class NoBalancedCustomerHref(Exception): pass
+
+    def withdraw_balance_to_bank_account(self, cursor):
+        if self.is_suspicious in (True, None):
+            raise self.NotWhitelisted
+        if self.balanced_customer_href is None:
+            raise self.NoBalancedCustomerHref
+
+        from gittip.billing.payday import Payday
+        hack = Payday(self.db)  # Our payout code is on the Payday object. Rather than
+                                # refactor right now, let's just use it from there.
+
+        # Monkey-patch a couple methods, coopting them for callbacks, essentially.
+        hack.mark_ach_failed = lambda cursor: None
+        hack.mark_ach_success = lambda cursor, amount, fee: self.set_attributes(balance=0)
+
+        hack.ach_credit( ts_start=None                  # not used
+                       , participant=self
+                       , tips=None                      # not used
+                       , total=Decimal('0.00')          # don't withold anything
+                       , minimum_credit=Decimal('0.00') # send it all
+                        ) # XXX Records the exchange using a different cursor. :-/
+
+
+    def refund_balance_to_patrons(self, cursor):
+        raise NotImplementedError
 
 
     class NoOneToGiveFinalGiftTo(Exception): pass
