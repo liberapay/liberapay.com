@@ -1,19 +1,22 @@
 {% from 'templates/auth.html' import auth_button with context %}
 {% from 'templates/account-row.html' import account_row with context %}
 
+{% set own_account=(user.participant == participant) %}
 <h2>Social Profiles</h2>
 <table class="accounts">
 
     <!-- social profiles -->
     {% for platform in website.social_profiles %}
-        {% if accounts[platform.name] or user.participant == participant %}
+        {% if accounts[platform.name] or own_account %}
             {{ account_row(platform, accounts, auth_button) }}
         {% endif %}
     {% endfor %}
 
 </table>
 
-{% if not user.ANON and user.participant == participant %}
+{% if participant.bitcoin_address or accounts[website.platforms.venmo.name] or own_account %}
+
+{% if not user.ANON and own_account %}
 <h2>Other Receiving Options</h2>
 {% else %}
 <h2>Other Giving Options</h2>
@@ -21,12 +24,13 @@
 <table class="accounts">
 
     <!-- one-off receiving options -->
+    {% if participant.bitcoin_address or own_account %}
     <tr>
         <td class="account-type">
             <img src="{{ website.asset_url }}/bitcoin.png" />
         </td>
-        <td class="account-details">
-            {% if not user.ANON and user.participant == participant %}
+        <td class="account-details" colspan="2">
+            {% if not user.ANON and own_account %}
                 <div class="bitcoin">
             {% else %}
                 <div>
@@ -35,13 +39,13 @@
                     <a class="address" rel="me" href="https://blockchain.info/address/{{ participant.bitcoin_address }}">
                       {{ participant.bitcoin_address }}
                     </a>
-                    {% if not user.ANON and user.participant == participant %}
+                    {% if not user.ANON and own_account %}
                     <button class="toggle-bitcoin">Edit</button>
                     {% endif %}
 
                 {% else %}
                     <span class="none">None</span>
-                    {% if not user.ANON and user.participant == participant %}
+                    {% if not user.ANON and own_account %}
                         <button class="toggle-bitcoin">+ Add</button>
                     {% endif %}
                 {% endif %}
@@ -63,5 +67,11 @@
             <div class="account-type">Bitcoin</div>
         </td>
     </tr>
-    {{ account_row(website.platforms.venmo, accounts, auth_button) }}
+    {% endif %}
+
+    {% if accounts[website.platforms.venmo.name] or own_account %}
+        {% include "templates/venmo-account.html" %}
+    {% endif %}
 </table>
+
+{% endif %}

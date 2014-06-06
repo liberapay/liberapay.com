@@ -11,10 +11,9 @@ of participant, based on certain properties.
 from __future__ import print_function, unicode_literals
 
 import datetime
-from decimal import Decimal
+from decimal import Decimal, ROUND_DOWN
 import uuid
 
-from aspen import Response
 from aspen.utils import typecheck
 from postgres.orm import Model
 from psycopg2 import IntegrityError
@@ -23,20 +22,23 @@ import pytz
 import gittip
 from gittip import NotSane
 from gittip.exceptions import (
+    HasBigTips,
     UsernameIsEmpty,
     UsernameTooLong,
     UsernameContainsInvalidCharacters,
     UsernameIsRestricted,
     UsernameAlreadyTaken,
     NoSelfTipping,
+    NoTippee,
     BadAmount,
 )
 
 from gittip.models import add_event
 from gittip.models._mixin_team import MixinTeam
 from gittip.models.account_elsewhere import AccountElsewhere
-from gittip.utils import canonicalize
-from gittip.utils.username import gen_random_usernames, reserve_a_random_username
+from gittip.utils.username import safely_reserve_a_username
+from gittip import billing
+from gittip.utils import is_card_expiring
 
 
 ASCII_ALLOWED_IN_USERNAME = set("0123456789"
@@ -47,6 +49,7 @@ ASCII_ALLOWED_IN_USERNAME = set("0123456789"
 
 NANSWERS_THRESHOLD = 0  # configured in wireup.py
 
+NOTIFIED_ABOUT_EXPIRATION = b'notifiedAboutExpiration'
 
 class Participant(Model, MixinTeam):
     """Represent a Gittip participant.
@@ -73,7 +76,7 @@ class Participant(Model, MixinTeam):
         """Return a new participant with a random username.
         """
         with cls.db.get_cursor() as cursor:
-            username = reserve_a_random_username(cursor)
+            username = safely_reserve_a_username(cursor)
         return cls.from_username(username)
 
     @classmethod
@@ -92,7 +95,11 @@ class Participant(Model, MixinTeam):
     def from_session_token(cls, token):
         """Return an existing participant based on session token.
         """
-        return cls._from_thing("session_token", token)
+        participant = cls._from_thing("session_token", token)
+        if participant and participant.session_expires < pytz.utc.localize(datetime.datetime.utcnow()):
+            participant = None
+
+        return participant
 
     @classmethod
     def from_api_key(cls, api_key):
@@ -175,12 +182,26 @@ class Participant(Model, MixinTeam):
 
     def update_number(self, number):
         assert number in ('singular', 'plural')
+        if number == 'singular':
+            nbigtips = self.db.one("""\
+                SELECT count(*) FROM current_tips WHERE tippee=%s AND amount > %s
+            """, (self.username, gittip.MAX_TIP_SINGULAR))
+            if nbigtips > 0:
+                raise HasBigTips
         with self.db.get_cursor() as c:
             add_event(c, 'participant', dict(action='set', id=self.id, values=dict(number=number)))
             c.execute( "UPDATE participants SET number=%s WHERE id=%s"
                      , (number, self.id)
                       )
         self.set_attributes(number=number)
+
+
+    # Statement
+    # =========
+
+    def update_statement(self, statement):
+        self.db.run("UPDATE participants SET statement=%s WHERE id=%s", (statement, self.id))
+        self.set_attributes(statement=statement)
 
 
     # API Key
@@ -226,6 +247,125 @@ class Participant(Model, MixinTeam):
             """, (self.username,))
             self.set_attributes(claimed_time=claimed_time)
 
+
+    # Canceling
+    # =========
+
+    class UnknownDisbursementStrategy(Exception): pass
+
+    def cancel(self, disbursement_strategy):
+        """Cancel the participant's account.
+        """
+        with self.db.get_cursor() as cursor:
+            self.clear_tips_receiving(cursor)
+            if disbursement_strategy == 'bank':
+                self.withdraw_balance_to_bank_account(cursor)
+            elif disbursement_strategy == 'upstream':
+                self.refund_to_patrons(cursor)
+            elif disbursement_strategy == 'downstream':
+                self.distribute_balance_as_final_gift(cursor)
+            else:
+                raise self.UnknownDisbursementStrategy
+            return self.archive(cursor)
+
+
+    class NotWhitelisted(Exception): pass
+    class NoBalancedCustomerHref(Exception): pass
+
+    def withdraw_balance_to_bank_account(self, cursor):
+        if self.is_suspicious in (True, None):
+            raise self.NotWhitelisted
+        if self.balanced_customer_href is None:
+            raise self.NoBalancedCustomerHref
+
+        from gittip.billing.payday import Payday
+        hack = Payday(self.db)  # Our payout code is on the Payday object. Rather than
+                                # refactor right now, let's just use it from there.
+
+        # Monkey-patch a couple methods, coopting them for callbacks, essentially.
+        hack.mark_ach_failed = lambda cursor: None
+        hack.mark_ach_success = lambda cursor, amount, fee: self.set_attributes(balance=0)
+
+        hack.ach_credit( ts_start=None                  # not used
+                       , participant=self
+                       , tips=None                      # not used
+                       , total=Decimal('0.00')          # don't withold anything
+                       , minimum_credit=Decimal('0.00') # send it all
+                        ) # XXX Records the exchange using a different cursor. :-/
+
+
+    def refund_balance_to_patrons(self, cursor):
+        raise NotImplementedError
+
+
+    class NoOneToGiveFinalGiftTo(Exception): pass
+
+    def distribute_balance_as_final_gift(self, cursor):
+        """Distribute a balance as a final gift.
+        """
+        if self.balance == 0:
+            return
+
+        claimed_tips, claimed_total, _, _= self.get_giving_for_profile()
+        transfers = []
+        distributed = Decimal('0.00')
+
+        for tip in claimed_tips:
+            if tip.amount == 0:
+                continue
+            rate = tip.amount / claimed_total
+            pro_rated = (self.balance * rate).quantize(Decimal('0.01'), ROUND_DOWN)
+            distributed += pro_rated
+            transfers.append([tip.tippee, pro_rated])
+
+        if not transfers:
+            raise self.NoOneToGiveFinalGiftTo
+
+        diff = self.balance - distributed
+        if diff != 0:
+            transfers[0][1] += diff  # Give it to the highest receiver.
+
+        for tippee, amount in transfers:
+            assert amount > 0
+            balance = cursor.one( "UPDATE participants SET balance=balance - %s "
+                                  "WHERE username=%s RETURNING balance"
+                                , (amount, self.username)
+                                 )
+            assert balance >= 0  # sanity check
+            cursor.run( "UPDATE participants SET balance=balance + %s WHERE username=%s"
+                      , (amount, tippee)
+                       )
+            cursor.run( "INSERT INTO transfers (tipper, tippee, amount) VALUES (%s, %s, %s)"
+                      , (self.username, tippee, amount)
+                       )
+
+        assert balance == 0
+        self.set_attributes(balance=balance)
+
+
+    def clear_tips_receiving(self, cursor):
+        """Zero out tips to a given user. This is a workaround for #1469.
+        """
+
+        tips = cursor.all("""
+
+            SELECT amount
+                 , ( SELECT participants.*::participants
+                       FROM participants
+                      WHERE username=tipper
+                    ) AS tipper
+                 , ( SELECT participants.*::participants
+                       FROM participants
+                      WHERE username=tippee
+                    ) AS tippee
+              FROM current_tips
+             WHERE tippee = %s
+               AND amount > 0
+          ORDER BY amount DESC
+
+        """, (self.username,))
+        for tip in tips:
+            tip.tipper.set_tip_to(tip.tippee.username, '0.00')
 
 
     # Random Junk
@@ -369,8 +509,13 @@ class Participant(Model, MixinTeam):
         if self.username == tippee:
             raise NoSelfTipping
 
+        tippee = Participant.from_username(tippee)
+        if tippee is None:
+            raise NoTippee
+
         amount = Decimal(amount)  # May raise InvalidOperation
-        if (amount < gittip.MIN_TIP) or (amount > gittip.MAX_TIP):
+        max_tip = gittip.MAX_TIP_PLURAL if tippee.IS_PLURAL else gittip.MAX_TIP_SINGULAR
+        if (amount < gittip.MIN_TIP) or (amount > max_tip):
             raise BadAmount
 
         NEW_TIP = """\
@@ -388,8 +533,8 @@ class Participant(Model, MixinTeam):
                      AS first_time_tipper
 
         """
-        args = (self.username, tippee, self.username, tippee, amount, \
-                                                                 self.username)
+        args = (self.username, tippee.username, self.username, tippee.username, amount, \
+                                                                                     self.username)
         first_time_tipper = self.db.one(NEW_TIP, args)
         return amount, first_time_tipper
 
@@ -551,6 +696,7 @@ class Participant(Model, MixinTeam):
                      , t.ctime
                      , p.claimed_time
                      , p.username_lower
+                     , p.number
                   FROM tips t
                   JOIN participants p ON p.username = t.tippee
                  WHERE tipper = %s
@@ -733,6 +879,59 @@ class Participant(Model, MixinTeam):
         return accounts_dict
 
 
+    class StillReceivingTips(Exception): pass
+    class BalanceIsNotZero(Exception): pass
+
+    def archive(self, cursor):
+        """Given a cursor, use it to archive ourself.
+
+        Archiving means changing to a random username so the username they were
+        using is released. We also sign them out.
+
+        """
+
+        # Sanity-check that balance and tips have been dealt with.
+        # ========================================================
+
+        INCOMING = "SELECT count(*) FROM current_tips WHERE tippee = %s AND amount > 0"
+        if cursor.one(INCOMING, (self.username,)) > 0:
+            raise self.StillReceivingTips
+
+        if self.balance != 0:
+            raise self.BalanceIsNotZero
+
+
+        # Do it!
+        # ======
+
+        def reserve(cursor, username):
+            check = cursor.one("""
+
+                UPDATE participants
+                   SET username=%s
+                     , username_lower=%s
+                     , claimed_time=NULL
+                     , session_token=NULL
+                     , session_expires=now()
+                 WHERE username=%s
+             RETURNING username
+
+            """, ( username
+                 , username.lower()
+                 , self.username
+                  ), default=NotSane)
+            return check
+
+        archived_as = safely_reserve_a_username(cursor, reserve=reserve)
+        add_event(cursor, 'participant', dict( id=self.id
+                                             , action='archive'
+                                             , values=dict( new_username=archived_as
+                                                          , old_username=self.username
+                                                           )
+                                              ))
+        return archived_as
+
+
     def take_over(self, account, have_confirmation=False):
         """Given an AccountElsewhere or a tuple (platform_name, user_id),
         associate an elsewhere account.
@@ -879,19 +1078,18 @@ class Participant(Model, MixinTeam):
             # Every account elsewhere has at least a stub participant account
             # on Gittip.
 
-            rec = cursor.one("""
+            elsewhere = cursor.one("""
 
-                SELECT participant
-                     , claimed_time IS NULL AS is_stub
+                SELECT elsewhere.*::elsewhere_with_participant
                   FROM elsewhere
                   JOIN participants ON participant=participants.username
                  WHERE elsewhere.platform=%s AND elsewhere.user_id=%s
 
             """, (platform, user_id), default=NotSane)
+            other = elsewhere.participant
 
-            other_username = rec.participant
 
-            if self.username == other_username:
+            if self.username == other.username:
                 # this is a no op - trying to take over itself
                 return
 
@@ -915,12 +1113,12 @@ class Participant(Model, MixinTeam):
             #       participant
 
             # other_is_a_real_participant
-            other_is_a_real_participant = not rec.is_stub
+            other_is_a_real_participant = other.is_claimed
 
             # this_is_others_last_account_elsewhere
             nelsewhere = cursor.one( "SELECT count(*) FROM elsewhere "
                                      "WHERE participant=%s"
-                                   , (other_username,)
+                                   , (other.username,)
                                     )
             assert nelsewhere > 0           # sanity check
             this_is_others_last_account_elsewhere = (nelsewhere == 1)
@@ -932,6 +1130,10 @@ class Participant(Model, MixinTeam):
                                        )
             assert nparticipants in (0, 1)  # sanity check
             we_already_have_that_kind_of_account = nparticipants == 1
+
+            if elsewhere.is_team and we_already_have_that_kind_of_account:
+                if len(self.get_accounts_elsewhere()) == 1:
+                    raise TeamCantBeOnlyAuth
 
             need_confirmation = NeedConfirmation( other_is_a_real_participant
                                                 , this_is_others_last_account_elsewhere
@@ -952,7 +1154,7 @@ class Participant(Model, MixinTeam):
             # ====================================
 
             if we_already_have_that_kind_of_account:
-                new_stub_username = reserve_a_random_username(cursor)
+                new_stub_username = safely_reserve_a_username(cursor)
                 cursor.run( "UPDATE elsewhere SET participant=%s "
                             "WHERE platform=%s AND participant=%s"
                           , (new_stub_username, platform, self.username)
@@ -981,12 +1183,12 @@ class Participant(Model, MixinTeam):
                 # Take over tips.
                 # ===============
 
-                x, y = self.username, other_username
+                x, y = self.username, other.username
                 cursor.run(CREATE_TEMP_TABLE_FOR_UNIQUE_TIPS)
                 cursor.run(CONSOLIDATE_TIPS_RECEIVING, dict(live=x, dead=y))
                 cursor.run(CONSOLIDATE_TIPS_GIVING, dict(live=x, dead=y))
-                cursor.run(ZERO_OUT_OLD_TIPS_RECEIVING, (other_username,))
-                cursor.run(ZERO_OUT_OLD_TIPS_GIVING, (other_username,))
+                cursor.run(ZERO_OUT_OLD_TIPS_RECEIVING, (other.username,))
+                cursor.run(ZERO_OUT_OLD_TIPS_GIVING, (other.username,))
 
 
                 # Archive the old participant.
@@ -994,29 +1196,7 @@ class Participant(Model, MixinTeam):
                 # We always give them a new, random username. We sign out
                 # the old participant.
 
-                for archive_username in gen_random_usernames():
-                    try:
-                        username = cursor.one("""
-
-                            UPDATE participants
-                               SET username=%s
-                                 , username_lower=%s
-                                 , session_token=NULL
-                                 , session_expires=now()
-                             WHERE username=%s
-                         RETURNING username
-
-                        """, ( archive_username
-                             , archive_username.lower()
-                             , other_username
-                              ), default=NotSane)
-                    except IntegrityError:
-                        continue  # archive_username is already taken;
-                                  # extremely unlikely, but ...
-                                  # XXX But can the UPDATE fail in other ways?
-                    else:
-                        assert username == archive_username
-                        break
+                archive_username = other.archive(cursor)
 
 
                 # Record the absorption.
@@ -1026,7 +1206,7 @@ class Participant(Model, MixinTeam):
                 cursor.run( "INSERT INTO absorptions "
                             "(absorbed_was, absorbed_by, archived_as) "
                             "VALUES (%s, %s, %s)"
-                          , ( other_username
+                          , ( other.username
                             , self.username
                             , archive_username
                              )
@@ -1045,6 +1225,7 @@ class Participant(Model, MixinTeam):
                   FROM elsewhere
                  WHERE participant=%s
                    AND platform IN %s
+                   AND NOT is_team
             """, (self.username, AccountElsewhere.signin_platforms_names))
             assert len(accounts) > 0
             if len(accounts) == 1 and accounts[0] == (platform, user_id):
@@ -1058,6 +1239,27 @@ class Participant(Model, MixinTeam):
             """, (self.username, platform, user_id), default=NonexistingElsewhere)
             add_event(c, 'participant', dict(id=self.id, action='disconnect', values=dict(platform=platform, user_id=user_id)))
         self.update_avatar()
+
+    def credit_card_expiring(self, request, response):
+        card_expiring = False
+
+        if NOTIFIED_ABOUT_EXPIRATION in request.headers.cookie:
+            cookie = request.headers.cookie[NOTIFIED_ABOUT_EXPIRATION]
+            if cookie.value == self.session_token:
+                return False
+
+        if self.balanced_customer_href:
+            card = billing.BalancedCard(self.balanced_customer_href)
+        else:
+            card = billing.StripeCard(self.stripe_customer_id)
+
+        expiration_year = card['expiration_year']
+        expiration_month= card['expiration_month']
+        if expiration_year and expiration_month:
+            card_expiring = is_card_expiring(int(expiration_year), int(expiration_month))
+
+        response.headers.cookie[NOTIFIED_ABOUT_EXPIRATION] = self.session_token
+        return card_expiring
 
 
 class NeedConfirmation(Exception):
@@ -1092,43 +1294,4 @@ class LastElsewhere(Exception): pass
 
 class NonexistingElsewhere(Exception): pass
 
-
-def typecast(request):
-    """Given a Request, raise Response or return Participant.
-
-    If user is not None then we'll restrict access to owners and admins.
-
-    """
-
-    # XXX We can't use this yet because we don't have an inbound Aspen hook
-    # that fires after the first page of the simplate is exec'd.
-
-    path = request.line.uri.path
-    if 'username' not in path:
-        return
-
-    slug = path['username']
-
-    participant = request.website.db.one( """
-        SELECT participants.*::participants
-        FROM participants
-        WHERE username_lower=%s
-    """, (slug.lower()))
-
-    if participant is None:
-        raise Response(404)
-
-    canonicalize(request.line.uri.path.raw, '/', participant.username, slug)
-
-    if participant.claimed_time is None:
-
-        # This is a stub participant record for someone on another platform
-        # who hasn't actually registered with Gittip yet. Let's bounce the
-        # viewer over to the appropriate platform page.
-
-        to = participant.resolve_unclaimed()
-        if to is None:
-            raise Response(404)
-        request.redirect(to)
-
-    path['participant'] = participant
+class TeamCantBeOnlyAuth(Exception): pass

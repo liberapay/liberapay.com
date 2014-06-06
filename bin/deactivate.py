@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""The final rename and clear step for deactivating an account.
+"""The final rename and clear step for canceling an account.
 
 If the account has a balance or is involved in active tips,
 this script will report the problem and abort without making any update.
@@ -9,7 +9,7 @@ this script will report the problem and abort without making any update.
 
 Usage:
 
-    [gittip] $ heroku config -s -a gittip | foreman run -e /dev/stdin ./env/bin/python ./bin/deactivate-final-rename.py "username" [first-eight-of-api-key]
+    [gittip] $ heroku config -s -a gittip | foreman run -e /dev/stdin ./env/bin/python ./bin/deactivate.py "username" [first-eight-of-api-key]
 
 """
 from __future__ import print_function
@@ -28,6 +28,10 @@ else:
 
 db = wireup.db(wireup.env())
 
+
+# Ensure that balance and tips have been dealt with.
+# ==================================================
+
 target = Participant.from_username(username)
 
 INCOMING = """
@@ -43,7 +47,6 @@ FIELDS = """
          WHERE username = %s
 """
 
-
 incoming = db.one(INCOMING, (username,))
 fields = db.one(FIELDS, (username,))
 
@@ -57,6 +60,10 @@ if fields.api_key == None:
     assert first_eight == "None"
 else:
     assert fields.api_key[0:8] == first_eight
+
+
+# Archive the participant record.
+# ===============================
 
 deactivated_name = "deactivated-" + username
 print("Renaming " + username + " to " + deactivated_name)

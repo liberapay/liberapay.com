@@ -101,6 +101,7 @@ class Payee(object):
         while 1:
             net -= D('0.01')
             fee = round_(net * D('0.02'))
+            fee = min(fee, self.fee_cap)
             gross = net + fee
             if gross <= target:
                 break

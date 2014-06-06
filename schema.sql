@@ -1309,3 +1309,35 @@ END;
 BEGIN;
     ALTER TABLE transfers ADD COLUMN as_team_member boolean NOT NULL DEFAULT false;
 END;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/pull/2377
+
+BEGIN;
+    ALTER TABLE participants ALTER COLUMN session_expires SET DEFAULT CURRENT_TIMESTAMP + INTERVAL '6 hours';
+END;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/pull/2378
+
+BEGIN;
+    ALTER TABLE participants ADD CONSTRAINT participants_api_key UNIQUE (api_key);
+END;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/pull/2418
+
+BEGIN;
+    ALTER TABLE elsewhere ALTER COLUMN user_name DROP NOT NULL;
+END;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/pull/2434
+
+BEGIN;
+    ALTER TABLE participants DROP CONSTRAINT min_balance;
+END;

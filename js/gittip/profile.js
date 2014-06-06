@@ -43,6 +43,15 @@ Gittip.profile.init = function() {
             $('.statement textarea').focus();
         });
     }
+
+    function update_members_button(is_plural) {
+        if (is_plural) {
+            $("#members-button").removeClass("hidden")
+        } else {
+            $("#members-button").addClass("hidden")
+        }
+    }
+
     if ($('.statement textarea').val() === '') {
         start_editing_statement();
     }
@@ -55,6 +64,7 @@ Gittip.profile.init = function() {
     $('form.statement').submit(function(e) {
         e.preventDefault();
 
+        var is_plural = jQuery("#statement-select").val() === "plural";
         $('.statement button.save').text('Saving ...');
 
         function success(d) {
@@ -62,11 +72,17 @@ Gittip.profile.init = function() {
             var number = $('.statement select').val();
             Gittip.profile.toNumber(number);
             finish_editing_statement();
+            update_members_button(is_plural);
+        }
+        function error(e) {
+            $('.statement button.save').text('Save');
+            Gittip.notification(JSON.parse(e.responseText).error_message_long, 'error');
         }
         jQuery.ajax(
             { url: "statement.json"
             , type: "POST"
             , success: success
+            , error: error
             , data: { statement: $('.statement textarea').val()
                     , number: $('.statement select').val()
                      }
@@ -158,6 +174,9 @@ Gittip.profile.init = function() {
     }
 
 
+    // Wire up bitcoin input.
+    // ======================
+
     $('.bitcoin').on("click", ".toggle-bitcoin", function()
     {
         // "Add bitcoin address" text or existing
@@ -165,8 +184,6 @@ Gittip.profile.init = function() {
         $('.bitcoin').toggle();
         $('input.bitcoin').focus();
     });
-
-    // Wire up bitcoin input.
     $('.bitcoin-submit')
         .on('click', '[type=submit]', function () {
             var $this = $(this);
@@ -231,6 +248,15 @@ Gittip.profile.init = function() {
         });
 
         return false;
+    });
+
+    // Wire up user_name_prompt
+    // ========================
+
+    $('.user_name_prompt').on('click', function () {
+        var user_name = prompt('Please enter the name of the GitHub account you would like to connect:');
+        if(!user_name) return false;
+        $(this).children('[name="user_name"]').val(user_name);
     });
 
 };

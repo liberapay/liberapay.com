@@ -20,9 +20,13 @@
     {% for slug, name in pages %}
     <a href="/{{ participant.username }}{{ slug }}"><button{% if slug.strip('/') == current_page %} class="selected"{% endif %}>{{ name }}</button></a>
     {% endfor %}
-    {% if participant.show_as_team(user) %}
-    <a href="/{{ participant.username }}/members/"><button{% if 'members' == current_page %} class="selected"{% endif %}>Members</button></a>
+
+    <a href="/{{ participant.username }}/members/" id="members-button"
+    {% if not participant.show_as_team(user) %}
+        class="hidden"
     {% endif %}
+    ><button{% if 'members' == current_page %} class="selected"{% endif %}>Members</button></a>
+
     {% if user.ADMIN %}
     <a href="/{{ participant.username }}/events/"><button{% if 'events' == current_page %} class="selected"{% endif %}>Events</button></a>
     {% endif %}

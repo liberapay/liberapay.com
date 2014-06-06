@@ -6,6 +6,8 @@ from aspen import log_dammit, Response
 from aspen.utils import typecheck, to_age
 from postgres.cursors import SimpleCursorBase
 from jinja2 import escape
+from datetime import datetime
+from datetime import timedelta
 
 COUNTRIES = (
     ('AF', u'Afghanistan'),
@@ -260,6 +262,9 @@ COUNTRIES = (
 )
 COUNTRIES_MAP = dict(COUNTRIES)
 
+# Difference between current time and credit card expiring date when
+# card is considered as expiring
+EXPIRING_DELTA = timedelta(days = 30)
 
 def wrap(u):
     """Given a unicode, return a unicode.
@@ -475,3 +480,9 @@ def to_statement(prepend, string, length=140, append='...'):
             return string
     else:
         return ''
+
+def is_card_expiring(expiration_year, expiration_month):
+    now = datetime.utcnow()
+    expiring_date = datetime(expiration_year, expiration_month, 1)
+    delta = expiring_date - now
+    return delta < EXPIRING_DELTA

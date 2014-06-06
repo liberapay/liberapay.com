@@ -24,6 +24,22 @@ class UsernameIsRestricted(ProblemChangingUsername):
 class UsernameAlreadyTaken(ProblemChangingUsername):
     msg = "The username '{}' is already taken."
 
+
+class ProblemChangingNumber(Exception):
+    def __str__(self):
+        return self.msg
+
+class HasBigTips(ProblemChangingNumber):
+    msg = "You receive tips too large for an individual. Please contact support@gittip.com."
+
+
 class TooGreedy(Exception): pass
 class NoSelfTipping(Exception): pass
+class NoTippee(Exception): pass
 class BadAmount(Exception): pass
+
+class FailedToReserveUsername(Exception): pass
+
+class NegativeBalance(Exception):
+    def __str__(self):
+        return "Negative balance not allowed in this context."

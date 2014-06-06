@@ -2,10 +2,11 @@
 
 [![Build Status](http://img.shields.io/travis/gittip/www.gittip.com/master.svg)](https://travis-ci.org/gittip/www.gittip.com)
 [![HuBoard badge](http://img.shields.io/badge/Hu-Board-7965cc.svg)](https://huboard.com/gittip/www.gittip.com)
+[![Open Bounties](https://api.bountysource.com/badge/team?team_id=423&style=bounties_received)](https://www.bountysource.com/teams/gittip/issues)
 
 Gittip is a weekly gift exchange, helping to create a culture of generosity.
 If you'd like to learn more, check out <https://gittip.com/about>.
-If you'd like to contribute to Gittip, the best first reference is <https://gittip.com/for/contributors>.
+If you'd like to contribute to Gittip, check out <http://building.gittip.com>.
 
 Quick Start
 ===========
@@ -106,10 +107,10 @@ met](http://initd.org/psycopg/docs/faq.html#problems-compiling-and-deploying-psy
 If you are getting an error about `unknown argument: '-mno-fused-madd'` when
 running `make`, then add
 `Wno-error=unused-command-line-argument-hard-error-in-future` to your
-`ARCHFLAGS` environment variable and try again (see [this Stack Overflow answer
+`ARCHFLAGS` environment variable and run `make clean env` again (see [this Stack Overflow answer
 for more information](http://stackoverflow.com/a/22355874/347246)):
 
-    $ ARCHFLAGS=-Wno-error=unused-command-line-argument-hard-error-in-future
+    $ ARCHFLAGS=-Wno-error=unused-command-line-argument-hard-error-in-future make clean env
 
 Building
 --------
@@ -439,7 +440,7 @@ NOTE: The amounts must be encoded as a string (rather than a number).
 Additionally, currently, the only supported platform is 'gittip'.
 
 This endpoint requires authentication. Look for your API key on your [profile
-page](https://www.gittip.com/about/me.html), and pass it as the basic auth
+page](https://www.gittip.com/about/me/account), and pass it as the basic auth
 username. E.g.:
 
 ```
@@ -456,20 +457,32 @@ API Implementations
 Below are some projects that use the Gittip APIs, that can serve as inspiration
 for your project!
 
- - [Drupal: Gittip](https://drupal.org/project/gittip)&mdash;Includes a Gittip
+ - [Drupal: Gittip](https://drupal.org/project/gittip): Includes a Gittip
    giving field type to let you implement the Khan academy model for users on
    your Drupal site.
 
  - [Node.js: Node-Gittip](https://npmjs.org/package/gittip) (also see [Khan
    Academy's setup](http://ejohn.org/blog/gittip-at-khan-academy/))
 
- - [Ruby: gratitude](https://github.com/JohnKellyFerguson/gratitude): A ruby gem that wraps the Gittip API (currently in development and not feature complete).
+ - [Ruby: gratitude](https://github.com/JohnKellyFerguson/gratitude): A ruby
+   gem that wraps the Gittip API.
 
  - [WordPress: WP-Gittip](https://github.com/daankortenbach/WP-Gittip)
 
- - [hubot-gittip](https://github.com/myplanetdigital/hubot-gittip): A Hubot script for interacting with a shared Gittip account.
+ - [hubot-gittip](https://github.com/myplanetdigital/hubot-gittip): A Hubot
+   script for interacting with a shared Gittip account.
 
- - [gittip-collab](https://github.com/engineyard/gittip-collab): A Khan-style tool for managing a Gittip account as a team.
+ - [gittip-collab](https://github.com/engineyard/gittip-collab): A Khan-style
+   tool for managing a Gittip account as a team.
+
+ - [WWW::Gittip](https://metacpan.org/pod/WWW::Gittip): A Perl module
+   implementing the Gittip API more or less
+
+ - [php-curl-class](https://github.com/php-curl-class/php-curl-class/blob/master/examples/gittip_send_tip.php): A php class to tip using the Gittip API.
+
+ - [gittip-twisted](https://github.com/TigerND/gittip-twisted): Gittip client
+   for the Twisted framework
+
 
 Glossary
 ========

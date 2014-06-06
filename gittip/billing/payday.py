@@ -27,6 +27,7 @@ import aspen.utils
 from aspen import log
 from aspen.utils import typecheck
 from gittip.models.participant import Participant
+from gittip.exceptions import NegativeBalance
 from psycopg2 import IntegrityError
 
 
@@ -84,6 +85,9 @@ class NoPayday(Exception):
         return "No payday found where one was expected."
 
 
+LOOP_PAYIN, LOOP_PACHINKO, LOOP_PAYOUT = range(3)
+
+
 class Payday(object):
     """Represent an abstract event during which money is moved.
 
@@ -100,24 +104,31 @@ class Payday(object):
         self.db = db
 
 
-    def genparticipants(self, ts_start, for_payday):
-        """Generator to yield participants with tips and total.
+    def genparticipants(self, ts_start, loop):
+        """Generator to yield participants with extra info.
 
-        We re-fetch participants each time, because the second time through
-        we want to use the total obligations they have for next week, and
-        if we pass a non-False for_payday to get_tips_and_total then we
-        only get unfulfilled tips from prior to that timestamp, which is
-        none of them by definition.
-
-        If someone changes tips after payout starts, and we crash during
-        payout, then their new tips_and_total will be used on the re-run.
-        That's okay.
+        The extra info varies depending on which loop we're in: tips/total for
+        payin and payout, takes for pachinko.
 
         """
-        for participant in self.get_participants(ts_start):
-            tips, total = participant.get_tips_and_total(for_payday=for_payday)
-            typecheck(total, Decimal)
-            yield(participant, tips, total)
+        teams_only = (loop == LOOP_PACHINKO)
+        for participant in self.get_participants(ts_start, teams_only):
+            if loop == LOOP_PAYIN:
+                extra = participant.get_tips_and_total(for_payday=ts_start)
+            elif loop == LOOP_PACHINKO:
+                extra = participant.get_takes(for_payday=ts_start)
+            elif loop == LOOP_PAYOUT:
+
+                # On the payout loop we want to use the total obligations they
+                # have for next week, and if we pass a non-False for_payday to
+                # get_tips_and_total then we only get unfulfilled tips from
+                # prior to that timestamp, which is none of them by definition
+                # at this point since we just recently finished payin.
+
+                extra = participant.get_tips_and_total()
+            else:
+                raise Exception  # sanity check
+            yield(participant, extra)
 
 
     def run(self):
@@ -135,11 +146,11 @@ class Payday(object):
         ts_start = self.start()
         self.zero_out_pending(ts_start)
 
-        self.payin(ts_start, self.genparticipants(ts_start, ts_start))
+        self.payin(ts_start, self.genparticipants(ts_start, loop=LOOP_PAYIN))
         self.move_pending_to_balance_for_teams()
-        self.pachinko(ts_start, self.genparticipants(ts_start, ts_start))
+        self.pachinko(ts_start, self.genparticipants(ts_start, loop=LOOP_PACHINKO))
         self.clear_pending_to_balance()
-        self.payout(ts_start, self.genparticipants(ts_start, False))
+        self.payout(ts_start, self.genparticipants(ts_start, loop=LOOP_PAYOUT))
         self.set_nactive(ts_start)
 
         self.end()
@@ -205,7 +216,7 @@ class Payday(object):
         return None
 
 
-    def get_participants(self, ts_start):
+    def get_participants(self, ts_start, teams_only=False):
         """Given a timestamp, return a list of participants dicts.
         """
         PARTICIPANTS = """\
@@ -214,8 +225,9 @@ class Payday(object):
              WHERE claimed_time IS NOT NULL
                AND claimed_time < %s
                AND is_suspicious IS NOT true
+               {}
           ORDER BY claimed_time ASC
-        """
+        """.format(teams_only and "AND number = 'plural'" or '')
         participants = self.db.all(PARTICIPANTS, (ts_start,))
         log("Fetched participants.")
         return participants
@@ -226,7 +238,7 @@ class Payday(object):
         """
         i = 0
         log("Starting payin loop.")
-        for i, (participant, tips, total) in enumerate(participants, start=1):
+        for i, (participant, (tips, total)) in enumerate(participants, start=1):
             if i % 100 == 0:
                 log("Payin done for %d participants." % i)
             self.charge_and_or_transfer(ts_start, participant, tips, total)
@@ -235,11 +247,9 @@ class Payday(object):
 
     def pachinko(self, ts_start, participants):
         i = 0
-        for i, (participant, foo, bar) in enumerate(participants, start=1):
+        for i, (participant, takes) in enumerate(participants, start=1):
             if i % 100 == 0:
                 log("Pachinko done for %d participants." % i)
-            if participant.number != 'plural':
-                continue
 
             available = participant.balance
             log("Pachinko out from %s with $%s." % ( participant.username
@@ -258,7 +268,7 @@ class Payday(object):
                         , pachinko=True
                          )
 
-            for take in participant.get_current_takes():
+            for take in takes:
                 amount = min(take['amount'], available)
                 available -= amount
                 tip(take['member'], amount)
@@ -273,7 +283,7 @@ class Payday(object):
         """
         i = 0
         log("Starting payout loop.")
-        for i, (participant, tips, total) in enumerate(participants, start=1):
+        for i, (participant, (tips, total)) in enumerate(participants, start=1):
             if i % 100 == 0:
                 log("Payout done for %d participants." % i)
             self.ach_credit(ts_start, participant, tips, total)
@@ -450,7 +460,7 @@ class Payday(object):
 
             try:
                 self.debit_participant(cursor, tipper, amount)
-            except IntegrityError:
+            except NegativeBalance:
                 return False
 
             self.credit_participant(cursor, tippee, amount)
@@ -470,19 +480,17 @@ class Payday(object):
         DECREMENT = """\
 
            UPDATE participants
-              SET balance=(balance - %s)
-            WHERE username=%s
-              AND pending IS NOT NULL
-        RETURNING balance
+              SET balance = (balance - %(amount)s)
+            WHERE username = %(participant)s
+              AND balance >= %(amount)s
+        RETURNING pending
 
         """
-
-        # This will fail with IntegrityError if the balance goes below zero.
-        # We catch that and return false in our caller.
-        cursor.execute(DECREMENT, (amount, participant))
-
-        rec = cursor.fetchone()
-        assert rec is not None, (amount, participant)  # sanity check
+        args = dict(amount=amount, participant=participant)
+        r = cursor.one(DECREMENT, args, default=False)
+        if r is False:
+            raise NegativeBalance
+        assert r is not None, (amount, participant)  # sanity check
 
 
     def credit_participant(self, cursor, participant, amount):
@@ -569,7 +577,7 @@ class Payday(object):
                            )
 
 
-    def ach_credit(self, ts_start, participant, tips, total):
+    def ach_credit(self, ts_start, participant, tips, total, minimum_credit=MINIMUM_CREDIT):
 
         # Compute the amount to credit them.
         # ==================================
@@ -586,13 +594,13 @@ class Payday(object):
         if amount <= 0:
             return      # Participant not owed anything.
 
-        if amount < MINIMUM_CREDIT:
+        if amount < minimum_credit:
             also_log = ""
             if total > 0:
                 also_log = " ($%s balance - $%s in obligations)"
                 also_log %= (balance, total)
             log("Minimum payout is $%s. %s is only due $%s%s."
-               % (MINIMUM_CREDIT, participant.username, amount, also_log))
+               % (minimum_credit, participant.username, amount, also_log))
             return      # Participant owed too little.
 
         if not is_whitelisted(participant):
@@ -827,12 +835,15 @@ class Payday(object):
                SET last_ach_result=%s
                  , balance=(balance + %s)
              WHERE username=%s
+         RETURNING balance
 
             """
-            cursor.execute(RESULT, ( last_ach_result
-                                   , credit - fee     # -10.00 - 0.30 = -10.30
-                                   , username
-                                    ))
+            balance = cursor.one(RESULT, ( last_ach_result
+                                         , credit - fee     # -10.00 - 0.30 = -10.30
+                                         , username
+                                          ))
+            if balance < 0:
+                raise NegativeBalance
 
 
     def record_transfer(self, cursor, tipper, tippee, amount, as_team_member=False):

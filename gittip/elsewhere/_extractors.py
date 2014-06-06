@@ -3,9 +3,50 @@
 from __future__ import unicode_literals
 
 import json
+from operator import getitem
 import xml.etree.ElementTree as ET
 
 from aspen import log
+
+
+def _getitemchain(o, *keys):
+    return reduce(getitem, keys, o)
+
+
+def _popitemchain(obj, *keys):
+    objs = [obj]
+    for key in keys[:-1]:
+        objs.append(objs[-1][key])
+    r = objs[-1].pop(keys[-1])
+    for o, k in reversed(list(zip(objs[:-1], keys[:-1]))):
+        if len(o[k]) != 0:
+            break
+        o.pop(k)
+    return r
+
+
+def any_key(*keys, **kw):
+    clean = kw.pop('clean', lambda a: a)
+    def f(self, info, *default):
+        for key in keys:
+            chain = isinstance(key, basestring) and (key,) or key
+            try:
+                v = _getitemchain(info, *chain)
+            except (KeyError, TypeError):
+                continue
+            if v:
+                v = clean(v)
+            if not v:
+                continue
+            _popitemchain(info, *chain)
+            return v
+        if default:
+            return default[0]
+        msg = 'Unable to find any of the keys %s in %s API response:\n%s'
+        msg %= keys, self.name, json.dumps(info, indent=4)
+        log(msg)
+        raise KeyError(msg)
+    return f
 
 
 def key(k, clean=lambda a: a):

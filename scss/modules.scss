@@ -86,9 +86,23 @@ a.mini-user:hover {
         font-style: italic;
         color: $gray;
     }
-    .auth-button, .account-delete {
-        float: right;
-        margin-top: 8px;
+
+    .account-action {
+        padding-right: 8px;
+        vertical-align: middle;
+        text-align: right;
+
+        .account-delete {
+            display: inline-block;
+        }
+    }
+
+    tr.has-avatar > .account-details {
+      vertical-align: bottom;
+    }
+
+    .email {
+        position: relative;
     }
     .toggle-bitcoin, .toggle-email {
         position: absolute;
@@ -96,12 +110,10 @@ a.mini-user:hover {
     }
     .toggle-bitcoin {
         margin-top: 8px;
+        right: 8px;
     }
     .account-type ~ .auth-button, .toggle-email {
         margin-top: -1.25em;
-    }
-    td > div {
-        position: relative;
     }
     table {
         width: 100%;
@@ -155,9 +167,6 @@ a.mini-user:hover {
                 background-color: #D7E4DE;
             }
         }
-    }
-    tr.has-avatar > td {
-        vertical-align: bottom;
     }
     div.account-type {
         font-size: 12px;
@@ -290,3 +299,25 @@ ul.memberships {
 #page h1.congrats {
     font-size: 25px;
 }
+
+#dnt {
+  width: 100%
+}
+
+#dnt tr {
+  border-top: 1px solid #DDD;
+  border-bottom: 1px solid #DDD;
+  width: 100%
+}
+
+td.dnt-label {
+  height: 36pt;
+  margin-bottom: 3px;
+}
+
+td.dnt-value {
+  text-align: right;
+  padding-right: 8px;
+}
+
+

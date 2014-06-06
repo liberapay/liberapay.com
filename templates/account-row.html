@@ -14,27 +14,32 @@
         <td class="account-details">
             {% if account == None %}
                 <span class="none">None</span>
-                {% if not user.ANON and user.participant == participant %}
-                    {% call auth_button(platform.name, 'connect') %}
-                        + Add
-                    {% endcall %}
-                {% endif %}
             {% else %}
                 <a class="account-username" rel="me" href="{{ account.html_url|e }}"
-                    >{{ account.user_name|e }}
+                    >{{ (account.user_name or account.user_id)|e }}
                     {% if account.display_name and account.display_name != account.user_name %}
                         ({{ account.display_name|e }})
                     {% endif %}
                 </a>
-                {% if user.participant == participant %}
+            {% endif %}
+
+            <div class="account-type">{{ platform.display_name }}</div>
+        </td>
+        <td class="account-action">
+            {% if user.participant == participant %}
+                {% if account == None %}
+                    {% set allow_team = participant.IS_PLURAL and platform.is_team_admin %}
+                    {% set cls = allow_team and 'user_name_prompt' or '' %}
+                    {% call auth_button(platform.name, 'connect', class=cls) %}
+                        + Add
+                    {% endcall %}
+                {% else %}
                     <div class="account-delete" title="Disconnect"
                             data-platform="{{ platform.name }}"
                             data-user_id="{{ account.user_id }}">
                     </div>
                 {% endif %}
             {% endif %}
-
-            <div class="account-type">{{ platform.display_name }}</div>
         </td>
     </tr>
 {% endmacro %}

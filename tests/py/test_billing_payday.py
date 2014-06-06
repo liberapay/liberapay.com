@@ -5,11 +5,13 @@ from datetime import datetime, timedelta
 
 import balanced
 import mock
+import pytest
 from psycopg2 import IntegrityError
 
 from aspen.utils import typecheck, utcnow
 from gittip import billing
-from gittip.billing.payday import Payday, skim_credit
+from gittip.billing.payday import Payday, skim_credit, LOOP_PACHINKO
+from gittip.exceptions import NegativeBalance
 from gittip.models.participant import Participant
 from gittip.testing import Harness
 from gittip.testing.balanced import BalancedHarness
@@ -722,7 +724,7 @@ class TestBillingTransfer(PaydayHarness):
 
         # this will fail because not enough balance
         with self.db.get_cursor() as cursor:
-            with self.assertRaises(IntegrityError):
+            with self.assertRaises(NegativeBalance):
                 self.payday.debit_participant(cursor, subject.username, amount)
 
     def test_skim_credit(self):
@@ -810,6 +812,15 @@ class TestBillingTransfer(PaydayHarness):
         alice = Participant.from_username('alice')
         assert alice.balance == D("0.59")
 
+    def test_record_credit_fails_if_negative_balance(self):
+        pytest.raises( NegativeBalance
+                     , self.payday.record_credit
+                     , amount=D("10.00")
+                     , fee=D("0.41")
+                     , error=""
+                     , username="alice"
+                      )
+
     def test_record_credit_doesnt_update_balance_if_error(self):
         self.payday.record_credit( amount=D("-1.00")
                                  , fee=D("0.41")
@@ -838,11 +849,60 @@ class TestPachinko(Harness):
         assert actual == expected
 
     def test_pachinko_pachinkos(self):
-        a_team = self.make_participant('a_team', claimed_time='now', number='plural', balance=20, pending=0)
+        a_team = self.make_participant('a_team', claimed_time='now', number='plural', balance=20, \
+                                                                                         pending=0)
         a_team.add_member(self.make_participant('alice', claimed_time='now', balance=0, pending=0))
         a_team.add_member(self.make_participant('bob', claimed_time='now', balance=0, pending=0))
 
         ts_start = self.payday.start()
 
-        participants = self.payday.genparticipants(ts_start, ts_start)
+        participants = self.payday.genparticipants(ts_start, LOOP_PACHINKO)
         self.payday.pachinko(ts_start, participants)
+
+        assert Participant.from_username('alice').pending == D('0.01')
+        assert Participant.from_username('bob').pending == D('0.01')
+
+    def test_pachinko_sees_current_take(self):
+        a_team = self.make_participant('a_team', claimed_time='now', number='plural', balance=20, \
+                                                                                         pending=0)
+        alice = self.make_participant('alice', claimed_time='now', balance=0, pending=0)
+        a_team.add_member(alice)
+        a_team.set_take_for(alice, D('1.00'), alice)
+
+        ts_start = self.payday.start()
+
+        participants = self.payday.genparticipants(ts_start, LOOP_PACHINKO)
+        self.payday.pachinko(ts_start, participants)
+
+        assert Participant.from_username('alice').pending == D('1.00')
+
+    def test_pachinko_ignores_take_set_after_payday_starts(self):
+        a_team = self.make_participant('a_team', claimed_time='now', number='plural', balance=20, \
+                                                                                         pending=0)
+        alice = self.make_participant('alice', claimed_time='now', balance=0, pending=0)
+        a_team.add_member(alice)
+        a_team.set_take_for(alice, D('0.33'), alice)
+
+        ts_start = self.payday.start()
+        a_team.set_take_for(alice, D('1.00'), alice)
+
+        participants = self.payday.genparticipants(ts_start, LOOP_PACHINKO)
+        self.payday.pachinko(ts_start, participants)
+
+        assert Participant.from_username('alice').pending == D('0.33')
+
+    def test_pachinko_ignores_take_thats_already_been_processed(self):
+        a_team = self.make_participant('a_team', claimed_time='now', number='plural', balance=20, \
+                                                                                         pending=0)
+        alice = self.make_participant('alice', claimed_time='now', balance=0, pending=0)
+        a_team.add_member(alice)
+        a_team.set_take_for(alice, D('0.33'), alice)
+
+        ts_start = self.payday.start()
+        a_team.set_take_for(alice, D('1.00'), alice)
+
+        for i in range(4):
+            participants = self.payday.genparticipants(ts_start, LOOP_PACHINKO)
+            self.payday.pachinko(ts_start, participants)
+
+        assert Participant.from_username('alice').pending == D('0.33')

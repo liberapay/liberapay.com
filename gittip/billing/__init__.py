@@ -186,6 +186,8 @@ class StripeCard(object):
                    , 'address_2': 'address_line2'
                    , 'state': 'address_state'
                    , 'zip': 'address_zip'
+                   , 'expiration_month': 'exp_month'
+                   , 'expiration_year': 'exp_year'
                     }.get(name, name)
             out = self._get(name)
         return out
@@ -279,6 +281,8 @@ class BalancedCard(BalancedThing):
         'state': 'meta.region',
         'last4': 'number',
         'last_four': 'number',
+        'expiration_month': 'expiration_month',
+        'expiration_year': 'expiration_year',
     }
 
 

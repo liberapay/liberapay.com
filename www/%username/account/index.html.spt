@@ -72,9 +72,14 @@ locked = False
                         <div class="account-type">Credit card</div>
                         {% if participant.last_bill_result != "" %}
                             <span class="none">None</span>
-                            <a class="button auth-button" href="/credit-card.html">+ Add</a>
                         {% else %}
                             <a class="account-username" href="/credit-card.html">Added</a>
+                        {% endif %}
+                    </td>
+                    <td class="account-action">
+                        {% if participant.last_bill_result != "" %}
+                            <a class="button auth-button" href="/credit-card.html">+ Add</a>
+                        {% else %}
                             <a class="button auth-button" href="/credit-card.html">Edit</a>
                         {% endif %}
                     </td>
@@ -100,9 +105,14 @@ locked = False
                         <div class="account-type">Bank account</div>
                         {% if participant.last_ach_result != "" %}
                             <span class="none">None</span>
-                            <a class="button auth-button" href="/bank-account.html">+ Add</a>
                         {% else %}
                             <a class="account-username" href="/bank-account.html">Added</a>
+                        {% endif %}
+                    </td>
+                    <td class="account-action">
+                        {% if participant.last_ach_result != "" %}
+                            <a class="button auth-button" href="/bank-account.html">+ Add</a>
+                        {% else %}
                             <a class="button auth-button" href="/bank-account.html">Edit</a>
                         {% endif %}
                     </td>
@@ -159,6 +169,21 @@ locked = False
           <a href="https://github.com/gittip/www.gittip.com#api">API docs</a>
         </div>
 
+        <h2>Privacy</h2>
+        <table id="dnt">
+            <tr>
+                <td class="dnt-label">
+                    <a href="/about/privacy/#dnt">Do Not Track</a>
+                </td>
+                <td class="dnt-value">
+                    {% if request.headers.get('DNT') == '1' %}
+                    ON
+                    {% else %}
+                    OFF
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
     </div>
 </div>
 {% endblock %}

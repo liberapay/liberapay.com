@@ -4,22 +4,23 @@ import datetime
 import random
 from decimal import Decimal
 
-import psycopg2
 import pytz
 import pytest
 from aspen.utils import utcnow
 from gittip import NotSane
 from gittip.exceptions import (
+    HasBigTips,
     UsernameIsEmpty,
     UsernameTooLong,
     UsernameAlreadyTaken,
     UsernameContainsInvalidCharacters,
     UsernameIsRestricted,
     NoSelfTipping,
+    NoTippee,
     BadAmount,
 )
 from gittip.models.participant import (
-    LastElsewhere, NeedConfirmation, NonexistingElsewhere, Participant
+    LastElsewhere, NeedConfirmation, NonexistingElsewhere, Participant, TeamCantBeOnlyAuth
 )
 from gittip.testing import Harness
 
@@ -113,57 +114,70 @@ class TestAbsorptions(Harness):
 class TestTakeOver(Harness):
 
     def test_cross_tip_doesnt_become_self_tip(self):
-        alice = self.make_elsewhere('twitter', 1, 'alice')
-        bob   = self.make_elsewhere('twitter', 2, 'bob')
-        alice_participant = alice.opt_in('alice')[0].participant
-        bob_participant = bob.opt_in('bob')[0].participant
-        alice_participant.set_tip_to('bob', '1.00')
-        bob_participant.take_over(alice, have_confirmation=True)
+        alice_twitter = self.make_elsewhere('twitter', 1, 'alice')
+        bob_twitter   = self.make_elsewhere('twitter', 2, 'bob')
+        alice = alice_twitter.opt_in('alice')[0].participant
+        bob = bob_twitter.opt_in('bob')[0].participant
+        alice.set_tip_to('bob', '1.00')
+        bob.take_over(alice_twitter, have_confirmation=True)
         self.db.self_check()
 
     def test_zero_cross_tip_doesnt_become_self_tip(self):
-        alice = self.make_elsewhere('twitter', 1, 'alice')
-        bob   = self.make_elsewhere('twitter', 2, 'bob')
-        alice_participant = alice.opt_in('alice')[0].participant
-        bob_participant = bob.opt_in('bob')[0].participant
-        alice_participant.set_tip_to('bob', '1.00')
-        alice_participant.set_tip_to('bob', '0.00')
-        bob_participant.take_over(alice, have_confirmation=True)
+        alice_twitter = self.make_elsewhere('twitter', 1, 'alice')
+        bob_twitter   = self.make_elsewhere('twitter', 2, 'bob')
+        alice = alice_twitter.opt_in('alice')[0].participant
+        bob = bob_twitter.opt_in('bob')[0].participant
+        alice.set_tip_to('bob', '1.00')
+        alice.set_tip_to('bob', '0.00')
+        bob.take_over(alice_twitter, have_confirmation=True)
         self.db.self_check()
 
     def test_do_not_take_over_zero_tips_giving(self):
-        alice = self.make_elsewhere('twitter', 1, 'alice')
+        alice_twitter = self.make_elsewhere('twitter', 1, 'alice')
         self.make_elsewhere('twitter', 2, 'bob').opt_in('bob')
-        carl  = self.make_elsewhere('twitter', 3, 'carl')
-        alice_participant = alice.opt_in('alice')[0].participant
-        carl_participant = carl.opt_in('carl')[0].participant
-        carl_participant.set_tip_to('bob', '1.00')
-        carl_participant.set_tip_to('bob', '0.00')
-        alice_participant.take_over(carl, have_confirmation=True)
+        carl_twitter  = self.make_elsewhere('twitter', 3, 'carl')
+        alice = alice_twitter.opt_in('alice')[0].participant
+        carl = carl_twitter.opt_in('carl')[0].participant
+        carl.set_tip_to('bob', '1.00')
+        carl.set_tip_to('bob', '0.00')
+        alice.take_over(carl_twitter, have_confirmation=True)
         ntips = self.db.one("select count(*) from tips")
         assert 2 == ntips
         self.db.self_check()
 
     def test_do_not_take_over_zero_tips_receiving(self):
-        alice = self.make_elsewhere('twitter', 1, 'alice')
-        bob   = self.make_elsewhere('twitter', 2, 'bob')
-        carl  = self.make_elsewhere('twitter', 3, 'carl')
-        alice_participant = alice.opt_in('alice')[0].participant
-        bob_participant   = bob.opt_in('bob')[0].participant
-        carl.opt_in('carl')
-        bob_participant.set_tip_to('carl', '1.00')
-        bob_participant.set_tip_to('carl', '0.00')
-        alice_participant.take_over(carl, have_confirmation=True)
+        alice_twitter = self.make_elsewhere('twitter', 1, 'alice')
+        bob_twitter   = self.make_elsewhere('twitter', 2, 'bob')
+        carl_twitter  = self.make_elsewhere('twitter', 3, 'carl')
+        alice = alice_twitter.opt_in('alice')[0].participant
+        bob = bob_twitter.opt_in('bob')[0].participant
+        carl_twitter.opt_in('carl')
+        bob.set_tip_to('carl', '1.00')
+        bob.set_tip_to('carl', '0.00')
+        alice.take_over(carl_twitter, have_confirmation=True)
         ntips = self.db.one("select count(*) from tips")
         assert 2 == ntips
         self.db.self_check()
 
+    def test_take_over_fails_if_it_would_result_in_just_a_team_account(self):
+        alice_github = self.make_elsewhere('github', 2, 'alice')
+        alice = alice_github.opt_in('alice')[0].participant
+
+        a_team_github = self.make_elsewhere('github', 1, 'a_team', is_team=True)
+        a_team_github.opt_in('a_team')
+
+        pytest.raises( TeamCantBeOnlyAuth
+                     , alice.take_over
+                     , a_team_github
+                     , have_confirmation=True
+                      )
+
     def test_idempotent(self):
-        alice = self.make_elsewhere('twitter', 1, 'alice')
-        bob   = self.make_elsewhere('github', 2, 'bob')
-        alice_participant = alice.opt_in('alice')[0].participant
-        alice_participant.take_over(bob, have_confirmation=True)
-        alice_participant.take_over(bob, have_confirmation=True)
+        alice_twitter = self.make_elsewhere('twitter', 1, 'alice')
+        bob_github    = self.make_elsewhere('github', 2, 'bob')
+        alice = alice_twitter.opt_in('alice')[0].participant
+        alice.take_over(bob_github, have_confirmation=True)
+        alice.take_over(bob_github, have_confirmation=True)
         self.db.self_check()
 
 
@@ -378,6 +392,31 @@ class Tests(Harness):
         assert actual == long
 
 
+    # number
+
+    def test_cant_go_singular_with_big_tips(self):
+        alice = self.make_participant('alice', last_bill_result='')
+        bob = self.make_participant('bob', number='plural')
+        carl = self.make_participant('carl')
+        carl.set_tip_to('bob', '100.00')
+        alice.set_tip_to('bob', '1000.00')
+        pytest.raises(HasBigTips, bob.update_number, 'singular')
+
+    def test_can_go_singular_without_big_tips(self):
+        alice = self.make_participant('alice', last_bill_result='')
+        bob = self.make_participant('bob', number='plural')
+        alice.set_tip_to('bob', '100.00')
+        bob.update_number('singular')
+        assert Participant.from_username('bob').number == 'singular'
+
+    def test_can_go_plural(self):
+        alice = self.make_participant('alice', last_bill_result='')
+        bob = self.make_participant('bob')
+        alice.set_tip_to('bob', '100.00')
+        bob.update_number('plural')
+        assert Participant.from_username('bob').number == 'plural'
+
+
     # set_tip_to - stt
 
     def test_stt_sets_tip_to(self):
@@ -403,28 +442,27 @@ class Tests(Harness):
 
     def test_stt_doesnt_allow_self_tipping(self):
         alice = self.make_participant('alice', last_bill_result='')
-        self.assertRaises( NoSelfTipping
-                     , alice.set_tip_to
-                     , 'alice'
-                     , '1000000.00'
-                      )
+        self.assertRaises(NoSelfTipping, alice.set_tip_to, 'alice', '10.00')
 
     def test_stt_doesnt_allow_just_any_ole_amount(self):
         alice = self.make_participant('alice', last_bill_result='')
         self.make_participant('bob')
-        self.assertRaises( BadAmount
-                     , alice.set_tip_to
-                     , 'bob'
-                     , '1000000.00'
-                      )
+        self.assertRaises(BadAmount, alice.set_tip_to, 'bob', '1000.00')
+
+    def test_stt_allows_higher_tip_to_plural_receiver(self):
+        alice = self.make_participant('alice', last_bill_result='')
+        self.make_participant('bob', number='plural')
+        actual = alice.set_tip_to('bob', '1000.00')
+        assert actual == (Decimal('1000.00'), True)
+
+    def test_stt_still_caps_tips_to_plural_receivers(self):
+        alice = self.make_participant('alice', last_bill_result='')
+        self.make_participant('bob', number='plural')
+        self.assertRaises(BadAmount, alice.set_tip_to, 'bob', '1000.01')
 
     def test_stt_fails_to_tip_unknown_people(self):
         alice = self.make_participant('alice', last_bill_result='')
-        self.assertRaises( psycopg2.IntegrityError
-                     , alice.set_tip_to
-                     , 'bob'
-                     , '1.00'
-                      )
+        self.assertRaises(NoTippee, alice.set_tip_to, 'bob', '1.00')
 
 
     # get_dollars_receiving - gdr
@@ -643,3 +681,49 @@ class Tests(Harness):
         stub = Participant.from_username(unclaimed.participant.username)
         actual = stub.resolve_unclaimed()
         assert actual == "/on/openstreetmap/alice/"
+
+
+    # archive
+
+    def test_archive_fails_if_ctr_not_run(self):
+        alice = self.make_participant('alice')
+        self.make_participant('bob').set_tip_to('alice', Decimal('1.00'))
+        with self.db.get_cursor() as cursor:
+            pytest.raises(alice.StillReceivingTips, alice.archive, cursor)
+
+    def test_archive_fails_if_balance_is_positive(self):
+        alice = self.make_participant('alice', balance=2)
+        with self.db.get_cursor() as cursor:
+            pytest.raises(alice.BalanceIsNotZero, alice.archive, cursor)
+
+    def test_archive_fails_if_balance_is_negative(self):
+        alice = self.make_participant('alice', balance=-2)
+        with self.db.get_cursor() as cursor:
+            pytest.raises(alice.BalanceIsNotZero, alice.archive, cursor)
+
+    def test_archive_clears_claimed_time(self):
+        alice = self.make_participant('alice')
+        with self.db.get_cursor() as cursor:
+            archived_as = alice.archive(cursor)
+        assert Participant.from_username(archived_as).claimed_time is None
+
+    def test_archive_records_an_event(self):
+        alice = self.make_participant('alice')
+        with self.db.get_cursor() as cursor:
+            archived_as = alice.archive(cursor)
+        payload = self.db.one("SELECT * FROM events WHERE payload->>'action' = 'archive'").payload
+        assert payload['values']['old_username'] == 'alice'
+        assert payload['values']['new_username'] == archived_as
+
+
+    # participant session
+
+    def test_no_participant_from_expired_session(self):
+        self.participant.start_new_session()
+        token = self.participant.session_token
+
+        # Session has expired long time ago
+        self.participant.set_session_expires(0)
+        actual = Participant.from_session_token(token)
+
+        assert actual is None

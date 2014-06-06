@@ -57,6 +57,19 @@ class TestChartOfReceiving(Harness):
         actual = Participant.from_username('bob').get_tip_distribution()
         assert actual == expected
 
+    def test_get_tip_distribution_handles_big_tips(self):
+        bob = Participant.from_username('bob')
+        bob.update_number('plural')
+        self.make_participant('carl', last_bill_result='')
+        Participant.from_username('alice').set_tip_to('bob', '200.00')
+        Participant.from_username('carl').set_tip_to('bob', '300.00')
+        expected = ([
+            [Decimal('200.00'), 1L, Decimal('200.00'), 0.5, Decimal('0.4')],
+            [Decimal('300.00'), 1L, Decimal('300.00'), 0.5, Decimal('0.6')]
+        ], 2.0, Decimal('500.00'))
+        actual = bob.get_tip_distribution()
+        assert actual == expected
+
     def test_get_tip_distribution_ignores_bad_cc(self):
         self.make_participant('bad_cc', last_bill_result='Failure!')
         Participant.from_username('alice').set_tip_to('bob', '1.00')
