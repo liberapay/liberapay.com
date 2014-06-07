@@ -4,7 +4,6 @@ import re
 
 from aspen import json
 from gittip.utils import get_participant
-import gittip.utils.json
 
 callback_pattern = re.compile(r'^[_A-Za-z0-9.]+$')
 
@@ -13,9 +12,7 @@ callback_pattern = re.compile(r'^[_A-Za-z0-9.]+$')
 
 participant = get_participant(request, restrict=False)
 
-output = gittip.utils.json.from_participant(user, path['username'], participant)
-
-response.body = output
+response.body = participant.to_dict(inquirer=user.participant)
 
 # CORS - see https://github.com/gittip/aspen-python/issues/138
 response.headers["Access-Control-Allow-Origin"] = "*"

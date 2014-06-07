@@ -1089,6 +1089,76 @@ class Participant(Model, MixinTeam):
         response.headers.cookie[NOTIFIED_ABOUT_EXPIRATION] = self.session_token
         return card_expiring
 
+    def to_dict(self, inquirer=None):
+        output = { 'id': self.id
+                 , 'username': self.username
+                 , 'avatar': self.avatar_url
+                 , 'number': self.number
+                 , 'on': 'gittip'
+                 }
+
+        # Key: npatrons
+        output['npatrons'] = self.get_number_of_backers()
+
+        # Key: goal
+        # Values:
+        #   undefined - user is not here to receive tips, but will generally regift them
+        #   null - user has no funding goal
+        #   3.00 - user wishes to receive at least this amount
+        if self.goal != 0:
+            if self.goal > 0:
+                goal = str(self.goal)
+            else:
+                goal = None
+            output['goal'] = goal
+
+        # Key: receiving
+        # Values:
+        #   null - user is receiving anonymously
+        #   3.00 - user receives this amount in tips
+        if not self.anonymous_receiving:
+            receiving = str(self.get_dollars_receiving())
+        else:
+            receiving = None
+        output['receiving'] = receiving
+
+        # Key: giving
+        # Values:
+        #   null - user is giving anonymously
+        #   3.00 - user gives this amount in tips
+        if not self.anonymous_giving:
+            giving = str(self.get_dollars_giving())
+        else:
+            giving = None
+        output['giving'] = giving
+
+        # Key: my_tip
+        # Values:
+        #   undefined - user is not authenticated
+        #   "self" - user == participant
+        #   null - user has never tipped this person
+        #   0.00 - user used to tip this person but now doesn't
+        #   3.00 - user tips this person this amount
+        if inquirer:
+            if inquirer.username == self.username:
+                my_tip = 'self'
+            else:
+                my_tip = inquirer.get_tip_to(self.username)
+            output['my_tip'] = str(my_tip)
+
+        # Key: elsewhere
+        accounts = self.get_accounts_elsewhere()
+        elsewhere = output['elsewhere'] = {}
+        for platform, account in accounts.items():
+            fields = ['id', 'user_id', 'user_name']
+            elsewhere[platform] = {k: getattr(account, k, None) for k in fields}
+
+        # Key: bitcoin
+        if self.bitcoin_address is not None:
+            output['bitcoin'] = 'https://blockchain.info/address/%s' % self.bitcoin_address
+
+        return output
+
 
 class NeedConfirmation(Exception):
     """Represent the case where we need user confirmation during a merge.

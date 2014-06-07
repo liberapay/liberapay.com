@@ -1,6 +1,5 @@
 from aspen import Response
 from gittip.models.community import name_pattern, slugize, Community
-import gittip.utils.json
 
 [----------------------]
 
@@ -27,12 +26,10 @@ if not community:
 
     raise Response(404)
 
-members = [gittip.utils.json.from_participant(user, None, member) for member in community.get_members()]
-
 response.body = {
     "name": community.name,
     "slug": community.slug,
-    "members": members
+    "members": [p.to_dict() for p in community.get_members()]
 }
 
 
