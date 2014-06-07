@@ -351,46 +351,39 @@ class Participant(Model, MixinTeam):
         self.set_attributes(balance=balance)
 
 
-    CLEAR_GIVING, CLEAR_RECEIVING = [object() for i in range(2)]
-
     def clear_tips_giving(self, cursor):
         """Zero out tips from a given user.
         """
-        self._clear_tips(cursor, self.CLEAR_GIVING)
+        tippees = cursor.all("""
 
-    def clear_tips_receiving(self, cursor):
-        """Zero out tips to a given user. This is a workaround for #1469.
-        """
-        self._clear_tips(cursor, self.CLEAR_RECEIVING)
-
-    def _clear_tips(self, cursor, direction):
-
-        if direction is self.CLEAR_GIVING:
-            filter_on = 'tipper'
-        elif direction is self.CLEAR_RECEIVING:
-            filter_on = 'tippee'
-        else:
-            raise  # sanity check
-
-        tips = cursor.all("""
-
-            SELECT amount
-                 , ( SELECT participants.*::participants
-                       FROM participants
-                      WHERE username=tipper
-                    ) AS tipper
-                 , ( SELECT participants.*::participants
+            SELECT ( SELECT participants.*::participants
                        FROM participants
                       WHERE username=tippee
                     ) AS tippee
               FROM current_tips
-             WHERE {} = %s
+             WHERE tipper = %s
                AND amount > 0
-          ORDER BY amount DESC
 
-        """.format(filter_on), (self.username,))
-        for tip in tips:
-            tip.tipper.set_tip_to(tip.tippee.username, '0.00')
+        """, (self.username,))
+        for tippee in tippees:
+            self.set_tip_to(tippee, '0.00')
+
+    def clear_tips_receiving(self, cursor):
+        """Zero out tips to a given user. This is a workaround for #1469.
+        """
+        tippers = cursor.all("""
+
+            SELECT ( SELECT participants.*::participants
+                       FROM participants
+                      WHERE username=tipper
+                    ) AS tipper
+              FROM current_tips
+             WHERE tippee = %s
+               AND amount > 0
+
+        """, (self.username,))
+        for tipper in tippers:
+            tipper.set_tip_to(self, '0.00')
 
 
     def clear_personal_information(self, cursor):
