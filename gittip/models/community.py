@@ -2,7 +2,6 @@ import re
 
 from postgres.orm import Model
 
-from gittip.models.participant import Participant
 
 name_pattern = re.compile(r'^[A-Za-z0-9,._ -]+$')
 
@@ -71,7 +70,14 @@ class Community(Model):
                 """, (slug,))
 
     def get_members(self):
-        return Participant.get_members_of_community(self.name)
+        return self.db.all("""
+
+            SELECT participants.*::participants FROM participants
+            WHERE username IN
+              (SELECT participant FROM communities
+               WHERE name=%s);
+
+        """, (self.name,))
 
     def check_membership(self, participant):
         return self.db.one("""

@@ -1089,17 +1089,6 @@ class Participant(Model, MixinTeam):
         response.headers.cookie[NOTIFIED_ABOUT_EXPIRATION] = self.session_token
         return card_expiring
 
-    @classmethod
-    def get_members_of_community(cls, community_name):
-        return cls.db.all("""
-
-            SELECT participants.*::participants FROM participants
-            WHERE username IN
-              (SELECT participant FROM communities
-               WHERE name=%s);
-
-        """, (community_name,))
-
 
 class NeedConfirmation(Exception):
     """Represent the case where we need user confirmation during a merge.
