@@ -1089,13 +1089,16 @@ class Participant(Model, MixinTeam):
         response.headers.cookie[NOTIFIED_ABOUT_EXPIRATION] = self.session_token
         return card_expiring
 
-    def to_dict(self, inquirer=None):
+    def to_dict(self, details=False, inquirer=None):
         output = { 'id': self.id
                  , 'username': self.username
                  , 'avatar': self.avatar_url
                  , 'number': self.number
                  , 'on': 'gittip'
                  }
+
+        if not details:
+            return output
 
         # Key: npatrons
         output['npatrons'] = self.get_number_of_backers()
