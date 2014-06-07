@@ -25,7 +25,7 @@ try:
 except ValueError:
     raise Response(400)
 
-community = Community.from_slug(website.db, slug)
+community = Community.from_slug(slug)
 
 if community is None:
     class StubCommunity:

@@ -19,7 +19,7 @@ slug = slugize(_slug)
 #    request.redirect('../' + slug + '/')
 
 
-community = Community.from_slug(website.db, slug)
+community = Community.from_slug(slug)
 
 if not community:
 

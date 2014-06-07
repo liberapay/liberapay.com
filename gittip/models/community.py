@@ -63,8 +63,8 @@ class Community(Model):
     typname = "community_summary"
 
     @classmethod
-    def from_slug(cls, db, slug):
-        return db.one( """
+    def from_slug(cls, slug):
+        return cls.db.one( """
                 SELECT community_summary.*::community_summary
                 FROM community_summary WHERE slug=%s;
 
