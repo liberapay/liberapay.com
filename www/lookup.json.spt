@@ -1,5 +1,5 @@
 SQL = "SELECT username, username_lower, id FROM participants " \
-      "WHERE username_lower LIKE %s " \
+      "WHERE username_lower LIKE %s AND claimed_time IS NOT NULL " \
       "ORDER BY username_lower LIMIT 5"
 
 [----------------------]

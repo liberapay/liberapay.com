@@ -69,7 +69,6 @@ class TestMembernameJson(Harness):
             assert rec['username'] in ('team', 'alice'), rec['username']
 
         response = self.client.POST('/team/members/alice.json', {'take': '0.00'}, auth_as='team')
-
         data = json.loads(response.body)
         assert len(data) == 1
         assert data[0]['username'] == 'team'
@@ -101,7 +100,11 @@ class TestMembernameJson(Harness):
 
         response = self.client.GET('/team/members/alice.json', auth_as='team')
         data = json.loads(response.body)
-
         assert response.code == 200
         assert data['username'] == 'alice'
         assert data['take'] == '0.01'
+
+    def test_preclude_adding_stub_participants(self):
+        self.make_participant("stub")
+        response = self.client.PxST('/team/members/stub.json', {'take': '0.01'}, auth_as='team')
+        assert response.code == 403
