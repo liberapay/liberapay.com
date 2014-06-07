@@ -366,7 +366,7 @@ class Participant(Model, MixinTeam):
 
         """, (self.username,))
         for tippee in tippees:
-            self.set_tip_to(tippee, '0.00')
+            self.set_tip_to(tippee, '0.00', cursor=cursor)
 
     def clear_tips_receiving(self, cursor):
         """Zero out tips to a given user. This is a workaround for #1469.
@@ -383,7 +383,7 @@ class Participant(Model, MixinTeam):
 
         """, (self.username,))
         for tipper in tippers:
-            tipper.set_tip_to(self, '0.00')
+            tipper.set_tip_to(self, '0.00', cursor=cursor)
 
 
     def clear_personal_information(self, cursor):
@@ -535,7 +535,7 @@ class Participant(Model, MixinTeam):
         self.set_attributes(goal=goal)
 
 
-    def set_tip_to(self, tippee, amount):
+    def set_tip_to(self, tippee, amount, cursor=None):
         """Given a Participant or username, and amount as str, return a tuple.
 
         We INSERT instead of UPDATE, so that we have history to explore. The
@@ -578,7 +578,7 @@ class Participant(Model, MixinTeam):
 
         """
         args = dict(tipper=self.username, tippee=tippee.username, amount=amount)
-        first_time_tipper = self.db.one(NEW_TIP, args)
+        first_time_tipper = (cursor or self.db).one(NEW_TIP, args)
         return amount, first_time_tipper
 
 
