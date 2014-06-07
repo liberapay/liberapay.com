@@ -63,25 +63,20 @@ class Community(Model):
 
     @classmethod
     def from_slug(cls, slug):
-        return cls.db.one( """
-                SELECT community_summary.*::community_summary
-                FROM community_summary WHERE slug=%s;
-
-                """, (slug,))
+        return cls.db.one("""
+            SELECT community_summary.*::community_summary
+            FROM community_summary WHERE slug=%s;
+        """, (slug,))
 
     def get_members(self):
         return self.db.all("""
-
             SELECT participants.*::participants FROM participants
             WHERE username IN
               (SELECT participant FROM communities
                WHERE name=%s);
-
         """, (self.name,))
 
     def check_membership(self, participant):
         return self.db.one("""
-
-        SELECT * FROM current_communities WHERE slug=%s AND participant=%s
-
+            SELECT * FROM current_communities WHERE slug=%s AND participant=%s
         """, (self.slug, participant.username)) is not None

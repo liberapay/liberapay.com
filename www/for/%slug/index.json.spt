@@ -4,11 +4,8 @@ from gittip.models.community import name_pattern, slugize, Community
 [----------------------]
 
 if not GET:
-
     # Method not allowed
-
     raise Response(405)
-
 
 _slug = path['slug']
 if name_pattern.match(_slug) is None:
@@ -17,13 +14,10 @@ slug = slugize(_slug)
 #if slug != _slug:
 #    request.redirect('../' + slug + '/')
 
-
 community = Community.from_slug(slug)
 
 if not community:
-
     # Community not found
-
     raise Response(404)
 
 response.body = {
@@ -31,5 +25,3 @@ response.body = {
     "slug": community.slug,
     "members": [p.to_dict() for p in community.get_members()]
 }
-
-
