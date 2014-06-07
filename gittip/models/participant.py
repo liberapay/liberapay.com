@@ -257,15 +257,22 @@ class Participant(Model, MixinTeam):
         """Cancel the participant's account.
         """
         with self.db.get_cursor() as cursor:
-            self.clear_tips_receiving(cursor)
-            if disbursement_strategy == 'bank':
+
+            if disbursement_strategy == None:
+                pass  # No balance, supposedly. archive will check.
+            elif disbursement_strategy == 'bank':
                 self.withdraw_balance_to_bank_account(cursor)
             elif disbursement_strategy == 'upstream':
                 self.refund_to_patrons(cursor)
             elif disbursement_strategy == 'downstream':
+                # This in particular needs to come before clear_tips_giving.
                 self.distribute_balance_as_final_gift(cursor)
             else:
                 raise self.UnknownDisbursementStrategy
+
+            self.clear_tips_giving(cursor)
+            self.clear_tips_receiving(cursor)
+
             return self.archive(cursor)
 
 
@@ -343,9 +350,26 @@ class Participant(Model, MixinTeam):
         self.set_attributes(balance=balance)
 
 
+    CLEAR_GIVING, CLEAR_RECEIVING = [object() for i in range(2)]
+
+    def clear_tips_giving(self, cursor):
+        """Zero out tips from a given user.
+        """
+        self._clear_tips(cursor, self.CLEAR_GIVING)
+
     def clear_tips_receiving(self, cursor):
         """Zero out tips to a given user. This is a workaround for #1469.
         """
+        self._clear_tips(cursor, self.CLEAR_RECEIVING)
+
+    def _clear_tips(self, cursor, direction):
+
+        if direction is self.CLEAR_GIVING:
+            filter_on = 'tipper'
+        elif direction is self.CLEAR_RECEIVING:
+            filter_on = 'tippee'
+        else:
+            raise  # sanity check
 
         tips = cursor.all("""
 
@@ -359,11 +383,11 @@ class Participant(Model, MixinTeam):
                       WHERE username=tippee
                     ) AS tippee
               FROM current_tips
-             WHERE tippee = %s
+             WHERE {} = %s
                AND amount > 0
           ORDER BY amount DESC
 
-        """, (self.username,))
+        """.format(filter_on), (self.username,))
         for tip in tips:
             tip.tipper.set_tip_to(tip.tippee.username, '0.00')
 
