@@ -238,3 +238,30 @@ class TestCanceling(Harness):
         with self.db.get_cursor() as cursor:
             alice.clear_tips_receiving(cursor)
         assert ntips() == 0
+
+
+    # cpi - clear_personal_information
+
+    def test_cpi_clears_personal_information(self):
+        alice = self.make_participant( 'alice'
+                                     , statement='not forgetting to be awesome!'
+                                     , goal=100
+                                     , anonymous_giving=True
+                                     , anonymous_receiving=True
+                                     , number='plural'
+                                     , avatar_url='img-url'
+                                     , email=('alice@example.com', True)
+                                      )
+        assert Participant.from_username('alice').number == 'plural' # sanity check
+
+        with self.db.get_cursor() as cursor:
+            alice.clear_personal_information(cursor)
+        new_alice = Participant.from_username('alice')
+
+        assert alice.statement == new_alice.statement == ''
+        assert alice.goal == new_alice.goal == None
+        assert (alice.anonymous_giving, new_alice.anonymous_giving) == (False, False)
+        assert (alice.anonymous_receiving, new_alice.anonymous_giving) == (False, False)
+        assert alice.number == new_alice.number == 'singular'
+        assert alice.avatar_url == new_alice.avatar_url == None
+        assert alice.email == new_alice.email == None
