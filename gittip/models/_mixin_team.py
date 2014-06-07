@@ -40,10 +40,8 @@ class MixinTeam(object):
         assert self.IS_PLURAL
         if len(self.get_takes()) == 149:
             raise MemberLimitReached
-
         if not member.is_claimed:
             raise StubParticipantAdded
-
         self.__set_take_for(member, Decimal('0.01'), self)
 
     def remove_member(self, member):

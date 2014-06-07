@@ -51,9 +51,7 @@ if POST:
                 raise Exception
             team.remove_member(member)
         if not member.is_claimed:
-
             # Attempted to add a stub participant
-
             raise Response(403)
 
         if take == A_PENNY:
