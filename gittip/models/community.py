@@ -73,11 +73,11 @@ class Community(Model):
             SELECT p.*::participants
               FROM current_communities c
               JOIN participants p ON p.username = c.participant
-             WHERE c.name = %s
+             WHERE c.slug = %s
           ORDER BY c.ctime
              LIMIT %s
             OFFSET %s;
-        """, (self.name, limit, offset))
+        """, (self.slug, limit, offset))
 
     def check_membership(self, participant):
         return self.db.one("""
