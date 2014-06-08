@@ -1,13 +1,13 @@
+import json
+
+from gittip.models.community import slugize
 from gittip.testing import Harness
 
-import json
-from gittip.models.community import slugize
 
 class TestForCommunityJson(Harness):
 
     def setUp(self):
         Harness.setUp(self)
-
         self.add_participant('alice')
         self.add_participant('bob')
 
@@ -22,9 +22,8 @@ class TestForCommunityJson(Harness):
     def test_get_existing_community(self):
         response = self.client.GET('/for/test/index.json')
         result = json.loads(response.body)
-
-        assert len(result["members"]) == 2
-        assert result["name"] == "test"
+        assert len(result['members']) == 2
+        assert result['name'] == 'test'
 
     def test_post_not_supported(self):
         response = self.client.PxST('/for/test/index.json')
@@ -33,21 +32,17 @@ class TestForCommunityJson(Harness):
     def test_limit(self):
         response = self.client.GET('/for/test/index.json?limit=1')
         result = json.loads(response.body)
-
-        assert len(result["members"]) == 1
+        assert len(result['members']) == 1
 
     def test_offset(self):
         response = self.client.GET('/for/test/index.json?offset=1')
         result = json.loads(response.body)
-
-        assert len(result["members"]) == 1
+        assert len(result['members']) == 1
 
     def test_invalid_limit(self):
         response = self.client.GxT('/for/test/index.json?limit=abc')
-
         assert response.code == 400
 
     def test_invalid_offset(self):
         response = self.client.GxT('/for/test/index.json?offset=abc')
-
         assert response.code == 400
