@@ -70,12 +70,13 @@ class Community(Model):
 
     def get_members(self, limit=None, offset=None):
         return self.db.all("""
-            SELECT participants.*::participants FROM participants
-            WHERE username IN
-              (SELECT participant FROM communities
-               WHERE name=%s
-               ORDER BY claimed_time
-               LIMIT %s OFFSET %s);
+            SELECT p.*::participants
+              FROM current_communities c
+              JOIN participants p ON p.username = c.participant
+             WHERE c.name = %s
+          ORDER BY c.ctime
+             LIMIT %s
+            OFFSET %s;
         """, (self.name, limit, offset))
 
     def check_membership(self, participant):

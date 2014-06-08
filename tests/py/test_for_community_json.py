@@ -10,10 +10,13 @@ class TestForCommunityJson(Harness):
         Harness.setUp(self)
         self.add_participant('alice')
         self.add_participant('bob')
+        carl = self.add_participant('carl')
+        carl.insert_into_communities(False, 'test', 'test')
 
     def add_participant(self, participant_name):
         participant = self.make_participant(participant_name)
         participant.insert_into_communities(True, 'test', slugize('test'))
+        return participant
 
     def test_get_non_existing_community(self):
         response = self.client.GxT('/for/NonExisting/index.json')
