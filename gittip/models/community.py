@@ -55,16 +55,31 @@ def get_list_for(db, username):
 
     """.format(member_test, sort_order), params)
 
-
 class Community(Model):
     """Model a community on Gittip.
     """
 
     typname = "community_summary"
 
+    @classmethod
+    def from_slug(cls, slug):
+        return cls.db.one("""
+            SELECT community_summary.*::community_summary
+            FROM community_summary WHERE slug=%s;
+        """, (slug,))
+
+    def get_members(self, limit=None, offset=None):
+        return self.db.all("""
+            SELECT p.*::participants
+              FROM current_communities c
+              JOIN participants p ON p.username = c.participant
+             WHERE c.slug = %s
+          ORDER BY c.ctime
+             LIMIT %s
+            OFFSET %s;
+        """, (self.slug, limit, offset))
+
     def check_membership(self, participant):
         return self.db.one("""
-
-        SELECT * FROM current_communities WHERE slug=%s AND participant=%s
-
+            SELECT * FROM current_communities WHERE slug=%s AND participant=%s
         """, (self.slug, participant.username)) is not None
