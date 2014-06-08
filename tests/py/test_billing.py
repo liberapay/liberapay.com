@@ -5,7 +5,6 @@ import mock
 
 from gittip import billing
 from gittip.security import authentication
-from gittip.testing import Harness
 from gittip.testing.balanced import BalancedHarness
 from gittip.models.participant import Participant
 
@@ -95,48 +94,6 @@ class TestBalancedCard(BalancedHarness):
         card = billing.BalancedCard(url_user)
 
         assert card._thing.href == self.card_href
-
-
-class TestStripeCard(Harness):
-
-    @mock.patch('stripe.Customer')
-    def test_stripe_card_basically_works(self, sc):
-        active_card = {}
-        active_card['last4'] = '1234'
-        active_card['exp_month'] = 10
-        active_card['exp_year'] = 2020
-        active_card['address_line1'] = "123 Main Street"
-        active_card['address_line2'] = "Box 2"
-        active_card['address_state'] = "Confusion"
-        active_card['address_zip'] = "90210"
-
-        stripe_customer = sc.retrieve.return_value
-        stripe_customer.id = 'deadbeef'
-        stripe_customer.get = {'active_card': active_card}.get
-
-        expected = {
-            'id': 'deadbeef',
-            'last4': '************1234',
-            'expiration_month': 10,
-            'expiration_year': 2020,
-            'address_1': '123 Main Street',
-            'address_2': 'Box 2',
-            'state': 'Confusion',
-            'zip': '90210'
-        }
-        card = billing.StripeCard('deadbeef')
-        actual = dict([(name, card[name]) for name in expected])
-        assert actual == expected
-
-    @mock.patch('stripe.Customer')
-    def test_stripe_card_gives_empty_string_instead_of_KeyError(self, sc):
-        stripe_customer = sc.retrieve.return_value
-        stripe_customer.id = 'deadbeef'
-        stripe_customer.get = {'active_card': {}}.get
-
-        expected = ''
-        actual = billing.StripeCard('deadbeef')['nothing']
-        assert actual == expected
 
 
 class TestBalancedBankAccount(BalancedHarness):

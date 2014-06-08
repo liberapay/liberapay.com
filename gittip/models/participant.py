@@ -1299,13 +1299,11 @@ class Participant(Model, MixinTeam):
             if cookie.value == self.session_token:
                 return False
 
+        if not self.balanced_customer_href:
+            return False
+
         try:
-            if self.balanced_customer_href:
-                card = billing.BalancedCard(self.balanced_customer_href)
-            elif self.stripe_customer_id:
-                card = billing.StripeCard(self.stripe_customer_id)
-            else:
-                return False
+            card = billing.BalancedCard(self.balanced_customer_href)
             year, month = card['expiration_year'], card['expiration_month']
             if not (year and month):
                 return False

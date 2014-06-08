@@ -7,7 +7,6 @@ import aspen
 import balanced
 import gittip
 import raven
-import stripe
 import mandrill
 from environment import Environment, is_yesish
 from gittip.elsewhere import PlatformRegistry
@@ -47,8 +46,6 @@ def mail(env):
     return mandrill_client
 
 def billing(env):
-    stripe.api_key = env.stripe_secret_api_key
-    stripe.publishable_api_key = env.stripe_publishable_api_key
     balanced.configure(env.balanced_api_secret)
 
 
@@ -230,8 +227,6 @@ def env():
         GITTIP_ASSET_URL                = unicode,
         GITTIP_CACHE_STATIC             = is_yesish,
         GITTIP_COMPRESS_ASSETS          = is_yesish,
-        STRIPE_SECRET_API_KEY           = unicode,
-        STRIPE_PUBLISHABLE_API_KEY      = unicode,
         BALANCED_API_SECRET             = unicode,
         #DEBUG                           = unicode,
         GITHUB_CLIENT_ID                = unicode,
