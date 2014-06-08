@@ -1357,3 +1357,11 @@ BEGIN;
     DROP TABLE log_participant_number;
 
 END;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/pull/2430
+
+BEGIN;
+    CREATE INDEX ON communities (slug);
+COMMIT;
