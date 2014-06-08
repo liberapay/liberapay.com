@@ -20,8 +20,26 @@ if not community:
     # Community not found
     raise Response(404)
 
+try:
+    limit = min(int(qs.get('limit', 10)), 100)
+    offset = int(qs.get('offset', 0))
+except ValueError:
+    raise Response(400)
+
+
+community_members = website.db.all("""
+    SELECT participants.*::participants FROM participants
+    WHERE username IN
+    (SELECT participant FROM communities
+    WHERE name=%s
+    ORDER BY claimed_time
+    LIMIT %s
+    OFFSET %s);
+""", (community.name, limit, offset))
+
+
 response.body = {
     "name": community.name,
     "slug": community.slug,
-    "members": [p.to_dict() for p in community.get_members()]
+    "members": [p.to_dict() for p in community_members]
 }
