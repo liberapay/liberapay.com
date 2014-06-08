@@ -39,6 +39,13 @@ class TestForCommunityJson(Harness):
         result = json.loads(response.body)
         assert len(result['members']) == 1
 
+    def test_max_limit(self):
+        for i in range(110):
+            self.add_participant(str(i))
+        response = self.client.GET('/for/test/index.json?limit=200')
+        result = json.loads(response.body)
+        assert len(result['members']) == 100
+
     def test_invalid_limit(self):
         response = self.client.GxT('/for/test/index.json?limit=abc')
         assert response.code == 400
