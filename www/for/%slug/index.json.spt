@@ -29,5 +29,6 @@ community_members = community.get_members(limit=limit, offset=offset)
 response.body = {
     "name": community.name,
     "slug": community.slug,
+    "total": community.nmembers,
     "members": [p.to_dict() for p in community_members]
 }
