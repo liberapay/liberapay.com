@@ -68,13 +68,15 @@ class Community(Model):
             FROM community_summary WHERE slug=%s;
         """, (slug,))
 
-    def get_members(self):
+    def get_members(self, limit=None, offset=None):
         return self.db.all("""
             SELECT participants.*::participants FROM participants
             WHERE username IN
               (SELECT participant FROM communities
-               WHERE name=%s);
-        """, (self.name,))
+               WHERE name=%s
+               ORDER BY claimed_time
+               LIMIT %s OFFSET %s);
+        """, (self.name, limit, offset))
 
     def check_membership(self, participant):
         return self.db.one("""

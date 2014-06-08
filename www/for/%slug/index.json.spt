@@ -26,17 +26,7 @@ try:
 except ValueError:
     raise Response(400)
 
-
-community_members = website.db.all("""
-    SELECT participants.*::participants FROM participants
-    WHERE username IN
-    (SELECT participant FROM communities
-    WHERE name=%s
-    ORDER BY claimed_time
-    LIMIT %s
-    OFFSET %s);
-""", (community.name, limit, offset))
-
+community_members = community.get_members(limit=limit, offset=offset)
 
 response.body = {
     "name": community.name,
