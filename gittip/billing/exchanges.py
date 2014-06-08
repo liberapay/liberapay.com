@@ -118,12 +118,11 @@ def ach_credit(db, participant, withhold, minimum_credit=MINIMUM_CREDIT):
     return error
 
 
-def charge(db, participant, amount):
-    """Charge the participants credit card.
+def create_card_hold(db, participant, amount):
+    """Create a hold on the participant's credit card.
 
-    This is the only place where we actually charge credit cards. Amount
-    should be the nominal amount. We'll compute Gittip's fee below this
-    function and add it to amount to end up with charge_amount.
+    Amount should be the nominal amount. We'll compute Gittip's fee below
+    this function and add it to amount to end up with charge_amount.
 
     """
     typecheck(amount, Decimal)
@@ -149,33 +148,16 @@ def charge(db, participant, amount):
     # Go to Balanced.
     # ===============
 
-    things = charge_on_balanced( username
-                               , balanced_customer_href
-                               , amount
-                                )
-    charge_amount, fee, error = things
+    cents, amount_str, charge_amount, fee = _prep_hit(amount)
+    msg = "Holding " + amount_str + " on Balanced for " + username + " ... "
 
-    amount = charge_amount - fee  # account for possible rounding under
-                                  # charge_on_*
-
-    record_exchange(db, 'bill', amount, fee, error, participant)
-    return error
-
-
-def charge_on_balanced(username, balanced_customer_href, amount):
-    """We have a purported balanced_customer_href. Try to use it.
-    """
-    typecheck( username, unicode
-             , balanced_customer_href, unicode
-             , amount, Decimal
-              )
-
-    cents, msg, charge_amount, fee = _prep_hit(amount)
-    msg = msg % (username, "Balanced")
-
+    hold = None
     try:
-        customer = balanced.Customer.fetch(balanced_customer_href)
-        customer.cards.one().debit(amount=cents, description=username)
+        card = balanced.Customer.fetch(balanced_customer_href).cards.one()
+        hold = card.hold( amount=cents
+                        , description=username
+                        , meta=dict(participant_id=participant.id, state='new')
+                         )
         log(msg + "succeeded.")
         error = ""
     except balanced.exc.HTTPError as err:
@@ -185,8 +167,38 @@ def charge_on_balanced(username, balanced_customer_href, amount):
 
     if error:
         log(msg + "failed: %s" % error)
+        record_exchange(db, 'bill', None, None, error, participant)
 
-    return charge_amount, fee, error
+    return hold, error
+
+
+def capture_card_hold(db, participant, amount, hold):
+    """Capture the previously created hold on the participant's credit card.
+    """
+    typecheck( hold, balanced.CardHold
+             , amount, Decimal
+              )
+
+    username = participant.username
+
+    cents, amount_str, charge_amount, fee = _prep_hit(amount)
+
+    hold.capture(amount=cents, description=username)
+    hold.meta['state'] = 'captured'
+    hold.save()
+
+    log("Captured " + amount_str + " on Balanced for " + username)
+
+    amount = charge_amount - fee  # account for possible rounding
+    record_exchange(db, 'bill', amount, fee, '', participant)
+
+
+def cancel_card_hold(hold):
+    """Cancel the previously created hold on the participant's credit card.
+    """
+    hold.is_void = True
+    hold.meta['state'] = 'cancelled'
+    hold.save()
 
 
 def _prep_hit(unrounded):
@@ -195,8 +207,7 @@ def _prep_hit(unrounded):
     cents       This is passed to the payment processor charge API. This is
                 the value that is actually charged to the participant. It's
                 an int.
-    msg         A log message with a couple %s to be filled in by the
-                caller.
+    amount_str  A detailed string representation of the amount.
     upcharged   Decimal dollar equivalent to `cents'.
     fee         Decimal dollar amount of the fee portion of `upcharged'.
 
@@ -212,10 +223,10 @@ def _prep_hit(unrounded):
     upcharged, fee = upcharge(rounded)
     cents = int(upcharged * 100)
 
-    msg = "Charging %%s %d cents ($%s%s + $%s fee = $%s) on %%s ... "
-    msg %= cents, rounded, also_log, fee, upcharged
+    amount_str = "%d cents ($%s%s + $%s fee = $%s)"
+    amount_str %= cents, rounded, also_log, fee, upcharged
 
-    return cents, msg, upcharged, fee
+    return cents, amount_str, upcharged, fee
 
 
 def record_exchange(db, kind, amount, fee, error, participant):
