@@ -14,6 +14,7 @@ import datetime
 from decimal import Decimal, ROUND_DOWN
 import uuid
 
+import aspen
 from aspen.utils import typecheck
 from postgres.orm import Model
 from psycopg2 import IntegrityError
@@ -1292,26 +1293,29 @@ class Participant(Model, MixinTeam):
         self.update_avatar()
 
     def credit_card_expiring(self, request, response):
+
         if NOTIFIED_ABOUT_EXPIRATION in request.headers.cookie:
             cookie = request.headers.cookie[NOTIFIED_ABOUT_EXPIRATION]
             if cookie.value == self.session_token:
                 return False
 
-        response.headers.cookie[NOTIFIED_ABOUT_EXPIRATION] = self.session_token
-
-        card_expiring = False
         try:
             if self.balanced_customer_href:
                 card = billing.BalancedCard(self.balanced_customer_href)
-            else:
+            elif self.stripe_customer_id:
                 card = billing.StripeCard(self.stripe_customer_id)
-
+            else:
+                return False
             year, month = card['expiration_year'], card['expiration_month']
-            if year and month:
-                card_expiring = is_card_expiring(int(year), int(month))
-        except:
-            pass
-        return card_expiring
+            if not (year and month):
+                return False
+            card_expiring = is_card_expiring(int(year), int(month))
+            response.headers.cookie[NOTIFIED_ABOUT_EXPIRATION] = self.session_token
+            return card_expiring
+        except Exception as e:
+            aspen.log(e)
+            request.website.tell_sentry(e, request)
+            return False
 
 
 class NeedConfirmation(Exception):

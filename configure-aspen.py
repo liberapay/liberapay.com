@@ -45,7 +45,7 @@ gittip.wireup.username_restrictions(website)
 gittip.wireup.nanswers(env)
 gittip.wireup.other_stuff(website, env)
 gittip.wireup.accounts_elsewhere(website, env)
-tell_sentry = gittip.wireup.make_sentry_teller(website)
+tell_sentry = website.tell_sentry = gittip.wireup.make_sentry_teller(env)
 
 # The homepage wants expensive queries. Let's periodically select into an
 # intermediate table.
