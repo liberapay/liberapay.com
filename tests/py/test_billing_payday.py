@@ -28,7 +28,6 @@ class PaydayHarness(BalancedHarness):
 
 
 class TestPaydayCharge(PaydayHarness):
-    STRIPE_CUSTOMER_ID = 'cus_deadbeef'
 
     def get_numbers(self):
         """Return a list of 11 ints:
@@ -66,7 +65,6 @@ class TestPaydayCharge(PaydayHarness):
         cob.return_value = (D('10.00'), D('0.68'), 'FAILED')
         bob = self.make_participant('bob', last_bill_result="failure",
                                     balanced_customer_href=self.balanced_customer_href,
-                                    stripe_customer_id=self.STRIPE_CUSTOMER_ID,
                                     is_suspicious=False)
 
         self.payday.start()
@@ -78,7 +76,6 @@ class TestPaydayCharge(PaydayHarness):
         charge_on_balanced.return_value = (D('10.00'), D('0.68'), "")
         bob = self.make_participant('bob', last_bill_result="failure",
                                     balanced_customer_href=self.balanced_customer_href,
-                                    stripe_customer_id=self.STRIPE_CUSTOMER_ID,
                                     is_suspicious=False)
 
         self.payday.start()
@@ -279,8 +276,6 @@ class TestBillingCharges(PaydayHarness):
     BALANCED_CUSTOMER_HREF = '/customers/CU123123123'
     BALANCED_TOKEN = u'/cards/CU123123123'
 
-    STRIPE_CUSTOMER_ID = u'cus_deadbeef'
-
     def test_mark_missing_funding(self):
         self.payday.start()
         before = self.fetch_payday()
@@ -312,21 +307,6 @@ class TestBillingCharges(PaydayHarness):
         # verify paydays
         actual = self.fetch_payday()
         assert actual['ncharges'] == 1
-
-    @mock.patch('stripe.Charge')
-    def test_charge_on_stripe(self, ba):
-        amount_to_charge = D('10.00')  # $10.00 USD
-        expected_fee = D('0.61')
-        charge_amount, fee, msg = self.payday.charge_on_stripe(
-            self.alice.username, self.STRIPE_CUSTOMER_ID, amount_to_charge)
-
-        assert charge_amount == amount_to_charge + fee
-        assert fee == expected_fee
-        assert ba.find.called_with(self.STRIPE_CUSTOMER_ID)
-        customer = ba.find.return_value
-        assert customer.debit.called_with( int(charge_amount * 100)
-                                         , self.alice.username
-                                          )
 
 
 class TestPrepHit(PaydayHarness):

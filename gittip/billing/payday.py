@@ -22,7 +22,6 @@ import sys
 from decimal import Decimal, ROUND_UP
 
 import balanced
-import stripe
 import aspen.utils
 from aspen import log
 from aspen.utils import typecheck
@@ -530,18 +529,16 @@ class Payday(object):
 
         username = participant.username
         balanced_customer_href = participant.balanced_customer_href
-        stripe_customer_id = participant.stripe_customer_id
 
         typecheck( username, unicode
                  , balanced_customer_href, (unicode, None)
-                 , stripe_customer_id, (unicode, None)
                   )
 
 
         # Perform some last-minute checks.
         # ================================
 
-        if balanced_customer_href is None and stripe_customer_id is None:
+        if balanced_customer_href is None:
             self.mark_missing_funding()
             return      # Participant has no funding source.
 
@@ -549,22 +546,14 @@ class Payday(object):
             return      # Participant not trusted.
 
 
-        # Go to Balanced or Stripe.
-        # =========================
+        # Go to Balanced.
+        # ===============
 
-        if balanced_customer_href is not None:
-            things = self.charge_on_balanced( username
-                                            , balanced_customer_href
-                                            , amount
-                                             )
-            charge_amount, fee, error = things
-        else:
-            assert stripe_customer_id is not None
-            things = self.charge_on_stripe( username
-                                          , stripe_customer_id
-                                          , amount
-                                           )
-            charge_amount, fee, error = things
+        things = self.charge_on_balanced( username
+                                        , balanced_customer_href
+                                        , amount
+                                         )
+        charge_amount, fee, error = things
 
         amount = charge_amount - fee  # account for possible rounding under
                                       # charge_on_*
@@ -672,32 +661,6 @@ class Payday(object):
             error = repr(sys.exc_info()[1])
 
         if error:
-            log(msg + "failed: %s" % error)
-
-        return charge_amount, fee, error
-
-
-    def charge_on_stripe(self, username, stripe_customer_id, amount):
-        """We have a purported stripe_customer_id. Try to use it.
-        """
-        typecheck( username, unicode
-                 , stripe_customer_id, unicode
-                 , amount, Decimal
-                  )
-
-        cents, msg, charge_amount, fee = self._prep_hit(amount)
-        msg = msg % (username, "Stripe")
-
-        try:
-            stripe.Charge.create( customer=stripe_customer_id
-                                , amount=cents
-                                , description=username
-                                , currency="USD"
-                                 )
-            log(msg + "succeeded.")
-            error = ""
-        except stripe.StripeError, err:
-            error = err.message
             log(msg + "failed: %s" % error)
 
         return charge_amount, fee, error
