@@ -11,8 +11,6 @@ _slug = path['slug']
 if name_pattern.match(_slug) is None:
     raise Response(404)
 slug = slugize(_slug)
-#if slug != _slug:
-#    request.redirect('../' + slug + '/')
 
 community = Community.from_slug(slug)
 
