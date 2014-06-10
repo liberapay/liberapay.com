@@ -154,6 +154,8 @@ class AccountElsewhere(Model):
                 user.participant.change_username(desired_username)
             except ProblemChangingUsername:
                 pass
+        if user.participant.is_closed:
+            user.participant.update_is_closed(False)
         return user, newly_claimed
 
     def save_token(self, token, refresh_token=None, expires=None):

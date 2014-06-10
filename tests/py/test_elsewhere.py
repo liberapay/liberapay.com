@@ -2,6 +2,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from gittip.elsewhere import UserInfo
 from gittip.models.account_elsewhere import AccountElsewhere
+from gittip.models.participant import Participant
 from gittip.testing import Harness
 import gittip.testing.elsewhere as user_info_examples
 
@@ -32,6 +33,13 @@ class Tests(Harness):
         expected = account.participant.username # A random one.
         actual = account.opt_in('bob')[0].participant.username
         assert actual == expected
+
+    def test_opt_in_resets_is_closed_to_false(self):
+        alice = self.make_elsewhere('twitter', 1, 'alice')
+        alice.participant.update_is_closed(True)
+        user = alice.opt_in('alice')[0]
+        assert not user.participant.is_closed
+        assert not Participant.from_username('alice').is_closed
 
     def test_redirect_csrf(self):
         response = self.client.GxT('/on/github/redirect')

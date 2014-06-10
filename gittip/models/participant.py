@@ -241,13 +241,12 @@ class Participant(Model, MixinTeam):
 
                 UPDATE participants
                    SET claimed_time=CURRENT_TIMESTAMP
-                     , is_closed=false
                  WHERE username=%s
                    AND claimed_time IS NULL
              RETURNING claimed_time
 
             """, (self.username,))
-            self.set_attributes(claimed_time=claimed_time, is_closed=False)
+            self.set_attributes(claimed_time=claimed_time)
 
 
     # Canceling
