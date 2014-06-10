@@ -248,7 +248,7 @@ Gittip.payments.cc.submit = function(e) {
         credit_card.number = '';  // don't send if it's the **** version
     credit_card.cvv = val('cvv');
     credit_card.name = val('name');
-    country = $('select[id="country"]').val();
+    country = $('select[id="country"]').val() || null;
     credit_card.meta = { 'address_2': val('address_2')
                        , 'region': credit_card.region // workaround
                        , 'city_town': val('city_town')
