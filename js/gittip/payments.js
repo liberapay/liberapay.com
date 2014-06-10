@@ -54,6 +54,19 @@ Gittip.payments.onError = function(response) {
     Gittip.forms.showFeedback(null, [msg]);
 };
 
+Gittip.payments.onSuccess = function(data) {
+    $('#status').text('working').addClass('highlight');
+    setTimeout(function() {
+        $('#status').removeClass('highlight');
+    }, 8000);
+    $('#delete').show();
+    Gittip.forms.clearFeedback();
+    $('button#save').text('Save');
+    setTimeout(function() {
+        window.location.href = '/' + Gittip.participantId + '/';
+    }, 1000);
+};
+
 
 // Bank Accounts
 // =============
@@ -165,19 +178,6 @@ Gittip.payments.ba.handleResponse = function (response) {
      * on there.
      */
 
-    function success() {
-        $('#status').text('connected').addClass('highlight');
-        setTimeout(function() {
-            $('#status').removeClass('highlight');
-        }, 8000);
-        $('#delete').show();
-        Gittip.forms.clearFeedback();
-        $('button#save').text('Save');
-        setTimeout(function() {
-            window.location.href = '/' + Gittip.participantId + '/';
-        }, 1000);
-    }
-
     function detailedFeedback(data) {
         $('#status').text('failing');
         $('#delete').show();
@@ -196,7 +196,7 @@ Gittip.payments.ba.handleResponse = function (response) {
 
     Gittip.forms.submit( "/bank-account.json"
                        , detailsToSubmit
-                       , success
+                       , Gittip.payments.onSuccess
                        , detailedFeedback
                         );
 };
@@ -308,19 +308,6 @@ Gittip.payments.cc.handleResponse = function(response) {
      * card is good.
      */
 
-    function success(data) {
-        $('#status').text('working').addClass('highlight');
-        setTimeout(function() {
-            $('#status').removeClass('highlight');
-        }, 8000);
-        $('#delete').show();
-        Gittip.forms.clearFeedback();
-        $('button#save').text('Save');
-        setTimeout(function() {
-            window.location.href = '/' + Gittip.participantId + '/';
-        }, 1000);
-    }
-
     function detailedFeedback(data) {
         $('#status').text('failing');
         $('#delete').show();
@@ -331,7 +318,7 @@ Gittip.payments.cc.handleResponse = function(response) {
 
     Gittip.forms.submit( "/credit-card.json"
                        , {card_uri: response.cards[0].href}
-                       , success
+                       , Gittip.payments.onSuccess
                        , detailedFeedback
                         );
 };
