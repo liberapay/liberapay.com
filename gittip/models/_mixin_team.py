@@ -50,6 +50,16 @@ class MixinTeam(object):
         assert self.IS_PLURAL
         self.__set_take_for(member, Decimal('0.00'), self)
 
+    def remove_all_members(self, cursor=None):
+        (cursor or self.db).run("""
+            INSERT INTO takes (ctime, member, team, amount, recorder) (
+                SELECT ctime, member, %(username)s, 0.00, %(username)s
+                  FROM current_takes
+                 WHERE team=%(username)s
+                   AND amount > 0
+            );
+        """, dict(username=self.username))
+
     def member_of(self, team):
         """Given a Participant object, return a boolean.
         """

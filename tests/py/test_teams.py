@@ -81,3 +81,13 @@ class Tests(Harness):
         stub_participant = self.make_participant('stub')
         with self.assertRaises(StubParticipantAdded):
             self.team.add_member(stub_participant)
+
+    def test_remove_all_members(self):
+        alice = self.make_participant('alice', claimed_time='now')
+        self.team.add_member(alice)
+        bob = self.make_participant('bob', claimed_time='now')
+        self.team.add_member(bob)
+
+        assert len(self.team.get_takes()) == 2  # sanity check
+        self.team.remove_all_members()
+        assert len(self.team.get_takes()) == 0
