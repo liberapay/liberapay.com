@@ -14,6 +14,7 @@ import datetime
 from decimal import Decimal, ROUND_DOWN
 import uuid
 
+import aspen
 from aspen.utils import typecheck
 from postgres.orm import Model
 from psycopg2 import IntegrityError
@@ -1292,25 +1293,31 @@ class Participant(Model, MixinTeam):
         self.update_avatar()
 
     def credit_card_expiring(self, request, response):
-        card_expiring = False
 
         if NOTIFIED_ABOUT_EXPIRATION in request.headers.cookie:
             cookie = request.headers.cookie[NOTIFIED_ABOUT_EXPIRATION]
             if cookie.value == self.session_token:
                 return False
 
-        if self.balanced_customer_href:
-            card = billing.BalancedCard(self.balanced_customer_href)
-        else:
-            card = billing.StripeCard(self.stripe_customer_id)
-
-        expiration_year = card['expiration_year']
-        expiration_month= card['expiration_month']
-        if expiration_year and expiration_month:
-            card_expiring = is_card_expiring(int(expiration_year), int(expiration_month))
-
-        response.headers.cookie[NOTIFIED_ABOUT_EXPIRATION] = self.session_token
-        return card_expiring
+        try:
+            if self.balanced_customer_href:
+                card = billing.BalancedCard(self.balanced_customer_href)
+            elif self.stripe_customer_id:
+                card = billing.StripeCard(self.stripe_customer_id)
+            else:
+                return False
+            year, month = card['expiration_year'], card['expiration_month']
+            if not (year and month):
+                return False
+            card_expiring = is_card_expiring(int(year), int(month))
+            response.headers.cookie[NOTIFIED_ABOUT_EXPIRATION] = self.session_token
+            return card_expiring
+        except Exception as e:
+            if request.website.env.testing:
+                raise
+            aspen.log(e)
+            request.website.tell_sentry(e, request)
+            return False
 
     def to_dict(self, details=False, inquirer=None):
         output = { 'id': self.id

@@ -57,14 +57,14 @@ def username_restrictions(website):
         gittip.RESTRICTED_USERNAMES = os.listdir(website.www_root)
 
 
-def make_sentry_teller(website):
-    if not website.sentry_dsn:
+def make_sentry_teller(env):
+    if not env.sentry_dsn:
         aspen.log_dammit("Won't log to Sentry (SENTRY_DSN is empty).")
         def noop(exception, request=None):
             pass
         return noop
 
-    sentry = raven.Client(website.sentry_dsn)
+    sentry = raven.Client(env.sentry_dsn)
 
     def tell_sentry(exception, request=None):
 
@@ -262,6 +262,7 @@ def env():
         LOG_BUSY_THREADS_EVERY          = int,
         LOG_METRICS                     = is_yesish,
         MANDRILL_KEY                    = unicode,
+        TESTING                         = is_yesish,
     )
 
 
