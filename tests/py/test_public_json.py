@@ -21,9 +21,9 @@ class Tests(Harness):
 
     def test_anonymous_gets_receiving(self):
         alice = self.make_participant('alice', last_bill_result='')
-        self.make_participant('bob')
+        bob = self.make_participant('bob')
 
-        alice.set_tip_to('bob', '1.00')
+        alice.set_tip_to(bob, '1.00')
 
         data = json.loads(self.client.GET('/bob/public.json').body)
 
@@ -31,9 +31,9 @@ class Tests(Harness):
 
     def test_anonymous_does_not_get_my_tip(self):
         alice = self.make_participant('alice', last_bill_result='')
-        self.make_participant('bob')
+        bob = self.make_participant('bob')
 
-        alice.set_tip_to('bob', '1.00')
+        alice.set_tip_to(bob, '1.00')
 
         data = json.loads(self.client.GET('/bob/public.json').body)
 
@@ -41,9 +41,9 @@ class Tests(Harness):
 
     def test_anonymous_gets_giving(self):
         alice = self.make_participant('alice', last_bill_result='')
-        self.make_participant('bob')
+        bob = self.make_participant('bob')
 
-        alice.set_tip_to('bob', '1.00')
+        alice.set_tip_to(bob, '1.00')
 
         data = json.loads(self.client.GET('/alice/public.json').body)
 
@@ -54,8 +54,8 @@ class Tests(Harness):
                                      , last_bill_result=''
                                      , anonymous_giving=True
                                      )
-        self.make_participant('bob')
-        alice.set_tip_to('bob', '1.00')
+        bob = self.make_participant('bob')
+        alice.set_tip_to(bob, '1.00')
         data = json.loads(self.client.GET('/alice/public.json').body)
 
         assert data['giving'] == None
@@ -65,8 +65,8 @@ class Tests(Harness):
                                      , last_bill_result=''
                                      , anonymous_receiving=True
                                      )
-        self.make_participant('bob')
-        alice.set_tip_to('bob', '1.00')
+        bob = self.make_participant('bob')
+        alice.set_tip_to(bob, '1.00')
         data = json.loads(self.client.GET('/alice/public.json').body)
 
         assert data['receiving'] == None
@@ -88,9 +88,9 @@ class Tests(Harness):
 
     def test_authenticated_user_gets_their_tip(self):
         alice = self.make_participant('alice', last_bill_result='')
-        self.make_participant('bob')
+        bob = self.make_participant('bob')
 
-        alice.set_tip_to('bob', '1.00')
+        alice.set_tip_to(bob, '1.00')
 
         raw = self.client.GET('/bob/public.json', auth_as='alice').body
 
@@ -103,11 +103,11 @@ class Tests(Harness):
         alice = self.make_participant('alice', last_bill_result='')
         bob = self.make_participant('bob', last_bill_result='')
         carl = self.make_participant('carl', last_bill_result='')
-        self.make_participant('dana')
+        dana = self.make_participant('dana')
 
-        alice.set_tip_to('dana', '1.00')
-        bob.set_tip_to('dana', '3.00')
-        carl.set_tip_to('dana', '12.00')
+        alice.set_tip_to(dana, '1.00')
+        bob.set_tip_to(dana, '3.00')
+        carl.set_tip_to(dana, '12.00')
 
         raw = self.client.GET('/dana/public.json', auth_as='alice').body
 
@@ -119,9 +119,9 @@ class Tests(Harness):
     def test_authenticated_user_gets_zero_if_they_dont_tip(self):
         self.make_participant('alice', last_bill_result='')
         bob = self.make_participant('bob', last_bill_result='')
-        self.make_participant('carl')
+        carl = self.make_participant('carl')
 
-        bob.set_tip_to('carl', '3.00')
+        bob.set_tip_to(carl, '3.00')
 
         raw = self.client.GET('/carl/public.json', auth_as='alice').body
 
@@ -132,9 +132,9 @@ class Tests(Harness):
 
     def test_authenticated_user_gets_self_for_self(self):
         alice = self.make_participant('alice', last_bill_result='')
-        self.make_participant('bob')
+        bob = self.make_participant('bob')
 
-        alice.set_tip_to('bob', '3.00')
+        alice.set_tip_to(bob, '3.00')
 
         raw = self.client.GET('/bob/public.json', auth_as='bob').body
 

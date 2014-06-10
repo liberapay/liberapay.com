@@ -12,10 +12,10 @@ class TestPages(Harness):
         assert expected in actual
 
     def test_homepage_with_anonymous_giver(self):
-        self.make_participant('bob', elsewhere='twitter', claimed_time='now')
+        bob = self.make_participant('bob', elsewhere='twitter', claimed_time='now')
         alice = self.make_participant('alice', anonymous_giving=True, last_bill_result='',
                                       elsewhere='twitter', claimed_time='now')
-        alice.set_tip_to('bob', 1)
+        alice.set_tip_to(bob, 1)
         update_homepage_queries_once(self.db)
 
         actual = self.client.GET('/').body
@@ -23,10 +23,10 @@ class TestPages(Harness):
         assert expected in actual
 
     def test_homepage_with_anonymous_receiver(self):
-        self.make_participant('bob', anonymous_receiving=True, last_bill_result='',
-                              elsewhere='twitter', claimed_time='now')
+        bob = self.make_participant('bob', anonymous_receiving=True, last_bill_result='',
+                                    elsewhere='twitter', claimed_time='now')
         alice = self.make_participant('alice', last_bill_result='', claimed_time='now')
-        alice.set_tip_to('bob', 1)
+        alice.set_tip_to(bob, 1)
         update_homepage_queries_once(self.db)
 
         actual = self.client.GET('/').body

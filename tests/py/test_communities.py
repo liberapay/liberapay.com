@@ -22,8 +22,8 @@ class Tests(Harness):
     def test_givers_show_up_on_community_page(self):
 
         # Alice tips bob.
-        self.make_participant("bob", claimed_time='now')
-        self.alice.set_tip_to('bob', '1.00')
+        bob = self.make_participant('bob', claimed_time='now')
+        self.alice.set_tip_to(bob, '1.00')
 
         html = self.client.GET('/for/something/', want='response.body')
         assert html.count('alice') == 4  # entries in both New Participants and Givers
@@ -32,9 +32,9 @@ class Tests(Harness):
     def test_givers_dont_show_up_if_they_give_zero(self):
 
         # Alice tips bob.
-        self.make_participant("bob", claimed_time='now')
-        self.alice.set_tip_to('bob', '1.00')
-        self.alice.set_tip_to('bob', '0.00')
+        bob = self.make_participant('bob', claimed_time='now')
+        self.alice.set_tip_to(bob, '1.00')
+        self.alice.set_tip_to(bob, '0.00')
 
         html = self.client.GET('/for/something/', want='response.body')
         assert html.count('alice') == 2  # entry in New Participants only
@@ -44,7 +44,7 @@ class Tests(Harness):
 
         # Bob tips alice.
         bob = self.make_participant("bob", claimed_time='now', last_bill_result='')
-        bob.set_tip_to('alice', '1.00')
+        bob.set_tip_to(self.alice, '1.00')
 
         html = self.client.GET('/for/something/', want='response.body')
         assert html.count('alice') == 4  # entries in both New Participants and Receivers
@@ -54,8 +54,8 @@ class Tests(Harness):
 
         # Bob tips alice.
         bob = self.make_participant("bob", claimed_time='now', last_bill_result='')
-        bob.set_tip_to('alice', '1.00')
-        bob.set_tip_to('alice', '0.00')  # zero out bob's tip
+        bob.set_tip_to(self.alice, '1.00')
+        bob.set_tip_to(self.alice, '0.00')  # zero out bob's tip
 
         html = self.client.GET('/for/something/', want='response.body')
         assert html.count('alice') == 2  # entry in New Participants only
