@@ -1365,3 +1365,11 @@ END;
 BEGIN;
     CREATE INDEX ON communities (slug);
 COMMIT;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/pull/2485
+
+BEGIN;
+    ALTER TABLE participants ADD COLUMN is_closed bool NOT NULL DEFAULT FALSE;
+END;
