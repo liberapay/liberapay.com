@@ -276,8 +276,6 @@ class Participant(Model, MixinTeam):
             self.clear_personal_information(cursor)
             self.update_is_closed(True, cursor)
 
-            return self.archive(cursor)
-
 
     class NotWhitelisted(Exception): pass
     class NoBalancedCustomerHref(Exception): pass
@@ -417,6 +415,7 @@ class Participant(Model, MixinTeam):
                  , number='singular'
                  , avatar_url=NULL
                  , email=NULL
+                 , claimed_time=NULL
                  , giving=0
                  , pledging=0
                  , receiving=0
@@ -430,6 +429,7 @@ class Participant(Model, MixinTeam):
                            , number='singular'
                            , avatar_url=None
                            , email=None
+                           , claimed_time=None
                             )
 
 

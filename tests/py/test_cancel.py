@@ -21,11 +21,10 @@ class TestCanceling(Harness):
         alice.set_tip_to(bob, D('3.00'))
         carl.set_tip_to(alice, D('2.00'))
 
-        archived_as = alice.cancel('downstream')
+        alice.cancel('downstream')
 
-        deadbeef = Participant.from_username(archived_as)
         assert carl.get_tip_to('alice') == 0
-        assert deadbeef.balance == 0
+        assert alice.balance == 0
 
     def test_cancel_raises_for_unknown_disbursement_strategy(self):
         alice = self.make_participant('alice', balance=D('0.00'))
@@ -252,6 +251,7 @@ class TestCanceling(Harness):
                                      , number='plural'
                                      , avatar_url='img-url'
                                      , email=('alice@example.com', True)
+                                     , claimed_time='now'
                                       )
         assert Participant.from_username('alice').number == 'plural' # sanity check
 
@@ -266,6 +266,7 @@ class TestCanceling(Harness):
         assert alice.number == new_alice.number == 'singular'
         assert alice.avatar_url == new_alice.avatar_url == None
         assert alice.email == new_alice.email == None
+        assert alice.claimed_time == new_alice.claimed_time == None
 
     def test_cpi_clears_communities(self):
         alice = self.make_participant('alice')
