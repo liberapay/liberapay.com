@@ -4,6 +4,7 @@ from decimal import Decimal as D
 
 import balanced
 import pytest
+from gittip.models.community import Community
 from gittip.models.participant import Participant
 from gittip.testing import Harness
 
@@ -265,3 +266,30 @@ class TestCanceling(Harness):
         assert alice.number == new_alice.number == 'singular'
         assert alice.avatar_url == new_alice.avatar_url == None
         assert alice.email == new_alice.email == None
+
+    def test_cpi_clears_communities(self):
+        alice = self.make_participant('alice')
+        alice.insert_into_communities(True, 'test', 'test')
+        bob = self.make_participant('bob')
+        bob.insert_into_communities(True, 'test', 'test')
+
+        assert Community.from_slug('test').nmembers == 2  # sanity check
+
+        with self.db.get_cursor() as cursor:
+            alice.clear_personal_information(cursor)
+
+        assert Community.from_slug('test').nmembers == 1
+
+    def test_cpi_clears_teams(self):
+        team = self.make_participant('team', number='plural')
+        alice = self.make_participant('alice', claimed_time='now')
+        team.add_member(alice)
+        bob = self.make_participant('bob', claimed_time='now')
+        team.add_member(bob)
+
+        assert len(team.get_takes()) == 2  # sanity check
+
+        with self.db.get_cursor() as cursor:
+            alice.clear_personal_information(cursor)
+
+        assert len(team.get_takes()) == 1

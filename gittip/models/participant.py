@@ -390,7 +390,23 @@ class Participant(Model, MixinTeam):
     def clear_personal_information(self, cursor):
         """Clear personal information such as statement and goal.
         """
+        if self.IS_PLURAL:
+            self.remove_all_members(cursor)
         cursor.run("""
+
+            INSERT INTO communities (ctime, name, slug, participant, is_member) (
+                SELECT ctime, name, slug, %(username)s, false
+                  FROM current_communities
+                 WHERE participant=%(username)s
+                   AND is_member IS true
+            );
+
+            INSERT INTO takes (ctime, member, team, amount, recorder) (
+                SELECT ctime, %(username)s, team, 0.00, %(username)s
+                  FROM current_takes
+                 WHERE member=%(username)s
+                   AND amount > 0
+            );
 
             UPDATE participants
                SET statement=''
@@ -400,9 +416,9 @@ class Participant(Model, MixinTeam):
                  , number='singular'
                  , avatar_url=NULL
                  , email=NULL
-            WHERE username=%s
+            WHERE username=%(username)s;
 
-        """, (self.username,))
+        """, dict(username=self.username))
         self.set_attributes( statement=''
                            , goal=None
                            , anonymous_giving=False
