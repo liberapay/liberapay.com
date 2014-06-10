@@ -144,18 +144,14 @@ Gittip.payments.ba.submit = function (e) {
 };
 
 Gittip.payments.ba.handleResponse = function (response) {
-    console.log('bank account response', response);
     if (response.status_code !== 201) {
         $('button#save').text('Save');
-        var msg = response.status.toString() + " " + response.error.description;
-        jQuery.ajax(
-            { type: "POST"
-            , url: "/bank-account.json"
-            , data: {action: 'store-error', msg: msg}
-             }
-        );
+        var msg = response.status_code + ": " +
+            $.map(response.errors, function(obj) { return obj.description }).join(', ');
 
-        Gittip.forms.showFeedback(null, [response.error.description]);
+        $.post('/credit-card.json', {action: 'store-error', msg: msg});
+
+        Gittip.forms.showFeedback(null, [msg]);
         return;
     }
 
@@ -295,34 +291,14 @@ Gittip.payments.cc.submit = function(e) {
 };
 
 Gittip.payments.cc.handleResponse = function(response) {
-
-    /* If status !== 201 then response.error will contain information about the
-     * error, in this form:
-     *
-     *      { "code": "incorrect_number"
-     *      , "message": "Your card number is incorrect"
-     *      , "param": "number"
-     *      , "type": "card_error"
-     *       }
-     *
-     * The error codes are documented here:
-     *
-     *      https://www.balancedpayments.com/docs/js
-     *
-     */
-
-    if (response.status_code !== 201) {   // The request to create the token failed. Store the failure message in
-        // our db.
+    if (response.status_code !== 201) {
         $('button#save').text('Save');
-        var msg = response.status.toString() + " " + response.error.description;
-        jQuery.ajax(
-            { type: "POST"
-            , url: "/credit-card.json"
-            , data: {action: 'store-error', msg: msg}
-             }
-        );
+        var msg = response.status_code + ": " +
+            $.map(response.errors, function(obj) { return obj.description }).join(', ');
 
-        Gittip.forms.showFeedback(null, [response.error.description]);
+        $.post('/credit-card.json', {action: 'store-error', msg: msg});
+
+        Gittip.forms.showFeedback(null, [msg]);
         return;
     }
 
