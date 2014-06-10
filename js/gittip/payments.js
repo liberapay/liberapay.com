@@ -48,10 +48,8 @@ Gittip.payments.onError = function(response) {
     $('button#save').text('Save');
     var msg = response.status_code + ": " +
         $.map(response.errors, function(obj) { return obj.description }).join(', ');
-
-    $.post('/credit-card.json', {action: 'store-error', msg: msg});
-
     Gittip.forms.showFeedback(null, [msg]);
+    return msg;
 };
 
 Gittip.payments.onSuccess = function(data) {
@@ -168,7 +166,8 @@ Gittip.payments.ba.submit = function (e) {
 
 Gittip.payments.ba.handleResponse = function (response) {
     if (response.status_code !== 201) {
-        Gittip.payments.onError(response);
+        var msg = Gittip.payments.onError(response);
+        $.post('/bank-account.json', {action: 'store-error', msg: msg});
         return;
     }
 
@@ -296,7 +295,8 @@ Gittip.payments.cc.submit = function(e) {
 
 Gittip.payments.cc.handleResponse = function(response) {
     if (response.status_code !== 201) {
-        Gittip.payments.onError(response);
+        var msg = Gittip.payments.onError(response);
+        $.post('/credit-card.json', {action: 'store-error', msg: msg});
         return;
     }
 
