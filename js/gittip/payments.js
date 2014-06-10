@@ -44,6 +44,16 @@ Gittip.payments.submitDeleteForm = function(e) {
     return false;
 };
 
+Gittip.payments.onError = function(response) {
+    $('button#save').text('Save');
+    var msg = response.status_code + ": " +
+        $.map(response.errors, function(obj) { return obj.description }).join(', ');
+
+    $.post('/credit-card.json', {action: 'store-error', msg: msg});
+
+    Gittip.forms.showFeedback(null, [msg]);
+};
+
 
 // Bank Accounts
 // =============
@@ -145,13 +155,7 @@ Gittip.payments.ba.submit = function (e) {
 
 Gittip.payments.ba.handleResponse = function (response) {
     if (response.status_code !== 201) {
-        $('button#save').text('Save');
-        var msg = response.status_code + ": " +
-            $.map(response.errors, function(obj) { return obj.description }).join(', ');
-
-        $.post('/credit-card.json', {action: 'store-error', msg: msg});
-
-        Gittip.forms.showFeedback(null, [msg]);
+        Gittip.payments.onError(response);
         return;
     }
 
@@ -292,13 +296,7 @@ Gittip.payments.cc.submit = function(e) {
 
 Gittip.payments.cc.handleResponse = function(response) {
     if (response.status_code !== 201) {
-        $('button#save').text('Save');
-        var msg = response.status_code + ": " +
-            $.map(response.errors, function(obj) { return obj.description }).join(', ');
-
-        $.post('/credit-card.json', {action: 'store-error', msg: msg});
-
-        Gittip.forms.showFeedback(null, [msg]);
+        Gittip.payments.onError(response);
         return;
     }
 
