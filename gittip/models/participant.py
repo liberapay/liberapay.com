@@ -352,46 +352,39 @@ class Participant(Model, MixinTeam):
         self.set_attributes(balance=balance)
 
 
-    CLEAR_GIVING, CLEAR_RECEIVING = [object() for i in range(2)]
-
     def clear_tips_giving(self, cursor):
         """Zero out tips from a given user.
         """
-        self._clear_tips(cursor, self.CLEAR_GIVING)
+        tippees = cursor.all("""
 
-    def clear_tips_receiving(self, cursor):
-        """Zero out tips to a given user. This is a workaround for #1469.
-        """
-        self._clear_tips(cursor, self.CLEAR_RECEIVING)
-
-    def _clear_tips(self, cursor, direction):
-
-        if direction is self.CLEAR_GIVING:
-            filter_on = 'tipper'
-        elif direction is self.CLEAR_RECEIVING:
-            filter_on = 'tippee'
-        else:
-            raise  # sanity check
-
-        tips = cursor.all("""
-
-            SELECT amount
-                 , ( SELECT participants.*::participants
-                       FROM participants
-                      WHERE username=tipper
-                    ) AS tipper
-                 , ( SELECT participants.*::participants
+            SELECT ( SELECT participants.*::participants
                        FROM participants
                       WHERE username=tippee
                     ) AS tippee
               FROM current_tips
-             WHERE {} = %s
+             WHERE tipper = %s
                AND amount > 0
-          ORDER BY amount DESC
 
-        """.format(filter_on), (self.username,))
-        for tip in tips:
-            tip.tipper.set_tip_to(tip.tippee.username, '0.00')
+        """, (self.username,))
+        for tippee in tippees:
+            self.set_tip_to(tippee, '0.00', cursor=cursor)
+
+    def clear_tips_receiving(self, cursor):
+        """Zero out tips to a given user. This is a workaround for #1469.
+        """
+        tippers = cursor.all("""
+
+            SELECT ( SELECT participants.*::participants
+                       FROM participants
+                      WHERE username=tipper
+                    ) AS tipper
+              FROM current_tips
+             WHERE tippee = %s
+               AND amount > 0
+
+        """, (self.username,))
+        for tipper in tippers:
+            tipper.set_tip_to(self, '0.00', cursor=cursor)
 
 
     def clear_personal_information(self, cursor):
@@ -543,8 +536,8 @@ class Participant(Model, MixinTeam):
         self.set_attributes(goal=goal)
 
 
-    def set_tip_to(self, tippee, amount):
-        """Given participant id and amount as str, return a tuple.
+    def set_tip_to(self, tippee, amount, cursor=None):
+        """Given a Participant or username, and amount as str, return a tuple.
 
         We INSERT instead of UPDATE, so that we have history to explore. The
         COALESCE function returns the first of its arguments that is not NULL.
@@ -557,13 +550,13 @@ class Participant(Model, MixinTeam):
         that as part of our conversion funnel).
 
         """
+        if not isinstance(tippee, Participant):
+            tippee, u = Participant.from_username(tippee), tippee
+            if not tippee:
+                raise NoTippee(u)
 
-        if self.username == tippee:
+        if self.username == tippee.username:
             raise NoSelfTipping
-
-        tippee = Participant.from_username(tippee)
-        if tippee is None:
-            raise NoTippee
 
         amount = Decimal(amount)  # May raise InvalidOperation
         max_tip = gittip.MAX_TIP_PLURAL if tippee.IS_PLURAL else gittip.MAX_TIP_SINGULAR
@@ -576,18 +569,17 @@ class Participant(Model, MixinTeam):
                         (ctime, tipper, tippee, amount)
                  VALUES ( COALESCE (( SELECT ctime
                                         FROM tips
-                                       WHERE (tipper=%s AND tippee=%s)
+                                       WHERE (tipper=%(tipper)s AND tippee=%(tippee)s)
                                        LIMIT 1
                                       ), CURRENT_TIMESTAMP)
-                        , %s, %s, %s
+                        , %(tipper)s, %(tippee)s, %(amount)s
                          )
-              RETURNING ( SELECT count(*) = 0 FROM tips WHERE tipper=%s )
+              RETURNING ( SELECT count(*) = 0 FROM tips WHERE tipper=%(tipper)s )
                      AS first_time_tipper
 
         """
-        args = (self.username, tippee.username, self.username, tippee.username, amount, \
-                                                                                     self.username)
-        first_time_tipper = self.db.one(NEW_TIP, args)
+        args = dict(tipper=self.username, tippee=tippee.username, amount=amount)
+        first_time_tipper = (cursor or self.db).one(NEW_TIP, args)
         return amount, first_time_tipper
 
 
