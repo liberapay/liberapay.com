@@ -329,6 +329,12 @@ class Tests(Harness):
         expected = datetime.timedelta(seconds=0.1)
         assert actual < expected
 
+    def test_claiming_participant_resets_is_closed_to_false(self):
+        self.participant.update_is_closed(True)
+        self.participant.set_as_claimed()
+        assert not self.participant.is_closed
+        assert not Participant.from_username('user1').is_closed
+
     def test_changing_username_successfully(self):
         self.participant.change_username('user2')
         actual = Participant.from_username('user2')
