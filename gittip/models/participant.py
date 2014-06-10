@@ -274,6 +274,7 @@ class Participant(Model, MixinTeam):
             self.clear_tips_giving(cursor)
             self.clear_tips_receiving(cursor)
             self.clear_personal_information(cursor)
+            self.update_is_closed(True, cursor)
 
             return self.archive(cursor)
 
@@ -550,6 +551,25 @@ class Participant(Model, MixinTeam):
                  , (goal, self.username)
                   )
         self.set_attributes(goal=goal)
+
+    def update_is_closed(self, is_closed, cursor=None):
+        ctx = None
+        if cursor is None:
+            ctx = self.db.get_cursor()
+            cursor = ctx.__enter__()
+        try:
+            cursor.run( "UPDATE participants SET is_closed=%(is_closed)s "
+                        "WHERE username=%(username)s"
+                      , dict(username=self.username, is_closed=is_closed)
+                       )
+            add_event( cursor
+                     , 'participant'
+                     , dict(id=self.id, action='set', values=dict(is_closed=is_closed))
+                      )
+            self.set_attributes(is_closed=is_closed)
+        finally:
+            if ctx is not None:
+                ctx.__exit__(None, None, None)
 
 
     def set_tip_to(self, tippee, amount, cursor=None):

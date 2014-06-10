@@ -293,3 +293,30 @@ class TestCanceling(Harness):
             alice.clear_personal_information(cursor)
 
         assert len(team.get_takes()) == 1
+
+
+    # uic = update_is_closed
+
+    def test_uic_updates_is_closed(self):
+        alice = self.make_participant('alice')
+        alice.update_is_closed(True)
+
+        assert alice.is_closed
+        assert Participant.from_username('alice').is_closed
+
+    def test_uic_updates_is_closed_False(self):
+        alice = self.make_participant('alice')
+        alice.update_is_closed(True)
+        alice.update_is_closed(False)
+
+        assert not alice.is_closed
+        assert not Participant.from_username('alice').is_closed
+
+    def test_uic_uses_supplied_cursor(self):
+        alice = self.make_participant('alice')
+
+        with self.db.get_cursor() as cursor:
+            alice.update_is_closed(True, cursor)
+            assert alice.is_closed
+            assert not Participant.from_username('alice').is_closed
+        assert Participant.from_username('alice').is_closed
