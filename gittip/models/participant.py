@@ -417,6 +417,8 @@ class Participant(Model, MixinTeam):
                  , avatar_url=NULL
                  , email=NULL
                  , claimed_time=NULL
+                 , session_token=NULL
+                 , session_expires=now()
                  , giving=0
                  , pledging=0
                  , receiving=0
