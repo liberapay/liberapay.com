@@ -41,7 +41,7 @@ username = team.username  # used in footer shared with on/%platform/ pages
         <td class="figure last_week"></td>
         <td class="figure this_week"></td>
         <td class="figure balance">
-          {{ participant.get_dollars_receiving() }}
+          {{ participant.receiving }}
         </td>
         <td class="figure percentage"></td>
       </tr>

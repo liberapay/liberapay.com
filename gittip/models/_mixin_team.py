@@ -201,7 +201,7 @@ class MixinTeam(object):
         assert self.IS_PLURAL
         TAKE = "SELECT sum(amount) FROM current_takes WHERE team=%s"
         total_take = self.db.one(TAKE, (self.username,), default=0)
-        team_take = max(self.get_dollars_receiving() - total_take, 0)
+        team_take = max(self.receiving - total_take, 0)
         membership = { "ctime": None
                      , "mtime": None
                      , "member": self.username
@@ -215,7 +215,7 @@ class MixinTeam(object):
         assert self.IS_PLURAL
         takes = self.get_takes()
         takes.append(self.get_team_take())
-        budget = balance = self.get_dollars_receiving()
+        budget = balance = self.receiving
         members = []
         for take in takes:
             member = {}

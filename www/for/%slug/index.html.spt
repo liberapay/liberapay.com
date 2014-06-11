@@ -76,32 +76,19 @@ new_participants = query_cache.all("""
 givers = query_cache.all("""
 -- top givers on community page
 
-    SELECT tipper AS username
+    SELECT username
          , anonymous_giving AS anonymous
-         , sum(amount) AS amount
+         , giving AS amount
          , avatar_url
          , statement
          , number
-      FROM (    SELECT DISTINCT ON (tipper, tippee)
-                       amount
-                     , tipper
-                  FROM tips
-                  JOIN participants p ON p.username = tipper
-                  JOIN participants p2 ON p2.username = tippee
-                  JOIN elsewhere ON elsewhere.participant = tippee
-                  JOIN current_communities cc ON cc.participant = tipper
-                 WHERE p.last_bill_result = ''
-                   AND p.is_suspicious IS NOT true
-                   AND p2.claimed_time IS NOT NULL
-                   AND elsewhere.is_locked = false
-                   AND cc.slug = %s and cc.is_member
-              ORDER BY tipper, tippee, tips.mtime DESC
-              ) AS foo
-      JOIN participants p ON p.username = tipper
+      FROM participants
+      JOIN current_communities cc ON cc.participant = username AND cc.slug = %s
      WHERE is_suspicious IS NOT true
-       AND amount > 0
-  GROUP BY tipper, anonymous_giving, avatar_url, statement, number
-  ORDER BY amount DESC
+       AND giving > 0
+       AND cc.is_member
+       AND last_bill_result = ''
+  ORDER BY giving DESC
   LIMIT %s
   OFFSET %s
 
@@ -113,31 +100,18 @@ givers = query_cache.all("""
 receivers = query_cache.all("""
 -- top receivers on community page
 
-    SELECT tippee AS username
+    SELECT username
          , anonymous_receiving AS anonymous
-         , sum(amount) AS amount
+         , receiving AS amount
          , avatar_url
          , statement
          , number
-      FROM (    SELECT DISTINCT ON (tipper, tippee)
-                       amount
-                     , tippee
-                  FROM tips
-                  JOIN participants p ON p.username = tipper
-                  JOIN elsewhere ON elsewhere.participant = tippee
-                  JOIN current_communities cc ON cc.participant = tippee
-                 WHERE last_bill_result = ''
-                   AND elsewhere.is_locked = false
-                   AND is_suspicious IS NOT true
-                   AND claimed_time IS NOT null
-                   AND cc.slug = %s and cc.is_member
-              ORDER BY tipper, tippee, tips.mtime DESC
-              ) AS foo
-      JOIN participants p ON p.username = tippee
+      FROM participants
+      JOIN current_communities cc ON cc.participant = username AND cc.slug = %s
      WHERE is_suspicious IS NOT true
-       AND amount > 0
-  GROUP BY tippee, anonymous_receiving, avatar_url, statement, number
-  ORDER BY amount DESC
+       AND receiving > 0
+       AND cc.is_member
+  ORDER BY receiving DESC
   LIMIT %s
   OFFSET %s
 

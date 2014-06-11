@@ -6,10 +6,10 @@
 
 {% set prefix = user.participant == participant and "my-" or "" %}
 {% set anon_giving = participant.anonymous_giving %}
-{% set g = participant.get_dollars_giving() %}
+{% set g = participant.giving %}
 {% set giving = anon_giving and "anonymously" or "$"+str(g) %}
 {% set anon_receiving = participant.anonymous_receiving %}
-{% set r = participant.get_dollars_receiving() %}
+{% set r = participant.receiving %}
 {% set receiving = anon_receiving and "anonymously" or "$"+str(r) %}
 
 <table class="on-profile{% if participant.is_suspicious %} is-suspicious{% endif %}">

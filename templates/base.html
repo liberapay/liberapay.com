@@ -32,10 +32,10 @@
                 <a id="sign-out" href="/sign-out.html">sign out</a>
                 <div class="quick-stats">
                   Giving: <a href="/{{ user.participant.username }}/giving/">
-                              <span class="my-total-giving">${{ user.participant.get_dollars_giving() }}<span>/wk
+                              <span class="my-total-giving">${{ user.participant.giving }}<span>/wk
                           </a>
                   <br />
-                  Receiving: <b>${{ user.participant.get_dollars_receiving() }}/wk</b>
+                  Receiving: <b>${{ user.participant.receiving }}/wk</b>
                 </div>
             </div>
             {% endif %}

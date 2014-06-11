@@ -8,7 +8,6 @@ from mock import patch
 
 from gittip import wireup
 from gittip.billing.payday import Payday
-from gittip.models.participant import Participant
 from gittip.testing import Harness
 
 
@@ -36,33 +35,33 @@ class TestChartOfReceiving(Harness):
             setattr(self, participant, p)
 
     def test_get_tip_distribution_handles_a_tip(self):
-        Participant.from_username('alice').set_tip_to(self.bob, '3.00')
+        self.alice.set_tip_to(self.bob, '3.00')
         expected = ([[Decimal('3.00'), 1, Decimal('3.00'), 1.0, Decimal('1')]],
                     1.0, Decimal('3.00'))
-        actual = Participant.from_username('bob').get_tip_distribution()
+        actual = self.bob.get_tip_distribution()
         assert actual == expected
 
     def test_get_tip_distribution_handles_no_tips(self):
         expected = ([], 0.0, Decimal('0.00'))
-        actual = Participant.from_username('alice').get_tip_distribution()
+        actual = self.alice.get_tip_distribution()
         assert actual == expected
 
     def test_get_tip_distribution_handles_multiple_tips(self):
-        self.make_participant('carl', last_bill_result='')
-        Participant.from_username('alice').set_tip_to(self.bob, '1.00')
-        Participant.from_username('carl').set_tip_to(self.bob, '3.00')
+        carl = self.make_participant('carl', last_bill_result='')
+        self.alice.set_tip_to(self.bob, '1.00')
+        carl.set_tip_to(self.bob, '3.00')
         expected = ([
             [Decimal('1.00'), 1L, Decimal('1.00'), 0.5, Decimal('0.25')],
             [Decimal('3.00'), 1L, Decimal('3.00'), 0.5, Decimal('0.75')]
         ], 2.0, Decimal('4.00'))
-        actual = Participant.from_username('bob').get_tip_distribution()
+        actual = self.bob.get_tip_distribution()
         assert actual == expected
 
     def test_get_tip_distribution_handles_big_tips(self):
         self.bob.update_number('plural')
-        self.make_participant('carl', last_bill_result='')
-        Participant.from_username('alice').set_tip_to(self.bob, '200.00')
-        Participant.from_username('carl').set_tip_to(self.bob, '300.00')
+        carl = self.make_participant('carl', last_bill_result='')
+        self.alice.set_tip_to(self.bob, '200.00')
+        carl.set_tip_to(self.bob, '300.00')
         expected = ([
             [Decimal('200.00'), 1L, Decimal('200.00'), 0.5, Decimal('0.4')],
             [Decimal('300.00'), 1L, Decimal('300.00'), 0.5, Decimal('0.6')]
@@ -71,21 +70,21 @@ class TestChartOfReceiving(Harness):
         assert actual == expected
 
     def test_get_tip_distribution_ignores_bad_cc(self):
-        self.make_participant('bad_cc', last_bill_result='Failure!')
-        Participant.from_username('alice').set_tip_to(self.bob, '1.00')
-        Participant.from_username('bad_cc').set_tip_to(self.bob, '3.00')
+        bad_cc = self.make_participant('bad_cc', last_bill_result='Failure!')
+        self.alice.set_tip_to(self.bob, '1.00')
+        bad_cc.set_tip_to(self.bob, '3.00')
         expected = ([[Decimal('1.00'), 1L, Decimal('1.00'), 1, Decimal('1')]],
                     1.0, Decimal('1.00'))
-        actual = Participant.from_username('bob').get_tip_distribution()
+        actual = self.bob.get_tip_distribution()
         assert actual == expected
 
     def test_get_tip_distribution_ignores_missing_cc(self):
-        self.make_participant('missing_cc', last_bill_result=None)
-        Participant.from_username('alice').set_tip_to(self.bob, '1.00')
-        Participant.from_username('missing_cc').set_tip_to(self.bob, '3.00')
+        missing_cc = self.make_participant('missing_cc', last_bill_result=None)
+        self.alice.set_tip_to(self.bob, '1.00')
+        missing_cc.set_tip_to(self.bob, '3.00')
         expected = ([[Decimal('1.00'), 1L, Decimal('1.00'), 1, Decimal('1')]],
                     1.0, Decimal('1.00'))
-        actual = Participant.from_username('bob').get_tip_distribution()
+        actual = self.bob.get_tip_distribution()
         assert actual == expected
 
 class TestJson(Harness):
