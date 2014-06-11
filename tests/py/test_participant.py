@@ -4,7 +4,6 @@ import datetime
 import random
 from decimal import Decimal
 
-import pytz
 import pytest
 from aspen.utils import utcnow
 from gittip import NotSane
@@ -319,7 +318,7 @@ class Tests(Harness):
 
 
     def test_claiming_participant(self):
-        now = datetime.datetime.now(pytz.utc)
+        now = utcnow()
         self.participant.set_as_claimed()
         actual = self.participant.claimed_time - now
         expected = datetime.timedelta(seconds=0.1)
@@ -651,7 +650,7 @@ class Tests(Harness):
     # get_age_in_seconds - gais
 
     def test_gais_gets_age_in_seconds(self):
-        now = datetime.datetime.now(pytz.utc)
+        now = utcnow()
         alice = self.make_participant('alice', claimed_time=now)
         actual = alice.get_age_in_seconds()
         assert 0 < actual < 1
@@ -724,16 +723,3 @@ class Tests(Harness):
         payload = self.db.one("SELECT * FROM events WHERE payload->>'action' = 'archive'").payload
         assert payload['values']['old_username'] == 'alice'
         assert payload['values']['new_username'] == archived_as
-
-
-    # participant session
-
-    def test_no_participant_from_expired_session(self):
-        self.participant.start_new_session()
-        token = self.participant.session_token
-
-        # Session has expired long time ago
-        self.participant.set_session_expires(0)
-        actual = Participant.from_session_token(token)
-
-        assert actual is None

@@ -10,15 +10,13 @@ of participant, based on certain properties.
 """
 from __future__ import print_function, unicode_literals
 
-import datetime
 from decimal import Decimal, ROUND_DOWN
 import uuid
 
 import aspen
-from aspen.utils import typecheck
+from aspen.utils import typecheck, utcnow
 from postgres.orm import Model
 from psycopg2 import IntegrityError
-import pytz
 
 import gittip
 from gittip import NotSane
@@ -97,7 +95,7 @@ class Participant(Model, MixinTeam):
         """Return an existing participant based on session token.
         """
         participant = cls._from_thing("session_token", token)
-        if participant and participant.session_expires < pytz.utc.localize(datetime.datetime.utcnow()):
+        if participant and participant.session_expires < utcnow():
             participant = None
 
         return participant
@@ -123,43 +121,32 @@ class Participant(Model, MixinTeam):
     # Session Management
     # ==================
 
-    def start_new_session(self):
-        """Set ``session_token`` in the database to a new uuid.
+    def update_session(self, new_token, expires):
+        """Set ``session_token`` and ``session_expires``.
 
         :database: One UPDATE, one row
 
         """
-        self._update_session_token(uuid.uuid4().hex)
-
-    def end_session(self):
-        """Set ``session_token`` in the database to ``NULL``.
-
-        :database: One UPDATE, one row
-
-        """
-        self._update_session_token(None)
-
-    def _update_session_token(self, new_token):
-        self.db.run( "UPDATE participants SET session_token=%s "
-                     "WHERE id=%s AND is_suspicious IS NOT true"
-                   , (new_token, self.id,)
-                    )
-        self.set_attributes(session_token=new_token)
+        self.db.run("""
+            UPDATE participants
+               SET session_token=%s
+                 , session_expires=%s
+             WHERE id=%s
+               AND is_suspicious IS NOT true
+        """, (new_token, expires, self.id))
+        self.set_attributes(session_token=new_token, session_expires=expires)
 
     def set_session_expires(self, expires):
-        """Set session_expires in the database.
+        """Set ``session_expires`` to the given datetime.
 
-        :param float expires: A UNIX timestamp, which XXX we assume is UTC?
         :database: One UPDATE, one row
 
         """
-        session_expires = datetime.datetime.fromtimestamp(expires) \
-                                                      .replace(tzinfo=pytz.utc)
         self.db.run( "UPDATE participants SET session_expires=%s "
                      "WHERE id=%s AND is_suspicious IS NOT true"
-                   , (session_expires, self.id,)
+                   , (expires, self.id,)
                     )
-        self.set_attributes(session_expires=session_expires)
+        self.set_attributes(session_expires=expires)
 
 
     # Claimed-ness
@@ -259,7 +246,7 @@ class Participant(Model, MixinTeam):
         """
         with self.db.get_cursor() as cursor:
             if disbursement_strategy == None:
-                pass  # No balance, supposedly. archive will check.
+                pass  # No balance, supposedly. final_check will make sure.
             elif disbursement_strategy == 'bank':
                 self.withdraw_balance_to_bank_account(cursor)
             elif disbursement_strategy == 'downstream':
@@ -271,9 +258,8 @@ class Participant(Model, MixinTeam):
             self.clear_tips_giving(cursor)
             self.clear_tips_receiving(cursor)
             self.clear_personal_information(cursor)
+            self.final_check(cursor)
             self.update_is_closed(True, cursor)
-
-            return self.archive(cursor)
 
 
     class NotWhitelisted(Exception): pass
@@ -386,7 +372,7 @@ class Participant(Model, MixinTeam):
         """
         if self.IS_PLURAL:
             self.remove_all_members(cursor)
-        cursor.run("""
+        session_expires = cursor.one("""
 
             INSERT INTO communities (ctime, name, slug, participant, is_member) (
                 SELECT ctime, name, slug, %(username)s, false
@@ -410,10 +396,14 @@ class Participant(Model, MixinTeam):
                  , number='singular'
                  , avatar_url=NULL
                  , email=NULL
+                 , claimed_time=NULL
+                 , session_token=NULL
+                 , session_expires=now()
                  , giving=0
                  , pledging=0
                  , receiving=0
-             WHERE username=%(username)s;
+             WHERE username=%(username)s
+         RETURNING session_expires;
 
         """, dict(username=self.username))
         self.set_attributes( statement=''
@@ -423,6 +413,12 @@ class Participant(Model, MixinTeam):
                            , number='singular'
                            , avatar_url=None
                            , email=None
+                           , claimed_time=None
+                           , session_token=None
+                           , session_expires=session_expires
+                           , giving=0
+                           , pledging=0
+                           , receiving=0
                             )
 
 
@@ -958,7 +954,7 @@ class Participant(Model, MixinTeam):
     def get_age_in_seconds(self):
         out = -1
         if self.claimed_time is not None:
-            now = datetime.datetime.now(self.claimed_time.tzinfo)
+            now = utcnow()
             out = (now - self.claimed_time).total_seconds()
         return out
 
@@ -980,6 +976,15 @@ class Participant(Model, MixinTeam):
     class StillReceivingTips(Exception): pass
     class BalanceIsNotZero(Exception): pass
 
+    def final_check(self, cursor):
+        """Sanity-check that balance and tips have been dealt with.
+        """
+        INCOMING = "SELECT count(*) FROM current_tips WHERE tippee = %s AND amount > 0"
+        if cursor.one(INCOMING, (self.username,)) > 0:
+            raise self.StillReceivingTips
+        if self.balance != 0:
+            raise self.BalanceIsNotZero
+
     def archive(self, cursor):
         """Given a cursor, use it to archive ourself.
 
@@ -988,17 +993,7 @@ class Participant(Model, MixinTeam):
 
         """
 
-        # Sanity-check that balance and tips have been dealt with.
-        # ========================================================
-
-        INCOMING = "SELECT count(*) FROM current_tips WHERE tippee = %s AND amount > 0"
-        if cursor.one(INCOMING, (self.username,)) > 0:
-            raise self.StillReceivingTips
-        if self.balance != 0:
-            raise self.BalanceIsNotZero
-
-        # Do it!
-        # ======
+        self.final_check(cursor)
 
         def reserve(cursor, username):
             check = cursor.one("""
@@ -1337,13 +1332,11 @@ class Participant(Model, MixinTeam):
             if cookie.value == self.session_token:
                 return False
 
+        if not self.balanced_customer_href:
+            return False
+
         try:
-            if self.balanced_customer_href:
-                card = billing.BalancedCard(self.balanced_customer_href)
-            elif self.stripe_customer_id:
-                card = billing.StripeCard(self.stripe_customer_id)
-            else:
-                return False
+            card = billing.BalancedCard(self.balanced_customer_href)
             year, month = card['expiration_year'], card['expiration_month']
             if not (year and month):
                 return False

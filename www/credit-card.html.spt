@@ -12,21 +12,16 @@ balanced_customer_href = None
 
 if not user.ANON:
     balanced_customer_href = user.participant.balanced_customer_href
-    stripe_customer_id = user.participant.stripe_customer_id
 
     status = "missing"
-    if stripe_customer_id or balanced_customer_href:
+    if balanced_customer_href:
         if user.participant.last_bill_result is not None:
             status = "working" if user.participant.last_bill_result == "" \
                                                                  else "failing"
-    if balanced_customer_href:
-        card = billing.BalancedCard(balanced_customer_href)
-        # the id on the card might not match unless the db
-        # is updated to use the new style of urls
-    else:
-        card = billing.StripeCard(stripe_customer_id)
-        assert stripe_customer_id == card['id']
 
+    card = billing.BalancedCard(balanced_customer_href)
+    # the id on the card might not match unless the db
+    # is updated to use the new style of urls
 
     username = user.participant.username
 

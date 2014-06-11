@@ -1,5 +1,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+from datetime import date
 from decimal import Decimal as D
 
 import balanced
@@ -21,11 +22,10 @@ class TestClosing(Harness):
         alice.set_tip_to(bob, D('3.00'))
         carl.set_tip_to(alice, D('2.00'))
 
-        archived_as = alice.close('downstream')
+        alice.cancel('downstream')
 
-        deadbeef = Participant.from_username(archived_as)
         assert carl.get_tip_to('alice') == 0
-        assert deadbeef.balance == 0
+        assert alice.balance == 0
 
     def test_close_raises_for_unknown_disbursement_strategy(self):
         alice = self.make_participant('alice', balance=D('0.00'))
@@ -252,6 +252,12 @@ class TestClosing(Harness):
                                      , number='plural'
                                      , avatar_url='img-url'
                                      , email=('alice@example.com', True)
+                                     , claimed_time='now'
+                                     , session_token='deadbeef'
+                                     , session_expires='2000-01-01'
+                                     , giving=20
+                                     , pledging=30
+                                     , receiving=40
                                       )
         assert Participant.from_username('alice').number == 'plural' # sanity check
 
@@ -266,6 +272,12 @@ class TestClosing(Harness):
         assert alice.number == new_alice.number == 'singular'
         assert alice.avatar_url == new_alice.avatar_url == None
         assert alice.email == new_alice.email == None
+        assert alice.claimed_time == new_alice.claimed_time == None
+        assert alice.giving == new_alice.giving == 0
+        assert alice.pledging == new_alice.pledging == 0
+        assert alice.receiving == new_alice.receiving == 0
+        assert alice.session_token == new_alice.session_token == None
+        assert alice.session_expires.year == new_alice.session_expires.year == date.today().year
 
     def test_cpi_clears_communities(self):
         alice = self.make_participant('alice')

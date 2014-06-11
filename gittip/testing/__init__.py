@@ -7,15 +7,15 @@ import unittest
 from decimal import Decimal
 from os.path import join, dirname, realpath
 
-import pytz
 import vcr
 from aspen import resources
+from aspen.utils import utcnow
 from aspen.testing.client import Client
 from gittip.billing.payday import Payday
 from gittip.elsewhere import UserInfo
 from gittip.models.account_elsewhere import AccountElsewhere
 from gittip.models.participant import Participant
-from gittip.security.user import User
+from gittip.security.user import User, SESSION
 from gittip import wireup
 from psycopg2 import IntegrityError, InternalError
 
@@ -44,25 +44,26 @@ class ClientWithAuth(Client):
         # user authentication
         auth_as = kw.pop('auth_as', None)
         if auth_as is None:
-            if b'session' in self.cookie:
-                del self.cookie[b'session']
+            if SESSION in self.cookie:
+                del self.cookie[SESSION]
         else:
             user = User.from_username(auth_as)
-            user.sign_in()
-            self.cookie[b'session'] = user.participant.session_token
+            user.sign_in(self.cookie)
 
         return Client.build_wsgi_environ(self, *a, **kw)
 
 
 class Harness(unittest.TestCase):
 
+    client = ClientWithAuth(www_root=WWW_ROOT, project_root=PROJECT_ROOT)
+    db = client.website.db
+    platforms = client.website.platforms
+    tablenames = db.all("SELECT tablename FROM pg_tables "
+                        "WHERE schemaname='public'")
+
+
     @classmethod
     def setUpClass(cls):
-        cls.client = ClientWithAuth(www_root=WWW_ROOT, project_root=PROJECT_ROOT)
-        cls.db = cls.client.website.db
-        cls.platforms = cls.client.website.platforms
-        cls.tablenames = cls.db.all("SELECT tablename FROM pg_tables "
-                                    "WHERE schemaname='public'")
         cls.seq = 0
         cls.setUpVCR()
 
@@ -159,7 +160,7 @@ class Harness(unittest.TestCase):
         # Update participant
         if kw:
             if kw.get('claimed_time') == 'now':
-                kw['claimed_time'] = datetime.datetime.now(pytz.utc)
+                kw['claimed_time'] = utcnow()
             cols, vals = zip(*kw.items())
             cols = ', '.join(cols)
             placeholders = ', '.join(['%s']*len(vals))

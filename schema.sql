@@ -1392,3 +1392,11 @@ BEGIN;
       ORDER BY tipper, tippee, mtime DESC;
 
 END;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/pull/2482
+
+BEGIN;
+    ALTER TABLE participants DROP COLUMN stripe_customer_id;
+END;

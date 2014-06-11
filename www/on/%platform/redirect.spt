@@ -1,12 +1,11 @@
 from base64 import b64encode
-from Cookie import SimpleCookie
-from email.utils import formatdate
+from datetime import timedelta
 import json
-from time import time
 
 from aspen import Response
-import gittip
 from gittip.elsewhere import ACTIONS
+
+COOKIE_TIMEOUT = timedelta(minutes=2)
 
 [-----------------------------]
 
@@ -27,21 +26,10 @@ if action not in ACTIONS:
 
 url, query_id, query_data = platform.get_auth_url(user=user)
 
-headers = {}
-
-C = SimpleCookie()
 cookie_name = (platform.name+'_'+query_id).encode('ascii')
 cookie_value = b64encode(json.dumps([query_data, action, then, user_name]))
-C[cookie_name] = cookie_value
-C[cookie_name]['path'] = '/'
-C[cookie_name]['expires'] = formatdate(time()+120, False, True)
-C[cookie_name]['httponly'] = 'Yes, please.'
-if gittip.canonical_scheme == 'https':
-    C[cookie_name]['secure'] = 'Yes, please.'
+response.set_cookie(cookie_name, cookie_value, expires=COOKIE_TIMEOUT)
 
-headers['Set-Cookie'] = C[cookie_name].OutputString()
-headers['Location'] = url
-
-raise Response(302, headers=headers)
+response.redirect(url)
 
 [-----------------------------] text/plain

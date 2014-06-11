@@ -1,10 +1,8 @@
 from __future__ import print_function, unicode_literals
 
-import datetime
 import json
 
-import pytz
-
+from aspen.utils import utcnow
 from gittip.testing import Harness
 
 
@@ -15,7 +13,7 @@ class TestTipJson(Harness):
 
         # First, create some test data
         # We need accounts
-        now = datetime.datetime.now(pytz.utc)
+        now = utcnow()
         self.make_participant("test_tippee1", claimed_time=now)
         self.make_participant("test_tippee2", claimed_time=now)
         self.make_participant("test_tipper")
@@ -40,7 +38,7 @@ class TestTipJson(Harness):
         assert second_data['total_giving'] == "4.00"
 
     def test_set_tip_out_of_range(self):
-        now = datetime.datetime.now(pytz.utc)
+        now = utcnow()
         self.make_participant("alice", claimed_time=now)
         self.make_participant("bob", claimed_time=now)
 

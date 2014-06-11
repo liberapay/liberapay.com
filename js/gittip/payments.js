@@ -44,6 +44,27 @@ Gittip.payments.submitDeleteForm = function(e) {
     return false;
 };
 
+Gittip.payments.onError = function(response) {
+    $('button#save').text('Save');
+    var msg = response.status_code + ": " +
+        $.map(response.errors, function(obj) { return obj.description }).join(', ');
+    Gittip.forms.showFeedback(null, [msg]);
+    return msg;
+};
+
+Gittip.payments.onSuccess = function(data) {
+    $('#status').text('working').addClass('highlight');
+    setTimeout(function() {
+        $('#status').removeClass('highlight');
+    }, 8000);
+    $('#delete').show();
+    Gittip.forms.clearFeedback();
+    $('button#save').text('Save');
+    setTimeout(function() {
+        window.location.href = '/' + Gittip.participantId + '/';
+    }, 1000);
+};
+
 
 // Bank Accounts
 // =============
@@ -144,18 +165,9 @@ Gittip.payments.ba.submit = function (e) {
 };
 
 Gittip.payments.ba.handleResponse = function (response) {
-    console.log('bank account response', response);
     if (response.status_code !== 201) {
-        $('button#save').text('Save');
-        var msg = response.status.toString() + " " + response.error.description;
-        jQuery.ajax(
-            { type: "POST"
-            , url: "/bank-account.json"
-            , data: {action: 'store-error', msg: msg}
-             }
-        );
-
-        Gittip.forms.showFeedback(null, [response.error.description]);
+        var msg = Gittip.payments.onError(response);
+        $.post('/bank-account.json', {action: 'store-error', msg: msg});
         return;
     }
 
@@ -164,19 +176,6 @@ Gittip.payments.ba.handleResponse = function (response) {
      * /bank-accounts.json and check the response code to see what's going
      * on there.
      */
-
-    function success() {
-        $('#status').text('connected').addClass('highlight');
-        setTimeout(function() {
-            $('#status').removeClass('highlight');
-        }, 8000);
-        $('#delete').show();
-        Gittip.forms.clearFeedback();
-        $('button#save').text('Save');
-        setTimeout(function() {
-            window.location.href = '/' + Gittip.participantId + '/';
-        }, 1000);
-    }
 
     function detailedFeedback(data) {
         $('#status').text('failing');
@@ -196,7 +195,7 @@ Gittip.payments.ba.handleResponse = function (response) {
 
     Gittip.forms.submit( "/bank-account.json"
                        , detailsToSubmit
-                       , success
+                       , Gittip.payments.onSuccess
                        , detailedFeedback
                         );
 };
@@ -252,7 +251,7 @@ Gittip.payments.cc.submit = function(e) {
         credit_card.number = '';  // don't send if it's the **** version
     credit_card.cvv = val('cvv');
     credit_card.name = val('name');
-    country = $('select[id="country"]').val();
+    country = $('select[id="country"]').val() || null;
     credit_card.meta = { 'address_2': val('address_2')
                        , 'region': credit_card.region // workaround
                        , 'city_town': val('city_town')
@@ -295,34 +294,9 @@ Gittip.payments.cc.submit = function(e) {
 };
 
 Gittip.payments.cc.handleResponse = function(response) {
-
-    /* If status !== 201 then response.error will contain information about the
-     * error, in this form:
-     *
-     *      { "code": "incorrect_number"
-     *      , "message": "Your card number is incorrect"
-     *      , "param": "number"
-     *      , "type": "card_error"
-     *       }
-     *
-     * The error codes are documented here:
-     *
-     *      https://www.balancedpayments.com/docs/js
-     *
-     */
-
-    if (response.status_code !== 201) {   // The request to create the token failed. Store the failure message in
-        // our db.
-        $('button#save').text('Save');
-        var msg = response.status.toString() + " " + response.error.description;
-        jQuery.ajax(
-            { type: "POST"
-            , url: "/credit-card.json"
-            , data: {action: 'store-error', msg: msg}
-             }
-        );
-
-        Gittip.forms.showFeedback(null, [response.error.description]);
+    if (response.status_code !== 201) {
+        var msg = Gittip.payments.onError(response);
+        $.post('/credit-card.json', {action: 'store-error', msg: msg});
         return;
     }
 
@@ -334,19 +308,6 @@ Gittip.payments.cc.handleResponse = function(response) {
      * card is good.
      */
 
-    function success(data) {
-        $('#status').text('working').addClass('highlight');
-        setTimeout(function() {
-            $('#status').removeClass('highlight');
-        }, 8000);
-        $('#delete').show();
-        Gittip.forms.clearFeedback();
-        $('button#save').text('Save');
-        setTimeout(function() {
-            window.location.href = '/' + Gittip.participantId + '/';
-        }, 1000);
-    }
-
     function detailedFeedback(data) {
         $('#status').text('failing');
         $('#delete').show();
@@ -357,7 +318,7 @@ Gittip.payments.cc.handleResponse = function(response) {
 
     Gittip.forms.submit( "/credit-card.json"
                        , {card_uri: response.cards[0].href}
-                       , success
+                       , Gittip.payments.onSuccess
                        , detailedFeedback
                         );
 };

@@ -1,5 +1,6 @@
 from __future__ import print_function, unicode_literals
 
+from gittip.security.user import SESSION
 from gittip.testing import Harness
 from gittip.utils import update_homepage_queries_once
 
@@ -101,6 +102,12 @@ class TestPages(Harness):
         response = self.client.PxST('/sign-out.html')
         assert response.code == 302
         assert response.headers['Location'] == '/'
+
+    def test_sign_out_overwrites_session_cookie(self):
+        self.make_participant('alice')
+        response = self.client.PxST('/sign-out.html', auth_as='alice')
+        assert response.code == 302
+        assert response.headers.cookie[SESSION].value == ''
 
     def test_receipts_signed_in(self):
         self.make_participant('alice', claimed_time='now')

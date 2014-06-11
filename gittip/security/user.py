@@ -1,4 +1,16 @@
+
+from datetime import timedelta
+import uuid
+
+from aspen.utils import utcnow
 from gittip.models.participant import Participant
+from gittip.utils import set_cookie
+
+
+SESSION = b'session'
+SESSION_REFRESH = timedelta(hours=1)
+SESSION_TIMEOUT = timedelta(hours=6)
+
 
 class User(object):
     """Represent a user of our website.
@@ -46,24 +58,29 @@ class User(object):
     # Authentication Helpers
     # ======================
 
-    def sign_in(self):
+    def sign_in(self, cookies):
         """Start a new session for the user.
         """
-        self.participant.start_new_session()
+        token = uuid.uuid4().hex
+        expires = utcnow() + SESSION_TIMEOUT
+        self.participant.update_session(token, expires)
+        set_cookie(cookies, SESSION, token, expires)
 
-    def keep_signed_in_until(self, expires):
+    def keep_signed_in(self, cookies):
         """Extend the user's current session.
-
-        :param float expires: A UNIX timestamp (XXX timezone?)
-
         """
-        self.participant.set_session_expires(expires)
+        new_expires = utcnow() + SESSION_TIMEOUT
+        if new_expires - self.participant.session_expires > SESSION_REFRESH:
+            self.participant.set_session_expires(new_expires)
+            token = self.participant.session_token
+            set_cookie(cookies, SESSION, token, expires=new_expires)
 
-    def sign_out(self):
+    def sign_out(self, cookies):
         """End the user's current session.
         """
-        self.participant.end_session()
+        self.participant.update_session(None, None)
         self.participant = None
+        set_cookie(cookies, SESSION, '')
 
 
     # Roles
