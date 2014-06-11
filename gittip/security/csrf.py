@@ -148,7 +148,7 @@ def outbound(request, response):
     """
     csrf_token = request.context.get('csrf_token')
     if csrf_token:
-        response.set_cookie('csrf_token', csrf_token, expires=CSRF_TIMEOUT)
+        response.set_cookie('csrf_token', csrf_token, expires=CSRF_TIMEOUT, httponly=False)
 
         # Content varies with the CSRF cookie, so set the Vary header.
         patch_vary_headers(response, ('Cookie',))
