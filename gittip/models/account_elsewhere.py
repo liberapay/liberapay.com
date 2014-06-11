@@ -143,7 +143,6 @@ class AccountElsewhere(Model):
         from gittip.security.user import User
         self.set_is_locked(False)
         user = User.from_username(self.participant.username)
-        user.sign_in()
         assert not user.ANON, self.participant  # sanity check
         if self.participant.is_claimed:
             newly_claimed = False

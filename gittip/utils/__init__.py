@@ -1,13 +1,14 @@
+from datetime import datetime, timedelta
 import locale
+import re
 import time
 
-import re
 from aspen import log_dammit, Response
-from aspen.utils import typecheck, to_age
+from aspen.utils import typecheck, to_age, utcnow
+import gittip
 from postgres.cursors import SimpleCursorBase
 from jinja2 import escape
-from datetime import datetime
-from datetime import timedelta
+
 
 COUNTRIES = (
     ('AF', u'Afghanistan'),
@@ -274,6 +275,7 @@ def wrap(u):
     out = linkified.replace(u'\r\n', u'<br />\r\n').replace(u'\n', u'<br />\n')
     return out if out else '...'
 
+
 def linkify(u):
     escaped = unicode(escape(u))
 
@@ -296,6 +298,7 @@ def linkify(u):
         )
     , escaped)
 
+
 def dict_to_querystring(mapping):
     if not mapping:
         return u''
@@ -306,6 +309,7 @@ def dict_to_querystring(mapping):
             arguments.append(u'='.join([key, val]))
 
     return u'?' + u'&'.join(arguments)
+
 
 def canonicalize(path, base, canonical, given, arguments=None):
     if given != canonical:
@@ -440,9 +444,11 @@ def _to_age(participant):
         age = age.replace(word, str(i))
     return age.replace(' ', ' <span class="unit">') + "</span>"
 
+
 def format_money(money):
     format = '%.2f' if money < 1000 else '%.0f'
     return format % money
+
 
 def to_statement(prepend, string, length=140, append='...'):
     if prepend and string:
@@ -456,8 +462,40 @@ def to_statement(prepend, string, length=140, append='...'):
     else:
         return ''
 
+
 def is_card_expiring(expiration_year, expiration_month):
     now = datetime.utcnow()
     expiring_date = datetime(expiration_year, expiration_month, 1)
     delta = expiring_date - now
     return delta < EXPIRING_DELTA
+
+
+# XXX copied from aspen.utils, remove after upgrade to aspen 0.32
+def to_rfc822(dt):
+    t = dt.utctimetuple()
+    return '%s, %02d %s %04d %02d:%02d:%02d GMT' % (
+        ('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun')[t[6]],
+        t[2],
+        ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+         'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec')[t[1] - 1],
+        t[0], t[3], t[4], t[5]
+    )
+
+
+def set_cookie(cookies, key, value, expires=None, httponly=True, path='/'):
+    cookies[key] = value
+    cookie = cookies[key]
+    if expires:
+        if isinstance(expires, datetime):
+            pass
+        elif isinstance(expires, timedelta):
+            expires += utcnow()
+        else:
+            raise TypeError('`expires` should be a `datetime` or `timedelta`')
+        cookie['expires'] = to_rfc822(expires)
+    if httponly:
+        cookie['httponly'] = True
+    if path:
+        cookie['path'] = path
+    if gittip.canonical_scheme == 'https':
+        cookie['secure'] = True

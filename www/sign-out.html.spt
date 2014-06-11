@@ -6,14 +6,14 @@ if user.ANON:
     request.redirect('/')
 
 if POST:
-    user.sign_out()
+    user.sign_out(response.headers.cookie)
 
     if 'back_to' in request.body:
         back_to = request.body['back_to']
     else:
         back_to = request.headers.get('referer', '/')
 
-    request.redirect(back_to)
+    response.redirect(back_to)
 
 [-----------------------------------------------------------------------------]
 {% extends "templates/base.html" %}
