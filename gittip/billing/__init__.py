@@ -19,7 +19,6 @@ There are three pieces of information for each participant related to billing:
 from __future__ import unicode_literals
 
 import balanced
-import stripe
 from aspen.utils import typecheck
 
 
@@ -143,54 +142,6 @@ def store_error(db, thing, username, msg):
 
     """ % ("bill" if thing == "credit card" else "ach")
     db.run(ERROR, (msg, username))
-
-
-# Card
-# ====
-# While we're migrating data we need to support loading data from both Stripe
-# and Balanced.
-
-class StripeCard(object):
-    """This is a dict-like wrapper around a Stripe PaymentMethod.
-    """
-
-    _customer = None  # underlying stripe.Customer object
-
-    def __init__(self, stripe_customer_id):
-        """Given a Stripe customer id, load data from Stripe.
-        """
-        if stripe_customer_id is not None:
-            self._customer = stripe.Customer.retrieve(stripe_customer_id)
-
-    def _get(self, name, default=""):
-        """Given a name, return a string.
-        """
-        out = ""
-        if self._customer is not None:
-            out = self._customer.get('active_card', {}).get(name, "")
-            if out is None:
-                out = default
-        return out
-
-    def __getitem__(self, name):
-        """Given a name, return a string.
-        """
-        if name == 'id':
-            out = self._customer.id if self._customer is not None else None
-        elif name == 'last4':
-            out = self._get('last4')
-            if out:
-                out = "************" + out
-        else:
-            name = { 'address_1': 'address_line1'
-                   , 'address_2': 'address_line2'
-                   , 'state': 'address_state'
-                   , 'zip': 'address_zip'
-                   , 'expiration_month': 'exp_month'
-                   , 'expiration_year': 'exp_year'
-                    }.get(name, name)
-            out = self._get(name)
-        return out
 
 
 class BalancedThing(object):

@@ -4,8 +4,6 @@ import datetime
 import locale
 from decimal import Decimal
 
-import aspen
-
 
 try:  # XXX This can't be right.
     locale.setlocale(locale.LC_ALL, "en_US.utf8")
@@ -55,12 +53,6 @@ MAX_TIP_PLURAL = Decimal('1000.00')
 MIN_TIP = Decimal('0.00')
 
 RESTRICTED_IDS = None
-
-
-def log(*messages, **kw):
-    if 'level' not in kw:
-        kw['level'] = 2
-    aspen.log(*messages, **kw)
 
 
 # canonizer
