@@ -352,6 +352,9 @@ def get_participant(request, restrict=True):
 
     canonicalize(request.line.uri.path.raw, '/', participant.username, slug, qs)
 
+    if participant.is_closed:
+        raise Response(410)
+
     if participant.claimed_time is None:
 
         # This is a stub participant record for someone on another platform who
