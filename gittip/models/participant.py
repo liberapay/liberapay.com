@@ -247,7 +247,7 @@ class Participant(Model, MixinTeam):
         with self.db.get_cursor() as cursor:
 
             if disbursement_strategy == None:
-                pass  # No balance, supposedly. archive will check.
+                pass  # No balance, supposedly. final_check will make sure.
             elif disbursement_strategy == 'bank':
                 self.withdraw_balance_to_bank_account(cursor)
             elif disbursement_strategy == 'upstream':
@@ -261,9 +261,8 @@ class Participant(Model, MixinTeam):
             self.clear_tips_giving(cursor)
             self.clear_tips_receiving(cursor)
             self.clear_personal_information(cursor)
+            self.final_check(cursor)
             self.update_is_closed(True, cursor)
-
-            return self.archive(cursor)
 
 
     class NotWhitelisted(Exception): pass
@@ -380,7 +379,7 @@ class Participant(Model, MixinTeam):
         """
         if self.IS_PLURAL:
             self.remove_all_members(cursor)
-        cursor.run("""
+        session_expires = cursor.one("""
 
             INSERT INTO communities (ctime, name, slug, participant, is_member) (
                 SELECT ctime, name, slug, %(username)s, false
@@ -404,10 +403,14 @@ class Participant(Model, MixinTeam):
                  , number='singular'
                  , avatar_url=NULL
                  , email=NULL
+                 , claimed_time=NULL
+                 , session_token=NULL
+                 , session_expires=now()
                  , giving=0
                  , pledging=0
                  , receiving=0
-             WHERE username=%(username)s;
+             WHERE username=%(username)s
+         RETURNING session_expires;
 
         """, dict(username=self.username))
         self.set_attributes( statement=''
@@ -417,6 +420,12 @@ class Participant(Model, MixinTeam):
                            , number='singular'
                            , avatar_url=None
                            , email=None
+                           , claimed_time=None
+                           , session_token=None
+                           , session_expires=session_expires
+                           , giving=0
+                           , pledging=0
+                           , receiving=0
                             )
 
 
@@ -974,6 +983,15 @@ class Participant(Model, MixinTeam):
     class StillReceivingTips(Exception): pass
     class BalanceIsNotZero(Exception): pass
 
+    def final_check(self, cursor):
+        """Sanity-check that balance and tips have been dealt with.
+        """
+        INCOMING = "SELECT count(*) FROM current_tips WHERE tippee = %s AND amount > 0"
+        if cursor.one(INCOMING, (self.username,)) > 0:
+            raise self.StillReceivingTips
+        if self.balance != 0:
+            raise self.BalanceIsNotZero
+
     def archive(self, cursor):
         """Given a cursor, use it to archive ourself.
 
@@ -982,17 +1000,7 @@ class Participant(Model, MixinTeam):
 
         """
 
-        # Sanity-check that balance and tips have been dealt with.
-        # ========================================================
-
-        INCOMING = "SELECT count(*) FROM current_tips WHERE tippee = %s AND amount > 0"
-        if cursor.one(INCOMING, (self.username,)) > 0:
-            raise self.StillReceivingTips
-        if self.balance != 0:
-            raise self.BalanceIsNotZero
-
-        # Do it!
-        # ======
+        self.final_check(cursor)
 
         def reserve(cursor, username):
             check = cursor.one("""
