@@ -1373,3 +1373,22 @@ COMMIT;
 BEGIN;
     ALTER TABLE participants ADD COLUMN is_closed bool NOT NULL DEFAULT FALSE;
 END;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/pull/2352
+
+BEGIN;
+
+    ALTER TABLE participants ADD COLUMN giving numeric(35,2) NOT NULL DEFAULT 0;
+    ALTER TABLE participants ADD COLUMN pledging numeric(35,2) NOT NULL DEFAULT 0;
+    ALTER TABLE participants ADD COLUMN receiving numeric(35,2) NOT NULL DEFAULT 0;
+
+    DROP VIEW backed_tips;
+    DROP VIEW current_tips;
+    CREATE VIEW current_tips AS
+        SELECT DISTINCT ON (tipper, tippee) *
+          FROM tips
+      ORDER BY tipper, tippee, mtime DESC;
+
+END;
