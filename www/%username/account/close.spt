@@ -6,9 +6,6 @@ title = participant.username      # used in the title tag
 username = participant.username   # used in footer shared with on/$platform/
                                   # pages
 
-can_upstream = participant.get_dollars_receiving() > 0
-can_downstream = participant.get_dollars_giving() > 0
-
 if POST:
     disbursement_strategy = request.body.get('disbursement_strategy')
     participant.close(disbursement_strategy)
