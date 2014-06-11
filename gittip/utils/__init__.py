@@ -4,7 +4,7 @@ import re
 import time
 
 from aspen import log_dammit, Response
-from aspen.utils import typecheck, to_age, utcnow
+from aspen.utils import typecheck, to_age, to_rfc822, utcnow
 import gittip
 from postgres.cursors import SimpleCursorBase
 from jinja2 import escape
@@ -471,18 +471,6 @@ def is_card_expiring(expiration_year, expiration_month):
     expiring_date = datetime(expiration_year, expiration_month, 1)
     delta = expiring_date - now
     return delta < EXPIRING_DELTA
-
-
-# XXX copied from aspen.utils, remove after upgrade to aspen 0.32
-def to_rfc822(dt):
-    t = dt.utctimetuple()
-    return '%s, %02d %s %04d %02d:%02d:%02d GMT' % (
-        ('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun')[t[6]],
-        t[2],
-        ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-         'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec')[t[1] - 1],
-        t[0], t[3], t[4], t[5]
-    )
 
 
 def set_cookie(cookies, key, value, expires=None, httponly=True, path='/'):
