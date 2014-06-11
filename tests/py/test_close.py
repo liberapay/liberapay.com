@@ -22,7 +22,7 @@ class TestClosing(Harness):
         alice.set_tip_to(bob, D('3.00'))
         carl.set_tip_to(alice, D('2.00'))
 
-        alice.cancel('downstream')
+        alice.close('downstream')
 
         assert carl.get_tip_to('alice') == 0
         assert alice.balance == 0

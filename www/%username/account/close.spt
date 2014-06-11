@@ -33,7 +33,7 @@ if POST:
                         <label for="r1">Send it to my <a href="/bank-account.html">bank
                         account</a></label></li>
                     <li><input type="radio" name="disbursement_strategy" id="r2"
-                         value="downstream" {{ 'disabled' if not can_downstream }} />
+                         value="downstream" {{ 'disabled' if not participant.giving }} />
                         <label for="r2">Give it to the <a href="../giving/">people I
                         tip</a></label></li>
                 </ul>
