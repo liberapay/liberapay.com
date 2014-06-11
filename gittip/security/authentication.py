@@ -2,7 +2,7 @@
 """
 from datetime import datetime
 
-from aspen.utils import to_rfc822
+from gittip.utils import to_rfc822
 from gittip.security import csrf
 from gittip.security.user import User, SESSION
 
