@@ -9,7 +9,7 @@ username = participant.username   # used in footer shared with on/$platform/
 if POST:
     disbursement_strategy = request.body.get('disbursement_strategy')
     participant.close(disbursement_strategy)
-    request.redirect('/')
+    request.redirect('/%s/' % participant.username)
 [---] text/html
 {% extends "templates/base.html" %}
 
@@ -78,7 +78,7 @@ if POST:
                 received from).</p>
 
                 <p>After you close your account, your profile page will say,
-                "Account closed by user."</p>
+                &ldquo;The account owner has closed this account.&rdquo;</p>
 
 
                 <h2>Remember</h2>
