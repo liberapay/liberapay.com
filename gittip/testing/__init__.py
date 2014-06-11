@@ -55,13 +55,15 @@ class ClientWithAuth(Client):
 
 class Harness(unittest.TestCase):
 
+    client = ClientWithAuth(www_root=WWW_ROOT, project_root=PROJECT_ROOT)
+    db = client.website.db
+    platforms = client.website.platforms
+    tablenames = db.all("SELECT tablename FROM pg_tables "
+                        "WHERE schemaname='public'")
+
+
     @classmethod
     def setUpClass(cls):
-        cls.client = ClientWithAuth(www_root=WWW_ROOT, project_root=PROJECT_ROOT)
-        cls.db = cls.client.website.db
-        cls.platforms = cls.client.website.platforms
-        cls.tablenames = cls.db.all("SELECT tablename FROM pg_tables "
-                                    "WHERE schemaname='public'")
         cls.seq = 0
         cls.setUpVCR()
 

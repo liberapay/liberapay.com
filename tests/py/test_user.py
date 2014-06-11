@@ -87,12 +87,16 @@ class TestUser(Harness):
         assert actual == 'alice'
 
     def test_session_cookie_is_secure_if_it_should_be(self):
+        canonical_scheme = gittip.canonical_scheme
         gittip.canonical_scheme = 'https'
-        cookies = SimpleCookie()
-        self.make_participant('alice')
-        user = User.from_username('alice')
-        user.sign_in(cookies)
-        assert '; secure' in cookies[SESSION].output()
+        try:
+            cookies = SimpleCookie()
+            self.make_participant('alice')
+            user = User.from_username('alice')
+            user.sign_in(cookies)
+            assert '; secure' in cookies[SESSION].output()
+        finally:
+            gittip.canonical_scheme = canonical_scheme
 
     def test_session_is_regularly_refreshed(self):
         self.make_participant('alice')
