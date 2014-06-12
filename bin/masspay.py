@@ -197,6 +197,7 @@ def post_back_to_gittip():
     except KeyError:
         gittip_base_url = 'https://www.gittip.com'
 
+    nposts = 0
     for username, email, gross, fee, net, additional_note in csv.reader(open(GITTIP_CSV)):
         url = '{}/{}/history/record-an-exchange'.format(gittip_base_url, username)
         note = 'PayPal MassPay to {}.'.format(email)
@@ -210,13 +211,16 @@ def post_back_to_gittip():
         except IncompleteRead:
             print('IncompleteRead, proceeding (but double-check!)')
         else:
-            if response.status_code != 200:
+            if response.status_code == 200:
+                nposts += 1
+            else:
                 if response.status_code == 404:
                     print('Got 404, is your API key good? {}'.format(gittip_api_key))
                 else:
                     print('... resulted in a {} response:'.format(response.status_code))
                     print(response.text)
                 raise SystemExit
+        print("POSTed MassPay back to Gittip for {} users.".format(nposts))
 
 
 def run_report():
