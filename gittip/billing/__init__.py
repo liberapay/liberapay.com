@@ -22,6 +22,29 @@ import balanced
 from aspen.utils import typecheck
 
 
+def update_receiving_amounts(db, tipper, error):
+    """Update receiving amounts of participants tipped by given tipper.
+    """
+    from gittip.models.participant import Participant
+    tipper = Participant.from_username(tipper)
+    if tipper.is_suspicious or tipper.last_bill_result == error:
+        return
+    if error == '':
+        op = '+'
+    else:
+        op = '-'
+    db.run("""
+        UPDATE participants
+           SET receiving = (receiving {0} amount)
+          FROM ( SELECT DISTINCT ON (tippee) tippee, amount
+                   FROM tips
+                  WHERE tipper=%(tipper)s
+               ORDER BY tippee, mtime DESC
+               ) foo
+         WHERE tippee = username;
+    """.format(op), dict(tipper=tipper))
+
+
 def get_balanced_account(db, username, balanced_customer_href):
     """Find or create a balanced.Account.
     """
@@ -92,6 +115,8 @@ def associate(db, thing, username, balanced_customer_href, balanced_thing_uri):
     typecheck(error, unicode)
 
     db.run(SQL, (error, username))
+    if thing == "credit card":
+        update_receiving_amounts(db, username, error)
     return error
 
 
@@ -129,6 +154,8 @@ def clear(db, thing, username, balanced_customer_href):
 
     """ % ("bill" if thing == "credit card" else "ach")
     db.run(CLEAR, (username,))
+    if thing == "credit card":
+        update_receiving_amounts(db, username, None)
 
 
 def store_error(db, thing, username, msg):
@@ -142,6 +169,8 @@ def store_error(db, thing, username, msg):
 
     """ % ("bill" if thing == "credit card" else "ach")
     db.run(ERROR, (msg, username))
+    if thing == "credit card":
+        update_receiving_amounts(db, username, msg)
 
 
 class BalancedThing(object):
