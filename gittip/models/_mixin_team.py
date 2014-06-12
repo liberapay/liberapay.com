@@ -1,5 +1,6 @@
 """Teams on Gittip are plural participants with members.
 """
+from collections import OrderedDict
 from decimal import Decimal
 
 from aspen.utils import typecheck
@@ -209,18 +210,34 @@ class MixinTeam(object):
                       }
         return membership
 
+    def compute_actual_takes(self):
+        """Get the takes, compute the actual amounts, and return an OrderedDict.
+        """
+        actual_takes = OrderedDict()
+        nominal_takes = self.get_takes()
+        nominal_takes.append(self.get_team_take())
+        budget = balance = self.receiving
+        for take in nominal_takes:
+            nominal_amount = take['nominal_amount'] = take.pop('amount')
+            actual_amount = take['actual_amount'] = min(nominal_amount, balance)
+            balance -= actual_amount
+            take['balance'] = balance
+            take['percentage'] = (actual_amount / budget) if budget > 0 else 0
+            actual_takes[take['member']] = take
+        return actual_takes
+
     def get_members(self, current_participant):
         """Return a list of member dicts.
         """
         assert self.IS_PLURAL
-        takes = self.get_takes()
-        takes.append(self.get_team_take())
-        budget = balance = self.receiving
+        takes = self.compute_actual_takes()
         members = []
-        for take in takes:
+        for take in takes.values():
             member = {}
             member['username'] = take['member']
-            member['take'] = take['amount']
+            member['take'] = take['nominal_amount']
+            member['balance'] = take['balance']
+            member['percentage'] = take['percentage']
 
             member['removal_allowed'] = current_participant == self
             member['editing_allowed'] = False
@@ -234,9 +251,5 @@ class MixinTeam(object):
 
             member['last_week'] = last_week = self.get_take_last_week_for(member)
             member['max_this_week'] = self.compute_max_this_week(last_week)
-            amount = min(take['amount'], balance)
-            balance -= amount
-            member['balance'] = balance
-            member['percentage'] = (amount / budget) if budget > 0 else 0
             members.append(member)
         return members
