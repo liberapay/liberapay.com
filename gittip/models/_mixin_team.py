@@ -127,23 +127,43 @@ class MixinTeam(object):
     def __set_take_for(self, member, amount, recorder):
         assert self.IS_PLURAL
         # XXX Factored out for testing purposes only! :O Use .set_take_for.
-        self.db.run("""
+        with self.db.get_cursor() as cursor:
+            # Lock to avoid race conditions
+            cursor.run("LOCK TABLE takes IN EXCLUSIVE MODE")
+            # Compute the current takes
+            old_takes = self.compute_actual_takes(cursor)
+            # Insert the new take
+            cursor.run("""
 
-            INSERT INTO takes (ctime, member, team, amount, recorder)
-             VALUES ( COALESCE (( SELECT ctime
-                                    FROM takes
-                                   WHERE member=%(member)s
-                                     AND team=%(team)s
-                                   LIMIT 1
-                                 ), CURRENT_TIMESTAMP)
-                    , %(member)s
-                    , %(team)s
-                    , %(amount)s
-                    , %(recorder)s
-                     )
+                INSERT INTO takes (ctime, member, team, amount, recorder)
+                 VALUES ( COALESCE (( SELECT ctime
+                                        FROM takes
+                                       WHERE member=%(member)s
+                                         AND team=%(team)s
+                                       LIMIT 1
+                                     ), CURRENT_TIMESTAMP)
+                        , %(member)s
+                        , %(team)s
+                        , %(amount)s
+                        , %(recorder)s
+                         )
 
-        """, dict(member=member.username, team=self.username, amount=amount,
-                  recorder=recorder.username))
+            """, dict(member=member.username, team=self.username, amount=amount,
+                      recorder=recorder.username))
+            # Compute the new takes
+            new_takes = self.compute_actual_takes(cursor)
+            # Update receiving amounts in the participants table
+            for username in set(old_takes.keys()).union(new_takes.keys()):
+                old = old_takes.get(username, {}).get('actual_amount', Decimal(0))
+                new = new_takes.get(username, {}).get('actual_amount', Decimal(0))
+                diff = new - old
+                if diff != 0:
+                    cursor.run("""
+                        UPDATE participants
+                           SET takes = (takes + %(diff)s)
+                             , receiving = (receiving + %(diff)s)
+                         WHERE username=%(username)s
+                    """, dict(username=username, diff=diff))
 
     def get_takes(self, for_payday=False, cursor=None):
         """Return a list of member takes for a team.
