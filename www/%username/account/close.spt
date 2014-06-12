@@ -6,10 +6,19 @@ title = participant.username      # used in the title tag
 username = participant.username   # used in footer shared with on/$platform/
                                   # pages
 
+payday_is_running = website.db.one("""
+
+    SELECT ts_start FROM paydays WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
+
+""") is not None
+
 if POST:
-    disbursement_strategy = request.body.get('disbursement_strategy')
-    participant.close(disbursement_strategy)
-    request.redirect('/%s/' % participant.username)
+    if payday_is_running:
+        pass    # User will get the "Try Again Later" message.
+    else:
+        disbursement_strategy = request.body.get('disbursement_strategy')
+        participant.close(disbursement_strategy)
+        request.redirect('/%s/' % participant.username)
 [---] text/html
 {% extends "templates/base.html" %}
 
@@ -19,11 +28,24 @@ if POST:
 
 {% block box %}
     <div class="on-form">
+        {% if payday_is_running %}
+
+            <form><div class="constrain-width group">
+
+                <h2>Try Again Later</h2>
+
+                <p>Sorry, we're running payday right now, and we're not set up
+                to close accounts while payday is running. Please check back in
+                a few hours.</p>
+
+            </div></form>
+
+        {% else %}
         <form method="POST">
-            <div class="constrain-width group" style="margin-top: 35px;">
+            <div class="constrain-width group">
 
                 {% if participant.balance > 0 %}
-                <h2>Balance</h2>
+                <h2 class="first">Balance</h2>
                 <p>You have a balance of <b>${{ participant.balance }}</b>.<br>
                    What should we do with it?</p>
 
@@ -99,5 +121,6 @@ if POST:
                     type="submit">Yes, Close My Gittip Account</button>
             </div>
         </form>
+        {% endif %}
     </div>
 {% endblock %}

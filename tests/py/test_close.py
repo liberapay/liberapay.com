@@ -5,6 +5,7 @@ from decimal import Decimal as D
 
 import balanced
 import pytest
+from gittip.billing.payday import Payday
 from gittip.models.community import Community
 from gittip.models.participant import Participant
 from gittip.testing import Harness
@@ -31,6 +32,36 @@ class TestClosing(Harness):
         alice = self.make_participant('alice', balance=D('0.00'))
         with pytest.raises(alice.UnknownDisbursementStrategy):
             alice.close('cheese')
+
+    def test_close_page_is_usually_available(self):
+        self.make_participant('alice', claimed_time='now')
+        body = self.client.GET('/alice/account/close', auth_as='alice').body
+        assert 'Personal Information' in body
+
+    def test_close_page_is_not_available_during_payday(self):
+        Payday(self.db).start()
+        self.make_participant('alice', claimed_time='now')
+        body = self.client.GET('/alice/account/close', auth_as='alice').body
+        assert 'Personal Information' not in body
+        assert 'Try Again Later' in body
+
+    def test_can_post_to_close_page(self):
+        alice = self.make_participant('alice', claimed_time='now', balance=7)
+        bob = self.make_participant('bob', claimed_time='now')
+        alice.set_tip_to(bob, D('10.00'))
+
+        data = {'disbursement_strategy': 'downstream'}
+        response = self.client.PxST('/alice/account/close', auth_as='alice', data=data)
+        assert response.code == 302
+        assert response.headers['Location'] == '/alice/'
+        assert Participant.from_username('alice').balance == 0
+        assert Participant.from_username('bob').balance == 7
+
+    def test_cant_post_to_close_page_during_payday(self):
+        Payday(self.db).start()
+        self.make_participant('alice', claimed_time='now')
+        body = self.client.POST('/alice/account/close', auth_as='alice').body
+        assert 'Try Again Later' in body
 
 
     # wbtba - withdraw_balance_to_bank_account
