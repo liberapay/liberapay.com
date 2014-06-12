@@ -391,7 +391,7 @@ class Payday(object):
               GROUP BY tippee;
 
             UPDATE participants
-               SET receiving = amount
+               SET receiving = (amount + takes)
               FROM total_receiving
              WHERE tippee = username;
         """
