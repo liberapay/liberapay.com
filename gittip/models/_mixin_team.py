@@ -145,7 +145,7 @@ class MixinTeam(object):
         """, dict(member=member.username, team=self.username, amount=amount,
                   recorder=recorder.username))
 
-    def get_takes(self, for_payday=False):
+    def get_takes(self, for_payday=False, cursor=None):
         """Return a list of member takes for a team.
 
         This is implemented parallel to Participant.get_tips_and_total. See
@@ -194,14 +194,15 @@ class MixinTeam(object):
 
             """
 
-        return self.db.all(TAKES, args, back_as=dict)
+        records = (cursor or self.db).all(TAKES, args)
+        return [r._asdict() for r in records]
 
-    def get_team_take(self):
+    def get_team_take(self, cursor=None):
         """Return a single take for a team, the team itself's take.
         """
         assert self.IS_PLURAL
         TAKE = "SELECT sum(amount) FROM current_takes WHERE team=%s"
-        total_take = self.db.one(TAKE, (self.username,), default=0)
+        total_take = (cursor or self.db).one(TAKE, (self.username,), default=0)
         team_take = max(self.receiving - total_take, 0)
         membership = { "ctime": None
                      , "mtime": None
@@ -210,12 +211,12 @@ class MixinTeam(object):
                       }
         return membership
 
-    def compute_actual_takes(self):
+    def compute_actual_takes(self, cursor=None):
         """Get the takes, compute the actual amounts, and return an OrderedDict.
         """
         actual_takes = OrderedDict()
-        nominal_takes = self.get_takes()
-        nominal_takes.append(self.get_team_take())
+        nominal_takes = self.get_takes(cursor=cursor)
+        nominal_takes.append(self.get_team_take(cursor=cursor))
         budget = balance = self.receiving
         for take in nominal_takes:
             nominal_amount = take['nominal_amount'] = take.pop('amount')
