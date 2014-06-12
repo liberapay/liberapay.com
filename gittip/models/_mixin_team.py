@@ -132,18 +132,18 @@ class MixinTeam(object):
             INSERT INTO takes (ctime, member, team, amount, recorder)
              VALUES ( COALESCE (( SELECT ctime
                                     FROM takes
-                                   WHERE member=%s
-                                     AND team=%s
+                                   WHERE member=%(member)s
+                                     AND team=%(team)s
                                    LIMIT 1
                                  ), CURRENT_TIMESTAMP)
-                    , %s
-                    , %s
-                    , %s
-                    , %s
+                    , %(member)s
+                    , %(team)s
+                    , %(amount)s
+                    , %(recorder)s
                      )
 
-        """, (member.username, self.username, member.username, self.username, \
-                                                      amount, recorder.username))
+        """, dict(member=member.username, team=self.username, amount=amount,
+                  recorder=recorder.username))
 
     def get_takes(self, for_payday=False):
         """Return a list of member takes for a team.
