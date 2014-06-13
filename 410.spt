@@ -1,0 +1,21 @@
+[---]
+[---] text/html via jinja2
+{% extends "templates/base.html" %}
+{% block heading %}<h2 class="top"><span>Closed</span></h2>{% endblock %}
+{% block box %}
+
+<div class="as-content">
+
+    <p style="margin: 3em 0;">The account owner has closed this account.</p>
+
+    {% if user.ANON %}
+        <h2>Are you the account owner?</h2>
+
+        <p>{% include "templates/sign-in-using.html" %} to reopen your account.</p>
+    {% endif %}
+
+</div>
+
+<div class="nav level-1"><a href="/"><button>Home</button></a></div>
+
+{% endblock %}

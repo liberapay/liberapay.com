@@ -149,6 +149,14 @@ class Participant(Model, MixinTeam):
         self.set_attributes(session_expires=expires)
 
 
+    # Suspiciousness
+    # ==============
+
+    @property
+    def is_whitelisted(self):
+        return self.is_suspicious is False
+
+
     # Claimed-ness
     # ============
 
@@ -236,22 +244,19 @@ class Participant(Model, MixinTeam):
             self.set_attributes(claimed_time=claimed_time)
 
 
-    # Canceling
-    # =========
+    # Closing
+    # =======
 
     class UnknownDisbursementStrategy(Exception): pass
 
-    def cancel(self, disbursement_strategy):
-        """Cancel the participant's account.
+    def close(self, disbursement_strategy):
+        """Close the participant's account.
         """
         with self.db.get_cursor() as cursor:
-
             if disbursement_strategy == None:
                 pass  # No balance, supposedly. final_check will make sure.
             elif disbursement_strategy == 'bank':
                 self.withdraw_balance_to_bank_account(cursor)
-            elif disbursement_strategy == 'upstream':
-                self.refund_to_patrons(cursor)
             elif disbursement_strategy == 'downstream':
                 # This in particular needs to come before clear_tips_giving.
                 self.distribute_balance_as_final_gift(cursor)
@@ -288,10 +293,6 @@ class Participant(Model, MixinTeam):
                        , total=Decimal('0.00')          # don't withold anything
                        , minimum_credit=Decimal('0.00') # send it all
                         ) # XXX Records the exchange using a different cursor. :-/
-
-
-    def refund_balance_to_patrons(self, cursor):
-        raise NotImplementedError
 
 
     class NoOneToGiveFinalGiftTo(Exception): pass

@@ -163,4 +163,11 @@ Gittip.account.init = function() {
         return false;
     });
 
+
+    // Wire up close knob.
+    // ===================
+
+    $('button.close-account').click(function() {
+        window.location.href = './close';
+    });
 };
