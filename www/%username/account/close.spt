@@ -50,14 +50,41 @@ if POST:
                    What should we do with it?</p>
 
                 <ul>
-                    <li><input type="radio" name="disbursement_strategy" id="r1"
-                         value="bank" checked />
-                        <label for="r1">Send it to my <a href="/bank-account.html">bank
-                        account</a></label></li>
+
+                    {% if participant.last_ach_result == '' %}
+                        {% if participant.is_whitelisted %}
+                            <li><input type="radio" name="disbursement_strategy" id="r1"
+                                 value="bank" checked />
+                                <label for="r1">Send it to my <a href="/bank-account.html">bank
+                                account</a></label></li>
+                        {% else %}
+
+                            <li><label>A staff member will review your account
+                            by Thursday, and then you'll be able to have your
+                            funds deposited to your bank account on file. To
+                            expedite the review, please <a
+                            href="mailto:support@gittip.com?subject=review%20for%20closing%20account">contact
+                            support</a>.</label></li>
+
+                        {% endif %}
+                    {% else %}
+                        <li><label>Go <a href="/bank-account.html">set up a bank
+                        account</a> to be able to have your funds deposited there.
+                        Due to our anti-fraud policies, a staff member will need to
+                        review your account before completing the
+                        transaction using this option.</label></li>
+                    {% endif %}
+
+                    {% if participant.giving %}
                     <li><input type="radio" name="disbursement_strategy" id="r2"
-                         value="downstream" {{ 'disabled' if not participant.giving }} />
+                               value="downstream" />
                         <label for="r2">Give it to the <a href="../giving/">people I
-                        tip</a></label></li>
+                            tip</a></label></li>
+                    {% else %}
+                    <li><i>Go <a href="/">set up some tips</a> to be able to distribute your
+                    balance as a final gift.</i></li>
+                    {% endif %}
+
                 </ul>
 
                 <p>If neither option works for you, please <a

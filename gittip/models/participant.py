@@ -149,6 +149,14 @@ class Participant(Model, MixinTeam):
         self.set_attributes(session_expires=expires)
 
 
+    # Suspiciousness
+    # ==============
+
+    @property
+    def is_whitelisted(self):
+        return self.is_suspicious is False
+
+
     # Claimed-ness
     # ============
 
