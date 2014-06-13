@@ -35,8 +35,8 @@ ncc = db.one("SELECT count(*) FROM participants WHERE last_bill_result = '' AND 
 pcc = "%5.1f" % ((ncc * 100.0) / npeople) if npeople > 0 else 0.0
 statements = db.all("SELECT username, statement FROM participants WHERE statement != '' AND is_suspicious IS NOT true ORDER BY random(), username LIMIT 16")
 transfer_volume = db.one("SELECT transfer_volume FROM paydays ORDER BY ts_end DESC LIMIT 1", default=0)
-tip_amounts = db.one("""
-        SELECT avg(amount), sum(amount)
+tips_stats = db.one("""
+        SELECT count(*), avg(amount), sum(amount)
          FROM (    SELECT DISTINCT ON (tipper, tippee) amount
                      FROM tips
                      JOIN participants p ON p.username = tipper
@@ -48,12 +48,9 @@ tip_amounts = db.one("""
                  ORDER BY tipper, tippee, mtime DESC
                ) AS foo;
 """)
-if tip_amounts is None:
-    average_tip = 0
-    total_backed_tips = 0
-else:
-    average_tip = tip_amounts.avg if tip_amounts.avg is not None else 0
-    total_backed_tips = tip_amounts.sum if tip_amounts.sum is not None else 0
+tip_n = getattr(tips_stats, 'count', None) or 0
+average_tip = getattr(tips_stats, 'avg', None) or 0
+total_backed_tips = getattr(tips_stats, 'sum', None) or 0
 
 average_tippees = int(db.one("""\
         SELECT round(avg(ntippees))
@@ -85,9 +82,7 @@ else:
 
 other_people = "%s other %s" % (number, word)
 
-# Tip Distribution
-_tip_distribution = db.all("""
-
+TIP_DISTRIBUTION = """
     SELECT amount, count(amount)
       FROM (SELECT DISTINCT ON (tipper, tippee)
                    amount
@@ -104,15 +99,15 @@ _tip_distribution = db.all("""
      WHERE amount > 0
   GROUP BY amount
   ORDER BY amount
+"""
 
-""", back_as=dict)
-
-tip_n = sum([row['count'] for row in _tip_distribution])
-
-tip_distribution = {}
-for row in _tip_distribution:
-    row['percentage'] = row['count'] * 1.0 / tip_n
-    tip_distribution[row['amount']] = (row['count'], row['percentage'])
+def get_tip_distribution():
+    tip_distribution = db.all(TIP_DISTRIBUTION)
+    r = {}
+    for row in tip_distribution:
+        percentage = row.count * 1.0 / tip_n
+        r[str(row.amount)] = (row.count, percentage)
+    return r
 
 
 def part(s):
@@ -187,14 +182,15 @@ elif now.weekday() == SATURDAY:
     last_thursday = "this past Thursday"
     this_thursday = "this coming Thursday"
 
-tip_distribution_json = {str(k): v for k,v in tip_distribution.items()}
-names = ['ncc', 'pcc', 'statements', 'transfer_volume',
-         'last_thursday', 'this_thursday', 'punc', 'other_people',
-         'average_tip', 'average_tippees', 'total_backed_tips',
-         'tip_distribution_json', 'tip_n', 'nach', 'escrow',
-         'ngivers', 'nreceivers', 'noverlap', 'nactive']
-
-json_dump = lambda: json.dumps({name: globals()[name] for name in names})
+def json_dump():
+    names = ['ncc', 'pcc', 'statements', 'transfer_volume', 'last_thursday',
+             'this_thursday', 'punc', 'other_people', 'average_tip',
+             'average_tippees', 'total_backed_tips', 'tip_n', 'nach', 'escrow',
+             'ngivers', 'nreceivers', 'noverlap', 'nactive']
+    d = globals()
+    r = {name: d[name] for name in names}
+    r['tip_distribution'] = get_tip_distribution()
+    return json.dumps(r)
 
 [----------------------------------------------------------] application/json
 {{ json_dump() }}
