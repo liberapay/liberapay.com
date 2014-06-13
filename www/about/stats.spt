@@ -236,10 +236,6 @@ def json_dump():
       shape-rendering: crispEdges;
     }
 
-    .bar text {
-      fill: #fff;
-    }
-
     .axis path, .axis line {
       fill: none;
       stroke: #000;
@@ -319,8 +315,8 @@ d3.json("/about/tip-distribution.json", function(tips){
 
         bar.append("text")
             .attr("dy", ".75em")
-            .attr("y", 6)
-            .attr("x", bar_width / 2)
+            .attr("y", -10)
+            .attr("x", bar_width / 2 - 1)
             .attr("text-anchor", "middle")
             .text(function(d) { return formatCount(d.y); });
 
