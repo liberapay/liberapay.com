@@ -279,9 +279,7 @@ d3.json("/about/tip-distribution.json", function(tips){
     tips.map(function(tip){
 
       var tick = Math.floor(tip/interval)
-      if (tick === 20){
-        tick = 19;
-      }
+      if (tick > 19) tick = 19
       tips_by_value[tick].y += tip
 
     });
