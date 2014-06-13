@@ -53,14 +53,11 @@ if request.website.show_tracebacks and pygmentize:
         <pre>{{err|e}}</pre>
     </body>
 </html>
-[----------------------------------------] application/json
-{{
-json.dumps({
-    "error_code": response.code,
-    "error_message_short": msg,
-    "error_message_long": err
-})
-}}
+[----------------------------------------] application/json via json_dump
+{ "error_code": response.code
+, "error_message_short": msg
+, "error_message_long": err
+ }
 [----------------------------------------] text/plain
 {{msg}}, program!
 {{err}}
