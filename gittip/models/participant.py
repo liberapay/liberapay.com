@@ -1175,6 +1175,29 @@ class Participant(Model, MixinTeam):
 
         """
 
+        TRANSFER_BALANCE_1 = """
+
+            UPDATE participants
+               SET balance = (balance - %(balance)s)
+             WHERE username=%(dead)s
+         RETURNING balance;
+
+        """
+
+        TRANSFER_BALANCE_2 = """
+
+            INSERT INTO transfers (tipper, tippee, amount)
+            VALUES (%(dead)s, %(live)s, %(balance)s);
+
+            UPDATE participants
+               SET balance = (balance + %(balance)s)
+             WHERE username=%(live)s
+         RETURNING balance;
+
+        """
+
+        new_balance = None
+
         with self.db.get_cursor() as cursor:
 
             # Load the existing connection.
@@ -1294,6 +1317,15 @@ class Participant(Model, MixinTeam):
                 cursor.run(ZERO_OUT_OLD_TIPS_RECEIVING, (other.username,))
                 cursor.run(ZERO_OUT_OLD_TIPS_GIVING, (other.username,))
 
+                # Take over balance.
+                # ==================
+
+                other_balance = other.balance
+                args = dict(live=x, dead=y, balance=other_balance)
+                archive_balance = cursor.one(TRANSFER_BALANCE_1, args)
+                other.set_attributes(balance=archive_balance)
+                new_balance = cursor.one(TRANSFER_BALANCE_2, args)
+
 
                 # Archive the old participant.
                 # ============================
@@ -1315,6 +1347,9 @@ class Participant(Model, MixinTeam):
                             , archive_username
                              )
                            )
+
+        if new_balance is not None:
+            self.set_attributes(balance=new_balance)
 
         self.update_avatar()
         self.update_giving()
