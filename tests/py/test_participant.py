@@ -18,6 +18,7 @@ from gittip.exceptions import (
     NoTippee,
     BadAmount,
 )
+from gittip.models.account_elsewhere import AccountElsewhere
 from gittip.models.participant import (
     LastElsewhere, NeedConfirmation, NonexistingElsewhere, Participant, TeamCantBeOnlyAuth
 )
@@ -59,18 +60,22 @@ class TestAbsorptions(Harness):
         Harness.setUp(self)
         now = utcnow()
         hour_ago = now - datetime.timedelta(hours=1)
-        for username in ['alice', 'bob', 'carl']:
+        for i, username in enumerate(['alice', 'bob', 'carl']):
             p = self.make_participant( username
                                      , claimed_time=hour_ago
                                      , last_bill_result=''
+                                     , balance=Decimal(i)
                                       )
             setattr(self, username, p)
-        deadbeef = self.make_elsewhere('twitter', '1', 'deadbeef')
-        self.deadbeef_original_username = deadbeef.participant.username
+
+        deadbeef = self.make_participant('deadbeef', balance=Decimal('18.03'), elsewhere='twitter')
+        self.expected_new_balance = self.bob.balance + deadbeef.balance
+        deadbeef_twitter = AccountElsewhere.from_user_name('twitter', 'deadbeef')
 
         self.carl.set_tip_to(self.bob, '1.00')
-        self.alice.set_tip_to(self.deadbeef_original_username, '1.00')
-        self.bob.take_over(deadbeef, have_confirmation=True)
+        self.alice.set_tip_to(deadbeef, '1.00')
+        self.bob.take_over(deadbeef_twitter, have_confirmation=True)
+        self.deadbeef_archived = Participant.from_id(deadbeef.id)
 
     def test_participant_can_be_instantiated(self):
         expected = Participant
@@ -89,25 +94,29 @@ class TestAbsorptions(Harness):
 
     def test_deadbeef_is_archived(self):
         actual = self.db.one( "SELECT count(*) FROM absorptions "
-                              "WHERE absorbed_by='bob' AND absorbed_was=%s"
-                            , (self.deadbeef_original_username,)
+                              "WHERE absorbed_by='bob' AND absorbed_was='deadbeef'"
                              )
         expected = 1
         assert actual == expected
 
     def test_alice_doesnt_gives_to_deadbeef_anymore(self):
         expected = Decimal('0.00')
-        actual = self.alice.get_tip_to(self.deadbeef_original_username)
+        actual = self.alice.get_tip_to('deadbeef')
         assert actual == expected
 
     def test_alice_doesnt_give_to_whatever_deadbeef_was_archived_as_either(self):
         expected = Decimal('0.00')
-        actual = self.alice.get_tip_to(self.deadbeef_original_username)
+        actual = self.alice.get_tip_to(self.deadbeef_archived.username)
         assert actual == expected
 
     def test_there_is_no_more_deadbeef(self):
         actual = Participant.from_username('deadbeef')
         assert actual is None
+
+    def test_balance_was_transferred(self):
+        fresh_bob = Participant.from_username('bob')
+        assert fresh_bob.balance == self.bob.balance == self.expected_new_balance
+        assert self.deadbeef_archived.balance == 0
 
 
 class TestTakeOver(Harness):
