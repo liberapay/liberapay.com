@@ -16,7 +16,7 @@ if POST:
 
     """.format(field), (user.participant.username,))
     assert rec is not None
-    response.body = {field: rec}
+    out = {field: rec}
 else:
     rec = website.db.one("""
 
@@ -25,4 +25,7 @@ else:
 
     """, (user.participant.username,), back_as=dict)
     assert rec is not None
-    response.body = rec
+    out = rec
+
+[---] application/json via json_dump
+out

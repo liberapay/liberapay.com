@@ -11,8 +11,6 @@ callback_pattern = re.compile(r'^[_A-Za-z0-9.]+$')
 
 participant = get_participant(request, restrict=False)
 
-response.body = participant.to_dict(details=True, inquirer=user.participant)
-
 # CORS - see https://github.com/gittip/aspen-python/issues/138
 response.headers["Access-Control-Allow-Origin"] = "*"
 
@@ -20,8 +18,11 @@ response.headers["Access-Control-Allow-Origin"] = "*"
 callback = qs.get('callback')
 if callback is not None:
     if callback_pattern.match(callback) is None:
-        response.code = 400
-        response.body = {"error": "bad callback"}
+        raise Response(400, "bad callback")
     else:
         response.body = "%s(%s)" % (callback, json.dumps(response.body))
         response.headers['Content-Type'] = 'application/javascript'
+        raise response
+
+[---] application/json via json_dump
+participant.to_dict(details=True, inquirer=user.participant)

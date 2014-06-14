@@ -81,4 +81,5 @@ else:
               "FROM current_takes WHERE team=%s AND member=%s"
         out = website.db.one(SQL, (team.username, member.username))
 
-response.body = out
+[---] application/json via json_dump
+out

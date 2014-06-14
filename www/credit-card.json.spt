@@ -48,4 +48,5 @@ else:
         out = {"problem": ""}
     out["first_time"] = user.participant.last_bill_result is None
 
-response.body = out
+[---] application/json via json_dump
+out

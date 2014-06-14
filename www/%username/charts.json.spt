@@ -36,9 +36,10 @@ anonymous = website.db.one("""
 """, (username,))
 
 if anonymous:
-    if user.ANON or user.participant.username != username and not user.ADMIN:
-        response.body = {'error': 'unauthorized'}
-        raise response
+    if user.ANON:
+        raise Response(401)
+    elif user.participant.username != username and not user.ADMIN:
+        raise Response(403)
 
 
 # Fetch data from the database.
@@ -105,15 +106,18 @@ if paydays:
 # Prepare response.
 # =================
 
-response.body = paydays[:-1]  # don't show Gittip #0
 response.headers["Access-Control-Allow-Origin"] = "*"
+out = paydays[:-1]  # don't show Gittip #0
 
 # JSONP - see https://github.com/gittip/aspen-python/issues/138
 callback = qs.get('callback')
 if callback is not None:
     if callback_pattern.match(callback) is None:
-        response.code = 400
-        response.body = {"error": "bad callback"}
+        raise Response(400, "bad callback")
     else:
         response.body = "%s(%s)" % (callback, json.dumps(response.body))
         response.headers['Content-Type'] = 'application/javascript'
+        raise response
+
+[---] application/json via json_dump
+out
