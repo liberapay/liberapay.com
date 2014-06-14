@@ -17,6 +17,7 @@ class Tests(Harness):
                                         , last_bill_result=''
                                          )
         warbucks.set_tip_to(team, '100')
+        self.warbucks = warbucks
 
         return team
 
@@ -91,3 +92,17 @@ class Tests(Harness):
         assert members[0]['username'] == 'alice'
         assert members[0]['take'] == 42
         assert members[0]['balance'] == 58
+
+    def test_takes_and_receiving_are_updated_correctly(self):
+        team = self.make_team()
+        alice = self.make_participant('alice', claimed_time='now')
+        team.add_member(alice)
+        team.set_take_for(alice, D('42.00'), team)
+        assert alice.takes == 42
+        assert alice.receiving == 42
+        self.warbucks.set_tip_to(alice, D('10.00'))
+        assert alice.takes == 42
+        assert alice.receiving == 52
+        team.set_take_for(alice, D('50.00'), team)
+        assert alice.takes == 50
+        assert alice.receiving == 60

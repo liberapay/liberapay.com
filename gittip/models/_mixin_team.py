@@ -158,12 +158,15 @@ class MixinTeam(object):
                 new = new_takes.get(username, {}).get('actual_amount', Decimal(0))
                 diff = new - old
                 if diff != 0:
-                    cursor.run("""
+                    r = cursor.one("""
                         UPDATE participants
                            SET takes = (takes + %(diff)s)
                              , receiving = (receiving + %(diff)s)
                          WHERE username=%(username)s
+                     RETURNING takes, receiving
                     """, dict(username=username, diff=diff))
+                    if username == member.username:
+                        member.set_attributes(**r._asdict())
 
     def get_takes(self, for_payday=False, cursor=None):
         """Return a list of member takes for a team.
