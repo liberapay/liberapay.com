@@ -153,6 +153,8 @@ paydays = Paydays(participant.username, participant.balance)
 hero = "History"
 title = "%s - %s" % (participant.username, hero)
 locked = False
+subpath = 'history/' if user.ADMIN else ''
+admin_override = user.ADMIN and (participant != user.participant or 'override' in qs)
 
 [-----------------------------------------------------------------------------]
 {% extends "templates/profile.html" %}
@@ -274,23 +276,17 @@ locked = False
 
         <td class="balance">{{ event['balance'] }}</td>
 
+        <td class="notes">
         {% if event['tippee'] == participant.username %}
-            {% if user.ADMIN and (participant != user.participant or 'override' in qs) %}
-            <td class="notes">from <a href="/{{ event['tipper'] }}/history/">{{ event['tipper'] }}</a></td>
-            {% elif event['context'] in ('take', 'take-over') %}
-            <td class="notes">from <a href="/{{ event['tipper'] }}/">{{ event['tipper'] }}</a></td>
+            {% if event['context'] in ('take', 'take-over') or admin_override %}
+                from <a href="/{{ event['tipper'] }}/{{ subpath }}">{{ event['tipper'] }}</a>
             {% else %}
-            <td class="notes">from someone</td>
+                from someone
             {% endif %}
         {% else %}
-            {% if user.ADMIN %}
-            <td class="notes">to
-                <a href="/{{ event['tippee'] }}/history/">{{ event['tippee'] }}</a></td>
-            {% else %}
-            <td class="notes">to
-                <a href="/{{ event['tippee'] }}/">{{ event['tippee'] }}</a></td>
-            {% endif %}
+            to <a href="/{{ event['tippee'] }}/{{ subpath }}">{{ event['tippee'] }}</a>
         {% endif %}
+        </td>
 
     </tr>
     {% endif %}
