@@ -130,6 +130,7 @@ def fake_transfer(db, tipper, tippee):
                , tipper=tipper.username
                , tippee=tippee.username
                , amount=fake_tip_amount()
+               , context='tip'
                 )
 
 

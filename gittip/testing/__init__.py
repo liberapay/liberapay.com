@@ -184,8 +184,8 @@ class Harness(unittest.TestCase):
             transfer_volume = Decimal(0)
             active = set()
             for i, (f, t, amount) in enumerate(transfers):
-                cursor.run("INSERT INTO transfers (timestamp, tipper, tippee, amount)"
-                              "VALUES (%s, %s, %s, %s)",
+                cursor.run("INSERT INTO transfers (timestamp, tipper, tippee, amount, context)"
+                              "VALUES (%s, %s, %s, %s, 'tip')",
                               (ts_start + datetime.timedelta(seconds=i), f, t, amount))
                 transfer_volume += Decimal(amount)
                 active.add(f)

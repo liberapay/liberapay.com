@@ -333,7 +333,8 @@ class Participant(Model, MixinTeam):
             cursor.run( "UPDATE participants SET balance=balance + %s WHERE username=%s"
                       , (amount, tippee)
                        )
-            cursor.run( "INSERT INTO transfers (tipper, tippee, amount) VALUES (%s, %s, %s)"
+            cursor.run( "INSERT INTO transfers (tipper, tippee, amount, context) "
+                        "VALUES (%s, %s, %s, 'final-gift')"
                       , (self.username, tippee, amount)
                        )
 
@@ -1186,8 +1187,8 @@ class Participant(Model, MixinTeam):
 
         TRANSFER_BALANCE_2 = """
 
-            INSERT INTO transfers (tipper, tippee, amount)
-            VALUES (%(dead)s, %(live)s, %(balance)s);
+            INSERT INTO transfers (tipper, tippee, amount, context)
+            VALUES (%(dead)s, %(live)s, %(balance)s, 'take-over');
 
             UPDATE participants
                SET balance = (balance + %(balance)s)

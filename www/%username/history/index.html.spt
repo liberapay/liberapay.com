@@ -277,7 +277,7 @@ locked = False
         {% if event['tippee'] == participant.username %}
             {% if user.ADMIN and (participant != user.participant or 'override' in qs) %}
             <td class="notes">from <a href="/{{ event['tipper'] }}/history/">{{ event['tipper'] }}</a></td>
-            {% elif event['as_team_member'] %}
+            {% elif event['context'] in ('take', 'take-over') %}
             <td class="notes">from <a href="/{{ event['tipper'] }}/">{{ event['tipper'] }}</a></td>
             {% else %}
             <td class="notes">from someone</td>
