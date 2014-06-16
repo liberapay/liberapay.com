@@ -1334,6 +1334,10 @@ class Participant(Model, MixinTeam):
                 other.set_attributes(balance=archive_balance)
                 new_balance = cursor.one(TRANSFER_BALANCE_2, args)
 
+                # Disconnect any remaining elsewhere account.
+                # ===========================================
+
+                cursor.run("DELETE FROM elsewhere WHERE participant=%s", (y,))
 
                 # Archive the old participant.
                 # ============================
