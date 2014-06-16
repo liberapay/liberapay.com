@@ -47,4 +47,6 @@ BEGIN;
          WHERE t.amount > 0
       ORDER BY ctime DESC;
 
+    DROP FUNCTION process_take() CASCADE;
+
 END;
