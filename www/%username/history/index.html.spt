@@ -277,14 +277,25 @@ admin_override = user.ADMIN and (participant != user.participant or 'override' i
         <td class="balance">{{ event['balance'] }}</td>
 
         <td class="notes">
+        {% set context = event['context'] %}
         {% if event['tippee'] == participant.username %}
-            {% if event['context'] in ('take', 'take-over') or admin_override %}
-                from <a href="/{{ event['tipper'] }}/{{ subpath }}">{{ event['tipper'] }}</a>
+            {% if context in ('take', 'take-over') or admin_override %}
+                {% if context == 'take-over' %}
+                    balance from taken-over account
+                {% else %}
+                    {{ context }} from
+                {% endif %}
+                <a href="/{{ event['tipper'] }}/{{ subpath }}">{{ event['tipper'] }}</a>
             {% else %}
-                from someone
+                anonymous tip
             {% endif %}
         {% else %}
-            to <a href="/{{ event['tippee'] }}/{{ subpath }}">{{ event['tippee'] }}</a>
+            {% if context == 'take' %}
+                take of
+            {% else %}
+                {{ context }} to
+            {% endif %}
+            <a href="/{{ event['tippee'] }}/{{ subpath }}">{{ event['tippee'] }}</a>
         {% endif %}
         </td>
 
