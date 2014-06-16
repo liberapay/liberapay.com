@@ -996,6 +996,19 @@ class Participant(Model, MixinTeam):
         return accounts_dict
 
 
+    def get_elsewhere_logins(self, cursor):
+        """Return the list of (platform, user_id) tuples that the participant
+        can log in with.
+        """
+        return cursor.all("""
+            SELECT platform, user_id
+              FROM elsewhere
+             WHERE participant=%s
+               AND platform IN %s
+               AND NOT is_team
+        """, (self.username, AccountElsewhere.signin_platforms_names))
+
+
     class StillReceivingTips(Exception): pass
     class BalanceIsNotZero(Exception): pass
 
@@ -1363,13 +1376,7 @@ class Participant(Model, MixinTeam):
         """
         user_id = unicode(user_id)
         with self.db.get_cursor() as c:
-            accounts = c.all("""
-                SELECT platform, user_id
-                  FROM elsewhere
-                 WHERE participant=%s
-                   AND platform IN %s
-                   AND NOT is_team
-            """, (self.username, AccountElsewhere.signin_platforms_names))
+            accounts = self.get_elsewhere_logins(c)
             assert len(accounts) > 0
             if len(accounts) == 1 and accounts[0] == (platform, user_id):
                 raise LastElsewhere()
