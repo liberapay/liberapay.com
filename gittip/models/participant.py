@@ -1305,9 +1305,7 @@ class Participant(Model, MixinTeam):
             # Do the deal.
             # ============
             # If other_is_not_a_stub, then other will have the account
-            # elsewhere taken away from them with this call. If there are other
-            # browsing sessions open from that account, they will stay open
-            # until they expire (XXX Is that okay?)
+            # elsewhere taken away from them with this call.
 
             cursor.run( "UPDATE elsewhere SET participant=%s "
                         "WHERE platform=%s AND user_id=%s"
