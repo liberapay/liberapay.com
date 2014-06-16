@@ -1256,13 +1256,9 @@ class Participant(Model, MixinTeam):
             # other_is_a_real_participant
             other_is_a_real_participant = other.is_claimed
 
-            # this_is_others_last_account_elsewhere
-            nelsewhere = cursor.one( "SELECT count(*) FROM elsewhere "
-                                     "WHERE participant=%s"
-                                   , (other.username,)
-                                    )
-            assert nelsewhere > 0           # sanity check
-            this_is_others_last_account_elsewhere = (nelsewhere == 1)
+            # this_is_others_last_login_account
+            nelsewhere = len(other.get_elsewhere_logins(cursor))
+            this_is_others_last_login_account = (nelsewhere <= 1)
 
             # we_already_have_that_kind_of_account
             nparticipants = cursor.one( "SELECT count(*) FROM elsewhere "
@@ -1277,7 +1273,7 @@ class Participant(Model, MixinTeam):
                     raise TeamCantBeOnlyAuth
 
             need_confirmation = NeedConfirmation( other_is_a_real_participant
-                                                , this_is_others_last_account_elsewhere
+                                                , this_is_others_last_login_account
                                                 , we_already_have_that_kind_of_account
                                                  )
             if need_confirmation and not have_confirmation:
@@ -1317,7 +1313,7 @@ class Participant(Model, MixinTeam):
             # =====================================================
             # We want to do this whether or not other is a stub participant.
 
-            if this_is_others_last_account_elsewhere:
+            if this_is_others_last_login_account:
 
                 # Take over tips.
                 # ===============
@@ -1496,7 +1492,7 @@ class NeedConfirmation(Exception):
 
     def __init__(self, a, b, c):
         self.other_is_a_real_participant = a
-        self.this_is_others_last_account_elsewhere = b
+        self.this_is_others_last_login_account = b
         self.we_already_have_that_kind_of_account = c
         self._all = (a, b, c)
 
