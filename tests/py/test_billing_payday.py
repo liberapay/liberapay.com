@@ -405,6 +405,27 @@ class TestBillingPayday(PaydayHarness):
         actual = self.db.one("SELECT balance FROM participants WHERE username='A'")
         assert actual == 0
 
+    def test_update_receiving_amounts_updates_receiving_amounts(self):
+        A = self.make_participant('A')
+        B = self.make_participant('B', claimed_time='now', last_bill_result='')
+        B.set_tip_to(A, D('10.00'), update_tippee=False)
+        assert Participant.from_username('A').receiving == 0
+
+        self.payday.update_receiving_amounts()
+        assert Participant.from_username('A').receiving == 10
+
+    def test_update_receiving_amounts_includes_takes(self):
+        A = self.make_participant('A', claimed_time='now', takes=3)
+        B = self.make_participant('B', claimed_time='now', last_bill_result='')
+        B.set_tip_to(A, D('10.00'), update_tippee=False)
+
+        assert Participant.from_username('A').receiving == 0
+        assert Participant.from_username('A').takes == 3
+
+        self.payday.update_receiving_amounts()
+        assert Participant.from_username('A').receiving == 13
+        assert Participant.from_username('A').takes == 3
+
     @mock.patch('gittip.models.participant.Participant.get_tips_and_total')
     def test_charge_and_or_transfer_no_tips(self, get_tips_and_total):
         self.db.run("""
