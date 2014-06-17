@@ -109,3 +109,17 @@ class Tests(Harness):
         self.warbucks.set_tip_to(team, D('10.00'))  # hard times
         alice = Participant.from_username('alice')
         assert alice.receiving == alice.takes == 10
+
+    def test_changes_to_others_take_affects_members_take(self):
+        team = self.make_team()
+
+        alice = self.make_participant('alice', take_last_week='30.00', claimed_time='now')
+        team.add_member(alice)
+        team.set_take_for(alice, D('42.00'), alice)
+
+        bob = self.make_participant('bob', take_last_week='50.00', claimed_time='now')
+        team.add_member(bob)
+        team.set_take_for(bob, D('60.00'), bob)
+
+        alice = Participant.from_username('alice')
+        assert alice.receiving == alice.takes == 40
