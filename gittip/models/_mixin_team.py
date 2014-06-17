@@ -153,9 +153,9 @@ class MixinTeam(object):
             # Compute the new takes
             new_takes = self.compute_actual_takes(cursor)
             # Update receiving amounts in the participants table
-            self.update_takes(old_takes, new_takes, cursor, member)
+            self.update_taking(old_takes, new_takes, cursor, member)
 
-    def update_takes(self, old_takes, new_takes, cursor=None, member=None):
+    def update_taking(self, old_takes, new_takes, cursor=None, member=None):
         """Update `taking` amounts based on the difference between `old_takes`
         and `new_takes`.
         """

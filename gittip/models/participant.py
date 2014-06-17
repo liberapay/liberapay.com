@@ -627,7 +627,7 @@ class Participant(Model, MixinTeam):
         self.set_attributes(receiving=receiving)
         if self.IS_PLURAL:
             new_takes = self.compute_actual_takes(cursor=cursor)
-            self.update_takes(old_takes, new_takes, cursor=cursor)
+            self.update_taking(old_takes, new_takes, cursor=cursor)
 
     def set_tip_to(self, tippee, amount, update_self=True, update_tippee=True, cursor=None):
         """Given a Participant or username, and amount as str, return a tuple.
