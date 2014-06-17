@@ -535,9 +535,9 @@ class Tests(Harness):
         actual = bob.receiving
         assert actual == expected
 
-    def test_receiving_includes_takes_when_updated_from_set_tip_to(self):
+    def test_receiving_includes_taking_when_updated_from_set_tip_to(self):
         alice = self.make_participant('alice', last_bill_result='')
-        bob = self.make_participant('bob', takes=Decimal('42.00'))
+        bob = self.make_participant('bob', taking=Decimal('42.00'))
         alice.set_tip_to(bob, '3.00')
         assert Participant.from_username('bob').receiving == bob.receiving == Decimal('45.00')
 

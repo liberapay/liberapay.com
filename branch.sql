@@ -1,6 +1,6 @@
 BEGIN;
 
-    ALTER TABLE participants ADD COLUMN takes numeric(35,2) NOT NULL DEFAULT 0;
+    ALTER TABLE participants ADD COLUMN taking numeric(35,2) NOT NULL DEFAULT 0;
 
     CREATE TEMPORARY TABLE temp_teams AS
         SELECT username, receiving
@@ -28,7 +28,7 @@ BEGIN;
                 actual_amount := team_balance;
             END IF;
             UPDATE participants
-               SET takes = (takes + actual_amount)
+               SET taking = (taking + actual_amount)
                  , receiving = (receiving + actual_amount)
              WHERE username = NEW.member;
             UPDATE temp_teams

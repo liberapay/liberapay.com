@@ -620,7 +620,7 @@ class Participant(Model, MixinTeam):
                           AND p2.is_suspicious IS NOT true
                           AND p2.last_bill_result = ''
                      GROUP BY tippee
-                   ), 0) + takes)
+                   ), 0) + taking)
              WHERE p.username = %s
          RETURNING receiving
         """, (self.username,))

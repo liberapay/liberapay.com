@@ -168,10 +168,10 @@ class MixinTeam(object):
             if diff != 0:
                 r = (self.db or cursor).one("""
                     UPDATE participants
-                       SET takes = (takes + %(diff)s)
+                       SET taking = (taking + %(diff)s)
                          , receiving = (receiving + %(diff)s)
                      WHERE username=%(username)s
-                 RETURNING takes, receiving
+                 RETURNING taking, receiving
                 """, dict(username=username, diff=diff))
                 if member and username == member.username:
                     member.set_attributes(**r._asdict())

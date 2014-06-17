@@ -86,26 +86,26 @@ class Tests(Harness):
         assert members[0]['take'] == 42
         assert members[0]['balance'] == 58
 
-    def test_takes_and_receiving_are_updated_correctly(self):
+    def test_taking_and_receiving_are_updated_correctly(self):
         team = self.make_team()
         alice = self.make_participant('alice', take_last_week='40.00', claimed_time='now')
         team.add_member(alice)
         team.set_take_for(alice, D('42.00'), alice)
-        assert alice.takes == 42
+        assert alice.taking == 42
         assert alice.receiving == 42
         self.warbucks.set_tip_to(alice, D('10.00'))
-        assert alice.takes == 42
+        assert alice.taking == 42
         assert alice.receiving == 52
         team.set_take_for(alice, D('50.00'), alice)
-        assert alice.takes == 50
+        assert alice.taking == 50
         assert alice.receiving == 60
 
-    def test_takes_is_zero_for_team(self):
+    def test_taking_is_zero_for_team(self):
         team = self.make_team()
         alice = self.make_participant('alice', claimed_time='now')
         team.add_member(alice)
         team = Participant.from_id(team.id)
-        assert team.takes == 0
+        assert team.taking == 0
         assert team.receiving == 100
 
     def test_changes_to_team_receiving_affect_members_take(self):
@@ -116,7 +116,7 @@ class Tests(Harness):
 
         self.warbucks.set_tip_to(team, D('10.00'))  # hard times
         alice = Participant.from_username('alice')
-        assert alice.receiving == alice.takes == 10
+        assert alice.receiving == alice.taking == 10
 
     def test_changes_to_others_take_affects_members_take(self):
         team = self.make_team()
@@ -130,7 +130,7 @@ class Tests(Harness):
         team.set_take_for(bob, D('60.00'), bob)
 
         alice = Participant.from_username('alice')
-        assert alice.receiving == alice.takes == 40
+        assert alice.receiving == alice.taking == 40
 
         # But get_members still uses nominal amount
         assert [m['take'] for m in  team.get_members(alice)] == [60, 42, 0]
@@ -146,8 +146,8 @@ class Tests(Harness):
         team.add_member(bob)
         team.set_take_for(bob, D('80.00'), bob)
         alice = Participant.from_username('alice')
-        assert alice.receiving == alice.takes == 20
+        assert alice.receiving == alice.taking == 20
 
         team.set_take_for(bob, D('30.00'), bob)
         alice = Participant.from_username('alice')
-        assert alice.receiving == alice.takes == 42
+        assert alice.receiving == alice.taking == 42
