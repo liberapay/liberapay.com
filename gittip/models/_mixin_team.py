@@ -153,20 +153,26 @@ class MixinTeam(object):
             # Compute the new takes
             new_takes = self.compute_actual_takes(cursor)
             # Update receiving amounts in the participants table
-            for username in set(old_takes.keys()).union(new_takes.keys()):
-                old = old_takes.get(username, {}).get('actual_amount', Decimal(0))
-                new = new_takes.get(username, {}).get('actual_amount', Decimal(0))
-                diff = new - old
-                if diff != 0:
-                    r = cursor.one("""
-                        UPDATE participants
-                           SET takes = (takes + %(diff)s)
-                             , receiving = (receiving + %(diff)s)
-                         WHERE username=%(username)s
-                     RETURNING takes, receiving
-                    """, dict(username=username, diff=diff))
-                    if username == member.username:
-                        member.set_attributes(**r._asdict())
+            self.update_takes(old_takes, new_takes, cursor, member)
+
+    def update_takes(self, old_takes, new_takes, cursor=None, member=None):
+        """Update `taking` amounts based on the difference between `old_takes`
+        and `new_takes`.
+        """
+        for username in set(old_takes.keys()).union(new_takes.keys()):
+            old = old_takes.get(username, {}).get('actual_amount', Decimal(0))
+            new = new_takes.get(username, {}).get('actual_amount', Decimal(0))
+            diff = new - old
+            if diff != 0:
+                r = (self.db or cursor).one("""
+                    UPDATE participants
+                       SET takes = (takes + %(diff)s)
+                         , receiving = (receiving + %(diff)s)
+                     WHERE username=%(username)s
+                 RETURNING takes, receiving
+                """, dict(username=username, diff=diff))
+                if member and username == member.username:
+                    member.set_attributes(**r._asdict())
 
     def get_takes(self, for_payday=False, cursor=None):
         """Return a list of member takes for a team.
