@@ -1,5 +1,6 @@
 """Teams on Gittip are plural participants with members.
 """
+from collections import OrderedDict
 from decimal import Decimal
 
 from aspen.utils import typecheck
@@ -126,25 +127,56 @@ class MixinTeam(object):
     def __set_take_for(self, member, amount, recorder):
         assert self.IS_PLURAL
         # XXX Factored out for testing purposes only! :O Use .set_take_for.
-        self.db.run("""
+        with self.db.get_cursor() as cursor:
+            # Lock to avoid race conditions
+            cursor.run("LOCK TABLE takes IN EXCLUSIVE MODE")
+            # Compute the current takes
+            old_takes = self.compute_actual_takes(cursor)
+            # Insert the new take
+            cursor.run("""
 
-            INSERT INTO takes (ctime, member, team, amount, recorder)
-             VALUES ( COALESCE (( SELECT ctime
-                                    FROM takes
-                                   WHERE member=%s
-                                     AND team=%s
-                                   LIMIT 1
-                                 ), CURRENT_TIMESTAMP)
-                    , %s
-                    , %s
-                    , %s
-                    , %s
-                     )
+                INSERT INTO takes (ctime, member, team, amount, recorder)
+                 VALUES ( COALESCE (( SELECT ctime
+                                        FROM takes
+                                       WHERE member=%(member)s
+                                         AND team=%(team)s
+                                       LIMIT 1
+                                     ), CURRENT_TIMESTAMP)
+                        , %(member)s
+                        , %(team)s
+                        , %(amount)s
+                        , %(recorder)s
+                         )
 
-        """, (member.username, self.username, member.username, self.username, \
-                                                      amount, recorder.username))
+            """, dict(member=member.username, team=self.username, amount=amount,
+                      recorder=recorder.username))
+            # Compute the new takes
+            new_takes = self.compute_actual_takes(cursor)
+            # Update receiving amounts in the participants table
+            self.update_taking(old_takes, new_takes, cursor, member)
 
-    def get_takes(self, for_payday=False):
+    def update_taking(self, old_takes, new_takes, cursor=None, member=None):
+        """Update `taking` amounts based on the difference between `old_takes`
+        and `new_takes`.
+        """
+        for username in set(old_takes.keys()).union(new_takes.keys()):
+            if username == self.username:
+                continue
+            old = old_takes.get(username, {}).get('actual_amount', Decimal(0))
+            new = new_takes.get(username, {}).get('actual_amount', Decimal(0))
+            diff = new - old
+            if diff != 0:
+                r = (self.db or cursor).one("""
+                    UPDATE participants
+                       SET taking = (taking + %(diff)s)
+                         , receiving = (receiving + %(diff)s)
+                     WHERE username=%(username)s
+                 RETURNING taking, receiving
+                """, dict(username=username, diff=diff))
+                if member and username == member.username:
+                    member.set_attributes(**r._asdict())
+
+    def get_takes(self, for_payday=False, cursor=None):
         """Return a list of member takes for a team.
 
         This is implemented parallel to Participant.get_tips_and_total. See
@@ -193,14 +225,15 @@ class MixinTeam(object):
 
             """
 
-        return self.db.all(TAKES, args, back_as=dict)
+        records = (cursor or self.db).all(TAKES, args)
+        return [r._asdict() for r in records]
 
-    def get_team_take(self):
+    def get_team_take(self, cursor=None):
         """Return a single take for a team, the team itself's take.
         """
         assert self.IS_PLURAL
         TAKE = "SELECT sum(amount) FROM current_takes WHERE team=%s"
-        total_take = self.db.one(TAKE, (self.username,), default=0)
+        total_take = (cursor or self.db).one(TAKE, (self.username,), default=0)
         team_take = max(self.receiving - total_take, 0)
         membership = { "ctime": None
                      , "mtime": None
@@ -209,18 +242,34 @@ class MixinTeam(object):
                       }
         return membership
 
+    def compute_actual_takes(self, cursor=None):
+        """Get the takes, compute the actual amounts, and return an OrderedDict.
+        """
+        actual_takes = OrderedDict()
+        nominal_takes = self.get_takes(cursor=cursor)
+        nominal_takes.append(self.get_team_take(cursor=cursor))
+        budget = balance = self.receiving
+        for take in nominal_takes:
+            nominal_amount = take['nominal_amount'] = take.pop('amount')
+            actual_amount = take['actual_amount'] = min(nominal_amount, balance)
+            balance -= actual_amount
+            take['balance'] = balance
+            take['percentage'] = (actual_amount / budget) if budget > 0 else 0
+            actual_takes[take['member']] = take
+        return actual_takes
+
     def get_members(self, current_participant):
         """Return a list of member dicts.
         """
         assert self.IS_PLURAL
-        takes = self.get_takes()
-        takes.append(self.get_team_take())
-        budget = balance = self.receiving
+        takes = self.compute_actual_takes()
         members = []
-        for take in takes:
+        for take in takes.values():
             member = {}
             member['username'] = take['member']
-            member['take'] = take['amount']
+            member['take'] = take['nominal_amount']
+            member['balance'] = take['balance']
+            member['percentage'] = take['percentage']
 
             member['removal_allowed'] = current_participant == self
             member['editing_allowed'] = False
@@ -234,9 +283,5 @@ class MixinTeam(object):
 
             member['last_week'] = last_week = self.get_take_last_week_for(member)
             member['max_this_week'] = self.compute_max_this_week(last_week)
-            amount = min(take['amount'], balance)
-            balance -= amount
-            member['balance'] = balance
-            member['percentage'] = (amount / budget) if budget > 0 else 0
             members.append(member)
         return members

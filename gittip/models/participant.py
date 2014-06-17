@@ -608,9 +608,11 @@ class Participant(Model, MixinTeam):
         self.set_attributes(pledging=pledging)
 
     def update_receiving(self, cursor=None):
+        if self.IS_PLURAL:
+            old_takes = self.compute_actual_takes(cursor=cursor)
         receiving = (cursor or self.db).one("""
             UPDATE participants p
-               SET receiving = COALESCE((
+               SET receiving = (COALESCE((
                        SELECT sum(amount)
                          FROM current_tips
                          JOIN participants p2 ON p2.username = tipper
@@ -618,11 +620,14 @@ class Participant(Model, MixinTeam):
                           AND p2.is_suspicious IS NOT true
                           AND p2.last_bill_result = ''
                      GROUP BY tippee
-                   ), 0)
+                   ), 0) + taking)
              WHERE p.username = %s
          RETURNING receiving
         """, (self.username,))
         self.set_attributes(receiving=receiving)
+        if self.IS_PLURAL:
+            new_takes = self.compute_actual_takes(cursor=cursor)
+            self.update_taking(old_takes, new_takes, cursor=cursor)
 
     def set_tip_to(self, tippee, amount, update_self=True, update_tippee=True, cursor=None):
         """Given a Participant or username, and amount as str, return a tuple.
