@@ -3,12 +3,16 @@ addons:
   postgresql: 9.3
 before_install:
  - node --version
-install: make env node_modules
+install:
+ - make env node_modules
+ - pip install coveralls
 before_script:
  - echo "DATABASE_URL=dbname=gittip" | tee -a tests/local.env local.env
  - psql -U postgres -c 'CREATE DATABASE "gittip";'
  - if [ "`git rev-parse --abbrev-ref HEAD`" = "master" ]; then rm -rf tests/fixtures; fi
 script: make test
+after_success:
+  coveralls
 notifications:
   email: false
   irc:
