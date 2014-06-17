@@ -6,13 +6,10 @@ from gittip.testing import Harness
 from gittip.models.participant import Participant
 
 
-default_team_name = 'Team'
-
-
 class Tests(Harness):
 
-    def make_team(self, name=default_team_name):
-        team = self.make_participant(name, number='plural')
+    def make_team(self):
+        team = self.make_participant('A Team', number='plural')
 
         warbucks = self.make_participant( 'Daddy Warbucks'
                                         , last_bill_result=''
@@ -24,15 +21,13 @@ class Tests(Harness):
 
     def make_participant(self, username, *arg, **kw):
         take_last_week = kw.pop('take_last_week', '40')
-        team_name = kw.pop('team_name', default_team_name)
         participant = Harness.make_participant(self, username, **kw)
         if username == 'alice':
             self.db.run("INSERT INTO paydays DEFAULT VALUES")
-            self.db.run( "INSERT INTO transfers "
-                           "(timestamp, tipper, tippee, amount) "
-                           "VALUES (now(), %s, 'alice', %s)"
-                         , (team_name, take_last_week,)
-                          )
+            self.db.run( "INSERT INTO transfers (timestamp, tipper, tippee, amount) "
+                         "VALUES (now(), 'A Team', 'alice', %s)"
+                       , (take_last_week,)
+                        )
         return participant
 
     def test_we_can_make_a_team(self):
