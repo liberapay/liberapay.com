@@ -126,3 +126,20 @@ class Tests(Harness):
 
         # But get_members still uses nominal amount
         assert [m['take'] for m in  team.get_members(alice)] == [60, 42, 0]
+
+    def test_changes_to_others_take_can_increase_members_take(self):
+        team = self.make_team()
+
+        alice = self.make_participant('alice', take_last_week='30.00', claimed_time='now')
+        team.add_member(alice)
+        team.set_take_for(alice, D('42.00'), alice)
+
+        bob = self.make_participant('bob', take_last_week='60.00', claimed_time='now')
+        team.add_member(bob)
+        team.set_take_for(bob, D('80.00'), bob)
+        alice = Participant.from_username('alice')
+        assert alice.receiving == alice.takes == 20
+
+        team.set_take_for(bob, D('30.00'), bob)
+        alice = Participant.from_username('alice')
+        assert alice.receiving == alice.takes == 42
