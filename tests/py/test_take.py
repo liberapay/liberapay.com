@@ -6,24 +6,29 @@ from gittip.testing import Harness
 from gittip.models.participant import Participant
 
 
+TEAM = 'A Team'
+
+
 class Tests(Harness):
 
-    def make_team(self):
-        team = self.make_participant('A Team', number='plural')
-        warbucks = self.make_participant('Daddy Warbucks', last_bill_result='')
-        warbucks.set_tip_to(team, '100')
-        self.warbucks = warbucks
+    def make_team(self, username=TEAM, **kw):
+        team = self.make_participant(username, number='plural', **kw)
+        if Participant.from_username('Daddy Warbucks') is None:
+            warbucks = self.make_participant('Daddy Warbucks', last_bill_result='')
+            self.warbucks = warbucks
+        self.warbucks.set_tip_to(team, '100')
         return team
 
-    def make_participant(self, username, *arg, **kw):
+    def make_participant(self, username, **kw):
         take_last_week = kw.pop('take_last_week', None)
+        team_name = kw.pop('', TEAM)
         participant = Harness.make_participant(self, username, **kw)
         if take_last_week is not None:
             if self.db.one('SELECT * FROM paydays') is None:
                 self.db.run("INSERT INTO paydays DEFAULT VALUES")
             self.db.run( "INSERT INTO transfers (timestamp, tipper, tippee, amount) "
-                         "VALUES (now(), 'A Team', %(tippee)s, %(amount)s)"
-                       , dict(tippee=username, amount=take_last_week,)
+                         "VALUES (now(), %(tipper)s, %(tippee)s, %(amount)s)"
+                       , dict(tipper=team_name, tippee=username, amount=take_last_week,)
                         )
         return participant
 
@@ -107,6 +112,16 @@ class Tests(Harness):
         team = Participant.from_id(team.id)
         assert team.taking == 0
         assert team.receiving == 100
+
+    def test_but_team_can_take_from_other_team(self):
+        a_team = self.make_team('A Team', claimed_time='now')
+        b_team = self.make_team('B Team', claimed_time='now')
+        a_team.add_member(b_team)
+        a_team.set_take_for(b_team, D('1.00'), b_team)
+
+        b_team = Participant.from_id(b_team.id)
+        assert b_team.taking == 1
+        assert b_team.receiving == 101
 
     def test_changes_to_team_receiving_affect_members_take(self):
         team = self.make_team()
