@@ -45,7 +45,7 @@ pyflakes: env
 test: pytest jstest
 
 pytest: env test-schema
-	$(py_test) --cov ./tests/py/
+	$(py_test) --cov gittip ./tests/py/
 	@$(MAKE) --no-print-directory pyflakes
 
 retest: env
