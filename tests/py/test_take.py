@@ -98,13 +98,13 @@ class Tests(Harness):
         team = self.make_team()
         alice = self.make_participant('alice', claimed_time='now')
         team.add_member(alice)
-        team.set_take_for(alice, D('42.00'), team)
+        team.set_take_for(alice, D('42.00'), alice)
         assert alice.takes == 42
         assert alice.receiving == 42
         self.warbucks.set_tip_to(alice, D('10.00'))
         assert alice.takes == 42
         assert alice.receiving == 52
-        team.set_take_for(alice, D('50.00'), team)
+        team.set_take_for(alice, D('50.00'), alice)
         assert alice.takes == 50
         assert alice.receiving == 60
 
@@ -112,7 +112,7 @@ class Tests(Harness):
         team = self.make_team()
         alice = self.make_participant('alice', claimed_time='now')
         team.add_member(alice)
-        team.set_take_for(alice, D('42.00'), team)
+        team.set_take_for(alice, D('42.00'), alice)
 
         self.warbucks.set_tip_to(team, D('10.00'))  # hard times
         alice = Participant.from_username('alice')
