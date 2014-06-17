@@ -123,3 +123,6 @@ class Tests(Harness):
 
         alice = Participant.from_username('alice')
         assert alice.receiving == alice.takes == 40
+
+        # But get_members still uses nominal amount
+        assert [m['take'] for m in  team.get_members(alice)] == [60, 42, 0]
