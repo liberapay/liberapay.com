@@ -10,13 +10,9 @@ class Tests(Harness):
 
     def make_team(self):
         team = self.make_participant('A Team', number='plural')
-
-        warbucks = self.make_participant( 'Daddy Warbucks'
-                                        , last_bill_result=''
-                                         )
+        warbucks = self.make_participant('Daddy Warbucks', last_bill_result='')
         warbucks.set_tip_to(team, '100')
         self.warbucks = warbucks
-
         return team
 
     def make_participant(self, username, *arg, **kw):
