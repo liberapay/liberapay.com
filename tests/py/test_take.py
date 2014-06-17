@@ -100,6 +100,14 @@ class Tests(Harness):
         assert alice.takes == 50
         assert alice.receiving == 60
 
+    def test_takes_is_zero_for_team(self):
+        team = self.make_team()
+        alice = self.make_participant('alice', claimed_time='now')
+        team.add_member(alice)
+        team = Participant.from_id(team.id)
+        assert team.takes == 0
+        assert team.receiving == 100
+
     def test_changes_to_team_receiving_affect_members_take(self):
         team = self.make_team()
         alice = self.make_participant('alice', take_last_week='40.00', claimed_time='now')
