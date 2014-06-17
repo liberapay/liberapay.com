@@ -160,6 +160,8 @@ class MixinTeam(object):
         and `new_takes`.
         """
         for username in set(old_takes.keys()).union(new_takes.keys()):
+            if username == self.username:
+                continue
             old = old_takes.get(username, {}).get('actual_amount', Decimal(0))
             new = new_takes.get(username, {}).get('actual_amount', Decimal(0))
             diff = new - old
