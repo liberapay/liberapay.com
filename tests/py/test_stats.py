@@ -35,7 +35,7 @@ class TestChartOfReceiving(Harness):
     def setUp(self):
         Harness.setUp(self)
         for participant in ['alice', 'bob']:
-            p = self.make_participant(participant, last_bill_result='')
+            p = self.make_participant(participant, claimed_time='now', last_bill_result='')
             setattr(self, participant, p)
 
     def test_get_tip_distribution_handles_a_tip(self):
@@ -51,7 +51,7 @@ class TestChartOfReceiving(Harness):
         assert actual == expected
 
     def test_get_tip_distribution_handles_multiple_tips(self):
-        carl = self.make_participant('carl', last_bill_result='')
+        carl = self.make_participant('carl', claimed_time='now', last_bill_result='')
         self.alice.set_tip_to(self.bob, '1.00')
         carl.set_tip_to(self.bob, '3.00')
         expected = ([
@@ -63,7 +63,7 @@ class TestChartOfReceiving(Harness):
 
     def test_get_tip_distribution_handles_big_tips(self):
         self.bob.update_number('plural')
-        carl = self.make_participant('carl', last_bill_result='')
+        carl = self.make_participant('carl', claimed_time='now', last_bill_result='')
         self.alice.set_tip_to(self.bob, '200.00')
         carl.set_tip_to(self.bob, '300.00')
         expected = ([
@@ -74,7 +74,7 @@ class TestChartOfReceiving(Harness):
         assert actual == expected
 
     def test_get_tip_distribution_ignores_bad_cc(self):
-        bad_cc = self.make_participant('bad_cc', last_bill_result='Failure!')
+        bad_cc = self.make_participant('bad_cc', claimed_time='now', last_bill_result='Failure!')
         self.alice.set_tip_to(self.bob, '1.00')
         bad_cc.set_tip_to(self.bob, '3.00')
         expected = ([[Decimal('1.00'), 1L, Decimal('1.00'), 1, Decimal('1')]],
@@ -83,7 +83,7 @@ class TestChartOfReceiving(Harness):
         assert actual == expected
 
     def test_get_tip_distribution_ignores_missing_cc(self):
-        missing_cc = self.make_participant('missing_cc', last_bill_result=None)
+        missing_cc = self.make_participant('missing_cc', claimed_time='now', last_bill_result=None)
         self.alice.set_tip_to(self.bob, '1.00')
         missing_cc.set_tip_to(self.bob, '3.00')
         expected = ([[Decimal('1.00'), 1L, Decimal('1.00'), 1, Decimal('1')]],
