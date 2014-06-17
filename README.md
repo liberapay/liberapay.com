@@ -1,6 +1,7 @@
 # Welcome to Gittip [<img height="26px" src="www/assets/%25version/gittip.opengraph.png"/>](https://www.gittip.com/)
 
 [![Build Status](http://img.shields.io/travis/gittip/www.gittip.com/master.svg)](https://travis-ci.org/gittip/www.gittip.com)
+[![Coverage Status](https://img.shields.io/coveralls/gittip/www.gittip.com.svg)](https://coveralls.io/r/gittip/www.gittip.com?branch=master)
 [![HuBoard badge](http://img.shields.io/badge/Hu-Board-7965cc.svg)](https://huboard.com/gittip/www.gittip.com)
 [![Open Bounties](https://api.bountysource.com/badge/team?team_id=423&style=bounties_received)](https://www.bountysource.com/teams/gittip/issues)
 
