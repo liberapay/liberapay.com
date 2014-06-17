@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from decimal import Decimal as D
 
 from gittip.testing import Harness
+from gittip.models.participant import Participant
 
 
 default_team_name = 'Team'
@@ -106,3 +107,13 @@ class Tests(Harness):
         team.set_take_for(alice, D('50.00'), team)
         assert alice.takes == 50
         assert alice.receiving == 60
+
+    def test_changes_to_team_receiving_affect_members_take(self):
+        team = self.make_team()
+        alice = self.make_participant('alice', claimed_time='now')
+        team.add_member(alice)
+        team.set_take_for(alice, D('42.00'), team)
+
+        self.warbucks.set_tip_to(team, D('10.00'))  # hard times
+        alice = Participant.from_username('alice')
+        assert alice.receiving == alice.takes == 10
