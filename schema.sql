@@ -1400,3 +1400,11 @@ END;
 BEGIN;
     ALTER TABLE participants DROP COLUMN stripe_customer_id;
 END;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/pull/2496
+
+BEGIN;
+    ALTER TABLE participants ADD COLUMN taking numeric(35,2) NOT NULL DEFAULT 0;
+END;
