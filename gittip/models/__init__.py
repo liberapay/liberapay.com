@@ -54,9 +54,6 @@ def _check_balances(cursor):
 
     https://github.com/gittip/www.gittip.com/issues/1118
     """
-    if cursor.one("select exists (select * from paydays where ts_end < ts_start) as running"):
-        # payday is running and the query bellow does not account for pending
-        return
     b = cursor.one("""
         select count(*)
           from (
