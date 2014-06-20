@@ -1,7 +1,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 from decimal import Decimal as D
-from datetime import datetime
 
 import balanced
 import mock
@@ -9,8 +8,7 @@ import pytest
 from psycopg2 import IntegrityError
 
 from aspen.utils import typecheck, utcnow
-from gittip import billing
-from gittip.billing.payday import Payday, skim_credit, LOOP_PACHINKO
+from gittip.billing.payday import Payday, skim_credit
 from gittip.exceptions import NegativeBalance
 from gittip.models.participant import Participant
 from gittip.testing import Harness
@@ -353,100 +351,6 @@ class TestBillingPayday(PaydayHarness):
         assert Participant.from_username('A').receiving == 13
         assert Participant.from_username('A').taking == 3
 
-    @mock.patch('gittip.models.participant.Participant.get_tips_and_total')
-    def test_charge_and_or_transfer_no_tips(self, get_tips_and_total):
-        self.db.run("""
-            UPDATE participants
-               SET balance=1
-             WHERE username='janet'
-        """)
-
-        amount = D('1.00')
-
-        ts_start = self.payday.start()
-
-        tips, total = [], amount
-
-        initial_payday = self.fetch_payday()
-        self.payday.charge_and_or_transfer(ts_start, self.janet, tips, total)
-        resulting_payday = self.fetch_payday()
-
-        assert initial_payday['ntippers'] == resulting_payday['ntippers']
-        assert initial_payday['ntips'] == resulting_payday['ntips']
-        assert initial_payday['nparticipants'] + 1 == resulting_payday['nparticipants']
-
-    @mock.patch('gittip.models.participant.Participant.get_tips_and_total')
-    @mock.patch('gittip.billing.payday.Payday.tip')
-    def test_charge_and_or_transfer(self, tip, get_tips_and_total):
-        self.db.run("""
-            UPDATE participants
-               SET balance=1
-             WHERE username='janet'
-        """)
-
-        ts_start = self.payday.start()
-        now = datetime.utcnow()
-        amount = D('1.00')
-        like_a_tip = {'amount': amount, 'tippee': 'mjallday', 'ctime': now,
-                      'claimed_time': now}
-
-        # success, success, claimed, failure
-        tips = [like_a_tip, like_a_tip, like_a_tip, like_a_tip]
-        total = amount
-
-        ts_start = datetime.utcnow()
-
-        return_values = [1, 1, 0, -1]
-        return_values.reverse()
-
-        def tip_return_values(*_):
-            return return_values.pop()
-
-        tip.side_effect = tip_return_values
-
-        initial_payday = self.fetch_payday()
-        self.payday.charge_and_or_transfer(ts_start, self.janet, tips, total)
-        resulting_payday = self.fetch_payday()
-
-        assert initial_payday['nparticipants'] + 1 == resulting_payday['nparticipants']
-
-    @mock.patch('gittip.models.participant.Participant.get_tips_and_total')
-    @mock.patch('gittip.billing.payday.Payday.charge')
-    def test_charge_and_or_transfer_short(self, charge, get_tips_and_total):
-        self.db.run("""
-            UPDATE participants
-               SET balance=1
-             WHERE username='janet'
-        """)
-
-        now = datetime.utcnow()
-        amount = D('1.00')
-        like_a_tip = {'amount': amount, 'tippee': 'mjallday', 'ctime': now,
-                      'claimed_time': now}
-
-        # success, success, claimed, failure
-        tips = [like_a_tip, like_a_tip, like_a_tip, like_a_tip]
-        get_tips_and_total.return_value = tips, amount
-
-        ts_start = datetime.utcnow()
-
-        # In real-life we wouldn't be able to catch an error as the charge
-        # method will swallow any errors and return false. We don't handle this
-        # return value within charge_and_or_transfer but instead continue on
-        # trying to use the remaining credit in the user's account to payout as
-        # many tips as possible.
-        #
-        # Here we're hacking the system and throwing the exception so execution
-        # stops since we're only testing this part of the method. That smells
-        # like we need to refactor.
-
-        charge.side_effect = Exception()
-        with self.assertRaises(Exception):
-            billing.charge_and_or_transfer(ts_start, self.janet)
-        assert charge.called_with(self.janet.username,
-                                  self.janet_href,
-                                  amount)
-
     @mock.patch('gittip.billing.payday.Payday.transfer')
     @mock.patch('gittip.billing.payday.log')
     def test_tip(self, log, transfer):
@@ -481,18 +385,6 @@ class TestBillingPayday(PaydayHarness):
 
         tip['amount'] = amount
 
-        # XXX: We should have constants to compare the values to
-        # not claimed
-        tip['claimed_time'] = None
-        result = self.payday.tip(self.janet, tip, ts_start)
-        assert result == 0
-
-        # XXX: We should have constants to compare the values to
-        # claimed after payday
-        tip['claimed_time'] = utcnow()
-        result = self.payday.tip(self.janet, tip, ts_start)
-        assert result == 0
-
         ts_start = utcnow()
 
         # XXX: We should have constants to compare the values to
@@ -502,21 +394,25 @@ class TestBillingPayday(PaydayHarness):
         assert result == -1
 
     @mock.patch('gittip.billing.payday.log')
-    def test_start_zero_out_and_get_participants(self, log):
+    def test_start_prepare_and_zero_out(self, log):
         self.clear_tables()
         self.make_participant('bob', balance=10, claimed_time=None, pending=1)
         self.make_participant('carl', balance=10, claimed_time='now', pending=1)
 
         ts_start = self.payday.start()
 
+        get_participants = lambda: self.db.all("SELECT * FROM pay_participants")
+
+        self.payday.prepare(ts_start)
         self.payday.zero_out_pending(ts_start)
-        participants = self.payday.get_participants(ts_start)
+
+        participants = get_participants()
 
         expected_logging_call_args = [
             ('Starting a new payday.'),
             ('Payday started at {}.'.format(ts_start)),
+            ('Prepared the DB.'),
             ('Zeroed out the pending column.'),
-            ('Fetched participants.'),
         ]
         expected_logging_call_args.reverse()
         for args, _ in log.call_args_list:
@@ -526,8 +422,9 @@ class TestBillingPayday(PaydayHarness):
 
         # run a second time, we should see it pick up the existing payday
         second_ts_start = self.payday.start()
+        self.payday.prepare(second_ts_start)
         self.payday.zero_out_pending(second_ts_start)
-        second_participants = self.payday.get_participants(second_ts_start)
+        second_participants = get_participants()
 
         assert ts_start == second_ts_start
         participants = list(participants)
@@ -540,8 +437,8 @@ class TestBillingPayday(PaydayHarness):
         expected_logging_call_args = [
             ('Picking up with an existing payday.'),
             ('Payday started at {}.'.format(second_ts_start)),
-            ('Zeroed out the pending column.'),
-            ('Fetched participants.')]
+            ('Prepared the DB.'),
+            ('Zeroed out the pending column.')]
         expected_logging_call_args.reverse()
         for args, _ in log.call_args_list:
             assert args[0] == expected_logging_call_args.pop()
@@ -717,17 +614,6 @@ class TestPachinko(Harness):
         Harness.setUp(self)
         self.payday = Payday(self.db)
 
-    def test_get_participants_gets_participants(self):
-        a_team = self.make_participant('a_team', claimed_time='now', number='plural', balance=20)
-        a_team.add_member(self.make_participant('alice', claimed_time='now'))
-        a_team.add_member(self.make_participant('bob', claimed_time='now'))
-
-        ts_start = self.payday.start()
-
-        actual = [p.username for p in self.payday.get_participants(ts_start)]
-        expected = ['a_team', 'alice', 'bob']
-        assert actual == expected
-
     def test_pachinko_pachinkos(self):
         a_team = self.make_participant('a_team', claimed_time='now', number='plural', balance=20, \
                                                                                          pending=0)
@@ -736,8 +622,8 @@ class TestPachinko(Harness):
 
         ts_start = self.payday.start()
 
-        participants = self.payday.genparticipants(ts_start, LOOP_PACHINKO)
-        self.payday.pachinko(ts_start, participants)
+        self.payday.prepare(ts_start)
+        self.payday.pachinko(ts_start)
 
         assert Participant.from_username('alice').pending == D('0.01')
         assert Participant.from_username('bob').pending == D('0.01')
@@ -751,8 +637,8 @@ class TestPachinko(Harness):
 
         ts_start = self.payday.start()
 
-        participants = self.payday.genparticipants(ts_start, LOOP_PACHINKO)
-        self.payday.pachinko(ts_start, participants)
+        self.payday.prepare(ts_start)
+        self.payday.pachinko(ts_start)
 
         assert Participant.from_username('alice').pending == D('1.00')
 
@@ -766,8 +652,8 @@ class TestPachinko(Harness):
         ts_start = self.payday.start()
         a_team.set_take_for(alice, D('1.00'), alice)
 
-        participants = self.payday.genparticipants(ts_start, LOOP_PACHINKO)
-        self.payday.pachinko(ts_start, participants)
+        self.payday.prepare(ts_start)
+        self.payday.pachinko(ts_start)
 
         assert Participant.from_username('alice').pending == D('0.33')
 
@@ -782,7 +668,7 @@ class TestPachinko(Harness):
         a_team.set_take_for(alice, D('1.00'), alice)
 
         for i in range(4):
-            participants = self.payday.genparticipants(ts_start, LOOP_PACHINKO)
-            self.payday.pachinko(ts_start, participants)
+            self.payday.prepare(ts_start)
+            self.payday.pachinko(ts_start)
 
         assert Participant.from_username('alice').pending == D('0.33')

@@ -25,7 +25,6 @@ import balanced
 import aspen.utils
 from aspen import log
 from aspen.utils import typecheck
-from gittip.models.participant import Participant
 from gittip.exceptions import NegativeBalance
 from psycopg2 import IntegrityError
 
@@ -84,9 +83,6 @@ class NoPayday(Exception):
         return "No payday found where one was expected."
 
 
-LOOP_PAYIN, LOOP_PACHINKO, LOOP_PAYOUT = range(3)
-
-
 class Payday(object):
     """Represent an abstract event during which money is moved.
 
@@ -103,33 +99,6 @@ class Payday(object):
         self.db = db
 
 
-    def genparticipants(self, ts_start, loop):
-        """Generator to yield participants with extra info.
-
-        The extra info varies depending on which loop we're in: tips/total for
-        payin and payout, takes for pachinko.
-
-        """
-        teams_only = (loop == LOOP_PACHINKO)
-        for participant in self.get_participants(ts_start, teams_only):
-            if loop == LOOP_PAYIN:
-                extra = participant.get_tips_and_total(for_payday=ts_start)
-            elif loop == LOOP_PACHINKO:
-                extra = participant.get_takes(for_payday=ts_start)
-            elif loop == LOOP_PAYOUT:
-
-                # On the payout loop we want to use the total obligations they
-                # have for next week, and if we pass a non-False for_payday to
-                # get_tips_and_total then we only get unfulfilled tips from
-                # prior to that timestamp, which is none of them by definition
-                # at this point since we just recently finished payin.
-
-                extra = participant.get_tips_and_total()
-            else:
-                raise Exception  # sanity check
-            yield(participant, extra)
-
-
     def run(self):
         """This is the starting point for payday.
 
@@ -143,13 +112,14 @@ class Payday(object):
         _start = aspen.utils.utcnow()
         log("Greetings, program! It's PAYDAY!!!!")
         ts_start = self.start()
+        self.prepare(ts_start)
         self.zero_out_pending(ts_start)
 
-        self.payin(ts_start, self.genparticipants(ts_start, loop=LOOP_PAYIN))
+        self.payin(ts_start)
         self.move_pending_to_balance_for_teams()
-        self.pachinko(ts_start, self.genparticipants(ts_start, loop=LOOP_PACHINKO))
+        self.pachinko(ts_start)
         self.clear_pending_to_balance()
-        self.payout(ts_start, self.genparticipants(ts_start, loop=LOOP_PAYOUT))
+        self.payout()
         self.update_stats(ts_start)
         self.update_receiving_amounts()
 
@@ -190,6 +160,88 @@ class Payday(object):
         return ts_start
 
 
+    def prepare(self, ts_start):
+        """Prepare the DB: we need temporary tables with indexes.
+        """
+        self.db.run("""
+
+        DROP TABLE IF EXISTS pay_participants CASCADE;
+        CREATE TEMPORARY TABLE pay_participants AS
+            SELECT username
+                 , claimed_time
+                 , number
+                 , is_suspicious
+                 , balance
+                 , balanced_customer_href
+                 , last_bill_result
+              FROM participants
+             WHERE is_suspicious IS NOT true
+               AND claimed_time < %(ts_start)s
+          ORDER BY claimed_time;
+
+        CREATE UNIQUE INDEX ON pay_participants (username);
+
+        DROP TABLE IF EXISTS pay_transfers CASCADE;
+        CREATE TEMPORARY TABLE pay_transfers AS
+            SELECT *
+              FROM transfers t
+             WHERE t.timestamp > %(ts_start)s;
+
+        DROP TABLE IF EXISTS pay_tips CASCADE;
+        CREATE TEMPORARY TABLE pay_tips AS
+            SELECT tipper, tippee, amount
+              FROM ( SELECT DISTINCT ON (tipper, tippee) *
+                       FROM tips
+                      WHERE mtime < %(ts_start)s
+                   ORDER BY tipper, tippee, mtime DESC
+                   ) t
+              JOIN pay_participants p ON p.username = t.tipper
+             WHERE t.amount > 0
+               AND t.tippee IN (SELECT username FROM pay_participants)
+               AND ( SELECT id
+                       FROM pay_transfers t2
+                      WHERE t.tipper = t2.tipper
+                        AND t.tippee = t2.tippee
+                        AND context = 'tip'
+                   ) IS NULL
+          ORDER BY p.claimed_time ASC, t.ctime ASC;
+
+        CREATE INDEX ON pay_tips (tipper);
+        CREATE INDEX ON pay_tips (tippee);
+
+        ALTER TABLE pay_participants ADD COLUMN giving_today numeric(35,2);
+        UPDATE pay_participants
+           SET giving_today = (
+                   SELECT sum(amount)
+                     FROM pay_tips
+                    WHERE tipper = username
+               );
+
+        DROP TABLE IF EXISTS pay_takes CASCADE;
+        CREATE TEMPORARY TABLE pay_takes AS
+            SELECT team, member, amount, ctime
+              FROM ( SELECT DISTINCT ON (team, member)
+                            team, member, amount, ctime
+                       FROM takes
+                      WHERE mtime < %(ts_start)s
+                   ORDER BY team, member, mtime DESC
+                   ) t
+             WHERE t.amount > 0
+               AND t.team IN (SELECT username FROM pay_participants)
+               AND t.member IN (SELECT username FROM pay_participants)
+               AND ( SELECT id
+                       FROM pay_transfers t2
+                      WHERE t.team = t2.tipper
+                        AND t.member = t2.tippee
+                        AND context = 'take'
+                   ) IS NULL;
+
+        CREATE INDEX ON pay_takes (team);
+
+        """, dict(ts_start=ts_start))
+        log('Prepared the DB.')
+
+
     def zero_out_pending(self, ts_start):
         """Given a timestamp, zero out the pending column.
 
@@ -211,38 +263,27 @@ class Payday(object):
         return None
 
 
-    def get_participants(self, ts_start, teams_only=False):
-        """Given a timestamp, return a list of participants dicts.
-        """
-        PARTICIPANTS = """\
-            SELECT participants.*::participants
-              FROM participants
-             WHERE claimed_time IS NOT NULL
-               AND claimed_time < %s
-               AND is_suspicious IS NOT true
-               {}
-          ORDER BY claimed_time ASC
-        """.format(teams_only and "AND number = 'plural'" or '')
-        participants = self.db.all(PARTICIPANTS, (ts_start,))
-        log("Fetched participants.")
-        return participants
-
-
-    def payin(self, ts_start, participants):
-        """Given a datetime and an iterator, do the payin side of Payday.
+    def payin(self, ts_start):
+        """Given a datetime, do the payin side of Payday.
         """
         i = 0
         log("Starting payin loop.")
-        for i, (participant, (tips, total)) in enumerate(participants, start=1):
+        participants = self.db.all("""
+            SELECT * FROM pay_participants WHERE giving_today > 0
+        """)
+        for i, participant in enumerate(participants, start=1):
             if i % 100 == 0:
                 log("Payin done for %d participants." % i)
-            self.charge_and_or_transfer(ts_start, participant, tips, total)
+            self.charge_and_or_transfer(ts_start, participant)
         log("Did payin for %d participants." % i)
 
 
-    def pachinko(self, ts_start, participants):
+    def pachinko(self, ts_start):
         i = 0
-        for i, (participant, takes) in enumerate(participants, start=1):
+        participants = self.db.all("""
+            SELECT * FROM pay_participants WHERE number = 'plural'
+        """)
+        for i, participant in enumerate(participants, start=1):
             if i % 100 == 0:
                 log("Pachinko done for %d participants." % i)
 
@@ -263,6 +304,10 @@ class Payday(object):
                         , pachinko=True
                          )
 
+            takes = self.db.all("""
+                SELECT * FROM pay_takes WHERE team = %s ORDER BY ctime DESC
+            """, (participant.username,), back_as=dict)
+
             for take in takes:
                 amount = min(take['amount'], available)
                 available -= amount
@@ -273,26 +318,30 @@ class Payday(object):
         log("Did pachinko for %d participants." % i)
 
 
-    def payout(self, ts_start, participants):
-        """Given a datetime and an iterator, do the payout side of Payday.
+    def payout(self):
+        """Do the payout side of Payday.
         """
         i = 0
         log("Starting payout loop.")
-        for i, (participant, (tips, total)) in enumerate(participants, start=1):
+        participants = self.db.all("""
+            SELECT p.*::participants FROM participants p WHERE balance > 0
+        """)
+        for i, participant in enumerate(participants, start=1):
             if i % 100 == 0:
                 log("Payout done for %d participants." % i)
-            self.ach_credit(ts_start, participant, tips, total)
+            withhold = participant.giving + participant.pledging
+            self.ach_credit(participant, withhold)
         log("Did payout for %d participants." % i)
 
 
-    def charge_and_or_transfer(self, ts_start, participant, tips, total):
+    def charge_and_or_transfer(self, ts_start, participant):
         """Given one participant record, pay their day.
 
         Charge each participants' credit card if needed before transfering
         money between Gittip accounts.
 
         """
-        short = total - participant.balance
+        short = participant.giving_today - participant.balance
         if short > 0:
 
             # The participant's Gittip account is short the amount needed to
@@ -304,6 +353,10 @@ class Payday(object):
 
             self.charge(participant, short)
 
+        tips = self.db.all("""
+            SELECT * FROM pay_tips WHERE tipper = %s
+        """, (participant.username,), back_as=dict)
+
         nsuccessful_tips = 0
         for tip in tips:
             result = self.tip(participant, tip, ts_start)
@@ -311,8 +364,6 @@ class Payday(object):
                 nsuccessful_tips += result
             else:
                 break
-
-        self.mark_participant()
 
 
     def move_pending_to_balance_for_teams(self):
@@ -401,6 +452,7 @@ class Payday(object):
                            SELECT tippee FROM our_transfers
                        ) AS foo
                    )
+                 , nparticipants = (SELECT count(*) FROM pay_participants)
                  , ntippers = (SELECT count(DISTINCT tipper) FROM our_transfers)
                  , ntips = (SELECT count(*) FROM our_tips)
                  , npachinko = (SELECT count(*) FROM our_pachinkos)
@@ -479,16 +531,6 @@ class Payday(object):
             # generates three entries. We are looking at the last entry here,
             # and it's zero.
 
-            return 0
-
-        claimed_time = tip['claimed_time']
-        if claimed_time is None or claimed_time > ts_start:
-
-            # Gittip is opt-in. We're only going to collect money on a person's
-            # behalf if they opted-in by claiming their account before the
-            # start of this payday.
-
-            log("SKIPPED: %s" % msg)
             return 0
 
         if not self.transfer(participant.username, tip['tippee'], \
@@ -584,7 +626,7 @@ class Payday(object):
         function and add it to amount to end up with charge_amount.
 
         """
-        typecheck(participant, Participant, amount, Decimal)
+        typecheck(amount, Decimal)
 
         username = participant.username
         balanced_customer_href = participant.balanced_customer_href
@@ -624,7 +666,7 @@ class Payday(object):
                            )
 
 
-    def ach_credit(self, ts_start, participant, tips, total, minimum_credit=MINIMUM_CREDIT):
+    def ach_credit(self, participant, total, minimum_credit=MINIMUM_CREDIT):
 
         # Compute the amount to credit them.
         # ==================================
@@ -907,17 +949,6 @@ class Payday(object):
 
             UPDATE paydays
                SET nach_failing = nach_failing + 1
-             WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
-         RETURNING id
-
-        """, default=NoPayday)
-
-
-    def mark_participant(self):
-        self.db.one("""\
-
-            UPDATE paydays
-               SET nparticipants = nparticipants + 1
              WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
          RETURNING id
 

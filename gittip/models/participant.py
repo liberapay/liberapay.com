@@ -291,11 +291,9 @@ class Participant(Model, MixinTeam):
         # Monkey-patch a couple methods, coopting them for callbacks, essentially.
         hack.mark_ach_failed = lambda cursor: None
 
-        hack.ach_credit( ts_start=None                  # not used
-                       , participant=self
-                       , tips=None                      # not used
-                       , total=Decimal('0.00')          # don't withold anything
-                       , minimum_credit=Decimal('0.00') # send it all
+        hack.ach_credit( self
+                       , Decimal('0.00') # don't withhold anything
+                       , Decimal('0.00') # send it all
                         ) # XXX Records the exchange using a different cursor. :-/
 
 
