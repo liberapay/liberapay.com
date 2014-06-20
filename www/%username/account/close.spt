@@ -17,8 +17,11 @@ if POST:
         pass    # User will get the "Try Again Later" message.
     else:
         disbursement_strategy = request.body.get('disbursement_strategy')
-        participant.close(disbursement_strategy)
-        request.redirect('/%s/' % participant.username)
+        if participant.balance and disbursement_strategy is None:
+            pass    # User will get the "Please choose a disbursement method" message.
+        else:
+            participant.close(disbursement_strategy)
+            request.redirect('/%s/' % participant.username)
 [---] text/html
 {% extends "templates/base.html" %}
 
@@ -150,4 +153,17 @@ if POST:
         </form>
         {% endif %}
     </div>
+{% endblock %}
+
+{% block scripts %}
+{% if not payday_is_running and POST %}
+    <script>
+        $(function () {
+            Gittip.notification(
+                'You still have money in this Gittip account, please ' +
+                'choose a disbursement method below or contact support.'
+            , 'error')
+        });
+    </script>
+{% endif %}
 {% endblock %}
