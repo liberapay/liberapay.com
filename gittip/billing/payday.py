@@ -654,14 +654,13 @@ class Payday(object):
                                          )
         charge_amount, fee, error = things
 
+        if error:
+            self.mark_charge_failed()
+
         amount = charge_amount - fee  # account for possible rounding under
                                       # charge_on_*
 
-        self.record_charge( amount
-                          , fee
-                          , error
-                          , username
-                           )
+        self.record_exchange('bill', amount, fee, error, participant)
 
 
     def ach_credit(self, participant, total, minimum_credit=MINIMUM_CREDIT):
@@ -733,8 +732,9 @@ class Payday(object):
 
         if error:
             log(msg + "failed: %s" % error)
+            self.mark_ach_failed()
 
-        self.record_credit(credit_amount, fee, error, participant)
+        self.record_exchange('ach', -credit_amount, fee, error, participant)
 
 
     def charge_on_balanced(self, username, balanced_customer_href, amount):
@@ -775,7 +775,7 @@ class Payday(object):
         upcharged   Decimal dollar equivalent to `cents'.
         fee         Decimal dollar amount of the fee portion of `upcharged'.
 
-        The latter two end up in the db in a couple places via record_charge.
+        The latter two end up in the db in a couple places via record_exchange.
 
         """
         also_log = ''
@@ -796,8 +796,17 @@ class Payday(object):
     # Record-keeping.
     # ===============
 
-    def record_charge(self, amount, fee, error, username):
+    def record_exchange(self, kind, amount, fee, error, participant):
         """Given a Bunch of Stuff, return None.
+
+        Records in the exchanges table have these characteristics:
+
+            amount  It's negative for credits (representing an outflow from
+                    Gittip to you) and positive for charges.
+                    The sign is how we differentiate the two in, e.g., the
+                    history page.
+
+            fee     The payment processor's fee. It's always positive.
 
         This function takes the result of an API call to a payment processor
         and records the result in our db. If the power goes out at this point
@@ -818,14 +827,12 @@ class Payday(object):
 
         """
 
+        username = participant.username
         with self.db.get_cursor() as cursor:
 
             if error:
-                last_bill_result = error
-                amount = Decimal('0.00')
-                self.mark_charge_failed(cursor)
+                amount = fee = Decimal('0.00')
             else:
-                last_bill_result = ''
                 EXCHANGE = """\
 
                         INSERT INTO exchanges
@@ -835,77 +842,26 @@ class Payday(object):
                 """
                 cursor.execute(EXCHANGE, (amount, fee, username))
 
-
-            # Update the participant's balance.
-            # =================================
-            # Credit card charges go immediately to balance, not to pending.
-
-            RESULT = """\
-
-            UPDATE participants
-               SET last_bill_result=%s
-                 , balance=(balance + %s)
-             WHERE username=%s
-
-            """
-            cursor.execute(RESULT, (last_bill_result, amount, username))
-
-
-    def record_credit(self, amount, fee, error, participant):
-        """Given a Bunch of Stuff, return None.
-
-        Records in the exchanges table for credits have these characteristics:
-
-            amount  It's negative, representing an outflow from Gittip to you.
-                    This is oppositive of charges, where amount is positive.
-                    The sign is how we differentiate the two in, e.g., the
-                    history page.
-
-            fee     It's positive, just like with charges.
-
-        """
-        username = participant.username
-        credit = -amount  # From Gittip's POV this is money flowing out of the
-                          # system.
-
-        with self.db.get_cursor() as cursor:
-
-            if error:
-                last_ach_result = error
-                credit = fee = Decimal('0.00')  # ensures balance won't change
-                self.mark_ach_failed(cursor)
-            else:
-                last_ach_result = ''
-                EXCHANGE = """\
-
-                        INSERT INTO exchanges
-                               (amount, fee, participant)
-                        VALUES (%s, %s, %s)
-
-                """
-                cursor.execute(EXCHANGE, (credit, fee, username))
-
-
             # Update the participant's balance.
             # =================================
 
             RESULT = """\
 
-            UPDATE participants
-               SET last_ach_result=%s
-                 , balance=(balance + %s)
-             WHERE username=%s
-         RETURNING balance
+                UPDATE participants
+                   SET last_{0}_result=%s
+                     , balance=(balance + %s)
+                 WHERE username=%s
+             RETURNING balance
 
-            """
-            balance = cursor.one(RESULT, ( last_ach_result
-                                         , credit - fee     # -10.00 - 0.30 = -10.30
-                                         , username
-                                          ))
+            """.format(kind)
+            if kind == 'ach':
+                amount -= fee
+            balance = cursor.one(RESULT, (error or '', amount, username))
             if balance < 0:
                 raise NegativeBalance
 
-        participant.set_attributes(balance=balance)
+        if hasattr(participant, 'set_attributes'):
+            participant.set_attributes(balance=balance)
 
 
     def record_transfer(self, cursor, tipper, tippee, amount, context):
@@ -929,21 +885,19 @@ class Payday(object):
         """, default=NoPayday)
 
 
-    def mark_charge_failed(self, cursor):
-        STATS = """\
+    def mark_charge_failed(self):
+        self.db.one("""\
 
             UPDATE paydays
                SET ncc_failing = ncc_failing + 1
              WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
          RETURNING id
 
-        """
-        cursor.execute(STATS)
-        assert cursor.fetchone() is not None
+        """, default=NoPayday)
 
 
-    def mark_ach_failed(self, cursor):
-        cursor.one("""\
+    def mark_ach_failed(self):
+        self.db.one("""\
 
             UPDATE paydays
                SET nach_failing = nach_failing + 1

@@ -234,8 +234,7 @@ class TestBillingCharges(PaydayHarness):
         before = self.fetch_payday()
         fail_count = before['ncc_failing']
 
-        with self.db.get_cursor() as cursor:
-            self.payday.mark_charge_failed(cursor)
+        self.payday.mark_charge_failed()
 
         after = self.fetch_payday()
         assert after['ncc_failing'] == fail_count + 1
@@ -574,33 +573,36 @@ class TestBillingTransfer(PaydayHarness):
                                            , 'tip'
                                             )
 
-    def test_record_credit_updates_balance(self):
+    def test_record_exchange_updates_balance(self):
         alice = Participant.from_username('alice')
-        self.payday.record_credit( amount=D("-1.00")
-                                 , fee=D("0.41")
-                                 , error=""
-                                 , participant=alice
-                                  )
+        self.payday.record_exchange( 'bill'
+                                   , amount=D("0.59")
+                                   , fee=D("0.41")
+                                   , error=""
+                                   , participant=alice
+                                    )
         alice = Participant.from_username('alice')
         assert alice.balance == D("0.59")
 
-    def test_record_credit_fails_if_negative_balance(self):
+    def test_record_exchange_fails_if_negative_balance(self):
         alice = Participant.from_username('alice')
         pytest.raises( NegativeBalance
-                     , self.payday.record_credit
-                     , amount=D("10.00")
+                     , self.payday.record_exchange
+                     , 'ach'
+                     , amount=D("-10.00")
                      , fee=D("0.41")
                      , error=""
                      , participant=alice
                       )
 
-    def test_record_credit_doesnt_update_balance_if_error(self):
+    def test_record_exchange_doesnt_update_balance_if_error(self):
         alice = Participant.from_username('alice')
-        self.payday.record_credit( amount=D("-1.00")
-                                 , fee=D("0.41")
-                                 , error="SOME ERROR"
-                                 , participant=alice
-                                  )
+        self.payday.record_exchange( 'bill'
+                                   , amount=D("1.00")
+                                   , fee=D("0.41")
+                                   , error="SOME ERROR"
+                                   , participant=alice
+                                    )
         alice = Participant.from_username('alice')
         assert alice.balance == D("0.00")
 
