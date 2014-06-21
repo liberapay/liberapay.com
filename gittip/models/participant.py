@@ -275,15 +275,7 @@ class Participant(Model, MixinTeam):
             self.update_is_closed(True, cursor)
 
 
-    class NotWhitelisted(Exception): pass
-    class NoBalancedCustomerHref(Exception): pass
-
     def withdraw_balance_to_bank_account(self, cursor):
-        if self.is_suspicious in (True, None):
-            raise self.NotWhitelisted
-        if self.balanced_customer_href is None:
-            raise self.NoBalancedCustomerHref
-
         from gittip.billing.payday import Payday
         hack = Payday(self.db)  # Our payout code is on the Payday object. Rather than
                                 # refactor right now, let's just use it from there.
