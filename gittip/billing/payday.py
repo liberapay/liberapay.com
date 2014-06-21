@@ -665,7 +665,7 @@ class Payday(object):
         self.record_exchange('bill', amount, fee, error, participant)
 
 
-    def ach_credit(self, participant, total, minimum_credit=MINIMUM_CREDIT):
+    def ach_credit(self, participant, withhold, minimum_credit=MINIMUM_CREDIT):
 
         # Compute the amount to credit them.
         # ==================================
@@ -674,7 +674,7 @@ class Payday(object):
 
         balance = participant.balance
         assert balance is not None, balance # sanity check
-        amount = balance - total
+        amount = balance - withhold
 
         # Do some last-minute checks.
         # ===========================
@@ -684,9 +684,9 @@ class Payday(object):
 
         if amount < minimum_credit:
             also_log = ""
-            if total > 0:
+            if withhold > 0:
                 also_log = " ($%s balance - $%s in obligations)"
-                also_log %= (balance, total)
+                also_log %= (balance, withhold)
             log("Minimum payout is $%s. %s is only due $%s%s."
                % (minimum_credit, participant.username, amount, also_log))
             return      # Participant owed too little.
@@ -701,9 +701,9 @@ class Payday(object):
         credit_amount, fee = skim_credit(amount)
         cents = credit_amount * 100
 
-        if total > 0:
+        if withhold > 0:
             also_log = "$%s balance - $%s in obligations"
-            also_log %= (balance, total)
+            also_log %= (balance, withhold)
         else:
             also_log = "$%s" % amount
         msg = "Crediting %s %d cents (%s - $%s fee = $%s) on Balanced ... "
