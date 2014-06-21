@@ -122,9 +122,17 @@ Gittip.profile.init = function() {
     $('form.goal').submit(function(e) {
         e.preventDefault();
 
-        $('.goal button.save').text('Saving ...');
-
         var goal = $('input[name=goal]:checked');
+
+        if(goal.val() === '-1') {
+            var r = confirm(
+                'Warning: Doing this will remove all the tips you are currently receiving.\n\n'+
+                'That cannot be undone!'
+            );
+            if(!r) return;
+        }
+
+        $('.goal button.save').text('Saving ...');
 
         function success(d) {
             var label = $('label[for=' + goal.attr('id') + ']');
