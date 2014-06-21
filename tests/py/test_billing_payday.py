@@ -365,9 +365,8 @@ class TestBillingPayday(PaydayHarness):
               , 'tippee': 'janet'
               , 'claimed_time': utcnow()
                }
-        ts_start = utcnow()
 
-        result = self.payday.tip(self.janet, tip, ts_start)
+        result = self.payday.tip(self.janet, tip)
         assert result == 1
         result = transfer.called_with('janet', tip['tippee'], tip['amount'])
         assert result
@@ -380,17 +379,15 @@ class TestBillingPayday(PaydayHarness):
         # XXX: We should have constants to compare the values to
         # invalid amount
         tip['amount'] = invalid_amount
-        result = self.payday.tip(self.janet, tip, ts_start)
+        result = self.payday.tip(self.janet, tip)
         assert result == 0
 
         tip['amount'] = amount
 
-        ts_start = utcnow()
-
         # XXX: We should have constants to compare the values to
         # transfer failed
         transfer.return_value = False
-        result = self.payday.tip(self.janet, tip, ts_start)
+        result = self.payday.tip(self.janet, tip)
         assert result == -1
 
     @mock.patch('gittip.billing.payday.log')
@@ -623,7 +620,7 @@ class TestPachinko(Harness):
         ts_start = self.payday.start()
 
         self.payday.prepare(ts_start)
-        self.payday.pachinko(ts_start)
+        self.payday.pachinko()
 
         assert Participant.from_username('alice').pending == D('0.01')
         assert Participant.from_username('bob').pending == D('0.01')
@@ -638,7 +635,7 @@ class TestPachinko(Harness):
         ts_start = self.payday.start()
 
         self.payday.prepare(ts_start)
-        self.payday.pachinko(ts_start)
+        self.payday.pachinko()
 
         assert Participant.from_username('alice').pending == D('1.00')
 
@@ -653,7 +650,7 @@ class TestPachinko(Harness):
         a_team.set_take_for(alice, D('1.00'), alice)
 
         self.payday.prepare(ts_start)
-        self.payday.pachinko(ts_start)
+        self.payday.pachinko()
 
         assert Participant.from_username('alice').pending == D('0.33')
 
@@ -669,6 +666,6 @@ class TestPachinko(Harness):
 
         for i in range(4):
             self.payday.prepare(ts_start)
-            self.payday.pachinko(ts_start)
+            self.payday.pachinko()
 
         assert Participant.from_username('alice').pending == D('0.33')

@@ -115,9 +115,9 @@ class Payday(object):
         self.prepare(ts_start)
         self.zero_out_pending(ts_start)
 
-        self.payin(ts_start)
+        self.payin()
         self.move_pending_to_balance_for_teams()
-        self.pachinko(ts_start)
+        self.pachinko()
         self.clear_pending_to_balance()
         self.payout()
         self.update_stats(ts_start)
@@ -263,8 +263,8 @@ class Payday(object):
         return None
 
 
-    def payin(self, ts_start):
-        """Given a datetime, do the payin side of Payday.
+    def payin(self):
+        """Do the payin side of Payday.
         """
         i = 0
         log("Starting payin loop.")
@@ -274,11 +274,11 @@ class Payday(object):
         for i, participant in enumerate(participants, start=1):
             if i % 100 == 0:
                 log("Payin done for %d participants." % i)
-            self.charge_and_or_transfer(ts_start, participant)
+            self.charge_and_or_transfer(participant)
         log("Did payin for %d participants." % i)
 
 
-    def pachinko(self, ts_start):
+    def pachinko(self):
         i = 0
         participants = self.db.all("""
             SELECT * FROM pay_participants WHERE number = 'plural'
@@ -297,10 +297,8 @@ class Payday(object):
                 tip['tipper'] = participant.username
                 tip['tippee'] = tippee
                 tip['amount'] = amount
-                tip['claimed_time'] = ts_start
                 self.tip( participant
                         , tip
-                        , ts_start
                         , pachinko=True
                          )
 
@@ -334,7 +332,7 @@ class Payday(object):
         log("Did payout for %d participants." % i)
 
 
-    def charge_and_or_transfer(self, ts_start, participant):
+    def charge_and_or_transfer(self, participant):
         """Given one participant record, pay their day.
 
         Charge each participants' credit card if needed before transfering
@@ -359,7 +357,7 @@ class Payday(object):
 
         nsuccessful_tips = 0
         for tip in tips:
-            result = self.tip(participant, tip, ts_start)
+            result = self.tip(participant, tip)
             if result >= 0:
                 nsuccessful_tips += result
             else:
@@ -507,7 +505,7 @@ class Payday(object):
     # Move money between Gittip participants.
     # =======================================
 
-    def tip(self, participant, tip, ts_start, pachinko=False):
+    def tip(self, participant, tip, pachinko=False):
         """Given dict, dict, and datetime, log and return int.
 
         Return values:
