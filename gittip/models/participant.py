@@ -550,7 +550,10 @@ class Participant(Model, MixinTeam):
             c.one( "UPDATE participants SET goal=%s WHERE username=%s RETURNING id"
                  , (goal, self.username)
                   )
-        self.set_attributes(goal=goal)
+            self.set_attributes(goal=goal)
+            if not self.accepts_tips:
+                self.clear_tips_receiving(c)
+                self.update_receiving(c)
 
     def update_is_closed(self, is_closed, cursor=None):
         ctx = None
