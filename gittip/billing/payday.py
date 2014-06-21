@@ -328,7 +328,9 @@ class Payday(object):
             if i % 100 == 0:
                 log("Payout done for %d participants." % i)
             withhold = participant.giving + participant.pledging
-            self.ach_credit(participant, withhold)
+            error = self.ach_credit(participant, withhold)
+            if error:
+                self.mark_ach_failed()
         log("Did payout for %d participants." % i)
 
 
@@ -732,9 +734,9 @@ class Payday(object):
 
         if error:
             log(msg + "failed: %s" % error)
-            self.mark_ach_failed()
 
         self.record_exchange('ach', -credit_amount, fee, error, participant)
+        return error
 
 
     def charge_on_balanced(self, username, balanced_customer_href, amount):

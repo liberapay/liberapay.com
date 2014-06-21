@@ -288,9 +288,6 @@ class Participant(Model, MixinTeam):
         hack = Payday(self.db)  # Our payout code is on the Payday object. Rather than
                                 # refactor right now, let's just use it from there.
 
-        # Monkey-patch a couple methods, coopting them for callbacks, essentially.
-        hack.mark_ach_failed = lambda cursor: None
-
         hack.ach_credit( self
                        , Decimal('0.00') # don't withhold anything
                        , Decimal('0.00') # send it all
