@@ -63,21 +63,6 @@ def skim_credit(amount):
 assert upcharge(MINIMUM_CHARGE) == (Decimal('10.00'), Decimal('0.59'))
 
 
-def is_whitelisted(participant):
-    """Given a dict, return bool, possibly logging.
-
-    We only perform credit card charges and bank deposits for whitelisted
-    participants. We don't even include is_suspicious participants in the
-    initial SELECT, so we should never see one here.
-
-    """
-    assert participant.is_suspicious is not True, participant.username
-    if participant.is_suspicious is None:
-        log("UNREVIEWED: %s" % participant.username)
-        return False
-    return True
-
-
 class NoPayday(Exception):
     def __str__(self):
         return "No payday found where one was expected."
@@ -357,7 +342,15 @@ class Payday(object):
             # at least *some* tips. The charge method will have set
             # last_bill_result to a non-empty string if the card did fail.
 
-            self.charge(participant, short)
+            try:
+                error = self.charge(participant, short)
+                if error:
+                    self.mark_charge_failed()
+            except NoBalancedCustomerHref:
+                self.mark_missing_funding()
+            except NotWhitelisted:
+                if participant.is_suspicious is None:
+                    log("UNREVIEWED: %s" % participant.username)
 
         tips = self.db.all("""
             SELECT * FROM pay_tips WHERE tipper = %s
@@ -646,11 +639,10 @@ class Payday(object):
         # ================================
 
         if balanced_customer_href is None:
-            self.mark_missing_funding()
-            return      # Participant has no funding source.
+            raise NoBalancedCustomerHref  # Participant has no funding source.
 
-        if not is_whitelisted(participant):
-            return      # Participant not trusted.
+        if participant.is_suspicious is not False:
+            raise NotWhitelisted  # Participant not trusted.
 
 
         # Go to Balanced.
@@ -661,9 +653,6 @@ class Payday(object):
                                         , amount
                                          )
         charge_amount, fee, error = things
-
-        if error:
-            self.mark_charge_failed()
 
         amount = charge_amount - fee  # account for possible rounding under
                                       # charge_on_*
