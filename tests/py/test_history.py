@@ -11,7 +11,7 @@ from gittip.utils.history import iter_payday_events
 class TestHistory(Harness):
 
     def test_iter_payday_events(self):
-        Payday(self.db).run()
+        Payday.start().run()
         team = self.make_participant('team', number='plural', claimed_time='now', balance=10000)
         alice = self.make_participant('alice', claimed_time='now', balance=5000)
         self.db.run("""
@@ -29,7 +29,7 @@ class TestHistory(Harness):
 
         assert bob.balance == 0
         for i in range(2):
-            Payday(self.db).run()
+            Payday.start().run()
             self.db.run("""
                 UPDATE paydays
                    SET ts_start = ts_start - interval '1 week'
@@ -40,7 +40,7 @@ class TestHistory(Harness):
         bob = Participant.from_id(bob.id)
         assert bob.balance == 12
 
-        Payday(self.db).start()
+        Payday().start()
         events = list(iter_payday_events(self.db, bob))
         assert len(events) == 8
         assert events[0]['kind'] == 'day-open'

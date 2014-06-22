@@ -18,20 +18,20 @@ class PaydayHarness(BalancedHarness):
 
     def setUp(self):
         BalancedHarness.setUp(self)
-        self.payday = Payday(self.db)
         self.alice = self.make_participant('alice', claimed_time='now')
+        self.payday = Payday.start()
 
     def fetch_payday(self):
         return self.db.one("SELECT * FROM paydays", back_as=dict)
 
 
-class TestPayday(PaydayHarness):
+class TestPayday(BalancedHarness):
 
     @mock.patch('gittip.billing.exchanges.charge_on_balanced')
     def test_payday_moves_money(self, charge_on_balanced):
         charge_on_balanced.return_value = (D('10.00'), D('0.68'), "")
         self.janet.set_tip_to(self.homer, '6.00')  # under $10!
-        self.payday.run()
+        Payday.start().run()
 
         janet = Participant.from_username('janet')
         homer = Participant.from_username('homer')
@@ -48,7 +48,7 @@ class TestPayday(PaydayHarness):
              WHERE username = 'janet'
         """)
         self.janet.set_tip_to(self.homer, '6.00')  # under $10!
-        self.payday.run()
+        Payday.start().run()
 
         janet = Participant.from_username('janet')
         homer = Participant.from_username('homer')
@@ -65,7 +65,7 @@ class TestPayday(PaydayHarness):
              WHERE username = 'homer'
         """)
         self.janet.set_tip_to(self.homer, '6.00')  # under $10!
-        self.payday.run()
+        Payday.start().run()
 
         janet = Participant.from_username('janet')
         homer = Participant.from_username('homer')
@@ -75,7 +75,7 @@ class TestPayday(PaydayHarness):
 
     def test_payday_moves_money_with_balanced(self):
         self.janet.set_tip_to(self.homer, '15.00')
-        self.payday.run()
+        Payday.start().run()
 
         janet = Participant.from_username('janet')
         homer = Participant.from_username('homer')
@@ -100,7 +100,6 @@ class TestPayday(PaydayHarness):
 class TestBillingCharges(PaydayHarness):
 
     def test_mark_missing_funding(self):
-        self.payday.start()
         before = self.fetch_payday()
         missing_count = before['ncc_missing']
 
@@ -110,7 +109,6 @@ class TestBillingCharges(PaydayHarness):
         assert after['ncc_missing'] == missing_count + 1
 
     def test_mark_charge_failed(self):
-        self.payday.start()
         before = self.fetch_payday()
         fail_count = before['ncc_failing']
 
@@ -201,12 +199,13 @@ class TestBillingPayday(PaydayHarness):
         self.make_participant('bob', balance=10, claimed_time=None, pending=1)
         self.make_participant('carl', balance=10, claimed_time='now', pending=1)
 
-        ts_start = self.payday.start()
+        payday = Payday.start()
+        ts_start = payday.ts_start
 
         get_participants = lambda: self.db.all("SELECT * FROM pay_participants")
 
-        self.payday.prepare(ts_start)
-        self.payday.zero_out_pending(ts_start)
+        payday.prepare()
+        payday.zero_out_pending()
 
         participants = get_participants()
 
@@ -223,9 +222,10 @@ class TestBillingPayday(PaydayHarness):
         log.reset_mock()
 
         # run a second time, we should see it pick up the existing payday
-        second_ts_start = self.payday.start()
-        self.payday.prepare(second_ts_start)
-        self.payday.zero_out_pending(second_ts_start)
+        payday = Payday.start()
+        second_ts_start = payday.ts_start
+        payday.prepare()
+        payday.zero_out_pending()
         second_participants = get_participants()
 
         assert ts_start == second_ts_start
@@ -247,7 +247,6 @@ class TestBillingPayday(PaydayHarness):
 
     @mock.patch('gittip.billing.payday.log')
     def test_end(self, log):
-        self.payday.start()
         self.payday.end()
         assert log.called_with('Finished payday.')
 
@@ -258,26 +257,21 @@ class TestBillingPayday(PaydayHarness):
         assert result == 1
 
     @mock.patch('gittip.billing.payday.log')
-    @mock.patch('gittip.billing.payday.Payday.start')
     @mock.patch('gittip.billing.payday.Payday.payin')
     @mock.patch('gittip.billing.payday.Payday.end')
-    def test_payday(self, end, payin, init, log):
-        ts_start = utcnow()
-        init.return_value = (ts_start,)
+    def test_payday(self, end, payin, log):
         greeting = 'Greetings, program! It\'s PAYDAY!!!!'
 
         self.payday.run()
 
         assert log.called_with(greeting)
-        assert init.call_count
-        assert payin.called_with(init.return_value)
-        assert end.call_count
+        assert payin.call_count == 1
+        assert end.call_count == 1
 
 
 class TestBillingTransfer(PaydayHarness):
     def setUp(self):
         PaydayHarness.setUp(self)
-        self.payday.start()
         self.tipper = self.make_participant('lgtest')
 
     def test_transfer(self):
@@ -378,20 +372,15 @@ class TestBillingTransfer(PaydayHarness):
 
 class TestPachinko(Harness):
 
-    def setUp(self):
-        Harness.setUp(self)
-        self.payday = Payday(self.db)
-
     def test_pachinko_pachinkos(self):
         a_team = self.make_participant('a_team', claimed_time='now', number='plural', balance=20, \
                                                                                          pending=0)
         a_team.add_member(self.make_participant('alice', claimed_time='now', balance=0, pending=0))
         a_team.add_member(self.make_participant('bob', claimed_time='now', balance=0, pending=0))
 
-        ts_start = self.payday.start()
-
-        self.payday.prepare(ts_start)
-        self.payday.pachinko()
+        payday = Payday.start()
+        payday.prepare()
+        payday.pachinko()
 
         assert Participant.from_username('alice').pending == D('0.01')
         assert Participant.from_username('bob').pending == D('0.01')
@@ -403,10 +392,9 @@ class TestPachinko(Harness):
         a_team.add_member(alice)
         a_team.set_take_for(alice, D('1.00'), alice)
 
-        ts_start = self.payday.start()
-
-        self.payday.prepare(ts_start)
-        self.payday.pachinko()
+        payday = Payday.start()
+        payday.prepare()
+        payday.pachinko()
 
         assert Participant.from_username('alice').pending == D('1.00')
 
@@ -417,11 +405,12 @@ class TestPachinko(Harness):
         a_team.add_member(alice)
         a_team.set_take_for(alice, D('0.33'), alice)
 
-        ts_start = self.payday.start()
+        payday = Payday.start()
+
         a_team.set_take_for(alice, D('1.00'), alice)
 
-        self.payday.prepare(ts_start)
-        self.payday.pachinko()
+        payday.prepare()
+        payday.pachinko()
 
         assert Participant.from_username('alice').pending == D('0.33')
 
@@ -432,11 +421,12 @@ class TestPachinko(Harness):
         a_team.add_member(alice)
         a_team.set_take_for(alice, D('0.33'), alice)
 
-        ts_start = self.payday.start()
+        payday = Payday.start()
+
         a_team.set_take_for(alice, D('1.00'), alice)
 
         for i in range(4):
-            self.payday.prepare(ts_start)
-            self.payday.pachinko()
+            payday.prepare()
+            payday.pachinko()
 
         assert Participant.from_username('alice').pending == D('0.33')

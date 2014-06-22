@@ -40,7 +40,7 @@ class TestClosing(Harness):
         assert 'Personal Information' in body
 
     def test_close_page_is_not_available_during_payday(self):
-        Payday(self.db).start()
+        Payday.start()
         self.make_participant('alice', claimed_time='now')
         body = self.client.GET('/alice/account/close', auth_as='alice').body
         assert 'Personal Information' not in body
@@ -59,7 +59,7 @@ class TestClosing(Harness):
         assert Participant.from_username('bob').balance == 7
 
     def test_cant_post_to_close_page_during_payday(self):
-        Payday(self.db).start()
+        Payday.start()
         self.make_participant('alice', claimed_time='now')
         body = self.client.POST('/alice/account/close', auth_as='alice').body
         assert 'Try Again Later' in body

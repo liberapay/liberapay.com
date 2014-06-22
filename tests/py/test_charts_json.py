@@ -29,7 +29,7 @@ class Tests(Harness):
         self.bob.set_tip_to(self.carl, '2.00')
 
     def run_payday(self):
-        Payday(self.db).run()
+        Payday.start().run()
 
 
     def test_no_payday_returns_empty_list(self):
