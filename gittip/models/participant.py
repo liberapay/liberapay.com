@@ -30,6 +30,7 @@ from gittip.exceptions import (
     NoSelfTipping,
     NoTippee,
     BadAmount,
+    UserDoesntAcceptTips,
 )
 
 from gittip.models import add_event
@@ -550,7 +551,10 @@ class Participant(Model, MixinTeam):
             c.one( "UPDATE participants SET goal=%s WHERE username=%s RETURNING id"
                  , (goal, self.username)
                   )
-        self.set_attributes(goal=goal)
+            self.set_attributes(goal=goal)
+            if not self.accepts_tips:
+                self.clear_tips_receiving(c)
+                self.update_receiving(c)
 
     def update_is_closed(self, is_closed, cursor=None):
         ctx = None
@@ -655,6 +659,9 @@ class Participant(Model, MixinTeam):
         max_tip = gittip.MAX_TIP_PLURAL if tippee.IS_PLURAL else gittip.MAX_TIP_SINGULAR
         if (amount < gittip.MIN_TIP) or (amount > max_tip):
             raise BadAmount
+
+        if not tippee.accepts_tips and amount != 0:
+            raise UserDoesntAcceptTips
 
         # Insert tip
         NEW_TIP = """\

@@ -55,3 +55,15 @@ class TestTipJson(Harness):
                                     )
         assert "bad amount" in response.body
         assert response.code == 400
+
+    def test_set_tip_to_patron(self):
+        now = utcnow()
+        self.make_participant("alice", claimed_time=now, goal='-1')
+        self.make_participant("bob", claimed_time=now)
+
+        response = self.client.PxST( "/alice/tip.json"
+                                   , {'amount': "10.00"}
+                                   , auth_as='bob'
+                                    )
+        assert "user doesn't accept tips" in response.body
+        assert response.code == 400
