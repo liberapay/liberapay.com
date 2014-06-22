@@ -4,11 +4,10 @@ from decimal import Decimal as D
 
 import balanced
 import mock
-import pytest
 from psycopg2 import IntegrityError
 
-from aspen.utils import typecheck, utcnow
-from gittip.billing.payday import Payday, skim_credit
+from aspen.utils import utcnow
+from gittip.billing.payday import Payday
 from gittip.exceptions import NegativeBalance
 from gittip.models.participant import Participant
 from gittip.testing import Harness
@@ -26,66 +25,9 @@ class PaydayHarness(BalancedHarness):
         return self.db.one("SELECT * FROM paydays", back_as=dict)
 
 
-class TestPaydayCharge(PaydayHarness):
+class TestPayday(PaydayHarness):
 
-    def get_numbers(self):
-        """Return a list of 11 ints:
-
-            nachs
-            nach_failing
-            nactive
-            ncc_failing
-            ncc_missing
-            ncharges
-            npachinko
-            nparticipants
-            ntippers
-            ntips
-            ntransfers
-
-        """
-        payday = self.fetch_payday()
-        keys = [key for key in sorted(payday) if key.startswith('n')]
-        return [payday[key] for key in keys]
-
-    def test_charge_without_cc_details_returns_None(self):
-        self.payday.start()
-        actual = self.payday.charge(self.alice, D('1.00'))
-        assert actual is None
-
-    def test_charge_without_cc_marked_as_failure(self):
-        self.payday.start()
-        self.payday.charge(self.alice, D('1.00'))
-        actual = self.get_numbers()
-        assert actual == [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0]
-
-    @mock.patch('gittip.billing.payday.Payday.charge_on_balanced')
-    def test_charge_failure_returns_None(self, cob):
-        cob.return_value = (D('10.00'), D('0.68'), 'FAILED')
-        self.payday.start()
-        actual = self.payday.charge(self.janet, D('1.00'))
-        assert actual is None
-
-    @mock.patch('gittip.billing.payday.Payday.charge_on_balanced')
-    def test_charge_success_returns_None(self, charge_on_balanced):
-        charge_on_balanced.return_value = (D('10.00'), D('0.68'), "")
-        self.payday.start()
-        actual = self.payday.charge(self.janet, D('1.00'))
-        assert actual is None
-
-    @mock.patch('gittip.billing.payday.Payday.charge_on_balanced')
-    def test_charge_success_updates_participant(self, cob):
-        cob.return_value = (D('10.00'), D('0.68'), "")
-        self.payday.start()
-        self.payday.charge(self.janet, D('1.00'))
-
-        janet = Participant.from_username('janet')
-        expected = {'balance': D('9.32'), 'last_bill_result': ''}
-        actual = {'balance': janet.balance,
-                  'last_bill_result': janet.last_bill_result}
-        assert actual == expected
-
-    @mock.patch('gittip.billing.payday.Payday.charge_on_balanced')
+    @mock.patch('gittip.billing.exchanges.charge_on_balanced')
     def test_payday_moves_money(self, charge_on_balanced):
         charge_on_balanced.return_value = (D('10.00'), D('0.68'), "")
         self.janet.set_tip_to(self.homer, '6.00')  # under $10!
@@ -97,7 +39,7 @@ class TestPaydayCharge(PaydayHarness):
         assert homer.balance == D('6.00')
         assert janet.balance == D('3.32')
 
-    @mock.patch('gittip.billing.payday.Payday.charge_on_balanced')
+    @mock.patch('gittip.billing.exchanges.charge_on_balanced')
     def test_payday_doesnt_move_money_from_a_suspicious_account(self, charge_on_balanced):
         charge_on_balanced.return_value = (D('10.00'), D('0.68'), "")
         self.db.run("""
@@ -114,7 +56,7 @@ class TestPaydayCharge(PaydayHarness):
         assert janet.balance == D('0.00')
         assert homer.balance == D('0.00')
 
-    @mock.patch('gittip.billing.payday.Payday.charge_on_balanced')
+    @mock.patch('gittip.billing.exchanges.charge_on_balanced')
     def test_payday_doesnt_move_money_to_a_suspicious_account(self, charge_on_balanced):
         charge_on_balanced.return_value = (D('10.00'), D('0.68'), "")
         self.db.run("""
@@ -145,76 +87,14 @@ class TestPaydayCharge(PaydayHarness):
         homer_customer = balanced.Customer.fetch(homer.balanced_customer_href)
 
         homer_credits = homer_customer.credits.all()
-        assert len(homer_credits) == 1
+        assert len(homer_credits) >= 1
         assert homer_credits[0].amount == 1500
         assert homer_credits[0].description == 'homer'
 
         janet_debits = janet_customer.debits.all()
-        assert len(janet_debits) == 1
+        assert len(janet_debits) >= 1
         assert janet_debits[0].amount == 1576  # base amount + fee
         assert janet_debits[0].description == 'janet'
-
-
-class TestPaydayChargeOnBalanced(PaydayHarness):
-
-    def test_charge_on_balanced(self):
-        actual = self.payday.charge_on_balanced( 'janet'
-                                               , self.janet_href
-                                               , D('10.00') # $10.00 USD
-                                                )
-        assert actual == (D('10.61'), D('0.61'), '')
-
-    def test_charge_on_balanced_small_amount(self):
-        actual = self.payday.charge_on_balanced( 'janet'
-                                               , self.janet_href
-                                               , D('0.06')  # $0.06 USD
-                                                )
-        assert actual == (D('10.00'), D('0.59'), '')
-
-    def test_charge_on_balanced_failure(self):
-        customer_with_bad_card = self.make_balanced_customer()
-        card = balanced.Card(
-            number='4444444444444448',
-            expiration_year=2020,
-            expiration_month=12
-        ).save()
-        card.associate_to_customer(customer_with_bad_card)
-
-        actual = self.payday.charge_on_balanced( 'whatever username'
-                                               , customer_with_bad_card
-                                               , D('10.00')
-                                                )
-        assert actual == (D('10.61'), D('0.61'), '402 Client Error: PAYMENT REQUIRED')
-
-    def test_charge_on_balanced_handles_MultipleFoundError(self):
-        customer_href = self.make_balanced_customer()
-        card = balanced.Card(
-            number='4242424242424242',
-            expiration_year=2020,
-            expiration_month=12
-        ).save()
-        card.associate_to_customer(customer_href)
-
-        card = balanced.Card(
-            number='4242424242424242',
-            expiration_year=2030,
-            expiration_month=12
-        ).save()
-        card.associate_to_customer(customer_href)
-
-        actual = self.payday.charge_on_balanced( 'whatever username'
-                                               , customer_href
-                                               , D('10.00')
-                                                )
-        assert actual == (D('10.61'), D('0.61'), 'MultipleResultsFound()')
-
-    def test_charge_on_balanced_handles_NotFoundError(self):
-        customer_with_no_card = self.make_balanced_customer()
-        actual = self.payday.charge_on_balanced( 'whatever username'
-                                               , customer_with_no_card
-                                               , D('10.00')
-                                                )
-        assert actual == (D('10.61'), D('0.61'), 'NoResultFound()')
 
 
 class TestBillingCharges(PaydayHarness):
@@ -238,80 +118,6 @@ class TestBillingCharges(PaydayHarness):
 
         after = self.fetch_payday()
         assert after['ncc_failing'] == fail_count + 1
-
-
-class TestPrepHit(PaydayHarness):
-
-    def prep(self, amount):
-        """Given a dollar amount as a string, return a 3-tuple.
-
-        The return tuple is like the one returned from _prep_hit, but with the
-        second value, a log message, removed.
-
-        """
-        typecheck(amount, unicode)
-        out = list(self.payday._prep_hit(D(amount)))
-        out = [out[0]] + out[2:]
-        return tuple(out)
-
-    def test_prep_hit_basically_works(self):
-        actual = self.payday._prep_hit(D('20.00'))
-        expected = (2091,
-                    u'Charging %s 2091 cents ($20.00 + $0.91 fee = $20.91) on %s ' u'... ',
-                    D('20.91'), D('0.91'))
-        assert actual == expected
-
-    def test_prep_hit_full_in_rounded_case(self):
-        actual = self.payday._prep_hit(D('5.00'))
-        expected = (1000,
-                    u'Charging %s 1000 cents ($9.41 [rounded up from $5.00] + ' u'$0.59 fee = $10.00) on %s ... ',
-                    D('10.00'), D('0.59'))
-        assert actual == expected
-
-    def test_prep_hit_at_ten_dollars(self):
-        actual = self.prep(u'10.00')
-        expected = (1061, D('10.61'), D('0.61'))
-        assert actual == expected
-
-    def test_prep_hit_at_forty_cents(self):
-        actual = self.prep(u'0.40')
-        expected = (1000, D('10.00'), D('0.59'))
-        assert actual == expected
-
-    def test_prep_hit_at_fifty_cents(self):
-        actual = self.prep(u'0.50')
-        expected = (1000, D('10.00'), D('0.59'))
-        assert actual == expected
-
-    def test_prep_hit_at_sixty_cents(self):
-        actual = self.prep(u'0.60')
-        expected = (1000, D('10.00'), D('0.59'))
-        assert actual == expected
-
-    def test_prep_hit_at_eighty_cents(self):
-        actual = self.prep(u'0.80')
-        expected = (1000, D('10.00'), D('0.59'))
-        assert actual == expected
-
-    def test_prep_hit_at_nine_fifteen(self):
-        actual = self.prep(u'9.15')
-        expected = (1000, D('10.00'), D('0.59'))
-        assert actual == expected
-
-    def test_prep_hit_at_nine_forty(self):
-        actual = self.prep(u'9.40')
-        expected = (1000, D('10.00'), D('0.59'))
-        assert actual == expected
-
-    def test_prep_hit_at_nine_forty_one(self):
-        actual = self.prep(u'9.41')
-        expected = (1000, D('10.00'), D('0.59'))
-        assert actual == expected
-
-    def test_prep_hit_at_nine_forty_two(self):
-        actual = self.prep(u'9.42')
-        expected = (1002, D('10.02'), D('0.60'))
-        assert actual == expected
 
 
 class TestBillingPayday(PaydayHarness):
@@ -515,10 +321,6 @@ class TestBillingTransfer(PaydayHarness):
             with self.assertRaises(NegativeBalance):
                 self.payday.debit_participant(cursor, subject.username, amount)
 
-    def test_skim_credit(self):
-        actual = skim_credit(D('10.00'))
-        assert actual == (D('10.00'), D('0.00'))
-
     def test_credit_participant(self):
         amount = D('1.00')
         subject = self.make_participant('test_credit_participant', pending=0,
@@ -572,39 +374,6 @@ class TestBillingTransfer(PaydayHarness):
                                            , amount
                                            , 'tip'
                                             )
-
-    def test_record_exchange_updates_balance(self):
-        alice = Participant.from_username('alice')
-        self.payday.record_exchange( 'bill'
-                                   , amount=D("0.59")
-                                   , fee=D("0.41")
-                                   , error=""
-                                   , participant=alice
-                                    )
-        alice = Participant.from_username('alice')
-        assert alice.balance == D("0.59")
-
-    def test_record_exchange_fails_if_negative_balance(self):
-        alice = Participant.from_username('alice')
-        pytest.raises( NegativeBalance
-                     , self.payday.record_exchange
-                     , 'ach'
-                     , amount=D("-10.00")
-                     , fee=D("0.41")
-                     , error=""
-                     , participant=alice
-                      )
-
-    def test_record_exchange_doesnt_update_balance_if_error(self):
-        alice = Participant.from_username('alice')
-        self.payday.record_exchange( 'bill'
-                                   , amount=D("1.00")
-                                   , fee=D("0.41")
-                                   , error="SOME ERROR"
-                                   , participant=alice
-                                    )
-        alice = Participant.from_username('alice')
-        assert alice.balance == D("0.00")
 
 
 class TestPachinko(Harness):
