@@ -43,11 +43,6 @@ class Payday(object):
 
     """
 
-    def __init__(self, db):
-        """Takes a postgres.Postgres instance.
-        """
-        self.db = db
-
 
     def run(self):
         """This is the starting point for payday.
@@ -61,16 +56,16 @@ class Payday(object):
 
         _start = aspen.utils.utcnow()
         log("Greetings, program! It's PAYDAY!!!!")
-        ts_start = self.start()
-        self.prepare(ts_start)
-        self.zero_out_pending(ts_start)
+
+        self.prepare()
+        self.zero_out_pending()
 
         self.payin()
         self.move_pending_to_balance_for_teams()
         self.pachinko()
         self.clear_pending_to_balance()
         self.payout()
-        self.update_stats(ts_start)
+        self.update_stats()
         self.update_receiving_amounts()
 
         self.end()
@@ -83,7 +78,8 @@ class Payday(object):
         log(aspen.utils.to_age(_start, fmt_past=fmt_past))
 
 
-    def start(self):
+    @classmethod
+    def start(cls):
         """Try to start a new Payday.
 
         If there is a Payday that hasn't finished yet, then the UNIQUE
@@ -93,24 +89,29 @@ class Payday(object):
 
         """
         try:
-            ts_start = self.db.one("INSERT INTO paydays DEFAULT VALUES "
-                                   "RETURNING ts_start")
+            d = cls.db.one("""
+                INSERT INTO paydays DEFAULT VALUES
+                RETURNING id, (ts_start AT TIME ZONE 'UTC') AS ts_start
+            """, back_as=dict)
             log("Starting a new payday.")
         except IntegrityError:  # Collision, we have a Payday already.
-            ts_start = self.db.one("""
-
-                SELECT ts_start
+            d = cls.db.one("""
+                SELECT id, (ts_start AT TIME ZONE 'UTC') AS ts_start
                   FROM paydays
                  WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
-
-            """)
+            """, back_as=dict)
             log("Picking up with an existing payday.")
 
-        log("Payday started at %s." % ts_start)
-        return ts_start
+        d['ts_start'] = d['ts_start'].replace(tzinfo=aspen.utils.utc)
+
+        log("Payday started at %s." % d['ts_start'])
+
+        payday = Payday()
+        payday.__dict__.update(d)
+        return payday
 
 
-    def prepare(self, ts_start):
+    def prepare(self):
         """Prepare the DB: we need temporary tables with indexes.
         """
         self.db.run("""
@@ -188,11 +189,11 @@ class Payday(object):
 
         CREATE INDEX ON pay_takes (team);
 
-        """, dict(ts_start=ts_start))
+        """, dict(ts_start=self.ts_start))
         log('Prepared the DB.')
 
 
-    def zero_out_pending(self, ts_start):
+    def zero_out_pending(self):
         """Given a timestamp, zero out the pending column.
 
         We keep track of balance changes as a result of Payday in the pending
@@ -208,7 +209,7 @@ class Payday(object):
                AND claimed_time < %s
 
         """
-        self.db.run(START_PENDING, (ts_start,))
+        self.db.run(START_PENDING, (self.ts_start,))
         log("Zeroed out the pending column.")
         return None
 
@@ -375,7 +376,7 @@ class Payday(object):
         log("Cleared pending to balance. Ready for payouts.")
 
 
-    def update_stats(self, ts_start):
+    def update_stats(self):
         self.db.run("""\
 
             WITH our_transfers AS (
@@ -434,7 +435,7 @@ class Payday(object):
                  , charge_fees_volume = (SELECT sum(fee) FROM our_charges)
              WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
 
-        """, {'ts_start': ts_start})
+        """, {'ts_start': self.ts_start})
 
 
     def update_receiving_amounts(self):
@@ -458,15 +459,14 @@ class Payday(object):
             cursor.execute(UPDATE)
 
     def end(self):
-        self.db.one("""\
+        self.ts_end = self.db.one("""\
 
             UPDATE paydays
                SET ts_end=now()
              WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
-         RETURNING id
+         RETURNING ts_end AT TIME ZONE 'UTC'
 
-        """, default=NoPayday)
-
+        """, default=NoPayday).replace(tzinfo=aspen.utils.utc)
 
     # Move money between Gittip participants.
     # =======================================

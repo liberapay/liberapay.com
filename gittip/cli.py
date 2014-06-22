@@ -29,7 +29,7 @@ def payday():
     from gittip.billing.payday import Payday
 
     try:
-        Payday(db).run()
+        Payday.start().run()
     except KeyboardInterrupt:
         pass
     except:
