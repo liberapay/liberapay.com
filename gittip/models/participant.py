@@ -276,14 +276,12 @@ class Participant(Model, MixinTeam):
 
 
     def withdraw_balance_to_bank_account(self, cursor):
-        from gittip.billing.payday import Payday
-        hack = Payday(self.db)  # Our payout code is on the Payday object. Rather than
-                                # refactor right now, let's just use it from there.
-
-        hack.ach_credit( self
-                       , Decimal('0.00') # don't withhold anything
-                       , Decimal('0.00') # send it all
-                        ) # XXX Records the exchange using a different cursor. :-/
+        from gittip.billing.exchanges import ach_credit
+        ach_credit( self.db
+                  , self
+                  , Decimal('0.00') # don't withhold anything
+                  , Decimal('0.00') # send it all
+                   )
 
 
     class NoOneToGiveFinalGiftTo(Exception): pass

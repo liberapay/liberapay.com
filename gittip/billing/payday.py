@@ -18,49 +18,14 @@ single transaction.
 """
 from __future__ import unicode_literals
 
-import sys
-from decimal import Decimal, ROUND_UP
+from decimal import Decimal
 
-import balanced
 import aspen.utils
 from aspen import log
 from aspen.utils import typecheck
+from gittip.billing.exchanges import ach_credit, charge
 from gittip.exceptions import NegativeBalance, NoBalancedCustomerHref, NotWhitelisted
 from psycopg2 import IntegrityError
-
-
-# Set fees and minimums.
-# ======================
-# Balanced has a $0.50 minimum. We go even higher to avoid onerous
-# per-transaction fees. See:
-# https://github.com/gittip/www.gittip.com/issues/167 XXX I should maybe
-# compute this using *ahem* math.
-
-FEE_CHARGE = ( Decimal("0.30")   # $0.30
-             , Decimal("0.029")  #  2.9%
-              )
-FEE_CREDIT = Decimal("0.00")    # Balanced doesn't actually charge us for this,
-                                # because we were in the door early enough.
-
-MINIMUM_CHARGE = Decimal("9.41")
-MINIMUM_CREDIT = Decimal("10.00")
-
-
-def upcharge(amount):
-    """Given an amount, return a higher amount and the difference.
-    """
-    typecheck(amount, Decimal)
-    charge_amount = (amount + FEE_CHARGE[0]) / (1 - FEE_CHARGE[1])
-    charge_amount = charge_amount.quantize(FEE_CHARGE[0], rounding=ROUND_UP)
-    return charge_amount, charge_amount - amount
-
-def skim_credit(amount):
-    """Given an amount, return a lower amount and the difference.
-    """
-    typecheck(amount, Decimal)
-    return amount - FEE_CREDIT, FEE_CREDIT
-
-assert upcharge(MINIMUM_CHARGE) == (Decimal('10.00'), Decimal('0.59'))
 
 
 class NoPayday(Exception):
@@ -314,7 +279,7 @@ class Payday(object):
                 log("Payout done for %d participants." % i)
             withhold = participant.giving + participant.pledging
             try:
-                error = self.ach_credit(participant, withhold)
+                error = ach_credit(self.db, participant, withhold)
                 if error:
                     self.mark_ach_failed()
             except NoBalancedCustomerHref:
@@ -343,7 +308,7 @@ class Payday(object):
             # last_bill_result to a non-empty string if the card did fail.
 
             try:
-                error = self.charge(participant, short)
+                error = charge(self.db, participant, short)
                 if error:
                     self.mark_charge_failed()
             except NoBalancedCustomerHref:
@@ -614,252 +579,8 @@ class Payday(object):
         assert rec is not None, (participant, amount)  # sanity check
 
 
-    # Move money between Gittip and the outside world.
-    # ================================================
-
-    def charge(self, participant, amount):
-        """Given dict and Decimal, return None.
-
-        This is the only place where we actually charge credit cards. Amount
-        should be the nominal amount. We'll compute Gittip's fee below this
-        function and add it to amount to end up with charge_amount.
-
-        """
-        typecheck(amount, Decimal)
-
-        username = participant.username
-        balanced_customer_href = participant.balanced_customer_href
-
-        typecheck( username, unicode
-                 , balanced_customer_href, (unicode, None)
-                  )
-
-
-        # Perform some last-minute checks.
-        # ================================
-
-        if balanced_customer_href is None:
-            raise NoBalancedCustomerHref  # Participant has no funding source.
-
-        if participant.is_suspicious is not False:
-            raise NotWhitelisted  # Participant not trusted.
-
-
-        # Go to Balanced.
-        # ===============
-
-        things = self.charge_on_balanced( username
-                                        , balanced_customer_href
-                                        , amount
-                                         )
-        charge_amount, fee, error = things
-
-        amount = charge_amount - fee  # account for possible rounding under
-                                      # charge_on_*
-
-        self.record_exchange('bill', amount, fee, error, participant)
-
-
-    def ach_credit(self, participant, withhold, minimum_credit=MINIMUM_CREDIT):
-
-        # Compute the amount to credit them.
-        # ==================================
-        # Leave money in Gittip to cover their obligations next week (as these
-        # currently stand). Also reduce the amount by our service fee.
-
-        balance = participant.balance
-        assert balance is not None, balance # sanity check
-        amount = balance - withhold
-
-        # Do some last-minute checks.
-        # ===========================
-
-        if amount <= 0:
-            return      # Participant not owed anything.
-
-        if amount < minimum_credit:
-            also_log = ""
-            if withhold > 0:
-                also_log = " ($%s balance - $%s in obligations)"
-                also_log %= (balance, withhold)
-            log("Minimum payout is $%s. %s is only due $%s%s."
-               % (minimum_credit, participant.username, amount, also_log))
-            return      # Participant owed too little.
-
-        if not participant.is_whitelisted:
-            raise NotWhitelisted      # Participant not trusted.
-
-        balanced_customer_href = participant.balanced_customer_href
-        if balanced_customer_href is None:
-            log("%s has no balanced_customer_href."
-                % participant.username)
-            raise NoBalancedCustomerHref  # not in Balanced
-
-
-        # Do final calculations.
-        # ======================
-
-        credit_amount, fee = skim_credit(amount)
-        cents = credit_amount * 100
-
-        if withhold > 0:
-            also_log = "$%s balance - $%s in obligations"
-            also_log %= (balance, withhold)
-        else:
-            also_log = "$%s" % amount
-        msg = "Crediting %s %d cents (%s - $%s fee = $%s) on Balanced ... "
-        msg %= (participant.username, cents, also_log, fee, credit_amount)
-
-
-        # Try to dance with Balanced.
-        # ===========================
-
-        try:
-            customer = balanced.Customer.fetch(balanced_customer_href)
-            customer.bank_accounts.one()\
-                                  .credit(amount=cents,
-                                          description=participant.username)
-
-            log(msg + "succeeded.")
-            error = ""
-        except balanced.exc.HTTPError as err:
-            error = err.message.message
-        except:
-            error = repr(sys.exc_info()[1])
-
-        if error:
-            log(msg + "failed: %s" % error)
-
-        self.record_exchange('ach', -credit_amount, fee, error, participant)
-        return error
-
-
-    def charge_on_balanced(self, username, balanced_customer_href, amount):
-        """We have a purported balanced_customer_href. Try to use it.
-        """
-        typecheck( username, unicode
-                 , balanced_customer_href, unicode
-                 , amount, Decimal
-                  )
-
-        cents, msg, charge_amount, fee = self._prep_hit(amount)
-        msg = msg % (username, "Balanced")
-
-        try:
-            customer = balanced.Customer.fetch(balanced_customer_href)
-            customer.cards.one().debit(amount=cents, description=username)
-            log(msg + "succeeded.")
-            error = ""
-        except balanced.exc.HTTPError as err:
-            error = err.message.message
-        except:
-            error = repr(sys.exc_info()[1])
-
-        if error:
-            log(msg + "failed: %s" % error)
-
-        return charge_amount, fee, error
-
-
-    def _prep_hit(self, unrounded):
-        """Takes an amount in dollars. Returns cents, etc.
-
-        cents       This is passed to the payment processor charge API. This is
-                    the value that is actually charged to the participant. It's
-                    an int.
-        msg         A log message with a couple %s to be filled in by the
-                    caller.
-        upcharged   Decimal dollar equivalent to `cents'.
-        fee         Decimal dollar amount of the fee portion of `upcharged'.
-
-        The latter two end up in the db in a couple places via record_exchange.
-
-        """
-        also_log = ''
-        rounded = unrounded
-        if unrounded < MINIMUM_CHARGE:
-            rounded = MINIMUM_CHARGE  # per github/#167
-            also_log = ' [rounded up from $%s]' % unrounded
-
-        upcharged, fee = upcharge(rounded)
-        cents = int(upcharged * 100)
-
-        msg = "Charging %%s %d cents ($%s%s + $%s fee = $%s) on %%s ... "
-        msg %= cents, rounded, also_log, fee, upcharged
-
-        return cents, msg, upcharged, fee
-
-
     # Record-keeping.
     # ===============
-
-    def record_exchange(self, kind, amount, fee, error, participant):
-        """Given a Bunch of Stuff, return None.
-
-        Records in the exchanges table have these characteristics:
-
-            amount  It's negative for credits (representing an outflow from
-                    Gittip to you) and positive for charges.
-                    The sign is how we differentiate the two in, e.g., the
-                    history page.
-
-            fee     The payment processor's fee. It's always positive.
-
-        This function takes the result of an API call to a payment processor
-        and records the result in our db. If the power goes out at this point
-        then Postgres will be out of sync with the payment processor. We'll
-        have to resolve that manually be reviewing the transaction log at the
-        processor and modifying Postgres accordingly.
-
-        For Balanced, this could be automated by generating an ID locally and
-        commiting that to the db and then passing that through in the meta
-        field.* Then syncing would be a case of simply::
-
-            for payment in unresolved_payments:
-                payment_in_balanced = balanced.Transaction.query.filter(
-                  **{'meta.unique_id': 'value'}).one()
-                payment.transaction_uri = payment_in_balanced.uri
-
-        * https://www.balancedpayments.com/docs/meta
-
-        """
-
-        username = participant.username
-        with self.db.get_cursor() as cursor:
-
-            if error:
-                amount = fee = Decimal('0.00')
-            else:
-                EXCHANGE = """\
-
-                        INSERT INTO exchanges
-                               (amount, fee, participant)
-                        VALUES (%s, %s, %s)
-
-                """
-                cursor.execute(EXCHANGE, (amount, fee, username))
-
-            # Update the participant's balance.
-            # =================================
-
-            RESULT = """\
-
-                UPDATE participants
-                   SET last_{0}_result=%s
-                     , balance=(balance + %s)
-                 WHERE username=%s
-             RETURNING balance
-
-            """.format(kind)
-            if kind == 'ach':
-                amount -= fee
-            balance = cursor.one(RESULT, (error or '', amount, username))
-            if balance < 0:
-                raise NegativeBalance
-
-        if hasattr(participant, 'set_attributes'):
-            participant.set_attributes(balance=balance)
-
 
     def record_transfer(self, cursor, tipper, tippee, amount, context):
         cursor.run("""\
