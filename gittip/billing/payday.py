@@ -50,12 +50,12 @@ class Payday(object):
         try:
             d = cls.db.one("""
                 INSERT INTO paydays DEFAULT VALUES
-                RETURNING id, (ts_start AT TIME ZONE 'UTC') AS ts_start
+                RETURNING id, (ts_start AT TIME ZONE 'UTC') AS ts_start, stage
             """, back_as=dict)
             log("Starting a new payday.")
         except IntegrityError:  # Collision, we have a Payday already.
             d = cls.db.one("""
-                SELECT id, (ts_start AT TIME ZONE 'UTC') AS ts_start
+                SELECT id, (ts_start AT TIME ZONE 'UTC') AS ts_start, stage
                   FROM paydays
                  WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
             """, back_as=dict)
