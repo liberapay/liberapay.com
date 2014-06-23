@@ -1408,3 +1408,15 @@ END;
 BEGIN;
     ALTER TABLE participants ADD COLUMN taking numeric(35,2) NOT NULL DEFAULT 0;
 END;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/pull/2501
+
+BEGIN;
+    CREATE TYPE context_type AS ENUM
+        ('tip', 'take', 'final-gift', 'take-over', 'one-off');
+
+    ALTER TABLE transfers ADD COLUMN context context_type NOT NULL;
+    ALTER TABLE transfers DROP COLUMN as_team_member;
+END;
