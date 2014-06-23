@@ -14,7 +14,10 @@ class Tests(Harness):
     def make_team(self, username=TEAM, **kw):
         team = self.make_participant(username, number='plural', **kw)
         if Participant.from_username('Daddy Warbucks') is None:
-            warbucks = self.make_participant('Daddy Warbucks', last_bill_result='')
+            warbucks = self.make_participant( 'Daddy Warbucks'
+                                            , claimed_time='now'
+                                            , last_bill_result=''
+                                             )
             self.warbucks = warbucks
         self.warbucks.set_tip_to(team, '100')
         return team

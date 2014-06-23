@@ -371,6 +371,7 @@ class Tests(Harness):
     def test_getting_tips_actually_made(self):
         expected = Decimal('1.00')
         user2 = self.make_participant('user2')
+        self.participant.set_as_claimed()
         self.participant.set_tip_to(user2, expected)
         actual = self.participant.get_tip_to('user2')
         assert actual == expected
@@ -392,22 +393,22 @@ class Tests(Harness):
     # number
 
     def test_cant_go_singular_with_big_tips(self):
-        alice = self.make_participant('alice', last_bill_result='')
+        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
         bob = self.make_participant('bob', number='plural')
-        carl = self.make_participant('carl')
+        carl = self.make_participant('carl', claimed_time='now')
         carl.set_tip_to(bob, '100.00')
         alice.set_tip_to(bob, '1000.00')
         pytest.raises(HasBigTips, bob.update_number, 'singular')
 
     def test_can_go_singular_without_big_tips(self):
-        alice = self.make_participant('alice', last_bill_result='')
+        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
         bob = self.make_participant('bob', number='plural')
         alice.set_tip_to(bob, '100.00')
         bob.update_number('singular')
         assert Participant.from_username('bob').number == 'singular'
 
     def test_can_go_plural(self):
-        alice = self.make_participant('alice', last_bill_result='')
+        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
         bob = self.make_participant('bob')
         alice.set_tip_to(bob, '100.00')
         bob.update_number('plural')
@@ -417,7 +418,7 @@ class Tests(Harness):
     # set_tip_to - stt
 
     def test_stt_sets_tip_to(self):
-        alice = self.make_participant('alice', last_bill_result='')
+        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
         bob = self.make_participant('bob')
         alice.set_tip_to(bob, '1.00')
 
@@ -425,47 +426,47 @@ class Tests(Harness):
         assert actual == Decimal('1.00')
 
     def test_stt_returns_a_Decimal_and_a_boolean(self):
-        alice = self.make_participant('alice', last_bill_result='')
+        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
         bob = self.make_participant('bob')
         actual = alice.set_tip_to(bob, '1.00')
         assert actual == (Decimal('1.00'), True)
 
     def test_stt_returns_False_for_second_time_tipper(self):
-        alice = self.make_participant('alice', last_bill_result='')
+        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
         bob = self.make_participant('bob')
         alice.set_tip_to(bob, '1.00')
         actual = alice.set_tip_to(bob, '2.00')
         assert actual == (Decimal('2.00'), False)
 
     def test_stt_doesnt_allow_self_tipping(self):
-        alice = self.make_participant('alice', last_bill_result='')
+        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
         self.assertRaises(NoSelfTipping, alice.set_tip_to, 'alice', '10.00')
 
     def test_stt_doesnt_allow_just_any_ole_amount(self):
-        alice = self.make_participant('alice', last_bill_result='')
+        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
         self.make_participant('bob')
         self.assertRaises(BadAmount, alice.set_tip_to, 'bob', '1000.00')
 
     def test_stt_allows_higher_tip_to_plural_receiver(self):
-        alice = self.make_participant('alice', last_bill_result='')
+        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
         bob = self.make_participant('bob', number='plural')
         actual = alice.set_tip_to(bob, '1000.00')
         assert actual == (Decimal('1000.00'), True)
 
     def test_stt_still_caps_tips_to_plural_receivers(self):
-        alice = self.make_participant('alice', last_bill_result='')
+        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
         self.make_participant('bob', number='plural')
         self.assertRaises(BadAmount, alice.set_tip_to, 'bob', '1000.01')
 
     def test_stt_fails_to_tip_unknown_people(self):
-        alice = self.make_participant('alice', last_bill_result='')
+        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
         self.assertRaises(NoTippee, alice.set_tip_to, 'bob', '1.00')
 
 
     # giving and receiving
 
     def test_giving_and_receiving_only_count_latest_tip(self):
-        alice = self.make_participant('alice', last_bill_result='')
+        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
         bob = self.make_participant('bob', claimed_time='now')
         alice.set_tip_to(bob, '12.00')
         alice.set_tip_to(bob, '3.00')
@@ -473,7 +474,7 @@ class Tests(Harness):
         assert bob.receiving == Decimal('3.00')
 
     def test_receiving_includes_tips_from_accounts_with_a_working_card(self):
-        alice = self.make_participant('alice', last_bill_result='')
+        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
         bob = self.make_participant('bob')
         alice.set_tip_to(bob, '3.00')
 
@@ -482,7 +483,7 @@ class Tests(Harness):
         assert actual == expected
 
     def test_receiving_ignores_tips_from_accounts_with_no_card_on_file(self):
-        alice = self.make_participant('alice', last_bill_result=None)
+        alice = self.make_participant('alice', claimed_time='now', last_bill_result=None)
         bob = self.make_participant('bob')
         alice.set_tip_to(bob, '3.00')
 
@@ -491,7 +492,7 @@ class Tests(Harness):
         assert actual == expected
 
     def test_receiving_ignores_tips_from_accounts_with_a_failing_card_on_file(self):
-        alice = self.make_participant('alice', last_bill_result="Fail!")
+        alice = self.make_participant('alice', claimed_time='now', last_bill_result="Fail!")
         bob = self.make_participant('bob')
         alice.set_tip_to(bob, '3.00')
 
@@ -501,6 +502,7 @@ class Tests(Harness):
 
     def test_receiving_includes_tips_from_whitelisted_accounts(self):
         alice = self.make_participant( 'alice'
+                                     , claimed_time='now'
                                      , last_bill_result=''
                                      , is_suspicious=False
                                       )
@@ -513,6 +515,7 @@ class Tests(Harness):
 
     def test_receiving_includes_tips_from_unreviewed_accounts(self):
         alice = self.make_participant( 'alice'
+                                     , claimed_time='now'
                                      , last_bill_result=''
                                      , is_suspicious=None
                                       )
@@ -525,6 +528,7 @@ class Tests(Harness):
 
     def test_receiving_ignores_tips_from_blacklisted_accounts(self):
         alice = self.make_participant( 'alice'
+                                     , claimed_time='now'
                                      , last_bill_result=''
                                      , is_suspicious=True
                                       )
@@ -536,7 +540,7 @@ class Tests(Harness):
         assert actual == expected
 
     def test_receiving_includes_taking_when_updated_from_set_tip_to(self):
-        alice = self.make_participant('alice', last_bill_result='')
+        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
         bob = self.make_participant('bob', taking=Decimal('42.00'))
         alice.set_tip_to(bob, '3.00')
         assert Participant.from_username('bob').receiving == bob.receiving == Decimal('45.00')
@@ -555,15 +559,15 @@ class Tests(Harness):
     # pledging
 
     def test_pledging_only_counts_latest_tip(self):
-        alice = self.make_participant('alice', last_bill_result='')
-        bob = self.make_elsewhere('github', 1, 'bob').participant
+        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
+        bob = self.make_elsewhere('github', 58946, 'bob').participant
         alice.set_tip_to(bob, '12.00')
         alice.set_tip_to(bob, '3.00')
         assert alice.pledging == Decimal('3.00')
 
     def test_pledging_isnt_giving(self):
-        alice = self.make_participant('alice', last_bill_result='')
-        bob = self.make_elsewhere('github', 1, 'bob').participant
+        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
+        bob = self.make_elsewhere('github', 58946, 'bob').participant
         alice.set_tip_to(bob, '3.00')
         assert alice.giving == Decimal('0.00')
 
@@ -571,8 +575,8 @@ class Tests(Harness):
     # get_number_of_backers - gnob
 
     def test_gnob_gets_number_of_backers(self):
-        alice = self.make_participant('alice', last_bill_result='')
-        bob = self.make_participant('bob', last_bill_result='')
+        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
+        bob = self.make_participant('bob', claimed_time='now', last_bill_result='')
         clancy = self.make_participant('clancy')
 
         alice.set_tip_to(clancy, '3.00')
@@ -583,7 +587,7 @@ class Tests(Harness):
 
 
     def test_gnob_includes_backers_with_a_working_card_on_file(self):
-        alice = self.make_participant('alice', last_bill_result='')
+        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
         bob = self.make_participant('bob')
         alice.set_tip_to(bob, '3.00')
 
@@ -591,7 +595,7 @@ class Tests(Harness):
         assert actual == 1
 
     def test_gnob_ignores_backers_with_no_card_on_file(self):
-        alice = self.make_participant('alice', last_bill_result=None)
+        alice = self.make_participant('alice', claimed_time='now', last_bill_result=None)
         bob = self.make_participant('bob')
         alice.set_tip_to(bob, '3.00')
 
@@ -599,7 +603,7 @@ class Tests(Harness):
         assert actual == 0
 
     def test_gnob_ignores_backers_with_a_failing_card_on_file(self):
-        alice = self.make_participant('alice', last_bill_result="Fail!")
+        alice = self.make_participant('alice', claimed_time='now', last_bill_result="Fail!")
         bob = self.make_participant('bob')
         alice.set_tip_to(bob, '3.00')
 
@@ -609,6 +613,7 @@ class Tests(Harness):
 
     def test_gnob_includes_whitelisted_backers(self):
         alice = self.make_participant( 'alice'
+                                     , claimed_time='now'
                                      , last_bill_result=''
                                      , is_suspicious=False
                                       )
@@ -620,6 +625,7 @@ class Tests(Harness):
 
     def test_gnob_includes_unreviewed_backers(self):
         alice = self.make_participant( 'alice'
+                                     , claimed_time='now'
                                      , last_bill_result=''
                                      , is_suspicious=None
                                       )
@@ -631,6 +637,7 @@ class Tests(Harness):
 
     def test_gnob_ignores_blacklisted_backers(self):
         alice = self.make_participant( 'alice'
+                                     , claimed_time='now'
                                      , last_bill_result=''
                                      , is_suspicious=True
                                       )
@@ -642,7 +649,7 @@ class Tests(Harness):
 
 
     def test_gnob_ignores_backers_where_tip_is_zero(self):
-        alice = self.make_participant('alice', last_bill_result='')
+        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
         bob = self.make_participant('bob')
         alice.set_tip_to(bob, '0.00')
 
@@ -650,7 +657,7 @@ class Tests(Harness):
         assert actual == 0
 
     def test_gnob_looks_at_latest_tip_only(self):
-        alice = self.make_participant('alice', last_bill_result='')
+        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
         bob = self.make_participant('bob')
 
         alice.set_tip_to(bob, '1.00')
@@ -712,7 +719,7 @@ class Tests(Harness):
 
     def test_archive_fails_if_ctr_not_run(self):
         alice = self.make_participant('alice')
-        self.make_participant('bob').set_tip_to(alice, Decimal('1.00'))
+        self.make_participant('bob', claimed_time='now').set_tip_to(alice, Decimal('1.00'))
         with self.db.get_cursor() as cursor:
             pytest.raises(alice.StillReceivingTips, alice.archive, cursor)
 

@@ -647,6 +647,8 @@ class Participant(Model, MixinTeam):
         that as part of our conversion funnel).
 
         """
+        assert self.is_claimed  # sanity check
+
         if not isinstance(tippee, Participant):
             tippee, u = Participant.from_username(tippee), tippee
             if not tippee:
