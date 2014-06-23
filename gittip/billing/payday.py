@@ -44,6 +44,39 @@ class Payday(object):
     """
 
 
+    @classmethod
+    def start(cls):
+        """Try to start a new Payday.
+
+        If there is a Payday that hasn't finished yet, then the UNIQUE
+        constraint on ts_end will kick in and notify us of that. In that case
+        we load the existing Payday and work on it some more. We use the start
+        time of the current Payday to synchronize our work.
+
+        """
+        try:
+            d = cls.db.one("""
+                INSERT INTO paydays DEFAULT VALUES
+                RETURNING id, (ts_start AT TIME ZONE 'UTC') AS ts_start
+            """, back_as=dict)
+            log("Starting a new payday.")
+        except IntegrityError:  # Collision, we have a Payday already.
+            d = cls.db.one("""
+                SELECT id, (ts_start AT TIME ZONE 'UTC') AS ts_start
+                  FROM paydays
+                 WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
+            """, back_as=dict)
+            log("Picking up with an existing payday.")
+
+        d['ts_start'] = d['ts_start'].replace(tzinfo=aspen.utils.utc)
+
+        log("Payday started at %s." % d['ts_start'])
+
+        payday = Payday()
+        payday.__dict__.update(d)
+        return payday
+
+
     def run(self):
         """This is the starting point for payday.
 
@@ -76,39 +109,6 @@ class Payday(object):
         _delta = _end - _start
         fmt_past = "Script ran for {age} (%s)." % _delta
         log(aspen.utils.to_age(_start, fmt_past=fmt_past))
-
-
-    @classmethod
-    def start(cls):
-        """Try to start a new Payday.
-
-        If there is a Payday that hasn't finished yet, then the UNIQUE
-        constraint on ts_end will kick in and notify us of that. In that case
-        we load the existing Payday and work on it some more. We use the start
-        time of the current Payday to synchronize our work.
-
-        """
-        try:
-            d = cls.db.one("""
-                INSERT INTO paydays DEFAULT VALUES
-                RETURNING id, (ts_start AT TIME ZONE 'UTC') AS ts_start
-            """, back_as=dict)
-            log("Starting a new payday.")
-        except IntegrityError:  # Collision, we have a Payday already.
-            d = cls.db.one("""
-                SELECT id, (ts_start AT TIME ZONE 'UTC') AS ts_start
-                  FROM paydays
-                 WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
-            """, back_as=dict)
-            log("Picking up with an existing payday.")
-
-        d['ts_start'] = d['ts_start'].replace(tzinfo=aspen.utils.utc)
-
-        log("Payday started at %s." % d['ts_start'])
-
-        payday = Payday()
-        payday.__dict__.update(d)
-        return payday
 
 
     def prepare(self):
