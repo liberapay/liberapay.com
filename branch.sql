@@ -16,6 +16,13 @@ BEGIN;
      WHERE context IS NULL
        AND tipper LIKE 'deactivated-%';
 
+    UPDATE transfers
+       SET context = 'final-gift'
+      FROM participants p
+     WHERE context IS NULL
+       AND p.username = tipper
+       AND p.is_closed IS true;
+
     -- Treat anomalous transfer as a one-off tip
     UPDATE transfers
        SET context = 'one-off'
