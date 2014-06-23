@@ -80,7 +80,7 @@ class MixinTeam(object):
 
             SELECT amount
               FROM transfers
-             WHERE tipper=%s AND tippee=%s
+             WHERE tipper=%s AND tippee=%s AND context='take'
                AND timestamp >
                 (SELECT ts_start FROM paydays ORDER BY ts_start DESC LIMIT 1)
           ORDER BY timestamp DESC LIMIT 1
@@ -207,7 +207,7 @@ class MixinTeam(object):
                                 FROM transfers
                                WHERE tipper=t.team
                                  AND tippee=t.member
-                                 AND as_team_member IS true
+                                 AND context='take'
                                  AND timestamp >= %(ts_start)s
                              ) IS NULL
                    ORDER BY member, mtime DESC

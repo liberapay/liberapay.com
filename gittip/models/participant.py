@@ -333,7 +333,8 @@ class Participant(Model, MixinTeam):
             cursor.run( "UPDATE participants SET balance=balance + %s WHERE username=%s"
                       , (amount, tippee)
                        )
-            cursor.run( "INSERT INTO transfers (tipper, tippee, amount) VALUES (%s, %s, %s)"
+            cursor.run( "INSERT INTO transfers (tipper, tippee, amount, context) "
+                        "VALUES (%s, %s, %s, 'final-gift')"
                       , (self.username, tippee, amount)
                        )
 
@@ -995,6 +996,19 @@ class Participant(Model, MixinTeam):
         return accounts_dict
 
 
+    def get_elsewhere_logins(self, cursor):
+        """Return the list of (platform, user_id) tuples that the participant
+        can log in with.
+        """
+        return cursor.all("""
+            SELECT platform, user_id
+              FROM elsewhere
+             WHERE participant=%s
+               AND platform IN %s
+               AND NOT is_team
+        """, (self.username, AccountElsewhere.signin_platforms_names))
+
+
     class StillReceivingTips(Exception): pass
     class BalanceIsNotZero(Exception): pass
 
@@ -1175,6 +1189,29 @@ class Participant(Model, MixinTeam):
 
         """
 
+        TRANSFER_BALANCE_1 = """
+
+            UPDATE participants
+               SET balance = (balance - %(balance)s)
+             WHERE username=%(dead)s
+         RETURNING balance;
+
+        """
+
+        TRANSFER_BALANCE_2 = """
+
+            INSERT INTO transfers (tipper, tippee, amount, context)
+            VALUES (%(dead)s, %(live)s, %(balance)s, 'take-over');
+
+            UPDATE participants
+               SET balance = (balance + %(balance)s)
+             WHERE username=%(live)s
+         RETURNING balance;
+
+        """
+
+        new_balance = None
+
         with self.db.get_cursor() as cursor:
 
             # Load the existing connection.
@@ -1219,13 +1256,9 @@ class Participant(Model, MixinTeam):
             # other_is_a_real_participant
             other_is_a_real_participant = other.is_claimed
 
-            # this_is_others_last_account_elsewhere
-            nelsewhere = cursor.one( "SELECT count(*) FROM elsewhere "
-                                     "WHERE participant=%s"
-                                   , (other.username,)
-                                    )
-            assert nelsewhere > 0           # sanity check
-            this_is_others_last_account_elsewhere = (nelsewhere == 1)
+            # this_is_others_last_login_account
+            nelsewhere = len(other.get_elsewhere_logins(cursor))
+            this_is_others_last_login_account = (nelsewhere <= 1)
 
             # we_already_have_that_kind_of_account
             nparticipants = cursor.one( "SELECT count(*) FROM elsewhere "
@@ -1240,7 +1273,7 @@ class Participant(Model, MixinTeam):
                     raise TeamCantBeOnlyAuth
 
             need_confirmation = NeedConfirmation( other_is_a_real_participant
-                                                , this_is_others_last_account_elsewhere
+                                                , this_is_others_last_login_account
                                                 , we_already_have_that_kind_of_account
                                                  )
             if need_confirmation and not have_confirmation:
@@ -1268,9 +1301,7 @@ class Participant(Model, MixinTeam):
             # Do the deal.
             # ============
             # If other_is_not_a_stub, then other will have the account
-            # elsewhere taken away from them with this call. If there are other
-            # browsing sessions open from that account, they will stay open
-            # until they expire (XXX Is that okay?)
+            # elsewhere taken away from them with this call.
 
             cursor.run( "UPDATE elsewhere SET participant=%s "
                         "WHERE platform=%s AND user_id=%s"
@@ -1282,7 +1313,7 @@ class Participant(Model, MixinTeam):
             # =====================================================
             # We want to do this whether or not other is a stub participant.
 
-            if this_is_others_last_account_elsewhere:
+            if this_is_others_last_login_account:
 
                 # Take over tips.
                 # ===============
@@ -1294,6 +1325,19 @@ class Participant(Model, MixinTeam):
                 cursor.run(ZERO_OUT_OLD_TIPS_RECEIVING, (other.username,))
                 cursor.run(ZERO_OUT_OLD_TIPS_GIVING, (other.username,))
 
+                # Take over balance.
+                # ==================
+
+                other_balance = other.balance
+                args = dict(live=x, dead=y, balance=other_balance)
+                archive_balance = cursor.one(TRANSFER_BALANCE_1, args)
+                other.set_attributes(balance=archive_balance)
+                new_balance = cursor.one(TRANSFER_BALANCE_2, args)
+
+                # Disconnect any remaining elsewhere account.
+                # ===========================================
+
+                cursor.run("DELETE FROM elsewhere WHERE participant=%s", (y,))
 
                 # Archive the old participant.
                 # ============================
@@ -1316,6 +1360,9 @@ class Participant(Model, MixinTeam):
                              )
                            )
 
+        if new_balance is not None:
+            self.set_attributes(balance=new_balance)
+
         self.update_avatar()
         self.update_giving()
         self.update_pledging()
@@ -1327,13 +1374,7 @@ class Participant(Model, MixinTeam):
         """
         user_id = unicode(user_id)
         with self.db.get_cursor() as c:
-            accounts = c.all("""
-                SELECT platform, user_id
-                  FROM elsewhere
-                 WHERE participant=%s
-                   AND platform IN %s
-                   AND NOT is_team
-            """, (self.username, AccountElsewhere.signin_platforms_names))
+            accounts = self.get_elsewhere_logins(c)
             assert len(accounts) > 0
             if len(accounts) == 1 and accounts[0] == (platform, user_id):
                 raise LastElsewhere()
@@ -1455,7 +1496,7 @@ class NeedConfirmation(Exception):
 
     def __init__(self, a, b, c):
         self.other_is_a_real_participant = a
-        self.this_is_others_last_account_elsewhere = b
+        self.this_is_others_last_login_account = b
         self.we_already_have_that_kind_of_account = c
         self._all = (a, b, c)
 

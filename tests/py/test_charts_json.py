@@ -112,7 +112,8 @@ class Tests(Harness):
         # Do an out-of-band transfer.
         self.db.run("UPDATE participants SET balance=balance - 4 WHERE username='alice'")
         self.db.run("UPDATE participants SET balance=balance + 4 WHERE username='carl'")
-        self.db.run("INSERT INTO transfers (tipper, tippee, amount) VALUES ('alice', 'carl', 4)")
+        self.db.run("INSERT INTO transfers (tipper, tippee, amount, context) "
+                    "VALUES ('alice', 'carl', 4, 'tip')")
 
         self.run_payday()   # third
 

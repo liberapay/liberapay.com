@@ -29,8 +29,8 @@ class Tests(Harness):
         if take_last_week is not None:
             if self.db.one('SELECT * FROM paydays') is None:
                 self.db.run("INSERT INTO paydays DEFAULT VALUES")
-            self.db.run( "INSERT INTO transfers (timestamp, tipper, tippee, amount) "
-                         "VALUES (now(), %(tipper)s, %(tippee)s, %(amount)s)"
+            self.db.run( "INSERT INTO transfers (timestamp, tipper, tippee, amount, context) "
+                         "VALUES (now(), %(tipper)s, %(tippee)s, %(amount)s, 'take')"
                        , dict(tipper=team_name, tippee=username, amount=take_last_week,)
                         )
         return participant

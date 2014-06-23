@@ -134,7 +134,7 @@ title = "Please Confirm"
                     <b>{{ user.participant.username }}</b><br />
                     <table>
                         <tr>
-                            {% if obstacles.this_is_others_last_account_elsewhere %}
+                            {% if obstacles.this_is_others_last_login_account %}
                             <th><i>Gives</i></th>
                             <td>{{ fmt(combined_giving) }}</td>
                         </tr>
@@ -172,7 +172,7 @@ title = "Please Confirm"
                 </div>
                 </div>
             </td>
-            {% if obstacles.this_is_others_last_account_elsewhere %}
+            {% if obstacles.this_is_others_last_login_account %}
             <td>
                 <div class="participant other nix">
                 <div class="participant-padding">
