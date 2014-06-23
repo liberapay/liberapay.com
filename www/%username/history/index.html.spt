@@ -291,7 +291,7 @@ admin_override = user.ADMIN and (participant != user.participant or 'override' i
             {% endif %}
         {% else %}
             {% if context == 'take' %}
-                take of
+                take by
             {% else %}
                 {{ context }} to
             {% endif %}
