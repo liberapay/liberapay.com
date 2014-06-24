@@ -517,6 +517,7 @@ class Payday(object):
              WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
 
         """, {'ts_start': self.ts_start})
+        log("Updated payday stats.")
 
 
     def update_receiving_amounts(self):
@@ -538,6 +539,8 @@ class Payday(object):
         """
         with self.db.get_cursor() as cursor:
             cursor.execute(UPDATE)
+        log("Updated receiving amounts.")
+
 
     def end(self):
         self.ts_end = self.db.one("""\
