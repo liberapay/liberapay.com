@@ -87,10 +87,16 @@ class Payday(object):
         _start = aspen.utils.utcnow()
         log("Greetings, program! It's PAYDAY!!!!")
 
-        self.payin()
-        self.payout()
-        self.update_stats()
-        self.update_receiving_amounts()
+        if self.stage < 1:
+            self.payin()
+            self.mark_stage_done()
+        if self.stage < 2:
+            self.payout()
+            self.mark_stage_done()
+        if self.stage < 3:
+            self.update_stats()
+            self.update_receiving_amounts()
+            self.mark_stage_done()
 
         self.end()
 
@@ -564,6 +570,17 @@ class Payday(object):
 
             UPDATE paydays
                SET nach_failing = nach_failing + 1
+             WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
+         RETURNING id
+
+        """, default=NoPayday)
+
+
+    def mark_stage_done(self):
+        self.db.one("""\
+
+            UPDATE paydays
+               SET stage = stage + 1
              WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
          RETURNING id
 
