@@ -4,11 +4,8 @@ from decimal import Decimal as D
 
 import balanced
 import mock
-from psycopg2 import IntegrityError
 
-from aspen.utils import utcnow
 from gittip.billing.payday import Payday
-from gittip.exceptions import NegativeBalance
 from gittip.models.participant import Participant
 from gittip.testing import Harness
 from gittip.testing.balanced import BalancedHarness
@@ -27,9 +24,7 @@ class PaydayHarness(BalancedHarness):
 
 class TestPayday(BalancedHarness):
 
-    @mock.patch('gittip.billing.exchanges.charge_on_balanced')
-    def test_payday_moves_money(self, charge_on_balanced):
-        charge_on_balanced.return_value = (D('10.00'), D('0.68'), "")
+    def test_payday_moves_money(self):
         self.janet.set_tip_to(self.homer, '6.00')  # under $10!
         Payday.start().run()
 
@@ -37,11 +32,9 @@ class TestPayday(BalancedHarness):
         homer = Participant.from_username('homer')
 
         assert homer.balance == D('6.00')
-        assert janet.balance == D('3.32')
+        assert janet.balance == D('3.41')
 
-    @mock.patch('gittip.billing.exchanges.charge_on_balanced')
-    def test_payday_doesnt_move_money_from_a_suspicious_account(self, charge_on_balanced):
-        charge_on_balanced.return_value = (D('10.00'), D('0.68'), "")
+    def test_payday_doesnt_move_money_from_a_suspicious_account(self):
         self.db.run("""
             UPDATE participants
                SET is_suspicious = true
@@ -56,9 +49,7 @@ class TestPayday(BalancedHarness):
         assert janet.balance == D('0.00')
         assert homer.balance == D('0.00')
 
-    @mock.patch('gittip.billing.exchanges.charge_on_balanced')
-    def test_payday_doesnt_move_money_to_a_suspicious_account(self, charge_on_balanced):
-        charge_on_balanced.return_value = (D('10.00'), D('0.68'), "")
+    def test_payday_doesnt_move_money_to_a_suspicious_account(self):
         self.db.run("""
             UPDATE participants
                SET is_suspicious = true
@@ -86,52 +77,29 @@ class TestPayday(BalancedHarness):
         janet_customer = balanced.Customer.fetch(janet.balanced_customer_href)
         homer_customer = balanced.Customer.fetch(homer.balanced_customer_href)
 
-        homer_credits = homer_customer.credits.all()
-        assert len(homer_credits) >= 1
-        assert homer_credits[0].amount == 1500
-        assert homer_credits[0].description == 'homer'
+        credit = homer_customer.credits.first()
+        assert credit.amount == 1500
+        assert credit.description == 'homer'
 
-        janet_debits = janet_customer.debits.all()
-        assert len(janet_debits) >= 1
-        assert janet_debits[0].amount == 1576  # base amount + fee
-        assert janet_debits[0].description == 'janet'
+        debit = janet_customer.debits.first()
+        assert debit.amount == 1576  # base amount + fee
+        assert debit.description == 'janet'
 
 
 class TestBillingCharges(PaydayHarness):
-
-    def test_mark_missing_funding(self):
-        before = self.fetch_payday()
-        missing_count = before['ncc_missing']
-
-        self.payday.mark_missing_funding()
-
-        after = self.fetch_payday()
-        assert after['ncc_missing'] == missing_count + 1
 
     def test_mark_charge_failed(self):
         before = self.fetch_payday()
         fail_count = before['ncc_failing']
 
-        self.payday.mark_charge_failed()
+        with self.db.get_cursor() as cursor:
+            self.payday.mark_charge_failed(cursor)
 
         after = self.fetch_payday()
         assert after['ncc_failing'] == fail_count + 1
 
 
 class TestBillingPayday(PaydayHarness):
-
-    def test_move_pending_to_balance_for_teams_does_so(self):
-        self.make_participant('A', number='plural', balance=2, pending=3)
-        self.payday.move_pending_to_balance_for_teams()
-        actual = self.db.one("SELECT balance FROM participants WHERE username='A'")
-        assert actual == 5
-
-    def test_move_pending_to_balance_for_teams_ignores_new_teams(self):
-        # See https://github.com/gittip/www.gittip.com/issues/1684
-        self.make_participant('A', number='plural', balance=0, pending=None)
-        self.payday.move_pending_to_balance_for_teams()
-        actual = self.db.one("SELECT balance FROM participants WHERE username='A'")
-        assert actual == 0
 
     def test_update_receiving_amounts_updates_receiving_amounts(self):
         A = self.make_participant('A')
@@ -154,58 +122,18 @@ class TestBillingPayday(PaydayHarness):
         assert Participant.from_username('A').receiving == 13
         assert Participant.from_username('A').taking == 3
 
-    @mock.patch('gittip.billing.payday.Payday.transfer')
     @mock.patch('gittip.billing.payday.log')
-    def test_tip(self, log, transfer):
-        self.db.run("""
-            UPDATE participants
-               SET balance=1
-             WHERE username='janet'
-        """)
-        amount = D('1.00')
-        invalid_amount = D('0.00')
-        tip = { 'amount': amount
-              , 'tippee': 'janet'
-              , 'claimed_time': utcnow()
-               }
-
-        result = self.payday.tip(self.janet, tip)
-        assert result == 1
-        result = transfer.called_with('janet', tip['tippee'], tip['amount'])
-        assert result
-
-        assert log.called_with('SUCCESS: $1 from mjallday to alice.')
-
-        # XXX: Should these tests be broken down to a separate class with the
-        # common setup factored in to a setUp method.
-
-        # XXX: We should have constants to compare the values to
-        # invalid amount
-        tip['amount'] = invalid_amount
-        result = self.payday.tip(self.janet, tip)
-        assert result == 0
-
-        tip['amount'] = amount
-
-        # XXX: We should have constants to compare the values to
-        # transfer failed
-        transfer.return_value = False
-        result = self.payday.tip(self.janet, tip)
-        assert result == -1
-
-    @mock.patch('gittip.billing.payday.log')
-    def test_start_prepare_and_zero_out(self, log):
+    def test_start_prepare(self, log):
         self.clear_tables()
-        self.make_participant('bob', balance=10, claimed_time=None, pending=1)
-        self.make_participant('carl', balance=10, claimed_time='now', pending=1)
+        self.make_participant('bob', balance=10, claimed_time=None)
+        self.make_participant('carl', balance=10, claimed_time='now')
 
         payday = Payday.start()
         ts_start = payday.ts_start
 
         get_participants = lambda: self.db.all("SELECT * FROM pay_participants")
 
-        payday.prepare()
-        payday.zero_out_pending()
+        payday.prepare(self.db, ts_start)
 
         participants = get_participants()
 
@@ -213,7 +141,6 @@ class TestBillingPayday(PaydayHarness):
             ('Starting a new payday.'),
             ('Payday started at {}.'.format(ts_start)),
             ('Prepared the DB.'),
-            ('Zeroed out the pending column.'),
         ]
         expected_logging_call_args.reverse()
         for args, _ in log.call_args_list:
@@ -224,8 +151,7 @@ class TestBillingPayday(PaydayHarness):
         # run a second time, we should see it pick up the existing payday
         payday = Payday.start()
         second_ts_start = payday.ts_start
-        payday.prepare()
-        payday.zero_out_pending()
+        payday.prepare(self.db, second_ts_start)
         second_participants = get_participants()
 
         assert ts_start == second_ts_start
@@ -240,7 +166,7 @@ class TestBillingPayday(PaydayHarness):
             ('Picking up with an existing payday.'),
             ('Payday started at {}.'.format(second_ts_start)),
             ('Prepared the DB.'),
-            ('Zeroed out the pending column.')]
+        ]
         expected_logging_call_args.reverse()
         for args, _ in log.call_args_list:
             assert args[0] == expected_logging_call_args.pop()
@@ -269,164 +195,35 @@ class TestBillingPayday(PaydayHarness):
         assert end.call_count == 1
 
 
-class TestBillingTransfer(PaydayHarness):
-    def setUp(self):
-        PaydayHarness.setUp(self)
-        self.tipper = self.make_participant('lgtest')
-
-    def test_transfer(self):
-        amount = D('1.00')
-        sender = self.make_participant('test_transfer_sender', pending=0,
-                                       balance=1)
-        recipient = self.make_participant('test_transfer_recipient', pending=0,
-                                          balance=1)
-
-        result = self.payday.transfer( sender.username
-                                     , recipient.username
-                                     , amount
-                                      )
-        assert result == True
-
-        # no balance remaining for a second transfer
-        result = self.payday.transfer( sender.username
-                                     , recipient.username
-                                     , amount
-                                      )
-        assert result == False
-
-    def test_debit_participant(self):
-        amount = D('1.00')
-        subject = self.make_participant('test_debit_participant', pending=0,
-                                        balance=1)
-
-        initial_amount = subject.balance
-
-        with self.db.get_cursor() as cursor:
-            self.payday.debit_participant(cursor, subject.username, amount)
-
-        subject = Participant.from_username('test_debit_participant')
-
-        expected = initial_amount - amount
-        actual = subject.balance
-        assert actual == expected
-
-        # this will fail because not enough balance
-        with self.db.get_cursor() as cursor:
-            with self.assertRaises(NegativeBalance):
-                self.payday.debit_participant(cursor, subject.username, amount)
-
-    def test_credit_participant(self):
-        amount = D('1.00')
-        subject = self.make_participant('test_credit_participant', pending=0,
-                                        balance=1)
-
-        initial_amount = subject.pending
-
-        with self.db.get_cursor() as cursor:
-            self.payday.credit_participant(cursor, subject.username, amount)
-
-        subject = Participant.from_username('test_credit_participant') # reload
-
-        expected = initial_amount + amount
-        actual = subject.pending
-        assert actual == expected
-
-    def test_record_transfer(self):
-        amount = D('1.00')
-        subjects = ['jim', 'kate', 'bob']
-
-        for subject in subjects:
-            self.make_participant(subject, balance=1, pending=0)
-
-        with self.db.get_cursor() as cursor:
-            # Tip 'jim' twice
-            for recipient in ['jim'] + subjects:
-                self.payday.record_transfer( cursor
-                                           , self.tipper.username
-                                           , recipient
-                                           , amount
-                                           , 'tip'
-                                            )
-
-        for subject in subjects:
-            # 'jim' is tipped twice
-            expected = amount * 2 if subject == 'jim' else amount
-            actual = self.db.one( "SELECT sum(amount) FROM transfers "
-                                  "WHERE tippee=%s"
-                                , (subject,)
-                                 )
-            assert actual == expected
-
-    def test_record_transfer_invalid_participant(self):
-        amount = D('1.00')
-
-        with self.db.get_cursor() as cursor:
-            with self.assertRaises(IntegrityError):
-                self.payday.record_transfer( cursor
-                                           , 'idontexist'
-                                           , 'nori'
-                                           , amount
-                                           , 'tip'
-                                            )
-
-
 class TestPachinko(Harness):
 
-    def test_pachinko_pachinkos(self):
-        a_team = self.make_participant('a_team', claimed_time='now', number='plural', balance=20, \
-                                                                                         pending=0)
-        a_team.add_member(self.make_participant('alice', claimed_time='now', balance=0, pending=0))
-        a_team.add_member(self.make_participant('bob', claimed_time='now', balance=0, pending=0))
-
-        payday = Payday.start()
-        payday.prepare()
-        payday.pachinko()
-
-        assert Participant.from_username('alice').pending == D('0.01')
-        assert Participant.from_username('bob').pending == D('0.01')
-
-    def test_pachinko_sees_current_take(self):
-        a_team = self.make_participant('a_team', claimed_time='now', number='plural', balance=20, \
-                                                                                         pending=0)
-        alice = self.make_participant('alice', claimed_time='now', balance=0, pending=0)
+    def test_transfer_takes(self):
+        a_team = self.make_participant('a_team', claimed_time='now', number='plural', balance=20)
+        alice = self.make_participant('alice', claimed_time='now')
         a_team.add_member(alice)
+        a_team.add_member(self.make_participant('bob', claimed_time='now'))
         a_team.set_take_for(alice, D('1.00'), alice)
 
         payday = Payday.start()
-        payday.prepare()
-        payday.pachinko()
 
-        assert Participant.from_username('alice').pending == D('1.00')
+        # Test that payday ignores takes set after it started
+        a_team.set_take_for(alice, D('2.00'), alice)
 
-    def test_pachinko_ignores_take_set_after_payday_starts(self):
-        a_team = self.make_participant('a_team', claimed_time='now', number='plural', balance=20, \
-                                                                                         pending=0)
-        alice = self.make_participant('alice', claimed_time='now', balance=0, pending=0)
-        a_team.add_member(alice)
-        a_team.set_take_for(alice, D('0.33'), alice)
+        # Run the transfer multiple times to make sure we ignore takes that
+        # have already been processed
+        for i in range(3):
+            payday.prepare(self.db, payday.ts_start)
+            payday.transfer_takes(self.db, payday.ts_start)
+            payday.update_balances(self.db)
 
-        payday = Payday.start()
+        participants = self.db.all("SELECT username, balance FROM participants")
 
-        a_team.set_take_for(alice, D('1.00'), alice)
-
-        payday.prepare()
-        payday.pachinko()
-
-        assert Participant.from_username('alice').pending == D('0.33')
-
-    def test_pachinko_ignores_take_thats_already_been_processed(self):
-        a_team = self.make_participant('a_team', claimed_time='now', number='plural', balance=20, \
-                                                                                         pending=0)
-        alice = self.make_participant('alice', claimed_time='now', balance=0, pending=0)
-        a_team.add_member(alice)
-        a_team.set_take_for(alice, D('0.33'), alice)
-
-        payday = Payday.start()
-
-        a_team.set_take_for(alice, D('1.00'), alice)
-
-        for i in range(4):
-            payday.prepare()
-            payday.pachinko()
-
-        assert Participant.from_username('alice').pending == D('0.33')
+        for p in participants:
+            if p.username == 'a_team':
+                assert p.balance == D('18.99')
+            elif p.username == 'alice':
+                assert p.balance == D('1.00')
+            elif p.username == 'bob':
+                assert p.balance == D('0.01')
+            else:
+                assert p.balance == 0

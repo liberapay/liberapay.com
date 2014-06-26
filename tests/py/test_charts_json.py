@@ -9,7 +9,7 @@ from gittip.testing import Harness
 def today():
     return datetime.datetime.utcnow().date().strftime('%Y-%m-%d')
 
-class Tests(Harness):
+class TestChartsJson(Harness):
 
     def setUp(self):
         Harness.setUp(self)

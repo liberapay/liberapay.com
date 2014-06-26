@@ -294,4 +294,6 @@ def record_exchange(db, kind, amount, fee, error, participant):
             raise NegativeBalance
 
     if hasattr(participant, 'set_attributes'):
-        participant.set_attributes(balance=balance)
+        attrs = dict(balance=balance)
+        attrs['last_%s_result' % kind] = error or ''
+        participant.set_attributes(**attrs)
