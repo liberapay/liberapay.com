@@ -42,9 +42,9 @@ test-schema: env
 pyflakes: env
 	./$(env_bin)/pyflakes bin gittip tests
 
-test: pytest jstest
+test: test-schema pytest jstest
 
-pytest: env test-schema
+pytest: env
 	$(py_test) --cov gittip ./tests/py/
 	@$(MAKE) --no-print-directory pyflakes
 
