@@ -9,12 +9,14 @@ import pytest
 from aspen.utils import typecheck
 from gittip.billing.exchanges import (
     _prep_hit,
+    ach_credit,
+    cancel_card_hold,
     capture_card_hold,
     create_card_hold,
     record_exchange,
     skim_credit,
 )
-from gittip.exceptions import NegativeBalance, NoBalancedCustomerHref
+from gittip.exceptions import NegativeBalance, NoBalancedCustomerHref, NotWhitelisted
 from gittip.models.participant import Participant
 from gittip.testing import Harness
 from gittip.testing.balanced import BalancedHarness
@@ -26,12 +28,50 @@ def raise_foobar(*a):
     raise Foobar
 
 
+class TestCredits(BalancedHarness):
+
+    def test_ach_credit_withhold(self):
+        bob = self.make_participant('bob', last_ach_result="failure", balance=20,
+                                    balanced_customer_href=self.homer_href,
+                                    is_suspicious=False)
+        withhold = D('1.00')
+        error = ach_credit(self.db, bob, withhold)
+        assert error == ''
+        bob2 = Participant.from_id(bob.id)
+        assert bob.balance == bob2.balance == 1
+
+    def test_ach_credit_amount_under_minimum(self):
+        bob = self.make_participant('bob', last_ach_result="failure", balance=8,
+                                    balanced_customer_href=self.homer_href,
+                                    is_suspicious=False)
+        r = ach_credit(self.db, bob, 0)
+        assert r is None
+
+    @mock.patch('balanced.Customer')
+    def test_ach_credit_failure(self, Customer):
+        Customer.fetch = raise_foobar
+        bob = self.make_participant('bob', last_ach_result="failure", balance=20,
+                                    balanced_customer_href=self.homer_href,
+                                    is_suspicious=False)
+
+        error = ach_credit(self.db, bob, D('1.00'))
+        bob2 = Participant.from_id(bob.id)
+        assert bob.last_ach_result == bob2.last_ach_result == error == "Foobar()"
+        assert bob.balance == bob2.balance == 20
+
+
 class TestCardHolds(BalancedHarness):
 
     def test_create_card_hold_without_cc_details_raises_NoBalancedCustomerHref(self):
         alice = self.make_participant('alice')
         with self.assertRaises(NoBalancedCustomerHref):
             create_card_hold(self.db, alice, D('1.00'))
+
+    def test_create_card_hold_for_suspicious_raises_NotWhitelisted(self):
+        bob = self.make_participant('bob', is_suspicious=True,
+                                    balanced_customer_href='fake_href')
+        with self.assertRaises(NotWhitelisted):
+            create_card_hold(self.db, bob, D('1.00'))
 
     @mock.patch('balanced.Customer')
     def test_create_card_hold_failure(self, Customer):
@@ -46,8 +86,12 @@ class TestCardHolds(BalancedHarness):
         assert isinstance(hold, balanced.CardHold)
         assert hold.failure_reason is None
         assert hold.amount == 1000
+        assert hold.meta['state'] == 'new'
         assert error == ''
         assert self.janet.balance == janet.balance == 0
+
+        # Clean up
+        cancel_card_hold(hold)
 
     def test_capture_card_hold_full_amount(self):
         hold, error = create_card_hold(self.db, self.janet, D('20.00'))
@@ -74,10 +118,13 @@ class TestCardHolds(BalancedHarness):
         assert error == ''  # sanity check
 
         with self.assertRaises(balanced.exc.HTTPError):
-            capture_card_hold(self.db, self.janet, D('25.00'), hold)
+            capture_card_hold(self.db, self.janet, D('20.01'), hold)
 
         janet = Participant.from_id(self.janet.id)
         assert self.janet.balance == janet.balance == 0
+
+        # Clean up
+        cancel_card_hold(hold)
 
     def test_capture_card_hold_amount_under_minimum(self):
         hold, error = create_card_hold(self.db, self.janet, D('20.00'))
