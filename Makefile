@@ -52,8 +52,8 @@ retest: env
 	$(py_test) ./tests/py/ --lf
 	@$(MAKE) --no-print-directory pyflakes
 
-test-cov: env test-schema
-	$(py_test) --cov gittip ./tests/py/
+test-cov: env
+	$(py_test) --cov-report html --cov gittip ./tests/py/
 
 tests: test
 
