@@ -8,6 +8,7 @@ from decimal import Decimal
 from os.path import join, dirname, realpath
 
 import vcr
+from vcr.serializers import yamlserializer
 from aspen import resources
 from aspen.utils import utcnow
 from aspen.testing.client import Client
@@ -25,6 +26,32 @@ SCHEMA = open(join(TOP, "schema.sql")).read()
 WWW_ROOT = str(realpath(join(TOP, 'www')))
 PROJECT_ROOT = str(TOP)
 FIXTURES_ROOT = join(TOP, 'tests', 'py', 'fixtures')
+
+
+def filter_x_headers(headers):
+    for k in list(headers.keys()):
+        if k.startswith('x-'):
+            headers.pop(k)
+
+
+class CustomSerializer:
+
+    @staticmethod
+    def serialize(cassette_dict):
+        for i in cassette_dict['interactions']:
+            # Remove request headers
+            i['request']['headers'] = {}
+            # Filter some unimportant response headers
+            response_headers = i['response']['headers']
+            response_headers.pop('connection', None)
+            response_headers.pop('date', None)
+            response_headers.pop('server', None)
+            filter_x_headers(response_headers)
+        return yamlserializer.serialize(cassette_dict)
+
+    @staticmethod
+    def deserialize(cassette_str):
+        return yamlserializer.deserialize(cassette_str)
 
 
 class ClientWithAuth(Client):
@@ -85,7 +112,11 @@ class Harness(unittest.TestCase):
             record_mode = 'once',
             match_on = ['url', 'method'],
         )
-        cls.vcr_cassette = cls.vcr.use_cassette('{}.yml'.format(cls.__name__)).__enter__()
+        cls.vcr.register_serializer('custom', CustomSerializer)
+        cls.vcr_cassette = cls.vcr.use_cassette(
+            '{}.yml'.format(cls.__name__),
+            serializer='custom',
+        ).__enter__()
 
 
     @classmethod
