@@ -107,6 +107,7 @@ class TestBalancedBankAccount(BalancedHarness):
 class TestBillingAssociate(BalancedHarness):
 
     def test_associate_valid_card(self):
+        self.david.set_tip_to(self.homer, 10)
         card = balanced.Card(
             number='4242424242424242',
             expiration_year=2020,
@@ -123,6 +124,9 @@ class TestBillingAssociate(BalancedHarness):
         cards = customer.cards.all()
         assert len(cards) == 1
         assert cards[0].href == card.href
+
+        homer = Participant.from_id(self.homer.id)
+        assert homer.receiving == 10
 
     def test_associate_invalid_card(self): #, find):
         billing.associate( self.db
