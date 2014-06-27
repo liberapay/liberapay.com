@@ -42,9 +42,9 @@ test-schema: env
 pyflakes: env
 	./$(env_bin)/pyflakes bin gittip tests
 
-test: pytest jstest
+test: test-schema pytest jstest
 
-pytest: env test-schema
+pytest: env
 	$(py_test) --cov gittip ./tests/py/
 	@$(MAKE) --no-print-directory pyflakes
 
@@ -52,8 +52,8 @@ retest: env
 	$(py_test) ./tests/py/ --lf
 	@$(MAKE) --no-print-directory pyflakes
 
-test-cov: env test-schema
-	$(py_test) --cov gittip ./tests/py/
+test-cov: env
+	$(py_test) --cov-report html --cov gittip ./tests/py/
 
 tests: test
 
