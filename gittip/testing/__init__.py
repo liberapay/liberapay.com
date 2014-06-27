@@ -12,7 +12,6 @@ from vcr.serializers import yamlserializer
 from aspen import resources
 from aspen.utils import utcnow
 from aspen.testing.client import Client
-from gittip.billing.payday import Payday
 from gittip.elsewhere import UserInfo
 from gittip.models.account_elsewhere import AccountElsewhere
 from gittip.models.participant import Participant
@@ -223,10 +222,3 @@ class Harness(unittest.TestCase):
                 active.add(t)
             cursor.run("INSERT INTO paydays (ts_start, ts_end, nactive, transfer_volume) VALUES (%s, %s, %s, %s)",
                     (ts_start, ts_end, len(active), transfer_volume))
-
-
-class GittipPaydayTest(Harness):
-
-    def setUp(self):
-        super(GittipPaydayTest, self).setUp()
-        self.payday = Payday(self.db)
