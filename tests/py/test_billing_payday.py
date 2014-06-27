@@ -273,8 +273,6 @@ class TestPaydayChargeOnBalanced(PaydayHarness):
 
 
 class TestBillingCharges(PaydayHarness):
-    BALANCED_CUSTOMER_HREF = '/customers/CU123123123'
-    BALANCED_TOKEN = u'/cards/CU123123123'
 
     def test_mark_missing_funding(self):
         self.payday.start()
@@ -390,7 +388,6 @@ class TestPrepHit(PaydayHarness):
 
 
 class TestBillingPayday(PaydayHarness):
-    BALANCED_CUSTOMER_HREF = '/customers/CU123123123'
 
     def test_move_pending_to_balance_for_teams_does_so(self):
         self.make_participant('A', number='plural', balance=2, pending=3)
@@ -436,7 +433,7 @@ class TestBillingPayday(PaydayHarness):
                  , is_suspicious=False
              WHERE username='alice'
 
-        """, (self.BALANCED_CUSTOMER_HREF,))
+        """, (self.balanced_customer_href,))
 
         amount = D('1.00')
 
@@ -463,7 +460,7 @@ class TestBillingPayday(PaydayHarness):
                  , is_suspicious=False
              WHERE username='alice'
 
-        """, (self.BALANCED_CUSTOMER_HREF,))
+        """, (self.balanced_customer_href,))
 
         ts_start = self.payday.start()
         now = datetime.utcnow()
@@ -504,7 +501,7 @@ class TestBillingPayday(PaydayHarness):
                  , is_suspicious=False
              WHERE username='alice'
 
-        """, (self.BALANCED_CUSTOMER_HREF,))
+        """, (self.balanced_customer_href,))
 
         now = datetime.utcnow()
         amount = D('1.00')
@@ -531,7 +528,7 @@ class TestBillingPayday(PaydayHarness):
         with self.assertRaises(Exception):
             billing.charge_and_or_transfer(ts_start, self.alice)
         assert charge.called_with(self.alice.username,
-                                  self.BALANCED_CUSTOMER_HREF,
+                                  self.balanced_customer_href,
                                   amount)
 
     @mock.patch('gittip.billing.payday.Payday.transfer')
@@ -545,7 +542,7 @@ class TestBillingPayday(PaydayHarness):
                  , is_suspicious=False
              WHERE username='alice'
 
-        """, (self.BALANCED_CUSTOMER_HREF,))
+        """, (self.balanced_customer_href,))
         amount = D('1.00')
         invalid_amount = D('0.00')
         tip = { 'amount': amount
@@ -597,10 +594,10 @@ class TestBillingPayday(PaydayHarness):
     def test_start_zero_out_and_get_participants(self, log):
         self.make_participant('bob', balance=10, claimed_time=None,
                               pending=1,
-                              balanced_customer_href=self.BALANCED_CUSTOMER_HREF)
+                              balanced_customer_href=self.balanced_customer_href)
         self.make_participant('carl', balance=10, claimed_time=utcnow(),
                               pending=1,
-                              balanced_customer_href=self.BALANCED_CUSTOMER_HREF)
+                              balanced_customer_href=self.balanced_customer_href)
         self.db.run("""
 
             UPDATE participants
@@ -610,7 +607,7 @@ class TestBillingPayday(PaydayHarness):
                  , balanced_customer_href=%s
              WHERE username='alice'
 
-        """, (self.BALANCED_CUSTOMER_HREF,))
+        """, (self.balanced_customer_href,))
 
         ts_start = self.payday.start()
 
