@@ -22,14 +22,35 @@ import balanced
 from aspen.utils import typecheck
 
 
-def update_receiving_amounts(db, tipper, error):
-    """Update receiving amounts of participants tipped by given tipper.
+def update_last_thing_result(db, thing, username, new_result):
+    """Update the participant's last_{ach,bill}_result in the DB.
+
+    Also update receiving amounts of the participant's tippees.
     """
-    from gittip.models.participant import Participant
-    tipper = Participant.from_username(tipper)
-    if tipper.is_suspicious or tipper.last_bill_result == error:
+    assert thing in ("credit card", "bank account"), thing
+    x = "bill" if thing == "credit card" else "ach"
+
+    # Update last_thing_result in the DB
+    SQL = """
+
+        UPDATE participants p
+           SET last_{0}_result=%s
+         WHERE username=%s
+     RETURNING is_suspicious
+             , ( SELECT last_{0}_result
+                   FROM participants p2
+                  WHERE p2.id = p.id
+               ) AS old_result
+
+    """.format(x)
+    p = db.one(SQL, (new_result, username))
+
+    # Update the receiving amounts of tippees if necessary
+    if thing != "credit card":
         return
-    if error == '':
+    if p.is_suspicious or new_result == p.old_result:
+        return
+    if new_result == '':
         op = '+'
     else:
         op = '-'
@@ -42,7 +63,7 @@ def update_receiving_amounts(db, tipper, error):
                ORDER BY tippee, mtime DESC
                ) foo
          WHERE tippee = username;
-    """.format(op), dict(tipper=tipper))
+    """.format(op), dict(tipper=username))
 
 
 def get_balanced_account(db, username, balanced_customer_href):
@@ -94,16 +115,13 @@ def associate(db, thing, username, balanced_customer_href, balanced_thing_uri):
                                                , balanced_customer_href
                                                 )
     invalidate_on_balanced(thing, balanced_account.href)
-    SQL = "UPDATE participants SET last_%s_result=%%s WHERE username=%%s"
     try:
         if thing == "credit card":
-            SQL %= "bill"
             obj = balanced.Card.fetch(balanced_thing_uri)
             #add = balanced_account.add_card
 
         else:
             assert thing == "bank account", thing # sanity check
-            SQL %= "ach"
             obj = balanced.BankAccount.fetch(balanced_thing_uri)
             #add = balanced_account.add_bank_account
 
@@ -114,9 +132,7 @@ def associate(db, thing, username, balanced_customer_href, balanced_thing_uri):
         error = ''
     typecheck(error, unicode)
 
-    db.run(SQL, (error, username))
-    if thing == "credit card":
-        update_receiving_amounts(db, username, error)
+    update_last_thing_result(db, thing, username, error)
     return error
 
 
@@ -144,33 +160,11 @@ def clear(db, thing, username, balanced_customer_href):
              , username, unicode
              , balanced_customer_href, (unicode, str)
               )
-    assert thing in ("credit card", "bank account"), thing
     invalidate_on_balanced(thing, balanced_customer_href)
-    CLEAR = """\
-
-        UPDATE participants
-           SET last_%s_result=NULL
-         WHERE username=%%s
-
-    """ % ("bill" if thing == "credit card" else "ach")
-    db.run(CLEAR, (username,))
-    if thing == "credit card":
-        update_receiving_amounts(db, username, None)
+    update_last_thing_result(db, thing, username, None)
 
 
-def store_error(db, thing, username, msg):
-    typecheck(thing, unicode, username, unicode, msg, unicode)
-    assert thing in ("credit card", "bank account"), thing
-    ERROR = """\
-
-        UPDATE participants
-           SET last_%s_result=%%s
-         WHERE username=%%s
-
-    """ % ("bill" if thing == "credit card" else "ach")
-    db.run(ERROR, (msg, username))
-    if thing == "credit card":
-        update_receiving_amounts(db, username, msg)
+store_error = update_last_thing_result
 
 
 class BalancedThing(object):
