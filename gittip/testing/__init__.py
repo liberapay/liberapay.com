@@ -161,6 +161,8 @@ class Harness(unittest.TestCase):
         if kw:
             if kw.get('claimed_time') == 'now':
                 kw['claimed_time'] = utcnow()
+            if kw.get('balanced_customer_href') == 'new':
+                kw['balanced_customer_href'] = self.make_balanced_customer()
             cols, vals = zip(*kw.items())
             cols = ', '.join(cols)
             placeholders = ', '.join(['%s']*len(vals))
