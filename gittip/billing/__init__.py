@@ -118,13 +118,9 @@ def associate(db, thing, username, balanced_customer_href, balanced_thing_uri):
     try:
         if thing == "credit card":
             obj = balanced.Card.fetch(balanced_thing_uri)
-            #add = balanced_account.add_card
-
         else:
             assert thing == "bank account", thing # sanity check
             obj = balanced.BankAccount.fetch(balanced_thing_uri)
-            #add = balanced_account.add_bank_account
-
         obj.associate_to_customer(balanced_account)
     except balanced.exc.HTTPError as err:
         error = err.message.message.decode('UTF-8')  # XXX UTF-8?
