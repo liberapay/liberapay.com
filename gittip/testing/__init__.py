@@ -3,6 +3,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import datetime
+import itertools
 import unittest
 from decimal import Decimal
 from os.path import join, dirname, realpath
@@ -58,6 +59,7 @@ class Harness(unittest.TestCase):
     platforms = client.website.platforms
     tablenames = db.all("SELECT tablename FROM pg_tables "
                         "WHERE schemaname='public'")
+    seq = itertools.count(0)
 
 
     @classmethod
@@ -130,6 +132,13 @@ class Harness(unittest.TestCase):
             for v, w in zip(row, widths):
                 print("{0:{width}}".format(unicode(v), width=w), end=' | ')
             print()
+
+
+    @classmethod
+    def make_balanced_customer(cls):
+        import balanced
+        seq = next(cls.seq)
+        return unicode(balanced.Customer(meta=dict(seq=seq)).save().href)
 
 
     def make_participant(self, username, **kw):
