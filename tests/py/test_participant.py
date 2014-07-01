@@ -220,41 +220,36 @@ class TestParticipant(Harness):
         assert actual == True
 
     def test_cant_take_over_claimed_participant_without_confirmation(self):
-        bob_twitter = self.make_elsewhere('twitter', '2', 'bob')
         with self.assertRaises(NeedConfirmation):
-            self.alice.take_over(bob_twitter)
+            self.alice.take_over(('twitter', str(self.bob.id)))
 
     def test_taking_over_yourself_sets_all_to_zero(self):
-        bob_twitter = self.make_elsewhere('twitter', '2', 'bob')
         self.alice.set_tip_to(self.bob, '1.00')
-        self.alice.take_over(bob_twitter, have_confirmation=True)
+        self.alice.take_over(('twitter', str(self.bob.id)), have_confirmation=True)
         expected = Decimal('0.00')
         actual = self.alice.giving
         assert actual == expected
 
     def test_alice_ends_up_tipping_bob_two_dollars(self):
-        carl_twitter = self.make_elsewhere('twitter', '3', 'carl')
         self.alice.set_tip_to(self.bob, '1.00')
         self.alice.set_tip_to(self.carl, '1.00')
-        self.bob.take_over(carl_twitter, have_confirmation=True)
+        self.bob.take_over(('twitter', str(self.carl.id)), have_confirmation=True)
         expected = Decimal('2.00')
         actual = self.alice.get_tip_to('bob')
         assert actual == expected
 
     def test_bob_ends_up_tipping_alice_two_dollars(self):
-        carl_twitter = self.make_elsewhere('twitter', '3', 'carl')
         self.bob.set_tip_to(self.alice, '1.00')
         self.carl.set_tip_to(self.alice, '1.00')
-        self.bob.take_over(carl_twitter, have_confirmation=True)
+        self.bob.take_over(('twitter', str(self.carl.id)), have_confirmation=True)
         expected = Decimal('2.00')
         actual = self.bob.get_tip_to('alice')
         assert actual == expected
 
     def test_ctime_comes_from_the_older_tip(self):
-        carl_twitter = self.make_elsewhere('twitter', '3', 'carl')
         self.alice.set_tip_to(self.bob, '1.00')
         self.alice.set_tip_to(self.carl, '1.00')
-        self.bob.take_over(carl_twitter, have_confirmation=True)
+        self.bob.take_over(('twitter', str(self.carl.id)), have_confirmation=True)
 
         tips = self.db.all("SELECT * FROM tips")
         first, second = tips[0], tips[1]
@@ -274,12 +269,12 @@ class TestParticipant(Harness):
 
     def test_delete_elsewhere_last(self):
         with pytest.raises(LastElsewhere):
-            self.alice.delete_elsewhere('twitter', 1)
+            self.alice.delete_elsewhere('twitter', self.alice.id)
 
     def test_delete_elsewhere_last_signin(self):
         self.make_elsewhere('bountysource', self.alice.id, 'alice')
         with pytest.raises(LastElsewhere):
-            self.alice.delete_elsewhere('twitter', 1)
+            self.alice.delete_elsewhere('twitter', self.alice.id)
 
     def test_delete_elsewhere_nonsignin(self):
         g = self.make_elsewhere('bountysource', 1, 'alice')
@@ -303,7 +298,7 @@ class TestParticipant(Harness):
         accounts = alice.get_accounts_elsewhere()
         assert accounts['twitter'] and accounts['github']
         # do the thing
-        alice.delete_elsewhere('twitter', 1)
+        alice.delete_elsewhere('twitter', alice.id)
         # unit test
         accounts = alice.get_accounts_elsewhere()
         assert accounts.get('twitter') is None and accounts['github']

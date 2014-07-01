@@ -8,7 +8,7 @@ venv := "./vendor/virtualenv-1.9.1.py"
 test_env_files := defaults.env,tests/test.env,tests/local.env
 py_test := ./$(env_bin)/honcho -e $(test_env_files) run ./$(env_bin)/py.test
 
-env:
+env: requirements.txt requirements_tests.txt setup.py
 	$(python)  $(venv)\
 				--unzip-setuptools \
 				--prompt="[gittip] " \

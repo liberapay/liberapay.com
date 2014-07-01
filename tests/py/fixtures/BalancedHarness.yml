@@ -1,0 +1,265 @@
+interactions:
+- request:
+    body: '{}'
+    headers: {}
+    method: POST
+    uri: https://api.balancedpayments.com:443/api_keys
+  response:
+    body: {string: !!python/unicode "{\n  \"links\": {},\n  \"api_keys\": [\n    {\n
+        \     \"links\": {},\n      \"created_at\": \"2014-07-01T11:32:21.176697Z\",\n
+        \     \"secret\": \"ak-test-i2BYNzhi88y5uxqw4Rcw738sk2rjLWiY\",\n      \"href\":
+        \"/api_keys/AK2QkRBCbioFJrtCGdS61egF\",\n      \"meta\": {},\n      \"id\":
+        \"AK2QkRBCbioFJrtCGdS61egF\"\n    }\n  ]\n}"}
+    headers:
+      content-length: ['289']
+      content-type: [application/json]
+    status: {code: 201, message: CREATED}
+- request:
+    body: null
+    headers: {}
+    method: GET
+    uri: https://api.balancedpayments.com:443/marketplaces?limit=25&offset=0
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA5VUTW/bMAy991cEPuyyJfFngQQotrXZZe3QYE0xbMNgyBaNeJElQ5aabEH++2hZ
+        rmNMKLZLQFKP5CP54uPFZOJVoIi3nBzRRo+RRqHnzSsid6BqRnJo3rKyKtVVmLwSRdGAuvK9Nx2c
+        w6GFc82YjWwlFP9RwFRGfJjY/K4DRnwbqCU8lUI34zZKKMIwFFhUUcp/I468T22Odz4gFvpuBuq2
+        gK8lT6HJpdi3PXw/DhZ+2LXCRyoqggAtWwYeHEhVM5jlorJrQQgnFbSPa52xMp+s4Gl4YyXfteP0
+        zRAu9hxkmutGiQpkm3jzGOwfi693q+xud7++pcFn+L29PmSe4WmHMCdzbny++fCwmX5aB/vNr8Pq
+        /cfbG/Jl/fP6Ib5nZUwHLrkEooCmxFw99IN46ifTMN740TK8XIaL2WIRxVH8bUhpdF0LqVLAJbCU
+        UCqhacfx7MM750J0TV9qFPmzKIj8JHA0qreCQ8p1lXWreR1cJn6SJEEYxQOtWgqqc1UKjlwKwhp4
+        vlcvcXN4szPNUcaK4eAFQEveqq29PG1neXl9pswJf38YKY0POlLWjEJWKrOeuTWtYs/1N0ONg2yQ
+        tAEOngtLy6bWyrDGmr3jQvZ66qCD58RKoD1RFIWxnTgiqa1nLBdGSIrTGH7WdKFyzE+3gp2Vs64L
+        jZ8VzS20t124v/9J8+fB58fR0sfQk3MUJQlviJFVN9Ao4CKQEb5LSZ4Lze3dxxFXTk4Yy0huvgre
+        fPBcWFRKX9ia7Sft4vQHQlHAFs0FAAA=
+    headers:
+      content-encoding: [gzip]
+      content-length: ['593']
+      content-type: [application/json]
+    status: {code: 200, message: OK}
+- request:
+    body: '{"meta": {"seq": 0}}'
+    headers: {}
+    method: POST
+    uri: https://api.balancedpayments.com:443/customers
+  response:
+    body: {string: !!python/unicode "{\n  \"customers\": [\n    {\n      \"name\":
+        null,\n      \"links\": {\n        \"source\": null,\n        \"destination\":
+        null\n      },\n      \"updated_at\": \"2014-07-01T11:32:21.952391Z\",\n      \"created_at\":
+        \"2014-07-01T11:32:21.838223Z\",\n      \"dob_month\": null,\n      \"id\":
+        \"CU2R4ZqaRKDZoW1GpfgeKFbr\",\n      \"phone\": null,\n      \"href\": \"/customers/CU2R4ZqaRKDZoW1GpfgeKFbr\",\n
+        \     \"merchant_status\": \"no-match\",\n      \"meta\": {\n        \"seq\":
+        \"0\"\n      },\n      \"dob_year\": null,\n      \"address\": {\n        \"city\":
+        null,\n        \"line2\": null,\n        \"line1\": null,\n        \"state\":
+        null,\n        \"postal_code\": null,\n        \"country_code\": null\n      },\n
+        \     \"business_name\": null,\n      \"ssn_last4\": null,\n      \"email\":
+        null,\n      \"ein\": null\n    }\n  ],\n  \"links\": {\n    \"customers.source\":
+        \"/resources/{customers.source}\",\n    \"customers.card_holds\": \"/customers/{customers.id}/card_holds\",\n
+        \   \"customers.bank_accounts\": \"/customers/{customers.id}/bank_accounts\",\n
+        \   \"customers.debits\": \"/customers/{customers.id}/debits\",\n    \"customers.destination\":
+        \"/resources/{customers.destination}\",\n    \"customers.external_accounts\":
+        \"/customers/{customers.id}/external_accounts\",\n    \"customers.cards\":
+        \"/customers/{customers.id}/cards\",\n    \"customers.disputes\": \"/customers/{customers.id}/disputes\",\n
+        \   \"customers.transactions\": \"/customers/{customers.id}/transactions\",\n
+        \   \"customers.refunds\": \"/customers/{customers.id}/refunds\",\n    \"customers.reversals\":
+        \"/customers/{customers.id}/reversals\",\n    \"customers.orders\": \"/customers/{customers.id}/orders\",\n
+        \   \"customers.credits\": \"/customers/{customers.id}/credits\"\n  }\n}"}
+    headers:
+      content-length: ['1619']
+      content-type: [application/json]
+    status: {code: 201, message: CREATED}
+- request:
+    body: '{"meta": {"seq": 1}}'
+    headers: {}
+    method: POST
+    uri: https://api.balancedpayments.com:443/customers
+  response:
+    body: {string: !!python/unicode "{\n  \"customers\": [\n    {\n      \"name\":
+        null,\n      \"links\": {\n        \"source\": null,\n        \"destination\":
+        null\n      },\n      \"updated_at\": \"2014-07-01T11:32:22.451880Z\",\n      \"created_at\":
+        \"2014-07-01T11:32:22.324563Z\",\n      \"dob_month\": null,\n      \"id\":
+        \"CU2RCigJCqQDdYQEcThv3Jxr\",\n      \"phone\": null,\n      \"href\": \"/customers/CU2RCigJCqQDdYQEcThv3Jxr\",\n
+        \     \"merchant_status\": \"no-match\",\n      \"meta\": {\n        \"seq\":
+        \"1\"\n      },\n      \"dob_year\": null,\n      \"address\": {\n        \"city\":
+        null,\n        \"line2\": null,\n        \"line1\": null,\n        \"state\":
+        null,\n        \"postal_code\": null,\n        \"country_code\": null\n      },\n
+        \     \"business_name\": null,\n      \"ssn_last4\": null,\n      \"email\":
+        null,\n      \"ein\": null\n    }\n  ],\n  \"links\": {\n    \"customers.source\":
+        \"/resources/{customers.source}\",\n    \"customers.card_holds\": \"/customers/{customers.id}/card_holds\",\n
+        \   \"customers.bank_accounts\": \"/customers/{customers.id}/bank_accounts\",\n
+        \   \"customers.debits\": \"/customers/{customers.id}/debits\",\n    \"customers.destination\":
+        \"/resources/{customers.destination}\",\n    \"customers.external_accounts\":
+        \"/customers/{customers.id}/external_accounts\",\n    \"customers.cards\":
+        \"/customers/{customers.id}/cards\",\n    \"customers.disputes\": \"/customers/{customers.id}/disputes\",\n
+        \   \"customers.transactions\": \"/customers/{customers.id}/transactions\",\n
+        \   \"customers.refunds\": \"/customers/{customers.id}/refunds\",\n    \"customers.reversals\":
+        \"/customers/{customers.id}/reversals\",\n    \"customers.orders\": \"/customers/{customers.id}/orders\",\n
+        \   \"customers.credits\": \"/customers/{customers.id}/credits\"\n  }\n}"}
+    headers:
+      content-length: ['1619']
+      content-type: [application/json]
+    status: {code: 201, message: CREATED}
+- request:
+    body: '{"expiration_month": 10, "meta": {"region": "Confusion", "city_town": "",
+      "address_2": "Box 2"}, "number": "4111111111111111", "expiration_year": 2020,
+      "address": {"state": "Confusion", "postal_code": "90210", "line1": "123 Main
+      Street"}}'
+    headers: {}
+    method: POST
+    uri: https://api.balancedpayments.com:443/cards
+  response:
+    body: {string: !!python/unicode "{\n  \"cards\": [\n    {\n      \"links\": {\n
+        \       \"customer\": null\n      },\n      \"fingerprint\": \"8c7f0423365af88c3e36cf02746eca64fdcf36ddc2e1f398c7ec9f3ffd05a267\",\n
+        \     \"cvv_result\": null,\n      \"number\": \"xxxxxxxxxxxx1111\",\n      \"avs_postal_match\":
+        \"no\",\n      \"expiration_month\": 10,\n      \"meta\": {\n        \"region\":
+        \"Confusion\",\n        \"city_town\": \"\",\n        \"address_2\": \"Box
+        2\"\n      },\n      \"id\": \"CC2SGPDNPBU0oOKbaes9tqC1\",\n      \"category\":
+        \"other\",\n      \"type\": \"credit\",\n      \"cvv_match\": null,\n      \"bank_name\":
+        \"JPMORGAN CHASE BANK, N.A.\",\n      \"avs_street_match\": \"yes\",\n      \"brand\":
+        \"Visa\",\n      \"updated_at\": \"2014-07-01T11:32:23.284439Z\",\n      \"address\":
+        {\n        \"city\": null,\n        \"line2\": null,\n        \"line1\": \"123
+        Main Street\",\n        \"state\": \"Confusion\",\n        \"postal_code\":
+        \"90210\",\n        \"country_code\": null\n      },\n      \"can_debit\":
+        true,\n      \"name\": null,\n      \"expiration_year\": 2020,\n      \"cvv\":
+        null,\n      \"is_verified\": true,\n      \"avs_result\": \"Street address
+        and postal code do not match.\",\n      \"can_credit\": false,\n      \"href\":
+        \"/cards/CC2SGPDNPBU0oOKbaes9tqC1\",\n      \"created_at\": \"2014-07-01T11:32:23.284437Z\"\n
+        \   }\n  ],\n  \"links\": {\n    \"cards.card_holds\": \"/cards/{cards.id}/card_holds\",\n
+        \   \"cards.customer\": \"/customers/{cards.customer}\",\n    \"cards.disputes\":
+        \"/cards/{cards.id}/disputes\",\n    \"cards.debits\": \"/cards/{cards.id}/debits\"\n
+        \ }\n}"}
+    headers:
+      access-control-allow-headers: [Content-Type]
+      access-control-allow-methods: ['POST, OPTIONS']
+      access-control-allow-origin: ['*']
+      content-length: ['1419']
+      content-type: [application/json]
+    status: {code: 201, message: CREATED}
+- request:
+    body: '{"links": {"customer": "/customers/CU2RCigJCqQDdYQEcThv3Jxr"}, "cvv_result":
+      null, "number": "xxxxxxxxxxxx1111", "expiration_month": 10, "meta": {"region":
+      "Confusion", "city_town": "", "address_2": "Box 2"}, "id": "CC2SGPDNPBU0oOKbaes9tqC1",
+      "category": "other", "is_verified": true, "type": "credit", "cvv_match": null,
+      "bank_name": "JPMORGAN CHASE BANK, N.A.", "avs_street_match": "yes", "brand":
+      "Visa", "updated_at": "2014-07-01T11:32:23.284439Z", "fingerprint": "8c7f0423365af88c3e36cf02746eca64fdcf36ddc2e1f398c7ec9f3ffd05a267",
+      "can_debit": true, "name": null, "expiration_year": 2020, "can_credit": false,
+      "avs_postal_match": "no", "avs_result": "Street address and postal code do not
+      match.", "cvv": null, "created_at": "2014-07-01T11:32:23.284437Z", "address":
+      {"city": null, "line2": null, "line1": "123 Main Street", "state": "Confusion",
+      "postal_code": "90210", "country_code": null}}'
+    headers: {}
+    method: PUT
+    uri: https://api.balancedpayments.com:443/cards/CC2SGPDNPBU0oOKbaes9tqC1
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA41U207jMBB95yusPEObOKFN+1YKYgWi3FdaVqvI9aW1SO1iO91WqP++tpM0CbDa
+        9UOkzMVz5szxvB8BEGCkiA7G4Kf9AeDdf6055+LVmWuDiyy0kSuqrDWYPsOHKV9cTd/uz8mP+wv8
+        tNzEV1sVVPn74/oixsWCqrXiwrjEFA9ZmMA4HpwilqY4pvEAsxAOkwHFaJAwglk8IARDGrF4ZMMp
+        HrGYMRKeIjgYBoeL8WaTKaqL3N0rijw/eESxmpcwt60T2dNko43O1lIblGcrZPDSYROy8dPtmitk
+        uBTZSgrj/FF4qLCiBnXJUXRhYz01UrBCu5863HHHzS4z8rePaDsQIbYJnUHnOJNbAD9TyIm/dwof
+        L+/OZ3dnz6G8vZ4jqkfmbdrqCSNDF1LtXLQ0S0vBAbDZrakzY0UJN10S6/47HM6ReM0EWvmsq7ub
+        24fLyQxMv00eL8DZZHZ9DGa9Sa/LpzaKUtPwuaO6CZgrJHwf37lGjblYE4uaZMirA4ZRchIOT8Lo
+        KYrGMRzDuJemKUxGL61SJWU2vi1OS7C1tHsoVUwds1+YI1cvgjG4QVyARw+9PRgrDeOb/3KelXSw
+        JD5mFMIobGdjWQijdlkV4Op/ehkYiYzQuR3HGBhV0Ea/Je2debT0uKPIvUEYwkaQ9jF8aDPgOttQ
+        xRmnjvZOASf+w9MJyt5BpURgxwTK9oBDD4gEQhrgVdIauENfqWkMGMp1g3+pKHOs9P1u6f+HcBX9
+        hwhgmiTx8KV8G3tL5S/H1octVe6ynquaLWXu11oN4t1j6XGy96gqf0l5ndfab/162el+lVkb9tWY
+        qyTC9bowVuhfljp4O4X80P+WUfpsc/uj/R/ViBIhoQUAAA==
+    headers:
+      content-encoding: [gzip]
+      content-length: ['661']
+      content-type: [application/json]
+    status: {code: 200, message: OK}
+- request:
+    body: '{"meta": {"seq": 2}}'
+    headers: {}
+    method: POST
+    uri: https://api.balancedpayments.com:443/customers
+  response:
+    body: {string: !!python/unicode "{\n  \"customers\": [\n    {\n      \"name\":
+        null,\n      \"links\": {\n        \"source\": null,\n        \"destination\":
+        null\n      },\n      \"updated_at\": \"2014-07-01T11:32:24.889772Z\",\n      \"created_at\":
+        \"2014-07-01T11:32:24.783468Z\",\n      \"dob_month\": null,\n      \"id\":
+        \"CU2Uomy8gvhh6SdpAqQO2wHv\",\n      \"phone\": null,\n      \"href\": \"/customers/CU2Uomy8gvhh6SdpAqQO2wHv\",\n
+        \     \"merchant_status\": \"no-match\",\n      \"meta\": {\n        \"seq\":
+        \"2\"\n      },\n      \"dob_year\": null,\n      \"address\": {\n        \"city\":
+        null,\n        \"line2\": null,\n        \"line1\": null,\n        \"state\":
+        null,\n        \"postal_code\": null,\n        \"country_code\": null\n      },\n
+        \     \"business_name\": null,\n      \"ssn_last4\": null,\n      \"email\":
+        null,\n      \"ein\": null\n    }\n  ],\n  \"links\": {\n    \"customers.source\":
+        \"/resources/{customers.source}\",\n    \"customers.card_holds\": \"/customers/{customers.id}/card_holds\",\n
+        \   \"customers.bank_accounts\": \"/customers/{customers.id}/bank_accounts\",\n
+        \   \"customers.debits\": \"/customers/{customers.id}/debits\",\n    \"customers.destination\":
+        \"/resources/{customers.destination}\",\n    \"customers.external_accounts\":
+        \"/customers/{customers.id}/external_accounts\",\n    \"customers.cards\":
+        \"/customers/{customers.id}/cards\",\n    \"customers.disputes\": \"/customers/{customers.id}/disputes\",\n
+        \   \"customers.transactions\": \"/customers/{customers.id}/transactions\",\n
+        \   \"customers.refunds\": \"/customers/{customers.id}/refunds\",\n    \"customers.reversals\":
+        \"/customers/{customers.id}/reversals\",\n    \"customers.orders\": \"/customers/{customers.id}/orders\",\n
+        \   \"customers.credits\": \"/customers/{customers.id}/credits\"\n  }\n}"}
+    headers:
+      content-length: ['1619']
+      content-type: [application/json]
+    status: {code: 201, message: CREATED}
+- request:
+    body: '{"routing_number": "121042882", "account_number": "112233a", "name": "Homer
+      Jay"}'
+    headers: {}
+    method: POST
+    uri: https://api.balancedpayments.com:443/bank_accounts
+  response:
+    body: {string: !!python/unicode "{\n  \"bank_accounts\": [\n    {\n      \"routing_number\":
+        \"121042882\",\n      \"bank_name\": \"WELLS FARGO BANK NA\",\n      \"account_type\":
+        \"checking\",\n      \"name\": \"Homer Jay\",\n      \"links\": {\n        \"customer\":
+        null,\n        \"bank_account_verification\": null\n      },\n      \"can_credit\":
+        true,\n      \"created_at\": \"2014-07-01T11:32:25.564498Z\",\n      \"fingerprint\":
+        \"dac6514d9dd3a1cd7ac925d5749e0308c2c65fa27c506aefb0c9b21611ff9969\",\n      \"updated_at\":
+        \"2014-07-01T11:32:25.564501Z\",\n      \"href\": \"/bank_accounts/BA2Vg7rBg6MrZmOr6xyqEYcd\",\n
+        \     \"meta\": {},\n      \"account_number\": \"xxx233a\",\n      \"address\":
+        {\n        \"city\": null,\n        \"line2\": null,\n        \"line1\": null,\n
+        \       \"state\": null,\n        \"postal_code\": null,\n        \"country_code\":
+        null\n      },\n      \"can_debit\": false,\n      \"id\": \"BA2Vg7rBg6MrZmOr6xyqEYcd\"\n
+        \   }\n  ],\n  \"links\": {\n    \"bank_accounts.credits\": \"/bank_accounts/{bank_accounts.id}/credits\",\n
+        \   \"bank_accounts.bank_account_verifications\": \"/bank_accounts/{bank_accounts.id}/verifications\",\n
+        \   \"bank_accounts.customer\": \"/customers/{bank_accounts.customer}\",\n
+        \   \"bank_accounts.debits\": \"/bank_accounts/{bank_accounts.id}/debits\",\n
+        \   \"bank_accounts.bank_account_verification\": \"/verifications/{bank_accounts.bank_account_verification}\"\n
+        \ }\n}"}
+    headers:
+      access-control-allow-headers: [Content-Type]
+      access-control-allow-methods: ['POST, OPTIONS']
+      access-control-allow-origin: ['*']
+      content-length: ['1281']
+      content-type: [application/json]
+    status: {code: 201, message: CREATED}
+- request:
+    body: '{"routing_number": "121042882", "bank_name": "WELLS FARGO BANK NA", "account_type":
+      "checking", "name": "Homer Jay", "links": {"customer": "/customers/CU2Uomy8gvhh6SdpAqQO2wHv"},
+      "can_credit": true, "created_at": "2014-07-01T11:32:25.564498Z", "fingerprint":
+      "dac6514d9dd3a1cd7ac925d5749e0308c2c65fa27c506aefb0c9b21611ff9969", "updated_at":
+      "2014-07-01T11:32:25.564501Z", "meta": {}, "account_number": "xxx233a", "address":
+      {"city": null, "line2": null, "line1": null, "state": null, "postal_code": null,
+      "country_code": null}, "can_debit": false, "id": "BA2Vg7rBg6MrZmOr6xyqEYcd"}'
+    headers: {}
+    method: PUT
+    uri: https://api.balancedpayments.com:443/bank_accounts/BA2Vg7rBg6MrZmOr6xyqEYcd
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA5VTW2+bMBh9769APK8Bm3veyNSt2rpGW9dW6zQhY5sEhVuNSYMi/vtsCuXSdOpe
+        /ODzcTiXz8czRVFDlO0ChHFeZbxUl8pvcakox/YUMMsrHmebIKvSkDKBqwAC3YSuC9UP/VDLkaGU
+        Svz+4urqRvnk//i8Vlb+9Vfl2h8mux8FvC7aYbyleCf4h4me5jJPKVO+oHqAkjjbSYm9OCEPVyWX
+        g5Lr4y28zdPa3ey3W/uGFP7j9zV8uty/EMzcBnvK4ijGiMd5JgiyKkk6R82LNYyyADNKYi4mOKvo
+        gDCKOCUBkogKdWCe6865Dn4CsDTgEloLyzZNz30YDETCKWUFi7P2G4KwbQGTeIQYCGDiIOxBi1iO
+        6VHd0F0MBR4h6GBLtxGNQh17IQQ2AFHkebY3EFcF+acWewFtz7LMkZYto5EUoU0WQFv58G7jsNXG
+        /sYe0jWzD/XjxS9Mhn+llCNZwpBRX+qwI4fDARoGGvVOCKPlvLyY113ufaqiItEyhaevwevrkgvj
+        r6+LXABJgHNyAmx3ndVj9GTvhIZt7RFKyqH3mMjY3sypZWrE+Ud6km5GOzt9bYvnxZKpzGs4TlpZ
+        xKTR+uHnqGZM4/HJXr+TfPwUyq62udjRU9P6d1dqM6U90JwmaSN9p6Zu9v/8tllO3MwVvhlVo4rC
+        mrPmL7GaaGsXBQAA
+    headers:
+      content-encoding: [gzip]
+      content-length: ['525']
+      content-type: [application/json]
+    status: {code: 200, message: OK}
+version: 1

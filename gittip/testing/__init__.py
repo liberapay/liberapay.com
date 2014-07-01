@@ -3,19 +3,19 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import datetime
+import itertools
 import unittest
 from decimal import Decimal
 from os.path import join, dirname, realpath
 
-import vcr
 from aspen import resources
 from aspen.utils import utcnow
 from aspen.testing.client import Client
-from gittip.billing.payday import Payday
 from gittip.elsewhere import UserInfo
 from gittip.models.account_elsewhere import AccountElsewhere
 from gittip.models.participant import Participant
 from gittip.security.user import User, SESSION
+from gittip.testing.vcr import use_cassette
 from gittip import wireup
 from psycopg2 import IntegrityError, InternalError
 
@@ -24,7 +24,6 @@ TOP = realpath(join(dirname(dirname(__file__)), '..'))
 SCHEMA = open(join(TOP, "schema.sql")).read()
 WWW_ROOT = str(realpath(join(TOP, 'www')))
 PROJECT_ROOT = str(TOP)
-FIXTURES_ROOT = join(TOP, 'tests', 'py', 'fixtures')
 
 
 class ClientWithAuth(Client):
@@ -60,11 +59,11 @@ class Harness(unittest.TestCase):
     platforms = client.website.platforms
     tablenames = db.all("SELECT tablename FROM pg_tables "
                         "WHERE schemaname='public'")
+    seq = itertools.count(0)
 
 
     @classmethod
     def setUpClass(cls):
-        cls.seq = 0
         cls.setUpVCR()
 
 
@@ -80,12 +79,7 @@ class Harness(unittest.TestCase):
         information, and you can commit that with your updated tests.
 
         """
-        cls.vcr = vcr.VCR(
-            cassette_library_dir = FIXTURES_ROOT,
-            record_mode = 'once',
-            match_on = ['url', 'method'],
-        )
-        cls.vcr_cassette = cls.vcr.use_cassette('{}.yml'.format(cls.__name__)).__enter__()
+        cls.vcr_cassette = use_cassette(cls.__name__).__enter__()
 
 
     @classmethod
@@ -140,6 +134,13 @@ class Harness(unittest.TestCase):
             print()
 
 
+    @classmethod
+    def make_balanced_customer(cls):
+        import balanced
+        seq = next(cls.seq)
+        return unicode(balanced.Customer(meta=dict(seq=seq)).save().href)
+
+
     def make_participant(self, username, **kw):
         # At this point wireup.db() has been called, but not ...
         wireup.username_restrictions(self.client.website)
@@ -150,17 +151,18 @@ class Harness(unittest.TestCase):
         if 'elsewhere' in kw or 'claimed_time' in kw:
             username = participant.username
             platform = kw.pop('elsewhere', 'github')
-            self.seq += 1
             self.db.run("""
                 INSERT INTO elsewhere
                             (platform, user_id, user_name, participant)
                      VALUES (%s,%s,%s,%s)
-            """, (platform, self.seq, username, username))
+            """, (platform, participant.id, username, username))
 
         # Update participant
         if kw:
             if kw.get('claimed_time') == 'now':
                 kw['claimed_time'] = utcnow()
+            if kw.get('balanced_customer_href') == 'new':
+                kw['balanced_customer_href'] = self.make_balanced_customer()
             cols, vals = zip(*kw.items())
             cols = ', '.join(cols)
             placeholders = ', '.join(['%s']*len(vals))
@@ -192,10 +194,3 @@ class Harness(unittest.TestCase):
                 active.add(t)
             cursor.run("INSERT INTO paydays (ts_start, ts_end, nactive, transfer_volume) VALUES (%s, %s, %s, %s)",
                     (ts_start, ts_end, len(active), transfer_volume))
-
-
-class GittipPaydayTest(Harness):
-
-    def setUp(self):
-        super(GittipPaydayTest, self).setUp()
-        self.payday = Payday(self.db)

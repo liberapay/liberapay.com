@@ -67,19 +67,18 @@ class TestClosing(Harness):
     # wbtba - withdraw_balance_to_bank_account
 
     def test_wbtba_withdraws_balance_to_bank_account(self):
-        customer = balanced.Customer().save()
+        alice = self.make_participant( 'alice'
+                                     , balance=D('10.00')
+                                     , is_suspicious=False
+                                     , balanced_customer_href='new'
+                                      )
+
         bank_account = balanced.BankAccount( name='Alice G. Krebs'
                                            , routing_number='321174851'
                                            , account_number='9900000001'
                                            , account_type='checking'
                                             ).save()
-        bank_account.associate_to_customer(customer.href)
-
-        alice = self.make_participant( 'alice'
-                                     , balance=D('10.00')
-                                     , is_suspicious=False
-                                     , balanced_customer_href=customer.href
-                                      )
+        bank_account.associate_to_customer(alice.balanced_customer_href)
 
         alice.close('bank')
 
