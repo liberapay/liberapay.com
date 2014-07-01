@@ -90,7 +90,6 @@ class Harness(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.seq = 0
         cls.setUpVCR()
 
 
@@ -180,12 +179,11 @@ class Harness(unittest.TestCase):
         if 'elsewhere' in kw or 'claimed_time' in kw:
             username = participant.username
             platform = kw.pop('elsewhere', 'github')
-            self.seq += 1
             self.db.run("""
                 INSERT INTO elsewhere
                             (platform, user_id, user_name, participant)
                      VALUES (%s,%s,%s,%s)
-            """, (platform, self.seq, username, username))
+            """, (platform, participant.id, username, username))
 
         # Update participant
         if kw:
