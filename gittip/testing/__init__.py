@@ -7,8 +7,6 @@ import unittest
 from decimal import Decimal
 from os.path import join, dirname, realpath
 
-import vcr
-from vcr.serializers import yamlserializer
 from aspen import resources
 from aspen.utils import utcnow
 from aspen.testing.client import Client
@@ -16,6 +14,7 @@ from gittip.elsewhere import UserInfo
 from gittip.models.account_elsewhere import AccountElsewhere
 from gittip.models.participant import Participant
 from gittip.security.user import User, SESSION
+from gittip.testing.vcr import use_cassette
 from gittip import wireup
 from psycopg2 import IntegrityError, InternalError
 
@@ -24,33 +23,6 @@ TOP = realpath(join(dirname(dirname(__file__)), '..'))
 SCHEMA = open(join(TOP, "schema.sql")).read()
 WWW_ROOT = str(realpath(join(TOP, 'www')))
 PROJECT_ROOT = str(TOP)
-FIXTURES_ROOT = join(TOP, 'tests', 'py', 'fixtures')
-
-
-def filter_x_headers(headers):
-    for k in list(headers.keys()):
-        if k.startswith('x-'):
-            headers.pop(k)
-
-
-class CustomSerializer:
-
-    @staticmethod
-    def serialize(cassette_dict):
-        for i in cassette_dict['interactions']:
-            # Remove request headers
-            i['request']['headers'] = {}
-            # Filter some unimportant response headers
-            response_headers = i['response']['headers']
-            response_headers.pop('connection', None)
-            response_headers.pop('date', None)
-            response_headers.pop('server', None)
-            filter_x_headers(response_headers)
-        return yamlserializer.serialize(cassette_dict)
-
-    @staticmethod
-    def deserialize(cassette_str):
-        return yamlserializer.deserialize(cassette_str)
 
 
 class ClientWithAuth(Client):
@@ -105,16 +77,7 @@ class Harness(unittest.TestCase):
         information, and you can commit that with your updated tests.
 
         """
-        cls.vcr = vcr.VCR(
-            cassette_library_dir = FIXTURES_ROOT,
-            record_mode = 'once',
-            match_on = ['url', 'method'],
-        )
-        cls.vcr.register_serializer('custom', CustomSerializer)
-        cls.vcr_cassette = cls.vcr.use_cassette(
-            '{}.yml'.format(cls.__name__),
-            serializer='custom',
-        ).__enter__()
+        cls.vcr_cassette = use_cassette(cls.__name__).__enter__()
 
 
     @classmethod
