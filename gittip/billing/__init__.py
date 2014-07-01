@@ -22,7 +22,7 @@ import balanced
 from aspen.utils import typecheck
 
 
-def update_last_thing_result(db, thing, username, new_result):
+def store_result(db, thing, username, new_result):
     """Update the participant's last_{ach,bill}_result in the DB.
 
     Also update receiving amounts of the participant's tippees.
@@ -132,7 +132,7 @@ def associate(db, thing, username, balanced_customer_href, balanced_thing_uri):
         error = ''
     typecheck(error, unicode)
 
-    update_last_thing_result(db, thing, username, error)
+    store_result(db, thing, username, error)
     return error
 
 
@@ -161,10 +161,7 @@ def clear(db, thing, username, balanced_customer_href):
              , balanced_customer_href, (unicode, str)
               )
     invalidate_on_balanced(thing, balanced_customer_href)
-    update_last_thing_result(db, thing, username, None)
-
-
-store_error = update_last_thing_result
+    store_result(db, thing, username, None)
 
 
 class BalancedThing(object):
