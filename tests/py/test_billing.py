@@ -107,6 +107,7 @@ class TestBalancedBankAccount(BalancedHarness):
 class TestBillingAssociate(BalancedHarness):
 
     def test_associate_valid_card(self):
+        self.david.set_tip_to(self.homer, 10)
         card = balanced.Card(
             number='4242424242424242',
             expiration_year=2020,
@@ -123,6 +124,9 @@ class TestBillingAssociate(BalancedHarness):
         cards = customer.cards.all()
         assert len(cards) == 1
         assert cards[0].href == card.href
+
+        homer = Participant.from_id(self.homer.id)
+        assert homer.receiving == 10
 
     def test_associate_invalid_card(self): #, find):
         billing.associate( self.db
@@ -195,19 +199,19 @@ class TestBillingClear(BalancedHarness):
         assert david.balanced_customer_href
 
 
-class TestBillingStoreError(Harness):
+class TestBillingStoreResult(Harness):
 
     def setUp(self):
-        super(TestBillingStoreError, self).setUp()
+        super(TestBillingStoreResult, self).setUp()
         self.make_participant('alice')
 
-    def test_store_error_stores_bill_error(self):
-        billing.store_error(self.db, u"credit card", "alice", "cheese is yummy")
+    def test_store_result_stores_bill_error(self):
+        billing.store_result(self.db, u"credit card", "alice", "cheese is yummy")
         alice = Participant.from_username('alice')
         assert alice.last_bill_result == "cheese is yummy"
 
-    def test_store_error_stores_ach_error(self):
+    def test_store_result_stores_ach_error(self):
         for message in ['cheese is yummy', 'cheese smells like my vibrams']:
-            billing.store_error(self.db, u"bank account", 'alice', message)
+            billing.store_result(self.db, u"bank account", 'alice', message)
             alice = Participant.from_username('alice')
             assert alice.last_ach_result == message

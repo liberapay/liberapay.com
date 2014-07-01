@@ -25,7 +25,7 @@ if body.get('action') == 'delete':
                  , user.participant.balanced_customer_href
                   )
 elif body.get('action') == 'store-error':
-    billing.store_error(website.db, u"credit card", user.participant.username, body['msg'])
+    billing.store_result(website.db, u"credit card", user.participant.username, body['msg'])
 else:
 
     # Associate the single-use token representing the credit card details (we
