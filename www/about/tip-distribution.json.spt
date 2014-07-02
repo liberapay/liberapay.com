@@ -1,6 +1,6 @@
 [---]
-
-response.body = website.db.all("""
+[---] application/json via json_dump
+website.db.all("""
 
     SELECT amount
       FROM (SELECT DISTINCT ON (tipper, tippee)
