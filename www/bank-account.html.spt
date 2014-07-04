@@ -30,7 +30,7 @@ title = "Bank Account"
 
 {% block heading %}
 
-    <h2 class="top"><span>Your bank account is <em id="status">{{ status }}</em></span></h2>
+    <h1>Your bank account is <em id="status">{{ status }}</em></h1>
 
     <p>When you receive money on Gittip we
     {% if bank_account and bank_account.is_setup %}will{% else %}can{% endif %}

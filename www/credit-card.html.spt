@@ -31,7 +31,7 @@ title = "Credit Card"
 {% extends "templates/base.html" %}
 
 {% block heading %}
-    <h2 class="top"><span>Your credit card is <em id="status">{{ status }}</em></span></h2>
+    <h1>Your credit card is <em id="status">{{ status }}</em></h1>
 
     <p>When you don't have enough money in your Gittip account to cover
     your gifts, we {% if balanced_customer_href %}will{% else %}can{% endif %}

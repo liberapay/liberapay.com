@@ -46,12 +46,13 @@
         <div class="container">
             {% block heading %}
             {% if title %}
-            <h2 class="top"><span>{{ title }}</span></h2>
+            <h1>{{ title }}</h1>
             {% endif %}
             {% endblock %}
         </div>
     </div>
 
+    {% block whole_page %}
     <div class="container">
         {% block killbox %}
         <div class="box">
@@ -61,7 +62,10 @@
         <div id="page" class="group">
             {% block page %}{% endblock %}
         </div>
+    </div>
+    {% endblock %}
 
+    <div class="container">
         <div id="footer">
             <div class="social">
                 <a href="https://twitter.com/gittip"><img src="{{ website.asset_url }}/icons/twitter.16.png" /></a>

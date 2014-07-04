@@ -55,7 +55,7 @@ else:
 {% extends "templates/base.html" %}
 
 {% block heading %}
-    <h2 class="top"><span>{{ platform.name }}</span></h2>
+    <h1>{{ platform.name }}</h1>
 {% endblock %}
 
 {% block scripts %}

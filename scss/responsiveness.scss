@@ -22,6 +22,17 @@
         width: 100%;
     }
 
+    .homepage-content {
+        .give-receive, .browse-about {
+            display: block;
+            .give,.receive,.browse,.about {
+                width: 100%;
+                display: block;
+                text-align: center;
+            }
+        }
+    }
+
     .col0, .col1, .col2 {
         float: none;
         margin: auto;
@@ -37,12 +48,24 @@
     }
 
     #hero {
-        h2.top {
-            font-size: 30px;
-        }
+        .homepage {
+            h1 {
+                font-size: 72px;
+                line-height: 72px;
+                margin: 0 0 21px;
+            }
 
+            h2 {
+                font: italic 48px/64px $Ideal;
+                padding: 0 20px;
+            }
+        }
+    }
+    .homepage-content {
         h1 {
-            font-size: 48px;
+            font-size: 72px;
+            line-height: 72px;
+            margin: 0 0 21px;
         }
     }
 
@@ -95,14 +118,27 @@
 
     #hero {
         font-size: 15px;
-        h2.top {
-            letter-spacing: -1px;
-            font-size: 1.33em;
-        }
-
         h1 {
-            letter-spacing: -1px;
             font-size: 36px;
+            padding: 36px 0 18px;
+        }
+        .homepage {
+            h1 {
+                font-size: 64px;
+                line-height: 64px;
+                margin: 0 0 18px;
+            }
+
+            h2 {
+                font: italic 36px/48px $Ideal;
+            }
+        }
+    }
+    .homepage-content {
+        h1 {
+            font-size: 64px;
+            line-height: 64px;
+            margin: 0 0 18px;
         }
     }
 

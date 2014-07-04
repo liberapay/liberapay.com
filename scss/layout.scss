@@ -20,9 +20,9 @@
         text-transform: uppercase;
         padding-left: 18px;
         text-align: left;
-	a {
-	    color: inherit;
-	}
+    a {
+        color: inherit;
+    }
     }
     .sign-in, .you-are {
         padding-top: 18px;
@@ -47,8 +47,9 @@
 }
 
 #hero {
-    background: transparent url('hero-bg.png') top left repeat;
-    border: 1px solid $light-gray;
+    background: url("pennies.jpg") 50% 50% no-repeat;
+
+    border: 1px solid $brown;
     border-style: solid none;
     color: $black;
     padding-bottom: 100px;
@@ -56,54 +57,27 @@
     position: relative;
     z-index: 1;
 
-    h2 {
-        span {
-            background: transparent url('hero-bg.png') top left repeat;
-            display: inline-block;
-            padding: 0 10px;
-        }
-    }
-    h2.top {
-        letter-spacing: -2px;
-        font: normal 36px $Mensch;
-        padding: 1.5em 0 1em 0;
-
-        span {
-            background: transparent url('hero-bg.png') top left repeat;
-            display: inline-block;
-            padding: 0 10px;
-        }
-        &:after {
-            background: $black;
-            content: "";
-            display: block;
-            height: 1px;
-            margin-top: -0.5em;
-        }
-    }
     h1 {
-        letter-spacing: -3px;
-        font: normal 64px $Mensch;
-        padding-bottom: 0.375em;
-    }
-    h2.bottom {
-        padding-bottom: 20px;
-        span.button-container {
-            display: inline-block;
-            padding: 0 10px;
+        font: bold 48px $Ideal;
+        padding: 48px 0 24px;
+        color: $white;
+        text-shadow: 0.1em 0.1em 0.2em black;
 
-            button {
-                font-size: 14px;
-                line-height: 17px;
-            }
+        em {
+            font-style: italic;
+            color: $gold;
         }
-        &:after {
-            background: $black;
-            content: "";
-            display: block;
-            height: 1px;
-            margin-top: -16px;
-        }
+    }
+
+    p {
+        color: $white;
+        text-shadow: 0.1em 0.1em 0.2em black;
+        font-size: 120%;
+        line-height: 200%;
+    }
+
+    a {
+        color: $gold;
     }
 }
 .box {

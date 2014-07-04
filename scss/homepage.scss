@@ -1,0 +1,108 @@
+#hero {
+    .homepage {
+
+        padding: 128px 0;
+
+        h1 {
+            font-size: 96px;
+            line-height: 96px;
+            margin: 0 0 24px;
+            padding: 0;
+        }
+
+        font: normal 36px/48px $Ideal;
+        text-shadow: 0.1em 0.1em 0.2em black;
+        p { line-height: 48px; margin: 0; padding: 0; }
+
+        span {
+            white-space: nowrap;
+        }
+    }
+}
+
+.homepage-content {
+
+    color: $white; 
+    font: normal 36px/48px $Ideal;
+    text-shadow: 0.1em 0.1em 0.2em black;
+
+    h1 {
+        font: bold 96px/96px $Ideal;
+        text-transform: none;
+        margin: 0 0 24px;
+        padding: 0;
+        color: $white;
+    }
+
+    a {
+        color: $gold;
+        &:hover {
+            color: $brown;
+        }
+    }
+
+    span {
+        white-space: nowrap;
+    }
+
+    .give-receive {
+        display: table;
+        width: 100%;
+
+        .give,.receive {
+            width: 50%;
+            display: table-cell;
+            padding: 96px 48px;
+        }
+
+        .give {
+            background: url("pennies.brown.jpg");
+        }
+
+        .receive {
+            background: url("pennies.gold.jpg");
+        }
+
+    }
+
+    .why {
+        text-align: center;
+        padding: 96px 48px;
+        background: url("pennies.jpg");
+    }
+
+    .browse-about {
+        display: table;
+        width: 100%;
+
+        .browse,.about {
+            width: 50%;
+            display: table-cell;
+        }
+
+        .browse {
+            background: url("pennies.brown.jpg");
+        }
+
+        .about {
+            background: url("pennies.gold.jpg");
+            a {
+                color: $brown;
+            }
+        }
+        h1 {
+            margin: 0;
+            padding: 0;
+
+            a {
+                display: block;
+                padding: 96px 48px;
+                text-align: center;
+                &:hover {
+                    color: $green;
+                }
+            }
+        }
+
+    }
+}

@@ -19,7 +19,7 @@ team = qs.get('team', '').lower() == 'true'
 [---]
 
 {% extends "templates/base.html" %}
-{% block heading %}<h2 class="top"><span>Failure</span></h2>{% endblock %}
+{% block heading %}<h1>Failure</h1>{% endblock %}
 {% block box %}
 
 <div class="as-content">
