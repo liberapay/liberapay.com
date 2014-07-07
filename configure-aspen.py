@@ -99,24 +99,6 @@ else:
 def add_stuff_to_context(request):
     request.context['username'] = None
 
-def scab_body_onto_response(response):
-
-    # This is a workaround for a Cheroot bug, where the connection is closed
-    # too early if there is no body:
-    #
-    # https://bitbucket.org/cherrypy/cheroot/issue/1/fail-if-passed-zero-bytes
-    #
-    # This Cheroot bug is manifesting because of a change in Aspen's behavior
-    # with the algorithm.py refactor in 0.27+: Aspen no longer sets a body for
-    # 302s as it used to. This means that all redirects are breaking
-    # intermittently (sometimes the client seems not to care that the
-    # connection is closed too early, so I guess there's some timing
-    # involved?), which is affecting a number of parts of Gittip, notably
-    # around logging in (#1859).
-
-    if not response.body:
-        response.body = '*sigh*'
-
 
 algorithm = website.algorithm
 algorithm.functions = [ timer.start
@@ -152,7 +134,6 @@ algorithm.functions = [ timer.start
                       , algorithm['log_traceback_for_exception']
                       , algorithm['log_result_of_request']
 
-                      , scab_body_onto_response
                       , timer.end
                       , tell_sentry
                        ]
