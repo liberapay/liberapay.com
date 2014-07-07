@@ -1,37 +1,37 @@
 #hero {
-    .homepage {
-
+    .homepage-content {
         padding: 128px 0;
-
-        h1 {
-            font-size: 96px;
-            line-height: 96px;
-            margin: 0 0 24px;
-            padding: 0;
-        }
-
-        font: normal 36px/48px $Ideal;
-        text-shadow: 0.1em 0.1em 0.2em black;
-        p { line-height: 48px; margin: 0; padding: 0; }
-
-        span {
-            white-space: nowrap;
-        }
     }
 }
 
+#hero .homepage-content,
 .homepage-content {
 
     color: $white; 
-    font: normal 36px/48px $Ideal;
-    text-shadow: 0.1em 0.1em 0.2em black;
+
+    span {
+        white-space: nowrap;
+    }
 
     h1 {
         font: bold 96px/96px $Ideal;
+        text-shadow: 0.05em 0.05em 0.2em black;
         text-transform: none;
         margin: 0 0 24px;
         padding: 0;
         color: $white;
+    }
+
+    p {
+        font: normal 48px/72px $Ideal;
+        text-shadow: 0.1em 0.1em 0.2em black;
+        margin: 0;
+        padding: 0;
+
+        .parenthesis {
+            font-size: 36px;
+            line-height: 60px;
+        }
     }
 
     a {
@@ -39,10 +39,6 @@
         &:hover {
             color: $brown;
         }
-    }
-
-    span {
-        white-space: nowrap;
     }
 
     .give-receive {
@@ -56,11 +52,11 @@
         }
 
         .give {
-            background: url("pennies.brown.jpg");
+            background: transparentize($brown, 0.1);
         }
 
         .receive {
-            background: url("pennies.gold.jpg");
+            background: transparentize($gold, 0.1);
         }
 
     }
@@ -68,7 +64,7 @@
     .why {
         text-align: center;
         padding: 96px 48px;
-        background: url("pennies.jpg");
+            background: transparentize($green, 0.2);
     }
 
     .browse-about {
@@ -81,11 +77,11 @@
         }
 
         .browse {
-            background: url("pennies.brown.jpg");
+            background: transparentize($brown, 0.1);
         }
 
         .about {
-            background: url("pennies.gold.jpg");
+            background: transparentize($gold, 0.1);
             a {
                 color: $brown;
             }

@@ -31,6 +31,9 @@
         right: 0;
         font: normal 13px $Ideal;
         text-align: right;
+        width: 50%;
+        overflow: hidden;
+        white-space: nowrap;
     }
     .you-are {
         padding-top: 4px;
@@ -46,8 +49,13 @@
     }
 }
 
+.pennies {
+    background: url("pennies.jpg");
+    background-size: cover;
+    background-position: 0 -100px;
+}
 #hero {
-    background: url("pennies.jpg") 50% 50% no-repeat;
+    background: transparentize($green, 0.2);
 
     border: 1px solid $brown;
     border-style: solid none;

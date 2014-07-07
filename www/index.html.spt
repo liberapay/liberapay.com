@@ -81,13 +81,21 @@ receivers = website.db.all("""
     <style>
         #hero { padding-bottom: 0; border: none; }
         #page { padding: 0; }
-        #footer { margin-top: 0; border-top: 0; }
-        .container { padding: 0 48px; max-width: 100%; width: 100%; }
+        #header { margin: 0; padding: 10px 48px; }
+        #footer { margin: 0; border-top: 0; padding: 10px 48px; background: white; }
+        .container { padding: 0; max-width: 100%; width: 100%; }
+        .pennies { background: none; }
+        body {
+            background: url("{{ website.asset_url }}/pennies.jpg");
+            background-size: cover;
+            background-position: 0 -47px;
+        }
+        .sign-in, .you-are { margin-right: 48px; }
     </style>
 {% endblock %}
 
 {% block heading %}
-<div class="homepage">
+<div class="homepage-content">
     <h1>Weekly Payments</h1>
     <p>Motivated by Gratitude</p>
 </div>
@@ -97,15 +105,15 @@ receivers = website.db.all("""
     <div class="give-receive">
         <div class="give">
             <h1>Give</h1>
-            <p><span>People share freely</span> <span>with you</span>.</p>
-            <p><span>Return the favor.</span></p>
+            <p>People share freely.</p>
+            <p>Return the favor.</p>
             {% include "templates/sign-in-using.html" %}
         </div>
 
         <div class="receive">
             <h1>Receive</h1>
-            <p><span>You share freely</span> <span>with people</span>.</p>
-            <p><span>Receive in return.</span></p>
+            <p>You share freely.</p>
+            <p>Receive in return.</p>
             {% include "templates/sign-in-using.html" %}
         </div>
     </div>
@@ -114,7 +122,8 @@ receivers = website.db.all("""
         <h1>Why Gittip?</h1>
         <p>Sustainable funding.</p>
         <p>No strings attached.</p>
-        <p>No fees. Gittip is <a href="/Gittip/">funded on Gittip</a>.</p>
+        <p>No fees.</p>
+        <p class="parenthesis">(Gittip is <a href="/Gittip/">funded on Gittip</a>.)</p>
     </div>
 
     <div class="browse-about">
