@@ -306,3 +306,7 @@ def env():
         raise BadEnvironment("Missing envvar{}: {}.".format(plural, keys))
 
     return env
+
+
+if __name__ == '__main__':
+    env()
