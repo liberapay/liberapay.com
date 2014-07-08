@@ -257,7 +257,7 @@ def env():
         LOG_BUSY_THREADS_EVERY          = int,
         LOG_METRICS                     = is_yesish,
         MANDRILL_KEY                    = unicode,
-        TESTING                         = is_yesish,
+        RAISE_CARD_EXPIRATION           = is_yesish,
     )
 
 

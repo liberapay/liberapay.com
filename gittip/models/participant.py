@@ -1407,7 +1407,7 @@ class Participant(Model, MixinTeam):
             response.headers.cookie[NOTIFIED_ABOUT_EXPIRATION] = self.session_token
             return card_expiring
         except Exception as e:
-            if request.website.env.testing:
+            if request.website.env.raise_card_expiration:
                 raise
             aspen.log(e)
             request.website.tell_sentry(e, request)
