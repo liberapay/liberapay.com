@@ -57,6 +57,7 @@ def store_result(db, thing, username, new_result):
     db.run("""
         UPDATE participants
            SET receiving = (receiving {0} amount)
+             , npatrons = (npatrons {0} 1)
           FROM ( SELECT DISTINCT ON (tippee) tippee, amount
                    FROM tips
                   WHERE tipper=%(tipper)s

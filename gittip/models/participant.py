@@ -386,7 +386,7 @@ class Participant(Model, MixinTeam):
         """
         if self.IS_PLURAL:
             self.remove_all_members(cursor)
-        session_expires = cursor.one("""
+        r = cursor.one("""
 
             INSERT INTO communities (ctime, name, slug, participant, is_member) (
                 SELECT ctime, name, slug, %(username)s, false
@@ -416,24 +416,12 @@ class Participant(Model, MixinTeam):
                  , giving=0
                  , pledging=0
                  , receiving=0
+                 , npatrons=0
              WHERE username=%(username)s
-         RETURNING session_expires;
+         RETURNING *;
 
         """, dict(username=self.username))
-        self.set_attributes( statement=''
-                           , goal=None
-                           , anonymous_giving=False
-                           , anonymous_receiving=False
-                           , number='singular'
-                           , avatar_url=None
-                           , email=None
-                           , claimed_time=None
-                           , session_token=None
-                           , session_expires=session_expires
-                           , giving=0
-                           , pledging=0
-                           , receiving=0
-                            )
+        self.set_attributes(**r._asdict())
 
 
     # Random Junk
@@ -619,21 +607,26 @@ class Participant(Model, MixinTeam):
     def update_receiving(self, cursor=None):
         if self.IS_PLURAL:
             old_takes = self.compute_actual_takes(cursor=cursor)
-        receiving = (cursor or self.db).one("""
+        r = (cursor or self.db).one("""
+            WITH our_tips AS (
+                     SELECT amount
+                       FROM current_tips
+                       JOIN participants p2 ON p2.username = tipper
+                      WHERE tippee = %(username)s
+                        AND p2.is_suspicious IS NOT true
+                        AND p2.last_bill_result = ''
+                        AND amount > 0
+                 )
             UPDATE participants p
                SET receiving = (COALESCE((
                        SELECT sum(amount)
-                         FROM current_tips
-                         JOIN participants p2 ON p2.username = tipper
-                        WHERE tippee = p.username
-                          AND p2.is_suspicious IS NOT true
-                          AND p2.last_bill_result = ''
-                     GROUP BY tippee
+                         FROM our_tips
                    ), 0) + taking)
-             WHERE p.username = %s
-         RETURNING receiving
-        """, (self.username,))
-        self.set_attributes(receiving=receiving)
+                 , npatrons = COALESCE((SELECT count(*) FROM our_tips), 0)
+             WHERE p.username = %(username)s
+         RETURNING receiving, npatrons
+        """, dict(username=self.username))
+        self.set_attributes(receiving=r.receiving, npatrons=r.npatrons)
         if self.IS_PLURAL:
             new_takes = self.compute_actual_takes(cursor=cursor)
             self.update_taking(old_takes, new_takes, cursor=cursor)
