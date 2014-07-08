@@ -213,8 +213,7 @@ class Participant(Model, MixinTeam):
         self.set_attributes(api_key=api_key)
         return api_key
 
-    @staticmethod
-    def _generate_api_key():
+    def _generate_api_key(self):
         return str(uuid.uuid4())
 
 

@@ -12,14 +12,11 @@ class Tests(Harness):
     def setUp(self):
         self._old = Participant._generate_api_key
         seq = itertools.count(0)
-        print("_generate_api_key clobbered")
-        Participant._generate_api_key = staticmethod(lambda: 'deadbeef{}'.format(next(seq)))
+        Participant._generate_api_key = lambda self: 'deadbeef{}'.format(next(seq))
         Harness.setUp(self)
 
     def tearDown(self):
         Participant._generate_api_key = self._old
-        print("_generate_api_key restored")
-        print()
         Harness.tearDown(self)
 
     def hit_api_key_json(self, method='GET'):
