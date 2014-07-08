@@ -79,12 +79,8 @@ module.exports = function(grunt) {
             var started = false;
             var stdout = [];
 
-            var aspen = yaml.safeLoad(fs.readFileSync('Procfile', 'utf8')).web
-                            .replace('$PORT', canonicalHost.match(/\d+$/)[0])
-                            .split(' ');
-
             var bin = 'env/' + (process.platform == 'win32' ? 'Scripts' : 'bin');
-            var child = spawn(bin + '/' + aspen.shift(), aspen, {
+            var child = spawn(bin+'/honcho', ['run', 'web'], {
                 env: grunt.config.get('env')
             });
 
