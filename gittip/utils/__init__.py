@@ -483,7 +483,7 @@ def set_cookie(cookies, key, value, expires=None, httponly=True, path='/'):
             expires += utcnow()
         else:
             raise TypeError('`expires` should be a `datetime` or `timedelta`')
-        cookie['expires'] = to_rfc822(expires)
+        cookie['expires'] = str(to_rfc822(expires))
     if httponly:
         cookie['httponly'] = True
     if path:
