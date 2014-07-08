@@ -8,7 +8,7 @@ import traceback
 
 import gittip
 import gittip.wireup
-from gittip import canonize
+from gittip import canonize, utils
 from gittip.security import authentication, csrf, x_frame_options
 from gittip.utils import cache_static, set_cookie, timer
 
@@ -69,28 +69,29 @@ tell_sentry = website.tell_sentry = gittip.wireup.make_sentry_teller(env)
 # The homepage wants expensive queries. Let's periodically select into an
 # intermediate table.
 
-UPDATE_HOMEPAGE_EVERY = env.update_homepage_every
-def update_homepage_queries():
-    from gittip import utils
-    while 1:
-        try:
-            utils.update_global_stats(website)
-            utils.update_homepage_queries_once(website.db)
-            website.db.self_check()
-        except:
-            exception = sys.exc_info()[0]
-            tell_sentry(exception)
-            tb = traceback.format_exc().strip()
-            log_dammit(tb)
-        time.sleep(UPDATE_HOMEPAGE_EVERY)
+def cron(period, func):
+    def f():
+        if period <= 0:
+            return
+        sleep = time.sleep
+        while 1:
+            try:
+                func()
+            except Exception, e:
+                tell_sentry(e)
+                log_dammit(traceback.format_exc().strip())
+            sleep(period)
+    t = threading.Thread(target=f)
+    t.daemon = True
+    t.start()
 
-if UPDATE_HOMEPAGE_EVERY > 0:
-    homepage_updater = threading.Thread(target=update_homepage_queries)
-    homepage_updater.daemon = True
-    homepage_updater.start()
-else:
-    from gittip import utils
+def update_homepage_queries():
     utils.update_global_stats(website)
+    utils.update_homepage_queries_once(website.db)
+
+cron(env.update_homepage_every, update_homepage_queries)
+
+cron(env.check_db_every, website.db.self_check)
 
 
 # Server Algorithm
