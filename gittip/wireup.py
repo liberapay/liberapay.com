@@ -252,12 +252,13 @@ def env():
         OPENSTREETMAP_AUTH_URL          = unicode,
         NANSWERS_THRESHOLD              = int,
         UPDATE_HOMEPAGE_EVERY           = int,
+        CHECK_DB_EVERY                  = int,
         SEGMENT_KEY                     = unicode,
         SENTRY_DSN                      = unicode,
         LOG_BUSY_THREADS_EVERY          = int,
         LOG_METRICS                     = is_yesish,
         MANDRILL_KEY                    = unicode,
-        TESTING                         = is_yesish,
+        RAISE_CARD_EXPIRATION           = is_yesish,
     )
 
 
@@ -306,3 +307,7 @@ def env():
         raise BadEnvironment("Missing envvar{}: {}.".format(plural, keys))
 
     return env
+
+
+if __name__ == '__main__':
+    env()
