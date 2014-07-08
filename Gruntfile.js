@@ -77,7 +77,7 @@ module.exports = function(grunt) {
             grunt.log.write('Starting Aspen...');
 
             var started = false;
-            var stdout = [];
+            var aspen_out = [];
 
             var bin = 'env/' + (process.platform == 'win32' ? 'Scripts' : 'bin');
             var child = spawn(bin+'/honcho', ['run', 'web'], {
@@ -85,22 +85,26 @@ module.exports = function(grunt) {
             });
 
             child.stdout.setEncoding('utf8');
+            child.stderr.setEncoding('utf8');
 
             child.stdout.on('data', function(data) {
-                stdout.push(data);
+                aspen_out.push(data);
 
                 if (!started && /Greetings, program! Welcome to port \d+\./.test(data)) {
                     started = true;
-                    grunt.log.writeln('started.');
+                    grunt.log.writeln(' started.');
                     setTimeout(done, 1000);
                 } else if (started && /Is something already running on port \d+/.test(data)) {
                     started = false;
                 }
             });
 
+            child.stderr.on('data', function(data) { aspen_out.push(data); });
+
             child.on('exit', function() {
                 if (!started) {
-                    grunt.log.writeln(stdout);
+                    grunt.log.writeln(' failed!');
+                    grunt.log.write(aspen_out);
                     grunt.fail.fatal('Something went wrong when starting Aspen :<');
                 }
             });
