@@ -63,7 +63,7 @@ module.exports = function(grunt) {
     grunt.registerTask('default', ['test']);
     grunt.registerTask('test', ['jshint', 'aspen:start', 'dalek']);
 
-    grunt.registerTask('aspen:start', 'Start Aspen (if necessary)', function aspenStart() {
+    grunt.registerTask('aspen:start', 'Start Aspen (if necessary)', function() {
         var done = this.async();
 
         grunt.config.requires('env.CANONICAL_HOST');
@@ -87,19 +87,19 @@ module.exports = function(grunt) {
             child.stdout.setEncoding('utf8');
             child.stderr.setEncoding('utf8');
 
-            child.stdout.on('data', function(data) {
+            child.stdout.on('data', function(data) { aspen_out.push(data); });
+
+            child.stderr.on('data', function(data) {
                 aspen_out.push(data);
 
-                if (!started && /Greetings, program! Welcome to port \d+\./.test(data)) {
-                    started = true;
+                if (!started && /Starting gunicorn /.test(data)) {
                     grunt.log.writeln(' started.');
-                    setTimeout(done, 1000);
-                } else if (started && /Is something already running on port \d+/.test(data)) {
-                    started = false;
+                    setTimeout(function() {
+                        started = true;
+                        done();
+                    }, 1000);
                 }
             });
-
-            child.stderr.on('data', function(data) { aspen_out.push(data); });
 
             child.on('exit', function() {
                 if (!started) {
