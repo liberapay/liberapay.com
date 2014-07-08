@@ -8,7 +8,7 @@ import traceback
 
 import gittip
 import gittip.wireup
-from gittip import canonize
+from gittip import canonize, utils
 from gittip.security import authentication, csrf, x_frame_options
 from gittip.utils import cache_static, set_cookie, timer
 
