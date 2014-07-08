@@ -710,28 +710,6 @@ class Participant(Model, MixinTeam):
         """, (self.username, tippee), default=Decimal('0.00'))
 
 
-    def get_number_of_backers(self):
-        """Given a unicode, return an int.
-        """
-        return self.db.one("""\
-
-            SELECT count(amount)
-              FROM ( SELECT DISTINCT ON (tipper)
-                            amount
-                          , tipper
-                       FROM tips
-                       JOIN participants p ON p.username = tipper
-                      WHERE tippee=%s
-                        AND last_bill_result = ''
-                        AND is_suspicious IS NOT true
-                   ORDER BY tipper
-                          , mtime DESC
-                    ) AS foo
-             WHERE amount > 0
-
-        """, (self.username,), default=0)
-
-
     def get_tip_distribution(self):
         """
             Returns a data structure in the form of::
@@ -1422,7 +1400,7 @@ class Participant(Model, MixinTeam):
             return output
 
         # Key: npatrons
-        output['npatrons'] = self.get_number_of_backers()
+        output['npatrons'] = self.npatrons
 
         # Key: goal
         # Values:

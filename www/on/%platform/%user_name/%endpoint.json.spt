@@ -44,7 +44,7 @@ participant = account.participant
 
 out = { "on": path['platform']
       , "avatar": participant.avatar_url
-      , "npatrons": participant.get_number_of_backers()
+      , "npatrons": participant.npatrons
        }
 
 
