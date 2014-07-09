@@ -213,7 +213,6 @@ def other_stuff(website, env):
     website.sentry_dsn = env.sentry_dsn
 
     website.min_threads = env.min_threads
-    website.log_busy_threads_every = env.log_busy_threads_every
     website.log_metrics = env.log_metrics
 
 
@@ -255,7 +254,6 @@ def env():
         CHECK_DB_EVERY                  = int,
         SEGMENT_KEY                     = unicode,
         SENTRY_DSN                      = unicode,
-        LOG_BUSY_THREADS_EVERY          = int,
         LOG_METRICS                     = is_yesish,
         MANDRILL_KEY                    = unicode,
         RAISE_CARD_EXPIRATION           = is_yesish,
