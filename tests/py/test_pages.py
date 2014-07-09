@@ -77,6 +77,11 @@ class TestPages(Harness):
         actual = self.client.GET('/about/charts.html').body
         assert expected in actual
 
+    def test_about_faq(self):
+        expected = "have joined Gittip"
+        actual = self.client.GET('/about/faq.html').body
+        assert expected in actual
+
     def test_404(self):
         response = self.client.GET('/about/four-oh-four.html', raise_immediately=False)
         assert "Page Not Found" in response.body
