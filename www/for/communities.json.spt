@@ -30,4 +30,5 @@ communities = []
 if not user.ANON:
     communities = community.get_list_for(website.db, user.participant.username)
 
-response.body = {"communities": communities}
+[---] application/json via json_dump
+{"communities": communities}

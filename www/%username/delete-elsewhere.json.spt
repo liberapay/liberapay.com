@@ -10,8 +10,10 @@ user_id = request.body["user_id"]
 
 try:
     user.participant.delete_elsewhere(platform, user_id)
-    response.body = { "msg": "OK" }
 except LastElsewhere:
     raise Response(400, "Cannot delete last login account.")
 except NonexistingElsewhere:
     raise Response(400, "Account does not exist.")
+
+[---] application/json via json_dump
+{ "msg": "OK" }

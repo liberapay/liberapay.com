@@ -10,4 +10,5 @@ team = get_participant(request, restrict=False)
 if not team.show_as_team(user):
     raise Response(404)
 
-response.body = team.get_members(user.participant)
+[--------------------] application/json via json_dump
+team.get_members(user.participant)

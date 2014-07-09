@@ -23,4 +23,5 @@ if number != user.participant.number:
         raise Response(400, unicode(e))
 user.participant.update_statement(statement)
 
-response.body = {"statement": wrap(statement), "number": wrap(number)}
+[---] application/json via json_dump
+{"statement": wrap(statement), "number": wrap(number)}

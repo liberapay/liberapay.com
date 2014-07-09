@@ -11,7 +11,9 @@ if user.ANON:
 try:
     old_username = user.participant.username
     new_username = user.participant.change_username(request.body['username'])
-    response.body = {"username": new_username}
     log_dammit("user with username %s has become username %s" % (old_username, new_username))
 except ProblemChangingUsername, e:
     raise Response(400, unicode(e))
+
+[---] application/json via json_dump
+{"username": new_username}

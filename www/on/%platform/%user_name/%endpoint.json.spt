@@ -42,10 +42,10 @@ if account.participant.is_claimed:
 
 participant = account.participant
 
-output = { "on": path['platform']
-         , "avatar": participant.avatar_url
-         , "npatrons": participant.get_number_of_backers()
-          }
+out = { "on": path['platform']
+      , "avatar": participant.avatar_url
+      , "npatrons": participant.get_number_of_backers()
+       }
 
 
 
@@ -64,10 +64,8 @@ if not user.ANON:
         my_tip = "self"
     else:
         my_tip = user.participant.get_tip_to(participant.username)
-    output["my_tip"] = str(my_tip)
+    out["my_tip"] = str(my_tip)
 
-
-response.body = output
 
 # CORS - see https://github.com/gittip/aspen-python/issues/138
 response.headers["Access-Control-Allow-Origin"] = "*"
@@ -76,8 +74,11 @@ response.headers["Access-Control-Allow-Origin"] = "*"
 callback = qs.get('callback')
 if callback is not None:
     if callback_pattern.match(callback) is None:
-        response.code = 400
-        response.body = {"error": "bad callback"}
+        raise Response(400, "bad callback")
     else:
         response.body = "%s(%s)" % (callback, json.dumps(response.body))
         response.headers['Content-Type'] = 'application/javascript'
+        raise response
+
+[---] application/json via json_dump
+out

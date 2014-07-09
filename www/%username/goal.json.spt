@@ -28,4 +28,6 @@ participant.update_goal(goal)
 
 if goal is not None:
     goal = locale.format("%.2f", goal, grouping=True)
-response.body = {"goal": goal}
+
+[---] application/json via json_dump
+{"goal": goal}

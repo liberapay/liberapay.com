@@ -29,11 +29,11 @@ class Tests(Harness):
 
     def test_canonize_canonizes(self):
         response = self.client.GxT( "/"
-                                  , HTTP_HOST='www.gittip.com'
-                                  , HTTP_X_FORWARDED_PROTO='http'
+                                  , HTTP_HOST=b'www.gittip.com'
+                                  , HTTP_X_FORWARDED_PROTO=b'http'
                                    )
         assert response.code == 302
-        assert response.headers['Location'] == 'https://www.gittip.com/'
+        assert response.headers['Location'] == b'https://www.gittip.com/'
 
 
     def test_session_cookie_isnt_overwritten_by_canonizer(self):
@@ -44,8 +44,8 @@ class Tests(Harness):
         # Make a request that canonizer will redirect.
         redirect = self.client.GET( "/"
                                   , auth_as='alice'
-                                  , HTTP_X_FORWARDED_PROTO='http'
-                                  , HTTP_HOST='www.gittip.com'
+                                  , HTTP_X_FORWARDED_PROTO=b'http'
+                                  , HTTP_HOST=b'www.gittip.com'
                                   , raise_immediately=False
                                    )
         assert redirect.code == 302
@@ -60,11 +60,11 @@ class Tests(Harness):
         alice = self.make_participant('alice', claimed_time='now')
         api_key = alice.recreate_api_key()
 
-        auth_header = ('Basic ' + (api_key + ':').encode('base64')).strip()
+        auth_header = (b'Basic ' + (api_key + b':').encode('base64')).strip()
         response = self.client.GET( '/alice/public.json'
                                   , HTTP_AUTHORIZATION=auth_header
-                                  , HTTP_X_FORWARDED_PROTO='https'
-                                  , HTTP_HOST='www.gittip.com'
+                                  , HTTP_X_FORWARDED_PROTO=b'https'
+                                  , HTTP_HOST=b'www.gittip.com'
                                    )
 
         assert response.code == 200

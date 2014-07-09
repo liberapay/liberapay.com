@@ -1,3 +1,5 @@
+from aspen import Response
+
 SQL = "SELECT username, username_lower, id FROM participants " \
       "WHERE username_lower LIKE %s AND claimed_time IS NOT NULL " \
       "ORDER BY username_lower LIMIT 5"
@@ -6,8 +8,7 @@ SQL = "SELECT username, username_lower, id FROM participants " \
 
 error = ''
 if 'query' not in qs:
-    response.code = 400
-    response.body = {"error":  "no 'query' key in querystring"}
+    raise Response(400, "no 'query' key in querystring")
 else:
     query = qs['query']
     query_lower = query.lower()
@@ -23,4 +24,5 @@ else:
                    , "username_lower": query_lower
                    , "id": -1
                     })
-    response.body = out
+[---] application/json via json_dump
+out
