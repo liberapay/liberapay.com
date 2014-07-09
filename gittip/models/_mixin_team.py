@@ -248,7 +248,7 @@ class MixinTeam(object):
         actual_takes = OrderedDict()
         nominal_takes = self.get_takes(cursor=cursor)
         nominal_takes.append(self.get_team_take(cursor=cursor))
-        budget = balance = self.receiving
+        budget = balance = self.balance + self.receiving
         for take in nominal_takes:
             nominal_amount = take['nominal_amount'] = take.pop('amount')
             actual_amount = take['actual_amount'] = min(nominal_amount, balance)
