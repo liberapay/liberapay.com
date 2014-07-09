@@ -252,7 +252,8 @@ class MixinTeam(object):
         for take in nominal_takes:
             nominal_amount = take['nominal_amount'] = take.pop('amount')
             actual_amount = take['actual_amount'] = min(nominal_amount, balance)
-            balance -= actual_amount
+            if take['member'] != self.username:
+                balance -= actual_amount
             take['balance'] = balance
             take['percentage'] = (actual_amount / budget) if budget > 0 else 0
             actual_takes[take['member']] = take
