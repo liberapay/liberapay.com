@@ -4,9 +4,10 @@ python := "$(shell { command -v python2.7 || command -v python; } 2>/dev/null)"
 # NOTE: Creating a virtualenv on Windows places binaries in the 'Scripts' directory.
 bin_dir := $(shell $(python) -c 'import sys; bin = "Scripts" if sys.platform == "win32" else "bin"; print(bin)')
 env_bin := env/$(bin_dir)
+export PATH := $(env_bin):$(PATH)
 venv := "./vendor/virtualenv-1.9.1.py"
 test_env_files := defaults.env,tests/test.env,tests/local.env
-py_test := ./$(env_bin)/honcho -e $(test_env_files) run ./$(env_bin)/py.test
+py_test := honcho -e $(test_env_files) run py.test
 
 env: requirements.txt requirements_tests.txt setup.py
 	$(python)  $(venv)\
@@ -16,31 +17,31 @@ env: requirements.txt requirements_tests.txt setup.py
 				--extra-search-dir=./vendor/ \
 				--distribute \
 				./env/
-	./$(env_bin)/pip install -r requirements.txt
-	./$(env_bin)/pip install -r requirements_tests.txt
-	./$(env_bin)/pip install -e ./
+	pip install -r requirements.txt
+	pip install -r requirements_tests.txt
+	pip install -e ./
 
 clean:
 	rm -rf env *.egg *.egg-info
 	find . -name \*.pyc -delete
 
 schema: env
-	./$(env_bin)/honcho -e defaults.env,local.env run ./recreate-schema.sh
+	honcho -e defaults.env,local.env run ./recreate-schema.sh
 
 data:
-	./$(env_bin)/honcho -e defaults.env,local.env run ./$(env_bin)/fake_data fake_data
+	honcho -e defaults.env,local.env run fake_data fake_data
 
 run: env
-	./$(env_bin)/honcho -e defaults.env,local.env run web
+	honcho -e defaults.env,local.env run web
 
 py: env
-	./$(env_bin)/honcho -e defaults.env,local.env run ./$(env_bin)/python
+	honcho -e defaults.env,local.env run python
 
 test-schema: env
-	./$(env_bin)/honcho -e $(test_env_files) run ./recreate-schema.sh
+	honcho -e $(test_env_files) run ./recreate-schema.sh
 
 pyflakes: env
-	./$(env_bin)/pyflakes bin gittip tests
+	pyflakes bin gittip tests
 
 test: test-schema pytest jstest
 
