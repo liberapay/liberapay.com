@@ -212,7 +212,6 @@ def other_stuff(website, env):
     website.segment_key = env.segment_key
     website.sentry_dsn = env.sentry_dsn
 
-    website.min_threads = env.min_threads
     website.log_metrics = env.log_metrics
 
 
@@ -221,7 +220,6 @@ def env():
         DATABASE_URL                    = unicode,
         CANONICAL_HOST                  = unicode,
         CANONICAL_SCHEME                = unicode,
-        MIN_THREADS                     = int,
         DATABASE_MAXCONN                = int,
         GITTIP_ASSET_URL                = unicode,
         GITTIP_CACHE_STATIC             = is_yesish,
