@@ -13,6 +13,7 @@ participant = get_participant(request, restrict=False)
 
 # CORS - see https://github.com/gittip/aspen-python/issues/138
 response.headers["Access-Control-Allow-Origin"] = "*"
+out = participant.to_dict(details=True, inquirer=user.participant)
 
 # JSONP - see https://github.com/gittip/aspen-python/issues/138
 callback = qs.get('callback')
@@ -20,9 +21,9 @@ if callback is not None:
     if callback_pattern.match(callback) is None:
         raise Response(400, "bad callback")
     else:
-        response.body = "%s(%s)" % (callback, json.dumps(response.body))
+        response.body = "%s(%s)" % (callback, json.dumps(out))
         response.headers['Content-Type'] = 'application/javascript'
         raise response
 
 [---] application/json via json_dump
-participant.to_dict(details=True, inquirer=user.participant)
+out
