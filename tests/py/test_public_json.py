@@ -141,3 +141,32 @@ class Tests(Harness):
 
         assert data['receiving'] == '3.00'
         assert data['my_tip'] == 'self'
+
+    def test_jsonp_works(self):
+        alice = self.make_participant('alice', last_bill_result='')
+        bob = self.make_participant('bob')
+
+        alice.set_tip_to(bob, '3.00')
+
+        raw = self.client.GxT('/bob/public.json?callback=foo', auth_as='bob').body
+
+        assert raw == '''\
+foo({
+    "avatar": null,
+    "elsewhere": {
+        "github": {
+            "id": %(elsewhere_id)s,
+            "user_id": "%(user_id)s",
+            "user_name": "bob"
+        }
+    },
+    "giving": "0.00",
+    "goal": null,
+    "id": %(user_id)s,
+    "my_tip": "self",
+    "npatrons": 1,
+    "number": "singular",
+    "on": "gittip",
+    "receiving": "3.00",
+    "username": "bob"
+})''' % dict(user_id=bob.id, elsewhere_id=bob.get_accounts_elsewhere()['github'].id)
