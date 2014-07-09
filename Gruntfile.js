@@ -80,9 +80,9 @@ module.exports = function(grunt) {
             var aspen_out = [];
 
             var bin = 'env/' + (process.platform == 'win32' ? 'Scripts' : 'bin');
-            var child = spawn(bin+'/honcho', ['run', 'web'], {
-                env: grunt.config.get('env')
-            });
+            var child = spawn(bin+'/gunicorn',
+                              ['--bind', ':8537', '--workers', '1', 'aspen.wsgi:website'],
+                              {env: grunt.config.get('env')});
 
             child.stdout.setEncoding('utf8');
             child.stderr.setEncoding('utf8');
