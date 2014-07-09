@@ -80,19 +80,19 @@ if [ $1 ]; then
     confirm "Tag and push version $1?"
     if [ $? -eq 0 ]; then
 
+        # Check that the environment contains all required variables.
+        # ===========================================================
+
+        heroku config -sa gittip | ./env/bin/honcho run -e /dev/stdin \
+            ./env/bin/python gittip/wireup.py
+
+
         # Bump the version.
         # =================
 
         printf "$1\n" > www/version.txt
         git commit www/version.txt -m"Bump version to $1"
         git tag $1
-
-
-        # Check that the environment contains all required variables.
-        # ===========================================================
-
-        heroku config -sa gittip | ./env/bin/honcho run -e /dev/stdin \
-            ./env/bin/python gittip/wireup.py
 
 
         # Deploy to Heroku.
