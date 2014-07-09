@@ -78,8 +78,8 @@ class TestPages(Harness):
         assert expected in actual
 
     def test_about_faq(self):
-        expected = "have joined Gittip"
-        actual = self.client.GET('/about/faq.html').body
+        expected = "What is Gittip?"
+        actual = self.client.GET('/about/faq.html').body.decode('utf8')
         assert expected in actual
 
     def test_404(self):
