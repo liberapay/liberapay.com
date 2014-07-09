@@ -258,8 +258,8 @@ def env():
         MANDRILL_KEY                    = unicode,
         RAISE_CARD_EXPIRATION           = is_yesish,
 
-        # These are used in our Procfile.
-        PORT                            = int,
+        # This is used in our Procfile. (PORT is also used but is provided by
+        # Heroku; we don't set it ourselves in our app config.)
         GUNICORN_OPTS                   = unicode,
     )
 
