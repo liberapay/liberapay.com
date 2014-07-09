@@ -257,6 +257,10 @@ def env():
         LOG_METRICS                     = is_yesish,
         MANDRILL_KEY                    = unicode,
         RAISE_CARD_EXPIRATION           = is_yesish,
+
+        # These are used in our Procfile.
+        PORT                            = int,
+        GUNICORN_OPTS                   = unicode,
     )
 
 
