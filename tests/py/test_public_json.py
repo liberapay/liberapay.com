@@ -141,3 +141,13 @@ class Tests(Harness):
 
         assert data['receiving'] == '3.00'
         assert data['my_tip'] == 'self'
+
+    def test_jsonp_works(self):
+        alice = self.make_participant('alice', last_bill_result='')
+        bob = self.make_participant('bob')
+
+        alice.set_tip_to(bob, '3.00')
+
+        raw = self.client.GxT('/bob/public.json?callback=foo', auth_as='bob').body
+
+        assert raw == 'foo("bar")'
