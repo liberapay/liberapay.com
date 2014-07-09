@@ -82,6 +82,11 @@ class TestPages(Harness):
         actual = self.client.GET('/about/faq.html').body.decode('utf8')
         assert expected in actual
 
+    def test_about_teams(self):
+        expected = "About teams"
+        actual = self.client.GET('/about/teams/').body.decode('utf8')
+        assert expected in actual
+
     def test_404(self):
         response = self.client.GET('/about/four-oh-four.html', raise_immediately=False)
         assert "Page Not Found" in response.body
