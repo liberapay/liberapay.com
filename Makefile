@@ -34,7 +34,7 @@ data:
 	$(honcho_run) $(env_bin)/fake_data fake_data
 
 run: env
-	$(honcho_run) web
+	PATH=$(env_bin):$(PATH) $(honcho_run) web
 
 py: env
 	$(honcho_run) $(env_bin)/python
