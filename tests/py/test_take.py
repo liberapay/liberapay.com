@@ -33,6 +33,7 @@ class Tests(Harness):
                          "VALUES (now(), %(tipper)s, %(tippee)s, %(amount)s, 'take')"
                        , dict(tipper=team_name, tippee=username, amount=take_last_week,)
                         )
+            self.db.run("UPDATE paydays SET ts_end=now()")
         return participant
 
     def test_we_can_make_a_team(self):
@@ -197,3 +198,13 @@ class Tests(Harness):
         team.set_take_for(bob, D('30.00'), bob)
         alice = Participant.from_username('alice')
         assert alice.receiving == alice.taking == 42
+
+    # get_take_last_week_for - gtlwf
+
+    def test_gtlwf_works_during_payday(self):
+        team = self.make_team()
+        alice = self.make_participant('alice', take_last_week='30.00', claimed_time='now')
+        team.add_member(alice)
+        team.set_take_for(alice, D('42.00'), alice)
+        self.db.run("INSERT INTO paydays DEFAULT VALUES")
+        assert team.get_take_last_week_for(alice) == 30
