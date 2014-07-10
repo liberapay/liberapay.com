@@ -212,8 +212,6 @@ def other_stuff(website, env):
     website.segment_key = env.segment_key
     website.sentry_dsn = env.sentry_dsn
 
-    website.min_threads = env.min_threads
-    website.log_busy_threads_every = env.log_busy_threads_every
     website.log_metrics = env.log_metrics
 
 
@@ -222,7 +220,6 @@ def env():
         DATABASE_URL                    = unicode,
         CANONICAL_HOST                  = unicode,
         CANONICAL_SCHEME                = unicode,
-        MIN_THREADS                     = int,
         DATABASE_MAXCONN                = int,
         GITTIP_ASSET_URL                = unicode,
         GITTIP_CACHE_STATIC             = is_yesish,
@@ -252,12 +249,16 @@ def env():
         OPENSTREETMAP_AUTH_URL          = unicode,
         NANSWERS_THRESHOLD              = int,
         UPDATE_HOMEPAGE_EVERY           = int,
+        CHECK_DB_EVERY                  = int,
         SEGMENT_KEY                     = unicode,
         SENTRY_DSN                      = unicode,
-        LOG_BUSY_THREADS_EVERY          = int,
         LOG_METRICS                     = is_yesish,
         MANDRILL_KEY                    = unicode,
-        TESTING                         = is_yesish,
+        RAISE_CARD_EXPIRATION           = is_yesish,
+
+        # This is used in our Procfile. (PORT is also used but is provided by
+        # Heroku; we don't set it ourselves in our app config.)
+        GUNICORN_OPTS                   = unicode,
     )
 
 
@@ -306,3 +307,7 @@ def env():
         raise BadEnvironment("Missing envvar{}: {}.".format(plural, keys))
 
     return env
+
+
+if __name__ == '__main__':
+    env()

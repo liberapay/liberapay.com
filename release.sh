@@ -44,9 +44,8 @@ confirm () {
 require () {
     if [ ! `which $1` ]; then
         echo "The '$1' command was not found."
-        return 1
+        exit 1
     fi
-    return 0
 }
 
 
@@ -55,10 +54,8 @@ require () {
 
 if [ $1 ]; then
 
+    require heroku
     require git
-    if [ $? -eq 1 ]; then
-        exit
-    fi
 
     if [ "`git rev-parse --abbrev-ref HEAD`" != "master" ]; then
         echo "Not on master, checkout master first."
@@ -82,6 +79,13 @@ if [ $1 ]; then
 
     confirm "Tag and push version $1?"
     if [ $? -eq 0 ]; then
+
+        # Check that the environment contains all required variables.
+        # ===========================================================
+
+        heroku config -sa gittip | ./env/bin/honcho run -e /dev/stdin \
+            ./env/bin/python gittip/wireup.py
+
 
         # Bump the version.
         # =================

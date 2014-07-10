@@ -1,1 +1,1 @@
-web: aspen --network_address :$PORT --www_root www/ --project_root .
+web: gunicorn aspen.wsgi:website --bind :$PORT $GUNICORN_OPTS

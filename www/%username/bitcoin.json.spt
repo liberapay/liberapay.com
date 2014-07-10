@@ -22,5 +22,5 @@ with website.db.get_cursor() as c:
         , (bit_address, user.participant.username)
     )
 
-response.body = { "bitcoin_address": bit_address
-              , "username": user.participant.username }
+[---] application/json via json_dump
+{"bitcoin_address": bit_address, "username": user.participant.username}

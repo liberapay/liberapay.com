@@ -205,12 +205,16 @@ class Participant(Model, MixinTeam):
     # =======
 
     def recreate_api_key(self):
-        api_key = str(uuid.uuid4())
-        SQL = "UPDATE participants SET api_key=%s WHERE username=%s"
+        api_key = self._generate_api_key()
+        SQL = "UPDATE participants SET api_key=%s WHERE username=%s RETURNING api_key"
         with self.db.get_cursor() as c:
             add_event(c, 'participant', dict(action='set', id=self.id, values=dict(api_key=api_key)))
-            c.run(SQL, (api_key, self.username))
+            api_key = c.one(SQL, (api_key, self.username))
+        self.set_attributes(api_key=api_key)
         return api_key
+
+    def _generate_api_key(self):
+        return str(uuid.uuid4())
 
 
     # Claiming
@@ -1407,7 +1411,7 @@ class Participant(Model, MixinTeam):
             response.headers.cookie[NOTIFIED_ABOUT_EXPIRATION] = self.session_token
             return card_expiring
         except Exception as e:
-            if request.website.env.testing:
+            if request.website.env.raise_card_expiration:
                 raise
             aspen.log(e)
             request.website.tell_sentry(e, request)

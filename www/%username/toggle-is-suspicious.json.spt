@@ -35,4 +35,5 @@ with website.db.get_cursor() as c:
         action='set', values=dict(is_suspicious=is_suspicious)
     ))
 
-response.body = {"is_suspicious": is_suspicious}
+[---] application/json via json_dump
+{"is_suspicious": is_suspicious}

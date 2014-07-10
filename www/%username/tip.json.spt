@@ -51,4 +51,5 @@ if not user.ANON:
         out["first_time"] = first_time_tipper
 
 
-response.body = out
+[---] application/json via json_dump
+out

@@ -8,7 +8,7 @@ from gittip.testing import Harness
 class TestLookupJson(Harness):
 
     def test_get_without_query_querystring_returns_400(self):
-        response = self.client.GET('/lookup.json')
+        response = self.client.GxT('/lookup.json')
         assert response.code == 400
 
     def test_get_non_existent_user(self):

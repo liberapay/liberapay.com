@@ -23,4 +23,5 @@ else:
     # Woohoo! valid request, store it!
     user.participant.update_email(address)
 
-    response.body = {'email': address}
+[---] application/json via json_dump
+{'email': address}

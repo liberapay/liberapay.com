@@ -182,7 +182,7 @@ elif now.weekday() == SATURDAY:
     last_thursday = "this past Thursday"
     this_thursday = "this coming Thursday"
 
-def json_dump():
+def out():
     names = ['ncc', 'pcc', 'statements', 'transfer_volume', 'last_thursday',
              'this_thursday', 'punc', 'other_people', 'average_tip',
              'average_tippees', 'total_backed_tips', 'tip_n', 'nach', 'escrow',
@@ -190,10 +190,10 @@ def json_dump():
     d = globals()
     r = {name: d[name] for name in names}
     r['tip_distribution'] = get_tip_distribution()
-    return json.dumps(r)
+    return r
 
-[----------------------------------------------------------] application/json
-{{ json_dump() }}
+[----------------------------------------------------------] application/json via json_dump
+out()
 [----------------------------------------------------------] text/html
 
 {% extends "templates/about.html" %}
