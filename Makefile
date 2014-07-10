@@ -9,7 +9,7 @@ test_env_files := defaults.env,tests/test.env,tests/local.env
 pip := $(env_bin)/pip
 honcho := $(env_bin)/honcho
 honcho_run := $(honcho) -e defaults.env,local.env run
-py_test := $(honcho) -e $(test_env_files) run py.test
+py_test := $(honcho) -e $(test_env_files) run $(env_bin)/py.test
 
 env: requirements.txt requirements_tests.txt setup.py
 	$(python) $(venv) \
