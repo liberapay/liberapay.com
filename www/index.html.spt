@@ -94,36 +94,18 @@ receivers = website.db.all("""
     </style>
 {% endblock %}
 
-{% block heading %}
-<div class="homepage-content">
-    <h1>Weekly Payments</h1>
-    <p>Motivated by Gratitude</p>
-</div>
-{% endblock %}
+{% block heading %}{% endblock %}
 {% block whole_page %}
 <div class="homepage-content">
-    <div class="give-receive">
-        <div class="give">
-            <h1>Give</h1>
-            <p>People share freely.</p>
-            <p>Return the favor.</p>
-            {% include "templates/sign-in-using.html" %}
-        </div>
-
-        <div class="receive">
-            <h1>Receive</h1>
-            <p>You share freely.</p>
-            <p>Receive in return.</p>
-            {% include "templates/sign-in-using.html" %}
-        </div>
+    <div class="pitch">
+        <h1>Weekly Payments</h1>
+        <p>Motivated by Gratitude</p>
     </div>
-
-    <div class="why">
-        <h1>Why Gittip?</h1>
-        <p>Sustainable funding.</p>
-        <p>No strings attached.</p>
-        <p>No fees.</p>
-        <p class="parenthesis">(Gittip is <a href="/Gittip/">funded on Gittip</a>.)</p>
+    <div class="sign-in">
+        <div class="receive">
+            <h1>Sign up to accept payments.</h1>
+            {% include "templates/sign-in-using.html" %}
+        </div>
     </div>
 
     <div class="browse-about">
