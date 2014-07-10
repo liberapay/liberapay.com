@@ -85,8 +85,8 @@ Gittip.team = (function() {
                     , ['td']
                     , ['td']
                     , ['td']
-                    , ['td']
-                    , ['td', {'class': 'figure balance'}, num(member.take)]
+                    , ['td', {'class': 'figure take'}, num(member.take)]
+                    , ['td', {'class': 'figure balance'}, num(member.balance)]
                     , ['td', {'class': 'figure percentage'}, perc(member.percentage)]
                      ]
                 ));

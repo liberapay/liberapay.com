@@ -94,6 +94,34 @@ class Tests(Harness):
         assert members[0]['take'] == 42
         assert members[0]['balance'] == 58
 
+    def test_compute_actual_takes_counts_the_team_balance(self):
+        team = self.make_team(balance=D('59.46'))
+        alice = self.make_participant('alice', take_last_week='100.00', claimed_time='now')
+        team.add_member(alice)
+        team.set_take_for(alice, D('142.00'), team)
+        takes = team.compute_actual_takes().values()
+        assert len(takes) == 2
+        assert takes[0]['member'] == 'alice'
+        assert takes[0]['actual_amount'] == 142
+        assert takes[0]['balance'] == D('17.46')
+        assert takes[1]['member'] == TEAM
+        assert takes[1]['actual_amount'] == 0
+        assert takes[1]['balance'] == D('17.46')
+
+    def test_compute_actual_takes_gives_correct_final_balance(self):
+        team = self.make_team(balance=D('53.72'))
+        alice = self.make_participant('alice', take_last_week='100.00', claimed_time='now')
+        team.add_member(alice)
+        team.set_take_for(alice, D('86.00'), team)
+        takes = team.compute_actual_takes().values()
+        assert len(takes) == 2
+        assert takes[0]['member'] == 'alice'
+        assert takes[0]['actual_amount'] == 86
+        assert takes[0]['balance'] == D('67.72')
+        assert takes[1]['member'] == TEAM
+        assert takes[1]['actual_amount'] == 14
+        assert takes[1]['balance'] == D('67.72')
+
     def test_taking_and_receiving_are_updated_correctly(self):
         team = self.make_team()
         alice = self.make_participant('alice', take_last_week='40.00', claimed_time='now')
