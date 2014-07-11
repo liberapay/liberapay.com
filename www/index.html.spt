@@ -50,16 +50,16 @@ for them.
         {% from 'templates/auth.html' import auth_button with context %}
 
         <div class="twitter">
-        {% call auth_button('twitter', 'opt-in') %}
+        {% call auth_button('twitter', 'opt-in', then='/about/me//') %}
             Sign in with Twitter
         {% endcall %}
         </div>
 
         <div class="other">Or sign in with:
         <span>
-        {% call auth_button('github', 'opt-in') %}GitHub{% endcall %}
-        {% call auth_button('bitbucket', 'opt-in') %}Bitbucket{% endcall %}
-        {% call auth_button('openstreetmap', 'opt-in') %}OpenStreetMap{% endcall %}
+        {% call auth_button('github', 'opt-in', then='/about/me//') %}GitHub{% endcall %}
+        {% call auth_button('bitbucket', 'opt-in', then='/about/me//') %}Bitbucket{% endcall %}
+        {% call auth_button('openstreetmap', 'opt-in', then='/about/me//') %}OpenStreetMap{% endcall %}
         </span>
         <br><br>
         By signing in you indicate that you have read and agree
