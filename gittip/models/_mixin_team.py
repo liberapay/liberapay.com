@@ -81,9 +81,12 @@ class MixinTeam(object):
             SELECT amount
               FROM transfers
              WHERE tipper=%s AND tippee=%s AND context='take'
-               AND timestamp >
-                (SELECT ts_start FROM paydays ORDER BY ts_start DESC LIMIT 1)
-          ORDER BY timestamp DESC LIMIT 1
+               AND timestamp > (
+                       SELECT ts_start
+                         FROM paydays
+                        WHERE ts_end > ts_start
+                     ORDER BY ts_start DESC LIMIT 1
+                   )
 
         """, (self.username, membername), default=Decimal('0.00'))
 

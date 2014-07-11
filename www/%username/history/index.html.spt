@@ -1,155 +1,11 @@
-from decimal import Decimal
-
-from aspen import Response, log
 from aspen.utils import to_age
 from gittip.utils import get_participant
-
-db = website.db
-
-
-class Paydays(object):
-
-    def __init__(self, username, balance):
-        self._username = username
-        self._paydays = db.all("SELECT ts_start, ts_end FROM paydays "
-                               "ORDER BY ts_end DESC", back_as=dict)
-        self._npaydays = len(self._paydays)
-        self._exchanges = db.all( "SELECT * FROM exchanges "
-                                  "WHERE participant=%s "
-                                  "ORDER BY timestamp ASC"
-                                , (username,), back_as=dict
-                                 )
-        self._transfers = db.all( "SELECT * FROM transfers "
-                                  "WHERE tipper=%s OR tippee=%s "
-                                  "ORDER BY timestamp ASC"
-                                , (username, username), back_as=dict
-                                 )
-        self._balance = balance
-
-
-    def __iter__(self):
-        """Yield iterators of events.
-
-        Each payday is expected to encompass 0 or 1 exchanges and 0 or more
-        transfers per participant. Here we knit them together along with start
-        and end events for each payday. If we have exchanges or transfers that
-        fall outside of a payday, then we have a logic bug. I am 50% confident
-        that this will manifest some day.
-
-        """
-        _i = 1
-        for payday in self._paydays:
-
-            if not (self._exchanges or self._transfers):
-                # Show all paydays since the user started really participating.
-                break
-
-            payday_start = { 'event': 'payday-start'
-                           , 'timestamp': payday['ts_start']
-                           , 'number': self._npaydays - _i
-                           , 'balance': Decimal('0.00')
-                            }
-            payday_end = { 'event': 'payday-end'
-                         , 'timestamp': payday['ts_end']
-                         , 'number': self._npaydays - _i
-                          }
-            received = { 'event': 'received'
-                       , 'amount': Decimal('0.00')
-                       , 'n': 0
-                        }
-            _i += 1
-
-
-            events = []
-            while (self._exchanges or self._transfers):
-
-                # Take the next event, either an exchange or transfer.
-                # ====================================================
-                # We do this by peeking at both lists, and popping the list
-                # that has the next event.
-
-                exchange = self._exchanges[-1] if self._exchanges else None
-                transfer = self._transfers[-1] if self._transfers else None
-
-                if exchange is None:
-                    event = self._transfers.pop()
-                elif transfer is None:
-                    event = self._exchanges.pop()
-                elif transfer['timestamp'] > exchange['timestamp']:
-                    event = self._transfers.pop()
-                else:
-                    event = self._exchanges.pop()
-
-                if 'fee' in event:
-                    if event['amount'] > 0:
-                        event['event'] = 'charge'
-                    else:
-                        event['event'] = 'credit'
-                else:
-                    event['event'] = 'transfer'
-
-
-                # Record the next event.
-                # ======================
-
-                if event['timestamp'] < payday_start['timestamp']:
-                    if event['event'] == 'exchange':
-                        back_on = self._exchanges
-                    else:
-                        back_on = self._transfers
-                    back_on.append(event)
-                    break
-
-                if event['event'] == 'transfer':
-                    if event['tippee'] == self._username:
-
-                        # Don't leak details about who tipped you. Only show
-                        # aggregates for that.
-
-                        received['amount'] += event['amount']
-                        received['n'] += 1
-
-                        #continue  # Don't leak!
-
-                events.append(event)
-
-            if not events:
-                continue
-
-
-            # Calculate balance.
-            # ==================
-
-            prev = events[0]
-            prev['balance'] = self._balance
-            for event in events[1:] + [payday_start]:
-                if prev['event'] == 'charge':
-                    balance = prev['balance'] - prev['amount']
-                elif prev['event'] == 'credit':
-                    balance = prev['balance'] - prev['amount'] + prev['fee']
-                elif prev['event'] == 'transfer':
-                    if prev['tippee'] == self._username:
-                        balance = prev['balance'] - prev['amount']
-                    else:
-                        balance = prev['balance'] + prev['amount']
-                event['balance'] = balance
-                prev = event
-            self._balance = payday_start['balance']
-
-            yield payday_start
-            for event in reversed(events):
-                yield event
-            yield payday_end
-
-        # This should catch that logic bug.
-        if self._exchanges or self._transfers:
-            log("These should be empty:", self._exchanges, self._transfers)
-            raise "Logic bug in payday timestamping."
+from gittip.utils.history import iter_payday_events
 
 [-----------------------------------------------------------------------------]
 
 participant = get_participant(request, restrict=True)
-paydays = Paydays(participant.username, participant.balance)
+events = iter_payday_events(website.db, participant)
 hero = "History"
 title = "%s - %s" % (participant.username, hero)
 locked = False
@@ -188,7 +44,7 @@ admin_override = user.ADMIN and (participant != user.participant or 'override' i
         </form>
         {% endif %}
     </td></tr>
-    {% for event in paydays %}
+    {% for event in events %}
     {% if event['event'] == 'payday-start' %}
     <tr>
         <th colspan="7"><h2>Gittip #{{ event['number'] }}
