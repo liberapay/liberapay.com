@@ -1,91 +1,114 @@
-.homepage-content {
+.homepage {
 
-    color: $white; 
+    color: red; // so any anomalies are clear
+    display: table;
+    width: 100%;
+    min-height: 100%;
+    background: url("pennies.jpg");
+    background-size: cover;
+    background-position: 0 50%;
 
     span {
         white-space: nowrap;
     }
 
+    .footnote {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        padding: 12px 48px;
+        text-align: right;
+        font-size: 14px; 
+        line-height: 20px;
+    }
+
     h1 {
-        font: bold 96px/96px $Ideal;
-        text-shadow: 0.05em 0.05em 0.2em black;
+        font: bold 30px/40px $Ideal;
         text-transform: none;
-        margin: 0 0 24px;
+        margin: 0;
         padding: 0;
-        color: $white;
     }
 
     p {
-        font: normal 48px/72px $Ideal;
-        text-shadow: 0.1em 0.1em 0.2em black;
+        font: normal 18px/24px $Ideal;
         margin: 0;
         padding: 0;
-
-        .parenthesis {
-            font-size: 36px;
-            line-height: 60px;
-        }
     }
 
-    a {
-        color: $gold;
-        &:hover {
-            color: $brown;
-        }
+    .pitch,.action {
+        display: table-cell;
+        padding: 256px 48px 128px;
+        position: relative;
     }
 
-    .give-receive {
-        display: table;
-        width: 100%;
-
-        .give,.receive {
-            width: 50%;
-            display: table-cell;
-            padding: 96px 48px;
+    .pitch {
+        width: 480px;
+        color: transparentize($white, 0.5);
+        background: transparentize($brown, 0.1);
+        img {
+            width: 384px;
+            position: absolute;
+            top: 48px;
+            left: 48px;
         }
-
-        .give {
-            background: transparentize($brown, 0.1);
-        }
-
-        .receive {
-            background: transparentize($gold, 0.1);
-        }
-
-    }
-
-    .browse-about {
-        display: table;
-        width: 100%;
-
-        .browse,.about {
-            width: 50%;
-            display: table-cell;
-        }
-
-        .browse {
-            background: transparentize($brown, 0.1);
-        }
-
-        .about {
-            background: transparentize($gold, 0.1);
-            a {
-                color: $brown;
+        h1 { color: $white; }
+        a {
+            color: transparentize($gold, 0.3);
+            &:hover {
+                color: $gold;
             }
         }
-        h1 {
-            margin: 0;
-            padding: 0;
+        padding-left: 110px;
+    }
 
-            a {
-                display: block;
-                padding: 96px 48px;
-                text-align: center;
+    .action {
+        background: transparentize($white, 0.1);
+        h1 { color: $brown; }
+        color: transparentize($brown, 0.3);
+        a {
+            color: transparentize($green, 0.3);
+            &:hover {
+                color: $green;
+            }
+        }
+
+        form {
+            display: inline;
+        }
+
+        .twitter {
+            margin-top: 24px;
+            button {
+                @include has-icon("twitter", 24px, 4px);
+                font-size: 24px;
+                padding: 10px 24px 10px 18px;
+                border-radius: 6px;
+                background: $green;
+                color: $white;
                 &:hover {
-                    color: $green;
+                    color: $gold;
+                    border-color: $brown;
+                    background: $brown;
                 }
             }
         }
-
+        .other {
+            margin-top: 24px;
+            font-size: 13px;
+        
+            button {
+                border: 1px solid transparentize($brown, 0.2);
+                background: transparent;
+                color: transparentize($brown, 0.2);
+                &:hover {
+                    color: $gold;
+                    border-color: $brown;
+                    background: $brown;
+                }
+            }
+            form.github button { @include has-icon("github"); }
+            form.bitbucket button { @include has-icon("bitbucket"); }
+            form.openstreetmap button { @include has-icon("openstreetmap"); }
+        }
     }
 }

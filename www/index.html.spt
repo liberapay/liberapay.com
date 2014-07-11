@@ -13,60 +13,7 @@ impression of Gittip and help people take the next step, whatever that might be
 for them.
 
 """
-import os
-from aspen import Response
-from gittip.utils import _to_age, format_money, to_statement
-
-
-LUXURY = 4  # used for responsive design to limit items shown on small screens
-MAKING = "making the world better by"
-I_AM = "I am"
-WE_ARE = "We are"
-
 [---]
-
-try:
-    limit = min(int(qs.get('limit', 12)), 100)
-    offset = int(qs.get('offset', 0))
-except ValueError:
-    raise Response(400)
-
-new_participants = website.db.all("""
--- new participants on homepage
-
-    SELECT username, claimed_time, avatar_url, statement, number
-      FROM participants p
-     WHERE EXISTS (SELECT * FROM elsewhere e WHERE p.username = e.participant)
-       AND claimed_time IS NOT null
-       AND is_suspicious IS NOT true
-  ORDER BY claimed_time DESC
-     LIMIT %s
-    OFFSET %s
-
-""", (limit, offset))
-
-givers = website.db.all("""
--- top givers on homepage
-
-    SELECT * FROM homepage_top_givers
-  ORDER BY amount DESC
-     LIMIT %s
-    OFFSET %s
-
-""", (limit, offset))
-
-# XXX I'm nearly positive that one or both of givers and receivers can contain
-# orphan accounts. See https://github.com/gittip/www.gittip.com/issues/650
-
-receivers = website.db.all("""
--- top receivers on homepage
-
-    SELECT * FROM homepage_top_receivers
-  ORDER BY amount DESC
-     LIMIT %s
-    OFFSET %s
-
-""", (limit, offset))
 [---]
 {% from 'templates/avatar-url.html' import avatar_url with context %}
 {% extends "templates/base.html" %}
@@ -79,44 +26,46 @@ receivers = website.db.all("""
     <meta name="og:title" content="Gittip" />
     <meta name="og:image" content="{{ website.asset_url }}/gittip.opengraph.png" />
     <style>
-        #hero { padding-bottom: 0; border: none; }
-        #page { padding: 0; }
-        #header { margin: 0; padding: 10px 48px; }
-        #footer { margin: 0; border-top: 0; padding: 10px 48px; background: white; }
-        .container { padding: 0; max-width: 100%; width: 100%; }
-        .pennies { background: none; }
-        body {
-            background: url("{{ website.asset_url }}/pennies.jpg");
-            background-size: cover;
-            background-position: 0 -47px;
-        }
-        .sign-in, .you-are { margin-right: 48px; }
+        .pennies, .container { display: none; }
+        html, body { height: 100%; min-height: 100%; }
     </style>
 {% endblock %}
 
 {% block heading %}{% endblock %}
 {% block whole_page %}
-<div class="homepage-content">
+<div class="homepage">
     <div class="pitch">
+        <img src="{{ website.asset_url }}/logo.white.svg" alt="Gittip">
         <h1>Weekly Payments</h1>
-        <p>Motivated by Gratitude</p>
+        <p>Motivated by Gratitude<br><br>
+        Gittip is sustainable funding, with no extra fees* and no strings attached.<br>
+        <br>
+        <a href="/about/">Read more</a>.</p>
+        <div class="footnote"><span>*Gittip itself is <a href="/Gittip/">funded on
+        Gittip</a>.</span></div>
     </div>
-    <div class="sign-in">
-        <div class="receive">
-            <h1>Sign up to accept payments.</h1>
-            {% include "templates/sign-in-using.html" %}
+    <div class="action">
+        <h1>Sign In</h1>
+        <p>to Make and Accept Payments</p>
+        {% from 'templates/auth.html' import auth_button with context %}
+
+        <div class="twitter">
+        {% call auth_button('twitter', 'opt-in') %}
+            Sign in with Twitter
+        {% endcall %}
         </div>
+
+        <div class="other">Or sign in with:
+        {% call auth_button('github', 'opt-in') %}GitHub{% endcall %}
+        {% call auth_button('bitbucket', 'opt-in') %}Bitbucket{% endcall %}
+        {% call auth_button('openstreetmap', 'opt-in') %}OpenStreetMap{% endcall %}
+        <br><br>
+        By signing in you indicate that you have read and agree
+        to our <a href="/about/terms/">Terms and Conditions</a>.
+        </div>
+
+        <div class="footnote"><span>Want to find someone to give to?</span>
+        <span><a href="/for/">Browse communities</a>.</span></div>
     </div>
-
-    <div class="browse-about">
-        <div class="browse">
-            <h1><a href="/for/">Browse</a></h1>
-        </div>
-
-        <div class="about">
-            <h1><a href="/about/">About</a></h1>
-        </div>
-    </div>
-
 </div>
 {% endblock %}
