@@ -37,11 +37,9 @@ for them.
         <img src="{{ website.asset_url }}/logo.white.svg" alt="Gittip">
         <h1>Weekly Payments</h1>
         <p>Motivated by Gratitude<br><br>
-        Gittip is sustainable funding, with no extra fees* and no strings attached.<br>
+        Gittip is sustainable funding, with no extra fees and no strings attached.<br>
         <br>
         <a href="/about/">Read more</a>.</p>
-        <div class="footnote"><span>*Gittip itself is <a href="/Gittip/">funded on
-        Gittip</a>.</span></div>
     </div>
     <div class="action">
         {% if user.ANON %}
@@ -62,12 +60,13 @@ for them.
         {% call auth_button('openstreetmap', 'opt-in', then='/about/me//') %}OpenStreetMap{% endcall %}
         </span>
         <br><br>
-        By signing in you indicate that you have read and agree
+        By signing in, you indicate that you have read and agree
         to our <a href="/about/terms/">Terms and Conditions</a>.
+        <br><br>
+        Want to see who's on Gittip?</span>
+        <a href="/for/">Browse our communities</a>.
         </div>
 
-        <div class="footnote"><span>Want to see who's using Gittip?</span>
-        <span><a href="/for/">Browse our communities</a>.</span></div>
         {% else %}
         <h1>Welcome back, {{ user.participant.username }}</a>!</h1>
         <p>Your balance is ${{ user.participant.balance }}.<br><br>
@@ -85,8 +84,6 @@ for them.
             </select>
             <button type="submit">Go</button></span>
         </form>
-
-        <div class="footnote"><a href="/sign-out.html">Sign out</a>.</div>
 
         {% endif %}
     </div>
