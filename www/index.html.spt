@@ -70,7 +70,8 @@ for them.
         {% else %}
         <h1>Welcome back, {{ user.participant.username }}</a>!</h1>
         <p>Your balance is ${{ user.participant.balance }}.<br><br>
-        Go to <a href="/{{ user.participant.username }}/">your profile</a>.</p>
+        Go to <a href="/{{ user.participant.username }}/">your profile</a> or
+        <a href="/sign-out.html">sign out</a>.</p>
 
         <form id="jump"><br>
             <span>Jump to
