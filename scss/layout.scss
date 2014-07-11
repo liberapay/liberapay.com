@@ -31,9 +31,6 @@
         right: 0;
         font: normal 13px $Ideal;
         text-align: right;
-        width: 50%;
-        overflow: hidden;
-        white-space: nowrap;
     }
     .you-are {
         padding-top: 4px;
@@ -57,7 +54,7 @@
     background-position: 0 50%;
 }
 #hero {
-    background: transparentize($green, 0.2);
+    background: transparentize($brown, 0.1);
 
     border: 1px solid $brown;
     border-style: solid none;
@@ -68,10 +65,9 @@
     z-index: 1;
 
     h1 {
-        font: bold 48px $Ideal;
+        font: bold 30px/40px $Ideal;
         padding: 48px 0 24px;
         color: $white;
-        text-shadow: 0.1em 0.1em 0.2em black;
 
         em {
             font-style: italic;
@@ -81,9 +77,8 @@
 
     p {
         color: $white;
-        text-shadow: 0.1em 0.1em 0.2em black;
-        font-size: 120%;
-        line-height: 200%;
+        font-size: 18px;
+        line-height: 24px;
     }
 
     a {
