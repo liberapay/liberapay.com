@@ -6,7 +6,7 @@
     min-height: 100%;
     background: url("pennies.jpg");
     background-size: cover;
-    background-position: 0 50%;
+    background-position: 0 -54px;
 
     span {
         white-space: nowrap;
@@ -37,13 +37,13 @@
 
     .pitch,.action {
         display: table-cell;
-        padding: 256px 48px 128px;
         position: relative;
     }
 
     .pitch {
         width: 480px;
-        color: transparentize($white, 0.5);
+        padding: 256px 48px 128px 110px;
+        color: transparentize($white, 0.3);
         background: transparentize($brown, 0.1);
         img {
             width: 384px;
@@ -53,18 +53,18 @@
         }
         h1 { color: $white; }
         a {
-            color: transparentize($gold, 0.3);
+            color: transparentize($gold, 0.2);
             &:hover {
                 color: $gold;
             }
         }
-        padding-left: 110px;
     }
 
     .action {
+        padding: 256px 48px 128px;
+        color: transparentize($brown, 0.2);
         background: transparentize($white, 0.1);
         h1 { color: $brown; }
-        color: transparentize($brown, 0.3);
         a {
             color: transparentize($green, 0.3);
             &:hover {
@@ -76,7 +76,7 @@
             display: inline;
         }
 
-        .twitter {
+        div.twitter {
             margin-top: 24px;
             button {
                 @include has-icon("twitter", 24px, 4px);
@@ -95,6 +95,7 @@
         .other {
             margin-top: 24px;
             font-size: 13px;
+            line-height: 18px;
         
             button {
                 border: 1px solid transparentize($brown, 0.2);

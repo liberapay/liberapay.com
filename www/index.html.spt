@@ -56,9 +56,11 @@ for them.
         </div>
 
         <div class="other">Or sign in with:
+        <span>
         {% call auth_button('github', 'opt-in') %}GitHub{% endcall %}
         {% call auth_button('bitbucket', 'opt-in') %}Bitbucket{% endcall %}
         {% call auth_button('openstreetmap', 'opt-in') %}OpenStreetMap{% endcall %}
+        </span>
         <br><br>
         By signing in you indicate that you have read and agree
         to our <a href="/about/terms/">Terms and Conditions</a>.

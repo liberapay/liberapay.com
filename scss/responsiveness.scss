@@ -22,13 +22,24 @@
         width: 100%;
     }
 
-    .homepage-content {
-        .give-receive, .browse-about {
+    .homepage {
+        display: block;
+        .pitch,.action {
             display: block;
-            .give,.receive,.browse,.about {
-                width: 100%;
-                display: block;
-                text-align: center;
+            width: auto;
+        }
+        .pitch {
+            padding: 216px 48px 72px 110px;
+        }
+        .action {
+            padding: 48px 48px 72px;
+            .footnote {
+                position: static;
+                text-align: left;
+                margin: 18px 0 0;
+                padding: 0;
+                font-size: 13px;
+                line-height: 18px;
             }
         }
     }
@@ -47,26 +58,7 @@
         display: none !important;
     }
 
-    #hero {
-        .homepage {
-            h1 {
-                font-size: 72px;
-                line-height: 72px;
-                margin: 0 0 21px;
-            }
-
-            h2 {
-                font: italic 48px/64px $Ideal;
-                padding: 0 20px;
-            }
-        }
-    }
-    .homepage-content {
-        h1 {
-            font-size: 72px;
-            line-height: 72px;
-            margin: 0 0 21px;
-        }
+    .homepage {
     }
 
     #leaderboard {
@@ -122,25 +114,35 @@
             font-size: 36px;
             padding: 36px 0 18px;
         }
-        .homepage {
-            h1 {
-                font-size: 64px;
-                line-height: 64px;
-                margin: 0 0 18px;
-            }
+    }
 
-            h2 {
-                font: italic 36px/48px $Ideal;
+    .homepage {
+        display: block;
+        .pitch,.action {
+            display: block;
+            width: auto;
+            h1 { 
+                font-size: 24px; 
+                line-height: 36px;
+            }
+            p { 
+                font-size: 16px; 
+                line-height: 24px;
+            }
+            .footnote {
+                font-size: 12px;
+                line-height: 16px;
             }
         }
-    }
-    .homepage-content {
-        h1 {
-            font-size: 64px;
-            line-height: 64px;
-            margin: 0 0 18px;
+        .pitch {
+            img { width: 256px; }
+            padding: 160px 36px 60px 90px;
+        }
+        .action {
+            padding: 36px 36px 60px;
         }
     }
+
 
     #jump {
         select, input, button {
