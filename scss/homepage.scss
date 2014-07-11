@@ -4,7 +4,7 @@
     display: table;
     width: 100%;
     min-height: 100%;
-    background: url("pennies.jpg");
+    background: #434343 url("pennies.jpg") no-repeat;
     background-size: cover;
     background-position: 0 -54px;
 
@@ -29,7 +29,7 @@
         padding: 0;
     }
 
-    p {
+    p, #jump {
         font: normal 18px/24px $Ideal;
         margin: 0;
         padding: 0;
@@ -110,6 +110,10 @@
             form.github button { @include has-icon("github"); }
             form.bitbucket button { @include has-icon("bitbucket"); }
             form.openstreetmap button { @include has-icon("openstreetmap"); }
+        }
+
+        #jump {
+
         }
     }
 }

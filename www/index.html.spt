@@ -44,6 +44,7 @@ for them.
         Gittip</a>.</span></div>
     </div>
     <div class="action">
+        {% if user.ANON %}
         <h1>Sign In</h1>
         <p>to Make and Accept Payments</p>
         {% from 'templates/auth.html' import auth_button with context %}
@@ -67,6 +68,25 @@ for them.
 
         <div class="footnote"><span>Want to see who's using Gittip?</span>
         <span><a href="/for/">Browse our communities</a>.</span></div>
+        {% else %}
+        <h1>Welcome back, {{ user.participant.username }}</a>!</h1>
+        <p>Your balance is ${{ user.participant.balance }}.<br><br>
+        Go to <a href="/{{ user.participant.username }}/">your profile</a>.</p>
+
+        <form id="jump"><br>
+            <span>Jump to
+            <input placeholder="username" autocomplete="off" autocorrect="off"
+                autocapitalize="off" spellcheck="false" size="12"></span>
+            <span>from
+            <select>
+                <option value="twitter">Twitter</option>
+                <option value="github">GitHub</option>
+                <option value="bitbucket">Bitbucket</option>
+            </select>
+            <button type="submit">Go</button></span>
+        </form>
+
+        {% endif %}
     </div>
 </div>
 {% endblock %}
