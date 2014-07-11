@@ -17,7 +17,7 @@ def iter_payday_events(db, participant):
     paydays = db.all("""
         SELECT ts_start, ts_end
           FROM paydays
-      ORDER BY ts_end DESC
+      ORDER BY ts_start DESC
     """, back_as=dict)
     npaydays = len(paydays)
     exchanges = db.all("""
