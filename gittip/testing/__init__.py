@@ -196,3 +196,7 @@ class Harness(unittest.TestCase):
                 active.add(t)
             cursor.run("INSERT INTO paydays (ts_start, ts_end, nactive, transfer_volume) VALUES (%s, %s, %s, %s)",
                     (ts_start, ts_end, len(active), transfer_volume))
+
+
+    def fetch_payday(self):
+        return self.db.one("SELECT * FROM paydays", back_as=dict)

@@ -11,17 +11,6 @@ from gittip.testing import Harness
 from gittip.testing.balanced import BalancedHarness
 
 
-class PaydayHarness(BalancedHarness):
-
-    def setUp(self):
-        BalancedHarness.setUp(self)
-        self.alice = self.make_participant('alice', claimed_time='now')
-        self.payday = Payday.start()
-
-    def fetch_payday(self):
-        return self.db.one("SELECT * FROM paydays", back_as=dict)
-
-
 class TestPayday(BalancedHarness):
 
     def test_payday_moves_money(self):
@@ -85,21 +74,13 @@ class TestPayday(BalancedHarness):
         assert debit.amount == 1576  # base amount + fee
         assert debit.description == 'janet'
 
-
-class TestBillingCharges(PaydayHarness):
-
     def test_mark_charge_failed(self):
+        payday = Payday.start()
         before = self.fetch_payday()
-        fail_count = before['ncc_failing']
-
         with self.db.get_cursor() as cursor:
-            self.payday.mark_charge_failed(cursor)
-
+            payday.mark_charge_failed(cursor)
         after = self.fetch_payday()
-        assert after['ncc_failing'] == fail_count + 1
-
-
-class TestBillingPayday(PaydayHarness):
+        assert after['ncc_failing'] == before['ncc_failing'] + 1
 
     def test_update_receiving_amounts_updates_receiving_amounts(self):
         A = self.make_participant('A')
@@ -107,7 +88,7 @@ class TestBillingPayday(PaydayHarness):
         B.set_tip_to(A, D('10.00'), update_tippee=False)
         assert Participant.from_username('A').receiving == 0
 
-        self.payday.update_receiving_amounts()
+        Payday.start().update_receiving_amounts()
         assert Participant.from_username('A').receiving == 10
 
     def test_update_receiving_amounts_includes_taking(self):
@@ -118,7 +99,7 @@ class TestBillingPayday(PaydayHarness):
         assert Participant.from_username('A').receiving == 0
         assert Participant.from_username('A').taking == 3
 
-        self.payday.update_receiving_amounts()
+        Payday.start().update_receiving_amounts()
         assert Participant.from_username('A').receiving == 13
         assert Participant.from_username('A').taking == 3
 
@@ -171,13 +152,8 @@ class TestBillingPayday(PaydayHarness):
         for args, _ in log.call_args_list:
             assert args[0] == expected_logging_call_args.pop()
 
-    @mock.patch('gittip.billing.payday.log')
-    def test_end(self, log):
-        self.payday.end()
-        assert log.called_with('Finished payday.')
-
-        # finishing the payday will set the ts_end date on this payday record
-        # to now, so this will not return any result
+    def test_end(self):
+        Payday.start().end()
         result = self.db.one("SELECT count(*) FROM paydays "
                              "WHERE ts_end > '1970-01-01'")
         assert result == 1
@@ -187,9 +163,7 @@ class TestBillingPayday(PaydayHarness):
     @mock.patch('gittip.billing.payday.Payday.end')
     def test_payday(self, end, payin, log):
         greeting = 'Greetings, program! It\'s PAYDAY!!!!'
-
-        self.payday.run()
-
+        Payday.start().run()
         assert log.called_with(greeting)
         assert payin.call_count == 1
         assert end.call_count == 1
