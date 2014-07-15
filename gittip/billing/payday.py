@@ -26,8 +26,7 @@ from psycopg2 import IntegrityError
 
 
 class NoPayday(Exception):
-    def __str__(self):
-        return "No payday found where one was expected."
+    __str__ = lambda self: "No payday found where one was expected."
 
 
 class Payday(object):
