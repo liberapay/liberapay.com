@@ -200,3 +200,10 @@ class Harness(unittest.TestCase):
 
     def fetch_payday(self):
         return self.db.one("SELECT * FROM paydays", back_as=dict)
+
+
+class Foobar(Exception): pass
+
+
+def raise_foobar(*a):
+    raise Foobar

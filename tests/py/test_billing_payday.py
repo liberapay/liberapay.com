@@ -5,9 +5,11 @@ from decimal import Decimal as D
 import balanced
 import mock
 
-from gittip.billing.payday import Payday
+from gittip.billing.exchanges import create_card_hold
+from gittip.billing.payday import NoPayday, Payday
+from gittip.exceptions import NegativeBalance
 from gittip.models.participant import Participant
-from gittip.testing import Harness
+from gittip.testing import Harness, raise_foobar
 from gittip.testing.balanced import BalancedHarness
 
 
@@ -158,18 +160,126 @@ class TestPayday(BalancedHarness):
                              "WHERE ts_end > '1970-01-01'")
         assert result == 1
 
+    def test_end_raises_NoPayday(self):
+        with self.assertRaises(NoPayday):
+            Payday().end()
+
     @mock.patch('gittip.billing.payday.log')
     @mock.patch('gittip.billing.payday.Payday.payin')
     @mock.patch('gittip.billing.payday.Payday.end')
     def test_payday(self, end, payin, log):
         greeting = 'Greetings, program! It\'s PAYDAY!!!!'
         Payday.start().run()
-        assert log.called_with(greeting)
+        log.assert_any_call(greeting)
         assert payin.call_count == 1
         assert end.call_count == 1
 
 
-class TestPachinko(Harness):
+class TestPayin(BalancedHarness):
+
+    def create_card_holds(self):
+        payday = Payday.start()
+        with self.db.get_cursor() as cursor:
+            payday.prepare(cursor, payday.ts_start)
+            return payday.create_card_holds(cursor)
+
+    @mock.patch.object(Payday, 'fetch_card_holds')
+    @mock.patch('gittip.billing.payday.create_card_hold')
+    def test_hold_amount_includes_negative_balance(self, cch, fch):
+        self.db.run("""
+            UPDATE participants SET balance = -10 WHERE username='janet'
+        """)
+        self.janet.set_tip_to(self.homer, 25)
+        fch.return_value = {}
+        cch.return_value = (None, 'some error')
+        self.create_card_holds()
+        assert cch.call_args[0][-1] == 35
+
+    def test_payin_fetches_and_uses_existing_holds(self):
+        self.janet.set_tip_to(self.homer, 20)
+        hold, error = create_card_hold(self.db, self.janet, D(20))
+        assert hold is not None
+        assert not error
+        with mock.patch('gittip.billing.payday.create_card_hold') as cch:
+            cch.return_value = (None, None)
+            self.create_card_holds()
+            assert not cch.called, cch.call_args_list
+
+    @mock.patch.object(Payday, 'fetch_card_holds')
+    def test_payin_cancels_existing_holds_of_insufficient_amounts(self, fch):
+        self.janet.set_tip_to(self.homer, 30)
+        hold, error = create_card_hold(self.db, self.janet, D(10))
+        assert not error
+        fch.return_value = {self.janet.id: hold}
+        with mock.patch('gittip.billing.payday.create_card_hold') as cch:
+            fake_hold = object()
+            cch.return_value = (fake_hold, None)
+            holds = self.create_card_holds()
+            assert len(holds) == 1
+            assert holds[self.janet.id] is fake_hold
+            assert hold.voided_at is not None
+
+    @mock.patch('gittip.billing.payday.CardHold')
+    @mock.patch('gittip.billing.payday.cancel_card_hold')
+    def test_fetch_card_holds_handles_extra_holds(self, cancel, CardHold):
+        fake_hold = mock.MagicMock()
+        fake_hold.meta = {'participant_id': 0}
+        fake_hold.save = mock.MagicMock()
+        CardHold.query.filter.return_value = [fake_hold]
+        for attr, state in (('failure_reason', 'failed'),
+                            ('voided_at', 'cancelled'),
+                            ('debit_href', 'captured')):
+            holds = Payday.fetch_card_holds(set())
+            assert fake_hold.meta['state'] == state
+            fake_hold.save.assert_called_with()
+            assert len(holds) == 0
+            setattr(fake_hold, attr, None)
+        holds = Payday.fetch_card_holds(set())
+        cancel.assert_called_with(fake_hold)
+        assert len(holds) == 0
+
+    @mock.patch('gittip.billing.payday.log')
+    def test_payin_cancels_uncaptured_holds(self, log):
+        self.janet.set_tip_to(self.homer, 42)
+        alice = self.make_participant('alice', claimed_time='now',
+                                      is_suspicious=False, balance=50)
+        self.db.run("""
+            INSERT INTO exchanges
+                        (amount, fee, participant)
+                 VALUES (50, 0, 'alice');
+        """)
+        alice.set_tip_to(self.janet, 50)
+        Payday.start().payin()
+        assert log.call_args_list[-3][0] == ("Captured 0 card holds.",)
+        assert log.call_args_list[-2][0] == ("Canceled 1 card holds.",)
+        assert Participant.from_id(alice.id).balance == 0
+        assert Participant.from_id(self.janet.id).balance == 8
+        assert Participant.from_id(self.homer.id).balance == 42
+
+    def test_payin_cant_make_balances_more_negative(self):
+        self.db.run("""
+            UPDATE participants SET balance = -10 WHERE username='janet'
+        """)
+        payday = Payday.start()
+        with self.db.get_cursor() as cursor:
+            payday.prepare(cursor, payday.ts_start)
+            cursor.run("""
+                UPDATE pay_participants
+                   SET new_balance = -50
+                 WHERE username IN ('janet', 'homer')
+            """)
+            with self.assertRaises(NegativeBalance):
+                payday.update_balances(cursor)
+
+    @mock.patch.object(Payday, 'fetch_card_holds')
+    @mock.patch('balanced.Customer')
+    def test_card_hold_error(self, Customer, fch):
+        self.janet.set_tip_to(self.homer, 17)
+        Customer.fetch = raise_foobar
+        fch.return_value = {}
+        Payday.start().payin()
+        payday = self.fetch_payday()
+        assert payday['ncc_failing'] == 1
 
     def test_transfer_takes(self):
         a_team = self.make_participant('a_team', claimed_time='now', number='plural', balance=20)
@@ -201,3 +311,20 @@ class TestPachinko(Harness):
                 assert p.balance == D('0.01')
             else:
                 assert p.balance == 0
+
+
+class TestPayout(Harness):
+
+    def test_payout_no_balanced_href(self):
+        self.make_participant('alice', claimed_time='now', is_suspicious=False,
+                              balance=20)
+        Payday.start().payout()
+
+    @mock.patch('gittip.billing.payday.ach_credit')
+    def test_payout_ach_error(self, ach_credit):
+        self.make_participant('alice', claimed_time='now', is_suspicious=False,
+                              balance=20)
+        ach_credit.return_value = 'some error'
+        Payday.start().payout()
+        payday = self.fetch_payday()
+        assert payday['nach_failing'] == 1

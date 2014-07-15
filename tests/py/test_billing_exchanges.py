@@ -18,14 +18,8 @@ from gittip.billing.exchanges import (
 )
 from gittip.exceptions import NegativeBalance, NoBalancedCustomerHref, NotWhitelisted
 from gittip.models.participant import Participant
-from gittip.testing import Harness
+from gittip.testing import Harness, raise_foobar
 from gittip.testing.balanced import BalancedHarness
-
-
-class Foobar(Exception): pass
-
-def raise_foobar(*a):
-    raise Foobar
 
 
 class TestCredits(BalancedHarness):
