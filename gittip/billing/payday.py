@@ -441,8 +441,6 @@ class Payday(object):
             SELECT p.*::participants FROM participants p WHERE balance > 0
         """)
         for i, participant in enumerate(participants, start=1):
-            if i % 100 == 0:
-                log("Payout done for %d participants." % i)
             withhold = participant.giving + participant.pledging
             try:
                 error = ach_credit(self.db, participant, withhold)
