@@ -291,6 +291,19 @@ class TestPayin(BalancedHarness):
         payday = self.fetch_payday()
         assert payday['ncc_failing'] == 1
 
+    def test_payin_doesnt_process_tips_when_goal_is_negative(self):
+        alice = self.make_participant('alice', claimed_time='now', balance=20)
+        bob = self.make_participant('bob', claimed_time='now')
+        alice.set_tip_to(bob, 13)
+        self.db.run("UPDATE participants SET goal = -1 WHERE username='bob'")
+        payday = Payday.start()
+        with self.db.get_cursor() as cursor:
+            payday.prepare(cursor, payday.ts_start)
+            payday.transfer_tips(cursor)
+            payday.update_balances(cursor)
+        assert Participant.from_id(alice.id).balance == 20
+        assert Participant.from_id(bob.id).balance == 0
+
     def test_transfer_takes(self):
         a_team = self.make_participant('a_team', claimed_time='now', number='plural', balance=20)
         alice = self.make_participant('alice', claimed_time='now')
