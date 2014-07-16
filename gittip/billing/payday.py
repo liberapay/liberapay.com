@@ -137,6 +137,7 @@ class Payday(object):
                  , balanced_customer_href
                  , last_bill_result
                  , is_suspicious
+                 , goal
               FROM participants
              WHERE is_suspicious IS NOT true
                AND claimed_time < %(ts_start)s
@@ -160,8 +161,9 @@ class Payday(object):
                    ORDER BY tipper, tippee, mtime DESC
                    ) t
               JOIN pay_participants p ON p.username = t.tipper
+              JOIN pay_participants p2 ON p2.username = t.tippee
              WHERE t.amount > 0
-               AND t.tippee IN (SELECT username FROM pay_participants)
+               AND (p2.goal IS NULL or p2.goal >= 0)
                AND ( SELECT id
                        FROM pay_transfers t2
                       WHERE t.tipper = t2.tipper
