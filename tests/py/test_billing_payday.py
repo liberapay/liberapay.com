@@ -76,11 +76,13 @@ class TestPayday(BalancedHarness):
         janet_customer = balanced.Customer.fetch(janet.balanced_customer_href)
         homer_customer = balanced.Customer.fetch(homer.balanced_customer_href)
 
-        credit = homer_customer.credits.first()
+        created_at = balanced.Transaction.f.created_at
+
+        credit = homer_customer.credits.sort(created_at.desc()).first()
         assert credit.amount == 1500
         assert credit.description == 'homer'
 
-        debit = janet_customer.debits.first()
+        debit = janet_customer.debits.sort(created_at.desc()).first()
         assert debit.amount == 1576  # base amount + fee
         assert debit.description == 'janet'
 
