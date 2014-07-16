@@ -104,6 +104,7 @@ class Harness(unittest.TestCase):
                 self.db.run("DELETE FROM %s CASCADE" % tablename)
             except (IntegrityError, InternalError):
                 tablenames.insert(0, tablename)
+        self.db.run("ALTER SEQUENCE participants_id_seq RESTART WITH 1")
 
 
     def make_elsewhere(self, platform, user_id, user_name, **kw):
