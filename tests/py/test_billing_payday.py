@@ -15,8 +15,10 @@ from gittip.testing.balanced import BalancedHarness
 
 class TestPayday(BalancedHarness):
 
-    def test_payday_moves_money(self):
+    @mock.patch.object(Payday, 'fetch_card_holds')
+    def test_payday_moves_money(self, fch):
         self.janet.set_tip_to(self.homer, '6.00')  # under $10!
+        fch.return_value = {}
         Payday.start().run()
 
         janet = Participant.from_username('janet')
@@ -25,13 +27,15 @@ class TestPayday(BalancedHarness):
         assert homer.balance == D('6.00')
         assert janet.balance == D('3.41')
 
-    def test_payday_doesnt_move_money_from_a_suspicious_account(self):
+    @mock.patch.object(Payday, 'fetch_card_holds')
+    def test_payday_doesnt_move_money_from_a_suspicious_account(self, fch):
         self.db.run("""
             UPDATE participants
                SET is_suspicious = true
              WHERE username = 'janet'
         """)
         self.janet.set_tip_to(self.homer, '6.00')  # under $10!
+        fch.return_value = {}
         Payday.start().run()
 
         janet = Participant.from_username('janet')
@@ -40,13 +44,15 @@ class TestPayday(BalancedHarness):
         assert janet.balance == D('0.00')
         assert homer.balance == D('0.00')
 
-    def test_payday_doesnt_move_money_to_a_suspicious_account(self):
+    @mock.patch.object(Payday, 'fetch_card_holds')
+    def test_payday_doesnt_move_money_to_a_suspicious_account(self, fch):
         self.db.run("""
             UPDATE participants
                SET is_suspicious = true
              WHERE username = 'homer'
         """)
         self.janet.set_tip_to(self.homer, '6.00')  # under $10!
+        fch.return_value = {}
         Payday.start().run()
 
         janet = Participant.from_username('janet')
@@ -55,8 +61,10 @@ class TestPayday(BalancedHarness):
         assert janet.balance == D('0.00')
         assert homer.balance == D('0.00')
 
-    def test_payday_moves_money_with_balanced(self):
+    @mock.patch.object(Payday, 'fetch_card_holds')
+    def test_payday_moves_money_with_balanced(self, fch):
         self.janet.set_tip_to(self.homer, '15.00')
+        fch.return_value = {}
         Payday.start().run()
 
         janet = Participant.from_username('janet')

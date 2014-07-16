@@ -2,6 +2,8 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from decimal import Decimal
 
+from mock import patch
+
 from gittip.billing.payday import Payday
 from gittip.models.participant import Participant
 from gittip.testing import Harness
@@ -29,7 +31,9 @@ class TestHistory(Harness):
 
         assert bob.balance == 0
         for i in range(2):
-            Payday.start().run()
+            with patch.object(Payday, 'fetch_card_holds') as fch:
+                fch.return_value = {}
+                Payday.start().run()
             self.db.run("""
                 UPDATE paydays
                    SET ts_start = ts_start - interval '1 week'

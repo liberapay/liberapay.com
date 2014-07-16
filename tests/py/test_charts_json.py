@@ -3,6 +3,8 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import datetime
 import json
 
+from mock import patch
+
 from gittip.billing.payday import Payday
 from gittip.testing import Harness
 
@@ -29,7 +31,9 @@ class TestChartsJson(Harness):
         self.bob.set_tip_to(self.carl, '2.00')
 
     def run_payday(self):
-        Payday.start().run()
+        with patch.object(Payday, 'fetch_card_holds') as fch:
+            fch.return_value = {}
+            Payday.start().run()
 
 
     def test_no_payday_returns_empty_list(self):
