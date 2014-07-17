@@ -13,7 +13,6 @@ from aspen.utils import utcnow
 from aspen.testing.client import Client
 from gittip.elsewhere import UserInfo
 from gittip.models.account_elsewhere import AccountElsewhere
-from gittip.models.participant import Participant
 from gittip.security.user import User, SESSION
 from gittip.testing.vcr import use_cassette
 from gittip import wireup
@@ -145,11 +144,14 @@ class Harness(unittest.TestCase):
         # At this point wireup.db() has been called, but not ...
         wireup.username_restrictions(self.client.website)
 
-        participant = Participant.with_random_username()
-        participant.change_username(username)
+        participant = self.db.one("""
+            INSERT INTO participants
+                        (username, username_lower)
+                 VALUES (%s, %s)
+              RETURNING participants.*::participants
+        """, (username, username.lower()))
 
         if 'elsewhere' in kw or 'claimed_time' in kw:
-            username = participant.username
             platform = kw.pop('elsewhere', 'github')
             self.db.run("""
                 INSERT INTO elsewhere
@@ -171,7 +173,7 @@ class Harness(unittest.TestCase):
                    SET ({0}) = ({1})
                  WHERE username=%s
              RETURNING participants.*::participants
-            """.format(cols, placeholders), vals+(participant.username,))
+            """.format(cols, placeholders), vals+(username,))
 
         return participant
 

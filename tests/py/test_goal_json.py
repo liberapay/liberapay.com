@@ -4,24 +4,18 @@ import json
 from decimal import Decimal
 
 from gittip.testing import Harness
-from gittip.models.participant import Participant
 
 
 class Tests(Harness):
 
-    def make_alice(self):
-        return self.make_participant('alice', claimed_time='now')
+    def setUp(self):
+        self.make_participant('alice', claimed_time='now')
 
-    def change_goal(self, goal, goal_custom="", username="alice", expecting_error=False):
-        if isinstance(username, Participant):
-            username = username.username
-        elif username == 'alice':
-            self.make_alice()
-
+    def change_goal(self, goal, goal_custom="", auth_as="alice", expecting_error=False):
         method = self.client.POST if not expecting_error else self.client.PxST
         response = method( "/alice/goal.json"
                          , {'goal': goal, 'goal_custom': goal_custom}
-                         , auth_as=username
+                         , auth_as=auth_as
                           )
         return response
 
@@ -52,7 +46,7 @@ class Tests(Harness):
         assert actual == "100,100.00"
 
     def test_anonymous_gets_404(self):
-        response = self.change_goal("100.00", username=None, expecting_error=True)
+        response = self.change_goal("100.00", auth_as=None, expecting_error=True)
         assert response.code == 404, response.code
 
     def test_invalid_is_400(self):
@@ -67,22 +61,24 @@ class Tests(Harness):
     # Exercise the event logging for goal changes.
 
     def test_last_goal_is_stored_in_participants_table(self):
-        alice = self.make_alice()
-        self.change_goal("custom", "100", alice)
-        self.change_goal("custom", "200", alice)
-        self.change_goal("custom", "300", alice)
-        self.change_goal("null", "", alice)
-        self.change_goal("custom", "400", alice)
+        self.change_goal("custom", "100")
+        self.change_goal("custom", "200")
+        self.change_goal("custom", "300")
+        self.change_goal("null", "")
+        self.change_goal("custom", "400")
         actual = self.db.one("SELECT goal FROM participants")
         assert actual == Decimal("400.00")
 
     def test_all_goals_are_stored_in_events_table(self):
-        alice = self.make_alice()
-        self.change_goal("custom", "100", alice)
-        self.change_goal("custom", "200", alice)
-        self.change_goal("custom", "300", alice)
-        self.change_goal("null", "", alice)
-        self.change_goal("custom", "400", alice)
-        actual = self.db.all("SELECT (payload->'values'->>'goal')::int AS goal "
-                             "FROM events ORDER BY ts DESC")
-        assert actual == [400, None, 300, 200, 100, None]
+        self.change_goal("custom", "100")
+        self.change_goal("custom", "200")
+        self.change_goal("custom", "300")
+        self.change_goal("null", "")
+        self.change_goal("custom", "400")
+        actual = self.db.all("""
+            SELECT (payload->'values'->>'goal')::int AS goal
+              FROM events
+             WHERE 'goal' IN (SELECT json_object_keys(payload->'values'))
+          ORDER BY ts DESC
+        """)
+        assert actual == [400, None, 300, 200, 100]
