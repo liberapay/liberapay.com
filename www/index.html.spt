@@ -39,11 +39,10 @@ for them.
         <p>Motivated by Gratitude</p>
 
         <p>Gittip is sustainable crowdfunding, with no strings attached and
-        <span>no extra fees</span>. <span><a href="/about/">Read about
-        Gittip</a></span>.</p>
+        <span>no extra fees</span>.</p>
 
-        <p>Want to see who&rsquo;s on Gittip?
-        <span><a href="/for/">Browse our communities</a></span>.</p>
+        <p><a href="/about/">Read more</a>.</p>
+
     </div>
     <div class="action">
         {% if user.ANON %}
@@ -68,7 +67,9 @@ for them.
         agree to our <a href="/about/terms/">Terms and Conditions</a>.
         You&rsquo;ll be joining {{ website.gnactive }} active users, who
         exchanged ${{ website.gtransfer_volume }} <a
-        href="/about/charts.html">{{ website.glast_week }}</a>. Gittip is an <a
+        href="/about/charts.html">{{ website.glast_week }}</a>.  Want to see
+        who&rsquo;s on Gittip? <a href="/for/">Browse our communities</a>.
+        Want to work for Gittip? We are an <a
         href="http://building.gittip.com/big-picture/welcome">open
         company</a>.</p>
 
