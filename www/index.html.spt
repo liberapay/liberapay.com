@@ -36,12 +36,14 @@ for them.
     <div class="pitch">
         <img src="{{ website.asset_url }}/logo.white.svg" alt="Gittip">
         <h1>Weekly Payments</h1>
-        <p>Motivated by Gratitude<br><br>
-        Gittip is sustainable funding, with no extra fees and no strings attached.<br>
-        <br>
-        <a href="/about/">Read more</a>.</p>
-        <div class="footnote">We moved ${{ website.gtransfer_volume }}
-        <a href="/about/charts.html">last week</a>.</div>
+        <p>Motivated by Gratitude</p>
+
+        <p>Gittip is sustainable crowdfunding, with no strings attached and
+        <span>no extra fees</span>. <span><a href="/about/">Read about
+        Gittip</a></span>.</p>
+
+        <p>Want to see who&rsquo;s on Gittip?
+        <span><a href="/for/">Browse our communities</a></span>.</p>
     </div>
     <div class="action">
         {% if user.ANON %}
@@ -60,14 +62,15 @@ for them.
         {% call auth_button('github', 'opt-in', then='/about/me//') %}GitHub{% endcall %}
         {% call auth_button('bitbucket', 'opt-in', then='/about/me//') %}Bitbucket{% endcall %}
         {% call auth_button('openstreetmap', 'opt-in', then='/about/me//') %}OpenStreetMap{% endcall %}
-        </span>
-        <br><br>
-        By signing in, you indicate that you have read and agree
-        to our <a href="/about/terms/">Terms and Conditions</a>.
-        <br><br>
-        Want to see who's on Gittip?</span>
-        <a href="/for/">Browse our communities</a>.
-        </div>
+        </span></div>
+
+        <p class="other">By signing in, you indicate that you have read and
+        agree to our <a href="/about/terms/">Terms and Conditions</a>.
+        You&rsquo;ll be joining {{ website.gnactive }} active users, who
+        exchanged ${{ website.gtransfer_volume }} <a
+        href="/about/charts.html">{{ website.glast_week }}</a>. Gittip is an <a
+        href="http://building.gittip.com/big-picture/welcome">open
+        company</a>.</p>
 
         {% else %}
         <h1>Welcome back, {{ user.participant.username }}</a>!</h1>

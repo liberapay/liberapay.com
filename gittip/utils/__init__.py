@@ -381,6 +381,23 @@ def update_global_stats(website):
     """, default=(0, 0.0))
     website.gnactive = locale.format("%d", stats[0], grouping=True)
     website.gtransfer_volume = locale.format("%d", stats[1], grouping=True)
+    website.glast_week = last_week(website.db)
+
+
+def last_week(db):
+    WEDNESDAY, THURSDAY, FRIDAY, SATURDAY = 2, 3, 4, 5
+    now = datetime.utcnow()
+    payday = db.one("SELECT ts_start, ts_end FROM paydays WHERE ts_start > ts_end")
+    last_week = "last week"
+    if now.weekday() == THURSDAY:
+        if payday is not None and payday.ts_end is not None and payday.ts_end.year > 1970:
+            # Payday is finished for today.
+            last_week = "today"
+    elif now.weekday() == FRIDAY:
+        last_week = "yesterday"
+    elif now.weekday() == SATURDAY:
+        last_week = "this past week"
+    return last_week
 
 
 def update_homepage_queries_once(db):
