@@ -32,6 +32,15 @@ from aspen.utils import utcnow
     </style>
 {% endblock %}
 
+{% block scripts %}
+<script>
+    $(document).ready(function () {
+        Gittip.jump.init();
+    });
+</script>
+{{ super() }}
+{% endblock %}
+
 {% block heading %}{% endblock %}
 {% block whole_page %}
 <div class="homepage">
