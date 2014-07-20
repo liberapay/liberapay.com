@@ -87,11 +87,13 @@ from aspen.utils import utcnow
         {% else %}
         {% set quick = utcnow() - timedelta(seconds=15)  %}
         <h1>Welcome{{ " back" if user.participant.claimed_time < quick else "" }}, {{ user.participant.username }}</a>!</h1>
-        <p>Your balance is ${{ user.participant.balance }}.<br><br>
-        Go to <a href="/{{ user.participant.username }}/">your profile</a> (or
+        <p>Your balance is ${{ user.participant.balance }}.</p>
+
+        <p>Go to <a href="/{{ user.participant.username }}/">your profile</a> (or
         <a href="/sign-out.html">sign out</a>).</p>
 
-        <form id="jump"><br>
+        <div class="jump">
+        <form id="jump">
             <span>Jump to
             <input placeholder="username" autocomplete="off" autocorrect="off"
                 autocapitalize="off" spellcheck="false" size="12"></span>
@@ -103,6 +105,7 @@ from aspen.utils import utcnow
             </select>
             <button type="submit">Go</button></span>
         </form>
+        </div>
 
         {% endif %}
     </div>

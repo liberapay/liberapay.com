@@ -31,13 +31,19 @@
         padding: 0;
     }
 
-    p, #jump {
+    p, .jump {
         font: normal 18px/24px $Ideal;
+    }
+    p {
         margin: 0;
         padding: 0 0 24px 0;
+        &:last-child {
+            padding-bottom: 0;
+        }
     }
-    p:last-child {
-        padding-bottom: 0;
+    .jump {
+        margin: 0;
+        padding: 48px 0 0;
     }
 
     .pitch,.action {
