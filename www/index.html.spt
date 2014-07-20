@@ -13,12 +13,14 @@ impression of Gittip and help people take the next step, whatever that might be
 for them.
 
 """
+from datetime import timedelta
+from aspen.utils import utcnow
 [---]
 [---]
 {% extends "templates/base.html" %}
 {% block head %}
     <link rel="publisher" href="https://plus.google.com/110591317655791133884">
-    <meta name="description" content="Weekly payments, motivated by gratitude. Gittip is sustainable funding with no extra fees and no strings attached." />
+    <meta name="description" content="Weekly payments, motivated by gratitude. Gittip is sustainable crowdfunding with no strings attached and no extra fees." />
     <meta name="fb:app_id" content="229465400522758" />
     <meta name="og:type" content="website" />
     <meta name="og:url" content="https://www.gittip.com/" />
@@ -51,16 +53,16 @@ for them.
         {% from 'templates/auth.html' import auth_button with context %}
 
         <div class="twitter">
-        {% call auth_button('twitter', 'opt-in', then='/about/me//') %}
+        {% call auth_button('twitter', 'opt-in') %}
             Sign in with Twitter
         {% endcall %}
         </div>
 
         <div class="other">Or sign in with:
         <span>
-        {% call auth_button('github', 'opt-in', then='/about/me//') %}GitHub{% endcall %}
-        {% call auth_button('bitbucket', 'opt-in', then='/about/me//') %}Bitbucket{% endcall %}
-        {% call auth_button('openstreetmap', 'opt-in', then='/about/me//') %}OpenStreetMap{% endcall %}
+        {% call auth_button('github', 'opt-in') %}GitHub{% endcall %}
+        {% call auth_button('bitbucket', 'opt-in') %}Bitbucket{% endcall %}
+        {% call auth_button('openstreetmap', 'opt-in') %}OpenStreetMap{% endcall %}
         </span></div>
 
         <p class="other">By signing in, you indicate that you have read and
@@ -74,10 +76,11 @@ for them.
         company</a>.</p>
 
         {% else %}
-        <h1>Welcome back, {{ user.participant.username }}</a>!</h1>
+        {% set quick = utcnow() - timedelta(seconds=15)  %}
+        <h1>Welcome{{ " back" if user.participant.claimed_time < quick else "" }}, {{ user.participant.username }}</a>!</h1>
         <p>Your balance is ${{ user.participant.balance }}.<br><br>
-        Go to <a href="/{{ user.participant.username }}/">your profile</a> or
-        <a href="/sign-out.html">sign out</a>.</p>
+        Go to <a href="/{{ user.participant.username }}/">your profile</a> (or
+        <a href="/sign-out.html">sign out</a>).</p>
 
         <form id="jump"><br>
             <span>Jump to
