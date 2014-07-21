@@ -150,7 +150,7 @@ class Payday(object):
         self.pachinko(ts_start, self.genparticipants(ts_start, loop=LOOP_PACHINKO))
         self.clear_pending_to_balance()
         self.payout(ts_start, self.genparticipants(ts_start, loop=LOOP_PAYOUT))
-        self.set_nactive(ts_start)
+        self.update_stats(ts_start)
         self.update_receiving_amounts()
 
         self.end()
@@ -160,11 +160,6 @@ class Payday(object):
         _end = aspen.utils.utcnow()
         _delta = _end - _start
         fmt_past = "Script ran for {age} (%s)." % _delta
-
-        # XXX For some reason newer versions of aspen use old string
-        # formatting, so if/when we upgrade this will break. Why do we do that
-        # in aspen, anyway?
-
         log(aspen.utils.to_age(_start, fmt_past=fmt_past))
 
 
@@ -317,7 +312,7 @@ class Payday(object):
             else:
                 break
 
-        self.mark_participant(nsuccessful_tips)
+        self.mark_participant()
 
 
     def move_pending_to_balance_for_teams(self):
@@ -365,20 +360,66 @@ class Payday(object):
         log("Cleared pending to balance. Ready for payouts.")
 
 
-    def set_nactive(self, ts_start):
+    def update_stats(self, ts_start):
         self.db.run("""\
 
+            WITH our_transfers AS (
+                     SELECT *
+                       FROM transfers
+                      WHERE "timestamp" >= %(ts_start)s
+                 )
+               , our_tips AS (
+                     SELECT *
+                       FROM our_transfers
+                      WHERE context = 'tip'
+                 )
+               , our_pachinkos AS (
+                     SELECT *
+                       FROM our_transfers
+                      WHERE context = 'take'
+                 )
+               , our_exchanges AS (
+                     SELECT *
+                       FROM exchanges
+                      WHERE "timestamp" >= %(ts_start)s
+                 )
+               , our_achs AS (
+                     SELECT *
+                       FROM our_exchanges
+                      WHERE amount < 0
+                 )
+               , our_charges AS (
+                     SELECT *
+                       FROM our_exchanges
+                      WHERE amount > 0
+                 )
             UPDATE paydays
-               SET nactive=(
-                    SELECT count(DISTINCT foo.*) FROM (
-                        SELECT tipper FROM transfers WHERE "timestamp" >= %(ts_start)s
-                            UNION
-                        SELECT tippee FROM transfers WHERE "timestamp" >= %(ts_start)s
-                    ) AS foo
-                )
+               SET nactive = (
+                       SELECT DISTINCT count(*) FROM (
+                           SELECT tipper FROM our_transfers
+                               UNION
+                           SELECT tippee FROM our_transfers
+                       ) AS foo
+                   )
+                 , ntippers = (SELECT count(DISTINCT tipper) FROM our_transfers)
+                 , ntips = (SELECT count(*) FROM our_tips)
+                 , npachinko = (SELECT count(*) FROM our_pachinkos)
+                 , pachinko_volume = (SELECT sum(amount) FROM our_pachinkos)
+                 , ntransfers = (SELECT count(*) FROM our_transfers)
+                 , transfer_volume = (SELECT sum(amount) FROM our_transfers)
+                 , nachs = (SELECT count(*) FROM our_achs)
+                 , ach_volume = (SELECT COALESCE(sum(amount), 0) FROM our_achs)
+                 , ach_fees_volume = (SELECT sum(fee) FROM our_achs)
+                 , ncharges = (SELECT count(*) FROM our_charges)
+                 , charge_volume = (
+                       SELECT COALESCE(sum(amount + fee), 0)
+                         FROM our_charges
+                   )
+                 , charge_fees_volume = (SELECT sum(fee) FROM our_charges)
              WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
 
         """, {'ts_start': ts_start})
+
 
     def update_receiving_amounts(self):
         UPDATE = """
@@ -484,10 +525,6 @@ class Payday(object):
             self.credit_participant(cursor, tippee, amount)
             context = 'take' if pachinko else 'tip'
             self.record_transfer(cursor, tipper, tippee, amount, context)
-            if pachinko:
-                self.mark_pachinko(cursor, amount)
-            else:
-                self.mark_transfer(cursor, amount)
 
             return True
 
@@ -579,7 +616,6 @@ class Payday(object):
                                       # charge_on_*
 
         self.record_charge( amount
-                          , charge_amount
                           , fee
                           , error
                           , username
@@ -656,7 +692,7 @@ class Payday(object):
         if error:
             log(msg + "failed: %s" % error)
 
-        self.record_credit(credit_amount, fee, error, participant.username)
+        self.record_credit(credit_amount, fee, error, participant)
 
 
     def charge_on_balanced(self, username, balanced_customer_href, amount):
@@ -718,7 +754,7 @@ class Payday(object):
     # Record-keeping.
     # ===============
 
-    def record_charge(self, amount, charge_amount, fee, error, username):
+    def record_charge(self, amount, fee, error, username):
         """Given a Bunch of Stuff, return None.
 
         This function takes the result of an API call to a payment processor
@@ -756,7 +792,6 @@ class Payday(object):
 
                 """
                 cursor.execute(EXCHANGE, (amount, fee, username))
-                self.mark_charge_success(cursor, charge_amount, fee)
 
 
             # Update the participant's balance.
@@ -774,7 +809,7 @@ class Payday(object):
             cursor.execute(RESULT, (last_bill_result, amount, username))
 
 
-    def record_credit(self, amount, fee, error, username):
+    def record_credit(self, amount, fee, error, participant):
         """Given a Bunch of Stuff, return None.
 
         Records in the exchanges table for credits have these characteristics:
@@ -787,6 +822,7 @@ class Payday(object):
             fee     It's positive, just like with charges.
 
         """
+        username = participant.username
         credit = -amount  # From Gittip's POV this is money flowing out of the
                           # system.
 
@@ -806,7 +842,6 @@ class Payday(object):
 
                 """
                 cursor.execute(EXCHANGE, (credit, fee, username))
-                self.mark_ach_success(cursor, amount, fee)
 
 
             # Update the participant's balance.
@@ -827,6 +862,8 @@ class Payday(object):
                                           ))
             if balance < 0:
                 raise NegativeBalance
+
+        participant.set_attributes(balance=balance)
 
 
     def record_transfer(self, cursor, tipper, tippee, amount, context):
@@ -862,20 +899,6 @@ class Payday(object):
         cursor.execute(STATS)
         assert cursor.fetchone() is not None
 
-    def mark_charge_success(self, cursor, amount, fee):
-        STATS = """\
-
-            UPDATE paydays
-               SET ncharges = ncharges + 1
-                 , charge_volume = charge_volume + %s
-                 , charge_fees_volume = charge_fees_volume + %s
-             WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
-         RETURNING id
-
-        """
-        cursor.execute(STATS, (amount, fee))
-        assert cursor.fetchone() is not None
-
 
     def mark_ach_failed(self, cursor):
         cursor.one("""\
@@ -887,53 +910,13 @@ class Payday(object):
 
         """, default=NoPayday)
 
-    def mark_ach_success(self, cursor, amount, fee):
-        cursor.one("""\
 
-            UPDATE paydays
-               SET nachs = nachs + 1
-                 , ach_volume = ach_volume + %s
-                 , ach_fees_volume = ach_fees_volume + %s
-             WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
-         RETURNING id
-
-        """, (-amount, fee), default=NoPayday)
-
-
-    def mark_transfer(self, cursor, amount):
-        cursor.one("""\
-
-            UPDATE paydays
-               SET ntransfers = ntransfers + 1
-                 , transfer_volume = transfer_volume + %s
-             WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
-         RETURNING id
-
-        """, (amount,), default=NoPayday)
-
-
-    def mark_pachinko(self, cursor, amount):
-        cursor.one("""\
-
-            UPDATE paydays
-               SET npachinko = npachinko + 1
-                 , pachinko_volume = pachinko_volume + %s
-             WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
-         RETURNING id
-
-        """, (amount,), default=NoPayday)
-
-
-    def mark_participant(self, nsuccessful_tips):
+    def mark_participant(self):
         self.db.one("""\
 
             UPDATE paydays
                SET nparticipants = nparticipants + 1
-                 , ntippers = ntippers + %s
-                 , ntips = ntips + %s
              WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
          RETURNING id
 
-        """, ( 1 if nsuccessful_tips > 0 else 0
-             , nsuccessful_tips  # XXX bug?
-              ), default=NoPayday)
+        """, default=NoPayday)

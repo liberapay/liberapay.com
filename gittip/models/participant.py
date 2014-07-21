@@ -290,7 +290,6 @@ class Participant(Model, MixinTeam):
 
         # Monkey-patch a couple methods, coopting them for callbacks, essentially.
         hack.mark_ach_failed = lambda cursor: None
-        hack.mark_ach_success = lambda cursor, amount, fee: self.set_attributes(balance=0)
 
         hack.ach_credit( ts_start=None                  # not used
                        , participant=self
