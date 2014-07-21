@@ -1,8 +1,8 @@
-{% macro auth_button(platform, action, user_name='', class='', then='') %}
+{% macro auth_button(platform, action, user_name='', class='') %}
     <form action="/on/{{ platform|e }}/redirect" method="post"
           class="auth-button {{ platform|e }} {{ class|e }}">
         <input type="hidden" name="action" value="{{ action|e }}" />
-        <input type="hidden" name="then" value="{{ then or path.decoded|e }}" />
+        <input type="hidden" name="then" value="{{ path.decoded|e }}" />
         <input type="hidden" name="user_name" value="{{ user_name|e }}" />
         <input type="hidden" name="csrf_token" value="{{ csrf_token|e }}" />
         <button type="submit">{{ caller()|e }}</button>
