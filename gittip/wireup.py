@@ -248,7 +248,7 @@ def env():
         OPENSTREETMAP_API_URL           = unicode,
         OPENSTREETMAP_AUTH_URL          = unicode,
         NANSWERS_THRESHOLD              = int,
-        UPDATE_HOMEPAGE_EVERY           = int,
+        UPDATE_GLOBAL_STATS_EVERY       = int,
         CHECK_DB_EVERY                  = int,
         SEGMENT_KEY                     = unicode,
         SENTRY_DSN                      = unicode,

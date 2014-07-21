@@ -1,9 +1,8 @@
 from datetime import datetime, timedelta
 import locale
 import re
-import time
 
-from aspen import log_dammit, Response
+from aspen import Response
 from aspen.utils import typecheck, to_age, to_rfc822, utcnow
 import gittip
 from postgres.cursors import SimpleCursorBase
@@ -379,43 +378,25 @@ def update_global_stats(website):
         SELECT nactive, transfer_volume FROM paydays
         ORDER BY ts_end DESC LIMIT 1
     """, default=(0, 0.0))
-    website.gnactive = locale.format("%d", round(stats[0], -2), grouping=True)
-    website.gtransfer_volume = locale.format("%d", round(stats[1], -2), grouping=True)
+    website.gnactive = locale.format("%d", stats[0], grouping=True)
+    website.gtransfer_volume = locale.format("%d", stats[1], grouping=True)
+    website.glast_week = last_week(website.db)
 
 
-def update_homepage_queries_once(db):
-    with db.get_cursor() as cursor:
-        log_dammit("updating homepage queries")
-        start = time.time()
-        cursor.execute("DELETE FROM homepage_top_givers")
-        cursor.execute("""
-
-        INSERT INTO homepage_top_givers (username, anonymous, amount, avatar_url, statement, number)
-            SELECT username, anonymous_giving, giving, avatar_url, statement, number
-              FROM participants
-             WHERE is_suspicious IS NOT true
-               AND last_bill_result = ''
-          ORDER BY giving DESC
-             LIMIT 100;
-
-        """.strip())
-
-        cursor.execute("DELETE FROM homepage_top_receivers")
-        cursor.execute("""
-
-        INSERT INTO homepage_top_receivers (username, anonymous, amount, avatar_url, statement, number)
-            SELECT username, anonymous_receiving, receiving, avatar_url, statement, number
-              FROM participants
-             WHERE is_suspicious IS NOT true
-               AND claimed_time IS NOT NULL
-          ORDER BY receiving DESC
-             LIMIT 100;
-
-        """.strip())
-
-        end = time.time()
-        elapsed = end - start
-        log_dammit("updated homepage queries in %.2f seconds" % elapsed)
+def last_week(db):
+    WEDNESDAY, THURSDAY, FRIDAY, SATURDAY = 2, 3, 4, 5
+    now = datetime.utcnow()
+    payday = db.one("SELECT ts_start, ts_end FROM paydays WHERE ts_start > ts_end")
+    last_week = "last week"
+    if now.weekday() == THURSDAY:
+        if payday is not None and payday.ts_end is not None and payday.ts_end.year > 1970:
+            # Payday is finished for today.
+            last_week = "today"
+    elif now.weekday() == FRIDAY:
+        last_week = "yesterday"
+    elif now.weekday() == SATURDAY:
+        last_week = "this past week"
+    return last_week
 
 
 def _execute(this, sql, params=[]):

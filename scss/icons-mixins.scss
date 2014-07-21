@@ -10,13 +10,13 @@
     font-style: normal;
 }
 
-@mixin icon($name: "") {
+@mixin icon($name: "", $font-size: 16px, $margin-right: 4px) {
   font-family: 'icons';
   speak: none;
   font-weight: normal;
   font-variant: normal;
-  font-size: 16px;
-  margin-right: 4px;
+  font-size: $font-size;
+  margin-right: $margin-right;
   text-transform: none;
   line-height: 1;
   -webkit-font-smoothing: antialiased;
@@ -32,9 +32,9 @@
   }
 }
 
-@mixin has-icon($name: "") {
+@mixin has-icon($name: "", $font-size: 16px, $margin-right: 4px) {
   &:before {
-    @include icon($name);
+    @include icon($name, $font-size, $margin-right);
   }
 }
 

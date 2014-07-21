@@ -13,205 +13,101 @@ impression of Gittip and help people take the next step, whatever that might be
 for them.
 
 """
-import os
-from aspen import Response
-from gittip.utils import _to_age, format_money, to_statement
-
-
-LUXURY = 4  # used for responsive design to limit items shown on small screens
-MAKING = "making the world better by"
-I_AM = "I am"
-WE_ARE = "We are"
-
+from datetime import timedelta
+from aspen.utils import utcnow
 [---]
-
-try:
-    limit = min(int(qs.get('limit', 12)), 100)
-    offset = int(qs.get('offset', 0))
-except ValueError:
-    raise Response(400)
-
-new_participants = website.db.all("""
--- new participants on homepage
-
-    SELECT username, claimed_time, avatar_url, statement, number
-      FROM participants p
-     WHERE EXISTS (SELECT * FROM elsewhere e WHERE p.username = e.participant)
-       AND claimed_time IS NOT null
-       AND is_suspicious IS NOT true
-  ORDER BY claimed_time DESC
-     LIMIT %s
-    OFFSET %s
-
-""", (limit, offset))
-
-givers = website.db.all("""
--- top givers on homepage
-
-    SELECT * FROM homepage_top_givers
-  ORDER BY amount DESC
-     LIMIT %s
-    OFFSET %s
-
-""", (limit, offset))
-
-# XXX I'm nearly positive that one or both of givers and receivers can contain
-# orphan accounts. See https://github.com/gittip/www.gittip.com/issues/650
-
-receivers = website.db.all("""
--- top receivers on homepage
-
-    SELECT * FROM homepage_top_receivers
-  ORDER BY amount DESC
-     LIMIT %s
-    OFFSET %s
-
-""", (limit, offset))
 [---]
-{% from 'templates/avatar-url.html' import avatar_url with context %}
 {% extends "templates/base.html" %}
 {% block head %}
     <link rel="publisher" href="https://plus.google.com/110591317655791133884">
-    <meta name="description" content="Inspiring Generosity. Gittip is a weekly gift exchange. Support and thank your favorite people and projects and communities with small cash gifts." />
+    <meta name="description" content="Weekly payments, motivated by gratitude. Gittip is sustainable crowdfunding with no strings attached and no extra fees." />
     <meta name="fb:app_id" content="229465400522758" />
     <meta name="og:type" content="website" />
     <meta name="og:url" content="https://www.gittip.com/" />
     <meta name="og:title" content="Gittip" />
     <meta name="og:image" content="{{ website.asset_url }}/gittip.opengraph.png" />
+    <style>
+        .pennies, .container { display: none; }
+        html, body { height: 100%; min-height: 100%; }
+    </style>
 {% endblock %}
 
 {% block scripts %}
 <script>
     $(document).ready(function () {
-        $("a.mini-user:not([data-tip=''])").tipr();
         Gittip.jump.init();
     });
 </script>
 {{ super() }}
 {% endblock %}
 
-{% block heading %}
-    <h2 class="top"><span>Sustainable Crowdfunding</span></h2>
-    <h1>
-        <span>Inspiring Generosity</span>
-    </h1>
-    <h2 class="bottom">
-        <span class="button-container">
-            <a href="/about/"><button class="selected">About</button></a>
-        </span>
-    </h2>
-{% endblock %}
-{% block box %}
-    <div class="as-content">
-        <h1>Who inspires you?</h1>
+{% block heading %}{% endblock %}
+{% block whole_page %}
+<div class="homepage">
+    <div class="pitch">
+        <img src="{{ website.asset_url }}/logo.white.svg" alt="Gittip">
+        <h1>Weekly Payments</h1>
+        <p>Motivated by Gratitude</p>
+
+        <p>Gittip is sustainable crowdfunding, with <span>no strings</span> attached and
+        <span>no extra fees</span>.</p>
+
+        <p><a href="/about/">Read more</a>.</p>
+
+    </div>
+    <div class="action">
+        {% if user.ANON %}
+        <h1>Sign In</h1>
+        <p>to Make and Accept Payments</p>
+        {% from 'templates/auth.html' import auth_button with context %}
+
+        <div class="twitter">
+        {% call auth_button('twitter', 'opt-in') %}
+            Sign in with Twitter
+        {% endcall %}
+        </div>
+
+        <div class="other">Or sign in with:
+        <span>
+        {% call auth_button('github', 'opt-in') %}GitHub{% endcall %}
+        {% call auth_button('bitbucket', 'opt-in') %}Bitbucket{% endcall %}
+        {% call auth_button('openstreetmap', 'opt-in') %}OpenStreetMap{% endcall %}
+        </span></div>
+
+        <p class="other">By signing in, you indicate that you have read and
+        agree to our <a href="/about/terms/">Terms and Conditions</a>.
+        You&rsquo;ll be joining {{ website.gnactive }} active users, who
+        exchanged ${{ website.gtransfer_volume }} <a
+        href="/about/charts.html">{{ website.glast_week }}</a>.  Want to see
+        who they are? Browse <a href="/for/">our communities</a>.  Want to work
+        for Gittip? We are an <a
+        href="http://building.gittip.com/big-picture/welcome">open
+        company</a>.</p>
+
+        {% else %}
+        {% set quick = utcnow() - timedelta(seconds=15)  %}
+        <h1>Welcome{{ " back" if user.participant.claimed_time < quick else "" }}, {{ user.participant.username }}</a>!</h1>
+        <p>Your balance is ${{ user.participant.balance }}.</p>
+
+        <p>Go to <a href="/{{ user.participant.username }}/">your profile</a> (or
+        <a href="/sign-out.html">sign out</a>).</p>
+
+        <div class="jump">
         <form id="jump">
-            <span class="luxury">Enter a </span>
+            <span>Jump to
+            <input placeholder="username" autocomplete="off" autocorrect="off"
+                autocapitalize="off" spellcheck="false" size="12"></span>
+            <span>from
             <select>
                 <option value="twitter">Twitter</option>
                 <option value="github">GitHub</option>
                 <option value="bitbucket">Bitbucket</option>
             </select>
-            <span class="luxury"> username: </span>
-            <input placeholder="username" autocomplete="off" autocorrect="off"
-                autocapitalize="off" spellcheck="false"/>
-            <button type="submit">Go</button>
+            <button type="submit">Go</button></span>
         </form>
+        </div>
+
+        {% endif %}
     </div>
-
-    <div class="nav level-1">Or browse <a
-            href="/for/">communities on Gittip ...</a></div>
-
-{% endblock %}
-{% block page %}
-
-<div id="leaderboard">
-
-    <div class="people">
-        <h2>New Participants</h2>
-        <ul class="group">
-            {% for i, participant in enumerate(new_participants, start=1) %}
-            <li{% if i > LUXURY %} class="luxury"{% endif %}>
-                <a href="/{{ participant.username }}/"
-                    class="mini-user tip"
-                    data-tip="{{ to_statement((I_AM if participant.number == 'singular' else WE_ARE) + ' ' + MAKING + ' ',
-                    participant.statement) }}">
-                    <span class="inner">
-                        <span class="avatar"
-                            style="background-image: url('{{ avatar_url(participant) }}')">
-                        </span>
-                        <span class="age">{{ _to_age(participant) }}</span>
-                        <span class="name">{{ participant.username }}</span>
-                    </span>
-                </a>
-            </li>
-            {% endfor %}
-        </ul>
-    </div>
-    <div class="people">
-        <h2>Top Givers</h2>
-        <ul class="group">
-            {% for i, giver in enumerate(givers, start=1) %}
-            <li{% if i > LUXURY %} class="luxury"{% endif %}>
-                {% if giver.anonymous and not user.ADMIN %}
-                <span class="mini-user">
-                    <span class="inner">
-                        <span class="avatar">
-                        </span>
-                        <span class="money">${{ format_money(giver.amount) }}</span>
-                        <span class="name">Anonymous</span>
-                    </span>
-                </span>
-                {% else %}
-                <a href="/{{ giver.username }}/"
-                   class="mini-user{{ ' anonymous' if giver.anonymous else '' }} tip"
-                   data-tip="{{ to_statement((I_AM if giver.number == 'singular' else WE_ARE) + ' ' + MAKING + ' ',
-                   giver.statement) }}">
-                    <span class="inner">
-                        <span class="avatar"
-                            style="background-image: url('{{ avatar_url(giver) }}')">
-                        </span>
-                        <span class="money">${{ format_money(giver.amount) }}</span>
-                        <span class="name">{{ giver.username }}</span>
-                    </span>
-                </a>
-                {% endif %}
-            </li>
-            {% endfor %}
-        </ul>
-    </div>
-    <div class="people">
-        <h2>Top Receivers</h2>
-        <ul class="group">
-            {% for i, receiver in enumerate(receivers, start=1) %}
-            <li{% if i > LUXURY %} class="luxury"{% endif %}>
-                {% if receiver.anonymous and not user.ADMIN %}
-                <span class="mini-user">
-                    <span class="inner">
-                        <span class="avatar">
-                        </span>
-                        <span class="money">${{ format_money(receiver.amount) }}</span>
-                        <span class="name">Anonymous</span>
-                    </span>
-                </span>
-                {% else %}
-                <a href="/{{ receiver.username }}/"
-                   class="mini-user{{ ' anonymous' if receiver.anonymous else '' }} tip"
-                   data-tip="{{ to_statement((I_AM if receiver.number == 'singular' else WE_ARE) + ' ' + MAKING + ' ',
-                   receiver.statement) }}">
-                    <span class="inner">
-                        <span class="avatar"
-                            style="background-image: url('{{ avatar_url(receiver) }}')">
-                        </span>
-                        <span class="money">${{ format_money(receiver.amount) }}</span>
-                        <span class="name">{{ receiver.username }}</span>
-                    </span>
-                </a>
-                {% endif %}
-            </li>
-            {% endfor %}
-        </ul>
-    </div>
-
 </div>
-
 {% endblock %}

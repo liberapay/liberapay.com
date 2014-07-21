@@ -22,6 +22,24 @@
         width: 100%;
     }
 
+    .homepage {
+        display: block;
+        height: auto;
+        .pitch,.action {
+            display: block;
+            width: auto;
+        }
+        .pitch {
+            padding: 216px 48px 72px 110px;
+        }
+        .action {
+            padding: 48px 48px 72px 110px;
+            .jump {
+                padding-top: 0;
+            }
+        }
+    }
+
     .col0, .col1, .col2 {
         float: none;
         margin: auto;
@@ -34,16 +52,6 @@
 @media (max-width: 700px) {
     .luxury {
         display: none !important;
-    }
-
-    #hero {
-        h2.top {
-            font-size: 30px;
-        }
-
-        h1 {
-            font-size: 48px;
-        }
     }
 
     #leaderboard {
@@ -95,24 +103,42 @@
 
     #hero {
         font-size: 15px;
-        h2.top {
-            letter-spacing: -1px;
-            font-size: 1.33em;
-        }
-
         h1 {
-            letter-spacing: -1px;
             font-size: 36px;
+            padding: 36px 0 18px;
         }
     }
 
-    #jump {
-        select, input, button {
+    .homepage {
+        span { white-space: normal; }
+        display: block;
+        .pitch,.action {
             display: block;
-            width: 75%;
-            margin: 1em auto;
+            width: auto;
+            h1 { 
+                font-size: 24px; 
+                line-height: 36px;
+            }
+            p, .jump {
+                font-size: 16px; 
+                line-height: 24px;
+            }
+        }
+        .pitch {
+            text-align: center;
+            img { width: 256px; position: static; }
+            h1 { margin-top: 36px; }
+            h1, p { text-align: left; }
+            padding: 36px 36px 60px;
+        }
+        .action {
+            padding: 36px 36px 60px;
+            div.twitter {
+                text-align: center;
+            }
         }
     }
+
 
     #leaderboard {
         .people {
