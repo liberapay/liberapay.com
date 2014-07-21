@@ -89,8 +89,8 @@ from aspen.utils import utcnow
         <h1>Welcome{{ " back" if user.participant.claimed_time < quick else "" }}, {{ user.participant.username }}</a>!</h1>
         <p>Your balance is ${{ user.participant.balance }}.</p>
 
-        <p>Go to <a href="/{{ user.participant.username }}/">your profile</a> (or
-        <a href="/sign-out.html">sign out</a>).</p>
+        <p>Go to <a href="/{{ user.participant.username }}/">your profile</a>, or
+        <a href="/sign-out.html">sign out</a>.</p>
 
         <div class="jump">
         <form id="jump">
