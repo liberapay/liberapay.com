@@ -85,12 +85,7 @@ def cron(period, func):
     t.daemon = True
     t.start()
 
-def update_homepage_queries():
-    utils.update_global_stats(website)
-    utils.update_homepage_queries_once(website.db)
-
-cron(env.update_homepage_every, update_homepage_queries)
-
+cron(env.update_global_stats_every, lambda: utils.update_global_stats(website))
 cron(env.check_db_every, website.db.self_check)
 
 

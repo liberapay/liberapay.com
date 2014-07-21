@@ -1,9 +1,8 @@
 from datetime import datetime, timedelta
 import locale
 import re
-import time
 
-from aspen import log_dammit, Response
+from aspen import Response
 from aspen.utils import typecheck, to_age, to_rfc822, utcnow
 import gittip
 from postgres.cursors import SimpleCursorBase
@@ -398,41 +397,6 @@ def last_week(db):
     elif now.weekday() == SATURDAY:
         last_week = "this past week"
     return last_week
-
-
-def update_homepage_queries_once(db):
-    with db.get_cursor() as cursor:
-        log_dammit("updating homepage queries")
-        start = time.time()
-        cursor.execute("DELETE FROM homepage_top_givers")
-        cursor.execute("""
-
-        INSERT INTO homepage_top_givers (username, anonymous, amount, avatar_url, statement, number)
-            SELECT username, anonymous_giving, giving, avatar_url, statement, number
-              FROM participants
-             WHERE is_suspicious IS NOT true
-               AND last_bill_result = ''
-          ORDER BY giving DESC
-             LIMIT 100;
-
-        """.strip())
-
-        cursor.execute("DELETE FROM homepage_top_receivers")
-        cursor.execute("""
-
-        INSERT INTO homepage_top_receivers (username, anonymous, amount, avatar_url, statement, number)
-            SELECT username, anonymous_receiving, receiving, avatar_url, statement, number
-              FROM participants
-             WHERE is_suspicious IS NOT true
-               AND claimed_time IS NOT NULL
-          ORDER BY receiving DESC
-             LIMIT 100;
-
-        """.strip())
-
-        end = time.time()
-        elapsed = end - start
-        log_dammit("updated homepage queries in %.2f seconds" % elapsed)
 
 
 def _execute(this, sql, params=[]):
