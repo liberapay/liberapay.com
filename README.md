@@ -99,7 +99,7 @@ met](http://initd.org/psycopg/docs/faq.html#problems-compiling-and-deploying-psy
 
 On Debian or Ubuntu you will need the following packages:
 
-    $ sudo apt-get install libpq5-dev libpq-dev python-dev postgres-contrib
+    $ sudo apt-get install postgresql-9.3 postgres-contrib libpq5-dev libpq-dev python-dev
 
 To configure local Postgres create default role and database:
 
