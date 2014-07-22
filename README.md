@@ -12,6 +12,27 @@ If you'd like to contribute to Gittip, check out <http://building.gittip.com>.
 Quick Start
 ===========
 
+Local
+-----
+
+Given Python 2.7, Postgres 9.3, and a C/make toolchain:
+
+```
+$ git clone git@github.com:gittip/www.gittip.com.git
+$ cd www.gittip.com
+$ sudo -u postgres createuser --superuser $USER
+$ createdb gittip
+$ make schema data
+$ make run
+```
+
+And/or:
+
+```
+$ make test
+```
+
+
 Vagrant
 -------
 
@@ -35,27 +56,6 @@ $ docker run -p 8537:8537 gittip
 ```
 
 [Read more](#docker-1).
-
-
-Local
------
-
-Given Python 2.7, Postgres 9.3, and a C/make toolchain:
-
-```
-$ git clone git@github.com:gittip/www.gittip.com.git
-$ cd www.gittip.com
-$ sudo -u postgres createuser --superuser $USER
-$ createdb gittip
-$ make schema data
-$ make run
-```
-
-And/or:
-
-```
-$ make test
-```
 
 
 Table of Contents
