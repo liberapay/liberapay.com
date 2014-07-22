@@ -1420,3 +1420,14 @@ BEGIN;
     ALTER TABLE transfers ADD COLUMN context context_type NOT NULL;
     ALTER TABLE transfers DROP COLUMN as_team_member;
 END;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/pull/2544
+
+BEGIN;
+
+    DROP TABLE homepage_top_givers;
+    DROP TABLE homepage_top_receivers;
+
+END;

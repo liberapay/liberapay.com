@@ -12,6 +12,29 @@ If you'd like to contribute to Gittip, check out <http://building.gittip.com>.
 Quick Start
 ===========
 
+Local
+-----
+
+Given Python 2.7, Postgres 9.3, and a C/make toolchain:
+
+```
+$ git clone git@github.com:gittip/www.gittip.com.git
+$ cd www.gittip.com
+$ sudo -u postgres createuser --superuser $USER
+$ createdb gittip
+$ make schema data
+$ make run
+```
+
+And/or:
+
+```
+$ make test
+```
+
+[Read more](#table-of-contents).
+
+
 Vagrant
 -------
 
@@ -35,27 +58,6 @@ $ docker run -p 8537:8537 gittip
 ```
 
 [Read more](#docker-1).
-
-
-Local 
------
-
-Given Python 2.7, Postgres 9.3, and a C/make toolchain:
-
-```
-$ git clone git@github.com:gittip/www.gittip.com.git
-$ cd www.gittip.com
-$ sudo -u postgres createuser --superuser $USER
-$ createdb gittip
-$ make schema data
-$ make run
-```
-
-And/or:
-
-```
-$ make test
-```
 
 
 Table of Contents
@@ -155,42 +157,39 @@ If Gittip launches successfully it will look like this:
 
 ```
 $ make run
-./env/bin/honcho -e default_local.env,local.env run ./env/bin/aspen
-pid-27937 thread-47041048338176 (MainThread) Reading configuration from defaults, environment, and command line.
-pid-27937 thread-47041048338176 (MainThread)   changes_reload         False                          default
-pid-27937 thread-47041048338176 (MainThread)   changes_reload         True                           environment variable ASPEN_CHANGES_RELOAD=1
-pid-27937 thread-47041048338176 (MainThread)   charset_dynamic        UTF-8                          default
-pid-27937 thread-47041048338176 (MainThread)   charset_static         None                           default
-pid-27937 thread-47041048338176 (MainThread)   configuration_scripts  []                             default
-pid-27937 thread-47041048338176 (MainThread)   indices                [u'index.html', u'index.json', u'index', u'index.html.spt', u'index.json.spt', u'index.spt'] default
-pid-27937 thread-47041048338176 (MainThread)   list_directories       False                          default
-pid-27937 thread-47041048338176 (MainThread)   logging_threshold      0                              default
-pid-27937 thread-47041048338176 (MainThread)   media_type_default     text/plain                     default
-pid-27937 thread-47041048338176 (MainThread)   media_type_json        application/json               default
-pid-27937 thread-47041048338176 (MainThread)   network_address        ((u'0.0.0.0', 8080), 2)        default
-pid-27937 thread-47041048338176 (MainThread)   network_address        ((u'0.0.0.0', 8537), 2)        environment variable ASPEN_NETWORK_ADDRESS=:8537
-pid-27937 thread-47041048338176 (MainThread)   network_engine         cheroot                        default
-pid-27937 thread-47041048338176 (MainThread)   project_root           None                           default
-pid-27937 thread-47041048338176 (MainThread)   project_root           .                              environment variable ASPEN_PROJECT_ROOT=.
-pid-27937 thread-47041048338176 (MainThread)   renderer_default       stdlib_percent                 default
-pid-27937 thread-47041048338176 (MainThread)   show_tracebacks        False                          default
-pid-27937 thread-47041048338176 (MainThread)   show_tracebacks        True                           environment variable ASPEN_SHOW_TRACEBACKS=1
-pid-27937 thread-47041048338176 (MainThread)   www_root               None                           default
-pid-27937 thread-47041048338176 (MainThread)   www_root               www/                           environment variable ASPEN_WWW_ROOT=www/
-pid-27937 thread-47041048338176 (MainThread) project_root is relative to CWD: '.'.
-pid-27937 thread-47041048338176 (MainThread) project_root set to /home/zbynek/www.gittip.com.
-pid-27937 thread-47041048338176 (MainThread) Found plugin for renderer 'jinja2'
-pid-27937 thread-47041048338176 (MainThread) Won't log to Sentry (SENTRY_DSN is empty).
-pid-27937 thread-47041048338176 (MainThread) Loading configuration file '/home/zbynek/www.gittip.com/configure-aspen.py' (possibly changing settings)
-pid-27937 thread-47041048338176 (MainThread) Renderers (*ed are unavailable, CAPS is default):
-pid-27937 thread-47041048338176 (MainThread)   stdlib_percent
-pid-27937 thread-47041048338176 (MainThread)   stdlib_format
-pid-27937 thread-47041048338176 (MainThread)   JINJA2
-pid-27937 thread-47041048338176 (MainThread)   stdlib_template
-pid-27937 thread-47041048338176 (MainThread) Starting cheroot engine.
-pid-27937 thread-47041048338176 (MainThread) Greetings, program! Welcome to port 8537.
-pid-27937 thread-47041048338176 (MainThread) Aspen will restart when configuration scripts or Python modules change.
-pid-27937 thread-47041048338176 (MainThread) Starting up Aspen website.
+PATH=env/bin:{lots-more-of-your-own-PATH} env/bin/honcho -e defaults.env,local.env run web
+2014-07-22 14:53:09 [1258] [INFO] Starting gunicorn 18.0
+2014-07-22 14:53:09 [1258] [INFO] Listening at: http://0.0.0.0:8537 (1258)
+2014-07-22 14:53:09 [1258] [INFO] Using worker: sync
+2014-07-22 14:53:09 [1261] [INFO] Booting worker with pid: 1261
+pid-1261 thread-140735191843600 (MainThread) Reading configuration from defaults, environment, and command line.
+pid-1261 thread-140735191843600 (MainThread)   changes_reload         False                          default
+pid-1261 thread-140735191843600 (MainThread)   changes_reload         True                           environment variable ASPEN_CHANGES_RELOAD=yes
+pid-1261 thread-140735191843600 (MainThread)   charset_dynamic        UTF-8                          default
+pid-1261 thread-140735191843600 (MainThread)   charset_static         None                           default
+pid-1261 thread-140735191843600 (MainThread)   configuration_scripts  []                             default
+pid-1261 thread-140735191843600 (MainThread)   indices                [u'index.html', u'index.json', u'index', u'index.html.spt', u'index.json.spt', u'index.spt'] default
+pid-1261 thread-140735191843600 (MainThread)   list_directories       False                          default
+pid-1261 thread-140735191843600 (MainThread)   logging_threshold      0                              default
+pid-1261 thread-140735191843600 (MainThread)   media_type_default     text/plain                     default
+pid-1261 thread-140735191843600 (MainThread)   media_type_json        application/json               default
+pid-1261 thread-140735191843600 (MainThread)   project_root           None                           default
+pid-1261 thread-140735191843600 (MainThread)   project_root           .                              environment variable ASPEN_PROJECT_ROOT=.
+pid-1261 thread-140735191843600 (MainThread)   renderer_default       stdlib_percent                 default
+pid-1261 thread-140735191843600 (MainThread)   show_tracebacks        False                          default
+pid-1261 thread-140735191843600 (MainThread)   show_tracebacks        True                           environment variable ASPEN_SHOW_TRACEBACKS=yes
+pid-1261 thread-140735191843600 (MainThread)   www_root               None                           default
+pid-1261 thread-140735191843600 (MainThread)   www_root               www/                           environment variable ASPEN_WWW_ROOT=www/
+pid-1261 thread-140735191843600 (MainThread) project_root is relative to CWD: '.'.
+pid-1261 thread-140735191843600 (MainThread) project_root set to /Users/whit537/personal/gittip/www.gittip.com.
+pid-1261 thread-140735191843600 (MainThread) Found plugin for renderer 'jinja2'
+pid-1261 thread-140735191843600 (MainThread) Won't log to Sentry (SENTRY_DSN is empty).
+pid-1261 thread-140735191843600 (MainThread) Renderers (*ed are unavailable, CAPS is default):
+pid-1261 thread-140735191843600 (MainThread)   stdlib_percent
+pid-1261 thread-140735191843600 (MainThread)   json_dump
+pid-1261 thread-140735191843600 (MainThread)   stdlib_format
+pid-1261 thread-140735191843600 (MainThread)   JINJA2
+pid-1261 thread-140735191843600 (MainThread)   stdlib_template
 ```
 
 You should then find this in your browser at
