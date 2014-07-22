@@ -80,7 +80,7 @@ class TestBalancedCard(BalancedHarness):
         assert card._thing.href == self.card_href
 
     def test_receipt_page_loads (self):
-        # card_type was changed to brand to reflect
+        # 'card_type' was changed to 'brand' to reflect
         # card companies (i.e. Visa, MasterCard, etc.)
         
         customer_href = self.make_balanced_customer()
@@ -99,7 +99,6 @@ class TestBalancedCard(BalancedHarness):
                     "returning id"
                     )
         url_receipt = '/alice/receipts/{}.html'.format(ex_id)
-        #import pdb; pdb.set_trace()
         actual = self.client.GET(url_receipt, auth_as='alice').body.decode('utf8')
         assert 'Visa' in actual
         
