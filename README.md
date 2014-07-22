@@ -32,6 +32,8 @@ And/or:
 $ make test
 ```
 
+[Read more](#table-of-contents).
+
 
 Vagrant
 -------
