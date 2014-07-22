@@ -79,7 +79,29 @@ class TestBalancedCard(BalancedHarness):
 
         assert card._thing.href == self.card_href
 
-
+    def test_receipt_page_loads (self):
+        # 'card_type' was changed to 'brand' to reflect
+        # card companies (i.e. Visa, MasterCard, etc.)
+        
+        customer_href = self.make_balanced_customer()
+        card = balanced.Card(
+            number='4242424242424242',
+            expiration_year=2020,
+            expiration_month=12
+        ).save()
+        
+        card.associate_to_customer(customer_href)
+        self.make_participant('alice', claimed_time='now', balanced_customer_href=customer_href)
+        
+        ex_id = self.db.one("insert into exchanges "
+                    "(amount, fee, participant) "
+                    "values (113.00, 30.00, 'alice') "
+                    "returning id"
+                    )
+        url_receipt = '/alice/receipts/{}.html'.format(ex_id)
+        actual = self.client.GET(url_receipt, auth_as='alice').body.decode('utf8')
+        assert 'Visa' in actual
+        
 class TestBalancedBankAccount(BalancedHarness):
 
     def test_balanced_bank_account(self):
@@ -215,3 +237,4 @@ class TestBillingStoreResult(Harness):
             billing.store_result(self.db, u"bank account", 'alice', message)
             alice = Participant.from_username('alice')
             assert alice.last_ach_result == message
+
