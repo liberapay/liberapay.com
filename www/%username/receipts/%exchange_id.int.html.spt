@@ -19,6 +19,7 @@ exchange = website.db.one( "SELECT * FROM exchanges "
                    "WHERE id=%s AND participant=%s"
                  , (path['exchange_id'], path['username'])
                  , back_as=dict)
+#import pdb; pdb.set_trace()
 if exchange is None:
     raise Response(404)
 
