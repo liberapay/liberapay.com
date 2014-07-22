@@ -93,19 +93,18 @@ Dependencies
 Building `www.gittip.com` requires [Python
 2.7](http://python.org/download/releases/2.7.4/), and a gcc/make toolchain.
 
-All Python library dependencies are bundled in the repo (under `vendor/`).
+All Python library dependencies are bundled in the repo (under `vendor/`). If
+you are receiving issues from `psycopg2`, please [ensure that its needs are
+met](http://initd.org/psycopg/docs/faq.html#problems-compiling-and-deploying-psycopg2).
+
+On Debian or Ubuntu you will need the following packages:
+
+    $ sudo apt-get install libpq5-dev libpq-dev python-dev postgres-contrib
 
 To configure local Postgres create default role and database:
 
     $ sudo -u postgres createuser --superuser $USER
     $ createdb gittip
-
-On Debian or Ubuntu you will need the following packages:
-`libpq5-dev`/`libpq-dev`, (includes headers needed to build the `psycopg2` Python library)
-and `python-dev` (includes Python header files for `psycopg2`).
-
-If you are receiving issues from `psycopg2`, please [ensure that its needs are
-met](http://initd.org/psycopg/docs/faq.html#problems-compiling-and-deploying-psycopg2).
 
 If you are getting an error about `unknown argument: '-mno-fused-madd'` when
 running `make`, then add
@@ -114,6 +113,7 @@ running `make`, then add
 for more information](http://stackoverflow.com/a/22355874/347246)):
 
     $ ARCHFLAGS=-Wno-error=unused-command-line-argument-hard-error-in-future make clean env
+
 
 Building
 --------
