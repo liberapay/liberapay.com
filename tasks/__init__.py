@@ -16,16 +16,14 @@ from gittip import wireup
         'heroku': "Configure task for running directly via `heroku run`.",
     }
 )
-def set_paypal_email(username='', email='', api_key_fragment='', overwrite=False, heroku=False):
+def set_paypal_email(username='', email='', api_key_fragment='', overwrite=False):
     """
     Usage:
 
-    [gittip] $ env/bin/invoke set_paypal_email --username=username --email=user@example.com [--api-key-fragment=12e4s678] [--overwrite] [--heroku]
-
-    Use --heroku when running directly on heroku
+    [gittip] $ env/bin/invoke set_paypal_email --username=username --email=user@example.com [--api-key-fragment=12e4s678] [--overwrite]
     """
 
-    if not heroku:
+    if not os.environ.get('DATABASE_URL'):
         load_prod_envvars()
 
     if not username or not email:
