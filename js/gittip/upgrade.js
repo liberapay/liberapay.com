@@ -9,9 +9,8 @@ Gittip.upgrade.init = function () {
         var message = '' +
             '<div id="upgrade_browser">' +
             '   <div class="container">' +
-            'This browser isn\'t supported by GitTip.com. ' +
-            'We encourage You to upgrade or change browser. ' +
-            '<a href="http://browsehappy.com">Learn more</a>' +
+            'You\'re using a browser that we don\'t support. ' +
+            'We encourage you to <a href="http://browsehappy.com/">upgrade</a>.' +
             '   </div>' +
             '</div>';
         $("body").prepend(message);

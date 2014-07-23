@@ -28,6 +28,7 @@ from aspen.utils import utcnow
     <meta name="og:image" content="{{ website.asset_url }}/gittip.opengraph.png" />
     <style>
         .pennies, .container { display: none; }
+        #upgrade_browser .container { display: block; }
         html, body { height: 100%; min-height: 100%; }
     </style>
 {% endblock %}
