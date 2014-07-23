@@ -1,4 +1,4 @@
-# Welcome to Gittip [<img height="26px" src="www/assets/%25version/gittip.opengraph.png"/>](https://www.gittip.com/)
+# Welcome to Gittip [<img height="26px" src="https://raw.githubusercontent.com/gittip/www.gittip.com/master/www/assets/%25version/gittip.opengraph.png"/>](https://www.gittip.com/)
 
 [![Build Status](http://img.shields.io/travis/gittip/www.gittip.com/master.svg)](https://travis-ci.org/gittip/www.gittip.com)
 [![Coverage Status](https://img.shields.io/coveralls/gittip/www.gittip.com.svg)](https://coveralls.io/r/gittip/www.gittip.com?branch=master)
