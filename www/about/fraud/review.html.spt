@@ -13,6 +13,7 @@ unreviewed = website.db.all("""
       FROM participants
      WHERE is_suspicious IS NULL
        AND balanced_customer_href IS NOT NULL
+       AND NOT is_closed
   ORDER BY claimed_time
 
 """)
