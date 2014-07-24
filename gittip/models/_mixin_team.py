@@ -87,6 +87,7 @@ class MixinTeam(object):
                         WHERE ts_end > ts_start
                      ORDER BY ts_start DESC LIMIT 1
                    )
+          ORDER BY timestamp ASC LIMIT 1
 
         """, (self.username, membername), default=Decimal('0.00'))
 
