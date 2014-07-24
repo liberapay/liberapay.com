@@ -204,7 +204,13 @@ class Tests(Harness):
     def test_gtlwf_works_during_payday(self):
         team = self.make_team()
         alice = self.make_participant('alice', take_last_week='30.00', claimed_time='now')
+        take_this_week = D('42.00')
         team.add_member(alice)
-        team.set_take_for(alice, D('42.00'), alice)
+        team.set_take_for(alice, take_this_week, alice)
         self.db.run("INSERT INTO paydays DEFAULT VALUES")
+        assert team.get_take_last_week_for(alice) == 30
+        self.db.run("""
+            INSERT INTO transfers (timestamp, tipper, tippee, amount, context)
+            VALUES (now(), %(tipper)s, 'alice', %(amount)s, 'take')
+        """, dict(tipper=team.username, amount=take_this_week))
         assert team.get_take_last_week_for(alice) == 30
