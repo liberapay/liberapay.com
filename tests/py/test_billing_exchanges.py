@@ -14,6 +14,7 @@ from gittip.billing.exchanges import (
     capture_card_hold,
     create_card_hold,
     record_exchange,
+    record_exchange_result,
     skim_credit,
 )
 from gittip.exceptions import NegativeBalance, NoBalancedCustomerHref, NotWhitelisted
@@ -252,17 +253,29 @@ class TestFees(Harness):
 
 class TestRecordExchange(Harness):
 
-    def test_record_exchange_updates_balance(self):
+    def test_record_exchange_doesnt_update_balance_for_positive_amounts(self):
         alice = self.make_participant('alice')
         record_exchange( self.db
                        , 'bill'
                        , amount=D("0.59")
                        , fee=D("0.41")
-                       , error=""
                        , participant=alice
+                       , status='pre'
                         )
         alice = Participant.from_username('alice')
-        assert alice.balance == D("0.59")
+        assert alice.balance == D('0.00')
+
+    def test_record_exchange_updates_balance_for_negative_amounts(self):
+        alice = self.make_participant('alice', balance=50)
+        record_exchange( self.db
+                       , 'ach'
+                       , amount=D('-35.84')
+                       , fee=D('0.75')
+                       , participant=alice
+                       , status='pre'
+                        )
+        alice = Participant.from_username('alice')
+        assert alice.balance == D('13.41')
 
     def test_record_exchange_fails_if_negative_balance(self):
         alice = self.make_participant('alice')
@@ -272,18 +285,30 @@ class TestRecordExchange(Harness):
                      , 'ach'
                      , amount=D("-10.00")
                      , fee=D("0.41")
-                     , error=""
                      , participant=alice
+                     , status='pre'
                       )
 
-    def test_record_exchange_doesnt_update_balance_if_error(self):
-        alice = self.make_participant('alice')
-        record_exchange( self.db
-                       , 'bill'
-                       , amount=D("1.00")
-                       , fee=D("0.41")
-                       , error="SOME ERROR"
-                       , participant=alice
-                        )
+    def test_record_exchange_result_restores_balance_on_error(self):
+        alice = self.make_participant('alice', balance=30)
+        e_id = record_exchange(self.db, 'ach', D('-27.06'), D('0.81'), alice, 'pre')
+        assert alice.balance == D('02.13')
+        record_exchange_result( self.db, e_id, 'failed', 'SOME ERROR', alice)
         alice = Participant.from_username('alice')
-        assert alice.balance == D("0.00")
+        assert alice.balance == D('30.00')
+
+    def test_record_exchange_result_doesnt_restore_balance_on_success(self):
+        alice = self.make_participant('alice', balance=50)
+        e_id = record_exchange(self.db, 'ach', D('-43.98'), D('1.60'), alice, 'pre')
+        assert alice.balance == D('4.42')
+        record_exchange_result( self.db, e_id, 'succeeded', None, alice)
+        alice = Participant.from_username('alice')
+        assert alice.balance == D('4.42')
+
+    def test_record_exchange_result_updates_balance_for_positive_amounts(self):
+        alice = self.make_participant('alice', balance=4)
+        e_id = record_exchange(self.db, 'bill', D('31.59'), D('0.01'), alice, 'pre')
+        assert alice.balance == D('4.00')
+        record_exchange_result( self.db, e_id, 'succeeded', None, alice)
+        alice = Participant.from_username('alice')
+        assert alice.balance == D('35.59')
