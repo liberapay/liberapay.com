@@ -4,10 +4,9 @@ import locale
 
 from aspen import json, Response
 from aspen.utils import to_age
-from gittip.utils import get_participant, wrap, plural
+from gittip.utils import get_participant, wrap, plural, parse_locales, _
 from gittip.models import community
 
-MAKING = "making the world better by"
 LONG_STATEMENT = 256
 
 def _clip(text, n):
@@ -18,10 +17,11 @@ def _clip(text, n):
 
 [-----------------------------------------------------------------------------]
 
+locales = parse_locales(request)
 participant = get_participant(request, restrict=False)
 locked = False
 tip_or_pledge = "tip"
-hero = "Profile"
+hero = _("Profile", locales)
 title = participant.username      # used in the title tag
 username = participant.username   # used in footer shared with on/$platform/
                                   # pages
@@ -34,27 +34,58 @@ accounts = participant.get_accounts_elsewhere()
 
 long_statement = len(participant.statement) > LONG_STATEMENT
 communities = [c for c in community.get_list_for(website.db, username) if c.is_member]
+
+I_AM_MAKING = _("I am making the world better by", locales)
+WE_ARE_MAKING = _("We are making the world better by", locales)
+GIVE_WEEKLY = _("Give weekly gift on Gittip", locales)
+GITTIP_IS = _("Gittip is a weekly gift exchange", locales)
+STATEMENT = _("Statement", locales)
+FUNDING_GOAL = _("Funding Goal", locales)
+COMMUNITIES = _("Communities", locales)
+JOIN_COMMUNITIES = _("Join Communities", locales)
+EDIT = _("Edit", locales)
+SAVE = _("Save", locales)
+CANCEL = _("Cancel", locales)
+NEWLINES_AND_LINKS = _("Newlines and links are converted to HTML.", locales)
+CURRENCY = "$"
+
 if participant.number == 'singular':
-    I_AM = "I am"
-    I_M = "I'm"
-    MY = "My"
+    I_AM = _("I am", locales)
+    I_M = _("I'm", locales)
+    MY = _("My", locales)
+    MAKING = I_AM_MAKING
+    GRATEFUL = _("I'm grateful for gifts, but don't have a specific funding goal.", locales)
+    PATRON = _("I'm here as a patron.", locales)
+    PATRON_NO_GIFTS = _("I'm here as a patron, and politely decline to receive gifts.", locales)
+    GOAL_RAW = _("My goal is to receive {0} per week on Gittip.", locales)
+    GOAL = GOAL_RAW.format(CURRENCY + locale.format("%.2f", participant.goal or 0, grouping=True))
+    GOAL_PARTS = GOAL_RAW.split("{0}")
 else:
-    I_AM = "We are"
-    I_M = "We're"
-    MY = "Our"
+    I_AM = _("We are", locales)
+    I_M = _("We're", locales)
+    MY = _("Our", locales)
+    MAKING = WE_ARE_MAKING
+    GRATEFUL = _("We're grateful for gifts, but don't have a specific funding goal.", locales)
+    PATRON = _("We're here as a patron.", locales)
+    PATRON_NO_GIFTS = _("We're here as a patron, and politely decline to receive gifts.", locales)
+    GOAL_RAW = _("Our goal is to receive {0} per week on Gittip.", locales)
+    GOAL = GOAL_RAW.format(CURRENCY + locale.format("%.2f", participant.goal or 0, grouping=True))
+    GOAL_PARTS = GOAL_RAW.split("{0}")
+
 
 [-----------------------------------------------------------------------------]
 {% extends "templates/profile.html" %}
 {% block head %}
-    <link rel="payment" type="text/html" title="Give weekly gift on Gittip" href="https://www.gittip.com/{{ username }}/" />
+    <link rel="payment" type="text/html" title="{{ GIVE_WEEKLY }}"
+        href="https://www.gittip.com/{{ username }}/" />
     <meta name="twitter:card" content="summary" />
     <meta name="og:url" content="https://www.gittip.com/{{ username }}/" />
     <meta name="og:type" content="profile" />
     <meta name="og:title" content="{{ participant.get_og_title() }}" />
     {% if participant.statement %}
-    <meta name="og:description" content="{{ _clip(I_AM + " " + MAKING + " " + participant.statement, 200)|e }}" />
+    <meta name="og:description" content="{{ _clip(MAKING + " " + participant.statement, 200)|e }}" />
     {% else %}
-    <meta name="og:description" content="Gittip is a weekly gift exchange." />
+    <meta name="og:description" content="{{ GITTIP_IS }}" />
     {% endif %}
     {% if participant.avatar_url %}
     <meta name="og:image" content="{{ participant.avatar_url|e }}" />
@@ -88,9 +119,8 @@ $(document).ready(function() {
     <div class="group">
         {% if participant.statement %}
         <div class="{% if long_statement %}col1{% else %}col0{% endif %}">
-            <h2>Statement</h2>
+            <h2>{{ STATEMENT }}</h2>
             <div class="statement">
-                {{ I_AM }}
                 {{ MAKING }} {{ wrap(participant.statement) }}
             </div>
             {% include "templates/team-listing.html" %}
@@ -103,20 +133,16 @@ $(document).ready(function() {
             {% include "templates/community-listing.html" %}
         {% endif %}
 
-            <h2>Funding Goal</h2>
+            <h2>{{ FUNDING_GOAL }}</h2>
             <div class="goal">
                 {% if participant.goal == None %}
-                {{ I_M }} grateful for gifts, but don't have a specific funding
-                goal.
+                {{ GRATEFUL }}
                 {% elif participant.goal == 0 %}
-                {{ I_M }} here as a patron.
+                {{ PATRON }}
                 {% elif participant.goal < 0 %}
-                {{ I_M }} here as a patron, and politely decline to receive
-                gifts.
+                {{ PATRON_NO_GIFTS }}
                 {% else %}
-                {{ MY }} goal is to receive
-                ${{ locale.format("%.2f", participant.goal, grouping=True) }}
-                per week on Gittip.
+                {{ GOAL }}
                 {% endif %}
             </div>
 

@@ -2,30 +2,28 @@
 
     <!-- Statement -->
     <form class="statement">
-        <h2>Statement
-            <button tabindex="200" class="edit">Edit</button>
-            <button tabindex="203" class="save" type="submit">Save</button>
-            <button tabindex="204" class="cancel" type="cancel">Cancel</button>
+        <h2>{{ STATEMENT }}
+            <button tabindex="200" class="edit">{{ EDIT }}</button>
+            <button tabindex="203" class="save" type="submit">{{ SAVE }}</button>
+            <button tabindex="204" class="cancel" type="cancel">{{ CANCEL }}</button>
         </h2>
 
         <div class="edit">
             <select tabindex="201" name="number" id="statement-select">
                 <option value="singular"
                     {{ "selected" if participant.number == 'singular' else ''}}>
-                    I am
+                    {{ I_AM_MAKING }}
                 </option>
                 <option value="plural"
                     {{ "selected" if participant.number != 'singular' else ''}}>
-                    We are
+                    {{ WE_ARE_MAKING }}
                 </option>
             </select>
-            making the world better by ...
             <textarea tabindex="202">{{ participant.statement }}</textarea>
-            <span class="help">Newlines and links are converted to HTML.</span>
+            <span class="help">{{ NEWLINES_AND_LINKS }}</span>
         </div>
 
         <div class="view">
-            <span class="i-am">{{ I_AM }}</span>
             {{ MAKING }}
             <span>{{ wrap(participant.statement) }}</span>
         </div>
@@ -40,69 +38,61 @@
         Still show the communities heading in this case. Otherwise it's set in
         community-listing.html. See https://github.com/gittip/www.gittip.com/pull/1916.
     #}
-    <h2>Communities</h2>
+    <h2>{{ COMMUNITIES }}</h2>
     {% endif %}
-    <a href="/for/">Join Communities</a>
+    <a href="/for/">{{ JOIN_COMMUNITIES }}</a>
 
 </div>
 <div class="col2">
 
     <!-- Funding Goal -->
     <form class="goal">
-        <h2>Funding Goal
-            <button tabindex="400" class="edit">Edit</button>
-            <button tabindex="401" class="save" type="submit">Save</button>
-            <button tabindex="402" class="cancel" type="cancel">Cancel</button>
+        <h2>{{ FUNDING_GOAL }}
+            <button tabindex="400" class="edit">{{ EDIT }}</button>
+            <button tabindex="401" class="save" type="submit">{{ SAVE }}</button>
+            <button tabindex="402" class="cancel" type="cancel">{{ CANCEL }}</button>
         </h2>
         <div class="view">
             {% if user.participant.goal > 0 %}
-            <span class="my">{{ MY }}</span> goal is to receive
-            ${{ locale.format("%.2f", user.participant.goal, grouping=True) }} per week on
-            Gittip.
+            {{ GOAL }}
             {% elif user.participant.goal == 0 %}
-            <span class="i-m">{{ I_M }}</span> here as a patron.
+            {{ PATRON }}
             {% elif user.participant.goal == None %}
-            <span class="i-m">{{ I_M }}</span> grateful for gifts, but
-            don't have a specific funding goal.
+            {{ GRATEFUL }}
             {% else %}
-            <span class="i-m">{{ I_M }}</span> here as a patron, and politely
-            decline to receive gifts.
+            {{ PATRON_NO_GOAL }}
             {% endif %}
         </div>
         <table class="edit"><tr><td>
 
             <input tabindex="403" type="radio" name="goal" id="goal-yes" value="custom"
             {% if user.participant.goal > 0 %} checked="true"{% endif %}/>
-            <label for="goal-yes"><span class="my">{{ MY }}</span> goal is to
-                receive $</label><input
+            <label for="goal-yes">{{ GOAL_PARTS[0] + CURRENCY }}</label><input
                 name="goal_custom" id="goal-custom"
             {% if (user.participant.goal == None) or (user.participant.goal <= 0) %}
             {% else %}
             value="{{ locale.format("%.2f", user.participant.goal, grouping=True) }}"
             {% endif %} />
-            <label for="goal-yes"> per week on Gittip.</label>
+            <label for="goal-yes">{{ GOAL_PARTS[1] }}</label>
 
             <br />
 
             <input tabindex="404" type="radio" name="goal" id="goal-null" value="null"
             {% if user.participant.goal == None %} checked="true"{% endif %}/>
-            <label for="goal-null"><span class="i-m">{{ I_M }}</span> grateful for
-                gifts, but don't have a specific funding goal.</label>
+            <label for="goal-null">{{ GRATEFUL }}</label>
 
             <br />
 
             <input tabindex="405" type="radio" name="goal" id="goal-0" value="0.00"
             {% if user.participant.goal == 0 %} checked="true"{% endif %}/>
-            <label for="goal-0"><span class="i-m">{{ I_M }}</span> here as a
-                patron.</label>
+            <label for="goal-0">{{ PATRON }}</label>
 
             <br />
 
             <input tabindex="406" type="radio" name="goal" id="goal-negative"
                    value="-1"
             {% if (user.participant.goal != None) and user.participant.goal < 0 %} checked="true"{% endif %}/>
-            <label for="goal-negative"><span class="i-m">{{ I_M }}</span> here
-                as a patron, and politely decline to receive gifts.</label>
+            <label for="goal-negative">{{ PATRON_NO_GIFTS }}</label>
 
         </td></tr></table>
     </form>

@@ -8,6 +8,9 @@ import gittip
 from postgres.cursors import SimpleCursorBase
 from jinja2 import escape
 
+import os
+import babel.messages.pofile
+
 
 COUNTRIES = (
     ('AF', u'Afghanistan'),
@@ -471,3 +474,36 @@ def set_cookie(cookies, key, value, expires=None, httponly=True, path='/'):
         cookie['path'] = path
     if gittip.canonical_scheme == 'https':
         cookie['secure'] = True
+
+def load_langs(localeDir):
+    langs = {}
+    for file in os.listdir(localeDir):
+        parts = file.split(".")
+        if len(parts) == 2 and parts[1] == "po":
+            lang = parts[0]
+            with open(os.path.join(localeDir, file)) as f:
+                catalog = babel.messages.pofile.read_po(f)
+                catalog_dict = {}
+                for message in catalog:
+                    if message.id:
+                        catalog_dict[message.id] = message.string
+                langs[lang] = catalog_dict
+    return langs
+
+LANGS = load_langs("i18n")
+
+def parse_locales(request):
+    accept_lang = request.headers.get("Accept-Language", "")
+    locales = []
+    for lang in accept_lang.split(","):
+        lang_parts = lang.split(";")
+        locales.append(lang_parts[0])
+    return locales
+
+def _(s, locales):
+    for locale in locales:
+        if locale.startswith('en'):
+            return s
+        elif LANGS.has_key(locale):
+            return LANGS[locale].get(s, s)
+    return s
