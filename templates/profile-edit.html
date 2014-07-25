@@ -67,7 +67,7 @@
 
             <input tabindex="403" type="radio" name="goal" id="goal-yes" value="custom"
             {% if user.participant.goal > 0 %} checked="true"{% endif %}/>
-            <label for="goal-yes">{{ GOAL_PARTS[0] + CURRENCY }}</label><input
+            <label for="goal-yes">{{ GOAL_PARTS[0] }}$</label><input
                 name="goal_custom" id="goal-custom"
             {% if (user.participant.goal == None) or (user.participant.goal <= 0) %}
             {% else %}
@@ -118,13 +118,13 @@
     <table class="tip-distribution">
         {% for amount, ncontributors, summed, pcontributors, psummed in tip_distribution %}
         <tr>
-            <td class="dollar-sign">{{ CURRENCY }}</td>
+            <td class="dollar-sign">$</td>
             <td class="amount">{{ amount }}</td>
             <td colspan="2"></td>
             <td class="count">
                 <span class="green bar" style="width: {{ psummed * 240 }}pt"></span>
                 {{ "%5.1f" % (psummed * 100) }}%
-                <span class="number">({{ CURRENCY }}{{ summed }})</span>
+                <span class="number">(${{ summed }})</span>
             </td>
         </tr>
         {% endfor %}

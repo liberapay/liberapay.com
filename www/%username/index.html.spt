@@ -47,7 +47,6 @@ EDIT = _("Edit", locales)
 SAVE = _("Save", locales)
 CANCEL = _("Cancel", locales)
 NEWLINES_AND_LINKS = _("Newlines and links are converted to HTML.", locales)
-CURRENCY = "$"
 
 if participant.number == 'singular':
     MAKING = I_AM_MAKING
@@ -55,7 +54,7 @@ if participant.number == 'singular':
     PATRON = _("I'm here as a patron.", locales)
     PATRON_NO_GIFTS = _("I'm here as a patron, and politely decline to receive gifts.", locales)
     GOAL_RAW = _("My goal is to receive {0} per week on Gittip.", locales)
-    GOAL = GOAL_RAW.format(CURRENCY + locale.format("%.2f", participant.goal or 0, grouping=True))
+    GOAL = GOAL_RAW.format("$" + locale.format("%.2f", participant.goal or 0, grouping=True))
     GOAL_PARTS = GOAL_RAW.split("{0}")
 else:
     MAKING = WE_ARE_MAKING
@@ -63,7 +62,7 @@ else:
     PATRON = _("We're here as a patron.", locales)
     PATRON_NO_GIFTS = _("We're here as a patron, and politely decline to receive gifts.", locales)
     GOAL_RAW = _("Our goal is to receive {0} per week on Gittip.", locales)
-    GOAL = GOAL_RAW.format(CURRENCY + locale.format("%.2f", participant.goal or 0, grouping=True))
+    GOAL = GOAL_RAW.format("$" + locale.format("%.2f", participant.goal or 0, grouping=True))
     GOAL_PARTS = GOAL_RAW.split("{0}")
 
 def with_others(obj):
