@@ -104,19 +104,20 @@ def ach_credit(db, participant, withhold, minimum_credit=MINIMUM_CREDIT):
     # Try to dance with Balanced.
     # ===========================
 
+    e_id = record_exchange(db, 'ach', -credit_amount, fee, participant, 'pre')
+    meta = dict(exchange_id=e_id, participant_id=participant.id)
     try:
         customer = balanced.Customer.fetch(balanced_customer_href)
-        customer.bank_accounts.one()\
-                              .credit(amount=cents,
-                                      description=participant.username)
-
+        ba = customer.bank_accounts.one()
+        ba.credit(amount=cents, description=participant.username, meta=meta)
+        record_exchange_result(db, e_id, 'pending', None, participant)
         log(msg + "succeeded.")
         error = ""
     except Exception as e:
         error = repr_exception(e)
+        record_exchange_result(db, e_id, 'failed', error, participant)
         log(msg + "failed: %s" % error)
 
-    record_exchange(db, 'ach', -credit_amount, fee, error, participant)
     return error
 
 
@@ -165,7 +166,8 @@ def create_card_hold(db, participant, amount):
     except Exception as e:
         error = repr_exception(e)
         log(msg + "failed: %s" % error)
-        record_exchange(db, 'bill', None, None, error, participant)
+        db.run("UPDATE participants SET last_bill_result=%s WHERE id=%s",
+               (error, participant.id))
 
     return hold, error
 
@@ -178,17 +180,25 @@ def capture_card_hold(db, participant, amount, hold):
               )
 
     username = participant.username
+    assert participant.id == int(hold.meta['participant_id'])
 
     cents, amount_str, charge_amount, fee = _prep_hit(amount)
+    amount = charge_amount - fee  # account for possible rounding
+    e_id = record_exchange(db, 'bill', amount, fee, participant, 'pre')
 
-    hold.capture(amount=cents, description=username)
+    meta = dict(participant_id=participant.id, exchange_id=e_id)
+    try:
+        hold.capture(amount=cents, description=username, meta=meta)
+        record_exchange_result(db, e_id, 'succeeded', None, participant)
+    except Exception as e:
+        error = repr_exception(e)
+        record_exchange_result(db, e_id, 'failed', error, participant)
+        raise
+
     hold.meta['state'] = 'captured'
     hold.save()
 
     log("Captured " + amount_str + " on Balanced for " + username)
-
-    amount = charge_amount - fee  # account for possible rounding
-    record_exchange(db, 'bill', amount, fee, '', participant)
 
 
 def cancel_card_hold(hold):
@@ -227,7 +237,7 @@ def _prep_hit(unrounded):
     return cents, amount_str, upcharged, fee
 
 
-def record_exchange(db, kind, amount, fee, error, participant):
+def record_exchange(db, kind, amount, fee, participant, status):
     """Given a Bunch of Stuff, return None.
 
     Records in the exchanges table have these characteristics:
@@ -258,40 +268,60 @@ def record_exchange(db, kind, amount, fee, error, participant):
 
     """
 
-    username = participant.username
     with db.get_cursor() as cursor:
 
-        if error:
-            amount = fee = Decimal('0.00')
-        else:
-            EXCHANGE = """\
+        exchange_id = cursor.one("""
+            INSERT INTO exchanges
+                   (amount, fee, participant, status)
+            VALUES (%s, %s, %s, %s)
+         RETURNING id
+        """, (amount, fee, participant.username, status))
 
-                    INSERT INTO exchanges
-                           (amount, fee, participant)
-                    VALUES (%s, %s, %s)
-
-            """
-            cursor.execute(EXCHANGE, (amount, fee, username))
-
-        # Update the participant's balance.
-        # =================================
-
-        RESULT = """\
-
-            UPDATE participants
-               SET last_{0}_result=%s
-                 , balance=(balance + %s)
-             WHERE username=%s
-         RETURNING balance
-
-        """.format(kind)
-        if kind == 'ach':
+        if amount < 0:
             amount -= fee
-        balance = cursor.one(RESULT, (error or '', amount, username))
-        if balance < 0:
-            raise NegativeBalance
+            propagate_exchange(cursor, participant, kind, '', amount)
+
+    return exchange_id
+
+
+def record_exchange_result(db, exchange_id, status, error, participant):
+    """Updates the status of an exchange.
+    """
+    with db.get_cursor() as cursor:
+        amount, fee, username = cursor.one("""
+            UPDATE exchanges
+               SET status=%(status)s
+                 , note=%(error)s
+             WHERE id=%(exchange_id)s
+               AND status <> %(status)s
+         RETURNING amount, fee, participant
+        """, locals())
+        assert participant.username == username
+
+        if amount < 0:
+            amount -= fee
+            amount = amount if error else 0
+            propagate_exchange(cursor, participant, 'ach', error, -amount)
+        else:
+            amount = amount if not error else 0
+            propagate_exchange(cursor, participant, 'bill', error, amount)
+
+
+def propagate_exchange(cursor, participant, kind, error, amount):
+    """Propagates an exchange to the participant's balance.
+    """
+    column = 'last_%s_result' % kind
+    error = error or ''
+    new_balance = cursor.one("""
+        UPDATE participants
+           SET {0}=%s
+             , balance=(balance + %s)
+         WHERE id=%s
+     RETURNING balance
+    """.format(column), (error, amount, participant.id))
+
+    if amount < 0 and new_balance < 0:
+        raise NegativeBalance
 
     if hasattr(participant, 'set_attributes'):
-        attrs = dict(balance=balance)
-        attrs['last_%s_result' % kind] = error or ''
-        participant.set_attributes(**attrs)
+        participant.set_attributes(**{'balance': new_balance, column: error})
