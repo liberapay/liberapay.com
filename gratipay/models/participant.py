@@ -18,6 +18,7 @@ import uuid
 
 import aspen
 from aspen.utils import typecheck, utcnow
+import balanced
 from postgres.orm import Model
 from psycopg2 import IntegrityError
 
@@ -1145,6 +1146,24 @@ class Participant(Model, MixinTeam):
                AND platform IN %s
                AND NOT is_team
         """, (self.username, AccountElsewhere.signin_platforms_names))
+
+
+    def get_balanced_account(self):
+        """Fetch or create the balanced account for this participant.
+        """
+        if not self.balanced_customer_href:
+            customer = balanced.Customer(meta={
+                'username': self.username,
+                'participant_id': self.id,
+            }).save()
+            self.db.run("""
+                UPDATE participants
+                   SET balanced_customer_href=%s
+                 WHERE id=%s
+            """, (customer.href, self.id))
+        else:
+            customer = balanced.Customer.fetch(self.balanced_customer_href)
+        return customer
 
 
     class StillReceivingTips(Exception): pass

@@ -24,70 +24,40 @@ from aspen.utils import typecheck
 from gratipay.models.participant import Participant
 
 
-def store_result(db, thing, username, new_result):
+def store_result(db, thing, participant, new_result):
     """Update the participant's last_{ach,bill}_result in the DB.
 
     Also update receiving amounts of the participant's tippees.
     """
     assert thing in ("credit card", "bank account"), thing
-    x = "bill" if thing == "credit card" else "ach"
+    column = 'last_%s_result' % ('bill' if thing == 'credit card' else 'ach')
+    old_result = getattr(participant, column)
 
     # Update last_thing_result in the DB
-    SQL = """
-
+    db.run("""
         UPDATE participants p
-           SET last_{0}_result=%s
-         WHERE username=%s
-     RETURNING is_suspicious
-             , ( SELECT last_{0}_result
-                   FROM participants p2
-                  WHERE p2.id = p.id
-               ) AS old_result
+           SET {0}=%s
+         WHERE id=%s
+    """.format(column), (new_result, participant.id))
+    participant.set_attributes(**{column: new_result})
 
-    """.format(x)
-    p = db.one(SQL, (new_result, username))
-
-    # Update the receiving amounts of tippees if necessary
+    # Update the receiving amounts of tippees if requested and necessary
     if thing != "credit card":
         return
-    if p.is_suspicious or new_result == p.old_result:
+    if participant.is_suspicious or new_result == old_result:
         return
     with db.get_cursor() as cursor:
-        Participant.from_username(username).update_giving(cursor)
+        participant.update_giving(cursor)
         tippees = cursor.all("""
             SELECT tippee
               FROM current_tips
              WHERE tipper=%(tipper)s;
-        """, dict(tipper=username))
+        """, dict(tipper=participant.username))
         for tippee in tippees:
             Participant.from_username(tippee).update_receiving(cursor)
 
 
-def get_balanced_account(db, username, balanced_customer_href):
-    """Find or create a balanced.Account.
-    """
-    typecheck( username, unicode
-             , balanced_customer_href, (unicode, None)
-              )
-
-    if balanced_customer_href is None:
-        customer = balanced.Customer(meta={
-            'username': username,
-        }).save()
-        BALANCED_ACCOUNT = """\
-
-                UPDATE participants
-                   SET balanced_customer_href=%s
-                 WHERE username=%s
-
-        """
-        db.run(BALANCED_ACCOUNT, (customer.href, username))
-    else:
-        customer = balanced.Customer.fetch(balanced_customer_href)
-    return customer
-
-
-def associate(db, thing, username, balanced_customer_href, balanced_thing_uri):
+def associate(db, thing, participant, balanced_account, balanced_thing_uri):
     """Given four unicodes, return a unicode.
 
     This function attempts to associate the credit card or bank account details
@@ -98,20 +68,13 @@ def associate(db, thing, username, balanced_customer_href, balanced_thing_uri):
     form.
 
     """
-    typecheck( username, unicode
-               , balanced_customer_href, (unicode, None, balanced.Customer)
-               , balanced_thing_uri, unicode
-               , thing, unicode
+    typecheck( participant, Participant
+             , balanced_account, balanced.Customer
+             , balanced_thing_uri, unicode
+             , thing, unicode
               )
 
-    if isinstance(balanced_customer_href, balanced.Customer):
-        balanced_account = balanced_customer_href
-    else:
-        balanced_account = get_balanced_account( db
-                                               , username
-                                               , balanced_customer_href
-                                                )
-    invalidate_on_balanced(thing, balanced_account.href)
+    invalidate_on_balanced(thing, balanced_account)
     try:
         if thing == "credit card":
             obj = balanced.Card.fetch(balanced_thing_uri)
@@ -125,11 +88,11 @@ def associate(db, thing, username, balanced_customer_href, balanced_thing_uri):
         error = ''
     typecheck(error, unicode)
 
-    store_result(db, thing, username, error)
+    store_result(db, thing, participant, error)
     return error
 
 
-def invalidate_on_balanced(thing, balanced_customer_href):
+def invalidate_on_balanced(thing, customer):
     """XXX Things in balanced cannot be deleted at the moment.
 
     Instead we mark all valid cards as invalid which will restrict against
@@ -139,22 +102,20 @@ def invalidate_on_balanced(thing, balanced_customer_href):
 
     """
     assert thing in ("credit card", "bank account")
-    typecheck(balanced_customer_href, (str, unicode))
+    typecheck(customer, balanced.Customer)
 
-    customer = balanced.Customer.fetch(balanced_customer_href)
     things = customer.cards if thing == "credit card" else customer.bank_accounts
 
     for _thing in things:
         _thing.unstore()
 
 
-def clear(db, thing, username, balanced_customer_href):
+def clear(db, thing, participant, balanced_account):
     typecheck( thing, unicode
-             , username, unicode
-             , balanced_customer_href, (unicode, str)
+             , participant, Participant
               )
-    invalidate_on_balanced(thing, balanced_customer_href)
-    store_result(db, thing, username, None)
+    invalidate_on_balanced(thing, balanced_account)
+    store_result(db, thing, participant, None)
 
 
 class BalancedThing(object):
