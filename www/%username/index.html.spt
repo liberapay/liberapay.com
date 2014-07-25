@@ -50,9 +50,6 @@ NEWLINES_AND_LINKS = _("Newlines and links are converted to HTML.", locales)
 CURRENCY = "$"
 
 if participant.number == 'singular':
-    I_AM = _("I am", locales)
-    I_M = _("I'm", locales)
-    MY = _("My", locales)
     MAKING = I_AM_MAKING
     GRATEFUL = _("I'm grateful for gifts, but don't have a specific funding goal.", locales)
     PATRON = _("I'm here as a patron.", locales)
@@ -61,9 +58,6 @@ if participant.number == 'singular':
     GOAL = GOAL_RAW.format(CURRENCY + locale.format("%.2f", participant.goal or 0, grouping=True))
     GOAL_PARTS = GOAL_RAW.split("{0}")
 else:
-    I_AM = _("We are", locales)
-    I_M = _("We're", locales)
-    MY = _("Our", locales)
     MAKING = WE_ARE_MAKING
     GRATEFUL = _("We're grateful for gifts, but don't have a specific funding goal.", locales)
     PATRON = _("We're here as a patron.", locales)
