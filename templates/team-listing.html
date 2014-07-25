@@ -2,12 +2,11 @@
 {% if teams %}
 <h2>Teams</h2>
 <ul class="team memberships">
-  {% for team in teams %}
-  <li>
-    <a href="/{{ team.name }}/">{{ team.name }}</a>
-    {% set nothers = team.nmembers - 1 %}
-    <div class="fine">with {{ nothers }} other{{ plural(nothers) }}</div>
-  </li>
-  {% endfor %}
+    {% for team in teams %}
+    <li>
+        <a href="/{{ team.name }}/">{{ team.name }}</a>
+        <div class="fine">{{ with_others(team) }}</div>
+    </li>
+    {% endfor %}
 </ul>
 {% endif %}

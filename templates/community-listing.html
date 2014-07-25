@@ -1,13 +1,10 @@
 {% if communities %}
-<h2>Communities</h2>
+<h2>{{ _("Communities", locales) }}</h2>
 <ul class="community memberships">
     {% for community in communities %}
     <li>
         <a href="/for/{{ community.slug }}/">{{ community.name }}</a>
-        <div class="fine">
-            {% set nothers = community.nmembers - 1 %}
-            with {{ nothers }} other{{ plural(nothers) }}
-        </div>
+        <div class="fine">{{ with_others(community) }}</div>
     </li>
     {% endfor %}
 </ul>

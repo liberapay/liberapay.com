@@ -66,6 +66,12 @@ else:
     GOAL = GOAL_RAW.format(CURRENCY + locale.format("%.2f", participant.goal or 0, grouping=True))
     GOAL_PARTS = GOAL_RAW.split("{0}")
 
+def with_others(obj):
+    others = obj.nmembers - 1
+    if others == 1:
+        return _("with 1 other", locales)
+    else:
+        return _("with {0} others", locales).format(others)
 
 [-----------------------------------------------------------------------------]
 {% extends "templates/profile.html" %}

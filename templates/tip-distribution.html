@@ -1,7 +1,7 @@
     <table class="tip-distribution">
         {% for amount, ncontributors, summed, pcontributors, psummed in tip_distribution%}
         <tr>
-            <td class="dollar-sign">$</td>
+            <td class="dollar-sign">{{ CURRENCY }}</td>
             <td class="amount">{{ amount }}</td>
             <td class="count">
                 <span class="bar" style="width:{{ pcontributors * 240 }}pt"></span>
