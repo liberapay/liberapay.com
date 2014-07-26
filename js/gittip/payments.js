@@ -45,7 +45,7 @@ Gittip.payments.submitDeleteForm = function(e) {
 };
 
 Gittip.payments.onError = function(response) {
-    $('button#save').text('Save');
+    $('button#save').css('opacity', 1);
     var msg = response.status_code + ": " +
         $.map(response.errors, function(obj) { return obj.description }).join(', ');
     Gittip.forms.showFeedback(null, [msg]);
@@ -59,7 +59,7 @@ Gittip.payments.onSuccess = function(data) {
     }, 8000);
     $('#delete').show();
     Gittip.forms.clearFeedback();
-    $('button#save').text('Save');
+    $('button#save').css('opacity', 1);
     setTimeout(function() {
         window.location.href = '/' + Gittip.participantId + '/';
     }, 1000);
@@ -87,7 +87,7 @@ Gittip.payments.ba.init = function(balanced_uri, participantId) {
 Gittip.payments.ba.submit = function (e) {
     e.preventDefault();
 
-    $('button#save').text('Saving ...');
+    $('button#save').css('opacity', 0.5);
     Gittip.forms.clearFeedback();
 
     var bankAccount = {
@@ -155,7 +155,7 @@ Gittip.payments.ba.submit = function (e) {
 
 
     if (errors.length) {
-        $('button#save').text('Save');
+        $('button#save').css('opacity', 1);
         Gittip.forms.showFeedback(null, errors);
     } else {
         balanced.bankAccount.create( bankAccount
@@ -187,7 +187,7 @@ Gittip.payments.ba.handleResponse = function (response) {
             ];
         }
         Gittip.forms.showFeedback(data.problem, messages);
-        $('button#save').text('Save');
+        $('button#save').css('opacity', 1);
     }
 
     var detailsToSubmit = Gittip.payments.ba.merchantData;
@@ -223,7 +223,7 @@ Gittip.payments.cc.submit = function(e) {
 
     e.stopPropagation();
     e.preventDefault();
-    $('button#save').text('Saving ...');
+    $('button#save').css('opacity', 0.5);
     Gittip.forms.clearFeedback();
 
     if (!Gittip.havePayments) {
@@ -274,17 +274,17 @@ Gittip.payments.cc.submit = function(e) {
     credit_card.expiration_year = val('expiration_year');
 
     if (!balanced.card.isCardNumberValid(credit_card.number)) {
-        $('button#save').text('Save');
+        $('button#save').css('opacity', 1);
         Gittip.forms.showFeedback(null, ["Your card number is bad."]);
     } else if (!balanced.card.isExpiryValid( credit_card.expiration_month
                                          , credit_card.expiration_year
                                           )) {
-        $('button#save').text('Save');
+        $('button#save').css('opacity', 1);
         Gittip.forms.showFeedback(null, ["Your expiration date is bad."]);
     } else if (!balanced.card.isSecurityCodeValid( credit_card.number
                                                , credit_card.cvv
                                                 )) {
-        $('button#save').text('Save');
+        $('button#save').css('opacity', 1);
         Gittip.forms.showFeedback(null, ["Your CVV is bad."]);
     } else {
         balanced.card.create(credit_card, Gittip.payments.cc.handleResponse);
@@ -313,7 +313,7 @@ Gittip.payments.cc.handleResponse = function(response) {
         $('#delete').show();
         var details = [];
         Gittip.forms.showFeedback(data.problem, [data.error]);
-        $('button#save').text('Save');
+        $('button#save').css('opacity', 1);
     }
 
     Gittip.forms.submit( "/credit-card.json"

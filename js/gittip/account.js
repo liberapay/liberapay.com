@@ -19,13 +19,13 @@ Gittip.account.init = function() {
     $('form.username').submit(function(e) {
         e.preventDefault();
 
-        $('#save-username').text('Saving ...');
+        $('#save-username').css('opacity', 0.5);
 
         function success(d) {
             window.location.href = "/" + encodeURIComponent(d.username) + "/";
         }
         function error(e) {
-            $('#save-username').text('Save');
+            $('#save-username').css('opacity', 1);
             Gittip.notification(JSON.parse(e.responseText).error_message_long, 'error');
         }
         jQuery.ajax(
@@ -126,7 +126,7 @@ Gittip.account.init = function() {
     $('.email-submit').on('click', '[type=submit]', function() {
         var $this = $(this);
 
-        $this.text('Saving...');
+        $this.css('opacity', 0.5);
 
         function success(data) {
             $('.email-address').text(data.email);
@@ -139,7 +139,7 @@ Gittip.account.init = function() {
                 html += '<button class="toggle-email">Edit</button>';
             }
             $('div.email').html(html);
-            $this.text('Save');
+            $this.css('opacity', 1);
         }
 
         $.ajax({
@@ -148,7 +148,7 @@ Gittip.account.init = function() {
             dataType: 'json',
             success: success,
             error: function (data) {
-                $this.text('Save');
+                $this.css('opacity', 1);
                 Gittip.notification('Failed to save your email address. '
                                   + 'Please try again.', 'error');
             },
