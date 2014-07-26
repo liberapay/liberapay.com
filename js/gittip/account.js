@@ -99,9 +99,12 @@ Gittip.account.init = function() {
 
         if (data.api_key) {
             $('.api-key').data('api-key', data.api_key);
-            $('.api-key .show').text('Hide Key').toggleClass('show hide');
-        } else
-            $('.api-key .hide').text('Show Key').toggleClass('show hide');
+            $('.api-key .show').hide();
+            $('.api-key .hide').show();
+        } else {
+            $('.api-key .show').show();
+            $('.api-key .hide').hide();
+        }
     }
 
     $('.api-key').on('click', '.show', function() {

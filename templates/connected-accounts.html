@@ -40,13 +40,13 @@
                       {{ participant.bitcoin_address }}
                     </a>
                     {% if not user.ANON and own_account %}
-                    <button class="toggle-bitcoin">Edit</button>
+                    <button class="toggle-bitcoin">{{ _("Edit", loc) }}</button>
                     {% endif %}
 
                 {% else %}
                     <span class="none">None</span>
                     {% if not user.ANON and own_account %}
-                        <button class="toggle-bitcoin">+ Add</button>
+                        <button class="toggle-bitcoin">+ {{ _("Add", loc) }}</button>
                     {% endif %}
                 {% endif %}
             </div>
