@@ -36,16 +36,6 @@ communities = [c for c in community.get_list_for(website.db, username) if c.is_m
 
 I_AM_MAKING = _("I am making the world better by", loc)
 WE_ARE_MAKING = _("We are making the world better by", loc)
-GIVE_WEEKLY = _("Give weekly gift on Gittip", loc)
-GITTIP_IS = _("Gittip is a weekly gift exchange", loc)
-STATEMENT = _("Statement", loc)
-FUNDING_GOAL = _("Funding Goal", loc)
-COMMUNITIES = _("Communities", loc)
-JOIN_COMMUNITIES = _("Join Communities", loc)
-EDIT = _("Edit", loc)
-SAVE = _("Save", loc)
-CANCEL = _("Cancel", loc)
-NEWLINES_AND_LINKS = _("Newlines and links are converted to HTML.", loc)
 
 if participant.number == 'singular':
     MAKING = I_AM_MAKING
@@ -54,7 +44,6 @@ if participant.number == 'singular':
     PATRON_NO_GIFTS = _("I'm here as a patron, and politely decline to receive gifts.", loc)
     GOAL_RAW = _("My goal is to receive {0} per week on Gittip.", loc)
     GOAL = GOAL_RAW.format("$" + locale.format("%.2f", participant.goal or 0, grouping=True))
-    GOAL_PARTS = GOAL_RAW.split("{0}")
 else:
     MAKING = WE_ARE_MAKING
     GRATEFUL = _("We're grateful for gifts, but don't have a specific funding goal.", loc)
@@ -62,7 +51,8 @@ else:
     PATRON_NO_GIFTS = _("We're here as a patron, and politely decline to receive gifts.", loc)
     GOAL_RAW = _("Our goal is to receive {0} per week on Gittip.", loc)
     GOAL = GOAL_RAW.format("$" + locale.format("%.2f", participant.goal or 0, grouping=True))
-    GOAL_PARTS = GOAL_RAW.split("{0}")
+
+GOAL_PARTS = GOAL_RAW.split("{0}")
 
 def with_others(obj):
     others = obj.nmembers - 1
@@ -74,7 +64,7 @@ def with_others(obj):
 [-----------------------------------------------------------------------------]
 {% extends "templates/profile.html" %}
 {% block head %}
-    <link rel="payment" type="text/html" title="{{ GIVE_WEEKLY }}"
+    <link rel="payment" type="text/html" title="{{ _("Give weekly gift on Gittip", loc) }}"
         href="https://www.gittip.com/{{ username }}/" />
     <meta name="twitter:card" content="summary" />
     <meta name="og:url" content="https://www.gittip.com/{{ username }}/" />
@@ -83,7 +73,7 @@ def with_others(obj):
     {% if participant.statement %}
     <meta name="og:description" content="{{ _clip(MAKING + " " + participant.statement, 200)|e }}" />
     {% else %}
-    <meta name="og:description" content="{{ GITTIP_IS }}" />
+    <meta name="og:description" content="{{ _("Gittip is a weekly gift exchange", loc) }}" />
     {% endif %}
     {% if participant.avatar_url %}
     <meta name="og:image" content="{{ participant.avatar_url|e }}" />

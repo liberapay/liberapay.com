@@ -2,10 +2,10 @@
 
     <!-- Statement -->
     <form class="statement">
-        <h2>{{ STATEMENT }}
-            <button tabindex="200" class="edit">{{ EDIT }}</button>
-            <button tabindex="203" class="save" type="submit">{{ SAVE }}</button>
-            <button tabindex="204" class="cancel" type="cancel">{{ CANCEL }}</button>
+        <h2>{{ _("Statement", loc) }}
+            <button tabindex="200" class="edit">{{ _("Edit", loc) }}</button>
+            <button tabindex="203" class="save" type="submit">{{ _("Save", loc) }}</button>
+            <button tabindex="204" class="cancel" type="cancel">{{ _("Cancel", loc) }}</button>
         </h2>
 
         <div class="edit">
@@ -20,7 +20,7 @@
                 </option>
             </select>
             <textarea tabindex="202">{{ participant.statement }}</textarea>
-            <span class="help">{{ NEWLINES_AND_LINKS }}</span>
+            <span class="help">{{ _("Newlines and links are converted to HTML.", loc) }}</span>
         </div>
 
         <div class="view">
@@ -38,19 +38,19 @@
         Still show the communities heading in this case. Otherwise it's set in
         community-listing.html. See https://github.com/gittip/www.gittip.com/pull/1916.
     #}
-    <h2>{{ COMMUNITIES }}</h2>
+    <h2>{{ _("Communities", loc) }}</h2>
     {% endif %}
-    <a href="/for/">{{ JOIN_COMMUNITIES }}</a>
+    <a href="/for/">{{ _("Join Communities", loc) }}</a>
 
 </div>
 <div class="col2">
 
     <!-- Funding Goal -->
     <form class="goal">
-        <h2>{{ FUNDING_GOAL }}
-            <button tabindex="400" class="edit">{{ EDIT }}</button>
-            <button tabindex="401" class="save" type="submit">{{ SAVE }}</button>
-            <button tabindex="402" class="cancel" type="cancel">{{ CANCEL }}</button>
+        <h2>{{ _("Funding Goal", loc) }}
+            <button tabindex="400" class="edit">{{ _("Edit", loc) }}</button>
+            <button tabindex="401" class="save" type="submit">{{ _("Save", loc) }}</button>
+            <button tabindex="402" class="cancel" type="cancel">{{ _("Cancel", loc) }}</button>
         </h2>
         <div class="view">
             {% if user.participant.goal > 0 %}
