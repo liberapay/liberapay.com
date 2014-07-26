@@ -2,7 +2,7 @@
 {% from 'templates/account-row.html' import account_row with context %}
 
 {% set own_account=(user.participant == participant) %}
-<h2>{{ _("Social Profiles", locales) }}</h2>
+<h2>{{ _("Social Profiles", locale) }}</h2>
 <table class="accounts">
 
     <!-- social profiles -->
@@ -17,9 +17,9 @@
 {% if participant.bitcoin_address or accounts[website.platforms.venmo.name] or own_account %}
 
 {% if not user.ANON and own_account %}
-<h2>{{ _("Other Receiving Options", locales) }}</h2>
+<h2>{{ _("Other Receiving Options", locale) }}</h2>
 {% else %}
-<h2>{{ _("Other Giving Options", locales) }}</h2>
+<h2>{{ _("Other Giving Options", locale) }}</h2>
 {% endif %}
 <table class="accounts">
 
@@ -59,8 +59,8 @@
                     >
                 </div>
                 <div class="buttons">
-                    <button type="submit" class="bitcoin hidden">{{ _("Save", locales) }}</button>
-                    <button type="cancel" class="bitcoin cancel hidden">{{ _("Cancel", locales) }}</button>
+                    <button type="submit" class="bitcoin hidden">{{ _("Save", locale) }}</button>
+                    <button type="cancel" class="bitcoin cancel hidden">{{ _("Cancel", locale) }}</button>
                 </div>
             </form>
 

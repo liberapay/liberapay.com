@@ -500,10 +500,13 @@ def parse_locales(request):
         locales.append(lang_parts[0])
     return locales
 
-def _(s, locales):
-    for locale in locales:
-        if locale.startswith('en'):
-            return s
-        elif LANGS.has_key(locale):
-            return LANGS[locale].get(s, s)
-    return s
+def parse_locale(request):
+    for locale in parse_locales(request):
+        if locale.startswith("en") or LANGS.has_key(locale):
+            return locale
+    return "en"
+
+def _(s, locale):
+    if not LANGS.has_key(locale):
+        return s
+    return LANGS[locale].get(s, s)

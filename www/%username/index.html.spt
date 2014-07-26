@@ -4,7 +4,7 @@ import locale
 
 from aspen import json, Response
 from aspen.utils import to_age
-from gittip.utils import get_participant, wrap, plural, parse_locales, _
+from gittip.utils import get_participant, wrap, plural, parse_locale, _
 from gittip.models import community
 
 LONG_STATEMENT = 256
@@ -17,11 +17,11 @@ def _clip(text, n):
 
 [-----------------------------------------------------------------------------]
 
-locales = parse_locales(request)
+locale = parse_locale(request)
 participant = get_participant(request, restrict=False)
 locked = False
 tip_or_pledge = "tip"
-hero = _("Profile", locales)
+hero = _("Profile", locale)
 title = participant.username      # used in the title tag
 username = participant.username   # used in footer shared with on/$platform/
                                   # pages
@@ -35,42 +35,42 @@ accounts = participant.get_accounts_elsewhere()
 long_statement = len(participant.statement) > LONG_STATEMENT
 communities = [c for c in community.get_list_for(website.db, username) if c.is_member]
 
-I_AM_MAKING = _("I am making the world better by", locales)
-WE_ARE_MAKING = _("We are making the world better by", locales)
-GIVE_WEEKLY = _("Give weekly gift on Gittip", locales)
-GITTIP_IS = _("Gittip is a weekly gift exchange", locales)
-STATEMENT = _("Statement", locales)
-FUNDING_GOAL = _("Funding Goal", locales)
-COMMUNITIES = _("Communities", locales)
-JOIN_COMMUNITIES = _("Join Communities", locales)
-EDIT = _("Edit", locales)
-SAVE = _("Save", locales)
-CANCEL = _("Cancel", locales)
-NEWLINES_AND_LINKS = _("Newlines and links are converted to HTML.", locales)
+I_AM_MAKING = _("I am making the world better by", locale)
+WE_ARE_MAKING = _("We are making the world better by", locale)
+GIVE_WEEKLY = _("Give weekly gift on Gittip", locale)
+GITTIP_IS = _("Gittip is a weekly gift exchange", locale)
+STATEMENT = _("Statement", locale)
+FUNDING_GOAL = _("Funding Goal", locale)
+COMMUNITIES = _("Communities", locale)
+JOIN_COMMUNITIES = _("Join Communities", locale)
+EDIT = _("Edit", locale)
+SAVE = _("Save", locale)
+CANCEL = _("Cancel", locale)
+NEWLINES_AND_LINKS = _("Newlines and links are converted to HTML.", locale)
 
 if participant.number == 'singular':
     MAKING = I_AM_MAKING
-    GRATEFUL = _("I'm grateful for gifts, but don't have a specific funding goal.", locales)
-    PATRON = _("I'm here as a patron.", locales)
-    PATRON_NO_GIFTS = _("I'm here as a patron, and politely decline to receive gifts.", locales)
-    GOAL_RAW = _("My goal is to receive {0} per week on Gittip.", locales)
+    GRATEFUL = _("I'm grateful for gifts, but don't have a specific funding goal.", locale)
+    PATRON = _("I'm here as a patron.", locale)
+    PATRON_NO_GIFTS = _("I'm here as a patron, and politely decline to receive gifts.", locale)
+    GOAL_RAW = _("My goal is to receive {0} per week on Gittip.", locale)
     GOAL = GOAL_RAW.format("$" + locale.format("%.2f", participant.goal or 0, grouping=True))
     GOAL_PARTS = GOAL_RAW.split("{0}")
 else:
     MAKING = WE_ARE_MAKING
-    GRATEFUL = _("We're grateful for gifts, but don't have a specific funding goal.", locales)
-    PATRON = _("We're here as a patron.", locales)
-    PATRON_NO_GIFTS = _("We're here as a patron, and politely decline to receive gifts.", locales)
-    GOAL_RAW = _("Our goal is to receive {0} per week on Gittip.", locales)
+    GRATEFUL = _("We're grateful for gifts, but don't have a specific funding goal.", locale)
+    PATRON = _("We're here as a patron.", locale)
+    PATRON_NO_GIFTS = _("We're here as a patron, and politely decline to receive gifts.", locale)
+    GOAL_RAW = _("Our goal is to receive {0} per week on Gittip.", locale)
     GOAL = GOAL_RAW.format("$" + locale.format("%.2f", participant.goal or 0, grouping=True))
     GOAL_PARTS = GOAL_RAW.split("{0}")
 
 def with_others(obj):
     others = obj.nmembers - 1
     if others == 1:
-        return _("with 1 other", locales)
+        return _("with 1 other", locale)
     else:
-        return _("with {0} others", locales).format(others)
+        return _("with {0} others", locale).format(others)
 
 [-----------------------------------------------------------------------------]
 {% extends "templates/profile.html" %}
