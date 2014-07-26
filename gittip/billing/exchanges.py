@@ -3,7 +3,6 @@
 from __future__ import unicode_literals
 
 from decimal import Decimal, ROUND_UP
-import sys
 
 import balanced
 
@@ -42,6 +41,13 @@ def skim_credit(amount):
     """
     typecheck(amount, Decimal)
     return amount - FEE_CREDIT, FEE_CREDIT
+
+
+def repr_exception(e):
+    if isinstance(e, balanced.exc.HTTPError):
+        return e.message.message
+    else:
+        return repr(e)
 
 
 def ach_credit(db, participant, withhold, minimum_credit=MINIMUM_CREDIT):
@@ -106,12 +112,8 @@ def ach_credit(db, participant, withhold, minimum_credit=MINIMUM_CREDIT):
 
         log(msg + "succeeded.")
         error = ""
-    except balanced.exc.HTTPError as err:
-        error = err.message.message
-    except:
-        error = repr(sys.exc_info()[1])
-
-    if error:
+    except Exception as e:
+        error = repr_exception(e)
         log(msg + "failed: %s" % error)
 
     record_exchange(db, 'ach', -credit_amount, fee, error, participant)
@@ -160,12 +162,8 @@ def create_card_hold(db, participant, amount):
                          )
         log(msg + "succeeded.")
         error = ""
-    except balanced.exc.HTTPError as err:
-        error = err.message.message
-    except:
-        error = repr(sys.exc_info()[1])
-
-    if error:
+    except Exception as e:
+        error = repr_exception(e)
         log(msg + "failed: %s" % error)
         record_exchange(db, 'bill', None, None, error, participant)
 
