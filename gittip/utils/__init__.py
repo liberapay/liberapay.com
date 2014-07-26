@@ -10,6 +10,7 @@ from jinja2 import escape
 
 import os
 import babel.messages.pofile
+from babel.dates import format_timedelta
 
 
 COUNTRIES = (
@@ -431,6 +432,8 @@ def _to_age(participant):
         age = age.replace(word, str(i))
     return age.replace(' ', ' <span class="unit">') + "</span>"
 
+def to_localized_age(dt, locale):
+    return format_timedelta(datetime.now().replace(tzinfo=dt.tzinfo) - dt, locale=locale)
 
 def format_money(money):
     format = '%.2f' if money < 1000 else '%.0f'

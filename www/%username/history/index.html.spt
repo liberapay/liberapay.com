@@ -1,9 +1,5 @@
-from aspen.utils import to_age
-from gittip.utils import get_participant, parse_locale, _
+from gittip.utils import get_participant, to_localized_age, parse_locale, _
 from gittip.utils.history import iter_payday_events
-
-from datetime import datetime
-from babel.dates import format_timedelta
 
 [-----------------------------------------------------------------------------]
 
@@ -16,13 +12,12 @@ locked = False
 subpath = 'history/' if user.ADMIN else ''
 admin_override = user.ADMIN and (participant != user.participant or 'override' in qs)
 
-age = datetime.now().replace(tzinfo=participant.claimed_time.tzinfo) - participant.claimed_time
-age_str = format_timedelta(age, locale=locale)
-
 if participant == user.participant:
-    JOINED = _("You joined {0} ago.", locale).format(age_str)
+    JOINED = _("You joined {0} ago.", locale).format(
+        to_localized_age(participant.claimed_time, locale))
 else:
-    JOINED = _("{0} joined {1} ago.", locale).format((participant.username, age_str))
+    JOINED = _("{0} joined {1} ago.", locale).format(
+        participant.username, to_localized_age(participant.claimed_time, locale))
 
 if participant == user.participant:
     BALANCE = _("Your balance is {0}.", locale).format("$" + str(participant.balance))
@@ -63,7 +58,7 @@ else:
     <tr>
         <th colspan="7"><h2>Gittip #{{ event['number'] }}
             &mdash;{{ event['timestamp'].strftime("%B %d, %Y").replace(' 0', ' ') }}
-                ({{ to_age(event['timestamp']) }})</h2></th>
+                ({{ to_localized_age(event['timestamp'], locale) }})</h2></th>
     </tr>
     <tr class="head">
         <td colspan="3" class="outside">&larr; {{ _("Outside", locale) }}</td>

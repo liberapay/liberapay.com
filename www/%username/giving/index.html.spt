@@ -44,9 +44,9 @@ first_time = qs.get('first_time') == '1'
             <ol>
                 <li>{{ _("Change the weekly tips below as you please.", locale) }}</li>
                 <li>{{ _("{0}Add a credit card{1} to make sure your weekly tips go through this Thursday.", locale).format(
-                        ("<a class='highlight' href='/credit-card.html'>", "</a>")) }}</li>
+                        "<a class='highlight' href='/credit-card.html'>", "</a>") }}</li>
                 <li>{{ _("{0}Fill out your profile{1} to let others know about you.", locale).format(
-                        ("<a href='../'>Fill out your profile</a>", "</a>")) }}</li>
+                        "<a href='../'>", "</a>") }}</li>
             </ol>
 
             {% endif %}
@@ -55,7 +55,7 @@ first_time = qs.get('first_time') == '1'
                 "<span class='my-total-giving'>$" + str(total) + "</span>") }}</h2>
             {% else %}
             <h2>{{ _("{0} gives {1} per week", locale).format(
-                (participant.username, "$" + str(total))) }}</h2>
+                participant.username, "$" + str(total)) }}</h2>
             {% endif %}
         </td>
     </tr>
