@@ -1,9 +1,10 @@
 from aspen import Response
-from gittip.utils import get_participant
+from gittip.utils import get_participant, parse_locale, _
 [-----------------------------------------------------------------------------]
 
+loc = parse_locale(request)
 participant = get_participant(request, restrict=True)
-hero = "Widgets"
+hero = _("Widgets", loc)
 title = "%s - %s" % (participant.username, hero)
 locked = False
 
@@ -99,55 +100,55 @@ locked = False
     }
 </style>
 <div class="col1">
-    <h2>Widget #1</h2>
+    <h2>{{ _("Widget #{0}", loc).format(1) }}</h2>
 
-    <p>Use this code to embed a Gittip button on your website:</p>
+    <p>{{ _("Use this code to embed a Gittip button on your website:", loc) }}</p>
 
     <pre>&lt;script data-gittip-username="{{ participant.username }}"
         data-gittip-widget="button"
         src="//gttp.co/v1.js"&gt;&lt;/script&gt;</pre>
 
-    <p>The button opens your profile on Gittip in a new tab or window.
-    Here's what the text reads:</p>
+    <p>{{ _("The button opens your profile on Gittip in a new tab or window. Here's what the text reads:", loc) }}</p>
 
     <ul class="button-examples no-bullets">
 
-        <li><button class="old-widget-style">Gittip</button>&mdash;person is not
-        logged into Gittip or doesn't tip you</li>
+        <li><button class="old-widget-style">Gittip</button>&mdash;
+        {{ _("person is not logged into Gittip or doesn't tip you", loc) }}</li>
 
-        <li><button class="old-widget-style">3.00</button>&mdash;person tips you;
-        shows current gift amount</li>
+        <li><button class="old-widget-style">3.00</button>&mdash;
+        {{ _("person tips you; shows current gift amount", loc) }}</li>
 
-        <li><button class="old-widget-style">You!</button>&mdash;your own
-        button</li>
+        <li><button class="old-widget-style">You!</button>&mdash;
+        {{ _("your own button", loc) }}</li>
 
     </ul>
 
-    <p>Here's an example using
-        <a href="/whit537/">whit537</a>:
+    <p>
+        {{ _("Here's an example using {0}:", loc).format("<a href='/whit537/'>whit537</a>") }}
         <script data-gittip-username="whit537" data-gittip-widget="button" src="//gttp.co/v1.js"></script>
     </p>
 </div>
 <div class="col2">
 
-    <h2>Widget #2</h2>
+    <h2>{{ _("Widget #{0}", loc).format(2) }}</h2>
 
-    <p>Use this code to add a Gittip &ldquo;receiving&rdquo; widget on your website:</p>
+    <p>{{ _("Use this code to add a Gittip \"receiving\" widget on your website:", loc) }}</p>
 
     <pre>&lt;script data-gittip-username="{{ participant.username }}"
         src="//gttp.co/v1.js"&gt;&lt;/script&gt;</pre>
 
-    <p>Here's what it looks like:</p>
+    <p>{{ _("Here's what it looks like:", loc) }}</p>
 
     <p><script data-gittip-username="{{ participant.username }}" src="//gttp.co/v1.js"></script></p>
 
-    <p>Or, if you'd like to include a &ldquo;giving&rdquo; widget, you can add the <pre>data-gittip-widget="giving"</pre> attribute:</p>
+    <p>{{ _("Or, if you'd like to include a \"giving\" widget, you can add the {0} attribute:", loc).format(
+            "<pre>data-gittip-widget=\"giving\"</pre>") }}</p>
 
     <pre>&lt;script data-gittip-username="{{ participant.username }}"
         data-gittip-widget="giving"
         src="//gttp.co/v1.js"&gt;&lt;/script&gt;</pre>
 
-    <p>Here's what it looks like:</p>
+    <p>{{ _("Here's what it looks like:", loc) }}</p>
 
     <p><script data-gittip-username="{{ participant.username }}" data-gittip-widget="giving" src="//gttp.co/v1.js"></script></p>
 
