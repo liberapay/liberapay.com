@@ -109,12 +109,12 @@
 {% if participant.receiving > 0 %}
 {% set tip_distribution = participant.get_tip_distribution()[0] %}
 <div class="col1">
-    <h2>{{ _("Tips Received, by Number of Tips", locale) }}</h2>
+    <h2>{{ _("Tips Received, by Number of Tips", loc) }}</h2>
     {% include "templates/tip-distribution.html" %}
 </div>
 
 <div class="col2">
-    <h2>{{ _("Tips Received, by Dollar Amount", locale) }}</h2>
+    <h2>{{ _("Tips Received, by Dollar Amount", loc) }}</h2>
     <table class="tip-distribution">
         {% for amount, ncontributors, summed, pcontributors, psummed in tip_distribution %}
         <tr>

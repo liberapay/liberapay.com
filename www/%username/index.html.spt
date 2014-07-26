@@ -16,11 +16,11 @@ def _clip(text, n):
 
 [-----------------------------------------------------------------------------]
 
-locale = parse_locale(request)
+loc = parse_locale(request)
 participant = get_participant(request, restrict=False)
 locked = False
 tip_or_pledge = "tip"
-hero = _("Profile", locale)
+hero = _("Profile", loc)
 title = participant.username      # used in the title tag
 username = participant.username   # used in footer shared with on/$platform/
                                   # pages
@@ -34,42 +34,42 @@ accounts = participant.get_accounts_elsewhere()
 long_statement = len(participant.statement) > LONG_STATEMENT
 communities = [c for c in community.get_list_for(website.db, username) if c.is_member]
 
-I_AM_MAKING = _("I am making the world better by", locale)
-WE_ARE_MAKING = _("We are making the world better by", locale)
-GIVE_WEEKLY = _("Give weekly gift on Gittip", locale)
-GITTIP_IS = _("Gittip is a weekly gift exchange", locale)
-STATEMENT = _("Statement", locale)
-FUNDING_GOAL = _("Funding Goal", locale)
-COMMUNITIES = _("Communities", locale)
-JOIN_COMMUNITIES = _("Join Communities", locale)
-EDIT = _("Edit", locale)
-SAVE = _("Save", locale)
-CANCEL = _("Cancel", locale)
-NEWLINES_AND_LINKS = _("Newlines and links are converted to HTML.", locale)
+I_AM_MAKING = _("I am making the world better by", loc)
+WE_ARE_MAKING = _("We are making the world better by", loc)
+GIVE_WEEKLY = _("Give weekly gift on Gittip", loc)
+GITTIP_IS = _("Gittip is a weekly gift exchange", loc)
+STATEMENT = _("Statement", loc)
+FUNDING_GOAL = _("Funding Goal", loc)
+COMMUNITIES = _("Communities", loc)
+JOIN_COMMUNITIES = _("Join Communities", loc)
+EDIT = _("Edit", loc)
+SAVE = _("Save", loc)
+CANCEL = _("Cancel", loc)
+NEWLINES_AND_LINKS = _("Newlines and links are converted to HTML.", loc)
 
 if participant.number == 'singular':
     MAKING = I_AM_MAKING
-    GRATEFUL = _("I'm grateful for gifts, but don't have a specific funding goal.", locale)
-    PATRON = _("I'm here as a patron.", locale)
-    PATRON_NO_GIFTS = _("I'm here as a patron, and politely decline to receive gifts.", locale)
-    GOAL_RAW = _("My goal is to receive {0} per week on Gittip.", locale)
+    GRATEFUL = _("I'm grateful for gifts, but don't have a specific funding goal.", loc)
+    PATRON = _("I'm here as a patron.", loc)
+    PATRON_NO_GIFTS = _("I'm here as a patron, and politely decline to receive gifts.", loc)
+    GOAL_RAW = _("My goal is to receive {0} per week on Gittip.", loc)
     GOAL = GOAL_RAW.format("$" + locale.format("%.2f", participant.goal or 0, grouping=True))
     GOAL_PARTS = GOAL_RAW.split("{0}")
 else:
     MAKING = WE_ARE_MAKING
-    GRATEFUL = _("We're grateful for gifts, but don't have a specific funding goal.", locale)
-    PATRON = _("We're here as a patron.", locale)
-    PATRON_NO_GIFTS = _("We're here as a patron, and politely decline to receive gifts.", locale)
-    GOAL_RAW = _("Our goal is to receive {0} per week on Gittip.", locale)
+    GRATEFUL = _("We're grateful for gifts, but don't have a specific funding goal.", loc)
+    PATRON = _("We're here as a patron.", loc)
+    PATRON_NO_GIFTS = _("We're here as a patron, and politely decline to receive gifts.", loc)
+    GOAL_RAW = _("Our goal is to receive {0} per week on Gittip.", loc)
     GOAL = GOAL_RAW.format("$" + locale.format("%.2f", participant.goal or 0, grouping=True))
     GOAL_PARTS = GOAL_RAW.split("{0}")
 
 def with_others(obj):
     others = obj.nmembers - 1
     if others == 1:
-        return _("with 1 other", locale)
+        return _("with 1 other", loc)
     else:
-        return _("with {0} others", locale).format(others)
+        return _("with {0} others", loc).format(others)
 
 [-----------------------------------------------------------------------------]
 {% extends "templates/profile.html" %}

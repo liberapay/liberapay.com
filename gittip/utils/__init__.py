@@ -432,8 +432,8 @@ def _to_age(participant):
         age = age.replace(word, str(i))
     return age.replace(' ', ' <span class="unit">') + "</span>"
 
-def to_localized_age(dt, locale):
-    return format_timedelta(datetime.now().replace(tzinfo=dt.tzinfo) - dt, locale=locale)
+def to_localized_age(dt, loc):
+    return format_timedelta(datetime.now().replace(tzinfo=dt.tzinfo) - dt, locale=loc)
 
 def format_money(money):
     format = '%.2f' if money < 1000 else '%.0f'
@@ -504,12 +504,12 @@ def parse_locales(request):
     return locales
 
 def parse_locale(request):
-    for locale in parse_locales(request):
-        if locale.startswith("en") or LANGS.has_key(locale):
-            return locale
+    for loc in parse_locales(request):
+        if loc.startswith("en") or LANGS.has_key(loc):
+            return loc
     return "en"
 
-def _(s, locale):
-    if not LANGS.has_key(locale):
+def _(s, loc):
+    if not LANGS.has_key(loc):
         return s
-    return LANGS[locale].get(s, s)
+    return LANGS[loc].get(s, s)

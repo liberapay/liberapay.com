@@ -3,26 +3,26 @@ from gittip.utils.history import iter_payday_events
 
 [-----------------------------------------------------------------------------]
 
-locale = parse_locale(request)
+loc = parse_locale(request)
 participant = get_participant(request, restrict=True)
 events = iter_payday_events(website.db, participant)
-hero = _("History", locale)
+hero = _("History", loc)
 title = "%s - %s" % (participant.username, hero)
 locked = False
 subpath = 'history/' if user.ADMIN else ''
 admin_override = user.ADMIN and (participant != user.participant or 'override' in qs)
 
 if participant == user.participant:
-    JOINED = _("You joined {0} ago.", locale).format(
-        to_localized_age(participant.claimed_time, locale))
+    JOINED = _("You joined {0} ago.", loc).format(
+        to_localized_age(participant.claimed_time, loc))
 else:
-    JOINED = _("{0} joined {1} ago.", locale).format(
-        participant.username, to_localized_age(participant.claimed_time, locale))
+    JOINED = _("{0} joined {1} ago.", loc).format(
+        participant.username, to_localized_age(participant.claimed_time, loc))
 
 if participant == user.participant:
-    BALANCE = _("Your balance is {0}.", locale).format("$" + str(participant.balance))
+    BALANCE = _("Your balance is {0}.", loc).format("$" + str(participant.balance))
 else:
-    BALANCE = _("Their balance is {0}.", locale).format("$" + str(participant.balance))
+    BALANCE = _("Their balance is {0}.", loc).format("$" + str(participant.balance))
 
 [-----------------------------------------------------------------------------]
 {% extends "templates/profile.html" %}
@@ -58,20 +58,20 @@ else:
     <tr>
         <th colspan="7"><h2>Gittip #{{ event['number'] }}
             &mdash;{{ event['timestamp'].strftime("%B %d, %Y").replace(' 0', ' ') }}
-                ({{ to_localized_age(event['timestamp'], locale) }})</h2></th>
+                ({{ to_localized_age(event['timestamp'], loc) }})</h2></th>
     </tr>
     <tr class="head">
-        <td colspan="3" class="outside">&larr; {{ _("Outside", locale) }}</td>
-        <td colspan="4" class="inside">{{ _("Inside Gittip", locale) }} &rarr;</td>
+        <td colspan="3" class="outside">&larr; {{ _("Outside", loc) }}</td>
+        <td colspan="4" class="inside">{{ _("Inside Gittip", loc) }} &rarr;</td>
     </tr>
     <tr class="head">
-        <td class="bank">{{ _("Bank", locale) }}</td>
-        <td class="card">{{ _("Card", locale) }}</td>
-        <td class="fees">{{ _("Fees", locale) }}</td>
-        <td class="credits">{{ _("Credits", locale) }}</td>
-        <td class="debits">{{ _("Debits", locale) }}</td>
-        <td class="balance">{{ _("Balance", locale) }}</td>
-        <td class="notes">{{ _("Notes", locale) }}</td>
+        <td class="bank">{{ _("Bank", loc) }}</td>
+        <td class="card">{{ _("Card", loc) }}</td>
+        <td class="fees">{{ _("Fees", loc) }}</td>
+        <td class="credits">{{ _("Credits", loc) }}</td>
+        <td class="debits">{{ _("Debits", loc) }}</td>
+        <td class="balance">{{ _("Balance", loc) }}</td>
+        <td class="notes">{{ _("Notes", loc) }}</td>
     </tr>
     <tr>
         <td class="bank"></td>
@@ -101,7 +101,7 @@ else:
         <td class="debits">{{ -event['amount'] + event['fee'] }}</td>
         <td class="balance">{{ event['balance'] }}</td>
         {% if event['recorder'] == None %}
-        <td class="notes">{{ _("automatic withdrawal", locale) }}</td>
+        <td class="notes">{{ _("automatic withdrawal", loc) }}</td>
         {% else %}
         <td class="notes">
             &ldquo;{{ event['note']|e }}&rdquo;&mdash;<a
@@ -119,12 +119,12 @@ else:
         <td class="balance">{{ event['balance'] }}</td>
         <td class="notes">
             {% if event['recorder'] == None %}
-            {{ _("automatic charge", locale) }}
+            {{ _("automatic charge", loc) }}
             {% else %}
             &ldquo;{{ event['note']|e }}&rdquo;&mdash;<a
             href="/{{ event['recorder'] }}/">{{ event['recorder'] }}</a>
             {% endif %}
-            (<a href="../receipts/{{ event['id'] }}.html">{{ _("receipt", locale) }}</a>)
+            (<a href="../receipts/{{ event['id'] }}.html">{{ _("receipt", loc) }}</a>)
         </td>
     </tr>
     {% elif event['event'] == 'transfer' %}
