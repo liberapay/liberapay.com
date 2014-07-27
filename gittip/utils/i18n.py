@@ -1,6 +1,5 @@
 from __future__ import print_function, unicode_literals
 
-from datetime import datetime
 import os
 
 from aspen.utils import utcnow
@@ -31,7 +30,7 @@ def load_langs(localeDir):
 LANGS = load_langs("i18n")
 
 
-def parse_locale(request):
+def get_locale_for_request(request):
     accept_lang = request.headers.get("Accept-Language", "")
     languages = (lang.split(";", 1)[0] for lang in accept_lang.split(","))
     for loc in languages:
@@ -40,5 +39,7 @@ def parse_locale(request):
     return "en"
 
 
-def _(s, loc):
-    return LANGS[loc].get(s, s) if loc in LANGS else s
+def inbound(request):
+    loc = request.context.locale = get_locale_for_request(request)
+    request.context._ = lambda s: LANGS[loc].get(s, s) if loc in LANGS else s
+    request.context.to_age = lambda delta: to_age(delta, loc)
