@@ -1,4 +1,3 @@
-import locale
 import decimal
 
 from aspen import Response
@@ -27,7 +26,7 @@ participant = get_participant(request)
 participant.update_goal(goal)
 
 if goal is not None:
-    goal = locale.format("%.2f", goal, grouping=True)
+    goal = format_decimal(goal)
 
 [---] application/json via json_dump
 {"goal": goal}

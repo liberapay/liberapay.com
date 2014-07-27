@@ -1,7 +1,5 @@
 """Show information about a single participant. It might be you!
 """
-import locale
-
 from gittip.utils import get_participant, wrap, plural
 from gittip.models import community
 
@@ -41,14 +39,14 @@ if participant.number == 'singular':
     PATRON = _("I'm here as a patron.")
     PATRON_NO_GIFTS = _("I'm here as a patron, and politely decline to receive gifts.")
     GOAL_RAW = _("My goal is to receive {0} per week on Gittip.")
-    GOAL = GOAL_RAW.format("$" + locale.format("%.2f", participant.goal or 0, grouping=True))
+    GOAL = GOAL_RAW.format(format_currency(participant.goal or 0, 'USD'))
 else:
     MAKING = WE_ARE_MAKING
     GRATEFUL = _("We're grateful for gifts, but don't have a specific funding goal.")
     PATRON = _("We're here as a patron.")
     PATRON_NO_GIFTS = _("We're here as a patron, and politely decline to receive gifts.")
     GOAL_RAW = _("Our goal is to receive {0} per week on Gittip.")
-    GOAL = GOAL_RAW.format("$" + locale.format("%.2f", participant.goal or 0, grouping=True))
+    GOAL = GOAL_RAW.format(format_currency(participant.goal or 0, 'USD'))
 
 GOAL_PARTS = GOAL_RAW.split("{0}")
 
