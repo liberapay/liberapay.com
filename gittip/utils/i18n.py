@@ -5,6 +5,9 @@ import os
 from aspen.utils import utcnow
 from babel.dates import format_timedelta
 import babel.messages.pofile
+from babel.numbers import (
+    format_currency, format_decimal, format_number, format_percent
+)
 
 
 def to_age(dt, loc):
@@ -42,4 +45,8 @@ def get_locale_for_request(request):
 def inbound(request):
     loc = request.context.locale = get_locale_for_request(request)
     request.context._ = lambda s: LANGS[loc].get(s, s) if loc in LANGS else s
+    request.context.format_number = lambda *a: format_number(*a, locale=loc)
+    request.context.format_decimal = lambda *a: format_decimal(*a, locale=loc)
+    request.context.format_currency = lambda *a: format_currency(*a, locale=loc)
+    request.context.format_percent = lambda *a: format_percent(*a, locale=loc)
     request.context.to_age = lambda delta: to_age(delta, loc)
