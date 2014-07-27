@@ -2,10 +2,10 @@
 
     <!-- Statement -->
     <form class="statement">
-        <h2>{{ _("Statement", loc) }}
-            <button tabindex="200" class="edit">{{ _("Edit", loc) }}</button>
-            <button tabindex="203" class="save" type="submit">{{ _("Save", loc) }}</button>
-            <button tabindex="204" class="cancel" type="cancel">{{ _("Cancel", loc) }}</button>
+        <h2>{{ _("Statement") }}
+            <button tabindex="200" class="edit">{{ _("Edit") }}</button>
+            <button tabindex="203" class="save" type="submit">{{ _("Save") }}</button>
+            <button tabindex="204" class="cancel" type="cancel">{{ _("Cancel") }}</button>
         </h2>
 
         <div class="edit">
@@ -20,7 +20,7 @@
                 </option>
             </select>
             <textarea tabindex="202">{{ participant.statement }}</textarea>
-            <span class="help">{{ _("Newlines and links are converted to HTML.", loc) }}</span>
+            <span class="help">{{ _("Newlines and links are converted to HTML.") }}</span>
         </div>
 
         <div class="view">
@@ -38,19 +38,19 @@
         Still show the communities heading in this case. Otherwise it's set in
         community-listing.html. See https://github.com/gittip/www.gittip.com/pull/1916.
     #}
-    <h2>{{ _("Communities", loc) }}</h2>
+    <h2>{{ _("Communities") }}</h2>
     {% endif %}
-    <a href="/for/">{{ _("Join Communities", loc) }}</a>
+    <a href="/for/">{{ _("Join Communities") }}</a>
 
 </div>
 <div class="col2">
 
     <!-- Funding Goal -->
     <form class="goal">
-        <h2>{{ _("Funding Goal", loc) }}
-            <button tabindex="400" class="edit">{{ _("Edit", loc) }}</button>
-            <button tabindex="401" class="save" type="submit">{{ _("Save", loc) }}</button>
-            <button tabindex="402" class="cancel" type="cancel">{{ _("Cancel", loc) }}</button>
+        <h2>{{ _("Funding Goal") }}
+            <button tabindex="400" class="edit">{{ _("Edit") }}</button>
+            <button tabindex="401" class="save" type="submit">{{ _("Save") }}</button>
+            <button tabindex="402" class="cancel" type="cancel">{{ _("Cancel") }}</button>
         </h2>
         <div class="view">
             {% if user.participant.goal > 0 %}
@@ -109,12 +109,12 @@
 {% if participant.receiving > 0 %}
 {% set tip_distribution = participant.get_tip_distribution()[0] %}
 <div class="col1">
-    <h2>{{ _("Tips Received, by Number of Tips", loc) }}</h2>
+    <h2>{{ _("Tips Received, by Number of Tips") }}</h2>
     {% include "templates/tip-distribution.html" %}
 </div>
 
 <div class="col2">
-    <h2>{{ _("Tips Received, by Dollar Amount", loc) }}</h2>
+    <h2>{{ _("Tips Received, by Dollar Amount") }}</h2>
     <table class="tip-distribution">
         {% for amount, ncontributors, summed, pcontributors, psummed in tip_distribution %}
         <tr>

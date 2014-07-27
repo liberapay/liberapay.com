@@ -2,7 +2,7 @@
 
 <div class="sign-in">
   <div class="dropdown">
-    <button class="dropdown-toggle" data-toggle="dropdown">{{ _("Sign in", loc) }} <b class="caret"></b></button>
+    <button class="dropdown-toggle" data-toggle="dropdown">{{ _("Sign in") }} <b class="caret"></b></button>
     <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
     {% for platform in website.signin_platforms %}
       <li class="{{ platform.name }}">

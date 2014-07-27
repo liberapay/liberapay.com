@@ -1,10 +1,9 @@
-from aspen import Response
-from gittip.utils import get_participant, parse_locale, _
+from gittip.utils import get_participant
+
 [-----------------------------------------------------------------------------]
 
-loc = parse_locale(request)
 participant = get_participant(request, restrict=True)
-hero = _("Widgets", loc)
+hero = _("Widgets")
 title = "%s - %s" % (participant.username, hero)
 locked = False
 
@@ -100,44 +99,44 @@ locked = False
     }
 </style>
 <div class="col1">
-    <h2>{{ _("Widget #{0}", loc).format(1) }}</h2>
+    <h2>{{ _("Widget #{0}").format(1) }}</h2>
 
-    <p>{{ _("Use this code to embed a Gittip button on your website:", loc) }}</p>
+    <p>{{ _("Use this code to embed a Gittip button on your website:") }}</p>
 
     <pre>&lt;script data-gittip-username="{{ participant.username }}"
         data-gittip-widget="button"
         src="//gttp.co/v1.js"&gt;&lt;/script&gt;</pre>
 
-    <p>{{ _("The button opens your profile on Gittip in a new tab or window. Here's what the text reads:", loc) }}</p>
+    <p>{{ _("The button opens your profile on Gittip in a new tab or window. Here's what the text reads:") }}</p>
 
     <ul class="button-examples no-bullets">
 
         <li><button class="old-widget-style">Gittip</button>&mdash;
-        {{ _("person is not logged into Gittip or doesn't tip you", loc) }}</li>
+        {{ _("person is not logged into Gittip or doesn't tip you") }}</li>
 
         <li><button class="old-widget-style">3.00</button>&mdash;
-        {{ _("person tips you; shows current gift amount", loc) }}</li>
+        {{ _("person tips you; shows current gift amount") }}</li>
 
         <li><button class="old-widget-style">You!</button>&mdash;
-        {{ _("your own button", loc) }}</li>
+        {{ _("your own button") }}</li>
 
     </ul>
 
     <p>
-        {{ _("Here's an example using {0}:", loc).format("<a href='/whit537/'>whit537</a>") }}
+        {{ _("Here's an example using {0}:").format("<a href='/whit537/'>whit537</a>") }}
         <script data-gittip-username="whit537" data-gittip-widget="button" src="//gttp.co/v1.js"></script>
     </p>
 </div>
 <div class="col2">
 
-    <h2>{{ _("Widget #{0}", loc).format(2) }}</h2>
+    <h2>{{ _("Widget #{0}").format(2) }}</h2>
 
     <p>{{ _("Use this code to add a Gittip \"receiving\" widget on your website:", loc) }}</p>
 
     <pre>&lt;script data-gittip-username="{{ participant.username }}"
         src="//gttp.co/v1.js"&gt;&lt;/script&gt;</pre>
 
-    <p>{{ _("Here's what it looks like:", loc) }}</p>
+    <p>{{ _("Here's what it looks like:") }}</p>
 
     <p><script data-gittip-username="{{ participant.username }}" src="//gttp.co/v1.js"></script></p>
 
@@ -148,7 +147,7 @@ locked = False
         data-gittip-widget="giving"
         src="//gttp.co/v1.js"&gt;&lt;/script&gt;</pre>
 
-    <p>{{ _("Here's what it looks like:", loc) }}</p>
+    <p>{{ _("Here's what it looks like:") }}</p>
 
     <p><script data-gittip-username="{{ participant.username }}" data-gittip-widget="giving" src="//gttp.co/v1.js"></script></p>
 

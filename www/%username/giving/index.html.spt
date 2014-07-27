@@ -1,13 +1,11 @@
-from aspen import Response
-from gittip.utils import get_participant, parse_locale, _
+from gittip.utils import get_participant
 
 [-----------------------------------------------------------------------------]
 
-loc = parse_locale(request)
 participant = get_participant(request, restrict=True)
 tips, total, unclaimed_tips, unclaimed_total = \
                                            participant.get_giving_for_profile()
-hero = _("Giving", loc)
+hero = _("Giving")
 title = "%s - %s" % (participant.username, hero)
 locked = False
 first_time = qs.get('first_time') == '1'
@@ -37,24 +35,24 @@ first_time = qs.get('first_time') == '1'
         <td colspan="2">
             {% if first_time %}
 
-            <h2>{{ _("Thanks for joining Gittip!", loc) }}</h2>
+            <h2>{{ _("Thanks for joining Gittip!") }}</h2>
 
-            <p>{{ _("To get you started, we've suggested a few people to give to below. Next steps:", loc) }}</p>
+            <p>{{ _("To get you started, we've suggested a few people to give to below. Next steps:") }}</p>
 
             <ol>
-                <li>{{ _("Change the weekly tips below as you please.", loc) }}</li>
-                <li>{{ _("{0}Add a credit card{1} to make sure your weekly tips go through this Thursday.", loc).format(
+                <li>{{ _("Change the weekly tips below as you please.") }}</li>
+                <li>{{ _("{0}Add a credit card{1} to make sure your weekly tips go through this Thursday.").format(
                         "<a class='highlight' href='/credit-card.html'>", "</a>") }}</li>
-                <li>{{ _("{0}Fill out your profile{1} to let others know about you.", loc).format(
+                <li>{{ _("{0}Fill out your profile{1} to let others know about you.").format(
                         "<a href='../'>", "</a>") }}</li>
             </ol>
 
             {% endif %}
             {% if participant == user.participant %}
-            <h2>{{ _("You give {0} per week", loc).format(
+            <h2>{{ _("You give {0} per week").format(
                 "<span class='my-total-giving'>$" + str(total) + "</span>") }}</h2>
             {% else %}
-            <h2>{{ _("{0} gives {1} per week", loc).format(
+            <h2>{{ _("{0} gives {1} per week").format(
                 participant.username, "$" + str(total)) }}</h2>
             {% endif %}
         </td>
@@ -72,7 +70,7 @@ first_time = qs.get('first_time') == '1'
     {% if unclaimed_total > 0 %}
     <tr>
         <td colspan="2">
-            <h2>{{ _("Another {0} per week goes unclaimed", loc).format(
+            <h2>{{ _("Another {0} per week goes unclaimed").format(
                 "$" + str(unclaimed_total)) }}</h2>
         </td>
     </tr>

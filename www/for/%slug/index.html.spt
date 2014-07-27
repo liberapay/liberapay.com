@@ -1,6 +1,6 @@
 from aspen import Response
 from gittip.models.community import name_pattern, slugize, Community
-from gittip.utils import _to_age, format_money, to_statement
+from gittip.utils import format_money, to_statement
 from gittip.utils.query_cache import QueryCache
 
 LUXURY = 4
@@ -201,7 +201,7 @@ $(document).ready(function() {
                         <span class="avatar"
                             style="background-image: url('{{ avatar_url(participant) }}')">
                         </span>
-                        <span class="age">{{ _to_age(participant) }}</span>
+                        <span class="age">{{ to_age(participant.claimed_time) }}</span>
                         <span class="name">{{ participant.username }}</span>
                     </span>
                 </a>

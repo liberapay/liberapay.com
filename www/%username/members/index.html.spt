@@ -1,10 +1,9 @@
 """Show information about a single participant. It might be you!
 """
-from gittip.utils import get_participant, parse_locale, _
+from gittip.utils import get_participant
 
 [-----------------------------------------------------------------------------]
 
-loc = parse_locale(request)
 participant = team = get_participant(request, restrict=False)
 if not team.show_as_team(user):
   request.redirect('../')

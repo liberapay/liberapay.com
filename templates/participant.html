@@ -44,11 +44,11 @@
             {% set age = participant.get_age_in_seconds() %}
             <h2>
                 {% if age < 60 %}
-                {{ _("{0} just joined Gittip! :D", loc).format(participant.username) }}
+                {{ _("{0} just joined Gittip! :D").format(participant.username) }}
                 {% elif age < (60 * 60 * 24 * 7) %}
-                {{ _("{0} joined recently", loc).format(participant.username) }}
+                {{ _("{0} joined recently").format(participant.username) }}
                 {% else %}
-                {{ _("{0} is quietly watching the Gittip world", loc).format(participant.username) }}
+                {{ _("{0} is quietly watching the Gittip world").format(participant.username) }}
                 {% endif %}
             </h2>
         {% endif %}
