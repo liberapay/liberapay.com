@@ -2,12 +2,13 @@ from decimal import Decimal
 
 from aspen import Response, log
 from aspen.utils import to_age
-from gittip.utils import get_participant
+from gittip.utils import get_participant, parse_locale, _
 
 db = website.db
 
 [-----------------------------------------------------------------------------]
 
+loc = parse_locale(request)
 participant = get_participant(request, restrict=True)
 hero = "Events"
 title = "%s - %s" % (participant.username, hero)
