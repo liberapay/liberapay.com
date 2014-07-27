@@ -12,11 +12,9 @@ subpath = 'history/' if user.ADMIN else ''
 admin_override = user.ADMIN and (participant != user.participant or 'override' in qs)
 
 if participant == user.participant:
-    JOINED = _("You joined {0} ago.").format(
-        to_age(participant.claimed_time, loc))
+    JOINED = _("You joined {0} ago.").format(to_age(participant.claimed_time))
 else:
-    JOINED = _("{0} joined {1} ago.").format(
-        participant.username, to_age(participant.claimed_time, loc))
+    JOINED = _("{0} joined {1} ago.").format(participant.username, to_age(participant.claimed_time))
 
 if participant == user.participant:
     BALANCE = _("Your balance is {0}.").format("$" + str(participant.balance))
@@ -57,7 +55,7 @@ else:
     <tr>
         <th colspan="7"><h2>Gittip #{{ event['number'] }}
             &mdash;{{ event['timestamp'].strftime("%B %d, %Y").replace(' 0', ' ') }}
-                ({{ to_age(event['timestamp'], loc) }})</h2></th>
+                ({{ to_age(event['timestamp']) }})</h2></th>
     </tr>
     <tr class="head">
         <td colspan="3" class="outside">&larr; {{ _("Outside") }}</td>

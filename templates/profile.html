@@ -18,7 +18,7 @@
     <h2>{{ _("Navigation") }}</h2>
     {% set pages = [('/', 'Profile'), ('/giving/', 'Giving'), ('/history/', 'History'), ('/widgets/', 'Widgets'), ('/account/', 'Account')] %}
     {% for slug, name in pages %}
-    <a href="/{{ participant.username }}{{ slug }}"><button{% if slug.strip('/') == current_page %} class="selected"{% endif %}>{{ _(name, loc) }}</button></a>
+    <a href="/{{ participant.username }}{{ slug }}"><button{% if slug.strip('/') == current_page %} class="selected"{% endif %}>{{ _(name) }}</button></a>
     {% endfor %}
 
     <a href="/{{ participant.username }}/members/" id="members-button"

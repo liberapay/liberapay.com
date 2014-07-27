@@ -131,7 +131,7 @@ locked = False
 
     <h2>{{ _("Widget #{0}").format(2) }}</h2>
 
-    <p>{{ _("Use this code to add a Gittip \"receiving\" widget on your website:", loc) }}</p>
+    <p>{{ _("Use this code to add a Gittip \"receiving\" widget on your website:") }}</p>
 
     <pre>&lt;script data-gittip-username="{{ participant.username }}"
         src="//gttp.co/v1.js"&gt;&lt;/script&gt;</pre>
@@ -140,7 +140,7 @@ locked = False
 
     <p><script data-gittip-username="{{ participant.username }}" src="//gttp.co/v1.js"></script></p>
 
-    <p>{{ _("Or, if you'd like to include a \"giving\" widget, you can add the {0} attribute:", loc).format(
+    <p>{{ _("Or, if you'd like to include a \"giving\" widget, you can add the {0} attribute:").format(
             "<pre>data-gittip-widget=\"giving\"</pre>") }}</p>
 
     <pre>&lt;script data-gittip-username="{{ participant.username }}"
