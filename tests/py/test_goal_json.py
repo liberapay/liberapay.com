@@ -28,22 +28,22 @@ class Tests(Harness):
     def test_participant_can_set_their_goal_to_zero(self):
         response = self.change_goal("0")
         actual = json.loads(response.body)['goal']
-        assert actual == "0.00"
+        assert actual == "0"
 
     def test_participant_can_set_their_goal_to_a_custom_amount(self):
         response = self.change_goal("custom", "100.00")
         actual = json.loads(response.body)['goal']
-        assert actual == "100.00"
+        assert actual == "100"
 
     def test_custom_amounts_can_include_comma(self):
         response = self.change_goal("custom", "1,100.00")
         actual = json.loads(response.body)['goal']
-        assert actual == "1,100.00"
+        assert actual == "1,100"
 
     def test_wonky_custom_amounts_are_standardized(self):
         response = self.change_goal("custom", ",100,100.00000")
         actual = json.loads(response.body)['goal']
-        assert actual == "100,100.00"
+        assert actual == "100,100"
 
     def test_anonymous_gets_404(self):
         response = self.change_goal("100.00", auth_as=None, expecting_error=True)
