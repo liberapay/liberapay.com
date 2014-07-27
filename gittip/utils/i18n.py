@@ -3,12 +3,13 @@ from __future__ import print_function, unicode_literals
 from datetime import datetime
 import os
 
+from aspen.utils import utcnow
 from babel.dates import format_timedelta
 import babel.messages.pofile
 
 
 def to_age(dt, loc):
-    return format_timedelta(datetime.now().replace(tzinfo=dt.tzinfo) - dt, locale=loc)
+    return format_timedelta(utcnow() - dt, add_direction=True, locale=loc)
 
 
 def load_langs(localeDir):
