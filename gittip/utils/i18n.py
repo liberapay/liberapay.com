@@ -6,8 +6,10 @@ import os
 from babel.dates import format_timedelta
 import babel.messages.pofile
 
+
 def to_age(dt, loc):
     return format_timedelta(datetime.now().replace(tzinfo=dt.tzinfo) - dt, locale=loc)
+
 
 def load_langs(localeDir):
     langs = {}
@@ -24,23 +26,18 @@ def load_langs(localeDir):
                 langs[lang] = catalog_dict
     return langs
 
+
 LANGS = load_langs("i18n")
 
-def parse_locales(request):
-    accept_lang = request.headers.get("Accept-Language", "")
-    locales = []
-    for lang in accept_lang.split(","):
-        lang_parts = lang.split(";")
-        locales.append(lang_parts[0])
-    return locales
 
 def parse_locale(request):
-    for loc in parse_locales(request):
+    accept_lang = request.headers.get("Accept-Language", "")
+    languages = (lang.split(";", 1)[0] for lang in accept_lang.split(","))
+    for loc in languages:
         if loc.startswith("en") or LANGS.has_key(loc):
             return loc
     return "en"
 
+
 def _(s, loc):
-    if not LANGS.has_key(loc):
-        return s
-    return LANGS[loc].get(s, s)
+    return LANGS[loc].get(s, s) if loc in LANGS else s
