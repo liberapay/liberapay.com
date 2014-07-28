@@ -47,64 +47,63 @@ from aspen.utils import utcnow
 <div class="homepage">
     <div class="pitch">
         <img src="{{ website.asset_url }}/logo.white.svg" alt="Gittip">
-        <h1>Weekly Payments</h1>
-        <p>Motivated by Gratitude</p>
+        <h1>{{ _("Weekly Payments") }}</h1>
+        <p>{{ _("Motivated by Gratitude") }}</p>
 
-        <p>Gittip is sustainable crowdfunding, with <span>no strings</span> attached and
-        <span>no extra fees</span>.</p>
+        <p>{{ _("Gittip is sustainable crowdfunding, with {0}no strings{1} attached and {0}no extra fees{1}.").format(
+            "<span>", "</span>") }}</p>
 
-        <p><a href="/about/">Read more</a>.</p>
+        <p><a href="/about/">{{ _("Read more.") }}</a></p>
 
     </div>
     <div class="action">
         {% if user.ANON %}
-        <h1>Sign In</h1>
-        <p>to Make and Accept Payments</p>
+        {{ _("{0}Sign In{1} {2}to Make and Accept Payments{3}").format(
+            "<h1>", "</h1>", "<p>", "</p>") }}
         {% from 'templates/auth.html' import auth_button with context %}
 
         <div class="twitter">
         {% call auth_button('twitter', 'opt-in') %}
-            Sign in with Twitter
+        {{ _("Sign in with {0}").format("Twitter") }}
         {% endcall %}
         </div>
 
-        <div class="other">Or sign in with:
+        <div class="other">{{ _("Or sign in with:") }}
         <span>
         {% call auth_button('github', 'opt-in') %}GitHub{% endcall %}
         {% call auth_button('bitbucket', 'opt-in') %}Bitbucket{% endcall %}
         {% call auth_button('openstreetmap', 'opt-in') %}OpenStreetMap{% endcall %}
         </span></div>
 
-        <p class="other">By signing in, you indicate that you have read and
-        agree to our <a href="/about/terms/">Terms and Conditions</a>.
-        You&rsquo;ll be joining {{ website.gnactive }} active users, who
-        exchanged ${{ website.gtransfer_volume }} <a
-        href="/about/charts.html">{{ website.glast_week }}</a>.  Want to see
-        who they are? Browse <a href="/for/">our communities</a>.  Want to work
-        for Gittip? We are an <a
-        href="http://building.gittip.com/big-picture/welcome">open
-        company</a>.</p>
+        <p class="other">{{
+            _("By signing in, you indicate that you have read and agree to our {0}Terms and Conditions{1}.").format(
+            "<a href='/about/terms/'>", "</a>") + " " +
+            _("You'll be joining {0} active users, who exchanged {1} {2}last week{3}.").format(
+            website.gnactive, "$" + website.gtransfer_volume, "<a href='/about/charts.html'>", "</a>") + " " +
+            _("Want to see who they are? Browse {0}our communities{1}.").format(
+            "<a href='/for/'>", "</a>") + " " +
+            _("Want to work for Gittip? We are an {0}open company{1}.").format(
+            "<a href='http://building.gittip.com/big-picture/welcome'>", "</a>") }}</p>
 
         {% else %}
         {% set quick = utcnow() - timedelta(seconds=15)  %}
-        <h1>Welcome{{ " back" if user.participant.claimed_time < quick else "" }}, {{ user.participant.username }}</a>!</h1>
-        <p>Your balance is ${{ user.participant.balance }}.</p>
+        <h1>{{ _("Welcome back, {0}!").format(user.participant.username) if user.participant.claimed_time < quick
+            else _("Welcome, {0}!").format(user.participant.username) }}</h1>
+        <p>{{ _("Your balance is {0}.").format("$" + str(user.participant.balance)) }}</p>
 
-        <p>Go to <a href="/{{ user.participant.username }}/">your profile</a>, or
-        <a href="/sign-out.html">sign out</a>.</p>
+        <p>{{ _("Go to {0}your profile{1}, or {2}sign out{3}.").format(
+            "<a href='/" + user.participant.username + "/'>", "</a>", "<a href='/sign-out.html'>", "</a>") }}</p>
 
         <div class="jump">
         <form id="jump">
-            <span>Jump to
-            <input placeholder="username" autocomplete="off" autocorrect="off"
-                autocapitalize="off" spellcheck="false" size="12"></span>
-            <span>from
-            <select>
-                <option value="twitter">Twitter</option>
-                <option value="github">GitHub</option>
-                <option value="bitbucket">Bitbucket</option>
-            </select>
-            <button type="submit">Go</button></span>
+        {{ _("Jump to {0} from {1}").format(
+            "<input placeholder='username' autocomplete='off' autocorrect='off' autocapitalize='off' spellcheck='false' size='12'>",
+            """<select>
+                <option value='twitter'>Twitter</option>
+                <option value='github'>GitHub</option>
+                <option value='bitbucket'>Bitbucket</option>
+            </select>""") }}
+            <button type="submit">{{ _("Go") }}</button>
         </form>
         </div>
 

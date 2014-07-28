@@ -22,20 +22,21 @@
                     </a>
                 </h1>
                 </td><td class="motto luxury">
-            <a href='/about/charts.html'>{{ website.gnactive }} users exchanging ${{ website.gtransfer_volume }} per week</a>
+            <a href='/about/charts.html'>{{ _("{0} users exchanging {1} per week").format(
+                                        website.gnactive, "$" + website.gtransfer_volume) }}</a>
             </td></tr></table>
             {% if user.ANON %}
               {% include "templates/sign-in-using.html" %}
             {% else %}
             <div class="you-are">
                 <a href="/{{ user.participant.username }}/">{{ user.participant.username }}</a> &ndash;
-                <a id="sign-out" href="/sign-out.html">sign out</a>
+                <a id="sign-out" href="/sign-out.html">{{ _("Sign Out").lower() }}</a>
                 <div class="quick-stats">
-                  Giving: <a href="/{{ user.participant.username }}/giving/">
-                              <span class="my-total-giving">${{ user.participant.giving }}<span>/wk
+                  {{ _("Giving:") }} <a href="/{{ user.participant.username }}/giving/">
+                              <span class="my-total-giving">${{ user.participant.giving }}<span>/{{ _("wk") }}
                           </a>
                   <br />
-                  Receiving: <b>${{ user.participant.receiving }}/wk</b>
+                  {{ _("Receiving:") }} <b>${{ user.participant.receiving }}/{{ _("wk") }}</b>
                 </div>
             </div>
             {% endif %}

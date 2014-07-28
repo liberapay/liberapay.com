@@ -60,7 +60,7 @@ def with_others(obj):
 [-----------------------------------------------------------------------------]
 {% extends "templates/profile.html" %}
 {% block head %}
-    <link rel="payment" type="text/html" title="{{ _("Give weekly gift on Gittip") }}"
+    <link rel="payment" type="text/html" title="Give weekly gift on Gittip"
         href="https://www.gittip.com/{{ username }}/" />
     <meta name="twitter:card" content="summary" />
     <meta name="og:url" content="https://www.gittip.com/{{ username }}/" />
@@ -69,7 +69,7 @@ def with_others(obj):
     {% if participant.statement %}
     <meta name="og:description" content="{{ _clip(MAKING + " " + participant.statement, 200)|e }}" />
     {% else %}
-    <meta name="og:description" content="{{ _("Gittip is a weekly gift exchange") }}" />
+    <meta name="og:description" content="Gittip is a weekly gift exchange" />
     {% endif %}
     {% if participant.avatar_url %}
     <meta name="og:image" content="{{ participant.avatar_url|e }}" />
