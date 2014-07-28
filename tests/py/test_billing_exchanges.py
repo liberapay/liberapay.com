@@ -16,10 +16,11 @@ from gittip.billing.exchanges import (
     record_exchange,
     record_exchange_result,
     skim_credit,
+    sync_with_balanced,
 )
 from gittip.exceptions import NegativeBalance, NoBalancedCustomerHref, NotWhitelisted
 from gittip.models.participant import Participant
-from gittip.testing import Harness, raise_foobar
+from gittip.testing import Foobar, Harness, raise_foobar
 from gittip.testing.balanced import BalancedHarness
 
 
@@ -312,3 +313,41 @@ class TestRecordExchange(Harness):
         record_exchange_result( self.db, e_id, 'succeeded', None, alice)
         alice = Participant.from_username('alice')
         assert alice.balance == D('35.59')
+
+
+class TestSyncWithBalanced(BalancedHarness):
+
+    @classmethod
+    def tearDownClass(cls):
+        has_exchange_id = balanced.Transaction.f.meta.contains('exchange_id')
+        for t in balanced.Debit.query.filter(has_exchange_id):
+            t.meta.pop('exchange_id')
+            t.save()
+        super(TestSyncWithBalanced, cls).tearDownClass()
+
+    def test_sync_with_balanced(self):
+        with mock.patch('gittip.billing.exchanges.record_exchange_result') as rer:
+            rer.side_effect = Foobar()
+            hold, error = create_card_hold(self.db, self.janet, D('20.00'))
+            assert error == ''  # sanity check
+            with self.assertRaises(Foobar):
+                capture_card_hold(self.db, self.janet, D('10.00'), hold)
+        exchange = self.db.one("SELECT * FROM exchanges")
+        assert exchange.status == 'pre'
+        sync_with_balanced(self.db)
+        exchange = self.db.one("SELECT * FROM exchanges")
+        assert exchange.status == 'succeeded'
+
+    def test_sync_with_balanced_deletes_exchanges_that_didnt_happen(self):
+        with mock.patch('gittip.billing.exchanges.record_exchange_result') as rer \
+           , mock.patch('balanced.CardHold.capture') as capture:
+            rer.side_effect = capture.side_effect = Foobar
+            hold, error = create_card_hold(self.db, self.janet, D('33.67'))
+            assert error == ''  # sanity check
+            with self.assertRaises(Foobar):
+                capture_card_hold(self.db, self.janet, D('7.52'), hold)
+        exchange = self.db.one("SELECT * FROM exchanges")
+        assert exchange.status == 'pre'
+        sync_with_balanced(self.db)
+        exchanges = self.db.all("SELECT * FROM exchanges")
+        assert not exchanges

@@ -63,6 +63,7 @@ class Harness(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
+        cls.db.run("ALTER SEQUENCE exchanges_id_seq RESTART WITH 1")
         cls.setUpVCR()
 
 
