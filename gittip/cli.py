@@ -26,9 +26,11 @@ def payday():
     # This dodges a problem where db in billing is None if we import it from
     # gittip before calling wireup.billing.
 
+    from gittip.billing.exchanges import sync_with_balanced
     from gittip.billing.payday import Payday
 
     try:
+        sync_with_balanced()
         Payday.start().run()
     except KeyboardInterrupt:
         pass

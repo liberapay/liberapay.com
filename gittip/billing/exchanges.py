@@ -9,6 +9,7 @@ import balanced
 from aspen import log
 from aspen.utils import typecheck
 from gittip.exceptions import NegativeBalance, NoBalancedCustomerHref, NotWhitelisted
+from gittip.models.participant import Participant
 
 
 # Balanced has a $0.50 minimum. We go even higher to avoid onerous
@@ -249,23 +250,6 @@ def record_exchange(db, kind, amount, fee, participant, status):
 
         fee     The payment processor's fee. It's always positive.
 
-    This function takes the result of an API call to a payment processor
-    and records the result in our db. If the power goes out at this point
-    then Postgres will be out of sync with the payment processor. We'll
-    have to resolve that manually be reviewing the transaction log at the
-    processor and modifying Postgres accordingly.
-
-    For Balanced, this could be automated by generating an ID locally and
-    commiting that to the db and then passing that through in the meta
-    field.* Then syncing would be a case of simply::
-
-        for payment in unresolved_payments:
-            payment_in_balanced = balanced.Transaction.query.filter(
-              **{'meta.unique_id': 'value'}).one()
-            payment.transaction_uri = payment_in_balanced.uri
-
-    * https://www.balancedpayments.com/docs/meta
-
     """
 
     with db.get_cursor() as cursor:
@@ -325,3 +309,29 @@ def propagate_exchange(cursor, participant, kind, error, amount):
 
     if hasattr(participant, 'set_attributes'):
         participant.set_attributes(**{'balance': new_balance, column: error})
+
+
+def sync_with_balanced(db):
+    """We can get out of sync with Balanced if record_exchange_result was
+    interrupted or wasn't called. This is where we fix that.
+    """
+    exchanges = db.all("""
+        SELECT *
+          FROM exchanges
+         WHERE status = 'pre'
+    """)
+    meta_exchange_id = balanced.Transaction.f.meta.exchange_id
+    for e in exchanges:
+        p = Participant.from_username(e.participant)
+        cls = balanced.Debit if e.amount > 0 else balanced.Credit
+        transactions = cls.query.filter(meta_exchange_id == e.id).all()
+        assert len(transactions) < 2
+        if transactions:
+            t = transactions[0]
+            error = t.failure_reason
+            status = t.status
+            assert (not error) ^ (status == 'failed')
+            record_exchange_result(db, e.id, status, error, p)
+        else:
+            # The exchange didn't happen, just remove it
+            db.run("DELETE FROM exchanges WHERE id=%s", (e.id,))
