@@ -49,4 +49,9 @@ def inbound(request):
     request.context.format_decimal = lambda *a: format_decimal(*a, locale=loc)
     request.context.format_currency = lambda *a: format_currency(*a, locale=loc)
     request.context.format_percent = lambda *a: format_percent(*a, locale=loc)
-    request.context.to_age = lambda delta: to_age(delta, loc)
+    def _to_age(delta):
+        try:
+            return to_age(delta, loc)
+        except:
+            return to_age(delta, 'en')
+    request.context.to_age = _to_age
