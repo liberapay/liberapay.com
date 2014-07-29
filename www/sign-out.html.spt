@@ -23,11 +23,11 @@ if POST:
 
 {% block box %}
     <div class="as-content">
-        <h1>Are you sure you wish to sign out?</h1>
+        <h1>{{ _("Are you sure you wish to sign out?") }}</h1>
         <form id="sign-out" method="POST">
             <input name="back_to" type="hidden" value="/" />
             <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
-            <button type="submit">Yes!</button>
+            <button type="submit">{{ _("Yes!") }}</button>
         </form>
     </div>
 {% endblock %}
