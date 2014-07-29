@@ -30,8 +30,8 @@ accounts = participant.get_accounts_elsewhere()
 long_statement = len(participant.statement) > LONG_STATEMENT
 communities = [c for c in community.get_list_for(website.db, username) if c.is_member]
 
-I_AM_MAKING = _("I am making the world better by")
-WE_ARE_MAKING = _("We are making the world better by")
+I_AM_MAKING = _("I am making the world better by {0}")
+WE_ARE_MAKING = _("We are making the world better by {0}")
 
 if participant.number == 'singular':
     MAKING = I_AM_MAKING
@@ -67,7 +67,7 @@ def with_others(obj):
     <meta name="og:type" content="profile" />
     <meta name="og:title" content="{{ participant.get_og_title() }}" />
     {% if participant.statement %}
-    <meta name="og:description" content="{{ _clip(MAKING + " " + participant.statement, 200)|e }}" />
+    <meta name="og:description" content="{{ _clip(MAKING.format(participant.statement), 200)|e }}" />
     {% else %}
     <meta name="og:description" content="Gittip is a weekly gift exchange" />
     {% endif %}
@@ -105,7 +105,7 @@ $(document).ready(function() {
         <div class="{% if long_statement %}col1{% else %}col0{% endif %}">
             <h2>{{ STATEMENT }}</h2>
             <div class="statement">
-                {{ MAKING }} {{ wrap(participant.statement) }}
+                {{ MAKING.format(wrap(participant.statement)) }}
             </div>
             {% include "templates/team-listing.html" %}
             {% include "templates/community-listing.html" %}

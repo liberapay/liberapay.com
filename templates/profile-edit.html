@@ -12,11 +12,11 @@
             <select tabindex="201" name="number" id="statement-select">
                 <option value="singular"
                     {{ "selected" if participant.number == 'singular' else ''}}>
-                    {{ I_AM_MAKING }}
+                    {{ I_AM_MAKING.format("...") }}
                 </option>
                 <option value="plural"
                     {{ "selected" if participant.number != 'singular' else ''}}>
-                    {{ WE_ARE_MAKING }}
+                    {{ WE_ARE_MAKING.format("...") }}
                 </option>
             </select>
             <textarea tabindex="202">{{ participant.statement }}</textarea>
@@ -24,8 +24,7 @@
         </div>
 
         <div class="view">
-            {{ MAKING }}
-            <span>{{ wrap(participant.statement) }}</span>
+            {{ MAKING.format("<span>" + wrap(participant.statement) + "</span>") }}
         </div>
     </form>
 
