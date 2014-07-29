@@ -1,16 +1,16 @@
 from aspen import Response
 from gittip.models.community import name_pattern, slugize, Community
-from gittip.utils import format_money, to_statement
+from gittip.utils import format_money
 from gittip.utils.query_cache import QueryCache
 
 LUXURY = 4
-MAKING = "making the world better by"
-I_AM = "I am"
-WE_ARE = "We are"
 
 query_cache = QueryCache(website.db, threshold=20)
 
 [---]
+
+I_AM_MAKING = _("I am making the world better by {0}")
+WE_ARE_MAKING = _("We are making the world better by {0}")
 
 _slug = path['slug']
 if name_pattern.match(_slug) is None:
@@ -37,7 +37,7 @@ if community is None:
     community = StubCommunity()
 
 # Set the page title based on the communities name.
-title = community.name + ' Community'
+title = _("{0} Community").format(community.name)
 
 
 # Run queries for listings.
@@ -122,8 +122,8 @@ receivers = query_cache.all("""
 {% extends "templates/base.html" %}
 
 {% block heading %}
-    <h1>Community</h1>
-    <p>Browse <a href="/for/">All Communities</a></p>
+    <h1>{{ _("Community") }}</h1>
+    <p>{{ _("Browse {0}All Communities{1}").format("<a href='/for/'>", "</a>") }}</p>
 {% endblock %}
 
 {% block scripts %}
@@ -178,10 +178,9 @@ $(document).ready(function() {
 
 <div class="col0">
 
-    <h2>You're the first one here!</h2>
+    <h2>{{ _("You're the first one here!") }}</h2>
 
-    <p>Bring the {{ community.name }} community to Gittip to find like-minded
-    people to give to.</p>
+    <p>{{ _("Bring the {0} community to Gittip to find like-minded people to give to.").format(community.name) }}</p>
 
 </div>
 
@@ -190,13 +189,12 @@ $(document).ready(function() {
 <div id="leaderboard">
 
     <div class="people">
-        <h2>New Members</h2>
+        <h2>{{ _("New Members") }}</h2>
         <ul class="group">
             {% for i, participant in enumerate(new_participants, start=1) %}
             <li{% if i > LUXURY %} class="luxury"{% endif %}>
                 <a href="/{{ participant.username }}/" class="mini-user tip"
-                data-tip="{{ to_statement((I_AM if participant.number == 'singular' else WE_ARE) + ' ' + MAKING + ' ',
-                participant.statement) }}">
+                data-tip="{{ (I_AM_MAKING if participant.number == 'singular' else WE_ARE_MAKING).format(participant.statement) }}">
                     <span class="inner">
                         <span class="avatar"
                             style="background-image: url('{{ avatar_url(participant) }}')">
@@ -210,7 +208,7 @@ $(document).ready(function() {
         </ul>
     </div>
     <div class="people">
-        <h2>Top Givers</h2>
+        <h2>{{ _("Top Givers") }}</h2>
         <ul class="group">
             {% for i, giver in enumerate(givers, start=1) %}
             <li{% if i > LUXURY %} class="luxury"{% endif %}>
@@ -226,8 +224,7 @@ $(document).ready(function() {
                 {% else %}
                 <a href="/{{ giver.username }}/"
                    class="mini-user{{ ' anonymous' if giver.anonymous else '' }} tip"
-                   data-tip="{{ to_statement((I_AM if giver.number == 'singular' else WE_ARE) + ' ' + MAKING + ' ',
-                   giver.statement) }}">
+                   data-tip="{{ (I_AM_MAKING if giver.number == 'singular' else WE_ARE_MAKING).format(giver.statement) }}">
                     <span class="inner">
                         <span class="avatar" style="background-image: url('{{ avatar_url(giver) }}')">
                         </span>
@@ -241,7 +238,7 @@ $(document).ready(function() {
         </ul>
     </div>
     <div class="people">
-        <h2>Top Receivers</h2>
+        <h2>{{ _("Top Receivers") }}</h2>
         <ul class="group">
             {% for i, receiver in enumerate(receivers, start=1) %}
             <li{% if i > LUXURY %} class="luxury"{% endif %}>
@@ -257,8 +254,7 @@ $(document).ready(function() {
                 {% else %}
                 <a href="/{{ receiver.username }}/"
                    class="mini-user{{ ' anonymous' if receiver.anonymous else '' }} tip"
-                   data-tip="{{ to_statement((I_AM if receiver.number == 'singular' else WE_ARE) + ' ' + MAKING + ' ',
-                   receiver.statement) }}">
+                   data-tip="{{ (I_AM_MAKING if receiver.number == 'singular' else WE_ARE_MAKING).format(receiver.statement) }}">
                     <span class="inner">
                         <span class="avatar"
                             style="background-image: url('{{ avatar_url(receiver) }}')">
@@ -276,7 +272,7 @@ $(document).ready(function() {
 </div>
 
 <div class="more-container">
-    <a href="/for/{{ community.slug }}/?limit={{ limit + 12 }}"><button class="selected">More</button></a>
+    <a href="/for/{{ community.slug }}/?limit={{ limit + 12 }}"><button class="selected">{{ _("More") }}</button></a>
 </div>
 
 {% endif %}

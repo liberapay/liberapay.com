@@ -420,19 +420,6 @@ def format_money(money):
     return format % money
 
 
-def to_statement(prepend, string, length=140, append='...'):
-    if prepend and string:
-        statement = prepend + string
-        if len(string) > length:
-            return statement[:length] + append
-        elif len(string) > 0:
-            return statement
-        else:
-            return string
-    else:
-        return ''
-
-
 def is_card_expiring(expiration_year, expiration_month):
     now = datetime.utcnow()
     expiring_date = datetime(expiration_year, expiration_month, 1)
