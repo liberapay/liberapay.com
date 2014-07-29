@@ -153,7 +153,7 @@ $(document).ready(function() {
 <div class="on-community">
     <h2 class="pad-sign">{{ community.name }}</h2>
     <div class="number">{{ community.nmembers }}</div>
-    <div class="unit pad-sign">member{{ '' if community.nmembers == 1 else 's' }}</div>
+    <div class="unit pad-sign">{{ _("Member").lower() if community.nmembers == 1 else _("Members").lower() }}</div>
 </div>
 <div class="nav level-1">
     {% if user.ANON %}
@@ -166,7 +166,7 @@ $(document).ready(function() {
     <button class="join-leave"
             data-name="{{ community.name }}"
             data-is-member="{{ 'true' if is_member else 'false' }}">
-        <span>{{ "Leave" if is_member else "Join" }}</span>
+        <span>{{ _("Leave") if is_member else _("Join") }}</span>
     </button>
     {% endif %}
 </div>
@@ -218,7 +218,7 @@ $(document).ready(function() {
                         <span class="avatar">
                         </span>
                         <span class="money">${{ format_money(giver.amount) }}</span>
-                        <span class="name">Anonymous</span>
+                        <span class="name">{{ _("Anonymous") }}</span>
                     </span>
                 </span>
                 {% else %}
@@ -248,7 +248,7 @@ $(document).ready(function() {
                         <span class="avatar">
                         </span>
                         <span class="money">${{ format_money(receiver.amount) }}</span>
-                        <span class="name">Anonymous</span>
+                        <span class="name">{{ _("Anonymous") }}</span>
                     </span>
                 </span>
                 {% else %}

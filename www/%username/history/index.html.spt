@@ -98,7 +98,7 @@ else:
         <td class="debits">{{ -event['amount'] + event['fee'] }}</td>
         <td class="balance">{{ event['balance'] }}</td>
         {% if event['recorder'] == None %}
-        <td class="notes">{{ _("automatic withdrawal") }}</td>
+        <td class="notes">{{ _("Automatic Withdrawal").lower() }}</td>
         {% else %}
         <td class="notes">
             &ldquo;{{ event['note']|e }}&rdquo;&mdash;<a
@@ -116,12 +116,12 @@ else:
         <td class="balance">{{ event['balance'] }}</td>
         <td class="notes">
             {% if event['recorder'] == None %}
-            {{ _("automatic charge") }}
+            {{ _("Automatic Charge").lower() }}
             {% else %}
             &ldquo;{{ event['note']|e }}&rdquo;&mdash;<a
             href="/{{ event['recorder'] }}/">{{ event['recorder'] }}</a>
             {% endif %}
-            (<a href="../receipts/{{ event['id'] }}.html">{{ _("receipt") }}</a>)
+            (<a href="../receipts/{{ event['id'] }}.html">{{ _("Receipt").lower() }}</a>)
         </td>
     </tr>
     {% elif event['event'] == 'transfer' %}
