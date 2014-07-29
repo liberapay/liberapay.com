@@ -11,6 +11,8 @@ immediately affect the participant's balance.
 """
 from __future__ import unicode_literals
 
+import itertools
+
 from balanced import CardHold
 
 import aspen.utils
@@ -117,6 +119,7 @@ class Payday(object):
             self.settle_card_holds(cursor, holds)
             self.update_balances(cursor)
             check_db(cursor)
+        self.take_over_balances()
 
 
     @staticmethod
@@ -205,7 +208,17 @@ class Payday(object):
                  WHERE username = $2;
                 INSERT INTO transfers
                             (tipper, tippee, amount, context)
-                     VALUES ($1, $2, $3, $4);
+                     VALUES ( ( SELECT p.username
+                                  FROM participants p
+                                  JOIN pay_participants p2 ON p.id = p2.id
+                                 WHERE p2.username = $1 )
+                            , ( SELECT p.username
+                                  FROM participants p
+                                  JOIN pay_participants p2 ON p.id = p2.id
+                                 WHERE p2.username = $2 )
+                            , $3
+                            , $4
+                            );
             END;
         $$ LANGUAGE plpgsql;
 
@@ -430,6 +443,46 @@ class Payday(object):
             if p.new_balance < 0 and p.new_balance < p.cur_balance:
                 raise NegativeBalance(p)
         log("Updated the balances of %i participants." % len(participants))
+
+
+    def take_over_balances(self):
+        """If an account that receives money is taken over during payin we need
+        to transfer the balance to the absorbing account.
+        """
+        for i in itertools.count():
+            if i > 10:
+                raise Exception('possible infinite loop')
+            count = self.db.one("""
+
+                DROP TABLE IF EXISTS temp;
+                CREATE TEMPORARY TABLE temp AS
+                    SELECT archived_as, absorbed_by, balance AS archived_balance
+                      FROM absorptions a
+                      JOIN participants p ON a.archived_as = p.username
+                     WHERE balance > 0;
+
+                SELECT count(*) FROM temp;
+
+            """)
+            if not count:
+                break
+            self.db.run("""
+
+                INSERT INTO transfers (tipper, tippee, amount, context)
+                    SELECT archived_as, absorbed_by, archived_balance, 'take-over'
+                      FROM temp;
+
+                UPDATE participants
+                   SET balance = (balance - archived_balance)
+                  FROM temp
+                 WHERE username = archived_as;
+
+                UPDATE participants
+                   SET balance = (balance + archived_balance)
+                  FROM temp
+                 WHERE username = absorbed_by;
+
+            """)
 
 
     def payout(self):

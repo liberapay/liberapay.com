@@ -345,9 +345,11 @@ class TestPayin(BalancedHarness):
             bruce = self.make_participant('bruce', claimed_time='now')
             bruce.take_over(('twitter', str(bob.id)), have_confirmation=True)
             payday.transfer_tips(cursor)
+            bruce.delete_elsewhere('twitter', str(bob.id))
             billy = self.make_participant('billy', claimed_time='now')
             billy.take_over(('github', str(bruce.id)), have_confirmation=True)
             payday.update_balances(cursor)
+        payday.take_over_balances()
         assert Participant.from_id(bob.id).balance == 0
         assert Participant.from_id(bruce.id).balance == 0
         assert Participant.from_id(billy.id).balance == 18
