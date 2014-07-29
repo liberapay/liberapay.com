@@ -11,7 +11,7 @@ from babel.numbers import (
 
 
 def to_age(dt, loc):
-    return format_timedelta(utcnow() - dt, add_direction=True, locale=loc)
+    return format_timedelta(dt - utcnow(), add_direction=True, locale=loc)
 
 
 def load_langs(localeDir):
