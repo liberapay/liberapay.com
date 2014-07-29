@@ -335,6 +335,23 @@ class TestPayin(BalancedHarness):
             else:
                 assert p.balance == 0
 
+    def test_take_over_during_payin(self):
+        alice = self.make_participant('alice', claimed_time='now', balance=50)
+        bob = self.make_participant('bob', claimed_time='now', elsewhere='twitter')
+        alice.set_tip_to(bob, 18)
+        payday = Payday.start()
+        with self.db.get_cursor() as cursor:
+            payday.prepare(cursor, payday.ts_start)
+            bruce = self.make_participant('bruce', claimed_time='now')
+            bruce.take_over(('twitter', str(bob.id)), have_confirmation=True)
+            payday.transfer_tips(cursor)
+            billy = self.make_participant('billy', claimed_time='now')
+            billy.take_over(('github', str(bruce.id)), have_confirmation=True)
+            payday.update_balances(cursor)
+        assert Participant.from_id(bob.id).balance == 0
+        assert Participant.from_id(bruce.id).balance == 0
+        assert Participant.from_id(billy.id).balance == 18
+
 
 class TestPayout(Harness):
 
