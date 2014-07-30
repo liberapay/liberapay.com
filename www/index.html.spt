@@ -79,8 +79,8 @@ from aspen.utils import utcnow
             _("By signing in, you indicate that you have read and agree to our {0}Terms and Conditions{1}.").format(
                 "<a href='/about/terms/'>", "</a>") + " " +
             _("You'll be joining {0} active users, who exchanged {1} {2}last week{3}.").format(
-                format_number(float(website.gnactive)),
-                format_currency(float(website.gtransfer_volume), "USD"),
+                format_number(website.gnactive),
+                format_currency(website.gtransfer_volume, "USD"),
                 "<a href='/about/charts.html'>", "</a>") + " " +
             _("Want to see who they are? Browse {0}our communities{1}.").format(
                 "<a href='/for/'>", "</a>") + " " +

@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta
-import locale
 import re
 
 from aspen import Response
@@ -378,8 +377,8 @@ def update_global_stats(website):
         SELECT nactive, transfer_volume FROM paydays
         ORDER BY ts_end DESC LIMIT 1
     """, default=(0, 0.0))
-    website.gnactive = locale.format("%d", stats[0], grouping=True)
-    website.gtransfer_volume = locale.format("%d", stats[1], grouping=True)
+    website.gnactive = stats[0]
+    website.gtransfer_volume = stats[1]
     website.glast_week = last_week(website.db)
 
 
