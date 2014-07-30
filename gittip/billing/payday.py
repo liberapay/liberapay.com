@@ -20,9 +20,7 @@ from aspen import log
 from gittip.billing.exchanges import (
     ach_credit, cancel_card_hold, capture_card_hold, create_card_hold, upcharge
 )
-from gittip.exceptions import (
-    NegativeBalance, NoBalancedCustomerHref, NotWhitelisted
-)
+from gittip.exceptions import NegativeBalance
 from gittip.models import check_db
 from psycopg2 import IntegrityError
 
@@ -509,19 +507,20 @@ class Payday(object):
         i = 0
         log("Starting payout loop.")
         participants = self.db.all("""
-            SELECT p.*::participants FROM participants p WHERE balance > 0
+            SELECT p.*::participants
+              FROM participants p
+             WHERE balance > 0
+               AND balanced_customer_href IS NOT NULL
+               AND last_ach_result IS NOT NULL
         """)
         for i, participant in enumerate(participants, start=1):
-            withhold = participant.giving + participant.pledging
-            try:
-                error = ach_credit(self.db, participant, withhold)
-                if error:
-                    self.mark_ach_failed()
-            except NoBalancedCustomerHref:
+            if participant.is_suspicious is None:
+                log("UNREVIEWED: %s" % participant.username)
                 continue
-            except NotWhitelisted:
-                if participant.is_suspicious is None:
-                    log("UNREVIEWED: %s" % participant.username)
+            withhold = participant.giving + participant.pledging
+            error = ach_credit(self.db, participant, withhold)
+            if error:
+                self.mark_ach_failed()
         log("Did payout for %d participants." % i)
         self.db.self_check()
         log("Checked the DB.")
