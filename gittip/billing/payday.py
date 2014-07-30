@@ -119,7 +119,7 @@ class Payday(object):
 
         _end = aspen.utils.utcnow()
         _delta = _end - _start
-        fmt_past = "Script ran for {age} (%s)." % _delta
+        fmt_past = "Script ran for %%(age)s (%s)." % _delta
         log(aspen.utils.to_age(_start, fmt_past=fmt_past))
 
 
