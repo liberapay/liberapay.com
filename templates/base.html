@@ -23,7 +23,8 @@
                 </h1>
                 </td><td class="motto luxury">
             <a href='/about/charts.html'>{{ _("{0} users exchanging {1} per week").format(
-                                        website.gnactive, "$" + website.gtransfer_volume) }}</a>
+                                            format_number(float(website.gnactive)),
+                                            format_currency(float(website.gtransfer_volume), "USD")) }}</a>
             </td></tr></table>
             {% if user.ANON %}
               {% include "templates/sign-in-using.html" %}
@@ -33,10 +34,10 @@
                 <a id="sign-out" href="/sign-out.html">{{ _("Sign Out").lower() }}</a>
                 <div class="quick-stats">
                   {{ _("Giving:") }} <a href="/{{ user.participant.username }}/giving/">
-                              <span class="my-total-giving">${{ user.participant.giving }}<span>/{{ _("wk") }}
+                              <span class="my-total-giving">{{ format_currency(float(user.participant.giving), "USD") }}<span>/{{ _("wk") }}
                           </a>
                   <br />
-                  {{ _("Receiving:") }} <b>${{ user.participant.receiving }}/{{ _("wk") }}</b>
+                  {{ _("Receiving:") }} <b>{{ format_currency(float(user.participant.receiving), "USD") }}/{{ _("wk") }}</b>
                 </div>
             </div>
             {% endif %}

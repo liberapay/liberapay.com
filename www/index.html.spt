@@ -77,19 +77,21 @@ from aspen.utils import utcnow
 
         <p class="other">{{
             _("By signing in, you indicate that you have read and agree to our {0}Terms and Conditions{1}.").format(
-            "<a href='/about/terms/'>", "</a>") + " " +
+                "<a href='/about/terms/'>", "</a>") + " " +
             _("You'll be joining {0} active users, who exchanged {1} {2}last week{3}.").format(
-            website.gnactive, "$" + website.gtransfer_volume, "<a href='/about/charts.html'>", "</a>") + " " +
+                format_number(float(website.gnactive)),
+                format_currency(float(website.gtransfer_volume), "USD"),
+                "<a href='/about/charts.html'>", "</a>") + " " +
             _("Want to see who they are? Browse {0}our communities{1}.").format(
-            "<a href='/for/'>", "</a>") + " " +
+                "<a href='/for/'>", "</a>") + " " +
             _("Want to work for Gittip? We are an {0}open company{1}.").format(
-            "<a href='http://building.gittip.com/big-picture/welcome'>", "</a>") }}</p>
+                "<a href='http://building.gittip.com/big-picture/welcome'>", "</a>") }}</p>
 
         {% else %}
         {% set quick = utcnow() - timedelta(seconds=15)  %}
         <h1>{{ _("Welcome back, {0}!").format(user.participant.username) if user.participant.claimed_time < quick
             else _("Welcome, {0}!").format(user.participant.username) }}</h1>
-        <p>{{ _("Your balance is {0}.").format("$" + str(user.participant.balance)) }}</p>
+        <p>{{ _("Your balance is {0}.").format(format_currency(user.participant.balance, "USD")) }}</p>
 
         <p>{{ _("Go to {0}your profile{1}, or {2}sign out{3}.").format(
             "<a href='/" + user.participant.username + "/'>", "</a>", "<a href='/sign-out.html'>", "</a>") }}</p>
