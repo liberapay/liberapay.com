@@ -365,7 +365,8 @@ class TestPayout(Harness):
     @mock.patch('gittip.billing.payday.ach_credit')
     def test_payout_ach_error(self, ach_credit):
         self.make_participant('alice', claimed_time='now', is_suspicious=False,
-                              balance=20)
+                              balance=20, balanced_customer_href='foo',
+                              last_ach_result='')
         ach_credit.return_value = 'some error'
         Payday.start().payout()
         payday = self.fetch_payday()
