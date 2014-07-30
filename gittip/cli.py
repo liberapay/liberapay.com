@@ -30,7 +30,7 @@ def payday():
     from gittip.billing.payday import Payday
 
     try:
-        sync_with_balanced()
+        sync_with_balanced(db)
         Payday.start().run()
     except KeyboardInterrupt:
         pass
