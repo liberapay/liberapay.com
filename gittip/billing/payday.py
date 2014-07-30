@@ -329,6 +329,7 @@ class Payday(object):
              WHERE old_balance < giving_today
                AND balanced_customer_href IS NOT NULL
                AND last_bill_result IS NOT NULL
+               AND is_suspicious IS false
         """)
         if not participants:
             return {}
