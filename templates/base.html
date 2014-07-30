@@ -31,7 +31,7 @@
             {% else %}
             <div class="you-are">
                 <a href="/{{ user.participant.username }}/">{{ user.participant.username }}</a> &ndash;
-                <a id="sign-out" href="/sign-out.html">{{ _("Sign Out").lower() }}</a>
+                <a id="sign-out" href="/sign-out.html">{{ _("Sign out").lower() }}</a>
                 <div class="quick-stats">
                   {{ _("Giving:") }} <a href="/{{ user.participant.username }}/giving/">
                               <span class="my-total-giving">{{ format_currency(float(user.participant.giving), "USD") }}<span>/{{ _("wk") }}
