@@ -39,6 +39,22 @@ class Payday(object):
     want to use their balance at the start of Payday. Balance changes should be
     atomic globally per-Payday.
 
+    Here's the call structure of the Payday.run method:
+
+        run
+            payin
+                prepare
+                create_card_holds
+                transfer_tips
+                transfer_takes
+                settle_card_holds
+                update_balances
+                take_over_balances
+            payout
+            update_stats
+            update_receiving_amounts
+            end
+
     """
 
 
