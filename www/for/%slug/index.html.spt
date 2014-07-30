@@ -1,6 +1,6 @@
 from aspen import Response
 from gittip.models.community import name_pattern, slugize, Community
-from gittip.utils import format_money
+from gittip.utils import format_money, to_statement
 from gittip.utils.query_cache import QueryCache
 
 LUXURY = 4
@@ -194,7 +194,7 @@ $(document).ready(function() {
             {% for i, participant in enumerate(new_participants, start=1) %}
             <li{% if i > LUXURY %} class="luxury"{% endif %}>
                 <a href="/{{ participant.username }}/" class="mini-user tip"
-                data-tip="{{ (I_AM_MAKING if participant.number == 'singular' else WE_ARE_MAKING).format(participant.statement) }}">
+                data-tip="{{ to_statement((I_AM_MAKING if participant.number == 'singular' else WE_ARE_MAKING), participant.statement) }}">
                     <span class="inner">
                         <span class="avatar"
                             style="background-image: url('{{ avatar_url(participant) }}')">
@@ -224,7 +224,7 @@ $(document).ready(function() {
                 {% else %}
                 <a href="/{{ giver.username }}/"
                    class="mini-user{{ ' anonymous' if giver.anonymous else '' }} tip"
-                   data-tip="{{ (I_AM_MAKING if giver.number == 'singular' else WE_ARE_MAKING).format(giver.statement) }}">
+                   data-tip="{{ to_statement((I_AM_MAKING if giver.number == 'singular' else WE_ARE_MAKING), giver.statement) }}">
                     <span class="inner">
                         <span class="avatar" style="background-image: url('{{ avatar_url(giver) }}')">
                         </span>
@@ -254,7 +254,7 @@ $(document).ready(function() {
                 {% else %}
                 <a href="/{{ receiver.username }}/"
                    class="mini-user{{ ' anonymous' if receiver.anonymous else '' }} tip"
-                   data-tip="{{ (I_AM_MAKING if receiver.number == 'singular' else WE_ARE_MAKING).format(receiver.statement) }}">
+                   data-tip="{{ to_statement((I_AM_MAKING if receiver.number == 'singular' else WE_ARE_MAKING), receiver.statement) }}">
                     <span class="inner">
                         <span class="avatar"
                             style="background-image: url('{{ avatar_url(receiver) }}')">
