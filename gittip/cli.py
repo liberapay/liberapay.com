@@ -10,7 +10,6 @@ def payday():
 
     env = wireup.env()
     db = wireup.db(env)
-    db.run("SET statement_timeout = 0")
 
     wireup.billing(env)
     wireup.nanswers(env)
