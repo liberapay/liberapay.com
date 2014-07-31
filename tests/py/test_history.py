@@ -14,14 +14,14 @@ class TestHistory(Harness):
 
     def test_iter_payday_events(self):
         Payday.start().run()
-        team = self.make_participant('team', number='plural', claimed_time='now', balance=10000)
-        alice = self.make_participant('alice', claimed_time='now', balance=5000)
+        team = self.make_participant('team', number='plural', claimed_time='now')
+        alice = self.make_participant('alice', claimed_time='now')
+        self.make_exchange('bill', 10000, 0, team)
+        self.make_exchange('bill', 10000, 0, alice)
+        self.make_exchange('bill', -5000, 0, alice)
         self.db.run("""
-            INSERT INTO exchanges
-                        (amount, fee, participant, timestamp)
-                 VALUES (10000, 0, 'team', now() - interval '1 month')
-                      , (10000, 0, 'alice', now() - interval '1 month')
-                      , (-5000, 0, 'alice', now() - interval '1 month');
+            UPDATE transfers
+               SET timestamp = "timestamp" - interval '1 month'
         """)
         bob = self.make_participant('bob', claimed_time='now')
         carl = self.make_participant('carl', claimed_time='now')

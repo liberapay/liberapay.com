@@ -11,6 +11,7 @@ from os.path import join, dirname, realpath
 from aspen import resources
 from aspen.utils import utcnow
 from aspen.testing.client import Client
+from gittip.billing.exchanges import record_exchange, record_exchange_result
 from gittip.elsewhere import UserInfo
 from gittip.models.account_elsewhere import AccountElsewhere
 from gittip.security.user import User, SESSION
@@ -202,6 +203,12 @@ class Harness(unittest.TestCase):
 
     def fetch_payday(self):
         return self.db.one("SELECT * FROM paydays", back_as=dict)
+
+
+    def make_exchange(self, kind, amount, fee, participant):
+        e_id = record_exchange(self.db, kind, amount, fee, participant, 'pre')
+        record_exchange_result(self.db, e_id, 'succeeded', '', participant)
+        return e_id
 
 
 class Foobar(Exception): pass

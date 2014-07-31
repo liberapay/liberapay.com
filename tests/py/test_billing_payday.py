@@ -252,12 +252,8 @@ class TestPayin(BalancedHarness):
     def test_payin_cancels_uncaptured_holds(self, log):
         self.janet.set_tip_to(self.homer, 42)
         alice = self.make_participant('alice', claimed_time='now',
-                                      is_suspicious=False, balance=50)
-        self.db.run("""
-            INSERT INTO exchanges
-                        (amount, fee, participant)
-                 VALUES (50, 0, 'alice');
-        """)
+                                      is_suspicious=False)
+        self.make_exchange('bill', 50, 0, alice)
         alice.set_tip_to(self.janet, 50)
         Payday.start().payin()
         assert log.call_args_list[-3][0] == ("Captured 0 card holds.",)

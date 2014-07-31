@@ -91,13 +91,10 @@ class TestBalancedCard(BalancedHarness):
         ).save()
         
         card.associate_to_customer(customer_href)
-        self.make_participant('alice', claimed_time='now', balanced_customer_href=customer_href)
+        alice = self.make_participant('alice', claimed_time='now',
+                                      balanced_customer_href=customer_href)
         
-        ex_id = self.db.one("insert into exchanges "
-                    "(amount, fee, participant) "
-                    "values (113.00, 30.00, 'alice') "
-                    "returning id"
-                    )
+        ex_id = self.make_exchange('bill', 113, 30, alice)
         url_receipt = '/alice/receipts/{}.html'.format(ex_id)
         actual = self.client.GET(url_receipt, auth_as='alice').body.decode('utf8')
         assert 'Visa' in actual
