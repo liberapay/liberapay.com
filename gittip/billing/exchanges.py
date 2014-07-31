@@ -335,6 +335,13 @@ def sync_with_balanced(db):
             assert (not error) ^ (status == 'failed')
             record_exchange_result(db, e.id, status, error, p)
         else:
-            # The exchange didn't happen, just remove it
+            # The exchange didn't happen, remove it
             db.run("DELETE FROM exchanges WHERE id=%s", (e.id,))
+            # and restore the participant's balance if it was a credit
+            if e.amount < 0:
+                db.run("""
+                    UPDATE participants
+                       SET balance=(balance + %s)
+                     WHERE id=%s
+                """, (-e.amount + e.fee, p.id))
     check_db(db)
