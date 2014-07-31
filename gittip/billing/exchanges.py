@@ -9,6 +9,7 @@ import balanced
 from aspen import log
 from aspen.utils import typecheck
 from gittip.exceptions import NegativeBalance, NoBalancedCustomerHref, NotWhitelisted
+from gittip.models import check_db
 from gittip.models.participant import Participant
 
 
@@ -315,6 +316,7 @@ def sync_with_balanced(db):
     """We can get out of sync with Balanced if record_exchange_result was
     interrupted or wasn't called. This is where we fix that.
     """
+    check_db(db)
     exchanges = db.all("""
         SELECT *
           FROM exchanges
@@ -335,3 +337,4 @@ def sync_with_balanced(db):
         else:
             # The exchange didn't happen, just remove it
             db.run("DELETE FROM exchanges WHERE id=%s", (e.id,))
+    check_db(db)
