@@ -54,10 +54,10 @@ def _check_balances(cursor):
 
     https://github.com/gittip/www.gittip.com/issues/1118
     """
-    b = cursor.one("""
-        select count(*)
+    b = cursor.all("""
+        select p.username, expected, balance as actual
           from (
-            select username, sum(a) as balance
+            select username, sum(a) as expected
               from (
                       select participant as username, sum(amount) as a
                         from exchanges
@@ -86,14 +86,11 @@ def _check_balances(cursor):
                     group by tippee
                     ) as foo
             group by username
-
-            except
-
-            select username, balance
-            from participants
           ) as foo2
+        join participants p on p.username = foo2.username
+        where expected <> p.balance
     """)
-    assert b == 0, "conflicting balances: {}".format(b)
+    assert len(b) == 0, "conflicting balances: {}".format(b)
 
 
 def _check_orphans(cursor):
