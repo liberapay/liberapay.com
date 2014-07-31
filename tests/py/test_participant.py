@@ -467,42 +467,32 @@ class Tests(Harness):
         self.assertRaises(NoTippee, alice.set_tip_to, 'bob', '1.00')
 
 
-    # giving and receiving
+    # giving, npatrons and receiving
 
-    def test_giving_and_receiving_only_count_latest_tip(self):
+    def test_only_funded_tips_count(self):
         alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
-        bob = self.make_participant('bob', claimed_time='now')
-        alice.set_tip_to(bob, '12.00')
-        alice.set_tip_to(bob, '3.00')
+        bob = self.make_participant('bob', claimed_time='now', last_bill_result=None)
+        carl = self.make_participant('carl', claimed_time='now', last_bill_result="Fail!")
+        dana = self.make_participant('dana')
+        alice.set_tip_to(dana, '3.00')
+        bob.set_tip_to(dana, '5.00')
+        carl.set_tip_to(dana, '2.08')
+
+        assert dana.receiving == Decimal('3.00')
+        assert dana.npatrons == 1
+
+    def test_only_latest_tip_counts(self):
+        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
+        bob = self.make_participant('bob', claimed_time='now', last_bill_result='')
+        carl = self.make_participant('carl', claimed_time='now')
+        alice.set_tip_to(carl, '12.00')
+        alice.set_tip_to(carl, '3.00')
+        bob.set_tip_to(carl, '2.00')
+        bob.set_tip_to(carl, '0.00')
         assert alice.giving == Decimal('3.00')
-        assert bob.receiving == Decimal('3.00')
-
-    def test_receiving_includes_tips_from_accounts_with_a_working_card(self):
-        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
-        bob = self.make_participant('bob')
-        alice.set_tip_to(bob, '3.00')
-
-        expected = Decimal('3.00')
-        actual = bob.receiving
-        assert actual == expected
-
-    def test_receiving_ignores_tips_from_accounts_with_no_card_on_file(self):
-        alice = self.make_participant('alice', claimed_time='now', last_bill_result=None)
-        bob = self.make_participant('bob')
-        alice.set_tip_to(bob, '3.00')
-
-        expected = Decimal('0.00')
-        actual = bob.receiving
-        assert actual == expected
-
-    def test_receiving_ignores_tips_from_accounts_with_a_failing_card_on_file(self):
-        alice = self.make_participant('alice', claimed_time='now', last_bill_result="Fail!")
-        bob = self.make_participant('bob')
-        alice.set_tip_to(bob, '3.00')
-
-        expected = Decimal('0.00')
-        actual = bob.receiving
-        assert actual == expected
+        assert bob.giving == Decimal('0.00')
+        assert carl.receiving == Decimal('3.00')
+        assert carl.npatrons == 1
 
     def test_receiving_includes_tips_from_whitelisted_accounts(self):
         alice = self.make_participant( 'alice'
@@ -513,9 +503,8 @@ class Tests(Harness):
         bob = self.make_participant('bob')
         alice.set_tip_to(bob, '3.00')
 
-        expected = Decimal('3.00')
-        actual = bob.receiving
-        assert actual == expected
+        assert bob.receiving == Decimal('3.00')
+        assert bob.npatrons == 1
 
     def test_receiving_includes_tips_from_unreviewed_accounts(self):
         alice = self.make_participant( 'alice'
@@ -526,9 +515,8 @@ class Tests(Harness):
         bob = self.make_participant('bob')
         alice.set_tip_to(bob, '3.00')
 
-        expected = Decimal('3.00')
-        actual = bob.receiving
-        assert actual == expected
+        assert bob.receiving == Decimal('3.00')
+        assert bob.npatrons == 1
 
     def test_receiving_ignores_tips_from_blacklisted_accounts(self):
         alice = self.make_participant( 'alice'
@@ -539,9 +527,8 @@ class Tests(Harness):
         bob = self.make_participant('bob')
         alice.set_tip_to(bob, '3.00')
 
-        expected = Decimal('0.00')
-        actual = bob.receiving
-        assert actual == expected
+        assert bob.receiving == Decimal('0.00')
+        assert bob.npatrons == 0
 
     def test_receiving_includes_taking_when_updated_from_set_tip_to(self):
         alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
@@ -556,6 +543,7 @@ class Tests(Harness):
 
         bob.update_goal(Decimal('-1'))
         assert bob.receiving == 0
+        assert bob.npatrons == 0
         alice = Participant.from_id(alice.id)
         assert alice.giving == 0
 
@@ -574,104 +562,6 @@ class Tests(Harness):
         bob = self.make_elsewhere('github', 58946, 'bob').participant
         alice.set_tip_to(bob, '3.00')
         assert alice.giving == Decimal('0.00')
-
-
-    # get_number_of_backers - gnob
-
-    def test_gnob_gets_number_of_backers(self):
-        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
-        bob = self.make_participant('bob', claimed_time='now', last_bill_result='')
-        clancy = self.make_participant('clancy')
-
-        alice.set_tip_to(clancy, '3.00')
-        bob.set_tip_to(clancy, '1.00')
-
-        actual = clancy.get_number_of_backers()
-        assert actual == 2
-
-
-    def test_gnob_includes_backers_with_a_working_card_on_file(self):
-        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
-        bob = self.make_participant('bob')
-        alice.set_tip_to(bob, '3.00')
-
-        actual = bob.get_number_of_backers()
-        assert actual == 1
-
-    def test_gnob_ignores_backers_with_no_card_on_file(self):
-        alice = self.make_participant('alice', claimed_time='now', last_bill_result=None)
-        bob = self.make_participant('bob')
-        alice.set_tip_to(bob, '3.00')
-
-        actual = bob.get_number_of_backers()
-        assert actual == 0
-
-    def test_gnob_ignores_backers_with_a_failing_card_on_file(self):
-        alice = self.make_participant('alice', claimed_time='now', last_bill_result="Fail!")
-        bob = self.make_participant('bob')
-        alice.set_tip_to(bob, '3.00')
-
-        actual = bob.get_number_of_backers()
-        assert actual == 0
-
-
-    def test_gnob_includes_whitelisted_backers(self):
-        alice = self.make_participant( 'alice'
-                                     , claimed_time='now'
-                                     , last_bill_result=''
-                                     , is_suspicious=False
-                                      )
-        bob = self.make_participant('bob')
-        alice.set_tip_to(bob, '3.00')
-
-        actual = bob.get_number_of_backers()
-        assert actual == 1
-
-    def test_gnob_includes_unreviewed_backers(self):
-        alice = self.make_participant( 'alice'
-                                     , claimed_time='now'
-                                     , last_bill_result=''
-                                     , is_suspicious=None
-                                      )
-        bob = self.make_participant('bob')
-        alice.set_tip_to(bob, '3.00')
-
-        actual = bob.get_number_of_backers()
-        assert actual == 1
-
-    def test_gnob_ignores_blacklisted_backers(self):
-        alice = self.make_participant( 'alice'
-                                     , claimed_time='now'
-                                     , last_bill_result=''
-                                     , is_suspicious=True
-                                      )
-        bob = self.make_participant('bob')
-        alice.set_tip_to(bob, '3.00')
-
-        actual = bob.get_number_of_backers()
-        assert actual == 0
-
-
-    def test_gnob_ignores_backers_where_tip_is_zero(self):
-        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
-        bob = self.make_participant('bob')
-        alice.set_tip_to(bob, '0.00')
-
-        actual = bob.get_number_of_backers()
-        assert actual == 0
-
-    def test_gnob_looks_at_latest_tip_only(self):
-        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
-        bob = self.make_participant('bob')
-
-        alice.set_tip_to(bob, '1.00')
-        alice.set_tip_to(bob, '12.00')
-        alice.set_tip_to(bob, '3.00')
-        alice.set_tip_to(bob, '6.00')
-        alice.set_tip_to(bob, '0.00')
-
-        actual = bob.get_number_of_backers()
-        assert actual == 0
 
 
     # get_age_in_seconds - gais
