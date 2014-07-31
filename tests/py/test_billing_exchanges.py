@@ -1,6 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 from decimal import Decimal as D
+import itertools
 
 import balanced
 import mock
@@ -320,7 +321,9 @@ class TestSyncWithBalanced(BalancedHarness):
     @classmethod
     def tearDownClass(cls):
         has_exchange_id = balanced.Transaction.f.meta.contains('exchange_id')
-        for t in balanced.Debit.query.filter(has_exchange_id):
+        credits = balanced.Credit.query.filter(has_exchange_id)
+        debits = balanced.Debit.query.filter(has_exchange_id)
+        for t in itertools.chain(credits, debits):
             t.meta.pop('exchange_id')
             t.save()
         super(TestSyncWithBalanced, cls).tearDownClass()
@@ -337,8 +340,9 @@ class TestSyncWithBalanced(BalancedHarness):
         sync_with_balanced(self.db)
         exchange = self.db.one("SELECT * FROM exchanges")
         assert exchange.status == 'succeeded'
+        assert Participant.from_username('janet').balance == 10
 
-    def test_sync_with_balanced_deletes_exchanges_that_didnt_happen(self):
+    def test_sync_with_balanced_deletes_charges_that_didnt_happen(self):
         with mock.patch('gittip.billing.exchanges.record_exchange_result') as rer \
            , mock.patch('balanced.CardHold.capture') as capture:
             rer.side_effect = capture.side_effect = Foobar
@@ -351,3 +355,18 @@ class TestSyncWithBalanced(BalancedHarness):
         sync_with_balanced(self.db)
         exchanges = self.db.all("SELECT * FROM exchanges")
         assert not exchanges
+        assert Participant.from_username('janet').balance == 0
+
+    def test_sync_with_balanced_reverts_credits_that_didnt_happen(self):
+        self.make_exchange('bill', 41, 0, self.homer)
+        with mock.patch('gittip.billing.exchanges.record_exchange_result') as rer \
+           , mock.patch('balanced.Customer.fetch') as fetch:
+            rer.side_effect = fetch.side_effect = Foobar
+            with self.assertRaises(Foobar):
+                ach_credit(self.db, self.homer, 0, 0)
+        exchange = self.db.one("SELECT * FROM exchanges WHERE amount < 0")
+        assert exchange.status == 'pre'
+        sync_with_balanced(self.db)
+        exchanges = self.db.all("SELECT * FROM exchanges WHERE amount < 0")
+        assert not exchanges
+        assert Participant.from_username('homer').balance == 41
