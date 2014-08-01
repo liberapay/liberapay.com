@@ -285,10 +285,10 @@ def record_exchange_result(db, exchange_id, status, error, participant):
 
         if amount < 0:
             amount -= fee
-            amount = amount if error else 0
+            amount = amount if status == 'failed' else 0
             propagate_exchange(cursor, participant, 'ach', error, -amount)
         else:
-            amount = amount if not error else 0
+            amount = amount if status == 'succeeded' else 0
             propagate_exchange(cursor, participant, 'bill', error, amount)
 
 
