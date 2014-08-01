@@ -126,25 +126,15 @@ def _check_orphans_no_tips(cursor):
     This should not happen because when we remove the last elsewhere account
     in take_over we also zero out all tips.
     """
-    tips_with_orphans = cursor.all("""
-        WITH orphans AS (
-            SELECT username FROM participants
-            WHERE NOT EXISTS (SELECT 1 FROM elsewhere WHERE participant=username)
-        ), valid_tips AS (
-              SELECT * FROM (
-                        SELECT DISTINCT ON (tipper, tippee) *
-                          FROM tips
-                      ORDER BY tipper, tippee, mtime DESC
-                  ) AS foo
-              WHERE amount > 0
-        )
-        SELECT id FROM valid_tips
-        WHERE tipper IN (SELECT * FROM orphans)
-        OR tippee IN (SELECT * FROM orphans)
+    orphans_with_tips = cursor.all("""
+        WITH valid_tips AS (SELECT * FROM current_tips WHERE amount > 0)
+        SELECT username
+          FROM (SELECT tipper AS username FROM valid_tips
+                UNION
+                SELECT tippee AS username FROM valid_tips) foo
+         WHERE NOT EXISTS (SELECT 1 FROM elsewhere WHERE participant=username)
     """)
-    known = set([25206, 46266]) # '4c074000c7bc', 'naderman', '3.00'
-    real = set(tips_with_orphans) - known
-    assert len(real) == 0, real
+    assert len(orphans_with_tips) == 0, orphans_with_tips
 
 
 def _check_paydays_volumes(cursor):
