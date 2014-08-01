@@ -62,3 +62,21 @@ class TestHistory(Harness):
         assert carl.balance == 0
         events = list(iter_payday_events(self.db, carl))
         assert len(events) == 0
+
+    def test_iter_payday_events_with_failed_exchanges(self):
+        alice = self.make_participant('alice', claimed_time='now')
+        self.make_exchange('bill', 50, 0, alice)
+        self.make_exchange('bill', 12, 0, alice, status='failed')
+        self.make_exchange('ach', -40, 0, alice, status='failed')
+        events = list(iter_payday_events(self.db, alice))
+        assert len(events) == 5
+        assert events[0]['kind'] == 'day-open'
+        assert events[0]['balance'] == 50
+        assert events[1]['kind'] == 'credit'
+        assert events[1]['balance'] == 50
+        assert events[2]['kind'] == 'charge'
+        assert events[2]['balance'] == 50
+        assert events[3]['kind'] == 'charge'
+        assert events[3]['balance'] == 50
+        assert events[4]['kind'] == 'day-close'
+        assert events[4]['balance'] == '0.00'

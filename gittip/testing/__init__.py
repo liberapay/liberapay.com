@@ -205,9 +205,9 @@ class Harness(unittest.TestCase):
         return self.db.one("SELECT * FROM paydays", back_as=dict)
 
 
-    def make_exchange(self, kind, amount, fee, participant):
+    def make_exchange(self, kind, amount, fee, participant, status='succeeded', error=''):
         e_id = record_exchange(self.db, kind, amount, fee, participant, 'pre')
-        record_exchange_result(self.db, e_id, 'succeeded', '', participant)
+        record_exchange_result(self.db, e_id, status, error, participant)
         return e_id
 
 
