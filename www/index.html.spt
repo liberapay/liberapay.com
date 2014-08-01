@@ -20,7 +20,7 @@ from aspen.utils import utcnow
 {% extends "templates/base.html" %}
 {% block head %}
     <link rel="publisher" href="https://plus.google.com/110591317655791133884">
-    <meta name="description" content="Weekly payments, motivated by gratitude. Gittip is sustainable crowdfunding with no strings attached and no extra fees." />
+    <meta name="description" content="Weekly payments, motivated by gratitude. Sustainably crowdfund your business, personal projects, or charity, with no extra fees." />
     <meta name="fb:app_id" content="229465400522758" />
     <meta name="og:type" content="website" />
     <meta name="og:url" content="https://www.gittip.com/" />
@@ -50,9 +50,8 @@ from aspen.utils import utcnow
         <h1>Weekly Payments</h1>
         <p>Motivated by Gratitude</p>
 
-        <p>Solid funding for pay-what-you-want businesses, registered
-        charities, and free spirits, with <span>no strings</span> attached and
-        <span>no extra fees</span>.</p>
+        <p>Sustainably crowdfund your business, personal projects, or charity,
+        with <span>no extra fees</span>.</p>
 
         <p><a href="/about/">Read more</a>.</p>
 
@@ -60,7 +59,7 @@ from aspen.utils import utcnow
     <div class="action">
         {% if user.ANON %}
         <h1>Sign In</h1>
-        <p>to Make and Accept Payments</p>
+        <p>to Accept Weekly Payments</p>
         {% from 'templates/auth.html' import auth_button with context %}
 
         <div class="twitter">
