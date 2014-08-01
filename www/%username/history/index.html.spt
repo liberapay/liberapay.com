@@ -75,14 +75,16 @@ admin_override = user.ADMIN and (participant != user.participant or 'override' i
         <td class="credits"></td>
         <td class="debits">{{ -event['amount'] + event['fee'] }}</td>
         <td class="balance">{{ event['balance'] }}</td>
-        {% if event['recorder'] == None %}
-        <td class="notes">automatic withdrawal</td>
-        {% else %}
         <td class="notes">
+        {% if event['recorder'] == None %}
+            automatic withdrawal
+            {% if event['status'] %}&mdash; status: {{ event['status'] }}{% endif %}
+            {% if event['note'] %}&mdash; error: &ldquo;{{ event['note']|e }}&rdquo;{% endif %}
+        {% else %}
             &ldquo;{{ event['note']|e }}&rdquo;&mdash;<a
             href="/{{ event['recorder'] }}/">{{ event['recorder'] }}</a>
-        </td>
         {% endif %}
+        </td>
     </tr>
     {% elif event['kind'] == 'charge' %}
     <tr>
@@ -93,11 +95,17 @@ admin_override = user.ADMIN and (participant != user.participant or 'override' i
         <td class="debits"></td>
         <td class="balance">{{ event['balance'] }}</td>
         <td class="notes">
-            {% if event['recorder'] == None %}automatic charge{% else %}
+        {% if event['recorder'] == None %}
+            automatic charge
+        {% else %}
             &ldquo;{{ event['note']|e }}&rdquo;&mdash;<a
             href="/{{ event['recorder'] }}/">{{ event['recorder'] }}</a>
-            {% endif %}
+        {% endif %}
+        {% if event['status'] in (None, 'suceeded') %}
             (<a href="../receipts/{{ event['id'] }}.html">receipt</a>)
+        {% elif event['status'] in ('pending', 'failed') %}
+            ({{ event['status'] }}{% if event['note'] %}: &ldquo;{{ event['note']|e }}&rdquo;{% endif %})
+        {% endif %}
         </td>
     </tr>
     {% elif event['kind'] == 'transfer' %}
