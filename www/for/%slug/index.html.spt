@@ -153,13 +153,15 @@ $(document).ready(function() {
 <div class="on-community">
     <h2 class="pad-sign">{{ community.name }}</h2>
     <div class="number">{{ community.nmembers }}</div>
-    <div class="unit pad-sign">{{ _("Member").lower() if community.nmembers == 1 else _("Members").lower() }}</div>
+    <div class="unit pad-sign">
+        {{ _(("{0} Member", "{0} Members"), count=community.nmembers).format("").lower() }}
+    </div>
 </div>
 <div class="nav level-1">
     {% if user.ANON %}
     <div class="help with-padding">
         {% include "templates/sign-in-using.html" %}
-        to join the {{ community.name }} community on Gittip.
+        {{ _("{0} to join the {1} community on Gittip.").format("", community.name) }}
     </div>
     {% else %}
     {% set is_member = community.check_membership(user.participant) %}

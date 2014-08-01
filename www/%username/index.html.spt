@@ -52,10 +52,7 @@ GOAL_PARTS = GOAL_RAW.split("{0}")
 
 def with_others(obj):
     others = obj.nmembers - 1
-    if others == 1:
-        return _("with 1 other")
-    else:
-        return _("with {0} others").format(others)
+    return _(("with {0} other", "with {0} others"), others).format(others)
 
 [-----------------------------------------------------------------------------]
 {% extends "templates/profile.html" %}
