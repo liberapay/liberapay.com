@@ -358,6 +358,14 @@ class TestPayout(Harness):
                               balance=20)
         Payday.start().payout()
 
+    @mock.patch('gittip.billing.payday.log')
+    def test_payout_unreviewed(self, log):
+        self.make_participant('alice', claimed_time='now', is_suspicious=None,
+                              balance=20, balanced_customer_href='foo',
+                              last_ach_result='')
+        Payday.start().payout()
+        log.assert_any_call('UNREVIEWED: alice')
+
     @mock.patch('gittip.billing.payday.ach_credit')
     def test_payout_ach_error(self, ach_credit):
         self.make_participant('alice', claimed_time='now', is_suspicious=False,
