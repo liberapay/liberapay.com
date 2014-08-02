@@ -23,7 +23,7 @@ def get_function_from_rule(rule):
         rule = ternary_re.sub(r'(\2) if \1 else (\3)', rule)
     rule = and_re.sub(' and ', rule)
     rule = or_re.sub(' or ', rule)
-    return eval('lambda n: ' + rule)
+    return eval('lambda n: ' + rule, {'__builtins__': {}})
 
 
 def get_text(s, loc, count):
