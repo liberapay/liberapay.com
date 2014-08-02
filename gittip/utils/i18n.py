@@ -45,7 +45,7 @@ def get_text(request, loc, s, *a, **kw):
         if s2 is None:
             loc = 'en'
             s2 = s[n != 1]
-        kw['n'] = n and format_number(n, locale=loc) or '{n}'
+        kw['n'] = n != None and format_number(n, locale=loc) or '{n}'
         s = s2
     elif msg:
         s = msg.string
