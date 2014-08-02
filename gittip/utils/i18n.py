@@ -32,8 +32,7 @@ def get_text(s, loc, count):
         s = message.string if message else s
     if isinstance(s, tuple):
         try:
-            plural_fn = get_function_from_rule(LANGS[loc].plural_expr)
-            i = int(plural_fn(count))
+            i = int(LANGS[loc].plural_func(count))
             s = s[i] if len(s) >= i + 1 else s[0]
         except:
             return s[0]
@@ -51,7 +50,8 @@ def load_langs(localeDir):
         if len(parts) == 2 and parts[1] == "po":
             lang = parts[0]
             with open(os.path.join(localeDir, file)) as f:
-                langs[lang] = babel.messages.pofile.read_po(f)
+                c = langs[lang] = babel.messages.pofile.read_po(f)
+                c.plural_func = get_function_from_rule(c.plural_expr)
     return langs
 
 
