@@ -152,9 +152,9 @@ $(document).ready(function() {
 {% block box %}
 <div class="on-community">
     <h2 class="pad-sign">{{ community.name }}</h2>
-    <div class="number">{{ community.nmembers }}</div>
     <div class="unit pad-sign">
-        {{ _(("{n} Member", "{n} Members"), n=community.nmembers).lower() }}
+        {{ _(("{n} Member", "{n} Members"), n=community.nmembers).lower().replace(
+            str(community.nmembers), "<div class='number'>" + str(community.nmembers) + "</div>") }}
     </div>
 </div>
 <div class="nav level-1">
