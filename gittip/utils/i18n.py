@@ -21,7 +21,7 @@ def get_function_from_rule(rule):
     return eval('lambda n: ' + rule)
 
 
-def get_text(s, loc, count=0):
+def get_text(s, loc, count):
     if loc in LANGS:
         message = LANGS[loc].get(s)
         s = message.string if message else s
@@ -64,7 +64,7 @@ def get_locale_for_request(request):
 
 def inbound(request):
     loc = request.context.locale = get_locale_for_request(request)
-    request.context._ = lambda s, count=0: get_text(s, loc, count=count)
+    request.context._ = lambda s, count=1: get_text(s, loc, count)
     request.context.format_number = lambda *a: format_number(*a, locale=loc)
     request.context.format_decimal = lambda *a: format_decimal(*a, locale=loc)
     request.context.format_currency = lambda *a: format_currency(*a, locale=loc)
