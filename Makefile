@@ -45,7 +45,7 @@ test-schema: env
 pyflakes: env
 	$(env_bin)/pyflakes bin gittip tests
 
-test: test-schema pytest jstest
+test: test-schema pytest
 
 pytest: env
 	$(py_test) --cov gittip ./tests/py/
