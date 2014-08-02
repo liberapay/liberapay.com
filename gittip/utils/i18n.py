@@ -11,18 +11,18 @@ from babel.numbers import (
 )
 
 
-ternary_re = re.compile(r'(.*)\?(.*):(.*)')
-and_re = re.compile(r'&&')
-or_re = re.compile(r'\|\|')
+ternary_re = re.compile(r' *(.*) *\? *(.*) *: *(.*) *')
+and_re = re.compile(r' *&& *')
+or_re = re.compile(r' *\|\| *')
 
 
 def get_function_from_rule(rule):
     oldrule = None
     while oldrule != rule:
         oldrule = rule
-        rule = ternary_re.sub(r'(\1) and (\2) or (\3)', rule)
-    rule = and_re.sub('and', rule)
-    rule = or_re.sub('or', rule)
+        rule = ternary_re.sub(r'(\2) if \1 else (\3)', rule)
+    rule = and_re.sub(' and ', rule)
+    rule = or_re.sub(' or ', rule)
     return eval('lambda n: ' + rule)
 
 
