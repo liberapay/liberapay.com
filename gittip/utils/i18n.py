@@ -26,16 +26,31 @@ def get_function_from_rule(rule):
     return eval('lambda n: ' + rule, {'__builtins__': {}})
 
 
-def get_text(s, loc, count):
-    if loc in LANGS:
-        message = LANGS[loc].get(s)
-        s = message.string if message else s
+def get_text(request, loc, s, *a, **kw):
+    catalog = LANGS.get(loc)
+    msg = catalog.get(s) if catalog else None
     if isinstance(s, tuple):
-        try:
-            i = int(LANGS[loc].plural_func(count))
-            s = s[i] if len(s) >= i + 1 else s[0]
-        except:
-            return s[0]
+        n = kw.pop('n', None)
+        if n is None:
+            try:
+                raise TypeError('n should not be None')
+            except Exception as e:
+                request.website.tell_sentry(e, request)
+        s2 = None
+        if msg:
+            try:
+                s2 = msg.string[catalog.plural_func(n)]
+            except Exception as e:
+                request.website.tell_sentry(e, request)
+        if s2 is None:
+            loc = 'en'
+            s2 = s[n != 1]
+        kw['n'] = n and format_number(n, locale=loc) or '{n}'
+        s = s2
+    elif msg:
+        s = msg.string
+    if a or kw:
+        return s.format(*a, **kw)
     return s
 
 
@@ -70,7 +85,7 @@ def get_locale_for_request(request):
 def inbound(request):
     context = request.context
     loc = context.locale = get_locale_for_request(request)
-    context._ = lambda s, count=1: get_text(s, loc, count)
+    context._ = lambda s, *a, **kw: get_text(request, loc, s, *a, **kw)
     context.format_number = lambda *a: format_number(*a, locale=loc)
     context.format_decimal = lambda *a: format_decimal(*a, locale=loc)
     context.format_currency = lambda *a: format_currency(*a, locale=loc)
