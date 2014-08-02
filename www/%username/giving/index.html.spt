@@ -41,18 +41,18 @@ first_time = qs.get('first_time') == '1'
 
             <ol>
                 <li>{{ _("Change the weekly tips below as you please.") }}</li>
-                <li>{{ _("{0}Add a credit card{1} to make sure your weekly tips go through this Thursday.").format(
+                <li>{{ _("{0}Add a credit card{1} to make sure your weekly tips go through this Thursday.",
                         "<a class='highlight' href='/credit-card.html'>", "</a>") }}</li>
-                <li>{{ _("{0}Fill out your profile{1} to let others know about you.").format(
+                <li>{{ _("{0}Fill out your profile{1} to let others know about you.",
                         "<a href='../'>", "</a>") }}</li>
             </ol>
 
             {% endif %}
             {% if participant == user.participant %}
-            <h2>{{ _("You give {0} per week").format(
+            <h2>{{ _("You give {0} per week",
                 "<span class='my-total-giving'>" + format_currency(total, "USD") + "</span>") }}</h2>
             {% else %}
-            <h2>{{ _("{0} gives {1} per week").format(participant.username, format_currency(total, "USD")) }}</h2>
+            <h2>{{ _("{0} gives {1} per week", participant.username, format_currency(total, "USD")) }}</h2>
             {% endif %}
         </td>
     </tr>
@@ -69,7 +69,7 @@ first_time = qs.get('first_time') == '1'
     {% if unclaimed_total > 0 %}
     <tr>
         <td colspan="2">
-            <h2>{{ _("Another {0} per week goes unclaimed").format(format_currency(unclaimed_total, "USD")) }}</h2>
+            <h2>{{ _("Another {0} per week goes unclaimed", format_currency(unclaimed_total, "USD")) }}</h2>
         </td>
     </tr>
     {% endif %}

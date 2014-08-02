@@ -12,14 +12,14 @@ subpath = 'history/' if user.ADMIN else ''
 admin_override = user.ADMIN and (participant != user.participant or 'override' in qs)
 
 if participant == user.participant:
-    JOINED = _("You joined {0}.").format(to_age(participant.claimed_time))
+    JOINED = _("You joined {0}.", to_age(participant.claimed_time))
 else:
-    JOINED = _("{0} joined {1}.").format(participant.username, to_age(participant.claimed_time))
+    JOINED = _("{0} joined {1}.", participant.username, to_age(participant.claimed_time))
 
 if participant == user.participant:
-    BALANCE = _("Your balance is {0}.").format(format_currency(participant.balance, "USD"))
+    BALANCE = _("Your balance is {0}.", format_currency(participant.balance, "USD"))
 else:
-    BALANCE = _("Their balance is {0}.").format(format_currency(participant.balance, "USD"))
+    BALANCE = _("Their balance is {0}.", format_currency(participant.balance, "USD"))
 
 [-----------------------------------------------------------------------------]
 {% extends "templates/profile.html" %}

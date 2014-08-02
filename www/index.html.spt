@@ -50,7 +50,7 @@ from aspen.utils import utcnow
         <h1>{{ _("Weekly Payments") }}</h1>
         <p>{{ _("Motivated by Gratitude") }}</p>
 
-        <p>{{ _("Sustainably crowdfund your business, personal projects, or charity, with {0}no extra fees{1}.").format(
+        <p>{{ _("Sustainably crowdfund your business, personal projects, or charity, with {0}no extra fees{1}.",
             "<span>", "</span>") }}</p>
 
         <p><a href="/about/">{{ _("Learn more.") }}</a></p>
@@ -58,13 +58,13 @@ from aspen.utils import utcnow
     </div>
     <div class="action">
         {% if user.ANON %}
-        {{ _("{0}Sign In{1} {2}to Accept Weekly Payments{3}").format(
+        {{ _("{0}Sign In{1} {2}to Accept Weekly Payments{3}",
             "<h1>", "</h1>", "<p>", "</p>") }}
         {% from 'templates/auth.html' import auth_button with context %}
 
         <div class="twitter">
         {% call auth_button('twitter', 'opt-in') %}
-        {{ _("Sign in with {0}").format("Twitter") }}
+        {{ _("Sign in with {0}", "Twitter") }}
         {% endcall %}
         </div>
 
@@ -76,29 +76,29 @@ from aspen.utils import utcnow
         </span></div>
 
         <p class="other">{{
-            _("By signing in, you indicate that you have read and agree to our {0}Terms and Conditions{1}.").format(
+            _("By signing in, you indicate that you have read and agree to our {0}Terms and Conditions{1}.",
                 "<a href='/about/terms/'>", "</a>") + " " +
-            _("You'll be joining {0} active users, who exchanged {1} {2}last week{3}.").format(
+            _("You'll be joining {0} active users, who exchanged {1} {2}last week{3}.",
                 format_number(website.gnactive),
                 format_currency(website.gtransfer_volume, "USD"),
                 "<a href='/about/charts.html'>", "</a>") + " " +
-            _("Want to see who they are? Browse {0}our communities{1}.").format(
+            _("Want to see who they are? Browse {0}our communities{1}.",
                 "<a href='/for/'>", "</a>") + " " +
-            _("Want to work for Gittip? We are an {0}open company{1}.").format(
+            _("Want to work for Gittip? We are an {0}open company{1}.",
                 "<a href='http://building.gittip.com/big-picture/welcome'>", "</a>") }}</p>
 
         {% else %}
         {% set quick = utcnow() - timedelta(seconds=15)  %}
-        <h1>{{ _("Welcome back, {0}!").format(user.participant.username) if user.participant.claimed_time < quick
-            else _("Welcome, {0}!").format(user.participant.username) }}</h1>
-        <p>{{ _("Your balance is {0}.").format(format_currency(user.participant.balance, "USD")) }}</p>
+        <h1>{{ _("Welcome back, {0}!", user.participant.username) if user.participant.claimed_time < quick
+            else _("Welcome, {0}!", user.participant.username) }}</h1>
+        <p>{{ _("Your balance is {0}.", format_currency(user.participant.balance, "USD")) }}</p>
 
-        <p>{{ _("Go to {0}your profile{1}, or {2}sign out{3}.").format(
+        <p>{{ _("Go to {0}your profile{1}, or {2}sign out{3}.",
             "<a href='/" + user.participant.username + "/'>", "</a>", "<a href='/sign-out.html'>", "</a>") }}</p>
 
         <div class="jump">
         <form id="jump">
-        {{ _("Jump to {0} from {1}").format(
+        {{ _("Jump to {0} from {1}",
             "<input placeholder='username' autocomplete='off' autocorrect='off' autocapitalize='off' spellcheck='false' size='12'>",
             """<select>
                 <option value='twitter'>Twitter</option>

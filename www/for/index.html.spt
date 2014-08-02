@@ -21,7 +21,7 @@ title = _("Browse Communities")
 
 {% block box %}
 <div class="on-community">
-    {{ _("{0}There are{1} {2} {3}communities on Gittip.{4}").format(
+    {{ _("{0}There are{1} {2} {3}communities on Gittip.{4}",
         "<h2 class='pad-sign'>",
         "</h2>",
         "<div class='number'>" + str(ncommunities) + "</div>",
@@ -79,7 +79,7 @@ title = _("Browse Communities")
             <a href="/for/{{ community.slug }}/">{{ community.name }}</a>
             {% set n = community.nmembers %}
             <div class="fine">
-                {{ _(("{0} Member", "{0} Members"), n).format(n).lower() }}
+                {{ _(("{n} Member", "{n} Members"), n=n).lower() }}
             </div>
         </li>
         {% endfor %}
@@ -92,7 +92,7 @@ title = _("Browse Communities")
             {% for community in communities %}
             <option value="{{ community.slug }}">{{ community.name }} -
             {% set n = community.nmembers %}
-            {{ _(("{0} Member", "{0} Members"), n).format(n).lower() }}
+            {{ _(("{n} Member", "{n} Members"), n=n).lower() }}
             </option>
             {% endfor %}
         </select>

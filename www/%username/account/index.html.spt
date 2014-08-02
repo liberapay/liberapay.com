@@ -27,7 +27,7 @@ locked = False
 
         <!-- Name and Anonymous -->
         <form class="username">
-            <h2>{{ _("You are {0}").format(
+            <h2>{{ _("You are {0}",
                     "<span class='view'>" + escape(user.participant.username) + "</span>") }}
                 <input tabindex="100" name="username" value="{{ user.participant.username|e }}"/>
                 <button tabindex="101" class="edit">{{ _("Edit") }}</button>

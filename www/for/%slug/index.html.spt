@@ -37,7 +37,7 @@ if community is None:
     community = StubCommunity()
 
 # Set the page title based on the communities name.
-title = _("{0} Community").format(community.name)
+title = _("{0} Community", community.name)
 
 
 # Run queries for listings.
@@ -123,7 +123,7 @@ receivers = query_cache.all("""
 
 {% block heading %}
     <h1>{{ _("Community") }}</h1>
-    <p>{{ _("Browse {0}All Communities{1}").format("<a href='/for/'>", "</a>") }}</p>
+    <p>{{ _("Browse {0}All Communities{1}", "<a href='/for/'>", "</a>") }}</p>
 {% endblock %}
 
 {% block scripts %}
@@ -154,14 +154,14 @@ $(document).ready(function() {
     <h2 class="pad-sign">{{ community.name }}</h2>
     <div class="number">{{ community.nmembers }}</div>
     <div class="unit pad-sign">
-        {{ _(("{0} Member", "{0} Members"), count=community.nmembers).format("").lower() }}
+        {{ _(("{n} Member", "{n} Members"), n=community.nmembers).lower() }}
     </div>
 </div>
 <div class="nav level-1">
     {% if user.ANON %}
     <div class="help with-padding">
         {% include "templates/sign-in-using.html" %}
-        {{ _("{0} to join the {1} community on Gittip.").format("", community.name) }}
+        {{ _("{0} to join the {1} community on Gittip.", "", community.name) }}
     </div>
     {% else %}
     {% set is_member = community.check_membership(user.participant) %}
@@ -182,7 +182,7 @@ $(document).ready(function() {
 
     <h2>{{ _("You're the first one here!") }}</h2>
 
-    <p>{{ _("Bring the {0} community to Gittip to find like-minded people to give to.").format(community.name) }}</p>
+    <p>{{ _("Bring the {0} community to Gittip to find like-minded people to give to.", community.name) }}</p>
 
 </div>
 
