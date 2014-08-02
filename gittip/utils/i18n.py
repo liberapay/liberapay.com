@@ -23,8 +23,8 @@ def get_function_from_rule(rule):
 
 def get_text(s, loc, count=0):
     if loc in LANGS:
-        new_s = LANGS[loc].get(s)
-        s = new_s.string if new_s else s
+        message = LANGS[loc].get(s)
+        s = message.string if message else s
     if isinstance(s, tuple):
         try:
             plural_fn = get_function_from_rule(LANGS[loc].plural_expr)
