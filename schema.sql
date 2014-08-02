@@ -1431,3 +1431,11 @@ BEGIN;
     DROP TABLE homepage_top_receivers;
 
 END;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/pull/2554
+
+BEGIN;
+    ALTER TABLE participants ADD COLUMN npatrons integer NOT NULL DEFAULT 0;
+END;

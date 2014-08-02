@@ -288,6 +288,7 @@ class TestClosing(Harness):
                                      , giving=20
                                      , pledging=30
                                      , receiving=40
+                                     , npatrons=21
                                       )
         assert Participant.from_username('alice').number == 'plural' # sanity check
 
@@ -306,6 +307,7 @@ class TestClosing(Harness):
         assert alice.giving == new_alice.giving == 0
         assert alice.pledging == new_alice.pledging == 0
         assert alice.receiving == new_alice.receiving == 0
+        assert alice.npatrons == new_alice.npatrons == 0
         assert alice.session_token == new_alice.session_token == None
         assert alice.session_expires.year == new_alice.session_expires.year == date.today().year
 

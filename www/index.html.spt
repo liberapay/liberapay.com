@@ -20,7 +20,7 @@ from aspen.utils import utcnow
 {% extends "templates/base.html" %}
 {% block head %}
     <link rel="publisher" href="https://plus.google.com/110591317655791133884">
-    <meta name="description" content="Weekly payments, motivated by gratitude. Gittip is sustainable crowdfunding with no strings attached and no extra fees." />
+    <meta name="description" content="Weekly payments, motivated by gratitude. Sustainably crowdfund your business, personal projects, or charity, with no extra fees." />
     <meta name="fb:app_id" content="229465400522758" />
     <meta name="og:type" content="website" />
     <meta name="og:url" content="https://www.gittip.com/" />
@@ -50,15 +50,15 @@ from aspen.utils import utcnow
         <h1>{{ _("Weekly Payments") }}</h1>
         <p>{{ _("Motivated by Gratitude") }}</p>
 
-        <p>{{ _("Gittip is sustainable crowdfunding, with {0}no strings{1} attached and {0}no extra fees{1}.").format(
+        <p>{{ _("Sustainably crowdfund your business, personal projects, or charity, with {0}no extra fees{1}.").format(
             "<span>", "</span>") }}</p>
 
-        <p><a href="/about/">{{ _("Read more.") }}</a></p>
+        <p><a href="/about/">{{ _("Learn more.") }}</a></p>
 
     </div>
     <div class="action">
         {% if user.ANON %}
-        {{ _("{0}Sign In{1} {2}to Make and Accept Payments{3}").format(
+        {{ _("{0}Sign In{1} {2}to Accept Weekly Payments{3}").format(
             "<h1>", "</h1>", "<p>", "</p>") }}
         {% from 'templates/auth.html' import auth_button with context %}
 

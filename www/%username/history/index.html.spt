@@ -51,11 +51,14 @@ else:
         {% endif %}
     </td></tr>
     {% for event in events %}
-    {% if event['event'] == 'payday-start' %}
+    {% if event['kind'] == 'day-open' %}
     <tr>
-        <th colspan="7"><h2>Gittip #{{ event['number'] }}
-            &mdash;{{ event['timestamp'].strftime("%B %d, %Y").replace(' 0', ' ') }}
-                ({{ to_age(event['timestamp']) }})</h2></th>
+        <th colspan="7"><h2>
+            {{ event['date'].strftime("%B %d, %Y").replace(' 0', ' ') }}
+            {% if event['payday_number'] %}
+                &mdash; Weekly Payday #{{ event['payday_number'] }}
+            {% endif %}
+        </h2></th>
     </tr>
     <tr class="head">
         <td colspan="3" class="outside">&larr; {{ _("Outside") }}</td>
@@ -70,26 +73,7 @@ else:
         <td class="balance">{{ _("Balance") }}</td>
         <td class="notes">{{ _("Notes") }}</td>
     </tr>
-    <tr>
-        <td class="bank"></td>
-        <td class="card"></td>
-        <td class="fees"></td>
-        <td class="credits"></td>
-        <td class="debits"></td>
-        <td class="balance">{{ event['balance'] }}</td>
-        <td class="notes"></td>
-    </tr>
-    {% elif event['event'] == 'balance' %}
-    <tr>
-        <td class="bank"></td>
-        <td class="card"></td>
-        <td class="fees"></td>
-        <td class="credits"></td>
-        <td class="debits"></td>
-        <td class="balance">{{ event['balance'] }}</td>
-        <td class="notes"></td>
-    </tr>
-    {% elif event['event'] == 'credit' %}
+    {% elif event['kind'] == 'credit' %}
     <tr>
         <td class="bank">{{ -event['amount'] }}</td>
         <td class="card"></td>
@@ -106,7 +90,7 @@ else:
         </td>
         {% endif %}
     </tr>
-    {% elif event['event'] == 'charge' %}
+    {% elif event['kind'] == 'charge' %}
     <tr>
         <td class="bank"></td>
         <td class="card">{{ event['amount'] + event['fee'] }}</td>
@@ -124,7 +108,7 @@ else:
             (<a href="../receipts/{{ event['id'] }}.html">{{ _("Receipt").lower() }}</a>)
         </td>
     </tr>
-    {% elif event['event'] == 'transfer' %}
+    {% elif event['kind'] == 'transfer' %}
     <tr>
         <td class="bank"></td>
         <td class="card"></td>
@@ -163,6 +147,16 @@ else:
         {% endif %}
         </td>
 
+    </tr>
+    {% elif event['kind'] == 'day-close' %}
+    <tr>
+        <td class="bank"></td>
+        <td class="card"></td>
+        <td class="fees"></td>
+        <td class="credits"></td>
+        <td class="debits"></td>
+        <td class="balance">{{ event['balance'] }}</td>
+        <td class="notes"></td>
     </tr>
     {% endif %}
 {% endfor %}
