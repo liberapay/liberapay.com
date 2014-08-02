@@ -63,15 +63,16 @@ def get_locale_for_request(request):
 
 
 def inbound(request):
-    loc = request.context.locale = get_locale_for_request(request)
-    request.context._ = lambda s, count=1: get_text(s, loc, count)
-    request.context.format_number = lambda *a: format_number(*a, locale=loc)
-    request.context.format_decimal = lambda *a: format_decimal(*a, locale=loc)
-    request.context.format_currency = lambda *a: format_currency(*a, locale=loc)
-    request.context.format_percent = lambda *a: format_percent(*a, locale=loc)
+    context = request.context
+    loc = context.locale = get_locale_for_request(request)
+    context._ = lambda s, count=1: get_text(s, loc, count)
+    context.format_number = lambda *a: format_number(*a, locale=loc)
+    context.format_decimal = lambda *a: format_decimal(*a, locale=loc)
+    context.format_currency = lambda *a: format_currency(*a, locale=loc)
+    context.format_percent = lambda *a: format_percent(*a, locale=loc)
     def _to_age(delta):
         try:
             return to_age(delta, loc)
         except:
             return to_age(delta, 'en')
-    request.context.to_age = _to_age
+    context.to_age = _to_age
