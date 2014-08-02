@@ -50,6 +50,8 @@ def get_text(request, loc, s, *a, **kw):
     elif msg:
         s = msg.string
     if a or kw:
+        if isinstance(s, bytes):
+            s = s.decode('ascii')
         return s.format(*a, **kw)
     return s
 
