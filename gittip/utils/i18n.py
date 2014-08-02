@@ -1,6 +1,7 @@
 from __future__ import print_function, unicode_literals
 
 import os
+import re
 
 from aspen.utils import utcnow
 from babel.dates import format_timedelta
@@ -8,16 +9,20 @@ import babel.messages.pofile
 from babel.numbers import (
     format_currency, format_decimal, format_number, format_percent
 )
-import re
+
+
+ternary_re = re.compile(r'(.*)\?(.*):(.*)')
+and_re = re.compile(r'&&')
+or_re = re.compile(r'\|\|')
 
 
 def get_function_from_rule(rule):
     oldrule = None
     while oldrule != rule:
         oldrule = rule
-        rule = re.sub('(.*)\?(.*):(.*)', r'(\1) and (\2) or (\3)', oldrule)
-    rule = re.sub('&&', 'and', rule)
-    rule = re.sub('\|\|', 'or', rule)
+        rule = ternary_re.sub(r'(\1) and (\2) or (\3)', rule)
+    rule = and_re.sub('and', rule)
+    rule = or_re.sub('or', rule)
     return eval('lambda n: ' + rule)
 
 
