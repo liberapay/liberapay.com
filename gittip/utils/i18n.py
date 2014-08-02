@@ -11,19 +11,21 @@ from babel.numbers import (
 )
 
 
-ternary_re = re.compile(r'(.*)?\?(.*):(.*)')
-and_re = re.compile(r'&&')
-or_re = re.compile(r'\|\|')
+ternary_re = re.compile(r'^\(? *(.+?) *\? *(.+?) *: *(.+?) *\)?$')
+and_re = re.compile(r' *&& *')
+or_re = re.compile(r' *\|\| *')
+
+
+def ternary_sub(m):
+    g1, g2, g3 = m.groups()
+    return '%s if %s else %s' % (g2, g1, ternary_re.sub(ternary_sub, g3))
 
 
 def get_function_from_rule(rule):
-    oldrule = None
-    while oldrule != rule:
-        oldrule = rule
-        rule = ternary_re.sub(r"(\1) and str(\2) or (\3)", rule)
-    rule = and_re.sub('and', rule)
-    rule = or_re.sub('or', rule)
-    return eval('lambda n: int(' + rule + ')', globals())
+    rule = ternary_re.sub(ternary_sub, rule.strip())
+    rule = and_re.sub(' and ', rule)
+    rule = or_re.sub(' or ', rule)
+    return eval('lambda n: ' + rule, {'__builtins__': {}})
 
 
 def get_text(request, loc, s, *a, **kw):
