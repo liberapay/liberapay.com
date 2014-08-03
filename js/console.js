@@ -17,9 +17,3 @@ if (!window.console)
 {
     mock_console();
 }
-
-
-function getCookie(key) {
-    var o = new RegExp("(?:^|; ?)" + escape(key) + "=([^;]+)").exec(document.cookie);
-    return o && unescape(o[1]);
-}
