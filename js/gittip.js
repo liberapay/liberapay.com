@@ -9,6 +9,7 @@ Gittip.init = function() {
     Gittip.forms.initCSRF();
     Gittip.signIn();
     Gittip.signOut();
+    $(document).ready(Gittip.ready);
 };
 
 
@@ -109,5 +110,11 @@ Gittip.signOut = function() {
                 Gittip.notification('Failed to sign out', 'error');
             }
         });
+    });
+};
+
+Gittip.ready = function() {
+    $('img.avatar').one("error", function () {
+        $(this).attr("src", Gittip.asset_url+"/avatar-default.png");
     });
 };
