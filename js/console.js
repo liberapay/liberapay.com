@@ -9,8 +9,9 @@ function mock_console()
                  "dirxml", "group", "groupEnd", "time", "timeEnd", "count",
                  "trace", "profile", "profileEnd"];
     window.console = {};
+    var mock = function() {};
     for (var i=0, name; name = names[i]; i++)
-        window.console[name] = function() {};
+        window.console[name] = mock;
 }
 
 if (!window.console)
