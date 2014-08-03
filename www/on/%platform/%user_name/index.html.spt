@@ -72,7 +72,7 @@ else:
 <table class="on-elsewhere">
     <tr>
         <td class="picture">
-            <img src="{{ avatar_url(account) }}" />
+            <img class="avatar" src="{{ avatar_url(account) }}" />
         </td>
         <td class="ready">
             <h2>
@@ -199,7 +199,7 @@ else:
             {% if on_gittip %}
                 <td>
                     <a href="/{{ member.participant.username }}/">
-                        <img src="{{ avatar_url(member.participant) }}" />
+                        <img class="avatar" src="{{ avatar_url(member.participant) }}" />
                         {{member.participant.username|e}}
                     </a>
                 </td>
@@ -213,7 +213,7 @@ else:
             {% else %}
                 <td>
                     <a href="/on/{{platform.name}}/{{member.user_name|e}}/">
-                        <img src="{{ avatar_url(member) }}" />
+                        <img class="avatar" src="{{ avatar_url(member) }}" />
                         {{member.user_name|e}}
                     </a>
                 </td>
