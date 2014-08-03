@@ -1,1 +1,1 @@
-{% macro avatar_url(account) %}{{ account.avatar_url }}{% endmacro %}
+{% macro avatar_url(account) %}{{ account.avatar_url or website.asset_url+'/avatar-default.png' }}{% endmacro %}
