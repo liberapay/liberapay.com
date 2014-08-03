@@ -9,7 +9,7 @@ Gittip.init = function() {
     Gittip.forms.initCSRF();
     Gittip.signIn();
     Gittip.signOut();
-    $(document).ready(Gittip.ready);
+    Gittip.defaultAvatars();
 };
 
 
@@ -113,8 +113,12 @@ Gittip.signOut = function() {
     });
 };
 
-Gittip.ready = function() {
-    $('img.avatar').one("error", function () {
-        $(this).attr("src", Gittip.asset_url+"/avatar-default.png");
+Gittip.defaultAvatars = function() {
+    $('img.avatar').each(function() {
+        function useDefault() {
+            $(this).attr("src", Gittip.asset_url+"/avatar-default.png");
+        }
+        if (this.complete && this.naturalHeight === 0) useDefault.call(this);
+        else $(this).one("error", useDefault);
     });
 };
