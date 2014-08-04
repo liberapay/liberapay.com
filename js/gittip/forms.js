@@ -73,8 +73,7 @@ Gittip.forms.initCSRF = function() {   // https://docs.djangoproject.com/en/dev/
         }
 
         if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
-            xhr.setRequestHeader("X-CSRF-TOKEN", getCookie('csrf_token'));
+            xhr.setRequestHeader("X-CSRF-TOKEN", Gittip.getCookie('csrf_token'));
         }
     });
 };
-

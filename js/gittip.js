@@ -5,6 +5,11 @@
 
 Gittip = {};
 
+Gittip.getCookie = function(key) {
+    var o = new RegExp("(?:^|; ?)" + escape(key) + "=([^;]+)").exec(document.cookie);
+    return o && unescape(o[1]);
+}
+
 Gittip.init = function() {
     Gittip.forms.initCSRF();
     Gittip.signIn();
