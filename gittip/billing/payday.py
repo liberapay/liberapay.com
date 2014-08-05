@@ -423,10 +423,10 @@ class Payday(object):
         # Capture holds to bring balances back up to (at least) zero
         i = 0
         for p in participants:
-            assert p.id in holds
-            amount = -p.new_balance
-            capture_card_hold(self.db, p, amount, holds.pop(p.id))
-            i += 1
+            if p.id in holds:
+                amount = -p.new_balance
+                capture_card_hold(self.db, p, amount, holds.pop(p.id))
+                i += 1
         log("Captured %i card holds." % i)
 
         # Cancel the remaining holds
