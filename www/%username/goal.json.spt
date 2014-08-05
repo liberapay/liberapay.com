@@ -14,11 +14,11 @@ goal = request.body["goal"]
 if goal == "null":
     goal = None
 elif goal == "custom":
-    goal = request.body["goal_custom"].replace(',', '')
+    goal = request.body["goal_custom"]
 
 if goal is not None:
     try:
-        goal = decimal.Decimal(goal)
+        goal = parse_decimal(goal)
     except decimal.InvalidOperation:
         raise Response(400, "Bad input.")
 

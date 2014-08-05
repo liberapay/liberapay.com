@@ -7,7 +7,7 @@ from aspen.utils import utcnow
 from babel.dates import format_timedelta
 import babel.messages.pofile
 from babel.numbers import (
-    format_currency, format_decimal, format_number, format_percent
+    format_currency, format_decimal, format_number, format_percent, parse_decimal
 )
 
 
@@ -94,6 +94,7 @@ def inbound(request):
     context.format_decimal = lambda *a: format_decimal(*a, locale=loc)
     context.format_currency = lambda *a: format_currency(*a, locale=loc)
     context.format_percent = lambda *a: format_percent(*a, locale=loc)
+    context.parse_decimal = lambda *a: parse_decimal(*a, locale=loc)
     def _to_age(delta):
         try:
             return to_age(delta, loc)

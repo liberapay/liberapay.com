@@ -70,7 +70,7 @@
                 name="goal_custom" id="goal-custom"
             {% if (user.participant.goal == None) or (user.participant.goal <= 0) %}
             {% else %}
-            value="{{ locale.format("%.2f", user.participant.goal, grouping=True) }}"
+            value="{{ format_decimal(user.participant.goal) }}"
             {% endif %} />
             <label for="goal-yes">{{ GOAL_PARTS[1] }}</label>
 
