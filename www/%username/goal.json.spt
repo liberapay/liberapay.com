@@ -19,7 +19,7 @@ elif goal == "custom":
 if goal is not None:
     try:
         goal = parse_decimal(goal)
-    except decimal.InvalidOperation:
+    except:
         raise Response(400, "Bad input.")
 
 participant = get_participant(request)
