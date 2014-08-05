@@ -12,6 +12,7 @@ immediately affect the participant's balance.
 from __future__ import unicode_literals
 
 import itertools
+from multiprocessing.dummy import Pool as ThreadPool
 
 from balanced import CardHold
 
@@ -23,6 +24,14 @@ from gratipay.billing.exchanges import (
 from gratipay.exceptions import NegativeBalance
 from gratipay.models import check_db
 from psycopg2 import IntegrityError
+
+
+def threaded_map(func, iterable, threads=5):
+    pool = ThreadPool(threads)
+    r = pool.map(func, iterable)
+    pool.close()
+    pool.join()
+    return r
 
 
 class NoPayday(Exception):
@@ -372,14 +381,14 @@ class Payday(object):
         holds = self.fetch_card_holds(participant_ids)
 
         # Create new holds and check amounts of existing ones
-        for p in participants:
+        def f(p):
             amount = p.giving_today
             if p.old_balance < 0:
                 amount -= p.old_balance
             if p.id in holds:
                 charge_amount = upcharge(amount)[0]
                 if holds[p.id].amount >= charge_amount * 100:
-                    continue
+                    return
                 else:
                     # The amount is too low, cancel the hold and make a new one
                     cancel_card_hold(holds.pop(p.id))
@@ -388,6 +397,7 @@ class Payday(object):
                 self.mark_charge_failed(cursor)
             else:
                 holds[p.id] = hold
+        threaded_map(f, participants)
 
         # Update the values of card_hold_ok in our temporary table
         if not holds:
@@ -450,19 +460,17 @@ class Payday(object):
               FROM payday_participants
              WHERE new_balance < 0
         """)
+        participants = [p for p in participants if p.id in holds]
 
         # Capture holds to bring balances back up to (at least) zero
-        i = 0
-        for p in participants:
-            if p.id in holds:
-                amount = -p.new_balance
-                capture_card_hold(self.db, p, amount, holds.pop(p.id))
-                i += 1
-        log("Captured %i card holds." % i)
+        def capture(p):
+            amount = -p.new_balance
+            capture_card_hold(self.db, p, amount, holds.pop(p.id))
+        threaded_map(capture, participants)
+        log("Captured %i card holds." % len(participants))
 
         # Cancel the remaining holds
-        for hold in holds.values():
-            cancel_card_hold(hold)
+        threaded_map(cancel_card_hold, holds.values())
         log("Canceled %i card holds." % len(holds))
 
 
@@ -540,7 +548,6 @@ class Payday(object):
         """This is the second stage of payday in which we send money out to the
         bank accounts of participants.
         """
-        i = 0
         log("Starting payout loop.")
         participants = self.db.all("""
             SELECT p.*::participants
@@ -549,15 +556,16 @@ class Payday(object):
                AND balanced_customer_href IS NOT NULL
                AND last_ach_result IS NOT NULL
         """)
-        for i, participant in enumerate(participants, start=1):
+        def credit(participant):
             if participant.is_suspicious is None:
                 log("UNREVIEWED: %s" % participant.username)
-                continue
+                return
             withhold = participant.giving + participant.pledging
             error = ach_credit(self.db, participant, withhold)
             if error:
                 self.mark_ach_failed()
-        log("Did payout for %d participants." % i)
+        threaded_map(credit, participants)
+        log("Did payout for %d participants." % len(participants))
         self.db.self_check()
         log("Checked the DB.")
 
