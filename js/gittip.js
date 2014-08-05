@@ -9,7 +9,6 @@ Gittip.init = function() {
     Gittip.forms.initCSRF();
     Gittip.signIn();
     Gittip.signOut();
-    Gittip.defaultAvatars();
 };
 
 
@@ -110,15 +109,5 @@ Gittip.signOut = function() {
                 Gittip.notification('Failed to sign out', 'error');
             }
         });
-    });
-};
-
-Gittip.defaultAvatars = function() {
-    $('img.avatar').each(function() {
-        function useDefault() {
-            $(this).attr("src", Gittip.asset_url+"/avatar-default.png");
-        }
-        if (this.complete && this.naturalHeight === 0) useDefault.call(this);
-        else $(this).one("error", useDefault);
     });
 };

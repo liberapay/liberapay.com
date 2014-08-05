@@ -14,4 +14,3 @@ for root, dirs, files in os.walk(js_root):
             catted.append(content + '\n')
 [---]
 {{ "".join(catted) }}
-Gittip.asset_url = "{{ website.asset_url }}";

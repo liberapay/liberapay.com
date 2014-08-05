@@ -1,4 +1,4 @@
-{% from 'templates/avatar-url.html' import avatar_url with context %}
+{% from 'templates/avatar-url.html' import avatar_img with context %}
 
 {% extends "templates/base.html" %}
 
@@ -15,7 +15,7 @@
 <table class="on-profile{% if participant.is_suspicious %} is-suspicious{% endif %}">
     <tr>
         <td class="picture">
-            <a href="/{{ participant.username }}/"><img class="avatar" src="{{ avatar_url(participant) }}" /></a>
+            <a href="/{{ participant.username }}/">{{ avatar_img(participant) }}</a>
         </td>
         <td class="giving-receiving">
         {% if anon_giving and anon_receiving %}

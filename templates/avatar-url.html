@@ -1,1 +1,6 @@
 {% macro avatar_url(account) %}{{ account.avatar_url or website.asset_url+'/avatar-default.png' }}{% endmacro %}
+
+{% macro avatar_img(account) %}
+<img class="avatar" src="{{ avatar_url(account) }}"
+     onerror="this.src = '{{ website.asset_url }}/avatar-default.png'" />
+{% endmacro %}
