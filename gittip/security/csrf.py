@@ -87,6 +87,7 @@ def inbound(request):
     """Given a Request object, reject it if it's a forgery.
     """
     if request.line.uri.startswith('/assets/'): return
+    if request.line.uri == '/balanced-callbacks': return
 
     try:
         csrf_token = request.headers.cookie.get('csrf_token')
