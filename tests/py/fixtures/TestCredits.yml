@@ -3,28 +3,6 @@ interactions:
     body: null
     headers: {}
     method: GET
-    uri: https://api.balancedpayments.com:443/customers/CU3O2IKYocPZ5LA7GkZWpwKZ
-  response:
-    body:
-      string: !!binary |
-        H4sIAAAAAAAAA41UTY/TMBS876+IcqabpJu2orcVB4QWCQ4gRBGKXNsoVhM7+AOoqvx3ntMk69oB
-        7yWH55mJ37zxu9wlSYqN0qKlUqX75BsUkuQyfOGIo5ZClZumeTXVGsZPFjqBAKaEkdgHQp1QpRlH
-        mgk+qowi/axmOoI0JRXSgEjXeVGu8t0qLz4Vm335sC+397tNmW/zQzpTsKQRynazLnavHQoRx6oV
-        XNd+M4zY3775/PBh/e7pq8AfD5v3j7u3p8OX7veTI9DVgvsNprWkPyw9mx3M4kpgNK4R15XSSBtr
-        ZMrFqkUa188ttlQjz2L6czAoDRy0vZ0pkn5riBBJlTcpzPTZA8KcYKR0vVwuwrK9uO8FiHQCDpoK
-        C7JwiIXhWp7d06CRo1FwD6WqpdQpxasGKV36bdIWsSYospvA9fCv7zY/tlMnvM/Rv58jnGbg2pBn
-        lV3mwY7n/Tgih4iRJFUtGjKM0omCQ2akzxzcNcmOxhHxU4XwYFJE5hYaKBF6ZDGJEbPAdV/rP3xw
-        nvSCGfSPppJDCl7WTAgPLmVti1hyhQRMwlRnNI2QZ1TA1xJxhbBdXhGNG2SgA0vC8FgPE2iB/Qs2
-        M2oiV5B0ggUKQpLrbv9POEdMwIVVS6J5mkDwvvq7/i9xeE/EUwYAAA==
-    headers:
-      content-encoding: [gzip]
-      content-length: ['496']
-      content-type: [application/json]
-    status: {code: 200, message: OK}
-- request:
-    body: null
-    headers: {}
-    method: GET
     uri: https://api.balancedpayments.com:443/customers/CU3O2IKYocPZ5LA7GkZWpwKZ/bank_accounts?limit=10&offset=0
   response:
     body:
@@ -46,7 +24,8 @@ interactions:
       content-type: [application/json]
     status: {code: 200, message: OK}
 - request:
-    body: '{"amount": 1900.00, "description": "bob"}'
+    body: '{"amount": 1900.00, "meta": {"exchange_id": 2, "participant_id": 4}, "description":
+      "bob"}'
     headers: {}
     method: POST
     uri: https://api.balancedpayments.com:443/bank_accounts/BA3QLnsEGgrsjqfhXh43Pq4d/credits
@@ -54,18 +33,19 @@ interactions:
     body: {string: !!python/unicode "{\n  \"credits\": [\n    {\n      \"status\":
         \"succeeded\",\n      \"description\": \"bob\",\n      \"links\": {\n        \"customer\":
         \"CU3O2IKYocPZ5LA7GkZWpwKZ\",\n        \"destination\": \"BA3QLnsEGgrsjqfhXh43Pq4d\",\n
-        \       \"order\": null\n      },\n      \"updated_at\": \"2014-07-01T19:19:43.494105Z\",\n
-        \     \"created_at\": \"2014-07-01T19:19:43.018298Z\",\n      \"transaction_number\":
-        \"CR807-645-5056\",\n      \"failure_reason\": null,\n      \"currency\":
+        \       \"order\": null\n      },\n      \"updated_at\": \"2014-08-06T16:10:29.977848Z\",\n
+        \     \"created_at\": \"2014-08-06T16:10:29.680080Z\",\n      \"transaction_number\":
+        \"CR130-017-0655\",\n      \"failure_reason\": null,\n      \"currency\":
         \"USD\",\n      \"amount\": 1900,\n      \"failure_reason_code\": null,\n
-        \     \"meta\": {},\n      \"href\": \"/credits/CR56p7y5a2SbEJCkNqZUWXS9\",\n
-        \     \"appears_on_statement_as\": \"example.com\",\n      \"id\": \"CR56p7y5a2SbEJCkNqZUWXS9\"\n
+        \     \"meta\": {\n        \"exchange_id\": \"2\",\n        \"participant_id\":
+        \"4\"\n      },\n      \"href\": \"/credits/CR1rvyY2Z7d46MsU9PScdBfT\",\n
+        \     \"appears_on_statement_as\": \"example.com\",\n      \"id\": \"CR1rvyY2Z7d46MsU9PScdBfT\"\n
         \   }\n  ],\n  \"links\": {\n    \"credits.order\": \"/orders/{credits.order}\",\n
         \   \"credits.customer\": \"/customers/{credits.customer}\",\n    \"credits.destination\":
         \"/resources/{credits.destination}\",\n    \"credits.reversals\": \"/credits/{credits.id}/reversals\",\n
         \   \"credits.events\": \"/credits/{credits.id}/events\"\n  }\n}"}
     headers:
-      content-length: ['953']
+      content-length: ['1018']
       content-type: [application/json]
     status: {code: 201, message: CREATED}
 version: 1

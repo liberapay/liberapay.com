@@ -3,28 +3,6 @@ interactions:
     body: null
     headers: {}
     method: GET
-    uri: https://api.balancedpayments.com:443/customers/CU3KXdyvNSDeyLP3pAWr9hqd
-  response:
-    body:
-      string: !!binary |
-        H4sIAAAAAAAAA41Uy27bMBC85ysEnWvLipQ29i1oby2CAG3RokUh0CQLEZFIhY+ggqF/79KWZJpU
-        wlx02J0ZcmdHPFwlSYqN0qKlUqW75DcUkuRw/EKLo5ZClZumeTfVGsYfLXQCAUwJI7EPhDqhSjOO
-        NBN8VBlFhlnNdARpSiqkAZFeb/Jytfmw2uTf8ptdWezKcp0Xxfvb7a90pmBJX6UU622+uSlKh0LE
-        vmoF17U/DCP22I/fi88/Sf98//UT7b88FN3dD7mtn8j5zK4W3B8wrSX9a+nZ7GAWVwKjcY24rpRG
-        2lgjUy5WLdK4Ph/XUo08i+mTheZp4KCdradI+qMhQiRV3qYw070HhD3BSun1cjkPy/bivhcg0glo
-        NBUWZKGJheFa9m43GGRvFNxDqWopdUrxqkFKl/6YtEWsCYrsInADnPXH5sdO6oT3HP31HOE0A9eO
-        eVbZYV7s2B/GFTlEjCSpatGQ4yqdKDhkRobMwZ2S7GjsEX+sED6aFJG5hAZKhO5ZTGLELHDdv/UF
-        H5xfesEM+k9TySEFbxsmhAeXsrZFLDlBAiZhqjOaRsgzKuBribhC2D5eEY0LZKADj4ThsRkm0AL7
-        GV5m1ESuIOkECxSEJKe3/ZVwjpiAC08tieZpAsH/NVwN/wHQiK4AUwYAAA==
-    headers:
-      content-encoding: [gzip]
-      content-length: ['499']
-      content-type: [application/json]
-    status: {code: 200, message: OK}
-- request:
-    body: null
-    headers: {}
-    method: GET
     uri: https://api.balancedpayments.com:443/customers/CU3KXdyvNSDeyLP3pAWr9hqd/cards?limit=10&offset=0
   response:
     body:
@@ -58,13 +36,13 @@ interactions:
     body: {string: !!python/unicode "{\n  \"card_holds\": [\n    {\n      \"status\":
         \"succeeded\",\n      \"description\": \"janet\",\n      \"links\": {\n        \"card\":
         \"CC3MHBsW6vHaL3suLVdTVbO9\",\n        \"debit\": null\n      },\n      \"updated_at\":
-        \"2014-07-28T12:44:02.482667Z\",\n      \"created_at\": \"2014-07-28T12:44:02.246126Z\",\n
-        \     \"transaction_number\": \"HL223-221-7905\",\n      \"expires_at\": \"2014-08-04T12:44:02.393923Z\",\n
+        \"2014-08-06T16:10:31.247252Z\",\n      \"created_at\": \"2014-08-06T16:10:30.903504Z\",\n
+        \     \"transaction_number\": \"HL645-330-0776\",\n      \"expires_at\": \"2014-08-13T16:10:31.135263Z\",\n
         \     \"failure_reason\": null,\n      \"currency\": \"USD\",\n      \"amount\":
         2091,\n      \"meta\": {\n        \"state\": \"new\",\n        \"participant_id\":
-        \"2\"\n      },\n      \"href\": \"/card_holds/HL6DNvcbs8HPF3Hk2S7ktMY5\",\n
+        \"2\"\n      },\n      \"href\": \"/card_holds/HL1sTnLxawUR168Ucdth56zH\",\n
         \     \"failure_reason_code\": null,\n      \"voided_at\": null,\n      \"id\":
-        \"HL6DNvcbs8HPF3Hk2S7ktMY5\"\n    }\n  ],\n  \"links\": {\n    \"card_holds.events\":
+        \"HL1sTnLxawUR168Ucdth56zH\"\n    }\n  ],\n  \"links\": {\n    \"card_holds.events\":
         \"/card_holds/{card_holds.id}/events\",\n    \"card_holds.card\": \"/cards/{card_holds.card}\",\n
         \   \"card_holds.debits\": \"/card_holds/{card_holds.id}/debits\",\n    \"card_holds.debit\":
         \"/debits/{card_holds.debit}\"\n  }\n}"}
@@ -73,79 +51,58 @@ interactions:
       content-type: [application/json]
     status: {code: 201, message: CREATED}
 - request:
-    body: '{"amount": 1000, "description": "janet"}'
+    body: '{"amount": 1000, "meta": {"exchange_id": 1, "participant_id": 2}, "description":
+      "janet"}'
     headers: {}
     method: POST
-    uri: https://api.balancedpayments.com:443/card_holds/HL6DNvcbs8HPF3Hk2S7ktMY5/debits
+    uri: https://api.balancedpayments.com:443/card_holds/HL1sTnLxawUR168Ucdth56zH/debits
   response:
     body: {string: !!python/unicode "{\n  \"debits\": [\n    {\n      \"status\":
         \"succeeded\",\n      \"description\": \"janet\",\n      \"links\": {\n        \"customer\":
         \"CU3KXdyvNSDeyLP3pAWr9hqd\",\n        \"source\": \"CC3MHBsW6vHaL3suLVdTVbO9\",\n
         \       \"order\": null,\n        \"dispute\": null\n      },\n      \"updated_at\":
-        \"2014-07-28T12:44:03.374049Z\",\n      \"created_at\": \"2014-07-28T12:44:02.942161Z\",\n
-        \     \"transaction_number\": \"W481-816-9765\",\n      \"failure_reason\":
+        \"2014-08-06T16:10:32.094369Z\",\n      \"created_at\": \"2014-08-06T16:10:31.653991Z\",\n
+        \     \"transaction_number\": \"W530-573-0663\",\n      \"failure_reason\":
         null,\n      \"currency\": \"USD\",\n      \"amount\": 1000,\n      \"failure_reason_code\":
-        null,\n      \"meta\": {\n        \"state\": \"new\",\n        \"participant_id\":
-        \"2\"\n      },\n      \"href\": \"/debits/WD6EAiSkHLrwka8kNBgz40yd\",\n      \"appears_on_statement_as\":
-        \"BAL*example.com\",\n      \"id\": \"WD6EAiSkHLrwka8kNBgz40yd\"\n    }\n
+        null,\n      \"meta\": {\n        \"exchange_id\": \"1\",\n        \"participant_id\":
+        \"2\"\n      },\n      \"href\": \"/debits/WD1tJAtTmE3J2iFFK32qNVjL\",\n      \"appears_on_statement_as\":
+        \"BAL*example.com\",\n      \"id\": \"WD1tJAtTmE3J2iFFK32qNVjL\"\n    }\n
         \ ],\n  \"links\": {\n    \"debits.customer\": \"/customers/{debits.customer}\",\n
         \   \"debits.dispute\": \"/disputes/{debits.dispute}\",\n    \"debits.source\":
         \"/resources/{debits.source}\",\n    \"debits.order\": \"/orders/{debits.order}\",\n
         \   \"debits.refunds\": \"/debits/{debits.id}/refunds\",\n    \"debits.events\":
         \"/debits/{debits.id}/events\"\n  }\n}"}
     headers:
-      content-length: ['1063']
+      content-length: ['1067']
       content-type: [application/json]
     status: {code: 201, message: CREATED}
 - request:
     body: '{"status": "succeeded", "description": "janet", "amount": 2091, "created_at":
-      "2014-07-28T12:44:02.246126Z", "card_href": "/cards/CC3MHBsW6vHaL3suLVdTVbO9",
-      "updated_at": "2014-07-28T12:44:02.482667Z", "expires_at": "2014-08-04T12:44:02.393923Z",
-      "failure_reason": null, "currency": "USD", "transaction_number": "HL223-221-7905",
+      "2014-08-06T16:10:30.903504Z", "card_href": "/cards/CC3MHBsW6vHaL3suLVdTVbO9",
+      "updated_at": "2014-08-06T16:10:31.247252Z", "expires_at": "2014-08-13T16:10:31.135263Z",
+      "failure_reason": null, "currency": "USD", "transaction_number": "HL645-330-0776",
       "meta": {"state": "captured", "participant_id": "2"}, "debit": null, "failure_reason_code":
-      null, "voided_at": null, "id": "HL6DNvcbs8HPF3Hk2S7ktMY5"}'
+      null, "voided_at": null, "id": "HL1sTnLxawUR168Ucdth56zH"}'
     headers: {}
     method: PUT
-    uri: https://api.balancedpayments.com:443/card_holds/HL6DNvcbs8HPF3Hk2S7ktMY5
+    uri: https://api.balancedpayments.com:443/card_holds/HL1sTnLxawUR168Ucdth56zH
   response:
     body: {string: !!python/unicode "{\n  \"card_holds\": [\n    {\n      \"status\":
         \"succeeded\",\n      \"description\": \"janet\",\n      \"links\": {\n        \"card\":
-        \"CC3MHBsW6vHaL3suLVdTVbO9\",\n        \"debit\": \"WD6EAiSkHLrwka8kNBgz40yd\"\n
-        \     },\n      \"updated_at\": \"2014-07-28T12:44:03.779589Z\",\n      \"created_at\":
-        \"2014-07-28T12:44:02.246126Z\",\n      \"transaction_number\": \"HL223-221-7905\",\n
-        \     \"expires_at\": \"2014-08-04T12:44:02.393923Z\",\n      \"failure_reason\":
+        \"CC3MHBsW6vHaL3suLVdTVbO9\",\n        \"debit\": \"WD1tJAtTmE3J2iFFK32qNVjL\"\n
+        \     },\n      \"updated_at\": \"2014-08-06T16:10:32.534385Z\",\n      \"created_at\":
+        \"2014-08-06T16:10:30.903504Z\",\n      \"transaction_number\": \"HL645-330-0776\",\n
+        \     \"expires_at\": \"2014-08-13T16:10:31.135263Z\",\n      \"failure_reason\":
         null,\n      \"currency\": \"USD\",\n      \"amount\": 2091,\n      \"meta\":
         {\n        \"state\": \"captured\",\n        \"participant_id\": \"2\"\n      },\n
-        \     \"href\": \"/card_holds/HL6DNvcbs8HPF3Hk2S7ktMY5\",\n      \"failure_reason_code\":
-        null,\n      \"voided_at\": null,\n      \"id\": \"HL6DNvcbs8HPF3Hk2S7ktMY5\"\n
+        \     \"href\": \"/card_holds/HL1sTnLxawUR168Ucdth56zH\",\n      \"failure_reason_code\":
+        null,\n      \"voided_at\": null,\n      \"id\": \"HL1sTnLxawUR168Ucdth56zH\"\n
         \   }\n  ],\n  \"links\": {\n    \"card_holds.events\": \"/card_holds/{card_holds.id}/events\",\n
         \   \"card_holds.card\": \"/cards/{card_holds.card}\",\n    \"card_holds.debits\":
         \"/card_holds/{card_holds.id}/debits\",\n    \"card_holds.debit\": \"/debits/{card_holds.debit}\"\n
         \ }\n}"}
     headers:
       content-length: ['971']
-      content-type: [application/json]
-    status: {code: 200, message: OK}
-- request:
-    body: null
-    headers: {}
-    method: GET
-    uri: https://api.balancedpayments.com:443/customers/CU3KXdyvNSDeyLP3pAWr9hqd
-  response:
-    body:
-      string: !!binary |
-        H4sIAAAAAAAAA41Uy27bMBC85ysEnWvLipQ29i1oby2CAG3RokUh0CQLEZFIhY+ggqF/79KWZJpU
-        wlx02J0ZcmdHPFwlSYqN0qKlUqW75DcUkuRw/EKLo5ZClZumeTfVGsYfLXQCAUwJI7EPhDqhSjOO
-        NBN8VBlFhlnNdARpSiqkAZFeb/Jytfmw2uTf8ptdWezKcp0Xxfvb7a90pmBJX6UU622+uSlKh0LE
-        vmoF17U/DCP22I/fi88/Sf98//UT7b88FN3dD7mtn8j5zK4W3B8wrSX9a+nZ7GAWVwKjcY24rpRG
-        2lgjUy5WLdK4Ph/XUo08i+mTheZp4KCdradI+qMhQiRV3qYw070HhD3BSun1cjkPy/bivhcg0glo
-        NBUWZKGJheFa9m43GGRvFNxDqWopdUrxqkFKl/6YtEWsCYrsInADnPXH5sdO6oT3HP31HOE0A9eO
-        eVbZYV7s2B/GFTlEjCSpatGQ4yqdKDhkRobMwZ2S7GjsEX+sED6aFJG5hAZKhO5ZTGLELHDdv/UF
-        H5xfesEM+k9TySEFbxsmhAeXsrZFLDlBAiZhqjOaRsgzKuBribhC2D5eEY0LZKADj4ThsRkm0AL7
-        GV5m1ESuIOkECxSEJKe3/ZVwjpiAC08tieZpAsH/NVwN/wHQiK4AUwYAAA==
-    headers:
-      content-encoding: [gzip]
-      content-length: ['499']
       content-type: [application/json]
     status: {code: 200, message: OK}
 - request:
@@ -185,13 +142,13 @@ interactions:
     body: {string: !!python/unicode "{\n  \"card_holds\": [\n    {\n      \"status\":
         \"succeeded\",\n      \"description\": \"janet\",\n      \"links\": {\n        \"card\":
         \"CC3MHBsW6vHaL3suLVdTVbO9\",\n        \"debit\": null\n      },\n      \"updated_at\":
-        \"2014-07-28T12:44:05.151262Z\",\n      \"created_at\": \"2014-07-28T12:44:04.938351Z\",\n
-        \     \"transaction_number\": \"HL278-301-3242\",\n      \"expires_at\": \"2014-08-04T12:44:05.064676Z\",\n
+        \"2014-08-06T16:10:33.479111Z\",\n      \"created_at\": \"2014-08-06T16:10:33.257372Z\",\n
+        \     \"transaction_number\": \"HL744-952-5009\",\n      \"expires_at\": \"2014-08-13T16:10:33.392359Z\",\n
         \     \"failure_reason\": null,\n      \"currency\": \"USD\",\n      \"amount\":
         2091,\n      \"meta\": {\n        \"state\": \"new\",\n        \"participant_id\":
-        \"2\"\n      },\n      \"href\": \"/card_holds/HL6GP82LFspeIjW9XWztLEwE\",\n
+        \"2\"\n      },\n      \"href\": \"/card_holds/HL1vxwGqvZFvkpjdSyBB74SF\",\n
         \     \"failure_reason_code\": null,\n      \"voided_at\": null,\n      \"id\":
-        \"HL6GP82LFspeIjW9XWztLEwE\"\n    }\n  ],\n  \"links\": {\n    \"card_holds.events\":
+        \"HL1vxwGqvZFvkpjdSyBB74SF\"\n    }\n  ],\n  \"links\": {\n    \"card_holds.events\":
         \"/card_holds/{card_holds.id}/events\",\n    \"card_holds.card\": \"/cards/{card_holds.card}\",\n
         \   \"card_holds.debits\": \"/card_holds/{card_holds.id}/debits\",\n    \"card_holds.debit\":
         \"/debits/{card_holds.debit}\"\n  }\n}"}
@@ -200,79 +157,58 @@ interactions:
       content-type: [application/json]
     status: {code: 201, message: CREATED}
 - request:
-    body: '{"amount": 2091, "description": "janet"}'
+    body: '{"amount": 2091, "meta": {"exchange_id": 2, "participant_id": 2}, "description":
+      "janet"}'
     headers: {}
     method: POST
-    uri: https://api.balancedpayments.com:443/card_holds/HL6GP82LFspeIjW9XWztLEwE/debits
+    uri: https://api.balancedpayments.com:443/card_holds/HL1vxwGqvZFvkpjdSyBB74SF/debits
   response:
     body: {string: !!python/unicode "{\n  \"debits\": [\n    {\n      \"status\":
         \"succeeded\",\n      \"description\": \"janet\",\n      \"links\": {\n        \"customer\":
         \"CU3KXdyvNSDeyLP3pAWr9hqd\",\n        \"source\": \"CC3MHBsW6vHaL3suLVdTVbO9\",\n
         \       \"order\": null,\n        \"dispute\": null\n      },\n      \"updated_at\":
-        \"2014-07-28T12:44:06.139206Z\",\n      \"created_at\": \"2014-07-28T12:44:05.676736Z\",\n
-        \     \"transaction_number\": \"W013-682-4382\",\n      \"failure_reason\":
+        \"2014-08-06T16:10:34.625458Z\",\n      \"created_at\": \"2014-08-06T16:10:34.219263Z\",\n
+        \     \"transaction_number\": \"W452-602-8336\",\n      \"failure_reason\":
         null,\n      \"currency\": \"USD\",\n      \"amount\": 2091,\n      \"failure_reason_code\":
-        null,\n      \"meta\": {\n        \"state\": \"new\",\n        \"participant_id\":
-        \"2\"\n      },\n      \"href\": \"/debits/WD6HEBOYVE3p11E9idopswsd\",\n      \"appears_on_statement_as\":
-        \"BAL*example.com\",\n      \"id\": \"WD6HEBOYVE3p11E9idopswsd\"\n    }\n
+        null,\n      \"meta\": {\n        \"exchange_id\": \"2\",\n        \"participant_id\":
+        \"2\"\n      },\n      \"href\": \"/debits/WD1wCGE8xvdpujzu33oQ0Iuc\",\n      \"appears_on_statement_as\":
+        \"BAL*example.com\",\n      \"id\": \"WD1wCGE8xvdpujzu33oQ0Iuc\"\n    }\n
         \ ],\n  \"links\": {\n    \"debits.customer\": \"/customers/{debits.customer}\",\n
         \   \"debits.dispute\": \"/disputes/{debits.dispute}\",\n    \"debits.source\":
         \"/resources/{debits.source}\",\n    \"debits.order\": \"/orders/{debits.order}\",\n
         \   \"debits.refunds\": \"/debits/{debits.id}/refunds\",\n    \"debits.events\":
         \"/debits/{debits.id}/events\"\n  }\n}"}
     headers:
-      content-length: ['1063']
+      content-length: ['1067']
       content-type: [application/json]
     status: {code: 201, message: CREATED}
 - request:
     body: '{"status": "succeeded", "description": "janet", "amount": 2091, "created_at":
-      "2014-07-28T12:44:04.938351Z", "card_href": "/cards/CC3MHBsW6vHaL3suLVdTVbO9",
-      "updated_at": "2014-07-28T12:44:05.151262Z", "expires_at": "2014-08-04T12:44:05.064676Z",
-      "failure_reason": null, "currency": "USD", "transaction_number": "HL278-301-3242",
+      "2014-08-06T16:10:33.257372Z", "card_href": "/cards/CC3MHBsW6vHaL3suLVdTVbO9",
+      "updated_at": "2014-08-06T16:10:33.479111Z", "expires_at": "2014-08-13T16:10:33.392359Z",
+      "failure_reason": null, "currency": "USD", "transaction_number": "HL744-952-5009",
       "meta": {"state": "captured", "participant_id": "2"}, "debit": null, "failure_reason_code":
-      null, "voided_at": null, "id": "HL6GP82LFspeIjW9XWztLEwE"}'
+      null, "voided_at": null, "id": "HL1vxwGqvZFvkpjdSyBB74SF"}'
     headers: {}
     method: PUT
-    uri: https://api.balancedpayments.com:443/card_holds/HL6GP82LFspeIjW9XWztLEwE
+    uri: https://api.balancedpayments.com:443/card_holds/HL1vxwGqvZFvkpjdSyBB74SF
   response:
     body: {string: !!python/unicode "{\n  \"card_holds\": [\n    {\n      \"status\":
         \"succeeded\",\n      \"description\": \"janet\",\n      \"links\": {\n        \"card\":
-        \"CC3MHBsW6vHaL3suLVdTVbO9\",\n        \"debit\": \"WD6HEBOYVE3p11E9idopswsd\"\n
-        \     },\n      \"updated_at\": \"2014-07-28T12:44:06.588345Z\",\n      \"created_at\":
-        \"2014-07-28T12:44:04.938351Z\",\n      \"transaction_number\": \"HL278-301-3242\",\n
-        \     \"expires_at\": \"2014-08-04T12:44:05.064676Z\",\n      \"failure_reason\":
+        \"CC3MHBsW6vHaL3suLVdTVbO9\",\n        \"debit\": \"WD1wCGE8xvdpujzu33oQ0Iuc\"\n
+        \     },\n      \"updated_at\": \"2014-08-06T16:10:35.009812Z\",\n      \"created_at\":
+        \"2014-08-06T16:10:33.257372Z\",\n      \"transaction_number\": \"HL744-952-5009\",\n
+        \     \"expires_at\": \"2014-08-13T16:10:33.392359Z\",\n      \"failure_reason\":
         null,\n      \"currency\": \"USD\",\n      \"amount\": 2091,\n      \"meta\":
         {\n        \"state\": \"captured\",\n        \"participant_id\": \"2\"\n      },\n
-        \     \"href\": \"/card_holds/HL6GP82LFspeIjW9XWztLEwE\",\n      \"failure_reason_code\":
-        null,\n      \"voided_at\": null,\n      \"id\": \"HL6GP82LFspeIjW9XWztLEwE\"\n
+        \     \"href\": \"/card_holds/HL1vxwGqvZFvkpjdSyBB74SF\",\n      \"failure_reason_code\":
+        null,\n      \"voided_at\": null,\n      \"id\": \"HL1vxwGqvZFvkpjdSyBB74SF\"\n
         \   }\n  ],\n  \"links\": {\n    \"card_holds.events\": \"/card_holds/{card_holds.id}/events\",\n
         \   \"card_holds.card\": \"/cards/{card_holds.card}\",\n    \"card_holds.debits\":
         \"/card_holds/{card_holds.id}/debits\",\n    \"card_holds.debit\": \"/debits/{card_holds.debit}\"\n
         \ }\n}"}
     headers:
       content-length: ['971']
-      content-type: [application/json]
-    status: {code: 200, message: OK}
-- request:
-    body: null
-    headers: {}
-    method: GET
-    uri: https://api.balancedpayments.com:443/customers/CU3KXdyvNSDeyLP3pAWr9hqd
-  response:
-    body:
-      string: !!binary |
-        H4sIAAAAAAAAA41Uy27bMBC85ysEnWvLipQ29i1oby2CAG3RokUh0CQLEZFIhY+ggqF/79KWZJpU
-        wlx02J0ZcmdHPFwlSYqN0qKlUqW75DcUkuRw/EKLo5ZClZumeTfVGsYfLXQCAUwJI7EPhDqhSjOO
-        NBN8VBlFhlnNdARpSiqkAZFeb/Jytfmw2uTf8ptdWezKcp0Xxfvb7a90pmBJX6UU622+uSlKh0LE
-        vmoF17U/DCP22I/fi88/Sf98//UT7b88FN3dD7mtn8j5zK4W3B8wrSX9a+nZ7GAWVwKjcY24rpRG
-        2lgjUy5WLdK4Ph/XUo08i+mTheZp4KCdradI+qMhQiRV3qYw070HhD3BSun1cjkPy/bivhcg0glo
-        NBUWZKGJheFa9m43GGRvFNxDqWopdUrxqkFKl/6YtEWsCYrsInADnPXH5sdO6oT3HP31HOE0A9eO
-        eVbZYV7s2B/GFTlEjCSpatGQ4yqdKDhkRobMwZ2S7GjsEX+sED6aFJG5hAZKhO5ZTGLELHDdv/UF
-        H5xfesEM+k9TySEFbxsmhAeXsrZFLDlBAiZhqjOaRsgzKuBribhC2D5eEY0LZKADj4ThsRkm0AL7
-        GV5m1ESuIOkECxSEJKe3/ZVwjpiAC08tieZpAsH/NVwN/wHQiK4AUwYAAA==
-    headers:
-      content-encoding: [gzip]
-      content-length: ['499']
       content-type: [application/json]
     status: {code: 200, message: OK}
 - request:
@@ -312,13 +248,13 @@ interactions:
     body: {string: !!python/unicode "{\n  \"card_holds\": [\n    {\n      \"status\":
         \"succeeded\",\n      \"description\": \"janet\",\n      \"links\": {\n        \"card\":
         \"CC3MHBsW6vHaL3suLVdTVbO9\",\n        \"debit\": null\n      },\n      \"updated_at\":
-        \"2014-07-28T12:44:08.073612Z\",\n      \"created_at\": \"2014-07-28T12:44:07.849448Z\",\n
-        \     \"transaction_number\": \"HL787-086-5782\",\n      \"expires_at\": \"2014-08-04T12:44:07.976594Z\",\n
+        \"2014-08-06T16:10:36.017293Z\",\n      \"created_at\": \"2014-08-06T16:10:35.807447Z\",\n
+        \     \"transaction_number\": \"HL893-713-2609\",\n      \"expires_at\": \"2014-08-13T16:10:35.934417Z\",\n
         \     \"failure_reason\": null,\n      \"currency\": \"USD\",\n      \"amount\":
         2091,\n      \"meta\": {\n        \"state\": \"new\",\n        \"participant_id\":
-        \"2\"\n      },\n      \"href\": \"/card_holds/HL6K6eJyyZDc7Wa2YNTWgl1P\",\n
+        \"2\"\n      },\n      \"href\": \"/card_holds/HL1yplLIcgwLVUWkXXK5D96l\",\n
         \     \"failure_reason_code\": null,\n      \"voided_at\": null,\n      \"id\":
-        \"HL6K6eJyyZDc7Wa2YNTWgl1P\"\n    }\n  ],\n  \"links\": {\n    \"card_holds.events\":
+        \"HL1yplLIcgwLVUWkXXK5D96l\"\n    }\n  ],\n  \"links\": {\n    \"card_holds.events\":
         \"/card_holds/{card_holds.id}/events\",\n    \"card_holds.card\": \"/cards/{card_holds.card}\",\n
         \   \"card_holds.debits\": \"/card_holds/{card_holds.id}/debits\",\n    \"card_holds.debit\":
         \"/debits/{card_holds.debit}\"\n  }\n}"}
@@ -327,79 +263,58 @@ interactions:
       content-type: [application/json]
     status: {code: 201, message: CREATED}
 - request:
-    body: '{"amount": 1576, "description": "janet"}'
+    body: '{"amount": 1576, "meta": {"exchange_id": 3, "participant_id": 2}, "description":
+      "janet"}'
     headers: {}
     method: POST
-    uri: https://api.balancedpayments.com:443/card_holds/HL6K6eJyyZDc7Wa2YNTWgl1P/debits
+    uri: https://api.balancedpayments.com:443/card_holds/HL1yplLIcgwLVUWkXXK5D96l/debits
   response:
     body: {string: !!python/unicode "{\n  \"debits\": [\n    {\n      \"status\":
         \"succeeded\",\n      \"description\": \"janet\",\n      \"links\": {\n        \"customer\":
         \"CU3KXdyvNSDeyLP3pAWr9hqd\",\n        \"source\": \"CC3MHBsW6vHaL3suLVdTVbO9\",\n
         \       \"order\": null,\n        \"dispute\": null\n      },\n      \"updated_at\":
-        \"2014-07-28T12:44:08.888162Z\",\n      \"created_at\": \"2014-07-28T12:44:08.477253Z\",\n
-        \     \"transaction_number\": \"W346-884-7108\",\n      \"failure_reason\":
+        \"2014-08-06T16:10:37.174940Z\",\n      \"created_at\": \"2014-08-06T16:10:36.767099Z\",\n
+        \     \"transaction_number\": \"W550-194-1344\",\n      \"failure_reason\":
         null,\n      \"currency\": \"USD\",\n      \"amount\": 1576,\n      \"failure_reason_code\":
-        null,\n      \"meta\": {\n        \"state\": \"new\",\n        \"participant_id\":
-        \"2\"\n      },\n      \"href\": \"/debits/WD6KNTVQcbvgalfEe3OD7CRv\",\n      \"appears_on_statement_as\":
-        \"BAL*example.com\",\n      \"id\": \"WD6KNTVQcbvgalfEe3OD7CRv\"\n    }\n
+        null,\n      \"meta\": {\n        \"exchange_id\": \"3\",\n        \"participant_id\":
+        \"2\"\n      },\n      \"href\": \"/debits/WD1zuksSljYxGxbMMHmaFpw4\",\n      \"appears_on_statement_as\":
+        \"BAL*example.com\",\n      \"id\": \"WD1zuksSljYxGxbMMHmaFpw4\"\n    }\n
         \ ],\n  \"links\": {\n    \"debits.customer\": \"/customers/{debits.customer}\",\n
         \   \"debits.dispute\": \"/disputes/{debits.dispute}\",\n    \"debits.source\":
         \"/resources/{debits.source}\",\n    \"debits.order\": \"/orders/{debits.order}\",\n
         \   \"debits.refunds\": \"/debits/{debits.id}/refunds\",\n    \"debits.events\":
         \"/debits/{debits.id}/events\"\n  }\n}"}
     headers:
-      content-length: ['1063']
+      content-length: ['1067']
       content-type: [application/json]
     status: {code: 201, message: CREATED}
 - request:
     body: '{"status": "succeeded", "description": "janet", "amount": 2091, "created_at":
-      "2014-07-28T12:44:07.849448Z", "card_href": "/cards/CC3MHBsW6vHaL3suLVdTVbO9",
-      "updated_at": "2014-07-28T12:44:08.073612Z", "expires_at": "2014-08-04T12:44:07.976594Z",
-      "failure_reason": null, "currency": "USD", "transaction_number": "HL787-086-5782",
+      "2014-08-06T16:10:35.807447Z", "card_href": "/cards/CC3MHBsW6vHaL3suLVdTVbO9",
+      "updated_at": "2014-08-06T16:10:36.017293Z", "expires_at": "2014-08-13T16:10:35.934417Z",
+      "failure_reason": null, "currency": "USD", "transaction_number": "HL893-713-2609",
       "meta": {"state": "captured", "participant_id": "2"}, "debit": null, "failure_reason_code":
-      null, "voided_at": null, "id": "HL6K6eJyyZDc7Wa2YNTWgl1P"}'
+      null, "voided_at": null, "id": "HL1yplLIcgwLVUWkXXK5D96l"}'
     headers: {}
     method: PUT
-    uri: https://api.balancedpayments.com:443/card_holds/HL6K6eJyyZDc7Wa2YNTWgl1P
+    uri: https://api.balancedpayments.com:443/card_holds/HL1yplLIcgwLVUWkXXK5D96l
   response:
     body: {string: !!python/unicode "{\n  \"card_holds\": [\n    {\n      \"status\":
         \"succeeded\",\n      \"description\": \"janet\",\n      \"links\": {\n        \"card\":
-        \"CC3MHBsW6vHaL3suLVdTVbO9\",\n        \"debit\": \"WD6KNTVQcbvgalfEe3OD7CRv\"\n
-        \     },\n      \"updated_at\": \"2014-07-28T12:44:09.290268Z\",\n      \"created_at\":
-        \"2014-07-28T12:44:07.849448Z\",\n      \"transaction_number\": \"HL787-086-5782\",\n
-        \     \"expires_at\": \"2014-08-04T12:44:07.976594Z\",\n      \"failure_reason\":
+        \"CC3MHBsW6vHaL3suLVdTVbO9\",\n        \"debit\": \"WD1zuksSljYxGxbMMHmaFpw4\"\n
+        \     },\n      \"updated_at\": \"2014-08-06T16:10:37.710099Z\",\n      \"created_at\":
+        \"2014-08-06T16:10:35.807447Z\",\n      \"transaction_number\": \"HL893-713-2609\",\n
+        \     \"expires_at\": \"2014-08-13T16:10:35.934417Z\",\n      \"failure_reason\":
         null,\n      \"currency\": \"USD\",\n      \"amount\": 2091,\n      \"meta\":
         {\n        \"state\": \"captured\",\n        \"participant_id\": \"2\"\n      },\n
-        \     \"href\": \"/card_holds/HL6K6eJyyZDc7Wa2YNTWgl1P\",\n      \"failure_reason_code\":
-        null,\n      \"voided_at\": null,\n      \"id\": \"HL6K6eJyyZDc7Wa2YNTWgl1P\"\n
+        \     \"href\": \"/card_holds/HL1yplLIcgwLVUWkXXK5D96l\",\n      \"failure_reason_code\":
+        null,\n      \"voided_at\": null,\n      \"id\": \"HL1yplLIcgwLVUWkXXK5D96l\"\n
         \   }\n  ],\n  \"links\": {\n    \"card_holds.events\": \"/card_holds/{card_holds.id}/events\",\n
         \   \"card_holds.card\": \"/cards/{card_holds.card}\",\n    \"card_holds.debits\":
         \"/card_holds/{card_holds.id}/debits\",\n    \"card_holds.debit\": \"/debits/{card_holds.debit}\"\n
         \ }\n}"}
     headers:
       content-length: ['971']
-      content-type: [application/json]
-    status: {code: 200, message: OK}
-- request:
-    body: null
-    headers: {}
-    method: GET
-    uri: https://api.balancedpayments.com:443/customers/CU3KXdyvNSDeyLP3pAWr9hqd
-  response:
-    body:
-      string: !!binary |
-        H4sIAAAAAAAAA41Uy27bMBC85ysEnWvLipQ29i1oby2CAG3RokUh0CQLEZFIhY+ggqF/79KWZJpU
-        wlx02J0ZcmdHPFwlSYqN0qKlUqW75DcUkuRw/EKLo5ZClZumeTfVGsYfLXQCAUwJI7EPhDqhSjOO
-        NBN8VBlFhlnNdARpSiqkAZFeb/Jytfmw2uTf8ptdWezKcp0Xxfvb7a90pmBJX6UU622+uSlKh0LE
-        vmoF17U/DCP22I/fi88/Sf98//UT7b88FN3dD7mtn8j5zK4W3B8wrSX9a+nZ7GAWVwKjcY24rpRG
-        2lgjUy5WLdK4Ph/XUo08i+mTheZp4KCdradI+qMhQiRV3qYw070HhD3BSun1cjkPy/bivhcg0glo
-        NBUWZKGJheFa9m43GGRvFNxDqWopdUrxqkFKl/6YtEWsCYrsInADnPXH5sdO6oT3HP31HOE0A9eO
-        eVbZYV7s2B/GFTlEjCSpatGQ4yqdKDhkRobMwZ2S7GjsEX+sED6aFJG5hAZKhO5ZTGLELHDdv/UF
-        H5xfesEM+k9TySEFbxsmhAeXsrZFLDlBAiZhqjOaRsgzKuBribhC2D5eEY0LZKADj4ThsRkm0AL7
-        GV5m1ESuIOkECxSEJKe3/ZVwjpiAC08tieZpAsH/NVwN/wHQiK4AUwYAAA==
-    headers:
-      content-encoding: [gzip]
-      content-length: ['499']
       content-type: [application/json]
     status: {code: 200, message: OK}
 - request:
@@ -439,13 +354,13 @@ interactions:
     body: {string: !!python/unicode "{\n  \"card_holds\": [\n    {\n      \"status\":
         \"succeeded\",\n      \"description\": \"janet\",\n      \"links\": {\n        \"card\":
         \"CC3MHBsW6vHaL3suLVdTVbO9\",\n        \"debit\": null\n      },\n      \"updated_at\":
-        \"2014-07-28T12:44:10.526231Z\",\n      \"created_at\": \"2014-07-28T12:44:10.311057Z\",\n
-        \     \"transaction_number\": \"HL886-348-7865\",\n      \"expires_at\": \"2014-08-04T12:44:10.436799Z\",\n
+        \"2014-08-06T16:10:38.643314Z\",\n      \"created_at\": \"2014-08-06T16:10:38.441152Z\",\n
+        \     \"transaction_number\": \"HL139-329-1699\",\n      \"expires_at\": \"2014-08-13T16:10:38.557152Z\",\n
         \     \"failure_reason\": null,\n      \"currency\": \"USD\",\n      \"amount\":
         2091,\n      \"meta\": {\n        \"state\": \"new\",\n        \"participant_id\":
-        \"2\"\n      },\n      \"href\": \"/card_holds/HL6MShgF10sXHw6r21W3OTLX\",\n
+        \"2\"\n      },\n      \"href\": \"/card_holds/HL1BndAv7I2I7BPg7Tl25oqY\",\n
         \     \"failure_reason_code\": null,\n      \"voided_at\": null,\n      \"id\":
-        \"HL6MShgF10sXHw6r21W3OTLX\"\n    }\n  ],\n  \"links\": {\n    \"card_holds.events\":
+        \"HL1BndAv7I2I7BPg7Tl25oqY\"\n    }\n  ],\n  \"links\": {\n    \"card_holds.events\":
         \"/card_holds/{card_holds.id}/events\",\n    \"card_holds.card\": \"/cards/{card_holds.card}\",\n
         \   \"card_holds.debits\": \"/card_holds/{card_holds.id}/debits\",\n    \"card_holds.debit\":
         \"/debits/{card_holds.debit}\"\n  }\n}"}
@@ -454,43 +369,44 @@ interactions:
       content-type: [application/json]
     status: {code: 201, message: CREATED}
 - request:
-    body: '{"amount": 2092, "description": "janet"}'
+    body: '{"amount": 2092, "meta": {"exchange_id": 4, "participant_id": 2}, "description":
+      "janet"}'
     headers: {}
     method: POST
-    uri: https://api.balancedpayments.com:443/card_holds/HL6MShgF10sXHw6r21W3OTLX/debits
+    uri: https://api.balancedpayments.com:443/card_holds/HL1BndAv7I2I7BPg7Tl25oqY/debits
   response:
     body: {string: !!python/unicode "{\n  \"errors\": [\n    {\n      \"status\":
         \"Bad Request\",\n      \"category_code\": \"request\",\n      \"additional\":
         null,\n      \"status_code\": 400,\n      \"category_type\": \"request\",\n
         \     \"extras\": {\n        \"amount\": \"\\\"2092\\\" must be <= 2091\"\n
-        \     },\n      \"request_id\": \"OHMdf6d676e165411e4b88e02b12035401b\",\n
+        \     },\n      \"request_id\": \"OHM35123eac1d8411e4aecc02b12035401b\",\n
         \     \"description\": \"Invalid field [amount] - \\\"2092\\\" must be <=
-        2091 Your request id is OHMdf6d676e165411e4b88e02b12035401b.\"\n    }\n  ]\n}"}
+        2091 Your request id is OHM35123eac1d8411e4aecc02b12035401b.\"\n    }\n  ]\n}"}
     headers:
       content-length: ['444']
       content-type: [application/json]
     status: {code: 400, message: BAD REQUEST}
 - request:
-    body: '{"status": "succeeded", "transaction_number": "HL886-348-7865", "description":
-      "janet", "amount": 2091, "created_at": "2014-07-28T12:44:10.311057Z", "card_href":
-      "/cards/CC3MHBsW6vHaL3suLVdTVbO9", "updated_at": "2014-07-28T12:44:10.526231Z",
-      "expires_at": "2014-08-04T12:44:10.436799Z", "failure_reason": null, "currency":
+    body: '{"status": "succeeded", "transaction_number": "HL139-329-1699", "description":
+      "janet", "amount": 2091, "created_at": "2014-08-06T16:10:38.441152Z", "card_href":
+      "/cards/CC3MHBsW6vHaL3suLVdTVbO9", "updated_at": "2014-08-06T16:10:38.643314Z",
+      "expires_at": "2014-08-13T16:10:38.557152Z", "failure_reason": null, "currency":
       "USD", "is_void": true, "meta": {"state": "cancelled", "participant_id": "2"},
-      "debit": null, "failure_reason_code": null, "voided_at": null, "id": "HL6MShgF10sXHw6r21W3OTLX"}'
+      "debit": null, "failure_reason_code": null, "voided_at": null, "id": "HL1BndAv7I2I7BPg7Tl25oqY"}'
     headers: {}
     method: PUT
-    uri: https://api.balancedpayments.com:443/card_holds/HL6MShgF10sXHw6r21W3OTLX
+    uri: https://api.balancedpayments.com:443/card_holds/HL1BndAv7I2I7BPg7Tl25oqY
   response:
     body: {string: !!python/unicode "{\n  \"card_holds\": [\n    {\n      \"status\":
         \"succeeded\",\n      \"description\": \"janet\",\n      \"links\": {\n        \"card\":
         \"CC3MHBsW6vHaL3suLVdTVbO9\",\n        \"debit\": null\n      },\n      \"updated_at\":
-        \"2014-07-28T12:44:11.365477Z\",\n      \"created_at\": \"2014-07-28T12:44:10.311057Z\",\n
-        \     \"transaction_number\": \"HL886-348-7865\",\n      \"expires_at\": \"2014-08-04T12:44:10.436799Z\",\n
+        \"2014-08-06T16:10:39.911789Z\",\n      \"created_at\": \"2014-08-06T16:10:38.441152Z\",\n
+        \     \"transaction_number\": \"HL139-329-1699\",\n      \"expires_at\": \"2014-08-13T16:10:38.557152Z\",\n
         \     \"failure_reason\": null,\n      \"currency\": \"USD\",\n      \"amount\":
         2091,\n      \"meta\": {\n        \"state\": \"cancelled\",\n        \"participant_id\":
-        \"2\"\n      },\n      \"href\": \"/card_holds/HL6MShgF10sXHw6r21W3OTLX\",\n
-        \     \"failure_reason_code\": null,\n      \"voided_at\": \"2014-07-28T12:44:11.365480Z\",\n
-        \     \"id\": \"HL6MShgF10sXHw6r21W3OTLX\"\n    }\n  ],\n  \"links\": {\n
+        \"2\"\n      },\n      \"href\": \"/card_holds/HL1BndAv7I2I7BPg7Tl25oqY\",\n
+        \     \"failure_reason_code\": null,\n      \"voided_at\": \"2014-08-06T16:10:39.911791Z\",\n
+        \     \"id\": \"HL1BndAv7I2I7BPg7Tl25oqY\"\n    }\n  ],\n  \"links\": {\n
         \   \"card_holds.events\": \"/card_holds/{card_holds.id}/events\",\n    \"card_holds.card\":
         \"/cards/{card_holds.card}\",\n    \"card_holds.debits\": \"/card_holds/{card_holds.id}/debits\",\n
         \   \"card_holds.debit\": \"/debits/{card_holds.debit}\"\n  }\n}"}
@@ -499,18 +415,18 @@ interactions:
       content-type: [application/json]
     status: {code: 200, message: OK}
 - request:
-    body: '{"meta": {"seq": 3}}'
+    body: '{"meta": {"seq": 4}}'
     headers: {}
     method: POST
     uri: https://api.balancedpayments.com:443/customers
   response:
     body: {string: !!python/unicode "{\n  \"customers\": [\n    {\n      \"name\":
         null,\n      \"links\": {\n        \"source\": null,\n        \"destination\":
-        null\n      },\n      \"updated_at\": \"2014-07-28T12:44:12.158196Z\",\n      \"created_at\":
-        \"2014-07-28T12:44:12.031864Z\",\n      \"dob_month\": null,\n      \"id\":
-        \"CU6OOh9HBCcXISrxLboPWJbr\",\n      \"phone\": null,\n      \"href\": \"/customers/CU6OOh9HBCcXISrxLboPWJbr\",\n
+        null\n      },\n      \"updated_at\": \"2014-08-06T16:10:40.816863Z\",\n      \"created_at\":
+        \"2014-08-06T16:10:40.687848Z\",\n      \"dob_month\": null,\n      \"id\":
+        \"CU1DTFMftE4lvobMCsSFSonP\",\n      \"phone\": null,\n      \"href\": \"/customers/CU1DTFMftE4lvobMCsSFSonP\",\n
         \     \"merchant_status\": \"no-match\",\n      \"meta\": {\n        \"seq\":
-        \"3\"\n      },\n      \"dob_year\": null,\n      \"address\": {\n        \"city\":
+        \"4\"\n      },\n      \"dob_year\": null,\n      \"address\": {\n        \"city\":
         null,\n        \"line2\": null,\n        \"line1\": null,\n        \"state\":
         null,\n        \"postal_code\": null,\n        \"country_code\": null\n      },\n
         \     \"business_name\": null,\n      \"ssn_last4\": null,\n      \"email\":
@@ -540,16 +456,16 @@ interactions:
         \       \"customer\": null\n      },\n      \"fingerprint\": \"9ea2b317b53183f5a93ba23a594a0b8a0f2183ea9cc338e0964755cd9df71b99\",\n
         \     \"cvv_result\": null,\n      \"number\": \"xxxxxxxxxxxx4448\",\n      \"avs_postal_match\":
         null,\n      \"expiration_month\": 12,\n      \"meta\": {},\n      \"id\":
-        \"CC6PZQCKGZAQsuwLSTBbRqId\",\n      \"category\": \"other\",\n      \"type\":
+        \"CC1EVcqDEt16H3uaDsjp7kqN\",\n      \"category\": \"other\",\n      \"type\":
         \"credit\",\n      \"cvv_match\": null,\n      \"bank_name\": \"CREDIT AGRICOLE
         BANK POLSKA, S.A.\",\n      \"avs_street_match\": null,\n      \"brand\":
-        \"Visa\",\n      \"updated_at\": \"2014-07-28T12:44:13.094156Z\",\n      \"address\":
+        \"Visa\",\n      \"updated_at\": \"2014-08-06T16:10:41.600581Z\",\n      \"address\":
         {\n        \"city\": null,\n        \"line2\": null,\n        \"line1\": null,\n
         \       \"state\": null,\n        \"postal_code\": null,\n        \"country_code\":
         null\n      },\n      \"can_debit\": true,\n      \"name\": null,\n      \"expiration_year\":
         2020,\n      \"cvv\": null,\n      \"is_verified\": true,\n      \"avs_result\":
-        null,\n      \"can_credit\": false,\n      \"href\": \"/cards/CC6PZQCKGZAQsuwLSTBbRqId\",\n
-        \     \"created_at\": \"2014-07-28T12:44:13.094153Z\"\n    }\n  ],\n  \"links\":
+        null,\n      \"can_credit\": false,\n      \"href\": \"/cards/CC1EVcqDEt16H3uaDsjp7kqN\",\n
+        \     \"created_at\": \"2014-08-06T16:10:41.600578Z\"\n    }\n  ],\n  \"links\":
         {\n    \"cards.card_holds\": \"/cards/{cards.id}/card_holds\",\n    \"cards.customer\":
         \"/customers/{cards.customer}\",\n    \"cards.disputes\": \"/cards/{cards.id}/disputes\",\n
         \   \"cards.debits\": \"/cards/{cards.id}/debits\"\n  }\n}"}
@@ -561,80 +477,58 @@ interactions:
       content-type: [application/json]
     status: {code: 201, message: CREATED}
 - request:
-    body: '{"links": {"customer": "/customers/CU6OOh9HBCcXISrxLboPWJbr"}, "cvv_result":
+    body: '{"links": {"customer": "/customers/CU1DTFMftE4lvobMCsSFSonP"}, "cvv_result":
       null, "number": "xxxxxxxxxxxx4448", "avs_postal_match": null, "expiration_month":
-      12, "meta": {}, "id": "CC6PZQCKGZAQsuwLSTBbRqId", "category": "other", "type":
+      12, "meta": {}, "id": "CC1EVcqDEt16H3uaDsjp7kqN", "category": "other", "type":
       "credit", "cvv_match": null, "bank_name": "CREDIT AGRICOLE BANK POLSKA, S.A.",
-      "avs_street_match": null, "brand": "Visa", "updated_at": "2014-07-28T12:44:13.094156Z",
+      "avs_street_match": null, "brand": "Visa", "updated_at": "2014-08-06T16:10:41.600581Z",
       "fingerprint": "9ea2b317b53183f5a93ba23a594a0b8a0f2183ea9cc338e0964755cd9df71b99",
       "can_debit": true, "customer": null, "name": null, "expiration_year": 2020,
       "cvv": null, "is_verified": true, "avs_result": null, "can_credit": false, "created_at":
-      "2014-07-28T12:44:13.094153Z", "address": {"city": null, "line2": null, "line1":
+      "2014-08-06T16:10:41.600578Z", "address": {"city": null, "line2": null, "line1":
       null, "state": null, "postal_code": null, "country_code": null}}'
     headers: {}
     method: PUT
-    uri: https://api.balancedpayments.com:443/cards/CC6PZQCKGZAQsuwLSTBbRqId
+    uri: https://api.balancedpayments.com:443/cards/CC1EVcqDEt16H3uaDsjp7kqN
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAAA41U247aMBB936+I8rwLuULCG6SrLQUVFuhFVFVkx85ibeJQ22FBKP9eOxcILKs2
-        D5FyJjNzzsyxj3eapkeAIa4PtF/yQ9OO5VvCCaGvCm4A9WfORZZiJlE9+NabzTb+51EQ/Rwv2X4K
-        s/mPL5DpdX5x3xSKCX3BbMsIFSrRx8CCttmHrm16duwC34bAsoHrO8CAHjBiS+IY+FFk2x42/J7T
-        d90I+Sjum9D39VPhaLcLGeZ5ourSPElOEZqnsKK5bz2O43jnbLDj4TbjAiRhCkS0ua6B91vCgCAZ
-        DdOMChU3rVOHFAughnOWSVA5lqA3Xz8Hk6f18Jnnb9PlagQXf8aoxRoI/JKxg/o7ExtJ81RUHLZY
-        wRHDiIhLoTc5QkBfQwrSMitYPH4ar7Th02IczKaP2mj4daLNZ9PlZHivLTvDzqV2LhjG4rZ2yAAt
-        5XwnHJzT8i2S5FEIykVahuk8GP0Hy1uZ1sBxBqbd6Vk9w3PXrU4IyRVd+4gIJb+9sspw2LoNm+9h
-        uTihZF8VqTcaZehGMMpyKtghbEXfuTUCNEQYyvEPNMFyfPZUNeYLn7U8csBAnQvLsIy2Qa8Y6oSH
-        O8xITLCa70UDZcjbdlacak8MtBgk/Mxqw3AsC+nd8hR3/8N+DP9jh4bvmK69rg5yIQf0Wwm6ug+q
-        W6OjuoabLCkvkIbEseTSIagoWdXxaipNXusm6TbXCu/WmQ1Q1D6qkxDh21zgD1qdoheNylV+lFHF
-        pLjirvgLKWEQ5QsFAAA=
+        H4sIAAAAAAAAA41U226jMBB971cgnlticydv2STdrXpVk+1DVytksGm8AUNtEzWK+PfFXBKSpqvl
+        AYkzzMw5M8feXWiaHiOOhT7WftUfmrZr3jWcUrZWcA+oP0sh84zwGtWnP+FseX2fyLmdbvLofioW
+        14ucPeldfnXZF0ooeyO84JRJlRgQZEYW9CLHgr6VOCiwImRayAlsBCIfgcSscYKCOLYsn4DAtT3H
+        iXGAEw9GQaDvC8ebTciJKFNVl5Vpuo+wMotamh+Dx7Zt/5CNNiIsciFRGmZIxqvTGuSjoBxJmrMw
+        y5lUcWjuO2REIjWcg0yKm7FM4fwlfp/NJXR/WCWaiT+Ft35/GLBGkrzlfKv+zuWqprkvKrcFUXDM
+        CabyWOhZjhFi65ChrMmaPs9nN0tt8v35Zvp4N9e+TR5utafHu8Xt5FJbGBPjWLuQnBB5XnvEEWvk
+        vFCBDmllgWvyOETNIk0A7SvgXwF3Cd0xBGPbNCAIfNd7HXTCuF7RqY+oVPKHK2sNR8zzMPwM14uT
+        SvZJkW6jcY7PBOO8ZJJvw0H0k1tjxEJMonr8Y03ykhw81Y75yGcDj2wJUufCBCYYGvSEoU5FuCGc
+        JpSo+R41UIY8b2fFqfPEWEtQKg6sVpwkdSF91Jzi0X/Yj5N/7hAaLgCO57+2B7mqB/RbCTq5D9pb
+        w1Bdw1WeNhdIT2LXcDEorhpWXbydSp83uElG/bUiRl1mD1Sdj7okTEVRSvJFq330qFGzyq8y2lgt
+        rrqo/gIsC5QGCwUAAA==
     headers:
       content-encoding: [gzip]
-      content-length: ['584']
+      content-length: ['583']
       content-type: [application/json]
     status: {code: 200, message: OK}
 - request:
     body: null
     headers: {}
     method: GET
-    uri: https://api.balancedpayments.com:443/customers/CU6OOh9HBCcXISrxLboPWJbr
+    uri: https://api.balancedpayments.com:443/customers/CU1DTFMftE4lvobMCsSFSonP/cards?limit=10&offset=0
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAAA41UwY7TMBC971dEOdNNkw2l2yN7AYS0SIBAIBRNbKNYm9jFdtBWVf6dcZukrh0w
-        lxxm3nv2vHnx8SZJUtJrIzumdLpLvmMhSY6nL7YEdAyrom/bF1Ot5eLJQicQwrTsFfGBWKdMGy7A
-        cClGlVFkmNX6PQXDaAUGEWmxzsvV+tWq2H7Ki11Z7vLiNn+5ze8339KZQhSLUNZ3+XZTOhQq66qT
-        wjT+MJzaYx8+bx4fm/s3rx/I17cf1fP7Wn748q5WlzP3jRT+gGmj2E9Lz2YHs7gSGk0aEKbSBkxv
-        jUyFXHVgSHM5rmMGPIvZLwu9SwMH7WwHBsofDShVTHubItwcPCDuCVfKiuVyHpbtxX0vUGQvsdFW
-        RNKFJpG9MOrgdoNB6l7jPbSullKntaha0Kb0x2Qd8DYo8qvADXjWD5sfO6kT3kv0b+cIpxm6dsqz
-        zo7zYsf+MK7IIRJQtGpkS0+rdKLgkDkdMgd3TrKjUYN4qoCcTIrIXEMDJcpqHpMYMQtc92/9iw/O
-        L71gBns2TAlMwf8NE8KDS1nbIpacIQGTcr3vDYuQZ1TANwqEBmIfr4jGFTLQwUeiF7EZJtAC+ze+
-        zNBGrqDYBAsUpKLnt/0f4RwxARefWhrN0wTC/2u4Gf4A2ILrwFMGAAA=
-    headers:
-      content-encoding: [gzip]
-      content-length: ['497']
-      content-type: [application/json]
-    status: {code: 200, message: OK}
-- request:
-    body: null
-    headers: {}
-    method: GET
-    uri: https://api.balancedpayments.com:443/customers/CU6OOh9HBCcXISrxLboPWJbr/cards?limit=10&offset=0
-  response:
-    body:
-      string: !!binary |
-        H4sIAAAAAAAAA6VUbW/aMBD+3l8R+cM+tZBXIEjVRFnVsaJCS/cipilyYqdYTZzMdhio4r/PdhIS
-        KNWmjQ+RuPPdPXfPc/dyZhggggxxMDS+yz+G8aK/0pwQ+qzMtUG9LLjIUsykFYw/92azlf/xahx9
-        myzYZhpm86+fQgaq+N15nSgm9AmznBEqVKCPoR06Vj/0HGvgxB70nRDaDvR8F5rhAJqxLe0Y+lHk
-        OANs+j2373kR8lHct0LfB/vE0XodMMyLROWlRZLsPbRIwxLmpvVzXXfQRMM1D/KMC5gEKRTR6jgH
-        3uSEQUEyGqQZFcpv2fsKKRZQDadpkyA9lnFvvrwf394sR/e8+DVdPF6FDz8nqIUaCvyUsa16nYmV
-        hLlPKrY5VuaIYUTEYaMnMYaQPgcUpjpq/HD9YfJojG4eJuPZ9Nq4Gt3dGvPZdHE7OjcWnVHnsHcu
-        GMbidO8hg1S384Vw2IQVOZLgUQA1kbZpuRdm/8IePFr20HWHltPp2T1z4C1blRCSFB3riAjVfpuy
-        UnDYPm22XpslcUK1fZSkYjTK0AlnlBVUsG3Q8r5SawRpgHAoxz80BCtwo6lyzAc6a2lki6HaC9u0
-        zbZAjxACwoM1ZiQmWM33oIAS5Gk5K0yVJoZGDBPeoFoxHMtEoKu3uPsX8mP4Dxyavmt5zrJc5J0c
-        0A/VEKgVrycGEsi1CLr1TZC137gIJbT3CUmJuLTMd1kccywuzUokgOLN4QKDpqnq4Px7cl1VArUq
-        VkBZXVpqQ87wmmSFkmjDLRCZPAwqriQTxIT9f8NydPpeHN3W8gJ3EOF5IbACUtP5olntELTr7r0V
-        oNLTvsgtKqq42rurR10FyaTBKkv01T9RSr2q/AfF9Fq8EVP5VIdnu9+TvyXqVwYAAA==
+        H4sIAAAAAAAAA6VUTW/bMAy991cYOuzUJpLtJHaAYsiSdCv6iabrocNgyLbcaLUlV5KDBkX++yR/
+        xE6aDsOWg4GQIvnI98i3I8sCERaxBGPrh/5jWW/lV5tTyp6NuTGYl4VUPCNCW8H0O5rdn10lau6m
+        Kx5eTeXibMHZLajjN8dNooSyJyJyQZkygT7BduigUThwkOckA+w7IbYdPPBdDEMPw8TWdoL9KHIc
+        j0B/6I4Ggyj242SEQt8H28TRahUIIovU5GVFmm49rMjCCuZr5+e6rtdG45UMci4VToMMq2i5n4O8
+        5lRgRTkLMs6U8SN7WyEjCpvhtG3SuBzLFM0fopfZXKHhN6fAM/krHz2/XHdQY0WeuFib11wtNcxt
+        UrXOiTFHgsRU7TZ6EGOI2XPAcFZGTe/ms/N7a/L17nx6czm3vkyuL6zbm8vFxeTYWvQmvd3epRKE
+        qMO9hwKzsp0HKnEbVuSxBh8HuCTShsg9gd4JHN6j4RjBsWv3EPS94eixUymONUX7OqLKtN+lrBIc
+        sQ+b0XuzJk6ZtveS1IxGPD7gjHjBlFgHHe87tUaYBTEJ9fjHlhIFaTVVjXlHZx2NrAk2e2FDG3YF
+        uocQUBmsiKAJJWa+OwWMIA/L2WCqNTG2EpzKFtVSkEQnAv1yi/t/IT9B/sgh6g0hHIy8x2qRN3pA
+        P01DoFF8OTGQYlmKoN/cBF37g4tQQfuc0oyqUwQ/8SSRRJ3CWiSAkdfdBQZtU/XB+ffkZVUNFNWs
+        gKq6tjSGXJAV5YWRaMstUFwfBhNXkQkSKv6/YT268l7s3dbqAvdiKvNCEQOkofOtZLVH401/660B
+        VZ7uRe5QUcc13k0z6jpIJw2WPC2v/oFS5lXt3ylWrsUHMbXPdHi0+Q2h8zE4VwYAAA==
     headers:
       content-encoding: [gzip]
       content-length: ['676']
@@ -645,31 +539,31 @@ interactions:
       "bob"}'
     headers: {}
     method: POST
-    uri: https://api.balancedpayments.com:443/cards/CC6PZQCKGZAQsuwLSTBbRqId/card_holds
+    uri: https://api.balancedpayments.com:443/cards/CC1EVcqDEt16H3uaDsjp7kqN/card_holds
   response:
     body: {string: !!python/unicode "{\n  \"errors\": [\n    {\n      \"status\":
         \"Payment Required\",\n      \"category_code\": \"card-declined\",\n      \"additional\":
         \"Account Frozen\",\n      \"status_code\": 402,\n      \"category_type\":
-        \"banking\",\n      \"extras\": {},\n      \"request_id\": \"OHMe1ca5954165411e4ac8902b12035401b\",\n
-        \     \"description\": \"R758: Account Frozen. Your request id is OHMe1ca5954165411e4ac8902b12035401b.\"\n
+        \"banking\",\n      \"extras\": {},\n      \"request_id\": \"OHM3750c8d21d8411e4ac8902b12035401b\",\n
+        \     \"description\": \"R758: Account Frozen. Your request id is OHM3750c8d21d8411e4ac8902b12035401b.\"\n
         \   }\n  ]\n}"}
     headers:
       content-length: ['387']
       content-type: [application/json]
     status: {code: 402, message: PAYMENT REQUIRED}
 - request:
-    body: '{"meta": {"seq": 4}}'
+    body: '{"meta": {"seq": 5}}'
     headers: {}
     method: POST
     uri: https://api.balancedpayments.com:443/customers
   response:
     body: {string: !!python/unicode "{\n  \"customers\": [\n    {\n      \"name\":
         null,\n      \"links\": {\n        \"source\": null,\n        \"destination\":
-        null\n      },\n      \"updated_at\": \"2014-07-28T12:44:15.686124Z\",\n      \"created_at\":
-        \"2014-07-28T12:44:15.567519Z\",\n      \"dob_month\": null,\n      \"id\":
-        \"CU6SMkCwTyQHAjXzmtSm0CRO\",\n      \"phone\": null,\n      \"href\": \"/customers/CU6SMkCwTyQHAjXzmtSm0CRO\",\n
+        null\n      },\n      \"updated_at\": \"2014-08-06T16:10:43.645536Z\",\n      \"created_at\":
+        \"2014-08-06T16:10:43.529220Z\",\n      \"dob_month\": null,\n      \"id\":
+        \"CU1H61sY8q0ahFI1LKltdoOY\",\n      \"phone\": null,\n      \"href\": \"/customers/CU1H61sY8q0ahFI1LKltdoOY\",\n
         \     \"merchant_status\": \"no-match\",\n      \"meta\": {\n        \"seq\":
-        \"4\"\n      },\n      \"dob_year\": null,\n      \"address\": {\n        \"city\":
+        \"5\"\n      },\n      \"dob_year\": null,\n      \"address\": {\n        \"city\":
         null,\n        \"line2\": null,\n        \"line1\": null,\n        \"state\":
         null,\n        \"postal_code\": null,\n        \"country_code\": null\n      },\n
         \     \"business_name\": null,\n      \"ssn_last4\": null,\n      \"email\":
@@ -699,16 +593,16 @@ interactions:
         \       \"customer\": null\n      },\n      \"fingerprint\": \"1e2c425a579a1c7f27a037f0662b855035ceadbff18a0adbe785fb07e2afe1cc\",\n
         \     \"cvv_result\": null,\n      \"number\": \"xxxxxxxxxxxx4242\",\n      \"avs_postal_match\":
         null,\n      \"expiration_month\": 12,\n      \"meta\": {},\n      \"id\":
-        \"CC6TLLgPxyk72mp6wYSQ54YF\",\n      \"category\": \"other\",\n      \"type\":
+        \"CC1Iivi5I2HmI7btXkS1ze6s\",\n      \"category\": \"other\",\n      \"type\":
         \"credit\",\n      \"cvv_match\": null,\n      \"bank_name\": \"\",\n      \"avs_street_match\":
-        null,\n      \"brand\": \"Visa\",\n      \"updated_at\": \"2014-07-28T12:44:16.442981Z\",\n
+        null,\n      \"brand\": \"Visa\",\n      \"updated_at\": \"2014-08-06T16:10:44.599088Z\",\n
         \     \"address\": {\n        \"city\": null,\n        \"line2\": null,\n
         \       \"line1\": null,\n        \"state\": null,\n        \"postal_code\":
         null,\n        \"country_code\": null\n      },\n      \"can_debit\": true,\n
         \     \"name\": null,\n      \"expiration_year\": 2020,\n      \"cvv\": null,\n
         \     \"is_verified\": true,\n      \"avs_result\": null,\n      \"can_credit\":
-        false,\n      \"href\": \"/cards/CC6TLLgPxyk72mp6wYSQ54YF\",\n      \"created_at\":
-        \"2014-07-28T12:44:16.442979Z\"\n    }\n  ],\n  \"links\": {\n    \"cards.card_holds\":
+        false,\n      \"href\": \"/cards/CC1Iivi5I2HmI7btXkS1ze6s\",\n      \"created_at\":
+        \"2014-08-06T16:10:44.599085Z\"\n    }\n  ],\n  \"links\": {\n    \"cards.card_holds\":
         \"/cards/{cards.id}/card_holds\",\n    \"cards.customer\": \"/customers/{cards.customer}\",\n
         \   \"cards.disputes\": \"/cards/{cards.id}/disputes\",\n    \"cards.debits\":
         \"/cards/{cards.id}/debits\"\n  }\n}"}
@@ -720,34 +614,34 @@ interactions:
       content-type: [application/json]
     status: {code: 201, message: CREATED}
 - request:
-    body: '{"links": {"customer": "/customers/CU6SMkCwTyQHAjXzmtSm0CRO"}, "cvv_result":
+    body: '{"links": {"customer": "/customers/CU1H61sY8q0ahFI1LKltdoOY"}, "cvv_result":
       null, "number": "xxxxxxxxxxxx4242", "avs_postal_match": null, "expiration_month":
-      12, "meta": {}, "id": "CC6TLLgPxyk72mp6wYSQ54YF", "category": "other", "type":
+      12, "meta": {}, "id": "CC1Iivi5I2HmI7btXkS1ze6s", "category": "other", "type":
       "credit", "cvv_match": null, "bank_name": "", "avs_street_match": null, "brand":
-      "Visa", "updated_at": "2014-07-28T12:44:16.442981Z", "fingerprint": "1e2c425a579a1c7f27a037f0662b855035ceadbff18a0adbe785fb07e2afe1cc",
+      "Visa", "updated_at": "2014-08-06T16:10:44.599088Z", "fingerprint": "1e2c425a579a1c7f27a037f0662b855035ceadbff18a0adbe785fb07e2afe1cc",
       "can_debit": true, "customer": null, "name": null, "expiration_year": 2020,
       "cvv": null, "is_verified": true, "avs_result": null, "can_credit": false, "created_at":
-      "2014-07-28T12:44:16.442979Z", "address": {"city": null, "line2": null, "line1":
+      "2014-08-06T16:10:44.599085Z", "address": {"city": null, "line2": null, "line1":
       null, "state": null, "postal_code": null, "country_code": null}}'
     headers: {}
     method: PUT
-    uri: https://api.balancedpayments.com:443/cards/CC6TLLgPxyk72mp6wYSQ54YF
+    uri: https://api.balancedpayments.com:443/cards/CC1Iivi5I2HmI7btXkS1ze6s
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAAA41UTW/bMAy991cYPq+JrPoruRUBhh06bF2yYe1QGLJEJ1ps2ZDlNF7g/z7JH4mT
-        pth8MGxSj3wkn3i4sSybEslKe2790j+WdWjf2pxysTXmwWBOVqXKM5Daai+++8vP28Xrqn78dP/7
-        559MLTO0+PbF7vHNhyFQwsUaZCG5UAboAKYu9ogXzIhDgwQHBN0FCfJ9HIeeh+48CoTFSeKEBOkP
-        CEIviVEAmCTgUGofA9PdLpJQVqmJK6o0PXpElcUdzf3ocbGLT2iyK6MiLxVJo4wourmMAfuCS6J4
-        LqIsF8r4HXzMkIEipjmnMjlr27LwVw8P66/7ehvgrPBfn5aPnvv0ccSaKFjnsjanc7XRNI9BVV2A
-        MVMJjKvzQq9yjInYRoJkLeq8tFJJAHW9tFgS0bL9wUtyglUF09xYRNo5YeS4tyi4xeHKwXPXnTv+
-        JMTYReHzKBNjegKXMuHKVDeeSKcnwNfNzluznosyVV0E6QdGc3bFSfNKKFlHI+8bMVIiIgax7u7c
-        UrKCk2S6Lp7JaCSBGoiRPUYYjfV3wdDmZbQDyRMOpr9nCYzerqvVcOpHPrcSkpYnVhsJiQ5kT9tL
-        Ov0PdUn4xwxdF8+C2XN3TxvdoBdT0MV175bCxGSNNnna7oeBxKHlMuGsaVn1/q4rA260KKbD1iin
-        PXIwNL2OehDjZVEpeCfV0XuWqB3le4jOp4trbpq/Q/Cq6eoEAAA=
+        H4sIAAAAAAAAA41U227bMAx971cYfm4TSfEteS0wNNiAPeyCtcVgyBLdCLFlT5KDZoH/fZIviZOm
+        WP1g2KQOeUge8XDjeT6jimt/5T3bH887dG9rLoTcOvNocCcbbaoSlLX69z/wQ4T1Y/IH0c2nNf7y
+        uTC8+vroD/j2dgyUC/kCqlZCGgfEQFhAQhrGS4pZnJOYokWcoygiWRKGaBEyoDzLc5xQZD8gTsI8
+        QzEQmgNmzD8GZrtdqkA3hYsrm6I4emRTZj3N18kTkICc0HSn07rShhZpSQ3bXMaA11ooakQl07KS
+        xvkxOWYowVDXnFOZgndtucdrsRPhmjyU6zgzv7bf8F+I9IQ1NfBSqb07XZmNpXkMavY1ODNTwIU5
+        L/Qqx4zKbSpp2aHOS9NGAZjrpWWKyo7tT6HpCdbU3HLjKe3mRBAO7lByh6LvOFphtAqC2TIJk0Xy
+        NMnEuZ3ApUyEcdVNJ9LrCch1M35rtnMxrqqLIMPAWMWvOFnVSKP26cT7RoyMypRDZru78oxq4CSZ
+        votnMppIYA/UyZ4ggqb6u2DoC53uQIlcgOvvWQKnt+tqdZyGka+8nBb6xGqjILeB/Hl3SecfUJeC
+        /8wwXC5REj7197S1DfrtCrq47v1SmLms6aYquv0wkjh0XGaCtx2rwd93ZcRNFsV83Bp6PiBHQzvo
+        aABxoevGwDupjt6zRN0o30P0Pltce9P+AyYgRuPqBAAA
     headers:
       content-encoding: [gzip]
-      content-length: ['551']
+      content-length: ['546']
       content-type: [application/json]
     status: {code: 200, message: OK}
 - request:
@@ -761,16 +655,16 @@ interactions:
         \       \"customer\": null\n      },\n      \"fingerprint\": \"d34d613121ae61ae732d86eaf09929617bd3f5ccc60f7364d32ae1afc5f81745\",\n
         \     \"cvv_result\": null,\n      \"number\": \"xxxxxxxxxxxx4242\",\n      \"avs_postal_match\":
         null,\n      \"expiration_month\": 12,\n      \"meta\": {},\n      \"id\":
-        \"CC6V7qZ6DESWZ76Ta29niOlD\",\n      \"category\": \"other\",\n      \"type\":
+        \"CC1K1gP7SunZXxzUAe188mGx\",\n      \"category\": \"other\",\n      \"type\":
         \"credit\",\n      \"cvv_match\": null,\n      \"bank_name\": \"\",\n      \"avs_street_match\":
-        null,\n      \"brand\": \"Visa\",\n      \"updated_at\": \"2014-07-28T12:44:17.648341Z\",\n
+        null,\n      \"brand\": \"Visa\",\n      \"updated_at\": \"2014-08-06T16:10:46.133144Z\",\n
         \     \"address\": {\n        \"city\": null,\n        \"line2\": null,\n
         \       \"line1\": null,\n        \"state\": null,\n        \"postal_code\":
         null,\n        \"country_code\": null\n      },\n      \"can_debit\": true,\n
         \     \"name\": null,\n      \"expiration_year\": 2030,\n      \"cvv\": null,\n
         \     \"is_verified\": true,\n      \"avs_result\": null,\n      \"can_credit\":
-        false,\n      \"href\": \"/cards/CC6V7qZ6DESWZ76Ta29niOlD\",\n      \"created_at\":
-        \"2014-07-28T12:44:17.648338Z\"\n    }\n  ],\n  \"links\": {\n    \"cards.card_holds\":
+        false,\n      \"href\": \"/cards/CC1K1gP7SunZXxzUAe188mGx\",\n      \"created_at\":
+        \"2014-08-06T16:10:46.133142Z\"\n    }\n  ],\n  \"links\": {\n    \"cards.card_holds\":
         \"/cards/{cards.id}/card_holds\",\n    \"cards.customer\": \"/customers/{cards.customer}\",\n
         \   \"cards.disputes\": \"/cards/{cards.id}/disputes\",\n    \"cards.debits\":
         \"/cards/{cards.id}/debits\"\n  }\n}"}
@@ -782,98 +676,76 @@ interactions:
       content-type: [application/json]
     status: {code: 201, message: CREATED}
 - request:
-    body: '{"links": {"customer": "/customers/CU6SMkCwTyQHAjXzmtSm0CRO"}, "cvv_result":
+    body: '{"links": {"customer": "/customers/CU1H61sY8q0ahFI1LKltdoOY"}, "cvv_result":
       null, "number": "xxxxxxxxxxxx4242", "avs_postal_match": null, "expiration_month":
-      12, "meta": {}, "id": "CC6V7qZ6DESWZ76Ta29niOlD", "category": "other", "type":
+      12, "meta": {}, "id": "CC1K1gP7SunZXxzUAe188mGx", "category": "other", "type":
       "credit", "cvv_match": null, "bank_name": "", "avs_street_match": null, "brand":
-      "Visa", "updated_at": "2014-07-28T12:44:17.648341Z", "fingerprint": "d34d613121ae61ae732d86eaf09929617bd3f5ccc60f7364d32ae1afc5f81745",
+      "Visa", "updated_at": "2014-08-06T16:10:46.133144Z", "fingerprint": "d34d613121ae61ae732d86eaf09929617bd3f5ccc60f7364d32ae1afc5f81745",
       "can_debit": true, "customer": null, "name": null, "expiration_year": 2030,
       "cvv": null, "is_verified": true, "avs_result": null, "can_credit": false, "created_at":
-      "2014-07-28T12:44:17.648338Z", "address": {"city": null, "line2": null, "line1":
+      "2014-08-06T16:10:46.133142Z", "address": {"city": null, "line2": null, "line1":
       null, "state": null, "postal_code": null, "country_code": null}}'
     headers: {}
     method: PUT
-    uri: https://api.balancedpayments.com:443/cards/CC6V7qZ6DESWZ76Ta29niOlD
+    uri: https://api.balancedpayments.com:443/cards/CC1K1gP7SunZXxzUAe188mGx
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAAA41U32+bMBB+71+BeG4TbBxD8lalk/YyVVuydso0Icc2jRcwzDZZs4j/fTY/EpKm
-        05BA4s7f3Xd3n+9w43k+JYppf+Z9tz+ed2i+1pwJuXXm3uBOVtoUOVfW6s+/4sWn7fz3cv/54/3P
-        b39ys8iD+ZdHv8PXt32gVMgXrkolpHFAFiKGQQggIBzbNwohizEnaTCdwikG0ZqF6YRSioM0CjFi
-        ISQckJRO0hhEaOIfA9PdLlFcV5mLK6ssO3pkla9bmq+DB0EET2iy00lZaEOyJCeGbi5j8NdSKGJE
-        IZO8kMb5ATxmyLkhrjmnMgVr2jLHT9GvFX74sHheRXhJ4FSKx+xhwJoY/lKovTtdmI2leQxq9iV3
-        Zqo4E+a80Ksc10RuE0nyBnVemjaKc3O9tLUismH7JDQ5waqSWW4sIc2cYADQXRDdwXgJ4AyhGYhH
-        QYQRRqtBJsbsBC5lIoyrbjiRVk8cXjeDt2Y7F+OqugjSDYwW7IqTFpU0ap8MvG/ESIlMGF/b7s48
-        oyp+kkzbxTMZDSSw58TJHgZhMNTfBUNf6GTHlUgFd/09S+D0dl2tjlM38pmXkkyfWG0UT20gf9xc
-        0vF/qEvxf84wGmEUh2G8au9pbRv0wxV0cd3bpTByWZNNkTX7oSdxaLiMBKsbVp2/7UqPGyyKcb81
-        9LhD9oa601EHYkKXleHvpDp6zxI1o3wP0fpscfVN/RfqZT+Q6gQAAA==
+        H4sIAAAAAAAAA41UbW+bMBD+3l+B+Lwm2BBC8q2qtBd10iZtndZMFXLsI7EKhtkmShbx32fznpRq
+        A4HEHc/dc3eP73zjOC4lkil37fwyH45zrt/GnHLxYs2dwf5ZKp1nII3VvX9EH0OknqLfHtm//4Q+
+        P6Sa5V+e3BZfvesCJVzsQBaSC22BzA9YiHyEEYHQPEsfsygEknirFV6FaLllfrKglIZesvTDgPmY
+        ACIJXSQRWgYLtw9MD4dYgipTG1eUadp7RJltG5rH0RXgAA9oclBxkStN0jgjmu6vY8Cx4JJonos4
+        y4W2foT7DBloYpszlMlZ3ZZ79IB2X5ffSrH5efzzeAcoirIPxxFromGXy5P9O9d7Q7MPqk8FWDOV
+        wLi+LHSS45aIl1iQrEZdlqa0BNDTpW0lETXbH1yRAVYWzHBjMannhD0U3HrRrRd+R+EaeesgnEWR
+        Z+7NKBNjZgLXMuHaVjeeSKMnwNNm9Nps5qJtVVdB2oHRnE04aV4KLU/xyPtKjJSImMHWdHftaFnC
+        IJmmixcyGkngBMTKHnu+N9bfFUOXq/gAkiccbH8vEli9TavVcmpHvnYSkqqB1V5CYgK58/qQzv9D
+        XRL+MUPk+yjAm+acVqZBz7agq+PeLIWZzRrv87TeDx2Jc81lxllVs2r9TVc63GhRzLutoeYtsjNU
+        rY5aEOOqKDW8kar3XiSqR/kWovGZ4qqb6i+YkJej6gQAAA==
     headers:
       content-encoding: [gzip]
-      content-length: ['553']
+      content-length: ['547']
       content-type: [application/json]
     status: {code: 200, message: OK}
 - request:
     body: null
     headers: {}
     method: GET
-    uri: https://api.balancedpayments.com:443/customers/CU6SMkCwTyQHAjXzmtSm0CRO
+    uri: https://api.balancedpayments.com:443/customers/CU1H61sY8q0ahFI1LKltdoOY/cards?limit=10&offset=0
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAAA41UwY7TMBC971dEOdNNE6XdpTfUCxeEYBcJgVA0tY1imtjFdoBS5d8Zt0nq2gFz
-        yWHmvWfPmxef7pIkJZ02smVKp5vkMxaS5HT+YktAy7AquqZ5MdYaLvYWOoIQpmWniA/EOmXacAGG
-        SzGoDCL9pNYdKBhGKzCISItlXi6WD4vi8TkvNmW5yVf368d1XpSf0olCFItQVuuHVf7SoVC5q1op
-        TO0Pw6k9dvth/fRmv/35fHz3+tW3j79b89Qut+/fXs881FL4A6a1Yl8tPZsczOJKaDSpQZhKGzCd
-        NTIVctGCIfX1uJYZ8Cxm3y20TAMH7WxHBsofDShVTHubItwcPSDuCVfKivlyHpbtxX0vUOQgsdFU
-        RNKZJpGdMOrodoNBdp3Ge2hdzaVOa1E1oE3pj8la4E1Q5DeB6/GsLzY/dlInvNfo308RTjN07Zxn
-        nZ2mxQ79fliRQySgaFXLhp5X6UTBIXPaZw7ukmRHYwdiXwE5mxSRuYUGSpTteExiwMxw3b/1Lz44
-        v/SMGeyXYUpgCv5vmBAeXMraFrHkAgmYlOtDZ1iEPKECvlEgNBD7eEU0bpCBDj4SnYjNMIJm2D/w
-        ZYYmcgXFRligIBW9vO3/COeACbj41NJonkYQ/l/9Xf8HeuokgVMGAAA=
+        H4sIAAAAAAAAA+VW22obMRB9z1eYfehTY0vaqw2hlEAbk0ILSUqSUhatNIpF9uJqtcZO8L9X2ou9
+        dhxSWkqgtbGxZ3ZGczlzRo9Hg4HDqOKlMxl8M38Gg8f624hTmd9bcSewT1alLjJQRuqcXuGzAJc3
+        0Q9EZx+m+NN5qnnx+cZp7ddvO0dC5neg5krm2hpiIMwjPvXDMcUsFCSkyA0FCgKSRL6PXJ8B5YkQ
+        OKLI/IAw8kWCQiBUAGbM2Thmi0WsoKxS6zev0nSjyassacJc9l4e8cjWmi7KeF6UmqZxRjWb7fuA
+        5VwqqmWRx1mRa6vHZHNCBpra4mzTlLwuyymeyoX0p+Qsm4aJvr6/wA8QlL2oqYa7Qq3s04WemTA3
+        TvVqDlbMFHCpdxM9GGNC8/s4p1lttZtaqRWAPpxaomheR/tVlnRrVs25iY3HtO4TQdg7RtExCi5x
+        MMFo4nnDceRHbnTbO4lz04F9mEhts+t3pMETkMNi/FRs+qJtVntO2oaxgh9QsqLKtVrFPe0TMDKa
+        xxwSU93JQKsKtpBpqrgDox4EVkAt7AkiqI+/vQgdWcYLUFJIsPXdOcDi7TBabUxtyycDQdNyG9VM
+        gTCOnFE9pKNfQJeCF3roj8co8m+bOW3h+9eHnrseD7CLCaYQmE/oEh4FQAUaj8k4wGHCXeEzxgIk
+        QjfwuEsoYCqYLyIcev7uLBwu46sO/Tm++xJeVPnt9fLh6j3gKMo+Lv+FoQ+GUYTM+78eeveVh/4l
+        dL0w9MEQuy72SDf0hhW/WxZzui1W06ST0rJm/lG35w3hPLPlGz56l8pM6hOM3hRClKBPUIt4J4fl
+        7lJ2tkzWXiJ+33l9qgkUt11xmtONpBPMFSxkUdm9tCV0Rxdm2VsSbxjcEVL9ecKmdDWJ7t2XmlvV
+        sH9j6pX1sabzjXbdla0Rc1nOKw02+o74WwPJ16ONts2idWUcxrMirW9yB6zsU61+x67ehc/YtDqb
+        4dH6J9Yl180rCgAA
     headers:
       content-encoding: [gzip]
-      content-length: ['497']
+      content-length: ['753']
       content-type: [application/json]
     status: {code: 200, message: OK}
 - request:
-    body: null
-    headers: {}
-    method: GET
-    uri: https://api.balancedpayments.com:443/customers/CU6SMkCwTyQHAjXzmtSm0CRO/cards?limit=10&offset=0
-  response:
-    body:
-      string: !!binary |
-        H4sIAAAAAAAAA+VWW2/TMBR+36+o8sATa2MnsdNKE0IdiIchGC2DFaHI8WU1zaU4Ttcy9b9jJ2mb
-        dp2GQGgSVGrUnpNzfC7f+Y7vTjodhxLFCmfQ+WL+dDp31dOIE5nNrHgjsG+Whc5TrozUGX5Eo7ez
-        4e14dfnm5bfPP1I9St3hh3dOY79+vnEkZHbD1VzJTFtDwCH1YUAC3CeAYgExcT0sXIRgHAaB6wWU
-        ExYLAULimh8ch4GIXcwhERxQ6mwd08UiUrwoE+s3K5Nkq8nKNK7DXLY+PvThzposimieF5okUUo0
-        nR764Mu5VETLPIvSPNNWD+D2hJRrYouzS1OyqixDNL64uHm/XM0wTOfo9np0GfjXr1tRE81vcrWy
-        b+d6asLcOtWrObdiqjiTej/RozHGJJtFGUkrq/3UCq0418dTixXJqmivZEF2ZuWcmdhYRKo+QRf4
-        py4+heEYwIHvDwDqhhD6bjhpncSY6cAhTKS22bU7UuOJw+NicF9s+qJtVgdOmobRnB1R0rzMtFpF
-        Le09MFKSRYzHprqDjlYl30GmruIejFoQWHFiYQ9d6LbxdxChI4towZUUktv67h1g8XYcrTampuWD
-        jiBJsYtqqrgwjpxeNaS9X0CX4o/00PdhH/cn9Zw28P3rQ888nyHgAQgIR+aLPchCxIlw+33YRwDH
-        zBMBpRS5AnvIZx4kHBBBAxEC7Af7s3C8jE869Ff4+wSdvxp9mmA0JrCfyXfJ+b8w9GHXxchH/n89
-        9N4TD/1j6Hpk6HEX+aHnGeKu+HBtnl8tizmbLVaJnYQUFfP3NnveEM4DW77moxeJTKU+A+6zXIiC
-        6zO3QbyT8eX+UnZ2TNZcIn7feXWqCRQ0XXHq041kI5grvpB5affSjtAdnZtlb0m8ZnBHSPXnCZvS
-        VSR6cF+qb1Xd9o2pVda7is632vWmbLWYyWJeam6j3xB/YyDZurfVNlk0rozDaJon1U3uiJV9q9Hv
-        2VW78AGbRmczPFn/BA+kcscrCgAA
-    headers:
-      content-encoding: [gzip]
-      content-length: ['762']
-      content-type: [application/json]
-    status: {code: 200, message: OK}
-- request:
-    body: '{"meta": {"seq": 5}}'
+    body: '{"meta": {"seq": 6}}'
     headers: {}
     method: POST
     uri: https://api.balancedpayments.com:443/customers
   response:
     body: {string: !!python/unicode "{\n  \"customers\": [\n    {\n      \"name\":
         null,\n      \"links\": {\n        \"source\": null,\n        \"destination\":
-        null\n      },\n      \"updated_at\": \"2014-07-28T12:44:19.427386Z\",\n      \"created_at\":
-        \"2014-07-28T12:44:19.315286Z\",\n      \"dob_month\": null,\n      \"id\":
-        \"CU6X0aCm4qom2lpUvyxszYvv\",\n      \"phone\": null,\n      \"href\": \"/customers/CU6X0aCm4qom2lpUvyxszYvv\",\n
+        null\n      },\n      \"updated_at\": \"2014-08-06T16:10:47.916458Z\",\n      \"created_at\":
+        \"2014-08-06T16:10:47.747801Z\",\n      \"dob_month\": null,\n      \"id\":
+        \"CU1LPZ5SkBmi1Spr6shPbNnT\",\n      \"phone\": null,\n      \"href\": \"/customers/CU1LPZ5SkBmi1Spr6shPbNnT\",\n
         \     \"merchant_status\": \"no-match\",\n      \"meta\": {\n        \"seq\":
-        \"5\"\n      },\n      \"dob_year\": null,\n      \"address\": {\n        \"city\":
+        \"6\"\n      },\n      \"dob_year\": null,\n      \"address\": {\n        \"city\":
         null,\n        \"line2\": null,\n        \"line1\": null,\n        \"state\":
         null,\n        \"postal_code\": null,\n        \"country_code\": null\n      },\n
         \     \"business_name\": null,\n      \"ssn_last4\": null,\n      \"email\":
@@ -896,60 +768,16 @@ interactions:
     body: null
     headers: {}
     method: GET
-    uri: https://api.balancedpayments.com:443/customers/CU6X0aCm4qom2lpUvyxszYvv
-  response:
-    body:
-      string: !!binary |
-        H4sIAAAAAAAAA41UXW+jMBB8769APDclUPqV1/6Fq3TtqUIb2yesGpvaJmou4r93nQAhNne+Fx52
-        Z8be2cGHqyRJSWesapg26Sb5hYUkORy/2JLQMKzKTojrsSa4/HDQEYQwozpNfCDWKTOWS7BcyUFl
-        EOknta6lYBmtwCIiLdZ5uVo/rIrHH3mxKctN/nRTFg+3j/dv6UQhmkUot/ldcUGhals1StraH4ZT
-        d+zzy/3PNTw35adqCtG+7PZf5s/rbnc+s62V9AdMa81+O3o2OZjFldBoUoO0lbFgO2dkKtWqAUvq
-        83ENs+BZzD4d9C4NHHSz7RlofzSgVDPjbYpwu/eAuCdcKSuWy3lYdhf3vUCRVmFDVETRhSZRnbR6
-        P+8Gg2w7g/cwplpKnTGyEmBs6Y/JGuAiKPKLwPV41rvLj5t0Ft5z9G+mCKcZunbMs8kO02KHfj+s
-        aEYkoGlVK0GPq5xFYUbmtM9muFOSZxpbkB8VkKNJEZlLaKBE2ZbHJAbMAnf+t/7Fh9kvvWAG+7JM
-        S0zB/w0TwoNLOdsilpwgAZNy03aWRcgTKuBbDdIAcY9XROMCGejgI9HJ2AwjaIG9w5cZROQKmo2w
-        QEFpenrb/xHOARNw8aml0TyNIPy/+qv+G5NozWlTBgAA
-    headers:
-      content-encoding: [gzip]
-      content-length: ['489']
-      content-type: [application/json]
-    status: {code: 200, message: OK}
-- request:
-    body: null
-    headers: {}
-    method: GET
-    uri: https://api.balancedpayments.com:443/customers/CU6X0aCm4qom2lpUvyxszYvv/cards?limit=10&offset=0
+    uri: https://api.balancedpayments.com:443/customers/CU1LPZ5SkBmi1Spr6shPbNnT/cards?limit=10&offset=0
   response:
     body: {string: !!python/unicode "{\n  \"cards\": [],\n  \"meta\": {\n    \"last\":
-        \"/customers/CU6X0aCm4qom2lpUvyxszYvv/cards?limit=10&offset=0\",\n    \"next\":
-        null,\n    \"href\": \"/customers/CU6X0aCm4qom2lpUvyxszYvv/cards?limit=10&offset=0\",\n
+        \"/customers/CU1LPZ5SkBmi1Spr6shPbNnT/cards?limit=10&offset=0\",\n    \"next\":
+        null,\n    \"href\": \"/customers/CU1LPZ5SkBmi1Spr6shPbNnT/cards?limit=10&offset=0\",\n
         \   \"limit\": 10,\n    \"offset\": 0,\n    \"previous\": null,\n    \"total\":
-        0,\n    \"first\": \"/customers/CU6X0aCm4qom2lpUvyxszYvv/cards?limit=10&offset=0\"\n
+        0,\n    \"first\": \"/customers/CU1LPZ5SkBmi1Spr6shPbNnT/cards?limit=10&offset=0\"\n
         \ },\n  \"links\": {}\n}"}
     headers:
       content-length: ['364']
-      content-type: [application/json]
-    status: {code: 200, message: OK}
-- request:
-    body: null
-    headers: {}
-    method: GET
-    uri: https://api.balancedpayments.com:443/customers/CU3KXdyvNSDeyLP3pAWr9hqd
-  response:
-    body:
-      string: !!binary |
-        H4sIAAAAAAAAA41Uy27bMBC85ysEnWvLipQ29i1oby2CAG3RokUh0CQLEZFIhY+ggqF/79KWZJpU
-        wlx02J0ZcmdHPFwlSYqN0qKlUqW75DcUkuRw/EKLo5ZClZumeTfVGsYfLXQCAUwJI7EPhDqhSjOO
-        NBN8VBlFhlnNdARpSiqkAZFeb/Jytfmw2uTf8ptdWezKcp0Xxfvb7a90pmBJX6UU622+uSlKh0LE
-        vmoF17U/DCP22I/fi88/Sf98//UT7b88FN3dD7mtn8j5zK4W3B8wrSX9a+nZ7GAWVwKjcY24rpRG
-        2lgjUy5WLdK4Ph/XUo08i+mTheZp4KCdradI+qMhQiRV3qYw070HhD3BSun1cjkPy/bivhcg0glo
-        NBUWZKGJheFa9m43GGRvFNxDqWopdUrxqkFKl/6YtEWsCYrsInADnPXH5sdO6oT3HP31HOE0A9eO
-        eVbZYV7s2B/GFTlEjCSpatGQ4yqdKDhkRobMwZ2S7GjsEX+sED6aFJG5hAZKhO5ZTGLELHDdv/UF
-        H5xfesEM+k9TySEFbxsmhAeXsrZFLDlBAiZhqjOaRsgzKuBribhC2D5eEY0LZKADj4ThsRkm0AL7
-        GV5m1ESuIOkECxSEJKe3/ZVwjpiAC08tieZpAsH/NVwN/wHQiK4AUwYAAA==
-    headers:
-      content-encoding: [gzip]
-      content-length: ['499']
       content-type: [application/json]
     status: {code: 200, message: OK}
 - request:
@@ -989,13 +817,13 @@ interactions:
     body: {string: !!python/unicode "{\n  \"card_holds\": [\n    {\n      \"status\":
         \"succeeded\",\n      \"description\": \"janet\",\n      \"links\": {\n        \"card\":
         \"CC3MHBsW6vHaL3suLVdTVbO9\",\n        \"debit\": null\n      },\n      \"updated_at\":
-        \"2014-07-28T12:44:21.775480Z\",\n      \"created_at\": \"2014-07-28T12:44:21.559915Z\",\n
-        \     \"transaction_number\": \"HL101-260-3999\",\n      \"expires_at\": \"2014-08-04T12:44:21.689475Z\",\n
+        \"2014-08-06T16:10:49.329099Z\",\n      \"created_at\": \"2014-08-06T16:10:49.118601Z\",\n
+        \     \"transaction_number\": \"HL656-773-9031\",\n      \"expires_at\": \"2014-08-13T16:10:49.239247Z\",\n
         \     \"failure_reason\": null,\n      \"currency\": \"USD\",\n      \"amount\":
         1000,\n      \"meta\": {\n        \"state\": \"new\",\n        \"participant_id\":
-        \"2\"\n      },\n      \"href\": \"/card_holds/HL6ZwcjcM9CPa5eZEgQFeQ0g\",\n
+        \"2\"\n      },\n      \"href\": \"/card_holds/HL1NnMRbDzyqPSlCLkibOXSw\",\n
         \     \"failure_reason_code\": null,\n      \"voided_at\": null,\n      \"id\":
-        \"HL6ZwcjcM9CPa5eZEgQFeQ0g\"\n    }\n  ],\n  \"links\": {\n    \"card_holds.events\":
+        \"HL1NnMRbDzyqPSlCLkibOXSw\"\n    }\n  ],\n  \"links\": {\n    \"card_holds.events\":
         \"/card_holds/{card_holds.id}/events\",\n    \"card_holds.card\": \"/cards/{card_holds.card}\",\n
         \   \"card_holds.debits\": \"/card_holds/{card_holds.id}/debits\",\n    \"card_holds.debit\":
         \"/debits/{card_holds.debit}\"\n  }\n}"}
@@ -1004,26 +832,26 @@ interactions:
       content-type: [application/json]
     status: {code: 201, message: CREATED}
 - request:
-    body: '{"status": "succeeded", "transaction_number": "HL101-260-3999", "description":
-      "janet", "amount": 1000, "created_at": "2014-07-28T12:44:21.559915Z", "card_href":
-      "/cards/CC3MHBsW6vHaL3suLVdTVbO9", "updated_at": "2014-07-28T12:44:21.775480Z",
-      "expires_at": "2014-08-04T12:44:21.689475Z", "failure_reason": null, "currency":
+    body: '{"status": "succeeded", "transaction_number": "HL656-773-9031", "description":
+      "janet", "amount": 1000, "created_at": "2014-08-06T16:10:49.118601Z", "card_href":
+      "/cards/CC3MHBsW6vHaL3suLVdTVbO9", "updated_at": "2014-08-06T16:10:49.329099Z",
+      "expires_at": "2014-08-13T16:10:49.239247Z", "failure_reason": null, "currency":
       "USD", "is_void": true, "meta": {"state": "cancelled", "participant_id": "2"},
-      "debit": null, "failure_reason_code": null, "voided_at": null, "id": "HL6ZwcjcM9CPa5eZEgQFeQ0g"}'
+      "debit": null, "failure_reason_code": null, "voided_at": null, "id": "HL1NnMRbDzyqPSlCLkibOXSw"}'
     headers: {}
     method: PUT
-    uri: https://api.balancedpayments.com:443/card_holds/HL6ZwcjcM9CPa5eZEgQFeQ0g
+    uri: https://api.balancedpayments.com:443/card_holds/HL1NnMRbDzyqPSlCLkibOXSw
   response:
     body: {string: !!python/unicode "{\n  \"card_holds\": [\n    {\n      \"status\":
         \"succeeded\",\n      \"description\": \"janet\",\n      \"links\": {\n        \"card\":
         \"CC3MHBsW6vHaL3suLVdTVbO9\",\n        \"debit\": null\n      },\n      \"updated_at\":
-        \"2014-07-28T12:44:22.144977Z\",\n      \"created_at\": \"2014-07-28T12:44:21.559915Z\",\n
-        \     \"transaction_number\": \"HL101-260-3999\",\n      \"expires_at\": \"2014-08-04T12:44:21.689475Z\",\n
+        \"2014-08-06T16:10:49.892521Z\",\n      \"created_at\": \"2014-08-06T16:10:49.118601Z\",\n
+        \     \"transaction_number\": \"HL656-773-9031\",\n      \"expires_at\": \"2014-08-13T16:10:49.239247Z\",\n
         \     \"failure_reason\": null,\n      \"currency\": \"USD\",\n      \"amount\":
         1000,\n      \"meta\": {\n        \"state\": \"cancelled\",\n        \"participant_id\":
-        \"2\"\n      },\n      \"href\": \"/card_holds/HL6ZwcjcM9CPa5eZEgQFeQ0g\",\n
-        \     \"failure_reason_code\": null,\n      \"voided_at\": \"2014-07-28T12:44:22.144979Z\",\n
-        \     \"id\": \"HL6ZwcjcM9CPa5eZEgQFeQ0g\"\n    }\n  ],\n  \"links\": {\n
+        \"2\"\n      },\n      \"href\": \"/card_holds/HL1NnMRbDzyqPSlCLkibOXSw\",\n
+        \     \"failure_reason_code\": null,\n      \"voided_at\": \"2014-08-06T16:10:49.892523Z\",\n
+        \     \"id\": \"HL1NnMRbDzyqPSlCLkibOXSw\"\n    }\n  ],\n  \"links\": {\n
         \   \"card_holds.events\": \"/card_holds/{card_holds.id}/events\",\n    \"card_holds.card\":
         \"/cards/{card_holds.card}\",\n    \"card_holds.debits\": \"/card_holds/{card_holds.id}/debits\",\n
         \   \"card_holds.debit\": \"/debits/{card_holds.debit}\"\n  }\n}"}

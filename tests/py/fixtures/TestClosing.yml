@@ -1,17 +1,17 @@
 interactions:
 - request:
-    body: '{"meta": {"seq": 6}}'
+    body: '{"meta": {"seq": 7}}'
     headers: {}
     method: POST
     uri: https://api.balancedpayments.com:443/customers
   response:
     body: {string: !!python/unicode "{\n  \"customers\": [\n    {\n      \"name\":
         null,\n      \"links\": {\n        \"source\": null,\n        \"destination\":
-        null\n      },\n      \"updated_at\": \"2014-07-01T15:44:57.039650Z\",\n      \"created_at\":
-        \"2014-07-01T15:44:56.925624Z\",\n      \"dob_month\": null,\n      \"id\":
-        \"CU5555ODX3LB3yvScKR27QPD\",\n      \"phone\": null,\n      \"href\": \"/customers/CU5555ODX3LB3yvScKR27QPD\",\n
+        null\n      },\n      \"updated_at\": \"2014-08-06T16:11:13.542466Z\",\n      \"created_at\":
+        \"2014-08-06T16:11:13.412450Z\",\n      \"dob_month\": null,\n      \"id\":
+        \"CU2eHRmBFee1y5mc84bVX2JW\",\n      \"phone\": null,\n      \"href\": \"/customers/CU2eHRmBFee1y5mc84bVX2JW\",\n
         \     \"merchant_status\": \"no-match\",\n      \"meta\": {\n        \"seq\":
-        \"6\"\n      },\n      \"dob_year\": null,\n      \"address\": {\n        \"city\":
+        \"7\"\n      },\n      \"dob_year\": null,\n      \"address\": {\n        \"city\":
         null,\n        \"line2\": null,\n        \"line1\": null,\n        \"state\":
         null,\n        \"postal_code\": null,\n        \"country_code\": null\n      },\n
         \     \"business_name\": null,\n      \"ssn_last4\": null,\n      \"email\":
@@ -41,13 +41,13 @@ interactions:
         \"321174851\",\n      \"bank_name\": \"SAN MATEO CREDIT UNION\",\n      \"account_type\":
         \"checking\",\n      \"name\": \"Alice G. Krebs\",\n      \"links\": {\n        \"customer\":
         null,\n        \"bank_account_verification\": null\n      },\n      \"can_credit\":
-        true,\n      \"created_at\": \"2014-07-01T15:44:57.851974Z\",\n      \"fingerprint\":
+        true,\n      \"created_at\": \"2014-08-06T16:11:14.584220Z\",\n      \"fingerprint\":
         \"5f0ba9fa3f1122ef13b944a40abfe44e7eba9e16934e64200913cb4c402ace14\",\n      \"updated_at\":
-        \"2014-07-01T15:44:57.851976Z\",\n      \"href\": \"/bank_accounts/BA567z1OsbkUtySKaCLl1QdX\",\n
+        \"2014-08-06T16:11:14.584222Z\",\n      \"href\": \"/bank_accounts/BA2g1fNaSsXFegYbFlUMItH7\",\n
         \     \"meta\": {},\n      \"account_number\": \"xxxxxx0001\",\n      \"address\":
         {\n        \"city\": null,\n        \"line2\": null,\n        \"line1\": null,\n
         \       \"state\": null,\n        \"postal_code\": null,\n        \"country_code\":
-        null\n      },\n      \"can_debit\": false,\n      \"id\": \"BA567z1OsbkUtySKaCLl1QdX\"\n
+        null\n      },\n      \"can_debit\": false,\n      \"id\": \"BA2g1fNaSsXFegYbFlUMItH7\"\n
         \   }\n  ],\n  \"links\": {\n    \"bank_accounts.credits\": \"/bank_accounts/{bank_accounts.id}/credits\",\n
         \   \"bank_accounts.bank_account_verifications\": \"/bank_accounts/{bank_accounts.id}/verifications\",\n
         \   \"bank_accounts.customer\": \"/customers/{bank_accounts.customer}\",\n
@@ -64,27 +64,27 @@ interactions:
 - request:
     body: '{"routing_number": "321174851", "bank_name": "SAN MATEO CREDIT UNION",
       "account_type": "checking", "name": "Alice G. Krebs", "links": {"customer":
-      "/customers/CU5555ODX3LB3yvScKR27QPD"}, "can_credit": true, "created_at": "2014-07-01T15:44:57.851974Z",
-      "fingerprint": "5f0ba9fa3f1122ef13b944a40abfe44e7eba9e16934e64200913cb4c402ace14",
-      "updated_at": "2014-07-01T15:44:57.851976Z", "meta": {}, "account_number": "xxxxxx0001",
+      "/customers/CU2eHRmBFee1y5mc84bVX2JW"}, "can_credit": true, "created_at": "2014-08-06T16:11:14.584220Z",
       "address": {"city": null, "line2": null, "line1": null, "state": null, "postal_code":
-      null, "country_code": null}, "can_debit": false, "id": "BA567z1OsbkUtySKaCLl1QdX"}'
+      null, "country_code": null}, "updated_at": "2014-08-06T16:11:14.584222Z", "customer":
+      null, "meta": {}, "bank_account_verification": null, "fingerprint": "5f0ba9fa3f1122ef13b944a40abfe44e7eba9e16934e64200913cb4c402ace14",
+      "can_debit": false, "id": "BA2g1fNaSsXFegYbFlUMItH7", "account_number": "xxxxxx0001"}'
     headers: {}
     method: PUT
-    uri: https://api.balancedpayments.com:443/bank_accounts/BA567z1OsbkUtySKaCLl1QdX
+    uri: https://api.balancedpayments.com:443/bank_accounts/BA2g1fNaSsXFegYbFlUMItH7
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAAA5VTTW+jMBC991cgzm1ig4GSW5pUqyrdZNskUrXVChkzbK0QExlTLY3472tIKISm
-        qy4HH/yG8fuY2V8YhhlSsQkoY2kuVGaOjGd9aRj7+tSwTHPFxe9A5NsQpMZN28LYI9cONi+borqH
-        oFuo8OV4bnwfr24XxuTxdnq3Mtbzu8W8LT6+FahiV9ezF2Ab/URb0XQaJ5yB8W1gzCSEWYsnXGwq
-        qg1JTZPlmUq3B4KTtaO/xfTJvr+xi9clmz1a3sOP6XuDnurgFSSPOaOKp0K3FXmSHJWV7xIZFQGT
-        EHGlK5TMoUUkUAVRQCvEtBAmV8i7QniFnREhI8cbaK98j/xsBcRaLsid5KL+x4lRSP2Y2jHGlgUx
-        tkOfEEoQDWMgBDzQMGDXtwm4xELIxzYLCSPIogwwaRvnu+ifXK4Hluu6yO1weZEQVySGJ4MwvBk7
-        rveGF1m4WatiOaOT+wQ/RE/tW1tQtAqh9ahJtp2VP/WHEOoMC40iCVk/P66Ko/WNsTolHTRY56/x
-        x+tMae0fr3epBpKApdEZsB57WXTRs9FHENbJxzTJ2uh5VDn3qVV1p1KfvypNlZrO2J4u3uAwW5Ur
-        /ST2J8EMeFQOm+KDVb1O3fKT0f5i8+42NEvXJ9vZtmGzetmwx7QByuPM9JrUln6R07H2//TWXp6o
-        6TP81KrS1IGVF+VfDeyr4SIFAAA=
+        H4sIAAAAAAAAA5VTW2+bMBR+769APK9gG5PbW9o1azY1ldpk6zZNyJhDaoVLZMy0KOK/zxAol6ZT
+        x4Mf/B2Ov8s5xwvDMH2W7DzGeZonKjNnxk99aRjH6tSwTHMlkq2X5LEPUuOmQzAe04mLzQ9NUdUj
+        YTGU+ON8ZdzN1zf3xvXDzcfl2tislvertrh+y1OHfVXPn4Hv9BNtRdNpHgkOxifL+CLBz1o8Esmu
+        pNqQ1DR5nqk0PhG83hC4fYivFgD44MZ8Qv2vT+Tzt5cGA9Xeb5AiFJwpkSa6bZJHUa2seJHIWeJx
+        CYFQukLJHFpEAlMQeKxETIIwvUSTSzRa49EM4xmmljuhhKAfrYBQywW5lyKp/nFD5LNpyJwQY0Ig
+        xI4/pZRRxPwQKIUxaBjwaOpQGFGC0BQ73KecIsI4YNo2zvfBP7m4Fhm5ztjtcHmWEJYk7N4g2Fdz
+        ssXhij1mTwvYfvcX0eZuqW7H7VsxKFaG0HrUJNvOyp/qQwh1hoUFgYRsmJ9Qh9r6xlidkg4ayPlr
+        /Po6U1r76+t9qoHI42lwBqzGXh666NnoA/Cr5EMWZW30Iiide9OqqlOhz1+lplJNZ2z7i2edZqt0
+        ZZjEsReMJYLCbopPVg06dct7o/3O5t1taJZuSLazbXazepk9YNoART0zgyaVpe/kVNf+n97Ky56a
+        IcM3rSpMHVhxUfwFDbm4ryIFAAA=
     headers:
       content-encoding: [gzip]
       content-length: ['533']
@@ -94,69 +94,49 @@ interactions:
     body: null
     headers: {}
     method: GET
-    uri: https://api.balancedpayments.com:443/customers/CU5555ODX3LB3yvScKR27QPD
+    uri: https://api.balancedpayments.com:443/customers/CU2eHRmBFee1y5mc84bVX2JW/bank_accounts?limit=10&offset=0
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAAA41UTY+bMBS8769AnJtACCTaHLt7a6V+S1WrCjm2K6wFO/XHqlHEf+9zAsSx6Xo5
-        cHieGfvNG/t0lyQpNkqLjkqV7pKfUEiS0/kPSxx1FKrctO2bsdYy/mShIwhgShiJfSDUCVWacaSZ
-        4IPKINJPauZAkKakRhoQaZGvykW+XeSrr6tqV5a7arvM1/ebKv+RThQs6YuUzfK+qDZF6VCI2Ned
-        4Lrxm2HEbvvwrYLvw+P39fu36+PzF/zuc7H99PHxuuehEdxvMG0k/W3p2eRgFlcCo3GDuK6VRtpY
-        I1MuFh3SuLlu11GNPIvpHwvdpIGDtrcjRdJvDREiqfImhZk+ekCYE4yUFvPlVVi2B/e9AJGDgIW2
-        xoLMLGJhuJZHdzVoZG8UnEOpei51SvG6RUqXfpu0Q6wNiuwmcD3s9cvmx3bqhPca/eUU4TQD1855
-        VtlpGuyw3g8jcogYSVI3oiXnUTpRcMiM9JmDuyTZ0dgj/lQjfDYpInMLDZQI3bOYxICZ4bq39T8+
-        OFd6xgz6V1PJIQWvayaEB4eytkUsuUACJmHqYDSNkCdUwNcScYWwfbwiGjfIQAceCcNjPYygGfYz
-        vMyojRxB0hEWKAhJLm/7C+EcMAEXnloSzdMIgvvV3/X/AG22s3RTBgAA
-    headers:
-      content-encoding: [gzip]
-      content-length: ['498']
-      content-type: [application/json]
-    status: {code: 200, message: OK}
-- request:
-    body: null
-    headers: {}
-    method: GET
-    uri: https://api.balancedpayments.com:443/customers/CU5555ODX3LB3yvScKR27QPD/bank_accounts?limit=10&offset=0
-  response:
-    body:
-      string: !!binary |
-        H4sIAAAAAAAAA61U22rbQBB9z1cIPfSpsXaltRQHQnEulJDUbmIHQksRq9WoWSxLZrUycYP+vbtr
-        KbokKSlEDwLNjGbOnHOYpwPLsiOarULKWF5msrCPrZ8qaFlP5q3SIi8lz36HWbmOQKi87bkYB+Ro
-        jO3PTZHpkdE16PxiOrO+TZcXc+vs9uL8cmndzS7ns7a4nhXK3cbUswdgKzWirWg6TVPOwPo6sq4E
-        REWbT3m20lAbkAomKwuZr/cAz+7G6pmf33vXp95uu2BXt25w8/38ucFg63ALgiecUcnzTLXNyjSt
-        N6ueV2Q0C5mAmEtVIUUJbUYAlRCHVGdsF2FyiIJDhJd4fEzI8TgYKa4mAfnRLpCodUFsBM/MP+ME
-        RXSSUC/B2HUhwV40IYQSRKMECIEAVBqwP/EI+MRFaII9FhFGkEsZYNI2LjfxP7EcjVzf95HfwfIg
-        INEgnJ4RnNPp2A/+4HkRre7kbnFFz65TfBPft7PWIKkWoeWoUbb1yqN5EEIds9A4FlAM9eNyV1Pf
-        EKtUUkKD+3oYvwwXUu3+MrzJVSINWR6/kjS2F7tu9lXpY4iM8glNi1Z6Hmvm3qTKdKrU+5feyW4I
-        M2E7pYUR32msWzhvGbcvzZeUr7k8wehTniQFyBNUa2Jn8Khbav/uSbSfxf24IWa6moJRPWOPQkWa
-        wEbAluelVrgDReZKBf1f/VvCxccRoCg1NtSO6ZyG/nEbGRE1rKHZn3reH/G4curaGmw/3/3qHY93
-        9u7em+asDaB271nHIQOgTVXVOKCPc3+v3gmqKf6/jQ2ZvX2cAcY3yapsrdpB9RchlguzhgYAAA==
+        H4sIAAAAAAAAA61UXU/bMBR951dEedjTaG3X6ZeEpsJgsIki8bGxTVPkONdgkY/KcRBV1f8+201I
+        UujEJPoQqfde33vuOUd3ted5fsSyh5BxnpeZLvyp99sEPW/lviat8lLL7C7MyjQCZfL+gGA8ouMA
+        +x/rItcjYynY/NVs7p3Pro8vvKPL489n197N/Oxi3hRXs0K9XLh6fg/8wYxoKupOs0Ry8L70vG8K
+        oqLJJzJ7sFBrkAYmLwudpxuARzcETi/TwxMAvAxSPqbR91vy9cdzg62tw0dQUkjOtMwz0zYrk6Ta
+        bP28ImdZyBXEUpsKrUpoMgqYhjhkNuMThOk+Gu+j4TUeTjGeYtoLxpQQ9KtZQJh1QS2UzNybQKCI
+        TQQbCIwJAYEH0YRSRhGLBFAKIzBpwMPJgMKQEoQmeMAjyikijAOmTeNyEf8TS9Ajw2AwClpY7hUI
+        C6LfMUL/cEbusJizq+L2BO5+RifJzfmZPh01s1LQzIrQcFQr23jlyf0QQi2zsDhWUGzrJ/Wyor4m
+        1qhkhAbyehi/DBfa7P4yvMhNIgl5Hr+SdLZXy3b2VeljiJzygiVFI72MLXM7qXKd1ub7x+7k14S5
+        sJ+wwonfr61b9HcZtyvNp0SmUh9g9CEXogB9gCpN/AyebEvr3w2J/rO47zfETTdTMKpmbFCYSB1Y
+        KHiUeWkVbkHRuVHBvqueCanejwBDqbOhdUzrNHSPW8+JaGFtm33V8X5Pxut+VVuB7ebb/zrH4429
+        2/emPmtbUNv3rOWQLaB11bp2QBfn5l69EVRd/H8bOzI7+/S3MO4ka+1b1fbWfwGe3xfJhgYAAA==
     headers:
       content-encoding: [gzip]
       content-length: ['625']
       content-type: [application/json]
     status: {code: 200, message: OK}
 - request:
-    body: '{"amount": 1000.00, "description": "alice"}'
+    body: '{"amount": 1000.00, "meta": {"exchange_id": 1, "participant_id": 1}, "description":
+      "alice"}'
     headers: {}
     method: POST
-    uri: https://api.balancedpayments.com:443/bank_accounts/BA567z1OsbkUtySKaCLl1QdX/credits
+    uri: https://api.balancedpayments.com:443/bank_accounts/BA2g1fNaSsXFegYbFlUMItH7/credits
   response:
     body: {string: !!python/unicode "{\n  \"credits\": [\n    {\n      \"status\":
         \"pending\",\n      \"description\": \"alice\",\n      \"links\": {\n        \"customer\":
-        \"CU5555ODX3LB3yvScKR27QPD\",\n        \"destination\": \"BA567z1OsbkUtySKaCLl1QdX\",\n
-        \       \"order\": null\n      },\n      \"updated_at\": \"2014-07-01T15:45:00.125855Z\",\n
-        \     \"created_at\": \"2014-07-01T15:44:59.861937Z\",\n      \"transaction_number\":
-        \"CR401-922-8833\",\n      \"failure_reason\": null,\n      \"currency\":
+        \"CU2eHRmBFee1y5mc84bVX2JW\",\n        \"destination\": \"BA2g1fNaSsXFegYbFlUMItH7\",\n
+        \       \"order\": null\n      },\n      \"updated_at\": \"2014-08-06T16:11:16.609323Z\",\n
+        \     \"created_at\": \"2014-08-06T16:11:16.336908Z\",\n      \"transaction_number\":
+        \"CR558-399-7492\",\n      \"failure_reason\": null,\n      \"currency\":
         \"USD\",\n      \"amount\": 1000,\n      \"failure_reason_code\": null,\n
-        \     \"meta\": {},\n      \"href\": \"/credits/CR58nuI5mbLeeWVDYO4ewvQB\",\n
-        \     \"appears_on_statement_as\": \"example.com\",\n      \"id\": \"CR58nuI5mbLeeWVDYO4ewvQB\"\n
+        \     \"meta\": {\n        \"exchange_id\": \"1\",\n        \"participant_id\":
+        \"1\"\n      },\n      \"href\": \"/credits/CR2hZpvNGVj8Z79divl41tE4\",\n
+        \     \"appears_on_statement_as\": \"example.com\",\n      \"id\": \"CR2hZpvNGVj8Z79divl41tE4\"\n
         \   }\n  ],\n  \"links\": {\n    \"credits.order\": \"/orders/{credits.order}\",\n
         \   \"credits.customer\": \"/customers/{credits.customer}\",\n    \"credits.destination\":
         \"/resources/{credits.destination}\",\n    \"credits.reversals\": \"/credits/{credits.id}/reversals\",\n
         \   \"credits.events\": \"/credits/{credits.id}/events\"\n  }\n}"}
     headers:
-      content-length: ['953']
+      content-length: ['1018']
       content-type: [application/json]
     status: {code: 201, message: CREATED}
 version: 1
