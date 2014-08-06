@@ -276,6 +276,7 @@ class Payday(object):
                       FROM pay_participants
                      WHERE username = NEW.team
                 );
+                IF (team_balance <= 0) THEN RETURN NULL; END IF;
                 actual_amount := NEW.amount;
                 IF (team_balance < NEW.amount) THEN
                     actual_amount := team_balance;
