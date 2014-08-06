@@ -1,5 +1,5 @@
 <form class="my-tip{{ " anon" if user.ANON else "" }}">
-    $ <input type="number"
+    $ <input type="text"
            class="my-tip"
            min="0"
            max="{{ tip.number == 'plural' and '1000' or '100' }}"

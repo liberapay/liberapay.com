@@ -116,7 +116,16 @@
     <script src="{{ website.asset_url }}/bootstrap-dropdown.js"></script>
 
     <script src="{{ website.asset_url }}/gittip.js"></script>
-    <script>$(document).ready(Gittip.init);</script>
+
+    <script src="{{ website.asset_url }}/accounting.min.js"></script>
+
+    <script>
+        function unformat(s) {
+            return accounting.unformat(s, '{{ decimal_symbol }}');
+        }
+
+        $(document).ready(Gittip.init);
+    </script>
     {% block scripts %}
 
     {% endblock %}
