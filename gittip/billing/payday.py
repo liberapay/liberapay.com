@@ -130,9 +130,20 @@ class Payday(object):
             holds = self.create_card_holds(cursor)
             self.transfer_tips(cursor)
             self.transfer_takes(cursor, self.ts_start)
-            self.settle_card_holds(cursor, holds)
-            self.update_balances(cursor)
-            check_db(cursor)
+            transfers = cursor.all("""
+                SELECT * FROM transfers WHERE "timestamp" > %s
+            """, (self.ts_start,))
+            try:
+                self.settle_card_holds(cursor, holds)
+                self.update_balances(cursor)
+                check_db(cursor)
+            except:
+                # Dump transfers for debugging
+                import csv
+                from time import time
+                with open('%s_transfers.csv' % time(), 'wb') as f:
+                    csv.writer(f).writerows(transfers)
+                raise
         self.take_over_balances()
 
 

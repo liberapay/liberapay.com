@@ -9,7 +9,7 @@ from gittip.billing.exchanges import create_card_hold
 from gittip.billing.payday import NoPayday, Payday
 from gittip.exceptions import NegativeBalance
 from gittip.models.participant import Participant
-from gittip.testing import Harness, raise_foobar
+from gittip.testing import Foobar, Harness, raise_foobar
 from gittip.testing.balanced import BalancedHarness
 
 
@@ -349,6 +349,20 @@ class TestPayin(BalancedHarness):
         assert Participant.from_id(bob.id).balance == 0
         assert Participant.from_id(bruce.id).balance == 0
         assert Participant.from_id(billy.id).balance == 18
+
+    @mock.patch.object(Payday, 'fetch_card_holds')
+    @mock.patch('gittip.billing.payday.capture_card_hold')
+    def test_payin_dumps_transfers_for_debugging(self, cch, fch):
+        self.janet.set_tip_to(self.homer, 10)
+        fake_hold = mock.MagicMock()
+        fake_hold.amount = 1500
+        fch.return_value = {self.janet.id: fake_hold}
+        cch.side_effect = Foobar
+        open = mock.MagicMock()
+        with mock.patch.dict(__builtins__, {'open': open}):
+            with self.assertRaises(Foobar):
+                Payday.start().payin()
+        assert open.call_count == 1
 
 
 class TestPayout(Harness):
