@@ -190,7 +190,3 @@ class Harness(unittest.TestCase):
 
 
 class Foobar(Exception): pass
-
-
-def raise_foobar(*a):
-    raise Foobar

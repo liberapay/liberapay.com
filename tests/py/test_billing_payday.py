@@ -9,7 +9,7 @@ from gittip.billing.exchanges import create_card_hold
 from gittip.billing.payday import NoPayday, Payday
 from gittip.exceptions import NegativeBalance
 from gittip.models.participant import Participant
-from gittip.testing import Foobar, Harness, raise_foobar
+from gittip.testing import Foobar, Harness
 from gittip.testing.balanced import BalancedHarness
 
 
@@ -281,7 +281,7 @@ class TestPayin(BalancedHarness):
     @mock.patch('balanced.Customer')
     def test_card_hold_error(self, Customer, fch):
         self.janet.set_tip_to(self.homer, 17)
-        Customer.fetch = raise_foobar
+        Customer.side_effect = Foobar
         fch.return_value = {}
         Payday.start().payin()
         payday = self.fetch_payday()

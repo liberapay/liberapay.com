@@ -21,7 +21,7 @@ from gittip.billing.exchanges import (
 )
 from gittip.exceptions import NegativeBalance, NoBalancedCustomerHref, NotWhitelisted
 from gittip.models.participant import Participant
-from gittip.testing import Foobar, Harness, raise_foobar
+from gittip.testing import Foobar, Harness
 from gittip.testing.balanced import BalancedHarness
 
 
@@ -46,7 +46,7 @@ class TestCredits(BalancedHarness):
 
     @mock.patch('balanced.Customer')
     def test_ach_credit_failure(self, Customer):
-        Customer.fetch = raise_foobar
+        Customer.side_effect = Foobar
         bob = self.make_participant('bob', last_ach_result="failure", balance=20,
                                     balanced_customer_href=self.homer_href,
                                     is_suspicious=False)
@@ -72,7 +72,7 @@ class TestCardHolds(BalancedHarness):
 
     @mock.patch('balanced.Customer')
     def test_create_card_hold_failure(self, Customer):
-        Customer.fetch = raise_foobar
+        Customer.side_effect = Foobar
         hold, error = create_card_hold(self.db, self.janet, D('1.00'))
         assert hold is None
         assert error == "Foobar()"
@@ -360,8 +360,8 @@ class TestSyncWithBalanced(BalancedHarness):
     def test_sync_with_balanced_reverts_credits_that_didnt_happen(self):
         self.make_exchange('bill', 41, 0, self.homer)
         with mock.patch('gittip.billing.exchanges.record_exchange_result') as rer \
-           , mock.patch('balanced.Customer.fetch') as fetch:
-            rer.side_effect = fetch.side_effect = Foobar
+           , mock.patch('balanced.Customer') as Customer:
+            rer.side_effect = Customer.side_effect = Foobar
             with self.assertRaises(Foobar):
                 ach_credit(self.db, self.homer, 0, 0)
         exchange = self.db.one("SELECT * FROM exchanges WHERE amount < 0")
