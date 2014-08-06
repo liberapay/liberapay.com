@@ -225,6 +225,7 @@ class Payday(object):
         CREATE OR REPLACE FUNCTION transfer(text, text, numeric, context_type)
         RETURNS void AS $$
             BEGIN
+                IF ($3 = 0) THEN RETURN; END IF;
                 UPDATE pay_participants
                    SET new_balance = (new_balance - $3)
                  WHERE username = $1;
