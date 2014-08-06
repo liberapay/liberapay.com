@@ -13,6 +13,32 @@ from gittip.models import check_db
 from gittip.models.participant import Participant
 
 
+# https://docs.balancedpayments.com/1.1/api/customers/
+CUSTOMER_LINKS = {
+    "customers.bank_accounts": "/customers/{customers.id}/bank_accounts",
+    "customers.card_holds": "/customers/{customers.id}/card_holds",
+    "customers.cards": "/customers/{customers.id}/cards",
+    "customers.credits": "/customers/{customers.id}/credits",
+    "customers.debits": "/customers/{customers.id}/debits",
+    "customers.destination": "/resources/{customers.destination}",
+    "customers.disputes": "/customers/{customers.id}/disputes",
+    "customers.external_accounts": "/customers/{customers.id}/external_accounts",
+    "customers.orders": "/customers/{customers.id}/orders",
+    "customers.refunds": "/customers/{customers.id}/refunds",
+    "customers.reversals": "/customers/{customers.id}/reversals",
+    "customers.source": "/resources/{customers.source}",
+    "customers.transactions": "/customers/{customers.id}/transactions"
+}
+
+
+def customer_from_href(href):
+    """This functions "manually" builds a minimal Customer instance.
+    """
+    id = href.rsplit('/', 1)[1]
+    d = {'href': href, 'id': id, 'links': {}, 'meta': {}}
+    return balanced.Customer(customers=[d], links=CUSTOMER_LINKS)
+
+
 # Balanced has a $0.50 minimum. We go even higher to avoid onerous
 # per-transaction fees. See:
 # https://github.com/gittip/www.gittip.com/issues/167
@@ -109,7 +135,7 @@ def ach_credit(db, participant, withhold, minimum_credit=MINIMUM_CREDIT):
     e_id = record_exchange(db, 'ach', -credit_amount, fee, participant, 'pre')
     meta = dict(exchange_id=e_id, participant_id=participant.id)
     try:
-        customer = balanced.Customer.fetch(balanced_customer_href)
+        customer = customer_from_href(balanced_customer_href)
         ba = customer.bank_accounts.one()
         ba.credit(amount=cents, description=participant.username, meta=meta)
         record_exchange_result(db, e_id, 'pending', None, participant)
@@ -158,7 +184,7 @@ def create_card_hold(db, participant, amount):
 
     hold = None
     try:
-        card = balanced.Customer.fetch(balanced_customer_href).cards.one()
+        card = customer_from_href(balanced_customer_href).cards.one()
         hold = card.hold( amount=cents
                         , description=username
                         , meta=dict(participant_id=participant.id, state='new')
