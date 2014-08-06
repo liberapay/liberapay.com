@@ -300,6 +300,16 @@ class TestPayin(BalancedHarness):
         assert Participant.from_id(alice.id).balance == 20
         assert Participant.from_id(bob.id).balance == 0
 
+    def test_payin_doesnt_make_null_transfers(self):
+        alice = self.make_participant('alice', claimed_time='now')
+        alice.set_tip_to(self.homer, 1)
+        alice.set_tip_to(self.homer, 0)
+        a_team = self.make_participant('a_team', claimed_time='now', number='plural')
+        a_team.add_member(alice)
+        Payday.start().payin()
+        transfers0 = self.db.all("SELECT * FROM transfers WHERE amount = 0")
+        assert not transfers0
+
     def test_transfer_takes(self):
         a_team = self.make_participant('a_team', claimed_time='now', number='plural', balance=20)
         alice = self.make_participant('alice', claimed_time='now')
