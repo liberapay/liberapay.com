@@ -1,6 +1,7 @@
 import decimal
 
 from aspen import Response
+from babel.numbers import NumberFormatError
 from gittip.utils import get_participant
 
 [-----------------------------------------------------------------------------]
@@ -19,7 +20,7 @@ elif goal == "custom":
 if goal is not None:
     try:
         goal = parse_decimal(goal)
-    except:
+    except NumberFormatError:
         raise Response(400, "Bad input.")
 
 participant = get_participant(request)
