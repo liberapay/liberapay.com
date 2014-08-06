@@ -341,6 +341,20 @@ class TestPayin(BalancedHarness):
             else:
                 assert p.balance == 0
 
+    @mock.patch.object(Payday, 'fetch_card_holds')
+    def test_transfer_takes_doesnt_make_negative_transfers(self, fch):
+        hold = balanced.CardHold(amount=1500, meta={'participant_id': self.janet.id})
+        hold.capture = lambda *a, **kw: None
+        hold.save = lambda *a, **kw: None
+        fch.return_value = {self.janet.id: hold}
+        self.janet.update_number('plural')
+        self.janet.set_tip_to(self.homer, 10)
+        self.janet.add_member(self.david)
+        Payday.start().payin()
+        assert Participant.from_id(self.david.id).balance == 0
+        assert Participant.from_id(self.homer.id).balance == 10
+        assert Participant.from_id(self.janet.id).balance == 0
+
     def test_take_over_during_payin(self):
         alice = self.make_participant('alice', claimed_time='now', balance=50)
         bob = self.make_participant('bob', claimed_time='now', elsewhere='twitter')
