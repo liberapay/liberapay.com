@@ -21,10 +21,10 @@ Gittip.tips.init = function() {
         var $this     = $(this),
             $parent   = $this.parents('form'),
             $confirm  = $parent.find('.confirm-tip'),
-            amount    = unformat($this.val()) || 0,
-            oldAmount = unformat(this.defaultValue),
-            max       = unformat($this.prop('max')),
-            min       = unformat($this.prop('min')),
+            amount    = parseFloat(unformat($this.val()), 10) || 0,
+            oldAmount = parseFloat(unformat(this.defaultValue), 10),
+            max       = parseFloat($this.prop('max')),
+            min       = parseFloat($this.prop('min')),
             inBounds  = amount <= max && amount >= min,
             same      = amount === oldAmount;
 
@@ -96,8 +96,8 @@ Gittip.tips.init = function() {
         event.preventDefault();
         var $this     = $(this),
             $myTip    = $this.find('.my-tip'),
-            amount    = unformat($myTip.val()),
-            oldAmount = unformat($myTip[0].defaultValue),
+            amount    = parseFloat(unformat($myTip.val()), 10),
+            oldAmount = parseFloat(unformat($myTip[0].defaultValue), 10),
             tippee    = $myTip.data('tippee'),
             isAnon    = $this.hasClass('anon');
 

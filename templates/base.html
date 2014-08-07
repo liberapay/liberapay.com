@@ -117,11 +117,9 @@
 
     <script src="{{ website.asset_url }}/gittip.js"></script>
 
-    <script src="{{ website.asset_url }}/accounting.min.js"></script>
-
     <script>
         function unformat(s) {
-            return accounting.unformat(s, '{{ decimal_symbol }}');
+            return s.replace('{{ decimal_symbol }}', '.');
         }
 
         $(document).ready(Gittip.init);
