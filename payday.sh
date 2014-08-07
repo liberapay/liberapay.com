@@ -81,7 +81,7 @@ else
 fi
 
 if [ $1 ]; then
-    require foreman
+    require honcho
     confirm "$RUN payday #$1?"
     if [ $? -eq 0 ]; then
         if [ "$2" == "" ]; then
@@ -92,7 +92,7 @@ if [ $1 ]; then
                 confirm "$RUN payday #$1 FOR REAL?!?!?!??!?!?"
                 if [ $? -eq 0 ]; then
                     start
-                    heroku config -s | foreman run -e /dev/stdin \
+                    heroku config -s | honcho run -e /dev/stdin \
                         ./env/bin/payday >> $LOG 2>&1
                 fi
             else
