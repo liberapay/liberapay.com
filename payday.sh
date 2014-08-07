@@ -86,15 +86,18 @@ confirm "$RUN payday #$1?" || exit 0
 case "$2" in
     "")
         start
-        honcho run -e defaults.env,local.env payday >>$LOG 2>&1
+        honcho run -e defaults.env,local.env payday >>$LOG 2>&1 &
         ;;
     "for_real_please")
         confirm "$RUN payday #$1 FOR REAL?!?!?!??!?!?" || exit 0
         start
-        heroku config -s | honcho run -e /dev/stdin payday >>$LOG 2>&1
+        heroku config -s | honcho run -e /dev/stdin payday >>$LOG 2>&1 &
         ;;
     *)
         echo "Your second arg was $2. Wazzat mean?"
         exit 1
         ;;
 esac
+
+disown -a
+tail -f $LOG
