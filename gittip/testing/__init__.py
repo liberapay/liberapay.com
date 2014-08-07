@@ -35,8 +35,10 @@ class ClientWithAuth(Client):
         """
 
         # csrf - for both anon and authenticated
-        self.cookie[b'csrf_token'] = b'sotokeny'
-        kw[b'HTTP_X-CSRF-TOKEN'] = b'sotokeny'
+        csrf_token = kw.get('csrf_token', b'sotokeny')
+        if csrf_token:
+            self.cookie[b'csrf_token'] = csrf_token
+            kw[b'HTTP_X-CSRF-TOKEN'] = csrf_token
 
         # user authentication
         auth_as = kw.pop('auth_as', None)
