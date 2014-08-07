@@ -469,7 +469,8 @@ class Payday(object):
         # Check that balances aren't becoming (more) negative
         for p in participants:
             if p.new_balance < 0 and p.new_balance < p.cur_balance:
-                raise NegativeBalance(p)
+                log(p)
+                raise NegativeBalance()
         log("Updated the balances of %i participants." % len(participants))
 
 
