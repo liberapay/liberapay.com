@@ -252,13 +252,23 @@ class Payday(object):
         -- Create a trigger to process tips
 
         CREATE OR REPLACE FUNCTION process_tip() RETURNS trigger AS $$
+            DECLARE
+                tipper pay_participants;
             BEGIN
-                EXECUTE transfer(NEW.tipper, NEW.tippee, NEW.amount, 'tip');
+                tipper := (
+                    SELECT p.*::pay_participants
+                      FROM pay_participants p
+                     WHERE username = NEW.tipper
+                );
+                IF (NEW.amount <= tipper.new_balance OR tipper.last_bill_result = '') THEN
+                    EXECUTE transfer(NEW.tipper, NEW.tippee, NEW.amount, 'tip');
+                    RETURN NEW;
+                END IF;
                 RETURN NULL;
             END;
         $$ LANGUAGE plpgsql;
 
-        CREATE TRIGGER process_tip AFTER UPDATE OF is_funded ON pay_tips
+        CREATE TRIGGER process_tip BEFORE UPDATE OF is_funded ON pay_tips
             FOR EACH ROW
             WHEN (NEW.is_funded IS true AND OLD.is_funded IS NOT true)
             EXECUTE PROCEDURE process_tip();
@@ -390,12 +400,7 @@ class Payday(object):
 
         UPDATE pay_tips t
            SET is_funded = true
-         WHERE is_funded IS NOT true
-           AND amount <= (
-                   SELECT new_balance
-                     FROM pay_participants p
-                    WHERE p.username = t.tipper
-               );
+         WHERE is_funded IS NOT true;
 
         """)
 
