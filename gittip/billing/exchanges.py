@@ -73,7 +73,7 @@ def skim_credit(amount):
 
 def repr_exception(e):
     if isinstance(e, balanced.exc.HTTPError):
-        return e.message.message
+        return '%s %s, %s' % (e.status_code, e.status, e.description)
     else:
         return repr(e)
 
