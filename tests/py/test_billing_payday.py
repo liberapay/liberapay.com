@@ -311,7 +311,8 @@ class TestPayin(BalancedHarness):
         assert not transfers0
 
     def test_transfer_tips(self):
-        alice = self.make_participant('alice', claimed_time='now', balance=1)
+        alice = self.make_participant('alice', claimed_time='now', balance=1,
+                                      last_bill_result='')
         alice.set_tip_to(self.janet, D('0.51'))
         alice.set_tip_to(self.homer, D('0.50'))
         payday = Payday.start()
