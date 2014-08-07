@@ -310,6 +310,19 @@ class TestPayin(BalancedHarness):
         transfers0 = self.db.all("SELECT * FROM transfers WHERE amount = 0")
         assert not transfers0
 
+    def test_transfer_tips(self):
+        alice = self.make_participant('alice', claimed_time='now', balance=1)
+        alice.set_tip_to(self.janet, D('0.51'))
+        alice.set_tip_to(self.homer, D('0.50'))
+        payday = Payday.start()
+        payday.prepare(self.db, payday.ts_start)
+        payday.transfer_tips(self.db)
+        payday.update_balances(self.db)
+        alice = Participant.from_id(alice.id)
+        assert Participant.from_id(alice.id).balance == D('0.49')
+        assert Participant.from_id(self.janet.id).balance == D('0.51')
+        assert Participant.from_id(self.homer.id).balance == 0
+
     def test_transfer_takes(self):
         a_team = self.make_participant('a_team', claimed_time='now', number='plural', balance=20)
         alice = self.make_participant('alice', claimed_time='now')
