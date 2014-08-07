@@ -602,7 +602,7 @@ class Payday(object):
                        SELECT COALESCE(sum(amount + fee), 0)
                          FROM our_charges
                    )
-                 , charge_fees_volume = (SELECT sum(fee) FROM our_charges)
+                 , charge_fees_volume = (SELECT COALESCE(sum(fee), 0) FROM our_charges)
              WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
 
         """, {'ts_start': self.ts_start})
