@@ -81,19 +81,19 @@ else
 fi
 
 if [ $1 ]; then
+    PATH="./env/bin:$PATH"
     require honcho
     confirm "$RUN payday #$1?"
     if [ $? -eq 0 ]; then
         if [ "$2" == "" ]; then
             start
-            honcho run -e defaults.env,local.env ./env/bin/payday >> $LOG 2>&1
+            honcho run -e defaults.env,local.env payday >>$LOG 2>&1
         else 
             if [ "$2" == "for_real_please" ]; then
                 confirm "$RUN payday #$1 FOR REAL?!?!?!??!?!?"
                 if [ $? -eq 0 ]; then
                     start
-                    heroku config -s | honcho run -e /dev/stdin \
-                        ./env/bin/payday >> $LOG 2>&1
+                    heroku config -s | honcho run -e /dev/stdin payday >>$LOG 2>&1
                 fi
             else
                 echo "Your second arg was $2. Wazzat mean?"
