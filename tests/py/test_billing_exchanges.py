@@ -144,7 +144,7 @@ class TestCardHolds(BalancedHarness):
         bob = self.make_participant('bob', balanced_customer_href=customer_href,
                                     is_suspicious=False)
         hold, error = create_card_hold(self.db, bob, D('10.00'))
-        assert error == '402 Client Error: PAYMENT REQUIRED'
+        assert error.startswith('402 Payment Required, ')
 
     def test_create_card_hold_multiple_cards(self):
         customer_href = self.make_balanced_customer()
