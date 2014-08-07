@@ -166,6 +166,7 @@ class Payday(object):
                  , last_bill_result
                  , is_suspicious
                  , goal
+                 , false AS card_hold_ok
               FROM participants
              WHERE is_suspicious IS NOT true
                AND claimed_time < %(ts_start)s
@@ -260,7 +261,7 @@ class Payday(object):
                       FROM pay_participants p
                      WHERE username = NEW.tipper
                 );
-                IF (NEW.amount <= tipper.new_balance OR tipper.last_bill_result = '') THEN
+                IF (NEW.amount <= tipper.new_balance OR tipper.card_hold_ok) THEN
                     EXECUTE transfer(NEW.tipper, NEW.tippee, NEW.amount, 'tip');
                     RETURN NEW;
                 END IF;
@@ -377,13 +378,14 @@ class Payday(object):
             else:
                 holds[p.id] = hold
 
-        # Update the values of last_bill_result in our temporary table
+        # Update the values of card_hold_ok in our temporary table
+        if not holds:
+            return {}
         cursor.run("""
             UPDATE pay_participants p
-               SET last_bill_result = p2.last_bill_result
-              FROM participants p2
-             WHERE p.id = p2.id
-        """)
+               SET card_hold_ok = true
+             WHERE p.id IN %s
+        """, (tuple(holds.keys()),))
 
         return holds
 
@@ -396,7 +398,7 @@ class Payday(object):
            SET is_funded = true
           FROM pay_participants p
          WHERE p.username = t.tipper
-           AND p.last_bill_result = '';
+           AND p.card_hold_ok;
 
         UPDATE pay_tips t
            SET is_funded = true
