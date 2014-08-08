@@ -314,6 +314,7 @@ class Payday(object):
                             last_bill_result IS NULL
                           )
                )
+         WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz;
 
         """, dict(ts_start=ts_start))
         log('Prepared the DB.')
