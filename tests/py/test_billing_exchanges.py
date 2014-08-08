@@ -56,6 +56,13 @@ class TestCredits(BalancedHarness):
         assert bob.last_ach_result == bob2.last_ach_result == error == "Foobar()"
         assert bob.balance == bob2.balance == 20
 
+    def test_ach_credit_no_bank_account(self):
+        self.make_exchange('bill', 20, 0, self.david)
+        error = ach_credit(self.db, self.david, D('1.00'))
+        david = Participant.from_username('david')
+        assert error == 'NoResultFound()'
+        assert self.david.last_ach_result == david.last_ach_result == None
+
 
 class TestCardHolds(BalancedHarness):
 
@@ -172,7 +179,9 @@ class TestCardHolds(BalancedHarness):
         bob = self.make_participant('bob', balanced_customer_href=customer_href,
                                     is_suspicious=False)
         hold, error = create_card_hold(self.db, bob, D('10.00'))
+        bob2 = Participant.from_id(bob.id)
         assert error == 'NoResultFound()'
+        assert bob.last_bill_result == bob2.last_bill_result == None
 
 
 class TestFees(Harness):
