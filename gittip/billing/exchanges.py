@@ -194,8 +194,7 @@ def create_card_hold(db, participant, amount):
     except Exception as e:
         error = repr_exception(e)
         log(msg + "failed: %s" % error)
-        db.run("UPDATE participants SET last_bill_result=%s WHERE id=%s",
-               (error, participant.id))
+        propagate_exchange(db, participant, 'bill', error, 0)
 
     return hold, error
 
@@ -322,7 +321,7 @@ def propagate_exchange(cursor, participant, kind, error, amount):
     """Propagates an exchange to the participant's balance.
     """
     column = 'last_%s_result' % kind
-    error = error or ''
+    error = None if error == 'NoResultFound()' else (error or '')
     new_balance = cursor.one("""
         UPDATE participants
            SET {0}=%s

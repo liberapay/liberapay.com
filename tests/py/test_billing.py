@@ -38,9 +38,9 @@ class TestBalancedCard(BalancedHarness):
         actual = self.client.GET('/credit-card.html', auth_as='janet').body.decode('utf8')
         assert expected in actual
 
-    def test_credit_card_page_loads_when_there_is_an_account_but_no_card(self):
+    def test_credit_card_page_shows_card_failing(self):
         self.db.run( "UPDATE participants "
-                     "SET last_bill_result='NoResultFound()'"
+                     "SET last_bill_result='Some error'"
                      "WHERE username='janet'"
                     )
 
