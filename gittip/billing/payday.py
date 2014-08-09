@@ -155,8 +155,7 @@ class Payday(object):
 
         -- Create the necessary temporary tables and indexes
 
-        DROP TABLE IF EXISTS payday_participants CASCADE;
-        CREATE TEMPORARY TABLE payday_participants AS
+        CREATE TEMPORARY TABLE payday_participants ON COMMIT DROP AS
             SELECT id
                  , username
                  , claimed_time
@@ -175,14 +174,12 @@ class Payday(object):
         CREATE UNIQUE INDEX ON payday_participants (id);
         CREATE UNIQUE INDEX ON payday_participants (username);
 
-        DROP TABLE IF EXISTS payday_transfers CASCADE;
-        CREATE TEMPORARY TABLE payday_transfers AS
+        CREATE TEMPORARY TABLE payday_transfers ON COMMIT DROP AS
             SELECT *
               FROM transfers t
              WHERE t.timestamp > %(ts_start)s;
 
-        DROP TABLE IF EXISTS payday_tips CASCADE;
-        CREATE TEMPORARY TABLE payday_tips AS
+        CREATE TEMPORARY TABLE payday_tips ON COMMIT DROP AS
             SELECT tipper, tippee, amount
               FROM ( SELECT DISTINCT ON (tipper, tippee) *
                        FROM tips
@@ -213,12 +210,11 @@ class Payday(object):
                     WHERE tipper = username
                ), 0);
 
-        DROP TABLE IF EXISTS payday_takes;
         CREATE TEMPORARY TABLE payday_takes
         ( team text
         , member text
         , amount numeric(35,2)
-        );
+        ) ON COMMIT DROP;
 
 
         -- Prepare a statement that makes and records a transfer

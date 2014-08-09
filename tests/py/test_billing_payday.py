@@ -124,11 +124,11 @@ class TestPayday(BalancedHarness):
         payday = Payday.start()
         ts_start = payday.ts_start
 
-        get_participants = lambda: self.db.all("SELECT * FROM payday_participants")
+        get_participants = lambda c: c.all("SELECT * FROM payday_participants")
 
-        payday.prepare(self.db, ts_start)
-
-        participants = get_participants()
+        with self.db.get_cursor() as cursor:
+            payday.prepare(cursor, ts_start)
+            participants = get_participants(cursor)
 
         expected_logging_call_args = [
             ('Starting a new payday.'),
@@ -144,8 +144,9 @@ class TestPayday(BalancedHarness):
         # run a second time, we should see it pick up the existing payday
         payday = Payday.start()
         second_ts_start = payday.ts_start
-        payday.prepare(self.db, second_ts_start)
-        second_participants = get_participants()
+        with self.db.get_cursor() as cursor:
+            payday.prepare(cursor, second_ts_start)
+            second_participants = get_participants(cursor)
 
         assert ts_start == second_ts_start
         participants = list(participants)
@@ -316,9 +317,10 @@ class TestPayin(BalancedHarness):
         alice.set_tip_to(self.janet, D('0.51'))
         alice.set_tip_to(self.homer, D('0.50'))
         payday = Payday.start()
-        payday.prepare(self.db, payday.ts_start)
-        payday.transfer_tips(self.db)
-        payday.update_balances(self.db)
+        with self.db.get_cursor() as cursor:
+            payday.prepare(cursor, payday.ts_start)
+            payday.transfer_tips(cursor)
+            payday.update_balances(cursor)
         alice = Participant.from_id(alice.id)
         assert Participant.from_id(alice.id).balance == D('0.49')
         assert Participant.from_id(self.janet.id).balance == D('0.51')
@@ -339,9 +341,10 @@ class TestPayin(BalancedHarness):
         # Run the transfer multiple times to make sure we ignore takes that
         # have already been processed
         for i in range(3):
-            payday.prepare(self.db, payday.ts_start)
-            payday.transfer_takes(self.db, payday.ts_start)
-            payday.update_balances(self.db)
+            with self.db.get_cursor() as cursor:
+                payday.prepare(cursor, payday.ts_start)
+                payday.transfer_takes(cursor, payday.ts_start)
+                payday.update_balances(cursor)
 
         participants = self.db.all("SELECT username, balance FROM participants")
 
