@@ -155,8 +155,8 @@ class Payday(object):
 
         -- Create the necessary temporary tables and indexes
 
-        DROP TABLE IF EXISTS pay_participants CASCADE;
-        CREATE TEMPORARY TABLE pay_participants AS
+        DROP TABLE IF EXISTS payday_participants CASCADE;
+        CREATE TEMPORARY TABLE payday_participants AS
             SELECT id
                  , username
                  , claimed_time
@@ -172,49 +172,49 @@ class Payday(object):
                AND claimed_time < %(ts_start)s
           ORDER BY claimed_time;
 
-        CREATE UNIQUE INDEX ON pay_participants (id);
-        CREATE UNIQUE INDEX ON pay_participants (username);
+        CREATE UNIQUE INDEX ON payday_participants (id);
+        CREATE UNIQUE INDEX ON payday_participants (username);
 
-        DROP TABLE IF EXISTS pay_transfers CASCADE;
-        CREATE TEMPORARY TABLE pay_transfers AS
+        DROP TABLE IF EXISTS payday_transfers CASCADE;
+        CREATE TEMPORARY TABLE payday_transfers AS
             SELECT *
               FROM transfers t
              WHERE t.timestamp > %(ts_start)s;
 
-        DROP TABLE IF EXISTS pay_tips CASCADE;
-        CREATE TEMPORARY TABLE pay_tips AS
+        DROP TABLE IF EXISTS payday_tips CASCADE;
+        CREATE TEMPORARY TABLE payday_tips AS
             SELECT tipper, tippee, amount
               FROM ( SELECT DISTINCT ON (tipper, tippee) *
                        FROM tips
                       WHERE mtime < %(ts_start)s
                    ORDER BY tipper, tippee, mtime DESC
                    ) t
-              JOIN pay_participants p ON p.username = t.tipper
-              JOIN pay_participants p2 ON p2.username = t.tippee
+              JOIN payday_participants p ON p.username = t.tipper
+              JOIN payday_participants p2 ON p2.username = t.tippee
              WHERE t.amount > 0
                AND (p2.goal IS NULL or p2.goal >= 0)
                AND ( SELECT id
-                       FROM pay_transfers t2
+                       FROM payday_transfers t2
                       WHERE t.tipper = t2.tipper
                         AND t.tippee = t2.tippee
                         AND context = 'tip'
                    ) IS NULL
           ORDER BY p.claimed_time ASC, t.ctime ASC;
 
-        CREATE INDEX ON pay_tips (tipper);
-        CREATE INDEX ON pay_tips (tippee);
-        ALTER TABLE pay_tips ADD COLUMN is_funded boolean;
+        CREATE INDEX ON payday_tips (tipper);
+        CREATE INDEX ON payday_tips (tippee);
+        ALTER TABLE payday_tips ADD COLUMN is_funded boolean;
 
-        ALTER TABLE pay_participants ADD COLUMN giving_today numeric(35,2);
-        UPDATE pay_participants
+        ALTER TABLE payday_participants ADD COLUMN giving_today numeric(35,2);
+        UPDATE payday_participants
            SET giving_today = COALESCE((
                    SELECT sum(amount)
-                     FROM pay_tips
+                     FROM payday_tips
                     WHERE tipper = username
                ), 0);
 
-        DROP TABLE IF EXISTS pay_takes;
-        CREATE TEMPORARY TABLE pay_takes
+        DROP TABLE IF EXISTS payday_takes;
+        CREATE TEMPORARY TABLE payday_takes
         ( team text
         , member text
         , amount numeric(35,2)
@@ -227,21 +227,21 @@ class Payday(object):
         RETURNS void AS $$
             BEGIN
                 IF ($3 = 0) THEN RETURN; END IF;
-                UPDATE pay_participants
+                UPDATE payday_participants
                    SET new_balance = (new_balance - $3)
                  WHERE username = $1;
-                UPDATE pay_participants
+                UPDATE payday_participants
                    SET new_balance = (new_balance + $3)
                  WHERE username = $2;
                 INSERT INTO transfers
                             (tipper, tippee, amount, context)
                      VALUES ( ( SELECT p.username
                                   FROM participants p
-                                  JOIN pay_participants p2 ON p.id = p2.id
+                                  JOIN payday_participants p2 ON p.id = p2.id
                                  WHERE p2.username = $1 )
                             , ( SELECT p.username
                                   FROM participants p
-                                  JOIN pay_participants p2 ON p.id = p2.id
+                                  JOIN payday_participants p2 ON p.id = p2.id
                                  WHERE p2.username = $2 )
                             , $3
                             , $4
@@ -254,11 +254,11 @@ class Payday(object):
 
         CREATE OR REPLACE FUNCTION process_tip() RETURNS trigger AS $$
             DECLARE
-                tipper pay_participants;
+                tipper payday_participants;
             BEGIN
                 tipper := (
-                    SELECT p.*::pay_participants
-                      FROM pay_participants p
+                    SELECT p.*::payday_participants
+                      FROM payday_participants p
                      WHERE username = NEW.tipper
                 );
                 IF (NEW.amount <= tipper.new_balance OR tipper.card_hold_ok) THEN
@@ -269,7 +269,7 @@ class Payday(object):
             END;
         $$ LANGUAGE plpgsql;
 
-        CREATE TRIGGER process_tip BEFORE UPDATE OF is_funded ON pay_tips
+        CREATE TRIGGER process_tip BEFORE UPDATE OF is_funded ON payday_tips
             FOR EACH ROW
             WHEN (NEW.is_funded IS true AND OLD.is_funded IS NOT true)
             EXECUTE PROCEDURE process_tip();
@@ -284,7 +284,7 @@ class Payday(object):
             BEGIN
                 team_balance := (
                     SELECT new_balance
-                      FROM pay_participants
+                      FROM payday_participants
                      WHERE username = NEW.team
                 );
                 IF (team_balance <= 0) THEN RETURN NULL; END IF;
@@ -297,17 +297,17 @@ class Payday(object):
             END;
         $$ LANGUAGE plpgsql;
 
-        CREATE TRIGGER process_take AFTER INSERT ON pay_takes
+        CREATE TRIGGER process_take AFTER INSERT ON payday_takes
             FOR EACH ROW EXECUTE PROCEDURE process_take();
 
 
         -- Save the stats we already have
 
         UPDATE paydays
-           SET nparticipants = (SELECT count(*) FROM pay_participants)
+           SET nparticipants = (SELECT count(*) FROM payday_participants)
              , ncc_missing = (
                    SELECT count(*)
-                     FROM pay_participants
+                     FROM payday_participants
                     WHERE old_balance < giving_today
                       AND ( balanced_customer_href IS NULL
                             OR
@@ -348,7 +348,7 @@ class Payday(object):
         # Get the list of participants to create card holds for
         participants = cursor.all("""
             SELECT *
-              FROM pay_participants
+              FROM payday_participants
              WHERE old_balance < giving_today
                AND balanced_customer_href IS NOT NULL
                AND last_bill_result IS NOT NULL
@@ -383,7 +383,7 @@ class Payday(object):
         if not holds:
             return {}
         cursor.run("""
-            UPDATE pay_participants p
+            UPDATE payday_participants p
                SET card_hold_ok = true
              WHERE p.id IN %s
         """, (tuple(holds.keys()),))
@@ -395,13 +395,13 @@ class Payday(object):
     def transfer_tips(cursor):
         cursor.run("""
 
-        UPDATE pay_tips t
+        UPDATE payday_tips t
            SET is_funded = true
-          FROM pay_participants p
+          FROM payday_participants p
          WHERE p.username = t.tipper
            AND p.card_hold_ok;
 
-        UPDATE pay_tips t
+        UPDATE payday_tips t
            SET is_funded = true
          WHERE is_funded IS NOT true;
 
@@ -412,7 +412,7 @@ class Payday(object):
     def transfer_takes(cursor, ts_start):
         cursor.run("""
 
-        INSERT INTO pay_takes
+        INSERT INTO payday_takes
             SELECT team, member, amount
               FROM ( SELECT DISTINCT ON (team, member)
                             team, member, amount, ctime
@@ -421,10 +421,10 @@ class Payday(object):
                    ORDER BY team, member, mtime DESC
                    ) t
              WHERE t.amount > 0
-               AND t.team IN (SELECT username FROM pay_participants)
-               AND t.member IN (SELECT username FROM pay_participants)
+               AND t.team IN (SELECT username FROM payday_participants)
+               AND t.member IN (SELECT username FROM payday_participants)
                AND ( SELECT id
-                       FROM pay_transfers t2
+                       FROM payday_transfers t2
                       WHERE t.team = t2.tipper
                         AND t.member = t2.tippee
                         AND context = 'take'
@@ -437,7 +437,7 @@ class Payday(object):
     def settle_card_holds(self, cursor, holds):
         participants = cursor.all("""
             SELECT *
-              FROM pay_participants
+              FROM payday_participants
              WHERE new_balance < 0
         """)
 
@@ -462,7 +462,7 @@ class Payday(object):
 
             UPDATE participants p
                SET balance = (balance + p2.new_balance - p2.old_balance)
-              FROM pay_participants p2
+              FROM payday_participants p2
              WHERE p.id = p2.id
                AND p2.new_balance <> p2.old_balance
          RETURNING p.id

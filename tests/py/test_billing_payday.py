@@ -124,7 +124,7 @@ class TestPayday(BalancedHarness):
         payday = Payday.start()
         ts_start = payday.ts_start
 
-        get_participants = lambda: self.db.all("SELECT * FROM pay_participants")
+        get_participants = lambda: self.db.all("SELECT * FROM payday_participants")
 
         payday.prepare(self.db, ts_start)
 
@@ -270,7 +270,7 @@ class TestPayin(BalancedHarness):
         with self.db.get_cursor() as cursor:
             payday.prepare(cursor, payday.ts_start)
             cursor.run("""
-                UPDATE pay_participants
+                UPDATE payday_participants
                    SET new_balance = -50
                  WHERE username IN ('janet', 'homer')
             """)
