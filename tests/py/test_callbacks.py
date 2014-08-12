@@ -14,7 +14,7 @@ class TestBalancedCallbacks(Harness):
         kw.setdefault(b'HTTP_X_FORWARDED_FOR', b'50.18.199.26')
         kw.setdefault('content_type', 'application/json')
         kw.setdefault('raise_immediately', False)
-        return self.client.POST('/balanced-callbacks', **kw)
+        return self.client.POST('/callbacks/balanced', **kw)
 
     def test_simplate_checks_source_address(self):
         r = self.callback(HTTP_X_FORWARDED_FOR=b'0.0.0.0')
