@@ -20,9 +20,9 @@
         text-transform: uppercase;
         padding-left: 18px;
         text-align: left;
-    a {
-        color: inherit;
-    }
+        a {
+            color: inherit;
+        }
     }
     .sign-in, .you-are {
         padding-top: 18px;
@@ -52,6 +52,16 @@
     background: url("pennies.jpg");
     background-size: cover;
     background-position: 0 50%;
+
+    .support-gittip {
+        a {
+            color: $green ! important;
+        }
+        float: left;
+        padding: 3px 3px 3px 7px;
+        border-radius: 0 0 3px 3px;
+        background: $gold;
+    }
 }
 #hero {
     background: transparentize($brown, 0.1);

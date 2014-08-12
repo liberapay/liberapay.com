@@ -44,6 +44,15 @@
 
     <div class="pennies"><div id="hero">
         <div class="container">
+            <div class="support-gittip">
+                {% if not user.ANON %}
+                7% of active users also support <a href="/Gittip/">Gittip</a>!
+                Will you?
+                <button>$5</button>
+                <button>50¢</button>
+                <button>x</button>
+                {% endif %}
+            </div>
             {% block heading %}
             {% if title %}
             <h1>{{ title }}</h1>
