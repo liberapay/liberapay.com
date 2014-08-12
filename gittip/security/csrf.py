@@ -87,15 +87,14 @@ def inbound(request):
     """Given a Request object, reject it if it's a forgery.
     """
     if request.line.uri.startswith('/assets/'): return
+    if request.line.uri.startswith('/callbacks/'): return
 
     try:
-        csrf_token = request.headers.cookie.get('csrf_token')
-        csrf_token = '' if csrf_token is None else csrf_token.value
-        csrf_token = _sanitize_token(csrf_token)
+        csrf_token = _sanitize_token(request.headers.cookie['csrf_token'].value)
     except KeyError:
-        csrf_token = _get_new_csrf_key()
+        csrf_token = None
 
-    request.context['csrf_token'] = csrf_token
+    request.context['csrf_token'] = csrf_token or _get_new_csrf_key()
 
     # Assume that anything not defined as 'safe' by RC2616 needs protection
     if request.line.method not in ('GET', 'HEAD', 'OPTIONS', 'TRACE'):
