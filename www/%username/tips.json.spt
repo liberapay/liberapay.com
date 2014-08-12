@@ -29,7 +29,7 @@ if POST:
         out.append(one)
 
     if qs.get('also_prune', 'false').lower() in ('true', '1', 'yes'):
-        old_tips, __ignored = participant.get_tips_and_total()
+        old_tips = participant.get_current_tips()
         for tip in old_tips:
             if tip['tippee'] not in seen:
                 participant.set_tip_to(tip['tippee'], '0.00')

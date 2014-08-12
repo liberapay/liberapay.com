@@ -3,33 +3,33 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import datetime
 import json
 
+from mock import patch
+
 from gittip.billing.payday import Payday
 from gittip.testing import Harness
 
 def today():
     return datetime.datetime.utcnow().date().strftime('%Y-%m-%d')
 
-class Tests(Harness):
+class TestChartsJson(Harness):
 
     def setUp(self):
         Harness.setUp(self)
 
-        self.alice = self.make_participant('alice', balance=10, claimed_time='now')
-        self.bob = self.make_participant('bob', balance=10, claimed_time='now')
+        self.alice = self.make_participant('alice', claimed_time='now')
+        self.bob = self.make_participant('bob', claimed_time='now')
         self.carl = self.make_participant('carl', claimed_time='now')
-        self.db.run("""
-            INSERT INTO EXCHANGES
-                (amount, fee, participant) VALUES
-                (10.00, 0.00, 'alice'),
-                (10.00, 0.00, 'bob')
-        """)
+        self.make_exchange('bill', 10, 0, self.alice)
+        self.make_exchange('bill', 10, 0, self.bob)
         self.make_participant('notactive', claimed_time='now')
 
         self.alice.set_tip_to(self.carl, '1.00')
         self.bob.set_tip_to(self.carl, '2.00')
 
     def run_payday(self):
-        Payday(self.db).run()
+        with patch.object(Payday, 'fetch_card_holds') as fch:
+            fch.return_value = {}
+            Payday.start().run()
 
 
     def test_no_payday_returns_empty_list(self):

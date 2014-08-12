@@ -47,10 +47,12 @@ def iter_payday_events(db, participant):
         if 'fee' in event:
             if event['amount'] > 0:
                 kind = 'charge'
-                balance -= event['amount']
+                if event['status'] in (None, 'succeeded'):
+                    balance -= event['amount']
             else:
                 kind = 'credit'
-                balance -= event['amount'] - event['fee']
+                if event['status'] != 'failed':
+                    balance -= event['amount'] - event['fee']
         else:
             kind = 'transfer'
             if event['tippee'] == username:

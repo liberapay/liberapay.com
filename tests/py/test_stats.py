@@ -117,8 +117,7 @@ class TestRenderingStatsPage(Harness):
 
         env = wireup.env()
         wireup.billing(env)
-        payday = Payday(self.db)
-        payday.start()
+        payday = Payday.start()
 
         body = self.get_stats_page()
         assert "is changing hands <b>right now!</b>" in body, body
@@ -133,8 +132,7 @@ class TestRenderingStatsPage(Harness):
 
         self.client.hydrate_website()
 
-        payday = Payday(self.db)
-        payday.start()
+        payday = Payday.start()
 
         body = self.get_stats_page()
         assert "is ready for <b>this Thursday</b>" in body, body

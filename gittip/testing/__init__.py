@@ -2,15 +2,14 @@
 """
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-import datetime
 import itertools
 import unittest
-from decimal import Decimal
 from os.path import join, dirname, realpath
 
 from aspen import resources
 from aspen.utils import utcnow
 from aspen.testing.client import Client
+from gittip.billing.exchanges import record_exchange, record_exchange_result
 from gittip.elsewhere import UserInfo
 from gittip.models.account_elsewhere import AccountElsewhere
 from gittip.security.user import User, SESSION
@@ -63,6 +62,7 @@ class Harness(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
+        cls.db.run("ALTER SEQUENCE exchanges_id_seq RESTART WITH 1")
         cls.setUpVCR()
 
 
@@ -104,6 +104,7 @@ class Harness(unittest.TestCase):
                 self.db.run("DELETE FROM %s CASCADE" % tablename)
             except (IntegrityError, InternalError):
                 tablenames.insert(0, tablename)
+        self.db.run("ALTER SEQUENCE participants_id_seq RESTART WITH 1")
 
 
     def make_elsewhere(self, platform, user_id, user_name, **kw):
@@ -178,21 +179,14 @@ class Harness(unittest.TestCase):
         return participant
 
 
-    def make_payday(self, *transfers):
+    def fetch_payday(self):
+        return self.db.one("SELECT * FROM paydays", back_as=dict)
 
-        with self.db.get_cursor() as cursor:
-            last_end = datetime.datetime(year=2012, month=1, day=1)
-            last_end = cursor.one("SELECT ts_end FROM paydays ORDER BY ts_end DESC LIMIT 1", default=last_end)
-            ts_end = last_end + datetime.timedelta(days=7)
-            ts_start = ts_end - datetime.timedelta(hours=1)
-            transfer_volume = Decimal(0)
-            active = set()
-            for i, (f, t, amount) in enumerate(transfers):
-                cursor.run("INSERT INTO transfers (timestamp, tipper, tippee, amount, context)"
-                              "VALUES (%s, %s, %s, %s, 'tip')",
-                              (ts_start + datetime.timedelta(seconds=i), f, t, amount))
-                transfer_volume += Decimal(amount)
-                active.add(f)
-                active.add(t)
-            cursor.run("INSERT INTO paydays (ts_start, ts_end, nactive, transfer_volume) VALUES (%s, %s, %s, %s)",
-                    (ts_start, ts_end, len(active), transfer_volume))
+
+    def make_exchange(self, kind, amount, fee, participant, status='succeeded', error=''):
+        e_id = record_exchange(self.db, kind, amount, fee, participant, 'pre')
+        record_exchange_result(self.db, e_id, status, error, participant)
+        return e_id
+
+
+class Foobar(Exception): pass

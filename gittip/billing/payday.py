@@ -1,90 +1,32 @@
-"""This is Gittip's payday algorithm. I would appreciate feedback on it.
-
-The payday algorithm is designed to be crash-resistant and parallelizable, but
-it's not eventually consistent in the strict sense (iinm) because consistency
-is always apodeictically knowable.
+"""This is Gittip's payday algorithm.
 
 Exchanges (moving money between Gittip and the outside world) and transfers
 (moving money amongst Gittip users) happen within an isolated event called
-payday. This event has duration (it's not punctiliar). It is started
-transactionally, and it ends transactionally, and inside of it, exchanges and
-transfers happen transactionally (though the link between our db and our
-processor's db could be tightened up; see #213). Exchanges immediately affect
-the participant's balance, but transfers accrue against a "pending" column in
-the database. Once the payday event has completed successfully, it ends with
-the pending column being applied to the balance column and reset to NULL in a
-single transaction.
+payday. This event has duration (it's not punctiliar).
+
+Payday is designed to be crash-resistant. Everything that can be rolled back
+happens inside a single DB transaction. Exchanges cannot be rolled back, so they
+immediately affect the participant's balance.
 
 """
 from __future__ import unicode_literals
 
-import sys
-from decimal import Decimal, ROUND_UP
+import itertools
 
-import balanced
+from balanced import CardHold
+
 import aspen.utils
 from aspen import log
-from aspen.utils import typecheck
-from gittip.models.participant import Participant
+from gittip.billing.exchanges import (
+    ach_credit, cancel_card_hold, capture_card_hold, create_card_hold, upcharge
+)
 from gittip.exceptions import NegativeBalance
+from gittip.models import check_db
 from psycopg2 import IntegrityError
 
 
-# Set fees and minimums.
-# ======================
-# Balanced has a $0.50 minimum. We go even higher to avoid onerous
-# per-transaction fees. See:
-# https://github.com/gittip/www.gittip.com/issues/167 XXX I should maybe
-# compute this using *ahem* math.
-
-FEE_CHARGE = ( Decimal("0.30")   # $0.30
-             , Decimal("0.029")  #  2.9%
-              )
-FEE_CREDIT = Decimal("0.00")    # Balanced doesn't actually charge us for this,
-                                # because we were in the door early enough.
-
-MINIMUM_CHARGE = Decimal("9.41")
-MINIMUM_CREDIT = Decimal("10.00")
-
-
-def upcharge(amount):
-    """Given an amount, return a higher amount and the difference.
-    """
-    typecheck(amount, Decimal)
-    charge_amount = (amount + FEE_CHARGE[0]) / (1 - FEE_CHARGE[1])
-    charge_amount = charge_amount.quantize(FEE_CHARGE[0], rounding=ROUND_UP)
-    return charge_amount, charge_amount - amount
-
-def skim_credit(amount):
-    """Given an amount, return a lower amount and the difference.
-    """
-    typecheck(amount, Decimal)
-    return amount - FEE_CREDIT, FEE_CREDIT
-
-assert upcharge(MINIMUM_CHARGE) == (Decimal('10.00'), Decimal('0.59'))
-
-
-def is_whitelisted(participant):
-    """Given a dict, return bool, possibly logging.
-
-    We only perform credit card charges and bank deposits for whitelisted
-    participants. We don't even include is_suspicious participants in the
-    initial SELECT, so we should never see one here.
-
-    """
-    assert participant.is_suspicious is not True, participant.username
-    if participant.is_suspicious is None:
-        log("UNREVIEWED: %s" % participant.username)
-        return False
-    return True
-
-
 class NoPayday(Exception):
-    def __str__(self):
-        return "No payday found where one was expected."
-
-
-LOOP_PAYIN, LOOP_PACHINKO, LOOP_PAYOUT = range(3)
+    __str__ = lambda self: "No payday found where one was expected."
 
 
 class Payday(object):
@@ -95,39 +37,56 @@ class Payday(object):
     want to use their balance at the start of Payday. Balance changes should be
     atomic globally per-Payday.
 
+    Here's the call structure of the Payday.run method:
+
+        run
+            payin
+                prepare
+                create_card_holds
+                transfer_tips
+                transfer_takes
+                settle_card_holds
+                update_balances
+                take_over_balances
+            payout
+            update_stats
+            update_receiving_amounts
+            end
+
     """
 
-    def __init__(self, db):
-        """Takes a postgres.Postgres instance.
-        """
-        self.db = db
 
+    @classmethod
+    def start(cls):
+        """Try to start a new Payday.
 
-    def genparticipants(self, ts_start, loop):
-        """Generator to yield participants with extra info.
-
-        The extra info varies depending on which loop we're in: tips/total for
-        payin and payout, takes for pachinko.
+        If there is a Payday that hasn't finished yet, then the UNIQUE
+        constraint on ts_end will kick in and notify us of that. In that case
+        we load the existing Payday and work on it some more. We use the start
+        time of the current Payday to synchronize our work.
 
         """
-        teams_only = (loop == LOOP_PACHINKO)
-        for participant in self.get_participants(ts_start, teams_only):
-            if loop == LOOP_PAYIN:
-                extra = participant.get_tips_and_total(for_payday=ts_start)
-            elif loop == LOOP_PACHINKO:
-                extra = participant.get_takes(for_payday=ts_start)
-            elif loop == LOOP_PAYOUT:
+        try:
+            d = cls.db.one("""
+                INSERT INTO paydays DEFAULT VALUES
+                RETURNING id, (ts_start AT TIME ZONE 'UTC') AS ts_start, stage
+            """, back_as=dict)
+            log("Starting a new payday.")
+        except IntegrityError:  # Collision, we have a Payday already.
+            d = cls.db.one("""
+                SELECT id, (ts_start AT TIME ZONE 'UTC') AS ts_start, stage
+                  FROM paydays
+                 WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
+            """, back_as=dict)
+            log("Picking up with an existing payday.")
 
-                # On the payout loop we want to use the total obligations they
-                # have for next week, and if we pass a non-False for_payday to
-                # get_tips_and_total then we only get unfulfilled tips from
-                # prior to that timestamp, which is none of them by definition
-                # at this point since we just recently finished payin.
+        d['ts_start'] = d['ts_start'].replace(tzinfo=aspen.utils.utc)
 
-                extra = participant.get_tips_and_total()
-            else:
-                raise Exception  # sanity check
-            yield(participant, extra)
+        log("Payday started at %s." % d['ts_start'])
+
+        payday = Payday()
+        payday.__dict__.update(d)
+        return payday
 
 
     def run(self):
@@ -142,225 +101,450 @@ class Payday(object):
 
         _start = aspen.utils.utcnow()
         log("Greetings, program! It's PAYDAY!!!!")
-        ts_start = self.start()
-        self.zero_out_pending(ts_start)
 
-        self.payin(ts_start, self.genparticipants(ts_start, loop=LOOP_PAYIN))
-        self.move_pending_to_balance_for_teams()
-        self.pachinko(ts_start, self.genparticipants(ts_start, loop=LOOP_PACHINKO))
-        self.clear_pending_to_balance()
-        self.payout(ts_start, self.genparticipants(ts_start, loop=LOOP_PAYOUT))
-        self.update_stats(ts_start)
-        self.update_receiving_amounts()
+        if self.stage < 1:
+            self.payin()
+            self.mark_stage_done()
+        if self.stage < 2:
+            self.payout()
+            self.mark_stage_done()
+        if self.stage < 3:
+            self.update_stats()
+            self.update_receiving_amounts()
+            self.mark_stage_done()
 
         self.end()
 
-        self.db.self_check()
-
         _end = aspen.utils.utcnow()
         _delta = _end - _start
-        fmt_past = "Script ran for {age} (%s)." % _delta
+        fmt_past = "Script ran for %%(age)s (%s)." % _delta
         log(aspen.utils.to_age(_start, fmt_past=fmt_past))
 
 
-    def start(self):
-        """Try to start a new Payday.
-
-        If there is a Payday that hasn't finished yet, then the UNIQUE
-        constraint on ts_end will kick in and notify us of that. In that case
-        we load the existing Payday and work on it some more. We use the start
-        time of the current Payday to synchronize our work.
-
+    def payin(self):
+        """The first stage of payday where we charge credit cards and transfer
+        money internally between participants.
         """
-        try:
-            ts_start = self.db.one("INSERT INTO paydays DEFAULT VALUES "
-                                   "RETURNING ts_start")
-            log("Starting a new payday.")
-        except IntegrityError:  # Collision, we have a Payday already.
-            ts_start = self.db.one("""
+        with self.db.get_cursor() as cursor:
+            self.prepare(cursor, self.ts_start)
+            holds = self.create_card_holds(cursor)
+            self.transfer_tips(cursor)
+            self.transfer_takes(cursor, self.ts_start)
+            transfers = cursor.all("""
+                SELECT * FROM transfers WHERE "timestamp" > %s
+            """, (self.ts_start,))
+            try:
+                self.settle_card_holds(cursor, holds)
+                self.update_balances(cursor)
+                check_db(cursor)
+            except:
+                # Dump transfers for debugging
+                import csv
+                from time import time
+                with open('%s_transfers.csv' % time(), 'wb') as f:
+                    csv.writer(f).writerows(transfers)
+                raise
+        self.take_over_balances()
 
-                SELECT ts_start
-                  FROM paydays
-                 WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
+
+    @staticmethod
+    def prepare(cursor, ts_start):
+        """Prepare the DB: we need temporary tables with indexes and triggers.
+        """
+        cursor.run("""
+
+        -- Create the necessary temporary tables and indexes
+
+        CREATE TEMPORARY TABLE payday_participants ON COMMIT DROP AS
+            SELECT id
+                 , username
+                 , claimed_time
+                 , balance AS old_balance
+                 , balance AS new_balance
+                 , balanced_customer_href
+                 , last_bill_result
+                 , is_suspicious
+                 , goal
+                 , false AS card_hold_ok
+              FROM participants
+             WHERE is_suspicious IS NOT true
+               AND claimed_time < %(ts_start)s
+          ORDER BY claimed_time;
+
+        CREATE UNIQUE INDEX ON payday_participants (id);
+        CREATE UNIQUE INDEX ON payday_participants (username);
+
+        CREATE TEMPORARY TABLE payday_transfers ON COMMIT DROP AS
+            SELECT *
+              FROM transfers t
+             WHERE t.timestamp > %(ts_start)s;
+
+        CREATE TEMPORARY TABLE payday_tips ON COMMIT DROP AS
+            SELECT tipper, tippee, amount
+              FROM ( SELECT DISTINCT ON (tipper, tippee) *
+                       FROM tips
+                      WHERE mtime < %(ts_start)s
+                   ORDER BY tipper, tippee, mtime DESC
+                   ) t
+              JOIN payday_participants p ON p.username = t.tipper
+              JOIN payday_participants p2 ON p2.username = t.tippee
+             WHERE t.amount > 0
+               AND (p2.goal IS NULL or p2.goal >= 0)
+               AND ( SELECT id
+                       FROM payday_transfers t2
+                      WHERE t.tipper = t2.tipper
+                        AND t.tippee = t2.tippee
+                        AND context = 'tip'
+                   ) IS NULL
+          ORDER BY p.claimed_time ASC, t.ctime ASC;
+
+        CREATE INDEX ON payday_tips (tipper);
+        CREATE INDEX ON payday_tips (tippee);
+        ALTER TABLE payday_tips ADD COLUMN is_funded boolean;
+
+        ALTER TABLE payday_participants ADD COLUMN giving_today numeric(35,2);
+        UPDATE payday_participants
+           SET giving_today = COALESCE((
+                   SELECT sum(amount)
+                     FROM payday_tips
+                    WHERE tipper = username
+               ), 0);
+
+        CREATE TEMPORARY TABLE payday_takes
+        ( team text
+        , member text
+        , amount numeric(35,2)
+        ) ON COMMIT DROP;
+
+
+        -- Prepare a statement that makes and records a transfer
+
+        CREATE OR REPLACE FUNCTION transfer(text, text, numeric, context_type)
+        RETURNS void AS $$
+            BEGIN
+                IF ($3 = 0) THEN RETURN; END IF;
+                UPDATE payday_participants
+                   SET new_balance = (new_balance - $3)
+                 WHERE username = $1;
+                UPDATE payday_participants
+                   SET new_balance = (new_balance + $3)
+                 WHERE username = $2;
+                INSERT INTO transfers
+                            (tipper, tippee, amount, context)
+                     VALUES ( ( SELECT p.username
+                                  FROM participants p
+                                  JOIN payday_participants p2 ON p.id = p2.id
+                                 WHERE p2.username = $1 )
+                            , ( SELECT p.username
+                                  FROM participants p
+                                  JOIN payday_participants p2 ON p.id = p2.id
+                                 WHERE p2.username = $2 )
+                            , $3
+                            , $4
+                            );
+            END;
+        $$ LANGUAGE plpgsql;
+
+
+        -- Create a trigger to process tips
+
+        CREATE OR REPLACE FUNCTION process_tip() RETURNS trigger AS $$
+            DECLARE
+                tipper payday_participants;
+            BEGIN
+                tipper := (
+                    SELECT p.*::payday_participants
+                      FROM payday_participants p
+                     WHERE username = NEW.tipper
+                );
+                IF (NEW.amount <= tipper.new_balance OR tipper.card_hold_ok) THEN
+                    EXECUTE transfer(NEW.tipper, NEW.tippee, NEW.amount, 'tip');
+                    RETURN NEW;
+                END IF;
+                RETURN NULL;
+            END;
+        $$ LANGUAGE plpgsql;
+
+        CREATE TRIGGER process_tip BEFORE UPDATE OF is_funded ON payday_tips
+            FOR EACH ROW
+            WHEN (NEW.is_funded IS true AND OLD.is_funded IS NOT true)
+            EXECUTE PROCEDURE process_tip();
+
+
+        -- Create a trigger to process takes
+
+        CREATE OR REPLACE FUNCTION process_take() RETURNS trigger AS $$
+            DECLARE
+                actual_amount numeric(35,2);
+                team_balance numeric(35,2);
+            BEGIN
+                team_balance := (
+                    SELECT new_balance
+                      FROM payday_participants
+                     WHERE username = NEW.team
+                );
+                IF (team_balance <= 0) THEN RETURN NULL; END IF;
+                actual_amount := NEW.amount;
+                IF (team_balance < NEW.amount) THEN
+                    actual_amount := team_balance;
+                END IF;
+                EXECUTE transfer(NEW.team, NEW.member, actual_amount, 'take');
+                RETURN NULL;
+            END;
+        $$ LANGUAGE plpgsql;
+
+        CREATE TRIGGER process_take AFTER INSERT ON payday_takes
+            FOR EACH ROW EXECUTE PROCEDURE process_take();
+
+
+        -- Save the stats we already have
+
+        UPDATE paydays
+           SET nparticipants = (SELECT count(*) FROM payday_participants)
+             , ncc_missing = (
+                   SELECT count(*)
+                     FROM payday_participants
+                    WHERE old_balance < giving_today
+                      AND ( balanced_customer_href IS NULL
+                            OR
+                            last_bill_result IS NULL
+                          )
+               )
+         WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz;
+
+        """, dict(ts_start=ts_start))
+        log('Prepared the DB.')
+
+
+    @staticmethod
+    def fetch_card_holds(participant_ids):
+        holds = {}
+        for hold in CardHold.query.filter(CardHold.f.meta.state == 'new'):
+            state = 'new'
+            if hold.failure_reason:
+                state = 'failed'
+            elif hold.voided_at:
+                state = 'cancelled'
+            elif getattr(hold, 'debit_href', None):
+                state = 'captured'
+            if state != 'new':
+                hold.meta['state'] = state
+                hold.save()
+                continue
+            p_id = int(hold.meta['participant_id'])
+            if p_id in participant_ids:
+                holds[p_id] = hold
+            else:
+                cancel_card_hold(hold)
+        return holds
+
+
+    def create_card_holds(self, cursor):
+
+        # Get the list of participants to create card holds for
+        participants = cursor.all("""
+            SELECT *
+              FROM payday_participants
+             WHERE old_balance < giving_today
+               AND balanced_customer_href IS NOT NULL
+               AND last_bill_result IS NOT NULL
+               AND is_suspicious IS false
+        """)
+        if not participants:
+            return {}
+
+        # Fetch existing holds
+        participant_ids = set(p.id for p in participants)
+        holds = self.fetch_card_holds(participant_ids)
+
+        # Create new holds and check amounts of existing ones
+        for p in participants:
+            amount = p.giving_today
+            if p.old_balance < 0:
+                amount -= p.old_balance
+            if p.id in holds:
+                charge_amount = upcharge(amount)[0]
+                if holds[p.id].amount >= charge_amount * 100:
+                    continue
+                else:
+                    # The amount is too low, cancel the hold and make a new one
+                    cancel_card_hold(holds.pop(p.id))
+            hold, error = create_card_hold(self.db, p, amount)
+            if error:
+                self.mark_charge_failed(cursor)
+            else:
+                holds[p.id] = hold
+
+        # Update the values of card_hold_ok in our temporary table
+        if not holds:
+            return {}
+        cursor.run("""
+            UPDATE payday_participants p
+               SET card_hold_ok = true
+             WHERE p.id IN %s
+        """, (tuple(holds.keys()),))
+
+        return holds
+
+
+    @staticmethod
+    def transfer_tips(cursor):
+        cursor.run("""
+
+        UPDATE payday_tips t
+           SET is_funded = true
+          FROM payday_participants p
+         WHERE p.username = t.tipper
+           AND p.card_hold_ok;
+
+        UPDATE payday_tips t
+           SET is_funded = true
+         WHERE is_funded IS NOT true;
+
+        """)
+
+
+    @staticmethod
+    def transfer_takes(cursor, ts_start):
+        cursor.run("""
+
+        INSERT INTO payday_takes
+            SELECT team, member, amount
+              FROM ( SELECT DISTINCT ON (team, member)
+                            team, member, amount, ctime
+                       FROM takes
+                      WHERE mtime < %(ts_start)s
+                   ORDER BY team, member, mtime DESC
+                   ) t
+             WHERE t.amount > 0
+               AND t.team IN (SELECT username FROM payday_participants)
+               AND t.member IN (SELECT username FROM payday_participants)
+               AND ( SELECT id
+                       FROM payday_transfers t2
+                      WHERE t.team = t2.tipper
+                        AND t.member = t2.tippee
+                        AND context = 'take'
+                   ) IS NULL
+          ORDER BY t.team, t.ctime DESC;
+
+        """, dict(ts_start=ts_start))
+
+
+    def settle_card_holds(self, cursor, holds):
+        participants = cursor.all("""
+            SELECT *
+              FROM payday_participants
+             WHERE new_balance < 0
+        """)
+
+        # Capture holds to bring balances back up to (at least) zero
+        i = 0
+        for p in participants:
+            if p.id in holds:
+                amount = -p.new_balance
+                capture_card_hold(self.db, p, amount, holds.pop(p.id))
+                i += 1
+        log("Captured %i card holds." % i)
+
+        # Cancel the remaining holds
+        for hold in holds.values():
+            cancel_card_hold(hold)
+        log("Canceled %i card holds." % len(holds))
+
+
+    @staticmethod
+    def update_balances(cursor):
+        participants = cursor.all("""
+
+            UPDATE participants p
+               SET balance = (balance + p2.new_balance - p2.old_balance)
+              FROM payday_participants p2
+             WHERE p.id = p2.id
+               AND p2.new_balance <> p2.old_balance
+         RETURNING p.id
+                 , p.username
+                 , balance AS new_balance
+                 , ( SELECT balance
+                       FROM participants p3
+                      WHERE p3.id = p.id
+                   ) AS cur_balance;
+
+        """)
+        # Check that balances aren't becoming (more) negative
+        for p in participants:
+            if p.new_balance < 0 and p.new_balance < p.cur_balance:
+                log(p)
+                raise NegativeBalance()
+        log("Updated the balances of %i participants." % len(participants))
+
+
+    def take_over_balances(self):
+        """If an account that receives money is taken over during payin we need
+        to transfer the balance to the absorbing account.
+        """
+        for i in itertools.count():
+            if i > 10:
+                raise Exception('possible infinite loop')
+            count = self.db.one("""
+
+                DROP TABLE IF EXISTS temp;
+                CREATE TEMPORARY TABLE temp AS
+                    SELECT archived_as, absorbed_by, balance AS archived_balance
+                      FROM absorptions a
+                      JOIN participants p ON a.archived_as = p.username
+                     WHERE balance > 0;
+
+                SELECT count(*) FROM temp;
 
             """)
-            log("Picking up with an existing payday.")
+            if not count:
+                break
+            self.db.run("""
 
-        log("Payday started at %s." % ts_start)
-        return ts_start
+                INSERT INTO transfers (tipper, tippee, amount, context)
+                    SELECT archived_as, absorbed_by, archived_balance, 'take-over'
+                      FROM temp;
 
+                UPDATE participants
+                   SET balance = (balance - archived_balance)
+                  FROM temp
+                 WHERE username = archived_as;
 
-    def zero_out_pending(self, ts_start):
-        """Given a timestamp, zero out the pending column.
+                UPDATE participants
+                   SET balance = (balance + archived_balance)
+                  FROM temp
+                 WHERE username = absorbed_by;
 
-        We keep track of balance changes as a result of Payday in the pending
-        column, and then move them over to the balance column in one big
-        transaction at the end of Payday.
-
-        """
-        START_PENDING = """\
-
-            UPDATE participants
-               SET pending=0.00
-             WHERE pending IS NULL
-               AND claimed_time < %s
-
-        """
-        self.db.run(START_PENDING, (ts_start,))
-        log("Zeroed out the pending column.")
-        return None
+            """)
 
 
-    def get_participants(self, ts_start, teams_only=False):
-        """Given a timestamp, return a list of participants dicts.
-        """
-        PARTICIPANTS = """\
-            SELECT participants.*::participants
-              FROM participants
-             WHERE claimed_time IS NOT NULL
-               AND claimed_time < %s
-               AND is_suspicious IS NOT true
-               {}
-          ORDER BY claimed_time ASC
-        """.format(teams_only and "AND number = 'plural'" or '')
-        participants = self.db.all(PARTICIPANTS, (ts_start,))
-        log("Fetched participants.")
-        return participants
-
-
-    def payin(self, ts_start, participants):
-        """Given a datetime and an iterator, do the payin side of Payday.
-        """
-        i = 0
-        log("Starting payin loop.")
-        for i, (participant, (tips, total)) in enumerate(participants, start=1):
-            if i % 100 == 0:
-                log("Payin done for %d participants." % i)
-            self.charge_and_or_transfer(ts_start, participant, tips, total)
-        log("Did payin for %d participants." % i)
-
-
-    def pachinko(self, ts_start, participants):
-        i = 0
-        for i, (participant, takes) in enumerate(participants, start=1):
-            if i % 100 == 0:
-                log("Pachinko done for %d participants." % i)
-
-            available = participant.balance
-            log("Pachinko out from %s with $%s." % ( participant.username
-                                                   , available
-                                                    ))
-
-            def tip(tippee, amount):
-                tip = {}
-                tip['tipper'] = participant.username
-                tip['tippee'] = tippee
-                tip['amount'] = amount
-                tip['claimed_time'] = ts_start
-                self.tip( participant
-                        , tip
-                        , ts_start
-                        , pachinko=True
-                         )
-
-            for take in takes:
-                amount = min(take['amount'], available)
-                available -= amount
-                tip(take['member'], amount)
-                if available == 0:
-                    break
-
-        log("Did pachinko for %d participants." % i)
-
-
-    def payout(self, ts_start, participants):
-        """Given a datetime and an iterator, do the payout side of Payday.
+    def payout(self):
+        """This is the second stage of payday in which we send money out to the
+        bank accounts of participants.
         """
         i = 0
         log("Starting payout loop.")
-        for i, (participant, (tips, total)) in enumerate(participants, start=1):
-            if i % 100 == 0:
-                log("Payout done for %d participants." % i)
-            self.ach_credit(ts_start, participant, tips, total)
+        participants = self.db.all("""
+            SELECT p.*::participants
+              FROM participants p
+             WHERE balance > 0
+               AND balanced_customer_href IS NOT NULL
+               AND last_ach_result IS NOT NULL
+        """)
+        for i, participant in enumerate(participants, start=1):
+            if participant.is_suspicious is None:
+                log("UNREVIEWED: %s" % participant.username)
+                continue
+            withhold = participant.giving + participant.pledging
+            error = ach_credit(self.db, participant, withhold)
+            if error:
+                self.mark_ach_failed()
         log("Did payout for %d participants." % i)
+        self.db.self_check()
+        log("Checked the DB.")
 
 
-    def charge_and_or_transfer(self, ts_start, participant, tips, total):
-        """Given one participant record, pay their day.
-
-        Charge each participants' credit card if needed before transfering
-        money between Gittip accounts.
-
-        """
-        short = total - participant.balance
-        if short > 0:
-
-            # The participant's Gittip account is short the amount needed to
-            # fund all their tips. Let's try pulling in money from their credit
-            # card. If their credit card fails we'll forge ahead, in case they
-            # have a positive Gittip balance already that can be used to fund
-            # at least *some* tips. The charge method will have set
-            # last_bill_result to a non-empty string if the card did fail.
-
-            self.charge(participant, short)
-
-        nsuccessful_tips = 0
-        for tip in tips:
-            result = self.tip(participant, tip, ts_start)
-            if result >= 0:
-                nsuccessful_tips += result
-            else:
-                break
-
-        self.mark_participant()
-
-
-    def move_pending_to_balance_for_teams(self):
-        """Transfer pending into balance for teams.
-
-        We do this because debit_participant operates against balance, not
-        pending. This is because credit card charges go directly into balance
-        on the first (payin) loop.
-
-        """
-        self.db.run("""\
-
-            UPDATE participants
-               SET balance = (balance + pending)
-                 , pending = 0
-             WHERE pending IS NOT NULL
-               AND number='plural'
-
-        """)
-        # "Moved" instead of "cleared" because we don't also set to null.
-        log("Moved pending to balance for teams. Ready for pachinko.")
-
-
-    def clear_pending_to_balance(self):
-        """Transfer pending into balance, setting pending to NULL.
-
-        Any users that were created while the payin loop was running will have
-        pending NULL (the default). If we try to add that to balance we'll get
-        a NULL (0.0 + NULL = NULL), and balance has a NOT NULL constraint.
-        Hence the where clause. See:
-
-            https://github.com/gittip/www.gittip.com/issues/170
-
-        """
-
-        self.db.run("""\
-
-            UPDATE participants
-               SET balance = (balance + pending)
-                 , pending = NULL
-             WHERE pending IS NOT NULL
-
-        """)
-        # "Cleared" instead of "moved because we also set to null.
-        log("Cleared pending to balance. Ready for payouts.")
-
-
-    def update_stats(self, ts_start):
+    def update_stats(self):
         self.db.run("""\
 
             WITH our_transfers AS (
@@ -415,10 +599,11 @@ class Payday(object):
                        SELECT COALESCE(sum(amount + fee), 0)
                          FROM our_charges
                    )
-                 , charge_fees_volume = (SELECT sum(fee) FROM our_charges)
+                 , charge_fees_volume = (SELECT COALESCE(sum(fee), 0) FROM our_charges)
              WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
 
-        """, {'ts_start': ts_start})
+        """, {'ts_start': self.ts_start})
+        log("Updated payday stats.")
 
 
     def update_receiving_amounts(self):
@@ -440,470 +625,37 @@ class Payday(object):
         """
         with self.db.get_cursor() as cursor:
             cursor.execute(UPDATE)
+        log("Updated receiving amounts.")
+
 
     def end(self):
-        self.db.one("""\
+        self.ts_end = self.db.one("""\
 
             UPDATE paydays
                SET ts_end=now()
              WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
-         RETURNING id
+         RETURNING ts_end AT TIME ZONE 'UTC'
 
-        """, default=NoPayday)
-
-
-    # Move money between Gittip participants.
-    # =======================================
-
-    def tip(self, participant, tip, ts_start, pachinko=False):
-        """Given dict, dict, and datetime, log and return int.
-
-        Return values:
-
-            | 0 if no valid tip available or tip has not been claimed
-            | 1 if tip is valid
-            | -1 if transfer fails and we cannot continue
-
-        """
-        msg = "$%s from %s to %s%s."
-        msg %= ( tip['amount']
-               , participant.username
-               , tip['tippee']
-               , " (pachinko)" if pachinko else ""
-                )
-
-        if tip['amount'] == 0:
-
-            # The tips table contains a record for every time you click a tip
-            # button. So if you click $0.25 then $3.00 then $0.00, that
-            # generates three entries. We are looking at the last entry here,
-            # and it's zero.
-
-            return 0
-
-        claimed_time = tip['claimed_time']
-        if claimed_time is None or claimed_time > ts_start:
-
-            # Gittip is opt-in. We're only going to collect money on a person's
-            # behalf if they opted-in by claiming their account before the
-            # start of this payday.
-
-            log("SKIPPED: %s" % msg)
-            return 0
-
-        if not self.transfer(participant.username, tip['tippee'], \
-                                             tip['amount'], pachinko=pachinko):
-
-            # The transfer failed due to a lack of funds for the participant.
-            # Don't try any further transfers.
-
-            log("FAILURE: %s" % msg)
-            return -1
-
-        log("SUCCESS: %s" % msg)
-        return 1
-
-
-    def transfer(self, tipper, tippee, amount, pachinko=False):
-        """Given two unicodes, a Decimal, and a boolean, return a boolean.
-
-        If the tipper doesn't have enough in their Gittip account then we
-        return False. Otherwise we decrement tipper's balance and increment
-        tippee's *pending* balance by amount.
-
-        """
-        typecheck( tipper, unicode
-                 , tippee, unicode
-                 , amount, Decimal
-                 , pachinko, bool
-                  )
-        with self.db.get_cursor() as cursor:
-
-            try:
-                self.debit_participant(cursor, tipper, amount)
-            except NegativeBalance:
-                return False
-
-            self.credit_participant(cursor, tippee, amount)
-            context = 'take' if pachinko else 'tip'
-            self.record_transfer(cursor, tipper, tippee, amount, context)
-
-            return True
-
-
-    def debit_participant(self, cursor, participant, amount):
-        """Decrement the tipper's balance.
-        """
-
-        DECREMENT = """\
-
-           UPDATE participants
-              SET balance = (balance - %(amount)s)
-            WHERE username = %(participant)s
-              AND balance >= %(amount)s
-        RETURNING pending
-
-        """
-        args = dict(amount=amount, participant=participant)
-        r = cursor.one(DECREMENT, args, default=False)
-        if r is False:
-            raise NegativeBalance
-        assert r is not None, (amount, participant)  # sanity check
-
-
-    def credit_participant(self, cursor, participant, amount):
-        """Increment the tippee's *pending* balance.
-
-        The pending balance will clear to the balance proper when Payday is
-        done.
-
-        """
-
-        INCREMENT = """\
-
-           UPDATE participants
-              SET pending=(pending + %s)
-            WHERE username=%s
-              AND pending IS NOT NULL
-        RETURNING pending
-
-        """
-        cursor.execute(INCREMENT, (amount, participant))
-        rec = cursor.fetchone()
-        assert rec is not None, (participant, amount)  # sanity check
-
-
-    # Move money between Gittip and the outside world.
-    # ================================================
-
-    def charge(self, participant, amount):
-        """Given dict and Decimal, return None.
-
-        This is the only place where we actually charge credit cards. Amount
-        should be the nominal amount. We'll compute Gittip's fee below this
-        function and add it to amount to end up with charge_amount.
-
-        """
-        typecheck(participant, Participant, amount, Decimal)
-
-        username = participant.username
-        balanced_customer_href = participant.balanced_customer_href
-
-        typecheck( username, unicode
-                 , balanced_customer_href, (unicode, None)
-                  )
-
-
-        # Perform some last-minute checks.
-        # ================================
-
-        if balanced_customer_href is None:
-            self.mark_missing_funding()
-            return      # Participant has no funding source.
-
-        if not is_whitelisted(participant):
-            return      # Participant not trusted.
-
-
-        # Go to Balanced.
-        # ===============
-
-        things = self.charge_on_balanced( username
-                                        , balanced_customer_href
-                                        , amount
-                                         )
-        charge_amount, fee, error = things
-
-        amount = charge_amount - fee  # account for possible rounding under
-                                      # charge_on_*
-
-        self.record_charge( amount
-                          , fee
-                          , error
-                          , username
-                           )
-
-
-    def ach_credit(self, ts_start, participant, tips, total, minimum_credit=MINIMUM_CREDIT):
-
-        # Compute the amount to credit them.
-        # ==================================
-        # Leave money in Gittip to cover their obligations next week (as these
-        # currently stand). Also reduce the amount by our service fee.
-
-        balance = participant.balance
-        assert balance is not None, balance # sanity check
-        amount = balance - total
-
-        # Do some last-minute checks.
-        # ===========================
-
-        if amount <= 0:
-            return      # Participant not owed anything.
-
-        if amount < minimum_credit:
-            also_log = ""
-            if total > 0:
-                also_log = " ($%s balance - $%s in obligations)"
-                also_log %= (balance, total)
-            log("Minimum payout is $%s. %s is only due $%s%s."
-               % (minimum_credit, participant.username, amount, also_log))
-            return      # Participant owed too little.
-
-        if not is_whitelisted(participant):
-            return      # Participant not trusted.
-
-
-        # Do final calculations.
-        # ======================
-
-        credit_amount, fee = skim_credit(amount)
-        cents = credit_amount * 100
-
-        if total > 0:
-            also_log = "$%s balance - $%s in obligations"
-            also_log %= (balance, total)
-        else:
-            also_log = "$%s" % amount
-        msg = "Crediting %s %d cents (%s - $%s fee = $%s) on Balanced ... "
-        msg %= (participant.username, cents, also_log, fee, credit_amount)
-
-
-        # Try to dance with Balanced.
-        # ===========================
-
-        try:
-            balanced_customer_href = participant.balanced_customer_href
-            if balanced_customer_href is None:
-                log("%s has no balanced_customer_href."
-                    % participant.username)
-                return  # not in Balanced
-
-            customer = balanced.Customer.fetch(balanced_customer_href)
-            customer.bank_accounts.one()\
-                                  .credit(amount=cents,
-                                          description=participant.username)
-
-            log(msg + "succeeded.")
-            error = ""
-        except balanced.exc.HTTPError as err:
-            error = err.message.message
-        except:
-            error = repr(sys.exc_info()[1])
-
-        if error:
-            log(msg + "failed: %s" % error)
-
-        self.record_credit(credit_amount, fee, error, participant)
-
-
-    def charge_on_balanced(self, username, balanced_customer_href, amount):
-        """We have a purported balanced_customer_href. Try to use it.
-        """
-        typecheck( username, unicode
-                 , balanced_customer_href, unicode
-                 , amount, Decimal
-                  )
-
-        cents, msg, charge_amount, fee = self._prep_hit(amount)
-        msg = msg % (username, "Balanced")
-
-        try:
-            customer = balanced.Customer.fetch(balanced_customer_href)
-            customer.cards.one().debit(amount=cents, description=username)
-            log(msg + "succeeded.")
-            error = ""
-        except balanced.exc.HTTPError as err:
-            error = err.message.message
-        except:
-            error = repr(sys.exc_info()[1])
-
-        if error:
-            log(msg + "failed: %s" % error)
-
-        return charge_amount, fee, error
-
-
-    def _prep_hit(self, unrounded):
-        """Takes an amount in dollars. Returns cents, etc.
-
-        cents       This is passed to the payment processor charge API. This is
-                    the value that is actually charged to the participant. It's
-                    an int.
-        msg         A log message with a couple %s to be filled in by the
-                    caller.
-        upcharged   Decimal dollar equivalent to `cents'.
-        fee         Decimal dollar amount of the fee portion of `upcharged'.
-
-        The latter two end up in the db in a couple places via record_charge.
-
-        """
-        also_log = ''
-        rounded = unrounded
-        if unrounded < MINIMUM_CHARGE:
-            rounded = MINIMUM_CHARGE  # per github/#167
-            also_log = ' [rounded up from $%s]' % unrounded
-
-        upcharged, fee = upcharge(rounded)
-        cents = int(upcharged * 100)
-
-        msg = "Charging %%s %d cents ($%s%s + $%s fee = $%s) on %%s ... "
-        msg %= cents, rounded, also_log, fee, upcharged
-
-        return cents, msg, upcharged, fee
+        """, default=NoPayday).replace(tzinfo=aspen.utils.utc)
 
 
     # Record-keeping.
     # ===============
 
-    def record_charge(self, amount, fee, error, username):
-        """Given a Bunch of Stuff, return None.
-
-        This function takes the result of an API call to a payment processor
-        and records the result in our db. If the power goes out at this point
-        then Postgres will be out of sync with the payment processor. We'll
-        have to resolve that manually be reviewing the transaction log at the
-        processor and modifying Postgres accordingly.
-
-        For Balanced, this could be automated by generating an ID locally and
-        commiting that to the db and then passing that through in the meta
-        field.* Then syncing would be a case of simply::
-
-            for payment in unresolved_payments:
-                payment_in_balanced = balanced.Transaction.query.filter(
-                  **{'meta.unique_id': 'value'}).one()
-                payment.transaction_uri = payment_in_balanced.uri
-
-        * https://www.balancedpayments.com/docs/meta
-
-        """
-
-        with self.db.get_cursor() as cursor:
-
-            if error:
-                last_bill_result = error
-                amount = Decimal('0.00')
-                self.mark_charge_failed(cursor)
-            else:
-                last_bill_result = ''
-                EXCHANGE = """\
-
-                        INSERT INTO exchanges
-                               (amount, fee, participant)
-                        VALUES (%s, %s, %s)
-
-                """
-                cursor.execute(EXCHANGE, (amount, fee, username))
-
-
-            # Update the participant's balance.
-            # =================================
-            # Credit card charges go immediately to balance, not to pending.
-
-            RESULT = """\
-
-            UPDATE participants
-               SET last_bill_result=%s
-                 , balance=(balance + %s)
-             WHERE username=%s
-
-            """
-            cursor.execute(RESULT, (last_bill_result, amount, username))
-
-
-    def record_credit(self, amount, fee, error, participant):
-        """Given a Bunch of Stuff, return None.
-
-        Records in the exchanges table for credits have these characteristics:
-
-            amount  It's negative, representing an outflow from Gittip to you.
-                    This is oppositive of charges, where amount is positive.
-                    The sign is how we differentiate the two in, e.g., the
-                    history page.
-
-            fee     It's positive, just like with charges.
-
-        """
-        username = participant.username
-        credit = -amount  # From Gittip's POV this is money flowing out of the
-                          # system.
-
-        with self.db.get_cursor() as cursor:
-
-            if error:
-                last_ach_result = error
-                credit = fee = Decimal('0.00')  # ensures balance won't change
-                self.mark_ach_failed(cursor)
-            else:
-                last_ach_result = ''
-                EXCHANGE = """\
-
-                        INSERT INTO exchanges
-                               (amount, fee, participant)
-                        VALUES (%s, %s, %s)
-
-                """
-                cursor.execute(EXCHANGE, (credit, fee, username))
-
-
-            # Update the participant's balance.
-            # =================================
-
-            RESULT = """\
-
-            UPDATE participants
-               SET last_ach_result=%s
-                 , balance=(balance + %s)
-             WHERE username=%s
-         RETURNING balance
-
-            """
-            balance = cursor.one(RESULT, ( last_ach_result
-                                         , credit - fee     # -10.00 - 0.30 = -10.30
-                                         , username
-                                          ))
-            if balance < 0:
-                raise NegativeBalance
-
-        participant.set_attributes(balance=balance)
-
-
-    def record_transfer(self, cursor, tipper, tippee, amount, context):
-        cursor.run("""\
-
-          INSERT INTO transfers
-                      (tipper, tippee, amount, context)
-               VALUES (%s, %s, %s, %s)
-
-        """, (tipper, tippee, amount, context))
-
-
-    def mark_missing_funding(self):
-        self.db.one("""\
-
-            UPDATE paydays
-               SET ncc_missing = ncc_missing + 1
-             WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
-         RETURNING id
-
-        """, default=NoPayday)
-
-
-    def mark_charge_failed(self, cursor):
-        STATS = """\
+    @staticmethod
+    def mark_charge_failed(cursor):
+        cursor.one("""\
 
             UPDATE paydays
                SET ncc_failing = ncc_failing + 1
              WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
          RETURNING id
 
-        """
-        cursor.execute(STATS)
-        assert cursor.fetchone() is not None
+        """, default=NoPayday)
 
 
-    def mark_ach_failed(self, cursor):
-        cursor.one("""\
+    def mark_ach_failed(self):
+        self.db.one("""\
 
             UPDATE paydays
                SET nach_failing = nach_failing + 1
@@ -913,11 +665,11 @@ class Payday(object):
         """, default=NoPayday)
 
 
-    def mark_participant(self):
+    def mark_stage_done(self):
         self.db.one("""\
 
             UPDATE paydays
-               SET nparticipants = nparticipants + 1
+               SET stage = stage + 1
              WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
          RETURNING id
 

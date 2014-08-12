@@ -88,6 +88,6 @@ class Tests(Harness):
         bob = self.make_participant('bob', claimed_time='now')
         self.team.add_member(bob)
 
-        assert len(self.team.get_takes()) == 2  # sanity check
+        assert len(self.team.get_current_takes()) == 2  # sanity check
         self.team.remove_all_members()
-        assert len(self.team.get_takes()) == 0
+        assert len(self.team.get_current_takes()) == 0

@@ -2,6 +2,8 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from decimal import Decimal
 
+from mock import patch
+
 from gittip.billing.payday import Payday
 from gittip.models.participant import Participant
 from gittip.testing import Harness
@@ -11,15 +13,15 @@ from gittip.utils.history import iter_payday_events
 class TestHistory(Harness):
 
     def test_iter_payday_events(self):
-        Payday(self.db).run()
-        team = self.make_participant('team', number='plural', claimed_time='now', balance=10000)
-        alice = self.make_participant('alice', claimed_time='now', balance=5000)
+        Payday.start().run()
+        team = self.make_participant('team', number='plural', claimed_time='now')
+        alice = self.make_participant('alice', claimed_time='now')
+        self.make_exchange('bill', 10000, 0, team)
+        self.make_exchange('bill', 10000, 0, alice)
+        self.make_exchange('bill', -5000, 0, alice)
         self.db.run("""
-            INSERT INTO exchanges
-                        (amount, fee, participant, timestamp)
-                 VALUES (10000, 0, 'team', now() - interval '1 month')
-                      , (10000, 0, 'alice', now() - interval '1 month')
-                      , (-5000, 0, 'alice', now() - interval '1 month');
+            UPDATE transfers
+               SET timestamp = "timestamp" - interval '1 month'
         """)
         bob = self.make_participant('bob', claimed_time='now')
         carl = self.make_participant('carl', claimed_time='now')
@@ -29,7 +31,9 @@ class TestHistory(Harness):
 
         assert bob.balance == 0
         for i in range(2):
-            Payday(self.db).run()
+            with patch.object(Payday, 'fetch_card_holds') as fch:
+                fch.return_value = {}
+                Payday.start().run()
             self.db.run("""
                 UPDATE paydays
                    SET ts_start = ts_start - interval '1 week'
@@ -40,7 +44,7 @@ class TestHistory(Harness):
         bob = Participant.from_id(bob.id)
         assert bob.balance == 12
 
-        Payday(self.db).start()
+        Payday().start()
         events = list(iter_payday_events(self.db, bob))
         assert len(events) == 8
         assert events[0]['kind'] == 'day-open'
@@ -58,3 +62,21 @@ class TestHistory(Harness):
         assert carl.balance == 0
         events = list(iter_payday_events(self.db, carl))
         assert len(events) == 0
+
+    def test_iter_payday_events_with_failed_exchanges(self):
+        alice = self.make_participant('alice', claimed_time='now')
+        self.make_exchange('bill', 50, 0, alice)
+        self.make_exchange('bill', 12, 0, alice, status='failed')
+        self.make_exchange('ach', -40, 0, alice, status='failed')
+        events = list(iter_payday_events(self.db, alice))
+        assert len(events) == 5
+        assert events[0]['kind'] == 'day-open'
+        assert events[0]['balance'] == 50
+        assert events[1]['kind'] == 'credit'
+        assert events[1]['balance'] == 50
+        assert events[2]['kind'] == 'charge'
+        assert events[2]['balance'] == 50
+        assert events[3]['kind'] == 'charge'
+        assert events[3]['balance'] == 50
+        assert events[4]['kind'] == 'day-close'
+        assert events[4]['balance'] == '0.00'

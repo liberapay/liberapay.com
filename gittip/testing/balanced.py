@@ -9,7 +9,8 @@ from gittip.testing.vcr import use_cassette
 class BalancedHarness(Harness):
 
     def setUp(self):
-        self.david = self.make_participant('david', claimed_time='now',
+        self.david = self.make_participant('david', is_suspicious=False,
+                                           claimed_time='now',
                                            balanced_customer_href=self.david_href)
         self.janet = self.make_participant('janet', is_suspicious=False,
                                            claimed_time='now',
