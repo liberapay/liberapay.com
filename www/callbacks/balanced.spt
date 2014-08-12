@@ -1,0 +1,34 @@
+"""An endpoint to receive Balanced's callbacks.
+
+Docs: https://docs.balancedpayments.com/1.1/guides/events/
+      https://docs.balancedpayments.com/1.1/api/events/
+"""
+
+import json
+
+from aspen import Response
+from gittip.billing.exchanges import record_exchange_result
+from gittip.models.participant import Participant
+
+[---]
+
+if not POST:
+    raise Response(405)
+
+src = request.headers['X-Forwarded-For']
+if not src in ('50.18.199.26', '50.18.204.103'):
+    raise Response(403, 'untrusted source address: %s' % src)
+
+events = json.loads(request.body.raw)['events']
+for event in events:
+    resource, status = event['type'].split('.')
+    if resource == 'credit' and status in ('failed', 'succeeded'):
+        for credit in event['entity']['credits']:
+            meta = credit['meta']
+            p = Participant.from_id(int(meta['participant_id']))
+            e_id = meta['exchange_id']
+            error = credit['failure_reason']
+            assert credit['status'] == status
+            record_exchange_result(website.db, e_id, status, error, p)
+
+[---] text/plain
