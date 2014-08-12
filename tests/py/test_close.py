@@ -6,6 +6,7 @@ from decimal import Decimal as D
 import balanced
 import pytest
 from gittip.billing.payday import Payday
+from gittip.exceptions import NoBalancedCustomerHref, NotWhitelisted
 from gittip.models.community import Community
 from gittip.models.participant import Participant
 from gittip.testing import Harness
@@ -39,7 +40,7 @@ class TestClosing(Harness):
         assert 'Personal Information' in body
 
     def test_close_page_is_not_available_during_payday(self):
-        Payday(self.db).start()
+        Payday.start()
         self.make_participant('alice', claimed_time='now')
         body = self.client.GET('/alice/account/close', auth_as='alice').body
         assert 'Personal Information' not in body
@@ -58,7 +59,7 @@ class TestClosing(Harness):
         assert Participant.from_username('bob').balance == 7
 
     def test_cant_post_to_close_page_during_payday(self):
-        Payday(self.db).start()
+        Payday.start()
         self.make_participant('alice', claimed_time='now')
         body = self.client.POST('/alice/account/close', auth_as='alice').body
         assert 'Try Again Later' in body
@@ -85,19 +86,19 @@ class TestClosing(Harness):
     def test_wbtba_raises_NoBalancedCustomerHref_if_no_balanced_customer_href(self):
         alice = self.make_participant('alice', balance=D('10.00'), is_suspicious=False)
         with self.db.get_cursor() as cursor:
-            with pytest.raises(alice.NoBalancedCustomerHref):
+            with pytest.raises(NoBalancedCustomerHref):
                 alice.withdraw_balance_to_bank_account(cursor)
 
     def test_wbtba_raises_NotWhitelisted_if_not_whitelisted(self):
         alice = self.make_participant('alice', balance=D('10.00'))
         with self.db.get_cursor() as cursor:
-            with pytest.raises(alice.NotWhitelisted):
+            with pytest.raises(NotWhitelisted):
                 alice.withdraw_balance_to_bank_account(cursor)
 
     def test_wbtba_raises_NotWhitelisted_if_blacklisted(self):
         alice = self.make_participant('alice', balance=D('10.00'), is_suspicious=True)
         with self.db.get_cursor() as cursor:
-            with pytest.raises(alice.NotWhitelisted):
+            with pytest.raises(NotWhitelisted):
                 alice.withdraw_balance_to_bank_account(cursor)
 
 
@@ -331,12 +332,12 @@ class TestClosing(Harness):
         bob = self.make_participant('bob', claimed_time='now')
         team.add_member(bob)
 
-        assert len(team.get_takes()) == 2  # sanity check
+        assert len(team.get_current_takes()) == 2  # sanity check
 
         with self.db.get_cursor() as cursor:
             alice.clear_personal_information(cursor)
 
-        assert len(team.get_takes()) == 1
+        assert len(team.get_current_takes()) == 1
 
 
     # uic = update_is_closed

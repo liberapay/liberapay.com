@@ -1,0 +1,67 @@
+interactions:
+- request:
+    body: null
+    headers: {}
+    method: GET
+    uri: https://api.balancedpayments.com:443/customers/CU3O2IKYocPZ5LA7GkZWpwKZ/bank_accounts?limit=10&offset=0
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA61UXW+bMBR9769APOxpDTYfIUSqpnTqsi1R232pW6YJObZpvBBIjWkTRfz32Q4E
+        SIPWh74gcc/1veeec3V3Z4ZhzlGyDBHGaZ6IzBwav2XQMHb6K2Ge5oIl92GSr+aUS9yENgSuPRjY
+        5tsqSddI0Ioq/O5qOv1mfBh9Hd8Yl6PriXE9qjPLRqHYrnUyXlC8lPXrjKrMx3RFufEZbWsoZslS
+        UazISXo4z4RKVLXe/3Bu7E+TXym+nXnTkT9ezu7WT5PZocDRtOEj5SxiGAmWJrJAksdxOVFxGA2j
+        JMScEiZkhuA5rRFOkaAkRAoxbQDdc+CfA/gdekPXGbpBD/j9gefV/c1ITkr5mrNEvyEI9z3okoAQ
+        B0FMfIQD2yOe7wYUOGCAbYlHyPaxB/qIRnOAg7kN+xBGURD0g1qZfE3+w8UDvgeaXBacRoqE1VoA
+        63LkfJkm2dX4nmd/H6LFz4Xr3D64pO61ogIpE2qNKlPrHdlsNrbjoIbvhHCaHZvHxLbUvVJVWiRd
+        pvbpMHwezoQc/Hl4nUogDnFKToB61/m2iZ70ndC5tj1CcVb7zoiSrVMnXamQ3z9qJrNSS4fNGGXa
+        eava28zq2tq2L+9itmLiAoI3aRRlVFyAUlszoRtVUi3vXkTz4OzrNdHdZRcIyh57FjJSBdacPrI0
+        Vw43qIhUuqDelc8ixl9PACmp3kG1MY270L5oPW2ionW86bvW4vcYKawytyTbxpt/rcvxwtrNY5NV
+        5rVbNI9ZY0OOiFZZRUcRfaxeSGp/2TrodE6sxWzNYx1x7HxamMq1s+IftGquiHsGAAA=
+    headers:
+      content-encoding: [gzip]
+      content-length: ['620']
+      content-type: [application/json]
+    status: {code: 200, message: OK}
+- request:
+    body: '{"amount": 1900.00, "meta": {"exchange_id": 2, "participant_id": 4}, "description":
+      "bob"}'
+    headers: {}
+    method: POST
+    uri: https://api.balancedpayments.com:443/bank_accounts/BA3QLnsEGgrsjqfhXh43Pq4d/credits
+  response:
+    body: {string: !!python/unicode "{\n  \"credits\": [\n    {\n      \"status\":
+        \"succeeded\",\n      \"description\": \"bob\",\n      \"links\": {\n        \"customer\":
+        \"CU3O2IKYocPZ5LA7GkZWpwKZ\",\n        \"destination\": \"BA3QLnsEGgrsjqfhXh43Pq4d\",\n
+        \       \"order\": null\n      },\n      \"updated_at\": \"2014-08-06T16:10:29.977848Z\",\n
+        \     \"created_at\": \"2014-08-06T16:10:29.680080Z\",\n      \"transaction_number\":
+        \"CR130-017-0655\",\n      \"failure_reason\": null,\n      \"currency\":
+        \"USD\",\n      \"amount\": 1900,\n      \"failure_reason_code\": null,\n
+        \     \"meta\": {\n        \"exchange_id\": \"2\",\n        \"participant_id\":
+        \"4\"\n      },\n      \"href\": \"/credits/CR1rvyY2Z7d46MsU9PScdBfT\",\n
+        \     \"appears_on_statement_as\": \"example.com\",\n      \"id\": \"CR1rvyY2Z7d46MsU9PScdBfT\"\n
+        \   }\n  ],\n  \"links\": {\n    \"credits.order\": \"/orders/{credits.order}\",\n
+        \   \"credits.customer\": \"/customers/{credits.customer}\",\n    \"credits.destination\":
+        \"/resources/{credits.destination}\",\n    \"credits.reversals\": \"/credits/{credits.id}/reversals\",\n
+        \   \"credits.events\": \"/credits/{credits.id}/events\"\n  }\n}"}
+    headers:
+      content-length: ['1018']
+      content-type: [application/json]
+    status: {code: 201, message: CREATED}
+- request:
+    body: null
+    headers: {}
+    method: GET
+    uri: https://api.balancedpayments.com:443/customers/CU3KoKRb123DPYH3y6rw4OmF/bank_accounts?limit=10&offset=0
+  response:
+    body: {string: !!python/unicode "{\n  \"bank_accounts\": [],\n  \"meta\": {\n
+        \   \"last\": \"/customers/CU3KoKRb123DPYH3y6rw4OmF/bank_accounts?limit=10&offset=0\",\n
+        \   \"next\": null,\n    \"href\": \"/customers/CU3KoKRb123DPYH3y6rw4OmF/bank_accounts?limit=10&offset=0\",\n
+        \   \"limit\": 10,\n    \"offset\": 0,\n    \"previous\": null,\n    \"total\":
+        0,\n    \"first\": \"/customers/CU3KoKRb123DPYH3y6rw4OmF/bank_accounts?limit=10&offset=0\"\n
+        \ },\n  \"links\": {}\n}"}
+    headers:
+      content-length: ['396']
+      content-type: [application/json]
+    status: {code: 200, message: OK}
+version: 1

@@ -6,6 +6,7 @@ import os
 import aspen
 import balanced
 import gittip
+import gittip.billing.payday
 import raven
 import mandrill
 from environment import Environment, is_yesish
@@ -37,6 +38,7 @@ def db(env):
     db.register_model(AccountElsewhere)
     db.register_model(Participant)
     db.register_model(EmailAddressWithConfirmation)
+    gittip.billing.payday.Payday.db = db
 
     return db
 

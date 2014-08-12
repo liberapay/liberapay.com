@@ -44,3 +44,6 @@ class FailedToReserveUsername(Exception): pass
 class NegativeBalance(Exception):
     def __str__(self):
         return "Negative balance not allowed in this context."
+
+class NotWhitelisted(Exception): pass
+class NoBalancedCustomerHref(Exception): pass

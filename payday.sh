@@ -15,7 +15,7 @@ cd "`dirname $0`"
 # --help
 # ======
 
-if [ $# = 0 ]; then
+if [ $# = 0 -o "$1" = "" ]; then
     echo
     echo "Usage: $0 <number> [\"for_real_please\"]"
     echo
@@ -80,24 +80,24 @@ else
     RUN="Run"
 fi
 
-if [ $1 ]; then
-    require foreman
-    confirm "$RUN payday #$1?"
-    if [ $? -eq 0 ]; then
-        if [ "$2" == "" ]; then
-            start
-            honcho run -e defaults.env,local.env ./env/bin/payday >> $LOG 2>&1
-        else 
-            if [ "$2" == "for_real_please" ]; then
-                confirm "$RUN payday #$1 FOR REAL?!?!?!??!?!?"
-                if [ $? -eq 0 ]; then
-                    start
-                    heroku config -s | foreman run -e /dev/stdin \
-                        ./env/bin/payday >> $LOG 2>&1
-                fi
-            else
-                echo "Your second arg was $2. Wazzat mean?"
-            fi
-        fi
-    fi
-fi
+PATH="./env/bin:$PATH"
+require honcho
+confirm "$RUN payday #$1?" || exit 0
+case "$2" in
+    "")
+        start
+        honcho run -e defaults.env,local.env payday >>$LOG 2>&1 &
+        ;;
+    "for_real_please")
+        confirm "$RUN payday #$1 FOR REAL?!?!?!??!?!?" || exit 0
+        start
+        heroku config -s | honcho run -e /dev/stdin payday >>$LOG 2>&1 &
+        ;;
+    *)
+        echo "Your second arg was $2. Wazzat mean?"
+        exit 1
+        ;;
+esac
+
+disown -a
+tail -f $LOG

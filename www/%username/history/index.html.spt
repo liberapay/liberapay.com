@@ -81,14 +81,16 @@ else:
         <td class="credits"></td>
         <td class="debits">{{ -event['amount'] + event['fee'] }}</td>
         <td class="balance">{{ event['balance'] }}</td>
-        {% if event['recorder'] == None %}
-        <td class="notes">{{ _("Automatic Withdrawal").lower() }}</td>
-        {% else %}
         <td class="notes">
+        {% if event['recorder'] == None %}
+            {{ _("Automatic Withdrawal").lower() }}
+            {% if event['status'] %}&mdash; status: {{ event['status'] }}{% endif %}
+            {% if event['note'] %}&mdash; error: &ldquo;{{ event['note']|e }}&rdquo;{% endif %}
+        {% else %}
             &ldquo;{{ event['note']|e }}&rdquo;&mdash;<a
             href="/{{ event['recorder'] }}/">{{ event['recorder'] }}</a>
-        </td>
         {% endif %}
+        </td>
     </tr>
     {% elif event['kind'] == 'charge' %}
     <tr>
@@ -99,13 +101,17 @@ else:
         <td class="debits"></td>
         <td class="balance">{{ event['balance'] }}</td>
         <td class="notes">
-            {% if event['recorder'] == None %}
+        {% if event['recorder'] == None %}
             {{ _("Automatic Charge").lower() }}
-            {% else %}
+        {% else %}
             &ldquo;{{ event['note']|e }}&rdquo;&mdash;<a
             href="/{{ event['recorder'] }}/">{{ event['recorder'] }}</a>
-            {% endif %}
+        {% endif %}
+        {% if event['status'] in (None, 'suceeded') %}
             (<a href="../receipts/{{ event['id'] }}.html">{{ _("Receipt").lower() }}</a>)
+        {% elif event['status'] in ('pending', 'failed') %}
+            ({{ event['status'] }}{% if event['note'] %}: &ldquo;{{ event['note']|e }}&rdquo;{% endif %})
+        {% endif %}
         </td>
     </tr>
     {% elif event['kind'] == 'transfer' %}

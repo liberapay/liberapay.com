@@ -275,28 +275,13 @@ class Participant(Model, MixinTeam):
             self.update_is_closed(True, cursor)
 
 
-    class NotWhitelisted(Exception): pass
-    class NoBalancedCustomerHref(Exception): pass
-
     def withdraw_balance_to_bank_account(self, cursor):
-        if self.is_suspicious in (True, None):
-            raise self.NotWhitelisted
-        if self.balanced_customer_href is None:
-            raise self.NoBalancedCustomerHref
-
-        from gittip.billing.payday import Payday
-        hack = Payday(self.db)  # Our payout code is on the Payday object. Rather than
-                                # refactor right now, let's just use it from there.
-
-        # Monkey-patch a couple methods, coopting them for callbacks, essentially.
-        hack.mark_ach_failed = lambda cursor: None
-
-        hack.ach_credit( ts_start=None                  # not used
-                       , participant=self
-                       , tips=None                      # not used
-                       , total=Decimal('0.00')          # don't withold anything
-                       , minimum_credit=Decimal('0.00') # send it all
-                        ) # XXX Records the exchange using a different cursor. :-/
+        from gittip.billing.exchanges import ach_credit
+        ach_credit( self.db
+                  , self
+                  , Decimal('0.00') # don't withhold anything
+                  , Decimal('0.00') # send it all
+                   )
 
 
     class NoOneToGiveFinalGiftTo(Exception): pass
@@ -848,55 +833,10 @@ class Participant(Model, MixinTeam):
         return tips, total, unclaimed_tips, unclaimed_total
 
 
-    def get_tips_and_total(self, for_payday=False):
-        """Given a participant id and a date, return a list and a Decimal.
-
-        This function is used by the payday function. If for_payday is not
-        False it must be a date object. Originally we also used this function
-        to populate the profile page, but our requirements there changed while,
-        oddly, our requirements in payday *also* changed to match the old
-        requirements of the profile page. So this function keeps the for_payday
-        parameter after all.
-
+    def get_current_tips(self):
+        """Get the tips this participant is currently sending to others.
         """
-
-        if for_payday:
-
-            # For payday we want the oldest relationship to be paid first.
-            order_by = "ctime ASC"
-
-
-            # This is where it gets crash-proof.
-            # ==================================
-            # We need to account for the fact that we may have crashed during
-            # Payday and we're re-running that function. We only want to select
-            # tips that existed before Payday started, but haven't been
-            # processed as part of this Payday yet.
-            #
-            # It's a bug if the paydays subselect returns > 1 rows.
-            #
-            # XXX If we crash during Payday and we rerun it after a timezone
-            # change, will we get burned? How?
-
-            ts_filter = """\
-
-                   AND mtime < %s
-                   AND ( SELECT id
-                           FROM transfers
-                          WHERE tipper=t.tipper
-                            AND tippee=t.tippee
-                            AND timestamp >= %s
-                        ) IS NULL
-
-            """
-            args = (self.username, for_payday, for_payday)
-        else:
-            order_by = "amount DESC"
-            ts_filter = ""
-            args = (self.username,)
-
-        TIPS = """\
-
+        TIPS = """
             SELECT * FROM (
                 SELECT DISTINCT ON (tippee)
                        amount
@@ -905,34 +845,15 @@ class Participant(Model, MixinTeam):
                      , p.claimed_time
                   FROM tips t
                   JOIN participants p ON p.username = t.tippee
-                 WHERE tipper = %%s
+                 WHERE tipper = %s
                    AND p.is_suspicious IS NOT true
-                   %s
               ORDER BY tippee
                      , t.mtime DESC
             ) AS foo
-            ORDER BY %s
+            ORDER BY amount DESC
                    , tippee
-
-        """ % (ts_filter, order_by)  # XXX, No injections here, right?!
-        tips = self.db.all(TIPS, args, back_as=dict)
-
-
-        # Compute the total.
-        # ==================
-        # For payday we only want to process payments to tippees who have
-        # themselves opted into Gittip. For the tipper's profile page we want
-        # to show the total amount they've pledged (so they're not surprised
-        # when someone *does* start accepting tips and all of a sudden they're
-        # hit with bigger charges.
-
-        if for_payday:
-            to_total = [t for t in tips if t['claimed_time'] is not None]
-        else:
-            to_total = tips
-        total = sum([t['amount'] for t in to_total], Decimal('0.00'))
-
-        return tips, total
+        """
+        return self.db.all(TIPS, (self.username,), back_as=dict)
 
 
     def get_og_title(self):
