@@ -46,11 +46,16 @@
         <div class="container">
             <div class="support-gittip">
                 {% if not user.ANON %}
-                7% of active users also support <a href="/Gittip/">Gittip</a>!
-                Will you?
-                <button>$5</button>
-                <button>50¢</button>
-                <button>x</button>
+                7% of our users also <a href="/Gittip/">support Gittip</a>.
+                Help us reach 20%?
+                <button class="pay">50&cent;</button>
+                <button class="pay">$5.00</button>
+                <div class="support-gittip-help">
+                    We don't skim!
+                    Gittip is funded by your voluntary payments.
+                    <a href="/about/funding-gittip/">Learn more ...</a>
+                    <a class="support-gittip-dismiss" href="/dismiss/">No thanks.</a>
+                </div>
                 {% endif %}
             </div>
             {% block heading %}

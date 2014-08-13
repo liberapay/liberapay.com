@@ -54,13 +54,61 @@
     background-position: 0 50%;
 
     .support-gittip {
-        a {
-            color: $green ! important;
-        }
+        a { color: $brown ! important; }
         float: left;
-        padding: 3px 3px 3px 7px;
+        padding: 3px 7px;
         border-radius: 0 0 3px 3px;
-        background: $gold;
+        background: transparentize($gold, 0.5);
+        text-align: left;
+        &:hover {
+            background: $gold;
+            a { 
+                color: $green ! important; 
+                &:hover { color: $brown! important; }
+            }
+            button.pay {
+                border: 1px solid $green;
+                background: $green;
+                color: $white;
+            }
+            button.dismiss {
+                border: 1px solid $brown;
+                background: transparent;
+                color: $brown;
+            }
+            button {
+                &:hover {
+                    border: 1px solid $brown;
+                    background: $brown;
+                    color: $white;
+                }
+            }
+        }
+        button.pay {
+            border: 1px solid $brown;
+            background: transparent;
+            color: $brown;
+            width: 64px;
+        }
+        button.dismiss {
+            border: 1px solid $brown;
+            background: transparent;
+            color: $brown;
+        }
+    }
+    .support-gittip-help {
+        font-size: 13px;
+        font-style: italic;
+        a { font-weight: normal; }
+        a.support-gittip-dismiss {
+            font-size: 11px;
+            float: right;
+            font-style: normal;
+        }
+    }
+
+    h1 {
+        clear: both;
     }
 }
 #hero {
