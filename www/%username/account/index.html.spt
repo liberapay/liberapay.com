@@ -103,7 +103,7 @@ locked = False
                         <img src="{{ website.asset_url }}/bank_account_icon.jpg" />
                     </td>
                     <td class="account-details">
-                        <div class="account-type">{{ _("Bank account") }}</div>
+                        <div class="account-type">{{ _("Bank Account") }}</div>
                         {% if participant.last_ach_result != "" %}
                             <span class="none">{{ _("None") }}</span>
                         {% else %}
