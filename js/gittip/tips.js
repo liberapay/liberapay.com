@@ -110,7 +110,7 @@ Gittip.tips.init = function() {
             Gittip.tips.set(tippee, amount, function() {
                 // lock-in changes
                 $myTip[0].defaultValue = amount;
-                $myTip.change();
+                $myTip.attr('value', amount.toFixed(2));
 
                 // Increment an elsewhere receiver's "people ready to give"
                 if(!oldAmount)
