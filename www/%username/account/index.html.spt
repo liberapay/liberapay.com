@@ -70,7 +70,7 @@ locked = False
                         <img src="{{ website.asset_url }}/card_icon.jpg" />
                     </td>
                     <td class="account-details">
-                        <div class="account-type">{{ _("Credit card") }}</div>
+                        <div class="account-type">{{ _("Credit Card") }}</div>
                         {% if participant.last_bill_result != "" %}
                             <span class="none">{{ _("None") }}</span>
                         {% else %}
