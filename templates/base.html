@@ -46,8 +46,13 @@
         <div class="container">
             <div class="support-gittip">
                 {% if not user.ANON %}
-                7% of active users also <a href="/Gittip/">support Gittip</a>.
-                Will you help us reach 20%?
+                {% if website.support_current < 30 %}Only {% endif %}
+                {{ website.support_current }}% of active users also <a href="/Gittip/">support Gittip</a>.
+                {% if website.support_goal %}
+                Will you help us reach {{ website.support_goal }}%?
+                {% else %}
+                Will you join them?
+                {% endif %}
                 <button data-amount="0.50">50&cent;</button>
                 <button data-amount="5.00">$5.00</button>
                 <div class="support-gittip-help">

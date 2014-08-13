@@ -1,3 +1,5 @@
+from __future__ import division
+
 from datetime import datetime, timedelta
 import locale
 import re
@@ -381,6 +383,26 @@ def update_global_stats(website):
     website.gnactive = locale.format("%d", stats[0], grouping=True)
     website.gtransfer_volume = locale.format("%d", stats[1], grouping=True)
     website.glast_week = last_week(website.db)
+
+    nbackers = website.db.one("""
+
+        SELECT count(*)
+          FROM transfers
+         WHERE tippee='Gittip'
+           AND timestamp > (SELECT ts_start FROM paydays ORDER by ts_start DESC LIMIT 1)
+           AND context = 'tip'
+
+    """)
+    website.support_current = cur = int(round(nbackers / stats[0] * 100))
+    if cur < 10:    goal = 20
+    elif cur < 15:  goal = 30
+    elif cur < 25:  goal = 40
+    elif cur < 35:  goal = 50
+    elif cur < 45:  goal = 60
+    elif cur < 55:  goal = 70
+    elif cur < 65:  goal = 80
+    elif cur > 70:  goal = None
+    website.support_goal = goal
 
 
 def last_week(db):
