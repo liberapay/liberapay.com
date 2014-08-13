@@ -36,39 +36,33 @@ pcc = "%5.1f" % ((ncc * 100.0) / npeople) if npeople > 0 else 0.0
 statements = db.all("SELECT username, statement FROM participants WHERE statement != '' AND is_suspicious IS NOT true ORDER BY random(), username LIMIT 16")
 transfer_volume = db.one("SELECT transfer_volume FROM paydays ORDER BY ts_end DESC LIMIT 1", default=0)
 tips_stats = db.one("""
-        SELECT count(*), avg(amount), sum(amount)
-         FROM (    SELECT DISTINCT ON (tipper, tippee) amount
-                     FROM tips
-                     JOIN participants p ON p.username = tipper
-                     JOIN participants p2 ON p2.username = tippee
-                    WHERE p.last_bill_result = ''
-                      AND p2.claimed_time IS NOT NULL
-                      AND p.is_suspicious IS NOT true
-                      AND p2.is_suspicious IS NOT true
-                 ORDER BY tipper, tippee, mtime DESC
-               ) AS foo;
+    SELECT count(*), avg(amount), sum(amount)
+      FROM current_tips
+      JOIN participants p ON p.username = tipper
+      JOIN participants p2 ON p2.username = tippee
+     WHERE amount > 0
+       AND p.last_bill_result = ''
+       AND p2.claimed_time IS NOT NULL
+       AND p.is_suspicious IS NOT true
+       AND p2.is_suspicious IS NOT true
 """)
 tip_n = getattr(tips_stats, 'count', None) or 0
 average_tip = getattr(tips_stats, 'avg', None) or 0
 total_backed_tips = getattr(tips_stats, 'sum', None) or 0
 
 average_tippees = int(db.one("""\
-        SELECT round(avg(ntippees))
-          FROM ( SELECT count(tippee) as NTIPPEES
-                   FROM ( SELECT DISTINCT ON (tipper, tippee)
-                                 tipper
-                               , tippee
-                               , amount
-                            FROM tips
-                            JOIN participants p ON p.username = tipper
-                            JOIN participants p2 on p2.username = tippee
-                           WHERE p.last_bill_result = ''
-                             AND p2.claimed_time IS NOT NULL
-                             AND NOT (p.is_suspicious IS true)
-                             AND NOT (p2.is_suspicious IS true)
-                        GROUP BY tipper, tippee, mtime, amount
-                        ORDER BY tipper, tippee, mtime DESC
-                         ) AS foo WHERE amount > 0 GROUP BY tipper) AS bar
+    SELECT round(avg(ntippees))
+      FROM ( SELECT count(tippee) as NTIPPEES
+               FROM current_tips
+               JOIN participants p ON p.username = tipper
+               JOIN participants p2 on p2.username = tippee
+              WHERE amount > 0
+                AND p.last_bill_result = ''
+                AND p2.claimed_time IS NOT NULL
+                AND p.is_suspicious IS NOT true
+                AND p2.is_suspicious IS NOT true
+           GROUP BY tipper
+           ) AS bar
 """, default=0))
 
 word = "people"
@@ -84,19 +78,14 @@ other_people = "%s other %s" % (number, word)
 
 TIP_DISTRIBUTION = """
     SELECT amount, count(amount)
-      FROM (SELECT DISTINCT ON (tipper, tippee)
-                   amount
-              FROM tips
-              JOIN participants p ON p.username = tipper
-              JOIN participants p2 on p2.username = tippee
-             WHERE p.last_bill_result = ''
-               AND p2.claimed_time IS NOT NULL
-               AND NOT (p.is_suspicious IS true)
-               AND NOT (p2.is_suspicious IS true)
-          GROUP BY tipper, tippee, mtime, amount
-          ORDER BY tipper, tippee, mtime DESC
-                  ) AS foo
+      FROM current_tips
+      JOIN participants p ON p.username = tipper
+      JOIN participants p2 on p2.username = tippee
      WHERE amount > 0
+       AND p.last_bill_result = ''
+       AND p2.claimed_time IS NOT NULL
+       AND p.is_suspicious IS NOT true
+       AND p2.is_suspicious IS NOT true
   GROUP BY amount
   ORDER BY amount
 """
