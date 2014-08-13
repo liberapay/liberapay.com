@@ -11,6 +11,7 @@ from gittip.billing.exchanges import record_exchange_result
 from gittip.models.participant import Participant
 
 [---]
+raise Response(404)
 
 if not POST:
     raise Response(405)
