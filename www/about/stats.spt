@@ -115,6 +115,7 @@ if last_payday:
           FROM transfers
          WHERE timestamp > %(ts_start)s
            AND timestamp < %(ts_end)s
+           AND context IN ('tip', 'take')
     """, last_payday)
     noverlap = ngivers + nreceivers - nactive
 else:
