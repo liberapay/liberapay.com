@@ -106,36 +106,41 @@ Gittip.tips.init = function() {
 
         if(isAnon)
             Gittip.notification("Please sign in first", 'error');
-        else {
-            // send request to change tip
-            $.post('/' + tippee + '/tip.json', { amount: amount }, function(data) {
+        else
+            Gittip.tips.set(tippee, amount, function() {
                 // lock-in changes
                 $myTip[0].defaultValue = amount;
                 $myTip.change();
-
-                // update display
-                $('.my-total-giving').text('$'+data.total_giving);
-                $('.total-receiving').text(
-                    // check and see if we are on our giving page or not
-                    new RegExp('/' + tippee + '/').test(window.location.href) ?
-                        '$'+data.total_receiving_tippee : '$'+data.total_receiving);
 
                 // Increment an elsewhere receiver's "people ready to give"
                 if(!oldAmount)
                     $('.on-elsewhere .ready .number').text(
                         parseInt($('.on-elsewhere .ready .number').text(),10) + 1);
-
-                // update quick stats
-                $('.quick-stats a').text('$' + data.total_giving + '/wk');
-
-                Gittip.notification("Tip changed to $" + amount.toFixed(2) + "!", 'success');
-            })
-            .fail(function() {
-                Gittip.notification('Sorry, something went wrong while changing your tip. :(', 'error');
-                console.log.apply(console, arguments);
-            })
-        }
+            });
     });
-
 };
 
+
+Gittip.tips.set = function(tippee, amount, callback) {
+
+    // send request to change tip
+    $.post('/' + tippee + '/tip.json', { amount: amount }, function(data) {
+        if (callback) callback(data);
+
+        // update display
+        $('.my-total-giving').text('$'+data.total_giving);
+        $('.total-receiving').text(
+            // check and see if we are on our giving page or not
+            new RegExp('/' + tippee + '/').test(window.location.href) ?
+                '$'+data.total_receiving_tippee : '$'+data.total_receiving);
+
+        // update quick stats
+        $('.quick-stats a').text('$' + data.total_giving + '/wk');
+
+        Gittip.notification("Tip changed to $" + amount.toFixed(2) + "!", 'success');
+    })
+    .fail(function() {
+        Gittip.notification('Sorry, something went wrong while changing your tip. :(', 'error');
+        console.log.apply(console, arguments);
+    });
+};
