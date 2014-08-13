@@ -116,7 +116,31 @@ Gittip.tips.init = function() {
                 if(!oldAmount)
                     $('.on-elsewhere .ready .number').text(
                         parseInt($('.on-elsewhere .ready .number').text(),10) + 1);
+
+                // Use global notification system.
+                Gittip.notification("Tip changed to $" + amount.toFixed(2) + "!", 'success');
             });
+    });
+};
+
+
+Gittip.tips.initSupportGittip = function() {
+    $('.support-gittip button').click(function() {
+        var amount = parseFloat($(this).attr('data-amount'), 10);
+        Gittip.tips.set('Gittip', amount, function() {
+            Gittip.notification("Thank you so much for supporting Gittip! :D", 'success');
+            $('.support-gittip').slideUp();
+
+            // If you're on your own giving page ...
+            var tip_on_giving = $('.my-tip[data-tippee="Gittip"]');
+            if (tip_on_giving.length > 0) {
+                tip_on_giving[0].defaultValue = amount;
+                tip_on_giving.attr('value', amount.toFixed(2));
+            }
+
+            // If you're on Gittip's profile page or your own profile page,
+            // that's apparently taken care of in Gittip.tips.set.
+        });
     });
 };
 
@@ -136,8 +160,6 @@ Gittip.tips.set = function(tippee, amount, callback) {
 
         // update quick stats
         $('.quick-stats a').text('$' + data.total_giving + '/wk');
-
-        Gittip.notification("Tip changed to $" + amount.toFixed(2) + "!", 'success');
     })
     .fail(function() {
         Gittip.notification('Sorry, something went wrong while changing your tip. :(', 'error');

@@ -59,7 +59,7 @@
             &:hover { color: $green ! important; }
         }
         float: left;
-        padding: 3px 7px;
+        padding: 3px 10px;
         border-radius: 0 0 3px 3px;
         background: $gold;
         text-align: left;
@@ -81,16 +81,17 @@
             color: $brown;
             width: 64px;
         }
-    }
-    .support-gittip-help {
-        font-size: 13px;
-        font-style: italic;
-        a { 
-            font-weight: normal; 
-            &.no-thanks {
-                font-size: 11px;
-                float: right;
-                font-style: normal;
+
+        .support-gittip-help {
+            font-size: 13px;
+            font-style: italic;
+            a {
+                font-weight: normal;
+                &.no-thanks {
+                    font-size: 11px;
+                    float: right;
+                    font-style: normal;
+                }
             }
         }
     }

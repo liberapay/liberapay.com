@@ -14,6 +14,7 @@ Gittip.init = function() {
     Gittip.forms.initCSRF();
     Gittip.signIn();
     Gittip.signOut();
+    Gittip.tips.initSupportGittip();
 };
 
 
