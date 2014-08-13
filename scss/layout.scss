@@ -63,23 +63,23 @@
         border-radius: 0 0 3px 3px;
         background: $gold;
         text-align: left;
-        &:hover {
-            button {
+        button {
+            width: 64px;
+            &.low {
                 border: 1px solid $green;
                 background: $green;
                 color: $white;
-                &:hover {
-                    border: 1px solid $brown;
-                    background: $brown;
-                    color: $white;
-                }
             }
-        }
-        button {
-            border: 1px solid $brown;
-            background: transparent;
-            color: $brown;
-            width: 64px;
+            &.high {
+                border: 1px solid $brown;
+                background: transparent;
+                color: $brown;
+            }
+            &:hover {
+                border: 1px solid $brown;
+                background: $brown;
+                color: $white;
+            }
         }
 
         .support-gittip-help {
