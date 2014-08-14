@@ -96,30 +96,29 @@ def add_stuff_to_context(request):
     request.context['username'] = None
 
     # Helpers for global call to action to support Gittip itself.
-    if request.context['user'] is not None:
-        user = request.context['user']
-        if not user.ANON and user.participant.rides_free is None:
-            p = user.participant
-            usage = max(p.giving + p.pledging, p.receiving)
+    user = request.context.get('user')
+    p = user.participant if user else None
+    if p and p.rides_free is None:
+        usage = max(p.giving + p.pledging, p.receiving)
 
-            if usage < 5:
-                low = ('0.10', '10&cent;')
-                high = ('1.00', '$1.00')
-            elif usage < 20:
-                low = ('0.50', '50&cent;')
-                high = ('5.00', '$5.00')
-            elif usage < 100:
-                low = ('1.00', '$1')
-                high = ('10.00', '$10')
-            elif usage < 500:
-                low = ('5.00', '$5')
-                high = ('50.00', '$50')
-            elif usage >= 500:
-                low = ('10.00', '$10')
-                high = ('100.00', '$100')
+        if usage < 5:
+            low = ('0.10', '10&cent;')
+            high = ('1.00', '$1.00')
+        elif usage < 20:
+            low = ('0.50', '50&cent;')
+            high = ('5.00', '$5.00')
+        elif usage < 100:
+            low = ('1.00', '$1')
+            high = ('10.00', '$10')
+        elif usage < 500:
+            low = ('5.00', '$5')
+            high = ('50.00', '$50')
+        elif usage >= 500:
+            low = ('10.00', '$10')
+            high = ('100.00', '$100')
 
-            request.context['cta_low'] = low
-            request.context['cta_high'] = high
+        request.context['cta_low'] = low
+        request.context['cta_high'] = high
 
 
 algorithm = website.algorithm
