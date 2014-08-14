@@ -99,25 +99,26 @@ def add_stuff_to_context(request):
     user = request.context.get('user')
     p = user.participant if user else None
     if p and p.rides_free is None:
+        usage = p.usage
 
         # Above $500/wk we suggest 2%.
-        if p.usage >=                   5000:
+        if usage >= 5000:
             low = ('100.00', '$100')
             high = ('1000.00', '$1000')
-        elif p.usage >=                  500:
+        elif usage >= 500:
             low = ('10.00', '$10')
             high = ('100.00', '$100')
 
         # From $20 to $499 we suggest 5%.
-        elif p.usage >=                  100:
+        elif usage >= 100:
             low = ('5.00', '$5')
             high = ('25.00', '$25')
-        elif p.usage >=                   20:
+        elif usage >= 20:
             low = ('1.00', '$1')
             high = ('5.00', '$5')
 
         # Below $20 we suggest 10%.
-        elif p.usage >=                    5:
+        elif usage >= 5:
             low = ('0.50', '50&cent;')
             high = ('2.00', '$2.00')
         else:
