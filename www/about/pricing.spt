@@ -40,8 +40,8 @@ title = "About"
         {% endif %}
 
         {% if payment < p.suggested_payment %}
-            <p>
             {% if payment == 0 %}
+            <p>
                 {% if website.support_current < 30 %}Right now, only {% endif %}
                 {{ website.support_current }}% of active users <a href="/Gittip/">pay
                 for Gittip</a>.
@@ -50,11 +50,11 @@ title = "About"
                 {% else %}
                 Will you join them?
                 {% endif %}
+            </p>
             {% endif %}
 
-                Your usage is ${{ p.usage }}, so we suggest:
-                <button data-amount="">${{ p.suggested_payment }}</button>
-            </p>
+            <p>Your usage is ${{ p.usage }}, so we suggest:
+            <button data-amount="">${{ p.suggested_payment }}</button></p>
         {% endif %}
     {% endif %}
 
@@ -74,7 +74,7 @@ title = "About"
     payment processor. We don't see any of that ourselves.</p>
 
 
-    <h2>Where Does the Money Go?</h2>
+    <h2>What Do Payments Fund?</h2>
 
     <p>Your payments cover hosting and other costs of doing business, and the
     rest goes to the <a

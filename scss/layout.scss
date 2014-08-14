@@ -57,8 +57,10 @@
         a { 
             color: $brown ! important; 
             &:hover { color: $green ! important; }
+            text-decoration: underline;
         }
-        float: left;
+        display: table;
+        margin: 0 auto;
         padding: 3px 10px;
         border-radius: 0 0 3px 3px;
         background: $gold;
@@ -72,6 +74,9 @@
                 border: 1px solid $brown;
                 background: $brown;
                 color: $white;
+            }
+            &.low {
+                margin: 0 5px 0 10px;
             }
         }
 
