@@ -34,7 +34,7 @@ title = _("Credit Card")
 {% extends "templates/base.html" %}
 
 {% block heading %}
-    <h1>{{ status.format("<em id='status'>", "</em>") }}</h1>
+    <h1>{{ status.format("<em id=\"status\">", "</em>") }}</h1>
 
     <p>{{ pull_money }} {{ _("If your credit card is missing or fails then your gifts won't go through for that week.") }}<p>
 
