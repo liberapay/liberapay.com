@@ -15,28 +15,29 @@ status = ". . ."
 if not user.ANON:
     balanced_customer_href = user.participant.balanced_customer_href
 
-    status = "not connected"
+    status = _("Your bank account is {0}not connected{1}")
     if balanced_customer_href:
         working = user.participant.last_ach_result == ""
-        status = "connected" if working else "not connected"
+        status = _("Your bank account is {0}connected{1}") if working else status
 
         bank_account = billing.BalancedBankAccount(balanced_customer_href)
 
+    status = status.format("<em id='status'>", "</em>")
+
+    receive_money = _("When you receive money on Gittip we will automatically deposit it into your bank account.") if bank_account and bank_account.is_setup else \
+        _("When you receive money on Gittip we can automatically deposit it into your bank account.")
+
     username = user.participant.username
 
-title = "Bank Account"
+title = _("Bank Account")
 [-----------------------------------------------------------------------------]
 {% extends "templates/base.html" %}
 
 {% block heading %}
 
-    <h1>Your bank account is <em id="status">{{ status }}</em></h1>
+    <h1>{{ status }}</h1>
 
-    <p>When you receive money on Gittip we
-    {% if bank_account and bank_account.is_setup %}will{% else %}can{% endif %}
-    automatically deposit it into your bank account. If you don't connect
-    a bank account then your money will accumulate within Gittip unless you
-    regift it to others.<p>
+    <p>{{ receive_money }} {{ _("If you don't connect a bank account then your money will accumulate within Gittip unless you regift it to others.") }}<p>
 
 {% endblock %}
 
@@ -59,9 +60,9 @@ title = "Bank Account"
     <div class="as-content">
 
     {% include "templates/sign-in-using.html" %}
-    and then you'll be able to add<br> or change your bank account.</p>
+    {{ _("{0} and then you'll be able to add{1} or change your bank account.", "", "<br>") }}</p>
 
-    <p>Thanks! :-)</p>
+    <p>{{ _("Thanks! :-)") }}</p>
 
     </div>
 
@@ -85,61 +86,61 @@ title = "Bank Account"
                 {% endif %}
 
                 <div id="feedback">{% if user.participant.last_ach_result %}
-                <h2><span>Failure</span></h2>
+                <h2><span>{{ _("Failure") }}</span></h2>
                 <div class="details"><p>{{ user.participant.last_ach_result }}</p></div>
                   {% endif %}</div>
 
                 {% if account and 'merchant' in account.roles %}
-                <h2>Identity Verification &nbsp; <span>&#x2714;</span></h2>
-                <h2>Routing Information</h2>
+                <h2>{{ _("Identity Verification") }} &nbsp; <span>&#x2714;</span></h2>
+                <h2>{{ _("Routing Information") }}</h2>
                 {% endif %}
 
 
                 {% if not account or 'merchant' not in account.roles %}
-                <h2>Identity Verification</h2>
+                <h2>{{ _("Identity Verification") }}</h2>
 
                 <div>
-                <label for="name">Your Legal Name</label>
+                <label for="name">{{ _("Your Legal Name") }}</label>
                 <input id="name" value="" />
                 </div>
 
                 <div class="clear"></div>
 
                 <div>
-                    <label for="address_1">Street Address</label>
+                    <label for="address_1">{{ _("Street Address") }}</label>
                     <input id="address_1" value="" />
                 </div>
 
                 <div>
-                    <label for="address_1">City</label>
+                    <label for="address_1">{{ _("City") }}</label>
                     <input id="address_1" value="" />
                 </div>
 
                 <div class="half left">
-                    <label for="state">State or Province</label>
+                    <label for="state">{{ _("State or Province") }}</label>
                     <input id="state" value="" />
                 </div>
 
                 <div class="half right">
-                    <label for="zip">ZIP or Postal Code</label>
+                    <label for="zip">{{ _("ZIP or Postal Code") }}</label>
                     <input id="zip" value="" />
                 </div>
 
                 <div class="clear"></div>
 
                 <div>
-                    <label for="address_1">Country (<a href="https://github.com/gittip/www.gittip.com/issues/126">non-US?</a>)</label>
-                    <input id="zip" value="United States of America" disabled="true"
+                    <label for="address_1">{{ _("Country") }} (<a href="https://github.com/gittip/www.gittip.com/issues/126">{{ _("non-US?") }}</a>)</label>
+                    <input id="zip" value="{{ _("United States of America") }}" disabled="true"
                         class="disabled" />
                 </div>
 
                 <div>
-                    <label for="phone_number">Contact Phone Number</label>
+                    <label for="phone_number">{{ _("Contact Phone Number") }}</label>
                     <input id="phone_number" value="" />
                 </div>
 
                 <div class="left">
-                    <label for="dob-year">Date of Birth</label>
+                    <label for="dob-year">{{ _("Date of Birth") }}</label>
                     <select id="dob-month">
                         {% for i in range(1, 13) %}
                         <option value="{{ i }}">{{ MONTHS[i] }}</option>
@@ -160,29 +161,29 @@ title = "Bank Account"
                 <div class="clear"></div>
 
                 <div class="half left">
-                    <label for="ssn_last4">Last four SSN digits (Not required)</label>
+                    <label for="ssn_last4">{{ _("Last four SSN digits") }} {{ _("(Not required)") }}</label>
                     <input id="ssn_last4" value="" />
                 </div>
 
                 <div class="clear"></div>
 
 
-                <h2>Routing Information</h2>
+                <h2>{{ _("Routing Information") }}</h2>
                 {% endif %}
 
 
                 <div class="float">
-                    <label for="account_name">Name on Bank Account</label>
+                    <label for="account_name">{{ _("Name on Bank Account") }}</label>
                     <input id="account_name" autofocus="autofocus" />
                 </div>
 
                 <div class="float routing_number">
-                    <label for="routing_number">Routing Number</label>
+                    <label for="routing_number">{{ _("Routing Number") }}</label>
                     <input id="routing_number" />
                 </div>
 
                 <div class="float account_number">
-                    <label for="account_number">Bank Account Number</label>
+                    <label for="account_number">{{ _("Bank Account Number") }}</label>
                     <input id="account_number" />
                 </div>
 
@@ -191,7 +192,7 @@ title = "Bank Account"
 
             <div class="nav level-1">
                 <button class="selected larger" id="save"
-                    type="submit">Save</button>
+                    type="submit">{{ _("Save") }}</button>
             </div>
         </form>
 
@@ -200,7 +201,7 @@ title = "Bank Account"
         <div id="delete" class="nav level-2">
             <form action="bank-account.json" class="special" method="POST">
                 <input type="hidden" name="action" value="delete">
-                <button>Disconnect My Bank Account</button>
+                <button>{{ _("Disconnect My Bank Account") }}</button>
             </form>
         </div>
         {% endif %}
