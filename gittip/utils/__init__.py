@@ -393,7 +393,7 @@ def update_global_stats(website):
            AND context = 'tip'
 
     """)
-    website.support_current = cur = int(round(nbackers / stats[0] * 100))
+    website.support_current = cur = int(round(nbackers / stats[0] * 100)) if stats[0] else 0
     if cur < 10:    goal = 20
     elif cur < 15:  goal = 30
     elif cur < 25:  goal = 40

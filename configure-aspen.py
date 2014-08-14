@@ -95,6 +95,33 @@ cron(env.check_db_every, website.db.self_check)
 def add_stuff_to_context(request):
     request.context['username'] = None
 
+    # Helpers for global call to action to support Gittip itself.
+    if request.context['user'] is not None:
+        user = request.context['user']
+        if not user.ANON and user.participant.rides_free is None:
+            p = user.participant
+            usage = max(p.giving + p.pledging, p.receiving)
+
+            if usage < 1:
+                low = ('0.25', '25&cent;')
+                high = ('2.00', '$2.00')
+            elif usage < 20:
+                low = ('0.50', '50&cent;')
+                high = ('5.00', '$5.00')
+            elif usage < 100:
+                low = ('1.00', '$1.00')
+                high = ('10.00', '$10.00')
+            elif usage < 500:
+                low = ('5.00', '$5.00')
+                high = ('50.00', '$50.00')
+            elif usage >= 500:
+                low = ('10.00', '$10.00')
+                high = ('100.00', '$100.00')
+
+            request.context['cta_usage'] = usage
+            request.context['cta_low'] = low
+            request.context['cta_high'] = high
+
 
 algorithm = website.algorithm
 algorithm.functions = [ timer.start

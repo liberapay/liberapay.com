@@ -44,8 +44,8 @@
 
     <div class="pennies"><div id="hero">
         <div class="container">
+            {% if not user.ANON and user.participant.rides_free is none and cta_usage > 0.5 %}
             <div class="support-gittip">
-                {% if not user.ANON %}
                 {% if website.support_current < 30 %}Only {% endif %}
                 {{ website.support_current }}% of active users also <a href="/Gittip/">support Gittip</a>.
                 {% if website.support_goal %}
@@ -53,15 +53,16 @@
                 {% else %}
                 Will you join them?
                 {% endif %}
-                <button class="low" data-amount="0.50">50&cent;</button>
-                <button class="high" data-amount="5.00">$5.00</button>
+                <button class="low" data-amount="{{ cta_low[0] }}">{{ cta_low[1] }}</button>
+                <button class="high" data-amount="{{ cta_high[0] }}">{{ cta_high[1] }}</button>
                 <div class="support-gittip-help">
                     We fund Gittip solely through your voluntary payments!
                     <a href="/about/funding-gittip/">Learn more</a>.
-                    <a class="no-thanks" href="/dismiss/">No thanks.</a>
+                    <a class="no-thanks" href="">No thanks</a>
+                    <a class="other" href="/Gittip/">Other</a>
                 </div>
-                {% endif %}
             </div>
+            {% endif %}
             {% block heading %}
             {% if title %}
             <h1>{{ title }}</h1>

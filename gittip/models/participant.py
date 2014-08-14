@@ -615,6 +615,26 @@ class Participant(Model, MixinTeam):
             new_takes = self.compute_actual_takes(cursor=cursor)
             self.update_taking(old_takes, new_takes, cursor=cursor)
 
+    def update_rides_free(self, rides_free, cursor=None):
+        ctx = None
+        if cursor is None:
+            ctx = self.db.get_cursor()
+            cursor = ctx.__enter__()
+        try:
+            cursor.run( "UPDATE participants SET rides_free=%(rides_free)s "
+                        "WHERE username=%(username)s"
+                      , dict(username=self.username, rides_free=rides_free)
+                       )
+            add_event( cursor
+                     , 'participant'
+                     , dict(id=self.id, action='set', values=dict(rides_free=rides_free))
+                      )
+            self.set_attributes(rides_free=rides_free)
+        finally:
+            if ctx is not None:
+                ctx.__exit__(None, None, None)
+
+
     def set_tip_to(self, tippee, amount, update_self=True, update_tippee=True, cursor=None):
         """Given a Participant or username, and amount as str, return a tuple.
 
@@ -675,6 +695,9 @@ class Participant(Model, MixinTeam):
         if update_tippee:
             # Update receiving amount of tippee
             tippee.update_receiving(cursor)
+        if tippee.username == 'Gittip':
+            # Update whether the tipper is using Gittip for free
+            self.update_rides_free(None if amount == 0 else False, cursor)
 
         return amount, first_time_tipper
 

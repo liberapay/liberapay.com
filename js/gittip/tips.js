@@ -110,6 +110,7 @@ Gittip.tips.init = function() {
             Gittip.tips.set(tippee, amount, function() {
                 // lock-in changes
                 $myTip[0].defaultValue = amount;
+                $myTip.change();
                 $myTip.attr('value', amount.toFixed(2));
 
                 // Increment an elsewhere receiver's "people ready to give"
@@ -139,8 +140,17 @@ Gittip.tips.initSupportGittip = function() {
             }
 
             // If you're on Gittip's profile page or your own profile page,
-            // that's apparently taken care of in Gittip.tips.set.
+            // updating the proper giving/receiving amounts is apparently taken
+            // care of in Gittip.tips.set.
+
         });
+    });
+
+    $('.support-gittip .no-thanks').click(function(event) {
+        event.preventDefault();
+        jQuery.post('/ride-free.json')
+            .success(function() { $('.support-gittip').slideUp(); })
+            .fail(function() { Gittip.notification("Sorry, there was an error.", "failure"); })
     });
 };
 

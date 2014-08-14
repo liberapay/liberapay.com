@@ -65,16 +65,9 @@
         text-align: left;
         button {
             width: 64px;
-            &.low {
-                border: 1px solid $green;
-                background: $green;
-                color: $white;
-            }
-            &.high {
-                border: 1px solid $brown;
-                background: transparent;
-                color: $brown;
-            }
+            border: 1px solid $green;
+            background: $green;
+            color: $white;
             &:hover {
                 border: 1px solid $brown;
                 background: $brown;
@@ -87,10 +80,15 @@
             font-style: italic;
             a {
                 font-weight: normal;
-                &.no-thanks {
+                &.other, &.no-thanks {
                     font-size: 11px;
                     float: right;
                     font-style: normal;
+                    width: 64px;
+                    text-align: center;
+                }
+                &.other {
+                    margin-right: 5px;
                 }
             }
         }

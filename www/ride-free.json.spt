@@ -1,0 +1,12 @@
+from aspen import Response
+from gittip.utils import get_participant
+
+[-----------------------------------------------------------------------------]
+
+if user.ANON:
+    raise Response(404)
+request.allow("POST")
+user.participant.update_rides_free(True)
+raise Response(204)
+
+[---] application/json via json_dump
