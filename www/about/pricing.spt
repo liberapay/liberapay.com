@@ -48,9 +48,11 @@ title = "Pricing"
         {% set p = user.participant %}
         {% set payment = p.get_tip_to('Gittip') %}
 
+        <div class="payment">
         {% if payment > 0 %}
-        <p class="payment">You pay ${{ payment }} per week. Thank you! :-)</p>
+        <p>You pay ${{ payment }} per week. Thank you! :-)</p>
         {% endif %}
+        </div>
 
         {% if payment < p.suggested_payment %}
         <p class="suggestion-prompt">Your usage is ${{ p.usage }}, so we suggest
@@ -95,10 +97,10 @@ $(document).ready(function() {
     btn.click(function() {
         var amount = parseFloat($(this).attr('data-amount'), 10);
         Gittip.tips.set('Gittip', amount, function(data) {
-            $('.suggestion-prompt').slideUp();
-            $('button.suggestion').fadeOut();
+            $('.suggestion-prompt').hide();
+            $('button.suggestion').hide();
             amount = parseFloat(data.amount, 10).toFixed(2);
-            $('.payment').html('You pay $' + amount + ' per week. Thank you! :-)');
+            $('.payment').html('<p>You pay $' + amount + ' per week. Thank you! :-)</p>');
         });
     });
 });
