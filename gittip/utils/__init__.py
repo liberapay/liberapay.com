@@ -385,13 +385,9 @@ def update_global_stats(website):
     website.glast_week = last_week(website.db)
 
     nbackers = website.db.one("""
-
-        SELECT count(*)
-          FROM transfers
-         WHERE tippee='Gittip'
-           AND timestamp > (SELECT ts_start FROM paydays ORDER by ts_start DESC LIMIT 1)
-           AND context = 'tip'
-
+        SELECT npatrons
+          FROM participants
+         WHERE username = 'Gittip'
     """)
     website.support_current = cur = int(round(nbackers / stats[0] * 100)) if stats[0] else 0
     if cur < 10:    goal = 20
