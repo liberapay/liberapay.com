@@ -10,7 +10,7 @@ of participant, based on certain properties.
 """
 from __future__ import print_function, unicode_literals
 
-from decimal import Decimal, ROUND_DOWN
+from decimal import Decimal, ROUND_DOWN, ROUND_HALF_EVEN
 import uuid
 
 import aspen
@@ -199,6 +199,36 @@ class Participant(Model, MixinTeam):
     def update_statement(self, statement):
         self.db.run("UPDATE participants SET statement=%s WHERE id=%s", (statement, self.id))
         self.set_attributes(statement=statement)
+
+
+    # Pricing
+    # =======
+
+    @property
+    def usage(self):
+        return max(self.giving + self.pledging, self.receiving)
+
+    @property
+    def suggested_payment(self):
+        usage = self.usage
+        if usage >= 500:
+            percentage = Decimal('0.02')
+        elif usage >= 20:
+            percentage = Decimal('0.05')
+        else:
+            percentage = Decimal('0.10')
+
+        suggestion = usage * percentage
+        if suggestion < 0.25:
+            rounded = Decimal('0.25')
+        elif suggestion < 0.50:
+            rounded = Decimal('0.50')
+        elif suggestion < 1:
+            rounded = Decimal('1.00')
+        else:
+            rounded = suggestion.quantize(Decimal('0'), ROUND_HALF_EVEN)
+
+        return rounded
 
 
     # API Key

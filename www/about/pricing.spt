@@ -1,0 +1,86 @@
+# encoding=utf8
+[---]
+title = "About"
+[---] text/html
+{% extends "templates/about.html" %}
+{% block page %}
+<div class="col0">
+
+    <h1>Pricing</h1>
+
+    <p>We suggest the following pricing tiers, based on how much money you give
+    or receive through Gittip:</p>
+
+    <table class="simple">
+        <tr>
+            <th>Usage</th>
+            <th>Payment</th>
+        </tr>
+        <tr>
+            <td>Less than $20</td>
+            <td class="right">10%</td>
+        </tr>
+        <tr>
+            <td>$20 to $500</td>
+            <td class="right">5%</td>
+        </tr>
+        <tr>
+            <td>More than $500</td>
+            <td class="right">2%</td>
+        </tr>
+    </table>
+
+    {% if not user.ANON %}
+
+        {% set p = user.participant %}
+        {% set payment = p.get_tip_to('Gittip') %}
+
+        {% if payment > 0 %}
+        <p>You pay ${{ payment }}. Thank you! :-)</p>
+        {% endif %}
+
+        {% if payment < p.suggested_payment %}
+            <p>
+            {% if payment == 0 %}
+                {% if website.support_current < 30 %}Right now, only {% endif %}
+                {{ website.support_current }}% of active users <a href="/Gittip/">pay
+                for Gittip</a>.
+                {% if website.support_goal %}
+                Will you help us reach {{ website.support_goal }}%?
+                {% else %}
+                Will you join them?
+                {% endif %}
+            {% endif %}
+
+                Your usage is ${{ p.usage }}, so we suggest:
+                <button data-amount="">${{ p.suggested_payment }}</button>
+            </p>
+        {% endif %}
+    {% endif %}
+
+
+    <h2>Wait ... Suggested Pricing!?</h2>
+
+    <p>Gittip is funded <a href="/Gittip/">on Gittip</a>. We don't take a cut.
+    We don't skim off the top. We don't have any venture capital or foundation
+    money. We aren't a non-profit. We are running a business based on
+    voluntary payments&mdash;&ldquo;<a
+    href="http://en.wikipedia.org/wiki/Pay_what_you_want">pay-what-you-want</a>.&rdquo;</p>
+
+    <p><b>We believe in Gittip enough to depend on it ourselves.</b></p>
+
+    <p>Now, we <i>do</i> charge you processing fees when you use your credit
+    card or other payment method, but that's at cost. It all goes to the
+    payment processor. We don't see any of that ourselves.</p>
+
+
+    <h2>Where Does the Money Go?</h2>
+
+    <p>Your payments cover hosting and other costs of doing business, and the
+    rest goes to the <a
+    href="https://www.gittip.com/Gittip/members/">people</a> who are building
+    Gittip for you. If you want to help us build Gittip, <a
+    href="http://building.gittip.com/big-picture/welcome">you can</a>!</p>
+
+</div>
+{% endblock %}
