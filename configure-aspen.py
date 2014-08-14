@@ -101,21 +101,29 @@ def add_stuff_to_context(request):
     if p and p.rides_free is None:
         usage = max(p.giving + p.pledging, p.receiving)
 
-        if usage < 5:
-            low = ('0.10', '10&cent;')
-            high = ('1.00', '$1.00')
-        elif usage < 20:
-            low = ('0.50', '50&cent;')
-            high = ('5.00', '$5.00')
-        elif usage < 100:
-            low = ('1.00', '$1')
-            high = ('10.00', '$10')
-        elif usage < 500:
-            low = ('5.00', '$5')
-            high = ('50.00', '$50')
-        elif usage >= 500:
+        # Above $500/wk we suggest 2%.
+        if usage >=                     5000:
+            low = ('100.00', '$100')
+            high = ('1000.00', '$1000')
+        elif usage >=                    500:
             low = ('10.00', '$10')
             high = ('100.00', '$100')
+
+        # From $20 to $499 we suggest 5%.
+        elif usage >=                    100:
+            low = ('5.00', '$5')
+            high = ('25.00', '$25')
+        elif usage >=                     20:
+            low = ('1.00', '$1')
+            high = ('5.00', '$5')
+
+        # Below $20 we suggest 10%.
+        elif usage >=                      5:
+            low = ('0.50', '50&cent;')
+            high = ('2.00', '$2.00')
+        else:
+            low = ('0.10', '10&cent;')
+            high = ('1.00', '$1.00')
 
         request.context['cta_low'] = low
         request.context['cta_high'] = high
