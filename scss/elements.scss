@@ -83,11 +83,14 @@ input {
 
 table.simple {
     margin: 0 auto 1em;
+    th, td {
+        padding-right: 1em;
+    }
     th {
         font-weight: bold;
     }
     td.right {
         text-align: right;
-        padding-right: 1em;
+        padding-right: 2em;
     }
 }
