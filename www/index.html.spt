@@ -93,6 +93,8 @@ from aspen.utils import utcnow
         <p>Go to <a href="/{{ user.participant.username }}/">your profile</a>, or
         <a href="/sign-out.html">sign out</a>.</p>
 
+        {% include "templates/support-gittip.html" %}
+
         <div class="jump">
         <form id="jump">
             <span>Jump to

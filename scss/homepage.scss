@@ -97,7 +97,7 @@
             padding-bottom: 24px;
             font-size: 13px;
             line-height: 18px;
-        
+
             button {
                 border: 1px solid transparentize($brown, 0.2);
                 background: transparent;
@@ -113,4 +113,32 @@
             form.openstreetmap button { @include has-icon("openstreetmap"); }
         }
     }
+
+    .support-gittip {
+        padding-right: 10px;
+        text-align: center;
+        margin: 0 0 24px;
+        border-radius: 3px;
+        .knobs {
+            width: 261px;
+            display: table;
+            position: static;
+            top: 0;
+            right: 0;
+            margin: 20px auto 0;
+            button {
+                width: 128px;
+                height: 40px;
+                font-size: 18px;
+            }
+            a {
+                width: 128px;
+                margin-top: 14px;
+            }
+        }
+        .help {
+            margin-top: 0;
+        }
+    }
+
 }

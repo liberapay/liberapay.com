@@ -18,6 +18,31 @@
         }
     }
 
+    .support-gittip {
+        padding-right: 10px;
+        text-align: center;
+        .knobs {
+            width: 261px;
+            display: table;
+            position: static;
+            top: 0;
+            right: 0;
+            margin: 20px auto;
+            button {
+                width: 128px;
+                height: 40px;
+                font-size: 18px;
+            }
+            a {
+                width: 128px;
+                margin-top: 14px;
+            }
+        }
+        .help {
+            margin-top: 0;
+        }
+    }
+
     .accounts {
         width: 100%;
     }
@@ -115,12 +140,12 @@
         .pitch,.action {
             display: block;
             width: auto;
-            h1 { 
-                font-size: 24px; 
+            h1 {
+                font-size: 24px;
                 line-height: 36px;
             }
             p, .jump {
-                font-size: 16px; 
+                font-size: 16px;
                 line-height: 24px;
             }
         }
