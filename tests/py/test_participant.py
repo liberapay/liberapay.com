@@ -466,6 +466,24 @@ class Tests(Harness):
         alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
         self.assertRaises(NoTippee, alice.set_tip_to, 'bob', '1.00')
 
+    def test_stt_is_free_rider_defaults_to_none(self):
+        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
+        assert alice.is_free_rider is None
+
+    def test_stt_sets_is_free_rider_to_false(self):
+        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
+        gittip = self.make_participant('Gittip', number='plural')
+        alice.set_tip_to(gittip, '0.01')
+        assert alice.is_free_rider is False
+        assert Participant.from_username('alice').is_free_rider is False
+
+    def test_stt_resets_is_free_rider_to_null(self):
+        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
+        gittip = self.make_participant('Gittip', number='plural')
+        alice.set_tip_to(gittip, '0.00')
+        assert alice.is_free_rider is None
+        assert Participant.from_username('alice').is_free_rider is None
+
 
     # giving, npatrons and receiving
 

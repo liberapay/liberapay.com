@@ -10,7 +10,7 @@ of participant, based on certain properties.
 """
 from __future__ import print_function, unicode_literals
 
-from decimal import Decimal, ROUND_DOWN
+from decimal import Decimal, ROUND_DOWN, ROUND_HALF_EVEN
 import uuid
 
 import aspen
@@ -199,6 +199,36 @@ class Participant(Model, MixinTeam):
     def update_statement(self, statement):
         self.db.run("UPDATE participants SET statement=%s WHERE id=%s", (statement, self.id))
         self.set_attributes(statement=statement)
+
+
+    # Pricing
+    # =======
+
+    @property
+    def usage(self):
+        return max(self.giving + self.pledging, self.receiving)
+
+    @property
+    def suggested_payment(self):
+        usage = self.usage
+        if usage >= 500:
+            percentage = Decimal('0.02')
+        elif usage >= 20:
+            percentage = Decimal('0.05')
+        else:
+            percentage = Decimal('0.10')
+
+        suggestion = usage * percentage
+        if suggestion < 0.25:
+            rounded = Decimal('0.25')
+        elif suggestion < 0.50:
+            rounded = Decimal('0.50')
+        elif suggestion < 1:
+            rounded = Decimal('1.00')
+        else:
+            rounded = suggestion.quantize(Decimal('0'), ROUND_HALF_EVEN)
+
+        return rounded
 
 
     # API Key
@@ -615,6 +645,26 @@ class Participant(Model, MixinTeam):
             new_takes = self.compute_actual_takes(cursor=cursor)
             self.update_taking(old_takes, new_takes, cursor=cursor)
 
+    def update_is_free_rider(self, is_free_rider, cursor=None):
+        ctx = None
+        if cursor is None:
+            ctx = self.db.get_cursor()
+            cursor = ctx.__enter__()
+        try:
+            cursor.run( "UPDATE participants SET is_free_rider=%(is_free_rider)s "
+                        "WHERE username=%(username)s"
+                      , dict(username=self.username, is_free_rider=is_free_rider)
+                       )
+            add_event( cursor
+                     , 'participant'
+                     , dict(id=self.id, action='set', values=dict(is_free_rider=is_free_rider))
+                      )
+            self.set_attributes(is_free_rider=is_free_rider)
+        finally:
+            if ctx is not None:
+                ctx.__exit__(None, None, None)
+
+
     def set_tip_to(self, tippee, amount, update_self=True, update_tippee=True, cursor=None):
         """Given a Participant or username, and amount as str, return a tuple.
 
@@ -675,6 +725,9 @@ class Participant(Model, MixinTeam):
         if update_tippee:
             # Update receiving amount of tippee
             tippee.update_receiving(cursor)
+        if tippee.username == 'Gittip':
+            # Update whether the tipper is using Gittip for free
+            self.update_is_free_rider(None if amount == 0 else False, cursor)
 
         return amount, first_time_tipper
 

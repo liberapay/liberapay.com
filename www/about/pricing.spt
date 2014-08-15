@@ -1,0 +1,106 @@
+# encoding=utf8
+[---]
+title = "Pricing"
+[---] text/html
+{% extends "templates/about.html" %}
+{% block page %}
+<div class="col0">
+
+    <p>We suggest the following pricing tiers, based on how much money you give
+    or receive through Gittip:</p>
+
+    <table class="simple">
+        <tr>
+            <th>Weekly Usage</th>
+            <th>Payment</th>
+        </tr>
+        <tr>
+            <td>Less than $20</td>
+            <td class="right">10%</td>
+        </tr>
+        <tr>
+            <td>$20 to $500</td>
+            <td class="right">5%</td>
+        </tr>
+        <tr>
+            <td>More than $500</td>
+            <td class="right">2%</td>
+        </tr>
+    </table>
+
+    <p>
+        {% if website.support_current < 30 %}Right now, only {% endif %}
+        {{ website.support_current }}% of active users <a href="/Gittip/">pay
+        for Gittip</a>.
+
+        {% if not user.ANON and not user.participant.is_free_rider == False %}
+            {% if website.support_goal %}
+            Will you help us reach {{ website.support_goal }}%?
+            {% else %}
+            Will you join them?
+            {% endif %}
+        {% endif %}
+    </p>
+
+    {% if not user.ANON %}
+        {% set p = user.participant %}
+        {% set payment = p.get_tip_to('Gittip') %}
+
+        <div class="payment">
+        {% if payment > 0 %}
+        <p>You pay ${{ payment }} per week. Thank you! :-)</p>
+        {% endif %}
+        </div>
+
+        {% if payment < p.suggested_payment %}
+        <p class="suggestion-prompt">Your usage is ${{ p.usage }}, so we suggest
+        ${{ p.suggested_payment }} per week.</p>
+
+        <button class="suggestion" data-amount="{{ p.suggested_payment }}">Pay Gittip ${{ p.suggested_payment }} per week</button>
+
+        {% endif %}
+
+    {% endif %}
+
+
+    <h2>Wait ... Suggested Pricing!?</h2>
+
+    <p>Gittip is funded <a href="/Gittip/">on Gittip</a>. We don't take a cut.
+    We don't skim off the top. We don't have any venture capital or foundation
+    money. We aren't a non-profit. We are running a business based on
+    voluntary payments&mdash;&ldquo;<a
+    href="http://en.wikipedia.org/wiki/Pay_what_you_want">pay-what-you-want</a>.&rdquo;</p>
+
+    <p><b>We believe in Gittip enough to depend on it ourselves.</b></p>
+
+    <p>Now, we <i>do</i> charge you processing fees when you use your credit
+    card or other payment method, but that's at cost. It all goes to the
+    payment processor. We don't see any of that ourselves.</p>
+
+
+    <h2>Where Do Payments Go?</h2>
+
+    <p>Your payments cover hosting and other costs of doing business, and the
+    rest goes to the <a
+    href="https://www.gittip.com/Gittip/members/">people</a> who are building
+    Gittip for you. If you want to help us build Gittip, <a
+    href="http://building.gittip.com/big-picture/welcome">you can</a>!</p>
+
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+$(document).ready(function() {
+    var btn = $('button.suggestion');
+    btn.click(function() {
+        var amount = parseFloat($(this).attr('data-amount'), 10);
+        Gittip.tips.set('Gittip', amount, function(data) {
+            $('.suggestion-prompt').slideUp();
+            $('button.suggestion').slideUp();
+            amount = parseFloat(data.amount, 10).toFixed(2);
+            $('.payment').html('<p>You pay $' + amount + ' per week. Thank you! :-)</p>');
+        });
+    });
+});
+</script>
+{% endblock %}

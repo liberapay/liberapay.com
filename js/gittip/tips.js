@@ -106,36 +106,73 @@ Gittip.tips.init = function() {
 
         if(isAnon)
             Gittip.notification("Please sign in first", 'error');
-        else {
-            // send request to change tip
-            $.post('/' + tippee + '/tip.json', { amount: amount }, function(data) {
+        else
+            Gittip.tips.set(tippee, amount, function() {
                 // lock-in changes
                 $myTip[0].defaultValue = amount;
                 $myTip.change();
-
-                // update display
-                $('.my-total-giving').text('$'+data.total_giving);
-                $('.total-receiving').text(
-                    // check and see if we are on our giving page or not
-                    new RegExp('/' + tippee + '/').test(window.location.href) ?
-                        '$'+data.total_receiving_tippee : '$'+data.total_receiving);
+                $myTip.attr('value', amount.toFixed(2));
 
                 // Increment an elsewhere receiver's "people ready to give"
                 if(!oldAmount)
                     $('.on-elsewhere .ready .number').text(
                         parseInt($('.on-elsewhere .ready .number').text(),10) + 1);
 
-                // update quick stats
-                $('.quick-stats a').text('$' + data.total_giving + '/wk');
-
+                // Use global notification system.
                 Gittip.notification("Tip changed to $" + amount.toFixed(2) + "!", 'success');
-            })
-            .fail(function() {
-                Gittip.notification('Sorry, something went wrong while changing your tip. :(', 'error');
-                console.log.apply(console, arguments);
-            })
-        }
+            });
     });
-
 };
 
+
+Gittip.tips.initSupportGittip = function() {
+    $('.support-gittip button').click(function() {
+        var amount = parseFloat($(this).attr('data-amount'), 10);
+        Gittip.tips.set('Gittip', amount, function() {
+            Gittip.notification("Thank you so much for supporting Gittip! :D", 'success');
+            $('.support-gittip').slideUp();
+
+            // If you're on your own giving page ...
+            var tip_on_giving = $('.my-tip[data-tippee="Gittip"]');
+            if (tip_on_giving.length > 0) {
+                tip_on_giving[0].defaultValue = amount;
+                tip_on_giving.attr('value', amount.toFixed(2));
+            }
+
+            // If you're on Gittip's profile page or your own profile page,
+            // updating the proper giving/receiving amounts is apparently taken
+            // care of in Gittip.tips.set.
+
+        });
+    });
+
+    $('.support-gittip .no-thanks').click(function(event) {
+        event.preventDefault();
+        jQuery.post('/ride-free.json')
+            .success(function() { $('.support-gittip').slideUp(); })
+            .fail(function() { Gittip.notification("Sorry, there was an error.", "failure"); })
+    });
+};
+
+
+Gittip.tips.set = function(tippee, amount, callback) {
+
+    // send request to change tip
+    $.post('/' + tippee + '/tip.json', { amount: amount }, function(data) {
+        if (callback) callback(data);
+
+        // update display
+        $('.my-total-giving').text('$'+data.total_giving);
+        $('.total-receiving').text(
+            // check and see if we are on our giving page or not
+            new RegExp('/' + tippee + '/').test(window.location.href) ?
+                '$'+data.total_receiving_tippee : '$'+data.total_receiving);
+
+        // update quick stats
+        $('.quick-stats a').text('$' + data.total_giving + '/wk');
+    })
+    .fail(function() {
+        Gittip.notification('Sorry, something went wrong while changing your tip. :(', 'error');
+        console.log.apply(console, arguments);
+    });
+};
