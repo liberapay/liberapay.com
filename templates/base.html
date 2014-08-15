@@ -128,7 +128,7 @@
 
     {% endblock %}
 
-    {% if not user.ANON %}
+    {% if not user.ANON and not request.line.uri.startswith('/credit-card.html') %}
     <script>
         {% if user.participant.last_bill_result %}
         $(document).ready(function () {
