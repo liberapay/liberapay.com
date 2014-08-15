@@ -63,7 +63,7 @@ def to_age(dt, loc):
 
 
 def regularize_locale(loc):
-    return loc.replace("-", "_").lower()
+    return loc.split('-', 1)[0].lower()
 
 
 def load_langs(localeDir):
@@ -86,7 +86,7 @@ def get_locale_for_request(request):
     languages = (lang.split(";", 1)[0] for lang in accept_lang.split(","))
     for loc in languages:
         loc = regularize_locale(loc)
-        if loc.startswith("en") or LANGS.has_key(loc):
+        if loc == "en" or loc in LANGS:
             return loc
     return "en"
 
