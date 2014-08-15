@@ -128,11 +128,17 @@
 
     {% endblock %}
 
-    {% if not user.ANON and user.participant.credit_card_expiring(request, response) %}
+    {% if not user.ANON and not request.line.uri.startswith('/credit-card.html') %}
     <script>
+        {% if user.participant.last_bill_result %}
+        $(document).ready(function () {
+            Gittip.notification(["span", "Your credit card has failed! ", ['a', {'href': '/credit-card.html'}, 'Fix your card']], "error", -1)
+        });
+        {% elif user.participant.credit_card_expiring(request, response) %}
         $(document).ready(function () {
             Gittip.notification(["span", "Your credit card is about to expire! ", ['a', {'href': '/credit-card.html'}, 'Update card']], "error")
         });
+        {% endif %}
     </script>
     {% endif %}
 </body>
