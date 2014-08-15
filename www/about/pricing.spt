@@ -95,8 +95,8 @@ $(document).ready(function() {
     btn.click(function() {
         var amount = parseFloat($(this).attr('data-amount'), 10);
         Gittip.tips.set('Gittip', amount, function(data) {
-            $('.suggestion-prompt').hide();
-            $('button.suggestion').hide();
+            $('.suggestion-prompt').slideUp();
+            $('button.suggestion').slideUp();
             amount = parseFloat(data.amount, 10).toFixed(2);
             $('.payment').html('<p>You pay $' + amount + ' per week. Thank you! :-)</p>');
         });
