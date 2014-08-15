@@ -1,11 +1,11 @@
-{% from 'templates/avatar-url.html' import avatar_url with context %}
+{% from 'templates/avatar-url.html' import avatar_img with context %}
 
 {% set account = accounts.get('venmo', None) %}
 <tr class="{{ 'has-avatar' if account }}">
     <td class="account-type">
         <div class="sanity-preserving-wrapper">
             {% if account != None %}
-                <img class="avatar" src="{{ avatar_url(account) }}"/>
+                {{ avatar_img(account) }}
             {% endif %}
           <img class="platform" src="{{ website.asset_url }}/venmo.png" />
         </div>
