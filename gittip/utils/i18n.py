@@ -1,0 +1,109 @@
+from __future__ import print_function, unicode_literals
+
+import os
+import re
+
+from aspen.utils import utcnow
+from babel.dates import format_timedelta
+import babel.messages.pofile
+from babel.numbers import (
+    format_currency, format_decimal, format_number, format_percent, parse_decimal, get_decimal_symbol
+)
+
+
+ternary_re = re.compile(r'^\(? *(.+?) *\? *(.+?) *: *(.+?) *\)?$')
+and_re = re.compile(r' *&& *')
+or_re = re.compile(r' *\|\| *')
+
+
+def ternary_sub(m):
+    g1, g2, g3 = m.groups()
+    return '%s if %s else %s' % (g2, g1, ternary_re.sub(ternary_sub, g3))
+
+
+def get_function_from_rule(rule):
+    rule = ternary_re.sub(ternary_sub, rule.strip())
+    rule = and_re.sub(' and ', rule)
+    rule = or_re.sub(' or ', rule)
+    return eval('lambda n: ' + rule, {'__builtins__': {}})
+
+
+def get_text(request, loc, s, *a, **kw):
+    catalog = LANGS.get(loc)
+    msg = catalog.get(s) if catalog else None
+    if isinstance(s, tuple):
+        n = kw.pop('n', None)
+        if n is None:
+            try:
+                raise TypeError('n should not be None')
+            except Exception as e:
+                request.website.tell_sentry(e, request)
+        s2 = None
+        if msg:
+            try:
+                s2 = msg.string[catalog.plural_func(n)]
+            except Exception as e:
+                request.website.tell_sentry(e, request)
+        if s2 is None:
+            loc = 'en'
+            s2 = s[n != 1]
+        kw['n'] = n != None and format_number(n, locale=loc) or '{n}'
+        s = s2
+    elif msg:
+        s = msg.string
+    if a or kw:
+        if isinstance(s, bytes):
+            s = s.decode('ascii')
+        return s.format(*a, **kw)
+    return s
+
+
+def to_age(dt, loc):
+    return format_timedelta(dt - utcnow(), add_direction=True, locale=loc)
+
+
+def regularize_locale(loc):
+    return loc.replace("-", "_").lower()
+
+
+def load_langs(localeDir):
+    langs = {}
+    for file in os.listdir(localeDir):
+        parts = file.split(".")
+        if len(parts) == 2 and parts[1] == "po":
+            lang = regularize_locale(parts[0])
+            with open(os.path.join(localeDir, file)) as f:
+                c = langs[lang] = babel.messages.pofile.read_po(f)
+                c.plural_func = get_function_from_rule(c.plural_expr)
+    return langs
+
+
+LANGS = load_langs("i18n")
+
+
+def get_locale_for_request(request):
+    accept_lang = request.headers.get("Accept-Language", "")
+    languages = (lang.split(";", 1)[0] for lang in accept_lang.split(","))
+    for loc in languages:
+        loc = regularize_locale(loc)
+        if loc.startswith("en") or LANGS.has_key(loc):
+            return loc
+    return "en"
+
+
+def inbound(request):
+    context = request.context
+    loc = context.locale = get_locale_for_request(request)
+    context._ = lambda s, *a, **kw: get_text(request, loc, s, *a, **kw)
+    context.format_number = lambda *a: format_number(*a, locale=loc)
+    context.format_decimal = lambda *a: format_decimal(*a, locale=loc)
+    context.format_currency = lambda *a: format_currency(*a, locale=loc)
+    context.format_percent = lambda *a: format_percent(*a, locale=loc)
+    context.parse_decimal = lambda *a: parse_decimal(*a, locale=loc)
+    context.decimal_symbol = get_decimal_symbol(locale=loc)
+    def _to_age(delta):
+        try:
+            return to_age(delta, loc)
+        except:
+            return to_age(delta, 'en')
+    context.to_age = _to_age

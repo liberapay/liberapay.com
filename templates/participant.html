@@ -42,13 +42,13 @@
             </div>
         {% else %}
             {% set age = participant.get_age_in_seconds() %}
-            <h2>{{ participant.username }}
+            <h2>
                 {% if age < 60 %}
-                just joined Gittip! :D
+                {{ _("{0} just joined Gittip! :D", participant.username) }}
                 {% elif age < (60 * 60 * 24 * 7) %}
-                joined recently
+                {{ _("{0} joined recently", participant.username) }}
                 {% else %}
-                is quietly watching the Gittip world
+                {{ _("{0} is quietly watching the Gittip world", participant.username) }}
                 {% endif %}
             </h2>
         {% endif %}

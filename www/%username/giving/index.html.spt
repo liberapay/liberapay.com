@@ -1,11 +1,11 @@
-from aspen import Response
 from gittip.utils import get_participant
 
 [-----------------------------------------------------------------------------]
+
 participant = get_participant(request, restrict=True)
 tips, total, unclaimed_tips, unclaimed_total = \
                                            participant.get_giving_for_profile()
-hero = "Giving"
+hero = _("Giving")
 title = "%s - %s" % (participant.username, hero)
 locked = False
 first_time = qs.get('first_time') == '1'
@@ -35,26 +35,24 @@ first_time = qs.get('first_time') == '1'
         <td colspan="2">
             {% if first_time %}
 
-            <h2>Thanks for joining Gittip!</h2>
+            <h2>{{ _("Thanks for joining Gittip!") }}</h2>
 
-            <p>To get you started, we've suggested a few people to give to
-            below. Next steps:</p>
+            <p>{{ _("To get you started, we've suggested a few people to give to below. Next steps:") }}</p>
 
             <ol>
-                <li>Change the weekly tips below as you please.</li>
-                <li><a class="highlight" href="/credit-card.html">Add a credit
-                    card</a> to make sure your weekly tips go through this
-                    Thursday.</li>
-                <li><a href="../">Fill out your profile</a> to let others know
-                    about you.</li>
+                <li>{{ _("Change the weekly tips below as you please.") }}</li>
+                <li>{{ _("{0}Add a credit card{1} to make sure your weekly tips go through this Thursday.",
+                        "<a class='highlight' href='/credit-card.html'>", "</a>") }}</li>
+                <li>{{ _("{0}Fill out your profile{1} to let others know about you.",
+                        "<a href='../'>", "</a>") }}</li>
             </ol>
 
             {% endif %}
             {% if participant == user.participant %}
-            <h2>You give <span class="my-total-giving">${{ total }}</span> per
-                week</h2>
+            <h2>{{ _("You give {0} per week",
+                "<span class='my-total-giving'>" + format_currency(total, "USD") + "</span>") }}</h2>
             {% else %}
-            <h2>{{ participant.username }} gives ${{ total }} per week</h2>
+            <h2>{{ _("{0} gives {1} per week", participant.username, format_currency(total, "USD")) }}</h2>
             {% endif %}
         </td>
     </tr>
@@ -71,7 +69,7 @@ first_time = qs.get('first_time') == '1'
     {% if unclaimed_total > 0 %}
     <tr>
         <td colspan="2">
-            <h2>Another ${{ unclaimed_total }} per week goes unclaimed</h2>
+            <h2>{{ _("Another {0} per week goes unclaimed", format_currency(unclaimed_total, "USD")) }}</h2>
         </td>
     </tr>
     {% endif %}

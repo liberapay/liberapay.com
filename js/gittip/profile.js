@@ -65,7 +65,7 @@ Gittip.profile.init = function() {
         e.preventDefault();
 
         var is_plural = jQuery("#statement-select").val() === "plural";
-        $('.statement button.save').text('Saving ...');
+        $('.statement button.save').css('opacity', 0.5);
 
         function success(d) {
             $('.statement .view span').html(d.statement);
@@ -75,7 +75,7 @@ Gittip.profile.init = function() {
             update_members_button(is_plural);
         }
         function error(e) {
-            $('.statement button.save').text('Save');
+            $('.statement button.save').css('opacity', 1);
             Gittip.notification(JSON.parse(e.responseText).error_message_long, 'error');
         }
         jQuery.ajax(
@@ -98,7 +98,7 @@ Gittip.profile.init = function() {
     });
     function finish_editing_statement() {
         $('.statement button.edit').show();
-        $('.statement button.save').hide().text('Save');
+        $('.statement button.save').hide().css('opacity', 1);
         $('.statement button.cancel').hide();
         $('.statement div.view').show();
         $('.statement div.edit').hide();
@@ -132,7 +132,7 @@ Gittip.profile.init = function() {
             if(!r) return;
         }
 
-        $('.goal button.save').text('Saving ...');
+        $('.goal button.save').css('opacity', 0.5);
 
         function success(d) {
             var label = $('label[for=' + goal.attr('id') + ']');
@@ -160,7 +160,7 @@ Gittip.profile.init = function() {
                      }
             , success: success
             , error: function() {
-                    $('.goal button.save').text('Save');
+                    $('.goal button.save').css('opacity', 1);
                     Gittip.notification("Failed to change your funding goal. Please try again.", 'error');
                 }
              }
@@ -177,7 +177,7 @@ Gittip.profile.init = function() {
         $('.goal div.view').show();
         $('.goal table.edit').hide();
         $('.goal button.edit').show();
-        $('.goal button.save').hide().text('Save');
+        $('.goal button.save').hide().css('opacity', 1);
         $('.goal button.cancel').hide();
     }
 
@@ -196,7 +196,7 @@ Gittip.profile.init = function() {
         .on('click', '[type=submit]', function () {
             var $this = $(this);
 
-            $this.text('Saving...');
+            $this.css('opacity', 0.5);
 
             function success(d) {
                 $('a.bitcoin').text(d.bitcoin_address);
@@ -210,7 +210,7 @@ Gittip.profile.init = function() {
                     html += "<button class=\"toggle-bitcoin\">Edit</button>";
                 }
                 $('div.bitcoin').html(html);
-                $this.text('Save');
+                $this.css('opacity', 1);
             }
 
             jQuery.ajax({
@@ -219,7 +219,7 @@ Gittip.profile.init = function() {
                     dataType: 'json',
                     success: success,
                     error: function () {
-                        $this.text('Save');
+                        $this.css('opacity', 1);
                         Gittip.notification("Invalid Bitcoin address. Please try again.", 'error');
                     },
                     data: {

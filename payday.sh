@@ -80,7 +80,7 @@ else
     RUN="Run"
 fi
 
-PATH="./env/bin:$PATH"
+export PATH="./env/bin:$PATH"
 require honcho
 confirm "$RUN payday #$1?" || exit 0
 case "$2" in
