@@ -13,11 +13,10 @@ balanced_customer_href = None
 if not user.ANON:
     balanced_customer_href = user.participant.balanced_customer_href
 
-    status = _("Your credit card is {0}missing{1}")
+    status = "missing"
     if balanced_customer_href:
         if user.participant.last_bill_result is not None:
-            status = _("Your credit card is {0}working{1}") if user.participant.last_bill_result == "" \
-                else _("Your credit card is {0}failing{1}")
+            status = "working" if user.participant.last_bill_result == "" else "failing"
 
     card = billing.BalancedCard(balanced_customer_href)
     # the id on the card might not match unless the db
@@ -31,7 +30,7 @@ title = _("Credit Card")
 {% extends "templates/base.html" %}
 
 {% block heading %}
-    <h1>{{ status.format("<em id=\"status\">", "</em>") }}</h1>
+    <h1>{{ _("Your credit card is {0}%s{1}" % status).format("<em id=\"status\">", "</em>") }}</h1>
 
     <p>{{ _("When you don't have enough money in your Gittip account to cover your gifts, we'll attempt to pull money in using your credit card.") }}
     {{ _("If your credit card is missing or fails then your gifts won't go through for that week.") }}<p>
