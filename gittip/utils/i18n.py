@@ -62,12 +62,16 @@ def to_age(dt, loc):
     return format_timedelta(dt - utcnow(), add_direction=True, locale=loc)
 
 
+def regularize_locale(loc):
+    return loc.replace("-", "_").lower()
+
+
 def load_langs(localeDir):
     langs = {}
     for file in os.listdir(localeDir):
         parts = file.split(".")
         if len(parts) == 2 and parts[1] == "po":
-            lang = parts[0]
+            lang = regularize_locale(parts[0])
             with open(os.path.join(localeDir, file)) as f:
                 c = langs[lang] = babel.messages.pofile.read_po(f)
                 c.plural_func = get_function_from_rule(c.plural_expr)
@@ -81,6 +85,7 @@ def get_locale_for_request(request):
     accept_lang = request.headers.get("Accept-Language", "")
     languages = (lang.split(";", 1)[0] for lang in accept_lang.split(","))
     for loc in languages:
+        loc = regularize_locale(loc)
         if loc.startswith("en") or LANGS.has_key(loc):
             return loc
     return "en"
