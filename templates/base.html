@@ -132,7 +132,7 @@
     <script>
         {% if user.participant.last_bill_result %}
         $(document).ready(function () {
-            Gittip.notification(["span", "Your credit card has failed! ", ['a', {'href': '/credit-card.html'}, 'Fix your card']], "error")
+            Gittip.notification(["span", "Your credit card has failed! ", ['a', {'href': '/credit-card.html'}, 'Fix your card']], "error", -1)
         });
         {% elif user.participant.credit_card_expiring(request, response) %}
         $(document).ready(function () {

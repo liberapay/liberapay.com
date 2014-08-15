@@ -3,8 +3,9 @@
  * @param {string} text  Notification text
  * @param {string} [type=notice]  Notofication type (one of: notice, error, success)
  */
-Gittip.notification = function(text, type) {
-    type = type || 'notice';
+Gittip.notification = function(text, type, timeout) {
+    var type = type || 'notice';
+    var timeout = timeout || 10000;
 
     var dialog = ['div', { 'class': 'notification notification-' + type }, [ 'div', text ]];
     var $dialog = $([
@@ -23,5 +24,5 @@ Gittip.notification = function(text, type) {
     }
 
     $dialog.on('click', fadeOut);
-    setTimeout(fadeOut, 5000);
+    if (timeout > 0) setTimeout(fadeOut, timeout);
 };
