@@ -1453,3 +1453,11 @@ BEGIN;
     ALTER TABLE exchanges ADD COLUMN status exchange_status;
 
 END;
+
+
+-------------------------------------------------------------------------------
+-- https://github.com/gittip/www.gittip.com/pull/2629
+
+BEGIN;
+    ALTER TABLE participants ADD COLUMN is_free_rider boolean DEFAULT NULL;
+END;
