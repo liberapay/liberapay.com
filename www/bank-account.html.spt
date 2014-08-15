@@ -23,10 +23,6 @@ if not user.ANON:
         bank_account = billing.BalancedBankAccount(balanced_customer_href)
 
     status = status.format("<em id=\"status\">", "</em>")
-
-    receive_money = _("When you receive money on Gittip we will automatically deposit it into your bank account.") if bank_account and bank_account.is_setup else \
-        _("When you receive money on Gittip we can automatically deposit it into your bank account.")
-
     username = user.participant.username
 
 title = _("Bank Account")
@@ -37,7 +33,8 @@ title = _("Bank Account")
 
     <h1>{{ status }}</h1>
 
-    <p>{{ receive_money }} {{ _("If you don't connect a bank account then your money will accumulate within Gittip unless you regift it to others.") }}<p>
+    <p>{{ _("When you receive money on Gittip we'll automatically deposit it into your bank account.") }}
+    {{ _("If you don't connect a bank account then your money will accumulate within Gittip unless you regift it to others.") }}<p>
 
 {% endblock %}
 

@@ -19,9 +19,6 @@ if not user.ANON:
             status = _("Your credit card is {0}working{1}") if user.participant.last_bill_result == "" \
                 else _("Your credit card is {0}failing{1}")
 
-    pull_money = _("When you don't have enough money in your Gittip account to cover your gifts, we will attempt to pull money in using this credit card.") if balanced_customer_href \
-        else _("When you don't have enough money in your Gittip account to cover your gifts, we can attempt to pull money in using a credit card.")
-
     card = billing.BalancedCard(balanced_customer_href)
     # the id on the card might not match unless the db
     # is updated to use the new style of urls
@@ -36,7 +33,8 @@ title = _("Credit Card")
 {% block heading %}
     <h1>{{ status.format("<em id=\"status\">", "</em>") }}</h1>
 
-    <p>{{ pull_money }} {{ _("If your credit card is missing or fails then your gifts won't go through for that week.") }}<p>
+    <p>{{ _("When you don't have enough money in your Gittip account to cover your gifts, we'll attempt to pull money in using your credit card.") }}
+    {{ _("If your credit card is missing or fails then your gifts won't go through for that week.") }}<p>
 
 {% endblock %}
 
