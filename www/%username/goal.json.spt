@@ -1,7 +1,7 @@
-import locale
 import decimal
 
 from aspen import Response
+from babel.numbers import NumberFormatError
 from gittip.utils import get_participant
 
 [-----------------------------------------------------------------------------]
@@ -15,19 +15,19 @@ goal = request.body["goal"]
 if goal == "null":
     goal = None
 elif goal == "custom":
-    goal = request.body["goal_custom"].replace(',', '')
+    goal = request.body["goal_custom"]
 
 if goal is not None:
     try:
-        goal = decimal.Decimal(goal)
-    except decimal.InvalidOperation:
+        goal = parse_decimal(goal)
+    except NumberFormatError:
         raise Response(400, "Bad input.")
 
 participant = get_participant(request)
 participant.update_goal(goal)
 
 if goal is not None:
-    goal = locale.format("%.2f", goal, grouping=True)
+    goal = format_decimal(goal)
 
 [---] application/json via json_dump
 {"goal": goal}

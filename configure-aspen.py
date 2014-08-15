@@ -10,7 +10,7 @@ import gittip
 import gittip.wireup
 from gittip import canonize, utils
 from gittip.security import authentication, csrf, x_frame_options
-from gittip.utils import cache_static, set_cookie, timer
+from gittip.utils import cache_static, i18n, set_cookie, timer
 
 
 import aspen
@@ -106,6 +106,7 @@ algorithm.functions = [ timer.start
                       , authentication.inbound
                       , csrf.inbound
                       , add_stuff_to_context
+                      , i18n.inbound
 
                       , algorithm['dispatch_request_to_filesystem']
                       , algorithm['apply_typecasters_to_path']

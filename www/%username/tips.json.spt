@@ -21,7 +21,7 @@ if POST:
         try:
             if tip['platform'] != 'gittip':
                 raise BadPlatform
-            amount = participant.set_tip_to(tip['username'], tip['amount'])
+            amount = participant.set_tip_to(tip['username'], parse_decimal(tip['amount']))
         except Exception, exc:
             amount = "error"
             one['error'] = exc.__class__.__name__

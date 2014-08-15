@@ -2,13 +2,13 @@
     {% if locked %}
 
         <div class="help with-padding">
-            This account has been locked by its owner.
+            {{ _("This account has been locked by its owner.") }}
         </div>
 
     {% elif user.ANON %}
 
 
-        <h2>Your Weekly {{ "Pledge" if path.decoded.startswith('/on/') else "Gift" }}</h2>
+        <h2>{{ _("Your Weekly Pledge") if path.decoded.startswith('/on/') else _("Your Weekly Gift") }}</h2>
 
         {% set my_tip = 0 %}
         {% set tippee = participant.username %}
@@ -20,19 +20,20 @@
 
         {% set my_tip = user.participant.get_tip_to(participant.username) %}
         {% set tippee = participant.username %}
-        <h2>Your Weekly {{ "Pledge" if path.decoded.startswith('/on/') else "Gift" }}</h2>
+        <h2>{{ _("Your Weekly Pledge") if path.decoded.startswith('/on/') else _("Your Weekly Gift") }}</h2>
         {% include "templates/my-tip.html" %}
 
         {% if user.participant.last_bill_result == None %}
 
         <div id="payment-prompt" class="help{% if my_tip > 0 %} needed{% endif %}">
-        Back your gift with a <a href="/credit-card.html"
-            class="highlight">credit card</a> to make sure it goes
-        through!</div>
+            {{ _("Back your gift with a {0}credit card{1} to make sure it goes through!",
+                "<a href='/credit-card.html' class='highlight'>", "</a>") }}
+        </div>
         {% elif user.participant.last_bill_result %}
-        <div id="payment-prompt" class="help really-needed">Fix your <a
-            href="/credit-card.html" class="highlight">credit
-            card</a> to make sure your gifts go through!</div>
+        <div id="payment-prompt" class="help really-needed">
+            {{ _("Fix your {0}credit card{1} to make sure your gifts go through!",
+                "<a href='/credit-card.html' class='highlight'>", "</a>") }}
+        </div>
         {% endif %}
 
     {% endif %}

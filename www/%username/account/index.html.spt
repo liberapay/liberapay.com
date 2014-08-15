@@ -1,10 +1,11 @@
 
 from gittip.utils import get_participant
+from cgi import escape
 
 [-----------------------------------------------------------------------------]
 
 participant = get_participant(request, restrict=True)
-hero = "Account"
+hero = _("Account")
 title = participant.username      # used in the title tag
 username = participant.username   # used in footer shared with on/$platform/
                                   # pages
@@ -26,34 +27,34 @@ locked = False
 
         <!-- Name and Anonymous -->
         <form class="username">
-            <h2>You are
-                <span class="view">{{ user.participant.username|e }}</span>
+            <h2>{{ _("You are {0}",
+                    "<span class='view'>" + escape(user.participant.username) + "</span>") }}
                 <input tabindex="100" name="username" value="{{ user.participant.username|e }}"/>
-                <button tabindex="101" class="edit">Edit</button>
-                <button tabindex="102" class="save" type="submit">Save</button>
-                <button tabindex="103" class="cancel" type="cancel">Cancel</button>
+                <button tabindex="101" class="edit">{{ _("Edit") }}</button>
+                <button tabindex="102" class="save" type="submit">{{ _("Save") }}</button>
+                <button tabindex="103" class="cancel" type="cancel">{{ _("Cancel") }}</button>
             </h2>
 
-            <h2 class="warning">Have you linked to your Gittip profile from other
-                websites? Be sure to update those links!</h2>
-
+            <h2 class="warning">
+            {{ _("Have you linked to your Gittip profile from other websites? Be sure to update those links!") }}
+            </h2>
         </form>
         <p>
             <label tabindex="104" class="anonymous-giving">
                 <input type="checkbox"
                     {% if participant.anonymous_giving %}checked="true"{% endif %} />
-                    Hide total giving from others.
+                    {{ _("Hide total giving from others.") }}
             </label>
             <br />
             <label tabindex="105" class="anonymous-receiving">
                 <input type="checkbox"
                     {% if participant.anonymous_receiving %}checked="true"{% endif %} />
-                    Hide total receiving from others.
+                    {{ _("Hide total receiving from others.") }}
             </label>
         </p>
 
         {% if not user.ANON and (user.ADMIN or user.participant == participant) %}
-            <h2>Adding Money
+            <h2>{{ _("Adding Money") }}
                 {% if user.ADMIN and participant.balanced_customer_href %}
                     <a href="https://dashboard.balancedpayments.com/#/{{ participant.balanced_customer_href }}"
                        title="Go to Balanced Dashboard">
@@ -69,24 +70,24 @@ locked = False
                         <img src="{{ website.asset_url }}/card_icon.jpg" />
                     </td>
                     <td class="account-details">
-                        <div class="account-type">Credit card</div>
+                        <div class="account-type">{{ _("Credit Card") }}</div>
                         {% if participant.last_bill_result != "" %}
-                            <span class="none">None</span>
+                            <span class="none">{{ _("None") }}</span>
                         {% else %}
-                            <a class="account-username" href="/credit-card.html">Added</a>
+                            <a class="account-username" href="/credit-card.html">{{ _("Added") }}</a>
                         {% endif %}
                     </td>
                     <td class="account-action">
                         {% if participant.last_bill_result != "" %}
-                            <a class="button auth-button" href="/credit-card.html">+ Add</a>
+                            <a class="button auth-button" href="/credit-card.html">+ {{ _("Add") }}</a>
                         {% else %}
-                            <a class="button auth-button" href="/credit-card.html">Edit</a>
+                            <a class="button auth-button" href="/credit-card.html">{{ _("Edit") }}</a>
                         {% endif %}
                     </td>
                 </tr>
             </table>
 
-            <h2>Withdrawing Money
+            <h2>{{ _("Withdrawing Money") }}
                 {% if user.ADMIN and participant.balanced_customer_href %}
                     <a href="https://dashboard.balancedpayments.com/#/marketplaces/MP12Xw5lL6iaILtqImIoroDL{{ participant.balanced_customer_href }}"
                        title="Go to Balanced Dashboard">
@@ -102,41 +103,41 @@ locked = False
                         <img src="{{ website.asset_url }}/bank_account_icon.jpg" />
                     </td>
                     <td class="account-details">
-                        <div class="account-type">Bank account</div>
+                        <div class="account-type">{{ _("Bank Account") }}</div>
                         {% if participant.last_ach_result != "" %}
-                            <span class="none">None</span>
+                            <span class="none">{{ _("None") }}</span>
                         {% else %}
-                            <a class="account-username" href="/bank-account.html">Added</a>
+                            <a class="account-username" href="/bank-account.html">{{ _("Added") }}</a>
                         {% endif %}
                     </td>
                     <td class="account-action">
                         {% if participant.last_ach_result != "" %}
-                            <a class="button auth-button" href="/bank-account.html">+ Add</a>
+                            <a class="button auth-button" href="/bank-account.html">+ {{ _("Add") }}</a>
                         {% else %}
-                            <a class="button auth-button" href="/bank-account.html">Edit</a>
+                            <a class="button auth-button" href="/bank-account.html">{{ _("Edit") }}</a>
                         {% endif %}
                     </td>
                 </tr>
             </table>
         {% endif %}
 
-        <h2>Email Settings</h2>
+        <h2>{{ _("Email Settings") }}</h2>
         <table class="accounts">
             <tr>
                 <td class="account-type">
                     <img src="{{ website.asset_url }}/email.png" />
                 </td>
                 <td class="account-details">
-                    <div class="account-type">Email Address (Private)</div>
+                    <div class="account-type">{{ _("Email Address (Private)") }}</div>
                     <div class="email">
                         {% if participant.email %}
                             <a class="address email-address" href="javascript:;">
                               {{ participant.email.address }}
                             </a>
-                            <button class="toggle-email">Edit</button>
+                            <button class="toggle-email">{{ _("Edit") }}</button>
                         {% else %}
-                            <span class="none">None</span>
-                            <button class="toggle-email">+ Add</button>
+                            <span class="none">{{ _("None") }}</span>
+                            <button class="toggle-email">+ {{ _("Add") }}</button>
                         {% endif %}
                     </div>
 
@@ -160,26 +161,27 @@ locked = False
 
         <!-- API  -->
         <div class="api-key">
-          <h2>API Key</h2>
+          <h2>{{ _("API Key") }}</h2>
           <div><span>xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</span></div>
           <div class="buttons">
-            <button class="show">Show Key</button>
-            <button class="recreate">Recreate</button>
+            <button class="show">{{ _("Show Key") }}</button>
+            <button class="hide" style="display: none">{{ _("Hide Key") }}</button>
+            <button class="recreate">{{ _("Recreate") }}</button>
           </div>
-          <a href="https://github.com/gittip/www.gittip.com#api">API docs</a>
+          <a href="https://github.com/gittip/www.gittip.com#api">{{ _("API docs") }}</a>
         </div>
 
-        <h2>Privacy</h2>
+        <h2>{{ _("Privacy") }}</h2>
         <table id="dnt">
             <tr>
                 <td class="dnt-label">
-                    <a href="/about/privacy/#dnt">Do Not Track</a>
+                    <a href="/about/privacy/#dnt">{{ _("Do Not Track") }}</a>
                 </td>
                 <td class="dnt-value">
                     {% if request.headers.get('DNT') == '1' %}
-                    ON
+                    {{ _("On").upper() }}
                     {% else %}
-                    OFF
+                    {{ _("Off").upper() }}
                     {% endif %}
                 </td>
             </tr>
@@ -187,9 +189,9 @@ locked = False
 
         <!-- Close Account! -->
         <div class="close">
-          <h2>Close</h2>
+          <h2>{{ _("Close") }}</h2>
           <div class="buttons">
-            <button class="close-account">Close Account</button>
+            <button class="close-account">{{ _("Close Account") }}</button>
           </div>
         </div>
 

@@ -1,4 +1,3 @@
-from aspen.utils import to_age
 from gittip.utils import get_participant
 from gittip.utils.history import iter_payday_events
 
@@ -6,11 +5,21 @@ from gittip.utils.history import iter_payday_events
 
 participant = get_participant(request, restrict=True)
 events = iter_payday_events(website.db, participant)
-hero = "History"
+hero = _("History")
 title = "%s - %s" % (participant.username, hero)
 locked = False
 subpath = 'history/' if user.ADMIN else ''
 admin_override = user.ADMIN and (participant != user.participant or 'override' in qs)
+
+if participant == user.participant:
+    JOINED = _("You joined {0}.", to_age(participant.claimed_time))
+else:
+    JOINED = _("{0} joined {1}.", participant.username, to_age(participant.claimed_time))
+
+if participant == user.participant:
+    BALANCE = _("Your balance is {0}.", format_currency(participant.balance, "USD"))
+else:
+    BALANCE = _("Their balance is {0}.", format_currency(participant.balance, "USD"))
 
 [-----------------------------------------------------------------------------]
 {% extends "templates/profile.html" %}
@@ -18,13 +27,10 @@ admin_override = user.ADMIN and (participant != user.participant or 'override' i
 
 <table id="history" class="centered">
     <tr><td colspan="7">
-        <h2>{{ participant == user.participant and "You" or participant.username }} joined
-        {{ to_age(participant.claimed_time) }}.</h2>
+        <h2>{{ JOINED }}</h2>
     </td></tr>
     <tr><td colspan="7">
-
-        <h2>{{ participant == user.participant and "Your" or "Their" }} balance is
-            ${{ participant.balance }}.</h2>
+        <h2>{{ BALANCE }}</h2>
         {% if user.ADMIN %}
         <h2>Record an Exchange.</h2>
         <p style="text-align: left">
@@ -55,17 +61,17 @@ admin_override = user.ADMIN and (participant != user.participant or 'override' i
         </h2></th>
     </tr>
     <tr class="head">
-        <td colspan="3" class="outside">&larr; Outside</td>
-        <td colspan="4" class="inside">Inside Gittip &rarr;</td>
+        <td colspan="3" class="outside">&larr; {{ _("Outside") }}</td>
+        <td colspan="4" class="inside">{{ _("Inside Gittip") }} &rarr;</td>
     </tr>
     <tr class="head">
-        <td class="bank">Bank</td>
-        <td class="card">Card</td>
-        <td class="fees">Fees</td>
-        <td class="credits">Credits</td>
-        <td class="debits">Debits</td>
-        <td class="balance">Balance</td>
-        <td class="notes">Notes</td>
+        <td class="bank">{{ _("Bank") }}</td>
+        <td class="card">{{ _("Card") }}</td>
+        <td class="fees">{{ _("Fees") }}</td>
+        <td class="credits">{{ _("Credits") }}</td>
+        <td class="debits">{{ _("Debits") }}</td>
+        <td class="balance">{{ _("Balance") }}</td>
+        <td class="notes">{{ _("Notes") }}</td>
     </tr>
     {% elif event['kind'] == 'credit' %}
     <tr>
@@ -77,7 +83,7 @@ admin_override = user.ADMIN and (participant != user.participant or 'override' i
         <td class="balance">{{ event['balance'] }}</td>
         <td class="notes">
         {% if event['recorder'] == None %}
-            automatic withdrawal
+            {{ _("Automatic Withdrawal").lower() }}
             {% if event['status'] %}&mdash; status: {{ event['status'] }}{% endif %}
             {% if event['note'] %}&mdash; error: &ldquo;{{ event['note']|e }}&rdquo;{% endif %}
         {% else %}
@@ -96,13 +102,13 @@ admin_override = user.ADMIN and (participant != user.participant or 'override' i
         <td class="balance">{{ event['balance'] }}</td>
         <td class="notes">
         {% if event['recorder'] == None %}
-            automatic charge
+            {{ _("Automatic Charge").lower() }}
         {% else %}
             &ldquo;{{ event['note']|e }}&rdquo;&mdash;<a
             href="/{{ event['recorder'] }}/">{{ event['recorder'] }}</a>
         {% endif %}
         {% if event['status'] in (None, 'suceeded') %}
-            (<a href="../receipts/{{ event['id'] }}.html">receipt</a>)
+            (<a href="../receipts/{{ event['id'] }}.html">{{ _("Receipt").lower() }}</a>)
         {% elif event['status'] in ('pending', 'failed') %}
             ({{ event['status'] }}{% if event['note'] %}: &ldquo;{{ event['note']|e }}&rdquo;{% endif %})
         {% endif %}

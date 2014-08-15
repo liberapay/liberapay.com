@@ -1,9 +1,8 @@
 from datetime import datetime, timedelta
-import locale
 import re
 
 from aspen import Response
-from aspen.utils import typecheck, to_age, to_rfc822, utcnow
+from aspen.utils import typecheck, to_rfc822, utcnow
 import gittip
 from postgres.cursors import SimpleCursorBase
 from jinja2 import escape
@@ -378,8 +377,8 @@ def update_global_stats(website):
         SELECT nactive, transfer_volume FROM paydays
         ORDER BY ts_end DESC LIMIT 1
     """, default=(0, 0.0))
-    website.gnactive = locale.format("%d", stats[0], grouping=True)
-    website.gtransfer_volume = locale.format("%d", stats[1], grouping=True)
+    website.gnactive = stats[0]
+    website.gtransfer_volume = stats[1]
     website.glast_week = last_week(website.db)
 
 
@@ -415,20 +414,6 @@ def log_cursor(f):
     return wrapper
 
 
-def _to_age(participant):
-    # XXX I can't believe I'm doing this. Evolve aspen.utils.to_age!
-    age = to_age(participant.claimed_time, fmt_past="%(age)s")
-    age = age.replace('just a moment', 'just now')
-    age = age.replace('an ', '1 ').replace('a ', '1 ')
-    if age.endswith(' seconds'):
-        age = '1 minute'
-    words = ('zero', 'one', 'two','three', 'four', 'five', 'six', 'seven',
-                                                               'eight', 'nine')
-    for i, word in enumerate(words):
-        age = age.replace(word, str(i))
-    return age.replace(' ', ' <span class="unit">') + "</span>"
-
-
 def format_money(money):
     format = '%.2f' if money < 1000 else '%.0f'
     return format % money
@@ -436,7 +421,7 @@ def format_money(money):
 
 def to_statement(prepend, string, length=140, append='...'):
     if prepend and string:
-        statement = prepend + string
+        statement = prepend.format(string)
         if len(string) > length:
             return statement[:length] + append
         elif len(string) > 0:

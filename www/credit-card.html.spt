@@ -13,11 +13,14 @@ balanced_customer_href = None
 if not user.ANON:
     balanced_customer_href = user.participant.balanced_customer_href
 
-    status = "missing"
+    status = _("Your credit card is {0}missing{1}")
     if balanced_customer_href:
         if user.participant.last_bill_result is not None:
-            status = "working" if user.participant.last_bill_result == "" \
-                                                                 else "failing"
+            status = _("Your credit card is {0}working{1}") if user.participant.last_bill_result == "" \
+                else _("Your credit card is {0}failing{1}")
+
+    pull_money = _("When you don't have enough money in your Gittip account to cover your gifts, we will attempt to pull money in using this credit card.") if balanced_customer_href \
+        else _("When you don't have enough money in your Gittip account to cover your gifts, we can attempt to pull money in using a credit card.")
 
     card = billing.BalancedCard(balanced_customer_href)
     # the id on the card might not match unless the db
@@ -25,20 +28,15 @@ if not user.ANON:
 
     username = user.participant.username
 
-title = "Credit Card"
+title = _("Credit Card")
 
 [-----------------------------------------------------------------------------]
 {% extends "templates/base.html" %}
 
 {% block heading %}
-    <h1>Your credit card is <em id="status">{{ status }}</em></h1>
+    <h1>{{ status.format("<em id=\"status\">", "</em>") }}</h1>
 
-    <p>When you don't have enough money in your Gittip account to cover
-    your gifts, we {% if balanced_customer_href %}will{% else %}can{% endif %}
-    attempt to pull money in using
-    {% if balanced_customer_href %}this{% else %}a{% endif %} credit card.
-    If your credit card is missing or fails then your gifts won't go
-    through for that week.<p>
+    <p>{{ pull_money }} {{ _("If your credit card is missing or fails then your gifts won't go through for that week.") }}<p>
 
 {% endblock %}
 
@@ -83,30 +81,30 @@ title = "Credit Card"
             <div class="constrain-width group">
 
                 {% if status != "missing" %}
-                <h2>Current: {{ card['brand'] }} {{ card['number'][-4:] }}</h2>
+                <h2>{{ _("Current:") }} {{ card['brand'] }} {{ card['number'][-4:] }}</h2>
                 {% endif %}
 
                 <div id="feedback">{% if user.participant.last_bill_result %}
-                <h2><span>Failure</span></h2>
+                <h2><span>{{ _("Failure") }}</span></h2>
                 <div class="details"><p>{{ user.participant.last_bill_result }}</p></div>
                   {% endif %}</div>
 
 
-                <h2>Required</h2>
+                <h2>{{ _("Required") }}</h2>
 
                 <div class="float card_number">
-                    <label for="card_number">Credit Card Number</label>
+                    <label for="card_number">{{ _("Credit Card Number") }}</label>
                     <input id="card_number" />
                 </div>
 
                 <div class="float expiration not-first">
-                    <label for="expiration_month">Expiration</label>
+                    <label for="expiration_month">{{ _("Expiration") }}</label>
                     <input class="expiration_month" id="expiration_month" placeholder="MM"/>
                     <input class="expiration_year" id="expiration_year" placeholder="YYYY"/>
                 </div>
 
                 <div class="float cvv not-first">
-                    <label for="cvv">CVV</label>
+                    <label for="cvv">{{ _("CVV") }}</label>
                     <input id="cvv" />
                 </div>
 
@@ -115,39 +113,39 @@ title = "Credit Card"
 
                 <h2>Optional</h2>
 
-                <label for="name">Full Name on Card</label>
+                <label for="name">{{ _("Full Name on Card") }}</label>
                 <input id="name" value="{{ card['name'] }}" />
 
                 <div class="clear"></div>
 
-                <label for="address_1">Address 1</label>
+                <label for="address_1">{{ _("Address 1") }}</label>
                 <input id="address_1" value="{{ card['address_1'] }}" />
 
 
 
-                <label for="address_2">Address 2</label>
+                <label for="address_2">{{ _("Address 2") }}</label>
                 <input id="address_2" value="{{ card['address_2'] }}" />
 
-                <label for="city_town">City or Town</label>
+                <label for="city_town">{{ _("City or Town") }}</label>
                 <input id="city_town" value="{{ card['city_town'] }}" />
 
 
 
                 <div class="half left">
-                    <label for="state">State or Province</label>
+                    <label for="state">{{ _("State or Province") }}</label>
                     <input id="state" value="{{ card['state'] }}" />
                 </div>
 
                 <div class="half right">
-                    <label for="zip">ZIP or Postal Code</label>
+                    <label for="zip">{{ _("ZIP or Postal Code") }}</label>
                     <input id="zip" value="{{ card['zip'] }}" />
                 </div>
 
                 <div class="clear"></div>
 
-                <label for="country">Country</label>
+                <label for="country">{{ _("Country") }}</label>
 
-                <select id="country" name="country" data-placeholder="Choose a country...">
+                <select id="country" name="country" data-placeholder="{{ _("Choose a country...") }}">
                     <option value=""></option>
                 {% for each in COUNTRIES %}
                     {% if each[0] == card['country'] %}
@@ -162,7 +160,7 @@ title = "Credit Card"
 
             <div class="nav level-1">
                 <button class="selected larger" id="save"
-                    type="submit">Save</button>
+                    type="submit">{{ _("Save") }}</button>
             </div>
 
         </form>
@@ -170,7 +168,7 @@ title = "Credit Card"
         <div id="delete" class="nav level-2">
             <form action="credit-card.json" class="special" method="POST">
                 <input type="hidden" name="action" value="delete">
-                <button>Disconnect My Credit Card</button>
+                <button>{{ _("Disconnect My Credit Card") }}</button>
             </form>
         </div>
     </div>

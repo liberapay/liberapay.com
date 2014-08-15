@@ -5,7 +5,7 @@ from gittip.utils import plural
 
 communities = community.get_list_for(website.db, None)
 ncommunities = len(communities)
-title = "Browse Communities"
+title = _("Browse Communities")
 
 [-----------------------------]
 {% extends "templates/base.html" %}
@@ -16,15 +16,17 @@ title = "Browse Communities"
 {% endblock %}
 
 {% block heading %}
-<h1>Communities</h1>
+<h1>{{ _("Communities") }}</h1>
 {% endblock %}
 
 {% block box %}
 <div class="on-community">
-    <h2 class="pad-sign">There are</h2>
-    <div class="number">{{ ncommunities }}</div>
-    <div class="unit pad-sign">
-        communit{{ plural(ncommunities, 'y', 'ies') }} on Gittip.
+    {{ _("{0}There are{1} {2} {3}communities on Gittip.{4}",
+        "<h2 class='pad-sign'>",
+        "</h2>",
+        "<div class='number'>" + str(ncommunities) + "</div>",
+        "<div class='unit pad-sign'>",
+        "</div>") }}
     </div>
 </div>
 {% endblock %}
@@ -70,25 +72,27 @@ title = "Browse Communities"
 </style>
 <div class="col0">
 
-    <h2>Large Communities</h2>
+    <h2>{{ _("Large Communities") }}</h2>
     <ul class="community memberships">
         {% for community in communities[:18] %}
         <li>
             <a href="/for/{{ community.slug }}/">{{ community.name }}</a>
             {% set n = community.nmembers %}
-            <div class="fine">{{ n }} member{{ plural(n) }}</div>
+            <div class="fine">
+                {{ _(("{n} Member", "{n} Members"), n=n).lower() }}
+            </div>
         </li>
         {% endfor %}
     </ul>
 
-    <h2>All Communities</h2>
+    <h2>{{ _("All Communities") }}</h2>
     <form class="communities">
-        <select data-placeholder="Find or add a community ..." tabindex="1">
+        <select data-placeholder="{{ _("Find or add a community ...") }}" tabindex="1">
             <option></option>
             {% for community in communities %}
             <option value="{{ community.slug }}">{{ community.name }} -
             {% set n = community.nmembers %}
-            {{ n }} member{{ plural(n) }}
+            {{ _(("{n} Member", "{n} Members"), n=n).lower() }}
             </option>
             {% endfor %}
         </select>
