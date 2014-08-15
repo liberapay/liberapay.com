@@ -33,7 +33,7 @@ title = "Pricing"
         {{ website.support_current }}% of active users <a href="/Gittip/">pay
         for Gittip</a>.
 
-        {% if not user.ANON and not user.participant.rides_free == False %}
+        {% if not user.ANON and not user.participant.is_free_rider == False %}
             {% if website.support_goal %}
             Will you help us reach {{ website.support_goal }}%?
             {% else %}

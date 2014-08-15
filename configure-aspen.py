@@ -98,7 +98,7 @@ def add_stuff_to_context(request):
     # Helpers for global call to action to support Gittip itself.
     user = request.context.get('user')
     p = user.participant if user else None
-    if p and p.rides_free is None:
+    if p and p.is_free_rider is None:
         usage = p.usage
 
         # Above $500/wk we suggest 2%.

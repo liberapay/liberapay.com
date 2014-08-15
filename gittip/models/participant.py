@@ -645,21 +645,21 @@ class Participant(Model, MixinTeam):
             new_takes = self.compute_actual_takes(cursor=cursor)
             self.update_taking(old_takes, new_takes, cursor=cursor)
 
-    def update_rides_free(self, rides_free, cursor=None):
+    def update_is_free_rider(self, is_free_rider, cursor=None):
         ctx = None
         if cursor is None:
             ctx = self.db.get_cursor()
             cursor = ctx.__enter__()
         try:
-            cursor.run( "UPDATE participants SET rides_free=%(rides_free)s "
+            cursor.run( "UPDATE participants SET is_free_rider=%(is_free_rider)s "
                         "WHERE username=%(username)s"
-                      , dict(username=self.username, rides_free=rides_free)
+                      , dict(username=self.username, is_free_rider=is_free_rider)
                        )
             add_event( cursor
                      , 'participant'
-                     , dict(id=self.id, action='set', values=dict(rides_free=rides_free))
+                     , dict(id=self.id, action='set', values=dict(is_free_rider=is_free_rider))
                       )
-            self.set_attributes(rides_free=rides_free)
+            self.set_attributes(is_free_rider=is_free_rider)
         finally:
             if ctx is not None:
                 ctx.__exit__(None, None, None)
@@ -727,7 +727,7 @@ class Participant(Model, MixinTeam):
             tippee.update_receiving(cursor)
         if tippee.username == 'Gittip':
             # Update whether the tipper is using Gittip for free
-            self.update_rides_free(None if amount == 0 else False, cursor)
+            self.update_is_free_rider(None if amount == 0 else False, cursor)
 
         return amount, first_time_tipper
 
