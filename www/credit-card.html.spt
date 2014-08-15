@@ -12,11 +12,12 @@ balanced_customer_href = None
 
 if not user.ANON:
     balanced_customer_href = user.participant.balanced_customer_href
+    last_bill_result = user.participant.last_bill_result
 
     status = "missing"
     if balanced_customer_href:
-        if user.participant.last_bill_result is not None:
-            status = "working" if user.participant.last_bill_result == "" else "failing"
+        if last_bill_result is not None:
+            status = "working" if last_bill_result == "" else "failing"
 
     card = billing.BalancedCard(balanced_customer_href)
     # the id on the card might not match unless the db
@@ -81,9 +82,9 @@ title = _("Credit Card")
                 <h2>{{ _("Current:") }} {{ card['brand'] }} {{ card['number'][-4:] }}</h2>
                 {% endif %}
 
-                <div id="feedback">{% if user.participant.last_bill_result %}
+                <div id="feedback">{% if last_bill_result %}
                 <h2><span>{{ _("Failure") }}</span></h2>
-                <div class="details"><p>{{ user.participant.last_bill_result }}</p></div>
+                <div class="details"><p>{{ last_bill_result }}</p></div>
                   {% endif %}</div>
 
 
