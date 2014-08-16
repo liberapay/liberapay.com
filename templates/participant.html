@@ -11,8 +11,8 @@
 {% set r = participant.receiving %}
 
 {% set params = {
-    "giving": format_currency(g, "USD"),
-    "receiving": format_currency(r, "USD"),
+    "giving": None if anon_giving else format_currency(g, "USD"),
+    "receiving": None if anon_receiving else format_currency(r, "USD"),
     "username": participant.username,
     "topstart": "<h2 class='pad-sign'>",
     "topend": "</h2>",
