@@ -7,10 +7,20 @@
 {% set prefix = user.participant == participant and "my-" or "" %}
 {% set anon_giving = participant.anonymous_giving %}
 {% set g = participant.giving %}
-{% set giving = anon_giving and "anonymously" or "$"+str(g) %}
 {% set anon_receiving = participant.anonymous_receiving %}
 {% set r = participant.receiving %}
-{% set receiving = anon_receiving and "anonymously" or "$"+str(r) %}
+
+{% set params = {
+    "giving": None if anon_giving else format_currency(g, "USD"),
+    "receiving": None if anon_receiving else format_currency(r, "USD"),
+    "username": participant.username,
+    "topstart": "<h2 class='pad-sign'>",
+    "topend": "</h2>",
+    "midstart": "<div class='number'><span class='" + prefix + "total-giving'>",
+    "midend": "</span></div>",
+    "bottomstart": "<div class='unit pad-sign'>",
+    "bottomend": "</div>"
+} %}
 
 <table class="on-profile{% if participant.is_suspicious %} is-suspicious{% endif %}">
     <tr>
@@ -19,27 +29,23 @@
         </td>
         <td class="giving-receiving">
         {% if anon_giving and anon_receiving %}
-            <h2>{{ participant.username }} gives and receives anonymously</h2>
-        {% elif not anon_giving and g > 0 and (g > r or anon_receiving) %}
-            <h2 class="pad-sign">{{ participant.username }} gives</h2>
-            <div class="number">
-                <span class="{{prefix}}total-giving">{{ giving }}</span>
-            </div>
-            <div class="unit pad-sign">
-                per week{% if r > 0 or anon_receiving %}, and receives
-                    {{ receiving }}
-                {% endif %}
-            </div>
-        {% elif not anon_receiving and r > 0 and (r >= g or anon_giving) %}
-            <h2 class="pad-sign">{{ participant.username }} receives</h2>
-            <div class="number">
-                <span class="total-receiving">{{ receiving }}</span>
-            </div>
-            <div class="unit pad-sign">
-                per week{% if g > 0 or anon_giving %}, and gives
-                    <span class="{{prefix}}total-giving">{{ giving }}</span>
-                {% endif %}
-            </div>
+            <h2>{{ _("{0} gives and receives anonymously", participant.username) }}</h2>
+        {% elif anon_giving and r == 0 %}
+            <h2>{{ _("{0} gives anonymously", participant.username) }}</h2>
+        {% elif anon_receiving and g == 0 %}
+            <h2>{{ _("{0} receives anonymously", participant.username) }}</h2>
+        {% elif g > 0 and not anon_giving and anon_receiving %}
+            {{ _("{topstart}{username} gives{topend} {midstart}{giving}{midend} {bottomstart}per week, and receives anonymously{bottomend}", **params) }}
+        {% elif r > 0 and not anon_receiving and anon_giving %}
+            {{ _("{topstart}{username} receives{topend} {midstart}{receiving}{midend} {bottomstart}per week, and gives anonymously{bottomend}", **params) }}
+        {% elif g > 0 and r > 0 and g > r and not anon_giving and not anon_receiving %}
+            {{ _("{topstart}{username} gives{topend} {midstart}{giving}{midend} {bottomstart}per week, and receives {receiving}{bottomend}", **params) }}
+        {% elif g > 0 and r > 0 and r >= g and not anon_giving and not anon_receiving %}
+            {{ _("{topstart}{username} receives{topend} {midstart}{receiving}{midend} {bottomstart}per week, and gives {giving}{bottomend}", **params) }}
+        {% elif g > 0 and r == 0 and not anon_giving %}
+            {{ _("{topstart}{username} gives{topend} {midstart}{giving}{midend} {bottomstart}per week{bottomend}", **params) }}
+        {% elif g == 0 and r > 0 and not anon_receiving %}
+            {{ _("{topstart}{username} receives{topend} {midstart}{receiving}{midend} {bottomstart}per week{bottomend}", **params) }}
         {% else %}
             {% set age = participant.get_age_in_seconds() %}
             <h2>
