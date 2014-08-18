@@ -37,7 +37,7 @@ run: env
 	PATH=$(env_bin):$(PATH) $(honcho_run) web
 
 py: env
-	$(honcho_run) $(env_bin)/python
+	$(honcho_run) $(env_bin)/python -i -c 'from gittip.wireup import env, db; db = db(env())'
 
 test-schema: env
 	$(honcho) -e $(test_env_files) run ./recreate-schema.sh
