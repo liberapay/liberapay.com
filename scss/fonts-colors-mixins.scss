@@ -2,7 +2,6 @@
 
 // Fonts
 $Helvetica: 'Helvetica Neue', Helvetica, Arial, 'Liberation Sans', FreeSans, sans-serif;
-$Mensch: 'Mensch', $Helvetica;
 $Mono: Monaco, "Lucida Mono", monospace;
 $Ideal: 'Ideal Sans SSm A', 'Ideal Sans SSm B', $Helvetica;
 $Surveyor: 'Surveyor SSm A', 'Surveyor SSm B', sans-serif;
@@ -22,18 +21,6 @@ $red: #C00;
 $light-red: #F99;
 $gold: #FFC300;
 $white: #FFF;
-
-@font-face {
-    /* Props to http://www.fontsquirrel.com/ and http://www.losttype.com/. */
-    font-family: 'Mensch';
-    src: url('fonts/mensch.eot');
-    src: url('fonts/mensch.eot?#iefix') format('embedded-opentype'),
-         url('fonts/mensch.woff') format('woff'),
-         url('fonts/mensch.ttf') format('truetype'),
-         url('fonts/mensch.svg#Mensch') format('svg');
-    font-weight: normal;
-    font-style: normal;
-}
 
 // Mixins
 @mixin border-radius($radius: 5px) {
