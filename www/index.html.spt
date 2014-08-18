@@ -1,23 +1,33 @@
-"""## Information Architecture
+from gratipay.models import community
 
-This is where we document all the pages on our website, with their purpose and
-the most important thing on each page.
-
-
-### Homepage
-
-https://gratipay.com/
-
-This is the homepage. The most important thing is to give a good first
-impression of Gratipay and help people take the next step, whatever that might be
-for them.
-
-"""
-from aspen.utils import utcnow
-
-from gratipay.security.user import SESSION_TIMEOUT
 [---]
+
+if not user.ANON:
+    participant = user.participant # for team listing
+    communities = community.get_list_for(website.db, user.participant.id)
+
+    def with_others(obj):
+        others = obj.nmembers - 1
+        return ngettext("with {n} other", "with {n} others", others)
+
+
+friends_hack = website.db.all("""
+
+    SELECT username
+         , claimed_time
+         , avatar_url
+         , statement
+         , number
+      FROM participants
+     WHERE claimed_time IS NOT NULL
+       AND is_suspicious IS NOT TRUE
+  ORDER BY claimed_time DESC
+     LIMIT 9
+
+""")
+
 [---]
+{% from 'templates/avatar-url.html' import avatar_url with context %}
 {% extends "templates/base.html" %}
 {% block head_early %}
     {% if website.optimizely_id and request.headers.get('DNT') != '1' %}
@@ -33,10 +43,12 @@ from gratipay.security.user import SESSION_TIMEOUT
     <meta name="og:url" content="https://gratipay.com/" />
     <meta name="og:title" content="Gratipay" />
     <meta name="og:image" content="{{ website.asset('gratipay.opengraph.png') }}" />
+    {% if user.ANON %}
     <style>
         #header, #footer { display: none; }
         #upgrade_browser .container { display: block; }
     </style>
+    {% endif %}
 {% endblock %}
 
 {% block sidebar %}
@@ -89,40 +101,48 @@ from gratipay.security.user import SESSION_TIMEOUT
               "</a>"|safe) }}</p>
 
     {% else %}
-    <div class="greeting">
-        <a class="sign-out" id="sign-out" href='/sign-out.html'>{{ _("Sign out") }}</a>
+    <div>
+        <div class="col0">
+            <h2>Giving $0 per Week</h2>
 
-        {% set quick = utcnow() - SESSION_TIMEOUT  %}
-        {% if user.participant.claimed_time > quick %}
-            <h1>{{ _("Welcome, {0}!", user.participant.username) }}</h1>
-            <p>{{ _("Thanks for joining Gratipay!") }}</p>
-        {% else %}
-            <h1>{{ _("Welcome back, {0}!", user.participant.username) }}</h1>
-            <p>{{ _("Your balance is {0}.", format_currency(user.participant.balance, "USD")) }}</p>
-        {% endif %}
+            <p>Let's play the giving game! Click your Twitter friends to give
+            them a quarter a week!</p>
 
-        {% if user.participant.giving == user.participant.receiving == 0 %}
-            <p>{{ _("Next steps:") }}</p>
-            <ol>
-                <li>{{ _("Start tipping people; you can find great people to tip by browsing {0}our communities{1}.",
-                         "<a href='/for/'>"|safe, "</a>"|safe) }}</li>
-                <li>{{ _("{0}Add a credit card{1} to make sure your weekly tips go through this Thursday.",
-                         "<a href='/credit-card.html'>"|safe, "</a>"|safe) }}</li>
-                <li>{{ _("{0}Fill out your profile{1} to let others know about you.",
-                         "<a href='/%s/'>"|safe % user.participant.username, "</a>"|safe) }}</li>
-                <li>{{ _("Reach a wider audience by {0}embedding our widgets{1} on your blog/website.",
-                         "<a href='/%s/widgets'>"|safe % user.participant.username, "</a>"|safe) }}</li>
-            </ol>
-            <p></p>
-        {% else %}
-            <p>{{ _("Go to {0}your profile{1}.",
-                    "<a href='/%s/'>"|safe % user.participant.username,
-                    "</a>"|safe) }}</p>
-        {% endif %}
+            <div class="people">
+                <ul class="group">
+                    {% for i, participant in enumerate(friends_hack, start=1) %}
+                    <li>
+                        <a href="/{{ participant.username }}/" class="mini-user tip">
+                            <span class="inner">
+                                <span class="avatar"
+                                    style="background-image: url('{{ avatar_url(participant) }}')">
+                                </span>
+                                <span class="name">{{ participant.username }}</span>
+                            </span>
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
 
-        {% include "templates/jump.html" %}
+
+            <div class="clear"></div>
+            <h2>Receiving $0 per Week</h2>
+
+            <p>To receive money, do something awesome and then tell people
+            about it! Fill out <a href="">your profile</a> and see our <a
+            href="">About Receiving</a> guide for more suggestions.</p>
+
+
+            {% include "templates/team-listing.html" %}
+
+            <p><a href="">Join Teams</a> | <a href="">What are Teams?</a></p>
+
+
+            {% include "templates/community-listing.html" %}
+
+            <p><a href="">Join Communities</a> | <a href="">What are Communities?</a></p>
 
     {% endif %}
     </div>
-</div>
 {% endblock %}
