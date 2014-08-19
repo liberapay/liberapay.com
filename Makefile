@@ -67,3 +67,7 @@ node_modules: package.json
 jstest: node_modules
 	./node_modules/.bin/grunt test
 
+i18n_update: env
+	$(env_bin)/pybabel extract -F .babel_extract --no-wrap --omit-header -o i18n/tmp.pot templates www
+	for f in i18n/*.po; do $(env_bin)/pybabel update -i i18n/tmp.pot -l $$(basename $${f%.*}) -o $$f; done
+	rm i18n/tmp.pot

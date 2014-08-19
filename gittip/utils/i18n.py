@@ -1,14 +1,18 @@
 from __future__ import print_function, unicode_literals
 
+from io import BytesIO
 import os
 import re
 
+from aspen.resources.pagination import parse_specline, split_and_escape
 from aspen.utils import utcnow
 from babel.dates import format_timedelta
 import babel.messages.pofile
+from babel.messages.extract import extract_python
 from babel.numbers import (
     format_currency, format_decimal, format_number, format_percent, parse_decimal, get_decimal_symbol
 )
+import jinja2.ext
 
 
 ternary_re = re.compile(r'^\(? *(.+?) *\? *(.+?) *: *(.+?) *\)?$')
@@ -107,3 +111,19 @@ def inbound(request):
         except:
             return to_age(delta, 'en')
     context.to_age = _to_age
+
+
+def extract_spt(fileobj, *args, **kw):
+    pages = list(split_and_escape(fileobj.read()))
+    npages = len(pages)
+    for i, page in enumerate(pages, 1):
+        f = BytesIO(b'\n' * page.offset + page.content)
+        content_type, renderer = parse_specline(page.header)
+        extractor = None
+        if (i == npages and not page.header) or content_type == 'text/html' or renderer == 'jinja2':
+            extractor = jinja2.ext.babel_extract
+        elif i < 3:
+            extractor = extract_python
+        if extractor:
+            for match in extractor(f, *args, **kw):
+                yield match
