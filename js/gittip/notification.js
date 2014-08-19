@@ -1,11 +1,11 @@
 /**
  * Display a notification
  * @param {string} text  Notification text
- * @param {string} [type=notice]  Notofication type (one of: notice, error, success)
+ * @param {string} [type=notice]  Notification type (one of: notice, error, success)
  */
 Gittip.notification = function(text, type, timeout) {
     var type = type || 'notice';
-    var timeout = timeout || 10000;
+    var timeout = timeout || (type == 'error' ? 10000 : 5000);
 
     var dialog = ['div', { 'class': 'notification notification-' + type }, [ 'div', text ]];
     var $dialog = $([
@@ -23,6 +23,9 @@ Gittip.notification = function(text, type, timeout) {
         $dialog.addClass('fade-out');
     }
 
-    $dialog.on('click', fadeOut);
+    var $btn_close = $('<span class="btn-close">&times;</span>');
+    $btn_close.click(fadeOut);
+    $btn_close.appendTo($dialog.get(1));
+
     if (timeout > 0) setTimeout(fadeOut, timeout);
 };

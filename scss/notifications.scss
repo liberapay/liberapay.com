@@ -19,9 +19,8 @@
     .notification {
         box-sizing: border-box;
         text-align: center;
-        border-bottom: 1px solid #fff;
-        border-bottom-color: rgba(255, 255, 255, .6);
         overflow: hidden;
+        position: relative;
 
         @include animation(fadein 0.5s 1 ease-in);
 
@@ -33,6 +32,14 @@
 
         div {
             padding: 10px;
+        }
+
+        & > .btn-close {
+            cursor: pointer;
+            padding: 10px 15px;
+            position: absolute;
+            right: 0;
+            top: 0;
         }
     }
 
