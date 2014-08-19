@@ -658,3 +658,10 @@ class Tests(Harness):
         payload = self.db.one("SELECT * FROM events WHERE payload->>'action' = 'archive'").payload
         assert payload['values']['old_username'] == 'alice'
         assert payload['values']['new_username'] == archived_as
+
+
+    # suggested_payment
+
+    def test_suggested_payment_is_zero_for_new_user(self):
+        alice = self.make_participant('alice')
+        assert alice.suggested_payment == 0
