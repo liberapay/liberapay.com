@@ -1,7 +1,7 @@
 /**
  * Display a notification
  * @param {string} text  Notification text
- * @param {string} [type=notice]  Notofication type (one of: notice, error, success)
+ * @param {string} [type=notice]  Notification type (one of: notice, error, success)
  */
 Gittip.notification = function(text, type, timeout) {
     var type = type || 'notice';
