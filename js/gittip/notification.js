@@ -23,6 +23,9 @@ Gittip.notification = function(text, type, timeout) {
         $dialog.addClass('fade-out');
     }
 
-    $dialog.on('click', fadeOut);
+    var $btn_close = $('<span class="btn-close">&times;</span>');
+    $btn_close.click(fadeOut);
+    $btn_close.appendTo($dialog.get(1));
+
     if (timeout > 0) setTimeout(fadeOut, timeout);
 };
