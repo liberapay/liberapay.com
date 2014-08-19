@@ -7,7 +7,7 @@ from gittip.elsewhere import github
 from gittip.utils import COUNTRIES
 [-----------------------------------------------------------------------------]
 
-status = ". . ."
+status = status_msg = ". . ."
 balanced_customer_href = None
 
 if not user.ANON:
@@ -15,9 +15,15 @@ if not user.ANON:
     last_bill_result = user.participant.last_bill_result
 
     status = "missing"
+    status_msg = _("Your credit card is {0}missing{1}")
     if balanced_customer_href:
         if last_bill_result is not None:
-            status = "working" if last_bill_result == "" else "failing"
+            if last_bill_result == "":
+                status = "working"
+                status_msg = _("Your credit card is {0}working{1}")
+            else:
+                status = "failing"
+                status_msg = _("Your credit card is {0}failing{1}")
 
     card = billing.BalancedCard(balanced_customer_href)
     # the id on the card might not match unless the db
@@ -31,7 +37,7 @@ title = _("Credit Card")
 {% extends "templates/base.html" %}
 
 {% block heading %}
-    <h1>{{ _("Your credit card is {0}%s{1}" % status).format("<em id=\"status\">", "</em>") }}</h1>
+    <h1>{{ status_msg.format("<em id=\"status\">", "</em>") }}</h1>
 
     <p>{{ _("When you don't have enough money in your Gittip account to cover your gifts, we'll attempt to pull money in using your credit card.") }}
     {{ _("If your credit card is missing or fails then your gifts won't go through for that week.") }}<p>
