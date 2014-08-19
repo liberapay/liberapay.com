@@ -219,7 +219,9 @@ class Participant(Model, MixinTeam):
             percentage = Decimal('0.10')
 
         suggestion = usage * percentage
-        if suggestion < 0.25:
+        if suggestion == 0:
+            rounded = suggestion
+        elif suggestion < 0.25:
             rounded = Decimal('0.25')
         elif suggestion < 0.50:
             rounded = Decimal('0.50')
