@@ -1,4 +1,4 @@
-{% if not user.ANON and user.participant.is_free_rider is none %}
+{% if not user.ANON and user.participant.suggested_payment > 0 and user.participant.is_free_rider is none %}
 <div class="support-gittip">
     <div class="cta">
         {% if website.support_current < 30 %}Only {% endif %}
