@@ -387,7 +387,7 @@ def update_global_stats(website):
         SELECT npatrons
           FROM participants
          WHERE username = 'Gittip'
-    """)
+    """, default=0)
     website.support_current = cur = int(round(nbackers / stats[0] * 100)) if stats[0] else 0
     if cur < 10:    goal = 20
     elif cur < 15:  goal = 30
