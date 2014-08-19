@@ -50,7 +50,7 @@ def get_text(request, loc, s, *a, **kw):
         kw['n'] = n != None and format_number(n, locale=loc) or '{n}'
         s = s2
     elif msg:
-        s = msg.string
+        s = msg.string or s
     if a or kw:
         if isinstance(s, bytes):
             s = s.decode('ascii')
