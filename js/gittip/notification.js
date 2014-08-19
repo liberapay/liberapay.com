@@ -5,7 +5,7 @@
  */
 Gittip.notification = function(text, type, timeout) {
     var type = type || 'notice';
-    var timeout = timeout || 10000;
+    var timeout = timeout || (type == 'error' ? 10000 : 5000);
 
     var dialog = ['div', { 'class': 'notification notification-' + type }, [ 'div', text ]];
     var $dialog = $([
