@@ -35,31 +35,32 @@ def get_function_from_rule(rule):
 def get_text(request, loc, s, *a, **kw):
     catalog = LANGS.get(loc)
     msg = catalog.get(s) if catalog else None
-    if isinstance(s, tuple):
-        n = kw.pop('n', None)
-        if n is None:
-            try:
-                raise TypeError('n should not be None')
-            except Exception as e:
-                request.website.tell_sentry(e, request)
-        s2 = None
-        if msg:
-            try:
-                s2 = msg.string[catalog.plural_func(n)]
-            except Exception as e:
-                request.website.tell_sentry(e, request)
-        if s2 is None:
-            loc = 'en'
-            s2 = s[n != 1]
-        kw['n'] = n != None and format_number(n, locale=loc) or '{n}'
-        s = s2
-    elif msg:
+    if msg:
         s = msg.string or s
     if a or kw:
         if isinstance(s, bytes):
             s = s.decode('ascii')
         return s.format(*a, **kw)
     return s
+
+
+def n_get_text(request, loc, s, p, n, *a, **kw):
+    n = n or 0
+    catalog = LANGS.get(loc)
+    msg = catalog.get((s, p)) if catalog else None
+    s2 = None
+    if msg:
+        try:
+            s2 = msg.string[catalog.plural_func(n)]
+        except Exception as e:
+            request.website.tell_sentry(e, request)
+    if s2 is None:
+        loc = 'en'
+        s2 = s if n == 1 else p
+    kw['n'] = format_number(n, locale=loc) or n
+    if isinstance(s2, bytes):
+        s2 = s2.decode('ascii')
+    return s2.format(*a, **kw)
 
 
 def to_age(dt, loc):
@@ -99,6 +100,7 @@ def inbound(request):
     context = request.context
     loc = context.locale = get_locale_for_request(request)
     context._ = lambda s, *a, **kw: get_text(request, loc, s, *a, **kw)
+    context.ngettext = lambda *a, **kw: n_get_text(request, loc, *a, **kw)
     context.format_number = lambda *a: format_number(*a, locale=loc)
     context.format_decimal = lambda *a: format_decimal(*a, locale=loc)
     context.format_currency = lambda *a: format_currency(*a, locale=loc)

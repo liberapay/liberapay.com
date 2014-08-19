@@ -153,7 +153,7 @@ $(document).ready(function() {
 <div class="on-community">
     <h2 class="pad-sign">{{ community.name }}</h2>
     <div class="unit pad-sign">
-        {{ _(("{0}{n}{1} Member", "{0}{n}{1} Members"), "<div class='number'>", "</div>", n=community.nmembers).lower() }}
+        {{ ngettext("{0}{n}{1} Member", "{0}{n}{1} Members", community.nmembers, "<div class='number'>", "</div>").lower() }}
     </div>
 </div>
 <div class="nav level-1">
