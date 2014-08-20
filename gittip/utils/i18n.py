@@ -6,6 +6,7 @@ import re
 
 from aspen.resources.pagination import parse_specline, split_and_escape
 from aspen.utils import utcnow
+from babel.core import Locale
 from babel.dates import format_timedelta
 import babel.messages.pofile
 from babel.messages.extract import extract_python
@@ -13,6 +14,10 @@ from babel.numbers import (
     format_currency, format_decimal, format_number, format_percent, parse_decimal, get_decimal_symbol
 )
 import jinja2.ext
+
+
+# Monkey-patch Babel
+Locale('fr').currency_symbols['USD'] = '$'
 
 
 ternary_re = re.compile(r'^\(? *(.+?) *\? *(.+?) *: *(.+?) *\)?$')
