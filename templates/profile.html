@@ -16,7 +16,13 @@
 {% if user.participant == participant or user.ADMIN %}
 <div class="nav level-2">
     <h2>{{ _("Navigation") }}</h2>
-    {% set pages = [('/', 'Profile'), ('/giving/', 'Giving'), ('/history/', 'History'), ('/widgets/', 'Widgets'), ('/account/', 'Account')] %}
+    {% set pages = [
+        ('/', _('Profile')),
+        ('/giving/', _('Giving')),
+        ('/history/', _('History')),
+        ('/widgets/', _('Widgets')),
+        ('/account/', _('Account')),
+    ] %}
     {% for slug, name in pages %}
     <a href="/{{ participant.username }}{{ slug }}"><button{% if slug.strip('/') == current_page %} class="selected"{% endif %}>{{ _(name) }}</button></a>
     {% endfor %}
@@ -25,7 +31,7 @@
     {% if not participant.show_as_team(user) %}
         class="hidden"
     {% endif %}
-    ><button{% if 'members' == current_page %} class="selected"{% endif %}>Members</button></a>
+    ><button{% if 'members' == current_page %} class="selected"{% endif %}>{{ _('Members') }}</button></a>
 
     {% if user.ADMIN %}
     <a href="/{{ participant.username }}/events/"><button{% if 'events' == current_page %} class="selected"{% endif %}>Events</button></a>
@@ -34,8 +40,8 @@
 {% elif participant.show_as_team(user) %}
 <div class="nav level-2">
     <h2>{{ _("Navigation") }}</h2>
-    <a href="/{{ participant.username }}/"><button{% if '' == current_page %} class="selected"{% endif %}>Profile</button></a>
-    <a href="/{{ participant.username }}/members/"><button{% if 'members' == current_page %} class="selected"{% endif %}>Members</button></a>
+    <a href="/{{ participant.username }}/"><button{% if '' == current_page %} class="selected"{% endif %}>{{ _('Profile') }}</button></a>
+    <a href="/{{ participant.username }}/members/"><button{% if 'members' == current_page %} class="selected"{% endif %}>{{ _('Members') }}</button></a>
 </div>
 {% endif %}
 {% endblock %}

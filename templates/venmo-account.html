@@ -33,7 +33,7 @@
             {% endif %}
         {% else %}
             {% if user.participant == participant %}
-                <div class="account-delete" title="Disconnect"
+                <div class="account-delete" title="{{ _('Disconnect') }}"
                         data-platform="venmo"
                         data-user_id="{{ account.user_id }}">
                 </div>
