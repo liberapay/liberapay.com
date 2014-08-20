@@ -1,5 +1,6 @@
 from __future__ import division
 
+from decimal import Decimal as D
 import os
 import sys
 import threading
@@ -103,27 +104,27 @@ def add_stuff_to_context(request):
 
         # Above $500/wk we suggest 2%.
         if usage >= 5000:
-            low = ('100.00', '$100')
-            high = ('1000.00', '$1000')
+            low = D('100.00')
+            high = D('1000.00')
         elif usage >= 500:
-            low = ('10.00', '$10')
-            high = ('100.00', '$100')
+            low = D('10.00')
+            high = D('100.00')
 
         # From $20 to $499 we suggest 5%.
         elif usage >= 100:
-            low = ('5.00', '$5')
-            high = ('25.00', '$25')
+            low = D('5.00')
+            high = D('25.00')
         elif usage >= 20:
-            low = ('1.00', '$1')
-            high = ('5.00', '$5')
+            low = D('1.00')
+            high = D('5.00')
 
         # Below $20 we suggest 10%.
         elif usage >= 5:
-            low = ('0.50', '50&cent;')
-            high = ('2.00', '$2.00')
+            low = D('0.50')
+            high = D('2.00')
         else:
-            low = ('0.10', '10&cent;')
-            high = ('1.00', '$1.00')
+            low = D('0.10')
+            high = D('1.00')
 
         request.context['cta_low'] = low
         request.context['cta_high'] = high
