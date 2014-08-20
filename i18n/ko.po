@@ -13,6 +13,47 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
 
+#: templates/about.html:6 templates/base.html:78
+msgid "About"
+msgstr ""
+
+#: templates/about.html:6 templates/base.html:80
+msgid "FAQ"
+msgstr ""
+
+#: templates/about.html:6 templates/team-listing.html:3
+msgid "Teams"
+msgstr ""
+
+#: templates/about.html:10
+msgid "Pricing"
+msgstr ""
+
+#: templates/about.html:10 templates/base.html:81
+msgid "Stats"
+msgstr ""
+
+#: templates/about.html:10 templates/base.html:82
+msgid "Charts"
+msgstr ""
+
+#: templates/about.html:14 templates/base.html:83
+msgid "Terms"
+msgstr ""
+
+#: templates/about.html:14 templates/base.html:84
+#: www/%username/account/index.html.spt:174
+msgid "Privacy"
+msgstr "개인 정보"
+
+#: templates/about.html:14 templates/base.html:85
+msgid "Fraud"
+msgstr ""
+
+#: templates/about.html:14
+msgid "DNT"
+msgstr ""
+
 #: templates/account-row.html:16 templates/venmo-account.html:15
 #: www/%username/account/index.html.spt:75
 #: www/%username/account/index.html.spt:108
@@ -27,7 +68,7 @@ msgstr "없음"
 msgid "Add"
 msgstr "추가"
 
-#: templates/account-row.html:37
+#: templates/account-row.html:37 templates/venmo-account.html:36
 msgid "Disconnect"
 msgstr "끊기"
 
@@ -55,36 +96,8 @@ msgstr "모금:"
 msgid "Blog"
 msgstr ""
 
-#: templates/base.html:78
-msgid "About"
-msgstr ""
-
 #: templates/base.html:79
 msgid "Source"
-msgstr ""
-
-#: templates/base.html:80
-msgid "FAQ"
-msgstr ""
-
-#: templates/base.html:81
-msgid "Stats"
-msgstr ""
-
-#: templates/base.html:82
-msgid "Charts"
-msgstr ""
-
-#: templates/base.html:83
-msgid "Terms"
-msgstr ""
-
-#: templates/base.html:84 www/%username/account/index.html.spt:173
-msgid "Privacy"
-msgstr "개인 정보"
-
-#: templates/base.html:85
-msgid "Fraud"
 msgstr ""
 
 #: templates/base.html:86
@@ -284,9 +297,34 @@ msgstr ""
 msgid "Tips Received, by Dollar Amount"
 msgstr ""
 
-#: templates/profile.html:18 templates/profile.html:36
+#: templates/profile.html:18 templates/profile.html:42
 msgid "Navigation"
 msgstr "메뉴"
+
+#: templates/profile.html:20 templates/profile.html:43
+#: www/%username/index.html.spt:19
+msgid "Profile"
+msgstr "프로필"
+
+#: templates/profile.html:21 www/%username/giving/index.html.spt:8
+msgid "Giving"
+msgstr "기부"
+
+#: templates/profile.html:22 www/%username/history/index.html.spt:8
+msgid "History"
+msgstr "기록"
+
+#: templates/profile.html:23 www/%username/widgets/index.html.spt:6
+msgid "Widgets"
+msgstr "위젯"
+
+#: templates/profile.html:24 www/%username/account/index.html.spt:8
+msgid "Account"
+msgstr "계정"
+
+#: templates/profile.html:34 templates/profile.html:44
+msgid "Members"
+msgstr ""
 
 #: templates/sign-in-using-to-give.html:3
 msgid "{0} to pledge to {1}"
@@ -299,6 +337,40 @@ msgstr "{1} 님에게 기부하려면 {0}이 필요합니다"
 #: templates/sign-in-using.html:5
 msgid "Sign in"
 msgstr "로그인"
+
+#: templates/support-gittip.html:5
+#, python-format
+msgid "Only {0}% of active users also {1}support Gittip{2}."
+msgstr ""
+
+#: templates/support-gittip.html:7
+#, python-format
+msgid "{0}% of active users also {1}support Gittip{2}."
+msgstr ""
+
+#: templates/support-gittip.html:11
+msgid "Will you help us reach {0}%?"
+msgstr ""
+
+#: templates/support-gittip.html:13
+msgid "Will you join them?"
+msgstr ""
+
+#: templates/support-gittip.html:19
+msgid "Other"
+msgstr ""
+
+#: templates/support-gittip.html:19
+msgid "No thanks"
+msgstr ""
+
+#: templates/support-gittip.html:22
+msgid "We fund Gittip solely through your voluntary payments!"
+msgstr ""
+
+#: templates/support-gittip.html:23
+msgid "Learn more"
+msgstr ""
 
 #: www/bank-account.html.spt:19
 msgid "Your bank account is {0}not connected{1}"
@@ -562,10 +634,6 @@ msgstr "정말 로그아웃하시겠습니까?"
 msgid "Yes!"
 msgstr "네!"
 
-#: www/%username/index.html.spt:19
-msgid "Profile"
-msgstr "프로필"
-
 #: www/%username/index.html.spt:33 www/for/%slug/index.html.spt:12
 msgid "I am making the world better by {0}"
 msgstr "저는 다음과 같은 방식으로 세상에 기여하고 있습니다: {0}"
@@ -610,10 +678,6 @@ msgstr "저희의 목표 모금액은 매주 Gittip으로 {0}를 받는 것입�
 msgid "with {n} other"
 msgid_plural "with {n} others"
 msgstr[0] "{n}명의 다른 참여자와 함께"
-
-#: www/%username/account/index.html.spt:8
-msgid "Account"
-msgstr "계정"
 
 #: www/%username/account/index.html.spt:30
 msgid "You are {0}"
@@ -694,10 +758,6 @@ msgstr "탈퇴"
 msgid "Close Account"
 msgstr "계정 삭제"
 
-#: www/%username/giving/index.html.spt:8
-msgid "Giving"
-msgstr "기부"
-
 #: www/%username/giving/index.html.spt:38
 msgid "Thanks for joining Gittip!"
 msgstr "Gittip에 가입해주셔서 고맙습니다!"
@@ -733,10 +793,6 @@ msgstr "{0} 님은 매주 {1} 기부하고 계십니다"
 #: www/%username/giving/index.html.spt:72
 msgid "Another {0} per week goes unclaimed"
 msgstr ""
-
-#: www/%username/history/index.html.spt:8
-msgid "History"
-msgstr "기록"
 
 #: www/%username/history/index.html.spt:15
 msgid "You joined {0}."
@@ -797,10 +853,6 @@ msgstr "자동 입금"
 #: www/%username/history/index.html.spt:111
 msgid "Receipt"
 msgstr "영수증"
-
-#: www/%username/widgets/index.html.spt:6
-msgid "Widgets"
-msgstr "위젯"
 
 #: www/%username/widgets/index.html.spt:102
 #: www/%username/widgets/index.html.spt:132
