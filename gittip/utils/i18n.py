@@ -96,17 +96,21 @@ def get_locale_for_request(request):
     return "en"
 
 
+def _format_currency(loc, dsym, amount, currency):
+    return format_currency(amount, currency, locale=loc).replace(dsym+'00', '')
+
+
 def inbound(request):
     context = request.context
     loc = context.locale = get_locale_for_request(request)
+    dsym = context.decimal_symbol = get_decimal_symbol(locale=loc)
     context._ = lambda s, *a, **kw: get_text(request, loc, s, *a, **kw)
     context.ngettext = lambda *a, **kw: n_get_text(request, loc, *a, **kw)
     context.format_number = lambda *a: format_number(*a, locale=loc)
     context.format_decimal = lambda *a: format_decimal(*a, locale=loc)
-    context.format_currency = lambda *a: format_currency(*a, locale=loc)
+    context.format_currency = lambda *a: _format_currency(loc, dsym, *a)
     context.format_percent = lambda *a: format_percent(*a, locale=loc)
     context.parse_decimal = lambda *a: parse_decimal(*a, locale=loc)
-    context.decimal_symbol = get_decimal_symbol(locale=loc)
     def _to_age(delta):
         try:
             return to_age(delta, loc)
