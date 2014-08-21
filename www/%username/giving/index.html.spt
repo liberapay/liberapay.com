@@ -8,7 +8,6 @@ tips, total, unclaimed_tips, unclaimed_total = \
 hero = _("Giving")
 title = "%s - %s" % (participant.username, hero)
 locked = False
-first_time = qs.get('first_time') == '1'
 
 [-----------------------------------------------------------------------------]
 {% extends "templates/profile.html" %}
@@ -33,21 +32,6 @@ first_time = qs.get('first_time') == '1'
 <table id="matrix" class="col0">
     <tr>
         <td colspan="2">
-            {% if first_time %}
-
-            <h2>{{ _("Thanks for joining Gittip!") }}</h2>
-
-            <p>{{ _("To get you started, we've suggested a few people to give to below. Next steps:") }}</p>
-
-            <ol>
-                <li>{{ _("Change the weekly tips below as you please.") }}</li>
-                <li>{{ _("{0}Add a credit card{1} to make sure your weekly tips go through this Thursday.",
-                        "<a class='highlight' href='/credit-card.html'>", "</a>") }}</li>
-                <li>{{ _("{0}Fill out your profile{1} to let others know about you.",
-                        "<a href='../'>", "</a>") }}</li>
-            </ol>
-
-            {% endif %}
             {% if participant == user.participant %}
             <h2>{{ _("You give {0} per week",
                 "<span class='my-total-giving'>" + format_currency(total, "USD") + "</span>") }}</h2>
