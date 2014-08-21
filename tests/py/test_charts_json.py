@@ -160,3 +160,16 @@ class TestChartsJson(Harness):
         actual = json.loads(self.client.GET('/about/charts.json').body)[0]
 
         assert actual == expected
+
+    def test_anonymous_receiver(self):
+        self.run_payday()
+        self.run_payday()
+        self.client.POST('/carl/anonymous.json',
+                         {'toggle': 'receiving'},
+                         auth_as='carl')
+
+        r = self.client.GxT('/carl/charts.json')
+        assert r.code == 401
+
+        r = self.client.GxT('/carl/charts.json', auth_as='alice')
+        assert r.code == 403
