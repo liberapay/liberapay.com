@@ -2,7 +2,7 @@
 """
 import re
 
-from aspen import json
+from aspen import json, Response
 from gittip.utils import get_participant
 
 callback_pattern = re.compile(r'^[_A-Za-z0-9.]+$')
