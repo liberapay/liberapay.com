@@ -174,7 +174,7 @@ class Payday(object):
         CREATE UNIQUE INDEX ON payday_participants (id);
         CREATE UNIQUE INDEX ON payday_participants (username);
 
-        CREATE TEMPORARY TABLE transfers_done ON COMMIT DROP AS
+        CREATE TEMPORARY TABLE payday_transfers_done ON COMMIT DROP AS
             SELECT *
               FROM transfers t
              WHERE t.timestamp > %(ts_start)s;
@@ -191,7 +191,7 @@ class Payday(object):
              WHERE t.amount > 0
                AND (p2.goal IS NULL or p2.goal >= 0)
                AND ( SELECT id
-                       FROM transfers_done t2
+                       FROM payday_transfers_done t2
                       WHERE t.tipper = t2.tipper
                         AND t.tippee = t2.tippee
                         AND context = 'tip'
@@ -428,7 +428,7 @@ class Payday(object):
                AND t.team IN (SELECT username FROM payday_participants)
                AND t.member IN (SELECT username FROM payday_participants)
                AND ( SELECT id
-                       FROM transfers_done t2
+                       FROM payday_transfers_done t2
                       WHERE t.team = t2.tipper
                         AND t.member = t2.tippee
                         AND context = 'take'
