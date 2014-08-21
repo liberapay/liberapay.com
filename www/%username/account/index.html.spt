@@ -79,7 +79,7 @@ locked = False
                     </td>
                     <td class="account-action">
                         {% if participant.last_bill_result is none %}
-                            <a class="button auth-button" href="/credit-card.html">+ {{ _("Add") }}</a>
+                            <a class="button auth-button" href="/credit-card.html">{{ _("+ Add") }}</a>
                         {% else %}
                             <a class="button auth-button" href="/credit-card.html">{{ _("Edit") }}</a>
                         {% endif %}
@@ -112,7 +112,7 @@ locked = False
                     </td>
                     <td class="account-action">
                         {% if participant.last_ach_result is none %}
-                            <a class="button auth-button" href="/bank-account.html">+ {{ _("Add") }}</a>
+                            <a class="button auth-button" href="/bank-account.html">{{ _("+ Add") }}</a>
                         {% else %}
                             <a class="button auth-button" href="/bank-account.html">{{ _("Edit") }}</a>
                         {% endif %}
@@ -130,14 +130,11 @@ locked = False
                 <td class="account-details">
                     <div class="account-type">{{ _("Email Address (Private)") }}</div>
                     <div class="email">
-                        {% if participant.email %}
-                            <a class="address email-address" href="javascript:;">
-                              {{ participant.email.address }}
-                            </a>
-                            <button class="toggle-email">{{ _("Edit") }}</button>
-                        {% else %}
-                            <button class="toggle-email">+ {{ _("Add") }}</button>
-                        {% endif %}
+                        <a class="address email-address" href="javascript:;">
+                            {% if participant.email %}
+                                {{ participant.email.address }}
+                            {% endif %}
+                        </a>
                     </div>
 
                     <form class="email-submit">
@@ -146,13 +143,18 @@ locked = False
                                 {% if participant.email %}
                                     value="{{ participant.email.address }}"
                                 {% endif %}
-                            >
+                            />
                         </div>
                         <div class="buttons">
                             <button type="submit" class="email hidden">Save</button>
                             <button type="cancel" class="email cancel hidden">Cancel</button>
                         </div>
                     </form>
+                </td>
+                <td class="account-action">
+                    <button class="toggle-email">
+                        {{ _("Edit") if participant.email else _("+ Add") }}
+                    </button>
                 </td>
             </tr>
         </table>

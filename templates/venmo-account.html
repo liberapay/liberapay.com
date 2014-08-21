@@ -26,7 +26,7 @@
         {% if account == None %}
             {% if not user.ANON and user.participant == participant %}
                 {% call auth_button('venmo', 'connect') %}
-                    + {{ _("Add") }}
+                    {{ _("+ Add") }}
                 {% endcall %}
             {% endif %}
         {% else %}

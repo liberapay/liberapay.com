@@ -29,7 +29,7 @@
                     {% set allow_team = participant.IS_PLURAL and platform.is_team_admin %}
                     {% set cls = allow_team and 'user_name_prompt' or '' %}
                     {% call auth_button(platform.name, 'connect', class=cls) %}
-                        + {{ _("Add") }}
+                        {{ _("+ Add") }}
                     {% endcall %}
                 {% else %}
                     <div class="account-delete" title="{{ _("Disconnect") }}"

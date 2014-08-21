@@ -185,11 +185,9 @@ Gittip.profile.init = function() {
     // Wire up bitcoin input.
     // ======================
 
-    $('.bitcoin').on("click", ".toggle-bitcoin", function()
-    {
-        // "Add bitcoin address" text or existing
-        // bitcoin address was clicked, show the text box
+    $('.toggle-bitcoin').on("click", function() {
         $('.bitcoin').toggle();
+        $('.toggle-bitcoin').hide();
         $('input.bitcoin').focus();
     });
     $('.bitcoin-submit')
@@ -200,16 +198,15 @@ Gittip.profile.init = function() {
 
             function success(d) {
                 $('a.bitcoin').text(d.bitcoin_address);
+                $('.toggle-bitcoin').show();
                 $('.bitcoin').toggle();
                 if (d.bitcoin_address === '') {
-                    html = "<span class=\"none\">None</span>"
-                    html += "<button class=\"toggle-bitcoin\">+ Add</button>";
+                    $('.toggle-bitcoin').text('+ Add');  // TODO i18n
+                    $('.bitcoin .address').attr('href', '');
                 } else {
-                    html = "<a class=\"address\" rel=\"me\" href=\"https://blockchain.info/address/";
-                    html += d.bitcoin_address + "\">" + d.bitcoin_address + "</a>";
-                    html += "<button class=\"toggle-bitcoin\">Edit</button>";
+                    $('.toggle-bitcoin').text('Edit');  // TODO i18n
+                    $('.bitcoin .address').attr('href', 'https://blockchain.info/address/'+d.bitcoin_address);
                 }
-                $('div.bitcoin').html(html);
                 $this.css('opacity', 1);
             }
 
@@ -232,6 +229,7 @@ Gittip.profile.init = function() {
         })
         .on('click', '[type=cancel]', function () {
             $('.bitcoin').toggle();
+            $('.toggle-bitcoin').show();
 
             return false;
         });
