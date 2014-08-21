@@ -1,5 +1,5 @@
 from aspen import Response
-from gittip.utils import get_participant, COUNTRIES_MAP
+from gittip.utils import get_participant
 from gittip.billing import BalancedCard
 
 [-------------------]
@@ -101,7 +101,7 @@ if exchange is None:
         {{ card['city_town'] }}{% if card['city_town'] %},{% endif %}
         {{ card['state'] }}
         {{ card['zip'] }}<br />
-        {{ COUNTRIES_MAP.get(card['country'], '') }}
+        {{ locale.countries_map.get(card['country'], '') }}
     </div>
 
     <table>

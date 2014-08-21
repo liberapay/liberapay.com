@@ -3,17 +3,20 @@ from __future__ import print_function, unicode_literals
 from io import BytesIO
 import os
 import re
+from unicodedata import combining, normalize
 
 from aspen.resources.pagination import parse_specline, split_and_escape
 from aspen.utils import utcnow
 from babel.core import Locale
 from babel.dates import format_timedelta
-import babel.messages.pofile
+from babel.messages.pofile import Catalog, read_po
 from babel.messages.extract import extract_python
 from babel.numbers import (
     format_currency, format_decimal, format_number, format_percent, parse_decimal, get_decimal_symbol
 )
 import jinja2.ext
+
+from gittip.utils import COUNTRIES, COUNTRIES_MAP
 
 
 # Monkey-patch Babel
@@ -38,8 +41,7 @@ def get_function_from_rule(rule):
 
 
 def get_text(request, loc, s, *a, **kw):
-    catalog = LANGS.get(loc)
-    msg = catalog.get(s) if catalog else None
+    msg = loc.catalog.get(s)
     if msg:
         s = msg.string or s
     if a or kw:
@@ -51,12 +53,11 @@ def get_text(request, loc, s, *a, **kw):
 
 def n_get_text(request, loc, s, p, n, *a, **kw):
     n = n or 0
-    catalog = LANGS.get(loc)
-    msg = catalog.get((s, p)) if catalog else None
+    msg = loc.catalog.get((s, p))
     s2 = None
     if msg:
         try:
-            s2 = msg.string[catalog.plural_func(n)]
+            s2 = msg.string[loc.catalog.plural_func(n)]
         except Exception as e:
             request.website.tell_sentry(e, request)
     if s2 is None:
@@ -76,29 +77,48 @@ def regularize_locale(loc):
     return loc.split('-', 1)[0].lower()
 
 
+def strip_accents(s):
+    return ''.join(c for c in normalize('NFKD', s) if not combining(c))
+
+
 def load_langs(localeDir):
+    key = lambda t: strip_accents(t[1])
     langs = {}
     for file in os.listdir(localeDir):
         parts = file.split(".")
         if len(parts) == 2 and parts[1] == "po":
             lang = regularize_locale(parts[0])
             with open(os.path.join(localeDir, file)) as f:
-                c = langs[lang] = babel.messages.pofile.read_po(f)
+                l = langs[lang] = Locale(lang)
+                c = l.catalog = read_po(f)
                 c.plural_func = get_function_from_rule(c.plural_expr)
+                try:
+                    l.countries_map = {k: l.territories[k] for k in COUNTRIES_MAP}
+                    l.countries = sorted(l.countries_map.items(), key=key)
+                except KeyError:
+                    l.countries_map = COUNTRIES_MAP
+                    l.countries = COUNTRIES
     return langs
 
 
-LANGS = load_langs("i18n")
+LOCALES = load_langs("i18n")
+
+LOCALE_EN = LOCALES['en'] = Locale('en')
+LOCALE_EN.catalog = Catalog('en')
+LOCALE_EN.catalog.plural_func = lambda n: n != 1
+LOCALE_EN.countries = COUNTRIES
+LOCALE_EN.countries_map = COUNTRIES_MAP
 
 
 def get_locale_for_request(request):
     accept_lang = request.headers.get("Accept-Language", "")
     languages = (lang.split(";", 1)[0] for lang in accept_lang.split(","))
-    for loc in languages:
-        loc = regularize_locale(loc)
-        if loc == "en" or loc in LANGS:
+    for lang in languages:
+        lang = regularize_locale(lang)
+        loc = LOCALES.get(lang)
+        if loc:
             return loc
-    return "en"
+    return LOCALE_EN
 
 
 def _format_currency(loc, dsym, amount, currency):

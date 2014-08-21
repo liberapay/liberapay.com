@@ -128,7 +128,7 @@ title = _("Bank Account")
 
                 <div>
                     <label for="address_1">{{ _("Country") }} (<a href="https://github.com/gittip/www.gittip.com/issues/126">{{ _("non-US?") }}</a>)</label>
-                    <input id="zip" value="{{ _("United States of America") }}" disabled="true"
+                    <input id="zip" value="{{ locale.countries_map['US'] }}" disabled="true"
                         class="disabled" />
                 </div>
 
