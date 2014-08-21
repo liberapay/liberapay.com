@@ -135,7 +135,6 @@ Gittip.account.init = function() {
             $('.email-address').text(data.email);
             $('.email').toggle();
             if (data.email === '') {
-                html = '<span class="none">None</span>'
                 html += '<button class="toggle-email">+ Add</button>';
             } else {
                 html = '<a class="email-address" href="javascript:;">' + data.email + '</a>';
