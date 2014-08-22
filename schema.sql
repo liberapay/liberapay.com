@@ -30,8 +30,8 @@ CREATE TABLE participants
 , ctime                 timestamp with time zone    NOT NULL DEFAULT CURRENT_TIMESTAMP
 , claimed_time          timestamp with time zone    DEFAULT NULL
 , is_admin              boolean                     NOT NULL DEFAULT FALSE
-, anonymous_giving      boolean                     NOT NULL DEFAULT FALSE
 , balance               numeric(35,2)               NOT NULL DEFAULT 0.0
+, anonymous_giving      boolean                     NOT NULL DEFAULT FALSE
 , goal                  numeric(35,2)               DEFAULT NULL
 , balanced_customer_href  text                      DEFAULT NULL
 , last_ach_result       text                        DEFAULT NULL
@@ -65,8 +65,8 @@ CREATE TABLE elsewhere
 ( id                    serial          PRIMARY KEY
 , platform              text            NOT NULL
 , user_id               text            NOT NULL
-, is_locked             boolean         NOT NULL DEFAULT FALSE
 , participant           text            NOT NULL REFERENCES participants ON UPDATE CASCADE ON DELETE RESTRICT
+, is_locked             boolean         NOT NULL DEFAULT FALSE
 , access_token          text            DEFAULT NULL
 , refresh_token         text            DEFAULT NULL
 , expires               timestamptz     DEFAULT NULL
@@ -123,23 +123,23 @@ CREATE TABLE paydays
 ( id                    serial                      PRIMARY KEY
 , ts_start              timestamp with time zone    NOT NULL DEFAULT CURRENT_TIMESTAMP
 , ts_end                timestamp with time zone    UNIQUE NOT NULL DEFAULT '1970-01-01T00:00:00+00'::timestamptz
-, nparticipants         bigint                      DEFAULT 0
-, ntippers              bigint                      DEFAULT 0
-, ntips                 bigint                      DEFAULT 0
-, ntransfers            bigint                      DEFAULT 0
-, transfer_volume       numeric(35,2)               DEFAULT 0.00
-, ncc_failing           bigint                      DEFAULT 0
-, ncc_missing           bigint                      DEFAULT 0
-, ncharges              bigint                      DEFAULT 0
-, charge_volume         numeric(35,2)               DEFAULT 0.00
-, charge_fees_volume    numeric(35,2)               DEFAULT 0.00
-, nachs                 bigint                      DEFAULT 0
-, ach_volume            numeric(35,2)               DEFAULT 0.00
-, ach_fees_volume       numeric(35,2)               DEFAULT 0.00
-, nach_failing          bigint                      DEFAULT 0
-, npachinko             bigint                      DEFAULT 0
-, pachinko_volume       numeric(35,2)               DEFAULT 0.00
-, nactive               bigint                      DEFAULT 0
+, nparticipants         bigint                      NOT NULL DEFAULT 0
+, ntippers              bigint                      NOT NULL DEFAULT 0
+, ntips                 bigint                      NOT NULL DEFAULT 0
+, ntransfers            bigint                      NOT NULL DEFAULT 0
+, transfer_volume       numeric(35,2)               NOT NULL DEFAULT 0.00
+, ncc_failing           bigint                      NOT NULL DEFAULT 0
+, ncc_missing           bigint                      NOT NULL DEFAULT 0
+, ncharges              bigint                      NOT NULL DEFAULT 0
+, charge_volume         numeric(35,2)               NOT NULL DEFAULT 0.00
+, charge_fees_volume    numeric(35,2)               NOT NULL DEFAULT 0.00
+, nachs                 bigint                      NOT NULL DEFAULT 0
+, ach_volume            numeric(35,2)               NOT NULL DEFAULT 0.00
+, ach_fees_volume       numeric(35,2)               NOT NULL DEFAULT 0.00
+, nach_failing          bigint                      NOT NULL DEFAULT 0
+, npachinko             bigint                      NOT NULL DEFAULT 0
+, pachinko_volume       numeric(35,2)               NOT NULL DEFAULT 0.00
+, nactive               bigint                      NOT NULL DEFAULT 0
 , stage                 integer                     DEFAULT 0
  );
 
@@ -249,6 +249,7 @@ CREATE TABLE takes
                                                 ON UPDATE CASCADE
                                                 ON DELETE RESTRICT
 , CONSTRAINT no_team_recursion CHECK (team != member)
+, CONSTRAINT not_negative CHECK ((amount >= (0)::numeric))
  );
 
 CREATE VIEW current_takes AS
@@ -323,15 +324,3 @@ CREATE INDEX transfers_tipper_tippee_timestamp_idx
   ON transfers
   USING btree
   (tipper, tippee, timestamp DESC);
-
-
-CREATE TABLE emails
-( id            serial                          PRIMARY KEY
-, email         email_address_with_confirmation NOT NULL
-, ctime         timestamp with time zone        NOT NULL
-                                                DEFAULT CURRENT_TIMESTAMP
-, participant   text                            NOT NULL
-                                                REFERENCES participants
-                                                ON UPDATE CASCADE
-                                                ON DELETE RESTRICT
- );
