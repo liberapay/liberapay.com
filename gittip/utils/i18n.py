@@ -12,15 +12,12 @@ from babel.dates import format_timedelta
 from babel.messages.pofile import Catalog, read_po
 from babel.messages.extract import extract_python
 from babel.numbers import (
-    format_currency, format_decimal, format_number, format_percent, parse_decimal, get_decimal_symbol
+    format_currency, format_decimal, format_number, format_percent,
+    get_decimal_symbol, parse_decimal, parse_pattern
 )
 import jinja2.ext
 
 from gittip.utils import COUNTRIES, COUNTRIES_MAP
-
-
-# Monkey-patch Babel
-Locale('fr').currency_symbols['USD'] = '$'
 
 
 ternary_re = re.compile(r'^\(? *(.+?) *\? *(.+?) *: *(.+?) *\)?$')
@@ -101,13 +98,20 @@ def load_langs(localeDir):
     return langs
 
 
+# Load the locales
 LOCALES = load_langs("i18n")
 
+# Add the default English locale
 LOCALE_EN = LOCALES['en'] = Locale('en')
 LOCALE_EN.catalog = Catalog('en')
 LOCALE_EN.catalog.plural_func = lambda n: n != 1
 LOCALE_EN.countries = COUNTRIES
 LOCALE_EN.countries_map = COUNTRIES_MAP
+
+# Patch the locales to look less formal
+LOCALE_EN.currency_formats[None] = parse_pattern('\xa4#,##0.##')
+LOCALES['fr'].currency_formats[None] = parse_pattern('#,##0.##\u202f\xa4')
+LOCALES['fr'].currency_symbols['USD'] = '$'
 
 
 def get_locale_for_request(request):
@@ -121,19 +125,15 @@ def get_locale_for_request(request):
     return LOCALE_EN
 
 
-def _format_currency(loc, dsym, amount, currency):
-    return format_currency(amount, currency, locale=loc).replace(dsym+'00', '')
-
-
 def inbound(request):
     context = request.context
     loc = context.locale = get_locale_for_request(request)
-    dsym = context.decimal_symbol = get_decimal_symbol(locale=loc)
+    context.decimal_symbol = get_decimal_symbol(locale=loc)
     context._ = lambda s, *a, **kw: get_text(request, loc, s, *a, **kw)
     context.ngettext = lambda *a, **kw: n_get_text(request, loc, *a, **kw)
     context.format_number = lambda *a: format_number(*a, locale=loc)
     context.format_decimal = lambda *a: format_decimal(*a, locale=loc)
-    context.format_currency = lambda *a: _format_currency(loc, dsym, *a)
+    context.format_currency = lambda *a: format_currency(*a, locale=loc)
     context.format_percent = lambda *a: format_percent(*a, locale=loc)
     context.parse_decimal = lambda *a: parse_decimal(*a, locale=loc)
     def _to_age(delta):
