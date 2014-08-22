@@ -96,6 +96,8 @@ CREATE TABLE tips
 , amount                numeric(35,2)               NOT NULL
  );
 
+CREATE INDEX tips_all ON tips USING btree (tipper, tippee, mtime DESC);
+
 CREATE VIEW current_tips AS
     SELECT DISTINCT ON (tipper, tippee) *
       FROM tips
