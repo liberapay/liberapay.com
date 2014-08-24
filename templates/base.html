@@ -119,7 +119,11 @@
     <script src="{{ website.asset_url }}/gratipay.js"></script>
 
     <script>
-        function unformat(s) {
+        function localizeDecimal(s) {
+            return s.replace('.', '{{ decimal_symbol }}');
+        }
+
+        function unlocalizeDecimal(s) {
             return s.replace('{{ decimal_symbol }}', '.');
         }
 
