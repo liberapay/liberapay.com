@@ -83,7 +83,8 @@ Gratipay.tips.init = function() {
         var $this  = $(this),
             $myTip = $this.parents('form').find('.my-tip');
 
-        $myTip.val($this.text().match(/\d+/)[0] / ($this.hasClass('cents') ? 100 : 1)).change();
+        var newTip = $this.text().match(/\d+/)[0] / ($this.hasClass('cents') ? 100 : 1);
+        $myTip.val(localizeDecimal(newTip.toString())).change();
     });
 
     $('form.my-tip').on('reset', function() {
