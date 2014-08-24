@@ -79,7 +79,7 @@ title = _("Browse Communities")
             <a href="/for/{{ community.slug }}/">{{ community.name }}</a>
             {% set n = community.nmembers %}
             <div class="fine">
-                {{ _(("{0}{n}{1} Member", "{0}{n}{1} Members"), "", "", n=n).lower() }}
+                {{ ngettext("{0}{n}{1} Member", "{0}{n}{1} Members", n, "", "").lower() }}
             </div>
         </li>
         {% endfor %}
@@ -92,7 +92,7 @@ title = _("Browse Communities")
             {% for community in communities %}
             <option value="{{ community.slug }}">{{ community.name }} -
             {% set n = community.nmembers %}
-            {{ _(("{0}{n}{1} Member", "{0}{n}{1} Members"), "", "", n=n).lower() }}
+            {{ ngettext("{0}{n}{1} Member", "{0}{n}{1} Members", n, "", "").lower() }}
             </option>
             {% endfor %}
         </select>

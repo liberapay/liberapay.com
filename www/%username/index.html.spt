@@ -52,7 +52,7 @@ GOAL_PARTS = GOAL_RAW.split("{0}")
 
 def with_others(obj):
     others = obj.nmembers - 1
-    return _(("with {n} other", "with {n} others"), n=others)
+    return ngettext("with {n} other", "with {n} others", others)
 
 [-----------------------------------------------------------------------------]
 {% extends "templates/profile.html" %}

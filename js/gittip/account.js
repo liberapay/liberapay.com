@@ -120,8 +120,9 @@ Gittip.account.init = function() {
 
     // Wire up email address input.
     // ============================
-    $('.email').on("click", ".toggle-email", function() {
+    $('.toggle-email').on("click", function() {
         $('.email').toggle();
+        $('.toggle-email').hide();
         $('input.email').focus();
     });
 
@@ -134,14 +135,12 @@ Gittip.account.init = function() {
         function success(data) {
             $('.email-address').text(data.email);
             $('.email').toggle();
+            $('.toggle-email').show();
             if (data.email === '') {
-                html = '<span class="none">None</span>'
-                html += '<button class="toggle-email">+ Add</button>';
+                $('.toggle-email').text('+ Add');  // TODO i18n
             } else {
-                html = '<a class="email-address" href="javascript:;">' + data.email + '</a>';
-                html += '<button class="toggle-email">Edit</button>';
+                $('.toggle-email').text('Edit');  // TODO i18n
             }
-            $('div.email').html(html);
             $this.css('opacity', 1);
         }
 
@@ -162,6 +161,7 @@ Gittip.account.init = function() {
     })
     .on('click', '[type=cancel]', function () {
         $('.email').toggle();
+        $('.toggle-email').show();
 
         return false;
     });

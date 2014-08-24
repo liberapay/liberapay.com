@@ -1,6 +1,6 @@
 {% set teams = participant.get_teams() %}
 {% if teams %}
-<h2>Teams</h2>
+<h2>{{ _('Teams') }}</h2>
 <ul class="team memberships">
     {% for team in teams %}
     <li>

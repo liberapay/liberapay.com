@@ -3,15 +3,15 @@
     {% set current_page = path.raw.split('/')[2] %}
     {% set nav_base = "/about" %}
     <div class="nav">
-        {% set pages = [('/', 'About'), ('/faq.html', 'FAQ'), ('/teams/', 'Teams')] %}
+        {% set pages = [('/', _('About')), ('/faq.html', _('FAQ')), ('/teams/', _('Teams'))] %}
         {% include "templates/nav.html" %}
     </div>
     <div class="nav level-1">
-        {% set pages = [('/pricing', 'Pricing'), ('/stats.html', 'Stats'), ('/charts.html', 'Charts')] %}
+        {% set pages = [('/pricing', _('Pricing')), ('/stats.html', _('Stats')), ('/charts.html', _('Charts'))] %}
         {% include "templates/nav.html" %}
     </div>
     <div class="nav level-2">
-        {% set pages = [('/terms/', 'Terms'), ('/privacy/', 'Privacy'), ('/fraud/', 'Fraud'), ('/dnt.html', 'DNT')] %}
+        {% set pages = [('/terms/', _('Terms')), ('/privacy/', _('Privacy')), ('/fraud/', _('Fraud')), ('/dnt.html', _('DNT'))] %}
         {% include "templates/nav.html" %}
     </div>
 {% endblock %}

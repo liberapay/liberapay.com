@@ -1,627 +1,985 @@
+
 msgid ""
 msgstr ""
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2014-08-21 15:17+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: eo <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 1.3\n"
 
-# misc
+#: templates/about.html:6 templates/base.html:78
+msgid "About"
+msgstr ""
 
-msgid "Navigation"
-msgstr "Navigado"
+#: templates/about.html:6 templates/base.html:80
+msgid "FAQ"
+msgstr ""
 
+#: templates/about.html:6 templates/team-listing.html:3
+msgid "Teams"
+msgstr ""
+
+#: templates/about.html:10
+msgid "Pricing"
+msgstr ""
+
+#: templates/about.html:10 templates/base.html:81
+msgid "Stats"
+msgstr ""
+
+#: templates/about.html:10 templates/base.html:82
+msgid "Charts"
+msgstr ""
+
+#: templates/about.html:14 templates/base.html:83
+msgid "Terms"
+msgstr ""
+
+#: templates/about.html:14 templates/base.html:84
+#: www/%username/account/index.html.spt:175
+msgid "Privacy"
+msgstr "Regularo"
+
+#: templates/about.html:14 templates/base.html:85
+msgid "Fraud"
+msgstr ""
+
+#: templates/about.html:14
+msgid "DNT"
+msgstr ""
+
+#: templates/account-row.html:32 templates/connected-accounts.html:52
+#: templates/venmo-account.html:29 www/%username/account/index.html.spt:82
+#: www/%username/account/index.html.spt:115
+#: www/%username/account/index.html.spt:156
+msgid "+ Add"
+msgstr "+ Aldoni"
+
+#: templates/account-row.html:35 templates/venmo-account.html:34
+msgid "Disconnect"
+msgstr "Desacoplado"
+
+#: templates/base.html:25
 msgid "{0} users exchanging {1} per week"
 msgstr "{0} uzantoj interŝanĝanta {1} po semajno"
 
-msgid "Sign in"
-msgstr "Eniri"
-
+#: templates/base.html:34
 msgid "Sign out"
 msgstr "Adiaŭi"
 
-msgid "{0} to pledge to {1}"
-msgstr "{0} al promesos {1}"
-
-msgid "{0} to give to {1}"
-msgstr "{0} por doni al {1}"
-
+#: templates/base.html:36
 msgid "Giving:"
 msgstr "Doni:"
 
-msgid "Receiving:"
-msgstr "Ricevi:"
-
+#: templates/base.html:37 templates/base.html:40
 msgid "wk"
 msgstr "semajno"
 
-msgid "Are you sure you wish to sign out?"
-msgstr "Ĉu vi certas ke vi volas subskribi gxin?"
+#: templates/base.html:40
+msgid "Receiving:"
+msgstr "Ricevi:"
 
-msgid "Yes!"
-msgstr "Jes!"
+#: templates/base.html:77
+msgid "Blog"
+msgstr ""
 
-# www/index.html.spt
+#: templates/base.html:79
+msgid "Source"
+msgstr ""
 
-msgid "Weekly Payments"
-msgstr "Semajna Pago"
+#: templates/base.html:86
+msgid "Colophon"
+msgstr ""
 
-msgid "Motivated by Gratitude"
-msgstr "Motivita de Dankemo"
+#: templates/base.html:87
+msgid "Security"
+msgstr ""
 
-msgid "Sustainably crowdfund your business, personal projects, or charity, with {0}no extra fees{1}."
-msgstr "Longdaŭre crowdfund via negoco, personaj projektoj, aŭ bonfarado, kun {0}neniu ekstra kotizo{1}."
+#: templates/base.html:136
+msgid "Your credit card has failed!"
+msgstr ""
 
-msgid "Learn more."
-msgstr "Ekscii pli."
+#: templates/base.html:137
+msgid "Fix your card"
+msgstr ""
 
-msgid "{0}Sign In{1} {2}to Accept Weekly Payments{3}"
-msgstr "{0}Eniri{1} {2}por Akcepti Semajna Pagoj{3}"
+#: templates/base.html:142
+msgid "Your credit card is about to expire!"
+msgstr ""
 
-msgid "Sign in with {0}"
-msgstr "Eniri kun {0}"
+#: templates/base.html:143
+msgid "Update card"
+msgstr ""
 
-msgid "Or sign in with:"
-msgstr "Aŭ eniri per:"
+#: templates/charts-for-user.html:5
+msgid "Dollars Received Per Week"
+msgstr "Dolaroj Ricevitaj Per Semajno"
 
-msgid "By signing in, you indicate that you have read and agree to our {0}Terms and Conditions{1}."
-msgstr "Per subskribi, vi indiki, ke vi legis kaj konsentas al niaj {0}Kondiĉoj por Uzado{1}."
+#: templates/charts-for-user.html:7 templates/charts-for-user.html:14
+msgid "weeks"
+msgstr "semajnoj"
 
-msgid "You'll be joining {0} active users, who exchanged {1} {2}last week{3}."
-msgstr "Vi estos kunigi {0} aktivaj uzantoj, kiuj interŝanĝis {1} {2}pasintsemajne{3}."
+#: templates/charts-for-user.html:12
+msgid "Number of Patrons Per Week"
+msgstr "Nombro de Klientoj Por Semajno"
 
-msgid "Want to see who they are? Browse {0}our communities{1}."
-msgstr "Volas vidi kiu estas? Foliumu {0}niaj komunumoj{1}."
-
-msgid "Want to work for Gittip? We are an {0}open company{1}."
-msgstr "Volas labori por Gittip? Ni estas {0}malferma socio{1}."
-
-msgid "Welcome, {0}!"
-msgstr "Bonvenon, {0}!"
-
-msgid "Welcome back, {0}!"
-msgstr "Bonvenon reen, {0}!"
-
-msgid "Your balance is {0}."
-msgstr "Via balanciĝo estas {0}."
-
-msgid "Go to {0}your profile{1}, or {2}sign out{3}."
-msgstr "Iru al {0}via profilo{1}, aŭ {2}adiaŭi{3}."
-
-msgid "Jump to {0} from {1}"
-msgstr "Saltu al {0} de {1}"
-
-msgid "Go"
-msgstr "Eniru"
-
-# www/%username/index.html.spt
-
-msgid "Profile"
-msgstr "Profilo"
-
-msgid "I am making the world better by {0}"
-msgstr "Mi faras la mondon pli bona per {0}"
-
-msgid "We are making the world better by {0}"
-msgstr "Ni faras la mondon pli bona per {0}"
-
-msgid "I'm grateful for gifts, but don't have a specific funding goal."
-msgstr "Mi estas dankema pro donacoj, sed ne havas specifan financadon celon."
-
-msgid "We're grateful for gifts, but don't have a specific funding goal."
-msgstr "Ni estas dankema pro donacoj, sed ne havas specifan financadon celon."
-
-msgid "I'm here as a patron."
-msgstr "Mi estas ĉi tie kiel mastrino."
-
-msgid "We're here as a patron."
-msgstr "Ni estas ĉi tie kiel mastrino."
-
-msgid "I'm here as a patron, and politely decline to receive gifts."
-msgstr "Mi estas ĉi tie kiel mastrino, kaj ĝentile malakceptu ricevi donacojn."
-
-msgid "We're here as a patron, and politely decline to receive gifts."
-msgstr "Ni estas ĉi tie kiel mastrino, kaj ĝentile malakceptu ricevi donacojn."
-
-msgid "My goal is to receive {0} per week on Gittip."
-msgstr "Mia celo estas ricevi {0} por semajno sur Gittip."
-
-msgid "Our goal is to receive {0} per week on Gittip."
-msgstr "Nia celo estas ricevi {0} por semajno sur Gittip."
-
-msgid "Statement"
-msgstr "Aserto"
-
-msgid "Funding Goal"
-msgstr "Financadon Celon"
-
+#: templates/community-listing.html:2 templates/profile-edit.html:40
+#: www/for/index.html.spt:19
 msgid "Communities"
 msgstr "Komunumoj"
 
-msgid "Join Communities"
-msgstr "Aliĝu Komunumoj"
+#: templates/connected-accounts.html:5
+msgid "Social Profiles"
+msgstr "Socia Profiloj"
 
-msgid "Edit"
-msgstr "Redakti"
+#: templates/connected-accounts.html:20
+msgid "Other Receiving Options"
+msgstr "Aliaj Ricevante Agordoj"
 
+#: templates/connected-accounts.html:22
+msgid "Other Giving Options"
+msgstr "Aliaj Giving Agordoj"
+
+#: templates/connected-accounts.html:43 templates/profile-edit.html:7
+#: templates/profile-edit.html:51 www/bank-account.html.spt:193
+#: www/credit-card.html.spt:163 www/%username/account/index.html.spt:34
 msgid "Save"
 msgstr "Konservi"
 
+#: templates/connected-accounts.html:44 templates/my-tip-bulk.html:11
+#: templates/my-tip.html:18 templates/profile-edit.html:8
+#: templates/profile-edit.html:52 www/%username/account/index.html.spt:35
 msgid "Cancel"
 msgstr "Nuligi"
 
+#: templates/connected-accounts.html:52 templates/profile-edit.html:6
+#: templates/profile-edit.html:50 www/%username/account/index.html.spt:33
+#: www/%username/account/index.html.spt:84
+#: www/%username/account/index.html.spt:117
+#: www/%username/account/index.html.spt:156
+msgid "Edit"
+msgstr "Redakti"
+
+#: templates/my-tip-bulk.html:8 templates/my-tip.html:4
+msgid "week"
+msgstr "semajno"
+
+#: templates/my-tip-bulk.html:10 templates/my-tip.html:17
+msgid "Confirm"
+msgstr "Konfirmi"
+
+#: templates/participant.html:32
+msgid "{0} gives and receives anonymously"
+msgstr "{0} donas kaj ricevas anonime"
+
+#: templates/participant.html:34
+msgid "{0} gives anonymously"
+msgstr "{0} donas anonime"
+
+#: templates/participant.html:36
+msgid "{0} receives anonymously"
+msgstr "{0} ricevas anonime"
+
+#: templates/participant.html:38
+msgid ""
+"{topstart}{username} gives{topend} {midstart}{giving}{midend} "
+"{bottomstart}per week, and receives anonymously{bottomend}"
+msgstr ""
+"{topstart}{username} donas{topend} {midstart}{giving}{midend} "
+"{bottomstart}por semajno, kaj ricevas anonime{bottomend}"
+
+#: templates/participant.html:40
+msgid ""
+"{topstart}{username} receives{topend} {midstart}{receiving}{midend} "
+"{bottomstart}per week, and gives anonymously{bottomend}"
+msgstr ""
+"{topstart}{username} ricevas{topend} {midstart}{receiving}{midend} "
+"{bottomstart}por semajno, kaj donas anonime{bottomend}"
+
+#: templates/participant.html:42
+msgid ""
+"{topstart}{username} gives{topend} {midstart}{giving}{midend} "
+"{bottomstart}per week, and receives {receiving}{bottomend}"
+msgstr ""
+"{topstart}{username} donas{topend} {midstart}{giving}{midend} "
+"{bottomstart}por semajno, kaj ricevas {receiving}{bottomend}"
+
+#: templates/participant.html:44
+msgid ""
+"{topstart}{username} receives{topend} {midstart}{receiving}{midend} "
+"{bottomstart}per week, and gives {giving}{bottomend}"
+msgstr ""
+"{topstart}{username} ricevas{topend} {midstart}{receiving}{midend} "
+"{bottomstart}por semajno, kaj donas {giving}{bottomend}"
+
+#: templates/participant.html:46
+msgid ""
+"{topstart}{username} gives{topend} {midstart}{giving}{midend} "
+"{bottomstart}per week{bottomend}"
+msgstr ""
+"{topstart}{username} donas{topend} {midstart}{giving}{midend} "
+"{bottomstart}por semajno{bottomend}"
+
+#: templates/participant.html:48
+msgid ""
+"{topstart}{username} receives{topend} {midstart}{receiving}{midend} "
+"{bottomstart}per week{bottomend}"
+msgstr ""
+"{topstart}{username} ricevas{topend} {midstart}{receiving}{midend} "
+"{bottomstart}por semajno{bottomend}"
+
+#: templates/participant.html:53
+msgid "{0} just joined Gittip! :D"
+msgstr "{0} ĵus aliĝis Gittip! :D"
+
+#: templates/participant.html:55
+msgid "{0} joined recently"
+msgstr "{0} aliĝis lastatempe"
+
+#: templates/participant.html:57
+msgid "{0} is quietly watching the Gittip world"
+msgstr "{0} trankvile rigardante la Gittip mondo"
+
+#: templates/participant.tip.html:5
+msgid "This account has been locked by its owner."
+msgstr "Tiu konto estas ŝlosita por lia mastro."
+
+#: templates/participant.tip.html:11 templates/participant.tip.html:23
+msgid "Your Weekly Pledge"
+msgstr "Viaj Semajna Promeso"
+
+#: templates/participant.tip.html:11 templates/participant.tip.html:23
+msgid "Your Weekly Gift"
+msgstr "Viaj Semajna Donaco"
+
+#: templates/participant.tip.html:29
+msgid "Back your gift with a {0}credit card{1} to make sure it goes through!"
+msgstr "Reen vian donacon per {0}kreditkarto{1} certigi, ke ĝi iras tra!"
+
+#: templates/participant.tip.html:34
+msgid "Fix your {0}credit card{1} to make sure your gifts go through!"
+msgstr "Fiksu viajn {0}kreditkarto{1} certigi vian donacoj trairu!"
+
+#: templates/profile-edit.html:5
+msgid "Statement"
+msgstr "Aserto"
+
+#: templates/profile-edit.html:23
 msgid "Newlines and links are converted to HTML."
 msgstr "Novajn liniojn kaj ligiloj estas konvertita al HTML."
 
+#: templates/profile-edit.html:42
+msgid "Join Communities"
+msgstr "Aliĝu Komunumoj"
+
+#: templates/profile-edit.html:49
+msgid "Funding Goal"
+msgstr "Financadon Celon"
+
+#: templates/profile-edit.html:111
+msgid "Tips Received, by Number of Tips"
+msgstr "Konsiloj Ricevitaj, laŭ Nombro de Konsiletoj"
+
+#: templates/profile-edit.html:116
+msgid "Tips Received, by Dollar Amount"
+msgstr "Konsiloj Ricevitaj, laŭ Dolaro Kvanto"
+
+#: templates/profile.html:18 templates/profile.html:42
+msgid "Navigation"
+msgstr "Navigado"
+
+#: templates/profile.html:20 templates/profile.html:43
+#: www/%username/index.html.spt:19
+msgid "Profile"
+msgstr "Profilo"
+
+#: templates/profile.html:21 www/%username/giving/index.html.spt:8
+msgid "Giving"
+msgstr "Doni"
+
+#: templates/profile.html:22 www/%username/history/index.html.spt:8
+msgid "History"
+msgstr "Historio"
+
+#: templates/profile.html:23 www/%username/widgets/index.html.spt:6
+msgid "Widgets"
+msgstr "Iloj"
+
+#: templates/profile.html:24 www/%username/account/index.html.spt:8
+msgid "Account"
+msgstr "Konto"
+
+#: templates/profile.html:34 templates/profile.html:44
+msgid "Members"
+msgstr ""
+
+#: templates/sign-in-using-to-give.html:3
+msgid "{0} to pledge to {1}"
+msgstr "{0} al promesos {1}"
+
+#: templates/sign-in-using-to-give.html:3
+msgid "{0} to give to {1}"
+msgstr "{0} por doni al {1}"
+
+#: templates/sign-in-using.html:5
+msgid "Sign in"
+msgstr "Eniri"
+
+#: templates/support-gittip.html:5
+#, python-format
+msgid "Only {0}% of active users also {1}support Gittip{2}."
+msgstr ""
+
+#: templates/support-gittip.html:7
+#, python-format
+msgid "{0}% of active users also {1}support Gittip{2}."
+msgstr ""
+
+#: templates/support-gittip.html:11
+msgid "Will you help us reach {0}%?"
+msgstr ""
+
+#: templates/support-gittip.html:13
+msgid "Will you join them?"
+msgstr ""
+
+#: templates/support-gittip.html:19
+msgid "Other"
+msgstr ""
+
+#: templates/support-gittip.html:19
+msgid "No thanks"
+msgstr ""
+
+#: templates/support-gittip.html:22
+msgid "We fund Gittip solely through your voluntary payments!"
+msgstr ""
+
+#: templates/support-gittip.html:23 www/index.html.spt:56
+msgid "Learn more"
+msgstr "Ekscii pli"
+
+#: www/bank-account.html.spt:19
+msgid "Your bank account is {0}not connected{1}"
+msgstr "Via bankokonto estas {0}ne konektitaj{1}"
+
+#: www/bank-account.html.spt:22
+msgid "Your bank account is {0}connected{1}"
+msgstr "Via bankokonto estas {0}konektitaj{1}"
+
+#: www/bank-account.html.spt:29 www/%username/account/index.html.spt:106
+msgid "Bank Account"
+msgstr "Bankokonto"
+
+#: www/bank-account.html.spt:37
+msgid ""
+"When you receive money on Gittip we'll automatically deposit it into your"
+" bank account."
+msgstr "Kiam vi ricevas monon Gittip ni aŭtomate deponi ĝin en vian bankokonton."
+
+#: www/bank-account.html.spt:38
+msgid ""
+"If you don't connect a bank account then your money will accumulate "
+"within Gittip unless you regift it to others."
+msgstr ""
+"Se vi ne konekti bankokonto tiam via mono amasigos ene Gittip se vi re-"
+"donaco ĝin al aliaj."
+
+#: www/bank-account.html.spt:61
+msgid "{0} and then you'll be able to add{1} or change your bank account."
+msgstr "{0} kaj poste vi povos aldoni{1} aŭ ŝanĝi vian bankokonton."
+
+#: www/bank-account.html.spt:63
+msgid "Thanks! :-)"
+msgstr "Dankon! :-)"
+
+#: www/bank-account.html.spt:87 www/credit-card.html.spt:92
+msgid "Failure"
+msgstr "Fiasko"
+
+#: www/bank-account.html.spt:92 www/bank-account.html.spt:98
+msgid "Identity Verification"
+msgstr "Identeco Verification"
+
+#: www/bank-account.html.spt:93 www/bank-account.html.spt:169
+msgid "Routing Information"
+msgstr "Enrutamiento Informo"
+
+#: www/bank-account.html.spt:101
+msgid "Your Legal Name"
+msgstr "Via Juraj Nomo"
+
+#: www/bank-account.html.spt:108
+msgid "Street Address"
+msgstr "Strato Adreso"
+
+#: www/bank-account.html.spt:113
+msgid "City"
+msgstr "Urbo"
+
+#: www/bank-account.html.spt:118 www/credit-card.html.spt:139
+msgid "State or Province"
+msgstr "Ŝtato aŭ Provinco"
+
+#: www/bank-account.html.spt:123 www/credit-card.html.spt:144
+msgid "ZIP or Postal Code"
+msgstr "ZIP aŭ Poŝta Kodo"
+
+#: www/bank-account.html.spt:130 www/credit-card.html.spt:150
+msgid "Country"
+msgstr "Lando"
+
+#: www/bank-account.html.spt:130
+msgid "non-US?"
+msgstr "non-Usono?"
+
+#: www/bank-account.html.spt:136
+msgid "Contact Phone Number"
+msgstr "Kontakto Telefono Nombro"
+
+#: www/bank-account.html.spt:141
+msgid "Date of Birth"
+msgstr "Dato de Naskiĝo"
+
+#: www/bank-account.html.spt:162
+msgid "Last four SSN digits"
+msgstr "Lasta kvar SSN ciferoj"
+
+#: www/bank-account.html.spt:162
+msgid "(Not required)"
+msgstr "(Ne bezonata)"
+
+#: www/bank-account.html.spt:174
+msgid "Name on Bank Account"
+msgstr "Nomo sur Banko Konto"
+
+#: www/bank-account.html.spt:179
+msgid "Routing Number"
+msgstr "Enkursigilo Nombro"
+
+#: www/bank-account.html.spt:184
+msgid "Bank Account Number"
+msgstr "Banko Konto Numero"
+
+#: www/bank-account.html.spt:202
+msgid "Disconnect My Bank Account"
+msgstr "Malkonekti Mia Banko Nombro"
+
+#: www/credit-card.html.spt:18
+msgid "Your credit card is {0}missing{1}"
+msgstr "Via kreditkarto {0}mankas{1}"
+
+#: www/credit-card.html.spt:23 www/%username/account/index.html.spt:75
+msgid "Your credit card is {0}working{1}"
+msgstr "Via kreditkarto estas {0}funkcianta{1}"
+
+#: www/credit-card.html.spt:26 www/%username/account/index.html.spt:77
+msgid "Your credit card is {0}failing{1}"
+msgstr "Via kreditkarto {0}maltrafas{1}"
+
+#: www/credit-card.html.spt:34 www/%username/account/index.html.spt:73
+msgid "Credit Card"
+msgstr "Kreditkarto"
+
+#: www/credit-card.html.spt:42
+msgid ""
+"When you don't have enough money in your Gittip account to cover your "
+"gifts, we'll attempt to pull money in using your credit card."
+msgstr ""
+"Kiam vi ne havas sufiĉan monon en vian Gittip konto kovri viajn donacojn,"
+" ni provos tiri monon uzanta vian kreditkarto."
+
+#: www/credit-card.html.spt:43
+msgid ""
+"If your credit card is missing or fails then your gifts won't go through "
+"for that week."
+msgstr ""
+"Se via kreditkarto mankas aŭ mankas do viajn donacojn ne iros tra por tiu"
+" semajno."
+
+#: www/credit-card.html.spt:88
+msgid "Current:"
+msgstr "Fluo:"
+
+#: www/credit-card.html.spt:97
+msgid "Required"
+msgstr "Bezonata"
+
+#: www/credit-card.html.spt:100
+msgid "Credit Card Number"
+msgstr "Kreditkarto Nombro"
+
+#: www/credit-card.html.spt:105
+msgid "Expiration"
+msgstr "Finiĝo"
+
+#: www/credit-card.html.spt:111
+msgid "CVV"
+msgstr "CVV"
+
+#: www/credit-card.html.spt:120
+msgid "Full Name on Card"
+msgstr "Plena Nomo sur Karto"
+
+#: www/credit-card.html.spt:125
+msgid "Address 1"
+msgstr "Adreso 1"
+
+#: www/credit-card.html.spt:130
+msgid "Address 2"
+msgstr "Adreso 2"
+
+#: www/credit-card.html.spt:133
+msgid "City or Town"
+msgstr "Urbo aŭ Plaĉas"
+
+#: www/credit-card.html.spt:152
+msgid "Choose a country..."
+msgstr "Elektu landon..."
+
+#: www/credit-card.html.spt:171
+msgid "Disconnect My Credit Card"
+msgstr "Malkonekti Mia Kreditkarto"
+
+#: www/index.html.spt:50
+msgid "Weekly Payments"
+msgstr "Semajna Pago"
+
+#: www/index.html.spt:51
+msgid "Motivated by Gratitude"
+msgstr "Motivita de Dankemo"
+
+#: www/index.html.spt:53
+msgid ""
+"Sustainably crowdfund your business, personal projects, or charity, with "
+"{0}no extra fees{1}."
+msgstr ""
+"Longdaŭre crowdfund via negoco, personaj projektoj, aŭ bonfarado, kun "
+"{0}neniu ekstra kotizo{1}."
+
+#: www/index.html.spt:61
+msgid "{0}Sign In{1} {2}to Accept Weekly Payments{3}"
+msgstr "{0}Eniri{1} {2}por Akcepti Semajna Pagoj{3}"
+
+#: www/index.html.spt:67
+msgid "Sign in with {0}"
+msgstr "Eniri kun {0}"
+
+#: www/index.html.spt:71
+msgid "Or sign in with:"
+msgstr "Aŭ eniri per:"
+
+#: www/index.html.spt:79
+msgid ""
+"By signing in, you indicate that you have read and agree to our {0}Terms "
+"and Conditions{1}."
+msgstr ""
+"Per subskribi, vi indiki, ke vi legis kaj konsentas al niaj {0}Kondiĉoj "
+"por Uzado{1}."
+
+#: www/index.html.spt:81
+msgid "You'll be joining {0} active users, who exchanged {1} {2}last week{3}."
+msgstr ""
+"Vi estos kunigi {0} aktivaj uzantoj, kiuj interŝanĝis {1} "
+"{2}pasintsemajne{3}."
+
+#: www/index.html.spt:85
+msgid "Want to see who they are? Browse {0}our communities{1}."
+msgstr "Volas vidi kiu estas? Foliumu {0}niaj komunumoj{1}."
+
+#: www/index.html.spt:87
+msgid "Want to work for Gittip? We are an {0}open company{1}."
+msgstr "Volas labori por Gittip? Ni estas {0}malferma socio{1}."
+
+#: www/index.html.spt:93
+msgid "Welcome, {0}!"
+msgstr "Bonvenon, {0}!"
+
+#: www/index.html.spt:94
+msgid "Thanks for joining Gittip!"
+msgstr "Dankon pro via aliĝo Gittip!"
+
+#: www/index.html.spt:95
+msgid "Next steps:"
+msgstr "Sekva paŝojn:"
+
+#: www/index.html.spt:97
+msgid ""
+"Start tipping people, you can find great people to tip by browsing {0}our"
+" communities{1}."
+msgstr ""
+
+#: www/index.html.spt:99
+msgid ""
+"{0}Add a credit card{1} to make sure your weekly tips go through this "
+"Thursday."
+msgstr ""
+"{0}Aldonu kreditkarto{1} certigi vian semajna konsiletoj iri tra ĉi "
+"ĵaŭdon."
+
+#: www/index.html.spt:101
+msgid "{0}Fill out your profile{1} to let others know about you."
+msgstr "{0}Plenigu via profilo{1} al aliuloj estu vi."
+
+#: www/index.html.spt:106
+msgid "Welcome back, {0}!"
+msgstr "Bonvenon reen, {0}!"
+
+#: www/index.html.spt:107 www/%username/history/index.html.spt:20
+msgid "Your balance is {0}."
+msgstr "Via balanciĝo estas {0}."
+
+#: www/index.html.spt:110
+msgid "Go to {0}your profile{1}, or {2}sign out{3}."
+msgstr "Iru al {0}via profilo{1}, aŭ {2}adiaŭi{3}."
+
+#: www/index.html.spt:117
+msgid "Jump to {0} from {1}"
+msgstr "Saltu al {0} de {1}"
+
+#: www/index.html.spt:124
+msgid "Go"
+msgstr "Eniru"
+
+#: www/sign-out.html.spt:26
+msgid "Are you sure you wish to sign out?"
+msgstr "Ĉu vi certas ke vi volas subskribi gxin?"
+
+#: www/sign-out.html.spt:30
+msgid "Yes!"
+msgstr "Jes!"
+
+#: www/%username/index.html.spt:33 www/for/%slug/index.html.spt:12
+msgid "I am making the world better by {0}"
+msgstr "Mi faras la mondon pli bona per {0}"
+
+#: www/%username/index.html.spt:34 www/for/%slug/index.html.spt:13
+msgid "We are making the world better by {0}"
+msgstr "Ni faras la mondon pli bona per {0}"
+
+#: www/%username/index.html.spt:38
+msgid "I'm grateful for gifts, but don't have a specific funding goal."
+msgstr "Mi estas dankema pro donacoj, sed ne havas specifan financadon celon."
+
+#: www/%username/index.html.spt:39
+msgid "I'm here as a patron."
+msgstr "Mi estas ĉi tie kiel mastrino."
+
+#: www/%username/index.html.spt:40
+msgid "I'm here as a patron, and politely decline to receive gifts."
+msgstr "Mi estas ĉi tie kiel mastrino, kaj ĝentile malakceptu ricevi donacojn."
+
+#: www/%username/index.html.spt:41
+msgid "My goal is to receive {0} per week on Gittip."
+msgstr "Mia celo estas ricevi {0} por semajno sur Gittip."
+
+#: www/%username/index.html.spt:45
+msgid "We're grateful for gifts, but don't have a specific funding goal."
+msgstr "Ni estas dankema pro donacoj, sed ne havas specifan financadon celon."
+
+#: www/%username/index.html.spt:46
+msgid "We're here as a patron."
+msgstr "Ni estas ĉi tie kiel mastrino."
+
+#: www/%username/index.html.spt:47
+msgid "We're here as a patron, and politely decline to receive gifts."
+msgstr "Ni estas ĉi tie kiel mastrino, kaj ĝentile malakceptu ricevi donacojn."
+
+#: www/%username/index.html.spt:48
+msgid "Our goal is to receive {0} per week on Gittip."
+msgstr "Nia celo estas ricevi {0} por semajno sur Gittip."
+
+#: www/%username/index.html.spt:55
 msgid "with {n} other"
 msgid_plural "with {n} others"
 msgstr[0] "kun {n} alia"
 msgstr[1] "kun {n} aliaj"
 
-msgid "Dollars Received Per Week"
-msgstr "Dolaroj Ricevitaj Per Semajno"
-
-msgid "Number of Patrons Per Week"
-msgstr "Nombro de Klientoj Por Semajno"
-
-msgid "week"
-msgstr "semajno"
-
-msgid "weeks"
-msgstr "semajnoj"
-
-msgid "Social Profiles"
-msgstr "Socia Profiloj"
-
-msgid "Other Receiving Options"
-msgstr "Aliaj Ricevante Agordoj"
-
-msgid "Other Giving Options"
-msgstr "Aliaj Giving Agordoj"
-
-msgid "Tips Received, by Number of Tips"
-msgstr "Konsiloj Ricevitaj, laŭ Nombro de Konsiletoj"
-
-msgid "Tips Received, by Dollar Amount"
-msgstr "Konsiloj Ricevitaj, laŭ Dolaro Kvanto"
-
-msgid "Disconnect"
-msgstr "Desacoplado"
-
-# www/%username/giving/index.html.spt
-
-msgid "Giving"
-msgstr "Doni"
-
-msgid "Thanks for joining Gittip!"
-msgstr "Dankon pro via aliĝo Gittip!"
-
-msgid "To get you started, we've suggested a few people to give to below. Next steps:"
-msgstr "Por enkonduki vin, ni sugestis kelkajn homojn doni pli sube. Sekva paŝojn:"
-
-msgid "Change the weekly tips below as you please."
-msgstr "Ŝanĝi la semajna konsiletoj sube, kiel vi placxas."
-
-msgid "{0}Add a credit card{1} to make sure your weekly tips go through this Thursday."
-msgstr "{0}Aldonu kreditkarto{1} certigi vian semajna konsiletoj iri tra ĉi ĵaŭdon."
-
-msgid "{0}Fill out your profile{1} to let others know about you."
-msgstr "{0}Plenigu via profilo{1} al aliuloj estu vi."
-
-msgid "You give {0} per week"
-msgstr "Vi donu {0} ĉiusemajne"
-
-msgid "{0} gives {1} per week"
-msgstr "{0} donas {1} ĉiusemajne"
-
-msgid "Another {0} per week goes unclaimed"
-msgstr "Alia {0} ĉiusemajne iras sen pretendo"
-
-msgid "Confirm"
-msgstr "Konfirmi"
-
-# www/%username/history/index.html.spt
-
-msgid "History"
-msgstr "Historio"
-
-msgid "You joined {0}."
-msgstr "Vi aliĝis {0}."
-
-msgid "{0} joined {1}."
-msgstr "{0} aliĝis {1}."
-
-msgid "Your balance is {0}."
-msgstr "Via balanciĝo estas {0}."
-
-msgid "Their balance is {0}."
-msgstr "Iliaj balanciĝo estas {0}."
-
-msgid "Outside"
-msgstr "Ekstere"
-
-msgid "Inside Gittip"
-msgstr "Interne Gittip"
-
-msgid "Bank"
-msgstr "Banko"
-
-msgid "Card"
-msgstr "Karto"
-
-msgid "Fees"
-msgstr "Kotizoj"
-
-msgid "Credits"
-msgstr "Danko"
-
-msgid "Debits"
-msgstr "Egresos"
-
-msgid "Balance"
-msgstr "Bilanco"
-
-msgid "Notes"
-msgstr "Notoj"
-
-msgid "Automatic Withdrawal"
-msgstr "Aŭtomata Retiriĝo"
-
-msgid "Automatic Charge"
-msgstr "Aŭtomata Ŝarĝo"
-
-msgid "Receipt"
-msgstr "Kvitanco"
-
-# www/%username/widgets/index.html.spt
-
-msgid "Widgets"
-msgstr "Iloj"
-
-msgid "Widget #{0}"
-msgstr "Ilo #{0}"
-
-msgid "Use this code to embed a Gittip button on your website:"
-msgstr "Uzu tiun kodon por enkorpigi a Gittip butonon sur vian retejon:"
-
-msgid "The button opens your profile on Gittip in a new tab or window. Here's what the text reads:"
-msgstr "La butono malfermas vian profilon en Gittip en nova langeto aŭ fenestro. Jen kion la teksto diras:"
-
-msgid "person is not logged into Gittip or doesn't tip you"
-msgstr "persono ne estas ensalutinta en Gittip aŭ ne klini vin"
-
-msgid "person tips you; shows current gift amount"
-msgstr "persono konsiletoj vi; montras nuna donaco kvanto"
-
-msgid "your own button"
-msgstr "viajn proprajn butono"
-
-msgid "Here's an example using {0}:"
-msgstr "Jen ekzemplo uzanta {0}:"
-
-msgid "Use this code to add a Gittip \"receiving\" widget on your website:"
-msgstr "Uzu tiun kodon por aldoni Gittip \"ricevi\" ilon en via retejo:"
-
-msgid "Here's what it looks like:"
-msgstr "Jen kia ĝi aspektas kiel:"
-
-msgid "Or, if you'd like to include a \"giving\" widget, you can add the {0} attribute:"
-msgstr "Aŭ, se vi ŝatus inkluzivas \"doni\" ilo, vi povas aldoni la {0} atributo:"
-
-# www/%username/account/index.html.spt
-
-msgid "Account"
-msgstr "Konto"
-
+#: www/%username/account/index.html.spt:30
 msgid "You are {0}"
 msgstr "Vi estas {0}"
 
-msgid "Have you linked to your Gittip profile from other websites? Be sure to update those links!"
-msgstr "Ĉu vi ligita al via Gittip profilon de aliaj retejoj? Nepre aktualigi tiujn ligilojn!"
+#: www/%username/account/index.html.spt:39
+msgid ""
+"Have you linked to your Gittip profile from other websites? Be sure to "
+"update those links!"
+msgstr ""
+"Ĉu vi ligita al via Gittip profilon de aliaj retejoj? Nepre aktualigi "
+"tiujn ligilojn!"
 
+#: www/%username/account/index.html.spt:46
 msgid "Hide total giving from others."
 msgstr "Kaŝi entute dankesprimas al aliaj."
 
+#: www/%username/account/index.html.spt:52
 msgid "Hide total receiving from others."
 msgstr "Kaŝi entute ricevo de aliaj."
 
+#: www/%username/account/index.html.spt:57
 msgid "Adding Money"
 msgstr "Aldoni Monon"
 
-msgid "Credit Card"
-msgstr "Kreditkarto"
-
-msgid "None"
-msgstr "Neniu"
-
-msgid "Added"
-msgstr "Aldonita"
-
-msgid "Add"
-msgstr "Aldoni"
-
+#: www/%username/account/index.html.spt:90
 msgid "Withdrawing Money"
 msgstr "Forlasinte Mono"
 
-msgid "Bank Account"
-msgstr "Bankokonto"
+#: www/%username/account/index.html.spt:108
+msgid "Your bank account is {0}working{1}"
+msgstr ""
 
+#: www/%username/account/index.html.spt:110
+msgid "Your bank account is {0}failing{1}"
+msgstr ""
+
+#: www/%username/account/index.html.spt:124
 msgid "Email Settings"
 msgstr "Retpoŝto Agordojn"
 
+#: www/%username/account/index.html.spt:131
 msgid "Email Address (Private)"
 msgstr "Retpoŝta Adreso (Privata)"
 
+#: www/%username/account/index.html.spt:165
 msgid "API Key"
 msgstr "API Ŝlosilo"
 
+#: www/%username/account/index.html.spt:168
 msgid "Show Key"
 msgstr "Montri Ŝlosilo"
 
+#: www/%username/account/index.html.spt:169
 msgid "Hide Key"
 msgstr "Kaŝi Ŝlosilo"
 
+#: www/%username/account/index.html.spt:170
 msgid "Recreate"
 msgstr "Rekrei"
 
+#: www/%username/account/index.html.spt:172
 msgid "API docs"
 msgstr "API dokumentojn"
 
-msgid "Privacy"
-msgstr "Regularo"
-
+#: www/%username/account/index.html.spt:179
 msgid "Do Not Track"
 msgstr "Ne Sekvi"
 
+#: www/%username/account/index.html.spt:183
 msgid "On"
-msgstr "On"
+msgstr ""
 
+#: www/%username/account/index.html.spt:185
 msgid "Off"
 msgstr "Ekstere"
 
+#: www/%username/account/index.html.spt:193
 msgid "Close"
 msgstr "Fermi"
 
+#: www/%username/account/index.html.spt:195
 msgid "Close Account"
 msgstr "Fermi Konto"
 
-# www/for/%slug/index.html.spt
+#: www/%username/giving/index.html.spt:36
+msgid "You give {0} per week"
+msgstr "Vi donu {0} ĉiusemajne"
 
-msgid "{0} Community"
-msgstr "{0} Komunumo"
+#: www/%username/giving/index.html.spt:39
+msgid "{0} gives {1} per week"
+msgstr "{0} donas {1} ĉiusemajne"
 
-msgid "Community"
-msgstr "Komunumo"
+#: www/%username/giving/index.html.spt:56
+msgid "Another {0} per week goes unclaimed"
+msgstr "Alia {0} ĉiusemajne iras sen pretendo"
 
-msgid "Browse {0}All Communities{1}"
-msgstr "Foliumu {0}Ĉiujn Komunumoj{1}"
+#: www/%username/history/index.html.spt:15
+msgid "You joined {0}."
+msgstr "Vi aliĝis {0}."
 
-msgid "{0} to join the {1} community on Gittip."
-msgstr "{0} por kuniĝi la {1} komunumo sur Gittip."
+#: www/%username/history/index.html.spt:17
+msgid "{0} joined {1}."
+msgstr "{0} aliĝis {1}."
 
-msgid "Leave"
-msgstr "Lasi"
+#: www/%username/history/index.html.spt:22
+msgid "Their balance is {0}."
+msgstr "Iliaj balanciĝo estas {0}."
 
-msgid "Join"
-msgstr "Aliĝu"
+#: www/%username/history/index.html.spt:64
+msgid "Outside"
+msgstr "Ekstere"
 
-msgid "You're the first one here!"
-msgstr "Vi estas la unua ĉi tie!"
+#: www/%username/history/index.html.spt:65
+msgid "Inside Gittip"
+msgstr "Interne Gittip"
 
-msgid "Bring the {0} community to Gittip to find like-minded people to give to."
-msgstr "Alportu la {0} komunumon Gittip trovi samideanoj homojn doni."
+#: www/%username/history/index.html.spt:68
+msgid "Bank"
+msgstr "Banko"
 
-msgid "New Members"
-msgstr "Novaj Membroj"
+#: www/%username/history/index.html.spt:69
+msgid "Card"
+msgstr "Karto"
 
-msgid "Top Givers"
-msgstr "Alta Donantoj"
+#: www/%username/history/index.html.spt:70
+msgid "Fees"
+msgstr "Kotizoj"
 
-msgid "Top Receivers"
-msgstr "Alta Riceviloj"
+#: www/%username/history/index.html.spt:71
+msgid "Credits"
+msgstr "Danko"
 
-msgid "Anonymous"
-msgstr "Anonima"
+#: www/%username/history/index.html.spt:72
+msgid "Debits"
+msgstr "Egresos"
 
-msgid "More"
-msgstr "Pli"
+#: www/%username/history/index.html.spt:73
+msgid "Balance"
+msgstr "Bilanco"
 
-# www/for/index.html.spt
+#: www/%username/history/index.html.spt:74
+msgid "Notes"
+msgstr "Notoj"
 
+#: www/%username/history/index.html.spt:86
+msgid "Automatic Withdrawal"
+msgstr "Aŭtomata Retiriĝo"
+
+#: www/%username/history/index.html.spt:105
+msgid "Automatic Charge"
+msgstr "Aŭtomata Ŝarĝo"
+
+#: www/%username/history/index.html.spt:111
+msgid "Receipt"
+msgstr "Kvitanco"
+
+#: www/%username/widgets/index.html.spt:102
+#: www/%username/widgets/index.html.spt:132
+msgid "Widget #{0}"
+msgstr "Ilo #{0}"
+
+#: www/%username/widgets/index.html.spt:104
+msgid "Use this code to embed a Gittip button on your website:"
+msgstr "Uzu tiun kodon por enkorpigi a Gittip butonon sur vian retejon:"
+
+#: www/%username/widgets/index.html.spt:110
+msgid ""
+"The button opens your profile on Gittip in a new tab or window. Here's "
+"what the text reads:"
+msgstr ""
+"La butono malfermas vian profilon en Gittip en nova langeto aŭ fenestro. "
+"Jen kion la teksto diras:"
+
+#: www/%username/widgets/index.html.spt:115
+msgid "person is not logged into Gittip or doesn't tip you"
+msgstr "persono ne estas ensalutinta en Gittip aŭ ne klini vin"
+
+#: www/%username/widgets/index.html.spt:118
+msgid "person tips you; shows current gift amount"
+msgstr "persono konsiletoj vi; montras nuna donaco kvanto"
+
+#: www/%username/widgets/index.html.spt:121
+msgid "your own button"
+msgstr "viajn proprajn butono"
+
+#: www/%username/widgets/index.html.spt:126
+msgid "Here's an example using {0}:"
+msgstr "Jen ekzemplo uzanta {0}:"
+
+#: www/%username/widgets/index.html.spt:134
+msgid "Use this code to add a Gittip \"receiving\" widget on your website:"
+msgstr "Uzu tiun kodon por aldoni Gittip \"ricevi\" ilon en via retejo:"
+
+#: www/%username/widgets/index.html.spt:139
+#: www/%username/widgets/index.html.spt:150
+msgid "Here's what it looks like:"
+msgstr "Jen kia ĝi aspektas kiel:"
+
+#: www/%username/widgets/index.html.spt:143
+msgid ""
+"Or, if you'd like to include a \"giving\" widget, you can add the {0} "
+"attribute:"
+msgstr "Aŭ, se vi ŝatus inkluzivas \"doni\" ilo, vi povas aldoni la {0} atributo:"
+
+#: www/for/index.html.spt:8
 msgid "Browse Communities"
 msgstr "Foliumu Komunumoj"
 
+#: www/for/index.html.spt:24
 msgid "{0}There are{1} {2} {3}communities on Gittip.{4}"
 msgstr "{0}Estas{1} {2} {3}komunumoj sur Gittip.{4}"
 
+#: www/for/index.html.spt:75
 msgid "Large Communities"
 msgstr "Grandaj Komunumoj"
 
-msgid "All Communities"
-msgstr "Ĉiuj Komunumoj"
-
+#: www/for/index.html.spt:82 www/for/index.html.spt:95
+#: www/for/%slug/index.html.spt:156
 msgid "{0}{n}{1} Member"
 msgid_plural "{0}{n}{1} Members"
 msgstr[0] "{0}{n}{1} Membro"
 msgstr[1] "{0}{n}{1} Membroj"
 
+#: www/for/index.html.spt:88
+msgid "All Communities"
+msgstr "Ĉiuj Komunumoj"
+
+#: www/for/index.html.spt:90
 msgid "Find or add a community ..."
 msgstr "Trovu aŭ aldonu komunumo ..."
 
-# www/credit-card.html.spt
+#: www/for/%slug/index.html.spt:40
+msgid "{0} Community"
+msgstr "{0} Komunumo"
 
-msgid "Your credit card is {0}missing{1}"
-msgstr "Via kreditkarto {0}mankas{1}"
+#: www/for/%slug/index.html.spt:125
+msgid "Community"
+msgstr "Komunumo"
 
-msgid "Your credit card is {0}working{1}"
-msgstr "Via kreditkarto estas {0}funkcianta{1}"
+#: www/for/%slug/index.html.spt:126
+msgid "Browse {0}All Communities{1}"
+msgstr "Foliumu {0}Ĉiujn Komunumoj{1}"
 
-msgid "Your credit card is {0}failing{1}"
-msgstr "Via kreditkarto {0}maltrafas{1}"
+#: www/for/%slug/index.html.spt:163
+msgid "{0} to join the {1} community on Gittip."
+msgstr "{0} por kuniĝi la {1} komunumo sur Gittip."
 
-msgid "When you don't have enough money in your Gittip account to cover your gifts, we'll attempt to pull money in using your credit card."
-msgstr "Kiam vi ne havas sufiĉan monon en vian Gittip konto kovri viajn donacojn, ni provos tiri monon uzanta vian kreditkarto."
+#: www/for/%slug/index.html.spt:170
+msgid "Leave"
+msgstr "Lasi"
 
-msgid "If your credit card is missing or fails then your gifts won't go through for that week."
-msgstr "Se via kreditkarto mankas aŭ mankas do viajn donacojn ne iros tra por tiu semajno."
+#: www/for/%slug/index.html.spt:170
+msgid "Join"
+msgstr "Aliĝu"
 
-msgid "Current:"
-msgstr "Fluo:"
+#: www/for/%slug/index.html.spt:182
+msgid "You're the first one here!"
+msgstr "Vi estas la unua ĉi tie!"
 
-msgid "Failure"
-msgstr "Fiasko"
+#: www/for/%slug/index.html.spt:184
+msgid "Bring the {0} community to Gittip to find like-minded people to give to."
+msgstr "Alportu la {0} komunumon Gittip trovi samideanoj homojn doni."
 
-msgid "Required"
-msgstr "Bezonata"
+#: www/for/%slug/index.html.spt:193
+msgid "New Members"
+msgstr "Novaj Membroj"
 
-msgid "Credit Card Number"
-msgstr "Kreditkarto Nombro"
+#: www/for/%slug/index.html.spt:212
+msgid "Top Givers"
+msgstr "Alta Donantoj"
 
-msgid "Expiration"
-msgstr "Finiĝo"
+#: www/for/%slug/index.html.spt:222 www/for/%slug/index.html.spt:252
+msgid "Anonymous"
+msgstr "Anonima"
 
-msgid "CVV"
-msgstr "CVV"
+#: www/for/%slug/index.html.spt:242
+msgid "Top Receivers"
+msgstr "Alta Riceviloj"
 
-msgid "Full Name on Card"
-msgstr "Plena Nomo sur Karto"
-
-msgid "Address 1"
-msgstr "Adreso 1"
-
-msgid "Address 2"
-msgstr "Adreso 2"
-
-msgid "City or Town"
-msgstr "Urbo aŭ Plaĉas"
-
-msgid "State or Province"
-msgstr "Ŝtato aŭ Provinco"
-
-msgid "ZIP or Postal Code"
-msgstr "ZIP aŭ Poŝta Kodo"
-
-msgid "Country"
-msgstr "Lando"
-
-msgid "Choose a country..."
-msgstr "Elektu landon..."
-
-msgid "Disconnect My Credit Card"
-msgstr "Malkonekti Mia Kreditkarto"
-
-# www/bank-account.html.spt
-
-msgid "Your bank account is {0}connected{1}"
-msgstr "Via bankokonto estas {0}konektitaj{1}"
-
-msgid "Your bank account is {0}not connected{1}"
-msgstr "Via bankokonto estas {0}ne konektitaj{1}"
-
-msgid "When you receive money on Gittip we'll automatically deposit it into your bank account."
-msgstr "Kiam vi ricevas monon Gittip ni aŭtomate deponi ĝin en vian bankokonton."
-
-msgid "If you don't connect a bank account then your money will accumulate within Gittip unless you regift it to others."
-msgstr "Se vi ne konekti bankokonto tiam via mono amasigos ene Gittip se vi re-donaco ĝin al aliaj."
-
-msgid "{0} and then you'll be able to add{1} or change your bank account."
-msgstr "{0} kaj poste vi povos aldoni{1} aŭ ŝanĝi vian bankokonton."
-
-msgid "Thanks! :-)"
-msgstr "Dankon! :-)"
-
-msgid "Identity Verification"
-msgstr "Identeco Verification"
-
-msgid "Routing Information"
-msgstr "Enrutamiento Informo"
-
-msgid "Your Legal Name"
-msgstr "Via Juraj Nomo"
-
-msgid "Street Address"
-msgstr "Strato Adreso"
-
-msgid "City"
-msgstr "Urbo"
-
-msgid "non-US?"
-msgstr "non-Usono?"
-
-msgid "United States of America"
-msgstr "Unuiĝintaj Ŝtatoj de Ameriko"
-
-msgid "Contact Phone Number"
-msgstr "Kontakto Telefono Nombro"
-
-msgid "Date of Birth"
-msgstr "Dato de Naskiĝo"
-
-msgid "Last four SSN digits"
-msgstr "Lasta kvar SSN ciferoj"
-
-msgid "(Not required)"
-msgstr "(Ne bezonata)"
-
-msgid "Name on Bank Account"
-msgstr "Nomo sur Banko Konto"
-
-msgid "Routing Number"
-msgstr "Enkursigilo Nombro"
-
-msgid "Bank Account Number"
-msgstr "Banko Konto Numero"
-
-msgid "Disconnect My Bank Account"
-msgstr "Malkonekti Mia Banko Nombro"
-
-# templates/participant.html
-
-msgid "{0} gives and receives anonymously"
-msgstr "{0} donas kaj ricevas anonime"
-
-msgid "{0} gives anonymously"
-msgstr "{0} donas anonime"
-
-msgid "{0} receives anonymously"
-msgstr "{0} ricevas anonime"
-
-msgid "{topstart}{username} gives{topend} {midstart}{giving}{midend} {bottomstart}per week, and receives anonymously{bottomend}"
-msgstr "{topstart}{username} donas{topend} {midstart}{giving}{midend} {bottomstart}por semajno, kaj ricevas anonime{bottomend}"
-
-msgid "{topstart}{username} receives{topend} {midstart}{receiving}{midend} {bottomstart}per week, and gives anonymously{bottomend}"
-msgstr "{topstart}{username} ricevas{topend} {midstart}{receiving}{midend} {bottomstart}por semajno, kaj donas anonime{bottomend}"
-
-msgid "{topstart}{username} gives{topend} {midstart}{giving}{midend} {bottomstart}per week, and receives {receiving}{bottomend}"
-msgstr "{topstart}{username} donas{topend} {midstart}{giving}{midend} {bottomstart}por semajno, kaj ricevas {receiving}{bottomend}"
-
-msgid "{topstart}{username} receives{topend} {midstart}{receiving}{midend} {bottomstart}per week, and gives {giving}{bottomend}"
-msgstr "{topstart}{username} ricevas{topend} {midstart}{receiving}{midend} {bottomstart}por semajno, kaj donas {giving}{bottomend}"
-
-msgid "{topstart}{username} gives{topend} {midstart}{giving}{midend} {bottomstart}per week{bottomend}"
-msgstr "{topstart}{username} donas{topend} {midstart}{giving}{midend} {bottomstart}por semajno{bottomend}"
-
-msgid "{topstart}{username} receives{topend} {midstart}{receiving}{midend} {bottomstart}per week{bottomend}"
-msgstr "{topstart}{username} ricevas{topend} {midstart}{receiving}{midend} {bottomstart}por semajno{bottomend}"
-
-msgid "{0} just joined Gittip! :D"
-msgstr "{0} ĵus aliĝis Gittip! :D"
-
-msgid "{0} joined recently"
-msgstr "{0} aliĝis lastatempe"
-
-msgid "{0} is quietly watching the Gittip world"
-msgstr "{0} trankvile rigardante la Gittip mondo"
-
-# templates/participant.tip.html
-
-msgid "This account has been locked by its owner."
-msgstr "Tiu konto estas ŝlosita por lia mastro."
-
-msgid "Your Weekly Pledge"
-msgstr "Viaj Semajna Promeso"
-
-msgid "Your Weekly Gift"
-msgstr "Viaj Semajna Donaco"
-
-msgid "Back your gift with a {0}credit card{1} to make sure it goes through!"
-msgstr "Reen vian donacon per {0}kreditkarto{1} certigi, ke ĝi iras tra!"
-
-msgid "Fix your {0}credit card{1} to make sure your gifts go through!"
-msgstr "Fiksu viajn {0}kreditkarto{1} certigi vian donacoj trairu!"
+#: www/for/%slug/index.html.spt:276
+msgid "More"
+msgstr "Pli"

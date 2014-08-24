@@ -11,9 +11,7 @@
         </div>
     </td>
     <td class="account-details">
-        {% if account == None %}
-            <span class="none">{{ _("None") }}</span>
-        {% else %}
+        {% if account %}
             <a class="account-username" rel="me" href="{{ account.html_url|e }}"
                 >{{ account.user_name|e }}
                 {% if account.display_name and account.display_name != account.user_name %}
@@ -28,12 +26,12 @@
         {% if account == None %}
             {% if not user.ANON and user.participant == participant %}
                 {% call auth_button('venmo', 'connect') %}
-                    + {{ _("Add") }}
+                    {{ _("+ Add") }}
                 {% endcall %}
             {% endif %}
         {% else %}
             {% if user.participant == participant %}
-                <div class="account-delete" title="Disconnect"
+                <div class="account-delete" title="{{ _('Disconnect') }}"
                         data-platform="venmo"
                         data-user_id="{{ account.user_id }}">
                 </div>

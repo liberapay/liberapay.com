@@ -12,9 +12,7 @@
             </div>
         </td>
         <td class="account-details">
-            {% if account == None %}
-                <span class="none">{{ _("None") }}</span>
-            {% else %}
+            {% if account %}
                 <a class="account-username" rel="me" href="{{ account.html_url|e }}"
                     >{{ (account.user_name or account.user_id)|e }}
                     {% if account.display_name and account.display_name != account.user_name %}
@@ -31,7 +29,7 @@
                     {% set allow_team = participant.IS_PLURAL and platform.is_team_admin %}
                     {% set cls = allow_team and 'user_name_prompt' or '' %}
                     {% call auth_button(platform.name, 'connect', class=cls) %}
-                        + {{ _("Add") }}
+                        {{ _("+ Add") }}
                     {% endcall %}
                 {% else %}
                     <div class="account-delete" title="{{ _("Disconnect") }}"

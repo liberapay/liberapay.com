@@ -25,38 +25,19 @@
 
     <!-- one-off receiving options -->
     {% if participant.bitcoin_address or own_account %}
+    {% set addr = participant.bitcoin_address or '' %}
+    {% set url = 'https://blockchain.info/address/'+addr if addr else 'javascript:;' %}
     <tr>
         <td class="account-type">
             <img src="{{ website.asset_url }}/bitcoin.png" />
         </td>
-        <td class="account-details" colspan="2">
-            {% if not user.ANON and own_account %}
-                <div class="bitcoin">
-            {% else %}
-                <div>
-            {% endif %}
-                {% if participant.bitcoin_address %}
-                    <a class="address" rel="me" href="https://blockchain.info/address/{{ participant.bitcoin_address }}">
-                      {{ participant.bitcoin_address }}
-                    </a>
-                    {% if not user.ANON and own_account %}
-                    <button class="toggle-bitcoin">{{ _("Edit") }}</button>
-                    {% endif %}
-
-                {% else %}
-                    <span class="none">None</span>
-                    {% if not user.ANON and own_account %}
-                        <button class="toggle-bitcoin">+ {{ _("Add") }}</button>
-                    {% endif %}
-                {% endif %}
+        <td class="account-details">
+            <div class="{{ 'bitcoin' if own_account else '' }}">
+                <a class="address" rel="me" href="{{ url }}">{{ addr }}</a>
             </div>
             <form class="bitcoin-submit">
                 <div class="address">
-                    <input type="text" class="bitcoin hidden"
-                        {% if participant.bitcoin_address %}
-                            value="{{ participant.bitcoin_address }}"
-                        {% endif %}
-                    >
+                    <input type="text" class="bitcoin hidden" value="{{ addr }}" />
                 </div>
                 <div class="buttons">
                     <button type="submit" class="bitcoin hidden">{{ _("Save") }}</button>
@@ -65,6 +46,11 @@
             </form>
 
             <div class="account-type">Bitcoin</div>
+        </td>
+        <td class="account-action">
+            <button class="toggle-bitcoin">
+                {{ _("Edit") if addr else _("+ Add") }}
+            </button>
         </td>
     </tr>
     {% endif %}

@@ -71,15 +71,15 @@ locked = False
                     </td>
                     <td class="account-details">
                         <div class="account-type">{{ _("Credit Card") }}</div>
-                        {% if participant.last_bill_result != "" %}
-                            <span class="none">{{ _("None") }}</span>
-                        {% else %}
-                            <a class="account-username" href="/credit-card.html">{{ _("Added") }}</a>
+                        {% if participant.last_bill_result == "" %}
+                            {{ _("Your credit card is {0}working{1}", "", "") }}
+                        {% elif participant.last_bill_result %}
+                            {{ _("Your credit card is {0}failing{1}", "<b>", "</b>") }}
                         {% endif %}
                     </td>
                     <td class="account-action">
-                        {% if participant.last_bill_result != "" %}
-                            <a class="button auth-button" href="/credit-card.html">+ {{ _("Add") }}</a>
+                        {% if participant.last_bill_result is none %}
+                            <a class="button auth-button" href="/credit-card.html">{{ _("+ Add") }}</a>
                         {% else %}
                             <a class="button auth-button" href="/credit-card.html">{{ _("Edit") }}</a>
                         {% endif %}
@@ -104,15 +104,15 @@ locked = False
                     </td>
                     <td class="account-details">
                         <div class="account-type">{{ _("Bank Account") }}</div>
-                        {% if participant.last_ach_result != "" %}
-                            <span class="none">{{ _("None") }}</span>
-                        {% else %}
-                            <a class="account-username" href="/bank-account.html">{{ _("Added") }}</a>
+                        {% if participant.last_ach_result == "" %}
+                            {{ _("Your bank account is {0}working{1}", "", "") }}
+                        {% elif participant.last_ach_result %}
+                            {{ _("Your bank account is {0}failing{1}", "<b>", "</b>") }}
                         {% endif %}
                     </td>
                     <td class="account-action">
-                        {% if participant.last_ach_result != "" %}
-                            <a class="button auth-button" href="/bank-account.html">+ {{ _("Add") }}</a>
+                        {% if participant.last_ach_result is none %}
+                            <a class="button auth-button" href="/bank-account.html">{{ _("+ Add") }}</a>
                         {% else %}
                             <a class="button auth-button" href="/bank-account.html">{{ _("Edit") }}</a>
                         {% endif %}
@@ -130,15 +130,11 @@ locked = False
                 <td class="account-details">
                     <div class="account-type">{{ _("Email Address (Private)") }}</div>
                     <div class="email">
-                        {% if participant.email %}
-                            <a class="address email-address" href="javascript:;">
-                              {{ participant.email.address }}
-                            </a>
-                            <button class="toggle-email">{{ _("Edit") }}</button>
-                        {% else %}
-                            <span class="none">{{ _("None") }}</span>
-                            <button class="toggle-email">+ {{ _("Add") }}</button>
-                        {% endif %}
+                        <a class="address email-address" href="javascript:;">
+                            {% if participant.email %}
+                                {{ participant.email.address }}
+                            {% endif %}
+                        </a>
                     </div>
 
                     <form class="email-submit">
@@ -147,13 +143,18 @@ locked = False
                                 {% if participant.email %}
                                     value="{{ participant.email.address }}"
                                 {% endif %}
-                            >
+                            />
                         </div>
                         <div class="buttons">
                             <button type="submit" class="email hidden">Save</button>
                             <button type="cancel" class="email cancel hidden">Cancel</button>
                         </div>
                     </form>
+                </td>
+                <td class="account-action">
+                    <button class="toggle-email">
+                        {{ _("Edit") if participant.email else _("+ Add") }}
+                    </button>
                 </td>
             </tr>
         </table>
