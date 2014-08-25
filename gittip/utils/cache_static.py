@@ -26,7 +26,7 @@ def version_is_dash(request):
 def get_last_modified(fs_path):
     """Get the last modified time, as int, of the file pointed to by fs_path.
     """
-    return int(os.path.getctime(fs_path))
+    return int(os.path.getmtime(fs_path))
 
 
 def inbound(request):
