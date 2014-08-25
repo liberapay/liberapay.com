@@ -251,17 +251,14 @@ class TestParticipant(Harness):
         self.alice.set_tip_to(self.carl, '1.00')
         self.bob.take_over(('twitter', str(self.carl.id)), have_confirmation=True)
 
-        tips = self.db.all("SELECT * FROM tips")
-        first, second = tips[0], tips[1]
-
-        # sanity checks (these don't count :)
-        assert len(tips) == 4
-        assert first.tipper, first.tippee == ('alice', 'bob')
-        assert second.tipper, second.tippee == ('alice', 'carl')
-
-        expected = first.ctime
-        actual = self.db.one("SELECT ctime FROM tips ORDER BY ctime LIMIT 1")
-        assert actual == expected
+        ctimes = self.db.all("""
+            SELECT ctime
+              FROM tips
+             WHERE tipper = 'alice'
+               AND tippee = 'bob'
+        """)
+        assert len(ctimes) == 2
+        assert ctimes[0] == ctimes[1]
 
     def test_connecting_unknown_account_fails(self):
         with self.assertRaises(NotSane):
