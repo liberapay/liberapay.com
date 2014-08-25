@@ -1,0 +1,955 @@
+
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2014-08-25 16:45+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: zh <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 1.3\n"
+
+#: templates/about.html:6 templates/base.html:78
+msgid "About"
+msgstr ""
+
+#: templates/about.html:6 templates/base.html:80
+msgid "FAQ"
+msgstr ""
+
+#: templates/about.html:6 templates/team-listing.html:3
+msgid "Teams"
+msgstr ""
+
+#: templates/about.html:10
+msgid "Pricing"
+msgstr ""
+
+#: templates/about.html:10 templates/base.html:81
+msgid "Stats"
+msgstr ""
+
+#: templates/about.html:10 templates/base.html:82
+msgid "Charts"
+msgstr ""
+
+#: templates/about.html:14 templates/base.html:83
+msgid "Terms"
+msgstr ""
+
+#: templates/about.html:14 templates/base.html:84
+#: www/%username/account/index.html.spt:175
+msgid "Privacy"
+msgstr ""
+
+#: templates/about.html:14 templates/base.html:85
+msgid "Fraud"
+msgstr ""
+
+#: templates/about.html:14
+msgid "DNT"
+msgstr ""
+
+#: templates/account-row.html:32 templates/connected-accounts.html:52
+#: templates/venmo-account.html:29 www/%username/account/index.html.spt:82
+#: www/%username/account/index.html.spt:115
+#: www/%username/account/index.html.spt:156
+msgid "+ Add"
+msgstr ""
+
+#: templates/account-row.html:35 templates/venmo-account.html:34
+msgid "Disconnect"
+msgstr ""
+
+#: templates/base.html:25
+msgid "{0} users exchanging {1} per week"
+msgstr "{0} 用户每周在交换着 {1}"
+
+#: templates/base.html:34
+msgid "Sign out"
+msgstr "退出"
+
+#: templates/base.html:36
+msgid "Giving:"
+msgstr "正在给:"
+
+#: templates/base.html:37 templates/base.html:40
+msgid "wk"
+msgstr "周"
+
+#: templates/base.html:40
+msgid "Receiving:"
+msgstr "正在收:"
+
+#: templates/base.html:77
+msgid "Blog"
+msgstr ""
+
+#: templates/base.html:79
+msgid "Source"
+msgstr ""
+
+#: templates/base.html:86
+msgid "Colophon"
+msgstr ""
+
+#: templates/base.html:87
+msgid "Security"
+msgstr ""
+
+#: templates/base.html:136
+msgid "Your credit card has failed!"
+msgstr ""
+
+#: templates/base.html:137
+msgid "Fix your card"
+msgstr ""
+
+#: templates/base.html:142
+msgid "Your credit card is about to expire!"
+msgstr ""
+
+#: templates/base.html:143
+msgid "Update card"
+msgstr ""
+
+#: templates/charts-for-user.html:5
+msgid "Dollars Received Per Week"
+msgstr ""
+
+#: templates/charts-for-user.html:7 templates/charts-for-user.html:14
+msgid "weeks"
+msgstr ""
+
+#: templates/charts-for-user.html:12
+msgid "Number of Patrons Per Week"
+msgstr ""
+
+#: templates/community-listing.html:2 templates/profile-edit.html:40
+#: www/for/index.html.spt:19
+msgid "Communities"
+msgstr ""
+
+#: templates/connected-accounts.html:5
+msgid "Social Profiles"
+msgstr ""
+
+#: templates/connected-accounts.html:20
+msgid "Other Receiving Options"
+msgstr ""
+
+#: templates/connected-accounts.html:22
+msgid "Other Giving Options"
+msgstr ""
+
+#: templates/connected-accounts.html:43 templates/profile-edit.html:7
+#: templates/profile-edit.html:51 www/bank-account.html.spt:193
+#: www/credit-card.html.spt:163 www/%username/account/index.html.spt:34
+msgid "Save"
+msgstr ""
+
+#: templates/connected-accounts.html:44 templates/my-tip-bulk.html:11
+#: templates/my-tip.html:18 templates/profile-edit.html:8
+#: templates/profile-edit.html:52 www/%username/account/index.html.spt:35
+msgid "Cancel"
+msgstr ""
+
+#: templates/connected-accounts.html:52 templates/profile-edit.html:6
+#: templates/profile-edit.html:50 www/%username/account/index.html.spt:33
+#: www/%username/account/index.html.spt:84
+#: www/%username/account/index.html.spt:117
+#: www/%username/account/index.html.spt:156
+msgid "Edit"
+msgstr ""
+
+#: templates/my-tip-bulk.html:8 templates/my-tip.html:4
+msgid "week"
+msgstr ""
+
+#: templates/my-tip-bulk.html:10 templates/my-tip.html:17
+msgid "Confirm"
+msgstr ""
+
+#: templates/participant.html:32
+msgid "{0} gives and receives anonymously"
+msgstr ""
+
+#: templates/participant.html:34
+msgid "{0} gives anonymously"
+msgstr ""
+
+#: templates/participant.html:36
+msgid "{0} receives anonymously"
+msgstr ""
+
+#: templates/participant.html:38
+msgid ""
+"{topstart}{username} gives{topend} {midstart}{giving}{midend} "
+"{bottomstart}per week, and receives anonymously{bottomend}"
+msgstr ""
+
+#: templates/participant.html:40
+msgid ""
+"{topstart}{username} receives{topend} {midstart}{receiving}{midend} "
+"{bottomstart}per week, and gives anonymously{bottomend}"
+msgstr ""
+
+#: templates/participant.html:42
+msgid ""
+"{topstart}{username} gives{topend} {midstart}{giving}{midend} "
+"{bottomstart}per week, and receives {receiving}{bottomend}"
+msgstr ""
+
+#: templates/participant.html:44
+msgid ""
+"{topstart}{username} receives{topend} {midstart}{receiving}{midend} "
+"{bottomstart}per week, and gives {giving}{bottomend}"
+msgstr ""
+
+#: templates/participant.html:46
+msgid ""
+"{topstart}{username} gives{topend} {midstart}{giving}{midend} "
+"{bottomstart}per week{bottomend}"
+msgstr ""
+
+#: templates/participant.html:48
+msgid ""
+"{topstart}{username} receives{topend} {midstart}{receiving}{midend} "
+"{bottomstart}per week{bottomend}"
+msgstr ""
+
+#: templates/participant.html:53
+msgid "{0} just joined Gittip! :D"
+msgstr "{0} 刚刚加入了 Gittip! :D"
+
+#: templates/participant.html:55
+msgid "{0} joined recently"
+msgstr "{0} 最近加入了"
+
+#: templates/participant.html:57
+msgid "{0} is quietly watching the Gittip world"
+msgstr "{0} 正在安静地看着Gittip的世界"
+
+#: templates/participant.tip.html:5
+msgid "This account has been locked by its owner."
+msgstr "这个帐号被它的主人锁定了."
+
+#: templates/participant.tip.html:11 templates/participant.tip.html:23
+msgid "Your Weekly Pledge"
+msgstr ""
+
+#: templates/participant.tip.html:11 templates/participant.tip.html:23
+msgid "Your Weekly Gift"
+msgstr ""
+
+#: templates/participant.tip.html:29
+msgid "Back your gift with a {0}credit card{1} to make sure it goes through!"
+msgstr ""
+
+#: templates/participant.tip.html:34
+msgid "Fix your {0}credit card{1} to make sure your gifts go through!"
+msgstr ""
+
+#: templates/profile-edit.html:5
+msgid "Statement"
+msgstr ""
+
+#: templates/profile-edit.html:23
+msgid "Newlines and links are converted to HTML."
+msgstr ""
+
+#: templates/profile-edit.html:42
+msgid "Join Communities"
+msgstr ""
+
+#: templates/profile-edit.html:49
+msgid "Funding Goal"
+msgstr ""
+
+#: templates/profile-edit.html:111
+msgid "Tips Received, by Number of Tips"
+msgstr ""
+
+#: templates/profile-edit.html:116
+msgid "Tips Received, by Dollar Amount"
+msgstr ""
+
+#: templates/profile.html:18 templates/profile.html:42
+msgid "Navigation"
+msgstr "导航"
+
+#: templates/profile.html:20 templates/profile.html:43
+#: www/%username/index.html.spt:19
+msgid "Profile"
+msgstr ""
+
+#: templates/profile.html:21 www/%username/giving/index.html.spt:8
+msgid "Giving"
+msgstr ""
+
+#: templates/profile.html:22 www/%username/history/index.html.spt:8
+msgid "History"
+msgstr ""
+
+#: templates/profile.html:23 www/%username/widgets/index.html.spt:6
+msgid "Widgets"
+msgstr ""
+
+#: templates/profile.html:24 www/%username/account/index.html.spt:8
+msgid "Account"
+msgstr ""
+
+#: templates/profile.html:34 templates/profile.html:44
+msgid "Members"
+msgstr ""
+
+#: templates/sign-in-using-to-give.html:3
+msgid "{0} to pledge to {1}"
+msgstr ""
+
+#: templates/sign-in-using-to-give.html:3
+msgid "{0} to give to {1}"
+msgstr ""
+
+#: templates/sign-in-using.html:5
+msgid "Sign in"
+msgstr "登录"
+
+#: templates/support-gittip.html:5
+#, python-format
+msgid "Only {0}% of active users also {1}support Gittip{2}."
+msgstr ""
+
+#: templates/support-gittip.html:7
+#, python-format
+msgid "{0}% of active users also {1}support Gittip{2}."
+msgstr ""
+
+#: templates/support-gittip.html:11
+msgid "Will you help us reach {0}%?"
+msgstr ""
+
+#: templates/support-gittip.html:13
+msgid "Will you join them?"
+msgstr ""
+
+#: templates/support-gittip.html:19
+msgid "Other"
+msgstr ""
+
+#: templates/support-gittip.html:19
+msgid "No thanks"
+msgstr ""
+
+#: templates/support-gittip.html:22
+msgid "We fund Gittip solely through your voluntary payments!"
+msgstr ""
+
+#: templates/support-gittip.html:23 www/index.html.spt:56
+msgid "Learn more"
+msgstr ""
+
+#: www/bank-account.html.spt:19
+msgid "Your bank account is {0}not connected{1}"
+msgstr ""
+
+#: www/bank-account.html.spt:22
+msgid "Your bank account is {0}connected{1}"
+msgstr ""
+
+#: www/bank-account.html.spt:29 www/%username/account/index.html.spt:106
+msgid "Bank Account"
+msgstr ""
+
+#: www/bank-account.html.spt:37
+msgid ""
+"When you receive money on Gittip we'll automatically deposit it into your"
+" bank account."
+msgstr ""
+
+#: www/bank-account.html.spt:38
+msgid ""
+"If you don't connect a bank account then your money will accumulate "
+"within Gittip unless you regift it to others."
+msgstr ""
+
+#: www/bank-account.html.spt:61
+msgid "{0} and then you'll be able to add{1} or change your bank account."
+msgstr ""
+
+#: www/bank-account.html.spt:63
+msgid "Thanks! :-)"
+msgstr ""
+
+#: www/bank-account.html.spt:87 www/credit-card.html.spt:92
+msgid "Failure"
+msgstr ""
+
+#: www/bank-account.html.spt:92 www/bank-account.html.spt:98
+msgid "Identity Verification"
+msgstr ""
+
+#: www/bank-account.html.spt:93 www/bank-account.html.spt:169
+msgid "Routing Information"
+msgstr ""
+
+#: www/bank-account.html.spt:101
+msgid "Your Legal Name"
+msgstr ""
+
+#: www/bank-account.html.spt:108
+msgid "Street Address"
+msgstr ""
+
+#: www/bank-account.html.spt:113
+msgid "City"
+msgstr ""
+
+#: www/bank-account.html.spt:118 www/credit-card.html.spt:139
+msgid "State or Province"
+msgstr ""
+
+#: www/bank-account.html.spt:123 www/credit-card.html.spt:144
+msgid "ZIP or Postal Code"
+msgstr ""
+
+#: www/bank-account.html.spt:130 www/credit-card.html.spt:150
+msgid "Country"
+msgstr ""
+
+#: www/bank-account.html.spt:130
+msgid "non-US?"
+msgstr ""
+
+#: www/bank-account.html.spt:136
+msgid "Contact Phone Number"
+msgstr ""
+
+#: www/bank-account.html.spt:141
+msgid "Date of Birth"
+msgstr ""
+
+#: www/bank-account.html.spt:162
+msgid "Last four SSN digits"
+msgstr ""
+
+#: www/bank-account.html.spt:162
+msgid "(Not required)"
+msgstr ""
+
+#: www/bank-account.html.spt:174
+msgid "Name on Bank Account"
+msgstr ""
+
+#: www/bank-account.html.spt:179
+msgid "Routing Number"
+msgstr ""
+
+#: www/bank-account.html.spt:184
+msgid "Bank Account Number"
+msgstr ""
+
+#: www/bank-account.html.spt:202
+msgid "Disconnect My Bank Account"
+msgstr ""
+
+#: www/credit-card.html.spt:18
+msgid "Your credit card is {0}missing{1}"
+msgstr ""
+
+#: www/credit-card.html.spt:23 www/%username/account/index.html.spt:75
+msgid "Your credit card is {0}working{1}"
+msgstr ""
+
+#: www/credit-card.html.spt:26 www/%username/account/index.html.spt:77
+msgid "Your credit card is {0}failing{1}"
+msgstr ""
+
+#: www/credit-card.html.spt:34 www/%username/account/index.html.spt:73
+msgid "Credit Card"
+msgstr ""
+
+#: www/credit-card.html.spt:42
+msgid ""
+"When you don't have enough money in your Gittip account to cover your "
+"gifts, we'll attempt to pull money in using your credit card."
+msgstr ""
+
+#: www/credit-card.html.spt:43
+msgid ""
+"If your credit card is missing or fails then your gifts won't go through "
+"for that week."
+msgstr ""
+
+#: www/credit-card.html.spt:88
+msgid "Current:"
+msgstr ""
+
+#: www/credit-card.html.spt:97
+msgid "Required"
+msgstr ""
+
+#: www/credit-card.html.spt:100
+msgid "Credit Card Number"
+msgstr "信用卡号"
+
+#: www/credit-card.html.spt:105
+msgid "Expiration"
+msgstr "有效期至"
+
+#: www/credit-card.html.spt:111
+msgid "CVV"
+msgstr ""
+
+#: www/credit-card.html.spt:120
+msgid "Full Name on Card"
+msgstr "卡上的全名"
+
+#: www/credit-card.html.spt:125
+msgid "Address 1"
+msgstr ""
+
+#: www/credit-card.html.spt:130
+msgid "Address 2"
+msgstr ""
+
+#: www/credit-card.html.spt:133
+msgid "City or Town"
+msgstr ""
+
+#: www/credit-card.html.spt:152
+msgid "Choose a country..."
+msgstr ""
+
+#: www/credit-card.html.spt:171
+msgid "Disconnect My Credit Card"
+msgstr ""
+
+#: www/index.html.spt:50
+msgid "Weekly Payments"
+msgstr "每周支付服务"
+
+#: www/index.html.spt:51
+msgid "Motivated by Gratitude"
+msgstr ""
+
+#: www/index.html.spt:53
+msgid ""
+"Sustainably crowdfund your business, personal projects, or charity, with "
+"{0}no extra fees{1}."
+msgstr "给你的生意，个人课题或慈善机构找到没有费用的可待续的群众集资 {0}ekstra kotizoj{1}."
+
+#: www/index.html.spt:61
+msgid "{0}Sign In{1} {2}to Accept Weekly Payments{3}"
+msgstr ""
+
+#: www/index.html.spt:67
+msgid "Sign in with {0}"
+msgstr ""
+
+#: www/index.html.spt:71
+msgid "Or sign in with:"
+msgstr ""
+
+#: www/index.html.spt:79
+msgid ""
+"By signing in, you indicate that you have read and agree to our {0}Terms "
+"and Conditions{1}."
+msgstr ""
+
+#: www/index.html.spt:81
+msgid "You'll be joining {0} active users, who exchanged {1} {2}last week{3}."
+msgstr ""
+
+#: www/index.html.spt:85
+msgid "Want to see who they are? Browse {0}our communities{1}."
+msgstr ""
+
+#: www/index.html.spt:87
+msgid "Want to work for Gittip? We are an {0}open company{1}."
+msgstr ""
+
+#: www/index.html.spt:93
+msgid "Welcome, {0}!"
+msgstr ""
+
+#: www/index.html.spt:94
+msgid "Thanks for joining Gittip!"
+msgstr ""
+
+#: www/index.html.spt:95
+msgid "Next steps:"
+msgstr ""
+
+#: www/index.html.spt:97
+msgid ""
+"Start tipping people, you can find great people to tip by browsing {0}our"
+" communities{1}."
+msgstr ""
+
+#: www/index.html.spt:99
+msgid ""
+"{0}Add a credit card{1} to make sure your weekly tips go through this "
+"Thursday."
+msgstr ""
+
+#: www/index.html.spt:101
+msgid "{0}Fill out your profile{1} to let others know about you."
+msgstr ""
+
+#: www/index.html.spt:106
+msgid "Welcome back, {0}!"
+msgstr ""
+
+#: www/index.html.spt:107 www/%username/history/index.html.spt:20
+msgid "Your balance is {0}."
+msgstr ""
+
+#: www/index.html.spt:110
+msgid "Go to {0}your profile{1}, or {2}sign out{3}."
+msgstr ""
+
+#: www/index.html.spt:117
+msgid "Jump to {0} from {1}"
+msgstr ""
+
+#: www/index.html.spt:124
+msgid "Go"
+msgstr ""
+
+#: www/sign-out.html.spt:26
+msgid "Are you sure you wish to sign out?"
+msgstr "你确定你想退出吗?"
+
+#: www/sign-out.html.spt:30
+msgid "Yes!"
+msgstr "是的!"
+
+#: www/%username/index.html.spt:33 www/for/%slug/index.html.spt:12
+msgid "I am making the world better by {0}"
+msgstr ""
+
+#: www/%username/index.html.spt:34 www/for/%slug/index.html.spt:13
+msgid "We are making the world better by {0}"
+msgstr ""
+
+#: www/%username/index.html.spt:38
+msgid "I'm grateful for gifts, but don't have a specific funding goal."
+msgstr ""
+
+#: www/%username/index.html.spt:39
+msgid "I'm here as a patron."
+msgstr ""
+
+#: www/%username/index.html.spt:40
+msgid "I'm here as a patron, and politely decline to receive gifts."
+msgstr ""
+
+#: www/%username/index.html.spt:41
+msgid "My goal is to receive {0} per week on Gittip."
+msgstr ""
+
+#: www/%username/index.html.spt:45
+msgid "We're grateful for gifts, but don't have a specific funding goal."
+msgstr ""
+
+#: www/%username/index.html.spt:46
+msgid "We're here as a patron."
+msgstr ""
+
+#: www/%username/index.html.spt:47
+msgid "We're here as a patron, and politely decline to receive gifts."
+msgstr ""
+
+#: www/%username/index.html.spt:48
+msgid "Our goal is to receive {0} per week on Gittip."
+msgstr ""
+
+#: www/%username/index.html.spt:55
+msgid "with {n} other"
+msgid_plural "with {n} others"
+msgstr[0] ""
+msgstr[1] ""
+
+#: www/%username/account/index.html.spt:30
+msgid "You are {0}"
+msgstr ""
+
+#: www/%username/account/index.html.spt:39
+msgid ""
+"Have you linked to your Gittip profile from other websites? Be sure to "
+"update those links!"
+msgstr ""
+
+#: www/%username/account/index.html.spt:46
+msgid "Hide total giving from others."
+msgstr ""
+
+#: www/%username/account/index.html.spt:52
+msgid "Hide total receiving from others."
+msgstr ""
+
+#: www/%username/account/index.html.spt:57
+msgid "Adding Money"
+msgstr ""
+
+#: www/%username/account/index.html.spt:90
+msgid "Withdrawing Money"
+msgstr ""
+
+#: www/%username/account/index.html.spt:108
+msgid "Your bank account is {0}working{1}"
+msgstr ""
+
+#: www/%username/account/index.html.spt:110
+msgid "Your bank account is {0}failing{1}"
+msgstr ""
+
+#: www/%username/account/index.html.spt:124
+msgid "Email Settings"
+msgstr ""
+
+#: www/%username/account/index.html.spt:131
+msgid "Email Address (Private)"
+msgstr ""
+
+#: www/%username/account/index.html.spt:165
+msgid "API Key"
+msgstr ""
+
+#: www/%username/account/index.html.spt:168
+msgid "Show Key"
+msgstr ""
+
+#: www/%username/account/index.html.spt:169
+msgid "Hide Key"
+msgstr ""
+
+#: www/%username/account/index.html.spt:170
+msgid "Recreate"
+msgstr ""
+
+#: www/%username/account/index.html.spt:172
+msgid "API docs"
+msgstr ""
+
+#: www/%username/account/index.html.spt:179
+msgid "Do Not Track"
+msgstr ""
+
+#: www/%username/account/index.html.spt:183
+msgid "On"
+msgstr ""
+
+#: www/%username/account/index.html.spt:185
+msgid "Off"
+msgstr ""
+
+#: www/%username/account/index.html.spt:193
+msgid "Close"
+msgstr ""
+
+#: www/%username/account/index.html.spt:195
+msgid "Close Account"
+msgstr ""
+
+#: www/%username/giving/index.html.spt:36
+msgid "You give {0} per week"
+msgstr ""
+
+#: www/%username/giving/index.html.spt:39
+msgid "{0} gives {1} per week"
+msgstr ""
+
+#: www/%username/giving/index.html.spt:56
+msgid "Another {0} per week goes unclaimed"
+msgstr ""
+
+#: www/%username/history/index.html.spt:15
+msgid "You joined {0}."
+msgstr ""
+
+#: www/%username/history/index.html.spt:17
+msgid "{0} joined {1}."
+msgstr ""
+
+#: www/%username/history/index.html.spt:22
+msgid "Their balance is {0}."
+msgstr ""
+
+#: www/%username/history/index.html.spt:64
+msgid "Outside"
+msgstr ""
+
+#: www/%username/history/index.html.spt:65
+msgid "Inside Gittip"
+msgstr ""
+
+#: www/%username/history/index.html.spt:68
+msgid "Bank"
+msgstr ""
+
+#: www/%username/history/index.html.spt:69
+msgid "Card"
+msgstr ""
+
+#: www/%username/history/index.html.spt:70
+msgid "Fees"
+msgstr ""
+
+#: www/%username/history/index.html.spt:71
+msgid "Credits"
+msgstr ""
+
+#: www/%username/history/index.html.spt:72
+msgid "Debits"
+msgstr ""
+
+#: www/%username/history/index.html.spt:73
+msgid "Balance"
+msgstr ""
+
+#: www/%username/history/index.html.spt:74
+msgid "Notes"
+msgstr ""
+
+#: www/%username/history/index.html.spt:86
+msgid "Automatic Withdrawal"
+msgstr ""
+
+#: www/%username/history/index.html.spt:105
+msgid "Automatic Charge"
+msgstr ""
+
+#: www/%username/history/index.html.spt:111
+msgid "Receipt"
+msgstr ""
+
+#: www/%username/widgets/index.html.spt:102
+#: www/%username/widgets/index.html.spt:132
+msgid "Widget #{0}"
+msgstr ""
+
+#: www/%username/widgets/index.html.spt:104
+msgid "Use this code to embed a Gittip button on your website:"
+msgstr ""
+
+#: www/%username/widgets/index.html.spt:110
+msgid ""
+"The button opens your profile on Gittip in a new tab or window. Here's "
+"what the text reads:"
+msgstr ""
+
+#: www/%username/widgets/index.html.spt:115
+msgid "person is not logged into Gittip or doesn't tip you"
+msgstr ""
+
+#: www/%username/widgets/index.html.spt:118
+msgid "person tips you; shows current gift amount"
+msgstr ""
+
+#: www/%username/widgets/index.html.spt:121
+msgid "your own button"
+msgstr ""
+
+#: www/%username/widgets/index.html.spt:126
+msgid "Here's an example using {0}:"
+msgstr ""
+
+#: www/%username/widgets/index.html.spt:134
+msgid "Use this code to add a Gittip \"receiving\" widget on your website:"
+msgstr ""
+
+#: www/%username/widgets/index.html.spt:139
+#: www/%username/widgets/index.html.spt:150
+msgid "Here's what it looks like:"
+msgstr ""
+
+#: www/%username/widgets/index.html.spt:143
+msgid ""
+"Or, if you'd like to include a \"giving\" widget, you can add the {0} "
+"attribute:"
+msgstr ""
+
+#: www/for/index.html.spt:8
+msgid "Browse Communities"
+msgstr ""
+
+#: www/for/index.html.spt:24
+msgid "{0}There are{1} {2} {3}communities on Gittip.{4}"
+msgstr ""
+
+#: www/for/index.html.spt:75
+msgid "Large Communities"
+msgstr ""
+
+#: www/for/index.html.spt:82 www/for/index.html.spt:95
+#: www/for/%slug/index.html.spt:156
+msgid "{0}{n}{1} Member"
+msgid_plural "{0}{n}{1} Members"
+msgstr[0] ""
+msgstr[1] ""
+
+#: www/for/index.html.spt:88
+msgid "All Communities"
+msgstr ""
+
+#: www/for/index.html.spt:90
+msgid "Find or add a community ..."
+msgstr ""
+
+#: www/for/%slug/index.html.spt:40
+msgid "{0} Community"
+msgstr "{0} Komunumo"
+
+#: www/for/%slug/index.html.spt:125
+msgid "Community"
+msgstr ""
+
+#: www/for/%slug/index.html.spt:126
+msgid "Browse {0}All Communities{1}"
+msgstr ""
+
+#: www/for/%slug/index.html.spt:163
+msgid "{0} to join the {1} community on Gittip."
+msgstr ""
+
+#: www/for/%slug/index.html.spt:170
+msgid "Leave"
+msgstr ""
+
+#: www/for/%slug/index.html.spt:170
+msgid "Join"
+msgstr ""
+
+#: www/for/%slug/index.html.spt:182
+msgid "You're the first one here!"
+msgstr ""
+
+#: www/for/%slug/index.html.spt:184
+msgid "Bring the {0} community to Gittip to find like-minded people to give to."
+msgstr ""
+
+#: www/for/%slug/index.html.spt:193
+msgid "New Members"
+msgstr ""
+
+#: www/for/%slug/index.html.spt:212
+msgid "Top Givers"
+msgstr ""
+
+#: www/for/%slug/index.html.spt:222 www/for/%slug/index.html.spt:252
+msgid "Anonymous"
+msgstr ""
+
+#: www/for/%slug/index.html.spt:242
+msgid "Top Receivers"
+msgstr ""
+
+#: www/for/%slug/index.html.spt:276
+msgid "More"
+msgstr ""
