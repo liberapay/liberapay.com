@@ -18,16 +18,6 @@ def slugize(slug):
     return slug
 
 
-def slug_to_name(db, slug):
-    """Given a slug like ``python``, return a name like ``Python``.
-
-    :database: One SELECT, one row
-
-    """
-    SQL = "SELECT name FROM community_summary WHERE slug=%s"
-    return db.one(SQL, (slug,))
-
-
 def get_list_for(db, username):
     """Return a listing of communities.
 
