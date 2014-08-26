@@ -50,6 +50,5 @@ $$ LANGUAGE SQL;
 
 
     -- Rename participants_api_key to participants_api_key_key.
-    ALTER TABLE participants DROP CONSTRAINT participants_api_key;
-    ALTER TABLE participants ADD CONSTRAINT participants_api_key_key UNIQUE (api_key);
+    ALTER TABLE participants RENAME CONSTRAINT participants_api_key TO participants_api_key_key;
 END;
