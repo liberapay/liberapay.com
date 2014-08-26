@@ -145,6 +145,12 @@ class Payday(object):
                     csv.writer(f).writerows(transfers)
                 raise
         self.take_over_balances()
+        # Clean up leftover functions
+        self.db.run("""
+            DROP FUNCTION process_take();
+            DROP FUNCTION process_tip();
+            DROP FUNCTION transfer(text, text, numeric, context_type);
+        """)
 
 
     @staticmethod
