@@ -18,16 +18,6 @@ def slugize(slug):
     return slug
 
 
-def slug_to_name(db, slug):
-    """Given a slug like ``python``, return a name like ``Python``.
-
-    :database: One SELECT, one row
-
-    """
-    SQL = "SELECT name FROM community_summary WHERE slug=%s"
-    return db.one(SQL, (slug,))
-
-
 def get_list_for(db, username):
     """Return a listing of communities.
 
@@ -35,11 +25,11 @@ def get_list_for(db, username):
 
     """
     if username is None:
-        member_test = "false"
+        member_test = ''
         sort_order = 'DESC'
         params = ()
     else:
-        member_test = "bool_or(participant = %s)"
+        member_test = 'AND participant = %s'
         sort_order = 'ASC'
         params = (username,)
 
@@ -48,10 +38,10 @@ def get_list_for(db, username):
         SELECT max(name) AS name
              , slug
              , count(*) AS nmembers
-             , {} AS is_member
           FROM current_communities
+         WHERE is_member {0}
       GROUP BY slug
-      ORDER BY nmembers {}, slug
+      ORDER BY nmembers {1}, slug
 
     """.format(member_test, sort_order), params)
 
@@ -74,6 +64,7 @@ class Community(Model):
               FROM current_communities c
               JOIN participants p ON p.username = c.participant
              WHERE c.slug = %s
+               AND is_member
           ORDER BY c.ctime
              LIMIT %s
             OFFSET %s;
@@ -82,4 +73,4 @@ class Community(Model):
     def check_membership(self, participant):
         return self.db.one("""
             SELECT * FROM current_communities WHERE slug=%s AND participant=%s
-        """, (self.slug, participant.username)) is not None
+        """, (self.slug, participant.username))

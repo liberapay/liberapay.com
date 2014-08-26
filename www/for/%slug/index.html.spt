@@ -51,23 +51,12 @@ new_participants = query_cache.all("""
          , avatar_url
          , statement
          , number
-      FROM (
-        SELECT DISTINCT ON (p.username)
-               p.username
-             , claimed_time
-             , p.avatar_url
-             , p.statement
-             , p.number
-          FROM participants p
-          JOIN elsewhere e
-            ON p.username = e.participant
-          JOIN current_communities cc
-            ON p.username = cc.participant
-         WHERE claimed_time IS NOT null
-           AND is_suspicious IS NOT true
-           AND cc.slug = %s AND cc.is_member
-           ) AS foo
-  ORDER BY claimed_time DESC
+      FROM participants p
+      JOIN current_communities cc ON cc.participant = p.username
+     WHERE p.claimed_time IS NOT null
+       AND p.is_suspicious IS NOT true
+       AND cc.slug = %s AND cc.is_member
+  ORDER BY p.claimed_time DESC
      LIMIT %s
     OFFSET %s
 
