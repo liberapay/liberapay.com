@@ -77,7 +77,7 @@ def make_sentry_teller(env):
                 # Only log server errors to Sentry. For responses < 500 we use
                 # stream-/line-based access logging. See discussion on:
 
-                # https://github.com/gratipay/www.gratipay.com/pull/1560.
+                # https://github.com/gratipay/gratipay.com/pull/1560.
 
                 return
 
@@ -117,7 +117,7 @@ def make_sentry_teller(env):
                                    , 'is_admin': user.participant.is_admin
                                    , 'is_suspicious': user.participant.is_suspicious
                                    , 'claimed_time': user.participant.claimed_time.isoformat()
-                                   , 'url': 'https://www.gratipay.com/{}/'.format(username)
+                                   , 'url': 'https://gratipay.com/{}/'.format(username)
                                     }
 
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# see https://github.com/gratipay/www.gratipay.com/issues/1771
+# see https://github.com/gratipay/gratipay.com/issues/1771
 
 dump=${1-`ls -r ~/gratipay-dumps/????-??-??.dump | head -1`}
 cores=`grep -c ^processor /proc/cpuinfo`

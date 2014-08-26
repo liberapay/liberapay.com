@@ -108,7 +108,7 @@ class TestRenderingStatsPage(Harness):
         """Test that stats page takes running payday into account.
 
         This test was originally written to expose the fix required for
-        https://github.com/gratipay/www.gratipay.com/issues/92.
+        https://github.com/gratipay/gratipay.com/issues/92.
         """
         a_thursday = DateTime(2012, 8, 9, 11, 00, 01)
         utcnow.return_value = a_thursday

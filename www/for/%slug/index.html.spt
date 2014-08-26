@@ -84,7 +84,7 @@ givers = query_cache.all("""
 """, (community.slug, limit, offset))
 
 # XXX I'm nearly positive that one or both of givers and receivers can contain
-# orphan accounts. See https://github.com/gratipay/www.gratipay.com/issues/650
+# orphan accounts. See https://github.com/gratipay/gratipay.com/issues/650
 
 receivers = query_cache.all("""
 -- top receivers on community page

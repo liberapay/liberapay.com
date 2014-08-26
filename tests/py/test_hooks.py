@@ -17,7 +17,7 @@ class Tests(Harness):
 
         # Change env, doesn't change self.environ.
         env.canonical_scheme = 'https'
-        env.canonical_host = 'www.gratipay.com'
+        env.canonical_host = 'gratipay.com'
 
         wireup.canonical(env)
 
@@ -29,15 +29,15 @@ class Tests(Harness):
 
     def test_canonize_canonizes(self):
         response = self.client.GxT( "/"
-                                  , HTTP_HOST=b'www.gratipay.com'
+                                  , HTTP_HOST=b'gratipay.com'
                                   , HTTP_X_FORWARDED_PROTO=b'http'
                                    )
         assert response.code == 302
-        assert response.headers['Location'] == b'https://www.gratipay.com/'
+        assert response.headers['Location'] == b'https://gratipay.com/'
 
 
     def test_session_cookie_isnt_overwritten_by_canonizer(self):
-        # https://github.com/gratipay/www.gratipay.com/issues/940
+        # https://github.com/gratipay/gratipay.com/issues/940
 
         self.make_participant('alice')
 
@@ -45,15 +45,15 @@ class Tests(Harness):
         redirect = self.client.GET( "/"
                                   , auth_as='alice'
                                   , HTTP_X_FORWARDED_PROTO=b'http'
-                                  , HTTP_HOST=b'www.gratipay.com'
+                                  , HTTP_HOST=b'gratipay.com'
                                   , raise_immediately=False
                                    )
         assert redirect.code == 302
         assert SESSION not in redirect.headers.cookie
 
         # This is bad, because it means that the user will be signed out of
-        # https://www.gratipay.com/ if they make a request for
-        # http://www.gratipay.com/.
+        # https://gratipay.com/ if they make a request for
+        # http://gratipay.com/.
 
 
     def test_session_cookie_not_set_under_API_key_auth(self):
@@ -64,7 +64,7 @@ class Tests(Harness):
         response = self.client.GET( '/alice/public.json'
                                   , HTTP_AUTHORIZATION=auth_header
                                   , HTTP_X_FORWARDED_PROTO=b'https'
-                                  , HTTP_HOST=b'www.gratipay.com'
+                                  , HTTP_HOST=b'gratipay.com'
                                    )
 
         assert response.code == 200

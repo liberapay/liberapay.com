@@ -1,8 +1,8 @@
-# Welcome to Gratipay [<img height="26px" src="https://raw.githubusercontent.com/gratipay/www.gratipay.com/master/www/assets/%25version/gratipay.opengraph.png"/>](https://www.gratipay.com/)
+# Welcome to Gratipay [<img height="26px" src="https://raw.githubusercontent.com/gratipay/gratipay.com/master/www/assets/%25version/gratipay.opengraph.png"/>](https://gratipay.com/)
 
-[![Build Status](http://img.shields.io/travis/gratipay/www.gratipay.com/master.svg)](https://travis-ci.org/gratipay/www.gratipay.com)
-[![Coverage Status](https://img.shields.io/coveralls/gratipay/www.gratipay.com.svg)](https://coveralls.io/r/gratipay/www.gratipay.com?branch=master)
-[![HuBoard badge](http://img.shields.io/badge/Hu-Board-7965cc.svg)](https://huboard.com/gratipay/www.gratipay.com)
+[![Build Status](http://img.shields.io/travis/gratipay/gratipay.com/master.svg)](https://travis-ci.org/gratipay/gratipay.com)
+[![Coverage Status](https://img.shields.io/coveralls/gratipay/gratipay.com.svg)](https://coveralls.io/r/gratipay/gratipay.com?branch=master)
+[![HuBoard badge](http://img.shields.io/badge/Hu-Board-7965cc.svg)](https://huboard.com/gratipay/gratipay.com)
 [![Open Bounties](https://api.bountysource.com/badge/team?team_id=423&style=bounties_received)](https://www.bountysource.com/teams/gratipay/issues)
 
 Gratipay is a weekly gift exchange, helping to create a culture of generosity.
@@ -18,8 +18,8 @@ Local
 Given Python 2.7, Postgres 9.3, and a C/make toolchain:
 
 ```
-$ git clone git@github.com:gratipay/www.gratipay.com.git
-$ cd www.gratipay.com
+$ git clone git@github.com:gratipay/gratipay.com.git
+$ cd gratipay.com
 $ sudo -u postgres createuser --superuser $USER
 $ createdb gratipay
 $ make schema data
@@ -70,7 +70,7 @@ Table of Contents
   - [Vagrant](#vagrant)
   - [Docker](#docker)
   - [Help!](#help)
- - [Configuration](https://github.com/gratipay/www.gratipay.com/wiki/Configuration)
+ - [Configuration](https://github.com/gratipay/gratipay.com/wiki/Configuration)
  - [Modifying CSS](#modifying-css)
  - [Testing](#testing-)
  - [Setting up a Database](#local-database-setup)
@@ -83,14 +83,14 @@ Installation
 ============
 
 Thanks for hacking on Gratipay! Be sure to review
-[CONTRIBUTING](https://github.com/gratipay/www.gratipay.com/blob/master/CONTRIBUTING.md#readme)
+[CONTRIBUTING](https://github.com/gratipay/gratipay.com/blob/master/CONTRIBUTING.md#readme)
 as well if that's what you're planning to do.
 
 
 Dependencies
 ------------
 
-Building `www.gratipay.com` requires [Python
+Building `gratipay.com` requires [Python
 2.7](http://python.org/download/releases/2.7.4/), and a gcc/make toolchain.
 
 All Python library dependencies are bundled in the repo (under `vendor/`). If
@@ -181,7 +181,7 @@ pid-1261 thread-140735191843600 (MainThread)   show_tracebacks        True      
 pid-1261 thread-140735191843600 (MainThread)   www_root               None                           default
 pid-1261 thread-140735191843600 (MainThread)   www_root               www/                           environment variable ASPEN_WWW_ROOT=www/
 pid-1261 thread-140735191843600 (MainThread) project_root is relative to CWD: '.'.
-pid-1261 thread-140735191843600 (MainThread) project_root set to /Users/whit537/personal/gratipay/www.gratipay.com.
+pid-1261 thread-140735191843600 (MainThread) project_root set to /Users/whit537/personal/gratipay/gratipay.com.
 pid-1261 thread-140735191843600 (MainThread) Found plugin for renderer 'jinja2'
 pid-1261 thread-140735191843600 (MainThread) Won't log to Sentry (SENTRY_DSN is empty).
 pid-1261 thread-140735191843600 (MainThread) Renderers (*ed are unavailable, CAPS is default):
@@ -195,7 +195,7 @@ pid-1261 thread-140735191843600 (MainThread)   stdlib_template
 You should then find this in your browser at
 [http://localhost:8537/](http://localhost:8537/):
 
-![Success](https://raw.github.com/gratipay/www.gratipay.com/master/img-src/success.png)
+![Success](https://raw.github.com/gratipay/gratipay.com/master/img-src/success.png)
 
 Congratulations! Sign in using Twitter or GitHub and you're off and
 running. At some point, try [running the test suite](#testing-).
@@ -213,7 +213,7 @@ The Vagrantfile will download a custom made image from the internet. If you have
 Once downloaded, vagrant will use this local file automatically when you run `vagrant up`. Vagrant is setup to use key based SSH authentication, if you're prompted for a password please use `vagrant`.
 
 **Ubuntu users:** If you experience problems, please see [this
-issue](https://github.com/gratipay/www.gratipay.com/pull/2321#issuecomment-41455169).
+issue](https://github.com/gratipay/gratipay.com/pull/2321#issuecomment-41455169).
 As mentioned, you will also need to be wary of projects that are nested
 in encrypted directories.
 
@@ -231,8 +231,8 @@ $ docker pull citruspi/gratipay
 or build it with the included Dockerfile:
 
 ```
-$ git clone git@github.com:gratipay/www.gratipay.com.git
-$ cd www.gratipay.com
+$ git clone git@github.com:gratipay/gratipay.com.git
+$ cd gratipay.com
 $ docker build -t gratipay .
 ```
 
@@ -281,7 +281,7 @@ Help!
 
 If you get stuck somewhere along the way, you can find help in the #gratipay
 channel on [Freenode](http://webchat.freenode.net/) or in the [issue
-tracker](/gratipay/www.gratipay.com/issues/new) here on GitHub.
+tracker](/gratipay/gratipay.com/issues/new) here on GitHub.
 
 Thanks for installing Gratipay! :smiley:
 
@@ -293,7 +293,7 @@ We use SCSS, with files stored in `scss/`. All of the individual files are
 combined in `scss/gratipay.scss` which itself is compiled by `libsass` in
 `www/assets/%version/gratipay.css.spt` on each request.
 
-Testing [![Build Status](http://img.shields.io/travis/gratipay/www.gratipay.com/master.svg)](https://travis-ci.org/gratipay/www.gratipay.com)
+Testing [![Build Status](http://img.shields.io/travis/gratipay/gratipay.com/master.svg)](https://travis-ci.org/gratipay/gratipay.com)
 =======
 
 Please write unit tests for all new code and all code you change. Gratipay's
@@ -363,30 +363,30 @@ API
 
 The Gratipay API is comprised of these six endpoints:
 
-**[/about/charts.json](https://www.gratipay.com/about/charts.json)**
-([source](https://github.com/gratipay/www.gratipay.com/tree/master/www/about/charts.json.spt))&mdash;<i>public</i>&mdash;Returns
+**[/about/charts.json](https://gratipay.com/about/charts.json)**
+([source](https://github.com/gratipay/gratipay.com/tree/master/www/about/charts.json.spt))&mdash;<i>public</i>&mdash;Returns
 an array of objects, one per week, showing aggregate numbers over time. The
-[charts](https://www.gratipay.com/about/charts.html) page uses this.
+[charts](https://gratipay.com/about/charts.html) page uses this.
 
-**[/about/paydays.json](https://www.gratipay.com/about/paydays.json)**
-([source](https://github.com/gratipay/www.gratipay.com/tree/master/www/about/paydays.json.spt))&mdash;<i>public</i>&mdash;Returns
+**[/about/paydays.json](https://gratipay.com/about/paydays.json)**
+([source](https://github.com/gratipay/gratipay.com/tree/master/www/about/paydays.json.spt))&mdash;<i>public</i>&mdash;Returns
 an array of objects, one per week, showing aggregate numbers over time. The
-[charts](https://www.gratipay.com/about/charts.html) page used to use this.
+[charts](https://gratipay.com/about/charts.html) page used to use this.
 
-**[/about/stats.json](https://www.gratipay.com/about/stats.json)**
-([source](https://github.com/gratipay/www.gratipay.com/tree/master/www/about/stats.spt))&mdash;<i>public</i>&mdash;Returns
+**[/about/stats.json](https://gratipay.com/about/stats.json)**
+([source](https://github.com/gratipay/gratipay.com/tree/master/www/about/stats.spt))&mdash;<i>public</i>&mdash;Returns
 an object giving a point-in-time snapshot of Gratipay. The
-[stats](https://www.gratipay.com/about/stats.html) page displays the same info.
+[stats](https://gratipay.com/about/stats.html) page displays the same info.
 
 **/`%username`/charts.json**
-([example](https://www.gratipay.com/Gratipay/charts.json),
-[source](https://github.com/gratipay/www.gratipay.com/tree/master/www/%25username/charts.json.spt))&mdash;<i>public</i>&mdash;Returns
+([example](https://gratipay.com/Gratipay/charts.json),
+[source](https://github.com/gratipay/gratipay.com/tree/master/www/%25username/charts.json.spt))&mdash;<i>public</i>&mdash;Returns
 an array of objects, one per week, showing aggregate numbers over time for the
 given user.
 
 **/`%username`/public.json**
-([example](https://www.gratipay.com/Gratipay/public.json),
-[source](https://github.com/gratipay/www.gratipay.com/tree/master/www/%25username/public.json.spt))&mdash;<i>public</i>&mdash;Returns an object with these keys:
+([example](https://gratipay.com/Gratipay/public.json),
+[source](https://github.com/gratipay/gratipay.com/tree/master/www/%25username/public.json.spt))&mdash;<i>public</i>&mdash;Returns an object with these keys:
 
   - "receiving"&mdash;an estimate of the amount the given participant will
     receive this week
@@ -425,7 +425,7 @@ given user.
 
 
 **/`%username`/tips.json**
-([source](https://github.com/gratipay/www.gratipay.com/tree/master/www/%25username/tips.json.spt))&mdash;<i>private</i>&mdash;Responds
+([source](https://github.com/gratipay/gratipay.com/tree/master/www/%25username/tips.json.spt))&mdash;<i>private</i>&mdash;Responds
 to `GET` with an array of objects representing your current tips. `POST` the
 same structure back in order to update tips in bulk (be sure to set
 `Content-Type` to `application/json` instead of
@@ -440,11 +440,11 @@ NOTE: The amounts must be encoded as a string (rather than a number).
 Additionally, currently, the only supported platform is 'gratipay'.
 
 This endpoint requires authentication. Look for your API key on your [profile
-page](https://www.gratipay.com/about/me/account), and pass it as the basic auth
+page](https://gratipay.com/about/me/account), and pass it as the basic auth
 username. E.g.:
 
 ```
-curl https://www.gratipay.com/foobar/tips.json \
+curl https://gratipay.com/foobar/tips.json \
     -u API_KEY: \
     -X POST \
     -d'[{"username":"bazbuz", "platform":"gratipay", "amount": "1.00"}]' \

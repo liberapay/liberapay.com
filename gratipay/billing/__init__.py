@@ -197,7 +197,7 @@ class BalancedThing(object):
                     break
 
         if out is None:
-            # Default to ''; see https://github.com/gratipay/www.gratipay.com/issues/2161.
+            # Default to ''; see https://github.com/gratipay/gratipay.com/issues/2161.
             out = ''
 
         return out

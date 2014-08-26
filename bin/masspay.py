@@ -91,11 +91,11 @@ class Payee(object):
         #  11. BUT ... if we upload 1.25, PayPal upcharges to 1.28. Think about
         #       it.
         #
-        # See also: https://github.com/gratipay/www.gratipay.com/issues/1673
-        #           https://github.com/gratipay/www.gratipay.com/issues/2029
-        #           https://github.com/gratipay/www.gratipay.com/issues/2198
-        #           https://github.com/gratipay/www.gratipay.com/pull/2209
-        #           https://github.com/gratipay/www.gratipay.com/issues/2296
+        # See also: https://github.com/gratipay/gratipay.com/issues/1673
+        #           https://github.com/gratipay/gratipay.com/issues/2029
+        #           https://github.com/gratipay/gratipay.com/issues/2198
+        #           https://github.com/gratipay/gratipay.com/pull/2209
+        #           https://github.com/gratipay/gratipay.com/issues/2296
 
         target = net = self.gross
         while 1:
@@ -140,7 +140,7 @@ def compute_input_csv():
         amount = participant.balance - total
         if amount < 0.50:
             # Minimum payout of 50 cents. I think that otherwise PayPal upcharges to a penny.
-            # See https://github.com/gratipay/www.gratipay.com/issues/1958.
+            # See https://github.com/gratipay/gratipay.com/issues/1958.
             continue
         total_gross += amount
         print("{:<24}{:<32} {:>7} {:>7} {:>7} {:>7}".format( participant.username
@@ -195,7 +195,7 @@ def post_back_to_gratipay():
     try:
         gratipay_base_url = os.environ['GRATIPAY_BASE_URL']
     except KeyError:
-        gratipay_base_url = 'https://www.gratipay.com'
+        gratipay_base_url = 'https://gratipay.com'
 
     nposts = 0
     for username, email, gross, fee, net, additional_note in csv.reader(open(GRATIPAY_CSV)):

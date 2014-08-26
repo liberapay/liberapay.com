@@ -260,7 +260,7 @@ Gratipay.payments.cc.submit = function(e) {
 
     // XXX We're duping some of this info in both meta and address due to
     // evolution of the Balanced API and our stepwise keeping-up. See:
-    // https://github.com/gratipay/www.gratipay.com/issues/2446 and links from
+    // https://github.com/gratipay/gratipay.com/issues/2446 and links from
     // there.
     credit_card.address = { 'line1': val('address_1')
                           , 'line2': val('address_2')

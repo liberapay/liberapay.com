@@ -32,7 +32,7 @@ def _check_tips(cursor):
     """
     Checks that there are no rows in tips with duplicate (tipper, tippee, mtime).
 
-    https://github.com/gratipay/www.gratipay.com/issues/1704
+    https://github.com/gratipay/gratipay.com/issues/1704
     """
     conflicting_tips = cursor.one("""
         SELECT count(*)
@@ -52,7 +52,7 @@ def _check_balances(cursor):
     """
     Recalculates balances for all participants from transfers and exchanges.
 
-    https://github.com/gratipay/www.gratipay.com/issues/1118
+    https://github.com/gratipay/gratipay.com/issues/1118
     """
     b = cursor.all("""
         select p.username, expected, balance as actual
@@ -106,7 +106,7 @@ def _check_orphans(cursor):
     Especially bad case is when also claimed_time is set because
     there must have been elsewhere account attached and used to sign in.
 
-    https://github.com/gratipay/www.gratipay.com/issues/617
+    https://github.com/gratipay/gratipay.com/issues/617
     """
     orphans = cursor.all("""
         select username

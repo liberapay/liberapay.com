@@ -1,11 +1,11 @@
-www.gratipay.com
+gratipay.com
 ==============
 
-Welcome! This is the documentation for programmers working on `www.gratipay.com`_
+Welcome! This is the documentation for programmers working on `gratipay.com`_
 (not to be confused with programmers working with Gratipay's `web API`_).
 
-.. _www.gratipay.com: https://github.com/gratipay/www.gratipay.com
-.. _web API: https://github.com/gratipay/www.gratipay.com#api
+.. _gratipay.com: https://github.com/gratipay/gratipay.com
+.. _web API: https://github.com/gratipay/gratipay.com#api
 
 
 DB Schema

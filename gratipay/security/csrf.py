@@ -4,7 +4,7 @@ See also:
 
     https://github.com/django/django/blob/master/django/middleware/csrf.py
     https://docs.djangoproject.com/en/dev/ref/contrib/csrf/
-    https://github.com/gratipay/www.gratipay.com/issues/88
+    https://github.com/gratipay/gratipay.com/issues/88
 
 """
 

@@ -1,4 +1,4 @@
-"""This is the Python library behind www.gratipay.com.
+"""This is the Python library behind gratipay.com.
 """
 import datetime
 import locale

@@ -9,11 +9,11 @@
 -- numeric(35,2) maxes out at $999,999,999,999,999,999,999,999,999,999,999.00.
 
 
--- https://github.com/gratipay/www.gratipay.com/pull/1274
+-- https://github.com/gratipay/gratipay.com/pull/1274
 CREATE TYPE participant_number AS ENUM ('singular', 'plural');
 
 
--- https://github.com/gratipay/www.gratipay.com/pull/2305
+-- https://github.com/gratipay/gratipay.com/pull/2305
 CREATE TYPE email_address_with_confirmation AS
 (
     address text,
@@ -55,7 +55,7 @@ CREATE TABLE participants
 , is_free_rider         boolean                     DEFAULT NULL
  );
 
--- https://github.com/gratipay/www.gratipay.com/pull/1610
+-- https://github.com/gratipay/gratipay.com/pull/1610
 CREATE INDEX participants_claimed_time ON participants (claimed_time DESC)
   WHERE is_suspicious IS NOT TRUE
     AND claimed_time IS NOT null;
@@ -82,7 +82,7 @@ CREATE TABLE elsewhere
 , UNIQUE (platform, participant)
  );
 
--- https://github.com/gratipay/www.gratipay.com/issues/951
+-- https://github.com/gratipay/gratipay.com/issues/951
 CREATE INDEX elsewhere_participant ON elsewhere(participant);
 
 
@@ -104,7 +104,7 @@ CREATE VIEW current_tips AS
   ORDER BY tipper, tippee, mtime DESC;
 
 
--- https://github.com/gratipay/www.gratipay.com/pull/2501
+-- https://github.com/gratipay/gratipay.com/pull/2501
 CREATE TYPE context_type AS ENUM
     ('tip', 'take', 'final-gift', 'take-over', 'one-off');
 
@@ -146,7 +146,7 @@ CREATE TABLE paydays
  );
 
 
--- https://github.com/gratipay/www.gratipay.com/pull/2579
+-- https://github.com/gratipay/gratipay.com/pull/2579
 CREATE TYPE exchange_status AS ENUM ('pre', 'pending', 'failed', 'succeeded');
 
 
@@ -163,7 +163,7 @@ CREATE TABLE exchanges
  );
 
 
--- https://github.com/gratipay/www.gratipay.com/issues/406
+-- https://github.com/gratipay/gratipay.com/issues/406
 CREATE TABLE absorptions
 ( id                    serial                      PRIMARY KEY
 , timestamp             timestamp with time zone    NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -175,8 +175,8 @@ CREATE TABLE absorptions
  );
 
 
--- https://github.com/gratipay/www.gratipay.com/issues/545
--- https://github.com/gratipay/www.gratipay.com/issues/778
+-- https://github.com/gratipay/gratipay.com/issues/545
+-- https://github.com/gratipay/gratipay.com/issues/778
 CREATE VIEW goal_summary AS
   SELECT tippee as id
        , goal
@@ -196,7 +196,7 @@ CREATE VIEW goal_summary AS
 GROUP BY tippee, goal, percentage, statement;
 
 
--- https://github.com/gratipay/www.gratipay.com/issues/496
+-- https://github.com/gratipay/gratipay.com/issues/496
 CREATE TABLE communities
 ( id            bigserial                   PRIMARY KEY
 , ctime         timestamp with time zone    NOT NULL
@@ -208,7 +208,7 @@ CREATE TABLE communities
 , is_member     boolean
  );
 
--- https://github.com/gratipay/www.gratipay.com/pull/2430
+-- https://github.com/gratipay/gratipay.com/pull/2430
 CREATE INDEX ON communities (slug);
 
 CREATE OR REPLACE VIEW current_communities AS
@@ -231,7 +231,7 @@ CREATE VIEW community_summary AS
   ORDER BY nmembers DESC, slug;
 
 
--- https://github.com/gratipay/www.gratipay.com/issues/1085
+-- https://github.com/gratipay/gratipay.com/issues/1085
 CREATE TABLE takes
 ( id                serial                      PRIMARY KEY
 , ctime             timestamp with time zone    NOT NULL
@@ -268,7 +268,7 @@ CREATE VIEW current_takes AS
     ) AS anon WHERE amount > 0;
 
 
--- https://github.com/gratipay/www.gratipay.com/pull/1369
+-- https://github.com/gratipay/gratipay.com/pull/1369
 -- The following lets us cast queries to elsewhere_with_participant to get the
 -- participant data dereferenced and returned in a composite type along with
 -- the elsewhere data.
@@ -309,7 +309,7 @@ CREATE CAST (elsewhere AS elsewhere_with_participant)
     WITH FUNCTION load_participant_for_elsewhere(elsewhere);
 
 
--- https://github.com/gratipay/www.gratipay.com/pull/2006
+-- https://github.com/gratipay/gratipay.com/pull/2006
 CREATE TABLE events
 ( id        serial      PRIMARY KEY
 , ts        timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -321,7 +321,7 @@ CREATE INDEX events_ts ON events(ts ASC);
 CREATE INDEX events_type ON events(type);
 
 
--- https://github.com/gratipay/www.gratipay.com/issues/1417
+-- https://github.com/gratipay/gratipay.com/issues/1417
 CREATE INDEX transfers_tipper_tippee_timestamp_idx
   ON transfers
   USING btree
@@ -329,7 +329,7 @@ CREATE INDEX transfers_tipper_tippee_timestamp_idx
 
 
 ------------------------------------------------------------------------------
--- https://github.com/gratipay/www.gratipay.com/pull/2682
+-- https://github.com/gratipay/gratipay.com/pull/2682
 
 BEGIN;
 

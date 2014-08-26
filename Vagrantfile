@@ -11,7 +11,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   #For now we have a custom built vagrant image. It was built in the following manner:
   #-Use 'precise64' as a base.
-  #-perform a 'vagrant up' using this vagrantfile: https://github.com/gratipay/www.gratipay.com/blob/83312e60c6b31c298ffca61036baa9849044c75e/Vagrantfile
+  #-perform a 'vagrant up' using this vagrantfile: https://github.com/gratipay/gratipay.com/blob/83312e60c6b31c298ffca61036baa9849044c75e/Vagrantfile
   #-drop database gratipay
   #-drop role gratipay
   config.vm.box = "gratipay"

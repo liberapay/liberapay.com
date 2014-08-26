@@ -41,7 +41,7 @@ def customer_from_href(href):
 
 # Balanced has a $0.50 minimum. We go even higher to avoid onerous
 # per-transaction fees. See:
-# https://github.com/gratipay/www.gratipay.com/issues/167
+# https://github.com/gratipay/gratipay.com/issues/167
 
 MINIMUM_CHARGE = Decimal("9.41")
 MINIMUM_CREDIT = Decimal("10.00")
