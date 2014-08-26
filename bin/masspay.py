@@ -35,7 +35,7 @@ os.chdir('../masspay')
 ts = datetime.datetime.now().strftime('%Y-%m-%d')
 INPUT_CSV = '{}.input.csv'.format(ts)
 PAYPAL_CSV = '{}.output.paypal.csv'.format(ts)
-GITTIP_CSV = '{}.output.gratipay.csv'.format(ts)
+GRATIPAY_CSV = '{}.output.gratipay.csv'.format(ts)
 
 
 def round_(d):
@@ -166,7 +166,7 @@ def compute_output_csvs():
     assert total_fees + total_net == total_gross
 
     paypal_csv = csv.writer(open(PAYPAL_CSV, 'w+'))
-    gratipay_csv = csv.writer(open(GITTIP_CSV, 'w+'))
+    gratipay_csv = csv.writer(open(GRATIPAY_CSV, 'w+'))
     print_rule()
     print("{:<24}{:<32} {:^7} {:^7} {:^7}".format("username", "email", "gross", "fee", "net"))
     print_rule()
@@ -188,17 +188,17 @@ def compute_output_csvs():
 def post_back_to_gratipay():
 
     try:
-        gratipay_api_key = os.environ['GITTIP_API_KEY']
+        gratipay_api_key = os.environ['GRATIPAY_API_KEY']
     except KeyError:
         gratipay_api_key = getpass.getpass("Gratipay API key: ")
 
     try:
-        gratipay_base_url = os.environ['GITTIP_BASE_URL']
+        gratipay_base_url = os.environ['GRATIPAY_BASE_URL']
     except KeyError:
         gratipay_base_url = 'https://www.gratipay.com'
 
     nposts = 0
-    for username, email, gross, fee, net, additional_note in csv.reader(open(GITTIP_CSV)):
+    for username, email, gross, fee, net, additional_note in csv.reader(open(GRATIPAY_CSV)):
         url = '{}/{}/history/record-an-exchange'.format(gratipay_base_url, username)
         note = 'PayPal MassPay to {}.'.format(email)
         if additional_note:
@@ -256,7 +256,7 @@ def run_report():
 def main():
     if not sys.argv[1:]:
         print("Looking for files for {} ...".format(ts))
-        for filename in (INPUT_CSV, PAYPAL_CSV, GITTIP_CSV):
+        for filename in (INPUT_CSV, PAYPAL_CSV, GRATIPAY_CSV):
             print("  [{}] {}".format('x' if os.path.exists(filename) else ' ', filename))
         print("Rerun with one of these options:")
         print("  -i - hits db to generate input CSV (needs envvars via heroku + honcho)")
