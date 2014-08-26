@@ -11,6 +11,7 @@ locked = False
 
 [-----------------------------------------------------------------------------]
 {% extends "templates/profile.html" %}
+{% from 'templates/my-tip-bulk.html' import my_tip_bulk with context %}
 {% block page %}
 <style>
     #matrix td {
@@ -41,12 +42,10 @@ locked = False
         </td>
     </tr>
     {% for tip in tips %}
-    {% set my_tip = format_decimal(tip.amount) %}
-    {% set tippee = tip.tippee %}
-    {% if my_tip > 0 %}
+    {% if tip.amount > 0 %}
     <tr class="tip">
         <th><a href="/{{ tippee }}/">{{ tippee }}</a></th>
-        <td>{% include "templates/my-tip-bulk.html" %}</td>
+        <td>{{ my_tip_bulk(tip) }}</td>
     </tr>
     {% endif %}
     {% endfor %}
@@ -58,15 +57,13 @@ locked = False
     </tr>
     {% endif %}
     {% for tip in unclaimed_tips %}
-    {% set my_tip = tip.amount %}
-    {% set tippee = tip.tippee %}
-    {% if my_tip > 0 %}
+    {% if tip.amount > 0 %}
     <tr class="pledge">
         <th>
             <img class="platform-icon" src="{{ website.asset_url }}/icons/{{ tip.platform }}.12.png" />
             <a href="/{{ tippee }}/">{{ tip.user_name }}</a>
         </th>
-        <td>{% include "templates/my-tip-bulk.html" %}</td>
+        <td>{{ my_tip_bulk(tip) }}</td>
     </tr>
     {% endif %}
     {% endfor %}

@@ -1,12 +1,14 @@
+{% macro my_tip_bulk(tip) %}
 <form class="my-tip{{ " anon" if user.ANON else "" }}">
     $ <input type="text"
            class="my-tip"
            min="0"
            max="{{ tip.number == 'plural' and '1000' or '100' }}"
            step="0.01"
-           value="{{ my_tip }}"
-           data-tippee="{{ tippee }}"> / {{ _("week") }}
+           value="{{ format_decimal(tip.amount) }}"
+           data-tippee="{{ tip.tippee }}"> / {{ _("week") }}
 
     <button class="confirm-tip" disabled>{{ _("Confirm") }}</button>
     <a href="#" class="cancel-tip">{{ _("Cancel") }}</a>
 </form>
+{% endmacro %}
