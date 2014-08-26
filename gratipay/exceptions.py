@@ -30,7 +30,7 @@ class ProblemChangingNumber(Exception):
         return self.msg
 
 class HasBigTips(ProblemChangingNumber):
-    msg = "You receive tips too large for an individual. Please contact support@gratipay.com."
+    msg = "You receive tips too large for an individual. Please contact support@gittip.com."
 
 
 class TooGreedy(Exception): pass
