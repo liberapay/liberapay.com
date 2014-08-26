@@ -83,8 +83,7 @@ Gratipay.tips.init = function() {
         var $this  = $(this),
             $myTip = $this.parents('form').find('.my-tip');
 
-        var newTip = $this.text().match(/\d+/)[0] / ($this.hasClass('cents') ? 100 : 1);
-        $myTip.val(localizeDecimal(newTip.toString())).change();
+        $myTip.val($this.attr('data-decimal')).change();
     });
 
     $('form.my-tip').on('reset', function() {
@@ -163,15 +162,13 @@ Gratipay.tips.set = function(tippee, amount, callback) {
         if (callback) callback(data);
 
         // update display
-        $('.my-total-giving').text('$' + localizeDecimal(data.total_giving));
+        $('.my-total-giving').text(data.total_giving_l);
         $('.total-receiving').text(
             // check and see if we are on our giving page or not
             new RegExp('/' + tippee + '/').test(window.location.href) ?
-                '$' + localizeDecimal(data.total_receiving_tippee) :
-                '$' + localizeDecimal(data.total_receiving));
-
-        // update quick stats
-        $('.quick-stats a').text('$' + localizeDecimal(data.total_giving) + '/wk');
+                data.total_receiving_tippee_l :
+                data.total_receiving_l
+        );
     })
     .fail(function() {
         Gratipay.notification('Sorry, something went wrong while changing your tip. :(', 'error');
