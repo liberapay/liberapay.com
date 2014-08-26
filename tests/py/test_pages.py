@@ -72,9 +72,9 @@ class TestPages(Harness):
     def test_bank_account_complete(self):
         assert self.client.GxT('/bank-account-complete.html').code == 404
 
-    def test_for_contributors_redirects_to_inside.gratipay(self):
-        assert self.client.GxT('/for/contributors/').headers['Location'] == \
-                                                                      'http://inside.gratipay.com/'
+    def test_for_contributors_redirects_to_inside_gratipay(self):
+        loc = self.client.GxT('/for/contributors/').headers['Location']
+        assert loc == 'http://inside.gratipay.com/'
 
     def test_mission_statement_also_redirects(self):
         assert self.client.GxT('/for/contributors/mission-statement.html').code == 302
