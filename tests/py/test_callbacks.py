@@ -4,8 +4,8 @@ import json
 
 from mock import patch
 
-from gittip.billing.exchanges import record_exchange
-from gittip.testing import Harness
+from gratipay.billing.exchanges import record_exchange
+from gratipay.testing import Harness
 
 
 class TestBalancedCallbacks(Harness):
@@ -24,7 +24,7 @@ class TestBalancedCallbacks(Harness):
         r = self.callback(body=b'{"events": []}', csrf_token=False)
         assert r.code == 200, r.body
 
-    @patch('gittip.billing.exchanges.record_exchange_result')
+    @patch('gratipay.billing.exchanges.record_exchange_result')
     def test_credit_callback(self, rer):
         alice = self.make_participant('alice')
         for status in ('succeeded', 'failed'):

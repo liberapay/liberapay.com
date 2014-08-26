@@ -107,9 +107,9 @@ if paydays:
 # =================
 
 response.headers["Access-Control-Allow-Origin"] = "*"
-out = paydays[:-1]  # don't show Gittip #0
+out = paydays[:-1]  # don't show Gratipay #0
 
-# JSONP - see https://github.com/gittip/aspen-python/issues/138
+# JSONP - see https://github.com/gratipay/aspen-python/issues/138
 callback = qs.get('callback')
 if callback is not None:
     if callback_pattern.match(callback) is None:

@@ -19,7 +19,7 @@ if [ $# = 0 ]; then
     echo
     echo "Usage: $0 <version>"
     echo
-    echo "  This is a release script for Gittip. We bump the version number in "
+    echo "  This is a release script for Gratipay. We bump the version number in "
     echo "  www/version.txt and then do a git dance, pushing to Heroku."
     echo
     exit
@@ -83,8 +83,8 @@ if [ $1 ]; then
         # Check that the environment contains all required variables.
         # ===========================================================
 
-        heroku config -sa gittip | ./env/bin/honcho run -e /dev/stdin \
-            ./env/bin/python gittip/wireup.py
+        heroku config -sa gratipay | ./env/bin/honcho run -e /dev/stdin \
+            ./env/bin/python gratipay/wireup.py
 
 
         # Bump the version.

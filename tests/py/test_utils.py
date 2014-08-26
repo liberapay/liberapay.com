@@ -5,9 +5,9 @@ from datetime import timedelta
 
 import pytest
 from aspen.http.response import Response
-from gittip import utils
-from gittip.testing import Harness
-from gittip.utils.username import safely_reserve_a_username, FailedToReserveUsername, \
+from gratipay import utils
+from gratipay.testing import Harness
+from gratipay.utils.username import safely_reserve_a_username, FailedToReserveUsername, \
                                                                            RanOutOfUsernameAttempts
 from psycopg2 import IntegrityError
 

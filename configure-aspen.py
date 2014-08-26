@@ -7,11 +7,11 @@ import threading
 import time
 import traceback
 
-import gittip
-import gittip.wireup
-from gittip import canonize, utils
-from gittip.security import authentication, csrf, x_frame_options
-from gittip.utils import cache_static, i18n, set_cookie, timer
+import gratipay
+import gratipay.wireup
+from gratipay import canonize, utils
+from gratipay.security import authentication, csrf, x_frame_options
+from gratipay.utils import cache_static, i18n, set_cookie, timer
 
 
 import aspen
@@ -56,16 +56,16 @@ website.renderer_factories['jinja2'].Renderer.global_context = {
 }
 
 
-env = website.env = gittip.wireup.env()
-gittip.wireup.canonical(env)
-website.db = gittip.wireup.db(env)
-website.mail = gittip.wireup.mail(env)
-gittip.wireup.billing(env)
-gittip.wireup.username_restrictions(website)
-gittip.wireup.nanswers(env)
-gittip.wireup.other_stuff(website, env)
-gittip.wireup.accounts_elsewhere(website, env)
-tell_sentry = website.tell_sentry = gittip.wireup.make_sentry_teller(env)
+env = website.env = gratipay.wireup.env()
+gratipay.wireup.canonical(env)
+website.db = gratipay.wireup.db(env)
+website.mail = gratipay.wireup.mail(env)
+gratipay.wireup.billing(env)
+gratipay.wireup.username_restrictions(website)
+gratipay.wireup.nanswers(env)
+gratipay.wireup.other_stuff(website, env)
+gratipay.wireup.accounts_elsewhere(website, env)
+tell_sentry = website.tell_sentry = gratipay.wireup.make_sentry_teller(env)
 
 # The homepage wants expensive queries. Let's periodically select into an
 # intermediate table.
@@ -96,7 +96,7 @@ cron(env.check_db_every, website.db.self_check)
 def add_stuff_to_context(request):
     request.context['username'] = None
 
-    # Helpers for global call to action to support Gittip itself.
+    # Helpers for global call to action to support Gratipay itself.
     user = request.context.get('user')
     p = user.participant if user else None
     if p and p.is_free_rider is None:
@@ -153,7 +153,7 @@ algorithm.functions = [ timer.start
                       , tell_sentry
                       , algorithm['get_response_for_exception']
 
-                      , gittip.outbound
+                      , gratipay.outbound
                       , authentication.outbound
                       , csrf.outbound
                       , cache_static.outbound

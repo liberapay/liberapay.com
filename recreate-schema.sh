@@ -3,7 +3,7 @@
 # Exit if any subcommands or pipeline returns a non-zero status.
 set -e
 
-# Make a database for Gittip.
+# Make a database for Gratipay.
 #
 #   usage: DATABASE_URL=postgres://foo:bar@baz:5234/buz recreate-schema.sh
 

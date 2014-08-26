@@ -43,7 +43,7 @@ module.exports = function(grunt) {
                 jshintrc: '.jshintrc',
 
                 globals: {
-                    Gittip: true,
+                    Gratipay: true,
                     _gttp: true,
                     gttpURI: true,
                     alert: true

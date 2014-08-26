@@ -20,7 +20,7 @@ unreviewed = website.db.all("""
 
 [---]
 <script src="{{ website.asset_url }}/jquery.min.js"></script>
-<script src="{{ website.asset_url }}/gittip.js"></script>
+<script src="{{ website.asset_url }}/gratipay.js"></script>
 <style>
     table {
         width: auto;
@@ -41,7 +41,7 @@ unreviewed = website.db.all("""
 <script>
     $(document).ready(function()
     {
-        Gittip.forms.initCSRF();
+        Gratipay.forms.initCSRF();
 
         function error(a,b,c)
         {

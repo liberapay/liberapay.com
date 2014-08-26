@@ -3,7 +3,7 @@ from __future__ import print_function, unicode_literals
 import json
 
 from aspen.utils import utcnow
-from gittip.testing import Harness
+from gratipay.testing import Harness
 
 
 class TestTipsJson(Harness):
@@ -16,8 +16,8 @@ class TestTipsJson(Harness):
         self.make_participant("test_tipper", claimed_time=now)
 
         data = [
-            {'username': 'test_tippee1', 'platform': 'gittip', 'amount': '1.00'},
-            {'username': 'test_tippee2', 'platform': 'gittip', 'amount': '2.00'}
+            {'username': 'test_tippee1', 'platform': 'gratipay', 'amount': '1.00'},
+            {'username': 'test_tippee2', 'platform': 'gratipay', 'amount': '2.00'}
         ]
 
         response = self.client.POST( '/test_tipper/tips.json'
@@ -31,7 +31,7 @@ class TestTipsJson(Harness):
 
         response = self.client.POST( '/test_tipper/tips.json?also_prune=' + also_prune
                                    , body=json.dumps([{ 'username': 'test_tippee2'
-                                                      , 'platform': 'gittip'
+                                                      , 'platform': 'gratipay'
                                                       , 'amount': '1.00'
                                                        }])
                                    , content_type='application/json'

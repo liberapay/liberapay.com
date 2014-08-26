@@ -4,7 +4,7 @@ from collections import defaultdict
 from decimal import Decimal
 
 from aspen import Response
-from gittip import CARDINALS
+from gratipay import CARDINALS
 
 [---]
 _suspicious = website.db.all("""
@@ -82,7 +82,7 @@ names = set([person['username'] for person in suspicious])
 
 total_charged = 0
 total_withdrawn = 0
-gittip_fees = 0
+gratipay_fees = 0
 balanced_fees = 0
 total_escrowed = 0
 total_legit = 0
@@ -115,8 +115,8 @@ for person in suspicious:
             total_withdrawn += abs(exchange['amount'])
             balanced_fee = Decimal('0.25')
         balanced_fees += balanced_fee
-        gittip_fees += fee - balanced_fee
-assert total_legit == total_charged - total_withdrawn - gittip_fees - balanced_fees - total_escrowed
+        gratipay_fees += fee - balanced_fee
+assert total_legit == total_charged - total_withdrawn - gratipay_fees - balanced_fees - total_escrowed
 
 nweeks = CARDINALS[((latest.date() - earliest.date()).days // 7) + 1]
 
@@ -140,7 +140,7 @@ pad = lambda d, n: locale.format("%.2f", d, grouping=True).rjust(n).replace(' ',
 w = 9
 total_charged = pad(total_charged, w)
 total_withdrawn = pad(total_withdrawn, w)
-gittip_fees = pad(gittip_fees, w)
+gratipay_fees = pad(gratipay_fees, w)
 balanced_fees = pad(balanced_fees, w)
 total_escrowed = pad(total_escrowed, w)
 total_legit = pad(total_legit, w)
@@ -173,7 +173,7 @@ title = "The Delpan Incident"
 {% block box %}
 <div class="as-content left">
 
-    <p>Gittip's first <a href="./">fraud incident</a> surfaced when an
+    <p>Gratipay's first <a href="./">fraud incident</a> surfaced when an
     unknown user named delpan appeared among the top receivers on the site.
     This page provides data and collects information related to the
     incident.</p>
@@ -189,16 +189,16 @@ title = "The Delpan Incident"
     <ul>
 
         <li>GitHub ticket: &ldquo;<a
-            href="https://github.com/gittip/www.gittip.com/issues/329">make sure
+            href="https://github.com/gratipay/www.gratipay.com/issues/329">make sure
             "delpan" is not stealing money :-)</a>&rdquo;</li>
 
         <li>Blog post: &ldquo;<a
-            href="http://blog.gittip.com/post/35057426257/stolen-money-on-gittip-part-1">Stolen
-            Money on Gittip, Part 1</a>&rdquo;</li>
+            href="http://blog.gratipay.com/post/35057426257/stolen-money-on-gratipay-part-1">Stolen
+            Money on Gratipay, Part 1</a>&rdquo;</li>
 
         <li>Hacker News discussion: &ldquo;<a
         href="http://news.ycombinator.com/item?id=4743954">Stolen Money on
-        Gittip, Part 1</a>&rdquo;</li>
+        Gratipay, Part 1</a>&rdquo;</li>
 
         <li>Vice Motherboard: &ldquo;<a
         href="http://motherboard.vice.com/2012/11/6/thieves-launder-money-by-crowdfunding-themselves--2">Thieves
@@ -209,7 +209,7 @@ title = "The Delpan Incident"
         launder cash though grants startup</a>&rdquo;</li>
 
         <li>Blog post: &ldquo;<a
-        href="http://blog.gittip.com/post/35314128322/the-delpan-incident">The
+        href="http://blog.gratipay.com/post/35314128322/the-delpan-incident">The
         Delpan Incident</a>&rdquo; (Part 2 of the above)</li>
 
         <li>Hacker News discussion: &ldquo;<a
@@ -291,12 +291,12 @@ occured over a period of <b>{{ nweeks }} weeks</b>, from
         <td class="amount">${{ total_withdrawn }}&nbsp;</td></tr>
     <tr><th>Given to Innocent Bystanders</th>
         <td class="amount">${{ total_legit }}&nbsp;</td></tr>
-    <tr><th>Still Escrowed in Gittip</th>
+    <tr><th>Still Escrowed in Gratipay</th>
         <td class="amount">${{ total_escrowed }}&nbsp;</td></tr>
     <tr><th>Fees - Balanced</th>
         <td class="amount">${{ balanced_fees }}&nbsp;</td></tr>
-    <tr><th>Fees - Gittip</th>
-        <td class="amount">${{ gittip_fees }}&nbsp;</td></tr>
+    <tr><th>Fees - Gratipay</th>
+        <td class="amount">${{ gratipay_fees }}&nbsp;</td></tr>
     <tr><th><b>Total Stolen</b></th>
         <td class="amount"><b>${{ total_charged }}&nbsp;</b></td></tr>
     <tr><th>Overall Volume <span class="help">during the incident</span></th>

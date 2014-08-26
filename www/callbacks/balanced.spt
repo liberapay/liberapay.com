@@ -7,8 +7,8 @@ Docs: https://docs.balancedpayments.com/1.1/guides/events/
 import json
 
 from aspen import Response
-from gittip.billing.exchanges import record_exchange_result
-from gittip.models.participant import Participant
+from gratipay.billing.exchanges import record_exchange_result
+from gratipay.models.participant import Participant
 
 [---]
 
@@ -26,7 +26,7 @@ for event in events:
         for credit in event['entity']['credits']:
             customer = credit.get('links', {}).get('customer')
             if customer == 'AC13kr5rmbUkMJWbocmNs3tD':
-                # A Gittip Escrow Shuffle, we want to ignore these
+                # A Gratipay Escrow Shuffle, we want to ignore these
                 continue
             meta = credit['meta']
             p = Participant.from_id(int(meta['participant_id']))

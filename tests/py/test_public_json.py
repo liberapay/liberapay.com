@@ -3,7 +3,7 @@ from __future__ import print_function, unicode_literals
 import json
 
 from aspen.utils import utcnow
-from gittip.testing import Harness
+from gratipay.testing import Harness
 
 
 class Tests(Harness):
@@ -12,11 +12,11 @@ class Tests(Harness):
         kw['claimed_time'] = utcnow()
         return Harness.make_participant(self, *a, **kw)
 
-    def test_on_key_gives_gittip(self):
+    def test_on_key_gives_gratipay(self):
         self.make_participant('alice', last_bill_result='')
         data = json.loads(self.client.GET('/alice/public.json').body)
 
-        assert data['on'] == 'gittip'
+        assert data['on'] == 'gratipay'
 
     def test_anonymous_gets_receiving(self):
         alice = self.make_participant('alice', last_bill_result='')
@@ -166,7 +166,7 @@ foo({
     "my_tip": "self",
     "npatrons": 1,
     "number": "singular",
-    "on": "gittip",
+    "on": "gratipay",
     "receiving": "3.00",
     "username": "bob"
 })''' % dict(user_id=bob.id, elsewhere_id=bob.get_accounts_elsewhere()['github'].id)

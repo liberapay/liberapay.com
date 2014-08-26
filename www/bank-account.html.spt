@@ -3,8 +3,8 @@ from datetime import datetime, timedelta
 
 import balanced
 from aspen import json, log, Response
-from gittip import billing, MONTHS
-from gittip.elsewhere import github
+from gratipay import billing, MONTHS
+from gratipay.elsewhere import github
 
 [-----------------------------------------------------------------------------]
 balanced_customer_href = None
@@ -34,8 +34,8 @@ title = _("Bank Account")
 
     <h1>{{ status }}</h1>
 
-    <p>{{ _("When you receive money on Gittip we'll automatically deposit it into your bank account.") }}
-    {{ _("If you don't connect a bank account then your money will accumulate within Gittip unless you regift it to others.") }}<p>
+    <p>{{ _("When you receive money on Gratipay we'll automatically deposit it into your bank account.") }}
+    {{ _("If you don't connect a bank account then your money will accumulate within Gratipay unless you regift it to others.") }}<p>
 
 {% endblock %}
 
@@ -45,7 +45,7 @@ title = _("Bank Account")
 <script>
     $(document).ready(function()
     {
-        Gittip.payments.ba.init("{{ balanced.Marketplace.my_marketplace.uri }}", "{{ user.participant.username }}");
+        Gratipay.payments.ba.init("{{ balanced.Marketplace.my_marketplace.uri }}", "{{ user.participant.username }}");
     });
 </script>
 {% endif %}
@@ -127,7 +127,7 @@ title = _("Bank Account")
                 <div class="clear"></div>
 
                 <div>
-                    <label for="address_1">{{ _("Country") }} (<a href="https://github.com/gittip/www.gittip.com/issues/126">{{ _("non-US?") }}</a>)</label>
+                    <label for="address_1">{{ _("Country") }} (<a href="https://github.com/gratipay/www.gratipay.com/issues/126">{{ _("non-US?") }}</a>)</label>
                     <input id="zip" value="{{ locale.countries_map['US'] }}" disabled="true"
                         class="disabled" />
                 </div>

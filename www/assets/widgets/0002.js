@@ -1,8 +1,8 @@
 (function(_) {
-	var script   = document.querySelector('script[data-gittip-username]'),
-	    baseURI  = script.getAttribute('data-gittip-base')
+	var script   = document.querySelector('script[data-gratipay-username]'),
+	    baseURI  = script.getAttribute('data-gratipay-base')
 	            || script.src.replace(/^((https?:)?\/\/[^\/]+).*$/, '$1'),
-	    username = script.getAttribute('data-gittip-username'),
+	    username = script.getAttribute('data-gratipay-username'),
 	    widget, receiving, number;
 
 	// include css
@@ -15,14 +15,14 @@
 
 	// set up widget
 	script.parentNode.insertBefore(_.ml(
-		['div', { 'class': 'gittip-widget gittip-0002' },
-			[ 'div', { 'class': 'gittip-inner' },
+		['div', { 'class': 'gratipay-widget gratipay-0002' },
+			[ 'div', { 'class': 'gratipay-inner' },
 				number = _.ml(['span']), ' receive ', ['br'],
 				['a', { href: baseURI + '/' + username + '/' },
 					[ 'b', '$', receiving = _.ml(['span', '0.00'])] , ' / wk'
 				],
 				['br'],
-				' on ', ['a', { href: baseURI }, 'Gittip' ], '.'
+				' on ', ['a', { href: baseURI }, 'Gratipay' ], '.'
 			]
 		]
 	), script);

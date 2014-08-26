@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 import datetime
 import locale
 from aspen import json
-from gittip import age
+from gratipay import age
 
 CARDINALS = ["zero", "one", "two", "three", "four", "five", "six", "seven",
              "eight", "nine"]
@@ -326,7 +326,7 @@ d3.json("/about/tip-distribution.json", function(tips){
 
     <h1>Quick Facts</h1>
 
-    <p>Gittip is <b>{{ age() }}</b> old and has <b>{{ nactive }} active
+    <p>Gratipay is <b>{{ age() }}</b> old and has <b>{{ nactive }} active
     users</b>.</p>
 
     <p>
@@ -335,7 +335,7 @@ d3.json("/about/tip-distribution.json", function(tips){
         {{ noverlap }} did both.
     </p>
 
-    <p><b>{{ commaize(npeople) }} people</b> have joined Gittip. Of those,
+    <p><b>{{ commaize(npeople) }} people</b> have joined Gratipay. Of those,
     {{ pcc }}% ({{ commaize(ncc) }}) have a working credit card on
     file.{% if not user.ANON and user.participant.last_bill_result == '' %}
     You're one of them.{% elif not user.ANON %} You're not one of them.</p>
@@ -343,7 +343,7 @@ d3.json("/about/tip-distribution.json", function(tips){
     <p><b><a href="/credit-card.html" class="highlight">Click here to set up a
         credit card</a></b>.{% endif %}</p>
 
-    <p><b>${{ commaize(escrow, 2) }}</b> is escrowed within Gittip.
+    <p><b>${{ commaize(escrow, 2) }}</b> is escrowed within Gratipay.
     {{ nach }} people have connected a bank account</a> for withdrawals.
     {% if not user.ANON and user.participant.last_ach_result == '' %}You're one of them.
     {% elif not user.ANON %}You're not one of them.</p>
@@ -373,7 +373,7 @@ d3.json("/about/tip-distribution.json", function(tips){
 
     <h1>For Example</h1>
 
-    <p>How are Gittip participants <b>making the world better</b>?</p>
+    <p>How are Gratipay participants <b>making the world better</b>?</p>
 
     <p>
     {% for statement in statements %}

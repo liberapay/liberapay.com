@@ -1,9 +1,0 @@
-import os
-import sass
-
-filename = os.path.join(website.project_root, 'scss', 'gittip.scss')
-output_style = 'compressed' if website.compress_assets else 'nested'
-[---]
-css = sass.compile(output_style=str(output_style),filename=str(filename))
-[---]
-{{ css }}

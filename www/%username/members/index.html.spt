@@ -1,6 +1,6 @@
 """Show information about a single participant. It might be you!
 """
-from gittip.utils import get_participant
+from gratipay.utils import get_participant
 
 [-----------------------------------------------------------------------------]
 
@@ -18,7 +18,7 @@ username = team.username  # used in footer shared with on/%platform/ pages
 {% extends "templates/profile.html" %}
 
 {% block scripts %}
-<script>$(document).ready(Gittip.team.init);</script>
+<script>$(document).ready(Gratipay.team.init);</script>
 
 {{ super() }}
 {% endblock %}
@@ -53,7 +53,7 @@ username = team.username  # used in footer shared with on/%platform/ pages
               <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
               <input tabindex="1" id="query"
                      autocomplete="off"
-                     placeholder="Enter a Gittip username"
+                     placeholder="Enter a Gratipay username"
                  />&nbsp;<button type="submit"
                                  tabindex="2">Add</button>
               <ul id="lookup-results"></ul>

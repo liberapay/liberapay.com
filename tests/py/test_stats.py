@@ -6,9 +6,9 @@ import json
 
 from mock import patch
 
-from gittip import wireup
-from gittip.billing.payday import Payday
-from gittip.testing import Harness
+from gratipay import wireup
+from gratipay.billing.payday import Payday
+from gratipay.testing import Harness
 
 
 class DateTime(datetime.datetime): pass
@@ -108,7 +108,7 @@ class TestRenderingStatsPage(Harness):
         """Test that stats page takes running payday into account.
 
         This test was originally written to expose the fix required for
-        https://github.com/gittip/www.gittip.com/issues/92.
+        https://github.com/gratipay/www.gratipay.com/issues/92.
         """
         a_thursday = DateTime(2012, 8, 9, 11, 00, 01)
         utcnow.return_value = a_thursday

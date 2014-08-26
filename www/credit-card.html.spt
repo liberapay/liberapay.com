@@ -2,8 +2,8 @@ import traceback
 
 import balanced
 from aspen import json, log, Response
-from gittip import billing
-from gittip.elsewhere import github
+from gratipay import billing
+from gratipay.elsewhere import github
 
 [-----------------------------------------------------------------------------]
 
@@ -39,7 +39,7 @@ title = _("Credit Card")
 {% block heading %}
     <h1>{{ status_msg.format("<em id=\"status\">", "</em>") }}</h1>
 
-    <p>{{ _("When you don't have enough money in your Gittip account to cover your gifts, we'll attempt to pull money in using your credit card.") }}
+    <p>{{ _("When you don't have enough money in your Gratipay account to cover your gifts, we'll attempt to pull money in using your credit card.") }}
     {{ _("If your credit card is missing or fails then your gifts won't go through for that week.") }}<p>
 
 {% endblock %}
@@ -50,7 +50,7 @@ title = _("Credit Card")
 <script>
     $(document).ready(function()
     {
-        Gittip.payments.cc.init("{{ balanced.Marketplace.my_marketplace.uri }}", "{{ user.participant.username }}");
+        Gratipay.payments.cc.init("{{ balanced.Marketplace.my_marketplace.uri }}", "{{ user.participant.username }}");
         $('#country').chosen();
     });
 </script>

@@ -7,7 +7,7 @@ title = "Pricing"
 <div class="col0">
 
     <p>We suggest the following pricing tiers, based on how much money you give
-    or receive through Gittip:</p>
+    or receive through Gratipay:</p>
 
     <table class="simple">
         <tr>
@@ -30,8 +30,8 @@ title = "Pricing"
 
     <p>
         {% if website.support_current < 30 %}Right now, only {% endif %}
-        {{ website.support_current }}% of active users <a href="/Gittip/">pay
-        for Gittip</a>.
+        {{ website.support_current }}% of active users <a href="/Gratipay/">pay
+        for Gratipay</a>.
 
         {% if not user.ANON and not user.participant.is_free_rider == False %}
             {% if website.support_goal %}
@@ -44,7 +44,7 @@ title = "Pricing"
 
     {% if not user.ANON %}
         {% set p = user.participant %}
-        {% set payment = p.get_tip_to('Gittip') %}
+        {% set payment = p.get_tip_to('Gratipay') %}
 
         <div class="payment">
         {% if payment > 0 %}
@@ -56,7 +56,7 @@ title = "Pricing"
         <p class="suggestion-prompt">Your usage is ${{ p.usage }}, so we suggest
         ${{ p.suggested_payment }} per week.</p>
 
-        <button class="suggestion" data-amount="{{ p.suggested_payment }}">Pay Gittip ${{ p.suggested_payment }} per week</button>
+        <button class="suggestion" data-amount="{{ p.suggested_payment }}">Pay Gratipay ${{ p.suggested_payment }} per week</button>
 
         {% endif %}
 
@@ -65,13 +65,13 @@ title = "Pricing"
 
     <h2>Wait ... Suggested Pricing!?</h2>
 
-    <p>Gittip is funded <a href="/Gittip/">on Gittip</a>. We don't take a cut.
+    <p>Gratipay is funded <a href="/Gratipay/">on Gratipay</a>. We don't take a cut.
     We don't skim off the top. We don't have any venture capital or foundation
     money. We aren't a non-profit. We are running a business based on
     voluntary payments&mdash;&ldquo;<a
     href="http://en.wikipedia.org/wiki/Pay_what_you_want">pay-what-you-want</a>.&rdquo;</p>
 
-    <p><b>We believe in Gittip enough to depend on it ourselves.</b></p>
+    <p><b>We believe in Gratipay enough to depend on it ourselves.</b></p>
 
     <p>Now, we <i>do</i> charge you processing fees when you use your credit
     card or other payment method, but that's at cost. It all goes to the
@@ -82,9 +82,9 @@ title = "Pricing"
 
     <p>Your payments cover hosting and other costs of doing business, and the
     rest goes to the <a
-    href="https://www.gittip.com/Gittip/members/">people</a> who are building
-    Gittip for you. If you want to help us build Gittip, <a
-    href="http://building.gittip.com/big-picture/welcome">you can</a>!</p>
+    href="https://www.gratipay.com/Gratipay/members/">people</a> who are building
+    Gratipay for you. If you want to help us build Gratipay, <a
+    href="http://building.gratipay.com/big-picture/welcome">you can</a>!</p>
 
 </div>
 {% endblock %}
@@ -94,7 +94,7 @@ $(document).ready(function() {
     var btn = $('button.suggestion');
     btn.click(function() {
         var amount = parseFloat($(this).attr('data-amount'), 10);
-        Gittip.tips.set('Gittip', amount, function(data) {
+        Gratipay.tips.set('Gratipay', amount, function(data) {
             $('.suggestion-prompt').slideUp();
             $('button.suggestion').slideUp();
             amount = parseFloat(data.amount, 10).toFixed(2);

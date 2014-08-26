@@ -6,8 +6,8 @@ from decimal import Decimal
 
 import pytest
 from aspen.utils import utcnow
-from gittip import NotSane
-from gittip.exceptions import (
+from gratipay import NotSane
+from gratipay.exceptions import (
     HasBigTips,
     UsernameIsEmpty,
     UsernameTooLong,
@@ -18,11 +18,11 @@ from gittip.exceptions import (
     NoTippee,
     BadAmount,
 )
-from gittip.models.account_elsewhere import AccountElsewhere
-from gittip.models.participant import (
+from gratipay.models.account_elsewhere import AccountElsewhere
+from gratipay.models.participant import (
     LastElsewhere, NeedConfirmation, NonexistingElsewhere, Participant, TeamCantBeOnlyAuth
 )
-from gittip.testing import Harness
+from gratipay.testing import Harness
 
 
 # TODO: Test that accounts elsewhere are not considered claimed by default
@@ -209,13 +209,13 @@ class TestParticipant(Harness):
         assert actual == expected
 
     def test_can_change_email(self):
-        self.alice.update_email('alice@gittip.com')
-        expected = 'alice@gittip.com'
+        self.alice.update_email('alice@gratipay.com')
+        expected = 'alice@gratipay.com'
         actual = self.alice.email.address
         assert actual == expected
 
     def test_can_confirm_email(self):
-        self.alice.update_email('alice@gittip.com', True)
+        self.alice.update_email('alice@gratipay.com', True)
         actual = self.alice.email.confirmed
         assert actual == True
 
@@ -307,7 +307,7 @@ class Tests(Harness):
 
     def random_restricted_username(self):
         """helper method to chooses a restricted username for testing """
-        from gittip import RESTRICTED_USERNAMES
+        from gratipay import RESTRICTED_USERNAMES
         random_item = random.choice(RESTRICTED_USERNAMES)
         while random_item.startswith('%'):
             random_item = random.choice(RESTRICTED_USERNAMES)
@@ -469,15 +469,15 @@ class Tests(Harness):
 
     def test_stt_sets_is_free_rider_to_false(self):
         alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
-        gittip = self.make_participant('Gittip', number='plural')
-        alice.set_tip_to(gittip, '0.01')
+        gratipay = self.make_participant('Gratipay', number='plural')
+        alice.set_tip_to(gratipay, '0.01')
         assert alice.is_free_rider is False
         assert Participant.from_username('alice').is_free_rider is False
 
     def test_stt_resets_is_free_rider_to_null(self):
         alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
-        gittip = self.make_participant('Gittip', number='plural')
-        alice.set_tip_to(gittip, '0.00')
+        gratipay = self.make_participant('Gratipay', number='plural')
+        alice.set_tip_to(gratipay, '0.00')
         assert alice.is_free_rider is None
         assert Participant.from_username('alice').is_free_rider is None
 

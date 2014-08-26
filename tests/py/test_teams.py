@@ -1,8 +1,8 @@
 from __future__ import unicode_literals
-from gittip.models._mixin_team import StubParticipantAdded
+from gratipay.models._mixin_team import StubParticipantAdded
 
-from gittip.testing import Harness
-from gittip.security.user import User
+from gratipay.testing import Harness
+from gratipay.security.user import User
 
 
 class Tests(Harness):

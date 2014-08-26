@@ -1,9 +1,9 @@
-"""JSON endpoint for a Gittip widget.
+"""JSON endpoint for a Gratipay widget.
 """
 import re
 
 from aspen import json, Response
-from gittip.utils import get_participant
+from gratipay.utils import get_participant
 
 callback_pattern = re.compile(r'^[_A-Za-z0-9.]+$')
 
@@ -11,11 +11,11 @@ callback_pattern = re.compile(r'^[_A-Za-z0-9.]+$')
 
 participant = get_participant(request, restrict=False)
 
-# CORS - see https://github.com/gittip/aspen-python/issues/138
+# CORS - see https://github.com/gratipay/aspen-python/issues/138
 response.headers["Access-Control-Allow-Origin"] = "*"
 out = participant.to_dict(details=True, inquirer=user.participant)
 
-# JSONP - see https://github.com/gittip/aspen-python/issues/138
+# JSONP - see https://github.com/gratipay/aspen-python/issues/138
 callback = qs.get('callback')
 if callback is not None:
     if callback_pattern.match(callback) is None:

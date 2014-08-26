@@ -6,10 +6,10 @@ the most important thing on each page.
 
 ### Homepage
 
-https://www.gittip.com/
+https://www.gratipay.com/
 
 This is the homepage. The most important thing is to give a good first
-impression of Gittip and help people take the next step, whatever that might be
+impression of Gratipay and help people take the next step, whatever that might be
 for them.
 
 """
@@ -23,9 +23,9 @@ from aspen.utils import utcnow
     <meta name="description" content="Weekly payments, motivated by gratitude. Sustainably crowdfund your business, personal projects, or charity, with no extra fees." />
     <meta name="fb:app_id" content="229465400522758" />
     <meta name="og:type" content="website" />
-    <meta name="og:url" content="https://www.gittip.com/" />
-    <meta name="og:title" content="Gittip" />
-    <meta name="og:image" content="{{ website.asset_url }}/gittip.opengraph.png" />
+    <meta name="og:url" content="https://www.gratipay.com/" />
+    <meta name="og:title" content="Gratipay" />
+    <meta name="og:image" content="{{ website.asset_url }}/gratipay.opengraph.png" />
     <style>
         .pennies, .container { display: none; }
         #upgrade_browser .container { display: block; }
@@ -36,7 +36,7 @@ from aspen.utils import utcnow
 {% block scripts %}
 <script>
     $(document).ready(function () {
-        Gittip.jump.init();
+        Gratipay.jump.init();
     });
 </script>
 {{ super() }}
@@ -46,7 +46,7 @@ from aspen.utils import utcnow
 {% block whole_page %}
 <div class="homepage">
     <div class="pitch">
-        <img src="{{ website.asset_url }}/logo.white.svg" alt="Gittip">
+        <img src="{{ website.asset_url }}/logo.white.svg" alt="Gratipay">
         <h1>{{ _("Weekly Payments") }}</h1>
         <p>{{ _("Motivated by Gratitude") }}</p>
 
@@ -84,14 +84,14 @@ from aspen.utils import utcnow
                 "<a href='/about/charts.html'>", "</a>") + " " +
             _("Want to see who they are? Browse {0}our communities{1}.",
                 "<a href='/for/'>", "</a>") + " " +
-            _("Want to work for Gittip? We are an {0}open company{1}.",
-                "<a href='http://building.gittip.com/big-picture/welcome'>", "</a>") }}</p>
+            _("Want to work for Gratipay? We are an {0}open company{1}.",
+                "<a href='http://building.gratipay.com/big-picture/welcome'>", "</a>") }}</p>
 
         {% else %}
         {% set quick = utcnow() - timedelta(seconds=15)  %}
         {% if user.participant.claimed_time > quick %}
             <h1>{{ _("Welcome, {0}!", user.participant.username) }}</h1>
-            <p>{{ _("Thanks for joining Gittip!") }}</p>
+            <p>{{ _("Thanks for joining Gratipay!") }}</p>
             <p>{{ _("Next steps:") }}</p>
             <ol>
                 <li>{{ _("Start tipping people, you can find great people to tip by browsing {0}our communities{1}.",
@@ -110,7 +110,7 @@ from aspen.utils import utcnow
         <p>{{ _("Go to {0}your profile{1}, or {2}sign out{3}.",
             "<a href='/" + user.participant.username + "/'>", "</a>", "<a href='/sign-out.html'>", "</a>") }}</p>
 
-        {% include "templates/support-gittip.html" %}
+        {% include "templates/support-gratipay.html" %}
 
         <div class="jump">
         <form id="jump">

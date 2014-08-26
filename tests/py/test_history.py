@@ -4,10 +4,10 @@ from decimal import Decimal
 
 from mock import patch
 
-from gittip.billing.payday import Payday
-from gittip.models.participant import Participant
-from gittip.testing import Harness
-from gittip.utils.history import iter_payday_events
+from gratipay.billing.payday import Payday
+from gratipay.models.participant import Participant
+from gratipay.testing import Harness
+from gratipay.utils.history import iter_payday_events
 
 
 class TestHistory(Harness):

@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 from decimal import Decimal
 
 from aspen.utils import utcnow
-from gittip.testing import Harness
+from gratipay.testing import Harness
 
 
 class TestRecordAnExchange(Harness):

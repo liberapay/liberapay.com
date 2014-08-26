@@ -1,7 +1,7 @@
 from __future__ import print_function, unicode_literals
 
-from gittip.security.user import SESSION
-from gittip.testing import Harness
+from gratipay.security.user import SESSION
+from gratipay.testing import Harness
 
 
 class TestPages(Harness):
@@ -45,7 +45,7 @@ class TestPages(Harness):
         assert expected in actual
 
     def test_about_stats(self):
-        expected = "have joined Gittip"
+        expected = "have joined Gratipay"
         actual = self.client.GET('/about/stats.html').body
         assert expected in actual
 
@@ -55,7 +55,7 @@ class TestPages(Harness):
         assert expected in actual
 
     def test_about_faq(self):
-        expected = "What is Gittip?"
+        expected = "What is Gratipay?"
         actual = self.client.GET('/about/faq.html').body.decode('utf8')
         assert expected in actual
 
@@ -72,9 +72,9 @@ class TestPages(Harness):
     def test_bank_account_complete(self):
         assert self.client.GxT('/bank-account-complete.html').code == 404
 
-    def test_for_contributors_redirects_to_building_gittip(self):
+    def test_for_contributors_redirects_to_building_gratipay(self):
         assert self.client.GxT('/for/contributors/').headers['Location'] == \
-                                                                      'http://building.gittip.com/'
+                                                                      'http://building.gratipay.com/'
 
     def test_mission_statement_also_redirects(self):
         assert self.client.GxT('/for/contributors/mission-statement.html').code == 302

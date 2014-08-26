@@ -1,8 +1,8 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from gittip import wireup
-from gittip.security.user import SESSION
-from gittip.testing import Harness
+from gratipay import wireup
+from gratipay.security.user import SESSION
+from gratipay.testing import Harness
 from environment import Environment
 
 
@@ -17,7 +17,7 @@ class Tests(Harness):
 
         # Change env, doesn't change self.environ.
         env.canonical_scheme = 'https'
-        env.canonical_host = 'www.gittip.com'
+        env.canonical_host = 'www.gratipay.com'
 
         wireup.canonical(env)
 
@@ -29,15 +29,15 @@ class Tests(Harness):
 
     def test_canonize_canonizes(self):
         response = self.client.GxT( "/"
-                                  , HTTP_HOST=b'www.gittip.com'
+                                  , HTTP_HOST=b'www.gratipay.com'
                                   , HTTP_X_FORWARDED_PROTO=b'http'
                                    )
         assert response.code == 302
-        assert response.headers['Location'] == b'https://www.gittip.com/'
+        assert response.headers['Location'] == b'https://www.gratipay.com/'
 
 
     def test_session_cookie_isnt_overwritten_by_canonizer(self):
-        # https://github.com/gittip/www.gittip.com/issues/940
+        # https://github.com/gratipay/www.gratipay.com/issues/940
 
         self.make_participant('alice')
 
@@ -45,15 +45,15 @@ class Tests(Harness):
         redirect = self.client.GET( "/"
                                   , auth_as='alice'
                                   , HTTP_X_FORWARDED_PROTO=b'http'
-                                  , HTTP_HOST=b'www.gittip.com'
+                                  , HTTP_HOST=b'www.gratipay.com'
                                   , raise_immediately=False
                                    )
         assert redirect.code == 302
         assert SESSION not in redirect.headers.cookie
 
         # This is bad, because it means that the user will be signed out of
-        # https://www.gittip.com/ if they make a request for
-        # http://www.gittip.com/.
+        # https://www.gratipay.com/ if they make a request for
+        # http://www.gratipay.com/.
 
 
     def test_session_cookie_not_set_under_API_key_auth(self):
@@ -64,7 +64,7 @@ class Tests(Harness):
         response = self.client.GET( '/alice/public.json'
                                   , HTTP_AUTHORIZATION=auth_header
                                   , HTTP_X_FORWARDED_PROTO=b'https'
-                                  , HTTP_HOST=b'www.gittip.com'
+                                  , HTTP_HOST=b'www.gratipay.com'
                                    )
 
         assert response.code == 200

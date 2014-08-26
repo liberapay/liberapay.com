@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 
 import json
 
-from gittip.testing import Harness
+from gratipay.testing import Harness
 
 class TestMembernameJson(Harness):
 
@@ -22,18 +22,18 @@ class TestMembernameJson(Harness):
         return response
 
     def test_participant_can_change_email(self):
-        response = self.change_email_address('alice@gittip.com', should_fail=False)
+        response = self.change_email_address('alice@gratipay.com', should_fail=False)
         actual = json.loads(response.body)['email']
-        assert actual == 'alice@gittip.com', actual
+        assert actual == 'alice@gratipay.com', actual
 
     def test_post_anon_returns_404(self):
-        response = self.change_email_address('anon@gittip.com', user=None)
+        response = self.change_email_address('anon@gratipay.com', user=None)
         assert response.code == 404, response.code
 
     def test_post_with_no_at_symbol_is_400(self):
-        response = self.change_email_address('gittip.com')
+        response = self.change_email_address('gratipay.com')
         assert response.code == 400, response.code
 
     def test_post_with_no_period_symbol_is_400(self):
-        response = self.change_email_address('test@gittip')
+        response = self.change_email_address('test@gratipay')
         assert response.code == 400, response.code

@@ -10,7 +10,7 @@ import time
 import sys
 
 import requests
-from gittip import wireup
+from gratipay import wireup
 from requests_oauthlib import OAuth1
 
 db = wireup.db(wireup.env())
@@ -59,7 +59,7 @@ def update_twitter():
 
                 for user_info in users:
 
-                    # flatten per upsert method in gittip/elsewhere/__init__.py
+                    # flatten per upsert method in gratipay/elsewhere/__init__.py
                     for k, v in user_info.items():
                         user_info[k] = unicode(v)
 
@@ -131,7 +131,7 @@ def update_github():
 
             user_info = response.json()
 
-            # flatten per upsert method in gittip/elsewhere/__init__.py
+            # flatten per upsert method in gratipay/elsewhere/__init__.py
             for k, v in user_info.items():
                 user_info[k] = unicode(v)
 

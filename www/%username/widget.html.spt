@@ -1,17 +1,17 @@
 from aspen import Response
-from gittip.models.participant import Participant
+from gratipay.models.participant import Participant
 [---]
 participant = Participant.from_username(path['username'])
 if participant is None:
     raise Response(404)
 if user.ANON:
-    button_text = "Gittip"
+    button_text = "Gratipay"
 elif user.participant == participant:
     button_text = "You!"
 else:
     button_text = user.participant.get_tip_to(participant.username)
     if button_text == 0:
-        button_text = "Gittip"
+        button_text = "Gratipay"
 response.headers['X-Frame-Options'] = "ALLOWALL"
 [---]
 <!doctype html>

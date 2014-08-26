@@ -1,5 +1,5 @@
 
-from gittip.utils import get_participant
+from gratipay.utils import get_participant
 from cgi import escape
 
 [-----------------------------------------------------------------------------]
@@ -16,7 +16,7 @@ locked = False
 {% extends "templates/profile.html" %}
 
 {% block scripts %}
-<script>$(document).ready(Gittip.account.init);</script>
+<script>$(document).ready(Gratipay.account.init);</script>
 
 {{ super() }}
 {% endblock %}
@@ -36,7 +36,7 @@ locked = False
             </h2>
 
             <h2 class="warning">
-            {{ _("Have you linked to your Gittip profile from other websites? Be sure to update those links!") }}
+            {{ _("Have you linked to your Gratipay profile from other websites? Be sure to update those links!") }}
             </h2>
         </form>
         <p>
@@ -169,7 +169,7 @@ locked = False
             <button class="hide" style="display: none">{{ _("Hide Key") }}</button>
             <button class="recreate">{{ _("Recreate") }}</button>
           </div>
-          <a href="https://github.com/gittip/www.gittip.com#api">{{ _("API docs") }}</a>
+          <a href="https://github.com/gratipay/www.gratipay.com#api">{{ _("API docs") }}</a>
         </div>
 
         <h2>{{ _("Privacy") }}</h2>

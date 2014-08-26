@@ -8,7 +8,7 @@ import mock
 import pytest
 
 from aspen.utils import typecheck
-from gittip.billing.exchanges import (
+from gratipay.billing.exchanges import (
     _prep_hit,
     ach_credit,
     cancel_card_hold,
@@ -19,10 +19,10 @@ from gittip.billing.exchanges import (
     skim_credit,
     sync_with_balanced,
 )
-from gittip.exceptions import NegativeBalance, NoBalancedCustomerHref, NotWhitelisted
-from gittip.models.participant import Participant
-from gittip.testing import Foobar, Harness
-from gittip.testing.balanced import BalancedHarness
+from gratipay.exceptions import NegativeBalance, NoBalancedCustomerHref, NotWhitelisted
+from gratipay.models.participant import Participant
+from gratipay.testing import Foobar, Harness
+from gratipay.testing.balanced import BalancedHarness
 
 
 class TestCredits(BalancedHarness):
@@ -338,7 +338,7 @@ class TestSyncWithBalanced(BalancedHarness):
         super(TestSyncWithBalanced, cls).tearDownClass()
 
     def test_sync_with_balanced(self):
-        with mock.patch('gittip.billing.exchanges.record_exchange_result') as rer:
+        with mock.patch('gratipay.billing.exchanges.record_exchange_result') as rer:
             rer.side_effect = Foobar()
             hold, error = create_card_hold(self.db, self.janet, D('20.00'))
             assert error == ''  # sanity check
@@ -352,7 +352,7 @@ class TestSyncWithBalanced(BalancedHarness):
         assert Participant.from_username('janet').balance == 10
 
     def test_sync_with_balanced_deletes_charges_that_didnt_happen(self):
-        with mock.patch('gittip.billing.exchanges.record_exchange_result') as rer \
+        with mock.patch('gratipay.billing.exchanges.record_exchange_result') as rer \
            , mock.patch('balanced.CardHold.capture') as capture:
             rer.side_effect = capture.side_effect = Foobar
             hold, error = create_card_hold(self.db, self.janet, D('33.67'))
@@ -368,7 +368,7 @@ class TestSyncWithBalanced(BalancedHarness):
 
     def test_sync_with_balanced_reverts_credits_that_didnt_happen(self):
         self.make_exchange('bill', 41, 0, self.homer)
-        with mock.patch('gittip.billing.exchanges.record_exchange_result') as rer \
+        with mock.patch('gratipay.billing.exchanges.record_exchange_result') as rer \
            , mock.patch('balanced.Customer') as Customer:
             rer.side_effect = Customer.side_effect = Foobar
             with self.assertRaises(Foobar):

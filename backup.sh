@@ -76,8 +76,8 @@ then
     exit "Too many backups!"
 fi
 
-confirm "Backup the Gittip database to $FILEPATH?"
+confirm "Backup the Gratipay database to $FILEPATH?"
 if [ $? -eq 0 ]; then
     export PGSSLMODE=require
-    pg_dump `heroku config:get DATABASE_URL -a gittip` > $FILEPATH
+    pg_dump `heroku config:get DATABASE_URL -a gratipay` > $FILEPATH
 fi
