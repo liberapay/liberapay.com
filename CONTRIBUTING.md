@@ -11,4 +11,4 @@ it's public domain.
 **More info.** If you want to really get involved, then check out our full
 documentation for contributors:
 
-http://building.gratipay.com/
+http://inside.gratipay.com/

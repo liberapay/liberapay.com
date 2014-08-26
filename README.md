@@ -7,7 +7,7 @@
 
 Gratipay is a weekly gift exchange, helping to create a culture of generosity.
 If you'd like to learn more, check out <https://gratipay.com/about>.
-If you'd like to contribute to Gratipay, check out <http://building.gratipay.com>.
+If you'd like to contribute to Gratipay, check out <http://inside.gratipay.com>.
 
 Quick Start
 ===========

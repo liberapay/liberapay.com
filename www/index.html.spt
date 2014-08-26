@@ -85,7 +85,7 @@ from aspen.utils import utcnow
             _("Want to see who they are? Browse {0}our communities{1}.",
                 "<a href='/for/'>", "</a>") + " " +
             _("Want to work for Gratipay? We are an {0}open company{1}.",
-                "<a href='http://building.gratipay.com/big-picture/welcome'>", "</a>") }}</p>
+                "<a href='http://inside.gratipay.com/big-picture/welcome'>", "</a>") }}</p>
 
         {% else %}
         {% set quick = utcnow() - timedelta(seconds=15)  %}
