@@ -41,7 +41,7 @@ locked = False
         </td>
     </tr>
     {% for tip in tips %}
-    {% set my_tip = tip.amount %}
+    {% set my_tip = format_decimal(tip.amount) %}
     {% set tippee = tip.tippee %}
     {% if my_tip > 0 %}
     <tr class="tip">
