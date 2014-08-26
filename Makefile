@@ -14,7 +14,7 @@ py_test := $(honcho) -e $(test_env_files) run $(env_bin)/py.test
 env: requirements.txt requirements_tests.txt setup.py
 	$(python) $(venv) \
 				--unzip-setuptools \
-				--prompt="[gittip] " \
+				--prompt="[gratipay] " \
 				--never-download \
 				--extra-search-dir=./vendor/ \
 				--distribute \
@@ -37,18 +37,18 @@ run: env
 	PATH=$(env_bin):$(PATH) $(honcho_run) web
 
 py: env
-	$(honcho_run) $(env_bin)/python -i -c 'from gittip.wireup import env, db; db = db(env())'
+	$(honcho_run) $(env_bin)/python -i -c 'from gratipay.wireup import env, db; db = db(env())'
 
 test-schema: env
 	$(honcho) -e $(test_env_files) run ./recreate-schema.sh
 
 pyflakes: env
-	$(env_bin)/pyflakes bin gittip tests
+	$(env_bin)/pyflakes bin gratipay tests
 
 test: test-schema pytest jstest
 
 pytest: env
-	$(py_test) --cov gittip ./tests/py/
+	$(py_test) --cov gratipay ./tests/py/
 	@$(MAKE) --no-print-directory pyflakes
 
 retest: env
@@ -56,7 +56,7 @@ retest: env
 	@$(MAKE) --no-print-directory pyflakes
 
 test-cov: env
-	$(py_test) --cov-report html --cov gittip ./tests/py/
+	$(py_test) --cov-report html --cov gratipay ./tests/py/
 
 tests: test
 

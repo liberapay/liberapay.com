@@ -5,8 +5,8 @@ import json
 
 from mock import patch
 
-from gittip.billing.payday import Payday
-from gittip.testing import Harness
+from gratipay.billing.payday import Payday
+from gratipay.testing import Harness
 
 def today():
     return datetime.datetime.utcnow().date().strftime('%Y-%m-%d')

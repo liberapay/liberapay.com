@@ -3,7 +3,7 @@ from __future__ import print_function, unicode_literals
 import json
 
 from aspen.utils import utcnow
-from gittip.testing import Harness
+from gratipay.testing import Harness
 
 
 class TestTipJson(Harness):

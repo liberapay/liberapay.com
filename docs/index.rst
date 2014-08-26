@@ -1,11 +1,11 @@
-www.gittip.com
+gratipay.com
 ==============
 
-Welcome! This is the documentation for programmers working on `www.gittip.com`_
-(not to be confused with programmers working with Gittip's `web API`_).
+Welcome! This is the documentation for programmers working on `gratipay.com`_
+(not to be confused with programmers working with Gratipay's `web API`_).
 
-.. _www.gittip.com: https://github.com/gittip/www.gittip.com
-.. _web API: https://github.com/gittip/www.gittip.com#api
+.. _gratipay.com: https://github.com/gratipay/gratipay.com
+.. _web API: https://github.com/gratipay/gratipay.com#api
 
 
 DB Schema
@@ -14,12 +14,12 @@ DB Schema
 is_suspipicous on participant can be None, True or False. It represents unknown,
 blacklisted or whitelisted user.
 
-    * whitelisted can transfer money out of gittip
-    * unknown can move money within gittip
+    * whitelisted can transfer money out of gratipay
+    * unknown can move money within gratipay
     * blacklisted cannot do anything
 
 
-The exchanges table records movements of money into and out of Gittip. The
+The exchanges table records movements of money into and out of Gratipay. The
 ``amount`` column shows a positive amount for payins and a negative amount for
 payouts. The ``fee`` column is always positive. For both payins and payouts,
 the ``amount`` does not include the ``fee`` (e.g., a $10 payin would result in
@@ -33,4 +33,4 @@ Contents
 .. toctree::
     :maxdepth: 2
 
-    gittip Python library <gittip>
+    gratipay Python library <gratipay>

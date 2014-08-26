@@ -1,9 +1,9 @@
 #!/usr/bin/env python
-"""This is a command line utility for managing Gittip backups.
+"""This is a command line utility for managing Gratipay backups.
 
 Running this script gets you a `snapper> ` prompt with commands to take backups
 and load them locally. Backups are managed as *.psql files in ../backups/, and
-they're loaded into a local gittip-bak database. Type 'help' or '?' at the
+they're loaded into a local gratipay-bak database. Type 'help' or '?' at the
 prompt for help.
 
 """
@@ -18,7 +18,7 @@ class Snapper(cmd.Cmd):
 
     prompt = 'snapper> '
     root = '../backups'
-    dbname = 'gittip-bak'
+    dbname = 'gratipay-bak'
 
     def do_EOF(self, line):
         raise KeyboardInterrupt

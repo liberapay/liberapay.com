@@ -1,7 +1,7 @@
 from __future__ import print_function, unicode_literals
 
-from gittip.testing import Harness
-from gittip.models.participant import Participant
+from gratipay.testing import Harness
+from gratipay.models.participant import Participant
 
 
 class TestIsSuspicious(Harness):

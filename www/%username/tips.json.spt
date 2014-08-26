@@ -1,6 +1,6 @@
 import re
 from aspen import json, Response
-from gittip.utils import get_participant
+from gratipay.utils import get_participant
 
 callback_pattern = re.compile(r'^[_A-Za-z0-9.]+$')
 
@@ -17,9 +17,9 @@ if POST:
     seen = set()
     for tip in new_tips:
         seen.add(tip['username'])
-        one = {"username": tip['username'], "platform": "gittip"}
+        one = {"username": tip['username'], "platform": "gratipay"}
         try:
-            if tip['platform'] != 'gittip':
+            if tip['platform'] != 'gratipay':
                 raise BadPlatform
             amount = participant.set_tip_to(tip['username'], parse_decimal(tip['amount']))
         except Exception, exc:
@@ -43,7 +43,7 @@ else:
         if tip.amount == 0:
             continue
         out.append({ "username": tip.tippee
-                   , "platform": "gittip"
+                   , "platform": "gratipay"
                    , "amount": str(tip.amount)
                     })
 

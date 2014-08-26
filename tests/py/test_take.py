@@ -2,8 +2,8 @@ from __future__ import unicode_literals
 
 from decimal import Decimal as D
 
-from gittip.testing import Harness
-from gittip.models.participant import Participant
+from gratipay.testing import Harness
+from gratipay.models.participant import Participant
 
 
 TEAM = 'A Team'

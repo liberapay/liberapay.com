@@ -5,11 +5,11 @@ from decimal import Decimal as D
 
 import balanced
 import pytest
-from gittip.billing.payday import Payday
-from gittip.exceptions import NoBalancedCustomerHref, NotWhitelisted
-from gittip.models.community import Community
-from gittip.models.participant import Participant
-from gittip.testing import Harness
+from gratipay.billing.payday import Payday
+from gratipay.exceptions import NoBalancedCustomerHref, NotWhitelisted
+from gratipay.models.community import Community
+from gratipay.models.participant import Participant
+from gratipay.testing import Harness
 
 
 class TestClosing(Harness):

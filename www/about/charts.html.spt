@@ -6,7 +6,7 @@ title = "Charts"
 {% block scripts %}
 <script>
 $(document).ready(function() {
-    jQuery.get('/about/charts.json', Gittip.charts.make);
+    jQuery.get('/about/charts.json', Gratipay.charts.make);
 });
 </script>
 
@@ -18,7 +18,7 @@ $(document).ready(function() {
     <div class="chart-wrapper">
         <a name="users"></a>
         <h2>Total Users</h2>
-        <p class="note">Anyone who's ever created an account on Gittip</p>
+        <p class="note">Anyone who's ever created an account on Gratipay</p>
         <div class="chart" id="chart_total_users"></div>
         <div class="x-axis">weeks</div>
     </div>
@@ -26,7 +26,7 @@ $(document).ready(function() {
     <div class="chart-wrapper">
         <a name="active"></a>
         <h2>Active Users</h2>
-        <p class="note">Users that gave and/or received money within Gittip (per week)</p>
+        <p class="note">Users that gave and/or received money within Gratipay (per week)</p>
         <div class="chart" id="chart_active_users"></div>
         <div class="x-axis">weeks</div>
     </div>
@@ -34,7 +34,7 @@ $(document).ready(function() {
     <div class="chart-wrapper">
         <a name="cumulative-gifts"></a>
         <h2>Total Gifts ($)</h2>
-        <p class="note">Money transferred within Gittip (cumulative)</p>
+        <p class="note">Money transferred within Gratipay (cumulative)</p>
         <div class="chart" id="chart_total_gifts"></div>
         <div class="x-axis">weeks</div>
     </div>
@@ -42,7 +42,7 @@ $(document).ready(function() {
     <div class="chart-wrapper">
         <a name="gifts"></a>
         <h2>Weekly Gifts ($)</h2>
-        <p class="note">Money transferred within Gittip (per week)</p>
+        <p class="note">Money transferred within Gratipay (per week)</p>
         <div class="chart" id="chart_weekly_gifts"></div>
         <div class="x-axis">weeks</div>
     </div>
@@ -50,9 +50,9 @@ $(document).ready(function() {
     <div class="chart-wrapper newline">
         <a name="charges"></a>
         <h2>Charges ($)</h2>
-        <p class="note">Money moved into Gittip via credit card<br /> (minimum
+        <p class="note">Money moved into Gratipay via credit card<br /> (minimum
         charge <a
-            href="http://blog.gittip.com/post/28158537529/why-were-you-charged-10">upped</a>
+            href="http://blog.gratipay.com/post/28158537529/why-were-you-charged-10">upped</a>
         to $10 in week 8)</p>
         <div class="chart" id="chart_charges"></div>
         <div class="x-axis">weeks</div>
@@ -62,8 +62,8 @@ $(document).ready(function() {
         <a name="withdrawals"></a>
         <h2>Withdrawals ($)</h2>
 
-        <p class="note">Money withdrawn from Gittip to a bank account<br />(feature <a
-            href="http://blog.gittip.com/post/30116848405/with-payouts-gittip-is-minimally-viable">added</a>
+        <p class="note">Money withdrawn from Gratipay to a bank account<br />(feature <a
+            href="http://blog.gratipay.com/post/30116848405/with-payouts-gratipay-is-minimally-viable">added</a>
         in week 12)</p>
 
         <div class="chart" id="chart_withdrawals"></div>

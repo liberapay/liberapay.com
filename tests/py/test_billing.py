@@ -3,10 +3,10 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import balanced
 import mock
 
-from gittip import billing
-from gittip.testing import Harness
-from gittip.testing.balanced import BalancedHarness
-from gittip.models.participant import Participant
+from gratipay import billing
+from gratipay.testing import Harness
+from gratipay.testing.balanced import BalancedHarness
+from gratipay.models.participant import Participant
 
 
 class TestBalancedCard(BalancedHarness):
@@ -65,7 +65,7 @@ class TestBalancedCard(BalancedHarness):
         assert actual == expected
 
     def test_balanced_works_with_old_urls(self):
-        # gittip will have a combination of old style from v1
+        # gratipay will have a combination of old style from v1
         # and new urls from v1.1
         # do not actually do this in any real system
         # but construct the url using the id from the

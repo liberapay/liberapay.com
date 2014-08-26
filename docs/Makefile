@@ -27,10 +27,10 @@ help:
 	@echo "  doctest    to run all doctests embedded in the documentation (if enabled)"
 
 clean:
-	rm -rf gittip* $(BUILDDIR)/*
+	rm -rf gratipay* $(BUILDDIR)/*
 
 rst:
-	AUTOLIB_LIBRARY_ROOT=../gittip ./autolib.py
+	AUTOLIB_LIBRARY_ROOT=../gratipay ./autolib.py
 
 html:
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html

@@ -11,11 +11,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   #For now we have a custom built vagrant image. It was built in the following manner:
   #-Use 'precise64' as a base.
-  #-perform a 'vagrant up' using this vagrantfile: https://github.com/gittip/www.gittip.com/blob/83312e60c6b31c298ffca61036baa9849044c75e/Vagrantfile
-  #-drop database gittip
-  #-drop role gittip
-  config.vm.box = "gittip"
-  config.vm.box_url =  File.exist?("gittip.box") ? "file://gittip.box" : "http://downloads.gittipllc.netdna-cdn.com/gittip.box"
+  #-perform a 'vagrant up' using this vagrantfile: https://github.com/gratipay/gratipay.com/blob/83312e60c6b31c298ffca61036baa9849044c75e/Vagrantfile
+  #-drop database gratipay
+  #-drop role gratipay
+  config.vm.box = "gratipay"
+  config.vm.box_url =  File.exist?("gratipay.box") ? "file://gratipay.box" : "http://downloads.gratipayllc.netdna-cdn.com/gratipay.box"
 
   # Sync the project directory and expose the app
   config.vm.network "private_network", ip: "172.27.36.119"

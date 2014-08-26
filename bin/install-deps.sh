@@ -42,15 +42,15 @@ db_exists() {
     return 1;
 }
 
-if ! db_exists gittip-test;
+if ! db_exists gratipay-test;
 then
-    createdb gittip-test
-    psql -q gittip-test -c 'alter database "gittip-test" set synchronous_commit to off'
+    createdb gratipay-test
+    psql -q gratipay-test -c 'alter database "gratipay-test" set synchronous_commit to off'
 fi
 
-if ! db_exists gittip;
+if ! db_exists gratipay;
 then
-    createdb gittip
+    createdb gratipay
 fi
 
 echo "done"

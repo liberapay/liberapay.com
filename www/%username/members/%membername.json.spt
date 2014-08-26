@@ -2,10 +2,10 @@
 """
 from decimal import Decimal, InvalidOperation
 
-import gittip
+import gratipay
 from aspen import Response
-from gittip.utils import get_participant
-from gittip.models.participant import Participant
+from gratipay.utils import get_participant
+from gratipay.models.participant import Participant
 
 ZERO = Decimal('0.00')
 A_PENNY = Decimal('0.01')

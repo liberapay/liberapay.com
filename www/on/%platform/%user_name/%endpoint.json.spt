@@ -1,4 +1,4 @@
-"""JSON endpoint for a Gittip widget.
+"""JSON endpoint for a Gratipay widget.
 """
 import re
 
@@ -7,7 +7,7 @@ from aspen import Response
 from urllib import urlencode
 from base64 import b64decode, b64encode
 
-from gittip.models.account_elsewhere import get_account_elsewhere
+from gratipay.models.account_elsewhere import get_account_elsewhere
 
 whitelisted_endpoints = ['public', 'charts']
 
@@ -67,10 +67,10 @@ if not user.ANON:
     out["my_tip"] = str(my_tip)
 
 
-# CORS - see https://github.com/gittip/aspen-python/issues/138
+# CORS - see https://github.com/gratipay/aspen-python/issues/138
 response.headers["Access-Control-Allow-Origin"] = "*"
 
-# JSONP - see https://github.com/gittip/aspen-python/issues/138
+# JSONP - see https://github.com/gratipay/aspen-python/issues/138
 callback = qs.get('callback')
 if callback is not None:
     if callback_pattern.match(callback) is None:

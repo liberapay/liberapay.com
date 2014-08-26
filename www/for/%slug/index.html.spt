@@ -1,7 +1,7 @@
 from aspen import Response
-from gittip.models.community import name_pattern, slugize, Community
-from gittip.utils import format_money, to_statement
-from gittip.utils.query_cache import QueryCache
+from gratipay.models.community import name_pattern, slugize, Community
+from gratipay.utils import format_money, to_statement
+from gratipay.utils.query_cache import QueryCache
 
 LUXURY = 4
 
@@ -84,7 +84,7 @@ givers = query_cache.all("""
 """, (community.slug, limit, offset))
 
 # XXX I'm nearly positive that one or both of givers and receivers can contain
-# orphan accounts. See https://github.com/gittip/www.gittip.com/issues/650
+# orphan accounts. See https://github.com/gratipay/gratipay.com/issues/650
 
 receivers = query_cache.all("""
 -- top receivers on community page
@@ -126,7 +126,7 @@ $(document).ready(function() {
         var button = $(this);
         var name = button.attr('data-name');
         var is_member = button.attr('data-is-member') === 'true';
-        Gittip.communities.update(name, !is_member, function()
+        Gratipay.communities.update(name, !is_member, function()
         {
             window.location.reload();
         });
@@ -149,7 +149,7 @@ $(document).ready(function() {
     {% if user.ANON %}
     <div class="help with-padding">
         {% include "templates/sign-in-using.html" %}
-        {{ _("{0} to join the {1} community on Gittip.", "", community.name) }}
+        {{ _("{0} to join the {1} community on Gratipay.", "", community.name) }}
     </div>
     {% else %}
     {% set is_member = community.check_membership(user.participant) %}
@@ -170,7 +170,7 @@ $(document).ready(function() {
 
     <h2>{{ _("You're the first one here!") }}</h2>
 
-    <p>{{ _("Bring the {0} community to Gittip to find like-minded people to give to.", community.name) }}</p>
+    <p>{{ _("Bring the {0} community to Gratipay to find like-minded people to give to.", community.name) }}</p>
 
 </div>
 

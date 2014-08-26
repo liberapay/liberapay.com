@@ -5,11 +5,11 @@ from invoke import run, task
 import sys
 import os
 
-from gittip import wireup
+from gratipay import wireup
 
 @task(
     help={
-        'username': "Gittip username. (required)",
+        'username': "Gratipay username. (required)",
         'email':    "PayPal email address. (required)",
         'api-key-fragment': "First 8 characters of user's API key.",
         'overwrite': "Override existing PayPal email?",
@@ -20,7 +20,7 @@ def set_paypal_email(username='', email='', api_key_fragment='', overwrite=False
     """
     Usage:
 
-    [gittip] $ env/bin/invoke set_paypal_email --username=username --email=user@example.com [--api-key-fragment=12e4s678] [--overwrite]
+    [gratipay] $ env/bin/invoke set_paypal_email --username=username --email=user@example.com [--api-key-fragment=12e4s678] [--overwrite]
     """
 
     if not os.environ.get('DATABASE_URL'):
@@ -48,11 +48,11 @@ def set_paypal_email(username='', email='', api_key_fragment='', overwrite=False
     print(fields)
 
     if fields == None:
-        print("No Gittip participant found with username '" + username + "'")
+        print("No Gratipay participant found with username '" + username + "'")
         sys.exit(2)
 
     # PayPal caps the MassPay fee at $20 for users outside the U.S., and $1 for
-    # users inside the U.S. Most Gittip users using PayPal are outside the U.S.
+    # users inside the U.S. Most Gratipay users using PayPal are outside the U.S.
     # so we set to $20 and I'll manually adjust to $1 when running MassPay and
     # noticing that something is off.
     FEE_CAP = ', paypal_fee_cap=20'
@@ -86,7 +86,7 @@ def set_paypal_email(username='', email='', api_key_fragment='', overwrite=False
 def load_prod_envvars():
     print("Loading production environment variables...")
 
-    output = run("heroku config --shell --app=gittip", warn=False, hide=True)
+    output = run("heroku config --shell --app=gratipay", warn=False, hide=True)
     envvars = output.stdout.split("\n")
 
     for envvar in envvars:

@@ -23,12 +23,12 @@ if grep --quiet --binary --binary-files=without-match $(printf '\r') README.md; 
     exit 1
 fi
 
-# Set up the environment, the database, and run Gittip
+# Set up the environment, the database, and run Gratipay
 cd /vagrant && make clean env schema data
 
 # Output helper text
 cat <<EOF
 
-Gittip installed! To run,
+Gratipay installed! To run,
 $ vagrant ssh --command "make run"
 EOF

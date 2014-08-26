@@ -2,8 +2,8 @@ from __future__ import unicode_literals
 
 import json
 
-from gittip.billing.payday import Payday
-from gittip.testing import Harness
+from gratipay.billing.payday import Payday
+from gratipay.testing import Harness
 
 
 class Tests(Harness):

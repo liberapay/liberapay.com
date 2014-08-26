@@ -9,10 +9,10 @@ interfacing with PayPal's MassPay feature.
 
 This script provides for:
 
-  1. Computing an input CSV by hitting the Gittip database directly.
+  1. Computing an input CSV by hitting the Gratipay database directly.
   2. Computing two output CSVs (one to upload to PayPal, the second to use for POSTing
-      the exchanges back to Gittip)
-  3. POSTing the exchanges back to Gittip via the HTTP API.
+      the exchanges back to Gratipay)
+  3. POSTing the exchanges back to Gratipay via the HTTP API.
 
 The idea is that you run steps 1 and 2, then run through the MassPay UI on the
 PayPal website using the appropriate CSV from step 2, then run step 3.
@@ -35,7 +35,7 @@ os.chdir('../masspay')
 ts = datetime.datetime.now().strftime('%Y-%m-%d')
 INPUT_CSV = '{}.input.csv'.format(ts)
 PAYPAL_CSV = '{}.output.paypal.csv'.format(ts)
-GITTIP_CSV = '{}.output.gittip.csv'.format(ts)
+GRATIPAY_CSV = '{}.output.gratipay.csv'.format(ts)
 
 
 def round_(d):
@@ -85,17 +85,17 @@ class Payee(object):
         #
         #   9. We can't.
         #
-        #  10. Our solution is to leave a penny behind in Gittip for
+        #  10. Our solution is to leave a penny behind in Gratipay for
         #       affected payees.
         #
         #  11. BUT ... if we upload 1.25, PayPal upcharges to 1.28. Think about
         #       it.
         #
-        # See also: https://github.com/gittip/www.gittip.com/issues/1673
-        #           https://github.com/gittip/www.gittip.com/issues/2029
-        #           https://github.com/gittip/www.gittip.com/issues/2198
-        #           https://github.com/gittip/www.gittip.com/pull/2209
-        #           https://github.com/gittip/www.gittip.com/issues/2296
+        # See also: https://github.com/gratipay/gratipay.com/issues/1673
+        #           https://github.com/gratipay/gratipay.com/issues/2029
+        #           https://github.com/gratipay/gratipay.com/issues/2198
+        #           https://github.com/gratipay/gratipay.com/pull/2209
+        #           https://github.com/gratipay/gratipay.com/issues/2296
 
         target = net = self.gross
         while 1:
@@ -118,7 +118,7 @@ class Payee(object):
 
 
 def compute_input_csv():
-    from gittip import wireup
+    from gratipay import wireup
     db = wireup.db(wireup.env())
     participants = db.all("""
 
@@ -140,7 +140,7 @@ def compute_input_csv():
         amount = participant.balance - total
         if amount < 0.50:
             # Minimum payout of 50 cents. I think that otherwise PayPal upcharges to a penny.
-            # See https://github.com/gittip/www.gittip.com/issues/1958.
+            # See https://github.com/gratipay/gratipay.com/issues/1958.
             continue
         total_gross += amount
         print("{:<24}{:<32} {:>7} {:>7} {:>7} {:>7}".format( participant.username
@@ -166,13 +166,13 @@ def compute_output_csvs():
     assert total_fees + total_net == total_gross
 
     paypal_csv = csv.writer(open(PAYPAL_CSV, 'w+'))
-    gittip_csv = csv.writer(open(GITTIP_CSV, 'w+'))
+    gratipay_csv = csv.writer(open(GRATIPAY_CSV, 'w+'))
     print_rule()
     print("{:<24}{:<32} {:^7} {:^7} {:^7}".format("username", "email", "gross", "fee", "net"))
     print_rule()
     for payee in payees:
         paypal_csv.writerow((payee.email, payee.net, "usd"))
-        gittip_csv.writerow(( payee.username
+        gratipay_csv.writerow(( payee.username
                             , payee.email
                             , payee.gross
                             , payee.fee
@@ -185,21 +185,21 @@ def compute_output_csvs():
     print("{:>64} {:>7} {:>7}".format(total_gross, total_fees, total_net))
 
 
-def post_back_to_gittip():
+def post_back_to_gratipay():
 
     try:
-        gittip_api_key = os.environ['GITTIP_API_KEY']
+        gratipay_api_key = os.environ['GRATIPAY_API_KEY']
     except KeyError:
-        gittip_api_key = getpass.getpass("Gittip API key: ")
+        gratipay_api_key = getpass.getpass("Gratipay API key: ")
 
     try:
-        gittip_base_url = os.environ['GITTIP_BASE_URL']
+        gratipay_base_url = os.environ['GRATIPAY_BASE_URL']
     except KeyError:
-        gittip_base_url = 'https://www.gittip.com'
+        gratipay_base_url = 'https://gratipay.com'
 
     nposts = 0
-    for username, email, gross, fee, net, additional_note in csv.reader(open(GITTIP_CSV)):
-        url = '{}/{}/history/record-an-exchange'.format(gittip_base_url, username)
+    for username, email, gross, fee, net, additional_note in csv.reader(open(GRATIPAY_CSV)):
+        url = '{}/{}/history/record-an-exchange'.format(gratipay_base_url, username)
         note = 'PayPal MassPay to {}.'.format(email)
         if additional_note:
             note += " " + additional_note
@@ -207,7 +207,7 @@ def post_back_to_gittip():
 
         data = {'amount': '-' + net, 'fee': fee, 'note': note}
         try:
-            response = requests.post(url, auth=(gittip_api_key, ''), data=data)
+            response = requests.post(url, auth=(gratipay_api_key, ''), data=data)
         except IncompleteRead:
             print('IncompleteRead, proceeding (but double-check!)')
         else:
@@ -215,12 +215,12 @@ def post_back_to_gittip():
                 nposts += 1
             else:
                 if response.status_code == 404:
-                    print('Got 404, is your API key good? {}'.format(gittip_api_key))
+                    print('Got 404, is your API key good? {}'.format(gratipay_api_key))
                 else:
                     print('... resulted in a {} response:'.format(response.status_code))
                     print(response.text)
                 raise SystemExit
-        print("POSTed MassPay back to Gittip for {} users.".format(nposts))
+        print("POSTed MassPay back to Gratipay for {} users.".format(nposts))
 
 
 def run_report():
@@ -256,18 +256,18 @@ def run_report():
 def main():
     if not sys.argv[1:]:
         print("Looking for files for {} ...".format(ts))
-        for filename in (INPUT_CSV, PAYPAL_CSV, GITTIP_CSV):
+        for filename in (INPUT_CSV, PAYPAL_CSV, GRATIPAY_CSV):
             print("  [{}] {}".format('x' if os.path.exists(filename) else ' ', filename))
         print("Rerun with one of these options:")
         print("  -i - hits db to generate input CSV (needs envvars via heroku + honcho)")
         print("  -o - computes output CSVs (doesn't need anything but input CSV)")
-        print("  -p - posts back to Gittip (prompts for API key)")
+        print("  -p - posts back to Gratipay (prompts for API key)")
     elif '-i' in sys.argv:
         compute_input_csv()
     elif '-o' in sys.argv:
         compute_output_csvs()
     elif '-p' in sys.argv:
-        post_back_to_gittip()
+        post_back_to_gratipay()
 
 
 if __name__ == '__main__':

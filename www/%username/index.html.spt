@@ -1,7 +1,7 @@
 """Show information about a single participant. It might be you!
 """
-from gittip.utils import get_participant, wrap, plural
-from gittip.models import community
+from gratipay.utils import get_participant, wrap, plural
+from gratipay.models import community
 
 LONG_STATEMENT = 256
 
@@ -38,14 +38,14 @@ if participant.number == 'singular':
     GRATEFUL = _("I'm grateful for gifts, but don't have a specific funding goal.")
     PATRON = _("I'm here as a patron.")
     PATRON_NO_GIFTS = _("I'm here as a patron, and politely decline to receive gifts.")
-    GOAL_RAW = _("My goal is to receive {0} per week on Gittip.")
+    GOAL_RAW = _("My goal is to receive {0} per week on Gratipay.")
     GOAL = GOAL_RAW.format(format_currency(participant.goal or 0, 'USD'))
 else:
     MAKING = WE_ARE_MAKING
     GRATEFUL = _("We're grateful for gifts, but don't have a specific funding goal.")
     PATRON = _("We're here as a patron.")
     PATRON_NO_GIFTS = _("We're here as a patron, and politely decline to receive gifts.")
-    GOAL_RAW = _("Our goal is to receive {0} per week on Gittip.")
+    GOAL_RAW = _("Our goal is to receive {0} per week on Gratipay.")
     GOAL = GOAL_RAW.format(format_currency(participant.goal or 0, 'USD'))
 
 GOAL_PARTS = GOAL_RAW.split("{0}")
@@ -57,34 +57,34 @@ def with_others(obj):
 [-----------------------------------------------------------------------------]
 {% extends "templates/profile.html" %}
 {% block head %}
-    <link rel="payment" type="text/html" title="Give weekly gift on Gittip"
-        href="https://www.gittip.com/{{ username }}/" />
+    <link rel="payment" type="text/html" title="Give weekly gift on Gratipay"
+        href="https://gratipay.com/{{ username }}/" />
     <meta name="twitter:card" content="summary" />
-    <meta name="og:url" content="https://www.gittip.com/{{ username }}/" />
+    <meta name="og:url" content="https://gratipay.com/{{ username }}/" />
     <meta name="og:type" content="profile" />
     <meta name="og:title" content="{{ participant.get_og_title() }}" />
     {% if participant.statement %}
     <meta name="og:description" content="{{ _clip(MAKING.format(participant.statement), 200)|e }}" />
     {% else %}
-    <meta name="og:description" content="Gittip is a weekly gift exchange" />
+    <meta name="og:description" content="Gratipay is a weekly gift exchange" />
     {% endif %}
     {% if participant.avatar_url %}
     <meta name="og:image" content="{{ participant.avatar_url|e }}" />
     {% endif %}
-    <meta name="og:image" content="{{ website.asset_url }}/gittip.opengraph.png" />
+    <meta name="og:image" content="{{ website.asset_url }}/gratipay.opengraph.png" />
 {% endblock %}
 
 {% block scripts %}
 {% if show_charts %}
 <script>
 $(document).ready(function() {
-    jQuery.get('./charts.json', Gittip.charts.make);
+    jQuery.get('./charts.json', Gratipay.charts.make);
 });
 </script>
 {% endif %}
 
 {% if user.participant == participant %}
-<script>$(document).ready(Gittip.profile.init);</script>
+<script>$(document).ready(Gratipay.profile.init);</script>
 {% endif %}
 
 {{ super() }}

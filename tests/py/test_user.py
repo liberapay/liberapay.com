@@ -3,9 +3,9 @@ from __future__ import print_function, unicode_literals
 from Cookie import SimpleCookie
 
 from aspen.utils import utcnow
-import gittip
-from gittip.security.user import User, SESSION, SESSION_REFRESH
-from gittip.testing import Harness
+import gratipay
+from gratipay.security.user import User, SESSION, SESSION_REFRESH
+from gratipay.testing import Harness
 
 
 class TestUser(Harness):
@@ -87,8 +87,8 @@ class TestUser(Harness):
         assert actual == 'alice'
 
     def test_session_cookie_is_secure_if_it_should_be(self):
-        canonical_scheme = gittip.canonical_scheme
-        gittip.canonical_scheme = 'https'
+        canonical_scheme = gratipay.canonical_scheme
+        gratipay.canonical_scheme = 'https'
         try:
             cookies = SimpleCookie()
             self.make_participant('alice')
@@ -96,7 +96,7 @@ class TestUser(Harness):
             user.sign_in(cookies)
             assert '; secure' in cookies[SESSION].output()
         finally:
-            gittip.canonical_scheme = canonical_scheme
+            gratipay.canonical_scheme = canonical_scheme
 
     def test_session_is_regularly_refreshed(self):
         self.make_participant('alice')

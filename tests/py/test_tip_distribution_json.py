@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 import json
 from decimal import Decimal as D
 
-from gittip.testing import Harness
+from gratipay.testing import Harness
 
 
 class Tests(Harness):

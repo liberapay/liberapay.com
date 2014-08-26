@@ -1,6 +1,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from gittip.testing import Harness
+from gratipay.testing import Harness
 
 
 class Tests(Harness):

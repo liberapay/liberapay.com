@@ -1,4 +1,4 @@
-from gittip.utils import get_participant
+from gratipay.utils import get_participant
 [---]
 participant = get_participant(request, restrict=True)
 hero = "Close Account"
@@ -103,7 +103,7 @@ if POST:
                 <p>We immediately clear out most of the information in your
                 profile (though it may still exist in our database in event
                         logs, to be fully deleted once we sort out our <a
-                        href="https://github.com/gittip/www.gittip.com/issues/397">data
+                        href="https://github.com/gratipay/gratipay.com/issues/397">data
                         retention policy</a>).</p>
 
                 <p>Things we clear immediately include your &ldquo;making the
@@ -130,7 +130,7 @@ if POST:
                         trademark).</p>
 
                 <p>Until we give your username to someone else, you can use it
-                again if you ever decide to rejoin Gittip. Simply sign in.</p>
+                again if you ever decide to rejoin Gratipay. Simply sign in.</p>
 
 
                 <h2>Remember</h2>
@@ -148,7 +148,7 @@ if POST:
             <div class="nav level-1">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                 <button class="selected larger close-account" id="save"
-                    type="submit">Yes, Close My Gittip Account</button>
+                    type="submit">Yes, Close My Gratipay Account</button>
             </div>
         </form>
         {% endif %}
@@ -159,8 +159,8 @@ if POST:
 {% if not payday_is_running and POST %}
     <script>
         $(function () {
-            Gittip.notification(
-                'You still have money in this Gittip account, please ' +
+            Gratipay.notification(
+                'You still have money in this Gratipay account, please ' +
                 'choose a disbursement method below or contact support.'
             , 'error')
         });

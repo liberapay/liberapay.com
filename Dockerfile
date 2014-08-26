@@ -1,4 +1,4 @@
-# Dockerfile to build and run Gittip
+# Dockerfile to build and run Gratipay
 # Version 0.1 (April 15, 2014)
 
 ################################################## General Information ##################################################
@@ -34,21 +34,21 @@ RUN apt-get -y install \
 
 ################################################## Configure Postgres #################################################
 
-RUN /etc/init.d/postgresql start && su postgres -c "createuser --superuser root" && su postgres -c "createdb gittip"
+RUN /etc/init.d/postgresql start && su postgres -c "createuser --superuser root" && su postgres -c "createdb gratipay"
 
-################################################# Clone + Setup Gittip ################################################
+################################################# Clone + Setup Gratipay ################################################
 
-RUN cd /srv && wget --quiet https://github.com/gittip/www.gittip.com/archive/master.zip && unzip master.zip
-RUN cd /srv/www.gittip.com-master && make env && /etc/init.d/postgresql start && make schema && make schema data
+RUN cd /srv && wget --quiet https://github.com/gratipay/gratipay.com/archive/master.zip && unzip master.zip
+RUN cd /srv/gratipay.com-master && make env && /etc/init.d/postgresql start && make schema && make schema data
 
 ################################################ Create a Launch Script ###############################################
 
-RUN echo "#!/bin/bash" >> /usr/bin/gittip
-RUN echo "/etc/init.d/postgresql start" >> /usr/bin/gittip
-RUN echo "cd /srv/www.gittip.com-master && make run" >> /usr/bin/gittip
-RUN chmod +x /usr/bin/gittip
+RUN echo "#!/bin/bash" >> /usr/bin/gratipay
+RUN echo "/etc/init.d/postgresql start" >> /usr/bin/gratipay
+RUN echo "cd /srv/gratipay.com-master && make run" >> /usr/bin/gratipay
+RUN chmod +x /usr/bin/gratipay
 
 ################################################### Set an Entrypoint #################################################
 
-ENTRYPOINT ["/usr/bin/gittip"]
+ENTRYPOINT ["/usr/bin/gratipay"]
 

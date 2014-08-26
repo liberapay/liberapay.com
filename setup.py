@@ -9,12 +9,12 @@ def get_version():
         return 'n/a'
 
 
-setup( name='gittip'
+setup( name='gratipay'
      , version=get_version()
      , packages=find_packages()
      , entry_points = { 'console_scripts'
-                      : [ 'payday=gittip.cli:payday'
-                        , 'fake_data=gittip.utils.fake_data:main'
+                      : [ 'payday=gratipay.cli:payday'
+                        , 'fake_data=gratipay.utils.fake_data:main'
                          ]
                        }
       )

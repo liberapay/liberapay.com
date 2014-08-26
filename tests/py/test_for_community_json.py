@@ -1,7 +1,7 @@
 import json
 
-from gittip.models.community import slugize
-from gittip.testing import Harness
+from gratipay.models.community import slugize
+from gratipay.testing import Harness
 
 
 class TestForCommunityJson(Harness):

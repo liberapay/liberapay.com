@@ -1,12 +1,12 @@
 # encoding: utf8
-"""External user page on Gittip.
+"""External user page on Gratipay.
 """
 
 from base64 import b64decode, b64encode
 
 from aspen import Response
 
-from gittip.models.account_elsewhere import *
+from gratipay.models.account_elsewhere import *
 
 [-----------------------------------------------------------------------------]
 
@@ -42,7 +42,7 @@ if is_team:
 
 if locked:
     number = -2
-    description = 'has opted out of Gittip.'
+    description = 'has opted out of Gratipay.'
 elif is_team and not allow_pledges:
     number = nmembers
     description = team_description
@@ -61,7 +61,7 @@ else:
 
 {% block scripts %}
   {% if allow_pledges %}
-    <script>$(document).ready(Gittip.tips.init);</script>
+    <script>$(document).ready(Gratipay.tips.init);</script>
   {% endif %}
 
   {{ super() }}
@@ -110,11 +110,11 @@ else:
     {% if is_team %}
         <p>If you are an administrator of this {{ platform.display_name }} team
         account, you can unlock it to allow people to pledge tips to your team
-        on Gittip.</p>
+        on Gratipay.</p>
     {% else %}
         <p>If you are <a href="{{ account.html_url|e}}">{{ user_name|e }}</a>
         on {{ platform.name }}, you can unlock your account to allow people
-        to pledge tips to you on Gittip.</p>
+        to pledge tips to you on Gratipay.</p>
     {% endif %}
 
     {% call auth_button(platform.name, 'unlock', user_name) %}
@@ -124,9 +124,9 @@ else:
   {% elif is_team %}
 
     {% if allow_team_connect %}
-        <h2>{{ user_name|e }} has not joined Gittip.</h2>
+        <h2>{{ user_name|e }} has not joined Gratipay.</h2>
         <p>Are you an administrator of this {{ platform.display_name }} team
-        account? Connect it to your Gittip account.</p>
+        account? Connect it to your Gratipay account.</p>
         {% call auth_button(platform.name, 'connect', user_name) %}
             Connect team account
         {% endcall %}
@@ -134,16 +134,16 @@ else:
 
   {% else %}
 
-    <h2>{{ user_name|e }} has not joined Gittip.</h2>
+    <h2>{{ user_name|e }} has not joined Gratipay.</h2>
 
     {% if platform in website.signin_platforms or not user.ANON %}
         {% if user.ANON %}
             <p>Is this you? We never collect money for you unless you join.</p>
             {% call auth_button(platform.name, 'opt-in', user_name) %}
-                Join Gittip
+                Join Gratipay
             {% endcall %}
         {% else %}
-            <p>Is this yours? Connect it to your Gittip account.</p>
+            <p>Is this yours? Connect it to your Gratipay account.</p>
             {% call auth_button(platform.name, 'connect', user_name) %}
                 Connect
             {% endcall %}
@@ -154,9 +154,9 @@ else:
 
   {% if user.ANON %}
 
-    <h2>What is Gittip?</h2>
+    <h2>What is Gratipay?</h2>
 
-    <p>Gittip is a way to thank and support your favorite artists, musicians,
+    <p>Gratipay is a way to thank and support your favorite artists, musicians,
     writers, programmers, etc. by setting up a small weekly cash gift to them.
     <a href="/about/">Read more ...</a></p>
 
@@ -167,7 +167,7 @@ else:
     <h2>Don't like what you see?</h2>
 
     <p>If you are an owner of this {{ platform.display_name }} account, you can
-    explicitly opt out of Gittip by locking it. We don't allow new pledges to
+    explicitly opt out of Gratipay by locking it. We don't allow new pledges to
     locked accounts.</p>
 
     {% call auth_button(platform.name, 'lock', user_name) %}
@@ -193,10 +193,10 @@ else:
     <tbody>
 
     {% for member in members %}
-        {% set on_gittip = member.participant.is_claimed %}
+        {% set on_gratipay = member.participant.is_claimed %}
         {% set declines_gifts = not member.participant.accepts_tips or member.is_locked %}
-        <tr class="{{ 'declines' if declines_gifts }} {{ 'not-on-gittip' if not on_gittip }}">
-            {% if on_gittip %}
+        <tr class="{{ 'declines' if declines_gifts }} {{ 'not-on-gratipay' if not on_gratipay }}">
+            {% if on_gratipay %}
                 <td>
                     <a href="/{{ member.participant.username }}/">
                         {{ avatar_img(member.participant) }}
@@ -221,7 +221,7 @@ else:
                     {% if member.is_locked %}
                         declines gifts (opted out)
                     {% else %}
-                        hasn't joined Gittip yet
+                        hasn't joined Gratipay yet
                     {% endif %}
                 </td>
             {% endif %}

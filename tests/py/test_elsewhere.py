@@ -1,10 +1,10 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from gittip.elsewhere import UserInfo
-from gittip.models.account_elsewhere import AccountElsewhere
-from gittip.models.participant import Participant
-from gittip.testing import Harness
-import gittip.testing.elsewhere as user_info_examples
+from gratipay.elsewhere import UserInfo
+from gratipay.models.account_elsewhere import AccountElsewhere
+from gratipay.models.participant import Participant
+from gratipay.testing import Harness
+import gratipay.testing.elsewhere as user_info_examples
 
 
 class Tests(Harness):

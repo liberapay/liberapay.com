@@ -1,5 +1,5 @@
-from gittip.models import community
-from gittip.utils import plural
+from gratipay.models import community
+from gratipay.utils import plural
 
 [-----------------------------]
 
@@ -11,7 +11,7 @@ title = _("Browse Communities")
 {% extends "templates/base.html" %}
 {% block head %}
     <!-- Otherwise we're getting Indonesian. :-/ -->
-    <!-- https://github.com/gittip/www.gittip.com/issues/953 -->
+    <!-- https://github.com/gratipay/gratipay.com/issues/953 -->
     <meta name="google" value="notranslate">
 {% endblock %}
 
@@ -21,7 +21,7 @@ title = _("Browse Communities")
 
 {% block box %}
 <div class="on-community">
-    {{ _("{0}There are{1} {2} {3}communities on Gittip.{4}",
+    {{ _("{0}There are{1} {2} {3}communities on Gratipay.{4}",
         "<h2 class='pad-sign'>",
         "</h2>",
         "<div class='number'>" + str(ncommunities) + "</div>",
@@ -42,8 +42,8 @@ title = _("Browse Communities")
 
         function createOption(term)
         {
-            Gittip.communities.join(term, function(slug) {
-                Gittip.communities.jumpTo(term);
+            Gratipay.communities.join(term, function(slug) {
+                Gratipay.communities.jumpTo(term);
             });
         }
         // TODO: in future
@@ -55,7 +55,7 @@ title = _("Browse Communities")
                           };
         {% endif %}
         communityChooser.chosen(chosenOpts).change(function() {
-            Gittip.communities.jumpTo(communityChooser.val());
+            Gratipay.communities.jumpTo(communityChooser.val());
         });
     });
 </script>

@@ -5,8 +5,8 @@ module.exports = {
 
         test.open('http://localhost:8537')
             .execute(function() {
-                this.assert.ok(window.Gittip.trim('˚aø¶') == 'a', '"˚aø¶" should become "a"');
-                this.assert.ok(window.Gittip.trim('封b') == 'b', '"封b" should become "b"');
+                this.assert.ok(window.Gratipay.trim('˚aø¶') == 'a', '"˚aø¶" should become "a"');
+                this.assert.ok(window.Gratipay.trim('封b') == 'b', '"封b" should become "b"');
             })
             .done();
     },
@@ -16,7 +16,7 @@ module.exports = {
 
         test.open('http://localhost:8537')
             .execute(function() {
-                this.assert.ok(Gittip.trim('\n\t\rc') == 'c', '"\\n\\t\\rc" should become "c"');
+                this.assert.ok(Gratipay.trim('\n\t\rc') == 'c', '"\\n\\t\\rc" should become "c"');
             })
             .done();
     },
@@ -26,8 +26,8 @@ module.exports = {
 
         test.open('http://localhost:8537')
             .execute(function() {
-                this.assert.ok(window.Gittip.trim('  foo bar ') == 'foo bar', '"  foo bar " should become "foo bar"');
-                this.assert.ok(window.Gittip.trim(' foo  bar ') == 'foo  bar', '" foo  bar " should become "foo  bar"');
+                this.assert.ok(window.Gratipay.trim('  foo bar ') == 'foo bar', '"  foo bar " should become "foo bar"');
+                this.assert.ok(window.Gratipay.trim(' foo  bar ') == 'foo  bar', '" foo  bar " should become "foo  bar"');
             })
             .done();
     },
