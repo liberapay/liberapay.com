@@ -24,6 +24,10 @@ for event in events:
     resource, status = event['type'].split('.')
     if resource == 'credit' and status in ('failed', 'succeeded'):
         for credit in event['entity']['credits']:
+            customer = credit.get('links', {}).get('customer')
+            if customer == 'AC13kr5rmbUkMJWbocmNs3tD':
+                # A Gittip Escrow Shuffle, we want to ignore these
+                continue
             meta = credit['meta']
             p = Participant.from_id(int(meta['participant_id']))
             e_id = meta['exchange_id']
