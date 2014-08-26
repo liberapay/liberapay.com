@@ -52,7 +52,25 @@ locked = False
                     {{ _("Hide total receiving from others.") }}
             </label>
         </p>
-
+		{% if not user.ANON and (user.ADMIN or user.participant == participant) %}
+            <h2>Available Money</h2>
+            <table class="accounts" id="account-balance">
+                <tr>
+                    <td class="account-type">
+                        <img src="{{ website.asset_url }}/bank_account_icon.jpg" />
+                    </td>
+                    <td class="account-details">
+                        <div class="account-type">Available Balance</div>
+                            <span>
+                            	<a class="account-username" data-hidden="${{ participant.balance }}" href="">~~ Hidden ~~</a>
+                    		</span>
+                    </td>
+                    <td class="account-action">
+                        <button class="show">Show</button>
+                    </td>
+                </td>
+            </table>
+        {% endif %}
         {% if not user.ANON and (user.ADMIN or user.participant == participant) %}
             <h2>{{ _("Adding Money") }}
                 {% if user.ADMIN and participant.balanced_customer_href %}

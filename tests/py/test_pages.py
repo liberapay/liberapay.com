@@ -105,6 +105,7 @@ class TestPages(Harness):
     
     def test_account_page_available_balance(self):
     	self.make_participant('alice', claimed_time='now')
+    	self.db.run("UPDATE participants SET balance = 123.00 WHERE username = 'alice'")
     	actual = self.client.GET("/alice/account/", auth_as="alice").body
-        expected = "Available Balance"
+        expected = "0.00"
         assert expected in actual
