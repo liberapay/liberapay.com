@@ -99,7 +99,7 @@ from aspen.utils import utcnow
                 <li>{{ _("{0}Add a credit card{1} to make sure your weekly tips go through this Thursday.",
                         "<a href='/credit-card.html'>", "</a>") }}</li>
                 <li>{{ _("{0}Fill out your profile{1} to let others know about you.",
-                        "<a href='/{{ user.participant.username }}/'>", "</a>") }}</li>
+                        "<a href='/"+ user.participant.username + "/'>", "</a>") }}</li>
             </ol>
             <p></p>
         {% else %}
