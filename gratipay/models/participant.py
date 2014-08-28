@@ -404,10 +404,10 @@ class Participant(Model, MixinTeam):
             self.remove_all_members(cursor)
         r = cursor.one("""
 
-            INSERT INTO communities (ctime, name, slug, participant, is_member) (
-                SELECT ctime, name, slug, %(username)s, false
-                  FROM current_communities
-                 WHERE participant=%(username)s
+            INSERT INTO community_members (slug, participant, ctime, name, is_member) (
+                SELECT slug, participant, ctime, name, false
+                  FROM community_members
+                 WHERE participant=%(participant_id)s
                    AND is_member IS true
             );
 
@@ -436,7 +436,7 @@ class Participant(Model, MixinTeam):
              WHERE username=%(username)s
          RETURNING *;
 
-        """, dict(username=self.username))
+        """, dict(username=self.username, participant_id=self.id))
         self.set_attributes(**r._asdict())
 
 
@@ -464,25 +464,26 @@ class Participant(Model, MixinTeam):
 
 
     def insert_into_communities(self, is_member, name, slug):
-        username = self.username
+        participant_id = self.id
         self.db.run("""
 
-            INSERT INTO communities
+            INSERT INTO community_members
                         (ctime, name, slug, participant, is_member)
                  VALUES ( COALESCE (( SELECT ctime
-                                        FROM communities
-                                       WHERE (participant=%s AND slug=%s)
+                                        FROM community_members
+                                       WHERE participant=%(participant_id)s
+                                         AND slug=%(slug)s
                                        LIMIT 1
                                       ), CURRENT_TIMESTAMP)
-                        , %s, %s, %s, %s
+                        , %(name)s, %(slug)s, %(participant_id)s, %(is_member)s
                          )
               RETURNING ( SELECT count(*) = 0
-                            FROM communities
-                           WHERE participant=%s
+                            FROM community_members
+                           WHERE participant=%(participant_id)s
                          )
                      AS first_time_community
 
-        """, (username, slug, name, slug, username, is_member, username))
+        """, locals())
 
 
     def change_username(self, suggested):

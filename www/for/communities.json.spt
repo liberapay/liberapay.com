@@ -28,7 +28,7 @@ elif GET:
 communities = []
 
 if not user.ANON:
-    communities = community.get_list_for(website.db, user.participant.username)
+    communities = community.get_list_for(website.db, user.participant.id)
 
 [---] application/json via json_dump
 {"communities": communities}
