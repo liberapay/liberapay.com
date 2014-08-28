@@ -196,39 +196,75 @@ CREATE VIEW goal_summary AS
 GROUP BY tippee, goal, percentage, statement;
 
 
--- https://github.com/gratipay/gratipay.com/issues/496
+-- https://github.com/gratipay/gratipay.com/pull/2701
+CREATE TABLE community_members
+( slug          text           NOT NULL
+, participant   bigint         NOT NULL REFERENCES participants(id)
+, ctime         timestamptz    NOT NULL
+, mtime         timestamptz    NOT NULL DEFAULT CURRENT_TIMESTAMP
+, name          text           NOT NULL
+, is_member     boolean        NOT NULL
+);
+
+CREATE INDEX community_members_idx
+    ON community_members (slug, participant, mtime DESC);
+
 CREATE TABLE communities
-( id            bigserial                   PRIMARY KEY
-, ctime         timestamp with time zone    NOT NULL
-, mtime         timestamp with time zone    NOT NULL DEFAULT CURRENT_TIMESTAMP
-, name          text                        NOT NULL
-, slug          text                        NOT NULL
-, participant   text                        NOT NULL
-    REFERENCES participants ON UPDATE CASCADE ON DELETE RESTRICT
-, is_member     boolean
- );
+( slug text PRIMARY KEY
+, name text UNIQUE NOT NULL
+, nmembers int NOT NULL
+, ctime timestamptz NOT NULL
+, CHECK (nmembers >= 0)
+);
 
--- https://github.com/gratipay/gratipay.com/pull/2430
-CREATE INDEX ON communities (slug);
+CREATE FUNCTION upsert_community() RETURNS trigger AS $$
+    DECLARE
+        is_member boolean;
+    BEGIN
+        IF (SELECT is_suspicious FROM participants WHERE id = NEW.participant) THEN
+            RETURN NULL;
+        END IF;
+        is_member := (
+            SELECT cur.is_member
+              FROM community_members cur
+             WHERE slug = NEW.slug
+               AND participant = NEW.participant
+          ORDER BY mtime DESC
+             LIMIT 1
+        );
+        IF (is_member IS NULL AND NEW.is_member IS false OR NEW.is_member = is_member) THEN
+            RETURN NULL;
+        END IF;
+        LOOP
+            UPDATE communities
+               SET nmembers = nmembers + (CASE WHEN NEW.is_member THEN 1 ELSE -1 END)
+             WHERE slug = NEW.slug;
+            EXIT WHEN FOUND;
+            BEGIN
+                INSERT INTO communities
+                     VALUES (NEW.slug, NEW.name, 1, NEW.ctime);
+            EXCEPTION
+                WHEN unique_violation THEN
+                    IF (CONSTRAINT_NAME = 'communities_slug_pkey') THEN
+                        CONTINUE; -- Try again
+                    ELSE
+                        RAISE;
+                    END IF;
+            END;
+            EXIT;
+        END LOOP;
+        RETURN NEW;
+    END;
+$$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE VIEW current_communities AS
-    SELECT * FROM (
-        SELECT DISTINCT ON (participant, slug) c.*
-          FROM communities c
-          JOIN participants p ON p.username = participant
-         WHERE p.is_suspicious IS NOT TRUE
-      ORDER BY participant
-             , slug
-             , mtime DESC
-    ) AS anon WHERE is_member;
+CREATE TRIGGER upsert_community BEFORE INSERT ON community_members
+    FOR EACH ROW
+    EXECUTE PROCEDURE upsert_community();
 
-CREATE VIEW community_summary AS
-    SELECT max(name) AS name -- gotta pick one, this is good enough for now
-         , slug
-         , count(participant) AS nmembers
-      FROM current_communities
-  GROUP BY slug
-  ORDER BY nmembers DESC, slug;
+CREATE VIEW current_community_members AS
+    SELECT DISTINCT ON (participant, slug) c.*
+      FROM community_members c
+  ORDER BY participant, slug, mtime DESC;
 
 
 -- https://github.com/gratipay/gratipay.com/issues/1085
