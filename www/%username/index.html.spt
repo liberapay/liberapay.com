@@ -28,7 +28,7 @@ if participant.anonymous_receiving:
 accounts = participant.get_accounts_elsewhere()
 
 long_statement = len(participant.statement) > LONG_STATEMENT
-communities = community.get_list_for(website.db, username)
+communities = community.get_list_for(website.db, participant.id)
 
 I_AM_MAKING = _("I am making the world better by {0}")
 WE_ARE_MAKING = _("We are making the world better by {0}")

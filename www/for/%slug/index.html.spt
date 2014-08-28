@@ -52,7 +52,7 @@ new_participants = query_cache.all("""
          , statement
          , number
       FROM participants p
-      JOIN current_communities cc ON cc.participant = p.username
+      JOIN current_community_members cc ON cc.participant = p.id
      WHERE p.claimed_time IS NOT null
        AND p.is_suspicious IS NOT true
        AND cc.slug = %s AND cc.is_member
@@ -71,8 +71,8 @@ givers = query_cache.all("""
          , avatar_url
          , statement
          , number
-      FROM participants
-      JOIN current_communities cc ON cc.participant = username AND cc.slug = %s
+      FROM participants p
+      JOIN current_community_members cc ON cc.participant = p.id AND cc.slug = %s
      WHERE is_suspicious IS NOT true
        AND giving > 0
        AND cc.is_member
@@ -95,8 +95,8 @@ receivers = query_cache.all("""
          , avatar_url
          , statement
          , number
-      FROM participants
-      JOIN current_communities cc ON cc.participant = username AND cc.slug = %s
+      FROM participants p
+      JOIN current_community_members cc ON cc.participant = p.id AND cc.slug = %s
      WHERE is_suspicious IS NOT true
        AND receiving > 0
        AND cc.is_member
