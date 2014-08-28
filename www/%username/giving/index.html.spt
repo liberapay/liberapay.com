@@ -44,7 +44,7 @@ locked = False
     {% for tip in tips %}
     {% if tip.amount > 0 %}
     <tr class="tip">
-        <th><a href="/{{ tippee }}/">{{ tippee }}</a></th>
+        <th><a href="/{{ tip.tippee }}/">{{ tip.tippee }}</a></th>
         <td>{{ my_tip_bulk(tip) }}</td>
     </tr>
     {% endif %}
@@ -61,7 +61,7 @@ locked = False
     <tr class="pledge">
         <th>
             <img class="platform-icon" src="{{ website.asset_url }}/icons/{{ tip.platform }}.12.png" />
-            <a href="/{{ tippee }}/">{{ tip.user_name }}</a>
+            <a href="/{{ tip.tippee }}/">{{ tip.user_name }}</a>
         </th>
         <td>{{ my_tip_bulk(tip) }}</td>
     </tr>
