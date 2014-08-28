@@ -5,11 +5,10 @@
         </div>
 
         <ul class="tip-suggestions">
-            <li><a href="#">$100</a></li>
-            <li><a href="#">$25</a></li>
-            <li><a href="#">$10</a></li>
-            <li><a href="#">$2</a></li>
-            <li><a href="#" class="cents">25¢</a></li>
+            {% for amount in (100, 25, 10, 2, 0.25) %}
+                <li><a href="#" data-decimal="{{ format_decimal(amount) }}">
+                    {{ format_currency(amount, 'USD') }}</a></li>
+            {% endfor %}
         </ul>
     </div>
 

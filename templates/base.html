@@ -34,7 +34,7 @@
                 <a id="sign-out" href="/sign-out.html">{{ _("Sign out").lower() }}</a>
                 <div class="quick-stats">
                   {{ _("Giving:") }} <a href="/{{ user.participant.username }}/giving/">
-                              <span class="my-total-giving">{{ format_currency(float(user.participant.giving), "USD") }}<span>/{{ _("wk") }}
+                              <span class="my-total-giving">{{ format_currency(float(user.participant.giving), "USD") }}</span>/{{ _("wk") }}
                           </a>
                   <br />
                   {{ _("Receiving:") }} <b>{{ format_currency(float(user.participant.receiving), "USD") }}/{{ _("wk") }}</b>
@@ -119,8 +119,8 @@
     <script src="{{ website.asset_url }}/gratipay.js"></script>
 
     <script>
-        function unformat(s) {
-            return s.replace('{{ decimal_symbol }}', '.');
+        function unlocalizeDecimal(s) {
+            return s.replace('{{ decimal_symbol }}', '.').replace(/[^0-9.]/g, '');
         }
 
         $(document).ready(Gratipay.init);
