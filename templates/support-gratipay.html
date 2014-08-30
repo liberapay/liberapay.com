@@ -14,8 +14,8 @@
         {% endif %}
     </div>
     <div class="knobs">
-        <button class="low" data-amount="{{ cta_low }}">{{ format_currency(cta_low, 'USD') }}</button><button
-            class="high" data-amount="{{ cta_high }}">{{ format_currency(cta_high, 'USD') }}</button>
+        <button class="low" data-amount="{{ cta_low }}">{{ format_currency(cta_low, 'USD', trailing_zeroes = False) }}</button><button
+            class="high" data-amount="{{ cta_high }}">{{ format_currency(cta_high, 'USD', trailing_zeroes = False) }}</button>
         <a class="other" href="/Gratipay/">{{ _('Other') }}</a><a class="no-thanks" href="">{{ _('No thanks') }}</a>
     </div>
     <div class="help">
