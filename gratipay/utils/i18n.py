@@ -126,10 +126,10 @@ def get_locale_for_request(request):
     return LOCALE_EN
 
 def format_currency_with_options(*a, **kw):
-    if ('trailing_zeroes' in kw) and (kw['trailing_zeroes'] == False):    
-        return format_currency(*a, format = LOCALE_EN.currency_formats['no_trailing_zeroes'], locale=kw['locale'])
-    else:        
-        return format_currency(*a, format = LOCALE_EN.currency_formats[None], locale=kw['locale'])
+    if ('trailing_zeroes' in kw) and (kw['trailing_zeroes'] == False):
+        return format_currency(*a, format=LOCALE_EN.currency_formats['no_trailing_zeroes'], locale=kw['locale'])
+    else:
+        return format_currency(*a, format=LOCALE_EN.currency_formats[None], locale=kw['locale'])
 
 def inbound(request):
     context = request.context
