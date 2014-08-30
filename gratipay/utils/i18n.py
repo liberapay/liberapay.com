@@ -109,7 +109,8 @@ LOCALE_EN.countries = COUNTRIES
 LOCALE_EN.countries_map = COUNTRIES_MAP
 
 # Patch the locales to look less formal
-LOCALE_EN.currency_formats[None] = parse_pattern('\xa4#,##0.##')
+LOCALE_EN.currency_formats[None] = parse_pattern('\xa4#,##0.00')
+LOCALE_EN.currency_formats['no_trailing_zeroes'] = parse_pattern('\xa4#,##0.##')
 LOCALES['fr'].currency_formats[None] = parse_pattern('#,##0.##\u202f\xa4')
 LOCALES['fr'].currency_symbols['USD'] = '$'
 
@@ -124,6 +125,11 @@ def get_locale_for_request(request):
             return loc
     return LOCALE_EN
 
+def format_currency_with_options(*a, **kw):
+    if ('trailing_zeroes' in kw) and (kw['trailing_zeroes'] == False):    
+        return format_currency(*a, format = LOCALE_EN.currency_formats['no_trailing_zeroes'], locale=kw['locale'])
+    else:        
+        return format_currency(*a, format = LOCALE_EN.currency_formats[None], locale=kw['locale'])
 
 def inbound(request):
     context = request.context
@@ -133,7 +139,7 @@ def inbound(request):
     context.ngettext = lambda *a, **kw: n_get_text(request, loc, *a, **kw)
     context.format_number = lambda *a: format_number(*a, locale=loc)
     context.format_decimal = lambda *a: format_decimal(*a, locale=loc)
-    context.format_currency = lambda *a: format_currency(*a, locale=loc)
+    context.format_currency = lambda *a, **kw: format_currency_with_options(*a, locale=loc, **kw)
     context.format_percent = lambda *a: format_percent(*a, locale=loc)
     context.parse_decimal = lambda *a: parse_decimal(*a, locale=loc)
     def _to_age(delta):
