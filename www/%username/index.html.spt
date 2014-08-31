@@ -39,15 +39,14 @@ if participant.number == 'singular':
     PATRON = _("I'm here as a patron.")
     PATRON_NO_GIFTS = _("I'm here as a patron, and politely decline to receive gifts.")
     GOAL_RAW = _("My goal is to receive {0} per week on Gratipay.")
-    GOAL = GOAL_RAW.format(format_currency(participant.goal or 0, 'USD'))
 else:
     MAKING = WE_ARE_MAKING
     GRATEFUL = _("We're grateful for gifts, but don't have a specific funding goal.")
     PATRON = _("We're here as a patron.")
     PATRON_NO_GIFTS = _("We're here as a patron, and politely decline to receive gifts.")
     GOAL_RAW = _("Our goal is to receive {0} per week on Gratipay.")
-    GOAL = GOAL_RAW.format(format_currency(participant.goal or 0, 'USD'))
 
+GOAL = GOAL_RAW.format(format_currency(participant.goal or 0, 'USD', trailing_zeroes=False))
 GOAL_PARTS = GOAL_RAW.split("{0}")
 
 def with_others(obj):
