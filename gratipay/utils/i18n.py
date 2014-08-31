@@ -109,9 +109,7 @@ LOCALE_EN.countries = COUNTRIES
 LOCALE_EN.countries_map = COUNTRIES_MAP
 
 # Patch the locales to look less formal
-LOCALE_EN.currency_formats[None] = parse_pattern('\xa4#,##0.00')
-LOCALE_EN.currency_formats['no_trailing_zeroes'] = parse_pattern('\xa4#,##0.##')
-LOCALES['fr'].currency_formats[None] = parse_pattern('#,##0.##\u202f\xa4')
+LOCALES['fr'].currency_formats[None] = parse_pattern('#,##0.00\u202f\xa4')
 LOCALES['fr'].currency_symbols['USD'] = '$'
 
 
@@ -126,10 +124,11 @@ def get_locale_for_request(request):
     return LOCALE_EN
 
 
-def format_currency_with_options(*a, **kw):
-    loc = kw['locale']
-    k = None if kw.get('trailing_zeroes', True) else 'no_trailing_zeroes'
-    return format_currency(*a, format=loc.currency_formats[k], locale=loc)
+def format_currency_with_options(number, currency, locale=LOCALE_EN, trailing_zeroes=True):
+    s = format_currency(number, currency, locale=locale)
+    if not trailing_zeroes:
+        s = s.replace(get_decimal_symbol(locale)+'00', '')
+    return s
 
 
 def inbound(request):
