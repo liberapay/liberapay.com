@@ -106,7 +106,7 @@ class MixinTeam(object):
         """
         return max(last_week * Decimal('2'), Decimal('1.00'))
 
-    def set_take_for(self, member, take, recorder):
+    def set_take_for(self, member, take, recorder, cursor=None):
         """Sets member's take from the team pool.
         """
         assert self.IS_PLURAL
@@ -125,13 +125,13 @@ class MixinTeam(object):
         if take > max_this_week:
             take = max_this_week
 
-        self.__set_take_for(member, take, recorder)
+        self.__set_take_for(member, take, recorder, cursor)
         return take
 
-    def __set_take_for(self, member, amount, recorder):
+    def __set_take_for(self, member, amount, recorder, cursor=None):
         assert self.IS_PLURAL
         # XXX Factored out for testing purposes only! :O Use .set_take_for.
-        with self.db.get_cursor() as cursor:
+        with self.db.get_cursor(cursor) as cursor:
             # Lock to avoid race conditions
             cursor.run("LOCK TABLE takes IN EXCLUSIVE MODE")
             # Compute the current takes

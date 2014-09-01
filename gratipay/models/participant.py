@@ -397,11 +397,20 @@ class Participant(Model, MixinTeam):
             tipper.set_tip_to(self, '0.00', update_tippee=False, cursor=cursor)
 
 
+    def clear_takes(self, cursor):
+        """Leave all teams by zeroing all takes.
+        """
+        for team, nmembers in self.get_teams():
+            t = Participant.from_username(team)
+            t.set_take_for(self, Decimal(0), self, cursor)
+
+
     def clear_personal_information(self, cursor):
         """Clear personal information such as statement and goal.
         """
         if self.IS_PLURAL:
             self.remove_all_members(cursor)
+        self.clear_takes(cursor)
         r = cursor.one("""
 
             INSERT INTO community_members (slug, participant, ctime, name, is_member) (
@@ -409,13 +418,6 @@ class Participant(Model, MixinTeam):
                   FROM community_members
                  WHERE participant=%(participant_id)s
                    AND is_member IS true
-            );
-
-            INSERT INTO takes (ctime, member, team, amount, recorder) (
-                SELECT ctime, %(username)s, team, 0.00, %(username)s
-                  FROM current_takes
-                 WHERE member=%(username)s
-                   AND amount > 0
             );
 
             UPDATE participants
@@ -1252,6 +1254,8 @@ class Participant(Model, MixinTeam):
             # We want to do this whether or not other is a stub participant.
 
             if this_is_others_last_login_account:
+
+                other.clear_takes(cursor)
 
                 # Take over tips.
                 # ===============
