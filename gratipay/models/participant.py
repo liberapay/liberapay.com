@@ -380,7 +380,7 @@ class Participant(Model, MixinTeam):
             self.set_tip_to(tippee, '0.00', update_self=False, cursor=cursor)
 
     def clear_tips_receiving(self, cursor):
-        """Zero out tips to a given user. This is a workaround for #1469.
+        """Zero out tips to a given user.
         """
         tippers = cursor.all("""
 
