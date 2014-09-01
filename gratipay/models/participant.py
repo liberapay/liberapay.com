@@ -567,11 +567,7 @@ class Participant(Model, MixinTeam):
                 self.update_receiving(c)
 
     def update_is_closed(self, is_closed, cursor=None):
-        ctx = None
-        if cursor is None:
-            ctx = self.db.get_cursor()
-            cursor = ctx.__enter__()
-        try:
+        with self.db.get_cursor(cursor) as cursor:
             cursor.run( "UPDATE participants SET is_closed=%(is_closed)s "
                         "WHERE username=%(username)s"
                       , dict(username=self.username, is_closed=is_closed)
@@ -581,9 +577,6 @@ class Participant(Model, MixinTeam):
                      , dict(id=self.id, action='set', values=dict(is_closed=is_closed))
                       )
             self.set_attributes(is_closed=is_closed)
-        finally:
-            if ctx is not None:
-                ctx.__exit__(None, None, None)
 
     def update_giving(self, cursor=None):
         giving = (cursor or self.db).one("""
@@ -649,11 +642,7 @@ class Participant(Model, MixinTeam):
             self.update_taking(old_takes, new_takes, cursor=cursor)
 
     def update_is_free_rider(self, is_free_rider, cursor=None):
-        ctx = None
-        if cursor is None:
-            ctx = self.db.get_cursor()
-            cursor = ctx.__enter__()
-        try:
+        with self.db.get_cursor(cursor) as cursor:
             cursor.run( "UPDATE participants SET is_free_rider=%(is_free_rider)s "
                         "WHERE username=%(username)s"
                       , dict(username=self.username, is_free_rider=is_free_rider)
@@ -663,9 +652,6 @@ class Participant(Model, MixinTeam):
                      , dict(id=self.id, action='set', values=dict(is_free_rider=is_free_rider))
                       )
             self.set_attributes(is_free_rider=is_free_rider)
-        finally:
-            if ctx is not None:
-                ctx.__exit__(None, None, None)
 
 
     def set_tip_to(self, tippee, amount, update_self=True, update_tippee=True, cursor=None):
