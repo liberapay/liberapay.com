@@ -339,7 +339,7 @@ def get_participant(request, restrict=True):
 
     if restrict:
         if user.ANON:
-            request.redirect(u'/%s/' % slug)
+            raise Response(403)
 
     participant = request.website.db.one("""
         SELECT participants.*::participants

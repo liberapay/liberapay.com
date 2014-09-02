@@ -1,16 +1,16 @@
 from aspen import Response, log_dammit
 from gratipay.exceptions import ProblemChangingUsername
 from gratipay.models.participant import Participant
+from gratipay.utils import get_participant
 
 
 [-----------------------------------------------------------------------------]
 
-if user.ANON:
-    raise Response(404)
+participant = get_participant(request, restrict=True)
 
 try:
-    old_username = user.participant.username
-    new_username = user.participant.change_username(request.body['username'])
+    old_username = participant.username
+    new_username = participant.change_username(request.body['username'])
     log_dammit("user with username %s has become username %s" % (old_username, new_username))
 except ProblemChangingUsername, e:
     raise Response(400, unicode(e))
