@@ -979,6 +979,10 @@ class Participant(Model, MixinTeam):
                      , claimed_time=NULL
                      , session_token=NULL
                      , session_expires=now()
+                     , giving = 0
+                     , pledging = 0
+                     , receiving = 0
+                     , taking = 0
                  WHERE username=%s
              RETURNING username
 
