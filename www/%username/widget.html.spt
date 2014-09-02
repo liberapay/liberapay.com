@@ -9,7 +9,7 @@ if user.ANON:
 elif user.participant == participant:
     button_text = "You!"
 else:
-    button_text = user.participant.get_tip_to(participant.username)
+    button_text = user.participant.get_tip_to(participant.username)['amount']
     if button_text == 0:
         button_text = "Gratipay"
 response.headers['X-Frame-Options'] = "ALLOWALL"

@@ -89,7 +89,7 @@ class TestAbsorptions(Harness):
 
     def test_alice_gives_to_bob_now(self):
         expected = Decimal('1.00')
-        actual = self.alice.get_tip_to('bob')
+        actual = self.alice.get_tip_to('bob')['amount']
         assert actual == expected
 
     def test_deadbeef_is_archived(self):
@@ -101,12 +101,12 @@ class TestAbsorptions(Harness):
 
     def test_alice_doesnt_gives_to_deadbeef_anymore(self):
         expected = Decimal('0.00')
-        actual = self.alice.get_tip_to('deadbeef')
+        actual = self.alice.get_tip_to('deadbeef')['amount']
         assert actual == expected
 
     def test_alice_doesnt_give_to_whatever_deadbeef_was_archived_as_either(self):
         expected = Decimal('0.00')
-        actual = self.alice.get_tip_to(self.deadbeef_archived.username)
+        actual = self.alice.get_tip_to(self.deadbeef_archived.username)['amount']
         assert actual == expected
 
     def test_there_is_no_more_deadbeef(self):
@@ -235,7 +235,7 @@ class TestParticipant(Harness):
         self.alice.set_tip_to(self.carl, '1.00')
         self.bob.take_over(('twitter', str(self.carl.id)), have_confirmation=True)
         expected = Decimal('2.00')
-        actual = self.alice.get_tip_to('bob')
+        actual = self.alice.get_tip_to('bob')['amount']
         assert actual == expected
 
     def test_bob_ends_up_tipping_alice_two_dollars(self):
@@ -243,7 +243,7 @@ class TestParticipant(Harness):
         self.carl.set_tip_to(self.alice, '1.00')
         self.bob.take_over(('twitter', str(self.carl.id)), have_confirmation=True)
         expected = Decimal('2.00')
-        actual = self.bob.get_tip_to('alice')
+        actual = self.bob.get_tip_to('alice')['amount']
         assert actual == expected
 
     def test_ctime_comes_from_the_older_tip(self):
@@ -374,13 +374,13 @@ class Tests(Harness):
         user2 = self.make_participant('user2')
         self.participant.set_as_claimed()
         self.participant.set_tip_to(user2, expected)
-        actual = self.participant.get_tip_to('user2')
+        actual = self.participant.get_tip_to('user2')['amount']
         assert actual == expected
 
     def test_getting_tips_not_made(self):
         expected = Decimal('0.00')
         self.make_participant('user2')
-        actual = self.participant.get_tip_to('user2')
+        actual = self.participant.get_tip_to('user2')['amount']
         assert actual == expected
 
 
@@ -423,21 +423,25 @@ class Tests(Harness):
         bob = self.make_participant('bob')
         alice.set_tip_to(bob, '1.00')
 
-        actual = alice.get_tip_to('bob')
+        actual = alice.get_tip_to('bob')['amount']
         assert actual == Decimal('1.00')
 
-    def test_stt_returns_a_Decimal_and_a_boolean(self):
+    def test_stt_returns_a_dict(self):
         alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
         bob = self.make_participant('bob')
         actual = alice.set_tip_to(bob, '1.00')
-        assert actual == (Decimal('1.00'), True)
+        assert isinstance(actual, dict)
+        assert isinstance(actual['amount'], Decimal)
+        assert actual['amount'] == 1
+        assert actual['first_time_tipper'] is True
 
     def test_stt_returns_False_for_second_time_tipper(self):
         alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
         bob = self.make_participant('bob')
         alice.set_tip_to(bob, '1.00')
         actual = alice.set_tip_to(bob, '2.00')
-        assert actual == (Decimal('2.00'), False)
+        assert actual['amount'] == 2
+        assert actual['first_time_tipper'] is False
 
     def test_stt_doesnt_allow_self_tipping(self):
         alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
@@ -452,7 +456,7 @@ class Tests(Harness):
         alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
         bob = self.make_participant('bob', number='plural')
         actual = alice.set_tip_to(bob, '1000.00')
-        assert actual == (Decimal('1000.00'), True)
+        assert actual['amount'] == 1000
 
     def test_stt_still_caps_tips_to_plural_receivers(self):
         alice = self.make_participant('alice', claimed_time='now', last_bill_result='')

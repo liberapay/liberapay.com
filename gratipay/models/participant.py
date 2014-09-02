@@ -657,7 +657,7 @@ class Participant(Model, MixinTeam):
 
 
     def set_tip_to(self, tippee, amount, update_self=True, update_tippee=True, cursor=None):
-        """Given a Participant or username, and amount as str, return a tuple.
+        """Given a Participant or username, and amount as str, returns a dict.
 
         We INSERT instead of UPDATE, so that we have history to explore. The
         COALESCE function returns the first of its arguments that is not NULL.
@@ -665,9 +665,10 @@ class Participant(Model, MixinTeam):
         tip from this user to that. I believe this is used to determine the
         order of transfers during payday.
 
-        The tuple returned is the amount as a Decimal and a boolean indicating
-        whether this is the first time this tipper has tipped (we want to track
-        that as part of our conversion funnel).
+        The dict returned represents the row inserted in the tips table, with
+        an additional boolean indicating whether this is the first time this
+        tipper has tipped (we want to track that as part of our conversion
+        funnel).
 
         """
         assert self.is_claimed  # sanity check
@@ -700,12 +701,12 @@ class Participant(Model, MixinTeam):
                                       ), CURRENT_TIMESTAMP)
                         , %(tipper)s, %(tippee)s, %(amount)s
                          )
-              RETURNING ( SELECT count(*) = 0 FROM tips WHERE tipper=%(tipper)s )
-                     AS first_time_tipper
+              RETURNING *
+                      , ( SELECT count(*) = 0 FROM tips WHERE tipper=%(tipper)s ) AS first_time_tipper
 
         """
         args = dict(tipper=self.username, tippee=tippee.username, amount=amount)
-        first_time_tipper = (cursor or self.db).one(NEW_TIP, args)
+        t = (cursor or self.db).one(NEW_TIP, args)
 
         if update_self:
             # Update giving/pledging amount of tipper
@@ -720,22 +721,23 @@ class Participant(Model, MixinTeam):
             # Update whether the tipper is using Gratipay for free
             self.update_is_free_rider(None if amount == 0 else False, cursor)
 
-        return amount, first_time_tipper
+        return t._asdict()
 
 
     def get_tip_to(self, tippee):
-        """Given two user ids, return a Decimal.
+        """Given a username, returns a dict.
         """
+        default = dict(amount=Decimal('0.00'))
         return self.db.one("""\
 
-            SELECT amount
+            SELECT *
               FROM tips
              WHERE tipper=%s
                AND tippee=%s
           ORDER BY mtime DESC
              LIMIT 1
 
-        """, (self.username, tippee), default=Decimal('0.00'))
+        """, (self.username, tippee), back_as=dict, default=default)
 
 
     def get_tip_distribution(self):
@@ -1416,7 +1418,7 @@ class Participant(Model, MixinTeam):
             if inquirer.username == self.username:
                 my_tip = 'self'
             else:
-                my_tip = inquirer.get_tip_to(self.username)
+                my_tip = inquirer.get_tip_to(self.username)['amount']
             output['my_tip'] = str(my_tip)
 
         # Key: elsewhere

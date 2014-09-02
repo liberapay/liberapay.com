@@ -26,7 +26,7 @@ class TestClosing(Harness):
 
         alice.close('downstream')
 
-        assert carl.get_tip_to('alice') == 0
+        assert carl.get_tip_to('alice')['amount'] == 0
         assert alice.balance == 0
 
     def test_close_raises_for_unknown_disbursement_strategy(self):

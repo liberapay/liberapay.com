@@ -63,7 +63,7 @@ if not user.ANON:
     if user.participant.username == participant.username:
         my_tip = "self"
     else:
-        my_tip = user.participant.get_tip_to(participant.username)
+        my_tip = user.participant.get_tip_to(participant.username)['amount']
     out["my_tip"] = str(my_tip)
 
 

@@ -44,7 +44,7 @@ title = "Pricing"
 
     {% if not user.ANON %}
         {% set p = user.participant %}
-        {% set payment = p.get_tip_to('Gratipay') %}
+        {% set payment = p.get_tip_to('Gratipay')['amount'] %}
 
         <div class="payment">
         {% if payment > 0 %}
