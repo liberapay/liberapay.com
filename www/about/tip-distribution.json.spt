@@ -8,7 +8,7 @@ website.db.all("""
               FROM tips
               JOIN participants p ON p.username = tipper
               JOIN participants p2 on p2.username = tippee
-             WHERE p.last_bill_result = ''
+             WHERE is_funded
                AND p2.claimed_time IS NOT NULL
                AND NOT (p.is_suspicious IS true)
                AND NOT (p2.is_suspicious IS true)

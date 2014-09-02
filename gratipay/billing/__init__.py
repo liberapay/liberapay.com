@@ -21,6 +21,8 @@ from __future__ import unicode_literals
 import balanced
 from aspen.utils import typecheck
 
+from gratipay.models.participant import Participant
+
 
 def store_result(db, thing, username, new_result):
     """Update the participant's last_{ach,bill}_result in the DB.
@@ -50,21 +52,15 @@ def store_result(db, thing, username, new_result):
         return
     if p.is_suspicious or new_result == p.old_result:
         return
-    if new_result == '':
-        op = '+'
-    else:
-        op = '-'
-    db.run("""
-        UPDATE participants
-           SET receiving = (receiving {0} amount)
-             , npatrons = (npatrons {0} 1)
-          FROM ( SELECT DISTINCT ON (tippee) tippee, amount
-                   FROM tips
-                  WHERE tipper=%(tipper)s
-               ORDER BY tippee, mtime DESC
-               ) foo
-         WHERE tippee = username;
-    """.format(op), dict(tipper=username))
+    with db.get_cursor() as cursor:
+        Participant.from_username(username).update_giving(cursor)
+        tippees = cursor.all("""
+            SELECT tippee
+              FROM current_tips
+             WHERE tipper=%(tipper)s;
+        """, dict(tipper=username))
+        for tippee in tippees:
+            Participant.from_username(tippee).update_receiving(cursor)
 
 
 def get_balanced_account(db, username, balanced_customer_href):
