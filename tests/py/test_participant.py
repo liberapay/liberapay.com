@@ -492,7 +492,7 @@ class Tests(Harness):
         alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
         bob = self.make_participant('bob', claimed_time='now', last_bill_result=None)
         carl = self.make_participant('carl', claimed_time='now', last_bill_result="Fail!")
-        dana = self.make_participant('dana')
+        dana = self.make_participant('dana', claimed_time='now')
         alice.set_tip_to(dana, '3.00')
         bob.set_tip_to(dana, '5.00')
         carl.set_tip_to(dana, '2.08')
@@ -551,7 +551,7 @@ class Tests(Harness):
 
     def test_receiving_includes_taking_when_updated_from_set_tip_to(self):
         alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
-        bob = self.make_participant('bob', taking=Decimal('42.00'))
+        bob = self.make_participant('bob', claimed_time='now', taking=Decimal('42.00'))
         alice.set_tip_to(bob, '3.00')
         assert Participant.from_username('bob').receiving == bob.receiving == Decimal('45.00')
 

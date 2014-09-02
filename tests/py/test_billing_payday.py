@@ -95,7 +95,7 @@ class TestPayday(BalancedHarness):
         assert after['ncc_failing'] == before['ncc_failing'] + 1
 
     def test_update_receiving_amounts_updates_receiving_amounts(self):
-        A = self.make_participant('A')
+        A = self.make_participant('A', claimed_time='now')
         B = self.make_participant('B', claimed_time='now', last_bill_result='')
         B.set_tip_to(A, D('10.00'), update_tippee=False)
         assert Participant.from_username('A').receiving == 0
@@ -104,16 +104,20 @@ class TestPayday(BalancedHarness):
         assert Participant.from_username('A').receiving == 10
 
     def test_update_receiving_amounts_includes_taking(self):
-        A = self.make_participant('A', claimed_time='now', taking=3)
+        team = self.make_participant('team', claimed_time='now', number='plural')
+        A = self.make_participant('A', claimed_time='now')
+        team.add_member(A)
+        team.set_take_for(A, D('1.00'), A)
         B = self.make_participant('B', claimed_time='now', last_bill_result='')
         B.set_tip_to(A, D('10.00'), update_tippee=False)
+        B.set_tip_to(team, D('10.00'), update_tippee=False)
 
         assert Participant.from_username('A').receiving == 0
-        assert Participant.from_username('A').taking == 3
+        assert Participant.from_username('A').taking == 0
 
         Payday.start().update_receiving_amounts()
-        assert Participant.from_username('A').receiving == 13
-        assert Participant.from_username('A').taking == 3
+        assert Participant.from_username('A').receiving == 11
+        assert Participant.from_username('A').taking == 1
 
     @mock.patch('gratipay.billing.payday.log')
     def test_start_prepare(self, log):
