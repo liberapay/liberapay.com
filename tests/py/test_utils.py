@@ -9,6 +9,7 @@ from gratipay import utils
 from gratipay.testing import Harness
 from gratipay.utils.username import safely_reserve_a_username, FailedToReserveUsername, \
                                                                            RanOutOfUsernameAttempts
+from gratipay.utils import i18n
 from psycopg2 import IntegrityError
 
 
@@ -75,6 +76,21 @@ class Tests(Harness):
         expiring = datetime.utcnow() + timedelta(days = 100)
         expiring = utils.is_card_expiring(expiring.year, expiring.month)
         assert not expiring
+
+    def test_format_currency_without_trailing_zeroes(self):
+        expected = '$16'
+        actual = i18n.format_currency_with_options(16, 'USD', locale=i18n.Locale('en'), trailing_zeroes=False)
+        assert actual == expected
+
+    def test_format_currency_with_trailing_zeroes(self):
+        expected = '$16.00'
+        actual = i18n.format_currency_with_options(16, 'USD', locale=i18n.Locale('en'), trailing_zeroes=True)
+        assert actual == expected
+
+    def test_format_currency_defaults_to_trailing_zeroes(self):
+        expected = '$16.00'
+        actual = i18n.format_currency_with_options(16, 'USD', locale=i18n.Locale('en'))
+        assert actual == expected
 
 
     # sru - safely_reserve_a_username
