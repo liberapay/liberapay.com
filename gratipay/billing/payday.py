@@ -63,7 +63,7 @@ class Payday(object):
                 take_over_balances
             payout
             update_stats
-            update_receiving_amounts
+            update_cached_amounts
             end
 
     """
@@ -123,7 +123,7 @@ class Payday(object):
             self.mark_stage_done()
         if self.stage < 3:
             self.update_stats()
-            self.update_receiving_amounts()
+            self.update_cached_amounts()
             self.mark_stage_done()
 
         self.end()
@@ -636,7 +636,7 @@ class Payday(object):
         log("Updated payday stats.")
 
 
-    def update_receiving_amounts(self):
+    def update_cached_amounts(self):
         with self.db.get_cursor() as cursor:
             cursor.execute(FAKE_PAYDAY)
         log("Updated receiving amounts.")
