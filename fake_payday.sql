@@ -130,7 +130,7 @@ UPDATE tips t
    SET is_funded = tt.is_funded
   FROM temp_tips tt
  WHERE t.id = tt.id
-   AND t.is_funded <> tt.is_funded;
+   AND COALESCE(t.is_funded, false) <> COALESCE(tt.is_funded, false);
 
 UPDATE participants p
    SET giving = p2.giving
