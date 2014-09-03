@@ -94,30 +94,41 @@ class TestPayday(BalancedHarness):
         after = self.fetch_payday()
         assert after['ncc_failing'] == before['ncc_failing'] + 1
 
-    def test_update_receiving_amounts_updates_receiving_amounts(self):
-        A = self.make_participant('A', claimed_time='now')
-        B = self.make_participant('B', claimed_time='now', last_bill_result='')
-        B.set_tip_to(A, D('10.00'), update_tippee=False)
-        assert Participant.from_username('A').receiving == 0
-
-        Payday.start().update_receiving_amounts()
-        assert Participant.from_username('A').receiving == 10
-
-    def test_update_receiving_amounts_includes_taking(self):
+    def test_update_cached_amounts(self):
         team = self.make_participant('team', claimed_time='now', number='plural')
-        A = self.make_participant('A', claimed_time='now')
-        team.add_member(A)
-        team.set_take_for(A, D('1.00'), A)
-        B = self.make_participant('B', claimed_time='now', last_bill_result='')
-        B.set_tip_to(A, D('10.00'), update_tippee=False)
-        B.set_tip_to(team, D('10.00'), update_tippee=False)
+        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
+        bob = self.make_participant('bob', claimed_time='now', last_bill_result=None)
+        carl = self.make_participant('carl', claimed_time='now', last_bill_result="Fail!")
+        dana = self.make_participant('dana', claimed_time='now')
+        alice.set_tip_to(dana, '3.00')
+        alice.set_tip_to(bob, '6.00')
+        alice.set_tip_to(team, '4.00')
+        bob.set_tip_to(alice, '5.00')
+        bob.set_tip_to(dana, '2.00')
+        carl.set_tip_to(dana, '2.08')
+        team.add_member(bob)
+        team.set_take_for(bob, D('1.00'), bob)
 
-        assert Participant.from_username('A').receiving == 0
-        assert Participant.from_username('A').taking == 0
+        def check():
+            alice = Participant.from_username('alice')
+            bob = Participant.from_username('bob')
+            carl = Participant.from_username('carl')
+            dana = Participant.from_username('dana')
+            assert alice.giving == D('13.00')
+            assert alice.receiving == D('5.00')
+            assert bob.giving == D('5.00')
+            assert bob.receiving == D('7.00')
+            assert bob.taking == D('1.00')
+            assert carl.giving == D('0.00')
+            assert carl.receiving == D('0.00')
+            assert dana.receiving == D('3.00')
+            assert dana.npatrons == 1
+            funded_tips = self.db.all("SELECT amount FROM tips WHERE is_funded ORDER BY id")
+            assert funded_tips == [3, 6, 4, 5]
 
-        Payday.start().update_receiving_amounts()
-        assert Participant.from_username('A').receiving == 11
-        assert Participant.from_username('A').taking == 1
+        check()
+        Payday.start().update_cached_amounts()
+        check()
 
     @mock.patch('gratipay.billing.payday.log')
     def test_start_prepare(self, log):

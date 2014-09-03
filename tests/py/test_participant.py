@@ -494,11 +494,22 @@ class Tests(Harness):
         carl = self.make_participant('carl', claimed_time='now', last_bill_result="Fail!")
         dana = self.make_participant('dana', claimed_time='now')
         alice.set_tip_to(dana, '3.00')
-        bob.set_tip_to(dana, '5.00')
+        alice.set_tip_to(bob, '6.00')
+        bob.set_tip_to(alice, '5.00')
+        bob.set_tip_to(dana, '2.00')
         carl.set_tip_to(dana, '2.08')
 
+        assert alice.giving == Decimal('9.00')
+        assert alice.receiving == Decimal('5.00')
+        assert bob.giving == Decimal('5.00')
+        assert bob.receiving == Decimal('6.00')
+        assert carl.giving == Decimal('0.00')
+        assert carl.receiving == Decimal('0.00')
         assert dana.receiving == Decimal('3.00')
         assert dana.npatrons == 1
+
+        funded_tips = self.db.all("SELECT amount FROM tips WHERE is_funded ORDER BY id")
+        assert funded_tips == [3, 6, 5]
 
     def test_only_latest_tip_counts(self):
         alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
