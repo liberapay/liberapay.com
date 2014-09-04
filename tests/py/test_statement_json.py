@@ -21,7 +21,7 @@ class Tests(Harness):
     def test_participant_can_change_their_statement(self):
         response = self.change_statement('being awesome.')
         actual = json.loads(response.body)['statement']
-        assert actual == 'being awesome.'
+        assert actual == '<p>I am making the world better by being awesome.</p>\n'
 
     def test_participant_can_change_their_number(self):
         response = self.change_statement('', 'plural')

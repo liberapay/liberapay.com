@@ -68,7 +68,7 @@ Gratipay.profile.init = function() {
         $('.statement button.save').css('opacity', 0.5);
 
         function success(d) {
-            $('.statement .view span').html(d.statement);
+            $('.statement .view').html(d.statement);
             var number = $('.statement select').val();
             Gratipay.profile.toNumber(number);
             finish_editing_statement();
