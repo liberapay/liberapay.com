@@ -1,6 +1,6 @@
 """Show information about a single participant. It might be you!
 """
-from gratipay.utils import get_participant, wrap, plural
+from gratipay.utils import get_participant, wrap, plural, render_markdown
 from gratipay.models import community
 
 LONG_STATEMENT = 256
@@ -101,7 +101,7 @@ $(document).ready(function() {
         <div class="{% if long_statement %}col1{% else %}col0{% endif %}">
             <h2>{{ STATEMENT }}</h2>
             <div class="statement">
-                {{ MAKING.format(wrap(participant.statement)) }}
+                {{ render_markdown(MAKING.format(participant.statement)) }}
             </div>
             {% include "templates/team-listing.html" %}
             {% include "templates/community-listing.html" %}

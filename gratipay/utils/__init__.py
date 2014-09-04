@@ -9,6 +9,8 @@ import gratipay
 from postgres.cursors import SimpleCursorBase
 from jinja2 import escape
 
+import misaka as m
+
 
 COUNTRIES = (
     ('AF', u'Afghanistan'),
@@ -474,3 +476,6 @@ def set_cookie(cookies, key, value, expires=None, httponly=True, path='/'):
         cookie['path'] = path
     if gratipay.canonical_scheme == 'https':
         cookie['secure'] = True
+
+def render_markdown(markdown):
+    return m.html(markdown, render_flags=m.HTML_SKIP_HTML)
