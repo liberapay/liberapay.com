@@ -54,22 +54,7 @@ Gratipay.account.init = function() {
         $('.username .warning').hide();
     }
 	
-	
-	// Wire up balance visibility button
-	//
-	
-	$('#account-balance .show').click( function () {
 		
-		if ($('#account-balance button').text() == 'Show' ) {
-			var bal = $('#account-balance span a').attr('data-hidden');
-			$('#account-balance span a').text(bal);
-			$('#account-balance button').text('Hide');
-		} else {
-			$('#account-balance span a').html('~~Hidden~~');
-			$('#account-balance button').text('Show');
-		}
-	});
-	
 	// Wire up aggregate giving knob.
     // ==============================
 
