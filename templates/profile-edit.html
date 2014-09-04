@@ -23,8 +23,8 @@
             <span class="help">{{ _("Markdown supported.") }}</span>
         </div>
 
-        <div class="view">
-            {{ MAKING.format("<span>" + render_markdown(participant.statement) + "</span>") }}
+        <div class="view markdown-output">
+            {{ render_markdown(MAKING.format(participant.statement)) }}
         </div>
     </form>
 

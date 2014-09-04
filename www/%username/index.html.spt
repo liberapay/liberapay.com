@@ -100,7 +100,7 @@ $(document).ready(function() {
         {% if participant.statement %}
         <div class="{% if long_statement %}col1{% else %}col0{% endif %}">
             <h2>{{ STATEMENT }}</h2>
-            <div class="statement">
+            <div class="statement markdown-output">
                 {{ render_markdown(MAKING.format(participant.statement)) }}
             </div>
             {% include "templates/team-listing.html" %}
