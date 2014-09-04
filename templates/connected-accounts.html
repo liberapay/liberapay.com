@@ -48,9 +48,11 @@
             <div class="account-type">Bitcoin</div>
         </td>
         <td class="account-action">
+            {% if own_account %}
             <button class="toggle-bitcoin">
                 {{ _("Edit") if addr else _("+ Add") }}
             </button>
+            {% endif %}
         </td>
     </tr>
     {% endif %}
