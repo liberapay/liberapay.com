@@ -477,5 +477,6 @@ def set_cookie(cookies, key, value, expires=None, httponly=True, path='/'):
     if gratipay.canonical_scheme == 'https':
         cookie['secure'] = True
 
+
 def render_markdown(markdown):
-    return m.html(markdown, render_flags=m.HTML_SKIP_HTML)
+    return m.html(markdown, extensions=m.EXT_AUTOLINK, render_flags=m.HTML_SKIP_HTML)
