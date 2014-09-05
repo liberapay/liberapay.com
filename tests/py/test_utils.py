@@ -133,6 +133,21 @@ class Tests(Harness):
             with pytest.raises(RanOutOfUsernameAttempts):
                 safely_reserve_a_username(cursor, gen_test_username, reserve)
 
+    def test_render_markdown_does_render(self):
+        expected = "<p>Example</p>\n"
+        actual = utils.render_markdown('Example')
+        assert expected == actual
+
+    def test_render_markdown_escapes_scripts(self):
+        expected = '<p>Example alert &ldquo;hi&rdquo;;</p>\n'
+        actual = utils.render_markdown('Example <script>alert "hi";</script>')
+        assert expected == actual
+
+    def test_render_markdown_autolinks(self):
+        expected = '<p><a href="http://google.com/">http://google.com/</a></p>\n'
+        actual = utils.render_markdown('http://google.com/')
+        assert expected == actual
+
     @pytest.mark.xfail
     def test_srau_retries_work_with_db(self):
         # XXX This is raising InternalError because the transaction is ended or something.
