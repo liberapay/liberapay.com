@@ -24,8 +24,7 @@ def payday():
     from gratipay.billing.payday import Payday
 
     try:
-        with db.get_cursor() as cursor:
-            sync_with_balanced(cursor)
+        sync_with_balanced(db)
         Payday.start().run()
     except KeyboardInterrupt:
         pass
