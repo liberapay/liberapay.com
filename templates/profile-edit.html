@@ -20,7 +20,10 @@
                 </option>
             </select>
             <textarea tabindex="202">{{ participant.statement }}</textarea>
-            <span class="help"><a href="https://daringfireball.net/projects/markdown/basics" target="_blank">{{ _("Markdown supported.") }}</a></span>
+            <span class="help">{{ _("Markdown supported:") }}
+                <a href="https://daringfireball.net/projects/markdown/basics" target="_blank">{{ _("basics") }}</a>,
+                <a href="https://github.com/gratipay/gratipay.com/tree/master/gratipay/utils/markdown.py" target="_blank">{{ _("details") }}</a>.
+            </span>
         </div>
 
         <div class="view markdown-output">
