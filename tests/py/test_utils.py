@@ -7,9 +7,9 @@ import pytest
 from aspen.http.response import Response
 from gratipay import utils
 from gratipay.testing import Harness
+from gratipay.utils import i18n, markdown
 from gratipay.utils.username import safely_reserve_a_username, FailedToReserveUsername, \
                                                                            RanOutOfUsernameAttempts
-from gratipay.utils import i18n
 from psycopg2 import IntegrityError
 
 
@@ -133,19 +133,19 @@ class Tests(Harness):
             with pytest.raises(RanOutOfUsernameAttempts):
                 safely_reserve_a_username(cursor, gen_test_username, reserve)
 
-    def test_render_markdown_does_render(self):
+    def test_markdown_render_does_render(self):
         expected = "<p>Example</p>\n"
-        actual = utils.render_markdown('Example')
+        actual = markdown.render('Example')
         assert expected == actual
 
-    def test_render_markdown_escapes_scripts(self):
+    def test_markdown_render_escapes_scripts(self):
         expected = '<p>Example alert &ldquo;hi&rdquo;;</p>\n'
-        actual = utils.render_markdown('Example <script>alert "hi";</script>')
+        actual = markdown.render('Example <script>alert "hi";</script>')
         assert expected == actual
 
-    def test_render_markdown_autolinks(self):
+    def test_markdown_render_autolinks(self):
         expected = '<p><a href="http://google.com/">http://google.com/</a></p>\n'
-        actual = utils.render_markdown('http://google.com/')
+        actual = markdown.render('http://google.com/')
         assert expected == actual
 
     @pytest.mark.xfail
