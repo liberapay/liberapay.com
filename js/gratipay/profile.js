@@ -197,7 +197,7 @@ Gratipay.profile.init = function() {
             $this.css('opacity', 0.5);
 
             function success(d) {
-                $('a.bitcoin').text(d.bitcoin_address);
+                $('.bitcoin a.address').text(d.bitcoin_address);
                 $('.toggle-bitcoin').show();
                 $('.bitcoin').toggle();
                 if (d.bitcoin_address === '') {
