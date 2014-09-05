@@ -479,4 +479,4 @@ def set_cookie(cookies, key, value, expires=None, httponly=True, path='/'):
 
 
 def render_markdown(markdown):
-    return m.html(markdown, extensions=m.EXT_AUTOLINK, render_flags=m.HTML_SKIP_HTML)
+    return m.html(markdown, extensions=m.EXT_AUTOLINK | m.EXT_STRIKETHROUGH, render_flags=m.HTML_SKIP_HTML | m.HTML_TOC | m.HTML_SMARTYPANTS)
