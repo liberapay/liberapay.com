@@ -20,11 +20,11 @@
                 </option>
             </select>
             <textarea tabindex="202">{{ participant.statement }}</textarea>
-            <span class="help">{{ _("Newlines and links are converted to HTML.") }}</span>
+            <span class="help"><a href="https://daringfireball.net/projects/markdown/basics" target="_blank">{{ _("Markdown supported.") }}</a></span>
         </div>
 
-        <div class="view">
-            {{ MAKING.format("<span>" + wrap(participant.statement) + "</span>") }}
+        <div class="view markdown-output">
+            {{ render_markdown(MAKING.format(participant.statement)) }}
         </div>
     </form>
 

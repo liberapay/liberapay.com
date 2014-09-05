@@ -1,7 +1,7 @@
 from __future__ import print_function, unicode_literals
 
 from aspen import Response
-from gratipay.utils import wrap
+from gratipay.utils import wrap, render_markdown
 from gratipay.exceptions import ProblemChangingNumber
 
 [-----------------------------------------------------------------------------]
@@ -23,5 +23,10 @@ if number != user.participant.number:
         raise Response(400, unicode(e))
 user.participant.update_statement(statement)
 
+I_AM_MAKING = _("I am making the world better by {0}")
+WE_ARE_MAKING = _("We are making the world better by {0}")
+
+MAKING = I_AM_MAKING if (number == 'singular') else WE_ARE_MAKING
+
 [---] application/json via json_dump
-{"statement": wrap(statement), "number": wrap(number)}
+{"statement": render_markdown(MAKING.format(statement)), "number": wrap(number)}
