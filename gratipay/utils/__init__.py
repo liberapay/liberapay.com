@@ -9,7 +9,7 @@ import gratipay
 from postgres.cursors import SimpleCursorBase
 from jinja2 import escape
 
-import misaka as m
+import misaka
 
 
 COUNTRIES = (
@@ -479,4 +479,8 @@ def set_cookie(cookies, key, value, expires=None, httponly=True, path='/'):
 
 
 def render_markdown(markdown):
-    return m.html(markdown, extensions=m.EXT_AUTOLINK | m.EXT_STRIKETHROUGH, render_flags=m.HTML_SKIP_HTML | m.HTML_TOC | m.HTML_SMARTYPANTS)
+    m = misaka  # http://misaka.61924.nl/
+    return misaka.html( markdown
+                      , extensions=m.EXT_AUTOLINK | m.EXT_STRIKETHROUGH
+                      , render_flags=m.HTML_SKIP_HTML | m.HTML_TOC | m.HTML_SMARTYPANTS
+                       )
