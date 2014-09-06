@@ -62,6 +62,7 @@
         text-align: center;
         vertical-align: middle;
         font: normal 16px/16px $Ideal;
+        height:40px;
     }
     #lookup-container {
         position: relative;
@@ -74,7 +75,7 @@
         input:-moz-placeholder { color: $light-brown; }
 
         #query {
-            width: 170px;
+            width: 220px;
             padding: 2px 5px;
             z-index: 1;
             position: relative;
@@ -84,8 +85,8 @@
         }
 
         #lookup-results {
-            width: 188px;
-            min-height: 30px;
+            width: 225px;
+            min-height: 26px;
             position: absolute;
             bottom: -1px;
             z-index: 0;
@@ -93,7 +94,7 @@
             background: white;
             margin: 0;
             padding: 2px 0;
-            border: 4px solid rgba($brown, 0.5);
+            border: 1px solid rgba($brown, 0.5);
             color: $light-brown;
             @include border-radius(3px);
 
