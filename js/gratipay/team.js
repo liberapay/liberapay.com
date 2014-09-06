@@ -186,6 +186,8 @@ Gratipay.team = (function() {
                 }
                 callback = function() { Gratipay.notification('Removed!'); };
             }
+            var $updating = $('<span class="updating">Updating...</span>');
+            $('#take').parent().html($updating)
             setTake(username, take, callback);
         }
         return false;
