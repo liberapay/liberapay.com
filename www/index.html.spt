@@ -92,6 +92,12 @@ from aspen.utils import utcnow
         {% if user.participant.claimed_time > quick %}
             <h1>{{ _("Welcome, {0}!", user.participant.username) }}</h1>
             <p>{{ _("Thanks for joining Gratipay!") }}</p>
+        {% else %}
+            <h1>{{ _("Welcome back, {0}!", user.participant.username) }}</h1>
+            <p>{{ _("Your balance is {0}.", format_currency(user.participant.balance, "USD")) }}</p>
+        {% endif %}
+
+        {% if user.participant.giving == user.participant.receiving == 0 %}
             <p>{{ _("Next steps:") }}</p>
             <ol>
                 <li>{{ _("Start tipping people, you can find great people to tip by browsing {0}our communities{1}.",
@@ -105,18 +111,11 @@ from aspen.utils import utcnow
             </ol>
             <p></p>
         {% else %}
-            <h1>{{ _("Welcome back, {0}!", user.participant.username) }}</h1>
-            <p>{{ _("Your balance is {0}.", format_currency(user.participant.balance, "USD")) }}</p>
+            <p>{{ _("Go to {0}your profile{1}, or {2}sign out{3}.",
+                    "<a href='/" + user.participant.username + "/'>", "</a>",
+                    "<a href='/sign-out.html'>", "</a>") }}</p>
         {% endif %}
 
-        <p>{{ _("Go to {0}your profile{1}, or {2}sign out{3}.",
-            "<a href='/" + user.participant.username + "/'>", "</a>", "<a href='/sign-out.html'>", "</a>") }}</p>
-
-        {% if user.participant.giving == 0 %}
-            <p> {{ _("You can find great people to tip by browing {0}our communities{1}.",
-                         "<a href='/for/'>", "</a>") }} </p>
-        {% endif %}
-        
         {% include "templates/support-gratipay.html" %}
 
         <div class="jump">
