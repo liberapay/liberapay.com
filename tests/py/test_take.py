@@ -93,7 +93,7 @@ class Tests(Harness):
         assert members[0]['balance'] == 58
 
     def test_compute_actual_takes_counts_the_team_balance(self):
-        team = self.make_team(balance=D('59.46'))
+        team = self.make_team(balance=D('59.46'), giving=D('7.15'))
         alice = self.make_participant('alice', claimed_time='now')
         self.take_last_week(team, alice, '100.00')
         team.set_take_for(alice, D('142.00'), team)
@@ -101,10 +101,10 @@ class Tests(Harness):
         assert len(takes) == 2
         assert takes[0]['member'] == 'alice'
         assert takes[0]['actual_amount'] == 142
-        assert takes[0]['balance'] == D('17.46')
+        assert takes[0]['balance'] == D('10.31')
         assert takes[1]['member'] == TEAM
         assert takes[1]['actual_amount'] == 0
-        assert takes[1]['balance'] == D('17.46')
+        assert takes[1]['balance'] == D('10.31')
 
     def test_compute_actual_takes_gives_correct_final_balance(self):
         team = self.make_team(balance=D('53.72'))
