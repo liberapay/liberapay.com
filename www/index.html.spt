@@ -101,8 +101,8 @@ friends_hack = website.db.all("""
               "</a>"|safe) }}</p>
 
     {% else %}
-    <div>
-        <div class="col0">
+    <div class="row">
+        <div class="col1">
             <h2>{{ _("You give {0} per week", format_currency(participant.giving, 'USD')) }}</h2>
 
             <p>Let's play the giving game! Click your Twitter friends to give
@@ -125,14 +125,15 @@ friends_hack = website.db.all("""
                 </ul>
             </div>
 
+        </div>
 
-            <div class="clear"></div>
+        <div class="col1">
+
             <h2>{{ _("You receive {0} per week", format_currency(participant.receiving, 'USD')) }}</h2>
 
             <p>To receive money, do something awesome and then tell people
             about it! Fill out <a href="">your profile</a> and see our <a
             href="">About Receiving</a> guide for more suggestions.</p>
-
 
             {% include "templates/team-listing.html" %}
 
@@ -142,6 +143,8 @@ friends_hack = website.db.all("""
             {% include "templates/community-listing.html" %}
 
             <p><a href="">Join Communities</a> | <a href="">What are Communities?</a></p>
+
+        </div>
 
     {% endif %}
     </div>
