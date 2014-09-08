@@ -547,10 +547,11 @@ class Participant(Model, MixinTeam):
         self.set_attributes(avatar_url=avatar_url)
 
     def update_email(self, email, confirmed=False):
+        hash_string = str(uuid.uuid4())        
         with self.db.get_cursor() as c:
             add_event(c, 'participant', dict(id=self.id, action='set', values=dict(current_email=email)))
-            r = c.one("UPDATE participants SET email = ROW(%s, %s) WHERE username=%s RETURNING email"
-                     , (email, confirmed, self.username)
+            r = c.one("UPDATE participants SET email = ROW(%s, %s, %s, %s) WHERE username=%s RETURNING email"
+                     , (email, confirmed, hash_string, utcnow(),self.username)
                       )
             self.set_attributes(email=r)
 
