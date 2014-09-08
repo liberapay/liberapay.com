@@ -329,10 +329,10 @@ class Participant(Model, MixinTeam):
         distributed = Decimal('0.00')
 
         for tip in claimed_tips:
-            if tip.amount == 0:
-                continue
             rate = tip.amount / claimed_total
             pro_rated = (self.balance * rate).quantize(Decimal('0.01'), ROUND_DOWN)
+            if pro_rated == 0:
+                continue
             distributed += pro_rated
             transfers.append([tip.tippee, pro_rated])
 
