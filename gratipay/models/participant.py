@@ -1152,7 +1152,8 @@ class Participant(Model, MixinTeam):
         TRANSFER_BALANCE_2 = """
 
             INSERT INTO transfers (tipper, tippee, amount, context)
-            VALUES (%(dead)s, %(live)s, %(balance)s, 'take-over');
+            SELECT %(dead)s, %(live)s, %(balance)s, 'take-over'
+             WHERE %(balance)s > 0;
 
             UPDATE participants
                SET balance = (balance + %(balance)s)
