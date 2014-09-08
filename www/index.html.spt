@@ -103,7 +103,7 @@ friends_hack = website.db.all("""
     {% else %}
     <div>
         <div class="col0">
-            <h2>Giving $0 per Week</h2>
+            <h2>{{ _("You give {0} per week", format_currency(participant.giving, 'USD')) }}</h2>
 
             <p>Let's play the giving game! Click your Twitter friends to give
             them a quarter a week!</p>
@@ -127,7 +127,7 @@ friends_hack = website.db.all("""
 
 
             <div class="clear"></div>
-            <h2>Receiving $0 per Week</h2>
+            <h2>{{ _("You receive {0} per week", format_currency(participant.receiving, 'USD')) }}</h2>
 
             <p>To receive money, do something awesome and then tell people
             about it! Fill out <a href="">your profile</a> and see our <a
