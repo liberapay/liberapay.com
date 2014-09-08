@@ -233,7 +233,7 @@ Gratipay.payments.cc.formatInputs = function (cardNumberInput, expirationMonthIn
         var inputValue = element.val().trim();
         inputValue = inputValue + String.fromCharCode(e.which);
         return inputValue.replace(/[^\d]/g, "");
-    };
+    }
 
     function isEscapedKeyStroke(e) {
         // Key event is for a browser shortcut
@@ -249,7 +249,7 @@ Gratipay.payments.cc.formatInputs = function (cardNumberInput, expirationMonthIn
         if (e.which < 33) return true;
 
         return false;
-    };
+    }
 
     function isNumberEvent(e) {
         return (/^\d+$/.test(String.fromCharCode(e.which)));
@@ -262,7 +262,7 @@ Gratipay.payments.cc.formatInputs = function (cardNumberInput, expirationMonthIn
             return false;
         }
         return true;
-    };
+    }
 
     var isAmericanExpress = function(number) {
         return number.match("^(34|37)");
@@ -278,7 +278,7 @@ Gratipay.payments.cc.formatInputs = function (cardNumberInput, expirationMonthIn
           return false;
         }
         return (!isEscapedKeyStroke(e)) && onlyAllowNumeric(e, maximumLength, element);
-    };
+    }
 
     function addSpaces(number, spaces) {
       var parts = []
@@ -302,7 +302,7 @@ Gratipay.payments.cc.formatInputs = function (cardNumberInput, expirationMonthIn
       } else {
         return number;
       }
-    };
+    }
 
     var americanExpressSpaces = [4, 10, 15];
     var defaultSpaces = [4, 8, 12, 16];
@@ -322,7 +322,11 @@ Gratipay.payments.cc.formatInputs = function (cardNumberInput, expirationMonthIn
         var maximumLength = 2;
         if (shouldProcessInput(e, maximumLength, expirationMonthInput)) {
             var newInput = getInputValue(e, expirationMonthInput);
-            newInput < 13 ? expirationMonthInput.val(newInput) : e.preventDefault();                        
+            if (newInput < 13) {
+                expirationMonthInput.val(newInput);
+            } else {
+                e.preventDefault();                        
+            }
         }
     });
 
