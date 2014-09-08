@@ -58,7 +58,7 @@ from gratipay.security.user import SESSION_TIMEOUT
 
     </div>
     <div class="action">
-        {% if user.ANON %}
+    {% if user.ANON %}
         {{ _("{0}Sign In{1} {2}to Accept Weekly Payments{3}",
             "<h1>", "</h1>", "<p>", "</p>") }}
         {% from 'templates/auth.html' import auth_button with context %}
@@ -88,7 +88,7 @@ from gratipay.security.user import SESSION_TIMEOUT
             _("Want to work for Gratipay? We are an {0}open company{1}.",
                 "<a href='http://inside.gratipay.com/big-picture/welcome'>", "</a>") }}</p>
 
-        {% else %}
+    {% else %}
         {% set quick = utcnow() - SESSION_TIMEOUT  %}
         {% if user.participant.claimed_time > quick %}
             <h1>{{ _("Welcome, {0}!", user.participant.username) }}</h1>
@@ -132,7 +132,7 @@ from gratipay.security.user import SESSION_TIMEOUT
         </form>
         </div>
 
-        {% endif %}
+    {% endif %}
     </div>
 </div>
 {% endblock %}
