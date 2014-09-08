@@ -225,6 +225,9 @@ Gratipay.payments.cc.init = function(balanced_uri, participantId) {
     );
 };
 
+
+/* Most of the following code is taken from https://github.com/wangjohn/creditly */
+
 Gratipay.payments.cc.formatInputs = function (cardNumberInput, expirationMonthInput, expirationYearInput, cvvInput) {    
     function getInputValue(e, element) {
         var inputValue = element.val().trim();
