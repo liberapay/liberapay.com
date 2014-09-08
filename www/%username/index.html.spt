@@ -113,7 +113,7 @@ $(document).ready(function() {
             {% include "templates/community-listing.html" %}
         {% endif %}
 
-            <h2>{{ FUNDING_GOAL }}</h2>
+            <h2>{{ _("Funding Goal") }}</h2>
             <div class="goal">
                 {% if participant.goal == None %}
                 {{ GRATEFUL }}
