@@ -367,7 +367,7 @@ Gratipay.payments.cc.submit = function(e) {
     // Adapt our form lingo to balanced nomenclature.
 
     function val(field) {
-        return $('form#payment input[id="' + field + '"]').val();
+        return $('form#payment input[id="' + field + '"]').val().replace(/[^\d]/g, "");
     }
 
     var credit_card = {};   // holds CC info
@@ -397,7 +397,7 @@ Gratipay.payments.cc.submit = function(e) {
                            };
 
     credit_card.expiration_month = val('expiration_month');
-    credit_card.expiration_year = val('expiration_year');
+    credit_card.expiration_year = '20' + val('expiration_year');
 
     if (!balanced.card.isCardNumberValid(credit_card.number)) {
         $('button#save').css('opacity', 1);
