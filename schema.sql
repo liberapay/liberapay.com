@@ -13,7 +13,7 @@
 CREATE TYPE participant_number AS ENUM ('singular', 'plural');
 
 
--- https://github.com/gratipay/gratipay.com/pull/2305
+-- https://github.com/gratipay/gratipay.com/pull/2303
 CREATE TYPE email_address_with_confirmation AS
 (
     address text,
@@ -270,7 +270,7 @@ CREATE VIEW current_community_members AS
   ORDER BY participant, slug, mtime DESC;
 
 
--- https://github.com/gratipay/gratipay.com/issues/1085
+-- https://github.com/gratipay/gratipay.com/issues/1100
 CREATE TABLE takes
 ( id                serial                      PRIMARY KEY
 , ctime             timestamp with time zone    NOT NULL
