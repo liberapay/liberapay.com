@@ -13,8 +13,9 @@ impression of Gratipay and help people take the next step, whatever that might b
 for them.
 
 """
-from datetime import timedelta
 from aspen.utils import utcnow
+
+from gratipay.security.user import SESSION_TIMEOUT
 [---]
 [---]
 {% extends "templates/base.html" %}
@@ -57,7 +58,7 @@ from aspen.utils import utcnow
 
     </div>
     <div class="action">
-        {% if user.ANON %}
+    {% if user.ANON %}
         {{ _("{0}Sign In{1} {2}to Accept Weekly Payments{3}",
             "<h1>", "</h1>", "<p>", "</p>") }}
         {% from 'templates/auth.html' import auth_button with context %}
@@ -87,11 +88,19 @@ from aspen.utils import utcnow
             _("Want to work for Gratipay? We are an {0}open company{1}.",
                 "<a href='http://inside.gratipay.com/big-picture/welcome'>", "</a>") }}</p>
 
-        {% else %}
-        {% set quick = utcnow() - timedelta(seconds=15)  %}
+    {% else %}
+        <a class="sign-out" href='/sign-out.html'>{{ _("Sign out") }}</a>
+
+        {% set quick = utcnow() - SESSION_TIMEOUT  %}
         {% if user.participant.claimed_time > quick %}
             <h1>{{ _("Welcome, {0}!", user.participant.username) }}</h1>
             <p>{{ _("Thanks for joining Gratipay!") }}</p>
+        {% else %}
+            <h1>{{ _("Welcome back, {0}!", user.participant.username) }}</h1>
+            <p>{{ _("Your balance is {0}.", format_currency(user.participant.balance, "USD")) }}</p>
+        {% endif %}
+
+        {% if user.participant.giving == user.participant.receiving == 0 %}
             <p>{{ _("Next steps:") }}</p>
             <ol>
                 <li>{{ _("Start tipping people, you can find great people to tip by browsing {0}our communities{1}.",
@@ -100,15 +109,14 @@ from aspen.utils import utcnow
                         "<a href='/credit-card.html'>", "</a>") }}</li>
                 <li>{{ _("{0}Fill out your profile{1} to let others know about you.",
                         "<a href='/"+ user.participant.username + "/'>", "</a>") }}</li>
+                <li>{{ _("Reach a wider audience by {0}embedding our widgets{1} on your blog/website.",
+                        "<a href='/"+ user.participant.username + "/widgets'>", "</a>") }}</li>
             </ol>
             <p></p>
         {% else %}
-            <h1>{{ _("Welcome back, {0}!", user.participant.username) }}</h1>
-            <p>{{ _("Your balance is {0}.", format_currency(user.participant.balance, "USD")) }}</p>
+            <p>{{ _("Go to {0}your profile{1}.",
+                    "<a href='/" + user.participant.username + "/'>", "</a>") }}</p>
         {% endif %}
-
-        <p>{{ _("Go to {0}your profile{1}, or {2}sign out{3}.",
-            "<a href='/" + user.participant.username + "/'>", "</a>", "<a href='/sign-out.html'>", "</a>") }}</p>
 
         {% include "templates/support-gratipay.html" %}
 
@@ -125,7 +133,7 @@ from aspen.utils import utcnow
         </form>
         </div>
 
-        {% endif %}
+    {% endif %}
     </div>
 </div>
 {% endblock %}
