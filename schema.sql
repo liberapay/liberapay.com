@@ -119,6 +119,9 @@ CREATE TABLE transfers
 , context               context_type                NOT NULL
  );
 
+-- https://github.com/gratipay/gratipay.com/pull/2723
+ALTER TABLE transfers ADD CONSTRAINT positive CHECK (amount > 0) NOT VALID;
+
 
 -- paydays -- payday events, stats about them
 CREATE TABLE paydays
