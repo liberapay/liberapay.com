@@ -227,7 +227,13 @@ class TestParticipant(Harness):
         actual = self.alice.email.address
         assert actual == expected
 
-    def test_can_confirm_email(self):
+    def test_cannot_confirm_email_in_one_step(self):
+        self.alice.update_email('alice@gratipay.com', True)
+        actual = self.alice.email.confirmed
+        assert actual == False
+
+    def test_can_confirm_email_in_second_step(self):
+        self.alice.update_email('alice@gratipay.com')
         self.alice.update_email('alice@gratipay.com', True)
         actual = self.alice.email.confirmed
         assert actual == True

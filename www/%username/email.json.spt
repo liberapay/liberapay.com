@@ -24,4 +24,4 @@ else:
     user.participant.update_email(address)
 
 [---] application/json via json_dump
-{'email': address}
+{'email': address, 'confirmed': user.participant.email.confirmed }
