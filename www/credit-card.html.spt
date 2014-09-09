@@ -101,13 +101,15 @@ title = _("Credit Card")
                     <input id="card_number" />
                 </div>
 
-                <div class="float expiration not-first">
+                <div class="clear"></div>
+                <div class="float expiration half">
                     <label for="expiration_month">{{ _("Expiration") }}</label>
                     <input class="expiration_month" id="expiration_month" placeholder="MM"/>
-                    <input class="expiration_year" id="expiration_year" placeholder="YYYY"/>
+                    <span class="date_slash">/</span>
+                    <input class="expiration_year" id="expiration_year" placeholder="YY"/>
                 </div>
 
-                <div class="float cvv not-first">
+                <div class="float cvv half">
                     <label for="cvv">{{ _("CVV") }}</label>
                     <input id="cvv" />
                 </div>
