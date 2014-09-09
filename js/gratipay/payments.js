@@ -228,7 +228,7 @@ Gratipay.payments.cc.init = function(balanced_uri, participantId) {
 
 /* Most of the following code is taken from https://github.com/wangjohn/creditly */
 
-Gratipay.payments.cc.formatInputs = function (cardNumberInput, expirationMonthInput, expirationYearInput, cvvInput) {    
+Gratipay.payments.cc.formatInputs = function (cardNumberInput, expirationMonthInput, expirationYearInput, cvvInput) {
     function getInputValue(e, element) {
         var inputValue = element.val().trim();
         inputValue = inputValue + String.fromCharCode(e.which);
@@ -258,7 +258,7 @@ Gratipay.payments.cc.formatInputs = function (cardNumberInput, expirationMonthIn
     function onlyAllowNumeric(e, maximumLength, element) {
         e.preventDefault();
         // Ensure that it is a number and stop the keypress
-        if (!isNumberEvent(e)) {            
+        if (!isNumberEvent(e)) {
             return false;
         }
         return true;
@@ -314,7 +314,7 @@ Gratipay.payments.cc.formatInputs = function (cardNumberInput, expirationMonthIn
         if (shouldProcessInput(e, maximumLength, cardNumberInput)) {
             var newInput;
             newInput = isAmericanExpressCard ? addSpaces(number, americanExpressSpaces) : addSpaces(number, defaultSpaces);
-            cardNumberInput.val(newInput);            
+            cardNumberInput.val(newInput);
         }
     });
 
@@ -325,7 +325,7 @@ Gratipay.payments.cc.formatInputs = function (cardNumberInput, expirationMonthIn
             if (newInput < 13) {
                 expirationMonthInput.val(newInput);
             } else {
-                e.preventDefault();                        
+                e.preventDefault();
             }
         }
     });
@@ -334,7 +334,7 @@ Gratipay.payments.cc.formatInputs = function (cardNumberInput, expirationMonthIn
         var maximumLength = 2;
         if (shouldProcessInput(e, maximumLength, expirationYearInput)) {
             var newInput = getInputValue(e, expirationYearInput);
-            expirationYearInput.val(newInput);            
+            expirationYearInput.val(newInput);
         }
     });
 
@@ -344,7 +344,7 @@ Gratipay.payments.cc.formatInputs = function (cardNumberInput, expirationMonthIn
         var maximumLength = (isAmericanExpressCard ? 4 : 3);
         if (shouldProcessInput(e, maximumLength, cvvInput)) {
             var newInput = getInputValue(e, cvvInput);
-            cvvInput.val(newInput);            
+            cvvInput.val(newInput);
         }
     });
 }
