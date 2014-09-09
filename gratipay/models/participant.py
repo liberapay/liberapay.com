@@ -550,9 +550,10 @@ class Participant(Model, MixinTeam):
         hash_string = self.email.hash if hasattr(self.email,'hash') else ''
         current_email = self.email.address if hasattr(self.email,'address') else ''
         ctime = self.email.ctime if hasattr(self.email,'ctime') else utcnow()
-        if email != current_email:
+        was_confirmed = self.email.confirmed if hasattr(self.email,'confirmed') else ''
+        if (email != current_email) or (email == current_email and confirmed == was_confirmed == False):
             confirmed = False
-            hash_string = str(uuid.uuid4())        
+            hash_string = str(uuid.uuid4())
             ctime = utcnow()
             # Send the user an email here
         with self.db.get_cursor() as c:
@@ -561,6 +562,7 @@ class Participant(Model, MixinTeam):
                      , (email, confirmed, hash_string, ctime,self.username)
                       )
             self.set_attributes(email=r)
+        return r
 
     def update_goal(self, goal):
         typecheck(goal, (Decimal, None))

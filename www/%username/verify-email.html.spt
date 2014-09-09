@@ -1,0 +1,53 @@
+"""Verify a participant's email
+"""
+from gratipay.utils import get_participant
+from aspen import Response
+from aspen.utils import utcnow
+from datetime import timedelta
+
+[-----------------------------------------------------------------------------]
+
+participant = get_participant(request, restrict=False)
+qs = request.line.uri.querystring
+hash_string = qs['hash'] if 'hash' in qs else ''
+
+if not participant.email:
+    raise Response(404)
+
+CONFIRMED = participant.email.confirmed
+original_hash = participant.email.hash if hasattr(participant.email, 'hash') else ''
+email_ctime = participant.email.ctime if hasattr(participant.email, 'ctime') else ''
+
+EXPIRED = False
+
+if not CONFIRMED and hash_string == original_hash:
+    if utcnow() - email_ctime < timedelta(hours=24):
+        result = participant.update_email(participant.email.address, True)
+        CONFIRMED = result.confirmed
+    else:
+        EXPIRED = True
+
+[-----------------------------------------------------------------------------]
+{% extends "templates/base.html" %}
+
+{% block scripts %}
+
+{% endblock %}
+
+{% block heading %}
+    <h1>Verify Email</h1>
+{% endblock %}
+
+{% block box %}
+    <div class="as-content">
+    {% if ALREADY_CONFIRMED or CONFIRMED %}
+        <h1>{{ _("Your email address has been verified.") }}</h1>
+    {% elif EXPIRED  %}
+        <h1>{{ _("Your verification email has expired.") }}</h1>
+    {% else %}
+    	<h1>{{ _("Failed to verify your email address") }}</h1>
+    {% endif %}
+    <a href="http://gratipay.com/">{{ _("Go to homepage") }}</a>
+    </div>
+{% endblock %}
+

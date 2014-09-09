@@ -4,7 +4,7 @@ import json
 
 from gratipay.testing import Harness
 
-class TestMembernameJson(Harness):
+class TestEmailJson(Harness):
 
     def change_email_address(self, address, user='alice', should_fail=True):
         self.make_participant("alice")
