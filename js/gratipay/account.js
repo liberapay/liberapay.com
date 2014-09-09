@@ -137,6 +137,7 @@ Gratipay.account.init = function() {
             $('.email-address').text(data.email);
             $('.email').toggle();
             $('.toggle-email').show();
+            Gratipay.notification('Your email address has been changed', 'notice');
             if (data.email === '') {
                 $('.toggle-email').text('+ Add');  // TODO i18n
             } else {

@@ -35,7 +35,6 @@ from gratipay.utils import COUNTRIES, COUNTRIES_MAP
 from gratipay.utils.cache_static import asset_etag
 from gratipay.utils.i18n import ALIASES, ALIASES_R, get_function_from_rule, strip_accents
 
-
 def canonical(env):
     gratipay.canonical_scheme = env.canonical_scheme
     gratipay.canonical_host = env.canonical_host
@@ -56,7 +55,6 @@ def db(env):
 
 def mail(env):
     mandrill_client = mandrill.Mandrill(env.mandrill_key)
-
     return mandrill_client
 
 def billing(env):

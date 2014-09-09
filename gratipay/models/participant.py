@@ -38,6 +38,7 @@ from gratipay.models._mixin_team import MixinTeam
 from gratipay.models.account_elsewhere import AccountElsewhere
 from gratipay.utils.username import safely_reserve_a_username
 from gratipay.utils import is_card_expiring
+from gratipay.utils.emails import send_verification_email
 
 
 ASCII_ALLOWED_IN_USERNAME = set("0123456789"
@@ -551,18 +552,27 @@ class Participant(Model, MixinTeam):
         current_email = self.email.address if hasattr(self.email,'address') else ''
         ctime = self.email.ctime if hasattr(self.email,'ctime') else utcnow()
         was_confirmed = self.email.confirmed if hasattr(self.email,'confirmed') else ''
-        if (email != current_email) or (email == current_email and confirmed == was_confirmed == False):
+        should_verify = (email != current_email) or (email == current_email and confirmed == was_confirmed == False)
+        if should_verify:
             confirmed = False
             hash_string = str(uuid.uuid4())
             ctime = utcnow()
-            # Send the user an email here
         with self.db.get_cursor() as c:
             add_event(c, 'participant', dict(id=self.id, action='set', values=dict(current_email=email)))
             r = c.one("UPDATE participants SET email = ROW(%s, %s, %s, %s) WHERE username=%s RETURNING email"
                      , (email, confirmed, hash_string, ctime,self.username)
                       )
             self.set_attributes(email=r)
+        if should_verify:
+            send_verification_email(self)
         return r
+
+    def get_verification_link(self):
+        hash_string = self.email.hash
+        username = self.username_lower
+        link = "%s://%s/%s/verify-email.html?hash=%s" % (gratipay.canonical_scheme, gratipay.canonical_host, username, hash_string)
+        return link
+
 
     def update_goal(self, goal):
         typecheck(goal, (Decimal, None))
