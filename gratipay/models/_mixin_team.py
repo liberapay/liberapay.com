@@ -71,7 +71,7 @@ class MixinTeam(object):
         return False
 
     def get_take_last_week_for(self, member):
-        """What did the user actually take most recently? Used in throttling.
+        """Get the user's nominal take last week. Used in throttling.
         """
         assert self.IS_PLURAL
         membername = member.username if hasattr(member, 'username') \
@@ -79,15 +79,15 @@ class MixinTeam(object):
         return self.db.one("""
 
             SELECT amount
-              FROM transfers
-             WHERE tipper=%s AND tippee=%s AND context='take'
-               AND timestamp > (
+              FROM takes
+             WHERE team=%s AND member=%s
+               AND mtime < (
                        SELECT ts_start
                          FROM paydays
                         WHERE ts_end > ts_start
                      ORDER BY ts_start DESC LIMIT 1
                    )
-          ORDER BY timestamp ASC LIMIT 1
+          ORDER BY mtime DESC LIMIT 1
 
         """, (self.username, membername), default=Decimal('0.00'))
 
