@@ -167,6 +167,25 @@ class TestTakeOver(Harness):
         assert 2 == ntips
         self.db.self_check()
 
+    def test_is_funded_is_correct_for_consolidated_tips_receiving(self):
+        alice = self.make_participant('alice', claimed_time='now', balance=1)
+        bob = self.make_participant('bob', elsewhere='twitter')
+        carl = self.make_participant('carl', elsewhere='github')
+        alice.set_tip_to(bob, '1.00')  # funded
+        alice.set_tip_to(carl, '5.00')  # not funded
+        self.db.one("""
+            UPDATE tips
+               SET is_funded = NULL
+             WHERE is_funded IS false
+         RETURNING id
+        """, default=Exception)
+        bob.take_over(('github', str(carl.id)), have_confirmation=True)
+        tips = self.db.all("select * from tips where amount > 0 order by id asc")
+        assert len(tips) == 3
+        assert tips[-1].amount == 6
+        assert tips[-1].is_funded is False
+        self.db.self_check()
+
     def test_take_over_fails_if_it_would_result_in_just_a_team_account(self):
         alice_github = self.make_elsewhere('github', 2, 'alice')
         alice = alice_github.opt_in('alice')[0].participant
