@@ -27,7 +27,7 @@ CREATE TEMPORARY TABLE temp_tips ON COMMIT DROP AS
 
 CREATE INDEX ON temp_tips (tipper);
 CREATE INDEX ON temp_tips (tippee);
-ALTER TABLE temp_tips ADD COLUMN is_funded boolean;
+ALTER TABLE temp_tips ADD COLUMN is_funded boolean NOT NULL DEFAULT false;
 
 CREATE TEMPORARY TABLE temp_takes
 ( team text
@@ -130,7 +130,7 @@ UPDATE tips t
    SET is_funded = tt.is_funded
   FROM temp_tips tt
  WHERE t.id = tt.id
-   AND COALESCE(t.is_funded, false) <> COALESCE(tt.is_funded, false);
+   AND t.is_funded <> tt.is_funded;
 
 UPDATE participants p
    SET giving = p2.giving

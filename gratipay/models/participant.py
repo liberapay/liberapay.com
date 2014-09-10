@@ -1098,7 +1098,7 @@ class Participant(Model, MixinTeam):
 
             INSERT INTO tips (ctime, tipper, tippee, amount, is_funded)
 
-                 SELECT min(ctime), tipper, %(live)s AS tippee, sum(amount), bool_and(coalesce(is_funded, false))
+                 SELECT min(ctime), tipper, %(live)s AS tippee, sum(amount), bool_and(is_funded)
 
                    FROM __temp_unique_tips
 

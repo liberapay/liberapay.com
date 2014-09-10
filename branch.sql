@@ -1,6 +1,6 @@
 BEGIN;
     DROP VIEW goal_summary;
-    ALTER TABLE tips ADD COLUMN is_funded boolean;
+    ALTER TABLE tips ADD COLUMN is_funded boolean NOT NULL DEFAULT false;
 
     -- Needs to be recreated to include the new column
     DROP VIEW current_tips;

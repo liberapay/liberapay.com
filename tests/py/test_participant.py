@@ -173,12 +173,6 @@ class TestTakeOver(Harness):
         carl = self.make_participant('carl', elsewhere='github')
         alice.set_tip_to(bob, '1.00')  # funded
         alice.set_tip_to(carl, '5.00')  # not funded
-        self.db.one("""
-            UPDATE tips
-               SET is_funded = NULL
-             WHERE is_funded IS false
-         RETURNING id
-        """, default=Exception)
         bob.take_over(('github', str(carl.id)), have_confirmation=True)
         tips = self.db.all("select * from tips where amount > 0 order by id asc")
         assert len(tips) == 3
