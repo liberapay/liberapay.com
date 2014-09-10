@@ -9,7 +9,7 @@ BEGIN;
           FROM tips
       ORDER BY tipper, tippee, mtime DESC;
 
-    -- Allow updating is_funding via the current_tips view for convenience
+    -- Allow updating is_funded via the current_tips view for convenience
     CREATE FUNCTION update_tip() RETURNS trigger AS $$
         BEGIN
             UPDATE tips
