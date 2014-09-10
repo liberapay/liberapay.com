@@ -52,7 +52,7 @@ locked = False
                     {{ _("Hide total receiving from others.") }}
             </label>
         </p>
-		{% if not user.ANON and (user.ADMIN or user.participant == participant) %}
+        {% if not user.ANON and (user.ADMIN or user.participant == participant) %}
             <h2>Available Money</h2>
             <table class="accounts" id="account-balance">
                 <tr>
@@ -61,12 +61,9 @@ locked = False
                     </td>
                     <td class="account-details">
                         <div class="account-type">Available Balance</div>
-                            <span>
-                            	<a class="account-username" href="/{{ participant.username }}/history/">${{ participant.balance }}</a>
-                    		</span>
-                    </td>
-                    <td class="account-action">
-                        &nbsp;
+                        <span>
+                            <a class="account-username" href="/{{ participant.username }}/history/">${{ participant.balance }}</a>
+                        </span>
                     </td>
                 </td>
             </table>
