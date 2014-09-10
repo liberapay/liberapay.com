@@ -22,13 +22,14 @@ class Tests(Harness):
         self.warbucks.set_tip_to(team, '100')
         return team
 
-    def take_last_week(self, team, member, amount):
+    def take_last_week(self, team, member, amount, actual_amount=None):
         team._MixinTeam__set_take_for(member, amount, member)
         self.db.run("INSERT INTO paydays DEFAULT VALUES")
+        actual_amount = amount if actual_amount is None else actual_amount
         self.db.run("""
             INSERT INTO transfers (timestamp, tipper, tippee, amount, context)
             VALUES (now(), %(tipper)s, %(tippee)s, %(amount)s, 'take')
-        """, dict(tipper=team.username, tippee=member.username, amount=amount))
+        """, dict(tipper=team.username, tippee=member.username, amount=actual_amount))
         self.db.run("UPDATE paydays SET ts_end=now() WHERE ts_end < ts_start")
 
     def test_we_can_make_a_team(self):
@@ -66,10 +67,10 @@ class Tests(Harness):
         actual = team.set_take_for(alice, D('80.01'), alice)
         assert actual == 80
 
-    def test_increase_is_based_on_take_last_week(self):
+    def test_increase_is_based_on_nominal_take_last_week(self):
         team = self.make_team()
         alice = self.make_participant('alice', claimed_time='now')
-        self.take_last_week(team, alice, '20.00')
+        self.take_last_week(team, alice, '20.00', actual_amount='15.03')
         team._MixinTeam__set_take_for(alice, D('35.00'), team)
         assert team.set_take_for(alice, D('42.00'), alice) == 40
 
