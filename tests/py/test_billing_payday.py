@@ -126,7 +126,23 @@ class TestPayday(BalancedHarness):
             funded_tips = self.db.all("SELECT amount FROM tips WHERE is_funded ORDER BY id")
             assert funded_tips == [3, 6, 4, 5]
 
+        # Pre-test check
         check()
+
+        # Check that update_cached_amounts doesn't mess anything up
+        Payday.start().update_cached_amounts()
+        check()
+
+        # Check that update_cached_amounts actually updates amounts
+        self.db.run("""
+            UPDATE tips SET is_funded = false;
+            UPDATE participants
+               SET giving = 0
+                 , npatrons = 0
+                 , pledging = 0
+                 , receiving = 0
+                 , taking = 0;
+        """)
         Payday.start().update_cached_amounts()
         check()
 
