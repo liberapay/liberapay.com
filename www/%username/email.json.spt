@@ -21,7 +21,7 @@ if not re.match(r"[^@]+@[^@]+\.[^@]+", address):
     raise Response(400)
 else:
     # Woohoo! valid request, store it!
-    user.participant.update_email(address)
+    result = user.participant.update_email(address)
 
 [---] application/json via json_dump
-{'email': address, 'confirmed': user.participant.email.confirmed }
+{'email': result.address, 'confirmed': result.confirmed }

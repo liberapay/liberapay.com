@@ -47,7 +47,7 @@ if not CONFIRMED and hash_string == original_hash:
     {% else %}
     	<h1>{{ _("Failed to verify your email address") }}</h1>
     {% endif %}
-    <a href="http://gratipay.com/">{{ _("Go to homepage") }}</a>
+    <a href="/">{{ _("Go to homepage") }}</a>
     </div>
 {% endblock %}
 

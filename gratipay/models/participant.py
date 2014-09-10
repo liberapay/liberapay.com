@@ -553,6 +553,7 @@ class Participant(Model, MixinTeam):
         ctime = self.email.ctime if hasattr(self.email,'ctime') else utcnow()
         was_confirmed = self.email.confirmed if hasattr(self.email,'confirmed') else ''
         should_verify = (email != current_email) or (email == current_email and confirmed == was_confirmed == False)
+        confirmed = True
         if should_verify:
             confirmed = False
             hash_string = str(uuid.uuid4())
@@ -560,7 +561,7 @@ class Participant(Model, MixinTeam):
         with self.db.get_cursor() as c:
             add_event(c, 'participant', dict(id=self.id, action='set', values=dict(current_email=email)))
             r = c.one("UPDATE participants SET email = ROW(%s, %s, %s, %s) WHERE username=%s RETURNING email"
-                     , (email, confirmed, hash_string, ctime,self.username)
+                     , (email, confirmed, hash_string, ctime, self.username)
                       )
             self.set_attributes(email=r)
         if should_verify:
