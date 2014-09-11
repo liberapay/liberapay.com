@@ -103,7 +103,7 @@ from gratipay.security.user import SESSION_TIMEOUT
         {% if user.participant.giving == user.participant.receiving == 0 %}
             <p>{{ _("Next steps:") }}</p>
             <ol>
-                <li>{{ _("Start tipping people, you can find great people to tip by browsing {0}our communities{1}.",
+                <li>{{ _("Start tipping people; you can find great people to tip by browsing {0}our communities{1}.",
                          "<a href='/for/'>", "</a>") }}</li>
                 <li>{{ _("{0}Add a credit card{1} to make sure your weekly tips go through this Thursday.",
                         "<a href='/credit-card.html'>", "</a>") }}</li>
