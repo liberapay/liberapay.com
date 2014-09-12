@@ -42,7 +42,7 @@ def send_verification_email(participant):
     link = participant.get_verification_link()
     # TODO - Improve body text
     body = """
-        Welcome to Gratipay!
+        Welcome to Gratipay!<br><br>
 
         <a href="%s">Click on this link</a> to verify your email.
 

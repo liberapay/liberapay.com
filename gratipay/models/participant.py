@@ -15,6 +15,7 @@ import uuid
 
 import aspen
 from aspen.utils import typecheck, utcnow
+from datetime import timedelta
 from postgres.orm import Model
 from psycopg2 import IntegrityError
 
@@ -549,13 +550,8 @@ class Participant(Model, MixinTeam):
 
     def update_email(self, email, confirmed=False):
         hash_string = self.email.hash if hasattr(self.email,'hash') else ''
-        current_email = self.email.address if hasattr(self.email,'address') else ''
         ctime = self.email.ctime if hasattr(self.email,'ctime') else utcnow()
-        was_confirmed = self.email.confirmed if hasattr(self.email,'confirmed') else ''
-        should_verify = (email != current_email) or (email == current_email and confirmed == was_confirmed == False)
-        confirmed = True
-        if should_verify:
-            confirmed = False
+        if not confirmed:
             hash_string = str(uuid.uuid4())
             ctime = utcnow()
         with self.db.get_cursor() as c:
@@ -564,9 +560,36 @@ class Participant(Model, MixinTeam):
                      , (email, confirmed, hash_string, ctime, self.username)
                       )
             self.set_attributes(email=r)
-        if should_verify:
+        if not confirmed:
             send_verification_email(self)
         return r
+
+    def change_email(self, email):
+        current_email = self.email.address if hasattr(self.email,'address') else ''
+        was_confirmed = self.email.confirmed if hasattr(self.email,'confirmed') else False
+        result = {
+            'address': email,
+            'confirmed': False
+        }
+        if email != current_email:
+            self.update_email(email,False)
+        elif not was_confirmed:
+            self.update_email(email,False)
+        else:
+            result['confirmed'] = True
+        return result
+
+    def verify_email(self, hash_string):
+        original_hash = self.email.hash if hasattr(self.email, 'hash') else ''
+        email_ctime = self.email.ctime if hasattr(self.email, 'ctime') else ''
+        confirmed = self.email.confirmed if hasattr(self.email, 'confirmed') else ''
+        if (original_hash == hash_string) and ((utcnow() - email_ctime) < timedelta(hours=24)):
+            self.update_email(self.email.address,True)
+            return 0 # Verified
+        elif (original_hash == hash_string):
+            return 1 # Expired
+        else:
+            return 2 # Failed
 
     def get_verification_link(self):
         hash_string = self.email.hash

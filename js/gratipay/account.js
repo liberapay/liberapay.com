@@ -137,7 +137,7 @@ Gratipay.account.init = function() {
             $('.email-address').text(data.email);
             $('.email').toggle();
             $('.toggle-email').show();
-            Gratipay.notification('Your email address has been changed', 'success');
+
             if (data.email === '') {
                 $('.toggle-email').text('+ Add');  // TODO i18n
             } else {
@@ -145,6 +145,10 @@ Gratipay.account.init = function() {
             }
             if (!data.confirmed) {
                 $('#email-not-verified').show();
+                Gratipay.notification("We've sent a verification link to " + data.email , 'success');
+            }
+            else{
+                Gratipay.notification("We've updated your email address" , 'success');
             }
             $this.css('opacity', 1);
         }

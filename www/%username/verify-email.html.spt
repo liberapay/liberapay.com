@@ -14,18 +14,7 @@ hash_string = qs['hash'] if 'hash' in qs else ''
 if not participant.email:
     raise Response(404)
 
-CONFIRMED = participant.email.confirmed
-original_hash = participant.email.hash if hasattr(participant.email, 'hash') else ''
-email_ctime = participant.email.ctime if hasattr(participant.email, 'ctime') else ''
-
-EXPIRED = False
-
-if not CONFIRMED and hash_string == original_hash:
-    if utcnow() - email_ctime < timedelta(hours=24):
-        result = participant.update_email(participant.email.address, True)
-        CONFIRMED = result.confirmed
-    else:
-        EXPIRED = True
+result = participant.verify_email(hash_string)
 
 [-----------------------------------------------------------------------------]
 {% extends "templates/base.html" %}
@@ -40,11 +29,11 @@ if not CONFIRMED and hash_string == original_hash:
 
 {% block box %}
     <div class="as-content">
-    {% if ALREADY_CONFIRMED or CONFIRMED %}
+    {% if result == 0 %}
         <h1>{{ _("Your email address has been verified.") }}</h1>
-    {% elif EXPIRED  %}
+    {% elif result == 1  %}
         <h1>{{ _("Your verification email has expired.") }}</h1>
-    {% else %}
+    {% elif result == 2 %}
     	<h1>{{ _("Failed to verify your email address") }}</h1>
     {% endif %}
     <a href="/">{{ _("Go to homepage") }}</a>
