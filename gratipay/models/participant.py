@@ -580,9 +580,11 @@ class Participant(Model, MixinTeam):
         return result
 
     def verify_email(self, hash_string):
+        confirmed = self.email.confirmed if hasattr(self.email, 'confirmed') else ''
+        if confirmed:
+            return 0 # Verified
         original_hash = self.email.hash if hasattr(self.email, 'hash') else ''
         email_ctime = self.email.ctime if hasattr(self.email, 'ctime') else ''
-        confirmed = self.email.confirmed if hasattr(self.email, 'confirmed') else ''
         if (original_hash == hash_string) and ((utcnow() - email_ctime) < timedelta(hours=24)):
             self.update_email(self.email.address,True)
             return 0 # Verified
@@ -596,7 +598,6 @@ class Participant(Model, MixinTeam):
         username = self.username_lower
         link = "%s://%s/%s/verify-email.html?hash=%s" % (gratipay.canonical_scheme, gratipay.canonical_host, username, hash_string)
         return link
-
 
     def update_goal(self, goal):
         typecheck(goal, (Decimal, None))

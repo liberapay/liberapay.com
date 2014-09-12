@@ -222,21 +222,26 @@ class TestParticipant(Harness):
         assert actual == expected
 
     def test_can_change_email(self):
-        self.alice.update_email('alice@gratipay.com')
+        self.alice.change_email('alice@gratipay.com')
         expected = 'alice@gratipay.com'
         actual = self.alice.email.address
         assert actual == expected
 
-    def test_cannot_confirm_email_in_one_step(self):
-        self.alice.update_email('alice@gratipay.com', True)
-        actual = self.alice.email.confirmed
+    def test_can_verify_email(self):
+        self.alice.update_email('alice@gratipay.com')
+        hash_string = Participant.from_username('alice').email.hash
+        self.alice.verify_email(hash_string)
+        actual = Participant.from_username('alice').email.confirmed
+        assert actual == True
+
+    def test_cannot_verify_email_with_wrong_hash(self):
+        self.alice.update_email('alice@gratipay.com')
+        hash_string = "some wrong hash"
+        self.alice.verify_email(hash_string)
+        actual = Participant.from_username('alice').email.confirmed
         assert actual == False
 
-    def test_can_confirm_email_in_second_step(self):
-        self.alice.update_email('alice@gratipay.com')
-        self.alice.update_email('alice@gratipay.com', True)
-        actual = self.alice.email.confirmed
-        assert actual == True
+    # TODO - Add a test for expired hashes. (We don't have control over the ctime of emails)
 
     def test_cant_take_over_claimed_participant_without_confirmation(self):
         with self.assertRaises(NeedConfirmation):
