@@ -173,6 +173,28 @@ Gratipay.account.init = function() {
         $('.toggle-email').show();
 
         return false;
+    }).on('click', '[type=resend]', function () {
+        var $this = $(this);
+        $this.css('opacity', 0.5);
+
+        function success(data) {
+            Gratipay.notification("We've sent a verification link to " + data.email , 'success');
+            $this.css('opacity', 1);
+        }
+
+        $.ajax({
+            url: '../email.json',
+            type: 'POST',
+            dataType: 'json',
+            success: success,
+            error: function (data) {
+                $this.css('opacity', 1);
+                Gratipay.notification('Failed to save your email address. '
+                                  + 'Please try again.', 'error');
+            },
+            data: {email: $('input.email').val()}
+        })
+        return false;
     });
 
 

@@ -177,6 +177,11 @@ locked = False
                             <button type="submit" class="email hidden">Save</button>
                             <button type="cancel" class="email cancel hidden">Cancel</button>
                         </div>
+                        {% if participant.email and not participant.email.confirmed %}
+                            <div class="buttons">
+                                <button type="resend" class="email">Resend Email</button>
+                            </div>
+                        {% endif %}
                     </form>
                 </td>
                 <td class="account-action">
