@@ -110,8 +110,8 @@ title = _("Bank Account")
                 </div>
 
                 <div>
-                    <label for="address_1">{{ _("City") }}</label>
-                    <input id="address_1" value="" />
+                    <label for="city">{{ _("City") }}</label>
+                    <input id="city" value="" />
                 </div>
 
                 <div class="half left">
@@ -127,8 +127,8 @@ title = _("Bank Account")
                 <div class="clear"></div>
 
                 <div>
-                    <label for="address_1">{{ _("Country") }} (<a href="/about/faq.html#how-withdraw-funds">{{ _("non-US?") }}</a>)</label>
-                    <input id="zip" value="{{ locale.countries_map['US'] }}" disabled="true"
+                    <label for="country">{{ _("Country") }} (<a href="/about/faq.html#how-withdraw-funds">{{ _("non-US?") }}</a>)</label>
+                    <input id="country" value="{{ locale.countries_map['US'] }}" disabled="true"
                         class="disabled" />
                 </div>
 
