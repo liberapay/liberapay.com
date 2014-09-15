@@ -107,7 +107,7 @@ else:
             &ldquo;{{ event['note']|e }}&rdquo;&mdash;<a
             href="/{{ event['recorder'] }}/">{{ event['recorder'] }}</a>
         {% endif %}
-        {% if event['status'] in (None, 'suceeded') %}
+        {% if event['status'] in (None, 'succeeded') %}
             (<a href="../receipts/{{ event['id'] }}.html">{{ _("Receipt").lower() }}</a>)
         {% elif event['status'] in ('pending', 'failed') %}
             ({{ event['status'] }}{% if event['note'] %}: &ldquo;{{ event['note']|e }}&rdquo;{% endif %})
