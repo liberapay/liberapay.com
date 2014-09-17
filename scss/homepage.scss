@@ -77,10 +77,9 @@
             display: inline;
         }
 
-        div.twitter {
+        div.primary-login {
             margin-bottom: 48px;
             button {
-                @include has-icon("twitter", 24px, 4px);
                 font-size: 24px;
                 padding: 10px 24px 10px 18px;
                 border-radius: 6px;
@@ -91,6 +90,8 @@
                     border-color: $brown;
                     background: $brown;
                 }
+                .facebook { @include has-icon("facebook", 24px, 4px); }
+                .twitter { @include has-icon("twitter", 24px, 4px); }
             }
         }
         .other {

@@ -249,7 +249,7 @@ class PlatformOAuth2(Platform):
 
     def get_auth_url(self, **kw):
         sess = self.get_auth_session()
-        url, state = sess.authorization_url(self.auth_url+'/authorize')
+        url, state = sess.authorization_url(self.auth_url)
         return url, state, ''
 
     def get_query_id(self, querystring):
@@ -257,7 +257,7 @@ class PlatformOAuth2(Platform):
 
     def handle_auth_callback(self, url, state, unused_arg):
         sess = self.get_auth_session(state=state)
-        sess.fetch_token(self.auth_url+'/access_token',
+        sess.fetch_token(self.access_token_url,
                          client_secret=self.api_secret,
                          authorization_response=url)
         return sess
