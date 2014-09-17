@@ -89,6 +89,14 @@
         </div>
     </div>
 
+    <script>
+        // http://stackoverflow.com/questions/7131909/facebook-callback-appends-to-return-url
+        if (window.location.hash == '#_=_') {
+            window.location.hash = ''; // for older browsers, leaves a # behind
+            history.pushState('', document.title, window.location.pathname); // nice and clean
+        }
+    </script>
+
     {% if website.segment_key and request.headers.get('DNT') != '1' %}
     <!-- For non-minified JS and inline docs: https://segment.io/docs/tutorials/quickstart-analytics.js/#step-1-copy-the-snippet -->
     <script type="text/javascript">
