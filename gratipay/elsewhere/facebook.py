@@ -25,5 +25,14 @@ class Facebook(PlatformOAuth2):
     # User info extractors
     x_user_id = key('id')
     x_user_name = key('username')
-    x_display_name = key('first_name')
+    x_display_name = key('name')
     x_email = key('email')
+
+    def x_avatar_url(self, extracted, info, default):
+        picture = self.api_get('/' + extracted.user_name + '/picture'
+                               '?redirect=false&width=256&height=256')
+        data = picture.json().get('data', {})
+        avatar_url = data.get('url')
+        if data.get('is_silhouette'):
+            avatar_url = None
+        return avatar_url

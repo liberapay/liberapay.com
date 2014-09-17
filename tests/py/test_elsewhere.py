@@ -7,7 +7,7 @@ from gratipay.testing import Harness
 import gratipay.testing.elsewhere as user_info_examples
 
 
-class Tests(Harness):
+class TestElsewhere(Harness):
 
     def test_associate_csrf(self):
         response = self.client.GxT('/on/github/associate?state=49b7c66246c7')

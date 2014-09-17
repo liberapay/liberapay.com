@@ -27,7 +27,7 @@ def _popitemchain(obj, *keys):
 
 def any_key(*keys, **kw):
     clean = kw.pop('clean', lambda a: a)
-    def f(self, info, *default):
+    def f(self, extracted, info, *default):
         for key in keys:
             chain = isinstance(key, basestring) and (key,) or key
             try:
@@ -50,7 +50,7 @@ def any_key(*keys, **kw):
 
 
 def key(k, clean=lambda a: a):
-    def f(self, info, *default):
+    def f(self, extracted, info, *default):
         try:
             v = info.pop(k, *default)
         except KeyError:
@@ -68,12 +68,12 @@ def key(k, clean=lambda a: a):
     return f
 
 
-def not_available(self, info, default):
+def not_available(self, extracted, info, default):
     return default
 
 
 def xpath(path, attr=None, clean=lambda a: a):
-    def f(self, info, *default):
+    def f(self, extracted, info, *default):
         try:
             l = info.findall(path)
             if len(l) > 1:
