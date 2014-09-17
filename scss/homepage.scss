@@ -90,8 +90,12 @@
                     border-color: $brown;
                     background: $brown;
                 }
-                .facebook { @include has-icon("facebook", 24px, 4px); }
-                .twitter { @include has-icon("twitter", 24px, 4px); }
+            }
+            form.facebook button {
+                @include has-icon("facebook", 24px, 4px);
+            }
+            form.twitter button {
+                @include has-icon("twitter", 24px, 4px);
             }
         }
         .other {
