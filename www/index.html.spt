@@ -64,14 +64,14 @@ from gratipay.security.user import SESSION_TIMEOUT
         {% from 'templates/auth.html' import auth_button with context %}
 
         <div class="primary-login">
-        {% call auth_button('twitter', 'opt-in') %}
-        {{ _("Sign in with {0}", "Twitter") }}
+        {% call auth_button('facebook', 'opt-in') %}
+        {{ _("Sign in with {0}", "Facebook") }}
         {% endcall %}
         </div>
 
         <div class="primary-login">
-        {% call auth_button('facebook', 'opt-in') %}
-        {{ _("Sign in with {0}", "Facebook") }}
+        {% call auth_button('twitter', 'opt-in') %}
+        {{ _("Sign in with {0}", "Twitter") }}
         {% endcall %}
         </div>
 
