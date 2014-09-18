@@ -21,27 +21,28 @@ except InvalidOperation:
 note = body['note'].strip()
 if not note:
     raise Response(400)
+status = body['status']
 
 
 with website.db.get_cursor() as cursor:
-    params = (amount, fee, participant.username, user.participant.username, \
-                                                                          note)
+    params = (amount, fee, participant.username, user.participant.username, note, status)
     SQL = "INSERT INTO exchanges " \
-          "(amount, fee, participant, recorder, note) " \
-          "VALUES (%s, %s, %s, %s, %s)"
+          "(amount, fee, participant, recorder, note, status) " \
+          "VALUES (%s, %s, %s, %s, %s, %s)"
     cursor.execute(SQL, params)
 
-    if amount < 0:
-        # For payouts, we need to take the fee out of their Gratipay balance.
-        balance_adjustment = amount - fee
-    else:
-        # For payins, we don't have to worry about the fee relative to their
-        # balance, because the amount is already less the fee.
-        balance_adjustment = amount
+    if status == 'succeeded':
+        if amount < 0:
+            # For payouts, we need to take the fee out of their Gratipay balance.
+            balance_adjustment = amount - fee
+        else:
+            # For payins, we don't have to worry about the fee relative to their
+            # balance, because the amount is already less the fee.
+            balance_adjustment = amount
 
-    SQL = "UPDATE participants SET balance = balance + %s WHERE username=%s RETURNING balance"
-    balance = cursor.one(SQL, (balance_adjustment, participant.username))
-    # XXX This is the one context where dropping to a negative balance is allowed!
+        SQL = "UPDATE participants SET balance = balance + %s WHERE username=%s RETURNING balance"
+        balance = cursor.one(SQL, (balance_adjustment, participant.username))
+        # XXX This is the one context where dropping to a negative balance is allowed!
 
 request.redirect('/%s/history/' % participant.username)
 

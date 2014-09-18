@@ -10,14 +10,17 @@ class TestRecordAnExchange(Harness):
     # fixture
     # =======
 
-    def record_an_exchange(self, amount, fee, note, status=None, make_participants=True):
+    def make_participants(self):
+        now = utcnow()
+        self.make_participant('alice', claimed_time=now, is_admin=True)
+        self.make_participant('bob', claimed_time=now)
+
+    def record_an_exchange(self, amount, fee, note, status='succeeded', make_participants=True):
         if make_participants:
-            now = utcnow()
-            self.make_participant('alice', claimed_time=now, is_admin=True)
-            self.make_participant('bob', claimed_time=now)
+            self.make_participants()
         data = {'amount': amount, 'fee': fee, 'note': note}
         if status is not None:
-            data['status'] = 'status'
+            data['status'] = status
         return self.client.PxST('/bob/history/record-an-exchange', data, auth_as='alice')
 
     # tests
@@ -99,5 +102,18 @@ class TestRecordAnExchange(Harness):
         assert self.db.one(SQL) == Decimal('11.87')
 
     def test_can_set_status(self):
+        self.make_participants()
+        for status in (None, 'pre', 'pending', 'failed', 'succeeded'):
+            self.record_an_exchange('10', '0', 'noted', status, False)
+            actual = self.db.one("SELECT status FROM exchanges ORDER BY timestamp desc LIMIT 1")
+            assert actual == status
+
+    def test_succeeded_affects_balance(self):
         self.record_an_exchange('10', '0', 'noted', 'succeeded')
-        assert self.db.one("SELECT status FROM exchanges") == 'succeeded'
+        assert self.db.one("SELECT balance FROM participants WHERE username='bob'") == 10
+
+    def test_non_succeeded_status_doesnt_affect_balance(self):
+        self.make_participants()
+        for status in (None, 'pre', 'pending', 'failed'):
+            self.record_an_exchange('10', '0', 'noted', status, False)
+            assert self.db.one("SELECT balance FROM participants WHERE username='bob'") == 0
