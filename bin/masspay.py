@@ -36,6 +36,7 @@ ts = datetime.datetime.now().strftime('%Y-%m-%d')
 INPUT_CSV = '{}.input.csv'.format(ts)
 PAYPAL_CSV = '{}.output.paypal.csv'.format(ts)
 GRATIPAY_CSV = '{}.output.gratipay.csv'.format(ts)
+REPORT_CSV = '{}.report.paypal.csv'.format(ts)
 
 
 def round_(d):
@@ -185,6 +186,18 @@ def compute_output_csvs():
     print("{:>64} {:>7} {:>7}".format(total_gross, total_fees, total_net))
 
 
+def load_statuses():
+    _status_map = {'Completed': 'succeeded', 'Denied': 'failed'} # PayPal -> Gratipay
+    statuses = {}
+    fp = open(REPORT_CSV)
+    for line in fp:
+        if line.startswith('Transaction ID,Recipient'):
+            break
+    for rec in csv.reader(fp):
+        statuses[rec[1]] = _status_map[rec[5]]
+    return statuses
+
+
 def post_back_to_gratipay():
 
     try:
@@ -197,6 +210,8 @@ def post_back_to_gratipay():
     except KeyError:
         gratipay_base_url = 'https://gratipay.com'
 
+    statuses = load_statuses()
+
     nposts = 0
     for username, email, gross, fee, net, additional_note in csv.reader(open(GRATIPAY_CSV)):
         url = '{}/{}/history/record-an-exchange'.format(gratipay_base_url, username)
@@ -204,8 +219,9 @@ def post_back_to_gratipay():
         if additional_note:
             note += " " + additional_note
         print(note)
+        status = statuses[email]
 
-        data = {'amount': '-' + net, 'fee': fee, 'note': note}
+        data = {'amount': '-' + net, 'fee': fee, 'note': note, 'status': status}
         try:
             response = requests.post(url, auth=(gratipay_api_key, ''), data=data)
         except IncompleteRead:
