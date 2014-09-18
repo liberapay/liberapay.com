@@ -77,9 +77,10 @@
             display: inline;
         }
 
-        div.primary-login {
+        div.twitter {
             margin-bottom: 48px;
             button {
+                @include has-icon("twitter", 24px, 4px);
                 font-size: 24px;
                 padding: 10px 24px 10px 18px;
                 border-radius: 6px;
@@ -90,12 +91,6 @@
                     border-color: $brown;
                     background: $brown;
                 }
-            }
-            form.facebook button {
-                @include has-icon("facebook", 24px, 4px);
-            }
-            form.twitter button {
-                @include has-icon("twitter", 24px, 4px);
             }
         }
         .other {
@@ -114,9 +109,10 @@
                     background: $brown;
                 }
             }
-            form.github button { @include has-icon("github"); }
-            form.bitbucket button { @include has-icon("bitbucket"); }
-            form.openstreetmap button { @include has-icon("openstreetmap"); }
+            form.facebook button { @include has-icon("facebook", 13px); }
+            form.github button { @include has-icon("github", 13px); }
+            form.bitbucket button { @include has-icon("bitbucket", 13px); }
+            form.openstreetmap button { @include has-icon("openstreetmap", 13px); }
         }
     }
 
