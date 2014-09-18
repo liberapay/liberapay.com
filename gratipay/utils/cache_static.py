@@ -112,7 +112,7 @@ def outbound(request, response, website):
         response.headers['Cache-Control'] = 'public'
         response.headers['Vary'] = 'accept-encoding'
 
-        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Access-Control-Allow-Origin'] = 'https://gratipay.com'
 
         # all assets are versioned, so it's fine to cache them
 
