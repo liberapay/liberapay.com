@@ -32,6 +32,9 @@
     min-width: 140px;
     li {
       margin: 0;
+      &.facebook button {
+        @include has-icon("facebook");
+      }
       &.twitter button {
         @include has-icon("twitter");
       }

@@ -14,6 +14,7 @@ from gratipay.elsewhere import PlatformRegistry
 from gratipay.elsewhere.bitbucket import Bitbucket
 from gratipay.elsewhere.bountysource import Bountysource
 from gratipay.elsewhere.github import GitHub
+from gratipay.elsewhere.facebook import Facebook
 from gratipay.elsewhere.openstreetmap import OpenStreetMap
 from gratipay.elsewhere.twitter import Twitter
 from gratipay.elsewhere.venmo import Venmo
@@ -160,6 +161,12 @@ def accounts_elsewhere(website, env):
         env.twitter_consumer_secret,
         env.twitter_callback,
     )
+    facebook = Facebook(
+        website.asset_url,
+        env.facebook_app_id,
+        env.facebook_app_secret,
+        env.facebook_callback,
+    )
     github = GitHub(
         website.asset_url,
         env.github_client_id,
@@ -195,12 +202,12 @@ def accounts_elsewhere(website, env):
         env.venmo_callback,
     )
 
-    signin_platforms = [twitter, github, bitbucket, openstreetmap]
+    signin_platforms = [facebook, twitter, github, bitbucket, openstreetmap]
     website.signin_platforms = PlatformRegistry(signin_platforms)
     AccountElsewhere.signin_platforms_names = tuple(p.name for p in signin_platforms)
 
     # For displaying "Connected Accounts"
-    website.social_profiles = [twitter, github, bitbucket, openstreetmap, bountysource]
+    website.social_profiles = [facebook, twitter, github, bitbucket, openstreetmap, bountysource]
 
     all_platforms = signin_platforms + [bountysource, venmo]
     website.platforms = AccountElsewhere.platforms = PlatformRegistry(all_platforms)
@@ -237,6 +244,9 @@ def env():
         TWITTER_CONSUMER_KEY            = unicode,
         TWITTER_CONSUMER_SECRET         = unicode,
         TWITTER_CALLBACK                = unicode,
+        FACEBOOK_APP_ID                 = unicode,
+        FACEBOOK_APP_SECRET             = unicode,
+        FACEBOOK_CALLBACK               = unicode,
         BOUNTYSOURCE_API_SECRET         = unicode,
         BOUNTYSOURCE_CALLBACK           = unicode,
         BOUNTYSOURCE_API_HOST           = unicode,

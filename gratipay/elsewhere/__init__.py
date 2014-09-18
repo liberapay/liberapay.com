@@ -17,7 +17,7 @@ from gratipay.elsewhere._extractors import not_available
 
 
 ACTIONS = {'opt-in', 'connect', 'lock', 'unlock'}
-PLATFORMS = 'bitbucket bountysource github openstreetmap twitter venmo'.split()
+PLATFORMS = 'facebook bitbucket bountysource github openstreetmap twitter venmo'.split()
 
 
 class UnknownAccountElsewhere(Exception): pass
@@ -161,25 +161,25 @@ class Platform(object):
         unique non-empty value.
         """
         r = UserInfo(platform=self.name)
-        info = self.x_user_info(info, info)
-        r.user_name = self.x_user_name(info, None)
+        info = self.x_user_info(r, info, info)
+        r.user_name = self.x_user_name(r, info, None)
         if self.x_user_id.__func__ is not_available:
             r.user_id = r.user_name
         else:
-            r.user_id = self.x_user_id(info)
+            r.user_id = self.x_user_id(r, info)
         assert r.user_id is not None
         r.user_id = unicode(r.user_id)
         assert len(r.user_id) > 0
-        r.display_name = self.x_display_name(info, None)
-        r.email = self.x_email(info, None)
-        r.avatar_url = self.x_avatar_url(info, None)
+        r.display_name = self.x_display_name(r, info, None)
+        r.email = self.x_email(r, info, None)
+        r.avatar_url = self.x_avatar_url(r, info, None)
         if not r.avatar_url:
-            gravatar_id = self.x_gravatar_id(info, None)
+            gravatar_id = self.x_gravatar_id(r, info, None)
             if r.email and not gravatar_id:
                 gravatar_id = hashlib.md5(r.email.strip().lower()).hexdigest()
             if gravatar_id:
                 r.avatar_url = 'https://www.gravatar.com/avatar/'+gravatar_id
-        r.is_team = self.x_is_team(info, False)
+        r.is_team = self.x_is_team(r, info, False)
         r.extra_info = info
         return r
 
@@ -249,7 +249,7 @@ class PlatformOAuth2(Platform):
 
     def get_auth_url(self, **kw):
         sess = self.get_auth_session()
-        url, state = sess.authorization_url(self.auth_url+'/authorize')
+        url, state = sess.authorization_url(self.auth_url)
         return url, state, ''
 
     def get_query_id(self, querystring):
@@ -257,7 +257,7 @@ class PlatformOAuth2(Platform):
 
     def handle_auth_callback(self, url, state, unused_arg):
         sess = self.get_auth_session(state=state)
-        sess.fetch_token(self.auth_url+'/access_token',
+        sess.fetch_token(self.access_token_url,
                          client_secret=self.api_secret,
                          authorization_response=url)
         return sess

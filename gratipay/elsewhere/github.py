@@ -14,7 +14,8 @@ class GitHub(PlatformOAuth2):
     allows_team_connect = True
 
     # Auth attributes
-    auth_url = 'https://github.com/login/oauth'
+    auth_url = 'https://github.com/login/oauth/authorize'
+    access_token_url = 'https://github.com/login/oauth/access_token'
     oauth_email_scope = 'user:email'
     oauth_default_scope = ['read:org']
 

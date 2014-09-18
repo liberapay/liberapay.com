@@ -283,3 +283,14 @@ venmo = lambda: {
     "profile_picture_url": "https://s3.amazonaws.com/venmo/no-image.gif",
     "username": "thomas-boyt"
 }
+
+facebook = lambda: {
+   "id": "187701977",
+   "first_name": "Chad",
+   "gender": "male",
+   "last_name": "Whitacre",
+   "link": "https://www.facebook.com/whit537",
+   "locale": "en_US",
+   "name": "Chad Whitacre",
+   "username": "whit537"
+}

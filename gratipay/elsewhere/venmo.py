@@ -12,7 +12,8 @@ class Venmo(PlatformOAuth2):
     account_url = 'https://venmo.com/{user_name}'
 
     # PlatformOAuth2 attributes
-    auth_url = 'https://api.venmo.com/v1/oauth'
+    auth_url = 'https://api.venmo.com/v1/oauth/authorize'
+    access_token_url = 'https://api.venmo.com/v1/oauth/access_token'
     oauth_email_scope = 'access_email'
     oauth_payment_scope = 'make_payments'
     oauth_default_scope = ['access_profile']

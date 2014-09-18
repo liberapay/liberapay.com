@@ -109,9 +109,10 @@
                     background: $brown;
                 }
             }
-            form.github button { @include has-icon("github"); }
-            form.bitbucket button { @include has-icon("bitbucket"); }
-            form.openstreetmap button { @include has-icon("openstreetmap"); }
+            form.facebook button { @include has-icon("facebook", 13px); }
+            form.github button { @include has-icon("github", 13px); }
+            form.bitbucket button { @include has-icon("bitbucket", 13px); }
+            form.openstreetmap button { @include has-icon("openstreetmap", 13px); }
         }
     }
 
