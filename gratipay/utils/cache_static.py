@@ -99,7 +99,7 @@ def outbound(request, response, website):
     """Set caching headers for resources under assets/.
     """
     uri = request.line.uri
-    
+
     if not uri.startswith('/assets/'):
         return response
 
@@ -112,8 +112,12 @@ def outbound(request, response, website):
         response.headers['Cache-Control'] = 'public'
         response.headers['Vary'] = 'accept-encoding'
 
+        response.headers['Access-Control-Allow-Origin'] = '*'
+
         # all assets are versioned, so it's fine to cache them
 
         response.headers['Expires'] = 'Sun, 17 Jan 2038 19:14:07 GMT'
         last_modified = get_last_modified(request.fs)
         response.headers['Last-Modified'] = format_date_time(last_modified)
+
+
