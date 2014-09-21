@@ -37,7 +37,19 @@ p, dd {
 }
 dt {
     font-weight: bold;
-    margin: 1em 0 0.25em;
+    padding:1em 0 0.25em;
+}
+dt:target, dt:target + dd {
+    -webkit-animation: target-fade 3s 1;
+    -moz-animation: target-fade 3s 1;
+}
+@-webkit-keyframes target-fade {
+    0% { background-color: rgba(yellow,.3); }
+    100% { background-color: rgba(yellow,0); }
+}
+@-moz-keyframes target-fade {
+    0% { background-color: rgba(yellow,.3); }
+    100% { background-color: rgba(yellow,0); }
 }
 pre {
     font: 9pt/13pt monospace;
