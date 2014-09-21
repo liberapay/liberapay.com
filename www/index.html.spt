@@ -71,6 +71,7 @@ from gratipay.security.user import SESSION_TIMEOUT
 
         <div class="other">{{ _("Or sign in with:") }}
         <span>
+        {% call auth_button('google', 'opt-in') %}Google{% endcall %}
         {% call auth_button('facebook', 'opt-in') %}Facebook{% endcall %}
         {% call auth_button('github', 'opt-in') %}GitHub{% endcall %}
         {% call auth_button('bitbucket', 'opt-in') %}Bitbucket{% endcall %}
