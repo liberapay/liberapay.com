@@ -3,6 +3,8 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from gratipay.elsewhere import PlatformOAuth2
 from gratipay.elsewhere._extractors import key
 
+import json
+from aspen import log
 
 class Google(PlatformOAuth2):
 
@@ -33,7 +35,7 @@ class Google(PlatformOAuth2):
     	    image_dict = info.pop('image')
     	except KeyError:
     	    msg = 'Unable to find key "%s" in %s API response:\n%s'
-    	    log(msg % (k, self.name, json.dumps(info, indent=4)))
+    	    log(msg % ("image", self.name, json.dumps(info, indent=4)))
     	    raise
     	return image_dict.get('url')
 
@@ -42,6 +44,6 @@ class Google(PlatformOAuth2):
     	    emails = info.pop('emails')
     	except KeyError:
     	    msg = 'Unable to find key "%s" in %s API response:\n%s'
-    	    log(msg % (k, self.name, json.dumps(info, indent=4)))
+    	    log(msg % ("emails", self.name, json.dumps(info, indent=4)))
     	    raise
     	return emails[0].get('value')
