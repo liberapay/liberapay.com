@@ -6,6 +6,7 @@ Gratipay.team = (function() {
         $indicator.appendTo($('#page'));
 
         $('#lookup-container form').submit(add);
+        $('#lookup-results').on('click', 'li', selectLookupResult);
         $('#query').focus().keyup(lookup);
 
         $team.css('opacity', 0);
@@ -118,6 +119,11 @@ Gratipay.team = (function() {
             ));
         }
         $('#lookup-results').html(items);
+    }
+
+    function selectLookupResult() {
+        $('#query').val($(this).html());
+        $('#lookup-results').empty();
     }
 
     function add(e) {
