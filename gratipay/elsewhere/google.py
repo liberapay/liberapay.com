@@ -14,11 +14,10 @@ class Google(PlatformOAuth2):
     account_url = 'https://www.facebook.com/{user_name}'
 
     # Auth attributes
-
     auth_url = 'https://accounts.google.com/o/oauth2/auth'
     access_token_url = 'https://accounts.google.com/o/oauth2/token'
     oauth_default_scope = ['https://www.googleapis.com/auth/userinfo.email',
-    	'https://www.googleapis.com/auth/userinfo.profile']
+                           'https://www.googleapis.com/auth/userinfo.profile']
 
     # API attributes
     api_format = 'json'
@@ -31,19 +30,19 @@ class Google(PlatformOAuth2):
     x_display_name = key('displayName')
 
     def x_avatar_url(self,extracted,info,default):
-    	try:
-    	    image_dict = info.pop('image')
-    	except KeyError:
-    	    msg = 'Unable to find key "%s" in %s API response:\n%s'
-    	    log(msg % ("image", self.name, json.dumps(info, indent=4)))
-    	    raise
-    	return image_dict.get('url')
+        try:
+            image_dict = info.pop('image')
+        except KeyError:
+            msg = 'Unable to find key "%s" in %s API response:\n%s'
+            log(msg % ("image", self.name, json.dumps(info, indent=4)))
+            raise
+        return image_dict.get('url')
 
     def x_email(self,extracted,info,default):
-    	try:
-    	    emails = info.pop('emails')
-    	except KeyError:
-    	    msg = 'Unable to find key "%s" in %s API response:\n%s'
-    	    log(msg % ("emails", self.name, json.dumps(info, indent=4)))
-    	    raise
-    	return emails[0].get('value')
+        try:
+            emails = info.pop('emails')
+        except KeyError:
+            msg = 'Unable to find key "%s" in %s API response:\n%s'
+            log(msg % ("emails", self.name, json.dumps(info, indent=4)))
+            raise
+        return emails[0].get('value')
