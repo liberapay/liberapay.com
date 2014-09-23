@@ -26,7 +26,7 @@ class Google(PlatformOAuth2):
     api_user_self_info_path = '/people/me'
 
     # User info extractors
-    x_user_name = key('id') # Google doesn't provide a username, so we're using ID here.
+    x_user_id = key('id')
     x_display_name = key('displayName')
 
     def x_avatar_url(self,extracted,info,default):
