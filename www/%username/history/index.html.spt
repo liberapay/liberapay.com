@@ -68,7 +68,7 @@ else:
     </tr>
     <tr class="head">
         <td colspan="3" class="outside">&larr; {{ _("Outside") }}</td>
-        <td colspan="4" class="inside">{{ _("Inside Gratipay") }} &rarr;</td>
+        <td colspan="5" class="inside">{{ _("Inside Gratipay") }} &rarr;</td>
     </tr>
     <tr class="head">
         <td class="bank">{{ _("Bank") }}</td>
@@ -77,6 +77,7 @@ else:
         <td class="credits">{{ _("Credits") }}</td>
         <td class="debits">{{ _("Debits") }}</td>
         <td class="balance">{{ _("Balance") }}</td>
+        <td class="status">{{ _("Status") }}</td>
         <td class="notes">{{ _("Notes") }}</td>
     </tr>
     {% elif event['kind'] == 'credit' %}
@@ -87,14 +88,14 @@ else:
         <td class="credits"></td>
         <td class="debits">{{ -event['amount'] + event['fee'] }}</td>
         <td class="balance">{{ event['balance'] }}</td>
+        <td class="status">{{ _(event['status'] or '') }}</td>
         <td class="notes">
         {% if event['recorder'] == None %}
             {{ _("Automatic Withdrawal").lower() }}
-            {% if event['status'] %}&mdash; status: {{ event['status'] }}{% endif %}
-            {% if event['note'] %}&mdash; error: &ldquo;{{ event['note']|e }}&rdquo;{% endif %}
-        {% else %}
-            &ldquo;{{ event['note']|e }}&rdquo;&mdash;<a
-            href="/{{ event['recorder'] }}/">{{ event['recorder'] }}</a>
+            {% if event['note'] %}&mdash;{{ event['note']|e }}{% endif %}
+        {% elif event['note'] %}
+            &ldquo;{{ event['note']|e }}&rdquo;&mdash;
+            <a href="/{{ event['recorder'] }}/">{{ event['recorder'] }}</a>
         {% endif %}
         </td>
     </tr>
@@ -106,17 +107,17 @@ else:
         <td class="credits">{{ event['amount'] }}</td>
         <td class="debits"></td>
         <td class="balance">{{ event['balance'] }}</td>
+        <td class="status">{{ _(event['status'] or '') }}</td>
         <td class="notes">
         {% if event['recorder'] == None %}
             {{ _("Automatic Charge").lower() }}
-        {% else %}
-            &ldquo;{{ event['note']|e }}&rdquo;&mdash;<a
-            href="/{{ event['recorder'] }}/">{{ event['recorder'] }}</a>
+            {% if event['note'] %}&mdash;{{ event['note']|e }}{% endif %}
+        {% elif event['note'] %}
+            &ldquo;{{ event['note']|e }}&rdquo;&mdash;
+            <a href="/{{ event['recorder'] }}/">{{ event['recorder'] }}</a>
         {% endif %}
         {% if event['status'] in (None, 'succeeded') %}
             (<a href="../receipts/{{ event['id'] }}.html">{{ _("Receipt").lower() }}</a>)
-        {% elif event['status'] in ('pending', 'failed') %}
-            ({{ event['status'] }}{% if event['note'] %}: &ldquo;{{ event['note']|e }}&rdquo;{% endif %})
         {% endif %}
         </td>
     </tr>
@@ -136,6 +137,7 @@ else:
 
         <td class="balance">{{ event['balance'] }}</td>
 
+        <td class="status"></td>
         <td class="notes">
         {% set context = event['context'] %}
         {% if event['tippee'] == participant.username %}
@@ -168,6 +170,7 @@ else:
         <td class="credits"></td>
         <td class="debits"></td>
         <td class="balance">{{ event['balance'] }}</td>
+        <td class="status"></td>
         <td class="notes"></td>
     </tr>
     {% endif %}
