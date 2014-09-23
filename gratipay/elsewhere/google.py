@@ -28,3 +28,7 @@ class Google(PlatformOAuth2):
     x_display_name = key('displayName')
     x_email = any_key(('emails', 0), clean=lambda d: d.get('value'))
     x_avatar_url = key('image', clean=lambda d: d.get('url'))
+
+    def x_user_name(self, extracted, info, *default):
+        url = info.get('url', '')
+        return url[25:] if url.startswith('https://plus.google.com/+') else None
