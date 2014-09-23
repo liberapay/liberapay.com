@@ -54,6 +54,7 @@ Gratipay.account.init = function() {
         $('.username .warning').hide();
     }
 
+
     // Wire up aggregate giving knob.
     // ==============================
 

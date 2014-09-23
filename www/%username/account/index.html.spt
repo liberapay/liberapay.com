@@ -52,8 +52,21 @@ locked = False
                     {{ _("Hide total receiving from others.") }}
             </label>
         </p>
-
         {% if not user.ANON and (user.ADMIN or user.participant == participant) %}
+            <h2>{{ _("Available Money") }}</h2>
+            <table class="accounts" id="account-balance">
+                <tr>
+                    <td class="account-type">
+                        <img src="{{ website.asset_url }}/bank_account_icon.jpg" />
+                    </td>
+                    <td class="account-details">
+                        <div class="account-type">{{ _("Available Balance") }}</div>
+                        <span>
+                            <a class="account-username" href="/{{ participant.username }}/history/">{{ format_currency(participant.balance, "USD") }}</a>
+                        </span>
+                    </td>
+                </td>
+            </table>
             <h2>{{ _("Adding Money") }}
                 {% if user.ADMIN and participant.balanced_customer_href %}
                     <a href="https://dashboard.balancedpayments.com/#/{{ participant.balanced_customer_href }}"
