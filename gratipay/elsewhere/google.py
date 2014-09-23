@@ -11,7 +11,7 @@ class Google(PlatformOAuth2):
     # Platform attributes
     name = 'google'
     display_name = 'Google'
-    account_url = 'https://www.facebook.com/{user_name}'
+    account_url = 'https://plus.google.com/{user_id}'
 
     # Auth attributes
     auth_url = 'https://accounts.google.com/o/oauth2/auth'
@@ -22,7 +22,7 @@ class Google(PlatformOAuth2):
     # API attributes
     api_format = 'json'
     api_url = 'https://www.googleapis.com/plus/v1'
-    api_user_info_path = '/{user_id}'
+    api_user_info_path = '/people/{user_id}'
     api_user_self_info_path = '/people/me'
 
     # User info extractors
