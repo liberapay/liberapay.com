@@ -41,7 +41,7 @@ if action_user_name and account.user_name != action_user_name:
         request.redirect(then % (platform.name, action_user_name, action))
     account = claimed_account
 
-log('%s user "%s" wants to %s' % (platform.name, account.user_name, action))
+log('%s user "%s" wants to %s' % (platform.name, account.user_id, action))
 
 if action == 'opt-in':
     if platform not in website.signin_platforms or account.is_team:
