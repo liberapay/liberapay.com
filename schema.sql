@@ -94,6 +94,7 @@ CREATE TABLE tips
 , tipper                text                        NOT NULL REFERENCES participants ON UPDATE CASCADE ON DELETE RESTRICT
 , tippee                text                        NOT NULL REFERENCES participants ON UPDATE CASCADE ON DELETE RESTRICT
 , amount                numeric(35,2)               NOT NULL
+, is_funded             boolean                     NOT NULL DEFAULT false
  );
 
 CREATE INDEX tips_all ON tips USING btree (tipper, tippee, mtime DESC);
@@ -102,6 +103,19 @@ CREATE VIEW current_tips AS
     SELECT DISTINCT ON (tipper, tippee) *
       FROM tips
   ORDER BY tipper, tippee, mtime DESC;
+
+-- Allow updating is_funded via the current_tips view for convenience
+CREATE FUNCTION update_tip() RETURNS trigger AS $$
+    BEGIN
+        UPDATE tips
+           SET is_funded = NEW.is_funded
+         WHERE id = NEW.id;
+        RETURN NULL;
+    END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER update_current_tip INSTEAD OF UPDATE ON current_tips
+    FOR EACH ROW EXECUTE PROCEDURE update_tip();
 
 
 -- https://github.com/gratipay/gratipay.com/pull/2501
@@ -176,27 +190,6 @@ CREATE TABLE absorptions
 -- Here we actually want ON UPDATE RESTRICT as a sanity check:
 -- noone should be changing usernames of absorbed accounts.
  );
-
-
--- https://github.com/gratipay/gratipay.com/issues/545
--- https://github.com/gratipay/gratipay.com/issues/778
-CREATE VIEW goal_summary AS
-  SELECT tippee as id
-       , goal
-       , CASE goal WHEN 0 THEN 0 ELSE (amount / goal) * 100 END AS percentage
-       , statement
-       , sum(amount) as amount
-    FROM ( SELECT DISTINCT ON (tipper, tippee) tippee, amount
-                         FROM tips
-                         JOIN participants p ON p.username = tipper
-                         JOIN participants p2 ON p2.username = tippee
-                        WHERE p.last_bill_result = ''
-                          AND p2.claimed_time IS NOT NULL
-                     ORDER BY tipper, tippee, mtime DESC
-          ) AS tips_agg
-    JOIN participants p3 ON p3.username = tips_agg.tippee
-   WHERE goal > 0
-GROUP BY tippee, goal, percentage, statement;
 
 
 -- https://github.com/gratipay/gratipay.com/pull/2701
