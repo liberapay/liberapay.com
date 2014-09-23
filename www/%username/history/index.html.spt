@@ -44,8 +44,14 @@ else:
             <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
             <input name="amount" placeholder="amount" />
             <input name="fee" placeholder="fee" />
-            <br />
-            <input name="note" placeholder="note" style="width: 230px" />
+            <select name="status">
+                <option value="pre">pre</option>
+                <option value="pending">pending</option>
+                <option value="succeeded" selected="true">succeeded</option>
+                <option value="failed">failed</option>
+            </select>
+            <br>
+            <input name="note" placeholder="note" style="width: 420px" />
             <button type="submit">Submit</button>
         </form>
         {% endif %}
