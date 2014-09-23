@@ -209,12 +209,12 @@ def accounts_elsewhere(website, env):
         env.venmo_callback,
     )
 
-    signin_platforms = [facebook, google, twitter, github, bitbucket, openstreetmap]
+    signin_platforms = [twitter, github, facebook, google, bitbucket, openstreetmap]
     website.signin_platforms = PlatformRegistry(signin_platforms)
     AccountElsewhere.signin_platforms_names = tuple(p.name for p in signin_platforms)
 
     # For displaying "Connected Accounts"
-    website.social_profiles = [facebook, google, twitter, github, bitbucket, openstreetmap, bountysource]
+    website.social_profiles = [twitter, github, facebook, google, bitbucket, openstreetmap, bountysource]
 
     all_platforms = signin_platforms + [bountysource, venmo]
     website.platforms = AccountElsewhere.platforms = PlatformRegistry(all_platforms)
