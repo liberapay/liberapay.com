@@ -103,10 +103,15 @@ class TestRecordAnExchange(Harness):
 
     def test_can_set_status(self):
         self.make_participants()
-        for status in (None, 'pre', 'pending', 'failed', 'succeeded'):
+        for status in ('pre', 'pending', 'failed', 'succeeded'):
             self.record_an_exchange('10', '0', 'noted', status, False)
             actual = self.db.one("SELECT status FROM exchanges ORDER BY timestamp desc LIMIT 1")
             assert actual == status
+
+    def test_cant_record_new_exchanges_with_None_status(self):
+        r = self.record_an_exchange('10', '0', 'noted', None)
+        assert r.code == 400
+        assert self.db.one("SELECT count(*) FROM exchanges") == 0
 
     def test_succeeded_affects_balance(self):
         self.record_an_exchange('10', '0', 'noted', 'succeeded')
