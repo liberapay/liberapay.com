@@ -114,20 +114,29 @@ class TestRecordAnExchange(Harness):
         assert self.db.one("SELECT count(*) FROM exchanges") == 0
 
     def test_succeeded_affects_balance(self):
-        self.record_an_exchange('10', '0', 'noted', 'succeeded')
-        assert self.db.one("SELECT balance FROM participants WHERE username='bob'") == 10
-
-    def test_pending_affects_balance_for_payouts(self):
-        self.record_an_exchange('-10', '0', 'noted', 'pending')
-        assert self.db.one("SELECT balance FROM participants WHERE username='bob'") == -10
-
-    def test_pending_doesnt_affect_balance_for_payins(self):
-        self.record_an_exchange('10', '0', 'noted', 'pending')
-        assert self.db.one("SELECT balance FROM participants WHERE username='bob'") == 0
-
-    def test_other_statuses_dont_affect_balance(self):
         self.make_participants()
-        for status in (None, 'pre', 'failed'):
-            for amount in ('10', '-10'):
-                self.record_an_exchange(amount, '0', 'noted', status, False)
-                assert self.db.one("SELECT balance FROM participants WHERE username='bob'") == 0
+        balance = 0
+        for amount in ('10', '-10'):
+            self.record_an_exchange(amount, '0', 'noted', 'succeeded', False)
+            balance += int(amount)
+            assert self.db.one("SELECT balance FROM participants WHERE username='bob'") == balance
+
+    def test_failed_doesnt_affect_balance(self):
+        self.make_participants()
+        for amount in ('10', '-10'):
+            self.record_an_exchange(amount, '0', 'noted', 'failed', False)
+            assert self.db.one("SELECT balance FROM participants WHERE username='bob'") == 0
+
+    def test_other_statuses_dont_affect_balance_for_payins(self):
+        self.make_participants()
+        for status in ('pre', 'pending'):
+            self.record_an_exchange('10', '0', 'noted', status, False)
+            assert self.db.one("SELECT balance FROM participants WHERE username='bob'") == 0
+
+    def test_other_statuses_affect_balance_for_payouts(self):
+        self.make_participants()
+        balance = 0
+        for status in ('pre', 'pending'):
+            self.record_an_exchange('-10', '0', 'noted', status, False)
+            balance -= 10
+            assert self.db.one("SELECT balance FROM participants WHERE username='bob'") == balance

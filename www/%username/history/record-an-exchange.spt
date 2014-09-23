@@ -34,7 +34,7 @@ with website.db.get_cursor() as cursor:
     if amount < 0:
         # For payouts, we need to take the fee out of their Gratipay balance.
         balance_adjustment = amount - fee
-        update_balance = status in ('pending', 'succeeded')
+        update_balance = status != 'failed'
     else:
         # For payins, we don't have to worry about the fee relative to their
         # balance, because the amount is already less the fee.
