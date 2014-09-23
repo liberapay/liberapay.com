@@ -21,11 +21,11 @@ if POST:
         try:
             if tip['platform'] != 'gratipay':
                 raise BadPlatform
-            amount = participant.set_tip_to(tip['username'], parse_decimal(tip['amount']))
+            amount = participant.set_tip_to(tip['username'], parse_decimal(tip['amount']))['amount']
         except Exception, exc:
             amount = "error"
             one['error'] = exc.__class__.__name__
-        one['amount'] = str(amount[0])
+        one['amount'] = str(amount)
         out.append(one)
 
     if qs.get('also_prune', 'false').lower() in ('true', '1', 'yes'):

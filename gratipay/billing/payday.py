@@ -26,6 +26,10 @@ from gratipay.models import check_db
 from psycopg2 import IntegrityError
 
 
+with open('fake_payday.sql') as f:
+    FAKE_PAYDAY = f.read()
+
+
 def threaded_map(func, iterable, threads=5):
     pool = ThreadPool(threads)
     r = pool.map(func, iterable)
@@ -59,7 +63,7 @@ class Payday(object):
                 take_over_balances
             payout
             update_stats
-            update_receiving_amounts
+            update_cached_amounts
             end
 
     """
@@ -119,7 +123,7 @@ class Payday(object):
             self.mark_stage_done()
         if self.stage < 3:
             self.update_stats()
-            self.update_receiving_amounts()
+            self.update_cached_amounts()
             self.mark_stage_done()
 
         self.end()
@@ -632,25 +636,9 @@ class Payday(object):
         log("Updated payday stats.")
 
 
-    def update_receiving_amounts(self):
-        UPDATE = """
-            CREATE OR REPLACE TEMPORARY VIEW total_receiving AS
-                SELECT tippee, sum(amount) AS amount, count(*) AS ntippers
-                  FROM current_tips
-                  JOIN participants p ON p.username = tipper
-                 WHERE p.is_suspicious IS NOT TRUE
-                   AND p.last_bill_result = ''
-                   AND amount > 0
-              GROUP BY tippee;
-
-            UPDATE participants
-               SET receiving = (amount + taking)
-                 , npatrons = ntippers
-              FROM total_receiving
-             WHERE tippee = username;
-        """
+    def update_cached_amounts(self):
         with self.db.get_cursor() as cursor:
-            cursor.execute(UPDATE)
+            cursor.execute(FAKE_PAYDAY)
         log("Updated receiving amounts.")
 
 

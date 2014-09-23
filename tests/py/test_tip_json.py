@@ -16,7 +16,7 @@ class TestTipJson(Harness):
         now = utcnow()
         self.make_participant("test_tippee1", claimed_time=now)
         self.make_participant("test_tippee2", claimed_time=now)
-        self.make_participant("test_tipper", claimed_time=now)
+        self.make_participant("test_tipper", claimed_time=now, last_bill_result='')
 
         # Then, add a $1.50 and $3.00 tip
         response1 = self.client.POST( "/test_tippee1/tip.json"

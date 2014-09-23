@@ -37,7 +37,6 @@ from gratipay.models import add_event
 from gratipay.models._mixin_team import MixinTeam
 from gratipay.models.account_elsewhere import AccountElsewhere
 from gratipay.utils.username import safely_reserve_a_username
-from gratipay import billing
 from gratipay.utils import is_card_expiring
 
 
@@ -380,7 +379,7 @@ class Participant(Model, MixinTeam):
             self.set_tip_to(tippee, '0.00', update_self=False, cursor=cursor)
 
     def clear_tips_receiving(self, cursor):
-        """Zero out tips to a given user. This is a workaround for #1469.
+        """Zero out tips to a given user.
         """
         tippers = cursor.all("""
 
@@ -397,11 +396,20 @@ class Participant(Model, MixinTeam):
             tipper.set_tip_to(self, '0.00', update_tippee=False, cursor=cursor)
 
 
+    def clear_takes(self, cursor):
+        """Leave all teams by zeroing all takes.
+        """
+        for team, nmembers in self.get_teams():
+            t = Participant.from_username(team)
+            t.set_take_for(self, Decimal(0), self, cursor)
+
+
     def clear_personal_information(self, cursor):
         """Clear personal information such as statement and goal.
         """
         if self.IS_PLURAL:
             self.remove_all_members(cursor)
+        self.clear_takes(cursor)
         r = cursor.one("""
 
             INSERT INTO community_members (slug, participant, ctime, name, is_member) (
@@ -409,13 +417,6 @@ class Participant(Model, MixinTeam):
                   FROM community_members
                  WHERE participant=%(participant_id)s
                    AND is_member IS true
-            );
-
-            INSERT INTO takes (ctime, member, team, amount, recorder) (
-                SELECT ctime, %(username)s, team, 0.00, %(username)s
-                  FROM current_takes
-                 WHERE member=%(username)s
-                   AND amount > 0
             );
 
             UPDATE participants
@@ -567,11 +568,7 @@ class Participant(Model, MixinTeam):
                 self.update_receiving(c)
 
     def update_is_closed(self, is_closed, cursor=None):
-        ctx = None
-        if cursor is None:
-            ctx = self.db.get_cursor()
-            cursor = ctx.__enter__()
-        try:
+        with self.db.get_cursor(cursor) as cursor:
             cursor.run( "UPDATE participants SET is_closed=%(is_closed)s "
                         "WHERE username=%(username)s"
                       , dict(username=self.username, is_closed=is_closed)
@@ -581,45 +578,69 @@ class Participant(Model, MixinTeam):
                      , dict(id=self.id, action='set', values=dict(is_closed=is_closed))
                       )
             self.set_attributes(is_closed=is_closed)
-        finally:
-            if ctx is not None:
-                ctx.__exit__(None, None, None)
 
     def update_giving(self, cursor=None):
-        giving = (cursor or self.db).one("""
+        # Update is_funded on tips
+        if self.last_bill_result == '':
+            (cursor or self.db).run("""
+                UPDATE current_tips
+                   SET is_funded = true
+                 WHERE tipper = %s
+                   AND is_funded IS NOT true
+            """, (self.username,))
+        else:
+            tips = (cursor or self.db).all("""
+                SELECT t.*
+                  FROM current_tips t
+                  JOIN participants p2 ON p2.username = t.tippee
+                 WHERE t.tipper = %s
+                   AND t.amount > 0
+                   AND p2.is_suspicious IS NOT true
+              ORDER BY p2.claimed_time IS NULL, t.ctime ASC
+            """, (self.username,))
+            fake_balance = self.balance + self.receiving - self.taking
+            for tip in tips:
+                if tip.amount > fake_balance:
+                    is_funded = False
+                else:
+                    fake_balance -= tip.amount
+                    is_funded = True
+                if tip.is_funded == is_funded:
+                    continue
+                (cursor or self.db).run("""
+                    UPDATE tips
+                       SET is_funded = %s
+                     WHERE id = %s
+                """, (is_funded, tip.id))
+
+        # Update giving and pledging on participant
+        giving, pledging = (cursor or self.db).one("""
+            WITH our_tips AS (
+                     SELECT amount, tippee, p2.claimed_time
+                       FROM current_tips
+                       JOIN participants p2 ON p2.username = tippee
+                      WHERE tipper = %(username)s
+                        AND p2.is_suspicious IS NOT true
+                        AND amount > 0
+                        AND is_funded
+                 )
             UPDATE participants p
                SET giving = COALESCE((
                        SELECT sum(amount)
-                         FROM current_tips
-                         JOIN participants p2 ON p2.username = tippee
-                        WHERE tipper = p.username
-                          AND p2.claimed_time IS NOT NULL
-                          AND p2.is_suspicious IS NOT true
-                     GROUP BY tipper
+                         FROM our_tips
+                        WHERE claimed_time IS NOT NULL
                    ), 0)
-             WHERE p.username = %s
-         RETURNING giving
-        """, (self.username,))
-        self.set_attributes(giving=giving)
-
-    def update_pledging(self, cursor=None):
-        pledging = (cursor or self.db).one("""
-            UPDATE participants p
-               SET pledging = COALESCE((
+                 , pledging = COALESCE((
                        SELECT sum(amount)
-                         FROM current_tips
-                         JOIN participants p2 ON p2.username = tippee
+                         FROM our_tips
                          JOIN elsewhere ON elsewhere.participant = tippee
-                        WHERE tipper = p.username
-                          AND p2.claimed_time IS NULL
+                        WHERE claimed_time IS NULL
                           AND elsewhere.is_locked = false
-                          AND p2.is_suspicious IS NOT true
-                     GROUP BY tipper
                    ), 0)
-             WHERE p.username = %s
-         RETURNING pledging
-        """, (self.username,))
-        self.set_attributes(pledging=pledging)
+             WHERE p.username = %(username)s
+         RETURNING giving, pledging
+        """, dict(username=self.username))
+        self.set_attributes(giving=giving, pledging=pledging)
 
     def update_receiving(self, cursor=None):
         if self.IS_PLURAL:
@@ -631,8 +652,8 @@ class Participant(Model, MixinTeam):
                        JOIN participants p2 ON p2.username = tipper
                       WHERE tippee = %(username)s
                         AND p2.is_suspicious IS NOT true
-                        AND p2.last_bill_result = ''
                         AND amount > 0
+                        AND is_funded
                  )
             UPDATE participants p
                SET receiving = (COALESCE((
@@ -649,11 +670,7 @@ class Participant(Model, MixinTeam):
             self.update_taking(old_takes, new_takes, cursor=cursor)
 
     def update_is_free_rider(self, is_free_rider, cursor=None):
-        ctx = None
-        if cursor is None:
-            ctx = self.db.get_cursor()
-            cursor = ctx.__enter__()
-        try:
+        with self.db.get_cursor(cursor) as cursor:
             cursor.run( "UPDATE participants SET is_free_rider=%(is_free_rider)s "
                         "WHERE username=%(username)s"
                       , dict(username=self.username, is_free_rider=is_free_rider)
@@ -663,13 +680,10 @@ class Participant(Model, MixinTeam):
                      , dict(id=self.id, action='set', values=dict(is_free_rider=is_free_rider))
                       )
             self.set_attributes(is_free_rider=is_free_rider)
-        finally:
-            if ctx is not None:
-                ctx.__exit__(None, None, None)
 
 
     def set_tip_to(self, tippee, amount, update_self=True, update_tippee=True, cursor=None):
-        """Given a Participant or username, and amount as str, return a tuple.
+        """Given a Participant or username, and amount as str, returns a dict.
 
         We INSERT instead of UPDATE, so that we have history to explore. The
         COALESCE function returns the first of its arguments that is not NULL.
@@ -677,9 +691,10 @@ class Participant(Model, MixinTeam):
         tip from this user to that. I believe this is used to determine the
         order of transfers during payday.
 
-        The tuple returned is the amount as a Decimal and a boolean indicating
-        whether this is the first time this tipper has tipped (we want to track
-        that as part of our conversion funnel).
+        The dict returned represents the row inserted in the tips table, with
+        an additional boolean indicating whether this is the first time this
+        tipper has tipped (we want to track that as part of our conversion
+        funnel).
 
         """
         assert self.is_claimed  # sanity check
@@ -712,19 +727,16 @@ class Participant(Model, MixinTeam):
                                       ), CURRENT_TIMESTAMP)
                         , %(tipper)s, %(tippee)s, %(amount)s
                          )
-              RETURNING ( SELECT count(*) = 0 FROM tips WHERE tipper=%(tipper)s )
-                     AS first_time_tipper
+              RETURNING *
+                      , ( SELECT count(*) = 0 FROM tips WHERE tipper=%(tipper)s ) AS first_time_tipper
 
         """
         args = dict(tipper=self.username, tippee=tippee.username, amount=amount)
-        first_time_tipper = (cursor or self.db).one(NEW_TIP, args)
+        t = (cursor or self.db).one(NEW_TIP, args)
 
         if update_self:
             # Update giving/pledging amount of tipper
-            if tippee.is_claimed:
-                self.update_giving(cursor)
-            else:
-                self.update_pledging(cursor)
+            self.update_giving(cursor)
         if update_tippee:
             # Update receiving amount of tippee
             tippee.update_receiving(cursor)
@@ -732,22 +744,23 @@ class Participant(Model, MixinTeam):
             # Update whether the tipper is using Gratipay for free
             self.update_is_free_rider(None if amount == 0 else False, cursor)
 
-        return amount, first_time_tipper
+        return t._asdict()
 
 
     def get_tip_to(self, tippee):
-        """Given two user ids, return a Decimal.
+        """Given a username, returns a dict.
         """
+        default = dict(amount=Decimal('0.00'))
         return self.db.one("""\
 
-            SELECT amount
+            SELECT *
               FROM tips
              WHERE tipper=%s
                AND tippee=%s
           ORDER BY mtime DESC
              LIMIT 1
 
-        """, (self.username, tippee), default=Decimal('0.00'))
+        """, (self.username, tippee), back_as=dict, default=default)
 
 
     def get_tip_distribution(self):
@@ -781,7 +794,7 @@ class Participant(Model, MixinTeam):
                        FROM tips
                        JOIN participants p ON p.username = tipper
                       WHERE tippee=%s
-                        AND last_bill_result = ''
+                        AND is_funded
                         AND is_suspicious IS NOT true
                    ORDER BY tipper
                           , mtime DESC
@@ -991,6 +1004,10 @@ class Participant(Model, MixinTeam):
                      , claimed_time=NULL
                      , session_token=NULL
                      , session_expires=now()
+                     , giving = 0
+                     , pledging = 0
+                     , receiving = 0
+                     , taking = 0
                  WHERE username=%s
              RETURNING username
 
@@ -1066,7 +1083,7 @@ class Participant(Model, MixinTeam):
 
             -- Get all the latest tips from everyone to everyone.
 
-            SELECT ctime, tipper, tippee, amount
+            SELECT ctime, tipper, tippee, amount, is_funded
               FROM current_tips
              WHERE amount > 0;
 
@@ -1079,9 +1096,9 @@ class Participant(Model, MixinTeam):
             -- dead and the live account, then we create one new combined tip
             -- to the live account (via the GROUP BY and sum()).
 
-            INSERT INTO tips (ctime, tipper, tippee, amount)
+            INSERT INTO tips (ctime, tipper, tippee, amount, is_funded)
 
-                 SELECT min(ctime), tipper, %(live)s AS tippee, sum(amount)
+                 SELECT min(ctime), tipper, %(live)s AS tippee, sum(amount), bool_and(is_funded)
 
                    FROM __temp_unique_tips
 
@@ -1267,6 +1284,8 @@ class Participant(Model, MixinTeam):
 
             if this_is_others_last_login_account:
 
+                other.clear_takes(cursor)
+
                 # Take over tips.
                 # ===============
 
@@ -1316,9 +1335,10 @@ class Participant(Model, MixinTeam):
             self.set_attributes(balance=new_balance)
 
         self.update_avatar()
-        self.update_giving()
-        self.update_pledging()
+
+        # Note: the order matters here, receiving needs to be updated before giving
         self.update_receiving()
+        self.update_giving()
 
     def delete_elsewhere(self, platform, user_id):
         """Deletes account elsewhere unless the user would not be able
@@ -1351,6 +1371,7 @@ class Participant(Model, MixinTeam):
             return False
 
         try:
+            from gratipay import billing
             card = billing.BalancedCard(self.balanced_customer_href)
             year, month = card['expiration_year'], card['expiration_month']
             if not (year and month):
@@ -1422,7 +1443,7 @@ class Participant(Model, MixinTeam):
             if inquirer.username == self.username:
                 my_tip = 'self'
             else:
-                my_tip = inquirer.get_tip_to(self.username)
+                my_tip = inquirer.get_tip_to(self.username)['amount']
             output['my_tip'] = str(my_tip)
 
         # Key: elsewhere

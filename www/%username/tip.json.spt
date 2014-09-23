@@ -6,6 +6,7 @@ from aspen import Response
 from babel.numbers import NumberFormatError
 from gratipay.exceptions import BadAmount, UserDoesntAcceptTips
 from gratipay.models.participant import Participant
+from gratipay.utils import get_participant
 
 [-----------------------------------------------------------------------------]
 
@@ -18,41 +19,40 @@ if not user.ANON:
     # accounts.
 
     tipper = user.participant
-    tippee = Participant.from_username(path['username'])
+    tippee = get_participant(request, restrict=False)
 
 
     # Get and maybe set amount.
     # =========================
 
-    first_time_tipper = None
-    if tippee == tipper:
-        amount = None
-    elif POST and 'amount' in body:
+    if POST and 'amount' in body and tippee != tipper:
         try:
-            amount, first_time_tipper = tipper.set_tip_to( tippee
-                                                         , parse_decimal(body['amount'])
-                                                          )
+            out = tipper.set_tip_to(tippee, parse_decimal(body['amount']))
         except (InvalidOperation, ValueError, BadAmount, NumberFormatError):
             raise Response(400, "bad amount")
         except UserDoesntAcceptTips:
             raise Response(400, "user doesn't accept tips")
     else:
-        amount = tipper.get_tip_to(tippee.username)
+        out = tipper.get_tip_to(tippee.username)
 
+    amount = out['amount']
     total_giving = tipper.giving
     total_receiving = tipper.receiving
     total_receiving_tippee = tippee.receiving
 
-    out = { "amount": str(amount)
-          , "total_giving": str(total_giving)
-          , "total_giving_l": format_currency(total_giving, 'USD')
-          , "total_receiving": str(total_receiving)
-          , "total_receiving_l": format_currency(total_receiving, 'USD')
-          , "total_receiving_tippee": str(total_receiving_tippee)
-          , "total_receiving_tippee_l": format_currency(total_receiving_tippee, 'USD')
-           }
-    if first_time_tipper is not None:
-        out["first_time"] = first_time_tipper
+    out["amount"] = str(amount)
+    out["amount_l"] = format_currency(amount, 'USD')
+    out["total_giving"] = str(total_giving)
+    out["total_giving_l"] = format_currency(total_giving, 'USD')
+    out["total_receiving"] = str(total_receiving)
+    out["total_receiving_l"] = format_currency(total_receiving, 'USD')
+    out["total_receiving_tippee"] = str(total_receiving_tippee)
+    out["total_receiving_tippee_l"] = format_currency(total_receiving_tippee, 'USD')
+    if 'ctime' in out:
+        out["ctime"] = str(out['ctime'])
+        out["mtime"] = str(out['mtime'])
+    else:
+        out["ctime"] = out["mtime"] = None
 
 
 [---] application/json via json_dump

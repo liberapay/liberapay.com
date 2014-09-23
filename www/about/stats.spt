@@ -41,7 +41,7 @@ tips_stats = db.one("""
       JOIN participants p ON p.username = tipper
       JOIN participants p2 ON p2.username = tippee
      WHERE amount > 0
-       AND p.last_bill_result = ''
+       AND is_funded
        AND p2.claimed_time IS NOT NULL
        AND p.is_suspicious IS NOT true
        AND p2.is_suspicious IS NOT true
@@ -57,7 +57,7 @@ average_tippees = int(db.one("""\
                JOIN participants p ON p.username = tipper
                JOIN participants p2 on p2.username = tippee
               WHERE amount > 0
-                AND p.last_bill_result = ''
+                AND is_funded
                 AND p2.claimed_time IS NOT NULL
                 AND p.is_suspicious IS NOT true
                 AND p2.is_suspicious IS NOT true
@@ -82,7 +82,7 @@ TIP_DISTRIBUTION = """
       JOIN participants p ON p.username = tipper
       JOIN participants p2 on p2.username = tippee
      WHERE amount > 0
-       AND p.last_bill_result = ''
+       AND is_funded
        AND p2.claimed_time IS NOT NULL
        AND p.is_suspicious IS NOT true
        AND p2.is_suspicious IS NOT true

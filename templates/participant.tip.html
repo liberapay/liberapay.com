@@ -18,7 +18,7 @@
 
     {% else %}
 
-        {% set my_tip = format_decimal(user.participant.get_tip_to(participant.username)) %}
+        {% set my_tip = format_decimal(user.participant.get_tip_to(participant.username)['amount']) %}
         {% set tippee = participant.username %}
         <h2>{{ _("Your Weekly Pledge") if path.decoded.startswith('/on/') else _("Your Weekly Gift") }}</h2>
         {% include "templates/my-tip.html" %}

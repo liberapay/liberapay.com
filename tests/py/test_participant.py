@@ -89,7 +89,7 @@ class TestAbsorptions(Harness):
 
     def test_alice_gives_to_bob_now(self):
         expected = Decimal('1.00')
-        actual = self.alice.get_tip_to('bob')
+        actual = self.alice.get_tip_to('bob')['amount']
         assert actual == expected
 
     def test_deadbeef_is_archived(self):
@@ -101,12 +101,12 @@ class TestAbsorptions(Harness):
 
     def test_alice_doesnt_gives_to_deadbeef_anymore(self):
         expected = Decimal('0.00')
-        actual = self.alice.get_tip_to('deadbeef')
+        actual = self.alice.get_tip_to('deadbeef')['amount']
         assert actual == expected
 
     def test_alice_doesnt_give_to_whatever_deadbeef_was_archived_as_either(self):
         expected = Decimal('0.00')
-        actual = self.alice.get_tip_to(self.deadbeef_archived.username)
+        actual = self.alice.get_tip_to(self.deadbeef_archived.username)['amount']
         assert actual == expected
 
     def test_there_is_no_more_deadbeef(self):
@@ -165,6 +165,19 @@ class TestTakeOver(Harness):
         alice.take_over(carl_twitter, have_confirmation=True)
         ntips = self.db.one("select count(*) from tips")
         assert 2 == ntips
+        self.db.self_check()
+
+    def test_is_funded_is_correct_for_consolidated_tips_receiving(self):
+        alice = self.make_participant('alice', claimed_time='now', balance=1)
+        bob = self.make_participant('bob', elsewhere='twitter')
+        carl = self.make_participant('carl', elsewhere='github')
+        alice.set_tip_to(bob, '1.00')  # funded
+        alice.set_tip_to(carl, '5.00')  # not funded
+        bob.take_over(('github', str(carl.id)), have_confirmation=True)
+        tips = self.db.all("select * from tips where amount > 0 order by id asc")
+        assert len(tips) == 3
+        assert tips[-1].amount == 6
+        assert tips[-1].is_funded is False
         self.db.self_check()
 
     def test_take_over_fails_if_it_would_result_in_just_a_team_account(self):
@@ -235,7 +248,7 @@ class TestParticipant(Harness):
         self.alice.set_tip_to(self.carl, '1.00')
         self.bob.take_over(('twitter', str(self.carl.id)), have_confirmation=True)
         expected = Decimal('2.00')
-        actual = self.alice.get_tip_to('bob')
+        actual = self.alice.get_tip_to('bob')['amount']
         assert actual == expected
 
     def test_bob_ends_up_tipping_alice_two_dollars(self):
@@ -243,7 +256,7 @@ class TestParticipant(Harness):
         self.carl.set_tip_to(self.alice, '1.00')
         self.bob.take_over(('twitter', str(self.carl.id)), have_confirmation=True)
         expected = Decimal('2.00')
-        actual = self.bob.get_tip_to('alice')
+        actual = self.bob.get_tip_to('alice')['amount']
         assert actual == expected
 
     def test_ctime_comes_from_the_older_tip(self):
@@ -374,13 +387,13 @@ class Tests(Harness):
         user2 = self.make_participant('user2')
         self.participant.set_as_claimed()
         self.participant.set_tip_to(user2, expected)
-        actual = self.participant.get_tip_to('user2')
+        actual = self.participant.get_tip_to('user2')['amount']
         assert actual == expected
 
     def test_getting_tips_not_made(self):
         expected = Decimal('0.00')
         self.make_participant('user2')
-        actual = self.participant.get_tip_to('user2')
+        actual = self.participant.get_tip_to('user2')['amount']
         assert actual == expected
 
 
@@ -423,21 +436,25 @@ class Tests(Harness):
         bob = self.make_participant('bob')
         alice.set_tip_to(bob, '1.00')
 
-        actual = alice.get_tip_to('bob')
+        actual = alice.get_tip_to('bob')['amount']
         assert actual == Decimal('1.00')
 
-    def test_stt_returns_a_Decimal_and_a_boolean(self):
+    def test_stt_returns_a_dict(self):
         alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
         bob = self.make_participant('bob')
         actual = alice.set_tip_to(bob, '1.00')
-        assert actual == (Decimal('1.00'), True)
+        assert isinstance(actual, dict)
+        assert isinstance(actual['amount'], Decimal)
+        assert actual['amount'] == 1
+        assert actual['first_time_tipper'] is True
 
     def test_stt_returns_False_for_second_time_tipper(self):
         alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
         bob = self.make_participant('bob')
         alice.set_tip_to(bob, '1.00')
         actual = alice.set_tip_to(bob, '2.00')
-        assert actual == (Decimal('2.00'), False)
+        assert actual['amount'] == 2
+        assert actual['first_time_tipper'] is False
 
     def test_stt_doesnt_allow_self_tipping(self):
         alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
@@ -452,7 +469,7 @@ class Tests(Harness):
         alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
         bob = self.make_participant('bob', number='plural')
         actual = alice.set_tip_to(bob, '1000.00')
-        assert actual == (Decimal('1000.00'), True)
+        assert actual['amount'] == 1000
 
     def test_stt_still_caps_tips_to_plural_receivers(self):
         alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
@@ -488,13 +505,24 @@ class Tests(Harness):
         alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
         bob = self.make_participant('bob', claimed_time='now', last_bill_result=None)
         carl = self.make_participant('carl', claimed_time='now', last_bill_result="Fail!")
-        dana = self.make_participant('dana')
+        dana = self.make_participant('dana', claimed_time='now')
         alice.set_tip_to(dana, '3.00')
-        bob.set_tip_to(dana, '5.00')
+        alice.set_tip_to(bob, '6.00')
+        bob.set_tip_to(alice, '5.00')
+        bob.set_tip_to(dana, '2.00')
         carl.set_tip_to(dana, '2.08')
 
+        assert alice.giving == Decimal('9.00')
+        assert alice.receiving == Decimal('5.00')
+        assert bob.giving == Decimal('5.00')
+        assert bob.receiving == Decimal('6.00')
+        assert carl.giving == Decimal('0.00')
+        assert carl.receiving == Decimal('0.00')
         assert dana.receiving == Decimal('3.00')
         assert dana.npatrons == 1
+
+        funded_tips = self.db.all("SELECT amount FROM tips WHERE is_funded ORDER BY id")
+        assert funded_tips == [3, 6, 5]
 
     def test_only_latest_tip_counts(self):
         alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
@@ -547,7 +575,7 @@ class Tests(Harness):
 
     def test_receiving_includes_taking_when_updated_from_set_tip_to(self):
         alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
-        bob = self.make_participant('bob', taking=Decimal('42.00'))
+        bob = self.make_participant('bob', claimed_time='now', taking=Decimal('42.00'))
         alice.set_tip_to(bob, '3.00')
         assert Participant.from_username('bob').receiving == bob.receiving == Decimal('45.00')
 

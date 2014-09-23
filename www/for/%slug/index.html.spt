@@ -76,7 +76,6 @@ givers = query_cache.all("""
      WHERE is_suspicious IS NOT true
        AND giving > 0
        AND cc.is_member
-       AND last_bill_result = ''
   ORDER BY giving DESC
   LIMIT %s
   OFFSET %s
