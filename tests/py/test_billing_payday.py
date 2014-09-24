@@ -100,8 +100,10 @@ class TestPayday(BalancedHarness):
         bob = self.make_participant('bob', claimed_time='now', last_bill_result=None)
         carl = self.make_participant('carl', claimed_time='now', last_bill_result="Fail!")
         dana = self.make_participant('dana', claimed_time='now')
+        emma = self.make_participant('emma')
         alice.set_tip_to(dana, '3.00')
         alice.set_tip_to(bob, '6.00')
+        alice.set_tip_to(emma, '1.00')
         alice.set_tip_to(team, '4.00')
         bob.set_tip_to(alice, '5.00')
         bob.set_tip_to(dana, '2.00')
@@ -114,6 +116,7 @@ class TestPayday(BalancedHarness):
             bob = Participant.from_username('bob')
             carl = Participant.from_username('carl')
             dana = Participant.from_username('dana')
+            emma = Participant.from_username('emma')
             assert alice.giving == D('13.00')
             assert alice.receiving == D('5.00')
             assert bob.giving == D('5.00')
@@ -123,8 +126,10 @@ class TestPayday(BalancedHarness):
             assert carl.receiving == D('0.00')
             assert dana.receiving == D('3.00')
             assert dana.npatrons == 1
+            assert emma.receiving == D('1.00')
+            assert emma.npatrons == 1
             funded_tips = self.db.all("SELECT amount FROM tips WHERE is_funded ORDER BY id")
-            assert funded_tips == [3, 6, 4, 5]
+            assert funded_tips == [3, 6, 1, 4, 5]
 
         # Pre-test check
         check()
