@@ -67,3 +67,15 @@ class TestTipJson(Harness):
                                     )
         assert "user doesn't accept tips" in response.body
         assert response.code == 400
+
+    def test_tip_to_unclaimed(self):
+        now = utcnow()
+        alice = self.make_elsewhere('twitter', 1, 'alice')
+        self.make_participant("bob", claimed_time=now)
+        response = self.client.POST( "/%s/tip.json" % alice.participant.username
+                                   , {'amount': "10.00"}
+                                   , auth_as='bob'
+                                    )
+        data = json.loads(response.body)
+        assert response.code == 200
+        assert data['amount'] == "10.00"

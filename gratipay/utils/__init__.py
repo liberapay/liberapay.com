@@ -327,7 +327,7 @@ def plural(i, singular="", plural="s"):
     return singular if i == 1 else plural
 
 
-def get_participant(request, restrict=True):
+def get_participant(request, restrict=True, resolve_unclaimed=True):
     """Given a Request, raise Response or return Participant.
 
     If restrict is True then we'll restrict access to owners and admins.
@@ -355,7 +355,7 @@ def get_participant(request, restrict=True):
     if participant.is_closed:
         raise Response(410)
 
-    if participant.claimed_time is None:
+    if participant.claimed_time is None and resolve_unclaimed:
 
         # This is a stub participant record for someone on another platform who
         # hasn't actually registered with Gratipay yet. Let's bounce the viewer
