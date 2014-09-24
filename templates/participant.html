@@ -9,15 +9,17 @@
 {% set g = participant.giving %}
 {% set anon_receiving = participant.anonymous_receiving %}
 {% set r = participant.receiving %}
+{% set giving_str = '' if anon_giving else format_currency(g, "USD") %}
+{% set receiving_str = '' if anon_receiving else format_currency(r, "USD") %}
 
 {% set params = {
-    "giving": None if anon_giving else format_currency(g, "USD"),
-    "receiving": None if anon_receiving else format_currency(r, "USD"),
+    "giving": "<span class='" + prefix + "total-giving'>" + giving_str + "</span>",
+    "receiving": "<span class='" + prefix + "total-receiving'>" + receiving_str + "</span>",
     "username": participant.username,
     "topstart": "<h2 class='pad-sign'>",
     "topend": "</h2>",
-    "midstart": "<div class='number'><span class='" + prefix + "total-giving'>",
-    "midend": "</span></div>",
+    "midstart": "<div class='number'>",
+    "midend": "</div>",
     "bottomstart": "<div class='unit pad-sign'>",
     "bottomend": "</div>"
 } %}
@@ -116,9 +118,9 @@ first time three days before he committed suicide:
 
 
             <!-- https://dev.twitter.com/docs/tweet-button -->
-            <a href="https://twitter.com/share" 
-               class="twitter-share-button" data-lang="en" 
-               data-text="I just tipped a hard-working genius with Gratipay. You can too:" 
+            <a href="https://twitter.com/share"
+               class="twitter-share-button" data-lang="en"
+               data-text="I just tipped a hard-working genius with Gratipay. You can too:"
                data-url="https://gratipay.com/">Tweet</a>
             <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 
