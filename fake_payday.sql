@@ -5,25 +5,25 @@ CREATE TEMPORARY TABLE temp_participants ON COMMIT DROP AS
          , claimed_time
          , balance AS fake_balance
          , 0::numeric(35,2) AS giving
+         , 0::numeric(35,2) AS pledging
          , 0::numeric(35,2) AS taking
          , 0::numeric(35,2) AS receiving
          , 0 as npatrons
          , goal
          , COALESCE(last_bill_result = '', false) AS credit_card_ok
       FROM participants
-     WHERE is_suspicious IS NOT true
-       AND claimed_time IS NOT NULL;
+     WHERE is_suspicious IS NOT true;
 
 CREATE UNIQUE INDEX ON temp_participants (username);
 
 CREATE TEMPORARY TABLE temp_tips ON COMMIT DROP AS
-    SELECT t.id, tipper, tippee, amount
+    SELECT t.id, tipper, tippee, amount, (p2.claimed_time IS NOT NULL) AS claimed
       FROM current_tips t
       JOIN temp_participants p ON p.username = t.tipper
       JOIN temp_participants p2 ON p2.username = t.tippee
      WHERE t.amount > 0
        AND (p2.goal IS NULL or p2.goal >= 0)
-  ORDER BY p.claimed_time ASC, t.ctime ASC;
+  ORDER BY p2.claimed_time IS NULL, p.claimed_time ASC, t.ctime ASC;
 
 CREATE INDEX ON temp_tips (tipper);
 CREATE INDEX ON temp_tips (tippee);
@@ -47,19 +47,26 @@ CREATE OR REPLACE FUNCTION fake_tip() RETURNS trigger AS $$
               FROM temp_participants p
              WHERE username = NEW.tipper
         );
-        IF (NEW.amount <= tipper.fake_balance OR tipper.credit_card_ok) THEN
+        IF (NEW.amount > tipper.fake_balance AND NOT tipper.credit_card_ok) THEN
+            RETURN NULL;
+        END IF;
+        IF (NEW.claimed) THEN
             UPDATE temp_participants
                SET fake_balance = (fake_balance - NEW.amount)
                  , giving = (giving + NEW.amount)
              WHERE username = NEW.tipper;
+        ELSE
             UPDATE temp_participants
-               SET fake_balance = (fake_balance + NEW.amount)
-                 , receiving = (receiving + NEW.amount)
-                 , npatrons = (npatrons + 1)
-             WHERE username = NEW.tippee;
-            RETURN NEW;
+               SET fake_balance = (fake_balance - NEW.amount)
+                 , pledging = (pledging + NEW.amount)
+             WHERE username = NEW.tipper;
         END IF;
-        RETURN NULL;
+        UPDATE temp_participants
+           SET fake_balance = (fake_balance + NEW.amount)
+             , receiving = (receiving + NEW.amount)
+             , npatrons = (npatrons + 1)
+         WHERE username = NEW.tippee;
+        RETURN NEW;
     END;
 $$ LANGUAGE plpgsql;
 
