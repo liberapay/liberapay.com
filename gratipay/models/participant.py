@@ -495,7 +495,7 @@ class Participant(Model, MixinTeam):
 
         """
         # TODO: reconsider allowing unicode usernames
-        suggested = suggested.strip()
+        suggested = suggested and suggested.strip()
 
         if not suggested:
             raise UsernameIsEmpty(suggested)

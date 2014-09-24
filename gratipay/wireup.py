@@ -15,6 +15,7 @@ from gratipay.elsewhere.bitbucket import Bitbucket
 from gratipay.elsewhere.bountysource import Bountysource
 from gratipay.elsewhere.github import GitHub
 from gratipay.elsewhere.facebook import Facebook
+from gratipay.elsewhere.google import Google
 from gratipay.elsewhere.openstreetmap import OpenStreetMap
 from gratipay.elsewhere.twitter import Twitter
 from gratipay.elsewhere.venmo import Venmo
@@ -173,6 +174,12 @@ def accounts_elsewhere(website, env):
         env.github_client_secret,
         env.github_callback,
     )
+    google = Google(
+        website.asset_url,
+        env.google_client_id,
+        env.google_client_secret,
+        env.google_callback,
+    )
     bitbucket = Bitbucket(
         website.asset_url,
         env.bitbucket_consumer_key,
@@ -202,12 +209,12 @@ def accounts_elsewhere(website, env):
         env.venmo_callback,
     )
 
-    signin_platforms = [facebook, twitter, github, bitbucket, openstreetmap]
+    signin_platforms = [twitter, github, facebook, google, bitbucket, openstreetmap]
     website.signin_platforms = PlatformRegistry(signin_platforms)
     AccountElsewhere.signin_platforms_names = tuple(p.name for p in signin_platforms)
 
     # For displaying "Connected Accounts"
-    website.social_profiles = [facebook, twitter, github, bitbucket, openstreetmap, bountysource]
+    website.social_profiles = [twitter, github, facebook, google, bitbucket, openstreetmap, bountysource]
 
     all_platforms = signin_platforms + [bountysource, venmo]
     website.platforms = AccountElsewhere.platforms = PlatformRegistry(all_platforms)
@@ -247,6 +254,9 @@ def env():
         FACEBOOK_APP_ID                 = unicode,
         FACEBOOK_APP_SECRET             = unicode,
         FACEBOOK_CALLBACK               = unicode,
+        GOOGLE_CLIENT_ID                = unicode,
+        GOOGLE_CLIENT_SECRET            = unicode,
+        GOOGLE_CALLBACK                 = unicode,
         BOUNTYSOURCE_API_SECRET         = unicode,
         BOUNTYSOURCE_CALLBACK           = unicode,
         BOUNTYSOURCE_API_HOST           = unicode,

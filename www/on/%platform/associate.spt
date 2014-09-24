@@ -41,12 +41,13 @@ if action_user_name and account.user_name != action_user_name:
         request.redirect(then % (platform.name, action_user_name, action))
     account = claimed_account
 
-log('%s user "%s" wants to %s' % (platform.name, account.user_name, action))
+log('%s user "%s" wants to %s' % (platform.name, account.user_id, action))
 
 if action == 'opt-in':
     if platform not in website.signin_platforms or account.is_team:
         raise Response(400)
-    user, newly_claimed = account.opt_in(account.user_name)
+    suggested_username = account.user_name or (account.email or '').split('@')[0] or account.display_name
+    user, newly_claimed = account.opt_in(suggested_username)
     user.sign_in(response.headers.cookie)
 
 elif action == 'connect':

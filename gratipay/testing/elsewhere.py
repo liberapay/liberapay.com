@@ -294,3 +294,30 @@ facebook = lambda: {
    "name": "Chad Whitacre",
    "username": "whit537"
 }
+
+google = lambda: {
+    "kind": "plus#person",
+    "displayName": "Paul Kuruvilla",
+    "name": {
+        "givenName": "Paul",
+        "familyName": "Kuruvilla"
+    },
+    "language": "en",
+    "isPlusUser": True,
+    "url": "https://plus.google.com/+PaulKuruvilla",
+    "gender": "male",
+    "image": {
+        "url": "https://lh6.googleusercontent.com/-IVBSagxBYtI/AAAAAAAAAAI/AAAAAAAAAPM/M6QeFhQ3DWs/photo.jpg?sz=50",
+        "isDefault": False
+    },
+    "birthday": "1993-07-25",
+    "id": "103133617858201182649",
+    "etag": "\"L2Xbn8bDuSErT6QA3PEQiwYKQxM/0daBZaquM1pvzmFAQ_Z-Mp5CUok\"",
+    "verified": False,
+    "circledByCount": 255,
+    "emails": [{
+        "type": "account",
+        "value": "rohitpaulk@live.com"
+    }],
+    "objectType": "person"
+}
