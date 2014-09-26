@@ -91,6 +91,6 @@ def load_prod_envvars():
 
     for envvar in envvars:
         if envvar:
-            key, val = envvar.split("=")
+            key, val = envvar.split("=", 1)
             os.environ[key] = val
             print("Loaded " + key + ".")
