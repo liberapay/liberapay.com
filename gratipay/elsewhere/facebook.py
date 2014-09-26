@@ -9,7 +9,7 @@ class Facebook(PlatformOAuth2):
     # Platform attributes
     name = 'facebook'
     display_name = 'Facebook'
-    account_url = 'https://www.facebook.com/{user_name}'
+    account_url = 'https://www.facebook.com/profile.php?id={user_id}'
 
     # Auth attributes
     auth_url = 'https://www.facebook.com/dialog/oauth'
