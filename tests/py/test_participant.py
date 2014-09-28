@@ -600,6 +600,12 @@ class Tests(Harness):
         alice.set_tip_to(bob, '3.00')
         assert alice.pledging == Decimal('3.00')
 
+    def test_pledging_doesnt_count_locked_accounts(self):
+        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
+        bob = self.make_elsewhere('github', 58946, 'bob', is_locked=True).participant
+        alice.set_tip_to(bob, '3.00')
+        assert alice.pledging == Decimal('0.00')
+
     def test_pledging_isnt_giving(self):
         alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
         bob = self.make_elsewhere('github', 58946, 'bob').participant

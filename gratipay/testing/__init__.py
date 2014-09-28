@@ -109,13 +109,16 @@ class Harness(unittest.TestCase):
         self.db.run("ALTER SEQUENCE participants_id_seq RESTART WITH 1")
 
 
-    def make_elsewhere(self, platform, user_id, user_name, **kw):
+    def make_elsewhere(self, platform, user_id, user_name, is_locked=False, **kw):
         info = UserInfo( platform=platform
                        , user_id=unicode(user_id)
                        , user_name=user_name
                        , **kw
                        )
-        return AccountElsewhere.upsert(info)
+        account = AccountElsewhere.upsert(info)
+        if is_locked:
+            account.set_is_locked(True)
+        return account
 
 
     def show_table(self, table):
