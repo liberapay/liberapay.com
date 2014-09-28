@@ -102,10 +102,12 @@ class TestPayday(BalancedHarness):
         carl = self.make_participant('carl', claimed_time='now', last_bill_result="Fail!")
         dana = self.make_participant('dana', claimed_time='now')
         emma = self.make_elsewhere('github', 58946, 'emma').participant
+        roy = self.make_elsewhere('github', 58947, 'roy', is_locked=True).participant
         alice.set_tip_to(dana, '3.00')
         alice.set_tip_to(bob, '6.00')
         alice.set_tip_to(emma, '1.00')
         alice.set_tip_to(team, '4.00')
+        alice.set_tip_to(roy, '10.00')
         bob.set_tip_to(alice, '5.00')
         bob.set_tip_to(dana, '2.00')
         carl.set_tip_to(dana, '2.08')
@@ -131,7 +133,7 @@ class TestPayday(BalancedHarness):
             assert emma.receiving == D('1.00')
             assert emma.npatrons == 1
             funded_tips = self.db.all("SELECT amount FROM tips WHERE is_funded ORDER BY id")
-            assert funded_tips == [3, 6, 1, 4, 5]
+            assert funded_tips == [3, 6, 1, 4, 10, 5]
 
         # Pre-test check
         check()
