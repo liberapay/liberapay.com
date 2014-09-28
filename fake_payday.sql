@@ -41,11 +41,18 @@ CREATE TEMPORARY TABLE temp_takes
 CREATE OR REPLACE FUNCTION fake_tip() RETURNS trigger AS $$
     DECLARE
         tipper temp_participants;
+        tippee_elsewhere elsewhere;
     BEGIN
         tipper := (
             SELECT p.*::temp_participants
               FROM temp_participants p
              WHERE username = NEW.tipper
+        );
+        tippee_elsewhere := (
+            SELECT e.*::elsewhere
+              FROM elsewhere e
+             WHERE participant = NEW.tippee
+          LIMIT 1
         );
         IF (NEW.amount > tipper.fake_balance AND NOT tipper.credit_card_ok) THEN
             RETURN NULL;
@@ -55,7 +62,7 @@ CREATE OR REPLACE FUNCTION fake_tip() RETURNS trigger AS $$
                SET fake_balance = (fake_balance - NEW.amount)
                  , giving = (giving + NEW.amount)
              WHERE username = NEW.tipper;
-        ELSE
+        ELSIF (NOT tippee_elsewhere.is_locked) THEN
             UPDATE temp_participants
                SET fake_balance = (fake_balance - NEW.amount)
                  , pledging = (pledging + NEW.amount)
