@@ -141,12 +141,14 @@ UPDATE tips t
 
 UPDATE participants p
    SET giving = p2.giving
+     , pledging = p2.pledging
      , taking = p2.taking
      , receiving = p2.receiving
      , npatrons = p2.npatrons
   FROM temp_participants p2
  WHERE p.username = p2.username
    AND ( p.giving <> p2.giving OR
+         p.pledging <> p2.pledging OR
          p.taking <> p2.taking OR
          p.receiving <> p2.receiving OR
          p.npatrons <> p2.npatrons
