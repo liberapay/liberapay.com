@@ -19,16 +19,15 @@ def mail(env):
     mandrill_client = mandrill.Mandrill(env.mandrill_key)
     return mandrill_client
 
-def send_email(to_address, to_name, subject, body):
+def send_email(to_address, to_name, subject, html, text):
     mail_client = mail(env())
     message = {
-        'from_email': 'notifications@gratipay.com',
+        'from_email': 'support@gratipay.com',
         'from_name': 'Gratipay',
-        'to': [{'email': to_address,
-             'name': to_name
-            }],
+        'to': [{'email': to_address, 'name': to_name}],
         'subject': subject,
-        'html': body
+        'html': html,
+        'text': text
     }
     try:
         result = mail_client.messages.send(message=message)
@@ -40,11 +39,14 @@ def send_email(to_address, to_name, subject, body):
 def send_verification_email(participant):
     subject = "Welcome to Gratipay!"
     link = participant.get_verification_link()
-    # TODO - Improve body text
-    body = """
-        Welcome to Gratipay!<br><br>
+    html = """
+Welcome to Gratipay!
+<br><br>
+<a href="%s">Verify your email address</a>.
+""" % link
+    text = """
+Welcome to Gratipay! Verify your email address:
 
-        <a href="%s">Click on this link</a> to verify your email.
-
-    """ % link
-    return send_email(participant.email.address, participant.username, subject, body)
+%s
+""" % link
+    return send_email(participant.email.address, participant.username, subject, html, text)
