@@ -26,10 +26,10 @@ else:
 {% block page %}
 
 <table id="history" class="centered">
-    <tr><td colspan="7">
+    <tr><td colspan="8">
         <h2>{{ JOINED }}</h2>
     </td></tr>
-    <tr><td colspan="7">
+    <tr><td colspan="8">
         <h2>{{ BALANCE }}</h2>
         {% if user.ADMIN %}
         <h2>Record an Exchange.</h2>
@@ -59,7 +59,7 @@ else:
     {% for event in events %}
     {% if event['kind'] == 'day-open' %}
     <tr>
-        <th colspan="7"><h2>
+        <th colspan="8"><h2>
             {{ event['date'].strftime("%B %d, %Y").replace(' 0', ' ') }}
             {% if event['payday_number'] %}
                 &mdash; Weekly Payday #{{ event['payday_number'] }}
