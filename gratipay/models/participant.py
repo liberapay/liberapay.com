@@ -48,6 +48,8 @@ ASCII_ALLOWED_IN_USERNAME = set("0123456789"
                                 ".,-_:@ ")
 # We use | in Sentry logging, so don't make that allowable. :-)
 
+EMAIL_HASH_TIMEOUT = timedelta(hours=24)
+
 NANSWERS_THRESHOLD = 0  # configured in wireup.py
 
 NOTIFIED_ABOUT_EXPIRATION = b'notifiedAboutExpiration'
@@ -585,7 +587,7 @@ class Participant(Model, MixinTeam):
             return 0 # Verified
         original_hash = self.email.hash if hasattr(self.email, 'hash') else ''
         email_ctime = self.email.ctime if hasattr(self.email, 'ctime') else ''
-        if (original_hash == hash_string) and ((utcnow() - email_ctime) < timedelta(hours=24)):
+        if (original_hash == hash_string) and ((utcnow() - email_ctime) < EMAIL_HASH_TIMEOUT):
             self.update_email(self.email.address,True)
             return 0 # Verified
         elif (original_hash == hash_string):
