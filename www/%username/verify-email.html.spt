@@ -34,7 +34,7 @@ result = participant.verify_email(hash_string)
     {% elif result == 1  %}
         <h1>{{ _("Your verification email has expired.") }}</h1>
     {% elif result == 2 %}
-    	<h1>{{ _("Failed to verify your email address") }}</h1>
+        <h1>{{ _("Failed to verify your email address") }}</h1>
     {% endif %}
     <a href="/">{{ _("Go to homepage") }}</a>
     </div>
