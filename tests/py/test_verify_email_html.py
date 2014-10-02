@@ -1,10 +1,13 @@
+import mock
+
 from gratipay.models.participant import Participant
 from gratipay.testing import Harness
 
 
 class TestForVerifyEmail(Harness):
 
-    def change_email_address(self, address, username, should_fail=False):
+    @mock.patch.object(Participant, 'send_email')
+    def change_email_address(self, address, username, send_email, should_fail=False):
         url = "/%s/email.json" % username
         if should_fail:
             response = self.client.PxST(url

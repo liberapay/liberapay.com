@@ -1,10 +1,12 @@
 from __future__ import print_function, unicode_literals
 
 import datetime
-import random
 from decimal import Decimal
+import random
 
+import mock
 import pytest
+
 from aspen.utils import utcnow
 from gratipay import NotSane
 from gratipay.exceptions import (
@@ -221,20 +223,23 @@ class TestParticipant(Harness):
         actual = Participant.from_username('john').IS_PLURAL
         assert actual == expected
 
-    def test_can_change_email(self):
+    @mock.patch.object(Participant, 'send_email')
+    def test_can_change_email(self, send_email):
         self.alice.change_email('alice@gratipay.com')
         expected = 'alice@gratipay.com'
         actual = self.alice.email.address
         assert actual == expected
 
-    def test_can_verify_email(self):
+    @mock.patch.object(Participant, 'send_email')
+    def test_can_verify_email(self, send_email):
         self.alice.update_email('alice@gratipay.com')
         hash_string = Participant.from_username('alice').email.hash
         self.alice.verify_email(hash_string)
         actual = Participant.from_username('alice').email.confirmed
         assert actual == True
 
-    def test_cannot_verify_email_with_wrong_hash(self):
+    @mock.patch.object(Participant, 'send_email')
+    def test_cannot_verify_email_with_wrong_hash(self, send_email):
         self.alice.update_email('alice@gratipay.com')
         hash_string = "some wrong hash"
         self.alice.verify_email(hash_string)
