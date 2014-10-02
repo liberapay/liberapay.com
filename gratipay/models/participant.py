@@ -551,8 +551,8 @@ class Participant(Model, MixinTeam):
         self.set_attributes(avatar_url=avatar_url)
 
     def update_email(self, email, confirmed=False):
-        hash_string = self.email.hash if hasattr(self.email,'hash') else ''
-        ctime = self.email.ctime if hasattr(self.email,'ctime') else utcnow()
+        hash_string = getattr(self.email, 'hash', '')
+        ctime = getattr(self.email, 'ctime', utcnow())
         if not confirmed:
             hash_string = str(uuid.uuid4())
             ctime = utcnow()
@@ -567,8 +567,8 @@ class Participant(Model, MixinTeam):
         return r
 
     def change_email(self, email):
-        current_email = self.email.address if hasattr(self.email,'address') else ''
-        was_confirmed = self.email.confirmed if hasattr(self.email,'confirmed') else False
+        current_email = getattr(self.email, 'address', '')
+        was_confirmed = getattr(self.email, 'confirmed', False)
         result = {
             'address': email,
             'confirmed': False
@@ -582,11 +582,10 @@ class Participant(Model, MixinTeam):
         return result
 
     def verify_email(self, hash_string):
-        confirmed = self.email.confirmed if hasattr(self.email, 'confirmed') else ''
-        if confirmed:
+        if getattr(self.email, 'confirmed', False):
             return 0 # Verified
-        original_hash = self.email.hash if hasattr(self.email, 'hash') else ''
-        email_ctime = self.email.ctime if hasattr(self.email, 'ctime') else ''
+        original_hash = getattr(self.email, 'hash', '')
+        email_ctime = getattr(self.email, 'ctime', '')
         if (original_hash == hash_string) and ((utcnow() - email_ctime) < EMAIL_HASH_TIMEOUT):
             self.update_email(self.email.address,True)
             return 0 # Verified
