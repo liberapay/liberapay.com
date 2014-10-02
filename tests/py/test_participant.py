@@ -246,7 +246,19 @@ class TestParticipant(Harness):
         actual = Participant.from_username('alice').email.confirmed
         assert actual == False
 
-    # TODO - Add a test for expired hashes. (We don't have control over the ctime of emails)
+    @mock.patch.object(Participant, 'send_email')
+    def test_cannot_verify_email_with_expired_hash(self, send_email):
+        self.alice.update_email('alice@gratipay.com')
+        email = self.db.one("""
+            UPDATE participants
+               SET email.ctime = (now() - INTERVAL '25 hours')
+             WHERE username = 'alice'
+         RETURNING email
+        """)
+        self.alice.set_attributes(email=email)
+        self.alice.verify_email(self.alice.email.hash)
+        actual = Participant.from_username('alice').email.confirmed
+        assert actual == False
 
     def test_cant_take_over_claimed_participant_without_confirmation(self):
         with self.assertRaises(NeedConfirmation):
