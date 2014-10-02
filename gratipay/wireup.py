@@ -54,8 +54,8 @@ def db(env):
     return db
 
 def mail(env):
-    mandrill_client = mandrill.Mandrill(env.mandrill_key)
-    return mandrill_client
+    mailer = Participant.mailer = mandrill.Mandrill(env.mandrill_key)
+    return mailer
 
 def billing(env):
     balanced.configure(env.balanced_api_secret)
