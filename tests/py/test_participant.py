@@ -234,7 +234,8 @@ class TestParticipant(Harness):
     def test_can_verify_email(self, send_email):
         self.alice.update_email('alice@gratipay.com')
         hash_string = Participant.from_username('alice').email.hash
-        self.alice.verify_email(hash_string)
+        r = self.alice.verify_email(hash_string)
+        assert r == 0
         actual = Participant.from_username('alice').email.confirmed
         assert actual == True
 
@@ -242,7 +243,8 @@ class TestParticipant(Harness):
     def test_cannot_verify_email_with_wrong_hash(self, send_email):
         self.alice.update_email('alice@gratipay.com')
         hash_string = "some wrong hash"
-        self.alice.verify_email(hash_string)
+        r = self.alice.verify_email(hash_string)
+        assert r == 2
         actual = Participant.from_username('alice').email.confirmed
         assert actual == False
 
@@ -256,7 +258,8 @@ class TestParticipant(Harness):
          RETURNING email
         """)
         self.alice.set_attributes(email=email)
-        self.alice.verify_email(self.alice.email.hash)
+        r = self.alice.verify_email(self.alice.email.hash)
+        assert r == 1
         actual = Participant.from_username('alice').email.confirmed
         assert actual == False
 
