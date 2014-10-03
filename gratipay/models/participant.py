@@ -557,26 +557,26 @@ class Participant(Model, MixinTeam):
         if email == current_email and was_confirmed:
             return self.email
         if not confirmed:
-            hash_string = str(uuid.uuid4())
+            nonce = str(uuid.uuid4())
             ctime = utcnow()
         else:
-            hash_string = ctime = None
+            nonce = ctime = None
         with self.db.get_cursor() as c:
             add_event(c, 'participant', dict(id=self.id, action='set', values=dict(current_email=email)))
             r = c.one("UPDATE participants SET email = ROW(%s, %s, %s, %s) WHERE username=%s RETURNING email"
-                     , (email, confirmed, hash_string, ctime, self.username)
+                     , (email, confirmed, nonce, ctime, self.username)
                       )
             self.set_attributes(email=r)
         if not confirmed:
             self.send_email(VERIFICATION_EMAIL, link=self.get_verification_link())
         return r
 
-    def verify_email(self, hash_string):
+    def verify_email(self, nonce):
         if getattr(self.email, 'confirmed', False):
             return 0 # Verified
-        original_hash = getattr(self.email, 'hash', '')
+        expected_nonce = getattr(self.email, 'nonce', '')
         email_ctime = getattr(self.email, 'ctime', '')
-        if constant_time_compare(original_hash, hash_string):
+        if constant_time_compare(expected_nonce, nonce):
             if (utcnow() - email_ctime) < EMAIL_HASH_TIMEOUT:
                 self.update_email(self.email.address, True)
                 return 0 # Verified
@@ -588,9 +588,9 @@ class Participant(Model, MixinTeam):
     def get_verification_link(self):
         scheme = gratipay.canonical_scheme
         host = gratipay.canonical_host
-        hash = self.email.hash
+        nonce = self.email.nonce
         username = self.username_lower
-        link = "{scheme}://{host}/{username}/verify-email.html?hash={hash}"
+        link = "{scheme}://{host}/{username}/verify-email.html?nonce={nonce}"
         return link.format(**locals())
 
     def send_email(self, message, **params):

@@ -283,7 +283,7 @@ class TestClosing(Harness):
                                      , anonymous_receiving=True
                                      , number='plural'
                                      , avatar_url='img-url'
-                                     , email=('alice@example.com', True, 'samplehash', utcnow())
+                                     , email=('alice@example.com', True, 'samplenonce', utcnow())
                                      , claimed_time='now'
                                      , session_token='deadbeef'
                                      , session_expires='2000-01-01'

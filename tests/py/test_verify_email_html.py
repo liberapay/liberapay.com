@@ -21,8 +21,8 @@ class TestForVerifyEmail(Harness):
             )
         return response
 
-    def verify_email(self, username, hash_string, should_fail=False):
-        url = '/%s/verify-email.html?hash=%s' % (username , hash_string)
+    def verify_email(self, username, nonce, should_fail=False):
+        url = '/%s/verify-email.html?nonce=%s' % (username , nonce)
         if should_fail:
             response = self.client.GxT(url)
         else:
@@ -31,13 +31,13 @@ class TestForVerifyEmail(Harness):
 
     def test_verify_email_without_adding_email(self):
         participant = self.make_participant('alice')
-        response = self.verify_email(participant.username,'sample-hash', should_fail=True)
+        response = self.verify_email(participant.username, 'sample-nonce', should_fail=True)
         assert response.code == 404
 
-    def test_verify_email_wrong_hash(self):
+    def test_verify_email_wrong_nonce(self):
         participant = self.make_participant('alice', claimed_time="now")
         self.change_email_address('alice@gmail.com', participant.username)
-        self.verify_email(participant.username,'sample-hash')
+        self.verify_email(participant.username, 'sample-nonce')
         expected = False
         actual = Participant.from_username(participant.username).email.confirmed
         assert expected == actual
@@ -45,8 +45,8 @@ class TestForVerifyEmail(Harness):
     def test_verify_email(self):
         participant = self.make_participant('alice', claimed_time="now")
         self.change_email_address('alice@gmail.com', participant.username)
-        hash_string = Participant.from_username(participant.username).email.hash
-        self.verify_email(participant.username,hash_string)
+        nonce = Participant.from_username(participant.username).email.nonce
+        self.verify_email(participant.username, nonce)
         expected = True
         actual = Participant.from_username(participant.username).email.confirmed
         assert expected == actual
@@ -54,8 +54,8 @@ class TestForVerifyEmail(Harness):
     def test_email_is_not_confirmed_after_update(self):
         participant = self.make_participant('alice', claimed_time="now")
         self.change_email_address('alice@gmail.com', participant.username)
-        hash_string = Participant.from_username(participant.username).email.hash
-        self.verify_email(participant.username,hash_string)
+        nonce = Participant.from_username(participant.username).email.nonce
+        self.verify_email(participant.username, nonce)
         self.change_email_address('alice@yahoo.com', participant.username)
         expected = False
         actual = Participant.from_username(participant.username).email.confirmed
@@ -64,19 +64,19 @@ class TestForVerifyEmail(Harness):
     def test_verify_email_after_update(self):
         participant = self.make_participant('alice', claimed_time="now")
         self.change_email_address('alice@gmail.com', participant.username)
-        hash_string = Participant.from_username(participant.username).email.hash
-        self.verify_email(participant.username,hash_string)
+        nonce = Participant.from_username(participant.username).email.nonce
+        self.verify_email(participant.username, nonce)
         self.change_email_address('alice@yahoo.com', participant.username)
-        hash_string = Participant.from_username(participant.username).email.hash
-        self.verify_email(participant.username,hash_string)
+        nonce = Participant.from_username(participant.username).email.nonce
+        self.verify_email(participant.username, nonce)
         expected = True
         actual = Participant.from_username(participant.username).email.confirmed
         assert expected == actual
 
-    def test_hash_is_regenerated_on_update(self):
+    def test_nonce_is_regenerated_on_update(self):
         participant = self.make_participant('alice', claimed_time="now")
         self.change_email_address('alice@gmail.com', participant.username)
-        hash_string_1 = Participant.from_username(participant.username).email.hash
+        nonce1 = Participant.from_username(participant.username).email.nonce
         self.change_email_address('alice@gmail.com', participant.username)
-        hash_string_2 = Participant.from_username(participant.username).email.hash
-        assert hash_string_1 != hash_string_2
+        nonce2 = Participant.from_username(participant.username).email.nonce
+        assert nonce1 != nonce2

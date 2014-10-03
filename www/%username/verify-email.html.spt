@@ -9,12 +9,12 @@ from datetime import timedelta
 
 participant = get_participant(request, restrict=False)
 qs = request.line.uri.querystring
-hash_string = qs['hash'] if 'hash' in qs else ''
+nonce = qs.get('nonce', '')
 
 if not participant.email:
     raise Response(404)
 
-result = participant.verify_email(hash_string)
+result = participant.verify_email(nonce)
 
 [-----------------------------------------------------------------------------]
 {% extends "templates/base.html" %}

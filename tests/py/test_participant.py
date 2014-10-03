@@ -233,23 +233,23 @@ class TestParticipant(Harness):
     @mock.patch.object(Participant, 'send_email')
     def test_can_verify_email(self, send_email):
         self.alice.update_email('alice@gratipay.com')
-        hash_string = Participant.from_username('alice').email.hash
-        r = self.alice.verify_email(hash_string)
+        nonce = Participant.from_username('alice').email.nonce
+        r = self.alice.verify_email(nonce)
         assert r == 0
         actual = Participant.from_username('alice').email.confirmed
         assert actual == True
 
     @mock.patch.object(Participant, 'send_email')
-    def test_cannot_verify_email_with_wrong_hash(self, send_email):
+    def test_cannot_verify_email_with_wrong_nonce(self, send_email):
         self.alice.update_email('alice@gratipay.com')
-        hash_string = "some wrong hash"
-        r = self.alice.verify_email(hash_string)
+        nonce = "some wrong nonce"
+        r = self.alice.verify_email(nonce)
         assert r == 2
         actual = Participant.from_username('alice').email.confirmed
         assert actual == False
 
     @mock.patch.object(Participant, 'send_email')
-    def test_cannot_verify_email_with_expired_hash(self, send_email):
+    def test_cannot_verify_email_with_expired_nonce(self, send_email):
         self.alice.update_email('alice@gratipay.com')
         email = self.db.one("""
             UPDATE participants
@@ -258,7 +258,7 @@ class TestParticipant(Harness):
          RETURNING email
         """)
         self.alice.set_attributes(email=email)
-        r = self.alice.verify_email(self.alice.email.hash)
+        r = self.alice.verify_email(self.alice.email.nonce)
         assert r == 1
         actual = Participant.from_username('alice').email.confirmed
         assert actual == False
