@@ -7,27 +7,14 @@ from gratipay.testing import Harness
 class TestForVerifyEmail(Harness):
 
     @mock.patch.object(Participant, 'send_email')
-    def change_email_address(self, address, username, send_email, should_fail=False):
+    def change_email_address(self, address, username, send_email):
         url = "/%s/email.json" % username
-        if should_fail:
-            response = self.client.PxST(url
-                , {'email': address,}
-                , auth_as=username
-            )
-        else:
-            response = self.client.POST(url
-                , {'email': address,}
-                , auth_as=username
-            )
-        return response
+        return self.client.POST(url, {'email': address}, auth_as=username)
 
     def verify_email(self, username, nonce, should_fail=False):
         url = '/%s/verify-email.html?nonce=%s' % (username , nonce)
-        if should_fail:
-            response = self.client.GxT(url)
-        else:
-            response = self.client.GET(url)
-        return response
+        G = self.client.GxT if should_fail else self.client.GET
+        return G(url)
 
     def test_verify_email_without_adding_email(self):
         participant = self.make_participant('alice')
