@@ -37,6 +37,7 @@ from gratipay.exceptions import (
 from gratipay.models import add_event
 from gratipay.models._mixin_team import MixinTeam
 from gratipay.models.account_elsewhere import AccountElsewhere
+from gratipay.security.crypto import constant_time_compare
 from gratipay.utils.username import safely_reserve_a_username
 from gratipay.utils import is_card_expiring
 from gratipay.utils.emails import VERIFICATION_EMAIL
@@ -575,11 +576,12 @@ class Participant(Model, MixinTeam):
             return 0 # Verified
         original_hash = getattr(self.email, 'hash', '')
         email_ctime = getattr(self.email, 'ctime', '')
-        if (original_hash == hash_string) and ((utcnow() - email_ctime) < EMAIL_HASH_TIMEOUT):
-            self.update_email(self.email.address, True)
-            return 0 # Verified
-        elif (original_hash == hash_string):
-            return 1 # Expired
+        if constant_time_compare(original_hash, hash_string):
+            if (utcnow() - email_ctime) < EMAIL_HASH_TIMEOUT:
+                self.update_email(self.email.address, True)
+                return 0 # Verified
+            else:
+                return 1 # Expired
         else:
             return 2 # Failed
 
