@@ -10,12 +10,12 @@ of participant, based on certain properties.
 """
 from __future__ import print_function, unicode_literals
 
+from datetime import timedelta
 from decimal import Decimal, ROUND_DOWN, ROUND_HALF_EVEN
 import uuid
 
 import aspen
 from aspen.utils import typecheck, utcnow
-from datetime import timedelta
 from postgres.orm import Model
 from psycopg2 import IntegrityError
 
@@ -576,7 +576,7 @@ class Participant(Model, MixinTeam):
         original_hash = getattr(self.email, 'hash', '')
         email_ctime = getattr(self.email, 'ctime', '')
         if (original_hash == hash_string) and ((utcnow() - email_ctime) < EMAIL_HASH_TIMEOUT):
-            self.update_email(self.email.address,True)
+            self.update_email(self.email.address, True)
             return 0 # Verified
         elif (original_hash == hash_string):
             return 1 # Expired
@@ -584,10 +584,12 @@ class Participant(Model, MixinTeam):
             return 2 # Failed
 
     def get_verification_link(self):
-        hash_string = self.email.hash
+        scheme = gratipay.canonical_scheme
+        host = gratipay.canonical_host
+        hash = self.email.hash
         username = self.username_lower
-        link = "%s://%s/%s/verify-email.html?hash=%s" % (gratipay.canonical_scheme, gratipay.canonical_host, username, hash_string)
-        return link
+        link = "{scheme}://{host}/{username}/verify-email.html?hash={hash}"
+        return link.format(**locals())
 
     def send_email(self, message, **params):
         message['from_email'] = 'support@gratipay.com'
