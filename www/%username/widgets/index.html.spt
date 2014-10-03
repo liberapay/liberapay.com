@@ -99,7 +99,7 @@ locked = False
     }
 </style>
 <div class="col1">
-    <h2>{{ _("Widget #{0}", 1) }}</h2>
+    <h2>{{ _("Button") }}</h2>
 
     <p>{{ _("Use this code to embed a Gratipay button on your website:") }}</p>
 
@@ -126,10 +126,21 @@ locked = False
         {{ _("Here's an example using {0}:", "<a href='/whit537/'>whit537</a>") }}
         <script data-gratipay-username="whit537" data-gratipay-widget="button" src="//gttp.co/v1.js"></script>
     </p>
+
+    <h2>{{ _("Badge") }}</h2>
+
+    <p>{{ _("Use this code to embed a Gratipay badge on your website:") }}</p>
+
+    <pre>&lt;img src="http://img.shields.io/gratipay/{{ participant.username }}.svg"&gt;</pre>
+
+    <p>{{ _("Here's what it looks like:") }}</p>
+
+    <img src="http://img.shields.io/gratipay/{{ participant.username }}.svg">
+
 </div>
 <div class="col2">
 
-    <h2>{{ _("Widget #{0}", 2) }}</h2>
+    <h2>{{ _("Giving & Receiving Widgets") }}</h2>
 
     <p>{{ _("Use this code to add a Gratipay \"receiving\" widget on your website:") }}</p>
 
