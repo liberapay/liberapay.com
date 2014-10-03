@@ -551,11 +551,15 @@ class Participant(Model, MixinTeam):
         self.set_attributes(avatar_url=avatar_url)
 
     def update_email(self, email, confirmed=False):
-        hash_string = getattr(self.email, 'hash', '')
-        ctime = getattr(self.email, 'ctime', utcnow())
+        current_email = getattr(self.email, 'address', '')
+        was_confirmed = getattr(self.email, 'confirmed', False)
+        if email == current_email and was_confirmed:
+            return self.email
         if not confirmed:
             hash_string = str(uuid.uuid4())
             ctime = utcnow()
+        else:
+            hash_string = ctime = None
         with self.db.get_cursor() as c:
             add_event(c, 'participant', dict(id=self.id, action='set', values=dict(current_email=email)))
             r = c.one("UPDATE participants SET email = ROW(%s, %s, %s, %s) WHERE username=%s RETURNING email"
@@ -565,21 +569,6 @@ class Participant(Model, MixinTeam):
         if not confirmed:
             self.send_email(VERIFICATION_EMAIL, link=self.get_verification_link())
         return r
-
-    def change_email(self, email):
-        current_email = getattr(self.email, 'address', '')
-        was_confirmed = getattr(self.email, 'confirmed', False)
-        result = {
-            'address': email,
-            'confirmed': False
-        }
-        if email != current_email:
-            self.update_email(email,False)
-        elif not was_confirmed:
-            self.update_email(email,False)
-        else:
-            result['confirmed'] = True
-        return result
 
     def verify_email(self, hash_string):
         if getattr(self.email, 'confirmed', False):

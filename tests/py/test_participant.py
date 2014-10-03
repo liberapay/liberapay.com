@@ -224,8 +224,8 @@ class TestParticipant(Harness):
         assert actual == expected
 
     @mock.patch.object(Participant, 'send_email')
-    def test_can_change_email(self, send_email):
-        self.alice.change_email('alice@gratipay.com')
+    def test_can_update_email(self, send_email):
+        self.alice.update_email('alice@gratipay.com')
         expected = 'alice@gratipay.com'
         actual = self.alice.email.address
         assert actual == expected
