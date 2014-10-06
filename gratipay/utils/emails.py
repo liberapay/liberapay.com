@@ -4,10 +4,11 @@ from __future__ import unicode_literals
 VERIFICATION_EMAIL = dict(
     subject="Connect to {username} on Gratipay?",
     html="""\
-<div style="text-align: center; font: normal 14px/21px Arial, sans-serif;">
-    <img src="http://gratipay.com/assets/-/gratipay.png">
+<div style="text-align: center; font: normal 14px/21px Arial, sans-serif; color: #333;">
 
-    <br><br>
+    <div style="padding: 40px 0 20px; margin: 0;">
+        <img src="https://downloads.gratipay.com/email/gratipay.png">
+    </div>
 
     We've received a request to connect <b>{email}</b>
 
@@ -22,7 +23,7 @@ VERIFICATION_EMAIL = dict(
 
     <br><br>
 
-    <div style="color: #ccc;">Something not right? Reply to this email for help.</div>
+    <div style="color: #999;">Something not right? Reply to this email for help.</div>
 
 </div>
 """,
