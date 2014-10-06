@@ -602,6 +602,7 @@ class Participant(Model, MixinTeam):
         include_unsubscribe = params.pop('include_unsubscribe', True)
         footer = emails.FOOTER if include_unsubscribe else emails.FOOTER_NO_UNSUBSCRIBE
 
+        message = message.copy()
         message['from_email'] = 'support@gratipay.com'
         message['from_name'] = 'Gratipay Support'
         message['to'] = [{'email': self.email.address, 'name': self.username}]
