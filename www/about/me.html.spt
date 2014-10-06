@@ -1,15 +1,11 @@
 [---]
 if not user.ANON:
-    request.redirect('/%s/' % user.participant.username)
+    request.redirect('/' + user.participant.username + '/' + path.get('redirect_to', ''))
 title = "Sign In"
-[---]
+[---] text/html
 {% extends "templates/base.html" %}
 {% block box %}
     <div class="as-content">
-
-    <p>Sign in and this page will redirect you to your profile.</p>
-
-    <p>Thanks! :-)</p>
-
+    <p>You need to sign in to access this page.</p>
     </div>
 {% endblock %}
