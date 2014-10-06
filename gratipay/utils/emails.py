@@ -1,12 +1,29 @@
 from __future__ import unicode_literals
 
 
+FOOTER_NO_UNSUBSCRIBE = dict(
+    html = """\
+<div style="text-align: center; color: #999; font: normal 10px/21px Arial, sans-serif;">
+    Sent by <a href="https://gratipay.com/" style="color: #999; text-decoration: underline;">Gratipay, LLC</a> | 716 Park Road, Ambridge, PA, 15003, USA
+</div>
+    """,
+    text = """\
+----
+
+Sent by Gratipay, LLC, https://gratipay.com/
+716 Park Road, Ambridge, PA, 15003, USA
+""",
+)
+
+FOOTER = FOOTER_NO_UNSUBSCRIBE  # XXX Need to implement unsubscribe!
+
+
 VERIFICATION_EMAIL = dict(
     subject="Connect to {username} on Gratipay?",
     html="""\
 <div style="text-align: center; font: normal 14px/21px Arial, sans-serif; color: #333;">
 
-    <div style="padding: 40px 0 20px; margin: 0;">
+    <div style="padding: 20px 0; margin: 0;">
         <img src="https://downloads.gratipay.com/email/gratipay.png">
     </div>
 

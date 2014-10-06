@@ -39,8 +39,7 @@ from gratipay.models._mixin_team import MixinTeam
 from gratipay.models.account_elsewhere import AccountElsewhere
 from gratipay.security.crypto import constant_time_compare
 from gratipay.utils.username import safely_reserve_a_username
-from gratipay.utils import is_card_expiring
-from gratipay.utils.emails import VERIFICATION_EMAIL
+from gratipay.utils import emails, is_card_expiring
 
 
 ASCII_ALLOWED_IN_USERNAME = set("0123456789"
@@ -568,10 +567,11 @@ class Participant(Model, MixinTeam):
                       )
             self.set_attributes(email=r)
         if not confirmed:
-            self.send_email( VERIFICATION_EMAIL
+            self.send_email( emails.VERIFICATION_EMAIL
                            , link=self.get_verification_link()
                            , email=email
                            , username=self.username
+                           , include_unsubscribe=False
                             )
         return r
 
@@ -598,12 +598,14 @@ class Participant(Model, MixinTeam):
         return link.format(**locals())
 
     def send_email(self, message, **params):
+        include_unsubscribe = params.pop('include_unsubscribe', True)
+        footer = emails.FOOTER if include_unsubscribe else emails.FOOTER_NO_UNSUBSCRIBE
         message['from_email'] = 'support@gratipay.com'
         message['from_name'] = 'Gratipay Support'
         message['to'] = [{'email': self.email.address, 'name': self.username}]
         message['subject'] = message['subject'].format(**params)
-        message['html'] = message['html'].format(**params)
-        message['text'] = message['text'].format(**params)
+        message['html'] = message['html'].format(**params) + footer['html']
+        message['text'] = message['text'].format(**params) + footer['text']
         return self.mailer.messages.send(message=message)
 
     def update_goal(self, goal):
