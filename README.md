@@ -462,7 +462,7 @@ for your project!
    your Drupal site.
 
  - [Node.js: Node-Gratipay](https://npmjs.org/package/gratipay) (also see [Khan
-   Academy's setup](http://ejohn.org/blog/gratipay-at-khan-academy/))
+   Academy's setup](http://ejohn.org/blog/gittip-at-khan-academy/))
 
  - [Ruby: gratitude](https://github.com/JohnKellyFerguson/gratitude): A ruby
    gem that wraps the Gratipay API.
