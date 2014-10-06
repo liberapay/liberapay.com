@@ -36,7 +36,7 @@ result = participant.verify_email(nonce)
     {% elif result == 2 %}
         <h1>{{ _("Failed to verify your email address") }}</h1>
     {% endif %}
-    <a href="/">{{ _("Go to homepage") }}</a>
+    <a href="/{{ participant.username }}/">{{ _("Go to your profile") }}.</a>
     </div>
 {% endblock %}
 
