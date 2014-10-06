@@ -30,7 +30,11 @@ result = participant.verify_email(nonce)
 {% block box %}
     <div class="as-content">
     {% if result == 0 %}
-        <h1>{{ _("Your email address has been verified.") }}</h1>
+        <h1>{{ _("Success!") }}</h1>
+
+        <p>Your email address <b>{{ participant.email.address }}</b> is now
+        connected to your Gratipay account.</p>
+
     {% elif result == 1  %}
         <h1>{{ _("Your verification email has expired.") }}</h1>
     {% elif result == 2 %}
