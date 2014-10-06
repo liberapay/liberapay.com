@@ -598,14 +598,17 @@ class Participant(Model, MixinTeam):
         return link.format(**locals())
 
     def send_email(self, message, **params):
+        header = emails.HEADER
         include_unsubscribe = params.pop('include_unsubscribe', True)
         footer = emails.FOOTER if include_unsubscribe else emails.FOOTER_NO_UNSUBSCRIBE
+
         message['from_email'] = 'support@gratipay.com'
         message['from_name'] = 'Gratipay Support'
         message['to'] = [{'email': self.email.address, 'name': self.username}]
         message['subject'] = message['subject'].format(**params)
-        message['html'] = message['html'].format(**params) + footer['html']
-        message['text'] = message['text'].format(**params) + footer['text']
+        message['html'] = header['html'] + message['html'].format(**params) + footer['html']
+        message['text'] = header['text'] + message['text'].format(**params) + footer['text']
+
         return self.mailer.messages.send(message=message)
 
     def update_goal(self, goal):
