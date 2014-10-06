@@ -7,7 +7,7 @@ from __future__ import unicode_literals
 HEADER = dict(
     html="""\
 <div style="text-align: center; padding: 20px 0; margin: 0;">
-    <img src="https://downloads.gratipay.com/email/gratipay.png">
+    <img src="https://downloads.gratipay.com/email/gratipay.png" alt="Gratipay">
 </div>
 """,
     text="""\
