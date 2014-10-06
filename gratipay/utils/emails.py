@@ -21,8 +21,14 @@ Greetings, program!
 
 FOOTER_NO_UNSUBSCRIBE = dict(
     html = """\
-<div style="text-align: center; color: #999; font: normal 10px/21px Arial, sans-serif;">
-    Sent by <a href="https://gratipay.com/" style="color: #999; text-decoration: underline;">Gratipay, LLC</a> | 716 Park Road, Ambridge, PA, 15003, USA
+
+<div style="text-align: center; color: #999; padding: 21px 0 0;">
+    <div style="font: normal 14px/21px Arial, sans-serif;">
+        Something not right? Reply to this email for help.
+    </div>
+    <div style="font: normal 10px/21px Arial, sans-serif;">
+        Sent by <a href="https://gratipay.com/" style="color: #999; text-decoration: underline;">Gratipay, LLC</a> | 716 Park Road, Ambridge, PA, 15003, USA
+    </div>
 </div>
     """,
     text = """\
@@ -55,10 +61,6 @@ VERIFICATION_EMAIL = dict(
     <br><br>
 
     <a href="{link}" style="color: #fff; text-decoration:none; display:inline-block; padding: 0 15px; background: #396; font: normal 14px/40px Arial, sans-serif; white-space: nowrap; border-radius: 3px">Yes, proceed!</a>
-
-    <br><br>
-
-    <div style="color: #999;">Something not right? Reply to this email for help.</div>
 
 </div>
 """,
