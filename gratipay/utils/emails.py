@@ -2,15 +2,38 @@ from __future__ import unicode_literals
 
 
 VERIFICATION_EMAIL = dict(
-    subject="Welcome to Gratipay!",
-    html="""
-Welcome to Gratipay!
-<br><br>
-<a href="{link}">Verify your email address</a>.
+    subject="Connect to {username} on Gratipay?",
+    html="""\
+<div style="text-align: center; font: normal 14px/21px Arial, sans-serif;">
+    <img src="http://gratipay.com/assets/-/gratipay.png">
+
+    <br><br>
+
+    We've received a request to connect <b>{email}</b>
+
+    <br>
+
+    to the <b><a href="https://gratipay.com/{username}">{username}</a></b>
+    account on Gratipay. Sound familiar?
+
+    <br><br>
+
+    <a href="{link}" style="color: #fff; text-decoration:none; display:inline-block; padding: 0 15px; background: #396; font: normal 14px/40px Arial, sans-serif; white-space: nowrap; border-radius: 3px">Yes, proceed!</a>
+
+    <br><br>
+
+    <div style="color: #ccc;">Something not right? Reply to this email for help.</div>
+
+</div>
 """,
-    text="""
-Welcome to Gratipay! Verify your email address:
+    text="""\
+We've received a request to connect {email} to the
+{username} account on Gratipay. Sound familiar? Follow this
+link to finish making the connection:
 
 {link}
+
+Something not right? Reply to this email for help.
+
 """,
 )

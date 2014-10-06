@@ -568,7 +568,11 @@ class Participant(Model, MixinTeam):
                       )
             self.set_attributes(email=r)
         if not confirmed:
-            self.send_email(VERIFICATION_EMAIL, link=self.get_verification_link())
+            self.send_email( VERIFICATION_EMAIL
+                           , link=self.get_verification_link()
+                           , email=email
+                           , username=self.username
+                            )
         return r
 
     def verify_email(self, nonce):
@@ -595,9 +599,9 @@ class Participant(Model, MixinTeam):
 
     def send_email(self, message, **params):
         message['from_email'] = 'support@gratipay.com'
-        message['from_name'] = 'Gratipay'
-        message['to'] = [{'email': self.email.address,
-                          'name': self.username}]
+        message['from_name'] = 'Gratipay Support'
+        message['to'] = [{'email': self.email.address, 'name': self.username}]
+        message['subject'] = message['subject'].format(**params)
         message['html'] = message['html'].format(**params)
         message['text'] = message['text'].format(**params)
         return self.mailer.messages.send(message=message)
