@@ -72,6 +72,7 @@ Table of Contents
   - [Help!](#help)
  - [Configuration](https://github.com/gratipay/gratipay.com/wiki/Configuration)
  - [Modifying CSS](#modifying-css)
+ - [Modifying the Database](#modifying-the-database)
  - [Testing](#testing-)
  - [Setting up a Database](#local-database-setup)
  - [API](#api)
@@ -292,6 +293,17 @@ Modifying CSS
 We use SCSS, with files stored in `scss/`. All of the individual files are
 combined in `scss/gratipay.scss` which itself is compiled by `libsass` in
 `www/assets/%version/gratipay.css.spt` on each request.
+
+
+Modifying the Database
+======================
+
+We write SQL, specifically the [PostgreSQL
+variant](http://www.postgresql.org/docs/9.3/static/). We keep our database
+schema in `schema.sql`, and we write schema changes for each PR branch in a
+`branch.sql` file, which then gets run against production and appended to
+`schema.sql` during deployment.
+
 
 Testing [![Build Status](http://img.shields.io/travis/gratipay/gratipay.com/master.svg)](https://travis-ci.org/gratipay/gratipay.com)
 =======
