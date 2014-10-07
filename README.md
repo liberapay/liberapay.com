@@ -300,9 +300,11 @@ Modifying the Database
 
 We write SQL, specifically the [PostgreSQL
 variant](http://www.postgresql.org/docs/9.3/static/). We keep our database
-schema in `schema.sql`, and we write schema changes for each PR branch in a
-`branch.sql` file, which then gets run against production and appended to
-`schema.sql` during deployment.
+schema in
+[`schema.sql`](https://github.com/gratipay/gratipay.com/blob/master/schema.sql),
+and we write schema changes for each PR branch in a `branch.sql` file, which
+then gets run against production and appended to `schema.sql` during
+deployment.
 
 
 Testing [![Build Status](http://img.shields.io/travis/gratipay/gratipay.com/master.svg)](https://travis-ci.org/gratipay/gratipay.com)
