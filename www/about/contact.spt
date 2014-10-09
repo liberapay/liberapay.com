@@ -1,0 +1,33 @@
+title = "Contact"
+[---]
+[---] text/html
+{% extends "templates/about.html" %}
+{% block page %}
+<div class="col0">
+
+    <h2>Contact Us</h2>
+
+    <p>
+      <b>Gratipay, LLC</b><br />
+      716 Park Road<br />
+      Ambridge, PA 15003<br />
+      USA<br />
+      <br />
+      Email: <a href="mailto:support@gratipay.com">support@gratipay.com</a><br />
+      Twitter: <a href="https://twitter.com/Gratipay">@Gratipay</a><br />
+      Facebook: <a href="https://www.facebook.com/Gratipay">Gratipay</a><br />
+      Google+: <a href="https://plus.google.com/+Gratipay">+Gratipay</a><br />
+      Freenode: <a href="http://inside.gratipay.com/appendices/chat">#gratipay</a><br />
+      GitHub: <a href="https://github.com/gratipay/gratipay.com/issues/new">gratipay</a>
+    </p>
+
+    <div class="clear"></div>
+
+    <a name="get-involved"></a>
+    <h2>Help Build Gratipay</h2>
+
+    <p>Want to help us with design, code, marketing, and management for Gratipay?
+    Learn how on <a href="http://inside.gratipay.com/">Inside Gratipay</a>!</p>
+
+</div>
+{% endblock %}

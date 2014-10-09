@@ -3,11 +3,11 @@
     {% set current_page = path.raw.split('/')[2] %}
     {% set nav_base = "/about" %}
     <div class="nav">
-        {% set pages = [('/', _('About')), ('/faq.html', _('FAQ')), ('/teams/', _('Teams'))] %}
+        {% set pages = [('/', _('About')), ('/details', _('Details')), ('/faq.html', _('FAQ')), ('/contact', _('Contact'))] %}
         {% include "templates/nav.html" %}
     </div>
     <div class="nav level-1">
-        {% set pages = [('/pricing', _('Pricing')), ('/stats.html', _('Stats')), ('/charts.html', _('Charts'))] %}
+        {% set pages = [('/pricing', _('Pricing')), ('/teams/', _('Teams')), ('/stats.html', _('Stats')), ('/charts.html', _('Charts'))] %}
         {% include "templates/nav.html" %}
     </div>
     <div class="nav level-2">
