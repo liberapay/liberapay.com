@@ -10,6 +10,12 @@ title = "%s - %s" % (participant.username, hero)
 locked = False
 subpath = 'history/' if user.ADMIN else ''
 admin_override = user.ADMIN and (participant != user.participant or 'override' in qs)
+translated_status = { None:         ''
+                    , 'pre':        _('pre')
+                    , 'pending':    _('pending')
+                    , 'failed':     _('failed')
+                    , 'succeeded':  _('succeeded')
+                     }
 
 if participant == user.participant:
     JOINED = _("You joined {0}.", to_age(participant.claimed_time))
@@ -88,7 +94,7 @@ else:
         <td class="credits"></td>
         <td class="debits">{{ -event['amount'] + event['fee'] }}</td>
         <td class="balance">{{ event['balance'] }}</td>
-        <td class="status">{{ _(event['status'] or '') }}</td>
+        <td class="status">{{ translated_status[event['status']] }}</td>
         <td class="notes">
         {% if event['recorder'] == None %}
             {{ _("Automatic Withdrawal").lower() }}
