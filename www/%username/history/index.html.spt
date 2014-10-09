@@ -113,7 +113,7 @@ else:
         <td class="credits">{{ event['amount'] }}</td>
         <td class="debits"></td>
         <td class="balance">{{ event['balance'] }}</td>
-        <td class="status">{{ _(event['status'] or '') }}</td>
+        <td class="status">{{ translated_status[event['status']] }}</td>
         <td class="notes">
         {% if event['recorder'] == None %}
             {{ _("Automatic Charge").lower() }}
