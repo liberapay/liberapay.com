@@ -106,8 +106,6 @@ locked = False
                        title="Go to Balanced Dashboard">
                         <div class="payments-by"></div>
                     </a>
-                {% else %}
-                    <div class="payments-by"></div>
                 {% endif %}
             </h2>
             <table class="accounts">
@@ -131,6 +129,18 @@ locked = False
                         {% endif %}
                     </td>
                 </tr>
+                {% if participant.paypal_email %}
+                <tr>
+                    <td class="account-type">
+                        <img src="{{ website.asset_url }}/paypal.png" />
+                    </td>
+                    <td class="account-details">
+                        <div class="account-type">Paypal</div>
+                        <span>{{ participant.paypal_email }}</span>
+                    </td>
+                    <td class="account-action"></td>
+                </tr>
+                {% endif %}
             </table>
         {% endif %}
 
