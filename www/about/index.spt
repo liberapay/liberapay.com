@@ -9,7 +9,7 @@ example = website.db.one("""
   ORDER BY random() LIMIT 1
 
 """)
-[---]
+[---] text/html
 {% extends "templates/about.html" %}
 {% block page %}
 <div class="col0">
