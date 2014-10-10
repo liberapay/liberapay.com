@@ -150,7 +150,8 @@ def bitcoin_payout(username='', amount='', api_key_fragment='', bitcoin_address=
                 "to": bitcoin_address,
                 "amount_string": str(amount),
                 "amount_currency_iso": "USD",
-                "notes": "Gratipay Bitcoin Payout"
+                "notes": "Gratipay Bitcoin Payout",
+                "instant_buy": True
             }
         }
         result = coinbase_request('https://api.coinbase.com/v1/transactions/send_money', json.dumps(data))
