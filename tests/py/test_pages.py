@@ -40,7 +40,7 @@ class TestPages(Harness):
         assert self.client.GxT('/on/twitter/associate').code == 400
 
     def test_about(self):
-        expected = "small weekly cash gifts"
+        expected = "small weekly cash"
         actual = self.client.GET('/about/').body
         assert expected in actual
 

@@ -1,0 +1,50 @@
+title = "About"
+[---]
+example = website.db.one("""
+
+    SELECT username FROM participants
+     WHERE is_suspicious IS NOT true
+       AND (giving > 10 AND NOT anonymous_giving)
+        OR (receiving > 10 AND NOT anonymous_receiving)
+  ORDER BY random() LIMIT 1
+
+""")
+[---] text/html
+{% extends "templates/about.html" %}
+{% block page %}
+<div class="col0">
+
+    <h2>What Is Gratipay?</h2>
+
+    <p>Gratipay (formerly Gittip) is a way to make <b>small weekly cash
+    payments</b> to people you love and teams you respect.</p>
+
+    <p>Payments are <b>weekly</b>. Bills are recurring. Therefore, income from
+    Gratipay is recurring.</p>
+
+    <p>Payments come with <b>no strings attached</b>. You don't know exactly
+    who is paying you, and payments are capped at $100/wk to individuals and
+    $1,000/wk to organizations, to dampen undue influence.</p>
+
+    <p>Payments are <b>public</b>. By default, the <i>total</i> amount you give
+    and the <i>total</i> amount you receive is public (you can opt out of
+    sharing this info).</p>
+
+
+    <h2>Can you show me an example?</h2>
+
+    <p>Sure! How about <a href="/{{ example }}/">{{ example }}</a>?
+    (Refresh for another.)</p>
+
+
+    <h2>Where next?</h2>
+
+    <ul>
+        <li><a href="details">details about how money flows on Gratipay</a></li>
+        <li><a href="charts">charts showing Gratipay's growth over time</a></li>
+        <li><a href="faq">frequently asked questions (FAQ)</a></li>
+        <li><a href="contact">contact us</a></li>
+    </ul>
+
+</div>
+{% endblock %}
