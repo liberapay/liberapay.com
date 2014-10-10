@@ -184,8 +184,8 @@ def bitcoin_payout(username='', amount='', api_key_fragment='', bitcoin_address=
                  WHERE username=%s
              RETURNING balance
             """, (amount, username))
-        print "Exchange recorded: " + str(exchange_id)
-        print "New Balance: " + str(new_balance)
+        print("Exchange recorded: " + str(exchange_id))
+        print("New Balance: " + str(new_balance))
 
     print("All done.")
 
