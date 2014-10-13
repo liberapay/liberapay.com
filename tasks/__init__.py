@@ -162,6 +162,7 @@ def bitcoin_payout(username='', amount='', api_key_fragment='', bitcoin_address=
 
     if result.status_code != 200:
         print("Oops! Coinbase returned a " + str(result.status_code))
+        print(result.json())
         sys.exit(4)
     elif result.json()['success'] != True:
         print("Coinbase transaction didn't succeed!")
