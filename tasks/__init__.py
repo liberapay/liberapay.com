@@ -170,8 +170,16 @@ def bitcoin_payout(username='', amount='', api_key_fragment='', bitcoin_address=
     else:
         print("Coinbase transaction succeeded!")
         print("Entering Exchange in database")
-        fee = (amount * 0.01) + 0.15
-        amount = -int(amount) # Negative amount for payouts
+
+        # Get the fee from the response
+        fee_dict = result.json()['transfer']['fees']
+        assert fee_dict['coinbase']['currency_iso'] == fee_dict['bank']['currency_iso'] == "USD"
+        fee = (fee_dict['coinbase']['cents'] + fee_dict['bank']['cents']) * 0.01
+
+        # Get the amount from the response
+        assert result.json()['transfer']['subtotal']['currency'] == "USD"
+        amount = -int(result.json()['transfer']['subtotal']['amount']) # Negative amount for payouts
+
         with db.get_cursor() as cursor:
             exchange_id = cursor.one("""
                 INSERT INTO exchanges
