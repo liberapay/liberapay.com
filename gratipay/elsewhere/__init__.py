@@ -5,6 +5,7 @@ from __future__ import division, print_function, unicode_literals
 from collections import OrderedDict
 from datetime import datetime
 import hashlib
+import json
 import logging
 from urllib import quote
 import xml.etree.ElementTree as ET
@@ -207,7 +208,11 @@ class Platform(object):
         """Get the authenticated user's info from the API.
         """
         r = self.api_get(self.api_user_self_info_path, sess=sess)
-        return self.extract_user_info(self.api_parser(r))
+        info = self.extract_user_info(self.api_parser(r))
+        token = getattr(sess, 'token', None)
+        if token:
+            info.token = json.dumps(token)
+        return info
 
 
 class PlatformOAuth1(Platform):
@@ -216,8 +221,11 @@ class PlatformOAuth1(Platform):
     authorize_path = '/oauth/authorize'
     access_token_path = '/oauth/access_token'
 
-    def get_auth_session(self, token=None, token_secret=None):
-        return OAuth1Session(self.api_key, self.api_secret, token, token_secret,
+    def get_auth_session(self, token=None):
+        args = ()
+        if token:
+            args = (token['token'], token['token_secret'])
+        return OAuth1Session(self.api_key, self.api_secret, *args,
                              callback_uri=self.callback_url)
 
     def get_auth_url(self, **kw):
@@ -230,9 +238,11 @@ class PlatformOAuth1(Platform):
         return querystring['oauth_token']
 
     def handle_auth_callback(self, url, token, token_secret):
-        sess = self.get_auth_session(token=token, token_secret=token_secret)
+        sess = self.get_auth_session(dict(token=token, token_secret=token_secret))
         sess.parse_authorization_response(url)
-        sess.fetch_access_token(self.auth_url+self.access_token_path)
+        r = sess.fetch_access_token(self.auth_url+self.access_token_path)
+        sess.token = dict(token=r['oauth_token'],
+                          token_secret=r['oauth_token_secret'])
         return sess
 
 
@@ -242,8 +252,9 @@ class PlatformOAuth2(Platform):
     oauth_email_scope = None
     oauth_payment_scope = None
 
-    def get_auth_session(self, state=None, token=None):
+    def get_auth_session(self, state=None, token=None, token_updater=None):
         return OAuth2Session(self.api_key, state=state, token=token,
+                             token_updater=token_updater,
                              redirect_uri=self.callback_url,
                              scope=self.oauth_default_scope)
 
