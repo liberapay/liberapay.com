@@ -174,19 +174,23 @@ def bitcoin_payout(username='', amount='', api_key_fragment='', bitcoin_address=
         # Get the fee from the response
         fee_dict = result.json()['transfer']['fees']
         assert fee_dict['coinbase']['currency_iso'] == fee_dict['bank']['currency_iso'] == "USD"
-        fee = (fee_dict['coinbase']['cents'] + fee_dict['bank']['cents']) * 0.01
+        coinbase_fee = int(fee_dict['coinbase']['cents'])
+        bank_fee = int(fee_dict['bank']['cents'])
+        fee = (coibase_fee + bank_fee) * 0.01
 
         # Get the amount from the response
         assert result.json()['transfer']['subtotal']['currency'] == "USD"
         amount = -int(result.json()['transfer']['subtotal']['amount']) # Negative amount for payouts
 
+        note = "Bitcoin payout to %s" % bitcoin_address
+
         with db.get_cursor() as cursor:
             exchange_id = cursor.one("""
                 INSERT INTO exchanges
-                       (amount, fee, participant, status)
-                VALUES (%s, %s, %s, %s)
+                       (amount, fee, participant, note, status)
+                VALUES (%s, %s, %s, %s, %s)
              RETURNING id
-            """, (amount, fee, username, 'succeeded'))
+            """, (amount, fee, username, note, 'succeeded'))
             new_balance = cursor.one("""
                 UPDATE participants
                    SET balance=(balance + %s)
