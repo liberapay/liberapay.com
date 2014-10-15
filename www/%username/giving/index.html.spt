@@ -14,23 +14,23 @@ locked = False
 {% from 'templates/my-tip-bulk.html' import my_tip_bulk with context %}
 {% block page %}
 <style>
-    #matrix td {
+    .matrix td {
         text-align: left;
         height: 30px;
     }
-    #matrix h2,
-    #matrix tr.tip td,
-    #matrix tr.tip th,
-    #matrix tr.pledge td,
-    #matrix tr.pledge th {
+    .matrix h2,
+    .matrix tr.tip td,
+    .matrix tr.tip th,
+    .matrix tr.pledge td,
+    .matrix tr.pledge th {
         white-space: nowrap;
     }
-    #matrix th {
+    .matrix th {
         vertical-align: middle;
         padding-right: 0.5em;
     }
 </style>
-<table id="matrix" class="col0">
+<table class="matrix {{ 'col1' if unclaimed_total > 0 else 'col0' }}">
     <tr>
         <td colspan="2">
             {% if participant == user.participant %}
@@ -49,13 +49,15 @@ locked = False
     </tr>
     {% endif %}
     {% endfor %}
-    {% if unclaimed_total > 0 %}
+</table>
+{% if unclaimed_total > 0 %}
+<table class="matrix col2">
     <tr>
         <td colspan="2">
             <h2>{{ _("Another {0} per week goes unclaimed", format_currency(unclaimed_total, "USD")) }}</h2>
         </td>
     </tr>
-    {% endif %}
+
     {% for tip in unclaimed_tips %}
     {% if tip.amount > 0 %}
     <tr class="pledge">
@@ -68,4 +70,5 @@ locked = False
     {% endif %}
     {% endfor %}
 </table>
+{% endif %}
 {% endblock %}
