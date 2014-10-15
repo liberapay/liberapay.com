@@ -68,7 +68,7 @@ jstest: node_modules
 	./node_modules/.bin/grunt test
 
 i18n_update: env
-	$(env_bin)/pybabel extract -F .babel_extract --no-wrap --omit-header -o i18n/core.pot templates www
+	$(env_bin)/pybabel extract -F .babel_extract --no-wrap -o i18n/core.pot templates www
 	for d in i18n/*/; do \
 	    for f in $$d*.po; do \
 	        $(env_bin)/pybabel update -i $${d%/}.pot -l $$(basename $${f%.*}) --no-fuzzy-matching -o $$f; \
