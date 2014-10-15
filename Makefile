@@ -70,4 +70,5 @@ jstest: node_modules
 i18n_update: env
 	$(env_bin)/pybabel extract -F .babel_extract --no-wrap --omit-header -o i18n/tmp.pot templates www
 	for f in i18n/*.po; do $(env_bin)/pybabel update -i i18n/tmp.pot -l $$(basename $${f%.*}) --no-fuzzy-matching -o $$f; done
+	sed -e '/^#: /d' -i i18n/*.po
 	rm i18n/tmp.pot
