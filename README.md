@@ -203,15 +203,15 @@ running. At some point, try [running the test suite](#testing-).
 
 Vagrant
 -------
-If you have vagrant installed, you can run gratipay by running `vagrant up` from the project directory. Please note that if you ever switch between running gratipay on your own machine to vagrant or vice versa, you will need to run `make clean`.
+If you have Vagrant installed, you can run Gratipay by running `vagrant up` from the project directory. Please note that if you ever switch between running Gratipay on your own machine to Vagrant or vice versa, you will need to run `make clean`.
 
 If you're using Vagrant for the first time you'll need [Vagrant](http://www.vagrantup.com/) and [VirtualBox](https://www.virtualbox.org/) installed. If you're on Linux you'll need to install `nfs-kernel-server`.
 
-The Vagrantfile will download a custom made image from the internet. If you have a slow internet connection, you can download a local copy of this file, by running:
+The `Vagrantfile` will download a custom made image from the Internet. If you have a slow internet connection, you can download a local copy of this file, by running:
 
-`curl http://downloads.gratipay.com/gittip.box`
+`curl https://downloads.gratipay.com/gratipay.box`
 
-Once downloaded, vagrant will use this local file automatically when you run `vagrant up`. Vagrant is setup to use key based SSH authentication, if you're prompted for a password please use `vagrant`.
+Once downloaded, Vagrant will use this local file automatically when you run `vagrant up`. Vagrant is setup to use key based SSH authentication, if you're prompted for a password please use `vagrant`.
 
 **Ubuntu users:** If you experience problems, please see [this
 issue](https://github.com/gratipay/gratipay.com/pull/2321#issuecomment-41455169).
