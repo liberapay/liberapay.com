@@ -15,7 +15,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #-drop database gratipay
   #-drop role gratipay
   config.vm.box = "gratipay"
-  config.vm.box_url =  File.exist?("gratipay.box") ? "file://gratipay.box" : "http://downloads.gratipayllc.netdna-cdn.com/gratipay.box"
+  config.vm.box_url =  File.exist?("gratipay.box") ? "file://gratipay.box" : "https://downloads.gratipay.com/gratipay.box"
 
   # Sync the project directory and expose the app
   config.vm.network "private_network", ip: "172.27.36.119"
