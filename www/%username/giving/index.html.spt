@@ -13,6 +13,8 @@ locked = False
 cancelled_tips = filter(lambda x: x.amount==0 and (utcnow() - x.mtime < timedelta(weeks=1)), tips)
 ncancelled_tips = len(cancelled_tips)
 
+CANCELLED = ngettext("You cancelled {n} tip recently", "You cancelled {n} tips recently", ncancelled_tips)
+
 [-----------------------------------------------------------------------------]
 {% extends "templates/profile.html" %}
 {% from 'templates/my-tip-bulk.html' import my_tip_bulk with context %}
@@ -57,7 +59,7 @@ ncancelled_tips = len(cancelled_tips)
     <tr>
         <td colspan="2">
             {% if participant == user.participant %}
-            <h2>{{ _("You cancelled {0} tip(s) recently", ncancelled_tips) }}</h2>
+            <h2>{{ CANCELLED }}</h2>
             {% else %}
             <h2>{{ _("{0} cancelled {1} tip(s) recently", participant.username, ncancelled_tips) }}</h2>
             {% endif %}
