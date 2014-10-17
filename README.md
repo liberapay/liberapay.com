@@ -211,7 +211,9 @@ The `Vagrantfile` will download a custom made image from the Internet. If you ha
 
 `curl https://downloads.gratipay.com/gratipay.box`
 
-Once downloaded, Vagrant will use this local file automatically when you run `vagrant up`. Vagrant is setup to use key based SSH authentication, if you're prompted for a password please use `vagrant`.
+Once downloaded into the top of the project tree, our Vagrantfile will use this local file automatically when you run `vagrant up`. Vagrant is setup to use key based SSH authentication, if you're prompted for a password when logging in please use `vagrant`.
+
+**Mac users:** If you're prompted for a password during initial installation, it's sudo and you should enter your Mac OS password.
 
 **Ubuntu users:** If you experience problems, please see [this
 issue](https://github.com/gratipay/gratipay.com/pull/2321#issuecomment-41455169).
