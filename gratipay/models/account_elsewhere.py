@@ -129,6 +129,14 @@ class AccountElsewhere(Model):
     # Random Stuff
     # ============
 
+    def get_auth_session(self):
+        if not self.token:
+            return
+        params = dict(token=self.token)
+        if 'refresh_token' in self.token:
+            params['token_updater'] = self.save_token
+        return self.platform_data.get_auth_session(**params)
+
     @property
     def html_url(self):
         return self.platform_data.account_url.format(
@@ -157,18 +165,15 @@ class AccountElsewhere(Model):
             user.participant.update_is_closed(False)
         return user, newly_claimed
 
-    def save_token(self, token, refresh_token=None, expires=None):
+    def save_token(self, token):
         """Saves the given access token in the database.
         """
         self.db.run("""
             UPDATE elsewhere
-               SET (access_token, refresh_token, expires) = (%s, %s, %s)
+               SET token = %s
              WHERE id=%s
-        """, (token, refresh_token, expires, self.id))
-        self.set_attributes( access_token=token
-                           , refresh_token=refresh_token
-                           , expires=expires
-                           )
+        """, (token, self.id))
+        self.set_attributes(token=token)
 
     def set_is_locked(self, is_locked):
         self.db.run( 'UPDATE elsewhere SET is_locked=%s WHERE id=%s'
