@@ -78,6 +78,7 @@ CREATE TABLE elsewhere
 , avatar_url            text
 , is_team               boolean         NOT NULL DEFAULT FALSE
 , extra_info            json
+, token                 json
 , UNIQUE (platform, user_id)
 , UNIQUE (platform, participant)
  );
@@ -315,6 +316,7 @@ CREATE TYPE elsewhere_with_participant AS
 , extra_info    json
 , is_locked     boolean
 , is_team       boolean
+, token         json
 , participant   participants
  ); -- If Postgres had type inheritance this would be even awesomer.
 
@@ -331,6 +333,7 @@ AS $$
          , $1.extra_info
          , $1.is_locked
          , $1.is_team
+         , $1.token
          , participants.*::participants
       FROM participants
      WHERE participants.username = $1.participant
