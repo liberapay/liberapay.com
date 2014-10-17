@@ -5,6 +5,7 @@ from invoke import run, task
 import sys
 import os
 
+from decimal import Decimal as D
 import hashlib
 import hmac
 import requests
@@ -12,6 +13,7 @@ import time
 import json
 
 from gratipay import wireup
+from gratipay.exceptions import NegativeBalance
 
 @task(
     help={
@@ -108,7 +110,7 @@ def bitcoin_payout(username='', amount='', api_key_fragment='', bitcoin_address=
         print(bitcoin_payout.__doc__)
         sys.exit(1)
 
-    assert int(amount) > 0
+    assert D(amount) > 0
 
     if not api_key_fragment:
         first_eight = "unknown!"
@@ -118,7 +120,7 @@ def bitcoin_payout(username='', amount='', api_key_fragment='', bitcoin_address=
     db = wireup.db(wireup.env())
 
     FIELDS = """
-            SELECT username, api_key, bitcoin_address
+            SELECT username, api_key, bitcoin_address, balance
               FROM participants
              WHERE username = %s
     """
@@ -137,6 +139,9 @@ def bitcoin_payout(username='', amount='', api_key_fragment='', bitcoin_address=
             sys.exit(3)
         print("Fetching bitcoin_address from database: " + fields.bitcoin_address)
         bitcoin_address = fields.bitcoin_address
+    if D(fields.balance) < D(amount):
+        print("Not enough balance. %s only has %f in his account!" % username, D(amount))
+        sys.exit(4)
 
     if fields.api_key == None:
         assert first_eight == "None"
@@ -163,11 +168,11 @@ def bitcoin_payout(username='', amount='', api_key_fragment='', bitcoin_address=
     if result.status_code != 200:
         print("Oops! Coinbase returned a " + str(result.status_code))
         print(result.json())
-        sys.exit(4)
+        sys.exit(5)
     elif result.json()['success'] != True:
         print("Coinbase transaction didn't succeed!")
         print(result.json())
-        sys.exit(5)
+        sys.exit(6)
     else:
         print("Coinbase transaction succeeded!")
         print("Entering Exchange in database")
@@ -177,11 +182,11 @@ def bitcoin_payout(username='', amount='', api_key_fragment='', bitcoin_address=
         assert fee_dict['coinbase']['currency_iso'] == fee_dict['bank']['currency_iso'] == "USD"
         coinbase_fee = int(fee_dict['coinbase']['cents'])
         bank_fee = int(fee_dict['bank']['cents'])
-        fee = (coibase_fee + bank_fee) * 0.01
+        fee = (coinbase_fee + bank_fee) * D('0.01')
 
         # Get the amount from the response
         assert result.json()['transfer']['subtotal']['currency'] == "USD"
-        amount = -int(result.json()['transfer']['subtotal']['amount']) # Negative amount for payouts
+        amount = -D(result.json()['transfer']['subtotal']['amount']) # Negative amount for payouts
 
         note = "Bitcoin payout to %s" % bitcoin_address
 
@@ -198,6 +203,8 @@ def bitcoin_payout(username='', amount='', api_key_fragment='', bitcoin_address=
                  WHERE username=%s
              RETURNING balance
             """, (amount - fee, username))
+        if new_balance < 0:
+            raise NegativeBalance
         print("Exchange recorded: " + str(exchange_id))
         print("New Balance: " + str(new_balance))
 
