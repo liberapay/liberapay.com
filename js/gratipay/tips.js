@@ -71,10 +71,22 @@ Gratipay.tips.init = function() {
                 });
         });
 
-    $('.my-tip .cancel-tip').click(function(event) {
+    $('.my-tip .reset-tip').click(function(event) {
         event.preventDefault();
 
         $(this).parents('form').trigger('reset');
+    });
+
+    $('.my-tip .cancel-tip').click(function(event) {
+        event.preventDefault();
+
+        var $this     = $(this),
+            $myTip    = $this.parents('form').find('.my-tip');
+
+        if (confirm("Are you sure you want to cancel this tip?")) {
+            $myTip.val("0.00");
+            $(this).parents('form').trigger('submit');
+        }
     });
 
     $('.my-tip .tip-suggestions a').click(function(event) {

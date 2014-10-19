@@ -39,15 +39,32 @@ form.my-tip {
     }
 
     .cancel-tip {
-        opacity: 0.5;
-        cursor: default;
+        opacity: 1;
+        cursor: pointer;
+        display:inline;
+    }
+    .reset-tip {
+        display:none;
+    }
+    .confirm-tip {
+        display:none;
     }
 
     &.changed {
-        .cancel-tip {
+        .reset-tip {
             opacity: 1;
             cursor: pointer;
+            display:inline;
         }
+        .confirm-tip {
+            opacity: 1;
+            cursor: pointer;
+            display:inline;
+        }
+        .cancel-tip {
+            display:none;
+        }
+
     }
 }
 
