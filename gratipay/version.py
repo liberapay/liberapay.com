@@ -1,5 +1,4 @@
 from os.path import dirname, isdir, join
-import re
 from subprocess import CalledProcessError, check_output
 
 
@@ -20,9 +19,9 @@ def get_version():
             version = '.post'.join(version.split('-')[:2])
 
     else:
-        # Extract the version from the PKG-INFO file.
-        with open(join(d, 'PKG-INFO')) as f:
-            version = re.search('^Version: (.+)$', f.read(), re.M).group(1)
+        # Read the version from the version.txt file.
+        with open(join(d, 'www/version.txt')) as f:
+            version = f.read().strip()
 
     return version
 

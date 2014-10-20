@@ -75,6 +75,8 @@ fi
 
 # Ask confirmation and bump the version
 yesno "Tag and deploy version $version?" || exit
+echo $version >www/version.txt
+git commit www/version.txt -m "Bump version to $version"
 git tag $version
 
 
