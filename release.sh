@@ -1,21 +1,16 @@
 #!/bin/sh
 
-# Fail on error.
-# ==============
 
+# Fail on error
 set -e
 
 
-# Be somewhere predictable.
-# =========================
-
+# Be somewhere predictable
 cd "`dirname $0`"
 
 
 # --help
-# ======
-
-if [ $# = 0 ]; then
+if [ "$1" = "" ]; then
     echo
     echo "Usage: $0 <version>"
     echo
@@ -26,7 +21,6 @@ fi
 
 
 # Helpers
-# =======
 
 confirm () {
     proceed=""
@@ -48,56 +42,40 @@ require () {
 }
 
 
-# Work
-# ====
-
-if [ $1 ]; then
-
-    require heroku
-    require git
-
-    if [ "`git rev-parse --abbrev-ref HEAD`" != "master" ]; then
-        echo "Not on master, checkout master first."
-        exit
-    fi
-
-    # Make sure we have the latest master.
-    # ====================================
-
-    git pull
-
-    if [ "`git tag | grep $1`" ]; then
-        echo "Version $1 is already git tagged."
-        exit
-    fi
-
-    confirm "Tag and push version $1?"
-    if [ $? -eq 0 ]; then
-
-        # Check that the environment contains all required variables.
-        # ===========================================================
-
-        heroku config -sa gratipay | ./env/bin/honcho run -e /dev/stdin \
-            ./env/bin/python gratipay/wireup.py
+# Check that we have the required tools
+require heroku
+require git
 
 
-        # Bump the version.
-        # =================
+# Make sure we have the latest master
 
-        git tag $1
-
-
-        # Deploy to Heroku.
-        # =================
-
-        git push heroku master
-
-
-        # Push to GitHub.
-        # ===============
-
-        git push
-        git push --tags
-
-    fi
+if [ "`git rev-parse --abbrev-ref HEAD`" != "master" ]; then
+    echo "Not on master, checkout master first."
+    exit
 fi
+
+git pull
+
+if [ "`git tag | grep $1`" ]; then
+    echo "Version $1 is already git tagged."
+    exit
+fi
+
+
+# Check that the environment contains all required variables
+heroku config -sa gratipay | ./env/bin/honcho run -e /dev/stdin \
+    ./env/bin/python gratipay/wireup.py
+
+
+# Ask confirmation and bump the version
+confirm "Tag and push version $1?" || exit
+git tag $1
+
+
+# Deploy to Heroku
+git push heroku master
+
+
+# Push to GitHub
+git push
+git push --tags
