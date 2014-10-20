@@ -19,8 +19,7 @@ if [ $# = 0 ]; then
     echo
     echo "Usage: $0 <version>"
     echo
-    echo "  This is a release script for Gratipay. We bump the version number in "
-    echo "  www/version.txt and then do a git dance, pushing to Heroku."
+    echo "  This is a release script for Gratipay. We do a git dance, pushing to Heroku."
     echo
     exit
 fi
@@ -72,11 +71,6 @@ if [ $1 ]; then
         exit
     fi
 
-    if ! grep -e \-dev$ www/version.txt > /dev/null; then
-        echo "Current version does not end with '-dev'."
-        exit
-    fi
-
     confirm "Tag and push version $1?"
     if [ $? -eq 0 ]; then
 
@@ -90,8 +84,6 @@ if [ $1 ]; then
         # Bump the version.
         # =================
 
-        printf "$1\n" > www/version.txt
-        git commit www/version.txt -m"Bump version to $1"
         git tag $1
 
 
@@ -99,16 +91,6 @@ if [ $1 ]; then
         # =================
 
         git push heroku master
-
-
-        # Bump the version again.
-        # =======================
-        # We're using a Pythonic convention here by using -dev to mean, "a
-        # dev version following $whatever." We escape the dash for bash's
-        # sake
-
-        printf "$1\055dev\n" > www/version.txt
-        git commit www/version.txt -m"Bump version to $1-dev"
 
 
         # Push to GitHub.

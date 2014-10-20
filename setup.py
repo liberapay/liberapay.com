@@ -1,12 +1,7 @@
 import os
 from setuptools import setup, find_packages
 
-
-def get_version():
-    try:
-        return open(os.path.join('www', 'version.txt')).read().strip()
-    except OSError:
-        return 'n/a'
+from gratipay.version import get_version
 
 
 setup( name='gratipay'

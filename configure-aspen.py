@@ -12,6 +12,7 @@ import gratipay.wireup
 from gratipay import canonize, utils
 from gratipay.security import authentication, csrf, x_frame_options
 from gratipay.utils import cache_static, i18n, set_cookie, timer
+from gratipay.version import get_version
 
 
 import aspen
@@ -39,8 +40,7 @@ aspen.Response.set_cookie = _set_cookie
 # Wireup Algorithm
 # ================
 
-version_file = os.path.join(website.www_root, 'version.txt')
-website.version = open(version_file).read().strip()
+website.version = get_version()
 
 
 website.renderer_default = "jinja2"
