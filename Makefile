@@ -67,12 +67,14 @@ node_modules: package.json
 jstest: node_modules
 	./node_modules/.bin/grunt test
 
-i18n_update: env
+tx:
+	@if [ ! -x $(env_bin)/tx ]; then $(env_bin)/pip install transifex-client; fi
+
+i18n_upload: env tx
 	$(env_bin)/pybabel extract -F .babel_extract --no-wrap -o i18n/core.pot templates www
-	for d in i18n/*/; do \
-	    for f in $$d*.po; do \
-	        $(env_bin)/pybabel update -i $${d%/}.pot -l $$(basename $${f%.*}) --no-fuzzy-matching -o $$f; \
-	    done \
-	done
-	sed -e '/^#: /d' -i i18n/*/*.po
+	$(env_bin)/tx push -s
 	rm i18n/*.pot
+
+i18n_download: env tx
+	$(env_bin)/tx pull -a -f --mode=reviewed --minimum-perc=50
+	sed -e '/^#: /d' -i i18n/*/*.po
