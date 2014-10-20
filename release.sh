@@ -9,17 +9,6 @@ set -e
 cd "`dirname $0`"
 
 
-# --help
-if [ "$1" = "" ]; then
-    echo
-    echo "Usage: $0 <version>"
-    echo
-    echo "  This is a release script for Gratipay. We do a git dance, pushing to Heroku."
-    echo
-    exit
-fi
-
-
 # Helpers
 
 yesno () {
@@ -45,18 +34,16 @@ require git
 
 
 # Make sure we have the latest master
-
 if [ "`git rev-parse --abbrev-ref HEAD`" != "master" ]; then
     echo "Not on master, checkout master first."
     exit
 fi
-
 git pull
 
-if [ "`git tag | grep $1`" ]; then
-    echo "Version $1 is already git tagged."
-    exit
-fi
+
+# Compute the next version number
+prev="$(git describe --tags --match '[0-9]*' | cut -d- -f1 | sed 's/\.//g')"
+version="$((prev + 1))"
 
 
 # Check that the environment contains all required variables
@@ -87,8 +74,8 @@ fi
 
 
 # Ask confirmation and bump the version
-yesno "Tag and deploy version $1?" || exit
-git tag $1
+yesno "Tag and deploy version $version?" || exit
+git tag $version
 
 
 # Deploy to Heroku
