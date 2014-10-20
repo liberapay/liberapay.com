@@ -51,6 +51,14 @@ heroku config -sa gratipay | ./env/bin/honcho run -e /dev/stdin \
     ./env/bin/python gratipay/wireup.py
 
 
+# Sync the translations
+echo "Syncing translations..."
+make i18n_upload
+make i18n_download
+git add i18n
+if git commit --dry-run &>/dev/null; then git commit -m "update i18n files"; fi
+
+
 # Check for a branch.sql
 if [ -e branch.sql ]; then
     # Merge branch.sql into schema.sql
