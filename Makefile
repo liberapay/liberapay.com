@@ -67,6 +67,13 @@ node_modules: package.json
 jstest: node_modules
 	./node_modules/.bin/grunt test
 
+transifexrc:
+	@echo '[https://www.transifex.com]' >.transifexrc
+	@echo 'hostname = https://www.transifex.com' >>.transifexrc
+	@echo "password = $$TRANSIFEX_PASS" >>.transifexrc
+	@echo 'token = ' >>.transifexrc
+	@echo "username = $$TRANSIFEX_USER" >>.transifexrc
+
 tx:
 	@if [ ! -x $(env_bin)/tx ]; then $(env_bin)/pip install transifex-client; fi
 
