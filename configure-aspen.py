@@ -12,6 +12,7 @@ import gratipay.wireup
 from gratipay import canonize, utils
 from gratipay.security import authentication, csrf, x_frame_options
 from gratipay.utils import cache_static, i18n, set_cookie, timer
+from gratipay.version import get_version
 
 
 import aspen
@@ -39,8 +40,12 @@ aspen.Response.set_cookie = _set_cookie
 # Wireup Algorithm
 # ================
 
-version_file = os.path.join(website.www_root, 'version.txt')
-website.version = open(version_file).read().strip()
+exc = None
+try:
+    website.version = get_version()
+except Exception, e:
+    exc = e
+    website.version = 'x'
 
 
 website.renderer_default = "jinja2"
@@ -66,6 +71,9 @@ gratipay.wireup.nanswers(env)
 gratipay.wireup.other_stuff(website, env)
 gratipay.wireup.accounts_elsewhere(website, env)
 tell_sentry = website.tell_sentry = gratipay.wireup.make_sentry_teller(env)
+
+if exc:
+    tell_sentry(exc)
 
 # The homepage wants expensive queries. Let's periodically select into an
 # intermediate table.
