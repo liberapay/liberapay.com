@@ -551,61 +551,120 @@ class Participant(Model, MixinTeam):
         self.set_attributes(avatar_url=avatar_url)
 
     def update_email(self, email, confirmed=False):
-        current_email = getattr(self.email, 'address', '')
-        was_confirmed = getattr(self.email, 'confirmed', False)
-        if email == current_email and was_confirmed:
-            return self.email
-        if not confirmed:
+        """
+            Update the email address of a participant.
+
+            This could be called when
+            1) Adding a new email address
+            2) Resending the verification email for an unverified email address
+            3) Confirming an email address
+
+            In case 3, we UPDATE rows. In case 1 and 2, we're just INSERTing.
+
+            We return a value only if we've sent a verification email.
+        """
+        current_email = self.email_address
+
+        # If the email is already confirmed we have nothing to do.
+        if email == current_email:
+            return None
+
+        if confirmed:
+            with self.db.get_cursor() as c:
+                # TODO: Invalidate all other emails
+
+                r = c.run("""
+                    UPDATE emails
+                       SET confirmed = true, mtime = %s
+                     WHERE address = %s
+                 RETURNING address
+                """, (utcnow(), email))
+
+                # TODO: What happens another user has verified this email already?
+                #       Either do something here, or below.
+
+                # This could be done by a trigger function.
+                c.run("""
+                    UPDATE participants
+                       SET email_address = %s
+                     WHERE username = %s
+                """, (email, self.username))
+
+                self.set_attributes(email_address = r)
+            return None
+        else:
+            # TODO - check whether someone has verified this already?
             nonce = str(uuid.uuid4())
             ctime = utcnow()
-        else:
-            nonce = ctime = None
-        with self.db.get_cursor() as c:
-            add_event(c, 'participant', dict(id=self.id, action='set', values=dict(current_email=email)))
-            r = c.one("UPDATE participants SET email = ROW(%s, %s, %s, %s) WHERE username=%s RETURNING email"
-                     , (email, confirmed, nonce, ctime, self.username)
-                      )
-            self.set_attributes(email=r)
-        if not confirmed:
+            with self.db.get_cursor() as c:
+                add_event(c, 'participant', dict(id=self.id, action='set', values=dict(current_email=email)))
+                c.run("""
+                    INSERT INTO emails
+                                (address, nonce, ctime, participant)
+                         VALUES (%s, %s, %s, %s)
+                """, (email, nonce, ctime, self.username))
+
             self.send_email( emails.VERIFICATION_EMAIL
-                           , link=self.get_verification_link()
                            , email=email
+                           , link=self.get_verification_link(email)
                            , username=self.username
                            , include_unsubscribe=False
                             )
-        return r
+            return email
 
-    def verify_email(self, nonce):
-        if getattr(self.email, 'confirmed', False):
+    def verify_email(self, email, nonce):
+        if self.email_address and email == self.email_address:
             return 0 # Verified
-        expected_nonce = getattr(self.email, 'nonce', '')
-        email_ctime = getattr(self.email, 'ctime', '')
+
+        expected_nonce, ctime = self.get_email_nonce_and_ctime(email)
         if constant_time_compare(expected_nonce, nonce):
-            if (utcnow() - email_ctime) < EMAIL_HASH_TIMEOUT:
-                self.update_email(self.email.address, True)
+            if (utcnow() - ctime) < EMAIL_HASH_TIMEOUT:
+                self.update_email(email, True)
                 return 0 # Verified
             else:
                 return 1 # Expired
         else:
             return 2 # Failed
 
-    def get_verification_link(self):
+    def get_verification_link(self, email):
         scheme = gratipay.canonical_scheme
         host = gratipay.canonical_host
-        nonce = self.email.nonce
+        nonce = self.get_email_nonce_and_ctime(email)[0]
         username = self.username_lower
-        link = "{scheme}://{host}/{username}/verify-email.html?nonce={nonce}"
+        link = "{scheme}://{host}/{username}/verify-email.html?email={email}&nonce={nonce}"
         return link.format(**locals())
 
-    def send_email(self, message, **params):
+    def get_email_nonce_and_ctime(self, email):
+        rec = self.db.one("""
+            SELECT nonce, ctime
+              FROM emails
+             WHERE participant = %s
+               AND address = %s
+          ORDER BY ctime DESC
+             LIMIT 1
+        """, (self.username, email))
+        return rec.nonce, rec.ctime
+
+    def get_unverified_email(self):
+        return self.db.one("""
+            SELECT address
+              FROM emails
+             WHERE participant = %s
+          ORDER BY ctime DESC
+             LIMIT 1
+        """, (self.username,))
+
+    def send_email(self, message, email=None, **params):
         header = emails.HEADER
         include_unsubscribe = params.pop('include_unsubscribe', True)
         footer = emails.FOOTER if include_unsubscribe else emails.FOOTER_NO_UNSUBSCRIBE
-
+        if not email:
+            email = self.email_address
+        params['email'] = email
         message = message.copy()
         message['from_email'] = 'support@gratipay.com'
         message['from_name'] = 'Gratipay Support'
-        message['to'] = [{'email': self.email.address, 'name': self.username}]
+        message['to'] = [{'email': email, 'name': self.username}]
         message['subject'] = message['subject'].format(**params)
         message['html'] = header['html'] + message['html'].format(**params) + footer['html']
         message['text'] = header['text'] + message['text'].format(**params) + footer['text']

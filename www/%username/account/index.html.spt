@@ -154,14 +154,16 @@ locked = False
                     <div class="account-type">{{ _("Email Address (Private)") }}</div>
                     <div class="email">
                         <a class="address email-address" href="javascript:;">
-                            {% if participant.email %}
-                                {{ participant.email.address }}
+                            {% if participant.email_address %}
+                                {{ participant.email_address }}
+                            {% elif participant.get_unverified_email() %}
+                                {{ participant.get_unverified_email() }}
                             {% endif %}
                         </a>
-                        {% if participant.email and not participant.email.confirmed %}
-                            <span class="none" id="email-not-verified">{{ _("(Unverified)") }}</span>
-                        {% elif participant.email %}
+                        {% if participant.email_address %}
                             <span class="none hidden" id="email-not-verified">{{ _("(Unverified)") }}</span>
+                        {% elif participant.get_unverified_email() %}
+                            <span class="none" id="email-not-verified">{{ _("(Unverified)") }}</span>
                         {% endif %}
                     </div>
 
@@ -177,7 +179,7 @@ locked = False
                             <button type="submit" class="email hidden">Save</button>
                             <button type="cancel" class="email cancel hidden">Cancel</button>
                         </div>
-                        {% if participant.email and not participant.email.confirmed %}
+                        {% if not participant.email_address and participant.get_unverified_email() %}
                             <div class="buttons">
                                 <button type="resend" class="email">Resend Email</button>
                             </div>
@@ -186,7 +188,11 @@ locked = False
                 </td>
                 <td class="account-action">
                     <button class="toggle-email">
-                        {{ _("Edit") if participant.email else _("+ Add") }}
+                        {% if participant.email_address or participant.get_unverified_email() %}
+                            {{ _("Edit") }}
+                        {% else %}
+                            {{ _("+ Add") }}
+                        {% endif %}
                     </button>
                 </td>
             </tr>

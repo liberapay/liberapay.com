@@ -24,4 +24,4 @@ if not re.match(r"[^@]+@[^@]+\.[^@]+", address):
 email = user.participant.update_email(address)
 
 [---] application/json via json_dump
-{'email': email.address, 'confirmed': email.confirmed}
+{'email': email}

@@ -10,11 +10,12 @@ from datetime import timedelta
 participant = get_participant(request, restrict=False)
 qs = request.line.uri.querystring
 nonce = qs.get('nonce', '')
+email = qs.get('email', '')
 
 if not participant.email:
     raise Response(404)
 
-result = participant.verify_email(nonce)
+result = participant.verify_email(email, nonce)
 
 [-----------------------------------------------------------------------------]
 {% extends "templates/base.html" %}
@@ -32,7 +33,7 @@ result = participant.verify_email(nonce)
     {% if result == 0 %}
         <h1>{{ _("Success!") }}</h1>
 
-        <p>Your email address <b>{{ participant.email.address }}</b> is now
+        <p>Your email address <b>{{ participant.email_address }}</b> is now
         connected to your Gratipay account.</p>
 
     {% elif result == 1  %}
