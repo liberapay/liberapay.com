@@ -10,7 +10,6 @@ from gratipay.exceptions import NoBalancedCustomerHref, NotWhitelisted
 from gratipay.models.community import Community
 from gratipay.models.participant import Participant
 from gratipay.testing import Harness
-from aspen.utils import utcnow
 
 
 class TestClosing(Harness):
@@ -283,7 +282,7 @@ class TestClosing(Harness):
                                      , anonymous_receiving=True
                                      , number='plural'
                                      , avatar_url='img-url'
-                                     , email=('alice@example.com', True, 'samplenonce', utcnow())
+                                     , email_address='alice@example.com'
                                      , claimed_time='now'
                                      , session_token='deadbeef'
                                      , session_expires='2000-01-01'
@@ -304,7 +303,7 @@ class TestClosing(Harness):
         assert (alice.anonymous_receiving, new_alice.anonymous_giving) == (False, False)
         assert alice.number == new_alice.number == 'singular'
         assert alice.avatar_url == new_alice.avatar_url == None
-        assert alice.email == new_alice.email == None
+        assert alice.email_address == new_alice.email_address == None
         assert alice.claimed_time == new_alice.claimed_time == None
         assert alice.giving == new_alice.giving == 0
         assert alice.pledging == new_alice.pledging == 0

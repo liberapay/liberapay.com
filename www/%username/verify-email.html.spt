@@ -12,7 +12,7 @@ qs = request.line.uri.querystring
 nonce = qs.get('nonce', '')
 email = qs.get('email', '')
 
-if not participant.email:
+if not participant.get_unverified_email():
     raise Response(404)
 
 result = participant.verify_email(email, nonce)

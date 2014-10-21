@@ -430,7 +430,7 @@ class Participant(Model, MixinTeam):
                  , anonymous_receiving=False
                  , number='singular'
                  , avatar_url=NULL
-                 , email=NULL
+                 , email_address=NULL
                  , claimed_time=NULL
                  , session_token=NULL
                  , session_expires=now()
@@ -615,7 +615,8 @@ class Participant(Model, MixinTeam):
     def verify_email(self, email, nonce):
         if self.email_address and email == self.email_address:
             return 0 # Verified
-
+        if self.get_unverified_email() != email:
+            return 2
         expected_nonce, ctime = self.get_email_nonce_and_ctime(email)
         if constant_time_compare(expected_nonce, nonce):
             if (utcnow() - ctime) < EMAIL_HASH_TIMEOUT:
