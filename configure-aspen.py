@@ -75,17 +75,27 @@ tell_sentry = website.tell_sentry = gratipay.wireup.make_sentry_teller(env)
 if exc:
     tell_sentry(exc)
 
-# The homepage wants expensive queries. Let's periodically select into an
-# intermediate table.
 
-def cron(period, func):
+# Periodic jobs
+# =============
+
+conn = website.db.get_connection().__enter__()
+
+def cron(period, func, exclusive=False):
     def f():
         if period <= 0:
             return
         sleep = time.sleep
+        if exclusive:
+            cursor = conn.cursor()
+            try_lock = lambda: cursor.one("SELECT pg_try_advisory_lock(0, 0)")
+        has_lock = False
         while 1:
             try:
-                func()
+                if exclusive and not has_lock:
+                    has_lock = try_lock()
+                if not exclusive or has_lock:
+                    func()
             except Exception, e:
                 tell_sentry(e)
                 log_dammit(traceback.format_exc().strip())
@@ -95,7 +105,7 @@ def cron(period, func):
     t.start()
 
 cron(env.update_global_stats_every, lambda: utils.update_global_stats(website))
-cron(env.check_db_every, website.db.self_check)
+cron(env.check_db_every, website.db.self_check, True)
 
 
 # Website Algorithm
