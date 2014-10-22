@@ -157,11 +157,11 @@ unverified_email = participant.get_unverified_email()
                         <a class="address email-address" href="javascript:;">
                             {% if participant.email_address %}
                                 {{ participant.email_address }}
-                            {% elif participant.unverified_email %}
-                                {{ participant.unverified_email }}
+                            {% elif unverified_email %}
+                                {{ unverified_email }}
                             {% endif %}
                         </a>
-                        {% if participant.unverified_email %}
+                        {% if unverified_email %}
                             <span class="none" id="email-not-verified">{{ _("(Unverified)") }}</span>
                         {% else %}
                             <span class="none hidden" id="email-not-verified">{{ _("(Unverified)") }}</span>
@@ -171,7 +171,7 @@ unverified_email = participant.get_unverified_email()
                     <form class="email-submit">
                         <div class="address">
                            <input type="email" class="email hidden"
-                                {% if participant.email_address or participant.unverified_email %}
+                                {% if participant.email_address or unverified_email %}
                                     value="{{ participant.email_address or unverified_email }}"
                                 {% endif %}
                             />
@@ -180,16 +180,16 @@ unverified_email = participant.get_unverified_email()
                             <button type="submit" class="email hidden">Save</button>
                             <button type="cancel" class="email cancel hidden">Cancel</button>
                         </div>
-                        {% if not participant.email_address and participant.unverified_email %}
+                        {% if not participant.email_address and unverified_email %}
                             <div class="buttons">
-                                <button type="resend" class="email">Resend Email</button>
+                                <button type="resend" data-resend="true" class="email">Resend Email</button>
                             </div>
                         {% endif %}
                     </form>
                 </td>
                 <td class="account-action">
                     <button class="toggle-email">
-                        {% if participant.email_address or participant.unverified_email %}
+                        {% if participant.email_address or unverified_email %}
                             {{ _("Edit") }}
                         {% else %}
                             {{ _("+ Add") }}

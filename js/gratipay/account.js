@@ -134,8 +134,11 @@ Gratipay.account.init = function() {
         $this.css('opacity', 0.5);
 
         function success(data) {
-            $('.email').toggle();
-            $('.toggle-email').show();
+            if ($this.data('resend') != 'true')
+            {
+                $('.email').toggle();
+                $('.toggle-email').show();
+            }
 
             if (data.email && !data.previous_email) {
                 $('.email-address').text(data.email);
