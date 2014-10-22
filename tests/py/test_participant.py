@@ -231,6 +231,15 @@ class TestParticipant(Harness):
         assert actual == expected
 
     @mock.patch.object(Participant, 'send_email')
+    def test_cannot_update_email_to_already_verified(self, send_email):
+        self.alice.update_email('alice@gratipay.com')
+        nonce = Participant.from_username('alice').get_email_nonce_and_ctime('alice@gratipay.com')[0]
+        self.alice.verify_email('alice@gratipay.com', nonce)
+        self.bob.update_email('alice@gratipay.com')
+        assert self.alice.email_address == 'alice@gratipay.com'
+        assert self.bob.get_unverified_email() == None
+
+    @mock.patch.object(Participant, 'send_email')
     def test_can_verify_email(self, send_email):
         self.alice.update_email('alice@gratipay.com')
         email = Participant.from_username('alice').get_unverified_email()
