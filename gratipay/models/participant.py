@@ -564,10 +564,9 @@ class Participant(Model, MixinTeam):
 
             We return a value only if we've sent a verification email.
         """
-        current_email = self.email_address
 
         # If the email is already confirmed we have nothing to do.
-        if email == current_email:
+        if email == self.email_address:
             return None
 
         if confirmed:
@@ -626,6 +625,12 @@ class Participant(Model, MixinTeam):
                            , username=self.username
                            , include_unsubscribe=False
                             )
+            if self.email_address:
+                self.send_email( emails.VERIFICATION_NOTICE
+                               , new_email=email
+                               , username=self.username
+                               , include_unsubscribe=False
+                                )
             return email
 
     def verify_email(self, email, nonce):

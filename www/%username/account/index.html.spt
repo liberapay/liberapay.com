@@ -161,7 +161,7 @@ unverified_email = participant.get_unverified_email()
                                 {{ unverified_email }}
                             {% endif %}
                         </a>
-                        {% if unverified_email %}
+                        {% if unverified_email and not participant.email_address %}
                             <span class="none" id="email-not-verified">{{ _("(Unverified)") }}</span>
                         {% else %}
                             <span class="none hidden" id="email-not-verified">{{ _("(Unverified)") }}</span>

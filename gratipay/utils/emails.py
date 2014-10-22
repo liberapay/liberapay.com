@@ -74,3 +74,27 @@ connecting your email:
 
 """,
 )
+
+VERIFICATION_NOTICE = dict(
+    subject="Email change requested on Gratipay",
+    html="""\
+<div style="text-align: center; font: normal 14px/21px Arial, sans-serif; color: #333;">
+    We've received a request to connect <b>{new_email}</b>
+
+    <br>
+
+    to the <b><a href="https://gratipay.com/{username}">{username}</a></b>
+    account on Gratipay. If this wasn't you, contact us at support@gratipay.com.
+
+    <br><br>
+
+
+
+</div>
+""",
+    text="""\
+
+We've received a request to connect {email} to the {username}
+account on Gratipay. If this wasn't you, contact us at support@gratipay.com
+""",
+)
