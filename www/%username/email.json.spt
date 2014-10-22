@@ -6,6 +6,7 @@ import json
 import re
 
 from aspen import Response
+from gratipay.exceptions import ProblemChangingEmail
 
 [-----------------------------------------]
 
@@ -20,8 +21,10 @@ address = request.body['email']
 if not re.match(r"[^@]+@[^@]+\.[^@]+", address):
     raise Response(400)
 
-# Woohoo! valid request, store it!
-email = user.participant.update_email(address)
+try:
+	email = user.participant.update_email(address)
+except ProblemChangingEmail, e:
+	raise Response(400, unicode(e))
 
 [---] application/json via json_dump
 {'email': email}

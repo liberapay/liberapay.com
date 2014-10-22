@@ -32,6 +32,7 @@ from gratipay.exceptions import (
     NoTippee,
     BadAmount,
     UserDoesntAcceptTips,
+    EmailAlreadyTaken
 )
 
 from gratipay.models import add_event
@@ -573,7 +574,7 @@ class Participant(Model, MixinTeam):
             with self.db.get_cursor() as c:
                 # TODO: Invalidate all other emails
 
-                r = c.run("""
+                r = c.one("""
                     UPDATE emails
                        SET confirmed = true, mtime = %s
                      WHERE address = %s
@@ -594,6 +595,14 @@ class Participant(Model, MixinTeam):
             return None
         else:
             # TODO - check whether someone has verified this already?
+            exists = self.db.one("""
+                SELECT COUNT(*)
+                  FROM participants
+                 WHERE email_address=%s
+            """, (email,))
+            if exists:
+                raise EmailAlreadyTaken(email)
+                return None
             nonce = str(uuid.uuid4())
             ctime = utcnow()
             with self.db.get_cursor() as c:

@@ -25,6 +25,14 @@ class UsernameAlreadyTaken(ProblemChangingUsername):
     msg = "The username '{}' is already taken."
 
 
+class ProblemChangingEmail(Exception):
+    def __str__(self):
+        return self.msg.format(self.args[0])
+
+class EmailAlreadyTaken(ProblemChangingEmail):
+    msg = "An account with the email '{}' already exists"
+
+
 class ProblemChangingNumber(Exception):
     def __str__(self):
         return self.msg
