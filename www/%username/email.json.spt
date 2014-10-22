@@ -19,7 +19,7 @@ address = request.body['email']
 # This checks for exactly one @ and at least one . after @
 # The real validation will happen when we send the email
 if not re.match(r"[^@]+@[^@]+\.[^@]+", address):
-    raise Response(400)
+    raise Response(400, "Invalid email address.")
 
 try:
 	email = user.participant.update_email(address)
@@ -27,4 +27,4 @@ except ProblemChangingEmail, e:
 	raise Response(400, unicode(e))
 
 [---] application/json via json_dump
-{'email': email}
+{'email': email, 'previous_email': user.participant.email_address}

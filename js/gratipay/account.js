@@ -134,22 +134,24 @@ Gratipay.account.init = function() {
         $this.css('opacity', 0.5);
 
         function success(data) {
-            $('.email-address').text(data.email);
             $('.email').toggle();
             $('.toggle-email').show();
 
-            if (data.email === '') {
-                $('.toggle-email').text('+ Add');  // TODO i18n
-            } else {
-                $('.toggle-email').text('Edit');  // TODO i18n
-            }
-            if (!data.confirmed) {
+            if (data.email && !data.previous_email) {
+                $('.email-address').text(data.email);
                 $('#email-not-verified').show();
+            }
+
+            if (data.email){
                 Gratipay.notification("We've sent a verification link to " + data.email , 'success');
             }
-            else{
-                Gratipay.notification("We've updated your email address" , 'success');
+
+            if (data.email || data.previous_email) {
+                $('.toggle-email').text('Edit');  // TODO i18n
+            } else {
+                $('.toggle-email').text('+ Add');  // TODO i18n
             }
+
             $this.css('opacity', 1);
         }
 
@@ -158,10 +160,10 @@ Gratipay.account.init = function() {
             type: 'POST',
             dataType: 'json',
             success: success,
-            error: function (data) {
+            error: function (e) {
                 $this.css('opacity', 1);
-                Gratipay.notification('Failed to save your email address. '
-                                  + 'Please try again.', 'error');
+                error_message = JSON.parse(e.responseText).error_message_long;
+                Gratipay.notification(error_message || "Couldn't update email address.", 'error');
             },
             data: {email: $('input.email').val()}
         })
