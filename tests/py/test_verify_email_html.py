@@ -78,3 +78,20 @@ class TestForVerifyEmail(Harness):
         self.change_email_address('alice@gmail.com', participant.username)
         nonce2 = Participant.from_username('alice').get_email_nonce_and_ctime('alice@gmail.com')[0]
         assert nonce1 != nonce2
+
+    def test_latest_nonce_is_considered(self):
+        participant = self.make_participant('alice', claimed_time="now")
+        self.change_email_address('alice@gmail.com', participant.username)
+        nonce1 = Participant.from_username('alice').get_email_nonce_and_ctime('alice@gmail.com')[0]
+        self.change_email_address('alice@gmail.com', participant.username)
+        nonce2 = Participant.from_username('alice').get_email_nonce_and_ctime('alice@gmail.com')[0]
+
+        self.verify_email(participant.username, 'alice@gmail.com', nonce1)
+        expected = None
+        actual = Participant.from_username(participant.username).email_address
+        assert expected == actual
+
+        self.verify_email(participant.username, 'alice@gmail.com', nonce2)
+        expected = 'alice@gmail.com'
+        actual = Participant.from_username(participant.username).email_address
+        assert expected == actual

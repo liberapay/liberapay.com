@@ -572,29 +572,36 @@ class Participant(Model, MixinTeam):
 
         if confirmed:
             with self.db.get_cursor() as c:
-                # TODO: Invalidate all other emails
-
+                c.run("""
+                    UPDATE emails
+                    SET confirmed=NULL
+                    WHERE participant=%s
+                """, (self.username,))
+                # TODO - check whether someone has verified this already? Very unlikely.
                 r = c.one("""
                     UPDATE emails
-                       SET confirmed = true, mtime = %s
-                     WHERE address = %s
-                 RETURNING address
-                """, (utcnow(), email))
-
-                # TODO: What happens another user has verified this email already?
-                #       Either do something here, or below.
+                       SET confirmed=true, mtime=%s
+                      FROM (SELECT id
+                              FROM emails
+                             WHERE participant=%s
+                               AND address=%s
+                               AND confirmed IS NULL
+                          ORDER BY ctime DESC
+                             LIMIT 1) AS unverified
+                       WHERE emails.id=unverified.id
+                   RETURNING address
+                """, (utcnow(), self.username, email))
 
                 # This could be done by a trigger function.
                 c.run("""
                     UPDATE participants
-                       SET email_address = %s
-                     WHERE username = %s
+                       SET email_address=%s
+                     WHERE username=%s
                 """, (email, self.username))
 
                 self.set_attributes(email_address = r)
             return None
         else:
-            # TODO - check whether someone has verified this already?
             exists = self.db.one("""
                 SELECT COUNT(*)
                   FROM participants
@@ -648,8 +655,8 @@ class Participant(Model, MixinTeam):
         rec = self.db.one("""
             SELECT nonce, ctime
               FROM emails
-             WHERE participant = %s
-               AND address = %s
+             WHERE participant=%s
+               AND address=%s
           ORDER BY ctime DESC
              LIMIT 1
         """, (self.username, email))
@@ -659,7 +666,8 @@ class Participant(Model, MixinTeam):
         return self.db.one("""
             SELECT address
               FROM emails
-             WHERE participant = %s
+             WHERE participant=%s
+               AND confirmed IS NULL
           ORDER BY ctime DESC
              LIMIT 1
         """, (self.username,))
