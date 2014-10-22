@@ -33,7 +33,6 @@ payday = db.one( "SELECT ts_start, ts_end FROM paydays WHERE ts_start > %s"
 npeople = db.one("SELECT count(*) FROM participants WHERE claimed_time IS NOT NULL AND is_suspicious IS NOT true")
 ncc = db.one("SELECT count(*) FROM participants WHERE last_bill_result = '' AND is_suspicious IS NOT true")
 pcc = "%5.1f" % ((ncc * 100.0) / npeople) if npeople > 0 else 0.0
-statements = db.all("SELECT username, statement FROM participants WHERE statement != '' AND is_suspicious IS NOT true ORDER BY random(), username LIMIT 16")
 transfer_volume = db.one("SELECT transfer_volume FROM paydays ORDER BY ts_end DESC LIMIT 1", default=0)
 tips_stats = db.one("""
     SELECT count(*), avg(amount), sum(amount)
@@ -153,7 +152,7 @@ elif now.weekday() == SATURDAY:
     this_thursday = "this coming Thursday"
 
 def out():
-    names = ['ncc', 'pcc', 'statements', 'transfer_volume', 'last_thursday',
+    names = ['ncc', 'pcc', 'transfer_volume', 'last_thursday',
              'this_thursday', 'punc', 'other_people', 'average_tip',
              'average_tippees', 'total_backed_tips', 'tip_n', 'nach', 'escrow',
              'ngivers', 'nreceivers', 'noverlap', 'nactive']
@@ -322,9 +321,7 @@ d3.json("/about/tip-distribution.json", function(tips){
 {% block page %}
 
 
-<div class="col1">
-
-    <h1>Quick Facts</h1>
+<div class="col0">
 
     <p>Gratipay is <b>{{ age() }}</b> old and has <b>{{ nactive }} active
     users</b>.</p>
@@ -368,18 +365,5 @@ d3.json("/about/tip-distribution.json", function(tips){
     <p>Here's how tip amounts are distributed by total value of the tips:</p>
 
     <div id="distribution-by-value", class="distribution"></div>
-</div>
-<div class="col2">
-
-    <h1>For Example</h1>
-
-    <p>How are Gratipay participants <b>making the world better</b>?</p>
-
-    <p>
-    {% for statement in statements %}
-    <b><a href="/{{ statement.username|e }}/">{{ statement.username|e }}</a></b>
-    is <span title="{{ statement.statement|e }}">{{ part(statement.statement)|e }}</span><br />
-    {% endfor %}
-    </p>
 </div>
 {% endblock %}
