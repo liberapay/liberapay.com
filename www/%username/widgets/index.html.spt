@@ -29,7 +29,7 @@ locked = False
         border: 1pt solid #999;
         border-radius: 7pt;
 
-        background: #F7F7F6 url("{{ website.asset_url }}/button-bg.png") repeat-x bottom left;
+        background: #F7F7F6 url("{{ website.asset('button-bg.png') }}") repeat-x bottom left;
         background-image: -webkit-gradient( linear, 0% 0%, 0% 100%
                                           , from(#F7F7F6)
                                           , to(#999)
@@ -45,7 +45,7 @@ locked = False
 
     .button-examples button.old-widget-style { /* .selected */
         border: 1px solid #0A382E;
-        background: #2A8F79 url("{{ website.asset_url }}/button-bg.png") repeat-x bottom left;
+        background: #2A8F79 url("{{ website.asset('button-bg.png') }}") repeat-x bottom left;
         background-image: -webkit-gradient( linear, 0% 0%, 0% 100%
                                           , from(#2A8F79)
                                           , to(#0D4035)
@@ -82,7 +82,7 @@ locked = False
 
     .button-examples button.old-widget-style:hover, .button-examples button.old-widget-style:focus {
         border: 1px solid #0A382E;
-        background-image: url("{{ website.asset_url }}/button-bg.over.png");
+        background-image: url("{{ website.asset('button-bg.over.png') }}");
         background-image: -webkit-gradient( linear, 0% 0%, 0% 100%
                                           , from(#2A8F79)
                                           , to(#04221B)

@@ -75,8 +75,7 @@ class Platform(object):
                      , 'name'
                      )
 
-    def __init__(self, asset_url, api_key, api_secret, callback_url, api_url=None, auth_url=None):
-        self.icon = '%s/icons/%s.16.png' % (asset_url, self.name)
+    def __init__(self, api_key, api_secret, callback_url, api_url=None, auth_url=None):
         self.api_key = api_key
         self.api_secret = api_secret
         self.callback_url = callback_url

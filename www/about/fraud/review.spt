@@ -19,8 +19,8 @@ unreviewed = website.db.all("""
 """)
 
 [---] text/html
-<script src="{{ website.asset_url }}/jquery.min.js"></script>
-<script src="{{ website.asset_url }}/gratipay.js"></script>
+<script src="{{ website.asset('jquery.min.js') }}"></script>
+<script src="{{ website.asset('gratipay.js') }}"></script>
 <style>
     table {
         width: auto;

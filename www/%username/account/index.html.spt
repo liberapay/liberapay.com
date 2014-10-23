@@ -57,7 +57,7 @@ locked = False
             <table class="accounts" id="account-balance">
                 <tr>
                     <td class="account-type">
-                        <img src="{{ website.asset_url }}/bank_account_icon.jpg" />
+                        <img src="{{ website.asset('bank_account_icon.jpg') }}" />
                     </td>
                     <td class="account-details">
                         <div class="account-type">{{ _("Available Balance") }}</div>
@@ -80,7 +80,7 @@ locked = False
             <table class="accounts">
                 <tr>
                     <td class="account-type">
-                        <img src="{{ website.asset_url }}/card_icon.jpg" />
+                        <img src="{{ website.asset('card_icon.jpg') }}" />
                     </td>
                     <td class="account-details">
                         <div class="account-type">{{ _("Credit Card") }}</div>
@@ -111,7 +111,7 @@ locked = False
             <table class="accounts">
                 <tr>
                     <td class="account-type">
-                        <img src="{{ website.asset_url }}/bank_account_icon.jpg" />
+                        <img src="{{ website.asset('bank_account_icon.jpg') }}" />
                     </td>
                     <td class="account-details">
                         <div class="account-type">{{ _("Bank Account") }}</div>
@@ -132,7 +132,7 @@ locked = False
                 {% if participant.paypal_email %}
                 <tr>
                     <td class="account-type">
-                        <img src="{{ website.asset_url }}/paypal.png" />
+                        <img src="{{ website.asset('paypal.png') }}" />
                     </td>
                     <td class="account-details">
                         <div class="account-type">Paypal</div>
@@ -148,7 +148,7 @@ locked = False
         <table class="accounts">
             <tr>
                 <td class="account-type">
-                    <img src="{{ website.asset_url }}/email.png" />
+                    <img src="{{ website.asset('email.png') }}" />
                 </td>
                 <td class="account-details">
                     <div class="account-type">{{ _("Email Address (Private)") }}</div>

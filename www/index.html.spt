@@ -31,7 +31,7 @@ from gratipay.security.user import SESSION_TIMEOUT
     <meta name="og:type" content="website" />
     <meta name="og:url" content="https://gratipay.com/" />
     <meta name="og:title" content="Gratipay" />
-    <meta name="og:image" content="{{ website.asset_url }}/gratipay.opengraph.png" />
+    <meta name="og:image" content="{{ website.asset('gratipay.opengraph.png') }}" />
     <style>
         .pennies, .container { display: none; }
         #upgrade_browser .container { display: block; }
@@ -52,7 +52,7 @@ from gratipay.security.user import SESSION_TIMEOUT
 {% block whole_page %}
 <div class="homepage">
     <div class="pitch">
-        <img src="{{ website.asset_url }}/gratipay.white.svg" alt="Gratipay">
+        <img src="{{ website.asset('gratipay.white.svg') }}" alt="Gratipay">
         <h1>{{ _("Weekly Payments") }}</h1>
         <p>{{ _("Motivated by Gratitude") }}</p>
 
