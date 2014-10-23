@@ -39,7 +39,7 @@ class TestForVerifyEmail(Harness):
         actual = Participant.from_username(participant.username).email_address
         assert expected == actual
 
-    def test_confirmed_email_is_not_changed_after_update(self):
+    def test_verified_email_is_not_changed_after_update(self):
         participant = self.make_participant('alice', claimed_time="now")
         self.change_email_address('alice@gmail.com', participant.username)
         nonce = Participant.from_username('alice').get_email_nonce_and_ctime('alice@gmail.com')[0]

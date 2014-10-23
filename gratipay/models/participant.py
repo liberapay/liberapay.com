@@ -551,40 +551,40 @@ class Participant(Model, MixinTeam):
         """, (self.username,))
         self.set_attributes(avatar_url=avatar_url)
 
-    def update_email(self, email, confirmed=False):
+    def update_email(self, email, verify=False):
         """
             Update the email address of a participant.
 
             This could be called when
             1) Adding a new email address
             2) Resending the verification email for an unverified email address
-            3) Confirming an email address
+            3) Verifying an email address
 
             In case 3, we UPDATE rows. In case 1 and 2, we're just INSERTing.
 
             We return a value only if we've sent a verification email.
         """
 
-        # If the email is already confirmed we have nothing to do.
+        # If the email is already verified we have nothing to do.
         if email == self.email_address:
             return None
 
-        if confirmed:
+        if verify:
             with self.db.get_cursor() as c:
                 c.run("""
                     UPDATE emails
-                    SET confirmed=NULL
+                    SET verified=NULL
                     WHERE participant=%s
                 """, (self.username,))
                 # TODO - check whether someone has verified this already? Very unlikely.
                 r = c.one("""
                     UPDATE emails
-                       SET confirmed=true, mtime=%s
+                       SET verified=true, mtime=%s
                       FROM (SELECT id
                               FROM emails
                              WHERE participant=%s
                                AND address=%s
-                               AND confirmed IS NULL
+                               AND verified IS NULL
                           ORDER BY ctime DESC
                              LIMIT 1) AS unverified
                        WHERE emails.id=unverified.id
@@ -672,7 +672,7 @@ class Participant(Model, MixinTeam):
             SELECT address
               FROM emails
              WHERE participant=%s
-               AND confirmed IS NULL
+               AND verified IS NULL
           ORDER BY ctime DESC
              LIMIT 1
         """, (self.username,))

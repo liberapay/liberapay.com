@@ -5,12 +5,12 @@ BEGIN;
     CREATE TABLE emails
     ( id                                serial                      PRIMARY KEY
     , address                           text                        NOT NULL
-    , confirmed                         boolean                     DEFAULT NULL
+    , verified                          boolean                     DEFAULT NULL
     , nonce                             text
     , ctime                             timestamp with time zone    NOT NULL DEFAULT CURRENT_TIMESTAMP
     , mtime                             timestamp with time zone
     , participant                       text                        NOT NULL REFERENCES participants
-    , UNIQUE (address, confirmed) -- One verified email address per person.
+    , UNIQUE (address, verified) -- One verified email address per person.
      );
 
     -- The participants table currently has an `email` attribute of type email_address_with confirmation
