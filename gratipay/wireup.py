@@ -24,6 +24,7 @@ from gratipay.models.community import Community
 from gratipay.models.participant import Participant
 from gratipay.models.email_address_with_confirmation import EmailAddressWithConfirmation
 from gratipay.models import GratipayDB
+from gratipay.utils.cache_static import asset_etag
 
 
 def canonical(env):
@@ -225,9 +226,21 @@ def other_stuff(website, env):
     website.cache_static = env.gratipay_cache_static
     website.compress_assets = env.gratipay_compress_assets
 
+    if website.cache_static:
+        def asset(path):
+            fspath = website.www_root+'/assets/'+path
+            etag = ''
+            try:
+                etag = asset_etag(website, fspath)
+            except Exception as e:
+                website.tell_sentry(e)
+            return env.gratipay_asset_url+path+(etag and '?etag='+etag)
+        website.asset = asset
+    else:
+        website.asset = lambda path: env.gratipay_asset_url+path
+
     website.google_analytics_id = env.google_analytics_id
     website.optimizely_id = env.optimizely_id
-    website.sentry_dsn = env.sentry_dsn
 
     website.log_metrics = env.log_metrics
 
