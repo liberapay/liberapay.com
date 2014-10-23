@@ -1,9 +1,13 @@
 """Wireup
 """
 from __future__ import absolute_import, division, print_function, unicode_literals
+
+import fnmatch
 import os
+from tempfile import mkstemp
 
 import aspen
+from aspen.testing.client import Client
 import balanced
 import gratipay
 import gratipay.billing.payday
@@ -217,6 +221,28 @@ def accounts_elsewhere(website, env):
         platform.logo = website.asset('platforms/%s.png' % platform.name)
 
 
+def find_files(directory, pattern):
+    for root, dirs, files in os.walk(directory):
+        for filename in fnmatch.filter(files, pattern):
+            yield os.path.join(root, filename)
+
+
+def compile_assets(website):
+    client = Client(website.www_root, website.project_root)
+    client._website = website
+    for spt in find_files(website.www_root+'/assets/', '*.spt'):
+        path = spt[spt.rfind('/assets/'):-4]
+        try:
+            os.unlink(spt[:-4])
+        except:
+            pass
+        content = client.GET(path).body
+        tmpfd, tmpfpath = mkstemp(dir='.')
+        os.write(tmpfd, content)
+        os.close(tmpfd)
+        os.rename(tmpfpath, spt[:-4])
+
+
 def other_stuff(website, env):
     website.cache_static = env.gratipay_cache_static
     website.compress_assets = env.gratipay_compress_assets
@@ -231,6 +257,7 @@ def other_stuff(website, env):
                 website.tell_sentry(e)
             return env.gratipay_asset_url+path+(etag and '?etag='+etag)
         website.asset = asset
+        compile_assets(website)
     else:
         website.asset = lambda path: env.gratipay_asset_url+path
 
