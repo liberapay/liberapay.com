@@ -15,6 +15,8 @@ import json
 from gratipay import wireup
 from gratipay.exceptions import NegativeBalance
 
+MINIMUM_COINBASE_PAYOUT = 1 # in USD
+
 @task(
     help={
         'username': "Gratipay username. (required)",
@@ -110,7 +112,7 @@ def bitcoin_payout(username='', amount='', api_key_fragment='', bitcoin_address=
         print(bitcoin_payout.__doc__)
         sys.exit(1)
 
-    assert D(amount) > 0
+    assert D(amount) > MINIMUM_COINBASE_PAYOUT
 
     if not api_key_fragment:
         first_eight = "unknown!"
@@ -187,7 +189,6 @@ def bitcoin_payout(username='', amount='', api_key_fragment='', bitcoin_address=
         # Get the amount from the response
         assert result.json()['transfer']['subtotal']['currency'] == "USD"
         amount = -D(result.json()['transfer']['subtotal']['amount']) # Negative amount for payouts
-
         btcamount = result.json()['transfer']['btc']['amount']
 
         note = "Sent %s btc to %s" % (btcamount, bitcoin_address)
