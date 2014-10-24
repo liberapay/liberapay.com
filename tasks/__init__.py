@@ -188,7 +188,9 @@ def bitcoin_payout(username='', amount='', api_key_fragment='', bitcoin_address=
         assert result.json()['transfer']['subtotal']['currency'] == "USD"
         amount = -D(result.json()['transfer']['subtotal']['amount']) # Negative amount for payouts
 
-        note = "Bitcoin payout to %s" % bitcoin_address
+        btcamount = result.json()['transfer']['btc']['amount']
+
+        note = "Sent %s btc to %s" % (btcamount, bitcoin_address)
 
         with db.get_cursor() as cursor:
             exchange_id = cursor.one("""
@@ -203,10 +205,10 @@ def bitcoin_payout(username='', amount='', api_key_fragment='', bitcoin_address=
                  WHERE username=%s
              RETURNING balance
             """, (amount - fee, username))
-        if new_balance < 0:
-            raise NegativeBalance
-        print("Exchange recorded: " + str(exchange_id))
-        print("New Balance: " + str(new_balance))
+            if new_balance < 0:
+                raise NegativeBalance
+            print("Exchange recorded: " + str(exchange_id))
+            print("New Balance: " + str(new_balance))
 
     print("All done.")
 
@@ -244,3 +246,7 @@ def load_prod_envvars():
             key, val = envvar.split("=", 1)
             os.environ[key] = val
             print("Loaded " + key + ".")
+
+
+
+
