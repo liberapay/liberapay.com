@@ -101,11 +101,11 @@ def set_paypal_email(username='', email='', api_key_fragment='', overwrite=False
         'api-key-fragment': "First 8 characters of user's API key.",
     }
 )
-def bitcoin_payout(username='', amount='', api_key_fragment='', bitcoin_address=''):
+def bitcoin_payout(username='', amount='', api_key_fragment=''):
     """
     Usage:
 
-    [gratipay] $ env/bin/invoke bitcoin_payout --username=username --amount=amount [--api-key-fragment=12e4s678] [--bitcoin_address=1NmYSdbs9SkLiJQdKtmuZEjk6gJzXNtr4h]
+    [gratipay] $ env/bin/invoke bitcoin_payout --username=username --amount=amount [--api-key-fragment=12e4s678]
     """
 
     if not username or not amount:
@@ -135,12 +135,12 @@ def bitcoin_payout(username='', amount='', api_key_fragment='', bitcoin_address=
         print("No Gratipay participant found with username '" + username + "'")
         sys.exit(2)
 
-    if not bitcoin_address:
-        if not fields.bitcoin_address:
-            print(username + " hasn't linked a bitcoin address to their profile, please provide one.")
-            sys.exit(3)
-        print("Fetching bitcoin_address from database: " + fields.bitcoin_address)
-        bitcoin_address = fields.bitcoin_address
+    if not fields.bitcoin_address:
+        print(username + " hasn't linked a bitcoin address to their profile!")
+        sys.exit(3)
+    print("Fetching bitcoin_address from database: " + fields.bitcoin_address)
+    bitcoin_address = fields.bitcoin_address
+
     if D(fields.balance) < D(amount):
         print("Not enough balance. %s only has %f in his account!" % username, D(amount))
         sys.exit(4)
