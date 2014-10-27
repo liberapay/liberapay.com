@@ -98,13 +98,6 @@ def get_tip_distribution():
     return r
 
 
-def part(s):
-    s = s.splitlines()[0]
-    if len(s) > 45:
-        s = s[:42].rsplit(None, 1)[0] + " ..."
-    return s
-
-
 last_payday = db.one("select * from paydays order by ts_end desc limit 1", back_as="dict")
 if last_payday:
     nactive = last_payday['nactive']
