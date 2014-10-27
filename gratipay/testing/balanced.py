@@ -1,5 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+import itertools
+
 import balanced
 
 from gratipay.testing import Harness
@@ -20,6 +22,16 @@ class BalancedHarness(Harness):
                                            claimed_time='now',
                                            balanced_customer_href=self.homer_href,
                                            last_ach_result='')
+
+    @classmethod
+    def tearDownClass(cls):
+        has_exchange_id = balanced.Transaction.f.meta.contains('exchange_id')
+        credits = balanced.Credit.query.filter(has_exchange_id)
+        debits = balanced.Debit.query.filter(has_exchange_id)
+        for t in itertools.chain(credits, debits):
+            t.meta.pop('exchange_id')
+            t.save()
+        super(BalancedHarness, cls).tearDownClass()
 
 
 with use_cassette('BalancedHarness'):
