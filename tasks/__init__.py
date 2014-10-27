@@ -5,7 +5,7 @@ from invoke import run, task
 import sys
 import os
 
-from decimal import Decimal as D
+from decimal import Decimal as D, ROUND_HALF_UP
 import hashlib
 import hmac
 import requests
@@ -97,7 +97,6 @@ def set_paypal_email(username='', email='', api_key_fragment='', overwrite=False
     help={
         'username': "Gratipay username. (required)",
         'amount': "Amount to send in USD. (required)",
-        'bitcoin-address': "Bitcoin Address to send money to. If not mentioned, taken from database",
         'api-key-fragment': "First 8 characters of user's API key.",
     }
 )
@@ -112,7 +111,9 @@ def bitcoin_payout(username='', amount='', api_key_fragment=''):
         print(bitcoin_payout.__doc__)
         sys.exit(1)
 
-    assert D(amount) >= MINIMUM_COINBASE_PAYOUT
+    amount = D(amount)
+    assert amount >= MINIMUM_COINBASE_PAYOUT
+    amount = subtract_fee(amount)
 
     if not api_key_fragment:
         first_eight = "unknown!"
@@ -212,6 +213,20 @@ def bitcoin_payout(username='', amount='', api_key_fragment=''):
             print("New Balance: " + str(new_balance))
 
     print("All done.")
+
+def round_(d):
+    return d.quantize(D('0.01'), rounding=ROUND_HALF_UP)
+
+def subtract_fee(amount):
+    bank_fee = D('0.15')    # bank fee is $0.15
+    net = target = amount - bank_fee
+    while 1:                # coinbase fee is 1%; strategy borrowed from bin/masspay.py
+        net -= D('0.01')
+        coinbase_fee = round_(net * D('0.01'))
+        gross = net + coinbase_fee
+        if gross <= target:
+            break
+    return net
 
 def coinbase_request(url, body=None):
     if not os.environ.get('COINBASE_API_KEY'):
