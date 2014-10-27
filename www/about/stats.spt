@@ -285,9 +285,6 @@ d3.json("/about/tip-distribution.json", function(tips){
 
 {% block page %}
 
-
-<div class="col0">
-
     <p>Gratipay is <b>{{ age() }}</b> old and has <b>{{ nactive }} active
     users</b>.</p>
 
@@ -330,5 +327,5 @@ d3.json("/about/tip-distribution.json", function(tips){
     <p>Here's how tip amounts are distributed by total value of the tips:</p>
 
     <div id="distribution-by-value" class="distribution"></div>
-</div>
+
 {% endblock %}
