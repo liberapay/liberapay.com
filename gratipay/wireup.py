@@ -252,7 +252,7 @@ def other_stuff(website, env):
             fspath = website.www_root+'/assets/'+path
             etag = ''
             try:
-                etag = asset_etag(website, fspath)
+                etag = asset_etag(fspath)
             except Exception as e:
                 website.tell_sentry(e)
             return env.gratipay_asset_url+path+(etag and '?etag='+etag)

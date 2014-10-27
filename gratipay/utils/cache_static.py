@@ -10,10 +10,10 @@ from aspen import Response
 ETAGS = {}
 
 
-def asset_etag(website, path):
+def asset_etag(path):
     if path.endswith('.spt'):
         return ''
-    if website.cache_static and path in ETAGS:
+    if path in ETAGS:
         h = ETAGS[path]
     else:
         with open(path) as f:
@@ -30,7 +30,7 @@ def try_to_serve_304(dispatch_result, request, website):
         # This is a request for a dynamic resource.
         return request
 
-    etag = request.etag = asset_etag(website, dispatch_result.match)
+    etag = request.etag = asset_etag(dispatch_result.match)
 
     qs_etag = request.line.uri.querystring.get('etag')
     if qs_etag and qs_etag != etag:
