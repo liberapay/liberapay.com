@@ -97,7 +97,6 @@ def set_paypal_email(username='', email='', api_key_fragment='', overwrite=False
     help={
         'username': "Gratipay username. (required)",
         'amount': "Amount to send in USD. (required)",
-        'bitcoin-address': "Bitcoin Address to send money to. If not mentioned, taken from database",
         'api-key-fragment': "First 8 characters of user's API key.",
     }
 )
