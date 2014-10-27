@@ -1,8 +1,6 @@
 from __future__ import division
 
 from decimal import Decimal as D
-import os
-import sys
 import threading
 import time
 import traceback
