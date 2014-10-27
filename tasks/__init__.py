@@ -112,7 +112,7 @@ def bitcoin_payout(username='', amount='', api_key_fragment=''):
         print(bitcoin_payout.__doc__)
         sys.exit(1)
 
-    assert D(amount) > MINIMUM_COINBASE_PAYOUT
+    assert D(amount) >= MINIMUM_COINBASE_PAYOUT
 
     if not api_key_fragment:
         first_eight = "unknown!"
