@@ -142,7 +142,7 @@ def bitcoin_payout(username='', amount='', api_key_fragment=''):
     bitcoin_address = fields.bitcoin_address
 
     if D(fields.balance) < D(amount):
-        print("Not enough balance. %s only has %f in his account!" % username, D(amount))
+        print("Not enough balance. %s only has %f in their account!" % username, D(amount))
         sys.exit(4)
 
     if fields.api_key == None:
@@ -247,7 +247,3 @@ def load_prod_envvars():
             key, val = envvar.split("=", 1)
             os.environ[key] = val
             print("Loaded " + key + ".")
-
-
-
-
