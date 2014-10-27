@@ -86,7 +86,7 @@ def cron(period, func, exclusive=False):
         sleep = time.sleep
         if exclusive:
             cursor = conn.cursor()
-            try_lock = lambda: cursor.one("SELECT pg_try_advisory_lock(0, 0)")
+            try_lock = lambda: cursor.one("SELECT pg_try_advisory_lock(0)")
         has_lock = False
         while 1:
             try:
