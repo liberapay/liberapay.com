@@ -1,7 +1,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 from decimal import Decimal as D
-import itertools
 
 import balanced
 import mock
@@ -326,16 +325,6 @@ class TestRecordExchange(Harness):
 
 
 class TestSyncWithBalanced(BalancedHarness):
-
-    @classmethod
-    def tearDownClass(cls):
-        has_exchange_id = balanced.Transaction.f.meta.contains('exchange_id')
-        credits = balanced.Credit.query.filter(has_exchange_id)
-        debits = balanced.Debit.query.filter(has_exchange_id)
-        for t in itertools.chain(credits, debits):
-            t.meta.pop('exchange_id')
-            t.save()
-        super(TestSyncWithBalanced, cls).tearDownClass()
 
     def test_sync_with_balanced(self):
         with mock.patch('gratipay.billing.exchanges.record_exchange_result') as rer:
