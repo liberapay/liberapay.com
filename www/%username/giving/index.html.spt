@@ -1,5 +1,6 @@
-from gratipay.utils import get_participant
 from datetime import timedelta
+
+from gratipay.utils import get_participant
 from aspen.utils import utcnow
 
 [-----------------------------------------------------------------------------]
@@ -10,7 +11,7 @@ tips, total, unclaimed_tips, unclaimed_total = \
 hero = _("Giving")
 title = "%s - %s" % (participant.username, hero)
 locked = False
-cancelled_tips = filter(lambda x: x.amount==0 and (utcnow() - x.mtime < timedelta(weeks=1)), tips)
+cancelled_tips = [x for x in tips if x.amount == 0][:10]
 ncancelled_tips = len(cancelled_tips)
 
 CANCELLED = ngettext("You cancelled {n} tip recently", "You cancelled {n} tips recently", ncancelled_tips)
@@ -61,7 +62,7 @@ CANCELLED = ngettext("You cancelled {n} tip recently", "You cancelled {n} tips r
             {% if participant == user.participant %}
             <h2>{{ CANCELLED }}</h2>
             {% else %}
-            <h2>{{ _("{0} cancelled {1} tip(s) recently", participant.username, ncancelled_tips) }}</h2>
+            <h2>{{ "%s cancelled %s tip(s) recently" % participant.username, ncancelled_tips }}</h2>
             {% endif %}
         </td>
     </tr>
