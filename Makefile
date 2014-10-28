@@ -84,5 +84,7 @@ i18n_upload: env tx
 
 i18n_download: env tx
 	$(env_bin)/tx pull -a -f --mode=reviewed --minimum-perc=50
-	sed -e '/^"POT\?-[^-]\+-Date: /d' -i i18n/*/*.po
-	sed -e '/^#: /d' -i i18n/*/*.po
+	@for f in i18n/*/*.po; do \
+	    sed -e '/^"POT\?-[^-]\+-Date: /d' -e '/^#: /d' "$$f" >"$$f.new"; \
+	    mv "$$f.new" "$$f"; \
+	done
