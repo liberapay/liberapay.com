@@ -85,6 +85,8 @@ i18n_upload: env tx
 i18n_download: env tx
 	$(env_bin)/tx pull -a -f --mode=reviewed --minimum-perc=50
 	@for f in i18n/*/*.po; do \
-	    sed -E -e '/^"POT?-[^-]+-Date: /d' -e '/^#: /d' "$$f" >"$$f.new"; \
+	    sed -E -e '/^"POT?-[^-]+-Date: /d' \
+	           -e '/^"Last-Translator: /d' \
+	           -e '/^#: /d' "$$f" >"$$f.new"; \
 	    mv "$$f.new" "$$f"; \
 	done
