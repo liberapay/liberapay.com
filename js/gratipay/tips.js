@@ -16,11 +16,14 @@ Gratipay.tips.init = function() {
             timer = setTimeout(checkTip.bind(this), 700);
         }
     });
+    $('input.my-tip').trigger("change");
+
 
     function checkTip() {
         var $this     = $(this),
             $parent   = $this.parents('form'),
             $confirm  = $parent.find('.confirm-tip'),
+            $cancel   = $parent.find('.cancel-tip'),
             amount    = parseFloat(unlocalizeDecimal($this.val()), 10) || 0,
             oldAmount = parseFloat(unlocalizeDecimal(this.defaultValue), 10),
             max       = parseFloat($this.prop('max')),
@@ -37,10 +40,14 @@ Gratipay.tips.init = function() {
             $parent.addClass('changed');
 
         // show/hide the payment prompt
-        if (amount)
+        if (amount) {
+            $cancel.prop('disabled', false);
             $('#payment-prompt').addClass('needed');
-        else
+        }
+        else {
+            $cancel.prop('disabled', true);
             $('#payment-prompt').removeClass('needed');
+        }
 
         // prompt the user if they try leaving the page before confirming their tip
         if (same)
