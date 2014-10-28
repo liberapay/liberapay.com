@@ -99,7 +99,7 @@ def load_langs(localeDir):
 
 
 # Load the locales
-LOCALES = load_langs("i18n")
+LOCALES = load_langs("i18n/core")
 
 # Add the default English locale
 LOCALE_EN = LOCALES['en'] = Locale('en')

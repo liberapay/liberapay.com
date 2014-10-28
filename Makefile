@@ -67,7 +67,22 @@ node_modules: package.json
 jstest: node_modules
 	./node_modules/.bin/grunt test
 
-i18n_update: env
-	$(env_bin)/pybabel extract -F .babel_extract --no-wrap --omit-header -o i18n/tmp.pot templates www
-	for f in i18n/*.po; do $(env_bin)/pybabel update -i i18n/tmp.pot -l $$(basename $${f%.*}) --no-fuzzy-matching -o $$f; done
-	rm i18n/tmp.pot
+transifexrc:
+	@echo '[https://www.transifex.com]' >.transifexrc
+	@echo 'hostname = https://www.transifex.com' >>.transifexrc
+	@echo "password = $$TRANSIFEX_PASS" >>.transifexrc
+	@echo 'token = ' >>.transifexrc
+	@echo "username = $$TRANSIFEX_USER" >>.transifexrc
+
+tx:
+	@if [ ! -x $(env_bin)/tx ]; then $(env_bin)/pip install transifex-client; fi
+
+i18n_upload: env tx
+	$(env_bin)/pybabel extract -F .babel_extract --no-wrap -o i18n/core.pot templates www
+	$(env_bin)/tx push -s
+	rm i18n/*.pot
+
+i18n_download: env tx
+	$(env_bin)/tx pull -a -f --mode=reviewed --minimum-perc=50
+	sed -r -e '/^"POT?-[^-]+-Date: /d' -i i18n/*/*.po
+	sed -e '/^#: /d' -i i18n/*/*.po
