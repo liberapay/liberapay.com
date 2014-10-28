@@ -8,7 +8,10 @@
            value="{{ format_decimal(tip.amount) }}"
            data-tippee="{{ tip.tippee }}"> / {{ _("week") }}
 
-    <button class="confirm-tip" disabled>{{ _("Confirm") }}</button>
-    <a href="#" class="cancel-tip">{{ _("Cancel") }}</a>
+    <button href="#" class="cancel-tip" type="button">{{ _("Cancel") }}</a>
+
+    <button class="confirm-tip" type="submit" disabled>{{ _("Confirm") }}</button>
+    <a href="#" class="reset-tip">{{ _("Reset") }}</a>
+
 </form>
 {% endmacro %}
