@@ -19,6 +19,11 @@ from gratipay.security.user import SESSION_TIMEOUT
 [---]
 [---]
 {% extends "templates/base.html" %}
+{% block head_early %}
+    {% if website.optimizely_id %}
+    <script src="//cdn.optimizely.com/js/{{ website.optimizely_id }}.js"></script>
+    {% endif %}
+{% endblock %}
 {% block head %}
     <link rel="publisher" href="https://plus.google.com/104524895706770139568">
     <meta name="description" content="Weekly payments, motivated by gratitude. Sustainably crowdfund your business, personal projects, or charity, with no extra fees." />
@@ -32,9 +37,6 @@ from gratipay.security.user import SESSION_TIMEOUT
         #upgrade_browser .container { display: block; }
         html, body { height: 100%; min-height: 100%; }
     </style>
-    {% if website.optimizely_id %}
-    <script src="//cdn.optimizely.com/js/{{ website.optimizely_id }}.js"></script>
-    {% endif %}
 {% endblock %}
 
 {% block scripts %}
