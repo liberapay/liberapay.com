@@ -11,6 +11,25 @@
     <link rel="apple-touch-icon-precomposed" href="{{ website.asset_url }}/touch/icon-152x152.png" sizes="152x152">
     <link rel="stylesheet" type="text/css" href="//cloud.typography.com/6540672/615104/css/fonts.css" />
     {% block head %}{% endblock %}
+    
+    {% if website.google_analytics_id and request.headers.get('DNT') != '1' %}
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        
+        {% if user.ANON %}
+            // Automatic tracking based on anonymous session ID.
+            // See: https://developers.google.com/analytics/devguides/collection/analyticsjs/user-id
+            ga('create', '{{ website.google_analytics_id }}', 'auto');
+        {% else %}
+            ga('create', '{{ website.google_analytics_id }}', {'userId': '{{ user.participant.id }}'});
+        {% endif %}
+        
+        ga('send', 'pageview');
+    </script>
+    {% endif %}
 </head>
 <body>
     <div class="container">
@@ -99,23 +118,6 @@
         }
     </script>
 
-    {% if website.segment_key and request.headers.get('DNT') != '1' %}
-    <!-- For non-minified JS and inline docs: https://segment.io/docs/tutorials/quickstart-analytics.js/#step-1-copy-the-snippet -->
-    <script type="text/javascript">
-        window.analytics=window.analytics||[],window.analytics.methods=["identify","group","track","page","pageview","alias","ready","on","once","off","trackLink","trackForm","trackClick","trackSubmit"],window.analytics.factory=function(t){return function(){var a=Array.prototype.slice.call(arguments);return a.unshift(t),window.analytics.push(a),window.analytics}};for(var i=0;i<window.analytics.methods.length;i++){var key=window.analytics.methods[i];window.analytics[key]=window.analytics.factory(key)}window.analytics.load=function(t){if(!document.getElementById("analytics-js")){var a=document.createElement("script");a.type="text/javascript",a.id="analytics-js",a.async=!0,a.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.io/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(a,n)}},window.analytics.SNIPPET_VERSION="2.0.9",
-        window.analytics.load("{{ website.segment_key }}");
-        window.analytics.page();
-    </script>
-    <script type="text/javascript">
-    {% if user.ANON %}
-        // Automatic tracking based on anonymous session ID.
-        // See: https://segment.io/docs/tracking-api/identify/#anonymous-id
-        analytics.identify({});
-    {% else %}
-        analytics.identify('{{ user.participant.id }}', function(){});
-    {% endif %}
-    </script>
-    {% endif %}
 
     <script src="{{ website.asset_url }}/jquery.min.js"></script>
 
