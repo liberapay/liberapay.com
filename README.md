@@ -67,6 +67,7 @@ Table of Contents
   - [Dependencies](#dependencies)
   - [Building](#building)
   - [Launching](#launching)
+  - [Configuring](#configuring)
   - [Vagrant](#vagrant)
   - [Docker](#docker)
   - [Help!](#help)
@@ -200,6 +201,37 @@ You should then find this in your browser at
 
 Congratulations! Sign in using Twitter or GitHub and you're off and
 running. At some point, try [running the test suite](#testing-).
+
+Configuring
+-----------
+
+Gratipay's default configuration lives in [`defaults.env`](https://github.com/gratipay/gratipay.com/blob/master/defaults.env).
+If you'd like to override some settings, create a file named `local.env` to store them.
+
+The following explains some of the content of that file:
+
+The `BALANCED_API_SECRET` is a test marketplace. To generate a new secret for
+your own testing run this command:
+
+    curl -X POST https://api.balancedpayments.com/v1/api_keys | grep secret
+
+Grab that secret and also create a new marketplace to test against:
+
+    curl -X POST https://api.balancedpayments.com/v1/marketplaces -u <your_secret>:
+
+The site works without this, except for the credit card page. Visit the
+[Balanced Documentation](https://www.balancedpayments.com/docs) if you want to
+know more about creating marketplaces.
+
+The GITHUB_* keys are for a gratipay-dev application in the Gratipay organization
+on Github. It points back to localhost:8537, which is where Gratipay will be
+running if you start it locally with `make run`. Similarly with the TWITTER_*
+keys, but there they required us to spell it `127.0.0.1`.
+
+If you wish to use a different username or database name for the database, you
+should override the `DATABASE_URL` in `local.env` using the following format:
+
+    DATABASE_URL=postgres://<username>@localhost/<database name>
 
 Vagrant
 -------
