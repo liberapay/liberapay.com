@@ -225,6 +225,7 @@ def other_stuff(website, env):
     website.cache_static = env.gratipay_cache_static
     website.compress_assets = env.gratipay_compress_assets
 
+    website.optimizely_id = env.optimizely_id
     website.segment_key = env.segment_key
     website.sentry_dsn = env.sentry_dsn
 
@@ -273,6 +274,7 @@ def env():
         UPDATE_GLOBAL_STATS_EVERY       = int,
         CHECK_DB_EVERY                  = int,
         SEGMENT_KEY                     = unicode,
+        OPTIMIZELY_ID                   = unicode,
         SENTRY_DSN                      = unicode,
         LOG_METRICS                     = is_yesish,
         MANDRILL_KEY                    = unicode,
