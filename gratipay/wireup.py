@@ -225,8 +225,8 @@ def other_stuff(website, env):
     website.cache_static = env.gratipay_cache_static
     website.compress_assets = env.gratipay_compress_assets
 
+    website.google_analytics_id = env.google_analytics_id
     website.optimizely_id = env.optimizely_id
-    website.segment_key = env.segment_key
     website.sentry_dsn = env.sentry_dsn
 
     website.log_metrics = env.log_metrics
@@ -238,11 +238,10 @@ def env():
         CANONICAL_HOST                  = unicode,
         CANONICAL_SCHEME                = unicode,
         DATABASE_MAXCONN                = int,
-        GRATIPAY_ASSET_URL                = unicode,
-        GRATIPAY_CACHE_STATIC             = is_yesish,
-        GRATIPAY_COMPRESS_ASSETS          = is_yesish,
+        GRATIPAY_ASSET_URL              = unicode,
+        GRATIPAY_CACHE_STATIC           = is_yesish,
+        GRATIPAY_COMPRESS_ASSETS        = is_yesish,
         BALANCED_API_SECRET             = unicode,
-        #DEBUG                           = unicode,
         GITHUB_CLIENT_ID                = unicode,
         GITHUB_CLIENT_SECRET            = unicode,
         GITHUB_CALLBACK                 = unicode,
@@ -273,7 +272,7 @@ def env():
         NANSWERS_THRESHOLD              = int,
         UPDATE_GLOBAL_STATS_EVERY       = int,
         CHECK_DB_EVERY                  = int,
-        SEGMENT_KEY                     = unicode,
+        GOOGLE_ANALYTICS_ID             = unicode,
         OPTIMIZELY_ID                   = unicode,
         SENTRY_DSN                      = unicode,
         LOG_METRICS                     = is_yesish,
