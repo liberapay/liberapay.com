@@ -20,11 +20,11 @@ query_id = platform.get_query_id(qs)
 cookie_name = (platform.name+'_'+query_id).encode('ascii')
 try:
     cookie_value = request.headers.cookie[cookie_name].value
-    if not cookie_value:
-        raise KeyError
-    query_data, action, then, action_user_name = json.loads(b64decode(cookie_value))
 except KeyError:
     raise Response(400, 'Missing cookie')
+if not cookie_value:
+    raise Response(400, 'Empty cookie')
+query_data, action, then, action_user_name = json.loads(b64decode(cookie_value))
 
 # Finish the auth process, the returned session is ready to use
 url = canonical_scheme+'://'+canonical_host+request.line.uri.raw
