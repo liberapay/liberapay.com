@@ -8,7 +8,7 @@ from gratipay.security.user import User, SESSION
 
 BEGINNING_OF_EPOCH = to_rfc822(datetime(1970, 1, 1))
 
-def read_auth_from_headers(request):
+def get_auth_from_request(request):
     """Authenticate from a cookie or an API key in basic auth.
     """
     user = None
@@ -34,7 +34,7 @@ def read_auth_from_headers(request):
 
     request.context['user'] = user or User()
 
-def add_auth_to_headers(response, request=None):
+def add_auth_to_response(response, request=None):
     if request is None:
         return  # early parsing must've failed
     if request.line.uri.startswith('/assets/'):
