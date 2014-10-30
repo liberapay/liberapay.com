@@ -4,6 +4,8 @@ from gratipay import wireup
 from gratipay.security.user import SESSION
 from gratipay.testing import Harness
 from environment import Environment
+from aspen.http.request import Request
+from aspen.http.response import Response
 
 
 class Tests(Harness):
@@ -69,3 +71,14 @@ class Tests(Harness):
 
         assert response.code == 200
         assert SESSION not in response.headers.cookie
+
+
+    def test_early_failures_dont_break_everything(self):
+        old_from_wsgi = Request.from_wsgi
+        def broken_from_wsgi(*a, **kw):
+            raise Response(400)
+        try:
+            Request.from_wsgi = classmethod(broken_from_wsgi)
+            assert self.client.GET("/", raise_immediately=False).code == 400
+        finally:
+            Request.from_wsgi = old_from_wsgi

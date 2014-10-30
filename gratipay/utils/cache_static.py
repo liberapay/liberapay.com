@@ -27,7 +27,9 @@ def get_last_modified(fs_path):
     return int(os.path.getmtime(fs_path))
 
 
-def inbound(website, request):
+# algorithm functions
+
+def try_to_serve_304(website, request):
     """Try to serve a 304 for resources under assets/.
     """
     uri = request.line.uri
@@ -93,9 +95,12 @@ def inbound(website, request):
     raise response
 
 
-def outbound(request, response, website):
+def add_caching_to_response(response, website, request=None):
     """Set caching headers for resources under assets/.
     """
+    if request is None:
+        return  # early parsing must've failed
+
     uri = request.line.uri
 
     if not uri.startswith('/assets/'):
@@ -117,5 +122,3 @@ def outbound(request, response, website):
         response.headers['Expires'] = 'Sun, 17 Jan 2038 19:14:07 GMT'
         last_modified = get_last_modified(request.fs)
         response.headers['Last-Modified'] = format_date_time(last_modified)
-
-

@@ -153,15 +153,15 @@ algorithm.functions = [ timer.start
                       , algorithm['raise_200_for_OPTIONS']
 
                       , canonize
-                      , authentication.inbound
-                      , csrf.inbound
+                      , authentication.get_auth_from_request
+                      , csrf.get_csrf_token_from_request
                       , add_stuff_to_context
                       , i18n.add_helpers_to_context
 
                       , algorithm['dispatch_request_to_filesystem']
                       , algorithm['apply_typecasters_to_path']
 
-                      , cache_static.inbound
+                      , cache_static.try_to_serve_304
 
                       , algorithm['get_resource_for_request']
                       , algorithm['get_response_for_resource']
@@ -169,10 +169,10 @@ algorithm.functions = [ timer.start
                       , tell_sentry
                       , algorithm['get_response_for_exception']
 
-                      , gratipay.outbound
-                      , authentication.outbound
-                      , csrf.outbound
-                      , cache_static.outbound
+                      , gratipay.set_misc_headers
+                      , authentication.add_auth_to_response
+                      , csrf.add_csrf_token_to_response
+                      , cache_static.add_caching_to_response
                       , x_frame_options
 
                       , algorithm['log_traceback_for_5xx']

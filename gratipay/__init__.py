@@ -85,7 +85,7 @@ def canonize(request):
         request.redirect(url)
 
 
-def outbound(request, response, website):
+def set_misc_headers(response, website):
     version = website.version
 
     # Set misc headers for the website
