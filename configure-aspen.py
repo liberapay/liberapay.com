@@ -161,7 +161,7 @@ algorithm.functions = [ timer.start
                       , algorithm['dispatch_request_to_filesystem']
                       , algorithm['apply_typecasters_to_path']
 
-                      , cache_static.inbound
+                      , cache_static.try_to_serve_304
 
                       , algorithm['get_resource_for_request']
                       , algorithm['get_response_for_resource']
@@ -172,7 +172,7 @@ algorithm.functions = [ timer.start
                       , gratipay.set_misc_headers
                       , authentication.add_auth_to_response
                       , csrf.add_csrf_token_to_response
-                      , cache_static.outbound
+                      , cache_static.add_caching_to_response
                       , x_frame_options
 
                       , algorithm['log_traceback_for_5xx']
