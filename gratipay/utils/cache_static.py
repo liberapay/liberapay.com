@@ -9,11 +9,9 @@ from wsgiref.handlers import format_date_time
 from aspen import Response
 
 
-def version_is_available(request):
+def version_is_available(version, path):
     """Return a boolean, whether we have the version they asked for.
     """
-    path = request.line.uri.path
-    version = request.website.version
     return path['version'] == version if 'version' in path else True
 
 
@@ -29,7 +27,7 @@ def get_last_modified(fs_path):
     return int(os.path.getmtime(fs_path))
 
 
-def inbound(request):
+def inbound(website, request):
     """Try to serve a 304 for resources under assets/.
     """
     uri = request.line.uri
@@ -46,7 +44,7 @@ def inbound(request):
 
         return request
 
-    if not version_is_available(request):
+    if not version_is_available(website.version, request.line.uri.path):
 
         # Don't serve one version of a file as if it were another.
 
