@@ -1,0 +1,24 @@
+.search-box {
+    margin: 1em 0;
+}
+
+.search-results {
+    li {
+        display: inline-block;
+        margin: 0;
+        a {
+            display: inline-block;
+            margin: 0.25em 0.5em 0.25em 0;
+        }
+    }
+}
+
+.search-result {
+    .excerpt {
+        border-left: 4px solid $brown;
+        font-size: 80%;
+        line-height: 130%;
+        margin: 0 0 1em 1em;
+        padding-left: 1em;
+    }
+}
