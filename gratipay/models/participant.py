@@ -1360,7 +1360,7 @@ class Participant(Model, MixinTeam):
             add_event(c, 'participant', dict(id=self.id, action='disconnect', values=dict(platform=platform, user_id=user_id)))
         self.update_avatar()
 
-    def credit_card_expiring(self, request, response):
+    def credit_card_expiring(self, website, request, response):
 
         if NOTIFIED_ABOUT_EXPIRATION in request.headers.cookie:
             cookie = request.headers.cookie[NOTIFIED_ABOUT_EXPIRATION]
@@ -1380,10 +1380,10 @@ class Participant(Model, MixinTeam):
             response.headers.cookie[NOTIFIED_ABOUT_EXPIRATION] = self.session_token
             return card_expiring
         except Exception as e:
-            if request.website.env.raise_card_expiration:
+            if website.env.raise_card_expiration:
                 raise
             aspen.log(e)
-            request.website.tell_sentry(e, request)
+            website.tell_sentry(e, request)
             return False
 
     def to_dict(self, details=False, inquirer=None):
