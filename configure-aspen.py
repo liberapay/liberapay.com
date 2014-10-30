@@ -154,7 +154,7 @@ algorithm.functions = [ timer.start
 
                       , canonize
                       , authentication.get_auth_from_request
-                      , csrf.inbound
+                      , csrf.get_csrf_token_from_request
                       , add_stuff_to_context
                       , i18n.add_helpers_to_context
 
@@ -171,7 +171,7 @@ algorithm.functions = [ timer.start
 
                       , gratipay.set_misc_headers
                       , authentication.add_auth_to_response
-                      , csrf.outbound
+                      , csrf.add_csrf_token_to_response
                       , cache_static.outbound
                       , x_frame_options
 

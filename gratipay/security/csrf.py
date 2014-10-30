@@ -83,7 +83,7 @@ def _get_host(request):
 
 
 
-def inbound(request):
+def get_csrf_token_from_request(request):
     """Given a Request object, reject it if it's a forgery.
     """
     if request.line.uri.startswith('/assets/'): return
@@ -143,9 +143,11 @@ def inbound(request):
             raise Response(403, REASON_BAD_TOKEN)
 
 
-def outbound(request, response):
+def add_csrf_token_to_response(response, request=None):
     """Store the latest CSRF token as a cookie.
     """
+    if request is None:
+        return  # early parsing must've failed
     csrf_token = request.context.get('csrf_token')
     if csrf_token:
         response.set_cookie('csrf_token', csrf_token, expires=CSRF_TIMEOUT, httponly=False)
