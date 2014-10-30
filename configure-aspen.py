@@ -153,7 +153,7 @@ algorithm.functions = [ timer.start
                       , algorithm['raise_200_for_OPTIONS']
 
                       , canonize
-                      , authentication.inbound
+                      , authentication.read_auth_from_headers
                       , csrf.inbound
                       , add_stuff_to_context
                       , i18n.add_helpers_to_context
@@ -170,7 +170,7 @@ algorithm.functions = [ timer.start
                       , algorithm['get_response_for_exception']
 
                       , gratipay.set_misc_headers
-                      , authentication.outbound
+                      , authentication.add_auth_to_headers
                       , csrf.outbound
                       , cache_static.outbound
                       , x_frame_options
