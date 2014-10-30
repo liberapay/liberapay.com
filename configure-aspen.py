@@ -149,7 +149,7 @@ def add_stuff_to_context(request):
 algorithm = website.algorithm
 algorithm.functions = [ timer.start
                       , algorithm['parse_environ_into_request']
-                      , algorithm['tack_website_onto_request']
+                      , algorithm['parse_body_into_request']
                       , algorithm['raise_200_for_OPTIONS']
 
                       , canonize
