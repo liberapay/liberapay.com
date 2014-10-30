@@ -28,6 +28,7 @@ import sys
 from decimal import Decimal as D, ROUND_HALF_UP
 
 import requests
+from gratipay import wireup
 from httplib import IncompleteRead
 
 
@@ -119,7 +120,6 @@ class Payee(object):
 
 
 def compute_input_csv():
-    from gratipay import wireup
     db = wireup.db(wireup.env())
     participants = db.all("""
 
