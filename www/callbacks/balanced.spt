@@ -19,7 +19,7 @@ src = request.headers['X-Forwarded-For']
 if not src in ('50.18.199.26', '50.18.204.103'):
     raise Response(403, 'untrusted source address: %s' % src)
 
-events = json.loads(request.body.raw)['events']
+events = body['events']
 for event in events:
     resource, status = event['type'].split('.')
     if resource == 'credit' and status in ('failed', 'succeeded'):
