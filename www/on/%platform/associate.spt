@@ -1,3 +1,4 @@
+from base64 import b64decode
 import json
 
 from aspen import log, resources, Response
@@ -21,7 +22,7 @@ try:
     cookie_value = request.headers.cookie[cookie_name].value
     if not cookie_value:
         raise KeyError
-    query_data, action, then, action_user_name = json.loads(cookie_value.decode('base64'))
+    query_data, action, then, action_user_name = json.loads(b64decode(cookie_value))
 except KeyError:
     raise Response(400, 'Missing cookie')
 
