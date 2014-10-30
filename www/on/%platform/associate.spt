@@ -1,4 +1,3 @@
-from base64 import b64decode
 import json
 
 from aspen import log, resources, Response
@@ -19,8 +18,10 @@ query_id = platform.get_query_id(qs)
 # Check that we have a cookie that matches the query id (CSRF prevention)
 cookie_name = (platform.name+'_'+query_id).encode('ascii')
 try:
-    query_data, action, then, action_user_name = \
-        json.loads(b64decode(request.headers.cookie[cookie_name].value))
+    cookie_value = request.headers.cookie[cookie_name].value
+    if not cookie_value:
+        raise KeyError
+    query_data, action, then, action_user_name = json.loads(cookie_value.decode('base64'))
 except KeyError:
     raise Response(400, 'Missing cookie')
 
