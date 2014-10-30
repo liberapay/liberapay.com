@@ -10,7 +10,7 @@ from gratipay.models.account_elsewhere import *
 
 [-----------------------------------------------------------------------------]
 
-platform, account = get_account_elsewhere(request)
+platform, account = get_account_elsewhere(website, request)
 
 if account.participant.is_claimed:
     request.redirect('/%s/' % account.participant.username)

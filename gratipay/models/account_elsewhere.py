@@ -182,9 +182,9 @@ class AccountElsewhere(Model):
         self.set_attributes(is_locked=is_locked)
 
 
-def get_account_elsewhere(request):
+def get_account_elsewhere(website, request):
     path = request.line.uri.path
-    platform = getattr(request.website.platforms, path['platform'], None)
+    platform = getattr(website.platforms, path['platform'], None)
     if platform is None:
         raise Response(404)
     user_name = path['user_name']
