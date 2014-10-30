@@ -169,7 +169,7 @@ algorithm.functions = [ timer.start
                       , tell_sentry
                       , algorithm['get_response_for_exception']
 
-                      , gratipay.outbound
+                      , gratipay.set_misc_headers
                       , authentication.outbound
                       , csrf.outbound
                       , cache_static.outbound
