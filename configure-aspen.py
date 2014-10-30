@@ -156,7 +156,7 @@ algorithm.functions = [ timer.start
                       , authentication.inbound
                       , csrf.inbound
                       , add_stuff_to_context
-                      , i18n.inbound
+                      , i18n.add_helpers_to_context
 
                       , algorithm['dispatch_request_to_filesystem']
                       , algorithm['apply_typecasters_to_path']
