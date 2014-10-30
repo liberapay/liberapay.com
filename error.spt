@@ -20,7 +20,7 @@ except ImportError:
 style = ''
 msg = status_strings.get(response.code, 'Sorry').title()
 err = response.body
-if request.website.show_tracebacks and pygmentize:
+if website.show_tracebacks and pygmentize:
     sio = StringIO()
     formatter = HtmlFormatter()
     tokens = PythonTracebackLexer().get_tokens(response.body)

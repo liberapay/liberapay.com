@@ -11,14 +11,14 @@
     <link rel="apple-touch-icon-precomposed" href="{{ website.asset_url }}/touch/icon-152x152.png" sizes="152x152">
     <link rel="stylesheet" type="text/css" href="//cloud.typography.com/6540672/615104/css/fonts.css" />
     {% block head %}{% endblock %}
-    
+
     {% if website.google_analytics_id and request.headers.get('DNT') != '1' %}
     <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
         m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
         })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-        
+
         {% if user.ANON %}
             // Automatic tracking based on anonymous session ID.
             // See: https://developers.google.com/analytics/devguides/collection/analyticsjs/user-id
@@ -26,7 +26,7 @@
         {% else %}
             ga('create', '{{ website.google_analytics_id }}', {'userId': '{{ user.participant.id }}'});
         {% endif %}
-        
+
         ga('send', 'pageview');
     </script>
     {% endif %}
@@ -149,7 +149,7 @@
                 ['a', {'href': '/credit-card.html'}, "{{ _('Fix your card') }}"]
             ], "error", -1
         );
-        {% elif user.participant.credit_card_expiring(request, response) %}
+        {% elif user.participant.credit_card_expiring(website, request, response) %}
         Gratipay.notification(
             ["span", "{{ _('Your credit card is about to expire!') }} ",
                 ['a', {'href': '/credit-card.html'}, "{{ _('Update card') }}"]

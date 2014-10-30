@@ -149,14 +149,14 @@ def add_stuff_to_context(request):
 algorithm = website.algorithm
 algorithm.functions = [ timer.start
                       , algorithm['parse_environ_into_request']
-                      , algorithm['tack_website_onto_request']
+                      , algorithm['parse_body_into_request']
                       , algorithm['raise_200_for_OPTIONS']
 
                       , canonize
                       , authentication.inbound
                       , csrf.inbound
                       , add_stuff_to_context
-                      , i18n.inbound
+                      , i18n.add_helpers_to_context
 
                       , algorithm['dispatch_request_to_filesystem']
                       , algorithm['apply_typecasters_to_path']

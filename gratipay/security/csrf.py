@@ -131,7 +131,8 @@ def inbound(request):
         # Check non-cookie token for match.
         request_csrf_token = ""
         if request.line.method == "POST":
-            request_csrf_token = request.body.get('csrf_token', '')
+            if isinstance(request.body, dict):
+                request_csrf_token = request.body.get('csrf_token', '')
 
         if request_csrf_token == "":
             # Fall back to X-CSRF-TOKEN, to make things easier for AJAX,

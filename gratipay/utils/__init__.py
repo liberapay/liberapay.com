@@ -341,11 +341,8 @@ def get_participant(request, restrict=True, resolve_unclaimed=True):
         if user.ANON:
             raise Response(403)
 
-    participant = request.website.db.one("""
-        SELECT participants.*::participants
-        FROM participants
-        WHERE username_lower=%s
-    """, (slug.lower(),))
+    from gratipay.models.participant import Participant  # avoid circular import
+    participant = Participant.from_username(slug)
 
     if participant is None:
         raise Response(404)

@@ -48,7 +48,7 @@ def get_text(request, loc, s, *a, **kw):
     return s
 
 
-def n_get_text(request, loc, s, p, n, *a, **kw):
+def n_get_text(website, request, loc, s, p, n, *a, **kw):
     n = n or 0
     msg = loc.catalog.get((s, p))
     s2 = None
@@ -56,7 +56,7 @@ def n_get_text(request, loc, s, p, n, *a, **kw):
         try:
             s2 = msg.string[loc.catalog.plural_func(n)]
         except Exception as e:
-            request.website.tell_sentry(e, request)
+            website.tell_sentry(e, request)
     if s2 is None:
         loc = 'en'
         s2 = s if n == 1 else p
@@ -131,23 +131,23 @@ def format_currency_with_options(number, currency, locale=LOCALE_EN, trailing_ze
     return s
 
 
-def inbound(request):
+def add_helpers_to_context(website, request):
     context = request.context
-    loc = context.locale = get_locale_for_request(request)
-    context.decimal_symbol = get_decimal_symbol(locale=loc)
-    context._ = lambda s, *a, **kw: get_text(request, loc, s, *a, **kw)
-    context.ngettext = lambda *a, **kw: n_get_text(request, loc, *a, **kw)
-    context.format_number = lambda *a: format_number(*a, locale=loc)
-    context.format_decimal = lambda *a: format_decimal(*a, locale=loc)
-    context.format_currency = lambda *a, **kw: format_currency_with_options(*a, locale=loc, **kw)
-    context.format_percent = lambda *a: format_percent(*a, locale=loc)
-    context.parse_decimal = lambda *a: parse_decimal(*a, locale=loc)
+    loc = context['locale'] = get_locale_for_request(request)
+    context['decimal_symbol'] = get_decimal_symbol(locale=loc)
+    context['_'] = lambda s, *a, **kw: get_text(request, loc, s, *a, **kw)
+    context['ngettext'] = lambda *a, **kw: n_get_text(website, request, loc, *a, **kw)
+    context['format_number'] = lambda *a: format_number(*a, locale=loc)
+    context['format_decimal'] = lambda *a: format_decimal(*a, locale=loc)
+    context['format_currency'] = lambda *a, **kw: format_currency_with_options(*a, locale=loc, **kw)
+    context['format_percent'] = lambda *a: format_percent(*a, locale=loc)
+    context['parse_decimal'] = lambda *a: parse_decimal(*a, locale=loc)
     def _to_age(delta):
         try:
             return to_age(delta, loc)
         except:
             return to_age(delta, 'en')
-    context.to_age = _to_age
+    context['to_age'] = _to_age
 
 
 def extract_spt(fileobj, *args, **kw):
