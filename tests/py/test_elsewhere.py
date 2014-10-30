@@ -13,6 +13,11 @@ class TestElsewhere(Harness):
         response = self.client.GxT('/on/github/associate?state=49b7c66246c7')
         assert response.code == 400
 
+    def test_associate_with_empty_cookie_raises_400(self):
+        self.client.cookie[b'github_deadbeef'] = b''
+        response = self.client.GxT('/on/github/associate?state=deadbeef')
+        assert response.code == 400
+
     def test_extract_user_info(self):
         for platform in self.platforms:
             user_info = getattr(user_info_examples, platform.name)()
