@@ -1,5 +1,7 @@
 [---]
 [---] text/html via jinja2
+{% if 'username' in path %}
+
 {% extends "templates/base.html" %}
 {% block heading %}<h1>Closed</h1>{% endblock %}
 {% block box %}
@@ -19,3 +21,11 @@
 <div class="nav level-1"><a href="/"><button>Home</button></a></div>
 
 {% endblock %}
+
+{% else %}
+
+<h1>Gone (410)</h1>
+
+<p>The resource you've requested is no longer available.</p>
+
+{% endif %}
