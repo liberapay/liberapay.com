@@ -26,7 +26,8 @@
         {% else %}
             ga('create', '{{ website.google_analytics_id }}', {'userId': '{{ user.participant.id }}'});
         {% endif %}
-
+        window.optimizely = window.optimizely || [];
+        window.optimizely.push("activateUniversalAnalytics");
         ga('send', 'pageview');
     </script>
     {% endif %}
