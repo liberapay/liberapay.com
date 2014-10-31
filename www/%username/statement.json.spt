@@ -8,9 +8,10 @@ from gratipay.utils import get_participant, markdown
 request.allow("POST")
 participant = get_participant(request, restrict=True)
 
-statement = request.body["statement"]
+lang = request.body["lang"]
+content = request.body["content"]
 
-participant.update_statement(statement)
+participant.update_statement(lang, content)
 
 [---] application/json via json_dump
-{"statement": markdown.render(statement)}
+{"content": markdown.render(content), "lang": lang}

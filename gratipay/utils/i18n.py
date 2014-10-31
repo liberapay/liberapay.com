@@ -100,6 +100,9 @@ def regularize_locales(locales):
         if alias and alias not in locales_set:
             # Insert "fr_fr" after "fr" if it's not somewhere in the list
             yield alias
+    if 'en' not in locales_set and 'en_us' not in locales_set:
+        yield 'en'
+        yield 'en_us'
 
 
 def strip_accents(s):
@@ -128,7 +131,7 @@ def format_currency_with_options(number, currency, locale='en', trailing_zeroes=
 
 def set_up_i18n(website, request):
     accept_lang = request.headers.get("Accept-Language", "")
-    langs = request.accept_langs = parse_accept_lang(accept_lang)
+    langs = request.accept_langs = list(parse_accept_lang(accept_lang))
     loc = match_lang(langs)
     add_helpers_to_context(website.tell_sentry, request.context, loc, request)
 

@@ -27,7 +27,8 @@ if participant.anonymous_receiving:
 
 accounts = participant.get_accounts_elsewhere()
 
-long_statement = len(participant.statement) > LONG_STATEMENT
+statement = participant.get_statement(request.accept_langs)
+long_statement = len(statement or '') > LONG_STATEMENT
 communities = community.get_list_for(website.db, participant.id)
 
 if participant.number == 'singular':
@@ -58,7 +59,7 @@ def with_others(obj):
     <meta name="og:type" content="profile" />
     <meta name="og:title" content="{{ participant.get_og_title() }}" />
     {% if statement %}
-    <meta name="og:description" content="{{ _clip(participant.statement, 200)|e }}" />
+    <meta name="og:description" content="{{ _clip(statement, 200)|e }}" />
     {% else %}
     <meta name="og:description" content="Gratipay is a weekly gift exchange" />
     {% endif %}
@@ -92,11 +93,11 @@ $(document).ready(function() {
     </div>
 {% else %}
     <div class="group">
-        {% if participant.statement %}
+        {% if statement %}
         <div class="{% if long_statement %}col1{% else %}col0{% endif %}">
             <h2>{{ STATEMENT }}</h2>
             <div class="statement markdown-output">
-                {{ markdown.render(participant.statement) }}
+                {{ markdown.render(statement) }}
             </div>
             {% include "templates/team-listing.html" %}
             {% include "templates/community-listing.html" %}

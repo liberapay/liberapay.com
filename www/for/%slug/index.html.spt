@@ -1,3 +1,5 @@
+from itertools import chain
+
 from aspen import Response
 from gratipay.models.community import name_pattern, slugize, Community
 from gratipay.utils import excerpt_intro, format_money
@@ -44,9 +46,9 @@ new_participants = query_cache.all("""
 -- new participants on community page
 
     SELECT username
+         , id
          , claimed_time
          , avatar_url
-         , statement
          , number
       FROM participants p
       JOIN current_community_members cc ON cc.participant = p.id
@@ -63,10 +65,10 @@ givers = query_cache.all("""
 -- top givers on community page
 
     SELECT username
+         , id
          , anonymous_giving AS anonymous
          , giving AS amount
          , avatar_url
-         , statement
          , number
       FROM participants p
       JOIN current_community_members cc ON cc.participant = p.id AND cc.slug = %s
@@ -86,10 +88,10 @@ receivers = query_cache.all("""
 -- top receivers on community page
 
     SELECT username
+         , id
          , anonymous_receiving AS anonymous
          , receiving AS amount
          , avatar_url
-         , statement
          , number
       FROM participants p
       JOIN current_community_members cc ON cc.participant = p.id AND cc.slug = %s
@@ -101,6 +103,26 @@ receivers = query_cache.all("""
   OFFSET %s
 
 """, (community.slug, limit, offset))
+
+
+# Fetch statements
+
+ids = tuple(p.id for p in chain(new_participants, givers, receivers))
+if ids:
+    statements = website.db.all("""
+        SELECT DISTINCT ON (participant) participant, content
+        FROM statements s
+        JOIN enumerate(%s) langs ON langs.value = s.lang
+        WHERE participant IN %s
+    ORDER BY participant, langs.rank ASC
+    """, (request.accept_langs, ids))
+    statements = {s.participant: s.content for s in statements}
+else:
+    statements = {}
+
+for p in chain(new_participants, givers, receivers):
+    p.__dict__['statement'] = statements.get(p.id)
+
 [---]
 {% from 'templates/avatar-url.html' import avatar_url with context %}
 
