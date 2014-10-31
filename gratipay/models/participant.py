@@ -839,7 +839,6 @@ class Participant(Model, MixinTeam):
                        amount
                      , tippee
                      , t.ctime
-                     , mtime
                      , p.claimed_time
                      , p.username_lower
                      , p.number
