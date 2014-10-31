@@ -26,11 +26,11 @@ def asset_etag(path):
 def try_to_serve_304(dispatch_result, request, website):
     """Try to serve a 304 for static resources.
     """
-    if dispatch_result.match.endswith('.spt'):
+    etag = request.etag = asset_etag(dispatch_result.match)
+
+    if not etag:
         # This is a request for a dynamic resource.
         return request
-
-    etag = request.etag = asset_etag(dispatch_result.match)
 
     qs_etag = request.line.uri.querystring.get('etag')
     if qs_etag and qs_etag != etag:
@@ -53,14 +53,13 @@ def try_to_serve_304(dispatch_result, request, website):
     raise Response(304)
 
 
-def add_caching_to_response(response, website, request=None, dispatch_result=None):
+def add_caching_to_response(response, website, request=None):
     """Set caching headers for static resources.
     """
-    if dispatch_result is None:
+    if request is None:
         return  # early parsing must've failed
-    assert request is not None  # we can't have a dispatch_result without a request
 
-    if dispatch_result.match.endswith('.spt'):
+    if not request.etag:
         return response
 
     if response.code != 200:
