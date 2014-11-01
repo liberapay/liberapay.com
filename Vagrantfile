@@ -28,8 +28,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
 
   # --- [ boxes ] ---
+  #
   # after you bootstrap this box, saving it into a gratipay.box is as easy as
   # $ vagrant package --output gratipay.box
+  #
   config.vm.define "basebox" do |base|
     # using Ubuntu 14.04, because it is what our hosting (Heroku) uses
     # (search cedar-14 for details)
@@ -44,10 +46,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # disable snapshot box for now
   #config.vm.define "gratipay" do |box|
   #  box.vm.box = "gratipay"
-  #  config.vm.box_url =  File.exist?("gratipay.box") ? "file://gratipay.box" : "https://downloads.gratipay.com/gratipay.box"
-  #
-  #  config.vm.provision :shell,
-  #    :path => "scripts/vagrant-setup.sh"
+  #  box.vm.box_url =  File.exist?("gratipay.box") ? "file://gratipay.box" : "https://downloads.gratipay.com/gratipay.box"
+
+  #  box.vm.provision :shell, :path => "scripts/vagrant-setup.sh"
   #end
 
 end
