@@ -35,8 +35,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # (search cedar-14 for details)
     base.vm.box = "ubuntu/trusty64"
 
+    # --- install prerequisites ---
     # [ ] use the same package versions as Heroku
-
+    #   [ ] figure out how to fetch Heroku versions
+    base.vm.provision "shell", inline: "sudo apt-get -y install postgresql"
   end
 
   # disable snapshot box for now
