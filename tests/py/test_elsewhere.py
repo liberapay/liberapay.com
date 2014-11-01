@@ -69,7 +69,9 @@ class TestElsewhere(Harness):
                                                                       , ''
                                                                       , 'bob'
                                                                        ]))
-        assert self.client.GET('/on/github/associate?state=deadbeef', auth_as='alice')
+        response = self.client.GxT('/on/github/associate?state=deadbeef', auth_as='alice')
+        assert response.code == 200
+        assert "Please Confirm" in response.body
 
     def test_redirect_csrf(self):
         response = self.client.GxT('/on/github/redirect')

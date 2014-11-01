@@ -59,10 +59,12 @@ elif action == 'connect':
         user.participant.take_over((platform.name, account.user_id))
     except NeedConfirmation, obstacles:
         # XXX Eep! Internal redirect! Really?!
-        request.internally_redirected_from = request.fs
-        request.fs = website.www_root + '/on/confirm.html.spt'
-        request.resource = resources.get(request)
-        raise request.resource.respond(request)
+        # XXX In this case, we can get away with reusing the same dispatch_result. When upstreaming
+        #     we should probably generalize by making a new DispatchResult.
+        request.internally_redirected_from = dispatch_result.match
+        request.resource = resources.get(website, website.www_root+'/on/confirm.html.spt')
+        request.context.update(locals())
+        raise request.resource.respond(request, dispatch_result)
 
 elif action in {'lock', 'unlock'}:
     account.set_is_locked(action == 'lock')
