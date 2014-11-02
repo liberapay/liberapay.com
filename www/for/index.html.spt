@@ -42,9 +42,13 @@ title = _("Browse Communities")
 
         function createOption(term)
         {
-            Gratipay.communities.join(term, function(slug) {
+            success = function () {
                 Gratipay.communities.jumpTo(term);
-            });
+            }
+            error = function (e) {
+                Gratipay.notification(JSON.parse(e.responseText).error_message_long, 'error');
+            }
+            Gratipay.communities.join(term, success, error);
         }
         // TODO: in future
         {% if user.ANON %}
