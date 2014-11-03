@@ -1,5 +1,9 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+import json
+from base64 import b64encode
+
+import mock
 from gratipay.elsewhere import UserInfo
 from gratipay.models.account_elsewhere import AccountElsewhere
 from gratipay.models.participant import Participant
@@ -45,6 +49,29 @@ class TestElsewhere(Harness):
         user = alice.opt_in('alice')[0]
         assert not user.participant.is_closed
         assert not Participant.from_username('alice').is_closed
+
+    def test_hitting_confirm_plain_results_in_404(self):
+        assert self.client.GxT('/on/confirm.html').code == 404
+
+    @mock.patch('requests_oauthlib.OAuth2Session.fetch_token')
+    @mock.patch('gratipay.elsewhere.Platform.get_user_self_info')
+    @mock.patch('gratipay.elsewhere.Platform.get_user_info')
+    def test_connect_might_need_confirmation(self, gui, gusi, ft):
+        self.make_participant('alice', claimed_time='now')
+        self.make_participant('bob', claimed_time='now')
+
+        gusi.return_value = self.client.website.platforms.github.extract_user_info({'id': 2})
+        gui.return_value = self.client.website.platforms.github.extract_user_info({'id': 1})
+        ft.return_value = None
+
+        self.client.cookie[b'github_deadbeef'] = b64encode(json.dumps([ 'query_data'
+                                                                      , 'connect'
+                                                                      , ''
+                                                                      , 'bob'
+                                                                       ]))
+        response = self.client.GxT('/on/github/associate?state=deadbeef', auth_as='alice')
+        assert response.code == 200
+        assert "Please Confirm" in response.body
 
     def test_redirect_csrf(self):
         response = self.client.GxT('/on/github/redirect')
