@@ -67,6 +67,7 @@ website.mail = gratipay.wireup.mail(env)
 gratipay.wireup.billing(env)
 gratipay.wireup.username_restrictions(website)
 gratipay.wireup.nanswers(env)
+gratipay.wireup.load_i18n(website)
 gratipay.wireup.other_stuff(website, env)
 gratipay.wireup.accounts_elsewhere(website, env)
 

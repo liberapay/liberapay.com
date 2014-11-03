@@ -1,23 +1,23 @@
 from __future__ import print_function, unicode_literals
 
 from io import BytesIO
-import os
 import re
 from unicodedata import combining, normalize
 
 from aspen.resources.pagination import parse_specline, split_and_escape
 from aspen.utils import utcnow
-from babel.core import Locale
+from babel.core import LOCALE_ALIASES
 from babel.dates import format_timedelta
-from babel.messages.pofile import Catalog, read_po
 from babel.messages.extract import extract_python
 from babel.numbers import (
     format_currency, format_decimal, format_number, format_percent,
-    get_decimal_symbol, parse_decimal, parse_pattern
+    get_decimal_symbol, parse_decimal
 )
 import jinja2.ext
 
-from gratipay.utils import COUNTRIES, COUNTRIES_MAP
+
+ALIASES = {k: v.lower() for k, v in LOCALE_ALIASES.items()}
+ALIASES_R = {v: k for k, v in ALIASES.items()}
 
 
 ternary_re = re.compile(r'^\(? *(.+?) *\? *(.+?) *: *(.+?) *\)?$')
@@ -71,60 +71,42 @@ def to_age(dt, loc):
 
 
 def regularize_locale(loc):
-    return loc.split('-', 1)[0].lower()
+    if loc == 'no':
+        loc = 'nb_NO'
+    return loc.replace('-', '_').lower()
+
+
+def regularize_locales(locales):
+    locales = [regularize_locale(loc) for loc in locales]
+    locales_set = set(locales)
+    for loc in locales:
+        yield loc
+        parts = loc.split('_')
+        if len(parts) > 1 and parts[0] not in locales_set:
+            # Insert "fr" after "fr_fr" if it's not somewhere in the list
+            yield parts[0]
+        alias = ALIASES.get(loc)
+        if alias and alias not in locales_set:
+            # Insert "fr_fr" after "fr" if it's not somewhere in the list
+            yield alias
 
 
 def strip_accents(s):
     return ''.join(c for c in normalize('NFKD', s) if not combining(c))
 
 
-def load_langs(localeDir):
-    key = lambda t: strip_accents(t[1])
-    langs = {}
-    for file in os.listdir(localeDir):
-        parts = file.split(".")
-        if len(parts) == 2 and parts[1] == "po":
-            lang = regularize_locale(parts[0])
-            with open(os.path.join(localeDir, file)) as f:
-                l = langs[lang] = Locale(lang)
-                c = l.catalog = read_po(f)
-                c.plural_func = get_function_from_rule(c.plural_expr)
-                try:
-                    l.countries_map = {k: l.territories[k] for k in COUNTRIES_MAP}
-                    l.countries = sorted(l.countries_map.items(), key=key)
-                except KeyError:
-                    l.countries_map = COUNTRIES_MAP
-                    l.countries = COUNTRIES
-    return langs
-
-
-# Load the locales
-LOCALES = load_langs("i18n/core")
-
-# Add the default English locale
-LOCALE_EN = LOCALES['en'] = Locale('en')
-LOCALE_EN.catalog = Catalog('en')
-LOCALE_EN.catalog.plural_func = lambda n: n != 1
-LOCALE_EN.countries = COUNTRIES
-LOCALE_EN.countries_map = COUNTRIES_MAP
-
-# Patch the locales to look less formal
-LOCALES['fr'].currency_formats[None] = parse_pattern('#,##0.00\u202f\xa4')
-LOCALES['fr'].currency_symbols['USD'] = '$'
-
-
-def get_locale_for_request(request):
+def get_locale_for_request(request, website):
     accept_lang = request.headers.get("Accept-Language", "")
     languages = (lang.split(";", 1)[0] for lang in accept_lang.split(","))
+    languages = request.accept_langs = regularize_locales(languages)
     for lang in languages:
-        lang = regularize_locale(lang)
-        loc = LOCALES.get(lang)
+        loc = website.locales.get(lang)
         if loc:
             return loc
-    return LOCALE_EN
+    return website.locale_en
 
 
-def format_currency_with_options(number, currency, locale=LOCALE_EN, trailing_zeroes=True):
+def format_currency_with_options(number, currency, locale='en', trailing_zeroes=True):
     s = format_currency(number, currency, locale=locale)
     if not trailing_zeroes:
         s = s.replace(get_decimal_symbol(locale)+'00', '')
@@ -133,7 +115,7 @@ def format_currency_with_options(number, currency, locale=LOCALE_EN, trailing_ze
 
 def add_helpers_to_context(website, request):
     context = request.context
-    loc = context['locale'] = get_locale_for_request(request)
+    loc = context['locale'] = get_locale_for_request(request, website)
     context['decimal_symbol'] = get_decimal_symbol(locale=loc)
     context['_'] = lambda s, *a, **kw: get_text(request, loc, s, *a, **kw)
     context['ngettext'] = lambda *a, **kw: n_get_text(website, request, loc, *a, **kw)

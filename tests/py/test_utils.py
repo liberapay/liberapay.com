@@ -79,17 +79,17 @@ class Tests(Harness):
 
     def test_format_currency_without_trailing_zeroes(self):
         expected = '$16'
-        actual = i18n.format_currency_with_options(16, 'USD', locale=i18n.Locale('en'), trailing_zeroes=False)
+        actual = i18n.format_currency_with_options(16, 'USD', locale='en', trailing_zeroes=False)
         assert actual == expected
 
     def test_format_currency_with_trailing_zeroes(self):
         expected = '$16.00'
-        actual = i18n.format_currency_with_options(16, 'USD', locale=i18n.Locale('en'), trailing_zeroes=True)
+        actual = i18n.format_currency_with_options(16, 'USD', locale='en', trailing_zeroes=True)
         assert actual == expected
 
     def test_format_currency_defaults_to_trailing_zeroes(self):
         expected = '$16.00'
-        actual = i18n.format_currency_with_options(16, 'USD', locale=i18n.Locale('en'))
+        actual = i18n.format_currency_with_options(16, 'USD', locale='en')
         assert actual == expected
 
 
