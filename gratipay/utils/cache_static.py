@@ -98,8 +98,9 @@ def try_to_serve_304(website, request, dispatch_result):
 def add_caching_to_response(response, website, request=None, dispatch_result=None):
     """Set caching headers for resources under assets/.
     """
-    if request is None or dispatch_result is None:
+    if dispatch_result is None:
         return  # early parsing must've failed
+    assert request is not None  # we can't have a dispatch_result without a request
 
     uri = request.line.uri
 
