@@ -231,16 +231,19 @@ def compile_assets(website):
     client = Client(website.www_root, website.project_root)
     client._website = website
     for spt in find_files(website.www_root+'/assets/', '*.spt'):
-        path = spt[spt.rfind('/assets/'):-4]
+        filepath = spt[:-4]                         # /path/to/www/assets/foo.css
+        urlpath = spt[spt.rfind('/assets/'):-4]     # /assets/foo.css
         try:
-            os.unlink(spt[:-4])
+            # Remove any existing compiled asset, so we can access the dynamic
+            # one instead (Aspen prefers foo.css over foo.css.spt).
+            os.unlink(filepath)
         except:
             pass
-        content = client.GET(path).body
+        content = client.GET(urlpath).body
         tmpfd, tmpfpath = mkstemp(dir='.')
         os.write(tmpfd, content)
         os.close(tmpfd)
-        os.rename(tmpfpath, spt[:-4])
+        os.rename(tmpfpath, filepath)
 
 
 def other_stuff(website, env):
