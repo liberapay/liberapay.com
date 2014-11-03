@@ -111,3 +111,9 @@ def get_bcaddress_version(strAddress):
   if h3[0:4] == checksum:
     return ord(version)
   return None
+
+def validate(address):
+  if get_bcaddress_version(address) == None:
+    return False
+  else:
+    return True
