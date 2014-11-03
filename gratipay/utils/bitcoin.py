@@ -8,6 +8,9 @@ Gratipay changes:
 
  [x] Django field type made optional
  [x] Replaced pycrypto dependency with hashlib
+ [x] Added self-test with remote Bitcoin dataset
+ [x] Added cmdline interface for checking address
+       utils.bitcoin.py -i [hash]
 
 """
 
@@ -119,7 +122,21 @@ def validate(address):
     return True
 
 if __name__ == '__main__':
-  print("running self-tests..")
+  print("running self-tests.. (use -i [hash] for cmdline address check)")
+  import sys
+  if "-i" in sys.argv:
+    print sys.argv
+    if len(sys.argv) > 2:
+      addr = sys.argv[-1]
+    else:
+      addr = raw_input("Enter address: ")
+    if validate(addr):
+      print "ok."
+      sys.exit(0)
+    else:
+      print "invalid."
+      sys.exit(-1)
+
   import urllib, json
   print("..fetching dataset of invalid hashes")
   invalid = "https://raw.githubusercontent.com/bitcoin/bitcoin/master/src/test/data/base58_keys_invalid.json"
