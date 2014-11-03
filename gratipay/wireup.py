@@ -1,9 +1,13 @@
 """Wireup
 """
 from __future__ import absolute_import, division, print_function, unicode_literals
+
+import fnmatch
 import os
+from tempfile import mkstemp
 
 import aspen
+from aspen.testing.client import Client
 import balanced
 import gratipay
 import gratipay.billing.payday
@@ -24,6 +28,7 @@ from gratipay.models.community import Community
 from gratipay.models.participant import Participant
 from gratipay.models.email_address_with_confirmation import EmailAddressWithConfirmation
 from gratipay.models import GratipayDB
+from gratipay.utils.cache_static import asset_etag
 
 
 def canonical(env):
@@ -157,37 +162,31 @@ class BadEnvironment(SystemExit):
 def accounts_elsewhere(website, env):
 
     twitter = Twitter(
-        website.asset_url,
         env.twitter_consumer_key,
         env.twitter_consumer_secret,
         env.twitter_callback,
     )
     facebook = Facebook(
-        website.asset_url,
         env.facebook_app_id,
         env.facebook_app_secret,
         env.facebook_callback,
     )
     github = GitHub(
-        website.asset_url,
         env.github_client_id,
         env.github_client_secret,
         env.github_callback,
     )
     google = Google(
-        website.asset_url,
         env.google_client_id,
         env.google_client_secret,
         env.google_callback,
     )
     bitbucket = Bitbucket(
-        website.asset_url,
         env.bitbucket_consumer_key,
         env.bitbucket_consumer_secret,
         env.bitbucket_callback,
     )
     openstreetmap = OpenStreetMap(
-        website.asset_url,
         env.openstreetmap_consumer_key,
         env.openstreetmap_consumer_secret,
         env.openstreetmap_callback,
@@ -195,7 +194,6 @@ def accounts_elsewhere(website, env):
         env.openstreetmap_auth_url,
     )
     bountysource = Bountysource(
-        website.asset_url,
         None,
         env.bountysource_api_secret,
         env.bountysource_callback,
@@ -203,7 +201,6 @@ def accounts_elsewhere(website, env):
         env.bountysource_www_host,
     )
     venmo = Venmo(
-        website.asset_url,
         env.venmo_client_id,
         env.venmo_client_secret,
         env.venmo_callback,
@@ -219,15 +216,56 @@ def accounts_elsewhere(website, env):
     all_platforms = signin_platforms + [bountysource, venmo]
     website.platforms = AccountElsewhere.platforms = PlatformRegistry(all_platforms)
 
+    for platform in all_platforms:
+        platform.icon = website.asset('platforms/%s.16.png' % platform.name)
+        platform.logo = website.asset('platforms/%s.png' % platform.name)
+
+
+def find_files(directory, pattern):
+    for root, dirs, files in os.walk(directory):
+        for filename in fnmatch.filter(files, pattern):
+            yield os.path.join(root, filename)
+
+
+def compile_assets(website):
+    client = Client(website.www_root, website.project_root)
+    client._website = website
+    for spt in find_files(website.www_root+'/assets/', '*.spt'):
+        filepath = spt[:-4]                         # /path/to/www/assets/foo.css
+        urlpath = spt[spt.rfind('/assets/'):-4]     # /assets/foo.css
+        try:
+            # Remove any existing compiled asset, so we can access the dynamic
+            # one instead (Aspen prefers foo.css over foo.css.spt).
+            os.unlink(filepath)
+        except:
+            pass
+        content = client.GET(urlpath).body
+        tmpfd, tmpfpath = mkstemp(dir='.')
+        os.write(tmpfd, content)
+        os.close(tmpfd)
+        os.rename(tmpfpath, filepath)
+
 
 def other_stuff(website, env):
-    website.asset_url = env.gratipay_asset_url.replace('%version', website.version)
     website.cache_static = env.gratipay_cache_static
     website.compress_assets = env.gratipay_compress_assets
 
+    if website.cache_static:
+        def asset(path):
+            fspath = website.www_root+'/assets/'+path
+            etag = ''
+            try:
+                etag = asset_etag(fspath)
+            except Exception as e:
+                website.tell_sentry(e)
+            return env.gratipay_asset_url+path+(etag and '?etag='+etag)
+        website.asset = asset
+        compile_assets(website)
+    else:
+        website.asset = lambda path: env.gratipay_asset_url+path
+
     website.google_analytics_id = env.google_analytics_id
     website.optimizely_id = env.optimizely_id
-    website.sentry_dsn = env.sentry_dsn
 
     website.log_metrics = env.log_metrics
 

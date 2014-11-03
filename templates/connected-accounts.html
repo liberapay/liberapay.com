@@ -29,7 +29,7 @@
     {% set url = 'https://blockchain.info/address/'+addr if addr else 'javascript:;' %}
     <tr>
         <td class="account-type">
-            <img src="{{ website.asset_url }}/bitcoin.png" />
+            <img src="{{ website.asset('bitcoin.png') }}" />
         </td>
         <td class="account-details">
             <div class="{{ 'bitcoin' if own_account else '' }}">

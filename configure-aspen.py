@@ -60,6 +60,7 @@ website.renderer_factories['jinja2'].Renderer.global_context = {
 
 
 env = website.env = gratipay.wireup.env()
+tell_sentry = website.tell_sentry = gratipay.wireup.make_sentry_teller(env)
 gratipay.wireup.canonical(env)
 website.db = gratipay.wireup.db(env)
 website.mail = gratipay.wireup.mail(env)
@@ -68,7 +69,6 @@ gratipay.wireup.username_restrictions(website)
 gratipay.wireup.nanswers(env)
 gratipay.wireup.other_stuff(website, env)
 gratipay.wireup.accounts_elsewhere(website, env)
-tell_sentry = website.tell_sentry = gratipay.wireup.make_sentry_teller(env)
 
 if exc:
     tell_sentry(exc)
@@ -146,6 +146,7 @@ def add_stuff_to_context(request):
         request.context['cta_high'] = high
 
 
+noop = lambda: None
 algorithm = website.algorithm
 algorithm.functions = [ timer.start
                       , algorithm['parse_environ_into_request']
@@ -159,10 +160,11 @@ algorithm.functions = [ timer.start
                       , i18n.add_helpers_to_context
 
                       , algorithm['dispatch_request_to_filesystem']
+
+                      , cache_static.get_etag_for_file if website.cache_static else noop
+                      , cache_static.try_to_serve_304 if website.cache_static else noop
+
                       , algorithm['apply_typecasters_to_path']
-
-                      , cache_static.try_to_serve_304
-
                       , algorithm['get_resource_for_request']
                       , algorithm['get_response_for_resource']
 
@@ -172,7 +174,7 @@ algorithm.functions = [ timer.start
                       , gratipay.set_misc_headers
                       , authentication.add_auth_to_response
                       , csrf.add_csrf_token_to_response
-                      , cache_static.add_caching_to_response
+                      , cache_static.add_caching_to_response if website.cache_static else noop
                       , x_frame_options
 
                       , algorithm['log_traceback_for_5xx']

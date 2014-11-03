@@ -215,7 +215,7 @@ out()
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ website.asset_url }}/d3.min.js"></script>
+<script src="{{ website.asset('d3.min.js') }}"></script>
 <script>
 d3.json("/about/tip-distribution.json", function(tips){
 

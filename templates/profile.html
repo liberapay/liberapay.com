@@ -1,6 +1,6 @@
 {% extends "templates/participant.html" %}
 {% block scripts %}
-    {% if user.ADMIN %}<script src="{{ website.asset_url }}/admin.js"></script>{% endif %}
+    {% if user.ADMIN %}<script src="{{ website.asset('admin.js') }}"></script>{% endif %}
     <script>$(document).ready(Gratipay.tips.init)</script>
     <script>$(document).ready(function() {
       $('#goal-custom').on('click change', function() {

@@ -1,125 +1,78 @@
 """
 Handles caching of static resources.
 """
-import os
-from calendar import timegm
-from email.utils import parsedate
-from wsgiref.handlers import format_date_time
+from base64 import b64encode
+from hashlib import md5
 
 from aspen import Response
 
 
-def version_is_available(version, path):
-    """Return a boolean, whether we have the version they asked for.
-    """
-    return path['version'] == version if 'version' in path else True
+ETAGS = {}
 
 
-def version_is_dash(request):
-    """Return a boolean, whether the version they asked for is -.
-    """
-    return request.line.uri.path.get('version') == '-'
-
-
-def get_last_modified(fs_path):
-    """Get the last modified time, as int, of the file pointed to by fs_path.
-    """
-    return int(os.path.getmtime(fs_path))
+def asset_etag(path):
+    if path.endswith('.spt'):
+        return ''
+    if path in ETAGS:
+        h = ETAGS[path]
+    else:
+        with open(path) as f:
+            h = ETAGS[path] = b64encode(md5(f.read()).digest(), '-_').replace('=', '~')
+    return h
 
 
 # algorithm functions
 
-def try_to_serve_304(website, request, dispatch_result):
-    """Try to serve a 304 for resources under assets/.
+def get_etag_for_file(dispatch_result):
+    return {'etag': asset_etag(dispatch_result.match)}
+
+
+def try_to_serve_304(website, dispatch_result, request, etag):
+    """Try to serve a 304 for static resources.
     """
-    uri = request.line.uri
+    if not etag:
+        # This is a request for a dynamic resource.
+        return
 
-    if not uri.startswith('/assets/'):
-
-        # Only apply to the assets/ directory.
-
-        return request
-
-    if version_is_dash(request):
-
-        # Special-case a version of '-' to never 304/404 here.
-
-        return request
-
-    if not version_is_available(website.version, request.line.uri.path):
-
+    qs_etag = request.line.uri.querystring.get('etag')
+    if qs_etag and qs_etag != etag:
         # Don't serve one version of a file as if it were another.
+        raise Response(410)
 
-        raise Response(404)
+    headers_etag = request.headers.get('If-None-Match')
+    if not headers_etag:
+        # This client doesn't want a 304.
+        return
 
-    ims = request.headers.get('If-Modified-Since')
-    if not ims:
-
-        # This client doesn't care about when the file was modified.
-
-        return request
-
-    if dispatch_result.match.endswith('.spt'):
-
-        # This is a requests for a dynamic resource. Perhaps in the future
-        # we'll delegate to such resources to compute a sensible Last-Modified
-        # or E-Tag, but for now we punt. This is okay, because we expect to
-        # put our dynamic assets behind a CDN in production.
-
-        return request
-
-
-    try:
-        ims = timegm(parsedate(ims))
-    except:
-
-        # Malformed If-Modified-Since header. Proceed with the request.
-
-        return request
-
-    last_modified = get_last_modified(dispatch_result.match)
-    if ims < last_modified:
-
-        # The file has been modified since. Serve the whole thing.
-
-        return request
-
+    if headers_etag != etag:
+        # Cache miss, the client sent an old or invalid etag.
+        return
 
     # Huzzah!
     # =======
     # We can serve a 304! :D
 
-    response = Response(304)
-    response.headers['Last-Modified'] = format_date_time(last_modified)
-    response.headers['Cache-Control'] = 'no-cache'
-    raise response
+    raise Response(304)
 
 
-def add_caching_to_response(response, website, request=None, dispatch_result=None):
-    """Set caching headers for resources under assets/.
+def add_caching_to_response(website, response, request=None, etag=None):
+    """Set caching headers for static resources.
     """
-    if dispatch_result is None:
-        return  # early parsing must've failed
-    assert request is not None  # we can't have a dispatch_result without a request
+    if etag is None:
+        return
+    assert request is not None  # sanity check
 
-    uri = request.line.uri
+    if response.code not in (200, 304):
+        return
 
-    if not uri.startswith('/assets/'):
-        return response
+    # https://developers.google.com/speed/docs/best-practices/caching
+    response.headers['Access-Control-Allow-Origin'] = 'https://gratipay.com'
+    response.headers['Vary'] = 'accept-encoding'
+    response.headers['Etag'] = etag
 
-    if response.code != 200:
-        return response
-
-    if website.cache_static:
-
-        # https://developers.google.com/speed/docs/best-practices/caching
-        response.headers['Cache-Control'] = 'public'
-        response.headers['Vary'] = 'accept-encoding'
-
-        response.headers['Access-Control-Allow-Origin'] = 'https://gratipay.com'
-
-        # all assets are versioned, so it's fine to cache them
-
-        response.headers['Expires'] = 'Sun, 17 Jan 2038 19:14:07 GMT'
-        last_modified = get_last_modified(dispatch_result.match)
-        response.headers['Last-Modified'] = format_date_time(last_modified)
+    if request.line.uri.querystring.get('etag'):
+        # We can cache "indefinitely" when the querystring contains the etag.
+        response.headers['Cache-Control'] = 'public, max-age=31536000'
+    else:
+        # Otherwise we cache for 5 seconds
+        response.headers['Cache-Control'] = 'public, max-age=5'

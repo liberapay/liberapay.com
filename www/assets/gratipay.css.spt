@@ -1,0 +1,24 @@
+import os
+import re
+from urlparse import urlsplit
+
+import sass
+
+filename = os.path.join(website.project_root, 'scss', 'gratipay.scss')
+output_style = 'compressed' if website.compress_assets else 'nested'
+
+def url_sub(m):
+    url = urlsplit(m.group(2))
+    if url.netloc:
+        # Absolute URL, don't touch it
+        return m.group(0)
+    repl = website.asset(url.path) + (url.query and '&'+url.query) + (url.fragment and '#'+url.fragment)
+    return 'url({0}{1}{0})'.format(m.group(1), repl)
+
+url_re = re.compile(r"""\burl\((['"])(.+?)['"]\)""")
+[---]
+css = sass.compile(output_style=str(output_style),filename=str(filename))
+if website.cache_static:
+    css = url_re.sub(url_sub, css)
+[---]
+{{ css }}
