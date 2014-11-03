@@ -146,6 +146,7 @@ def add_stuff_to_context(request):
         request.context['cta_high'] = high
 
 
+noop = lambda: None
 algorithm = website.algorithm
 algorithm.functions = [ timer.start
                       , algorithm['parse_environ_into_request']
@@ -161,7 +162,7 @@ algorithm.functions = [ timer.start
                       , algorithm['dispatch_request_to_filesystem']
                       , algorithm['apply_typecasters_to_path']
 
-                      , cache_static.try_to_serve_304 if website.cache_static else lambda: None
+                      , cache_static.try_to_serve_304 if website.cache_static else noop
 
                       , algorithm['get_resource_for_request']
                       , algorithm['get_response_for_resource']
@@ -172,7 +173,7 @@ algorithm.functions = [ timer.start
                       , gratipay.set_misc_headers
                       , authentication.add_auth_to_response
                       , csrf.add_csrf_token_to_response
-                      , cache_static.add_caching_to_response if website.cache_static else lambda: None
+                      , cache_static.add_caching_to_response if website.cache_static else noop
                       , x_frame_options
 
                       , algorithm['log_traceback_for_5xx']
