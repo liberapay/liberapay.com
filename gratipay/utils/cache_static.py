@@ -30,7 +30,7 @@ def try_to_serve_304(dispatch_result, request, website):
 
     if not etag:
         # This is a request for a dynamic resource.
-        return request
+        return
 
     qs_etag = request.line.uri.querystring.get('etag')
     if qs_etag and qs_etag != etag:
@@ -40,11 +40,11 @@ def try_to_serve_304(dispatch_result, request, website):
     headers_etag = request.headers.get('If-None-Match')
     if not headers_etag:
         # This client doesn't want a 304.
-        return request
+        return
 
     if headers_etag != etag:
         # Cache miss, the client sent an old or invalid etag.
-        return request
+        return
 
     # Huzzah!
     # =======
