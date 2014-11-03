@@ -29,7 +29,7 @@ def get_last_modified(fs_path):
 
 # algorithm functions
 
-def try_to_serve_304(website, request):
+def try_to_serve_304(website, request, dispatch_result):
     """Try to serve a 304 for resources under assets/.
     """
     uri = request.line.uri
@@ -59,7 +59,7 @@ def try_to_serve_304(website, request):
 
         return request
 
-    if request.fs.endswith('.spt'):
+    if dispatch_result.match.endswith('.spt'):
 
         # This is a requests for a dynamic resource. Perhaps in the future
         # we'll delegate to such resources to compute a sensible Last-Modified
@@ -77,7 +77,7 @@ def try_to_serve_304(website, request):
 
         return request
 
-    last_modified = get_last_modified(request.fs)
+    last_modified = get_last_modified(dispatch_result.match)
     if ims < last_modified:
 
         # The file has been modified since. Serve the whole thing.
@@ -95,10 +95,10 @@ def try_to_serve_304(website, request):
     raise response
 
 
-def add_caching_to_response(response, website, request=None):
+def add_caching_to_response(response, website, request=None, dispatch_result=None):
     """Set caching headers for resources under assets/.
     """
-    if request is None:
+    if request is None or dispatch_result is None:
         return  # early parsing must've failed
 
     uri = request.line.uri
@@ -120,5 +120,5 @@ def add_caching_to_response(response, website, request=None):
         # all assets are versioned, so it's fine to cache them
 
         response.headers['Expires'] = 'Sun, 17 Jan 2038 19:14:07 GMT'
-        last_modified = get_last_modified(request.fs)
+        last_modified = get_last_modified(dispatch_result.match)
         response.headers['Last-Modified'] = format_date_time(last_modified)
