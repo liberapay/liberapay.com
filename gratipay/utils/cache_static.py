@@ -60,10 +60,10 @@ def add_caching_to_response(response, website, request=None):
         return  # early parsing must've failed
 
     if not request.etag:
-        return response
+        return
 
     if response.code != 200:
-        return response
+        return
 
     # https://developers.google.com/speed/docs/best-practices/caching
     response.headers['Access-Control-Allow-Origin'] = 'https://gratipay.com'
