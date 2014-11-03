@@ -1,27 +1,47 @@
+# This file is placed into the Public Domain
+
+"""
+Bitcoin address validator by Gavin Andresen.
+https://bitcointalk.org/index.php?topic=1026.0;all
+
+Gratipay changes:
+
+ [x] Django field type made optional
+ [ ] Replaced PyCrypto dependency with hashlib
+
+"""
+
+from Crypto.Hash import SHA256
+
 #
 # DJango field type for a Bitcoin Address
 #
-import re
-from django import forms
-from django.forms.util import ValidationError
-from Crypto.Hash import SHA256
+try:
+  import re
+  from django import forms
+  from django.forms.util import ValidationError
+except ImportError:
+  pass
+else:
+  # Django is available
+  class BCAddressField(forms.CharField):
+    default_error_messages = {
+      'invalid': 'Invalid Bitcoin address.',
+      }
 
-class BCAddressField(forms.CharField):
-  default_error_messages = {
-    'invalid': 'Invalid Bitcoin address.',
-    }
+    def __init__(self, *args, **kwargs):
+      super(BCAddressField, self).__init__(*args, **kwargs)
 
-  def __init__(self, *args, **kwargs):
-    super(BCAddressField, self).__init__(*args, **kwargs)
+    def clean(self, value):
+      value = value.strip()
+      if re.match(r"[a-zA-Z1-9]{27,35}$", value) is None:
+        raise ValidationError(self.error_messages['invalid'])
+      version = get_bcaddress_version(value)
+      if version is None:
+        raise ValidationError(self.error_messages['invalid'])
+      return value
 
-  def clean(self, value):
-    value = value.strip()
-    if re.match(r"[a-zA-Z1-9]{27,35}$", value) is None:
-      raise ValidationError(self.error_messages['invalid'])
-    version = get_bcaddress_version(value)
-    if version is None:
-      raise ValidationError(self.error_messages['invalid'])
-    return value
+
 
 import math
 
