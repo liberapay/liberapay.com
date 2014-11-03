@@ -8,6 +8,10 @@ tips, total, unclaimed_tips, unclaimed_total = \
 hero = _("Giving")
 title = "%s - %s" % (participant.username, hero)
 locked = False
+cancelled_tips = [x for x in tips if x.amount == 0][:10]
+ncancelled_tips = len(cancelled_tips)
+
+CANCELLED = ngettext("You cancelled {n} tip recently", "You cancelled {n} tips recently", ncancelled_tips)
 
 [-----------------------------------------------------------------------------]
 {% extends "templates/profile.html" %}
@@ -49,6 +53,26 @@ locked = False
     </tr>
     {% endif %}
     {% endfor %}
+    {% if ncancelled_tips > 0 %}
+    <tr>
+        <td colspan="2">
+            {% if participant == user.participant %}
+            <h2>{{ CANCELLED }}</h2>
+            {% else %}
+            <h2>{{ "%s cancelled %s tip(s) recently" % participant.username, ncancelled_tips }}</h2>
+            {% endif %}
+        </td>
+    </tr>
+
+    {% for tip in cancelled_tips %}
+        {% if tip.amount == 0 %}
+        <tr class="tip">
+            <th><a href="/{{ tip.tippee }}/">{{ tip.tippee }}</a></th>
+            <td>{{ my_tip_bulk(tip) }}</td>
+        </tr>
+        {% endif %}
+    {% endfor %}
+    {% endif %}
 </table>
 {% if unclaimed_total > 0 %}
 <table class="matrix col2">
