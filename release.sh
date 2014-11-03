@@ -94,7 +94,7 @@ git tag $version
 # Deploy to Heroku
 [ "$maintenance" = "yes" ] && heroku maintenance:on -a gratipay
 [ "$run_sql" = "before" ] && heroku pg:psql -a gratipay <branch.sql
-git push heroku master
+git push --force heroku master
 [ "$maintenance" = "yes" ] && heroku maintenance:off -a gratipay
 [ "$run_sql" = "after" ] && heroku pg:psql -a gratipay <branch.sql
 rm -f branch.sql
