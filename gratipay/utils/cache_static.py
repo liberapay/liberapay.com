@@ -62,7 +62,7 @@ def add_caching_to_response(website, response, request=None, etag=None):
         return
     assert request is not None  # sanity check
 
-    if response.code != 200:
+    if response.code not in (200, 304):
         return
 
     # https://developers.google.com/speed/docs/best-practices/caching
