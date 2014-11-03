@@ -138,8 +138,22 @@ if __name__ == '__main__':
       sys.exit(-1)
 
   import urllib, json
+  ok = True
   print("..fetching dataset of invalid hashes")
   invalid = "https://raw.githubusercontent.com/bitcoin/bitcoin/master/src/test/data/base58_keys_invalid.json"
   for entry in json.loads(urllib.urlopen(invalid).read()):
     if validate(entry[0]):
       print entry[0], "- should be invalid - check failed"
+      ok = False
+
+  print("fetching dataset of valid hashes..")
+  valid = "https://raw.githubusercontent.com/bitcoin/bitcoin/master/src/test/data/base58_keys_valid.json"
+  for entry in json.loads(urllib.urlopen(valid).read()):
+    if not validate(entry[0]):
+      privkey = entry[2][u'isPrivkey']
+      # validation fails for private key (https://en.bitcoin.it/wiki/Private_key)
+      if not privkey:
+        print entry[0], "- should be valid - check failed"
+        ok = False
+
+  sys.exit('some tests failed.') if ok else sys.exit('some tests failed.')
