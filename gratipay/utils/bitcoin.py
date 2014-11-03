@@ -7,11 +7,14 @@ https://bitcointalk.org/index.php?topic=1026.0;all
 Gratipay changes:
 
  [x] Django field type made optional
- [ ] Replaced PyCrypto dependency with hashlib
+ [x] Replaced pycrypto dependency with hashlib
 
 """
 
-from Crypto.Hash import SHA256
+#from Crypto.Hash import SHA256
+from hashlib import sha256
+class SHA256(object):
+  new = sha256
 
 #
 # DJango field type for a Bitcoin Address
