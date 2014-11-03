@@ -160,11 +160,11 @@ algorithm.functions = [ timer.start
                       , i18n.add_helpers_to_context
 
                       , algorithm['dispatch_request_to_filesystem']
-                      , algorithm['apply_typecasters_to_path']
 
                       , cache_static.get_etag_for_file if website.cache_static else noop
                       , cache_static.try_to_serve_304 if website.cache_static else noop
 
+                      , algorithm['apply_typecasters_to_path']
                       , algorithm['get_resource_for_request']
                       , algorithm['get_response_for_resource']
 
