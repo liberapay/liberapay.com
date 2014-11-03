@@ -117,3 +117,12 @@ def validate(address):
     return False
   else:
     return True
+
+if __name__ == '__main__':
+  print("running self-tests..")
+  import urllib, json
+  print("..fetching dataset of invalid hashes")
+  invalid = "https://raw.githubusercontent.com/bitcoin/bitcoin/master/src/test/data/base58_keys_invalid.json"
+  for entry in json.loads(urllib.urlopen(invalid).read()):
+    if validate(entry[0]):
+      print entry[0], "- should be invalid - check failed"
