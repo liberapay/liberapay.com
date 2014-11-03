@@ -162,6 +162,7 @@ algorithm.functions = [ timer.start
                       , algorithm['dispatch_request_to_filesystem']
                       , algorithm['apply_typecasters_to_path']
 
+                      , cache_static.get_etag_for_file if website.cache_static else noop
                       , cache_static.try_to_serve_304 if website.cache_static else noop
 
                       , algorithm['get_resource_for_request']
