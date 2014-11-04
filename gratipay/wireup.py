@@ -8,6 +8,9 @@ from tempfile import mkstemp
 
 import aspen
 from aspen.testing.client import Client
+from babel.core import Locale
+from babel.messages.pofile import Catalog, read_po
+from babel.numbers import parse_pattern
 import balanced
 import gratipay
 import gratipay.billing.payday
@@ -28,7 +31,9 @@ from gratipay.models.community import Community
 from gratipay.models.participant import Participant
 from gratipay.models.email_address_with_confirmation import EmailAddressWithConfirmation
 from gratipay.models import GratipayDB
+from gratipay.utils import COUNTRIES, COUNTRIES_MAP
 from gratipay.utils.cache_static import asset_etag
+from gratipay.utils.i18n import ALIASES, ALIASES_R, get_function_from_rule, strip_accents
 
 
 def canonical(env):
@@ -244,6 +249,49 @@ def compile_assets(website):
         os.write(tmpfd, content)
         os.close(tmpfd)
         os.rename(tmpfpath, filepath)
+
+
+def load_i18n(website):
+    # Load the locales
+    key = lambda t: strip_accents(t[1])
+    localeDir = os.path.join(website.project_root, 'i18n', 'core')
+    locales = website.locales = {}
+    for file in os.listdir(localeDir):
+        try:
+            parts = file.split(".")
+            if not (len(parts) == 2 and parts[1] == "po"):
+                continue
+            lang = parts[0]
+            with open(os.path.join(localeDir, file)) as f:
+                l = locales[lang.lower()] = Locale(lang)
+                c = l.catalog = read_po(f)
+                c.plural_func = get_function_from_rule(c.plural_expr)
+                try:
+                    l.countries_map = {k: l.territories[k] for k in COUNTRIES_MAP}
+                    l.countries = sorted(l.countries_map.items(), key=key)
+                except KeyError:
+                    l.countries_map = COUNTRIES_MAP
+                    l.countries = COUNTRIES
+        except Exception as e:
+            website.tell_sentry(e)
+
+    # Add the default English locale
+    locale_en = website.locale_en = locales['en'] = Locale('en')
+    locale_en.catalog = Catalog('en')
+    locale_en.catalog.plural_func = lambda n: n != 1
+    locale_en.countries = COUNTRIES
+    locale_en.countries_map = COUNTRIES_MAP
+
+    # Add aliases
+    for k, v in list(locales.items()):
+        locales.setdefault(ALIASES.get(k, k), v)
+        locales.setdefault(ALIASES_R.get(k, k), v)
+    for k, v in list(locales.items()):
+        locales.setdefault(k.split('_', 1)[0], v)
+
+    # Patch the locales to look less formal
+    locales['fr'].currency_formats[None] = parse_pattern('#,##0.00\u202f\xa4')
+    locales['fr'].currency_symbols['USD'] = '$'
 
 
 def other_stuff(website, env):
