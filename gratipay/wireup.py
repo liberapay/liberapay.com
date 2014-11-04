@@ -254,7 +254,7 @@ def compile_assets(website):
 def load_i18n(website):
     # Load the locales
     key = lambda t: strip_accents(t[1])
-    localeDir = 'i18n/core'
+    localeDir = os.path.join(website.project_root, 'i18n', 'core')
     locales = website.locales = {}
     for file in os.listdir(localeDir):
         try:
