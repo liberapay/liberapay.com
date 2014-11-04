@@ -1,15 +1,9 @@
 """Show information about a single participant. It might be you!
 """
-from gratipay.utils import get_participant, wrap, plural, markdown
+from gratipay.utils import excerpt_intro, get_participant, wrap, plural, markdown
 from gratipay.models import community
 
 LONG_STATEMENT = 256
-
-def _clip(text, n):
-    text = text.replace('\n', ' ')
-    if len(text) > n:
-        text = text[:(n - 4)] + '...'
-    return text
 
 [-----------------------------------------------------------------------------]
 
@@ -59,7 +53,7 @@ def with_others(obj):
     <meta name="og:type" content="profile" />
     <meta name="og:title" content="{{ participant.get_og_title() }}" />
     {% if statement %}
-    <meta name="og:description" content="{{ _clip(statement, 200)|e }}" />
+    <meta name="og:description" content="{{ excerpt_intro(statement)|e }}" />
     {% else %}
     <meta name="og:description" content="Gratipay is a weekly gift exchange" />
     {% endif %}
