@@ -84,6 +84,8 @@ def regularize_locale(loc):
 
 
 def regularize_locales(locales):
+    """Yield locale strings in the same format as they are in website.locales.
+    """
     locales = [regularize_locale(loc) for loc in locales]
     locales_set = set(locales)
     for loc in locales:
