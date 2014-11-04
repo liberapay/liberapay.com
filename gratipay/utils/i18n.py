@@ -1,3 +1,4 @@
+# encoding: utf8
 from __future__ import print_function, unicode_literals
 
 from io import BytesIO
@@ -72,6 +73,12 @@ def to_age(dt, loc):
 
 def regularize_locale(loc):
     if loc == 'no':
+
+        # There are two forms of written Norwegian, Bokmål and Nynorsk, and
+        # while ISO 639 includes `no` as a "macrolanguage", the CLDR (upon
+        # which Babel, our i18n/l10n library, depends), does not include it at
+        # all. Therefore, if a client sends `no` we interpret it as `nb_NO`.
+
         loc = 'nb_NO'
     return loc.replace('-', '_').lower()
 
