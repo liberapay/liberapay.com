@@ -25,7 +25,6 @@ emails = participant.get_emails()
 <div id="profile-edit">
     <div class="col0">
 
-        <!-- Name and Anonymous -->
         <form class="username">
             <h2>{{ _("You are {0}",
                     "<span class='view'>" + escape(participant.username) + "</span>") }}
@@ -39,21 +38,7 @@ emails = participant.get_emails()
             {{ _("Have you linked to your Gratipay profile from other websites? Be sure to update those links!") }}
             </h2>
         </form>
-        <p>
-            <label tabindex="104" class="anonymous-giving">
-                <input type="checkbox"
-                    {% if participant.anonymous_giving %}checked="true"{% endif %} />
-                    {{ _("Hide total giving from others.") }}
-            </label>
-            <br />
-            {% if participant.IS_SINGULAR %}
-            <label tabindex="105" class="anonymous-receiving">
-                <input type="checkbox"
-                    {% if participant.anonymous_receiving %}checked="true"{% endif %} />
-                    {{ _("Hide total receiving from others.") }}
-            </label>
-            {% endif %}
-        </p>
+
         {% if not user.ANON and (user.ADMIN or user.participant == participant) %}
             <h2>{{ _("Available Money") }}</h2>
             <table class="accounts" id="account-balance">
@@ -169,7 +154,6 @@ emails = participant.get_emails()
         </div>
 
 
-        <!-- API  -->
         <div class="api-key">
           <h2>{{ _("API Key") }}</h2>
           <div><span>xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</span></div>
@@ -182,22 +166,30 @@ emails = participant.get_emails()
         </div>
 
         <h2>{{ _("Privacy") }}</h2>
-        <table id="dnt">
-            <tr>
-                <td class="dnt-label">
-                    <a href="/about/privacy/#dnt">{{ _("Do Not Track") }}</a>
-                </td>
-                <td class="dnt-value">
-                    {% if request.headers.get('DNT') == '1' %}
-                    {{ _("On").upper() }}
-                    {% else %}
-                    {{ _("Off").upper() }}
-                    {% endif %}
-                </td>
-            </tr>
-        </table>
+        <p>
+            <label class="anonymous-giving">
+                <input type="checkbox"
+                    {% if participant.anonymous_giving %}checked="true"{% endif %} />
+                    {{ _("Hide total giving from others.") }}
+            </label>
+            <br />
+            {% if participant.IS_SINGULAR %}
+            <label class="anonymous-receiving">
+                <input type="checkbox"
+                    {% if participant.anonymous_receiving %}checked="true"{% endif %} />
+                    {{ _("Hide total receiving from others.") }}
+            </label>
+            {% endif %}
+        </p>
+        <p id="dnt">
+            <a href="/about/privacy/#dnt">{{ _("Do Not Track") }}</a>:
+            {% if request.headers.get('DNT') == '1' %}
+                {{ _("On").upper() }}
+            {% else %}
+                {{ _("Off").upper() }}
+            {% endif %}
+        </p>
 
-        <!-- Close Account! -->
         <div class="close">
           <h2>{{ _("Close") }}</h2>
           <div class="buttons">
