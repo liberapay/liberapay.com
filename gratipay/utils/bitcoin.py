@@ -6,7 +6,7 @@ https://bitcointalk.org/index.php?topic=1026.0;all
 
 Gratipay changes:
 
- [x] Django field type made optional
+ [x] Removed Django field
  [x] Replaced pycrypto dependency with hashlib
  [x] Added self-test with remote Bitcoin dataset
  [x] Added cmdline interface for checking address
@@ -18,35 +18,6 @@ Gratipay changes:
 from hashlib import sha256
 class SHA256(object):
   new = sha256
-
-#
-# DJango field type for a Bitcoin Address
-#
-try:
-  import re
-  from django import forms
-  from django.forms.util import ValidationError
-except ImportError:
-  pass
-else:
-  # Django is available
-  class BCAddressField(forms.CharField):
-    default_error_messages = {
-      'invalid': 'Invalid Bitcoin address.',
-      }
-
-    def __init__(self, *args, **kwargs):
-      super(BCAddressField, self).__init__(*args, **kwargs)
-
-    def clean(self, value):
-      value = value.strip()
-      if re.match(r"[a-zA-Z1-9]{27,35}$", value) is None:
-        raise ValidationError(self.error_messages['invalid'])
-      version = get_bcaddress_version(value)
-      if version is None:
-        raise ValidationError(self.error_messages['invalid'])
-      return value
-
 
 
 __b58chars = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
