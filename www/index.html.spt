@@ -62,8 +62,9 @@ from gratipay.security.user import SESSION_TIMEOUT
         <p><a href="/about/">{{ _("Learn more") }}</a></p>
 
     </div>
-    <div class="action">
+    
     {% if user.ANON %}
+    <div class="action">
         {{ _("{0}Sign In{1} {2}to Accept Weekly Payments{3}",
             "<h1>", "</h1>", "<p>", "</p>") }}
         {% from 'templates/auth.html' import auth_button with context %}
@@ -96,6 +97,7 @@ from gratipay.security.user import SESSION_TIMEOUT
                 "<a href='http://inside.gratipay.com/big-picture/welcome'>", "</a>") }}</p>
 
     {% else %}
+    <div class="greeting">
         <a class="sign-out" href='/sign-out.html'>{{ _("Sign out") }}</a>
 
         {% set quick = utcnow() - SESSION_TIMEOUT  %}
