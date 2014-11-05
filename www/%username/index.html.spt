@@ -89,7 +89,7 @@ $(document).ready(function() {
     <div class="group">
         {% if statement %}
         <div class="{% if long_statement %}col1{% else %}col0{% endif %}">
-            <h2>{{ STATEMENT }}</h2>
+            <h2>{{ _("Statement") }}</h2>
             <div class="statement markdown-output">
                 {{ markdown.render(statement) }}
             </div>
