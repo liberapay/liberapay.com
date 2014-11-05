@@ -13,9 +13,12 @@ from gratipay.security import authentication, csrf, x_frame_options
 from gratipay.utils import cache_static, i18n, set_cookie, timer
 from gratipay.version import get_version
 
-
 import aspen
 from aspen import log_dammit
+from aspen.website import Website
+
+
+website = Website([])
 
 
 # Monkey patch aspen.Response
