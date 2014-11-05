@@ -1,3 +1,5 @@
+# encoding: utf8
+
 from __future__ import division
 
 from datetime import datetime, timedelta
@@ -417,17 +419,12 @@ def format_money(money):
     return format % money
 
 
-def to_statement(prepend, string, length=140, append='...'):
-    if prepend and string:
-        statement = prepend.format(string)
-        if len(string) > length:
-            return statement[:length] + append
-        elif len(string) > 0:
-            return statement
-        else:
-            return string
-    else:
+def excerpt_intro(text, length=175, append=u'…'):
+    if not text:
         return ''
+    if len(text) > length:
+        return text[:length] + append
+    return text
 
 
 def is_card_expiring(expiration_year, expiration_month):

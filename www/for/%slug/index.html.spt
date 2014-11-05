@@ -1,6 +1,6 @@
 from aspen import Response
 from gratipay.models.community import name_pattern, slugize, Community
-from gratipay.utils import format_money, to_statement
+from gratipay.utils import excerpt_intro, format_money
 from gratipay.utils.query_cache import QueryCache
 
 LUXURY = 4
@@ -8,9 +8,6 @@ LUXURY = 4
 query_cache = QueryCache(website.db, threshold=20)
 
 [---]
-
-I_AM_MAKING = _("I am making the world better by {0}")
-WE_ARE_MAKING = _("We are making the world better by {0}")
 
 _slug = path['slug']
 if name_pattern.match(_slug) is None:
@@ -183,7 +180,7 @@ $(document).ready(function() {
             {% for i, participant in enumerate(new_participants, start=1) %}
             <li{% if i > LUXURY %} class="luxury"{% endif %}>
                 <a href="/{{ participant.username }}/" class="mini-user tip"
-                data-tip="{{ to_statement((I_AM_MAKING if participant.number == 'singular' else WE_ARE_MAKING), participant.statement)|e }}">
+                   data-tip="{{ excerpt_intro(participant.statement)|e }}">
                     <span class="inner">
                         <span class="avatar"
                             style="background-image: url('{{ avatar_url(participant) }}')">
@@ -213,7 +210,7 @@ $(document).ready(function() {
                 {% else %}
                 <a href="/{{ giver.username }}/"
                    class="mini-user{{ ' anonymous' if giver.anonymous else '' }} tip"
-                   data-tip="{{ to_statement((I_AM_MAKING if giver.number == 'singular' else WE_ARE_MAKING), giver.statement) }}">
+                   data-tip="{{ excerpt_intro(giver.statement) }}">
                     <span class="inner">
                         <span class="avatar" style="background-image: url('{{ avatar_url(giver) }}')">
                         </span>
@@ -243,7 +240,7 @@ $(document).ready(function() {
                 {% else %}
                 <a href="/{{ receiver.username }}/"
                    class="mini-user{{ ' anonymous' if receiver.anonymous else '' }} tip"
-                   data-tip="{{ to_statement((I_AM_MAKING if receiver.number == 'singular' else WE_ARE_MAKING), receiver.statement) }}">
+                   data-tip="{{ excerpt_intro(receiver.statement) }}">
                     <span class="inner">
                         <span class="avatar"
                             style="background-image: url('{{ avatar_url(receiver) }}')">

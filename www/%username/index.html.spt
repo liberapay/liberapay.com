@@ -30,17 +30,12 @@ accounts = participant.get_accounts_elsewhere()
 long_statement = len(participant.statement) > LONG_STATEMENT
 communities = community.get_list_for(website.db, participant.id)
 
-I_AM_MAKING = _("I am making the world better by {0}")
-WE_ARE_MAKING = _("We are making the world better by {0}")
-
 if participant.number == 'singular':
-    MAKING = I_AM_MAKING
     GRATEFUL = _("I'm grateful for gifts, but don't have a specific funding goal.")
     PATRON = _("I'm here as a patron.")
     PATRON_NO_GIFTS = _("I'm here as a patron, and politely decline to receive gifts.")
     GOAL_RAW = _("My goal is to receive {0} per week on Gratipay.")
 else:
-    MAKING = WE_ARE_MAKING
     GRATEFUL = _("We're grateful for gifts, but don't have a specific funding goal.")
     PATRON = _("We're here as a patron.")
     PATRON_NO_GIFTS = _("We're here as a patron, and politely decline to receive gifts.")
@@ -62,8 +57,8 @@ def with_others(obj):
     <meta name="og:url" content="https://gratipay.com/{{ username }}/" />
     <meta name="og:type" content="profile" />
     <meta name="og:title" content="{{ participant.get_og_title() }}" />
-    {% if participant.statement %}
-    <meta name="og:description" content="{{ _clip(MAKING.format(participant.statement), 200)|e }}" />
+    {% if statement %}
+    <meta name="og:description" content="{{ _clip(participant.statement, 200)|e }}" />
     {% else %}
     <meta name="og:description" content="Gratipay is a weekly gift exchange" />
     {% endif %}
@@ -101,7 +96,7 @@ $(document).ready(function() {
         <div class="{% if long_statement %}col1{% else %}col0{% endif %}">
             <h2>{{ STATEMENT }}</h2>
             <div class="statement markdown-output">
-                {{ markdown.render(MAKING.format(participant.statement)) }}
+                {{ markdown.render(participant.statement) }}
             </div>
             {% include "templates/team-listing.html" %}
             {% include "templates/community-listing.html" %}

@@ -7,13 +7,13 @@ from gratipay.testing import Harness
 
 class Tests(Harness):
 
-    def change_statement(self, statement, number='singular', auth_as='alice',
+    def change_statement(self, statement, auth_as='alice',
             expecting_error=False):
-        self.make_participant('alice')
+        self.make_participant('alice', claimed_time='now')
 
         method = self.client.POST if not expecting_error else self.client.PxST
         response = method( "/alice/statement.json"
-                         , {'statement': statement, 'number': number}
+                         , {'statement': statement}
                          , auth_as=auth_as
                           )
         return response
@@ -23,19 +23,9 @@ class Tests(Harness):
         actual = json.loads(response.body)['statement']
         assert actual == '<p>I am making the world better by being awesome.</p>\n'
 
-    def test_participant_can_change_their_number(self):
-        response = self.change_statement('', 'plural')
-        actual = json.loads(response.body)['number']
-        assert actual == 'plural'
-
-    def test_anonymous_gets_404(self):
+    def test_anonymous_gets_403(self):
         response = self.change_statement( 'being awesome.'
-                                        , 'singular'
                                         , auth_as=None
                                         , expecting_error=True
                                          )
-        assert response.code == 404, response.code
-
-    def test_invalid_is_400(self):
-        response = self.change_statement('', 'none', expecting_error=True)
-        assert response.code == 400, response.code
+        assert response.code == 403, response.code

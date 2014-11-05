@@ -9,16 +9,7 @@
         </h2>
 
         <div class="edit">
-            <select tabindex="201" name="number" id="statement-select">
-                <option value="singular"
-                    {{ "selected" if participant.number == 'singular' else ''}}>
-                    {{ I_AM_MAKING.format("...") }}
-                </option>
-                <option value="plural"
-                    {{ "selected" if participant.number != 'singular' else ''}}>
-                    {{ WE_ARE_MAKING.format("...") }}
-                </option>
-            </select>
+            {{ _("Tell us how you're making the world better:") }}
             <textarea tabindex="202">{{ participant.statement }}</textarea>
             <span class="help">{{ _("Markdown supported.") }}
                 <a href="https://daringfireball.net/projects/markdown/basics" target="_blank">{{ _("What is markdown?") }}</a>
@@ -27,7 +18,7 @@
         </div>
 
         <div class="view markdown-output">
-            {{ markdown.render(MAKING.format(participant.statement)) }}
+            {{ markdown.render(participant.statement) }}
         </div>
     </form>
 
