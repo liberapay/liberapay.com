@@ -39,6 +39,14 @@ emails = participant.get_emails()
             </h2>
         </form>
 
+        <h2>{{ _("Account type") }}</h2>
+        <form class="number">
+            <label><input type="radio" name="number" value="singular" {{ 'checked' if participant.IS_SINGULAR }} />
+                   {{ _("Individual") }}</label>
+            <label><input type="radio" name="number" value="plural" {{ 'checked' if participant.IS_PLURAL }} />
+                   {{ _("Team") }}</label>
+        </form>
+
         {% if not user.ANON and (user.ADMIN or user.participant == participant) %}
             <h2>{{ _("Available Money") }}</h2>
             <table class="accounts" id="account-balance">

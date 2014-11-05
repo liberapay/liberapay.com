@@ -1,24 +1,5 @@
 Gratipay.profile = {};
 
-Gratipay.profile.toNumber = function(number) {
-    if (number == 'plural')
-        Gratipay.profile.toPlural();
-    else if (number == 'singular')
-        Gratipay.profile.toSingular();
-};
-
-Gratipay.profile.toPlural = function() {
-    $('.i-am').text('We are');
-    $('.i-m').text("We're");
-    $('.my').text("Our");
-};
-
-Gratipay.profile.toSingular = function() {
-    $('.i-am').text('I am');
-    $('.i-m').text("I'm");
-    $('.my').text("My");
-};
-
 Gratipay.profile.init = function() {
     ////////////////////////////////////////////////////////////
     //                                                         /
@@ -44,14 +25,6 @@ Gratipay.profile.init = function() {
         });
     }
 
-    function update_members_button(is_plural) {
-        if (is_plural) {
-            $("#members-button").removeClass("hidden")
-        } else {
-            $("#members-button").addClass("hidden")
-        }
-    }
-
     if ($('.statement textarea').val() === '') {
         start_editing_statement();
     }
@@ -64,15 +37,11 @@ Gratipay.profile.init = function() {
     $('form.statement').submit(function(e) {
         e.preventDefault();
 
-        var is_plural = jQuery("#statement-select").val() === "plural";
         $('.statement button.save').css('opacity', 0.5);
 
         function success(d) {
             $('.statement .view').html(d.statement);
-            var number = $('.statement select').val();
-            Gratipay.profile.toNumber(number);
             finish_editing_statement();
-            update_members_button(is_plural);
         }
         function error(e) {
             $('.statement button.save').css('opacity', 1);
@@ -83,9 +52,7 @@ Gratipay.profile.init = function() {
             , type: "POST"
             , success: success
             , error: error
-            , data: { statement: $('.statement textarea').val()
-                    , number: $('.statement select').val()
-                     }
+            , data: { statement: $('.statement textarea').val() }
              }
         );
         return false;

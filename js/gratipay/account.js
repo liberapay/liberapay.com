@@ -94,6 +94,31 @@ Gratipay.account.init = function() {
     }
 
 
+    // Wire up account type knob.
+    // ==========================
+
+    $('.number input').click(function() {
+        var $input = $(this);
+        jQuery.ajax(
+            { url: '../number.json'
+            , type: 'POST'
+            , data: {number: $input.val()}
+            , success: function(data) {
+                Gratipay.notification("Your account type has been changed.", 'success');
+                if (data.number === 'plural') {
+                    $("#members-button").removeClass("hidden");
+                } else {
+                    $("#members-button").addClass("hidden");
+                }
+            }
+            , error: function(r) {
+                $input.prop('checked', false);
+                Gratipay.notification(JSON.parse(r.responseText).error_message_long, 'error');
+            }
+        });
+    });
+
+
     // Wire up aggregate giving knob.
     // ==============================
 
