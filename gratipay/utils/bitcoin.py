@@ -7,17 +7,19 @@ https://bitcointalk.org/index.php?topic=1026.0;all
 Gratipay changes:
 
  [x] Removed Django field
- [x] Replaced pycrypto dependency with hashlib
+ [x] Made pycrypto dependency optional with hashlib
  [x] Added self-test with remote Bitcoin dataset
  [x] Added cmdline interface for checking address
        utils.bitcoin.py -i [hash]
 
 """
 
-#from Crypto.Hash import SHA256
-from hashlib import sha256
-class SHA256(object):
-  new = sha256
+try:
+  from Crypto.Hash import SHA256
+except ImportError:
+  from hashlib import sha256
+  class SHA256(object):
+    new = sha256
 
 
 __b58chars = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
