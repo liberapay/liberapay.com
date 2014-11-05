@@ -1,0 +1,17 @@
+[---]
+
+[---] text/html
+{% extends "templates/base.html" %}
+
+{% block heading %}
+    <h1>Forbidden</h1>
+{% endblock %}
+{% block box %}
+
+<div class="as-content">
+    <p style="margin: 3em 0;">You don't have permission to view this page!</p>
+</div>
+
+<div class="nav level-1"><a href="/"><button>Home</button></a></div>
+
+{% endblock %}
