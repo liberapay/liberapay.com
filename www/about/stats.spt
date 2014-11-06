@@ -33,7 +33,6 @@ payday = db.one( "SELECT ts_start, ts_end FROM paydays WHERE ts_start > %s"
 npeople = db.one("SELECT count(*) FROM participants WHERE claimed_time IS NOT NULL AND is_suspicious IS NOT true")
 ncc = db.one("SELECT count(*) FROM participants WHERE last_bill_result = '' AND is_suspicious IS NOT true")
 pcc = "%5.1f" % ((ncc * 100.0) / npeople) if npeople > 0 else 0.0
-statements = db.all("SELECT username, statement FROM participants WHERE statement != '' AND is_suspicious IS NOT true ORDER BY random(), username LIMIT 16")
 transfer_volume = db.one("SELECT transfer_volume FROM paydays ORDER BY ts_end DESC LIMIT 1", default=0)
 tips_stats = db.one("""
     SELECT count(*), avg(amount), sum(amount)
@@ -99,13 +98,6 @@ def get_tip_distribution():
     return r
 
 
-def part(s):
-    s = s.splitlines()[0]
-    if len(s) > 45:
-        s = s[:42].rsplit(None, 1)[0] + " ..."
-    return s
-
-
 last_payday = db.one("select * from paydays order by ts_end desc limit 1", back_as="dict")
 if last_payday:
     nactive = last_payday['nactive']
@@ -153,7 +145,7 @@ elif now.weekday() == SATURDAY:
     this_thursday = "this coming Thursday"
 
 def out():
-    names = ['ncc', 'pcc', 'statements', 'transfer_volume', 'last_thursday',
+    names = ['ncc', 'pcc', 'transfer_volume', 'last_thursday',
              'this_thursday', 'punc', 'other_people', 'average_tip',
              'average_tippees', 'total_backed_tips', 'tip_n', 'nach', 'escrow',
              'ngivers', 'nreceivers', 'noverlap', 'nactive']
@@ -171,45 +163,17 @@ out()
 {% block head %}
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
 <style>
-    .dollar-sign {
-        padding: 0 2pt 0 24pt;
-        text-align: right;
-    }
-    .amount {
-        padding: 0 6pt 0 0;
-        text-align: right;
-    }
-    .amount-change {
-        padding: 6pt 0 6pt 24pt;
-        text-align: left;
-    }
-    .count {
-        text-align: left;
-        white-space: nowrap;
-    }
-    .count span.number {
-        font-size: 8pt;
-    }
-        background: #B2A196;
-    .count span.bar {
-        display: inline-block;
-        margin-right: 3pt;
-        height: 9pt;
-        }
-
     .distribution {
-      font: 10px sans-serif;
+        font: 10px sans-serif;
     }
-
     .bar rect {
-      fill: #396;
-      shape-rendering: crispEdges;
+        fill: #396;
+        shape-rendering: crispEdges;
     }
-
     .axis path, .axis line {
-      fill: none;
-      stroke: #000;
-      shape-rendering: crispEdges;
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
     }
 </style>
 {% endblock %}
@@ -321,11 +285,6 @@ d3.json("/about/tip-distribution.json", function(tips){
 
 {% block page %}
 
-
-<div class="col1">
-
-    <h1>Quick Facts</h1>
-
     <p>Gratipay is <b>{{ age() }}</b> old and has <b>{{ nactive }} active
     users</b>.</p>
 
@@ -363,23 +322,10 @@ d3.json("/about/tip-distribution.json", function(tips){
     </br>
     <p>Here's how tip amounts are distributed by number of tips:</p>
 
-    <div id="distribution-by-number", class="distribution"></div>
+    <div id="distribution-by-number" class="distribution"></div>
 
     <p>Here's how tip amounts are distributed by total value of the tips:</p>
 
-    <div id="distribution-by-value", class="distribution"></div>
-</div>
-<div class="col2">
+    <div id="distribution-by-value" class="distribution"></div>
 
-    <h1>For Example</h1>
-
-    <p>How are Gratipay participants <b>making the world better</b>?</p>
-
-    <p>
-    {% for statement in statements %}
-    <b><a href="/{{ statement.username|e }}/">{{ statement.username|e }}</a></b>
-    is <span title="{{ statement.statement|e }}">{{ part(statement.statement)|e }}</span><br />
-    {% endfor %}
-    </p>
-</div>
 {% endblock %}
