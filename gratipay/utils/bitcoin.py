@@ -12,6 +12,8 @@ Gratipay changes:
  [x] Added cmdline interface for checking address
        utils.bitcoin.py -i [hash]
 
+https://github.com/gratipay/gratipay.com/pull/2886
+
 """
 
 from hashlib import sha256
