@@ -2,8 +2,8 @@
 
 """
 from aspen import Response
-import bitcoinaddress
 from gratipay.models import add_event
+from gratipay.utils import bitcoin
 
 [---------------------------------------------------------------]
 
@@ -12,7 +12,7 @@ if user.ANON:
 request.allow("POST")
 
 bit_address = request.body['bitcoin_address'].strip()
-if bit_address != '' and not bitcoinaddress.validate(bit_address):
+if bit_address != '' and not bitcoin.validate(bit_address):
     raise Response(400)
 
 with website.db.get_cursor() as c:
