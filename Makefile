@@ -4,7 +4,7 @@ python := "$(shell { command -v python2.7 || command -v python; } 2>/dev/null)"
 # NOTE: Creating a virtualenv on Windows places binaries in the 'Scripts' directory.
 bin_dir := $(shell $(python) -c 'import sys; bin = "Scripts" if sys.platform == "win32" else "bin"; print(bin)')
 env_bin := env/$(bin_dir)
-venv := "./vendor/virtualenv-1.9.1.py"
+venv := "./vendor/virtualenv-1.11.6.py"
 test_env_files := defaults.env,tests/test.env,tests/local.env
 pip := $(env_bin)/pip
 honcho := $(env_bin)/honcho
@@ -15,9 +15,7 @@ env: requirements.txt requirements_tests.txt setup.py
 	$(python) $(venv) \
 				--unzip-setuptools \
 				--prompt="[gratipay] " \
-				--never-download \
 				--extra-search-dir=./vendor/ \
-				--distribute \
 				./env/
 	$(pip) install -r requirements.txt
 	$(pip) install -r requirements_tests.txt
