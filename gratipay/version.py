@@ -5,21 +5,21 @@ from subprocess import CalledProcessError, check_output
 def get_version():
     d = dirname(dirname(__file__))
 
+    version = False
     if isdir(join(d, '.git')):
-        # Get the version using "git describe".
+        # Running from source checkout
         cmd = 'git describe --tags --match [0-9]*'.split()
         try:
             version = check_output(cmd).decode().strip()
         except (CalledProcessError, OSError):
             print('Unable to get version number from git tags')
-            exit(1)
 
         # PEP 386 compatibility
-        if '-' in version:
+        if version and '-' in version:
             version = '.post'.join(version.split('-')[:2])
 
-    else:
-        # Read the version from the version.txt file.
+    if not version:
+        # [ ] This should really belong to gratipay module
         with open(join(d, 'www/version.txt')) as f:
             version = f.read().strip()
 
