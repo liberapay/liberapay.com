@@ -1,7 +1,7 @@
 from __future__ import print_function, unicode_literals
 
 from aspen import Response
-from gratipay.utils import get_participant, wrap
+from gratipay.utils import get_participant
 from gratipay.exceptions import ProblemChangingNumber
 
 [-----------------------------------------------------------------------------]
@@ -21,4 +21,4 @@ if number != participant.number:
         raise Response(400, unicode(e))
 
 [---] application/json via json_dump
-{"number": wrap(number)}
+{"number": number}

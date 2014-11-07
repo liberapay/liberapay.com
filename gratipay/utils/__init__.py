@@ -3,13 +3,11 @@
 from __future__ import division
 
 from datetime import datetime, timedelta
-import re
 
 from aspen import Response
-from aspen.utils import typecheck, to_rfc822, utcnow
+from aspen.utils import to_rfc822, utcnow
 import gratipay
 from postgres.cursors import SimpleCursorBase
-from jinja2 import escape
 
 
 COUNTRIES = (
@@ -268,37 +266,6 @@ COUNTRIES_MAP = dict(COUNTRIES)
 # Difference between current time and credit card expiring date when
 # card is considered as expiring
 EXPIRING_DELTA = timedelta(days = 30)
-
-def wrap(u):
-    """Given a unicode, return a unicode.
-    """
-    typecheck(u, unicode)
-    linkified = linkify(u)  # Do this first, because it calls xthml_escape.
-    out = linkified.replace(u'\r\n', u'<br />\r\n').replace(u'\n', u'<br />\n')
-    return out if out else '...'
-
-
-def linkify(u):
-    escaped = unicode(escape(u))
-
-    urls = re.compile(r"""
-        (                         # capture the entire URL
-            (?:(https?://)|www\.) # capture the protocol or match www.
-            [\w\d.-]*\w           # the domain
-            (?:/                  # the path
-                (?:\S*\(
-                    \S*[^\s.,;:'\"]|
-                    \S*[^\s.,;:'\"()]
-                )*
-            )?
-        )
-    """, re.VERBOSE|re.MULTILINE|re.UNICODE|re.IGNORECASE)
-
-    return urls.sub(lambda m:
-        '<a href="%s" target="_blank">%s</a>' % (
-            m.group(1) if m.group(2) else 'http://'+m.group(1), m.group(1)
-        )
-    , escaped)
 
 
 def dict_to_querystring(mapping):
