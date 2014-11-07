@@ -10,7 +10,7 @@ def get_version():
         cmd = 'git describe --tags --match [0-9]*'.split()
         try:
             version = check_output(cmd).decode().strip()
-        except CalledProcessError:
+        except (CalledProcessError, OSError):
             print('Unable to get version number from git tags')
             exit(1)
 
