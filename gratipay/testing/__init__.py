@@ -3,9 +3,8 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import itertools
-import os
 import unittest
-from os.path import dirname, isfile, join, realpath
+from os.path import dirname, join, realpath
 
 from aspen import resources
 from aspen.utils import utcnow
@@ -86,10 +85,6 @@ class Harness(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        for compiled_asset in ('gratipay.css', 'gratipay.js'):
-            filepath = join(cls.client.www_root, 'assets', compiled_asset)
-            if isfile(filepath):
-                os.remove(filepath)
         cls.vcr_cassette.__exit__(None, None, None)
 
 
