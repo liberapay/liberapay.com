@@ -4,7 +4,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import itertools
 import unittest
-from os.path import join, dirname, realpath
+from os.path import dirname, join, realpath
 
 from aspen import resources
 from aspen.utils import utcnow

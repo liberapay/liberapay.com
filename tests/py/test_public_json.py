@@ -142,6 +142,12 @@ class Tests(Harness):
         assert data['receiving'] == '3.00'
         assert data['my_tip'] == 'self'
 
+    def test_access_control_allow_origin_header_is_asterisk(self):
+        self.make_participant('alice', last_bill_result='')
+        response = self.client.GET('/alice/public.json')
+
+        assert response.headers['Access-Control-Allow-Origin'] == '*'
+
     def test_jsonp_works(self):
         alice = self.make_participant('alice', last_bill_result='')
         bob = self.make_participant('bob')
