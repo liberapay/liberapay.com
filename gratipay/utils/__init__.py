@@ -292,10 +292,6 @@ def canonicalize(path, base, canonical, given, arguments=None):
         raise Response(302, headers={"Location": newpath})
 
 
-def plural(i, singular="", plural="s"):
-    return singular if i == 1 else plural
-
-
 def get_participant(request, restrict=True, resolve_unclaimed=True):
     """Given a Request, raise Response or return Participant.
 
