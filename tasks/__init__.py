@@ -107,6 +107,9 @@ def bitcoin_payout(username='', amount='', api_key_fragment=''):
     [gratipay] $ env/bin/invoke bitcoin_payout --username=username --amount=amount [--api-key-fragment=12e4s678]
     """
 
+    if not os.environ.get('DATABASE_URL'):
+        load_prod_envvars()
+
     if not username or not amount:
         print(bitcoin_payout.__doc__)
         sys.exit(1)
@@ -233,7 +236,7 @@ def coinbase_request(url, body=None):
         load_prod_envvars()
     nonce = int(time.time() * 1e6)
     message = str(nonce) + url + ('' if body is None else body)
-    signature = hmac.new(os.environ['COINBASE_API_SECRET'], message, hashlib.sha256).hexdigest()
+    signature = hmac.new(str(os.environ['COINBASE_API_SECRET']), message, hashlib.sha256).hexdigest()
 
     headers = {
         'ACCESS_KEY' : os.environ['COINBASE_API_KEY'],
