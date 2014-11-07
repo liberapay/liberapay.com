@@ -28,3 +28,7 @@ def get_version():
 
 if __name__ == '__main__':
     print(get_version())
+
+# [ ] dump_version() for www
+# [ ] version_update (for itself/deployment)
+ 

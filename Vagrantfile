@@ -40,7 +40,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # --- install prerequisites ---
     # [ ] use the same package versions as Heroku
     #   [ ] figure out how to fetch Heroku versions
-    base.vm.provision "shell", inline: "sudo apt-get -y install postgresql"
+    base.vm.provision :shell, :path => "scripts/vagrant-debian.sh"
   end
 
   # disable snapshot box for now
