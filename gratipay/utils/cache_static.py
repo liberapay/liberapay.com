@@ -66,11 +66,10 @@ def add_caching_to_response(website, response, request=None, etag=None):
         return
 
     # https://developers.google.com/speed/docs/best-practices/caching
-    if response.headers['Access-Control-Allow-Origin'] is None:
-        response.headers['Access-Control-Allow-Origin'] = 'https://gratipay.com'
-
     response.headers['Vary'] = 'accept-encoding'
     response.headers['Etag'] = etag
+    if 'Access-Control-Allow-Origin' not in response.headers:
+        response.headers['Access-Control-Allow-Origin'] = 'https://gratipay.com'
 
     if request.line.uri.querystring.get('etag'):
         # We can cache "indefinitely" when the querystring contains the etag.
