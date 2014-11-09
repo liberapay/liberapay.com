@@ -162,6 +162,7 @@ class Payday(object):
         self.db.run("""
             DROP FUNCTION process_take();
             DROP FUNCTION process_tip();
+            DROP FUNCTION settle_tip_graph();
             DROP FUNCTION transfer(text, text, numeric, context_type);
         """)
 
@@ -323,6 +324,25 @@ class Payday(object):
         CREATE TRIGGER process_take AFTER INSERT ON payday_takes
             FOR EACH ROW EXECUTE PROCEDURE process_take();
 
+        -- Create a function to settle whole tip graph
+
+        CREATE OR REPLACE FUNCTION settle_tip_graph() RETURNS void AS $$
+            DECLARE count integer;
+            BEGIN
+              LOOP
+                WITH updated_rows AS (
+                     UPDATE payday_tips
+                        SET is_funded = true
+                      WHERE is_funded IS NOT true
+                  RETURNING *
+                )
+                SELECT COUNT(*) FROM updated_rows INTO count;
+                IF count = 0 THEN
+                  EXIT;
+                END IF;
+              END LOOP;
+            END;
+        $$ LANGUAGE plpgsql;
 
         -- Save the stats we already have
 
@@ -425,9 +445,7 @@ class Payday(object):
          WHERE p.username = t.tipper
            AND p.card_hold_ok;
 
-        UPDATE payday_tips t
-           SET is_funded = true
-         WHERE is_funded IS NOT true;
+        SELECT settle_tip_graph();
 
         """)
 
@@ -454,6 +472,8 @@ class Payday(object):
                         AND context = 'take'
                    ) IS NULL
           ORDER BY t.team, t.ctime DESC;
+
+        SELECT settle_tip_graph();
 
         """, dict(ts_start=ts_start))
 
