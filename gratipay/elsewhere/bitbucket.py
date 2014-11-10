@@ -1,5 +1,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+from aspen import Response
 from gratipay.elsewhere import PlatformOAuth1
 from gratipay.elsewhere._extractors import any_key, key, not_available
 from gratipay.elsewhere._paginators import keys_paginator
@@ -31,4 +32,20 @@ class Bitbucket(PlatformOAuth1):
     x_display_name = key('display_name')
     x_email = not_available
     x_avatar_url = any_key('avatar', ('links', 'avatar', 'href'))
-    x_is_team = key('is_team')
+    x_is_team = key('type', lambda v: v == 'team')
+
+    def api_get(self, path, sess=None, **kw):
+        """Extend to manually retry /users/pypy as /teams/pypy.
+
+        Bitbucket gives us a 404 where a 30x would be more helpful.
+
+        """
+        try:
+            return PlatformOAuth1.api_get(self, path, sess, **kw)
+        except Response, response:
+            if response.code == 404 and ' is a team account' in response.body:
+                assert path.startswith('/2.0/users/')
+                path = '/2.0/teams/' + path[11:]
+                return PlatformOAuth1.api_get(self, path, sess, **kw)
+            else:
+                raise
