@@ -544,3 +544,8 @@ Gratipay (e.g., Twitter).
 
 **User** - A person using the Gratipay website. Can be authenticated or
 anonymous. If authenticated, the user is guaranteed to also be a participant.
+
+License
+========
+
+Gratipay is licensed under the [CC0 1.0 Universal License](http://creativecommons.org/publicdomain/zero/1.0/). Please see the license [here](COPYING).
