@@ -20,13 +20,13 @@ class Bitbucket(PlatformOAuth1):
     api_format = 'json'
     api_paginator = keys_paginator(prev='previous')
     api_url = 'https://bitbucket.org/api'
-    api_user_info_path = '/1.0/users/{user_name}'
-    api_user_self_info_path = '/1.0/user'
+    api_user_info_path = '/2.0/users/{user_name}'
+    api_user_self_info_path = '/2.0/user'
     api_team_members_path = '/2.0/teams/{user_name}/members'
 
     # User info extractors
     x_user_info = key('user')
-    x_user_id = not_available  # No immutable id. :-/
+    x_user_id = key('uuid')
     x_user_name = key('username')
     x_display_name = key('display_name')
     x_email = not_available
