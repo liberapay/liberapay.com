@@ -548,4 +548,4 @@ anonymous. If authenticated, the user is guaranteed to also be a participant.
 License
 ========
 
-Gratipay is licensed under the [CC0 1.0 Universal License](http://creativecommons.org/publicdomain/zero/1.0/). Please see the license [here](COPYING).
+Gratipay is dedicated to public domain. See the text of [CC0 1.0 Universal](http://creativecommons.org/publicdomain/zero/1.0/) dedication in [COPYING](COPYING) file here.
