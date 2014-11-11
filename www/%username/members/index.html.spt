@@ -13,10 +13,10 @@ hero = _("Team Members")
 title = team.username     # used in the title tag
 username = team.username  # used in footer shared with on/%platform/ pages
 
-LAST_WEEK = _("Last<br/> Week ($)")
-THIS_WEEK_DOLLARS = _("This<br/> Week ($)")
-TEAM_BALANCE = _("Team<br/> Balance ($)")
-THIS_WEEK_PERCENT = _("This<br/> Week (%)")
+LAST_WEEK = _("Last{0} Week ($)", "<br/>")
+THIS_WEEK_DOLLARS = _("This{0} Week ($)", "<br/>")
+TEAM_BALANCE = _("Team{0} Balance ($)", "<br/>")
+THIS_WEEK_PERCENT = _("This{0} Week (%)", "<br/>")
 ENTER_USERNAME = _("Enter a Gratipay username")
 ADD = _("Add")
 
