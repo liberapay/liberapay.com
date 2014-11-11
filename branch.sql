@@ -11,7 +11,7 @@ BEGIN;
           FROM elsewhere e1
           JOIN elsewhere e2
             ON e1.participant = e2.participant
-         WHERE e1.platform='bitbucket'
+               AND e1.platform='bitbucket'
                AND e2.platform IN ('twitter', 'github', 'facebook', 'google', 'openstreetmap')
                AND NOT e2.is_team
     );
