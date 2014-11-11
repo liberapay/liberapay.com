@@ -9,10 +9,9 @@ if not team.show_as_team(user):
   request.redirect('../')
 locked = False
 tip_or_pledge = "tip"
-hero = "Team Members"
+hero = _("Team Members")
 title = team.username     # used in the title tag
 username = team.username  # used in footer shared with on/%platform/ pages
-
 
 [-----------------------------------------------------------------------------]
 {% extends "templates/profile.html" %}
@@ -30,10 +29,10 @@ username = team.username  # used in footer shared with on/%platform/ pages
       <tr>
         <th></th>
         <th>Member</th>
-        <th class="figure">Last<br />Week ($)</th>
-        <th class="figure">This<br />Week ($)</th>
-        <th class="figure">Team<br />Balance ($)</th>
-        <th class="figure">This<br />Week (%)</th>
+        <th class="figure">{{ _("Last{0} Week ($)", "<br/>") }}</th>
+        <th class="figure">{{ _("This{0} Week ($)", "<br/>") }}</th>
+        <th class="figure">{{ _("Team{0} Balance ($)", "<br/>") }}</th>
+        <th class="figure">{{ _("This{0} Week (%)", "<br/>") }}</th>
       </tr>
       <tr>
         <td></td>
@@ -53,9 +52,9 @@ username = team.username  # used in footer shared with on/%platform/ pages
               <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
               <input tabindex="1" id="query"
                      autocomplete="off"
-                     placeholder="Enter a Gratipay username"
+                     placeholder="{{ _("Enter a Gratipay username") }}"
                  />&nbsp;<button type="submit"
-                                 tabindex="2">Add</button>
+                                 tabindex="2">{{ _("Add") }}</button>
               <ul id="lookup-results"></ul>
             </form>
           </div>
