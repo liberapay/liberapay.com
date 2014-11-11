@@ -1,7 +1,7 @@
 BEGIN;
 
     -- Update user_id and is_team. See branch.py for doco.
-    --\i update.sql
+    \i update.sql
 
 
     -- Drop all Bitbucket accounts that aren't required for account access.
