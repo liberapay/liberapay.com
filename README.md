@@ -1,4 +1,4 @@
-# Welcome to Gratipay [<img height="26px" src="https://raw.githubusercontent.com/gratipay/gratipay.com/master/www/assets/%25version/gratipay.opengraph.png"/>](https://gratipay.com/)
+# Welcome to Gratipay [<img height="26px" src="https://raw.githubusercontent.com/gratipay/gratipay.com/master/www/assets/gratipay.opengraph.png"/>](https://gratipay.com/)
 
 [![Build Status](http://img.shields.io/travis/gratipay/gratipay.com/master.svg)](https://travis-ci.org/gratipay/gratipay.com)
 [![Coverage Status](https://img.shields.io/coveralls/gratipay/gratipay.com.svg)](https://coveralls.io/r/gratipay/gratipay.com?branch=master)
