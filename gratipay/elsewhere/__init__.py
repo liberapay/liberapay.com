@@ -117,7 +117,7 @@ class Platform(object):
         # Check status
         status = response.status_code
         if status == 404:
-            raise Response(404)
+            raise Response(404, response.text)
         elif status != 200:
             log('{} api responded with {}:\n{}'.format(self.name, status, response.text)
                , level=logging.ERROR)

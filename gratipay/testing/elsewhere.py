@@ -10,101 +10,33 @@ data.
 import xml.etree.ElementTree as ET
 
 bitbucket = lambda: {
-    "repositories": [
-        {
-            "scm": "hg",
-            "has_wiki": True,
-            "last_updated": "2012-03-16T23:36:38.019",
-            "no_forks": None,
-            "created_on": "2012-03-16T23:34:46.740",
-            "owner": "whit537",
-            "logo": "https://d3oaxc4q5k2d6q.cloudfront.net/m/6fac1fb24100/img/language-avatars/default_16.png",
-            "email_mailinglist": "",
-            "is_mq": False,
-            "size": 142818,
-            "read_only": False,
-            "fork_of": {
-                "scm": "hg",
-                "has_wiki": True,
-                "last_updated": "2014-02-01T03:41:46.920",
-                "no_forks": None,
-                "created_on": "2010-07-17T16:12:34.381",
-                "owner": "jaraco",
-                "logo": "https://d3oaxc4q5k2d6q.cloudfront.net/m/6fac1fb24100/img/language-avatars/python_16.png",
-                "email_mailinglist": "",
-                "is_mq": False,
-                "size": 316601,
-                "read_only": False,
-                "creator": None,
-                "state": "available",
-                "utc_created_on": "2010-07-17 14:12:34+00:00",
-                "website": "",
-                "description": "Inspried by jezdez.setuptools_hg, and building on that work, hgtools provides tools for developing with mercurial and setuptools/distribute (specifically a file-finder plugin and automatic repo tag versioning).\r\n\r\nThe underlying library is designed to be extensible for other applications to build other functionality that depends on mercurial, whether using the 'hg' command or the mercurial libraries directly.",
-                "has_issues": True,
-                "is_fork": True,
-                "slug": "hgtools",
-                "is_private": False,
-                "name": "hgtools",
-                "language": "python",
-                "utc_last_updated": "2014-02-01 02:41:46+00:00",
-                "email_writers": True,
-                "no_public_forks": False,
-                "resource_uri": "/1.0/repositories/jaraco/hgtools"
-            },
-            "mq_of": {
-                "scm": "hg",
-                "has_wiki": True,
-                "last_updated": "2014-02-01T03:41:46.920",
-                "no_forks": None,
-                "created_on": "2010-07-17T16:12:34.381",
-                "owner": "jaraco",
-                "logo": "https://d3oaxc4q5k2d6q.cloudfront.net/m/6fac1fb24100/img/language-avatars/python_16.png",
-                "email_mailinglist": "",
-                "is_mq": False,
-                "size": 316601,
-                "read_only": False,
-                "creator": None,
-                "state": "available",
-                "utc_created_on": "2010-07-17 14:12:34+00:00",
-                "website": "",
-                "description": "Inspried by jezdez.setuptools_hg, and building on that work, hgtools provides tools for developing with mercurial and setuptools/distribute (specifically a file-finder plugin and automatic repo tag versioning).\r\n\r\nThe underlying library is designed to be extensible for other applications to build other functionality that depends on mercurial, whether using the 'hg' command or the mercurial libraries directly.",
-                "has_issues": True,
-                "is_fork": True,
-                "slug": "hgtools",
-                "is_private": False,
-                "name": "hgtools",
-                "language": "python",
-                "utc_last_updated": "2014-02-01 02:41:46+00:00",
-                "email_writers": True,
-                "no_public_forks": False,
-                "resource_uri": "/1.0/repositories/jaraco/hgtools"
-            },
-            "state": "available",
-            "utc_created_on": "2012-03-16 22:34:46+00:00",
-            "website": None,
-            "description": "I'm forking to fix another bug case in issue #7.",
-            "has_issues": True,
-            "is_fork": True,
-            "slug": "hgtools",
-            "is_private": False,
-            "name": "hgtools",
-            "language": "",
-            "utc_last_updated": "2012-03-16 22:36:38+00:00",
-            "email_writers": True,
-            "no_public_forks": False,
-            "creator": None,
-            "resource_uri": "/1.0/repositories/whit537/hgtools"
+    "username": "whit537",
+    "website": "https://www.gittip.com/whit537/",
+    "display_name": "Chad Whitacre",
+    "uuid": "{59efeb39-29dc-415e-959e-3cb1ea7f579b}",
+    "links": {
+        "self": {
+            "href": "https://bitbucket.org/api/2.0/users/whit537"
+        },
+        "repositories": {
+            "href": "https://bitbucket.org/api/2.0/repositories/whit537"
+        },
+        "html": {
+            "href": "https://bitbucket.org/whit537"
+        },
+        "followers": {
+            "href": "https://bitbucket.org/api/2.0/users/whit537/followers"
+        },
+        "avatar": {
+            "href": "https://secure.gravatar.com/avatar/5698bc43665106a28833ef61c8a9f67f?d=https%3A%2F%2Fd3oaxc4q5k2d6q.cloudfront.net%2Fm%2F5fe8c0346b2d%2Fimg%2Fdefault_avatar%2F32%2Fuser_blue.png&s=32"
+        },
+        "following": {
+            "href": "https://bitbucket.org/api/2.0/users/whit537/following"
         }
-    ],
-    "user": {
-        "username": "whit537",
-        "first_name": "Chad",
-        "last_name": "Whitacre",
-        "display_name": "Chad Whitacre",
-        "is_team": False,
-        "avatar": "https://secure.gravatar.com/avatar/5698bc43665106a28833ef61c8a9f67f?d=https%3A%2F%2Fd3oaxc4q5k2d6q.cloudfront.net%2Fm%2F6fac1fb24100%2Fimg%2Fdefault_avatar%2F32%2Fuser_blue.png&s=32",
-        "resource_uri": "/1.0/users/whit537"
-    }
+    },
+    "created_on": "2012-01-23T20:11:10.736097+00:00",
+    "location": "Pittsburgh, PA USA",
+    "type": "user"
 }
 
 bountysource = lambda: {
