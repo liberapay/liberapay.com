@@ -59,7 +59,7 @@ CANCELLED = ngettext("You cancelled {n} tip recently", "You cancelled {n} tips r
             {% if participant == user.participant %}
             <h2>{{ CANCELLED }}</h2>
             {% else %}
-            <h2>{{ "%s cancelled %s tip(s) recently" % participant.username, ncancelled_tips }}</h2>
+            <h2>{{ "%s cancelled %s tip(s) recently" % (participant.username, ncancelled_tips) }}</h2>
             {% endif %}
         </td>
     </tr>
