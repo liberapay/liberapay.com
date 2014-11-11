@@ -13,13 +13,6 @@ hero = _("Team Members")
 title = team.username     # used in the title tag
 username = team.username  # used in footer shared with on/%platform/ pages
 
-LAST_WEEK = _("Last{0} Week ($)", "<br/>")
-THIS_WEEK_DOLLARS = _("This{0} Week ($)", "<br/>")
-TEAM_BALANCE = _("Team{0} Balance ($)", "<br/>")
-THIS_WEEK_PERCENT = _("This{0} Week (%)", "<br/>")
-ENTER_USERNAME = _("Enter a Gratipay username")
-ADD = _("Add")
-
 [-----------------------------------------------------------------------------]
 {% extends "templates/profile.html" %}
 
@@ -36,10 +29,10 @@ ADD = _("Add")
       <tr>
         <th></th>
         <th>Member</th>
-        <th class="figure">{{ LAST_WEEK }}</th>
-        <th class="figure">{{ THIS_WEEK_DOLLARS }}</th>
-        <th class="figure">{{ TEAM_BALANCE }}</th>
-        <th class="figure">{{ THIS_WEEK_PERCENT }}</th>
+        <th class="figure">{{ _("Last{0} Week ($)", "<br/>") }}</th>
+        <th class="figure">{{ _("This{0} Week ($)", "<br/>") }}</th>
+        <th class="figure">{{ _("Team{0} Balance ($)", "<br/>") }}</th>
+        <th class="figure">{{ _("This{0} Week (%)", "<br/>") }}</th>
       </tr>
       <tr>
         <td></td>
@@ -59,9 +52,9 @@ ADD = _("Add")
               <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
               <input tabindex="1" id="query"
                      autocomplete="off"
-                     placeholder="{{ ENTER_USERNAME }}"
+                     placeholder="{{ _("Enter a Gratipay username") }}"
                  />&nbsp;<button type="submit"
-                                 tabindex="2">{{ ADD }}</button>
+                                 tabindex="2">{{ _("Add") }}</button>
               <ul id="lookup-results"></ul>
             </form>
           </div>
