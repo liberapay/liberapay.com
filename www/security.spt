@@ -1,6 +1,7 @@
 title = "Security"
 [---]
-if path.raw.endswith(‘.txt’): request.redirect(‘/security.html’)
+if path.raw.endswith('.txt'):
+    request.redirect('/security.html')
 [---] text/html
 {% extends "templates/about.html" %}
 {% block page %}
