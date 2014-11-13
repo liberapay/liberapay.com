@@ -5,7 +5,7 @@
 [![HuBoard badge](http://img.shields.io/badge/Hu-Board-7965cc.svg)](https://huboard.com/gratipay/gratipay.com)
 [![Open Bounties](https://api.bountysource.com/badge/team?team_id=423&style=bounties_received)](https://www.bountysource.com/teams/gratipay/issues)
 
-Gratipay is a weekly gift exchange, helping to create a culture of generosity.
+[Gratipay](http://gratipay.com) is a weekly gift exchange, helping to create a culture of generosity.
 If you'd like to learn more, check out <https://gratipay.com/about>.
 If you'd like to contribute to Gratipay, check out <http://inside.gratipay.com>.
 
