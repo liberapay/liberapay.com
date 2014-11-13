@@ -1,7 +1,4 @@
 BEGIN;
-    -- TODO: Migrate the existing emails - there are 766 users with emails attached.
-    --       This is to be done before we can delete the existing emails and email types.
-
     CREATE TABLE emails
     ( id                                serial                      PRIMARY KEY
     , address                           text                        NOT NULL
@@ -19,6 +16,4 @@ BEGIN;
     -- All unverified email stuff happens in the emails table and won't touch this attribute.
 
     ALTER TABLE participants ADD COLUMN email_address text;
-
-    -- TODO: Add a trigger function to update the email attribute on the user model?.
 END;

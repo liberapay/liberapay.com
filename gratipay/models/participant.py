@@ -569,6 +569,15 @@ class Participant(Model, MixinTeam):
         if email == self.email_address:
             return None
 
+        exists = self.db.one("""
+            SELECT COUNT(*)
+              FROM participants
+             WHERE email_address=%s
+        """, (email,))
+        if exists:
+            raise EmailAlreadyTaken(email)
+            return None
+
         if verify:
             with self.db.get_cursor() as c:
                 c.run("""
@@ -576,7 +585,7 @@ class Participant(Model, MixinTeam):
                     SET verified=NULL
                     WHERE participant=%s
                 """, (self.username,))
-                # TODO - check whether someone has verified this already? Very unlikely.
+
                 r = c.one("""
                     UPDATE emails
                        SET verified=true, mtime=%s
@@ -591,24 +600,15 @@ class Participant(Model, MixinTeam):
                    RETURNING address
                 """, (utcnow(), self.username, email))
 
-                # This could be done by a trigger function.
                 c.run("""
                     UPDATE participants
                        SET email_address=%s
                      WHERE username=%s
                 """, (email, self.username))
 
-                self.set_attributes(email_address = r)
+                self.set_attributes(email_address=r)
             return None
         else:
-            exists = self.db.one("""
-                SELECT COUNT(*)
-                  FROM participants
-                 WHERE email_address=%s
-            """, (email,))
-            if exists:
-                raise EmailAlreadyTaken(email)
-                return None
             nonce = str(uuid.uuid4())
             ctime = utcnow()
             with self.db.get_cursor() as c:
