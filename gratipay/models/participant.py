@@ -619,34 +619,32 @@ class Participant(Model, MixinTeam):
                          VALUES (%s, %s, %s, %s)
                 """, (email, nonce, ctime, self.username))
 
-            self.send_email( emails.VERIFICATION_EMAIL
-                           , email=email
-                           , link=self.get_verification_link(email)
-                           , username=self.username
-                           , include_unsubscribe=False
-                            )
+            self.send_email(emails.VERIFICATION_EMAIL,
+                            email=email,
+                            link=self.get_verification_link(email),
+                            username=self.username,
+                            include_unsubscribe=False)
             if self.email_address:
-                self.send_email( emails.VERIFICATION_NOTICE
-                               , new_email=email
-                               , username=self.username
-                               , include_unsubscribe=False
-                                )
+                self.send_email(emails.VERIFICATION_NOTICE,
+                                new_email=email,
+                                username=self.username,
+                                include_unsubscribe=False)
             return email
 
     def verify_email(self, email, nonce):
         if self.email_address and email == self.email_address:
-            return 0 # Verified
+            return 0  # Verified
         if self.get_unverified_email() != email:
-            return 2
+            return 2  # Failed
         expected_nonce, ctime = self.get_email_nonce_and_ctime(email)
         if constant_time_compare(expected_nonce, nonce):
             if (utcnow() - ctime) < EMAIL_HASH_TIMEOUT:
                 self.update_email(email, True)
-                return 0 # Verified
+                return 0  # Verified
             else:
-                return 1 # Expired
+                return 1  # Expired
         else:
-            return 2 # Failed
+            return 2  # Failed
 
     def get_verification_link(self, email):
         scheme = gratipay.canonical_scheme
