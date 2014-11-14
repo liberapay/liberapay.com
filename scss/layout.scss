@@ -1,7 +1,7 @@
 body {
-    background: url("pennies.jpg");
+    background: #434343 url("pennies.jpg") no-repeat;
     background-size: cover;
-    background-position: 0 50%;
+    background-position: 0 -54px;
 }
 
 #header {
@@ -58,38 +58,26 @@ body {
 #content {
     display: table-row;
 }
-.pennies {
+
+#sidebar {
     display: table-cell;
     width: 200px;
     background: transparentize($brown, 0.1);
     border-right: 1px solid $brown;
 
-    h1 {
-        clear: both;
-    }
-
-    #hero {
-        color: $black;
-
-        h1 {
-            font: bold 30px/40px $Ideal;
-            padding: 48px 0 24px;
-            color: $white;
-
-            em {
-                font-style: italic;
-                color: $gold;
-            }
+    .nav {
+        margin-top: 50px;
+        li {
+            margin: 0;
         }
-
-        p {
-            color: $white;
-            font-size: 18px;
-            line-height: 24px;
-        }
-
         a {
+            padding: 5px 20px;
+            display: block;
             color: $gold;
+            &.selected {
+                background: transparentize($gold, 0.8);
+                color: $white;
+            }
         }
     }
 }
@@ -165,7 +153,6 @@ body {
 }
 .box {
     text-align: center;
-    background: white;
 
     h1 {
         font: bold 22px $Ideal;
@@ -301,56 +288,6 @@ body {
             }
         }
         */
-    }
-
-    .nav {
-        padding: 5px;
-
-        h2 {
-            color: $black;
-            font: bold 10px $Ideal;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            margin: 0 0 3px;
-        }
-
-        button.larger {
-            font-size: 14px;
-        }
-
-        &.level-1 {
-            border-top: 1px solid rgba($brown, 0.2);
-            background: $lighter-gray;
-
-            #payment-prompt {
-                display: none;
-                margin: 10px 0 5px;
-
-                &.needed {
-                    display: block;
-                }
-                &.really-needed {
-                    display: block;
-                }
-            }
-        }
-
-        &.level-2 {
-            border-top: 1px solid rgba($brown, 0.5);
-            background: $light-gray;
-        }
-
-        &.level-3 {
-            background: black;
-            text-align: center;
-            padding: 5px;
-            color: white;
-
-            a {
-                display: block;
-                color: white;
-            }
-        }
     }
 
     .on-confirm {
@@ -568,7 +505,7 @@ body {
 }
 
 #page {
-    padding: 20px 0 0;
+    padding: 50px;
     background: transparentize($white, 0.03);
 
     h1 {
@@ -601,7 +538,6 @@ body {
 }
 
 .col0 {
-    margin: 0 0 20px 20px;
 }
 
 .col1 {

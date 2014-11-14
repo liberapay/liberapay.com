@@ -1,17 +1,7 @@
 {% extends "templates/base.html" %}
-{% block box %}
+{% block sidebar %}
     {% set current_page = path.raw.split('/')[2] %}
     {% set nav_base = "/about" %}
-    <div class="nav">
-        {% set pages = [('/', _('About')), ('/details', _('Details')), ('/faq', _('FAQ')), ('/contact', _('Contact'))] %}
-        {% include "templates/nav.html" %}
-    </div>
-    <div class="nav level-1">
-        {% set pages = [('/pricing', _('Pricing')), ('/teams/', _('Teams')), ('/stats', _('Stats')), ('/charts', _('Charts'))] %}
-        {% include "templates/nav.html" %}
-    </div>
-    <div class="nav level-2">
-        {% set pages = [('/terms/', _('Terms')), ('/privacy/', _('Privacy')), ('/fraud/', _('Fraud')), ('/dnt', _('DNT'))] %}
-        {% include "templates/nav.html" %}
-    </div>
+    {% set pages = [('/', _('About')), ('/details', _('Details')), ('/faq', _('FAQ')), ('/contact', _('Contact')), ('/pricing', _('Pricing')), ('/teams/', _('Teams')), ('/stats', _('Stats')), ('/charts', _('Charts')), ('/terms/', _('Terms')), ('/privacy/', _('Privacy')), ('/fraud/', _('Fraud')), ('/dnt', _('DNT'))] %}
+    {% include "templates/nav.html" %}
 {% endblock %}
