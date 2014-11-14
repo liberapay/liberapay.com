@@ -523,58 +523,54 @@ fmtdate = lambda d: str(d)[:10]
 title = "The Delpan Incident"
 
 [---] text/html
-{% extends "templates/base.html" %}
-{% block box %}
-<div class="as-content left">
+{% extends "templates/about.html" %}
+{% block content %}
 
-    <p>Gratipay's first <a href="./">fraud incident</a> surfaced when an
-    unknown user named delpan appeared among the top receivers on the site.
-    This page provides data and collects information related to the
-    incident.</p>
-
-
-    <h2>Status</h2>
-
-    <p>This incident is <b>closed</b>.</p>
+<p>Gratipay's first <a href="./">fraud incident</a> surfaced when an
+unknown user named delpan appeared among the top receivers on the site.
+This page provides data and collects information related to the
+incident.</p>
 
 
-    <h2>Related</h2>
+<h2>Status</h2>
 
-    <ul>
+<p>This incident is <b>closed</b>.</p>
 
-        <li>GitHub ticket: &ldquo;<a
-            href="https://github.com/gratipay/gratipay.com/issues/329">make sure
-            "delpan" is not stealing money :-)</a>&rdquo;</li>
 
-        <li>Blog post: &ldquo;<a
-            href="http://blog.gittip.com/post/35057426257/stolen-money-on-gittip-part-1">Stolen
-            Money on Gratipay, Part 1</a>&rdquo;</li>
+<h2>Related</h2>
 
-        <li>Hacker News discussion: &ldquo;<a
-        href="http://news.ycombinator.com/item?id=4743954">Stolen Money on
-        Gratipay, Part 1</a>&rdquo;</li>
+<ul>
 
-        <li>Vice Motherboard: &ldquo;<a
-        href="http://motherboard.vice.com/2012/11/6/thieves-launder-money-by-crowdfunding-themselves--2">Thieves
-        Launder Money by Crowdfunding Themselves</a>&rdquo;</li>
+    <li>GitHub ticket: &ldquo;<a
+        href="https://github.com/gratipay/gratipay.com/issues/329">make sure
+        "delpan" is not stealing money :-)</a>&rdquo;</li>
 
-        <li>Secure Computing Magazine: &ldquo;<a
-        href="http://www.scmagazine.com.au/News/322118,fraudsters-launder-cash-though-grants-startup.aspx?utm_source=feed&utm_medium=rss&utm_campaign=SC+Magazine+All+Articles+feed">Fraudsters
-        launder cash though grants startup</a>&rdquo;</li>
+    <li>Blog post: &ldquo;<a
+        href="http://blog.gittip.com/post/35057426257/stolen-money-on-gittip-part-1">Stolen
+        Money on Gratipay, Part 1</a>&rdquo;</li>
 
-        <li>Blog post: &ldquo;<a
-        href="http://blog.gittip.com/post/35314128322/the-delpan-incident">The
-        Delpan Incident</a>&rdquo; (Part 2 of the above)</li>
+    <li>Hacker News discussion: &ldquo;<a
+    href="http://news.ycombinator.com/item?id=4743954">Stolen Money on
+    Gratipay, Part 1</a>&rdquo;</li>
 
-        <li>Hacker News discussion: &ldquo;<a
-        href="http://news.ycombinator.com/item?id=4763317">The Delpan
-        Incident</a>&rdquo;</li>
+    <li>Vice Motherboard: &ldquo;<a
+    href="http://motherboard.vice.com/2012/11/6/thieves-launder-money-by-crowdfunding-themselves--2">Thieves
+    Launder Money by Crowdfunding Themselves</a>&rdquo;</li>
 
-    </ul>
+    <li>Secure Computing Magazine: &ldquo;<a
+    href="http://www.scmagazine.com.au/News/322118,fraudsters-launder-cash-though-grants-startup.aspx?utm_source=feed&utm_medium=rss&utm_campaign=SC+Magazine+All+Articles+feed">Fraudsters
+    launder cash though grants startup</a>&rdquo;</li>
 
-</div>
-{% endblock %}
-{% block page %}
+    <li>Blog post: &ldquo;<a
+    href="http://blog.gittip.com/post/35314128322/the-delpan-incident">The
+    Delpan Incident</a>&rdquo; (Part 2 of the above)</li>
+
+    <li>Hacker News discussion: &ldquo;<a
+    href="http://news.ycombinator.com/item?id=4763317">The Delpan
+    Incident</a>&rdquo;</li>
+
+</ul>
+
 <style>
     th {
         font-weight: normal;

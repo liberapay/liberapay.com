@@ -11,7 +11,7 @@ example = website.db.one("""
 """)
 [---] text/html
 {% extends "templates/about.html" %}
-{% block page %}
+{% block content %}
 <div class="col0">
 
     <h2>What Is Gratipay?</h2>
