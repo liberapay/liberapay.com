@@ -3,10 +3,12 @@ body {
     background-size: cover;
     background-position: 0 50%;
 }
+
 #header {
-    background: white;
-    padding: 10px 0;
+    background: transparentize($white, 0.1);
+    padding: 10px 40px;
     position: relative;
+    border-bottom: 1px solid $brown;
 
     td {
         text-align: center;
@@ -33,7 +35,7 @@ body {
         padding-top: 18px;
         position: absolute;
         top: 0;
-        right: 0;
+        right: 40px;
         font: normal 13px $Ideal;
         text-align: right;
     }
@@ -53,13 +55,14 @@ body {
     }
 }
 
-.bulk {
+#content {
     display: table-row;
 }
 .pennies {
     display: table-cell;
     width: 200px;
     background: transparentize($brown, 0.1);
+    border-right: 1px solid $brown;
 
     h1 {
         clear: both;
@@ -566,7 +569,7 @@ body {
 
 #page {
     padding: 20px 0 0;
-    background: transparentize(white, 0.03);
+    background: transparentize($white, 0.03);
 
     h1 {
         color: $green;
@@ -619,9 +622,9 @@ body {
 
 #footer {
     @include clearfix;
-    margin: 4em 0 1em;
-    border-top: 1px solid $black;
-    padding: 1em 0 0;
+    background: transparentize($white, 0.1);
+    border-top: 1px solid $brown;
+    padding: 10px 40px;
     text-align: right;
     font-size: 13px;
     line-height: 13px;
