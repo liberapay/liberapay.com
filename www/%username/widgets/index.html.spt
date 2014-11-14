@@ -8,7 +8,7 @@ title = "%s - %s" % (participant.username, hero)
 
 [-----------------------------------------------------------------------------]
 {% extends "templates/profile.html" %}
-{% block page %}
+{% block content %}
 <style>
     /* Copied and pasted from %username/widget.html */
     .button-examples button.old-widget-style {

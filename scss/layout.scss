@@ -70,6 +70,12 @@ body {
     border-right: 1px solid $brown;
     color: $white;
 
+    .avatar img {
+        width: 180px;
+        height: 180px;
+        margin: 10px;
+    }
+
     .nav {
         li {
             margin: 0;
@@ -88,6 +94,14 @@ body {
     .padding {
         padding: 0 20px 50px;
         line-height: 150%;
+    }
+
+    .is-suspicious-knob {
+        text-align: right;
+        margin: -10px 10px 2px;
+        font-size: 10px;
+        text-transform: uppercase;
+        display: block;
     }
 }
 #content {

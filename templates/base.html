@@ -67,8 +67,8 @@
         {% block whole_page %}
         <div id="sidebar">{% block sidebar %}{% endblock %}</div>
 
-        {% include "templates/support-gratipay.html" %}
         <div id="content" class="group">
+            {% include "templates/support-gratipay.html" %}
             {% block heading %}{% if title %}<h1>{{ title }}</h1>{% endif %}{% endblock %}
             {% block content %}{% endblock %}
         </div>

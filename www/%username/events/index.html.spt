@@ -16,7 +16,7 @@ events = db.all(SQL, (unicode(participant.id),))
 
 [-----------------------------------------------------------------------------]
 {% extends "templates/profile.html" %}
-{% block page %}
+{% block content %}
 
 <style>
     td { padding: 4px; }

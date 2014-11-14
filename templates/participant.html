@@ -2,7 +2,7 @@
 
 {% extends "templates/base.html" %}
 
-{% block box %}
+{% block sidebar %}
 
 {% set prefix = user.participant == participant and "my-" or "" %}
 {% set anon_giving = participant.anonymous_giving %}
@@ -24,53 +24,59 @@
     "bottomend": "</div>"
 } %}
 
-<table class="on-profile{% if participant.is_suspicious %} is-suspicious{% endif %}">
-    <tr>
-        <td class="picture">
-            <a href="/{{ participant.username }}/">{{ avatar_img(participant) }}</a>
-        </td>
-        <td class="giving-receiving">
-        {% if anon_giving and anon_receiving %}
-            <h2>{{ _("{0} gives and receives anonymously", participant.username) }}</h2>
-        {% elif anon_giving and r == 0 %}
-            <h2>{{ _("{0} gives anonymously", participant.username) }}</h2>
-        {% elif anon_receiving and g == 0 %}
-            <h2>{{ _("{0} receives anonymously", participant.username) }}</h2>
-        {% elif g > 0 and not anon_giving and anon_receiving %}
-            {{ _("{topstart}{username} gives{topend} {midstart}{giving}{midend} {bottomstart}per week, and receives anonymously{bottomend}", **params) }}
-        {% elif r > 0 and not anon_receiving and anon_giving %}
-            {{ _("{topstart}{username} receives{topend} {midstart}{receiving}{midend} {bottomstart}per week, and gives anonymously{bottomend}", **params) }}
-        {% elif g > 0 and r > 0 and g > r and not anon_giving and not anon_receiving %}
-            {{ _("{topstart}{username} gives{topend} {midstart}{giving}{midend} {bottomstart}per week, and receives {receiving}{bottomend}", **params) }}
-        {% elif g > 0 and r > 0 and r >= g and not anon_giving and not anon_receiving %}
-            {{ _("{topstart}{username} receives{topend} {midstart}{receiving}{midend} {bottomstart}per week, and gives {giving}{bottomend}", **params) }}
-        {% elif g > 0 and r == 0 and not anon_giving %}
-            {{ _("{topstart}{username} gives{topend} {midstart}{giving}{midend} {bottomstart}per week{bottomend}", **params) }}
-        {% elif g == 0 and r > 0 and not anon_receiving %}
-            {{ _("{topstart}{username} receives{topend} {midstart}{receiving}{midend} {bottomstart}per week{bottomend}", **params) }}
-        {% else %}
-            {% set age = participant.get_age_in_seconds() %}
-            <h2>
-                {% if age < 60 %}
-                {{ _("{0} just joined Gratipay! :D", participant.username) }}
-                {% elif age < (60 * 60 * 24 * 7) %}
-                {{ _("{0} joined recently", participant.username) }}
-                {% else %}
-                {{ _("{0} is quietly watching the Gratipay world", participant.username) }}
-                {% endif %}
-            </h2>
-        {% endif %}
-        </td>
-    </tr>
-</table>
+<style>#sidebar { padding-top: 0; }</style>
+<div class="avatar">
+    <a href="/{{ participant.username }}/">{{ avatar_img(participant) }}</a>
+</div>
+
+{% if user.ADMIN %}
+<label class="is-suspicious-knob" data-username="{{ participant.username }}">
+    Suspicious
+    <input type="checkbox"
+        {% if participant.is_suspicious %}checked="true"{% endif %} />
+</label>
+{% elif participant.is_suspicious %}
+<div class="is-suspicious-indicator">Suspicious</div>
+{% endif %}
+
+<div class="padding {% if participant.is_suspicious %} is-suspicious{% endif %}">
+    {% if anon_giving and anon_receiving %}
+        <h2>{{ _("{0} gives and receives anonymously", participant.username) }}</h2>
+    {% elif anon_giving and r == 0 %}
+        <h2>{{ _("{0} gives anonymously", participant.username) }}</h2>
+    {% elif anon_receiving and g == 0 %}
+        <h2>{{ _("{0} receives anonymously", participant.username) }}</h2>
+    {% elif g > 0 and not anon_giving and anon_receiving %}
+        {{ _("{topstart}{username} gives{topend} {midstart}{giving}{midend} {bottomstart}per week, and receives anonymously{bottomend}", **params) }}
+    {% elif r > 0 and not anon_receiving and anon_giving %}
+        {{ _("{topstart}{username} receives{topend} {midstart}{receiving}{midend} {bottomstart}per week, and gives anonymously{bottomend}", **params) }}
+    {% elif g > 0 and r > 0 and g > r and not anon_giving and not anon_receiving %}
+        {{ _("{topstart}{username} gives{topend} {midstart}{giving}{midend} {bottomstart}per week, and receives {receiving}{bottomend}", **params) }}
+    {% elif g > 0 and r > 0 and r >= g and not anon_giving and not anon_receiving %}
+        {{ _("{topstart}{username} receives{topend} {midstart}{receiving}{midend} {bottomstart}per week, and gives {giving}{bottomend}", **params) }}
+    {% elif g > 0 and r == 0 and not anon_giving %}
+        {{ _("{topstart}{username} gives{topend} {midstart}{giving}{midend} {bottomstart}per week{bottomend}", **params) }}
+    {% elif g == 0 and r > 0 and not anon_receiving %}
+        {{ _("{topstart}{username} receives{topend} {midstart}{receiving}{midend} {bottomstart}per week{bottomend}", **params) }}
+    {% else %}
+        {% set age = participant.get_age_in_seconds() %}
+        <h2>
+            {% if age < 60 %}
+            {{ _("{0} just joined Gratipay! :D", participant.username) }}
+            {% elif age < (60 * 60 * 24 * 7) %}
+            {{ _("{0} joined recently", participant.username) }}
+            {% else %}
+            {{ _("{0} is quietly watching the Gratipay world", participant.username) }}
+            {% endif %}
+        </h2>
+    {% endif %}
+</div>
 
 {% if participant.accepts_tips %}
 {% if (user.ANON or (participant != user.participant)) %}
 {% include "templates/participant.tip.html" %}
 {% endif %}
 {% endif %}
-
-{% block nav %}{% endblock %}
 
 {% if participant.username == 'aaronsw' %}
 <div class="nav level-3">
@@ -88,51 +94,6 @@ first time three days before he committed suicide:
 -->
 {% endif %}
 
-{% if user.ADMIN %}
-<label class="is-suspicious-knob" data-username="{{ participant.username }}">
-    Suspicious
-    <input type="checkbox"
-        {% if participant.is_suspicious %}checked="true"{% endif %} />
-</label>
-{% elif participant.is_suspicious %}
-<div class="is-suspicious-indicator">Suspicious</div>
-{% endif %}
-
-{% endblock %}
-
-
-{% block body %}
-
-            <h2>Share</h2>
-
-            <!-- http://developers.facebook.com/docs/reference/plugins/like/ -->
-            <div id="fb-root"></div>
-            <script>(function(d, s, id) {
-              var js, fjs = d.getElementsByTagName(s)[0];
-              if (d.getElementById(id)) return;
-              js = d.createElement(s); js.id = id;
-              js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
-              fjs.parentNode.insertBefore(js, fjs);
-            }(document, 'script', 'facebook-jssdk'));</script>
-            <div class="fb-like" data-send="false" data-width="120" data-show-faces="false"></div>
-
-
-            <!-- https://dev.twitter.com/docs/tweet-button -->
-            <a href="https://twitter.com/share"
-               class="twitter-share-button" data-lang="en"
-               data-text="I just tipped a hard-working genius with Gratipay. You can too:"
-               data-url="https://gratipay.com/">Tweet</a>
-            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-
-
-            <!-- http://www.google.com/webmasters/+1/button/ -->
-            <g:plusone size="small" annotation="inline" width="120"></g:plusone>
-            <script type="text/javascript">
-              (function() {
-                var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-                po.src = 'https://apis.google.com/js/plusone.js';
-                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-              })();
-            </script>
+{% block nav %}{% endblock %}
 
 {% endblock %}

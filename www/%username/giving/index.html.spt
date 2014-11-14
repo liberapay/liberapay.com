@@ -15,7 +15,7 @@ CANCELLED = ngettext("You cancelled {n} tip recently", "You cancelled {n} tips r
 [-----------------------------------------------------------------------------]
 {% extends "templates/profile.html" %}
 {% from 'templates/my-tip-bulk.html' import my_tip_bulk with context %}
-{% block page %}
+{% block content %}
 <style>
     .matrix td {
         text-align: left;
