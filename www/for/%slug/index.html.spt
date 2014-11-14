@@ -36,7 +36,7 @@ if community is None:
     community = StubCommunity()
 
 # Set the page title based on the communities name.
-title = _("{0} Community", community.name)
+title = community.name
 
 
 # Run queries for listings.
@@ -128,44 +128,14 @@ for p in chain(new_participants, givers, receivers):
 
 {% extends "templates/base.html" %}
 
-{% block heading %}
-    <h1>{{ _("Community") }}</h1>
-    <p>{{ _("Browse {0}All Communities{1}", "<a href='/for/'>", "</a>") }}</p>
-{% endblock %}
+{% block sidebar %}
 
-{% block scripts %}
-
-<script>
-$(document).ready(function() {
-    $("a.mini-user:not([data-tip=''])").tipr();
-
-    $('button.join-leave').click(function()
-    {
-        var button = $(this);
-        var name = button.attr('data-name');
-        var is_member = button.attr('data-is-member') === 'true';
-        Gratipay.communities.update(name, !is_member, function()
-        {
-            window.location.reload();
-        });
-    });
-
-});
-</script>
-
-{{ super() }}
-{% endblock %}
-
-{% block box %}
-<div class="on-community">
-    <h2 class="pad-sign">{{ community.name }}</h2>
-    <div class="unit pad-sign">
-        {{ ngettext("{0}{n}{1} Member", "{0}{n}{1} Members", community.nmembers, "<div class='number'>", "</div>").lower() }}
+    <div class="padding">
+        {{ ngettext("{n}{1} Member", "{n} Members", community.nmembers).lower() }}
     </div>
-</div>
-<div class="nav level-1">
+
     {% if user.ANON %}
-    <div class="help with-padding">
+    <div class="padding">
         {% include "templates/sign-in-using.html" %}
         {{ _("{0} to join the {1} community on Gratipay.", "", community.name) }}
     </div>
@@ -177,25 +147,21 @@ $(document).ready(function() {
         <span>{{ _("Leave") if is_member else _("Join") }}</span>
     </button>
     {% endif %}
-</div>
 
+    <ul class="nav">
+        <li><a href='/for/'>{{ _("All Communities") }}</a></li>
+    </ul>
 {% endblock %}
-{% block page %}
+
+{% block content %}
 
 {% if community.nmembers == 0 %}
-
-<div class="col0">
-
     <h2>{{ _("You're the first one here!") }}</h2>
-
-    <p>{{ _("Bring the {0} community to Gratipay to find like-minded people to give to.", community.name) }}</p>
-
-</div>
-
+    <p>{{ _("Bring the {0} community to Gratipay to find like-minded people to give to.",
+            community.name) }}</p>
 {% else %}
 
 <div id="leaderboard">
-
     <div class="people">
         <h2>{{ _("New Members") }}</h2>
         <ul class="group">
@@ -284,4 +250,27 @@ $(document).ready(function() {
 </div>
 
 {% endif %}
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+$(document).ready(function() {
+    $("a.mini-user:not([data-tip=''])").tipr();
+
+    $('button.join-leave').click(function()
+    {
+        var button = $(this);
+        var name = button.attr('data-name');
+        var is_member = button.attr('data-is-member') === 'true';
+        Gratipay.communities.update(name, !is_member, function()
+        {
+            window.location.reload();
+        });
+    });
+
+});
+</script>
+
+{{ super() }}
 {% endblock %}

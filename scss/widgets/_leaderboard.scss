@@ -1,0 +1,28 @@
+#leaderboard {
+    @include clearfix;
+    width: leaderboard-width(3);
+    margin: 0 auto;
+}
+
+.people {
+    width: $people-column-width * 3;
+    margin-left: $people-column-gutter;
+    float: left;
+
+    &:first-child {
+        margin: 0;
+    }
+
+    ul {
+        li {
+            float: left;
+            margin: 0;
+            padding: 2px;
+            width: $people-column-width;
+        }
+    }
+
+    h2 {
+        font-size: 13px;
+    }
+}

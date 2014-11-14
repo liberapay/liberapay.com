@@ -63,17 +63,17 @@
         {% endif %}
     </div>
 
-    <div id="wrapper">
+    <div id="wrapper"><div id="wrapper-2">
         {% block whole_page %}
         <div id="sidebar">{% block sidebar %}{% endblock %}</div>
 
         {% include "templates/support-gratipay.html" %}
         <div id="content" class="group">
             {% block heading %}{% if title %}<h1>{{ title }}</h1>{% endif %}{% endblock %}
-            {% block page %}{% endblock %}
+            {% block content %}{% endblock %}
         </div>
         {% endblock %}
-    </div>
+    </div></div>
 
     <div id="footer">
         <div class="social">
@@ -103,17 +103,11 @@
             history.pushState('', document.title, window.location.pathname); // nice and clean
         }
     </script>
-
-
     <script src="{{ website.asset('jquery.min.js') }}"></script>
-
-    <!-- Used on the profile edit page for the community chooser. -->
-    <script src="{{ website.asset('chosen.jquery.min.js') }}"></script>
-
+    <script src="{{ website.asset('chosen.jquery.min.js') }}"
+            comment="Used on the profile edit page for the community chooser."></script>
     <script src="{{ website.asset('tipr.min.js') }}"></script>
-
     <script src="{{ website.asset('bootstrap-dropdown.js') }}"></script>
-
     <script src="{{ website.asset('gratipay.js') }}"></script>
 
     <script>

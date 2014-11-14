@@ -56,18 +56,21 @@ body {
 }
 
 #wrapper {
-    display: table-row;
+    display: table;
     width: 100%;
 }
-
+#wrapper-2 {
+    display: table-row;
+}
 #sidebar {
     display: table-cell;
     width: 200px;
+    padding: 50px 0;
     background: transparentize($brown, 0.1);
     border-right: 1px solid $brown;
+    color: $white;
 
     .nav {
-        margin-top: 50px;
         li {
             margin: 0;
         }
@@ -81,439 +84,21 @@ body {
             }
         }
     }
+
+    .padding {
+        padding: 0 20px 50px;
+        line-height: 150%;
+    }
 }
 #content {
     display: table-cell;
-
-}
-
-.support-gratipay {
-    a {
-        color: $brown ! important;
-        &:hover { color: $green ! important; }
-        text-decoration: underline;
-    }
-    display: table;
-    margin: 0 auto;
-    padding: 3px 10px;
-    border-radius: 0 0 3px 3px;
-    background: $gold;
-    text-align: left;
-    position: relative;
-    padding-right: 164px;
-
-    .cta {
-        padding-top: 4px;
-    }
-
-    .knobs {
-        position: absolute;
-        top: 3px;
-        right: 10px;
-
-        width: 133px;
-        button {
-            box-sizing: border-box;
-            width: 64px;
-            border: 1px solid $green;
-            background: $green;
-            color: $white;
-            margin: 0;
-            &:hover {
-                border: 1px solid $brown;
-                background: $brown;
-                color: $white;
-            }
-            &.low {
-                margin: 0 5px 0 0;
-            }
-        }
-        a {
-            box-sizing: border-box;
-            font-weight: normal;
-            font-size: 11px;
-            display: inline-block;
-            width: 64px;
-            margin: 0;
-            padding: 0;
-            text-align: center;
-
-            &.other {
-                margin-right: 5px;
-            }
-        }
-    }
-
-    .help {
-        margin-top: 2px;
-        font-size: 13px;
-        font-style: italic;
-        a {
-            font-weight: normal;
-        }
-    }
-}
-.box {
-    text-align: center;
-
-    h1 {
-        font: bold 22px $Ideal;
-        color: $brown;
-    }
-    h2 {
-        font: bold 14px $Ideal;
-        text-transform: uppercase;
-        color: $brown;
-    }
-
-    .help {
-        font: normal 14px/18px $Ideal;
-        color: $black;
-
-        &.with-padding {
-            padding: 10px;
-        }
-    }
-
-    .as-content {
-        padding: 20px;
-        &.left {
-            text-align: left;
-        }
-
-        h1 {
-            padding-bottom: 15px;
-        }
-
-        input {
-            padding: 2px;
-            width: 8em;
-        }
-    }
-
-    .is-suspicious-indicator {
-        display: block;
-        position: absolute;
-        top: 5px;
-        right: 5px;
-        font: normal 10px $Ideal;
-        text-transform: uppercase;
-        color: $black;
-    }
-
-    label.is-suspicious-knob {
-        display: block;
-        position: absolute;
-        top: 2px;
-        right: 5px;
-        font: normal 9px $Ideal;
-        text-transform: uppercase;
-        color: $black;
-
-        input {
-            position: relative;
-            top: 3px;
-        }
-    }
-
-    .ready {
-        padding-left: 15px;
-    }
-    .number {
-        font: bold 56px $Ideal;
-    }
-    .unit {
-        font: normal 12px $Ideal;
-    }
-
-    .on-community {
-        padding: 10px;
-    }
-
-    .on-elsewhere {
-        width: 100%;
-
-        .offset {
-            width: 138px;
-            height: 138px;
-        }
-
-        .picture {
-            width: 138px;
-            height: 138px;
-
-            img {
-                width: 128px;
-                height: 128px;
-
-                /* Without this we are inline-block and we get an extra 4px.
-                 * Is that due to line-height, maybe? */
-                display: block;
-                margin: 5px;
-            }
-        }
-    }
-
-    .on-profile {
-        width: 100%;
-
-        &.is-suspicious {
-            background: $light-red;
-        }
-        .picture {
-            width: 138px;
-            height: 138px;
-
-            img {
-                width: 128px;
-                height: 128px;
-
-                /* Without this we are inline-block and we get an extra 4px.
-                 * Is that due to line-height, maybe? */
-                display: block;
-                margin: 5px;
-            }
-        }
-        td {
-            text-align: left;
-        }
-        .pad-sign {
-            padding-left: 36px;
-        }
-        /*
-        form {
-            margin-bottom: 0;
-            margin-top: 12px;
-
-            input {
-                width: 30%;
-            }
-        }
-        */
-    }
-
-    .on-confirm {
-        padding: 35px 0 0;
-
-        h2 {
-            font: bold 14px $Ideal;
-            text-transform: uppercase;
-            margin: 35px 0 8px;
-        }
-        .nav {
-            margin: 35px 0 0;
-            h2 {
-                margin: 8px 0;
-            }
-        }
-
-        .scenario {
-            margin: 0 auto;
-        }
-        .scenario td {
-            padding: 6pt;
-            width: 33%;
-        }
-        #nix {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            margin: -16px 0 0 -16px;
-        }
-        .participant {
-            position: relative;
-            width: 96pt;
-            display: inline-block;
-            border: 2px solid $brown;
-            border-radius: 6pt;
-            font: normal 12px $Ideal;
-            color: $brown;
-            background: white url("clipped-heart.png") bottom right no-repeat;
-            text-align: left;
-            overflow: hidden;
-        }
-        .participant-padding {
-            display: block;
-            padding: 6pt 0 6pt 9pt;
-        }
-        .participant img, img.platform-icon {
-            width: 12px;
-            height: 12px;
-        }
-        .participant b {
-            font-size: 11pt;
-        }
-        .participant td {
-            padding: 0;
-        }
-        .participant th {
-            font-weight: normal;
-        }
-        .other, .abandoned {
-            font: normal 10px $Ideal;
-        }
-        .abandoned {
-            text-align: center;
-            overflow: hidden;
-        }
-        .nix {
-            border-color: $light-brown;
-        }
-        .other b {
-            font-size: 9pt;
-        }
-    }
-
-
-    .on-form {
-        text-align: left;
-
-        .constrain-width {
-            margin: 0 auto 35px;
-            width: 300px;
-        }
-        form {
-            h2 {
-                font: bold 14px $Ideal;
-                text-transform: uppercase;
-                margin: 35px 0 8px;
-            }
-        }
-
-        .half {
-            width: 150px;
-        }
-        .full {
-            clear: both;
-            text-align: right;
-            padding-top: 5px;
-        }
-        #other {
-            font: normal 9pt/14pt Arial, sans-serif;
-            color: #00E;
-            cursor: pointer;
-            margin-right: 1em;
-        }
-        #other:hover {
-            text-decoration: underline;
-        }
-        .info{
-            font-size:10px;
-            padding-top:20px;
-        }
-        .left {
-            float: left;
-        }
-        .right {
-            float: left;
-        }
-        label {
-            display: block;
-            font: normal 10px $Ideal;
-            margin: 8px 0 0;
-            padding: 0;
-            text-transform: uppercase;
-        }
-        input[type="radio"] + label {
-            display: inline;
-            margin: 0;
-        }
-        input[type="radio"]:disabled + label {
-            color: #888;
-        }
-        input:not([type]), input[type="text"] {
-            font: normal 11pt/14pt $Ideal;
-            width: 292px;
-            margin: 0;
-            padding: 3px;
-            border: 1px solid $light-brown;
-            outline: none;
-        }
-        input.disabled {
-            color: $light-brown;
-        }
-        input[type="radio"] {
-            vertical-align: middle;
-        }
-
-        .half input {
-            width: 137px;
-        }
-        .right.half label,
-        .right.half input {
-            margin-left: 5px;
-        }
-        input:focus {
-            border-color: $green;
-        }
-        .float {
-            float: left;
-        }
-        .city          input { width: 137px; }
-        .state         input { width: 43px; }
-        .zip           input { width: 75px; }
-        .card_number   input { width: 292px; }
-        .cvv           input { width: 50px; }
-        input.expiration_month { width: 35px;}
-        input.expiration_year  { width: 35px; margin-left: 1px !important;}
-        .not-first label,
-        .not-first input {
-            margin-left: 10px;
-        }
-        .nav {
-            text-align: center;
-        }
-        #feedback {
-            .details li {
-                margin: 0;
-                padding: 0 0 0 2em;
-                text-indent: -2em;
-                font: normal 12px $Ideal;
-            }
-        }
-        select {
-            font-size: 12.15px; // hack for Chosen to get a 292px width
-        }
-    }
-}
-.payment-footer {
-    font: normal 12px $Ideal;
-    text-align: center;
-}
-
-#leaderboard {
-    @include clearfix;
-    width: leaderboard-width(3);
-    margin: 0 auto;
-}
-
-.people {
-    width: $people-column-width * 3;
-    margin-left: $people-column-gutter;
-    float: left;
-
-    &:first-child {
-        margin: 0;
-    }
-
-    ul {
-        li {
-            float: left;
-            margin: 0;
-            padding: 2px;
-            width: $people-column-width;
-        }
-    }
-}
-
-#content {
     padding: 50px;
     background: transparentize($white, 0.03);
 
     h1 {
         color: $green;
         font: normal 35px $Ideal;
-        margin: 35px 0 20px 0;
+        margin: 0 0 20px 0;
     }
 
     h2, #members th {
@@ -522,10 +107,6 @@ body {
         letter-spacing: 1px;
         text-transform: uppercase;
         margin: 35px 0 8px;
-    }
-
-    #leaderboard > .people > h2 {
-        font-size: 13px;
     }
 }
 
@@ -556,6 +137,11 @@ body {
     @include clearfix;
     text-align: center;
     padding-top: 20px;
+}
+
+.payment-footer {
+    font: normal 12px $Ideal;
+    text-align: center;
 }
 
 #footer {

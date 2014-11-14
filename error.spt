@@ -29,21 +29,13 @@ if website.show_tracebacks and pygmentize:
     err = sio.read()
     style = formatter.get_style_defs()
 
+title = str(response.code)
 [----------------------------------------] text/html
 {% extends "templates/base.html" %}
-
-{% block heading %}
-    <h1>{{ response.code }}</h1>
-{% endblock %}
-{% block box %}
-
-<div class="as-content">
+{% block content %}
     <p style="margin: 3em 0;">{{ msg|e }}</p>
     <pre>{{err|e}}</pre>
-</div>
-
-<div class="nav level-1"><a href="/"><button>Home</button></a></div>
-
+    <p><a href="/"><button>Home</button></a></p>
 {% endblock %}
 [----------------------------------------] application/json via json_dump
 { "error_code": response.code

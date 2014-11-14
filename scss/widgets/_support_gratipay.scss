@@ -1,0 +1,66 @@
+.support-gratipay {
+    a {
+        color: $brown ! important;
+        &:hover { color: $green ! important; }
+        text-decoration: underline;
+    }
+    display: table;
+    margin: 0 auto;
+    padding: 3px 10px;
+    border-radius: 0 0 3px 3px;
+    background: $gold;
+    text-align: left;
+    position: relative;
+    padding-right: 164px;
+
+    .cta {
+        padding-top: 4px;
+    }
+
+    .knobs {
+        position: absolute;
+        top: 3px;
+        right: 10px;
+
+        width: 133px;
+        button {
+            box-sizing: border-box;
+            width: 64px;
+            border: 1px solid $green;
+            background: $green;
+            color: $white;
+            margin: 0;
+            &:hover {
+                border: 1px solid $brown;
+                background: $brown;
+                color: $white;
+            }
+            &.low {
+                margin: 0 5px 0 0;
+            }
+        }
+        a {
+            box-sizing: border-box;
+            font-weight: normal;
+            font-size: 11px;
+            display: inline-block;
+            width: 64px;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+
+            &.other {
+                margin-right: 5px;
+            }
+        }
+    }
+
+    .help {
+        margin-top: 2px;
+        font-size: 13px;
+        font-style: italic;
+        a {
+            font-weight: normal;
+        }
+    }
+}
