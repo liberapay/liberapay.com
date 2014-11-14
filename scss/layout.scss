@@ -1,3 +1,8 @@
+body {
+    background: url("pennies.jpg");
+    background-size: cover;
+    background-position: 0 50%;
+}
 #header {
     background: white;
     padding: 10px 0;
@@ -48,14 +53,45 @@
     }
 }
 
+.bulk {
+    display: table-row;
+}
 .pennies {
-    background: url("pennies.jpg");
-    background-size: cover;
-    background-position: 0 50%;
+    display: table-cell;
+    width: 200px;
+    background: transparentize($brown, 0.1);
 
     h1 {
         clear: both;
     }
+
+    #hero {
+        color: $black;
+
+        h1 {
+            font: bold 30px/40px $Ideal;
+            padding: 48px 0 24px;
+            color: $white;
+
+            em {
+                font-style: italic;
+                color: $gold;
+            }
+        }
+
+        p {
+            color: $white;
+            font-size: 18px;
+            line-height: 24px;
+        }
+
+        a {
+            color: $gold;
+        }
+    }
+}
+.content {
+    display: table-cell;
 }
 
 .support-gratipay {
@@ -124,49 +160,9 @@
         }
     }
 }
-
-#hero {
-    background: transparentize($brown, 0.1);
-
-    border: 1px solid $brown;
-    border-style: solid none;
-    color: $black;
-    padding-bottom: 100px;
-    text-align: center;
-    position: relative;
-    z-index: 1;
-
-    h1 {
-        font: bold 30px/40px $Ideal;
-        padding: 48px 0 24px;
-        color: $white;
-
-        em {
-            font-style: italic;
-            color: $gold;
-        }
-    }
-
-    p {
-        color: $white;
-        font-size: 18px;
-        line-height: 24px;
-    }
-
-    a {
-        color: $gold;
-    }
-}
 .box {
     text-align: center;
     background: white;
-    margin: -80px auto 0;
-    border: 5px solid rgba($brown, 0.4);
-    width: 480px;
-    max-width: 100%;
-    @include border-radius(3px);
-    position: relative;
-    z-index: 2;
 
     h1 {
         font: bold 22px $Ideal;
@@ -570,7 +566,7 @@
 
 #page {
     padding: 20px 0 0;
-    background: white;
+    background: transparentize(white, 0.03);
 
     h1 {
         color: $green;
@@ -602,7 +598,7 @@
 }
 
 .col0 {
-    margin: 0 auto;
+    margin: 0 0 20px 20px;
 }
 
 .col1 {
