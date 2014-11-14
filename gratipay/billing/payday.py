@@ -327,7 +327,8 @@ class Payday(object):
         -- Create a function to settle whole tip graph
 
         CREATE OR REPLACE FUNCTION settle_tip_graph() RETURNS void AS $$
-            DECLARE count integer;
+            DECLARE
+              count integer NOT NULL DEFAULT 0;
             BEGIN
               LOOP
                 WITH updated_rows AS (
