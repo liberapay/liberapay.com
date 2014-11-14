@@ -55,8 +55,9 @@ body {
     }
 }
 
-#content {
+#wrapper {
     display: table-row;
+    width: 100%;
 }
 
 #sidebar {
@@ -81,8 +82,9 @@ body {
         }
     }
 }
-.content {
+#content {
     display: table-cell;
+
 }
 
 .support-gratipay {
@@ -504,7 +506,7 @@ body {
     }
 }
 
-#page {
+#content {
     padding: 50px;
     background: transparentize($white, 0.03);
 

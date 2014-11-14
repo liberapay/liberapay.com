@@ -63,22 +63,14 @@
         {% endif %}
     </div>
 
-    <div class="bulk">
-        <div id="sidebar">
-            {% block sidebar %}{% endblock %}
-        </div>
-
+    <div id="wrapper">
         {% block whole_page %}
-        <div class="content">
-            {% include "templates/support-gratipay.html" %}
-            <div id="page" class="group">
-                {% block heading %}
-                {% if title %}
-                <h1>{{ title }}</h1>
-                {% endif %}
-                {% endblock %}
-                {% block page %}{% endblock %}
-            </div>
+        <div id="sidebar">{% block sidebar %}{% endblock %}</div>
+
+        {% include "templates/support-gratipay.html" %}
+        <div id="content" class="group">
+            {% block heading %}{% if title %}<h1>{{ title }}</h1>{% endif %}{% endblock %}
+            {% block page %}{% endblock %}
         </div>
         {% endblock %}
     </div>
