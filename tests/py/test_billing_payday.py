@@ -372,6 +372,7 @@ class TestPayin(BalancedHarness):
         alice.set_tip_to(self.homer, D('50'))
         self.homer.set_tip_to(self.janet, D('20'))
         self.janet.set_tip_to(self.david, D('5'))
+        self.david.set_tip_to(self.homer, D('20'))  # Should be unfunded
 
         payday = Payday.start()
         with self.db.get_cursor() as cursor:
