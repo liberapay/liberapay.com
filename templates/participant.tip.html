@@ -1,26 +1,14 @@
-<div class="nav level-1">
+<div class="tip">
     {% if locked %}
-
         <div class="help with-padding">
             {{ _("This account has been locked by its owner.") }}
         </div>
-
     {% elif user.ANON %}
-
-
-        <h2>{{ _("Your Weekly Pledge") if path.decoded.startswith('/on/') else _("Your Weekly Gift") }}</h2>
-
-        {% set my_tip = 0 %}
-        {% set tippee = participant.username %}
-        {% include "templates/my-tip.html" %}
-
         {% include "templates/sign-in-using-to-give.html" %}
-
     {% else %}
 
         {% set my_tip = format_decimal(user.participant.get_tip_to(participant.username)['amount']) %}
         {% set tippee = participant.username %}
-        <h2>{{ _("Your Weekly Pledge") if path.decoded.startswith('/on/') else _("Your Weekly Gift") }}</h2>
         {% include "templates/my-tip.html" %}
 
         {% if user.participant.last_bill_result == None %}
@@ -38,4 +26,3 @@
 
     {% endif %}
 </div>
-

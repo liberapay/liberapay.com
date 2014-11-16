@@ -3,20 +3,8 @@
         <div class="tip-amount">
             $ <input type="text" class="my-tip" min="0" max="{{ '1000' if participant.IS_PLURAL else '100' }}" value="{{ my_tip }}" data-tippee="{{ tippee }}"> / {{ _("week") }}
         </div>
-
-        <ul class="tip-suggestions">
-            {% for amount in (100, 25, 10, 2, 0.25) %}
-                <li><a href="#" data-decimal="{{ format_decimal(amount) }}">{{
-                    format_currency(amount, 'USD', trailing_zeroes=False)
-                }}</a></li>
-            {% endfor %}
-        </ul>
     </div>
-
     <div class="tip-actions">
-        <button href="#" class="cancel-tip" type="button">{{ _("Cancel") }}</a>
-
-        <button class="confirm-tip" type="submit" disabled>{{ _("Confirm") }}</button><br>
-        <a href="#" class="reset-tip">{{ _("Reset") }}</a>
+        <button class="confirm-tip" type="submit" disabled>{{ _("Save") }}</button>
     </div>
 </form>

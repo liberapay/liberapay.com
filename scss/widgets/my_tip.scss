@@ -1,54 +1,12 @@
+.tip {
+    background: $gold;
+    color: $brown;
+    padding: 20px;
+    margin: 0 0 40px;
+    text-align: center;
+}
+
 form.my-tip {
-    line-height: 1.7em;
-    overflow: hidden;
-
-    .tip-controls {
-        text-align: right;
-        width: 60%;
-        float: left;
-
-        .tip-suggestions {
-            display: inline-block;
-            font-size: 0.9em;
-
-            li {
-                float: left;
-                margin: 0;
-
-                &:before {
-                    content: ", ";
-                }
-
-                &:first-child:before {
-                    content: "";
-                }
-            }
-        }
-    }
-
-    .tip-actions {
-        width: 38%;
-        float: right;
-        text-align: left;
-        border-left: 1px solid $brown;
-        padding-left: 1.9%;
-
-        .cancel-tip {
-            font-size: 0.9em;
-        }
-    }
-
-    .cancel-tip {
-        cursor: pointer;
-        display:inline;
-    }
-    .reset-tip {
-        display:none;
-    }
-    .confirm-tip {
-        display:none;
-    }
-
     &.changed {
         .reset-tip {
             cursor: pointer;
@@ -61,10 +19,12 @@ form.my-tip {
         .cancel-tip {
             display:none;
         }
-
     }
 }
 
 input.my-tip {
-    width: 5.5em;
+    width: 90px;
+    height: 28px;
+    text-align: right;
+    font: bold 24px/28px $Ideal;
 }
