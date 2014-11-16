@@ -4,26 +4,6 @@
 
 {% block sidebar %}
 
-{% set prefix = user.participant == participant and "my-" or "" %}
-{% set anon_giving = participant.anonymous_giving %}
-{% set g = participant.giving %}
-{% set anon_receiving = participant.anonymous_receiving %}
-{% set r = participant.receiving %}
-{% set giving_str = '' if anon_giving else format_currency(g, "USD") %}
-{% set receiving_str = '' if anon_receiving else format_currency(r, "USD") %}
-
-{% set params = {
-    "giving": "<span class='" + prefix + "total-giving'>" + giving_str + "</span>",
-    "receiving": "<span class='" + prefix + "total-receiving'>" + receiving_str + "</span>",
-    "username": participant.username,
-    "topstart": "<h2 class='pad-sign'>",
-    "topend": "</h2>",
-    "midstart": "<div class='number'>",
-    "midend": "</div>",
-    "bottomstart": "<div class='unit pad-sign'>",
-    "bottomend": "</div>"
-} %}
-
 <div class="avatar">
     <a href="/{{ participant.username }}/">{{ avatar_img(participant) }}</a>
 </div>
@@ -39,36 +19,26 @@
 {% endif %}
 
 <div class="padding {% if participant.is_suspicious %} is-suspicious{% endif %}">
-    {% if anon_giving and anon_receiving %}
-        <h2>{{ _("{0} gives and receives anonymously", participant.username) }}</h2>
-    {% elif anon_giving and r == 0 %}
-        <h2>{{ _("{0} gives anonymously", participant.username) }}</h2>
-    {% elif anon_receiving and g == 0 %}
-        <h2>{{ _("{0} receives anonymously", participant.username) }}</h2>
-    {% elif g > 0 and not anon_giving and anon_receiving %}
-        {{ _("{topstart}{username} gives{topend} {midstart}{giving}{midend} {bottomstart}per week, and receives anonymously{bottomend}", **params) }}
-    {% elif r > 0 and not anon_receiving and anon_giving %}
-        {{ _("{topstart}{username} receives{topend} {midstart}{receiving}{midend} {bottomstart}per week, and gives anonymously{bottomend}", **params) }}
-    {% elif g > 0 and r > 0 and g > r and not anon_giving and not anon_receiving %}
-        {{ _("{topstart}{username} gives{topend} {midstart}{giving}{midend} {bottomstart}per week, and receives {receiving}{bottomend}", **params) }}
-    {% elif g > 0 and r > 0 and r >= g and not anon_giving and not anon_receiving %}
-        {{ _("{topstart}{username} receives{topend} {midstart}{receiving}{midend} {bottomstart}per week, and gives {giving}{bottomend}", **params) }}
-    {% elif g > 0 and r == 0 and not anon_giving %}
-        {{ _("{topstart}{username} gives{topend} {midstart}{giving}{midend} {bottomstart}per week{bottomend}", **params) }}
-    {% elif g == 0 and r > 0 and not anon_receiving %}
-        {{ _("{topstart}{username} receives{topend} {midstart}{receiving}{midend} {bottomstart}per week{bottomend}", **params) }}
-    {% else %}
-        {% set age = participant.get_age_in_seconds() %}
-        <h2>
-            {% if age < 60 %}
-            {{ _("{0} just joined Gratipay! :D", participant.username) }}
-            {% elif age < (60 * 60 * 24 * 7) %}
-            {{ _("{0} joined recently", participant.username) }}
-            {% else %}
-            {{ _("{0} is quietly watching the Gratipay world", participant.username) }}
-            {% endif %}
-        </h2>
-    {% endif %}
+    {% set prefix = user.participant == participant and "my-" or "" %}
+    {% set anon_giving = participant.anonymous_giving %}
+    {% set g = participant.giving %}
+    {% set anon_receiving = participant.anonymous_receiving %}
+    {% set r = participant.receiving %}
+    {% set giving_str = '[' + _('hidden') + ']' if anon_giving else format_currency(g, "USD") %}
+    {% set receiving_str = '[' + _('hidden') + ']' if anon_receiving else format_currency(r, "USD") %}
+
+    <table>
+        <tr>
+            <td class="left">{{ _('Gives') }}</td>
+            <td class="right">{{ giving_str }}</td>
+        </tr>
+        <tr>
+            <td class="left">{{ _('Receives') }}</td>
+            <td class="right">{{ receiving_str }}</td>
+        </tr>
+    </table>
+
+    <p>{{ _('Joined') }} {{ to_age(participant.claimed_time) }}.</p>
 </div>
 
 {% if participant.accepts_tips %}
@@ -92,7 +62,5 @@ first time three days before he committed suicide:
 
 -->
 {% endif %}
-
 {% block nav %}{% endblock %}
-
 {% endblock %}
