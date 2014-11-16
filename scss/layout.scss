@@ -2,33 +2,24 @@ body {
     background: #434343 url("pennies.jpg") no-repeat;
     background-size: cover;
     background-position: 0 -54px;
+    line-height: 100%;
 }
 
 #header {
     background: transparentize($white, 0.1);
-    padding: 10px 40px;
     position: relative;
     border-bottom: 1px solid $brown;
 
-    td {
-        text-align: center;
-        vertical-align: middle;
-    }
     h1 {
         line-height: 100%;
-    }
-    .logo {
-        padding-right: 18px;
-    }
-    .motto {
-        border-left: 2px solid $light-gray;
-        font: bold 10px $Ideal;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        padding-left: 18px;
-        text-align: left;
         a {
-            color: inherit;
+            display: block;
+            padding: 10px;
+            width: 200px;
+            img {
+                display: block;
+                width: 180px;
+            }
         }
     }
     .sign-in, .you-are {
@@ -74,6 +65,7 @@ body {
         width: 180px;
         height: 180px;
         margin: 10px;
+        border: 1px solid $brown;
     }
 
     .nav {
@@ -108,6 +100,7 @@ body {
     display: table-cell;
     padding: 50px;
     background: transparentize($white, 0.03);
+    font: 300 16px/170% $Chronicle;
 
     h1 {
         color: $green;
@@ -121,6 +114,9 @@ body {
         letter-spacing: 1px;
         text-transform: uppercase;
         margin: 35px 0 8px;
+    }
+    .statement {
+        font: 300 16px/170% $Chronicle;
     }
 }
 

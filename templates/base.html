@@ -34,18 +34,8 @@
 </head>
 <body>
     <div id="header">
-        <table><tr><td class="logo">
-            <h1>
-                <a href="/">
-                    <img src="{{ website.asset('platforms/gratipay.png') }}"
-                         alt="Gratipay" />
-                </a>
-            </h1>
-            </td><td class="motto luxury">
-        <a href='/about/charts.html'>{{ _("{0} users exchanging {1} per week",
-                                        format_number(website.gnactive),
-                                        format_currency(website.gtransfer_volume, "USD")) }}</a>
-        </td></tr></table>
+        <h1><a href="/"><img src="{{ website.asset('gratipay.svg') }}"
+                     alt="Gratipay" /></a></h1>
         {% if user.ANON %}
           {% include "templates/sign-in-using.html" %}
         {% else %}
