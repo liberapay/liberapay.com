@@ -55,6 +55,7 @@ body {
 }
 #sidebar {
     display: table-cell;
+    vertical-align: top;
     width: 200px;
     padding: 50px 0;
     background: transparentize($brown, 0.1);
@@ -64,7 +65,7 @@ body {
     .avatar img {
         width: 180px;
         height: 180px;
-        margin: 10px;
+        margin: -40px 10px 10px;
         border: 1px solid $brown;
     }
 
@@ -98,6 +99,7 @@ body {
 }
 #content {
     display: table-cell;
+    vertical-align: top;
     padding: 50px;
     background: transparentize($white, 0.03);
     font: 300 16px/170% $Chronicle;

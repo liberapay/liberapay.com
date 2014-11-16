@@ -56,7 +56,9 @@ else:
 {% extends "templates/base.html" %}
 
 {% block heading %}
-    <h1>{{ platform.name }}</h1>
+    <h1>{{ platform.name }} /
+        <a href="{{ account.html_url|e}}">{{ user_name|e }}</a>
+    </h1>
 {% endblock %}
 
 {% block scripts %}
@@ -67,32 +69,25 @@ else:
   {{ super() }}
 {% endblock %}
 
-{% block box %}
+{% block sidebar %}
 
-<table class="on-elsewhere">
-    <tr>
-        <td class="picture">
-            {{ avatar_img(account) }}
-        </td>
-        <td class="ready">
-            <h2>
-                <a href="{{ account.html_url|e}}">{{ user_name|e }}</a>
-                {{ description }}
-            </h2>
-            {% if number >= 0 %}
-                <div class="number">{{ number }}</div>
-                <div class="unit">
-                    {% if allow_pledges %}
-                        {{ 'person' if number == 1 else 'people' }} ready to give
-                    {% else %}
-                        public member{{ '' if number == 1 else 's' }}
-                    {% endif %}
-                </div>
-            {% endif %}
-        </td>
-        <td class="offset"></td>
-    </tr>
-</table>
+<div class="avatar">
+    <a href="{{ account.html_url|e}}">{{ avatar_img(account) }}</a>
+</div>
+
+<h2>
+    {{ description }}
+</h2>
+{% if number >= 0 %}
+    <div class="number">{{ number }}</div>
+    <div class="unit">
+        {% if allow_pledges %}
+            {{ 'person' if number == 1 else 'people' }} ready to give
+        {% else %}
+            public member{{ '' if number == 1 else 's' }}
+        {% endif %}
+    </div>
+{% endif %}
 
 {% if allow_pledges %}
     {% include "templates/participant.tip.html" %}
@@ -100,7 +95,7 @@ else:
 
 {% endblock %}
 
-{% block page %}
+{% block content %}
 
 {% from 'templates/auth.html' import auth_button with context %}
 
