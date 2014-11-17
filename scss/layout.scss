@@ -31,7 +31,7 @@ body {
     }
     .nav {
         line-height: 100%;
-        display: inline;
+        display: inline-block;
         height: 78px;
 
         li {
@@ -58,25 +58,14 @@ body {
         }
     }
     .sign-in, .you-are {
-        padding-top: 18px;
-        position: absolute;
-        top: 0;
-        right: 40px;
-        font: normal 13px $Ideal;
-        text-align: right;
+        float: right;
     }
     .you-are {
-        padding-top: 4px;
         white-space: nowrap;
-
         .quick-stats {
-            font: normal 11px/13px $Ideal;
-            a {
-                color: $brown;
-                &:hover {
-                    color: $green;
-                }
-            }
+            font: normal 11px/13px $Mono;
+        }
+        li {
         }
     }
 }
