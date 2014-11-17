@@ -7,6 +7,7 @@ body {
 
 #header {
     background: transparentize($white, 0.1);
+    border-bottom: 1px solid $brown;
     position: relative;
 
     h1 {
@@ -69,7 +70,6 @@ body {
         }
     }
 }
-
 #wrapper {
     display: table;
     width: 100%;
@@ -135,60 +135,53 @@ body {
     vertical-align: top;
     font: 300 16px/170% $Chronicle;
 
-    #content-header {
-        padding: 83px 40px 0;
-        background: transparentize($white, 0.03);
-        background: linear-gradient(transparentize($white, 0.1), transparentize($white, 0.03));
-        height: 200px;
-        h1 {
-            color: $green;
-            font: bold 42px $Ideal;
-            margin: 0 0 13px 0;
-        }
-        .nav {
-            line-height: 100%;
-            display: block;
-            height: 78px;
-            position: relative;
-            left: -40px;
+    padding: 0 40px 40px;
+    background: transparentize($white, 0.03);
+    h1 {
+        color: $black;
+        font: bold 42px $Ideal;
+        padding: 40px 0 10px 0;
+    }
+    .nav {
+        line-height: 100%;
+        display: block;
+        height: 34px;
+        position: relative;
+        left: -40px;
 
-            li {
-                display: inline;
-                margin: 0;
-                float: left;
-                a {
-                    font: bold 16px/16px $Ideal;
-                    height: 34px;
-                    font-size: 14px;
-                    line-height: 14px;
-                    display: inline-block;
-                    padding: 15px 5px 5px 40px;
-                    color: $black;
-                    &.selected {
-                        padding-top: 13px;
-                        border-top: 2px solid $green;
-                        background: transparentize($green, 0.8);
-                    }
-                    &:hover {
-                        padding-top: 13px;
-                        border-top: 2px solid $gold;
-                        background: transparentize($gold, 0.8);
-                    }
+        li {
+            display: inline;
+            margin: 0;
+            float: left;
+            a {
+                font: bold 16px/16px $Ideal;
+                height: 34px;
+                font-size: 14px;
+                line-height: 14px;
+                display: inline-block;
+                padding: 15px 5px 5px 40px;
+                color: $black;
+                &.selected {
+                    padding-top: 13px;
+                    border-top: 2px solid $brown;
+                    background: transparentize($brown, 0.8);
+                }
+                &:hover {
+                    padding-top: 13px;
+                    border-top: 2px solid $gold;
+                    background: transparentize($gold, 0.8);
                 }
             }
         }
     }
-
-    #content-proper {
-        background: transparentize($white, 0.03);
-        padding: 0 40px 40px;
-        h2, #members th {
-            color: $brown;
-            font: bold 14px $Ideal;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            padding: 34px 0 8px;
-        }
+    h2, #members th {
+        color: $black;
+        font: bold 14px $Ideal;
+        text-transform: uppercase;
+        padding: 34px 0 8px;
+    }
+    a:hover {
+        background: transparentize($gold, 0.8);;
     }
 }
 
