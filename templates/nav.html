@@ -1,9 +1,3 @@
 <ul class="nav">
-    {% for slug, name in pages %}
-    {% if slug == None %}
-    <li></li>
-    {% else %}
-    <li><a href="{{ nav_base }}{{ slug }}"{% if slug.strip('/') == current_page %} class="selected"{% endif %}>{{ name }}</a></li>
-    {% endif %}
-    {% endfor %}
+    {% for slug, name in pages %}<li><a href="{{ nav_base }}{{ slug }}"{% if slug.strip('/') == current_page %} class="selected"{% endif %}>{{ name }}</a></li>{% endfor %}
 </ul>

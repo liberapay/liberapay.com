@@ -1,0 +1,98 @@
+from gratipay.models import community
+from gratipay.utils import plural
+
+[-----------------------------]
+
+communities = community.get_list_for(website.db, None)
+ncommunities = len(communities)
+title = _("Explore")
+
+[-----------------------------]
+{% extends "templates/base.html" %}
+{% block head %}
+    <!-- Otherwise we're getting Indonesian. :-/ -->
+    <!-- https://github.com/gratipay/gratipay.com/issues/953 -->
+    <meta name="google" value="notranslate">
+{% endblock %}
+
+{% block sidebar %}
+    <div class="padding">
+        {{ ngettext( "There is {n} community on Gratipay."
+                   , "There are {n} communities on Gratipay."
+                   , ncommunities
+                    ) }}
+    </div>
+{% endblock %}
+
+{% block content %}
+<style>
+    .help {
+        font-size: 10px;
+        text-transform: uppercase;
+    }
+</style>
+<div class="col0">
+
+    <h2>{{ _("All Communities") }}</h2>
+    <form class="communities">
+        <select data-placeholder="{{ _("Find or add a community ...") }}" tabindex="1">
+            <option></option>
+            {% for community in communities %}
+            <option value="{{ community.slug }}">{{ community.name }} -
+            {{ ngettext("{n} Member", "{n} Members", community.nmembers).lower() }}
+            </option>
+            {% endfor %}
+        </select>
+    </form>
+
+    <h2>{{ _("Large Communities") }}</h2>
+    <ul class="community memberships">
+        {% for community in communities[:18] %}
+        <li>
+            <a href="/for/{{ community.slug }}/">{{ community.name }}</a>
+            {% set n = community.nmembers %}
+            <div class="fine">
+                {{ ngettext("{0}{n}{1} Member", "{0}{n}{1} Members", n, "", "").lower() }}
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function()
+    {
+
+        var communityChooser = $('.communities select')
+        var communityList = $('.communities ul')
+
+
+        function createOption(term)
+        {
+            success = function () {
+                Gratipay.communities.jumpTo(term);
+            }
+            error = function (e) {
+                Gratipay.notification(JSON.parse(e.responseText).error_message_long, 'error');
+            }
+            Gratipay.communities.join(term, success, error);
+        }
+        // TODO: in future
+        {% if user.ANON %}
+        var chosenOpts = {};
+        {% else %}
+        var chosenOpts = { create_option: createOption
+                         , create_option_text: "Add a new community"
+                          };
+        {% endif %}
+        communityChooser.chosen(chosenOpts).change(function() {
+            Gratipay.communities.jumpTo(communityChooser.val());
+        });
+    });
+</script>
+
+{{ super() }}
+{% endblock %}

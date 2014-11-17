@@ -12,13 +12,49 @@ body {
 
     h1 {
         line-height: 100%;
+        height: 78px;
+        width: 200px;
+        float: left;
         a {
-            display: block;
+            display: inline-block;
             padding: 10px;
             width: 200px;
             img {
-                display: block;
+                display: inline-block;
                 width: 180px;
+            }
+            &:hover {
+                padding-top: 5px;
+                border-top: 5px solid $green;
+                background: transparentize($green, 0.8);
+            }
+        }
+    }
+    .nav {
+        line-height: 100%;
+        display: inline;
+        height: 78px;
+
+        li {
+            display: inline;
+            margin: 0;
+            a {
+                height: 78px;
+                font-size: 16px;
+                line-height: 16px;
+                display: inline-block;
+                padding: 31px 10px 31px 40px;
+                color: $black;
+                &.selected {
+                    padding-top: 26px;
+                    border-top: 5px solid $brown;
+                    background: transparentize($brown, 0.8);
+                }
+                &:hover {
+                    padding-top: 26px;
+                    border-top: 5px solid $green;
+                    background: transparentize($green, 0.8);
+                }
             }
         }
     }
