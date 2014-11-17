@@ -19,11 +19,19 @@
     }
 
     .support-gratipay {
-        padding-right: 10px;
         text-align: center;
+        table, tbody, tr, td {
+            display: block;
+            margin: 0 auto;
+        }
+        padding-right: 10px;
+        .cta {
+            display: block;
+            line-height: 150%;
+        }
         .knobs {
             width: 261px;
-            display: table;
+            display: block;
             position: static;
             top: 0;
             right: 0;
@@ -40,6 +48,7 @@
         }
         .help {
             margin-top: 0;
+            line-height: 150%;
         }
     }
 
