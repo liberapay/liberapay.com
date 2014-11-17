@@ -305,4 +305,32 @@ td.dnt-value {
   padding-right: 8px;
 }
 
-
+.emails {
+    .label-primary, .set-primary { display: none; }
+    .verified {
+        .label-unverified, .resend { display: none; }
+        .set-primary { display: inline-block; }
+    }
+    .primary {
+        .set-primary, .remove { display: none; }
+        .label-primary { display: inline; }
+    }
+    li {
+        list-style: square inside;
+        margin: 0 0 0.5em 0.5em;
+    }
+    .label-primary, .label-unverified {
+        font-size: 90%;
+        margin-left: 0.5em;
+    }
+    .label-primary {
+        color: #164a9a;
+    }
+    .label-unverified {
+        color: #aaa;
+    }
+    li button {
+        float: right;
+        margin-left: 5px;
+    }
+}

@@ -11,7 +11,7 @@ username = participant.username   # used in footer shared with on/$platform/
                                   # pages
 locked = False
 
-unverified_email = participant.get_unverified_email()
+emails = participant.get_emails()
 
 [-----------------------------------------------------------------------------]
 {% extends "templates/profile.html" %}
@@ -145,59 +145,25 @@ unverified_email = participant.get_unverified_email()
             </table>
         {% endif %}
 
-        <h2>{{ _("Email Settings") }}</h2>
-        <table class="accounts">
-            <tr>
-                <td class="account-type">
-                    <img src="{{ website.asset('email.png') }}" />
-                </td>
-                <td class="account-details">
-                    <div class="account-type">{{ _("Email Address (Private)") }}</div>
-                    <div class="email">
-                        <a class="address email-address" href="javascript:;">
-                            {% if participant.email_address %}
-                                {{ participant.email_address }}
-                            {% elif unverified_email %}
-                                {{ unverified_email }}
-                            {% endif %}
-                        </a>
-                        {% if unverified_email and not participant.email_address %}
-                            <span class="none" id="email-not-verified">{{ _("(Unverified)") }}</span>
-                        {% else %}
-                            <span class="none hidden" id="email-not-verified">{{ _("(Unverified)") }}</span>
-                        {% endif %}
-                    </div>
-
-                    <form class="email-submit">
-                        <div class="address">
-                           <input type="email" class="email hidden"
-                                {% if participant.email_address or unverified_email %}
-                                    value="{{ participant.email_address or unverified_email }}"
-                                {% endif %}
-                            />
-                        </div>
-                        <div class="buttons">
-                            <button type="submit" class="email hidden">Save</button>
-                            <button type="cancel" class="email cancel hidden">Cancel</button>
-                        </div>
-                        {% if not participant.email_address and unverified_email %}
-                            <div class="buttons">
-                                <button type="resend" data-resend="true" class="email">Resend Email</button>
-                            </div>
-                        {% endif %}
-                    </form>
-                </td>
-                <td class="account-action">
-                    <button class="toggle-email">
-                        {% if participant.email_address or unverified_email %}
-                            {{ _("Edit") }}
-                        {% else %}
-                            {{ _("+ Add") }}
-                        {% endif %}
-                    </button>
-                </td>
-            </tr>
-        </table>
+        <div class="emails">
+            <h2>{{ _("Email Addresses (Private)") }}</h2>
+            <ul>
+            {% for email in emails %}
+                {% set is_primary = email.address == participant.email_address %}
+                <li class="{{ 'primary' if is_primary }} {{ 'verified' if email.verified }}"
+                    data-email="{{ email.address|e }}">
+                    {{ email.address|e }}
+                    <span class="label-primary">{{ _("Primary") }}</span>
+                    <span class="label-unverified">{{ _("Unverified") }}</span>
+                    <button class="remove">{{ _("Remove") }}</button>
+                    <button class="resend">{{ _("Resend Email") }}</button>
+                    <button class="set-primary">{{ _("Set as primary") }}</button>
+                </li>
+            {% endfor %}
+            </ul>
+            <input class="add-email" name="email" type="email" placeholder="sam@example.net" />
+            <button class="add-email">{{ _("Add email address") }}</button>
+        </div>
 
 
         <!-- API  -->
