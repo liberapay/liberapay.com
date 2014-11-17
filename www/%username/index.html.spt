@@ -78,23 +78,17 @@ def with_others(obj):
     </div>
 {% else %}
     <div class="group">
-        {% if statement %}
-        <div class="{% if long_statement %}col1{% else %}col0{% endif %}">
+        <div class="col1">
             <h2>{{ _("Statement") }}</h2>
             <div class="statement markdown-output">
+                {% if statement %}
                 {{ markdown.render(statement) }}
+                {% else %}
+                <p><i>{{ _('No statement.') }}</i></p>
+                {% endif %}
             </div>
-            {% include "templates/team-listing.html" %}
-            {% include "templates/community-listing.html" %}
         </div>
-        <div class="{% if long_statement %}col2{% else %}col0{% endif %}">
-        {% else %}
-        <div class="col0">
-            {% include "templates/team-listing.html" %}
-            {% include "templates/community-listing.html" %}
-        {% endif %}
-
-            <h2>{{ _("Funding Goal") }}</h2>
+        <div class="col2">
             <div class="goal">
                 {% if participant.goal == None %}
                 {{ GRATEFUL }}
@@ -108,6 +102,8 @@ def with_others(obj):
             </div>
 
             {% include "templates/charts-for-user.html" %}
+            {% include "templates/team-listing.html" %}
+            {% include "templates/community-listing.html" %}
             {% include "templates/connected-accounts.html" %}
         </div>
     </div>

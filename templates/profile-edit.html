@@ -33,20 +33,6 @@
             {{ markdown.render(statement) if statement }}
         </div>
     </div>
-
-
-    <!-- Memberships -->
-    {% include "templates/team-listing.html" %}
-    {% include "templates/community-listing.html" %}
-    {% if not communities %}
-    {#
-        Still show the communities heading in this case. Otherwise it's set in
-        community-listing.html. See https://github.com/gratipay/gratipay.com/pull/1916.
-    #}
-    <h2>{{ _("Communities") }}</h2>
-    {% endif %}
-    <a href="/for/">{{ _("Join Communities") }}</a>
-
 </div>
 <div class="col2">
 
@@ -104,6 +90,17 @@
 
     {% include "templates/charts-for-user.html" %}
 
+    <!-- Memberships -->
+    {% include "templates/team-listing.html" %}
+    {% include "templates/community-listing.html" %}
+    {% if not communities %}
+    {#
+        Still show the communities heading in this case. Otherwise it's set in
+        community-listing.html. See https://github.com/gratipay/gratipay.com/pull/1916.
+    #}
+    <h2>{{ _("Communities") }}</h2>
+    {% endif %}
+    <a href="/for/">{{ _("Join Communities") }}</a>
 
     <!-- Connected Accounts -->
     {% include "templates/connected-accounts.html" %}
