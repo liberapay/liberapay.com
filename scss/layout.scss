@@ -24,8 +24,8 @@ body {
             }
             &:hover {
                 padding-top: 5px;
-                border-top: 5px solid $green;
-                background: transparentize($green, 0.8);
+                border-top: 5px solid $gold;
+                background: transparentize($gold, 0.8);
             }
         }
     }
@@ -51,8 +51,8 @@ body {
                 }
                 &:hover {
                     padding-top: 26px;
-                    border-top: 5px solid $green;
-                    background: transparentize($green, 0.8);
+                    border-top: 5px solid $gold;
+                    background: transparentize($gold, 0.8);
                 }
             }
         }
@@ -158,13 +158,15 @@ body {
         }
         .nav {
             line-height: 100%;
-            display: inline;
+            display: block;
             height: 78px;
-            margin-left: -40px;
+            position: relative;
+            left: -40px;
 
             li {
                 display: inline;
                 margin: 0;
+                float: left;
                 a {
                     font: bold 16px/16px $Ideal;
                     height: 34px;
@@ -180,8 +182,8 @@ body {
                     }
                     &:hover {
                         padding-top: 13px;
-                        border-top: 2px solid $brown;
-                        background: transparentize($brown, 0.8);
+                        border-top: 2px solid $gold;
+                        background: transparentize($gold, 0.8);
                     }
                 }
             }
