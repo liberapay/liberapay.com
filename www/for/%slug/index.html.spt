@@ -167,7 +167,7 @@ for p in chain(new_participants, givers, receivers):
         <ul class="group">
             {% for i, participant in enumerate(new_participants, start=1) %}
             <li{% if i > LUXURY %} class="luxury"{% endif %}>
-                <a href="/{{ participant.username }}/" class="mini-user tip"
+                <a href="/{{ participant.username }}/" class="mini-user"
                    data-tip="{{ excerpt_intro(participant.statement)|e }}">
                     <span class="inner">
                         <span class="avatar"
@@ -197,8 +197,8 @@ for p in chain(new_participants, givers, receivers):
                 </span>
                 {% else %}
                 <a href="/{{ giver.username }}/"
-                   class="mini-user{{ ' anonymous' if giver.anonymous else '' }} tip"
-                   data-tip="{{ excerpt_intro(giver.statement) }}">
+                   class="mini-user{{ ' anonymous' if giver.anonymous else '' }}"
+                   data-tip="{{ excerpt_intro(giver.statement)|e }}">
                     <span class="inner">
                         <span class="avatar" style="background-image: url('{{ avatar_url(giver) }}')">
                         </span>
@@ -227,8 +227,8 @@ for p in chain(new_participants, givers, receivers):
                 </span>
                 {% else %}
                 <a href="/{{ receiver.username }}/"
-                   class="mini-user{{ ' anonymous' if receiver.anonymous else '' }} tip"
-                   data-tip="{{ excerpt_intro(receiver.statement) }}">
+                   class="mini-user{{ ' anonymous' if receiver.anonymous else '' }}"
+                   data-tip="{{ excerpt_intro(receiver.statement)|e }}">
                     <span class="inner">
                         <span class="avatar"
                             style="background-image: url('{{ avatar_url(receiver) }}')">
