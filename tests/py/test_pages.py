@@ -138,20 +138,3 @@ class TestPages(Harness):
         expected2 = "cancelled 1 tip"
         assert expected1 in actual
         assert expected2 in actual
-
-    def test_account_page_verified_email(self):
-        self.make_participant('alice', claimed_time='now')
-        self.db.run("UPDATE participants SET email_address = 'alice@gmail.com' WHERE username = 'alice'")
-        actual = self.client.GET("/alice/account/", auth_as="alice").body
-        expected = "alice@gmail.com"
-        assert expected in actual
-
-    def test_account_page_unverified_email(self):
-        self.make_participant('alice', claimed_time='now')
-        self.db.run("""
-            INSERT INTO emails (participant, address)
-                 VALUES ('alice', 'alice@gmail.com')
-        """)
-        actual = self.client.GET("/alice/account/", auth_as="alice").body
-        expected = "alice@gmail.com"
-        assert expected in actual

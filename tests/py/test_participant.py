@@ -4,7 +4,6 @@ import datetime
 from decimal import Decimal
 import random
 
-import mock
 import pytest
 
 from aspen.utils import utcnow
@@ -19,7 +18,6 @@ from gratipay.exceptions import (
     NoSelfTipping,
     NoTippee,
     BadAmount,
-    EmailAlreadyTaken
 )
 from gratipay.models.account_elsewhere import AccountElsewhere
 from gratipay.models.participant import (
@@ -222,61 +220,6 @@ class TestParticipant(Harness):
         expected = True
         self.make_participant('john', number='plural')
         actual = Participant.from_username('john').IS_PLURAL
-        assert actual == expected
-
-    @mock.patch.object(Participant, 'send_email')
-    def test_can_update_email(self, send_email):
-        self.alice.update_email('alice@gratipay.com')
-        expected = 'alice@gratipay.com'
-        actual = self.alice.get_unverified_email()
-        assert actual == expected
-
-    @mock.patch.object(Participant, 'send_email')
-    def test_cannot_update_email_to_already_verified(self, send_email):
-        self.alice.update_email('alice@gratipay.com')
-        nonce = Participant.from_username('alice').get_email_nonce_and_ctime('alice@gratipay.com')[0]
-        self.alice.verify_email('alice@gratipay.com', nonce)
-        with self.assertRaises(EmailAlreadyTaken):
-            self.bob.update_email('alice@gratipay.com')
-        assert self.alice.email_address == 'alice@gratipay.com'
-        assert self.bob.get_unverified_email() == None
-
-    @mock.patch.object(Participant, 'send_email')
-    def test_can_verify_email(self, send_email):
-        self.alice.update_email('alice@gratipay.com')
-        email = Participant.from_username('alice').get_unverified_email()
-        nonce = Participant.from_username('alice').get_email_nonce_and_ctime(email)[0]
-        r = self.alice.verify_email(email, nonce)
-        assert r == 0
-        actual = Participant.from_username('alice').email_address
-        expected = 'alice@gratipay.com'
-        assert actual == expected
-
-    @mock.patch.object(Participant, 'send_email')
-    def test_cannot_verify_email_with_wrong_nonce(self, send_email):
-        self.alice.update_email('alice@gratipay.com')
-        nonce = "some wrong nonce"
-        r = self.alice.verify_email("alice@gratipay.com", nonce)
-        assert r == 2
-        actual = Participant.from_username('alice').email_address
-        assert actual == None
-
-    @mock.patch.object(Participant, 'send_email')
-    def test_cannot_verify_email_with_expired_nonce(self, send_email):
-        self.alice.update_email('alice@gratipay.com')
-        email = self.db.one("""
-            UPDATE emails
-               SET ctime = (now() - INTERVAL '25 hours')
-             WHERE participant = 'alice'
-         RETURNING address
-        """)
-        nonce = self.alice.get_email_nonce_and_ctime(email)[0]
-        r = self.alice.verify_email("alice@gratipay.com", nonce)
-        assert r == 1
-        actual = Participant.from_username('alice').email_address
-        assert actual == None
-        actual = Participant.from_username('alice').get_unverified_email()
-        expected = 'alice@gratipay.com'
         assert actual == expected
 
     def test_cant_take_over_claimed_participant_without_confirmation(self):
