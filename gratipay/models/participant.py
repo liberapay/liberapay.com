@@ -32,7 +32,9 @@ from gratipay.exceptions import (
     NoTippee,
     BadAmount,
     UserDoesntAcceptTips,
-    EmailAlreadyTaken
+    EmailAlreadyTaken,
+    CannotRemovePrimaryEmail,
+    EmailNotVerified,
 )
 
 from gratipay.models import add_event
@@ -551,66 +553,22 @@ class Participant(Model, MixinTeam):
         """, (self.username,))
         self.set_attributes(avatar_url=avatar_url)
 
-    def update_email(self, email, verify=False):
+    def add_email(self, email):
         """
-            Update the email address of a participant.
-
-            This could be called when
+            This is called when
             1) Adding a new email address
             2) Resending the verification email for an unverified email address
-            3) Verifying an email address
 
-            In case 3, we UPDATE rows. In case 1 and 2, we're just INSERTing.
-
-            We return a value only if we've sent a verification email.
+            Returns the number of emails sent.
         """
 
         # If the email is already verified we have nothing to do.
         if email == self.email_address:
-            return None
+            return 0
 
-        exists = self.db.one("""
-            SELECT COUNT(*)
-              FROM participants
-             WHERE email_address=%s
-        """, (email,))
-        if exists:
-            raise EmailAlreadyTaken(email)
-            return None
-
-        if verify:
-            with self.db.get_cursor() as c:
-                c.run("""
-                    UPDATE emails
-                    SET verified=NULL
-                    WHERE participant=%s
-                """, (self.username,))
-
-                r = c.one("""
-                    UPDATE emails
-                       SET verified=true, mtime=%s
-                      FROM (SELECT id
-                              FROM emails
-                             WHERE participant=%s
-                               AND address=%s
-                               AND verified IS NULL
-                          ORDER BY ctime DESC
-                             LIMIT 1) AS unverified
-                       WHERE emails.id=unverified.id
-                   RETURNING address
-                """, (utcnow(), self.username, email))
-
-                c.run("""
-                    UPDATE participants
-                       SET email_address=%s
-                     WHERE username=%s
-                """, (email, self.username))
-
-                self.set_attributes(email_address=r)
-            return None
-        else:
-            nonce = str(uuid.uuid4())
-            ctime = utcnow()
+        nonce = str(uuid.uuid4())
+        ctime = utcnow()
+        try:
             with self.db.get_cursor() as c:
                 add_event(c, 'participant', dict(id=self.id, action='set', values=dict(current_email=email)))
                 c.run("""
@@ -618,62 +576,91 @@ class Participant(Model, MixinTeam):
                                 (address, nonce, ctime, participant)
                          VALUES (%s, %s, %s, %s)
                 """, (email, nonce, ctime, self.username))
+        except IntegrityError:
+            nonce = self.db.one("""
+                UPDATE emails
+                   SET ctime=%s
+                 WHERE participant=%s
+                   AND address=%s
+                   AND verified IS NULL
+             RETURNING nonce
+            """, (ctime, self.username, email))
+            if not nonce:
+                return self.add_email(email)
 
-            self.send_email(emails.VERIFICATION_EMAIL,
-                            email=email,
-                            link=self.get_verification_link(email),
+        scheme = gratipay.canonical_scheme
+        host = gratipay.canonical_host
+        username = self.username_lower
+        link = "{scheme}://{host}/{username}/verify-email.html?email={email}&nonce={nonce}"
+        self.send_email(emails.VERIFICATION_EMAIL,
+                        email=email,
+                        link=link.format(**locals()),
+                        username=self.username,
+                        include_unsubscribe=False)
+        if self.email_address:
+            self.send_email(emails.VERIFICATION_NOTICE,
+                            new_email=email,
                             username=self.username,
                             include_unsubscribe=False)
-            if self.email_address:
-                self.send_email(emails.VERIFICATION_NOTICE,
-                                new_email=email,
-                                username=self.username,
-                                include_unsubscribe=False)
-            return email
+            return 2
+        return 1
+
+    def update_email(self, email):
+        if not getattr(self.get_email(email), 'verified', False):
+            raise EmailNotVerified(email)
+        username = self.username
+        self.db.run("""
+            UPDATE participants
+               SET email_address=%(email)s
+             WHERE username=%(username)s
+        """, locals())
+        self.set_attributes(email_address=email)
 
     def verify_email(self, email, nonce):
-        if self.email_address and email == self.email_address:
+        r = self.get_email(email)
+        if r and r.verified:
             return 0  # Verified
-        if self.get_unverified_email() != email:
-            return 2  # Failed
-        expected_nonce, ctime = self.get_email_nonce_and_ctime(email)
-        if constant_time_compare(expected_nonce, nonce):
-            if (utcnow() - ctime) < EMAIL_HASH_TIMEOUT:
-                self.update_email(email, True)
+        if r and constant_time_compare(r.nonce, nonce):
+            if (utcnow() - r.ctime) < EMAIL_HASH_TIMEOUT:
+                try:
+                    self.db.run("""
+                        UPDATE emails
+                           SET verified=true, mtime=now(), nonce=NULL
+                         WHERE participant=%s
+                           AND address=%s
+                           AND verified IS NULL
+                    """, (self.username, email))
+                except IntegrityError:
+                    raise EmailAlreadyTaken(email)
+                self.update_email(email)
                 return 0  # Verified
             else:
                 return 1  # Expired
         else:
             return 2  # Failed
 
-    def get_verification_link(self, email):
-        scheme = gratipay.canonical_scheme
-        host = gratipay.canonical_host
-        nonce = self.get_email_nonce_and_ctime(email)[0]
-        username = self.username_lower
-        link = "{scheme}://{host}/{username}/verify-email.html?email={email}&nonce={nonce}"
-        return link.format(**locals())
-
-    def get_email_nonce_and_ctime(self, email):
-        rec = self.db.one("""
-            SELECT nonce, ctime
+    def get_email(self, email):
+        return self.db.one("""
+            SELECT *
               FROM emails
              WHERE participant=%s
                AND address=%s
-          ORDER BY ctime DESC
-             LIMIT 1
         """, (self.username, email))
-        return rec.nonce, rec.ctime
 
-    def get_unverified_email(self):
-        return self.db.one("""
-            SELECT address
+    def get_emails(self):
+        return self.db.all("""
+            SELECT *
               FROM emails
              WHERE participant=%s
-               AND verified IS NULL
-          ORDER BY ctime DESC
-             LIMIT 1
         """, (self.username,))
+
+    def remove_email(self, address):
+        if address == self.email_address:
+            raise CannotRemovePrimaryEmail()
+        with self.db.get_cursor() as c:
+            add_event(c, 'participant', dict(id=self.id, action='remove', values=dict(email=address)))
+            c.run("DELETE FROM emails WHERE participant=%s AND address=%s",
+                  (self.username, address))
 
     def send_email(self, message, email=None, **params):
         header = emails.HEADER

@@ -1,30 +1,35 @@
 """
-Change the currently authenticated user's email address.
-This will need to send a confirmation email in the future.
+Manages the authenticated user's email addresses.
 """
-import json
 import re
 
 from aspen import Response
 from gratipay.exceptions import ProblemChangingEmail
+from gratipay.utils import get_participant
+
+email_re = re.compile(r'^[^@]+@[^@]+\.[^@]+$')
 
 [-----------------------------------------]
 
-if user.ANON:
-    raise Response(404)
 request.allow("POST")
+participant = get_participant(request, restrict=True)
 
-address = request.body['email']
+action = request.body['action']
+address = request.body['address']
 
 # This checks for exactly one @ and at least one . after @
 # The real validation will happen when we send the email
-if not re.match(r"[^@]+@[^@]+\.[^@]+", address):
+if not email_re.match(address):
     raise Response(400, "Invalid email address.")
 
-try:
-	email = user.participant.update_email(address)
-except ProblemChangingEmail, e:
-	raise Response(400, unicode(e))
+if action in ('add-email', 'resend'):
+    r = participant.add_email(address)
+elif action == 'set-primary':
+    r = participant.update_email(address)
+elif action == 'remove':
+    r = participant.remove_email(address)
+else:
+    raise Response(400, 'unknown action "%s"' % action)
 
 [---] application/json via json_dump
-{'email': email, 'previous_email': user.participant.email_address}
+r

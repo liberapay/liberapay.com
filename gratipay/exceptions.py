@@ -1,8 +1,12 @@
 """
 This module contains exceptions shared across application code.
+
+TODO i18n of error messages
 """
 
 from __future__ import print_function, unicode_literals
+
+from aspen import Response
 
 
 class ProblemChangingUsername(Exception):
@@ -25,12 +29,18 @@ class UsernameAlreadyTaken(ProblemChangingUsername):
     msg = "The username '{}' is already taken."
 
 
-class ProblemChangingEmail(Exception):
-    def __str__(self):
-        return self.msg.format(self.args[0])
+class ProblemChangingEmail(Response):
+    def __init__(self, *args):
+        Response.__init__(self, 400, self.msg.format(*args))
 
 class EmailAlreadyTaken(ProblemChangingEmail):
     msg = "An account with the email '{}' already exists"
+
+class CannotRemovePrimaryEmail(ProblemChangingEmail):
+    msg = "You cannot remove your primary email address."
+
+class EmailNotVerified(ProblemChangingEmail):
+    msg = "The email address '{}' is not verified."
 
 
 class ProblemChangingNumber(Exception):
