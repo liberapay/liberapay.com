@@ -3,40 +3,28 @@ title = "Do Not Track"
 [---] text/html
 {% extends "templates/about.html" %}
 {% block content %}
-
 <div class="col0">
 
-<p>
-<a href="http://donottrack.us/">"Do Not Track"</a> (DNT) is a web technology that is used to
-specify if a user wants to be tracked by websites such as analytics services, advertising networks,
-and social platforms.
-</p>
+    <p><a href="http://donottrack.us/">&ldquo;Do Not Track&rdquo;</a> (DNT) is a web
+    technology that is used to specify if a user wants to be tracked by
+    websites such as analytics services, advertising networks, and social
+    platforms.  </p>
 
-<p>
-Gratipay supports DNT. Enabling your browser's DNT settings ensures that
-Gratipay will disable any use of third-party analytics services.
-</p>
+    <p>Gratipay supports DNT. Enabling your browser's DNT settings ensures
+    that Gratipay will disable any use of third-party analytics services.  </p>
 
-<p>
-You can read more about how we use DNT header in our
-<a href="/about/privacy/#dnt">Privacy Policy</a>.
-</p>
+    <p>You can read more about how we use DNT headers in our <a
+        href="/about/privacy/#dnt">Privacy Policy</a>, and you can find how to
+    configure your DNT settings by following one of these links: </p>
 
-<p>
-You can find how to configure your DNT settings by following one of these links:
-</p>
-
-<div class="nav">
-        {% set pages = [
-        ('https://support.mozilla.org/en-US/kb/how-do-i-turn-do-not-track-feature#w_how-do-i-turn-the-do-not-track-feature-on_2', 'Firefox'),
-        ('http://windows.microsoft.com/en-us/internet-explorer/use-tracking-protection#ie=ie-11', 'IE'),
-        ('http://donottrack.us/images/safari_dnt.png', 'Safari'),
-        ('https://support.google.com/chrome/answer/114836', 'Chrome'),
-        ('http://www.opera.com/help/tutorials/security/control/#referrer', 'Opera'),
-        ] %}
-        {% include "templates/nav.html" %}
-</div>
+    {% set pages = [
+    ('https://support.mozilla.org/en-US/kb/how-do-i-turn-do-not-track-feature#w_how-do-i-turn-the-do-not-track-feature-on_2', 'Firefox'),
+    ('http://windows.microsoft.com/en-us/internet-explorer/use-tracking-protection#ie=ie-11', 'IE'),
+    ('http://donottrack.us/images/safari_dnt.png', 'Safari'),
+    ('https://support.google.com/chrome/answer/114836', 'Chrome'),
+    ('http://www.opera.com/help/tutorials/security/control/#referrer', 'Opera'),
+    ] %}
+    {% include "templates/nav.html" %}
 
 </div>
-
 {% endblock %}
