@@ -127,8 +127,6 @@ from gratipay.security.user import SESSION_TIMEOUT
                     "<a href='/" + user.participant.username + "/'>", "</a>") }}</p>
         {% endif %}
 
-        {% include "templates/support-gratipay.html" %}
-
         <div class="jump">
         <form id="jump">
         {{ _("Jump to {0} from {1}",
