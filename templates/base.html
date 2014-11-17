@@ -62,8 +62,13 @@
         {% block whole_page %}
         <div id="sidebar">{% block sidebar %}{% endblock %}</div>
         <div id="content">
-            {% block heading %}{% if title %}<h1>{{ title }}</h1>{% endif %}{% endblock %}
-            {% block content %}{% endblock %}
+            <div id="content-header">
+                {% block heading %}{% if title %}<h1>{{ title }}</h1>{% endif %}{% endblock %}
+                {% block subnav %}{% endblock %}
+            </div>
+            <div id="content-proper" class="group">
+                {% block content %}{% endblock %}
+            </div>
         </div>
         {% endblock %}
     </div></div>

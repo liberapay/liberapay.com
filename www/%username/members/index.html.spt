@@ -17,12 +17,10 @@ username = team.username  # used in footer shared with on/%platform/ pages
 
 {% block scripts %}
 <script>$(document).ready(Gratipay.team.init);</script>
-
 {{ super() }}
 {% endblock %}
 
 {% block content %}
-
 <div id="team" class="col0">
   <table>
       <tr>

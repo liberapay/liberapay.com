@@ -9,7 +9,7 @@
     })</script>
 {% endblock %}
 
-{% block nav %}
+{% block subnav %}
 {% set current_page = path.raw.split('/')[2] %}
 {% if user.participant == participant or user.ADMIN %}
     {% set pages = [
