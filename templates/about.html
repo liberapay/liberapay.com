@@ -2,6 +2,6 @@
 {% block sidebar %}
     {% set current_page = path.raw.split('/')[2] %}
     {% set nav_base = "/about" %}
-    {% set pages = [('/', _('About')), ('/details', _('Details')), ('/faq', _('FAQ')), ('/contact', _('Contact')), ('/pricing', _('Pricing')), ('/teams/', _('Teams')), ('/stats', _('Stats')), ('/charts', _('Charts')), ('/terms/', _('Terms')), ('/privacy/', _('Privacy')), ('/fraud/', _('Fraud')), ('/dnt', _('DNT'))] %}
+    {% set pages = [('/', _('About')), ('/details', _('Details')), ('/faq', _('FAQ')), ('/contact', _('Contact Us')), ('/pricing', _('Pricing')), ('/teams/', _('Teams')), ('/stats', _('Stats')), ('/charts', _('Charts')), ('/terms/', _('Terms')), ('/privacy/', _('Privacy')), ('/fraud/', _('Fraud')), ('/dnt', _('DNT'))] %}
     {% include "templates/nav.html" %}
 {% endblock %}
