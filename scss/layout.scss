@@ -96,12 +96,20 @@ body {
             margin: 0;
         }
         a {
-            padding: 5px 20px;
+            padding: 5px 20px 5px 40px;
+            text-indent: -20px;
             display: block;
             color: $gold;
             &.selected {
+                padding-left: 38px;
+                border-left: 2px solid $gold;
                 background: transparentize($gold, 0.8);
                 color: $white;
+            }
+            &:hover {
+                padding-left: 38px;
+                border-left: 2px solid $gold;
+                background: transparentize($gold, 0.8);
             }
         }
     }
