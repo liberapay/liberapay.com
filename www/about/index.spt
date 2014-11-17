@@ -30,21 +30,5 @@ example = website.db.one("""
     and the <i>total</i> amount you receive is public (you can opt out of
     sharing this info).</p>
 
-
-    <h2>Can you show me an example?</h2>
-
-    <p>Sure! How about <a href="/{{ example }}/">{{ example }}</a>?
-    (Refresh for another.)</p>
-
-
-    <h2>Where next?</h2>
-
-    <ul>
-        <li><a href="details">details about how money flows on Gratipay</a></li>
-        <li><a href="charts">charts showing Gratipay's growth over time</a></li>
-        <li><a href="faq">frequently asked questions (FAQ)</a></li>
-        <li><a href="contact">contact us</a></li>
-    </ul>
-
 </div>
 {% endblock %}
