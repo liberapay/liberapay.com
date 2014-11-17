@@ -24,16 +24,8 @@ title = _("Explore")
     </div>
 {% endblock %}
 
-{% block content %}
-<style>
-    .help {
-        font-size: 10px;
-        text-transform: uppercase;
-    }
-</style>
-<div class="col0">
-
-    <h2>{{ _("All Communities") }}</h2>
+{% block heading %}
+    <h1>{{ _("Explore") }}</h1>
     <form class="communities">
         <select data-placeholder="{{ _("Find or add a community ...") }}" tabindex="1">
             <option></option>
@@ -44,21 +36,21 @@ title = _("Explore")
             {% endfor %}
         </select>
     </form>
+{% endblock %}
 
-    <h2>{{ _("Large Communities") }}</h2>
-    <ul class="community memberships">
-        {% for community in communities[:18] %}
-        <li>
-            <a href="/for/{{ community.slug }}/">{{ community.name }}</a>
-            {% set n = community.nmembers %}
-            <div class="fine">
-                {{ ngettext("{0}{n}{1} Member", "{0}{n}{1} Members", n, "", "").lower() }}
-            </div>
-        </li>
-        {% endfor %}
-    </ul>
-
-</div>
+{% block content %}
+<h2>{{ _("Large Communities on Gratipay") }}</h2>
+<ul class="community memberships">
+    {% for community in communities[:18] %}
+    <li>
+        <a href="/for/{{ community.slug }}/">{{ community.name }}</a>
+        {% set n = community.nmembers %}
+        <div class="fine">
+            {{ ngettext("{0}{n}{1} Member", "{0}{n}{1} Members", n, "", "").lower() }}
+        </div>
+    </li>
+    {% endfor %}
+</ul>
 {% endblock %}
 
 {% block scripts %}

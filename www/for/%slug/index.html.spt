@@ -147,10 +147,6 @@ for p in chain(new_participants, givers, receivers):
         <span>{{ _("Leave") if is_member else _("Join") }}</span>
     </button>
     {% endif %}
-
-    <ul class="nav">
-        <li><a href='/for/'>{{ _("All Communities") }}</a></li>
-    </ul>
 {% endblock %}
 
 {% block content %}
