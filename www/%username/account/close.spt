@@ -1,8 +1,8 @@
 from gratipay.utils import get_participant
 [---]
 participant = get_participant(request, restrict=True)
-hero = "Close Account"
 title = participant.username      # used in the title tag
+subhead = _("Close Account")
 username = participant.username   # used in footer shared with on/$platform/
                                   # pages
 

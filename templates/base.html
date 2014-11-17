@@ -2,7 +2,7 @@
 <html lang="en">
 <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb#">
     {% block head_early %}{% endblock %}
-    <title>{% if title %}{{ title|e }} - {% endif %}Gratipay</title>
+    <title>{% if title %}{% if subhead %}{{ subhead|e }} - {% endif %}{{ title|e }} - {% endif %}Gratipay</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ website.asset('gratipay.css') }}" type="text/css">
     <link rel="apple-touch-icon-precomposed" href="{{ website.asset('touch/icon-60x60.png') }}">

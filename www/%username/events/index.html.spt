@@ -5,8 +5,8 @@ db = website.db
 [-----------------------------------------------------------------------------]
 
 participant = get_participant(request, restrict=True)
-hero = "Events"
-title = "%s - %s" % (participant.username, hero)
+title = participant.username
+subhead = "Events"
 
 SQL = """
     SELECT * FROM events WHERE type = 'participant' AND payload->>'id' = %s ORDER BY ts DESC

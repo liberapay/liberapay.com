@@ -11,7 +11,6 @@ LONG_STATEMENT = 256
 
 participant = get_participant(request, restrict=False)
 tip_or_pledge = "tip"
-hero = _("Profile")
 title = participant.username      # used in the title tag
 username = participant.username   # used in footer shared with on/$platform/
                                   # pages
