@@ -98,7 +98,7 @@ from gratipay.security.user import SESSION_TIMEOUT
 
     {% else %}
     <div class="greeting">
-        <a class="sign-out" href='/sign-out.html'>{{ _("Sign out") }}</a>
+        <a class="sign-out" id="sign-out" href='/sign-out.html'>{{ _("Sign out") }}</a>
 
         {% set quick = utcnow() - SESSION_TIMEOUT  %}
         {% if user.participant.claimed_time > quick %}

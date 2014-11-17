@@ -108,6 +108,7 @@ Gratipay.signOut = function() {
         jQuery.ajax({
             url: '/sign-out.html',
             type: 'POST',
+            contentType: 'application/x-www-form-urlencoded', // avoid a 415 response
             success: function() {
                 window.location.href = window.location.href;
             },
