@@ -77,7 +77,7 @@ def with_others(obj):
     </div>
 {% else %}
     <div class="group">
-        <div class="col1">
+        <div class="col0">
             <h2>{{ _("Statement") }}</h2>
             <div class="statement markdown-output">
                 {% if statement %}
@@ -86,9 +86,8 @@ def with_others(obj):
                 <p><i>{{ _('No statement.') }}</i></p>
                 {% endif %}
             </div>
-        </div>
-        <div class="col2">
             <div class="goal">
+                <h2>{{ _('Funding Goal') }}</h2>
                 {% if participant.goal == None %}
                 {{ GRATEFUL }}
                 {% elif participant.goal == 0 %}

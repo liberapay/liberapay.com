@@ -24,8 +24,8 @@ body {
                 width: 180px;
             }
             &:hover {
-                padding-top: 5px;
-                border-top: 5px solid $gold;
+                padding-top: 6px;
+                border-top: 4px solid $gold;
                 background: transparentize($gold, 0.8);
             }
         }
@@ -40,19 +40,19 @@ body {
             margin: 0;
             a {
                 height: 78px;
-                font-size: 16px;
-                line-height: 16px;
+                font: normal 16px/16px $Ideal;
                 display: inline-block;
                 padding: 31px 10px 31px 40px;
                 color: $black;
                 &.selected {
-                    padding-top: 26px;
-                    border-top: 5px solid $brown;
+                    padding-top: 27px;
+                    border-top: 4px solid $brown;
                     background: transparentize($brown, 0.8);
+                    font-weight: bold;
                 }
                 &:hover {
-                    padding-top: 26px;
-                    border-top: 5px solid $gold;
+                    padding-top: 27px;
+                    border-top: 4px solid $gold;
                     background: transparentize($gold, 0.8);
                 }
             }
@@ -67,6 +67,7 @@ body {
             font: normal 11px/13px $Mono;
         }
         li {
+            text-align: right;
         }
     }
 }
@@ -81,14 +82,19 @@ body {
     display: table-cell;
     vertical-align: top;
     width: 200px;
-    padding: 100px 0;
+    padding: 78px 0 40px;
     background: transparentize($brown, 0.1);
     color: $white;
 
-    .avatar img {
-        width: 160px;
-        height: 160px;
-        margin: -71px 0 20px 20px;
+    .avatar {
+        &.is-suspicious {
+            background: red;
+        }
+        img {
+            width: 160px;
+            height: 160px;
+            margin: -58px 0 20px 20px;
+        }
     }
 
     .nav {
@@ -119,6 +125,10 @@ body {
         line-height: 150%;
     }
 
+    .mono {
+        font: normal 12px/16px $Mono;
+    }
+
     table {
         width: 100%;
         margin-bottom: 10px;
@@ -141,42 +151,41 @@ body {
 #content {
     display: table-cell;
     vertical-align: top;
-    font: 300 16px/170% $Chronicle;
-
+    font: 300 16px/27px $Chronicle;
     padding: 0 40px 40px;
     background: transparentize($white, 0.03);
+
     h1 {
         color: $black;
-        font: bold 42px $Ideal;
-        padding: 40px 0 10px 0;
+        font: bold 28px/33px $Ideal;
+        padding: 40px 0 5px 0;
     }
     .nav {
         line-height: 100%;
         display: block;
-        height: 34px;
         position: relative;
-        left: -40px;
+        height: 24px;
+        margin-bottom: 20px;
 
         li {
             display: inline;
             margin: 0;
             float: left;
+            padding: 0 5px;
+            &:first-child { padding-left: 0; }
+            &:last-child { padding-right: 0; }
             a {
-                font: bold 16px/16px $Ideal;
-                height: 34px;
-                font-size: 14px;
-                line-height: 14px;
+                font: normal 14px/14px $Ideal;
+                height: 24px;
                 display: inline-block;
-                padding: 15px 5px 5px 40px;
-                color: $black;
+                padding: 5px 0;
+                color: $gray;
                 &.selected {
-                    padding-top: 13px;
-                    border-top: 2px solid $brown;
-                    background: transparentize($brown, 0.8);
+                    padding-bottom: 3px;
+                    border-bottom: 2px solid $green;
+                    font-weight: bold;
                 }
                 &:hover {
-                    padding-top: 13px;
-                    border-top: 2px solid $gold;
                     background: transparentize($gold, 0.8);
                 }
             }

@@ -34,10 +34,13 @@ a img {
 p, dd {
     margin: 0;
     padding: 0 0 1em;
+    &:last-child {
+        padding-bottom: 0;
+    }
 }
 dt {
     font-weight: bold;
-    padding:1em 0 0.25em;
+    padding: 1em 0 0.25em;
 }
 dt:target, dt:target + dd {
     -webkit-animation: target-fade 3s 1;

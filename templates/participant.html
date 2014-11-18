@@ -4,7 +4,7 @@
 
 {% block sidebar %}
 
-<div class="avatar">
+<div class="avatar{% if participant.is_suspicious %} is-suspicious{% endif %}">
     <a href="/{{ participant.username }}/">{{ avatar_img(participant) }}</a>
 </div>
 
@@ -18,7 +18,7 @@
 <div class="is-suspicious-indicator">Suspicious</div>
 {% endif %}
 
-<div class="padding {% if participant.is_suspicious %} is-suspicious{% endif %}">
+<div class="padding mono">
     {% set prefix = user.participant == participant and "my-" or "" %}
     {% set anon_giving = participant.anonymous_giving %}
     {% set g = participant.giving %}
