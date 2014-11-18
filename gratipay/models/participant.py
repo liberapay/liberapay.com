@@ -35,6 +35,7 @@ from gratipay.exceptions import (
     EmailAlreadyTaken,
     CannotRemovePrimaryEmail,
     EmailNotVerified,
+    TooManyEmailAddresses,
 )
 
 from gratipay.models import add_event
@@ -566,6 +567,9 @@ class Participant(Model, MixinTeam):
         if email == self.email_address:
             return 0
 
+        if len(self.get_emails('verified is null')) > 9:
+            raise TooManyEmailAddresses(email)
+
         nonce = str(uuid.uuid4())
         ctime = utcnow()
         try:
@@ -647,12 +651,12 @@ class Participant(Model, MixinTeam):
                AND address=%s
         """, (self.username, email))
 
-    def get_emails(self):
+    def get_emails(self, condition='true'):
         return self.db.all("""
             SELECT *
               FROM emails
-             WHERE participant=%s
-        """, (self.username,))
+             WHERE participant=%s AND {0}
+        """.format(condition), (self.username,))
 
     def remove_email(self, address):
         if address == self.email_address:

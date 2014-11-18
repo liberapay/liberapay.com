@@ -42,6 +42,9 @@ class CannotRemovePrimaryEmail(ProblemChangingEmail):
 class EmailNotVerified(ProblemChangingEmail):
     msg = "The email address '{}' is not verified."
 
+class TooManyEmailAddresses(ProblemChangingEmail):
+    msg = "You've reached the maximum number of email addresses we allow."
+
 
 class ProblemChangingNumber(Exception):
     def __str__(self):
