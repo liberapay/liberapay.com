@@ -5,7 +5,7 @@ from gratipay.utils import plural
 
 communities = community.get_list_for(website.db, None)
 ncommunities = len(communities)
-title = _("Browse")
+title = _("Explore")
 
 [-----------------------------]
 {% extends "templates/base.html" %}
@@ -25,7 +25,7 @@ title = _("Browse")
 {% endblock %}
 
 {% block heading %}
-    <h1>{{ _("Browse") }}</h1>
+    <h1>{{ _("Explore") }}</h1>
     <form class="communities">
         <select data-placeholder="{{ _("Find or add a community ...") }}" tabindex="1">
             <option></option>
