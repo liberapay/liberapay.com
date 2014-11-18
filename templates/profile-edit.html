@@ -37,7 +37,7 @@
     <!-- Funding Goal -->
     <div class="goal js-edit">
         <h2>{{ _("Funding Goal") }}
-            <button tabindex="400" class="edit">{{ _("Edit") }}</button>
+            <button class="edit">{{ _("Edit") }}</button>
         </h2>
         <div class="view">
             {% if user.participant.goal > 0 %}
@@ -54,26 +54,26 @@
             <input type="radio" name="goal" id="goal-yes" value="custom"
             {% if user.participant.goal > 0 %} checked="true"{% endif %}/>
             <label for="goal-yes">{{ GOAL_PARTS[0] }}$</label><input
-                name="goal_custom" id="goal-custom"
+                name="goal_custom" id="goal-custom" tabindex="202"
             {% if (user.participant.goal == None) or (user.participant.goal <= 0) %}
             {% else %}
             value="{{ format_decimal(user.participant.goal) }}"
             {% endif %} />
             <label for="goal-yes">{{ GOAL_PARTS[1] }}</label>
 
-            <br />
+            <br>
 
             <input type="radio" name="goal" id="goal-null" value="null"
             {% if user.participant.goal == None %} checked="true"{% endif %}/>
             <label for="goal-null">{{ GRATEFUL }}</label>
 
-            <br />
+            <br>
 
             <input type="radio" name="goal" id="goal-0" value="0.00"
             {% if user.participant.goal == 0 %} checked="true"{% endif %}/>
             <label for="goal-0">{{ PATRON }}</label>
 
-            <br />
+            <br>
 
             <input type="radio" name="goal" id="goal-negative" value="-1"
             {% if (user.participant.goal != None) and user.participant.goal < 0 %} checked="true"{% endif %}/>
