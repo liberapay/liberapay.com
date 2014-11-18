@@ -6,8 +6,8 @@
         @include border-radius(3px);
         color: #fff;
         padding: 0 8px;
-        font-size: 13px;
         display: block;
+        font-size: 13px;
         line-height: 25px;
         .caret {
             border-top: 4px solid #fff;
@@ -79,10 +79,25 @@
         }
     }
     #header & {
-        padding-top: 13px;
+        padding: 23px 40px 0 0;
+        float: right;
+        .dropdown-toggle {
+            @include border-radius(5px);
+            padding: 0 10px;
+            font-size: 16px;
+            line-height: 32px;
+            .caret {
+                border-top: 5px solid #fff;
+                border-right: 5px solid transparent;
+                border-left: 5px solid transparent;
+                margin-top: 13px;
+            }
+        }
         .dropdown-menu {
             left: auto;
+            top: 32px;
             right: 0;
+            @include border-radius(5px);
         }
     }
 }
