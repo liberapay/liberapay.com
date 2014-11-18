@@ -1,0 +1,39 @@
+from gratipay.utils import get_participant
+
+[-----------------------------------------------------------------------------]
+
+participant = get_participant(request, restrict=True)
+title = participant.username
+subhead = "Receiving"
+
+[-----------------------------------------------------------------------------]
+{% extends "templates/profile.html" %}
+{% block content %}
+{% if participant.receiving == 0 %}
+<p>{{ _('Not receiving anything.') }}</p>
+{% else %}
+{% set tip_distribution = participant.get_tip_distribution()[0] %}
+<div class="col1">
+    <h2>{{ _("Tips Received, by Number of Tips") }}</h2>
+    {% include "templates/tip-distribution.html" %}
+</div>
+
+<div class="col2">
+    <h2>{{ _("Tips Received, by Dollar Amount") }}</h2>
+    <table class="tip-distribution">
+        {% for amount, ncontributors, summed, pcontributors, psummed in tip_distribution %}
+        <tr>
+            <td class="dollar-sign">$</td>
+            <td class="amount">{{ amount }}</td>
+            <td colspan="2"></td>
+            <td class="count">
+                <span class="green bar" style="width: {{ psummed * 240 }}pt"></span>
+                {{ "%5.1f" % (psummed * 100) }}%
+                <span class="number">(${{ summed }})</span>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endif %}
+{% endblock %}
