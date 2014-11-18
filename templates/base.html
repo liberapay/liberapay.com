@@ -38,7 +38,7 @@
     <div id="header">
         <h1><a href="/"><img src="{{ website.asset('gratipay.svg') }}"
                      alt="Gratipay" /></a></h1>
-        {% set pages=[('/about/', _('About')), ('/explore/', _('Explore'))]%}
+        {% set pages=[('/about/', _('About')), ('/browse/', _('Browse'))]%}
         {% set current_page = path.raw.split('/')[1] %}
         {% include "templates/nav.html" %}
         {% if user.ANON %}
