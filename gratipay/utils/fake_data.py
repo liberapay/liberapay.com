@@ -89,7 +89,9 @@ def fake_tip_amount():
             + MIN_TIP)
 
     decimal_amount = decimal.Decimal(amount).quantize(decimal.Decimal('.01'))
-
+    while decimal_amount == decimal.Decimal('0.00'):
+        # https://github.com/gratipay/gratipay.com/issues/2950
+        decimal_amount = fake_tip_amount() 
     return decimal_amount
 
 
