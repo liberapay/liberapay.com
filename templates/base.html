@@ -52,7 +52,12 @@
                         <span class="my-total-giving">{{ format_currency(float(user.participant.giving), "USD") }}</span>/{{ _("wk") }}
                     </div>
                 </a>
-            </li><li><a id="sign-out" href="/sign-out.html">X</a></li>
+            </li>
+            <li>
+                <a id="sign-out" href="/sign-out.html">
+                    <img src="{{ website.asset('close-button.png') }}">
+                </a>
+            </li>
         </div>
         {% endif %}
     </div>
