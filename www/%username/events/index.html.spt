@@ -19,15 +19,15 @@ events = db.all(SQL, (unicode(participant.id),))
 {% block content %}
 
 <style>
-    td { padding: 4px; }
+    #events td { padding: 4px; }
 </style>
 <table id="events" class="centered">
 
     {% for e in events %}
     <tr>
-        <td>{{ e.ts }}</td>
-        <td>{{ e.type }}</td>
-        <td>{{ e.payload }}</td>
+        <td class="ts mono">{{ e.ts }}</td>
+        <td class="type mono">{{ e.type }}</td>
+        <td class="payload mono">{{ e.payload }}</td>
 
     </tr>
     {% endfor %}
