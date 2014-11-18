@@ -1,88 +1,88 @@
 .sign-in {
-  display: inline-block;
-  vertical-align: middle;
-  .dropdown-toggle {
-    background: $green;
-    @include border-radius(3px);
-    color: #fff;
-    padding: 0 8px;
-    font-size: 13px;
-    display: block;
-    line-height: 25px;
-    .caret {
-      border-top: 4px solid #fff;
-      border-right: 4px solid transparent;
-      border-left: 4px solid transparent;
-      margin-top: 11px;
+    display: inline-block;
+    vertical-align: middle;
+    .dropdown-toggle {
+        background: $green;
+        @include border-radius(3px);
+        color: #fff;
+        padding: 0 8px;
+        font-size: 13px;
+        display: block;
+        line-height: 25px;
+        .caret {
+            border-top: 4px solid #fff;
+            border-right: 4px solid transparent;
+            border-left: 4px solid transparent;
+            margin-top: 11px;
+        }
+        &.highlight {
+            @include box-shadow(0, 0, 8px, $green);
+            background: $darker-green;
+        }
     }
-    &.highlight {
-      @include box-shadow(0, 0, 8px, $green);
-      background: $darker-green;
-    }
-  }
-  .open .dropdown-toggle, .dropdown-toggle:hover {
-    background: $darker-green;
-  }
-  .dropdown-menu {
-    top: 24px;
-    @include border-radius(3px);
-    border: 0;
-    box-shadow: none;
-    background: $green;
-    min-width: 140px;
-    li {
-      margin: 0;
-      &.facebook button {
-        @include has-icon("facebook");
-      }
-      &.google button {
-        @include has-icon("google");
-      }
-      &.twitter button {
-        @include has-icon("twitter");
-      }
-      &.github button {
-        @include has-icon("github");
-      }
-      &.bitbucket button {
-        @include has-icon("bitbucket");
-      }
-      &.openstreetmap button {
-        @include has-icon("openstreetmap");
-      }
-      &:hover button {
+    .open .dropdown-toggle, .dropdown-toggle:hover {
         background: $darker-green;
-      }
     }
-    button {
-      color: #fff;
-      display: block;
-      width: 100%;
-      padding: 3px 8px;
-      margin: 0;
-      text-align: left;
-      position: relative;
-      font-size: 13px;
-      border: none;
-      @include border-radius(0);
-      background: none;
-    }
-    button:before {
-      position: absolute;
-      top: 4px;
-      right: 5px;
-    }
-    form {
-      display: block;
-      margin: 0;
-      padding: 0;
-    }
-  }
-  #header & {
-    padding-top: 13px;
     .dropdown-menu {
-      left: auto;
-      right: 0;
+        top: 24px;
+        @include border-radius(3px);
+        border: 0;
+        box-shadow: none;
+        background: $green;
+        min-width: 140px;
+        li {
+            margin: 0;
+            &.facebook button {
+                @include has-icon("facebook");
+            }
+            &.google button {
+                @include has-icon("google");
+            }
+            &.twitter button {
+                @include has-icon("twitter");
+            }
+            &.github button {
+                @include has-icon("github");
+            }
+            &.bitbucket button {
+                @include has-icon("bitbucket");
+            }
+            &.openstreetmap button {
+                @include has-icon("openstreetmap");
+            }
+            &:hover button {
+                background: $darker-green;
+            }
+        }
+        button {
+            color: #fff;
+            display: block;
+            width: 100%;
+            padding: 3px 8px;
+            margin: 0;
+            text-align: left;
+            position: relative;
+            font-size: 13px;
+            border: none;
+            @include border-radius(0);
+            background: none;
+        }
+        button:before {
+            position: absolute;
+            top: 4px;
+            right: 5px;
+        }
+        form {
+            display: block;
+            margin: 0;
+            padding: 0;
+        }
     }
-  }
+    #header & {
+        padding-top: 13px;
+        .dropdown-menu {
+            left: auto;
+            right: 0;
+        }
+    }
 }
