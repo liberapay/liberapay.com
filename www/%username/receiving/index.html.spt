@@ -2,16 +2,43 @@ from gratipay.utils import get_participant
 
 [-----------------------------------------------------------------------------]
 
-participant = get_participant(request, restrict=True)
+participant = get_participant(request, restrict=False)
+if participant.anonymous_receiving:
+    if user.ANON or user.participant != participant and not user.ADMIN:
+        request.redirect('../')
+
 title = participant.username
 subhead = "Receiving"
 
 [-----------------------------------------------------------------------------]
 {% extends "templates/profile.html" %}
 {% block content %}
-{% if participant.receiving == 0 %}
-<p>{{ _('Not receiving anything.') }}</p>
+
+{% if participant == user.participant %}
+<h2>{{ _("You receive {0} per week",
+    "<span class='my-total-giving'>" + format_currency(participant.receiving, "USD") + "</span>") }}</h2>
 {% else %}
+<h2>{{ _("{0} receives {1} per week", participant.username, format_currency(participant.receiving, "USD")) }}</h2>
+{% endif %}
+
+<div class="col1">
+    <div class="chart-wrapper">
+        <a name="gifts"></a>
+        <h2>{{ _("Dollars Received Per Week") }}</h2>
+        <div class="chart" id="chart_receipts"></div>
+        <div class="x-axis">{{ _("weeks") }}</div>
+    </div>
+</div>
+<div class="col2">
+    <div class="chart-wrapper">
+        <a name="gifts"></a>
+        <h2>{{ _("Number of Patrons Per Week") }}</h2>
+        <div class="chart" id="chart_npatrons"></div>
+        <div class="x-axis">{{ _("weeks") }}</div>
+    </div>
+</div>
+
+{% if participant.receiving > 0 %}
 {% set tip_distribution = participant.get_tip_distribution()[0] %}
 <div class="col1">
     <h2>{{ _("Tips Received, by Number of Tips") }}</h2>
@@ -36,4 +63,13 @@ subhead = "Receiving"
     </table>
 </div>
 {% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+    jQuery.get('../charts.json', Gratipay.charts.make);
+});
+</script>
+{{ super() }}
 {% endblock %}

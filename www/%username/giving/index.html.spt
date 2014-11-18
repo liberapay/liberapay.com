@@ -3,8 +3,7 @@ from gratipay.utils import get_participant
 [-----------------------------------------------------------------------------]
 
 participant = get_participant(request, restrict=True)
-tips, total, unclaimed_tips, unclaimed_total = \
-                                           participant.get_giving_for_profile()
+tips, total, unclaimed_tips, unclaimed_total = participant.get_giving_for_profile()
 title = participant.username
 subhead = "Giving"
 cancelled_tips = [x for x in tips if x.amount == 0][:10]

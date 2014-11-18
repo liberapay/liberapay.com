@@ -11,32 +11,24 @@
 
 {% block subnav %}
 {% set current_page = path.raw.split('/')[2] %}
-{% if user.participant == participant or user.ADMIN %}
-    {% set pages = [
-        ('/', _('Profile')),
-        ('/giving/', _('Giving')),
-        ('/receiving/', _('Receiving')),
-        ('/history/', _('History')),
-        ('/widgets/', _('Widgets')),
-        ('/account/', _('Account')),
-    ] %}
-    <ul class="nav">
-        {% for slug, name in pages %}
-        <li><a href="/{{ participant.username }}{{ slug }}"{% if slug.strip('/') == current_page %} class="selected"{% endif %}>{{ _(name) }}</a></li>
-        {% endfor %}
-
-        <li><a href="/{{ participant.username }}/members/" id="members-button"
-            {% if not participant.show_as_team(user) %} class="hidden"{% endif %}
-            {% if 'members' == current_page %} class="selected"{% endif %}>{{ _('Members') }}</a></li>
-
-        {% if user.ADMIN %}
-        <li><a href="/{{ participant.username }}/events/"{% if 'events' == current_page %} class="selected"{% endif %}>Events</a></li>
-        {% endif %}
-    </ul>
-{% elif participant.show_as_team(user) %}
+{% set show_members = participant.show_as_team(user) %}
+{% set show_receiving = user.participant == participant or not participant.anonymous_receiving %}
+{% set show_profile = show_members or show_receiving %}
+{% set pages = [ ('/',           _('Profile'),      True,           show_profile)
+               , ('/giving/',    _('Giving'),       True,           False)
+               , ('/receiving/', _('Receiving'),    True,           show_receiving)
+               , ('/history/',   _('History'),      True,           False)
+               , ('/widgets/',   _('Widgets'),      True,           False)
+               , ('/account/',   _('Account'),      True,           False)
+               , ('/members/',   _('Members'),      show_members,   show_members)
+               , ('/events/',    _('Events'),       False,          False)
+                ] %}
+{% set pages = filter_profile_subnav(user, participant, pages) %}
+{% if pages %}
 <ul class="nav">
-    <li><a href="/{{ participant.username }}/" {% if '' == current_page %} class="selected"{% endif %}>{{ _('Profile') }}</a></li>
-    <li><a href="/{{ participant.username }}/members/" {% if 'members' == current_page %} class="selected"{% endif %}>{{ _('Members') }}</a></li>
+    {% for slug, name, show_them, show_others in pages %}
+    <li{% if slug == '/members/' and not participant.show_as_team(user) %} class="hidden"{% endif %}><a href="/{{ participant.username }}{{ slug }}"{% if slug.strip('/') == current_page %} class="selected"{% endif %}>{{ _(name) }}</a></li>
+    {% endfor %}
 </ul>
 {% endif %}
 {% endblock %}

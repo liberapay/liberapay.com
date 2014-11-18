@@ -14,10 +14,6 @@ tip_or_pledge = "tip"
 title = participant.username      # used in the title tag
 username = participant.username   # used in footer shared with on/$platform/
                                   # pages
-show_charts = True
-if participant.anonymous_receiving:
-    if user.ANON or user.participant.username != username and not user.ADMIN:
-        show_charts = False
 
 accounts = participant.get_accounts_elsewhere()
 
@@ -78,14 +74,12 @@ def with_others(obj):
 {% else %}
     <div class="group">
         <div class="col0">
+            {% if statement %}
             <h2>{{ _("Statement") }}</h2>
             <div class="statement markdown-output">
-                {% if statement %}
                 {{ markdown.render(statement) }}
-                {% else %}
-                <p><i>{{ _('No statement.') }}</i></p>
-                {% endif %}
             </div>
+            {% endif %}
             <div class="goal">
                 <h2>{{ _('Funding Goal') }}</h2>
                 {% if participant.goal == None %}
@@ -99,7 +93,6 @@ def with_others(obj):
                 {% endif %}
             </div>
 
-            {% include "templates/charts-for-user.html" %}
             {% include "templates/team-listing.html" %}
             {% include "templates/community-listing.html" %}
             {% include "templates/connected-accounts.html" %}
@@ -108,20 +101,9 @@ def with_others(obj):
 {% endif %}
 {% endblock %}
 
-
-
 {% block scripts %}
-{% if show_charts %}
-<script>
-$(document).ready(function() {
-    jQuery.get('./charts.json', Gratipay.charts.make);
-});
-</script>
-{% endif %}
-
 {% if user.participant == participant %}
 <script>$(document).ready(Gratipay.profile.init);</script>
 {% endif %}
-
 {{ super() }}
 {% endblock %}
