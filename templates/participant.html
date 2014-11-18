@@ -34,7 +34,7 @@
         </tr>
         <tr>
             <td class="left">{{ _('Receives') }}</td>
-            <td class="right">{{ receiving_str }}</td>
+            <td class="right">{{ receiving_str if participant.accepts_tips else '&mdash;' }}</td>
         </tr>
     </table>
 

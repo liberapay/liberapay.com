@@ -3,8 +3,10 @@ from gratipay.utils import get_participant
 [-----------------------------------------------------------------------------]
 
 participant = get_participant(request, restrict=False)
-if participant.anonymous_receiving:
-    if user.ANON or user.participant != participant and not user.ADMIN:
+if participant.goal < 0:
+    request.redirect('../')
+elif participant.anonymous_receiving:
+    if user.ANON or (user.participant != participant and not user.ADMIN):
         request.redirect('../')
 
 title = participant.username
