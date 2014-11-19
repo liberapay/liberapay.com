@@ -79,25 +79,42 @@
         }
     }
     #header & {
-        padding: 23px 40px 0 0;
         float: right;
+        &:hover {
+            .dropdown-toggle {
+                background: transparentize($gold, 0.8);
+                padding-top: 27px;
+                border-top: 4px solid $gold;
+            }
+        }
         .dropdown-toggle {
-            @include border-radius(5px);
-            padding: 0 10px;
+            @include border-radius(0);
+            background: none;
+            padding: 31px 10px 31px 40px;
+            color: $black;
+
             font-size: 16px;
-            line-height: 32px;
+            line-height: 16px;
+
             .caret {
-                border-top: 5px solid #fff;
+                border-top: 5px solid $black;
                 border-right: 5px solid transparent;
                 border-left: 5px solid transparent;
-                margin-top: 13px;
+                margin-top: 6px;
             }
         }
         .dropdown-menu {
             left: auto;
-            top: 32px;
+            top: 76px;
             right: 0;
-            @include border-radius(5px);
+            @include border-radius(0);
+            background: transparentize($gold, 0.8);
+            button {
+                color: $black;
+                &:hover {
+                    background: transparentize($brown, 0.8);
+                }
+            }
         }
     }
 }
