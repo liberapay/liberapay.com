@@ -27,7 +27,7 @@
 {% if pages %}
 <ul class="nav">
     {% for slug, name, show_them, show_others in pages %}
-    <li{% if slug == '/members/' and not participant.show_as_team(user) %} class="hidden"{% endif %}><a href="/{{ participant.username }}{{ slug }}"{% if slug.strip('/') == current_page %} class="selected"{% endif %}>{{ _(name) }}</a></li>
+    <li{% if slug == '/members/' %} class="members{% if not participant.show_as_team(user) %} hidden{% endif %}"{% endif %}><a href="/{{ participant.username }}{{ slug }}"{% if slug.strip('/') == current_page %} class="selected"{% endif %}>{{ _(name) }}</a></li>
     {% endfor %}
 </ul>
 {% endif %}
