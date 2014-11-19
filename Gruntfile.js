@@ -3,6 +3,11 @@ var spawn = require('child_process').spawn;
 var fs = require('fs');
 var ini = require('ini');
 var yaml = require('js-yaml');
+var path = require('path');
+
+// Add node_modules/.bin to PATH.  We'll need it later for phantomjs
+process.env.PATH = process.env.PATH + path.delimiter +
+                   path.join(process.cwd(), 'node_modules', '.bin');
 
 module.exports = function(grunt) {
     'use strict';
@@ -25,12 +30,12 @@ module.exports = function(grunt) {
 
             js: {
                 files: '<%= jshint.js %>',
-                tasks: ['jshint:js', 'dalek']
+                tasks: ['jshint:js', 'webdriver']
             },
 
             tests: {
                 files: '<%= jshint.tests %>',
-                tasks: ['jshint:tests', 'dalek']
+                tasks: ['jshint:tests', 'webdriver']
             }
         },
 
@@ -51,23 +56,33 @@ module.exports = function(grunt) {
             }
         },
 
-        dalek: {
-            tests: 'tests/js/**/test_*.js'
+        webdriver: {
+            tests: {
+                tests: 'tests/js/test_*.js'
+            },
+
+            options: {
+                desiredCapabilities: {
+                    browserName: 'phantomjs'
+                }
+            }
         }
     });
 
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-dalek');
+    grunt.loadNpmTasks('grunt-webdriver');
 
     grunt.registerTask('default', ['test']);
-    grunt.registerTask('test', ['jshint', 'aspen:start', 'dalek']);
+    grunt.registerTask('test', ['jshint', 'aspen:start', 'webdriver']);
 
     grunt.registerTask('aspen:start', 'Start Aspen (if necessary)', function() {
         var done = this.async();
 
         grunt.config.requires('env.CANONICAL_HOST');
         var canonicalHost = grunt.config.get('env.CANONICAL_HOST') || 'localhost:8537';
+
+        var port = parseInt(canonicalHost.split(':').pop());
 
         http.get('http://' + canonicalHost + '/', function(res) {
             grunt.log.writeln('Aspen seems to be running already. Doing nothing.');
@@ -80,9 +95,11 @@ module.exports = function(grunt) {
             var aspen_out = [];
 
             var bin = 'env/' + (process.platform == 'win32' ? 'Scripts' : 'bin');
-            var child = spawn(bin+'/gunicorn',
-                              ['--bind', ':8537', '--workers', '1', 'aspen.wsgi:website'],
-                              {env: grunt.config.get('env')});
+            var child = spawn(
+                bin + '/gunicorn',
+                ['--bind', ':' + port, '--workers', '1', 'aspen.wsgi:website'],
+                { env: grunt.config.get('env') }
+            );
 
             child.stdout.setEncoding('utf8');
             child.stderr.setEncoding('utf8');
@@ -109,9 +126,7 @@ module.exports = function(grunt) {
                 }
             });
 
-            process.on('exit', function() {
-                child.kill();
-            });
+            process.on('exit', child.kill.bind(child));
         });
     });
 };
