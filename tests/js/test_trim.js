@@ -1,35 +1,57 @@
-module.exports = {
+var assert = require('assert');
 
-    'should strip all Unicode': function(test) {
-        test.expect(2);
+describe('Gratipay.trim()', function() {
 
-        test.open('http://localhost:8537')
-            .execute(function() {
-                this.assert.ok(window.Gratipay.trim('˚aø¶') == 'a', '"˚aø¶" should become "a"');
-                this.assert.ok(window.Gratipay.trim('封b') == 'b', '"封b" should become "b"');
-            })
-            .done();
-    },
+    it('should strip all unicode', function(done) {
+        browser
+            .url('http://localhost:8537')
+            .execute(
+                function() {
+                    return {
+                        a: window.Gratipay.trim('˚aø¶'),
+                        b: window.Gratipay.trim('封b'),
+                    };
+                },
+                function(err, res) {
+                    assert.equal(res.value.a, 'a', '"˚aø¶" should become "a"');
+                    assert.equal(res.value.b, 'b', '"封b" should become "b"');
+                }
+            )
+            .call(done);
+    });
 
-    'should strip non-printable ASCII': function(test) {
-        test.expect(1);
+    it('should strip non-printable ASCII', function(done) {
+        browser
+            .url('http://localhost:8537')
+            .execute(
+                function() {
+                    return {
+                        c: Gratipay.trim('\n\t\rc')
+                    };
+                },
+                function(err, res) {
+                    assert.equal(res.value.c, 'c', '"\\n\\t\\rc" should become "c"');
+                }
+            )
+            .call(done);
+    });
 
-        test.open('http://localhost:8537')
-            .execute(function() {
-                this.assert.ok(Gratipay.trim('\n\t\rc') == 'c', '"\\n\\t\\rc" should become "c"');
-            })
-            .done();
-    },
+    it('should trim leading and trailing whitespace', function(done) {
+        browser
+            .url('http://localhost:8537')
+            .execute(
+                function() {
+                    return [
+                        window.Gratipay.trim('  foo bar '),
+                        window.Gratipay.trim(' foo  bar ')
+                    ];
+                },
 
-    'should trim leading and trailing whitespace': function(test) {
-        test.expect(2);
-
-        test.open('http://localhost:8537')
-            .execute(function() {
-                this.assert.ok(window.Gratipay.trim('  foo bar ') == 'foo bar', '"  foo bar " should become "foo bar"');
-                this.assert.ok(window.Gratipay.trim(' foo  bar ') == 'foo  bar', '" foo  bar " should become "foo  bar"');
-            })
-            .done();
-    },
-
-};
+                function(err, res) {
+                    assert.equal(res.value[0], 'foo bar', '"  foo bar " should become "foo bar"');
+                    assert.equal(res.value[1], 'foo  bar', '" foo  bar " should become "foo  bar"');
+                }
+            )
+            .call(done);
+    });
+});

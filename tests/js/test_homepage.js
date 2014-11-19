@@ -1,12 +1,15 @@
-module.exports = {
+var assert = require('assert');
 
-    'Copy should render correctly': function(test) {
-        test.expect(2);
-
-        test.open('http://localhost:8537')
-            .assert.text('.pitch h1').is('Weekly Payments')
-            .assert.text('.action h1').is('Sign In')
-            .done();
-    },
-
-};
+describe('homepage', function() {
+    it('should render copy correctly', function(done) {
+        browser
+            .url('http://localhost:8537')
+            .getText('.pitch h1', function(err, text) {
+                assert.equal(text, 'Weekly Payments');
+            })
+            .getText('.action h1', function(err, text) {
+                assert.equal(text, 'Sign In');
+            })
+            .call(done);
+    });
+});
