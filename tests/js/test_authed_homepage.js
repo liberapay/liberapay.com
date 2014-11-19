@@ -1,5 +1,5 @@
 var assert = require('assert');
-var createSession = require('./_session.js');
+var createSession = require('./utils/session.js');
 
 describe('authed homepage', function() {
     beforeEach(function(done) {
