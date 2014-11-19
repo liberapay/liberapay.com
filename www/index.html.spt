@@ -35,7 +35,6 @@ from gratipay.security.user import SESSION_TIMEOUT
     <style>
         #header, #footer { display: none; }
         #upgrade_browser .container { display: block; }
-        html, body { height: 100%; min-height: 100%; }
     </style>
 {% endblock %}
 
@@ -48,21 +47,19 @@ from gratipay.security.user import SESSION_TIMEOUT
 {{ super() }}
 {% endblock %}
 
+{% block sidebar %}
+    <img src="{{ website.asset('gratipay.white.svg') }}" alt="Gratipay">
+    <h1>{{ _("Weekly Payments") }}</h1>
+    <p>{{ _("Motivated by Gratitude") }}</p>
+
+    <p>{{ _("Sustainably crowdfund your business, personal projects, or charity, with {0}no extra fees{1}.",
+        "<span>", "</span>") }}</p>
+
+    <p><a href="/about/">{{ _("Learn more") }}</a></p>
+{% endblock %}
+
 {% block heading %}{% endblock %}
-{% block whole_page %}
-<div class="homepage">
-    <div class="pitch">
-        <img src="{{ website.asset('gratipay.white.svg') }}" alt="Gratipay">
-        <h1>{{ _("Weekly Payments") }}</h1>
-        <p>{{ _("Motivated by Gratitude") }}</p>
-
-        <p>{{ _("Sustainably crowdfund your business, personal projects, or charity, with {0}no extra fees{1}.",
-            "<span>", "</span>") }}</p>
-
-        <p><a href="/about/">{{ _("Learn more") }}</a></p>
-
-    </div>
-    
+{% block content %}
     {% if user.ANON %}
     <div class="action">
         {{ _("{0}Sign In{1} {2}to Accept Weekly Payments{3}",

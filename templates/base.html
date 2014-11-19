@@ -32,10 +32,10 @@
     </script>
     {% endif %}
 </head>
-<body>
-    {% include "templates/support-gratipay.html" %}
+<body{% if path.raw == '/' %} id="homepage"{% endif %}><table id="layout">
 
-    <div id="header">
+    <tr><td id="header" colspan="2">
+        {% include "templates/support-gratipay.html" %}
         <h1><a href="/"><img src="{{ website.asset('gratipay.svg') }}"
                      alt="Gratipay" /></a></h1>
         {% set pages=[('/about/', _('About')), ('/explore/', _('Explore'))]%}
@@ -61,20 +61,18 @@
             </li>
         </div>
         {% endif %}
-    </div>
+    </td></tr>
 
-    <div id="wrapper"><div id="wrapper-2">
-        {% block whole_page %}
-        <div id="sidebar">{% block sidebar %}{% endblock %}</div>
-        <div id="content" class="group">
+    <tr>
+        <td id="sidebar">{% block sidebar %}{% endblock %}</td>
+        <td id="content" class="group">
             {% block heading %}{% if title %}<h1>{{ title }}</h1>{% endif %}{% endblock %}
             {% block subnav %}{% endblock %}
             {% block content %}{% endblock %}
-        </div>
-        {% endblock %}
-    </div></div>
+        </td>
+    </tr>
 
-    <div id="footer">
+    <tr><td id="footer" colspan="2">
         <div class="social">
             <a href="https://twitter.com/gratipay"><img src="{{ website.asset('platforms/twitter.16.png') }}" /></a>
             <a href="https://github.com/gratipay/gratipay.com"><img src="{{ website.asset('platforms/github.16.png') }}" /></a>
@@ -93,7 +91,7 @@
             <li><a href='http://inside.gratipay.com/appendices/colophon'>{{ _("Colophon") }}</a></li>
             <li><a href='/security.txt'>{{ _("Security") }}</a></li>
         </ul>
-    </div>
+    </td></tr>
 
     <script>
         // http://stackoverflow.com/questions/7131909/facebook-callback-appends-to-return-url
@@ -148,5 +146,5 @@
         {% endif %}
     </script>
     {% endif %}
-</body>
+</div></body>
 </html>

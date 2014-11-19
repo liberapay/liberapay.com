@@ -1,3 +1,6 @@
+html, body { height: 100%; min-height: 100%; }
+#layout { min-height: 100%; }
+
 body {
     background: #434343 url("pennies.jpg") no-repeat;
     background-size: 100% auto;
@@ -5,10 +8,13 @@ body {
     line-height: 100%;
 }
 
+#layout {
+    width: 100%;
+}
+
 #header {
     background: transparentize($white, 0.1);
     border-bottom: 1px solid $brown;
-    position: relative;
 
     h1 {
         line-height: 100%;
@@ -77,15 +83,8 @@ body {
         }
     }
 }
-#wrapper {
-    display: table;
-    width: 100%;
-}
-#wrapper-2 {
-    display: table-row;
-}
 #sidebar {
-    display: table-cell;
+    height: 100%;
     vertical-align: top;
     width: 200px;
     padding: 78px 0 40px;
@@ -151,7 +150,7 @@ body {
     }
 }
 #content {
-    display: table-cell;
+    height: 100%;
     vertical-align: top;
     font: 300 16px/27px $Chronicle;
     padding: 0 40px 40px;
@@ -239,7 +238,6 @@ body {
 }
 
 #footer {
-    @include clearfix;
     background: transparentize($white, 0.1);
     border-top: 1px solid $brown;
     padding: 10px 40px;

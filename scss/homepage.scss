@@ -1,10 +1,4 @@
-.homepage {
-
-    color: red; // so any anomalies are clear
-    display: table;
-    width: 100%;
-    min-height: 100%;
-    height: 100%;
+#homepage {
 
     span {
         white-space: nowrap;
@@ -37,18 +31,15 @@
         position: relative;
     }
 
-    .pitch {
+    #sidebar {
         width: 480px;
         padding: 256px 48px 128px 110px;
-        color: transparentize($white, 0.3);
-        background: transparentize($brown, 0.1);
         img {
             width: 384px;
             position: absolute;
             top: 48px;
             left: 48px;
         }
-        h1 { color: $white; }
         a {
             color: transparentize($gold, 0.2);
             &:hover {
@@ -57,10 +48,12 @@
         }
     }
 
+    #content {
+        background: transparentize($white, 0.1);
+    }
     .action,.greeting {
         padding: 256px 48px 128px;
         color: transparentize($brown, 0.2);
-        background: transparentize($white, 0.1);
         h1 { color: $brown; }
         a {
             color: transparentize($green, 0.3);
@@ -119,37 +112,4 @@
         line-height: 40px;
         margin-top: -40px;
     }
-
-    .support-gratipay {
-        position: absolute;
-        top: 24px;
-        left: 48px;
-        background: transparentize($gold, 0.7);
-
-        padding-right: 10px;
-        text-align: center;
-        margin: 0 0 24px;
-        border-radius: 3px;
-        .knobs {
-            width: 261px;
-            display: table;
-            position: static;
-            top: 0;
-            right: 0;
-            margin: 20px auto 0;
-            button {
-                width: 128px;
-                height: 40px;
-                font-size: 18px;
-            }
-            a {
-                width: 128px;
-                margin-top: 14px;
-            }
-        }
-        .help {
-            margin-top: 0;
-        }
-    }
-
 }
