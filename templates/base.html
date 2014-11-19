@@ -35,7 +35,6 @@
 <body{% if path.raw == '/' %} id="homepage"{% endif %}><table id="layout">
 
     <tr><td id="header" colspan="2">
-        {% include "templates/support-gratipay.html" %}
         <h1><a href="/"><img src="{{ website.asset('gratipay.svg') }}"
                      alt="Gratipay" /></a></h1>
         {% set pages=[('/about/', _('About')), ('/explore/', _('Explore'))]%}
@@ -59,8 +58,9 @@
                     <span class="screen-reader-text">Sign out</span>
                 </a>
             </li>
-        </div>
+        </ul>
         {% endif %}
+        {% include "templates/support-gratipay.html" %}
     </td></tr>
 
     <tr>
