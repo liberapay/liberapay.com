@@ -16,6 +16,7 @@ env: requirements.txt requirements_tests.txt setup.py
 				--unzip-setuptools \
 				--prompt="[gratipay] " \
 				--extra-search-dir=./vendor/ \
+				--always-copy \
 				./env/
 	$(pip) install -r requirements.txt
 	$(pip) install -r requirements_tests.txt

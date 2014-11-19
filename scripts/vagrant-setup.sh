@@ -3,28 +3,16 @@
 set -e
 
 # Set login directory to root vagrant share
-echo "cd /vagrant" > /etc/profile.d/login-directory.sh
+sudo sh -c "echo 'cd /vagrant' > /etc/profile.d/login-directory.sh"
 
-# Configure Postgres
-sudo -u postgres psql -U postgres -qf /vagrant/scripts/create_db.sql
-sudo -u postgres psql -U postgres -qf /vagrant/scripts/create_test_db.sql
-
-cd /vagrant
-
-# Warn if Windows newlines are detected and try to fix the problem
-if grep --quiet --binary --binary-files=without-match $(printf '\r') README.md; then
-    echo
-    cat scripts/crlf-warning.txt
-    echo
-
-    echo 'Running "git config core.autocrlf false"'
-    git config core.autocrlf false
-
-    exit 1
-fi
+# Configure Postgres (using system user 'postgres' run command
+# 'psql' with PostreSQL user 'postgres` to quietly execute scripts)
+sudo -u postgres psql -U postgres -qf /vagrant/scripts/reset-db.sql
+sudo -u postgres psql -U postgres -qf /vagrant/scripts/vagrant-postgre.sql
 
 # Set up the environment, the database, and run Gratipay
-cd /vagrant && make clean env schema data
+cd /vagrant
+sudo -u vagrant make clean env schema data
 
 # Output helper text
 cat <<EOF

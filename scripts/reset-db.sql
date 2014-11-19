@@ -1,0 +1,7 @@
+DROP DATABASE IF EXISTS "gratipay-test";
+DROP DATABASE IF EXISTS gratipay;
+DROP ROLE IF EXISTS gratipay;
+
+CREATE ROLE gratipay LOGIN PASSWORD 'gratipay' SUPERUSER;
+CREATE DATABASE gratipay WITH OWNER = gratipay;
+CREATE DATABASE "gratipay-test" WITH OWNER = gratipay;
