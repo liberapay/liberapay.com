@@ -2,8 +2,8 @@
     This is the top of the Gratipay CSS tree.
 */
 
-// include plain css files to reduce the number of http requests
 @import "reset";
+
 
 // Define some basic things that are used throughout the site.
 
@@ -24,18 +24,21 @@
 @import "lib/upgrade";
 @import "lib/linear_gradient";
 
+
 // Page layout styles
 
 @import "layout";
-@import "homepage";
 
 
 // Styles specific to certain pages.
 
+@import "homepage";
 @import "history";
 @import "team";
 @import "profile-edit";
 @import "markdown";
+@import "giving";
+
 
 @import "widgets/sign_in";
 @import "widgets/my_tip";
@@ -43,11 +46,9 @@
 @import "widgets/box";
 @import "widgets/leaderboard";
 @import "widgets/support_gratipay";
+@import "chosen";
 
 
 // Group media queries together.
 
 @import "responsiveness";
-
-// include plain css files to reduce the number of http requests
-@import "chosen";
