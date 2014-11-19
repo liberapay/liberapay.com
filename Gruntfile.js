@@ -3,6 +3,11 @@ var spawn = require('child_process').spawn;
 var fs = require('fs');
 var ini = require('ini');
 var yaml = require('js-yaml');
+var path = require('path');
+
+// Add node_modules/.bin to PATH.  We'll need it later for phantomjs
+process.env.PATH = process.env.PATH + path.delimiter +
+                   path.join(process.cwd(), 'node_modules', '.bin');
 
 module.exports = function(grunt) {
     'use strict';
@@ -58,7 +63,7 @@ module.exports = function(grunt) {
 
             options: {
                 desiredCapabilities: {
-                    browserName: 'chrome'
+                    browserName: 'phantomjs'
                 }
             }
         }
