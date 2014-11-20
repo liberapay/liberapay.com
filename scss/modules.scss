@@ -188,13 +188,19 @@ a.mini-user:hover {
 }
 
 #members { /* used on accounts elsewhere for GitHub org = Bitbucket team */
-    margin: 1em auto 1em;
-
     td, th {
         padding: 0 6px 6px;
         text-align: left;
         vertical-align: baseline;
+        font-family: $Ideal;
     }
+    th { // borrowed from elements/h2
+        font: bold 14px/14px $Ideal;
+        text-transform: uppercase;
+        padding: 34px 0 8px;
+    }
+    p + & th { padding-top: 13px; }
+    h2 + & th { padding-top: 26px; }
     .declines, .not-on-gratipay {
         font-size: 75%;
         a {

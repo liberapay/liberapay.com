@@ -26,6 +26,18 @@ p, dd {
         padding-bottom: 0;
     }
 }
+h2 {
+    color: $black;
+    font: bold 14px/14px $Ideal;
+    text-transform: uppercase;
+    padding: 34px 0 8px;
+}
+p + h2 {
+    padding-top: 13px;
+}
+h2 + h2 {
+    padding-top: 26px;
+}
 dt {
     font-weight: bold;
     padding: 21px 0 7px;

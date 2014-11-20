@@ -40,16 +40,6 @@ if is_team:
         if len(user_accounts) == 1 and platform.name in user_accounts:
             allow_team_connect = False
 
-if locked:
-    number = -2
-    description = 'has opted out of Gratipay.'
-elif is_team and not allow_pledges:
-    number = nmembers
-    description = team_description
-else:
-    number = participant.npatrons
-    description = 'has'
-
 [-----------------------------------------------------------------------------]
 {% from 'templates/avatar-url.html' import avatar_img with context %}
 
@@ -75,19 +65,22 @@ else:
     <a href="{{ account.html_url|e}}">{{ avatar_img(account) }}</a>
 </div>
 
-<h2>
-    {{ description }}
-</h2>
-{% if number >= 0 %}
-    <div class="number">{{ number }}</div>
-    <div class="unit">
-        {% if allow_pledges %}
-            {{ 'person' if number == 1 else 'people' }} ready to give
-        {% else %}
-            public member{{ '' if number == 1 else 's' }}
+<div class="padding mono">
+    <table>
+        {% if account.is_team %}
+        <tr>
+            <td class="left">{{ _("Team Members") }}</td>
+            <td class="right">{{ nmembers if nmembers > 0 else _('A Lot') }}</td>
+        </tr>
         {% endif %}
-    </div>
-{% endif %}
+        {% if not locked %}
+        <tr>
+            <td class="left">{{ _("Gifts Waiting") }}</td>
+            <td class="right">{{ participant.npatrons }}</td>
+        </tr>
+        {% endif %}
+    </table>
+</div>
 
 {% if allow_pledges %}
     {% include "templates/participant.tip.html" %}
@@ -174,7 +167,7 @@ else:
   {% if is_team and not locked %}
 
     {% if allow_pledges and members %}
-        <h2 style="text-align: center">
+        <h2>
             {{ user_name|e }} {{ team_description }}
             {% if nmembers > 0 %}
                 {{ nmembers }} public member{{ '' if nmembers == 1 else 's' }}
