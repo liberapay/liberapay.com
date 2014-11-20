@@ -30,14 +30,14 @@ a img {
 }
 p, dd {
     margin: 0;
-    padding: 0 0 1em;
+    padding: 0 0 21px;
     &:last-child {
         padding-bottom: 0;
     }
 }
 dt {
     font-weight: bold;
-    padding: 1em 0 0.25em;
+    padding: 21px 0 7px;
 }
 dt:target, dt:target + dd {
     -webkit-animation: target-fade 3s 1;
@@ -52,17 +52,17 @@ dt:target, dt:target + dd {
     100% { background-color: rgba(yellow,0); }
 }
 pre {
-    font: 9pt/13pt monospace;
-    margin: 0 0 1em 1em;
+    font: 11px/13px monospace;
+    margin: 0 0 11px 11px;
     padding: 0;
     overflow: auto;
 }
 li {
     margin: 0;
-    margin: 0 0 1em 1.5em;
+    margin: 0 0 21px 32px;
 }
 ol {
-    margin: 1em 0 0;
+    margin: 21px 0 0;
 }
 ol li {
     list-style: outside decimal;
@@ -94,16 +94,16 @@ input {
 }
 
 table.simple {
-    margin: 0 auto 1em;
+    margin: 0 auto 21px;
     th, td {
-        padding-right: 1em;
+        padding-right: 21px;
     }
     th {
         font-weight: bold;
     }
     td.right {
         text-align: right;
-        padding-right: 2em;
+        padding-right: 42px;
     }
 }
 .mono {
