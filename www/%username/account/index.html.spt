@@ -145,7 +145,7 @@ emails = participant.get_emails()
             </table>
         {% endif %}
 
-        <div class="emails">
+        <div id="emails" class="emails">
             <h2>{{ _("Email Addresses (Private)") }}</h2>
             <ul>
             {% for email in emails %}
