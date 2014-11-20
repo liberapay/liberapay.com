@@ -29,7 +29,6 @@ from gratipay.elsewhere.venmo import Venmo
 from gratipay.models.account_elsewhere import AccountElsewhere
 from gratipay.models.community import Community
 from gratipay.models.participant import Participant
-from gratipay.models.email_address_with_confirmation import EmailAddressWithConfirmation
 from gratipay.models import GratipayDB
 from gratipay.utils import COUNTRIES, COUNTRIES_MAP
 from gratipay.utils.cache_static import asset_etag
@@ -48,7 +47,6 @@ def db(env):
     db.register_model(Community)
     db.register_model(AccountElsewhere)
     db.register_model(Participant)
-    db.register_model(EmailAddressWithConfirmation)
     gratipay.billing.payday.Payday.db = db
 
     return db
