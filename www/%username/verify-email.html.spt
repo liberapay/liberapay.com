@@ -1,9 +1,11 @@
 """Verify a participant's email
 """
-from gratipay.utils import get_participant
+from cgi import escape
+from datetime import timedelta
+
 from aspen import Response
 from aspen.utils import utcnow
-from datetime import timedelta
+from gratipay.utils import get_participant
 
 [-----------------------------------------------------------------------------]
 
@@ -17,10 +19,6 @@ result = participant.verify_email(email, nonce)
 [-----------------------------------------------------------------------------]
 {% extends "templates/base.html" %}
 
-{% block scripts %}
-
-{% endblock %}
-
 {% block heading %}
     <h1>Verify Email</h1>
 {% endblock %}
@@ -30,8 +28,8 @@ result = participant.verify_email(email, nonce)
     {% if result == 0 %}
         <h1>{{ _("Success!") }}</h1>
 
-        <p>Your email address <b>{{ participant.email_address }}</b> is now
-        connected to your Gratipay account.</p>
+        <p>{{ _("Your email address {0} is now connected to your Gratipay account.",
+                "<b>%s</b>" % escape(email)) }}</p>
 
     {% elif result == 1  %}
         <h1>{{ _("Your verification email has expired.") }}</h1>
