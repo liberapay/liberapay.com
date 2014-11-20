@@ -39,14 +39,14 @@ def canonical(env):
     gratipay.canonical_host = env.canonical_host
 
 
-def db(env):
+def db(website, env):
     dburl = env.database_url
     maxconn = env.database_maxconn
     db = GratipayDB(dburl, maxconn=maxconn)
 
-    db.register_model(Community)
-    db.register_model(AccountElsewhere)
-    db.register_model(Participant)
+    for model in (Community, AccountElsewhere, Participant):
+        db.register_model(model)
+        model.website = website
     gratipay.billing.payday.Payday.db = db
 
     return db
