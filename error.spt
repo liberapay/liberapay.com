@@ -18,8 +18,9 @@ except ImportError:
 [----------------------------------------]
 
 style = ''
-msg = status_strings.get(response.code, 'Sorry').title()
+msg = status_strings.get(response.code, 'Unknown Error').title()
 err = response.body
+title = response.code
 if website.show_tracebacks and pygmentize:
     sio = StringIO()
     formatter = HtmlFormatter()
@@ -33,9 +34,8 @@ title = str(response.code)
 [----------------------------------------] text/html
 {% extends "templates/base.html" %}
 {% block content %}
-    <p style="margin: 3em 0;">{{ msg|e }}</p>
-    <pre>{{err|e}}</pre>
-    <p><a href="/"><button>Home</button></a></p>
+    <p>{{ msg|e }}</p>
+    <pre>{{ err|e }}</pre>
 {% endblock %}
 [----------------------------------------] application/json via json_dump
 { "error_code": response.code

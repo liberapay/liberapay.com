@@ -32,7 +32,12 @@
     </script>
     {% endif %}
 </head>
-<body{% if path.raw == '/' %} id="homepage"{% endif %}><table id="layout">
+{% set homepage = path.raw == '/' %}
+<body{% if homepage %} id="homepage"{% endif %}><table id="layout">
+    {% if not homepage %}
+    <col width="200px">
+    <col width="100%">
+    {% endif %}
 
     <tr><td id="header" colspan="2">
         <h1><a href="/"><img src="{{ website.asset('gratipay.svg') }}"
