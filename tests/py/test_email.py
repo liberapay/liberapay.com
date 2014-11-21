@@ -2,7 +2,7 @@ import json
 
 import mock
 
-from gratipay.exceptions import EmailAlreadyTaken
+from gratipay.exceptions import CannotRemovePrimaryEmail, EmailAlreadyTaken, EmailNotVerified
 from gratipay.models.participant import Participant
 from gratipay.testing import Harness
 
@@ -12,11 +12,12 @@ class TestEmail(Harness):
     def setUp(self):
         self.alice = self.make_participant('alice', claimed_time='now')
 
-    @mock.patch.object(Participant, 'send_email')
-    def hit_email_spt(self, action, address, send_email, user='alice', should_fail=False):
+    @mock.patch.object(Participant.website, 'mailer')
+    def hit_email_spt(self, action, address, mailer, user='alice', should_fail=False):
         P = self.client.PxST if should_fail else self.client.POST
         data = {'action': action, 'address': address}
-        return P('/alice/email.json', data, auth_as=user)
+        headers = {'HTTP_ACCEPT_LANGUAGE': 'fr,en'}
+        return P('/alice/email.json', data, auth_as=user, **headers)
 
     def verify_email(self, email, nonce, username='alice', should_fail=False):
         url = '/%s/verify-email.html?email=%s&nonce=%s' % (username, email, nonce)
@@ -108,29 +109,47 @@ class TestEmail(Harness):
         nonce2 = self.alice.get_email('alice@example.com').nonce
         assert nonce1 == nonce2
 
-    @mock.patch.object(Participant, 'send_email')
-    def test_cannot_update_email_to_already_verified(self, send_email):
+    @mock.patch.object(Participant.website, 'mailer')
+    def test_cannot_update_email_to_already_verified(self, mailer):
         bob = self.make_participant('bob', claimed_time='now')
         self.alice.add_email('alice@gratipay.com')
         nonce = self.alice.get_email('alice@gratipay.com').nonce
-        self.alice.verify_email('alice@gratipay.com', nonce)
-        with self.assertRaises(EmailAlreadyTaken):
-            bob.update_email('alice@gratipay.com')
-        assert self.alice.email_address == 'alice@gratipay.com'
-
-    @mock.patch.object(Participant, 'send_email')
-    def test_can_verify_email(self, send_email):
-        email = 'alice@gratipay.com'
-        self.alice.add_email(email)
-        nonce = self.alice.get_email(email).nonce
-        r = self.alice.verify_email(email, nonce)
+        r = self.alice.verify_email('alice@gratipay.com', nonce)
         assert r == 0
-        actual = Participant.from_username('alice').email_address
-        expected = 'alice@gratipay.com'
-        assert actual == expected
+
+        with self.assertRaises(EmailAlreadyTaken):
+            bob.add_email('alice@gratipay.com')
+            nonce = bob.get_email('alice@gratipay.com').nonce
+            bob.verify_email('alice@gratipay.com', nonce)
+
+        email_alice = Participant.from_username('alice').email_address
+        assert email_alice == 'alice@gratipay.com'
 
     def test_account_page_shows_emails(self):
         self.verify_and_change_email('alice@example.com', 'alice@example.net')
         body = self.client.GET("/alice/account/", auth_as="alice").body
         assert 'alice@example.com' in body
         assert 'alice@example.net' in body
+
+    def test_set_primary(self):
+        self.verify_and_change_email('alice@example.com', 'alice@example.net')
+        self.verify_and_change_email('alice@example.net', 'alice@example.org')
+        self.hit_email_spt('set-primary', 'alice@example.com')
+
+    def test_cannot_set_primary_to_unverified(self):
+        with self.assertRaises(EmailNotVerified):
+            self.hit_email_spt('set-primary', 'alice@example.com')
+
+    def test_remove_email(self):
+        # Can remove unverified
+        self.hit_email_spt('add-email', 'alice@example.com')
+        self.hit_email_spt('remove', 'alice@example.com')
+
+        # Can remove verified
+        self.verify_and_change_email('alice@example.com', 'alice@example.net')
+        self.verify_and_change_email('alice@example.net', 'alice@example.org')
+        self.hit_email_spt('remove', 'alice@example.com')
+
+        # Cannot remove primary
+        with self.assertRaises(CannotRemovePrimaryEmail):
+            self.hit_email_spt('remove', 'alice@example.net')
