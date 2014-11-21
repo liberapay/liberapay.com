@@ -1,0 +1,14 @@
+{{ _("Email change requested on Gratipay") }}
+
+[---] text/html
+<div style="text-align: center; font: normal 14px/21px Arial, sans-serif; color: #333;">
+    {{ _("We've received a request to connect {0} to the {1} account on Gratipay.",
+         '<b>%s</b><br>' % escape(email),
+         '<b><a href="https://gratipay.com/{0}">{0}</a></b>'.format(username)) }}
+    <br>
+    {{ _("If this wasn't you, contact us at {0}.", "support@gratipay.com") }}
+</div>
+
+[---] text/plain
+{{ _("We've received a request to connect {0} to the {1} account on Gratipay.", email, username) }}
+{{ _("If this wasn't you, contact us at {0}.", "support@gratipay.com") }}

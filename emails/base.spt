@@ -1,0 +1,35 @@
+[---] text/html
+<div style="text-align: center; padding: 20px 0; margin: 0;">
+    <img src="https://downloads.gratipay.com/email/gratipay.png" alt="Gratipay">
+</div>
+
+$body
+
+{% if include_unsubscribe %}
+    TODO
+{% endif %}
+
+<div style="text-align: center; color: #999; padding: 21px 0 0;">
+    <div style="font: normal 14px/21px Arial, sans-serif;">
+        {{ _("Something not right? Reply to this email for help.") }}
+    </div>
+    <div style="font: normal 10px/21px Arial, sans-serif;">
+        Sent by <a href="https://gratipay.com/" style="color: #999; text-decoration: underline;">Gratipay, LLC</a> | 716 Park Road, Ambridge, PA, 15003, USA
+    </div>
+</div>
+
+[---] text/plain
+{{ _("Greetings, program!") }}
+
+$body
+
+{% if include_unsubscribe %}
+    TODO
+{% endif %}
+
+{{ _("Something not right? Reply to this email for help.") }}
+
+----
+
+Sent by Gratipay, LLC, https://gratipay.com/
+716 Park Road, Ambridge, PA, 15003, USA

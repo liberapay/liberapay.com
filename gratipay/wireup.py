@@ -32,6 +32,7 @@ from gratipay.models.participant import Participant
 from gratipay.models import GratipayDB
 from gratipay.utils import COUNTRIES, COUNTRIES_MAP
 from gratipay.utils.cache_static import asset_etag
+from gratipay.utils.emails import compile_email_spt
 from gratipay.utils.i18n import ALIASES, ALIASES_R, get_function_from_rule, strip_accents
 
 def canonical(env):
@@ -42,18 +43,21 @@ def canonical(env):
 def db(website, env):
     dburl = env.database_url
     maxconn = env.database_maxconn
-    db = GratipayDB(dburl, maxconn=maxconn)
+    db = website.db = GratipayDB(dburl, maxconn=maxconn)
 
     for model in (Community, AccountElsewhere, Participant):
         db.register_model(model)
         model.website = website
     gratipay.billing.payday.Payday.db = db
 
-    return db
-
-def mail(env):
-    mailer = Participant.mailer = mandrill.Mandrill(env.mandrill_key)
-    return mailer
+def mail(website, env):
+    website.mailer = mandrill.Mandrill(env.mandrill_key)
+    website.emails = {}
+    emails_dir = website.project_root+'/emails/'
+    i = len(emails_dir)
+    for spt in find_files(emails_dir, '*.spt'):
+        base_name = spt[i:-4]
+        website.emails[base_name] = compile_email_spt(spt)
 
 def billing(env):
     balanced.configure(env.balanced_api_secret)

@@ -14,34 +14,6 @@ db = gratipay.wireup.db(env)
 gratipay.wireup.mail(env)
 
 
-INITIAL_EMAIL = dict(
-    subject="Connect to {username} on Gratipay?",
-    html="""\
-<div style="text-align: center; font: normal 14px/21px Arial, sans-serif; color: #333;">
-    We're working on adding email notifications to Gratipay (formerly Gittip)
-    and we're sending this email to confirm that you (<b>{email}</b>)
-    <br>
-    are the owner of the <b><a href="https://gratipay.com/{username}">{username}</a></b>
-    account on Gratipay. Sound familiar?
-    <br>
-    <br>
-    <a href="{link}" style="color: #fff; text-decoration:none; display:inline-block; padding: 0 15px; background: #396; font: normal 14px/40px Arial, sans-serif; white-space: nowrap; border-radius: 3px">Yes, proceed!</a>
-
-</div>
-""",
-    text="""\
-
-We're working on adding email notifications to Gratipay (formerly Gittip)
-and we're sending this email to confirm that you ({email}) are the owner
-of the {username} account on Gratipay. Sound familiar? Follow this link
-to finish connecting your email:
-
-{link}
-
-""",
-)
-
-
 def add_email(self, email):
     nonce = str(uuid.uuid4())
     ctime = utcnow()
@@ -53,7 +25,7 @@ def add_email(self, email):
 
     username = self.username_lower
     link = "https://gratipay.com/{username}/verify-email.html?email={email}&nonce={nonce}"
-    self.send_email(INITIAL_EMAIL,
+    self.send_email('initial',
                     email=email,
                     link=link.format(**locals()),
                     username=self.username,

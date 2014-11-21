@@ -10,6 +10,7 @@ of participant, based on certain properties.
 """
 from __future__ import print_function, unicode_literals
 
+from cgi import escape
 from datetime import timedelta
 from decimal import Decimal, ROUND_DOWN, ROUND_HALF_EVEN
 import uuid
@@ -42,8 +43,8 @@ from gratipay.models import add_event
 from gratipay.models._mixin_team import MixinTeam
 from gratipay.models.account_elsewhere import AccountElsewhere
 from gratipay.security.crypto import constant_time_compare
+from gratipay.utils import i18n, is_card_expiring
 from gratipay.utils.username import safely_reserve_a_username
-from gratipay.utils import emails, is_card_expiring
 
 
 ASCII_ALLOWED_IN_USERNAME = set("0123456789"
@@ -596,15 +597,13 @@ class Participant(Model, MixinTeam):
         host = gratipay.canonical_host
         username = self.username_lower
         link = "{scheme}://{host}/{username}/verify-email.html?email={email}&nonce={nonce}"
-        self.send_email(emails.VERIFICATION_EMAIL,
+        self.send_email('verification',
                         email=email,
                         link=link.format(**locals()),
-                        username=self.username,
                         include_unsubscribe=False)
         if self.email_address:
-            self.send_email(emails.VERIFICATION_NOTICE,
+            self.send_email('verification_notice',
                             new_email=email,
-                            username=self.username,
                             include_unsubscribe=False)
             return 2
         return 1
@@ -666,22 +665,28 @@ class Participant(Model, MixinTeam):
             c.run("DELETE FROM emails WHERE participant=%s AND address=%s",
                   (self.username, address))
 
-    def send_email(self, message, email=None, **params):
-        header = emails.HEADER
-        include_unsubscribe = params.pop('include_unsubscribe', True)
-        footer = emails.FOOTER if include_unsubscribe else emails.FOOTER_NO_UNSUBSCRIBE
-        if not email:
-            email = self.email_address
-        params['email'] = email
-        message = message.copy()
+    def send_email(self, spt_name, accept_lang=None, **context):
+        context['escape'] = escape
+        context['username'] = self.username
+        context.setdefault('include_unsubscribe', True)
+        email = context.setdefault('email', self.email_address)
+        langs = i18n.parse_accept_lang(accept_lang or self.email_lang or 'en')
+        locale = i18n.match_lang(langs, self.website)
+        i18n.add_helpers_to_context(self.website, context, locale)
+        spt = self.website.emails[spt_name]
+        base_spt = self.website.emails['base']
+        def render(t):
+            b = base_spt[t].render(context)
+            return b.replace('$body', spt[t].render(context))
+        message = {}
         message['from_email'] = 'support@gratipay.com'
         message['from_name'] = 'Gratipay Support'
         message['to'] = [{'email': email, 'name': self.username}]
-        message['subject'] = message['subject'].format(**params)
-        message['html'] = header['html'] + message['html'].format(**params) + footer['html']
-        message['text'] = header['text'] + message['text'].format(**params) + footer['text']
+        message['subject'] = spt['subject'].render(context)
+        message['html'] = render('text/html')
+        message['text'] = render('text/plain')
 
-        return self.mailer.messages.send(message=message)
+        return self.website.mailer.messages.send(message=message)
 
     def update_goal(self, goal):
         typecheck(goal, (Decimal, None))

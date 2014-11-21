@@ -16,5 +16,6 @@ BEGIN;
     -- The column we're going to replace it with is named `email_address`. This is only for **verified** emails.
     -- All unverified email stuff happens in the emails table and won't touch this attribute.
 
-    ALTER TABLE participants ADD COLUMN email_address text UNIQUE;
+    ALTER TABLE participants ADD COLUMN email_address text UNIQUE,
+                             ADD COLUMN email_lang text;
 END;
