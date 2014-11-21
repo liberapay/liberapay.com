@@ -38,7 +38,7 @@ def get_function_from_rule(rule):
     return eval('lambda n: ' + rule, {'__builtins__': {}})
 
 
-def get_text(request, loc, s, *a, **kw):
+def get_text(loc, s, *a, **kw):
     msg = loc.catalog.get(s)
     if msg:
         s = msg.string or s
@@ -104,10 +104,12 @@ def strip_accents(s):
     return ''.join(c for c in normalize('NFKD', s) if not combining(c))
 
 
-def get_locale_for_request(request, website):
-    accept_lang = request.headers.get("Accept-Language", "")
+def parse_accept_lang(accept_lang):
     languages = (lang.split(";", 1)[0] for lang in accept_lang.split(","))
-    languages = request.accept_langs = regularize_locales(languages)
+    return regularize_locales(languages)
+
+
+def match_lang(languages, website):
     for lang in languages:
         loc = website.locales.get(lang)
         if loc:
@@ -122,11 +124,17 @@ def format_currency_with_options(number, currency, locale='en', trailing_zeroes=
     return s
 
 
-def add_helpers_to_context(website, request):
-    context = request.context
-    loc = context['locale'] = get_locale_for_request(request, website)
+def set_up_i18n(website, request):
+    accept_lang = request.headers.get("Accept-Language", "")
+    langs = request.accept_langs = parse_accept_lang(accept_lang)
+    loc = match_lang(langs, website)
+    add_helpers_to_context(website, request.context, loc, request)
+
+
+def add_helpers_to_context(website, context, loc, request=None):
+    context['locale'] = loc
     context['decimal_symbol'] = get_decimal_symbol(locale=loc)
-    context['_'] = lambda s, *a, **kw: get_text(request, loc, s, *a, **kw)
+    context['_'] = lambda s, *a, **kw: get_text(loc, s, *a, **kw)
     context['ngettext'] = lambda *a, **kw: n_get_text(website, request, loc, *a, **kw)
     context['format_number'] = lambda *a: format_number(*a, locale=loc)
     context['format_decimal'] = lambda *a: format_decimal(*a, locale=loc)
