@@ -18,11 +18,20 @@
 @import "modules";  // bigger than a knob, but used in multiple places
 @import "elements"; // specific HTML elements (body, p, etc.)
 @import "loading-indicators";
+@import "markdown";
+@import "chosen";
 
 @import "lib/dropdown";
 @import "lib/chart";
 @import "lib/upgrade";
 @import "lib/linear_gradient";
+
+@import "widgets/sign_in";
+@import "widgets/my_tip";
+@import "widgets/tipr";
+@import "widgets/box";
+@import "widgets/leaderboard";
+@import "widgets/support_gratipay";
 
 
 // Page layout styles
@@ -32,21 +41,11 @@
 
 // Styles specific to certain pages.
 
-@import "homepage";
-@import "history";
-@import "team";
-@import "profile-edit";
-@import "markdown";
-@import "giving";
-
-
-@import "widgets/sign_in";
-@import "widgets/my_tip";
-@import "widgets/tipr";
-@import "widgets/box";
-@import "widgets/leaderboard";
-@import "widgets/support_gratipay";
-@import "chosen";
+@import "pages/homepage";
+@import "pages/history";
+@import "pages/team";
+@import "pages/profile-edit";
+@import "pages/giving";
 
 
 // Group media queries together.
