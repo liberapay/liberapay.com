@@ -16,6 +16,9 @@ email = qs.get('email', '')
 
 result = participant.verify_email(email, nonce)
 
+if not participant.email_lang:
+    participant.set_email_lang(request.headers.get("Accept-Language"))
+
 [-----------------------------------------------------------------------------]
 {% extends "templates/base.html" %}
 

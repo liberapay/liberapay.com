@@ -22,6 +22,9 @@ address = request.body['address']
 if not email_re.match(address):
     raise Response(400, "Invalid email address.")
 
+if not participant.email_lang:
+    participant.set_email_lang(request.headers.get("Accept-Language"))
+
 if action in ('add-email', 'resend'):
     r = participant.add_email(address)
 elif action == 'set-primary':

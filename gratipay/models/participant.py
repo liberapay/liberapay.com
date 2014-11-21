@@ -586,6 +586,13 @@ class Participant(Model, MixinTeam):
 
         return self.website.mailer.messages.send(message=message)
 
+    def set_email_lang(self, accept_lang):
+        if not accept_lang:
+            return
+        self.db.run("UPDATE participants SET email_lang=%s WHERE id=%s",
+                    (accept_lang, self.id))
+        self.set_attributes(email_lang=accept_lang)
+
 
     # Random Junk
     # ===========
