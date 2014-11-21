@@ -450,110 +450,8 @@ class Participant(Model, MixinTeam):
         self.set_attributes(**r._asdict())
 
 
-    # Random Junk
-    # ===========
-
-    def get_teams(self):
-        """Return a list of teams this user is a member of.
-        """
-        return self.db.all("""
-
-            SELECT team AS name
-                 , ( SELECT count(*)
-                       FROM current_takes
-                      WHERE team=x.team
-                    ) AS nmembers
-              FROM current_takes x
-             WHERE member=%s;
-
-        """, (self.username,))
-
-    @property
-    def accepts_tips(self):
-        return (self.goal is None) or (self.goal >= 0)
-
-
-    def insert_into_communities(self, is_member, name, slug):
-        participant_id = self.id
-        self.db.run("""
-
-            INSERT INTO community_members
-                        (ctime, name, slug, participant, is_member)
-                 VALUES ( COALESCE (( SELECT ctime
-                                        FROM community_members
-                                       WHERE participant=%(participant_id)s
-                                         AND slug=%(slug)s
-                                       LIMIT 1
-                                      ), CURRENT_TIMESTAMP)
-                        , %(name)s, %(slug)s, %(participant_id)s, %(is_member)s
-                         )
-              RETURNING ( SELECT count(*) = 0
-                            FROM community_members
-                           WHERE participant=%(participant_id)s
-                         )
-                     AS first_time_community
-
-        """, locals())
-
-
-    def change_username(self, suggested):
-        """Raise Response or return None.
-
-        Usernames are limited to alphanumeric characters, plus ".,-_:@ ",
-        and can only be 32 characters long.
-
-        """
-        # TODO: reconsider allowing unicode usernames
-        suggested = suggested and suggested.strip()
-
-        if not suggested:
-            raise UsernameIsEmpty(suggested)
-
-        if len(suggested) > 32:
-            raise UsernameTooLong(suggested)
-
-        if set(suggested) - ASCII_ALLOWED_IN_USERNAME:
-            raise UsernameContainsInvalidCharacters(suggested)
-
-        lowercased = suggested.lower()
-
-        if lowercased in gratipay.RESTRICTED_USERNAMES:
-            raise UsernameIsRestricted(suggested)
-
-        if suggested != self.username:
-            try:
-                # Will raise IntegrityError if the desired username is taken.
-                with self.db.get_cursor(back_as=tuple) as c:
-                    add_event(c, 'participant', dict(id=self.id, action='set', values=dict(username=suggested)))
-                    actual = c.one( "UPDATE participants "
-                                    "SET username=%s, username_lower=%s "
-                                    "WHERE username=%s "
-                                    "RETURNING username, username_lower"
-                                   , (suggested, lowercased, self.username)
-                                   )
-            except IntegrityError:
-                raise UsernameAlreadyTaken(suggested)
-
-            assert (suggested, lowercased) == actual # sanity check
-            self.set_attributes(username=suggested, username_lower=lowercased)
-
-        return suggested
-
-    def update_avatar(self):
-        avatar_url = self.db.run("""
-            UPDATE participants p
-               SET avatar_url = (
-                       SELECT avatar_url
-                         FROM elsewhere
-                        WHERE participant = p.username
-                     ORDER BY platform = 'github' DESC,
-                              avatar_url LIKE '%%gravatar.com%%' DESC
-                        LIMIT 1
-                   )
-             WHERE p.username = %s
-         RETURNING avatar_url
-        """, (self.username,))
-        self.set_attributes(avatar_url=avatar_url)
+    # Emails
+    # ======
 
     def add_email(self, email):
         """
@@ -687,6 +585,112 @@ class Participant(Model, MixinTeam):
         message['text'] = render('text/plain')
 
         return self.website.mailer.messages.send(message=message)
+
+
+    # Random Junk
+    # ===========
+
+    def get_teams(self):
+        """Return a list of teams this user is a member of.
+        """
+        return self.db.all("""
+
+            SELECT team AS name
+                 , ( SELECT count(*)
+                       FROM current_takes
+                      WHERE team=x.team
+                    ) AS nmembers
+              FROM current_takes x
+             WHERE member=%s;
+
+        """, (self.username,))
+
+    @property
+    def accepts_tips(self):
+        return (self.goal is None) or (self.goal >= 0)
+
+
+    def insert_into_communities(self, is_member, name, slug):
+        participant_id = self.id
+        self.db.run("""
+
+            INSERT INTO community_members
+                        (ctime, name, slug, participant, is_member)
+                 VALUES ( COALESCE (( SELECT ctime
+                                        FROM community_members
+                                       WHERE participant=%(participant_id)s
+                                         AND slug=%(slug)s
+                                       LIMIT 1
+                                      ), CURRENT_TIMESTAMP)
+                        , %(name)s, %(slug)s, %(participant_id)s, %(is_member)s
+                         )
+              RETURNING ( SELECT count(*) = 0
+                            FROM community_members
+                           WHERE participant=%(participant_id)s
+                         )
+                     AS first_time_community
+
+        """, locals())
+
+
+    def change_username(self, suggested):
+        """Raise Response or return None.
+
+        Usernames are limited to alphanumeric characters, plus ".,-_:@ ",
+        and can only be 32 characters long.
+
+        """
+        # TODO: reconsider allowing unicode usernames
+        suggested = suggested and suggested.strip()
+
+        if not suggested:
+            raise UsernameIsEmpty(suggested)
+
+        if len(suggested) > 32:
+            raise UsernameTooLong(suggested)
+
+        if set(suggested) - ASCII_ALLOWED_IN_USERNAME:
+            raise UsernameContainsInvalidCharacters(suggested)
+
+        lowercased = suggested.lower()
+
+        if lowercased in gratipay.RESTRICTED_USERNAMES:
+            raise UsernameIsRestricted(suggested)
+
+        if suggested != self.username:
+            try:
+                # Will raise IntegrityError if the desired username is taken.
+                with self.db.get_cursor(back_as=tuple) as c:
+                    add_event(c, 'participant', dict(id=self.id, action='set', values=dict(username=suggested)))
+                    actual = c.one( "UPDATE participants "
+                                    "SET username=%s, username_lower=%s "
+                                    "WHERE username=%s "
+                                    "RETURNING username, username_lower"
+                                   , (suggested, lowercased, self.username)
+                                   )
+            except IntegrityError:
+                raise UsernameAlreadyTaken(suggested)
+
+            assert (suggested, lowercased) == actual # sanity check
+            self.set_attributes(username=suggested, username_lower=lowercased)
+
+        return suggested
+
+    def update_avatar(self):
+        avatar_url = self.db.run("""
+            UPDATE participants p
+               SET avatar_url = (
+                       SELECT avatar_url
+                         FROM elsewhere
+                        WHERE participant = p.username
+                     ORDER BY platform = 'github' DESC,
+                              avatar_url LIKE '%%gravatar.com%%' DESC
+                        LIMIT 1
+                   )
+             WHERE p.username = %s
+         RETURNING avatar_url
+        """, (self.username,))
+        self.set_attributes(avatar_url=avatar_url)
 
     def update_goal(self, goal):
         typecheck(goal, (Decimal, None))
