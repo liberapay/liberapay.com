@@ -1,34 +1,12 @@
-// Fonts
-$Mono: Monaco, "Lucida Mono", monospace;
-$Ideal: 'Ideal Sans SSm A', 'Ideal Sans SSm B', sans-serif;
-$Chronicle: 'Chronicle SSm A', 'Chronicle SSm B', Georgia, serif;
-
-// Colors
-$green: #396;
-$darker-green: darken($green, 10);
-$lighter-green: lighten($green, 10);
-$brown: #630;
-$light-brown: desaturate(lighten($brown, 60), 60);
-$gray: #555;
-$light-gray: #DDD;
-$darker-gray: #CCC;
-$lighter-gray: #EEE;
-$black: #454545;
-$red: #C00;
-$light-red: #F99;
-$gold: #FFC300;
-$white: #FFF;
-
-// Mixins
 @mixin border-radius($radius: 5px) {
     border-radius: $radius;
     background-clip: padding-box;
 }
 @mixin box-shadow($horizontal: 0px, $vertical: 1px, $blur: 2px, $color: #CCC) {
-  box-shadow: $horizontal $vertical $blur $color;
+    box-shadow: $horizontal $vertical $blur $color;
 }
 @mixin inset-box-shadow($horizontal: 0px, $vertical: 1px, $blur: 2px, $color: #CCC) {
-  box-shadow: inset $horizontal $vertical $blur $color;
+    box-shadow: inset $horizontal $vertical $blur $color;
 }
 @mixin multi-color-border($top, $sides, $bottom) {
     border-top: 1px solid $top;
