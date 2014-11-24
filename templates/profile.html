@@ -12,7 +12,7 @@
 {% block subnav %}
 {% set current_page = path.raw.split('/')[2] %}
 {% set show_members = participant.show_as_team(user) %}
-{% set show_receiving = (user.participant == participant or not participant.anonymous_receiving) and participant.goal >= 0 %}
+{% set show_receiving = (user.participant == participant or not participant.anonymous_receiving) and participant.accepts_tips %}
 {% set show_profile = show_members or show_receiving %}
 {% set pages = [ ('/',           _('Profile'),      True,           show_profile)
                , ('/giving/',    _('Giving'),       True,           False)
