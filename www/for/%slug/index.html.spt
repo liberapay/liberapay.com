@@ -131,7 +131,7 @@ for p in chain(new_participants, givers, receivers):
 {% block sidebar %}
 
     <div class="padding">
-        {{ ngettext("{n}{1} Member", "{n} Members", community.nmembers).lower() }}
+        {{ ngettext("{n} Member", "{n} Members", community.nmembers).lower() }}
     </div>
 
     {% if user.ANON %}
