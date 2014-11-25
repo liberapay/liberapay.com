@@ -97,59 +97,59 @@
             <li><a href='/security.txt'>{{ _("Security") }}</a></li>
         </ul>
     </td></tr>
+</table>
 
-    <script>
-        // http://stackoverflow.com/questions/7131909/facebook-callback-appends-to-return-url
-        if (window.location.hash == '#_=_') {
-            window.location.hash = ''; // for older browsers, leaves a # behind
-            history.pushState('', document.title, window.location.pathname); // nice and clean
-        }
-    </script>
-    <script src="{{ website.asset('jquery.min.js') }}"></script>
-    <script src="{{ website.asset('chosen.jquery.min.js') }}"
-            comment="Used on the profile edit page for the community chooser."></script>
-    <script src="{{ website.asset('tipr.min.js') }}"></script>
-    <script src="{{ website.asset('bootstrap-dropdown.js') }}"></script>
-    <script src="{{ website.asset('gratipay.js') }}"></script>
+<script>
+    // http://stackoverflow.com/questions/7131909/facebook-callback-appends-to-return-url
+    if (window.location.hash == '#_=_') {
+        window.location.hash = ''; // for older browsers, leaves a # behind
+        history.pushState('', document.title, window.location.pathname); // nice and clean
+    }
+</script>
+<script src="{{ website.asset('jquery.min.js') }}"></script>
+<script src="{{ website.asset('chosen.jquery.min.js') }}"></script>
+<script src="{{ website.asset('tipr.min.js') }}"></script>
+<script src="{{ website.asset('bootstrap-dropdown.js') }}"></script>
+<script src="{{ website.asset('gratipay.js') }}"></script>
 
-    <script>
-        function unlocalizeDecimal(s) {
-            return s.replace('{{ decimal_symbol }}', '.').replace(/[^0-9.]/g, '');
-        }
+<script>
+    function unlocalizeDecimal(s) {
+        return s.replace('{{ decimal_symbol }}', '.').replace(/[^0-9.]/g, '');
+    }
 
-        $(document).ready(Gratipay.init);
-    </script>
-    {% block scripts %}
+    $(document).ready(Gratipay.init);
+</script>
 
-    {% endblock %}
+{% block scripts %}{% endblock %}
 
-    {% if not user.ANON %}
-    <script>
-        {% if not request.line.uri.startswith('/credit-card.html') %}
-        {% if user.participant.last_bill_result %}
-        Gratipay.notification(
-            ["span", "{{ _('Your credit card has failed!') }} ",
-                ['a', {'href': '/credit-card.html'}, "{{ _('Fix your card') }}"]
-            ], "error", -1
-        );
-        {% elif user.participant.credit_card_expiring(website, request, response) %}
-        Gratipay.notification(
-            ["span", "{{ _('Your credit card is about to expire!') }} ",
-                ['a', {'href': '/credit-card.html'}, "{{ _('Update card') }}"]
-            ], "error"
-        );
-        {% endif %}
-        {% endif %}
-        {% if not user.participant.email_address and not request.line.uri.path.raw.endswith('/account/') %}
-        {% if not user.participant.get_emails() %}
-        Gratipay.notification(
-            ["span", "{{ _('Your account does not have an associated email address.') }} ",
-                ['a', {'href': '/{{ user.participant.username }}/account/#emails'}, "{{ _('Add an email address') }}"]
-            ], "notice", -1
-        );
-        {% endif %}
-        {% endif %}
-    </script>
+{% if not user.ANON %}
+<script>
+    {% if not request.line.uri.startswith('/credit-card.html') %}
+    {% if user.participant.last_bill_result %}
+    Gratipay.notification(
+        ["span", "{{ _('Your credit card has failed!') }} ",
+            ['a', {'href': '/credit-card.html'}, "{{ _('Fix your card') }}"]
+        ], "error", -1
+    );
+    {% elif user.participant.credit_card_expiring(website, request, response) %}
+    Gratipay.notification(
+        ["span", "{{ _('Your credit card is about to expire!') }} ",
+            ['a', {'href': '/credit-card.html'}, "{{ _('Update card') }}"]
+        ], "error"
+    );
     {% endif %}
-</div></body>
+    {% endif %}
+    {% if not user.participant.email_address and not request.line.uri.path.raw.endswith('/account/') %}
+    {% if not user.participant.get_emails() %}
+    Gratipay.notification(
+        ["span", "{{ _('Your account does not have an associated email address.') }} ",
+            ['a', {'href': '/{{ user.participant.username }}/account/#emails'}, "{{ _('Add an email address') }}"]
+        ], "notice", -1
+    );
+    {% endif %}
+    {% endif %}
+</script>
+{% endif %}
+
+</body>
 </html>
