@@ -140,12 +140,14 @@ for p in chain(new_participants, givers, receivers):
         {{ _("{0} to join the {1} community on Gratipay.", "", community.name) }}
     </div>
     {% else %}
+    <div class="cta">
     {% set is_member = community.check_membership(user.participant) %}
     <button class="join-leave"
             data-name="{{ community.name }}"
             data-is-member="{{ 'true' if is_member else 'false' }}">
         <span>{{ _("Leave") if is_member else _("Join") }}</span>
     </button>
+    </div>
     {% endif %}
 {% endblock %}
 
