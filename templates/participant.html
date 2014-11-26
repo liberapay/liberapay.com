@@ -20,10 +20,10 @@
 
 <div class="padding mono">
     {% set prefix = user.participant == participant and "my-" or "" %}
-    {% set anon_giving = participant.anonymous_giving %}
     {% set g = participant.giving %}
-    {% set anon_receiving = participant.anonymous_receiving %}
     {% set r = participant.receiving %}
+    {% set anon_giving = participant.anonymous_giving %}
+    {% set anon_receiving = participant.anonymous_receiving %}
     {% set giving_str = '[' + _('hidden') + ']' if anon_giving else format_currency(g, "USD") %}
     {% set receiving_str = '[' + _('hidden') + ']' if anon_receiving else format_currency(r, "USD") %}
 

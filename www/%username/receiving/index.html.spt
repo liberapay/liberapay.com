@@ -17,10 +17,16 @@ subhead = "Receiving"
 {% block content %}
 
 {% if participant == user.participant %}
-<h2>{{ _("You receive {0} per week",
-    "<span class='my-total-giving'>" + format_currency(participant.receiving, "USD") + "</span>") }}</h2>
+<h2>{{ _( "You receive {0} per week"
+        , "<span class='my-total-giving'>" 
+          + format_currency(participant.receiving, "USD") 
+          + "</span>"
+         ) }}</h2>
 {% else %}
-<h2>{{ _("{0} receives {1} per week", participant.username, format_currency(participant.receiving, "USD")) }}</h2>
+<h2>{{ _( "{0} receives {1} per week"
+        , participant.username
+        , format_currency(participant.receiving, "USD")
+         ) }}</h2>
 {% endif %}
 
 <div class="col1">
