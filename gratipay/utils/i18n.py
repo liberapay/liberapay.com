@@ -19,6 +19,8 @@ import jinja2.ext
 
 ALIASES = {k: v.lower() for k, v in LOCALE_ALIASES.items()}
 ALIASES_R = {v: k for k, v in ALIASES.items()}
+LOCALES = {}
+LOCALE_EN = None
 
 
 ternary_re = re.compile(r'^\(? *(.+?) *\? *(.+?) *: *(.+?) *\)?$')
@@ -49,7 +51,7 @@ def get_text(loc, s, *a, **kw):
     return s
 
 
-def n_get_text(website, request, loc, s, p, n, *a, **kw):
+def n_get_text(tell_sentry, request, loc, s, p, n, *a, **kw):
     n = n or 0
     msg = loc.catalog.get((s, p))
     s2 = None
@@ -57,7 +59,7 @@ def n_get_text(website, request, loc, s, p, n, *a, **kw):
         try:
             s2 = msg.string[loc.catalog.plural_func(n)]
         except Exception as e:
-            website.tell_sentry(e, request)
+            tell_sentry(e, request)
     if s2 is None:
         loc = 'en'
         s2 = s if n == 1 else p
@@ -84,7 +86,7 @@ def regularize_locale(loc):
 
 
 def regularize_locales(locales):
-    """Yield locale strings in the same format as they are in website.locales.
+    """Yield locale strings in the same format as they are in LOCALES.
     """
     locales = [regularize_locale(loc) for loc in locales]
     locales_set = set(locales)
@@ -109,12 +111,12 @@ def parse_accept_lang(accept_lang):
     return regularize_locales(languages)
 
 
-def match_lang(languages, website):
+def match_lang(languages):
     for lang in languages:
-        loc = website.locales.get(lang)
+        loc = LOCALES.get(lang)
         if loc:
             return loc
-    return website.locale_en
+    return LOCALE_EN
 
 
 def format_currency_with_options(number, currency, locale='en', trailing_zeroes=True):
@@ -127,15 +129,15 @@ def format_currency_with_options(number, currency, locale='en', trailing_zeroes=
 def set_up_i18n(website, request):
     accept_lang = request.headers.get("Accept-Language", "")
     langs = request.accept_langs = parse_accept_lang(accept_lang)
-    loc = match_lang(langs, website)
-    add_helpers_to_context(website, request.context, loc, request)
+    loc = match_lang(langs)
+    add_helpers_to_context(website.tell_sentry, request.context, loc, request)
 
 
-def add_helpers_to_context(website, context, loc, request=None):
+def add_helpers_to_context(tell_sentry, context, loc, request=None):
     context['locale'] = loc
     context['decimal_symbol'] = get_decimal_symbol(locale=loc)
     context['_'] = lambda s, *a, **kw: get_text(loc, s, *a, **kw)
-    context['ngettext'] = lambda *a, **kw: n_get_text(website, request, loc, *a, **kw)
+    context['ngettext'] = lambda *a, **kw: n_get_text(tell_sentry, request, loc, *a, **kw)
     context['format_number'] = lambda *a: format_number(*a, locale=loc)
     context['format_decimal'] = lambda *a: format_decimal(*a, locale=loc)
     context['format_currency'] = lambda *a, **kw: format_currency_with_options(*a, locale=loc, **kw)

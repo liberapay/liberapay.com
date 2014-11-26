@@ -569,10 +569,10 @@ class Participant(Model, MixinTeam):
         context.setdefault('include_unsubscribe', True)
         email = context.setdefault('email', self.email_address)
         langs = i18n.parse_accept_lang(accept_lang or self.email_lang or 'en')
-        locale = i18n.match_lang(langs, self.website)
-        i18n.add_helpers_to_context(self.website, context, locale)
-        spt = self.website.emails[spt_name]
-        base_spt = self.website.emails['base']
+        locale = i18n.match_lang(langs)
+        i18n.add_helpers_to_context(self._tell_sentry, context, locale)
+        spt = self._emails[spt_name]
+        base_spt = self._emails['base']
         def render(t):
             b = base_spt[t].render(context)
             return b.replace('$body', spt[t].render(context))
@@ -584,7 +584,7 @@ class Participant(Model, MixinTeam):
         message['html'] = render('text/html')
         message['text'] = render('text/plain')
 
-        return self.website.mailer.messages.send(message=message)
+        return self._mailer.messages.send(message=message)
 
     def set_email_lang(self, accept_lang):
         if not accept_lang:

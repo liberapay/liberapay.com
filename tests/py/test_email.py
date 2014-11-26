@@ -12,7 +12,7 @@ class TestEmail(Harness):
     def setUp(self):
         self.alice = self.make_participant('alice', claimed_time='now')
 
-    @mock.patch.object(Participant.website, 'mailer')
+    @mock.patch.object(Participant, '_mailer')
     def hit_email_spt(self, action, address, mailer, user='alice', should_fail=False):
         P = self.client.PxST if should_fail else self.client.POST
         data = {'action': action, 'address': address}
@@ -109,7 +109,7 @@ class TestEmail(Harness):
         nonce2 = self.alice.get_email('alice@example.com').nonce
         assert nonce1 == nonce2
 
-    @mock.patch.object(Participant.website, 'mailer')
+    @mock.patch.object(Participant, '_mailer')
     def test_cannot_update_email_to_already_verified(self, mailer):
         bob = self.make_participant('bob', claimed_time='now')
         self.alice.add_email('alice@gratipay.com')

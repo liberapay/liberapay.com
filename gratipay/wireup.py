@@ -30,7 +30,7 @@ from gratipay.models.account_elsewhere import AccountElsewhere
 from gratipay.models.community import Community
 from gratipay.models.participant import Participant
 from gratipay.models import GratipayDB
-from gratipay.utils import COUNTRIES, COUNTRIES_MAP
+from gratipay.utils import COUNTRIES, COUNTRIES_MAP, i18n
 from gratipay.utils.cache_static import asset_etag
 from gratipay.utils.emails import compile_email_spt
 from gratipay.utils.i18n import ALIASES, ALIASES_R, get_function_from_rule, strip_accents
@@ -40,24 +40,26 @@ def canonical(env):
     gratipay.canonical_host = env.canonical_host
 
 
-def db(website, env):
+def db(env):
     dburl = env.database_url
     maxconn = env.database_maxconn
-    db = website.db = GratipayDB(dburl, maxconn=maxconn)
+    db = GratipayDB(dburl, maxconn=maxconn)
 
     for model in (Community, AccountElsewhere, Participant):
         db.register_model(model)
-        model.website = website
     gratipay.billing.payday.Payday.db = db
 
-def mail(website, env):
-    website.mailer = mandrill.Mandrill(env.mandrill_key)
-    website.emails = {}
-    emails_dir = website.project_root+'/emails/'
+    return db
+
+def mail(env, project_root='.'):
+    Participant._mailer = mandrill.Mandrill(env.mandrill_key)
+    emails = {}
+    emails_dir = project_root+'/emails/'
     i = len(emails_dir)
     for spt in find_files(emails_dir, '*.spt'):
         base_name = spt[i:-4]
-        website.emails[base_name] = compile_email_spt(spt)
+        emails[base_name] = compile_email_spt(spt)
+    Participant._emails = emails
 
 def billing(env):
     balanced.configure(env.balanced_api_secret)
@@ -73,6 +75,7 @@ def make_sentry_teller(env):
         aspen.log_dammit("Won't log to Sentry (SENTRY_DSN is empty).")
         def noop(exception, request=None):
             pass
+        Participant._tell_sentry = noop
         return noop
 
     sentry = raven.Client(env.sentry_dsn)
@@ -152,6 +155,7 @@ def make_sentry_teller(env):
         ident = sentry.get_ident(result)
         aspen.log_dammit('Exception reference: ' + ident)
 
+    Participant._tell_sentry = tell_sentry
     return tell_sentry
 
 
@@ -259,11 +263,11 @@ def clean_assets(website):
             pass
 
 
-def load_i18n(website):
+def load_i18n(project_root, tell_sentry):
     # Load the locales
     key = lambda t: strip_accents(t[1])
-    localeDir = os.path.join(website.project_root, 'i18n', 'core')
-    locales = website.locales = {}
+    localeDir = os.path.join(project_root, 'i18n', 'core')
+    locales = i18n.LOCALES
     for file in os.listdir(localeDir):
         try:
             parts = file.split(".")
@@ -281,10 +285,10 @@ def load_i18n(website):
                     l.countries_map = COUNTRIES_MAP
                     l.countries = COUNTRIES
         except Exception as e:
-            website.tell_sentry(e)
+            tell_sentry(e)
 
     # Add the default English locale
-    locale_en = website.locale_en = locales['en'] = Locale('en')
+    locale_en = i18n.LOCALE_EN = locales['en'] = Locale('en')
     locale_en.catalog = Catalog('en')
     locale_en.catalog.plural_func = lambda n: n != 1
     locale_en.countries = COUNTRIES
