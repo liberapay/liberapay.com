@@ -33,70 +33,73 @@
     {% endif %}
 </head>
 {% set homepage = path.raw == '/' %}
-<body{% if homepage %} id="homepage"{% endif %}><table id="layout">
+<body{% if homepage %} id="homepage"{% endif %}><table id="layout" class="layout">
     {% if not homepage %}
-    <col width="200px">
-    <col width="100%">
+    <colgroup>
+        <col width="200px">
+        <col width="100%">
+    </colgroup>
     {% endif %}
 
-    <tr><td id="header" colspan="2">
-        <h1><a href="/"><img src="{{ website.asset('gratipay.svg') }}"
-                     alt="Gratipay" /></a></h1>
-        {% set pages=[('/about/', _('About')), ('/explore/', _('Explore'))]%}
-        {% set current_page = path.raw.split('/')[1] %}
-        {% include "templates/nav.html" %}
-        {% if user.ANON %}
-          {% include "templates/sign-in-using.html" %}
-        {% else %}
-        <ul class="nav you-are">
-            <li>
-                <a href="/{{ user.participant.username }}/"{% if path.raw.split('/')[1] == user.participant.username  %} class="selected"{% endif %}>
-                    {{ user.participant.username }}
-                    <div class="quick-stats">
-                        <span class="my-total-giving">{{ format_currency(float(user.participant.giving), "USD") }}</span>/{{ _("wk") }}
-                    </div>
-                </a>
-            </li>
-            <li>
-                <a id="sign-out" href="/sign-out.html">
-                    <span class="icon">&#xe600;</span>
-                    <span class="screen-reader-text">Sign out</span>
-                </a>
-            </li>
-        </ul>
-        {% endif %}
-        {% include "templates/support-gratipay.html" %}
-    </td></tr>
+    <tbody class="layout">
+        <tr class="layout"><td id="header" colspan="2" class="layout group">
+            <h1><a href="/"><img src="{{ website.asset('gratipay.svg') }}"
+                         alt="Gratipay" /></a></h1>
+            {% set pages=[('/about/', _('About')), ('/explore/', _('Explore'))]%}
+            {% set current_page = path.raw.split('/')[1] %}
+            {% include "templates/nav.html" %}
+            {% if user.ANON %}
+              {% include "templates/sign-in-using.html" %}
+            {% else %}
+            <ul class="nav you-are">
+                <li>
+                    <a href="/{{ user.participant.username }}/"{% if path.raw.split('/')[1] == user.participant.username  %} class="selected"{% endif %}>
+                        {{ user.participant.username }}
+                        <div class="quick-stats">
+                            <span class="my-total-giving">{{ format_currency(float(user.participant.giving), "USD") }}</span>/{{ _("wk") }}
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a id="sign-out" href="/sign-out.html">
+                        <span class="icon">&#xe600;</span>
+                        <span class="screen-reader-text">Sign out</span>
+                    </a>
+                </li>
+            </ul>
+            {% endif %}
+            {% include "templates/support-gratipay.html" %}
+        </td></tr>
 
-    <tr>
-        <td id="sidebar">{% block sidebar %}{% endblock %}</td>
-        <td id="content" class="group">
-            {% block heading %}{% if title %}<h1>{{ title }}</h1>{% endif %}{% endblock %}
-            {% block subnav %}{% endblock %}
-            {% block content %}{% endblock %}
-        </td>
-    </tr>
+        <tr class="layout">
+            <td id="sidebar" class="layout">{% block sidebar %}{% endblock %}</td>
+            <td id="content" class="layout group">
+                {% block heading %}{% if title %}<h1>{{ title }}</h1>{% endif %}{% endblock %}
+                {% block subnav %}{% endblock %}
+                {% block content %}{% endblock %}
+            </td>
+        </tr>
 
-    <tr><td id="footer" colspan="2">
-        <div class="social">
-            <a href="https://twitter.com/gratipay"><img src="{{ website.asset('platforms/twitter.16.png') }}" /></a>
-            <a href="https://github.com/gratipay/gratipay.com"><img src="{{ website.asset('platforms/github.16.png') }}" /></a>
-
-        </div>
-        <ul>
-            <li><a href='https://medium.com/gratipay-blog'>{{ _("Blog") }}</a></li>
-            <li><a href="/about/">{{ _("About") }}</a></li>
-            <li><a href="/about/contact">{{ _("Contact Us") }}</a></li>
-            <li><a href='/about/faq.html'>{{ _("FAQ") }}</a></li>
-            <li><a href='/about/stats.html'>{{ _("Stats") }}</a></li>
-            <li><a href='/about/charts.html'>{{ _("Charts") }}</a></li>
-            <li><a href="/about/terms/">{{ _("Terms") }}</a></li>
-            <li><a href="/about/privacy/">{{ _("Privacy") }}</a></li>
-            <li><a href='/about/fraud/'>{{ _("Fraud") }}</a></li>
-            <li><a href='http://inside.gratipay.com/appendices/colophon'>{{ _("Colophon") }}</a></li>
-            <li><a href='/security.txt'>{{ _("Security") }}</a></li>
-        </ul>
-    </td></tr>
+        <tr class="layout"><td id="footer" colspan="2" class="layout">
+            <div class="social">
+                <a href="https://twitter.com/gratipay"><img src="{{ website.asset('platforms/twitter.16.png') }}" /></a>
+                <a href="https://github.com/gratipay/gratipay.com"><img src="{{ website.asset('platforms/github.16.png') }}" /></a>
+            </div>
+            <ul>
+                <li><a href='https://medium.com/gratipay-blog'>{{ _("Blog") }}</a></li>
+                <li><a href="/about/">{{ _("About") }}</a></li>
+                <li><a href="/about/contact">{{ _("Contact Us") }}</a></li>
+                <li><a href='/about/faq.html'>{{ _("FAQ") }}</a></li>
+                <li><a href='/about/stats.html'>{{ _("Stats") }}</a></li>
+                <li><a href='/about/charts.html'>{{ _("Charts") }}</a></li>
+                <li><a href="/about/terms/">{{ _("Terms") }}</a></li>
+                <li><a href="/about/privacy/">{{ _("Privacy") }}</a></li>
+                <li><a href='/about/fraud/'>{{ _("Fraud") }}</a></li>
+                <li><a href='http://inside.gratipay.com/appendices/colophon'>{{ _("Colophon") }}</a></li>
+                <li><a href='/security.txt'>{{ _("Security") }}</a></li>
+            </ul>
+        </td></tr>
+    </tbody>
 </table>
 
 <script>
