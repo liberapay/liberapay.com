@@ -7,11 +7,21 @@ from __future__ import division, print_function, unicode_literals
 import uuid
 
 from aspen.utils import utcnow
+from postgres.orm import Model
+
 import gratipay.wireup
 
 env = gratipay.wireup.env()
+tell_sentry = gratipay.wireup.make_sentry_teller(env)
 db = gratipay.wireup.db(env)
 gratipay.wireup.mail(env)
+gratipay.wireup.load_i18n('.', tell_sentry)
+
+
+class EmailAddressWithConfirmation(Model):
+    typname = "email_address_with_confirmation"
+
+db.register_model(EmailAddressWithConfirmation)
 
 
 def add_email(self, email):
