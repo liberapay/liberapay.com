@@ -1,7 +1,6 @@
 #leaderboard {
     @include clearfix;
     width: leaderboard-width(3);
-    margin: 0 auto;
 }
 
 .people {
@@ -25,4 +24,11 @@
     h2 {
         font-size: 13px;
     }
+}
+.more-container {
+    @include clearfix;
+    text-align: center;
+    padding-top: 20px;
+    width: $people-column-width * 3 * 3;
+    margin-left: $people-column-gutter;
 }

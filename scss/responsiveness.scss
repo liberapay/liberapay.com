@@ -11,7 +11,7 @@
 }
 
 // Small screens/tablets
-@media (max-width: 940px) {
+@media (max-width: 1150px) {
     // 2 column sections
     #leaderboard {
         width: leaderboard-width(2);
@@ -20,7 +20,12 @@
             width: $people-column-width * 2;
         }
     }
+    .more-container {
+        width: $people-column-width * 2 * 3;
+    }
+}
 
+@media (max-width: 940px) {
     .support-gratipay {
         text-align: center;
         table, tbody, tr, td {
@@ -92,23 +97,29 @@
 }
 
 // Smaller tablets in portrait/landscape phones
-@media (max-width: 700px) {
-    .luxury {
-        display: none !important;
-    }
-
+@media (max-width: 880px) {
     #leaderboard {
         width: 100%;
 
         .people {
             float: none;
             width: $people-column-width * 4;
-            margin: 0 auto;
+            margin: 0;
 
             li {
                 &.luxury { display: none; }
             }
         }
+    }
+    .more-container {
+        width: $people-column-width * 4;
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 700px) {
+    .luxury {
+        display: none !important;
     }
 
     #footer {
