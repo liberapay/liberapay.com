@@ -26,6 +26,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.synced_folder ".", "/vagrant", type: "nfs"
   config.vm.network "private_network", ip: "172.27.36.119"
 
+  # http://serverfault.com/questions/453185/vagrant-virtualbox-dns-10-0-2-3-not-working
+  config.vm.provider "virtualbox" do |vb|
+    # VirtualBox DNS proxy is enabled by default, but it fails to refresh
+    # DHCP leases after resume from sleep or WiFi network change
+    vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+  end
 
   # --- [ boxes ] ---
   #
