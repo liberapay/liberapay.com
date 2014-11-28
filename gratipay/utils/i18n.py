@@ -7,9 +7,10 @@ from unicodedata import combining, normalize
 
 from aspen.resources.pagination import parse_specline, split_and_escape
 from aspen.utils import utcnow
-from babel.core import LOCALE_ALIASES
+from babel.core import LOCALE_ALIASES, Locale
 from babel.dates import format_timedelta
 from babel.messages.extract import extract_python
+from babel.messages.pofile import Catalog
 from babel.numbers import (
     format_currency, format_decimal, format_number, format_percent,
     get_decimal_symbol, parse_decimal
@@ -274,7 +275,11 @@ COUNTRIES = (
 COUNTRIES_MAP = dict(COUNTRIES)
 
 LOCALES = {}
-LOCALE_EN = None
+LOCALE_EN = LOCALES['en'] = Locale('en')
+LOCALE_EN.catalog = Catalog('en')
+LOCALE_EN.catalog.plural_func = lambda n: n != 1
+LOCALE_EN.countries = COUNTRIES
+LOCALE_EN.countries_map = COUNTRIES_MAP
 
 
 ternary_re = re.compile(r'^\(? *(.+?) *\? *(.+?) *: *(.+?) *\)?$')
