@@ -15,13 +15,14 @@ from babel.numbers import (
     format_currency, format_decimal, format_number, format_percent,
     get_decimal_symbol, parse_decimal
 )
+from collections import OrderedDict
 import jinja2.ext
 
 
 ALIASES = {k: v.lower() for k, v in LOCALE_ALIASES.items()}
 ALIASES_R = {v: k for k, v in ALIASES.items()}
 
-COUNTRIES = (
+COUNTRIES = OrderedDict([
     ('AF', u'Afghanistan'),
     ('AX', u'\xc5land Islands'),
     ('AL', u'Albania'),
@@ -271,15 +272,13 @@ COUNTRIES = (
     ('YE', u'Yemen'),
     ('ZM', u'Zambia'),
     ('ZW', u'Zimbabwe'),
-)
-COUNTRIES_MAP = dict(COUNTRIES)
+])
 
 LOCALES = {}
 LOCALE_EN = LOCALES['en'] = Locale('en')
 LOCALE_EN.catalog = Catalog('en')
 LOCALE_EN.catalog.plural_func = lambda n: n != 1
 LOCALE_EN.countries = COUNTRIES
-LOCALE_EN.countries_map = COUNTRIES_MAP
 
 
 ternary_re = re.compile(r'^\(? *(.+?) *\? *(.+?) *: *(.+?) *\)?$')

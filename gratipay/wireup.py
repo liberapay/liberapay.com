@@ -12,6 +12,7 @@ from babel.core import Locale
 from babel.messages.pofile import read_po
 from babel.numbers import parse_pattern
 import balanced
+from collections import OrderedDict
 import gratipay
 import gratipay.billing.payday
 import raven
@@ -33,7 +34,7 @@ from gratipay.models import GratipayDB
 from gratipay.utils.cache_static import asset_etag
 from gratipay.utils.emails import compile_email_spt
 from gratipay.utils.i18n import (
-    ALIASES, ALIASES_R, COUNTRIES, COUNTRIES_MAP, LOCALES,
+    ALIASES, ALIASES_R, COUNTRIES, LOCALES,
     get_function_from_rule, strip_accents
 )
 
@@ -281,10 +282,9 @@ def load_i18n(project_root, tell_sentry):
                 c = l.catalog = read_po(f)
                 c.plural_func = get_function_from_rule(c.plural_expr)
                 try:
-                    l.countries_map = {k: l.territories[k] for k in COUNTRIES_MAP}
-                    l.countries = sorted(l.countries_map.items(), key=key)
+                    countries = ((k, l.territories[k]) for k in COUNTRIES)
+                    l.countries = OrderedDict(sorted(countries, key=key))
                 except KeyError:
-                    l.countries_map = COUNTRIES_MAP
                     l.countries = COUNTRIES
         except Exception as e:
             tell_sentry(e)

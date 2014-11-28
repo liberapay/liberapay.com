@@ -128,7 +128,7 @@ title = _("Bank Account")
 
                 <div>
                     <label for="country">{{ _("Country") }} (<a href="/about/faq.html#how-withdraw-funds">{{ _("non-US?") }}</a>)</label>
-                    <input id="country" value="{{ locale.countries_map['US'] }}" disabled="true"
+                    <input id="country" value="{{ locale.countries['US'] }}" disabled="true"
                         class="disabled" />
                 </div>
 

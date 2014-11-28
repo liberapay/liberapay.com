@@ -158,7 +158,7 @@ title = _("Credit Card")
 
                 <select id="country" name="country" data-placeholder="{{ _("Choose a country...") }}">
                     <option value=""></option>
-                {% for each in locale.countries %}
+                {% for each in locale.countries.items() %}
                     <option value="{{ each[0] }}" {{ 'selected' if each[0] == card['country'] else '' }}>{{ each[1] }}</option>
                 {% endfor %}
                 </select>
