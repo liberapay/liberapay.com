@@ -30,10 +30,13 @@ from gratipay.models.account_elsewhere import AccountElsewhere
 from gratipay.models.community import Community
 from gratipay.models.participant import Participant
 from gratipay.models import GratipayDB
-from gratipay.utils import COUNTRIES, COUNTRIES_MAP, i18n
+from gratipay.utils import i18n
 from gratipay.utils.cache_static import asset_etag
 from gratipay.utils.emails import compile_email_spt
-from gratipay.utils.i18n import ALIASES, ALIASES_R, get_function_from_rule, strip_accents
+from gratipay.utils.i18n import (
+    ALIASES, ALIASES_R, COUNTRIES, COUNTRIES_MAP,
+    get_function_from_rule, strip_accents
+)
 
 def canonical(env):
     gratipay.canonical_scheme = env.canonical_scheme
