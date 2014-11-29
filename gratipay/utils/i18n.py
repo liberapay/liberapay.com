@@ -47,11 +47,22 @@ COUNTRY_CODES = """
 
 COUNTRIES = make_sorted_dict(COUNTRY_CODES, Locale('en').territories)
 
+LANGUAGE_CODES_2 = """
+    aa af ak am ar as az be bg bm bn bo br bs ca cs cy da de dz ee el en eo es
+    et eu fa ff fi fo fr ga gd gl gu gv ha he hi hr hu hy ia id ig ii is it ja
+    ka ki kk kl km kn ko ks kw ky lg ln lo lt lu lv mg mk ml mn mr ms mt my nb
+    nd ne nl nn nr om or os pa pl ps pt rm rn ro ru rw se sg si sk sl sn so sq
+    sr ss st sv sw ta te tg th ti tn to tr ts uk ur uz ve vi vo xh yo zh zu
+""".split()
+
+LANGUAGES_2 = make_sorted_dict(LANGUAGE_CODES_2, Locale('en').languages)
+
 LOCALES = {}
 LOCALE_EN = LOCALES['en'] = Locale('en')
 LOCALE_EN.catalog = Catalog('en')
 LOCALE_EN.catalog.plural_func = lambda n: n != 1
 LOCALE_EN.countries = COUNTRIES
+LOCALE_EN.languages_2 = LANGUAGES_2
 
 
 ternary_re = re.compile(r'^\(? *(.+?) *\? *(.+?) *: *(.+?) *\)?$')

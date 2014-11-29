@@ -33,7 +33,7 @@ from gratipay.models import GratipayDB
 from gratipay.utils.cache_static import asset_etag
 from gratipay.utils.emails import compile_email_spt
 from gratipay.utils.i18n import (
-    ALIASES, ALIASES_R, COUNTRIES, LOCALES,
+    ALIASES, ALIASES_R, COUNTRIES, LANGUAGES_2, LOCALES,
     get_function_from_rule, make_sorted_dict
 )
 
@@ -283,6 +283,10 @@ def load_i18n(project_root, tell_sentry):
                     l.countries = make_sorted_dict(COUNTRIES, l.territories)
                 except KeyError:
                     l.countries = COUNTRIES
+                try:
+                    l.languages_2 = make_sorted_dict(LANGUAGES_2, l.languages)
+                except KeyError:
+                    l.languages_2 = LANGUAGES_2
         except Exception as e:
             tell_sentry(e)
 
