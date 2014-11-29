@@ -148,6 +148,11 @@ class Tests(Harness):
         actual = markdown.render('http://google.com/')
         assert expected == actual
 
+    def test_markdown_render_no_intra_emphasis(self):
+        expected = '<p>Examples like this_one and this other_one.</p>\n'
+        actual = markdown.render('Examples like this_one and this other_one.')
+        assert expected == actual
+
     @pytest.mark.xfail
     def test_srau_retries_work_with_db(self):
         # XXX This is raising InternalError because the transaction is ended or something.
