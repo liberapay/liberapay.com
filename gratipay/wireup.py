@@ -12,7 +12,6 @@ from babel.core import Locale
 from babel.messages.pofile import read_po
 from babel.numbers import parse_pattern
 import balanced
-from collections import OrderedDict
 import gratipay
 import gratipay.billing.payday
 import raven
@@ -35,7 +34,7 @@ from gratipay.utils.cache_static import asset_etag
 from gratipay.utils.emails import compile_email_spt
 from gratipay.utils.i18n import (
     ALIASES, ALIASES_R, COUNTRIES, LOCALES,
-    get_function_from_rule, strip_accents
+    get_function_from_rule, make_sorted_dict
 )
 
 def canonical(env):
@@ -268,7 +267,6 @@ def clean_assets(website):
 
 def load_i18n(project_root, tell_sentry):
     # Load the locales
-    key = lambda t: strip_accents(t[1])
     localeDir = os.path.join(project_root, 'i18n', 'core')
     locales = LOCALES
     for file in os.listdir(localeDir):
@@ -282,8 +280,7 @@ def load_i18n(project_root, tell_sentry):
                 c = l.catalog = read_po(f)
                 c.plural_func = get_function_from_rule(c.plural_expr)
                 try:
-                    countries = ((k, l.territories[k]) for k in COUNTRIES)
-                    l.countries = OrderedDict(sorted(countries, key=key))
+                    l.countries = make_sorted_dict(COUNTRIES, l.territories)
                 except KeyError:
                     l.countries = COUNTRIES
         except Exception as e:
