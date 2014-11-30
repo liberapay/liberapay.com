@@ -63,7 +63,7 @@ test-cov: env
 tests: test
 
 node_modules: package.json
-	npm install
+	npm install --no-bin-links
 	@if [ -d node_modules ]; then touch node_modules; fi
 
 jstest: node_modules
