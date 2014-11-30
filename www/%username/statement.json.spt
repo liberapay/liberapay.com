@@ -2,6 +2,7 @@ from __future__ import print_function, unicode_literals
 
 from aspen import Response
 from gratipay.utils import get_participant, markdown
+from gratipay.utils.i18n import LANGUAGES_2
 
 [-----------------------------------------------------------------------------]
 
@@ -10,6 +11,9 @@ participant = get_participant(request, restrict=True)
 
 lang = request.body["lang"]
 content = request.body["content"]
+
+if lang not in LANGUAGES_2:
+    raise Response(400, "unknown lang")
 
 participant.update_statement(lang, content)
 
