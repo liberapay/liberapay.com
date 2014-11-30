@@ -67,7 +67,7 @@ node_modules: package.json
 	@if [ -d node_modules ]; then touch node_modules; fi
 
 jstest: node_modules
-	./node_modules/.bin/grunt test
+	npm run-script grunt-cli test
 
 transifexrc:
 	@echo '[https://www.transifex.com]' >.transifexrc
