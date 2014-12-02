@@ -1,7 +1,5 @@
 """
 This module contains exceptions shared across application code.
-
-TODO i18n of error messages
 """
 
 from __future__ import print_function, unicode_literals
