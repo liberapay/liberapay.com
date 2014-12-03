@@ -330,8 +330,10 @@ class Payday(object):
         CREATE OR REPLACE FUNCTION settle_tip_graph() RETURNS void AS $$
             DECLARE
                 count integer NOT NULL DEFAULT 0;
+                i integer := 0;
             BEGIN
                 LOOP
+                    i := i + 1;
                     WITH updated_rows AS (
                          UPDATE payday_tips
                             SET is_funded = true
@@ -341,6 +343,9 @@ class Payday(object):
                     SELECT COUNT(*) FROM updated_rows INTO count;
                     IF (count = 0) THEN
                         EXIT;
+                    END IF;
+                    IF (i > 50) THEN
+                        RAISE 'Reached the maximum number of iterations';
                     END IF;
                 END LOOP;
             END;
