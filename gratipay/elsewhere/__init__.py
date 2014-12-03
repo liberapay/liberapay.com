@@ -114,7 +114,14 @@ class Platform(object):
             sess = self.get_auth_session()
         response = sess.get(self.api_url+path, **kw)
 
-        # Check status
+        self.check_api_response_status(response)
+        self.check_ratelimit_headers(response)
+
+        return response
+
+    def check_api_response_status(self, response):
+        """Pass through any 404, convert any other non-200 into a 500.
+        """
         status = response.status_code
         if status == 404:
             raise Response(404, response.text)
@@ -123,7 +130,9 @@ class Platform(object):
                , level=logging.ERROR)
             raise Response(500, '{} lookup failed with {}'.format(self.name, status))
 
-        # Check ratelimit headers
+    def check_ratelimit_headers(self, response):
+        """Emit log messages if we're running out of ratelimit.
+        """
         prefix = getattr(self, 'ratelimit_headers_prefix', None)
         if prefix:
             limit = response.headers[prefix+'limit']
@@ -148,8 +157,6 @@ class Platform(object):
                     elif percent_remaining < 0.05:
                         log_lvl = logging.CRITICAL
                     log(log_msg, log_lvl)
-
-        return response
 
     def extract_user_info(self, info):
         """
