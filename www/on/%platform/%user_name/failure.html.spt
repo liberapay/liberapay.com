@@ -9,7 +9,10 @@ if platform is None:
 user_name = path['user_name']
 if not user_name:
     raise Response(400, '%user_name is empty')
-platform.get_user_info(user_name) # raises 404 if user_name is unknown
+website.db.one( "SELECT * FROM ELSEWHERE WHERE platform=%s AND user_name=%s"
+              , (platform.name, user_name)
+              , default=Response(404)
+               )
 
 try:
     action = qs['action']
