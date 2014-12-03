@@ -1,0 +1,25 @@
+interactions:
+- request:
+    body: null
+    headers: {}
+    method: GET
+    uri: https://api.twitter.com:443/1.1/users/show.json?screen_name=nmjhgfcftyuikjnbvftyujhbgtfgh
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAAKpWSi0qyi8qVrKKrlbKTS0uTkxPVbJSCs4vKqrUUSjJSCxRKAAKKaTkpxYr5OWX
+        KKRWZBaXKOkoJeenABUam9TG1gIAAAD//wMAke1ZcEQAAAA=
+    headers:
+      cache-control: ['no-cache, no-store, must-revalidate, pre-check=0, post-check=0']
+      content-encoding: [gzip]
+      content-length: ['92']
+      content-type: [application/json;charset=utf-8]
+      expires: ['Tue, 31 Mar 1981 05:00:00 GMT']
+      last-modified: ['Wed, 03 Dec 2014 17:19:23 GMT']
+      pragma: [no-cache]
+      set-cookie: ['guest_id=v1%3A141762716382867775; Domain=.twitter.com; Path=/;
+          Expires=Fri, 02-Dec-2016 17:19:23 UTC']
+      status: [404 Not Found]
+      strict-transport-security: [max-age=631138519]
+    status: {code: 404, message: Not Found}
+version: 1
