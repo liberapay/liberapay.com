@@ -1,6 +1,6 @@
 """
 This is a one-off script to populate the new `emails` table using the addresses
-we have in `participants` and `elsewhere`.
+we have in `participants`.
 """
 from __future__ import division, print_function, unicode_literals
 
@@ -43,21 +43,6 @@ def add_email(self, email):
 
 
 participants = db.all("""
-    UPDATE participants p
-       SET email = (e.email, false)
-      FROM (
-               SELECT DISTINCT ON (participant)
-                      participant, email
-                 FROM elsewhere
-                WHERE email IS NOT NULL AND email <> ''
-             ORDER BY participant, platform = 'github' DESC
-           ) e
-     WHERE e.participant = p.username
-       AND p.email IS NULL
-       AND NOT p.is_closed
-       AND p.is_suspicious IS NOT true
-       AND p.claimed_time IS NOT NULL;
-
     SELECT p.*::participants
       FROM participants p
      WHERE email IS NOT NULL
