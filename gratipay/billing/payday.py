@@ -324,26 +324,28 @@ class Payday(object):
         CREATE TRIGGER process_take AFTER INSERT ON payday_takes
             FOR EACH ROW EXECUTE PROCEDURE process_take();
 
+
         -- Create a function to settle whole tip graph
 
         CREATE OR REPLACE FUNCTION settle_tip_graph() RETURNS void AS $$
             DECLARE
-              count integer NOT NULL DEFAULT 0;
+                count integer NOT NULL DEFAULT 0;
             BEGIN
-              LOOP
-                WITH updated_rows AS (
-                     UPDATE payday_tips
-                        SET is_funded = true
-                      WHERE is_funded IS NOT true
-                  RETURNING *
-                )
-                SELECT COUNT(*) FROM updated_rows INTO count;
-                IF count = 0 THEN
-                  EXIT;
-                END IF;
-              END LOOP;
+                LOOP
+                    WITH updated_rows AS (
+                         UPDATE payday_tips
+                            SET is_funded = true
+                          WHERE is_funded IS NOT true
+                      RETURNING *
+                    )
+                    SELECT COUNT(*) FROM updated_rows INTO count;
+                    IF (count = 0) THEN
+                        EXIT;
+                    END IF;
+                END LOOP;
             END;
         $$ LANGUAGE plpgsql;
+
 
         -- Save the stats we already have
 
