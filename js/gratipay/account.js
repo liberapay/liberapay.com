@@ -121,13 +121,14 @@ Gratipay.account.init = function() {
 
     // Wire up email addresses list.
     // =============================
-    $('.emails button').prop('disabled', false);
-    $('.emails button').on('click', function() {
+    function post_email(e) {
+        e.preventDefault();
         var $this = $(this);
         var action = this.className;
+        var $inputs = $('.emails button, .emails input');
         var address = $this.parent().data('email') || $('input.add-email').val();
 
-        $this.prop('disabled', true);
+        $inputs.prop('disabled', true);
 
         $.ajax({
             url: '../email.json',
@@ -135,8 +136,9 @@ Gratipay.account.init = function() {
             data: {action: action, address: address},
             dataType: 'json',
             success: function (data) {
-                $this.prop('disabled', false);
+                $inputs.prop('disabled', false);
                 if (action == 'add-email') {
+                    $('input.add-email').val('');
                     window.location.reload();
                 } else if (action == 'set-primary') {
                     $('.emails li').removeClass('primary');
@@ -148,12 +150,15 @@ Gratipay.account.init = function() {
                 }
             },
             error: function (e) {
-                $this.prop('disabled', false);
+                $inputs.prop('disabled', false);
                 error_message = JSON.parse(e.responseText).error_message_long;
                 Gratipay.notification(error_message || "Failure", 'error');
             },
         });
-    });
+    }
+    $('.emails button, .emails input').prop('disabled', false);
+    $('.emails button[class]').on('click', post_email);
+    $('form.add-email').on('submit', post_email);
 
 
     // Wire up close knob.

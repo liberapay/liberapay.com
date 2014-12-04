@@ -161,8 +161,10 @@ emails = participant.get_emails()
                 </li>
             {% endfor %}
             </ul>
-            <input class="add-email" name="email" type="email" placeholder="sam@example.net" />
-            <button class="add-email">{{ _("Add email address") }}</button>
+            <form class="add-email">
+                <input class="add-email" name="email" type="email" placeholder="sam@example.net" />
+                <button type="submit">{{ _("Add email address") }}</button>
+            </form>
         </div>
 
 
