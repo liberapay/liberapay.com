@@ -553,6 +553,7 @@ class Participant(Model, MixinTeam):
             SELECT *
               FROM emails
              WHERE participant=%s AND {0}
+          ORDER BY id
         """.format(condition), (self.username,))
 
     def remove_email(self, address):
