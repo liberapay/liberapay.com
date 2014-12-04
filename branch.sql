@@ -18,4 +18,10 @@ BEGIN;
 
     ALTER TABLE participants ADD COLUMN email_address text UNIQUE,
                              ADD COLUMN email_lang text;
+
+    UPDATE events
+       SET payload = replace(replace(payload::text, '"set"', '"add"'), '"current_email"', '"email"')::json
+     WHERE payload->>'action' = 'set'
+       AND (payload->'values'->'current_email') IS NOT NULL;
+
 END;

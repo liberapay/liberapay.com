@@ -473,7 +473,7 @@ class Participant(Model, MixinTeam):
         ctime = utcnow()
         try:
             with self.db.get_cursor() as c:
-                add_event(c, 'participant', dict(id=self.id, action='set', values=dict(current_email=email)))
+                add_event(c, 'participant', dict(id=self.id, action='add', values=dict(email=email)))
                 c.run("""
                     INSERT INTO emails
                                 (address, nonce, ctime, participant)
@@ -510,11 +510,13 @@ class Participant(Model, MixinTeam):
         if not getattr(self.get_email(email), 'verified', False):
             raise EmailNotVerified(email)
         username = self.username
-        self.db.run("""
-            UPDATE participants
-               SET email_address=%(email)s
-             WHERE username=%(username)s
-        """, locals())
+        with self.db.get_cursor() as c:
+            add_event(c, 'participant', dict(id=self.id, action='set', values=dict(primary_email=email)))
+            c.run("""
+                UPDATE participants
+                   SET email_address=%(email)s
+                 WHERE username=%(username)s
+            """, locals())
         self.set_attributes(email_address=email)
 
     def verify_email(self, email, nonce):
