@@ -46,11 +46,13 @@ emails = participant.get_emails()
                     {{ _("Hide total giving from others.") }}
             </label>
             <br />
+            {% if participant.IS_SINGULAR %}
             <label tabindex="105" class="anonymous-receiving">
                 <input type="checkbox"
                     {% if participant.anonymous_receiving %}checked="true"{% endif %} />
                     {{ _("Hide total receiving from others.") }}
             </label>
+            {% endif %}
         </p>
         {% if not user.ANON and (user.ADMIN or user.participant == participant) %}
             <h2>{{ _("Available Money") }}</h2>

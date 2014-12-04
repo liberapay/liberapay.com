@@ -7,6 +7,8 @@ if POST:
     field = body.get("toggle", "giving")
     if field not in ["giving", "receiving"]:
         raise Response(400)
+    if user.participant.IS_PLURAL and field == "receiving":
+        raise Response(400)
     rec = website.db.one("""
 
         UPDATE participants
