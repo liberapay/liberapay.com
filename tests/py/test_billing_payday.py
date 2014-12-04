@@ -366,6 +366,33 @@ class TestPayin(BalancedHarness):
         assert Participant.from_id(self.janet.id).balance == D('0.51')
         assert Participant.from_id(self.homer.id).balance == 0
 
+    def test_transfer_tips_whole_graph(self):
+        alice = self.make_participant('alice', claimed_time='now', balance=0,
+                                      last_bill_result='')
+        alice.set_tip_to(self.homer, D('50'))
+        self.homer.set_tip_to(self.janet, D('20'))
+        self.janet.set_tip_to(self.david, D('5'))
+        self.david.set_tip_to(self.homer, D('20'))  # Should be unfunded
+
+        payday = Payday.start()
+        with self.db.get_cursor() as cursor:
+            payday.prepare(cursor, payday.ts_start)
+            cursor.run("""UPDATE payday_participants
+                             SET card_hold_ok = true
+                           WHERE id = %s
+                """, (alice.id,))
+            payday.transfer_tips(cursor)
+            cursor.run("""UPDATE payday_participants
+                             SET new_balance = 0
+                           WHERE id = %s
+                """, (alice.id,))
+            payday.update_balances(cursor)
+        alice = Participant.from_id(alice.id)
+        assert Participant.from_id(alice.id).balance == D('0')
+        assert Participant.from_id(self.homer.id).balance == D('30')
+        assert Participant.from_id(self.janet.id).balance == D('15')
+        assert Participant.from_id(self.david.id).balance == D('5')
+
     def test_transfer_takes(self):
         a_team = self.make_participant('a_team', claimed_time='now', number='plural', balance=20)
         alice = self.make_participant('alice', claimed_time='now')
