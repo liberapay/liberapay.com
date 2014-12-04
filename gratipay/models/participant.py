@@ -462,9 +462,18 @@ class Participant(Model, MixinTeam):
             Returns the number of emails sent.
         """
 
-        # If the email is already verified we have nothing to do.
-        if email == self.email_address:
-            return 0
+        # Check that this address isn't already verified
+        owner = self.db.one("""
+            SELECT participant
+              FROM emails
+             WHERE address = %(email)s
+               AND verified IS true
+        """, locals())
+        if owner:
+            if owner == self.id:
+                return 0
+            else:
+                raise EmailAlreadyTaken(email)
 
         if len(self.get_emails('verified is null')) > 9:
             raise TooManyEmailAddresses(email)
