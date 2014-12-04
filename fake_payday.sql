@@ -112,6 +112,34 @@ CREATE OR REPLACE FUNCTION fake_take() RETURNS trigger AS $$
     END;
 $$ LANGUAGE plpgsql;
 
+
+-- Create a function to settle whole tip graph
+
+CREATE OR REPLACE FUNCTION settle_tip_graph() RETURNS void AS $$
+    DECLARE
+        count integer NOT NULL DEFAULT 0;
+        i integer := 0;
+    BEGIN
+        LOOP
+            i := i + 1;
+            WITH updated_rows AS (
+                 UPDATE temp_tips
+                    SET is_funded = true
+                  WHERE is_funded IS NOT true
+              RETURNING *
+            )
+            SELECT COUNT(*) FROM updated_rows INTO count;
+            IF (count = 0) THEN
+                EXIT;
+            END IF;
+            IF (i > 50) THEN
+                RAISE 'Reached the maximum number of iterations';
+            END IF;
+        END LOOP;
+    END;
+$$ LANGUAGE plpgsql;
+
+
 CREATE TRIGGER fake_take AFTER INSERT ON temp_takes
     FOR EACH ROW EXECUTE PROCEDURE fake_take();
 
@@ -125,12 +153,9 @@ UPDATE temp_tips t
  WHERE p.username = t.tipper
    AND p.credit_card_ok;
 
--- Step 2: tips that are covered by the user's balance
-UPDATE temp_tips t
-   SET is_funded = true
- WHERE is_funded IS NOT true;
+SELECT settle_tip_graph();
 
--- Step 3: team takes
+-- Step 2: team takes
 INSERT INTO temp_takes
     SELECT team, member, amount
       FROM current_takes t
@@ -139,7 +164,9 @@ INSERT INTO temp_takes
        AND t.member IN (SELECT username FROM temp_participants)
   ORDER BY ctime DESC;
 
--- Step 4: update the real tables
+SELECT settle_tip_graph();
+
+-- Step 3: update the real tables
 UPDATE tips t
    SET is_funded = tt.is_funded
   FROM temp_tips tt
