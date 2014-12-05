@@ -112,6 +112,9 @@ CREATE OR REPLACE FUNCTION fake_take() RETURNS trigger AS $$
     END;
 $$ LANGUAGE plpgsql;
 
+CREATE TRIGGER fake_take AFTER INSERT ON temp_takes
+    FOR EACH ROW EXECUTE PROCEDURE fake_take();
+
 
 -- Create a function to settle whole tip graph
 
@@ -140,13 +143,9 @@ CREATE OR REPLACE FUNCTION settle_tip_graph() RETURNS void AS $$
 $$ LANGUAGE plpgsql;
 
 
-CREATE TRIGGER fake_take AFTER INSERT ON temp_takes
-    FOR EACH ROW EXECUTE PROCEDURE fake_take();
-
-
 -- Start fake payday
 
--- Step 1: tips that are backed by a credit card
+-- Step 1: tips
 UPDATE temp_tips t
    SET is_funded = true
   FROM temp_participants p
@@ -164,9 +163,10 @@ INSERT INTO temp_takes
        AND t.member IN (SELECT username FROM temp_participants)
   ORDER BY ctime DESC;
 
+-- Step 3: tips again
 SELECT settle_tip_graph();
 
--- Step 3: update the real tables
+-- Step 4: update the real tables
 UPDATE tips t
    SET is_funded = tt.is_funded
   FROM temp_tips tt
