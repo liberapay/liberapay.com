@@ -103,3 +103,13 @@ class TestElsewhere(Harness):
             response = self.client.GET('/on/%s/alice/' % platform.name)
             assert response.code == 200
             assert 'has not joined' in response.body.decode('utf8')
+
+
+    def test_failure_page_requires_valid_username(self):
+        response = self.client.GxT('/on/twitter/nmjhgfcftyuikjnbvftyujhbgtfgh/failure.html?action')
+        assert response.code == 404
+
+    def test_failure_page_accepts_valid_username(self):
+        self.client.GET('/on/twitter/Gratipay/')  # normal case will have the db primed
+        response = self.client.GET('/on/twitter/Gratipay/failure.html?action')
+        assert response.code == 200
