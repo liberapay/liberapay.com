@@ -135,12 +135,16 @@ class Platform(object):
         """
         prefix = getattr(self, 'ratelimit_headers_prefix', None)
         if prefix:
-            limit = response.headers[prefix+'limit']
-            remaining = response.headers[prefix+'remaining']
-            reset = response.headers[prefix+'reset']
+            limit = response.headers.get(prefix+'limit')
+            remaining = response.headers.get(prefix+'remaining')
+            reset = response.headers.get(prefix+'reset')
+
             try:
                 limit, remaining, reset = int(limit), int(remaining), int(reset)
             except (TypeError, ValueError):
+                limit, remaining, reset = None, None, None
+
+            if None in (limit, remaining, reset):
                 d = dict(limit=limit, remaining=remaining, reset=reset)
                 log('Got weird rate headers from %s: %s' % (self.name, d))
             else:
