@@ -1,17 +1,17 @@
 {{ _("Connect to {0} on Gratipay?", username) }}
 
 [---] text/html
-<div style="text-align: center; font: normal 14px/21px Arial, sans-serif; color: #333;">
-    {{ _("We've received a request to connect {0} to the {1} account on Gratipay. Sound familiar?",
-         '<b>%s</b><br>' % escape(email),
-         '<b><a href="https://gratipay.com/{0}">{0}</a></b>'.format(username)) }}
-    <br>
-    <br>
-    <a href="{{ link }}" style="color: #fff; text-decoration:none; display:inline-block; padding: 0 15px; background: #396; font: normal 14px/40px Arial, sans-serif; white-space: nowrap; border-radius: 3px">{{ _("Yes, proceed!") }}</a>
-</div>
+{{ _("We've received a request to connect {0} to the {1} account on Gratipay. Sound familiar?",
+     '<b>%s</b>' % escape(email),
+     '<b><a href="https://gratipay.com/{0}">{0}</a></b>'.format(username)) }}
+<br>
+<br>
+<a href="{{ link }}" style="color: #fff; text-decoration:none; display:inline-block; padding: 0 15px; background: #396; font: normal 14px/40px Arial, sans-serif; white-space: nowrap; border-radius: 3px">{{ _("Yes, proceed!") }}</a>
 
 [---] text/plain
-{{ _("We've received a request to connect {0} to the {1} account on Gratipay. Sound familiar?", email, username) }}
+{{ _("We've received a request to connect {0} to the {1} account on Gratipay. Sound familiar?",
+     email, username) }}
+
 {{ _("Follow this link to finish connecting your email:") }}
 
 {{ link }}
