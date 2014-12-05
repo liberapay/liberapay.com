@@ -66,6 +66,9 @@ class Participant(Model, MixinTeam):
             return False
         return self.username != other.username
 
+    def __repr__(self):
+        return '<Participant %s>' % repr(self.username)
+
 
     # Constructors
     # ============
@@ -598,7 +601,7 @@ class Participant(Model, MixinTeam):
                    AND p2.is_suspicious IS NOT true
               ORDER BY p2.claimed_time IS NULL, t.ctime ASC
             """, (self.username,))
-            fake_balance = self.balance + self.receiving - self.taking
+            fake_balance = self.balance + self.receiving
             for tip in tips:
                 if tip.amount > fake_balance:
                     is_funded = False
