@@ -32,7 +32,7 @@ class ProblemChangingEmail(Response):
         Response.__init__(self, 400, self.msg.format(*args))
 
 class EmailAlreadyTaken(ProblemChangingEmail):
-    msg = "An account with the email '{}' already exists"
+    msg = "{} is already linked to a different Gratipay account."
 
 class CannotRemovePrimaryEmail(ProblemChangingEmail):
     msg = "You cannot remove your primary email address."
