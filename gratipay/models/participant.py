@@ -588,8 +588,8 @@ class Participant(Model, MixinTeam):
         spt = self._emails[spt_name]
         base_spt = self._emails['base']
         def render(t):
-            b = base_spt[t].render(context)
-            return b.replace('$body', spt[t].render(context))
+            b = base_spt[t].render(context).strip()
+            return b.replace('$body', spt[t].render(context).strip())
         message = {}
         message['from_email'] = 'support@gratipay.com'
         message['from_name'] = 'Gratipay Support'
