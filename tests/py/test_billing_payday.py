@@ -156,6 +156,30 @@ class TestPayday(BalancedHarness):
         Payday.start().update_cached_amounts()
         check()
 
+    def test_update_cached_amounts_depth(self):
+        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
+        usernames = ('bob', 'carl', 'dana', 'emma', 'fred', 'greg')
+        users = [self.make_participant(username, claimed_time='now') for username in usernames]
+
+        prev = alice
+        for user in reversed(users):
+            prev.set_tip_to(user, '1.00')
+            prev = user
+
+        def check():
+            for username in reversed(usernames[1:]):
+                user = Participant.from_username(username)
+                assert user.giving == D('1.00')
+                assert user.pledging == D('0.00')
+                assert user.receiving == D('1.00')
+                assert user.npatrons == 1
+            funded_tips = self.db.all("SELECT id FROM tips WHERE is_funded ORDER BY id")
+            assert len(funded_tips) == 6
+
+        check()
+        Payday.start().update_cached_amounts()
+        check()
+
     @mock.patch('gratipay.billing.payday.log')
     def test_start_prepare(self, log):
         self.clear_tables()

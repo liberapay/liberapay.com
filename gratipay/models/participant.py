@@ -66,6 +66,9 @@ class Participant(Model, MixinTeam):
             return False
         return self.username != other.username
 
+    def __repr__(self):
+        return '<Participant %s>' % repr(self.username)
+
 
     # Constructors
     # ============
