@@ -1338,6 +1338,24 @@ class Participant(Model, MixinTeam):
 
         """
 
+        MERGE_EMAIL_ADDRESSES = """
+
+            WITH emails_to_keep AS (
+                     SELECT DISTINCT ON (address) id
+                       FROM emails
+                      WHERE participant IN (%(dead)s, %(live)s)
+                   ORDER BY address, mtime, ctime DESC
+                 )
+            DELETE FROM emails
+             WHERE participant IN (%(dead)s, %(live)s)
+               AND id NOT IN (SELECT id FROM emails_to_keep);
+
+            UPDATE emails
+               SET participant = %(live)s
+             WHERE participant = %(dead)s;
+
+        """
+
         new_balance = None
 
         with self.db.get_cursor() as cursor:
@@ -1463,6 +1481,11 @@ class Participant(Model, MixinTeam):
                 archive_balance = cursor.one(TRANSFER_BALANCE_1, args)
                 other.set_attributes(balance=archive_balance)
                 new_balance = cursor.one(TRANSFER_BALANCE_2, args)
+
+                # Take over email addresses.
+                # ==========================
+
+                cursor.run(MERGE_EMAIL_ADDRESSES, dict(live=x, dead=y))
 
                 # Disconnect any remaining elsewhere account.
                 # ===========================================
