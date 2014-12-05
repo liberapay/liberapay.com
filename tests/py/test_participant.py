@@ -4,6 +4,7 @@ import datetime
 from decimal import Decimal
 import random
 
+import mock
 import pytest
 
 from aspen.utils import utcnow
@@ -201,6 +202,30 @@ class TestTakeOver(Harness):
         alice.take_over(bob_github, have_confirmation=True)
         alice.take_over(bob_github, have_confirmation=True)
         self.db.self_check()
+
+    @mock.patch.object(Participant, '_mailer')
+    def test_email_addresses_merging(self, mailer):
+        alice = self.make_participant('alice')
+        alice.add_email('alice@example.com')
+        alice.add_email('alice@example.net')
+        alice.add_email('alice@example.org')
+        alice.verify_email('alice@example.org', alice.get_email('alice@example.org').nonce)
+        bob_github = self.make_elsewhere('github', 2, 'bob')
+        bob = bob_github.opt_in('bob')[0].participant
+        bob.add_email('alice@example.com')
+        bob.verify_email('alice@example.com', bob.get_email('alice@example.com').nonce)
+        bob.add_email('alice@example.net')
+        bob.add_email('bob@example.net')
+        alice.take_over(bob_github, have_confirmation=True)
+
+        alice_emails = {e.address: e for e in alice.get_emails()}
+        assert len(alice_emails) == 4
+        assert alice_emails['alice@example.com'].verified
+        assert alice_emails['alice@example.org'].verified
+        assert not alice_emails['alice@example.net'].verified
+        assert not alice_emails['bob@example.net'].verified
+
+        assert not Participant.from_id(bob.id).get_emails()
 
 
 class TestParticipant(Harness):
