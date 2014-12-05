@@ -472,7 +472,7 @@ class Participant(Model, MixinTeam):
                AND verified IS true
         """, locals())
         if owner:
-            if owner == self.id:
+            if owner == self.username:
                 return 0
             else:
                 raise EmailAlreadyTaken(email)
