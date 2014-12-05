@@ -109,10 +109,11 @@ class TestPayday(BalancedHarness):
         alice.set_tip_to(team, '4.00')
         alice.set_tip_to(roy, '10.00')
         bob.set_tip_to(alice, '5.00')
-        bob.set_tip_to(dana, '2.00')
-        carl.set_tip_to(dana, '2.08')
         team.add_member(bob)
         team.set_take_for(bob, D('1.00'), bob)
+        bob.set_tip_to(dana, '2.00')  # funded by bob's take
+        bob.set_tip_to(emma, '7.00')  # not funded, insufficient receiving
+        carl.set_tip_to(dana, '2.08')  # not funded, failing card
 
         def check():
             alice = Participant.from_username('alice')
@@ -123,17 +124,17 @@ class TestPayday(BalancedHarness):
             assert alice.giving == D('13.00')
             assert alice.pledging == D('1.00')
             assert alice.receiving == D('5.00')
-            assert bob.giving == D('5.00')
+            assert bob.giving == D('7.00')
             assert bob.receiving == D('7.00')
             assert bob.taking == D('1.00')
             assert carl.giving == D('0.00')
             assert carl.receiving == D('0.00')
-            assert dana.receiving == D('3.00')
-            assert dana.npatrons == 1
+            assert dana.receiving == D('5.00')
+            assert dana.npatrons == 2
             assert emma.receiving == D('1.00')
             assert emma.npatrons == 1
             funded_tips = self.db.all("SELECT amount FROM tips WHERE is_funded ORDER BY id")
-            assert funded_tips == [3, 6, 1, 4, 10, 5]
+            assert funded_tips == [3, 6, 1, 4, 10, 5, 2]
 
         # Pre-test check
         check()
