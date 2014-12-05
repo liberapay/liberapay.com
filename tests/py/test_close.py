@@ -4,7 +4,9 @@ from datetime import date
 from decimal import Decimal as D
 
 import balanced
+import mock
 import pytest
+
 from gratipay.billing.payday import Payday
 from gratipay.exceptions import NoBalancedCustomerHref, NotWhitelisted
 from gratipay.models.community import Community
@@ -274,7 +276,8 @@ class TestClosing(Harness):
 
     # cpi - clear_personal_information
 
-    def test_cpi_clears_personal_information(self):
+    @mock.patch.object(Participant, '_mailer')
+    def test_cpi_clears_personal_information(self, mailer):
         alice = self.make_participant( 'alice'
                                      , statement='not forgetting to be awesome!'
                                      , goal=100
@@ -292,6 +295,7 @@ class TestClosing(Harness):
                                      , npatrons=21
                                       )
         assert Participant.from_username('alice').number == 'plural' # sanity check
+        alice.add_email('alice@example.net')
 
         with self.db.get_cursor() as cursor:
             alice.clear_personal_information(cursor)
@@ -311,6 +315,7 @@ class TestClosing(Harness):
         assert alice.npatrons == new_alice.npatrons == 0
         assert alice.session_token == new_alice.session_token == None
         assert alice.session_expires.year == new_alice.session_expires.year == date.today().year
+        assert not alice.get_emails()
 
     def test_cpi_clears_communities(self):
         alice = self.make_participant('alice')
