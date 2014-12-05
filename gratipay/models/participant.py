@@ -428,6 +428,8 @@ class Participant(Model, MixinTeam):
                    AND is_member IS true
             );
 
+            DELETE FROM emails WHERE participant = %(username)s;
+
             UPDATE participants
                SET statement=''
                  , goal=NULL
