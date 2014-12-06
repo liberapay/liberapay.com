@@ -546,7 +546,8 @@ class Participant(Model, MixinTeam):
                     """, (self.username, email))
                 except IntegrityError:
                     raise EmailAlreadyTaken(email)
-                self.update_email(email)
+                if not self.email_address:
+                    self.update_email(email)
                 return 0  # Verified
             else:
                 return 1  # Expired

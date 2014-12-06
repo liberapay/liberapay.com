@@ -98,7 +98,7 @@ class TestEmail(Harness):
         self.verify_and_change_email('alice@example.com', 'alice@example.net')
         nonce = self.alice.get_email('alice@example.net').nonce
         self.verify_email('alice@example.net', nonce)
-        expected = 'alice@example.net'
+        expected = 'alice@example.com'
         actual = Participant.from_username('alice').email_address
         assert expected == actual
 
@@ -148,8 +148,8 @@ class TestEmail(Harness):
         # Can remove verified
         self.verify_and_change_email('alice@example.com', 'alice@example.net')
         self.verify_and_change_email('alice@example.net', 'alice@example.org')
-        self.hit_email_spt('remove', 'alice@example.com')
+        self.hit_email_spt('remove', 'alice@example.net')
 
         # Cannot remove primary
         with self.assertRaises(CannotRemovePrimaryEmail):
-            self.hit_email_spt('remove', 'alice@example.net')
+            self.hit_email_spt('remove', 'alice@example.com')
