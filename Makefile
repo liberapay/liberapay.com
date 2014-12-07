@@ -63,11 +63,11 @@ test-cov: env
 tests: test
 
 node_modules: package.json
-	npm install
+	npm install --no-bin-links
 	@if [ -d node_modules ]; then touch node_modules; fi
 
 jstest: node_modules
-	./node_modules/.bin/grunt test
+	node_modules/grunt-cli/bin/grunt test
 
 transifexrc:
 	@echo '[https://www.transifex.com]' >.transifexrc

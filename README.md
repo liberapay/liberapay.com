@@ -38,7 +38,7 @@ $ make test
 Vagrant
 -------
 
-Given VirtualBox 4.3 and Vagrant 1.5.4:
+Given VirtualBox 4.3 and Vagrant 1.6.x:
 
 ```
 $ vagrant up

@@ -55,4 +55,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #  box.vm.box_url =  File.exist?("gratipay.box") ? "file://gratipay.box" : "https://downloads.gratipay.com/gratipay.box"
   #end
 
+  config.vm.post_up_message = '
+----[ Gratipay Vagrant VM ]--------------------
+
+vagrant ssh
+
+$ make run        - start local Gratipay server
+$ make test       - run tests
+
+-----------------------------------------------
+
+'
 end
