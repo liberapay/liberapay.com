@@ -1,5 +1,44 @@
 Gratipay.account = {};
 
+Gratipay.account.post_email = function(e) {
+    e.preventDefault();
+    var $this = $(this);
+    var action = this.className;
+    var $inputs = $('.emails button, .emails input');
+    console.log($this);
+    var address = $this.parent().data('email') || $('input.add-email').val();
+
+    $inputs.prop('disabled', true);
+
+    $.ajax({
+        url: '../emails/modify.json',
+        type: 'POST',
+        data: {action: action, address: address},
+        dataType: 'json',
+        success: function (msg) {
+            if (msg) {
+                Gratipay.notification(msg, 'success');
+            }
+            if (action == 'add-email') {
+                $('input.add-email').val('');
+                setTimeout(function(){ window.location.reload(); }, 3000);
+                return;
+            } else if (action == 'set-primary') {
+                $('.emails li').removeClass('primary');
+                $this.parent().addClass('primary');
+            } else if (action == 'remove') {
+                $this.parent().fadeOut();
+            }
+            $inputs.prop('disabled', false);
+        },
+        error: function (e) {
+            $inputs.prop('disabled', false);
+            error_message = JSON.parse(e.responseText).error_message_long;
+            Gratipay.notification(error_message || "Failure", 'error');
+        },
+    });
+};
+
 Gratipay.account.init = function() {
 
     // Wire up username knob.
@@ -119,48 +158,13 @@ Gratipay.account.init = function() {
         $.post('../api-key.json', {action: 'show'}, callback);
     });
 
+
     // Wire up email addresses list.
     // =============================
-    function post_email(e) {
-        e.preventDefault();
-        var $this = $(this);
-        var action = this.className;
-        var $inputs = $('.emails button, .emails input');
-        var address = $this.parent().data('email') || $('input.add-email').val();
 
-        $inputs.prop('disabled', true);
-
-        $.ajax({
-            url: '../email.json',
-            type: 'POST',
-            data: {action: action, address: address},
-            dataType: 'json',
-            success: function (msg) {
-                if (msg) {
-                    Gratipay.notification(msg, 'success');
-                }
-                if (action == 'add-email') {
-                    $('input.add-email').val('');
-                    setTimeout(function(){ window.location.reload(); }, 3000);
-                    return;
-                } else if (action == 'set-primary') {
-                    $('.emails li').removeClass('primary');
-                    $this.parent().addClass('primary');
-                } else if (action == 'remove') {
-                    $this.parent().fadeOut();
-                }
-                $inputs.prop('disabled', false);
-            },
-            error: function (e) {
-                $inputs.prop('disabled', false);
-                error_message = JSON.parse(e.responseText).error_message_long;
-                Gratipay.notification(error_message || "Failure", 'error');
-            },
-        });
-    }
     $('.emails button, .emails input').prop('disabled', false);
-    $('.emails button[class]').on('click', post_email);
-    $('form.add-email').on('submit', post_email);
+    $('.emails button[class]').on('click', Gratipay.account.post_email);
+    $('form.add-email').on('submit', Gratipay.account.post_email);
 
 
     // Wire up close knob.

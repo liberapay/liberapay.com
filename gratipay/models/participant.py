@@ -44,7 +44,7 @@ from gratipay.models import add_event
 from gratipay.models._mixin_team import MixinTeam
 from gratipay.models.account_elsewhere import AccountElsewhere
 from gratipay.security.crypto import constant_time_compare
-from gratipay.utils import i18n, is_card_expiring
+from gratipay.utils import i18n, is_card_expiring, emails
 from gratipay.utils.username import safely_reserve_a_username
 
 
@@ -507,7 +507,7 @@ class Participant(Model, MixinTeam):
         host = gratipay.canonical_host
         username = self.username_lower
         quoted_email = quote(email)
-        link = "{scheme}://{host}/{username}/verify-email.html?email={quoted_email}&nonce={nonce}"
+        link = "{scheme}://{host}/{username}/emails/verify.html?email={quoted_email}&nonce={nonce}"
         self.send_email('verification',
                         email=email,
                         link=link.format(**locals()),
@@ -535,7 +535,7 @@ class Participant(Model, MixinTeam):
     def verify_email(self, email, nonce):
         r = self.get_email(email)
         if r and r.verified:
-            return 0  # Verified
+            return emails.ALREADY_VERIFIED
         if r and constant_time_compare(r.nonce, nonce):
             if (utcnow() - r.ctime) < EMAIL_HASH_TIMEOUT:
                 try:
@@ -550,11 +550,11 @@ class Participant(Model, MixinTeam):
                     raise EmailAlreadyTaken(email)
                 if not self.email_address:
                     self.update_email(email)
-                return 0  # Verified
+                return emails.VERIFICATION_SUCCEEDED
             else:
-                return 1  # Expired
+                return emails.VERIFICATION_EXPIRED
         else:
-            return 2  # Failed
+            return emails.VERIFICATION_FAILED
 
     def get_email(self, email):
         return self.db.one("""

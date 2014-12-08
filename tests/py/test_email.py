@@ -17,10 +17,10 @@ class TestEmail(Harness):
         P = self.client.PxST if should_fail else self.client.POST
         data = {'action': action, 'address': address}
         headers = {'HTTP_ACCEPT_LANGUAGE': 'fr,en'}
-        return P('/alice/email.json', data, auth_as=user, **headers)
+        return P('/alice/emails/modify.json', data, auth_as=user, **headers)
 
     def verify_email(self, email, nonce, username='alice', should_fail=False):
-        url = '/%s/verify-email.html?email=%s&nonce=%s' % (username, email, nonce)
+        url = '/%s/emails/verify.html?email=%s&nonce=%s' % (username, email, nonce)
         G = self.client.GxT if should_fail else self.client.GET
         return G(url)
 

@@ -5,8 +5,10 @@ from aspen_jinja2_renderer import SimplateLoader
 from jinja2 import Environment
 
 
-jinja_env = Environment()
+VERIFICATION_SUCCEEDED, ALREADY_VERIFIED, VERIFICATION_EXPIRED, VERIFICATION_FAILED = range(4)
 
+
+jinja_env = Environment()
 
 def compile_email_spt(fpath):
     r = {}

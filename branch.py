@@ -35,7 +35,7 @@ def add_email(self, email):
     host = gratipay.canonical_host
     username = self.username_lower
     quoted_email = quote(email)
-    link = "{scheme}://{host}/{username}/verify-email.html?email={quoted_email}&nonce={nonce}"
+    link = "{scheme}://{host}/{username}/emails/verify.html?email={quoted_email}&nonce={nonce}"
     self.send_email('initial',
                     email=email,
                     link=link.format(**locals()),

@@ -1,0 +1,62 @@
+"""Verify a participant's email
+"""
+from cgi import escape
+from datetime import timedelta
+
+from aspen import Response
+from aspen.utils import utcnow
+from gratipay.utils import emails, get_participant
+
+[-----------------------------------------------------------------------------]
+
+participant = get_participant(request, restrict=False)
+qs = request.line.uri.querystring
+nonce = qs.get('nonce', '')
+email = qs.get('email', '')
+
+result = participant.verify_email(email, nonce)
+
+if not participant.email_lang:
+    participant.set_email_lang(request.headers.get("Accept-Language"))
+
+[-----------------------------------------------------------------------------]
+{% extends "templates/base.html" %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function() {
+        $('button.resend').on('click', Gratipay.account.post_email);
+    });
+</script>
+{{ super() }}
+{% endblock %}
+
+{% block heading %}
+    <h1>Verify Email</h1>
+{% endblock %}
+
+{% block box %}
+    <div class="as-content">
+    {% if result == emails.VERIFICATION_SUCCEEDED %}
+        <h1>{{ _("Success!") }}</h1>
+        <p>{{ _("Your email address {0} is now connected to your Gratipay account.",
+                "<b>%s</b>" % escape(email)) }}</p>
+    {% elif result == emails.ALREADY_VERIFIED %}
+        <h1>{{ _("Already Verified") }}</h1>
+        <p>{{ _("Your email address {0} is already connected to your Gratipay account.",
+                "<b>%s</b>" % escape(email)) }}</p>
+    {% else %}
+        {% if result == emails.VERIFICATION_EXPIRED  %}
+            <h1>{{ _("Expired") }}</h1>
+            <p>{{ _("The verification code for {0} has expired.",
+                    "<b>%s</b>" % escape(email)) }}</p>
+        {% elif result == emails.VERIFICATION_FAILED %}
+            <h1>{{ _("Failure") }}</h1>
+            <p>{{ _("The verification code for {0} is bad.",
+                    "<b>%s</b>" % escape(email)) }}</p>
+        {% endif %}
+        <p data-email="{{ email|e }}"><button class="resend">{{ _("Resend verification email") }}</button></p>
+    {% endif %}
+    <a href="/{{ participant.username }}/account/#emails">{{ _("View your email addresses") }}.</a>
+    </div>
+{% endblock %}
