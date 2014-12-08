@@ -5,6 +5,7 @@ import mock
 from gratipay.exceptions import CannotRemovePrimaryEmail, EmailAlreadyTaken, EmailNotVerified
 from gratipay.models.participant import Participant
 from gratipay.testing import Harness
+from gratipay.utils import emails
 
 
 class TestEmail(Harness):
@@ -22,7 +23,7 @@ class TestEmail(Harness):
     def verify_email(self, email, nonce, username='alice', should_fail=False):
         url = '/%s/emails/verify.html?email=%s&nonce=%s' % (username, email, nonce)
         G = self.client.GxT if should_fail else self.client.GET
-        return G(url)
+        return G(url, auth_as=username)
 
     def verify_and_change_email(self, old_email, new_email, username='alice'):
         self.hit_email_spt('add-email', old_email)
@@ -49,13 +50,13 @@ class TestEmail(Harness):
 
     def test_verify_email_without_adding_email(self):
         response = self.verify_email('', 'sample-nonce')
-        assert 'Failed to verify' in response.body
+        assert 'Missing Info' in response.body
 
     def test_verify_email_wrong_nonce(self):
         self.hit_email_spt('add-email', 'alice@example.com')
         nonce = 'fake-nonce'
         r = self.alice.verify_email('alice@gratipay.com', nonce)
-        assert r == 2
+        assert r == emails.VERIFICATION_FAILED
         self.verify_email('alice@example.com', nonce)
         expected = None
         actual = Participant.from_username('alice').email_address
@@ -71,7 +72,7 @@ class TestEmail(Harness):
         """)
         nonce = self.alice.get_email(address).nonce
         r = self.alice.verify_email(address, nonce)
-        assert r == 1
+        assert r == emails.VERIFICATION_EXPIRED
         actual = Participant.from_username('alice').email_address
         assert actual == None
 
@@ -115,7 +116,7 @@ class TestEmail(Harness):
         self.alice.add_email('alice@gratipay.com')
         nonce = self.alice.get_email('alice@gratipay.com').nonce
         r = self.alice.verify_email('alice@gratipay.com', nonce)
-        assert r == 0
+        assert r == emails.VERIFICATION_SUCCEEDED
 
         with self.assertRaises(EmailAlreadyTaken):
             bob.add_email('alice@gratipay.com')
