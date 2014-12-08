@@ -4,6 +4,7 @@ we have in `participants`.
 """
 from __future__ import division, print_function, unicode_literals
 
+from urllib import quote
 import uuid
 
 import gratipay
@@ -38,7 +39,8 @@ def add_email(self, email):
     scheme = gratipay.canonical_scheme
     host = gratipay.canonical_host
     username = self.username_lower
-    link = "{scheme}://{host}/{username}/verify-email.html?email={email}&nonce={nonce}"
+    quoted_email = quote(email)
+    link = "{scheme}://{host}/{username}/verify-email.html?email={quoted_email}&nonce={nonce}"
     self.send_email('initial',
                     email=email,
                     link=link.format(**locals()),

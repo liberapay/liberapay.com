@@ -13,6 +13,7 @@ from __future__ import print_function, unicode_literals
 from cgi import escape
 from datetime import timedelta
 from decimal import Decimal, ROUND_DOWN, ROUND_HALF_EVEN
+from urllib import quote
 import uuid
 
 import aspen
@@ -505,7 +506,8 @@ class Participant(Model, MixinTeam):
         scheme = gratipay.canonical_scheme
         host = gratipay.canonical_host
         username = self.username_lower
-        link = "{scheme}://{host}/{username}/verify-email.html?email={email}&nonce={nonce}"
+        quoted_email = quote(email)
+        link = "{scheme}://{host}/{username}/verify-email.html?email={quoted_email}&nonce={nonce}"
         self.send_email('verification',
                         email=email,
                         link=link.format(**locals()),
