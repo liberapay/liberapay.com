@@ -136,19 +136,20 @@ Gratipay.account.init = function() {
             data: {action: action, address: address},
             dataType: 'json',
             success: function (msg) {
-                $inputs.prop('disabled', false);
+                if (msg) {
+                    Gratipay.notification(msg, 'success');
+                }
                 if (action == 'add-email') {
                     $('input.add-email').val('');
-                    window.location.reload();
+                    setTimeout(function(){ window.location.reload(); }, 3000);
+                    return;
                 } else if (action == 'set-primary') {
                     $('.emails li').removeClass('primary');
                     $this.parent().addClass('primary');
                 } else if (action == 'remove') {
                     $this.parent().fadeOut();
                 }
-                if (msg) {
-                    Gratipay.notification(msg, 'success');
-                }
+                $inputs.prop('disabled', false);
             },
             error: function (e) {
                 $inputs.prop('disabled', false);
