@@ -135,7 +135,7 @@ Gratipay.account.init = function() {
             type: 'POST',
             data: {action: action, address: address},
             dataType: 'json',
-            success: function (data) {
+            success: function (msg) {
                 $inputs.prop('disabled', false);
                 if (action == 'add-email') {
                     $('input.add-email').val('');
@@ -145,8 +145,9 @@ Gratipay.account.init = function() {
                     $this.parent().addClass('primary');
                 } else if (action == 'remove') {
                     $this.parent().fadeOut();
-                } else {
-                    Gratipay.notification("Success" , 'success');
+                }
+                if (msg) {
+                    Gratipay.notification(msg, 'success');
                 }
             },
             error: function (e) {

@@ -20,19 +20,24 @@ address = request.body['address']
 # This checks for exactly one @ and at least one . after @
 # The real validation will happen when we send the email
 if not email_re.match(address):
-    raise Response(400, "Invalid email address.")
+    raise Response(400, _("Invalid email address."))
 
 if not participant.email_lang:
     participant.set_email_lang(request.headers.get("Accept-Language"))
 
+msg = None
 if action in ('add-email', 'resend'):
     r = participant.add_email(address)
+    if r:
+        msg = _("A verification email has been sent to {0}", address)
+    else:
+        raise Response(400, _("You have already added and verified this address."))
 elif action == 'set-primary':
-    r = participant.update_email(address)
+    participant.update_email(address)
 elif action == 'remove':
-    r = participant.remove_email(address)
+    participant.remove_email(address)
 else:
     raise Response(400, 'unknown action "%s"' % action)
 
 [---] application/json via json_dump
-r
+msg
