@@ -29,7 +29,7 @@ msg = None
 if action in ('add-email', 'resend'):
     r = participant.add_email(address)
     if r:
-        msg = _("A verification email has been sent to {0}", address)
+        msg = _("A verification email has been sent to {0}.", address)
     else:
         raise Response(400, _("You have already added and verified this address."))
 elif action == 'set-primary':
