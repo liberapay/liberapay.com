@@ -45,6 +45,10 @@ if not participant.email_lang:
         <h1>{{ _("Already Verified") }}</h1>
         <p>{{ _("Your email address {0} is already connected to your Gratipay account.",
                 "<b>%s</b>" % escape(email)) }}</p>
+    {% elif result == emails.MISSING_VERIFICATION %}
+        <h1>{{ _("Missing Info") }}</h1>
+        <p>{{ _("Sorry, that's a bad link. You'll need to view your email addresses "
+                "and start over.") }}</p>
     {% else %}
         {% if result == emails.VERIFICATION_EXPIRED  %}
             <h1>{{ _("Expired") }}</h1>

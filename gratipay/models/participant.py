@@ -533,6 +533,8 @@ class Participant(Model, MixinTeam):
         self.set_attributes(email_address=email)
 
     def verify_email(self, email, nonce):
+        if '' in (email, nonce):
+            return emails.MISSING_VERIFICATION
         r = self.get_email(email)
         if r and r.verified:
             return emails.ALREADY_VERIFIED

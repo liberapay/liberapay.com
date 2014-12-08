@@ -5,7 +5,12 @@ from aspen_jinja2_renderer import SimplateLoader
 from jinja2 import Environment
 
 
-VERIFICATION_SUCCEEDED, ALREADY_VERIFIED, VERIFICATION_EXPIRED, VERIFICATION_FAILED = range(4)
+( VERIFICATION_SUCCEEDED
+, ALREADY_VERIFIED
+, VERIFICATION_EXPIRED
+, VERIFICATION_FAILED
+, MISSING_VERIFICATION
+ ) = range(5)
 
 
 jinja_env = Environment()
