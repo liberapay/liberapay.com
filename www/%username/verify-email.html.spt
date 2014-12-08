@@ -39,7 +39,7 @@ if not participant.email_lang:
     {% elif result == 2 %}
         <h1>{{ _("Failed to verify your email address") }}</h1>
     {% endif %}
-    <a href="/{{ participant.username }}/">{{ _("Go to your profile") }}.</a>
+    <a href="/{{ participant.username }}/account/#emails">{{ _("View your email addresses") }}.</a>
     </div>
 {% endblock %}
 
