@@ -6,6 +6,7 @@ from __future__ import division, print_function, unicode_literals
 
 import uuid
 
+import gratipay
 from aspen.utils import utcnow
 from postgres.orm import Model
 
@@ -16,6 +17,7 @@ tell_sentry = gratipay.wireup.make_sentry_teller(env)
 db = gratipay.wireup.db(env)
 gratipay.wireup.mail(env)
 gratipay.wireup.load_i18n('.', tell_sentry)
+gratipay.wireup.canonical(env)
 
 
 class EmailAddressWithConfirmation(Model):
@@ -33,8 +35,10 @@ def add_email(self, email):
              VALUES (%s, %s, %s, %s)
     """, (email, nonce, ctime, self.username))
 
+    scheme = gratipay.canonical_scheme
+    host = gratipay.canonical_host
     username = self.username_lower
-    link = "https://gratipay.com/{username}/verify-email.html?email={email}&nonce={nonce}"
+    link = "{scheme}://{host}/{username}/verify-email.html?email={email}&nonce={nonce}"
     self.send_email('initial',
                     email=email,
                     link=link.format(**locals()),
