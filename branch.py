@@ -30,11 +30,6 @@ db.register_model(EmailAddressWithConfirmation)
 def add_email(self, email):
     nonce = str(uuid.uuid4())
     ctime = utcnow()
-    db.run("""
-        INSERT INTO emails
-                    (address, nonce, ctime, participant)
-             VALUES (%s, %s, %s, %s)
-    """, (email, nonce, ctime, self.username))
 
     scheme = gratipay.canonical_scheme
     host = gratipay.canonical_host
@@ -46,6 +41,12 @@ def add_email(self, email):
                     link=link.format(**locals()),
                     username=self.username,
                     include_unsubscribe=False)
+
+    db.run("""
+        INSERT INTO emails
+                    (address, nonce, ctime, participant)
+             VALUES (%s, %s, %s, %s)
+    """, (email, nonce, ctime, self.username))
 
 
 participants = db.all("""
