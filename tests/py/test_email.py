@@ -33,7 +33,7 @@ class TestEmail(Harness):
     def test_participant_can_add_email(self):
         response = self.hit_email_spt('add-email', 'alice@gratipay.com')
         actual = json.loads(response.body)
-        assert actual == 1
+        assert actual
 
     def test_post_anon_returns_403(self):
         response = self.hit_email_spt('add-email', 'anon@gratipay.com', user=None, should_fail=True)
