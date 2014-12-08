@@ -1,6 +1,7 @@
 from __future__ import division
 
 from decimal import Decimal as D
+import base64
 import threading
 import time
 import traceback
@@ -55,7 +56,8 @@ website.renderer_factories['jinja2'].Renderer.global_context = {
     'len': len,
     'float': float,
     'type': type,
-    'str': str
+    'str': str,
+    'b64encode': base64.b64encode
 }
 
 

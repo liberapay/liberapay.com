@@ -25,6 +25,7 @@ except KeyError:
 if not cookie_value:
     raise Response(400, 'Empty cookie')
 query_data, action, then, action_user_name = json.loads(b64decode(cookie_value))
+then = b64decode(then)  # double-b64encoded to avoid other encoding issue w/ qs
 
 # Finish the auth process, the returned session is ready to use
 url = canonical_scheme+'://'+canonical_host+request.line.uri.raw
