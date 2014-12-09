@@ -43,14 +43,13 @@ if participant == user.participant:
 
         <p>Thanks! :-)</p>
     {% elif user.participant != participant %}
-        <h1>Wrong Account</h1>
+        <h1>{{ _("Wrong Account") }}</h1>
 
-        <p>You're signed into the wrong account to verify this email. If you
-        accidentally created two Gratipay accounts, you can merge them by
-        logging into the main one and adding the social accounts from the
-        other. Email <a
-        href="mailto:support@gratipay.com">support@gratipay.com</a> if you'd
-        like help.</p>
+        <p>{{ _("You're signed into the wrong Gratipay account to complete this email "
+                "verification. If you accidentally created two Gratipay accounts, you can merge "
+                "them by logging into the main one and adding the social accounts from the other. "
+                "Email {0} if you'd like help.",
+                '<a href="mailto:support@gratipay.com">support@gratipay.com</a>') }}</p>
 
     {% else %}
         {% if result == emails.VERIFICATION_SUCCEEDED %}
