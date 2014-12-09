@@ -47,11 +47,11 @@ if participant == user.participant:
             <h1>{{ _("Success!") }}</h1>
             <p>{{ _("Your email address {0} is now connected to your Gratipay account.",
                     "<b>%s</b>" % escape(email)) }}</p>
-        {% elif result == emails.ALREADY_VERIFIED %}
+        {% elif result == emails.VERIFICATION_REDUNDANT %}
             <h1>{{ _("Already Verified") }}</h1>
             <p>{{ _("Your email address {0} is already connected to your Gratipay account.",
                     "<b>%s</b>" % escape(email)) }}</p>
-        {% elif result == emails.MISSING_VERIFICATION %}
+        {% elif result == emails.VERIFICATION_MISSING %}
             <h1>{{ _("Missing Info") }}</h1>
             <p>{{ _("Sorry, that's a bad link. You'll need to view your email addresses "
                     "and start over.") }}</p>

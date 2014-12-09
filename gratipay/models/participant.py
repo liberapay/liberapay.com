@@ -534,10 +534,10 @@ class Participant(Model, MixinTeam):
 
     def verify_email(self, email, nonce):
         if '' in (email, nonce):
-            return emails.MISSING_VERIFICATION
+            return emails.VERIFICATION_MISSING
         r = self.get_email(email)
         if r and r.verified:
-            return emails.ALREADY_VERIFIED
+            return emails.VERIFICATION_REDUNDANT
         if r and constant_time_compare(r.nonce, nonce):
             if (utcnow() - r.ctime) < EMAIL_HASH_TIMEOUT:
                 try:
