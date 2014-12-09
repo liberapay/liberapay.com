@@ -536,27 +536,27 @@ class Participant(Model, MixinTeam):
         if '' in (email, nonce):
             return emails.VERIFICATION_MISSING
         r = self.get_email(email)
-        if r and r.verified:
-            return emails.VERIFICATION_REDUNDANT
-        if r and constant_time_compare(r.nonce, nonce):
-            if (utcnow() - r.verification_start) < EMAIL_HASH_TIMEOUT:
-                try:
-                    self.db.run("""
-                        UPDATE emails
-                           SET verified=true, verification_end=now(), nonce=NULL
-                         WHERE participant=%s
-                           AND address=%s
-                           AND verified IS NULL
-                    """, (self.username, email))
-                except IntegrityError:
-                    raise EmailAlreadyTaken(email)
-                if not self.email_address:
-                    self.update_email(email)
-                return emails.VERIFICATION_SUCCEEDED
-            else:
-                return emails.VERIFICATION_EXPIRED
-        else:
+        if r is None or not constant_time_compare(r.nonce, nonce):
             return emails.VERIFICATION_FAILED
+        if (utcnow() - r.verification_start) > EMAIL_HASH_TIMEOUT:
+            return emails.VERIFICATION_EXPIRED
+        if r.verified:
+            return emails.VERIFICATION_REDUNDANT
+
+        try:
+            self.db.run("""
+                UPDATE emails
+                   SET verified=true, verification_end=now(), nonce=NULL
+                 WHERE participant=%s
+                   AND address=%s
+                   AND verified IS NULL
+            """, (self.username, email))
+        except IntegrityError:
+            raise EmailAlreadyTaken(email)
+        if not self.email_address:
+            self.update_email(email)
+
+        return emails.VERIFICATION_SUCCEEDED
 
     def get_email(self, email):
         return self.db.one("""
