@@ -538,10 +538,10 @@ class Participant(Model, MixinTeam):
         r = self.get_email(email)
         if r is None or not constant_time_compare(r.nonce, nonce):
             return emails.VERIFICATION_FAILED
-        if (utcnow() - r.verification_start) > EMAIL_HASH_TIMEOUT:
-            return emails.VERIFICATION_EXPIRED
         if r.verified:
             return emails.VERIFICATION_REDUNDANT
+        if (utcnow() - r.verification_start) > EMAIL_HASH_TIMEOUT:
+            return emails.VERIFICATION_EXPIRED
         try:
             self.db.run("""
                 UPDATE emails
