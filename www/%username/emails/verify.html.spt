@@ -38,10 +38,10 @@ if participant == user.participant:
     <div class="as-content">
     {% if user.ANON %}
         <h1>{{ _("Please Sign In") }}</h1>
-        {% include "templates/sign-in-using.html" %}
-        and then you'll be able to verify your email.</p>
 
-        <p>Thanks! :-)</p>
+        <p>{{ _("Sign in to finish connecting your email.") }}</p>
+
+        <p>{% include "templates/sign-in-using.html" %}</p>
     {% elif user.participant != participant %}
         <h1>{{ _("Wrong Account") }}</h1>
 
