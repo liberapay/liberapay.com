@@ -9,9 +9,9 @@ BEGIN;
                                                             -- properly.
                                                             CHECK (verified IS NOT FALSE)
     , nonce                 text
-    , ctime                 timestamp with time zone    NOT NULL
+    , verification_start    timestamp with time zone    NOT NULL
                                                           DEFAULT CURRENT_TIMESTAMP
-    , mtime                 timestamp with time zone
+    , verification_end      timestamp with time zone
     , participant           text                        NOT NULL
                                                           REFERENCES participants
                                                           ON UPDATE CASCADE
