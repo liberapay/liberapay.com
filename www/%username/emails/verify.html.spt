@@ -16,8 +16,6 @@ if participant == user.participant:
     result = participant.verify_email(email, nonce)
     if not participant.email_lang:
         participant.set_email_lang(request.headers.get("Accept-Language"))
-elif not user.ANON:
-    raise Response(403)
 
 
 [-----------------------------------------------------------------------------]
@@ -39,11 +37,21 @@ elif not user.ANON:
 {% block box %}
     <div class="as-content">
     {% if user.ANON %}
-    <h1>{{ _("Please Sign In") }}</h1>
+        <h1>{{ _("Please Sign In") }}</h1>
         {% include "templates/sign-in-using.html" %}
         and then you'll be able to verify your email.</p>
 
         <p>Thanks! :-)</p>
+    {% elif user.participant != participant %}
+        <h1>Wrong Account</h1>
+
+        <p>You're signed into the wrong account to verify this email. If you
+        accidentally created two Gratipay accounts, you can merge them by
+        logging into the main one and adding the social accounts from the
+        other. Email <a
+        href="mailto:support@gratipay.com">support@gratipay.com</a> if you'd
+        like help.</p>
+
     {% else %}
         {% if result == emails.VERIFICATION_SUCCEEDED %}
             <h1>{{ _("Success!") }}</h1>
