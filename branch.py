@@ -29,7 +29,7 @@ db.register_model(EmailAddressWithConfirmation)
 
 def add_email(self, email):
     nonce = str(uuid.uuid4())
-    ctime = utcnow()
+    verification_start = utcnow()
 
     scheme = gratipay.canonical_scheme
     host = gratipay.canonical_host
@@ -44,9 +44,9 @@ def add_email(self, email):
 
     db.run("""
         INSERT INTO emails
-                    (address, nonce, ctime, participant)
+                    (address, nonce, verification_start, participant)
              VALUES (%s, %s, %s, %s)
-    """, (email, nonce, ctime, self.username))
+    """, (email, nonce, verification_start, self.username))
 
 
 participants = db.all("""
