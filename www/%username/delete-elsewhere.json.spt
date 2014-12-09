@@ -11,7 +11,7 @@ user_id = request.body["user_id"]
 try:
     user.participant.delete_elsewhere(platform, user_id)
 except LastElsewhere:
-    raise Response(400, "Cannot delete last login account.")
+    raise Response(400, "Cannot delete last login account. If you want to merge this login account to a different Gratipay account: log out of this account; log into the other account using another method; and then add this authentication provider to it. The two gratipay accounts will be merged.")
 except NonexistingElsewhere:
     raise Response(400, "Account does not exist.")
 
