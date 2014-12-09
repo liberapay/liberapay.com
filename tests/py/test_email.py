@@ -3,6 +3,7 @@ import json
 import mock
 
 from gratipay.exceptions import CannotRemovePrimaryEmail, EmailAlreadyTaken, EmailNotVerified
+from gratipay.exceptions import TooManyEmailAddresses
 from gratipay.models.participant import Participant
 from gratipay.testing import Harness
 from gratipay.utils import emails
@@ -125,6 +126,21 @@ class TestEmail(Harness):
 
         email_alice = Participant.from_username('alice').email_address
         assert email_alice == 'alice@gratipay.com'
+
+    @mock.patch.object(Participant, '_mailer')
+    def test_cannot_add_too_many_emails(self, mailer):
+        self.alice.add_email('alice@gratipay.com')
+        self.alice.add_email('alice@gratipay.net')
+        self.alice.add_email('alice@gratipay.org')
+        self.alice.add_email('alice@gratipay.co.uk')
+        self.alice.add_email('alice@gratipay.io')
+        self.alice.add_email('alice@gratipay.co')
+        self.alice.add_email('alice@gratipay.eu')
+        self.alice.add_email('alice@gratipay.asia')
+        self.alice.add_email('alice@gratipay.museum')
+        self.alice.add_email('alice@gratipay.py')
+        with self.assertRaises(TooManyEmailAddresses):
+            self.alice.add_email('alice@gratipay.coop')
 
     def test_account_page_shows_emails(self):
         self.verify_and_change_email('alice@example.com', 'alice@example.net')

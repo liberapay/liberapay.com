@@ -478,7 +478,7 @@ class Participant(Model, MixinTeam):
             else:
                 raise EmailAlreadyTaken(email)
 
-        if len(self.get_emails('verified is null')) > 9:
+        if len(self.get_emails()) > 9:
             raise TooManyEmailAddresses(email)
 
         nonce = str(uuid.uuid4())
@@ -566,13 +566,13 @@ class Participant(Model, MixinTeam):
                AND address=%s
         """, (self.username, email))
 
-    def get_emails(self, condition='true'):
+    def get_emails(self):
         return self.db.all("""
             SELECT *
               FROM emails
-             WHERE participant=%s AND {0}
+             WHERE participant=%s
           ORDER BY id
-        """.format(condition), (self.username,))
+        """, (self.username,))
 
     def remove_email(self, address):
         if address == self.email_address:
