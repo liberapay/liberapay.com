@@ -539,10 +539,13 @@ class Participant(Model, MixinTeam):
         if '' in (email, nonce):
             return emails.VERIFICATION_MISSING
         r = self.get_email(email)
-        if r is None or not constant_time_compare(r.nonce, nonce):
+        if r is None:
             return emails.VERIFICATION_FAILED
         if r.verified:
+            assert r.nonce is None  # and therefore, order of conditions matters
             return emails.VERIFICATION_REDUNDANT
+        if not constant_time_compare(r.nonce, nonce):
+            return emails.VERIFICATION_FAILED
         if (utcnow() - r.verification_start) > EMAIL_HASH_TIMEOUT:
             return emails.VERIFICATION_EXPIRED
         try:

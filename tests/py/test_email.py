@@ -63,6 +63,14 @@ class TestEmail(Harness):
         actual = Participant.from_username('alice').email_address
         assert expected == actual
 
+    def test_verify_email_a_second_time_returns_redundant(self):
+        address = 'alice@example.com'
+        self.hit_email_spt('add-email', address)
+        nonce = self.alice.get_email(address).nonce
+        r = self.alice.verify_email(address, nonce)
+        r = self.alice.verify_email(address, nonce)
+        assert r == emails.VERIFICATION_REDUNDANT
+
     def test_verify_email_expired_nonce(self):
         address = 'alice@example.com'
         self.hit_email_spt('add-email', address)
