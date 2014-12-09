@@ -10,7 +10,10 @@ of participant, based on certain properties.
 """
 from __future__ import print_function, unicode_literals
 
+from cgi import escape
+from datetime import timedelta
 from decimal import Decimal, ROUND_DOWN, ROUND_HALF_EVEN
+from urllib import quote
 import uuid
 
 import aspen
@@ -31,13 +34,18 @@ from gratipay.exceptions import (
     NoTippee,
     BadAmount,
     UserDoesntAcceptTips,
+    EmailAlreadyTaken,
+    CannotRemovePrimaryEmail,
+    EmailNotVerified,
+    TooManyEmailAddresses,
 )
 
 from gratipay.models import add_event
 from gratipay.models._mixin_team import MixinTeam
 from gratipay.models.account_elsewhere import AccountElsewhere
+from gratipay.security.crypto import constant_time_compare
+from gratipay.utils import i18n, is_card_expiring, emails
 from gratipay.utils.username import safely_reserve_a_username
-from gratipay.utils import is_card_expiring
 
 
 ASCII_ALLOWED_IN_USERNAME = set("0123456789"
@@ -45,6 +53,8 @@ ASCII_ALLOWED_IN_USERNAME = set("0123456789"
                                 "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                 ".,-_:@ ")
 # We use | in Sentry logging, so don't make that allowable. :-)
+
+EMAIL_HASH_TIMEOUT = timedelta(hours=24)
 
 NANSWERS_THRESHOLD = 0  # configured in wireup.py
 
@@ -422,6 +432,8 @@ class Participant(Model, MixinTeam):
                    AND is_member IS true
             );
 
+            DELETE FROM emails WHERE participant = %(username)s;
+
             UPDATE participants
                SET statement=''
                  , goal=NULL
@@ -429,7 +441,7 @@ class Participant(Model, MixinTeam):
                  , anonymous_receiving=False
                  , number='singular'
                  , avatar_url=NULL
-                 , email=NULL
+                 , email_address=NULL
                  , claimed_time=NULL
                  , session_token=NULL
                  , session_expires=now()
@@ -442,6 +454,165 @@ class Participant(Model, MixinTeam):
 
         """, dict(username=self.username, participant_id=self.id))
         self.set_attributes(**r._asdict())
+
+
+    # Emails
+    # ======
+
+    def add_email(self, email):
+        """
+            This is called when
+            1) Adding a new email address
+            2) Resending the verification email for an unverified email address
+
+            Returns the number of emails sent.
+        """
+
+        # Check that this address isn't already verified
+        owner = self.db.one("""
+            SELECT participant
+              FROM emails
+             WHERE address = %(email)s
+               AND verified IS true
+        """, locals())
+        if owner:
+            if owner == self.username:
+                return 0
+            else:
+                raise EmailAlreadyTaken(email)
+
+        if len(self.get_emails()) > 9:
+            raise TooManyEmailAddresses(email)
+
+        nonce = str(uuid.uuid4())
+        verification_start = utcnow()
+        try:
+            with self.db.get_cursor() as c:
+                add_event(c, 'participant', dict(id=self.id, action='add', values=dict(email=email)))
+                c.run("""
+                    INSERT INTO emails
+                                (address, nonce, verification_start, participant)
+                         VALUES (%s, %s, %s, %s)
+                """, (email, nonce, verification_start, self.username))
+        except IntegrityError:
+            nonce = self.db.one("""
+                UPDATE emails
+                   SET verification_start=%s
+                 WHERE participant=%s
+                   AND address=%s
+                   AND verified IS NULL
+             RETURNING nonce
+            """, (verification_start, self.username, email))
+            if not nonce:
+                return self.add_email(email)
+
+        scheme = gratipay.canonical_scheme
+        host = gratipay.canonical_host
+        username = self.username_lower
+        quoted_email = quote(email)
+        link = "{scheme}://{host}/{username}/emails/verify.html?email={quoted_email}&nonce={nonce}"
+        self.send_email('verification',
+                        email=email,
+                        link=link.format(**locals()),
+                        include_unsubscribe=False)
+        if self.email_address:
+            self.send_email('verification_notice',
+                            new_email=email,
+                            include_unsubscribe=False)
+            return 2
+        return 1
+
+    def update_email(self, email):
+        if not getattr(self.get_email(email), 'verified', False):
+            raise EmailNotVerified(email)
+        username = self.username
+        with self.db.get_cursor() as c:
+            add_event(c, 'participant', dict(id=self.id, action='set', values=dict(primary_email=email)))
+            c.run("""
+                UPDATE participants
+                   SET email_address=%(email)s
+                 WHERE username=%(username)s
+            """, locals())
+        self.set_attributes(email_address=email)
+
+    def verify_email(self, email, nonce):
+        if '' in (email, nonce):
+            return emails.VERIFICATION_MISSING
+        r = self.get_email(email)
+        if r is None or not constant_time_compare(r.nonce, nonce):
+            return emails.VERIFICATION_FAILED
+        if r.verified:
+            return emails.VERIFICATION_REDUNDANT
+        if (utcnow() - r.verification_start) > EMAIL_HASH_TIMEOUT:
+            return emails.VERIFICATION_EXPIRED
+        try:
+            self.db.run("""
+                UPDATE emails
+                   SET verified=true, verification_end=now(), nonce=NULL
+                 WHERE participant=%s
+                   AND address=%s
+                   AND verified IS NULL
+            """, (self.username, email))
+        except IntegrityError:
+            return emails.VERIFICATION_STYMIED
+
+        if not self.email_address:
+            self.update_email(email)
+        return emails.VERIFICATION_SUCCEEDED
+
+    def get_email(self, email):
+        return self.db.one("""
+            SELECT *
+              FROM emails
+             WHERE participant=%s
+               AND address=%s
+        """, (self.username, email))
+
+    def get_emails(self):
+        return self.db.all("""
+            SELECT *
+              FROM emails
+             WHERE participant=%s
+          ORDER BY id
+        """, (self.username,))
+
+    def remove_email(self, address):
+        if address == self.email_address:
+            raise CannotRemovePrimaryEmail()
+        with self.db.get_cursor() as c:
+            add_event(c, 'participant', dict(id=self.id, action='remove', values=dict(email=address)))
+            c.run("DELETE FROM emails WHERE participant=%s AND address=%s",
+                  (self.username, address))
+
+    def send_email(self, spt_name, accept_lang=None, **context):
+        context['escape'] = escape
+        context['username'] = self.username
+        context.setdefault('include_unsubscribe', True)
+        email = context.setdefault('email', self.email_address)
+        langs = i18n.parse_accept_lang(accept_lang or self.email_lang or 'en')
+        locale = i18n.match_lang(langs)
+        i18n.add_helpers_to_context(self._tell_sentry, context, locale)
+        spt = self._emails[spt_name]
+        base_spt = self._emails['base']
+        def render(t):
+            b = base_spt[t].render(context).strip()
+            return b.replace('$body', spt[t].render(context).strip())
+        message = {}
+        message['from_email'] = 'support@gratipay.com'
+        message['from_name'] = 'Gratipay Support'
+        message['to'] = [{'email': email, 'name': self.username}]
+        message['subject'] = spt['subject'].render(context)
+        message['html'] = render('text/html')
+        message['text'] = render('text/plain')
+
+        return self._mailer.messages.send(message=message)
+
+    def set_email_lang(self, accept_lang):
+        if not accept_lang:
+            return
+        self.db.run("UPDATE participants SET email_lang=%s WHERE id=%s",
+                    (accept_lang, self.id))
+        self.set_attributes(email_lang=accept_lang)
 
 
     # Random Junk
@@ -548,14 +719,6 @@ class Participant(Model, MixinTeam):
          RETURNING avatar_url
         """, (self.username,))
         self.set_attributes(avatar_url=avatar_url)
-
-    def update_email(self, email, confirmed=False):
-        with self.db.get_cursor() as c:
-            add_event(c, 'participant', dict(id=self.id, action='set', values=dict(current_email=email)))
-            r = c.one("UPDATE participants SET email = ROW(%s, %s) WHERE username=%s RETURNING email"
-                     , (email, confirmed, self.username)
-                      )
-            self.set_attributes(email=r)
 
     def update_goal(self, goal):
         typecheck(goal, (Decimal, None))
@@ -1182,6 +1345,24 @@ class Participant(Model, MixinTeam):
 
         """
 
+        MERGE_EMAIL_ADDRESSES = """
+
+            WITH emails_to_keep AS (
+                     SELECT DISTINCT ON (address) id
+                       FROM emails
+                      WHERE participant IN (%(dead)s, %(live)s)
+                   ORDER BY address, verification_end, verification_start DESC
+                 )
+            DELETE FROM emails
+             WHERE participant IN (%(dead)s, %(live)s)
+               AND id NOT IN (SELECT id FROM emails_to_keep);
+
+            UPDATE emails
+               SET participant = %(live)s
+             WHERE participant = %(dead)s;
+
+        """
+
         new_balance = None
 
         with self.db.get_cursor() as cursor:
@@ -1307,6 +1488,11 @@ class Participant(Model, MixinTeam):
                 archive_balance = cursor.one(TRANSFER_BALANCE_1, args)
                 other.set_attributes(balance=archive_balance)
                 new_balance = cursor.one(TRANSFER_BALANCE_2, args)
+
+                # Take over email addresses.
+                # ==========================
+
+                cursor.run(MERGE_EMAIL_ADDRESSES, dict(live=x, dead=y))
 
                 # Disconnect any remaining elsewhere account.
                 # ===========================================

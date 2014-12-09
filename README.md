@@ -223,15 +223,22 @@ The site works without this, except for the credit card page. Visit the
 [Balanced Documentation](https://www.balancedpayments.com/docs) if you want to
 know more about creating marketplaces.
 
-The GITHUB_* keys are for a gratipay-dev application in the Gratipay organization
-on Github. It points back to localhost:8537, which is where Gratipay will be
-running if you start it locally with `make run`. Similarly with the TWITTER_*
-keys, but there they required us to spell it `127.0.0.1`.
+The `GITHUB_*` keys are for a gratipay-dev application in the Gratipay
+organization on Github. It points back to localhost:8537, which is where
+Gratipay will be running if you start it locally with `make run`. Similarly
+with the `TWITTER_*` keys, but there they required us to spell it `127.0.0.1`.
 
 If you wish to use a different username or database name for the database, you
 should override the `DATABASE_URL` in `local.env` using the following format:
 
     DATABASE_URL=postgres://<username>@localhost/<database name>
+
+The `MANDRILL_KEY` value in `defaults.env` is for a test mail server, which
+won't actually send email to you. If you need to receive email during
+development then sign up for an account of your own at
+[Mandrill](http://mandrill.com/) and override `MANDRILL_KEY` in your
+`local.env`.
+
 
 Vagrant
 -------

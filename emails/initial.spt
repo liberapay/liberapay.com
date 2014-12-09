@@ -1,0 +1,21 @@
+{{ _("Connect to {0} on Gratipay?", username) }}
+
+[---] text/html
+A while ago we received a request to connect <b>{{ escape(email) }}</b> to the
+{{ '<b><a href="https://gratipay.com/{0}/">{0}</a></b>'.format(username) }}
+account on Gratipay (<a
+href="https://medium.com/gratipay-blog/gratitude-gratipay-ef24ad5e41f9">formerly</a>
+Gittip). Now we're finally sending a verification email! Ring a bell?
+<br>
+<br>
+<a href="{{ link }}" style="color: #fff; text-decoration:none; display:inline-block; padding: 0 15px; background: #396; font: normal 14px/40px Arial, sans-serif; white-space: nowrap; border-radius: 3px">Yes, proceed!</a>
+
+[---] text/plain
+
+A while ago we received a request to connect `{{ email }}`
+to the `{{ username }}` account on Gratipay (formerly Gittip).
+Now we're finally sending a verification email!
+
+Ring a bell? Follow this link to finish connecting your email:
+
+{{ link }}

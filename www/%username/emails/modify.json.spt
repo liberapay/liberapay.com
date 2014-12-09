@@ -1,0 +1,43 @@
+"""
+Manages the authenticated user's email addresses.
+"""
+import re
+
+from aspen import Response
+from gratipay.exceptions import ProblemChangingEmail
+from gratipay.utils import get_participant
+
+email_re = re.compile(r'^[^@]+@[^@]+\.[^@]+$')
+
+[-----------------------------------------]
+
+request.allow("POST")
+participant = get_participant(request, restrict=True)
+
+action = request.body['action']
+address = request.body['address']
+
+# This checks for exactly one @ and at least one . after @
+# The real validation will happen when we send the email
+if not email_re.match(address):
+    raise Response(400, _("Invalid email address."))
+
+if not participant.email_lang:
+    participant.set_email_lang(request.headers.get("Accept-Language"))
+
+msg = None
+if action in ('add-email', 'resend'):
+    r = participant.add_email(address)
+    if r:
+        msg = _("A verification email has been sent to {0}.", address)
+    else:
+        raise Response(400, _("You have already added and verified this address."))
+elif action == 'set-primary':
+    participant.update_email(address)
+elif action == 'remove':
+    participant.remove_email(address)
+else:
+    raise Response(400, 'unknown action "%s"' % action)
+
+[---] application/json via json_dump
+msg

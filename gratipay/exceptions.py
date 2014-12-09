@@ -4,6 +4,8 @@ This module contains exceptions shared across application code.
 
 from __future__ import print_function, unicode_literals
 
+from aspen import Response
+
 
 class ProblemChangingUsername(Exception):
     def __str__(self):
@@ -23,6 +25,23 @@ class UsernameIsRestricted(ProblemChangingUsername):
 
 class UsernameAlreadyTaken(ProblemChangingUsername):
     msg = "The username '{}' is already taken."
+
+
+class ProblemChangingEmail(Response):
+    def __init__(self, *args):
+        Response.__init__(self, 400, self.msg.format(*args))
+
+class EmailAlreadyTaken(ProblemChangingEmail):
+    msg = "{} is already connected to a different Gratipay account."
+
+class CannotRemovePrimaryEmail(ProblemChangingEmail):
+    msg = "You cannot remove your primary email address."
+
+class EmailNotVerified(ProblemChangingEmail):
+    msg = "The email address '{}' is not verified."
+
+class TooManyEmailAddresses(ProblemChangingEmail):
+    msg = "You've reached the maximum number of email addresses we allow."
 
 
 class ProblemChangingNumber(Exception):

@@ -201,10 +201,10 @@ Gratipay.profile.init = function() {
                 $('.toggle-bitcoin').show();
                 $('.bitcoin').toggle();
                 if (d.bitcoin_address === '') {
-                    $('.toggle-bitcoin').text('+ Add');  // TODO i18n
+                    $('.toggle-bitcoin').text('+ Add');
                     $('.bitcoin .address').attr('href', '');
                 } else {
-                    $('.toggle-bitcoin').text('Edit');  // TODO i18n
+                    $('.toggle-bitcoin').text('Edit');
                     $('.bitcoin .address').attr('href', 'https://blockchain.info/address/'+d.bitcoin_address);
                 }
                 $this.css('opacity', 1);

@@ -1,6 +1,7 @@
 from __future__ import division
 
 from decimal import Decimal as D
+import base64
 import threading
 import time
 import traceback
@@ -55,7 +56,8 @@ website.renderer_factories['jinja2'].Renderer.global_context = {
     'len': len,
     'float': float,
     'type': type,
-    'str': str
+    'str': str,
+    'b64encode': base64.b64encode
 }
 
 
@@ -63,11 +65,11 @@ env = website.env = gratipay.wireup.env()
 tell_sentry = website.tell_sentry = gratipay.wireup.make_sentry_teller(env)
 gratipay.wireup.canonical(env)
 website.db = gratipay.wireup.db(env)
-website.mail = gratipay.wireup.mail(env)
+website.mailer = gratipay.wireup.mail(env, website.project_root)
 gratipay.wireup.billing(env)
 gratipay.wireup.username_restrictions(website)
 gratipay.wireup.nanswers(env)
-gratipay.wireup.load_i18n(website)
+gratipay.wireup.load_i18n(website.project_root, tell_sentry)
 gratipay.wireup.other_stuff(website, env)
 gratipay.wireup.accounts_elsewhere(website, env)
 
@@ -158,7 +160,7 @@ algorithm.functions = [ timer.start
                       , authentication.get_auth_from_request
                       , csrf.get_csrf_token_from_request
                       , add_stuff_to_context
-                      , i18n.add_helpers_to_context
+                      , i18n.set_up_i18n
 
                       , algorithm['dispatch_request_to_filesystem']
 

@@ -142,8 +142,9 @@
 
     {% endblock %}
 
-    {% if not user.ANON and not request.line.uri.startswith('/credit-card.html') %}
+    {% if not user.ANON %}
     <script>
+        {% if not request.line.uri.startswith('/credit-card.html') %}
         {% if user.participant.last_bill_result %}
         Gratipay.notification(
             ["span", "{{ _('Your credit card has failed!') }} ",
@@ -156,6 +157,16 @@
                 ['a', {'href': '/credit-card.html'}, "{{ _('Update card') }}"]
             ], "error"
         );
+        {% endif %}
+        {% endif %}
+        {% if not user.participant.email_address and not request.line.uri.path.raw.endswith('/account/') %}
+        {% if not user.participant.get_emails() %}
+        Gratipay.notification(
+            ["span", "{{ _('Your account does not have an associated email address.') }} ",
+                ['a', {'href': '/{{ user.participant.username }}/account/#emails'}, "{{ _('Add an email address') }}"]
+            ], "notice", -1
+        );
+        {% endif %}
         {% endif %}
     </script>
     {% endif %}
