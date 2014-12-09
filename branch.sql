@@ -1,20 +1,21 @@
 BEGIN;
     CREATE TABLE emails
-    ( id            serial                      PRIMARY KEY
-    , address       text                        NOT NULL
-    , verified      boolean                     DEFAULT NULL
-                                                  CONSTRAINT verified_cant_be_false
-                                                    -- Only use TRUE and NULL, so that the unique
-                                                    -- constraint below functions properly.
-                                                    CHECK (verified IS NOT FALSE)
-    , nonce         text
-    , ctime         timestamp with time zone    NOT NULL
-                                                  DEFAULT CURRENT_TIMESTAMP
-    , mtime         timestamp with time zone
-    , participant   text                        NOT NULL
-                                                  REFERENCES participants
-                                                  ON UPDATE CASCADE
-                                                  ON DELETE RESTRICT
+    ( id                    serial                      PRIMARY KEY
+    , address               text                        NOT NULL
+    , verified              boolean                     DEFAULT NULL
+                                                          CONSTRAINT verified_cant_be_false
+                                                            -- Only use TRUE and NULL, so that the
+                                                            -- unique constraint below functions
+                                                            -- properly.
+                                                            CHECK (verified IS NOT FALSE)
+    , nonce                 text
+    , ctime                 timestamp with time zone    NOT NULL
+                                                          DEFAULT CURRENT_TIMESTAMP
+    , mtime                 timestamp with time zone
+    , participant           text                        NOT NULL
+                                                          REFERENCES participants
+                                                          ON UPDATE CASCADE
+                                                          ON DELETE RESTRICT
 
     , UNIQUE (address, verified) -- A verified email address can't be linked to multiple
                                  -- participants. However, an *un*verified address *can*
