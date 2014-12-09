@@ -70,8 +70,6 @@ class TestEmail(Harness):
         r = self.alice.verify_email(address, nonce)
         r = self.alice.verify_email(address, nonce)
         assert r == emails.VERIFICATION_REDUNDANT
-        actual = Participant.from_username('alice').email_address
-        assert actual == None
 
     def test_verify_email_expired_nonce(self):
         address = 'alice@example.com'
