@@ -542,7 +542,6 @@ class Participant(Model, MixinTeam):
             return emails.VERIFICATION_EXPIRED
         if r.verified:
             return emails.VERIFICATION_REDUNDANT
-
         try:
             self.db.run("""
                 UPDATE emails
@@ -552,10 +551,10 @@ class Participant(Model, MixinTeam):
                    AND verified IS NULL
             """, (self.username, email))
         except IntegrityError:
-            raise EmailAlreadyTaken(email)
+            return emails.VERIFICATION_STYMIED
+
         if not self.email_address:
             self.update_email(email)
-
         return emails.VERIFICATION_SUCCEEDED
 
     def get_email(self, email):

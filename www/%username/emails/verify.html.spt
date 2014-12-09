@@ -49,6 +49,10 @@ elif not user.ANON:
             <h1>{{ _("Success!") }}</h1>
             <p>{{ _("Your email address {0} is now connected to your Gratipay account.",
                     "<b>%s</b>" % escape(email)) }}</p>
+        {% elif result == emails.VERIFICATION_STYMIED %}
+            <h1>{{ _("Address Taken") }}</h1>
+            <p>{{ _("The email address {0} is already connected to a different Gratipay account.",
+                    "<b>%s</b>" % escape(email)) }}</p>
         {% elif result == emails.VERIFICATION_REDUNDANT %}
             <h1>{{ _("Already Verified") }}</h1>
             <p>{{ _("Your email address {0} is already connected to your Gratipay account.",
