@@ -1,16 +1,17 @@
 BEGIN;
     CREATE TABLE emails
-    ( id                                serial                      PRIMARY KEY
-    , address                           text                        NOT NULL
-    , verified                          boolean                     DEFAULT NULL
-    , nonce                             text
-    , ctime                             timestamp with time zone    NOT NULL
-                                                                      DEFAULT CURRENT_TIMESTAMP
-    , mtime                             timestamp with time zone
-    , participant                       text                        NOT NULL
-                                                                      REFERENCES participants
-                                                                      ON UPDATE CASCADE
-                                                                      ON DELETE RESTRICT
+    ( id            serial                      PRIMARY KEY
+    , address       text                        NOT NULL
+    , verified      boolean                     DEFAULT NULL
+    , nonce         text
+    , ctime         timestamp with time zone    NOT NULL
+                                                  DEFAULT CURRENT_TIMESTAMP
+    , mtime         timestamp with time zone
+    , participant   text                        NOT NULL
+                                                  REFERENCES participants
+                                                  ON UPDATE CASCADE
+                                                  ON DELETE RESTRICT
+
     , UNIQUE (address, verified) -- A verified email address can't be linked to multiple
                                  -- participants.
     , UNIQUE (participant, address)
