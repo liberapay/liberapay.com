@@ -32,7 +32,14 @@ with open('fake_payday.sql') as f:
 
 def threaded_map(func, iterable, threads=5):
     pool = ThreadPool(threads)
-    r = pool.map(func, iterable)
+    def g(*a, **kw):
+        # Without this wrapper we get a traceback from inside multiprocessing.
+        try:
+            return func(*a, **kw)
+        except Exception:
+            import sys, traceback
+            raise sys.exc_info()[0](traceback.format_exc())
+    r = pool.map(g, iterable)
     pool.close()
     pool.join()
     return r
