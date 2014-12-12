@@ -8,6 +8,9 @@ if user.ANON:
 if POST:
     user.sign_out(response.headers.cookie)
 
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        raise Response(200)
+
     if 'back_to' in request.body:
         back_to = request.body['back_to']
     else:
