@@ -433,10 +433,11 @@ class Payday(object):
                     cancel_card_hold(holds.pop(p.id))
             hold, error = create_card_hold(self.db, p, amount)
             if error:
-                self.mark_charge_failed(cursor)
+                return 1
             else:
                 holds[p.id] = hold
-        threaded_map(f, participants)
+        n_failures = sum(filter(None, threaded_map(f, participants)))
+        self.mark_charge_failed(cursor, n_failures)
 
         # Update the values of card_hold_ok in our temporary table
         if not holds:
@@ -692,15 +693,15 @@ class Payday(object):
     # ===============
 
     @staticmethod
-    def mark_charge_failed(cursor):
+    def mark_charge_failed(cursor, n_failures):
         cursor.one("""\
 
             UPDATE paydays
-               SET ncc_failing = ncc_failing + 1
+               SET ncc_failing = ncc_failing + %s
              WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
          RETURNING id
 
-        """, default=NoPayday)
+        """, (n_failures,), default=NoPayday)
 
 
     def mark_ach_failed(self):

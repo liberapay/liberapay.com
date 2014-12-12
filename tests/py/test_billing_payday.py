@@ -91,9 +91,9 @@ class TestPayday(BalancedHarness):
         payday = Payday.start()
         before = self.fetch_payday()
         with self.db.get_cursor() as cursor:
-            payday.mark_charge_failed(cursor)
+            payday.mark_charge_failed(cursor, 10)
         after = self.fetch_payday()
-        assert after['ncc_failing'] == before['ncc_failing'] + 1
+        assert after['ncc_failing'] == before['ncc_failing'] + 10
 
     def test_update_cached_amounts(self):
         team = self.make_participant('team', claimed_time='now', number='plural')
