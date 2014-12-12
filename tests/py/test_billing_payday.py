@@ -87,13 +87,18 @@ class TestPayday(BalancedHarness):
         assert debit.amount == 1576  # base amount + fee
         assert debit.description == 'janet'
 
-    def test_mark_charge_failed(self):
+    @mock.patch.object(Payday, 'fetch_card_holds')
+    @mock.patch('gratipay.billing.payday.create_card_hold')
+    def test_ncc_failing(self, cch, fch):
+        self.janet.set_tip_to(self.homer, 24)
+        fch.return_value = {}
+        cch.return_value = (None, 'oops')
         payday = Payday.start()
         before = self.fetch_payday()
-        with self.db.get_cursor() as cursor:
-            payday.mark_charge_failed(cursor, 10)
+        assert before['ncc_failing'] == 0
+        payday.payin()
         after = self.fetch_payday()
-        assert after['ncc_failing'] == before['ncc_failing'] + 10
+        assert after['ncc_failing'] == 1
 
     def test_update_cached_amounts(self):
         team = self.make_participant('team', claimed_time='now', number='plural')
