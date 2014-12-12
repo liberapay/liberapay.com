@@ -6,16 +6,21 @@ from gratipay.utils.i18n import LANGUAGES_2
 
 [-----------------------------------------------------------------------------]
 
-request.allow("POST")
 participant = get_participant(request, restrict=True)
 
-lang = request.body["lang"]
-content = request.body["content"]
+if POST:
+    lang = request.body['lang']
+    content = request.body['content']
 
-if lang not in LANGUAGES_2:
-    raise Response(400, "unknown lang")
+    if lang not in LANGUAGES_2:
+        raise Response(400, "unknown lang")
 
-participant.update_statement(lang, content)
+    participant.upsert_statement(lang, content)
+    r = {"html": markdown.render(content)}
+
+else:
+    lang = qs['lang']
+    r = {"content": participant.get_statement([lang])[0]}
 
 [---] application/json via json_dump
-{"content": markdown.render(content), "lang": lang}
+r

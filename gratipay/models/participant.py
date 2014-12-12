@@ -213,17 +213,39 @@ class Participant(Model, MixinTeam):
         the list provided.
         """
         return self.db.one("""
-            SELECT content
+            SELECT content, lang
               FROM statements
               JOIN enumerate(%(langs)s) langs ON langs.value = statements.lang
              WHERE participant=%(id)s
           ORDER BY langs.rank
              LIMIT 1
-        """, dict(id=self.id, langs=langs))
+        """, dict(id=self.id, langs=langs), default=(None, None))
 
-    def update_statement(self, lang, statement):
-        self.db.run("UPDATE statements SET content=%s WHERE participant=%s AND lang=%s",
-                    (statement, self.id, lang))
+    def get_statement_langs(self):
+        return self.db.all("SELECT lang FROM statements WHERE participant=%s",
+                           (self.id,))
+
+    def upsert_statement(self, lang, statement):
+        if not statement:
+            self.db.run("DELETE FROM statements WHERE participant=%s AND lang=%s",
+                        (self.id, lang))
+            return
+        r = self.db.one("""
+            UPDATE statements
+               SET content=%s
+             WHERE participant=%s
+               AND lang=%s
+         RETURNING true
+        """, (statement, self.id, lang))
+        if not r:
+            try:
+                self.db.run("""
+                    INSERT INTO statements
+                                (lang, content, participant)
+                         VALUES (%s, %s, %s)
+                """, (lang, statement, self.id))
+            except IntegrityError:
+                return self.upsert_statement(lang, statement)
 
 
     # Pricing

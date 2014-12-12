@@ -292,14 +292,14 @@ class TestClosing(Harness):
                                      , receiving=40
                                      , npatrons=21
                                       )
-        alice.update_statement('en', 'not forgetting to be awesome!')
+        alice.upsert_statement('en', 'not forgetting to be awesome!')
         alice.add_email('alice@example.net')
 
         with self.db.get_cursor() as cursor:
             alice.clear_personal_information(cursor)
         new_alice = Participant.from_username('alice')
 
-        assert not alice.get_statement(['en'])
+        assert alice.get_statement(['en']) == (None, None)
         assert alice.goal == new_alice.goal == None
         assert alice.anonymous_giving == new_alice.anonymous_giving == False
         assert alice.anonymous_receiving == new_alice.anonymous_receiving == False
