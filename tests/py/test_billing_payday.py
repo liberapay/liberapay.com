@@ -491,11 +491,12 @@ class TestPayin(BalancedHarness):
         fake_hold.amount = 1500
         fch.return_value = {self.janet.id: fake_hold}
         cch.side_effect = Foobar
-        open = mock.MagicMock()
-        with mock.patch.dict(__builtins__, {'open': open}):
+        open_ = mock.MagicMock()
+        open_.side_effect = open
+        with mock.patch.dict(__builtins__, {'open': open_}):
             with self.assertRaises(Foobar):
                 Payday.start().payin()
-        assert open.call_count == 1
+        assert open_.call_args_list[-1][0][0].endswith('_transfers.csv')
 
 
 class TestPayout(Harness):
