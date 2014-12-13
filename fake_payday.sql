@@ -3,6 +3,7 @@
 CREATE TEMPORARY TABLE temp_participants ON COMMIT DROP AS
     SELECT username
          , claimed_time
+         , is_locked
          , balance AS fake_balance
          , 0::numeric(35,2) AS giving
          , 0::numeric(35,2) AS pledging
@@ -41,17 +42,17 @@ CREATE TEMPORARY TABLE temp_takes
 CREATE OR REPLACE FUNCTION fake_tip() RETURNS trigger AS $$
     DECLARE
         tipper temp_participants;
-        tippee_elsewhere elsewhere;
+        tippee temp_participants;
     BEGIN
         tipper := (
             SELECT p.*::temp_participants
               FROM temp_participants p
              WHERE username = NEW.tipper
         );
-        tippee_elsewhere := (
-            SELECT e.*::elsewhere
-              FROM elsewhere e
-             WHERE participant = NEW.tippee
+        tippee := (
+            SELECT p.*::temp_participants
+              FROM temp_participants p
+             WHERE username = NEW.tippee
           LIMIT 1
         );
         IF (NEW.amount > tipper.fake_balance AND NOT tipper.credit_card_ok) THEN
@@ -62,7 +63,7 @@ CREATE OR REPLACE FUNCTION fake_tip() RETURNS trigger AS $$
                SET fake_balance = (fake_balance - NEW.amount)
                  , giving = (giving + NEW.amount)
              WHERE username = NEW.tipper;
-        ELSIF (NOT tippee_elsewhere.is_locked) THEN
+        ELSIF (NOT tippee.is_locked) THEN
             UPDATE temp_participants
                SET fake_balance = (fake_balance - NEW.amount)
                  , pledging = (pledging + NEW.amount)

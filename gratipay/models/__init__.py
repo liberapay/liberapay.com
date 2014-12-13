@@ -39,7 +39,6 @@ def check_db(cursor):
     _check_orphans(cursor)
     _check_orphans_no_tips(cursor)
     _check_paydays_volumes(cursor)
-    _check_claimed_not_locked(cursor)
 
 
 def _check_tips(cursor):
@@ -225,20 +224,6 @@ def _check_paydays_volumes(cursor):
         where ach_fees_volume != ref
     """)
     assert len(ach_fees_volume) == 0
-
-
-def _check_claimed_not_locked(cursor):
-    locked = cursor.all("""
-        SELECT participant
-        FROM elsewhere
-        WHERE EXISTS (
-            SELECT *
-            FROM participants
-            WHERE username=participant
-            AND claimed_time IS NOT NULL
-        ) AND is_locked
-    """)
-    assert len(locked) == 0
 
 
 def add_event(c, type, payload):

@@ -78,6 +78,7 @@ def fake_participant(db, number="singular", is_admin=False):
                , last_bill_result=''  # Needed to not be suspicious
                , claimed_time=faker.date_time_this_year()
                , number=number
+               , is_locked=False
                 )
     #Call participant constructor to perform other DB initialization
     return Participant.from_username(username)
@@ -118,7 +119,6 @@ def fake_elsewhere(db, participant, platform):
                , platform=platform
                , user_id=fake_text_id()
                , user_name=participant.username
-               , is_locked=False
                , participant=participant.username
                , extra_info=None
                 )
