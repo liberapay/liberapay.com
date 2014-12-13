@@ -20,7 +20,7 @@ class Tests(Harness):
 
     def test_participant_can_change_their_statement(self):
         response = self.change_statement('en', 'Lorem ipsum')
-        actual = json.loads(response.body)['content']
+        actual = json.loads(response.body)['html']
         assert actual == '<p>Lorem ipsum</p>\n'
 
     def test_anonymous_gets_403(self):
