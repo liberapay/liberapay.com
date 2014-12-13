@@ -30,16 +30,23 @@ with open('fake_payday.sql') as f:
     FAKE_PAYDAY = f.read()
 
 
+class ExceptionWrapped(Exception): pass
+
+
 def threaded_map(func, iterable, threads=5):
     pool = ThreadPool(threads)
     def g(*a, **kw):
         # Without this wrapper we get a traceback from inside multiprocessing.
         try:
             return func(*a, **kw)
-        except Exception:
-            import sys, traceback
-            raise sys.exc_info()[0](traceback.format_exc())
-    r = pool.map(g, iterable)
+        except Exception as e:
+            import traceback
+            raise ExceptionWrapped(e, traceback.format_exc())
+    try:
+        r = pool.map(g, iterable)
+    except ExceptionWrapped as e:
+        print(e.args[1])
+        raise e.args[0]
     pool.close()
     pool.join()
     return r
@@ -433,10 +440,18 @@ class Payday(object):
                     cancel_card_hold(holds.pop(p.id))
             hold, error = create_card_hold(self.db, p, amount)
             if error:
-                self.mark_charge_failed(cursor)
+                return 1
             else:
                 holds[p.id] = hold
-        threaded_map(f, participants)
+        n_failures = sum(filter(None, threaded_map(f, participants)))
+
+        # Record the number of failures
+        cursor.one("""
+            UPDATE paydays
+               SET ncc_failing = %s
+             WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
+         RETURNING id
+        """, (n_failures,), default=NoPayday)
 
         # Update the values of card_hold_ok in our temporary table
         if not holds:
@@ -690,18 +705,6 @@ class Payday(object):
 
     # Record-keeping.
     # ===============
-
-    @staticmethod
-    def mark_charge_failed(cursor):
-        cursor.one("""\
-
-            UPDATE paydays
-               SET ncc_failing = ncc_failing + 1
-             WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
-         RETURNING id
-
-        """, default=NoPayday)
-
 
     def mark_ach_failed(self):
         self.db.one("""\
