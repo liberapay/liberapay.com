@@ -27,29 +27,31 @@
     {% if participant.bitcoin_address or own_account %}
     {% set addr = participant.bitcoin_address or '' %}
     {% set url = 'https://blockchain.info/address/'+addr if addr else 'javascript:;' %}
-    <tr>
+    <tr class="bitcoin js-edit">
         <td class="account-type">
             <img src="{{ website.asset('bitcoin.png') }}" />
         </td>
         <td class="account-details">
-            <div class="{{ 'bitcoin' if own_account else '' }}">
+            <div class="view">
                 <a class="address" rel="me" href="{{ url }}">{{ addr }}</a>
             </div>
-            <form class="bitcoin-submit">
+            {% if own_account %}
+            <form class="edit" action="bitcoin.json">
                 <div class="address">
-                    <input type="text" class="bitcoin hidden" value="{{ addr }}" />
+                    <input type="text" name="bitcoin_address" value="{{ addr }}" />
                 </div>
                 <div class="buttons">
-                    <button type="submit" class="bitcoin hidden">{{ _("Save") }}</button>
-                    <button type="cancel" class="bitcoin cancel hidden">{{ _("Cancel") }}</button>
+                    <button class="save">{{ _("Save") }}</button>
+                    <button class="cancel">{{ _("Cancel") }}</button>
                 </div>
             </form>
+            {% endif %}
 
             <div class="account-type">Bitcoin</div>
         </td>
         <td class="account-action">
             {% if own_account %}
-            <button class="toggle-bitcoin">
+            <button class="edit">
                 {{ _("Edit") if addr else _("+ Add") }}
             </button>
             {% endif %}

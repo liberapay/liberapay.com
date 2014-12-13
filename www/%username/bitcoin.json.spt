@@ -13,7 +13,7 @@ request.allow("POST")
 
 bit_address = request.body['bitcoin_address'].strip()
 if bit_address != '' and not bitcoin.validate(bit_address):
-    raise Response(400)
+    raise Response(400, _("This is not a valid Bitcoin address."))
 
 with website.db.get_cursor() as c:
     add_event(c, 'participant', dict(id=user.participant.id, action='set', values=dict(bitcoin_address=bit_address)))

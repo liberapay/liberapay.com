@@ -74,54 +74,10 @@ Gratipay.profile.init = function() {
     // Wire up bitcoin input.
     // ======================
 
-    $('.toggle-bitcoin').on("click", function() {
-        $('.bitcoin').toggle();
-        $('.toggle-bitcoin').hide();
-        $('input.bitcoin').focus();
+    Gratipay.forms.jsEdit({
+        root: $('tr.bitcoin.js-edit'),
+        success: function(){ window.location.reload(); return false; },
     });
-    $('.bitcoin-submit')
-        .on('click', '[type=submit]', function () {
-            var $this = $(this);
-
-            $this.css('opacity', 0.5);
-
-            function success(d) {
-                $('.bitcoin a.address').text(d.bitcoin_address);
-                $('.toggle-bitcoin').show();
-                $('.bitcoin').toggle();
-                if (d.bitcoin_address === '') {
-                    $('.toggle-bitcoin').text('+ Add');
-                    $('.bitcoin .address').attr('href', '');
-                } else {
-                    $('.toggle-bitcoin').text('Edit');
-                    $('.bitcoin .address').attr('href', 'https://blockchain.info/address/'+d.bitcoin_address);
-                }
-                $this.css('opacity', 1);
-            }
-
-            jQuery.ajax({
-                    url: "bitcoin.json",
-                    type: "POST",
-                    dataType: 'json',
-                    success: success,
-                    error: function () {
-                        $this.css('opacity', 1);
-                        Gratipay.notification("Invalid Bitcoin address. Please try again.", 'error');
-                    },
-                    data: {
-                        bitcoin_address: $('input.bitcoin').val()
-                    }
-                }
-            )
-
-            return false;
-        })
-        .on('click', '[type=cancel]', function () {
-            $('.bitcoin').toggle();
-            $('.toggle-bitcoin').show();
-
-            return false;
-        });
 
 
     // Wire up account deletion.
