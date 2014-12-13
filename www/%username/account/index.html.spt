@@ -25,19 +25,20 @@ emails = participant.get_emails()
 <div id="profile-edit">
     <div class="col0">
 
-        <form class="username">
+        <div class="username js-edit">
             <h2>{{ _("You are {0}",
                     "<span class='view'>" + escape(participant.username) + "</span>") }}
-                <input tabindex="100" name="username" value="{{ participant.username|e }}"/>
-                <button tabindex="101" class="edit">{{ _("Edit") }}</button>
-                <button tabindex="102" class="save" type="submit">{{ _("Save") }}</button>
-                <button tabindex="103" class="cancel" type="cancel">{{ _("Cancel") }}</button>
+                <button class="edit">{{ _("Edit") }}</button>
+                <form class="edit" action="../username.json" data-display="inline">
+                    <input name="username" value="{{ participant.username|e }}"/>
+                    <button class="save">{{ _("Save") }}</button>
+                    <button class="cancel">{{ _("Cancel") }}</button>
+                    <span class="warning">
+                        {{ _("Have you linked to your Gratipay profile from other websites? Be sure to update those links!") }}
+                    </span>
+                </form>
             </h2>
-
-            <h2 class="warning">
-            {{ _("Have you linked to your Gratipay profile from other websites? Be sure to update those links!") }}
-            </h2>
-        </form>
+        </div>
 
         <h2>{{ _("Account type") }}</h2>
         <form class="number">

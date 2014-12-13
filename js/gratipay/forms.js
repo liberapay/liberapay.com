@@ -82,7 +82,7 @@ Gratipay.forms.jsEdit = function(params) {
 
     var $root = $(params.root);
     var $form = $root.find('form.edit');
-    var $view = $root.find('div.view');
+    var $view = $root.find('.view');
     var $editButton = $root.find('button.edit');
 
     $form.find('button').attr('type', 'button');
@@ -90,13 +90,14 @@ Gratipay.forms.jsEdit = function(params) {
 
     $editButton.prop('disabled', false);
     $editButton.click(function(e) {
-        $editButton.prop('disabled', true);
-        $form.show();
+        if (params.hideEditButton) $editButton.hide();
+        else $editButton.prop('disabled', true);
+        $form.css('display', $form.data('display') || 'block');
         $view.hide();
     });
 
     function finish_editing() {
-        $editButton.prop('disabled', false);
+        $editButton.show().prop('disabled', false);
         $form.hide();
         $view.show();
     }
