@@ -23,11 +23,15 @@ if goal is not None:
     except NumberFormatError:
         raise Response(400, "Bad input.")
 
-participant = get_participant(request)
-participant.update_goal(goal)
-
-if goal is not None:
-    goal = format_decimal(goal)
+if goal == -1 and not request.body.get("confirmed"):
+    msg = _("Warning: Doing this will remove all the tips you are currently receiving."
+            "\n\nThat cannot be undone!")
+    r = {'confirm': msg}
+else:
+    participant = get_participant(request)
+    participant.update_goal(goal)
+    goal_l = None if goal is None else format_currency(goal, 'USD', trailing_zeroes=False)
+    r = {"goal": goal, "goal_l": goal_l}
 
 [---] application/json via json_dump
-{"goal": goal}
+r

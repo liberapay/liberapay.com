@@ -77,3 +77,67 @@ Gratipay.forms.initCSRF = function() {   // https://docs.djangoproject.com/en/de
         }
     });
 };
+
+Gratipay.forms.jsEdit = function(params) {
+
+    var $root = $(params.root);
+    var $form = $root.find('form.edit');
+    var $view = $root.find('div.view');
+    var $editButton = $root.find('button.edit');
+
+    $form.find('button').attr('type', 'button');
+    $form.find('button.save').attr('type', 'submit');
+
+    $editButton.prop('disabled', false);
+    $editButton.click(function(e) {
+        $editButton.prop('disabled', true);
+        $form.show();
+        $view.hide();
+    });
+
+    function finish_editing() {
+        $editButton.prop('disabled', false);
+        $form.hide();
+        $view.show();
+    }
+    $root.find('button.cancel').click(finish_editing);
+
+    function post(e, confirmed) {
+        e.preventDefault();
+
+        var data = $form.serializeArray();
+        if (confirmed) data.push({name: 'confirmed', value: true});
+
+        var $inputs = $form.find(':not(:disabled)');
+        $inputs.prop('disabled', true);
+
+        $.ajax({
+            url: $form.attr('action'),
+            type: 'POST',
+            data: data,
+            dataType: 'json',
+            success: function (d) {
+                $inputs.prop('disabled', false);
+                if (d.confirm) {
+                    if (confirm(d.confirm)) return post(e, true);
+                    return;
+                }
+                var r = (params.success || function () {
+                    if (d.html || d.html === '') {
+                        $view.html(d.html);
+                        if (d.html === '') window.location.reload();
+                    }
+                }).call(this, d);
+                if (r !== false) finish_editing();
+            },
+            error: params.error || function (e) {
+                $inputs.prop('disabled', false);
+                error_message = JSON.parse(e.responseText).error_message_long;
+                Gratipay.notification(error_message || "Failure", 'error');
+            },
+        });
+    }
+
+    $form.on('submit', post);
+
+};

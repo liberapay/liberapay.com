@@ -1,7 +1,9 @@
 """Show information about a single participant. It might be you!
 """
-from gratipay.utils import excerpt_intro, get_participant, markdown
+from collections import OrderedDict
+
 from gratipay.models import community
+from gratipay.utils import excerpt_intro, get_participant, markdown
 
 LONG_STATEMENT = 256
 
@@ -21,8 +23,15 @@ if participant.anonymous_receiving:
 
 accounts = participant.get_accounts_elsewhere()
 
-statement = participant.get_statement(request.accept_langs)
+statement, stmt_lang = participant.get_statement(request.accept_langs)
 long_statement = len(statement or '') > LONG_STATEMENT
+if user.participant == participant:
+    pref_langs = set(request.accept_langs + participant.get_statement_langs())
+    select_langs = OrderedDict((k,v) for k, v in locale.languages_2.items() if k in pref_langs)
+    select_langs.update([('', '---')])  # Separator
+    select_langs.update(locale.languages_2)
+    stmt_placeholder = _("You don't have a profile statement in this language yet.")
+    confirm_discard = _("You haven't saved your changes, are you sure you want to discard them?")
 communities = community.get_list_for(website.db, participant.id)
 
 if participant.number == 'singular':
