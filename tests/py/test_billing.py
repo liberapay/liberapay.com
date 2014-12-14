@@ -195,9 +195,9 @@ class TestBillingAssociate(BalancedHarness):
 class TestBillingClear(BalancedHarness):
 
     def test_clear(self):
-        customer = balanced.Customer.fetch(self.david_href)
-        billing.clear(self.db, u"credit card", self.david, customer)
+        self.client.POST('/credit-card.json', data=dict(action='delete'), auth_as='david')
 
+        customer = balanced.Customer.fetch(self.david_href)
         cards = customer.cards.all()
         assert len(cards) == 0
 
@@ -206,9 +206,9 @@ class TestBillingClear(BalancedHarness):
         assert david.balanced_customer_href
 
     def test_clear_bank_account(self):
-        customer = balanced.Customer.fetch(self.david_href)
-        billing.clear(self.db, u"bank account", self.david, customer)
+        self.client.POST('/bank-account.json', data=dict(action='delete'), auth_as='david')
 
+        customer = balanced.Customer.fetch(self.david_href)
         bank_accounts = customer.bank_accounts.all()
         assert len(bank_accounts) == 0
 
@@ -224,13 +224,15 @@ class TestBillingStoreResult(Harness):
         self.alice = self.make_participant('alice')
 
     def test_store_result_stores_bill_error(self):
-        billing.store_result(self.db, u"credit card", self.alice, "cheese is yummy")
+        msg = "cheese is yummy"
+        data = dict(action='store-error', msg=msg)
+        self.client.POST('/credit-card.json', data=data, auth_as='alice')
         alice = Participant.from_username('alice')
-        assert self.alice.last_bill_result == alice.last_bill_result == "cheese is yummy"
+        assert alice.last_bill_result == msg
 
     def test_store_result_stores_ach_error(self):
         for message in ['cheese is yummy', 'cheese smells like my vibrams']:
-            billing.store_result(self.db, u"bank account", self.alice, message)
+            data = dict(action='store-error', msg=message)
+            self.client.POST('/bank-account.json', data=data, auth_as='alice')
             alice = Participant.from_username('alice')
-            assert self.alice.last_ach_result == alice.last_ach_result == message
-
+            assert alice.last_ach_result == message
