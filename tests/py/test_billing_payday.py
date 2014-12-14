@@ -9,7 +9,6 @@ from gratipay.billing.exchanges import create_card_hold
 from gratipay.billing.payday import NoPayday, Payday
 from gratipay.exceptions import NegativeBalance
 from gratipay.models.participant import Participant
-from gratipay.models.account_elsewhere import AccountElsewhere
 from gratipay.testing import Foobar, Harness
 from gratipay.testing.balanced import BalancedHarness
 
@@ -106,8 +105,8 @@ class TestPayday(BalancedHarness):
         bob = self.make_participant('bob', claimed_time='now', last_bill_result=None)
         carl = self.make_participant('carl', claimed_time='now', last_bill_result="Fail!")
         dana = self.make_participant('dana', claimed_time='now')
-        emma = self.make_elsewhere('github', 58946, 'emma').participant
-        roy = self.make_elsewhere('github', 58947, 'roy', is_locked=True).participant
+        emma = self.make_participant('emma')
+        roy = self.make_participant('roy', is_locked=True)
         alice.set_tip_to(dana, '3.00')
         alice.set_tip_to(bob, '6.00')
         alice.set_tip_to(emma, '1.00')
@@ -125,7 +124,7 @@ class TestPayday(BalancedHarness):
             bob = Participant.from_username('bob')
             carl = Participant.from_username('carl')
             dana = Participant.from_username('dana')
-            emma = AccountElsewhere.from_user_name('github','emma').participant
+            emma = Participant.from_username('emma')
             assert alice.giving == D('13.00')
             assert alice.pledging == D('1.00')
             assert alice.receiving == D('5.00')

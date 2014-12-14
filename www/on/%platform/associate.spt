@@ -68,7 +68,7 @@ elif action == 'connect':
         raise request.resource.respond(request, dispatch_result)
 
 elif action in {'lock', 'unlock'}:
-    account.set_is_locked(action == 'lock')
+    account.participant.set_is_locked(action == 'lock')
 
 else:
     raise Response(400)

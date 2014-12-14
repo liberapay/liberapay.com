@@ -149,7 +149,7 @@ class AccountElsewhere(Model):
         """Given a desired username, return a User object.
         """
         from gratipay.security.user import User
-        self.set_is_locked(False)
+        self.participant.set_is_locked(False)
         user = User.from_username(self.participant.username)
         assert not user.ANON, self.participant  # sanity check
         if self.participant.is_claimed:
@@ -174,12 +174,6 @@ class AccountElsewhere(Model):
              WHERE id=%s
         """, (token, self.id))
         self.set_attributes(token=token)
-
-    def set_is_locked(self, is_locked):
-        self.db.run( 'UPDATE elsewhere SET is_locked=%s WHERE id=%s'
-                   , (is_locked, self.id)
-                   )
-        self.set_attributes(is_locked=is_locked)
 
 
 def get_account_elsewhere(website, request):
