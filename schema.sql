@@ -57,6 +57,7 @@ CREATE TABLE participants
 , email_lang            text
 , is_locked             boolean                     NOT NULL DEFAULT FALSE
 , CONSTRAINT claimed_not_locked CHECK (NOT (claimed_time IS NOT NULL AND is_locked))
+, CONSTRAINT team_not_anonymous CHECK (NOT (number='plural' AND anonymous_receiving))
  );
 
 -- https://github.com/gratipay/gratipay.com/pull/1610
