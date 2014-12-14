@@ -53,6 +53,8 @@ CREATE TABLE participants
 , taking                numeric(35,2)               NOT NULL DEFAULT 0
 , npatrons              integer                     NOT NULL DEFAULT 0
 , is_free_rider         boolean                     DEFAULT NULL
+, is_locked             boolean                     NOT NULL DEFAULT FALSE
+, CONSTRAINT claimed_not_locked CHECK (NOT (claimed_time IS NOT NULL AND is_locked))
  );
 
 -- https://github.com/gratipay/gratipay.com/pull/1610
@@ -66,7 +68,6 @@ CREATE TABLE elsewhere
 , platform              text            NOT NULL
 , user_id               text            NOT NULL
 , participant           text            NOT NULL REFERENCES participants ON UPDATE CASCADE ON DELETE RESTRICT
-, is_locked             boolean         NOT NULL DEFAULT FALSE
 , access_token          text            DEFAULT NULL
 , refresh_token         text            DEFAULT NULL
 , expires               timestamptz     DEFAULT NULL
@@ -314,7 +315,6 @@ CREATE TYPE elsewhere_with_participant AS
 , email         text
 , avatar_url    text
 , extra_info    json
-, is_locked     boolean
 , is_team       boolean
 , token         json
 , participant   participants
@@ -331,7 +331,6 @@ AS $$
          , $1.email
          , $1.avatar_url
          , $1.extra_info
-         , $1.is_locked
          , $1.is_team
          , $1.token
          , participants.*::participants
