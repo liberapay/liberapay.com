@@ -13,6 +13,7 @@ class Twitter(PlatformOAuth1):
 
     # Auth attributes
     auth_url = 'https://api.twitter.com'
+    authorize_path = '/oauth/authenticate'
 
     # API attributes
     api_format = 'json'
