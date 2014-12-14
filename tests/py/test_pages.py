@@ -96,6 +96,12 @@ class TestPages(Harness):
         assert response.code == 302
         assert response.headers.cookie[SESSION].value == ''
 
+    def test_sign_out_doesnt_redirect_xhr(self):
+        self.make_participant('alice')
+        response = self.client.PxST('/sign-out.html', auth_as='alice',
+                                    HTTP_X_REQUESTED_WITH=b'XMLHttpRequest')
+        assert response.code == 200
+
     def test_receipts_signed_in(self):
         self.make_participant('alice', claimed_time='now')
         self.db.run("INSERT INTO exchanges (id, participant, amount, fee) "
