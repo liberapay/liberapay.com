@@ -32,6 +32,17 @@ class Tests(Harness):
         actual = json.loads(response.body)
         assert actual['receiving'] is True
 
+    def test_team_cannot_toggle_anonymous_receiving(self):
+        self.make_participant('team', number='plural')
+        response = self.client.PxST(
+            '/team/anonymous.json',
+            auth_as='team',
+            data={'toggle': 'receiving'}
+        )
+        actual = response.code
+        expected = 400
+        assert actual == expected
+
     def test_participant_can_toggle_anonymous_giving_back(self):
         response = self.hit_anonymous('POST', data={'toggle': 'giving'})
         response = self.hit_anonymous('POST', data={'toggle': 'giving'})
