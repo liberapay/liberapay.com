@@ -70,7 +70,7 @@ def fake_participant(db, number="singular", is_admin=False):
                , is_admin=is_admin
                , balance=fake_balance()
                , anonymous_giving=(random.randrange(5) == 0)
-               , anonymous_receiving=(random.randrange(5) == 0)
+               , anonymous_receiving=(number != 'plural' and random.randrange(5) == 0)
                , goal=fake_balance()
                , balanced_customer_href=faker.uri()
                , last_ach_result=''
