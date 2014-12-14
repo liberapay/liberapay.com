@@ -1,6 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 from decimal import Decimal as D
+import os
 
 import balanced
 import mock
@@ -500,7 +501,9 @@ class TestPayin(BalancedHarness):
         with mock.patch.dict(__builtins__, {'open': open_}):
             with self.assertRaises(Foobar):
                 Payday.start().payin()
-        assert open_.call_args_list[-1][0][0].endswith('_transfers.csv')
+        filename = open_.call_args_list[-1][0][0]
+        assert filename.endswith('_transfers.csv')
+        os.unlink(filename)
 
 
 class TestPayout(Harness):
