@@ -82,23 +82,24 @@ class TestBalancedCard(BalancedHarness):
     def test_receipt_page_loads (self):
         # 'card_type' was changed to 'brand' to reflect
         # card companies (i.e. Visa, MasterCard, etc.)
-        
+
         customer_href = self.make_balanced_customer()
         card = balanced.Card(
             number='4242424242424242',
             expiration_year=2020,
             expiration_month=12
         ).save()
-        
+
         card.associate_to_customer(customer_href)
         alice = self.make_participant('alice', claimed_time='now',
                                       balanced_customer_href=customer_href)
-        
+
         ex_id = self.make_exchange('bill', 113, 30, alice)
         url_receipt = '/alice/receipts/{}.html'.format(ex_id)
         actual = self.client.GET(url_receipt, auth_as='alice').body.decode('utf8')
         assert 'Visa' in actual
-        
+
+
 class TestBalancedBankAccount(BalancedHarness):
 
     def test_balanced_bank_account(self):
@@ -132,14 +133,14 @@ class TestBillingAssociate(BalancedHarness):
             expiration_year=2020,
             expiration_month=12
         ).save()
+        customer = self.david.get_balanced_account()
         billing.associate( self.db
                          , 'credit card'
-                         , 'david'
-                         , self.david_href
+                         , self.david
+                         , customer
                          , unicode(card.href)
                           )
 
-        customer = balanced.Customer.fetch(self.david_href)
         cards = customer.cards.all()
         assert len(cards) == 1
         assert cards[0].href == card.href
@@ -150,8 +151,8 @@ class TestBillingAssociate(BalancedHarness):
     def test_associate_invalid_card(self): #, find):
         billing.associate( self.db
                          , u"credit card"
-                         , 'david'
-                         , self.david_href
+                         , self.david
+                         , self.david.get_balanced_account()
                          , '/cards/CC123123123123',  # invalid href
                           )
         david = Participant.from_username('david')
@@ -163,16 +164,14 @@ class TestBillingAssociate(BalancedHarness):
                                            , account_number='9900000001'
                                            , account_type='checking'
                                             ).save()
+        customer = self.david.get_balanced_account()
         billing.associate( self.db
                          , u"bank account"
-                         , 'david'
-                         , self.david_href
+                         , self.david
+                         , customer
                          , unicode(bank_account.href)
                           )
 
-        #args, _ = find.call_args
-
-        customer = balanced.Customer.fetch(self.david_href)
         bank_accounts = customer.bank_accounts.all()
         assert len(bank_accounts) == 1
         assert bank_accounts[0].href == unicode(bank_account.href)
@@ -184,8 +183,8 @@ class TestBillingAssociate(BalancedHarness):
 
         billing.associate( self.db
                          , u"bank account"
-                         , 'david'
-                         , self.david_href
+                         , self.david
+                         , self.david.get_balanced_account()
                          , '/bank_accounts/BA123123123123123123' # invalid href
                           )
 
@@ -196,9 +195,9 @@ class TestBillingAssociate(BalancedHarness):
 class TestBillingClear(BalancedHarness):
 
     def test_clear(self):
-        billing.clear(self.db, u"credit card", 'david', self.david_href)
-
         customer = balanced.Customer.fetch(self.david_href)
+        billing.clear(self.db, u"credit card", self.david, customer)
+
         cards = customer.cards.all()
         assert len(cards) == 0
 
@@ -207,9 +206,9 @@ class TestBillingClear(BalancedHarness):
         assert david.balanced_customer_href
 
     def test_clear_bank_account(self):
-        billing.clear(self.db, u"bank account", 'david', self.david_href)
-
         customer = balanced.Customer.fetch(self.david_href)
+        billing.clear(self.db, u"bank account", self.david, customer)
+
         bank_accounts = customer.bank_accounts.all()
         assert len(bank_accounts) == 0
 
@@ -222,16 +221,16 @@ class TestBillingStoreResult(Harness):
 
     def setUp(self):
         super(TestBillingStoreResult, self).setUp()
-        self.make_participant('alice')
+        self.alice = self.make_participant('alice')
 
     def test_store_result_stores_bill_error(self):
-        billing.store_result(self.db, u"credit card", "alice", "cheese is yummy")
+        billing.store_result(self.db, u"credit card", self.alice, "cheese is yummy")
         alice = Participant.from_username('alice')
-        assert alice.last_bill_result == "cheese is yummy"
+        assert self.alice.last_bill_result == alice.last_bill_result == "cheese is yummy"
 
     def test_store_result_stores_ach_error(self):
         for message in ['cheese is yummy', 'cheese smells like my vibrams']:
-            billing.store_result(self.db, u"bank account", 'alice', message)
+            billing.store_result(self.db, u"bank account", self.alice, message)
             alice = Participant.from_username('alice')
-            assert alice.last_ach_result == message
+            assert self.alice.last_ach_result == alice.last_ach_result == message
 
