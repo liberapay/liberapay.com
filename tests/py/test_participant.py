@@ -617,7 +617,7 @@ class Tests(Harness):
 
     def test_pledging_doesnt_count_locked_accounts(self):
         alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
-        bob = self.make_participant('bob', is_locked=True)
+        bob = self.make_participant('bob', goal=-1)
         alice.set_tip_to(bob, '3.00')
         assert alice.pledging == Decimal('0.00')
 

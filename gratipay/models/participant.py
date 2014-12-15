@@ -621,12 +621,6 @@ class Participant(Model, MixinTeam):
     # Random Junk
     # ===========
 
-    def set_is_locked(self, is_locked):
-        self.db.run( 'UPDATE participants SET is_locked=%s WHERE id=%s'
-                   , (is_locked, self.id)
-                   )
-        self.set_attributes(is_locked=is_locked)
-
     def get_teams(self):
         """Return a list of teams this user is a member of.
         """
@@ -791,7 +785,7 @@ class Participant(Model, MixinTeam):
         # Update giving and pledging on participant
         giving, pledging = (cursor or self.db).one("""
             WITH our_tips AS (
-                     SELECT amount, tippee, p2.claimed_time, p2.is_locked
+                     SELECT amount, p2.claimed_time
                        FROM current_tips
                        JOIN participants p2 ON p2.username = tippee
                       WHERE tipper = %(username)s
@@ -809,7 +803,6 @@ class Participant(Model, MixinTeam):
                        SELECT sum(amount)
                          FROM our_tips
                         WHERE claimed_time IS NULL
-                          AND is_locked = false
                    ), 0)
              WHERE p.username = %(username)s
          RETURNING giving, pledging

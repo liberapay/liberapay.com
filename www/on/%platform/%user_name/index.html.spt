@@ -17,7 +17,7 @@ if account.participant.is_claimed:
 
 title = username = user_name = account.user_name
 participant = account.participant
-locked = participant.is_locked
+locked = participant.goal == -1
 is_team = account.is_team
 allow_pledges = not locked and (not is_team or platform.allows_team_connect)
 
@@ -194,7 +194,7 @@ else:
 
     {% for member in members %}
         {% set on_gratipay = member.participant.is_claimed %}
-        {% set declines_gifts = not member.participant.accepts_tips or member.participant.is_locked %}
+        {% set declines_gifts = not member.participant.accepts_tips %}
         <tr class="{{ 'declines' if declines_gifts }} {{ 'not-on-gratipay' if not on_gratipay }}">
             {% if on_gratipay %}
                 <td>
@@ -218,7 +218,7 @@ else:
                     </a>
                 </td>
                 <td>
-                    {% if member.participant.is_locked %}
+                    {% if member.participant.accepts_tips %}
                         declines gifts (opted out)
                     {% else %}
                         hasn't joined Gratipay yet

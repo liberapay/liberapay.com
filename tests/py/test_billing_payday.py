@@ -107,7 +107,7 @@ class TestPayday(BalancedHarness):
         carl = self.make_participant('carl', claimed_time='now', last_bill_result="Fail!")
         dana = self.make_participant('dana', claimed_time='now')
         emma = self.make_participant('emma')
-        roy = self.make_participant('roy', is_locked=True)
+        roy = self.make_participant('roy', goal=-1)
         alice.set_tip_to(dana, '3.00')
         alice.set_tip_to(bob, '6.00')
         alice.set_tip_to(emma, '1.00')
