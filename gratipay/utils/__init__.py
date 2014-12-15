@@ -398,7 +398,7 @@ def update_global_stats(website):
 
 
 def last_week(db):
-    WEDNESDAY, THURSDAY, FRIDAY, SATURDAY = 2, 3, 4, 5
+    THURSDAY, FRIDAY, SATURDAY = 3, 4, 5
     now = datetime.utcnow()
     payday = db.one("SELECT ts_start, ts_end FROM paydays WHERE ts_start > ts_end")
     last_week = "last week"
