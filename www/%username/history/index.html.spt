@@ -7,7 +7,6 @@ participant = get_participant(request, restrict=True)
 events = iter_payday_events(website.db, participant)
 hero = _("History")
 title = "%s - %s" % (participant.username, hero)
-locked = False
 subpath = 'history/' if user.ADMIN else ''
 admin_override = user.ADMIN and (participant != user.participant or 'override' in qs)
 translated_status = { None:         ''
