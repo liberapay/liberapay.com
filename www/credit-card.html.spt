@@ -40,7 +40,7 @@ title = _("Credit Card")
     <h1>{{ status_msg.format("<em id=\"status\">", "</em>") }}</h1>
 
     <p>{{ _("When you don't have enough money in your Gratipay account to cover your gifts, we'll attempt to pull money in using your credit card.") }}
-    {{ _("If your credit card is missing or fails then your gifts won't go through for that week.") }}<p>
+    {{ _("If your credit card is missing or fails then your gifts won't go through for that week.") }}</p>
 
 {% endblock %}
 
@@ -59,19 +59,13 @@ title = _("Credit Card")
 {{ super() }}
 {% endblock %}
 
-{% block box %}
+{% block content %}
   {% if user.ANON %}
-    <div class="as-content">
-
     {% include "templates/sign-in-using.html" %}
     and then you'll be able to add<br> or change your credit card.</p>
 
     <p>Thanks! :-)</p>
-
-    </div>
-
   {% else %}
-
 
     <style>
         {% if status == "missing" %}
@@ -80,7 +74,7 @@ title = _("Credit Card")
         }
         {% endif %}
     </style>
-    <div class="on-form">
+    <div class="cc-ba">
         <form id="payment" autocomplete="off">
             <div class="constrain-width group">
 
@@ -165,35 +159,26 @@ title = _("Credit Card")
 
             </div>
 
-            <div class="nav level-1">
-                <button class="selected larger" id="save"
-                    type="submit">{{ _("Save") }}</button>
-            </div>
+            <button class="selected larger" id="save" type="submit">{{ _("Save") }}</button>
 
         </form>
 
-        <div id="delete" class="nav level-2">
+        <div id="delete">
             <form action="credit-card.json" class="special" method="POST">
                 <input type="hidden" name="action" value="delete">
                 <button>{{ _("Disconnect My Credit Card") }}</button>
             </form>
         </div>
+
+        <p class="info">Credit card information is stored and processed by <a
+            href="https://www.balancedpayments.com/">Balanced Payments</a>.
+
+        Here are their <a href="https://www.balancedpayments.com/terms">Terms of
+            Service</a> and <a
+            href="https://www.balancedpayments.com/privacy">Privacy Policy</a>.</p>
+
+        <a href="https://www.balancedpayments.com/"><img
+            src="{{ website.asset('balanced-with-cards.png') }}" /></a>
     </div>
-{% endif %}
-{% endblock %}
-
-{% block page %}
-<div class="col0 payment-footer">
-
-    <p>Credit card information is stored and processed by <a
-        href="https://www.balancedpayments.com/">Balanced Payments</a>.<br />
-
-    Here are their <a href="https://www.balancedpayments.com/terms">Terms of
-        Service</a> and <a
-        href="https://www.balancedpayments.com/privacy">Privacy Policy</a>.</p>
-
-    <a href="https://www.balancedpayments.com/"><img
-        src="{{ website.asset('balanced-with-cards.png') }}" /></a>
-
-</div>
+    {% endif %}
 {% endblock %}

@@ -35,7 +35,7 @@ title = _("Bank Account")
     <h1>{{ status }}</h1>
 
     <p>{{ _("When you receive money on Gratipay we'll automatically deposit it into your bank account.") }}
-    {{ _("If you don't connect a bank account then your money will accumulate within Gratipay unless you regift it to others.") }}<p>
+    {{ _("If you don't connect a bank account then your money will accumulate within Gratipay unless you regift it to others.") }}</p>
 
 {% endblock %}
 
@@ -53,19 +53,13 @@ title = _("Bank Account")
 {{ super() }}
 {% endblock %}
 
-{% block box %}
+{% block content %}
   {% if user.ANON %}
-    <div class="as-content">
-
     {% include "templates/sign-in-using.html" %}
     {{ _("{0} and then you'll be able to add{1} or change your bank account.", "", "<br>") }}</p>
 
     <p>{{ _("Thanks! :-)") }}</p>
-
-    </div>
-
   {% else %}
-
 
     <style>
         {% if not balanced_customer_href %}
@@ -74,7 +68,7 @@ title = _("Bank Account")
         }
         {% endif %}
     </style>
-    <div class="on-form">
+    <div class="cc-ba">
         <form id="payout" autocomplete="off">
             <div class="constrain-width group">
 
@@ -188,15 +182,12 @@ title = _("Bank Account")
                 <div class="clear"></div>
             </div>
 
-            <div class="nav level-1">
-                <button class="selected larger" id="save"
-                    type="submit">{{ _("Save") }}</button>
-            </div>
+            <button class="selected larger" id="save" type="submit">{{ _("Save") }}</button>
         </form>
 
 
         {% if bank_account and bank_account.is_setup %}
-        <div id="delete" class="nav level-2">
+        <div id="delete">
             <form action="bank-account.json" class="special" method="POST">
                 <input type="hidden" name="action" value="delete">
                 <button>{{ _("Disconnect My Bank Account") }}</button>
@@ -204,22 +195,17 @@ title = _("Bank Account")
         </div>
         {% endif %}
 
-    </div>
-  {% endif %}
-{% endblock %}
-
-{% block page %}
-<div class="col0 payment-footer">
-
-    <p>Bank account information is stored and processed by <a
-        href="https://www.balancedpayments.com/">Balanced Payments</a>.<br />
-
-    Here are their <a href="https://www.balancedpayments.com/terms">Terms of
-        Service</a> and <a
-        href="https://www.balancedpayments.com/privacy">Privacy Policy</a>.</p>
+    <p class="info">Bank account information is stored and processed by <a
+        href="https://www.balancedpayments.com/">Balanced Payments</a>.  Here
+        are their <a href="https://www.balancedpayments.com/terms">Terms of
+            Service</a> and <a
+            href="https://www.balancedpayments.com/privacy">Privacy
+            Policy</a>.</p>
 
     <a href="https://www.balancedpayments.com/"><img
         src="{{ website.asset('platforms/balanced.png') }}" /></a>
 
-</div>
+    </div>
+  {% endif %}
+
 {% endblock %}
