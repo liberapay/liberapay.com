@@ -51,10 +51,10 @@ class TestUser(Harness):
         alice = User.from_username('alice')
         assert alice.ANON is False
 
-    def test_blacklisted_user_is_ANON(self):
+    def test_blacklisted_user_is_not_ANON(self):
         self.make_participant('alice', is_suspicious=True)
         alice = User.from_username('alice')
-        assert alice.ANON is True
+        assert alice.ANON is False
 
 
     # session token
@@ -134,11 +134,6 @@ class TestUser(Harness):
 
     def test_user_from_bad_id_is_anonymous(self):
         user = User.from_username('deadbeef')
-        assert user.ANON
-
-    def test_suspicious_user_from_username_is_anonymous(self):
-        self.make_participant('alice', is_suspicious=True)
-        user = User.from_username('alice')
         assert user.ANON
 
     def test_signed_out_user_is_anonymous(self):
