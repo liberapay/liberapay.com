@@ -1,10 +1,5 @@
 <form class="my-tip{{ " anon" if user.ANON else "" }}">
-    <div class="tip-controls">
-        <div class="tip-amount">
-            $ <input type="text" class="my-tip" min="0" max="{{ '1000' if participant.IS_PLURAL else '100' }}" value="{{ my_tip }}" data-tippee="{{ tippee }}"> / {{ _("week") }}
-        </div>
-    </div>
-    <div class="tip-actions">
-        <button class="confirm-tip" type="submit" disabled>{{ _("Save") }}</button>
-    </div>
+    $ <input type="text" class="my-tip" min="0" max="{{ '1000' if participant.IS_PLURAL else '100' }}" value="{{ my_tip }}" data-tippee="{{ tippee }}"><br>
+    {{ _("per week") }}
+    <button class="confirm-tip" type="submit" disabled>{{ _("Save") }}</button>
 </form>

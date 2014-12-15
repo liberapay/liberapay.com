@@ -7,19 +7,33 @@
         {% include "templates/sign-in-using-to-give.html" %}
     {% else %}
 
-        {% set my_tip = format_decimal(user.participant.get_tip_to(participant.username)['amount']) %}
+        {% set my_tip = format_decimal(user.participant.get_tip_to(participant.username)['amount'], '#,##0.00') %}
         {% set tippee = participant.username %}
-        {% include "templates/my-tip.html" %}
+        <h2>My Tip</h2>
+        <form class="my-tip{{ " anon" if user.ANON else "" }}">
+            <div class="payment-amount">
+                $
+                <span class="static-amount">{{ my_tip }}</span>
+                <input type="text" value="{{ my_tip }}"
+                       min="0" max="{{ '1000' if participant.IS_PLURAL else '100' }}"
+                       data-tippee="{{ tippee }}">
+            </div>
+            <div class="per-week">{{ _("per week") }}</div>
+
+            <button class="edit" class="selected">{{ _("Edit") }}</button>
+            <button class="save" class="selected" type="submit">{{ _("Save") }}</button>
+            <button class="cancel" class="selected" type="cancel">{{ _("Cancel") }}</button>
+        </form>
 
         {% if user.participant.last_bill_result == None %}
 
         <div id="payment-prompt" class="help{% if my_tip > 0 %} needed{% endif %}">
-            {{ _("Back your gift with a {0}credit card{1} to make sure it goes through!",
+            {{ _("Back your payment with a {0}credit card{1} to make sure it goes through!",
                 "<a href='/credit-card.html' class='highlight'>", "</a>") }}
         </div>
         {% elif user.participant.last_bill_result %}
         <div id="payment-prompt" class="help really-needed">
-            {{ _("Fix your {0}credit card{1} to make sure your gifts go through!",
+            {{ _("Fix your {0}credit card{1} to make sure your payment goes through!",
                 "<a href='/credit-card.html' class='highlight'>", "</a>") }}
         </div>
         {% endif %}

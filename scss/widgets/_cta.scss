@@ -1,7 +1,48 @@
 #sidebar .cta {
-    background: transparentize($gold, 0.5);
+    background: $gold;
     color: $brown;
     padding: 20px;
     margin: 0 0 40px;
     text-align: center;
+
+    h2 {
+        margin: 0;
+        padding: 0 0 10px;
+        color: $brown;
+    }
+
+    .payment-amount {
+        /* Match content h1 */
+        font: bold 28px/37px $Ideal;
+    }
+    .per-week {
+        margin-bottom: 10px;
+        font: normal 14px/14px $Ideal;
+    }
+
+    form.my-tip {
+        input {
+            display: none;
+            width: 120px;
+            height: 33px;
+            text-align: right;
+            font: bold 28px/28px $Ideal;
+            color: $black;
+        }
+        .save, .cancel {
+            display: none;
+        }
+        button {
+            background: $brown;
+            &:hover {
+                background: $green;
+            }
+        }
+    }
+
+    #payment-prompt {
+        font-size: smaller;
+        margin: 0;
+        padding: 20px 0 0;
+    }
 }

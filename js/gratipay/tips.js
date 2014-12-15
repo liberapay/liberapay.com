@@ -2,11 +2,78 @@ Gratipay.tips = {};
 
 Gratipay.tips.init = function() {
 
+
+    function start_editing_tip() {
+        $('.my-tip .static-amount').hide();
+        $('.my-tip input').show().focus();
+        $('.my-tip .edit').hide();
+        $('.my-tip .save').show();
+        $('.my-tip .cancel').show();
+
+    }
+    function finish_editing_tip(newAmount) {
+        if (newAmount !== undefined)
+            $('form.my-tip .static-amount').text(newAmount.toFixed(2));
+        $('form.my-tip .static-amount').show();
+        $('form.my-tip input').hide();
+        $('.my-tip .edit').show();
+        $('.my-tip .save').hide();
+        $('.my-tip .cancel').hide();
+        $(window).off('beforeunload.tips');
+    }
+
+    $('.my-tip button.edit').click(function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        start_editing_tip();
+        return false;
+    });
+    $('.my-tip').submit(function(event) {
+        event.preventDefault();
+        var $this     = $(this),
+            $input = $this.find('input'),
+            amount    = parseFloat(unlocalizeDecimal($input.val()), 10),
+            oldAmount = parseFloat(unlocalizeDecimal($input[0].defaultValue), 10),
+            tippee    = $input.data('tippee'),
+            isAnon    = $this.hasClass('anon');
+
+        if (amount == oldAmount)
+            return finish_editing_tip();
+
+        if(isAnon)
+            Gratipay.notification("Please sign in first", 'error');
+        else
+            Gratipay.tips.set(tippee, amount, function() {
+                // lock-in changes
+                $input[0].defaultValue = amount;
+                $input.change();
+                $input.attr('value', amount.toFixed(2));
+
+                // Increment an elsewhere receiver's "people ready to give"
+                if(!oldAmount)
+                    $('.on-elsewhere .ready .number').text(
+                        parseInt($('.on-elsewhere .ready .number').text(),10) + 1);
+
+                // Use global notification system.
+                Gratipay.notification( "Tip changed to $" + amount.toFixed(2) + " per week!"
+                                     , 'success'
+                                      );
+                finish_editing_tip(amount);
+            });
+    });
+    $('.my-tip button.cancel').click(function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        finish_editing_tip();
+        return false;
+    });
+
+
     // Check the tip value on change, or 0.7 seconds after the user stops typing.
     // If the user presses enter, the browser should natively submit the form.
     // If the user presses cancel, we reset the form to its previous state.
     var timer;
-    $('input.my-tip').change(checkTip).keyup(function(e) {
+    $('.my-tip input').change(checkTip).keyup(function(e) {
         if (e.keyCode === 27)                          // escape
             $(this).parents('form').trigger('reset');
         else if (e.keyCode === 38 || e.keyCode === 40) // up & down
@@ -22,22 +89,11 @@ Gratipay.tips.init = function() {
     function checkTip() {
         var $this     = $(this),
             $parent   = $this.parents('form'),
-            $confirm  = $parent.find('.confirm-tip'),
+            $confirm  = $parent.find('.save'),
             $cancel   = $parent.find('.cancel-tip'),
             amount    = parseFloat(unlocalizeDecimal($this.val()), 10) || 0,
             oldAmount = parseFloat(unlocalizeDecimal(this.defaultValue), 10),
-            max       = parseFloat($this.prop('max')),
-            min       = parseFloat($this.prop('min')),
-            inBounds  = amount <= max && amount >= min,
             same      = amount === oldAmount;
-
-        // dis/enables confirm button as needed
-        $confirm.prop('disabled', inBounds ? same : true);
-
-        if (same)
-            $parent.removeClass('changed');
-        else
-            $parent.addClass('changed');
 
         // show/hide the payment prompt
         if (amount) {
@@ -65,82 +121,18 @@ Gratipay.tips.init = function() {
         localStorage.removeItem('tipAfterSignIn');
 
         if (window.location.pathname === '/'+data.tippee+'/')
-            $('input.my-tip').val(data.val).change();
+            $('.my-tip input').val(data.val).change();
     }
 
     // Store the tip value if the user hasn't signed in
     if ($('.sign-in').length)
         $(window).on('unload.tips', function() {
-            var tip = $('input.my-tip');
+            var tip = $('.my-tip input');
             if (tip.parents('form').hasClass('changed'))
                 localStorage.tipAfterSignIn = JSON.stringify({
                     tippee: tip.data('tippee'), val: tip.val()
                 });
         });
-
-    $('.my-tip .reset-tip').click(function(event) {
-        event.preventDefault();
-
-        $(this).parents('form').trigger('reset');
-    });
-
-    $('.my-tip .cancel-tip').click(function(event) {
-        event.preventDefault();
-
-        var $this     = $(this),
-            $myTip    = $this.parents('form').find('.my-tip');
-
-        if (confirm("Are you sure you want to cancel this tip?")) {
-            $myTip.val("0.00");
-            $(this).parents('form').trigger('submit');
-        }
-    });
-
-    $('.my-tip .tip-suggestions a').click(function(event) {
-        event.preventDefault();
-
-        var $this  = $(this),
-            $myTip = $this.parents('form').find('.my-tip');
-
-        $myTip.val($this.attr('data-decimal')).change();
-    });
-
-    $('form.my-tip').on('reset', function() {
-        $(this).removeClass('changed');
-        $(this).find('.confirm-tip').prop('disabled', true);
-        $(window).off('beforeunload.tips');
-    });
-
-    $('form.my-tip').submit(function(event) {
-        event.preventDefault();
-        var $this     = $(this),
-            $myTip    = $this.find('.my-tip'),
-            amount    = parseFloat(unlocalizeDecimal($myTip.val()), 10),
-            oldAmount = parseFloat(unlocalizeDecimal($myTip[0].defaultValue), 10),
-            tippee    = $myTip.data('tippee'),
-            isAnon    = $this.hasClass('anon');
-
-        if (amount == oldAmount)
-            return;
-
-        if(isAnon)
-            Gratipay.notification("Please sign in first", 'error');
-        else
-            Gratipay.tips.set(tippee, amount, function() {
-                // lock-in changes
-                $myTip[0].defaultValue = amount;
-                $myTip.change();
-                $myTip.attr('value', amount.toFixed(2));
-
-                // Increment an elsewhere receiver's "people ready to give"
-                if(!oldAmount)
-                    $('.on-elsewhere .ready .number').text(
-                        parseInt($('.on-elsewhere .ready .number').text(),10) + 1);
-
-                // Use global notification system.
-                Gratipay.notification("Tip changed to $" + amount.toFixed(2) + "!", 'success');
-            });
-    });
 };
 
 
@@ -189,8 +181,8 @@ Gratipay.tips.set = function(tippee, amount, callback) {
                 data.total_receiving_l
         );
     })
-    .fail(function() {
-        Gratipay.notification('Sorry, something went wrong while changing your tip. :(', 'error');
+    .fail(function(e) {
+        Gratipay.notification('Sorry, something went wrong while changing your tip: ' + e.responseJSON.error_message_long + '. :(', 'error');
         console.log.apply(console, arguments);
     });
 };
