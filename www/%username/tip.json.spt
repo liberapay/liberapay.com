@@ -15,8 +15,6 @@ if not user.ANON:
 
     # Get tipper and tippee.
     # ======================
-    # XXX We could/should enforce that tips cannot be pledged at all to locked
-    # accounts.
 
     tipper = user.participant
     tippee = get_participant(request, restrict=False, resolve_unclaimed=False)
