@@ -11,6 +11,7 @@ from aspen.utils import utcnow
 from gratipay import NotSane
 from gratipay.exceptions import (
     HasBigTips,
+    UserDoesntAcceptTips,
     UsernameIsEmpty,
     UsernameTooLong,
     UsernameAlreadyTaken,
@@ -615,11 +616,11 @@ class Tests(Harness):
         alice.set_tip_to(bob, '3.00')
         assert alice.pledging == Decimal('3.00')
 
-    def test_pledging_doesnt_count_locked_accounts(self):
+    def test_cant_pledge_to_locked_accounts(self):
         alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
         bob = self.make_participant('bob', goal=-1)
-        alice.set_tip_to(bob, '3.00')
-        assert alice.pledging == Decimal('0.00')
+        with self.assertRaises(UserDoesntAcceptTips):
+            alice.set_tip_to(bob, '3.00')
 
     def test_pledging_isnt_giving(self):
         alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
