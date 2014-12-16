@@ -111,8 +111,8 @@ def n_get_text(tell_sentry, request, loc, s, p, n, *a, **kw):
     return s2.format(*a, **kw)
 
 
-def to_age(dt, loc):
-    return format_timedelta(dt - utcnow(), add_direction=True, locale=loc)
+def to_age(dt, loc, **kw):
+    return format_timedelta(dt - utcnow(), locale=loc, **kw)
 
 
 def regularize_locale(loc):
@@ -184,11 +184,11 @@ def add_helpers_to_context(tell_sentry, context, loc, request=None):
     context['format_currency'] = lambda *a, **kw: format_currency_with_options(*a, locale=loc, **kw)
     context['format_percent'] = lambda *a: format_percent(*a, locale=loc)
     context['parse_decimal'] = lambda *a: parse_decimal(*a, locale=loc)
-    def _to_age(delta):
+    def _to_age(delta, **kw):
         try:
-            return to_age(delta, loc)
+            return to_age(delta, loc, **kw)
         except:
-            return to_age(delta, 'en')
+            return to_age(delta, 'en', **kw)
     context['to_age'] = _to_age
 
 

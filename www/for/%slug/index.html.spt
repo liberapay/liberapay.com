@@ -171,7 +171,7 @@ for p in chain(new_participants, givers, receivers):
                         <span class="avatar"
                             style="background-image: url('{{ avatar_url(participant) }}')">
                         </span>
-                        <span class="age">{{ to_age(participant.claimed_time) }}</span>
+                        <span class="age">{{ to_age(participant.claimed_time, add_direction=True) }}</span>
                         <span class="name">{{ participant.username }}</span>
                     </span>
                 </a>

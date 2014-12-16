@@ -38,7 +38,7 @@
         </tr>
     </table>
 
-    <p>{{ _('Joined') }} {{ to_age(participant.claimed_time) }}.</p>
+    <p>{{ _('Joined') }} {{ to_age(participant.claimed_time, add_direction=True) }}.</p>
 </div>
 
 {% if participant.accepts_tips %}

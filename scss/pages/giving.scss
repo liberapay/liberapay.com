@@ -1,18 +1,42 @@
-.matrix th, .matrix td, .matrix input.my-tip {
-    font: normal 12px/14px $Ideal;
-}
-.matrix td {
-    text-align: left;
-    height: 30px;
-}
-.matrix h2,
-.matrix tr.tip td,
-.matrix tr.tip th,
-.matrix tr.pledge td,
-.matrix tr.pledge th {
-    white-space: nowrap;
-}
-.matrix th {
-    vertical-align: middle;
-    padding-right: 0.5em;
+.giving {
+    .note {
+        font: italic 12px/14px $Ideal;
+    }
+
+    .pane {
+        float: left;
+        padding-right: 40px;
+        &:last-child {
+            padding-right: 0;
+        }
+    }
+
+    th {
+        font: bold 12px/14px $Ideal;
+        padding-bottom: 5px;
+        vertical-align: bottom;
+        &.total {
+            font-weight: normal;
+            font-family: $Mono;
+            text-align: right;
+        }
+    }
+    td {
+        font: normal 12px/14px $Mono;
+        padding-bottom: 2px;
+        text-align: left;
+        &.recipient {
+            font-family: $Ideal;
+        }
+        &.amount {
+            text-align: right;
+        }
+    }
+    th, td {
+        white-space: nowrap;
+        padding-right: 15px;
+        &:last-child {
+            padding-right: 0;
+        }
+    }
 }
