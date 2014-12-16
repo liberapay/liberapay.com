@@ -495,13 +495,13 @@ NOTE: The amounts must be encoded as a string (rather than a number).
 Additionally, currently, the only supported platform is 'gratipay' ('gittip'
 still works for backwards-compatibility).
 
-This endpoint requires authentication. Look for your API key on your [profile
-page](https://gratipay.com/about/me/account), and pass it as the basic auth
-username. E.g.:
+This endpoint requires authentication. Look for your user ID and API key on your
+[account page](https://gratipay.com/about/me/account), and pass them using basic
+auth. E.g.:
 
 ```
 curl https://gratipay.com/foobar/tips.json \
-    -u API_KEY: \
+    -u $userid:$api_key \
     -X POST \
     -d'[{"username":"bazbuz", "platform":"gratipay", "amount": "1.00"}]' \
     -H"Content-Type: application/json"

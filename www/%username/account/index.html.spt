@@ -160,9 +160,10 @@ emails = participant.get_emails()
         </div>
 
 
-        <div class="api-key">
-          <h2>{{ _("API Key") }}</h2>
-          <div><span>xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</span></div>
+        <div id="api" class="api-key">
+          <h2>{{ _("API Credentials") }}</h2>
+          <div>{{ _("User ID:") }} {{ participant.id }}</div>
+          <div>{{ _("API Key:") }} <span>xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</span></div>
           <div class="buttons">
             <button class="show">{{ _("Show Key") }}</button>
             <button class="hide" style="display: none">{{ _("Hide Key") }}</button>
