@@ -117,12 +117,6 @@ class Participant(Model, MixinTeam):
         return participant
 
     @classmethod
-    def from_api_key(cls, api_key):
-        """Return an existing participant based on API key.
-        """
-        return cls._from_thing("api_key", api_key)
-
-    @classmethod
     def _from_thing(cls, thing, value):
         assert thing in ("id", "username_lower", "session_token", "api_key")
         return cls.db.one("""
