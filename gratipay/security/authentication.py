@@ -13,9 +13,11 @@ BEGINNING_OF_EPOCH = to_rfc822(datetime(1970, 1, 1))
 def get_auth_from_request(request):
     """Authenticate from a cookie or an API key in basic auth.
     """
-    user = None
+
+    request.context['user'] = User()  # Make sure we always have a user object
+
     if request.line.uri.startswith('/assets/'):
-        pass
+        return
     elif 'Authorization' in request.headers:
         header = request.headers['authorization']
         if header.startswith('Basic '):
@@ -26,7 +28,7 @@ def get_auth_from_request(request):
             if len(creds) != 2:
                 raise Response(401)
             userid, api_key = creds
-            user = User.from_id(userid)
+            user = request.context['user'] = User.from_id(userid)
             if user.ANON or user.participant.api_key != api_key:
                 raise Response(401)
 
@@ -39,9 +41,7 @@ def get_auth_from_request(request):
                                         'https://%s/' % csrf._get_host(request)
     elif SESSION in request.headers.cookie:
         token = request.headers.cookie[SESSION].value
-        user = User.from_session_token(token)
-
-    request.context['user'] = user or User()
+        request.context['user'] = User.from_session_token(token)
 
 def add_auth_to_response(response, request=None):
     if request is None:
