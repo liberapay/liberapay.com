@@ -112,29 +112,30 @@ class TestUser(Harness):
         assert SESSION in cookies
 
 
+    # from_id
 
-    # key token
-
-    def test_user_from_bad_api_key_is_anonymous(self):
-        user = User.from_api_key('deadbeef')
+    def test_user_from_bad_id_is_anonymous(self):
+        user = User.from_id(1786541)
         assert user.ANON
 
-    def test_user_from_None_api_key_is_anonymous(self):
-        self.make_participant('alice')
-        self.make_participant('bob')
-        user = User.from_api_key(None)
+    def test_user_from_None_id_is_anonymous(self):
+        user = User.from_id(None)
         assert user.ANON
 
-    def test_user_can_be_loaded_from_api_key(self):
+    def test_user_can_be_loaded_from_id(self):
         alice = self.make_participant('alice')
-        api_key = alice.recreate_api_key()
-        actual = User.from_api_key(api_key).participant.username
+        actual = User.from_id(alice.id).participant.username
         assert actual == 'alice'
 
 
-    def test_user_from_bad_id_is_anonymous(self):
+    # from_username
+
+    def test_user_from_bad_username_is_anonymous(self):
         user = User.from_username('deadbeef')
         assert user.ANON
+
+
+    # sign_out
 
     def test_signed_out_user_is_anonymous(self):
         self.make_participant('alice')

@@ -1,5 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+from base64 import b64encode
+
 from gratipay import wireup
 from gratipay.security.user import SESSION
 from gratipay.testing import Harness
@@ -59,7 +61,7 @@ class Tests(Harness):
         alice = self.make_participant('alice', claimed_time='now')
         api_key = alice.recreate_api_key()
 
-        auth_header = (b'Basic ' + (api_key + b':').encode('base64')).strip()
+        auth_header = b'Basic ' + b64encode(b'%s:%s' % (alice.id, api_key))
         response = self.client.GET( '/alice/public.json'
                                   , HTTP_AUTHORIZATION=auth_header
                                   , HTTP_X_FORWARDED_PROTO=b'https'
