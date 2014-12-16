@@ -8,13 +8,15 @@ from aspen.utils import to_rfc822
 from gratipay.security import csrf
 from gratipay.security.user import User, SESSION
 
+
+ANON = User()
 BEGINNING_OF_EPOCH = to_rfc822(datetime(1970, 1, 1))
 
 def get_auth_from_request(request):
     """Authenticate from a cookie or an API key in basic auth.
     """
 
-    request.context['user'] = User()  # Make sure we always have a user object
+    request.context['user'] = ANON  # Make sure we always have a user object
 
     if request.line.uri.startswith('/assets/'):
         return
@@ -52,6 +54,6 @@ def add_auth_to_response(response, request=None):
     response.headers['Expires'] = BEGINNING_OF_EPOCH # don't cache
 
     if SESSION in request.headers.cookie:
-        user = request.context.get('user') or User()
+        user = request.context.get('user') or ANON
         if not user.ANON:
             user.keep_signed_in(response.headers.cookie)
