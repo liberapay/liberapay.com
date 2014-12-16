@@ -20,9 +20,9 @@
             </div>
             <div class="per-week">{{ _("per week") }}</div>
 
-            <button class="edit" class="selected">{{ _("Edit") }}</button>
-            <button class="save" class="selected" type="submit">{{ _("Save") }}</button>
-            <button class="cancel" class="selected" type="cancel">{{ _("Cancel") }}</button>
+            <button class="edit">{{ _("Edit") }}</button>
+            <button class="save" type="submit">{{ _("Save") }}</button>
+            <button class="cancel" type="cancel">{{ _("Cancel") }}</button>
         </form>
 
         {% if user.participant.last_bill_result == None %}
