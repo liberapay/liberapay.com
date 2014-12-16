@@ -6,6 +6,7 @@ from datetime import datetime
 from aspen import Response
 from aspen.utils import to_rfc822
 from gratipay.security import csrf
+from gratipay.security.crypto import constant_time_compare
 from gratipay.security.user import User, SESSION
 
 
@@ -31,7 +32,7 @@ def get_auth_from_request(request):
                 raise Response(401)
             userid, api_key = creds
             user = request.context['user'] = User.from_id(userid)
-            if user.ANON or user.participant.api_key != api_key:
+            if user.ANON or not constant_time_compare(user.participant.api_key, api_key):
                 raise Response(401)
 
             # We don't require CSRF if they basically authenticated.
