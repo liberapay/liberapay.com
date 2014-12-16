@@ -117,12 +117,14 @@ body {
             padding: 5px 20px 5px 40px;
             text-indent: -20px;
             display: block;
-            color: $gold;
+            color: $white;
+            font-weight: normal;
             &.selected {
                 padding-left: 38px;
                 border-left: 2px solid $gold;
                 background: transparentize($gold, 0.8);
                 color: $white;
+                font-weight: bold;
             }
             &:hover {
                 padding-left: 38px;
