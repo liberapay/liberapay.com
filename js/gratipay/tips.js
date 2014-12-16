@@ -12,8 +12,6 @@ Gratipay.tips.init = function() {
 
     }
     function finish_editing_tip(newAmount) {
-        if (newAmount !== undefined)
-            $('form.my-tip .static-amount').text(newAmount.toFixed(2));
         $('form.my-tip .static-amount').show();
         $('form.my-tip input').hide();
         $('.my-tip .edit').show();
@@ -31,9 +29,13 @@ Gratipay.tips.init = function() {
     $('.my-tip').submit(function(event) {
         event.preventDefault();
         var $this     = $(this),
-            $input = $this.find('input'),
-            amount    = parseFloat(unlocalizeDecimal($input.val()), 10),
+            $static   = $this.find('.static-amount'),
+            $input    = $this.find('input'),
+            amount    = $input.val(),
+            amount    = amount.match(/^\s*$/) ? '0' : amount,
+            amount    = parseFloat(unlocalizeDecimal(amount), 10),
             oldAmount = parseFloat(unlocalizeDecimal($input[0].defaultValue), 10),
+            dispAmount= amount.toFixed(2),
             tippee    = $input.data('tippee'),
             isAnon    = $this.hasClass('anon');
 
@@ -47,7 +49,8 @@ Gratipay.tips.init = function() {
                 // lock-in changes
                 $input[0].defaultValue = amount;
                 $input.change();
-                $input.attr('value', amount.toFixed(2));
+                $input.val(dispAmount);
+                $static.text(dispAmount);
 
                 // Increment an elsewhere receiver's "people ready to give"
                 if(!oldAmount)
@@ -55,10 +58,10 @@ Gratipay.tips.init = function() {
                         parseInt($('.on-elsewhere .ready .number').text(),10) + 1);
 
                 // Use global notification system.
-                Gratipay.notification( "Tip changed to $" + amount.toFixed(2) + " per week!"
+                Gratipay.notification( "Tip changed to $" + dispAmount + " per week!"
                                      , 'success'
                                       );
-                finish_editing_tip(amount);
+                finish_editing_tip(dispAmount);
             });
     });
     $('.my-tip button.cancel').click(function(e) {
