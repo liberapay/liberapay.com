@@ -46,6 +46,7 @@ body {
         display: inline-block;
         height: 78px;
         float: left;
+        margin-left: 15px;
 
         li {
             float: left;
@@ -54,7 +55,7 @@ body {
                 height: 78px;
                 font: normal 16px/16px $Ideal;
                 display: inline-block;
-                padding: 31px 10px 31px 40px;
+                padding: 31px 25px 31px 25px;
                 color: $black;
                 &.selected {
                     padding-top: 27px;
@@ -80,8 +81,7 @@ body {
             text-align: right;
             float: left;
             a#sign-out {
-                padding-left: 25px;
-                padding-right: 20px;
+                padding-right: 20px; // tweak to make icon placement look right
                 .icon {
                     font: normal 20px/20px 'icomoon';
                 }
