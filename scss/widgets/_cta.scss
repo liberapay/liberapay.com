@@ -1,14 +1,12 @@
 #sidebar .cta {
-    background: $gold;
-    color: $brown;
-    padding: 20px;
+    padding: 0 20px;
     margin: 0 0 40px;
-    text-align: center;
+    text-align: right;
 
     h2 {
         margin: 0;
         padding: 0 0 10px;
-        color: $brown;
+        color: $white;
     }
 
     .payment-amount {
@@ -33,7 +31,6 @@
             display: none;
         }
         button {
-            background: $brown;
             &:hover {
                 background: $green;
             }
@@ -44,5 +41,8 @@
         font-size: smaller;
         margin: 0;
         padding: 20px 0 0;
+        a {
+            color: $gold;
+        }
     }
 }

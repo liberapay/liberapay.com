@@ -29,7 +29,7 @@
 
         <div id="payment-prompt" class="help{% if my_tip > 0 %} needed{% endif %}">
             {{ _("Back your payment with a {0}credit card{1} to make sure it goes through!",
-                "<a href='/credit-card.html' class='highlight'>", "</a>") }}
+                "<a href='/credit-card.html'>", "</a>") }}
         </div>
         {% elif user.participant.last_bill_result %}
         <div id="payment-prompt" class="help really-needed">
