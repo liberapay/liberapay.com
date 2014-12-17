@@ -80,7 +80,8 @@ class Harness(unittest.TestCase):
         information, and you can commit that with your updated tests.
 
         """
-        cls.vcr_cassette = use_cassette(cls.__name__).__enter__()
+        cls.vcr_cassette = use_cassette(cls.__name__)
+        cls.vcr_cassette.__enter__()
 
 
     @classmethod
