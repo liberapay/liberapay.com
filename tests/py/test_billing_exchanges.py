@@ -87,6 +87,7 @@ class TestCardHolds(BalancedHarness):
         assert exchange.amount
         assert exchange.status == 'failed'
         janet = Participant.from_id(self.janet.id)
+        assert self.janet.last_bill_result == 'Foobar()'
         assert self.janet.balance == janet.balance == 0
 
     def test_create_card_hold_success(self):
