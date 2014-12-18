@@ -194,7 +194,7 @@ def create_card_hold(db, participant, amount):
     except Exception as e:
         error = repr_exception(e)
         log(msg + "failed: %s" % error)
-        propagate_exchange(db, participant, 'bill', error, 0)
+        record_exchange(db, 'bill', amount, fee, participant, 'failed', error)
 
     return hold, error
 
@@ -264,7 +264,7 @@ def _prep_hit(unrounded):
     return cents, amount_str, upcharged, fee
 
 
-def record_exchange(db, kind, amount, fee, participant, status):
+def record_exchange(db, kind, amount, fee, participant, status, error=None):
     """Given a Bunch of Stuff, return None.
 
     Records in the exchanges table have these characteristics:
@@ -287,7 +287,9 @@ def record_exchange(db, kind, amount, fee, participant, status):
          RETURNING id
         """, (amount, fee, participant.username, status))
 
-        if amount < 0:
+        if status == 'failed':
+            propagate_exchange(cursor, participant, kind, error, 0)
+        elif amount < 0:
             amount -= fee
             propagate_exchange(cursor, participant, kind, '', amount)
 

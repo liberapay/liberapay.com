@@ -82,6 +82,13 @@ class TestCardHolds(BalancedHarness):
         hold, error = create_card_hold(self.db, self.janet, D('1.00'))
         assert hold is None
         assert error == "Foobar()"
+        exchange = self.db.one("SELECT * FROM exchanges")
+        assert exchange
+        assert exchange.amount
+        assert exchange.status == 'failed'
+        janet = Participant.from_id(self.janet.id)
+        assert self.janet.last_bill_result == 'Foobar()'
+        assert self.janet.balance == janet.balance == 0
 
     def test_create_card_hold_success(self):
         hold, error = create_card_hold(self.db, self.janet, D('1.00'))
