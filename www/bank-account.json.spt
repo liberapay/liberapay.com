@@ -13,6 +13,7 @@ base_url = gratipay.canonical_scheme + "://" + gratipay.canonical_host
 
 if user.ANON:
     raise Response(404)
+participant = user.participant
 
 request.allow('POST')
 
@@ -20,19 +21,20 @@ out = {}
 redirect_to = base_url + '/bank-account-complete.html'
 
 if body.get('action') == 'delete':
-    billing.clear(website.db, u"bank account", user.participant.username, user.participant.balanced_customer_href)
+    if participant.balanced_customer_href:
+        balanced_account = participant.get_balanced_account()
+        billing.clear(website.db, u"bank account", participant, balanced_account)
+
 elif body.get('action') == 'store-error':
-    billing.store_result(website.db, u"bank account", user.participant.username, body['msg'])
+    billing.store_result(website.db, u"bank account", participant, body['msg'])
+
 else:
 
     # Get a balanced account.
     # =======================
     # This will create one if user.balanced_customer_href is None.
 
-    balanced_account = billing.get_balanced_account( website.db
-                                                   , user.participant.username
-                                                   , user.participant.balanced_customer_href
-                                                    )
+    balanced_account = participant.get_balanced_account()
 
 
     # Ensure the user is a merchant.
@@ -70,17 +72,13 @@ else:
     if not out:
 
         # Clear out any old ones first.
-        billing.clear( website.db
-                     , u"bank account"
-                     , user.participant.username
-                     , balanced_account.href
-                      )
+        billing.clear(website.db, u"bank account", participant, balanced_account)
 
         bank_account_uri = body['bank_account_uri']
         try:
             billing.associate( website.db
                              , u"bank account"
-                             , user.participant.username
+                             , participant
                              , balanced_account
                              , bank_account_uri
                               )

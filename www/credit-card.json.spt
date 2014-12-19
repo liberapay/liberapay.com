@@ -14,18 +14,19 @@ from gratipay import billing
 
 if user.ANON:
     raise Response(404)
+participant = user.participant
 
 request.allow('POST')
 out = {}
 
 if body.get('action') == 'delete':
-    billing.clear( website.db
-                 , u"credit card"
-                 , user.participant.username
-                 , user.participant.balanced_customer_href
-                  )
+    if participant.balanced_customer_href:
+        balanced_account = participant.get_balanced_account()
+        billing.clear(website.db, u'credit card', participant, balanced_account)
+
 elif body.get('action') == 'store-error':
-    billing.store_result(website.db, u"credit card", user.participant.username, body['msg'])
+    billing.store_result(website.db, u'credit card', participant, body['msg'])
+
 else:
 
     # Associate the single-use token representing the credit card details (we
@@ -35,10 +36,11 @@ else:
 
     card_uri = body['card_uri']
 
+    balanced_account = participant.get_balanced_account()
     error = billing.associate( website.db
                              , u"credit card"
-                             , user.participant.username
-                             , user.participant.balanced_customer_href
+                             , participant
+                             , balanced_account
                              , card_uri
                               )
 
@@ -46,7 +48,6 @@ else:
         out = {"problem": "Problem", "error": error}
     else:
         out = {"problem": ""}
-    out["first_time"] = user.participant.last_bill_result is None
 
 [---] application/json via json_dump
 out
