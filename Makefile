@@ -8,8 +8,8 @@ venv := "./vendor/virtualenv-1.11.6.py"
 test_env_files := defaults.env,tests/test.env,tests/local.env
 pip := $(env_bin)/pip
 honcho := $(env_bin)/honcho
-honcho_run := $(honcho) -e defaults.env,local.env run
-py_test := $(honcho) -e $(test_env_files) run $(env_bin)/py.test
+honcho_run := $(honcho) run -e defaults.env,local.env
+py_test := $(honcho) run -e $(test_env_files) $(env_bin)/py.test
 
 env: requirements.txt requirements_tests.txt setup.py
 	$(python) $(venv) \
@@ -42,7 +42,7 @@ py: env
 	$(honcho_run) $(env_bin)/python -i -c 'from gratipay.wireup import env, db; db = db(env())'
 
 test-schema: env
-	$(honcho) -e $(test_env_files) run ./recreate-schema.sh
+	$(honcho) run -e $(test_env_files) ./recreate-schema.sh
 
 pyflakes: env
 	$(env_bin)/pyflakes bin gratipay tests
