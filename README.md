@@ -159,7 +159,7 @@ If Gratipay launches successfully it will look like this:
 
 ```
 $ make run
-PATH=env/bin:{lots-more-of-your-own-PATH} env/bin/honcho -e defaults.env,local.env run web
+PATH=env/bin:{lots-more-of-your-own-PATH} env/bin/honcho run -e defaults.env,local.env web
 2014-07-22 14:53:09 [1258] [INFO] Starting gunicorn 18.0
 2014-07-22 14:53:09 [1258] [INFO] Listening at: http://0.0.0.0:8537 (1258)
 2014-07-22 14:53:09 [1258] [INFO] Using worker: sync
@@ -367,7 +367,7 @@ To invoke py.test directly you should use the `honcho` utility that comes
 with the install. First `make tests/env`, activate the virtualenv and then:
 
     [gratipay] $ cd tests/
-    [gratipay] $ honcho -e defaults.env,local.env run py.test
+    [gratipay] $ honcho run -e defaults.env,local.env py.test
 
 Local Database Setup
 --------------------
