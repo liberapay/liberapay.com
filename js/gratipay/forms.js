@@ -73,6 +73,8 @@ Gratipay.forms.initCSRF = function() {   // https://docs.djangoproject.com/en/de
         }
 
         if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
+            // We have to avoid httponly on the csrf_token cookie because of this.
+            // https://github.com/gratipay/gratipay.com/issues/3030
             xhr.setRequestHeader("X-CSRF-TOKEN", Gratipay.getCookie('csrf_token'));
         }
     });
