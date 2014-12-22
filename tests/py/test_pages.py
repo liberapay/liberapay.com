@@ -144,3 +144,8 @@ class TestPages(Harness):
         expected2 = "cancelled 1 tip"
         assert expected1 in actual
         assert expected2 in actual
+
+    def test_new_participant_can_edit_profile(self):
+        self.make_participant('alice', claimed_time='now')
+        body = self.client.GET("/alice/", auth_as="alice").body
+        assert b'Edit' in body
