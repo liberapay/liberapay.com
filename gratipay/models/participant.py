@@ -662,11 +662,6 @@ class Participant(Model, MixinTeam):
                                       ), CURRENT_TIMESTAMP)
                         , %(name)s, %(slug)s, %(participant_id)s, %(is_member)s
                          )
-              RETURNING ( SELECT count(*) = 0
-                            FROM community_members
-                           WHERE participant=%(participant_id)s
-                         )
-                     AS first_time_community
 
         """, locals())
 
