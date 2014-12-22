@@ -30,7 +30,7 @@
         </form>
 
         <div class="view markdown-output">
-            {{ markdown.render(statement) }}
+            {{ markdown.render(statement) if statement }}
         </div>
     </div>
 
