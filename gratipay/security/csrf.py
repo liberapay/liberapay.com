@@ -150,6 +150,8 @@ def add_csrf_token_to_response(response, request=None):
         return  # early parsing must've failed
     csrf_token = request.context.get('csrf_token')
     if csrf_token:
+        # Don't set httponly so that we can POST using XHR.
+        # https://github.com/gratipay/gratipay.com/issues/3030
         response.set_cookie('csrf_token', csrf_token, expires=CSRF_TIMEOUT, httponly=False)
 
         # Content varies with the CSRF cookie, so set the Vary header.
