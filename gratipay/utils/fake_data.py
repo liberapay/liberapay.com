@@ -2,7 +2,7 @@ from faker import Factory
 from gratipay import wireup, MAX_TIP_SINGULAR, MIN_TIP
 from gratipay.elsewhere import PLATFORMS
 from gratipay.models.participant import Participant
-from gratipay.models.community import slugize, Community
+from gratipay.models import community
 
 import datetime
 import decimal
@@ -89,11 +89,11 @@ def fake_community(db, creator):
     """Create a fake community
     """
     name = faker.last_name()
-    slug = slugize(name)
+    slug = community.slugize(name)
 
     creator.insert_into_communities(True, name, slug)
 
-    return Community.from_slug(slug)
+    return community.Community.from_slug(slug)
 
 
 def fake_tip_amount():
