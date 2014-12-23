@@ -67,6 +67,16 @@ title = _("Credit Card")
     <p>Thanks! :-)</p>
   {% else %}
 
+    {% if status != "missing" %}
+    <h2>{{ _("Current:") }} {{ card['brand'] }} {{ card['number'][-4:] }}</h2>
+    {% endif %}
+
+    <div id="feedback">{% if last_bill_result %}
+    <h2><span>{{ _("Failure") }}</span></h2>
+    <div class="details"><p>{{ last_bill_result }}</p></div>
+    {% endif %}</div>
+
+
     <style>
         {% if status == "missing" %}
         #delete {
@@ -77,16 +87,6 @@ title = _("Credit Card")
     <div class="cc-ba">
         <form id="payment" autocomplete="off">
             <div class="constrain-width group">
-
-                {% if status != "missing" %}
-                <h2>{{ _("Current:") }} {{ card['brand'] }} {{ card['number'][-4:] }}</h2>
-                {% endif %}
-
-                <div id="feedback">{% if last_bill_result %}
-                <h2><span>{{ _("Failure") }}</span></h2>
-                <div class="details"><p>{{ last_bill_result }}</p></div>
-                  {% endif %}</div>
-
 
                 <h2>{{ _("Required") }}</h2>
 

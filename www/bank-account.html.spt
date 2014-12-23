@@ -61,6 +61,16 @@ title = _("Bank Account")
     <p>{{ _("Thanks! :-)") }}</p>
   {% else %}
 
+    {% if bank_account and bank_account.is_setup %}
+    <h2>Current: {{ bank_account['bank_name'] }}
+    ******{{ bank_account['account_number'][-4:] }}</h2>
+    {% endif %}
+
+    <div id="feedback">{% if last_ach_result %}
+    <h2><span>{{ _("Failure") }}</span></h2>
+    <div class="details"><p>{{ last_ach_result }}</p></div>
+    {% endif %}</div>
+
     <style>
         {% if not balanced_customer_href %}
         #delete {
@@ -71,16 +81,6 @@ title = _("Bank Account")
     <div class="cc-ba">
         <form id="payout" autocomplete="off">
             <div class="constrain-width group">
-
-                {% if bank_account and bank_account.is_setup %}
-                <h2>Current: {{ bank_account['bank_name'] }}
-                ******{{ bank_account['account_number'][-4:] }}</h2>
-                {% endif %}
-
-                <div id="feedback">{% if last_ach_result %}
-                <h2><span>{{ _("Failure") }}</span></h2>
-                <div class="details"><p>{{ last_ach_result }}</p></div>
-                  {% endif %}</div>
 
                 {% if account and 'merchant' in account.roles %}
                 <h2>{{ _("Identity Verification") }} &nbsp; <span>&#x2714;</span></h2>
