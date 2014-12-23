@@ -21,7 +21,9 @@ if POST:
         try:
             if tip['platform'] not in ('gittip', 'gratipay'):
                 raise BadPlatform
-            amount = participant.set_tip_to(tip['username'], parse_decimal(tip['amount']))['amount']
+            amount = participant.set_tip_to( tip['username']
+                                           , parse_decimal(tip['amount'])
+                                            )['amount']
         except Exception, exc:
             amount = "error"
             one['error'] = exc.__class__.__name__
@@ -35,8 +37,7 @@ if POST:
                 participant.set_tip_to(tip['tippee'], '0.00')
 
 else:
-    tips, total, unclaimed_tips, unclaimed_total = \
-                                           participant.get_giving_for_profile()
+    tips, total, unclaimed_tips, unclaimed_total = participant.get_giving_for_profile()
 
     out = []
     for tip in tips:
