@@ -1,6 +1,7 @@
 from itertools import chain
 
 from aspen import Response
+from aspen.utils import utcnow
 from gratipay.models.community import name_pattern, slugize, Community
 from gratipay.utils import excerpt_intro, format_money
 from gratipay.utils.query_cache import QueryCache
@@ -32,6 +33,7 @@ if community is None:
         name = _slug
         nmembers = 0
         check_membership = lambda a, b: False
+        ctime = utcnow()
 
     community = StubCommunity()
 
@@ -130,24 +132,35 @@ for p in chain(new_participants, givers, receivers):
 
 {% block sidebar %}
 
-    <div class="padding">
-        {{ ngettext("{n} Member", "{n} Members", community.nmembers).lower() }}
+    <div class="avatar">
+        <img src="{{ website.asset('default-avatar-community.svg') }}" />
     </div>
 
+    <div class="padding mono">
+        <table>
+            <tr>
+                <td class="left">{{ ngettext("Member", "Members", community.nmembers) }}</td>
+                <td class="right">{{ format_number(community.nmembers) }}</td>
+            </tr>
+        </table>
+        <p>{{ _('Organized {0} ago.', to_age(community.ctime, add_direction=False)) }}</p>
+    </div>
+
+
     {% if user.ANON %}
-    <div class="padding">
-        {% include "templates/sign-in-using.html" %}
-        {{ _("{0} to join the {1} community on Gratipay.", "", community.name) }}
-    </div>
+        <div class="padding">
+            {% include "templates/sign-in-using.html" %}
+            {{ _("{0} to join the {1} community on Gratipay.", "", community.name) }}
+        </div>
     {% else %}
-    <div class="cta">
-    {% set is_member = community.check_membership(user.participant) %}
-    <button class="join-leave"
-            data-name="{{ community.name }}"
-            data-is-member="{{ 'true' if is_member else 'false' }}">
-        <span>{{ _("Leave") if is_member else _("Join") }}</span>
-    </button>
-    </div>
+        <div class="cta">
+            {% set is_member = community.check_membership(user.participant) %}
+            <button class="join-leave"
+                    data-name="{{ community.name }}"
+                    data-is-member="{{ 'true' if is_member else 'false' }}">
+                <span>{{ _("Leave") if is_member else _("Join") }}</span>
+            </button>
+        </div>
     {% endif %}
 {% endblock %}
 
