@@ -4,29 +4,29 @@ Gratipay.tips.init = function() {
 
 
     function start_editing_tip() {
-        $('.my-tip .static-amount').hide();
-        $('.my-tip input').show().focus();
-        $('.my-tip .edit').hide();
-        $('.my-tip .save').show();
-        $('.my-tip .cancel').show();
+        $('.your-tip .static-amount').hide();
+        $('.your-tip input').show().focus();
+        $('.your-tip .edit').hide();
+        $('.your-tip .save').show();
+        $('.your-tip .cancel').show();
 
     }
     function finish_editing_tip() {
-        $('form.my-tip .static-amount').show();
-        $('form.my-tip input').hide();
-        $('.my-tip .edit').show();
-        $('.my-tip .save').hide();
-        $('.my-tip .cancel').hide();
+        $('form.your-tip .static-amount').show();
+        $('form.your-tip input').hide();
+        $('.your-tip .edit').show();
+        $('.your-tip .save').hide();
+        $('.your-tip .cancel').hide();
         $(window).off('beforeunload.tips');
     }
 
-    $('.my-tip button.edit').click(function(e) {
+    $('.your-tip button.edit').click(function(e) {
         e.preventDefault();
         e.stopPropagation();
         start_editing_tip();
         return false;
     });
-    $('.my-tip').submit(function(event) {
+    $('.your-tip').submit(function(event) {
         event.preventDefault();
         var $this     = $(this),
             $static   = $this.find('.static-amount'),
@@ -59,9 +59,9 @@ Gratipay.tips.init = function() {
 
                 // Adapt edit button urgency to amount.
                 if (amount > 0)
-                    $('.my-tip .edit').addClass('not-zero');
+                    $('.your-tip .edit').addClass('not-zero');
                 else
-                    $('.my-tip .edit').removeClass('not-zero');
+                    $('.your-tip .edit').removeClass('not-zero');
 
                 // Use global notification system.
                 Gratipay.notification( "Tip changed to $" + dispAmount + " per week!"
@@ -70,7 +70,7 @@ Gratipay.tips.init = function() {
                 finish_editing_tip();
             });
     });
-    $('.my-tip button.cancel').click(function(e) {
+    $('.your-tip button.cancel').click(function(e) {
         e.preventDefault();
         e.stopPropagation();
         finish_editing_tip();
@@ -82,7 +82,7 @@ Gratipay.tips.init = function() {
     // If the user presses enter, the browser should natively submit the form.
     // If the user presses cancel, we reset the form to its previous state.
     var timer;
-    $('.my-tip input').change(checkTip).keyup(function(e) {
+    $('.your-tip input').change(checkTip).keyup(function(e) {
         if (e.keyCode === 27)                          // escape
             $(this).parents('form').trigger('reset');
         else if (e.keyCode === 38 || e.keyCode === 40) // up & down
@@ -92,7 +92,7 @@ Gratipay.tips.init = function() {
             timer = setTimeout(checkTip.bind(this), 700);
         }
     });
-    $('input.my-tip').trigger("change");
+    $('input.your-tip').trigger("change");
 
 
     function checkTip() {
@@ -130,13 +130,13 @@ Gratipay.tips.init = function() {
         localStorage.removeItem('tipAfterSignIn');
 
         if (window.location.pathname === '/'+data.tippee+'/')
-            $('.my-tip input').val(data.val).change();
+            $('.your-tip input').val(data.val).change();
     }
 
     // Store the tip value if the user hasn't signed in
     if ($('.sign-in').length)
         $(window).on('unload.tips', function() {
-            var tip = $('.my-tip input');
+            var tip = $('.your-tip input');
             if (tip.parents('form').hasClass('changed'))
                 localStorage.tipAfterSignIn = JSON.stringify({
                     tippee: tip.data('tippee'), val: tip.val()
@@ -153,7 +153,7 @@ Gratipay.tips.initSupportGratipay = function() {
             $('.support-gratipay').slideUp();
 
             // If you're on your own giving page ...
-            var tip_on_giving = $('.my-tip[data-tippee="Gratipay"]');
+            var tip_on_giving = $('.your-tip[data-tippee="Gratipay"]');
             if (tip_on_giving.length > 0) {
                 tip_on_giving[0].defaultValue = amount;
                 tip_on_giving.attr('value', amount.toFixed(2));

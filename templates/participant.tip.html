@@ -10,8 +10,8 @@
         {% set raw_tip = user.participant.get_tip_to(participant.username)['amount'] %}
         {% set my_tip = format_decimal(raw_tip, '#,##0.00') %}
         {% set tippee = participant.username %}
-        <h2>My Tip</h2>
-        <form class="my-tip{{ " anon" if user.ANON else "" }}">
+        <h2>Your Tip</h2>
+        <form class="your-tip{{ " anon" if user.ANON else "" }}">
             <div class="payment-amount">
                 $
                 <span class="static-amount">{{ my_tip }}</span>
