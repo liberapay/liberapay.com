@@ -88,7 +88,10 @@ def fake_participant(db, number="singular", is_admin=False):
 def fake_community(db, creator):
     """Create a fake community
     """
-    name = faker.last_name()
+    name = faker.city()
+    if not community.name_pattern.match(name):
+        return fake_community(db, creator)
+
     slug = community.slugize(name)
 
     creator.insert_into_communities(True, name, slug)
