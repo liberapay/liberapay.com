@@ -88,9 +88,6 @@ class TestPages(Harness):
         assert "Page Not Found" in response.body
         assert "{%" not in response.body
 
-    def test_bank_account_complete(self):
-        assert self.client.GxT('/bank-account-complete.html').code == 404
-
     def test_for_contributors_redirects_to_inside_gratipay(self):
         loc = self.client.GxT('/for/contributors/').headers['Location']
         assert loc == 'http://inside.gratipay.com/'
