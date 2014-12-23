@@ -47,8 +47,6 @@ button.selected:hover, button.selected.drag,
     background: $darker-green;
 }
 
-button.join-leave[data-is-member="true"],
-.button.join-leave[data-is-member="true"],
 button.close-account {
     font-weight: normal;
     background: none;
@@ -59,9 +57,4 @@ button.close-account {
         color: white;
         text-decoration: none;
     }
-}
-
-button.join-leave[data-is-member="false"],
-.button.join-leave[data-is-member="false"] {
-    @extend .selected;
 }

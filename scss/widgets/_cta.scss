@@ -30,19 +30,19 @@
         .save, .cancel {
             display: none;
         }
-        button {
-            background: $white;
-            color: $brown;
-            &.edit {
-                background: $gold;
-            }
-            &.edit.not-zero, &.cancel {
-                background: transparentize($white, 0.6);
-            }
-            &:hover {
-                background: $green !important;
-                color: $white;
-            }
+    }
+    button {
+        background: $white;
+        color: $brown;
+        &.edit, &.join {
+            background: $gold;
+        }
+        &.edit.not-zero, &.cancel, &.leave {
+            background: transparentize($white, 0.5);
+        }
+        &:hover {
+            background: $green !important;
+            color: $white;
         }
     }
 

@@ -155,7 +155,7 @@ for p in chain(new_participants, givers, receivers):
     {% else %}
         <div class="cta">
             {% set is_member = community.check_membership(user.participant) %}
-            <button class="join-leave"
+            <button class="join-leave {{ 'leave' if is_member else 'join' }}"
                     data-name="{{ community.name }}"
                     data-is-member="{{ 'true' if is_member else 'false' }}">
                 <span>{{ _("Leave") if is_member else _("Join") }}</span>
