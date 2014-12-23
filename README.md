@@ -512,31 +512,38 @@ API Implementations
 Below are some projects that use the Gratipay APIs, that can serve as inspiration
 for your project!
 
- - [Drupal: Gratipay](https://drupal.org/project/gratipay): Includes a Gratipay
-   giving field type to let you implement the Khan academy model for users on
-   your Drupal site.
+### Renamed to Gratipay
 
- - [Node.js: Node-Gratipay](https://npmjs.org/package/gratipay) (also see [Khan
-   Academy's setup](http://ejohn.org/blog/gittip-at-khan-academy/))
-
- - [Ruby: gratitude](https://github.com/JohnKellyFerguson/gratitude): A ruby
-   gem that wraps the Gratipay API.
-
- - [WordPress: WP-Gratipay](https://github.com/daankortenbach/WP-Gratipay)
-
- - [hubot-gratipay](https://github.com/myplanetdigital/hubot-gratipay): A Hubot
-   script for interacting with a shared Gratipay account.
-
- - [gratipay-collab](https://github.com/engineyard/gratipay-collab): A Khan-style
-   tool for managing a Gratipay account as a team.
-
- - [WWW::Gratipay](https://metacpan.org/pod/WWW::Gratipay): A Perl module
-   implementing the Gratipay API more or less
+ - [Ruby: gratitude](https://github.com/JohnKellyFerguson/gratitude): A simple 
+   ruby wrapper for the Gratipay API.
 
  - [php-curl-class](https://github.com/php-curl-class/php-curl-class/blob/master/examples/gratipay_send_tip.php): A php class to tip using the Gratipay API.
 
- - [gratipay-twisted](https://github.com/TigerND/gratipay-twisted): Gratipay client
-   for the Twisted framework
+
+### Still Using Gittip
+
+These probably still work, but are using our [old name](https://medium.com/gratipay-blog/gratitude-gratipay-ef24ad5e41f9):
+
+ - [Drupal: Gittip](https://drupal.org/project/gittip): Includes a Gittip
+   giving field type to let you implement the Khan academy model for users on
+   your Drupal site. ([ticket](https://www.drupal.org/node/2332131))
+
+ - [Node.js: Node-Gittip](https://npmjs.org/package/gittip) (also see [Khan
+   Academy's setup](http://ejohn.org/blog/gittip-at-khan-academy/)) ([ticket](https://github.com/KevinTCoughlin/node-gittip/issues/1))
+
+ - [WordPress: WP-Gittip](https://github.com/daankortenbach/WP-Gittip) ([ticket](https://github.com/daankortenbach/WP-Gittip/issues/2))
+
+ - [hubot-gittip](https://github.com/myplanetdigital/hubot-gittip): A Hubot
+   script for interacting with a shared Gratipay account. ([ticket](https://github.com/myplanetdigital/hubot-gittip/issues/6))
+
+ - [gittip-collab](https://github.com/engineyard/gittip-collab): A Khan-style
+   tool for managing a Gittip account as a team. ([ticket](https://github.com/engineyard/gittip-collab/issues/1))
+
+ - [WWW::Gittip](https://metacpan.org/pod/WWW::Gittip): A Perl module
+   implementing the Gittip API more or less ([ticket](https://rt.cpan.org/Public/Bug/Display.html?id=101103))
+
+ - [gittip-twisted](https://github.com/TigerND/gittip-twisted): Gittip client
+   for the Twisted framework ([ticket](https://github.com/TigerND/gittip-twisted/issues/1))
 
 
 Glossary
