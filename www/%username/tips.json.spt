@@ -17,9 +17,9 @@ if POST:
     seen = set()
     for tip in new_tips:
         seen.add(tip['username'])
-        one = {"username": tip['username'], "platform": "gratipay"}
+        one = {"username": tip['username'], "platform": tip['platform']}
         try:
-            if tip['platform'] != 'gratipay':
+            if tip['platform'] not in ('gittip', 'gratipay'):
                 raise BadPlatform
             amount = participant.set_tip_to(tip['username'], parse_decimal(tip['amount']))['amount']
         except Exception, exc:
