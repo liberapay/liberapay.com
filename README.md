@@ -492,7 +492,8 @@ querystring (not the body!) with a value of `yes`, `true`, or `1`, then any
 tips not in the array you `POST` will be zeroed out.
 
 NOTE: The amounts must be encoded as a string (rather than a number).
-Additionally, currently, the only supported platform is 'gratipay'.
+Additionally, currently, the only supported platform is 'gratipay' ('gittip'
+still works for backwards-compatibility).
 
 This endpoint requires authentication. Look for your API key on your [profile
 page](https://gratipay.com/about/me/account), and pass it as the basic auth
