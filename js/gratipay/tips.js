@@ -11,7 +11,7 @@ Gratipay.tips.init = function() {
         $('.my-tip .cancel').show();
 
     }
-    function finish_editing_tip(newAmount) {
+    function finish_editing_tip() {
         $('form.my-tip .static-amount').show();
         $('form.my-tip input').hide();
         $('.my-tip .edit').show();
@@ -57,11 +57,17 @@ Gratipay.tips.init = function() {
                     $('.on-elsewhere .ready .number').text(
                         parseInt($('.on-elsewhere .ready .number').text(),10) + 1);
 
+                // Adapt edit button urgency to amount.
+                if (amount > 0)
+                    $('.my-tip .edit').addClass('not-zero');
+                else
+                    $('.my-tip .edit').removeClass('not-zero');
+
                 // Use global notification system.
                 Gratipay.notification( "Tip changed to $" + dispAmount + " per week!"
                                      , 'success'
                                       );
-                finish_editing_tip(dispAmount);
+                finish_editing_tip();
             });
     });
     $('.my-tip button.cancel').click(function(e) {

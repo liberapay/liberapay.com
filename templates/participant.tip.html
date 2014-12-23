@@ -7,7 +7,8 @@
         {% include "templates/sign-in-using-to-give.html" %}
     {% else %}
 
-        {% set my_tip = format_decimal(user.participant.get_tip_to(participant.username)['amount'], '#,##0.00') %}
+        {% set raw_tip = user.participant.get_tip_to(participant.username)['amount'] %}
+        {% set my_tip = format_decimal(raw_tip, '#,##0.00') %}
         {% set tippee = participant.username %}
         <h2>My Tip</h2>
         <form class="my-tip{{ " anon" if user.ANON else "" }}">
@@ -19,8 +20,7 @@
                        data-tippee="{{ tippee }}">
             </div>
             <div class="per-week">{{ _("per week") }}</div>
-
-            <button class="edit">{{ _("Edit") }}</button>
+            <button class="edit{{ ' not-zero' if raw_tip > 0 else '' }}">{{ _("Edit") }}</button>
             <button class="save" type="submit">{{ _("Save") }}</button>
             <button class="cancel" type="cancel">{{ _("Cancel") }}</button>
         </form>

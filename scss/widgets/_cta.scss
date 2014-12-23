@@ -31,8 +31,17 @@
             display: none;
         }
         button {
+            background: $white;
+            color: $brown;
+            &.edit {
+                background: $gold;
+            }
+            &.edit.not-zero, &.cancel {
+                background: transparentize($white, 0.6);
+            }
             &:hover {
-                background: $green;
+                background: $green !important;
+                color: $white;
             }
         }
     }
