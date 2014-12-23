@@ -1,5 +1,0 @@
-<form class="my-tip{{ " anon" if user.ANON else "" }}">
-    $ <input type="text" class="my-tip" min="0" max="{{ '1000' if participant.IS_PLURAL else '100' }}" value="{{ my_tip }}" data-tippee="{{ tippee }}"><br>
-    {{ _("per week") }}
-    <button class="confirm-tip" type="submit" disabled>{{ _("Save") }}</button>
-</form>
