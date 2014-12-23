@@ -94,6 +94,27 @@ class TestTipsJson(Harness):
         for tip in resp:
             assert 'error' in tip
 
+    def test_gittip_as_platform_works(self):
+        now = utcnow()
+        self.make_participant("test_tippee1", claimed_time=now)
+        self.make_participant("test_tipper", claimed_time=now)
+
+        response = self.client.POST( '/test_tipper/tips.json'
+                                   , body=json.dumps([{ 'username': 'test_tippee1'
+                                                      , 'platform': 'gittip'
+                                                      , 'amount': '1.00'
+                                                       }])
+                                   , auth_as='test_tipper'
+                                   , content_type='application/json'
+                                    )
+
+        assert response.code == 200
+
+        resp = json.loads(response.body)
+        assert len(resp) == 1
+        tip = resp[0]
+        assert tip['platform'] == 'gittip'
+
     def test_also_prune_as_1(self):
         self.also_prune_variant('1')
 
