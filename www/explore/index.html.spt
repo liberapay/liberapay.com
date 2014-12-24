@@ -16,6 +16,9 @@ title = _("Explore")
 {% endblock %}
 
 {% block sidebar %}
+    <div class="avatar">
+        <img src="{{ website.asset('communities.svg') }}">
+    </div>
     <div class="padding">
         {{ ngettext( "There is {n} community on Gratipay."
                    , "There are {n} communities on Gratipay."
