@@ -71,6 +71,16 @@ class Tests(Harness):
         assert response.code == 200
         assert SESSION not in response.headers.cookie
 
+    def test_bad_userid_returns_401(self):
+        self.make_participant('alice', claimed_time='now')
+        auth_header = b'Basic ' + b64encode(b'foo:')
+        response = self.client.GxT( '/alice/public.json'
+                                  , HTTP_AUTHORIZATION=auth_header
+                                  , HTTP_X_FORWARDED_PROTO=b'https'
+                                  , HTTP_HOST=b'gratipay.com'
+                                   )
+        assert response.code == 401
+
     def test_early_failures_dont_break_everything(self):
         old_from_wsgi = Request.from_wsgi
         def broken_from_wsgi(*a, **kw):

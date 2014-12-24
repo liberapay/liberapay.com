@@ -37,6 +37,10 @@ def get_auth_from_request(request):
                 user = request.context['user'] = User()
                 user.participant = Participant._from_thing('api_key', userid)
             else:
+                try:
+                    userid = int(userid)
+                except ValueError:
+                    raise Response(401)
                 user = request.context['user'] = User.from_id(userid)
                 if user.ANON or not constant_time_compare(user.participant.api_key, api_key):
                     raise Response(401)
