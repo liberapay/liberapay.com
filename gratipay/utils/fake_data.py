@@ -2,6 +2,7 @@ from faker import Factory
 from gratipay import wireup, MAX_TIP_SINGULAR, MIN_TIP
 from gratipay.elsewhere import PLATFORMS
 from gratipay.models.participant import Participant
+from gratipay.models import community
 
 import datetime
 import decimal
@@ -84,6 +85,19 @@ def fake_participant(db, number="singular", is_admin=False):
     return Participant.from_username(username)
 
 
+def fake_community(db, creator):
+    """Create a fake community
+    """
+    name = faker.city()
+    if not community.name_pattern.match(name):
+        return fake_community(db, creator)
+
+    slug = community.slugize(name)
+
+    creator.insert_into_communities(True, name, slug)
+
+    return community.Community.from_slug(slug)
+
 
 def fake_tip_amount():
     amount = ((decimal.Decimal(random.random()) * (MAX_TIP_SINGULAR - MIN_TIP))
@@ -136,7 +150,7 @@ def fake_transfer(db, tipper, tippee):
                 )
 
 
-def populate_db(db, num_participants=100, num_tips=200, num_teams=5, num_transfers=5000):
+def populate_db(db, num_participants=100, num_tips=200, num_teams=5, num_transfers=5000, num_communities=20):
     """Populate DB with fake data.
     """
     #Make the participants
@@ -158,6 +172,15 @@ def populate_db(db, num_participants=100, num_tips=200, num_teams=5, num_transfe
         members = random.sample(participants, random.randint(1, 3))
         for p in members:
             t.add_member(p)
+
+    #Make communities
+    for i in xrange(num_communities):
+        creator = random.sample(participants, 1)
+        community = fake_community(db, creator[0])
+
+        members = random.sample(participants, random.randint(1, 3))
+        for p in members:
+            p.insert_into_communities(True, community.name, community.slug)
 
     #Make the tips
     tips = []
