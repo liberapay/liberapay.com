@@ -391,3 +391,16 @@ CREATE TABLE emails
                              -- state, hence the check constraint on verified.
 , UNIQUE (participant, address)
  );
+
+
+-- https://github.com/gratipay/gratipay.com/pull/3010
+CREATE TABLE statements
+( participant  bigint  NOT NULL REFERENCES participants(id)
+, lang         text    NOT NULL
+, content      text    NOT NULL CHECK (content <> '')
+, UNIQUE (participant, lang)
+);
+
+CREATE FUNCTION enumerate(anyarray) RETURNS TABLE (rank bigint, value anyelement) AS $$
+    SELECT row_number() over() as rank, value FROM unnest($1) value;
+$$ LANGUAGE sql STABLE;
