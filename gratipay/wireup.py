@@ -9,7 +9,7 @@ from tempfile import mkstemp
 import aspen
 from aspen.testing.client import Client
 from babel.core import Locale
-from babel.messages.pofile import Catalog, read_po
+from babel.messages.pofile import read_po
 from babel.numbers import parse_pattern
 import balanced
 import gratipay
@@ -30,10 +30,12 @@ from gratipay.models.account_elsewhere import AccountElsewhere
 from gratipay.models.community import Community
 from gratipay.models.participant import Participant
 from gratipay.models import GratipayDB
-from gratipay.utils import COUNTRIES, COUNTRIES_MAP, i18n
 from gratipay.utils.cache_static import asset_etag
 from gratipay.utils.emails import compile_email_spt
-from gratipay.utils.i18n import ALIASES, ALIASES_R, get_function_from_rule, strip_accents
+from gratipay.utils.i18n import (
+    ALIASES, ALIASES_R, COUNTRIES, LANGUAGES_2, LOCALES,
+    get_function_from_rule, make_sorted_dict
+)
 
 def canonical(env):
     gratipay.canonical_scheme = env.canonical_scheme
@@ -265,9 +267,8 @@ def clean_assets(website):
 
 def load_i18n(project_root, tell_sentry):
     # Load the locales
-    key = lambda t: strip_accents(t[1])
     localeDir = os.path.join(project_root, 'i18n', 'core')
-    locales = i18n.LOCALES
+    locales = LOCALES
     for file in os.listdir(localeDir):
         try:
             parts = file.split(".")
@@ -279,20 +280,15 @@ def load_i18n(project_root, tell_sentry):
                 c = l.catalog = read_po(f)
                 c.plural_func = get_function_from_rule(c.plural_expr)
                 try:
-                    l.countries_map = {k: l.territories[k] for k in COUNTRIES_MAP}
-                    l.countries = sorted(l.countries_map.items(), key=key)
+                    l.countries = make_sorted_dict(COUNTRIES, l.territories)
                 except KeyError:
-                    l.countries_map = COUNTRIES_MAP
                     l.countries = COUNTRIES
+                try:
+                    l.languages_2 = make_sorted_dict(LANGUAGES_2, l.languages)
+                except KeyError:
+                    l.languages_2 = LANGUAGES_2
         except Exception as e:
             tell_sentry(e)
-
-    # Add the default English locale
-    locale_en = i18n.LOCALE_EN = locales['en'] = Locale('en')
-    locale_en.catalog = Catalog('en')
-    locale_en.catalog.plural_func = lambda n: n != 1
-    locale_en.countries = COUNTRIES
-    locale_en.countries_map = COUNTRIES_MAP
 
     # Add aliases
     for k, v in list(locales.items()):

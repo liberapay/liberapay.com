@@ -1,32 +1,26 @@
 from __future__ import print_function, unicode_literals
 
 from aspen import Response
-from gratipay.utils import wrap, markdown
-from gratipay.exceptions import ProblemChangingNumber
+from gratipay.utils import get_participant, markdown
+from gratipay.utils.i18n import LANGUAGES_2
 
 [-----------------------------------------------------------------------------]
 
-if user.ANON:
-    raise Response(404)
-request.allow("POST")
+participant = get_participant(request, restrict=True)
 
-statement = request.body["statement"]
-number = request.body["number"]
+if POST:
+    lang = request.body['lang']
+    content = request.body['content']
 
-if number not in ("singular", "plural"):
-    raise Response(400)
+    if lang not in LANGUAGES_2:
+        raise Response(400, "unknown lang")
 
-if number != user.participant.number:
-    try:
-        user.participant.update_number(number)
-    except ProblemChangingNumber, e:
-        raise Response(400, unicode(e))
-user.participant.update_statement(statement)
+    participant.upsert_statement(lang, content)
+    r = {"html": markdown.render(content)}
 
-I_AM_MAKING = _("I am making the world better by {0}")
-WE_ARE_MAKING = _("We are making the world better by {0}")
-
-MAKING = I_AM_MAKING if (number == 'singular') else WE_ARE_MAKING
+else:
+    lang = qs['lang']
+    r = {"content": participant.get_statement([lang])[0]}
 
 [---] application/json via json_dump
-{"statement": markdown.render(MAKING.format(statement)), "number": wrap(number)}
+r

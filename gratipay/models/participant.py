@@ -209,9 +209,44 @@ class Participant(Model, MixinTeam):
     # Statement
     # =========
 
-    def update_statement(self, statement):
-        self.db.run("UPDATE participants SET statement=%s WHERE id=%s", (statement, self.id))
-        self.set_attributes(statement=statement)
+    def get_statement(self, langs):
+        """Get the participant's statement in the language that best matches
+        the list provided.
+        """
+        return self.db.one("""
+            SELECT content, lang
+              FROM statements
+              JOIN enumerate(%(langs)s) langs ON langs.value = statements.lang
+             WHERE participant=%(id)s
+          ORDER BY langs.rank
+             LIMIT 1
+        """, dict(id=self.id, langs=langs), default=(None, None))
+
+    def get_statement_langs(self):
+        return self.db.all("SELECT lang FROM statements WHERE participant=%s",
+                           (self.id,))
+
+    def upsert_statement(self, lang, statement):
+        if not statement:
+            self.db.run("DELETE FROM statements WHERE participant=%s AND lang=%s",
+                        (self.id, lang))
+            return
+        r = self.db.one("""
+            UPDATE statements
+               SET content=%s
+             WHERE participant=%s
+               AND lang=%s
+         RETURNING true
+        """, (statement, self.id, lang))
+        if not r:
+            try:
+                self.db.run("""
+                    INSERT INTO statements
+                                (lang, content, participant)
+                         VALUES (%s, %s, %s)
+                """, (lang, statement, self.id))
+            except IntegrityError:
+                return self.upsert_statement(lang, statement)
 
 
     # Pricing
@@ -419,7 +454,7 @@ class Participant(Model, MixinTeam):
 
 
     def clear_personal_information(self, cursor):
-        """Clear personal information such as statement and goal.
+        """Clear personal information such as statements and goal.
         """
         if self.IS_PLURAL:
             self.remove_all_members(cursor)
@@ -434,10 +469,10 @@ class Participant(Model, MixinTeam):
             );
 
             DELETE FROM emails WHERE participant = %(username)s;
+            DELETE FROM statements WHERE participant=%(participant_id)s;
 
             UPDATE participants
-               SET statement=''
-                 , goal=NULL
+               SET goal=NULL
                  , anonymous_giving=False
                  , anonymous_receiving=False
                  , number='singular'

@@ -1,47 +1,34 @@
 #profile-edit {
-    button.save, button.cancel {
+    .js-edit form.edit {
         display: none;
     }
-
     .username {
         input {
             width: 6em;
-            display: none;
         }
         .warning {
             margin-top: 5px;
             display: block;
             color: red;
-            display: none;
         }
     }
     .statement {
-        div.edit {
-            display: none;
-        }
         textarea {
             width: 98%;
-            height: 126pt; /* 18pt * 7 rows; overriden in js */
             padding: 1%;
-            margin-top: 8px;
+            resize: vertical;
+        }
+        textarea, select.langs {
+            margin-top: 6px;
         }
         .help {
             font: normal 12px/12px $Ideal;
         }
     }
     .goal {
-        table.edit {
-            display: none;
-        }
-        td {
-            text-align: left;
-        }
         #goal-custom {
             text-align: right;
             width: 6pc;
-        }
-        li {
-            margin-bottom: 1em;
         }
     }
     .api-key {
@@ -57,7 +44,7 @@
             }
         }
     }
-    .email-submit, .bitcoin-submit {
+    .email-submit {
         .address input {
             width: 100%;
             margin: 5px 0;

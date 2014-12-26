@@ -1,0 +1,24 @@
+from __future__ import print_function, unicode_literals
+
+from aspen import Response
+from gratipay.utils import get_participant
+from gratipay.exceptions import ProblemChangingNumber
+
+[-----------------------------------------------------------------------------]
+
+request.allow("POST")
+participant = get_participant(request, restrict=True)
+
+number = request.body["number"]
+
+if number not in ("singular", "plural"):
+    raise Response(400)
+
+if number != participant.number:
+    try:
+        participant.update_number(number)
+    except ProblemChangingNumber, e:
+        raise Response(400, unicode(e))
+
+[---] application/json via json_dump
+{"number": number}

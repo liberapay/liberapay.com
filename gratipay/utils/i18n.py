@@ -7,20 +7,62 @@ from unicodedata import combining, normalize
 
 from aspen.resources.pagination import parse_specline, split_and_escape
 from aspen.utils import utcnow
-from babel.core import LOCALE_ALIASES
+from babel.core import LOCALE_ALIASES, Locale
 from babel.dates import format_timedelta
 from babel.messages.extract import extract_python
+from babel.messages.pofile import Catalog
 from babel.numbers import (
     format_currency, format_decimal, format_number, format_percent,
     get_decimal_symbol, parse_decimal
 )
+from collections import OrderedDict
 import jinja2.ext
 
 
 ALIASES = {k: v.lower() for k, v in LOCALE_ALIASES.items()}
 ALIASES_R = {v: k for k, v in ALIASES.items()}
+
+
+def strip_accents(s):
+    return ''.join(c for c in normalize('NFKD', s) if not combining(c))
+
+
+def make_sorted_dict(keys, d):
+    items = ((k, d[k]) for k in keys)
+    return OrderedDict(sorted(items, key=lambda t: strip_accents(t[1])))
+
+
+COUNTRY_CODES = """
+    AD AE AF AG AI AL AM AO AQ AR AS AT AU AW AX AZ BA BB BD BE BF BG BH BI BJ
+    BL BM BN BO BQ BR BS BT BV BW BY BZ CA CC CD CF CG CH CI CK CL CM CN CO CR
+    CU CV CW CX CY CZ DE DJ DK DM DO DZ EC EE EG EH ER ES ET FI FJ FK FM FO FR
+    GA GB GD GE GF GG GH GI GL GM GN GP GQ GR GS GT GU GW GY HK HM HN HR HT HU
+    ID IE IL IM IN IO IQ IR IS IT JE JM JO JP KE KG KH KI KM KN KP KR KW KY KZ
+    LA LB LC LI LK LR LS LT LU LV LY MA MC MD ME MF MG MH MK ML MM MN MO MP MQ
+    MR MS MT MU MV MW MX MY MZ NA NC NE NF NG NI NL NO NP NR NU NZ OM PA PE PF
+    PG PH PK PL PM PN PR PS PT PW PY QA RE RO RS RU RW SA SB SC SD SE SG SH SI
+    SJ SK SL SM SN SO SR SS ST SV SX SY SZ TC TD TF TG TH TJ TK TL TM TN TO TR
+    TT TV TW TZ UA UG UM US UY UZ VA VC VE VG VI VN VU WF WS YE YT ZA ZM ZW
+""".split()
+
+COUNTRIES = make_sorted_dict(COUNTRY_CODES, Locale('en').territories)
+
+LANGUAGE_CODES_2 = """
+    aa af ak am ar as az be bg bm bn bo br bs ca cs cy da de dz ee el en eo es
+    et eu fa ff fi fo fr ga gd gl gu gv ha he hi hr hu hy ia id ig ii is it ja
+    ka ki kk kl km kn ko ks kw ky lg ln lo lt lu lv mg mk ml mn mr ms mt my nb
+    nd ne nl nn nr om or os pa pl ps pt rm rn ro ru rw se sg si sk sl sn so sq
+    sr ss st sv sw ta te tg th ti tn to tr ts uk ur uz ve vi vo xh yo zh zu
+""".split()
+
+LANGUAGES_2 = make_sorted_dict(LANGUAGE_CODES_2, Locale('en').languages)
+
 LOCALES = {}
-LOCALE_EN = None
+LOCALE_EN = LOCALES['en'] = Locale('en')
+LOCALE_EN.catalog = Catalog('en')
+LOCALE_EN.catalog.plural_func = lambda n: n != 1
+LOCALE_EN.countries = COUNTRIES
+LOCALE_EN.languages_2 = LANGUAGES_2
 
 
 ternary_re = re.compile(r'^\(? *(.+?) *\? *(.+?) *: *(.+?) *\)?$')
@@ -100,10 +142,9 @@ def regularize_locales(locales):
         if alias and alias not in locales_set:
             # Insert "fr_fr" after "fr" if it's not somewhere in the list
             yield alias
-
-
-def strip_accents(s):
-    return ''.join(c for c in normalize('NFKD', s) if not combining(c))
+    if 'en' not in locales_set and 'en_us' not in locales_set:
+        yield 'en'
+        yield 'en_us'
 
 
 def parse_accept_lang(accept_lang):
@@ -128,7 +169,7 @@ def format_currency_with_options(number, currency, locale='en', trailing_zeroes=
 
 def set_up_i18n(website, request):
     accept_lang = request.headers.get("Accept-Language", "")
-    langs = request.accept_langs = parse_accept_lang(accept_lang)
+    langs = request.accept_langs = list(parse_accept_lang(accept_lang))
     loc = match_lang(langs)
     add_helpers_to_context(website.tell_sentry, request.context, loc, request)
 

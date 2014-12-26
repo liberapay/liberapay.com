@@ -66,7 +66,6 @@ def fake_participant(db, number="singular", is_admin=False):
                , id=fake_int_id()
                , username=username
                , username_lower=username.lower()
-               , statement=fake_sentence()
                , ctime=faker.date_time_this_year()
                , is_admin=is_admin
                , balance=fake_balance()

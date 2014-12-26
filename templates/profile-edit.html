@@ -1,35 +1,38 @@
 <div class="col1">
 
     <!-- Statement -->
-    <form class="statement">
+    <div class="statement js-edit">
         <h2>{{ _("Statement") }}
-            <button tabindex="200" class="edit">{{ _("Edit") }}</button>
-            <button tabindex="203" class="save" type="submit">{{ _("Save") }}</button>
-            <button tabindex="204" class="cancel" type="cancel">{{ _("Cancel") }}</button>
+            <button class="edit">{{ _("Edit") }}</button>
         </h2>
 
-        <div class="edit">
-            <select tabindex="201" name="number" id="statement-select">
-                <option value="singular"
-                    {{ "selected" if participant.number == 'singular' else ''}}>
-                    {{ I_AM_MAKING.format("...") }}
-                </option>
-                <option value="plural"
-                    {{ "selected" if participant.number != 'singular' else ''}}>
-                    {{ WE_ARE_MAKING.format("...") }}
-                </option>
+        <form class="edit" action="statement.json">
+            <p>{{ _("Tell us how you're making the world better.") }}</p>
+
+            {{ _("Gratipay allows you to have profile statements in multiple languages. "
+                 "Use the selector below to switch between them.") }}<br>
+            <select class="langs" name="lang">
+            {% for code, name in select_langs.items() %}
+                <option value="{{ code }}"
+                        {{ 'selected' if code == stmt_lang }}
+                        {{ 'disabled' if not code }}
+                    >{{ name }}</option>
+            {% endfor %}
             </select>
-            <textarea tabindex="202">{{ participant.statement }}</textarea>
-            <span class="help">{{ _("Markdown supported.") }}
+            <textarea name="content" rows="15" placeholder="{{ stmt_placeholder|e }}"
+                      data-confirm-discard="{{ confirm_discard|e }}"></textarea>
+            <p class="help">{{ _("Markdown supported.") }}
                 <a href="https://daringfireball.net/projects/markdown/basics" target="_blank">{{ _("What is markdown?") }}</a>
                 (<a href="https://github.com/gratipay/gratipay.com/tree/master/gratipay/utils/markdown.py" target="_blank">{{ _("View source.") }}</a>)
-            </span>
-        </div>
+            </p>
+            <button class="save">{{ _("Save") }}</button>
+            <button class="cancel">{{ _("Cancel") }}</button>
+        </form>
 
         <div class="view markdown-output">
-            {{ markdown.render(MAKING.format(participant.statement)) }}
+            {{ markdown.render(statement) if statement }}
         </div>
-    </form>
+    </div>
 
 
     <!-- Memberships -->
@@ -48,11 +51,9 @@
 <div class="col2">
 
     <!-- Funding Goal -->
-    <form class="goal">
+    <div class="goal js-edit">
         <h2>{{ _("Funding Goal") }}
             <button tabindex="400" class="edit">{{ _("Edit") }}</button>
-            <button tabindex="401" class="save" type="submit">{{ _("Save") }}</button>
-            <button tabindex="402" class="cancel" type="cancel">{{ _("Cancel") }}</button>
         </h2>
         <div class="view">
             {% if user.participant.goal > 0 %}
@@ -65,9 +66,8 @@
             {{ PATRON_NO_GOAL }}
             {% endif %}
         </div>
-        <table class="edit"><tr><td>
-
-            <input tabindex="403" type="radio" name="goal" id="goal-yes" value="custom"
+        <form class="edit" action="goal.json">
+            <input type="radio" name="goal" id="goal-yes" value="custom"
             {% if user.participant.goal > 0 %} checked="true"{% endif %}/>
             <label for="goal-yes">{{ GOAL_PARTS[0] }}$</label><input
                 name="goal_custom" id="goal-custom"
@@ -79,25 +79,28 @@
 
             <br />
 
-            <input tabindex="404" type="radio" name="goal" id="goal-null" value="null"
+            <input type="radio" name="goal" id="goal-null" value="null"
             {% if user.participant.goal == None %} checked="true"{% endif %}/>
             <label for="goal-null">{{ GRATEFUL }}</label>
 
             <br />
 
-            <input tabindex="405" type="radio" name="goal" id="goal-0" value="0.00"
+            <input type="radio" name="goal" id="goal-0" value="0.00"
             {% if user.participant.goal == 0 %} checked="true"{% endif %}/>
             <label for="goal-0">{{ PATRON }}</label>
 
             <br />
 
-            <input tabindex="406" type="radio" name="goal" id="goal-negative"
-                   value="-1"
+            <input type="radio" name="goal" id="goal-negative" value="-1"
             {% if (user.participant.goal != None) and user.participant.goal < 0 %} checked="true"{% endif %}/>
             <label for="goal-negative">{{ PATRON_NO_GIFTS }}</label>
 
-        </td></tr></table>
-    </form>
+            <br /><br />
+
+            <button class="save">{{ _("Save") }}</button>
+            <button class="cancel">{{ _("Cancel") }}</button>
+        </form>
+    </div>
 
     {% include "templates/charts-for-user.html" %}
 

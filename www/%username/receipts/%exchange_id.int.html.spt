@@ -101,7 +101,7 @@ if exchange is None:
         {{ card['city_town'] }}{% if card['city_town'] %},{% endif %}
         {{ card['state'] }}
         {{ card['zip'] }}<br />
-        {{ locale.countries_map.get(card['country'], '') }}
+        {{ locale.countries.get(card['country'], '') }}
     </div>
 
     <table>
