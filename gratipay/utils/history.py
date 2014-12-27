@@ -16,6 +16,13 @@ def iter_payday_events(db, participant):
     if not (exchanges or transfers):
         return
 
+    if transfers:
+        yield dict(
+            kind='totals',
+            given=sum(t['amount'] for t in transfers if t['tipper'] == username),
+            received=sum(t['amount'] for t in transfers if t['tippee'] == username),
+        )
+
     payday_dates = db.all("""
         SELECT ts_start::date
           FROM paydays

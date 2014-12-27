@@ -62,7 +62,12 @@ else:
         {% endif %}
     </td></tr>
     {% for event in events %}
-    {% if event['kind'] == 'day-open' %}
+    {% if event['kind'] == 'totals' %}
+    <tr><td colspan="8">
+        <h2>{{ _("Total given: {0}", format_currency(event['given'], "USD")) }}<br>
+            {{ _("Total received: {0}", format_currency(event['received'], "USD")) }}</h2>
+    </td></tr>
+    {% elif event['kind'] == 'day-open' %}
     <tr>
         <th colspan="8"><h2>
             {{ event['date'].strftime("%B %d, %Y").replace(' 0', ' ') }}
