@@ -149,7 +149,7 @@ class AccountElsewhere(Model):
         """Given a desired username, return a User object.
         """
         from gratipay.security.user import User
-        self.participant.set_is_locked(False)
+        self.participant.update_goal(None)
         user = User.from_username(self.participant.username)
         assert not user.ANON, self.participant  # sanity check
         if self.participant.is_claimed:

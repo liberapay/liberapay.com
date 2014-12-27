@@ -5,7 +5,6 @@ from gratipay.utils import get_participant
 participant = get_participant(request, restrict=True)
 hero = _("Widgets")
 title = "%s - %s" % (participant.username, hero)
-locked = False
 
 [-----------------------------------------------------------------------------]
 {% extends "templates/profile.html" %}
