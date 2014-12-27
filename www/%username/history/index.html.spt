@@ -15,22 +15,11 @@ translated_status = { None:         ''
                     , 'failed':     _('failed')
                     , 'succeeded':  _('succeeded')
                      }
-total_given = participant.get_total_given()
-total_received = participant.get_total_received()
 
 if participant == user.participant:
     JOINED = _("You joined {0}.", to_age(participant.claimed_time))
 else:
     JOINED = _("{0} joined {1}.", participant.username, to_age(participant.claimed_time))
-
-if participant == user.participant:
-    STATS = _("You have given {0} and received {1} on Gratipay."
-              , format_currency(total_given, "USD")
-              , format_currency(total_received, "USD"))
-else:
-    STATS = _("They have given {0} and received {1} on Gratipay."
-              , format_currency(total_given, "USD")
-              , format_currency(total_received, "USD"))
 
 if participant == user.participant:
     BALANCE = _("Your balance is {0}.", format_currency(participant.balance, "USD"))
@@ -45,11 +34,6 @@ else:
     <tr><td colspan="8">
         <h2>{{ JOINED }}</h2>
     </td></tr>
-    {% if total_given > 0 or total_received > 0 %}
-    <tr><td colspan="8">
-        <h2>{{ STATS }}</h2>
-    </td></tr>
-    {% endif %}
     <tr><td colspan="8">
         <h2>{{ BALANCE }}</h2>
         {% if user.ADMIN %}
@@ -78,7 +62,12 @@ else:
         {% endif %}
     </td></tr>
     {% for event in events %}
-    {% if event['kind'] == 'day-open' %}
+    {% if event['kind'] == 'totals' %}
+    <tr><td colspan="8">
+        <h2>{{ _("Total given: {0}", format_currency(event['given'], "USD")) }}<br>
+            {{ _("Total received: {0}", format_currency(event['received'], "USD")) }}</h2>
+    </td></tr>
+    {% elif event['kind'] == 'day-open' %}
     <tr>
         <th colspan="8"><h2>
             {{ event['date'].strftime("%B %d, %Y").replace(' 0', ' ') }}

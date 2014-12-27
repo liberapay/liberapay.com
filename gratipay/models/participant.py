@@ -1122,17 +1122,6 @@ class Participant(Model, MixinTeam):
         """
         return self.db.all(TIPS, (self.username,), back_as=dict)
 
-    def get_total_given(self):
-        total = self.db.one("""
-            SELECT SUM(amount) FROM transfers WHERE tipper = %s;
-        """, (self.username,), default=0)
-        return Decimal(total)
-
-    def get_total_received(self):
-        total = self.db.one("""
-            SELECT SUM(amount) FROM transfers WHERE tippee = %s;
-        """, (self.username,), default=0)
-        return Decimal(total)
 
     def get_og_title(self):
         out = self.username
