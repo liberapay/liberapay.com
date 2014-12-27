@@ -46,17 +46,17 @@ class TestHistory(Harness):
 
         Payday().start()
         events = list(iter_payday_events(self.db, bob))
-        assert len(events) == 8
-        assert events[0]['kind'] == 'day-open'
-        assert events[0]['payday_number'] == 2
-        assert events[1]['balance'] == 12
+        assert len(events) == 9
+        assert events[1]['kind'] == 'day-open'
+        assert events[1]['payday_number'] == 2
+        assert events[2]['balance'] == 12
         assert events[-1]['kind'] == 'day-close'
         assert events[-1]['balance'] == '0.00'
 
         alice = Participant.from_id(alice.id)
         assert alice.balance == 4990
         events = list(iter_payday_events(self.db, alice))
-        assert len(events) == 10
+        assert len(events) == 11
 
         carl = Participant.from_id(carl.id)
         assert carl.balance == 0
