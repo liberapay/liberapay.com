@@ -54,7 +54,6 @@ CREATE TABLE participants
 , is_free_rider         boolean                     DEFAULT NULL
 , email_address         text                        UNIQUE
 , email_lang            text
-, CONSTRAINT claimed_not_locked CHECK (NOT (claimed_time IS NOT NULL AND is_locked))
 , CONSTRAINT team_not_anonymous CHECK (NOT (number='plural' AND anonymous_receiving))
  );
 
