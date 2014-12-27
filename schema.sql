@@ -23,7 +23,6 @@ CREATE TYPE email_address_with_confirmation AS
 
 CREATE TABLE participants
 ( username              text                        PRIMARY KEY
-, statement             text                        NOT NULL DEFAULT ''
 , last_bill_result      text                        DEFAULT NULL
 , session_token         text                        UNIQUE DEFAULT NULL
 , session_expires       timestamp with time zone    DEFAULT (now() + INTERVAL '6 hours')
@@ -55,7 +54,6 @@ CREATE TABLE participants
 , is_free_rider         boolean                     DEFAULT NULL
 , email_address         text                        UNIQUE
 , email_lang            text
-, is_locked             boolean                     NOT NULL DEFAULT FALSE
 , CONSTRAINT claimed_not_locked CHECK (NOT (claimed_time IS NOT NULL AND is_locked))
 , CONSTRAINT team_not_anonymous CHECK (NOT (number='plural' AND anonymous_receiving))
  );
