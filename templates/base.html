@@ -124,10 +124,6 @@
 <script src="{{ website.asset('gratipay.js') }}"></script>
 
 <script>
-    function unlocalizeDecimal(s) {
-        return s.replace('{{ decimal_symbol }}', '.').replace(/[^0-9.]/g, '');
-    }
-
     $(document).ready(Gratipay.init);
 </script>
 
