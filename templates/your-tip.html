@@ -7,23 +7,25 @@
         {% include "templates/sign-in-using-to-give.html" %}
     {% else %}
 
-        {% set raw_tip = user.participant.get_tip_to(participant.username)['amount'] %}
-        {% set my_tip = format_decimal(raw_tip, '#,##0.00') %}
         {% set tippee = participant.username %}
+        {% set tip = user.participant.get_tip_to(tippee)['amount'] %}
         <h2>Your Tip</h2>
-        <form class="your-tip{{ " anon" if user.ANON else "" }}">
-            <div class="payment-amount">
-                $
-                <span class="static-amount">{{ my_tip }}</span>
-                <input type="text" value="{{ my_tip }}"
-                       min="0" max="{{ '1000' if participant.IS_PLURAL else '100' }}"
-                       data-tippee="{{ tippee }}">
+        <div class="js-edit your-tip {{ 'anon' if user.ANON }}"
+             data-tippee="{{ participant.id }}">
+            <div class="view">
+                <span class="amount">{{ format_currency(tip, 'USD') }}</span>
+                <div class="per-week">{{ _("per week") }}</div>
+                <button class="edit {{ 'not-zero' if tip > 0 }}">{{ _("Edit") }}</button><br>
             </div>
-            <div class="per-week">{{ _("per week") }}</div>
-            <button class="edit{{ ' not-zero' if raw_tip > 0 else '' }}">{{ _("Edit") }}</button>
-            <button class="save" type="submit">{{ _("Save") }}</button>
-            <button class="cancel" type="cancel">{{ _("Cancel") }}</button>
-        </form>
+            <form class="edit" action="/{{ tippee }}/tip.json">
+                $
+                <input type="text" name="amount" class="amount" value="{{ format_decimal(tip) }}"
+                       min="0" max="{{ '1000' if participant.IS_PLURAL else '100' }}">
+                <div class="per-week">{{ _("per week") }}</div>
+                <button class="save">{{ _("Save") }}</button>
+                <button class="cancel">{{ _("Cancel") }}</button>
+            </form>
+        </div>
 
         {% if user.participant.last_bill_result == None %}
 

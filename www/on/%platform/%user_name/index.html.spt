@@ -76,7 +76,9 @@ if is_team:
         {% if not locked %}
         <tr>
             <td class="left">{{ _("Gifts Waiting") }}</td>
-            <td class="right">{{ participant.npatrons }}</td>
+            <td class="right npatrons" data-tippee="{{ participant.id }}">{{
+                participant.npatrons
+            }}</td>
         </tr>
         {% endif %}
     </table>

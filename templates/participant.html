@@ -34,7 +34,9 @@
         </tr>
         <tr>
             <td class="left">{{ _('Receives') }}</td>
-            <td class="right">{{ receiving_str if participant.accepts_tips else '&mdash;' }}</td>
+            <td class="right total-receiving" data-tippee="{{ participant.id }}">{{
+                receiving_str if participant.accepts_tips else '&mdash;'
+            }}</td>
         </tr>
     </table>
 

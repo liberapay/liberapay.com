@@ -9,7 +9,7 @@
         color: $white;
     }
 
-    .payment-amount {
+    .your-tip .amount {
         /* Match content h1 */
         font: bold 28px/37px $Ideal;
     }
@@ -18,22 +18,19 @@
         font: normal 14px/14px $Ideal;
     }
 
-    form.your-tip {
+    .your-tip {
         input {
-            display: none;
             width: 120px;
             height: 33px;
             text-align: right;
             font: bold 28px/28px $Ideal;
             color: $black;
         }
-        .save, .cancel {
-            display: none;
-        }
     }
     button {
         background: $white;
         color: $brown;
+        margin-bottom: 3px;
         &.edit, &.join {
             background: $gold;
         }
