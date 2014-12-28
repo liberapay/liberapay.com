@@ -138,6 +138,11 @@ CREATE TABLE transfers
 -- https://github.com/gratipay/gratipay.com/pull/2723
 ALTER TABLE transfers ADD CONSTRAINT positive CHECK (amount > 0) NOT VALID;
 
+-- https://github.com/gratipay/gratipay.com/pull/3040
+CREATE INDEX transfers_timestamp_idx ON transfers (timestamp);
+CREATE INDEX transfers_tipper_idx ON transfers (tipper);
+CREATE INDEX transfers_tippee_idx ON transfers (tippee);
+
 
 -- paydays -- payday events, stats about them
 CREATE TABLE paydays
@@ -353,13 +358,6 @@ CREATE TABLE events
 
 CREATE INDEX events_ts ON events(ts ASC);
 CREATE INDEX events_type ON events(type);
-
-
--- https://github.com/gratipay/gratipay.com/issues/1417
-CREATE INDEX transfers_tipper_tippee_timestamp_idx
-  ON transfers
-  USING btree
-  (tipper, tippee, timestamp DESC);
 
 
 -- https://github.com/gratipay/gratipay.com/pulls/2752
