@@ -98,13 +98,14 @@ body {
     color: $white;
 
     .avatar {
+        margin: -78px 0 20px 0;
         &.is-suspicious {
-            background: red;
+            background: transparentize($light-red, 0.1);
         }
         img {
             width: 160px;
             height: 160px;
-            margin: -58px 20px 20px 20px;
+            margin: 20px 20px 0;
             @include border-radius(5px);
         }
     }
@@ -150,9 +151,9 @@ body {
         }
     }
 
-    .is-suspicious-knob {
+    .is-suspicious-label {
         text-align: right;
-        margin: -15px 20px 20px;
+        padding: 3px 20px;
         font-size: 10px;
         text-transform: uppercase;
         display: block;

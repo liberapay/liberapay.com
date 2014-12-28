@@ -4,19 +4,19 @@
 
 {% block sidebar %}
 
-<div class="avatar{% if participant.is_suspicious %} is-suspicious{% endif %}">
+<div class="avatar {{ 'is-suspicious' if participant.is_suspicious }}">
     <a href="/{{ participant.username }}/">{{ avatar_img(participant) }}</a>
-</div>
 
-{% if user.ADMIN %}
-<label class="is-suspicious-knob" data-username="{{ participant.username }}">
-    Suspicious
-    <input type="checkbox"
-        {% if participant.is_suspicious %}checked="true"{% endif %} />
-</label>
-{% elif participant.is_suspicious %}
-<div class="is-suspicious-indicator">Suspicious</div>
-{% endif %}
+    {% if user.ADMIN %}
+    <label class="is-suspicious-label">
+        Suspicious
+        <input type="checkbox" data-username="{{ participant.username }}"
+            {% if participant.is_suspicious %}checked="true"{% endif %} />
+    </label>
+    {% elif participant.is_suspicious %}
+    <div class="is-suspicious-label">Suspicious</div>
+    {% endif %}
+</div>
 
 <div class="padding mono">
     {% set prefix = user.participant == participant and "my-" or "" %}

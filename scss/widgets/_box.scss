@@ -38,31 +38,6 @@
         }
     }
 
-    .is-suspicious-indicator {
-        display: block;
-        position: absolute;
-        top: 5px;
-        right: 5px;
-        font: normal 10px $Ideal;
-        text-transform: uppercase;
-        color: $black;
-    }
-
-    label.is-suspicious-knob {
-        display: block;
-        position: absolute;
-        top: 2px;
-        right: 5px;
-        font: normal 9px $Ideal;
-        text-transform: uppercase;
-        color: $black;
-
-        input {
-            position: relative;
-            top: 3px;
-        }
-    }
-
     .ready {
         padding-left: 15px;
     }
@@ -99,44 +74,6 @@
                 margin: 5px;
             }
         }
-    }
-
-    .on-profile {
-        width: 100%;
-
-        &.is-suspicious {
-            background: $light-red;
-        }
-        .picture {
-            width: 138px;
-            height: 138px;
-
-            img {
-                width: 128px;
-                height: 128px;
-
-                /* Without this we are inline-block and we get an extra 4px.
-                 * Is that due to line-height, maybe? */
-                display: block;
-                margin: 5px;
-            }
-        }
-        td {
-            text-align: left;
-        }
-        .pad-sign {
-            padding-left: 36px;
-        }
-        /*
-        form {
-            margin-bottom: 0;
-            margin-top: 12px;
-
-            input {
-                width: 30%;
-            }
-        }
-        */
     }
 
     .on-confirm {
