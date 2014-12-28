@@ -218,7 +218,7 @@ else:
                     </a>
                 </td>
                 <td>
-                    {% if member.participant.accepts_tips %}
+                    {% if not member.participant.accepts_tips %}
                         declines gifts (opted out)
                     {% else %}
                         hasn't joined Gratipay yet
