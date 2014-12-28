@@ -70,7 +70,7 @@ Gratipay.tips.afterTipChange = function(data) {
         $input[0].defaultValue = $input.val();
         $your_tip.find('span.amount').text(data.amount_l);
         $your_tip.find('.edit').toggleClass('not-zero', data.amount > 0);
-        $your_tip.find('.stop').toggleClass('zero', data.amount == 0);
+        $your_tip.find('.stop').toggleClass('zero', data.amount === 0);
     }
 };
 
