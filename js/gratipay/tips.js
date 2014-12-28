@@ -30,25 +30,6 @@ Gratipay.tips.init = function() {
         if (e.keyCode === 27)
             $('.your-tip button.cancel').click();
     });
-
-    // Restore the tip value if stored
-    if (localStorage.tipAfterSignIn) {
-        var data = JSON.parse(localStorage.tipAfterSignIn);
-        localStorage.removeItem('tipAfterSignIn');
-
-        if (window.location.pathname === '/'+data.tippee+'/')
-            $('.your-tip input').val(data.val).change();
-    }
-
-    // Store the tip value if the user hasn't signed in
-    if ($('.sign-in').length)
-        $(window).on('unload.tips', function() {
-            var tip = $('.your-tip input');
-            if (tip.parents('form').hasClass('changed'))
-                localStorage.tipAfterSignIn = JSON.stringify({
-                    tippee: tip.data('tippee'), val: tip.val()
-                });
-        });
 };
 
 
