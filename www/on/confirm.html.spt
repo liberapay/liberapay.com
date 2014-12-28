@@ -58,142 +58,127 @@ title = "Please Confirm"
 
     <h2>Now</h2>
 
-    <table class="scenario">
-        <tr>
-            <td>
-                <div class="participant">
-                    <b>{{ user.participant.username }}</b><br />
-                    <table>
-                        <tr>
-                            <th><i>Gives</i></th>
-                            <td>{{ fmt(user.participant.giving) }}</td>
-                        </tr>
-                        <tr>
-                            <th><i>Receives</i></th>
-                            <td>{{ fmt(user.participant.receiving) }}</td>
-                        </tr>
-                    </table>
-                    <br />
+    <div class="scenario">
+        <div class="participant">
+            <b>{{ user.participant.username }}</b><br />
+            <table>
+                <tr>
+                    <th><i>Gives</i></th>
+                    <td>{{ fmt(user.participant.giving) }}</td>
+                </tr>
+                <tr>
+                    <th><i>Receives</i></th>
+                    <td>{{ fmt(user.participant.receiving) }}</td>
+                </tr>
+            </table>
+            <br />
 
-                    {% for account in user_accounts %}
-                        <img src="{{ account.platform_data.icon }}"
-                             alt="{{ account.platform }}"
-                             class="platform-icon" />
-                        {{ get_name(account) }}<br />
-                    {% endfor %}
-                </div>
-            </td>
-            <td>
-                <div class="participant other">
-                    <b>{{ other.username }}</b><br />
-                    <table>
-                        <tr>
-                            <th><i>Gives</i></th>
-                            <td>{{ fmt(other.giving) }}</td>
-                        </tr>
-                        <tr>
-                            <th><i>Receives</i></th>
-                            <td>{{ fmt(other.receiving) }}</td>
-                        </tr>
-                    </table>
-                    <br />
-                    {% for other_account in other_accounts %}
-                        <img src="{{ other_account.platform_data.icon }}"
-                             alt="{{ other_account.platform }}"
-                             class="platform-icon" />
-                        <span class="{{ 'highlight' if other_account.platform == account.platform }}">
-                            {{ get_name(other_account) }}<br />
-                        </span>
-                    {% endfor %}
-                </div>
-            </td>
-            {% if abandoned_account %}
-                <td></td>
-            {% endif %}
-        </tr>
-    </table>
+            {% for account in user_accounts %}
+                <img src="{{ account.platform_data.icon }}"
+                     alt="{{ account.platform }}"
+                     class="platform-icon" />
+                {{ get_name(account) }}<br />
+            {% endfor %}
+        </div>
+        <div class="participant other">
+            <b>{{ other.username }}</b><br />
+            <table>
+                <tr>
+                    <th><i>Gives</i></th>
+                    <td>{{ fmt(other.giving) }}</td>
+                </tr>
+                <tr>
+                    <th><i>Receives</i></th>
+                    <td>{{ fmt(other.receiving) }}</td>
+                </tr>
+            </table>
+            <br />
+            {% for other_account in other_accounts %}
+                <img src="{{ other_account.platform_data.icon }}"
+                     alt="{{ other_account.platform }}"
+                     class="platform-icon" />
+                <span class="{{ 'highlight' if other_account.platform == account.platform }}">
+                    {{ get_name(other_account) }}<br />
+                </span>
+            {% endfor %}
+        </div>
+    </div>
 
 
     <h2>After Transfer</h2>
 
-    <table class="scenario">
-        <tr>
-            <td>
-                <div class="participant">
-                    <b>{{ user.participant.username }}</b><br />
-                    <table>
-                        <tr>
-                            <th><i>Gives</i></th>
-                            <td>{{ fmt(giving_after) }}</td>
-                        </tr>
-                        <tr>
-                            <th><i>Receives</i></th>
-                            <td>{{ fmt(receiving_after) }}</td>
-                        </tr>
-                    </table>
-                    <br />
+    <div class="scenario">
+        <div class="participant">
+            <b>{{ user.participant.username }}</b><br />
+            <table>
+                <tr>
+                    <th><i>Gives</i></th>
+                    <td>{{ fmt(giving_after) }}</td>
+                </tr>
+                <tr>
+                    <th><i>Receives</i></th>
+                    <td>{{ fmt(receiving_after) }}</td>
+                </tr>
+            </table>
+            <br />
 
-                    {% for user_account in user_accounts %}
-                        {% if user_account != abandoned_account %}
-                        <span class="account-elsewhere">
-                            <img src="{{ user_account.platform_data.icon }}"
-                                 alt="{{ user_account.platform }}"
-                                 class="platform-icon" />
-                            {{ get_name(user_account) }}<br />
-                        </span>
-                        {% endif %}
-                    {% endfor %}
+            {% for user_account in user_accounts %}
+                {% if user_account != abandoned_account %}
+                <span class="account-elsewhere">
+                    <img src="{{ user_account.platform_data.icon }}"
+                         alt="{{ user_account.platform }}"
+                         class="platform-icon" />
+                    {{ get_name(user_account) }}<br />
+                </span>
+                {% endif %}
+            {% endfor %}
 
-                    <span class="account-elsewhere">
-                        <img src="{{ account.platform_data.icon }}" alt="{{ account.platform }}"
-                            class="platform-icon" />
-                        <span class="highlight">
-                            {{ get_name(account) }}<br />
-                        </span>
-                    </span>
-                </div>
-            </td>
-            <td>
-                <div class="participant other {{ 'nix' if nix }}">
-                    {% if nix %}
-                        <img id="nix" src="{{ website.asset('nix.png') }}" />
-                    {% endif %}
-                    <b>{{ other.username }}</b><br />
-                    <table>
-                        <tr>
-                            <th><i>Gives</i></th>
-                            <td>{{ fmt(other.giving) }}</td>
-                        </tr>
-                        <tr>
-                            <th><i>Receives</i></th>
-                            <td>{{ fmt(other.receiving ) }}</td>
-                        </tr>
-                    </table>
-                    <br />
-
-                    {% for other_account in other_accounts %}
-                        {% if other_account.platform != account.platform %}
-                            <span class="account-elsewhere">
-                                <img src="{{ other_account.platform_data.icon }}"
-                                     alt="{{ other_account.platform }}"
-                                     class="platform-icon" />
-                                {{ get_name(other_account) }}<br />
-                            </span>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-            </td>
-            {% if abandoned_account %}
-                <td class="abandoned">
-                    <p>Abandoned:</p>
-                    <span class="account-elsewhere">
-                        <img src="{{ abandoned_account.platform_data.icon }}" />
-                        {{ get_name(abandoned_account) }}<br />
-                    </span>
-                </td>
+            <span class="account-elsewhere">
+                <img src="{{ account.platform_data.icon }}" alt="{{ account.platform }}"
+                    class="platform-icon" />
+                <span class="highlight">
+                    {{ get_name(account) }}<br />
+                </span>
+            </span>
+        </div>
+        <div class="participant other {{ 'nix' if nix }}">
+            {% if nix %}
+                <img id="nix" src="{{ website.asset('nix.png') }}" />
             {% endif %}
-        </tr>
-    </table>
+            <b>{{ other.username }}</b><br />
+            <table>
+                <tr>
+                    <th><i>Gives</i></th>
+                    <td>{{ fmt(other.giving) }}</td>
+                </tr>
+                <tr>
+                    <th><i>Receives</i></th>
+                    <td>{{ fmt(other.receiving ) }}</td>
+                </tr>
+            </table>
+            <br />
+
+            {% for other_account in other_accounts %}
+                {% if other_account.platform != account.platform %}
+                    <span class="account-elsewhere">
+                        <img src="{{ other_account.platform_data.icon }}"
+                             alt="{{ other_account.platform }}"
+                             class="platform-icon" />
+                        {{ get_name(other_account) }}<br />
+                    </span>
+                {% endif %}
+            {% endfor %}
+        </div>
+        {% if abandoned_account %}
+        <div class="abandoned">
+            Abandoned:<br/><br/>
+            <span class="account-elsewhere">
+                <img src="{{ abandoned_account.platform_data.icon }}" />
+                {{ get_name(abandoned_account) }}<br />
+            </span>
+        </div>
+        {% endif %}
+    </div>
 
 
     <h2>Transfer it?</h2>
