@@ -3,8 +3,6 @@ from gratipay.utils import get_participant
 participant = get_participant(request, restrict=True)
 title = _("Close Account")
 subhead = participant.username
-username = participant.username   # used in footer shared with on/$platform/
-                                  # pages
 
 payday_is_running = website.db.one("""
 

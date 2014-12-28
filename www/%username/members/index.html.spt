@@ -8,9 +8,8 @@ participant = team = get_participant(request, restrict=False)
 if not team.show_as_team(user):
   request.redirect('../')
 tip_or_pledge = "tip"
-title = team.username     # used in the title tag
+title = team.username
 subhead = _("Team Members")
-username = team.username  # used in footer shared with on/%platform/ pages
 
 [-----------------------------------------------------------------------------]
 {% extends "templates/profile.html" %}

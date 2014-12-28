@@ -7,8 +7,6 @@ from cgi import escape
 participant = get_participant(request, restrict=True)
 title = participant.username
 subhead = _("Account")
-username = participant.username   # used in footer shared with on/$platform/
-                                  # pages
 
 emails = participant.get_emails()
 

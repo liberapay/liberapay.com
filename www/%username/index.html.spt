@@ -11,9 +11,7 @@ LONG_STATEMENT = 256
 
 participant = get_participant(request, restrict=False)
 tip_or_pledge = "tip"
-title = participant.username      # used in the title tag
-username = participant.username   # used in footer shared with on/$platform/
-                                  # pages
+title = username = participant.username
 
 accounts = participant.get_accounts_elsewhere()
 
