@@ -1,8 +1,8 @@
 from gratipay.utils import get_participant
 [---]
 participant = get_participant(request, restrict=True)
-title = participant.username      # used in the title tag
-subhead = _("Close Account")
+title = _("Close Account")
+subhead = participant.username
 username = participant.username   # used in footer shared with on/$platform/
                                   # pages
 
@@ -29,10 +29,6 @@ if POST:
                 request.redirect('/%s/' % participant.username)
 [---] text/html
 {% extends "templates/base.html" %}
-
-{% block heading %}
-    <h1>Close Account</h1>
-{% endblock %}
 
 {% block content %}
 <div class="col0">
