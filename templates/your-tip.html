@@ -1,8 +1,6 @@
 <div class="cta">
     {% if locked %}
-        <div class="help with-padding">
-            {{ _("This account has been locked by its owner.") }}
-        </div>
+        {{ _("This account has been locked by its owner.") }}
     {% elif user.ANON %}
         {% include "templates/sign-in-using-to-give.html" %}
     {% else %}
@@ -30,12 +28,12 @@
 
         {% if user.participant.last_bill_result == None %}
 
-        <div id="payment-prompt" class="help {{ 'needed' if tip > 0 }}">
+        <div id="payment-prompt" class="{{ 'needed' if tip > 0 }}">
             {{ _("Back your payment with a {0}credit card{1} to make sure it goes through!",
                 "<a href='/credit-card.html'>", "</a>") }}
         </div>
         {% elif user.participant.last_bill_result %}
-        <div id="payment-prompt" class="help really-needed">
+        <div id="payment-prompt" class="really-needed">
             {{ _("Fix your {0}credit card{1} to make sure your payment goes through!",
                 "<a href='/credit-card.html'>", "</a>") }}
         </div>

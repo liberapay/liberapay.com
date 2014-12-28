@@ -1,4 +1,4 @@
-<div class="help with-padding sign-in-to-give">
+<div class="sign-in-to-give">
     {% include "templates/sign-in-using.html" %}
     {% set message = _("{0} to pledge to {1}") if path.decoded.startswith('/on/') else _("{0} to give to {1}") %}
     {% set formatted_message = message.format("", username) %}
