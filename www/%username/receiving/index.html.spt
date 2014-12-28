@@ -10,7 +10,7 @@ elif participant.anonymous_receiving:
         request.redirect('../')
 
 title = participant.username
-subhead = "Receiving"
+subhead = _("Receiving")
 
 [-----------------------------------------------------------------------------]
 {% extends "templates/profile.html" %}
