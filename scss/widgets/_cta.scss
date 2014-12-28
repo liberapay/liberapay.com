@@ -34,12 +34,15 @@
         &.edit, &.join {
             background: $gold;
         }
-        &.edit.not-zero, &.cancel, &.leave {
+        &.edit.not-zero, &.cancel, &.leave, &.stop {
             background: transparentize($white, 0.5);
         }
         &:hover {
             background: $green !important;
             color: $white;
+        }
+        &.stop.zero {
+            display: none;
         }
     }
 

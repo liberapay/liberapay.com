@@ -16,6 +16,11 @@ Gratipay.tips.init = function() {
         $('.your-tip input').focus();
     });
 
+    $('.your-tip button.stop').click(function() {
+        $('.your-tip input').val('0');
+        $('.your-tip button.save').click();
+    });
+
     $('.your-tip button.cancel').click(function() {
         $('.your-tip form').trigger('reset');
     });
