@@ -3,16 +3,13 @@ Gratipay.team = (function() {
         var $team = $('#team');
 
         var $indicator = $('<div class="loading-indicator"/>');
-        $indicator.appendTo($('#page'));
+        $indicator.appendTo($team);
 
         $('#lookup-container form').submit(add);
         $('#lookup-results').on('click', 'li', selectLookupResult);
         $('#query').focus().keyup(lookup);
 
-        $team.css('opacity', 0);
-
         jQuery.get("index.json").success(function(members) {
-            $team.css('opacity', 1);
             $indicator.remove();
             drawRows(members);
         });
