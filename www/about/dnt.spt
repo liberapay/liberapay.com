@@ -24,7 +24,9 @@ title = "Do Not Track"
     ('https://support.google.com/chrome/answer/114836', 'Chrome'),
     ('http://www.opera.com/help/tutorials/security/control/#referrer', 'Opera'),
     ] %}
-    {% include "templates/nav.html" %}
+    {% for page in pages %}
+        <a href="{{ page[0] }}">{{ page[1] }}</a>&nbsp;&nbsp;
+    {% endfor %}
 
 </div>
 {% endblock %}
