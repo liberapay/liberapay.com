@@ -15,12 +15,12 @@
 {% set show_receiving = (user.participant == participant or not participant.anonymous_receiving) and participant.accepts_tips %}
 {% set show_profile = show_members or show_receiving %}
 {% set pages = [ ('/',           _('Profile'),      True,           show_profile)
-               , ('/giving/',    _('Giving'),       True,           False)
                , ('/receiving/', _('Receiving'),    True,           show_receiving)
+               , ('/members/',   _('Members'),      show_members,   show_members)
+               , ('/giving/',    _('Giving'),       True,           False)
                , ('/history/',   _('History'),      True,           False)
                , ('/widgets/',   _('Widgets'),      True,           False)
                , ('/account/',   _('Account'),      True,           False)
-               , ('/members/',   _('Members'),      show_members,   show_members)
                , ('/events/',    _('Events'),       False,          False)
                 ] %}
 {% set pages = filter_profile_subnav(user, participant, pages) %}
