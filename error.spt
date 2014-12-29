@@ -1,6 +1,5 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from aspen import json
 from aspen.http import status_strings
 
 try:
@@ -20,7 +19,6 @@ except ImportError:
 style = ''
 msg = status_strings.get(response.code, 'Unknown Error').title()
 err = response.body
-title = response.code
 if website.show_tracebacks and pygmentize:
     sio = StringIO()
     formatter = HtmlFormatter()
