@@ -5,5 +5,5 @@ title = _("Sign In")
 [---] text/html
 {% extends "templates/base.html" %}
 {% block content %}
-    <p>You need to sign in to access this page.</p>
+    <p>{{ _("You need to log in to access this page.") }}</p>
 {% endblock %}
