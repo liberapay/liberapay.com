@@ -40,7 +40,8 @@ subhead = _("Receiving")
     </div>
 </div>
 
-{% if participant.receiving > 0 %}
+{% if participant.receiving > 0 and
+      not user.ANON and (user.participant == participant or user.ADMIN) %}
 {% set tip_distribution = participant.get_tip_distribution()[0] %}
 <div class="col1">
     <h2>{{ _("Tips Received, by Number of Tips") }}</h2>
