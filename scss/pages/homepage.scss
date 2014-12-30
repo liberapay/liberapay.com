@@ -1,9 +1,4 @@
 #homepage {
-
-    span {
-        white-space: nowrap;
-    }
-
     h1 {
         font: bold 30px/40px $Ideal;
         text-transform: none;
@@ -26,11 +21,6 @@
         padding: 48px 0 0;
     }
 
-    .pitch,.action,.greeting {
-        display: table-cell;
-        position: relative;
-    }
-
     #sidebar {
         width: 480px;
         padding: 256px 48px 128px 110px;
@@ -46,12 +36,13 @@
                 color: $gold;
             }
         }
+        span {
+            white-space: nowrap;
+        }
     }
 
     #content {
         background: transparentize($white, 0.1);
-    }
-    .action,.greeting {
         padding: 256px 48px 128px;
         color: transparentize($brown, 0.2);
         h1 { color: $brown; }
