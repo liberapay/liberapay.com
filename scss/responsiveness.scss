@@ -27,37 +27,7 @@
 
 @media (max-width: 940px) {
     .support-gratipay {
-        text-align: center;
-        table, tbody, tr, td {
-            display: block;
-            margin: 0 auto;
-        }
-        padding-right: 10px;
-        .cta {
-            display: block;
-            line-height: 150%;
-        }
-        .knobs {
-            width: 261px;
-            display: block;
-            position: static;
-            top: 0;
-            right: 0;
-            margin: 20px auto;
-            button {
-                width: 128px;
-                height: 40px;
-                font-size: 18px;
-            }
-            a {
-                width: 128px;
-                margin-top: 14px;
-            }
-        }
-        .help {
-            margin-top: 0;
-            line-height: 150%;
-        }
+        line-height: 125%;
     }
 
     .accounts {
@@ -65,11 +35,6 @@
     }
 
     #homepage {
-        .support-gratipay {
-            position: static;
-            top: 0;
-            left: 0;
-        }
         #sidebar img {
             left: 32px;
             top: 32px;
@@ -136,6 +101,25 @@
     #homepage {
         #content {
             padding: 60px 32px;
+        }
+    }
+
+    #header {
+        h1 {
+            height: 50px;
+            a {
+                padding: 3px 5px 5px;
+                img {
+                    width: 120px;
+                }
+            }
+        }
+        .nav {
+            height: 50px;
+            li a {
+                height: 50px;
+                padding: 13px 12px 18px;
+            }
         }
     }
 
