@@ -67,7 +67,7 @@
 
         <div id="main">
             <div id="sidebar">{% block sidebar %}{% endblock %}</div>
-            <div id="content">
+            <div id="content" class="group">
                 {% block heading %}{% if title %}<h1>{{ title }}</h1>{% endif %}{% endblock %}
                 {% block subnav %}{% endblock %}
                 {% block content %}{% endblock %}
