@@ -1,19 +1,10 @@
-html, body { height: 100%; min-height: 100%; }
-#layout { height: 100%; min-height: 100%; }
+html, body, #wrapper { height: 100%; }
 
 body {
     background: #434343 url("pennies.jpg") no-repeat;
     background-size: 100% auto;
     background-position: 0 -54px;
     line-height: 100%;
-}
-
-#layout {
-    width: 100%;
-    table-layout: fixed;
-    #homepage & {
-        table-layout: auto;
-    }
 }
 
 #header {
@@ -89,8 +80,16 @@ body {
         }
     }
 }
-#sidebar {
+
+#main {
+    display: table;
     height: 100%;
+    table-layout: fixed;
+    width: 100%;
+}
+
+#sidebar {
+    display: table-cell;
     vertical-align: top;
     width: 200px;
     padding: 78px 0 40px;
@@ -159,8 +158,9 @@ body {
         display: block;
     }
 }
+
 #content {
-    height: 100%;
+    display: table-cell;
     vertical-align: top;
     font: 300 16px/27px $Chronicle;
     padding: 0 40px 40px;
@@ -203,7 +203,7 @@ body {
         }
     }
     a:hover {
-        background: transparentize($gold, 0.8);;
+        background: transparentize($gold, 0.8);
     }
 }
 
@@ -242,6 +242,7 @@ body {
     text-align: right;
     font-size: 13px;
     line-height: 13px;
+    @include clearfix;
 
     .social {
         float: left;
@@ -249,7 +250,6 @@ body {
 
     ul {
         float: right;
-        @include clearfix;
     }
     li {
         float: left;

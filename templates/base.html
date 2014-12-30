@@ -33,23 +33,17 @@
     {% endif %}
 </head>
 {% set homepage = path.raw == '/' %}
-<body{% if homepage %} id="homepage"{% endif %}><table id="layout" class="layout">
-    {% if not homepage %}
-    <colgroup>
-        <col width="200px">
-        <col width="100%">
-    </colgroup>
-    {% endif %}
+<body id="{{ 'homepage' if homepage }}">
 
-    <tbody class="layout">
-        <tr class="layout"><td id="header" colspan="2" class="layout group">
+    <div id="wrapper">
+        <div id="header" class="group">
             <h1><a href="/"><img src="{{ website.asset('gratipay.svg') }}"
-                         alt="Gratipay" /></a></h1>
+                                 alt="Gratipay" /></a></h1>
             {% set pages=[('/about/', _('About')), ('/explore/', _('Explore'))]%}
             {% set current_page = path.raw.split('/')[1] %}
             {% include "templates/nav.html" %}
             {% if user.ANON %}
-              {% include "templates/sign-in-using.html" %}
+                {% include "templates/sign-in-using.html" %}
             {% else %}
             <ul class="nav you-are">
                 <li>
@@ -69,18 +63,18 @@
             </ul>
             {% endif %}
             {% include "templates/support-gratipay.html" %}
-        </td></tr>
+        </div>
 
-        <tr class="layout">
-            <td id="sidebar" class="layout">{% block sidebar %}{% endblock %}</td>
-            <td id="content" class="layout group">
+        <div id="main">
+            <div id="sidebar">{% block sidebar %}{% endblock %}</div>
+            <div id="content">
                 {% block heading %}{% if title %}<h1>{{ title }}</h1>{% endif %}{% endblock %}
                 {% block subnav %}{% endblock %}
                 {% block content %}{% endblock %}
-            </td>
-        </tr>
+            </div>
+        </div>
 
-        <tr class="layout"><td id="footer" colspan="2" class="layout">
+        <div id="footer">
             <ul class="social">
                 <li>
                     <a href="https://twitter.com/gratipay">
@@ -106,9 +100,8 @@
                 <li><a href='http://inside.gratipay.com/appendices/colophon'>{{ _("Colophon") }}</a></li>
                 <li><a href='/security.txt'>{{ _("Security") }}</a></li>
             </ul>
-        </td></tr>
-    </tbody>
-</table>
+        </div>
+    </div>
 
 <script>
     // http://stackoverflow.com/questions/7131909/facebook-callback-appends-to-return-url
