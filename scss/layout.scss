@@ -88,19 +88,19 @@ body {
     display: table-cell;
     vertical-align: top;
     width: 200px;
-    padding: 78px 0 20px;
+    padding: 20px 0;
     background: transparentize($brown, 0.1);
     color: $white;
 
     .avatar {
-        margin: -78px 0 20px 0;
+        margin-bottom: 20px;
         &.is-suspicious {
             background: transparentize($light-red, 0.1);
         }
         img {
             width: 160px;
             height: 160px;
-            margin: 20px 20px 0;
+            margin: 0 20px;
             @include border-radius(5px);
         }
     }
@@ -110,21 +110,20 @@ body {
             margin: 0;
         }
         a {
-            padding: 5px 20px 5px 40px;
+            padding: 5px 20px 5px 38px;
             text-indent: -20px;
             display: block;
             color: $white;
             font-weight: normal;
+            border-left: 2px solid transparent;
             &.selected {
-                padding-left: 38px;
-                border-left: 2px solid $gold;
+                border-color: $gold;
                 background: transparentize($gold, 0.8);
                 color: $white;
                 font-weight: bold;
             }
             &:hover {
-                padding-left: 38px;
-                border-left: 2px solid $gold;
+                border-color: $gold;
                 background: transparentize($gold, 0.8);
             }
         }

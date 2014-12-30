@@ -89,12 +89,27 @@
     }
 
     #sidebar {
-        .nav li a {
-            font-size: 20px;
-            line-height: 24px;
-            padding-top: 20px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid $gold;
+        &:empty {
+            display: none;
+        }
+        & > div {
+            display: inline-block;
+            vertical-align: top;
+        }
+        .avatar {
+            margin-bottom: 0;
+        }
+        .nav li {
+            display: inline-block;
+            a {
+                font-size: 20px;
+                line-height: 24px;
+                margin: 0 10px 10px 10px;
+                padding-top: 10px;
+                padding-bottom: 10px;
+                border: 1px solid $gold;
+                border-radius: 6px;
+            }
         }
     }
 
