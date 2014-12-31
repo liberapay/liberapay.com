@@ -83,14 +83,14 @@
         &:hover {
             .dropdown-toggle {
                 background: transparentize($gold, 0.8);
-                padding-top: 27px;
-                border-top: 4px solid $gold;
+                border-color: $gold;
             }
         }
         .dropdown-toggle {
             @include border-radius(0);
+            border-top: 4px solid transparent;
             background: none;
-            padding: 31px 20px 31px 25px;
+            padding: 27px 20px 31px 25px;
             color: $black;
 
             font-size: 16px;
@@ -105,8 +105,9 @@
         }
         .dropdown-menu {
             left: auto;
-            top: 76px;
+            top: auto;
             right: 0;
+            margin-top: 0;
             @include border-radius(0);
             background: transparentize($gold, 0.8);
             button {
