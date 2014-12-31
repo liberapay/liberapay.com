@@ -69,6 +69,15 @@
         width: $people-column-width * 4;
         margin-left: 0;
     }
+
+    #footer {
+        text-align: center;
+
+        li a {
+            margin: 0.25em;
+            padding: 0.75em;
+        }
+    }
 }
 
 @media (max-width: 700px) {
@@ -150,28 +159,6 @@
             }
             .dropdown-menu {
                 background: transparentize($gold, 0.3);
-            }
-        }
-    }
-
-    #footer {
-        text-align: center;
-
-        .social, ul, li {
-            float: none;
-        }
-
-        li, .social a, li a {
-            display: block;
-        }
-
-        li {
-            margin: 0.25em 0;
-            padding: 0.25em 0;
-            border-top: 1px solid #eee;
-
-            &:before {
-                content: none;
             }
         }
     }

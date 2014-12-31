@@ -248,20 +248,14 @@ body {
     line-height: 13px;
     @include clearfix;
 
-    .social {
-        float: left;
-    }
-
-    ul {
-        float: right;
-    }
     li {
-        float: left;
+        display: inline-block;
         margin: 0;
 
-        &:before {
-            content: "|";
-            padding: 0 0.4em;
+        a {
+            display: inline-block;
+            margin: 0 0.3em;
+            padding: 0.25em 0.5em;
         }
 
         &:first-child:before {
