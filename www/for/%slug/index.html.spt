@@ -143,7 +143,9 @@ for p in chain(new_participants, givers, receivers):
                 <td class="right">{{ format_number(community.nmembers) }}</td>
             </tr>
         </table>
+        {% if community.nmembers > 0 %}
         <p>{{ _('Organized {0} ago.', to_age(community.ctime, add_direction=False)) }}</p>
+        {% endif %}
     </div>
 
 
