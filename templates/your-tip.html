@@ -1,10 +1,9 @@
-<div class="cta">
-    {% if locked %}
-        {{ _("This account has been locked by its owner.") }}
-    {% elif user.ANON %}
+{% if user.ANON %}
+    <div class="right">
         {% include "templates/sign-in-using-to-give.html" %}
-    {% else %}
-
+    </div>
+{% else %}
+    <div class="cta">
         {% set tippee = participant.username %}
         {% set tip = user.participant.get_tip_to(tippee)['amount'] %}
         <h2>Your Tip</h2>
@@ -27,7 +26,6 @@
         </div>
 
         {% if user.participant.last_bill_result == None %}
-
         <div id="payment-prompt" class="{{ 'needed' if tip > 0 }}">
             {{ _("Back your payment with a {0}credit card{1} to make sure it goes through!",
                 "<a href='/credit-card.html'>", "</a>") }}
@@ -38,6 +36,5 @@
                 "<a href='/credit-card.html'>", "</a>") }}
         </div>
         {% endif %}
-
-    {% endif %}
-</div>
+    </div>
+{% endif %}

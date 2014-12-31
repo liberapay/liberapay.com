@@ -88,11 +88,11 @@ body {
     display: table-cell;
     vertical-align: top;
     width: 200px;
-    padding: 20px 0;
+    padding: 20px;
     background: transparentize($brown, 0.1);
     color: $white;
 
-    .avatar {
+    div.avatar {
         margin-bottom: 20px;
         &.is-suspicious {
             background: transparentize($light-red, 0.1);
@@ -100,12 +100,12 @@ body {
         img {
             width: 160px;
             height: 160px;
-            margin: 0 20px;
             @include border-radius(5px);
         }
     }
 
     .nav {
+        margin: 0 -20px;
         li {
             margin: 0;
         }
@@ -129,8 +129,11 @@ body {
         }
     }
 
-    .padding {
-        padding: 0 20px 50px;
+    .right {
+        text-align: right;
+    }
+
+    p, table {
         line-height: 150%;
     }
 
@@ -140,17 +143,22 @@ body {
         .left {
             padding-right: 10px;
         }
-        .right {
-            text-align: right;
-        }
     }
 
     .is-suspicious-label {
         text-align: right;
-        padding: 3px 20px;
+        padding: 3px 0;
         font-size: 10px;
         text-transform: uppercase;
         display: block;
+    }
+
+    .sign-in-to {
+        line-height: 125%;
+        margin-top: 50px;
+        .dropdown-toggle {
+            margin-bottom: 3px;
+        }
     }
 }
 

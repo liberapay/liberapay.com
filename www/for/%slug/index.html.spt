@@ -136,7 +136,7 @@ for p in chain(new_participants, givers, receivers):
         <img src="{{ website.asset('default-avatar-community.svg') }}" />
     </div>
 
-    <div class="padding mono">
+    <div class="mono">
         <table>
             <tr>
                 <td class="left">{{ ngettext("Member", "Members", community.nmembers) }}</td>
@@ -148,7 +148,7 @@ for p in chain(new_participants, givers, receivers):
 
 
     {% if user.ANON %}
-        <div class="padding">
+        <div class="sign-in-to">
             {% include "templates/sign-in-using.html" %}
             {{ _("{0} to join the {1} community on Gratipay.", "", community.name) }}
         </div>

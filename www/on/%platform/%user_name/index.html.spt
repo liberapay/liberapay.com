@@ -65,7 +65,7 @@ if is_team:
     <a href="{{ account.html_url|e}}">{{ avatar_img(account) }}</a>
 </div>
 
-<div class="padding mono">
+<div class="mono">
     <table>
         {% if account.is_team %}
         <tr>
