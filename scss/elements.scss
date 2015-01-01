@@ -21,27 +21,18 @@ a img {
     border: 0;
 }
 p, dd {
-    margin: 0;
-    padding: 0 0 21px;
-    &:last-child {
-        padding-bottom: 0;
-    }
+    margin: 0 0 1em;
+    padding: 0;
 }
 h2 {
     color: $black;
     font: bold 14px/14px $Ideal;
     text-transform: uppercase;
-    padding: 34px 0 8px;
-}
-p + h2 {
-    padding-top: 13px;
-}
-h2 + h2 {
-    padding-top: 26px;
+    margin: 2em 0 0.5em;
 }
 dt {
     font-weight: bold;
-    padding: 21px 0 7px;
+    margin: 1em 0 0.3em;
 }
 dt:target, dt:target + dd {
     -webkit-animation: target-fade 3s 1;
@@ -62,11 +53,10 @@ pre {
     overflow: auto;
 }
 li {
-    margin: 0;
-    margin: 0 0 21px 32px;
+    margin: 0 0 1em 2em;
 }
 ol {
-    margin: 21px 0 0;
+    margin: 1em 0 0;
 }
 ol li {
     list-style: outside decimal;
@@ -98,9 +88,9 @@ input {
 }
 
 table.simple {
-    margin: 0 auto 21px;
+    margin: 0 auto 1em;
     th, td {
-        padding-right: 21px;
+        padding-right: 1em;
     }
     th {
         font-weight: bold;
