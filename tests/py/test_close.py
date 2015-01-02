@@ -101,21 +101,18 @@ class TestClosing(Harness):
 
     def test_wbtba_raises_NoBalancedCustomerHref_if_no_balanced_customer_href(self):
         alice = self.make_participant('alice', balance=D('10.00'), is_suspicious=False)
-        with self.db.get_cursor() as cursor:
-            with pytest.raises(NoBalancedCustomerHref):
-                alice.withdraw_balance_to_bank_account(cursor)
+        with pytest.raises(NoBalancedCustomerHref):
+            alice.withdraw_balance_to_bank_account()
 
     def test_wbtba_raises_NotWhitelisted_if_not_whitelisted(self):
         alice = self.make_participant('alice', balance=D('10.00'))
-        with self.db.get_cursor() as cursor:
-            with pytest.raises(NotWhitelisted):
-                alice.withdraw_balance_to_bank_account(cursor)
+        with pytest.raises(NotWhitelisted):
+            alice.withdraw_balance_to_bank_account()
 
     def test_wbtba_raises_NotWhitelisted_if_blacklisted(self):
         alice = self.make_participant('alice', balance=D('10.00'), is_suspicious=True)
-        with self.db.get_cursor() as cursor:
-            with pytest.raises(NotWhitelisted):
-                alice.withdraw_balance_to_bank_account(cursor)
+        with pytest.raises(NotWhitelisted):
+            alice.withdraw_balance_to_bank_account()
 
 
     # dbafg - distribute_balance_as_final_gift

@@ -341,7 +341,7 @@ class Participant(Model, MixinTeam):
             if disbursement_strategy == None:
                 pass  # No balance, supposedly. final_check will make sure.
             elif disbursement_strategy == 'bank':
-                self.withdraw_balance_to_bank_account(cursor)
+                self.withdraw_balance_to_bank_account()
             elif disbursement_strategy == 'downstream':
                 # This in particular needs to come before clear_tips_giving.
                 self.distribute_balance_as_final_gift(cursor)
@@ -357,7 +357,7 @@ class Participant(Model, MixinTeam):
 
     class BankWithdrawalFailed(Exception): pass
 
-    def withdraw_balance_to_bank_account(self, cursor):
+    def withdraw_balance_to_bank_account(self):
         from gratipay.billing.exchanges import ach_credit
         error = ach_credit( self.db
                           , self
