@@ -520,6 +520,9 @@ for your project!
 
  - [php-curl-class](https://github.com/php-curl-class/php-curl-class/blob/master/examples/gratipay_send_tip.php): A php class to tip using the Gratipay API.
 
+ - [gratipay-twisted](https://github.com/TigerND/gratipay-twisted): Gratipay client
+   for the Twisted framework
+
 
 ### Still Using Gittip
 
@@ -542,9 +545,6 @@ These probably still work, but are using our [old name](https://medium.com/grati
 
  - [WWW::Gittip](https://metacpan.org/pod/WWW::Gittip): A Perl module
    implementing the Gittip API more or less ([ticket](https://rt.cpan.org/Public/Bug/Display.html?id=101103))
-
- - [gittip-twisted](https://github.com/TigerND/gittip-twisted): Gittip client
-   for the Twisted framework ([ticket](https://github.com/TigerND/gittip-twisted/issues/1))
 
 
 Glossary
