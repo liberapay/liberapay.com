@@ -72,6 +72,14 @@ class TestClosing(Harness):
         body = self.client.POST('/alice/account/close', auth_as='alice').body
         assert 'Try Again Later' in body
 
+    @mock.patch('gratipay.billing.exchanges.ach_credit')
+    def test_ach_credit_failure_doesnt_cause_500(self, ach_credit):
+        ach_credit.side_effect = 'some error'
+        self.make_participant('alice', claimed_time='now', balance=384)
+        data = {'disbursement_strategy': 'bank'}
+        r = self.client.POST('/alice/account/close', auth_as='alice', data=data)
+        assert r.code == 200
+
 
     # wbtba - withdraw_balance_to_bank_account
 
