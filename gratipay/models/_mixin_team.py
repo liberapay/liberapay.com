@@ -172,7 +172,7 @@ class MixinTeam(object):
             new = new_takes.get(username, {}).get('actual_amount', Decimal(0))
             diff = new - old
             if diff != 0:
-                r = (self.db or cursor).one("""
+                r = (cursor or self.db).one("""
                     UPDATE participants
                        SET taking = (taking + %(diff)s)
                          , receiving = (receiving + %(diff)s)
