@@ -23,16 +23,14 @@ subhead = _("Receiving")
 <h2>{{ _("{0} receives {1} per week", participant.username, receiving) }}</h2>
 {% endif %}
 
-<div class="col1">
-    <div class="chart-wrapper">
+<div class="row">
+    <div class="chart-wrapper col1">
         <a name="gifts"></a>
         <h2>{{ _("Dollars Received Per Week") }}</h2>
         <div class="chart" id="chart_receipts"></div>
         <div class="x-axis">{{ _("weeks") }}</div>
     </div>
-</div>
-<div class="col2">
-    <div class="chart-wrapper">
+    <div class="chart-wrapper col1">
         <a name="gifts"></a>
         <h2>{{ _("Number of Patrons Per Week") }}</h2>
         <div class="chart" id="chart_npatrons"></div>
@@ -43,12 +41,13 @@ subhead = _("Receiving")
 {% if participant.receiving > 0 and
       not user.ANON and (user.participant == participant or user.ADMIN) %}
 {% set tip_distribution = participant.get_tip_distribution()[0] %}
+<div class="row">
 <div class="col1">
     <h2>{{ _("Tips Received, by Number of Tips") }}</h2>
     {% include "templates/tip-distribution.html" %}
 </div>
 
-<div class="col2">
+<div class="col1">
     <h2>{{ _("Tips Received, by Dollar Amount") }}</h2>
     <table class="tip-distribution">
         {% for amount, ncontributors, summed, pcontributors, psummed in tip_distribution %}
@@ -64,6 +63,7 @@ subhead = _("Receiving")
         </tr>
         {% endfor %}
     </table>
+</div>
 </div>
 {% endif %}
 {% endblock %}

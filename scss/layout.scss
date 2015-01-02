@@ -216,7 +216,7 @@ body {
     margin: 0 auto;
 }
 
-.col0, .col1, .col2 {
+.col0, .col1 {
     width: 50%;
 }
 
@@ -224,14 +224,14 @@ body {
     min-width: 420px;
 }
 
-.col1 {
-    float: left;
-    padding-right: 3%;
+.row {
+    margin: 0 -20px;
+    @include clearfix;
 }
 
-.col2 {
-    float: right;
-    padding-left: 3%;
+.col1 {
+    float: left;
+    padding: 0 20px;
 }
 
 .payment-footer {

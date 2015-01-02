@@ -97,6 +97,7 @@ subhead = _("Widgets")
             -1px -1px 0 rgba(255,255,255,.25) inset;
     }
 </style>
+<div class="row">
 <div class="col1">
     <h2>{{ _("Button") }}</h2>
 
@@ -137,7 +138,7 @@ subhead = _("Widgets")
     <img src="//img.shields.io/gratipay/{{ participant.username }}.svg">
 
 </div>
-<div class="col2">
+<div class="col1">
 
     <h2>{{ _("Giving & Receiving Widgets") }}</h2>
 
@@ -161,5 +162,6 @@ subhead = _("Widgets")
 
     <p><script data-gratipay-username="{{ participant.username }}" data-gratipay-widget="giving" src="//grtp.co/v1.js"></script></p>
 
+</div>
 </div>
 {% endblock %}
