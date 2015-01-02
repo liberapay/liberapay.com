@@ -19,6 +19,7 @@ class TestClosing(Harness):
     # close
 
     def test_close_closes(self):
+        team = self.make_participant('team', claimed_time='now', number='plural', balance=50)
         alice = self.make_participant('alice', claimed_time='now', balance=D('10.00'))
         bob = self.make_participant('bob', claimed_time='now')
         carl = self.make_participant('carl', claimed_time='now')
@@ -26,10 +27,15 @@ class TestClosing(Harness):
         alice.set_tip_to(bob, D('3.00'))
         carl.set_tip_to(alice, D('2.00'))
 
+        team.add_member(alice)
+        team.add_member(bob)
+        assert len(team.get_current_takes()) == 2  # sanity check
+
         alice.close('downstream')
 
         assert carl.get_tip_to('alice')['amount'] == 0
         assert alice.balance == 0
+        assert len(team.get_current_takes()) == 1
 
     def test_close_raises_for_unknown_disbursement_strategy(self):
         alice = self.make_participant('alice', balance=D('0.00'))
@@ -333,20 +339,6 @@ class TestClosing(Harness):
             alice.clear_personal_information(cursor)
 
         assert Community.from_slug('test').nmembers == 1
-
-    def test_cpi_clears_teams(self):
-        team = self.make_participant('team', number='plural')
-        alice = self.make_participant('alice', claimed_time='now')
-        team.add_member(alice)
-        bob = self.make_participant('bob', claimed_time='now')
-        team.add_member(bob)
-
-        assert len(team.get_current_takes()) == 2  # sanity check
-
-        with self.db.get_cursor() as cursor:
-            alice.clear_personal_information(cursor)
-
-        assert len(team.get_current_takes()) == 1
 
 
     # uic = update_is_closed
