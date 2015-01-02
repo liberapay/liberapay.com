@@ -18,10 +18,15 @@ if POST:
     else:
         disbursement_strategy = request.body.get('disbursement_strategy')
         if participant.balance and disbursement_strategy is None:
-            pass    # User will get the "Please choose a disbursement method" message.
+            error = _("You still have money in this Gratipay account, please "
+                      "choose a disbursement method below or contact support.")
         else:
-            participant.close(disbursement_strategy)
-            request.redirect('/%s/' % participant.username)
+            try:
+                participant.close(disbursement_strategy)
+            except participant.BankWithdrawalFailed as e:
+                error = _("The bank withdrawal failed. Error message: {0}", e)
+            else:
+                request.redirect('/%s/' % participant.username)
 [---] text/html
 {% extends "templates/base.html" %}
 
@@ -155,13 +160,10 @@ if POST:
 {% endblock %}
 
 {% block scripts %}
-{% if not payday_is_running and POST %}
+{% if error %}
     <script>
         $(function () {
-            Gratipay.notification(
-                'You still have money in this Gratipay account, please ' +
-                'choose a disbursement method below or contact support.'
-            , 'error')
+            Gratipay.notification("{{ error.replace('"', '\\"') }}", 'error', -1)
         });
     </script>
 {% endif %}

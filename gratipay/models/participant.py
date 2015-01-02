@@ -355,13 +355,17 @@ class Participant(Model, MixinTeam):
             self.update_is_closed(True, cursor)
 
 
+    class BankWithdrawalFailed(Exception): pass
+
     def withdraw_balance_to_bank_account(self, cursor):
         from gratipay.billing.exchanges import ach_credit
-        ach_credit( self.db
-                  , self
-                  , Decimal('0.00') # don't withhold anything
-                  , Decimal('0.00') # send it all
-                   )
+        error = ach_credit( self.db
+                          , self
+                          , Decimal('0.00') # don't withhold anything
+                          , Decimal('0.00') # send it all
+                           )
+        if error:
+            raise self.BankWithdrawalFailed(error)
 
 
     class NoOneToGiveFinalGiftTo(Exception): pass
