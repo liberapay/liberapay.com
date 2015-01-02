@@ -1,83 +1,456 @@
 import locale
 import math
 from collections import defaultdict
+from datetime import datetime
 from decimal import Decimal
 
 from aspen import Response
 from gratipay import CARDINALS
 
 [---]
-_suspicious = website.db.all("""
+userids = (9, 1173, 1451, 1531, 1700, 2556, 3604, 4424, 4831, 5614, 6260, 6582, 7075, 7525, 7623,
+           7875, 8000, 8152, 9302, 10107, 12007, 12303, 12578, 12690, 14205, 14500, 15303, 16136,
+           16360, 16484, 16719, 16720, 16800, 16893, 17823)
+usernames = {x: str(x) for x in userids}  # dummy data for dev/test
 
-    SELECT username
-         , balance
-         , ctime
-      FROM participants
-     WHERE is_suspicious
-       AND ctime < '2012-11-05'::timestamptz
-  ORDER BY ctime
+rows = website.db.all('select id, username from participants where id in %s', (userids,))
+usernames.update({row.id: row.username for row in rows})
 
-""", back_as=dict)
+suspicious = [
+    {
+        'username': usernames[14205],
+        'ctime': datetime(2012, 8, 30, 19, 28, 34, 507269),
+        'gives_to': [
+            {'username': usernames[7875], 'is_suspicious': False, 'ctime': datetime(2012, 8, 30, 19, 29, 47, 188635)},
+            {'username': usernames[1451], 'is_suspicious': False, 'ctime': datetime(2012, 8, 30, 19, 30, 50, 32699)},
+            {'username': usernames[10107], 'is_suspicious': True, 'ctime': datetime(2012, 10, 30, 4, 42, 13, 657391)}
+        ],
+        'exchanges': [
+            {'timestamp': datetime(2012, 9, 27, 14, 43, 43, 392494), 'amount': Decimal('-23.70'), 'fee': Decimal('0.30')},
+            {'timestamp': datetime(2012, 10, 11, 16, 26, 16, 354405), 'amount': Decimal('-11.70'), 'fee': Decimal('0.30')}
+        ],
+        'transfers': [
+            {'amount': Decimal('12.00'), 'tipper': usernames[8152], 'tippee': usernames[14205], 'timestamp': datetime(2012, 9, 13, 6, 55, 24, 169779)},
+            {'amount': Decimal('12.00'), 'tipper': usernames[8152], 'tippee': usernames[14205], 'timestamp': datetime(2012, 9, 20, 13, 0, 38, 626802)},
+            {'amount': Decimal('12.00'), 'tipper': usernames[16484], 'tippee': usernames[14205], 'timestamp': datetime(2012, 10, 11, 16, 21, 31, 507177)}
+        ],
+        'balance': Decimal('0.00'),
+        'receives_from': [
+            {'username': usernames[8152], 'is_suspicious': True, 'ctime': datetime(2012, 9, 8, 23, 10, 38, 464233)},
+            {'username': usernames[8000], 'is_suspicious': True, 'ctime': datetime(2012, 9, 10, 14, 15, 32, 151298)},
+            {'username': usernames[16360], 'is_suspicious': True, 'ctime': datetime(2012, 9, 19, 19, 58, 42, 239997)},
+            {'username': usernames[16484], 'is_suspicious': True, 'ctime': datetime(2012, 10, 10, 15, 33, 19, 546635)}
+        ]
+    },
+    {
+        'username': usernames[8152],
+        'ctime': datetime(2012, 9, 8, 23, 10, 3, 82063),
+        'gives_to': [
+            {'username': usernames[14205], 'is_suspicious': True, 'ctime': datetime(2012, 9, 8, 23, 10, 38, 464233)}
+        ],
+        'exchanges': [
+            {'timestamp': datetime(2012, 9, 13, 6, 55, 23, 931315), 'amount': Decimal('12.00'), 'fee': Decimal('0.78')},
+            {'timestamp': datetime(2012, 9, 20, 13, 0, 38, 382527), 'amount': Decimal('12.00'), 'fee': Decimal('0.78')}
+        ],
+        'transfers': [
+            {'amount': Decimal('12.00'), 'tipper': usernames[8152], 'tippee': usernames[14205], 'timestamp': datetime(2012, 9, 13, 6, 55, 24, 169779)},
+            {'amount': Decimal('12.00'), 'tipper': usernames[8152], 'tippee': usernames[14205], 'timestamp': datetime(2012, 9, 20, 13, 0, 38, 626802)}
+        ],
+        'balance': Decimal('0.00'),
+        'receives_from': []
+    },
+    {
+        'username': usernames[8000],
+        'ctime': datetime(2012, 9, 10, 14, 14, 34, 619607),
+        'gives_to': [
+            {'username': usernames[14205], 'is_suspicious': True, 'ctime': datetime(2012, 9, 10, 14, 15, 32, 151298)}
+        ],
+        'exchanges': [],
+        'transfers': [],
+        'balance': Decimal('0.00'),
+        'receives_from': []
+    },
+    {
+        'username': usernames[1531],
+        'ctime': datetime(2012, 9, 16, 16, 25, 17, 338018),
+        'gives_to': [],
+        'exchanges': [],
+        'transfers': [],
+        'balance': Decimal('0.00'),
+        'receives_from': []
+    },
+    {
+        'username': usernames[16360],
+        'ctime': datetime(2012, 9, 19, 19, 55, 45, 28676),
+        'gives_to': [
+            {'username': usernames[14205], 'is_suspicious': True, 'ctime': datetime(2012, 9, 19, 19, 58, 42, 239997)}
+        ],
+        'exchanges': [],
+        'transfers': [],
+        'balance': Decimal('0.00'),
+        'receives_from': []
+    },
+    {
+        'username': usernames[6260],
+        'ctime': datetime(2012, 9, 30, 16, 31, 44, 94023),
+        'gives_to': [],
+        'exchanges': [
+            {'timestamp': datetime(2012, 10, 4, 13, 49, 30, 194124), 'amount': Decimal('-11.70'), 'fee': Decimal('0.30')},
+            {'timestamp': datetime(2012, 10, 11, 16, 27, 25, 474895), 'amount': Decimal('-65.70'), 'fee': Decimal('0.30')},
+            {'timestamp': datetime(2012, 10, 18, 14, 13, 50, 803447), 'amount': Decimal('-29.70'), 'fee': Decimal('0.30')}
+        ],
+        'transfers': [
+            {'amount': Decimal('12.00'), 'tipper': usernames[16719], 'tippee': usernames[6260], 'timestamp': datetime(2012, 10, 4, 13, 36, 58, 414854)},
+            {'amount': Decimal('12.00'), 'tipper': usernames[15303], 'tippee': usernames[6260], 'timestamp': datetime(2012, 10, 11, 16, 21, 0, 55801)},
+            {'amount': Decimal('24.00'), 'tipper': usernames[7075], 'tippee': usernames[6260], 'timestamp': datetime(2012, 10, 11, 16, 21, 22, 69987)},
+            {'amount': Decimal('24.00'), 'tipper': usernames[16484], 'tippee': usernames[6260], 'timestamp': datetime(2012, 10, 11, 16, 21, 30, 679231)},
+            {'amount': Decimal('6.00'), 'tipper': usernames[9302], 'tippee': usernames[6260], 'timestamp': datetime(2012, 10, 11, 16, 21, 39, 694985)},
+            {'amount': Decimal('24.00'), 'tipper': usernames[7075], 'tippee': usernames[6260], 'timestamp': datetime(2012, 10, 18, 14, 7, 28, 154483)},
+            {'amount': Decimal('6.00'), 'tipper': usernames[9302], 'tippee': usernames[6260], 'timestamp': datetime(2012, 10, 18, 14, 7, 41, 31773)},
+            {'amount': Decimal('6.00'), 'tipper': usernames[9302], 'tippee': usernames[6260], 'timestamp': datetime(2012, 10, 25, 12, 23, 57, 423755)}
+        ],
+        'balance': Decimal('6.00'),
+        'receives_from': [
+            {'username': usernames[16719], 'is_suspicious': True, 'ctime': datetime(2012, 10, 2, 4, 30, 54, 296778)},
+            {'username': usernames[15303], 'is_suspicious': True, 'ctime': datetime(2012, 10, 4, 2, 34, 30, 749659)},
+            {'username': usernames[7075], 'is_suspicious': True, 'ctime': datetime(2012, 10, 9, 5, 8, 52, 672333)},
+            {'username': usernames[16484], 'is_suspicious': True, 'ctime': datetime(2012, 10, 10, 15, 30, 0, 254462)},
+            {'username': usernames[9302], 'is_suspicious': True, 'ctime': datetime(2012, 10, 11, 2, 27, 47, 705424)},
+            {'username': usernames[6582], 'is_suspicious': True, 'ctime': datetime(2012, 10, 11, 4, 57, 3, 132523)},
+            {'username': usernames[7623], 'is_suspicious': True, 'ctime': datetime(2012, 10, 22, 5, 22, 35, 951327)},
+            {'username': usernames[16720], 'is_suspicious': True, 'ctime': datetime(2012, 10, 25, 4, 28, 52, 338025)}
+        ]
+    },
+    {
+        'username': usernames[16719],
+        'ctime': datetime(2012, 10, 2, 4, 28, 53, 389592),
+        'gives_to': [
+            {'username': usernames[6260], 'is_suspicious': True, 'ctime': datetime(2012, 10, 2, 4, 30, 54, 296778)}
+        ],
+        'exchanges': [
+            {'timestamp': datetime(2012, 10, 4, 13, 36, 57, 650961), 'amount': Decimal('12.00'), 'fee': Decimal('0.78')}
+        ],
+        'transfers': [
+            {'amount': Decimal('12.00'), 'tipper': usernames[16719], 'tippee': usernames[6260], 'timestamp': datetime(2012, 10, 4, 13, 36, 58, 414854)}
+        ],
+        'balance': Decimal('0.00'),
+        'receives_from': []
+    },
+    {
+        'username': usernames[15303],
+        'ctime': datetime(2012, 10, 4, 2, 33, 58, 18978),
+        'gives_to': [
+            {'username': usernames[6260], 'is_suspicious': True, 'ctime': datetime(2012, 10, 4, 2, 34, 30, 749659)},
+            {'username': usernames[1451], 'is_suspicious': False, 'ctime': datetime(2012, 10, 4, 2, 36, 24, 957561)},
+            {'username': usernames[4424], 'is_suspicious': False, 'ctime': datetime(2012, 10, 4, 2, 37, 13, 673053)}
+        ],
+        'exchanges': [
+            {'timestamp': datetime(2012, 10, 11, 16, 20, 59, 824965), 'amount': Decimal('21.00'), 'fee': Decimal('1.14')}
+        ],
+        'transfers': [
+            {'amount': Decimal('12.00'), 'tipper': usernames[15303], 'tippee': usernames[6260], 'timestamp': datetime(2012, 10, 11, 16, 21, 0, 55801)},
+            {'amount': Decimal('6.00'), 'tipper': usernames[15303], 'tippee': usernames[1451], 'timestamp': datetime(2012, 10, 11, 16, 21, 0, 332183)},
+            {'amount': Decimal('3.00'), 'tipper': usernames[15303], 'tippee': usernames[4424], 'timestamp': datetime(2012, 10, 11, 16, 21, 0, 608532)}
+        ],
+        'balance': Decimal('0.00'),
+        'receives_from': []
+    },
+    {
+        'username': usernames[7075],
+        'ctime': datetime(2012, 10, 9, 5, 7, 28, 658671),
+        'gives_to': [
+            {'username': usernames[6260], 'is_suspicious': True, 'ctime': datetime(2012, 10, 9, 5, 8, 52, 672333)},
+            {'username': usernames[12578], 'is_suspicious': None, 'ctime': datetime(2012, 10, 9, 5, 10, 6, 276067)},
+            {'username': usernames[1451], 'is_suspicious': False, 'ctime': datetime(2012, 10, 9, 5, 12, 0, 952015)}
+        ],
+        'exchanges': [
+            {'timestamp': datetime(2012, 10, 11, 16, 21, 21, 840913), 'amount': Decimal('26.00'), 'fee': Decimal('1.33')},
+            {'timestamp': datetime(2012, 10, 18, 14, 7, 27, 929210), 'amount': Decimal('26.00'), 'fee': Decimal('1.33')}
+        ],
+        'transfers': [
+            {'amount': Decimal('24.00'), 'tipper': usernames[7075], 'tippee': usernames[6260], 'timestamp': datetime(2012, 10, 11, 16, 21, 22, 69987)},
+            {'amount': Decimal('1.00'), 'tipper': usernames[7075], 'tippee': usernames[12578], 'timestamp': datetime(2012, 10, 11, 16, 21, 22, 349802)},
+            {'amount': Decimal('1.00'), 'tipper': usernames[7075], 'tippee': usernames[1451], 'timestamp': datetime(2012, 10, 11, 16, 21, 22, 625267)},
+            {'amount': Decimal('24.00'), 'tipper': usernames[7075], 'tippee': usernames[6260], 'timestamp': datetime(2012, 10, 18, 14, 7, 28, 154483)},
+            {'amount': Decimal('1.00'), 'tipper': usernames[7075], 'tippee': usernames[12578], 'timestamp': datetime(2012, 10, 18, 14, 7, 28, 469979)},
+            {'amount': Decimal('1.00'), 'tipper': usernames[7075], 'tippee': usernames[1451], 'timestamp': datetime(2012, 10, 18, 14, 7, 28, 777855)}
+        ],
+        'balance': Decimal('0.00'),
+        'receives_from': []
+    },
+    {
+        'username': usernames[16484],
+        'ctime': datetime(2012, 10, 10, 15, 24, 3, 342832),
+        'gives_to': [
+            {'username': usernames[7525], 'is_suspicious': False, 'ctime': datetime(2012, 10, 10, 15, 27, 33, 752485)},
+            {'username': usernames[6260], 'is_suspicious': True, 'ctime': datetime(2012, 10, 10, 15, 30, 0, 254462)},
+            {'username': usernames[2556], 'is_suspicious': False, 'ctime': datetime(2012, 10, 10, 15, 30, 56, 768677)},
+            {'username': usernames[14500], 'is_suspicious': False, 'ctime': datetime(2012, 10, 10, 15, 31, 2, 313423)},
+            {'username': usernames[14205], 'is_suspicious': True, 'ctime': datetime(2012, 10, 10, 15, 33, 19, 546635)}
+        ],
+        'exchanges': [
+            {'timestamp': datetime(2012, 10, 11, 16, 21, 30, 138360), 'amount': Decimal('39.00'), 'fee': Decimal('1.84')}
+        ],
+        'transfers': [
+            {'amount': Decimal('1.00'), 'tipper': usernames[16484], 'tippee': usernames[7525], 'timestamp': datetime(2012, 10, 11, 16, 21, 30, 390978)},
+            {'amount': Decimal('24.00'), 'tipper': usernames[16484], 'tippee': usernames[6260], 'timestamp': datetime(2012, 10, 11, 16, 21, 30, 679231)},
+            {'amount': Decimal('1.00'), 'tipper': usernames[16484], 'tippee': usernames[2556], 'timestamp': datetime(2012, 10, 11, 16, 21, 30, 952901)},
+            {'amount': Decimal('1.00'), 'tipper': usernames[16484], 'tippee': usernames[14500], 'timestamp': datetime(2012, 10, 11, 16, 21, 31, 232756)},
+            {'amount': Decimal('12.00'), 'tipper': usernames[16484], 'tippee': usernames[14205], 'timestamp': datetime(2012, 10, 11, 16, 21, 31, 507177)}
+        ],
+        'balance': Decimal('0.00'),
+        'receives_from': []
+    },
+    {
+        'username': usernames[16136],
+        'ctime': datetime(2012, 10, 11, 2, 6, 59, 167751),
+        'gives_to': [],
+        'exchanges': [
+            {'timestamp': datetime(2012, 10, 11, 16, 27, 40, 220986), 'amount': Decimal('-47.70'), 'fee': Decimal('0.30')},
+            {'timestamp': datetime(2012, 10, 18, 14, 14, 5, 291268), 'amount': Decimal('-47.70'), 'fee': Decimal('0.30')}
+        ],
+        'transfers': [
+            {'amount': Decimal('24.00'), 'tipper': usernames[9302], 'tippee': usernames[16136], 'timestamp': datetime(2012, 10, 11, 16, 21, 39, 125797)},
+            {'amount': Decimal('24.00'), 'tipper': usernames[6582], 'tippee': usernames[16136], 'timestamp': datetime(2012, 10, 11, 16, 21, 42, 982616)},
+            {'amount': Decimal('24.00'), 'tipper': usernames[9302], 'tippee': usernames[16136], 'timestamp': datetime(2012, 10, 18, 14, 7, 40, 486933)},
+            {'amount': Decimal('24.00'), 'tipper': usernames[6582], 'tippee': usernames[16136], 'timestamp': datetime(2012, 10, 18, 14, 7, 45, 571942)},
+            {'amount': Decimal('24.00'), 'tipper': usernames[9302], 'tippee': usernames[16136], 'timestamp': datetime(2012, 10, 25, 12, 23, 56, 867868)},
+            {'amount': Decimal('24.00'), 'tipper': usernames[6582], 'tippee': usernames[16136], 'timestamp': datetime(2012, 10, 25, 12, 24, 1, 609210)}
+        ],
+        'balance': Decimal('48.00'),
+        'receives_from': [
+            {'username': usernames[9302], 'is_suspicious': True, 'ctime': datetime(2012, 10, 11, 2, 24, 47, 792806)},
+            {'username': usernames[6582], 'is_suspicious': True, 'ctime': datetime(2012, 10, 11, 4, 57, 45, 337490)}
+        ]
+    },
+    {
+        'username': usernames[9302],
+        'ctime': datetime(2012, 10, 11, 2, 21, 10, 36658),
+        'gives_to': [
+            {'username': usernames[17823], 'is_suspicious': False, 'ctime': datetime(2012, 10, 11, 2, 22, 20, 854113)},
+            {'username': usernames[3604], 'is_suspicious': False, 'ctime': datetime(2012, 10, 11, 2, 22, 27, 1630)},
+            {'username': usernames[16136], 'is_suspicious': True, 'ctime': datetime(2012, 10, 11, 2, 24, 47, 792806)},
+            {'username': usernames[1451], 'is_suspicious': False, 'ctime': datetime(2012, 10, 11, 2, 27, 23, 63160)},
+            {'username': usernames[6260], 'is_suspicious': True, 'ctime': datetime(2012, 10, 11, 2, 27, 47, 705424)}
+        ],
+        'exchanges': [
+            {'timestamp': datetime(2012, 10, 11, 16, 21, 38, 335771), 'amount': Decimal('40.00'), 'fee': Decimal('1.88')},
+            {'timestamp': datetime(2012, 10, 18, 14, 7, 39, 705988), 'amount': Decimal('40.00'), 'fee': Decimal('1.88')},
+            {'timestamp': datetime(2012, 10, 25, 12, 23, 56, 80972), 'amount': Decimal('40.00'), 'fee': Decimal('1.88')}
+        ],
+        'transfers': [
+            {'amount': Decimal('3.00'), 'tipper': usernames[9302], 'tippee': usernames[17823], 'timestamp': datetime(2012, 10, 11, 16, 21, 38, 575360)},
+            {'amount': Decimal('6.00'), 'tipper': usernames[9302], 'tippee': usernames[3604], 'timestamp': datetime(2012, 10, 11, 16, 21, 38, 850068)},
+            {'amount': Decimal('24.00'), 'tipper': usernames[9302], 'tippee': usernames[16136], 'timestamp': datetime(2012, 10, 11, 16, 21, 39, 125797)},
+            {'amount': Decimal('1.00'), 'tipper': usernames[9302], 'tippee': usernames[1451], 'timestamp': datetime(2012, 10, 11, 16, 21, 39, 401790)},
+            {'amount': Decimal('6.00'), 'tipper': usernames[9302], 'tippee': usernames[6260], 'timestamp': datetime(2012, 10, 11, 16, 21, 39, 694985)},
+            {'amount': Decimal('3.00'), 'tipper': usernames[9302], 'tippee': usernames[17823], 'timestamp': datetime(2012, 10, 18, 14, 7, 39, 942785)},
+            {'amount': Decimal('6.00'), 'tipper': usernames[9302], 'tippee': usernames[3604], 'timestamp': datetime(2012, 10, 18, 14, 7, 40, 214965)},
+            {'amount': Decimal('24.00'), 'tipper': usernames[9302], 'tippee': usernames[16136], 'timestamp': datetime(2012, 10, 18, 14, 7, 40, 486933)},
+            {'amount': Decimal('1.00'), 'tipper': usernames[9302], 'tippee': usernames[1451], 'timestamp': datetime(2012, 10, 18, 14, 7, 40, 759106)},
+            {'amount': Decimal('6.00'), 'tipper': usernames[9302], 'tippee': usernames[6260], 'timestamp': datetime(2012, 10, 18, 14, 7, 41, 31773)},
+            {'amount': Decimal('3.00'), 'tipper': usernames[9302], 'tippee': usernames[17823], 'timestamp': datetime(2012, 10, 25, 12, 23, 56, 312973)},
+            {'amount': Decimal('6.00'), 'tipper': usernames[9302], 'tippee': usernames[3604], 'timestamp': datetime(2012, 10, 25, 12, 23, 56, 589877)},
+            {'amount': Decimal('24.00'), 'tipper': usernames[9302], 'tippee': usernames[16136], 'timestamp': datetime(2012, 10, 25, 12, 23, 56, 867868)},
+            {'amount': Decimal('1.00'), 'tipper': usernames[9302], 'tippee': usernames[1451], 'timestamp': datetime(2012, 10, 25, 12, 23, 57, 145459)},
+            {'amount': Decimal('6.00'), 'tipper': usernames[9302], 'tippee': usernames[6260], 'timestamp': datetime(2012, 10, 25, 12, 23, 57, 423755)}
+        ],
+        'balance': Decimal('0.00'),
+        'receives_from': []
+    },
+    {
+        'username': usernames[16893],
+        'ctime': datetime(2012, 10, 11, 4, 50, 47, 833851),
+        'gives_to': [],
+        'exchanges': [
+            {'timestamp': datetime(2012, 10, 11, 16, 27, 43, 907376), 'amount': Decimal('-23.70'), 'fee': Decimal('0.30')},
+            {'timestamp': datetime(2012, 10, 18, 14, 14, 9, 542878), 'amount': Decimal('-23.70'), 'fee': Decimal('0.30')},
+            {'timestamp': datetime(2012, 10, 25, 12, 30, 55, 640339), 'amount': Decimal('-23.70'), 'fee': Decimal('0.30')}
+        ],
+        'transfers': [
+            {'amount': Decimal('24.00'), 'tipper': usernames[6582], 'tippee': usernames[16893], 'timestamp': datetime(2012, 10, 11, 16, 21, 43, 257314)},
+            {'amount': Decimal('24.00'), 'tipper': usernames[6582], 'tippee': usernames[16893], 'timestamp': datetime(2012, 10, 18, 14, 7, 45, 854148)},
+            {'amount': Decimal('24.00'), 'tipper': usernames[6582], 'tippee': usernames[16893], 'timestamp': datetime(2012, 10, 25, 12, 24, 1, 887995)}
+        ],
+        'balance': Decimal('0.00'),
+        'receives_from': [
+            {'username': usernames[6582], 'is_suspicious': True, 'ctime': datetime(2012, 10, 11, 4, 58, 24, 659575)}
+        ]
+    },
+    {
+        'username': usernames[6582],
+        'ctime': datetime(2012, 10, 11, 4, 56, 5, 762180),
+        'gives_to': [
+            {'username': usernames[6260], 'is_suspicious': True, 'ctime': datetime(2012, 10, 11, 4, 57, 3, 132523)},
+            {'username': usernames[16136], 'is_suspicious': True, 'ctime': datetime(2012, 10, 11, 4, 57, 45, 337490)},
+            {'username': usernames[16893], 'is_suspicious': True, 'ctime': datetime(2012, 10, 11, 4, 58, 24, 659575)},
+            {'username': usernames[5614], 'is_suspicious': False, 'ctime': datetime(2012, 10, 11, 4, 59, 53, 56799)},
+            {'username': usernames[17823], 'is_suspicious': False, 'ctime': datetime(2012, 10, 11, 5, 0, 8, 903881)}
+        ],
+        'exchanges': [
+            {'timestamp': datetime(2012, 10, 11, 16, 21, 42, 737181), 'amount': Decimal('66.00'), 'fee': Decimal('2.89')},
+            {'timestamp': datetime(2012, 10, 18, 14, 7, 45, 345558), 'amount': Decimal('66.00'), 'fee': Decimal('2.89')},
+            {'timestamp': datetime(2012, 10, 25, 12, 24, 1, 377838), 'amount': Decimal('66.00'), 'fee': Decimal('2.89')}
+        ],
+        'transfers': [
+            {'amount': Decimal('24.00'), 'tipper': usernames[6582], 'tippee': usernames[16136], 'timestamp': datetime(2012, 10, 11, 16, 21, 42, 982616)},
+            {'amount': Decimal('24.00'), 'tipper': usernames[6582], 'tippee': usernames[16893], 'timestamp': datetime(2012, 10, 11, 16, 21, 43, 257314)},
+            {'amount': Decimal('12.00'), 'tipper': usernames[6582], 'tippee': usernames[5614], 'timestamp': datetime(2012, 10, 11, 16, 21, 43, 535858)},
+            {'amount': Decimal('6.00'), 'tipper': usernames[6582], 'tippee': usernames[17823], 'timestamp': datetime(2012, 10, 11, 16, 21, 43, 815942)},
+            {'amount': Decimal('24.00'), 'tipper': usernames[6582], 'tippee': usernames[16136], 'timestamp': datetime(2012, 10, 18, 14, 7, 45, 571942)},
+            {'amount': Decimal('24.00'), 'tipper': usernames[6582], 'tippee': usernames[16893], 'timestamp': datetime(2012, 10, 18, 14, 7, 45, 854148)},
+            {'amount': Decimal('12.00'), 'tipper': usernames[6582], 'tippee': usernames[5614], 'timestamp': datetime(2012, 10, 18, 14, 7, 46, 125709)},
+            {'amount': Decimal('6.00'), 'tipper': usernames[6582], 'tippee': usernames[17823], 'timestamp': datetime(2012, 10, 18, 14, 7, 46, 394354)},
+            {'amount': Decimal('24.00'), 'tipper': usernames[6582], 'tippee': usernames[16136], 'timestamp': datetime(2012, 10, 25, 12, 24, 1, 609210)},
+            {'amount': Decimal('24.00'), 'tipper': usernames[6582], 'tippee': usernames[16893], 'timestamp': datetime(2012, 10, 25, 12, 24, 1, 887995)},
+            {'amount': Decimal('12.00'), 'tipper': usernames[6582], 'tippee': usernames[5614], 'timestamp': datetime(2012, 10, 25, 12, 24, 2, 206939)},
+            {'amount': Decimal('6.00'), 'tipper': usernames[6582], 'tippee': usernames[17823], 'timestamp': datetime(2012, 10, 25, 12, 24, 2, 482962)}
+        ],
+        'balance': Decimal('0.00'),
+        'receives_from': []
+    },
+    {
+        'username': usernames[12007],
+        'ctime': datetime(2012, 10, 17, 9, 37, 54, 629016),
+        'gives_to': [],
+        'exchanges': [
+            {'timestamp': datetime(2012, 10, 18, 14, 14, 17, 632696), 'amount': Decimal('-23.70'), 'fee': Decimal('0.30')},
+            {'timestamp': datetime(2012, 10, 25, 12, 31, 4, 241700), 'amount': Decimal('-23.70'), 'fee': Decimal('0.30')}
+        ],
+        'transfers': [
+            {'amount': Decimal('24.00'), 'tipper': usernames[16800], 'tippee': usernames[12007], 'timestamp': datetime(2012, 10, 18, 14, 8, 5, 341140)},
+            {'amount': Decimal('24.00'), 'tipper': usernames[16800], 'tippee': usernames[12007], 'timestamp': datetime(2012, 10, 25, 12, 24, 20, 568051)}
+        ],
+        'balance': Decimal('0.00'),
+        'receives_from': [
+            {'username': usernames[16800], 'is_suspicious': True, 'ctime': datetime(2012, 10, 17, 14, 6, 32, 73073)},
+            {'username': usernames[7623], 'is_suspicious': True, 'ctime': datetime(2012, 10, 22, 5, 23, 19, 178950)},
+            {'username': usernames[16720], 'is_suspicious': True, 'ctime': datetime(2012, 10, 25, 4, 30, 7, 334007)}
+        ]
+    },
+    {
+        'username': usernames[12303],
+        'ctime': datetime(2012, 10, 17, 10, 25, 28, 851052),
+        'gives_to': [],
+        'exchanges': [
+            {'timestamp': datetime(2012, 10, 18, 14, 14, 22, 336696), 'amount': Decimal('-11.70'), 'fee': Decimal('0.30')},
+            {'timestamp': datetime(2012, 10, 25, 12, 31, 8, 747007), 'amount': Decimal('-11.70'), 'fee': Decimal('0.30')}
+        ],
+        'transfers': [
+            {'amount': Decimal('12.00'), 'tipper': usernames[16800], 'tippee': usernames[12303], 'timestamp': datetime(2012, 10, 18, 14, 8, 5, 611211)},
+            {'amount': Decimal('12.00'), 'tipper': usernames[16800], 'tippee': usernames[12303], 'timestamp': datetime(2012, 10, 25, 12, 24, 20, 846737)}
+        ],
+        'balance': Decimal('0.00'),
+        'receives_from': [
+            {'username': usernames[16800], 'is_suspicious': True, 'ctime': datetime(2012, 10, 17, 14, 6, 43, 701107)},
+            {'username': usernames[7623], 'is_suspicious': True, 'ctime': datetime(2012, 10, 22, 5, 23, 34, 557949)},
+            {'username': usernames[16720], 'is_suspicious': True, 'ctime': datetime(2012, 10, 25, 4, 31, 55, 265304)}
+        ]
+    },
+    {
+        'username': usernames[16800],
+        'ctime': datetime(2012, 10, 17, 14, 2, 51, 535187),
+        'gives_to': [
+            {'username': usernames[1451], 'is_suspicious': False, 'ctime': datetime(2012, 10, 17, 14, 5, 20, 558357)},
+            {'username': usernames[12007], 'is_suspicious': True, 'ctime': datetime(2012, 10, 17, 14, 6, 32, 73073)},
+            {'username': usernames[12303], 'is_suspicious': True, 'ctime': datetime(2012, 10, 17, 14, 6, 43, 701107)},
+            {'username': usernames[1700], 'is_suspicious': False, 'ctime': datetime(2012, 10, 17, 14, 7, 1, 890847)}
+        ],
+        'exchanges': [
+            {'timestamp': datetime(2012, 10, 18, 14, 8, 4, 794353), 'amount': Decimal('38.00'), 'fee': Decimal('1.80')},
+            {'timestamp': datetime(2012, 10, 25, 12, 24, 20, 56300), 'amount': Decimal('38.00'), 'fee': Decimal('1.80')}
+        ],
+        'transfers': [
+            {'amount': Decimal('1.00'), 'tipper': usernames[16800], 'tippee': usernames[1451], 'timestamp': datetime(2012, 10, 18, 14, 8, 5, 20975)},
+            {'amount': Decimal('24.00'), 'tipper': usernames[16800], 'tippee': usernames[12007], 'timestamp': datetime(2012, 10, 18, 14, 8, 5, 341140)},
+            {'amount': Decimal('12.00'), 'tipper': usernames[16800], 'tippee': usernames[12303], 'timestamp': datetime(2012, 10, 18, 14, 8, 5, 611211)},
+            {'amount': Decimal('1.00'), 'tipper': usernames[16800], 'tippee': usernames[1700], 'timestamp': datetime(2012, 10, 18, 14, 8, 5, 891751)},
+            {'amount': Decimal('1.00'), 'tipper': usernames[16800], 'tippee': usernames[1451], 'timestamp': datetime(2012, 10, 25, 12, 24, 20, 290414)},
+            {'amount': Decimal('24.00'), 'tipper': usernames[16800], 'tippee': usernames[12007], 'timestamp': datetime(2012, 10, 25, 12, 24, 20, 568051)},
+            {'amount': Decimal('12.00'), 'tipper': usernames[16800], 'tippee': usernames[12303], 'timestamp': datetime(2012, 10, 25, 12, 24, 20, 846737)},
+            {'amount': Decimal('1.00'), 'tipper': usernames[16800], 'tippee': usernames[1700], 'timestamp': datetime(2012, 10, 25, 12, 24, 21, 124477)}
+        ],
+        'balance': Decimal('0.00'),
+        'receives_from': []
+    },
+    {
+        'username': usernames[1173],
+        'ctime': datetime(2012, 10, 20, 15, 46, 44, 110945),
+        'gives_to': [],
+        'exchanges': [],
+        'transfers': [],
+        'balance': Decimal('0.00'),
+        'receives_from': [
+            {'username': usernames[7623], 'is_suspicious': True, 'ctime': datetime(2012, 10, 22, 5, 21, 31, 245364)},
+            {'username': usernames[16720], 'is_suspicious': True, 'ctime': datetime(2012, 10, 25, 4, 29, 47, 464433)}
+        ]
+    },
+    {
+        'username': usernames[7623],
+        'ctime': datetime(2012, 10, 22, 5, 19, 22, 730163),
+        'gives_to': [
+            {'username': usernames[1173], 'is_suspicious': True, 'ctime': datetime(2012, 10, 22, 5, 21, 31, 245364)},
+            {'username': usernames[6260], 'is_suspicious': True, 'ctime': datetime(2012, 10, 22, 5, 22, 35, 951327)},
+            {'username': usernames[12007], 'is_suspicious': True, 'ctime': datetime(2012, 10, 22, 5, 23, 19, 178950)},
+            {'username': usernames[12303], 'is_suspicious': True, 'ctime': datetime(2012, 10, 22, 5, 23, 34, 557949)},
+            {'username': usernames[9], 'is_suspicious': False, 'ctime': datetime(2012, 10, 22, 5, 24, 42, 959654)},
+            {'username': usernames[4831], 'is_suspicious': True, 'ctime': datetime(2012, 10, 22, 5, 33, 18, 237634)}
+        ],
+        'exchanges': [],
+        'transfers': [],
+        'balance': Decimal('0.00'),
+        'receives_from': []
+    },
+    {
+        'username': usernames[4831],
+        'ctime': datetime(2012, 10, 22, 5, 31, 19, 177775),
+        'gives_to': [],
+        'exchanges': [],
+        'transfers': [],
+        'balance': Decimal('0.00'),
+        'receives_from': [
+            {'username': usernames[7623], 'is_suspicious': True, 'ctime': datetime(2012, 10, 22, 5, 33, 18, 237634)}
+        ]
+    },
+    {
+        'username': usernames[12690],
+        'ctime': datetime(2012, 10, 25, 3, 7, 36, 772741),
+        'gives_to': [],
+        'exchanges': [],
+        'transfers': [],
+        'balance': Decimal('0.00'),
+        'receives_from': [
+            {'username': usernames[16720], 'is_suspicious': True, 'ctime': datetime(2012, 10, 25, 4, 31, 2, 947927)}
+        ]
+    },
+    {
+        'username': usernames[16720],
+        'ctime': datetime(2012, 10, 25, 4, 28, 4, 343312),
+        'gives_to': [
+            {'username': usernames[6260], 'is_suspicious': True, 'ctime': datetime(2012, 10, 25, 4, 28, 52, 338025)},
+            {'username': usernames[1173], 'is_suspicious': True, 'ctime': datetime(2012, 10, 25, 4, 29, 47, 464433)},
+            {'username': usernames[12007], 'is_suspicious': True, 'ctime': datetime(2012, 10, 25, 4, 30, 7, 334007)},
+            {'username': usernames[12690], 'is_suspicious': True, 'ctime': datetime(2012, 10, 25, 4, 31, 2, 947927)},
+            {'username': usernames[12303], 'is_suspicious': True, 'ctime': datetime(2012, 10, 25, 4, 31, 55, 265304)}
+        ],
+        'exchanges': [],
+        'transfers': [],
+        'balance': Decimal('0.00'),
+        'receives_from': []
+    },
+    {
+        'username': usernames[10107],
+        'ctime': datetime(2012, 10, 30, 4, 31, 19, 503832),
+        'gives_to': [],
+        'exchanges': [],
+        'transfers': [],
+        'balance': Decimal('0.00'),
+        'receives_from': [
+            {'username': usernames[14205], 'is_suspicious': True, 'ctime': datetime(2012, 10, 30, 4, 42, 13, 657391)}
+        ]
+    }
+]
 
-
-def suspicious():
-    for person in _suspicious:
-        person['gives_to'] = website.db.all("""
-
-            SELECT DISTINCT tippee AS username
-                 , is_suspicious
-                 , tips.ctime
-              FROM tips
-              JOIN participants p
-                ON tippee = p.username
-             WHERE tipper=%s
-               AND tips.ctime < '2012-11-05'::timestamptz
-          ORDER BY tips.ctime
-
-
-        """, (person['username'],), back_as=dict)
-        person['receives_from'] = website.db.all("""
-
-            SELECT DISTINCT tipper AS username
-                 , is_suspicious
-                 , tips.ctime
-              FROM tips
-              JOIN participants p
-                ON tipper = p.username
-             WHERE tippee=%s
-               AND tips.ctime < '2012-11-05'::timestamptz
-          ORDER BY tips.ctime
-
-        """, (person['username'],), back_as=dict)
-
-        person['transfers'] = website.db.all("""
-
-            SELECT tippee
-                 , tipper
-                 , amount
-                 , timestamp
-              FROM transfers
-             WHERE tipper=%s OR tippee=%s
-               AND timestamp < '2012-11-05'::timestamptz
-          ORDER BY timestamp
-
-
-        """, (person['username'], person['username']), \
-                                                 back_as=dict)
-
-        person['exchanges'] = website.db.all("""
-
-            SELECT amount, fee, timestamp
-              FROM exchanges
-             WHERE participant=%s
-               AND timestamp < '2012-11-05'::timestamptz
-          ORDER BY timestamp
-
-
-        """, (person['username'],), back_as=dict)
-
-        yield person
-suspicious = list(suspicious())
 names = set([person['username'] for person in suspicious])
 
 total_charged = 0
@@ -88,7 +461,7 @@ total_escrowed = 0
 total_legit = 0
 total_fraudulent = 0
 
-bystanders = defaultdict(lambda: [Decimal('0.00')])
+bystanders = defaultdict(lambda: Decimal('0.00'))
 
 earliest = None
 latest = None
@@ -98,7 +471,7 @@ for person in suspicious:
     for transfer in person['transfers']:
         if transfer['tippee'] not in names:
             total_legit += transfer['amount']
-            bystanders[transfer['tippee']][0] += transfer['amount']
+            bystanders[transfer['tippee']] += transfer['amount']
     for exchange in person['exchanges']:
         total_fraudulent += 1
         amount, fee = exchange['amount'], exchange['fee']
@@ -120,17 +493,8 @@ assert total_legit == total_charged - total_withdrawn - gratipay_fees - balanced
 
 nweeks = CARDINALS[((latest.date() - earliest.date()).days // 7) + 1]
 
-overall = website.db.one("""
-
-    SELECT sum(amount + fee), count(amount)
-      FROM exchanges
-     WHERE amount > 0
-       AND timestamp > %s
-       AND timestamp < '2012-11-01'::timestamptz
-
-""", (earliest.date(),), back_as=dict)
-overall_volume = overall['sum']
-overall_transactions = overall['count']
+overall_volume = Decimal('9516.09')
+overall_transactions = 612
 percentage_stolen = (total_charged / overall_volume) * 100
 percentage_fraudulent = (total_fraudulent / float(overall_transactions)) * 100
 
@@ -151,16 +515,6 @@ overall_transactions = pad(overall_transactions, w)[:-3] + ('&nbsp;' * 3)
 total_fraudulent = pad(total_fraudulent, w)[:-3] + ('&nbsp;' * 3)
 percentage_fraudulent = pad(percentage_fraudulent, w)
 
-
-bystander_balances = website.db.all("""
-
-    SELECT username, balance FROM participants WHERE username = ANY(%s)
-
-""", (list(bystanders),), back_as=dict)
-if bystander_balances is None:
-    bystander_balances = []
-for row in bystander_balances:
-    bystanders[row['username']].append(row['balance'])
 
 bystanders = sorted(bystanders.items(), key=lambda i: i[1], reverse=True)
 
@@ -249,8 +603,6 @@ title = "The Delpan Incident"
         font-size: 10pt;
         line-height: 13pt;
     }
-    .balance {
-    }
     .amount {
         text-align: center;
         padding-right: 6pt;
@@ -318,18 +670,16 @@ occured over a period of <b>{{ nweeks }} weeks</b>, from
 incident.</p>
 
 <table class="summary">
-    <tr><th></th><th>Received</th>{% if user.ADMIN %}<th>Balance</th>{% endif %}</tr>
-    {% for name, (amount, balance) in bystanders %}
+    <tr><th></th><th>Received</th></tr>
+    {% for name, amount in bystanders %}
     <tr>
         <th><a href="/{{ name }}/">{{ name }}</a></th>
         <td class="amount">${{ pad(amount, 9) }}</td>
-        {% if user.ADMIN %}<td class="amount">${{ pad(balance, 7) }}</td>{% endif %}
     </tr>
     {% endfor %}
     <tr>
         <td><b>Total</b></td>
         <td class="amount"><b>${{ total_legit }}</b></td>
-        {% if user.ADMIN %}<td></td>{% endif %}
     </tr>
 </table>
 </div>

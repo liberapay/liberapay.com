@@ -18,7 +18,6 @@ participant = user.participant
 request.allow('POST')
 
 out = {}
-redirect_to = base_url + '/bank-account-complete.html'
 
 if body.get('action') == 'delete':
     if participant.balanced_customer_href:

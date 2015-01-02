@@ -1,15 +1,34 @@
 from __future__ import print_function, unicode_literals
 
+from aspen import Response
+
 from gratipay.security.user import SESSION
 from gratipay.testing import Harness
+from gratipay.wireup import find_files
 
 
 class TestPages(Harness):
 
-    def test_homepage(self):
-        actual = self.client.GET('/').body
-        expected = "Weekly Payments"
-        assert expected in actual
+    def browse(self, **kw):
+        alice = self.make_participant('alice', claimed_time='now')
+        alice.insert_into_communities(True, 'Wonderland', 'wonderland')
+        i = len(self.client.www_root)
+        for spt in find_files(self.client.www_root, '*.spt'):
+            url = spt[i:-4].replace('/%username/', 'alice') \
+                           .replace('/for/%slug/', '/for/wonderland/') \
+                           .replace('/%platform/', '/github/') \
+                           .replace('/%user_name/', '/Gratipay/')
+            try:
+                r = self.client.GET(url, **kw)
+            except Response as r:
+                pass
+            assert r.code < 500
+
+    def test_anon_can_browse(self):
+        self.browse()
+
+    def test_new_participant_can_browse(self):
+        self.browse(auth_as='alice')
 
     def test_profile(self):
         self.make_participant('cheese', claimed_time='now')
@@ -68,9 +87,6 @@ class TestPages(Harness):
         response = self.client.GET('/about/four-oh-four.html', raise_immediately=False)
         assert "Page Not Found" in response.body
         assert "{%" not in response.body
-
-    def test_bank_account_complete(self):
-        assert self.client.GxT('/bank-account-complete.html').code == 404
 
     def test_for_contributors_redirects_to_inside_gratipay(self):
         loc = self.client.GxT('/for/contributors/').headers['Location']
