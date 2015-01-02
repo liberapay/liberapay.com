@@ -11,9 +11,10 @@ from gratipay import CARDINALS
 userids = (9, 1173, 1451, 1531, 1700, 2556, 3604, 4424, 4831, 5614, 6260, 6582, 7075, 7525, 7623,
            7875, 8000, 8152, 9302, 10107, 12007, 12303, 12578, 12690, 14205, 14500, 15303, 16136,
            16360, 16484, 16719, 16720, 16800, 16893, 17823)
+usernames = {x: str(x) for x in userids}  # dummy data for dev/test
 
 rows = website.db.all('select id, username from participants where id in %s', (userids,))
-usernames = {row.id: row.username for row in rows}
+usernames.update({row.id: row.username for row in rows})
 
 suspicious = [
     {
