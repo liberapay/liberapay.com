@@ -13,10 +13,14 @@
     }
 
     ul {
+        // hide whitespace between items
+        font-size: 0;
+        line-height: 0;
         li {
-            float: left;
+            display: inline-block;
             margin: 0;
             padding: 2px;
+            vertical-align: top;
             width: $people-column-width;
         }
     }
