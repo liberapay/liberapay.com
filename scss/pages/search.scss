@@ -3,22 +3,27 @@
 }
 
 .search-results {
-    li {
-        display: inline-block;
-        margin: 0;
-        a {
-            display: inline-block;
-            margin: 0.25em 0.5em 0.25em 0;
-        }
+    .mini-user {
+        margin: 2px;
     }
 }
 
 .search-result {
+    margin-bottom: 0.8em;
+    padding-left: 0.5em;
+    @include clearfix;
+    .avatar {
+        float: left;
+        margin: 0.5em 0;
+        max-height: 66px;
+        max-width: 66px;
+    }
+    .col-right {
+        margin-left: 74px;
+    }
     .excerpt {
-        border-left: 4px solid $brown;
         font-size: 80%;
         line-height: 130%;
-        margin: 0 0 1em 1em;
-        padding-left: 1em;
+        padding: 0.5em 0 0 1em;
     }
 }

@@ -15,7 +15,7 @@ if query:
 
     if action in (None, 'search_usernames'):
         results['usernames'] = website.db.all("""
-            SELECT username, similarity(username, %(q)s) AS rank
+            SELECT username, avatar_url, similarity(username, %(q)s) AS rank
               FROM participants
              WHERE username %% %(q)s
                AND claimed_time IS NOT NULL
@@ -34,6 +34,7 @@ if query:
                        FROM unnest(%(search_confs)s) search_conf
                  )
             SELECT username
+                 , avatar_url
                  , max(rank) AS max_rank
                  , json_agg((SELECT a FROM (
                        SELECT rank
@@ -70,6 +71,7 @@ results
 
 [---] text/html
 {% extends "templates/base.html" %}
+{% from 'templates/avatar-url.html' import avatar_url, avatar_img with context %}
 {% block content %}
 
     {% include "templates/search-box.html" %}
@@ -84,11 +86,16 @@ results
         <h2>{{ ngettext("Found a matching username",
                         "Found matching usernames",
                         len(usernames)) }}</h2>
-        <ul class="search-results usernames">
+        <div class="search-results">
         {% for result in usernames %}
-            <li><a href="/{{ result.username|e }}/">{{ result.username }}</a></li>
+            <a class="mini-user" href="/{{ result.username }}/">
+                <span class="inner">
+                    <span class="avatar" style="background-image: url('{{ avatar_url(result) }}')"></span>
+                    <span class="name">{{ result.username }}</span>
+                </span>
+            </a>
         {% endfor %}
-        </ul>
+        </div>
     </div>
     {% endif %}
 
@@ -120,13 +127,16 @@ results
                         "Found matching user statements",
                         len(statements)) }}</h2>
         {% for result in statements %}
-            <div class="search-result">
-                <a href="/{{ result.username|e }}/">{{ result.username }}</a>
-                {% if len(result.excerpts) == 1 %}
-                    <blockquote class="excerpt markdown-output">{{
-                        markdown.render(result.excerpts[0].excerpt)
-                    }}</blockquote>
-                {% endif %}
+            <div class="search-result" href="/{{ result.username|e }}/">
+                {{ avatar_img(result) }}
+                <div class="col-right">
+                    <a class="username" href="/{{ result.username|e }}/">{{ result.username }}</a>
+                    {% if len(result.excerpts) == 1 %}
+                        <blockquote class="excerpt markdown-output">{{
+                            markdown.render(result.excerpts[0].excerpt)
+                        }}</blockquote>
+                    {% endif %}
+                </div>
             </div>
         {% endfor %}
     </div>
@@ -136,4 +146,14 @@ results
         <p>{{ _("Sorry, we didn't find anything matching your query.") }}</p>
     {% endif %}
 
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function(){
+        $('div.search-result').css('cursor', 'pointer').click(function(){
+            window.location = $(this).attr('href');
+        });
+    });
+</script>
 {% endblock %}
