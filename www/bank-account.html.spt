@@ -80,7 +80,7 @@ title = _("Bank Account")
     </style>
     <div class="cc-ba">
         <form id="payout" autocomplete="off">
-            <div class="constrain-width group">
+            <div class="constrain-width clearfix">
 
                 {% if account and 'merchant' in account.roles %}
                 <h2>{{ _("Identity Verification") }} &nbsp; <span>&#x2714;</span></h2>

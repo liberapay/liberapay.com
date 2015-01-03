@@ -70,7 +70,7 @@ def with_others(obj):
         {% include "templates/profile-edit.html" %}
     </div>
 {% else %}
-    <div class="group">
+    <div class="clearfix">
         <div class="col0">
             {% if statement %}
             <h2>{{ _("Statement") }}</h2>

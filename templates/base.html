@@ -36,7 +36,7 @@
 <body id="{{ 'homepage' if homepage }}">
 
     <div id="wrapper">
-        <div id="header" class="group">
+        <div id="header" class="clearfix">
             <h1><a href="/"><img src="{{ website.asset('gratipay.svg') }}"
                                  alt="Gratipay" /></a></h1>
             {% set pages=[('/about/', _('About')), ('/explore/', _('Explore'))]%}
@@ -67,7 +67,7 @@
 
         <div id="main">
             <div id="sidebar">{% block sidebar %}{% endblock %}</div>
-            <div id="content" class="group">
+            <div id="content" class="clearfix">
                 {% block heading %}{% if title %}<h1>{{ title }}</h1>{% endif %}{% endblock %}
                 {% block subnav %}{% endblock %}
                 {% block content %}{% endblock %}

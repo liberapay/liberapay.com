@@ -1,11 +1,7 @@
 // Utility rules
 
-.group:after {
-    content: ".";
-    display: block;
-    height: 0;
-    clear: both;
-    visibility: hidden;
+.clearfix {
+    @include clearfix;
 }
 .hidden {
     display: none ! important;

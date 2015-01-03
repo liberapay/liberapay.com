@@ -177,7 +177,7 @@ for p in chain(new_participants, givers, receivers):
 <div id="leaderboard">
     <div class="people">
         <h2>{{ _("New Members") }}</h2>
-        <ul class="group">
+        <ul class="clearfix">
             {% for i, participant in enumerate(new_participants, start=1) %}
             <li{% if i > LUXURY %} class="luxury"{% endif %}>
                 <a href="/{{ participant.username }}/" class="mini-user"
@@ -196,7 +196,7 @@ for p in chain(new_participants, givers, receivers):
     </div>
     <div class="people">
         <h2>{{ _("Top Givers") }}</h2>
-        <ul class="group">
+        <ul class="clearfix">
             {% for i, giver in enumerate(givers, start=1) %}
             <li{% if i > LUXURY %} class="luxury"{% endif %}>
                 {% if giver.anonymous and not user.ADMIN %}
@@ -226,7 +226,7 @@ for p in chain(new_participants, givers, receivers):
     </div>
     <div class="people">
         <h2>{{ _("Top Receivers") }}</h2>
-        <ul class="group">
+        <ul class="clearfix">
             {% for i, receiver in enumerate(receivers, start=1) %}
             <li{% if i > LUXURY %} class="luxury"{% endif %}>
                 {% if receiver.anonymous and not user.ADMIN %}
