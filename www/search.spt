@@ -57,7 +57,7 @@ if query:
 
     if action in (None, 'search_communities'):
         results['communities'] = website.db.all("""
-            SELECT slug, name, similarity(name, %(q)s) AS rank
+            SELECT slug, name, nmembers, similarity(name, %(q)s) AS rank
               FROM communities
              WHERE name %% %(q)s
                AND nmembers > 0
@@ -97,9 +97,17 @@ results
         <h2>{{ ngettext("Found a matching community name",
                         "Found matching community names",
                         len(communities)) }}</h2>
-        <ul class="search-results communities">
+        <ul class="community memberships">
         {% for result in communities %}
-            <li><a href="/for/{{ result.slug|e }}/">{{ result.name }}</a></li>
+            <li>
+                <a href="/for/{{ result.slug|e }}/">{{ result.name }}</a>
+                <div class="fine">{{
+                    ngettext("{0}{n}{1} Member",
+                             "{0}{n}{1} Members",
+                             result.nmembers,
+                             "", "").lower()
+                }}</div>
+            </li>
         {% endfor %}
         </ul>
     </div>
