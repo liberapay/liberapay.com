@@ -50,6 +50,11 @@ class TestElsewhere(Harness):
         assert not user.participant.is_closed
         assert not Participant.from_username('alice').is_closed
 
+    def test_logging_in_doesnt_reset_goal(self):
+        self.make_participant('alice', claimed_time='now', elsewhere='twitter', goal=100)
+        alice = AccountElsewhere.from_user_name('twitter', 'alice').opt_in('alice')[0].participant
+        assert alice.goal == 100
+
     def test_hitting_confirm_plain_results_in_404(self):
         assert self.client.GxT('/on/confirm.html').code == 404
 
