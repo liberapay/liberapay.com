@@ -327,6 +327,7 @@ class Participant(Model, MixinTeam):
 
             """, (self.username,))
             self.set_attributes(claimed_time=claimed_time)
+        self.update_goal(None)
 
 
     # Closing
