@@ -146,6 +146,9 @@ results
         <p>{{ _("Sorry, we didn't find anything matching your query.") }}</p>
     {% endif %}
 
+    <h2>{{ _("Looking for a specific user of a social network?") }}</h2>
+    {% include "templates/jump.html" %}
+
 {% endblock %}
 
 {% block scripts %}

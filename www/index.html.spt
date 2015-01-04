@@ -38,15 +38,6 @@ from gratipay.security.user import SESSION_TIMEOUT
     </style>
 {% endblock %}
 
-{% block scripts %}
-<script>
-    $(document).ready(function () {
-        Gratipay.jump.init();
-    });
-</script>
-{{ super() }}
-{% endblock %}
-
 {% block sidebar %}
     <img src="{{ website.asset('gratipay.white.svg') }}" alt="Gratipay">
     <h1>{{ _("Weekly Payments") }}</h1>
@@ -126,19 +117,7 @@ from gratipay.security.user import SESSION_TIMEOUT
                     "<a href='/" + user.participant.username + "/'>", "</a>") }}</p>
         {% endif %}
 
-        <div class="jump">
-        <form id="jump">
-        {{ _("Jump to {0} from {1}",
-            "<input placeholder='username' autocomplete='off' autocorrect='off' autocapitalize='off' spellcheck='false' size='12'>",
-            """<select>
-                <option value='twitter'>Twitter</option>
-                <option value='facebook'>Facebook</option>
-                <option value='github'>GitHub</option>
-                <option value='bitbucket'>Bitbucket</option>
-            </select>""") }}
-            <button type="submit">{{ _("Go") }}</button>
-        </form>
-        </div>
+        {% include "templates/jump.html" %}
 
     {% endif %}
     </div>
