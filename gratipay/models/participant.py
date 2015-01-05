@@ -17,7 +17,7 @@ from urllib import quote
 import uuid
 
 import aspen
-from aspen.utils import typecheck, utcnow
+from aspen.utils import utcnow
 import balanced
 from postgres.orm import Model
 from psycopg2 import IntegrityError
@@ -760,7 +760,6 @@ class Participant(Model, MixinTeam):
         self.set_attributes(avatar_url=avatar_url)
 
     def update_goal(self, goal):
-        typecheck(goal, (Decimal, None))
         with self.db.get_cursor() as c:
             tmp = goal if goal is None else unicode(goal)
             add_event(c, 'participant', dict(id=self.id, action='set', values=dict(goal=tmp)))
