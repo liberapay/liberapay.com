@@ -36,7 +36,7 @@ subhead = _("Team Members")
         <td class="figure last_week"></td>
         <td class="figure this_week"></td>
         <td class="figure balance">
-          {{ team.balance + team.receiving }}
+          {{ team.balance + team.receiving - team.giving }}
         </td>
         <td class="figure percentage"></td>
       </tr>
