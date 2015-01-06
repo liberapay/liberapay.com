@@ -48,7 +48,6 @@ Gratipay.charts.make = function(series) {
     for (var i=0, len=maxes.length; i < len; i++) {
         scales.push(Math.ceil(maxes[i] / 100) * 100);
     }
-    console.log(maxes, scales);
 
 
     // Draw bars.
