@@ -102,7 +102,7 @@ def n_get_text(tell_sentry, request, loc, s, p, n, *a, **kw):
             s2 = msg.string[loc.catalog.plural_func(n)]
         except Exception as e:
             tell_sentry(e, request)
-    if s2 is None:
+    if not s2:
         loc = 'en'
         s2 = s if n == 1 else p
     kw['n'] = format_number(n, locale=loc) or n
