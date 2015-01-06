@@ -2,8 +2,6 @@
     This is the top of the Gratipay CSS tree.
 */
 
-@import "reset";
-
 @import "mixins/layout";
 @import "mixins/icons";
 @import "mixins/borders-backgrounds-shadows";
@@ -14,6 +12,7 @@
 // =============
 // http://bradfrost.com/blog/post/atomic-web-design/
 
+@import "atoms/reset";
 @import "atoms/variables";
 @import "atoms/buttons-knobs";
 @import "atoms/elements";
