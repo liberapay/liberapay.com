@@ -1,20 +1,21 @@
 [---]
 charts = website.db.all("""\
 
-    SELECT ts_start::date   AS date
-         , nparticipants    AS total_users
-         , nactive          AS active_users
+    SELECT ts_start::date           AS date
+         , ts_start::date           AS xTitle
+         , nparticipants::text      AS total_users
+         , nactive::text            AS active_users
          , ( SELECT sum(transfer_volume)
                FROM paydays
               WHERE ts_start <= p.ts_start
-                   )        AS total_gifts
-         , transfer_volume  AS weekly_gifts
-         , charge_volume    AS charges
-         , abs(ach_volume)  AS withdrawals
+                   )::text          AS total_gifts
+         , transfer_volume::text    AS weekly_gifts
+         , charge_volume::text      AS charges
+         , abs(ach_volume)::text    AS withdrawals
       FROM paydays p
-  ORDER BY ts_start DESC
+  ORDER BY ts_start ASC
 
 """)
 response.headers["Access-Control-Allow-Origin"] = "*"
 [---] application/json via json_dump
-charts[:-1]  # Don't show Gratipay #0.
+charts[1:]  # Don't show Gratipay #0.

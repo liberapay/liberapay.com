@@ -2,18 +2,12 @@ Gratipay.charts = {};
 
 
 Gratipay.charts.make = function(series) {
-    // Takes an array of time series data.
+    // Takes an array of data points.
 
     if (!series.length) {
         $('.chart-wrapper').remove();
         return;
     }
-
-
-    // Sort the series in increasing date order.
-    // =========================================
-
-    series.sort(function(a,b) { return a.date > b.date ? 1 : -1 });
 
 
     // Gather charts.
@@ -33,7 +27,8 @@ Gratipay.charts.make = function(series) {
         }
     }
 
-    var H = $('.chart').height();
+    var flagRoom = 20;
+    var H = $('.chart').height() - flagRoom;
     var nitems = series.length;
     var w = (1 / nitems * 100).toFixed(10) + '%';
 
@@ -53,37 +48,41 @@ Gratipay.charts.make = function(series) {
     for (var i=0, len=maxes.length; i < len; i++) {
         scales.push(Math.ceil(maxes[i] / 100) * 100);
     }
+    console.log(maxes, scales);
 
 
     // Draw bars.
     // ==========
 
-    function Bar(i, j, N, y, title) {
+    function Bar(i, j, N, y, xText, xTitle) {
+        var yParsed = parseFloat(y);
         var bar = $(document.createElement('div')).addClass('bar');
         var shaded = $(document.createElement('div')).addClass('shaded');
-        shaded.html('<span class="y-label">'+ y.toFixed() +'</span>');
+        shaded.html('<span class="y-label">'+ y +'</span>');
         bar.append(shaded);
 
         var xTick = $(document.createElement('span')).addClass('x-tick');
-        xTick.text(i+1).attr('title', title);
+        xTick.text(xText).attr('title', xTitle);
         bar.append(xTick);
 
         // Display a max flag (only once)
-        if (y === maxes[j]) {
+        if (yParsed === maxes[j]) {
             maxes[j] = undefined;
             bar.addClass('flagged');
         }
 
         bar.css('width', w);
-        shaded.css('height', y / N * H);
+        var h = yParsed / N * H;
+        if (yParsed > 0) h = Math.max(h, 1); // make sure only true 0 is 0 height
+        shaded.css('height', h)
         return bar;
     }
 
     for (var i=0, point; point = series[i]; i++) {
         for (var j=0, chart; chart = charts[j]; j++) {
-            chart.append(
-                Bar(i, j, scales[j], point[chart.varname], point.date)
-            );
+            var xText = point.xText || i+1;
+            var xTitle = point.xTitle || '';
+            chart.append(Bar(i, j, scales[j], point[chart.varname], xText, xTitle));
         }
     }
 

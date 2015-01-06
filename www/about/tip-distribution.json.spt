@@ -53,7 +53,8 @@ for amount in amounts:
 
 [---] application/json via json_dump
 [{ 'ntips': str(rec[0])
- , 'value': str(rec[1])
+ , 'sum': str(rec[1])
  , 'lo': str(rec[2][0])
  , 'hi': str(rec[2][1])
+ , 'xText': str(rec[2][1])
   } for rec in zip(ntips, value, bins)]

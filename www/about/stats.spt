@@ -179,107 +179,11 @@ out()
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ website.asset('d3.min.js') }}"></script>
 <script>
-d3.json("/about/tip-distribution.json", function(tips){
-
-    var min_tip = 0.01;
-    var max_tip = 1000;
-    var number_of_bars = 20;
-
-    var margin = {top: 10, right: 30, bottom: 50, left: 20},
-        width = 630 - margin.left - margin.right,
-        height = 250 - margin.top - margin.bottom,
-        bar_width = width/number_of_bars;
-
-    var x_scale = d3.scale.log()
-        .domain([min_tip, max_tip])
-        .range([0, width]);
-
-    var ticks = d3.range(number_of_bars+1)
-        .map(function(i){ return x_scale.invert(i*bar_width) });
-
-    function initBarPos(i){
-      return {x: i*bar_width, y: 0}
-    }
-    var tips_by_value = d3.range(number_of_bars).map(initBarPos);
-    var tips_by_number = d3.range(number_of_bars).map(initBarPos);
-
-    tips.map(function(tip){
-      var i = Math.floor(x_scale(tip)/width*number_of_bars);
-      tips_by_value[i].y += tip;
-      tips_by_number[i].y += 1;
+    $(document).ready(function() {
+        jQuery.get('/about/tip-distribution.json', Gratipay.charts.make);
     });
-
-    var formatCount = d3.format(",.0f");
-    var formatTick = function(x){ return d3.round(x, x < 10 ? 2 : 0) };
-
-    var create_histogram = function(element, data, ylabel){
-
-        var y = d3.scale.linear()
-            .domain([0, d3.max(data, function(d) { return d.y; })])
-            .range([height, 0]);
-
-        var xAxis = d3.svg.axis()
-            .scale(x_scale)
-            .tickValues(ticks)
-            .tickFormat(formatTick)
-            .orient("bottom");
-
-        var svg = d3.select(element).append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-          .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-        var bar = svg.selectAll(".bar")
-            .data(data)
-          .enter().append("g")
-            .attr("class", "bar")
-            .attr("transform", function(d) { return "translate(" + d.x + "," + y(d.y) + ")"; });
-
-        bar.append("rect")
-            .attr("x", 1)
-            .attr("width", bar_width - 1)
-            .attr("height", function(d) { return height - y(d.y); });
-
-        bar.append("text")
-            .attr("dy", ".75em")
-            .attr("y", -10)
-            .attr("x", bar_width / 2 - 1)
-            .attr("text-anchor", "middle")
-            .text(function(d) { return formatCount(d.y); });
-
-        svg.append("g")
-            .attr("class", "x axis")
-            .attr("transform", "translate(0," + height + ")")
-            .call(xAxis);
-
-        svg.append("text")
-            .attr("class", "x label")
-            .attr("text-anchor", "end")
-            .attr("x", width)
-            .attr("y", height + 30)
-            .text("tip amount in US dollars ($)");
-
-        svg.append("text")
-            .attr("class", "y label")
-            .attr("text-anchor", "end")
-            .attr("y", - 15)
-            .attr("dy", ".75em")
-            .attr("transform", "rotate(-90)")
-            .text(ylabel);
-
-    }
-
-    create_histogram("#distribution-by-number", tips_by_number, "number of tips");
-    create_histogram("#distribution-by-value", tips_by_value,
-      "total value of tips in US dollars ($)");
-
-  });
-
 </script>
-
 {{ super() }}
 {% endblock %}
 
@@ -318,14 +222,21 @@ d3.json("/about/tip-distribution.json", function(tips){
     </p>
     <p>On average, people who tip, tip ${{ "%.2f" % average_tip }} each to
     {{ other_people }}. </p>
-    </br>
-    </br>
-    <p>Here's how tip amounts are distributed by number of tips:</p>
 
-    <div id="distribution-by-number" class="distribution"></div>
+    <div class="two-column">
+        <div class="chart-wrapper">
+            <a name="number-by-amount"></a>
+            <h2>Number of Tips by Amount</h2>
+            <div class="chart" id="chart_ntips"></div>
+            <div class="x-axis">tip amount ($)</div>
+        </div>
 
-    <p>Here's how tip amounts are distributed by total value of the tips:</p>
-
-    <div id="distribution-by-value" class="distribution"></div>
+        <div class="chart-wrapper">
+            <a name="sum-by-amount"></a>
+            <h2>Sum of Tips by Amount ($)</h2>
+            <div class="chart" id="chart_sum"></div>
+            <div class="x-axis">tip amount ($)</div>
+        </div>
+    </div>
 
 {% endblock %}
