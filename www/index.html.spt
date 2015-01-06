@@ -72,14 +72,16 @@ from gratipay.security.user import SESSION_TIMEOUT
         {% endcall %}
         </div>
 
-        <div class="other">{{ _("Or sign in with:") }}
-        <span>
-        {% call auth_button('google', 'opt-in') %}Google{% endcall %}
-        {% call auth_button('facebook', 'opt-in') %}Facebook{% endcall %}
-        {% call auth_button('github', 'opt-in') %}GitHub{% endcall %}
-        {% call auth_button('bitbucket', 'opt-in') %}Bitbucket{% endcall %}
-        {% call auth_button('openstreetmap', 'opt-in') %}OpenStreetMap{% endcall %}
-        </span></div>
+        <div class="other">
+            <div class="or">{{ _("Or sign in with:") }}</div>
+            <span>
+            {% call auth_button('google', 'opt-in') %}Google{% endcall %}
+            {% call auth_button('facebook', 'opt-in') %}Facebook{% endcall %}
+            {% call auth_button('github', 'opt-in') %}GitHub{% endcall %}
+            {% call auth_button('bitbucket', 'opt-in') %}Bitbucket{% endcall %}
+            {% call auth_button('openstreetmap', 'opt-in') %}OpenStreetMap{% endcall %}
+            </span>
+        </div>
 
         <p class="other">{{
             _("By signing in, you indicate that you have read and agree to our {0}Terms and Conditions{1}.",

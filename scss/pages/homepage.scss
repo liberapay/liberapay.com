@@ -39,6 +39,9 @@
         span {
             white-space: nowrap;
         }
+        p {
+            color: transparentize($white, 0.3);
+        }
     }
 
     #content {
@@ -78,6 +81,11 @@
             font-size: 13px;
             line-height: 18px;
             max-width: 700px;
+            display: block;
+
+            .or {
+                font: normal 13px/16px $Ideal;
+            }
 
             button {
                 border: 1px solid transparentize($brown, 0.2);
