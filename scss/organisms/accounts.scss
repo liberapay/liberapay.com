@@ -1,0 +1,105 @@
+.accounts {
+    margin-bottom: 12pt;
+    width: 100%;
+    span.none {
+        font-style: italic;
+        color: $gray;
+    }
+    font: normal 16px $Ideal;
+
+    .account-action {
+        padding-right: 8px;
+        vertical-align: middle;
+        text-align: right;
+
+        .account-delete {
+            display: inline-block;
+        }
+    }
+
+    tr.has-avatar > .account-details {
+      vertical-align: bottom;
+    }
+
+    table {
+        width: 100%;
+    }
+    tr {
+        border-top: 1px solid $light-gray;
+
+        &:last-of-type {
+            border-bottom: 1px solid $light-gray;
+        }
+    }
+    td {
+        text-align: left;
+        vertical-align: middle;
+        line-height: 100%;
+
+        padding: 6pt 0;
+
+        &.account-type {
+            width: 49px;
+            margin-bottom: 3px;
+
+            // Width and height of the avatar.
+            // The images and whitespace surrounding them scale to based on this.
+            $AvatarSize: 36pt;
+
+            // Width and height of the platform icon. 70% of avatar size.
+            $PlatformImageSize: round($AvatarSize * 0.7);
+
+            // Right offset of the platform icon.
+            $PlatformImageOffset: round($PlatformImageSize * 0.6);
+
+            .sanity-preserving-wrapper {
+                position: relative;
+                margin-right: $PlatformImageOffset - 4pt;
+            }
+
+            img {
+                width: $AvatarSize;
+                height: $AvatarSize;
+            }
+
+            img.avatar ~ img.platform {
+                width: $PlatformImageSize;
+                height: $PlatformImageSize;
+                position: absolute;
+                bottom: -6pt;
+                right: -$PlatformImageOffset;
+                border-radius: 3em;
+                border: 2px solid #FFFFFF;
+                background-color: #D7E4DE;
+            }
+        }
+    }
+    div.account-type {
+        font-size: 12px;
+        color: $gray;
+        text-transform: uppercase;
+        &:first-child {
+            padding-bottom: 3px;
+        }
+        &:last-child {
+            padding-top: 3px;
+        }
+    }
+    .account-details {
+        padding: 6pt;
+        word-break: break-all;
+    }
+    .account-username, span.none {
+        line-height: 16pt;
+    }
+    .account-delete {
+        background-image: url("close-button.png");
+        background-size: cover;
+        width: 15px;
+        height: 15px;
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+}

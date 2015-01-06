@@ -2,44 +2,48 @@
     This is the top of the Gratipay CSS tree.
 */
 
-@import "reset";
-
-
-// Define some basic things that are used throughout the site.
-
 @import "mixins/layout";
 @import "mixins/icons";
 @import "mixins/borders-backgrounds-shadows";
 @import "mixins/animation";
 
-@import "variables";
-@import "utils";
-@import "buttons-knobs";
-@import "notifications";
-@import "modules";  // bigger than a knob, but used in multiple places
-@import "elements"; // specific HTML elements (body, p, etc.)
-@import "loading-indicators";
-@import "markdown";
-@import "chosen";
 
-@import "lib/dropdown";
-@import "lib/chart";
-@import "lib/upgrade";
-@import "lib/linear_gradient";
+// Atomic Design
+// =============
+// http://bradfrost.com/blog/post/atomic-web-design/
 
-@import "widgets/sign_in";
-@import "widgets/tipr";
-@import "widgets/leaderboard";
-@import "widgets/cta";
-@import "widgets/support_gratipay";
+@import "atoms/reset";
+@import "atoms/variables";
+@import "atoms/buttons-knobs";
+@import "atoms/elements";
+@import "atoms/utils";
 
+@import "molecules/chart";
+@import "molecules/chosen";
+@import "molecules/communities";
+@import "molecules/cta";
+@import "molecules/dropdown";
+@import "molecules/emails";
+@import "molecules/js-edit";
+@import "molecules/leaderboard";
+@import "molecules/linear_gradient";
+@import "molecules/loading-indicators";
+@import "molecules/markdown";
+@import "molecules/memberships";
+@import "molecules/payments-by";
+@import "molecules/sign_in";
+@import "molecules/support_gratipay";
+@import "molecules/tip-distribution";
+@import "molecules/tipr";
+@import "molecules/upgrade";
 
-// Page layout styles
+@import "organisms/accounts";
+@import "organisms/members";
+@import "organisms/mini-user";
+@import "organisms/notifications";
 
-@import "layout";
-
-
-// Styles specific to certain pages.
+@import "templates/layout";
+@import "templates/responsiveness";
 
 @import "pages/homepage";
 @import "pages/history";
@@ -48,8 +52,3 @@
 @import "pages/giving";
 @import "pages/cc-ba";
 @import "pages/on-confirm";
-
-
-// Group media queries together.
-
-@import "responsiveness";
