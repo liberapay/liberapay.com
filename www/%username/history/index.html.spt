@@ -5,8 +5,8 @@ from gratipay.utils.history import iter_payday_events
 
 participant = get_participant(request, restrict=True)
 events = iter_payday_events(website.db, participant)
-hero = _("History")
-title = "%s - %s" % (participant.username, hero)
+title = participant.username
+subhead = _("History")
 subpath = 'history/' if user.ADMIN else ''
 admin_override = user.ADMIN and (participant != user.participant or 'override' in qs)
 translated_status = { None:         ''
@@ -17,9 +17,9 @@ translated_status = { None:         ''
                      }
 
 if participant == user.participant:
-    JOINED = _("You joined {0}.", to_age(participant.claimed_time))
+    JOINED = _("You joined {0} ago.", to_age(participant.claimed_time))
 else:
-    JOINED = _("{0} joined {1}.", participant.username, to_age(participant.claimed_time))
+    JOINED = _("{0} joined {1} ago.", participant.username, to_age(participant.claimed_time))
 
 if participant == user.participant:
     BALANCE = _("Your balance is {0}.", format_currency(participant.balance, "USD"))
@@ -28,9 +28,9 @@ else:
 
 [-----------------------------------------------------------------------------]
 {% extends "templates/profile.html" %}
-{% block page %}
+{% block content %}
 
-<table id="history" class="centered">
+<table id="history">
     <tr><td colspan="8">
         <h2>{{ JOINED }}</h2>
     </td></tr>

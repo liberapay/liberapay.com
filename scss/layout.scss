@@ -1,593 +1,213 @@
-#header {
-    background: white;
-    padding: 10px 0;
-    position: relative;
+html, body, #wrapper { height: 100%; }
 
-    td {
-        text-align: center;
-        vertical-align: middle;
-    }
+body {
+    background: #434343 url("pennies.jpg") no-repeat;
+    background-size: 100% auto;
+    background-position: 0 -54px;
+    line-height: 100%;
+}
+
+#header {
+    background: transparentize($white, 0.1);
+    border-bottom: 1px solid $brown;
+
     h1 {
         line-height: 100%;
-    }
-    .logo {
-        padding-right: 18px;
-    }
-    .motto {
-        border-left: 2px solid $light-gray;
-        font: bold 10px $Ideal;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        padding-left: 18px;
-        text-align: left;
+        height: 78px;
+        overflow: hidden;
+        float: left;
         a {
-            color: inherit;
-        }
-    }
-    .sign-in, .you-are {
-        padding-top: 18px;
-        position: absolute;
-        top: 0;
-        right: 0;
-        font: normal 13px $Ideal;
-        text-align: right;
-    }
-    .you-are {
-        padding-top: 4px;
-        white-space: nowrap;
-
-        .quick-stats {
-            font: normal 11px/13px $Ideal;
-            a {
-                color: $brown;
-                &:hover {
-                    color: $green;
-                }
+            display: inline-block;
+            border-top: 4px solid transparent;
+            padding: 6px 10px 10px;
+            img {
+                display: inline-block;
+                width: 180px;
             }
-        }
-    }
-}
-
-.pennies {
-    background: url("pennies.jpg");
-    background-size: cover;
-    background-position: 0 50%;
-
-    h1 {
-        clear: both;
-    }
-}
-
-.support-gratipay {
-    a {
-        color: $brown ! important;
-        &:hover { color: $green ! important; }
-        text-decoration: underline;
-    }
-    display: table;
-    margin: 0 auto;
-    padding: 3px 10px;
-    border-radius: 0 0 3px 3px;
-    background: $gold;
-    text-align: left;
-    position: relative;
-    padding-right: 164px;
-
-    .cta {
-        padding-top: 4px;
-    }
-
-    .knobs {
-        position: absolute;
-        top: 3px;
-        right: 10px;
-
-        width: 133px;
-        button {
-            box-sizing: border-box;
-            width: 64px;
-            border: 1px solid $green;
-            background: $green;
-            color: $white;
-            margin: 0;
             &:hover {
-                border: 1px solid $brown;
-                background: $brown;
-                color: $white;
-            }
-            &.low {
-                margin: 0 5px 0 0;
-            }
-        }
-        a {
-            box-sizing: border-box;
-            font-weight: normal;
-            font-size: 11px;
-            display: inline-block;
-            width: 64px;
-            margin: 0;
-            padding: 0;
-            text-align: center;
-
-            &.other {
-                margin-right: 5px;
+                border-top-color: $gold;
+                background: transparentize($gold, 0.8);
             }
         }
     }
-
-    .help {
-        margin-top: 2px;
-        font-size: 13px;
-        font-style: italic;
-        a {
-            font-weight: normal;
-        }
-    }
-}
-
-#hero {
-    background: transparentize($brown, 0.1);
-
-    border: 1px solid $brown;
-    border-style: solid none;
-    color: $black;
-    padding-bottom: 100px;
-    text-align: center;
-    position: relative;
-    z-index: 1;
-
-    h1 {
-        font: bold 30px/40px $Ideal;
-        padding: 48px 0 24px;
-        color: $white;
-
-        em {
-            font-style: italic;
-            color: $gold;
-        }
-    }
-
-    p {
-        color: $white;
-        font-size: 18px;
-        line-height: 24px;
-    }
-
-    a {
-        color: $gold;
-    }
-}
-.box {
-    text-align: center;
-    background: white;
-    margin: -80px auto 0;
-    border: 5px solid rgba($brown, 0.4);
-    width: 480px;
-    max-width: 100%;
-    @include border-radius(3px);
-    position: relative;
-    z-index: 2;
-
-    h1 {
-        font: bold 22px $Ideal;
-        color: $brown;
-    }
-    h2 {
-        font: bold 14px $Ideal;
-        text-transform: uppercase;
-        color: $brown;
-    }
-
-    .help {
-        font: normal 14px/18px $Ideal;
-        color: $black;
-
-        &.with-padding {
-            padding: 10px;
-        }
-    }
-
-    .as-content {
-        padding: 20px;
-        &.left {
-            text-align: left;
-        }
-
-        h1 {
-            padding-bottom: 15px;
-        }
-
-        input {
-            padding: 2px;
-            width: 8em;
-        }
-    }
-
-    .is-suspicious-indicator {
-        display: block;
-        position: absolute;
-        top: 5px;
-        right: 5px;
-        font: normal 10px $Ideal;
-        text-transform: uppercase;
-        color: $black;
-    }
-
-    label.is-suspicious-knob {
-        display: block;
-        position: absolute;
-        top: 2px;
-        right: 5px;
-        font: normal 9px $Ideal;
-        text-transform: uppercase;
-        color: $black;
-
-        input {
-            position: relative;
-            top: 3px;
-        }
-    }
-
-    .ready {
-        padding-left: 15px;
-    }
-    .number {
-        font: bold 56px $Ideal;
-    }
-    .unit {
-        font: normal 12px $Ideal;
-    }
-
-    .on-community {
-        padding: 10px;
-    }
-
-    .on-elsewhere {
-        width: 100%;
-
-        .offset {
-            width: 138px;
-            height: 138px;
-        }
-
-        .picture {
-            width: 138px;
-            height: 138px;
-
-            img {
-                width: 128px;
-                height: 128px;
-
-                /* Without this we are inline-block and we get an extra 4px.
-                 * Is that due to line-height, maybe? */
-                display: block;
-                margin: 5px;
-            }
-        }
-    }
-
-    .on-profile {
-        width: 100%;
-
-        &.is-suspicious {
-            background: $light-red;
-        }
-        .picture {
-            width: 138px;
-            height: 138px;
-
-            img {
-                width: 128px;
-                height: 128px;
-
-                /* Without this we are inline-block and we get an extra 4px.
-                 * Is that due to line-height, maybe? */
-                display: block;
-                margin: 5px;
-            }
-        }
-        td {
-            text-align: left;
-        }
-        .pad-sign {
-            padding-left: 36px;
-        }
-        /*
-        form {
-            margin-bottom: 0;
-            margin-top: 12px;
-
-            input {
-                width: 30%;
-            }
-        }
-        */
-    }
-
     .nav {
-        padding: 5px;
+        line-height: 100%;
+        display: inline-block;
+        height: 78px;
+        float: left;
+        margin-left: 15px;
 
-        h2 {
-            color: $black;
-            font: bold 10px $Ideal;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            margin: 0 0 3px;
-        }
-
-        button.larger {
-            font-size: 14px;
-        }
-
-        &.level-1 {
-            border-top: 1px solid rgba($brown, 0.2);
-            background: $lighter-gray;
-
-            #payment-prompt {
-                display: none;
-                margin: 10px 0 5px;
-
-                &.needed {
-                    display: block;
-                }
-                &.really-needed {
-                    display: block;
-                }
-            }
-        }
-
-        &.level-2 {
-            border-top: 1px solid rgba($brown, 0.5);
-            background: $light-gray;
-        }
-
-        &.level-3 {
-            background: black;
-            text-align: center;
-            padding: 5px;
-            color: white;
-
-            a {
-                display: block;
-                color: white;
-            }
-        }
-    }
-
-    .on-confirm {
-        padding: 35px 0 0;
-
-        h2 {
-            font: bold 14px $Ideal;
-            text-transform: uppercase;
-            margin: 35px 0 8px;
-        }
-        .nav {
-            margin: 35px 0 0;
-            h2 {
-                margin: 8px 0;
-            }
-        }
-
-        .scenario {
-            margin: 0 auto;
-        }
-        .scenario td {
-            padding: 6pt;
-            width: 33%;
-        }
-        #nix {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            margin: -16px 0 0 -16px;
-        }
-        .participant {
-            position: relative;
-            width: 96pt;
-            display: inline-block;
-            border: 2px solid $brown;
-            border-radius: 6pt;
-            font: normal 12px $Ideal;
-            color: $brown;
-            background: white url("clipped-heart.png") bottom right no-repeat;
-            text-align: left;
-            overflow: hidden;
-        }
-        .participant-padding {
-            display: block;
-            padding: 6pt 0 6pt 9pt;
-        }
-        .participant img, img.platform-icon {
-            width: 12px;
-            height: 12px;
-        }
-        .participant b {
-            font-size: 11pt;
-        }
-        .participant td {
-            padding: 0;
-        }
-        .participant th {
-            font-weight: normal;
-        }
-        .other, .abandoned {
-            font: normal 10px $Ideal;
-        }
-        .abandoned {
-            text-align: center;
-            overflow: hidden;
-        }
-        .nix {
-            border-color: $light-brown;
-        }
-        .other b {
-            font-size: 9pt;
-        }
-    }
-
-
-    .on-form {
-        text-align: left;
-
-        .constrain-width {
-            margin: 0 auto 35px;
-            width: 300px;
-        }
-        form {
-            h2 {
-                font: bold 14px $Ideal;
-                text-transform: uppercase;
-                margin: 35px 0 8px;
-            }
-        }
-
-        .half {
-            width: 150px;
-        }
-        .full {
-            clear: both;
-            text-align: right;
-            padding-top: 5px;
-        }
-        #other {
-            font: normal 9pt/14pt Arial, sans-serif;
-            color: #00E;
-            cursor: pointer;
-            margin-right: 1em;
-        }
-        #other:hover {
-            text-decoration: underline;
-        }
-        .info{
-            font-size:10px;
-            padding-top:20px;
-        }
-        .left {
-            float: left;
-        }
-        .right {
-            float: left;
-        }
-        label {
-            display: block;
-            font: normal 10px $Ideal;
-            margin: 8px 0 0;
-            padding: 0;
-            text-transform: uppercase;
-        }
-        input[type="radio"] + label {
-            display: inline;
-            margin: 0;
-        }
-        input[type="radio"]:disabled + label {
-            color: #888;
-        }
-        input:not([type]), input[type="text"] {
-            font: normal 11pt/14pt $Ideal;
-            width: 292px;
-            margin: 0;
-            padding: 3px;
-            border: 1px solid $light-brown;
-            outline: none;
-        }
-        input.disabled {
-            color: $light-brown;
-        }
-        input[type="radio"] {
-            vertical-align: middle;
-        }
-
-        .half input {
-            width: 137px;
-        }
-        .right.half label,
-        .right.half input {
-            margin-left: 5px;
-        }
-        input:focus {
-            border-color: $green;
-        }
-        .float {
-            float: left;
-        }
-        .city          input { width: 137px; }
-        .state         input { width: 43px; }
-        .zip           input { width: 75px; }
-        .card_number   input { width: 292px; }
-        .cvv           input { width: 50px; }
-        input.expiration_month { width: 35px;}
-        input.expiration_year  { width: 35px; margin-left: 1px !important;}
-        .not-first label,
-        .not-first input {
-            margin-left: 10px;
-        }
-        .nav {
-            text-align: center;
-        }
-        #feedback {
-            .details li {
-                margin: 0;
-                padding: 0 0 0 2em;
-                text-indent: -2em;
-                font: normal 12px $Ideal;
-            }
-        }
-        select {
-            font-size: 12.15px; // hack for Chosen to get a 292px width
-        }
-    }
-}
-.payment-footer {
-    font: normal 12px $Ideal;
-    text-align: center;
-}
-
-#leaderboard {
-    @include clearfix;
-    width: leaderboard-width(3);
-    margin: 0 auto;
-}
-
-.people {
-    width: $people-column-width * 3;
-    margin-left: $people-column-gutter;
-    float: left;
-
-    &:first-child {
-        margin: 0;
-    }
-
-    ul {
         li {
             float: left;
             margin: 0;
-            padding: 2px;
-            width: $people-column-width;
+            a {
+                height: 78px;
+                font: normal 16px/16px $Ideal;
+                display: inline-block;
+                padding: 27px 25px 31px;
+                border-top: 4px solid transparent;
+                color: $black;
+                &.selected {
+                    border-top-color: $brown;
+                    background: transparentize($brown, 0.9);
+                    font-weight: bold;
+                }
+                &:hover {
+                    border-top-color: $gold;
+                    background: transparentize($gold, 0.8);
+                }
+            }
+        }
+    }
+    .you-are {
+        float: right;
+        white-space: nowrap;
+        .quick-stats {
+            font: normal 11px/13px $Mono;
+        }
+        li {
+            text-align: right;
+            float: left;
+            a#sign-out {
+                padding-right: 20px; // tweak to make icon placement look right
+                .icon {
+                    font: normal 20px/20px 'icomoon';
+                }
+            }
         }
     }
 }
 
-#page {
-    padding: 20px 0 0;
-    background: white;
+#main {
+    display: table;
+    height: 100%;
+    table-layout: fixed;
+    width: 100%;
+}
+
+#sidebar {
+    display: table-cell;
+    vertical-align: top;
+    width: 200px;
+    padding: 20px;
+    background: transparentize($brown, 0.1);
+    color: $white;
+
+    div.avatar {
+        margin-bottom: 20px;
+        &.is-suspicious {
+            background: transparentize($light-red, 0.1);
+        }
+        img {
+            width: 160px;
+            height: 160px;
+            @include border-radius(5px);
+        }
+    }
+
+    .nav {
+        margin: 0 -20px;
+        li {
+            margin: 0;
+        }
+        a {
+            padding: 5px 20px 5px 38px;
+            text-indent: -20px;
+            display: block;
+            color: $white;
+            font-weight: normal;
+            border-left: 2px solid transparent;
+            &.selected {
+                border-color: $gold;
+                background: transparentize($gold, 0.8);
+                color: $white;
+                font-weight: bold;
+            }
+            &:hover {
+                border-color: $gold;
+                background: transparentize($gold, 0.8);
+            }
+        }
+    }
+
+    .right {
+        text-align: right;
+    }
+
+    p, table {
+        line-height: 150%;
+    }
+
+    table {
+        width: 100%;
+        margin-bottom: 10px;
+        .left {
+            padding-right: 10px;
+        }
+    }
+
+    .is-suspicious-label {
+        text-align: right;
+        padding: 3px 0;
+        font-size: 10px;
+        text-transform: uppercase;
+        display: block;
+    }
+
+    .sign-in-to {
+        line-height: 125%;
+        margin-top: 50px;
+        .dropdown-toggle {
+            margin-bottom: 3px;
+        }
+    }
+}
+
+#content {
+    display: table-cell;
+    vertical-align: top;
+    font: 300 16px/27px $Chronicle;
+    padding: 0 40px 40px;
+    background: transparentize($white, 0.03);
 
     h1 {
-        color: $green;
-        font: normal 35px $Ideal;
-        margin: 35px 0 20px 0;
+        color: $black;
+        font: bold 28px/33px $Ideal;
+        margin: 40px 0 5px 0;
     }
+    .nav {
+        line-height: 100%;
+        display: block;
+        position: relative;
+        height: 24px;
+        margin-bottom: 20px;
 
-    h2, #members th {
-        color: $brown;
-        font: bold 14px $Ideal;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        margin: 35px 0 8px;
+        li {
+            display: inline;
+            margin: 0;
+            float: left;
+            padding: 0 5px;
+            &:first-child { padding-left: 0; }
+            &:last-child { padding-right: 0; }
+            a {
+                font: normal 14px/14px $Ideal;
+                height: 24px;
+                display: inline-block;
+                padding: 5px 0;
+                color: $gray;
+                &.selected {
+                    padding-bottom: 3px;
+                    border-bottom: 2px solid $green;
+                    font-weight: bold;
+                }
+                &:hover {
+                    background: transparentize($gold, 0.8);
+                }
+            }
+        }
     }
-
-    #leaderboard > .people > h2 {
-        font-size: 13px;
+    a:hover {
+        background: transparentize($gold, 0.8);
     }
 }
 
@@ -596,55 +216,46 @@
     margin: 0 auto;
 }
 
-.col0, .col1, .col2 {
+.col0, .col1 {
     width: 50%;
-    max-width: 100%;
 }
 
 .col0 {
-    margin: 0 auto;
+    min-width: 420px;
+}
+
+.row {
+    margin: 0 -20px;
+    @include clearfix;
 }
 
 .col1 {
     float: left;
-    padding-right: 3%;
+    padding: 0 20px;
 }
 
-.col2 {
-    float: right;
-    padding-left: 3%;
-}
-
-.more-container {
-    @include clearfix;
+.payment-footer {
+    font: normal 12px $Ideal;
     text-align: center;
-    padding-top: 20px;
 }
 
 #footer {
-    @include clearfix;
-    margin: 4em 0 1em;
-    border-top: 1px solid $black;
-    padding: 1em 0 0;
+    background: transparentize($white, 0.1);
+    border-top: 1px solid $brown;
+    padding: 10px 40px;
     text-align: right;
     font-size: 13px;
     line-height: 13px;
+    @include clearfix;
 
-    .social {
-        float: left;
-    }
-
-    ul {
-        float: right;
-        @include clearfix;
-    }
     li {
-        float: left;
+        display: inline-block;
         margin: 0;
 
-        &:before {
-            content: "|";
-            padding: 0 0.4em;
+        a {
+            display: inline-block;
+            margin: 0 0.3em;
+            padding: 0.25em 0.5em;
         }
 
         &:first-child:before {

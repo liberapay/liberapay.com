@@ -1,49 +1,19 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from aspen import json
 from aspen.http import status_strings
-
-try:
-    from pygments.lexers import PythonTracebackLexer
-    from pygments.formatters import HtmlFormatter
-    from StringIO import StringIO
-    pygmentize = True
-except ImportError:
-    from aspen.logging import log
-    import sys
-    exc = sys.exc_info()[1]
-    log("Cannot import pygments: " + str(exc))
-    pygmentize = False
 
 [----------------------------------------]
 
 style = ''
-msg = status_strings.get(response.code, 'Sorry').title()
+msg = status_strings.get(response.code, 'Unknown Error').title()
 err = response.body
-if website.show_tracebacks and pygmentize:
-    sio = StringIO()
-    formatter = HtmlFormatter()
-    tokens = PythonTracebackLexer().get_tokens(response.body)
-    formatter.format(tokens, sio)
-    sio.seek(0)
-    err = sio.read()
-    style = formatter.get_style_defs()
 
+title = str(response.code)
 [----------------------------------------] text/html
 {% extends "templates/base.html" %}
-
-{% block heading %}
-    <h1>{{ response.code }}</h1>
-{% endblock %}
-{% block box %}
-
-<div class="as-content">
-    <p style="margin: 3em 0;">{{ msg|e }}</p>
-    <pre>{{err|e}}</pre>
-</div>
-
-<div class="nav level-1"><a href="/"><button>Home</button></a></div>
-
+{% block content %}
+    <p>{{ msg|e }}</p>
+    <pre>{{ err|e }}</pre>
 {% endblock %}
 [----------------------------------------] application/json via json_dump
 { "error_code": response.code

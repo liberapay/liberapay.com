@@ -1,0 +1,78 @@
+from gratipay.utils import get_participant
+
+[-----------------------------------------------------------------------------]
+
+participant = get_participant(request, restrict=False)
+if not participant.accepts_tips:
+    request.redirect('../')
+elif participant.anonymous_receiving:
+    if user.ANON or (user.participant != participant and not user.ADMIN):
+        request.redirect('../')
+
+title = participant.username
+subhead = _("Receiving")
+
+[-----------------------------------------------------------------------------]
+{% extends "templates/profile.html" %}
+{% block content %}
+
+{% set receiving = format_currency(participant.receiving, "USD") %}
+{% if participant == user.participant %}
+<h2>{{ _( "You receive {0} per week", receiving) }}</h2>
+{% else %}
+<h2>{{ _("{0} receives {1} per week", participant.username, receiving) }}</h2>
+{% endif %}
+
+<div class="row">
+    <div class="chart-wrapper col1">
+        <a name="gifts"></a>
+        <h2>{{ _("Dollars Received Per Week") }}</h2>
+        <div class="chart" id="chart_receipts"></div>
+        <div class="x-axis">{{ _("weeks") }}</div>
+    </div>
+    <div class="chart-wrapper col1">
+        <a name="gifts"></a>
+        <h2>{{ _("Number of Patrons Per Week") }}</h2>
+        <div class="chart" id="chart_npatrons"></div>
+        <div class="x-axis">{{ _("weeks") }}</div>
+    </div>
+</div>
+
+{% if participant.receiving > 0 and
+      not user.ANON and (user.participant == participant or user.ADMIN) %}
+{% set tip_distribution = participant.get_tip_distribution()[0] %}
+<div class="row">
+<div class="col1">
+    <h2>{{ _("Tips Received, by Number of Tips") }}</h2>
+    {% include "templates/tip-distribution.html" %}
+</div>
+
+<div class="col1">
+    <h2>{{ _("Tips Received, by Dollar Amount") }}</h2>
+    <table class="tip-distribution">
+        {% for amount, ncontributors, summed, pcontributors, psummed in tip_distribution %}
+        <tr>
+            <td class="dollar-sign">$</td>
+            <td class="amount">{{ amount }}</td>
+            <td colspan="2"></td>
+            <td class="count">
+                <span class="green bar" style="width: {{ psummed * 240 }}pt"></span>
+                {{ "%5.1f" % (psummed * 100) }}%
+                <span class="number">(${{ summed }})</span>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+    jQuery.get('../charts.json', Gratipay.charts.make);
+});
+</script>
+{{ super() }}
+{% endblock %}

@@ -66,9 +66,9 @@ Gratipay.account.init = function() {
             , success: function(data) {
                 Gratipay.notification("Your account type has been changed.", 'success');
                 if (data.number === 'plural') {
-                    $("#members-button").removeClass("hidden");
+                    $("li.members").removeClass("hidden");
                 } else {
-                    $("#members-button").addClass("hidden");
+                    $("li.members").addClass("hidden");
                 }
             }
             , error: function(r) {

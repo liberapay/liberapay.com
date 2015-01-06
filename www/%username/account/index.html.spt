@@ -5,10 +5,8 @@ from cgi import escape
 [-----------------------------------------------------------------------------]
 
 participant = get_participant(request, restrict=True)
-hero = _("Account")
-title = participant.username      # used in the title tag
-username = participant.username   # used in footer shared with on/$platform/
-                                  # pages
+title = participant.username
+subhead = _("Account")
 
 emails = participant.get_emails()
 
@@ -20,7 +18,7 @@ emails = participant.get_emails()
 {{ super() }}
 {% endblock %}
 
-{% block page %}
+{% block content %}
 <div id="profile-edit">
     <div class="col0">
 

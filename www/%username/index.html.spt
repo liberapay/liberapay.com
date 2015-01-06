@@ -11,14 +11,7 @@ LONG_STATEMENT = 256
 
 participant = get_participant(request, restrict=False)
 tip_or_pledge = "tip"
-hero = _("Profile")
-title = participant.username      # used in the title tag
-username = participant.username   # used in footer shared with on/$platform/
-                                  # pages
-show_charts = True
-if participant.anonymous_receiving:
-    if user.ANON or user.participant.username != username and not user.ADMIN:
-        show_charts = False
+title = username = participant.username
 
 accounts = participant.get_accounts_elsewhere()
 
@@ -71,48 +64,22 @@ def with_others(obj):
     <meta name="og:image" content="{{ website.asset('gratipay.opengraph.png') }}" />
 {% endblock %}
 
-{% block scripts %}
-{% if show_charts %}
-<script>
-$(document).ready(function() {
-    jQuery.get('./charts.json', Gratipay.charts.make);
-});
-</script>
-{% endif %}
-
-{% if user.participant == participant %}
-<script>$(document).ready(Gratipay.profile.init);</script>
-{% endif %}
-
-{{ super() }}
-{% endblock %}
-
-{% block page %}
-
+{% block content %}
 {% if user.participant == participant %}
     <div id="profile-edit">
         {% include "templates/profile-edit.html" %}
     </div>
 {% else %}
-    <div class="group">
-        {% if statement %}
-        <div class="{% if long_statement %}col1{% else %}col0{% endif %}">
+    <div class="clearfix">
+        <div class="col0">
+            {% if statement %}
             <h2>{{ _("Statement") }}</h2>
             <div class="statement markdown-output">
                 {{ markdown.render(statement) }}
             </div>
-            {% include "templates/team-listing.html" %}
-            {% include "templates/community-listing.html" %}
-        </div>
-        <div class="{% if long_statement %}col2{% else %}col0{% endif %}">
-        {% else %}
-        <div class="col0">
-            {% include "templates/team-listing.html" %}
-            {% include "templates/community-listing.html" %}
-        {% endif %}
-
-            <h2>{{ _("Funding Goal") }}</h2>
+            {% endif %}
             <div class="goal">
+                <h2>{{ _('Funding Goal') }}</h2>
                 {% if participant.goal == None %}
                 {{ GRATEFUL }}
                 {% elif participant.goal == 0 %}
@@ -124,10 +91,17 @@ $(document).ready(function() {
                 {% endif %}
             </div>
 
-            {% include "templates/charts-for-user.html" %}
+            {% include "templates/team-listing.html" %}
+            {% include "templates/community-listing.html" %}
             {% include "templates/connected-accounts.html" %}
         </div>
     </div>
 {% endif %}
+{% endblock %}
 
+{% block scripts %}
+{% if user.participant == participant %}
+<script>$(document).ready(Gratipay.profile.init);</script>
+{% endif %}
+{{ super() }}
 {% endblock %}

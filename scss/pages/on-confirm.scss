@@ -1,0 +1,33 @@
+.on-confirm {
+    padding: 1.5em 0 0;
+
+    .scenario > div {
+        width: 96pt;
+        display: inline-block;
+        vertical-align: middle;
+        color: $brown;
+        text-align: left;
+        overflow: hidden;
+        padding: 6pt 0 6pt 9pt;
+        margin: 6pt;
+    }
+    .participant {
+        background: white url("clipped-heart.png") bottom right no-repeat;
+        border: 2px solid $brown;
+        border-radius: 6pt;
+        font: normal 12px $Ideal;
+    }
+    .participant img, img.platform-icon {
+        width: 12px;
+        height: 12px;
+    }
+    .other, .abandoned {
+        font: normal 10px $Ideal;
+    }
+    .participant b {
+        font-size: 125%;
+    }
+    .nix {
+        border-color: $light-brown;
+    }
+}

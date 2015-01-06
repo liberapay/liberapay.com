@@ -48,10 +48,11 @@ def get_participant(request, restrict=True, resolve_unclaimed=True):
     user = request.context['user']
     slug = request.line.uri.path['username']
     qs = request.line.uri.querystring
+    _ = request.context['_']
 
     if restrict:
         if user.ANON:
-            raise Response(403)
+            raise Response(403, _("You need to log in to access this page."))
 
     from gratipay.models.participant import Participant  # avoid circular import
     participant = Participant.from_username(slug)
@@ -78,7 +79,7 @@ def get_participant(request, restrict=True, resolve_unclaimed=True):
     if restrict:
         if participant != user.participant:
             if not user.ADMIN:
-                raise Response(403)
+                raise Response(403, _("You are not authorized to access this page."))
 
     return participant
 

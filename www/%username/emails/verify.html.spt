@@ -30,12 +30,7 @@ if participant == user.participant:
 {{ super() }}
 {% endblock %}
 
-{% block heading %}
-    <h1>Verify Email</h1>
-{% endblock %}
-
-{% block box %}
-    <div class="as-content">
+{% block content %}
     {% if user.ANON %}
         <h1>{{ _("Please Sign In") }}</h1>
 
@@ -82,5 +77,4 @@ if participant == user.participant:
         {% endif %}
         <a href="/{{ participant.username }}/account/#emails">{{ _("View your email addresses") }}.</a>
     {% endif %}
-    </div>
 {% endblock %}

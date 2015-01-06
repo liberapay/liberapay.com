@@ -33,9 +33,8 @@ from gratipay.security.user import SESSION_TIMEOUT
     <meta name="og:title" content="Gratipay" />
     <meta name="og:image" content="{{ website.asset('gratipay.opengraph.png') }}" />
     <style>
-        .pennies, .container { display: none; }
+        #header, #footer { display: none; }
         #upgrade_browser .container { display: block; }
-        html, body { height: 100%; min-height: 100%; }
     </style>
 {% endblock %}
 
@@ -48,21 +47,19 @@ from gratipay.security.user import SESSION_TIMEOUT
 {{ super() }}
 {% endblock %}
 
+{% block sidebar %}
+    <img src="{{ website.asset('gratipay.white.svg') }}" alt="Gratipay">
+    <h1>{{ _("Weekly Payments") }}</h1>
+    <p>{{ _("Motivated by Gratitude") }}</p>
+
+    <p>{{ _("Sustainably crowdfund your business, personal projects, or charity, with {0}no extra fees{1}.",
+        "<span>", "</span>") }}</p>
+
+    <p><a href="/about/">{{ _("Learn more") }}</a></p>
+{% endblock %}
+
 {% block heading %}{% endblock %}
-{% block whole_page %}
-<div class="homepage">
-    <div class="pitch">
-        <img src="{{ website.asset('gratipay.white.svg') }}" alt="Gratipay">
-        <h1>{{ _("Weekly Payments") }}</h1>
-        <p>{{ _("Motivated by Gratitude") }}</p>
-
-        <p>{{ _("Sustainably crowdfund your business, personal projects, or charity, with {0}no extra fees{1}.",
-            "<span>", "</span>") }}</p>
-
-        <p><a href="/about/">{{ _("Learn more") }}</a></p>
-
-    </div>
-    
+{% block content %}
     {% if user.ANON %}
     <div class="action">
         {{ _("{0}Sign In{1} {2}to Accept Weekly Payments{3}",
@@ -75,14 +72,16 @@ from gratipay.security.user import SESSION_TIMEOUT
         {% endcall %}
         </div>
 
-        <div class="other">{{ _("Or sign in with:") }}
-        <span>
-        {% call auth_button('google', 'opt-in') %}Google{% endcall %}
-        {% call auth_button('facebook', 'opt-in') %}Facebook{% endcall %}
-        {% call auth_button('github', 'opt-in') %}GitHub{% endcall %}
-        {% call auth_button('bitbucket', 'opt-in') %}Bitbucket{% endcall %}
-        {% call auth_button('openstreetmap', 'opt-in') %}OpenStreetMap{% endcall %}
-        </span></div>
+        <div class="other">
+            <div class="or">{{ _("Or sign in with:") }}</div>
+            <span>
+            {% call auth_button('google', 'opt-in') %}Google{% endcall %}
+            {% call auth_button('facebook', 'opt-in') %}Facebook{% endcall %}
+            {% call auth_button('github', 'opt-in') %}GitHub{% endcall %}
+            {% call auth_button('bitbucket', 'opt-in') %}Bitbucket{% endcall %}
+            {% call auth_button('openstreetmap', 'opt-in') %}OpenStreetMap{% endcall %}
+            </span>
+        </div>
 
         <p class="other">{{
             _("By signing in, you indicate that you have read and agree to our {0}Terms and Conditions{1}.",
@@ -126,8 +125,6 @@ from gratipay.security.user import SESSION_TIMEOUT
             <p>{{ _("Go to {0}your profile{1}.",
                     "<a href='/" + user.participant.username + "/'>", "</a>") }}</p>
         {% endif %}
-
-        {% include "templates/support-gratipay.html" %}
 
         <div class="jump">
         <form id="jump">

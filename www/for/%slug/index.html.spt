@@ -1,6 +1,7 @@
 from itertools import chain
 
 from aspen import Response
+from aspen.utils import utcnow
 from gratipay.models.community import name_pattern, slugize, Community
 from gratipay.utils import excerpt_intro, format_money
 from gratipay.utils.query_cache import QueryCache
@@ -32,11 +33,12 @@ if community is None:
         name = _slug
         nmembers = 0
         check_membership = lambda a, b: False
+        ctime = utcnow()
 
     community = StubCommunity()
 
 # Set the page title based on the communities name.
-title = _("{0} Community", community.name)
+title = community.name
 
 
 # Run queries for listings.
@@ -128,9 +130,139 @@ for p in chain(new_participants, givers, receivers):
 
 {% extends "templates/base.html" %}
 
-{% block heading %}
-    <h1>{{ _("Community") }}</h1>
-    <p>{{ _("Browse {0}All Communities{1}", "<a href='/for/'>", "</a>") }}</p>
+{% block sidebar %}
+
+    <div class="avatar">
+        <img src="{{ website.asset('default-avatar-community.svg') }}" />
+    </div>
+
+    <div class="mono">
+        <table>
+            <tr>
+                <td class="left">{{ ngettext("Member", "Members", community.nmembers) }}</td>
+                <td class="right">{{ format_number(community.nmembers) }}</td>
+            </tr>
+        </table>
+        {% if community.nmembers > 0 %}
+        <p>{{ _('Organized {0} ago.', to_age(community.ctime, add_direction=False)) }}</p>
+        {% endif %}
+    </div>
+
+
+    {% if user.ANON %}
+        <div class="sign-in-to">
+            {% include "templates/sign-in-using.html" %}
+            {{ _("{0} to join the {1} community on Gratipay.", "", community.name) }}
+        </div>
+    {% else %}
+        <div class="cta">
+            {% set is_member = community.check_membership(user.participant) %}
+            <button class="join-leave {{ 'leave' if is_member else 'join' }}"
+                    data-name="{{ community.name }}"
+                    data-is-member="{{ 'true' if is_member else 'false' }}">
+                <span>{{ _("Leave") if is_member else _("Join") }}</span>
+            </button>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+{% if community.nmembers == 0 %}
+    <h2>{{ _("You're the first one here!") }}</h2>
+    <p>{{ _("Bring the {0} community to Gratipay to find like-minded people to give to.",
+            community.name) }}</p>
+{% else %}
+
+<div id="leaderboard">
+    <div class="people">
+        <h2>{{ _("New Members") }}</h2>
+        <ul class="clearfix">
+            {% for i, participant in enumerate(new_participants, start=1) %}
+            <li{% if i > LUXURY %} class="luxury"{% endif %}>
+                <a href="/{{ participant.username }}/" class="mini-user"
+                   data-tip="{{ excerpt_intro(participant.statement)|e }}">
+                    <span class="inner">
+                        <span class="avatar"
+                            style="background-image: url('{{ avatar_url(participant) }}')">
+                        </span>
+                        <span class="age">{{ to_age(participant.claimed_time, add_direction=True) }}</span>
+                        <span class="name">{{ participant.username }}</span>
+                    </span>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="people">
+        <h2>{{ _("Top Givers") }}</h2>
+        <ul class="clearfix">
+            {% for i, giver in enumerate(givers, start=1) %}
+            <li{% if i > LUXURY %} class="luxury"{% endif %}>
+                {% if giver.anonymous and not user.ADMIN %}
+                <span class="mini-user">
+                    <span class="inner">
+                        <span class="avatar">
+                        </span>
+                        <span class="money">${{ format_money(giver.amount) }}</span>
+                        <span class="name">{{ _("Anonymous") }}</span>
+                    </span>
+                </span>
+                {% else %}
+                <a href="/{{ giver.username }}/"
+                   class="mini-user{{ ' anonymous' if giver.anonymous else '' }}"
+                   data-tip="{{ excerpt_intro(giver.statement)|e }}">
+                    <span class="inner">
+                        <span class="avatar" style="background-image: url('{{ avatar_url(giver) }}')">
+                        </span>
+                        <span class="money">${{ format_money(giver.amount) }}</span>
+                        <span class="name">{{ giver.username }}</span>
+                    </span>
+                </a>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="people">
+        <h2>{{ _("Top Receivers") }}</h2>
+        <ul class="clearfix">
+            {% for i, receiver in enumerate(receivers, start=1) %}
+            <li{% if i > LUXURY %} class="luxury"{% endif %}>
+                {% if receiver.anonymous and not user.ADMIN %}
+                <span class="mini-user">
+                    <span class="inner">
+                        <span class="avatar">
+                        </span>
+                        <span class="money">${{ format_money(receiver.amount) }}</span>
+                        <span class="name">{{ _("Anonymous") }}</span>
+                    </span>
+                </span>
+                {% else %}
+                <a href="/{{ receiver.username }}/"
+                   class="mini-user{{ ' anonymous' if receiver.anonymous else '' }}"
+                   data-tip="{{ excerpt_intro(receiver.statement)|e }}">
+                    <span class="inner">
+                        <span class="avatar"
+                            style="background-image: url('{{ avatar_url(receiver) }}')">
+                        </span>
+                        <span class="money">${{ format_money(receiver.amount) }}</span>
+                        <span class="name">{{ receiver.username }}</span>
+                    </span>
+                </a>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+</div>
+
+<div class="more-container">
+    <a href="/for/{{ community.slug }}/?limit={{ limit + 12 }}"><button class="selected">{{ _("More") }}</button></a>
+</div>
+
+{% endif %}
 {% endblock %}
 
 {% block scripts %}
@@ -154,134 +286,4 @@ $(document).ready(function() {
 </script>
 
 {{ super() }}
-{% endblock %}
-
-{% block box %}
-<div class="on-community">
-    <h2 class="pad-sign">{{ community.name }}</h2>
-    <div class="unit pad-sign">
-        {{ ngettext("{0}{n}{1} Member", "{0}{n}{1} Members", community.nmembers, "<div class='number'>", "</div>").lower() }}
-    </div>
-</div>
-<div class="nav level-1">
-    {% if user.ANON %}
-    <div class="help with-padding">
-        {% include "templates/sign-in-using.html" %}
-        {{ _("{0} to join the {1} community on Gratipay.", "", community.name) }}
-    </div>
-    {% else %}
-    {% set is_member = community.check_membership(user.participant) %}
-    <button class="join-leave"
-            data-name="{{ community.name }}"
-            data-is-member="{{ 'true' if is_member else 'false' }}">
-        <span>{{ _("Leave") if is_member else _("Join") }}</span>
-    </button>
-    {% endif %}
-</div>
-
-{% endblock %}
-{% block page %}
-
-{% if community.nmembers == 0 %}
-
-<div class="col0">
-
-    <h2>{{ _("You're the first one here!") }}</h2>
-
-    <p>{{ _("Bring the {0} community to Gratipay to find like-minded people to give to.", community.name) }}</p>
-
-</div>
-
-{% else %}
-
-<div id="leaderboard">
-
-    <div class="people">
-        <h2>{{ _("New Members") }}</h2>
-        <ul class="group">
-            {% for i, participant in enumerate(new_participants, start=1) %}
-            <li{% if i > LUXURY %} class="luxury"{% endif %}>
-                <a href="/{{ participant.username }}/" class="mini-user tip"
-                   data-tip="{{ excerpt_intro(participant.statement)|e }}">
-                    <span class="inner">
-                        <span class="avatar"
-                            style="background-image: url('{{ avatar_url(participant) }}')">
-                        </span>
-                        <span class="age">{{ to_age(participant.claimed_time) }}</span>
-                        <span class="name">{{ participant.username }}</span>
-                    </span>
-                </a>
-            </li>
-            {% endfor %}
-        </ul>
-    </div>
-    <div class="people">
-        <h2>{{ _("Top Givers") }}</h2>
-        <ul class="group">
-            {% for i, giver in enumerate(givers, start=1) %}
-            <li{% if i > LUXURY %} class="luxury"{% endif %}>
-                {% if giver.anonymous and not user.ADMIN %}
-                <span class="mini-user">
-                    <span class="inner">
-                        <span class="avatar">
-                        </span>
-                        <span class="money">${{ format_money(giver.amount) }}</span>
-                        <span class="name">{{ _("Anonymous") }}</span>
-                    </span>
-                </span>
-                {% else %}
-                <a href="/{{ giver.username }}/"
-                   class="mini-user{{ ' anonymous' if giver.anonymous else '' }} tip"
-                   data-tip="{{ excerpt_intro(giver.statement) }}">
-                    <span class="inner">
-                        <span class="avatar" style="background-image: url('{{ avatar_url(giver) }}')">
-                        </span>
-                        <span class="money">${{ format_money(giver.amount) }}</span>
-                        <span class="name">{{ giver.username }}</span>
-                    </span>
-                </a>
-                {% endif %}
-            </li>
-            {% endfor %}
-        </ul>
-    </div>
-    <div class="people">
-        <h2>{{ _("Top Receivers") }}</h2>
-        <ul class="group">
-            {% for i, receiver in enumerate(receivers, start=1) %}
-            <li{% if i > LUXURY %} class="luxury"{% endif %}>
-                {% if receiver.anonymous and not user.ADMIN %}
-                <span class="mini-user">
-                    <span class="inner">
-                        <span class="avatar">
-                        </span>
-                        <span class="money">${{ format_money(receiver.amount) }}</span>
-                        <span class="name">{{ _("Anonymous") }}</span>
-                    </span>
-                </span>
-                {% else %}
-                <a href="/{{ receiver.username }}/"
-                   class="mini-user{{ ' anonymous' if receiver.anonymous else '' }} tip"
-                   data-tip="{{ excerpt_intro(receiver.statement) }}">
-                    <span class="inner">
-                        <span class="avatar"
-                            style="background-image: url('{{ avatar_url(receiver) }}')">
-                        </span>
-                        <span class="money">${{ format_money(receiver.amount) }}</span>
-                        <span class="name">{{ receiver.username }}</span>
-                    </span>
-                </a>
-                {% endif %}
-            </li>
-            {% endfor %}
-        </ul>
-    </div>
-
-</div>
-
-<div class="more-container">
-    <a href="/for/{{ community.slug }}/?limit={{ limit + 12 }}"><button class="selected">{{ _("More") }}</button></a>
-</div>
-
-{% endif %}
 {% endblock %}

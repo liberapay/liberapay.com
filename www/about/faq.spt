@@ -3,9 +3,9 @@ title = "Frequently Asked Questions"
 [---]
 [---] text/html
 {% extends "templates/about.html" %}
-{% block page %}
-<div class="col1">
-    <dl>
+{% block content %}
+<div class="row">
+    <dl class="col1">
 
         <dt id="what-gratipay">What is Gratipay?</dt>
 
@@ -102,9 +102,7 @@ title = "Frequently Asked Questions"
 
         <dd>No.</dd>
     </dl>
-</div>
-<div class="col2">
-    <dl>
+    <dl class="col1">
 
         <dt id="why-did-my-receipts-decrease">Why did my receipts decrease?</dt>
 

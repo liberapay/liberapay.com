@@ -7,7 +7,10 @@ Gratipay.profile.init = function() {
 
     $('textarea').focus();
 
-    Gratipay.forms.jsEdit({root: $('.statement.js-edit')});
+    Gratipay.forms.jsEdit({
+        confirmBeforeUnload: true,
+        root: $('.statement.js-edit'),
+    });
 
     $('.statement textarea').on('change keyup paste', function(){
         var changed = $(this).val() !== $(this).data('original');

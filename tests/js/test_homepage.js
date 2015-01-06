@@ -4,7 +4,7 @@ describe('homepage', function() {
     it('should render copy correctly', function(done) {
         browser
             .url('http://localhost:8537')
-            .getText('.pitch h1', function(err, text) {
+            .getText('#sidebar h1', function(err, text) {
                 assert.equal(text, 'Weekly Payments');
             })
             .getText('.action h1', function(err, text) {

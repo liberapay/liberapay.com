@@ -9,39 +9,26 @@
     })</script>
 {% endblock %}
 
-{% block heading %}<h1>{{ hero }}</h1>{% endblock %}
-
-{% block nav %}
+{% block subnav %}
 {% set current_page = path.raw.split('/')[2] %}
-{% if user.participant == participant or user.ADMIN %}
-<div class="nav level-2">
-    <h2>{{ _("Navigation") }}</h2>
-    {% set pages = [
-        ('/', _('Profile')),
-        ('/giving/', _('Giving')),
-        ('/history/', _('History')),
-        ('/widgets/', _('Widgets')),
-        ('/account/', _('Account')),
-    ] %}
-    {% for slug, name in pages %}
-    <a href="/{{ participant.username }}{{ slug }}"><button{% if slug.strip('/') == current_page %} class="selected"{% endif %}>{{ _(name) }}</button></a>
+{% set show_members = participant.show_as_team(user) %}
+{% set show_receiving = (user.participant == participant or not participant.anonymous_receiving) and participant.accepts_tips %}
+{% set show_profile = show_members or show_receiving %}
+{% set pages = [ ('/',           _('Profile'),      True,           show_profile)
+               , ('/receiving/', _('Receiving'),    True,           show_receiving)
+               , ('/members/',   _('Members'),      show_members,   show_members)
+               , ('/giving/',    _('Giving'),       True,           False)
+               , ('/history/',   _('History'),      True,           False)
+               , ('/widgets/',   _('Widgets'),      True,           False)
+               , ('/account/',   _('Account'),      True,           False)
+               , ('/events/',    _('Events'),       False,          False)
+                ] %}
+{% set pages = filter_profile_subnav(user, participant, pages) %}
+{% if pages %}
+<ul class="nav">
+    {% for slug, name, show_them, show_others in pages %}
+    <li{% if slug == '/members/' %} class="members{% if not participant.show_as_team(user) %} hidden{% endif %}"{% endif %}><a href="/{{ participant.username }}{{ slug }}"{% if slug.strip('/') == current_page %} class="selected"{% endif %}>{{ _(name) }}</a></li>
     {% endfor %}
-
-    <a href="/{{ participant.username }}/members/" id="members-button"
-    {% if not participant.show_as_team(user) %}
-        class="hidden"
-    {% endif %}
-    ><button{% if 'members' == current_page %} class="selected"{% endif %}>{{ _('Members') }}</button></a>
-
-    {% if user.ADMIN %}
-    <a href="/{{ participant.username }}/events/"><button{% if 'events' == current_page %} class="selected"{% endif %}>Events</button></a>
-    {% endif %}
-</div>
-{% elif participant.show_as_team(user) %}
-<div class="nav level-2">
-    <h2>{{ _("Navigation") }}</h2>
-    <a href="/{{ participant.username }}/"><button{% if '' == current_page %} class="selected"{% endif %}>{{ _('Profile') }}</button></a>
-    <a href="/{{ participant.username }}/members/"><button{% if 'members' == current_page %} class="selected"{% endif %}>{{ _('Members') }}</button></a>
-</div>
+</ul>
 {% endif %}
 {% endblock %}

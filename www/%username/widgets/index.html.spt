@@ -3,12 +3,12 @@ from gratipay.utils import get_participant
 [-----------------------------------------------------------------------------]
 
 participant = get_participant(request, restrict=True)
-hero = _("Widgets")
-title = "%s - %s" % (participant.username, hero)
+title = participant.username
+subhead = _("Widgets")
 
 [-----------------------------------------------------------------------------]
 {% extends "templates/profile.html" %}
-{% block page %}
+{% block content %}
 <style>
     /* Copied and pasted from %username/widget.html */
     .button-examples button.old-widget-style {
@@ -97,6 +97,7 @@ title = "%s - %s" % (participant.username, hero)
             -1px -1px 0 rgba(255,255,255,.25) inset;
     }
 </style>
+<div class="row">
 <div class="col1">
     <h2>{{ _("Button") }}</h2>
 
@@ -137,7 +138,7 @@ title = "%s - %s" % (participant.username, hero)
     <img src="//img.shields.io/gratipay/{{ participant.username }}.svg">
 
 </div>
-<div class="col2">
+<div class="col1">
 
     <h2>{{ _("Giving & Receiving Widgets") }}</h2>
 
@@ -161,5 +162,6 @@ title = "%s - %s" % (participant.username, hero)
 
     <p><script data-gratipay-username="{{ participant.username }}" data-gratipay-widget="giving" src="//grtp.co/v1.js"></script></p>
 
+</div>
 </div>
 {% endblock %}

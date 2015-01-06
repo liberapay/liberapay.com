@@ -1,14 +1,17 @@
 // Large screens
-@media (min-width: 706px) {
+@media (min-width: 940px) {
     .two-column > * {
         float: left;
         width: 50%;
-        padding: 0 10px;
+        padding: 0 20px 0 0;
+        &:nth-child(even) {
+            padding-right: 0;
+        }
     }
 }
 
 // Small screens/tablets
-@media (max-width: 940px) {
+@media (max-width: 1150px) {
     // 2 column sections
     #leaderboard {
         width: leaderboard-width(2);
@@ -17,110 +20,144 @@
             width: $people-column-width * 2;
         }
     }
+    .more-container {
+        width: $people-column-width * 2 * 3;
+    }
+}
 
+@media (max-width: 940px) {
     .support-gratipay {
-        padding-right: 10px;
-        text-align: center;
-        .knobs {
-            width: 261px;
-            display: table;
-            position: static;
-            top: 0;
-            right: 0;
-            margin: 20px auto;
-            button {
-                width: 128px;
-                height: 40px;
-                font-size: 18px;
-            }
-            a {
-                width: 128px;
-                margin-top: 14px;
-            }
-        }
-        .help {
-            margin-top: 0;
-        }
+        line-height: 125%;
     }
 
     .accounts {
         width: 100%;
     }
 
-    .homepage {
-        .support-gratipay {
-            position: static;
-            top: 0;
-            left: 0;
+    #homepage {
+        #sidebar img {
+            left: 32px;
+            top: 32px;
+            width: 284px;
         }
-
-        display: block;
-        height: auto;
-        .pitch,.action,.greeting {
-            display: block;
+        #sidebar, #content {
+            padding: 150px 32px 60px;
             width: auto;
-        }
-        .pitch {
-            padding: 216px 48px 72px 110px;
-        }
-        .action,.greeting {
-            padding: 48px 48px 72px 110px;
             .jump {
                 padding-top: 0;
             }
         }
     }
-
-    .col0, .col1, .col2 {
-        float: none;
-        margin: auto;
-        padding: 0;
-        width: 460px;
-    }
 }
 
 // Smaller tablets in portrait/landscape phones
-@media (max-width: 700px) {
-    .luxury {
-        display: none !important;
-    }
-
+@media (max-width: 880px) {
     #leaderboard {
         width: 100%;
 
         .people {
             float: none;
             width: $people-column-width * 4;
-            margin: 0 auto;
+            margin: 0;
 
             li {
                 &.luxury { display: none; }
             }
         }
     }
+    .more-container {
+        width: $people-column-width * 4;
+        margin-left: 0;
+    }
 
     #footer {
-        margin-left: auto;
-        margin-right: auto;
-        max-width: 100%;
-        text-align: left;
-        width: 480px;
+        text-align: center;
 
-        .social, ul, li {
-            float: none;
+        li a {
+            margin: 0.25em;
+            padding: 0.75em;
         }
+    }
+}
 
-        li, .social a, li a {
-            display: block;
+@media (max-width: 700px) {
+    .luxury {
+        display: none !important;
+    }
+
+    #main {
+        display: inline;
+    }
+    #content {
+        min-height: 90%;
+    }
+    #sidebar, #content {
+        display: block;
+        width: 100% !important;
+    }
+
+    .col0, .col1 {
+        float: none;
+        width: auto;
+        min-width: 0;
+    }
+
+    #sidebar {
+        &:empty {
+            display: none;
         }
+        & > div {
+            display: inline-block;
+            vertical-align: top;
+            margin: 0 20px 30px 0 !important;
+        }
+        .avatar {
+            margin-bottom: 0;
+        }
+        .nav li {
+            display: inline-block;
+            a {
+                font-size: 20px;
+                line-height: 24px;
+                margin: 0 10px 10px 10px;
+                padding-top: 10px;
+                padding-bottom: 10px;
+                border: 1px solid $gold;
+                border-radius: 6px;
+            }
+        }
+    }
 
-        li {
-            margin: 0.25em 0;
-            padding: 0.25em 0;
-            border-top: 1px solid #eee;
+    #homepage {
+        #content {
+            padding: 60px 32px;
+        }
+    }
 
-            &:before {
-                content: none;
+    #header {
+        h1 {
+            height: 50px;
+            a {
+                padding: 3px 5px 5px;
+                img {
+                    width: 120px;
+                }
+            }
+        }
+        .nav {
+            height: 50px;
+            li a {
+                height: 50px;
+                padding: 13px 12px 18px;
+            }
+        }
+        .sign-in {
+            .dropdown-toggle {
+                height: 50px;
+                padding: 13px 10px 18px 15px;
+            }
+            .dropdown-menu {
+                background: transparentize($gold, 0.3);
             }
         }
     }
@@ -132,20 +169,9 @@
         font-size: 14px;
     }
 
-    #hero {
-        font-size: 15px;
-        h1 {
-            font-size: 36px;
-            padding: 36px 0 18px;
-        }
-    }
-
-    .homepage {
-        span { white-space: normal; }
-        display: block;
-        .pitch,.action,.greeting {
-            display: block;
-            width: auto;
+    #homepage {
+        #sidebar, #content {
+            padding: 32px 32px 60px;
             h1 {
                 font-size: 24px;
                 line-height: 36px;
@@ -155,15 +181,13 @@
                 line-height: 24px;
             }
         }
-        .pitch {
+        #sidebar {
             text-align: center;
             img { width: 256px; position: static; }
-            h1 { margin-top: 36px; }
+            h1 { margin-top: 32px; }
             h1, p { text-align: left; }
-            padding: 36px 36px 60px;
         }
-        .action,.greeting {
-            padding: 36px 36px 60px;
+        #content {
             div.twitter {
                 text-align: center;
             }
@@ -177,32 +201,6 @@
 
             li:nth-child(4n) {
                 display: none;
-            }
-        }
-    }
-
-    .box {
-        border-radius: 0;
-        border-left-width: 1px;
-        border-right-width: 1px;
-
-        .on-profile {
-            .picture {
-                width: 100px;
-                height: 100px;
-
-                img {
-                    width: 90px !important;
-                    height: 90px;
-                }
-            }
-
-            .number {
-                font-size: 36px;
-            }
-
-            .pad-sign {
-                padding-left: 23px;
             }
         }
     }

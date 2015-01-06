@@ -2,50 +2,54 @@
     This is the top of the Gratipay CSS tree.
 */
 
-// include plain css files to reduce the number of http requests
 @import "reset";
+
 
 // Define some basic things that are used throughout the site.
 
+@import "mixins/layout";
+@import "mixins/icons";
+@import "mixins/borders-backgrounds-shadows";
+@import "mixins/animation";
+
 @import "variables";
-@import "layout-mixins";
-@import "fonts-colors-mixins";
-@import "animation-mixins";
 @import "utils";
 @import "buttons-knobs";
-@import "modals";
 @import "notifications";
 @import "modules";  // bigger than a knob, but used in multiple places
 @import "elements"; // specific HTML elements (body, p, etc.)
 @import "loading-indicators";
+@import "markdown";
+@import "chosen";
 
-@import "lib/dropdown"; // You guessed it... dropdowns.
+@import "lib/dropdown";
 @import "lib/chart";
 @import "lib/upgrade";
+@import "lib/linear_gradient";
+
+@import "widgets/sign_in";
+@import "widgets/tipr";
+@import "widgets/leaderboard";
+@import "widgets/cta";
+@import "widgets/support_gratipay";
+
 
 // Page layout styles
 
 @import "layout";
-@import "homepage";
 
 
-// Styles specific to certain pages. 
+// Styles specific to certain pages.
 
-@import "history";
-@import "team";
-@import "profile-edit";
-@import "markdown";
-
-@import "widgets/sign_in";
-
-@import "widgets/my_tip";
-
-@import "widgets/tipr";
+@import "pages/homepage";
+@import "pages/history";
+@import "pages/team";
+@import "pages/profile-edit";
+@import "pages/giving";
+@import "pages/cc-ba";
+@import "pages/on-confirm";
 
 
 // Group media queries together.
 
 @import "responsiveness";
-
-// include plain css files to reduce the number of http requests
-@import "chosen";

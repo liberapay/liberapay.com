@@ -1,19 +1,4 @@
-.homepage {
-
-    color: red; // so any anomalies are clear
-    display: table;
-    width: 100%;
-    min-height: 100%;
-    height: 100%;
-
-    background: #434343 url("pennies.jpg") no-repeat;
-    background-size: cover;
-    background-position: 0 -54px;
-
-    span {
-        white-space: nowrap;
-    }
-
+#homepage {
     h1 {
         font: bold 30px/40px $Ideal;
         text-transform: none;
@@ -36,35 +21,33 @@
         padding: 48px 0 0;
     }
 
-    .pitch,.action,.greeting {
-        display: table-cell;
-        position: relative;
-    }
-
-    .pitch {
+    #sidebar {
         width: 480px;
         padding: 256px 48px 128px 110px;
-        color: transparentize($white, 0.3);
-        background: transparentize($brown, 0.1);
         img {
             width: 384px;
             position: absolute;
             top: 48px;
             left: 48px;
         }
-        h1 { color: $white; }
         a {
             color: transparentize($gold, 0.2);
             &:hover {
                 color: $gold;
             }
         }
+        span {
+            white-space: nowrap;
+        }
+        p {
+            color: transparentize($white, 0.3);
+        }
     }
 
-    .action,.greeting {
+    #content {
+        background: transparentize($white, 0.1);
         padding: 256px 48px 128px;
         color: transparentize($brown, 0.2);
-        background: transparentize($white, 0.1);
         h1 { color: $brown; }
         a {
             color: transparentize($green, 0.3);
@@ -98,6 +81,11 @@
             font-size: 13px;
             line-height: 18px;
             max-width: 700px;
+            display: block;
+
+            .or {
+                font: normal 13px/16px $Ideal;
+            }
 
             button {
                 border: 1px solid transparentize($brown, 0.2);
@@ -123,37 +111,4 @@
         line-height: 40px;
         margin-top: -40px;
     }
-
-    .support-gratipay {
-        position: absolute;
-        top: 24px;
-        left: 48px;
-        background: transparentize($gold, 0.7);
-
-        padding-right: 10px;
-        text-align: center;
-        margin: 0 0 24px;
-        border-radius: 3px;
-        .knobs {
-            width: 261px;
-            display: table;
-            position: static;
-            top: 0;
-            right: 0;
-            margin: 20px auto 0;
-            button {
-                width: 128px;
-                height: 40px;
-                font-size: 18px;
-            }
-            a {
-                width: 128px;
-                margin-top: 14px;
-            }
-        }
-        .help {
-            margin-top: 0;
-        }
-    }
-
 }

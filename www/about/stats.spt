@@ -283,7 +283,7 @@ d3.json("/about/tip-distribution.json", function(tips){
 {{ super() }}
 {% endblock %}
 
-{% block page %}
+{% block content %}
 
     <p>Gratipay is <b>{{ age() }}</b> old and has <b>{{ nactive }} active
     users</b>.</p>

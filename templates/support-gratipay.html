@@ -1,26 +1,32 @@
 {% if not user.ANON and user.participant.suggested_payment > 0 and user.participant.is_free_rider is none %}
 <div class="support-gratipay">
-    <div class="cta">
-        {% if website.support_current < 30 %}
-            {% set msg = _('Only {0}% of active users also {1}support Gratipay{2}.') %}
-        {% else %}
-            {% set msg = _('{0}% of active users also {1}support Gratipay{2}.') %}
-        {% endif %}
-        {{ msg.format(website.support_current, '<a href="/Gratipay/">', '</a>') }}
-        {% if website.support_goal %}
-            {{ _('Will you help us reach {0}%?', website.support_goal) }}
-        {% else %}
-            {{ _('Will you join them?') }}
-        {% endif %}
-    </div>
-    <div class="knobs">
-        <button class="low" data-amount="{{ cta_low }}">{{ format_currency(cta_low, 'USD', trailing_zeroes=False) }}</button><button
-            class="high" data-amount="{{ cta_high }}">{{ format_currency(cta_high, 'USD', trailing_zeroes=False) }}</button>
-        <a class="other" href="/Gratipay/">{{ _('Other') }}</a><a class="no-thanks" href="">{{ _('No thanks') }}</a>
-    </div>
-    <div class="help">
-        {{ _('We fund Gratipay solely through your voluntary payments!') }}
-        <a href="/about/pricing">{{ _('Learn more') }}</a>.
-    </div>
+<table>
+    <tr>
+        <td class="cta">
+            {% if website.support_current < 30 %}
+                {% set msg = _('Only {0}% of active users also {1}support Gratipay{2}.') %}
+            {% else %}
+                {% set msg = _('{0}% of active users also {1}support Gratipay{2}.') %}
+            {% endif %}
+            {{ msg.format(website.support_current, '<a href="/Gratipay/">', '</a>') }}
+            {% if website.support_goal %}
+                {{ _('Will you help us reach {0}%?', website.support_goal) }}
+            {% else %}
+                {{ _('Will you join them?') }}
+            {% endif %}
+        </td>
+        <td class="knobs" rowspan="2">
+            <button class="low" data-amount="{{ cta_low }}">{{ format_currency(cta_low, 'USD', trailing_zeroes=False) }}</button><button
+                class="high" data-amount="{{ cta_high }}">{{ format_currency(cta_high, 'USD', trailing_zeroes=False) }}</button>
+            <a class="other" href="/Gratipay/">{{ _('Other') }}</a><a class="no-thanks" href="">{{ _('No thanks') }}</a>
+        </div>
+    </tr>
+    <tr>
+        <td class="help">
+            {{ _('We fund Gratipay solely through your voluntary payments!') }}
+            <a href="/about/pricing">{{ _('Learn more') }}</a>.
+        </td>
+    </tr>
+</table>
 </div>
 {% endif %}

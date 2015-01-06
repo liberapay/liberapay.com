@@ -59,7 +59,7 @@ class TestPages(Harness):
         assert self.client.GxT('/on/twitter/associate').code == 400
 
     def test_about(self):
-        expected = "small weekly cash"
+        expected = "give money every week"
         actual = self.client.GET('/about/').body
         assert expected in actual
 
@@ -79,13 +79,13 @@ class TestPages(Harness):
         assert expected in actual
 
     def test_about_teams(self):
-        expected = "About teams"
+        expected = "Teams"
         actual = self.client.GET('/about/teams/').body.decode('utf8')
         assert expected in actual
 
     def test_404(self):
         response = self.client.GET('/about/four-oh-four.html', raise_immediately=False)
-        assert "Page Not Found" in response.body
+        assert "Not Found" in response.body
         assert "{%" not in response.body
 
     def test_for_contributors_redirects_to_inside_gratipay(self):
@@ -146,7 +146,7 @@ class TestPages(Harness):
         alice.set_tip_to(emma, "1.00")
         actual = self.client.GET("/alice/giving/", auth_as="alice").body
         expected1 = "emma"
-        expected2 = "goes unclaimed"
+        expected2 = "Unclaimed"
         assert expected1 in actual
         assert expected2 in actual
 
@@ -156,10 +156,8 @@ class TestPages(Harness):
         alice.set_tip_to(bob, "1.00")
         alice.set_tip_to(bob, "0.00")
         actual = self.client.GET("/alice/giving/", auth_as="alice").body
-        expected1 = "bob"
-        expected2 = "cancelled 1 tip"
-        assert expected1 in actual
-        assert expected2 in actual
+        assert "bob" in actual
+        assert "Cancelled" in actual
 
     def test_new_participant_can_edit_profile(self):
         self.make_participant('alice', claimed_time='now')

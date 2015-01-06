@@ -1,6 +1,29 @@
+// Fonts
+$Mono: Monaco, "Lucida Mono", monospace;
+$Ideal: 'Ideal Sans SSm A', 'Ideal Sans SSm B', sans-serif;
+$Chronicle: 'Chronicle SSm A', 'Chronicle SSm B', Georgia, serif;
+
+// Colors
+$green: #396;
+$darker-green: darken($green, 10);
+$lighter-green: lighten($green, 10);
+$brown: #630;
+$light-brown: desaturate(lighten($brown, 60), 60);
+$gray: #555;
+$light-gray: #DDD;
+$darker-gray: #CCC;
+$lighter-gray: #EEE;
+$black: #454545;
+$red: #C00;
+$light-red: #F99;
+$gold: #FFC300;
+$white: #FFF;
+
+// leaderboard widths
 $people-column-width: 90px;
 $people-column-gutter: 30px;
 
 @function leaderboard-width($people, $col: 3) {
   @return (($people-column-width * $people) * $col) + ($people-column-gutter * ($col - 1));
 }
+

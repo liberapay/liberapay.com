@@ -2,22 +2,11 @@
     box-sizing: border-box;
 }
 
-html, body {
-    background: #FFF;
-}
 body {
     color: $black;
-    font: normal 16px $Ideal;
-    line-height: 130%;
+    font: normal 16px/21px $Ideal;
     min-width: 320px;
     text-rendering: optimizeLegibility;
-}
-.container {
-    @include clearfix;
-    width: 960px;
-    max-width: 90%;
-    margin: 0 auto;
-    position: relative;
 }
 * {
     box-sizing: border-box;
@@ -32,12 +21,18 @@ a img {
     border: 0;
 }
 p, dd {
-    margin: 0;
-    padding: 0 0 1em;
+    margin: 0 0 1em;
+    padding: 0;
+}
+h2 {
+    color: $black;
+    font: bold 14px/14px $Ideal;
+    text-transform: uppercase;
+    margin: 2em 0 0.5em;
 }
 dt {
     font-weight: bold;
-    padding:1em 0 0.25em;
+    margin: 1em 0 0.3em;
 }
 dt:target, dt:target + dd {
     -webkit-animation: target-fade 3s 1;
@@ -52,14 +47,13 @@ dt:target, dt:target + dd {
     100% { background-color: rgba(yellow,0); }
 }
 pre {
-    font: 9pt/13pt monospace;
-    margin: 0 0 1em 1em;
+    font: 11px/13px monospace;
+    margin: 0 0 11px 11px;
     padding: 0;
     overflow: auto;
 }
 li {
-    margin: 0;
-    margin: 0 0 1em 1.5em;
+    margin: 0 0 1em 2em;
 }
 ol {
     margin: 1em 0 0;
@@ -103,6 +97,9 @@ table.simple {
     }
     td.right {
         text-align: right;
-        padding-right: 2em;
+        padding-right: 42px;
     }
+}
+.mono {
+    font: normal 12px/16px $Mono;
 }

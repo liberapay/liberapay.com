@@ -50,14 +50,14 @@ except Exception, e:
 website.renderer_default = "jinja2"
 
 website.renderer_factories['jinja2'].Renderer.global_context = {
-    'range': range,
-    'unicode': unicode,
+    'b64encode': base64.b64encode,
     'enumerate': enumerate,
-    'len': len,
     'float': float,
-    'type': type,
+    'len': len,
+    'range': range,
     'str': str,
-    'b64encode': base64.b64encode
+    'type': type,
+    'unicode': unicode,
 }
 
 
@@ -114,6 +114,18 @@ cron(env.check_db_every, website.db.self_check, True)
 
 def add_stuff_to_context(request):
     request.context['username'] = None
+
+    def filter_profile_subnav(user, participant, pages):
+        out = []
+        for foo, bar, show_them, show_others in pages:
+            if (user.participant == participant and show_them) \
+            or (user.participant is None and show_others)       \
+            or (user.participant != participant and show_others) \
+            or user.ADMIN:
+                out.append((foo, bar, show_them, show_others))
+        return out
+    request.context['filter_profile_subnav'] = filter_profile_subnav
+
 
     # Helpers for global call to action to support Gratipay itself.
     user = request.context.get('user')

@@ -1,14 +1,10 @@
 // Utility rules
 
-.group:after {
-    content: ".";
-    display: block;
-    height: 0;
-    clear: both;
-    visibility: hidden;
+.clearfix {
+    @include clearfix;
 }
 .hidden {
-    display: none;
+    display: none ! important;
 }
 .clear {
     clear: both;
@@ -21,4 +17,9 @@
 }
 .word-wrap {
     white-space: pre-wrap;
+}
+.screen-reader-text {
+    position: absolute;
+    top: -99999px;
+    left: -99999px;
 }

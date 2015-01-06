@@ -8,21 +8,18 @@ participant = team = get_participant(request, restrict=False)
 if not team.show_as_team(user):
   request.redirect('../')
 tip_or_pledge = "tip"
-hero = _("Team Members")
-title = team.username     # used in the title tag
-username = team.username  # used in footer shared with on/%platform/ pages
+title = team.username
+subhead = _("Team Members")
 
 [-----------------------------------------------------------------------------]
 {% extends "templates/profile.html" %}
 
 {% block scripts %}
 <script>$(document).ready(Gratipay.team.init);</script>
-
 {{ super() }}
 {% endblock %}
 
-{% block page %}
-
+{% block content %}
 <div id="team" class="col0">
   <table>
       <tr>
@@ -39,7 +36,7 @@ username = team.username  # used in footer shared with on/%platform/ pages
         <td class="figure last_week"></td>
         <td class="figure this_week"></td>
         <td class="figure balance">
-          {{ team.balance + team.receiving }}
+          {{ team.balance + team.receiving - team.giving }}
         </td>
         <td class="figure percentage"></td>
       </tr>

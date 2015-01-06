@@ -5,8 +5,8 @@ db = website.db
 [-----------------------------------------------------------------------------]
 
 participant = get_participant(request, restrict=True)
-hero = "Events"
-title = "%s - %s" % (participant.username, hero)
+title = participant.username
+subhead = "Events"
 
 SQL = """
     SELECT * FROM events WHERE type = 'participant' AND payload->>'id' = %s ORDER BY ts DESC
@@ -16,18 +16,18 @@ events = db.all(SQL, (unicode(participant.id),))
 
 [-----------------------------------------------------------------------------]
 {% extends "templates/profile.html" %}
-{% block page %}
+{% block content %}
 
 <style>
-    td { padding: 4px; }
+    #events td { padding: 4px; }
 </style>
 <table id="events" class="centered">
 
     {% for e in events %}
     <tr>
-        <td>{{ e.ts }}</td>
-        <td>{{ e.type }}</td>
-        <td>{{ e.payload }}</td>
+        <td class="ts mono">{{ e.ts }}</td>
+        <td class="type mono">{{ e.type }}</td>
+        <td class="payload mono">{{ e.payload }}</td>
 
     </tr>
     {% endfor %}

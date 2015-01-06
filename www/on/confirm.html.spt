@@ -3,16 +3,18 @@
 import uuid
 
 from aspen import Response
-from gratipay.models.participant import Participant
+from gratipay.models.participant import NeedConfirmation, Participant
 
 website.connect_tokens = {}
 
 [--------]
 
-if not getattr(request, 'internally_redirected_from', None):
+if user.ANON:
     raise Response(404)
 
-if user.ANON:
+if 'fake' in qs:
+    account = next(iter(user.participant.get_accounts_elsewhere().values()))
+elif not getattr(request, 'internally_redirected_from', None):
     raise Response(404)
 
 # Compute and store a connect_token.
@@ -27,208 +29,168 @@ website.connect_tokens[connect_key] = connect_token
 other = Participant.from_username(account.participant.username)
 
 user_accounts_dict = user.participant.get_accounts_elsewhere()
+nix = len(user_accounts_dict) == 1
 user_accounts = user_accounts_dict.values()
 other_accounts = other.get_accounts_elsewhere().values()
-
 abandoned_account = user_accounts_dict.get(account.platform, None)
 
-user_giving = user.participant.giving
-user_receiving = user.participant.receiving
-
-other_giving = other.giving
-other_receiving = other.receiving
-
-combined_giving = user_giving + other_giving
-combined_receiving = user_receiving + other_receiving
+giving_after = user.participant.giving
+receiving_after = user.participant.receiving
+if nix:
+    giving_after += other.giving
+    receiving_after += other.receiving
 
 fmt = lambda x: '$' + str(int(round(x))) if x > 0 else '-'
+get_name = lambda a: a.user_name or a.display_name or a.user_id
 
-user_name = account.user_name
 title = "Please Confirm"
 
 [--------]
 
 {% extends "templates/base.html" %}
-{% block box %}
+{% block content %}
 <div class="on-confirm">
 
-    <div><img class="platform-icon" src="{{ platform.icon }}"
-    /> <span class="highlight">{{ user_name }}</span> is connected<br />to
-    <b>{{ other.username }}</b> on Gratipay.<br />Transfer it?</div>
+    <p><img class="platform-icon" src="{{ account.platform_data.icon }}" />
+    <span class="highlight">{{ get_name(account) }}</span> is connected to
+    <a href="/{{ other.username }}/">{{ other.username }}</a> on Gratipay.
+    Transfer it?</p>
 
     <h2>Now</h2>
 
-    <table class="scenario">
-        <tr>
-            <td></td>
-            <td>
-                <div class="participant">
-                <div class="participant-padding">
-                    <b>{{ user.participant.username }}</b><br />
-                    <table>
-                        <tr>
-                            <th><i>Gives</i></th>
-                            <td>{{ fmt(user_giving) }}</td>
-                        </tr>
-                        <tr>
-                            <th><i>Receives</i></th>
-                            <td>{{ fmt(user_receiving) }}</td>
-                        </tr>
-                    </table>
-                    <br />
+    <div class="scenario">
+        <div class="participant">
+            <b>{{ user.participant.username }}</b><br />
+            <table>
+                <tr>
+                    <th><i>Gives</i></th>
+                    <td>{{ fmt(user.participant.giving) }}</td>
+                </tr>
+                <tr>
+                    <th><i>Receives</i></th>
+                    <td>{{ fmt(user.participant.receiving) }}</td>
+                </tr>
+            </table>
+            <br />
 
-                    {% for account in user_accounts %}
-                        <img src="{{ account.platform_data.icon }}"
-                             alt="{{ account.platform }}"
-                             class="platform-icon" />
-                        {{ account.user_name }}<br />
-                    {% endfor %}
-                </div>
-                </div>
-            </td>
-            <td>
-                <div class="participant other">
-                <div class="participant-padding">
-                    <b>{{ other.username }}</b><br />
-                    <table>
-                        <tr>
-                            <th><i>Gives</i></th>
-                            <td>{{ fmt(other_giving) }}</td>
-                        </tr>
-                        <tr>
-                            <th><i>Receives</i></th>
-                            <td>{{ fmt(other_receiving) }}</td>
-                        </tr>
-                    </table>
-                    <br />
-                    {% for other_account in other_accounts %}
-                        <img src="{{ other_account.platform_data.icon }}"
-                             alt="{{ other_account.platform }}"
-                             class="platform-icon" />
-                        <span {% if other_account.platform == account.platform %}class="highlight"{% endif %}>
-                            {{ other_account.user_name }}<br />
-                        </span>
-                    {% endfor %}
-                </div>
-                </div>
-            </td>
-        </tr>
-    </table>
+            {% for account in user_accounts %}
+                <img src="{{ account.platform_data.icon }}"
+                     alt="{{ account.platform }}"
+                     class="platform-icon" />
+                {{ get_name(account) }}<br />
+            {% endfor %}
+        </div>
+        <div class="participant other">
+            <b>{{ other.username }}</b><br />
+            <table>
+                <tr>
+                    <th><i>Gives</i></th>
+                    <td>{{ fmt(other.giving) }}</td>
+                </tr>
+                <tr>
+                    <th><i>Receives</i></th>
+                    <td>{{ fmt(other.receiving) }}</td>
+                </tr>
+            </table>
+            <br />
+            {% for other_account in other_accounts %}
+                <img src="{{ other_account.platform_data.icon }}"
+                     alt="{{ other_account.platform }}"
+                     class="platform-icon" />
+                <span class="{{ 'highlight' if other_account.platform == account.platform }}">
+                    {{ get_name(other_account) }}<br />
+                </span>
+            {% endfor %}
+        </div>
+    </div>
 
 
     <h2>After Transfer</h2>
 
-    <table class="scenario">
-        <tr>
-            <td class="abandoned">
-                {% if abandoned_account %}
+    <div class="scenario">
+        <div class="participant">
+            <b>{{ user.participant.username }}</b><br />
+            <table>
+                <tr>
+                    <th><i>Gives</i></th>
+                    <td>{{ fmt(giving_after) }}</td>
+                </tr>
+                <tr>
+                    <th><i>Receives</i></th>
+                    <td>{{ fmt(receiving_after) }}</td>
+                </tr>
+            </table>
+            <br />
+
+            {% for user_account in user_accounts %}
+                {% if user_account != abandoned_account %}
+                <span class="account-elsewhere">
+                    <img src="{{ user_account.platform_data.icon }}"
+                         alt="{{ user_account.platform }}"
+                         class="platform-icon" />
+                    {{ get_name(user_account) }}<br />
+                </span>
+                {% endif %}
+            {% endfor %}
+
+            <span class="account-elsewhere">
+                <img src="{{ account.platform_data.icon }}" alt="{{ account.platform }}"
+                    class="platform-icon" />
+                <span class="highlight">
+                    {{ get_name(account) }}<br />
+                </span>
+            </span>
+        </div>
+        <div class="participant other {{ 'nix' if nix }}">
+            {% if nix %}
+                <img id="nix" src="{{ website.asset('nix.png') }}" />
+            {% endif %}
+            <b>{{ other.username }}</b><br />
+            <table>
+                <tr>
+                    <th><i>Gives</i></th>
+                    <td>{{ fmt(other.giving) }}</td>
+                </tr>
+                <tr>
+                    <th><i>Receives</i></th>
+                    <td>{{ fmt(other.receiving ) }}</td>
+                </tr>
+            </table>
+            <br />
+
+            {% for other_account in other_accounts %}
+                {% if other_account.platform != account.platform %}
                     <span class="account-elsewhere">
-                        <img src="{{ abandoned_account.platform_data.icon }}" />
-                        {{ abandoned_account.user_name }}<br />
+                        <img src="{{ other_account.platform_data.icon }}"
+                             alt="{{ other_account.platform }}"
+                             class="platform-icon" />
+                        {{ get_name(other_account) }}<br />
                     </span>
                 {% endif %}
-            </td>
-            <td>
-                <div class="participant">
-                <div class="participant-padding">
-                    <b>{{ user.participant.username }}</b><br />
-                    <table>
-                        <tr>
-                            {% if obstacles.this_is_others_last_login_account %}
-                            <th><i>Gives</i></th>
-                            <td>{{ fmt(combined_giving) }}</td>
-                        </tr>
-                        <tr>
-                            <th><i>Receives</i></th>
-                            <td>{{ fmt(combined_receiving ) }}</td>
-                            {% else %}
-                            <th><i>Gives</i></th>
-                            <td>{{ fmt(user_giving) }}</td>
-                        </tr>
-                        <tr>
-                            <th><i>Receives</i></th>
-                            <td>{{ fmt(user_receiving ) }}</td>
-                            {% endif %}
-                        </tr>
-                    </table>
-                    <br />
-
-                    {% for user_account in user_accounts %}
-                        <span class="account-elsewhere">
-                            <img src="{{ user_account.platform_data.icon }}"
-                                 alt="{{ user_account.platform }}"
-                                 class="platform-icon" />
-                            {{ user_account.user_name }}<br />
-                        </span>
-                    {% endfor %}
-
-                    <span class="account-elsewhere">
-                        <img src="{{ platform.icon }}" alt="{{ account.platform }}"
-                            class="platform-icon" />
-                        <span class="highlight">
-                            {{ account.user_name }}<br />
-                        </span>
-                    </span>
-                </div>
-                </div>
-            </td>
-            {% if obstacles.this_is_others_last_login_account %}
-            <td>
-                <div class="participant other nix">
-                <div class="participant-padding">
-                    <img id="nix" src="{{ website.asset('nix.png') }}" />
-                    <b>{{ other.username }}</b><br />
-                    <br />
-                </div>
-                </div>
-            </td>
-            {% else %}
-            <td>
-                <div class="participant other">
-                <div class="participant-padding">
-                    <b>{{ other.username }}</b><br />
-                    <table>
-                        <tr>
-                            <th><i>Gives</i></th>
-                            <td>{{ fmt(other_giving) }}</td>
-                        </tr>
-                        <tr>
-                            <th><i>Receives</i></th>
-                            <td>{{ fmt(other_receiving ) }}</td>
-                        </tr>
-                    </table>
-                    <br />
-
-                    {% for other_account in other_accounts %}
-                        {% if other_account.platform != account.platform %}
-                            <span class="account-elsewhere">
-                                <img src="{{ other_account.platform_data.icon }}"
-                                     alt="{{ other_account.platform }}"
-                                     class="platform-icon" />
-                                {{ other_account.user_name }}<br />
-                            </span>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-                </div>
-            </td>
-            {% endif %}
-        </tr>
-    </table>
-
-
-    <div class="nav level-2">
-        <h2>Transfer it?</h2>
-
-        <form action="/on/take-over.html" method="POST">
-            <input type="hidden" name="platform" value="{{ account.platform }}" />
-            <input type="hidden" name="user_id" value="{{ account.user_id }}" />
-            <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-            <input type="hidden" name="connect_token" value="{{ connect_token }}" />
-            <button name="should_transfer" value="yes" class="selected larger">Yes</button>
-            <button name="should_transfer" value="no" >No</button>
-        </form>
+            {% endfor %}
+        </div>
+        {% if abandoned_account %}
+        <div class="abandoned">
+            Abandoned:<br/><br/>
+            <span class="account-elsewhere">
+                <img src="{{ abandoned_account.platform_data.icon }}" />
+                {{ get_name(abandoned_account) }}<br />
+            </span>
+        </div>
+        {% endif %}
     </div>
+
+
+    <h2>Transfer it?</h2>
+
+    <form action="/on/take-over.html" method="POST">
+        <input type="hidden" name="platform" value="{{ account.platform }}" />
+        <input type="hidden" name="user_id" value="{{ account.user_id }}" />
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <input type="hidden" name="connect_token" value="{{ connect_token }}" />
+        <button name="should_transfer" value="yes" class="selected larger">Yes</button>
+        <button name="should_transfer" value="no" >No</button>
+    </form>
 
 </div>
 {% endblock %}

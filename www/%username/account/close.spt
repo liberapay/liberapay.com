@@ -1,10 +1,8 @@
 from gratipay.utils import get_participant
 [---]
 participant = get_participant(request, restrict=True)
-hero = "Close Account"
-title = participant.username      # used in the title tag
-username = participant.username   # used in footer shared with on/$platform/
-                                  # pages
+title = _("Close Account")
+subhead = participant.username
 
 payday_is_running = website.db.one("""
 
@@ -30,133 +28,129 @@ if POST:
 [---] text/html
 {% extends "templates/base.html" %}
 
-{% block heading %}
-    <h1>Close Account</h1>
-{% endblock %}
+{% block content %}
+<div class="col0">
+    {% if payday_is_running %}
 
-{% block box %}
-    <div class="on-form">
-        {% if payday_is_running %}
+        <form><div class="constrain-width clearfix">
 
-            <form><div class="constrain-width group">
+            <h2>Try Again Later</h2>
 
-                <h2>Try Again Later</h2>
+            <p>Sorry, we're running payday right now, and we're not set up
+            to close accounts while payday is running. Please check back in
+            a few hours.</p>
 
-                <p>Sorry, we're running payday right now, and we're not set up
-                to close accounts while payday is running. Please check back in
-                a few hours.</p>
+        </div></form>
 
-            </div></form>
+    {% else %}
+    <form method="POST">
+        <div class="constrain-width clearfix">
 
-        {% else %}
-        <form method="POST">
-            <div class="constrain-width group">
+            {% if participant.balance > 0 %}
+            <h2 class="first">Balance</h2>
+            <p>You have a balance of <b>${{ participant.balance }}</b>.<br>
+               What should we do with it?</p>
 
-                {% if participant.balance > 0 %}
-                <h2 class="first">Balance</h2>
-                <p>You have a balance of <b>${{ participant.balance }}</b>.<br>
-                   What should we do with it?</p>
+            <ul>
 
-                <ul>
-
-                    {% if participant.last_ach_result == '' %}
-                        {% if participant.is_whitelisted %}
-                            <li><input type="radio" name="disbursement_strategy" id="r1"
-                                 value="bank" checked />
-                                <label for="r1">Send it to my <a href="/bank-account.html">bank
-                                account</a></label></li>
-                        {% else %}
-
-                            <li><label>A staff member will review your account
-                            by Thursday, and then you'll be able to have your
-                            funds deposited to your bank account on file. To
-                            expedite the review, please <a
-                            href="mailto:support@gratipay.com?subject=review%20for%20closing%20account">contact
-                            support</a>.</label></li>
-
-                        {% endif %}
+                {% if participant.last_ach_result == '' %}
+                    {% if participant.is_whitelisted %}
+                        <li><input type="radio" name="disbursement_strategy" id="r1"
+                             value="bank" checked />
+                            <label for="r1">Send it to my <a href="/bank-account.html">bank
+                            account</a></label></li>
                     {% else %}
-                        <li><label>Go <a href="/bank-account.html">set up a bank
-                        account</a> to be able to have your funds deposited there.
-                        Due to our anti-fraud policies, a staff member will need to
-                        review your account before completing the
-                        transaction using this option.</label></li>
+
+                        <li><label>A staff member will review your account
+                        by Thursday, and then you'll be able to have your
+                        funds deposited to your bank account on file. To
+                        expedite the review, please <a
+                        href="mailto:support@gratipay.com?subject=review%20for%20closing%20account">contact
+                        support</a>.</label></li>
+
                     {% endif %}
-
-                    {% if participant.giving %}
-                    <li><input type="radio" name="disbursement_strategy" id="r2"
-                               value="downstream" />
-                        <label for="r2">Give it to the <a href="../giving/">people I
-                            tip</a></label></li>
-                    {% else %}
-                    <li><label>Go <a href="/">set up some tips</a> to be able to distribute your
-                    balance as a final gift.</label></li>
-                    {% endif %}
-
-                </ul>
-
-                <p>If neither option works for you, please <a
-                href="mailto:support@gratipay.com?subject=close%20account">contact
-                support</a> to otherwise deal with your balance before
-                closing your account.</p>
-
+                {% else %}
+                    <li><label>Go <a href="/bank-account.html">set up a bank
+                    account</a> to be able to have your funds deposited there.
+                    Due to our anti-fraud policies, a staff member will need to
+                    review your account before completing the
+                    transaction using this option.</label></li>
                 {% endif %}
 
+                {% if participant.giving %}
+                <li><input type="radio" name="disbursement_strategy" id="r2"
+                           value="downstream" />
+                    <label for="r2">Give it to the <a href="../giving/">people I
+                        tip</a></label></li>
+                {% else %}
+                <li><label>Go <a href="/">set up some tips</a> to be able to distribute your
+                balance as a final gift.</label></li>
+                {% endif %}
 
-                <h2>Personal Information</h2>
+            </ul>
 
-                <p>We immediately clear out most of the information in your
-                profile (though it may still exist in our database in event
-                        logs, to be fully deleted once we sort out our <a
-                        href="https://github.com/gratipay/gratipay.com/issues/397">data
-                        retention policy</a>).</p>
+            <p>If neither option works for you, please <a
+            href="mailto:support@gratipay.com?subject=close%20account">contact
+            support</a> to otherwise deal with your balance before
+            closing your account.</p>
 
-                <p>Things we clear immediately include your profile statement,
-                any funding goal, the tips you're receiving, and those you're
-                giving. You'll also be removed from any communities and teams
-                you were a part of. If you're closing a team account, all team
-                members will be removed from the team.</p>
-
-                <p>We specifically <i>don't</i> delete your past giving and
-                receiving history on the site, because that information also
-                belongs equally to other users (the ones you gave to and
-                received from).</p>
-
-                <p>After you close your account, your profile page will say,
-                &ldquo;The account owner has closed this account.&rdquo;</p>
+            {% endif %}
 
 
-                <h2>Username</h2>
+            <h2>Personal Information</h2>
 
-                <p>We may give your username to someone else if they ask for
-                it, but not for at least a year after you close your account
-                (unless we determine that you've been infringing a
-                        trademark).</p>
+            <p>We immediately clear out most of the information in your
+            profile (though it may still exist in our database in event
+                    logs, to be fully deleted once we sort out our <a
+                    href="https://github.com/gratipay/gratipay.com/issues/397">data
+                    retention policy</a>).</p>
 
-                <p>Until we give your username to someone else, you can use it
-                again if you ever decide to rejoin Gratipay. Simply sign in.</p>
+            <p>Things we clear immediately include your profile statement,
+            any funding goal, the tips you're receiving, and those you're
+            giving. You'll also be removed from any communities and teams
+            you were a part of. If you're closing a team account, all team
+            members will be removed from the team.</p>
+
+            <p>We specifically <i>don't</i> delete your past giving and
+            receiving history on the site, because that information also
+            belongs equally to other users (the ones you gave to and
+            received from).</p>
+
+            <p>After you close your account, your profile page will say,
+            &ldquo;The account owner has closed this account.&rdquo;</p>
 
 
-                <h2>Remember</h2>
+            <h2>Username</h2>
 
-                <p>We have no control over links to your profile from other
-                places on the Internet.</p>
+            <p>We may give your username to someone else if they ask for
+            it, but not for at least a year after you close your account
+            (unless we determine that you've been infringing a
+                    trademark).</p>
 
-                <p>We have no control over content indexed by search engines
-                like Google.</p>
+            <p>Until we give your username to someone else, you can use it
+            again if you ever decide to rejoin Gratipay. Simply sign in.</p>
 
 
-                <h2>Ready?</h2>
+            <h2>Remember</h2>
 
-            </div>
-            <div class="nav level-1">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                <button class="selected larger close-account" id="save"
-                    type="submit">Yes, Close My Gratipay Account</button>
-            </div>
-        </form>
-        {% endif %}
-    </div>
+            <p>We have no control over links to your profile from other
+            places on the Internet.</p>
+
+            <p>We have no control over content indexed by search engines
+            like Google.</p>
+
+
+            <h2>Ready?</h2>
+
+        </div>
+        <div class="nav level-1">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <button class="selected larger close-account" id="save"
+                type="submit">Yes, Close My Gratipay Account</button>
+        </div>
+    </form>
+    {% endif %}
+</div>
 {% endblock %}
 
 {% block scripts %}

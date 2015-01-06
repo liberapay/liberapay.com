@@ -28,10 +28,6 @@
             display: block;
             font: bold 16px $Ideal;
             margin: 7px 0 5px 0;
-
-            span.unit {
-                font: normal 11px $Ideal;
-            }
         }
         span.age {
             font-size: 11px;
@@ -88,6 +84,7 @@ a.mini-user:hover {
         font-style: italic;
         color: $gray;
     }
+    font: normal 16px $Ideal;
 
     .account-action {
         padding-right: 8px;
@@ -187,13 +184,19 @@ a.mini-user:hover {
 }
 
 #members { /* used on accounts elsewhere for GitHub org = Bitbucket team */
-    margin: 1em auto 1em;
-
     td, th {
         padding: 0 6px 6px;
         text-align: left;
         vertical-align: baseline;
+        font-family: $Ideal;
     }
+    th { // borrowed from elements/h2
+        font: bold 14px/14px $Ideal;
+        text-transform: uppercase;
+        padding: 34px 0 8px;
+    }
+    p + & th { padding-top: 13px; }
+    h2 + & th { padding-top: 26px; }
     .declines, .not-on-gratipay {
         font-size: 75%;
         a {
@@ -216,6 +219,7 @@ a.mini-user:hover {
 
 
 .tip-distribution {
+    font: normal 12px $Mono;
     .dollar-sign {
         padding: 0 2pt 0 24pt;
         text-align: right;
@@ -251,6 +255,7 @@ ul.memberships {
     padding: 0;
     float: left;
     width: 100%;
+    font: normal 16px $Ideal;
 
     li {
         padding: 0;
@@ -277,12 +282,10 @@ ul.memberships {
     }
 }
 .communities {
+    font-family: $Ideal;
     select {
-        width: 98%;
+        width: 50%;
     }
-}
-#page h1.congrats {
-    font-size: 25px;
 }
 
 .emails {
@@ -298,6 +301,7 @@ ul.memberships {
     li {
         list-style: square inside;
         margin: 0 0 0.5em 0.5em;
+        clear: both;
     }
     .label-primary, .label-unverified {
         font-size: 90%;
@@ -313,4 +317,11 @@ ul.memberships {
         float: right;
         margin-left: 5px;
     }
+    .add-email {
+        clear: both;
+    }
+}
+
+.js-edit form.edit {
+    display: none;
 }

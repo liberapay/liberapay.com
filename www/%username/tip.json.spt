@@ -10,8 +10,11 @@ from gratipay.utils import get_participant
 
 [-----------------------------------------------------------------------------]
 
-out = {}
-if not user.ANON:
+if user.ANON:
+    raise Response(403, _("Please sign in first"))
+
+else:
+    out = {}
 
     # Get tipper and tippee.
     # ======================
@@ -36,16 +39,25 @@ if not user.ANON:
     amount = out['amount']
     total_giving = tipper.giving
     total_receiving = tipper.receiving
-    total_receiving_tippee = tippee.receiving
 
     out["amount"] = str(amount)
     out["amount_l"] = format_currency(amount, 'USD')
+    out["msg"] = _("Tip changed to {0} per week!", out["amount_l"])
+    out["npatrons"] = tippee.npatrons
+    out["tippee_id"] = tippee.id
     out["total_giving"] = str(total_giving)
     out["total_giving_l"] = format_currency(total_giving, 'USD')
     out["total_receiving"] = str(total_receiving)
     out["total_receiving_l"] = format_currency(total_receiving, 'USD')
-    out["total_receiving_tippee"] = str(total_receiving_tippee)
-    out["total_receiving_tippee_l"] = format_currency(total_receiving_tippee, 'USD')
+
+    if not tippee.anonymous_receiving:
+        total_receiving_tippee = tippee.receiving
+        out["total_receiving_tippee"] = str(total_receiving_tippee)
+        out["total_receiving_tippee_l"] = format_currency(total_receiving_tippee, 'USD')
+    else:
+        out["total_receiving_tippee"] = None
+        out["total_receiving_tippee_l"] = '[' + _("hidden") + ']'
+
     if 'ctime' in out:
         out["ctime"] = str(out['ctime'])
         out["mtime"] = str(out['mtime'])

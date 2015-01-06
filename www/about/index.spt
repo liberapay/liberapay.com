@@ -1,4 +1,4 @@
-title = "About"
+title = "Welcome!"
 [---]
 example = website.db.one("""
 
@@ -11,13 +11,13 @@ example = website.db.one("""
 """)
 [---] text/html
 {% extends "templates/about.html" %}
-{% block page %}
+{% block content %}
 <div class="col0">
 
-    <h2>What Is Gratipay?</h2>
+    <p>You've found Gratipay!</p>
 
-    <p>Gratipay (formerly Gittip) is a way to make <b>small weekly cash
-    payments</b> to people you love and teams you respect.</p>
+    <p>Gratipay (formerly Gittip) is a way to give money every week to people
+    and teams you believe in.</p>
 
     <p>Payments are <b>weekly</b>. Bills are recurring. Therefore, income from
     Gratipay is recurring.</p>
@@ -29,22 +29,6 @@ example = website.db.one("""
     <p>Payments are <b>public</b>. By default, the <i>total</i> amount you give
     and the <i>total</i> amount you receive is public (you can opt out of
     sharing this info).</p>
-
-
-    <h2>Can you show me an example?</h2>
-
-    <p>Sure! How about <a href="/{{ example }}/">{{ example }}</a>?
-    (Refresh for another.)</p>
-
-
-    <h2>Where next?</h2>
-
-    <ul>
-        <li><a href="details">details about how money flows on Gratipay</a></li>
-        <li><a href="charts">charts showing Gratipay's growth over time</a></li>
-        <li><a href="faq">frequently asked questions (FAQ)</a></li>
-        <li><a href="contact">contact us</a></li>
-    </ul>
 
 </div>
 {% endblock %}

@@ -1,0 +1,38 @@
+#leaderboard {
+    @include clearfix;
+    width: leaderboard-width(3);
+}
+
+.people {
+    width: $people-column-width * 3;
+    margin-left: $people-column-gutter;
+    float: left;
+
+    &:first-child {
+        margin: 0;
+    }
+
+    ul {
+        // hide whitespace between items
+        font-size: 0;
+        line-height: 0;
+        li {
+            display: inline-block;
+            margin: 0;
+            padding: 2px;
+            vertical-align: top;
+            width: $people-column-width;
+        }
+    }
+
+    h2 {
+        font-size: 13px;
+    }
+}
+.more-container {
+    @include clearfix;
+    text-align: center;
+    padding-top: 20px;
+    width: $people-column-width * 3 * 3;
+    margin-left: $people-column-gutter;
+}

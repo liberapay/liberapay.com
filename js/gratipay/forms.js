@@ -96,12 +96,20 @@ Gratipay.forms.jsEdit = function(params) {
         else $editButton.prop('disabled', true);
         $form.css('display', $form.data('display') || 'block');
         $view.hide();
+
+        // prompt the user if they try leaving the page before saving
+        if (params.confirmBeforeUnload) {
+            $(window).on('beforeunload.js_edit', function(e) {
+                e.preventDefault();
+            });
+        }
     });
 
     function finish_editing() {
         $editButton.show().prop('disabled', false);
         $form.hide();
         $view.show();
+        $(window).off('beforeunload.js_edit');
     }
     $root.find('button.cancel').click(finish_editing);
 

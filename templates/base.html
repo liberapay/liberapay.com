@@ -2,7 +2,7 @@
 <html lang="en">
 <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb#">
     {% block head_early %}{% endblock %}
-    <title>{% if title %}{{ title|e }} - {% endif %}Gratipay</title>
+    <title>{% if title %}{% if subhead %}{{ subhead|e }} - {% endif %}{{ title|e }} - {% endif %}Gratipay</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ website.asset('gratipay.css') }}" type="text/css">
     <link rel="apple-touch-icon-precomposed" href="{{ website.asset('touch/icon-60x60.png') }}">
@@ -32,143 +32,109 @@
     </script>
     {% endif %}
 </head>
-<body>
-    <div class="container">
-        <div id="header">
-            <table><tr><td class="logo">
-                <h1>
-                    <a href="/">
-                        <img src="{{ website.asset('platforms/gratipay.png') }}"
-                             alt="Gratipay" />
-                    </a>
-                </h1>
-                </td><td class="motto luxury">
-            <a href='/about/charts.html'>{{ _("{0} users exchanging {1} per week",
-                                            format_number(website.gnactive),
-                                            format_currency(website.gtransfer_volume, "USD")) }}</a>
-            </td></tr></table>
+{% set homepage = path.raw == '/' %}
+<body id="{{ 'homepage' if homepage }}">
+
+    <div id="wrapper">
+        <div id="header" class="clearfix">
+            <h1><a href="/"><img src="{{ website.asset('gratipay.svg') }}"
+                                 alt="Gratipay" /></a></h1>
+            {% set pages=[('/about/', _('About')), ('/explore/', _('Explore'))]%}
+            {% set current_page = path.raw.split('/')[1] %}
+            {% include "templates/nav.html" %}
             {% if user.ANON %}
-              {% include "templates/sign-in-using.html" %}
+                {% include "templates/sign-in-using.html" %}
             {% else %}
-            <div class="you-are">
-                <a href="/{{ user.participant.username }}/">{{ user.participant.username }}</a> &ndash;
-                <a id="sign-out" href="/sign-out.html">{{ _("Sign out").lower() }}</a>
-                <div class="quick-stats">
-                  {{ _("Giving:") }} <a href="/{{ user.participant.username }}/giving/">
-                              <span class="my-total-giving">{{ format_currency(float(user.participant.giving), "USD") }}</span>/{{ _("wk") }}
-                          </a>
-                  <br />
-                  {{ _("Receiving:") }} <b>{{ format_currency(float(user.participant.receiving), "USD") }}/{{ _("wk") }}</b>
-                </div>
-            </div>
+            <ul class="nav you-are">
+                <li>
+                    <a href="/{{ user.participant.username }}/"{% if path.raw.split('/')[1] == user.participant.username  %} class="selected"{% endif %}>
+                        {{ user.participant.username }}
+                        <div class="quick-stats">
+                            <span class="my-total-giving">{{ format_currency(user.participant.giving, "USD") }}</span>/{{ _("wk") }}
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a id="sign-out" href="/sign-out.html">
+                        <span class="icon">&#xe600;</span>
+                        <span class="screen-reader-text">Sign out</span>
+                    </a>
+                </li>
+            </ul>
             {% endif %}
-        </div>
-    </div>
-
-    <div class="pennies"><div id="hero">
-        <div class="container">
             {% include "templates/support-gratipay.html" %}
-            {% block heading %}
-            {% if title %}
-            <h1>{{ title }}</h1>
-            {% endif %}
-            {% endblock %}
         </div>
-    </div></div>
 
-    {% block whole_page %}
-    <div class="container">
-        {% block killbox %}
-        <div class="box">
-            {% block box %}{% endblock %}
-        </div>
-        {% endblock %}
-        <div id="page" class="group">
-            {% block page %}{% endblock %}
-        </div>
-    </div>
-    {% endblock %}
-
-    <div class="container">
-        <div id="footer">
-            <div class="social">
-                <a href="https://twitter.com/gratipay"><img src="{{ website.asset('platforms/twitter.16.png') }}" /></a>
-                <a href="https://github.com/gratipay/gratipay.com"><img src="{{ website.asset('platforms/github.16.png') }}" /></a>
+        <div id="main">
+            <div id="sidebar">{% block sidebar %}{% endblock %}</div>
+            <div id="content" class="clearfix">
+                {% block heading %}{% if title %}<h1>{{ title }}</h1>{% endif %}{% endblock %}
+                {% block subnav %}{% endblock %}
+                {% block content %}{% endblock %}
             </div>
+        </div>
+
+        <div id="footer">
             <ul>
-                <li><a href='https://medium.com/gratipay-blog'>{{ _("Blog") }}</a></li>
                 <li><a href="/about/">{{ _("About") }}</a></li>
-                <li><a href="/about/contact">{{ _("Contact") }}</a></li>
-                <li><a href='/about/faq.html'>{{ _("FAQ") }}</a></li>
-                <li><a href='/about/stats.html'>{{ _("Stats") }}</a></li>
-                <li><a href='/about/charts.html'>{{ _("Charts") }}</a></li>
+                <li><a href="/about/contact">{{ _("Contact Us") }}</a></li>
+                <li><a href="/about/faq">{{ _("FAQ") }}</a></li>
                 <li><a href="/about/terms/">{{ _("Terms") }}</a></li>
-                <li><a href="/about/privacy/">{{ _("Privacy") }}</a></li>
-                <li><a href='/about/fraud/'>{{ _("Fraud") }}</a></li>
-                <li><a href='http://inside.gratipay.com/appendices/colophon'>{{ _("Colophon") }}</a></li>
-                <li><a href='/security.txt'>{{ _("Security") }}</a></li>
+                <li><a href="http://inside.gratipay.com/appendices/colophon">{{ _("Colophon") }}</a></li>
+                <li><a href="https://medium.com/gratipay-blog">{{ _("Blog") }}</a></li>
+                <li><a href="https://twitter.com/gratipay">Twitter</a></li>
+                <li><a href="https://github.com/gratipay/gratipay.com">GitHub</a></li>
             </ul>
         </div>
     </div>
 
-    <script>
-        // http://stackoverflow.com/questions/7131909/facebook-callback-appends-to-return-url
-        if (window.location.hash == '#_=_') {
-            window.location.hash = ''; // for older browsers, leaves a # behind
-            history.pushState('', document.title, window.location.pathname); // nice and clean
-        }
-    </script>
+<script>
+    // http://stackoverflow.com/questions/7131909/facebook-callback-appends-to-return-url
+    if (window.location.hash == '#_=_') {
+        window.location.hash = ''; // for older browsers, leaves a # behind
+        history.pushState('', document.title, window.location.pathname); // nice and clean
+    }
+</script>
+<script src="{{ website.asset('jquery.min.js') }}"></script>
+<script src="{{ website.asset('chosen.jquery.min.js') }}"></script>
+<script src="{{ website.asset('tipr.min.js') }}"></script>
+<script src="{{ website.asset('bootstrap-dropdown.js') }}"></script>
+<script src="{{ website.asset('gratipay.js') }}"></script>
 
+<script>
+    $(document).ready(Gratipay.init);
+</script>
 
-    <script src="{{ website.asset('jquery.min.js') }}"></script>
+{% block scripts %}{% endblock %}
 
-    <!-- Used on the profile edit page for the community chooser. -->
-    <script src="{{ website.asset('chosen.jquery.min.js') }}"></script>
-
-    <script src="{{ website.asset('tipr.min.js') }}"></script>
-
-    <script src="{{ website.asset('bootstrap-dropdown.js') }}"></script>
-
-    <script src="{{ website.asset('gratipay.js') }}"></script>
-
-    <script>
-        function unlocalizeDecimal(s) {
-            return s.replace('{{ decimal_symbol }}', '.').replace(/[^0-9.]/g, '');
-        }
-
-        $(document).ready(Gratipay.init);
-    </script>
-    {% block scripts %}
-
-    {% endblock %}
-
-    {% if not user.ANON %}
-    <script>
-        {% if not request.line.uri.startswith('/credit-card.html') %}
-        {% if user.participant.last_bill_result %}
-        Gratipay.notification(
-            ["span", "{{ _('Your credit card has failed!') }} ",
-                ['a', {'href': '/credit-card.html'}, "{{ _('Fix your card') }}"]
-            ], "error", -1
-        );
-        {% elif user.participant.credit_card_expiring(website, request, response) %}
-        Gratipay.notification(
-            ["span", "{{ _('Your credit card is about to expire!') }} ",
-                ['a', {'href': '/credit-card.html'}, "{{ _('Update card') }}"]
-            ], "error"
-        );
-        {% endif %}
-        {% endif %}
-        {% if not user.participant.email_address and not request.line.uri.path.raw.endswith('/account/') %}
-        {% if not user.participant.get_emails() %}
-        Gratipay.notification(
-            ["span", "{{ _('Your account does not have an associated email address.') }} ",
-                ['a', {'href': '/{{ user.participant.username }}/account/#emails'}, "{{ _('Add an email address') }}"]
-            ], "notice", -1
-        );
-        {% endif %}
-        {% endif %}
-    </script>
+{% if not user.ANON %}
+<script>
+    {% if not request.line.uri.startswith('/credit-card.html') %}
+    {% if user.participant.last_bill_result %}
+    Gratipay.notification(
+        ["span", "{{ _('Your credit card has failed!') }} ",
+            ['a', {'href': '/credit-card.html'}, "{{ _('Fix your card') }}"]
+        ], "error", -1
+    );
+    {% elif user.participant.credit_card_expiring(website, request, response) %}
+    Gratipay.notification(
+        ["span", "{{ _('Your credit card is about to expire!') }} ",
+            ['a', {'href': '/credit-card.html'}, "{{ _('Update card') }}"]
+        ], "error"
+    );
     {% endif %}
+    {% endif %}
+    {% if not user.participant.email_address and not request.line.uri.path.raw.endswith('/account/') %}
+    {% if not user.participant.get_emails() %}
+    Gratipay.notification(
+        ["span", "{{ _('Your account does not have an associated email address.') }} ",
+            ['a', {'href': '/{{ user.participant.username }}/account/#emails'}, "{{ _('Add an email address') }}"]
+        ], "notice", -1
+    );
+    {% endif %}
+    {% endif %}
+</script>
+{% endif %}
+
 </body>
 </html>
