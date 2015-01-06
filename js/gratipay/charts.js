@@ -34,10 +34,8 @@ Gratipay.charts.make = function(series) {
     }
 
     var H = $('.chart').height();
-    var nweeks = series.length;
-    var w = (1 / nweeks * 100).toFixed(10) + '%';
-
-    $('.n-weeks').text(nweeks);
+    var nitems = series.length;
+    var w = (1 / nitems * 100).toFixed(10) + '%';
 
 
     // Compute maxes and scales.
@@ -57,34 +55,34 @@ Gratipay.charts.make = function(series) {
     }
 
 
-    // Draw weeks.
-    // ===========
+    // Draw bars.
+    // ==========
 
-    function Week(i, j, N, y, title) {
-        var week   = $(document.createElement('div')).addClass('week');
+    function Bar(i, j, N, y, title) {
+        var bar = $(document.createElement('div')).addClass('bar');
         var shaded = $(document.createElement('div')).addClass('shaded');
         shaded.html('<span class="y-label">'+ y.toFixed() +'</span>');
-        week.append(shaded);
+        bar.append(shaded);
 
         var xTick = $(document.createElement('span')).addClass('x-tick');
         xTick.text(i+1).attr('title', title);
-        week.append(xTick);
+        bar.append(xTick);
 
         // Display a max flag (only once)
         if (y === maxes[j]) {
             maxes[j] = undefined;
-            week.addClass('flagged');
+            bar.addClass('flagged');
         }
 
-        week.css('width', w);
+        bar.css('width', w);
         shaded.css('height', y / N * H);
-        return week;
+        return bar;
     }
 
     for (var i=0, point; point = series[i]; i++) {
         for (var j=0, chart; chart = charts[j]; j++) {
             chart.append(
-                Week(i, j, scales[j], point[chart.varname], point.date)
+                Bar(i, j, scales[j], point[chart.varname], point.date)
             );
         }
     }
@@ -93,17 +91,17 @@ Gratipay.charts.make = function(series) {
     // Wire up behaviors.
     // ==================
 
-    $('.week').click(function() {
+    $('.bar').click(function() {
         $(this).toggleClass('flagged');
         if ($(this).hasClass('flagged'))
             $(this).removeClass('hover');
     });
 
-    $('.week').mouseover(function() {
+    $('.bar').mouseover(function() {
         $(this).addClass('hover');
     });
 
-    $('.week').mouseout(function() {
+    $('.bar').mouseout(function() {
         $(this).removeClass('hover');
     });
 };
