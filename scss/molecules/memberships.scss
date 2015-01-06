@@ -1,0 +1,31 @@
+ul.memberships {
+    margin: 0 0 2em;
+    padding: 0;
+    float: left;
+    width: 100%;
+    font: normal 16px $Ideal;
+
+    li {
+        padding: 0;
+        margin: 0;
+        width: 33%;
+        float: left;
+        word-wrap: break-word;
+
+        div.fine {
+            display: block;
+            font-size: 9pt;
+            line-height: 9pt;
+            padding-bottom: 6pt;
+
+            span.leave {
+                cursor: pointer;
+                color: $green;
+                text-decoration: underline;
+            }
+        }
+    }
+    li:nth-child(3n+1) {
+        clear: both;
+    }
+}

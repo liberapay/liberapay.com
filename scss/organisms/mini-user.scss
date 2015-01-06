@@ -1,0 +1,66 @@
+.mini-user {
+    background: white;
+    display: block;
+    float: left;
+    width: 100%;
+    overflow: hidden;
+    border: 4px solid #DEE0E0;
+    @include border-radius(3px);
+
+    span.inner {
+        border: 1px solid #B6B7B9;
+        display: block;
+        min-height: 50px;
+        padding: 5px;
+
+        span.avatar {
+            background: transparent url('avatar-default.png') center center no-repeat;
+            background-size: cover;
+            display: block;
+            height: 66px;
+            position: relative;
+        }
+        span.age,
+        span.money {
+            color: $black;
+            display: block;
+            font: bold 16px $Ideal;
+            margin: 7px 0 5px 0;
+        }
+        span.age {
+            font-size: 11px;
+        }
+        span.name {
+            display: block;
+            font: normal 11px $Ideal;
+            margin: 3px 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+
+    &.anonymous {
+        opacity: 0.33;
+    }
+}
+a.mini-user {
+    span.name {
+        color: $green;
+    }
+}
+span.mini-user {
+    border-color: white;
+    span.name {
+        color: $black;
+    }
+}
+a.mini-user:hover {
+    border: 4px solid $light-brown;
+    text-decoration: none;
+
+    span.inner {
+        border-color: $brown;
+    }
+}
+

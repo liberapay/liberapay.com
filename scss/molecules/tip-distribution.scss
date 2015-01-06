@@ -1,0 +1,31 @@
+.tip-distribution {
+    font: normal 12px $Mono;
+    .dollar-sign {
+        padding: 0 2pt 0 24pt;
+        text-align: right;
+    }
+    .amount {
+        padding: 0 6pt 0 0;
+        text-align: right;
+    }
+    .amount-change {
+        padding: 6pt 0 6pt 24pt;
+        text-align: left;
+    }
+    .count {
+        text-align: left;
+        white-space: nowrap;
+    }
+    .count span.number {
+        font-size: 8pt;
+    }
+    .count span.bar {
+        background: $light-brown;
+        display: inline-block;
+        margin-right: 3pt;
+        height: 9pt;
+    }
+    .count span.bar.green {
+        background: $green;
+    }
+}
