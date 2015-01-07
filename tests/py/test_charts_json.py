@@ -5,6 +5,7 @@ import json
 
 from mock import patch
 
+from aspen.utils import utcnow
 from gratipay.billing.payday import Payday
 from gratipay.testing import Harness
 
@@ -150,12 +151,13 @@ class TestChartsJson(Harness):
         self.run_payday()
 
         expected = { "date": today()
-                   , "weekly_gifts": 3.0
-                   , "charges": 0.0
-                   , "withdrawals": 0.0
-                   , "active_users": 3
-                   , "total_users": 4
-                   , "total_gifts": 6.0
+                   , "weekly_gifts": '3.00'
+                   , "charges": '0.00'
+                   , "withdrawals": '0.00'
+                   , "active_users": '3'
+                   , "total_users": '4'
+                   , "total_gifts": '6.00'
+                   , "xTitle": utcnow().strftime('%Y-%m-%d')
                     }
         actual = json.loads(self.client.GET('/about/charts.json').body)[0]
 

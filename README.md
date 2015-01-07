@@ -421,12 +421,12 @@ The Gratipay API is comprised of these six endpoints:
 **[/about/charts.json](https://gratipay.com/about/charts.json)**
 ([source](https://github.com/gratipay/gratipay.com/tree/master/www/about/charts.json.spt))&mdash;<i>public</i>&mdash;Returns
 an array of objects, one per week, showing aggregate numbers over time. The
-[charts](https://gratipay.com/about/charts.html) page uses this.
+[stats](https://gratipay.com/about/stats) page uses this.
 
 **[/about/paydays.json](https://gratipay.com/about/paydays.json)**
 ([source](https://github.com/gratipay/gratipay.com/tree/master/www/about/paydays.json.spt))&mdash;<i>public</i>&mdash;Returns
-an array of objects, one per week, showing aggregate numbers over time. The
-[charts](https://gratipay.com/about/charts.html) page used to use this.
+an array of objects, one per week, showing aggregate numbers over time. The old
+charts page used to use this.
 
 **[/about/stats.json](https://gratipay.com/about/stats.json)**
 ([source](https://github.com/gratipay/gratipay.com/tree/master/www/about/stats.spt))&mdash;<i>public</i>&mdash;Returns

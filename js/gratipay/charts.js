@@ -2,7 +2,7 @@ Gratipay.charts = {};
 
 
 Gratipay.charts.make = function(series) {
-    // Takes an array of time series data.
+    // Takes an array of data points.
 
     if (!series.length) {
         $('.chart-wrapper').remove();
@@ -10,10 +10,12 @@ Gratipay.charts.make = function(series) {
     }
 
 
-    // Sort the series in increasing date order.
-    // =========================================
+    // Reverse the series.
+    // ===================
+    // For historical reasons it comes to us in the opposite order from what we
+    // want.
 
-    series.sort(function(a,b) { return a.date > b.date ? 1 : -1 });
+    series.reverse();
 
 
     // Gather charts.
@@ -33,11 +35,10 @@ Gratipay.charts.make = function(series) {
         }
     }
 
-    var H = $('.chart').height();
-    var nweeks = series.length;
-    var w = (1 / nweeks * 100).toFixed(10) + '%';
-
-    $('.n-weeks').text(nweeks);
+    var flagRoom = 20;
+    var H = $('.chart').height() - flagRoom;
+    var nitems = series.length;
+    var w = (1 / nitems * 100).toFixed(10) + '%';
 
 
     // Compute maxes and scales.
@@ -57,35 +58,38 @@ Gratipay.charts.make = function(series) {
     }
 
 
-    // Draw weeks.
-    // ===========
+    // Draw bars.
+    // ==========
 
-    function Week(i, j, N, y, title) {
-        var week   = $(document.createElement('div')).addClass('week');
+    function Bar(i, j, N, y, xText, xTitle) {
+        var yParsed = parseFloat(y);
+        var bar = $(document.createElement('div')).addClass('bar');
         var shaded = $(document.createElement('div')).addClass('shaded');
-        shaded.html('<span class="y-label">'+ y.toFixed() +'</span>');
-        week.append(shaded);
+        shaded.html('<span class="y-label">'+ yParsed.toFixed() +'</span>');
+        bar.append(shaded);
 
         var xTick = $(document.createElement('span')).addClass('x-tick');
-        xTick.text(i+1).attr('title', title);
-        week.append(xTick);
+        xTick.text(xText).attr('title', xTitle);
+        bar.append(xTick);
 
         // Display a max flag (only once)
-        if (y === maxes[j]) {
+        if (yParsed === maxes[j]) {
             maxes[j] = undefined;
-            week.addClass('flagged');
+            bar.addClass('flagged');
         }
 
-        week.css('width', w);
-        shaded.css('height', y / N * H);
-        return week;
+        bar.css('width', w);
+        var h = yParsed / N * H;
+        if (yParsed > 0) h = Math.max(h, 1); // make sure only true 0 is 0 height
+        shaded.css('height', h)
+        return bar;
     }
 
     for (var i=0, point; point = series[i]; i++) {
         for (var j=0, chart; chart = charts[j]; j++) {
-            chart.append(
-                Week(i, j, scales[j], point[chart.varname], point.date)
-            );
+            var xText = point.xText || i+1;
+            var xTitle = point.xTitle || '';
+            chart.append(Bar(i, j, scales[j], point[chart.varname], xText, xTitle));
         }
     }
 
@@ -93,17 +97,17 @@ Gratipay.charts.make = function(series) {
     // Wire up behaviors.
     // ==================
 
-    $('.week').click(function() {
+    $('.bar').click(function() {
         $(this).toggleClass('flagged');
         if ($(this).hasClass('flagged'))
             $(this).removeClass('hover');
     });
 
-    $('.week').mouseover(function() {
+    $('.bar').mouseover(function() {
         $(this).addClass('hover');
     });
 
-    $('.week').mouseout(function() {
+    $('.bar').mouseout(function() {
         $(this).removeClass('hover');
     });
 };

@@ -1,6 +1,9 @@
+from math import log
+from decimal import Decimal as D
+
+import gratipay
 [---]
-[---] application/json via json_dump
-website.db.all("""
+amounts = website.db.all("""
 
     SELECT amount
       FROM (SELECT DISTINCT ON (tipper, tippee)
@@ -18,4 +21,40 @@ website.db.all("""
      WHERE amount > 0
   ORDER BY amount
 
-""", back_as=dict)
+""")
+
+bins = [ (D('0.00'), D('0.10'))
+       , (D('0.11'), D('0.20'))
+       , (D('0.21'), D('0.50'))
+
+       , (D('0.51'), D('1.00'))
+       , (D('1.01'), D('2.00'))
+       , (D('2.01'), D('5.00'))
+
+       , ( D('5.01'),  D('10.00'))
+       , (D('10.01'),  D('20.00'))
+       , (D('20.01'),  D('50.00'))
+
+       , ( D('50.01'), D('100.00'))
+       , (D('100.01'), D('200.00'))
+       , (D('200.01'), D('500.00'))
+
+       , (D('500.01'), D('1000.00'))
+        ]
+
+ntips = [0 for i in range(len(bins))]
+value = [0 for i in range(len(bins))]
+i = 0
+for amount in amounts:
+    while amount > bins[i][1]:
+        i += 1
+    ntips[i] += 1
+    value[i] += amount
+
+[---] application/json via json_dump
+[{ 'ntips': str(rec[0])
+ , 'sum': str(rec[1])
+ , 'lo': str(rec[2][0])
+ , 'hi': str(rec[2][1])
+ , 'xText': str(rec[2][1])
+  } for rec in reversed(zip(ntips, value, bins))]

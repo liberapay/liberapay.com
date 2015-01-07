@@ -4,9 +4,9 @@
         padding-top: 12pt;
     }
     .chart {
-        height: 100px;
+        height: 120px; // 100px for the chart + room for the max flag
     }
-    .week {
+    .bar {
         height: 100%;
         float: left;
         position: relative;
@@ -18,10 +18,10 @@
         bottom: 0;
         width: 100%;
     }
-    .week span, .x-axis {
+    .bar span, .x-axis {
         font: normal 7pt/7pt "Lucida Mono", Monaco, monospace;
     }
-    .week span.x-tick {
+    .bar span.x-tick {
         position: absolute;
         bottom: -12pt;
         right: 0;
@@ -32,7 +32,7 @@
         color: #630;
         background: white;
     }
-    .week span.y-label {    // This is the flag.
+    .bar span.y-label {     // This is the flag.
         display: none;
         position: absolute;
         top: -17pt;
@@ -45,17 +45,17 @@
         border-radius: 3pt 0 0 3pt;
         padding: 2pt 3pt;
     }
-    .week.max span.y-label {
+    .bar.max span.y-label {
         display: block;
     }
-    .week.flagged span.y-label,
-    .week.flagged span.x-tick,
-    .week.hover span.y-label,
-    .week.hover span.x-tick {
+    .bar.flagged span.y-label,
+    .bar.flagged span.x-tick,
+    .bar.hover span.y-label,
+    .bar.hover span.x-tick {
         display: block;
     }
-    .week.hover span.y-label,
-    .week.hover span.x-tick {
+    .bar.hover span.y-label,
+    .bar.hover span.x-tick {
         z-index: 2
     }
     .x-axis {
@@ -66,6 +66,5 @@
         font-style: italic;
         font-size: 8pt;
         line-height: 10pt;
-        padding-bottom: 12pt;
     }
 }
