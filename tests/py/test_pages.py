@@ -76,9 +76,12 @@ class TestPages(Harness):
         actual = self.client.GET('/about/faq.html').body.decode('utf8')
         assert expected in actual
 
+    def test_about_teams_redirect(self):
+        assert self.client.GxT('/about/teams/').code == 302
+
     def test_about_teams(self):
         expected = "Teams"
-        actual = self.client.GET('/about/teams/').body.decode('utf8')
+        actual = self.client.GET('/about/features/teams/').body.decode('utf8')
         assert expected in actual
 
     def test_404(self):
