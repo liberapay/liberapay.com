@@ -1,7 +1,12 @@
 Gratipay.charts = {};
 
-
 Gratipay.charts.make = function(series) {
+    $(document).ready(function() {
+        Gratipay.charts._make(series);
+    });
+};
+
+Gratipay.charts._make = function(series) {
     // Takes an array of data points.
 
     if (!series.length) {

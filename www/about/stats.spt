@@ -163,10 +163,8 @@ out()
 
 {% block scripts %}
 <script>
-    $(document).ready(function() {
-        jQuery.get('/about/charts.json', Gratipay.charts.make);
-        jQuery.get('/about/tip-distribution.json', Gratipay.charts.make);
-    });
+    jQuery.get('/about/charts.json', Gratipay.charts.make);
+    jQuery.get('/about/tip-distribution.json', Gratipay.charts.make);
 </script>
 {{ super() }}
 {% endblock %}
