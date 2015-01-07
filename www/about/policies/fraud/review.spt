@@ -1,0 +1,84 @@
+from aspen import Response
+
+title = "Fraud Review Dashboard"
+[---]
+if not user.ADMIN:
+    raise Response(404)
+
+
+unreviewed = website.db.all("""
+
+    SELECT username
+         , balance
+      FROM participants
+     WHERE is_suspicious IS NULL
+       AND balanced_customer_href IS NOT NULL
+       AND NOT is_closed
+  ORDER BY claimed_time
+
+""")
+
+[---] text/html
+<script src="{{ website.asset('jquery.min.js') }}"></script>
+<script src="{{ website.asset('gratipay.js') }}"></script>
+<style>
+    table {
+        width: auto;
+    }
+    td, th {
+        text-align: left;
+        vertical-align: top;
+    }
+    iframe {
+        width: 70%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        right: 0;
+        background: white;
+    }
+</style>
+<script>
+    $(document).ready(function()
+    {
+        Gratipay.forms.initCSRF();
+
+        function error(a,b,c)
+        {
+            console.log(a,b,c);
+            alert("Failed!");
+        }
+
+        $('button').click(function()
+        {
+            var row = $(this).parent();
+            var to = $(this).text() !== 'Good';
+            var username = row.attr('username');
+            var url = "/" + username + "/toggle-is-suspicious.json";
+
+            function success()
+            {
+                row.remove();
+                $('iframe').attr('src', '');
+            }
+
+            jQuery.ajax({ url: url
+                        , type: "POST"
+                        , dataType: "json"
+                        , data: {to: to}
+                        , success: success
+                        , error: error
+                         })
+        });
+    });
+</script>
+<h3>Unreviewed Accounts (N = {{ len(unreviewed) }})</h3>
+{% for account in unreviewed %}
+<div username="{{ account.username }}">
+    <button class="good small selected">Good</button>
+    <button class="bad small">Bad</button>
+    &nbsp;
+    <a href="/{{ account.username }}/" target="drill-down">{{ account.username }}</a>
+</div>
+{% endfor %}
+<iframe name="drill-down"></iframe>
