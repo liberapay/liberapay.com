@@ -4,18 +4,18 @@ title = _("Security")
 {% extends "templates/security.html" %}
 {% block content %}
 <div class="col0">
-    <p>We take the security of our systems very seriously.
+    <p>Please mail all security reports to <a
+        href="mailto:chad@zetawb.com">Chad Whitacre</a> using the below key.
+    Thank you.</p>
+</div>
 
-    Please send all security reports to the address below using our PGP Key.<br>
-    <b>Thank you.</b><br><br>
-
-Chad Whitacre <<a href="mailto:chad@zetaweb.com">chad@zetaweb.com</a>>
-<br><br>
-<a href="http://pgp.mit.edu:11371/pks/lookup?op=get&search=0x6EE18A8DC47977C2">PGP</a>
-<br><br>
-<i>$ gpg --keyserver pgp.mit.edu --recv-keys 0x6ee18a8dc47977c2</i>
-<br><br>
-<pre>-----BEGIN PGP PUBLIC KEY BLOCK-----
+    <pre>$ gpg --keyserver pgp.mit.edu --recv-keys 0x6ee18a8dc47977c2
+gpg: requesting key C47977C2 from hkp server pgp.mit.edu
+gpg: key C47977C2: "Chad Whitacre <chad@zetaweb.com>" imported
+gpg: Total number processed: 1
+gpg:               imported: 1
+$ gpg --export --armor "Chad Whitacre"
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v1.4.15 (Darwin)
 
 mQINBFELsnoBEADyUjugO/bD9mvms2jkxjSNjN25blQRcqKdQFAHpCvKN2eERR/V
@@ -41,32 +41,42 @@ XY6H8r4PrIy3Jr0iuKIiJMr3Zfaklcqh5MStGDqvkdb+CZPlrO8Y9tRz7e4p4U+h
 OhLe0A28oH+24PD1rLErndU4TGMlnFVRgGoKBNzlqIFLY0PQSVomWmkleMeGdSAd
 kPRoKLCQQS3ZlLcEEok/QaudcbZ8AfzgnOd0KgoomjOaKsEJzwuzaIShHpVRz4kZ
 nyb2mCSu4AR3iMxFgSz1GJXrtXJmF6X2S56Dt3duIOLIzcOYetotorxZzQjy9trl
-FAsiJmi6eD0ouFsGOM5xCKWNC3uafqrDeo8gQz3/nlqWHqi5Ag0EUQuyegEQAOVq
-xjepb78TsLYpp2093MtEXGl1j+T3/y/y7M61kbuaNutVUXvSwqDEjByWRBxBCx91
-OHa9yOCrjDpgADMmTDwEOI91/aWhBRtRValhgPd92P++UVxQWAVuD87hAtUSgqaY
-U02PEzPytlMwDdcwUoBjBCpp9bQfjWS4QMGTPsMHJpuJZ7Cmbk2PNaELH/7jiZIp
-3O3PQz43yGEbCQiVUN6HFXjjS0oARioL6Altakl1tic+SG+WiVesUxpeFBx0GJXn
-BLWKiWyR4Zt+vGZ6PLB7YR/88dL6bHn7LsFGGyF63Xm++OW2bdQyi33adj8QEzAt
-k2aixO7Og/FOGRTEg9LBbdMc5+fHtyDKSzb3dkBwyQGa0EjB5Oj5y5YXD1Q23nd6
-4bwGsuYJ4uHXJwJGXDe4PkTzaLN5BKRfDDdxX5IbhDfqey6cj68JqNYV94cy8qOZ
-PKr+F3pZnTrHbirlMa5+A7ke6GkUKokSif9yj9tTzm8O/BRvi9hTy76FbF1otvIu
-BkcY8kNEn3wG5SKWcmqP5MxeI+ZO1XWxqKuUMgV1xNRV0deQYGPEO3v8nyGDYluJ
-6LkkvZMVM7BKT57IoODoeNQfzS2lAm49OJZ8rKYJwwY5KMTmxE4oJQVGN0ISBLTv
-+nnOYtb6RNGHgvQbZeHovYrBv+4nI624bNgQ9+XvABEBAAGJAiUEGAECAA8CGwwF
-AlL6WdsFCQPP2t4ACgkQbuGKjcR5d8L/qQ/+J0mHQpciAmeeBi2Q/NrDsmzMsPC0
-NAkaLbMngboxVji7j5o/GUW4a2CgUUh00L1cUmgiHC+pqYnVR9zz787+Ryz2y1IF
-vJzmLChOhxJQtc9uyEYLov+zv9GfSoQxD3ZxpZZTGSHNRwXtBh69gMDzLiwx4dYk
-tSFR+JEY2nBXejnqsesIaFMx03A5bHm3EiJ4G1ihViMgpGz9IjTPLPAKkUo/2KQT
-36DqX/zrmJVqVur5qZ7LGrTsfqXUNv4m3tE8HFslog6pERAI56LmtDd5Ln0o5inF
-n/u5G9GYY2P1LRwe/ZMkG7NQ0O/jCKXKfw9uT8lBkLl8VFeftl4j1w/lqzHTq7yP
-x0gaGI1Cw3uzN405LQz7iHRnxQVbUui98TyAnnxXnIFBHqNYvJwiL4jZIu2YHVka
-wO+xpbvsc4RxULnDxQXmpvj8EltWHUa2FbLluFU+m0dHCvJUY5Y4pbtILSjLq9ay
-CDNGLIO6tW6uWxnYz1qA/jb0ziPTfOo/sOuRtDmbxupnL5KmfWozCFQjdaSPeJY6
-gcQHIGU0GZNjqFg7IuS0UX+xfENwXSMH8zQqeiwaoDGfjVRFY3FhYM7xO+EDUCSk
-yuUkMS/XHCXTWx0dRqb9LGyTWbCJ8noRX+MpWkpC1Wrs7+Hsplzgaq6oTLzOUga2
-XD/Lln8R0McvTqA=
-=gAsf<br>
------END PGP PUBLIC KEY BLOCK-----</pre></p>
-
-</div>
+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
+tlw/y5Z/EdDHL06g
+=j1x3
+-----END PGP PUBLIC KEY BLOCK-----</pre>
 {% endblock %}
