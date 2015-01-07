@@ -18,6 +18,8 @@ class TestPages(Harness):
                            .replace('/for/%slug/', '/for/wonderland/') \
                            .replace('/%platform/', '/github/') \
                            .replace('/%user_name/', '/Gratipay/')
+            if 'index' in url.split('/')[-1]:
+                url = url.rsplit('/', 1)[0] + '/'
             try:
                 r = self.client.GET(url, **kw)
             except Response as r:
