@@ -57,4 +57,4 @@ for amount in amounts:
  , 'lo': str(rec[2][0])
  , 'hi': str(rec[2][1])
  , 'xText': str(rec[2][1])
-  } for rec in zip(ntips, value, bins)]
+  } for rec in reversed(zip(ntips, value, bins))]

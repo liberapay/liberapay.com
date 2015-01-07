@@ -10,6 +10,14 @@ Gratipay.charts.make = function(series) {
     }
 
 
+    // Reverse the series.
+    // ===================
+    // For historical reasons it comes to us in the opposite order from what we
+    // want.
+
+    series.reverse();
+
+
     // Gather charts.
     // ==============
     // Sniff the first element to determine what data points are available, and

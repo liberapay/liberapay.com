@@ -13,11 +13,11 @@ charts = website.db.all("""\
          , charge_volume::text      AS charges
          , abs(ach_volume)::text    AS withdrawals
       FROM paydays p
-  ORDER BY ts_start ASC
+  ORDER BY ts_start DESC
 
 """, back_as=dict)
 for c in charts:
     c['xTitle'] = c.pop('xtitle')  # postgres doesn't respect case here
 response.headers["Access-Control-Allow-Origin"] = "*"
 [---] application/json via json_dump
-charts[1:]  # Don't show Gratipay #0.
+charts[:-1]  # Don't show Gratipay #0.
