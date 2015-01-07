@@ -89,7 +89,7 @@ from gratipay.security.user import SESSION_TIMEOUT
             _("You'll be joining {0} active users, who exchanged {1} {2}last week{3}.",
                 format_number(website.gnactive),
                 format_currency(website.gtransfer_volume, "USD"),
-                "<a href='/about/charts.html'>", "</a>") + " " +
+                "<a href='/about/stats'>", "</a>") + " " +
             _("Want to see who they are? Browse {0}our communities{1}.",
                 "<a href='/for/'>", "</a>") + " " +
             _("Want to work for Gratipay? We are an {0}open company{1}.",
