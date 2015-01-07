@@ -1,4 +1,5 @@
-title = "Welcome!"
+title = "About"
+subhead = "Overview"
 [---]
 example = website.db.one("""
 
@@ -10,7 +11,7 @@ example = website.db.one("""
 
 """)
 [---] text/html
-{% extends "templates/about.html" %}
+{% extends "templates/basic-info.html" %}
 {% block content %}
 <div class="col0">
 

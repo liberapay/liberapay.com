@@ -1,12 +1,9 @@
 {% extends "templates/base.html" %}
 {% block sidebar %}
     {% set current_page = path.raw.split('/')[2] %}
+    {% set current_page = current_page if current_page in ('features', 'policies', 'security') else '' %}
     {% set nav_base = "/about" %}
-    {% set pages = [ ('/', _('Welcome!'))
-                   , ('/faq', _('FAQ'))
-                   , ('/contact', _('Contact Us'))
-                   , ('/pricing', _('Pricing'))
-                   , ('/stats', _('Stats'))
+    {% set pages = [ ('/', _('Basic Info'))
                    , ('/features/', _('Features'))
                    , ('/policies/', _('Policies'))
                    , ('/security', _('Security'))
