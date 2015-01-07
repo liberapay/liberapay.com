@@ -65,6 +65,26 @@ LOCALE_EN.countries = COUNTRIES
 LOCALE_EN.languages_2 = LANGUAGES_2
 
 
+SEARCH_CONFS = dict((
+    ('da', 'danish'),
+    ('de', 'german'),
+    ('en', 'english'),
+    ('es', 'spanish'),
+    ('fi', 'finnish'),
+    ('fr', 'french'),
+    ('hu', 'hungarian'),
+    ('it', 'italian'),
+    ('nb', 'norwegian'),
+    ('nl', 'dutch'),
+    ('nn', 'norwegian'),
+    ('pt', 'portuguese'),
+    ('ro', 'romanian'),
+    ('ru', 'russian'),
+    ('sv', 'swedish'),
+    ('tr', 'turkish'),
+))
+
+
 ternary_re = re.compile(r'^\(? *(.+?) *\? *(.+?) *: *(.+?) *\)?$')
 and_re = re.compile(r' *&& *')
 or_re = re.compile(r' *\|\| *')

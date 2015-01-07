@@ -1,0 +1,29 @@
+.search-box {
+    margin: 1em 0;
+}
+
+.search-results {
+    .mini-user {
+        margin: 2px;
+    }
+}
+
+.search-result {
+    margin-bottom: 0.8em;
+    padding-left: 0.5em;
+    @include clearfix;
+    .avatar {
+        float: left;
+        margin: 0.5em 0;
+        max-height: 66px;
+        max-width: 66px;
+    }
+    .col-right {
+        margin-left: 74px;
+    }
+    .excerpt {
+        font-size: 80%;
+        line-height: 130%;
+        padding: 0.5em 0 0 1em;
+    }
+}

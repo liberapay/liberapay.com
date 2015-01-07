@@ -61,6 +61,8 @@ NANSWERS_THRESHOLD = 0  # configured in wireup.py
 
 NOTIFIED_ABOUT_EXPIRATION = b'notifiedAboutExpiration'
 
+USERNAME_MAX_SIZE = 32
+
 class Participant(Model, MixinTeam):
     """Represent a Gratipay participant.
     """
@@ -239,12 +241,13 @@ class Participant(Model, MixinTeam):
          RETURNING true
         """, (statement, self.id, lang))
         if not r:
+            search_conf = i18n.SEARCH_CONFS.get(lang, 'simple')
             try:
                 self.db.run("""
                     INSERT INTO statements
-                                (lang, content, participant)
-                         VALUES (%s, %s, %s)
-                """, (lang, statement, self.id))
+                                (lang, content, participant, search_conf)
+                         VALUES (%s, %s, %s, %s)
+                """, (lang, statement, self.id, search_conf))
             except IntegrityError:
                 return self.upsert_statement(lang, statement)
 
@@ -713,7 +716,7 @@ class Participant(Model, MixinTeam):
         if not suggested:
             raise UsernameIsEmpty(suggested)
 
-        if len(suggested) > 32:
+        if len(suggested) > USERNAME_MAX_SIZE:
             raise UsernameTooLong(suggested)
 
         if set(suggested) - ASCII_ALLOWED_IN_USERNAME:

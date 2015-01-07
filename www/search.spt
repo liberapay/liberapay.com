@@ -1,0 +1,162 @@
+from gratipay.utils import markdown
+from gratipay.utils.i18n import LANGUAGES_2, SEARCH_CONFS, strip_accents
+
+[---]
+
+action = qs.get('action')
+query = qs.get('q')
+
+title = _("Search")
+results = {}
+
+if query:
+    subhead = query
+    q = strip_accents(query)
+
+    if action in (None, 'search_usernames'):
+        results['usernames'] = website.db.all("""
+            SELECT username, avatar_url, similarity(username, %(q)s) AS rank
+              FROM participants
+             WHERE username %% %(q)s
+               AND claimed_time IS NOT NULL
+               AND NOT is_closed
+          ORDER BY rank DESC, username
+             LIMIT 10
+        """, locals())
+
+    if action in (None, 'search_statements'):
+        langs = tuple(l for l in request.accept_langs if l in LANGUAGES_2)
+        search_confs = list(set(SEARCH_CONFS.get(lang, 'simple') for lang in langs))
+        results['statements'] = website.db.all("""
+            WITH queries AS (
+                     SELECT search_conf::regconfig
+                          , plainto_tsquery(search_conf::regconfig, %(q)s) AS query
+                       FROM unnest(%(search_confs)s) search_conf
+                 )
+            SELECT username
+                 , avatar_url
+                 , max(rank) AS max_rank
+                 , json_agg((SELECT a FROM (
+                       SELECT rank
+                            , lang
+                            , ts_headline(search_conf, content, query,
+                                          'StartSel=**,StopSel=**,MaxFragments=1') AS excerpt
+                   ) a)) AS excerpts
+              FROM (
+                       SELECT participant, lang, content, search_conf, query
+                            , ts_rank_cd(search_vector, query) AS rank
+                         FROM statements NATURAL JOIN queries
+                        WHERE lang IN %(langs)s
+                          AND search_vector @@ query
+                     ORDER BY rank DESC
+                        LIMIT 10
+                   ) s
+              JOIN participants p ON p.id = s.participant
+          GROUP BY username
+          ORDER BY max_rank DESC
+        """, locals())
+
+    if action in (None, 'search_communities'):
+        results['communities'] = website.db.all("""
+            SELECT slug, name, nmembers, similarity(name, %(q)s) AS rank
+              FROM communities
+             WHERE name %% %(q)s
+               AND nmembers > 0
+          ORDER BY rank DESC, name
+             LIMIT 10
+        """, locals())
+
+[---] application/json via json_dump
+results
+
+[---] text/html
+{% extends "templates/base.html" %}
+{% from 'templates/avatar-url.html' import avatar_url, avatar_img with context %}
+{% block content %}
+
+    {% include "templates/search-box.html" %}
+
+    {% set usernames = results.get('usernames') %}
+    {% set communities = results.get('communities') %}
+    {% set statements = results.get('statements') %}
+
+    <div class="row">
+    {% if usernames %}
+    <div class="col1">
+        <h2>{{ ngettext("Found a matching username",
+                        "Found matching usernames",
+                        len(usernames)) }}</h2>
+        <div class="search-results">
+        {% for result in usernames %}
+            <a class="mini-user" href="/{{ result.username }}/">
+                <span class="inner">
+                    <span class="avatar" style="background-image: url('{{ avatar_url(result) }}')"></span>
+                    <span class="name">{{ result.username }}</span>
+                </span>
+            </a>
+        {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if communities %}
+    <div class="col1">
+        <h2>{{ ngettext("Found a matching community name",
+                        "Found matching community names",
+                        len(communities)) }}</h2>
+        <ul class="community memberships">
+        {% for result in communities %}
+            <li>
+                <a href="/for/{{ result.slug|e }}/">{{ result.name }}</a>
+                <div class="fine">{{
+                    ngettext("{0}{n}{1} Member",
+                             "{0}{n}{1} Members",
+                             result.nmembers,
+                             "", "").lower()
+                }}</div>
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    </div>
+
+    {% if statements %}
+    <div>
+        <h2>{{ ngettext("Found a matching user statement",
+                        "Found matching user statements",
+                        len(statements)) }}</h2>
+        {% for result in statements %}
+            <div class="search-result" href="/{{ result.username|e }}/">
+                {{ avatar_img(result) }}
+                <div class="col-right">
+                    <a class="username" href="/{{ result.username|e }}/">{{ result.username }}</a>
+                    {% if len(result.excerpts) == 1 %}
+                        <blockquote class="excerpt markdown-output">{{
+                            markdown.render(result.excerpts[0].excerpt)
+                        }}</blockquote>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if query and not (usernames or communities or statements) %}
+        <p>{{ _("Sorry, we didn't find anything matching your query.") }}</p>
+    {% endif %}
+
+    <h2>{{ _("Looking for a specific user of a social network?") }}</h2>
+    {% include "templates/jump.html" %}
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function(){
+        $('div.search-result').css('cursor', 'pointer').click(function(){
+            window.location = $(this).attr('href');
+        });
+    });
+</script>
+{% endblock %}
