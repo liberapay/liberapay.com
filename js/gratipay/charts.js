@@ -83,14 +83,9 @@ Gratipay.charts._make = function(series) {
         var h = Math.ceil(yParsed / N * H);
         shaded.css('height', h)
 
-        // Wire up behaviors.
         bar.click(function() {
             $(this).toggleClass('flagged');
-            if ($(this).hasClass('flagged'))
-                $(this).removeClass('hover');
         });
-        bar.mouseover(function() { $(this).addClass('hover'); });
-        bar.mouseout(function() { $(this).removeClass('hover'); });
         return bar;
     }
 
