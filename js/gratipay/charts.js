@@ -82,6 +82,15 @@ Gratipay.charts.make = function(series) {
         var h = yParsed / N * H;
         if (yParsed > 0) h = Math.max(h, 1); // make sure only true 0 is 0 height
         shaded.css('height', h)
+
+        // Wire up behaviors.
+        bar.click(function() {
+            $(this).toggleClass('flagged');
+            if ($(this).hasClass('flagged'))
+                $(this).removeClass('hover');
+        });
+        bar.mouseover(function() { $(this).addClass('hover'); });
+        bar.mouseout(function() { $(this).removeClass('hover'); });
         return bar;
     }
 
@@ -92,22 +101,4 @@ Gratipay.charts.make = function(series) {
             chart.append(Bar(i, j, scales[j], point[chart.varname], xText, xTitle));
         }
     }
-
-
-    // Wire up behaviors.
-    // ==================
-
-    $('.bar').click(function() {
-        $(this).toggleClass('flagged');
-        if ($(this).hasClass('flagged'))
-            $(this).removeClass('hover');
-    });
-
-    $('.bar').mouseover(function() {
-        $(this).addClass('hover');
-    });
-
-    $('.bar').mouseout(function() {
-        $(this).removeClass('hover');
-    });
 };
