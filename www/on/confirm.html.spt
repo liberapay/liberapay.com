@@ -43,7 +43,7 @@ if nix:
 fmt = lambda x: '$' + str(int(round(x))) if x > 0 else '-'
 get_name = lambda a: a.user_name or a.display_name or a.user_id
 
-title = "Please Confirm"
+title = _("Please Confirm")
 
 [--------]
 

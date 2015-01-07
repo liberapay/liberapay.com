@@ -520,7 +520,7 @@ bystanders = sorted(bystanders.items(), key=lambda i: i[1], reverse=True)
 
 fmtdate = lambda d: str(d)[:10]
 
-title = "The Delpan Incident"
+title = _("The Delpan Incident")
 
 [---] text/html
 {% extends "templates/about.html" %}
