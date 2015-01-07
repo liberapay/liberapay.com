@@ -63,12 +63,12 @@ Gratipay.charts.make = function(series) {
 
     function Bar(i, j, N, y, xText, xTitle) {
         var yParsed = parseFloat(y);
-        var bar = $(document.createElement('div')).addClass('bar');
-        var shaded = $(document.createElement('div')).addClass('shaded');
+        var bar = $('<div>').addClass('bar');
+        var shaded = $('<div>').addClass('shaded');
         shaded.html('<span class="y-label">'+ yParsed.toFixed() +'</span>');
         bar.append(shaded);
 
-        var xTick = $(document.createElement('span')).addClass('x-tick');
+        var xTick = $('<span>').addClass('x-tick');
         xTick.text(xText).attr('title', xTitle);
         bar.append(xTick);
 
