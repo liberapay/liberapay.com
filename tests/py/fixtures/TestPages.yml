@@ -3,48 +3,90 @@ interactions:
     body: null
     headers: {}
     method: GET
-    uri: https://api.balancedpayments.com:443/marketplaces?limit=25&offset=0
+    uri: https://api.github.com:443/users/Gratipay
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAAA5VUTW/bMAy991cEPuyyNf7OkALFtra7rB0arCmGbRgM2aIRL7JkyFKTLsh/Hy3L
-        dY0JxXYJSOqRfCRffDiZzbwaFPHOZge00WOkVeh5fk3kFlTDSAHtO1bVlTqP0leiLFtQ54H3podz
-        2HdwrhmzkY2E8j8KmMqIj1Kb33fASGADjYSHSuh22kYJRRiGQosqK/lvxJH3scvxng+IhX6Ygfot
-        4GvFM2gLKXZdjyBeBGn6tm+Fj1TUBAFadgw82JO6YTAvRG3XghBOaugeVzpnVTG7gofxjVV8240z
-        NEO42HGQWaFbJWqQXeLlfbi7L7/dXOU329vVNQ2/wO/NxT73DE87hDmZc+P++uPd+vTzKtytH/dX
-        Hz5dX5Kvq18Xd8ktqxI6cikkEAU0I+bqURAmp0F6GiXrID6LFmfRcr5cxkmcfB9TWt00QqoMcAks
-        I5RKaLtxPPvw3rkQ3dCXGsXBPA7jIA0djZqN4JBxXef9al6HixTvkYZRnIy0GimoLlQlOHIpCWvh
-        6V6DxM3hzc40RxkrhoOXAB15q7bu8rSb5eX1mTJH/P1ppDQ96ERZcwp5pcx6fGtaxT7X3xw1DrJF
-        0gY4ei4srdpGK8Maaw6OCznoqYeOnhMrgQ5EURTGduKIpLaesVwYISlOY/hZ04UqMD/bCPasnHVd
-        aPysaG6hg+3C/f1P8p8G9w+TpU+hR+coShLeEiOrfqBJwEUgJ3ybkaIQmtu7TyOunIIwlpPCfBU8
-        f/RcWFTKUNia3Sft5PgH1FVKPs0FAAA=
+        H4sIAAAAAAAAA52TT2+cMBDFv4vPbGzI0lUtRemtx172lMvKgAMjGdvyH1ZblO/eMSYJ2UMlcgJb
+        837z/DQzE2V60IST3okAVtxIQaAjvDwdj+z0WBAxiSDcJTqFRUMI1nNK86V/6CEMsYleutboIHV4
+        aM1II13Vz9PTI/IQnSEJTPDiDmZhBWU10jzd2BnCqO76575L+abw1Shlrqi+d/u/BvRDhcbyP+j+
+        GwRUzdSEQWJY+IS39HDwYZ+ZRTHT9LlAlxge03ey22Vo1aCdq0YnM3XSmgUWG986sAGM3mfsixJJ
+        xvVCw1+cmb0kVHoEJEv7LCwKVMoJB22fNEtmah1Mor2lKJxsJUwY7Ddwd1qkhZuVONt/NqmkuCHI
+        i+jGtGCvQnlZEC3GVPj7c9twiK3QN8J1VKogDS7kZtPex3uZdUQq0y6Z50WSo4C0lz5aa1z4ta3G
+        4gGcFI3ChisbTNbZ2ChoLzlRXv0syHqzzB/h7H0VcJk2Jxzx5dQiNmB0IiCuYmV1YPWh/HFmJWcn
+        Xtcv2Dva7ktNfWDlgZ3OFePHitfshbz9A6cO0Nd9BAAA
     headers:
+      access-control-allow-credentials: ['true']
+      access-control-allow-origin: ['*']
+      access-control-expose-headers: ['ETag, Link, X-GitHub-OTP, X-RateLimit-Limit,
+          X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes,
+          X-Poll-Interval']
+      cache-control: ['public, max-age=60, s-maxage=60']
       content-encoding: [gzip]
-      content-length: ['593']
-      content-type: [application/json]
+      content-security-policy: [default-src 'none']
+      content-type: [application/json; charset=utf-8]
+      etag: ['"b2d0ecc511bf4ff283a0697787f0982e"']
+      last-modified: ['Wed, 07 Jan 2015 20:42:50 GMT']
+      status: [200 OK]
+      strict-transport-security: [max-age=31536000; includeSubdomains; preload]
+      transfer-encoding: [chunked]
+      vary: [Accept, Accept-Encoding]
     status: {code: 200, message: OK}
 - request:
     body: null
     headers: {}
     method: GET
-    uri: https://api.balancedpayments.com:443/marketplaces?limit=25&offset=0
+    uri: https://api.github.com:443/orgs/gratipay/public_members
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAAA5VUTW/bMAy991cEPuyyNf7OkALFtra7rB0arCmGbRgM2aIRL7JkyFKTLsh/Hy3L
-        dY0JxXYJSOqRfCRffDiZzbwaFPHOZge00WOkVeh5fk3kFlTDSAHtO1bVlTqP0leiLFtQ54H3podz
-        2HdwrhmzkY2E8j8KmMqIj1Kb33fASGADjYSHSuh22kYJRRiGQosqK/lvxJH3scvxng+IhX6Ygfot
-        4GvFM2gLKXZdjyBeBGn6tm+Fj1TUBAFadgw82JO6YTAvRG3XghBOaugeVzpnVTG7gofxjVV8240z
-        NEO42HGQWaFbJWqQXeLlfbi7L7/dXOU329vVNQ2/wO/NxT73DE87hDmZc+P++uPd+vTzKtytH/dX
-        Hz5dX5Kvq18Xd8ktqxI6cikkEAU0I+bqURAmp0F6GiXrID6LFmfRcr5cxkmcfB9TWt00QqoMcAks
-        I5RKaLtxPPvw3rkQ3dCXGsXBPA7jIA0djZqN4JBxXef9al6HixTvkYZRnIy0GimoLlQlOHIpCWvh
-        6V6DxM3hzc40RxkrhoOXAB15q7bu8rSb5eX1mTJH/P1ppDQ96ERZcwp5pcx6fGtaxT7X3xw1DrJF
-        0gY4ei4srdpGK8Maaw6OCznoqYeOnhMrgQ5EURTGduKIpLaesVwYISlOY/hZ04UqMD/bCPasnHVd
-        aPysaG6hg+3C/f1P8p8G9w+TpU+hR+coShLeEiOrfqBJwEUgJ3ybkaIQmtu7TyOunIIwlpPCfBU8
-        f/RcWFTKUNia3Sft5PgH1FVKPs0FAAA=
+        H4sIAAAAAAAAA63czW7bRhQF4HfROo1EUaSkAEURFO2u3bRFgRZFQEu0xJgiBZKW6xh9985w5s4P
+        E1C4cyabBMaco2MlH2TRjP9+W9TtqWoWHxY/novmVBzaxbtFdVx8SLJdku1X7xbFrRiK7tNzV4tD
+        52G49h+WS/XB/v2pGs7PD8992R3aZiib4f2hvSyflzr9w+37VPSdOl0iixfiA5Oya6WLVFq09Utn
+        znm41JPHV487HncOPrZ13b6I9HTt3AMsTUoMU3+umlNAg0i9LdvhXIonS3wK/8lPvOoH3pgx8baU
+        v32qjrKjF89+Vx5Zg3RGzHlpxJK3ZVde27Hs+aE/dNV1qNqGN8xLiqa2OxVN9aXgN4lkLwrkJN6E
+        MSGS5U38Q+NFVeRtee2qW3F4lU9FVx7K6iae2IC6SVa0Da/XUvzb/kP8xcunuRrKT8XxImE9FnVf
+        /vfOQvvptz8//i4OSQx5tsl3gcbGLCCMdszzolMsW2MoHJYbR1SpHoiUqojnSfe5DEMwqRquJJXi
+        M1K5OIZog4ePB+iX6qn8uagkNGlona42WbYNVKTTgCNnzjwl5yBLE+XCQU0aEFOmCmJlWuLJspUo
+        LtPE9WWCfGImGkeZswSAVjw0rVWW5/l6E6xsTAPKaMs8MTrF8jWGwnG5cUSW6oFYqYp4pnQfCkrV
+        cDWpFJ+SysVxRBsQRIensjuWN3q12q52u/061JFKI47snDuU7EGeJp0DQPkNkCmqwlhRS0RZphLG
+        RU1sXxQMIEbRSMrsEgDaw/Mw9IfqUJfyTeJ4DWO136abfaA1nQas+YvmuflnWeKcaDi6r0sQd24b
+        RM8tiqfPa0UBumVcg26Wz9BNx5Ho7wEwHuq2KZNVsqOXvXWep6FXOtZjGIDorpln6J5kITTBcILT
+        CgSg7YL42Zp4+JxOlJ6t4sKzST47m42Dzt0CkDuKa49NP9CVxXSz2m2SwNe+XKUBcnbNPDh7jsVN
+        x8Kx+QUINWqCoFFJPGamEUVGRVxilOMDo2QcXnYHgOtU/vrxL7KVrrP1Lgu9FqLTgC0zZp6WOcaS
+        pVLhsLw84koXQax0RzxVVIii0j1cUzrGJ6WDcUSZFQiorjyd7Fu1dL/Ogr8TpsIIKDvmDil7kIdK
+        5wBWfgMEi6owWtQSEZephHlRExsYBQOIUTQSMrsEYHYuq2N1KrqjuA9Af2W42WfJdpcHfmWo0wC2
+        yaR5cJPDLHRuNhzeN1oQfF4dBNBriofQr0Uhem1cjF6YD9KLx0E5WQTA/Pwg7lQyFyrX+33oN7AT
+        mQU4miHzEM0xFkGVCsfn5RF2uggCpzviUaNCFJnu4fLSMT4sHYxDyqxAMJVd2VcnuuyfJ1ngq1si
+        oogls+MOJnOOp0nFAE5eAeRJN2GgdElEUdQIk9JFbFM6F4BKJyOpMjsQVm35WvZXuiVYXBTMtmmg
+        LBVGbNkxd3DZgzxdOgfw8hsgX1SFAaOWiMJMJUyMmtjGKBiAjKKRlNklALPL7fhUl9Xnht6gpckm
+        C71DZDOGAWfumnlo7kmWNBMMpzatQKzZLgibrYmnzelEudkqrjeb5IOz2Tji3C0AubaublXZ1cWh
+        IHV5ts9C/7vLmAXMTebMs5scZslzs+H4vtGC+PPqIIJeUzyFfi0K0WvjWvTCfI5ePI7IySIA5fXz
+        F3oHlySrUIuJzAIW1Yp5guoMS56IhIOzYcSZbIF4yYJ4qsY2FJMs4RqSGT4dmYojRj0+AKV7vlyq
+        J3Ojx2q/Cr3HMU9lGNBipsyDMcdYZlQqnI2XR+ToIgiP7ojnhwpRQrqHq0jH+JB0MI4lswLg1JdF
+        U1dNX5evZGonfoV+hywfw4Apf888LP8sS5cTDSf2dQnizG2DsLlF8cR5rSg7t4xrz83yAbrpOAr9
+        PQjF6pLTVZDNfpeG3mO1GcOIQTXkDj51iKdOZABuNg05kzUYMNkQUdZYB5OSLWxLMhSASMYi6VEL
+        MDZt891L+WBu8hDXI7JV6CuYCmN6nD13ETlnuZYoCpGalICyTBsKzBRFdWZbI3AzZQHqTDYIn0lH
+        M+jsASiKn//y2P5b0Z0d6VZ8yyz0LnwVBhw6Y+YROgdZAikXzm/SgNgzVRA80xJPna1EyZkmrjcT
+        5GMz0TjSnCUIs5e2fuxbuni/X603u9D/XqbCCDM75g4ze5DHTOcAZn4DxIyqMGbUEpGZqYSZUROb
+        GQUDmFE0EjO7BGD2cq6GLN3SZfl0I37STuANIMkYBpTZLfPI7DmWMR0LJ+YXIMKoCQJGJfF8mUaU
+        FxVxdVGOj4uScWzZHQitqn6qSi0rTfJt6LWOMYu4oiF3WNExnqoxBaBy85ApVYSRUh0RRelCGJTq
+        YXtSsQBOKhhJE60AMH15oa8EkyRdrbLQd1w6DWhSS+YpqTMsRyISjsiGEUGyBeIjC+LZGdtQOLKE
+        q0Zm+GRkKo4X9fhcLP/8D6wOIvLrVwAA
     headers:
+      access-control-allow-credentials: ['true']
+      access-control-allow-origin: ['*']
+      access-control-expose-headers: ['ETag, Link, X-GitHub-OTP, X-RateLimit-Limit,
+          X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes,
+          X-Poll-Interval']
+      cache-control: ['public, max-age=60, s-maxage=60']
       content-encoding: [gzip]
-      content-length: ['593']
-      content-type: [application/json]
+      content-security-policy: [default-src 'none']
+      content-type: [application/json; charset=utf-8]
+      etag: ['"1baa877691ece525da929342927195ae"']
+      status: [200 OK]
+      strict-transport-security: [max-age=31536000; includeSubdomains; preload]
+      transfer-encoding: [chunked]
+      vary: [Accept, Accept-Encoding]
     status: {code: 200, message: OK}
 version: 1
