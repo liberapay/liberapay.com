@@ -1,7 +1,8 @@
-title = "Contact Us"
+title = "About"
+subhead = "Contact Us"
 [---]
 [---] text/html
-{% extends "templates/about.html" %}
+{% extends "templates/basic-info.html" %}
 {% block content %}
 <div class="col0">
 
@@ -20,6 +21,13 @@ title = "Contact Us"
     </p>
 
     <div class="clear"></div>
+
+
+    <h2>Security</h2>
+
+    <p>Please see our <a href="./security">security page</a> to report
+    security-related issues.</p>
+
 
     <a name="get-involved"></a>
     <h2>Help Build Gratipay</h2>
