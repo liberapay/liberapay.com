@@ -69,9 +69,7 @@ class TestPages(Harness):
         assert expected in actual
 
     def test_about_charts(self):
-        expected = "Money transferred"
-        actual = self.client.GET('/about/charts.html').body
-        assert expected in actual
+        assert self.client.GxT('/about/charts.html').code == 302
 
     def test_about_faq(self):
         expected = "What is Gratipay?"

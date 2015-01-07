@@ -15,7 +15,9 @@ charts = website.db.all("""\
       FROM paydays p
   ORDER BY ts_start ASC
 
-""")
+""", back_as=dict)
+for c in charts:
+    c['xTitle'] = c.pop('xtitle')  # postgres doesn't respect case here
 response.headers["Access-Control-Allow-Origin"] = "*"
 [---] application/json via json_dump
 charts[1:]  # Don't show Gratipay #0.
