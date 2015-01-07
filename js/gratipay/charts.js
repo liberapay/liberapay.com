@@ -32,13 +32,13 @@ Gratipay.charts._make = function(series) {
     var point  = series[0];
     var charts = [];
 
-    for (var varname in point) {
+    Object.keys(point).forEach(function(varname) {
         var chart = $('#chart_'+varname);
         if (chart.length) {
             chart.varname = varname;
             charts.push(chart);
         }
-    }
+    });
 
     var flagRoom = 20;
     var H = $('.chart').height() - flagRoom;
@@ -49,19 +49,15 @@ Gratipay.charts._make = function(series) {
     // Compute maxes and scales.
     // =========================
 
-    var maxes  = [];
-    var scales = [];
+    var maxes = charts.map(function(chart) {
+        return series.reduce(function(previous, current) {
+            return Math.max(previous, current[chart.varname]);
+        }, 0);
+    });
 
-    for (var i=0, point; point = series[i]; i++) {
-        for (var j=0, chart; chart = charts[j]; j++) {
-            maxes[j] = Math.max(maxes[j] || 0, point[chart.varname]);
-        }
-    }
-
-    for (var i=0, len=maxes.length; i < len; i++) {
-        scales.push(Math.ceil(maxes[i] / 100) * 100);
-    }
-
+    var scales = maxes.map(function(max) {
+        return Math.ceil(max / 100) * 100; // round to nearest hundred
+    });
 
     // Draw bars.
     // ==========
@@ -84,8 +80,7 @@ Gratipay.charts._make = function(series) {
         }
 
         bar.css('width', w);
-        var h = yParsed / N * H;
-        if (yParsed > 0) h = Math.max(h, 1); // make sure only true 0 is 0 height
+        var h = Math.ceil(yParsed / N * H);
         shaded.css('height', h)
 
         // Wire up behaviors.
