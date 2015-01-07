@@ -57,11 +57,11 @@ subhead = _("Hall of Fame")
 [---] text/html
 {% extends "templates/security.html" %}
 {% block content %}
-<div class="hall-of-fame">
-
+<div class="col0">
     <p>Thank you to the following researchers (most recent first) for
     <a href="./">disclosing</a> security issues to us.</p>
-
+</div>
+<div class="hall-of-fame">
     <dl>
         {% for researchers, link in hof %}
         <dt>
