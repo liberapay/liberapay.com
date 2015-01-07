@@ -1,0 +1,82 @@
+[---]
+title = _("Security")
+[---] text/html
+{% extends "templates/security.html" %}
+{% block content %}
+<div class="col0">
+    <p>Please mail all security reports to <a
+        href="mailto:chad@zetawb.com">Chad Whitacre</a> using the below key.
+    Thank you.</p>
+</div>
+
+    <pre>$ gpg --keyserver pgp.mit.edu --recv-keys 0x6ee18a8dc47977c2
+gpg: requesting key C47977C2 from hkp server pgp.mit.edu
+gpg: key C47977C2: "Chad Whitacre <chad@zetaweb.com>" imported
+gpg: Total number processed: 1
+gpg:               imported: 1
+$ gpg --export --armor "Chad Whitacre"
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: GnuPG v1.4.15 (Darwin)
+
+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
+tlw/y5Z/EdDHL06g
+=j1x3
+-----END PGP PUBLIC KEY BLOCK-----</pre>
+{% endblock %}
