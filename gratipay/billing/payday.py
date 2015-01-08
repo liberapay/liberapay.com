@@ -656,6 +656,7 @@ class Payday(object):
                      SELECT *
                        FROM our_exchanges
                       WHERE amount > 0
+                        AND status <> 'failed'
                  )
             UPDATE paydays
                SET nactive = (
