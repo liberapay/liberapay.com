@@ -19,6 +19,7 @@ if query:
               FROM participants
              WHERE username %% %(q)s
                AND claimed_time IS NOT NULL
+               AND is_searchable
                AND NOT is_closed
           ORDER BY rank DESC, username
              LIMIT 10
@@ -52,6 +53,9 @@ if query:
                         LIMIT 10
                    ) s
               JOIN participants p ON p.id = s.participant
+          WHERE p.claimed_time IS NOT NULL
+             AND p.is_searchable
+             AND NOT p.is_closed
           GROUP BY username
           ORDER BY max_rank DESC
         """, locals())

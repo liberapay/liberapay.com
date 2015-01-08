@@ -1,0 +1,31 @@
+from aspen import Response
+[---]
+if user.ANON:
+    raise Response(404)
+request.allow("GET", "POST")
+if POST:
+    field = body.get("toggle")
+    if field not in ["is_searchable"]:
+        raise Response(400)
+    rec = website.db.one("""
+
+        UPDATE participants
+           SET is_searchable=not is_searchable
+         WHERE username=%s
+        RETURNING is_searchable
+
+    """.format(field), (user.participant.username,))
+    assert rec is not None
+    out = {field: rec}
+else:
+    rec = website.db.one("""
+
+        SELECT is_searchable AS is_searchable
+        FROM participants WHERE username=%s
+
+    """, (user.participant.username,), back_as=dict)
+    assert rec is not None
+    out = {'is_searchable': rec}
+
+[---] application/json via json_dump
+out

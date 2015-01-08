@@ -1,4 +1,11 @@
 {% extends "templates/participant.html" %}
+
+{% block head_early %}
+    {% if not participant.is_searchable %}
+    <meta name="robots" content="noindex,nofollow" />
+    {% endif %}
+{% endblock %}
+
 {% block scripts %}
     {% if user.ADMIN %}<script src="{{ website.asset('admin.js') }}"></script>{% endif %}
     <script>$(document).ready(Gratipay.tips.init)</script>

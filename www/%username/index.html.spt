@@ -46,6 +46,7 @@ def with_others(obj):
 
 [-----------------------------------------------------------------------------]
 {% extends "templates/profile.html" %}
+
 {% block head %}
     <link rel="payment" type="text/html" title="Give weekly gift on Gratipay"
         href="https://gratipay.com/{{ username }}/" />
