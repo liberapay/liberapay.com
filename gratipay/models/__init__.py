@@ -166,6 +166,7 @@ def _check_paydays_volumes(cursor):
                     and timestamp < ts_end
                     and amount > 0
                     and recorder is null
+                    and (status is null or status <> 'failed')
                 ) as ref
             from paydays
             order by id
@@ -183,6 +184,7 @@ def _check_paydays_volumes(cursor):
                     and timestamp < ts_end
                     and amount > 0
                     and recorder is null
+                    and (status is null or status <> 'failed')
                 ) as ref
             from paydays
             order by id
