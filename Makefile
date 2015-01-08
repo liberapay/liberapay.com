@@ -11,6 +11,12 @@ honcho := $(env_bin)/honcho
 honcho_run := $(honcho) run -e defaults.env,local.env
 py_test := $(honcho) run -e $(test_env_files) $(env_bin)/py.test
 
+ifdef PYTEST
+	pytest = ./tests/py/$(PYTEST)
+else
+	pytest = ./tests/py/
+endif
+
 env: requirements.txt requirements_tests.txt setup.py
 	$(python) $(venv) \
 				--unzip-setuptools \
@@ -50,7 +56,7 @@ pyflakes: env
 test: test-schema pytest jstest
 
 pytest: env
-	$(py_test) --cov gratipay ./tests/py/
+	$(py_test) --cov gratipay $(pytest)
 	@$(MAKE) --no-print-directory pyflakes
 
 retest: env
