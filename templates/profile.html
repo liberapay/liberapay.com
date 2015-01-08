@@ -1,27 +1,10 @@
 {% extends "templates/participant.html" %}
 
-{% block head %}
-    <link rel="payment" type="text/html" title="Give weekly gift on Gratipay"
-        href="https://gratipay.com/{{ username }}/" />
-    <meta name="twitter:card" content="summary" />
-    <meta name="og:url" content="https://gratipay.com/{{ username }}/" />
-    <meta name="og:type" content="profile" />
-    <meta name="og:title" content="{{ participant.get_og_title() }}" />
-    {% if statement %}
-    <meta name="og:description" content="{{ excerpt_intro(statement)|e }}" />
-    {% else %}
-    <meta name="og:description" content="Gratipay is a weekly gift exchange" />
-    {% endif %}
-    {% if participant.avatar_url %}
-    <meta name="og:image" content="{{ participant.avatar_url|e }}" />
-    {% endif %}
-    <meta name="og:image" content="{{ website.asset('gratipay.opengraph.png') }}" />
-
-    {% if participant.is_searchable %}
+{% block head_early %}
+    {% if not participant.is_searchable %}
     <meta name="robots" content="noindex,nofollow" />
     {% endif %}
 {% endblock %}
-
 
 {% block scripts %}
     {% if user.ADMIN %}<script src="{{ website.asset('admin.js') }}"></script>{% endif %}

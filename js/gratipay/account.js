@@ -127,7 +127,7 @@ Gratipay.account.init = function() {
             , data: {toggle: 'is_searchable'}
             , dataType: 'json'
             , success: function(data) {
-                $('.is-searchable input').attr('checked', data.is_searchable);
+                $('.is-searchable input').attr('checked', !data.is_searchable);
             }
             , error: function() {
                 Gratipay.notification("Failed to change your search opt out settings. Please try again.", 'error');

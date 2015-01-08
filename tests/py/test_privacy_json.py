@@ -19,18 +19,18 @@ class Tests(Harness):
     def test_participant_can_get_their_privacy_settings(self):
         response = self.hit_privacy('GET')
         actual = json.loads(response.body)
-        assert actual == {'is_searchable': False}
+        assert actual == {'is_searchable': True}
 
     def test_participant_can_toggle_is_searchable(self):
         response = self.hit_privacy('POST', data={'toggle': 'is_searchable'})
         actual = json.loads(response.body)
-        assert actual['is_searchable'] is True
+        assert actual['is_searchable'] is False
 
     def test_participant_can_toggle_is_searchable_back(self):
         response = self.hit_privacy('POST', data={'toggle': 'is_searchable'})
         response = self.hit_privacy('POST', data={'toggle': 'is_searchable'})
         actual = json.loads(response.body)
-        assert actual['is_searchable'] is False
+        assert actual['is_searchable'] is True
 
     def test_meta_robots_tag_added_on_opt_out(self):
         self.hit_privacy('POST', data={'toggle': 'is_searchable'})
