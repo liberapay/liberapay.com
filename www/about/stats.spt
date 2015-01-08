@@ -210,7 +210,7 @@ out()
             <a name="users"></a>
             <h2>Total Users</h2>
             <p class="note">Anyone who's ever created an account on Gratipay</p>
-            <div class="chart" id="chart_total_users"></div>
+            <div class="chart" data-chart="total_users"></div>
             <div class="x-axis">weeks</div>
         </div>
 
@@ -218,7 +218,7 @@ out()
             <a name="active"></a>
             <h2>Active Users</h2>
             <p class="note">Users that gave and/or received money within Gratipay (per week)</p>
-            <div class="chart" id="chart_active_users"></div>
+            <div class="chart" data-chart="active_users"></div>
             <div class="x-axis">weeks</div>
         </div>
 
@@ -226,7 +226,7 @@ out()
             <a name="cumulative-gifts"></a>
             <h2>Total Gifts ($)</h2>
             <p class="note">Money transferred within Gratipay (cumulative)</p>
-            <div class="chart" id="chart_total_gifts"></div>
+            <div class="chart" data-chart="total_gifts"></div>
             <div class="x-axis">weeks</div>
         </div>
 
@@ -234,7 +234,7 @@ out()
             <a name="gifts"></a>
             <h2>Weekly Gifts ($)</h2>
             <p class="note">Money transferred within Gratipay (per week)</p>
-            <div class="chart" id="chart_weekly_gifts"></div>
+            <div class="chart" data-chart="weekly_gifts"></div>
             <div class="x-axis">weeks</div>
         </div>
 
@@ -245,7 +245,7 @@ out()
             charge <a
                 href="http://blog.gittip.com/post/28158537529/why-were-you-charged-10">upped</a>
             to $10 in week 8)</p>
-            <div class="chart" id="chart_charges"></div>
+            <div class="chart" data-chart="charges"></div>
             <div class="x-axis">weeks</div>
         </div>
 
@@ -257,21 +257,21 @@ out()
                 href="http://blog.gittip.com/post/30116848405/with-payouts-gittip-is-minimally-viable">added</a>
             in week 12)</p>
 
-            <div class="chart" id="chart_withdrawals"></div>
+            <div class="chart" data-chart="withdrawals"></div>
             <div class="x-axis">weeks</div>
         </div>
 
         <div class="chart-wrapper">
             <a name="number-by-amount"></a>
             <h2>Number of Tips by Amount</h2>
-            <div class="chart" id="chart_ntips"></div>
+            <div class="chart" data-chart="ntips"></div>
             <div class="x-axis">tip amount ($)</div>
         </div>
 
         <div class="chart-wrapper">
             <a name="sum-by-amount"></a>
             <h2>Sum of Tips by Amount ($)</h2>
-            <div class="chart" id="chart_sum"></div>
+            <div class="chart" data-chart="sum"></div>
             <div class="x-axis">tip amount ($)</div>
         </div>
     </div>

@@ -27,13 +27,13 @@ subhead = _("Receiving")
     <div class="chart-wrapper col1">
         <a name="gifts"></a>
         <h2>{{ _("Dollars Received Per Week") }}</h2>
-        <div class="chart" id="chart_receipts"></div>
+        <div class="chart" data-chart="receipts"></div>
         <div class="x-axis">{{ _("weeks") }}</div>
     </div>
     <div class="chart-wrapper col1">
         <a name="gifts"></a>
         <h2>{{ _("Number of Patrons Per Week") }}</h2>
-        <div class="chart" id="chart_npatrons"></div>
+        <div class="chart" data-chart="npatrons"></div>
         <div class="x-axis">{{ _("weeks") }}</div>
     </div>
 </div>
