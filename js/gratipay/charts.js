@@ -69,7 +69,10 @@ Gratipay.charts._make = function(series) {
             }
 
             bar.css('width', W);
-            shaded.css('height', Math.ceil(y / scales[chart_index] * H));
+
+            var h = y / scales[chart_index] * H;
+            if (y > 0) h = Math.max(h, 1); // make sure only true 0 is 0 height
+            shaded.css('height', h);
 
             bar.click(function() {
                 $(this).toggleClass('flagged');
