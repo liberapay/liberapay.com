@@ -186,6 +186,12 @@ emails = participant.get_emails()
                     {{ _("Hide total receiving from others.") }}
             </label>
             {% endif %}
+            <br />
+            <label class="search-opt-out">
+                <input type="checkbox"
+                    {% if participant.search_opt_out %}checked="true"{% endif %} />
+                    {{ _("Hide myself from search results.") }}
+            </label>
         </p>
         <p id="dnt">
             <a href="/about/privacy/#dnt">{{ _("Do Not Track") }}</a>:

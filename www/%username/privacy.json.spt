@@ -1,0 +1,31 @@
+from aspen import Response
+[---]
+if user.ANON:
+    raise Response(404)
+request.allow("GET", "POST")
+if POST:
+    field = body.get("toggle")
+    if field not in ["search_opt_out"]:
+        raise Response(400)
+    rec = website.db.one("""
+
+        UPDATE participants
+           SET search_opt_out=not search_opt_out
+         WHERE username=%s
+        RETURNING search_opt_out
+
+    """.format(field), (user.participant.username,))
+    assert rec is not None
+    out = {field: rec}
+else:
+    rec = website.db.one("""
+
+        SELECT search_opt_out AS search_opt_out
+        FROM participants WHERE username=%s
+
+    """, (user.participant.username,), back_as=dict)
+    assert rec is not None
+    out = rec
+
+[---] application/json via json_dump
+out

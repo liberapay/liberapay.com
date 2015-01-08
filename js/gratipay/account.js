@@ -116,6 +116,25 @@ Gratipay.account.init = function() {
         });
     });
 
+
+    // Wire up search opt out
+    // ======================
+
+    $('.search-opt-out input').click(function() {
+        jQuery.ajax(
+            { url: '../privacy.json'
+            , type: 'POST'
+            , data: {toggle: 'search_opt_out'}
+            , dataType: 'json'
+            , success: function(data) {
+                $('.search-opt-out input').attr('checked', data.search_opt_out);
+            }
+            , error: function() {
+                Gratipay.notification("Failed to change your search opt out settings. Please try again.", 'error');
+            }
+        });
+    });
+
     // Wire up API Key
     // ===============
     //
