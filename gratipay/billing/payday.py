@@ -390,7 +390,7 @@ class Payday(object):
         holds = {}
         for hold in CardHold.query.filter(CardHold.f.meta.state == 'new'):
             state = 'new'
-            if hold.failure_reason:
+            if hold.status == 'failed' or hold.failure_reason:
                 state = 'failed'
             elif hold.voided_at:
                 state = 'cancelled'
