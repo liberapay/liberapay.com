@@ -17,7 +17,7 @@
     {% endif %}
     <meta name="og:image" content="{{ website.asset('gratipay.opengraph.png') }}" />
 
-    {% if participant.search_opt_out %}
+    {% if participant.is_searchable %}
     <meta name="robots" content="noindex,nofollow" />
     {% endif %}
 {% endblock %}

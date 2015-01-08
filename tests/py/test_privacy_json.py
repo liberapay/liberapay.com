@@ -8,7 +8,7 @@ class Tests(Harness):
 
     def setUp(self):
         Harness.setUp(self)
-        self.make_participant('alice')
+        self.make_participant('alice', claimed_time='now')
 
     def hit_privacy(self, method='GET', expected_code=200, **kw):
         response = self.client.hit(method, "/alice/privacy.json", auth_as='alice', **kw)
@@ -19,23 +19,20 @@ class Tests(Harness):
     def test_participant_can_get_their_privacy_settings(self):
         response = self.hit_privacy('GET')
         actual = json.loads(response.body)
-        assert actual == {'search_opt_out': False}
+        assert actual == {'is_searchable': False}
 
-    def test_participant_can_toggle_search_opt_out(self):
-        response = self.hit_privacy('POST', data={'toggle': 'search_opt_out'})
+    def test_participant_can_toggle_is_searchable(self):
+        response = self.hit_privacy('POST', data={'toggle': 'is_searchable'})
         actual = json.loads(response.body)
-        assert actual['search_opt_out'] is True
+        assert actual['is_searchable'] is True
 
-    def test_participant_can_toggle_search_opt_out_back(self):
-        response = self.hit_privacy('POST', data={'toggle': 'search_opt_out'})
-        response = self.hit_privacy('POST', data={'toggle': 'search_opt_out'})
+    def test_participant_can_toggle_is_searchable_back(self):
+        response = self.hit_privacy('POST', data={'toggle': 'is_searchable'})
+        response = self.hit_privacy('POST', data={'toggle': 'is_searchable'})
         actual = json.loads(response.body)
-        assert actual['search_opt_out'] is False
+        assert actual['is_searchable'] is False
 
     def test_meta_robots_tag_added_on_opt_out(self):
-        apiResponse = self.hit_privacy('POST', data={'toggle': 'search_opt_out'})
-
+        self.hit_privacy('POST', data={'toggle': 'is_searchable'})
         expected = '<meta name="robots" content="noindex,nofollow" />'
-        response = self.client.GET("/alice")
-
-        assert expected in response.body
+        assert expected in self.client.GET("/alice/").body

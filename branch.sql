@@ -1,3 +1,3 @@
 BEGIN;
-	ALTER TABLE participants ADD COLUMN search_opt_out bool NOT NULL DEFAULT FALSE;
+	ALTER TABLE participants ADD COLUMN is_searchable bool NOT NULL DEFAULT FALSE;
 END;

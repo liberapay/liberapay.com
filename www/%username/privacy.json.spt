@@ -5,14 +5,14 @@ if user.ANON:
 request.allow("GET", "POST")
 if POST:
     field = body.get("toggle")
-    if field not in ["search_opt_out"]:
+    if field not in ["is_searchable"]:
         raise Response(400)
     rec = website.db.one("""
 
         UPDATE participants
-           SET search_opt_out=not search_opt_out
+           SET is_searchable=not is_searchable
          WHERE username=%s
-        RETURNING search_opt_out
+        RETURNING is_searchable
 
     """.format(field), (user.participant.username,))
     assert rec is not None
@@ -20,12 +20,12 @@ if POST:
 else:
     rec = website.db.one("""
 
-        SELECT search_opt_out AS search_opt_out
+        SELECT is_searchable AS is_searchable
         FROM participants WHERE username=%s
 
     """, (user.participant.username,), back_as=dict)
     assert rec is not None
-    out = rec
+    out = {'is_searchable': rec}
 
 [---] application/json via json_dump
 out

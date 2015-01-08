@@ -120,14 +120,14 @@ Gratipay.account.init = function() {
     // Wire up search opt out
     // ======================
 
-    $('.search-opt-out input').click(function() {
+    $('.is-searchable input').click(function() {
         jQuery.ajax(
             { url: '../privacy.json'
             , type: 'POST'
-            , data: {toggle: 'search_opt_out'}
+            , data: {toggle: 'is_searchable'}
             , dataType: 'json'
             , success: function(data) {
-                $('.search-opt-out input').attr('checked', data.search_opt_out);
+                $('.is-searchable input').attr('checked', data.is_searchable);
             }
             , error: function() {
                 Gratipay.notification("Failed to change your search opt out settings. Please try again.", 'error');
