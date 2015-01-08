@@ -28,12 +28,10 @@
         padding: 5pt 0.5pt 0 0;
         border: 1pt solid #630;
         border-style: none solid none none;
-        display: none;
         color: #630;
         background: white;
     }
     .bar span.y-label {     // This is the flag.
-        display: none;
         position: absolute;
         top: -17pt;
         right: 0;
@@ -45,18 +43,8 @@
         border-radius: 3pt 0 0 3pt;
         padding: 2pt 3pt;
     }
-    .bar.max span.y-label {
-        display: block;
-    }
-    .bar.flagged span.y-label,
-    .bar.flagged span.x-tick,
-    .bar.hover span.y-label,
-    .bar.hover span.x-tick {
-        display: block;
-    }
-    .bar.hover span.y-label,
-    .bar.hover span.x-tick {
-        z-index: 2
+    .bar:not(.flagged):not(.max):not(:hover) span {
+        display: none;
     }
     .x-axis {
         text-align: center;
