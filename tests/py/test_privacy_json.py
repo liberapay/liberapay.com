@@ -36,3 +36,10 @@ class Tests(Harness):
         self.hit_privacy('POST', data={'toggle': 'is_searchable'})
         expected = '<meta name="robots" content="noindex,nofollow" />'
         assert expected in self.client.GET("/alice/").body
+
+    def test_participant_does_show_up_on_search(self):
+        assert 'alice' in self.client.GET("/search?q=alice").body
+
+    def test_participant_doesnt_show_up_on_search(self):
+        self.hit_privacy('POST', data={'toggle': 'is_searchable'})
+        assert 'alice' not in self.client.GET("/search?q=alice").body
