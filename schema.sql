@@ -453,3 +453,6 @@ UPDATE statements SET search_conf = COALESCE((SELECT search_conf FROM languages 
 ALTER TABLE statements ALTER COLUMN search_conf SET NOT NULL;
 
 END;
+BEGIN;
+    ALTER TABLE participants ADD COLUMN is_searchable bool NOT NULL DEFAULT TRUE;
+END;
