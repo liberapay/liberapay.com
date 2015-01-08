@@ -54,6 +54,7 @@ CREATE TABLE participants
 , is_free_rider         boolean                     DEFAULT NULL
 , email_address         text                        UNIQUE
 , email_lang            text
+, is_searchable         bool                        NOT NULL DEFAULT TRUE
 , CONSTRAINT team_not_anonymous CHECK (NOT (number='plural' AND anonymous_receiving))
  );
 
@@ -399,7 +400,7 @@ CREATE TABLE statements
 CREATE FUNCTION enumerate(anyarray) RETURNS TABLE (rank bigint, value anyelement) AS $$
     SELECT row_number() over() as rank, value FROM unnest($1) value;
 $$ LANGUAGE sql STABLE;
-BEGIN;
+
 
 -- Index user and community names
 
@@ -415,7 +416,7 @@ CREATE INDEX community_trgm_idx ON communities
 -- Index statements
 
 ALTER TABLE statements ADD COLUMN search_vector tsvector;
-ALTER TABLE statements ADD COLUMN search_conf regconfig;
+ALTER TABLE statements ADD COLUMN search_conf regconfig NOT NULL;
 
 CREATE INDEX statements_fts_idx ON statements USING gist(search_vector);
 
@@ -423,36 +424,3 @@ CREATE TRIGGER search_vector_update
     BEFORE INSERT OR UPDATE ON statements
     FOR EACH ROW EXECUTE PROCEDURE
     tsvector_update_trigger_column(search_vector, search_conf, content);
-
--- Initialize search_conf column
-
-CREATE TEMP TABLE languages
-( lang_code    text       PRIMARY KEY
-, search_conf  regconfig  NOT NULL
-);
-
-INSERT INTO languages
-VALUES ('da', 'danish'),
-       ('de', 'german'),
-       ('en', 'english'),
-       ('es', 'spanish'),
-       ('fi', 'finnish'),
-       ('fr', 'french'),
-       ('hu', 'hungarian'),
-       ('it', 'italian'),
-       ('nb', 'norwegian'),
-       ('nl', 'dutch'),
-       ('nn', 'norwegian'),
-       ('pt', 'portuguese'),
-       ('ro', 'romanian'),
-       ('ru', 'russian'),
-       ('sv', 'swedish'),
-       ('tr', 'turkish');
-
-UPDATE statements SET search_conf = COALESCE((SELECT search_conf FROM languages WHERE lang_code = lang), 'simple');
-ALTER TABLE statements ALTER COLUMN search_conf SET NOT NULL;
-
-END;
-BEGIN;
-    ALTER TABLE participants ADD COLUMN is_searchable bool NOT NULL DEFAULT TRUE;
-END;
