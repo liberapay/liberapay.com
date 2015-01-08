@@ -187,7 +187,7 @@ emails = participant.get_emails()
             </label>
             {% endif %}
             <br />
-            <label class="search-opt-out">
+            <label class="is-searchable">
                 <input type="checkbox"
                     {% if participant.is_searchable %}checked="true"{% endif %} />
                     {{ _("Hide myself from search results.") }}
