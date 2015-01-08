@@ -5,12 +5,13 @@ title = _("Security")
 {% block content %}
 <div class="col0">
     <p>Please email security reports to <a href="mailto:chad@zetaweb.com">Chad
-        Whitacre</a> using the key below. Thank you.</p>
+        Whitacre</a> using the key below. <a
+    href="/about/security/hall-of-fame">Thank you</a>.</p>
 </div>
 
     <pre>$ gpg --keyserver pgp.mit.edu --recv-keys 0x6ee18a8dc47977c2
 gpg: requesting key C47977C2 from hkp server pgp.mit.edu
-gpg: key C47977C2: "Chad Whitacre <chad@zetaweb.com>" imported
+gpg: key C47977C2: "Chad Whitacre &lt;chad@zetaweb.com&gt;" imported
 gpg: Total number processed: 1
 gpg:               imported: 1
 $ gpg --export --armor "Chad Whitacre"

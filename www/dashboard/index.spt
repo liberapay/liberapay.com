@@ -1,6 +1,5 @@
 from aspen import Response
 
-title = "Fraud Review Dashboard"
 [---]
 if not user.ADMIN:
     raise Response(404)
@@ -18,6 +17,7 @@ unreviewed = website.db.all("""
 
 """)
 
+title = _("Fraud Review Dashboard")
 [---] text/html
 <script src="{{ website.asset('jquery.min.js') }}"></script>
 <script src="{{ website.asset('gratipay.js') }}"></script>

@@ -18,8 +18,8 @@ def commaize(number, places=0):
 
 [--------------------------------------------------------]
 
-title = "About"
-subhead = "Stats"
+title = _("About")
+subhead = _("Stats")
 yesterday = datetime.datetime.utcnow() - datetime.timedelta(hours=24)
 db = website.db
 escrow = db.one("SELECT sum(balance) FROM participants", default=0)
