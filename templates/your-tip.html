@@ -12,8 +12,7 @@
             <div class="view">
                 <span class="amount">{{ format_currency(tip, 'USD') }}</span>
                 <div class="per-week">{{ _("per week") }}</div>
-                <button class="edit {{ 'not-zero' if tip > 0 }}">{{ _("Edit") }}</button><br>
-                <button class="stop {{ 'zero' if not tip }}">{{ _("Stop giving") }}</button>
+                <button class="edit {{ 'not-zero' if tip > 0 }}">{{ _("Edit") }}</button>
             </div>
             <form class="edit" action="/{{ tippee }}/tip.json">
                 $
@@ -22,6 +21,7 @@
                 <div class="per-week">{{ _("per week") }}</div>
                 <button class="save">{{ _("Save") }}</button>
                 <button class="cancel">{{ _("Cancel") }}</button>
+                <button class="stop {{ 'zero' if not tip }}">{{ _("Stop Giving") }}</button>
             </form>
         </div>
 
