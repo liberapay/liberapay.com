@@ -1,5 +1,5 @@
 <form action="/search" method="get" class="search-box">
     <input type="text" name="q" placeholder="{{ _('Search Gratipay') }}"
-           value="{{ (query or '')|e }}" />
+           value="{{ (query or '')|e }}" autofocus />
     <button type="submit">{{ _("Go") }}</button>
 </form>
