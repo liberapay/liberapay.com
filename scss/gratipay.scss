@@ -1,5 +1,13 @@
 /*
     This is the top of the Gratipay CSS tree.
+
+    Our code organization here was inspired by Brad Frost's Atomic Web Design:
+
+        http://bradfrost.com/blog/post/atomic-web-design/
+
+    We dropped the "atomic" metaphor and tried to use nomenclature consistent
+    with how the W3C talks about HTML.
+
 */
 
 @import "mixins/layout";
@@ -7,45 +15,39 @@
 @import "mixins/borders-backgrounds-shadows";
 @import "mixins/animation";
 @import "mixins/transform";
+@import "utils";
+@import "variables";
 
+@import "elements/reset";
+@import "elements/buttons-knobs";
+@import "elements/elements";
 
-// Atomic Design
-// =============
-// http://bradfrost.com/blog/post/atomic-web-design/
+@import "components/chart";
+@import "components/chosen";
+@import "components/communities";
+@import "components/cta";
+@import "components/dropdown";
+@import "components/emails";
+@import "components/js-edit";
+@import "components/leaderboard";
+@import "components/linear_gradient";
+@import "components/loading-indicators";
+@import "components/markdown";
+@import "components/memberships";
+@import "components/payments-by";
+@import "components/sign_in";
+@import "components/support_gratipay";
+@import "components/tip-distribution";
+@import "components/tipr";
+@import "components/upgrade";
 
-@import "atoms/reset";
-@import "atoms/variables";
-@import "atoms/buttons-knobs";
-@import "atoms/elements";
-@import "atoms/utils";
+@import "fragments/accounts";
+@import "fragments/members";
+@import "fragments/mini-user";
+@import "fragments/notifications";
 
-@import "molecules/chart";
-@import "molecules/chosen";
-@import "molecules/communities";
-@import "molecules/cta";
-@import "molecules/dropdown";
-@import "molecules/emails";
-@import "molecules/js-edit";
-@import "molecules/leaderboard";
-@import "molecules/linear_gradient";
-@import "molecules/loading-indicators";
-@import "molecules/markdown";
-@import "molecules/memberships";
-@import "molecules/payments-by";
-@import "molecules/sign_in";
-@import "molecules/support_gratipay";
-@import "molecules/tip-distribution";
-@import "molecules/tipr";
-@import "molecules/upgrade";
-@import "molecules/feedback";
-
-@import "organisms/accounts";
-@import "organisms/members";
-@import "organisms/mini-user";
-@import "organisms/notifications";
-
-@import "templates/layout";
-@import "templates/responsiveness";
+@import "layouts/layout";
+@import "layouts/responsiveness";
 
 @import "pages/homepage";
 @import "pages/history";
