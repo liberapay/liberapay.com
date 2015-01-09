@@ -10,24 +10,7 @@ if not user.ANON:
         others = obj.nmembers - 1
         return ngettext("with {n} other", "with {n} others", others)
 
-
-friends_hack = website.db.all("""
-
-    SELECT username
-         , claimed_time
-         , avatar_url
-         , statement
-         , number
-      FROM participants
-     WHERE claimed_time IS NOT NULL
-       AND is_suspicious IS NOT TRUE
-  ORDER BY claimed_time DESC
-     LIMIT 9
-
-""")
-
 [---]
-{% from 'templates/avatar-url.html' import avatar_url with context %}
 {% extends "templates/base.html" %}
 {% block head_early %}
     {% if website.optimizely_id and request.headers.get('DNT') != '1' %}
@@ -107,25 +90,13 @@ friends_hack = website.db.all("""
         <div class="col1">
             <h2>{{ _("You give {0} per week", format_currency(participant.giving, 'USD')) }}</h2>
 
-            <p>Let's play the giving game! Click your Twitter friends to give
-            them a quarter a week!</p>
+            {% if user.participant.giving > 0 or user.participant.pledging > 0 %}
+                <p>{{ _("{0}Click here to see or modify your tips.{1}",
+                        "<a href='/"+ user.participant.username + "/giving/'>", "</a>") }}</p>
+            {% endif %}
 
-            <div class="people">
-                <ul class="group">
-                    {% for i, participant in enumerate(friends_hack, start=1) %}
-                    <li>
-                        <a href="/{{ participant.username }}/" class="mini-user tip">
-                            <span class="inner">
-                                <span class="avatar"
-                                    style="background-image: url('{{ avatar_url(participant) }}')">
-                                </span>
-                                <span class="name">{{ participant.username }}</span>
-                            </span>
-                        </a>
-                    </li>
-                    {% endfor %}
-                </ul>
-            </div>
+            <p>{{ _("Who inspires you? Use this search box to find your heroes on Gratipay:") }}</p>
+            {% include "templates/search-box.html" %}
 
         </div>
 
