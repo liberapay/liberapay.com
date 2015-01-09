@@ -2,6 +2,7 @@
 """
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+import atexit
 import itertools
 import unittest
 from os.path import dirname, join, realpath
@@ -193,3 +194,6 @@ class Harness(unittest.TestCase):
 
 
 class Foobar(Exception): pass
+
+
+atexit.register(lambda: wireup.clean_assets(WWW_ROOT))

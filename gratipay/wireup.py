@@ -257,8 +257,8 @@ def compile_assets(website):
         os.rename(tmpfpath, filepath)
 
 
-def clean_assets(website):
-    for spt in find_files(website.www_root+'/assets/', '*.spt'):
+def clean_assets(www_root):
+    for spt in find_files(www_root+'/assets/', '*.spt'):
         try:
             os.unlink(spt[:-4])
         except:
@@ -319,7 +319,7 @@ def other_stuff(website, env):
         compile_assets(website)
     else:
         website.asset = lambda path: env.gratipay_asset_url+path
-        clean_assets(website)
+        clean_assets(website.www_root)
 
     website.google_analytics_id = env.google_analytics_id
     website.optimizely_id = env.optimizely_id
