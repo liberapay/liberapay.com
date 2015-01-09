@@ -1,0 +1,30 @@
+.feedback {
+    display: inline-block;
+    position: fixed;
+
+    left: 100%;
+    top: 50%;
+    width: 7em;
+    height: 2.2em;
+    margin: -2em 0 0 -3.5em;
+    padding-top: 0.2em;
+
+    font-size: 1em;
+    line-height: 2em;
+    text-align: center;
+    text-decoration: none;
+
+    background: $green;
+    color: $white;
+
+    border-radius: 3px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+
+    @include transform(rotate(-90deg));
+    @include transform-origin(bottom center);
+
+    &:hover {
+        background: $darker-green;
+    }
+}
