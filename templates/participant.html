@@ -21,6 +21,7 @@
 <div class="mono">
     {% set g = participant.giving %}
     {% set r = participant.receiving %}
+    {% set goal = participant.goal %}
     {% set anon_giving = participant.anonymous_giving %}
     {% set anon_receiving = participant.anonymous_receiving %}
     {% set giving_str = '[' + _('hidden') + ']' if anon_giving else format_currency(g, "USD") %}
@@ -37,6 +38,12 @@
                 receiving_str if participant.accepts_tips else '&mdash;'
             }}</td>
         </tr>
+        {% if goal > 0 %}
+        <tr>
+            <td class="left">{{ _('Goal') }}</td>
+            <td class="right">{{ format_currency(goal, "USD") }}</td>
+        </tr>
+        {% endif %}
     </table>
 
     <p>{{ _('Joined') }} {{ to_age(participant.claimed_time, add_direction=True) }}.</p>
