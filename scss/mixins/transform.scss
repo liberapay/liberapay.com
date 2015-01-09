@@ -1,0 +1,11 @@
+@mixin transform($transform...) {
+    -webkit-transform: $transform;
+    -ms-transform: $transform;
+    transform: $transform;
+}
+
+@mixin transform-origin($origin...) {
+    -webkit-transform-origin: $origin;
+    -ms-transform-origin: $origin;
+    transform-origin: $origin;
+}
