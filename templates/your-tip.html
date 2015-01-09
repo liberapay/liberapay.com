@@ -12,7 +12,9 @@
             <div class="view">
                 <span class="amount">{{ format_currency(tip, 'USD') }}</span>
                 <div class="per-week">{{ _("per week") }}</div>
-                <button class="edit {{ 'not-zero' if tip > 0 }}">{{ _("Edit") }}</button>
+                <button class="edit {{ 'not-zero' if tip > 0 }}">
+                  {{ _("Edit") if tip > 0 else _("Give to {0}", tippee) }}
+                </button>
             </div>
             <form class="edit" action="/{{ tippee }}/tip.json">
                 $
