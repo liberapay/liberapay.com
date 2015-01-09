@@ -52,6 +52,7 @@ friends_hack = website.db.all("""
 {% endblock %}
 
 {% block sidebar %}
+{% if user.ANON %}
     <img src="{{ website.asset('gratipay.white.svg') }}" alt="Gratipay">
     <h1>{{ _("Weekly Payments") }}</h1>
     <p>{{ _("Motivated by Gratitude") }}</p>
@@ -60,6 +61,7 @@ friends_hack = website.db.all("""
             "<span>"|safe, "</span>"|safe) }}</p>
 
     <p><a href="/about/">{{ _("Learn more") }}</a></p>
+{% endif %}
 {% endblock %}
 
 {% block heading %}{% endblock %}

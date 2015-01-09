@@ -33,7 +33,7 @@
     {% endif %}
 </head>
 {% set homepage = path.raw == '/' %}
-<body id="{{ 'homepage' if homepage }}">
+<body id="{{ 'homepage' if homepage and user.ANON }}">
 
     <div id="wrapper">
         <div id="header" class="clearfix">
