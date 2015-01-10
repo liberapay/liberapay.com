@@ -22,11 +22,8 @@ describe('authed homepage', function() {
     it('should render copy correctly', function(done) {
         browser
             .url('http://localhost:8537')
-            .getText('.greeting h1', function(err, text) {
+            .getText('#content h1', function(err, text) {
                 assert.equal(text, 'Welcome, alice!');
-            })
-            .getText('.greeting p:first-of-type', function(err, text) {
-                assert.equal(text, 'Thanks for joining Gratipay!');
             })
             .deleteCookie('session')
             .call(done);

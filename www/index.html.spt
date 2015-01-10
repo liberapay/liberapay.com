@@ -4,6 +4,7 @@ from gratipay.models import community
 
 if not user.ANON:
     participant = user.participant # for team listing
+    title = _("Welcome, {0}!", participant.username)
     communities = community.get_list_for(website.db, user.participant.id)
 
     def with_others(obj):
@@ -47,7 +48,7 @@ if not user.ANON:
 {% endif %}
 {% endblock %}
 
-{% block heading %}{% endblock %}
+{% block heading %}{{ super() if not user.ANON }}{% endblock %}
 {% block content %}
     {% if user.ANON %}
     <div class="action">
