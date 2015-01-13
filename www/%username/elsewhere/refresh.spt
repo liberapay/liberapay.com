@@ -11,10 +11,7 @@ participant = get_participant(request, restrict=True)
 accounts = participant.get_accounts_elsewhere()
 i = 0
 for account in accounts.values():
-    sess = account.get_auth_session()
-    if not sess:
-        continue
-    AccountElsewhere.upsert(account.platform_data.get_user_self_info(sess))
+    AccountElsewhere.upsert(account.platform_data.get_user_info(account.user_name))
     i += 1
 
 [---] text/html
