@@ -69,9 +69,6 @@ CREATE TABLE elsewhere
 , platform              text            NOT NULL
 , user_id               text            NOT NULL
 , participant           text            NOT NULL REFERENCES participants ON UPDATE CASCADE ON DELETE RESTRICT
-, access_token          text            DEFAULT NULL
-, refresh_token         text            DEFAULT NULL
-, expires               timestamptz     DEFAULT NULL
 , user_name             text
 -- Note: using "user_name" instead of "username" avoids having the same
 --       column name in the participants and elsewhere tables.
