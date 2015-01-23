@@ -156,6 +156,7 @@ class AccountElsewhere(Model):
         else:
             newly_claimed = True
             user.participant.set_as_claimed()
+            user.participant.notify_patrons()
             try:
                 user.participant.change_username(desired_username)
             except ProblemChangingUsername:

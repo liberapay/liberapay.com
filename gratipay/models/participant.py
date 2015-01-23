@@ -636,6 +636,15 @@ class Participant(Model, MixinTeam):
 
         return self._mailer.messages.send(message=message)
 
+    @classmethod
+    def send_emails_to(cls, participants, spt_name, **context):
+        for p in participants:
+            p.send_email(spt_name, **context)
+
+    def notify_patrons(self):
+        patrons = self.get_patrons()
+        self.send_emails_to(patrons, 'notify_patron', username=self.username)
+
     def set_email_lang(self, accept_lang):
         if not accept_lang:
             return
@@ -1090,6 +1099,14 @@ class Participant(Model, MixinTeam):
 
         return tips, total, unclaimed_tips, unclaimed_total
 
+    def get_patrons(self):
+        patrons = self.db.all("""
+            SELECT tipper
+              FROM current_tips
+             WHERE tippee=%s
+               AND amount>0
+        """, (self.username,))
+        return [self.from_username(p) for p in patrons]
 
     def get_current_tips(self):
         """Get the tips this participant is currently sending to others.
