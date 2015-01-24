@@ -1,0 +1,22 @@
+from aspen import Response
+[---]
+if user.ANON:
+    raise Response(404)
+request.allow("POST")
+if POST:
+    field = body.get("toggle")
+    if field not in ["notify_on_opt_in"]:
+        raise Response(400)
+    rec = website.db.one("""
+
+        UPDATE participants
+           SET {0}=not {0}
+         WHERE username=%s
+        RETURNING {0}
+
+    """.format(field), (user.participant.username,))
+    assert rec is not None
+    out = {field: rec}
+
+[---] application/json via json_dump
+out

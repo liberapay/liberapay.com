@@ -146,6 +146,25 @@ Gratipay.account.init = function() {
         });
     });
 
+    // Wire up notification preferences
+    // ==============================
+
+    $('.email-notifications input').click(function(e) {
+        var field = $(e.target).data('field');
+        jQuery.ajax(
+            { url: '../email-notifications.json'
+            , type: 'POST'
+            , data: {toggle: field}
+            , dataType: 'json'
+            , success: function(data) {
+                $(e.target).attr('checked', data[field]);
+            }
+            , error: function() {
+                Gratipay.notification("Failed to change your notification preference. Please try again.", 'error');
+            }
+        });
+    });
+
     // Wire up API Key
     // ===============
 
