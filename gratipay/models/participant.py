@@ -287,14 +287,17 @@ class Participant(Model, MixinTeam):
     def resolve_unclaimed(self):
         """Given a username, return an URL path.
         """
-        rec = self.db.one( "SELECT platform, user_name "
-                           "FROM elsewhere "
-                           "WHERE participant = %s"
-                           , (self.username,)
-                            )
-        if rec is None:
+        elsewhere = self.get_unclaimed_elsewhere()
+        if elsewhere is None:
             return
-        return '/on/%s/%s/' % (rec.platform, rec.user_name)
+        return '/on/%s/%s/' % (elsewhere.platform, elsewhere.user_name)
+
+    def get_unclaimed_elsewhere(self):
+        return self.db.one( """
+            SELECT platform, user_name
+            FROM elsewhere
+            WHERE participant = %s
+        """, (self.username,))
 
     def set_as_claimed(self):
         with self.db.get_cursor() as c:
@@ -647,7 +650,14 @@ class Participant(Model, MixinTeam):
 
     def notify_patrons(self):
         patrons = self.get_patrons()
-        self.send_emails_to(patrons, 'notify_patron', check_for="notify_on_opt_in", username=self.username)
+        elsewhere = self.get_unclaimed_elsewhere()
+        self.send_emails_to(
+            patrons, 'notify_patron',
+            check_for="notify_on_opt_in",
+            elsewhere_username=elsewhere.user_name,
+            elsewhere_platform=elsewhere.platform,
+            profile_url=self.profile_url
+        )
 
     def set_email_lang(self, accept_lang):
         if not accept_lang:
@@ -678,6 +688,14 @@ class Participant(Model, MixinTeam):
     @property
     def accepts_tips(self):
         return (self.goal is None) or (self.goal >= 0)
+
+    @property
+    def profile_url(self):
+        scheme = gratipay.canonical_scheme
+        host = gratipay.canonical_host
+        username = self.username_lower
+        link = "{scheme}://{host}/{username}/"
+        return link.format(**locals())
 
 
     def insert_into_communities(self, is_member, name, slug):

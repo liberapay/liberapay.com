@@ -1,9 +1,16 @@
-{{ _("{0} has joined Gratipay!", username) }}
+{{ _("{0} from {1} has joined Gratipay!", elsewhere_username, elsewhere_platform) }}
 
 [---] text/html
 
-{{ username }} has joined Gratipay!
+{{ _("You had pledged to {0}. They've just joined Gratipay!", elsewhere_username) }}
+<br>
+<br>
+<a href="{{ profile_url }}" style="color: #fff; text-decoration:none; display:inline-block; padding: 0 15px; background: #396; font: normal 14px/40px Arial, sans-serif; white-space: nowrap; border-radius: 3px">{{ _("View their profile!") }}</a>
 
 [---] text/plain
 
-{{ username }} has joined Gratipay!
+{{ _("You had pledged to {0}. They've just joined Gratipay!", elsewhere_username) }}
+
+{{ _("Follow this link to view their profile:") }}
+
+{{ profile_url }}
