@@ -637,13 +637,17 @@ class Participant(Model, MixinTeam):
         return self._mailer.messages.send(message=message)
 
     @classmethod
-    def send_emails_to(cls, participants, spt_name, **context):
+    def send_emails_to(cls, participants, spt_name, check_for=None, **context):
         for p in participants:
-            p.send_email(spt_name, **context)
+            if not p.email_address:
+                continue
+            send = getattr(p, check_for) if check_for else True
+            if send:
+                p.send_email(spt_name, **context)
 
     def notify_patrons(self):
         patrons = self.get_patrons()
-        self.send_emails_to(patrons, 'notify_patron', username=self.username)
+        self.send_emails_to(patrons, 'notify_patron', check_for="notify_on_opt_in", username=self.username)
 
     def set_email_lang(self, accept_lang):
         if not accept_lang:
