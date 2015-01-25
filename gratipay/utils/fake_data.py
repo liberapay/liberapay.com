@@ -3,6 +3,7 @@ from gratipay import wireup, MAX_TIP_SINGULAR, MIN_TIP
 from gratipay.elsewhere import PLATFORMS
 from gratipay.models.participant import Participant
 from gratipay.models import community
+from gratipay.models import check_db
 
 import datetime
 import decimal
@@ -39,11 +40,6 @@ def fake_text_id(size=6, chars=string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size))
 
 
-def fake_balance(max_amount=100):
-    """Return a random amount between 0 and max_amount.
-    """
-    return random.random() * max_amount
-
 
 def fake_int_id(nmax=2 ** 31 -1):
     """Create a random int id.
@@ -68,10 +64,10 @@ def fake_participant(db, number="singular", is_admin=False):
                , username_lower=username.lower()
                , ctime=faker.date_time_this_year()
                , is_admin=is_admin
-               , balance=fake_balance()
+               , balance=0
                , anonymous_giving=(random.randrange(5) == 0)
                , anonymous_receiving=(number != 'plural' and random.randrange(5) == 0)
-               , goal=fake_balance()
+               , goal=1
                , balanced_customer_href=faker.uri()
                , last_ach_result=''
                , is_suspicious=False
@@ -104,7 +100,7 @@ def fake_tip_amount():
     decimal_amount = decimal.Decimal(amount).quantize(decimal.Decimal('.01'))
     while decimal_amount == decimal.Decimal('0.00'):
         # https://github.com/gratipay/gratipay.com/issues/2950
-        decimal_amount = fake_tip_amount() 
+        decimal_amount = fake_tip_amount()
     return decimal_amount
 
 
@@ -151,19 +147,19 @@ def fake_transfer(db, tipper, tippee):
 def populate_db(db, num_participants=100, num_tips=200, num_teams=5, num_transfers=5000, num_communities=20):
     """Populate DB with fake data.
     """
-    #Make the participants
+    print("Making Participants")
     participants = []
     for i in xrange(num_participants):
         participants.append(fake_participant(db))
 
-    #Make the "Elsewhere's"
+    print("Making Elsewheres")
     for p in participants:
         #All participants get between 1 and 3 elsewheres
         num_elsewheres = random.randint(1, 3)
         for platform_name in random.sample(PLATFORMS, num_elsewheres):
             fake_elsewhere(db, p, platform_name)
 
-    #Make teams
+    print("Making Teams")
     for i in xrange(num_teams):
         t = fake_participant(db, number="plural")
         #Add 1 to 3 members to the team
@@ -171,7 +167,7 @@ def populate_db(db, num_participants=100, num_tips=200, num_teams=5, num_transfe
         for p in members:
             t.add_member(p)
 
-    #Make communities
+    print("Making Communities")
     for i in xrange(num_communities):
         creator = random.sample(participants, 1)
         community = fake_community(db, creator[0])
@@ -180,21 +176,33 @@ def populate_db(db, num_participants=100, num_tips=200, num_teams=5, num_transfe
         for p in members:
             p.insert_into_communities(True, community.name, community.slug)
 
-    #Make the tips
+    print("Making Tips")
     tips = []
     for i in xrange(num_tips):
         tipper, tippee = random.sample(participants, 2)
         tips.append(fake_tip(db, tipper, tippee))
 
 
-    #Make the transfers
+    print("Making Transfers")
     transfers = []
     for i in xrange(num_transfers):
         tipper, tippee = random.sample(participants, 2)
-        transfers.append(fake_transfer(db, tipper, tippee))
+        transfer = fake_transfer(db, tipper, tippee)
+        transfers.append(transfer)
 
+        db.run("""
+          UPDATE participants
+             SET balance = balance + %s
+           WHERE username = %s
+        """, (transfer['amount'], tippee.username))
 
-    #Make some paydays
+        db.run("""
+          UPDATE participants
+             SET balance = balance - %s
+           WHERE username = %s
+        """, (transfer['amount'], tipper.username))
+
+    print("Making Paydays")
     #First determine the boundaries - min and max date
     min_date = min(min(x['ctime'] for x in tips), \
                    min(x['timestamp'] for x in transfers))
@@ -233,9 +241,11 @@ def populate_db(db, num_participants=100, num_tips=200, num_teams=5, num_transfe
         date = end_date
 
 
-
 def main():
-    populate_db(wireup.db(wireup.env()))
+    db = wireup.db(wireup.env())
+    populate_db(db)
+    check_db(db)
+
 
 if __name__ == '__main__':
     main()
