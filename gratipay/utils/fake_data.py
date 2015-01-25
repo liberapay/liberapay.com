@@ -4,6 +4,7 @@ from gratipay.elsewhere import PLATFORMS
 from gratipay.models.participant import Participant
 from gratipay.models import community
 from gratipay.models import check_db
+from psycopg2 import IntegrityError
 
 import datetime
 from decimal import Decimal as D
@@ -40,13 +41,6 @@ def fake_text_id(size=6, chars=string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size))
 
 
-
-def fake_int_id(nmax=2 ** 31 -1):
-    """Create a random int id.
-    """
-    return random.randint(0, nmax)
-
-
 def fake_sentence(start=1, stop=100):
     """Create a sentence of random length.
     """
@@ -57,24 +51,26 @@ def fake_participant(db, number="singular", is_admin=False):
     """Create a fake User.
     """
     username = faker.first_name() + fake_text_id(3)
-    _fake_thing( db
-               , "participants"
-               , id=fake_int_id()
-               , username=username
-               , username_lower=username.lower()
-               , ctime=faker.date_time_this_year()
-               , is_admin=is_admin
-               , balance=0
-               , anonymous_giving=(random.randrange(5) == 0)
-               , anonymous_receiving=(number != 'plural' and random.randrange(5) == 0)
-               , goal=1
-               , balanced_customer_href=faker.uri()
-               , last_ach_result=''
-               , is_suspicious=False
-               , last_bill_result=''  # Needed to not be suspicious
-               , claimed_time=faker.date_time_this_year()
-               , number=number
-                )
+    try:
+      _fake_thing( db
+                 , "participants"
+                 , username=username
+                 , username_lower=username.lower()
+                 , ctime=faker.date_time_this_year()
+                 , is_admin=is_admin
+                 , balance=0
+                 , anonymous_giving=(random.randrange(5) == 0)
+                 , anonymous_receiving=(number != 'plural' and random.randrange(5) == 0)
+                 , balanced_customer_href=faker.uri()
+                 , last_ach_result=''
+                 , is_suspicious=False
+                 , last_bill_result=''  # Needed to not be suspicious
+                 , claimed_time=faker.date_time_this_year()
+                 , number=number
+                  )
+    except IntegrityError:
+      return fake_participant(db, number, is_admin)
+
     #Call participant constructor to perform other DB initialization
     return Participant.from_username(username)
 
@@ -109,7 +105,6 @@ def fake_tip(db, tipper, tippee):
     """
     return _fake_thing( db
                , "tips"
-               , id=fake_int_id()
                , ctime=faker.date_time_this_year()
                , mtime=faker.date_time_this_month()
                , tipper=tipper.username
@@ -123,7 +118,6 @@ def fake_elsewhere(db, participant, platform):
     """
     _fake_thing( db
                , "elsewhere"
-               , id=fake_int_id()
                , platform=platform
                , user_id=fake_text_id()
                , user_name=participant.username
@@ -135,7 +129,6 @@ def fake_elsewhere(db, participant, platform):
 def fake_transfer(db, tipper, tippee):
         return _fake_thing( db
                , "transfers"
-               , id=fake_int_id()
                , timestamp=faker.date_time_this_year()
                , tipper=tipper.username
                , tippee=tippee.username
@@ -146,7 +139,6 @@ def fake_transfer(db, tipper, tippee):
 def fake_exchange(db, participant, amount, fee, timestamp):
         return _fake_thing( db
                , "exchanges"
-               , id=fake_int_id()
                , timestamp=timestamp
                , participant=participant.username
                , amount=amount
@@ -266,7 +258,6 @@ def populate_db(db, num_participants=100, num_tips=200, num_teams=5, num_transfe
             actives.update(x['tippee'] for x in xfers)
             tippers.update(x['tipper'] for x in xfers)
         payday = {
-            'id': fake_int_id(),
             'ts_start': date,
             'ts_end': end_date,
             'ntips': len(week_tips),
