@@ -152,20 +152,21 @@ def populate_db(db, num_participants=100, num_tips=200, num_teams=5, num_transfe
     for i in xrange(num_participants):
         participants.append(fake_participant(db))
 
+    print("Making Teams")
+    for i in xrange(num_teams):
+        t = fake_participant(db, number="plural")
+        participants.append(t)
+        #Add 1 to 3 members to the team
+        members = random.sample(participants, random.randint(1, 3))
+        for p in members:
+            t.add_member(p)
+
     print("Making Elsewheres")
     for p in participants:
         #All participants get between 1 and 3 elsewheres
         num_elsewheres = random.randint(1, 3)
         for platform_name in random.sample(PLATFORMS, num_elsewheres):
             fake_elsewhere(db, p, platform_name)
-
-    print("Making Teams")
-    for i in xrange(num_teams):
-        t = fake_participant(db, number="plural")
-        #Add 1 to 3 members to the team
-        members = random.sample(participants, random.randint(1, 3))
-        for p in members:
-            t.add_member(p)
 
     print("Making Communities")
     for i in xrange(num_communities):
