@@ -1,19 +1,19 @@
+import datetime
+from decimal import Decimal as D
+import random
+import string
+import sys
+
 from faker import Factory
+from psycopg2 import IntegrityError
+
 from gratipay import wireup, MAX_TIP_SINGULAR, MIN_TIP
 from gratipay.elsewhere import PLATFORMS
 from gratipay.models.participant import Participant
 from gratipay.models import community
 from gratipay.models import check_db
-from psycopg2 import IntegrityError
-
-import datetime
-from decimal import Decimal as D
-import random
-import string
-
 
 faker = Factory.create()
-
 
 def _fake_thing(db, tablename, **kw):
     column_names = []
@@ -240,12 +240,12 @@ def populate_db(db, num_participants=100, num_tips=200, num_teams=5, num_transfe
 
     print("Making Teams")
     for i in xrange(num_teams):
-        t = fake_participant(db, number="plural")
+        team = fake_participant(db, number="plural")
         #Add 1 to 3 members to the team
         members = random.sample(participants, random.randint(1, 3))
         for p in members:
-            t.add_member(p)
-        participants.append(t)
+            team.add_member(p)
+        participants.append(team)
 
     print("Making Elsewheres")
     for p in participants:
@@ -269,23 +269,29 @@ def populate_db(db, num_participants=100, num_tips=200, num_teams=5, num_transfe
         tipper, tippee = random.sample(participants, 2)
         tips.append(fake_tip(db, tipper, tippee))
 
-
-    print("Making Transfers")
+    # Transfers
     transfers = []
     for i in xrange(num_transfers):
+        sys.stdout.write("\rMaking Transfers (%i/%i)" % (i+1, num_transfers))
+        sys.stdout.flush()
         tipper, tippee = random.sample(participants, 2)
-        transfer = fake_transfer(db, tipper, tippee)
-        transfers.append(transfer)
+        transfers.append(fake_transfer(db, tipper, tippee))
+    print("")
 
-    print("Making Paydays")
-    #First determine the boundaries - min and max date
+    # Paydays
+    # First determine the boundaries - min and max date
     min_date = min(min(x['ctime'] for x in tips), \
                    min(x['timestamp'] for x in transfers))
     max_date = max(max(x['ctime'] for x in tips), \
                    max(x['timestamp'] for x in transfers))
-    #iterate through min_date, max_date one week at a time
+    # iterate through min_date, max_date one week at a time
+    payday_counter = 1
     date = min_date
+    paydays_total = (max_date - min_date).days/7 + 1
     while date < max_date:
+        sys.stdout.write("\rMaking Paydays (%i/%i)" % (payday_counter, paydays_total))
+        sys.stdout.flush()
+        payday_counter += 1
         end_date = date + datetime.timedelta(days=7)
         week_tips = filter(lambda x: date < x['ctime'] < end_date, tips)
         week_transfers = filter(lambda x: date < x['timestamp'] < end_date, transfers)
@@ -299,7 +305,7 @@ def populate_db(db, num_participants=100, num_tips=200, num_teams=5, num_transfe
             if amount != 0:
                 fee = amount * D('0.02')
                 fee = abs(fee.quantize(D('.01')))
-                exchange = fake_exchange(
+                fake_exchange(
                     db=db,
                     participant=p,
                     amount=amount,
@@ -324,6 +330,7 @@ def populate_db(db, num_participants=100, num_tips=200, num_teams=5, num_transfe
         }
         _fake_thing(db, "paydays", **payday)
         date = end_date
+    print("")
 
 def main():
     db = wireup.db(wireup.env())
