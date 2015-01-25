@@ -241,11 +241,11 @@ def populate_db(db, num_participants=100, num_tips=200, num_teams=5, num_transfe
     print("Making Teams")
     for i in xrange(num_teams):
         t = fake_participant(db, number="plural")
-        participants.append(t)
         #Add 1 to 3 members to the team
         members = random.sample(participants, random.randint(1, 3))
         for p in members:
             t.add_member(p)
+        participants.append(t)
 
     print("Making Elsewheres")
     for p in participants:
