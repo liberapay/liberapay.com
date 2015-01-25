@@ -6,7 +6,7 @@ from gratipay.models import community
 from gratipay.models import check_db
 
 import datetime
-import decimal
+from decimal import Decimal as D
 import random
 import string
 
@@ -94,11 +94,11 @@ def fake_community(db, creator):
 
 
 def fake_tip_amount():
-    amount = ((decimal.Decimal(random.random()) * (MAX_TIP_SINGULAR - MIN_TIP))
+    amount = ((D(random.random()) * (MAX_TIP_SINGULAR - MIN_TIP))
             + MIN_TIP)
 
-    decimal_amount = decimal.Decimal(amount).quantize(decimal.Decimal('.01'))
-    while decimal_amount == decimal.Decimal('0.00'):
+    decimal_amount = D(amount).quantize(D('.01'))
+    while decimal_amount == D('0.00'):
         # https://github.com/gratipay/gratipay.com/issues/2950
         decimal_amount = fake_tip_amount()
     return decimal_amount
@@ -141,6 +141,17 @@ def fake_transfer(db, tipper, tippee):
                , tippee=tippee.username
                , amount=fake_tip_amount()
                , context='tip'
+                )
+
+def fake_exchange(db, participant, amount, fee, timestamp):
+        return _fake_thing( db
+               , "exchanges"
+               , id=fake_int_id()
+               , timestamp=timestamp
+               , participant=participant.username
+               , amount=amount
+               , fee=fee
+               , status='succeeded'
                 )
 
 
@@ -213,9 +224,41 @@ def populate_db(db, num_participants=100, num_tips=200, num_teams=5, num_transfe
     date = min_date
     while date < max_date:
         end_date = date + datetime.timedelta(days=7)
-        week_tips = filter(lambda x: date <= x['ctime'] <= end_date, tips)
-        week_transfers = filter(lambda x: date <= x['timestamp'] <= end_date, transfers)
-        week_participants = filter(lambda x: x.ctime.replace(tzinfo=None) <= end_date, participants)
+        week_tips = filter(lambda x: date < x['ctime'] < end_date, tips)
+        week_transfers = filter(lambda x: date < x['timestamp'] < end_date, transfers)
+        week_participants = filter(lambda x: x.ctime.replace(tzinfo=None) < end_date, participants)
+        credits = [] # Bank withdrawals
+        debits = [] # Credit Card charges
+        for p in week_participants:
+          transfers_in = filter(lambda x: x['tippee'] == p.username, week_transfers)
+          transfers_out = filter(lambda x: x['tipper'] == p.username, week_transfers)
+          amount_in = sum([t['amount'] for t in transfers_in])
+          amount_out = sum([t['amount'] for t in transfers_out])
+          amount = amount_out - amount_in
+          fee = amount * D('0.02')
+          fee = abs(fee.quantize(D('.01')))
+          if amount != 0:
+            exchange = fake_exchange(
+              db=db,
+              participant=p,
+              amount=amount,
+              fee=fee,
+              timestamp=(end_date - datetime.timedelta(seconds=1))
+            )
+            if amount > 0:
+              debits.append(exchange)
+              db.run("""
+                UPDATE participants
+                   SET balance = balance + %s
+                 WHERE username = %s
+              """, (amount, p.username))
+            else:
+              credits.append(exchange)
+              db.run("""
+                UPDATE participants
+                   SET balance = balance + %s
+                 WHERE username = %s
+              """, (amount-fee, p.username))
         actives=set()
         tippers=set()
         for xfers in week_tips, week_transfers:
@@ -233,14 +276,12 @@ def populate_db(db, num_participants=100, num_tips=200, num_teams=5, num_transfe
             'nactive': len(actives),
             'transfer_volume': sum(x['amount'] for x in week_transfers)
         }
-        #Make ach_volume and charge_volume between 0 and 10% of transfer volume
-        def rand_part():
-            return decimal.Decimal(random.random()* 0.1)
-        payday['ach_volume']   = -1 * payday['transfer_volume'] * rand_part()
-        payday['charge_volume'] = payday['transfer_volume'] * rand_part()
+        payday['ach_volume'] = sum([e['amount'] for e in credits])
+        payday['ach_fees_volume'] = sum([e['fee'] for e in credits])
+        payday['charge_volume'] = sum([(e['amount'] + e['fee']) for e in debits])
+        payday['charge_fees_volume'] = sum([e['fee'] for e in debits])
         _fake_thing(db, "paydays", **payday)
         date = end_date
-
 
 def main():
     db = wireup.db(wireup.env())
