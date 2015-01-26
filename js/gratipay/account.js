@@ -77,7 +77,7 @@ Gratipay.account.init = function() {
                     }
                     if (data.number) {
                         $input.prop('checked', true);
-                        Gratipay.notification("Your account type has been changed.", 'success');
+                        Gratipay.notification(data.msg || "Success", 'success');
                         $('li.members').toggleClass('hidden', data.number !== 'plural');
                     }
                 },
