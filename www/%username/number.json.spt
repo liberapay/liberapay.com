@@ -14,11 +14,20 @@ number = request.body["number"]
 if number not in ("singular", "plural"):
     raise Response(400)
 
+out = {}
+
 if number != participant.number:
-    try:
-        participant.update_number(number)
-    except ProblemChangingNumber, e:
-        raise Response(400, unicode(e))
+    if request.body.get("confirmed") or number == "plural" or participant.nmembers == 0:
+        try:
+            participant.update_number(number)
+            out = {'number': number}
+        except ProblemChangingNumber, e:
+            raise Response(400, unicode(e))
+    elif participant.nmembers > 0:
+        msg = _("Warning: Doing this will remove all the members from your team.\n\n"
+                "You'll have to add them back manually to undo this!")
+        out = {'confirm': msg}
+
 
 [---] application/json via json_dump
-{"number": number}
+out

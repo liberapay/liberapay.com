@@ -226,7 +226,16 @@ class MixinTeam(object):
             actual_takes[take['member']] = take
         return actual_takes
 
-    def get_members(self, current_participant):
+    @property
+    def nmembers(self):
+        assert self.IS_PLURAL
+        return self.db.one("""
+            SELECT COUNT(*)
+              FROM current_takes
+             WHERE team=%s
+        """, (self.username, ))
+
+    def get_members(self, current_participant=None):
         """Return a list of member dicts.
         """
         assert self.IS_PLURAL

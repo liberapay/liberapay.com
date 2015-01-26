@@ -57,25 +57,40 @@ Gratipay.account.init = function() {
     // Wire up account type knob.
     // ==========================
 
-    $('.number input').click(function() {
+    $('.number input').click(function(e) {
         var $input = $(this);
-        jQuery.ajax(
-            { url: '../number.json'
-            , type: 'POST'
-            , data: {number: $input.val()}
-            , success: function(data) {
-                Gratipay.notification("Your account type has been changed.", 'success');
-                if (data.number === 'plural') {
-                    $("li.members").removeClass("hidden");
-                } else {
-                    $("li.members").addClass("hidden");
+
+        e.preventDefault();
+
+        function post(confirmed) {
+            jQuery.ajax({
+                url: '../number.json',
+                type: 'POST',
+                data: {
+                    number: $input.val(),
+                    confirmed: confirmed
+                },
+                success: function(data) {
+                    if (data.confirm) {
+                        if (confirm(data.confirm)) return post(true);
+                        return;
+                    }
+                    if (data.number) {
+                        $input.prop('checked', true);
+                        Gratipay.notification("Your account type has been changed.", 'success');
+                        if (data.number === 'plural') {
+                            $("li.members").removeClass("hidden");
+                        } else {
+                            $("li.members").addClass("hidden");
+                        }
+                    }
+                },
+                error: function(r) {
+                    Gratipay.notification(JSON.parse(r.responseText).error_message_long, 'error');
                 }
-            }
-            , error: function(r) {
-                $input.prop('checked', false);
-                Gratipay.notification(JSON.parse(r.responseText).error_message_long, 'error');
-            }
-        });
+            });
+        }
+        post();
     });
 
 
