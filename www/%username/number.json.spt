@@ -14,11 +14,21 @@ number = request.body["number"]
 if number not in ("singular", "plural"):
     raise Response(400)
 
+out = {}
+
 if number != participant.number:
-    try:
-        participant.update_number(number)
-    except ProblemChangingNumber, e:
-        raise Response(400, unicode(e))
+    if number == "singular" and not request.body.get("confirmed") and participant.nmembers > 0:
+        msg = _("Warning: Doing this will remove all the members from your team.\n\n"
+                "You'll have to add them back manually to undo this!")
+        out = {'confirm': msg}
+    else:
+        try:
+            participant.update_number(number)
+        except ProblemChangingNumber, e:
+            raise Response(400, unicode(e))
+        msg = _("Your account type has been changed.")
+        out = {'number': number, 'msg': msg}
+
 
 [---] application/json via json_dump
-{"number": number}
+out

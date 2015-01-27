@@ -202,6 +202,7 @@ class Participant(Model, MixinTeam):
                 raise HasBigTips
         with self.db.get_cursor() as c:
             add_event(c, 'participant', dict(action='set', id=self.id, values=dict(number=number)))
+            self.remove_all_members(c)
             c.execute( "UPDATE participants SET number=%s WHERE id=%s"
                      , (number, self.id)
                       )

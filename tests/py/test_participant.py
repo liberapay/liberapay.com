@@ -437,6 +437,13 @@ class Tests(Harness):
         bob.update_number('singular')
         assert Participant.from_username('bob').number == 'singular'
 
+    def test_going_singular_clears_takes(self):
+        team = self.make_participant('team', number='plural')
+        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
+        team.set_take_for(alice, Decimal('10'), alice)
+        team.update_number('singular')
+        assert Participant.from_username('alice').get_teams() == []
+
     def test_can_go_plural(self):
         alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
         bob = self.make_participant('bob')
