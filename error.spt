@@ -8,12 +8,22 @@ style = ''
 msg = status_strings.get(response.code, 'Unknown Error').title()
 err = response.body
 
+try:
+   username = path["user_name"]
+except KeyError:
+   username = ""
+
+
 title = str(response.code)
 [----------------------------------------] text/html
 {% extends "templates/base.html" %}
 {% block content %}
-    <p>{{ msg|e }}</p>
-    <pre>{{ err|e }}</pre>
+    <h2>{{ msg|e }}</h2>
+    {% if response.code == 404 and username %}
+        <p><b>{{ username }} :</b> {{ err|e }}</p>
+    {% else %}
+        <pre>{{ err|e }}</pre>
+    {% endif %}
 {% endblock %}
 [----------------------------------------] application/json via json_dump
 { "error_code": response.code
