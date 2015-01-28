@@ -189,3 +189,19 @@ class TestPages(Harness):
         self.make_participant('alice', claimed_time='now')
         body = self.client.GET("/alice/", auth_as="alice").body
         assert b'Edit' in body
+
+    def test_search_results_error_pages_twitter(self):
+        body = self.client.GxT("/on/twitter/adhsjakdjsdkjsajdhksda/").body
+        assert "User does not exist on Twitter" in body
+
+    def test_search_results_error_pages_facebook(self):
+        body = self.client.GxT("/on/facebook/adhsjakdjsdkjsajdhksda/").body
+        assert "User does not exist on Facebook" in body
+
+    def test_search_results_error_pages_github(self):
+        body = self.client.GxT("/on/github/adhsjakdjsdkjsajdhksda/").body
+        assert "User does not exist on Github" in body
+
+    def test_search_results_error_pages_bitbucket(self):
+        body = self.client.GxT("/on/bitbucket/adhsjakdjsdkjsajdhksda/").body
+        assert "User does not exist on Bitbucket" in body
