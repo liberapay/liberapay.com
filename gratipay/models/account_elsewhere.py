@@ -184,5 +184,11 @@ def get_account_elsewhere(website, request):
     try:
         account = AccountElsewhere.from_user_name(platform.name, user_name)
     except UnknownAccountElsewhere:
-        account = AccountElsewhere.upsert(platform.get_user_info(user_name))
+        account = None
+    if not account:
+        try:
+            user_info = platform.get_user_info(user_name)
+        except Response:
+            raise Response(404, 'The user {} does not exist on {}'.format( user_name, platform.display_name))
+        account = AccountElsewhere.upsert(user_info)
     return platform, account

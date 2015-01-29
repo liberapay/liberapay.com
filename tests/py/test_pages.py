@@ -192,16 +192,16 @@ class TestPages(Harness):
 
     def test_search_results_error_pages_twitter(self):
         body = self.client.GxT("/on/twitter/adhsjakdjsdkjsajdhksda/").body
-        assert "User does not exist on Twitter" in body
+        assert "The user adhsjakdjsdkjsajdhksda does not exist on Twitter" in body
 
     def test_search_results_error_pages_facebook(self):
         body = self.client.GxT("/on/facebook/adhsjakdjsdkjsajdhksda/").body
-        assert "User does not exist on Facebook" in body
+        assert "The user adhsjakdjsdkjsajdhksda does not exist on Facebook" in body
 
     def test_search_results_error_pages_github(self):
         body = self.client.GxT("/on/github/adhsjakdjsdkjsajdhksda/").body
-        assert "User does not exist on GitHub" in body
+        assert "The user adhsjakdjsdkjsajdhksda does not exist on GitHub" in body
 
     def test_search_results_error_pages_bitbucket(self):
         body = self.client.GxT("/on/bitbucket/adhsjakdjsdkjsajdhksda/").body
-        assert "User does not exist on Bitbucket" in body
+        assert "The user adhsjakdjsdkjsajdhksda does not exist on Bitbucket" in body
