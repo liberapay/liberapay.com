@@ -200,7 +200,7 @@ class TestPages(Harness):
 
     def test_search_results_error_pages_github(self):
         body = self.client.GxT("/on/github/adhsjakdjsdkjsajdhksda/").body
-        assert "User does not exist on Github" in body
+        assert "User does not exist on GitHub" in body
 
     def test_search_results_error_pages_bitbucket(self):
         body = self.client.GxT("/on/bitbucket/adhsjakdjsdkjsajdhksda/").body
