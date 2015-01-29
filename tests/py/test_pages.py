@@ -191,7 +191,6 @@ class TestPages(Harness):
         assert b'Edit' in body
 
     def test_search_results_error_pages_twitter(self):
-<<<<<<< Updated upstream
         body = self.client.GxT("/on/twitter/adhsjakdjsdkjsajdhksda/").body
         assert "User does not exist on Twitter" in body
 
@@ -206,9 +205,3 @@ class TestPages(Harness):
     def test_search_results_error_pages_bitbucket(self):
         body = self.client.GxT("/on/bitbucket/adhsjakdjsdkjsajdhksda/").body
         assert "User does not exist on Bitbucket" in body
-=======
-        body = self.client.GxT("/on/twitter/jkdhfieihi/").body
-        assert "Not Found" in body
-#         assert self.client.GxT("/on/twitter/jkdhfieihi/").code == 200
-
->>>>>>> Stashed changes

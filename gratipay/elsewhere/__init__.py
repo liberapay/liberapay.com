@@ -124,7 +124,7 @@ class Platform(object):
         """
         status = response.status_code
         if status == 404:
-            raise Response(404,'User does not exist on {}'.format(self.name.capitalize()))
+            raise Response(404, 'User does not found on {}'.format(self.display_name) )
         elif status != 200:
             log('{} api responded with {}:\n{}'.format(self.name, status, response.text)
                , level=logging.ERROR)
