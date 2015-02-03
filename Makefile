@@ -35,6 +35,12 @@ clean:
 schema: env
 	$(honcho_run) ./recreate-schema.sh
 
+schema-diff: test-schema
+	pg_dump -sO `heroku config:get DATABASE_URL -a gratipay` >prod.sql
+	$(honcho) run -e $(test_env_files) sh -c 'pg_dump -sO "$$DATABASE_URL"' >local.sql
+	diff -uw prod.sql local.sql
+	rm prod.sql local.sql
+
 data:
 	$(honcho_run) $(env_bin)/fake_data fake_data
 
