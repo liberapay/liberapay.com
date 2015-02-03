@@ -180,3 +180,8 @@ UPDATE participants p
          p.receiving <> p2.receiving OR
          p.npatrons <> p2.npatrons
        );
+
+-- Clean up functions
+DROP FUNCTION fake_take() CASCADE;
+DROP FUNCTION fake_tip() CASCADE;
+DROP FUNCTION settle_tip_graph() CASCADE;
