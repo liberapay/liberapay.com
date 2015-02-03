@@ -103,3 +103,12 @@ rm -f branch.sql
 # Push to GitHub
 git push
 git push --tags
+
+
+# Check for schema drift
+if [[ $run_sql ]]; then
+    if ! make schema-diff; then
+        echo "schema.sql doesn't match the production DB, please fix it"
+        exit 1
+    fi
+fi
