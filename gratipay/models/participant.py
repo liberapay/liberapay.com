@@ -649,9 +649,11 @@ class Participant(Model, MixinTeam):
             if send:
                 p.send_email(spt_name, **context)
 
-    def notify_patrons(self):
-        patrons = self.get_patrons()
-        elsewhere = self.get_unclaimed_elsewhere()
+    def notify_patrons(self, patrons=None, elsewhere=None):
+        if patrons is None:
+            patrons = self.get_patrons()
+        if elsewhere is None:
+            elsewhere = self.get_unclaimed_elsewhere()
         threading.Thread(
             target=self.send_emails_to,
             name='email',
@@ -1494,6 +1496,15 @@ class Participant(Model, MixinTeam):
             # other_is_a_real_participant
             other_is_a_real_participant = other.is_claimed
 
+            if not other_is_a_real_participant:
+                old_patrons = self.db.all("""
+                    SELECT tipper
+                      FROM current_tips
+                     WHERE tippee=%s
+                       AND amount>0
+                """, (other.username,))
+
+
             # this_is_others_last_login_account
             nelsewhere = len(other.get_elsewhere_logins(cursor))
             this_is_others_last_login_account = (nelsewhere <= 1)
@@ -1607,6 +1618,16 @@ class Participant(Model, MixinTeam):
 
         if new_balance is not None:
             self.set_attributes(balance=new_balance)
+
+        # old_patrons = self.db.all("""
+        #     SELECT tipper
+        #       FROM current_tips
+        #      WHERE tippee=%s
+        #        AND amount>0
+        # """, (self.username,))
+        if not other_is_a_real_participant:
+            old_patrons = [self.from_username(p) for p in old_patrons]
+            self.notify_patrons(patrons=old_patrons, elsewhere=elsewhere)
 
         self.update_avatar()
 
