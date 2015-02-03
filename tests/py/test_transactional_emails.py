@@ -1,4 +1,5 @@
 import mock
+import threading
 
 from gratipay.models.participant import Participant
 from gratipay.models.account_elsewhere import AccountElsewhere
@@ -17,6 +18,11 @@ class TestTransactionalEmails(Harness):
         dan.set_tip_to(alice.participant.username, '100')
         alice = AccountElsewhere.from_user_name('twitter', 'alice')
         alice.opt_in('alice')
+
+        # Emails are processed in a thread, wait for it to complete
+        email_thread = filter(lambda x: x.name == 'email', threading.enumerate())
+        if email_thread:
+            email_thread[0].join()
 
         assert mailer.call_count == 2
         last_email = get_last_email(mailer)

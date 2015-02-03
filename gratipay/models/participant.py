@@ -14,6 +14,7 @@ from datetime import timedelta
 from decimal import Decimal, ROUND_DOWN
 from urllib import quote
 import uuid
+import threading
 
 import aspen
 from aspen.utils import utcnow
@@ -651,13 +652,17 @@ class Participant(Model, MixinTeam):
     def notify_patrons(self):
         patrons = self.get_patrons()
         elsewhere = self.get_unclaimed_elsewhere()
-        self.send_emails_to(
-            patrons, 'notify_patron',
-            check_for="notify_on_opt_in",
-            elsewhere_username=elsewhere.user_name,
-            elsewhere_platform=elsewhere.platform,
-            profile_url=self.profile_url
-        )
+        threading.Thread(
+            target=self.send_emails_to,
+            name='email',
+            args=(patrons, 'notify_patron'),
+            kwargs={
+                'check_for': 'notify_on_opt_in',
+                'elsewhere_username': elsewhere.user_name,
+                'elsewhere_platform': elsewhere.platform,
+                'profile_url': self.profile_url
+            }
+        ).start()
 
     def set_email_lang(self, accept_lang):
         if not accept_lang:
