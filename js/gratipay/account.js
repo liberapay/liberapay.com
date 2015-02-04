@@ -157,10 +157,13 @@ Gratipay.account.init = function() {
             , data: {toggle: field}
             , dataType: 'json'
             , success: function(data) {
+                if (data.msg) {
+                    Gratipay.notification(data.msg, 'success');
+                }
                 $(e.target).attr('checked', data[field]);
             }
-            , error: function() {
-                Gratipay.notification("Failed to change your notification preference. Please try again.", 'error');
+            , error: function(e) {
+                Gratipay.notification(JSON.parse(e.responseText).error_message_long, 'error');
             }
         });
     });

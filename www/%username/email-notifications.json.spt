@@ -6,7 +6,7 @@ request.allow("POST")
 if POST:
     field = body.get("toggle")
     if field not in ["notify_on_opt_in"]:
-        raise Response(400)
+        raise Response(400, _("Invalid notification preference."))
     rec = website.db.one("""
 
         UPDATE participants
@@ -16,7 +16,10 @@ if POST:
 
     """.format(field), (user.participant.username,))
     assert rec is not None
-    out = {field: rec}
+    out = {
+        field: rec,
+        'msg': _("Your notification preference has been changed.")
+    }
 
 [---] application/json via json_dump
 out
