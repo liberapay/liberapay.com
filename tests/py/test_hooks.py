@@ -71,6 +71,19 @@ class Tests(Harness):
         assert response.code == 200
         assert SESSION not in response.headers.cookie
 
+    def test_old_API_key_auth(self):
+        alice = self.make_participant('alice', claimed_time='now')
+        api_key = alice.recreate_api_key()
+
+        auth_header = b'Basic ' + b64encode(b'%s:' % api_key)
+        response = self.client.GET( '/alice/public.json'
+                                  , HTTP_AUTHORIZATION=auth_header
+                                  , HTTP_X_FORWARDED_PROTO=b'https'
+                                  , HTTP_HOST=b'gratipay.com'
+                                   )
+
+        assert response.code == 200
+
     def test_bad_userid_returns_401(self):
         self.make_participant('alice', claimed_time='now')
         auth_header = b'Basic ' + b64encode(b'foo:')
