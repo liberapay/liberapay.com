@@ -9,6 +9,10 @@
 -- numeric(35,2) maxes out at $999,999,999,999,999,999,999,999,999,999,999.00.
 
 
+CREATE EXTENSION IF NOT EXISTS pg_stat_statements WITH SCHEMA public;
+COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQL statements executed';
+
+
 -- https://github.com/gratipay/gratipay.com/pull/1274
 CREATE TYPE participant_number AS ENUM ('singular', 'plural');
 
