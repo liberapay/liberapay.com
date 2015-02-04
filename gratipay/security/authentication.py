@@ -1,7 +1,7 @@
 """Defines website authentication helpers.
 """
 import binascii
-from datetime import datetime
+from datetime import date, datetime
 
 from aspen import Response
 from aspen.utils import to_rfc822
@@ -36,6 +36,15 @@ def get_auth_from_request(request):
                 # For backward-compatibility
                 user = request.context['user'] = User()
                 user.participant = Participant._from_thing('api_key', userid)
+                if user.participant:
+                    p = user.participant
+                    today = date.today()
+                    if p.old_auth_usage != today:
+                        Participant.db.run("""
+                            UPDATE participants
+                               SET old_auth_usage = %s
+                             WHERE id = %s
+                        """, (today, p.id))
             else:
                 try:
                     userid = int(userid)
