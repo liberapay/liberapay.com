@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 import json
 
 from aspen.utils import utcnow
+from gratipay.models.community import Community
 from gratipay.testing import Harness
 
 class TestCommunitiesJson(Harness):
@@ -17,7 +18,7 @@ class TestCommunitiesJson(Harness):
                                     )
         assert response.code == 400
 
-    def test_post_can_join_community(self):
+    def test_joining_and_leaving_community(self):
         self.make_participant("alice", claimed_time=utcnow())
 
         response = self.client.GET('/for/communities.json', auth_as='alice')
@@ -30,17 +31,8 @@ class TestCommunitiesJson(Harness):
 
         communities = json.loads(response.body)['communities']
         assert len(communities) == 1
-
-        actual = communities[0]['name']
-        assert actual == 'Test'
-
-    def test_post_can_leave_community(self):
-        self.make_participant("alice", claimed_time=utcnow())
-
-        response = self.client.POST( '/for/communities.json'
-                                   , {'name': 'Test', 'is_member': 'true'}
-                                   , auth_as='alice'
-                                    )
+        assert communities[0]['name'] == 'Test'
+        assert communities[0]['nmembers'] == 1
 
         response = self.client.POST( '/for/communities.json'
                                    , {'name': 'Test', 'is_member': 'false'}
@@ -50,6 +42,10 @@ class TestCommunitiesJson(Harness):
         response = self.client.GET('/for/communities.json', auth_as='alice')
 
         assert len(json.loads(response.body)['communities']) == 0
+
+        # Check that the empty community was deleted
+        community = Community.from_slug('test')
+        assert not community
 
     def test_get_can_get_communities_for_user(self):
         self.make_participant("alice", claimed_time=utcnow())
