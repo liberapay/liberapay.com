@@ -2,6 +2,7 @@
 """
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+import atexit
 import fnmatch
 import os
 from tempfile import mkstemp
@@ -255,6 +256,7 @@ def compile_assets(website):
         os.write(tmpfd, content)
         os.close(tmpfd)
         os.rename(tmpfpath, filepath)
+    atexit.register(lambda: clean_assets(website.www_root))
 
 
 def clean_assets(www_root):
