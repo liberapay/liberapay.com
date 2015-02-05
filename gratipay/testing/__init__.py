@@ -12,6 +12,7 @@ from aspen.utils import utcnow
 from aspen.testing.client import Client
 from gratipay.billing.exchanges import record_exchange, record_exchange_result
 from gratipay.elsewhere import UserInfo
+from gratipay.main import website
 from gratipay.models.account_elsewhere import AccountElsewhere
 from gratipay.security.user import User, SESSION
 from gratipay.testing.vcr import use_cassette
@@ -29,7 +30,7 @@ class ClientWithAuth(Client):
 
     def __init__(self, *a, **kw):
         Client.__init__(self, *a, **kw)
-        Client.website = Client.hydrate_website(self)
+        Client.website = website
 
     def build_wsgi_environ(self, *a, **kw):
         """Extend base class to support authenticating as a certain user.

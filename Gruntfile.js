@@ -97,7 +97,7 @@ module.exports = function(grunt) {
             var bin = 'env/' + (process.platform == 'win32' ? 'Scripts' : 'bin');
             var child = spawn(
                 bin + '/gunicorn',
-                ['--bind', ':' + port, '--workers', '1', 'aspen.wsgi:website'],
+                ['--bind', ':' + port, '--workers', '1', 'gratipay.main:website'],
                 { env: grunt.config.get('env') }
             );
 

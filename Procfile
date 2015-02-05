@@ -1,1 +1,1 @@
-web: gunicorn aspen.wsgi:website --bind :$PORT $GUNICORN_OPTS
+web: gunicorn gratipay.main:website --bind :$PORT $GUNICORN_OPTS
