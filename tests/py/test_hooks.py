@@ -38,12 +38,12 @@ class Tests(Harness):
         assert response.code == 302
         assert response.headers['Location'] == b'https://gratipay.com/'
 
-    def test_session_cookie_isnt_overwritten_by_canonizer(self):
-        # https://github.com/gratipay/gratipay.com/issues/940
-
+    def test_no_cookies_over_http(self):
+        """
+        We don't want to send cookies over HTTP, especially not CSRF and
+        session cookies, for obvious security reasons.
+        """
         self.make_participant('alice')
-
-        # Make a request that canonizer will redirect.
         redirect = self.client.GET( "/"
                                   , auth_as='alice'
                                   , HTTP_X_FORWARDED_PROTO=b'http'
@@ -51,11 +51,7 @@ class Tests(Harness):
                                   , raise_immediately=False
                                    )
         assert redirect.code == 302
-        assert SESSION not in redirect.headers.cookie
-
-        # This is bad, because it means that the user will be signed out of
-        # https://gratipay.com/ if they make a request for
-        # http://gratipay.com/.
+        assert not redirect.headers.cookie
 
     def test_session_cookie_not_set_under_API_key_auth(self):
         alice = self.make_participant('alice', claimed_time='now')
