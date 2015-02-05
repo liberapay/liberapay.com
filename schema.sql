@@ -219,12 +219,13 @@ CREATE TABLE communities
 , name text UNIQUE NOT NULL
 , nmembers int NOT NULL
 , ctime timestamptz NOT NULL
-, CHECK (nmembers >= 0)
+, CHECK (nmembers > 0)
 );
 
 CREATE FUNCTION upsert_community() RETURNS trigger AS $$
     DECLARE
         is_member boolean;
+        delta int = CASE WHEN NEW.is_member THEN 1 ELSE -1 END;
     BEGIN
         IF (SELECT is_suspicious FROM participants WHERE id = NEW.participant) THEN
             RETURN NULL;
@@ -242,21 +243,27 @@ CREATE FUNCTION upsert_community() RETURNS trigger AS $$
         END IF;
         LOOP
             UPDATE communities
-               SET nmembers = nmembers + (CASE WHEN NEW.is_member THEN 1 ELSE -1 END)
-             WHERE slug = NEW.slug;
+               SET nmembers = nmembers + delta
+             WHERE slug = NEW.slug
+               AND nmembers + delta > 0;
             EXIT WHEN FOUND;
-            BEGIN
-                INSERT INTO communities
-                     VALUES (NEW.slug, NEW.name, 1, NEW.ctime);
-            EXCEPTION
-                WHEN unique_violation THEN
-                    IF (CONSTRAINT_NAME = 'communities_slug_pkey') THEN
-                        CONTINUE; -- Try again
-                    ELSE
-                        RAISE;
-                    END IF;
-            END;
-            EXIT;
+            IF (NEW.is_member) THEN
+                BEGIN
+                    INSERT INTO communities
+                         VALUES (NEW.slug, NEW.name, 1, NEW.ctime);
+                EXCEPTION
+                    WHEN unique_violation THEN
+                        IF (CONSTRAINT_NAME = 'communities_slug_pkey') THEN
+                            CONTINUE; -- Try again
+                        ELSE
+                            RAISE;
+                        END IF;
+                END;
+                EXIT;
+            ELSE
+                DELETE FROM communities WHERE slug = NEW.slug AND nmembers = 1;
+                EXIT WHEN FOUND;
+            END IF;
         END LOOP;
         RETURN NEW;
     END;
