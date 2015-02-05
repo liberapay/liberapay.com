@@ -65,7 +65,8 @@ def set_request_context_user(request):
     """Set request.context['user']. This signs the user in.
     """
 
-    user = ANON  # Make sure we always have a user object
+    request.context['user'] = user = ANON  # Make sure we always have a user object, even if
+                                           # there's an exception in the rest of this function.
 
     if request.line.uri.startswith('/assets/'):
         pass
