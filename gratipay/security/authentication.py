@@ -58,8 +58,6 @@ def _turn_off_csrf(request):
     csrf_token = csrf._get_new_csrf_key()
     request.headers.cookie['csrf_token'] = csrf_token
     request.headers['X-CSRF-TOKEN'] = csrf_token
-    if 'Referer' not in request.headers:
-        request.headers['Referer'] = 'https://%s/' % csrf._get_host(request)
 
 def set_request_context_user(request):
     """Set request.context['user']. This signs the user in.
