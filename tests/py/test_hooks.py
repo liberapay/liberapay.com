@@ -28,7 +28,6 @@ class Tests(Harness):
         reset = Environment(CANONICAL_SCHEME=unicode, CANONICAL_HOST=unicode, environ=self.environ)
         wireup.canonical(reset)
 
-
     def test_canonize_canonizes(self):
         response = self.client.GxT( "/"
                                   , HTTP_HOST=b'gratipay.com'
@@ -36,7 +35,6 @@ class Tests(Harness):
                                    )
         assert response.code == 302
         assert response.headers['Location'] == b'https://gratipay.com/'
-
 
     def test_session_cookie_isnt_overwritten_by_canonizer(self):
         # https://github.com/gratipay/gratipay.com/issues/940
@@ -57,7 +55,6 @@ class Tests(Harness):
         # https://gratipay.com/ if they make a request for
         # http://gratipay.com/.
 
-
     def test_session_cookie_not_set_under_API_key_auth(self):
         alice = self.make_participant('alice', claimed_time='now')
         api_key = alice.recreate_api_key()
@@ -72,7 +69,6 @@ class Tests(Harness):
         assert response.code == 200
         assert SESSION not in response.headers.cookie
 
-
     def test_early_failures_dont_break_everything(self):
         old_from_wsgi = Request.from_wsgi
         def broken_from_wsgi(*a, **kw):
@@ -82,3 +78,10 @@ class Tests(Harness):
             assert self.client.GET("/", raise_immediately=False).code == 400
         finally:
             Request.from_wsgi = old_from_wsgi
+
+
+class Tests2(Harness):
+
+    def test_error_spt_works(self):
+        r = self.client.POST('/', csrf_token=False, raise_immediately=False)
+        assert r.code == 403
