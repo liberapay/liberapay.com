@@ -173,7 +173,7 @@ algorithm.functions = [ timer.start
 
                       , canonize
                       , i18n.set_up_i18n
-                      , authentication.get_auth_from_request
+                      , authentication.set_request_context_user
                       , csrf.get_csrf_token_from_request
                       , add_stuff_to_context
 
