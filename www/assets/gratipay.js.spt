@@ -13,4 +13,4 @@ for root, dirs, files in os.walk(js_root):
             content = content.decode('ascii')
             catted.append(content + '\n')
 [---]
-{{ "".join(catted) }}
+{% autoescape false %}{{ "".join(catted) }}{% endautoescape %}

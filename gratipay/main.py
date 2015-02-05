@@ -39,6 +39,22 @@ def _set_cookie(response, *args, **kw):
 aspen.Response.set_cookie = _set_cookie
 
 
+# Monkey-patch aspen_jinja2 to autoescape.
+# ========================================
+
+import aspen_jinja2_renderer
+def autoescaping_compile_meta(self, configuration):
+    loader = None
+    if configuration.project_root is not None:
+        # Instantiate a loader that will be used to resolve template bases.
+        loader = aspen_jinja2_renderer.FileSystemLoader(configuration.project_root)
+    return aspen_jinja2_renderer.Environment( loader=loader
+                                            , autoescape=True
+                                            , extensions=['jinja2.ext.autoescape']
+                                             )
+aspen_jinja2_renderer.Factory.compile_meta = autoescaping_compile_meta
+
+
 # Wireup Algorithm
 # ================
 
