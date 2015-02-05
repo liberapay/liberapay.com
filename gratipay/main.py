@@ -172,10 +172,10 @@ algorithm.functions = [ timer.start
                       , algorithm['raise_200_for_OPTIONS']
 
                       , canonize
+                      , i18n.set_up_i18n
                       , authentication.get_auth_from_request
                       , csrf.get_csrf_token_from_request
                       , add_stuff_to_context
-                      , i18n.set_up_i18n
 
                       , algorithm['dispatch_request_to_filesystem']
 
