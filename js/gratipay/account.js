@@ -148,23 +148,24 @@ Gratipay.account.init = function() {
 
     // Wire up API Key
     // ===============
-    //
+
     var callback = function(data) {
-        $('.api-key span').text(data.api_key || 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx');
+        var val = data.api_key || 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx';
+        $('.api-credentials .key span').text(val);
 
         if (data.api_key) {
-            $('.api-key').data('api-key', data.api_key);
-            $('.api-key .show').hide();
-            $('.api-key .hide').show();
+            $('.api-credentials').data('key', data.api_key);
+            $('.api-credentials .show').hide();
+            $('.api-credentials .hide').show();
         } else {
-            $('.api-key .show').show();
-            $('.api-key .hide').hide();
+            $('.api-credentials .show').show();
+            $('.api-credentials .hide').hide();
         }
     }
 
-    $('.api-key').on('click', '.show', function() {
-        if ($('.api-key').data('api-key'))
-            callback({api_key: $('.api-key').data('api-key')});
+    $('.api-credentials').on('click', '.show', function() {
+        if ($('.api-credentials').data('key'))
+            callback({api_key: $('.api-credentials').data('key')});
         else
             $.get('../api-key.json', {action: 'show'}, callback);
     })

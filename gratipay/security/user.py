@@ -31,11 +31,11 @@ class User(object):
         return self
 
     @classmethod
-    def from_api_key(cls, api_key):
-        """Find a participant based on token and return a User.
+    def from_id(cls, userid):
+        """Find a participant based on id and return a User.
         """
         self = cls()
-        self.participant = Participant.from_api_key(api_key)
+        self.participant = Participant.from_id(userid)
         return self
 
     @classmethod

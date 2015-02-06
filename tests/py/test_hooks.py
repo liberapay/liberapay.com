@@ -1,5 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+from base64 import b64encode
+
 from gratipay import wireup
 from gratipay.security.user import SESSION
 from gratipay.testing import Harness
@@ -59,7 +61,7 @@ class Tests(Harness):
         alice = self.make_participant('alice', claimed_time='now')
         api_key = alice.recreate_api_key()
 
-        auth_header = (b'Basic ' + (api_key + b':').encode('base64')).strip()
+        auth_header = b'Basic ' + b64encode(b'%s:%s' % (alice.id, api_key))
         response = self.client.GET( '/alice/public.json'
                                   , HTTP_AUTHORIZATION=auth_header
                                   , HTTP_X_FORWARDED_PROTO=b'https'
@@ -68,6 +70,29 @@ class Tests(Harness):
 
         assert response.code == 200
         assert SESSION not in response.headers.cookie
+
+    def test_old_API_key_auth(self):
+        alice = self.make_participant('alice', claimed_time='now')
+        api_key = alice.recreate_api_key()
+
+        auth_header = b'Basic ' + b64encode(b'%s:' % api_key)
+        response = self.client.GET( '/alice/public.json'
+                                  , HTTP_AUTHORIZATION=auth_header
+                                  , HTTP_X_FORWARDED_PROTO=b'https'
+                                  , HTTP_HOST=b'gratipay.com'
+                                   )
+
+        assert response.code == 200
+
+    def test_bad_userid_returns_401(self):
+        self.make_participant('alice', claimed_time='now')
+        auth_header = b'Basic ' + b64encode(b'foo:')
+        response = self.client.GxT( '/alice/public.json'
+                                  , HTTP_AUTHORIZATION=auth_header
+                                  , HTTP_X_FORWARDED_PROTO=b'https'
+                                  , HTTP_HOST=b'gratipay.com'
+                                   )
+        assert response.code == 401
 
     def test_early_failures_dont_break_everything(self):
         old_from_wsgi = Request.from_wsgi

@@ -1,0 +1,35 @@
+#account {
+    .username {
+        input {
+            width: 6em;
+        }
+        .warning {
+            margin-top: 5px;
+            display: block;
+            color: red;
+        }
+    }
+    .api-credentials {
+        span {
+            font: normal 10pt/12pt $Mono;
+            background: #EEE;
+            padding: 3pt;
+        }
+        .buttons {
+            padding: 3pt 0;
+            button {
+                margin-top: 3pt;
+            }
+        }
+    }
+    .email-submit {
+        .address input {
+            width: 100%;
+            margin: 5px 0;
+        }
+        .buttons > button {
+            margin-top: 3pt;
+        }
+    }
+}
+
