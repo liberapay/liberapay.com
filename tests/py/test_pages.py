@@ -34,7 +34,7 @@ class TestPages(Harness):
 
     def test_profile(self):
         self.make_participant('cheese', claimed_time='now')
-        expected = "I'm grateful for gifts"
+        expected = "I&#39;m grateful for gifts"
         actual = self.client.GET('/cheese/').body.decode('utf8') # deal with cent sign
         assert expected in actual
 
