@@ -515,13 +515,15 @@ for your project!
 
 ### Renamed to Gratipay
 
- - [Ruby: gratitude](https://github.com/JohnKellyFerguson/gratitude): A simple 
-   ruby wrapper for the Gratipay API.
+ - [Ruby: gratitude](https://github.com/JohnKellyFerguson/gratitude): a simple 
+   ruby wrapper for the Gratipay API
 
- - [php-curl-class](https://github.com/php-curl-class/php-curl-class/blob/master/examples/gratipay_send_tip.php): A php class to tip using the Gratipay API.
+ - [php-curl-class](https://github.com/php-curl-class/php-curl-class/blob/master/examples/gratipay_send_tip.php): a php class to tip using the Gratipay API
 
  - [gratipay-twisted](https://github.com/TigerND/gratipay-twisted): Gratipay client
    for the Twisted framework
+
+ - [WordPress: WP-Gratipay](https://github.com/KakersUK/WP-Gratipay): a simple way to show a Gratipay widget on your WordPress site
 
 
 ### Still Using Gittip
@@ -534,8 +536,6 @@ These probably still work, but are using our [old name](https://medium.com/grati
 
  - [Node.js: Node-Gittip](https://npmjs.org/package/gittip) (also see [Khan
    Academy's setup](http://ejohn.org/blog/gittip-at-khan-academy/)) ([ticket](https://github.com/KevinTCoughlin/node-gittip/issues/1))
-
- - [WordPress: WP-Gittip](https://github.com/daankortenbach/WP-Gittip) ([ticket](https://github.com/daankortenbach/WP-Gittip/issues/2))
 
  - [hubot-gittip](https://github.com/myplanetdigital/hubot-gittip): A Hubot
    script for interacting with a shared Gratipay account. ([ticket](https://github.com/myplanetdigital/hubot-gittip/issues/6))
