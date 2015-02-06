@@ -178,3 +178,8 @@ class TestEmail(Harness):
         # Cannot remove primary
         with self.assertRaises(CannotRemovePrimaryEmail):
             self.hit_email_spt('remove', 'alice@example.com')
+
+    @mock.patch.object(Participant._mailer.messages, 'send')
+    def test_text_email_isnt_html_escaped(self, send):
+        self.alice.add_email("foo'bar@example.com")
+        assert '&#39;' not in send.call_args[1]['message']['text']
