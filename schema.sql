@@ -41,7 +41,7 @@ CREATE TABLE participants
 , is_suspicious         boolean                     DEFAULT NULL
 , id                    bigserial                   NOT NULL UNIQUE
 , username_lower        text                        NOT NULL UNIQUE
-, api_key               text                        UNIQUE DEFAULT NULL
+, api_key               text                        DEFAULT NULL
 , number                participant_number          NOT NULL DEFAULT 'singular'
 , paypal_email          text                        DEFAULT NULL
 , anonymous_receiving   boolean                     NOT NULL DEFAULT FALSE
@@ -59,6 +59,7 @@ CREATE TABLE participants
 , email_address         text                        UNIQUE
 , email_lang            text
 , is_searchable         bool                        NOT NULL DEFAULT TRUE
+, old_auth_usage        date
 , CONSTRAINT team_not_anonymous CHECK (NOT (number='plural' AND anonymous_receiving))
  );
 
