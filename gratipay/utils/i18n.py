@@ -17,6 +17,7 @@ from babel.numbers import (
 )
 from collections import OrderedDict
 import jinja2.ext
+from markupsafe import escape
 
 
 ALIASES = {k: v.lower() for k, v in LOCALE_ALIASES.items()}
@@ -109,8 +110,8 @@ def get_text(loc, s, *a, **kw):
     if a or kw:
         if isinstance(s, bytes):
             s = s.decode('ascii')
-        return s.format(*a, **kw)
-    return s
+        return escape(s).format(*a, **kw)
+    return escape(s)
 
 
 def n_get_text(tell_sentry, request, loc, s, p, n, *a, **kw):
@@ -128,7 +129,7 @@ def n_get_text(tell_sentry, request, loc, s, p, n, *a, **kw):
     kw['n'] = format_number(n, locale=loc) or n
     if isinstance(s2, bytes):
         s2 = s2.decode('ascii')
-    return s2.format(*a, **kw)
+    return escape(s2).format(*a, **kw)
 
 
 def to_age(dt, loc, **kw):
