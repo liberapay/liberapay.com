@@ -1,12 +1,12 @@
 <form id="jump">
     {{ _("Jump to {0} from {1}",
          """<input placeholder='username' autocomplete='off' autocorrect='off'
-                   spellcheck='false' size='12' type='text'>""",
+                   spellcheck='false' size='12' type='text'>"""|safe,
          """<select>
             <option value='twitter'>Twitter</option>
             <option value='facebook'>Facebook</option>
             <option value='github'>GitHub</option>
             <option value='bitbucket'>Bitbucket</option>
-         </select>""") }}
+         </select>"""|safe) }}
     <button type="submit">{{ _("Go") }}</button>
 </form>

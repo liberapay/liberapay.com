@@ -1,6 +1,5 @@
 
 from gratipay.utils import get_participant
-from cgi import escape
 
 [-----------------------------------------------------------------------------]
 
@@ -24,7 +23,7 @@ emails = participant.get_emails()
 
         <div class="username js-edit">
             <h2>{{ _("You are {0}",
-                    "<span class='view'>" + escape(participant.username) + "</span>") }}
+                     ("<span class='view'>%s</span>"|safe) % participant.username) }}
                 <button class="edit">{{ _("Edit") }}</button>
                 <form class="edit" action="../username.json" data-display="inline">
                     <input name="username" value="{{ participant.username|e }}"/>
@@ -80,7 +79,7 @@ emails = participant.get_emails()
                         {% if participant.last_bill_result == "" %}
                             {{ _("Your credit card is {0}working{1}", "", "") }}
                         {% elif participant.last_bill_result %}
-                            {{ _("Your credit card is {0}failing{1}", "<b>", "</b>") }}
+                            {{ _("Your credit card is {0}failing{1}", "<b>"|safe, "</b>"|safe) }}
                         {% endif %}
                     </td>
                     <td class="account-action">
@@ -111,7 +110,7 @@ emails = participant.get_emails()
                         {% if participant.last_ach_result == "" %}
                             {{ _("Your bank account is {0}working{1}", "", "") }}
                         {% elif participant.last_ach_result %}
-                            {{ _("Your bank account is {0}failing{1}", "<b>", "</b>") }}
+                            {{ _("Your bank account is {0}failing{1}", "<b>"|safe, "</b>"|safe) }}
                         {% endif %}
                     </td>
                     <td class="account-action">

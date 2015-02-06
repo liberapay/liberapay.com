@@ -25,10 +25,10 @@ subhead = _("Team Members")
       <tr>
         <th></th>
         <th>Member</th>
-        <th class="figure">{{ _("Last{0} Week ($)", "<br/>") }}</th>
-        <th class="figure">{{ _("This{0} Week ($)", "<br/>") }}</th>
-        <th class="figure">{{ _("Team{0} Balance ($)", "<br/>") }}</th>
-        <th class="figure">{{ _("This{0} Week (%)", "<br/>") }}</th>
+        <th class="figure">{{ _("Last{0} Week ($)", "<br/>"|safe) }}</th>
+        <th class="figure">{{ _("This{0} Week ($)", "<br/>"|safe) }}</th>
+        <th class="figure">{{ _("Team{0} Balance ($)", "<br/>"|safe) }}</th>
+        <th class="figure">{{ _("This{0} Week (%)", "<br/>"|safe) }}</th>
       </tr>
       <tr>
         <td></td>

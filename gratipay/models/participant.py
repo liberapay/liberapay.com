@@ -10,7 +10,6 @@ of participant, based on certain properties.
 """
 from __future__ import print_function, unicode_literals
 
-from cgi import escape
 from datetime import timedelta
 from decimal import Decimal, ROUND_DOWN, ROUND_HALF_EVEN
 from urllib import quote
@@ -627,7 +626,6 @@ class Participant(Model, MixinTeam):
                   (self.username, address))
 
     def send_email(self, spt_name, accept_lang=None, **context):
-        context['escape'] = escape
         context['username'] = self.username
         context.setdefault('include_unsubscribe', True)
         email = context.setdefault('email', self.email_address)
