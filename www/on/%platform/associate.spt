@@ -2,6 +2,7 @@ from base64 import b64decode
 import json
 
 from aspen import log, resources, Response
+from requests_oauthlib.oauth1_session import TokenRequestDenied
 
 from gratipay import canonical_scheme, canonical_host
 from gratipay.models.account_elsewhere import AccountElsewhere
@@ -29,7 +30,11 @@ then = b64decode(then)  # double-b64encoded to avoid other encoding issues w/ qs
 
 # Finish the auth process, the returned session is ready to use
 url = canonical_scheme+'://'+canonical_host+request.line.uri.raw
-sess = platform.handle_auth_callback(url, query_id, query_data)
+try:
+    sess = platform.handle_auth_callback(url, query_id, query_data)
+except TokenRequestDenied as e:
+    raise Response(502, _("{0} returned an error, please try again later.",
+                          platform.display_name))
 
 # Get the user's info from the platform's API and upsert it in the DB
 account = AccountElsewhere.upsert(platform.get_user_self_info(sess))
