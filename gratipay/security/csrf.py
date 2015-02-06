@@ -10,7 +10,6 @@ See also:
 
 from datetime import timedelta
 import re
-import urlparse
 
 
 #from django.utils.cache import patch_vary_headers
@@ -33,15 +32,6 @@ def patch_vary_headers(response, newheaders):
     additional_headers = [newheader for newheader in newheaders
                           if newheader.lower() not in existing_headers]
     response.headers['Vary'] = ', '.join(vary_headers + additional_headers)
-
-
-#from django.utils.http import same_origin
-def same_origin(url1, url2):
-    """
-    Checks if two URLs are 'same-origin'
-    """
-    p1, p2 = urlparse.urlparse(url1), urlparse.urlparse(url2)
-    return (p1.scheme, p1.hostname, p1.port) == (p2.scheme, p2.hostname, p2.port)
 
 
 from aspen import Response
