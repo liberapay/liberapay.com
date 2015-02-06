@@ -19,7 +19,7 @@ emails = participant.get_emails()
 {% endblock %}
 
 {% block content %}
-<div id="profile-edit">
+<div id="account">
     <div class="col0">
 
         <div class="username js-edit">
@@ -160,11 +160,11 @@ emails = participant.get_emails()
         </div>
 
 
-        <div id="api" class="api-key">
+        <div class="api-credentials">
           <h2>{{ _("API Credentials") }}</h2>
-          <div>{{ _("User ID:") }} {{ participant.id }}</div>
-          <div>{{ _("API Key:") }} <span>xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</span></div>
-          <div class="buttons">
+          <div>{{ _("User ID:") }} <span>{{ participant.id }}</span></div>
+          <div class="key">
+            {{ _("API Key:") }} <span>xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</span>
             <button class="show">{{ _("Show Key") }}</button>
             <button class="hide" style="display: none">{{ _("Hide Key") }}</button>
             <button class="recreate">{{ _("Recreate") }}</button>
