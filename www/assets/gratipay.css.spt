@@ -22,4 +22,4 @@ css = sass.compile(output_style=str(output_style),filename=str(filename))
 if website.cache_static:
     css = url_re.sub(url_sub, css)
 [---]
-{% autoescape false %}{{ css }}{% endautoescape %}
+{{ css|safe }}
