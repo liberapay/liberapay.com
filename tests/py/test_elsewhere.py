@@ -97,14 +97,15 @@ class TestElsewhere(Harness):
             account = AccountElsewhere.upsert(platform.extract_user_info(user_info))
             assert isinstance(account, AccountElsewhere)
 
-    def test_user_pages(self):
+    @mock.patch('gratipay.elsewhere.Platform.get_user_info')
+    def test_user_pages(self, get_user_info):
         for platform in self.platforms:
             alice = UserInfo( platform=platform.name
                             , user_id='0'
                             , user_name='alice'
                             , is_team=False
                              )
-            platform.get_user_info = lambda *a: alice
+            get_user_info.side_effect = lambda *a: alice
             response = self.client.GET('/on/%s/alice/' % platform.name)
             assert response.code == 200
             assert 'has not joined' in response.body.decode('utf8')
