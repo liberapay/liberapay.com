@@ -88,17 +88,20 @@ if not user.ANON:
 
     {% else %}
         <div class="col0">
-            <h2>{{ _("You give {0} per week", format_currency(participant.giving, 'USD')) }}</h2>
+            <h2>{{ _("Giving") }}</h2>
 
-            {% if user.participant.giving > 0 or user.participant.pledging > 0 %}
-                <p>{{ _("{0}Click here to see or modify your tips.{1}",
-                        "<a href='/"+ user.participant.username + "/giving/'>", "</a>") }}</p>
-            {% endif %}
+            <p><a href="/{{ participant.username }}/giving/">{{
+                _("You give {0} per week.", format_currency(participant.giving, 'USD'))
+            }}</a></p>
 
             <p>{{ _("Who inspires you? Use this search box to find your heroes on Gratipay:") }}</p>
             {% include "templates/search-box.html" %}
 
-            <h2>{{ _("You receive {0} per week", format_currency(participant.receiving, 'USD')) }}</h2>
+            <h2>{{ _("Receiving") }}</h2>
+
+            <p><a href="/{{ participant.username }}/receiving/">{{
+                _("You receive {0} per week.", format_currency(participant.receiving, 'USD'))
+            }}</a></p>
 
             {% if not participant.accepts_tips %}
                 <p>{{ _("You are currently declining tips, you can change that {0}on your profile{1}.",
