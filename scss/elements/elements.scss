@@ -53,10 +53,16 @@ pre {
     overflow: auto;
 }
 li {
-    margin: 0 0 1em 2em;
+    margin: 0 0 0.5em 2em;
 }
 ol {
     margin: 1em 0 0;
+}
+p + ol, p + ul {
+    margin-top: -0.5em;
+}
+ol + p, ul + p {
+    margin-top: 1em;
 }
 ol li {
     list-style: outside decimal;
