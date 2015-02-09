@@ -17,7 +17,7 @@ from babel.numbers import (
 )
 from collections import OrderedDict
 import jinja2.ext
-from markupsafe import escape as htmlescape
+from markupsafe import escape
 
 
 ALIASES = {k: v.lower() for k, v in LOCALE_ALIASES.items()}
@@ -188,18 +188,10 @@ def format_currency_with_options(number, currency, locale='en', trailing_zeroes=
     return s
 
 
-def get_escape(request):
-    # XXX we should use the actual type of the response instead of guessing
-    html_ext = request.line.uri.path.raw.endswith('.html')
-    accept_html = 'text/html' in request.headers.get("Accept", "")
-    return htmlescape if html_ext or accept_html else lambda a: a
-
-
 def set_up_i18n(website, request):
     accept_lang = request.headers.get("Accept-Language", "")
     langs = request.accept_langs = list(parse_accept_lang(accept_lang))
     loc = match_lang(langs)
-    escape = get_escape(request)
     add_helpers_to_context(website.tell_sentry, request.context, escape, loc, request)
 
 
