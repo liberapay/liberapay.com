@@ -17,7 +17,7 @@ from babel.numbers import (
 )
 from collections import OrderedDict
 import jinja2.ext
-from markupsafe import escape
+from markupsafe import escape as htmlescape
 
 
 ALIASES = {k: v.lower() for k, v in LOCALE_ALIASES.items()}
@@ -103,7 +103,8 @@ def get_function_from_rule(rule):
     return eval('lambda n: ' + rule, {'__builtins__': {}})
 
 
-def get_text(loc, s, *a, **kw):
+def get_text(context, loc, s, *a, **kw):
+    escape = context['escape']
     msg = loc.catalog.get(s)
     if msg:
         s = msg.string or s
@@ -114,7 +115,8 @@ def get_text(loc, s, *a, **kw):
     return escape(s)
 
 
-def n_get_text(tell_sentry, request, loc, s, p, n, *a, **kw):
+def n_get_text(tell_sentry, context, loc, s, p, n, *a, **kw):
+    escape = context['escape']
     n = n or 0
     msg = loc.catalog.get((s, p))
     s2 = None
@@ -122,7 +124,7 @@ def n_get_text(tell_sentry, request, loc, s, p, n, *a, **kw):
         try:
             s2 = msg.string[loc.catalog.plural_func(n)]
         except Exception as e:
-            tell_sentry(e, request)
+            tell_sentry(e, context.get('request'))
     if not s2:
         loc = 'en'
         s2 = s if n == 1 else p
@@ -192,14 +194,19 @@ def set_up_i18n(website, request):
     accept_lang = request.headers.get("Accept-Language", "")
     langs = request.accept_langs = list(parse_accept_lang(accept_lang))
     loc = match_lang(langs)
-    add_helpers_to_context(website.tell_sentry, request.context, loc, request)
+    add_helpers_to_context(website.tell_sentry, request.context, loc)
+
+    # XXX we should use the actual type of the response instead of guessing
+    html_ext = request.line.uri.path.raw.endswith('.html')
+    accept_html = 'text/html' in request.headers.get("Accept", "")
+    request.context['escape'] = htmlescape if html_ext or accept_html else lambda a: a
 
 
-def add_helpers_to_context(tell_sentry, context, loc, request=None):
+def add_helpers_to_context(tell_sentry, context, loc):
     context['locale'] = loc
     context['decimal_symbol'] = get_decimal_symbol(locale=loc)
-    context['_'] = lambda s, *a, **kw: get_text(loc, s, *a, **kw)
-    context['ngettext'] = lambda *a, **kw: n_get_text(tell_sentry, request, loc, *a, **kw)
+    context['_'] = lambda s, *a, **kw: get_text(context, loc, s, *a, **kw)
+    context['ngettext'] = lambda *a, **kw: n_get_text(tell_sentry, context, loc, *a, **kw)
     context['format_number'] = lambda *a: format_number(*a, locale=loc)
     context['format_decimal'] = lambda *a: format_decimal(*a, locale=loc)
     context['format_currency'] = lambda *a, **kw: format_currency_with_options(*a, locale=loc, **kw)

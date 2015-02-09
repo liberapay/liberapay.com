@@ -18,6 +18,7 @@ import uuid
 import aspen
 from aspen.utils import utcnow
 import balanced
+from markupsafe import escape as htmlescape
 from postgres.orm import Model
 from psycopg2 import IntegrityError
 
@@ -631,10 +632,13 @@ class Participant(Model, MixinTeam):
         email = context.setdefault('email', self.email_address)
         langs = i18n.parse_accept_lang(accept_lang or self.email_lang or 'en')
         locale = i18n.match_lang(langs)
+        context['escape'] = lambda a: a
         i18n.add_helpers_to_context(self._tell_sentry, context, locale)
+        context_html = dict(context, escape=htmlescape)
+        i18n.add_helpers_to_context(self._tell_sentry, context_html, locale)
         spt = self._emails[spt_name]
         base_spt = self._emails['base']
-        def render(t):
+        def render(t, context):
             b = base_spt[t].render(context).strip()
             return b.replace('$body', spt[t].render(context).strip())
         message = {}
@@ -642,8 +646,8 @@ class Participant(Model, MixinTeam):
         message['from_name'] = 'Gratipay Support'
         message['to'] = [{'email': email, 'name': self.username}]
         message['subject'] = spt['subject'].render(context)
-        message['html'] = render('text/html')
-        message['text'] = render('text/plain')
+        message['html'] = render('text/html', context_html)
+        message['text'] = render('text/plain', context)
 
         return self._mailer.messages.send(message=message)
 
