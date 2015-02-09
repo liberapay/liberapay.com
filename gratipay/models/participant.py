@@ -632,10 +632,13 @@ class Participant(Model, MixinTeam):
         email = context.setdefault('email', self.email_address)
         langs = i18n.parse_accept_lang(accept_lang or self.email_lang or 'en')
         locale = i18n.match_lang(langs)
-        escape = lambda a: a
-        i18n.add_helpers_to_context(self._tell_sentry, context, escape, locale)
+        i18n.add_helpers_to_context(self._tell_sentry, context, locale)
+
         context_html = dict(context)
-        i18n.add_helpers_to_context(self._tell_sentry, context_html, htmlescape, locale)
+        _, ngettext = context['_'], context['ngettext']
+        context_html['_'] = lambda *a, **kw: _(*a, **dict(kw, escape=htmlescape))
+        context_html['ngettext'] = lambda *a, **kw: ngettext(*a, **dict(kw, escape=htmlescape))
+
         spt = self._emails[spt_name]
         base_spt = self._emails['base']
         def render(t, context):

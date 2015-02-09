@@ -1,6 +1,5 @@
 import traceback
 from datetime import datetime, timedelta
-from markupsafe import Markup
 
 import balanced
 from aspen import json, log, Response
@@ -24,7 +23,7 @@ if not user.ANON:
 
         bank_account = billing.BalancedBankAccount(balanced_customer_href)
 
-    status = status.format(Markup('<em id="status">'), Markup('</em>'))
+    status = status.format('<em id="status">', '</em>')
     username = user.participant.username
 
 title = _("Bank Account")
@@ -33,7 +32,7 @@ title = _("Bank Account")
 
 {% block heading %}
 
-    <h1>{{ status }}</h1>
+    <h1>{{ status|safe }}</h1>
 
     <p>{{ _("When you receive money on Gratipay we'll automatically deposit it into your bank account.") }}
     {{ _("If you don't connect a bank account then your money will accumulate within Gratipay unless you regift it to others.") }}</p>

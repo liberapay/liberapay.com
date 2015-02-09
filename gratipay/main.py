@@ -12,6 +12,7 @@ from gratipay import canonize, utils
 from gratipay.security import authentication, csrf, x_frame_options
 from gratipay.utils import cache_static, i18n, set_cookie, timer
 from gratipay.version import get_version
+from gratipay.renderers import jinja2_html, jinja2_text
 
 import aspen
 from aspen import log_dammit
@@ -39,22 +40,6 @@ def _set_cookie(response, *args, **kw):
 aspen.Response.set_cookie = _set_cookie
 
 
-# Monkey-patch aspen_jinja2 to autoescape.
-# ========================================
-
-import aspen_jinja2_renderer
-def autoescaping_compile_meta(self, configuration):
-    loader = None
-    if configuration.project_root is not None:
-        # Instantiate a loader that will be used to resolve template bases.
-        loader = aspen_jinja2_renderer.FileSystemLoader(configuration.project_root)
-    return aspen_jinja2_renderer.Environment( loader=loader
-                                            , autoescape=True
-                                            , extensions=['jinja2.ext.autoescape']
-                                             )
-aspen_jinja2_renderer.Factory.compile_meta = autoescaping_compile_meta
-
-
 # Wireup Algorithm
 # ================
 
@@ -66,9 +51,16 @@ except Exception, e:
     website.version = 'x'
 
 
-website.renderer_default = "jinja2"
+website.renderer_default = 'unspecified'  # require explicit renderer, to avoid escaping bugs
+
+website.renderer_factories['jinja2_html'] = jinja2_html.Factory(website)
+website.default_renderers_by_media_type['text/html'] = 'jinja2_html'
+
+website.renderer_factories['jinja2_text'] = jinja2_text.Factory(website)
+website.default_renderers_by_media_type['text/plain'] = 'jinja2_text'
 
 website.renderer_factories['jinja2'].Renderer.global_context = {
+    # This is shared via class inheritance by jinja2_html and jinja2_text.
     'b64encode': base64.b64encode,
     'enumerate': enumerate,
     'float': float,

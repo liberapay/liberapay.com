@@ -37,7 +37,7 @@ title = _("Credit Card")
 {% extends "templates/base.html" %}
 
 {% block heading %}
-    <h1>{{ status_msg.format("<em id=\"status\">"|safe, "</em>"|safe) }}</h1>
+    <h1>{{ (status_msg|safe).format("<em id=\"status\">"|safe, "</em>"|safe) }}</h1>
 
     <p>{{ _("When you don't have enough money in your Gratipay account to cover your gifts, we'll attempt to pull money in using your credit card.") }}
     {{ _("If your credit card is missing or fails then your gifts won't go through for that week.") }}</p>

@@ -17,11 +17,11 @@ from babel.numbers import (
 )
 from collections import OrderedDict
 import jinja2.ext
-from markupsafe import escape
 
 
 ALIASES = {k: v.lower() for k, v in LOCALE_ALIASES.items()}
 ALIASES_R = {v: k for k, v in ALIASES.items()}
+escape_noop = lambda s: s
 
 
 def strip_accents(s):
@@ -103,7 +103,8 @@ def get_function_from_rule(rule):
     return eval('lambda n: ' + rule, {'__builtins__': {}})
 
 
-def get_text(escape, loc, s, *a, **kw):
+def get_text(loc, s, *a, **kw):
+    escape = kw.pop('escape', escape_noop)
     msg = loc.catalog.get(s)
     if msg:
         s = msg.string or s
@@ -114,7 +115,8 @@ def get_text(escape, loc, s, *a, **kw):
     return escape(s)
 
 
-def n_get_text(tell_sentry, request, escape, loc, s, p, n, *a, **kw):
+def n_get_text(tell_sentry, request, loc, s, p, n, *a, **kw):
+    escape = kw.pop('escape', escape_noop)
     n = n or 0
     msg = loc.catalog.get((s, p))
     s2 = None
@@ -192,14 +194,14 @@ def set_up_i18n(website, request):
     accept_lang = request.headers.get("Accept-Language", "")
     langs = request.accept_langs = list(parse_accept_lang(accept_lang))
     loc = match_lang(langs)
-    add_helpers_to_context(website.tell_sentry, request.context, escape, loc, request)
+    add_helpers_to_context(website.tell_sentry, request.context, loc, request)
 
 
-def add_helpers_to_context(tell_sentry, context, escape, loc, request=None):
+def add_helpers_to_context(tell_sentry, context, loc, request=None):
     context['locale'] = loc
     context['decimal_symbol'] = get_decimal_symbol(locale=loc)
-    context['_'] = lambda s, *a, **kw: get_text(escape, loc, s, *a, **kw)
-    context['ngettext'] = lambda *a, **kw: n_get_text(tell_sentry, request, escape, loc, *a, **kw)
+    context['_'] = lambda s, *a, **kw: get_text(loc, s, *a, **kw)
+    context['ngettext'] = lambda *a, **kw: n_get_text(tell_sentry, request, loc, *a, **kw)
     context['format_number'] = lambda *a: format_number(*a, locale=loc)
     context['format_decimal'] = lambda *a: format_decimal(*a, locale=loc)
     context['format_currency'] = lambda *a, **kw: format_currency_with_options(*a, locale=loc, **kw)
