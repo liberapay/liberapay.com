@@ -87,8 +87,7 @@ if not user.ANON:
               "</a>"|safe) }}</p>
 
     {% else %}
-    <div class="row">
-        <div class="col1">
+        <div class="col0">
             <h2>{{ _("You give {0} per week", format_currency(participant.giving, 'USD')) }}</h2>
 
             {% if user.participant.giving > 0 or user.participant.pledging > 0 %}
@@ -98,10 +97,6 @@ if not user.ANON:
 
             <p>{{ _("Who inspires you? Use this search box to find your heroes on Gratipay:") }}</p>
             {% include "templates/search-box.html" %}
-
-        </div>
-
-        <div class="col1">
 
             <h2>{{ _("You receive {0} per week", format_currency(participant.receiving, 'USD')) }}</h2>
 
