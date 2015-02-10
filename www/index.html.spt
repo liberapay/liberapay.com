@@ -105,16 +105,16 @@ if not user.ANON:
 
             {% if not participant.accepts_tips %}
                 <p>{{ _("You are currently declining tips, you can change that {0}on your profile{1}.",
-                        "<a href='/"+ user.participant.username + "/'>", "</a>") }}</p>
+                        "<a href='/%s/'>"|safe % participant.username, "</a>"|safe) }}</p>
             {% elif participant.goal and participant.receiving >= participant.goal %}
                 <p>{{ _("Congratulations, you have reached your goal of receiving {0} per week!", participant.goal) }}</p>
             {% else %}
                 <p>{{ _("To receive money, do something awesome and then tell people about it:") }}</p>
                 <ol>
                     <li>{{ _("{0}Fill out your profile{1} to let others know about you.",
-                             "<a href='/"+ user.participant.username + "/'>", "</a>") }}</li>
+                             "<a href='/%s/'>"|safe % participant.username, "</a>"|safe) }}</li>
                     <li>{{ _("Reach a wider audience by {0}embedding our widgets{1} on your blog/website.",
-                             "<a href='/"+ user.participant.username + "/widgets'>", "</a>") }}</li>
+                             "<a href='/%s/widgets'>"|safe % participant.username, "</a>"|safe) }}</li>
                 </ol>
             {% endif %}
 
