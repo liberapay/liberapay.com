@@ -45,12 +45,12 @@ class TestPages(Harness):
         assert expected in actual
 
     def test_bank_account(self):
-        expected = "add<br> or change your bank account"
+        expected = "add or change your bank account"
         actual = self.client.GET('/bank-account.html').body
         assert expected in actual
 
     def test_credit_card(self):
-        expected = "add<br> or change your credit card"
+        expected = "add or change your credit card"
         actual = self.client.GET('/credit-card.html').body
         assert expected in actual
 

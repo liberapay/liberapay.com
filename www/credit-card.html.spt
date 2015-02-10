@@ -62,9 +62,7 @@ title = _("Credit Card")
 {% block content %}
   {% if user.ANON %}
     {% include "templates/sign-in-using.html" %}
-    and then you'll be able to add<br> or change your credit card.</p>
-
-    <p>Thanks! :-)</p>
+    {{ _("and then you'll be able to add or change your credit card.") }}
   {% else %}
 
     {% if status != "missing" %}
