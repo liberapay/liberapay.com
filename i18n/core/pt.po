@@ -4,6 +4,7 @@
 # 
 # Translators:
 # Changaco <changaco@changaco.oy.lc>, 2014
+# Changaco <changaco@changaco.oy.lc>, 2015
 # Ibrahim Cesar Nogueira de Souza <email@ibrahimcesar.com>, 2014
 # Thiago Freitas Da Ponte <thiagoponte@gmail.com>, 2014-2015
 # Waldir Pimenta <waldyrious@gmail.com>, 2014-2015
@@ -22,6 +23,9 @@ msgstr ""
 msgid "Something not right? Reply to this email for help."
 msgstr "Algum problema? Responda a este email para obter ajuda."
 
+msgid "Greetings, program!"
+msgstr ""
+
 msgid "Connect to {0} on Gratipay?"
 msgstr "Ligar-se a {0} no Gratipay?"
 
@@ -32,6 +36,9 @@ msgstr "Recebemos um pedido para ligar {0} à conta {1} no Gratipay. Reconhece i
 
 msgid "Yes, proceed!"
 msgstr "Sim, proceda!"
+
+msgid "Follow this link to finish connecting your email:"
+msgstr ""
 
 msgid "Connecting {0} to {1} on Gratipay."
 msgstr "Ligando {0} a {1} no Gratipay."
@@ -302,11 +309,8 @@ msgid ""
 "Gratipay unless you regift it to others."
 msgstr "Se você não conectar uma conta bancária então o seu dinheiro vai ficar acumulado no Gratipay a não ser que você re-presenteie para outros."
 
-msgid "{0} and then you'll be able to add{1} or change your bank account."
-msgstr "{0} e então você será capaz de adicionar{1} ou mudar sua conta bancária."
-
-msgid "Thanks! :-)"
-msgstr "Obrigado! :-)"
+msgid "and then you'll be able to add or change your bank account."
+msgstr ""
 
 msgid "Failure"
 msgstr "Falha"
@@ -384,6 +388,9 @@ msgid ""
 " that week."
 msgstr "Se o seu cartão de crédito está faltando ou falhar então os seus presentes não irão ser processados para esta semana."
 
+msgid "and then you'll be able to add or change your credit card."
+msgstr ""
+
 msgid "Current:"
 msgstr "Atual:"
 
@@ -402,8 +409,8 @@ msgstr "CSC"
 msgid ""
 "To minimize processing fees, we charge your credit card at least $10 at a "
 "time                         (anything extra stays in Gratipay to use in "
-"future weeks). {0}"
-msgstr "Para minimizar as taxas de processamento, nós cobramos o seu cartão de crédito pelo menos U$10 Dólares por vez (qualquer extra continua no Gratipay para ser usado nas semanas futuras). {0}"
+"future weeks). {0}Read More{1}"
+msgstr ""
 
 msgid "Full Name on Card"
 msgstr "Nome Completo no Cartão"
@@ -497,13 +504,13 @@ msgstr "Vá para {0}seu perfil{1}."
 
 msgid "Found a matching username"
 msgid_plural "Found matching usernames"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Encontrado um nome de usuário correspondente"
+msgstr[1] "Encontrados nomes de usuários correspondentes"
 
 msgid "Found a matching community name"
 msgid_plural "Found matching community names"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Encontrado um nome de comunidade correspondente"
+msgstr[1] "Encontrados nomes de comunidades correspondentes"
 
 msgid "{0}{n}{1} Member"
 msgid_plural "{0}{n}{1} Members"
@@ -512,11 +519,11 @@ msgstr[1] "{0}{n}{1} Membros"
 
 msgid "Found a matching user statement"
 msgid_plural "Found matching user statements"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Encontrada uma declaração de usuário correspondente"
+msgstr[1] "Encontradas declarações de usuários correspondentes"
 
 msgid "Sorry, we didn't find anything matching your query."
-msgstr ""
+msgstr "Desculpe, nós não encontramos nada correspondente a sua dúvida."
 
 msgid "Looking for a specific user of a social network?"
 msgstr "Procurando por um usuário específico de uma rede social?"
@@ -537,13 +544,13 @@ msgid ""
 "Warning: Doing this will remove all the tips you are currently receiving.\n"
 "\n"
 "That cannot be undone!"
-msgstr ""
+msgstr "Cuidado: Fazer isso vai remover todas as gorjetas que você está recebendo no momento.\n\nIsso não pode ser desfeito!"
 
 msgid "You don't have a profile statement in this language yet."
-msgstr ""
+msgstr "Você ainda não tem uma declaração no seu perfil nesta língua."
 
 msgid "You haven't saved your changes, are you sure you want to discard them?"
-msgstr ""
+msgstr "Você não salvou suas alterações, tem certeza que deseja descartá-las?"
 
 msgid "I'm grateful for gifts, but don't have a specific funding goal."
 msgstr "Eu sou grato por presentes, mas não tenho um objetivo de financiamento."
@@ -578,7 +585,7 @@ msgid ""
 "Warning: Doing this will remove all the members from your team.\n"
 "\n"
 "You'll have to add them back manually to undo this!"
-msgstr ""
+msgstr "Cuidado: Fazendo isso irá remover todos os membros da sua equipe.\n\nVocê vai ter que adicioná-los de volta manualmente para desfazer essa ação!"
 
 msgid "Your account type has been changed."
 msgstr "O tipo da sua conta foi alterado."
@@ -595,7 +602,7 @@ msgstr "Fechar Conta"
 msgid ""
 "You still have money in this Gratipay account, please choose a disbursement "
 "method below or contact support."
-msgstr ""
+msgstr "Você ainda tem dinheiro nessa conta do Gratipay, por favor escolha um método de reembolso abaixo ou contate o suporte."
 
 msgid "The bank withdrawal failed. Error message: {0}"
 msgstr "O saque bancário falhou. Mensagem de erro: {0}"
@@ -657,13 +664,13 @@ msgid "Add email address"
 msgstr "Adicione endereço de email"
 
 msgid "API Credentials"
-msgstr ""
+msgstr "Credenciais da API"
 
 msgid "User ID:"
-msgstr ""
+msgstr "ID do usuário:"
 
 msgid "API Key:"
-msgstr ""
+msgstr "Chave da API:"
 
 msgid "Show Key"
 msgstr "Mostrar Chave"
@@ -721,7 +728,7 @@ msgid ""
 "verification. If you accidentally created two Gratipay accounts, you can "
 "merge them by logging into the main one and adding the social accounts from "
 "the other. Email {0} if you'd like help."
-msgstr ""
+msgstr "Você logou na conta errada do Gratipay para completar essa verificação de email. Se você acidentalmente criou duas contas no Gratipay, você pode fundi-las logando na conta principal e adicionando as contas sociais da outra. Email {0} se você precisar de ajuda."
 
 msgid "Success!"
 msgstr "Sucesso!"
@@ -786,7 +793,7 @@ msgid "First Set"
 msgstr ""
 
 msgid "Recently Cancelled"
-msgstr ""
+msgstr "Recentemente Cancelado"
 
 msgid "within the last 30 days"
 msgstr "nos últimos 30 dias"
