@@ -21,7 +21,6 @@ import jinja2.ext
 
 ALIASES = {k: v.lower() for k, v in LOCALE_ALIASES.items()}
 ALIASES_R = {v: k for k, v in ALIASES.items()}
-escape_noop = lambda s: s
 
 
 def strip_accents(s):
