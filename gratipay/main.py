@@ -12,7 +12,7 @@ from gratipay import canonize, utils
 from gratipay.security import authentication, csrf, x_frame_options
 from gratipay.utils import cache_static, i18n, set_cookie, timer
 from gratipay.version import get_version
-from gratipay.renderers import jinja2_html, jinja2_text
+from gratipay.renderers import jinja2_html
 
 import aspen
 from aspen import log_dammit
@@ -51,16 +51,19 @@ except Exception, e:
     website.version = 'x'
 
 
+# Configure renderers
+# ===================
+
 website.renderer_default = 'unspecified'  # require explicit renderer, to avoid escaping bugs
 
 website.renderer_factories['jinja2_html'] = jinja2_html.Factory(website)
 website.default_renderers_by_media_type['text/html'] = 'jinja2_html'
 
-website.renderer_factories['jinja2_text'] = jinja2_text.Factory(website)
-website.default_renderers_by_media_type['text/plain'] = 'jinja2_text'
+# We're fine with the default non-escaping behavior for text/plain.
+website.default_renderers_by_media_type['text/plain'] = 'jinja2'
 
 website.renderer_factories['jinja2'].Renderer.global_context = {
-    # This is shared via class inheritance by jinja2_html and jinja2_text.
+    # This is shared via class inheritance with jinja2_html.
     'b64encode': base64.b64encode,
     'enumerate': enumerate,
     'float': float,
