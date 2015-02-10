@@ -32,6 +32,12 @@ class TestPages(Harness):
     def test_new_participant_can_browse(self):
         self.browse(auth_as='alice')
 
+    def test_escaping_on_homepage(self):
+        self.make_participant('alice', claimed_time='now')
+        expected = "<option value='twitter'>Twitter</option>"
+        actual = self.client.GET('/', auth_as='alice').body
+        assert expected in actual
+
     def test_profile(self):
         self.make_participant('cheese', claimed_time='now')
         expected = "I&#39;m grateful for gifts"
