@@ -43,6 +43,14 @@
         &.stop.zero {
             display: none;
         }
+        &.edit {
+            .not-zero { display: none; }
+            .zero { display: inline; }
+        }
+        &.edit.not-zero {
+            .not-zero { display: inline; }
+            .zero { display: none; }
+        }
     }
 
     #payment-prompt {
