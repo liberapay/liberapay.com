@@ -12,6 +12,7 @@ from gratipay import canonize, utils
 from gratipay.security import authentication, csrf, x_frame_options
 from gratipay.utils import cache_static, i18n, set_cookie, timer
 from gratipay.version import get_version
+from gratipay.renderers import jinja2_htmlescaped
 
 import aspen
 from aspen import log_dammit
@@ -50,9 +51,17 @@ except Exception, e:
     website.version = 'x'
 
 
-website.renderer_default = "jinja2"
+# Configure renderers
+# ===================
+
+website.renderer_default = 'unspecified'  # require explicit renderer, to avoid escaping bugs
+
+website.renderer_factories['jinja2_htmlescaped'] = jinja2_htmlescaped.Factory(website)
+website.default_renderers_by_media_type['text/html'] = 'jinja2_htmlescaped'
+website.default_renderers_by_media_type['text/plain'] = 'jinja2'  # unescaped is fine here
 
 website.renderer_factories['jinja2'].Renderer.global_context = {
+    # This is shared via class inheritance with jinja2_htmlescaped.
     'b64encode': base64.b64encode,
     'enumerate': enumerate,
     'float': float,

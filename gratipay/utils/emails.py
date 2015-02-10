@@ -15,6 +15,7 @@ from jinja2 import Environment
 
 
 jinja_env = Environment()
+jinja_env_html = Environment(autoescape=True, extensions=['jinja2.ext.autoescape'])
 
 def compile_email_spt(fpath):
     r = {}
@@ -24,5 +25,6 @@ def compile_email_spt(fpath):
         tmpl = b'\n' * page.offset + page.content
         content_type, renderer = parse_specline(page.header)
         key = 'subject' if i == 1 else content_type
-        r[key] = SimplateLoader(fpath, tmpl).load(jinja_env, fpath)
+        env = jinja_env_html if content_type == 'text/html' else jinja_env
+        r[key] = SimplateLoader(fpath, tmpl).load(env, fpath)
     return r

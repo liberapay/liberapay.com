@@ -8,7 +8,7 @@
             {% else %}
                 {% set msg = _('{0}% of active users also {1}support Gratipay{2}.') %}
             {% endif %}
-            {{ msg.format(website.support_current, '<a href="/Gratipay/">', '</a>') }}
+            {{ msg.format(website.support_current, '<a href="/Gratipay/">'|safe, '</a>'|safe) }}
             {% if website.support_goal %}
                 {{ _('Will you help us reach {0}%?', website.support_goal) }}
             {% else %}

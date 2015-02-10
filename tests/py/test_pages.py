@@ -32,9 +32,15 @@ class TestPages(Harness):
     def test_new_participant_can_browse(self):
         self.browse(auth_as='alice')
 
+    def test_escaping_on_homepage(self):
+        self.make_participant('alice', claimed_time='now')
+        expected = "<option value='twitter'>Twitter</option>"
+        actual = self.client.GET('/', auth_as='alice').body
+        assert expected in actual
+
     def test_profile(self):
         self.make_participant('cheese', claimed_time='now')
-        expected = "I'm grateful for gifts"
+        expected = "I&#39;m grateful for gifts"
         actual = self.client.GET('/cheese/').body.decode('utf8') # deal with cent sign
         assert expected in actual
 
@@ -45,12 +51,18 @@ class TestPages(Harness):
         assert expected in actual
 
     def test_bank_account(self):
-        expected = "add<br> or change your bank account"
+        expected = "add or change your bank account"
         actual = self.client.GET('/bank-account.html').body
         assert expected in actual
 
+    def test_bank_account_auth(self):
+        self.make_participant('alice', claimed_time='now')
+        expected = '<em id="status">not connected</em>'
+        actual = self.client.GET('/bank-account.html', auth_as='alice').body
+        assert expected in actual
+
     def test_credit_card(self):
-        expected = "add<br> or change your credit card"
+        expected = "add or change your credit card"
         actual = self.client.GET('/credit-card.html').body
         assert expected in actual
 

@@ -37,7 +37,7 @@ title = _("Credit Card")
 {% extends "templates/base.html" %}
 
 {% block heading %}
-    <h1>{{ status_msg.format("<em id=\"status\">", "</em>") }}</h1>
+    <h1>{{ escape(status_msg).format("<em id=\"status\">"|safe, "</em>"|safe) }}</h1>
 
     <p>{{ _("When you don't have enough money in your Gratipay account to cover your gifts, we'll attempt to pull money in using your credit card.") }}
     {{ _("If your credit card is missing or fails then your gifts won't go through for that week.") }}</p>
@@ -62,9 +62,7 @@ title = _("Credit Card")
 {% block content %}
   {% if user.ANON %}
     {% include "templates/sign-in-using.html" %}
-    and then you'll be able to add<br> or change your credit card.</p>
-
-    <p>Thanks! :-)</p>
+    {{ _("and then you'll be able to add or change your credit card.") }}
   {% else %}
 
     {% if status != "missing" %}
@@ -112,8 +110,9 @@ title = _("Credit Card")
 
                 <div class="info">
                     {{ _("To minimize processing fees, we charge your credit card at least $10 at a time \
-                        (anything extra stays in Gratipay to use in future weeks). {0}",
-                        "<a target='_blank' href='/about/faq.html#how-add-funds'>Read More</a>") }}
+                        (anything extra stays in Gratipay to use in future weeks). {0}Read More{1}",
+                        "<a target='_blank' href='/about/faq.html#how-add-funds'>"|safe,
+                        "</a>"|safe) }}
                 </div>
 
                 <h2>Optional</h2>

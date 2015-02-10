@@ -12,5 +12,6 @@ for root, dirs, files in os.walk(js_root):
             content = open(os.path.join(root, filename)).read()
             content = content.decode('ascii')
             catted.append(content + '\n')
-[---]
-{{ "".join(catted) }}
+js = "".join(catted)
+[---] via stdlib_format
+{js}

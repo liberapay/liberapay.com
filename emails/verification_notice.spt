@@ -3,9 +3,9 @@
 [---] text/html
 {{ _("We are connecting {0} to the {1} account on Gratipay. This is a notification "
      "sent to {2} because that is the primary email address we have on file.",
-     '<b>%s</b>' % escape(new_email),
-     '<b><a href="https://gratipay.com/{0}">{0}</a></b>'.format(username),
-     '<b>%s</b>' % escape(email)) }}
+     ('<b>%s</b>'|safe) % new_email,
+     ('<b><a href="https://gratipay.com/{0}">{0}</a></b>'|safe).format(username),
+     ('<b>%s</b>'|safe) % email) }}
 
 [---] text/plain
 {{ _("We are connecting {0} to the {1} account on Gratipay. This is a notification "

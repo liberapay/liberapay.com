@@ -2,8 +2,8 @@
 
 [---] text/html
 {{ _("We've received a request to connect {0} to the {1} account on Gratipay. Sound familiar?",
-     '<b>%s</b>' % escape(email),
-     '<b><a href="https://gratipay.com/{0}">{0}</a></b>'.format(username)) }}
+     ('<b>%s</b>'|safe) % email,
+     ('<b><a href="https://gratipay.com/{0}">{0}</a></b>'|safe).format(username)) }}
 <br>
 <br>
 <a href="{{ link }}" style="color: #fff; text-decoration:none; display:inline-block; padding: 0 15px; background: #396; font: normal 14px/40px Arial, sans-serif; white-space: nowrap; border-radius: 3px">{{ _("Yes, proceed!") }}</a>

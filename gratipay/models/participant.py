@@ -10,7 +10,6 @@ of participant, based on certain properties.
 """
 from __future__ import print_function, unicode_literals
 
-from cgi import escape
 from datetime import timedelta
 from decimal import Decimal, ROUND_DOWN, ROUND_HALF_EVEN
 from urllib import quote
@@ -19,6 +18,7 @@ import uuid
 import aspen
 from aspen.utils import utcnow
 import balanced
+from markupsafe import escape as htmlescape
 from postgres.orm import Model
 from psycopg2 import IntegrityError
 
@@ -627,16 +627,19 @@ class Participant(Model, MixinTeam):
                   (self.username, address))
 
     def send_email(self, spt_name, accept_lang=None, **context):
-        context['escape'] = escape
         context['username'] = self.username
         context.setdefault('include_unsubscribe', True)
         email = context.setdefault('email', self.email_address)
         langs = i18n.parse_accept_lang(accept_lang or self.email_lang or 'en')
         locale = i18n.match_lang(langs)
         i18n.add_helpers_to_context(self._tell_sentry, context, locale)
+        context['escape'] = lambda s: s
+        context_html = dict(context)
+        i18n.add_helpers_to_context(self._tell_sentry, context_html, locale)
+        context_html['escape'] = htmlescape
         spt = self._emails[spt_name]
         base_spt = self._emails['base']
-        def render(t):
+        def render(t, context):
             b = base_spt[t].render(context).strip()
             return b.replace('$body', spt[t].render(context).strip())
         message = {}
@@ -644,8 +647,8 @@ class Participant(Model, MixinTeam):
         message['from_name'] = 'Gratipay Support'
         message['to'] = [{'email': email, 'name': self.username}]
         message['subject'] = spt['subject'].render(context)
-        message['html'] = render('text/html')
-        message['text'] = render('text/plain')
+        message['html'] = render('text/html', context_html)
+        message['text'] = render('text/plain', context)
 
         return self._mailer.messages.send(message=message)
 

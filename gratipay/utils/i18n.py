@@ -102,18 +102,20 @@ def get_function_from_rule(rule):
     return eval('lambda n: ' + rule, {'__builtins__': {}})
 
 
-def get_text(loc, s, *a, **kw):
+def get_text(context, loc, s, *a, **kw):
+    escape = context['escape']
     msg = loc.catalog.get(s)
     if msg:
         s = msg.string or s
     if a or kw:
         if isinstance(s, bytes):
             s = s.decode('ascii')
-        return s.format(*a, **kw)
-    return s
+        return escape(s).format(*a, **kw)
+    return escape(s)
 
 
-def n_get_text(tell_sentry, request, loc, s, p, n, *a, **kw):
+def n_get_text(tell_sentry, context, loc, s, p, n, *a, **kw):
+    escape = context['escape']
     n = n or 0
     msg = loc.catalog.get((s, p))
     s2 = None
@@ -121,14 +123,14 @@ def n_get_text(tell_sentry, request, loc, s, p, n, *a, **kw):
         try:
             s2 = msg.string[loc.catalog.plural_func(n)]
         except Exception as e:
-            tell_sentry(e, request)
+            tell_sentry(e, context.get('request'))
     if not s2:
         loc = 'en'
         s2 = s if n == 1 else p
     kw['n'] = format_number(n, locale=loc) or n
     if isinstance(s2, bytes):
         s2 = s2.decode('ascii')
-    return s2.format(*a, **kw)
+    return escape(s2).format(*a, **kw)
 
 
 def to_age(dt, loc, **kw):
@@ -195,10 +197,11 @@ def set_up_i18n(website, request):
 
 
 def add_helpers_to_context(tell_sentry, context, loc, request=None):
+    context['escape'] = lambda s: s  # to be overriden by renderers
     context['locale'] = loc
     context['decimal_symbol'] = get_decimal_symbol(locale=loc)
-    context['_'] = lambda s, *a, **kw: get_text(loc, s, *a, **kw)
-    context['ngettext'] = lambda *a, **kw: n_get_text(tell_sentry, request, loc, *a, **kw)
+    context['_'] = lambda s, *a, **kw: get_text(context, loc, s, *a, **kw)
+    context['ngettext'] = lambda *a, **kw: n_get_text(tell_sentry, context, loc, *a, **kw)
     context['format_number'] = lambda *a: format_number(*a, locale=loc)
     context['format_decimal'] = lambda *a: format_decimal(*a, locale=loc)
     context['format_currency'] = lambda *a, **kw: format_currency_with_options(*a, locale=loc, **kw)
@@ -219,7 +222,7 @@ def extract_spt(fileobj, *args, **kw):
         f = BytesIO(b'\n' * page.offset + page.content)
         content_type, renderer = parse_specline(page.header)
         extractor = None
-        if (i == npages and not page.header) or content_type == 'text/html' or renderer == 'jinja2':
+        if (i == npages and not page.header) or content_type in ('text/html', 'text/plain'):
             extractor = jinja2.ext.babel_extract
         elif i < 3:
             extractor = extract_python

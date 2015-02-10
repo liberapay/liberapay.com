@@ -1,6 +1,5 @@
 """Verify a participant's email
 """
-from cgi import escape
 from datetime import timedelta
 
 from aspen import Response
@@ -44,21 +43,21 @@ if participant == user.participant:
                 "verification. If you accidentally created two Gratipay accounts, you can merge "
                 "them by logging into the main one and adding the social accounts from the other. "
                 "Email {0} if you'd like help.",
-                '<a href="mailto:support@gratipay.com">support@gratipay.com</a>') }}</p>
+                '<a href="mailto:support@gratipay.com">support@gratipay.com</a>'|safe) }}</p>
 
     {% else %}
         {% if result == emails.VERIFICATION_SUCCEEDED %}
             <h1>{{ _("Success!") }}</h1>
             <p>{{ _("Your email address {0} is now connected to your Gratipay account.",
-                    "<b>%s</b>" % escape(email)) }}</p>
+                    ("<b>%s</b>"|safe) % email) }}</p>
         {% elif result == emails.VERIFICATION_STYMIED %}
             <h1>{{ _("Address Taken") }}</h1>
             <p>{{ _("The email address {0} is already connected to a different Gratipay account.",
-                    "<b>%s</b>" % escape(email)) }}</p>
+                    ("<b>%s</b>"|safe) % email) }}</p>
         {% elif result == emails.VERIFICATION_REDUNDANT %}
             <h1>{{ _("Already Verified") }}</h1>
             <p>{{ _("Your email address {0} is already connected to your Gratipay account.",
-                    "<b>%s</b>" % escape(email)) }}</p>
+                    ("<b>%s</b>"|safe) % email) }}</p>
         {% elif result == emails.VERIFICATION_MISSING %}
             <h1>{{ _("Missing Info") }}</h1>
             <p>{{ _("Sorry, that's a bad link. You'll need to view your email addresses "
@@ -67,11 +66,11 @@ if participant == user.participant:
             {% if result == emails.VERIFICATION_EXPIRED  %}
                 <h1>{{ _("Expired") }}</h1>
                 <p>{{ _("The verification code for {0} has expired.",
-                        "<b>%s</b>" % escape(email)) }}</p>
+                        ("<b>%s</b>"|safe) % email) }}</p>
             {% elif result == emails.VERIFICATION_FAILED %}
                 <h1>{{ _("Failure") }}</h1>
                 <p>{{ _("The verification code for {0} is bad.",
-                        "<b>%s</b>" % escape(email)) }}</p>
+                        ("<b>%s</b>"|safe) % email) }}</p>
             {% endif %}
             <p data-email="{{ email|e }}"><button class="resend">{{ _("Resend verification email") }}</button></p>
         {% endif %}
