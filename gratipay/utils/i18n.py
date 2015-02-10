@@ -222,7 +222,7 @@ def extract_spt(fileobj, *args, **kw):
         f = BytesIO(b'\n' * page.offset + page.content)
         content_type, renderer = parse_specline(page.header)
         extractor = None
-        if (i == npages and not page.header) or content_type == 'text/html' or renderer == 'jinja2':
+        if (i == npages and not page.header) or content_type in ('text/html', 'text/plain'):
             extractor = jinja2.ext.babel_extract
         elif i < 3:
             extractor = extract_python
