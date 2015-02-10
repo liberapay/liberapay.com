@@ -152,7 +152,7 @@ Gratipay.account.init = function() {
     $('.email-notifications input').click(function(e) {
         var field = $(e.target).data('field');
         jQuery.ajax(
-            { url: '../email-notifications.json'
+            { url: '../emails/notifications.json'
             , type: 'POST'
             , data: {toggle: field}
             , dataType: 'json'
