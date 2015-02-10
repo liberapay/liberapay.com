@@ -49,6 +49,12 @@ class TestPages(Harness):
         actual = self.client.GET('/bank-account.html').body
         assert expected in actual
 
+    def test_bank_account_auth(self):
+        self.make_participant('alice', claimed_time='now')
+        expected = '<em id="status">not connected</em>'
+        actual = self.client.GET('/bank-account.html', auth_as='alice').body
+        assert expected in actual
+
     def test_credit_card(self):
         expected = "add or change your credit card"
         actual = self.client.GET('/credit-card.html').body

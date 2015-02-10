@@ -31,7 +31,7 @@ title = _("Bank Account")
 
 {% block heading %}
 
-    <h1>{{ status.format('<em id="status">'|safe, '</em>'|safe) }}</h1>
+    <h1>{{ escape(status).format('<em id="status">'|safe, '</em>'|safe) }}</h1>
 
     <p>{{ _("When you receive money on Gratipay we'll automatically deposit it into your bank account.") }}
     {{ _("If you don't connect a bank account then your money will accumulate within Gratipay unless you regift it to others.") }}</p>
