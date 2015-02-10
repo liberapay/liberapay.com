@@ -103,8 +103,8 @@ def get_function_from_rule(rule):
     return eval('lambda n: ' + rule, {'__builtins__': {}})
 
 
-def get_text(loc, s, *a, **kw):
-    escape = kw.pop('escape', escape_noop)
+def get_text(context, loc, s, *a, **kw):
+    escape = context['escape']
     msg = loc.catalog.get(s)
     if msg:
         s = msg.string or s
@@ -115,8 +115,8 @@ def get_text(loc, s, *a, **kw):
     return escape(s)
 
 
-def n_get_text(tell_sentry, request, loc, s, p, n, *a, **kw):
-    escape = kw.pop('escape', escape_noop)
+def n_get_text(tell_sentry, context, loc, s, p, n, *a, **kw):
+    escape = context['escape']
     n = n or 0
     msg = loc.catalog.get((s, p))
     s2 = None
@@ -124,7 +124,7 @@ def n_get_text(tell_sentry, request, loc, s, p, n, *a, **kw):
         try:
             s2 = msg.string[loc.catalog.plural_func(n)]
         except Exception as e:
-            tell_sentry(e, request)
+            tell_sentry(e, context['request'])
     if not s2:
         loc = 'en'
         s2 = s if n == 1 else p
@@ -198,10 +198,11 @@ def set_up_i18n(website, request):
 
 
 def add_helpers_to_context(tell_sentry, context, loc, request=None):
+    context['escape'] = lambda s: s  # to be overriden by renderers
     context['locale'] = loc
     context['decimal_symbol'] = get_decimal_symbol(locale=loc)
-    context['_'] = lambda s, *a, **kw: get_text(loc, s, *a, **kw)
-    context['ngettext'] = lambda *a, **kw: n_get_text(tell_sentry, request, loc, *a, **kw)
+    context['_'] = lambda s, *a, **kw: get_text(context, loc, s, *a, **kw)
+    context['ngettext'] = lambda *a, **kw: n_get_text(tell_sentry, context, loc, *a, **kw)
     context['format_number'] = lambda *a: format_number(*a, locale=loc)
     context['format_decimal'] = lambda *a: format_decimal(*a, locale=loc)
     context['format_currency'] = lambda *a, **kw: format_currency_with_options(*a, locale=loc, **kw)

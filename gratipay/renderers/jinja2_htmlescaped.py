@@ -5,10 +5,13 @@ from markupsafe import escape as htmlescape
 
 class HTMLRenderer(base.Renderer):
     def render_content(self, context):
-        # Extend to inject HTML-escaping i18n functions.
-        _, ngettext = context['_'], context['ngettext']
-        context['_'] = lambda *a, **kw: _(*a, **dict(kw, escape=htmlescape))
-        context['ngettext'] = lambda *a, **kw: ngettext(*a, **dict(kw, escape=htmlescape))
+
+        # Extend to inject an HTML-escaping function. Since autoescape is on,
+        # template authors shouldn't normally need to use this function, but
+        # having it in the simplate context makes it easier to implement i18n.
+
+        context['escape'] = htmlescape
+
         return base.Renderer.render_content(self, context)
 
 
