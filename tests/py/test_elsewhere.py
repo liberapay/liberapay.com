@@ -115,6 +115,11 @@ class TestElsewhere(Harness):
         body = self.client.GET('/on/twitter/alice/', auth_as='bob').body
         assert '<span class="zero">Give to alice</span>' in body
 
+    def test_user_name_is_in_pledge_cta(self):
+        UserInfo( platform='twitter', user_id='0', user_name='alice', is_team=False)
+        body = self.client.GET('/on/twitter/alice/').body
+        assert 'pledge to alice' in body
+
 
     def test_failure_page_requires_valid_username(self):
         response = self.client.GxT('/on/twitter/nmjhgfcftyuikjnbvftyujhbgtfgh/failure.html?action')
