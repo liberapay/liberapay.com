@@ -109,6 +109,12 @@ class TestElsewhere(Harness):
             assert response.code == 200
             assert 'has not joined' in response.body.decode('utf8')
 
+    def test_user_name_is_in_button(self):
+        self.make_participant('bob', claimed_time='now')
+        UserInfo( platform='twitter', user_id='0', user_name='alice', is_team=False)
+        body = self.client.GET('/on/twitter/alice/', auth_as='bob').body
+        assert '<span class="zero">Give to alice</span>' in body
+
 
     def test_failure_page_requires_valid_username(self):
         response = self.client.GxT('/on/twitter/nmjhgfcftyuikjnbvftyujhbgtfgh/failure.html?action')
