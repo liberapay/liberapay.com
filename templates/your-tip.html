@@ -13,7 +13,9 @@
                 <span class="amount">{{ format_currency(tip, 'USD') }}</span>
                 <div class="per-week">{{ _("per week") }}</div>
                 <button class="edit {{ 'not-zero' if tip > 0 }}">
-                    <span class="zero">{{ _("Give to {0}", tippee) }}</span>
+                    <span class="zero">{{ _( "Give to {0}"
+                                           , account.user_name if account else tippee
+                                            ) }}</span>
                     <span class="not-zero">{{ _("Edit") }}</span>
                 </button>
             </div>

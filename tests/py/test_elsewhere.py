@@ -103,7 +103,7 @@ class TestElsewhere(Harness):
                             , user_id='0'
                             , user_name='alice'
                             , is_team=False
-                            )
+                             )
             platform.get_user_info = lambda *a: alice
             response = self.client.GET('/on/%s/alice/' % platform.name)
             assert response.code == 200
