@@ -44,6 +44,17 @@ class TestPages(Harness):
         actual = self.client.GET('/cheese/').body.decode('utf8') # deal with cent sign
         assert expected in actual
 
+    def test_username_is_in_button(self):
+        self.make_participant('alice', claimed_time='now')
+        self.make_participant('bob', claimed_time='now')
+        body = self.client.GET('/alice/', auth_as='bob').body
+        assert '<span class="zero">Give to alice</span>' in body
+
+    def test_username_is_in_unauth_giving_cta(self):
+        self.make_participant('alice', claimed_time='now')
+        body = self.client.GET('/alice/').body
+        assert 'give to alice' in body
+
     def test_widget(self):
         self.make_participant('cheese', claimed_time='now')
         expected = "javascript: window.open"
