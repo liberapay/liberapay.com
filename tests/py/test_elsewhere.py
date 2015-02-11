@@ -112,7 +112,7 @@ class TestElsewhere(Harness):
 
     def test_user_pages_not_found(self):
         user_name = 'adhsjakdjsdkjsajdhksda'
-        error = "The user %s does not exist on %s"
+        error = "There doesn't seem to be a user named %s on %s."
         for platform in self.platforms:
             r = self.client.GxT("/on/%s/%s/" % (platform.name, user_name))
             expected = error % (user_name, platform.display_name)
