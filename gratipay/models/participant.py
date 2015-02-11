@@ -14,7 +14,6 @@ from datetime import timedelta
 from decimal import Decimal, ROUND_DOWN
 from urllib import quote
 import uuid
-import threading
 
 import aspen
 from aspen.utils import utcnow
@@ -288,17 +287,12 @@ class Participant(Model, MixinTeam):
     def resolve_unclaimed(self):
         """Given a username, return an URL path.
         """
-        elsewhere = self.get_unclaimed_elsewhere()
-        if elsewhere is None:
-            return
-        return '/on/%s/%s/' % (elsewhere.platform, elsewhere.user_name)
-
-    def get_unclaimed_elsewhere(self):
-        return self.db.one( """
+        rec = self.db.one("""
             SELECT platform, user_name
-            FROM elsewhere
-            WHERE participant = %s
+              FROM elsewhere
+             WHERE participant = %s
         """, (self.username,))
+        return rec and '/on/%s/%s/' % (rec.platform, rec.user_name)
 
     def set_as_claimed(self):
         with self.db.get_cursor() as c:
@@ -640,31 +634,17 @@ class Participant(Model, MixinTeam):
 
         return self._mailer.messages.send(message=message)
 
-    @classmethod
-    def send_emails_to(cls, participants, spt_name, check_for=None, **context):
-        for p in participants:
-            if not p.email_address:
-                continue
-            send = getattr(p, check_for) if check_for else True
-            if send:
-                p.send_email(spt_name, **context)
-
-    def notify_patrons(self, patrons=None, elsewhere=None):
-        if patrons is None:
-            patrons = self.get_patrons()
-        if elsewhere is None:
-            elsewhere = self.get_unclaimed_elsewhere()
-        threading.Thread(
-            target=self.send_emails_to,
-            name='email',
-            args=(patrons, 'notify_patron'),
-            kwargs={
-                'check_for': 'notify_on_opt_in',
-                'elsewhere_username': elsewhere.user_name,
-                'elsewhere_platform': elsewhere.platform,
-                'profile_url': self.profile_url
-            }
-        ).start()
+    def notify_patrons(self, elsewhere, tips=None):
+        tips = self.get_tips_receiving() if tips is None else tips
+        for t in tips:
+            p = Participant.from_username(t.tipper)
+            if p.email_address and p.notify_on_opt_in:
+                p.send_email(
+                    'notify_patron',
+                    elsewhere_username=elsewhere.user_name,
+                    elsewhere_platform=elsewhere.platform,
+                    profile_url=self.profile_url,
+                )
 
     def set_email_lang(self, accept_lang):
         if not accept_lang:
@@ -1128,14 +1108,13 @@ class Participant(Model, MixinTeam):
 
         return tips, total, unclaimed_tips, unclaimed_total
 
-    def get_patrons(self):
-        patrons = self.db.all("""
-            SELECT tipper
+    def get_tips_receiving(self):
+        return self.db.all("""
+            SELECT *
               FROM current_tips
              WHERE tippee=%s
                AND amount>0
         """, (self.username,))
-        return [self.from_username(p) for p in patrons]
 
     def get_current_tips(self):
         """Get the tips this participant is currently sending to others.
@@ -1474,6 +1453,8 @@ class Participant(Model, MixinTeam):
                 # this is a no op - trying to take over itself
                 return
 
+            # Save old tips so we can notify patrons that they've been claimed
+            old_tips = None if other.is_claimed else other.get_tips_receiving()
 
             # Make sure we have user confirmation if needed.
             # ==============================================
@@ -1495,15 +1476,6 @@ class Participant(Model, MixinTeam):
 
             # other_is_a_real_participant
             other_is_a_real_participant = other.is_claimed
-
-            if not other_is_a_real_participant:
-                old_patrons = self.db.all("""
-                    SELECT tipper
-                      FROM current_tips
-                     WHERE tippee=%s
-                       AND amount>0
-                """, (other.username,))
-
 
             # this_is_others_last_login_account
             nelsewhere = len(other.get_elsewhere_logins(cursor))
@@ -1619,15 +1591,8 @@ class Participant(Model, MixinTeam):
         if new_balance is not None:
             self.set_attributes(balance=new_balance)
 
-        # old_patrons = self.db.all("""
-        #     SELECT tipper
-        #       FROM current_tips
-        #      WHERE tippee=%s
-        #        AND amount>0
-        # """, (self.username,))
-        if not other_is_a_real_participant:
-            old_patrons = [self.from_username(p) for p in old_patrons]
-            self.notify_patrons(patrons=old_patrons, elsewhere=elsewhere)
+        if old_tips:
+            self.notify_patrons(elsewhere, tips=old_tips)
 
         self.update_avatar()
 
