@@ -50,10 +50,10 @@ class TestPages(Harness):
         body = self.client.GET('/alice/', auth_as='bob').body
         assert '<span class="zero">Give to alice</span>' in body
 
-    def test_username_is_in_pledge_cta(self):
+    def test_username_is_in_unauth_giving_cta(self):
         self.make_participant('alice', claimed_time='now')
         body = self.client.GET('/alice/').body
-        assert 'pledge to alice' in body
+        assert 'give to alice' in body
 
     def test_widget(self):
         self.make_participant('cheese', claimed_time='now')
