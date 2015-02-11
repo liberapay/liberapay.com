@@ -113,7 +113,7 @@ class TestElsewhere(Harness):
         self.make_participant('bob', claimed_time='now')
         UserInfo( platform='twitter', user_id='0', user_name='alice', is_team=False)
         body = self.client.GET('/on/twitter/alice/', auth_as='bob').body
-        assert '<span class="zero">Give to alice</span>' in body
+        assert '<span class="zero">Pledge to alice</span>' in body
 
     def test_user_name_is_in_pledge_cta(self):
         UserInfo( platform='twitter', user_id='0', user_name='alice', is_team=False)
