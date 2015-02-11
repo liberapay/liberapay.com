@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 import balanced
 from aspen import json, log, Response
 from gratipay import billing, MONTHS
+from gratipay.billing.exchanges import MINIMUM_CREDIT
 from gratipay.elsewhere import github
 
 [-----------------------------------------------------------------------------]
@@ -34,7 +35,9 @@ title = _("Bank Account")
     <h1>{{ escape(status).format('<em id="status">'|safe, '</em>'|safe) }}</h1>
 
     <p>{{ _("When you receive money on Gratipay we'll automatically deposit it into your bank account.") }}
-    {{ _("If you don't connect a bank account then your money will accumulate within Gratipay unless you regift it to others.") }}</p>
+    {{ _("If you don't connect a bank account then your money will accumulate within Gratipay unless you regift it to others.") }}
+    {{ _("Deposits are initiated every Thursday, but only if you have more than {0} in your balance.",
+         format_currency(MINIMUM_CREDIT, 'USD')) }}</p>
 
 {% endblock %}
 
