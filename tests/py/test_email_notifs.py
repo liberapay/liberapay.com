@@ -1,24 +1,18 @@
-import mock
-
-from gratipay.models.participant import Participant
 from gratipay.models.account_elsewhere import AccountElsewhere
-from gratipay.testing import Harness
-from gratipay.testing.emails import get_last_email, wait_for_email_thread
+from gratipay.testing.emails import EmailHarness
 
-class TestTransactionalEmails(Harness):
+
+class TestTransactionalEmails(EmailHarness):
 
     def setUp(self):
-        self.bob = self.make_participant('bob', claimed_time='now', email_address='bob@gmail.com')
-        self.dan = self.make_participant('dan', claimed_time='now', email_address='dan@gmail.com')
-        self.alice = self.make_participant('alice', claimed_time='now', email_address='alice@gmail.com')
-
-        self.mailer_patcher = mock.patch.object(Participant._mailer.messages, 'send')
-        self.test_mailer = self.mailer_patcher.start()
-        self.addCleanup(self.mailer_patcher.stop)
+        EmailHarness.setUp(self)
+        self.bob = self.make_participant('bob', claimed_time='now', email_address='bob@example.com')
+        self.dan = self.make_participant('dan', claimed_time='now', email_address='dan@example.com')
+        self.alice = self.make_participant('alice', claimed_time='now', email_address='alice@example.com')
 
     def test_opt_in_sends_notifications_to_patrons(self):
         carl_twitter = self.make_elsewhere('twitter', 1, 'carl')
-        roy = self.make_participant('roy', claimed_time='now', email_address='roy@gmail.com', notify_on_opt_in=False)
+        roy = self.make_participant('roy', claimed_time='now', email_address='roy@example.com', notify_on_opt_in=False)
 
         self.bob.set_tip_to(carl_twitter.participant.username, '100')
         self.dan.set_tip_to(carl_twitter.participant.username, '100')
@@ -26,13 +20,11 @@ class TestTransactionalEmails(Harness):
 
         AccountElsewhere.from_user_name('twitter', 'carl').opt_in('carl')
 
-        wait_for_email_thread()
-
-        assert self.test_mailer.call_count == 2 # Emails should only be sent to bob and dan
-        last_email = get_last_email(self.test_mailer)
-        assert last_email['to'] == 'dan@gmail.com'
-        expected = "You had pledged to carl. They've just joined Gratipay!"
-        assert expected in last_email['message_text']
+        assert self.mailer.call_count == 2 # Emails should only be sent to bob and dan
+        last_email = self.get_last_email()
+        assert last_email['to'][0]['email'] == 'dan@example.com'
+        expected = "to carl"
+        assert expected in last_email['text']
 
     def test_take_over_sends_notifications_to_patrons(self):
         dan_twitter = self.make_elsewhere('twitter', 1, 'dan')
@@ -42,10 +34,8 @@ class TestTransactionalEmails(Harness):
 
         self.dan.take_over(dan_twitter, have_confirmation=True)
 
-        wait_for_email_thread()
-
-        assert self.test_mailer.call_count == 1
-        last_email = get_last_email(self.test_mailer)
-        assert last_email['to'] == 'bob@gmail.com'
-        expected = "You had pledged to dan. They've just joined Gratipay!"
-        assert expected in last_email['message_text']
+        assert self.mailer.call_count == 1
+        last_email = self.get_last_email()
+        assert last_email['to'][0]['email'] == 'bob@example.com'
+        expected = "to dan"
+        assert expected in last_email['text']

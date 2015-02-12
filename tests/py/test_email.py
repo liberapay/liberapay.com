@@ -1,22 +1,17 @@
 import json
 
-import mock
-
 from gratipay.exceptions import CannotRemovePrimaryEmail, EmailAlreadyTaken, EmailNotVerified
 from gratipay.exceptions import TooManyEmailAddresses
 from gratipay.models.participant import Participant
-from gratipay.testing import Harness
-from gratipay.testing.emails import get_last_email
+from gratipay.testing.emails import EmailHarness
 from gratipay.utils import emails
 
 
-class TestEmail(Harness):
+class TestEmail(EmailHarness):
 
     def setUp(self):
+        EmailHarness.setUp(self)
         self.alice = self.make_participant('alice', claimed_time='now')
-        self.mailer_patcher = mock.patch.object(Participant._mailer.messages, 'send')
-        self.test_mailer = self.mailer_patcher.start()
-        self.addCleanup(self.mailer_patcher.stop)
 
     def hit_email_spt(self, action, address, user='alice', should_fail=False):
         P = self.client.PxST if should_fail else self.client.POST
@@ -42,19 +37,19 @@ class TestEmail(Harness):
 
     def test_adding_email_sends_verification_email(self):
         self.hit_email_spt('add-email', 'alice@gratipay.com')
-        assert self.test_mailer.call_count == 1
-        last_email = get_last_email(self.test_mailer)
-        assert last_email['to'] == 'alice@gratipay.com'
+        assert self.mailer.call_count == 1
+        last_email = self.get_last_email()
+        assert last_email['to'][0]['email'] == 'alice@gratipay.com'
         expected = "We've received a request to connect alice@gratipay.com to the alice account on Gratipay"
-        assert expected in last_email['message_text']
+        assert expected in last_email['text']
 
     def test_adding_second_email_sends_verification_notice(self):
-        self.verify_and_change_email('alice1@gmail.com', 'alice2@gmail.com')
-        assert self.test_mailer.call_count == 3
-        last_email = get_last_email(self.test_mailer)
-        assert last_email['to'] == 'alice1@gmail.com'
-        expected = "We are connecting alice2@gmail.com to the alice account on Gratipay"
-        assert expected in last_email['message_text']
+        self.verify_and_change_email('alice1@example.com', 'alice2@example.com')
+        assert self.mailer.call_count == 3
+        last_email = self.get_last_email()
+        assert last_email['to'][0]['email'] == 'alice1@example.com'
+        expected = "We are connecting alice2@example.com to the alice account on Gratipay"
+        assert expected in last_email['text']
 
     def test_post_anon_returns_403(self):
         response = self.hit_email_spt('add-email', 'anon@gratipay.com', user=None, should_fail=True)
@@ -196,8 +191,8 @@ class TestEmail(Harness):
         with self.assertRaises(CannotRemovePrimaryEmail):
             self.hit_email_spt('remove', 'alice@example.com')
 
-    @mock.patch.object(Participant._mailer.messages, 'send')
-    def test_html_escaping(self, send):
+    def test_html_escaping(self):
         self.alice.add_email("foo'bar@example.com")
-        assert 'foo&#39;bar' in send.call_args[1]['message']['html']
-        assert '&#39;' not in send.call_args[1]['message']['text']
+        last_email = self.get_last_email()
+        assert 'foo&#39;bar' in last_email['html']
+        assert '&#39;' not in last_email['text']

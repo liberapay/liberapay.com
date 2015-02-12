@@ -1,14 +1,16 @@
-import threading
+import mock
 
-def get_last_email(mailer):
-    return {
-        'to': mailer.call_args[1]['message']['to'][0]['email'],
-        'message_text': mailer.call_args[1]['message']['text'],
-        'message_html': mailer.call_args[1]['message']['html']
-    }
+from gratipay.models.participant import Participant
+from gratipay.testing import Harness
 
-def wait_for_email_thread():
-        # Emails are processed in a thread, wait for it to complete
-        email_thread = filter(lambda x: x.name == 'email', threading.enumerate())
-        if email_thread:
-            email_thread[0].join()
+
+class EmailHarness(Harness):
+
+    def setUp(self):
+        Harness.setUp(self)
+        self.mailer_patcher = mock.patch.object(Participant._mailer.messages, 'send')
+        self.mailer = self.mailer_patcher.start()
+        self.addCleanup(self.mailer_patcher.stop)
+
+    def get_last_email(self):
+        return self.mailer.call_args[1]['message']
