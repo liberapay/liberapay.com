@@ -641,8 +641,9 @@ class Participant(Model, MixinTeam):
             if p.email_address and p.notify_on_opt_in:
                 p.send_email(
                     'notify_patron',
-                    elsewhere_username=elsewhere.user_name,
-                    elsewhere_platform=elsewhere.platform,
+                    user_name=elsewhere.user_name,
+                    platform=elsewhere.platform,
+                    amount=t.amount,
                     profile_url=self.profile_url,
                 )
 

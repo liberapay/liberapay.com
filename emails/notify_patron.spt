@@ -1,16 +1,19 @@
-{{ _("{0} from {1} has joined Gratipay!", elsewhere_username, elsewhere_platform) }}
+{{ _("{0} from {1} has joined Gratipay!", user_name, platform) }}
 
 [---] text/html
-
-{{ _("You had pledged to {0}. They've just joined Gratipay!", elsewhere_username) }}
-<br>
-<br>
-<a href="{{ profile_url }}" style="color: #fff; text-decoration:none; display:inline-block; padding: 0 15px; background: #396; font: normal 14px/40px Arial, sans-serif; white-space: nowrap; border-radius: 3px">{{ _("View their profile!") }}</a>
+{{ _("Your pledge to give {0} every week to {1} will be turned into action now that they have joined Gratipay.",
+     format_currency(amount, 'USD'), user_name) }}
+<br><br>
+<a href="{{ profile_url }}" style="color: #fff; text-decoration:none; display:inline-block; padding: 0 15px; background: #396; font: normal 14px/40px Arial, sans-serif; white-space: nowrap; border-radius: 3px">{{ _("View {0}'s profile", user_name) }}</a>
+<br><br>
+{{ _("You can adjust the amount by following the link above.") }}
 
 [---] text/plain
+{{ _("Your pledge to give {0} every week to {1} will be turned into action now that they have joined Gratipay.",
+     format_currency(amount, 'USD'), user_name) }}
 
-{{ _("You had pledged to {0}. They've just joined Gratipay!", elsewhere_username) }}
-
-{{ _("Follow this link to view their profile:") }}
+{{ _("Follow this link to view {0}'s profile:", user_name) }}
 
 {{ profile_url }}
+
+{{ _("You can adjust the amount by following the link above.") }}
