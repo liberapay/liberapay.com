@@ -163,7 +163,7 @@ emails = participant.get_emails()
           <h2>{{ _("API Credentials") }}</h2>
           <div>{{ _("User ID:") }} <span>{{ participant.id }}</span></div>
           <div class="key">
-            {{ _("API Key:") }} <span>xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</span>
+            {{ _("API Key:") }} <span>xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</span><br>
             <button class="show">{{ _("Show Key") }}</button>
             <button class="hide" style="display: none">{{ _("Hide Key") }}</button>
             <button class="recreate">{{ _("Recreate") }}</button>
