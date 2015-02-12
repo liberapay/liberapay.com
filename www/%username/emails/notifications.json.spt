@@ -1,25 +1,24 @@
 from aspen import Response
+from gratipay.utils import get_participant
+
 [---]
-if user.ANON:
-    raise Response(404)
 request.allow("POST")
-if POST:
-    field = body.get("toggle")
-    if field not in ["notify_on_opt_in"]:
-        raise Response(400, _("Invalid notification preference."))
-    rec = website.db.one("""
+participant = get_participant(request, restrict=True)
 
-        UPDATE participants
-           SET {0}=not {0}
-         WHERE username=%s
-        RETURNING {0}
+field = body.get("toggle")
+if field not in ["notify_on_opt_in"]:
+    raise Response(400, "Invalid notification preference.")
 
-    """.format(field), (user.participant.username,))
-    assert rec is not None
-    out = {
-        field: rec,
-        'msg': _("Your notification preference has been changed.")
-    }
+new_value = website.db.one("""
+    UPDATE participants
+       SET {0}=not {0}
+     WHERE username=%s
+ RETURNING {0}
+""".format(field), (participant.username,))
+assert new_value is not None
 
 [---] application/json via json_dump
-out
+{
+    field: new_value,
+    'msg': _("Your notification preference has been changed.")
+}
