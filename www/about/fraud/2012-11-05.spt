@@ -5,6 +5,8 @@ from datetime import datetime
 from decimal import Decimal
 
 from aspen import Response
+from markupsafe import Markup
+
 from gratipay import CARDINALS
 
 [---]
@@ -499,7 +501,7 @@ percentage_stolen = (total_charged / overall_volume) * 100
 percentage_fraudulent = (total_fraudulent / float(overall_transactions)) * 100
 
 
-pad = lambda d, n: locale.format("%.2f", d, grouping=True).rjust(n).replace(' ', '&nbsp;')
+pad = lambda d, n: Markup(locale.format("%.2f", d, grouping=True).rjust(n).replace(' ', '&nbsp;'))
 
 w = 9
 total_charged = pad(total_charged, w)
@@ -511,8 +513,8 @@ total_legit = pad(total_legit, w)
 overall_volume = pad(overall_volume, w)
 percentage_stolen = pad(percentage_stolen, w)
 
-overall_transactions = pad(overall_transactions, w)[:-3] + ('&nbsp;' * 3)
-total_fraudulent = pad(total_fraudulent, w)[:-3] + ('&nbsp;' * 3)
+overall_transactions = pad(overall_transactions, w)[:-3] + Markup('&nbsp;' * 3)
+total_fraudulent = pad(total_fraudulent, w)[:-3] + Markup('&nbsp;' * 3)
 percentage_fraudulent = pad(percentage_fraudulent, w)
 
 
