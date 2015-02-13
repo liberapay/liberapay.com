@@ -16,10 +16,11 @@ teams = website.db.all("""
 
 """)
 nteams = len(teams)
-title = _("Teams")
+title = _("Explore")
+subhead = _("Teams")
 
 [-----------------------------] text/html
-{% extends "templates/base.html" %}
+{% extends "templates/explore.html" %}
 
 {% block content %}
 <h2>{{ _("Teams (N={0})", nteams) }}</h2>
