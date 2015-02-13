@@ -3,34 +3,34 @@ table.table { // hack class, need to review all table instances
     td {
         padding-right: 5px;
         font: normal 12px/14px $Ideal;
+
+        &.no-members {
+            text-align: center;
+            padding: 20px 0 0;
+            color: $light-brown;
+        }
+        &.n {
+            text-align: right;
+            padding-right: 3px;
+        }
+        &.figure {
+            font: normal 11px/14px $Mono;
+            text-align: right;
+            padding: 0 1em 0 5px;
+        }
     }
-    td.no-members {
-        text-align: center;
-        padding: 20px 0 0;
-        color: $light-brown;
-    }
-    td.n {
-        text-align: right;
-        padding-right: 3px;
-    }
-    td.figure {
-        font: normal 11px/14px $Mono;
-        text-align: right;
-        padding: 0 0 0 5px;
-    }
+
     th {
         font: bold 11px/14px $Ideal;
         text-transform: uppercase;
         color: $brown;
         padding: 0 0 5px 0;
         vertical-align: bottom;
-    }
-    th.figure {
-        text-align: center;
-        padding-left: 1em;
-        white-space: nowrap;
-    }
-    td.figure {
-        padding-right: 1em;
+
+        &.figure {
+            text-align: center;
+            padding-left: 1em;
+            white-space: nowrap;
+        }
     }
 }
