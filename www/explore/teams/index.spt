@@ -8,6 +8,7 @@ teams = website.db.all("""
          , p.receiving / t.nmembers AS dollars_per_member 
          , CASE p.goal
            WHEN NULL THEN NULL
+           WHEN 0 THEN NULL
            ELSE ((p.receiving / p.goal) * 100)::int
             END                     AS pfunded
       FROM ( SELECT team            AS name
@@ -17,7 +18,7 @@ teams = website.db.all("""
             ) AS t
       JOIN participants p 
         ON p.username = t.name
-     WHERE p.goal > 0 OR p.goal IS NULL
+     WHERE p.goal >= 0 OR p.goal IS NULL
   ORDER BY dollars_per_member DESC, nmembers ASC
 
 """)
