@@ -20,8 +20,8 @@ subhead = _("Team Members")
 {% endblock %}
 
 {% block content %}
-<div id="team" class="col0">
-  <table>
+<div id="team">
+  <table class="table">
       <tr>
         <th></th>
         <th>Member</th>
@@ -57,7 +57,7 @@ subhead = _("Team Members")
         </td>
       </tr>
       {% endif %}
-      <tbody id="members"></tbody>
+      <tbody id="team-members"></tbody>
   </table>
 </div>
 {% endblock %}
