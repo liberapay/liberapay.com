@@ -12,7 +12,7 @@ teams = website.db.all("""
             ) AS t
       JOIN participants p 
         ON p.username = t.name
-  ORDER BY dollars_per_member DESC
+  ORDER BY dollars_per_member DESC, nmembers ASC
 
 """)
 nteams = len(teams)
