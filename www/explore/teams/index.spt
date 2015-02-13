@@ -34,9 +34,9 @@ subhead = _("Teams")
     {% for team in teams %}
     <tr>
         <td class=""><a href="/{{ team.name }}/">{{ team.name }}</a></td>
-        <td class="figure">{{ format_currency(team.receiving, 'USD', '#,##0.00') }}</td>
+        <td class="figure">{{ format_decimal(team.receiving, '#,##0.00') }}</td>
         <td class="figure">{{ team.nmembers }}</td>
-        <td class="figure">{{ format_currency(team.dollars_per_member, 'USD', '#,##0.00') }}</td>
+        <td class="figure">{{ format_decimal(team.dollars_per_member, '#,##0.00') }}</td>
     </tr>
     {% endfor %}
 </table>
