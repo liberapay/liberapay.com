@@ -1,10 +1,15 @@
 from __future__ import print_function, unicode_literals
 
+import re
+
 from aspen import Response
 
 from gratipay.security.user import SESSION
 from gratipay.testing import Harness
 from gratipay.wireup import find_files
+
+
+overescaping_re = re.compile(r'&amp;(#[0-9]{4}|[a-z]+);')
 
 
 class TestPages(Harness):
@@ -25,6 +30,7 @@ class TestPages(Harness):
             except Response as r:
                 pass
             assert r.code < 500
+            assert not overescaping_re.search(r.body.decode('utf8'))
 
     def test_anon_can_browse(self):
         self.browse()
