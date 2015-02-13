@@ -65,7 +65,6 @@ website.renderer_factories['jinja2'].Renderer.global_context = {
     'b64encode': base64.b64encode,
     'enumerate': enumerate,
     'float': float,
-    'int': int,
     'len': len,
     'range': range,
     'str': str,
