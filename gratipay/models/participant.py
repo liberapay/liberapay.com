@@ -644,7 +644,7 @@ class Participant(Model, MixinTeam):
                     user_name=elsewhere.user_name,
                     platform=elsewhere.platform,
                     amount=t.amount,
-                    profile_url=self.profile_url,
+                    profile_url=elsewhere.gratipay_url,
                 )
 
     def set_email_lang(self, accept_lang):
@@ -676,14 +676,6 @@ class Participant(Model, MixinTeam):
     @property
     def accepts_tips(self):
         return (self.goal is None) or (self.goal >= 0)
-
-    @property
-    def profile_url(self):
-        scheme = gratipay.canonical_scheme
-        host = gratipay.canonical_host
-        username = self.username_lower
-        link = "{scheme}://{host}/{username}/"
-        return link.format(**locals())
 
 
     def insert_into_communities(self, is_member, name, slug):
