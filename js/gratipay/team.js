@@ -89,7 +89,7 @@ Gratipay.team = (function() {
                      ]
                 ));
         }
-        $('#members').html(rows);
+        $('#team-members').html(rows);
         $('#take').submit(doTake);
         $('#take input').focus().keyup(maybeCancelTake);
         $('#members .remove').click(remove);

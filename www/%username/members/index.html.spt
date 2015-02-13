@@ -20,44 +20,42 @@ subhead = _("Team Members")
 {% endblock %}
 
 {% block content %}
-<div id="team" class="col0">
-  <table>
-      <tr>
-        <th></th>
-        <th>Member</th>
-        <th class="figure">{{ _("Last{0} Week ($)", "<br/>"|safe) }}</th>
-        <th class="figure">{{ _("This{0} Week ($)", "<br/>"|safe) }}</th>
-        <th class="figure">{{ _("Team{0} Balance ($)", "<br/>"|safe) }}</th>
-        <th class="figure">{{ _("This{0} Week (%)", "<br/>"|safe) }}</th>
-      </tr>
-      <tr>
-        <td></td>
-        <td></td>
-        <td class="figure last_week"></td>
-        <td class="figure this_week"></td>
-        <td class="figure balance">
-          {{ team.balance + team.receiving - team.giving }}
-        </td>
-        <td class="figure percentage"></td>
-      </tr>
-      {% if user.participant == team %}
-      <tr>
-        <td colspan="6" class="lookup">
-          <div id="lookup-container">
-            <form>
-              <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
-              <input tabindex="1" id="query"
-                     autocomplete="off"
-                     placeholder="{{ _("Enter a Gratipay username") }}"
-                 />&nbsp;<button type="submit"
-                                 tabindex="2">{{ _("Add") }}</button>
-              <ul id="lookup-results"></ul>
-            </form>
-          </div>
-        </td>
-      </tr>
-      {% endif %}
-      <tbody id="members"></tbody>
-  </table>
-</div>
+<table id="team" class="table">
+    <tr>
+      <th></th>
+      <th>Member</th>
+      <th class="figure">{{ _("Last{0} Week ($)", "<br/>"|safe) }}</th>
+      <th class="figure">{{ _("This{0} Week ($)", "<br/>"|safe) }}</th>
+      <th class="figure">{{ _("Team{0} Balance ($)", "<br/>"|safe) }}</th>
+      <th class="figure">{{ _("This{0} Week (%)", "<br/>"|safe) }}</th>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td class="figure last_week"></td>
+      <td class="figure this_week"></td>
+      <td class="figure balance">
+        {{ team.balance + team.receiving - team.giving }}
+      </td>
+      <td class="figure percentage"></td>
+    </tr>
+    {% if user.participant == team %}
+    <tr>
+      <td colspan="6" class="lookup">
+        <div id="lookup-container">
+          <form>
+            <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
+            <input tabindex="1" id="query"
+                   autocomplete="off"
+                   placeholder="{{ _("Enter a Gratipay username") }}"
+               />&nbsp;<button type="submit"
+                               tabindex="2">{{ _("Add") }}</button>
+            <ul id="lookup-results"></ul>
+          </form>
+        </div>
+      </td>
+    </tr>
+    {% endif %}
+    <tbody id="team-members"></tbody>
+</table>
 {% endblock %}

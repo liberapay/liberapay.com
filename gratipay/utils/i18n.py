@@ -182,8 +182,8 @@ def match_lang(languages):
     return LOCALE_EN
 
 
-def format_currency_with_options(number, currency, locale='en', trailing_zeroes=True):
-    s = format_currency(number, currency, locale=locale)
+def format_currency_with_options(number, currency, format=None, locale='en', trailing_zeroes=True):
+    s = format_currency(number, currency, format, locale=locale)
     if not trailing_zeroes:
         s = s.replace(get_decimal_symbol(locale)+'00', '')
     return s
