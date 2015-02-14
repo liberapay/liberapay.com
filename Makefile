@@ -92,7 +92,7 @@ tx:
 	@if [ ! -x $(env_bin)/tx ]; then $(env_bin)/pip install transifex-client; fi
 
 i18n: env tx
-	$(env_bin)/pybabel extract -F .babel_extract --no-wrap -o i18n/core.pot emails templates www
+	$(env_bin)/pybabel extract -F .babel_extract --no-wrap -o i18n/core.pot emails gratipay templates www
 
 i18n_upload: i18n
 	$(env_bin)/tx push -s

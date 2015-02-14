@@ -97,17 +97,26 @@ class TestElsewhere(Harness):
             account = AccountElsewhere.upsert(platform.extract_user_info(user_info))
             assert isinstance(account, AccountElsewhere)
 
-    def test_user_pages(self):
+    @mock.patch('gratipay.elsewhere.Platform.get_user_info')
+    def test_user_pages(self, get_user_info):
         for platform in self.platforms:
             alice = UserInfo( platform=platform.name
                             , user_id='0'
                             , user_name='alice'
                             , is_team=False
                              )
-            platform.get_user_info = lambda *a: alice
+            get_user_info.side_effect = lambda *a: alice
             response = self.client.GET('/on/%s/alice/' % platform.name)
             assert response.code == 200
             assert 'has not joined' in response.body.decode('utf8')
+
+    def test_user_pages_not_found(self):
+        user_name = 'adhsjakdjsdkjsajdhksda'
+        error = "There doesn't seem to be a user named %s on %s."
+        for platform in self.platforms:
+            r = self.client.GxT("/on/%s/%s/" % (platform.name, user_name))
+            expected = error % (user_name, platform.display_name)
+            assert expected in r.body
 
     def test_user_name_is_in_button(self):
         self.make_participant('bob', claimed_time='now')
@@ -119,7 +128,6 @@ class TestElsewhere(Harness):
         self.make_participant('alice', elsewhere='twitter')
         body = self.client.GET('/on/twitter/alice/').body
         assert 'pledge to alice' in body
-
 
     def test_failure_page_requires_valid_username(self):
         response = self.client.GxT('/on/twitter/nmjhgfcftyuikjnbvftyujhbgtfgh/failure.html?action')
