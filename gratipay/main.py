@@ -1,6 +1,5 @@
 from __future__ import division
 
-from decimal import Decimal as D
 import base64
 import threading
 import time
@@ -10,7 +9,7 @@ import gratipay
 import gratipay.wireup
 from gratipay import canonize, utils
 from gratipay.security import authentication, csrf, x_frame_options
-from gratipay.utils import cache_static, i18n, set_cookie, timer
+from gratipay.utils import cache_static, i18n, pricing, set_cookie, timer
 from gratipay.version import get_version
 from gratipay.renderers import jinja2_htmlescaped
 
@@ -138,39 +137,11 @@ def add_stuff_to_context(request):
         return out
     request.context['filter_profile_subnav'] = filter_profile_subnav
 
-
     # Helpers for global call to action to support Gratipay itself.
     user = request.context.get('user')
     p = user.participant if user else None
     if p and p.is_free_rider is None:
-        usage = p.usage
-
-        # Above $500/wk we suggest 2%.
-        if usage >= 5000:
-            low = D('100.00')
-            high = D('1000.00')
-        elif usage >= 500:
-            low = D('10.00')
-            high = D('100.00')
-
-        # From $20 to $499 we suggest 5%.
-        elif usage >= 100:
-            low = D('5.00')
-            high = D('25.00')
-        elif usage >= 20:
-            low = D('1.00')
-            high = D('5.00')
-
-        # Below $20 we suggest 10%.
-        elif usage >= 5:
-            low = D('0.50')
-            high = D('2.00')
-        else:
-            low = D('0.10')
-            high = D('1.00')
-
-        request.context['cta_low'] = low
-        request.context['cta_high'] = high
+        request.context.update(pricing.suggested_payment_low_high(p.usage))
 
 
 noop = lambda: None

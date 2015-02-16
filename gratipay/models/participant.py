@@ -11,7 +11,7 @@ of participant, based on certain properties.
 from __future__ import print_function, unicode_literals
 
 from datetime import timedelta
-from decimal import Decimal, ROUND_DOWN, ROUND_HALF_EVEN
+from decimal import Decimal, ROUND_DOWN
 from urllib import quote
 import uuid
 
@@ -45,7 +45,7 @@ from gratipay.models import add_event
 from gratipay.models._mixin_team import MixinTeam
 from gratipay.models.account_elsewhere import AccountElsewhere
 from gratipay.security.crypto import constant_time_compare
-from gratipay.utils import i18n, is_card_expiring, emails
+from gratipay.utils import i18n, is_card_expiring, emails, pricing
 from gratipay.utils.username import safely_reserve_a_username
 
 
@@ -256,27 +256,7 @@ class Participant(Model, MixinTeam):
 
     @property
     def suggested_payment(self):
-        usage = self.usage
-        if usage >= 500:
-            percentage = Decimal('0.02')
-        elif usage >= 20:
-            percentage = Decimal('0.05')
-        else:
-            percentage = Decimal('0.10')
-
-        suggestion = usage * percentage
-        if suggestion == 0:
-            rounded = suggestion
-        elif suggestion < 0.25:
-            rounded = Decimal('0.25')
-        elif suggestion < 0.50:
-            rounded = Decimal('0.50')
-        elif suggestion < 1:
-            rounded = Decimal('1.00')
-        else:
-            rounded = suggestion.quantize(Decimal('0'), ROUND_HALF_EVEN)
-
-        return rounded
+        return pricing.suggested_payment(self.usage)
 
 
     # API Key
