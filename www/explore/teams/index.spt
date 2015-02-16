@@ -18,7 +18,8 @@ teams = website.db.all("""
             ) AS t
       JOIN participants p 
         ON p.username = t.name
-     WHERE p.goal >= 0 OR p.goal IS NULL
+     WHERE (p.goal >= 0 OR p.goal IS NULL)
+       AND p.is_searchable
   ORDER BY dollars_per_member DESC, nmembers ASC
 
 """)
