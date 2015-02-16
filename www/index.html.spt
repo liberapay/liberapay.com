@@ -3,7 +3,8 @@ from gratipay.models import community
 [---]
 
 if not user.ANON:
-    title = _("Welcome, {0}!", user.participant.username)
+    participant = user.participant
+    title = participant.username
 
 [---]
 {% extends "templates/base.html" %}
@@ -39,10 +40,16 @@ if not user.ANON:
             "<span>"|safe, "</span>"|safe) }}</p>
 
     <p><a href="/about/">{{ _("Learn more") }}</a></p>
+{% else %}
+{% include "templates/profile-sidebar.html" %}
 {% endif %}
 {% endblock %}
 
 {% block heading %}{{ super() if not user.ANON }}{% endblock %}
+{% block subnav %}
+{% if not user.ANON %}{% include "templates/profile-subnav.html" %}{% endif %}
+{% endblock %}
+
 {% block content %}
     {% if user.ANON %}
 
@@ -81,11 +88,12 @@ if not user.ANON:
               "</a>"|safe) }}</p>
 
     {% else %}
+
         <div class="col0">
             <h2>{{ _("Giving") }}</h2>
 
-            <p><a href="/{{ user.participant.username }}/giving/">{{
-                _("You give {0} per week.", format_currency(user.participant.giving, 'USD'))
+            <p><a href="/{{ participant.username }}/giving/">{{
+                _("You give {0} per week.", format_currency(participant.giving, 'USD'))
             }}</a></p>
 
             <p>{{ _("Who inspires you? Use this search box to find your heroes on Gratipay:") }}</p>
@@ -93,22 +101,22 @@ if not user.ANON:
 
             <h2>{{ _("Receiving") }}</h2>
 
-            <p><a href="/{{ user.participant.username }}/receiving/">{{
-                _("You receive {0} per week.", format_currency(user.participant.receiving, 'USD'))
+            <p><a href="/{{ participant.username }}/receiving/">{{
+                _("You receive {0} per week.", format_currency(participant.receiving, 'USD'))
             }}</a></p>
 
-            {% if not user.participant.accepts_tips %}
+            {% if not participant.accepts_tips %}
                 <p>{{ _("You are currently declining tips, you can change that {0}on your profile{1}.",
-                        "<a href='/%s/'>"|safe % user.participant.username, "</a>"|safe) }}</p>
-            {% elif user.participant.goal and user.participant.receiving >= user.participant.goal %}
-                <p>{{ _("Congratulations, you have reached your goal of receiving {0} per week!", user.participant.goal) }}</p>
+                        "<a href='/%s/'>"|safe % participant.username, "</a>"|safe) }}</p>
+            {% elif participant.goal and participant.receiving >= participant.goal %}
+                <p>{{ _("Congratulations, you have reached your goal of receiving {0} per week!", participant.goal) }}</p>
             {% else %}
                 <p>{{ _("To receive money, do something awesome and then tell people about it:") }}</p>
                 <ol>
                     <li>{{ _("{0}Fill out your profile{1} to let others know about you.",
-                             "<a href='/%s/'>"|safe % user.participant.username, "</a>"|safe) }}</li>
+                             "<a href='/%s/'>"|safe % participant.username, "</a>"|safe) }}</li>
                     <li>{{ _("Reach a wider audience by {0}embedding our widgets{1} on your blog/website.",
-                             "<a href='/%s/widgets'>"|safe % user.participant.username, "</a>"|safe) }}</li>
+                             "<a href='/%s/widgets'>"|safe % participant.username, "</a>"|safe) }}</li>
                 </ol>
             {% endif %}
         </div>

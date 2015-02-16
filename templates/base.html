@@ -47,7 +47,7 @@
             {% else %}
             <ul class="nav you-are">
                 <li>
-                    <a href="/{{ user.participant.username }}/"{% if path.raw.split('/')[1] == user.participant.username  %} class="selected"{% endif %}>
+                    <a href="/"{% if path.raw == '/' or path.raw.split('/')[1] == user.participant.username  %} class="selected"{% endif %}>
                         {{ user.participant.username }}
                         <div class="quick-stats">
                             <span class="my-total-giving">{{ format_currency(user.participant.giving, "USD") }}</span>/{{ _("wk") }}
