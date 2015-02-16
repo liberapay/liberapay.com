@@ -117,16 +117,6 @@ if not user.ANON:
                              "<a href='/%s/widgets'>"|safe % participant.username, "</a>"|safe) }}</li>
                 </ol>
             {% endif %}
-
-            {% include "templates/team-listing.html" %}
-
-            <p><a href="">Join Teams</a> | <a href="">What are Teams?</a></p>
-
-
-            {% include "templates/community-listing.html" %}
-
-            <p><a href="">Join Communities</a> | <a href="">What are Communities?</a></p>
-
         </div>
 
     {% endif %}
