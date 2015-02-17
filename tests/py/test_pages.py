@@ -49,7 +49,7 @@ class TestPages(Harness):
 
     def test_escaping_on_homepage(self):
         self.make_participant('alice', claimed_time='now')
-        expected = "<option value='twitter'>Twitter</option>"
+        expected = "<a href='/alice/'>"
         actual = self.client.GET('/', auth_as='alice').body
         assert expected in actual
 

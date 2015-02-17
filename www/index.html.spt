@@ -1,22 +1,11 @@
-"""## Information Architecture
+from gratipay.models import community
 
-This is where we document all the pages on our website, with their purpose and
-the most important thing on each page.
-
-
-### Homepage
-
-https://gratipay.com/
-
-This is the homepage. The most important thing is to give a good first
-impression of Gratipay and help people take the next step, whatever that might be
-for them.
-
-"""
-from aspen.utils import utcnow
-
-from gratipay.security.user import SESSION_TIMEOUT
 [---]
+
+if not user.ANON:
+    participant = user.participant
+    title = participant.username
+
 [---]
 {% extends "templates/base.html" %}
 {% block head_early %}
@@ -33,13 +22,16 @@ from gratipay.security.user import SESSION_TIMEOUT
     <meta name="og:url" content="https://gratipay.com/" />
     <meta name="og:title" content="Gratipay" />
     <meta name="og:image" content="{{ website.asset('gratipay.opengraph.png') }}" />
+    {% if user.ANON %}
     <style>
         #header, #footer { display: none; }
         #upgrade_browser .container { display: block; }
     </style>
+    {% endif %}
 {% endblock %}
 
 {% block sidebar %}
+{% if user.ANON %}
     <img src="{{ website.asset('gratipay.white.svg') }}" alt="Gratipay">
     <h1>{{ _("Weekly Payments") }}</h1>
     <p>{{ _("Motivated by Gratitude") }}</p>
@@ -48,12 +40,19 @@ from gratipay.security.user import SESSION_TIMEOUT
             "<span>"|safe, "</span>"|safe) }}</p>
 
     <p><a href="/about/">{{ _("Learn more") }}</a></p>
+{% else %}
+{% include "templates/profile-sidebar.html" %}
+{% endif %}
 {% endblock %}
 
-{% block heading %}{% endblock %}
+{% block heading %}{{ super() if not user.ANON }}{% endblock %}
+{% block subnav %}
+{% if not user.ANON %}{% include "templates/profile-subnav.html" %}{% endif %}
+{% endblock %}
+
 {% block content %}
     {% if user.ANON %}
-    <div class="action">
+
         {{ _("{0}Sign In{1} {2}to Accept Weekly Payments{3}",
              "<h1>"|safe, "</h1>"|safe, "<p>"|safe, "</p>"|safe) }}
         {% from 'templates/auth.html' import auth_button with context %}
@@ -89,40 +88,38 @@ from gratipay.security.user import SESSION_TIMEOUT
               "</a>"|safe) }}</p>
 
     {% else %}
-    <div class="greeting">
-        <a class="sign-out" id="sign-out" href='/sign-out.html'>{{ _("Sign out") }}</a>
 
-        {% set quick = utcnow() - SESSION_TIMEOUT  %}
-        {% if user.participant.claimed_time > quick %}
-            <h1>{{ _("Welcome, {0}!", user.participant.username) }}</h1>
-            <p>{{ _("Thanks for joining Gratipay!") }}</p>
-        {% else %}
-            <h1>{{ _("Welcome back, {0}!", user.participant.username) }}</h1>
-            <p>{{ _("Your balance is {0}.", format_currency(user.participant.balance, "USD")) }}</p>
-        {% endif %}
+        <div class="col0">
+            <h2>{{ _("Giving") }}</h2>
 
-        {% if user.participant.giving == user.participant.receiving == 0 %}
-            <p>{{ _("Next steps:") }}</p>
-            <ol>
-                <li>{{ _("Start tipping people; you can find great people to tip by browsing {0}our communities{1}.",
-                         "<a href='/for/'>"|safe, "</a>"|safe) }}</li>
-                <li>{{ _("{0}Add a credit card{1} to make sure your weekly tips go through this Thursday.",
-                         "<a href='/credit-card.html'>"|safe, "</a>"|safe) }}</li>
-                <li>{{ _("{0}Fill out your profile{1} to let others know about you.",
-                         "<a href='/%s/'>"|safe % user.participant.username, "</a>"|safe) }}</li>
-                <li>{{ _("Reach a wider audience by {0}embedding our widgets{1} on your blog/website.",
-                         "<a href='/%s/widgets'>"|safe % user.participant.username, "</a>"|safe) }}</li>
-            </ol>
-            <p></p>
-        {% else %}
-            <p>{{ _("Go to {0}your profile{1}.",
-                    "<a href='/%s/'>"|safe % user.participant.username,
-                    "</a>"|safe) }}</p>
-        {% endif %}
+            <p><a href="/{{ participant.username }}/giving/">{{
+                _("You give {0} per week.", format_currency(participant.giving, 'USD'))
+            }}</a></p>
 
-        {% include "templates/jump.html" %}
+            <p>{{ _("Who inspires you? See if they're on Gratipay:") }}</p>
+            {% include "templates/search-box.html" %}
+
+            <h2>{{ _("Receiving") }}</h2>
+
+            <p><a href="/{{ participant.username }}/receiving/">{{
+                _("You receive {0} per week.", format_currency(participant.receiving, 'USD'))
+            }}</a></p>
+
+            {% if not participant.accepts_tips %}
+                <p>{{ _("You are currently declining tips, you can change that {0}on your profile{1}.",
+                        "<a href='/%s/'>"|safe % participant.username, "</a>"|safe) }}</p>
+            {% elif participant.goal and participant.receiving >= participant.goal %}
+                <p>{{ _("Congratulations, you have reached your goal of receiving {0} per week!", participant.goal) }}</p>
+            {% else %}
+                <p>{{ _("To receive money, do something awesome and then tell people about it:") }}</p>
+                <ol>
+                    <li>{{ _("{0}Fill out your profile{1} to let others know about you.",
+                             "<a href='/%s/'>"|safe % participant.username, "</a>"|safe) }}</li>
+                    <li>{{ _("Reach a wider audience by {0}embedding our widgets{1} on your blog/website.",
+                             "<a href='/%s/widgets'>"|safe % participant.username, "</a>"|safe) }}</li>
+                </ol>
+            {% endif %}
+        </div>
 
     {% endif %}
-    </div>
-</div>
 {% endblock %}

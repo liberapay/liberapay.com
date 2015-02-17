@@ -7,7 +7,7 @@ describe('homepage', function() {
             .getText('#sidebar h1', function(err, text) {
                 assert.equal(text, 'Weekly Payments');
             })
-            .getText('.action h1', function(err, text) {
+            .getText('#content h1', function(err, text) {
                 assert.equal(text, 'Sign In');
             })
             .call(done);

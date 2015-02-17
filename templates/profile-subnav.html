@@ -1,0 +1,24 @@
+{% set current_page = path.raw %}
+{% set show_members = participant.show_as_team(user) %}
+{% set show_dashboard = (user.participant == participant) %}
+{% set show_receiving = (user.participant == participant or not participant.anonymous_receiving) and participant.accepts_tips %}
+{% set show_profile = show_members or show_receiving %}
+{% set u = participant.username %}
+{% set pages = [ ('/',                  _('Dashboard'), True,           False)
+               , ('/'+u+'/',            _('Profile'),   True,           show_profile)
+               , ('/'+u+'/members/',    _('Members'),   show_members,   show_members)
+               , ('/'+u+'/receiving/',  _('Receiving'), True,           show_receiving)
+               , ('/'+u+'/giving/',     _('Giving'),    True,           False)
+               , ('/'+u+'/history/',    _('History'),   True,           False)
+               , ('/'+u+'/widgets/',    _('Widgets'),   True,           False)
+               , ('/'+u+'/account/',    _('Account'),   True,           False)
+               , ('/'+u+'/events/',     _('Events'),    False,          False)
+                ] %}
+{% set pages = filter_profile_subnav(user, participant, pages) %}
+{% if pages %}
+<ul class="nav">
+    {% for slug, name, show_them, show_others in pages %}
+    <li{% if slug == '/members/' %} class="members{% if not participant.show_as_team(user) %} hidden{% endif %}"{% endif %}><a href="{{ slug }}"{% if slug == current_page %} class="selected"{% endif %}>{{ _(name) }}</a></li>
+    {% endfor %}
+</ul>
+{% endif %}
