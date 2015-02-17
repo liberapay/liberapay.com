@@ -36,17 +36,6 @@ def _set_cookie(response, *args, **kw):
 aspen.Response.set_cookie = _set_cookie
 
 
-# Wireup Algorithm
-# ================
-
-exc = None
-try:
-    website.version = get_version()
-except Exception, e:
-    exc = e
-    website.version = 'x'
-
-
 # Configure renderers
 # ===================
 
@@ -67,6 +56,17 @@ website.renderer_factories['jinja2'].Renderer.global_context = {
     'type': type,
     'unicode': unicode,
 }
+
+
+# Wireup Algorithm
+# ================
+
+exc = None
+try:
+    website.version = get_version()
+except Exception, e:
+    exc = e
+    website.version = 'x'
 
 
 env = website.env = gratipay.wireup.env()
