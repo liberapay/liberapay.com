@@ -23,7 +23,7 @@ describe('authed homepage', function() {
         browser
             .url('http://localhost:8537')
             .getText('#content h1', function(err, text) {
-                assert.equal(text, 'Welcome, alice!');
+                assert.equal(text, 'alice');
             })
             .deleteCookie('session')
             .call(done);
