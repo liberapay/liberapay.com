@@ -1,6 +1,7 @@
 from __future__ import print_function, unicode_literals
 
 import re
+from decimal import Decimal as D
 
 from aspen import Response
 
@@ -14,9 +15,11 @@ overescaping_re = re.compile(r'&amp;(#[0-9]{4}|[a-z]+);')
 
 class TestPages(Harness):
 
-    def browse(self, **kw):
+    def browse(self, setup=None, **kw):
         alice = self.make_participant('alice', claimed_time='now')
         alice.insert_into_communities(True, 'Wonderland', 'wonderland')
+        if setup:
+            setup(alice)
         i = len(self.client.www_root)
         for spt in find_files(self.client.www_root, '*.spt'):
             url = spt[i:-4].replace('/%username/', 'alice') \
@@ -37,6 +40,12 @@ class TestPages(Harness):
 
     def test_new_participant_can_browse(self):
         self.browse(auth_as='alice')
+
+    def test_on_the_fence_can_browse(self):
+        def setup(alice):
+            bob = self.make_participant('bob', claimed_time='now', last_bill_result='')
+            bob.set_tip_to(alice, D('1.00'))
+        self.browse(setup, auth_as='alice')
 
     def test_escaping_on_homepage(self):
         self.make_participant('alice', claimed_time='now')
