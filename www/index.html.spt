@@ -96,7 +96,7 @@ if not user.ANON:
                 _("You give {0} per week.", format_currency(participant.giving, 'USD'))
             }}</a></p>
 
-            <p>{{ _("Who inspires you? Use this search box to find your heroes on Gratipay:") }}</p>
+            <p>{{ _("Who inspires you? See if they're on Gratipay:") }}</p>
             {% include "templates/search-box.html" %}
 
             <h2>{{ _("Receiving") }}</h2>
