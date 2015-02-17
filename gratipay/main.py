@@ -99,40 +99,41 @@ cron(env.check_db_every, website.db.self_check, True)
 
 noop = lambda: None
 algorithm = website.algorithm
-algorithm.functions = [ timer.start
-                      , algorithm['parse_environ_into_request']
-                      , algorithm['parse_body_into_request']
-                      , algorithm['raise_200_for_OPTIONS']
+algorithm.functions = [
+    timer.start,
+    algorithm['parse_environ_into_request'],
+    algorithm['parse_body_into_request'],
+    algorithm['raise_200_for_OPTIONS'],
 
-                      , canonize
-                      , i18n.set_up_i18n
-                      , authentication.set_request_context_user
-                      , csrf.get_csrf_token_from_request
+    canonize,
+    i18n.set_up_i18n,
+    authentication.set_request_context_user,
+    csrf.get_csrf_token_from_request,
 
-                      , algorithm['dispatch_request_to_filesystem']
+    algorithm['dispatch_request_to_filesystem'],
 
-                      , cache_static.get_etag_for_file if website.cache_static else noop
-                      , cache_static.try_to_serve_304 if website.cache_static else noop
+    cache_static.get_etag_for_file if website.cache_static else noop,
+    cache_static.try_to_serve_304 if website.cache_static else noop,
 
-                      , algorithm['apply_typecasters_to_path']
-                      , algorithm['get_resource_for_request']
-                      , algorithm['get_response_for_resource']
+    algorithm['apply_typecasters_to_path'],
+    algorithm['get_resource_for_request'],
+    algorithm['get_response_for_resource'],
 
-                      , tell_sentry
-                      , algorithm['get_response_for_exception']
+    tell_sentry,
+    algorithm['get_response_for_exception'],
 
-                      , gratipay.set_misc_headers
-                      , authentication.add_auth_to_response
-                      , csrf.add_csrf_token_to_response
-                      , cache_static.add_caching_to_response if website.cache_static else noop
-                      , x_frame_options
+    gratipay.set_misc_headers,
+    authentication.add_auth_to_response,
+    csrf.add_csrf_token_to_response,
+    cache_static.add_caching_to_response if website.cache_static else noop,
+    x_frame_options,
 
-                      , algorithm['log_traceback_for_5xx']
-                      , algorithm['delegate_error_to_simplate']
-                      , tell_sentry
-                      , algorithm['log_traceback_for_exception']
-                      , algorithm['log_result_of_request']
+    algorithm['log_traceback_for_5xx'],
+    algorithm['delegate_error_to_simplate'],
+    tell_sentry,
+    algorithm['log_traceback_for_exception'],
+    algorithm['log_result_of_request'],
 
-                      , timer.end
-                      , tell_sentry
-                       ]
+    timer.end,
+    tell_sentry,
+]
