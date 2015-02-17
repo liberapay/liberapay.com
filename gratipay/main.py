@@ -97,10 +97,6 @@ cron(env.check_db_every, website.db.self_check, True)
 # Website Algorithm
 # =================
 
-def add_stuff_to_context(request):
-    request.context['username'] = None
-
-
 noop = lambda: None
 algorithm = website.algorithm
 algorithm.functions = [ timer.start
@@ -112,7 +108,6 @@ algorithm.functions = [ timer.start
                       , i18n.set_up_i18n
                       , authentication.set_request_context_user
                       , csrf.get_csrf_token_from_request
-                      , add_stuff_to_context
 
                       , algorithm['dispatch_request_to_filesystem']
 
