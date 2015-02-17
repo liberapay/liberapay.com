@@ -1,20 +1,17 @@
 from __future__ import division
 
 import base64
-import threading
-import time
-import traceback
 
 import gratipay
 import gratipay.wireup
 from gratipay import canonize, utils
+from gratipay.cron import Cron
 from gratipay.security import authentication, csrf, x_frame_options
 from gratipay.utils import cache_static, i18n, pricing, set_cookie, timer
 from gratipay.version import get_version
 from gratipay.renderers import jinja2_htmlescaped
 
 import aspen
-from aspen import log_dammit
 from aspen.website import Website
 
 
@@ -91,31 +88,7 @@ if exc:
 # Periodic jobs
 # =============
 
-conn = website.db.get_connection().__enter__()
-
-def cron(period, func, exclusive=False):
-    def f():
-        if period <= 0:
-            return
-        sleep = time.sleep
-        if exclusive:
-            cursor = conn.cursor()
-            try_lock = lambda: cursor.one("SELECT pg_try_advisory_lock(0)")
-        has_lock = False
-        while 1:
-            try:
-                if exclusive and not has_lock:
-                    has_lock = try_lock()
-                if not exclusive or has_lock:
-                    func()
-            except Exception, e:
-                tell_sentry(e)
-                log_dammit(traceback.format_exc().strip())
-            sleep(period)
-    t = threading.Thread(target=f)
-    t.daemon = True
-    t.start()
-
+cron = Cron(website)
 cron(env.update_global_stats_every, lambda: utils.update_global_stats(website))
 cron(env.check_db_every, website.db.self_check, True)
 
