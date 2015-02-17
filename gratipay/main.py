@@ -7,7 +7,7 @@ import gratipay.wireup
 from gratipay import canonize, utils
 from gratipay.cron import Cron
 from gratipay.security import authentication, csrf, x_frame_options
-from gratipay.utils import cache_static, i18n, pricing, set_cookie, timer
+from gratipay.utils import cache_static, i18n, set_cookie, timer
 from gratipay.version import get_version
 from gratipay.renderers import jinja2_htmlescaped
 
@@ -99,12 +99,6 @@ cron(env.check_db_every, website.db.self_check, True)
 
 def add_stuff_to_context(request):
     request.context['username'] = None
-
-    # Helpers for global call to action to support Gratipay itself.
-    user = request.context.get('user')
-    p = user.participant if user else None
-    if p and p.is_free_rider is None:
-        request.context.update(pricing.suggested_payment_low_high(p.usage))
 
 
 noop = lambda: None

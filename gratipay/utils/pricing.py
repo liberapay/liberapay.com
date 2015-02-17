@@ -49,4 +49,4 @@ def suggested_payment_low_high(usage):
         low = D('0.10')
         high = D('1.00')
 
-    return {'cta_low': low, 'cta_high': high}
+    return low, high

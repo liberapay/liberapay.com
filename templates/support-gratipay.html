@@ -1,4 +1,5 @@
-{% if not user.ANON and user.participant.suggested_payment > 0 and user.participant.is_free_rider is none %}
+{% if not user.ANON and user.participant.is_free_rider is none and user.participant.suggested_payment > 0 %}
+{% set cta_low, cta_high = user.participant.suggested_payment_low_high() %}
 <div class="support-gratipay">
 <table>
     <tr>

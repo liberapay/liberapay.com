@@ -258,6 +258,10 @@ class Participant(Model, MixinTeam):
     def suggested_payment(self):
         return pricing.suggested_payment(self.usage)
 
+    @property
+    def suggested_payment_low_high(self):
+        return pricing.suggested_payment_low_high(self.usage)
+
 
     # API Key
     # =======
