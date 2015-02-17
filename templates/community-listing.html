@@ -1,11 +1,14 @@
-{% if communities %}
-<h2>{{ _("Communities") }}</h2>
-<ul class="community memberships">
-    {% for community in communities %}
-    <li>
-        <a href="/for/{{ community.slug }}/">{{ community.name }}</a>
-        <div class="fine">{{ with_others(community) }}</div>
-    </li>
-    {% endfor %}
-</ul>
+{% if communities or user.participant == participant %}
+    <h2>{{ _("Communities") }}</h2>
+    <ul class="community memberships">
+        {% for community in communities %}
+        <li>
+            <a href="/for/{{ community.slug }}/">{{ community.name }}</a>
+            <div class="fine">{{ with_others(community) }}</div>
+        </li>
+        {% endfor %}
+    </ul>
+    {% if user.participant == participant %}
+        <p><a href="/explore/">{{ _("Join Communities") }}</a></p>
+    {% endif %}
 {% endif %}
