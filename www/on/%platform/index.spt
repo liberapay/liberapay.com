@@ -3,8 +3,9 @@ from aspen import Response
 platform = getattr(website.platforms, request.path['platform'], None)
 if platform is None:
     raise Response(404)
-title = platform.display_name
+title = _("Your {0} Friends", platform.display_name)
 account = user.participant.get_account_elsewhere(platform.name)
+friends = account.get_friends()
 [---] text/html
 {% extends "templates/base.html" %}
 {% block content %}
@@ -14,16 +15,22 @@ account = user.participant.get_account_elsewhere(platform.name)
         platform.display_name) }}</p>
 
 {% else %}
-<p>{{ _("Here are your friends from {0} who are also on Gratipay:", 
-        platform.display_name) }}</p>
-
 <table class="table">
     <tr>
         <th>{{ _('Name') }}</th>
+        <th class="figure">{{ _('On Gratipay?') }}</th>
+        <th class="figure">{{ _('Supporters') }}</th>
+        <th class="figure">{{ _('Receiving') }}</th>
+        <th class="figure">{{ _('Giving') }}</th>
     </tr>
-    {% for friend in account.get_friends() %}
+    {% for friend in friends %}
+    {% set p = friend.e.participant %}
     <tr>
-        <td>{{ friend['name'] }}</td>
+        <td><a href="./{{ friend.e.user_name }}/">{{ friend.e.user_name }}</a></td>
+        <td class="figure">{{ '&check;'|safe if p.is_claimed }}</td>
+        <td class="figure">{{ '[hidden]' if p.anonymous_receiving else p.npatrons }}</td>
+        <td class="figure">{{ '[hidden]' if p.anonymous_receiving else p.receiving }}</td>
+        <td class="figure">{{ '[hidden]' if p.anonymous_giving else p.giving }}</td>
     </tr>
     {% endfor %}
 </table>

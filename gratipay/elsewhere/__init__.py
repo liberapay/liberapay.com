@@ -224,6 +224,14 @@ class Platform(object):
             info.token = json.dumps(token)
         return info
 
+    def get_friends_for(self, user_id, page_url=None):
+        first_page_url = self.api_friends_path.format(user_id=quote(user_id))
+        r = self.api_get(page_url or first_page_url)
+        if r.status_code == 200:
+            friend_ids = r.json()['ids']
+            return friend_ids
+        return []
+
 
 class PlatformOAuth1(Platform):
 
