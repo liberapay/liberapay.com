@@ -227,6 +227,9 @@ class AccountElsewhere(Model):
         """, (token, self.id))
         self.set_attributes(token=token)
 
+    def get_friends(self):
+        return [{'name': 'something'}]
+
 
 def get_account_elsewhere(website, state):
     path = state['request'].line.uri.path

@@ -1285,6 +1285,19 @@ class Participant(Model, MixinTeam):
         return out
 
 
+    def get_account_elsewhere(self, platform):
+        """Return an AccountElsewhere instance.
+        """
+        return self.db.one("""
+
+            SELECT elsewhere.*::elsewhere_with_participant
+              FROM elsewhere
+             WHERE participant=%s
+               AND platform=%s
+
+        """, (self.username, platform))
+
+
     def get_accounts_elsewhere(self):
         """Return a dict of AccountElsewhere instances.
         """

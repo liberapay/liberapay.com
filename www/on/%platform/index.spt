@@ -1,0 +1,32 @@
+from aspen import Response
+[---]
+platform = getattr(website.platforms, request.path['platform'], None)
+if platform is None:
+    raise Response(404)
+title = platform.display_name
+account = user.participant.get_account_elsewhere(platform.name)
+[---] text/html
+{% extends "templates/base.html" %}
+{% block content %}
+
+{% if user.ANON %}
+<p>{{ _("Sign in to Gratipay with {0} to find your friends from there.",
+        platform.display_name) }}</p>
+
+{% else %}
+<p>{{ _("Here are your friends from {0} who are also on Gratipay:", 
+        platform.display_name) }}</p>
+
+<table class="table">
+    <tr>
+        <th>{{ _('Name') }}</th>
+    </tr>
+    {% for friend in account.get_friends() %}
+    <tr>
+        <td>{{ friend['name'] }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
+
+{% endblock %}
