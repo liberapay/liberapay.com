@@ -6,6 +6,7 @@ import gratipay
 import gratipay.wireup
 from gratipay import canonize, utils
 from gratipay.cron import Cron
+from gratipay.models.participant import Participant
 from gratipay.security import authentication, csrf, x_frame_options
 from gratipay.utils import cache_static, i18n, set_cookie, timer
 from gratipay.version import get_version
@@ -92,6 +93,7 @@ if exc:
 cron = Cron(website)
 cron(env.update_global_stats_every, lambda: utils.update_global_stats(website))
 cron(env.check_db_every, website.db.self_check, True)
+cron(env.dequeue_emails_every, Participant.dequeue_emails, True)
 
 
 # Website Algorithm

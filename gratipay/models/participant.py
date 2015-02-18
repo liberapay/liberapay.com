@@ -12,6 +12,8 @@ from __future__ import print_function, unicode_literals
 
 from datetime import timedelta
 from decimal import Decimal, ROUND_DOWN
+import pickle
+from time import sleep
 from urllib import quote
 import uuid
 
@@ -608,11 +610,11 @@ class Participant(Model, MixinTeam):
             c.run("DELETE FROM emails WHERE participant=%s AND address=%s",
                   (self.username, address))
 
-    def send_email(self, spt_name, accept_lang=None, **context):
+    def send_email(self, spt_name, **context):
         context['username'] = self.username
         context.setdefault('include_unsubscribe', True)
         email = context.setdefault('email', self.email_address)
-        langs = i18n.parse_accept_lang(accept_lang or self.email_lang or 'en')
+        langs = i18n.parse_accept_lang(self.email_lang or 'en')
         locale = i18n.match_lang(langs)
         i18n.add_helpers_to_context(self._tell_sentry, context, locale)
         context['escape'] = lambda s: s
@@ -639,13 +641,34 @@ class Participant(Model, MixinTeam):
         for t in tips:
             p = Participant.from_username(t.tipper)
             if p.email_address and p.notify_on_opt_in:
-                p.send_email(
+                p.queue_email(
                     'notify_patron',
                     user_name=elsewhere.user_name,
                     platform=elsewhere.platform,
                     amount=t.amount,
                     profile_url=elsewhere.gratipay_url,
                 )
+
+    def queue_email(self, spt_name, **context):
+        self.db.run("""
+            INSERT INTO email_queue
+                        (participant, spt_name, context)
+                 VALUES (%s, %s, %s)
+        """, (self.id, spt_name, pickle.dumps(context)))
+
+    @classmethod
+    def dequeue_emails(cls):
+        messages = cls.db.all("""
+            SELECT *
+              FROM email_queue
+          ORDER BY id ASC
+             LIMIT 60
+        """)
+        for msg in messages:
+            p = cls.from_id(msg.participant)
+            p.send_email(msg.spt_name, **pickle.loads(msg.context))
+            cls.db.run("DELETE FROM email_queue WHERE id = %s", (msg.id,))
+            sleep(1)
 
     def set_email_lang(self, accept_lang):
         if not accept_lang:

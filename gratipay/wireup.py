@@ -369,6 +369,7 @@ def env():
         NANSWERS_THRESHOLD              = int,
         UPDATE_GLOBAL_STATS_EVERY       = int,
         CHECK_DB_EVERY                  = int,
+        DEQUEUE_EMAILS_EVERY            = int,
         GOOGLE_ANALYTICS_ID             = unicode,
         OPTIMIZELY_ID                   = unicode,
         SENTRY_DSN                      = unicode,

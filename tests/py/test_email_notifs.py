@@ -1,4 +1,5 @@
 from gratipay.models.account_elsewhere import AccountElsewhere
+from gratipay.models.participant import Participant
 from gratipay.testing.emails import EmailHarness
 
 
@@ -20,6 +21,7 @@ class TestTransactionalEmails(EmailHarness):
 
         AccountElsewhere.from_user_name('twitter', 'carl').opt_in('carl')
 
+        Participant.dequeue_emails()
         assert self.mailer.call_count == 2 # Emails should only be sent to bob and dan
         last_email = self.get_last_email()
         assert last_email['to'][0]['email'] == 'dan@example.com'
@@ -34,6 +36,7 @@ class TestTransactionalEmails(EmailHarness):
 
         self.dan.take_over(dan_twitter, have_confirmation=True)
 
+        Participant.dequeue_emails()
         assert self.mailer.call_count == 1
         last_email = self.get_last_email()
         assert last_email['to'][0]['email'] == 'bob@example.com'
