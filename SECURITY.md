@@ -42,4 +42,4 @@ If you believe you’ve found a security vulnerability in one of our products or
 * A detailed description of the steps required to reproduce the vulnerability (POC scripts, screenshots, and compressed screen captures are all helpful to us); and
 * Your name/handle and a link for recognition in our Hall of Fame.
 
-If you’d like to encrypt the information, please use our PGP Key.
+If you’d like to encrypt the information, please use our PGP Key (available [here](https://gratipay.com/about/security/)).
