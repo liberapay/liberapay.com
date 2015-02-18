@@ -1,5 +1,5 @@
 import threading
-import time
+from time import sleep
 import traceback
 
 from aspen import log_dammit
@@ -9,27 +9,40 @@ class Cron(object):
 
     def __init__(self, website):
         self.website = website
-        self.conn = website.db.get_connection().__enter__()
+        self.conn = None
+        self.has_lock = False
+        self.exclusive_jobs = []
 
     def __call__(self, period, func, exclusive=False):
+        if period <= 0:
+            return
+        if exclusive and not self.has_lock:
+            self.exclusive_jobs.append((period, func))
+            self._wait_for_lock()
+            return
         def f():
-            if period <= 0:
-                return
-            sleep = time.sleep
-            if exclusive:
-                cursor = self.conn.cursor()
-                try_lock = lambda: cursor.one("SELECT pg_try_advisory_lock(0)")
-            has_lock = False
-            while 1:
+            while True:
                 try:
-                    if exclusive and not has_lock:
-                        has_lock = try_lock()
-                    if not exclusive or has_lock:
-                        func()
+                    func()
                 except Exception, e:
                     self.website.tell_sentry(e)
                     log_dammit(traceback.format_exc().strip())
                 sleep(period)
+        t = threading.Thread(target=f)
+        t.daemon = True
+        t.start()
+
+    def _wait_for_lock(self):
+        if self.conn:
+            return  # Already waiting
+        self.conn = self.website.db.get_connection().__enter__()
+        def f():
+            cursor = self.conn.cursor()
+            while not self.has_lock:
+                self.has_lock = cursor.one("SELECT pg_try_advisory_lock(0)")
+                sleep(300)
+            for job in self.exclusive_jobs:
+                self(*job, exclusive=True)
         t = threading.Thread(target=f)
         t.daemon = True
         t.start()
