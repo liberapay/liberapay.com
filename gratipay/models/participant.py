@@ -644,7 +644,7 @@ class Participant(Model, MixinTeam):
                 p.queue_email(
                     'notify_patron',
                     user_name=elsewhere.user_name,
-                    platform=elsewhere.platform,
+                    platform=elsewhere.platform_data.display_name,
                     amount=t.amount,
                     profile_url=elsewhere.gratipay_url,
                 )
