@@ -33,12 +33,12 @@ def set_paypal_email(username='', email='', api_key_fragment='', overwrite=False
     [gratipay] $ env/bin/invoke set_paypal_email --username=username --email=user@example.com [--api-key-fragment=12e4s678] [--overwrite]
     """
 
-    if not os.environ.get('DATABASE_URL'):
-        load_prod_envvars()
-
     if not username or not email:
         print(set_paypal_email.__doc__)
         sys.exit(1)
+
+    if not os.environ.get('DATABASE_URL'):
+        load_prod_envvars()
 
     if not api_key_fragment:
         first_eight = "unknown!"
@@ -107,12 +107,12 @@ def bitcoin_payout(username='', amount='', api_key_fragment=''):
     [gratipay] $ env/bin/invoke bitcoin_payout --username=username --amount=amount [--api-key-fragment=12e4s678]
     """
 
-    if not os.environ.get('DATABASE_URL'):
-        load_prod_envvars()
-
     if not username or not amount:
         print(bitcoin_payout.__doc__)
         sys.exit(1)
+
+    if not os.environ.get('DATABASE_URL'):
+        load_prod_envvars()
 
     amount = D(amount)
     assert amount >= MINIMUM_COINBASE_PAYOUT
