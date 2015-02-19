@@ -10,7 +10,7 @@ payday_is_running = website.db.one("""
 
 """) is not None
 
-if POST:
+if request.method == 'POST':
     if payday_is_running:
         pass    # User will get the "Try Again Later" message.
     else:

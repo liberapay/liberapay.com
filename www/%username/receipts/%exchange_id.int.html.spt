@@ -17,7 +17,7 @@ else:
 card = BalancedCard(participant.balanced_customer_href)
 exchange = website.db.one( "SELECT * FROM exchanges "
                    "WHERE id=%s AND participant=%s"
-                 , (path['exchange_id'], path['username'])
+                 , (request.path['exchange_id'], request.path['username'])
                  , back_as=dict)
 if exchange is None:
     raise Response(404)

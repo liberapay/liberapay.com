@@ -22,7 +22,7 @@ is_team = account.is_team
 allow_pledges = not locked and (not is_team or platform.allows_team_connect)
 
 if is_team:
-    page_url = b64decode(qs.get('page', ''))
+    page_url = b64decode(request.qs.get('page', ''))
     members, nmembers, pages_urls = platform.get_team_members(user_name, page_url)
     members = AccountElsewhere.get_many(platform.name, members)
     if not members:

@@ -5,7 +5,7 @@ from aspen import Response
 if user.ANON:
     request.redirect('/')
 
-if POST:
+if request.method == 'POST':
     user.sign_out(response.headers.cookie)
 
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':

@@ -10,8 +10,8 @@ from gratipay.utils import emails, get_participant
 
 participant = get_participant(state, restrict=False)
 if participant == user.participant:
-    email = qs.get('email', '')
-    nonce = qs.get('nonce', '')
+    email = request.qs.get('email', '')
+    nonce = request.qs.get('nonce', '')
     result = participant.verify_email(email, nonce)
     if not participant.email_lang:
         participant.set_email_lang(request.headers.get("Accept-Language"))

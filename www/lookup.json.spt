@@ -7,10 +7,10 @@ SQL = "SELECT username, username_lower, id FROM participants " \
 [----------------------]
 
 error = ''
-if 'query' not in qs:
+if 'query' not in request.qs:
     raise Response(400, "no 'query' key in querystring")
 else:
-    query = qs['query']
+    query = request.qs['query']
     query_lower = query.lower()
     out = website.db.all(SQL, (query_lower + '%',))
     out.reverse()

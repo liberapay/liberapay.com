@@ -25,7 +25,7 @@ def stringify_qs(qs, prefix='?'):
 
 [-----------------------------------------------------------------------------]
 
-endpoint = path['endpoint']
+endpoint = request.path['endpoint']
 if not endpoint in whitelisted_endpoints:
     raise Response(404)
 
@@ -33,7 +33,7 @@ platform, account = get_account_elsewhere(website, state)
 
 if account.participant.is_claimed:
     next_url = '/%s/%s.json' % (account.participant.username, endpoint)
-    next_url += stringify_qs(qs)
+    next_url += stringify_qs(request.qs)
     headers = {}
     headers["Access-Control-Allow-Origin"] = "*"
     headers["Location"] = next_url
@@ -42,7 +42,7 @@ if account.participant.is_claimed:
 
 participant = account.participant
 
-out = { "on": path['platform']
+out = { "on": request.path['platform']
       , "avatar": participant.avatar_url
       , "npatrons": participant.npatrons
        }
@@ -71,7 +71,7 @@ if not user.ANON:
 response.headers["Access-Control-Allow-Origin"] = "*"
 
 # JSONP - see https://github.com/gratipay/aspen-python/issues/138
-callback = qs.get('callback')
+callback = request.qs.get('callback')
 if callback is not None:
     if callback_pattern.match(callback) is None:
         raise Response(400, "bad callback")

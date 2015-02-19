@@ -9,13 +9,13 @@ COOKIE_TIMEOUT = timedelta(minutes=5)
 
 [-----------------------------]
 
-if not POST:
-    raise Response(405)
+request.allow('POST')
 
-platform = getattr(website.platforms, path['platform'], None)
+platform = getattr(website.platforms, request.path['platform'], None)
 if platform is None:
     raise Response(404)
 
+body = request.body
 try:
     action, then, user_name = body['action'], body['then'], body['user_name']
 except KeyError:

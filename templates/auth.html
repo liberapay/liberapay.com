@@ -2,7 +2,7 @@
     <form action="/on/{{ platform|e }}/redirect" method="post"
           class="auth-button {{ platform|e }} {{ class|e }}">
         <input type="hidden" name="action" value="{{ action|e }}" />
-        {% set then=b64encode(path.raw + ('?' + qs.raw if qs else '')).strip() %}
+        {% set then=b64encode(request.path.raw + ('?' + request.qs.raw if request.qs else '')).strip() %}
         <input type="hidden" name="then" value="{{ then }}" />
         <input type="hidden" name="user_name" value="{{ user_name|e }}" />
         <input type="hidden" name="csrf_token" value="{{ csrf_token|e }}" />

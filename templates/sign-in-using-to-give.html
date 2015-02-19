@@ -1,6 +1,6 @@
 <div class="sign-in-to">
     {% include "templates/sign-in-using.html" %}
-    {% set message = _("{0} to pledge to {1}") if path.decoded.startswith('/on/') else _("{0} to give to {1}") %}
+    {% set message = _("{0} to pledge to {1}") if request.path.decoded.startswith('/on/') else _("{0} to give to {1}") %}
     {% set formatted_message = message.format("", account.user_name if account else participant.username) %}
     {{ formatted_message }}
 </div>

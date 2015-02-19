@@ -12,7 +12,7 @@ query_cache = QueryCache(website.db, threshold=20)
 
 [---]
 
-_slug = path['slug']
+_slug = request.path['slug']
 if name_pattern.match(_slug) is None:
     raise Response(404)
 slug = slugize(_slug)
@@ -20,8 +20,8 @@ if slug != _slug:
     request.redirect('../' + slug + '/')
 
 try:
-    limit = min(int(qs.get('limit', 12)), 100)
-    offset = int(qs.get('offset', 0))
+    limit = min(int(request.qs.get('limit', 12)), 100)
+    offset = int(request.qs.get('offset', 0))
 except ValueError:
     raise Response(400)
 

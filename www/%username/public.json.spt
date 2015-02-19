@@ -16,7 +16,7 @@ response.headers["Access-Control-Allow-Origin"] = "*"
 out = participant.to_dict(details=True, inquirer=user.participant)
 
 # JSONP - see https://github.com/gratipay/aspen-python/issues/138
-callback = qs.get('callback')
+callback = request.qs.get('callback')
 if callback is not None:
     if callback_pattern.match(callback) is None:
         raise Response(400, "bad callback")

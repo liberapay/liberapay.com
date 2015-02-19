@@ -1,6 +1,6 @@
 {% extends "templates/about.html" %}
 {% block subnav %}
-    {% set current_page = path.raw.split('/')[3] %}
+    {% set current_page = request.path.raw.split('/')[3] %}
     {% set nav_base = '/about/security' %}
     {% set pages = [ ('/', _('Disclosure'))
                    , ('/hall-of-fame', _('Hall of Fame'))

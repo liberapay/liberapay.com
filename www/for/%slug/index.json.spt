@@ -3,11 +3,9 @@ from gratipay.models.community import name_pattern, slugize, Community
 
 [----------------------]
 
-if not GET:
-    # Method not allowed
-    raise Response(405)
+request.allow('GET')
 
-_slug = path['slug']
+_slug = request.path['slug']
 if name_pattern.match(_slug) is None:
     raise Response(404)
 slug = slugize(_slug)
@@ -19,8 +17,8 @@ if not community:
     raise Response(404)
 
 try:
-    limit = min(int(qs.get('limit', 10)), 100)
-    offset = int(qs.get('offset', 0))
+    limit = min(int(request.qs.get('limit', 10)), 100)
+    offset = int(request.qs.get('offset', 0))
 except ValueError:
     raise Response(400)
 

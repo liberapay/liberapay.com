@@ -17,19 +17,19 @@ team = get_participant(state, restrict=False)
 if not team.show_as_team(user):
     raise Response(404)
 
-member = Participant.from_username(path['membername'])
+member = Participant.from_username(request.path['membername'])
 if member is None or member.is_suspicious:
     raise Response(404)
 is_member = member.member_of(team)
 proceed = True
 
-if POST:
+if request.method == 'POST':
 
     if user.participant not in (member, team):
         raise Response(403)
 
     try:
-        take = Decimal(body['take'])
+        take = Decimal(request.body['take'])
     except InvalidOperation:
         raise Response(400, "bad take")
 

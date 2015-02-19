@@ -32,7 +32,7 @@
     </script>
     {% endif %}
 </head>
-{% set homepage = path.raw == '/' %}
+{% set homepage = request.path.raw == '/' %}
 <body id="{{ 'homepage' if homepage and user.ANON }}">
 
     <div id="wrapper">
@@ -40,14 +40,14 @@
             <h1><a href="/"><img src="{{ website.asset('gratipay.svg') }}"
                                  alt="Gratipay" /></a></h1>
             {% set pages = [('/about/', _('About')), ('/explore/', _('Explore')), ('/search', _('Search'))] %}
-            {% set current_page = path.raw.split('/')[1] %}
+            {% set current_page = request.path.raw.split('/')[1] %}
             {% include "templates/nav.html" %}
             {% if user.ANON %}
                 {% include "templates/sign-in-using.html" %}
             {% else %}
             <ul class="nav you-are">
                 <li>
-                    <a href="/"{% if path.raw == '/' or path.raw.split('/')[1] == user.participant.username  %} class="selected"{% endif %}>
+                    <a href="/"{% if request.path.raw == '/' or request.path.raw.split('/')[1] == user.participant.username  %} class="selected"{% endif %}>
                         {{ user.participant.username }}
                         <div class="quick-stats">
                             <span class="my-total-giving">{{ format_currency(user.participant.giving, "USD") }}</span>/{{ _("wk") }}
