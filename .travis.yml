@@ -1,6 +1,9 @@
 language: python
 addons:
   postgresql: 9.3
+branches:
+  only:
+    - master
 before_install:
  - node --version
 install:
