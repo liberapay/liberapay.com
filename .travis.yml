@@ -6,6 +6,10 @@ branches:
     - master
 before_install:
  - node --version
+cache:
+  directories:
+    - env/bin
+    - env/lib/python2.7/site-packages
 install:
  - make env node_modules
  - pip install coveralls
