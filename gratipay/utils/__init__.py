@@ -41,16 +41,17 @@ def canonicalize(path, base, canonical, given, arguments=None):
         raise Response(302, headers={"Location": newpath})
 
 
-def get_participant(request, restrict=True, resolve_unclaimed=True):
+def get_participant(state, restrict=True, resolve_unclaimed=True):
     """Given a Request, raise Response or return Participant.
 
     If restrict is True then we'll restrict access to owners and admins.
 
     """
-    user = request.context['user']
+    request = state['request']
+    user = state['user']
     slug = request.line.uri.path['username']
     qs = request.line.uri.querystring
-    _ = request.context['_']
+    _ = state['_']
 
     if restrict:
         if user.ANON:

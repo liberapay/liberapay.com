@@ -29,7 +29,7 @@ endpoint = path['endpoint']
 if not endpoint in whitelisted_endpoints:
     raise Response(404)
 
-platform, account = get_account_elsewhere(website, request)
+platform, account = get_account_elsewhere(website, state)
 
 if account.participant.is_claimed:
     next_url = '/%s/%s.json' % (account.participant.username, endpoint)

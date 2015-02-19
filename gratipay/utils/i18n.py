@@ -114,8 +114,8 @@ def get_text(context, loc, s, *a, **kw):
     return escape(s)
 
 
-def n_get_text(tell_sentry, context, loc, s, p, n, *a, **kw):
-    escape = context['escape']
+def n_get_text(tell_sentry, state, loc, s, p, n, *a, **kw):
+    escape = state['escape']
     n = n or 0
     msg = loc.catalog.get((s, p))
     s2 = None
@@ -123,7 +123,7 @@ def n_get_text(tell_sentry, context, loc, s, p, n, *a, **kw):
         try:
             s2 = msg.string[loc.catalog.plural_func(n)]
         except Exception as e:
-            tell_sentry(e, context.get('request'))
+            tell_sentry(e, state)
     if not s2:
         loc = 'en'
         s2 = s if n == 1 else p
@@ -189,14 +189,14 @@ def format_currency_with_options(number, currency, format=None, locale='en', tra
     return s
 
 
-def set_up_i18n(website, request):
+def set_up_i18n(website, request, state):
     accept_lang = request.headers.get("Accept-Language", "")
     langs = request.accept_langs = list(parse_accept_lang(accept_lang))
     loc = match_lang(langs)
-    add_helpers_to_context(website.tell_sentry, request.context, loc, request)
+    add_helpers_to_context(website.tell_sentry, state, loc)
 
 
-def add_helpers_to_context(tell_sentry, context, loc, request=None):
+def add_helpers_to_context(tell_sentry, context, loc):
     context['escape'] = lambda s: s  # to be overriden by renderers
     context['locale'] = loc
     context['decimal_symbol'] = get_decimal_symbol(locale=loc)

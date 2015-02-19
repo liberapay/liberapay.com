@@ -7,7 +7,7 @@ callback_pattern = re.compile(r'^[_A-Za-z0-9.]+$')
 class BadPlatform(Exception): pass
 
 [-----------------------]
-participant = get_participant(request, restrict=True)
+participant = get_participant(state, restrict=True)
 if user != participant:
     raise Response(403) # disallow admins
 

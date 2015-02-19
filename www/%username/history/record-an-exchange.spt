@@ -12,7 +12,7 @@ if not user.ADMIN:
 if not POST:
     raise Response(405)
 
-participant = get_participant(request)
+participant = get_participant(state)
 try:
     amount = Decimal(body['amount'])
     fee = Decimal(body['fee'])

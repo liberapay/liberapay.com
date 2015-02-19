@@ -7,7 +7,7 @@ from gratipay.utils import get_participant
 if not user.ADMIN:
     raise Response(403)
 
-participant = get_participant(request, restrict=True)
+participant = get_participant(state, restrict=True)
 accounts = participant.get_accounts_elsewhere()
 i = 0
 for account in accounts.values():

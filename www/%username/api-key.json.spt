@@ -1,6 +1,6 @@
 from gratipay.utils import get_participant
 [-----------------------]
-participant = get_participant(request, restrict=True)
+participant = get_participant(state, restrict=True)
 api_key = participant.api_key
 if POST or api_key is None:
     api_key = participant.recreate_api_key()

@@ -13,7 +13,7 @@ A_PENNY = Decimal('0.01')
 [--------------------]
 
 request.allow('GET', 'POST')
-team = get_participant(request, restrict=False)
+team = get_participant(state, restrict=False)
 if not team.show_as_team(user):
     raise Response(404)
 

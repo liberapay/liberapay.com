@@ -10,7 +10,7 @@ from gratipay.models.account_elsewhere import *
 
 [-----------------------------------------------------------------------------]
 
-platform, account = get_account_elsewhere(website, request)
+platform, account = get_account_elsewhere(website, state)
 participant = account.participant
 
 if participant.is_claimed or participant.is_closed:

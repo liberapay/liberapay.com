@@ -4,7 +4,7 @@ db = website.db
 
 [-----------------------------------------------------------------------------]
 
-participant = get_participant(request, restrict=True)
+participant = get_participant(state, restrict=True)
 title = participant.username
 subhead = _("Events")
 

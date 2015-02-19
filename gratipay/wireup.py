@@ -76,14 +76,14 @@ def username_restrictions(website):
 def make_sentry_teller(env):
     if not env.sentry_dsn:
         aspen.log_dammit("Won't log to Sentry (SENTRY_DSN is empty).")
-        def noop(exception, request=None):
+        def noop(*a, **kw):
             pass
         Participant._tell_sentry = noop
         return noop
 
     sentry = raven.Client(env.sentry_dsn)
 
-    def tell_sentry(exception, request=None):
+    def tell_sentry(exception, state):
 
         # Decide if we care.
         # ==================
@@ -105,47 +105,44 @@ def make_sentry_teller(env):
         # | is disallowed in usernames, so we can use it here to indicate
         # situations in which we can't get a username.
 
-        request_context = getattr(request, 'context', None)
-        user = {}
+        user = state.get('user')
         user_id = 'n/a'
-        if request_context is None:
-            username = '| no context'
+        if user is None:
+            username = '| no user'
         else:
-            user = request.context.get('user', None)
-            if user is None:
-                username = '| no user'
+            is_anon = getattr(user, 'ANON', None)
+            if is_anon is None:
+                username = '| no ANON'
+            elif is_anon:
+                username = '| anonymous'
             else:
-                is_anon = getattr(user, 'ANON', None)
-                if is_anon is None:
-                    username = '| no ANON'
-                elif is_anon:
-                    username = '| anonymous'
+                participant = getattr(user, 'participant', None)
+                if participant is None:
+                    username = '| no participant'
                 else:
-                    participant = getattr(user, 'participant', None)
-                    if participant is None:
-                        username = '| no participant'
+                    username = getattr(user.participant, 'username', None)
+                    if username is None:
+                        username = '| no username'
                     else:
-                        username = getattr(user.participant, 'username', None)
-                        if username is None:
-                            username = '| no username'
-                        else:
-                            user_id = user.participant.id
-                            username = username.encode('utf8')
-                            user = { 'id': user_id
-                                   , 'is_admin': user.participant.is_admin
-                                   , 'is_suspicious': user.participant.is_suspicious
-                                   , 'claimed_time': user.participant.claimed_time.isoformat()
-                                   , 'url': 'https://gratipay.com/{}/'.format(username)
-                                    }
+                        user_id = user.participant.id
+                        username = username.encode('utf8')
+                        user = { 'id': user_id
+                               , 'is_admin': user.participant.is_admin
+                               , 'is_suspicious': user.participant.is_suspicious
+                               , 'claimed_time': user.participant.claimed_time.isoformat()
+                               , 'url': 'https://gratipay.com/{}/'.format(username)
+                                }
 
 
         # Fire off a Sentry call.
         # =======================
 
+        dispatch_result = state.get('dispatch_result')
+        request = state.get('request')
         tags = { 'username': username
                , 'user_id': user_id
                 }
-        extra = { 'filepath': getattr(request, 'fs', None)
+        extra = { 'filepath': getattr(dispatch_result, 'match', None)
                 , 'request': str(request).splitlines()
                 , 'user': user
                  }
@@ -290,7 +287,7 @@ def load_i18n(project_root, tell_sentry):
                 except KeyError:
                     l.languages_2 = LANGUAGES_2
         except Exception as e:
-            tell_sentry(e)
+            tell_sentry(e, {})
 
     # Add aliases
     for k, v in list(locales.items()):
@@ -315,7 +312,7 @@ def other_stuff(website, env):
             try:
                 etag = asset_etag(fspath)
             except Exception as e:
-                website.tell_sentry(e)
+                website.tell_sentry(e, {})
             return env.gratipay_asset_url+path+(etag and '?etag='+etag)
         website.asset = asset
         compile_assets(website)

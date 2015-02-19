@@ -3,7 +3,7 @@ from gratipay.utils.history import iter_payday_events
 
 [-----------------------------------------------------------------------------]
 
-participant = get_participant(request, restrict=True)
+participant = get_participant(state, restrict=True)
 events = iter_payday_events(website.db, participant)
 title = participant.username
 subhead = _("History")

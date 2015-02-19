@@ -1,6 +1,6 @@
 from gratipay.utils import get_participant
 [---]
-participant = get_participant(request, restrict=True)
+participant = get_participant(state, restrict=True)
 title = _("Close Account")
 subhead = participant.username
 

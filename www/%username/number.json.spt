@@ -7,7 +7,7 @@ from gratipay.exceptions import ProblemChangingNumber
 [-----------------------------------------------------------------------------]
 
 request.allow("POST")
-participant = get_participant(request, restrict=True)
+participant = get_participant(state, restrict=True)
 
 number = request.body["number"]
 

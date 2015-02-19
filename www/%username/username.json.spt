@@ -6,7 +6,7 @@ from gratipay.utils import get_participant
 
 [-----------------------------------------------------------------------------]
 
-participant = get_participant(request, restrict=True)
+participant = get_participant(state, restrict=True)
 
 try:
     old_username = participant.username

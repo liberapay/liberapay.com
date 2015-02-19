@@ -6,7 +6,7 @@ from gratipay.utils.i18n import LANGUAGES_2
 
 [-----------------------------------------------------------------------------]
 
-participant = get_participant(request, restrict=True)
+participant = get_participant(state, restrict=True)
 
 if POST:
     lang = request.body['lang']

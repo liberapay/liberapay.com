@@ -118,7 +118,7 @@
             ['a', {'href': '/credit-card.html'}, "{{ _('Fix your card') }}"]
         ], "error", -1
     );
-    {% elif user.participant.credit_card_expiring(website, request, response) %}
+    {% elif user.participant.credit_card_expiring(website, state) %}
     Gratipay.notification(
         ["span", "{{ _('Your credit card is about to expire!') }} ",
             ['a', {'href': '/credit-card.html'}, "{{ _('Update card') }}"]
