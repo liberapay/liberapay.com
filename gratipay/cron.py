@@ -38,8 +38,10 @@ class Cron(object):
         self.conn = self.website.db.get_connection().__enter__()
         def f():
             cursor = self.conn.cursor()
-            while not self.has_lock:
-                self.has_lock = cursor.one("SELECT pg_try_advisory_lock(0)")
+            while True:
+                if cursor.one("SELECT pg_try_advisory_lock(0)"):
+                    self.has_lock = True
+                    break
                 sleep(300)
             for job in self.exclusive_jobs:
                 self(*job, exclusive=True)
