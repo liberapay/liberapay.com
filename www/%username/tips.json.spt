@@ -8,7 +8,7 @@ class BadPlatform(Exception): pass
 
 [-----------------------]
 participant = get_participant(state, restrict=True)
-if user != participant:
+if user.participant != participant:
     raise Response(403) # disallow admins
 
 if request.method == 'POST':
