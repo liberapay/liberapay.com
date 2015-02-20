@@ -12,6 +12,8 @@ from __future__ import print_function, unicode_literals
 
 from datetime import timedelta
 from decimal import Decimal, ROUND_DOWN
+import pickle
+from time import sleep
 from urllib import quote
 import uuid
 
@@ -287,14 +289,12 @@ class Participant(Model, MixinTeam):
     def resolve_unclaimed(self):
         """Given a username, return an URL path.
         """
-        rec = self.db.one( "SELECT platform, user_name "
-                           "FROM elsewhere "
-                           "WHERE participant = %s"
-                           , (self.username,)
-                            )
-        if rec is None:
-            return
-        return '/on/%s/%s/' % (rec.platform, rec.user_name)
+        rec = self.db.one("""
+            SELECT platform, user_name
+              FROM elsewhere
+             WHERE participant = %s
+        """, (self.username,))
+        return rec and '/on/%s/%s/' % (rec.platform, rec.user_name)
 
     def set_as_claimed(self):
         with self.db.get_cursor() as c:
@@ -610,11 +610,11 @@ class Participant(Model, MixinTeam):
             c.run("DELETE FROM emails WHERE participant=%s AND address=%s",
                   (self.username, address))
 
-    def send_email(self, spt_name, accept_lang=None, **context):
+    def send_email(self, spt_name, **context):
         context['username'] = self.username
         context.setdefault('include_unsubscribe', True)
         email = context.setdefault('email', self.email_address)
-        langs = i18n.parse_accept_lang(accept_lang or self.email_lang or 'en')
+        langs = i18n.parse_accept_lang(self.email_lang or 'en')
         locale = i18n.match_lang(langs)
         i18n.add_helpers_to_context(self._tell_sentry, context, locale)
         context['escape'] = lambda s: s
@@ -635,6 +635,44 @@ class Participant(Model, MixinTeam):
         message['text'] = render('text/plain', context)
 
         return self._mailer.messages.send(message=message)
+
+    def notify_patrons(self, elsewhere, tips=None):
+        tips = self.get_tips_receiving() if tips is None else tips
+        for t in tips:
+            p = Participant.from_username(t.tipper)
+            if p.email_address and p.notify_on_opt_in:
+                p.queue_email(
+                    'notify_patron',
+                    user_name=elsewhere.user_name,
+                    platform=elsewhere.platform_data.display_name,
+                    amount=t.amount,
+                    profile_url=elsewhere.gratipay_url,
+                )
+
+    def queue_email(self, spt_name, **context):
+        self.db.run("""
+            INSERT INTO email_queue
+                        (participant, spt_name, context)
+                 VALUES (%s, %s, %s)
+        """, (self.id, spt_name, pickle.dumps(context)))
+
+    @classmethod
+    def dequeue_emails(cls):
+        fetch_messages = lambda: cls.db.all("""
+            SELECT *
+              FROM email_queue
+          ORDER BY id ASC
+             LIMIT 60
+        """)
+        while True:
+            messages = fetch_messages()
+            if not messages:
+                break
+            for msg in messages:
+                p = cls.from_id(msg.participant)
+                p.send_email(msg.spt_name, **pickle.loads(msg.context))
+                cls.db.run("DELETE FROM email_queue WHERE id = %s", (msg.id,))
+                sleep(1)
 
     def set_email_lang(self, accept_lang):
         if not accept_lang:
@@ -1090,6 +1128,13 @@ class Participant(Model, MixinTeam):
 
         return tips, total, unclaimed_tips, unclaimed_total
 
+    def get_tips_receiving(self):
+        return self.db.all("""
+            SELECT *
+              FROM current_tips
+             WHERE tippee=%s
+               AND amount>0
+        """, (self.username,))
 
     def get_current_tips(self):
         """Get the tips this participant is currently sending to others.
@@ -1428,6 +1473,8 @@ class Participant(Model, MixinTeam):
                 # this is a no op - trying to take over itself
                 return
 
+            # Save old tips so we can notify patrons that they've been claimed
+            old_tips = None if other.is_claimed else other.get_tips_receiving()
 
             # Make sure we have user confirmation if needed.
             # ==============================================
@@ -1563,6 +1610,9 @@ class Participant(Model, MixinTeam):
 
         if new_balance is not None:
             self.set_attributes(balance=new_balance)
+
+        if old_tips:
+            self.notify_patrons(elsewhere, tips=old_tips)
 
         self.update_avatar()
 

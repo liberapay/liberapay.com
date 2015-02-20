@@ -1,13 +1,15 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import json
-from postgres.orm import Model
-from psycopg2 import IntegrityError
 from urlparse import urlsplit, urlunsplit
 import xml.etree.ElementTree as ET
-import xmltodict
 
 from aspen import Response
+from postgres.orm import Model
+from psycopg2 import IntegrityError
+import xmltodict
+
+import gratipay
 from gratipay.exceptions import ProblemChangingUsername
 from gratipay.utils.username import safely_reserve_a_username
 
@@ -138,6 +140,14 @@ class AccountElsewhere(Model):
         return self.platform_data.get_auth_session(**params)
 
     @property
+    def gratipay_url(self):
+        scheme = gratipay.canonical_scheme
+        host = gratipay.canonical_host
+        platform = self.platform
+        user_name = self.user_name
+        return "{scheme}://{host}/on/{platform}/{user_name}/".format(**locals())
+
+    @property
     def html_url(self):
         return self.platform_data.account_url.format(
             user_id=self.user_id,
@@ -156,6 +166,7 @@ class AccountElsewhere(Model):
         else:
             newly_claimed = True
             user.participant.set_as_claimed()
+            user.participant.notify_patrons(self)
             try:
                 user.participant.change_username(desired_username)
             except ProblemChangingUsername:

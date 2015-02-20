@@ -202,6 +202,17 @@ emails = participant.get_emails()
             {% endif %}
         </p>
 
+        <h2>{{ _("Notifications") }}</h2>
+        <p class="email-notifications">
+            <span> Send me notifications via email when:</span>
+            <br />
+            <label>
+                <input type="checkbox" data-field="notify_on_opt_in"
+                    {% if participant.notify_on_opt_in %}checked="true"{% endif %} />
+                    {{ _("People I pledge to join Gratipay") }}
+            </label>
+        </p>
+
         <div class="close">
           <h2>{{ _("Close") }}</h2>
           <div class="buttons">

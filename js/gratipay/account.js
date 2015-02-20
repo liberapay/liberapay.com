@@ -146,6 +146,28 @@ Gratipay.account.init = function() {
         });
     });
 
+    // Wire up notification preferences
+    // ==============================
+
+    $('.email-notifications input').click(function(e) {
+        var field = $(e.target).data('field');
+        jQuery.ajax(
+            { url: '../emails/notifications.json'
+            , type: 'POST'
+            , data: {toggle: field}
+            , dataType: 'json'
+            , success: function(data) {
+                if (data.msg) {
+                    Gratipay.notification(data.msg, 'success');
+                }
+                $(e.target).attr('checked', data[field]);
+            }
+            , error: function(e) {
+                Gratipay.notification(JSON.parse(e.responseText).error_message_long, 'error');
+            }
+        });
+    });
+
     // Wire up API Key
     // ===============
 
