@@ -1,18 +1,17 @@
 """Defines website authentication helpers.
 """
 import binascii
-from datetime import date, datetime
+from datetime import date
 
 from aspen import Response
-from aspen.utils import to_rfc822
 from gratipay.models.participant import Participant
 from gratipay.security import csrf
 from gratipay.security.crypto import constant_time_compare
 from gratipay.security.user import User, SESSION
+from gratipay.utils import BEGINNING_OF_EPOCH
 
 
 ANON = User()
-BEGINNING_OF_EPOCH = to_rfc822(datetime(1970, 1, 1))
 
 def _get_user_via_api_key(api_key):
     """Given an api_key, return a User. This auth method is deprecated.

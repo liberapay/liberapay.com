@@ -10,6 +10,8 @@ import gratipay
 from postgres.cursors import SimpleCursorBase
 
 
+BEGINNING_OF_EPOCH = to_rfc822(datetime(1970, 1, 1)).encode('ascii')
+
 # Difference between current time and credit card expiring date when
 # card is considered as expiring
 EXPIRING_DELTA = timedelta(days = 30)
@@ -149,19 +151,21 @@ def set_cookie(cookies, key, value, expires=None, httponly=True, path='/'):
     cookies[key] = value
     cookie = cookies[key]
     if expires:
-        if isinstance(expires, datetime):
-            pass
-        elif isinstance(expires, timedelta):
+        if isinstance(expires, timedelta):
             expires += utcnow()
-        else:
-            raise TypeError('`expires` should be a `datetime` or `timedelta`')
-        cookie['expires'] = str(to_rfc822(expires))
+        if isinstance(expires, datetime):
+            expires = to_rfc822(expires).encode('ascii')
+        cookie['expires'] = expires
     if httponly:
         cookie['httponly'] = True
     if path:
         cookie['path'] = path
     if gratipay.canonical_scheme == 'https':
         cookie['secure'] = True
+
+
+def erase_cookie(cookies, key, **kw):
+    set_cookie(cookies, key, '', BEGINNING_OF_EPOCH, **kw)
 
 
 def filter_profile_subnav(user, participant, pages):

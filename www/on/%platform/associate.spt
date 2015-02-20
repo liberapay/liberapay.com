@@ -78,7 +78,7 @@ elif action in {'lock', 'unlock'}:
 else:
     raise Response(400)
 
-response.set_cookie(cookie_name, '')
+response.erase_cookie(cookie_name)
 response.redirect(then)
 
 [-----------------------------] text/plain
