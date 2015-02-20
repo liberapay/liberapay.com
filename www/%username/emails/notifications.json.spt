@@ -3,9 +3,9 @@ from gratipay.utils import get_participant
 
 [---]
 request.allow("POST")
-participant = get_participant(request, restrict=True)
+participant = get_participant(state, restrict=True)
 
-field = body.get("toggle")
+field = request.body.get("toggle")
 if field not in ["notify_on_opt_in"]:
     raise Response(400, "Invalid notification preference.")
 
