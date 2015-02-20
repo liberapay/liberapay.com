@@ -182,8 +182,7 @@ body {
         position: relative;
         margin-bottom: 20px;
         li {
-            display: inline-block;
-            height: 24px;
+            display: inline;
             margin: 0;
             float: left;
             padding: 0 5px;
@@ -191,7 +190,10 @@ body {
             &:last-child { padding-right: 0; }
             a {
                 font: normal 14px/14px $Ideal;
+                height: 24px;
+                display: inline-block;
                 padding: 5px 0;
+                margin-bottom: 5px;
                 color: $gray;
                 &.selected {
                     padding-bottom: 3px;
