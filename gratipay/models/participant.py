@@ -78,7 +78,7 @@ class Participant(Model, MixinTeam):
 
     def __ne__(self, other):
         if not isinstance(other, Participant):
-            return False
+            return True
         return self.username != other.username
 
     def __repr__(self):
