@@ -22,8 +22,7 @@ MINIMUM_COINBASE_PAYOUT = 1 # in USD
         'username': "Gratipay username. (required)",
         'email':    "PayPal email address. (required)",
         'api-key-fragment': "First 8 characters of user's API key.",
-        'overwrite': "Override existing PayPal email?",
-        'heroku': "Configure task for running directly via `heroku run`.",
+        'overwrite': "Override existing PayPal email?"
     }
 )
 def set_paypal_email(username='', email='', api_key_fragment='', overwrite=False):
@@ -33,12 +32,12 @@ def set_paypal_email(username='', email='', api_key_fragment='', overwrite=False
     [gratipay] $ env/bin/invoke set_paypal_email --username=username --email=user@example.com [--api-key-fragment=12e4s678] [--overwrite]
     """
 
+    if not username or not email:
+        print_help(set_paypal_email)
+        sys.exit(1)
+
     if not os.environ.get('DATABASE_URL'):
         load_prod_envvars()
-
-    if not username or not email:
-        print(set_paypal_email.__doc__)
-        sys.exit(1)
 
     if not api_key_fragment:
         first_eight = "unknown!"
@@ -107,12 +106,12 @@ def bitcoin_payout(username='', amount='', api_key_fragment=''):
     [gratipay] $ env/bin/invoke bitcoin_payout --username=username --amount=amount [--api-key-fragment=12e4s678]
     """
 
+    if not username or not amount:
+        print_help(bitcoin_payout)
+        sys.exit(1)
+
     if not os.environ.get('DATABASE_URL'):
         load_prod_envvars()
-
-    if not username or not amount:
-        print(bitcoin_payout.__doc__)
-        sys.exit(1)
 
     amount = D(amount)
     assert amount >= MINIMUM_COINBASE_PAYOUT
@@ -216,6 +215,11 @@ def bitcoin_payout(username='', amount='', api_key_fragment=''):
             print("New Balance: " + str(new_balance))
 
     print("All done.")
+
+def print_help(task):
+    print(task.__doc__)
+    for k,v in task.help.items():
+        print("\t{0:20} {1:10}".format(k, v))
 
 def round_(d):
     return d.quantize(D('0.01'), rounding=ROUND_HALF_UP)
