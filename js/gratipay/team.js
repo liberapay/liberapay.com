@@ -92,7 +92,7 @@ Gratipay.team = (function() {
         $('#team-members').html(rows);
         $('#take').submit(doTake);
         $('#take input').focus().keyup(maybeCancelTake);
-        $('#members .remove').click(remove);
+        $('#team-members .remove').click(remove);
     }
 
 
