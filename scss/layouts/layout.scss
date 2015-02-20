@@ -176,12 +176,11 @@ body {
         margin: 40px 0 5px 0;
     }
     .nav {
+        @include clearfix;
         line-height: 100%;
         display: block;
         position: relative;
-        height: 24px;
         margin-bottom: 20px;
-
         li {
             display: inline;
             margin: 0;
@@ -194,6 +193,7 @@ body {
                 height: 24px;
                 display: inline-block;
                 padding: 5px 0;
+                margin-bottom: 5px;
                 color: $gray;
                 &.selected {
                     padding-bottom: 3px;
