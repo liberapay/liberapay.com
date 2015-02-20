@@ -658,17 +658,21 @@ class Participant(Model, MixinTeam):
 
     @classmethod
     def dequeue_emails(cls):
-        messages = cls.db.all("""
+        fetch_messages = lambda: cls.db.all("""
             SELECT *
               FROM email_queue
           ORDER BY id ASC
              LIMIT 60
         """)
-        for msg in messages:
-            p = cls.from_id(msg.participant)
-            p.send_email(msg.spt_name, **pickle.loads(msg.context))
-            cls.db.run("DELETE FROM email_queue WHERE id = %s", (msg.id,))
-            sleep(1)
+        while True:
+            messages = fetch_messages()
+            if not messages:
+                break
+            for msg in messages:
+                p = cls.from_id(msg.participant)
+                p.send_email(msg.spt_name, **pickle.loads(msg.context))
+                cls.db.run("DELETE FROM email_queue WHERE id = %s", (msg.id,))
+                sleep(1)
 
     def set_email_lang(self, accept_lang):
         if not accept_lang:
