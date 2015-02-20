@@ -1,38 +1,29 @@
 from aspen import Response
 
+from gratipay.models.account_elsewhere import AccountElsewhere
+
 [---------]
 if user.ANON:
-    raise Response(404)
+    raise Response(403)
 request.allow('POST')
 
 body = request.body
 
 if body['should_transfer'] != 'yes':
-    request.redirect('/about/me.html')
+    request.redirect('/%s/' % user.participant.username)
 
-platform = body['platform']
-if not hasattr(website.platforms, platform):
-    raise Response(400, "bad platform: %s" % platform)
+account_id = body['account_id']
+account = AccountElsewhere.from_id(account_id)
+if not account:
+    raise Response(400, 'bad account_id "%s"' % account_id)
 
-user_id = body['user_id']
-if not user_id:
-    raise Response(400, "no user_id")
+token = request.headers.cookie.get('connect_%s' % account_id)
+if not token or not account.check_connect_token(token.value):
+    raise Response(400, 'bad connect token "%s"' % token)
 
+account.save_connect_token(None, None)
 
-# Look for a connect_token.
-# =========================
-# CSRF isn't enough to protect against unauthorized take_overs. Someone need
-# only find their own CSRF header and use that. We need a token specific to the
-# connection request.
-
-connect_key = (user.participant.username, platform, user_id)
-expected = website.connect_tokens.pop(connect_key, None)
-actual = body.get('connect_token')
-if expected is None or actual != expected:
-    msg = str("Is %s gaming us? %s:%s" % (user.participant.username, expected, actual))
-    raise Response(400, msg)
-
-user.participant.take_over((platform, user_id), have_confirmation=True)
-request.redirect('/about/me.html')
+user.participant.take_over(account, have_confirmation=True)
+request.redirect('/%s/' % user.participant.username)
 
 [---------]
