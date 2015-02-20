@@ -60,6 +60,7 @@ CREATE TABLE participants
 , email_lang            text
 , is_searchable         bool                        NOT NULL DEFAULT TRUE
 , old_auth_usage        date
+, notify_on_opt_in      boolean                     NOT NULL DEFAULT TRUE
 , CONSTRAINT team_not_anonymous CHECK (NOT (number='plural' AND anonymous_receiving))
  );
 
@@ -410,7 +411,6 @@ CREATE FUNCTION enumerate(anyarray) RETURNS TABLE (rank bigint, value anyelement
     SELECT row_number() over() as rank, value FROM unnest($1) value;
 $$ LANGUAGE sql STABLE;
 
-
 -- Index user and community names
 
 CREATE EXTENSION pg_trgm;
@@ -433,3 +433,12 @@ CREATE TRIGGER search_vector_update
     BEFORE INSERT OR UPDATE ON statements
     FOR EACH ROW EXECUTE PROCEDURE
     tsvector_update_trigger_column(search_vector, search_conf, content);
+
+
+-- https://github.com/gratipay/gratipay.com/pull/3136
+CREATE TABLE email_queue
+( id            serial   PRIMARY KEY
+, participant   bigint   NOT NULL REFERENCES participants(id)
+, spt_name      text     NOT NULL
+, context       bytea    NOT NULL
+);
