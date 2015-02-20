@@ -371,7 +371,7 @@ CREATE INDEX events_ts ON events(ts ASC);
 CREATE INDEX events_type ON events(type);
 
 
--- https://github.com/gratipay/gratipay.com/pulls/2752
+-- https://github.com/gratipay/gratipay.com/pull/2752
 CREATE TABLE emails
 ( id                    serial                      PRIMARY KEY
 , address               text                        NOT NULL
