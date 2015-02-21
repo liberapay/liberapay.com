@@ -16,35 +16,29 @@ class User(object):
     """Represent a user of our website.
     """
 
-    participant = None
-
-
     # Constructors
     # ============
+
+    def __init__(self, participant=None):
+        self.participant = participant
 
     @classmethod
     def from_session_token(cls, token):
         """Find a participant based on token and return a User.
         """
-        self = cls()
-        self.participant = Participant.from_session_token(token)
-        return self
+        return cls(Participant.from_session_token(token))
 
     @classmethod
     def from_id(cls, userid):
         """Find a participant based on id and return a User.
         """
-        self = cls()
-        self.participant = Participant.from_id(userid)
-        return self
+        return cls(Participant.from_id(userid))
 
     @classmethod
     def from_username(cls, username):
         """Find a participant based on username and return a User.
         """
-        self = cls()
-        self.participant = Participant.from_username(username)
-        return self
+        return cls(Participant.from_username(username))
 
     def __str__(self):
         if self.participant is None:
@@ -93,26 +87,3 @@ class User(object):
     @property
     def ANON(self):
         return self.participant is None
-
-    def get_highest_role(self, owner):
-        """Return a string representing the highest role this user has.
-
-        :param string owner: the username of the owner of the resource we're
-            concerned with, or None
-
-        """
-        def is_owner():
-            if self.participant is not None:
-                if owner is not None:
-                    if self.participant.username == owner:
-                        return True
-            return False
-
-        if self.ADMIN:
-            return 'admin'
-        elif is_owner():
-            return 'owner'
-        elif not self.ANON:
-            return 'authenticated'
-        else:
-            return 'anonymous'
