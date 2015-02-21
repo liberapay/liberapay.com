@@ -52,7 +52,9 @@ def safely_reserve_a_username(cursor, gen_usernames=gen_random_usernames,
             continue
         else:
             assert check == username
+            cursor.execute("RELEASE before_integrity_error")
             break
     else:
         raise RanOutOfUsernameAttempts
+
     return username
