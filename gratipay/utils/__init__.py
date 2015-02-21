@@ -173,7 +173,6 @@ def filter_profile_subnav(user, participant, pages):
     out = []
     for foo, bar, show_them, show_others in pages:
         if (user.participant == participant and show_them) \
-        or (user.participant is None and show_others)       \
         or (user.participant != participant and show_others) \
         or user.ADMIN:
             out.append((foo, bar, show_them, show_others))
