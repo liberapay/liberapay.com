@@ -133,9 +133,7 @@ class Tests(Harness):
         actual = markdown.render('Examples like this_one and this other_one.')
         assert expected == actual
 
-    @pytest.mark.xfail
     def test_srau_retries_work_with_db(self):
-        # XXX This is raising InternalError because the transaction is ended or something.
         self.make_participant('deadbeef')
         def gen_test_username():
             yield 'deadbeef'
@@ -143,14 +141,3 @@ class Tests(Harness):
         with self.db.get_cursor() as cursor:
             username = safely_reserve_a_username(cursor, gen_test_username)
             assert username == 'deafbeef'
-
-    @pytest.mark.xfail
-    def test_srau_retries_cheese(self):
-        # XXX This is a simplified case of the above test.
-        with self.db.get_cursor() as cursor:
-            cursor.execute("INSERT INTO participants (username, username_lower) VALUES ('c', 'c')")
-            try:
-                cursor.execute("INSERT INTO participants (username, username_lower) VALUES ('c', 'c')")
-            except:
-                pass
-            cursor.execute("INSERT INTO participants (username, username_lower) VALUES ('c', 'c')")

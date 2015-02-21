@@ -45,8 +45,10 @@ def safely_reserve_a_username(cursor, gen_usernames=gen_random_usernames,
             raise FailedToReserveUsername
 
         try:
+            cursor.execute("SAVEPOINT before_integrity_error")
             check = reserve(cursor, username)
         except IntegrityError:  # Collision, try again with another value.
+            cursor.execute("ROLLBACK TO before_integrity_error")
             continue
         else:
             assert check == username
