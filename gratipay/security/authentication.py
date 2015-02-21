@@ -17,8 +17,7 @@ BEGINNING_OF_EPOCH = to_rfc822(datetime(1970, 1, 1))
 def _get_user_via_api_key(api_key):
     """Given an api_key, return a User. This auth method is deprecated.
     """
-    user = User()
-    user.participant = Participant._from_thing('api_key', api_key)
+    user = User(Participant._from_thing('api_key', api_key))
     if user.participant:
         p = user.participant
         today = date.today()

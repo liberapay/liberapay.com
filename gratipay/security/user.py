@@ -16,35 +16,29 @@ class User(object):
     """Represent a user of our website.
     """
 
-    participant = None
-
-
     # Constructors
     # ============
+
+    def __init__(self, participant=None):
+        self.participant = participant
 
     @classmethod
     def from_session_token(cls, token):
         """Find a participant based on token and return a User.
         """
-        self = cls()
-        self.participant = Participant.from_session_token(token)
-        return self
+        return cls(Participant.from_session_token(token))
 
     @classmethod
     def from_id(cls, userid):
         """Find a participant based on id and return a User.
         """
-        self = cls()
-        self.participant = Participant.from_id(userid)
-        return self
+        return cls(Participant.from_id(userid))
 
     @classmethod
     def from_username(cls, username):
         """Find a participant based on username and return a User.
         """
-        self = cls()
-        self.participant = Participant.from_username(username)
-        return self
+        return cls(Participant.from_username(username))
 
     def __str__(self):
         if self.participant is None:
