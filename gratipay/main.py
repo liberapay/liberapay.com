@@ -8,7 +8,7 @@ from gratipay import canonize, utils
 from gratipay.cron import Cron
 from gratipay.models.participant import Participant
 from gratipay.security import authentication, csrf, x_frame_options
-from gratipay.utils import cache_static, i18n, set_cookie, timer
+from gratipay.utils import cache_static, erase_cookie, i18n, set_cookie, timer
 from gratipay.version import get_version
 from gratipay.renderers import jinja2_htmlescaped
 
@@ -35,6 +35,12 @@ if hasattr(aspen.Response, 'set_cookie'):
 def _set_cookie(response, *args, **kw):
     set_cookie(response.headers.cookie, *args, **kw)
 aspen.Response.set_cookie = _set_cookie
+
+if hasattr(aspen.Response, 'erase_cookie'):
+    raise Warning('aspen.Response.erase_cookie() already exists')
+def _erase_cookie(response, *args, **kw):
+    erase_cookie(response.headers.cookie, *args, **kw)
+aspen.Response.erase_cookie = _erase_cookie
 
 
 # Configure renderers

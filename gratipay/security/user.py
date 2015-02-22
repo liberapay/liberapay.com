@@ -4,7 +4,7 @@ import uuid
 
 from aspen.utils import utcnow
 from gratipay.models.participant import Participant
-from gratipay.utils import set_cookie
+from gratipay.utils import erase_cookie, set_cookie
 
 
 SESSION = b'session'
@@ -74,7 +74,7 @@ class User(object):
         """
         self.participant.update_session(None, None)
         self.participant = None
-        set_cookie(cookies, SESSION, '')
+        erase_cookie(cookies, SESSION)
 
 
     # Roles
