@@ -69,8 +69,7 @@ def billing(env):
 
 
 def username_restrictions(website):
-    if not hasattr(gratipay, 'RESTRICTED_USERNAMES'):
-        gratipay.RESTRICTED_USERNAMES = os.listdir(website.www_root)
+    gratipay.RESTRICTED_USERNAMES = os.listdir(website.www_root)
 
 
 def make_sentry_teller(env):
