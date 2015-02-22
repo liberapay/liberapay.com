@@ -38,6 +38,8 @@ def safely_reserve_a_username(cursor, gen_usernames=gen_random_usernames,
     The returned value is guaranteed to have been reserved in the database.
 
     """
+    cursor.execute("SAVEPOINT safely_reserve_a_username")
+
     seatbelt = 0
     for username in gen_usernames():
         seatbelt += 1
@@ -45,16 +47,15 @@ def safely_reserve_a_username(cursor, gen_usernames=gen_random_usernames,
             raise FailedToReserveUsername
 
         try:
-            cursor.execute("SAVEPOINT before_integrity_error")
             check = reserve(cursor, username)
         except IntegrityError:  # Collision, try again with another value.
-            cursor.execute("ROLLBACK TO before_integrity_error")
+            cursor.execute("ROLLBACK TO safely_reserve_a_username")
             continue
         else:
             assert check == username
-            cursor.execute("RELEASE before_integrity_error")
             break
     else:
         raise RanOutOfUsernameAttempts
 
+    cursor.execute("RELEASE safely_reserve_a_username")
     return username
