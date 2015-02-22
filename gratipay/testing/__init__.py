@@ -13,7 +13,7 @@ from gratipay.billing.exchanges import record_exchange, record_exchange_result
 from gratipay.elsewhere import UserInfo
 from gratipay.main import website
 from gratipay.models.account_elsewhere import AccountElsewhere
-from gratipay.security.user import User, SESSION
+from gratipay.security.user import User
 from gratipay.testing.vcr import use_cassette
 from gratipay import wireup
 from psycopg2 import IntegrityError, InternalError
@@ -35,6 +35,8 @@ class ClientWithAuth(Client):
         """Extend base class to support authenticating as a certain user.
         """
 
+        self.cookie.clear()
+
         # csrf - for both anon and authenticated
         csrf_token = kw.get('csrf_token', b'sotokeny')
         if csrf_token:
@@ -43,12 +45,12 @@ class ClientWithAuth(Client):
 
         # user authentication
         auth_as = kw.pop('auth_as', None)
-        if auth_as is None:
-            if SESSION in self.cookie:
-                del self.cookie[SESSION]
-        else:
+        if auth_as:
             user = User.from_username(auth_as)
             user.sign_in(self.cookie)
+
+        for k, v in kw.pop('cookies', {}).items():
+            self.cookie[k] = v
 
         return Client.build_wsgi_environ(self, *a, **kw)
 
