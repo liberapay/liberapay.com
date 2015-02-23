@@ -115,7 +115,8 @@ algorithm.functions = [
 
     canonize,
     i18n.set_up_i18n,
-    authentication.set_request_context_user,
+    authentication.start_user_as_anon,
+    authentication.authenticate_user_if_possible,
     csrf.get_csrf_token_from_request,
 
     algorithm['dispatch_request_to_filesystem'],

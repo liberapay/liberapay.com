@@ -57,13 +57,14 @@ def _turn_off_csrf(request):
     request.headers.cookie['csrf_token'] = csrf_token
     request.headers['X-CSRF-TOKEN'] = csrf_token
 
-def set_request_context_user(request, state):
-    """Set state['user']. This signs the user in.
+def start_user_as_anon():
+    """Make sure we always have a user object, regardless of exceptions during authentication.
     """
+    return {'user': ANON}
 
-    state['user'] = user = ANON  # Make sure we always have a user object, even if
-                                 # there's an exception in the rest of this function.
-
+def authenticate_user_if_possible(request, user):
+    """This signs the user in.
+    """
     if request.line.uri.startswith('/assets/'):
         pass
     elif 'Authorization' in request.headers:
@@ -75,8 +76,7 @@ def set_request_context_user(request, state):
     elif SESSION in request.headers.cookie:
         token = request.headers.cookie[SESSION].value
         user = User.from_session_token(token)
-
-    state['user'] = user
+    return {'user': user}
 
 def add_auth_to_response(response, request=None, user=ANON):
     if request is None:
