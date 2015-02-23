@@ -42,10 +42,14 @@
         {% endif %}
     </table>
 
+    {% if participant.claimed_time %}
     <p>{{ _('Joined') }} {{ to_age(participant.claimed_time, add_direction=True) }}.</p>
+    {% else %}
+    <p>This account is {{ 'closed' if participant.is_closed else 'archived' }}.</p>
+    {% endif %}
 </div>
 
-{% if participant.accepts_tips %}
+{% if participant.accepts_tips and participant.claimed_time %}
 {% if participant != user.participant %}
 {% include "templates/your-tip.html" %}
 {% endif %}

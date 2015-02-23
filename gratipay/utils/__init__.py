@@ -66,18 +66,21 @@ def get_participant(state, restrict=True, resolve_unclaimed=True):
     canonicalize(request.line.uri.path.raw, '/', participant.username, slug, qs)
 
     if participant.is_closed:
+        if user.ADMIN:
+            return participant
         raise Response(410)
 
     if participant.claimed_time is None and resolve_unclaimed:
-
-        # This is a stub participant record for someone on another platform who
-        # hasn't actually registered with Gratipay yet. Let's bounce the viewer
-        # over to the appropriate platform page.
-
         to = participant.resolve_unclaimed()
-        if to is None:
+        if to:
+            # This is a stub account (someone on another platform who hasn't
+            # actually registered with Gratipay yet)
+            request.redirect(to)
+        else:
+            # This is an archived account (result of take_over)
+            if user.ADMIN:
+                return participant
             raise Response(404)
-        request.redirect(to)
 
     if restrict:
         if participant != user.participant:
