@@ -2,12 +2,14 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from base64 import b64encode
 
-from gratipay import wireup
-from gratipay.security.user import SESSION
-from gratipay.testing import Harness
-from environment import Environment
 from aspen.http.request import Request
 from aspen.http.response import Response
+from environment import Environment
+
+from gratipay import wireup
+from gratipay.security.csrf import REASON_BAD_TOKEN, REASON_NO_CSRF_COOKIE
+from gratipay.security.user import SESSION
+from gratipay.testing import Harness
 
 
 class Tests(Harness):
@@ -106,3 +108,13 @@ class Tests2(Harness):
     def test_error_spt_works(self):
         r = self.client.POST('/', csrf_token=False, raise_immediately=False)
         assert r.code == 403
+
+    def test_no_csrf_cookie(self):
+        r = self.client.PxST('/', csrf_token=False)
+        assert r.code == 403
+        assert r.body == REASON_NO_CSRF_COOKIE
+
+    def test_bad_csrf_cookie(self):
+        r = self.client.PxST('/', csrf_token=b'bad_token')
+        assert r.code == 403
+        assert r.body == REASON_BAD_TOKEN
