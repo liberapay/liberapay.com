@@ -1,6 +1,6 @@
 [---]
 if not user.ANON:
-    request.redirect('/' + user.participant.username + '/' + path.get('redirect_to', ''))
+    request.redirect('/' + user.participant.username + '/' + request.path.get('redirect_to', ''))
 title = _("Sign In")
 [---] text/html
 {% extends "templates/base.html" %}

@@ -6,9 +6,9 @@ from gratipay.utils.i18n import LANGUAGES_2
 
 [-----------------------------------------------------------------------------]
 
-participant = get_participant(request, restrict=True)
+participant = get_participant(state, restrict=True)
 
-if POST:
+if request.method == 'POST':
     lang = request.body['lang']
     content = request.body['content']
 
@@ -19,7 +19,7 @@ if POST:
     r = {"html": markdown.render(content)}
 
 else:
-    lang = qs['lang']
+    lang = request.qs['lang']
     r = {"content": participant.get_statement([lang])[0]}
 
 [---] application/json via json_dump

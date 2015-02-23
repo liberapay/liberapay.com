@@ -12,7 +12,7 @@ email_re = re.compile(r'^[^@]+@[^@]+\.[^@]+$')
 [-----------------------------------------]
 
 request.allow("POST")
-participant = get_participant(request, restrict=True)
+participant = get_participant(state, restrict=True)
 
 action = request.body['action']
 address = request.body['address']

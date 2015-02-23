@@ -20,15 +20,15 @@ else:
     # ======================
 
     tipper = user.participant
-    tippee = get_participant(request, restrict=False, resolve_unclaimed=False)
+    tippee = get_participant(state, restrict=False, resolve_unclaimed=False)
 
 
     # Get and maybe set amount.
     # =========================
 
-    if POST and 'amount' in body and tippee != tipper:
+    if request.method == 'POST' and 'amount' in request.body and tippee != tipper:
         try:
-            out = tipper.set_tip_to(tippee, parse_decimal(body['amount']))
+            out = tipper.set_tip_to(tippee, parse_decimal(request.body['amount']))
         except (InvalidOperation, ValueError, BadAmount, NumberFormatError):
             raise Response(400, "bad amount")
         except UserDoesntAcceptTips:

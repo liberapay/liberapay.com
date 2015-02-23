@@ -10,12 +10,12 @@ from gratipay.models.participant import NeedConfirmation
 
 [-----------------------------]
 
-platform = getattr(website.platforms, path['platform'], None)
+platform = getattr(website.platforms, request.path['platform'], None)
 if platform is None:
     raise Response(404)
 
 # Get the query id from the querystring
-query_id = platform.get_query_id(qs)
+query_id = platform.get_query_id(request.qs)
 
 # Check that we have a cookie that matches the query id (CSRF prevention)
 cookie_name = (platform.name+'_'+query_id).encode('ascii')
@@ -68,9 +68,9 @@ elif action == 'connect':
         # XXX In this case, we can get away with reusing the same dispatch_result. When upstreaming
         #     we should probably generalize by making a new DispatchResult.
         request.internally_redirected_from = dispatch_result.match
-        request.resource = resources.get(website, website.www_root+'/on/confirm.html.spt')
-        request.context.update(locals())
-        raise request.resource.respond(request, dispatch_result)
+        resource = resources.get(website, website.www_root+'/on/confirm.html.spt')
+        state.update(locals())
+        raise resource.respond(state)
 
 elif action in {'lock', 'unlock'}:
     account.participant.update_goal(-1 if action == 'lock' else None)

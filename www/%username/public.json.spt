@@ -9,14 +9,14 @@ callback_pattern = re.compile(r'^[_A-Za-z0-9.]+$')
 
 [-----------------------------------------------------------------------------]
 
-participant = get_participant(request, restrict=False)
+participant = get_participant(state, restrict=False)
 
 # CORS - see https://github.com/gratipay/aspen-python/issues/138
 response.headers["Access-Control-Allow-Origin"] = "*"
 out = participant.to_dict(details=True, inquirer=user.participant)
 
 # JSONP - see https://github.com/gratipay/aspen-python/issues/138
-callback = qs.get('callback')
+callback = request.qs.get('callback')
 if callback is not None:
     if callback_pattern.match(callback) is None:
         raise Response(400, "bad callback")

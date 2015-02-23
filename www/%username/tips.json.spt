@@ -7,13 +7,13 @@ callback_pattern = re.compile(r'^[_A-Za-z0-9.]+$')
 class BadPlatform(Exception): pass
 
 [-----------------------]
-participant = get_participant(request, restrict=True)
+participant = get_participant(state, restrict=True)
 if user != participant:
     raise Response(403) # disallow admins
 
-if POST:
+if request.method == 'POST':
     out = []
-    new_tips = body
+    new_tips = request.body
     seen = set()
     for tip in new_tips:
         seen.add(tip['username'])
@@ -30,7 +30,7 @@ if POST:
         one['amount'] = str(amount)
         out.append(one)
 
-    if qs.get('also_prune', 'false').lower() in ('true', '1', 'yes'):
+    if request.qs.get('also_prune', 'false').lower() in ('true', '1', 'yes'):
         old_tips = participant.get_current_tips()
         for tip in old_tips:
             if tip['tippee'] not in seen:

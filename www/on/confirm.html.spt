@@ -12,7 +12,7 @@ website.connect_tokens = {}
 if user.ANON:
     raise Response(404)
 
-if 'fake' in qs:
+if 'fake' in request.qs:
     account = next(iter(user.participant.get_accounts_elsewhere().values()))
 elif not getattr(request, 'internally_redirected_from', None):
     raise Response(404)

@@ -61,7 +61,7 @@ def _sanitize_token(token):
 
 
 
-def get_csrf_token_from_request(request):
+def get_csrf_token_from_request(request, state):
     """Given a Request object, reject it if it's a forgery.
     """
     if request.line.uri.startswith('/assets/'): return
@@ -72,7 +72,7 @@ def get_csrf_token_from_request(request):
     except KeyError:
         csrf_token = None
 
-    request.context['csrf_token'] = csrf_token or _get_new_csrf_key()
+    state['csrf_token'] = csrf_token or _get_new_csrf_key()
 
     # Assume that anything not defined as 'safe' by RC2616 needs protection
     if request.line.method not in ('GET', 'HEAD', 'OPTIONS', 'TRACE'):
@@ -95,12 +95,9 @@ def get_csrf_token_from_request(request):
             raise Response(403, REASON_BAD_TOKEN)
 
 
-def add_csrf_token_to_response(response, request=None):
+def add_csrf_token_to_response(response, csrf_token=None):
     """Store the latest CSRF token as a cookie.
     """
-    if request is None:
-        return  # early parsing must've failed
-    csrf_token = request.context.get('csrf_token')
     if csrf_token:
         # Don't set httponly so that we can POST using XHR.
         # https://github.com/gratipay/gratipay.com/issues/3030

@@ -4,7 +4,7 @@ from datetime import timedelta
 
 [-----------------------------------------------------------------------------]
 
-participant = get_participant(request, restrict=True)
+participant = get_participant(state, restrict=True)
 tips, total, unclaimed_tips, unclaimed_total = participant.get_giving_for_profile()
 title = participant.username
 subhead = _("Giving")

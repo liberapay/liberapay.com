@@ -90,7 +90,7 @@ gratipay.wireup.other_stuff(website, env)
 gratipay.wireup.accounts_elsewhere(website, env)
 
 if exc:
-    tell_sentry(exc)
+    tell_sentry(exc, {})
 
 
 # Periodic jobs

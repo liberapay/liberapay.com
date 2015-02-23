@@ -3,8 +3,8 @@ from aspen import Response
 if user.ANON:
     raise Response(404)
 request.allow("GET", "POST")
-if POST:
-    field = body.get("toggle")
+if request.method == 'POST':
+    field = request.body.get("toggle")
     if field not in ["is_searchable"]:
         raise Response(400)
     rec = website.db.one("""

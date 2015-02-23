@@ -1,7 +1,7 @@
 from aspen import Response
 from gratipay.models.participant import Participant
 [---]
-participant = Participant.from_username(path['username'])
+participant = Participant.from_username(request.path['username'])
 if participant is None:
     raise Response(404)
 if user.ANON:

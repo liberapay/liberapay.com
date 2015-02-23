@@ -3,10 +3,10 @@ from gratipay.models import community
 
 [----------------------]
 
-if POST:
+if request.method == 'POST':
 
     # name
-    name = body['name']
+    name = request.body['name']
     if community.name_pattern.match(name) is None:
         errormsg = "The community name %s contains invalid characters." % name
         raise Response(400, errormsg)
@@ -15,7 +15,7 @@ if POST:
     slug = community.slugize(name)
 
     # is_member
-    is_member = body['is_member']
+    is_member = request.body['is_member']
     if is_member not in ('true', 'false'):
         raise Response(400)
     is_member = is_member == 'true'
@@ -23,7 +23,7 @@ if POST:
     # delegate
     user.participant.insert_into_communities(is_member, name, slug)
 
-elif GET:
+elif request.method == 'GET':
     response.headers["Access-Control-Allow-Origin"] = "*"
 
 communities = []

@@ -2,11 +2,11 @@ from aspen import Response
 
 [---]
 
-platform = getattr(website.platforms, path['platform'], None)
+platform = getattr(website.platforms, request.path['platform'], None)
 if platform is None:
     raise Response(404)
 
-user_name = path['user_name']
+user_name = request.path['user_name']
 if not user_name:
     raise Response(400, '%user_name is empty')
 website.db.one( "SELECT * FROM ELSEWHERE WHERE platform=%s AND user_name=%s"
@@ -15,11 +15,11 @@ website.db.one( "SELECT * FROM ELSEWHERE WHERE platform=%s AND user_name=%s"
                )
 
 try:
-    action = qs['action']
+    action = request.qs['action']
 except KeyError:
     raise Response(400)
 
-team = qs.get('team', '').lower() == 'true'
+team = request.qs.get('team', '').lower() == 'true'
 
 title = _("Failure")
 

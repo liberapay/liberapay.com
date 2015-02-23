@@ -17,22 +17,22 @@ class Tests(Harness):
 
     def test_get_participant_gets_participant(self):
         expected = self.make_participant('alice', claimed_time='now')
-        request = self.client.GET( '/alice/'
-                                 , return_after='dispatch_request_to_filesystem'
-                                 , want='request'
-                                  )
-        actual = utils.get_participant(request, restrict=False)
+        state = self.client.GET( '/alice/'
+                               , return_after='dispatch_request_to_filesystem'
+                               , want='state'
+                                )
+        actual = utils.get_participant(state, restrict=False)
         assert actual == expected
 
     def test_get_participant_canonicalizes(self):
         self.make_participant('alice', claimed_time='now')
-        request = self.client.GET( '/Alice/'
-                                 , return_after='dispatch_request_to_filesystem'
-                                 , want='request'
-                                  )
+        state = self.client.GET( '/Alice/'
+                               , return_after='dispatch_request_to_filesystem'
+                               , want='state'
+                                )
 
         with self.assertRaises(Response) as cm:
-            utils.get_participant(request, restrict=False)
+            utils.get_participant(state, restrict=False)
         actual = cm.exception.code
 
         assert actual == 302

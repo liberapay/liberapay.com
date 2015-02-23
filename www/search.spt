@@ -3,8 +3,8 @@ from gratipay.utils.i18n import LANGUAGES_2, SEARCH_CONFS, strip_accents
 
 [---]
 
-action = qs.get('action')
-query = qs.get('q')
+action = request.qs.get('action')
+query = request.qs.get('q')
 
 title = _("Search")
 results = {}

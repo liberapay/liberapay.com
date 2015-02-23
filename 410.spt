@@ -1,10 +1,10 @@
 from aspen.http import status_strings
 [---]
-title = 'Closed' if 'username' in path else '410'
+title = 'Closed' if 'username' in request.path else '410'
 [---] text/html via jinja2
 {% extends "templates/base.html" %}
 {% block content %}
-{% if 'username' in path %}
+{% if 'username' in request.path %}
     <p>The account owner has closed this account.</p>
     {% if user.ANON %}
     <h2>Are you the account owner?</h2>

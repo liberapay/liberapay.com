@@ -5,7 +5,7 @@ from gratipay.utils import get_participant
 if not user.ADMIN:
     raise Response(400)
 
-to = body.get('to')
+to = request.body.get('to')
 if not to in ('true', 'false', None):
     raise Response(400)
 
@@ -18,7 +18,7 @@ with website.db.get_cursor() as c:
              WHERE username=%s
          RETURNING is_suspicious
 
-        """, (path['username'],))
+        """, (request.path['username'],))
     else:
         is_suspicious = website.db.one("""
 
@@ -27,10 +27,10 @@ with website.db.get_cursor() as c:
              WHERE username=%s
          RETURNING is_suspicious
 
-        """, (to == 'true', path['username'],))
+        """, (to == 'true', request.path['username'],))
 
     add_event(c, 'participant', dict(
-        id=get_participant(request).id,
+        id=get_participant(state).id,
         recorder=dict(id=user.participant.id, username=user.participant.username),
         action='set', values=dict(is_suspicious=is_suspicious)
     ))

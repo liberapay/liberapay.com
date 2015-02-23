@@ -9,19 +9,18 @@ from gratipay.utils import get_participant
 if not user.ADMIN:
     raise Response(404)
 
-if not POST:
-    raise Response(405)
+request.allow('POST')
 
-participant = get_participant(request)
+participant = get_participant(state)
 try:
-    amount = Decimal(body['amount'])
-    fee = Decimal(body['fee'])
+    amount = Decimal(request.body['amount'])
+    fee = Decimal(request.body['fee'])
 except InvalidOperation:
     raise Response(400)
-note = body['note'].strip()
+note = request.body['note'].strip()
 if not note:
     raise Response(400)
-status = body['status']
+status = request.body['status']
 
 
 with website.db.get_cursor() as cursor:

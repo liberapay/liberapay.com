@@ -28,7 +28,7 @@ if goal == -1 and not request.body.get("confirmed"):
             "\n\nThat cannot be undone!")
     r = {'confirm': msg}
 else:
-    participant = get_participant(request)
+    participant = get_participant(state)
     participant.update_goal(goal)
     goal_l = None if goal is None else format_currency(goal, 'USD', trailing_zeroes=False)
     r = {"goal": goal, "goal_l": goal_l}

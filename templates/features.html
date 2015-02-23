@@ -1,6 +1,6 @@
 {% extends "templates/about.html" %}
 {% block subnav %}
-    {% set current_page = path.raw.split('/')[3] %}
+    {% set current_page = request.path.raw.split('/')[3] %}
     {% set nav_base = '/about/features' %}
     {% set pages = [ ('/', _('Overview'))
                    , ('/teams/', _('Teams'))

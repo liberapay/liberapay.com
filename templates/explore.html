@@ -1,6 +1,6 @@
 {% extends "templates/base.html" %}
 {% block subnav %}
-    {% set current_page = path.raw.split('/')[2] %}
+    {% set current_page = request.path.raw.split('/')[2] %}
     {% set nav_base = "/explore" %}
     {% set pages = [ ('/', _('Communities'))
                    , ('/teams/', _('Teams'))

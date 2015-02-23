@@ -57,12 +57,12 @@ def _turn_off_csrf(request):
     request.headers.cookie['csrf_token'] = csrf_token
     request.headers['X-CSRF-TOKEN'] = csrf_token
 
-def set_request_context_user(request):
-    """Set request.context['user']. This signs the user in.
+def set_request_context_user(request, state):
+    """Set state['user']. This signs the user in.
     """
 
-    request.context['user'] = user = ANON  # Make sure we always have a user object, even if
-                                           # there's an exception in the rest of this function.
+    state['user'] = user = ANON  # Make sure we always have a user object, even if
+                                 # there's an exception in the rest of this function.
 
     if request.line.uri.startswith('/assets/'):
         pass
@@ -76,9 +76,9 @@ def set_request_context_user(request):
         token = request.headers.cookie[SESSION].value
         user = User.from_session_token(token)
 
-    request.context['user'] = user
+    state['user'] = user
 
-def add_auth_to_response(response, request=None):
+def add_auth_to_response(response, request=None, user=ANON):
     if request is None:
         return  # early parsing must've failed
     if request.line.uri.startswith('/assets/'):
@@ -87,6 +87,5 @@ def add_auth_to_response(response, request=None):
     response.headers['Expires'] = BEGINNING_OF_EPOCH # don't cache
 
     if SESSION in request.headers.cookie:
-        user = request.context.get('user') or ANON
         if not user.ANON:
             user.keep_signed_in(response.headers.cookie)

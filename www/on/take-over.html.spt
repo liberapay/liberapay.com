@@ -3,8 +3,9 @@ from aspen import Response
 [---------]
 if user.ANON:
     raise Response(404)
-if not POST:
-    raise Response(405)
+request.allow('POST')
+
+body = request.body
 
 if body['should_transfer'] != 'yes':
     request.redirect('/about/me.html')

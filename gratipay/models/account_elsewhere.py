@@ -186,8 +186,8 @@ class AccountElsewhere(Model):
         self.set_attributes(token=token)
 
 
-def get_account_elsewhere(website, request):
-    path = request.line.uri.path
+def get_account_elsewhere(website, state):
+    path = state['request'].line.uri.path
     platform = getattr(website.platforms, path['platform'], None)
     if platform is None:
         raise Response(404)
@@ -201,7 +201,7 @@ def get_account_elsewhere(website, request):
             user_info = platform.get_user_info(user_name)
         except Response as r:
             if r.code == 404:
-                _ = request.context['_']
+                _ = state['_']
                 err = _("There doesn't seem to be a user named {0} on {1}.",
                         user_name, platform.display_name)
                 raise Response(404, err)

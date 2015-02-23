@@ -3,8 +3,8 @@ from aspen import Response
 if user.ANON:
     raise Response(404)
 request.allow("GET", "POST")
-if POST:
-    field = body.get("toggle", "giving")
+if request.method == 'POST':
+    field = request.body.get("toggle", "giving")
     if field not in ["giving", "receiving"]:
         raise Response(400)
     if user.participant.IS_PLURAL and field == "receiving":

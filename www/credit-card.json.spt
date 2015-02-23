@@ -17,6 +17,7 @@ if user.ANON:
 participant = user.participant
 
 request.allow('POST')
+body = request.body
 out = {}
 
 if body.get('action') == 'delete':

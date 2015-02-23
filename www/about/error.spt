@@ -1,5 +1,5 @@
 import os
 from aspen import Response
 [---]
-raise Response(int(qs['code']))
+raise Response(int(request.qs['code']))
 [---] text/plain
