@@ -60,7 +60,8 @@ def _sanitize_token(token):
     return token
 
 
-def get_csrf_token_from_request(request):
+
+def get_csrf_token_from_request(request, state):
     """Given a Request object, reject it if it's a forgery.
     """
     if request.line.uri.startswith('/assets/'): return
@@ -71,8 +72,7 @@ def get_csrf_token_from_request(request):
     except KeyError:
         csrf_token = None
 
-    if not csrf_token:
-        csrf_token = _get_new_csrf_key()
+    state['csrf_token'] = csrf_token or _get_new_csrf_key()
 
     # Assume that anything not defined as 'safe' by RC2616 needs protection
     if request.line.method not in ('GET', 'HEAD', 'OPTIONS', 'TRACE'):
@@ -93,8 +93,6 @@ def get_csrf_token_from_request(request):
 
         if not constant_time_compare(request_csrf_token, csrf_token):
             raise Response(403, REASON_BAD_TOKEN)
-
-    return {'csrf_token': csrf_token}
 
 
 def add_csrf_token_to_response(response, csrf_token=None):
