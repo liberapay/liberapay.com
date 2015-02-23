@@ -68,30 +68,30 @@ def get_csrf_token_from_request(request, state):
     if request.line.uri.startswith('/callbacks/'): return
 
     try:
-        csrf_token = _sanitize_token(request.headers.cookie['csrf_token'].value)
+        cookie_token = _sanitize_token(request.headers.cookie['csrf_token'].value)
     except KeyError:
-        csrf_token = None
+        cookie_token = None
 
-    state['csrf_token'] = csrf_token or _get_new_csrf_key()
+    state['csrf_token'] = cookie_token or _get_new_csrf_key()
 
     # Assume that anything not defined as 'safe' by RC2616 needs protection
     if request.line.method not in ('GET', 'HEAD', 'OPTIONS', 'TRACE'):
 
-        if csrf_token is None:
+        if cookie_token is None:
             raise Response(403, REASON_NO_CSRF_COOKIE)
 
         # Check non-cookie token for match.
-        request_csrf_token = ""
+        second_token = ""
         if request.line.method == "POST":
             if isinstance(request.body, dict):
-                request_csrf_token = request.body.get('csrf_token', '')
+                second_token = request.body.get('csrf_token', '')
 
-        if request_csrf_token == "":
+        if second_token == "":
             # Fall back to X-CSRF-TOKEN, to make things easier for AJAX,
             # and possible for PUT/DELETE.
-            request_csrf_token = request.headers.get('X-CSRF-TOKEN', '')
+            second_token = request.headers.get('X-CSRF-TOKEN', '')
 
-        if not constant_time_compare(request_csrf_token, csrf_token):
+        if not constant_time_compare(second_token, cookie_token):
             raise Response(403, REASON_BAD_TOKEN)
 
 
