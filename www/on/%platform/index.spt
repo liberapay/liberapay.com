@@ -8,20 +8,32 @@ from gratipay.models.account_elsewhere import AccountElsewhere
 platform = getattr(website.platforms, request.path['platform'], None)
 if platform is None or not getattr(platform, 'api_friends_path', None):
     raise Response(404)
+
 title = _("Your {0} Friends", platform.display_name)
+
+account = None
 if not user.ANON:
     account = user.participant.get_account_elsewhere(platform.name)
+
+if account:
     page_url = b64decode(request.qs.get('page', ''))
     friends, nfriends, pages_urls = platform.get_friends_for(account, page_url)
     friends = AccountElsewhere.get_many(platform.name, friends)
+
 [---] text/html
 {% extends "templates/base.html" %}
+{% from 'templates/auth.html' import auth_button with context %}
 {% block content %}
 
-{% if user.ANON %}
-<p>{{ _("Sign in to Gratipay with {0} to find your friends from there.",
-        platform.display_name) }}</p>
-
+{% if not account %}
+<div>
+    <span style="display: inline-block">
+    {% call auth_button(platform.name, 'opt-in' if user.ANON else 'connect') %}{{
+        _("Sign in with {0}", platform.display_name)
+    }}{% endcall %}
+    </span>
+    {{ _("to find your friends from there.") }}
+</div>
 {% else %}
 <table class="table">
     <tr>
