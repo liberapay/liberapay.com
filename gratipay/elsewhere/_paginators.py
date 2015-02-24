@@ -35,9 +35,12 @@ def _strip_prefix(prefix, s):
 links_keys = set('prev next first last'.split())
 
 
-def cursor_paginator():
+def query_param_paginator(param, **kw):
+    # https://developers.google.com/+/api/#pagination
     # https://dev.twitter.com/overview/api/cursoring
-    links_keys_map = (('prev', 'previous_cursor'), ('next', 'next_cursor'))
+    page_key = kw.get('page')
+    total_key = kw.get('total')
+    links_keys_map = tuple((k, v) for k, v in kw.items() if k in links_keys)
     def f(self, response, parsed):
         url = _strip_prefix(self.api_url, response.request.url)
         links = {k: _modify_query(url, param, parsed[k2])
@@ -45,10 +48,13 @@ def cursor_paginator():
                  if parsed.get(k2)}
         if links.get('prev') and not links.get('first'):
             links['first'] = _modify_query(url, param, None)
-        lists = [a for a in parsed.values() if isinstance(a, list)]
-        assert len(lists) == 1
-        page = next(iter(lists))
-        total_count = -1 if links else len(page)
+        if page_key:
+            page = parsed[page_key]
+        else:
+            lists = [a for a in parsed.values() if isinstance(a, list)]
+            assert len(lists) == 1
+            page = next(iter(lists))
+        total_count = parsed.get(total_key, -1) if links else len(page)
         return page, total_count, links
     return f
 

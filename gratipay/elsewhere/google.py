@@ -2,6 +2,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from gratipay.elsewhere import PlatformOAuth2
 from gratipay.elsewhere._extractors import any_key, key
+from gratipay.elsewhere._paginators import query_param_paginator
 
 
 class Google(PlatformOAuth2):
@@ -19,6 +20,10 @@ class Google(PlatformOAuth2):
 
     # API attributes
     api_format = 'json'
+    api_paginator = query_param_paginator('pageToken',
+                                          next='nextPageToken',
+                                          page='items',
+                                          total='totalItems')
     api_url = 'https://www.googleapis.com/plus/v1'
     api_user_info_path = '/people/{user_id}'
     api_user_self_info_path = '/people/me'

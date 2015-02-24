@@ -2,7 +2,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from gratipay.elsewhere import PlatformOAuth1
 from gratipay.elsewhere._extractors import key, not_available
-from gratipay.elsewhere._paginators import cursor_paginator
+from gratipay.elsewhere._paginators import query_param_paginator
 
 
 class Twitter(PlatformOAuth1):
@@ -18,7 +18,9 @@ class Twitter(PlatformOAuth1):
 
     # API attributes
     api_format = 'json'
-    api_paginator = cursor_paginator()
+    api_paginator = query_param_paginator('cursor',
+                                          prev='previous_cursor',
+                                          next='next_cursor')
     api_url = 'https://api.twitter.com/1.1'
     api_user_info_path = '/users/show.json?screen_name={user_name}'
     api_user_self_info_path = '/account/verify_credentials.json'
