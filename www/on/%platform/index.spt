@@ -34,6 +34,8 @@ if account:
     </span>
     {{ _("to find your friends from there.") }}
 </div>
+{% elif not friends %}
+<p>{{ _("No friends found on {0}.", platform.display_name) }}</p>
 {% else %}
 <table class="table">
     <tr>
