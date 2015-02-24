@@ -1,7 +1,7 @@
 from aspen import Response
 [---]
 platform = getattr(website.platforms, request.path['platform'], None)
-if platform is None:
+if platform is None or not getattr(platform, 'api_friends_path', None):
     raise Response(404)
 title = _("Your {0} Friends", platform.display_name)
 if not user.ANON:
