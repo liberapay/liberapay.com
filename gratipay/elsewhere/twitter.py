@@ -24,7 +24,7 @@ class Twitter(PlatformOAuth1):
     api_url = 'https://api.twitter.com/1.1'
     api_user_info_path = '/users/show.json?screen_name={user_name}'
     api_user_self_info_path = '/account/verify_credentials.json'
-    api_friends_path = '/friends/ids.json?user_id={user_id}'
+    api_friends_path = '/friends/list.json?user_id={user_id}&skip_status=true'
     ratelimit_headers_prefix = 'x-rate-limit-'
 
     # User info extractors

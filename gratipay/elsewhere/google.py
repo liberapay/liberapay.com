@@ -16,7 +16,7 @@ class Google(PlatformOAuth2):
     auth_url = 'https://accounts.google.com/o/oauth2/auth'
     access_token_url = 'https://accounts.google.com/o/oauth2/token'
     oauth_default_scope = ['https://www.googleapis.com/auth/userinfo.email',
-                           'https://www.googleapis.com/auth/userinfo.profile']
+                           'https://www.googleapis.com/auth/plus.login']
 
     # API attributes
     api_format = 'json'
@@ -27,6 +27,7 @@ class Google(PlatformOAuth2):
     api_url = 'https://www.googleapis.com/plus/v1'
     api_user_info_path = '/people/{user_id}'
     api_user_self_info_path = '/people/me'
+    api_friends_path = '/people/{user_id}/people/visible'
 
     # User info extractors
     x_user_id = key('id')

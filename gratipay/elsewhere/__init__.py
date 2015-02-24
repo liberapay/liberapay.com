@@ -198,8 +198,9 @@ class Platform(object):
         """Given a team_name on the platform, return the team's membership list
         from the API.
         """
-        default_url = self.api_team_members_path.format(user_name=quote(team_name))
-        r = self.api_get(page_url or default_url)
+        if not page_url:
+            page_url = self.api_team_members_path.format(user_name=quote(team_name))
+        r = self.api_get(page_url)
         members, count, pages_urls = self.api_paginator(r, self.api_parser(r))
         members = [self.extract_user_info(m) for m in members]
         return members, count, pages_urls
@@ -224,13 +225,16 @@ class Platform(object):
             info.token = json.dumps(token)
         return info
 
-    def get_friends_for(self, user_id, page_url=None):
-        first_page_url = self.api_friends_path.format(user_id=quote(user_id))
-        r = self.api_get(page_url or first_page_url)
-        if r.status_code == 200:
-            friend_ids = r.json()['ids']
-            return friend_ids
-        return []
+    def get_friends_for(self, account, page_url=None):
+        if not page_url:
+            page_url = self.api_friends_path.format(
+                user_id=quote(account.user_id),
+                user_name=quote(account.user_name or ''),
+            )
+        r = self.api_get(page_url)
+        friends, count, pages_urls = self.api_paginator(r, self.api_parser(r))
+        friends = [self.extract_user_info(f) for f in friends]
+        return friends, count, pages_urls
 
 
 class PlatformOAuth1(Platform):

@@ -227,20 +227,6 @@ class AccountElsewhere(Model):
         """, (token, self.id))
         self.set_attributes(token=token)
 
-    def get_friends(self):
-        friend_ids = self.platform_data.get_friends_for(self.user_id)
-        return self.db.all("""
-
-            SELECT p.*, e.*::elsewhere_with_participant
-              FROM elsewhere e
-              JOIN participants p
-                ON e.participant = p.username
-             WHERE platform = %s
-               AND user_id = ANY(%s)
-               AND is_suspicious IS NOT TRUE
-
-        """, (self.platform, [str(x) for x in friend_ids]))
-
 
 def get_account_elsewhere(website, state):
     path = state['request'].line.uri.path
