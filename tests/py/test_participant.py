@@ -248,6 +248,14 @@ class TestParticipant(Harness):
         actual = Participant.from_username('john').IS_PLURAL
         assert actual == expected
 
+    def test_comparison(self):
+        assert self.alice == self.alice
+        assert not (self.alice != self.alice)
+        assert self.alice != self.bob
+        assert not (self.alice == self.bob)
+        assert self.alice != None
+        assert not (self.alice == None)
+
     def test_cant_take_over_claimed_participant_without_confirmation(self):
         with self.assertRaises(NeedConfirmation):
             self.alice.take_over(('twitter', str(self.bob.id)))
