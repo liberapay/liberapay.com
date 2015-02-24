@@ -1,0 +1,34 @@
+{% macro pages_links(pages_urls) %}
+    <tr>
+        <td>
+            {% if pages_urls.get('prev') %}
+                <a href="?page={{ b64encode(pages_urls['prev']) }}">
+                    ⇠ {{ _("Previous") }}
+                </a>
+            {% endif %}
+        </td>
+        <td style="text-align: right">
+            {% if pages_urls.get('next') %}
+                <a href="?page={{ b64encode(pages_urls['next']) }}">
+                    {{ _("Next") }} ⇢
+                </a>
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            {% if pages_urls.get('first') %}
+                <a href="?page={{ b64encode(pages_urls['first']) }}">
+                    ⇤ {{ _("First") }}
+                </a>
+            {% endif %}
+        </td>
+        <td style="text-align: right">
+            {% if pages_urls.get('last') %}
+                <a href="?page={{ b64encode(pages_urls['last']) }}">
+                    {{ _("Last") }} ⇥
+                </a>
+            {% endif %}
+        </td>
+    </tr>
+{% endmacro %}

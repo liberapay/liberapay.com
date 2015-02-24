@@ -55,6 +55,10 @@ if account:
         <td class="figure">{{ '[hidden]' if p.anonymous_giving else p.giving }}</td>
     </tr>
     {% endfor %}
+    {% if pages_urls %}
+        {% from 'templates/pagination.html' import pages_links with context %}
+        {{ pages_links(pages_urls) }}
+    {% endif %}
 </table>
 {% endif %}
 

@@ -221,38 +221,8 @@ if is_team:
     {% endfor %}
 
     {% if pages_urls %}
-        <tr>
-            <td>
-                {% if pages_urls.get('prev') %}
-                    <a href="?page={{ b64encode(pages_urls['prev']) }}">
-                        ⇠ Previous
-                    </a>
-                {% endif %}
-            </td>
-            <td style="text-align: right">
-                {% if pages_urls.get('next') %}
-                    <a href="?page={{ b64encode(pages_urls['next']) }}">
-                        Next ⇢
-                    </a>
-                {% endif %}
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {% if pages_urls.get('first') %}
-                    <a href="?page={{ b64encode(pages_urls['first']) }}">
-                        ⇤ First
-                    </a>
-                {% endif %}
-            </td>
-            <td style="text-align: right">
-                {% if pages_urls.get('last') %}
-                    <a href="?page={{ b64encode(pages_urls['last']) }}">
-                        Last ⇥
-                    </a>
-                {% endif %}
-            </td>
-        </tr>
+        {% from 'templates/pagination.html' import pages_links with context %}
+        {{ pages_links(pages_urls) }}
     {% endif %}
 
     </tbody>
