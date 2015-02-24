@@ -4,8 +4,9 @@ platform = getattr(website.platforms, request.path['platform'], None)
 if platform is None:
     raise Response(404)
 title = _("Your {0} Friends", platform.display_name)
-account = user.participant.get_account_elsewhere(platform.name)
-friends = account.get_friends()
+if not user.ANON:
+    account = user.participant.get_account_elsewhere(platform.name)
+    friends = account.get_friends()
 [---] text/html
 {% extends "templates/base.html" %}
 {% block content %}
