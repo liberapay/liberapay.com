@@ -42,8 +42,8 @@ if account:
         <th>{{ _('Name') }}</th>
         <th class="figure">{{ _('On Gratipay?') }}</th>
         <th class="figure">{{ _('Supporters') }}</th>
-        <th class="figure">{{ _('Receiving') }}</th>
-        <th class="figure">{{ _('Giving') }}</th>
+        <th class="figure">{{ _('Receives') }}</th>
+        <th class="figure">{{ _('Gives') }}</th>
     </tr>
     {% for friend in friends %}
     {% set p = friend.participant %}
