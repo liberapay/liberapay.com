@@ -90,6 +90,8 @@ CREATE TABLE elsewhere
 , UNIQUE (platform, participant)
  );
 
+\i sql/elsewhere_with_participant.sql
+
 -- https://github.com/gratipay/gratipay.com/issues/951
 CREATE INDEX elsewhere_participant ON elsewhere(participant);
 
@@ -226,52 +228,7 @@ CREATE TABLE communities
 , CHECK (nmembers > 0)
 );
 
-CREATE FUNCTION upsert_community() RETURNS trigger AS $$
-    DECLARE
-        is_member boolean;
-        delta int = CASE WHEN NEW.is_member THEN 1 ELSE -1 END;
-    BEGIN
-        IF (SELECT is_suspicious FROM participants WHERE id = NEW.participant) THEN
-            RETURN NULL;
-        END IF;
-        is_member := (
-            SELECT cur.is_member
-              FROM community_members cur
-             WHERE slug = NEW.slug
-               AND participant = NEW.participant
-          ORDER BY mtime DESC
-             LIMIT 1
-        );
-        IF (is_member IS NULL AND NEW.is_member IS false OR NEW.is_member = is_member) THEN
-            RETURN NULL;
-        END IF;
-        LOOP
-            UPDATE communities
-               SET nmembers = nmembers + delta
-             WHERE slug = NEW.slug
-               AND nmembers + delta > 0;
-            EXIT WHEN FOUND;
-            IF (NEW.is_member) THEN
-                BEGIN
-                    INSERT INTO communities
-                         VALUES (NEW.slug, NEW.name, 1, NEW.ctime);
-                EXCEPTION
-                    WHEN unique_violation THEN
-                        IF (CONSTRAINT_NAME = 'communities_slug_pkey') THEN
-                            CONTINUE; -- Try again
-                        ELSE
-                            RAISE;
-                        END IF;
-                END;
-                EXIT;
-            ELSE
-                DELETE FROM communities WHERE slug = NEW.slug AND nmembers = 1;
-                EXIT WHEN FOUND;
-            END IF;
-        END LOOP;
-        RETURN NEW;
-    END;
-$$ LANGUAGE plpgsql;
+\i sql/upsert_community.sql
 
 CREATE TRIGGER upsert_community BEFORE INSERT ON community_members
     FOR EACH ROW
@@ -318,47 +275,6 @@ CREATE VIEW current_takes AS
               , team
               , mtime DESC
     ) AS anon WHERE amount > 0;
-
-
--- https://github.com/gratipay/gratipay.com/pull/1369
--- The following lets us cast queries to elsewhere_with_participant to get the
--- participant data dereferenced and returned in a composite type along with
--- the elsewhere data.
-CREATE TYPE elsewhere_with_participant AS
-( id            integer
-, platform      text
-, user_id       text
-, user_name     text
-, display_name  text
-, email         text
-, avatar_url    text
-, extra_info    json
-, is_team       boolean
-, token         json
-, participant   participants
- ); -- If Postgres had type inheritance this would be even awesomer.
-
-CREATE OR REPLACE FUNCTION load_participant_for_elsewhere (elsewhere)
-RETURNS elsewhere_with_participant
-AS $$
-    SELECT $1.id
-         , $1.platform
-         , $1.user_id
-         , $1.user_name
-         , $1.display_name
-         , $1.email
-         , $1.avatar_url
-         , $1.extra_info
-         , $1.is_team
-         , $1.token
-         , participants.*::participants
-      FROM participants
-     WHERE participants.username = $1.participant
-          ;
-$$ LANGUAGE SQL;
-
-CREATE CAST (elsewhere AS elsewhere_with_participant)
-    WITH FUNCTION load_participant_for_elsewhere(elsewhere);
 
 
 -- https://github.com/gratipay/gratipay.com/pull/2006
@@ -409,9 +325,7 @@ CREATE TABLE statements
 , UNIQUE (participant, lang)
 );
 
-CREATE FUNCTION enumerate(anyarray) RETURNS TABLE (rank bigint, value anyelement) AS $$
-    SELECT row_number() over() as rank, value FROM unnest($1) value;
-$$ LANGUAGE sql STABLE;
+\i sql/enumerate.sql
 
 -- Index user and community names
 
