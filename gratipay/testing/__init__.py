@@ -19,7 +19,6 @@ from psycopg2 import IntegrityError, InternalError
 
 
 TOP = realpath(join(dirname(dirname(__file__)), '..'))
-SCHEMA = open(join(TOP, "schema.sql")).read()
 WWW_ROOT = str(realpath(join(TOP, 'www')))
 PROJECT_ROOT = str(TOP)
 

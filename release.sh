@@ -66,10 +66,10 @@ if git commit --dry-run &>/dev/null; then git commit -m "update i18n files"; fi
 if [ -e branch.sql ]; then
     # Merge branch.sql into schema.sql
     git rm --cached branch.sql
-    echo | cat branch.sql >>schema.sql
-    echo "branch.sql has been appended to schema.sql"
-    read -p "If you have manual modifications to make to schema.sql do them now, then press Enter to continue... " enter
-    git add schema.sql
+    echo | cat branch.sql >>sql/schema.sql
+    echo "branch.sql has been appended to sql/schema.sql"
+    read -p "Please make the necessary manual modifications to schema.sql now, then press Enter to continue... " enter
+    git add sql/schema.sql
     git commit -m "merge branch.sql into schema.sql"
 
     # Deployment options

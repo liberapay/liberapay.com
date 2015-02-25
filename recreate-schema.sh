@@ -23,8 +23,7 @@ echo "==========================================================================
 echo "Applying schema.sql ..."
 echo 
 
-psql $DATABASE_URL < enforce-utc.sql
-psql $DATABASE_URL < schema.sql
+psql $DATABASE_URL < sql/schema.sql
 
 
 echo "=============================================================================="
