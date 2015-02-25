@@ -19,30 +19,6 @@ from aspen.website import Website
 website = Website([])
 
 
-# Monkey patch aspen.Response
-# ===========================
-
-if hasattr(aspen.Response, 'redirect'):
-    raise Warning('aspen.Response.redirect() already exists')
-def _redirect(response, url):
-    response.code = 302
-    response.headers['Location'] = url
-    raise response
-aspen.Response.redirect = _redirect
-
-if hasattr(aspen.Response, 'set_cookie'):
-    raise Warning('aspen.Response.set_cookie() already exists')
-def _set_cookie(response, *args, **kw):
-    set_cookie(response.headers.cookie, *args, **kw)
-aspen.Response.set_cookie = _set_cookie
-
-if hasattr(aspen.Response, 'erase_cookie'):
-    raise Warning('aspen.Response.erase_cookie() already exists')
-def _erase_cookie(response, *args, **kw):
-    erase_cookie(response.headers.cookie, *args, **kw)
-aspen.Response.erase_cookie = _erase_cookie
-
-
 # Configure renderers
 # ===================
 
@@ -145,3 +121,27 @@ algorithm.functions = [
     timer.end,
     tell_sentry,
 ]
+
+
+# Monkey patch aspen.Response
+# ===========================
+
+if hasattr(aspen.Response, 'redirect'):
+    raise Warning('aspen.Response.redirect() already exists')
+def _redirect(response, url):
+    response.code = 302
+    response.headers['Location'] = url
+    raise response
+aspen.Response.redirect = _redirect
+
+if hasattr(aspen.Response, 'set_cookie'):
+    raise Warning('aspen.Response.set_cookie() already exists')
+def _set_cookie(response, *args, **kw):
+    set_cookie(response.headers.cookie, *args, **kw)
+aspen.Response.set_cookie = _set_cookie
+
+if hasattr(aspen.Response, 'erase_cookie'):
+    raise Warning('aspen.Response.erase_cookie() already exists')
+def _erase_cookie(response, *args, **kw):
+    erase_cookie(response.headers.cookie, *args, **kw)
+aspen.Response.erase_cookie = _erase_cookie
