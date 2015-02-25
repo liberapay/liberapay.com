@@ -401,7 +401,8 @@ Gratipay.payments.cc.submit = function(e) {
                            };
 
     credit_card.expiration_month = val('expiration_month');
-    credit_card.expiration_year = '20' + val('expiration_year');
+    var year = val('expiration_year');
+    credit_card.expiration_year = year.length == 2 ? '20' + year : year;
 
     if (!balanced.card.isCardNumberValid(credit_card.number)) {
         $('button#save').css('opacity', 1);
