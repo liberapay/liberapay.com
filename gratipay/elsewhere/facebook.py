@@ -2,6 +2,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from gratipay.elsewhere import PlatformOAuth2
 from gratipay.elsewhere._extractors import key
+from gratipay.elsewhere._paginators import keys_paginator
 
 
 class Facebook(PlatformOAuth2):
@@ -18,6 +19,7 @@ class Facebook(PlatformOAuth2):
 
     # API attributes
     api_format = 'json'
+    api_paginator = keys_paginator('data', paging='paging', prev='previous')
     api_url = 'https://graph.facebook.com'
     api_user_info_path = '/{user_name}'
     api_user_self_info_path = '/me'

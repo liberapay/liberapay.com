@@ -70,16 +70,18 @@ def header_links_paginator():
     return f
 
 
-def keys_paginator(**kw):
+def keys_paginator(page_key, **kw):
     # https://confluence.atlassian.com/display/BITBUCKET/Version+2#Version2-Pagingthroughobjectcollections
-    page_key = kw.get('page', 'values')
-    total_count_key = kw.get('total_count', 'size')
+    # https://developers.facebook.com/docs/graph-api/using-graph-api/v2.2#paging
+    paging_key = kw.get('paging')
+    total_key = kw.get('total')
     links_keys_map = tuple((k, kw.get(k, k)) for k in links_keys)
     def f(self, response, parsed):
         page = parsed[page_key]
-        links = {k: _strip_prefix(self.api_url, parsed[k2])
+        paging = parsed.get(paging_key, {}) if paging_key else parsed
+        links = {k: _strip_prefix(self.api_url, paging[k2])
                  for k, k2 in links_keys_map
-                 if parsed.get(k2)}
-        total_count = parsed.get(total_count_key, -1) if links else len(page)
+                 if paging.get(k2)}
+        total_count = paging.get(total_key, -1) if links else len(page)
         return page, total_count, links
     return f
