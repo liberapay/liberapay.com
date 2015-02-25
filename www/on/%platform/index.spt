@@ -73,7 +73,7 @@ if account:
     {% endfor %}
     {% if pages_urls %}
         {% from 'templates/pagination.html' import pages_links with context %}
-        {{ pages_links(pages_urls) }}
+        <tr><td colspan="5">{{ pages_links(pages_urls) }}</td></tr>
     {% endif %}
 </table>
 {% endif %}
