@@ -23,6 +23,22 @@ if account:
 [---] text/html
 {% extends "templates/base.html" %}
 {% from 'templates/auth.html' import auth_button with context %}
+
+{% block sidebar %}
+    <div class="avatar">
+        <img src="{{ website.asset('communities.svg') }}">
+    </div>
+    {% set current_page = platform.name %}
+    {% set nav_base = '/on' %}
+    {% set pages = [
+        ('/github/', 'GitHub'),
+        ('/twitter/', 'Twitter'),
+        ('/bitbucket/', 'BitBucket'),
+        ('/google/', 'Google+')
+    ] %}
+    {% include "templates/nav.html" %}
+{% endblock %}
+
 {% block content %}
 
 {% if not account %}
