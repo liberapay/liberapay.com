@@ -46,7 +46,7 @@
 </div>
 
 {% if participant.accepts_tips %}
-{% if (user.ANON or (participant != user.participant)) %}
+{% if participant != user.participant %}
 {% include "templates/your-tip.html" %}
 {% endif %}
 {% endif %}

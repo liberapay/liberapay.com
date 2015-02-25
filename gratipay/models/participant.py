@@ -74,12 +74,12 @@ class Participant(Model, MixinTeam):
     def __eq__(self, other):
         if not isinstance(other, Participant):
             return False
-        return self.username == other.username
+        return self.id == other.id
 
     def __ne__(self, other):
         if not isinstance(other, Participant):
-            return False
-        return self.username != other.username
+            return True
+        return self.id != other.id
 
     def __repr__(self):
         return '<Participant %s>' % repr(self.username)
