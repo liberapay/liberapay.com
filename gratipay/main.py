@@ -101,6 +101,7 @@ algorithm.functions = [
 
     algorithm['apply_typecasters_to_path'],
     algorithm['get_resource_for_request'],
+    algorithm['extract_accept_from_request'],
     algorithm['get_response_for_resource'],
 
     tell_sentry,
