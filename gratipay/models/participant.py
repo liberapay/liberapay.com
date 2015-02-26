@@ -176,6 +176,18 @@ class Participant(Model, MixinTeam):
     def is_claimed(self):
         return self.claimed_time is not None
 
+    @property
+    def closed_time(self):
+        return self.db.one("""
+            SELECT ts AT TIME ZONE 'UTC'
+              FROM events
+             WHERE payload->>'id'=%s
+               AND payload->>'action'='set'
+               AND payload->'values'->>'is_closed'='true'
+          ORDER BY ts DESC
+             LIMIT 1
+        """, (str(self.id),))
+
 
     # Number
     # ======
