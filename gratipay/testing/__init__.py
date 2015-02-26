@@ -15,7 +15,6 @@ from gratipay.main import website
 from gratipay.models.account_elsewhere import AccountElsewhere
 from gratipay.security.user import User, SESSION
 from gratipay.testing.vcr import use_cassette
-from gratipay import wireup
 from psycopg2 import IntegrityError, InternalError
 
 
@@ -146,9 +145,6 @@ class Harness(unittest.TestCase):
 
 
     def make_participant(self, username, **kw):
-        # At this point wireup.db() has been called, but not ...
-        wireup.username_restrictions(self.client.website)
-
         participant = self.db.one("""
             INSERT INTO participants
                         (username, username_lower)
