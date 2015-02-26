@@ -15,7 +15,7 @@ platform = getattr(website.platforms, request.path['platform'], None)
 if platform is None or not getattr(platform, 'api_friends_path', None):
     raise Response(404)
 
-title = _("Your {0} Friends", platform.display_name)
+title = _("Friend Finder")
 
 account = None
 if not user.ANON:
@@ -30,10 +30,7 @@ if account:
 {% extends "templates/base.html" %}
 {% from 'templates/auth.html' import auth_button with context %}
 
-{% block sidebar %}
-    <div class="avatar">
-        <img src="{{ website.asset('communities.svg') }}">
-    </div>
+{% block subnav %}
     {% set current_page = platform.name %}
     {% set nav_base = '/on' %}
     {% set pages = supported_platforms %}
