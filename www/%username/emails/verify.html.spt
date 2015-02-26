@@ -72,7 +72,7 @@ if participant == user.participant:
                 <p>{{ _("The verification code for {0} is bad.",
                         ("<b>%s</b>"|safe) % email) }}</p>
             {% endif %}
-            <p data-email="{{ email|e }}"><button class="resend">{{ _("Resend verification email") }}</button></p>
+            <p data-email="{{ email }}"><button class="resend">{{ _("Resend verification email") }}</button></p>
         {% endif %}
         <a href="/{{ participant.username }}/account/#emails">{{ _("View your email addresses") }}.</a>
     {% endif %}

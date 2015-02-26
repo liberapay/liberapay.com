@@ -102,9 +102,9 @@ else:
         <td class="notes">
         {% if event['recorder'] == None %}
             {{ _("Automatic Withdrawal").lower() }}
-            {% if event['note'] %}&mdash;{{ event['note']|e }}{% endif %}
+            {% if event['note'] %}&mdash;{{ event['note'] }}{% endif %}
         {% elif event['note'] %}
-            &ldquo;{{ event['note']|e }}&rdquo;&mdash;
+            &ldquo;{{ event['note'] }}&rdquo;&mdash;
             <a href="/{{ event['recorder'] }}/">{{ event['recorder'] }}</a>
         {% endif %}
         </td>
@@ -121,9 +121,9 @@ else:
         <td class="notes">
         {% if event['recorder'] == None %}
             {{ _("Automatic Charge").lower() }}
-            {% if event['note'] %}&mdash;{{ event['note']|e }}{% endif %}
+            {% if event['note'] %}&mdash;{{ event['note'] }}{% endif %}
         {% elif event['note'] %}
-            &ldquo;{{ event['note']|e }}&rdquo;&mdash;
+            &ldquo;{{ event['note'] }}&rdquo;&mdash;
             <a href="/{{ event['recorder'] }}/">{{ event['recorder'] }}</a>
         {% endif %}
         {% if event['status'] in (None, 'succeeded') %}

@@ -111,7 +111,7 @@ results
         <ul class="community memberships">
         {% for result in communities %}
             <li>
-                <a href="/for/{{ result.slug|e }}/">{{ result.name }}</a>
+                <a href="/for/{{ result.slug }}/">{{ result.name }}</a>
                 <div class="fine">{{
                     ngettext("{0}{n}{1} Member",
                              "{0}{n}{1} Members",
@@ -131,10 +131,10 @@ results
                         "Found matching user statements",
                         len(statements)) }}</h2>
         {% for result in statements %}
-            <div class="search-result" href="/{{ result.username|e }}/">
+            <div class="search-result" href="/{{ result.username }}/">
                 {{ avatar_img(result) }}
                 <div class="col-right">
-                    <a class="username" href="/{{ result.username|e }}/">{{ result.username }}</a>
+                    <a class="username" href="/{{ result.username }}/">{{ result.username }}</a>
                     {% if len(result.excerpts) == 1 %}
                         <blockquote class="excerpt markdown-output">{{
                             markdown.render(result.excerpts[0].excerpt)

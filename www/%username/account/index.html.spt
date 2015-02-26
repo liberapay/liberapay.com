@@ -26,7 +26,7 @@ emails = participant.get_emails()
                      ("<span class='view'>%s</span>"|safe) % participant.username) }}
                 <button class="edit">{{ _("Edit") }}</button>
                 <form class="edit" action="../username.json" data-display="inline">
-                    <input name="username" value="{{ participant.username|e }}"/>
+                    <input name="username" value="{{ participant.username }}"/>
                     <button class="save">{{ _("Save") }}</button>
                     <button class="cancel">{{ _("Cancel") }}</button>
                     <span class="warning">
@@ -142,8 +142,8 @@ emails = participant.get_emails()
             {% for email in emails %}
                 {% set is_primary = email.address == participant.email_address %}
                 <li class="{{ 'primary' if is_primary }} {{ 'verified' if email.verified }}"
-                    data-email="{{ email.address|e }}">
-                    {{ email.address|e }}
+                    data-email="{{ email.address }}">
+                    {{ email.address }}
                     <span class="label-primary">{{ _("Primary") }}</span>
                     <span class="label-unverified">{{ _("Unverified") }}</span>
                     <button class="remove">{{ _("Remove") }}</button>
