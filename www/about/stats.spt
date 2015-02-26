@@ -155,8 +155,6 @@ def out():
     r['tip_distribution'] = get_tip_distribution()
     return r
 
-[----------------------------------------------------------] application/json via json_dump
-out()
 [----------------------------------------------------------] text/html
 
 {% extends "templates/basic-info.html" %}
@@ -277,3 +275,6 @@ out()
     </div>
 
 {% endblock %}
+
+[----------------------------------------------------------] application/json via json_dump
+out()
