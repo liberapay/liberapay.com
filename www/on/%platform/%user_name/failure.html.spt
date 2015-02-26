@@ -14,11 +14,6 @@ website.db.one( "SELECT * FROM ELSEWHERE WHERE platform=%s AND user_name=%s"
               , default=Response(404)
                )
 
-try:
-    action = request.qs['action']
-except KeyError:
-    raise Response(400)
-
 team = request.qs.get('team', '').lower() == 'true'
 
 title = _("Failure")
@@ -29,20 +24,25 @@ title = _("Failure")
 
     {% if team %}
 
-    <h2>Are you really an administrator of the {{ user_name }} team?</h2>
+    <h2>{{ _("Are you really an administrator of the {0} team?", user_name) }}</h2>
 
-    <p>Your attempt to {{ action }} this account failed because you're
-    logged into {{ platform.display_name }} as someone who isn't an
-    administrator of the {{ user_name }} team. Please sign out
-    and <a href="./">try again</a>.</p>
+    <p>{{ _("Your attempt to claim this account failed because you're logged "
+            "into {0} as someone who isn't an administrator of the {1} team. "
+            "Please sign out and {2}try again{3}.",
+            platform.display_name,
+            user_name,
+            '<a href="./">'|safe,
+            '</a>'|safe) }}</p>
 
     {% else %}
 
-    <h2>Are you really {{ user_name }}?</h2>
+    <h2>{{ _("Are you really {0}?", user_name) }}</h2>
 
-    <p>Your attempt to {{ action }} this account failed because you're
-    logged into {{ platform.display_name }} as someone else. Please sign out
-    and <a href="./">try again</a>.</p>
+    <p>{{ _("Your attempt to claim this account failed because you're logged "
+            "into {0} as someone else. Please sign out and {1}try again{2}.",
+            platform.display_name,
+            '<a href="./">'|safe,
+            '</a>'|safe) }}</p>
 
     {% endif %}
 
