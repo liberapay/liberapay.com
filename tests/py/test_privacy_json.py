@@ -43,7 +43,7 @@ class Tests(Harness):
 
     def test_participant_doesnt_show_up_on_search(self):
         self.hit_privacy('POST', data={'toggle': 'is_searchable'})
-        assert 'alice' not in self.client.GET("/search?q=alice").body
+        assert 'alice' not in self.client.GET("/search.json?q=alice").body
 
     def test_team_participant_does_show_up_on_explore_teams(self):
         alice = Participant.from_username('alice')

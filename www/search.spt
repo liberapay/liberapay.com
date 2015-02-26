@@ -70,9 +70,6 @@ if query:
              LIMIT 10
         """, locals())
 
-[---] application/json via json_dump
-results
-
 [---] text/html
 {% extends "templates/base.html" %}
 {% from 'templates/avatar-url.html' import avatar_url, avatar_img with context %}
@@ -164,3 +161,5 @@ results
     });
 </script>
 {% endblock %}
+[---] application/json via json_dump
+results
