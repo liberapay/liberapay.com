@@ -110,11 +110,13 @@ class Tests2(Harness):
         assert r.code == 403
 
     def test_no_csrf_cookie(self):
-        r = self.client.PxST('/', csrf_token=False)
+        r = self.client.POST('/', csrf_token=False, raise_immediately=False)
         assert r.code == 403
-        assert r.body == REASON_NO_CSRF_COOKIE
+        assert REASON_NO_CSRF_COOKIE in r.body
+        assert b'csrf_token' in r.headers.cookie
 
     def test_bad_csrf_cookie(self):
-        r = self.client.PxST('/', csrf_token=b'bad_token')
+        r = self.client.POST('/', csrf_token=b'bad_token', raise_immediately=False)
         assert r.code == 403
-        assert r.body == REASON_BAD_TOKEN
+        assert REASON_BAD_TOKEN in r.body
+        assert r.headers.cookie[b'csrf_token'].value != 'bad_token'
