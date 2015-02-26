@@ -51,7 +51,7 @@ stop:
 	pkill gunicorn
 
 py: env
-	$(honcho_run) $(env_bin)/python -i -c 'from gratipay.wireup import env, db; db = db(env())'
+	$(honcho_run) $(env_bin)/python -i gratipay/main.py
 
 test-schema: env
 	$(honcho) run -e $(test_env_files) ./recreate-schema.sh
