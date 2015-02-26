@@ -37,6 +37,18 @@ if account:
     {% include "templates/nav.html" %}
 {% endblock %}
 
+{% block sidebar %}
+    <div class="avatar">
+        <img src='{{ website.asset("platforms/%s.png" % platform.name) }}' />
+    </div>
+    {% if account and nfriends > 0 %}
+    <p>
+        You have {{ nfriends }} friends on {{ platform.display_name }}.
+    </p>
+    {% endif %}
+
+{% endblock %}
+
 {% block content %}
 
 {% if not account %}
