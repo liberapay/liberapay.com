@@ -12,8 +12,8 @@ title = str(response.code)
 [----------------------------------------] text/html
 {% extends "templates/base.html" %}
 {% block content %}
-    <p>{{ msg|e }}</p>
-    <pre>{{ err|e }}</pre>
+    <p>{{ msg }}</p>
+    <pre>{{ err }}</pre>
 {% endblock %}
 [----------------------------------------] application/json via json_dump
 { "error_code": response.code

@@ -181,7 +181,7 @@ for p in chain(new_participants, givers, receivers):
             {% for i, participant in enumerate(new_participants, start=1) %}
             <li{% if i > LUXURY %} class="luxury"{% endif %}>
                 <a href="/{{ participant.username }}/" class="mini-user"
-                   data-tip="{{ excerpt_intro(participant.statement)|e }}">
+                   data-tip="{{ excerpt_intro(participant.statement) }}">
                     <span class="inner">
                         <span class="avatar"
                             style="background-image: url('{{ avatar_url(participant) }}')">
@@ -211,7 +211,7 @@ for p in chain(new_participants, givers, receivers):
                 {% else %}
                 <a href="/{{ giver.username }}/"
                    class="mini-user{{ ' anonymous' if giver.anonymous else '' }}"
-                   data-tip="{{ excerpt_intro(giver.statement)|e }}">
+                   data-tip="{{ excerpt_intro(giver.statement) }}">
                     <span class="inner">
                         <span class="avatar" style="background-image: url('{{ avatar_url(giver) }}')">
                         </span>
@@ -241,7 +241,7 @@ for p in chain(new_participants, givers, receivers):
                 {% else %}
                 <a href="/{{ receiver.username }}/"
                    class="mini-user{{ ' anonymous' if receiver.anonymous else '' }}"
-                   data-tip="{{ excerpt_intro(receiver.statement)|e }}">
+                   data-tip="{{ excerpt_intro(receiver.statement) }}">
                     <span class="inner">
                         <span class="avatar"
                             style="background-image: url('{{ avatar_url(receiver) }}')">

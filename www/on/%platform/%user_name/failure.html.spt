@@ -29,18 +29,18 @@ title = _("Failure")
 
     {% if team %}
 
-    <h2>Are you really an administrator of the {{ user_name|e }} team?</h2>
+    <h2>Are you really an administrator of the {{ user_name }} team?</h2>
 
-    <p>Your attempt to {{ action|e }} this account failed because you're
+    <p>Your attempt to {{ action }} this account failed because you're
     logged into {{ platform.display_name }} as someone who isn't an
-    administrator of the {{ user_name|e }} team. Please sign out
+    administrator of the {{ user_name }} team. Please sign out
     and <a href="./">try again</a>.</p>
 
     {% else %}
 
-    <h2>Are you really {{ user_name|e }}?</h2>
+    <h2>Are you really {{ user_name }}?</h2>
 
-    <p>Your attempt to {{ action|e }} this account failed because you're
+    <p>Your attempt to {{ action }} this account failed because you're
     logged into {{ platform.display_name }} as someone else. Please sign out
     and <a href="./">try again</a>.</p>
 

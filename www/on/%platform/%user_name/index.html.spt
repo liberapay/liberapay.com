@@ -47,7 +47,7 @@ if is_team:
 
 {% block heading %}
     <h1>{{ platform.name }} /
-        <a href="{{ account.html_url|e}}">{{ user_name|e }}</a>
+        <a href="{{ account.html_url}}">{{ user_name }}</a>
     </h1>
 {% endblock %}
 
@@ -62,7 +62,7 @@ if is_team:
 {% block sidebar %}
 
 <div class="avatar">
-    <a href="{{ account.html_url|e}}">{{ avatar_img(account) }}</a>
+    <a href="{{ account.html_url}}">{{ avatar_img(account) }}</a>
 </div>
 
 <div class="mono">
@@ -102,7 +102,7 @@ if is_team:
         account, you can unlock it to allow people to pledge tips to your team
         on Gratipay.</p>
     {% else %}
-        <p>If you are <a href="{{ account.html_url|e}}">{{ user_name|e }}</a>
+        <p>If you are <a href="{{ account.html_url}}">{{ user_name }}</a>
         on {{ platform.name }}, you can unlock your account to allow people
         to pledge tips to you on Gratipay.</p>
     {% endif %}
@@ -114,7 +114,7 @@ if is_team:
   {% elif is_team %}
 
     {% if allow_team_connect %}
-        <h2>{{ user_name|e }} has not joined Gratipay.</h2>
+        <h2>{{ user_name }} has not joined Gratipay.</h2>
         <p>Are you an administrator of this {{ platform.display_name }} team
         account? Connect it to your Gratipay account.</p>
         {% call auth_button(platform.name, 'connect', user_name) %}
@@ -124,7 +124,7 @@ if is_team:
 
   {% else %}
 
-    <h2>{{ user_name|e }} has not joined Gratipay.</h2>
+    <h2>{{ user_name }} has not joined Gratipay.</h2>
 
     {% if platform in website.signin_platforms or not user.ANON %}
         {% if user.ANON %}
@@ -170,7 +170,7 @@ if is_team:
 
     {% if allow_pledges and members %}
         <h2>
-            {{ user_name|e }} {{ team_description }}
+            {{ user_name }} {{ team_description }}
             {% if nmembers > 0 %}
                 {{ nmembers }} public member{{ '' if nmembers == 1 else 's' }}
             {% endif %}
@@ -190,7 +190,7 @@ if is_team:
                 <td>
                     <a href="/{{ member.participant.username }}/">
                         {{ avatar_img(member.participant) }}
-                        {{member.participant.username|e}}
+                        {{member.participant.username}}
                     </a>
                 </td>
                 <td>
@@ -202,9 +202,9 @@ if is_team:
                 </td>
             {% else %}
                 <td>
-                    <a href="/on/{{platform.name}}/{{member.user_name|e}}/">
+                    <a href="/on/{{platform.name}}/{{member.user_name}}/">
                         {{ avatar_img(member) }}
-                        {{member.user_name|e}}
+                        {{member.user_name}}
                     </a>
                 </td>
                 <td>
