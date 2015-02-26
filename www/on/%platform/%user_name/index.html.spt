@@ -27,11 +27,13 @@ if is_team:
     members = AccountElsewhere.get_many(platform.name, members)
     if not members:
         nmembers = 0
-        team_description = 'is a private team'
+        team_description = _("{0} is a private team", user_name)
     elif nmembers == -1:
-        team_description = 'is a big team'
+        team_description = _("{0} is a big team", user_name)
     else:
-        team_description = 'is a team with'
+        team_description = ngettext("{0} is a team with {n} public member",
+                                    "{0} is a team with {n} public members",
+                                    nmembers, user_name)
     allow_team_connect = platform.allows_team_connect
     if user.ANON or not user.participant.IS_PLURAL:
         allow_team_connect = False
@@ -98,44 +100,47 @@ if is_team:
   {% if locked %}
 
     {% if is_team %}
-        <p>If you are an administrator of this {{ platform.display_name }} team
-        account, you can unlock it to allow people to pledge tips to your team
-        on Gratipay.</p>
+        <p>{{ _("If you are an administrator of this {0} team account, you can "
+                "unlock it to allow people to pledge tips to your team on "
+                "Gratipay.",
+                platform.display_name) }}</p>
     {% else %}
-        <p>If you are <a href="{{ account.html_url}}">{{ user_name }}</a>
-        on {{ platform.name }}, you can unlock your account to allow people
-        to pledge tips to you on Gratipay.</p>
+        <p>{{ _("If you are {0} on {1}, you can unlock your account to allow "
+                "people to pledge tips to you on Gratipay.",
+                '<a href="%s">%s</a>'|safe % (account.html_url, user_name),
+                platform.display_name) }}</p>
     {% endif %}
 
     {% call auth_button(platform.name, 'unlock', user_name) %}
-        Unlock
+        {{ _("Unlock") }}
     {% endcall %}
 
   {% elif is_team %}
 
     {% if allow_team_connect %}
-        <h2>{{ user_name }} has not joined Gratipay.</h2>
-        <p>Are you an administrator of this {{ platform.display_name }} team
-        account? Connect it to your Gratipay account.</p>
+        <h2>{{ _("{0} has not joined Gratipay.", user_name) }}</h2>
+        <p>{{ _("Are you an administrator of this {0} team account? Connect it "
+                "to your Gratipay account.",
+                platform.display_name) }}</p>
         {% call auth_button(platform.name, 'connect', user_name) %}
-            Connect team account
+            {{ _("Connect team account") }}
         {% endcall %}
     {% endif %}
 
   {% else %}
 
-    <h2>{{ user_name }} has not joined Gratipay.</h2>
+    <h2>{{ _("{0} has not joined Gratipay.", user_name) }}</h2>
 
     {% if platform in website.signin_platforms or not user.ANON %}
         {% if user.ANON %}
-            <p>Is this you? We never collect money for you unless you join.</p>
+            <p>{{ _("Is this you? We never collect money for you unless you join.") }}</p>
             {% call auth_button(platform.name, 'opt-in', user_name) %}
-                Join Gratipay
+                {{ _("Join Gratipay") }}
             {% endcall %}
         {% else %}
-            <p>Is this yours? Connect it to your Gratipay account.</p>
+            <p>{{ _("Is this yours? Connect it to your Gratipay account.") }}</p>
             {% call auth_button(platform.name, 'connect', user_name) %}
-                Connect
+                {{ _("Connect") }}
             {% endcall %}
         {% endif %}
     {% endif %}
@@ -144,24 +149,26 @@ if is_team:
 
   {% if user.ANON %}
 
-    <h2>What is Gratipay?</h2>
+    <h2>{{ _("What is Gratipay?") }}</h2>
 
-    <p>Gratipay is a way to thank and support your favorite artists, musicians,
-    writers, programmers, etc. by setting up a small weekly cash gift to them.
-    <a href="/about/">Read more ...</a></p>
+    <p>{{ _("Gratipay is a way to thank and support your favorite artists, "
+            "musicians, writers, programmers, etc. by setting up a small weekly "
+            "cash gift to them.") }}
+    <a href="/about/">{{ _("Learn more") }}</a></p>
 
   {% endif %}
 
   {% if user.ANON and allow_pledges %}
 
-    <h2>Don't like what you see?</h2>
+    <h2>{{ _("Don't like what you see?") }}</h2>
 
-    <p>If you are an owner of this {{ platform.display_name }} account, you can
-    explicitly opt out of Gratipay by locking it. We don't allow new pledges to
-    locked accounts.</p>
+    <p>{{ _("If you are an owner of this {0} account, you can explicitly opt "
+            "out of Gratipay by locking it. We don't allow new pledges to "
+            "locked accounts.",
+            platform.display_name) }}</p>
 
     {% call auth_button(platform.name, 'lock', user_name) %}
-        Lock
+        {{ _("Lock") }}
     {% endcall %}
 
   {% endif %}
@@ -169,17 +176,12 @@ if is_team:
   {% if is_team and not locked %}
 
     {% if allow_pledges and members %}
-        <h2>
-            {{ user_name }} {{ team_description }}
-            {% if nmembers > 0 %}
-                {{ nmembers }} public member{{ '' if nmembers == 1 else 's' }}
-            {% endif %}
-        </h2>
+        <h2>{{ team_description }}</h2>
     {% endif %}
 
     {% if members %}
     <table id="members">
-    <thead><tr><th>Member</th><th>Status</th></tr></thead>
+    <thead><tr><th>{{ _("Member") }}</th><th>{{ _("Status") }}</th></tr></thead>
     <tbody>
 
     {% for member in members %}
@@ -195,9 +197,9 @@ if is_team:
                 </td>
                 <td>
                     {% if declines_gifts %}
-                        declines gifts (is a patron)
+                        {{ _("declines gifts") }}
                     {% else %}
-                        accepts gifts
+                        {{ _("accepts gifts") }}
                     {% endif %}
                 </td>
             {% else %}
@@ -209,9 +211,9 @@ if is_team:
                 </td>
                 <td>
                     {% if not member.participant.accepts_tips %}
-                        declines gifts (opted out)
+                        {{ _("opted out of Gratipay") }}
                     {% else %}
-                        hasn't joined Gratipay yet
+                        {{ _("hasn't joined Gratipay yet") }}
                     {% endif %}
                 </td>
             {% endif %}
