@@ -44,8 +44,15 @@
 
     {% if participant.claimed_time %}
     <p>{{ _('Joined') }} {{ to_age(participant.claimed_time, add_direction=True) }}.</p>
+    {% elif participant.is_closed %}
+    <p>Closed {{ to_age(participant.closed_time, add_direction=True) }}.</p>
     {% else %}
-    <p>This account is {{ 'closed' if participant.is_closed else 'archived' }}.</p>
+    {% set absorption = website.db.one( "select * from absorptions where archived_as=%s"
+                                      , (participant.username,)
+                                       ) %}
+    <p>Formerly {{ absorption.absorbed_was }}.</p>
+    <p>Absorbed by <a href="/{{ absorption.absorbed_by }}/">{{ absorption.absorbed_by }}</a>
+    {{ to_age(absorption.timestamp, add_direction=True) }}.<p>
     {% endif %}
 </div>
 
