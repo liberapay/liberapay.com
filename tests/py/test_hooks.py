@@ -1,6 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 from base64 import b64encode
+import json
 
 from gratipay import wireup
 from gratipay.security.user import SESSION
@@ -102,6 +103,11 @@ class Tests(Harness):
 
 
 class Tests2(Harness):
+
+    def test_accept_header_is_respected(self):
+        r = self.client.GET('/about/stats', HTTP_ACCEPT=b'application/json')
+        assert r.headers['Content-Type'].startswith('application/json')
+        json.loads(r.body)
 
     def test_error_spt_works(self):
         r = self.client.POST('/', csrf_token=False, raise_immediately=False)
