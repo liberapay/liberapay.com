@@ -4,7 +4,7 @@ We take the security of our systems seriously, and we value the security communi
 
 **Guidelines**  
 
-We require that all researchers:
+We ask that all researchers:
 * Make every effort to avoid privacy violations, degradation of user experience, disruption to production systems, and destruction of data during security testing;
 * Perform research only within the scope set out below; 
 * Use the identified communication channels to report vulnerability information to us; and
