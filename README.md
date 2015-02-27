@@ -343,8 +343,8 @@ We write SQL, specifically the [PostgreSQL
 variant](http://www.postgresql.org/docs/9.3/static/). We keep our database
 schema in
 [`schema.sql`](https://github.com/gratipay/gratipay.com/blob/master/sql/schema.sql),
-and we write schema changes for each PR branch in a `branch.sql` file, which
-then gets run against production and merged into `schema.sql` during
+and we write schema changes for each PR branch in a `sql/branch.sql` file, which
+then gets run against production and merged into `sql/schema.sql` during
 deployment.
 
 

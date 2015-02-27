@@ -30,8 +30,8 @@ echo "==========================================================================
 echo "Looking for branch.sql ..."
 echo 
 
-if [ -f branch.sql ]
-then psql $DATABASE_URL < branch.sql
+if [ -f sql/branch.sql ]
+then psql $DATABASE_URL < sql/branch.sql
 else 
     echo "None found. That's cool. You only need a branch.sql file if you want to include"
     echo "schema changes with your pull request."
