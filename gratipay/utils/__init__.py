@@ -4,7 +4,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from datetime import datetime, timedelta
 
-from aspen import Response
+from aspen import Response, json
 from aspen.utils import to_rfc822, utcnow
 import gratipay
 from postgres.cursors import SimpleCursorBase
@@ -180,3 +180,9 @@ def filter_profile_subnav(user, participant, pages):
         or user.ADMIN:
             out.append((foo, bar, show_them, show_others))
     return out
+
+
+def to_javascript(obj):
+    """For when you want to inject an object into a <script> tag.
+    """
+    return json.dumps(obj).replace('</', '<\\/')

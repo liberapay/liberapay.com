@@ -1,4 +1,4 @@
-from gratipay.utils import get_participant
+from gratipay.utils import get_participant, to_javascript
 [---]
 participant = get_participant(state, restrict=True)
 title = _("Close Account")
@@ -157,7 +157,7 @@ if request.method == 'POST':
 {% if error %}
     <script>
         $(function () {
-            Gratipay.notification("{{ error.replace('"', '\\"') }}", 'error', -1)
+            Gratipay.notification({{ to_javascript(error)|safe }}, 'error', -1)
         });
     </script>
 {% endif %}
