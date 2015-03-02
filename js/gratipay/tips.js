@@ -36,8 +36,8 @@ Gratipay.tips.init = function() {
 Gratipay.tips.initSupportGratipay = function() {
     $('.support-gratipay button').click(function() {
         var amount = parseFloat($(this).attr('data-amount'), 10);
-        Gratipay.tips.set('Gratipay', amount, function() {
-            Gratipay.notification("Thank you so much for supporting Gratipay! :D", 'success');
+        Gratipay.tips.set('Gratipay', amount, function(data) {
+            Gratipay.notification(data.msg, 'success');
             $('.support-gratipay').slideUp();
 
             // If you're on your own giving page ...

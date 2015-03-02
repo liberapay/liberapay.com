@@ -1,3 +1,4 @@
+# encoding: utf8
 """Show information about a single participant. It might be you!
 """
 from gratipay.utils import get_participant
@@ -20,7 +21,8 @@ subhead = _("Team Members")
 {% endblock %}
 
 {% block content %}
-<table id="team" class="table">
+<table id="team" class="table" data-updating="{{ _('Updating…') }}">
+    <thead>
     <tr>
       <th></th>
       <th>Member</th>
@@ -56,6 +58,8 @@ subhead = _("Team Members")
       </td>
     </tr>
     {% endif %}
+    </thead>
+    <tfoot><tr><td colspan=6><div class="loading-indicator"/></td></tr></foot>
     <tbody id="team-members"></tbody>
 </table>
 {% endblock %}

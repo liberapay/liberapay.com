@@ -1,16 +1,11 @@
 Gratipay.team = (function() {
     function init() {
-        var $team = $('#team');
-
-        var $indicator = $('<div class="loading-indicator"/>');
-        $indicator.appendTo($team);
-
         $('#lookup-container form').submit(add);
         $('#lookup-results').on('click', 'li', selectLookupResult);
         $('#query').focus().keyup(lookup);
 
         jQuery.get("index.json").success(function(members) {
-            $indicator.remove();
+            $('.loading-indicator').remove();
             drawRows(members);
         });
     }
@@ -44,7 +39,7 @@ Gratipay.team = (function() {
 
     function drawRows(members) {
         nmembers = members.length - 1; // includes the team itself, which we don't
-                                                                     // want to enumerate
+                                       // want to enumerate
         var rows = [];
 
         if (nmembers === 0) {
@@ -127,7 +122,7 @@ Gratipay.team = (function() {
         e.preventDefault();
         e.stopPropagation();
         var query = $('#query').val();
-        setTake(query, '0.01', function() { Gratipay.notification('Member added!', 'success'); });
+        setTake(query, '0.01');
         $('#lookup-results').empty();
         $('#query').val('').focus();
         return false;
@@ -137,8 +132,7 @@ Gratipay.team = (function() {
         e.preventDefault();
         e.stopPropagation();
         var membername = $(e.target).attr('data-username');
-        if (confirm("Remove " + membername + " from this team?"))
-            setTake(membername, '0.00', function() { Gratipay.notification('Member removed!'); });
+        setTake(membername, '0.00');
         return false;
     }
 
@@ -153,6 +147,7 @@ Gratipay.team = (function() {
     }
 
     function resetTake() {
+        $('#take').show().parent().find('.updating').remove();
         var _ = $('#take input');
         _.val(_.attr('data-take')).blur();
     }
@@ -163,52 +158,38 @@ Gratipay.team = (function() {
         var frm = $('#take'), _ = $('input', frm);
         var username = _.attr('data-username'),
                 take = _.val();
-        if (take.search(/^\d+\.?\d*$/) !== 0)
-            Gratipay.notification("Bad input! Must be a number.", 'error');
-        else
-        {
-            var callback = function(d) {
-                var newTake = $.grep(d, function(row) { return row.username == username })[0].take;
-                if ( take == newTake)
-                    Gratipay.notification('Updated your take!', 'success');
-                else
-                    Gratipay.notification('You cannot exceed double of last week. Updated your take to ' + newTake + '.', 'error');
-
-                // Have a little fun if updating the user's take results in the team balance
-                // equaling $0.01 or $1.00
-                var balance = $('.figure.balance').last().text();
-                if (localStorage && !localStorage.lastSushi && (balance == '0.01' || balance == '1.00')) {
-                    Gratipay.notification('Achievement Unlocked: The Last Sushi Roll', 'success');
-                    localStorage.lastSushi = true;
-                }
-            };
-            if (parseFloat(take) === 0) {
-                if (!confirm("Remove yourself from this team?")) {
-                    resetTake();
-                    return false;
-                }
-                callback = function() { Gratipay.notification('Removed!'); };
-            }
-            var $updating = $('<span class="updating">Updating...</span>');
-            $('#take').parent().html($updating)
-            setTake(username, take, callback);
-        }
+        setTake(username, take);
         return false;
     }
 
-    function setTake(username, take, callback) {
-        callback = callback || function() {};
+    function setTake(username, take, confirmed) {
+        if ($('#take').parent().find('.updating').length == 0) {
+            var $updating = $('<span class="updating"></span>');
+            $updating.text($('#team').data('updating'));
+            $('#take').hide().parent().append($updating);
+        }
 
-        // The members.json endpoint takes a list of member objects so that it
-        // can be updated programmatically in bulk (as with tips.json. From
-        // this UI we only ever change one at a time, however.
+        var data = {take: take};
+        if (confirmed) data.confirmed = true;
 
         jQuery.ajax(
                 { type: 'POST'
                 , url: username + ".json"
-                , data: {take: take}
-                , success: function(d) { drawRows(d); callback(d); }
-                , error: Gratipay.error
+                , data: data
+                , success: function(d) {
+                    if (d.confirm) {
+                        if (confirm(d.confirm)) {
+                            return setTake(username, take, true)
+                        } else {
+                            return resetTake()
+                        }
+                    }
+                    if(d.success) {
+                        Gratipay.notification(d.success, 'success');
+                    }
+                    drawRows(d.members);
+                }
+                , error: [resetTake, Gratipay.error]
                  });
     }
 
