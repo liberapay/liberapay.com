@@ -13,7 +13,16 @@ Gratipay.payments = {};
 // Common code
 // ===========
 
+Gratipay.payments.init = function() {
+    Gratipay.participantId = participantId;
+    $('#delete form').submit(Gratipay.payments.submitDeleteForm);
 
+    // Lazily depend on Balanced.
+    var balanced_js = "https://js.balancedpayments.com/1.1/balanced.min.js";
+    jQuery.getScript(balanced_js, function() {
+        $('input[type!="hidden"]').eq(0).focus();
+    }).fail(Gratipay.error);
+}
 
 Gratipay.payments.submitDeleteForm = function(e) {
     var item = $("#payout").length ? "bank account" : "credit card";
@@ -65,17 +74,9 @@ Gratipay.payments.onSuccess = function(data) {
 
 Gratipay.payments.ba = {};
 
-Gratipay.payments.ba.init = function(balanced_uri, participantId) {
-    Gratipay.participantId = participantId;
-    $('#delete form').submit(Gratipay.payments.submitDeleteForm);
+Gratipay.payments.ba.init = function(participantId) {
+    Gratipay.payments.init();
     $('#payout').submit(Gratipay.payments.ba.submit);
-
-    // Lazily depend on Balanced.
-    var balanced_js = "https://js.balancedpayments.com/1.1/balanced.min.js";
-    jQuery.getScript(balanced_js, function() {
-        Gratipay.havePayouts = true;
-        $('input[type!="hidden"]').eq(0).focus();
-    });
 };
 
 Gratipay.payments.ba.submit = function (e) {
@@ -200,17 +201,9 @@ Gratipay.payments.ba.handleResponse = function (response) {
 
 Gratipay.payments.cc = {};
 
-Gratipay.payments.cc.init = function(balanced_uri, participantId) {
-    Gratipay.participantId = participantId;
-    $('#delete form').submit(Gratipay.payments.submitDeleteForm);
+Gratipay.payments.cc.init = function(participantId) {
+    Gratipay.payments.init();
     $('form#payment').submit(Gratipay.payments.cc.submit);
-
-    // Lazily depend on Balanced.
-    var balanced_js = "https://js.balancedpayments.com/1.1/balanced.min.js";
-    jQuery.getScript(balanced_js, function() {
-        Gratipay.havePayments = true;
-        $('input[type!="hidden"]').eq(0).focus();
-    }).fail(Gratipay.error);
     Gratipay.payments.cc.formatInputs(
         $('#card_number'),
         $('#expiration_month'),

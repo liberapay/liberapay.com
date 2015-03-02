@@ -50,7 +50,7 @@ title = _("Credit Card")
 <script>
     $(document).ready(function()
     {
-        Gratipay.payments.cc.init("{{ balanced.Marketplace.my_marketplace.uri }}", "{{ user.participant.username }}");
+        Gratipay.payments.cc.init("{{ user.participant.username }}");
         $('#country').chosen();
     });
 </script>
