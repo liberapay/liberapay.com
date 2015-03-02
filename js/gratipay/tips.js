@@ -53,7 +53,7 @@ Gratipay.tips.initSupportGratipay = function() {
         event.preventDefault();
         jQuery.post('/ride-free.json')
             .success(function() { $('.support-gratipay').slideUp(); })
-            .fail(function() { Gratipay.notification("Sorry, there was an error.", "failure"); })
+            .fail(Gratipay.error)
     });
 };
 
@@ -82,8 +82,5 @@ Gratipay.tips.set = function(tippee, amount, callback) {
         if (callback) callback(data);
         Gratipay.tips.afterTipChange(data);
     })
-    .fail(function(e) {
-        Gratipay.notification('Sorry, something went wrong while changing your tip: ' + e.responseJSON.error_message_long + '. :(', 'error');
-        console.log.apply(console, arguments);
-    });
+    .fail(Gratipay.error);
 };

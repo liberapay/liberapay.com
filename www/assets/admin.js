@@ -12,9 +12,7 @@ $(document).ready(function() {
                 $('.avatar').toggleClass('is-suspicious', data.is_suspicious);
                 $('.is-suspicious-label input').prop('checked', data.is_suspicious);
             },
-            error: function(r) {
-                Gratipay.notification(r.responseJSON.error_message_long || 'Failure', 'error');
-            },
+            error: Gratipay.error,
         });
     });
 });

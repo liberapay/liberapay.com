@@ -34,11 +34,7 @@ Gratipay.payments.submitDeleteForm = function(e) {
         , success: function() {
             window.location.href = '/' + slug + '.html';
           }
-        , error: function(x,y,z) {
-            select(cur);
-            Gratipay.notification("Sorry, something went wrong deleting your " + item + ". :(", 'error');
-            console.log(x,y,z);
-          }
+        , error: Gratipay.error
          }
     );
     return false;
@@ -216,7 +212,7 @@ Gratipay.payments.cc.init = function(balanced_uri, participantId) {
     jQuery.getScript(balanced_js, function() {
         Gratipay.havePayments = true;
         $('input[type!="hidden"]').eq(0).focus();
-    });
+    }).fail(Gratipay.error);
     Gratipay.payments.cc.formatInputs(
         $('#card_number'),
         $('#expiration_month'),

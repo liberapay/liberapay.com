@@ -208,12 +208,7 @@ Gratipay.team = (function() {
                 , url: username + ".json"
                 , data: {take: take}
                 , success: function(d) { drawRows(d); callback(d); }
-                , error: function(xhr) {
-                        switch (xhr.status) {
-                            case 404: Gratipay.notification("Unknown user!", 'error'); break;
-                            default: Gratipay.notification("Problem! " + xhr.status, 'error');
-                        }
-                    }
+                , error: Gratipay.error
                  });
     }
 
