@@ -75,7 +75,7 @@ def with_others(obj):
         <div class="col0">
             {% if statement %}
             <h2>{{ _("Statement") }}</h2>
-            <div class="statement markdown-output">
+            <div class="statement profile-statement">
                 {{ markdown.render(statement) }}
             </div>
             {% endif %}

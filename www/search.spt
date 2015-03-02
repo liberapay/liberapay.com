@@ -133,7 +133,7 @@ if query:
                 <div class="col-right">
                     <a class="username" href="/{{ result.username }}/">{{ result.username }}</a>
                     {% if len(result.excerpts) == 1 %}
-                        <blockquote class="excerpt markdown-output">{{
+                        <blockquote class="excerpt profile-statement">{{
                             markdown.render(result.excerpts[0].excerpt)
                         }}</blockquote>
                     {% endif %}
