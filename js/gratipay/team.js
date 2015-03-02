@@ -163,7 +163,7 @@ Gratipay.team = (function() {
     }
 
     function setTake(username, take, confirmed) {
-        if ($('#take').parent().find('.updating').length == 0) {
+        if ($('#take').parent().find('.updating').length === 0) {
             var $updating = $('<span class="updating"></span>');
             $updating.text($('#team').data('updating'));
             $('#take').hide().parent().append($updating);
