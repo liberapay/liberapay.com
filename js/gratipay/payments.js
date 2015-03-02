@@ -13,9 +13,7 @@ Gratipay.payments = {};
 // Common code
 // ===========
 
-Gratipay.payments.havePayments = false;
 
-Gratipay.payments.processorAttempts = 0;
 
 Gratipay.payments.submitDeleteForm = function(e) {
     var item = $("#payout").length ? "bank account" : "credit card";
@@ -351,18 +349,6 @@ Gratipay.payments.cc.submit = function(e) {
     e.preventDefault();
     $('button#save').css('opacity', 0.5);
     Gratipay.forms.clearFeedback();
-
-    if (!Gratipay.havePayments) {
-        if (Gratipay.paymentProcessorAttempts++ === 50)
-            Gratipay.notification( "Gah! Apparently we suck. If you're really motivated, call "
-                 + "me (Chad) at 412-925-4220 and we'll figure this out. "
-                 + "Sorry. :-("
-                  );
-        else
-            setTimeout(Gratipay.submitPaymentForm, 200);
-        return false;
-    }
-
 
     // Adapt our form lingo to balanced nomenclature.
 
