@@ -26,7 +26,7 @@ from gratipay.models import check_db
 from psycopg2 import IntegrityError
 
 
-with open('fake_payday.sql') as f:
+with open('sql/fake_payday.sql') as f:
     FAKE_PAYDAY = f.read()
 
 

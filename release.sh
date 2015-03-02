@@ -63,13 +63,13 @@ if git commit --dry-run &>/dev/null; then git commit -m "update i18n files"; fi
 
 
 # Check for a branch.sql
-if [ -e branch.sql ]; then
+if [ -e sql/branch.sql ]; then
     # Merge branch.sql into schema.sql
-    git rm --cached branch.sql
-    echo | cat branch.sql >>schema.sql
-    echo "branch.sql has been appended to schema.sql"
-    read -p "If you have manual modifications to make to schema.sql do them now, then press Enter to continue... " enter
-    git add schema.sql
+    git rm --cached sql/branch.sql
+    echo | cat sql/branch.sql >>sql/schema.sql
+    echo "sql/branch.sql has been appended to sql/schema.sql"
+    read -p "Please make the necessary manual modifications to schema.sql now, then press Enter to continue... " enter
+    git add sql/schema.sql
     git commit -m "merge branch.sql into schema.sql"
 
     # Deployment options
@@ -93,11 +93,11 @@ git tag $version
 
 # Deploy to Heroku
 [ "$maintenance" = "yes" ] && heroku maintenance:on -a gratipay
-[ "$run_sql" = "before" ] && heroku pg:psql -a gratipay <branch.sql
+[ "$run_sql" = "before" ] && heroku pg:psql -a gratipay <sql/branch.sql
 git push --force heroku master
 [ "$maintenance" = "yes" ] && heroku maintenance:off -a gratipay
-[ "$run_sql" = "after" ] && heroku pg:psql -a gratipay <branch.sql
-rm -f branch.sql
+[ "$run_sql" = "after" ] && heroku pg:psql -a gratipay <sql/branch.sql
+rm -f sql/branch.sql
 
 
 # Push to GitHub

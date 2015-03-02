@@ -20,22 +20,21 @@ echo "CREATE SCHEMA public" | psql $DATABASE_URL
 
 
 echo "=============================================================================="
-echo "Applying schema.sql ..."
+echo "Applying sql/schema.sql ..."
 echo 
 
-psql $DATABASE_URL < enforce-utc.sql
-psql $DATABASE_URL < schema.sql
+psql $DATABASE_URL < sql/schema.sql
 
 
 echo "=============================================================================="
-echo "Looking for branch.sql ..."
+echo "Looking for sql/branch.sql ..."
 echo 
 
-if [ -f branch.sql ]
-then psql $DATABASE_URL < branch.sql
+if [ -f sql/branch.sql ]
+then psql $DATABASE_URL < sql/branch.sql
 else 
-    echo "None found. That's cool. You only need a branch.sql file if you want to include"
-    echo "schema changes with your pull request."
+    echo "None found. That's cool. You only need a sql/branch.sql file if you want to "
+    echo "include schema changes with your pull request."
 fi
 
 echo 

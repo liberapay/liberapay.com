@@ -342,9 +342,9 @@ Modifying the Database
 We write SQL, specifically the [PostgreSQL
 variant](http://www.postgresql.org/docs/9.3/static/). We keep our database
 schema in
-[`schema.sql`](https://github.com/gratipay/gratipay.com/blob/master/schema.sql),
-and we write schema changes for each PR branch in a `branch.sql` file, which
-then gets run against production and appended to `schema.sql` during
+[`schema.sql`](https://github.com/gratipay/gratipay.com/blob/master/sql/schema.sql),
+and we write schema changes for each PR branch in a `sql/branch.sql` file, which
+then gets run against production and merged into `sql/schema.sql` during
 deployment.
 
 
@@ -397,13 +397,7 @@ Once Postgres is set up, run:
 
     $ make schema
 
-Which populates the database named by `DATABASE_URL` with the schema from `schema.sql`.
-
-The `schema.sql` file should be considered append-only. The idea is that it's the log
-of DDL that we've run against the production database. You should never change
-commands that have already been run. New DDL will be (manually) run against the
-production database as part of deployment.
-
+Which populates the database named by `DATABASE_URL` with the schema from `sql/schema.sql`.
 
 ### Example data
 

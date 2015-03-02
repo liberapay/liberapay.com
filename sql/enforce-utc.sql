@@ -30,6 +30,5 @@
 
 DO $$
 BEGIN
-EXECUTE '
-ALTER DATABASE "' || current_database() || '" SET timezone TO ''UTC'' ';
+EXECUTE 'ALTER DATABASE "' || current_database() || '" SET timezone TO ''UTC'' ';
 END; $$;
