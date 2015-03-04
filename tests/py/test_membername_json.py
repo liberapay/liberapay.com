@@ -53,7 +53,7 @@ class TestMembernameJson(Harness):
 
     def test_post_can_add_member_to_team(self):
         response = self.client.POST('/team/members/alice.json', {'take': '0.01'}, auth_as='team')
-        data = json.loads(response.body)
+        data = json.loads(response.body)['members']
         assert len(data) == 2
 
         for rec in data:
@@ -62,14 +62,16 @@ class TestMembernameJson(Harness):
     def test_post_can_remove_member_from_team(self):
         response = self.client.POST('/team/members/alice.json', {'take': '0.01'}, auth_as='team')
 
-        data = json.loads(response.body)
+        data = json.loads(response.body)['members']
         assert len(data) == 2
 
         for rec in data:
             assert rec['username'] in ('team', 'alice'), rec['username']
 
-        response = self.client.POST('/team/members/alice.json', {'take': '0.00'}, auth_as='team')
-        data = json.loads(response.body)
+        response = self.client.POST('/team/members/alice.json',
+                                    {'take': '0.00', 'confirmed': True},
+                                    auth_as='team')
+        data = json.loads(response.body)['members']
         assert len(data) == 1
         assert data[0]['username'] == 'team'
 

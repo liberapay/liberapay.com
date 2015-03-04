@@ -17,6 +17,18 @@ Gratipay.init = function() {
     Gratipay.tips.initSupportGratipay();
 };
 
+Gratipay.error = function(jqXHR, textStatus, errorThrown) {
+    var msg = null;
+    try {
+        msg = JSON.parse(jqXHR.responseText).error_message_long;
+    } catch(exc) {}
+    if(!msg) {
+        msg = "An error occurred (" + (errorThrown || textStatus) + ").\n" +
+              "Please contact support@gratipay.com if the problem persists.";
+    }
+    Gratipay.notification(msg, 'error', -1);
+}
+
 
 // each/jsoncss/jsonml
 // ===================
@@ -112,9 +124,7 @@ Gratipay.signOut = function() {
             success: function() {
                 window.location.href = window.location.href;
             },
-            error: function() {
-                Gratipay.notification('Failed to sign out', 'error');
-            }
+            error: Gratipay.error
         });
     });
 };

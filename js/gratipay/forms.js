@@ -141,11 +141,10 @@ Gratipay.forms.jsEdit = function(params) {
                 }).call(this, d);
                 if (r !== false) finish_editing();
             },
-            error: params.error || function (e) {
-                $inputs.prop('disabled', false);
-                error_message = JSON.parse(e.responseText).error_message_long;
-                Gratipay.notification(error_message || "Failure", 'error');
-            },
+            error: params.error || [
+                function () { $inputs.prop('disabled', false); },
+                Gratipay.error,
+            ],
         });
     }
 

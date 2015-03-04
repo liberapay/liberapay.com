@@ -2,8 +2,8 @@
 """
 from decimal import Decimal, InvalidOperation
 
-import gratipay
 from aspen import Response
+from babel.numbers import NumberFormatError
 from gratipay.utils import get_participant
 from gratipay.models.participant import Participant
 
@@ -19,9 +19,8 @@ if not team.show_as_team(user):
 
 member = Participant.from_username(request.path['membername'])
 if member is None or member.is_suspicious:
-    raise Response(404)
+    raise Response(404, _("User not found."))
 is_member = member.member_of(team)
-proceed = True
 
 if request.method == 'POST':
 
@@ -29,12 +28,15 @@ if request.method == 'POST':
         raise Response(403)
 
     try:
-        take = Decimal(request.body['take'])
-    except InvalidOperation:
-        raise Response(400, "bad take")
+        take = parse_decimal(request.body['take'])
+    except (InvalidOperation, NumberFormatError):
+        raise Response(400, _("That's not a valid number"))
 
     if member == team:
-        raise Response(400, "can't recurse")
+        raise Response(400, _("A team can't take from itself"))
+
+    msg = None
+    out = {}
 
     if user.participant == team:
 
@@ -44,32 +46,48 @@ if request.method == 'POST':
         # a penny.
 
         if take not in (ZERO, A_PENNY):
-            raise Response(400, "bad team setting take")
+            raise Response(400, _("You're only allowed to add or remove members, "
+                                  "you can't set their takes to specific amounts."))
         if take == ZERO:
-            if not is_member:
-                # This is a UI bug. How are they deleting a non-member?
-                raise Exception
-            team.remove_member(member)
-        if not member.is_claimed:
+            if is_member:
+                if request.body.get('confirmed'):
+                    team.remove_member(member)
+                else:
+                    out['confirm'] = _(
+                        "Are you sure you want to remove {0} from this team?",
+                        member.username
+                    )
+            msg = _("{0} has been removed from the team.", member.username)
+        elif not member.is_claimed:
             # Attempted to add a stub participant
             raise Response(403)
 
         if take == A_PENNY:
-            proceed = False
-            if not is_member:
-                # Silently don't re-add existing members. We don't want to
-                # whack their take back to a penny!
+            if is_member:
+                msg = _("{0} is already a member of this team.", member.username)
+            else:
                 team.add_member(member)
+                msg = _("{0} has been added to the team.", member.username)
 
-    elif not is_member:
+    elif is_member:
+        if take == ZERO and not request.body.get('confirmed'):
+            out['confirm'] = _("Are you sure you want to leave this team?")
+        else:
+            new_take = team.set_take_for(member, take, user.participant)
+            new_take_str = format_currency(new_take, 'USD')
+            if new_take < take:
+                msg = _("Your take is now {0} (you can't go higher this week).",
+                        new_take_str)
+            else:
+                msg = _("Your take is now {0}.", new_take_str)
 
+    else:
         # Only the team itself can add new members.
-
         raise Response(403)
 
-    if proceed:
-        team.set_take_for(member, take, user.participant)
-    out = team.get_members(user.participant)
+    if 'confirm' not in out:
+        out['members'] = team.get_members(user.participant)
+        out['success'] = msg
 
 else:
     if member == team:

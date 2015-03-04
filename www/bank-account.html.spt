@@ -47,7 +47,7 @@ title = _("Bank Account")
 <script>
     $(document).ready(function()
     {
-        Gratipay.payments.ba.init("{{ balanced.Marketplace.my_marketplace.uri }}", "{{ user.participant.username }}");
+        Gratipay.payments.ba.init("{{ user.participant.username }}");
     });
 </script>
 {% endif %}

@@ -66,10 +66,7 @@ title = _("Explore")
             success = function () {
                 Gratipay.communities.jumpTo(term);
             }
-            error = function (e) {
-                Gratipay.notification(JSON.parse(e.responseText).error_message_long, 'error');
-            }
-            Gratipay.communities.join(term, success, error);
+            Gratipay.communities.join(term, success, Gratipay.error);
         }
         // TODO: in future
         {% if user.ANON %}

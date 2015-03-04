@@ -31,11 +31,10 @@ Gratipay.account.post_email = function(e) {
             }
             $inputs.prop('disabled', false);
         },
-        error: function (e) {
-            $inputs.prop('disabled', false);
-            error_message = JSON.parse(e.responseText).error_message_long;
-            Gratipay.notification(error_message || "Failure", 'error');
-        },
+        error: [
+            function () { $inputs.prop('disabled', false); },
+            Gratipay.error
+        ],
     });
 };
 
@@ -81,9 +80,7 @@ Gratipay.account.init = function() {
                         $('li.members').toggleClass('hidden', data.number !== 'plural');
                     }
                 },
-                error: function(r) {
-                    Gratipay.notification(JSON.parse(r.responseText).error_message_long, 'error');
-                }
+                error: Gratipay.error,
             });
         }
         post();
@@ -102,9 +99,7 @@ Gratipay.account.init = function() {
             , success: function(data) {
                 $('.anonymous-giving input').attr('checked', data.giving);
             }
-            , error: function() {
-                Gratipay.notification("Failed to change your anonymity preference. Please try again.", 'error');
-            }
+            , error: Gratipay.error,
         });
     });
 
@@ -121,9 +116,7 @@ Gratipay.account.init = function() {
             , success: function(data) {
                 $('.anonymous-receiving input').attr('checked', data.receiving);
             }
-            , error: function() {
-                Gratipay.notification("Failed to change your anonymity preference. Please try again.", 'error');
-            }
+            , error: Gratipay.error
         });
     });
 
@@ -140,9 +133,7 @@ Gratipay.account.init = function() {
             , success: function(data) {
                 $('.is-searchable input').attr('checked', !data.is_searchable);
             }
-            , error: function() {
-                Gratipay.notification("Failed to change your search opt out settings. Please try again.", 'error');
-            }
+            , error: Gratipay.error
         });
     });
 
@@ -162,9 +153,7 @@ Gratipay.account.init = function() {
                 }
                 $(e.target).attr('checked', data[field]);
             }
-            , error: function(e) {
-                Gratipay.notification(JSON.parse(e.responseText).error_message_long, 'error');
-            }
+            , error: Gratipay.error
         });
     });
 

@@ -42,7 +42,10 @@ else:
 
     out["amount"] = str(amount)
     out["amount_l"] = format_currency(amount, 'USD')
-    out["msg"] = _("Tip changed to {0} per week!", out["amount_l"])
+    if tippee.username == 'Gratipay':
+        out["msg"] = _("Thank you so much for supporting Gratipay! :D")
+    else:
+        out["msg"] = _("Tip changed to {0} per week!", out["amount_l"])
     out["npatrons"] = tippee.npatrons
     out["tippee_id"] = tippee.id
     out["total_giving"] = str(total_giving)

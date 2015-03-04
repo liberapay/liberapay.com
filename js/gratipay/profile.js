@@ -43,11 +43,10 @@ Gratipay.profile.init = function() {
                 $form.find('button.save').prop('disabled', true);
                 $this.data('value', lang);
             },
-            error: function (e) {
-                $inputs.prop('disabled', false);
-                error_message = JSON.parse(e.responseText).error_message_long;
-                Gratipay.notification(error_message || "Failure", 'error');
-            },
+            error: [
+                function () { $inputs.prop('disabled', false); },
+                Gratipay.error,
+            ]
         });
     });
 
@@ -96,13 +95,7 @@ Gratipay.profile.init = function() {
             success: function ( ) {
                 location.reload();
             },
-            error: function (e) {
-                try {
-                    Gratipay.notification(JSON.parse(e.responseText).error_message_long, 'error');
-                } catch(exception) {
-                    Gratipay.notification("Some error occured: "+exception, 'error')
-                }
-            },
+            error: Gratipay.error,
             data: { platform: this.dataset.platform, user_id: this.dataset.user_id }
         });
 
