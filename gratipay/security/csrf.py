@@ -41,7 +41,7 @@ from .crypto import constant_time_compare, get_random_string
 TOKEN_LENGTH = 32
 CSRF_TIMEOUT = timedelta(days=7)
 
-_get_new_token = lambda: get_random_string(TOKEN_LENGTH)
+_get_new_token = lambda: get_random_string(TOKEN_LENGTH).encode('ascii')
 _token_re = re.compile(r'^[a-zA-Z0-9]{%d}$' % TOKEN_LENGTH)
 _sanitize_token = lambda t: t if _token_re.match(t) else None
 
@@ -88,7 +88,7 @@ def add_token_to_response(response, csrf_token=None):
     if csrf_token:
         # Don't set httponly so that we can POST using XHR.
         # https://github.com/gratipay/gratipay.com/issues/3030
-        response.set_cookie('csrf_token', csrf_token, expires=CSRF_TIMEOUT, httponly=False)
+        response.set_cookie(b'csrf_token', csrf_token, expires=CSRF_TIMEOUT, httponly=False)
 
         # Content varies with the CSRF cookie, so set the Vary header.
         patch_vary_headers(response, ('Cookie',))

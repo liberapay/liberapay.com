@@ -149,8 +149,6 @@ def is_card_expiring(expiration_year, expiration_month):
 
 
 def set_cookie(cookies, key, value, expires=None, httponly=True, path=b'/'):
-    key = key.encode('ascii')
-    value = value.encode('ascii')
     cookies[key] = value
     cookie = cookies[key]
     if expires:
