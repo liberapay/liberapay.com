@@ -19,7 +19,7 @@ if not team.show_as_team(user):
 
 member = Participant.from_username(request.path['membername'])
 if member is None or member.is_suspicious:
-    raise Response(404)
+    raise Response(404, _("User not found."))
 is_member = member.member_of(team)
 
 if request.method == 'POST':
