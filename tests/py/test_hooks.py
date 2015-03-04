@@ -122,17 +122,17 @@ class Tests2(Harness):
         assert r.headers.cookie[b'csrf_token'].value != 'bad_token'
 
     def test_sanitize_token_passes_through_good_token(self):
-        expected = 'ddddeeeeaaaaddddbbbbeeeeeeeeffff'
-        assert csrf._sanitize_token(expected) == expected
+        token = 'ddddeeeeaaaaddddbbbbeeeeeeeeffff'
+        assert csrf._sanitize_token(token) == token
 
     def test_sanitize_token_rejects_overlong_token(self):
-        expected = 'ddddeeeeaaaaddddbbbbeeeeeeeefffff'
-        assert csrf._sanitize_token(expected) is None
+        token = 'ddddeeeeaaaaddddbbbbeeeeeeeefffff'
+        assert csrf._sanitize_token(token) is None
 
     def test_sanitize_token_rejects_underlong_token(self):
-        expected = 'ddddeeeeaaaaddddbbbbeeeeeeeefff'
-        assert csrf._sanitize_token(expected) is None
+        token = 'ddddeeeeaaaaddddbbbbeeeeeeeefff'
+        assert csrf._sanitize_token(token) is None
 
     def test_sanitize_token_rejects_goofy_token(self):
-        expected = 'ddddeeeeaaaadddd bbbbeeeeeeeefff'
-        assert csrf._sanitize_token(expected) is None
+        token = 'ddddeeeeaaaadddd bbbbeeeeeeeefff'
+        assert csrf._sanitize_token(token) is None

@@ -38,7 +38,7 @@ class ClientWithAuth(Client):
         self.cookie.clear()
 
         # csrf - for both anon and authenticated
-        csrf_token = kw.get('csrf_token', b'ThisIsATokenThatIsThirtyTwoChars')
+        csrf_token = kw.get('csrf_token', b'ThisIsATokenThatIsThirtyTwoBytes')
         if csrf_token:
             self.cookie[b'csrf_token'] = csrf_token
             kw[b'HTTP_X-CSRF-TOKEN'] = csrf_token
