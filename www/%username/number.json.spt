@@ -21,6 +21,10 @@ if number != participant.number:
         msg = _("Warning: Doing this will remove all the members from your team.\n\n"
                 "You'll have to add them back manually to undo this!")
         out = {'confirm': msg}
+    elif number == "plural" and not request.body.get("confirmed") and participant.anonymous_receiving == True:
+        msg = _("Warning: This will make the total amount you receive publicly visible.\n\n"
+                "Are you sure you want to do this?")
+        out = {'confirm': msg}
     else:
         try:
             participant.update_number(number)
