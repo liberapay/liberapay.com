@@ -63,11 +63,11 @@ if request.method == 'POST':
             raise Response(403)
 
         if take == A_PENNY:
-            if not is_member:
-                # Silently don't re-add existing members. We don't want to
-                # whack their take back to a penny!
+            if is_member:
+                msg = _("{0} is already a member of this team.", member.username)
+            else:
                 team.add_member(member)
-            msg = _("{0} has been added to the team.", member.username)
+                msg = _("{0} has been added to the team.", member.username)
 
     elif is_member:
         if take == ZERO and not request.body.get('confirmed'):
