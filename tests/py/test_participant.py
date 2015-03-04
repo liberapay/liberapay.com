@@ -459,6 +459,10 @@ class Tests(Harness):
         bob.update_number('plural')
         assert Participant.from_username('bob').number == 'plural'
 
+    def test_going_plural_forces_public_receiving(self):
+        bob = self.make_participant('bob', claimed_time='now', anonymous_receiving=True)
+        bob.update_number('plural')
+        assert Participant.from_username('bob').anonymous_receiving == False
 
     # set_tip_to - stt
 
