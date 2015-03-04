@@ -7,6 +7,7 @@ See also:
     https://github.com/gratipay/gratipay.com/issues/88
 
 """
+from __future__ import absolute_import, division, print_function, unicode_literals
 
 from datetime import timedelta
 import re
@@ -35,50 +36,36 @@ def patch_vary_headers(response, newheaders):
 
 
 from aspen import Response
-from crypto import constant_time_compare, get_random_string
-
-REASON_NO_CSRF_COOKIE = "CSRF cookie not set."
-REASON_BAD_TOKEN = "CSRF token missing or incorrect."
+from .crypto import constant_time_compare, get_random_string
 
 TOKEN_LENGTH = 32
 CSRF_TIMEOUT = timedelta(days=7)
 
-
-def _get_new_csrf_key():
-    return get_random_string(TOKEN_LENGTH)
-
-
-def _sanitize_token(token):
-    # Allow only alphanum, and ensure we return a 'str' for the sake
-    # of the post processing middleware.
-    if len(token) > TOKEN_LENGTH:
-        return _get_new_csrf_key()
-    token = re.sub('[^a-zA-Z0-9]+', '', str(token.decode('ascii', 'ignore')))
-    if token == "":
-        # In case the cookie has been truncated to nothing at some point.
-        return _get_new_csrf_key()
-    return token
+_get_new_token = lambda: get_random_string(TOKEN_LENGTH)
+_token_re = re.compile(r'^[a-zA-Z0-9]{%d}$' % TOKEN_LENGTH)
+_sanitize_token = lambda t: t if _token_re.match(t) else None
 
 
-
-def get_csrf_token_from_request(request, state):
-    """Given a Request object, reject it if it's a forgery.
+def extract_token_from_cookie(request):
+    """Given a Request object, return a csrf_token.
     """
-    if request.line.uri.startswith('/assets/'): return
-    if request.line.uri.startswith('/callbacks/'): return
-
     try:
-        cookie_token = _sanitize_token(request.headers.cookie['csrf_token'].value)
+        token = request.headers.cookie['csrf_token'].value
     except KeyError:
-        cookie_token = None
+        token = None
+    else:
+        token = _sanitize_token(token)
 
-    state['csrf_token'] = cookie_token or _get_new_csrf_key()
+    return {'csrf_token': token or _get_new_token()}
 
-    # Assume that anything not defined as 'safe' by RC2616 needs protection
+
+def reject_forgeries(request, csrf_token):
+    # Assume that anything not defined as 'safe' by RC2616 needs protection.
     if request.line.method not in ('GET', 'HEAD', 'OPTIONS', 'TRACE'):
 
-        if cookie_token is None:
-            raise Response(403, REASON_NO_CSRF_COOKIE)
+        # But for webhooks we depend on IP filtering for security.
+        if request.line.uri.startswith('/callbacks/'):
+            return
 
         # Check non-cookie token for match.
         second_token = ""
@@ -91,11 +78,11 @@ def get_csrf_token_from_request(request, state):
             # and possible for PUT/DELETE.
             second_token = request.headers.get('X-CSRF-TOKEN', '')
 
-        if not constant_time_compare(second_token, cookie_token):
-            raise Response(403, REASON_BAD_TOKEN)
+        if not constant_time_compare(second_token, csrf_token):
+            raise Response(403, "Bad CSRF cookie")
 
 
-def add_csrf_token_to_response(response, csrf_token=None):
+def add_token_to_response(response, csrf_token=None):
     """Store the latest CSRF token as a cookie.
     """
     if csrf_token:

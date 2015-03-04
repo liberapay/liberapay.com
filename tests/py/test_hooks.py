@@ -7,7 +7,7 @@ from aspen.http.response import Response
 from environment import Environment
 
 from gratipay import wireup
-from gratipay.security.csrf import REASON_BAD_TOKEN, REASON_NO_CSRF_COOKIE
+from gratipay.security import csrf
 from gratipay.security.user import SESSION
 from gratipay.testing import Harness
 
@@ -112,11 +112,27 @@ class Tests2(Harness):
     def test_no_csrf_cookie(self):
         r = self.client.POST('/', csrf_token=False, raise_immediately=False)
         assert r.code == 403
-        assert REASON_NO_CSRF_COOKIE in r.body
+        assert "Bad CSRF cookie" in r.body
         assert b'csrf_token' in r.headers.cookie
 
     def test_bad_csrf_cookie(self):
         r = self.client.POST('/', csrf_token=b'bad_token', raise_immediately=False)
         assert r.code == 403
-        assert REASON_BAD_TOKEN in r.body
+        assert "Bad CSRF cookie" in r.body
         assert r.headers.cookie[b'csrf_token'].value != 'bad_token'
+
+    def test_sanitize_token_passes_through_good_token(self):
+        expected = 'ddddeeeeaaaaddddbbbbeeeeeeeeffff'
+        assert csrf._sanitize_token(expected) == expected
+
+    def test_sanitize_token_rejects_overlong_token(self):
+        expected = 'ddddeeeeaaaaddddbbbbeeeeeeeefffff'
+        assert csrf._sanitize_token(expected) is None
+
+    def test_sanitize_token_rejects_underlong_token(self):
+        expected = 'ddddeeeeaaaaddddbbbbeeeeeeeefff'
+        assert csrf._sanitize_token(expected) is None
+
+    def test_sanitize_token_rejects_goofy_token(self):
+        expected = 'ddddeeeeaaaadddd bbbbeeeeeeeefff'
+        assert csrf._sanitize_token(expected) is None

@@ -53,7 +53,7 @@ def _get_user_via_basic_auth(auth_header):
 def _turn_off_csrf(request):
     """Given a request, short-circuit CSRF.
     """
-    csrf_token = csrf._get_new_csrf_key()
+    csrf_token = csrf._get_new_token()
     request.headers.cookie['csrf_token'] = csrf_token
     request.headers['X-CSRF-TOKEN'] = csrf_token
 
