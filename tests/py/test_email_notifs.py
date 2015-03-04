@@ -46,3 +46,13 @@ class TestTransactionalEmails(EmailHarness):
         assert last_email['to'][0]['email'] == 'bob@example.com'
         expected = "to dan"
         assert expected in last_email['text']
+
+    def test_opt_in_notification_includes_unsubscribe(self):
+        carl_twitter = self.make_elsewhere('twitter', 1, 'carl')
+        roy = self.make_participant('roy', claimed_time='now', email_address='roy@example.com', notify_on_opt_in=True)
+        roy.set_tip_to(carl_twitter.participant.username, '100')
+
+        AccountElsewhere.from_user_name('twitter', 'carl').opt_in('carl')
+
+        Participant.dequeue_emails()
+        assert "To stop receiving" in self.get_last_email()['text']

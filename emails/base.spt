@@ -14,6 +14,11 @@ $body
     <div style="font: normal 10px/21px Arial, sans-serif;">
         Sent by <a href="https://gratipay.com/" style="color: #999; text-decoration: underline;">Gratipay, LLC</a> | 716 Park Road, Ambridge, PA, 15003, USA
     </div>
+    {% if include_unsubscribe %}
+    <div style="font: normal 10px/21px Arial, sans-serif; padding-top: 10px;">
+        To stop receiving emails like this, change your <a href="https://gratipay.com/about/me/account#notifications" style="color: #999; text-decoration: underline;">notification preferences</a>.
+    </div>
+    {% endif %}
 </div>
 
 [---] text/plain
@@ -27,3 +32,7 @@ $body
 
 Sent by Gratipay, LLC, https://gratipay.com/
 716 Park Road, Ambridge, PA, 15003, USA
+
+{% if include_unsubscribe %}
+To stop receiving emails like this, change your notification preferences by visiting https://gratipay.com/about/me/account#notifications
+{% endif %}
