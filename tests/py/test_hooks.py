@@ -121,6 +121,14 @@ class Tests2(Harness):
         assert "Bad CSRF cookie" in r.body
         assert r.headers.cookie[b'csrf_token'].value != 'bad_token'
 
+    def test_csrf_cookie_set_for_most_requests(self):
+        r = self.client.GET('/')
+        assert b'csrf_token' in r.headers.cookie
+
+    def test_no_csrf_cookie_set_for_assets(self):
+        r = self.client.GET('/assets/gratipay.css')
+        assert b'csrf_token' not in r.headers.cookie
+
     def test_sanitize_token_passes_through_good_token(self):
         token = 'ddddeeeeaaaaddddbbbbeeeeeeeeffff'
         assert csrf._sanitize_token(token) == token

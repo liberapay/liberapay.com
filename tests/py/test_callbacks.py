@@ -24,6 +24,10 @@ class TestBalancedCallbacks(Harness):
         r = self.callback(body=b'{"events": []}', csrf_token=False)
         assert r.code == 200, r.body
 
+    def test_no_csrf_cookie_set_for_callbacks(self):
+        r = self.callback(body=b'{"events": []}', csrf_token=False)
+        assert b'csrf_token' not in r.headers.cookie
+
     @patch('gratipay.billing.exchanges.record_exchange_result')
     def test_credit_callback(self, rer):
         alice = self.make_participant('alice')
