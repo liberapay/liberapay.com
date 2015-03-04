@@ -56,7 +56,16 @@ def extract_token_from_cookie(request):
     else:
         token = _sanitize_token(token)
 
-    return {'csrf_token': token or _get_new_token()}
+    # Don't set a CSRF cookie on assets, to avoid busting the cache due to the
+    # Vary header we set below. Don't set it on callbacks, because we use IP
+    # filtering there.
+
+    if request.path.raw.startswith('/assets/') or request.path.raw.startswith('/callbacks/'):
+        token = None
+    else:
+        token = token or _get_new_token()
+
+    return {'csrf_token': token}
 
 
 def reject_forgeries(request, csrf_token):
