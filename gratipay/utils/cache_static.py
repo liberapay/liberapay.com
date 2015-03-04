@@ -66,8 +66,8 @@ def add_caching_to_response(website, response, request=None, etag=None):
         return
 
     # https://developers.google.com/speed/docs/best-practices/caching
-    response.headers['Vary'] = 'accept-encoding'
     response.headers['Etag'] = etag
+
     # Set CORS header for https://assets.gratipay.com (see issue #2970)
     if 'Access-Control-Allow-Origin' not in response.headers:
         response.headers['Access-Control-Allow-Origin'] = 'https://gratipay.com'
