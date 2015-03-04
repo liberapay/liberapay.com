@@ -91,8 +91,10 @@ algorithm.functions = [
 
     canonize,
     i18n.set_up_i18n,
-    authentication.set_request_context_user,
-    csrf.get_csrf_token_from_request,
+    authentication.start_user_as_anon,
+    authentication.authenticate_user_if_possible,
+    csrf.extract_token_from_cookie,
+    csrf.reject_forgeries,
 
     algorithm['dispatch_request_to_filesystem'],
 
@@ -109,7 +111,7 @@ algorithm.functions = [
 
     gratipay.set_misc_headers,
     authentication.add_auth_to_response,
-    csrf.add_csrf_token_to_response,
+    csrf.add_token_to_response,
     cache_static.add_caching_to_response if website.cache_static else noop,
     x_frame_options,
 

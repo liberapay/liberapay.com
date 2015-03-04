@@ -69,12 +69,10 @@ class TestElsewhere(Harness):
         gui.return_value = self.client.website.platforms.github.extract_user_info({'id': 1})
         ft.return_value = None
 
-        self.client.cookie[b'github_deadbeef'] = b64encode(json.dumps([ 'query_data'
-                                                                      , 'connect'
-                                                                      , ''
-                                                                      , 'bob'
-                                                                       ]))
-        response = self.client.GxT('/on/github/associate?state=deadbeef', auth_as='alice')
+        cookie = b64encode(json.dumps(['query_data', 'connect', '', 'bob']))
+        response = self.client.GxT('/on/github/associate?state=deadbeef',
+                                   auth_as='alice',
+                                   cookies={b'github_deadbeef': cookie})
         assert response.code == 200
         assert "Please Confirm" in response.body
 

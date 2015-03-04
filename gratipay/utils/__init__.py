@@ -1,6 +1,6 @@
 # encoding: utf8
 
-from __future__ import division
+from __future__ import absolute_import, division, print_function, unicode_literals
 
 from datetime import datetime, timedelta
 
@@ -151,7 +151,7 @@ def is_card_expiring(expiration_year, expiration_month):
     return delta < EXPIRING_DELTA
 
 
-def set_cookie(cookies, key, value, expires=None, httponly=True, path='/'):
+def set_cookie(cookies, key, value, expires=None, httponly=True, path=b'/'):
     cookies[key] = value
     cookie = cookies[key]
     if expires:
@@ -159,13 +159,13 @@ def set_cookie(cookies, key, value, expires=None, httponly=True, path='/'):
             expires += utcnow()
         if isinstance(expires, datetime):
             expires = to_rfc822(expires).encode('ascii')
-        cookie['expires'] = expires
+        cookie[b'expires'] = expires
     if httponly:
-        cookie['httponly'] = True
+        cookie[b'httponly'] = True
     if path:
-        cookie['path'] = path
+        cookie[b'path'] = path
     if gratipay.canonical_scheme == 'https':
-        cookie['secure'] = True
+        cookie[b'secure'] = True
 
 
 def erase_cookie(cookies, key, **kw):
