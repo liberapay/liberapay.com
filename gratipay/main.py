@@ -109,7 +109,7 @@ algorithm.functions = [
     tell_sentry,
     algorithm['get_response_for_exception'],
 
-    gratipay.set_misc_headers,
+    gratipay.set_version_header,
     authentication.add_auth_to_response,
     csrf.add_token_to_response,
     cache_static.add_caching_to_response if website.cache_static else noop,
