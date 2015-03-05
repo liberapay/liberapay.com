@@ -103,7 +103,11 @@ On Debian or Ubuntu you will need the following packages:
 
     $ sudo apt-get install postgresql-9.3 postgresql-contrib libpq-dev python-dev
 
-To configure local Postgres create default role and database:
+On OS X you can [download Postgres directly](http://www.postgresql.org/download/macosx/) or install through [Homebrew](http://brew.sh/):
+
+    $ brew install postgresql
+
+To configure local Postgres create default role (if it hasn’t been created already) and database.
 
     $ sudo -u postgres createuser --superuser $USER
     $ createdb gratipay
