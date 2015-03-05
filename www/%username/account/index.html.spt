@@ -126,11 +126,10 @@ emails = participant.get_emails()
                     <td class="account-type">
                         <img src="{{ website.asset('paypal.png') }}" />
                     </td>
-                    <td class="account-details">
+                    <td colspan="2" class="account-details">
                         <div class="account-type">Paypal</div>
                         <span>{{ participant.paypal_email }}</span>
                     </td>
-                    <td class="account-action"></td>
                 </tr>
                 {% endif %}
             </table>
