@@ -12,31 +12,10 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from datetime import timedelta
 import re
 
-
-#from django.utils.cache import patch_vary_headers
-cc_delim_re = re.compile(r'\s*,\s*')
-def patch_vary_headers(response, newheaders):
-    """
-    Adds (or updates) the "Vary" header in the given HttpResponse object.
-    newheaders is a list of header names that should be in "Vary". Existing
-    headers in "Vary" aren't removed.
-    """
-    # Note that we need to keep the original order intact, because cache
-    # implementations may rely on the order of the Vary contents in, say,
-    # computing an MD5 hash.
-    if 'Vary' in response.headers:
-        vary_headers = cc_delim_re.split(response.headers['Vary'])
-    else:
-        vary_headers = []
-    # Use .lower() here so we treat headers as case-insensitive.
-    existing_headers = set([header.lower() for header in vary_headers])
-    additional_headers = [newheader for newheader in newheaders
-                          if newheader.lower() not in existing_headers]
-    response.headers['Vary'] = ', '.join(vary_headers + additional_headers)
-
-
 from aspen import Response
+
 from .crypto import constant_time_compare, get_random_string
+
 
 TOKEN_LENGTH = 32
 CSRF_TIMEOUT = timedelta(days=7)
@@ -56,9 +35,8 @@ def extract_token_from_cookie(request):
     else:
         token = _sanitize_token(token)
 
-    # Don't set a CSRF cookie on assets, to avoid busting the cache due to the
-    # Vary header we set below. Don't set it on callbacks, because we use IP
-    # filtering there.
+    # Don't set a CSRF cookie on assets, to avoid busting the cache.
+    # Don't set it on callbacks, because we don't need it there.
 
     if request.path.raw.startswith('/assets/') or request.path.raw.startswith('/callbacks/'):
         token = None
@@ -98,6 +76,3 @@ def add_token_to_response(response, csrf_token=None):
         # Don't set httponly so that we can POST using XHR.
         # https://github.com/gratipay/gratipay.com/issues/3030
         response.set_cookie(b'csrf_token', csrf_token, expires=CSRF_TIMEOUT, httponly=False)
-
-        # Content varies with the CSRF cookie, so set the Vary header.
-        patch_vary_headers(response, ('Cookie',))
