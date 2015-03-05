@@ -81,7 +81,7 @@ class AccountElsewhere(Model):
             fragment = ''
             if netloc.endswith('githubusercontent.com') or \
                netloc.endswith('gravatar.com'):
-                query = 's=128'
+                query = 's=160'
             i.avatar_url = urlunsplit((scheme, netloc, path, query, fragment))
 
         # Serialize extra_info
