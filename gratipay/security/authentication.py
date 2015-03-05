@@ -8,7 +8,6 @@ from gratipay.models.participant import Participant
 from gratipay.security import csrf
 from gratipay.security.crypto import constant_time_compare
 from gratipay.security.user import User, SESSION
-from gratipay.utils import BEGINNING_OF_EPOCH
 
 
 ANON = User()
@@ -82,9 +81,7 @@ def add_auth_to_response(response, request=None, user=ANON):
     if request is None:
         return  # early parsing must've failed
     if request.line.uri.startswith('/assets/'):
-        return  # assets never get auth headers and have their own caching done elsewhere
-
-    response.headers['Expires'] = BEGINNING_OF_EPOCH # don't cache
+        return  # assets never get auth headers
 
     if SESSION in request.headers.cookie:
         if not user.ANON:

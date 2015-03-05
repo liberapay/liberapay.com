@@ -8,7 +8,7 @@ from gratipay import canonize, utils
 from gratipay.cron import Cron
 from gratipay.models.participant import Participant
 from gratipay.security import authentication, csrf, x_frame_options
-from gratipay.utils import cache_static, erase_cookie, i18n, set_cookie, timer
+from gratipay.utils import erase_cookie, http_caching, i18n, set_cookie, timer
 from gratipay.version import get_version
 from gratipay.renderers import jinja2_htmlescaped
 
@@ -98,8 +98,8 @@ algorithm.functions = [
 
     algorithm['dispatch_request_to_filesystem'],
 
-    cache_static.get_etag_for_file if website.cache_static else noop,
-    cache_static.try_to_serve_304 if website.cache_static else noop,
+    http_caching.get_etag_for_file if website.cache_static else noop,
+    http_caching.try_to_serve_304 if website.cache_static else noop,
 
     algorithm['apply_typecasters_to_path'],
     algorithm['get_resource_for_request'],
@@ -112,7 +112,7 @@ algorithm.functions = [
     gratipay.set_version_header,
     authentication.add_auth_to_response,
     csrf.add_token_to_response,
-    cache_static.add_caching_to_response if website.cache_static else noop,
+    http_caching.add_caching_to_response,
     x_frame_options,
 
     algorithm['log_traceback_for_5xx'],

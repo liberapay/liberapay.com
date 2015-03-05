@@ -1,5 +1,5 @@
 """
-Handles caching of static resources.
+Handles HTTP caching.
 """
 from base64 import b64encode
 from hashlib import md5
@@ -56,10 +56,14 @@ def try_to_serve_304(dispatch_result, request, etag):
 
 
 def add_caching_to_response(response, request=None, etag=None):
-    """Set caching headers for static resources.
+    """Set caching headers.
     """
     if not etag:
+        # This is a dynamic resource, disable caching by default
+        if 'Cache-Control' not in response.headers:
+            response.headers['Cache-Control'] = 'no-cache'
         return
+
     assert request is not None  # sanity check
 
     if response.code not in (200, 304):
