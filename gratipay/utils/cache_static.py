@@ -27,7 +27,7 @@ def get_etag_for_file(dispatch_result):
     return {'etag': asset_etag(dispatch_result.match)}
 
 
-def try_to_serve_304(website, dispatch_result, request, etag):
+def try_to_serve_304(dispatch_result, request, etag):
     """Try to serve a 304 for static resources.
     """
     if not etag:
@@ -55,7 +55,7 @@ def try_to_serve_304(website, dispatch_result, request, etag):
     raise Response(304)
 
 
-def add_caching_to_response(website, response, request=None, etag=None):
+def add_caching_to_response(response, request=None, etag=None):
     """Set caching headers for static resources.
     """
     if not etag:
