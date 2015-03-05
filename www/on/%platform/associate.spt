@@ -57,6 +57,12 @@ if action == 'opt-in':
     suggested_username = account.user_name or (account.email or '').split('@')[0] or account.display_name
     user, newly_claimed = account.opt_in(suggested_username)
     user.sign_in(response.headers.cookie)
+    try:
+        user.participant.add_signin_notifications()
+    except Exception as e:
+        if website.env.raise_signin_notifications:
+            raise
+        website.tell_sentry(e, state)
 
 elif action == 'connect':
     if user.ANON:

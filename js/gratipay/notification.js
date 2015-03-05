@@ -1,7 +1,6 @@
 /**
  * Display a notification
- * @param {string} text  Notification text
- * @param {string} [type=notice]  Notification type (one of: notice, error, success)
+ * Valid notification types are: "notice", "error", and "success".
  */
 Gratipay.notification = function(text, type, timeout, closeCallback) {
     var type = type || 'notice';
@@ -32,4 +31,18 @@ Gratipay.notification = function(text, type, timeout, closeCallback) {
 
     $dialog.append($('<span class="btn-close">&times;</span>').click(close));
     if (timeout > 0) setTimeout(close, timeout);
+};
+
+Gratipay.initNotifications = function(notifs, username) {
+    jQuery.each(notifs, function(k, notif) {
+        Gratipay.notification(notif.jsonml, notif.type, -1, function() {
+            jQuery.ajax({
+                url: '/'+username+'/notifications.json',
+                type: 'POST',
+                data: {remove: notif.name},
+                dataType: 'json',
+                error: Gratipay.error,
+            });
+        });
+    });
 };

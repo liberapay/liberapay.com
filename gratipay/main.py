@@ -37,6 +37,7 @@ website.renderer_factories['jinja2'].Renderer.global_context = {
     'len': len,
     'range': range,
     'str': str,
+    'to_javascript': utils.to_javascript,
     'type': type,
     'unicode': unicode,
 }

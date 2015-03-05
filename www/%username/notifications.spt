@@ -1,0 +1,7 @@
+from gratipay.utils import get_participant
+[---]
+request.allow('POST')
+participant = get_participant(state, restrict=True)
+participant.remove_notification(request.body['remove'])
+[---] application/json via json_dump
+{}
