@@ -58,7 +58,7 @@ def try_to_serve_304(website, dispatch_result, request, etag):
 def add_caching_to_response(website, response, request=None, etag=None):
     """Set caching headers for static resources.
     """
-    if etag is None:
+    if not etag:
         return
     assert request is not None  # sanity check
 
