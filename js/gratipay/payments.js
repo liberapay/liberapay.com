@@ -13,7 +13,7 @@ Gratipay.payments = {};
 // Common code
 // ===========
 
-Gratipay.payments.init = function() {
+Gratipay.payments.init = function(participantId) {
     Gratipay.participantId = participantId;
     $('#delete form').submit(Gratipay.payments.submitDeleteForm);
 
@@ -75,7 +75,7 @@ Gratipay.payments.onSuccess = function(data) {
 Gratipay.payments.ba = {};
 
 Gratipay.payments.ba.init = function(participantId) {
-    Gratipay.payments.init();
+    Gratipay.payments.init(participantId);
     $('#payout').submit(Gratipay.payments.ba.submit);
 };
 
@@ -202,7 +202,7 @@ Gratipay.payments.ba.handleResponse = function (response) {
 Gratipay.payments.cc = {};
 
 Gratipay.payments.cc.init = function(participantId) {
-    Gratipay.payments.init();
+    Gratipay.payments.init(participantId);
     $('form#payment').submit(Gratipay.payments.cc.submit);
     Gratipay.payments.cc.formatInputs(
         $('#card_number'),
