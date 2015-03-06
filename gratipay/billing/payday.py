@@ -141,6 +141,7 @@ class Payday(object):
             self.mark_stage_done()
 
         self.end()
+        self.notify_participants()
 
         _end = aspen.utils.utcnow()
         _delta = _end - _start
@@ -704,6 +705,25 @@ class Payday(object):
          RETURNING ts_end AT TIME ZONE 'UTC'
 
         """, default=NoPayday).replace(tzinfo=aspen.utils.utc)
+
+
+    def notify_participants(self):
+        recs = self.db.all("""
+            SELECT e.*::exchanges AS exchange, p.*::participants AS participant
+              FROM exchanges e
+              JOIN participants p ON e.participant = p.username
+             WHERE "timestamp" >= %(ts_start)s
+               AND "timestamp" < %(ts_end)s
+               AND amount > 0
+               AND p.notify_charge > 0
+        """)
+        for e, p in recs:
+            if e.status not in ('failed', 'succeeded'):
+                log('exchange %s has an unexpected status: %s' % (e.id, e.status))
+                continue
+            i = 1 if e.status == 'failed' else 2
+            if p.notify_charge & i:
+                p.queue_email('charge_'+e.status, exchange=e)
 
 
     # Record-keeping.
