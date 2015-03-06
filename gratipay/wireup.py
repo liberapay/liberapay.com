@@ -158,11 +158,6 @@ def make_sentry_teller(env):
     return tell_sentry
 
 
-def nanswers(env):
-    from gratipay.models import participant
-    participant.NANSWERS_THRESHOLD = env.nanswers_threshold
-
-
 class BadEnvironment(SystemExit):
     pass
 
@@ -362,7 +357,6 @@ def env():
         OPENSTREETMAP_CALLBACK          = unicode,
         OPENSTREETMAP_API_URL           = unicode,
         OPENSTREETMAP_AUTH_URL          = unicode,
-        NANSWERS_THRESHOLD              = int,
         UPDATE_GLOBAL_STATS_EVERY       = int,
         CHECK_DB_EVERY                  = int,
         DEQUEUE_EMAILS_EVERY            = int,

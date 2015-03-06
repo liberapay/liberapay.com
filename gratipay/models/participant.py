@@ -59,8 +59,6 @@ ASCII_ALLOWED_IN_USERNAME = set("0123456789"
 
 EMAIL_HASH_TIMEOUT = timedelta(hours=24)
 
-NANSWERS_THRESHOLD = 0  # configured in wireup.py
-
 NOTIFIED_ABOUT_EXPIRATION = b'notifiedAboutExpiration'
 
 USERNAME_MAX_SIZE = 32

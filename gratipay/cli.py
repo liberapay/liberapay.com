@@ -12,7 +12,6 @@ def payday():
     db = wireup.db(env)
 
     wireup.billing(env)
-    wireup.nanswers(env)
 
 
     # Lazily import the billing module.
