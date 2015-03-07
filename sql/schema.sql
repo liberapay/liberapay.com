@@ -63,6 +63,7 @@ CREATE TABLE participants
 , is_searchable         bool                        NOT NULL DEFAULT TRUE
 , old_auth_usage        date
 , notify_on_opt_in      boolean                     NOT NULL DEFAULT TRUE
+, notifications         text[]                      NOT NULL DEFAULT '{}'
 , CONSTRAINT team_not_anonymous CHECK (NOT (number='plural' AND anonymous_receiving))
  );
 
