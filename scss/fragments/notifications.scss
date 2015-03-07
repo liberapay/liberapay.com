@@ -1,5 +1,6 @@
 #notification-area {
     $transparency: 0.15;
+    background-color: transparentize($white, 0.03);
 
     .notifications-fixed {
         position: fixed;
@@ -21,14 +22,6 @@
         text-align: center;
         overflow: hidden;
         position: relative;
-
-        @include animation(fadein 0.5s 1 ease-in);
-
-        &.fade-out {
-            @include animation(fadeout 0.5s 1 ease-out);
-            opacity: 0;
-            max-height: 0;
-        }
 
         div {
             padding: 10px;
@@ -56,29 +49,5 @@
     .notification-error {
         background: $light-red;
         background: transparentize($light-red, $transparency);
-    }
-}
-
-@include keyframes(fadein) {
-    0% {
-        opacity: 0;
-        max-height: 0;
-    }
-
-    100% {
-        opacity: 1;
-        max-height: 150px;
-    }
-}
-
-@include keyframes(fadeout) {
-    0% {
-        opacity: 1;
-        max-height: 150px;
-    }
-
-    100% {
-        opacity: 0;
-        max-height: 0;
     }
 }

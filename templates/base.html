@@ -104,39 +104,18 @@
 <script src="{{ website.asset('gratipay.js') }}"></script>
 
 <script>
-    $(document).ready(Gratipay.init);
+    $(document).ready(function() {
+        Gratipay.init();
+        {% if not user.ANON %}
+        Gratipay.initNotifications(
+            {{ to_javascript(user.participant.render_notifications(state))|safe }},
+            {{ to_javascript(user.participant.username)|safe }}
+        );
+        {% endif %}
+    });
 </script>
 
 {% block scripts %}{% endblock %}
-
-{% if not user.ANON %}
-<script>
-    {% if not request.line.uri.startswith('/credit-card.html') %}
-    {% if user.participant.last_bill_result %}
-    Gratipay.notification(
-        ["span", "{{ _('Your credit card has failed!') }} ",
-            ['a', {'href': '/credit-card.html'}, "{{ _('Fix your card') }}"]
-        ], "error", -1
-    );
-    {% elif user.participant.credit_card_expiring(website, state) %}
-    Gratipay.notification(
-        ["span", "{{ _('Your credit card is about to expire!') }} ",
-            ['a', {'href': '/credit-card.html'}, "{{ _('Update card') }}"]
-        ], "error"
-    );
-    {% endif %}
-    {% endif %}
-    {% if not user.participant.email_address and not request.line.uri.path.raw.endswith('/account/') %}
-    {% if not user.participant.get_emails() %}
-    Gratipay.notification(
-        ["span", "{{ _('Your account does not have an associated email address.') }} ",
-            ['a', {'href': '/{{ user.participant.username }}/account/#emails'}, "{{ _('Add an email address') }}"]
-        ], "notice", -1
-    );
-    {% endif %}
-    {% endif %}
-</script>
-{% endif %}
 
 </body>
 </html>

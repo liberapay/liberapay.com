@@ -1,9 +1,8 @@
 /**
  * Display a notification
- * @param {string} text  Notification text
- * @param {string} [type=notice]  Notification type (one of: notice, error, success)
+ * Valid notification types are: "notice", "error", and "success".
  */
-Gratipay.notification = function(text, type, timeout) {
+Gratipay.notification = function(text, type, timeout, closeCallback) {
     var type = type || 'notice';
     var timeout = timeout || (type == 'error' ? 10000 : 5000);
 
@@ -13,19 +12,37 @@ Gratipay.notification = function(text, type, timeout) {
         Gratipay.jsonml(dialog)
     ]);
 
+    // Close if we're on the page the notification links to.
+    var links = $dialog.eq(1).find('a');
+    if (links.length == 1 && links[0].pathname == location.pathname) {
+        return closeCallback()
+    }
+
     if (!$('#notification-area').length)
         $('body').prepend('<div id="notification-area"><div class="notifications-fixed"></div></div>');
 
     $('#notification-area').prepend($dialog.get(0));
     $('#notification-area .notifications-fixed').prepend($dialog.get(1));
 
-    function fadeOut() {
-        $dialog.addClass('fade-out');
+    function close() {
+        $dialog.fadeOut(null, $dialog.remove);
+        if (closeCallback) closeCallback();
     }
 
-    var $btn_close = $('<span class="btn-close">&times;</span>');
-    $btn_close.click(fadeOut);
-    $btn_close.appendTo($dialog.get(1));
+    $dialog.append($('<span class="btn-close">&times;</span>').click(close));
+    if (timeout > 0) setTimeout(close, timeout);
+};
 
-    if (timeout > 0) setTimeout(fadeOut, timeout);
+Gratipay.initNotifications = function(notifs, username) {
+    jQuery.each(notifs, function(k, notif) {
+        Gratipay.notification(notif.jsonml, notif.type, -1, function() {
+            jQuery.ajax({
+                url: '/'+username+'/notifications.json',
+                type: 'POST',
+                data: {remove: notif.name},
+                dataType: 'json',
+                error: Gratipay.error,
+            });
+        });
+    });
 };

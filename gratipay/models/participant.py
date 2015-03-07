@@ -17,9 +17,9 @@ from time import sleep
 from urllib import quote
 import uuid
 
-import aspen
 from aspen.utils import utcnow
 import balanced
+from dependency_injection import resolve_dependencies
 from markupsafe import escape as htmlescape
 from postgres.orm import Model
 from psycopg2 import IntegrityError
@@ -47,7 +47,7 @@ from gratipay.models import add_event
 from gratipay.models._mixin_team import MixinTeam
 from gratipay.models.account_elsewhere import AccountElsewhere
 from gratipay.security.crypto import constant_time_compare
-from gratipay.utils import i18n, is_card_expiring, emails, pricing
+from gratipay.utils import i18n, is_card_expiring, emails, notifications, pricing
 from gratipay.utils.username import safely_reserve_a_username
 
 
@@ -58,8 +58,6 @@ ASCII_ALLOWED_IN_USERNAME = set("0123456789"
 # We use | in Sentry logging, so don't make that allowable. :-)
 
 EMAIL_HASH_TIMEOUT = timedelta(hours=24)
-
-NOTIFIED_ABOUT_EXPIRATION = b'notifiedAboutExpiration'
 
 USERNAME_MAX_SIZE = 32
 
@@ -693,6 +691,68 @@ class Participant(Model, MixinTeam):
         self.db.run("UPDATE participants SET email_lang=%s WHERE id=%s",
                     (accept_lang, self.id))
         self.set_attributes(email_lang=accept_lang)
+
+
+    # Notifications
+    # =============
+
+    def add_notification(self, name):
+        id = self.id
+        r = self.db.one("""
+            UPDATE participants
+               SET notifications = array_append(notifications, %(name)s)
+             WHERE id = %(id)s
+               AND NOT %(name)s = ANY(notifications);
+
+            SELECT notifications
+              FROM participants
+             WHERE id = %(id)s;
+        """, locals())
+        self.set_attributes(notifications=r)
+
+    def add_signin_notifications(self):
+        if not self.get_emails():
+            self.add_notification('email_missing')
+        if self.last_ach_result:
+            self.add_notification('ba_withdrawal_failed')
+        if self.last_bill_result:
+            self.add_notification('credit_card_failed')
+        elif self.credit_card_expiring():
+            self.add_notification('credit_card_expires')
+
+    def credit_card_expiring(self):
+        if not self.balanced_customer_href:
+            return False
+        from gratipay import billing
+        card = billing.BalancedCard(self.balanced_customer_href)
+        year, month = card['expiration_year'], card['expiration_month']
+        if not (year and month):
+            return False
+        return is_card_expiring(int(year), int(month))
+
+    def remove_notification(self, name):
+        id = self.id
+        r = self.db.one("""
+            UPDATE participants
+               SET notifications = array_remove(notifications, %(name)s)
+             WHERE id = %(id)s
+         RETURNING notifications
+        """, locals())
+        self.set_attributes(notifications=r)
+
+    def render_notifications(self, state):
+        r = []
+        escape = state['escape']
+        state['escape'] = lambda a: a
+        for name in self.notifications:
+            try:
+                f = getattr(notifications, name)
+                typ, msg = f(*resolve_dependencies(f, state).as_args)
+                r.append(dict(jsonml=msg, name=name, type=typ))
+            except Exception as e:
+                self._tell_sentry(e, state)
+        state['escape'] = escape
+        return r
 
 
     # Random Junk
@@ -1652,33 +1712,6 @@ class Participant(Model, MixinTeam):
             """, (self.username, platform, user_id), default=NonexistingElsewhere)
             add_event(c, 'participant', dict(id=self.id, action='disconnect', values=dict(platform=platform, user_id=user_id)))
         self.update_avatar()
-
-    def credit_card_expiring(self, website, state):
-
-        request, response = state['request'], state['response']
-        if NOTIFIED_ABOUT_EXPIRATION in request.headers.cookie:
-            cookie = request.headers.cookie[NOTIFIED_ABOUT_EXPIRATION]
-            if cookie.value == self.session_token:
-                return False
-
-        if not self.balanced_customer_href:
-            return False
-
-        try:
-            from gratipay import billing
-            card = billing.BalancedCard(self.balanced_customer_href)
-            year, month = card['expiration_year'], card['expiration_month']
-            if not (year and month):
-                return False
-            card_expiring = is_card_expiring(int(year), int(month))
-            response.headers.cookie[NOTIFIED_ABOUT_EXPIRATION] = self.session_token
-            return card_expiring
-        except Exception as e:
-            if website.env.raise_card_expiration:
-                raise
-            aspen.log(e)
-            website.tell_sentry(e, state)
-            return False
 
     def to_dict(self, details=False, inquirer=None):
         output = { 'id': self.id
