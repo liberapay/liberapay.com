@@ -697,13 +697,12 @@ class Participant(Model, MixinTeam):
     # =============
 
     def add_notification(self, name):
-        name = ' %s ' % name
         id = self.id
         r = self.db.one("""
             UPDATE participants
-               SET notifications = (notifications || %(name)s)
+               SET notifications = array_append(notifications, %(name)s)
              WHERE id = %(id)s
-               AND notifications !~ %(name)s;
+               AND NOT %(name)s = ANY(notifications);
 
             SELECT notifications
               FROM participants
@@ -732,11 +731,10 @@ class Participant(Model, MixinTeam):
         return is_card_expiring(int(year), int(month))
 
     def remove_notification(self, name):
-        name = ' %s ' % name
         id = self.id
         r = self.db.one("""
             UPDATE participants
-               SET notifications = replace(notifications, %(name)s, '')
+               SET notifications = array_remove(notifications, %(name)s)
              WHERE id = %(id)s
          RETURNING notifications
         """, locals())
@@ -746,7 +744,7 @@ class Participant(Model, MixinTeam):
         r = []
         escape = state['escape']
         state['escape'] = lambda a: a
-        for name in self.notifications.split():
+        for name in self.notifications:
             try:
                 f = getattr(notifications, name)
                 typ, msg = f(*resolve_dependencies(f, state).as_args)
