@@ -6,13 +6,17 @@ from gratipay.billing import BalancedCard
 
 participant = get_participant(state, restrict=True)
 
-card = BalancedCard(participant.balanced_customer_href)
-exchange = website.db.one( "SELECT * FROM exchanges "
-                   "WHERE id=%s AND participant=%s"
-                 , (request.path['exchange_id'], request.path['username'])
-                 , back_as=dict)
+exchange = website.db.one("""
+    SELECT *
+      FROM exchanges
+     WHERE id = %s
+       AND participant = %s
+       AND amount > 0
+""", (request.path['exchange_id'], participant.username))
 if exchange is None:
     raise Response(404)
+
+card = BalancedCard(participant.balanced_customer_href) 
 
 [-------------------]
 <style>
