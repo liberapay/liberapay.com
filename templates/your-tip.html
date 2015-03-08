@@ -5,14 +5,14 @@
 {% else %}
     <div class="cta">
         {% set tippee = participant.username %}
-        {% set tip = user.participant.get_tip_to(tippee)['amount'] %}
+        {% set tip = user.participant.get_tip_to(tippee) %}
         <h2>{{ _('Your Tip') }}</h2>
         <div class="js-edit your-tip {{ 'anon' if user.ANON }}"
              data-tippee="{{ participant.id }}">
             <div class="view">
-                <span class="amount">{{ format_currency(tip, 'USD') }}</span>
+                <span class="amount">{{ format_currency(tip.amount, 'USD') }}</span>
                 <div class="per-week">{{ _("per week") }}</div>
-                <button class="edit {{ 'not-zero' if tip > 0 }}">
+                <button class="edit {{ 'not-zero' if tip.amount > 0 }}">
                     <span class="zero">{{
                         _("Pledge to {0}", account.user_name) if account else
                         _("Give to {0}", tippee)
@@ -22,24 +22,18 @@
             </div>
             <form class="edit" action="/{{ tippee }}/tip.json">
                 $
-                <input type="text" name="amount" class="amount" value="{{ format_decimal(tip) }}"
+                <input type="text" name="amount" class="amount" value="{{ format_decimal(tip.amount) }}"
                        min="0" max="{{ '1000' if participant.IS_PLURAL else '100' }}">
                 <div class="per-week">{{ _("per week") }}</div>
                 <button class="save">{{ _("Save") }}</button>
                 <button class="cancel">{{ _("Cancel") }}</button>
-                <button class="stop {{ 'zero' if not tip }}">{{ _("Stop Giving") }}</button>
+                <button class="stop {{ 'zero' if not tip.amount }}">{{ _("Stop Giving") }}</button>
             </form>
         </div>
 
-        {% if user.participant.last_bill_result == None %}
-        <div id="payment-prompt" class="{{ 'needed' if tip > 0 }}">
+        {% if not tip.is_funded %}
+        <div id="payment-prompt" class="{{ 'needed' if tip.amount > 0 }}">
             {{ _("Back your payment with a {0}credit card{1} to make sure it goes through!",
-                 "<a href='/%s/routes/credit-card.html'>"|safe % user.participant.username,
-                 "</a>"|safe) }}
-        </div>
-        {% elif user.participant.last_bill_result %}
-        <div id="payment-prompt" class="really-needed">
-            {{ _("Fix your {0}credit card{1} to make sure your payment goes through!",
                  "<a href='/%s/routes/credit-card.html'>"|safe % user.participant.username,
                  "</a>"|safe) }}
         </div>

@@ -1048,7 +1048,7 @@ class Participant(Model, MixinTeam):
     def get_tip_to(self, tippee):
         """Given a username, returns a dict.
         """
-        default = dict(amount=Decimal('0.00'))
+        default = dict(amount=Decimal('0.00'), is_funded=False)
         return self.db.one("""\
 
             SELECT *
