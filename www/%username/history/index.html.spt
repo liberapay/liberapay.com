@@ -1,10 +1,11 @@
+from aspen import Response
+
 from gratipay.utils import get_participant
 from gratipay.utils.history import iter_payday_events
 
 [-----------------------------------------------------------------------------]
 
 participant = get_participant(state, restrict=True)
-events = iter_payday_events(website.db, participant)
 title = participant.username
 subhead = _("History")
 subpath = 'history/' if user.ADMIN else ''
@@ -16,10 +17,13 @@ translated_status = { None:         ''
                     , 'succeeded':  _('succeeded')
                      }
 
-if participant == user.participant:
-    JOINED = _("You joined {0} ago.", to_age(participant.claimed_time))
-elif participant.claimed_time:
-    JOINED = _("{0} joined {1} ago.", participant.username, to_age(participant.claimed_time))
+year = request.qs.get('year')
+if year:
+    try:
+        year = int(year)
+    except ValueError:
+        raise Response(400, "bad year")
+events = iter_payday_events(website.db, participant, year)
 
 if participant == user.participant:
     BALANCE = _("Your balance is {0}.", format_currency(participant.balance, "USD"))
@@ -31,9 +35,7 @@ else:
 {% block content %}
 
 <table id="history">
-    <tr><td colspan="8">
-        <h2>{{ JOINED }}</h2>
-    </td></tr>
+{% if not year %}
     <tr><td colspan="8">
         <h2>{{ BALANCE }}</h2>
         {% if user.ADMIN %}
@@ -61,7 +63,8 @@ else:
         </form>
         {% endif %}
     </td></tr>
-    {% for event in events %}
+{% endif %}
+{% for event in events %}
     {% if event['kind'] == 'totals' %}
     <tr><td colspan="8">
         <h2>{{ _("Total given: {0}", format_currency(event['given'], "USD")) }}<br>
@@ -184,6 +187,8 @@ else:
         <td class="notes"></td>
     </tr>
     {% endif %}
+{% else %}
+    <p>{{ _("No transactions to show.") }}</p>
 {% endfor %}
 </table>
 
