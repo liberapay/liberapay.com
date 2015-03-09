@@ -55,7 +55,7 @@ Gratipay.payments.onSuccess = function(data) {
     window.location.reload();
 };
 
-Gratipay.payments.associate = function (thing) { return function (response) {
+Gratipay.payments.associate = function (network) { return function (response) {
     if (response.status_code !== 201) {
         return Gratipay.payments.onError(response);
     }
@@ -64,9 +64,9 @@ Gratipay.payments.associate = function (thing) { return function (response) {
      * to the Customer on Balanced and to the participant in our DB.
      */
     var data = {
-        thing: thing,
-        thing_uri: thing == 'bank account' ? response.bank_accounts[0].href
-                                           : response.cards[0].href,
+        network: network,
+        address: network == 'balanced-ba' ? response.bank_accounts[0].href
+                                          : response.cards[0].href,
     };
 
     jQuery.ajax({
@@ -117,7 +117,7 @@ Gratipay.payments.ba.submit = function (e) {
 
     // Okay, send the data to Balanced.
     balanced.bankAccount.create( bankAccount
-                               , Gratipay.payments.associate('bank account')
+                               , Gratipay.payments.associate('balanced-ba')
                                 );
 };
 
@@ -320,6 +320,6 @@ Gratipay.payments.cc.submit = function(e) {
         return false;
     }
 
-    balanced.card.create(credit_card, Gratipay.payments.associate('credit card'));
+    balanced.card.create(credit_card, Gratipay.payments.associate('balanced-cc'));
     return false;
 };

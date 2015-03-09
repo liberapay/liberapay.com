@@ -53,7 +53,7 @@ if request.method == 'POST':
 
             <ul>
 
-                {% if participant.last_ach_result == '' %}
+                {% if participant.get_bank_account_error() == '' %}
                     {% if participant.is_whitelisted %}
                         <li><input type="radio" name="disbursement_strategy" id="r1"
                              value="bank" checked />

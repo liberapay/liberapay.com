@@ -1,8 +1,10 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 from aspen import Response
+import balanced
 
-from gratipay import billing
+from gratipay.billing.exchanges import repr_exception
+from gratipay.models.exchange_route import ExchangeRoute
 from gratipay.utils import get_participant
 
 [---]
@@ -10,8 +12,8 @@ from gratipay.utils import get_participant
 request.allow('POST')
 participant = get_participant(state, restrict=True)
 
-thing = request.body['thing']
-thing_uri = request.body['thing_uri']
+network = request.body['network']
+address = request.body['address']
 
 
 # Get a balanced account.
@@ -24,7 +26,7 @@ account = participant.get_balanced_account()
 # For a bank account, ensure the user is identified.
 # ==================================================
 
-if thing == 'bank account' and account.merchant_status != 'underwritten':
+if network == 'balanced-ba' and account.merchant_status != 'underwritten':
     raise Response(400, _("You need to verify your identity first."))
 
 
@@ -32,11 +34,14 @@ if thing == 'bank account' and account.merchant_status != 'underwritten':
 # =============================================
 
 # Clear out any old ones first.
-billing.clear(website.db, thing, participant, account)
+route = ExchangeRoute.from_network(participant, network)
+if route:
+    route.invalidate()
 
-error = billing.associate(website.db, thing, participant, account, thing_uri)
-if error:
-    raise Response(400, error)
+try:
+    ExchangeRoute.associate_balanced(participant, account, network, address)
+except balanced.exc.HTTPError as err:
+    raise Response(400, repr_exception(err))
 
 [---] application/json via json_dump
 {}

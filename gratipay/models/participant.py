@@ -46,6 +46,7 @@ from gratipay.exceptions import (
 from gratipay.models import add_event
 from gratipay.models._mixin_team import MixinTeam
 from gratipay.models.account_elsewhere import AccountElsewhere
+from gratipay.models.exchange_route import ExchangeRoute
 from gratipay.security.crypto import constant_time_compare
 from gratipay.utils import i18n, is_card_expiring, emails, notifications, pricing
 from gratipay.utils.username import safely_reserve_a_username
@@ -713,18 +714,18 @@ class Participant(Model, MixinTeam):
     def add_signin_notifications(self):
         if not self.get_emails():
             self.add_notification('email_missing')
-        if self.last_ach_result:
+        if self.get_bank_account_error():
             self.add_notification('ba_withdrawal_failed')
-        if self.last_bill_result:
+        if self.get_credit_card_error():
             self.add_notification('credit_card_failed')
         elif self.credit_card_expiring():
             self.add_notification('credit_card_expires')
 
     def credit_card_expiring(self):
-        if not self.balanced_customer_href:
-            return False
-        from gratipay import billing
-        card = billing.BalancedCard(self.balanced_customer_href)
+        route = ExchangeRoute.from_network(self, 'balanced-cc')
+        if not route:
+            return
+        card = balanced.Card.fetch(route.address)
         year, month = card['expiration_year'], card['expiration_month']
         if not (year and month):
             return False
@@ -753,6 +754,19 @@ class Participant(Model, MixinTeam):
                 self._tell_sentry(e, state)
         state['escape'] = escape
         return r
+
+
+    # Exchange-related stuff
+    # ======================
+
+    def get_bank_account_error(self):
+        return getattr(ExchangeRoute.from_network(self, 'balanced-ba'), 'error', None)
+
+    def get_credit_card_error(self):
+        return getattr(ExchangeRoute.from_network(self, 'balanced-cc'), 'error', None)
+
+    def get_route(self, network):
+        return ExchangeRoute.from_network(self, network)
 
 
     # Random Junk
@@ -879,14 +893,21 @@ class Participant(Model, MixinTeam):
                       )
             self.set_attributes(is_closed=is_closed)
 
+    def update_giving_and_tippees(self):
+        with self.db.get_cursor() as cursor:
+            updated_tips = self.update_giving(cursor)
+            for tip in updated_tips:
+                Participant.from_username(tip.tippee).update_receiving(cursor)
+
     def update_giving(self, cursor=None):
         # Update is_funded on tips
-        if self.last_bill_result == '':
-            (cursor or self.db).run("""
+        if self.get_credit_card_error() == '':
+            updated = (cursor or self.db).all("""
                 UPDATE current_tips
                    SET is_funded = true
                  WHERE tipper = %s
                    AND is_funded IS NOT true
+             RETURNING *
             """, (self.username,))
         else:
             tips = (cursor or self.db).all("""
@@ -899,6 +920,7 @@ class Participant(Model, MixinTeam):
               ORDER BY p2.claimed_time IS NULL, t.ctime ASC
             """, (self.username,))
             fake_balance = self.balance + self.receiving
+            updated = []
             for tip in tips:
                 if tip.amount > fake_balance:
                     is_funded = False
@@ -907,11 +929,12 @@ class Participant(Model, MixinTeam):
                     is_funded = True
                 if tip.is_funded == is_funded:
                     continue
-                (cursor or self.db).run("""
+                updated.append((cursor or self.db).one("""
                     UPDATE tips
                        SET is_funded = %s
                      WHERE id = %s
-                """, (is_funded, tip.id))
+                 RETURNING *
+                """, (is_funded, tip.id)))
 
         # Update giving and pledging on participant
         giving, pledging = (cursor or self.db).one("""
@@ -939,6 +962,8 @@ class Participant(Model, MixinTeam):
          RETURNING giving, pledging
         """, dict(username=self.username))
         self.set_attributes(giving=giving, pledging=pledging)
+
+        return updated
 
     def update_receiving(self, cursor=None):
         if self.IS_PLURAL:
@@ -1288,11 +1313,15 @@ class Participant(Model, MixinTeam):
                 'username': self.username,
                 'participant_id': self.id,
             }).save()
-            self.db.run("""
+            r = self.db.one("""
                 UPDATE participants
                    SET balanced_customer_href=%s
                  WHERE id=%s
+                   AND balanced_customer_href IS NULL
+             RETURNING 1
             """, (customer.href, self.id))
+            if not r:
+                return self.get_balanced_account()
         else:
             customer = balanced.Customer.fetch(self.balanced_customer_href)
         return customer
@@ -1781,8 +1810,9 @@ class Participant(Model, MixinTeam):
             elsewhere[platform] = {k: getattr(account, k, None) for k in fields}
 
         # Key: bitcoin
-        if self.bitcoin_address is not None:
-            output['bitcoin'] = 'https://blockchain.info/address/%s' % self.bitcoin_address
+        route = ExchangeRoute.from_network(self, 'bitcoin')
+        if route:
+            output['bitcoin'] = route.address
 
         return output
 

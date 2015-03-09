@@ -11,32 +11,7 @@ from aspen.utils import typecheck
 from gratipay.exceptions import NegativeBalance, NoBalancedCustomerHref, NotWhitelisted
 from gratipay.models import check_db
 from gratipay.models.participant import Participant
-
-
-# https://docs.balancedpayments.com/1.1/api/customers/
-CUSTOMER_LINKS = {
-    "customers.bank_accounts": "/customers/{customers.id}/bank_accounts",
-    "customers.card_holds": "/customers/{customers.id}/card_holds",
-    "customers.cards": "/customers/{customers.id}/cards",
-    "customers.credits": "/customers/{customers.id}/credits",
-    "customers.debits": "/customers/{customers.id}/debits",
-    "customers.destination": "/resources/{customers.destination}",
-    "customers.disputes": "/customers/{customers.id}/disputes",
-    "customers.external_accounts": "/customers/{customers.id}/external_accounts",
-    "customers.orders": "/customers/{customers.id}/orders",
-    "customers.refunds": "/customers/{customers.id}/refunds",
-    "customers.reversals": "/customers/{customers.id}/reversals",
-    "customers.source": "/resources/{customers.source}",
-    "customers.transactions": "/customers/{customers.id}/transactions"
-}
-
-
-def customer_from_href(href):
-    """This functions "manually" builds a minimal Customer instance.
-    """
-    id = href.rsplit('/', 1)[1]
-    d = {'href': href, 'id': id, 'links': {}, 'meta': {}}
-    return balanced.Customer(customers=[d], links=CUSTOMER_LINKS)
+from gratipay.models.exchange_route import ExchangeRoute
 
 
 # Balanced has a $0.50 minimum. We go even higher to avoid onerous
@@ -107,11 +82,9 @@ def ach_credit(db, participant, withhold, minimum_credit=MINIMUM_CREDIT):
     if not participant.is_whitelisted:
         raise NotWhitelisted      # Participant not trusted.
 
-    balanced_customer_href = participant.balanced_customer_href
-    if balanced_customer_href is None:
-        log("%s has no balanced_customer_href."
-            % participant.username)
-        raise NoBalancedCustomerHref  # not in Balanced
+    route = ExchangeRoute.from_network(participant, 'balanced-ba')
+    if not route:
+        return 'No bank account'
 
 
     # Do final calculations.
@@ -132,11 +105,10 @@ def ach_credit(db, participant, withhold, minimum_credit=MINIMUM_CREDIT):
     # Try to dance with Balanced.
     # ===========================
 
-    e_id = record_exchange(db, 'ach', -credit_amount, fee, participant, 'pre')
+    e_id = record_exchange(db, route, -credit_amount, fee, participant, 'pre')
     meta = dict(exchange_id=e_id, participant_id=participant.id)
     try:
-        customer = customer_from_href(balanced_customer_href)
-        ba = customer.bank_accounts.one()
+        ba = balanced.BankAccount.fetch(route.address)
         ba.credit(amount=cents, description=participant.username, meta=meta)
         record_exchange_result(db, e_id, 'pending', None, participant)
         log(msg + "succeeded.")
@@ -159,21 +131,17 @@ def create_card_hold(db, participant, amount):
     typecheck(amount, Decimal)
 
     username = participant.username
-    balanced_customer_href = participant.balanced_customer_href
-
-    typecheck( username, unicode
-             , balanced_customer_href, (unicode, None)
-              )
 
 
     # Perform some last-minute checks.
     # ================================
 
-    if balanced_customer_href is None:
-        raise NoBalancedCustomerHref      # Participant has no funding source.
-
     if participant.is_suspicious is not False:
         raise NotWhitelisted      # Participant not trusted.
+
+    route = ExchangeRoute.from_network(participant, 'balanced-cc')
+    if not route:
+        return None, 'No credit card'
 
 
     # Go to Balanced.
@@ -184,7 +152,7 @@ def create_card_hold(db, participant, amount):
 
     hold = None
     try:
-        card = customer_from_href(balanced_customer_href).cards.one()
+        card = balanced.Card.fetch(route.address)
         hold = card.hold( amount=cents
                         , description=username
                         , meta=dict(participant_id=participant.id, state='new')
@@ -194,7 +162,7 @@ def create_card_hold(db, participant, amount):
     except Exception as e:
         error = repr_exception(e)
         log(msg + "failed: %s" % error)
-        record_exchange(db, 'bill', amount, fee, participant, 'failed', error)
+        record_exchange(db, route, amount, fee, participant, 'failed', error)
 
     return hold, error
 
@@ -209,9 +177,12 @@ def capture_card_hold(db, participant, amount, hold):
     username = participant.username
     assert participant.id == int(hold.meta['participant_id'])
 
+    route = ExchangeRoute.from_address(participant, 'balanced-cc', hold.card_href)
+    assert route
+
     cents, amount_str, charge_amount, fee = _prep_hit(amount)
     amount = charge_amount - fee  # account for possible rounding
-    e_id = record_exchange(db, 'bill', amount, fee, participant, 'pre')
+    e_id = record_exchange(db, route, amount, fee, participant, 'pre')
 
     meta = dict(participant_id=participant.id, exchange_id=e_id)
     try:
@@ -264,8 +235,8 @@ def _prep_hit(unrounded):
     return cents, amount_str, upcharged, fee
 
 
-def record_exchange(db, kind, amount, fee, participant, status, error=None):
-    """Given a Bunch of Stuff, return None.
+def record_exchange(db, route, amount, fee, participant, status, error=''):
+    """Given a Bunch of Stuff, return an int (exchange_id).
 
     Records in the exchanges table have these characteristics:
 
@@ -282,16 +253,16 @@ def record_exchange(db, kind, amount, fee, participant, status, error=None):
 
         exchange_id = cursor.one("""
             INSERT INTO exchanges
-                   (amount, fee, participant, status)
-            VALUES (%s, %s, %s, %s)
+                   (amount, fee, participant, status, route)
+            VALUES (%s, %s, %s, %s, %s)
          RETURNING id
-        """, (amount, fee, participant.username, status))
+        """, (amount, fee, participant.username, status, route.id))
 
         if status == 'failed':
-            propagate_exchange(cursor, participant, kind, error, 0)
+            propagate_exchange(cursor, participant, route, error, 0)
         elif amount < 0:
             amount -= fee
-            propagate_exchange(cursor, participant, kind, '', amount)
+            propagate_exchange(cursor, participant, route, '', amount)
 
     return exchange_id
 
@@ -300,43 +271,47 @@ def record_exchange_result(db, exchange_id, status, error, participant):
     """Updates the status of an exchange.
     """
     with db.get_cursor() as cursor:
-        amount, fee, username = cursor.one("""
-            UPDATE exchanges
+        amount, fee, username, route = cursor.one("""
+            UPDATE exchanges e
                SET status=%(status)s
                  , note=%(error)s
              WHERE id=%(exchange_id)s
                AND status <> %(status)s
          RETURNING amount, fee, participant
+                 , ( SELECT r.*::exchange_routes
+                       FROM exchange_routes r
+                      WHERE r.id = e.route
+                   ) AS route
         """, locals())
         assert participant.username == username
+        assert route
 
         if amount < 0:
             amount -= fee
             amount = amount if status == 'failed' else 0
-            propagate_exchange(cursor, participant, 'ach', error, -amount)
+            propagate_exchange(cursor, participant, route, error, -amount)
         else:
             amount = amount if status == 'succeeded' else 0
-            propagate_exchange(cursor, participant, 'bill', error, amount)
+            propagate_exchange(cursor, participant, route, error, amount)
 
 
-def propagate_exchange(cursor, participant, kind, error, amount):
-    """Propagates an exchange to the participant's balance.
+def propagate_exchange(cursor, participant, route, error, amount):
+    """Propagates an exchange's result to the participant's balance and the
+    route's status.
     """
-    column = 'last_%s_result' % kind
-    error = None if error == 'NoResultFound()' else (error or '')
+    route.update_error(error or '', propagate=False)
     new_balance = cursor.one("""
         UPDATE participants
-           SET {0}=%s
-             , balance=(balance + %s)
+           SET balance=(balance + %s)
          WHERE id=%s
      RETURNING balance
-    """.format(column), (error, amount, participant.id))
+    """, (amount, participant.id))
 
     if amount < 0 and new_balance < 0:
         raise NegativeBalance
 
     if hasattr(participant, 'set_attributes'):
-        participant.set_attributes(**{'balance': new_balance, column: error})
+        participant.set_attributes(balance=new_balance)
 
 
 def sync_with_balanced(db):

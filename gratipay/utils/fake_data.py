@@ -62,9 +62,7 @@ def fake_participant(db, number="singular", is_admin=False):
                    , anonymous_giving=(random.randrange(5) == 0)
                    , anonymous_receiving=(number != 'plural' and random.randrange(5) == 0)
                    , balanced_customer_href=faker.uri()
-                   , last_ach_result=''
                    , is_suspicious=False
-                   , last_bill_result=''  # Needed to not be suspicious
                    , claimed_time=faker.date_time_this_year()
                    , number=number
                     )

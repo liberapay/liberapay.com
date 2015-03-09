@@ -14,7 +14,8 @@
 
 </table>
 
-{% if participant.bitcoin_address or accounts[website.platforms.venmo.name] or own_account %}
+{% set bitcoin = participant.get_route('bitcoin') %}
+{% if bitcoin or accounts.venmo or own_account %}
 
 {% if not user.ANON and own_account %}
 <h2>{{ _("Other Receiving Options") }}</h2>
@@ -24,8 +25,8 @@
 <table class="accounts">
 
     <!-- one-off receiving options -->
-    {% if participant.bitcoin_address or own_account %}
-    {% set addr = participant.bitcoin_address or '' %}
+    {% if bitcoin or own_account %}
+    {% set addr = bitcoin.address if bitcoin else '' %}
     {% set url = 'https://blockchain.info/address/'+addr if addr else 'javascript:;' %}
     <tr class="bitcoin js-edit">
         <td class="account-type">

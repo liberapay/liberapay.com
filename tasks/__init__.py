@@ -14,6 +14,8 @@ import json
 
 from gratipay import wireup
 from gratipay.exceptions import NegativeBalance
+from gratipay.models.exchange_route import ExchangeRoute
+from gratipay.models.participant import Participant
 
 MINIMUM_COINBASE_PAYOUT = 1 # in USD
 
@@ -46,33 +48,24 @@ def set_paypal_email(username='', email='', api_key_fragment='', overwrite=False
 
     db = wireup.db(wireup.env())
 
-    FIELDS = """
-            SELECT username, api_key, paypal_email
-              FROM participants
-             WHERE username = %s
-    """
-
-    fields = db.one(FIELDS, (username,))
-
-    print(fields)
-
-    if fields == None:
+    participant = Participant.from_username(username)
+    if not participant:
         print("No Gratipay participant found with username '" + username + "'")
         sys.exit(2)
+
+    route = ExchangeRoute.from_network(participant, 'paypal')
 
     # PayPal caps the MassPay fee at $20 for users outside the U.S., and $1 for
     # users inside the U.S. Most Gratipay users using PayPal are outside the U.S.
     # so we set to $20 and I'll manually adjust to $1 when running MassPay and
     # noticing that something is off.
-    FEE_CAP = ', paypal_fee_cap=20'
+    FEE_CAP = 20
 
-    if fields.paypal_email != None:
-        print("PayPal email is already set to: " + fields.paypal_email)
+    if route:
+        print("PayPal email is already set to: " + route.address)
         if not overwrite:
             print("Not overwriting existing PayPal email.")
             sys.exit(3)
-        else:
-            FEE_CAP = ''  # Don't overwrite fee_cap when overwriting email address.
 
     if fields.api_key == None:
         assert first_eight == "None"
@@ -80,16 +73,7 @@ def set_paypal_email(username='', email='', api_key_fragment='', overwrite=False
         assert fields.api_key[0:8] == first_eight
 
     print("Setting PayPal email for " + username + " to " + email)
-
-    SET_EMAIL = """
-            UPDATE participants
-               SET paypal_email=%s{}
-             WHERE username=%s;
-    """.format(FEE_CAP)
-    print(SET_EMAIL % (email, username))
-
-    db.run(SET_EMAIL, (email, username))
-
+    ExchangeRoute.insert(participant, 'paypal', email, fee_cap=FEE_CAP)
     print("All done.")
 
 @task(
@@ -124,34 +108,27 @@ def bitcoin_payout(username='', amount='', api_key_fragment=''):
 
     db = wireup.db(wireup.env())
 
-    FIELDS = """
-            SELECT username, api_key, bitcoin_address, balance
-              FROM participants
-             WHERE username = %s
-    """
-
-    fields = db.one(FIELDS, (username,))
-
-    print(fields)
-
-    if fields == None:
+    participant = Participant.from_username(username)
+    if not participant:
         print("No Gratipay participant found with username '" + username + "'")
         sys.exit(2)
 
-    if not fields.bitcoin_address:
+    route = ExchangeRoute.from_network(participant, 'bitcoin')
+    if not route:
         print(username + " hasn't linked a bitcoin address to their profile!")
         sys.exit(3)
-    print("Fetching bitcoin_address from database: " + fields.bitcoin_address)
-    bitcoin_address = fields.bitcoin_address
 
-    if D(fields.balance) < D(amount):
+    bitcoin_address = route.address
+    print("Fetched bitcoin_address from database: " + bitcoin_address)
+
+    if D(participant.balance) < D(amount):
         print("Not enough balance. %s only has %f in their account!" % username, D(amount))
         sys.exit(4)
 
-    if fields.api_key == None:
+    if participant.api_key == None:
         assert first_eight == "None"
     else:
-        assert fields.api_key[0:8] == first_eight
+        assert participant.api_key[0:8] == first_eight
 
     print("Sending bitcoin payout for " + username + " to " + bitcoin_address)
     try:

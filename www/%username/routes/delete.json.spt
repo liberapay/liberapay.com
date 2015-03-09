@@ -1,6 +1,8 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from gratipay import billing
+from aspen import Response
+
+from gratipay.models.exchange_route import ExchangeRoute
 from gratipay.utils import get_participant
 
 [---]
@@ -8,11 +10,11 @@ from gratipay.utils import get_participant
 request.allow('POST')
 participant = get_participant(state, restrict=True)
 
-thing = request.body['thing']
-
-if participant.balanced_customer_href:
-    account = participant.get_balanced_account()
-    billing.clear(website.db, thing, participant, account)
+route = ExchangeRoute.from_network(participant, request.body['network'])
+if route:
+    route.invalidate()
+else:
+    raise Response(400, _("It seems you're trying to delete something that doesn't exist."))
 
 [---] application/json via json_dump
 {}
