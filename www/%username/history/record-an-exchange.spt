@@ -1,50 +1,83 @@
 from decimal import Decimal, InvalidOperation
 
 from aspen import Response
-import gratipay
 from gratipay.utils import get_participant
 
 [---------------------------------------------]
 
 if not user.ADMIN:
-    raise Response(404)
+    raise Response(403)
 
-request.allow('POST')
+request.allow('GET', 'POST')
 
 participant = get_participant(state)
-try:
-    amount = Decimal(request.body['amount'])
-    fee = Decimal(request.body['fee'])
-except InvalidOperation:
-    raise Response(400)
-note = request.body['note'].strip()
-if not note:
-    raise Response(400)
-status = request.body['status']
+title = participant.username
+subhead = "Record an exchange"
+
+if request.method == 'POST':
+    try:
+        amount = Decimal(request.body['amount'])
+        fee = Decimal(request.body['fee'])
+    except InvalidOperation:
+        raise Response(400)
+    note = request.body['note'].strip()
+    if not note:
+        raise Response(400)
+    status = request.body['status']
 
 
-with website.db.get_cursor() as cursor:
-    params = (amount, fee, participant.username, user.participant.username, note, status)
-    SQL = "INSERT INTO exchanges " \
-          "(amount, fee, participant, recorder, note, status) " \
-          "VALUES (%s, %s, %s, %s, %s, %s)"
-    cursor.execute(SQL, params)
+    with website.db.get_cursor() as cursor:
+        cursor.run("""
+            INSERT INTO exchanges
+                        (amount, fee, participant, recorder, note, status)
+                 VALUES (%s, %s, %s, %s, %s, %s)
+        """, (amount, fee, participant.username, user.participant.username, note, status))
 
-    if amount < 0:
-        # For payouts, we need to take the fee out of their Gratipay balance.
-        balance_adjustment = amount - fee
-        update_balance = status != 'failed'
-    else:
-        # For payins, we don't have to worry about the fee relative to their
-        # balance, because the amount is already less the fee.
-        balance_adjustment = amount
-        update_balance = status == 'succeeded'
+        if amount < 0:
+            # For payouts, we need to take the fee out of their Gratipay balance.
+            balance_adjustment = amount - fee
+            update_balance = status != 'failed'
+        else:
+            # For payins, we don't have to worry about the fee relative to their
+            # balance, because the amount is already less the fee.
+            balance_adjustment = amount
+            update_balance = status == 'succeeded'
 
-    if update_balance:
-        SQL = "UPDATE participants SET balance = balance + %s WHERE username=%s RETURNING balance"
-        balance = cursor.one(SQL, (balance_adjustment, participant.username))
-        # XXX This is the one context where dropping to a negative balance is allowed!
+        if update_balance:
+            # Dropping to a negative balance is allowed here.
+            balance = cursor.one("""
+                UPDATE participants
+                   SET balance = balance + %s
+                 WHERE username=%s
+             RETURNING balance
+            """, (balance_adjustment, participant.username))
 
-request.redirect('/%s/history/' % participant.username)
+    request.redirect('/%s/history/' % participant.username)
 
-[---------------------------------------------] text/plain
+[---------------------------------------------] text/html
+{% extends "templates/profile.html" %}
+{% block content %}
+
+<h2>Record an Exchange</h2>
+<p style="text-align: left">
+    <b>Amount</b> is a black number. Positive for payins ("Credits"),
+    negative for payouts ("Bank").<br>
+    <b>Fee</b> is always positive.<br>
+    <b>Note</b> is required.
+</p>
+<form action="" method="POST">
+    <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
+    <input name="amount" placeholder="amount" />
+    <input name="fee" placeholder="fee" />
+    <select name="status">
+        <option value="pre">pre</option>
+        <option value="pending">pending</option>
+        <option value="succeeded" selected="true">succeeded</option>
+        <option value="failed">failed</option>
+    </select>
+    <br>
+    <input name="note" placeholder="note" style="width: 420px" />
+    <button type="submit">Submit</button>
+</form>
+
+{% endblock %}

@@ -54,28 +54,7 @@ else:
     <tr><td colspan="8">
         <h2>{{ BALANCE }}</h2>
         {% if user.ADMIN %}
-        <h2>Record an Exchange.</h2>
-        <p style="text-align: left">
-            <b>Amount</b> is a black number. Positive for payins ("Credits"),
-            negative for payouts ("Bank").<br>
-            <b>Fee</b> is always positive.<br>
-            <b>Note</b> is required.
-        </p>
-        <form style="text-align: left;" action="record-an-exchange"
-            method="POST">
-            <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
-            <input name="amount" placeholder="amount" />
-            <input name="fee" placeholder="fee" />
-            <select name="status">
-                <option value="pre">pre</option>
-                <option value="pending">pending</option>
-                <option value="succeeded" selected="true">succeeded</option>
-                <option value="failed">failed</option>
-            </select>
-            <br>
-            <input name="note" placeholder="note" style="width: 420px" />
-            <button type="submit">Submit</button>
-        </form>
+        <h2><a href="record-an-exchange.html">Record an exchange</a></h2>
         {% endif %}
     </td></tr>
 {% endif %}
