@@ -86,7 +86,7 @@ def iter_payday_events(db, participant, year=None):
     if transfers:
         yield dict(
             kind='totals',
-            given=sum(t['amount'] for t in transfers if t['tipper'] == username),
+            given=sum(t['amount'] for t in transfers if t['tipper'] == username and t['context'] != 'take'),
             received=sum(t['amount'] for t in transfers if t['tippee'] == username),
         )
 
