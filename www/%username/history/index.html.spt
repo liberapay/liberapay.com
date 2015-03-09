@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from aspen import Response
 
 from gratipay.utils import get_participant
@@ -17,13 +19,13 @@ translated_status = { None:         ''
                     , 'succeeded':  _('succeeded')
                      }
 
-year = request.qs.get('year')
-if year:
-    try:
-        year = int(year)
-    except ValueError:
-        raise Response(400, "bad year")
+current_year = datetime.utcnow().year
+try:
+    year = int(request.qs.get('year', current_year))
+except ValueError:
+    raise Response(400, "bad year")
 events = iter_payday_events(website.db, participant, year)
+years = list(range(current_year, participant.ctime.year-1, -1))
 
 if participant == user.participant:
     BALANCE = _("Your balance is {0}.", format_currency(participant.balance, "USD"))
@@ -34,8 +36,21 @@ else:
 {% extends "templates/profile.html" %}
 {% block content %}
 
+{% if len(years) > 1 %}
+<form action="" method="get">
+    <label>{{ _("Year:") }}
+        <select name="year">
+        {% for y in years %}
+            <option value="{{ y }}" {{ 'selected' if y == year }}>{{ y }}</option>
+        {% endfor %}
+        </select>
+    </label>
+    <button type="submit">{{ _("Go") }}</button>
+</form>
+{% endif %}
+
 <table id="history">
-{% if not year %}
+{% if year == current_year %}
     <tr><td colspan="8">
         <h2>{{ BALANCE }}</h2>
         {% if user.ADMIN %}
