@@ -30,19 +30,11 @@ class TestRecordAnExchange(Harness):
         actual = self.record_an_exchange('10', '0', 'foo').code
         assert actual == 302
 
-    def test_non_admin_is_404(self):
+    def test_non_admin_is_403(self):
         self.make_participant('alice', claimed_time=utcnow())
         self.make_participant('bob', claimed_time=utcnow())
         actual = self.record_an_exchange('10', '0', 'foo', make_participants=False).code
-        assert actual == 404
-
-    def test_non_post_is_405(self):
-        self.make_participant('alice', claimed_time=utcnow(), is_admin=True)
-        self.make_participant('bob', claimed_time=utcnow())
-        actual = self.client.GxT( '/bob/history/record-an-exchange'
-                                , auth_as='alice'
-                                 ).code
-        assert actual == 405
+        assert actual == 403
 
     def test_bad_amount_is_400(self):
         actual = self.record_an_exchange('cheese', '0', 'foo').code

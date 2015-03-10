@@ -54,7 +54,7 @@ class TestHistory(Harness):
         assert events[1]['payday_number'] == 2
         assert events[2]['balance'] == 12
         assert events[-1]['kind'] == 'day-close'
-        assert events[-1]['balance'] == '0.00'
+        assert events[-1]['balance'] == 0
 
         alice = Participant.from_id(alice.id)
         assert alice.balance == 4990
@@ -83,4 +83,4 @@ class TestHistory(Harness):
         assert events[3]['kind'] == 'charge'
         assert events[3]['balance'] == 50
         assert events[4]['kind'] == 'day-close'
-        assert events[4]['balance'] == '0.00'
+        assert events[4]['balance'] == 0

@@ -1,10 +1,13 @@
+from datetime import datetime
+
+from aspen import Response
+
 from gratipay.utils import get_participant
 from gratipay.utils.history import iter_payday_events
 
 [-----------------------------------------------------------------------------]
 
 participant = get_participant(state, restrict=True)
-events = iter_payday_events(website.db, participant)
 title = participant.username
 subhead = _("History")
 subpath = 'history/' if user.ADMIN else ''
@@ -16,10 +19,13 @@ translated_status = { None:         ''
                     , 'succeeded':  _('succeeded')
                      }
 
-if participant == user.participant:
-    JOINED = _("You joined {0} ago.", to_age(participant.claimed_time))
-elif participant.claimed_time:
-    JOINED = _("{0} joined {1} ago.", participant.username, to_age(participant.claimed_time))
+current_year = datetime.utcnow().year
+try:
+    year = int(request.qs.get('year', current_year))
+except ValueError:
+    raise Response(400, "bad year")
+events = iter_payday_events(website.db, participant, year)
+years = list(range(current_year, participant.ctime.year-1, -1))
 
 if participant == user.participant:
     BALANCE = _("Your balance is {0}.", format_currency(participant.balance, "USD"))
@@ -30,42 +36,28 @@ else:
 {% extends "templates/profile.html" %}
 {% block content %}
 
+<p>{{ BALANCE }}</p>
+
+{% if user.ADMIN %}
+<h2><a href="record-an-exchange.html">Record an exchange</a></h2>
+{% endif %}
+
+<h2>{{ _("Account Statement") }}</h2>
+
+{% if len(years) > 1 %}
+<ul class="nav">
+    {% for y in years %}
+        <li><a href="?year={{ y }}" class="{{ 'selected' if y == year }}">{{ y }}</a></li>
+    {% endfor %}
+</ul>
+{% endif %}
+
 <table id="history">
-    <tr><td colspan="8">
-        <h2>{{ JOINED }}</h2>
-    </td></tr>
-    <tr><td colspan="8">
-        <h2>{{ BALANCE }}</h2>
-        {% if user.ADMIN %}
-        <h2>Record an Exchange.</h2>
-        <p style="text-align: left">
-            <b>Amount</b> is a black number. Positive for payins ("Credits"),
-            negative for payouts ("Bank").<br>
-            <b>Fee</b> is always positive.<br>
-            <b>Note</b> is required.
-        </p>
-        <form style="text-align: left;" action="record-an-exchange"
-            method="POST">
-            <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
-            <input name="amount" placeholder="amount" />
-            <input name="fee" placeholder="fee" />
-            <select name="status">
-                <option value="pre">pre</option>
-                <option value="pending">pending</option>
-                <option value="succeeded" selected="true">succeeded</option>
-                <option value="failed">failed</option>
-            </select>
-            <br>
-            <input name="note" placeholder="note" style="width: 420px" />
-            <button type="submit">Submit</button>
-        </form>
-        {% endif %}
-    </td></tr>
-    {% for event in events %}
+{% for event in events %}
     {% if event['kind'] == 'totals' %}
-    <tr><td colspan="8">
-        <h2>{{ _("Total given: {0}", format_currency(event['given'], "USD")) }}<br>
-            {{ _("Total received: {0}", format_currency(event['received'], "USD")) }}</h2>
+    <tr><td colspan="8" class="totals">
+        {{ _("Total given: {0}", format_currency(event['given'], "USD")) }}<br>
+        {{ _("Total received: {0}", format_currency(event['received'], "USD")) }}
     </td></tr>
     {% elif event['kind'] == 'day-open' %}
     <tr>
@@ -184,6 +176,8 @@ else:
         <td class="notes"></td>
     </tr>
     {% endif %}
+{% else %}
+    <p>{{ _("No transactions to show.") }}</p>
 {% endfor %}
 </table>
 
