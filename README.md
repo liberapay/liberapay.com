@@ -268,13 +268,7 @@ Docker
 
 You can also install/run Gratipay with Docker.
 
-Either pull the image from the Docker Index:
-
-```
-$ docker pull citruspi/gratipay
-```
-
-or build it with the included Dockerfile:
+Build it with the included Dockerfile:
 
 ```
 $ git clone git@github.com:gratipay/gratipay.com.git
@@ -282,45 +276,42 @@ $ cd gratipay.com
 $ docker build -t gratipay .
 ```
 
-Once you have the image, get the Image ID with
+Once you've built the image, you can launch a container:
+
 
 ```
-$ docker images
+$ docker run -d -p 8537:8537 gratipay
 ```
 
+Check it out at [localhost:8537](http://localhost:8537/)!
 
-You can then run it in the foreground:
 
-```
-$ docker run -p 8537:8537 [image_id]
-```
-
-or in the background:
+To edit files and have those changes reflect in the running container, mount your local folder when you execute the run command:
 
 ```
-$ docker run -d -p 8537:8537 [image_id]
+$ docker run -d -v $PWD:/srv/gratipay.com -p 8537:8537 gratipay
 ```
 
-Check it out at [localhost:8537](localhost:8537)!
+You can get the running container's ID with `docker ps`. With that, you can
 
-If you run it in the background, you can get the Container ID with
-
-```
-$ docker ps
-```
-
-With that, you can view the logs:
+- view the logs:
 
 ```
 $ docker logs [container_id]
 ```
 
-or kill the detached container with:
+- run commands within the project root:
+
+```
+$ docker exec [container_id] make schema
+$ docker exec [container_id] make data
+```
+
+Once you're done, kill the running container:
 
 ```
 $ docker kill [container_id]
 ```
-
 
 Help!
 -----
@@ -513,7 +504,7 @@ for your project!
 
 ### Renamed to Gratipay
 
- - [Ruby: gratitude](https://github.com/JohnKellyFerguson/gratitude): a simple 
+ - [Ruby: gratitude](https://github.com/JohnKellyFerguson/gratitude): a simple
    ruby wrapper for the Gratipay API
 
  - [php-curl-class](https://github.com/php-curl-class/php-curl-class/blob/master/examples/gratipay_send_tip.php): a php class to tip using the Gratipay API
