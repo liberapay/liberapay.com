@@ -18,7 +18,7 @@ from gratipay.billing.exchanges import (
     skim_credit,
     sync_with_balanced,
 )
-from gratipay.exceptions import NegativeBalance, NoBalancedCustomerHref, NotWhitelisted
+from gratipay.exceptions import NegativeBalance, NotWhitelisted
 from gratipay.models.participant import Participant
 from gratipay.testing import Foobar, Harness
 from gratipay.testing.balanced import BalancedHarness
@@ -64,11 +64,6 @@ class TestCredits(BalancedHarness):
 
 
 class TestCardHolds(BalancedHarness):
-
-    def test_create_card_hold_without_cc_details_raises_NoBalancedCustomerHref(self):
-        alice = self.make_participant('alice')
-        with self.assertRaises(NoBalancedCustomerHref):
-            create_card_hold(self.db, alice, D('1.00'))
 
     def test_create_card_hold_for_suspicious_raises_NotWhitelisted(self):
         bob = self.make_participant('bob', is_suspicious=True,

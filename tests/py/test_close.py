@@ -8,7 +8,7 @@ import mock
 import pytest
 
 from gratipay.billing.payday import Payday
-from gratipay.exceptions import NoBalancedCustomerHref, NotWhitelisted
+from gratipay.exceptions import NotWhitelisted
 from gratipay.models.community import Community
 from gratipay.models.participant import Participant
 from gratipay.testing import Harness
@@ -98,11 +98,6 @@ class TestClosing(Harness):
         bank_account.associate_to_customer(alice.balanced_customer_href)
 
         alice.close('bank')
-
-    def test_wbtba_raises_NoBalancedCustomerHref_if_no_balanced_customer_href(self):
-        alice = self.make_participant('alice', balance=D('10.00'), is_suspicious=False)
-        with pytest.raises(NoBalancedCustomerHref):
-            alice.withdraw_balance_to_bank_account()
 
     def test_wbtba_raises_NotWhitelisted_if_not_whitelisted(self):
         alice = self.make_participant('alice', balance=D('10.00'))

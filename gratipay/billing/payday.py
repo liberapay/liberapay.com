@@ -195,7 +195,6 @@ class Payday(object):
                  , claimed_time
                  , balance AS old_balance
                  , balance AS new_balance
-                 , balanced_customer_href
                  , is_suspicious
                  , goal
                  , false AS card_hold_ok
