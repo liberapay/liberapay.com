@@ -36,33 +36,28 @@ else:
 {% extends "templates/profile.html" %}
 {% block content %}
 
+<p>{{ BALANCE }}</p>
+
+{% if user.ADMIN %}
+<h2><a href="record-an-exchange.html">Record an exchange</a></h2>
+{% endif %}
+
+<h2>{{ _("Account Statement") }}</h2>
+
 {% if len(years) > 1 %}
-<form action="" method="get">
-    <label>{{ _("Year:") }}
-        <select name="year">
-        {% for y in years %}
-            <option value="{{ y }}" {{ 'selected' if y == year }}>{{ y }}</option>
-        {% endfor %}
-        </select>
-    </label>
-    <button type="submit">{{ _("Go") }}</button>
-</form>
+<ul class="nav">
+    {% for y in years %}
+        <li><a href="?year={{ y }}" class="{{ 'selected' if y == year }}">{{ y }}</a></li>
+    {% endfor %}
+</ul>
 {% endif %}
 
 <table id="history">
-{% if year == current_year %}
-    <tr><td colspan="8">
-        <h2>{{ BALANCE }}</h2>
-        {% if user.ADMIN %}
-        <h2><a href="record-an-exchange.html">Record an exchange</a></h2>
-        {% endif %}
-    </td></tr>
-{% endif %}
 {% for event in events %}
     {% if event['kind'] == 'totals' %}
-    <tr><td colspan="8">
-        <h2>{{ _("Total given: {0}", format_currency(event['given'], "USD")) }}<br>
-            {{ _("Total received: {0}", format_currency(event['received'], "USD")) }}</h2>
+    <tr><td colspan="8" class="totals">
+        {{ _("Total given: {0}", format_currency(event['given'], "USD")) }}<br>
+        {{ _("Total received: {0}", format_currency(event['received'], "USD")) }}
     </td></tr>
     {% elif event['kind'] == 'day-open' %}
     <tr>
