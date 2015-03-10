@@ -359,3 +359,11 @@ CREATE TABLE email_queue
 , spt_name      text     NOT NULL
 , context       bytea    NOT NULL
 );
+
+-- https://github.com/gratipay/gratipay.com/pull/3239
+CREATE TABLE balances_at
+( participant  bigint         NOT NULL REFERENCES participants(id)
+, at           timestamptz    NOT NULL
+, balance      numeric(35,2)  NOT NULL
+, UNIQUE (participant, at)
+);
