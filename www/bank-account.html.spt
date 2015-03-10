@@ -1,11 +1,7 @@
-import traceback
-from datetime import datetime, timedelta
+from datetime import datetime
 
-import balanced
-from aspen import json, log, Response
 from gratipay import billing, MONTHS
 from gratipay.billing.exchanges import MINIMUM_CREDIT
-from gratipay.elsewhere import github
 
 [-----------------------------------------------------------------------------]
 balanced_customer_href = None
