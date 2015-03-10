@@ -91,31 +91,13 @@ Gratipay.payments.ba.submit = function (e) {
         routing_number: $('#routing_number').val()
     };
 
-    Gratipay.payments.ba.merchantData = {
-        //type: 'person',  // Oooh, may need to vary this some day?
-        street_address: $('#address_1').val(),
-        postal_code: $('#zip').val(),
-        phone_number: $('#phone_number').val(),
-        region: $('#state').val(),
-        dob_month: $('#dob-month').val(),
-        dob_year: $('#dob-year').val(),
-        dob_day: $('#dob-day').val(),
-        name: $('#name').val()
-    };
     var errors = [];
 
 
     // Require some fields.
     // ====================
-    // We only require fields that are actually on the page. Since we don't
-    // load the identity verification fields if they're already verified, not
-    // all of these will necessarily be present at all.
 
     var requiredFields = {
-        name: 'Your legal name is required.',
-        address_1: 'Your street address is required.',
-        zip: 'Your ZIP or postal code is required.',
-        phone_number: 'A phone number is required.',
         account_name: 'The name on your bank account is required.',
         account_number: 'Your bank account number is required.',
         routing_number: 'A routing number is required.'
