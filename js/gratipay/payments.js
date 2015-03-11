@@ -48,7 +48,7 @@ Gratipay.payments.submitDeleteForm = function(e) {
 };
 
 Gratipay.payments.onError = function(response) {
-    $('button#save').css('opacity', 1);
+    $('button#save').prop('disabled', false);
     var msg = response.status_code + ": " +
         $.map(response.errors, function(obj) { return obj.description }).join(', ');
     Gratipay.forms.showFeedback(null, [msg]);
@@ -62,7 +62,7 @@ Gratipay.payments.onSuccess = function(data) {
     }, 8000);
     $('#delete').show();
     Gratipay.forms.clearFeedback();
-    $('button#save').css('opacity', 1);
+    $('button#save').prop('disabled', false);
     setTimeout(function() {
         window.location.href = '/' + Gratipay.participantId + '/';
     }, 1000);
@@ -82,7 +82,7 @@ Gratipay.payments.ba.init = function(participantId) {
 Gratipay.payments.ba.submit = function (e) {
     e.preventDefault();
 
-    $('button#save').css('opacity', 0.5);
+    $('button#save').prop('disabled', true);
     Gratipay.forms.clearFeedback();
 
     var bankAccount = {
@@ -150,7 +150,7 @@ Gratipay.payments.ba.submit = function (e) {
 
 
     if (errors.length) {
-        $('button#save').css('opacity', 1);
+        $('button#save').prop('disabled', false);
         Gratipay.forms.showFeedback(null, errors);
     } else {
         balanced.bankAccount.create( bankAccount
@@ -182,7 +182,7 @@ Gratipay.payments.ba.handleResponse = function (response) {
             ];
         }
         Gratipay.forms.showFeedback(data.problem, messages);
-        $('button#save').css('opacity', 1);
+        $('button#save').prop('disabled', false);
     }
 
     var detailsToSubmit = Gratipay.payments.ba.merchantData;
@@ -340,7 +340,7 @@ Gratipay.payments.cc.submit = function(e) {
 
     e.stopPropagation();
     e.preventDefault();
-    $('button#save').css('opacity', 0.5);
+    $('button#save').prop('disabled', true);
     Gratipay.forms.clearFeedback();
 
     // Adapt our form lingo to balanced nomenclature.
@@ -379,17 +379,17 @@ Gratipay.payments.cc.submit = function(e) {
     credit_card.expiration_year = year.length == 2 ? '20' + year : year;
 
     if (!balanced.card.isCardNumberValid(credit_card.number)) {
-        $('button#save').css('opacity', 1);
+        $('button#save').prop('disabled', false);
         Gratipay.forms.showFeedback(null, ["Your card number is bad."]);
     } else if (!balanced.card.isExpiryValid( credit_card.expiration_month
                                          , credit_card.expiration_year
                                           )) {
-        $('button#save').css('opacity', 1);
+        $('button#save').prop('disabled', false);
         Gratipay.forms.showFeedback(null, ["Your expiration date is bad."]);
     } else if (!balanced.card.isSecurityCodeValid( credit_card.number
                                                , credit_card.cvv
                                                 )) {
-        $('button#save').css('opacity', 1);
+        $('button#save').prop('disabled', false);
         Gratipay.forms.showFeedback(null, ["Your CVV is bad."]);
     } else {
         balanced.card.create(credit_card, Gratipay.payments.cc.handleResponse);
@@ -418,7 +418,7 @@ Gratipay.payments.cc.handleResponse = function(response) {
         $('#delete').show();
         var details = [];
         Gratipay.forms.showFeedback(data.problem, [data.error]);
-        $('button#save').css('opacity', 1);
+        $('button#save').prop('disabled', false);
     }
 
     Gratipay.forms.submit( "/credit-card.json"
