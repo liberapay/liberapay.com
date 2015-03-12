@@ -316,6 +316,7 @@ def other_stuff(website, env):
 
     website.google_analytics_id = env.google_analytics_id
     website.optimizely_id = env.optimizely_id
+    website.include_piwik = env.include_piwik
 
     website.log_metrics = env.log_metrics
 
@@ -364,6 +365,7 @@ def env():
         OPTIMIZELY_ID                   = unicode,
         SENTRY_DSN                      = unicode,
         LOG_METRICS                     = is_yesish,
+        INCLUDE_PIWIK                   = is_yesish,
         MANDRILL_KEY                    = unicode,
         RAISE_SIGNIN_NOTIFICATIONS      = is_yesish,
 
