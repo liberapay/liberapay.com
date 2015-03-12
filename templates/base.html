@@ -30,7 +30,9 @@
         window.optimizely.push("activateUniversalAnalytics");
         ga('send', 'pageview');
     </script>
+    {% endif %}
 
+    {% if website.include_piwik and request.headers.get('DNT') != '1' %}
     <!-- Piwik -->
     <script type="text/javascript">
       var _paq = _paq || [];
@@ -44,7 +46,6 @@
         g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
       })();
     </script>
-    <noscript><p><img src="//gratipay.piwik.pro/piwik.php?idsite=1" style="border:0;" alt="" /></p></noscript>
     <!-- End Piwik Code -->
     {% endif %}
 </head>
@@ -133,5 +134,10 @@
 
 {% block scripts %}{% endblock %}
 
+{% if website.include_piwik and request.headers.get('DNT') != '1' %}
+<!-- Piwik -->
+<noscript><img src="//gratipay.piwik.pro/piwik.php?idsite=1" style="border:0;" alt="" /></noscript>
+<!-- End Piwik Code -->
+{% endif %}
 </body>
 </html>
