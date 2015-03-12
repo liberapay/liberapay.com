@@ -33,20 +33,18 @@
     {% endif %}
 
     {% if website.include_piwik and request.headers.get('DNT') != '1' %}
-    <!-- Piwik -->
     <script type="text/javascript">
-      var _paq = _paq || [];
-      _paq.push(['trackPageView']);
-      _paq.push(['enableLinkTracking']);
-      (function() {
-        var u="//gratipay.piwik.pro/";
-        _paq.push(['setTrackerUrl', u+'piwik.php']);
-        _paq.push(['setSiteId', 1]);
-        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-        g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
-      })();
+        var _paq = _paq || [];
+        _paq.push(['trackPageView']);
+        _paq.push(['enableLinkTracking']);
+        (function() {
+            var u="//gratipay.piwik.pro/";
+            _paq.push(['setTrackerUrl', u+'piwik.php']);
+            _paq.push(['setSiteId', 1]);
+            var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+            g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+        })();
     </script>
-    <!-- End Piwik Code -->
     {% endif %}
 </head>
 {% set homepage = request.path.raw == '/' %}
@@ -135,9 +133,7 @@
 {% block scripts %}{% endblock %}
 
 {% if website.include_piwik and request.headers.get('DNT') != '1' %}
-<!-- Piwik -->
 <noscript><img src="//gratipay.piwik.pro/piwik.php?idsite=1" style="border:0;" alt="" /></noscript>
-<!-- End Piwik Code -->
 {% endif %}
 </body>
 </html>
