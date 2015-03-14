@@ -76,7 +76,7 @@ title = _("Bank Account")
         {% endif %}
     </style>
     <div class="cc-ba">
-        <form id="payout" autocomplete="off">
+        <form id="bank-account" autocomplete="off">
             <div class="constrain-width clearfix">
 
                 {% if account and 'merchant' in account.roles %}

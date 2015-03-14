@@ -76,7 +76,7 @@ Gratipay.payments.ba = {};
 
 Gratipay.payments.ba.init = function(participantId) {
     Gratipay.payments.init(participantId);
-    $('#payout').submit(Gratipay.payments.ba.submit);
+    $('form#bank-account').submit(Gratipay.payments.ba.submit);
 };
 
 Gratipay.payments.ba.submit = function (e) {
@@ -203,7 +203,7 @@ Gratipay.payments.cc = {};
 
 Gratipay.payments.cc.init = function(participantId) {
     Gratipay.payments.init(participantId);
-    $('form#payment').submit(Gratipay.payments.cc.submit);
+    $('form#credit-card').submit(Gratipay.payments.cc.submit);
     Gratipay.payments.cc.formatInputs(
         $('#card_number'),
         $('#expiration_month'),
@@ -346,7 +346,7 @@ Gratipay.payments.cc.submit = function(e) {
     // Adapt our form lingo to balanced nomenclature.
 
     function val(field) {
-        return $('form#payment input[id="' + field + '"]').val();
+        return $('form#credit-card input[id="' + field + '"]').val();
     }
 
     var credit_card = {};   // holds CC info
