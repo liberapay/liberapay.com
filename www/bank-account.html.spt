@@ -80,17 +80,17 @@ title = _("Bank Account")
 
             <label>
                 <span>{{ _("Name on Bank Account") }}</span>
-                <input id="account_name" autofocus />
+                <input id="account_name" required autofocus />
             </label>
 
             <label>
                 <span>{{ _("Routing Number") }}</span>
-                <input id="routing_number" />
+                <input id="routing_number" required />
             </label>
 
             <label>
                 <span>{{ _("Bank Account Number") }}</span>
-                <input id="account_number" />
+                <input id="account_number" required />
             </label>
 
             <button class="selected larger" id="save" type="submit">{{ _("Save") }}</button>

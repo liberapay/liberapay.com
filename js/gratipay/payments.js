@@ -90,29 +90,6 @@ Gratipay.payments.ba.submit = function (e) {
     var errors = [];
 
 
-    // Require some fields.
-    // ====================
-
-    var requiredFields = {
-        account_name: 'The name on your bank account is required.',
-        account_number: 'Your bank account number is required.',
-        routing_number: 'A routing number is required.'
-    };
-    for (var field in requiredFields) {
-        var $f = $('#' + field);
-        if (!$f.length)  // Only validate if it's on the page.
-            continue;
-        var value = $f.val();
-
-        if (!value) {
-            $f.closest('div').addClass('error');
-            errors.push(requiredFields[field]);
-        } else {
-            $f.closest('div').removeClass('error');
-        }
-    }
-
-
     // Validate routing number.
     // ========================
 

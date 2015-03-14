@@ -84,19 +84,19 @@ title = _("Credit Card")
 
             <label>
                 <span>{{ _("Credit Card Number") }}</span>
-                <input id="card_number" />
+                <input id="card_number" required />
             </label>
 
             <div class="half">
                 <label for="expiration_month">{{ _("Expiration") }}</label>
-                <input id="expiration_month" placeholder="{{ _('MM') }}" title="{{ _('Expiration Month') }}" />
+                <input id="expiration_month" placeholder="{{ _('MM') }}" title="{{ _('Expiration Month') }}" required />
                 <span class="date_slash">/</span>
-                <input id="expiration_year" placeholder="{{ _('YY') }}" title="{{ _('Expiration Year') }}" />
+                <input id="expiration_year" placeholder="{{ _('YY') }}" title="{{ _('Expiration Year') }}" required />
             </div>
 
             <label class="half right">
                 <span>{{ _("CVV") }}</span>
-                <input id="cvv" />
+                <input id="cvv" required />
             </label>
 
             <div class="info">
