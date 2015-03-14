@@ -157,12 +157,10 @@ title = _("Credit Card")
 
         </form>
 
-        <div id="delete">
-            <form action="credit-card.json" class="special" method="POST">
-                <input type="hidden" name="action" value="delete">
-                <button>{{ _("Disconnect My Credit Card") }}</button>
-            </form>
-        </div>
+        <form id="delete" action="credit-card.json" method="POST"
+              data-confirm="{{ _('Are you sure you want to disconnect your credit card ?') }}">
+            <button>{{ _("Disconnect My Credit Card") }}</button>
+        </form>
 
         <p class="info">Credit card information is stored and processed by <a
             href="https://www.balancedpayments.com/">Balanced Payments</a>.

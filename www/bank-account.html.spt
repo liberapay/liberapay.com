@@ -108,12 +108,10 @@ title = _("Bank Account")
         {% endif %}
 
         {% if bank_account and bank_account.is_setup %}
-        <div id="delete">
-            <form action="bank-account.json" class="special" method="POST">
-                <input type="hidden" name="action" value="delete">
-                <button>{{ _("Disconnect My Bank Account") }}</button>
-            </form>
-        </div>
+        <form id="delete" action="bank-account.json" method="POST"
+              data-confirm="{{ _('Are you sure you want to disconnect your bank account ?') }}">
+            <button>{{ _("Disconnect My Bank Account") }}</button>
+        </form>
         {% endif %}
 
     <p class="info">Bank account information is stored and processed by <a

@@ -15,7 +15,7 @@ Gratipay.payments = {};
 
 Gratipay.payments.init = function(participantId) {
     Gratipay.participantId = participantId;
-    $('#delete form').submit(Gratipay.payments.submitDeleteForm);
+    $('#delete').submit(Gratipay.payments.submitDeleteForm);
 
     // Lazily depend on Balanced.
     var balanced_js = "https://js.balancedpayments.com/1.1/balanced.min.js";
@@ -25,22 +25,18 @@ Gratipay.payments.init = function(participantId) {
 }
 
 Gratipay.payments.submitDeleteForm = function(e) {
-    var item = $("#payout").length ? "bank account" : "credit card";
-    var slug = $("#payout").length ? "bank-account" : "credit-card";
-    var msg = "Really disconnect your " + item + "?";
-    if (!confirm(msg)) {
-        e.stopPropagation();
-        e.preventDefault();
+    e.stopPropagation();
+    e.preventDefault();
+
+    var $form = $(this);
+    if (!confirm($form.data('confirm'))) {
         return false;
     }
-
     jQuery.ajax(
-        { url: '/' + slug + '.json'
+        { url: $form.attr('action')
         , data: {action: "delete"}
         , type: "POST"
-        , success: function() {
-            window.location.href = '/' + slug + '.html';
-          }
+        , success: function() { window.location.reload(); }
         , error: Gratipay.error
          }
     );
