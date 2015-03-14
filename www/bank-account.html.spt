@@ -75,27 +75,23 @@ title = _("Bank Account")
     <div class="cc-ba">
         {% if account and account.merchant_status == 'underwritten' %}
         <form id="bank-account" autocomplete="off">
-            <div class="constrain-width clearfix">
 
-                <h2>{{ _("Routing Information") }}</h2>
+            <h2>{{ _("Routing Information") }}</h2>
 
-                <div class="float">
-                    <label for="account_name">{{ _("Name on Bank Account") }}</label>
-                    <input id="account_name" autofocus="autofocus" />
-                </div>
+            <label>
+                <span>{{ _("Name on Bank Account") }}</span>
+                <input id="account_name" autofocus />
+            </label>
 
-                <div class="float routing_number">
-                    <label for="routing_number">{{ _("Routing Number") }}</label>
-                    <input id="routing_number" />
-                </div>
+            <label>
+                <span>{{ _("Routing Number") }}</span>
+                <input id="routing_number" />
+            </label>
 
-                <div class="float account_number">
-                    <label for="account_number">{{ _("Bank Account Number") }}</label>
-                    <input id="account_number" />
-                </div>
-
-                <div class="clear"></div>
-            </div>
+            <label>
+                <span>{{ _("Bank Account Number") }}</span>
+                <input id="account_number" />
+            </label>
 
             <button class="selected larger" id="save" type="submit">{{ _("Save") }}</button>
 
@@ -114,15 +110,14 @@ title = _("Bank Account")
         </form>
         {% endif %}
 
-    <p class="info">Bank account information is stored and processed by <a
-        href="https://www.balancedpayments.com/">Balanced Payments</a>.  Here
-        are their <a href="https://www.balancedpayments.com/terms">Terms of
-            Service</a> and <a
-            href="https://www.balancedpayments.com/privacy">Privacy
-            Policy</a>.</p>
+        <p class="info">Bank account information is stored and processed by
+            <a href="https://www.balancedpayments.com/">Balanced Payments</a>. Here
+            are their <a href="https://www.balancedpayments.com/terms">Terms of Service</a>
+            and <a href="https://www.balancedpayments.com/privacy">Privacy Policy</a>.
+        </p>
 
-    <a href="https://www.balancedpayments.com/"><img
-        src="{{ website.asset('platforms/balanced.png') }}" /></a>
+        <a href="https://www.balancedpayments.com/"><img
+            src="{{ website.asset('platforms/balanced.png') }}" /></a>
 
     </div>
   {% endif %}
