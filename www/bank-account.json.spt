@@ -35,29 +35,24 @@ else:
     # ==============================
 
     if balanced_account.merchant_status != 'underwritten':
-        out = {'problem': _("You need to verify your identity first.")}
+        raise Response(400, _("You need to verify your identity first."))
 
 
     # No errors? Great! Let's add the bank account.
     # =============================================
 
-    if not out:
+    # Clear out any old ones first.
+    billing.clear(website.db, u"bank account", participant, balanced_account)
 
-        # Clear out any old ones first.
-        billing.clear(website.db, u"bank account", participant, balanced_account)
-
-        bank_account_uri = body['bank_account_uri']
-        try:
-            billing.associate( website.db
+    bank_account_uri = body['bank_account_uri']
+    error = billing.associate( website.db
                              , u"bank account"
                              , participant
                              , balanced_account
                              , bank_account_uri
                               )
-        except balanced.exc.HTTPError as err:
-            out = {"problem": "Problem", "error": err.message}
-        else:
-            out = {"problem": ""}
+    if error:
+        raise Response(400, error)
 
 [---] application/json via json_dump
 out

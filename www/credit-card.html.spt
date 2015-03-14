@@ -65,14 +65,6 @@ title = _("Credit Card")
     <div class="details"><p>{{ last_bill_result }}</p></div>
     {% endif %}</div>
 
-
-    <style>
-        {% if status == "missing" %}
-        #delete {
-            display: none;
-        }
-        {% endif %}
-    </style>
     <div class="cc-ba">
         <form id="credit-card" autocomplete="off">
 
@@ -81,12 +73,14 @@ title = _("Credit Card")
             <label>
                 <span>{{ _("Credit Card Number") }}</span>
                 <input id="card_number" value="{{ card.number }}" required />
+                <span class="invalid-msg">{{ _("This card number is invalid.") }}</span>
             </label>
 
             <div class="half">
                 <label for="expiration_month">{{ _("Expiration") }}</label>
                 <input id="expiration_month" placeholder="{{ _('MM') }}" title="{{ _('Expiration Month') }}"
                        value="{{ card.expiration_month }}" required />
+                <span class="invalid-msg">{{ _("This expiration date is invalid.") }}</span>
                 <span class="date_slash">/</span>
                 <input id="expiration_year" placeholder="{{ _('YY') }}" title="{{ _('Expiration Year') }}"
                        value="{{ card.expiration_year - 2000 if card.expiration_year }}" required />
@@ -95,6 +89,7 @@ title = _("Credit Card")
             <label class="half right">
                 <span>{{ _("CVV") }}</span>
                 <input id="cvv" value="{{ card.cvv }}" required />
+                <span class="invalid-msg">{{ _("This verification code is invalid.") }}</span>
             </label>
 
             <div class="info">
@@ -150,10 +145,12 @@ title = _("Credit Card")
 
         </form>
 
+        {% if status != "missing" %}
         <form id="delete" action="credit-card.json" method="POST"
               data-confirm="{{ _('Are you sure you want to disconnect your credit card ?') }}">
             <button>{{ _("Disconnect My Credit Card") }}</button>
         </form>
+        {% endif %}
 
         <p class="info">Credit card information is stored and processed by
             <a href="https://www.balancedpayments.com/">Balanced Payments</a>. Here

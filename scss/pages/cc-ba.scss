@@ -69,4 +69,38 @@
     #save {
         margin-top: 1.2em;
     }
+
+    input.invalid {
+        box-shadow: rgb(255, 0, 0) 0 0 1.5px 1px;
+    }
+    input.invalid:focus {
+        box-shadow: rgba(255, 0, 0, 0.4) 0 0 2px 2px;
+    }
+    .invalid-msg {
+        background: rgba(240, 0, 0, 0.9);
+        border-radius: 5px;
+        color: #fff;
+        display: none;
+        font: normal 11px/13px $Ideal;
+        margin: 7px 0 0 -12px;
+        padding: 12px;
+        position: absolute;
+
+        &::before {
+            background: transparent;
+            border-style: solid;
+            border-width: 8px;
+            border-color: transparent;
+            border-bottom-color: rgba(240, 0, 0, 0.9);
+            content: '';
+            height: 0;
+            margin-left: -8px;
+            position: absolute;
+            top: -16px;
+            width: 0;
+        }
+    }
+    input.invalid:focus + .invalid-msg {
+        display: block;
+    }
 }

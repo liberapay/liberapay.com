@@ -60,13 +60,6 @@ title = _("Bank Account")
     <div class="details"><p>{{ last_ach_result }}</p></div>
     {% endif %}</div>
 
-    <style>
-        {% if not balanced_customer_href %}
-        #delete {
-            display: none;
-        }
-        {% endif %}
-    </style>
     <div class="cc-ba">
         {% if account and account.merchant_status == 'underwritten' %}
         <form id="bank-account" autocomplete="off">
@@ -81,6 +74,7 @@ title = _("Bank Account")
             <label>
                 <span>{{ _("Routing Number") }}</span>
                 <input id="routing_number" value="{{ bank_account.routing_number }}" required />
+                <span class="invalid-msg">{{ _("This routing number is invalid.") }}</span>
             </label>
 
             <label>

@@ -47,21 +47,13 @@ Gratipay.payments.onError = function(response) {
     $('button#save').prop('disabled', false);
     var msg = response.status_code + ": " +
         $.map(response.errors, function(obj) { return obj.description }).join(', ');
-    Gratipay.forms.showFeedback(null, [msg]);
+    Gratipay.notification(msg, 'error', -1);
     return msg;
 };
 
 Gratipay.payments.onSuccess = function(data) {
-    $('#status').text('working').addClass('highlight');
-    setTimeout(function() {
-        $('#status').removeClass('highlight');
-    }, 8000);
-    $('#delete').show();
-    Gratipay.forms.clearFeedback();
     $('button#save').prop('disabled', false);
-    setTimeout(function() {
-        window.location.href = '/' + Gratipay.participantId + '/';
-    }, 1000);
+    window.location.reload();
 };
 
 
@@ -79,7 +71,7 @@ Gratipay.payments.ba.submit = function (e) {
     e.preventDefault();
 
     $('button#save').prop('disabled', true);
-    Gratipay.forms.clearFeedback();
+    Gratipay.forms.clearInvalid($(this));
 
     var bankAccount = {
         name: $('#account_name').val(),
@@ -87,31 +79,20 @@ Gratipay.payments.ba.submit = function (e) {
         routing_number: $('#routing_number').val()
     };
 
-    var errors = [];
-
-
     // Validate routing number.
-    // ========================
-
-    var $rn = $('#routing_number');
     if (bankAccount.routing_number) {
         if (!balanced.bankAccount.validateRoutingNumber(bankAccount.routing_number)) {
-            $rn.closest('div').addClass('error');
-            errors.push("That routing number is invalid.");
-        } else {
-            $rn.closest('div').removeClass('error');
+            Gratipay.forms.setInvalid($('#routing_number'));
+            Gratipay.forms.focusInvalid($(this));
+            $('button#save').prop('disabled', false);
+            return false
         }
     }
 
-
-    if (errors.length) {
-        $('button#save').prop('disabled', false);
-        Gratipay.forms.showFeedback(null, errors);
-    } else {
-        balanced.bankAccount.create( bankAccount
-                                   , Gratipay.payments.ba.handleResponse
-                                    );
-    }
+    // Okay, send the data to Balanced.
+    balanced.bankAccount.create( bankAccount
+                               , Gratipay.payments.ba.handleResponse
+                                );
 };
 
 Gratipay.payments.ba.handleResponse = function (response) {
@@ -122,32 +103,21 @@ Gratipay.payments.ba.handleResponse = function (response) {
     }
 
     /* The request to tokenize the bank account succeeded. Now we need to
-     * validate the merchant information. We'll submit it to
-     * /bank-accounts.json and check the response code to see what's going
-     * on there.
+     * associate it to the Customer on Balanced and to the participant in
+     * our DB.
      */
 
-    function detailedFeedback(data) {
-        $('#status').text('failing');
-        $('#delete').show();
-        var messages = [data.error];
-        if (data.problem == 'More Info Needed') {
-            messages = [ "Sorry, we couldn't verify your identity. Please "
-                       + "check, correct, and resubmit your details."
-            ];
-        }
-        Gratipay.forms.showFeedback(data.problem, messages);
-        $('button#save').prop('disabled', false);
-    }
-
-    var detailsToSubmit = Gratipay.payments.ba.merchantData;
-    detailsToSubmit.bank_account_uri = response.bank_accounts[0].href;
-
-    Gratipay.forms.submit( "/bank-account.json"
-                       , detailsToSubmit
-                       , Gratipay.payments.onSuccess
-                       , detailedFeedback
-                        );
+    jQuery.ajax({
+        url: "/bank-account.json",
+        type: "POST",
+        data: {bank_account_uri: response.bank_accounts[0].href},
+        dataType: "json",
+        success: Gratipay.payments.onSuccess,
+        error: [
+            Gratipay.error,
+            function() { $('button#save').prop('disabled', false); },
+        ],
+    });
 };
 
 
@@ -296,12 +266,12 @@ Gratipay.payments.cc.submit = function(e) {
     e.stopPropagation();
     e.preventDefault();
     $('button#save').prop('disabled', true);
-    Gratipay.forms.clearFeedback();
+    Gratipay.forms.clearInvalid($(this));
 
     // Adapt our form lingo to balanced nomenclature.
 
     function val(field) {
-        return $('form#credit-card input[id="' + field + '"]').val();
+        return $('form#credit-card #'+field).val();
     }
 
     var credit_card = {};   // holds CC info
@@ -333,23 +303,23 @@ Gratipay.payments.cc.submit = function(e) {
     var year = val('expiration_year');
     credit_card.expiration_year = year.length == 2 ? '20' + year : year;
 
-    if (!balanced.card.isCardNumberValid(credit_card.number)) {
+    var is_card_number_invalid = !balanced.card.isCardNumberValid(credit_card.number);
+    var is_expiry_invalid = !balanced.card.isExpiryValid(credit_card.expiration_month,
+                                                         credit_card.expiration_year);
+    var is_cvv_invalid = !balanced.card.isSecurityCodeValid(credit_card.number,
+                                                            credit_card.cvv);
+
+    Gratipay.forms.setInvalid($('#card_number'), is_card_number_invalid);
+    Gratipay.forms.setInvalid($('#expiration_month'), is_expiry_invalid);
+    Gratipay.forms.setInvalid($('#cvv'), is_cvv_invalid);
+
+    if (is_card_number_invalid || is_expiry_invalid || is_cvv_invalid) {
         $('button#save').prop('disabled', false);
-        Gratipay.forms.showFeedback(null, ["Your card number is bad."]);
-    } else if (!balanced.card.isExpiryValid( credit_card.expiration_month
-                                         , credit_card.expiration_year
-                                          )) {
-        $('button#save').prop('disabled', false);
-        Gratipay.forms.showFeedback(null, ["Your expiration date is bad."]);
-    } else if (!balanced.card.isSecurityCodeValid( credit_card.number
-                                               , credit_card.cvv
-                                                )) {
-        $('button#save').prop('disabled', false);
-        Gratipay.forms.showFeedback(null, ["Your CVV is bad."]);
-    } else {
-        balanced.card.create(credit_card, Gratipay.payments.cc.handleResponse);
+        Gratipay.forms.focusInvalid($(this));
+        return false;
     }
 
+    balanced.card.create(credit_card, Gratipay.payments.cc.handleResponse);
     return false;
 };
 
@@ -368,17 +338,15 @@ Gratipay.payments.cc.handleResponse = function(response) {
      * card is good.
      */
 
-    function detailedFeedback(data) {
-        $('#status').text('failing');
-        $('#delete').show();
-        var details = [];
-        Gratipay.forms.showFeedback(data.problem, [data.error]);
-        $('button#save').prop('disabled', false);
-    }
-
-    Gratipay.forms.submit( "/credit-card.json"
-                       , {card_uri: response.cards[0].href}
-                       , Gratipay.payments.onSuccess
-                       , detailedFeedback
-                        );
+    jQuery.ajax({
+        url: "/credit-card.json",
+        type: "POST",
+        data: {card_uri: response.cards[0].href},
+        dataType: "json",
+        success: Gratipay.payments.onSuccess,
+        error: [
+            Gratipay.error,
+            function() { $('button#save').prop('disabled', false); },
+        ],
+    });
 };
