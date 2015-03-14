@@ -60,10 +60,6 @@ title = _("Credit Card")
     {{ _("and then you'll be able to add or change your credit card.") }}
   {% else %}
 
-    {% if status != "missing" %}
-    <h2>{{ _("Current:") }} {{ card['brand'] }} {{ card['number'][-4:] }}</h2>
-    {% endif %}
-
     <div id="feedback">{% if last_bill_result %}
     <h2><span>{{ _("Failure") }}</span></h2>
     <div class="details"><p>{{ last_bill_result }}</p></div>
@@ -84,19 +80,21 @@ title = _("Credit Card")
 
             <label>
                 <span>{{ _("Credit Card Number") }}</span>
-                <input id="card_number" required />
+                <input id="card_number" value="{{ card.number }}" required />
             </label>
 
             <div class="half">
                 <label for="expiration_month">{{ _("Expiration") }}</label>
-                <input id="expiration_month" placeholder="{{ _('MM') }}" title="{{ _('Expiration Month') }}" required />
+                <input id="expiration_month" placeholder="{{ _('MM') }}" title="{{ _('Expiration Month') }}"
+                       value="{{ card.expiration_month }}" required />
                 <span class="date_slash">/</span>
-                <input id="expiration_year" placeholder="{{ _('YY') }}" title="{{ _('Expiration Year') }}" required />
+                <input id="expiration_year" placeholder="{{ _('YY') }}" title="{{ _('Expiration Year') }}"
+                       value="{{ card.expiration_year - 2000 if card.expiration_year }}" required />
             </div>
 
             <label class="half right">
                 <span>{{ _("CVV") }}</span>
-                <input id="cvv" required />
+                <input id="cvv" value="{{ card.cvv }}" required />
             </label>
 
             <div class="info">

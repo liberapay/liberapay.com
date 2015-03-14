@@ -55,11 +55,6 @@ title = _("Bank Account")
     {{ _("and then you'll be able to add or change your bank account.") }}
   {% else %}
 
-    {% if bank_account and bank_account.is_setup %}
-    <h2>Current: {{ bank_account['bank_name'] }}
-    ******{{ bank_account['account_number'][-4:] }}</h2>
-    {% endif %}
-
     <div id="feedback">{% if last_ach_result %}
     <h2><span>{{ _("Failure") }}</span></h2>
     <div class="details"><p>{{ last_ach_result }}</p></div>
@@ -80,17 +75,17 @@ title = _("Bank Account")
 
             <label>
                 <span>{{ _("Name on Bank Account") }}</span>
-                <input id="account_name" required autofocus />
+                <input id="account_name" value="{{ bank_account.name }}" required autofocus />
             </label>
 
             <label>
                 <span>{{ _("Routing Number") }}</span>
-                <input id="routing_number" required />
+                <input id="routing_number" value="{{ bank_account.routing_number }}" required />
             </label>
 
             <label>
                 <span>{{ _("Bank Account Number") }}</span>
-                <input id="account_number" required />
+                <input id="account_number" value="{{ bank_account.account_number }}" required />
             </label>
 
             <button class="selected larger" id="save" type="submit">{{ _("Save") }}</button>
