@@ -4,7 +4,6 @@ import balanced
 import mock
 
 from gratipay import billing
-from gratipay.testing import Harness
 from gratipay.testing.balanced import BalancedHarness
 from gratipay.models.participant import Participant
 
@@ -28,14 +27,14 @@ class TestBalancedCard(BalancedHarness):
         assert actual == expected
 
     def test_credit_card_page_shows_card_missing(self):
-        self.make_participant('alice')
+        self.make_participant('alice', claimed_time='now')
         expected = 'Your credit card is <em id="status">missing'
-        actual = self.client.GET('/credit-card.html', auth_as='alice').body.decode('utf8')
+        actual = self.client.GET('/alice/routes/credit-card.html', auth_as='alice').body.decode('utf8')
         assert expected in actual
 
     def test_credit_card_page_loads_when_there_is_a_card(self):
         expected = 'Your credit card is <em id="status">working'
-        actual = self.client.GET('/credit-card.html', auth_as='janet').body.decode('utf8')
+        actual = self.client.GET('/janet/routes/credit-card.html', auth_as='janet').body.decode('utf8')
         assert expected in actual
 
     def test_credit_card_page_shows_card_failing(self):
@@ -45,7 +44,7 @@ class TestBalancedCard(BalancedHarness):
                     )
 
         expected = 'Your credit card is <em id="status">failing'
-        actual = self.client.GET('/credit-card.html', auth_as='janet').body.decode('utf8')
+        actual = self.client.GET('/janet/routes/credit-card.html', auth_as='janet').body.decode('utf8')
         assert expected in actual
 
     @mock.patch('balanced.Customer')
@@ -195,7 +194,9 @@ class TestBillingAssociate(BalancedHarness):
 class TestBillingClear(BalancedHarness):
 
     def test_clear(self):
-        self.client.POST('/credit-card.json', data=dict(action='delete'), auth_as='david')
+        self.client.POST('/david/routes/delete.json',
+                         data=dict(thing='credit card'),
+                         auth_as='david')
 
         customer = balanced.Customer.fetch(self.david_href)
         cards = customer.cards.all()
@@ -206,7 +207,9 @@ class TestBillingClear(BalancedHarness):
         assert david.balanced_customer_href
 
     def test_clear_bank_account(self):
-        self.client.POST('/bank-account.json', data=dict(action='delete'), auth_as='david')
+        self.client.POST('/david/routes/delete.json',
+                         data=dict(thing='bank account'),
+                         auth_as='david')
 
         customer = balanced.Customer.fetch(self.david_href)
         bank_accounts = customer.bank_accounts.all()
@@ -215,24 +218,3 @@ class TestBillingClear(BalancedHarness):
         david = Participant.from_username('david')
         assert david.last_ach_result is None
         assert david.balanced_customer_href
-
-
-class TestBillingStoreResult(Harness):
-
-    def setUp(self):
-        super(TestBillingStoreResult, self).setUp()
-        self.alice = self.make_participant('alice')
-
-    def test_store_result_stores_bill_error(self):
-        msg = "cheese is yummy"
-        data = dict(action='store-error', msg=msg)
-        self.client.POST('/credit-card.json', data=data, auth_as='alice')
-        alice = Participant.from_username('alice')
-        assert alice.last_bill_result == msg
-
-    def test_store_result_stores_ach_error(self):
-        for message in ['cheese is yummy', 'cheese smells like my vibrams']:
-            data = dict(action='store-error', msg=message)
-            self.client.POST('/bank-account.json', data=data, auth_as='alice')
-            alice = Participant.from_username('alice')
-            assert alice.last_ach_result == message

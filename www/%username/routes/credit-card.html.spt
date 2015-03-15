@@ -1,4 +1,5 @@
 from gratipay import billing
+from gratipay.utils import get_participant
 
 [-----------------------------------------------------------------------------]
 
@@ -6,8 +7,9 @@ status = status_msg = ". . ."
 balanced_customer_href = None
 
 if not user.ANON:
-    balanced_customer_href = user.participant.balanced_customer_href
-    last_bill_result = user.participant.last_bill_result
+    participant = get_participant(state, restrict=True)
+    balanced_customer_href = participant.balanced_customer_href
+    last_bill_result = participant.last_bill_result
 
     status = "missing"
     status_msg = _("Your credit card is {0}missing{1}")
@@ -23,8 +25,6 @@ if not user.ANON:
     card = billing.BalancedCard(balanced_customer_href)
     # the id on the card might not match unless the db
     # is updated to use the new style of urls
-
-    username = user.participant.username
 
 title = _("Credit Card")
 
@@ -43,9 +43,8 @@ title = _("Credit Card")
 
 {% if not user.ANON %}
 <script>
-    $(document).ready(function()
-    {
-        Gratipay.payments.cc.init("{{ user.participant.username }}");
+    $(document).ready(function() {
+        Gratipay.payments.cc.init();
         $('#country').chosen();
     });
 </script>
@@ -146,7 +145,7 @@ title = _("Credit Card")
         </form>
 
         {% if status != "missing" %}
-        <form id="delete" action="credit-card.json" method="POST"
+        <form id="delete" data-thing="credit card"
               data-confirm="{{ _('Are you sure you want to disconnect your credit card?') }}">
             <button>{{ _("Disconnect My Credit Card") }}</button>
         </form>

@@ -183,16 +183,16 @@ def out():
     file.{% if not user.ANON and user.participant.last_bill_result == '' %}
     You're one of them.{% elif not user.ANON %} You're not one of them.</p>
 
-    <p><b><a href="/credit-card.html" class="highlight">Click here to set up a
-        credit card</a></b>.{% endif %}</p>
+    <p><b><a href="/about/me/routes/credit-card.html" class="highlight">Click
+        here to set up a credit card</a></b>.{% endif %}</p>
 
     <p><b>${{ commaize(escrow, 2) }}</b> is escrowed within Gratipay.
     {{ nach }} people have connected a bank account</a> for withdrawals.
     {% if not user.ANON and user.participant.last_ach_result == '' %}You're one of them.
     {% elif not user.ANON %}You're not one of them.</p>
 
-    <p><b><a href="/bank-account.html" class="highlight">Click here to connect
-        a bank account</a></b>.{% endif %}</p>
+    <p><b><a href="/about/me/routes/bank-account.html" class="highlight">Click
+        here to connect a bank account</a></b>.{% endif %}</p>
 
     <p><b>${{ commaize(transfer_volume, 2) }}</b> changed hands
         <b>{{ last_thursday }}</b>.</p>

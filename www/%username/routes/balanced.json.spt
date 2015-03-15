@@ -1,0 +1,42 @@
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+from aspen import Response
+
+from gratipay import billing
+from gratipay.utils import get_participant
+
+[---]
+
+request.allow('POST')
+participant = get_participant(state, restrict=True)
+
+thing = request.body['thing']
+thing_uri = request.body['thing_uri']
+
+
+# Get a balanced account.
+# =======================
+# This will create one if user.balanced_customer_href is None.
+
+account = participant.get_balanced_account()
+
+
+# For a bank account, ensure the user is identified.
+# ==================================================
+
+if thing == 'bank account' and account.merchant_status != 'underwritten':
+    raise Response(400, _("You need to verify your identity first."))
+
+
+# No errors? Great! Let's add the bank account.
+# =============================================
+
+# Clear out any old ones first.
+billing.clear(website.db, thing, participant, account)
+
+error = billing.associate(website.db, thing, participant, account, thing_uri)
+if error:
+    raise Response(400, error)
+
+[---] application/json via json_dump
+{}

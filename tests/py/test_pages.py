@@ -88,18 +88,19 @@ class TestPages(Harness):
 
     def test_bank_account(self):
         expected = "add or change your bank account"
-        actual = self.client.GET('/bank-account.html').body
+        actual = self.client.GET('/alice/routes/bank-account.html').body
         assert expected in actual
 
     def test_bank_account_auth(self):
         self.make_participant('alice', claimed_time='now')
         expected = '<em id="status">not connected</em>'
-        actual = self.client.GET('/bank-account.html', auth_as='alice').body
+        actual = self.client.GET('/alice/routes/bank-account.html', auth_as='alice').body
         assert expected in actual
 
     def test_credit_card(self):
+        self.make_participant('alice', claimed_time='now')
         expected = "add or change your credit card"
-        actual = self.client.GET('/credit-card.html').body
+        actual = self.client.GET('/alice/routes/credit-card.html').body
         assert expected in actual
 
     def test_github_associate(self):

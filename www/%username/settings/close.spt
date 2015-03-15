@@ -57,7 +57,7 @@ if request.method == 'POST':
                     {% if participant.is_whitelisted %}
                         <li><input type="radio" name="disbursement_strategy" id="r1"
                              value="bank" checked />
-                            <label for="r1">Send it to my <a href="/bank-account.html">bank
+                            <label for="r1">Send it to my <a href="../routes/bank-account.html">bank
                             account</a></label></li>
                     {% else %}
 
@@ -70,7 +70,7 @@ if request.method == 'POST':
 
                     {% endif %}
                 {% else %}
-                    <li><label>Go <a href="/bank-account.html">set up a bank
+                    <li><label>Go <a href="../routes/bank-account.html">set up a bank
                     account</a> to be able to have your funds deposited there.
                     Due to our anti-fraud policies, a staff member will need to
                     review your account before completing the

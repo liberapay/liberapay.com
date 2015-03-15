@@ -34,12 +34,14 @@
         {% if user.participant.last_bill_result == None %}
         <div id="payment-prompt" class="{{ 'needed' if tip > 0 }}">
             {{ _("Back your payment with a {0}credit card{1} to make sure it goes through!",
-                "<a href='/credit-card.html'>"|safe, "</a>"|safe) }}
+                 "<a href='/%s/routes/credit-card.html'>"|safe % user.participant.username,
+                 "</a>"|safe) }}
         </div>
         {% elif user.participant.last_bill_result %}
         <div id="payment-prompt" class="really-needed">
             {{ _("Fix your {0}credit card{1} to make sure your payment goes through!",
-                "<a href='/credit-card.html'>"|safe, "</a>"|safe) }}
+                 "<a href='/%s/routes/credit-card.html'>"|safe % user.participant.username,
+                 "</a>"|safe) }}
         </div>
         {% endif %}
     </div>

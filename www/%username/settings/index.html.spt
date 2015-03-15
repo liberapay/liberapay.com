@@ -83,11 +83,9 @@ emails = participant.get_emails()
                         {% endif %}
                     </td>
                     <td class="account-action">
-                        {% if participant.last_bill_result is none %}
-                            <a class="button auth-button" href="/credit-card.html">{{ _("+ Add") }}</a>
-                        {% else %}
-                            <a class="button auth-button" href="/credit-card.html">{{ _("Edit") }}</a>
-                        {% endif %}
+                        <a class="button auth-button" href="../routes/credit-card.html">{{
+                            _("+ Add") if participant.last_bill_result is none else _("Edit")
+                        }}</a>
                     </td>
                 </tr>
             </table>
@@ -114,11 +112,9 @@ emails = participant.get_emails()
                         {% endif %}
                     </td>
                     <td class="account-action">
-                        {% if participant.last_ach_result is none %}
-                            <a class="button auth-button" href="/bank-account.html">{{ _("+ Add") }}</a>
-                        {% else %}
-                            <a class="button auth-button" href="/bank-account.html">{{ _("Edit") }}</a>
-                        {% endif %}
+                        <a class="button auth-button" href="../routes/bank-account.html">{{
+                            _("+ Add") if participant.last_ach_result is none else _("Edit")
+                        }}</a>
                     </td>
                 </tr>
                 {% if participant.paypal_email %}

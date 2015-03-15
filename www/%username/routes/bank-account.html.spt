@@ -1,14 +1,14 @@
 from gratipay import billing
 from gratipay.billing.exchanges import MINIMUM_CREDIT
+from gratipay.utils import get_participant
 
 [-----------------------------------------------------------------------------]
-balanced_customer_href = None
 account = None
 bank_account = None
 status = ". . ."
 
 if not user.ANON:
-    participant = user.participant
+    participant = get_participant(state, restrict=True)
     balanced_customer_href = participant.balanced_customer_href
     last_ach_result = participant.last_ach_result
 
@@ -39,10 +39,7 @@ title = _("Bank Account")
 
 {% if not user.ANON %}
 <script>
-    $(document).ready(function()
-    {
-        Gratipay.payments.ba.init("{{ user.participant.username }}");
-    });
+    $(document).ready(function() { Gratipay.payments.ba.init(); });
 </script>
 {% endif %}
 
@@ -87,7 +84,7 @@ title = _("Bank Account")
         </form>
 
         {% if bank_account and bank_account.is_setup %}
-        <form id="delete" action="bank-account.json" method="POST"
+        <form id="delete" data-thing="credit card"
               data-confirm="{{ _('Are you sure you want to disconnect your bank account?') }}">
             <button>{{ _("Disconnect My Bank Account") }}</button>
         </form>
