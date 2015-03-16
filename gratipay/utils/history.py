@@ -1,6 +1,7 @@
 from datetime import datetime
 from decimal import Decimal
 
+from aspen import Response
 from psycopg2 import IntegrityError
 
 
@@ -138,3 +139,66 @@ def iter_payday_events(db, participant, year=None):
         yield event
 
     yield dict(kind='day-close', balance=balance)
+
+
+def export_history(participant, year, mode, key, back_as='namedtuple', require_key=False):
+    db = participant.db
+    params = dict(username=participant.username, year=year)
+    out = {}
+    if mode == 'aggregate':
+        out['given'] = lambda: db.all("""
+            SELECT tippee, sum(amount) AS amount
+              FROM transfers
+             WHERE tipper = %(username)s
+               AND extract(year from timestamp) = %(year)s
+          GROUP BY tippee
+        """, params, back_as=back_as)
+        out['taken'] = lambda: db.all("""
+            SELECT tipper AS team, sum(amount) AS amount
+              FROM transfers
+             WHERE tippee = %(username)s
+               AND context = 'take'
+               AND extract(year from timestamp) = %(year)s
+          GROUP BY tipper
+        """, params, back_as=back_as)
+    else:
+        out['exchanges'] = lambda: db.all("""
+            SELECT timestamp, amount, fee, status, note
+              FROM exchanges
+             WHERE participant = %(username)s
+               AND extract(year from timestamp) = %(year)s
+          ORDER BY timestamp ASC
+        """, params, back_as=back_as)
+        out['given'] = lambda: db.all("""
+            SELECT timestamp, tippee, amount, context
+              FROM transfers
+             WHERE tipper = %(username)s
+               AND extract(year from timestamp) = %(year)s
+          ORDER BY timestamp ASC
+        """, params, back_as=back_as)
+        out['taken'] = lambda: db.all("""
+            SELECT timestamp, tipper AS team, amount
+              FROM transfers
+             WHERE tippee = %(username)s
+               AND context = 'take'
+               AND extract(year from timestamp) = %(year)s
+          ORDER BY timestamp ASC
+        """, params, back_as=back_as)
+        out['received'] = lambda: db.all("""
+            SELECT timestamp, amount, context
+              FROM transfers
+             WHERE tippee = %(username)s
+               AND context NOT IN ('take', 'take-over')
+               AND extract(year from timestamp) = %(year)s
+          ORDER BY timestamp ASC
+        """, params, back_as=back_as)
+
+    if key:
+        try:
+            return out[key]()
+        except KeyError:
+            raise Response(400, "bad key `%s`" % key)
+    elif require_key:
+        raise Response(400, "missing `key` parameter")
+    else:
+        return {k: v() for k, v in out.items()}

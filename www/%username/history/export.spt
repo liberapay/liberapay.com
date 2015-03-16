@@ -1,0 +1,27 @@
+from datetime import datetime
+
+from aspen import Response
+
+from gratipay.utils import get_participant
+from gratipay.utils.history import export_history
+
+[---]
+
+participant = get_participant(state, restrict=True)
+title = participant.username
+subhead = _("Export History")
+
+current_year = datetime.utcnow().year
+try:
+    year = int(request.qs.get('year', current_year))
+except ValueError:
+    raise Response(400, "bad year")
+
+key = request.qs.get('key')
+mode = request.qs.get('mode')
+
+[---] text/csv via csv_dump
+export_history(participant, year, mode, key, require_key=True)
+
+[---] application/json via json_dump
+export_history(participant, year, mode, key, back_as=dict)

@@ -1,13 +1,38 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+from datetime import datetime
 from decimal import Decimal
+import json
 
 from mock import patch
 
 from gratipay.billing.payday import Payday
 from gratipay.models.participant import Participant
 from gratipay.testing import Harness
-from gratipay.utils.history import iter_payday_events
+from gratipay.utils.history import get_end_of_year_balance, iter_payday_events
+
+
+def make_history(harness):
+    alice = harness.make_participant('alice', claimed_time=datetime(2001, 1, 1, 0, 0, 0))
+    harness.alice = alice
+    harness.make_exchange('bill', 50, 0, alice)
+    harness.make_exchange('bill', 12, 0, alice, status='failed')
+    harness.make_exchange('ach', -40, 0, alice)
+    harness.make_exchange('ach', -5, 0, alice, status='failed')
+    harness.db.run("""
+        UPDATE exchanges
+           SET timestamp = "timestamp" - interval '1 year'
+    """)
+    harness.past_year = int(harness.db.one("""
+        SELECT extract(year from timestamp)
+          FROM exchanges
+      ORDER BY timestamp ASC
+         LIMIT 1
+    """))
+    harness.make_exchange('bill', 35, 0, alice)
+    harness.make_exchange('bill', 49, 0, alice, status='failed')
+    harness.make_exchange('ach', -15, 0, alice)
+    harness.make_exchange('ach', -7, 0, alice, status='failed')
 
 
 class TestHistory(Harness):
@@ -84,3 +109,31 @@ class TestHistory(Harness):
         assert events[3]['balance'] == 50
         assert events[4]['kind'] == 'day-close'
         assert events[4]['balance'] == 0
+
+    def test_get_end_of_year_balance(self):
+        make_history(self)
+        balance = get_end_of_year_balance(self.db, self.alice, self.past_year, datetime.now().year)
+        assert balance == 10
+
+
+class TestExport(Harness):
+
+    def setUp(self):
+        Harness.setUp(self)
+        make_history(self)
+
+    def test_export_json(self):
+        r = self.client.GET('/alice/history/export.json', auth_as='alice')
+        assert json.loads(r.body)
+
+    def test_export_json_aggregate(self):
+        r = self.client.GET('/alice/history/export.json?mode=aggregate', auth_as='alice')
+        assert json.loads(r.body)
+
+    def test_export_json_past_year(self):
+        r = self.client.GET('/alice/history/export.json?year=%s' % self.past_year, auth_as='alice')
+        assert len(json.loads(r.body)['exchanges']) == 4
+
+    def test_export_csv(self):
+        r = self.client.GET('/alice/history/export.csv?key=exchanges', auth_as='alice')
+        assert r.body.count('\n') == 5

@@ -56,7 +56,13 @@ else:
 {% for event in events %}
     {% if event['kind'] == 'totals' %}
     <tr><td colspan="8" class="totals">
-        {{ _("Total given: {0}", format_currency(event['given'], "USD")) }}<br>
+        {{ _("Total given: {0}", format_currency(event['given'], "USD")) }}
+            {% if event['given'] %}
+            (<a href="export.csv?year={{ year }}&amp;key=given&amp;mode=aggregate">{{
+                _("Export as CSV")
+            }}</a>)
+            {% endif %}
+        <br>
         {{ _("Total received: {0}", format_currency(event['received'], "USD")) }}
     </td></tr>
     {% elif event['kind'] == 'day-open' %}
