@@ -351,7 +351,7 @@ Gratipay.payments.cc.submit = function(e) {
 
     var credit_card = {};   // holds CC info
 
-    credit_card.number = val('card_number').replace(/\s/g, '');
+    credit_card.number = val('card_number').replace(/[^\d]/g, '');
     credit_card.cvv = val('cvv');
     credit_card.name = val('name');
     var country = val('country') || null;
