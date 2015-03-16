@@ -1,5 +1,7 @@
-from gratipay import billing
+import balanced
+
 from gratipay.billing.exchanges import MINIMUM_CREDIT
+from gratipay.models.exchange_route import ExchangeRoute
 from gratipay.utils import get_participant
 
 [-----------------------------------------------------------------------------]
@@ -9,16 +11,15 @@ status = ". . ."
 
 if not user.ANON:
     participant = get_participant(state, restrict=True)
-    balanced_customer_href = participant.balanced_customer_href
-    last_ach_result = participant.last_ach_result
 
     status = _("Your bank account is {0}not connected{1}")
-    if balanced_customer_href:
+    route = ExchangeRoute.from_network(participant, 'balanced-ba')
+    if route:
+        account = participant.get_balanced_account()
+        bank_account = balanced.BankAccount.fetch(route.address)
+        last_ach_result = route.error
         if last_ach_result == "":
             status = _("Your bank account is {0}connected{1}")
-
-        account = participant.get_balanced_account()
-        bank_account = billing.BalancedBankAccount(balanced_customer_href)
 
 title = _("Bank Account")
 [-----------------------------------------------------------------------------]
@@ -83,7 +84,8 @@ title = _("Bank Account")
 
         </form>
 
-        {% if bank_account and bank_account.is_setup %}
+
+        {% if bank_account %}
         <form id="delete" data-thing="credit card"
               data-confirm="{{ _('Are you sure you want to disconnect your bank account?') }}">
             <button>{{ _("Disconnect My Bank Account") }}</button>

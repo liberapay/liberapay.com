@@ -1,6 +1,8 @@
+import balanced
+
 from aspen import Response
+from gratipay.models.exchange_route import ExchangeRoute
 from gratipay.utils import get_participant
-from gratipay.billing import BalancedCard
 
 [-------------------]
 
@@ -16,7 +18,11 @@ exchange = website.db.one("""
 if exchange is None:
     raise Response(404)
 
-card = BalancedCard(participant.balanced_customer_href) 
+route = ExchangeRoute.from_id(exchange.route)
+if route and route.network == 'balanced-cc':
+    card = balanced.Card.fetch(route.address)
+else:
+    card = balanced.Card(address={}, meta={})
 
 [-------------------]
 <style>
@@ -87,42 +93,42 @@ card = BalancedCard(participant.balanced_customer_href)
     <h1>Receipt</h1>
 
     <div id="their-info">
-        {{ card['name'] }}
+        {{ card.name }}
         ({{ participant.username }})<br />
-        {{ card['last4'] }} ({{ card['card_type'] }})<br />
-        {{ card['address_1'] }}<br />
-        {% if card['address_2'] %}
-        {{ card['address_2'] }}<br />
+        {{ card.number }} ({{ card.brand }})<br />
+        {{ card.address.line1 }}<br />
+        {% if card.address.line2 %}
+        {{ card.address.line2 }}<br />
         {% endif %}
-        {{ card['city_town'] }}{% if card['city_town'] %},{% endif %}
-        {{ card['state'] }}
-        {{ card['zip'] }}<br />
-        {{ locale.countries.get(card['country'], '') }}
+        {{ card.address.city }}{% if card.address.city %},{% endif %}
+        {{ card.address.state }}
+        {{ card.address.postal_code }}<br />
+        {{ locale.countries.get(card.address.country_code, '') }}
     </div>
 
     <table>
         <tr>
             <th>Amount:</th>
             <td>$</td>
-            <td>{{ exchange['amount'] }}</td>
+            <td>{{ exchange.amount }}</td>
         </tr>
         <tr>
             <th>Fee:</th>
             <td>$</td>
-            <td>{{ exchange['fee'] }}</td>
+            <td>{{ exchange.fee }}</td>
         </tr>
         <tr class="total">
             <th>Total:</th>
             <td>$</td>
-            <td>{{ exchange['fee'] + exchange['amount'] }}</td>
+            <td>{{ exchange.fee + exchange.amount }}</td>
         </tr>
     </table>
 
     <table id="txnid">
         <tr>
-            <td class="date">{{ exchange['timestamp'].strftime("%B %d, %Y").replace(' 0', ' ') }}</td>
+            <td class="date">{{ exchange.timestamp.strftime("%B %d, %Y").replace(' 0', ' ') }}</td>
             <td class="mdash">&mdash;</td>
-            <td class="txnid">Transaction ID: {{ exchange['id'] }}</td>
+            <td class="txnid">Transaction ID: {{ exchange.id }}</td>
         </tr>
     </table>
 
