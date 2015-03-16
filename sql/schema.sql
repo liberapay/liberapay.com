@@ -87,6 +87,8 @@ CREATE TABLE elsewhere
 , is_team               boolean         NOT NULL DEFAULT FALSE
 , extra_info            json
 , token                 json
+, connect_token         text
+, connect_expires       timestamptz
 , UNIQUE (platform, user_id)
 , UNIQUE (platform, participant)
  );
