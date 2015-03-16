@@ -9,7 +9,6 @@ from aspen import renderers
 class Renderer(renderers.Renderer):
 
     def render_content(self, context):
-        context['response'].headers['Content-Type'] = 'text/plain'
         rows = eval(self.compiled, globals(), context)
         if not rows:
             return ''
