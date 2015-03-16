@@ -31,8 +31,8 @@ from gratipay.models.account_elsewhere import AccountElsewhere
 from gratipay.models.community import Community
 from gratipay.models.participant import Participant
 from gratipay.models import GratipayDB
-from gratipay.utils.cache_static import asset_etag
 from gratipay.utils.emails import compile_email_spt
+from gratipay.utils.http_caching import asset_etag
 from gratipay.utils.i18n import (
     ALIASES, ALIASES_R, COUNTRIES, LANGUAGES_2, LOCALES,
     get_function_from_rule, make_sorted_dict

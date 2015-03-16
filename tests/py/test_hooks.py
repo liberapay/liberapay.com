@@ -115,6 +115,25 @@ class Tests2(Harness):
         r = self.client.POST('/', csrf_token=False, raise_immediately=False)
         assert r.code == 403
 
+    def test_caching_of_assets(self):
+        r = self.client.GET('/assets/jquery.min.js')
+        assert r.headers['Access-Control-Allow-Origin'] == 'https://gratipay.com'
+        assert r.headers['Cache-Control'] == 'public, max-age=5'
+        assert 'Vary' not in r.headers
+        assert not r.headers.cookie
+
+    def test_caching_of_assets_with_etag(self):
+        r = self.client.GET(self.client.website.asset('jquery.min.js'))
+        assert r.headers['Access-Control-Allow-Origin'] == 'https://gratipay.com'
+        assert r.headers['Cache-Control'] == 'public, max-age=31536000'
+        assert 'Vary' not in r.headers
+        assert not r.headers.cookie
+
+    def test_caching_of_simplates(self):
+        r = self.client.GET('/')
+        assert r.headers['Cache-Control'] == 'no-cache'
+        assert 'Vary' not in r.headers
+
     def test_no_csrf_cookie(self):
         r = self.client.POST('/', csrf_token=False, raise_immediately=False)
         assert r.code == 403

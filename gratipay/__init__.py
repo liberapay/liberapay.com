@@ -85,9 +85,5 @@ def canonize(request):
         request.redirect(url)
 
 
-def set_misc_headers(response, website):
-    version = website.version
-
-    # Set misc headers for the website
-    response.headers['X-Gratipay-Version'] = version
-    response.headers['Content-Language'] = 'en'
+def set_version_header(response, website):
+    response.headers['X-Gratipay-Version'] = website.version
