@@ -22,6 +22,7 @@ if not user.ANON:
         if last_ach_result == "":
             status = _("Your bank account is {0}connected{1}")
 
+        account = participant.get_balanced_account()
         bank_account = billing.BalancedBankAccount(balanced_customer_href)
 
     username = user.participant.username

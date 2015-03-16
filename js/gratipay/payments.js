@@ -346,19 +346,18 @@ Gratipay.payments.cc.submit = function(e) {
     // Adapt our form lingo to balanced nomenclature.
 
     function val(field) {
-        return $('form#payment input[id="' + field + '"]').val().replace(/[^\d]/g, "");
+        return $('form#payment input[id="' + field + '"]').val();
     }
 
     var credit_card = {};   // holds CC info
 
-    credit_card.number = val('card_number');
-    if (credit_card.number.search('[*]') !== -1)
-        credit_card.number = '';  // don't send if it's the **** version
+    credit_card.number = val('card_number').replace(/[^\d]/g, '');
     credit_card.cvv = val('cvv');
     credit_card.name = val('name');
-    country = $('select[id="country"]').val() || null;
+    var country = val('country') || null;
+
     credit_card.meta = { 'address_2': val('address_2')
-                       , 'region': credit_card.region // workaround
+                       , 'region': val('state')
                        , 'city_town': val('city_town')
                        , 'country': country
                         };
