@@ -11,9 +11,11 @@ CREATE TYPE elsewhere_with_participant AS
 , display_name  text
 , email         text
 , avatar_url    text
-, extra_info    json
 , is_team       boolean
+, extra_info    json
 , token         json
+, connect_token text
+, connect_expires timestamptz
 , participant   participants
  ); -- If Postgres had type inheritance this would be even awesomer.
 
@@ -27,13 +29,14 @@ AS $$
          , $1.display_name
          , $1.email
          , $1.avatar_url
-         , $1.extra_info
          , $1.is_team
+         , $1.extra_info
          , $1.token
+         , $1.connect_token
+         , $1.connect_expires
          , participants.*::participants
       FROM participants
-     WHERE participants.username = $1.participant
-          ;
+     WHERE participants.username = $1.participant;
 $$ LANGUAGE SQL;
 
 CREATE CAST (elsewhere AS elsewhere_with_participant)

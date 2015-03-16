@@ -70,13 +70,9 @@ elif action == 'connect':
     try:
         user.participant.take_over((platform.name, account.user_id))
     except NeedConfirmation, obstacles:
-        # XXX Eep! Internal redirect! Really?!
-        # XXX In this case, we can get away with reusing the same dispatch_result. When upstreaming
-        #     we should probably generalize by making a new DispatchResult.
-        request.internally_redirected_from = dispatch_result.match
-        resource = resources.get(website, website.www_root+'/on/confirm.html.spt')
-        state.update(locals())
-        raise resource.respond(state)
+        token, expires = account.make_connect_token()
+        response.set_cookie(b'connect_%s' % account.id, token, expires)
+        response.redirect('/on/confirm.html?id=%s' % account.id)
 
 elif action in {'lock', 'unlock'}:
     account.participant.update_goal(-1 if action == 'lock' else None)

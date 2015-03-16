@@ -4,6 +4,7 @@ import json
 from base64 import b64encode
 
 import mock
+
 from gratipay.elsewhere import UserInfo
 from gratipay.models.account_elsewhere import AccountElsewhere
 from gratipay.models.participant import Participant
@@ -55,9 +56,6 @@ class TestElsewhere(Harness):
         alice = AccountElsewhere.from_user_name('twitter', 'alice').opt_in('alice')[0].participant
         assert alice.goal == 100
 
-    def test_hitting_confirm_plain_results_in_404(self):
-        assert self.client.GxT('/on/confirm.html').code == 404
-
     @mock.patch('requests_oauthlib.OAuth2Session.fetch_token')
     @mock.patch('gratipay.elsewhere.Platform.get_user_self_info')
     @mock.patch('gratipay.elsewhere.Platform.get_user_info')
@@ -73,8 +71,8 @@ class TestElsewhere(Harness):
         response = self.client.GxT('/on/github/associate?state=deadbeef',
                                    auth_as='alice',
                                    cookies={b'github_deadbeef': cookie})
-        assert response.code == 200
-        assert "Please Confirm" in response.body
+        assert response.code == 302
+        assert response.headers['Location'].startswith('/on/confirm.html?id=')
 
     def test_redirect_csrf(self):
         response = self.client.GxT('/on/github/redirect')
@@ -135,3 +133,42 @@ class TestElsewhere(Harness):
         self.client.GET('/on/twitter/Gratipay/')  # normal case will have the db primed
         response = self.client.GET('/on/twitter/Gratipay/failure.html?action')
         assert response.code == 200
+
+
+class TestConfirmTakeOver(Harness):
+
+    def setUp(self):
+        Harness.setUp(self)
+        self.alice_elsewhere = self.make_elsewhere('twitter', -1, 'alice')
+        token, expires = self.alice_elsewhere.make_connect_token()
+        self.connect_cookie = {b'connect_%s' % self.alice_elsewhere.id: token}
+        self.bob = self.make_participant('bob', claimed_time='now')
+
+    def test_confirm(self):
+        url = '/on/confirm.html?id=%s' % self.alice_elsewhere.id
+
+        response = self.client.GxT(url)
+        assert response.code == 403
+
+        response = self.client.GxT(url, auth_as='bob')
+        assert response.code == 400
+        assert 'bad connect token' in response.body
+
+        response = self.client.GET(url, auth_as='bob', cookies=self.connect_cookie)
+        assert response.code == 200
+        assert 'Please Confirm' in response.body
+
+    def test_take_over(self):
+        data = {'account_id': self.alice_elsewhere.id, 'should_transfer': 'yes'}
+
+        response = self.client.PxST('/on/take-over.html', data=data)
+        assert response.code == 403
+
+        response = self.client.PxST('/on/take-over.html', data=data, auth_as='bob')
+        assert response.code == 400
+        assert 'bad connect token' in response.body
+
+        response = self.client.PxST('/on/take-over.html', data=data, auth_as='bob',
+                                    cookies=self.connect_cookie)
+        assert response.code == 302
+        assert response.headers['Location'] == '/bob/'

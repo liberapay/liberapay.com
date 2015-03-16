@@ -1,33 +1,19 @@
-"""This is called as an internal redirect from /on/blah/associate
-"""
-import uuid
-
 from aspen import Response
-from gratipay.models.participant import NeedConfirmation, Participant
 
-website.connect_tokens = {}
+from gratipay.models.account_elsewhere import AccountElsewhere
 
 [--------]
 
 if user.ANON:
-    raise Response(404)
+    raise Response(403)
 
-if 'fake' in request.qs:
-    account = next(iter(user.participant.get_accounts_elsewhere().values()))
-elif not getattr(request, 'internally_redirected_from', None):
-    raise Response(404)
+account_id = request.qs['id']
+account = AccountElsewhere.from_id(account_id)
+token = request.headers.cookie.get('connect_%s' % account_id)
+if not token or not account.check_connect_token(token.value):
+    raise Response(400, 'bad connect token "%s"' % token)
 
-# Compute and store a connect_token.
-# ==================================
-# This is a protection against unauthorized users taking over accounts.
-
-connect_token = uuid.uuid4().hex
-connect_key = (user.participant.username, account.platform, account.user_id)
-website.connect_tokens[connect_key] = connect_token
-
-
-other = Participant.from_username(account.participant.username)
-
+other = account.participant
 user_accounts_dict = user.participant.get_accounts_elsewhere()
 nix = len(user_accounts_dict) == 1
 user_accounts = user_accounts_dict.values()
@@ -154,10 +140,8 @@ title = _("Please Confirm")
     <h2>{{ _("Transfer it?") }}</h2>
 
     <form action="/on/take-over.html" method="POST">
-        <input type="hidden" name="platform" value="{{ account.platform }}" />
-        <input type="hidden" name="user_id" value="{{ account.user_id }}" />
+        <input type="hidden" name="account_id" value="{{ account_id }}" />
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-        <input type="hidden" name="connect_token" value="{{ connect_token }}" />
         <button name="should_transfer" value="yes" class="selected larger">{{ _("Yes") }}</button>
         <button name="should_transfer" value="no" >{{ _("No") }}</button>
     </form>

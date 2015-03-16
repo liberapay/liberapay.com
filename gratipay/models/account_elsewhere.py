@@ -1,17 +1,24 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+from datetime import timedelta
 import json
 from urlparse import urlsplit, urlunsplit
+import uuid
 import xml.etree.ElementTree as ET
 
 from aspen import Response
+from aspen.utils import utcnow
 from postgres.orm import Model
 from psycopg2 import IntegrityError
 import xmltodict
 
 import gratipay
 from gratipay.exceptions import ProblemChangingUsername
+from gratipay.security.crypto import constant_time_compare
 from gratipay.utils.username import safely_reserve_a_username
+
+
+CONNECT_TOKEN_TIMEOUT = timedelta(hours=24)
 
 
 class UnknownAccountElsewhere(Exception): pass
@@ -28,6 +35,16 @@ class AccountElsewhere(Model):
 
     # Constructors
     # ============
+
+    @classmethod
+    def from_id(cls, id):
+        """Return an existing AccountElsewhere based on id.
+        """
+        return cls.db.one("""
+            SELECT elsewhere.*::elsewhere_with_participant
+              FROM elsewhere
+             WHERE id = %s
+        """, (id,))
 
     @classmethod
     def from_user_id(cls, platform, user_id):
@@ -126,6 +143,31 @@ class AccountElsewhere(Model):
         account = AccountElsewhere.from_user_id(i.platform, i.user_id)
         account.participant.update_avatar()
         return account
+
+
+    # Connect tokens
+    # ==============
+
+    def check_connect_token(self, token):
+        return (
+            self.connect_token and
+            constant_time_compare(self.connect_token, token) and
+            self.connect_expires > utcnow()
+        )
+
+    def make_connect_token(self):
+        token = uuid.uuid4().hex
+        expires = utcnow() + CONNECT_TOKEN_TIMEOUT
+        return self.save_connect_token(token, expires)
+
+    def save_connect_token(self, token, expires):
+        return self.db.one("""
+            UPDATE elsewhere
+               SET connect_token = %s
+                 , connect_expires = %s
+             WHERE id = %s
+         RETURNING connect_token, connect_expires
+        """, (token, expires, self.id))
 
 
     # Random Stuff
