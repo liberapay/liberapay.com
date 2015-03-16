@@ -23,7 +23,7 @@ if participant == user.participant:
 {% block scripts %}
 <script>
     $(document).ready(function() {
-        $('button.resend').on('click', Gratipay.account.post_email);
+        $('button.resend').on('click', Gratipay.settings.post_email);
     });
 </script>
 {{ super() }}
@@ -74,6 +74,6 @@ if participant == user.participant:
             {% endif %}
             <p data-email="{{ email }}"><button class="resend">{{ _("Resend verification email") }}</button></p>
         {% endif %}
-        <a href="/{{ participant.username }}/account/#emails">{{ _("View your email addresses") }}.</a>
+        <a href="/{{ participant.username }}/settings/#emails">{{ _("View your email addresses") }}.</a>
     {% endif %}
 {% endblock %}

@@ -1,6 +1,6 @@
-Gratipay.account = {};
+Gratipay.settings = {};
 
-Gratipay.account.post_email = function(e) {
+Gratipay.settings.post_email = function(e) {
     e.preventDefault();
     var $this = $(this);
     var action = this.className;
@@ -38,7 +38,7 @@ Gratipay.account.post_email = function(e) {
     });
 };
 
-Gratipay.account.init = function() {
+Gratipay.settings.init = function() {
 
     // Wire up username knob.
     // ======================
@@ -47,7 +47,7 @@ Gratipay.account.init = function() {
         hideEditButton: true,
         root: $('.username.js-edit'),
         success: function(d) {
-            window.location.href = "/" + encodeURIComponent(d.username) + "/account/";
+            window.location.href = "/" + encodeURIComponent(d.username) + "/settings/";
             return false;
         },
     });
@@ -190,8 +190,8 @@ Gratipay.account.init = function() {
     // =============================
 
     $('.emails button, .emails input').prop('disabled', false);
-    $('.emails button[class]').on('click', Gratipay.account.post_email);
-    $('form.add-email').on('submit', Gratipay.account.post_email);
+    $('.emails button[class]').on('click', Gratipay.settings.post_email);
+    $('form.add-email').on('submit', Gratipay.settings.post_email);
 
 
     // Wire up close knob.

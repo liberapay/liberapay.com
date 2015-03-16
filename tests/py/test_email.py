@@ -169,7 +169,7 @@ class TestEmail(EmailHarness):
 
     def test_account_page_shows_emails(self):
         self.verify_and_change_email('alice@example.com', 'alice@example.net')
-        body = self.client.GET("/alice/account/", auth_as="alice").body
+        body = self.client.GET("/alice/settings/", auth_as="alice").body
         assert 'alice@example.com' in body
         assert 'alice@example.net' in body
 

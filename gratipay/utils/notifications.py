@@ -26,7 +26,7 @@ def credit_card_expires(_):
 
 
 def email_missing(_, user):
-    href = '/%s/account/#emails' % user.participant.username
+    href = '/%s/settings/#emails' % user.participant.username
     return ('notice',
         ['span', _('Your account does not have an associated email address.') + " ",
             ['a', {'href': href}, _('Add an email address')],
