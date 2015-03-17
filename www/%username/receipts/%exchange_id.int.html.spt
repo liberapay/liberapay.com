@@ -4,15 +4,7 @@ from gratipay.billing import BalancedCard
 
 [-------------------]
 
-participant = get_participant(state, restrict=False)
-
-# Do our own restriction.
-if user.participant == participant:
-    pass
-elif user.ADMIN:
-    pass
-else:
-    raise Response(404)
+participant = get_participant(state, restrict=True)
 
 card = BalancedCard(participant.balanced_customer_href)
 exchange = website.db.one( "SELECT * FROM exchanges "

@@ -9,10 +9,6 @@ if platform is None:
 user_name = request.path['user_name']
 if not user_name:
     raise Response(400, '%user_name is empty')
-website.db.one( "SELECT * FROM ELSEWHERE WHERE platform=%s AND user_name=%s"
-              , (platform.name, user_name)
-              , default=Response(404)
-               )
 
 team = request.qs.get('team', '').lower() == 'true'
 

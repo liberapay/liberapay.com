@@ -2,7 +2,7 @@ from aspen import Response
 
 [---]
 if not user.ADMIN:
-    raise Response(404)
+    raise Response(403)
 
 
 unreviewed = website.db.all("""

@@ -16,22 +16,32 @@ overescaping_re = re.compile(r'&amp;(#[0-9]{4}|[a-z]+);')
 class TestPages(Harness):
 
     def browse(self, setup=None, **kw):
-        alice = self.make_participant('alice', claimed_time='now')
+        alice = self.make_participant('alice', claimed_time='now', number='plural')
+        exchange_id = self.make_exchange('bill', 19, 0, alice)
         alice.insert_into_communities(True, 'Wonderland', 'wonderland')
+        alan = self.make_participant('alan', claimed_time='now')
+        alice.add_member(alan)
         if setup:
             setup(alice)
         i = len(self.client.www_root)
         for spt in find_files(self.client.www_root, '*.spt'):
-            url = spt[i:-4].replace('/%username/', 'alice') \
+            url = spt[i:-4].replace('/%username/', '/alice/') \
                            .replace('/for/%slug/', '/for/wonderland/') \
                            .replace('/%platform/', '/github/') \
-                           .replace('/%user_name/', '/Gratipay/')
+                           .replace('/%user_name/', '/gratipay/') \
+                           .replace('/%membername', '/alan') \
+                           .replace('/%exchange_id.int', '/%s' % exchange_id) \
+                           .replace('/%redirect_to', '/giving') \
+                           .replace('/%endpoint', '/public')
+            assert '/%' not in url
             if 'index' in url.split('/')[-1]:
                 url = url.rsplit('/', 1)[0] + '/'
             try:
                 r = self.client.GET(url, **kw)
             except Response as r:
-                pass
+                if r.code == 404 or r.code >= 500:
+                    raise
+            assert r.code != 404
             assert r.code < 500
             assert not overescaping_re.search(r.body.decode('utf8'))
 
@@ -135,12 +145,6 @@ class TestPages(Harness):
 
     def test_mission_statement_also_redirects(self):
         assert self.client.GxT('/for/contributors/mission-statement.html').code == 302
-
-    def test_bank_account_json(self):
-        assert self.client.GxT('/bank-account.json').code == 404
-
-    def test_credit_card_json(self):
-        assert self.client.GxT('/credit-card.json').code == 404
 
     def test_anonymous_sign_out_redirects(self):
         response = self.client.PxST('/sign-out.html')

@@ -42,11 +42,11 @@ account = AccountElsewhere.upsert(platform.get_user_self_info(sess))
 if action_user_name and account.user_name != action_user_name:
     claimed_account = AccountElsewhere.upsert(platform.get_user_info(action_user_name))
     if not claimed_account.is_team:
-        then = '/on/%s/%s/failure.html?action=%s'
-        request.redirect(then % (platform.name, action_user_name, action))
+        then = '/on/%s/%s/failure.html'
+        request.redirect(then % (platform.name, action_user_name))
     if not platform.is_team_admin(claimed_account.user_name, sess):
-        then = '/on/%s/%s/failure.html?action=%s&team=true'
-        request.redirect(then % (platform.name, action_user_name, action))
+        then = '/on/%s/%s/failure.html?team=true'
+        request.redirect(then % (platform.name, action_user_name))
     account = claimed_account
 
 log('%s user "%s" wants to %s' % (platform.name, account.user_id, action))

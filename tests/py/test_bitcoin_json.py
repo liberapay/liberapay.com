@@ -26,10 +26,10 @@ class Tests(Harness):
         actual = json.loads(response.body)['bitcoin_address']
         assert actual == '17NdbrSGoUotzeGCcMMCqnFkEvLymoou9j', actual
 
-    def test_anonymous_gets_404(self):
+    def test_anonymous_gets_403(self):
         response = self.change_bitcoin_address(
             '17NdbrSGoUotzeGCcMMCqnFkEvLymoou9j', user=None)
-        assert response.code == 404, response.code
+        assert response.code == 403, response.code
 
     def test_invalid_is_400(self):
         response = self.change_bitcoin_address('12345')

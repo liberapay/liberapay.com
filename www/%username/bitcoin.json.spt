@@ -8,7 +8,7 @@ from gratipay.utils import bitcoin
 [---------------------------------------------------------------]
 
 if user.ANON:
-    raise Response(404)
+    raise Response(403)
 request.allow("POST")
 
 bit_address = request.body['bitcoin_address'].strip()
