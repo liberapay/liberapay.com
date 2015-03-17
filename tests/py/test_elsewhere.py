@@ -127,7 +127,7 @@ class TestElsewhere(Harness):
 
     def test_failure_page_accepts_valid_username(self):
         self.client.GET('/on/twitter/Gratipay/')  # normal case will have the db primed
-        response = self.client.GET('/on/twitter/Gratipay/failure.html?action')
+        response = self.client.GET('/on/twitter/Gratipay/failure.html')
         assert response.code == 200
 
 
