@@ -7,7 +7,7 @@ from gratipay.utils import get_participant
 [-----------------------------------------------------------------------------]
 
 if user.ANON:
-    raise Response(404)
+    raise Response(403)
 request.allow("POST")
 
 goal = request.body["goal"]

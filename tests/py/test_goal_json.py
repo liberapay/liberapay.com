@@ -45,9 +45,9 @@ class Tests(Harness):
         actual = json.loads(response.body)['goal_l']
         assert actual == "$100,100"
 
-    def test_anonymous_gets_404(self):
+    def test_anonymous_gets_403(self):
         response = self.change_goal("100.00", auth_as=None, expecting_error=True)
-        assert response.code == 404, response.code
+        assert response.code == 403, response.code
 
     def test_invalid_is_400(self):
         response = self.change_goal("cheese", expecting_error=True)

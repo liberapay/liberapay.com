@@ -12,7 +12,7 @@ base_url = gratipay.canonical_scheme + "://" + gratipay.canonical_host
 [-----------------------------------------------------------------------------]
 
 if user.ANON:
-    raise Response(404)
+    raise Response(403)
 participant = user.participant
 
 request.allow('POST')

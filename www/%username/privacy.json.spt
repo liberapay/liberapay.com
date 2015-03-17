@@ -1,7 +1,7 @@
 from aspen import Response
 [---]
 if user.ANON:
-    raise Response(404)
+    raise Response(403)
 request.allow("GET", "POST")
 if request.method == 'POST':
     field = request.body.get("toggle")

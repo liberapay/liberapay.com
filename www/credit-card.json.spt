@@ -13,7 +13,7 @@ from gratipay import billing
 [-----------------------------------------------------------------------------]
 
 if user.ANON:
-    raise Response(404)
+    raise Response(403)
 participant = user.participant
 
 request.allow('POST')

@@ -4,7 +4,7 @@ from gratipay.utils import get_participant
 [-----------------------------------------------------------------------------]
 
 if user.ANON:
-    raise Response(404)
+    raise Response(403)
 request.allow("POST")
 user.participant.update_is_free_rider(True)
 raise Response(204)
