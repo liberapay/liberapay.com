@@ -22,7 +22,7 @@ class TestPages(Harness):
             setup(alice)
         i = len(self.client.www_root)
         for spt in find_files(self.client.www_root, '*.spt'):
-            url = spt[i:-4].replace('/%username/', 'alice') \
+            url = spt[i:-4].replace('/%username/', '/alice/') \
                            .replace('/for/%slug/', '/for/wonderland/') \
                            .replace('/%platform/', '/github/') \
                            .replace('/%user_name/', '/Gratipay/')
