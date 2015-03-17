@@ -46,7 +46,7 @@ elif participant.balanced_customer_href:
     account = participant.get_balanced_account()
 
 else:
-    account = balanced.Customer()
+    account = balanced.Customer(address={}, meta={})
 
 [---] text/html
 {% extends "templates/base.html" %}
