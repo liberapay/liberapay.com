@@ -16,8 +16,11 @@ overescaping_re = re.compile(r'&amp;(#[0-9]{4}|[a-z]+);')
 class TestPages(Harness):
 
     def browse(self, setup=None, **kw):
-        alice = self.make_participant('alice', claimed_time='now')
+        alice = self.make_participant('alice', claimed_time='now', number='plural')
+        exchange_id = self.make_exchange('bill', 19, 0, alice)
         alice.insert_into_communities(True, 'Wonderland', 'wonderland')
+        alan = self.make_participant('alan', claimed_time='now')
+        alice.add_member(alan)
         if setup:
             setup(alice)
         i = len(self.client.www_root)
@@ -25,7 +28,12 @@ class TestPages(Harness):
             url = spt[i:-4].replace('/%username/', '/alice/') \
                            .replace('/for/%slug/', '/for/wonderland/') \
                            .replace('/%platform/', '/github/') \
-                           .replace('/%user_name/', '/Gratipay/')
+                           .replace('/%user_name/', '/Gratipay/') \
+                           .replace('/%membername', '/alan') \
+                           .replace('/%exchange_id.int', '/%s' % exchange_id) \
+                           .replace('/%redirect_to', '/giving') \
+                           .replace('/%endpoint', '/public')
+            assert '/%' not in url
             if 'index' in url.split('/')[-1]:
                 url = url.rsplit('/', 1)[0] + '/'
             try:
