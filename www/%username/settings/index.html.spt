@@ -13,12 +13,12 @@ emails = participant.get_emails()
 {% extends "templates/profile.html" %}
 
 {% block scripts %}
-<script>$(document).ready(Gratipay.account.init);</script>
+<script>$(document).ready(Gratipay.settings.init);</script>
 {{ super() }}
 {% endblock %}
 
 {% block content %}
-<div id="account">
+<div id="settings">
     <div class="col0">
 
         <div class="username js-edit">

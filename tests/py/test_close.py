@@ -44,13 +44,13 @@ class TestClosing(Harness):
 
     def test_close_page_is_usually_available(self):
         self.make_participant('alice', claimed_time='now')
-        body = self.client.GET('/alice/account/close', auth_as='alice').body
+        body = self.client.GET('/alice/settings/close', auth_as='alice').body
         assert 'Personal Information' in body
 
     def test_close_page_is_not_available_during_payday(self):
         Payday.start()
         self.make_participant('alice', claimed_time='now')
-        body = self.client.GET('/alice/account/close', auth_as='alice').body
+        body = self.client.GET('/alice/settings/close', auth_as='alice').body
         assert 'Personal Information' not in body
         assert 'Try Again Later' in body
 
@@ -60,7 +60,7 @@ class TestClosing(Harness):
         alice.set_tip_to(bob, D('10.00'))
 
         data = {'disbursement_strategy': 'downstream'}
-        response = self.client.PxST('/alice/account/close', auth_as='alice', data=data)
+        response = self.client.PxST('/alice/settings/close', auth_as='alice', data=data)
         assert response.code == 302
         assert response.headers['Location'] == '/alice/'
         assert Participant.from_username('alice').balance == 0
@@ -69,7 +69,7 @@ class TestClosing(Harness):
     def test_cant_post_to_close_page_during_payday(self):
         Payday.start()
         self.make_participant('alice', claimed_time='now')
-        body = self.client.POST('/alice/account/close', auth_as='alice').body
+        body = self.client.POST('/alice/settings/close', auth_as='alice').body
         assert 'Try Again Later' in body
 
     @mock.patch('gratipay.billing.exchanges.ach_credit')
@@ -77,7 +77,7 @@ class TestClosing(Harness):
         ach_credit.side_effect = 'some error'
         self.make_participant('alice', claimed_time='now', balance=384)
         data = {'disbursement_strategy': 'bank'}
-        r = self.client.POST('/alice/account/close', auth_as='alice', data=data)
+        r = self.client.POST('/alice/settings/close', auth_as='alice', data=data)
         assert r.code == 200
 
 

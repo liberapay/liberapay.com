@@ -485,7 +485,7 @@ Additionally, currently, the only supported platform is 'gratipay' ('gittip'
 still works for backwards-compatibility).
 
 This endpoint requires authentication. Look for your user ID and API key on your
-[account page](https://gratipay.com/about/me/account), and pass them using basic
+[account page](https://gratipay.com/about/me/settings/), and pass them using basic
 auth. E.g.:
 
 ```
