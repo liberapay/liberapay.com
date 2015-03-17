@@ -60,8 +60,8 @@ title = _("Bank Account")
     <div class="details"><p>{{ last_ach_result }}</p></div>
     {% endif %}</div>
 
+    {% if account and account.merchant_status == 'underwritten' %}
     <div class="cc-ba">
-        {% if account and account.merchant_status == 'underwritten' %}
         <form id="bank-account" autocomplete="off">
 
             <h2>{{ _("Routing Information") }}</h2>
@@ -86,12 +86,6 @@ title = _("Bank Account")
 
         </form>
 
-        {% else %}
-        <p><a href="/{{ participant.username }}/identity">{{
-            _("You need to verify your identity first")
-        }}</a></p>
-        {% endif %}
-
         {% if bank_account and bank_account.is_setup %}
         <form id="delete" action="bank-account.json" method="POST"
               data-confirm="{{ _('Are you sure you want to disconnect your bank account?') }}">
@@ -109,6 +103,11 @@ title = _("Bank Account")
             src="{{ website.asset('platforms/balanced.png') }}" /></a>
 
     </div>
+    {% else %}
+    <p><a href="/{{ participant.username }}/identity">{{
+        _("You need to verify your identity first.")
+    }}</a></p>
+    {% endif %}
   {% endif %}
 
 {% endblock %}
