@@ -147,7 +147,7 @@ title = _("Credit Card")
 
         {% if status != "missing" %}
         <form id="delete" action="credit-card.json" method="POST"
-              data-confirm="{{ _('Are you sure you want to disconnect your credit card ?') }}">
+              data-confirm="{{ _('Are you sure you want to disconnect your credit card?') }}">
             <button>{{ _("Disconnect My Credit Card") }}</button>
         </form>
         {% endif %}

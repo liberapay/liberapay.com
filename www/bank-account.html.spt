@@ -94,7 +94,7 @@ title = _("Bank Account")
 
         {% if bank_account and bank_account.is_setup %}
         <form id="delete" action="bank-account.json" method="POST"
-              data-confirm="{{ _('Are you sure you want to disconnect your bank account ?') }}">
+              data-confirm="{{ _('Are you sure you want to disconnect your bank account?') }}">
             <button>{{ _("Disconnect My Bank Account") }}</button>
         </form>
         {% endif %}
