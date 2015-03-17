@@ -28,7 +28,7 @@ class TestPages(Harness):
             url = spt[i:-4].replace('/%username/', '/alice/') \
                            .replace('/for/%slug/', '/for/wonderland/') \
                            .replace('/%platform/', '/github/') \
-                           .replace('/%user_name/', '/Gratipay/') \
+                           .replace('/%user_name/', '/gratipay/') \
                            .replace('/%membername', '/alan') \
                            .replace('/%exchange_id.int', '/%s' % exchange_id) \
                            .replace('/%redirect_to', '/giving') \
