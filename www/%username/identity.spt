@@ -65,6 +65,10 @@ else:
 
 {% block content %}
 
+{% if account.merchant_status == 'underwritten' %}
+    <p>{{ _("Your identity is verified.") }}</p>
+{% endif %}
+
 <div class="cc-ba">
 <form action="" method="POST" autocomplete="off">
 
