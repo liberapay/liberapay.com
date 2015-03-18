@@ -23,8 +23,8 @@ env: requirements.txt requirements_tests.txt setup.py
 				--extra-search-dir=./vendor/ \
 				--always-copy \
 				./env/
-	$(pip) install -r requirements.txt
-	$(pip) install -r requirements_tests.txt
+	$(pip) install -r requirements.txt --no-index
+	$(pip) install -r requirements_tests.txt --no-index
 	$(pip) install -e ./
 
 clean:
