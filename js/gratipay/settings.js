@@ -98,6 +98,7 @@ Gratipay.settings.init = function() {
             , dataType: 'json'
             , success: function(data) {
                 $('.anonymous-giving input').attr('checked', data.giving);
+                Gratipay.notification(data.msg, 'success');
             }
             , error: Gratipay.error,
         });
@@ -115,6 +116,7 @@ Gratipay.settings.init = function() {
             , dataType: 'json'
             , success: function(data) {
                 $('.anonymous-receiving input').attr('checked', data.receiving);
+                Gratipay.notification(data.msg, 'success');
             }
             , error: Gratipay.error
         });
@@ -132,6 +134,7 @@ Gratipay.settings.init = function() {
             , dataType: 'json'
             , success: function(data) {
                 $('.is-searchable input').attr('checked', !data.is_searchable);
+                Gratipay.notification(data.msg, 'success');
             }
             , error: Gratipay.error
         });

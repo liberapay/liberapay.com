@@ -16,7 +16,10 @@ if request.method == 'POST':
 
     """.format(field), (user.participant.username,))
     assert rec is not None
-    out = {field: rec}
+    out = {
+        field: rec,
+        'msg': _("Your privacy setting has been changed.")
+    }
 else:
     rec = website.db.one("""
 
