@@ -1,9 +1,4 @@
-import traceback
-
-import balanced
-from aspen import json, log, Response
 from gratipay import billing
-from gratipay.elsewhere import github
 
 [-----------------------------------------------------------------------------]
 
@@ -65,116 +60,103 @@ title = _("Credit Card")
     {{ _("and then you'll be able to add or change your credit card.") }}
   {% else %}
 
-    {% if status != "missing" %}
-    <h2>{{ _("Current:") }} {{ card['brand'] }} {{ card['number'][-4:] }}</h2>
-    {% endif %}
-
     <div id="feedback">{% if last_bill_result %}
     <h2><span>{{ _("Failure") }}</span></h2>
     <div class="details"><p>{{ last_bill_result }}</p></div>
     {% endif %}</div>
 
-
-    <style>
-        {% if status == "missing" %}
-        #delete {
-            display: none;
-        }
-        {% endif %}
-    </style>
     <div class="cc-ba">
-        <form id="payment" autocomplete="off">
-            <div class="constrain-width clearfix">
+        <form id="credit-card" autocomplete="off">
 
-                <h2>{{ _("Required") }}</h2>
+            <h2>{{ _("Required") }}</h2>
 
-                <div class="float card_number">
-                    <label for="card_number">{{ _("Credit Card Number") }}</label>
-                    <input id="card_number" />
-                </div>
+            <label>
+                <span>{{ _("Credit Card Number") }}</span>
+                <input id="card_number" value="{{ card.number }}" required />
+                <span class="invalid-msg">{{ _("This card number is invalid.") }}</span>
+            </label>
 
-                <div class="clear"></div>
-                <div class="float expiration half">
-                    <label for="expiration_month">{{ _("Expiration") }}</label>
-                    <input class="expiration_month" id="expiration_month" placeholder="MM"/>
-                    <span class="date_slash">/</span>
-                    <input class="expiration_year" id="expiration_year" placeholder="YY"/>
-                </div>
+            <div class="half">
+                <label for="expiration_month">{{ _("Expiration") }}</label>
+                <input id="expiration_month" placeholder="{{ _('MM') }}" title="{{ _('Expiration Month') }}"
+                       value="{{ card.expiration_month }}" required />
+                <span class="invalid-msg">{{ _("This expiration date is invalid.") }}</span>
+                <span class="date_slash">/</span>
+                <input id="expiration_year" placeholder="{{ _('YY') }}" title="{{ _('Expiration Year') }}"
+                       value="{{ card.expiration_year - 2000 if card.expiration_year }}" required />
+            </div>
 
-                <div class="float cvv half">
-                    <label for="cvv">{{ _("CVV") }}</label>
-                    <input id="cvv" />
-                </div>
+            <label class="half right">
+                <span>{{ _("CVV") }}</span>
+                <input id="cvv" value="{{ card.cvv }}" required />
+                <span class="invalid-msg">{{ _("This verification code is invalid.") }}</span>
+            </label>
 
-                <div class="clear"></div>
+            <div class="info">
+                {{ _("To minimize processing fees, we charge your credit card at least $10 at a time "
+                     "(anything extra stays in Gratipay to use in future weeks). {0}Read More{1}",
+                     "<a target='_blank' href='/about/faq.html#how-add-funds'>"|safe,
+                     "</a>"|safe) }}
+            </div>
 
-                <div class="info">
-                    {{ _("To minimize processing fees, we charge your credit card at least $10 at a time \
-                        (anything extra stays in Gratipay to use in future weeks). {0}Read More{1}",
-                        "<a target='_blank' href='/about/faq.html#how-add-funds'>"|safe,
-                        "</a>"|safe) }}
-                </div>
+            <h2>Optional</h2>
 
-                <h2>Optional</h2>
-
-                <label for="name">{{ _("Full Name on Card") }}</label>
+            <label>
+                <span>{{ _("Full Name on Card") }}</span>
                 <input id="name" value="{{ card['name'] }}" />
+            </label>
 
-                <div class="clear"></div>
-
-                <label for="address_1">{{ _("Address 1") }}</label>
+            <label>
+                <span>{{ _("Address 1") }}</span>
                 <input id="address_1" value="{{ card['address_1'] }}" />
+            </label>
 
-
-
-                <label for="address_2">{{ _("Address 2") }}</label>
+            <label>
+                <span>{{ _("Address 2") }}</span>
                 <input id="address_2" value="{{ card['address_2'] }}" />
+            </label>
 
-                <label for="city_town">{{ _("City or Town") }}</label>
+            <label>
+                <span>{{ _("City or Town") }}</span>
                 <input id="city_town" value="{{ card['city_town'] }}" />
+            </label>
 
+            <label class="half">
+                <span>{{ _("State or Province") }}</span>
+                <input id="state" value="{{ card['state'] }}" />
+            </label>
 
+            <label class="half right">
+                <span>{{ _("ZIP or Postal Code") }}</span>
+                <input id="zip" value="{{ card['zip'] }}" />
+            </label>
 
-                <div class="half left">
-                    <label for="state">{{ _("State or Province") }}</label>
-                    <input id="state" value="{{ card['state'] }}" />
-                </div>
-
-                <div class="half right">
-                    <label for="zip">{{ _("ZIP or Postal Code") }}</label>
-                    <input id="zip" value="{{ card['zip'] }}" />
-                </div>
-
-                <div class="clear"></div>
-
-                <label for="country">{{ _("Country") }}</label>
-
-                <select id="country" name="country" data-placeholder="{{ _("Choose a country...") }}">
+            <label>
+                <span>{{ _("Country") }}</span>
+                <select id="country" data-placeholder="{{ _('Select your country...') }}">
                     <option value=""></option>
                 {% for each in locale.countries.items() %}
                     <option value="{{ each[0] }}" {{ 'selected' if each[0] == card['country'] else '' }}>{{ each[1] }}</option>
                 {% endfor %}
                 </select>
-
-            </div>
+            </label>
 
             <button class="selected larger" id="save" type="submit">{{ _("Save") }}</button>
 
         </form>
 
-        <div id="delete">
-            <form action="credit-card.json" class="special" method="POST">
-                <input type="hidden" name="action" value="delete">
-                <button>{{ _("Disconnect My Credit Card") }}</button>
-            </form>
-        </div>
+        {% if status != "missing" %}
+        <form id="delete" action="credit-card.json" method="POST"
+              data-confirm="{{ _('Are you sure you want to disconnect your credit card?') }}">
+            <button>{{ _("Disconnect My Credit Card") }}</button>
+        </form>
+        {% endif %}
 
-        <p class="info">Credit card information is stored and processed by <a
-            href="https://www.balancedpayments.com/">Balanced Payments</a>.
-
-        Here are their <a href="https://www.balancedpayments.com/terms">Terms of
-            Service</a> and <a
-            href="https://www.balancedpayments.com/privacy">Privacy Policy</a>.</p>
+        <p class="info">Credit card information is stored and processed by
+            <a href="https://www.balancedpayments.com/">Balanced Payments</a>. Here
+            are their <a href="https://www.balancedpayments.com/terms">Terms of Service</a>
+            and <a href="https://www.balancedpayments.com/privacy">Privacy Policy</a>.
+        </p>
 
         <a href="https://www.balancedpayments.com/"><img
             src="{{ website.asset('balanced-with-cards.png') }}" /></a>

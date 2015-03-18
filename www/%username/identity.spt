@@ -1,0 +1,151 @@
+import balanced
+
+from gratipay.billing.exchanges import repr_exception
+from gratipay.utils import get_participant
+
+[---]
+request.allow('GET', 'POST')
+participant = get_participant(state, restrict=True)
+title = _("Identity Verification")
+error = ''
+
+if request.method == 'POST':
+    account = participant.get_balanced_account()
+
+    body = request.body
+    account.name = body.get('name')
+    account.address['line1'] = body.get('address_1')
+    account.address['line2'] = body.get('address_2')
+    account.address['postal_code'] = body.get('postal_code')
+    account.address['city'] = body.get('city')
+    account.address['state'] = body.get('region')
+    account.address['country_code'] = body.get('country')
+    account.phone = body.get('phone_number')
+    account.ssn_last4 = body.get('ssn_last4') or None
+
+    dob = body.get('dob', '')
+    if dob:
+        try:
+            account.dob_year, account.dob_month, account.meta['dob_day'] = \
+                map(int, dob.split('-'))
+        except ValueError:
+            error = _("Invalid date of birth.")
+
+    if not error:
+        # This will possibly fail with 400 if formatted badly, or 300 if we
+        # cannot identify the merchant.
+        try:
+            account.save()
+        except balanced.exc.HTTPError as err:
+            error = repr_exception(err)
+        else:
+            if account.merchant_status != 'underwritten':
+                error = _("Unable to verify your identity")
+
+elif participant.balanced_customer_href:
+    account = participant.get_balanced_account()
+
+else:
+    account = balanced.Customer(address={}, meta={})
+
+[---] text/html
+{% extends "templates/profile.html" %}
+
+{% block scripts %}
+    {{ super() }}
+    <script>
+        $(document).ready(function(){
+            $('select[name="country"]').chosen();
+            {% if error %}
+            Gratipay.notification({{ to_javascript(error)|safe }}, 'error', -1);
+            {% endif %}
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+
+{% if account.merchant_status == 'underwritten' %}
+    <p>{{ _( "Your identity is verified, which means you may add a {0}bank account{1}."
+           , '<a href="/bank-account.html">'|safe
+           , '</a>'|safe) }}</p>
+{% endif %}
+
+<div class="cc-ba">
+<form action="" method="POST" autocomplete="off">
+
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+
+    <label>
+        <span>{{ _("Your Legal Name") }}</span>
+        <input name="name" value="{{ account.name or '' }}" required />
+    </label>
+
+    <div class="clear"></div>
+
+    <label>
+        <span>{{ _("Address") }}</span>
+        <input name="address_1" value="{{ account.address.line1 or '' }}" required />
+    </label>
+
+    <label>
+        <span>{{ _("Address (second line)") }}</span>
+        <input name="address_2" value="{{ account.address.line2 or '' }}" />
+    </label>
+
+    <label>
+        <span>{{ _("City") }}</span>
+        <input name="city" value="{{ account.address.city or '' }}" />
+    </label>
+
+    <label class="half left">
+        <span>{{ _("State or Province") }}</span>
+        <input name="region" value="{{ account.address.state or '' }}" />
+    </label>
+
+    <label class="half right">
+        <span>{{ _("ZIP or Postal Code") }}</span>
+        <input name="postal_code" value="{{ account.address.postal_code or '' }}" required />
+    </label>
+
+    <div class="clear"></div>
+
+    <label>
+        <span>{{ _("Country") }} (<a href="/about/faq.html#how-withdraw-funds">{{ _("non-US?") }}</a>)</span>
+        <select name="country" disabled>
+        {% for each in locale.countries.items() %}
+            <option value="{{ each[0] }}" {{ 'selected' if each[0] == 'US' }}>{{ each[1] }}</option>
+        {% endfor %}
+        </select>
+    </label>
+
+    <label>
+        <span>{{ _("Contact Phone Number") }}</span>
+        <input name="phone_number" value="{{ account.phone or '' }}" required />
+    </label>
+
+    <label class="left">
+        <span>{{ _("Date of Birth") }}</span>
+        {% set dob = [account.dob_year, account.dob_month, account.meta.dob_day] %}
+        {% set dob = '-'.join(map(str, filter(none, dob))) %}
+        <input name="dob" value="{{ dob }}" pattern="[1-2][0-9]{3}-[0-9]{1,2}-[0-9]{1,2}"
+               placeholder="{{ _('YYYY-MM-DD') }}" title="{{ _('YYYY-MM-DD') }}"
+               required />
+    </label>
+
+    <div class="clear"></div>
+
+    <label class="half left">
+        <span>{{ _("Last four SSN digits") }} {{ _("(Not required)") }}</span>
+        <input name="ssn_last4" value="{{ account.ssn_last4 or '' }}" />
+    </label>
+
+    <div class="clear"></div>
+    <br/>
+
+    <button class="selected larger" type="submit">{{ _("Save") }}</button>
+
+</form>
+</div>
+
+{% endblock %}

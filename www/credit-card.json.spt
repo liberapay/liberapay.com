@@ -44,11 +44,8 @@ else:
                              , balanced_account
                              , card_uri
                               )
-
     if error:
-        out = {"problem": "Problem", "error": error}
-    else:
-        out = {"problem": ""}
+        raise Response(400, error)
 
 [---] application/json via json_dump
 out
