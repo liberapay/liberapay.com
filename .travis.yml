@@ -15,7 +15,7 @@ install:
  - touch requirements.txt package.json
  - make env
  - make node_modules
- - pip install coveralls
+ - pip install coveralls --disable-pip-version-check
 before_script:
  - echo "DATABASE_URL=dbname=gratipay" | tee -a tests/local.env local.env
  - psql -U postgres -c 'CREATE DATABASE "gratipay";'
