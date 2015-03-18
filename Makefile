@@ -19,7 +19,6 @@ endif
 
 env: requirements.txt requirements_tests.txt setup.py
 	$(python) $(venv) \
-				--unzip-setuptools \
 				--prompt="[gratipay] " \
 				--extra-search-dir=./vendor/ \
 				--always-copy \
