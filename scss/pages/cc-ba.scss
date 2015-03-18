@@ -77,27 +77,37 @@
         box-shadow: rgba(255, 0, 0, 0.4) 0 0 2px 2px;
     }
     .invalid-msg {
-        background: rgba(240, 0, 0, 0.9);
+        $background: #eee;
+        $border: #aaa;
+        background: $background;
+        border: 1px solid $border;
         border-radius: 5px;
-        color: #fff;
         display: none;
         font: normal 11px/13px $Ideal;
         margin: 7px 0 0 -12px;
         padding: 12px;
         position: absolute;
 
-        &::before {
+        &::after, &::before {
             background: transparent;
-            border-style: solid;
-            border-width: 8px;
+            border-style: solid outset solid solid;
             border-color: transparent;
-            border-bottom-color: rgba(240, 0, 0, 0.9);
             content: '';
             height: 0;
-            margin-left: -8px;
+            left: 4px;
             position: absolute;
             top: -16px;
             width: 0;
+        }
+        &::after {
+            border-width: 7px;
+            border-bottom-color: $background;
+            margin-left: 1px;
+            margin-top: 2px;
+        }
+        &::before {
+            border-width: 8px;
+            border-bottom-color: $border;
         }
     }
     input.invalid:focus + .invalid-msg {
