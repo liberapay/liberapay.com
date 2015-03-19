@@ -1,0 +1,92 @@
+#header {
+    .nav {
+        line-height: 100%;
+        display: inline-block;
+        height: 78px;
+        float: left;
+        margin-left: 15px;
+
+        li {
+            float: left;
+            margin: 0;
+            a {
+                height: 78px;
+                font: normal 16px/16px $Ideal;
+                display: inline-block;
+                padding: 27px 25px 31px;
+                border-top: 4px solid transparent;
+                color: $black;
+                &.selected {
+                    border-top-color: $brown;
+                    background: transparentize($brown, 0.9);
+                    font-weight: bold;
+                }
+                &:hover {
+                    border-top-color: $gold;
+                    background: transparentize($gold, 0.8);
+                }
+            }
+        }
+    }
+}
+
+#sidebar {
+    .nav {
+        margin: 0 -20px;
+        li {
+            margin: 0;
+        }
+        a {
+            padding: 5px 20px 5px 38px;
+            text-indent: -20px;
+            display: block;
+            color: $white;
+            font-weight: normal;
+            border-left: 2px solid transparent;
+            &.selected {
+                border-color: $gold;
+                background: transparentize($gold, 0.8);
+                color: $white;
+                font-weight: bold;
+            }
+            &:hover {
+                border-color: $gold;
+                background: transparentize($gold, 0.8);
+            }
+        }
+    }
+}
+
+#content {
+    .nav {
+        @include clearfix;
+        line-height: 100%;
+        display: block;
+        position: relative;
+        margin-bottom: 20px;
+        li {
+            display: inline;
+            margin: 0;
+            float: left;
+            padding: 0 5px;
+            &:first-child { padding-left: 0; }
+            &:last-child { padding-right: 0; }
+            a {
+                font: normal 14px/14px $Ideal;
+                height: 24px;
+                display: inline-block;
+                padding: 5px 0;
+                margin-bottom: 5px;
+                color: $gray;
+                &.selected {
+                    padding-bottom: 3px;
+                    border-bottom: 2px solid $green;
+                    font-weight: bold;
+                }
+                &:hover {
+                    background: transparentize($gold, 0.8);
+                }
+            }
+        }
+    }
+}
