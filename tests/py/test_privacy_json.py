@@ -39,7 +39,7 @@ class Tests(Harness):
     def test_participant_can_toggle_anonymous_giving(self):
         response = self.hit_privacy('POST', data={'toggle': 'anonymous_giving'})
         actual = json.loads(response.body)
-        assert actual['giving'] is True
+        assert actual['anonymous_giving'] is True
 
     def test_participant_can_toggle_anonymous_giving_back(self):
         response = self.hit_privacy('POST', data={'toggle': 'anonymous_giving'})
