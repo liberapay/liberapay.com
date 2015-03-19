@@ -14,7 +14,7 @@ Gratipay.payments = {};
 // ===========
 
 Gratipay.payments.init = function() {
-    $('#delete').submit(Gratipay.payments.submitDeleteForm);
+    $('#delete').submit(Gratipay.payments.deleteRoute);
 
     // Lazily depend on Balanced.
     var balanced_js = "https://js.balancedpayments.com/1.1/balanced.min.js";
@@ -23,17 +23,18 @@ Gratipay.payments.init = function() {
     }).fail(Gratipay.error);
 }
 
-Gratipay.payments.submitDeleteForm = function(e) {
+Gratipay.payments.deleteRoute = function(e) {
     e.stopPropagation();
     e.preventDefault();
 
-    var $form = $(this);
-    if (!confirm($form.data('confirm'))) {
+    var $this = $(this);
+    var confirm_msg = $this.data('confirm');
+    if (confirm_msg && !confirm(confirm_msg)) {
         return false;
     }
     jQuery.ajax(
-        { url: "delete.json"
-        , data: {network: $form.data('network'), address: $form.data('address')}
+        { url: "/" + Gratipay.username + "/routes/delete.json"
+        , data: {network: $this.data('network'), address: $this.data('address')}
         , type: "POST"
         , success: function() { window.location.reload(); }
         , error: Gratipay.error
@@ -70,7 +71,7 @@ Gratipay.payments.associate = function (network) { return function (response) {
     };
 
     jQuery.ajax({
-        url: "balanced.json",
+        url: "associate.json",
         type: "POST",
         data: data,
         dataType: "json",

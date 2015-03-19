@@ -1,0 +1,50 @@
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+from aspen import Response
+import balanced
+
+from gratipay.billing.exchanges import repr_exception
+from gratipay.models.exchange_route import ExchangeRoute
+from gratipay.utils import bitcoin, get_participant
+
+[---]
+
+request.allow('POST')
+participant = get_participant(state, restrict=True)
+
+network = request.body['network']
+address = request.body['address']
+
+old_route = ExchangeRoute.from_network(participant, network)
+
+change = getattr(old_route, 'address', '') != address
+
+if change:
+
+    if not address:
+        raise Response(400, _("The address cannot be empty."))
+
+    if network.startswith('balanced-'):
+        account = participant.get_balanced_account()
+
+        if network == 'balanced-ba' and account.merchant_status != 'underwritten':
+            raise Response(400, _("You need to verify your identity first."))
+
+        try:
+            ExchangeRoute.associate_balanced(participant, account, network, address)
+        except balanced.exc.HTTPError as err:
+            raise Response(400, repr_exception(err))
+
+    elif network == 'bitcoin':
+        if not bitcoin.validate(address):
+            raise Response(400, _("This is not a valid Bitcoin address."))
+        ExchangeRoute.insert(participant, network, address)
+
+    else:
+        raise Response(400, 'unknown network')
+
+    if old_route:
+        old_route.invalidate()
+
+[---] application/json via json_dump
+{}

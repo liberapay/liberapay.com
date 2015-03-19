@@ -225,6 +225,16 @@ def accounts_elsewhere(website, env):
         platform.logo = website.asset('platforms/%s.png' % platform.name)
 
 
+def cryptocoin_networks(website):
+    website.cryptocoin_networks = [
+        {
+            'name': 'bitcoin',
+            'display_name': 'Bitcoin',
+            'logo': website.asset('cryptocoins/bitcoin.png'),
+        },
+    ]
+
+
 def find_files(directory, pattern):
     for root, dirs, files in os.walk(directory):
         for filename in fnmatch.filter(files, pattern):

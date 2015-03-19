@@ -765,8 +765,15 @@ class Participant(Model, MixinTeam):
     def get_credit_card_error(self):
         return getattr(ExchangeRoute.from_network(self, 'balanced-cc'), 'error', None)
 
-    def get_route(self, network):
-        return ExchangeRoute.from_network(self, network)
+    def get_cryptocoin_addresses(self):
+        routes = self.db.all("""
+            SELECT network, address
+              FROM current_exchange_routes r
+             WHERE participant = %s
+               AND network = 'bitcoin'
+               AND error <> 'invalidated'
+        """, (self.id,))
+        return {r.network: r.address for r in routes}
 
 
     # Random Junk
@@ -1809,10 +1816,8 @@ class Participant(Model, MixinTeam):
             fields = ['id', 'user_id', 'user_name']
             elsewhere[platform] = {k: getattr(account, k, None) for k in fields}
 
-        # Key: bitcoin
-        route = ExchangeRoute.from_network(self, 'bitcoin')
-        if route:
-            output['bitcoin'] = route.address
+        # Key: cryptocoins
+        output['cryptocoins'] = self.get_cryptocoin_addresses()
 
         return output
 
