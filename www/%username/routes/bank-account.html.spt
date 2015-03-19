@@ -86,7 +86,7 @@ title = _("Bank Account")
 
 
         {% if bank_account %}
-        <form id="delete" data-thing="credit card"
+        <form id="delete" data-network="balanced-ba" data-address="{{ bank_account.href }}"
               data-confirm="{{ _('Are you sure you want to disconnect your bank account?') }}">
             <button>{{ _("Disconnect My Bank Account") }}</button>
         </form>

@@ -10,7 +10,9 @@ from gratipay.utils import get_participant
 request.allow('POST')
 participant = get_participant(state, restrict=True)
 
-route = ExchangeRoute.from_network(participant, request.body['network'])
+route = ExchangeRoute.from_address(participant,
+                                   request.body['network'],
+                                   request.body['address'])
 if route:
     route.invalidate()
 else:

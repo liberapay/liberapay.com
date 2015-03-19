@@ -33,7 +33,7 @@ Gratipay.payments.submitDeleteForm = function(e) {
     }
     jQuery.ajax(
         { url: "delete.json"
-        , data: {thing: $form.data('thing')}
+        , data: {network: $form.data('network'), address: $form.data('address')}
         , type: "POST"
         , success: function() { window.location.reload(); }
         , error: Gratipay.error
