@@ -86,55 +86,21 @@ Gratipay.settings.init = function() {
         post();
     });
 
+    // Wire up privacy settings.
+    // =========================
 
-    // Wire up aggregate giving knob.
-    // ==============================
-
-    $('.anonymous-giving input').click(function() {
-        jQuery.ajax(
-            { url: '../anonymous.json'
-            , type: 'POST'
-            , data: {toggle: 'giving'}
-            , dataType: 'json'
-            , success: function(data) {
-                $('.anonymous-giving input').attr('checked', data.giving);
-                Gratipay.notification(data.msg, 'success');
-            }
-            , error: Gratipay.error,
-        });
-    });
-
-
-    // Wire up aggregate receiving knob.
-    // ==============================
-
-    $('.anonymous-receiving input').click(function() {
-        jQuery.ajax(
-            { url: '../anonymous.json'
-            , type: 'POST'
-            , data: {toggle: 'receiving'}
-            , dataType: 'json'
-            , success: function(data) {
-                $('.anonymous-receiving input').attr('checked', data.receiving);
-                Gratipay.notification(data.msg, 'success');
-            }
-            , error: Gratipay.error
-        });
-    });
-
-
-    // Wire up search opt out
-    // ======================
-
-    $('.is-searchable input').click(function() {
+    $('.privacy-settings input[type=checkbox]').click(function(e) {
+        var field = $(e.target).data('field');
         jQuery.ajax(
             { url: '../privacy.json'
             , type: 'POST'
-            , data: {toggle: 'is_searchable'}
+            , data: {toggle: field}
             , dataType: 'json'
             , success: function(data) {
-                $('.is-searchable input').attr('checked', !data.is_searchable);
-                Gratipay.notification(data.msg, 'success');
+                if (data.msg) {
+                    Gratipay.notification(data.msg, 'success');
+                }
+                $(e.target).attr('checked', data[field]);
             }
             , error: Gratipay.error
         });

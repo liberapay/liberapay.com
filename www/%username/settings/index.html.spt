@@ -171,25 +171,25 @@ emails = participant.get_emails()
         </div>
 
         <h2>{{ _("Privacy") }}</h2>
-        <p>
-            <label class="anonymous-giving">
-                <input type="checkbox"
+        <p class="privacy-settings">
+            <label>
+                <input type="checkbox" data-field="anonymous_giving"
                     {% if participant.anonymous_giving %}checked="true"{% endif %} />
                     {{ _("Hide total giving from others.") }}
             </label>
             <br />
             {% if participant.IS_SINGULAR %}
-            <label class="anonymous-receiving">
-                <input type="checkbox"
+            <label>
+                <input type="checkbox" data-field="anonymous_receiving"
                     {% if participant.anonymous_receiving %}checked="true"{% endif %} />
                     {{ _("Hide total receiving from others.") }}
             </label>
-            {% endif %}
             <br />
+            {% endif %}
             <label class="is-searchable">
-                <input type="checkbox"
-                    {% if not participant.is_searchable %}checked="true"{% endif %} />
-                    {{ _("Hide myself from search results.") }}
+                <input type="checkbox" data-field="is_searchable"
+                    {% if participant.is_searchable %}checked="true"{% endif %} />
+                    {{ _("Show myself in search results.") }}
             </label>
         </p>
         <p id="dnt">
