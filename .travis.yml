@@ -11,6 +11,7 @@ cache:
     - env/bin
     - env/lib/python2.7/site-packages
 install:
+ - touch requirements.txt package.json
  - make env
  - make node_modules
  - pip install coveralls
