@@ -11,7 +11,8 @@ cache:
     - env/bin
     - env/lib/python2.7/site-packages
 install:
- - make env node_modules
+ - make env
+ - make node_modules
  - pip install coveralls
 before_script:
  - echo "DATABASE_URL=dbname=gratipay" | tee -a tests/local.env local.env
