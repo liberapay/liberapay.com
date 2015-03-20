@@ -1,31 +1,40 @@
 from aspen import Response
+from gratipay.utils import get_participant
 [---]
-if user.ANON:
-    raise Response(403)
 request.allow("GET", "POST")
+participant = get_participant(state, restrict=True)
+
 if request.method == 'POST':
     field = request.body.get("toggle")
-    if field not in ["is_searchable"]:
+
+    if field not in ["is_searchable", "anonymous_receiving", "anonymous_giving"]:
         raise Response(400)
+
+    if participant.IS_PLURAL and field == "anonymous_receiving":
+        raise Response(403, _("Teams aren't allowed to hide their receiving amount."))
+
     rec = website.db.one("""
 
         UPDATE participants
-           SET is_searchable=not is_searchable
+           SET {0}=not {0}
          WHERE username=%s
-        RETURNING is_searchable
+        RETURNING {0}
 
     """.format(field), (user.participant.username,))
     assert rec is not None
-    out = {field: rec}
+    out = {
+        field: rec,
+        'msg': _("Your privacy setting has been changed.")
+    }
 else:
     rec = website.db.one("""
 
-        SELECT is_searchable AS is_searchable
+        SELECT is_searchable, anonymous_receiving, anonymous_giving
         FROM participants WHERE username=%s
 
     """, (user.participant.username,), back_as=dict)
     assert rec is not None
-    out = {'is_searchable': rec}
+    out = rec
 
 [---] application/json via json_dump
 out
