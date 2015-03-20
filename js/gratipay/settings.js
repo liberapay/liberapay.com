@@ -90,7 +90,12 @@ Gratipay.settings.init = function() {
     // =========================
 
     $('.privacy-settings input[type=checkbox]').click(function(e) {
+        var neg = false;
         var field = $(e.target).data('field');
+        if (field[0] == '!') {
+            neg = true;
+            field = field.substr(1);
+        }
         jQuery.ajax(
             { url: '../privacy.json'
             , type: 'POST'
@@ -100,7 +105,7 @@ Gratipay.settings.init = function() {
                 if (data.msg) {
                     Gratipay.notification(data.msg, 'success');
                 }
-                $(e.target).attr('checked', data[field]);
+                $(e.target).attr('checked', data[field] ^ neg);
             }
             , error: Gratipay.error
         });
