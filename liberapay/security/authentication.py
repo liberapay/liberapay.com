@@ -12,21 +12,6 @@ from liberapay.security.user import User, SESSION
 
 ANON = User()
 
-def _get_user_via_api_key(api_key):
-    """Given an api_key, return a User. This auth method is deprecated.
-    """
-    user = User(Participant._from_thing('api_key', api_key))
-    if user.participant:
-        p = user.participant
-        today = date.today()
-        if p.old_auth_usage != today:
-            Participant.db.run("""
-                UPDATE participants
-                   SET old_auth_usage = %s
-                 WHERE id = %s
-            """, (today, p.id))
-    return user
-
 def _get_user_via_basic_auth(auth_header):
     """Given a basic auth header, return a User object.
     """
@@ -37,16 +22,13 @@ def _get_user_via_basic_auth(auth_header):
     if len(creds) != 2:
         raise Response(401)
     userid, api_key = creds
-    if len(userid) == 36 and '-' in userid:
-        user = _get_user_via_api_key(userid)  # For backward-compatibility
-    else:
-        try:
-            userid = int(userid)
-        except ValueError:
-            raise Response(401)
-        user = User.from_id(userid)
-        if user.ANON or not constant_time_compare(user.participant.api_key, api_key):
-            raise Response(401)
+    try:
+        userid = int(userid)
+    except ValueError:
+        raise Response(401)
+    user = User.from_id(userid)
+    if user.ANON or not constant_time_compare(user.participant.api_key, api_key):
+        raise Response(401)
     return user
 
 def _turn_off_csrf(request):
