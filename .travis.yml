@@ -11,6 +11,7 @@ cache:
     - env/bin
     - env/lib/python2.7/site-packages
 install:
+ - if [ "${TRAVIS_BRANCH}" = "master" -a "${TRAVIS_PULL_REQUEST}" = "false" ]; then rm -rf env; fi
  - touch requirements.txt package.json
  - make env
  - make node_modules
