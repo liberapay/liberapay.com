@@ -995,4 +995,29 @@ interactions:
       content-length: ['538']
       content-type: [application/json]
     status: {code: 200, message: OK}
+- request:
+    body: '{"amount": 1061, "meta": {"state": "new", "participant_id": 4}, "description":
+      "bob"}'
+    headers: {}
+    method: POST
+    uri: https://api.balancedpayments.com:443/cards/CCgw0n216u9Rq3oHLMQM1SJ/card_holds
+  response:
+    body: {string: !!python/unicode "{\n  \"card_holds\": [\n    {\n      \"status\":
+        \"succeeded\",\n      \"description\": \"bob\",\n      \"links\": {\n        \"order\":
+        null,\n        \"card\": \"CCgw0n216u9Rq3oHLMQM1SJ\",\n        \"debit\":
+        null\n      },\n      \"updated_at\": \"2015-03-24T13:18:03.691113Z\",\n      \"created_at\":
+        \"2015-03-24T13:18:03.306719Z\",\n      \"transaction_number\": \"HL3SX-MLJ-YE43\",\n
+        \     \"expires_at\": \"2015-03-31T13:18:03.593558Z\",\n      \"failure_reason\":
+        null,\n      \"currency\": \"USD\",\n      \"amount\": 1061,\n      \"meta\":
+        {\n        \"state\": \"new\",\n        \"participant_id\": \"4\"\n      },\n
+        \     \"href\": \"/card_holds/HL3TQo9nCFlNUnI8tYbF4iih\",\n      \"failure_reason_code\":
+        null,\n      \"voided_at\": null,\n      \"id\": \"HL3TQo9nCFlNUnI8tYbF4iih\"\n
+        \   }\n  ],\n  \"links\": {\n    \"card_holds.events\": \"/card_holds/{card_holds.id}/events\",\n
+        \   \"card_holds.order\": \"/orders/{card_holds.order}\",\n    \"card_holds.card\":
+        \"/cards/{card_holds.card}\",\n    \"card_holds.debits\": \"/card_holds/{card_holds.id}/debits\",\n
+        \   \"card_holds.debit\": \"/debits/{card_holds.debit}\"\n  }\n}"}
+    headers:
+      content-length: ['1018']
+      content-type: [application/json]
+    status: {code: 201, message: CREATED}
 version: 1
