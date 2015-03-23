@@ -6,8 +6,15 @@ branches:
     - master
 before_install:
  - node --version
+cache:
+  directories:
+    - env/bin
+    - env/lib/python2.7/site-packages
 install:
- - make env node_modules
+ - if [ "${TRAVIS_BRANCH}" = "master" -a "${TRAVIS_PULL_REQUEST}" = "false" ]; then rm -rf env; fi
+ - touch requirements.txt package.json
+ - make env
+ - make node_modules
  - pip install coveralls
 before_script:
  - echo "DATABASE_URL=dbname=gratipay" | tee -a tests/local.env local.env
