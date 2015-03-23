@@ -17,7 +17,7 @@ class TestPages(Harness):
 
     def browse(self, setup=None, **kw):
         alice = self.make_participant('alice', claimed_time='now', number='plural')
-        exchange_id = self.make_exchange('bill', 19, 0, alice)
+        exchange_id = self.make_exchange('balanced-cc', 19, 0, alice)
         alice.insert_into_communities(True, 'Wonderland', 'wonderland')
         alan = self.make_participant('alan', claimed_time='now')
         alice.add_member(alan)
@@ -86,23 +86,6 @@ class TestPages(Harness):
         actual = self.client.GET('/cheese/widget.html').body
         assert expected in actual
 
-    def test_bank_account(self):
-        expected = "add or change your bank account"
-        actual = self.client.GET('/alice/routes/bank-account.html').body
-        assert expected in actual
-
-    def test_bank_account_auth(self):
-        self.make_participant('alice', claimed_time='now')
-        expected = '<em id="status">not connected</em>'
-        actual = self.client.GET('/alice/routes/bank-account.html', auth_as='alice').body
-        assert expected in actual
-
-    def test_credit_card(self):
-        self.make_participant('alice', claimed_time='now')
-        expected = "add or change your credit card"
-        actual = self.client.GET('/alice/routes/credit-card.html').body
-        assert expected in actual
-
     def test_github_associate(self):
         assert self.client.GxT('/on/github/associate').code == 400
 
@@ -163,13 +146,6 @@ class TestPages(Harness):
         response = self.client.PxST('/sign-out.html', auth_as='alice',
                                     HTTP_X_REQUESTED_WITH=b'XMLHttpRequest')
         assert response.code == 200
-
-    def test_receipts_signed_in(self):
-        self.make_participant('alice', claimed_time='now')
-        self.db.run("INSERT INTO exchanges (id, participant, amount, fee) "
-                    "VALUES(100,'alice',1,0.1)")
-        request = self.client.GET("/alice/receipts/100.html", auth_as="alice")
-        assert request.code == 200
 
     def test_settings_page_available_balance(self):
         self.make_participant('alice', claimed_time='now')

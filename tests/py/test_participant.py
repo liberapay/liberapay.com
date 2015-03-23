@@ -538,7 +538,7 @@ class Tests(Harness):
 
     def test_only_funded_tips_count(self):
         alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
-        bob = self.make_participant('bob', claimed_time='now', last_bill_result=None)
+        bob = self.make_participant('bob', claimed_time='now')
         carl = self.make_participant('carl', claimed_time='now', last_bill_result="Fail!")
         dana = self.make_participant('dana', claimed_time='now')
         alice.set_tip_to(dana, '3.00')
