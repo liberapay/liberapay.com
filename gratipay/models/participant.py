@@ -1325,7 +1325,7 @@ class Participant(Model, MixinTeam):
                    SET balanced_customer_href=%s
                  WHERE id=%s
                    AND balanced_customer_href IS NULL
-             RETURNING 1
+             RETURNING id
             """, (customer.href, self.id))
             if not r:
                 return self.get_balanced_account()
