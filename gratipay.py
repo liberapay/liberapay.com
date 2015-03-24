@@ -32,7 +32,7 @@ requirements_installed_path = os.path.join(env_path, '.requirements_installed')
 bin_path = os.path.join(env_path, bin_dir)
 default_config_path = 'default_local.env'
 config_path = 'local.env'
-virtualenv_path = os.path.join(vendor_path, 'virtualenv-1.9.1.py')
+virtualenv_path = os.path.join(vendor_path, 'virtualenv-12.0.7.py')
 pip_path = os.path.join(bin_path, 'pip' + ext)
 swaddle_path = os.path.join(bin_path, 'swaddle' + ext)
 aspen_path = os.path.join(bin_path, 'aspen' + ext)
@@ -87,11 +87,9 @@ def init_virtualenv():
     print 'Initializing virtualenv at %s...' % env_path
 
     shell('python', virtualenv_path,
-          '--unzip-setuptools',
           '--prompt="[gratipay] "',
-          '--never-download',
           '--extra-search-dir=' + vendor_path,
-          '--distribute',
+          '--always-copy',
           env_path)
 
 
