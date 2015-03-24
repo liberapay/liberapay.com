@@ -1,0 +1,35 @@
+interactions:
+- request:
+    body: '{"meta": {"username": "alice", "participant_id": 2}}'
+    headers: {}
+    method: POST
+    uri: https://api.balancedpayments.com:443/customers
+  response:
+    body: {string: !!python/unicode "{\n  \"customers\": [\n    {\n      \"name\":
+        null,\n      \"links\": {\n        \"source\": null,\n        \"destination\":
+        null\n      },\n      \"updated_at\": \"2015-03-24T16:54:58.015604Z\",\n      \"created_at\":
+        \"2015-03-24T16:54:57.899336Z\",\n      \"dob_month\": null,\n      \"id\":
+        \"CU6fn0Mhh38klHvYYVHXt8Qw\",\n      \"phone\": null,\n      \"href\": \"/customers/CU6fn0Mhh38klHvYYVHXt8Qw\",\n
+        \     \"merchant_status\": \"no-match\",\n      \"meta\": {\n        \"username\":
+        \"alice\",\n        \"participant_id\": \"2\"\n      },\n      \"dob_year\":
+        null,\n      \"address\": {\n        \"city\": null,\n        \"line2\": null,\n
+        \       \"line1\": null,\n        \"state\": null,\n        \"postal_code\":
+        null,\n        \"country_code\": null\n      },\n      \"business_name\":
+        null,\n      \"ssn_last4\": null,\n      \"email\": null,\n      \"ein\":
+        null\n    }\n  ],\n  \"links\": {\n    \"customers.source\": \"/resources/{customers.source}\",\n
+        \   \"customers.card_holds\": \"/customers/{customers.id}/card_holds\",\n
+        \   \"customers.bank_accounts\": \"/customers/{customers.id}/bank_accounts\",\n
+        \   \"customers.debits\": \"/customers/{customers.id}/debits\",\n    \"customers.destination\":
+        \"/resources/{customers.destination}\",\n    \"customers.external_accounts\":
+        \"/customers/{customers.id}/external_accounts\",\n    \"customers.cards\":
+        \"/customers/{customers.id}/cards\",\n    \"customers.disputes\": \"/customers/{customers.id}/disputes\",\n
+        \   \"customers.transactions\": \"/customers/{customers.id}/transactions\",\n
+        \   \"customers.refunds\": \"/customers/{customers.id}/refunds\",\n    \"customers.reversals\":
+        \"/customers/{customers.id}/reversals\",\n    \"customers.orders\": \"/customers/{customers.id}/orders\",\n
+        \   \"customers.credits\": \"/customers/{customers.id}/credits\",\n    \"customers.accounts\":
+        \"/customers/{customers.id}/accounts\"\n  }\n}"}
+    headers:
+      content-length: ['1723']
+      content-type: [application/json]
+    status: {code: 201, message: CREATED}
+version: 1
