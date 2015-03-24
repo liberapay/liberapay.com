@@ -731,3 +731,10 @@ class Tests(Harness):
     def test_suggested_payment_is_zero_for_new_user(self):
         alice = self.make_participant('alice')
         assert alice.suggested_payment == 0
+
+class TestGetBalancedAccount(Harness):
+    def test_get_balanced_account_creates_new_customer_href(self):
+        alice = self.make_participant('alice')
+        account = alice.get_balanced_account()
+        alice = Participant.from_username('alice')
+        assert alice.balanced_customer_href == account.href
