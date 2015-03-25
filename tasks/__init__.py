@@ -176,10 +176,10 @@ def bitcoin_payout(username='', amount='', api_key_fragment=''):
         with db.get_cursor() as cursor:
             exchange_id = cursor.one("""
                 INSERT INTO exchanges
-                       (amount, fee, participant, note, status)
-                VALUES (%s, %s, %s, %s, %s)
+                       (amount, fee, participant, note, status, route)
+                VALUES (%s, %s, %s, %s, %s, %s)
              RETURNING id
-            """, (amount, fee, username, note, 'succeeded'))
+            """, (amount, fee, username, note, 'succeeded', route.id))
             new_balance = cursor.one("""
                 UPDATE participants
                    SET balance=(balance + %s)
