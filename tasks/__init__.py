@@ -67,10 +67,10 @@ def set_paypal_email(username='', email='', api_key_fragment='', overwrite=False
             print("Not overwriting existing PayPal email.")
             sys.exit(3)
 
-    if fields.api_key == None:
+    if participant.api_key == None:
         assert first_eight == "None"
     else:
-        assert fields.api_key[0:8] == first_eight
+        assert participant.api_key[0:8] == first_eight
 
     print("Setting PayPal email for " + username + " to " + email)
     ExchangeRoute.insert(participant, 'paypal', email, fee_cap=FEE_CAP)
