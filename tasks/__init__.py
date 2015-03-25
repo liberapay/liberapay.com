@@ -122,7 +122,7 @@ def bitcoin_payout(username='', amount='', api_key_fragment=''):
     print("Fetched bitcoin_address from database: " + bitcoin_address)
 
     if D(participant.balance) < D(amount):
-        print("Not enough balance. %s only has %f in their account!" % username, D(amount))
+        print("Not enough balance. %s only has %f in their account!" % (username, D(amount)))
         sys.exit(4)
 
     if participant.api_key == None:
