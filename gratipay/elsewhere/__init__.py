@@ -234,6 +234,8 @@ class Platform(object):
         r = self.api_get(page_url)
         friends, count, pages_urls = self.api_paginator(r, self.api_parser(r))
         friends = [self.extract_user_info(f) for f in friends]
+        if count == -1 and hasattr(self, 'x_friends_count'):
+            count = self.x_friends_count(None, account.extra_info, -1)
         return friends, count, pages_urls
 
 

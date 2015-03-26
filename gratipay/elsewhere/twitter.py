@@ -34,3 +34,4 @@ class Twitter(PlatformOAuth1):
     x_email = not_available
     x_avatar_url = key('profile_image_url_https',
                        clean=lambda v: v.replace('_normal.', '.'))
+    x_friends_count = key('friends_count')
