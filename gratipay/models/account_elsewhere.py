@@ -73,7 +73,8 @@ class AccountElsewhere(Model):
 
     @classmethod
     def get_many(cls, platform, user_infos):
-        accounts = cls.db.all("""\
+        accounts = []
+        found = cls.db.all("""\
 
             SELECT elsewhere.*::elsewhere_with_participant
               FROM elsewhere
@@ -81,9 +82,11 @@ class AccountElsewhere(Model):
                AND user_id = any(%s)
 
         """, (platform, [i.user_id for i in user_infos]))
-        found_user_ids = set(a.user_id for a in accounts)
+        found = {a.user_id: a for a in found}
         for i in user_infos:
-            if i.user_id not in found_user_ids:
+            if i.user_id in found:
+                accounts.append(found[i.user_id])
+            else:
                 accounts.append(cls.upsert(i))
         return accounts
 
