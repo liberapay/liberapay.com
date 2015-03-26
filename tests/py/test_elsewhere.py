@@ -173,11 +173,15 @@ class TestConfirmTakeOver(Harness):
 class TestFriendFinder(Harness):
 
     def test_twitter_get_friends_for(self):
-        elsewhere = self.make_elsewhere('twitter', 23608307, 'Changaco')
-        friends, nfriends, pages_urls = self.platforms.twitter.get_friends_for(elsewhere)
+        platform = self.platforms.twitter
+        user_info = platform.extract_user_info(user_info_examples.twitter())
+        account = AccountElsewhere.upsert(user_info)
+        friends, nfriends, pages_urls = platform.get_friends_for(account)
         assert nfriends > 0
 
     def test_github_get_friends_for(self):
-        elsewhere = self.make_elsewhere('github', 134455, 'whit537')
-        friends, nfriends, pages_urls = self.platforms.github.get_friends_for(elsewhere)
+        platform = self.platforms.github
+        user_info = platform.extract_user_info(user_info_examples.github())
+        account = AccountElsewhere.upsert(user_info)
+        friends, nfriends, pages_urls = platform.get_friends_for(account)
         assert nfriends > 0
