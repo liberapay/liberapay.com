@@ -1,4 +1,3 @@
-import os
 from setuptools import setup, find_packages
 
 from gratipay.version import get_version

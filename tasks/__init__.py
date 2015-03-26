@@ -46,7 +46,7 @@ def set_paypal_email(username='', email='', api_key_fragment='', overwrite=False
     else:
         first_eight = api_key_fragment
 
-    db = wireup.db(wireup.env())
+    wireup.db(wireup.env())
 
     participant = Participant.from_username(username)
     if not participant:
