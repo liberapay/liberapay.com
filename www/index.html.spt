@@ -1,5 +1,3 @@
-from gratipay.models import community
-
 [---]
 
 if not user.ANON:
@@ -98,6 +96,13 @@ if not user.ANON:
 
             <p>{{ _("Who inspires you? See if they're on Gratipay:") }}</p>
             {% include "templates/search-box.html" %}
+
+            <p>{{ _("Find your friends from social networks:") }}<br>
+            {% for p in website.friends_platforms %}
+                <a href="/on/{{ p.name }}/">{{ p.display_name }}</a
+                >{{ ',' if not loop.last }}
+            {% endfor %}
+            </p>
 
             <h2>{{ _("Receiving") }}</h2>
 

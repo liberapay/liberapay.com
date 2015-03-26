@@ -4,15 +4,12 @@ from aspen import Response
 
 from gratipay.models.account_elsewhere import AccountElsewhere
 
-supported_platforms = [
-    ('/%s/' % p.name, p.display_name) for p in website.platforms
-    if getattr(p, 'api_friends_path', None)
-]
+platforms_nav = [('/%s/' % p.name, p.display_name) for p in website.friends_platforms]
 del p
 
 [---]
 platform = getattr(website.platforms, request.path['platform'], None)
-if platform is None or not getattr(platform, 'api_friends_path', None):
+if platform is None or platform not in website.friends_platforms:
     raise Response(404)
 
 title = _("Friend Finder")
@@ -33,7 +30,7 @@ if account:
 {% block subnav %}
     {% set current_page = platform.name %}
     {% set nav_base = '/on' %}
-    {% set pages = supported_platforms %}
+    {% set pages = platforms_nav %}
     {% include "templates/nav.html" %}
 {% endblock %}
 
