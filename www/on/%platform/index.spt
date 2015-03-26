@@ -42,8 +42,8 @@ if account:
         <img src='{{ website.asset("platforms/%s.png" % platform.name) }}' />
     </div>
     {% if account and nfriends > 0 %}
-    <p>
-        You have {{ nfriends }} friends on {{ platform.display_name }}.
+    <p>{{ ngettext("You have {n} friend on {0}.", "You have {n} friends on {0}.",
+                   nfriends, platform.display_name) }}
     </p>
     {% endif %}
 
@@ -76,9 +76,9 @@ if account:
     <tr>
         <td><a href="./{{ friend.user_name }}/">{{ friend.user_name }}</a></td>
         <td class="figure">{{ '&check;'|safe if p.is_claimed }}</td>
-        <td class="figure">{{ '[hidden]' if p.anonymous_receiving else p.npatrons }}</td>
-        <td class="figure">{{ '[hidden]' if p.anonymous_receiving else p.receiving }}</td>
-        <td class="figure">{{ '[hidden]' if p.anonymous_giving else p.giving }}</td>
+        <td class="figure">{{ _('hidden') if p.anonymous_receiving else p.npatrons }}</td>
+        <td class="figure">{{ _('hidden') if p.anonymous_receiving else p.receiving }}</td>
+        <td class="figure">{{ _('hidden') if p.anonymous_giving else p.giving }}</td>
     </tr>
     {% endfor %}
     {% if pages_urls %}
