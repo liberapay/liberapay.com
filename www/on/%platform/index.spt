@@ -18,10 +18,13 @@ account = None
 if not user.ANON:
     account = user.participant.get_account_elsewhere(platform.name)
 
+sess = None
 if account:
-    page_url = b64decode(request.qs.get('page', ''))
-    friends, nfriends, pages_urls = platform.get_friends_for(account, page_url)
-    friends = AccountElsewhere.get_many(platform.name, friends)
+    sess = account.get_auth_session()
+    if sess:
+        page_url = b64decode(request.qs.get('page', ''))
+        friends, nfriends, pages_urls = platform.get_friends_for(account, page_url, sess)
+        friends = AccountElsewhere.get_many(platform.name, friends)
 
 [---] text/html
 {% extends "templates/base.html" %}
@@ -38,7 +41,7 @@ if account:
     <div class="avatar">
         <img src='{{ website.asset("platforms/%s.png" % platform.name) }}' />
     </div>
-    {% if account and nfriends > 0 %}
+    {% if nfriends and nfriends > 0 %}
     <p>{{ ngettext("You have {n} friend on {0}.", "You have {n} friends on {0}.",
                    nfriends, platform.display_name) }}
     </p>
@@ -48,7 +51,7 @@ if account:
 
 {% block content %}
 
-{% if not account %}
+{% if not account or not sess %}
 <div>
     <span style="display: inline-block">
     {% call auth_button(platform.name, 'opt-in' if user.ANON else 'connect') %}{{

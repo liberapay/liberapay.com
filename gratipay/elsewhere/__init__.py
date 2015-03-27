@@ -225,13 +225,13 @@ class Platform(object):
             info.token = json.dumps(token)
         return info
 
-    def get_friends_for(self, account, page_url=None):
+    def get_friends_for(self, account, page_url=None, sess=None):
         if not page_url:
             page_url = self.api_friends_path.format(
                 user_id=quote(account.user_id),
                 user_name=quote(account.user_name or ''),
             )
-        r = self.api_get(page_url)
+        r = self.api_get(page_url, sess=sess)
         friends, count, pages_urls = self.api_paginator(r, self.api_parser(r))
         friends = [self.extract_user_info(f) for f in friends]
         if count == -1 and hasattr(self, 'x_friends_count'):
