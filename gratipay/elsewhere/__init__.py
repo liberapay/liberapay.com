@@ -128,7 +128,7 @@ class Platform(object):
         if status != 200:
             log('{} api responded with {}:\n{}'.format(self.name, status, response.text)
                , level=logging.ERROR)
-            raise Response(500, '{} lookup failed with {}'.format(self.name, status))
+            raise Response(502, '{} lookup failed with {}'.format(self.name, status))
 
         return response
 
