@@ -110,29 +110,30 @@ class Platform(object):
         The response is returned, after checking its status code and ratelimit
         headers.
         """
+        is_user_session = bool(sess)
         if not sess:
             sess = self.get_auth_session()
         response = sess.get(self.api_url+path, **kw)
 
-        self.check_api_response_status(response)
-        self.check_ratelimit_headers(response)
+        limit, remaining, reset = self.get_ratelimit_headers(response)
+        if not is_user_session:
+            self.log_ratelimit_headers(limit, remaining, reset)
 
-        return response
-
-    def check_api_response_status(self, response):
-        """Pass through any 404, convert any other non-200 into a 500.
-        """
+        # Check response status
         status = response.status_code
         if status == 404:
             raise Response(404, response.text)
-        elif status != 200:
+        if status == 429 and is_user_session:
+            raise Response(429, response.text)
+        if status != 200:
             log('{} api responded with {}:\n{}'.format(self.name, status, response.text)
                , level=logging.ERROR)
             raise Response(500, '{} lookup failed with {}'.format(self.name, status))
 
-    def check_ratelimit_headers(self, response):
-        """Emit log messages if we're running out of ratelimit.
-        """
+        return response
+
+    def get_ratelimit_headers(self, response):
+        limit, remaining, reset = None, None, None
         prefix = getattr(self, 'ratelimit_headers_prefix', None)
         if prefix:
             limit = response.headers.get(prefix+'limit')
@@ -141,26 +142,31 @@ class Platform(object):
 
             try:
                 limit, remaining, reset = int(limit), int(remaining), int(reset)
+                reset = datetime.fromtimestamp(reset, tz=utc)
             except (TypeError, ValueError):
-                limit, remaining, reset = None, None, None
-
-            if None in (limit, remaining, reset):
                 d = dict(limit=limit, remaining=remaining, reset=reset)
                 log('Got weird rate headers from %s: %s' % (self.name, d))
-            else:
-                percent_remaining = remaining/limit
-                if percent_remaining < 0.5:
-                    reset = to_age(datetime.fromtimestamp(reset, tz=utc))
-                    log_msg = (
-                        '{0} API: {1:.1%} of ratelimit has been consumed, '
-                        '{2} requests remaining, resets {3}.'
-                    ).format(self.name, 1 - percent_remaining, remaining, reset)
-                    log_lvl = logging.WARNING
-                    if percent_remaining < 0.2:
-                        log_lvl = logging.ERROR
-                    elif percent_remaining < 0.05:
-                        log_lvl = logging.CRITICAL
-                    log(log_msg, log_lvl)
+                limit, remaining, reset = None, None, None
+
+        return limit, remaining, reset
+
+    def log_ratelimit_headers(self, limit, remaining, reset):
+        """Emit log messages if we're running out of ratelimit.
+        """
+        if None in (limit, remaining, reset):
+            return
+        percent_remaining = remaining/limit
+        if percent_remaining < 0.5:
+            log_msg = (
+                '{0} API: {1:.1%} of ratelimit has been consumed, '
+                '{2} requests remaining, resets {3}.'
+            ).format(self.name, 1 - percent_remaining, remaining, to_age(reset))
+            log_lvl = logging.WARNING
+            if percent_remaining < 0.2:
+                log_lvl = logging.ERROR
+            elif percent_remaining < 0.05:
+                log_lvl = logging.CRITICAL
+            log(log_msg, log_lvl)
 
     def extract_user_info(self, info):
         """
