@@ -28,6 +28,7 @@ class Google(PlatformOAuth2):
     api_user_info_path = '/people/{user_id}'
     api_user_self_info_path = '/people/me'
     api_friends_path = '/people/{user_id}/people/visible'
+    api_friends_limited = True
 
     # User info extractors
     x_user_id = key('id')

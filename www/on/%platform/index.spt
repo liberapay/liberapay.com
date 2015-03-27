@@ -26,6 +26,8 @@ if account:
         friends, nfriends, pages_urls = platform.get_friends_for(account, page_url, sess)
         friends = AccountElsewhere.get_many(platform.name, friends)
 
+limited = getattr(platform, 'api_friends_limited', False)
+
 [---] text/html
 {% extends "templates/base.html" %}
 {% from 'templates/auth.html' import auth_button with context %}
@@ -49,6 +51,14 @@ if account:
 
 {% endblock %}
 
+{% macro limitation_note() %}
+    {% if limited %}
+        <br>
+        <p>{{ _("Note: {0} only allows us to see your friends who have already joined Gratipay.",
+                platform.display_name) }}</p>
+    {% endif %}
+{% endmacro %}
+
 {% block content %}
 
 {% if not account or not sess %}
@@ -61,7 +71,8 @@ if account:
     {{ _("to find your friends from there.") }}
 </div>
 {% elif not friends %}
-<p>{{ _("No friends found on {0}.", platform.display_name) }}</p>
+<p>{{ _("No friends found.") }}</p>
+{{ limitation_note() }}
 {% else %}
 <table class="table">
     <tr>
@@ -86,6 +97,7 @@ if account:
         <tr><td colspan="5">{{ pages_links(pages_urls) }}</td></tr>
     {% endif %}
 </table>
+{{ limitation_note() }}
 {% endif %}
 
 {% endblock %}
