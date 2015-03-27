@@ -2,21 +2,28 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from aspen.http import status_strings
 
+from gratipay.utils.i18n import HTTP_ERRORS
+
 [----------------------------------------]
 
-style = ''
-msg = status_strings.get(response.code, 'Unknown Error').title()
+code = response.code
+msg = _(HTTP_ERRORS.get(code, status_strings.get(code, '')))
+try:
+    assert msg
+except Exception as e:
+    website.tell_sentry(e, state)
+
 err = response.body
 
-title = str(response.code)
 [----------------------------------------] text/html
 {% extends "templates/base.html" %}
+{% set title = code %}
 {% block content %}
     <p>{{ msg }}</p>
     <pre>{{ err }}</pre>
 {% endblock %}
 [----------------------------------------] application/json via json_dump
-{ "error_code": response.code
+{ "error_code": code
 , "error_message_short": msg
 , "error_message_long": err
  }
