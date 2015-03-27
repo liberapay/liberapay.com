@@ -6,8 +6,10 @@ from datetime import datetime, timedelta
 
 from aspen import Response, json
 from aspen.utils import to_rfc822, utcnow
-import gratipay
+from dependency_injection import resolve_dependencies
 from postgres.cursors import SimpleCursorBase
+
+import gratipay
 
 
 BEGINNING_OF_EPOCH = to_rfc822(datetime(1970, 1, 1)).encode('ascii')
@@ -186,3 +188,14 @@ def to_javascript(obj):
     """For when you want to inject an object into a <script> tag.
     """
     return json.dumps(obj).replace('</', '<\\/')
+
+
+class LazyResponse(Response):
+
+    def __init__(self, code, lazy_body, **kw):
+        Response.__init__(self, code, '', **kw)
+        self.lazy_body = lazy_body
+
+    def render_body(self, state):
+        f = self.lazy_body
+        self.body = f(*resolve_dependencies(f, state).as_args)

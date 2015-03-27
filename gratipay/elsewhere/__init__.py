@@ -15,6 +15,7 @@ from aspen.utils import to_age, utc
 from requests_oauthlib import OAuth1Session, OAuth2Session
 
 from gratipay.elsewhere._extractors import not_available
+from gratipay.utils import LazyResponse
 
 
 ACTIONS = {'opt-in', 'connect', 'lock', 'unlock'}
@@ -124,11 +125,18 @@ class Platform(object):
         if status == 404:
             raise Response(404, response.text)
         if status == 429 and is_user_session:
-            raise Response(429, response.text)
+            def msg(_, to_age):
+                if remaining == 0 and reset:
+                    return _("You've consumed your quota of requests, you can try again in {0}.", to_age(reset))
+                else:
+                    return _("You're making requests too fast, please try again later.")
+            raise LazyResponse(status, msg)
         if status != 200:
             log('{} api responded with {}:\n{}'.format(self.name, status, response.text)
                , level=logging.ERROR)
-            raise Response(502, '{} lookup failed with {}'.format(self.name, status))
+            msg = lambda _: _("{0} returned an error, please try again later.",
+                              self.display_name)
+            raise LazyResponse(502, msg)
 
         return response
 
