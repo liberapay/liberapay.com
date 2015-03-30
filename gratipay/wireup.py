@@ -325,7 +325,6 @@ def other_stuff(website, env):
         website.asset = lambda path: env.gratipay_asset_url+path
         clean_assets(website.www_root)
 
-    website.google_analytics_id = env.google_analytics_id
     website.optimizely_id = env.optimizely_id
     website.include_piwik = env.include_piwik
 
@@ -372,7 +371,6 @@ def env():
         UPDATE_GLOBAL_STATS_EVERY       = int,
         CHECK_DB_EVERY                  = int,
         DEQUEUE_EMAILS_EVERY            = int,
-        GOOGLE_ANALYTICS_ID             = unicode,
         OPTIMIZELY_ID                   = unicode,
         SENTRY_DSN                      = unicode,
         LOG_METRICS                     = is_yesish,
