@@ -195,12 +195,15 @@ class Payday(object):
                  , claimed_time
                  , balance AS old_balance
                  , balance AS new_balance
-                 , balanced_customer_href
-                 , last_bill_result
                  , is_suspicious
                  , goal
                  , false AS card_hold_ok
-              FROM participants
+                 , ( SELECT count(*)
+                       FROM exchange_routes r
+                      WHERE r.participant = p.id
+                        AND network = 'balanced-cc'
+                   ) > 0 AS has_credit_card
+              FROM participants p
              WHERE is_suspicious IS NOT true
                AND claimed_time < %(ts_start)s
           ORDER BY claimed_time;
@@ -374,10 +377,7 @@ class Payday(object):
                    SELECT count(*)
                      FROM payday_participants
                     WHERE old_balance < giving_today
-                      AND ( balanced_customer_href IS NULL
-                            OR
-                            last_bill_result IS NULL
-                          )
+                      AND NOT has_credit_card
                )
          WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz;
 
@@ -415,8 +415,7 @@ class Payday(object):
             SELECT *
               FROM payday_participants
              WHERE old_balance < giving_today
-               AND balanced_customer_href IS NOT NULL
-               AND last_bill_result IS NOT NULL
+               AND has_credit_card
                AND is_suspicious IS false
         """)
         if not participants:
@@ -607,8 +606,11 @@ class Payday(object):
             SELECT p.*::participants
               FROM participants p
              WHERE balance > 0
-               AND balanced_customer_href IS NOT NULL
-               AND last_ach_result IS NOT NULL
+               AND ( SELECT count(*)
+                       FROM exchange_routes r
+                      WHERE r.participant = p.id
+                        AND network = 'balanced-ba'
+                   ) > 0
         """)
         def credit(participant):
             if participant.is_suspicious is None:

@@ -122,9 +122,9 @@
     $(document).ready(function() {
         Gratipay.init();
         {% if not user.ANON %}
+        Gratipay.username = {{ to_javascript(user.participant.username)|safe }};
         Gratipay.initNotifications(
-            {{ to_javascript(user.participant.render_notifications(state))|safe }},
-            {{ to_javascript(user.participant.username)|safe }}
+            {{ to_javascript(user.participant.render_notifications(state))|safe }}
         );
         {% endif %}
     });

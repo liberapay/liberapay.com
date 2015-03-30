@@ -3,12 +3,11 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from datetime import date
 from decimal import Decimal as D
 
-import balanced
 import mock
 import pytest
 
 from gratipay.billing.payday import Payday
-from gratipay.exceptions import NoBalancedCustomerHref, NotWhitelisted
+from gratipay.exceptions import NotWhitelisted
 from gratipay.models.community import Community
 from gratipay.models.participant import Participant
 from gratipay.testing import Harness
@@ -83,26 +82,14 @@ class TestClosing(Harness):
 
     # wbtba - withdraw_balance_to_bank_account
 
-    def test_wbtba_withdraws_balance_to_bank_account(self):
+    @mock.patch('gratipay.billing.exchanges.thing_from_href')
+    def test_wbtba_withdraws_balance_to_bank_account(self, tfh):
         alice = self.make_participant( 'alice'
                                      , balance=D('10.00')
                                      , is_suspicious=False
-                                     , balanced_customer_href='new'
+                                     , last_ach_result=''
                                       )
-
-        bank_account = balanced.BankAccount( name='Alice G. Krebs'
-                                           , routing_number='321174851'
-                                           , account_number='9900000001'
-                                           , account_type='checking'
-                                            ).save()
-        bank_account.associate_to_customer(alice.balanced_customer_href)
-
         alice.close('bank')
-
-    def test_wbtba_raises_NoBalancedCustomerHref_if_no_balanced_customer_href(self):
-        alice = self.make_participant('alice', balance=D('10.00'), is_suspicious=False)
-        with pytest.raises(NoBalancedCustomerHref):
-            alice.withdraw_balance_to_bank_account()
 
     def test_wbtba_raises_NotWhitelisted_if_not_whitelisted(self):
         alice = self.make_participant('alice', balance=D('10.00'))

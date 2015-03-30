@@ -1,30 +1,30 @@
-from gratipay import billing
+import balanced
+
+from gratipay.models.exchange_route import ExchangeRoute
+from gratipay.utils import get_participant
 
 [-----------------------------------------------------------------------------]
 
 status = status_msg = ". . ."
-balanced_customer_href = None
 
 if not user.ANON:
-    balanced_customer_href = user.participant.balanced_customer_href
-    last_bill_result = user.participant.last_bill_result
+    participant = get_participant(state, restrict=True)
 
     status = "missing"
     status_msg = _("Your credit card is {0}missing{1}")
-    if balanced_customer_href:
-        if last_bill_result is not None:
-            if last_bill_result == "":
-                status = "working"
-                status_msg = _("Your credit card is {0}working{1}")
-            else:
-                status = "failing"
-                status_msg = _("Your credit card is {0}failing{1}")
 
-    card = billing.BalancedCard(balanced_customer_href)
-    # the id on the card might not match unless the db
-    # is updated to use the new style of urls
-
-    username = user.participant.username
+    route = ExchangeRoute.from_network(participant, 'balanced-cc')
+    if route:
+        card = balanced.Card.fetch(route.address)
+        last_bill_result = route.error
+        if last_bill_result == "":
+            status = "working"
+            status_msg = _("Your credit card is {0}working{1}")
+        else:
+            status = "failing"
+            status_msg = _("Your credit card is {0}failing{1}")
+    else:
+        card = balanced.Card(address={}, meta={})
 
 title = _("Credit Card")
 
@@ -43,9 +43,8 @@ title = _("Credit Card")
 
 {% if not user.ANON %}
 <script>
-    $(document).ready(function()
-    {
-        Gratipay.payments.cc.init("{{ user.participant.username }}");
+    $(document).ready(function() {
+        Gratipay.payments.cc.init();
         $('#country').chosen();
     });
 </script>
@@ -103,40 +102,41 @@ title = _("Credit Card")
 
             <label>
                 <span>{{ _("Full Name on Card") }}</span>
-                <input id="name" value="{{ card['name'] }}" />
+                <input id="name" value="{{ card.name }}" />
             </label>
 
             <label>
                 <span>{{ _("Address 1") }}</span>
-                <input id="address_1" value="{{ card['address_1'] }}" />
+                <input id="address_1" value="{{ card.address.line1 }}" />
             </label>
 
             <label>
                 <span>{{ _("Address 2") }}</span>
-                <input id="address_2" value="{{ card['address_2'] }}" />
+                <input id="address_2" value="{{ card.address.line2 or card.meta.address_2 }}" />
             </label>
 
             <label>
                 <span>{{ _("City or Town") }}</span>
-                <input id="city_town" value="{{ card['city_town'] }}" />
+                <input id="city_town" value="{{ card.address.city or card.meta.city_town }}" />
             </label>
 
             <label class="half">
                 <span>{{ _("State or Province") }}</span>
-                <input id="state" value="{{ card['state'] }}" />
+                <input id="state" value="{{ card.address.state or card.meta.region }}" />
             </label>
 
             <label class="half right">
                 <span>{{ _("ZIP or Postal Code") }}</span>
-                <input id="zip" value="{{ card['zip'] }}" />
+                <input id="zip" value="{{ card.address.postal_code }}" />
             </label>
 
             <label>
                 <span>{{ _("Country") }}</span>
                 <select id="country" data-placeholder="{{ _('Select your country...') }}">
                     <option value=""></option>
+                {% set country = card.address.country_code or card.meta.country %}
                 {% for each in locale.countries.items() %}
-                    <option value="{{ each[0] }}" {{ 'selected' if each[0] == card['country'] else '' }}>{{ each[1] }}</option>
+                    <option value="{{ each[0] }}" {{ 'selected' if each[0] == country else '' }}>{{ each[1] }}</option>
                 {% endfor %}
                 </select>
             </label>
@@ -146,7 +146,7 @@ title = _("Credit Card")
         </form>
 
         {% if status != "missing" %}
-        <form id="delete" action="credit-card.json" method="POST"
+        <form id="delete" data-network="balanced-cc" data-address="{{ card.href }}"
               data-confirm="{{ _('Are you sure you want to disconnect your credit card?') }}">
             <button>{{ _("Disconnect My Credit Card") }}</button>
         </form>

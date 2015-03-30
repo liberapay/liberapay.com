@@ -4,6 +4,7 @@ import itertools
 
 import balanced
 
+from gratipay.models.exchange_route import ExchangeRoute
 from gratipay.testing import Harness
 from gratipay.testing.vcr import use_cassette
 
@@ -16,12 +17,12 @@ class BalancedHarness(Harness):
                                            balanced_customer_href=self.david_href)
         self.janet = self.make_participant('janet', is_suspicious=False,
                                            claimed_time='now',
-                                           balanced_customer_href=self.janet_href,
-                                           last_bill_result='')
+                                           balanced_customer_href=self.janet_href)
+        self.janet_route = ExchangeRoute.insert(self.janet, 'balanced-cc', self.card_href)
         self.homer = self.make_participant('homer', is_suspicious=False,
                                            claimed_time='now',
-                                           balanced_customer_href=self.homer_href,
-                                           last_ach_result='')
+                                           balanced_customer_href=self.homer_href)
+        self.homer_route = ExchangeRoute.insert(self.homer, 'balanced-ba', self.bank_account_href)
 
     @classmethod
     def tearDownClass(cls):

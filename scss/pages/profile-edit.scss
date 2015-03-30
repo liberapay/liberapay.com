@@ -18,9 +18,20 @@
             width: 6pc;
         }
     }
-    .bitcoin {
+    .cryptocoin {
         .address {
             font-size: 13px;
+        }
+        .edit > .not-empty, .delete {
+            display: none;
+        }
+        &.not-empty {
+            .empty {
+                display: none;
+            }
+            .edit > .not-empty, .delete {
+                display: inline-block;
+            }
         }
     }
 }

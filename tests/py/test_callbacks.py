@@ -5,6 +5,7 @@ import json
 from mock import patch
 
 from gratipay.billing.exchanges import record_exchange
+from gratipay.models.exchange_route import ExchangeRoute
 from gratipay.testing import Harness
 
 
@@ -30,10 +31,11 @@ class TestBalancedCallbacks(Harness):
 
     @patch('gratipay.billing.exchanges.record_exchange_result')
     def test_credit_callback(self, rer):
-        alice = self.make_participant('alice')
+        alice = self.make_participant('alice', last_ach_result='')
+        ba = ExchangeRoute.from_network(alice, 'balanced-ba')
         for status in ('succeeded', 'failed'):
             error = 'FOO' if status == 'failed' else None
-            e_id = record_exchange(self.db, 'ach', 10, 0, alice, 'pre')
+            e_id = record_exchange(self.db, ba, 10, 0, alice, 'pre')
             body = json.dumps({
                 "events": [
                     {

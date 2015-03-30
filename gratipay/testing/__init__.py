@@ -13,6 +13,7 @@ from gratipay.billing.exchanges import record_exchange, record_exchange_result
 from gratipay.elsewhere import UserInfo
 from gratipay.main import website
 from gratipay.models.account_elsewhere import AccountElsewhere
+from gratipay.models.exchange_route import ExchangeRoute
 from gratipay.security.user import User
 from gratipay.testing.vcr import use_cassette
 from psycopg2 import IntegrityError, InternalError
@@ -161,6 +162,12 @@ class Harness(unittest.TestCase):
                      VALUES (%s,%s,%s,%s)
             """, (platform, participant.id, username, username))
 
+        # Insert exchange routes
+        if 'last_bill_result' in kw:
+            ExchangeRoute.insert(participant, 'balanced-cc', '/cards/foo', kw.pop('last_bill_result'))
+        if 'last_ach_result' in kw:
+            ExchangeRoute.insert(participant, 'balanced-ba', '/bank_accounts/bar', kw.pop('last_ach_result'))
+
         # Update participant
         if kw:
             if kw.get('claimed_time') == 'now':
@@ -184,8 +191,15 @@ class Harness(unittest.TestCase):
         return self.db.one("SELECT * FROM paydays", back_as=dict)
 
 
-    def make_exchange(self, kind, amount, fee, participant, status='succeeded', error=''):
-        e_id = record_exchange(self.db, kind, amount, fee, participant, 'pre')
+    def make_exchange(self, route, amount, fee, participant, status='succeeded', error=''):
+        if not isinstance(route, ExchangeRoute):
+            network = route
+            route = ExchangeRoute.from_network(participant, network)
+            if not route:
+                from .balanced import BalancedHarness
+                route = ExchangeRoute.insert(participant, network, BalancedHarness.card_href)
+                assert route
+        e_id = record_exchange(self.db, route, amount, fee, participant, 'pre')
         record_exchange_result(self.db, e_id, status, error, participant)
         return e_id
 

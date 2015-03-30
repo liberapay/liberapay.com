@@ -14,7 +14,8 @@
 
 </table>
 
-{% if participant.bitcoin_address or accounts[website.platforms.venmo.name] or own_account %}
+{% set cryptocoins = participant.get_cryptocoin_addresses() %}
+{% if cryptocoins or accounts.venmo or own_account %}
 
 {% if not user.ANON and own_account %}
 <h2>{{ _("Other Receiving Options") }}</h2>
@@ -24,40 +25,43 @@
 <table class="accounts">
 
     <!-- one-off receiving options -->
-    {% if participant.bitcoin_address or own_account %}
-    {% set addr = participant.bitcoin_address or '' %}
-    {% set url = 'https://blockchain.info/address/'+addr if addr else 'javascript:;' %}
-    <tr class="bitcoin js-edit">
+    {% for network in website.cryptocoin_networks %}
+    {% set addr = cryptocoins[network.name] %}
+    {% if addr or own_account %}
+    <tr class="cryptocoin js-edit {{ 'not-empty' if addr }}">
         <td class="account-type">
-            <img src="{{ website.asset('bitcoin.png') }}" />
+            <img src="{{ network.logo }}" />
         </td>
         <td class="account-details">
-            <div class="view">
-                <a class="address" rel="me" href="{{ url }}">{{ addr }}</a>
-            </div>
+            <div class="view">{{ addr }}</div>
             {% if own_account %}
-            <form class="edit" action="bitcoin.json">
+            <form class="edit" action="routes/associate.json">
                 <div class="address">
-                    <input type="text" name="bitcoin_address" value="{{ addr }}" />
+                    <input type="hidden" name="network" value="{{ network.name }}" />
+                    <input type="text" name="address" value="{{ addr }}" />
                 </div>
                 <div class="buttons">
                     <button class="save">{{ _("Save") }}</button>
                     <button class="cancel">{{ _("Cancel") }}</button>
+                    <button class="delete" data-network="{{ network.name }}"
+                            data-address="{{ addr }}">{{ _("Delete") }}</button>
                 </div>
             </form>
             {% endif %}
 
-            <div class="account-type">Bitcoin</div>
+            <div class="account-type">{{ network.display_name }}</div>
         </td>
         <td class="account-action">
             {% if own_account %}
             <button class="edit">
-                {{ _("Edit") if addr else _("+ Add") }}
+                <span class="empty">{{ _("+ Add") }}</span>
+                <span class="not-empty">{{ _("Edit") }}</span>
             </button>
             {% endif %}
         </td>
     </tr>
     {% endif %}
+    {% endfor %}
 
     {% if accounts[website.platforms.venmo.name] or own_account %}
         {% include "templates/venmo-account.html" %}

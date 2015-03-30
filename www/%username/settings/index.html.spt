@@ -1,4 +1,5 @@
 
+from gratipay.models.exchange_route import ExchangeRoute
 from gratipay.utils import get_participant
 
 [-----------------------------------------------------------------------------]
@@ -71,23 +72,22 @@ emails = participant.get_emails()
             </h2>
             <table class="accounts">
                 <tr>
+                    {% set cc_error = participant.get_credit_card_error() %}
                     <td class="account-type">
                         <img src="{{ website.asset('card_icon.jpg') }}" />
                     </td>
                     <td class="account-details">
                         <div class="account-type">{{ _("Credit Card") }}</div>
-                        {% if participant.last_bill_result == "" %}
+                        {% if cc_error == "" %}
                             {{ _("Your credit card is {0}working{1}", "", "") }}
-                        {% elif participant.last_bill_result %}
+                        {% elif cc_error %}
                             {{ _("Your credit card is {0}failing{1}", "<b>"|safe, "</b>"|safe) }}
                         {% endif %}
                     </td>
                     <td class="account-action">
-                        {% if participant.last_bill_result is none %}
-                            <a class="button auth-button" href="/credit-card.html">{{ _("+ Add") }}</a>
-                        {% else %}
-                            <a class="button auth-button" href="/credit-card.html">{{ _("Edit") }}</a>
-                        {% endif %}
+                        <a class="button auth-button" href="../routes/credit-card.html">{{
+                            _("+ Add") if cc_error is none else _("Edit")
+                        }}</a>
                     </td>
                 </tr>
             </table>
@@ -102,33 +102,33 @@ emails = participant.get_emails()
             </h2>
             <table class="accounts">
                 <tr>
+                    {% set ba_error = participant.get_bank_account_error() %}
                     <td class="account-type">
                         <img src="{{ website.asset('bank_account_icon.jpg') }}" />
                     </td>
                     <td class="account-details">
                         <div class="account-type">{{ _("Bank Account") }}</div>
-                        {% if participant.last_ach_result == "" %}
+                        {% if ba_error == "" %}
                             {{ _("Your bank account is {0}working{1}", "", "") }}
-                        {% elif participant.last_ach_result %}
+                        {% elif ba_error %}
                             {{ _("Your bank account is {0}failing{1}", "<b>"|safe, "</b>"|safe) }}
                         {% endif %}
                     </td>
                     <td class="account-action">
-                        {% if participant.last_ach_result is none %}
-                            <a class="button auth-button" href="/bank-account.html">{{ _("+ Add") }}</a>
-                        {% else %}
-                            <a class="button auth-button" href="/bank-account.html">{{ _("Edit") }}</a>
-                        {% endif %}
+                        <a class="button auth-button" href="../routes/bank-account.html">{{
+                            _("+ Add") if ba_error is none else _("Edit")
+                        }}</a>
                     </td>
                 </tr>
-                {% if participant.paypal_email %}
+                {% set paypal = ExchangeRoute.from_network(participant, 'paypal') %}
+                {% if paypal %}
                 <tr>
                     <td class="account-type">
                         <img src="{{ website.asset('paypal.png') }}" />
                     </td>
                     <td colspan="2" class="account-details">
                         <div class="account-type">Paypal</div>
-                        <span>{{ participant.paypal_email }}</span>
+                        <span>{{ paypal.address }}</span>
                     </td>
                 </tr>
                 {% endif %}

@@ -23,7 +23,14 @@ subhead = _("Stats")
 yesterday = datetime.datetime.utcnow() - datetime.timedelta(hours=24)
 db = website.db
 escrow = db.one("SELECT sum(balance) FROM participants", default=0)
-nach = db.one("SELECT count(*) FROM participants WHERE last_ach_result = '' AND is_suspicious IS NOT true")
+nach = db.one("""
+    SELECT count(*)
+      FROM current_exchange_routes r
+      JOIN participants p ON p.id = r.participant
+     WHERE r.network = 'balanced-ba'
+       AND r.error = ''
+       AND p.is_suspicious IS NOT true
+""")
 if nach < 10:
     nach = CARDINALS[nach].title()
 else:
@@ -32,7 +39,14 @@ payday = db.one( "SELECT ts_start, ts_end FROM paydays WHERE ts_start > %s"
                , (yesterday,)
                 )
 npeople = db.one("SELECT count(*) FROM participants WHERE claimed_time IS NOT NULL AND is_suspicious IS NOT true")
-ncc = db.one("SELECT count(*) FROM participants WHERE last_bill_result = '' AND is_suspicious IS NOT true")
+ncc = db.one("""
+    SELECT count(*)
+      FROM current_exchange_routes r
+      JOIN participants p ON p.id = r.participant
+     WHERE r.network = 'balanced-cc'
+       AND r.error = ''
+       AND p.is_suspicious IS NOT true
+""")
 pcc = "%5.1f" % ((ncc * 100.0) / npeople) if npeople > 0 else 0.0
 transfer_volume = db.one("SELECT transfer_volume FROM paydays ORDER BY ts_end DESC LIMIT 1", default=0)
 tips_stats = db.one("""
@@ -180,19 +194,19 @@ def out():
 
     <p><b>{{ commaize(npeople) }} people</b> have joined Gratipay. Of those,
     {{ pcc }}% ({{ commaize(ncc) }}) have a working credit card on
-    file.{% if not user.ANON and user.participant.last_bill_result == '' %}
+    file.{% if not user.ANON and user.participant.get_credit_card_error() == '' %}
     You're one of them.{% elif not user.ANON %} You're not one of them.</p>
 
-    <p><b><a href="/credit-card.html" class="highlight">Click here to set up a
-        credit card</a></b>.{% endif %}</p>
+    <p><b><a href="/about/me/routes/credit-card.html" class="highlight">Click
+        here to set up a credit card</a></b>.{% endif %}</p>
 
     <p><b>${{ commaize(escrow, 2) }}</b> is escrowed within Gratipay.
     {{ nach }} people have connected a bank account</a> for withdrawals.
-    {% if not user.ANON and user.participant.last_ach_result == '' %}You're one of them.
+    {% if not user.ANON and user.participant.get_bank_account_error() == '' %}You're one of them.
     {% elif not user.ANON %}You're not one of them.</p>
 
-    <p><b><a href="/bank-account.html" class="highlight">Click here to connect
-        a bank account</a></b>.{% endif %}</p>
+    <p><b><a href="/about/me/routes/bank-account.html" class="highlight">Click
+        here to connect a bank account</a></b>.{% endif %}</p>
 
     <p><b>${{ commaize(transfer_volume, 2) }}</b> changed hands
         <b>{{ last_thursday }}</b>.</p>

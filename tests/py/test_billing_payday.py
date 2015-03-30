@@ -103,7 +103,7 @@ class TestPayday(BalancedHarness):
     def test_update_cached_amounts(self):
         team = self.make_participant('team', claimed_time='now', number='plural')
         alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
-        bob = self.make_participant('bob', claimed_time='now', last_bill_result=None)
+        bob = self.make_participant('bob', claimed_time='now')
         carl = self.make_participant('carl', claimed_time='now', last_bill_result="Fail!")
         dana = self.make_participant('dana', claimed_time='now')
         emma = self.make_participant('emma')
@@ -322,7 +322,7 @@ class TestPayin(BalancedHarness):
         self.janet.set_tip_to(self.homer, 42)
         alice = self.make_participant('alice', claimed_time='now',
                                       is_suspicious=False)
-        self.make_exchange('bill', 50, 0, alice)
+        self.make_exchange('balanced-cc', 50, 0, alice)
         alice.set_tip_to(self.janet, 50)
         Payday.start().payin()
         assert log.call_args_list[-3][0] == ("Captured 0 card holds.",)
@@ -347,10 +347,10 @@ class TestPayin(BalancedHarness):
                 payday.update_balances(cursor)
 
     @mock.patch.object(Payday, 'fetch_card_holds')
-    @mock.patch('balanced.Customer')
-    def test_card_hold_error(self, Customer, fch):
+    @mock.patch('gratipay.billing.exchanges.thing_from_href')
+    def test_card_hold_error(self, tfh, fch):
         self.janet.set_tip_to(self.homer, 17)
-        Customer.side_effect = Foobar
+        tfh.side_effect = Foobar
         fch.return_value = {}
         Payday.start().payin()
         payday = self.fetch_payday()
@@ -455,7 +455,8 @@ class TestPayin(BalancedHarness):
 
     @mock.patch.object(Payday, 'fetch_card_holds')
     def test_transfer_takes_doesnt_make_negative_transfers(self, fch):
-        hold = balanced.CardHold(amount=1500, meta={'participant_id': self.janet.id})
+        hold = balanced.CardHold(amount=1500, meta={'participant_id': self.janet.id},
+                                 card_href=self.card_href)
         hold.capture = lambda *a, **kw: None
         hold.save = lambda *a, **kw: None
         fch.return_value = {self.janet.id: hold}

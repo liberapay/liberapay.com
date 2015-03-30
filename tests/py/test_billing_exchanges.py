@@ -18,7 +18,8 @@ from gratipay.billing.exchanges import (
     skim_credit,
     sync_with_balanced,
 )
-from gratipay.exceptions import NegativeBalance, NoBalancedCustomerHref, NotWhitelisted
+from gratipay.exceptions import NegativeBalance, NotWhitelisted
+from gratipay.models.exchange_route import ExchangeRoute
 from gratipay.models.participant import Participant
 from gratipay.testing import Foobar, Harness
 from gratipay.testing.balanced import BalancedHarness
@@ -27,48 +28,40 @@ from gratipay.testing.balanced import BalancedHarness
 class TestCredits(BalancedHarness):
 
     def test_ach_credit_withhold(self):
-        bob = self.make_participant('bob', last_ach_result="failure", balance=20,
-                                    balanced_customer_href=self.homer_href,
-                                    is_suspicious=False)
+        self.make_exchange('balanced-cc', 27, 0, self.homer)
         withhold = D('1.00')
-        error = ach_credit(self.db, bob, withhold)
+        error = ach_credit(self.db, self.homer, withhold)
         assert error == ''
-        bob2 = Participant.from_id(bob.id)
-        assert bob.balance == bob2.balance == 1
+        homer = Participant.from_id(self.homer.id)
+        assert self.homer.balance == homer.balance == 1
 
     def test_ach_credit_amount_under_minimum(self):
-        bob = self.make_participant('bob', last_ach_result="failure", balance=8,
-                                    balanced_customer_href=self.homer_href,
-                                    is_suspicious=False)
-        r = ach_credit(self.db, bob, 0)
+        self.make_exchange('balanced-cc', 8, 0, self.homer)
+        r = ach_credit(self.db, self.homer, 0)
         assert r is None
 
-    @mock.patch('balanced.Customer')
-    def test_ach_credit_failure(self, Customer):
-        Customer.side_effect = Foobar
-        bob = self.make_participant('bob', last_ach_result="failure", balance=20,
-                                    balanced_customer_href=self.homer_href,
-                                    is_suspicious=False)
-
-        error = ach_credit(self.db, bob, D('1.00'))
-        bob2 = Participant.from_id(bob.id)
-        assert bob.last_ach_result == bob2.last_ach_result == error == "Foobar()"
-        assert bob.balance == bob2.balance == 20
+    @mock.patch('gratipay.billing.exchanges.thing_from_href')
+    def test_ach_credit_failure(self, tfh):
+        tfh.side_effect = Foobar
+        self.make_exchange('balanced-cc', 20, 0, self.homer)
+        error = ach_credit(self.db, self.homer, D('1.00'))
+        homer = Participant.from_id(self.homer.id)
+        assert self.homer.get_bank_account_error() == error == "Foobar()"
+        assert self.homer.balance == homer.balance == 20
 
     def test_ach_credit_no_bank_account(self):
-        self.make_exchange('bill', 20, 0, self.david)
+        self.make_exchange('balanced-cc', 20, 0, self.david)
         error = ach_credit(self.db, self.david, D('1.00'))
-        david = Participant.from_username('david')
-        assert error == 'NoResultFound()'
-        assert self.david.last_ach_result == david.last_ach_result == None
+        assert error == 'No bank account'
+
+    def test_ach_credit_invalidated_bank_account(self):
+        bob = self.make_participant('bob', is_suspicious=False, balance=20,
+                                    last_ach_result='invalidated')
+        error = ach_credit(self.db, bob, D('1.00'))
+        assert error == 'No bank account'
 
 
 class TestCardHolds(BalancedHarness):
-
-    def test_create_card_hold_without_cc_details_raises_NoBalancedCustomerHref(self):
-        alice = self.make_participant('alice')
-        with self.assertRaises(NoBalancedCustomerHref):
-            create_card_hold(self.db, alice, D('1.00'))
 
     def test_create_card_hold_for_suspicious_raises_NotWhitelisted(self):
         bob = self.make_participant('bob', is_suspicious=True,
@@ -76,9 +69,9 @@ class TestCardHolds(BalancedHarness):
         with self.assertRaises(NotWhitelisted):
             create_card_hold(self.db, bob, D('1.00'))
 
-    @mock.patch('balanced.Customer')
-    def test_create_card_hold_failure(self, Customer):
-        Customer.side_effect = Foobar
+    @mock.patch('gratipay.billing.exchanges.thing_from_href')
+    def test_create_card_hold_failure(self, tfh):
+        tfh.side_effect = Foobar
         hold, error = create_card_hold(self.db, self.janet, D('1.00'))
         assert hold is None
         assert error == "Foobar()"
@@ -87,7 +80,7 @@ class TestCardHolds(BalancedHarness):
         assert exchange.amount
         assert exchange.status == 'failed'
         janet = Participant.from_id(self.janet.id)
-        assert self.janet.last_bill_result == 'Foobar()'
+        assert self.janet.get_credit_card_error() == 'Foobar()'
         assert self.janet.balance == janet.balance == 0
 
     def test_create_card_hold_success(self):
@@ -111,7 +104,7 @@ class TestCardHolds(BalancedHarness):
         capture_card_hold(self.db, self.janet, D('20.00'), hold)
         janet = Participant.from_id(self.janet.id)
         assert self.janet.balance == janet.balance == D('20.00')
-        assert self.janet.last_bill_result == janet.last_bill_result == ''
+        assert self.janet.get_credit_card_error() == ''
         assert hold.meta['state'] == 'captured'
 
     def test_capture_card_hold_partial_amount(self):
@@ -121,7 +114,7 @@ class TestCardHolds(BalancedHarness):
         capture_card_hold(self.db, self.janet, D('15.00'), hold)
         janet = Participant.from_id(self.janet.id)
         assert self.janet.balance == janet.balance == D('15.00')
-        assert self.janet.last_bill_result == janet.last_bill_result == ''
+        assert self.janet.get_credit_card_error() == ''
 
     def test_capture_card_hold_too_high_amount(self):
         hold, error = create_card_hold(self.db, self.janet, D('20.00'))
@@ -143,51 +136,53 @@ class TestCardHolds(BalancedHarness):
         capture_card_hold(self.db, self.janet, D('0.01'), hold)
         janet = Participant.from_id(self.janet.id)
         assert self.janet.balance == janet.balance == D('9.41')
-        assert self.janet.last_bill_result == janet.last_bill_result == ''
+        assert self.janet.get_credit_card_error() == ''
 
     def test_create_card_hold_bad_card(self):
-        customer_href = self.make_balanced_customer()
+        bob = self.make_participant('bob', balanced_customer_href='new',
+                                    is_suspicious=False)
         card = balanced.Card(
             number='4444444444444448',
             expiration_year=2020,
             expiration_month=12
         ).save()
-        card.associate_to_customer(customer_href)
+        card.associate_to_customer(bob.balanced_customer_href)
+        ExchangeRoute.insert(bob, 'balanced-cc', card.href)
 
-        bob = self.make_participant('bob', balanced_customer_href=customer_href,
-                                    is_suspicious=False)
         hold, error = create_card_hold(self.db, bob, D('10.00'))
         assert error.startswith('402 Payment Required, ')
 
     def test_create_card_hold_multiple_cards(self):
-        customer_href = self.make_balanced_customer()
+        bob = self.make_participant('bob', balanced_customer_href='new',
+                                    is_suspicious=False)
         card = balanced.Card(
             number='4242424242424242',
             expiration_year=2020,
             expiration_month=12
         ).save()
-        card.associate_to_customer(customer_href)
+        card.associate_to_customer(bob.balanced_customer_href)
+        ExchangeRoute.insert(bob, 'balanced-cc', card.href)
 
         card = balanced.Card(
             number='4242424242424242',
             expiration_year=2030,
             expiration_month=12
         ).save()
-        card.associate_to_customer(customer_href)
+        card.associate_to_customer(bob.balanced_customer_href)
+        ExchangeRoute.insert(bob, 'balanced-cc', card.href)
 
-        bob = self.make_participant('bob', balanced_customer_href=customer_href,
-                                    is_suspicious=False)
         hold, error = create_card_hold(self.db, bob, D('10.00'))
-        assert error == 'MultipleResultsFound()'
+        assert error == ''
 
     def test_create_card_hold_no_card(self):
-        customer_href = self.make_balanced_customer()
-        bob = self.make_participant('bob', balanced_customer_href=customer_href,
-                                    is_suspicious=False)
+        bob = self.make_participant('bob', is_suspicious=False)
         hold, error = create_card_hold(self.db, bob, D('10.00'))
-        bob2 = Participant.from_id(bob.id)
-        assert error == 'NoResultFound()'
-        assert bob.last_bill_result == bob2.last_bill_result == None
+        assert error == 'No credit card'
+
+    def test_create_card_hold_invalidated_card(self):
+        bob = self.make_participant('bob', is_suspicious=False, last_bill_result='invalidated')
+        hold, error = create_card_hold(self.db, bob, D('10.00'))
+        assert error == 'No credit card'
 
 
 class TestFees(Harness):
@@ -271,9 +266,9 @@ class TestFees(Harness):
 class TestRecordExchange(Harness):
 
     def test_record_exchange_doesnt_update_balance_for_positive_amounts(self):
-        alice = self.make_participant('alice')
+        alice = self.make_participant('alice', last_bill_result='')
         record_exchange( self.db
-                       , 'bill'
+                       , ExchangeRoute.from_network(alice, 'balanced-cc')
                        , amount=D("0.59")
                        , fee=D("0.41")
                        , participant=alice
@@ -283,9 +278,9 @@ class TestRecordExchange(Harness):
         assert alice.balance == D('0.00')
 
     def test_record_exchange_updates_balance_for_negative_amounts(self):
-        alice = self.make_participant('alice', balance=50)
+        alice = self.make_participant('alice', balance=50, last_ach_result='')
         record_exchange( self.db
-                       , 'ach'
+                       , ExchangeRoute.from_network(alice, 'balanced-ba')
                        , amount=D('-35.84')
                        , fee=D('0.75')
                        , participant=alice
@@ -295,38 +290,35 @@ class TestRecordExchange(Harness):
         assert alice.balance == D('13.41')
 
     def test_record_exchange_fails_if_negative_balance(self):
-        alice = self.make_participant('alice')
-        pytest.raises( NegativeBalance
-                     , record_exchange
-                     , self.db
-                     , 'ach'
-                     , amount=D("-10.00")
-                     , fee=D("0.41")
-                     , participant=alice
-                     , status='pre'
-                      )
+        alice = self.make_participant('alice', last_ach_result='')
+        ba = ExchangeRoute.from_network(alice, 'balanced-ba')
+        with pytest.raises(NegativeBalance):
+            record_exchange(self.db, ba, D("-10.00"), D("0.41"), alice, 'pre')
 
     def test_record_exchange_result_restores_balance_on_error(self):
-        alice = self.make_participant('alice', balance=30)
-        e_id = record_exchange(self.db, 'ach', D('-27.06'), D('0.81'), alice, 'pre')
+        alice = self.make_participant('alice', balance=30, last_ach_result='')
+        ba = ExchangeRoute.from_network(alice, 'balanced-ba')
+        e_id = record_exchange(self.db, ba, D('-27.06'), D('0.81'), alice, 'pre')
         assert alice.balance == D('02.13')
-        record_exchange_result( self.db, e_id, 'failed', 'SOME ERROR', alice)
+        record_exchange_result(self.db, e_id, 'failed', 'SOME ERROR', alice)
         alice = Participant.from_username('alice')
         assert alice.balance == D('30.00')
 
     def test_record_exchange_result_doesnt_restore_balance_on_success(self):
-        alice = self.make_participant('alice', balance=50)
-        e_id = record_exchange(self.db, 'ach', D('-43.98'), D('1.60'), alice, 'pre')
+        alice = self.make_participant('alice', balance=50, last_ach_result='')
+        ba = ExchangeRoute.from_network(alice, 'balanced-ba')
+        e_id = record_exchange(self.db, ba, D('-43.98'), D('1.60'), alice, 'pre')
         assert alice.balance == D('4.42')
-        record_exchange_result( self.db, e_id, 'succeeded', None, alice)
+        record_exchange_result(self.db, e_id, 'succeeded', None, alice)
         alice = Participant.from_username('alice')
         assert alice.balance == D('4.42')
 
     def test_record_exchange_result_updates_balance_for_positive_amounts(self):
-        alice = self.make_participant('alice', balance=4)
-        e_id = record_exchange(self.db, 'bill', D('31.59'), D('0.01'), alice, 'pre')
+        alice = self.make_participant('alice', balance=4, last_bill_result='')
+        cc = ExchangeRoute.from_network(alice, 'balanced-cc')
+        e_id = record_exchange(self.db, cc, D('31.59'), D('0.01'), alice, 'pre')
         assert alice.balance == D('4.00')
-        record_exchange_result( self.db, e_id, 'succeeded', None, alice)
+        record_exchange_result(self.db, e_id, 'succeeded', None, alice)
         alice = Participant.from_username('alice')
         assert alice.balance == D('35.59')
 
@@ -363,10 +355,10 @@ class TestSyncWithBalanced(BalancedHarness):
         assert Participant.from_username('janet').balance == 0
 
     def test_sync_with_balanced_reverts_credits_that_didnt_happen(self):
-        self.make_exchange('bill', 41, 0, self.homer)
+        self.make_exchange('balanced-cc', 41, 0, self.homer)
         with mock.patch('gratipay.billing.exchanges.record_exchange_result') as rer \
-           , mock.patch('balanced.Customer') as Customer:
-            rer.side_effect = Customer.side_effect = Foobar
+           , mock.patch('gratipay.billing.exchanges.thing_from_href') as tfh:
+            rer.side_effect = tfh.side_effect = Foobar
             with self.assertRaises(Foobar):
                 ach_credit(self.db, self.homer, 0, 0)
         exchange = self.db.one("SELECT * FROM exchanges WHERE amount < 0")

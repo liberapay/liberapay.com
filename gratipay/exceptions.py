@@ -65,4 +65,3 @@ class NegativeBalance(Exception):
         return "Negative balance not allowed in this context."
 
 class NotWhitelisted(Exception): pass
-class NoBalancedCustomerHref(Exception): pass

@@ -67,6 +67,7 @@ gratipay.wireup.username_restrictions(website)
 gratipay.wireup.load_i18n(website.project_root, tell_sentry)
 gratipay.wireup.other_stuff(website, env)
 gratipay.wireup.accounts_elsewhere(website, env)
+gratipay.wireup.cryptocoin_networks(website)
 
 if exc:
     tell_sentry(exc, {})

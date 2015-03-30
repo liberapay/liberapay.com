@@ -83,7 +83,7 @@ class TestChartOfReceiving(Harness):
         assert actual == expected
 
     def test_get_tip_distribution_ignores_missing_cc(self):
-        missing_cc = self.make_participant('missing_cc', claimed_time='now', last_bill_result=None)
+        missing_cc = self.make_participant('missing_cc', claimed_time='now')
         self.alice.set_tip_to(self.bob, '1.00')
         missing_cc.set_tip_to(self.bob, '3.00')
         expected = ([[Decimal('1.00'), 1L, Decimal('1.00'), 1, Decimal('1')]],

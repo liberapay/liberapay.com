@@ -13,9 +13,8 @@ Gratipay.payments = {};
 // Common code
 // ===========
 
-Gratipay.payments.init = function(participantId) {
-    Gratipay.participantId = participantId;
-    $('#delete').submit(Gratipay.payments.submitDeleteForm);
+Gratipay.payments.init = function() {
+    $('#delete').submit(Gratipay.payments.deleteRoute);
 
     // Lazily depend on Balanced.
     var balanced_js = "https://js.balancedpayments.com/1.1/balanced.min.js";
@@ -24,17 +23,18 @@ Gratipay.payments.init = function(participantId) {
     }).fail(Gratipay.error);
 }
 
-Gratipay.payments.submitDeleteForm = function(e) {
+Gratipay.payments.deleteRoute = function(e) {
     e.stopPropagation();
     e.preventDefault();
 
-    var $form = $(this);
-    if (!confirm($form.data('confirm'))) {
+    var $this = $(this);
+    var confirm_msg = $this.data('confirm');
+    if (confirm_msg && !confirm(confirm_msg)) {
         return false;
     }
     jQuery.ajax(
-        { url: $form.attr('action')
-        , data: {action: "delete"}
+        { url: "/" + Gratipay.username + "/routes/delete.json"
+        , data: {network: $this.data('network'), address: $this.data('address')}
         , type: "POST"
         , success: function() { window.location.reload(); }
         , error: Gratipay.error
@@ -56,14 +56,41 @@ Gratipay.payments.onSuccess = function(data) {
     window.location.reload();
 };
 
+Gratipay.payments.associate = function (network) { return function (response) {
+    if (response.status_code !== 201) {
+        return Gratipay.payments.onError(response);
+    }
+
+    /* The request to tokenize the thing succeeded. Now we need to associate it
+     * to the Customer on Balanced and to the participant in our DB.
+     */
+    var data = {
+        network: network,
+        address: network == 'balanced-ba' ? response.bank_accounts[0].href
+                                          : response.cards[0].href,
+    };
+
+    jQuery.ajax({
+        url: "associate.json",
+        type: "POST",
+        data: data,
+        dataType: "json",
+        success: Gratipay.payments.onSuccess,
+        error: [
+            Gratipay.error,
+            function() { $('button#save').prop('disabled', false); },
+        ],
+    });
+}};
+
 
 // Bank Accounts
 // =============
 
 Gratipay.payments.ba = {};
 
-Gratipay.payments.ba.init = function(participantId) {
-    Gratipay.payments.init(participantId);
+Gratipay.payments.ba.init = function() {
+    Gratipay.payments.init();
     $('form#bank-account').submit(Gratipay.payments.ba.submit);
 };
 
@@ -91,33 +118,8 @@ Gratipay.payments.ba.submit = function (e) {
 
     // Okay, send the data to Balanced.
     balanced.bankAccount.create( bankAccount
-                               , Gratipay.payments.ba.handleResponse
+                               , Gratipay.payments.associate('balanced-ba')
                                 );
-};
-
-Gratipay.payments.ba.handleResponse = function (response) {
-    if (response.status_code !== 201) {
-        var msg = Gratipay.payments.onError(response);
-        $.post('/bank-account.json', {action: 'store-error', msg: msg});
-        return;
-    }
-
-    /* The request to tokenize the bank account succeeded. Now we need to
-     * associate it to the Customer on Balanced and to the participant in
-     * our DB.
-     */
-
-    jQuery.ajax({
-        url: "/bank-account.json",
-        type: "POST",
-        data: {bank_account_uri: response.bank_accounts[0].href},
-        dataType: "json",
-        success: Gratipay.payments.onSuccess,
-        error: [
-            Gratipay.error,
-            function() { $('button#save').prop('disabled', false); },
-        ],
-    });
 };
 
 
@@ -126,8 +128,8 @@ Gratipay.payments.ba.handleResponse = function (response) {
 
 Gratipay.payments.cc = {};
 
-Gratipay.payments.cc.init = function(participantId) {
-    Gratipay.payments.init(participantId);
+Gratipay.payments.cc.init = function() {
+    Gratipay.payments.init();
     $('form#credit-card').submit(Gratipay.payments.cc.submit);
     Gratipay.payments.cc.formatInputs(
         $('#card_number'),
@@ -319,34 +321,6 @@ Gratipay.payments.cc.submit = function(e) {
         return false;
     }
 
-    balanced.card.create(credit_card, Gratipay.payments.cc.handleResponse);
+    balanced.card.create(credit_card, Gratipay.payments.associate('balanced-cc'));
     return false;
-};
-
-Gratipay.payments.cc.handleResponse = function(response) {
-    if (response.status_code !== 201) {
-        var msg = Gratipay.payments.onError(response);
-        $.post('/credit-card.json', {action: 'store-error', msg: msg});
-        return;
-    }
-
-    /* The request to create the token succeeded. We now have a single-use
-     * token associated with the credit card info. This token can be
-     * used to associate the card with a customer. We want to do the
-     * latter, and that happens on the server side. When the card is
-     * tokenized Balanced performs card validation, so we alredy know the
-     * card is good.
-     */
-
-    jQuery.ajax({
-        url: "/credit-card.json",
-        type: "POST",
-        data: {card_uri: response.cards[0].href},
-        dataType: "json",
-        success: Gratipay.payments.onSuccess,
-        error: [
-            Gratipay.error,
-            function() { $('button#save').prop('disabled', false); },
-        ],
-    });
 };

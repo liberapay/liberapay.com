@@ -10,8 +10,13 @@ CREATE TEMPORARY TABLE temp_participants ON COMMIT DROP AS
          , 0::numeric(35,2) AS receiving
          , 0 as npatrons
          , goal
-         , COALESCE(last_bill_result = '', false) AS credit_card_ok
-      FROM participants
+         , ( SELECT count(*)
+               FROM exchange_routes r
+              WHERE r.participant = p.id
+                AND network = 'balanced-cc'
+                AND error = ''
+           ) > 0 AS credit_card_ok
+      FROM participants p
      WHERE is_suspicious IS NOT true;
 
 CREATE UNIQUE INDEX ON temp_participants (username);

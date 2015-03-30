@@ -73,12 +73,21 @@ Gratipay.profile.init = function() {
     });
 
 
-    // Wire up bitcoin input.
-    // ======================
+    // Wire up cryptocoin inputs.
+    // ==========================
 
-    Gratipay.forms.jsEdit({
-        root: $('tr.bitcoin.js-edit'),
-        success: function(){ window.location.reload(); return false; },
+    $('tr.cryptocoin.js-edit').each(function() {
+        var $root = $(this);
+        Gratipay.forms.jsEdit({
+            root: $root,
+            success: function(){
+                var addr = $root.find('[name="address"]').val();
+                $root.find('.view').text(addr);
+                $root.find('button.delete').data('address', addr);
+                $root.addClass('not-empty');
+            },
+        });
+        $root.find('button.delete').click(Gratipay.payments.deleteRoute);
     });
 
 

@@ -1,0 +1,22 @@
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+from aspen import Response
+
+from gratipay.models.exchange_route import ExchangeRoute
+from gratipay.utils import get_participant
+
+[---]
+
+request.allow('POST')
+participant = get_participant(state, restrict=True)
+
+route = ExchangeRoute.from_address(participant,
+                                   request.body['network'],
+                                   request.body['address'])
+if route:
+    route.invalidate()
+else:
+    raise Response(400, _("It seems you're trying to delete something that doesn't exist."))
+
+[---] application/json via json_dump
+{}

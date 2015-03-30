@@ -1,26 +1,28 @@
 
 
-def ba_withdrawal_failed(_):
+def ba_withdrawal_failed(_, user):
+    href = '/%s/routes/bank-account.html' % user.participant.username
     return ('error',
         ['a',
-            {'href': '/bank-account.html'},
-            _("The transfer to your bank account has failed!"),
+            {'href': href}, _("The transfer to your bank account has failed!"),
         ],
     )
 
 
-def credit_card_failed(_):
+def credit_card_failed(_, user):
+    href = '/%s/routes/credit-card.html' % user.participant.username
     return ('error',
         ['span', _("Your credit card has failed!") + " ",
-            ['a', {'href': '/credit-card.html'}, _("Fix your card")]
+            ['a', {'href': href}, _("Fix your card")]
         ],
     )
 
 
-def credit_card_expires(_):
+def credit_card_expires(_, user):
+    href = '/%s/routes/credit-card.html' % user.participant.username
     return ('error',
         ['span', _("Your credit card is about to expire!") + " ",
-            ['a', {'href': '/credit-card.html'}, _("Update card")]
+            ['a', {'href': href}, _("Update card")]
         ],
     )
 

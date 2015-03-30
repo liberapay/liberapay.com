@@ -123,11 +123,12 @@ def compute_input_csv():
     db = wireup.db(wireup.env())
     participants = db.all("""
 
-        SELECT participants.*::participants
-          FROM participants
-         WHERE paypal_email IS NOT null
-           AND balance > 0
-      ORDER BY balance DESC
+        SELECT p.*, r.address AS paypal_email, r.fee_cap AS paypal_fee_cap
+          FROM exchange_routes r
+          JOIN participants p ON p.id = r.participant
+         WHERE r.network = 'paypal'
+           AND p.balance > 0
+      ORDER BY p.balance DESC
 
     """)
     writer = csv.writer(open(INPUT_CSV, 'w+'))

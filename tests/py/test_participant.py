@@ -538,7 +538,7 @@ class Tests(Harness):
 
     def test_only_funded_tips_count(self):
         alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
-        bob = self.make_participant('bob', claimed_time='now', last_bill_result=None)
+        bob = self.make_participant('bob', claimed_time='now')
         carl = self.make_participant('carl', claimed_time='now', last_bill_result="Fail!")
         dana = self.make_participant('dana', claimed_time='now')
         alice.set_tip_to(dana, '3.00')
@@ -731,3 +731,10 @@ class Tests(Harness):
     def test_suggested_payment_is_zero_for_new_user(self):
         alice = self.make_participant('alice')
         assert alice.suggested_payment == 0
+
+class TestGetBalancedAccount(Harness):
+    def test_get_balanced_account_creates_new_customer_href(self):
+        alice = self.make_participant('alice')
+        account = alice.get_balanced_account()
+        alice = Participant.from_username('alice')
+        assert alice.balanced_customer_href == account.href
