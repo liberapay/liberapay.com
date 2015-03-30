@@ -19,17 +19,8 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 CREATE TYPE participant_number AS ENUM ('singular', 'plural');
 
 
--- https://github.com/gratipay/gratipay.com/pull/2303
-CREATE TYPE email_address_with_confirmation AS
-(
-    address text,
-    confirmed boolean
-);
-
-
 CREATE TABLE participants
 ( username              text                        PRIMARY KEY
-, last_bill_result      text                        DEFAULT NULL
 , session_token         text                        UNIQUE DEFAULT NULL
 , session_expires       timestamp with time zone    DEFAULT (now() + INTERVAL '6 hours')
 , ctime                 timestamp with time zone    NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -39,18 +30,13 @@ CREATE TABLE participants
 , anonymous_giving      boolean                     NOT NULL DEFAULT FALSE
 , goal                  numeric(35,2)               DEFAULT NULL
 , balanced_customer_href  text                      DEFAULT NULL
-, last_ach_result       text                        DEFAULT NULL
 , is_suspicious         boolean                     DEFAULT NULL
 , id                    bigserial                   NOT NULL UNIQUE
 , username_lower        text                        NOT NULL UNIQUE
 , api_key               text                        DEFAULT NULL
 , number                participant_number          NOT NULL DEFAULT 'singular'
-, paypal_email          text                        DEFAULT NULL
 , anonymous_receiving   boolean                     NOT NULL DEFAULT FALSE
-, bitcoin_address       text                        DEFAULT NULL
 , avatar_url            text
-, paypal_fee_cap        numeric(35,2)
-, email                 email_address_with_confirmation
 , is_closed             boolean                     NOT NULL DEFAULT FALSE
 , giving                numeric(35,2)               NOT NULL DEFAULT 0
 , pledging              numeric(35,2)               NOT NULL DEFAULT 0
