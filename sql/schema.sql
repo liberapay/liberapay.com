@@ -181,6 +181,30 @@ CREATE TABLE paydays
  );
 
 
+-- https://github.com/gratipay/gratipay.com/pull/3282
+
+CREATE TYPE payment_net AS ENUM (
+    'balanced-ba', 'balanced-cc', 'paypal', 'bitcoin'
+);
+
+CREATE TABLE exchange_routes
+( id            serial         PRIMARY KEY
+, participant   bigint         NOT NULL REFERENCES participants(id)
+, network       payment_net    NOT NULL
+, address       text           NOT NULL CHECK (address <> '')
+, error         text           NOT NULL
+, fee_cap       numeric(35,2)
+, UNIQUE (participant, network, address)
+);
+
+CREATE VIEW current_exchange_routes AS
+    SELECT DISTINCT ON (participant, network) *
+      FROM exchange_routes
+  ORDER BY participant, network, id DESC;
+
+CREATE CAST (current_exchange_routes AS exchange_routes) WITH INOUT;
+
+
 -- https://github.com/gratipay/gratipay.com/pull/2579
 CREATE TYPE exchange_status AS ENUM ('pre', 'pending', 'failed', 'succeeded');
 
@@ -195,6 +219,7 @@ CREATE TABLE exchanges
 , recorder              text                        DEFAULT NULL REFERENCES participants ON UPDATE CASCADE ON DELETE RESTRICT
 , note                  text                        DEFAULT NULL
 , status                exchange_status
+, route                 bigint                      REFERENCES exchange_routes
  );
 
 
