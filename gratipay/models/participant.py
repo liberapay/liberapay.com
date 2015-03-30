@@ -726,7 +726,7 @@ class Participant(Model, MixinTeam):
         if not route:
             return
         card = balanced.Card.fetch(route.address)
-        year, month = card['expiration_year'], card['expiration_month']
+        year, month = card.expiration_year, card.expiration_month
         if not (year and month):
             return False
         return is_card_expiring(int(year), int(month))
