@@ -200,6 +200,16 @@ class AccountElsewhere(Model):
             platform_data=self.platform_data
         )
 
+    @property
+    def friendly_name(self):
+        if self.platform in ['github', 'twitter']:
+            result = self.user_name
+            if self.display_name and self.display_name != self.user_name:
+                result += ' (%s)' % self.display_name
+        else:
+            result = self.display_name
+        return result
+
     def opt_in(self, desired_username):
         """Given a desired username, return a User object.
         """
