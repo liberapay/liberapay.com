@@ -65,7 +65,8 @@ limited = getattr(platform, 'api_friends_limited', False)
 <div>
     <span style="display: inline-block">
     {% call auth_button(platform.name, 'opt-in' if user.ANON else 'connect') %}{{
-        _("Sign in with {0}", platform.display_name)
+        _("Sign in with {0}", platform.display_name) if user.ANON else
+        _("Connect your {0} account", platform.display_name)
     }}{% endcall %}
     </span>
     {{ _("to find your friends from there.") }}
