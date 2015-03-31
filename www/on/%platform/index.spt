@@ -54,7 +54,7 @@ limited = getattr(platform, 'api_friends_limited', False)
 {% macro limitation_note() %}
     {% if limited %}
         <br>
-        <p>{{ _("Note: {0} only allows us to see your friends who have already joined Gratipay.",
+        <p>{{ _("Note: privacy settings may prevent Gratipay from seeing some of your {0} friends.",
                 platform.display_name) }}</p>
     {% endif %}
 {% endmacro %}
