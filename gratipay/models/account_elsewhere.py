@@ -206,6 +206,10 @@ class AccountElsewhere(Model):
 
     @property
     def friendly_name(self):
+        return self.user_name or self.display_name or self.user_id
+
+    @property
+    def friendly_name_long(self):
         display_name = self.display_name
         user_name = self.user_name
         if display_name and user_name and display_name != user_name:
