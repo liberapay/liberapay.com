@@ -21,7 +21,8 @@ class Bitbucket(PlatformOAuth1):
     api_format = 'json'
     api_paginator = keys_paginator('values', prev='previous', total='size')
     api_url = 'https://bitbucket.org/api'
-    api_user_info_path = '/2.0/users/{user_name}'
+    api_user_info_path = '/2.0/users/{user_id}'
+    api_user_name_info_path = '/2.0/users/{user_name}'
     api_user_self_info_path = '/2.0/user'
     api_team_members_path = '/2.0/teams/{user_name}/members'
     api_friends_path = '/2.0/users/{user_name}/following'

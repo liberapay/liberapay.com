@@ -208,24 +208,31 @@ class Platform(object):
         r.extra_info = info
         return r
 
-    def get_team_members(self, team_name, page_url=None):
-        """Given a team_name on the platform, return the team's membership list
-        from the API.
+    def get_team_members(self, account, page_url=None):
+        """Given an AccountElsewhere, return its membership list from the API.
         """
         if not page_url:
-            page_url = self.api_team_members_path.format(user_name=quote(team_name))
+            page_url = self.api_team_members_path.format(
+                user_id=quote(account.user_id),
+                user_name=quote(account.user_name or ''),
+            )
         r = self.api_get(page_url)
         members, count, pages_urls = self.api_paginator(r, self.api_parser(r))
         members = [self.extract_user_info(m) for m in members]
         return members, count, pages_urls
 
-    def get_user_info(self, user_name, sess=None):
-        """Given a user_name on the platform, get the user's info from the API.
+    def get_user_info(self, key, value, sess=None):
+        """Given a user_name or user_id, get the user's info from the API.
         """
-        try:
-            path = self.api_user_info_path.format(user_name=quote(user_name))
-        except KeyError:
-            raise Response(404)
+        if key == 'user_id':
+            path = 'api_user_info_path'
+        else:
+            assert key == 'user_name'
+            path = 'api_user_name_info_path'
+        path = getattr(self, path, None)
+        if not path:
+            raise Response(400)
+        path = path.format(**{key: value})
         info = self.api_parser(self.api_get(path, sess=sess))
         return self.extract_user_info(info)
 

@@ -1,10 +1,10 @@
-{% macro auth_button(platform, action, user_name='', class='') %}
+{% macro auth_button(platform, action, user_id='', class='') %}
     <form action="/on/{{ platform }}/redirect" method="post"
           class="auth-button {{ platform }} {{ class }}">
         <input type="hidden" name="action" value="{{ action }}" />
         {% set then=b64encode(request.path.raw + ('?' + request.qs.raw if request.qs else '')).strip() %}
         <input type="hidden" name="then" value="{{ then }}" />
-        <input type="hidden" name="user_name" value="{{ user_name }}" />
+        <input type="hidden" name="user_id" value="{{ user_id }}" />
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <button type="submit">{{ caller() }}</button>
     </form>

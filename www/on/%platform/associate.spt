@@ -25,7 +25,7 @@ except KeyError:
     raise Response(400, 'Missing cookie')
 if not cookie_value:
     raise Response(400, 'Empty cookie')
-query_data, action, then, action_user_name = json.loads(b64decode(cookie_value))
+query_data, action, then, action_user_id = json.loads(b64decode(cookie_value))
 then = b64decode(then)  # double-b64encoded to avoid other encoding issues w/ qs
 
 # Finish the auth process, the returned session is ready to use
@@ -39,14 +39,14 @@ except TokenRequestDenied as e:
 # Get the user's info from the platform's API and upsert it in the DB
 account = AccountElsewhere.upsert(platform.get_user_self_info(sess))
 
-if action_user_name and account.user_name != action_user_name:
-    claimed_account = AccountElsewhere.upsert(platform.get_user_info(action_user_name))
+if action_user_id and account.user_id != action_user_id:
+    claimed_account = AccountElsewhere.upsert(platform.get_user_info('user_id', action_user_id))
     if not claimed_account.is_team:
         then = '/on/%s/%s/failure.html'
-        request.redirect(then % (platform.name, action_user_name))
+        request.redirect(then % (platform.name, claimed_account.gratipay_slug))
     if not platform.is_team_admin(claimed_account.user_name, sess):
         then = '/on/%s/%s/failure.html?team=true'
-        request.redirect(then % (platform.name, action_user_name))
+        request.redirect(then % (platform.name, claimed_account.gratipay_slug))
     account = claimed_account
 
 log('%s user "%s" wants to %s' % (platform.name, account.user_id, action))

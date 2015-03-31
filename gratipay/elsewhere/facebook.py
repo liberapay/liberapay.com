@@ -21,7 +21,7 @@ class Facebook(PlatformOAuth2):
     api_format = 'json'
     api_paginator = keys_paginator('data', paging='paging', prev='previous')
     api_url = 'https://graph.facebook.com'
-    api_user_info_path = '/{user_name}'
+    api_user_name_info_path = '/{user_name}'
     api_user_self_info_path = '/me'
     api_friends_path = '/v2.2/{user_id}/friends'
     api_friends_limited = True

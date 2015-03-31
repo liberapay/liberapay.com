@@ -23,7 +23,8 @@ class GitHub(PlatformOAuth2):
     api_format = 'json'
     api_paginator = header_links_paginator()
     api_url = 'https://api.github.com'
-    api_user_info_path = '/users/{user_name}'
+    api_user_info_path = '/user/{user_id}'
+    api_user_name_info_path = '/users/{user_name}'
     api_user_self_info_path = '/user'
     api_team_members_path = '/orgs/{user_name}/public_members'
     api_friends_path = '/users/{user_name}/following'

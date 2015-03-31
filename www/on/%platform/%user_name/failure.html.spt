@@ -1,14 +1,11 @@
 from aspen import Response
 
+from gratipay.models.account_elsewhere import get_account_elsewhere
+
 [---]
 
-platform = getattr(website.platforms, request.path['platform'], None)
-if platform is None:
-    raise Response(404)
-
-user_name = request.path['user_name']
-if not user_name:
-    raise Response(400, '%user_name is empty')
+platform, account = get_account_elsewhere(website, state, api_lookup=False)
+name = account.friendly_name
 
 team = request.qs.get('team', '').lower() == 'true'
 
@@ -20,19 +17,19 @@ title = _("Failure")
 
     {% if team %}
 
-    <h2>{{ _("Are you really an administrator of the {0} team?", user_name) }}</h2>
+    <h2>{{ _("Are you really an administrator of the {0} team?", name) }}</h2>
 
     <p>{{ _("Your attempt to claim this account failed because you're logged "
             "into {0} as someone who isn't an administrator of the {1} team. "
             "Please sign out and {2}try again{3}.",
             platform.display_name,
-            user_name,
+            name,
             '<a href="./">'|safe,
             '</a>'|safe) }}</p>
 
     {% else %}
 
-    <h2>{{ _("Are you really {0}?", user_name) }}</h2>
+    <h2>{{ _("Are you really {0}?", name) }}</h2>
 
     <p>{{ _("Your attempt to claim this account failed because you're logged "
             "into {0} as someone else. Please sign out and {1}try again{2}.",
