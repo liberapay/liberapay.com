@@ -1,6 +1,7 @@
 from base64 import b64decode
 
 from aspen import Response
+from oauthlib.oauth2 import TokenExpiredError
 
 from gratipay.models.account_elsewhere import AccountElsewhere
 
@@ -23,8 +24,12 @@ if account:
     sess = account.get_auth_session()
     if sess:
         page_url = b64decode(request.qs.get('page', ''))
-        friends, nfriends, pages_urls = platform.get_friends_for(account, page_url, sess)
-        friends = AccountElsewhere.get_many(platform.name, friends)
+        try:
+            friends, nfriends, pages_urls = platform.get_friends_for(account, page_url, sess)
+        except TokenExpiredError:
+            need_reconnect = True
+        else:
+            friends = AccountElsewhere.get_many(platform.name, friends)
 
 limited = getattr(platform, 'api_friends_limited', False)
 
@@ -61,7 +66,11 @@ limited = getattr(platform, 'api_friends_limited', False)
 
 {% block content %}
 
-{% if not account or not sess %}
+{% if need_reconnect %}
+    {% call auth_button(platform.name, 'opt-in' if user.ANON else 'connect') %}{{
+        _("Please log in again with {0}", platform.display_name)
+    }}{% endcall %}
+{% elif not account or not sess %}
 <div>
     <span style="display: inline-block">
     {% call auth_button(platform.name, 'opt-in' if user.ANON else 'connect') %}{{
