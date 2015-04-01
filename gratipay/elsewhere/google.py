@@ -11,6 +11,7 @@ class Google(PlatformOAuth2):
     name = 'google'
     display_name = 'Google'
     account_url = 'https://plus.google.com/{user_id}'
+    optional_user_name = True
 
     # Auth attributes
     auth_url = 'https://accounts.google.com/o/oauth2/auth'

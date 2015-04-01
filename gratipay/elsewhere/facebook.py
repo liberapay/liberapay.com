@@ -11,6 +11,7 @@ class Facebook(PlatformOAuth2):
     name = 'facebook'
     display_name = 'Facebook'
     account_url = 'https://www.facebook.com/profile.php?id={user_id}'
+    optional_user_name = True
 
     # Auth attributes
     auth_url = 'https://www.facebook.com/dialog/oauth'

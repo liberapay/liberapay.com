@@ -206,15 +206,21 @@ class AccountElsewhere(Model):
 
     @property
     def friendly_name(self):
-        return self.user_name or self.display_name or self.user_id
+        if getattr(self.platform, 'optional_user_name', False):
+            return self.display_name or self.user_name or self.user_id
+        else:
+            return self.user_name or self.display_name or self.user_id
 
     @property
     def friendly_name_long(self):
+        r = self.friendly_name
         display_name = self.display_name
+        if display_name and display_name != r:
+            return '%s (%s)' % (r, display_name)
         user_name = self.user_name
-        if display_name and user_name and display_name != user_name:
-            return '%s (%s)' % (user_name, display_name)
-        return user_name or display_name or self.user_id
+        if user_name and user_name != r:
+            return '%s (%s)' % (r, user_name)
+        return r
 
     def opt_in(self, desired_username):
         """Given a desired username, return a User object.
