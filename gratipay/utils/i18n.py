@@ -107,6 +107,8 @@ def get_text(context, loc, s, *a, **kw):
     msg = loc.catalog.get(s)
     if msg:
         s = msg.string or s
+        if isinstance(s, tuple):
+            s = s[0]
     if a or kw:
         if isinstance(s, bytes):
             s = s.decode('ascii')
