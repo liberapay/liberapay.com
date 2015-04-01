@@ -67,9 +67,14 @@ limited = getattr(platform, 'api_friends_limited', False)
 {% block content %}
 
 {% if need_reconnect %}
+<div>
+    <span style="display: inline-block">
     {% call auth_button(platform.name, 'opt-in' if user.ANON else 'connect') %}{{
-        _("Please log in again with {0}", platform.display_name)
+        _("Please refresh your {0} connection", platform.display_name)
     }}{% endcall %}
+    </span>
+    {{ _("to find your friends from there.") }}
+</div>
 {% elif not account or not sess %}
 <div>
     <span style="display: inline-block">
