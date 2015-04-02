@@ -15,14 +15,11 @@ install:
  - touch requirements.txt package.json
  - make env
  - make node_modules
- - pip install coveralls --disable-pip-version-check
 before_script:
  - echo "DATABASE_URL=dbname=gratipay" | tee -a tests/local.env local.env
  - psql -U postgres -c 'CREATE DATABASE "gratipay";'
  - if [ "${TRAVIS_BRANCH}" = "master" -a "${TRAVIS_PULL_REQUEST}" = "false" ]; then rm -rfv tests/py/fixtures; fi
 script: make test
-after_success:
-  coveralls
 notifications:
   email: false
   irc:
