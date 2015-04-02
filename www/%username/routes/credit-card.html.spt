@@ -6,7 +6,6 @@ from gratipay.utils import get_participant
 [-----------------------------------------------------------------------------]
 
 status = status_msg = ". . ."
-is_connected = False
 
 if not user.ANON:
     participant = get_participant(state, restrict=True)
@@ -18,7 +17,6 @@ if not user.ANON:
     if route:
         card = balanced.Card.fetch(route.address)
         last_bill_result = route.error
-        is_connected = True
         if last_bill_result == "":
             status = "working"
             status_msg = _("Your credit card is {0}working{1}")
@@ -69,16 +67,11 @@ title = _("Credit Card")
     <div class="cc-ba">
         <form id="credit-card" autocomplete="off">
 
-            {% if is_connected %}
-            <h2>{{ _("Currently Connected") }}</h2>
-            <p>{{ card.number }}</p>
-            {% endif %}
-
             <h2>{{ _("Required") }}</h2>
 
             <label>
                 <span>{{ _("Credit Card Number") }}</span>
-                <input id="card_number" required />
+                <input id="card_number" value="{{ card.number }}" required />
                 <span class="invalid-msg">{{ _("This card number is invalid.") }}</span>
             </label>
 
