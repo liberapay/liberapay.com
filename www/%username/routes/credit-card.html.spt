@@ -71,8 +71,11 @@ title = _("Credit Card")
 
             <label>
                 <span>{{ _("Credit Card Number") }}</span>
-                <input id="card_number" value="{{ card.number }}" required />
+                <input id="card_number" required />
                 <span class="invalid-msg">{{ _("This card number is invalid.") }}</span>
+                {% if card.number %}<span>{{
+                    _("Current: {0}", card.number)
+                }}</span>{% endif %}
             </label>
 
             <div class="half">

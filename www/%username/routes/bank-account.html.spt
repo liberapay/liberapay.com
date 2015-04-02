@@ -78,7 +78,10 @@ title = _("Bank Account")
 
             <label>
                 <span>{{ _("Bank Account Number") }}</span>
-                <input id="account_number" value="{{ bank_account.account_number }}" required />
+                <input id="account_number" required />
+                {% if bank_account.account_number %}<span>{{
+                    _("Current: {0}", bank_account.account_number)
+                }}</span>{% endif %}
             </label>
 
             <label>
