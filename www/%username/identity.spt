@@ -67,7 +67,7 @@ else:
 
 {% if account.merchant_status == 'underwritten' %}
     <p>{{ _( "Your identity is verified, which means you may add a {0}bank account{1}."
-           , '<a href="/bank-account.html">'|safe
+           , '<a href="routes/bank-account.html">'|safe
            , '</a>'|safe) }}</p>
 {% endif %}
 
