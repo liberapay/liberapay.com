@@ -8,7 +8,6 @@ from gratipay.utils import get_participant
 account = None
 bank_account = None
 status = ". . ."
-is_connected = False
 
 if not user.ANON:
     participant = get_participant(state, restrict=True)
@@ -22,7 +21,6 @@ if not user.ANON:
         last_ach_result = route.error
         if last_ach_result == "":
             status = _("Your bank account is {0}connected{1}")
-            is_connected = True
 
 title = _("Bank Account")
 [-----------------------------------------------------------------------------]
@@ -65,11 +63,6 @@ title = _("Bank Account")
     <div class="cc-ba">
         <form id="bank-account" autocomplete="off">
 
-            {% if is_connected %}
-            <h2>{{ _("Currently Connected") }}</h2>
-            <p>{{ bank_account.account_number }}</p>
-            {% endif %}
-
             <h2>{{ _("Routing Information") }}</h2>
 
             <label>
@@ -86,6 +79,9 @@ title = _("Bank Account")
             <label>
                 <span>{{ _("Bank Account Number") }}</span>
                 <input id="account_number" required />
+                {% if bank_account.account_number %}<span>{{
+                    _("Current: {0}", bank_account.account_number)
+                }}</span>{% endif %}
             </label>
 
             <label>
