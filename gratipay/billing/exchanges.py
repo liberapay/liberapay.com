@@ -209,7 +209,7 @@ def capture_card_hold(db, participant, amount, hold):
     assert participant.id == int(hold.meta['participant_id'])
 
     route = ExchangeRoute.from_address(participant, 'balanced-cc', hold.card_href)
-    assert route
+    assert isinstance(route, ExchangeRoute)
 
     cents, amount_str, charge_amount, fee = _prep_hit(amount)
     amount = charge_amount - fee  # account for possible rounding
@@ -315,7 +315,7 @@ def record_exchange_result(db, exchange_id, status, error, participant):
                    ) AS route
         """, locals())
         assert participant.username == username
-        assert route
+        assert isinstance(route, ExchangeRoute)
 
         if amount < 0:
             amount -= fee
