@@ -80,6 +80,15 @@ title = _("Bank Account")
                 <input id="account_number" value="{{ bank_account.account_number }}" required />
             </label>
 
+            <label>
+                <span>{{ _("Bank Account Type") }}</span>
+                {% set account_type = bank_account.account_type %}
+                <select id="account_type">
+                    <option value="checking">{{ _('checking') }}</option>
+                    <option value="savings" {{ 'selected' if account_type == 'savings' }}>{{ _('savings') }}</option>
+                </select>
+            </label>
+
             <button class="selected larger" id="save" type="submit">{{ _("Save") }}</button>
 
         </form>
