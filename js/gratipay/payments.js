@@ -103,6 +103,7 @@ Gratipay.payments.ba.submit = function (e) {
     var bankAccount = {
         name: $('#account_name').val(),
         account_number: $('#account_number').val(),
+        account_type: $('#account_type').val(),
         routing_number: $('#routing_number').val()
     };
 

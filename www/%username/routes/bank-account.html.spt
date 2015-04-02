@@ -11,11 +11,12 @@ status = ". . ."
 
 if not user.ANON:
     participant = get_participant(state, restrict=True)
+    if participant.balanced_customer_href:
+        account = participant.get_balanced_account()
 
     status = _("Your bank account is {0}not connected{1}")
     route = ExchangeRoute.from_network(participant, 'balanced-ba')
     if route:
-        account = participant.get_balanced_account()
         bank_account = balanced.BankAccount.fetch(route.address)
         last_ach_result = route.error
         if last_ach_result == "":
@@ -78,6 +79,15 @@ title = _("Bank Account")
             <label>
                 <span>{{ _("Bank Account Number") }}</span>
                 <input id="account_number" value="{{ bank_account.account_number }}" required />
+            </label>
+
+            <label>
+                <span>{{ _("Bank Account Type") }}</span>
+                {% set account_type = bank_account.account_type %}
+                <select id="account_type">
+                    <option value="checking">{{ _('checking') }}</option>
+                    <option value="savings" {{ 'selected' if account_type == 'savings' }}>{{ _('savings') }}</option>
+                </select>
             </label>
 
             <button class="selected larger" id="save" type="submit">{{ _("Save") }}</button>
