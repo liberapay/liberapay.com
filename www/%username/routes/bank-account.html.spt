@@ -11,11 +11,12 @@ status = ". . ."
 
 if not user.ANON:
     participant = get_participant(state, restrict=True)
+    if participant.balanced_customer_href:
+        account = participant.get_balanced_account()
 
     status = _("Your bank account is {0}not connected{1}")
     route = ExchangeRoute.from_network(participant, 'balanced-ba')
     if route:
-        account = participant.get_balanced_account()
         bank_account = balanced.BankAccount.fetch(route.address)
         last_ach_result = route.error
         if last_ach_result == "":
