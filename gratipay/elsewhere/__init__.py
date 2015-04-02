@@ -12,6 +12,7 @@ import xml.etree.ElementTree as ET
 
 from aspen import log, Response
 from aspen.utils import to_age, utc
+from oauthlib.oauth2 import TokenExpiredError
 from requests_oauthlib import OAuth1Session, OAuth2Session
 
 from gratipay.elsewhere._extractors import not_available
@@ -122,6 +123,11 @@ class Platform(object):
 
         # Check response status
         status = response.status_code
+        if status == 401 and isinstance(self, PlatformOAuth1):
+            # https://tools.ietf.org/html/rfc5849#section-3.2
+            if is_user_session:
+                raise TokenExpiredError
+            raise Response(500)
         if status == 404:
             raise Response(404, response.text)
         if status == 429 and is_user_session:
