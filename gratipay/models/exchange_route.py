@@ -85,6 +85,8 @@ class ExchangeRoute(Model):
     def update_error(self, new_error, propagate=True):
         id = self.id
         old_error = self.error
+        if old_error == 'invalidated':
+            return
         self.db.run("""
             UPDATE exchange_routes
                SET error = %(new_error)s
