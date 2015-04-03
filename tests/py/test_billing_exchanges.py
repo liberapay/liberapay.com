@@ -304,6 +304,17 @@ class TestRecordExchange(Harness):
         alice = Participant.from_username('alice')
         assert alice.balance == D('30.00')
 
+    def test_record_exchange_result_restores_balance_on_error_with_invalidated_route(self):
+        alice = self.make_participant('alice', balance=37, last_ach_result='')
+        ba = ExchangeRoute.from_network(alice, 'balanced-ba')
+        e_id = record_exchange(self.db, ba, D('-32.45'), D('0.86'), alice, 'pre')
+        assert alice.balance == D('3.69')
+        ba.update_error('invalidated')
+        record_exchange_result(self.db, e_id, 'failed', 'oops', alice)
+        alice = Participant.from_username('alice')
+        assert alice.balance == D('37.00')
+        assert ba.error == alice.get_bank_account_error() == 'invalidated'
+
     def test_record_exchange_result_doesnt_restore_balance_on_success(self):
         alice = self.make_participant('alice', balance=50, last_ach_result='')
         ba = ExchangeRoute.from_network(alice, 'balanced-ba')

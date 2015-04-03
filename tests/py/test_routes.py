@@ -63,8 +63,13 @@ class TestRoutes(BalancedHarness):
         self.hit('david', 'delete', 'balanced-ba', bank_account.href)
 
         david = Participant.from_username('david')
-        assert david.get_bank_account_error() == 'invalidated'
+        route = ExchangeRoute.from_address(david, 'balanced-ba', bank_account.href)
+        assert route.error == david.get_bank_account_error() == 'invalidated'
         assert david.balanced_customer_href
+
+        # Check that update_error doesn't update an invalidated route
+        route.update_error('some error')
+        assert route.error == david.get_bank_account_error() == 'invalidated'
 
     @mock.patch.object(Participant, 'get_balanced_account')
     def test_associate_bank_account_invalid(self, gba):
