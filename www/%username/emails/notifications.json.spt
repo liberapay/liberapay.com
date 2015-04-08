@@ -6,15 +6,15 @@ request.allow("POST")
 participant = get_participant(state, restrict=True)
 
 field = request.body.get("toggle")
-if field not in ["notify_on_opt_in"]:
+if field not in ["notify_charge", "notify_on_opt_in"]:
     raise Response(400, "Invalid notification preference.")
 
 new_value = website.db.one("""
     UPDATE participants
-       SET {0}=not {0}
-     WHERE username=%s
+       SET {0} = {0} # %s
+     WHERE id = %s
  RETURNING {0}
-""".format(field), (participant.username,))
+""".format(field), (request.body.get("bits", 1), participant.id))
 assert new_value is not None
 
 [---] application/json via json_dump
