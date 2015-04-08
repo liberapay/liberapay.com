@@ -527,3 +527,18 @@ class TestPayout(Harness):
         Payday.start().payout()
         payday = self.fetch_payday()
         assert payday['nach_failing'] == 1
+
+
+class TestNotifyParticipants(BalancedHarness):
+
+    @mock.patch.object(Payday, 'fetch_card_holds')
+    def test_it_notifies_participants(self, fch):
+        self.janet.set_tip_to(self.homer, D('10.00'))
+        fch.return_value = {}
+        Payday.start().run()
+
+        exchanges = self.db.one('SELECT * FROM exchanges')
+        assert exchanges['amount'] == D('10.00')
+
+        emails = self.db.one('SELECT * FROM email_queue')
+        assert emails['spt_name'] == 'charge_succeeded'
