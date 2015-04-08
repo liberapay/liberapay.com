@@ -1,8 +1,21 @@
-{{ _("Your payment(s) succeeded!", user_name, platform) }}
+{{ ngettext("Your payment succeeded!", "Your payments succeeded!", npayments) }}
 
 [---] text/html
-{{ _("We charged your credit card {{ format_currency(amount) }} today, to fund your payments to <a href="/giving/">{{ top_supported }}{% if %}and {{ nsupported - 1 }} others{% endif %}</a>. Thanks for using Gratipay!",
-     format_currency(amount, 'USD'),
-     ('<b><a href="{0}">{1}</a></b>'|safe).format(profile_url, user_name)) }}
-[---] text/plain
+{{ ngettext(
+    "We charged your credit card {0} today, to fund your weekly payment to {1}. Thanks for using Gratipay!",
+    "We charged your credit card {0} today, to fund your weekly payments to {1}. Thanks for using Gratipay!",
+    format_currency(amount, 'USD'),
+    ('<b><a href="{0}">{1}</a></b>'|safe).format(
+        participant.profile_url+'giving/',
+        top_tippee.username if nsupported == 1 else ngettext('{0} and {n} other', '{0} and {n} others', nsupported - 1, top_tippee.username)
+    )) }}
 
+[---] text/plain
+{{ ngettext(
+    "We charged your credit card {0} today, to fund your weekly payment to {1}. Thanks for using Gratipay!",
+    "We charged your credit card {0} today, to fund your weekly payments to {1}. Thanks for using Gratipay!",
+    format_currency(amount, 'USD'),
+    top_tippee.username if nsupported == 1 else ngettext('{0} and {n} other', '{0} and {n} others', nsupported - 1, top_tippee.username)
+    ) }}
+
+{{ _("Follow this link if you want to view or modify your payments:") }} {{ participant.profile_url+'giving/' }}
