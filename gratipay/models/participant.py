@@ -624,6 +624,11 @@ class Participant(Model, MixinTeam):
 
     def send_email(self, spt_name, **context):
         context['username'] = self.username
+        context['button_style'] = (
+            "color: #fff; text-decoration:none; display:inline-block; "
+            "padding: 0 15px; background: #396; white-space: nowrap; "
+            "font: normal 14px/40px Arial, sans-serif; border-radius: 3px"
+        )
         context.setdefault('include_unsubscribe', True)
         email = context.setdefault('email', self.email_address)
         langs = i18n.parse_accept_lang(self.email_lang or 'en')

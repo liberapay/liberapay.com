@@ -1,0 +1,30 @@
+{{ ngettext("Your payment failed!", "Your payments failed!", ntippees) }}
+
+[---] text/html
+{{ ngettext(
+    "We tried to charge your credit card {0} today, to fund your weekly payment to {1}, but it failed.",
+    "We tried to charge your credit card {0} today, to fund your weekly payments to {1}, but it failed.",
+    format_currency(exchange.amount, 'USD'),
+    top_tippee.username if ntippees == 1 else ngettext('{0} and {n} other', '{0} and {n} others', ntippees - 1, top_tippee.username)
+    ) }}
+
+{{ _("The error message we received from our payment processor is:") }}<pre>
+
+{{ exchange.note }}
+</pre>
+
+<a href="{{ participant.profile_url+'routes/credit-card.html' }}" style="{{ button_style }}">{{ _("Fix your credit card") }}</a>
+
+[---] text/plain
+{{ ngettext(
+    "We tried to charge your credit card {0} today, to fund your weekly payment to {1}, but it failed.",
+    "We tried to charge your credit card {0} today, to fund your weekly payments to {1}, but it failed.",
+    format_currency(exchange.amount, 'USD'),
+    top_tippee.username if ntippees == 1 else ngettext('{0} and {n} other', '{0} and {n} others', ntippees - 1, top_tippee.username)
+    ) }}
+
+{{ _("The error message we received from our payment processor is:") }}
+
+{{ exchange.note }}
+
+{{ _("Follow this link to fix your credit card:") }} {{ participant.profile_url+'routes/credit-card.html' }}
