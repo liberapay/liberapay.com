@@ -245,13 +245,11 @@ class TestPayday(BalancedHarness):
 
     @mock.patch('gratipay.billing.payday.log')
     @mock.patch('gratipay.billing.payday.Payday.payin')
-    @mock.patch('gratipay.billing.payday.Payday.end')
-    def test_payday(self, end, payin, log):
+    def test_payday(self, payin, log):
         greeting = 'Greetings, program! It\'s PAYDAY!!!!'
         Payday.start().run()
         log.assert_any_call(greeting)
         assert payin.call_count == 1
-        assert end.call_count == 1
 
 
 class TestPayin(BalancedHarness):

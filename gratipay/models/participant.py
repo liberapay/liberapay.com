@@ -779,6 +779,13 @@ class Participant(Model, MixinTeam):
     # Random Junk
     # ===========
 
+    @property
+    def profile_url(self):
+        scheme = gratipay.canonical_scheme
+        host = gratipay.canonical_host
+        username = self.username
+        return '{scheme}://{host}/{username}/'.format(**locals())
+
     def get_teams(self):
         """Return a list of teams this user is a member of.
         """

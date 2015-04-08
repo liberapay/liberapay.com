@@ -708,22 +708,54 @@ class Payday(object):
 
 
     def notify_participants(self):
-        recs = self.db.all("""
-            SELECT e.*::exchanges AS exchange, p.*::participants AS participant
+        ts_start, ts_end = self.ts_start, self.ts_end
+        exchanges = self.db.all("""
+            SELECT amount, fee, note, status, p.*::participants AS participant
               FROM exchanges e
               JOIN participants p ON e.participant = p.username
              WHERE "timestamp" >= %(ts_start)s
                AND "timestamp" < %(ts_end)s
                AND amount > 0
                AND p.notify_charge > 0
-        """)
-        for e, p in recs:
+        """, locals())
+        for e in exchanges:
             if e.status not in ('failed', 'succeeded'):
                 log('exchange %s has an unexpected status: %s' % (e.id, e.status))
                 continue
             i = 1 if e.status == 'failed' else 2
-            if p.notify_charge & i:
-                p.queue_email('charge_'+e.status, exchange=e)
+            p = e.participant
+            if p.notify_charge & i == 0:
+                continue
+            username = p.username
+            ntippees, top_tippee = self.db.one("""
+                WITH tippees AS (
+                         SELECT p.*::participants
+                           FROM ( SELECT DISTINCT ON (tippee) tippee, amount
+                                    FROM tips
+                                   WHERE mtime < %(ts_start)s
+                                     AND tipper = %(username)s
+                                ORDER BY tippee, mtime DESC
+                                )
+                           JOIN participants p ON p.username = t.tippee
+                          WHERE t.amount > 0
+                            AND (p.goal IS NULL or p.goal >= 0)
+                            AND p.is_suspicious IS NOT true
+                            AND p.claimed_time < %(ts_start)s
+                     )
+                SELECT ( SELECT count(*) FROM tippees ) AS ntippees
+                     , ( SELECT t.*
+                           FROM tippees t
+                       ORDER BY amount DESC
+                          LIMIT 1
+                       ) AS top_tippee
+            """, locals())
+            p.queue_email(
+                'charge_'+e.status,
+                exchange=e,
+                participant=p,
+                ntippees=ntippees,
+                top_tippee=top_tippee,
+            )
 
 
     # Record-keeping.
