@@ -16,24 +16,25 @@ participant = account.participant
 if participant.is_claimed or participant.is_closed:
     request.redirect('/%s/' % participant.username)
 
-title = username = user_name = account.user_name
+title = friendly_name = account.friendly_name
+user_id = account.user_id
 locked = participant.goal == -1
 is_team = account.is_team
 allow_pledges = not locked and (not is_team or platform.allows_team_connect)
 
 if is_team:
     page_url = b64decode(request.qs.get('page', ''))
-    members, nmembers, pages_urls = platform.get_team_members(user_name, page_url)
+    members, nmembers, pages_urls = platform.get_team_members(account, page_url)
     members = AccountElsewhere.get_many(platform.name, members)
     if not members:
         nmembers = 0
-        team_description = _("{0} is a private team", user_name)
+        team_description = _("{0} is a private team", friendly_name)
     elif nmembers == -1:
-        team_description = _("{0} is a big team", user_name)
+        team_description = _("{0} is a big team", friendly_name)
     else:
         team_description = ngettext("{0} is a team with {n} public member",
                                     "{0} is a team with {n} public members",
-                                    nmembers, user_name)
+                                    nmembers, friendly_name)
     allow_team_connect = platform.allows_team_connect
     if user.ANON or not user.participant.IS_PLURAL:
         allow_team_connect = False
@@ -49,7 +50,7 @@ if is_team:
 
 {% block heading %}
     <h1>{{ platform.name }} /
-        <a href="{{ account.html_url}}">{{ user_name }}</a>
+        <a href="{{ account.html_url }}">{{ friendly_name }}</a>
     </h1>
 {% endblock %}
 
@@ -107,39 +108,39 @@ if is_team:
     {% else %}
         <p>{{ _("If you are {0} on {1}, you can unlock your account to allow "
                 "people to pledge tips to you on Gratipay.",
-                '<a href="%s">%s</a>'|safe % (account.html_url, user_name),
+                '<a href="%s">%s</a>'|safe % (account.html_url, friendly_name),
                 platform.display_name) }}</p>
     {% endif %}
 
-    {% call auth_button(platform.name, 'unlock', user_name) %}
+    {% call auth_button(platform.name, 'unlock', user_id) %}
         {{ _("Unlock") }}
     {% endcall %}
 
   {% elif is_team %}
 
     {% if allow_team_connect %}
-        <h2>{{ _("{0} has not joined Gratipay.", user_name) }}</h2>
+        <h2>{{ _("{0} has not joined Gratipay.", user_id) }}</h2>
         <p>{{ _("Are you an administrator of this {0} team account? Connect it "
                 "to your Gratipay account.",
                 platform.display_name) }}</p>
-        {% call auth_button(platform.name, 'connect', user_name) %}
+        {% call auth_button(platform.name, 'connect', user_id) %}
             {{ _("Connect team account") }}
         {% endcall %}
     {% endif %}
 
   {% else %}
 
-    <h2>{{ _("{0} has not joined Gratipay.", user_name) }}</h2>
+    <h2>{{ _("{0} has not joined Gratipay.", friendly_name) }}</h2>
 
     {% if platform in website.signin_platforms or not user.ANON %}
         {% if user.ANON %}
             <p>{{ _("Is this you? We never collect money for you unless you join.") }}</p>
-            {% call auth_button(platform.name, 'opt-in', user_name) %}
+            {% call auth_button(platform.name, 'opt-in', user_id) %}
                 {{ _("Join Gratipay") }}
             {% endcall %}
         {% else %}
             <p>{{ _("Is this yours? Connect it to your Gratipay account.") }}</p>
-            {% call auth_button(platform.name, 'connect', user_name) %}
+            {% call auth_button(platform.name, 'connect', user_id) %}
                 {{ _("Connect") }}
             {% endcall %}
         {% endif %}
@@ -167,7 +168,7 @@ if is_team:
             "locked accounts.",
             platform.display_name) }}</p>
 
-    {% call auth_button(platform.name, 'lock', user_name) %}
+    {% call auth_button(platform.name, 'lock', user_id) %}
         {{ _("Lock") }}
     {% endcall %}
 
@@ -204,9 +205,9 @@ if is_team:
                 </td>
             {% else %}
                 <td>
-                    <a href="/on/{{platform.name}}/{{member.user_name}}/">
+                    <a href="/on/{{platform.name}}/{{member.gratipay_slug}}/">
                         {{ avatar_img(member) }}
-                        {{member.user_name}}
+                        {{ member.friendly_name }}
                     </a>
                 </td>
                 <td>
@@ -221,38 +222,8 @@ if is_team:
     {% endfor %}
 
     {% if pages_urls %}
-        <tr>
-            <td>
-                {% if pages_urls.get('prev') %}
-                    <a href="?page={{ b64encode(pages_urls['prev']) }}">
-                        ⇠ Previous
-                    </a>
-                {% endif %}
-            </td>
-            <td style="text-align: right">
-                {% if pages_urls.get('next') %}
-                    <a href="?page={{ b64encode(pages_urls['next']) }}">
-                        Next ⇢
-                    </a>
-                {% endif %}
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {% if pages_urls.get('first') %}
-                    <a href="?page={{ b64encode(pages_urls['first']) }}">
-                        ⇤ First
-                    </a>
-                {% endif %}
-            </td>
-            <td style="text-align: right">
-                {% if pages_urls.get('last') %}
-                    <a href="?page={{ b64encode(pages_urls['last']) }}">
-                        Last ⇥
-                    </a>
-                {% endif %}
-            </td>
-        </tr>
+        {% from 'templates/pagination.html' import pages_links with context %}
+        <tr><td colspan="2">{{ pages_links(pages_urls) }}</td></tr>
     {% endif %}
 
     </tbody>

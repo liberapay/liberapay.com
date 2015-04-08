@@ -220,6 +220,9 @@ def accounts_elsewhere(website, env):
     all_platforms = signin_platforms + [bountysource, venmo]
     website.platforms = AccountElsewhere.platforms = PlatformRegistry(all_platforms)
 
+    friends_platforms = [p for p in website.platforms if getattr(p, 'api_friends_path', None)]
+    website.friends_platforms = PlatformRegistry(friends_platforms)
+
     for platform in all_platforms:
         platform.icon = website.asset('platforms/%s.16.png' % platform.name)
         platform.logo = website.asset('platforms/%s.png' % platform.name)

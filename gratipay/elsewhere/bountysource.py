@@ -20,6 +20,7 @@ class Bountysource(Platform):
     name = 'bountysource'
     display_name = 'Bountysource'
     account_url = '{platform_data.auth_url}/people/{user_id}'
+    optional_user_name = True
 
     # API attributes
     api_format = 'json'

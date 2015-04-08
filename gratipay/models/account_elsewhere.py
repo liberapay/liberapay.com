@@ -73,7 +73,8 @@ class AccountElsewhere(Model):
 
     @classmethod
     def get_many(cls, platform, user_infos):
-        accounts = cls.db.all("""\
+        accounts = []
+        found = cls.db.all("""\
 
             SELECT elsewhere.*::elsewhere_with_participant
               FROM elsewhere
@@ -81,9 +82,11 @@ class AccountElsewhere(Model):
                AND user_id = any(%s)
 
         """, (platform, [i.user_id for i in user_infos]))
-        found_user_ids = set(a.user_id for a in accounts)
+        found = {a.user_id: a for a in found}
         for i in user_infos:
-            if i.user_id not in found_user_ids:
+            if i.user_id in found:
+                accounts.append(found[i.user_id])
+            else:
                 accounts.append(cls.upsert(i))
         return accounts
 
@@ -182,12 +185,16 @@ class AccountElsewhere(Model):
         return self.platform_data.get_auth_session(**params)
 
     @property
+    def gratipay_slug(self):
+        return self.user_name or ('~' + self.user_id)
+
+    @property
     def gratipay_url(self):
         scheme = gratipay.canonical_scheme
         host = gratipay.canonical_host
         platform = self.platform
-        user_name = self.user_name
-        return "{scheme}://{host}/on/{platform}/{user_name}/".format(**locals())
+        slug = self.gratipay_slug
+        return "{scheme}://{host}/on/{platform}/{slug}/".format(**locals())
 
     @property
     def html_url(self):
@@ -196,6 +203,24 @@ class AccountElsewhere(Model):
             user_name=self.user_name,
             platform_data=self.platform_data
         )
+
+    @property
+    def friendly_name(self):
+        if getattr(self.platform, 'optional_user_name', False):
+            return self.display_name or self.user_name or self.user_id
+        else:
+            return self.user_name or self.display_name or self.user_id
+
+    @property
+    def friendly_name_long(self):
+        r = self.friendly_name
+        display_name = self.display_name
+        if display_name and display_name != r:
+            return '%s (%s)' % (r, display_name)
+        user_name = self.user_name
+        if user_name and user_name != r:
+            return '%s (%s)' % (r, user_name)
+        return r
 
     def opt_in(self, desired_username):
         """Given a desired username, return a User object.
@@ -228,24 +253,31 @@ class AccountElsewhere(Model):
         self.set_attributes(token=token)
 
 
-def get_account_elsewhere(website, state):
+def get_account_elsewhere(website, state, api_lookup=True):
     path = state['request'].line.uri.path
     platform = getattr(website.platforms, path['platform'], None)
     if platform is None:
         raise Response(404)
-    user_name = path['user_name']
+    uid = path['user_name']
+    if uid[:1] == '~':
+        key = 'user_id'
+        uid = uid[1:]
+    else:
+        key = 'user_name'
     try:
-        account = AccountElsewhere.from_user_name(platform.name, user_name)
+        account = AccountElsewhere._from_thing(key, platform.name, uid)
     except UnknownAccountElsewhere:
         account = None
     if not account:
+        if not api_lookup:
+            raise Response(404)
         try:
-            user_info = platform.get_user_info(user_name)
+            user_info = platform.get_user_info(key, uid)
         except Response as r:
             if r.code == 404:
                 _ = state['_']
                 err = _("There doesn't seem to be a user named {0} on {1}.",
-                        user_name, platform.display_name)
+                        uid, platform.display_name)
                 raise Response(404, err)
             raise
         account = AccountElsewhere.upsert(user_info)

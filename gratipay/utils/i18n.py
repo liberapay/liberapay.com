@@ -85,6 +85,17 @@ SEARCH_CONFS = dict((
 ))
 
 
+_ = lambda a: a
+HTTP_ERRORS = {
+    403: _("Forbidden"),
+    404: _("Not Found"),
+    429: _("Too Many Requests"),
+    500: _("Internal Server Error"),
+    502: _("Upstream Error"),
+}
+del _
+
+
 ternary_re = re.compile(r'^\(? *(.+?) *\? *(.+?) *: *(.+?) *\)?$')
 and_re = re.compile(r' *&& *')
 or_re = re.compile(r' *\|\| *')

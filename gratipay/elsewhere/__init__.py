@@ -12,9 +12,11 @@ import xml.etree.ElementTree as ET
 
 from aspen import log, Response
 from aspen.utils import to_age, utc
+from oauthlib.oauth2 import TokenExpiredError
 from requests_oauthlib import OAuth1Session, OAuth2Session
 
 from gratipay.elsewhere._extractors import not_available
+from gratipay.utils import LazyResponse
 
 
 ACTIONS = {'opt-in', 'connect', 'lock', 'unlock'}
@@ -110,29 +112,42 @@ class Platform(object):
         The response is returned, after checking its status code and ratelimit
         headers.
         """
+        is_user_session = bool(sess)
         if not sess:
             sess = self.get_auth_session()
         response = sess.get(self.api_url+path, **kw)
 
-        self.check_api_response_status(response)
-        self.check_ratelimit_headers(response)
+        limit, remaining, reset = self.get_ratelimit_headers(response)
+        if not is_user_session:
+            self.log_ratelimit_headers(limit, remaining, reset)
+
+        # Check response status
+        status = response.status_code
+        if status == 401 and isinstance(self, PlatformOAuth1):
+            # https://tools.ietf.org/html/rfc5849#section-3.2
+            if is_user_session:
+                raise TokenExpiredError
+            raise Response(500)
+        if status == 404:
+            raise Response(404, response.text)
+        if status == 429 and is_user_session:
+            def msg(_, to_age):
+                if remaining == 0 and reset:
+                    return _("You've consumed your quota of requests, you can try again in {0}.", to_age(reset))
+                else:
+                    return _("You're making requests too fast, please try again later.")
+            raise LazyResponse(status, msg)
+        if status != 200:
+            log('{} api responded with {}:\n{}'.format(self.name, status, response.text)
+               , level=logging.ERROR)
+            msg = lambda _: _("{0} returned an error, please try again later.",
+                              self.display_name)
+            raise LazyResponse(502, msg)
 
         return response
 
-    def check_api_response_status(self, response):
-        """Pass through any 404, convert any other non-200 into a 500.
-        """
-        status = response.status_code
-        if status == 404:
-            raise Response(404, response.text)
-        elif status != 200:
-            log('{} api responded with {}:\n{}'.format(self.name, status, response.text)
-               , level=logging.ERROR)
-            raise Response(500, '{} lookup failed with {}'.format(self.name, status))
-
-    def check_ratelimit_headers(self, response):
-        """Emit log messages if we're running out of ratelimit.
-        """
+    def get_ratelimit_headers(self, response):
+        limit, remaining, reset = None, None, None
         prefix = getattr(self, 'ratelimit_headers_prefix', None)
         if prefix:
             limit = response.headers.get(prefix+'limit')
@@ -141,26 +156,31 @@ class Platform(object):
 
             try:
                 limit, remaining, reset = int(limit), int(remaining), int(reset)
+                reset = datetime.fromtimestamp(reset, tz=utc)
             except (TypeError, ValueError):
-                limit, remaining, reset = None, None, None
-
-            if None in (limit, remaining, reset):
                 d = dict(limit=limit, remaining=remaining, reset=reset)
                 log('Got weird rate headers from %s: %s' % (self.name, d))
-            else:
-                percent_remaining = remaining/limit
-                if percent_remaining < 0.5:
-                    reset = to_age(datetime.fromtimestamp(reset, tz=utc))
-                    log_msg = (
-                        '{0} API: {1:.1%} of ratelimit has been consumed, '
-                        '{2} requests remaining, resets {3}.'
-                    ).format(self.name, 1 - percent_remaining, remaining, reset)
-                    log_lvl = logging.WARNING
-                    if percent_remaining < 0.2:
-                        log_lvl = logging.ERROR
-                    elif percent_remaining < 0.05:
-                        log_lvl = logging.CRITICAL
-                    log(log_msg, log_lvl)
+                limit, remaining, reset = None, None, None
+
+        return limit, remaining, reset
+
+    def log_ratelimit_headers(self, limit, remaining, reset):
+        """Emit log messages if we're running out of ratelimit.
+        """
+        if None in (limit, remaining, reset):
+            return
+        percent_remaining = remaining/limit
+        if percent_remaining < 0.5:
+            log_msg = (
+                '{0} API: {1:.1%} of ratelimit has been consumed, '
+                '{2} requests remaining, resets {3}.'
+            ).format(self.name, 1 - percent_remaining, remaining, to_age(reset))
+            log_lvl = logging.WARNING
+            if percent_remaining < 0.2:
+                log_lvl = logging.ERROR
+            elif percent_remaining < 0.05:
+                log_lvl = logging.CRITICAL
+            log(log_msg, log_lvl)
 
     def extract_user_info(self, info):
         """
@@ -194,23 +214,31 @@ class Platform(object):
         r.extra_info = info
         return r
 
-    def get_team_members(self, team_name, page_url=None):
-        """Given a team_name on the platform, return the team's membership list
-        from the API.
+    def get_team_members(self, account, page_url=None):
+        """Given an AccountElsewhere, return its membership list from the API.
         """
-        default_url = self.api_team_members_path.format(user_name=quote(team_name))
-        r = self.api_get(page_url or default_url)
+        if not page_url:
+            page_url = self.api_team_members_path.format(
+                user_id=quote(account.user_id),
+                user_name=quote(account.user_name or ''),
+            )
+        r = self.api_get(page_url)
         members, count, pages_urls = self.api_paginator(r, self.api_parser(r))
         members = [self.extract_user_info(m) for m in members]
         return members, count, pages_urls
 
-    def get_user_info(self, user_name, sess=None):
-        """Given a user_name on the platform, get the user's info from the API.
+    def get_user_info(self, key, value, sess=None):
+        """Given a user_name or user_id, get the user's info from the API.
         """
-        try:
-            path = self.api_user_info_path.format(user_name=quote(user_name))
-        except KeyError:
-            raise Response(404)
+        if key == 'user_id':
+            path = 'api_user_info_path'
+        else:
+            assert key == 'user_name'
+            path = 'api_user_name_info_path'
+        path = getattr(self, path, None)
+        if not path:
+            raise Response(400)
+        path = path.format(**{key: value})
         info = self.api_parser(self.api_get(path, sess=sess))
         return self.extract_user_info(info)
 
@@ -223,6 +251,19 @@ class Platform(object):
         if token:
             info.token = json.dumps(token)
         return info
+
+    def get_friends_for(self, account, page_url=None, sess=None):
+        if not page_url:
+            page_url = self.api_friends_path.format(
+                user_id=quote(account.user_id),
+                user_name=quote(account.user_name or ''),
+            )
+        r = self.api_get(page_url, sess=sess)
+        friends, count, pages_urls = self.api_paginator(r, self.api_parser(r))
+        friends = [self.extract_user_info(f) for f in friends]
+        if count == -1 and hasattr(self, 'x_friends_count'):
+            count = self.x_friends_count(None, account.extra_info, -1)
+        return friends, count, pages_urls
 
 
 class PlatformOAuth1(Platform):

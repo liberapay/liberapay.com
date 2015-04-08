@@ -366,4 +366,64 @@ interactions:
       transfer-encoding: [chunked]
       vary: [Accept, Accept-Encoding]
     status: {code: 200, message: OK}
+- request:
+    body: null
+    headers: {}
+    method: GET
+    uri: https://api.github.com:443/users/alice/following
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA52T3WrEIBBG38XrZaUs9CdQ+hS9KiWYZDYZMCo6Jt0N++47xlBo9qLglSJzjp+j
+        fi1C2x6NqMSMWqMaG/szKK3FQWAnqufTy+vb00GoSZHydfSaKwciFyop82I49khDbGIA31pDYOjY
+        2lFGmeGP6f3Ett5vjqQVvLBzOdw8GWZZkA+RBhr1LkTefIUeys9WazuzaR/8/83kL8tR8xxNX+xh
+        dpGWBuAe8tFuqSEYqCTYyi0yDTV2yRT4ajx0BeE2kqPNhlMt0oOzqzI2ofXoCK0pCfmHZ5/1vTJ4
+        VaU+5gNrUrySOCvHPEz8OksEGVyk8zip9pJa5KEFnLjtxdKdgZ10ccC/45OfSLoEJKhVN6bveVY6
+        wO37Ds50B9mwAwAA
+    headers:
+      access-control-allow-credentials: ['true']
+      access-control-allow-origin: ['*']
+      access-control-expose-headers: ['ETag, Link, X-GitHub-OTP, X-RateLimit-Limit,
+          X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes,
+          X-Poll-Interval']
+      cache-control: ['public, max-age=60, s-maxage=60']
+      content-encoding: [gzip]
+      content-security-policy: [default-src 'none']
+      content-type: [application/json; charset=utf-8]
+      etag: [W/"f4fc15ed9b6894d78166a5d13ed33972"]
+      status: [200 OK]
+      strict-transport-security: [max-age=31536000; includeSubdomains; preload]
+      transfer-encoding: [chunked]
+      vary: [Accept, Accept-Encoding]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers: {}
+    method: GET
+    uri: https://api.github.com:443/users/alice/following
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA52T3WrEIBBG38XrZaUs9CdQ+hS9KiWYZDYZMCo6Jt0N++47xlBo9qLglSJzjp+j
+        fi1C2x6NqMSMWqMaG/szKK3FQWAnqufTy+vb00GoSZHydfSaKwciFyop82I49khDbGIA31pDYOjY
+        2lFGmeGP6f3Ett5vjqQVvLBzOdw8GWZZkA+RBhr1LkTefIUeys9WazuzaR/8/83kL8tR8xxNX+xh
+        dpGWBuAe8tFuqSEYqCTYyi0yDTV2yRT4ajx0BeE2kqPNhlMt0oOzqzI2ofXoCK0pCfmHZ5/1vTJ4
+        VaU+5gNrUrySOCvHPEz8OksEGVyk8zip9pJa5KEFnLjtxdKdgZ10ccC/45OfSLoEJKhVN6bveVY6
+        wO37Ds50B9mwAwAA
+    headers:
+      access-control-allow-credentials: ['true']
+      access-control-allow-origin: ['*']
+      access-control-expose-headers: ['ETag, Link, X-GitHub-OTP, X-RateLimit-Limit,
+          X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes,
+          X-Poll-Interval']
+      cache-control: ['public, max-age=60, s-maxage=60']
+      content-encoding: [gzip]
+      content-security-policy: [default-src 'none']
+      content-type: [application/json; charset=utf-8]
+      etag: [W/"f4fc15ed9b6894d78166a5d13ed33972"]
+      status: [200 OK]
+      strict-transport-security: [max-age=31536000; includeSubdomains; preload]
+      transfer-encoding: [chunked]
+      vary: [Accept, Accept-Encoding]
+    status: {code: 200, message: OK}
 version: 1

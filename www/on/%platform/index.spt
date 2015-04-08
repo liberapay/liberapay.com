@@ -1,0 +1,118 @@
+from base64 import b64decode
+
+from aspen import Response
+from oauthlib.oauth2 import TokenExpiredError
+
+from gratipay.models.account_elsewhere import AccountElsewhere
+
+platforms_nav = [('/%s/' % p.name, p.display_name) for p in website.friends_platforms]
+del p
+
+[---]
+platform = getattr(website.platforms, request.path['platform'], None)
+if platform is None or platform not in website.friends_platforms:
+    raise Response(404)
+
+title = _("Friend Finder")
+
+account = None
+if not user.ANON:
+    account = user.participant.get_account_elsewhere(platform.name)
+
+sess = None
+if account:
+    sess = account.get_auth_session()
+    if sess:
+        page_url = b64decode(request.qs.get('page', ''))
+        try:
+            friends, nfriends, pages_urls = platform.get_friends_for(account, page_url, sess)
+        except TokenExpiredError:
+            need_reconnect = True
+        else:
+            friends = AccountElsewhere.get_many(platform.name, friends)
+
+limited = getattr(platform, 'api_friends_limited', False)
+
+[---] text/html
+{% extends "templates/base.html" %}
+{% from 'templates/auth.html' import auth_button with context %}
+
+{% block subnav %}
+    {% set current_page = platform.name %}
+    {% set nav_base = '/on' %}
+    {% set pages = platforms_nav %}
+    {% include "templates/nav.html" %}
+{% endblock %}
+
+{% block sidebar %}
+    <div class="avatar">
+        <img src='{{ website.asset("platforms/%s.png" % platform.name) }}' />
+    </div>
+    {% if nfriends and nfriends > 0 %}
+    <p>{{ ngettext("You have {n} friend on {0}.", "You have {n} friends on {0}.",
+                   nfriends, platform.display_name) }}
+    </p>
+    {% endif %}
+
+{% endblock %}
+
+{% macro limitation_note() %}
+    {% if limited %}
+        <br>
+        <p>{{ _("Note: privacy settings may prevent Gratipay from seeing some of your {0} friends.",
+                platform.display_name) }}</p>
+    {% endif %}
+{% endmacro %}
+
+{% block content %}
+
+{% if need_reconnect %}
+<div>
+    <span style="display: inline-block">
+    {% call auth_button(platform.name, 'opt-in' if user.ANON else 'connect') %}{{
+        _("Please refresh your {0} connection", platform.display_name)
+    }}{% endcall %}
+    </span>
+    {{ _("to find your friends from there.") }}
+</div>
+{% elif not account or not sess %}
+<div>
+    <span style="display: inline-block">
+    {% call auth_button(platform.name, 'opt-in' if user.ANON else 'connect') %}{{
+        _("Sign in with {0}", platform.display_name) if user.ANON else
+        _("Connect your {0} account", platform.display_name)
+    }}{% endcall %}
+    </span>
+    {{ _("to find your friends from there.") }}
+</div>
+{% elif not friends %}
+<p>{{ _("No friends found.") }}</p>
+{{ limitation_note() }}
+{% else %}
+<table class="table">
+    <tr>
+        <th>{{ _('Name') }}</th>
+        <th class="figure">{{ _('On Gratipay?') }}</th>
+        <th class="figure">{{ _('Supporters') }}</th>
+        <th class="figure">{{ _('Receives') }}</th>
+        <th class="figure">{{ _('Gives') }}</th>
+    </tr>
+    {% for friend in friends %}
+    {% set p = friend.participant %}
+    <tr>
+        <td><a href="./{{ friend.gratipay_slug }}/">{{ friend.friendly_name }}</a></td>
+        <td class="figure">{{ '&check;'|safe if p.is_claimed }}</td>
+        <td class="figure">{{ _('hidden') if p.anonymous_receiving else p.npatrons }}</td>
+        <td class="figure">{{ _('hidden') if p.anonymous_receiving else p.receiving }}</td>
+        <td class="figure">{{ _('hidden') if p.anonymous_giving else p.giving }}</td>
+    </tr>
+    {% endfor %}
+    {% if pages_urls %}
+        {% from 'templates/pagination.html' import pages_links with context %}
+        <tr><td colspan="5">{{ pages_links(pages_urls) }}</td></tr>
+    {% endif %}
+</table>
+{{ limitation_note() }}
+{% endif %}
+
+{% endblock %}

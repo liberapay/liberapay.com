@@ -67,7 +67,7 @@ class TestElsewhere(Harness):
         gui.return_value = self.client.website.platforms.github.extract_user_info({'id': 1})
         ft.return_value = None
 
-        cookie = b64encode(json.dumps(['query_data', 'connect', '', 'bob']))
+        cookie = b64encode(json.dumps(['query_data', 'connect', '', '2']))
         response = self.client.GxT('/on/github/associate?state=deadbeef',
                                    auth_as='alice',
                                    cookies={b'github_deadbeef': cookie})
@@ -80,7 +80,7 @@ class TestElsewhere(Harness):
 
     def test_redirects(self, *classes):
         self.make_participant('alice')
-        data = dict(action='opt-in', then='/', user_name='')
+        data = dict(action='opt-in', then='/', user_id='')
         for platform in self.platforms:
             platform.get_auth_url = lambda *a, **kw: ('', '', '')
             response = self.client.PxST('/on/%s/redirect' % platform.name,
@@ -110,6 +110,8 @@ class TestElsewhere(Harness):
         user_name = 'adhsjakdjsdkjsajdhksda'
         error = "There doesn't seem to be a user named %s on %s."
         for platform in self.platforms:
+            if not hasattr(platform, 'api_user_name_info_path'):
+                continue
             r = self.client.GxT("/on/%s/%s/" % (platform.name, user_name))
             expected = error % (user_name, platform.display_name)
             assert expected in r.body
@@ -168,3 +170,20 @@ class TestConfirmTakeOver(Harness):
                                     cookies=self.connect_cookie)
         assert response.code == 302
         assert response.headers['Location'] == '/bob/'
+
+
+class TestFriendFinder(Harness):
+
+    def test_twitter_get_friends_for(self):
+        platform = self.platforms.twitter
+        user_info = platform.extract_user_info(user_info_examples.twitter())
+        account = AccountElsewhere.upsert(user_info)
+        friends, nfriends, pages_urls = platform.get_friends_for(account)
+        assert nfriends > 0
+
+    def test_github_get_friends_for(self):
+        platform = self.platforms.github
+        user_info = platform.extract_user_info(user_info_examples.github())
+        account = AccountElsewhere.upsert(user_info)
+        friends, nfriends, pages_urls = platform.get_friends_for(account)
+        assert nfriends > 0

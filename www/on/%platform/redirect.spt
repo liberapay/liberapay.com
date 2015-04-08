@@ -17,7 +17,7 @@ if platform is None:
 
 body = request.body
 try:
-    action, then, user_name = body['action'], body['then'], body['user_name']
+    action, then, user_id = body['action'], body['then'], body['user_id']
 except KeyError:
     raise Response(400)
 
@@ -27,7 +27,7 @@ if action not in ACTIONS:
 url, query_id, query_data = platform.get_auth_url(user=user)
 
 cookie_name = (platform.name+'_'+query_id).encode('ascii')
-cookie_value = b64encode(json.dumps([query_data, action, then, user_name]))
+cookie_value = b64encode(json.dumps([query_data, action, then, user_id]))
 response.set_cookie(cookie_name, cookie_value, expires=COOKIE_TIMEOUT)
 
 response.redirect(url)
