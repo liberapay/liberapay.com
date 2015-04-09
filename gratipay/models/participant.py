@@ -623,6 +623,7 @@ class Participant(Model, MixinTeam):
                   (self.username, address))
 
     def send_email(self, spt_name, **context):
+        context['participant'] = self
         context['username'] = self.username
         context['button_style'] = (
             "color: #fff; text-decoration:none; display:inline-block; "

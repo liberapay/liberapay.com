@@ -729,13 +729,13 @@ class Payday(object):
             username = p.username
             ntippees, top_tippee = self.db.one("""
                 WITH tippees AS (
-                         SELECT p.*::participants
+                         SELECT p.username, amount
                            FROM ( SELECT DISTINCT ON (tippee) tippee, amount
                                     FROM tips
                                    WHERE mtime < %(ts_start)s
                                      AND tipper = %(username)s
                                 ORDER BY tippee, mtime DESC
-                                )
+                                ) t
                            JOIN participants p ON p.username = t.tippee
                           WHERE t.amount > 0
                             AND (p.goal IS NULL or p.goal >= 0)
@@ -743,16 +743,15 @@ class Payday(object):
                             AND p.claimed_time < %(ts_start)s
                      )
                 SELECT ( SELECT count(*) FROM tippees ) AS ntippees
-                     , ( SELECT t.*
-                           FROM tippees t
+                     , ( SELECT username
+                           FROM tippees
                        ORDER BY amount DESC
                           LIMIT 1
                        ) AS top_tippee
             """, locals())
             p.queue_email(
                 'charge_'+e.status,
-                exchange=e,
-                participant=p,
+                exchange=dict(amount=e.amount, fee=e.fee, note=e.note),
                 ntippees=ntippees,
                 top_tippee=top_tippee,
             )
