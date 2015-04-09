@@ -185,3 +185,7 @@ class TestPages(Harness):
         self.make_participant('alice', claimed_time='now')
         body = self.client.GET("/alice/", auth_as="alice").body
         assert b'Edit' in body
+
+    def test_anon_bank_acc_page(self):
+        body = self.client.GET("/alice/routes/bank-account.html").body
+        assert "Please Sign in to Add/Change Bank Account" in body

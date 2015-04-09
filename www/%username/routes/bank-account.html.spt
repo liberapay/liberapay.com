@@ -7,7 +7,7 @@ from gratipay.utils import get_participant
 [-----------------------------------------------------------------------------]
 account = None
 bank_account = None
-status = ". . ."
+status = "Please Sign in to Add/Change Bank Account"
 
 if not user.ANON:
     participant = get_participant(state, restrict=True)
