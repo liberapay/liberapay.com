@@ -188,4 +188,4 @@ class TestPages(Harness):
 
     def test_anon_bank_acc_page(self):
         body = self.client.GET("/alice/routes/bank-account.html").body
-        assert "Please Sign in to Add/Change Bank Account" in body
+        assert "<h1>Bank Account</h1>" in body
