@@ -12,6 +12,7 @@ from gratipay.exceptions import NegativeBalance
 from gratipay.models.participant import Participant
 from gratipay.testing import Foobar, Harness
 from gratipay.testing.balanced import BalancedHarness
+from gratipay.testing.emails import EmailHarness
 
 
 class TestPayday(BalancedHarness):
@@ -529,16 +530,22 @@ class TestPayout(Harness):
         assert payday['nach_failing'] == 1
 
 
-class TestNotifyParticipants(BalancedHarness):
+class TestNotifyParticipants(EmailHarness):
 
-    @mock.patch.object(Payday, 'fetch_card_holds')
-    def test_it_notifies_participants(self, fch):
-        self.janet.set_tip_to(self.homer, D('10.00'))
-        fch.return_value = {}
-        Payday.start().run()
+    def test_it_notifies_participants(self):
+        kalel = self.make_participant('kalel', claimed_time='now', is_suspicious=False,
+                                      email_address='kalel@example.net', notify_charge=3)
+        lily = self.make_participant('lily', claimed_time='now', is_suspicious=False)
+        kalel.set_tip_to(lily, 10)
 
-        exchanges = self.db.one('SELECT * FROM exchanges')
-        assert exchanges['amount'] == D('10.00')
+        for status in ('failed', 'succeeded'):
+            payday = Payday.start()
+            self.make_exchange('balanced-cc', 10, 0, kalel, status)
+            payday.end()
+            payday.notify_participants()
 
-        emails = self.db.one('SELECT * FROM email_queue')
-        assert emails['spt_name'] == 'charge_succeeded'
+            emails = self.db.one('SELECT * FROM email_queue')
+            assert emails.spt_name == 'charge_'+status
+
+            Participant.dequeue_emails()
+            assert self.get_last_email()['to'][0]['email'] == 'kalel@example.net'
