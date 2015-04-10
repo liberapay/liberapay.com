@@ -7,7 +7,7 @@ from gratipay.utils import get_participant
 [-----------------------------------------------------------------------------]
 account = None
 bank_account = None
-status = ". . ."
+status = ""
 
 if not user.ANON:
     participant = get_participant(state, restrict=True)
@@ -28,7 +28,11 @@ title = _("Bank Account")
 
 {% block heading %}
 
-    <h1>{{ escape(status).format('<em id="status">'|safe, '</em>'|safe) }}</h1>
+    {% if not user.ANON %}
+        <h1>{{ escape(status).format('<em id="status">'|safe, '</em>'|safe) }}</h1>
+    {% else %}
+        <h1>{{ title }}</h1>
+    {% endif %}
 
     <p>{{ _("When you receive money on Gratipay we'll automatically deposit it into your bank account.") }}
     {{ _("If you don't connect a bank account then your money will accumulate within Gratipay unless you regift it to others.") }}

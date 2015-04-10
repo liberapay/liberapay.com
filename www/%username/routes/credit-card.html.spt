@@ -5,7 +5,7 @@ from gratipay.utils import get_participant
 
 [-----------------------------------------------------------------------------]
 
-status = status_msg = ". . ."
+status = status_msg = ""
 
 if not user.ANON:
     participant = get_participant(state, restrict=True)
@@ -32,7 +32,12 @@ title = _("Credit Card")
 {% extends "templates/base.html" %}
 
 {% block heading %}
-    <h1>{{ escape(status_msg).format("<em id=\"status\">"|safe, "</em>"|safe) }}</h1>
+
+    {% if not user.ANON %}
+        <h1>{{ escape(status_msg).format("<em id=\"status\">"|safe, "</em>"|safe) }}</h1>
+    {% else %}
+        <h1>{{ title }}</h1>
+    {% endif %}
 
     <p>{{ _("When you don't have enough money in your Gratipay account to cover your gifts, we'll attempt to pull money in using your credit card.") }}
     {{ _("If your credit card is missing or fails then your gifts won't go through for that week.") }}</p>
