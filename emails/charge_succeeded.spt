@@ -1,23 +1,21 @@
-{{ ngettext("Your payment succeeded!", "Your payments succeeded!", ntippees) }}
+{{ _("Thanks for supporting {0}!", top_tippee) }}
 
 [---] text/html
-{{ ngettext(
-    "We charged your credit card {0} today, to fund your weekly payment to {1}. Thanks for using Gratipay!",
-    "We charged your credit card {0} today, to fund your weekly payments to {1}. Thanks for using Gratipay!",
-    ntippees,
-    format_currency(exchange.amount + exchange.fee, 'USD'),
-    ('<b><a href="{0}">{1}</a></b>'|safe).format(
+{{ _("We charged your credit card {0} today, to fund your ongoing support for {1}. Thanks for using Gratipay!",
+     format_currency(exchange.amount + exchange.fee, 'USD'),
+     ('<b><a href="{0}">{1}</a></b>'|safe).format(
         participant.profile_url+'giving/',
-        top_tippee if ntippees == 1 else ngettext('{0} and {n} other', '{0} and {n} others', ntippees - 1, top_tippee)
-    )) }}
+        top_tippee if ntippees == 1 else ngettext('{0} and {n} other', 
+                                                  '{0} and {n} others', 
+                                                  ntippees - 1, 
+                                                  top_tippee))) }}
 
 [---] text/plain
-{{ ngettext(
-    "We charged your credit card {0} today, to fund your weekly payment to {1}. Thanks for using Gratipay!",
-    "We charged your credit card {0} today, to fund your weekly payments to {1}. Thanks for using Gratipay!",
-    ntippees,
-    format_currency(exchange.amount + exchange.fee, 'USD'),
-    top_tippee if ntippees == 1 else ngettext('{0} and {n} other', '{0} and {n} others', ntippees - 1, top_tippee)
-    ) }}
+{{ _("We charged your credit card {0} today, to fund your ongoing support for {1}. Thanks for using Gratipay!",
+     format_currency(exchange.amount + exchange.fee, 'USD'),
+     top_tippee if ntippees == 1 else ngettext('{0} and {n} other', 
+                                               '{0} and {n} others', 
+                                               ntippees - 1, 
+                                               top_tippee)) }}
 
 {{ _("Follow this link if you want to view or modify your payments:") }} {{ participant.profile_url+'giving/' }}
