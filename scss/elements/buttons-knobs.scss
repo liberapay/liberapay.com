@@ -21,6 +21,7 @@ button,
     font: normal 13px $Ideal;
     margin: 0 0 0 1px;
     padding: 5px 8px;
+    white-space: nowrap;
     @include border-radius(3px);
     cursor: pointer;
     display: inline;
@@ -57,4 +58,8 @@ button.close-account {
         color: white;
         text-decoration: none;
     }
+}
+
+.buttons button {
+    margin-top: 3px;
 }
