@@ -710,7 +710,7 @@ class Payday(object):
     def notify_participants(self):
         ts_start, ts_end = self.ts_start, self.ts_end
         exchanges = self.db.all("""
-            SELECT amount, fee, note, status, p.*::participants AS participant
+            SELECT e.id, amount, fee, note, status, p.*::participants AS participant
               FROM exchanges e
               JOIN participants p ON e.participant = p.username
              WHERE "timestamp" >= %(ts_start)s
@@ -751,7 +751,7 @@ class Payday(object):
             """, locals())
             p.queue_email(
                 'charge_'+e.status,
-                exchange=dict(amount=e.amount, fee=e.fee, note=e.note),
+                exchange=dict(id=e.id, amount=e.amount, fee=e.fee, note=e.note),
                 ntippees=ntippees,
                 top_tippee=top_tippee,
             )

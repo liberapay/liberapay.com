@@ -9,6 +9,10 @@
                                                   '{0} and {n} others', 
                                                   ntippees - 1, 
                                                   top_tippee))) }}
+<br>
+<br>
+<a href="{{ '{}receipts/{}.html'.format(participant.profile_url, exchange.id) }}" 
+   style="{{ button_style }}">{{ _("View Receipt") }}</a>
 
 [---] text/plain
 {{ _("We charged your credit card {0} today, to fund your ongoing support for {1}. Thanks for using Gratipay!",
@@ -17,5 +21,7 @@
                                                '{0} and {n} others', 
                                                ntippees - 1, 
                                                top_tippee)) }}
+
+{{ _("Follow this link to view your receipt:") }} {{ '{}receipts/{}.html'.format(participant.profile_url, exchange.id) }}
 
 {{ _("Follow this link if you want to view or modify your payments:") }} {{ participant.profile_url+'giving/' }}
