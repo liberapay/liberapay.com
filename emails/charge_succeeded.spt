@@ -5,7 +5,7 @@
     "We charged your credit card {0} today, to fund your weekly payment to {1}. Thanks for using Gratipay!",
     "We charged your credit card {0} today, to fund your weekly payments to {1}. Thanks for using Gratipay!",
     ntippees,
-    format_currency(exchange.amount, 'USD'),
+    format_currency(exchange.amount + exchange.fee, 'USD'),
     ('<b><a href="{0}">{1}</a></b>'|safe).format(
         participant.profile_url+'giving/',
         top_tippee if ntippees == 1 else ngettext('{0} and {n} other', '{0} and {n} others', ntippees - 1, top_tippee)
@@ -16,7 +16,7 @@
     "We charged your credit card {0} today, to fund your weekly payment to {1}. Thanks for using Gratipay!",
     "We charged your credit card {0} today, to fund your weekly payments to {1}. Thanks for using Gratipay!",
     ntippees,
-    format_currency(exchange.amount, 'USD'),
+    format_currency(exchange.amount + exchange.fee, 'USD'),
     top_tippee if ntippees == 1 else ngettext('{0} and {n} other', '{0} and {n} others', ntippees - 1, top_tippee)
     ) }}
 

@@ -5,7 +5,7 @@
     "We tried to charge your credit card {0} today, to fund your weekly payment to {1}, but it failed.",
     "We tried to charge your credit card {0} today, to fund your weekly payments to {1}, but it failed.",
     ntippees,
-    format_currency(exchange.amount, 'USD'),
+    format_currency(exchange.amount + exchange.fee, 'USD'),
     top_tippee if ntippees == 1 else ngettext('{0} and {n} other', '{0} and {n} others', ntippees - 1, top_tippee)
     ) }}
 
@@ -21,7 +21,7 @@
     "We tried to charge your credit card {0} today, to fund your weekly payment to {1}, but it failed.",
     "We tried to charge your credit card {0} today, to fund your weekly payments to {1}, but it failed.",
     ntippees,
-    format_currency(exchange.amount, 'USD'),
+    format_currency(exchange.amount + exchange.fee, 'USD'),
     top_tippee if ntippees == 1 else ngettext('{0} and {n} other', '{0} and {n} others', ntippees - 1, top_tippee)
     ) }}
 
