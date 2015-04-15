@@ -17,7 +17,6 @@
 
 [---] text/plain
 {{ _("We tried to charge your credit card {0} today, to fund your ongoing support for {1}, but the charge failed with this message:",
-     ntippees,
      format_currency(exchange.amount + exchange.fee, 'USD'),
      top_tippee if ntippees == 1 else ngettext('{0} and {n} other', 
                                                '{0} and {n} others', 
