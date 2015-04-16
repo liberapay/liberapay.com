@@ -632,6 +632,8 @@ class Participant(Model, MixinTeam):
         )
         context.setdefault('include_unsubscribe', True)
         email = context.setdefault('email', self.email_address)
+        if not email:
+            return
         langs = i18n.parse_accept_lang(self.email_lang or 'en')
         locale = i18n.match_lang(langs)
         i18n.add_helpers_to_context(self._tell_sentry, context, locale)
