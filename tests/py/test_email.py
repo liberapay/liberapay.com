@@ -201,3 +201,14 @@ class TestEmail(EmailHarness):
         last_email = self.get_last_email()
         assert 'foo&#39;bar' in last_email['html']
         assert '&#39;' not in last_email['text']
+
+    def test_can_dequeue_an_email(self):
+        larry = self.make_participant('larry', email_address='larry@example.com')
+        larry.queue_email("verification")
+
+        Participant.dequeue_emails()
+        assert self.mailer.call_count == 1
+        last_email = self.get_last_email()
+        assert last_email['to'][0]['email'] == 'larry@example.com'
+        expected = "connect larry"
+        assert expected in last_email['text']
