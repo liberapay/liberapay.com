@@ -380,3 +380,10 @@ CREATE TABLE balances_at
 , balance      numeric(35,2)  NOT NULL
 , UNIQUE (participant, at)
 );
+
+-- https://github.com/gratipay/gratipay.com/pull/3301
+ALTER TABLE participants ADD COLUMN notify_charge int DEFAULT 3;
+ALTER TABLE participants
+    ALTER COLUMN notify_on_opt_in DROP DEFAULT,
+    ALTER COLUMN notify_on_opt_in TYPE int USING notify_on_opt_in::int,
+    ALTER COLUMN notify_on_opt_in SET DEFAULT 1;
