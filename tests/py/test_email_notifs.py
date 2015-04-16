@@ -49,7 +49,7 @@ class TestTransactionalEmails(EmailHarness):
 
     def test_opt_in_notification_includes_unsubscribe(self):
         carl_twitter = self.make_elsewhere('twitter', 1, 'carl')
-        roy = self.make_participant('roy', claimed_time='now', email_address='roy@example.com', notify_on_opt_in=True)
+        roy = self.make_participant('roy', claimed_time='now', email_address='roy@example.com', notify_on_opt_in=1)
         roy.set_tip_to(carl_twitter.participant.username, '100')
 
         AccountElsewhere.from_user_name('twitter', 'carl').opt_in('carl')

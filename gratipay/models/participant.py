@@ -623,7 +623,13 @@ class Participant(Model, MixinTeam):
                   (self.username, address))
 
     def send_email(self, spt_name, **context):
+        context['participant'] = self
         context['username'] = self.username
+        context['button_style'] = (
+            "color: #fff; text-decoration:none; display:inline-block; "
+            "padding: 0 15px; background: #396; white-space: nowrap; "
+            "font: normal 14px/40px Arial, sans-serif; border-radius: 3px"
+        )
         context.setdefault('include_unsubscribe', True)
         email = context.setdefault('email', self.email_address)
         langs = i18n.parse_accept_lang(self.email_lang or 'en')
@@ -778,6 +784,13 @@ class Participant(Model, MixinTeam):
 
     # Random Junk
     # ===========
+
+    @property
+    def profile_url(self):
+        scheme = gratipay.canonical_scheme
+        host = gratipay.canonical_host
+        username = self.username
+        return '{scheme}://{host}/{username}/'.format(**locals())
 
     def get_teams(self):
         """Return a list of teams this user is a member of.

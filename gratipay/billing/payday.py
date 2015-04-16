@@ -141,6 +141,7 @@ class Payday(object):
             self.mark_stage_done()
 
         self.end()
+        self.notify_participants()
 
         _end = aspen.utils.utcnow()
         _delta = _end - _start
@@ -704,6 +705,56 @@ class Payday(object):
          RETURNING ts_end AT TIME ZONE 'UTC'
 
         """, default=NoPayday).replace(tzinfo=aspen.utils.utc)
+
+
+    def notify_participants(self):
+        ts_start, ts_end = self.ts_start, self.ts_end
+        exchanges = self.db.all("""
+            SELECT e.id, amount, fee, note, status, p.*::participants AS participant
+              FROM exchanges e
+              JOIN participants p ON e.participant = p.username
+             WHERE "timestamp" >= %(ts_start)s
+               AND "timestamp" < %(ts_end)s
+               AND amount > 0
+               AND p.notify_charge > 0
+        """, locals())
+        for e in exchanges:
+            if e.status not in ('failed', 'succeeded'):
+                log('exchange %s has an unexpected status: %s' % (e.id, e.status))
+                continue
+            i = 1 if e.status == 'failed' else 2
+            p = e.participant
+            if p.notify_charge & i == 0:
+                continue
+            username = p.username
+            ntippees, top_tippee = self.db.one("""
+                WITH tippees AS (
+                         SELECT p.username, amount
+                           FROM ( SELECT DISTINCT ON (tippee) tippee, amount
+                                    FROM tips
+                                   WHERE mtime < %(ts_start)s
+                                     AND tipper = %(username)s
+                                ORDER BY tippee, mtime DESC
+                                ) t
+                           JOIN participants p ON p.username = t.tippee
+                          WHERE t.amount > 0
+                            AND (p.goal IS NULL or p.goal >= 0)
+                            AND p.is_suspicious IS NOT true
+                            AND p.claimed_time < %(ts_start)s
+                     )
+                SELECT ( SELECT count(*) FROM tippees ) AS ntippees
+                     , ( SELECT username
+                           FROM tippees
+                       ORDER BY amount DESC
+                          LIMIT 1
+                       ) AS top_tippee
+            """, locals())
+            p.queue_email(
+                'charge_'+e.status,
+                exchange=dict(id=e.id, amount=e.amount, fee=e.fee, note=e.note),
+                ntippees=ntippees,
+                top_tippee=top_tippee,
+            )
 
 
     # Record-keeping.

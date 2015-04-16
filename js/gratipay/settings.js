@@ -112,22 +112,24 @@ Gratipay.settings.init = function() {
     });
 
     // Wire up notification preferences
-    // ==============================
+    // ================================
 
     $('.email-notifications input').click(function(e) {
         var field = $(e.target).data('field');
+        var bits = $(e.target).data('bits') || 1;
         jQuery.ajax(
             { url: '../emails/notifications.json'
             , type: 'POST'
-            , data: {toggle: field}
+            , data: {toggle: field, bits: bits}
             , dataType: 'json'
             , success: function(data) {
-                if (data.msg) {
-                    Gratipay.notification(data.msg, 'success');
-                }
-                $(e.target).attr('checked', data[field]);
+                Gratipay.notification(data.msg, 'success');
+                $(e.target).attr('checked', data.new_value & bits)
             }
-            , error: Gratipay.error
+            , error: [
+                Gratipay.error,
+                function(){ $(e.target).attr('checked', !$(e.target).attr('checked')) },
+            ]
         });
     });
 

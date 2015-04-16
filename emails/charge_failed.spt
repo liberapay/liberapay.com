@@ -1,0 +1,28 @@
+{{ _("Oh no! A problem supporting {0}!", top_tippee) }}
+
+[---] text/html
+{{ _("We tried to charge your credit card {0} today, to fund your ongoing support for {1}, but the charge failed with this message:",
+     format_currency(exchange.amount + exchange.fee, 'USD'),
+     ('<b><a href="{0}">{1}</a></b>'|safe).format(
+        participant.profile_url+'giving/',
+        top_tippee if ntippees == 1 else ngettext('{0} and {n} other', 
+                                                  '{0} and {n} others', 
+                                                  ntippees - 1, 
+                                                  top_tippee))) }}
+
+<pre>{{ exchange.note }}</pre>
+
+<a href="{{ participant.profile_url+'routes/credit-card.html' }}" 
+   style="{{ button_style }}">{{ _("Fix Credit Card") }}</a>
+
+[---] text/plain
+{{ _("We tried to charge your credit card {0} today, to fund your ongoing support for {1}, but the charge failed with this message:",
+     format_currency(exchange.amount + exchange.fee, 'USD'),
+     top_tippee if ntippees == 1 else ngettext('{0} and {n} other', 
+                                               '{0} and {n} others', 
+                                               ntippees - 1, 
+                                               top_tippee)) }}
+
+{{ exchange.note }}
+
+{{ _("Follow this link to fix your credit card:") }} {{ participant.profile_url+'routes/credit-card.html' }}

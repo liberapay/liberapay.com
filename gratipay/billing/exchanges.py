@@ -266,7 +266,7 @@ def _prep_hit(unrounded):
     return cents, amount_str, upcharged, fee
 
 
-def record_exchange(db, route, amount, fee, participant, status, error=''):
+def record_exchange(db, route, amount, fee, participant, status, error=None):
     """Given a Bunch of Stuff, return an int (exchange_id).
 
     Records in the exchanges table have these characteristics:
@@ -284,10 +284,10 @@ def record_exchange(db, route, amount, fee, participant, status, error=''):
 
         exchange_id = cursor.one("""
             INSERT INTO exchanges
-                   (amount, fee, participant, status, route)
-            VALUES (%s, %s, %s, %s, %s)
+                   (amount, fee, participant, status, route, note)
+            VALUES (%s, %s, %s, %s, %s, %s)
          RETURNING id
-        """, (amount, fee, participant.username, status, route.id))
+        """, (amount, fee, participant.username, status, route.id, error))
 
         if status == 'failed':
             propagate_exchange(cursor, participant, route, error, 0)
