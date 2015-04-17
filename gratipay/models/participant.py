@@ -546,10 +546,11 @@ class Participant(Model, MixinTeam):
         username = self.username_lower
         quoted_email = quote(email)
         link = "{scheme}://{host}/{username}/emails/verify.html?email={quoted_email}&nonce={nonce}"
-        self.send_email('verification',
+        r = self.send_email('verification',
                         email=email,
                         link=link.format(**locals()),
                         include_unsubscribe=False)
+        assert r == 1 # Make sure the verification email was sent
         if self.email_address:
             self.send_email('verification_notice',
                             new_email=email,
@@ -632,6 +633,8 @@ class Participant(Model, MixinTeam):
         )
         context.setdefault('include_unsubscribe', True)
         email = context.setdefault('email', self.email_address)
+        if not email:
+            return 0 # Not Sent
         langs = i18n.parse_accept_lang(self.email_lang or 'en')
         locale = i18n.match_lang(langs)
         i18n.add_helpers_to_context(self._tell_sentry, context, locale)
@@ -652,7 +655,8 @@ class Participant(Model, MixinTeam):
         message['html'] = render('text/html', context_html)
         message['text'] = render('text/plain', context)
 
-        return self._mailer.messages.send(message=message)
+        self._mailer.messages.send(message=message)
+        return 1 # Sent
 
     def notify_patrons(self, elsewhere, tips=None):
         tips = self.get_tips_receiving() if tips is None else tips
@@ -688,9 +692,10 @@ class Participant(Model, MixinTeam):
                 break
             for msg in messages:
                 p = cls.from_id(msg.participant)
-                p.send_email(msg.spt_name, **pickle.loads(msg.context))
+                r = p.send_email(msg.spt_name, **pickle.loads(msg.context))
                 cls.db.run("DELETE FROM email_queue WHERE id = %s", (msg.id,))
-                sleep(1)
+                if r == 1:
+                    sleep(1)
 
     def set_email_lang(self, accept_lang):
         if not accept_lang:
