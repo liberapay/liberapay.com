@@ -692,9 +692,10 @@ class Participant(Model, MixinTeam):
                 break
             for msg in messages:
                 p = cls.from_id(msg.participant)
-                p.send_email(msg.spt_name, **pickle.loads(msg.context))
+                r = p.send_email(msg.spt_name, **pickle.loads(msg.context))
                 cls.db.run("DELETE FROM email_queue WHERE id = %s", (msg.id,))
-                sleep(1)
+                if r == 1:
+                    sleep(1)
 
     def set_email_lang(self, accept_lang):
         if not accept_lang:
