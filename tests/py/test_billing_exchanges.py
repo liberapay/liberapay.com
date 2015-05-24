@@ -7,7 +7,7 @@ import mock
 import pytest
 
 from aspen.utils import typecheck
-from gratipay.billing.exchanges import (
+from liberapay.billing.exchanges import (
     _prep_hit,
     ach_credit,
     cancel_card_hold,
@@ -18,11 +18,11 @@ from gratipay.billing.exchanges import (
     skim_credit,
     sync_with_balanced,
 )
-from gratipay.exceptions import NegativeBalance, NotWhitelisted
-from gratipay.models.exchange_route import ExchangeRoute
-from gratipay.models.participant import Participant
-from gratipay.testing import Foobar, Harness
-from gratipay.testing.balanced import BalancedHarness
+from liberapay.exceptions import NegativeBalance, NotWhitelisted
+from liberapay.models.exchange_route import ExchangeRoute
+from liberapay.models.participant import Participant
+from liberapay.testing import Foobar, Harness
+from liberapay.testing.balanced import BalancedHarness
 
 
 class TestCredits(BalancedHarness):
@@ -40,7 +40,7 @@ class TestCredits(BalancedHarness):
         r = ach_credit(self.db, self.homer, 0)
         assert r is None
 
-    @mock.patch('gratipay.billing.exchanges.thing_from_href')
+    @mock.patch('liberapay.billing.exchanges.thing_from_href')
     def test_ach_credit_failure(self, tfh):
         tfh.side_effect = Foobar
         self.make_exchange('balanced-cc', 20, 0, self.homer)
@@ -69,7 +69,7 @@ class TestCardHolds(BalancedHarness):
         with self.assertRaises(NotWhitelisted):
             create_card_hold(self.db, bob, D('1.00'))
 
-    @mock.patch('gratipay.billing.exchanges.thing_from_href')
+    @mock.patch('liberapay.billing.exchanges.thing_from_href')
     def test_create_card_hold_failure(self, tfh):
         tfh.side_effect = Foobar
         hold, error = create_card_hold(self.db, self.janet, D('1.00'))
@@ -337,7 +337,7 @@ class TestRecordExchange(Harness):
 class TestSyncWithBalanced(BalancedHarness):
 
     def test_sync_with_balanced(self):
-        with mock.patch('gratipay.billing.exchanges.record_exchange_result') as rer:
+        with mock.patch('liberapay.billing.exchanges.record_exchange_result') as rer:
             rer.side_effect = Foobar()
             hold, error = create_card_hold(self.db, self.janet, D('20.00'))
             assert error == ''  # sanity check
@@ -351,7 +351,7 @@ class TestSyncWithBalanced(BalancedHarness):
         assert Participant.from_username('janet').balance == 10
 
     def test_sync_with_balanced_deletes_charges_that_didnt_happen(self):
-        with mock.patch('gratipay.billing.exchanges.record_exchange_result') as rer \
+        with mock.patch('liberapay.billing.exchanges.record_exchange_result') as rer \
            , mock.patch('balanced.CardHold.capture') as capture:
             rer.side_effect = capture.side_effect = Foobar
             hold, error = create_card_hold(self.db, self.janet, D('33.67'))
@@ -367,8 +367,8 @@ class TestSyncWithBalanced(BalancedHarness):
 
     def test_sync_with_balanced_reverts_credits_that_didnt_happen(self):
         self.make_exchange('balanced-cc', 41, 0, self.homer)
-        with mock.patch('gratipay.billing.exchanges.record_exchange_result') as rer \
-           , mock.patch('gratipay.billing.exchanges.thing_from_href') as tfh:
+        with mock.patch('liberapay.billing.exchanges.record_exchange_result') as rer \
+           , mock.patch('liberapay.billing.exchanges.thing_from_href') as tfh:
             rer.side_effect = tfh.side_effect = Foobar
             with self.assertRaises(Foobar):
                 ach_credit(self.db, self.homer, 0, 0)

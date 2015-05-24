@@ -4,9 +4,9 @@ from decimal import InvalidOperation
 
 from aspen import Response
 from babel.numbers import NumberFormatError
-from gratipay.exceptions import BadAmount, UserDoesntAcceptTips
-from gratipay.models.participant import Participant
-from gratipay.utils import get_participant
+from liberapay.exceptions import BadAmount, UserDoesntAcceptTips
+from liberapay.models.participant import Participant
+from liberapay.utils import get_participant
 
 [-----------------------------------------------------------------------------]
 
@@ -42,8 +42,8 @@ else:
 
     out["amount"] = str(amount)
     out["amount_l"] = format_currency(amount, 'USD')
-    if tippee.username == 'Gratipay':
-        out["msg"] = _("Thank you so much for supporting Gratipay! :D")
+    if tippee.username == 'Liberapay':
+        out["msg"] = _("Thank you so much for supporting Liberapay! :D")
     else:
         out["msg"] = _("Tip changed to {0} per week!", out["amount_l"])
     out["npatrons"] = tippee.npatrons

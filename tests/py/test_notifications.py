@@ -1,4 +1,4 @@
-from gratipay.testing import Harness
+from liberapay.testing import Harness
 
 class TestNotifications(Harness):
 	def test_add_single_notification(self):

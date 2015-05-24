@@ -2,7 +2,7 @@ from __future__ import print_function, unicode_literals
 
 import json
 
-from gratipay.testing import Harness
+from liberapay.testing import Harness
 
 
 class Tests(Harness):

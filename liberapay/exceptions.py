@@ -32,7 +32,7 @@ class ProblemChangingEmail(Response):
         Response.__init__(self, 400, self.msg.format(*args))
 
 class EmailAlreadyTaken(ProblemChangingEmail):
-    msg = "{} is already connected to a different Gratipay account."
+    msg = "{} is already connected to a different Liberapay account."
 
 class CannotRemovePrimaryEmail(ProblemChangingEmail):
     msg = "You cannot remove your primary email address."
@@ -42,14 +42,6 @@ class EmailNotVerified(ProblemChangingEmail):
 
 class TooManyEmailAddresses(ProblemChangingEmail):
     msg = "You've reached the maximum number of email addresses we allow."
-
-
-class ProblemChangingNumber(Exception):
-    def __str__(self):
-        return self.msg
-
-class HasBigTips(ProblemChangingNumber):
-    msg = "You receive tips too large for an individual. Please contact support@gratipay.com."
 
 
 class TooGreedy(Exception): pass

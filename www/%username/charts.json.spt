@@ -15,13 +15,8 @@ could become much more common in a one-off payments world, depending on how the
 implementation.
 
 """
-import re
 
-from aspen import json, Response
-
-
-callback_pattern = re.compile(r'^[_A-Za-z0-9.]+$')
-
+from aspen import Response
 
 [---]
 
@@ -42,8 +37,7 @@ if anonymous:
         raise Response(403)
 
 
-# Fetch data from the database.
-# =============================
+# Fetch data from the database
 
 paydays = website.db.all("""
 
@@ -70,54 +64,26 @@ transfers = website.db.all("""\
 
 
 if not transfers:
-
-    # This user has never received money.
-    # ===================================
-    # Send out an empty array, to trigger no charts.
-
+    # This user has never received money
     paydays = []
 
 
 if paydays:
 
-    # Set up a generator to cursor through paydays.
-    # =============================================
+    paydays_i = iter(paydays)
+    curpayday = next(paydays_i)
+    ts_start = curpayday.pop('ts_start')
 
-    def genpaydays():
-        for payday in paydays:
-            yield payday
-    paydaygen = genpaydays()
-
-    curpayday = next(paydaygen)
-
-
-    # Loop through transfers, advancing payday cursor as appropriate.
-    # ===============================================================
-
+    # Loop through transfers, advancing payday cursor as appropriate
     for transfer in transfers:
-        while transfer['timestamp'] < curpayday['ts_start']:
-            del curpayday['ts_start']   # done with it, don't want it in output
-            curpayday = next(paydaygen)
+        while transfer['timestamp'] < ts_start:
+            curpayday = next(paydays_i)
+            ts_start = curpayday.pop('ts_start')
 
         curpayday['npatrons'] += 1
         curpayday['receipts'] += transfer['amount']
 
-
-# Prepare response.
-# =================
-
 response.headers["Access-Control-Allow-Origin"] = "*"
-out = paydays[:-1]  # don't show Gratipay #0
 
-# JSONP - see https://github.com/gratipay/aspen-python/issues/138
-callback = request.qs.get('callback')
-if callback is not None:
-    if callback_pattern.match(callback) is None:
-        raise Response(400, "bad callback")
-    else:
-        response.body = "%s(%s)" % (callback, json.dumps(out))
-        response.headers['Content-Type'] = 'application/javascript'
-        raise response
-
-[---] application/json via json_dump
-out
+[---] application/json via jsonp_dump
+paydays

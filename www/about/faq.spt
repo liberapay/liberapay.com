@@ -1,188 +1,113 @@
 # encoding: utf8
+from liberapay import MIN_TIP, MAX_TIP
 [---]
-title = _("About")
-subhead = _("Frequently Asked Questions")
+title = _("Frequently Asked Questions")
 [---] text/html
-{% extends "templates/about-basic-info.html" %}
+{% extends "templates/about.html" %}
 {% block content %}
 <div class="row">
-    <dl class="col1">
+<dl class="col1">
 
-        <dt id="what-gratipay">What is Gratipay?</dt>
+    <dt id="what-is-it">{{ _("What is Liberapay?") }}</dt>
 
-        <dd>Gratipay is weekly payments, motivated by gratitude. Gratipay is
-        sustainable funding, with no extra fees and no strings attached.</dd>
+    <dd>{{ _("Liberapay is a recurrent donations platform. It's stable "
+             "crowdfunding, with no intrinsic fees and no strings attached.") }}</dd>
 
 
-        <dt id="who-gratipay">Who is Gratipay?</dt>
+    <dt id="who-is-it">{{ _("Who is Liberapay?") }}</dt>
 
-        <dd>Gratipay is an <a
-            href="http://blog.gittip.com/post/26350459746/the-first-open-company">open
-        company</a> founded by <a href="/whit537/">Chad Whitacre</a> in 2002 as
-        Zeta Web Design Company, renamed to Gittip, LLC in February, 2013, and
-        renamed to Gratipay, LLC in September, 2014. Anyone is welcome to <a
-        href="/for/contributors/">contribute</a> to building Gratipay. You can see the
-        members of the Gratipay team <a href="/Gratipay/members/">here</a>.</dd>
+    <dd>{{ _("Liberapay is a non-profit association founded in 2015 and legally registered in France (well, not yet).") }}
+    {{ _("Anyone is welcome to join {0}the members of the Liberapay team{2} in {1}building Liberapay{2}.",
+         '<a href="/Liberapay/members/">'|safe,
+         '<a href="https://github.com/liberapay/liberapay.com">'|safe,
+         '</a>'|safe) }}</dd>
 
 
-        <dt id="how-funded">How is Gratipay funded?</dt>
+    <dt id="how-funded">{{ _("How is Liberapay funded?") }}</dt>
 
-        <dd>Gratipay is funded <a href="/Gratipay/">on Gratipay</a>. We <a
-            href="/about/#details">charge a fee</a> to cover the things that we
-        ourselves are charged for.</dd>
+    <dd>{{ _("Liberapay is funded {0}on Liberapay{1}.",
+             '<a href="/Liberapay/">'|safe,
+             '</a>'|safe) }}</dd>
 
 
-        <dt id="one-time-gift">Can I make a one-time gift?</dt>
+    <dt id="who-can-use">{{ _("Who can use Liberapay?") }}</dt>
 
-        <dd>No. Gratipay is designed for long-term, sustainable funding, and only
-        supports recurring gifts at this time. We will probably offer one-time
-        gifts in the future; you can join that conversation <a
-            href="https://github.com/gratipay/gratipay.com/issues/5">here</a>.
-        The workaround for now is to change your gift amount back to zero after
-        the first week.</dd>
+    <dd>{{ _("Pretty much anyone who has a bank account (to receive) and a "
+             "credit card (to give) that are usable internationally. Please "
+             "note that banking fees can vary based on your country and the "
+             "currency of the transaction.") }}</dd>
 
 
-        <dt id="not-in-us">I'm not in the U.S., can I still use Gratipay?</dt>
+    <dt id="one-time-gift">{{ _("Can I make a one-time donation?") }}</dt>
 
-        <dd>Yes, but moving funds takes more time and the fees are higher.</dd>
+    <dd>{{ _("Liberapay is designed for long-term stable funding and only supports recurring gifts.") }}</dd>
 
 
-        <dt id="how-add-funds">How do I add funds to Gratipay?</dt>
+    <dt id="how-add-funds">{{ _("How do I add funds to Liberapay?") }}</dt>
 
-        <dd>There are two ways to add funds to Gratipay:
+    <dd><a href="/about/me/routes/credit-card.html">{{ _("Connect a credit card") }}</a></dd>
 
-        <ol>
 
-            <li><a href="/about/me/routes/credit-card.html">Connect a credit card</a>. We will
-            charge you every Thursday to fund the gifts you have set up ($10
-            minimum; we upcharge to cover a processing fee of 2.9% + 30&cent;;
-            expect additional fees from non-U.S. banks).</li>
+    <dt id="how-withdraw-funds">{{ _("How do I withdraw funds from Liberapay?") }}</dt>
 
-            <li><a
-                href="mailto:support@gratipay.com?subject=bitcoin%20payin">Email
-            us</a> to request a one-time bitcoin payin (1% + 15&cent;
-            fee).</li>
+    <dd><a href="/about/me/routes/bank-account.html">{{ _("Connect a bank account") }}</a></dd>
 
-        </ol>
 
-        </dd>
+    <dt id="taxable">{{ _("Do I have to pay taxes on the income I receive from Liberapay?") }}</dt>
 
+    <dd>{{ _("We don't know, it's up to you to figure out your country's tax rules.") }}</dd>
 
-        <dt id="how-withdraw-funds">How do I withdraw funds from Gratipay?</dt>
 
-        <dd>There are three ways to withdraw funds from Gratipay:
+    <dt id="tax-deductible">{{ _("Are donations through Liberapay tax-deductible?") }}</dt>
 
-        <ol>
+    <dd>{{ _("Probably not, but it depends on the tax rules of your country.") }}</dd>
 
-            <li><a href="/about/me/routes/bank-account.html">Connect a
-                bank account</a>. Funds will be deposited every Friday ($10 minimum; no fee;
-            U.S.-only).</li>
+</dl>
+<dl class="col1">
 
-            <li><a
-                href="mailto:support@gratipay.com?subject=configuring%20PayPal">Email
-            us</a> to set up a weekly PayPal payout (unlimited payout; 2% fee capped at
-            $20).</li>
+    <dt id="receipts-decrease">{{ _("Why did my receipts decrease?") }}</dt>
 
-            <li><a
-                href="mailto:support@gratipay.com?subject=bitcoin%20payout">Email
-            us</a> to request a one-time bitcoin payout (1% + 15&cent;
-            fee).</li>
+    <dd>{{ _("If your income decreased, one of the following happened:") }}
 
-        </ol>
+      <ol>
+        <li>{{ _("A donor to you intentionally decreased or zeroed their donation "
+                 "to you, or their account was closed or blacklisted.") }}</li>
 
-        </dd>
+        <li>{{ _("A donor to you had insufficient funds in their Liberapay wallet "
+                 "to fund their donation to you, and pulling money from their credit "
+                 "card failed.") }}</li>
 
+        <li>{{ _("Your account has been blacklisted for legal reasons.") }}</li>
 
-        <dt id="taxable">Do I have to pay taxes on the income I receive from Gratipay?</dt>
+      </ol>
+    </dd>
 
-        <dd>We can't offer blanket legal advice on that, sorry. You'll have to
-        talk to a lawyer.</dd>
+    <dt id="maximum-amount">{{ _("Is there a minimum or maximum amount I can give or receive?") }}</dt>
 
+    <dd>{{ _(
+        "There are no restrictions on the total amount you can give or receive, "
+        "but for legal reasons you will need to provide identity documents if "
+        "you give or receive a significant amount of money per year."
+    ) }}</dd>
 
-        <dt id="tax-deductible">Are gifts I give through Gratipay tax-deductible?</dt>
+    <dd>{{ _(
+        "The minimum you can give any user is {0}. To minimize processing fees, "
+        "we charge your credit card at least {1} at a time (the money that isn't "
+        "donated immediately is stored in your Liberapay wallet)."
+        , format_currency(MIN_TIP, 'USD'), format_currency(10, 'USD')
+    ) }}</dd>
 
-        <dd>No.</dd>
-    </dl>
-    <dl class="col1">
+    <dd>{{ _(
+        "The maximum you can give any one user is {0} per week. This helps to "
+        "stabilize income by reducing how dependent it is on a few large patrons."
+        , format_currency(MAX_TIP, 'USD')
+    ) }}</dd>
 
-        <dt id="why-did-my-receipts-decrease">Why did my receipts decrease?</dt>
 
-        <dd>We know that it can be disappointing for your donations received
-          weekly to decrease, for any reason at all. Gratipay itself will never
-          halt donations to you without first contacting you about our <a
-          href="https://gratipay.com/about/terms/">terms of use</a>, unless
-          required to do so by law. If your donations decreased, one of the
-          following happened, ordered by decreasing likelihood:
+    <dt id="close-account">{{ _("How do I close my account?") }}</dt>
 
-          <ol>
-            <li>A donor to you manually decreased or entirely removed their
-              donation to you, or their Gratipay account was closed. As Gratipay
-              gifts are anonymous, we cannot tell you who.</li>
+    <dd><a href="/about/me/settings/close">{{ _("Close account") }}</a></dd>
 
-            <li>A donor to you had insufficient funds in their Gratipay balance
-              to satisfy their pledges, and their credit card, if configured,
-              was unable to be charged. It will be reattempted the following
-              week.</li>
-
-            <li>You have violated our <a
-             href="https://gratipay.com/about/terms/">terms of use</a>. We will
-             have contacted you before terminating your account.</li>
-
-            <li>We received a legal document ordering Gratipay to cease
-             donations to you. We will contact you unless prohibited by court
-             order.</li>
-
-          </ol>
-        </dd>
-
-        <dt id="maximum-amount">Is there a minimum or maximum amount I can give or receive?</dt>
-
-        <dd>There are no restrictions on the total amount you can give
-        or receive.</dd>
-
-        <dd>The minimum you can give any one person is 1¢ per week. To minimize
-        processing fees, we charge your credit card at least $10 at a time
-        (anything extra stays in Gratipay to use in future weeks).</dd>
-
-        <dd>The maximum you can give any one person is $100 per week. The max
-        you can give any one company or organization is $1,000 per week. This
-        helps reduce volatility by reducing how dependent income is on a few
-        large patrons.</dd>
-
-
-        <dt id="support-organizations">Can I use Gratipay to support organizations?</dt>
-
-        <dd>Yes. Some accounts on Gratipay represent organizations.</dd>
-
-
-        <dt id="whats-point-of-communities">What's the point of communities?</dt>
-
-        <dd><a href="/for/">Communities</a> let you identify with groups
-        of people that share your interests, such as <a href="/for/python/">
-        programming languages</a> and <a href="/for/korea/">geographical
-        regions</a>.
-
-
-        <dt id="how-know-right-person">How do I know my gifts are being received by the right person?</dt>
-
-        <dd>You can follow links to Gratipay from a trusted source like a person
-        or organization's website. Also, Twitter verifies accounts in instances
-        where this is particularly relevant, so check their Twitter account
-        carefully if it's linked.</dd>
-
-
-        <dt id="dont-want-gifts">I don't want to receive gifts, I just want to give them. What should
-        I do?</dt>
-
-        <dd>Please select &ldquo;I'm here as a patron, and politely decline to
-        receive gifts.&rdquo; as your personal funding goal. We won't show gift
-        buttons to others on your profile.</dd>
-
-
-        <dt id="close-account">How do I close my account?</dt>
-
-        <dd><a href="/about/me/settings/close">Close account</a></dd>
-
-    </dl>
+</dl>
 </div>
 {% endblock %}

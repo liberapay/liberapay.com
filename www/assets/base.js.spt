@@ -1,0 +1,14 @@
+import os
+js_root = os.path.join(website.project_root, 'js')
+[---]
+catted = []
+for filename in sorted(os.listdir(js_root)):
+    if filename.endswith('.js'):
+        catted.append('/' + ('*'*70) + '/')
+        catted.append('/*' + filename.center(68) + '*/')
+        catted.append('/' + ('*'*70) + '/' + '\n')
+        with open(os.path.join(js_root, filename), 'rb') as f:
+            catted.append(f.read())
+js = "\n".join(catted)
+[---] via stdlib_format
+{js}

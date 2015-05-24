@@ -3,8 +3,8 @@ from __future__ import unicode_literals
 import json
 
 from aspen.utils import utcnow
-from gratipay.models.community import Community
-from gratipay.testing import Harness
+from liberapay.models.community import Community
+from liberapay.testing import Harness
 
 class TestCommunitiesJson(Harness):
 

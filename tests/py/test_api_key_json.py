@@ -3,8 +3,8 @@ from __future__ import print_function, unicode_literals
 import json
 import itertools
 
-from gratipay.models.participant import Participant
-from gratipay.testing import Harness
+from liberapay.models.participant import Participant
+from liberapay.testing import Harness
 
 
 class Tests(Harness):

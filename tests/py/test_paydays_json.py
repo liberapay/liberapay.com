@@ -2,8 +2,8 @@ from __future__ import unicode_literals
 
 import json
 
-from gratipay.billing.payday import Payday
-from gratipay.testing import Harness
+from liberapay.billing.payday import Payday
+from liberapay.testing import Harness
 
 
 class Tests(Harness):

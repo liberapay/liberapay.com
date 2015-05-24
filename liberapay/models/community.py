@@ -40,8 +40,6 @@ def get_list_for(db, participant_id):
         """, (participant_id,))
 
 class Community(Model):
-    """Model a community on Gratipay.
-    """
 
     typname = "communities"
 

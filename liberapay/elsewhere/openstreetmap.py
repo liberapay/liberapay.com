@@ -1,7 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from gratipay.elsewhere import PlatformOAuth1
-from gratipay.elsewhere._extractors import not_available, xpath
+from liberapay.elsewhere import PlatformOAuth1
+from liberapay.elsewhere._extractors import not_available, xpath
 
 
 class OpenStreetMap(PlatformOAuth1):

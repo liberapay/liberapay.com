@@ -13,45 +13,45 @@ from babel.core import Locale
 from babel.messages.pofile import read_po
 from babel.numbers import parse_pattern
 import balanced
-import gratipay
-import gratipay.billing.payday
+import liberapay
+import liberapay.billing.payday
 import raven
 import mandrill
 from environment import Environment, is_yesish
-from gratipay.elsewhere import PlatformRegistry
-from gratipay.elsewhere.bitbucket import Bitbucket
-from gratipay.elsewhere.bountysource import Bountysource
-from gratipay.elsewhere.github import GitHub
-from gratipay.elsewhere.facebook import Facebook
-from gratipay.elsewhere.google import Google
-from gratipay.elsewhere.openstreetmap import OpenStreetMap
-from gratipay.elsewhere.twitter import Twitter
-from gratipay.elsewhere.venmo import Venmo
-from gratipay.models.account_elsewhere import AccountElsewhere
-from gratipay.models.community import Community
-from gratipay.models.exchange_route import ExchangeRoute
-from gratipay.models.participant import Participant
-from gratipay.models import GratipayDB
-from gratipay.utils.emails import compile_email_spt
-from gratipay.utils.http_caching import asset_etag
-from gratipay.utils.i18n import (
+from liberapay.elsewhere import PlatformRegistry
+from liberapay.elsewhere.bitbucket import Bitbucket
+from liberapay.elsewhere.bountysource import Bountysource
+from liberapay.elsewhere.github import GitHub
+from liberapay.elsewhere.facebook import Facebook
+from liberapay.elsewhere.google import Google
+from liberapay.elsewhere.openstreetmap import OpenStreetMap
+from liberapay.elsewhere.twitter import Twitter
+from liberapay.elsewhere.venmo import Venmo
+from liberapay.models.account_elsewhere import AccountElsewhere
+from liberapay.models.community import Community
+from liberapay.models.exchange_route import ExchangeRoute
+from liberapay.models.participant import Participant
+from liberapay.models import DB
+from liberapay.utils.emails import compile_email_spt
+from liberapay.utils.http_caching import asset_etag
+from liberapay.utils.i18n import (
     ALIASES, ALIASES_R, COUNTRIES, LANGUAGES_2, LOCALES,
     get_function_from_rule, make_sorted_dict
 )
 
 def canonical(env):
-    gratipay.canonical_scheme = env.canonical_scheme
-    gratipay.canonical_host = env.canonical_host
+    liberapay.canonical_scheme = env.canonical_scheme
+    liberapay.canonical_host = env.canonical_host
 
 
 def db(env):
     dburl = env.database_url
     maxconn = env.database_maxconn
-    db = GratipayDB(dburl, maxconn=maxconn)
+    db = DB(dburl, maxconn=maxconn)
 
     for model in (AccountElsewhere, Community, ExchangeRoute, Participant):
         db.register_model(model)
-    gratipay.billing.payday.Payday.db = db
+    liberapay.billing.payday.Payday.db = db
 
     return db
 
@@ -70,7 +70,7 @@ def billing(env):
 
 
 def username_restrictions(website):
-    gratipay.RESTRICTED_USERNAMES = os.listdir(website.www_root)
+    liberapay.RESTRICTED_USERNAMES = os.listdir(website.www_root)
 
 
 def make_sentry_teller(env):
@@ -95,7 +95,7 @@ def make_sentry_teller(env):
                 # Only log server errors to Sentry. For responses < 500 we use
                 # stream-/line-based access logging. See discussion on:
 
-                # https://github.com/gratipay/gratipay.com/pull/1560.
+                # https://github.com/liberapay/liberapay.com/pull/1560.
 
                 return
 
@@ -130,7 +130,7 @@ def make_sentry_teller(env):
                                , 'is_admin': user.participant.is_admin
                                , 'is_suspicious': user.participant.is_suspicious
                                , 'claimed_time': user.participant.claimed_time.isoformat()
-                               , 'url': 'https://gratipay.com/{}/'.format(username)
+                               , 'url': 'https://liberapay.com/{}/'.format(username)
                                 }
 
 
@@ -310,10 +310,7 @@ def load_i18n(project_root, tell_sentry):
 
 
 def other_stuff(website, env):
-    website.cache_static = env.gratipay_cache_static
-    website.compress_assets = env.gratipay_compress_assets
-
-    if website.cache_static:
+    if env.cache_static:
         def asset(path):
             fspath = website.www_root+'/assets/'+path
             etag = ''
@@ -321,15 +318,12 @@ def other_stuff(website, env):
                 etag = asset_etag(fspath)
             except Exception as e:
                 website.tell_sentry(e, {})
-            return env.gratipay_asset_url+path+(etag and '?etag='+etag)
+            return env.asset_url+path+(etag and '?etag='+etag)
         website.asset = asset
         compile_assets(website)
     else:
-        website.asset = lambda path: env.gratipay_asset_url+path
+        website.asset = lambda path: env.asset_url+path
         clean_assets(website.www_root)
-
-    website.optimizely_id = env.optimizely_id
-    website.include_piwik = env.include_piwik
 
     website.log_metrics = env.log_metrics
 
@@ -340,9 +334,9 @@ def env():
         CANONICAL_HOST                  = unicode,
         CANONICAL_SCHEME                = unicode,
         DATABASE_MAXCONN                = int,
-        GRATIPAY_ASSET_URL              = unicode,
-        GRATIPAY_CACHE_STATIC           = is_yesish,
-        GRATIPAY_COMPRESS_ASSETS        = is_yesish,
+        ASSET_URL                       = unicode,
+        CACHE_STATIC                    = is_yesish,
+        COMPRESS_ASSETS                 = is_yesish,
         BALANCED_API_SECRET             = unicode,
         GITHUB_CLIENT_ID                = unicode,
         GITHUB_CLIENT_SECRET            = unicode,
@@ -374,10 +368,8 @@ def env():
         UPDATE_GLOBAL_STATS_EVERY       = int,
         CHECK_DB_EVERY                  = int,
         DEQUEUE_EMAILS_EVERY            = int,
-        OPTIMIZELY_ID                   = unicode,
         SENTRY_DSN                      = unicode,
         LOG_METRICS                     = is_yesish,
-        INCLUDE_PIWIK                   = is_yesish,
         MANDRILL_KEY                    = unicode,
         RAISE_SIGNIN_NOTIFICATIONS      = is_yesish,
 
@@ -391,43 +383,24 @@ def env():
     # ==============
 
     if env.malformed:
-        these = len(env.malformed) != 1 and 'these' or 'this'
         plural = len(env.malformed) != 1 and 's' or ''
         aspen.log_dammit("=" * 42)
-        aspen.log_dammit( "Oh no! Gratipay.com couldn't understand %s " % these
-                        , "environment variable%s:" % plural
-                         )
+        aspen.log_dammit("Malformed environment variable%s:" % plural)
         aspen.log_dammit(" ")
         for key, err in env.malformed:
             aspen.log_dammit("  {} ({})".format(key, err))
-        aspen.log_dammit(" ")
-        aspen.log_dammit("See ./default_local.env for hints.")
 
-        aspen.log_dammit("=" * 42)
         keys = ', '.join([key for key in env.malformed])
         raise BadEnvironment("Malformed envvar{}: {}.".format(plural, keys))
 
     if env.missing:
-        these = len(env.missing) != 1 and 'these' or 'this'
         plural = len(env.missing) != 1 and 's' or ''
         aspen.log_dammit("=" * 42)
-        aspen.log_dammit( "Oh no! Gratipay.com needs %s missing " % these
-                        , "environment variable%s:" % plural
-                         )
+        aspen.log_dammit("Missing environment variable%s:" % plural)
         aspen.log_dammit(" ")
         for key in env.missing:
             aspen.log_dammit("  " + key)
-        aspen.log_dammit(" ")
-        aspen.log_dammit( "(Sorry, we must've started looking for "
-                        , "%s since you last updated Gratipay!)" % these
-                         )
-        aspen.log_dammit(" ")
-        aspen.log_dammit("Running Gratipay locally? Edit ./local.env.")
-        aspen.log_dammit("Running the test suite? Edit ./tests/env.")
-        aspen.log_dammit(" ")
-        aspen.log_dammit("See ./default_local.env for hints.")
 
-        aspen.log_dammit("=" * 42)
         keys = ', '.join([key for key in env.missing])
         raise BadEnvironment("Missing envvar{}: {}.".format(plural, keys))
 

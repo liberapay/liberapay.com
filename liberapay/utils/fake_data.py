@@ -7,11 +7,11 @@ import sys
 from faker import Factory
 from psycopg2 import IntegrityError
 
-from gratipay import wireup, MAX_TIP_SINGULAR, MIN_TIP
-from gratipay.elsewhere import PLATFORMS
-from gratipay.models.participant import Participant
-from gratipay.models import community
-from gratipay.models import check_db
+from liberapay import wireup, MAX_TIP, MIN_TIP
+from liberapay.elsewhere import PLATFORMS
+from liberapay.models.participant import Participant
+from liberapay.models import community
+from liberapay.models import check_db
 
 faker = Factory.create()
 
@@ -88,8 +88,7 @@ def fake_community(db, creator):
 
 
 def fake_tip_amount():
-    amount = ((D(random.random()) * (MAX_TIP_SINGULAR - MIN_TIP))
-            + MIN_TIP)
+    amount = (D(random.random()) * (MAX_TIP - MIN_TIP) + MIN_TIP)
 
     decimal_amount = D(amount).quantize(D('.01'))
     while decimal_amount == D('0.00'):

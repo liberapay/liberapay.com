@@ -1,17 +1,11 @@
-"""JSON endpoint for a Gratipay widget.
-"""
-import re
-
-from aspen import json
-from aspen import Response
-from urllib import urlencode
 from base64 import b64decode, b64encode
+from urllib import urlencode
 
-from gratipay.models.account_elsewhere import get_account_elsewhere
+from aspen import Response
+
+from liberapay.models.account_elsewhere import get_account_elsewhere
 
 whitelisted_endpoints = ['public', 'charts']
-
-callback_pattern = re.compile(r'^[_A-Za-z0-9.]+$')
 
 
 def stringify_qs(qs, prefix='?'):
@@ -67,18 +61,7 @@ if not user.ANON:
     out["my_tip"] = str(my_tip)
 
 
-# CORS - see https://github.com/gratipay/aspen-python/issues/138
 response.headers["Access-Control-Allow-Origin"] = "*"
 
-# JSONP - see https://github.com/gratipay/aspen-python/issues/138
-callback = request.qs.get('callback')
-if callback is not None:
-    if callback_pattern.match(callback) is None:
-        raise Response(400, "bad callback")
-    else:
-        response.body = "%s(%s)" % (callback, json.dumps(out))
-        response.headers['Content-Type'] = 'application/javascript'
-        raise response
-
-[---] application/json via json_dump
+[---] application/json via jsonp_dump
 out

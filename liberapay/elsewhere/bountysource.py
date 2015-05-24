@@ -10,8 +10,8 @@ from urlparse import parse_qs, urlparse
 import requests
 
 from aspen import Response
-from gratipay.elsewhere import Platform
-from gratipay.elsewhere._extractors import key, not_available
+from liberapay.elsewhere import Platform
+from liberapay.elsewhere._extractors import key, not_available
 
 
 class Bountysource(Platform):
@@ -49,7 +49,7 @@ class Bountysource(Platform):
             redirect_url=self.callback_url+'?query_id='+query_id,
             external_access_token=token
         )
-        url = self.auth_url+'/auth/gratipay/confirm?'+urlencode(params)
+        url = self.auth_url+'/auth/liberapay/confirm?'+urlencode(params)
         return url, query_id, ''
 
     def get_query_id(self, querystring):

@@ -1,1 +1,1 @@
-web: gunicorn gratipay.main:website --bind :$PORT $GUNICORN_OPTS
+web: gunicorn liberapay.main:website --bind :$PORT $GUNICORN_OPTS

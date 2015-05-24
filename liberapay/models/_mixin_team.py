@@ -1,4 +1,4 @@
-"""Teams on Gratipay are plural participants with members.
+"""Teams are plural participants with members.
 """
 from collections import OrderedDict
 from decimal import Decimal
@@ -8,19 +8,11 @@ from aspen.utils import typecheck
 
 class MemberLimitReached(Exception): pass
 
+
 class StubParticipantAdded(Exception): pass
 
+
 class MixinTeam(object):
-    """This class provides methods for working with a Participant as a Team.
-
-    :param Participant participant: the underlying :py:class:`~gratipay.participant.Participant` object for this team
-
-    """
-
-    # XXX These were all written with the ORM and need to be converted.
-
-    def __init__(self, participant):
-        self.participant = participant
 
     def show_as_team(self, user):
         """Return a boolean, whether to show this participant as a team.
@@ -112,8 +104,8 @@ class MixinTeam(object):
         assert self.IS_PLURAL
 
         # lazy import to avoid circular import
-        from gratipay.security.user import User
-        from gratipay.models.participant import Participant
+        from liberapay.security.user import User
+        from liberapay.models.participant import Participant
 
         typecheck( member, Participant
                  , take, Decimal

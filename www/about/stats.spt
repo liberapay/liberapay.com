@@ -1,26 +1,10 @@
-from __future__ import print_function
-from __future__ import unicode_literals
+from __future__ import division, print_function, unicode_literals
 
-import datetime
-import locale
-from aspen import json
-from gratipay import age
-
-CARDINALS = ["zero", "one", "two", "three", "four", "five", "six", "seven",
-             "eight", "nine"]
-WEDNESDAY = 2
-THURSDAY = 3
-FRIDAY = 4
-SATURDAY = 5
-
-def commaize(number, places=0):
-    return locale.format("%%.%df" % places, number, grouping=True)
+from liberapay import BIRTHDAY
 
 [--------------------------------------------------------]
 
-title = _("About")
-subhead = _("Stats")
-yesterday = datetime.datetime.utcnow() - datetime.timedelta(hours=24)
+title = _("Stats")
 db = website.db
 escrow = db.one("SELECT sum(balance) FROM participants", default=0)
 nach = db.one("""
@@ -31,13 +15,6 @@ nach = db.one("""
        AND r.error = ''
        AND p.is_suspicious IS NOT true
 """)
-if nach < 10:
-    nach = CARDINALS[nach].title()
-else:
-    nach = commaize(nach)
-payday = db.one( "SELECT ts_start, ts_end FROM paydays WHERE ts_start > %s"
-               , (yesterday,)
-                )
 npeople = db.one("SELECT count(*) FROM participants WHERE claimed_time IS NOT NULL AND is_suspicious IS NOT true")
 ncc = db.one("""
     SELECT count(*)
@@ -47,7 +24,7 @@ ncc = db.one("""
        AND r.error = ''
        AND p.is_suspicious IS NOT true
 """)
-pcc = "%5.1f" % ((ncc * 100.0) / npeople) if npeople > 0 else 0.0
+pcc = ((ncc * 100.0) / npeople) if npeople > 0 else 0.0
 transfer_volume = db.one("SELECT transfer_volume FROM paydays ORDER BY ts_end DESC LIMIT 1", default=0)
 tips_stats = db.one("""
     SELECT count(*), avg(amount), sum(amount)
@@ -78,17 +55,6 @@ average_tippees = int(db.one("""\
            GROUP BY tipper
            ) AS bar
 """, default=0))
-
-word = "people"
-if average_tippees == 1:
-    word = "person"
-
-if average_tippees < 10:
-    number = CARDINALS[average_tippees]
-else:
-    number = str(average_tippees)
-
-other_people = "%s other %s" % (number, word)
 
 TIP_DISTRIBUTION = """
     SELECT amount, count(amount)
@@ -129,40 +95,9 @@ else:
     nactive = ngivers = nreceivers = noverlap = 0
 
 
-# Adapt wording to payday status.
-# ===============================
-
-now = datetime.datetime.utcnow()
-last_thursday = "last Thursday"
-this_thursday = "this Thursday"
-punc = "."
-future_processing_text = "is ready for"
-if now.weekday() == WEDNESDAY:
-    this_thursday = "tomorrow"
-if now.weekday() == THURSDAY:
-    if payday is None or payday.ts_end is None:
-        # Payday hasn't started yet.
-        this_thursday = "today"
-    elif payday.ts_end.year == 1970:
-        # Payday is going on right now.
-        future_processing_text = "is changing hands"
-        this_thursday = "right now!"
-        punc = ""
-    else:
-        # Payday is finished for today.
-        last_thursday = "today"
-        this_thursday = "next Thursday"
-elif now.weekday() == FRIDAY:
-    last_thursday = "yesterday"
-    this_thursday = "next Thursday"
-elif now.weekday() == SATURDAY:
-    last_thursday = "this past Thursday"
-    this_thursday = "this coming Thursday"
-
 def out():
-    names = ['ncc', 'pcc', 'transfer_volume', 'last_thursday',
-             'this_thursday', 'punc', 'other_people', 'average_tip',
-             'average_tippees', 'total_backed_tips', 'tip_n', 'nach', 'escrow',
+    names = ['ncc', 'pcc', 'transfer_volume', 'average_tip', 'average_tippees',
+             'total_backed_tips', 'tip_n', 'nach', 'escrow',
              'ngivers', 'nreceivers', 'noverlap', 'nactive']
     d = globals()
     r = {name: d[name] for name in names}
@@ -171,120 +106,87 @@ def out():
 
 [----------------------------------------------------------] text/html
 
-{% extends "templates/about-basic-info.html" %}
+{% extends "templates/about.html" %}
 
 {% block scripts %}
 <script>
-    jQuery.get('/about/charts.json', Gratipay.charts.make);
-    jQuery.get('/about/tip-distribution.json', Gratipay.charts.make);
+    jQuery.get('/about/charts.json', Liberapay.charts.make);
 </script>
 {{ super() }}
 {% endblock %}
 
 {% block content %}
 
-    <p>Gratipay is <b>{{ age() }}</b> old and has <b>{{ nactive }} active
-    users</b>.</p>
+    <p>{{ _("Liberapay is {0} old and has {1} active users.", to_age(BIRTHDAY), nactive) }}</p>
 
     <p>
-        {{ ngivers }} participants gave money in the past week.<br />
-        {{ nreceivers }} received money.<br />
-        {{ noverlap }} did both.
+        {{ _("{0} participants gave money in the past week.", ngivers) }}<br />
+        {{ _("{0} received money.", nreceivers) }}<br />
+        {{ _("{0} did both.", noverlap) }}
     </p>
 
-    <p><b>{{ commaize(npeople) }} people</b> have joined Gratipay. Of those,
-    {{ pcc }}% ({{ commaize(ncc) }}) have a working credit card on
-    file.{% if not user.ANON and user.participant.get_credit_card_error() == '' %}
-    You're one of them.{% elif not user.ANON %} You're not one of them.</p>
+    <p>{{ _("{0} people have joined Liberapay. Of those, {1}% ({2}) have a working credit card on file.",
+            npeople, pcc, ncc) }}</p>
 
-    <p><b><a href="/about/me/routes/credit-card.html" class="highlight">Click
-        here to set up a credit card</a></b>.{% endif %}</p>
+    <p>{{ _("{0} is escrowed within Liberapay. {1} people have connected a bank account for withdrawals.",
+            format_currency(escrow, 'USD'), nach) }}</p>
 
-    <p><b>${{ commaize(escrow, 2) }}</b> is escrowed within Gratipay.
-    {{ nach }} people have connected a bank account</a> for withdrawals.
-    {% if not user.ANON and user.participant.get_bank_account_error() == '' %}You're one of them.
-    {% elif not user.ANON %}You're not one of them.</p>
+    {% if last_payday %}
+    <p>{{ _("{0} changed hands {1}.", format_currency(transfer_volume, 'USD'),
+            to_age(last_payday.ts_start)) }}</p>
+    {% endif %}
 
-    <p><b><a href="/about/me/routes/bank-account.html" class="highlight">Click
-        here to connect a bank account</a></b>.{% endif %}</p>
-
-    <p><b>${{ commaize(transfer_volume, 2) }}</b> changed hands
-        <b>{{ last_thursday }}</b>.</p>
-
-    <p><b>${{ commaize(total_backed_tips, 2) }}</b>
-        {{ future_processing_text }} <b>{{ this_thursday }}</b>{{ punc }}
-    </p>
-    <p>On average, people who tip, tip ${{ "%.2f" % average_tip }} each to
-    {{ other_people }}. </p>
+    <p>{{ ngettext("On average, people who give, give {0} each to one other user",
+                   "On average, people who give, give {0} each to {n} other users",
+                   average_tippees, format_currency(average_tip, 'USD')) }}</p>
 
     <div class="two-column">
         <div class="chart-wrapper">
             <a name="users"></a>
-            <h2>Total Users</h2>
-            <p class="note">Anyone who's ever created an account on Gratipay</p>
+            <h2>{{ _("Total Users") }}</h2>
+            <p class="note">{{ _("Anyone who's ever created an account on Liberapay") }}</p>
             <div class="chart" data-chart="total_users"></div>
-            <div class="x-axis">weeks</div>
+            <div class="x-axis">{{ _("weeks") }}</div>
         </div>
 
         <div class="chart-wrapper">
             <a name="active"></a>
-            <h2>Active Users</h2>
-            <p class="note">Users that gave and/or received money within Gratipay (per week)</p>
+            <h2>{{ _("Active Users") }}</h2>
+            <p class="note">{{ _("Users that gave and/or received money within Liberapay (per week)") }}</p>
             <div class="chart" data-chart="active_users"></div>
-            <div class="x-axis">weeks</div>
+            <div class="x-axis">{{ _("weeks") }}</div>
         </div>
 
         <div class="chart-wrapper">
             <a name="cumulative-gifts"></a>
-            <h2>Total Gifts ($)</h2>
-            <p class="note">Money transferred within Gratipay (cumulative)</p>
+            <h2>{{ _("Total Gifts ($)") }}</h2>
+            <p class="note">{{ _("Money transferred within Liberapay (cumulative)") }}</p>
             <div class="chart" data-chart="total_gifts"></div>
-            <div class="x-axis">weeks</div>
+            <div class="x-axis">{{ _("weeks") }}</div>
         </div>
 
         <div class="chart-wrapper">
             <a name="gifts"></a>
-            <h2>Weekly Gifts ($)</h2>
-            <p class="note">Money transferred within Gratipay (per week)</p>
+            <h2>{{ _("Weekly Gifts ($)") }}</h2>
+            <p class="note">{{ _("Money transferred within Liberapay (per week)") }}</p>
             <div class="chart" data-chart="weekly_gifts"></div>
-            <div class="x-axis">weeks</div>
+            <div class="x-axis">{{ _("weeks") }}</div>
         </div>
 
         <div class="chart-wrapper newline">
             <a name="charges"></a>
-            <h2>Charges ($)</h2>
-            <p class="note">Money moved into Gratipay via credit card<br /> (minimum
-            charge <a
-                href="http://blog.gittip.com/post/28158537529/why-were-you-charged-10">upped</a>
-            to $10 in week 8)</p>
+            <h2>{{ _("Charges ($)") }}</h2>
+            <p class="note">{{ _("Money moved into Liberapay via credit card") }}</p>
             <div class="chart" data-chart="charges"></div>
-            <div class="x-axis">weeks</div>
+            <div class="x-axis">{{ _("weeks") }}</div>
         </div>
 
         <div class="chart-wrapper">
             <a name="withdrawals"></a>
-            <h2>Withdrawals ($)</h2>
-
-            <p class="note">Money withdrawn from Gratipay to a bank account<br />(feature <a
-                href="http://blog.gittip.com/post/30116848405/with-payouts-gittip-is-minimally-viable">added</a>
-            in week 12)</p>
-
+            <h2>{{ _("Withdrawals ($)") }}</h2>
+            <p class="note">{{ _("Money withdrawn from Liberapay to a bank account") }}</p>
             <div class="chart" data-chart="withdrawals"></div>
-            <div class="x-axis">weeks</div>
-        </div>
-
-        <div class="chart-wrapper">
-            <a name="number-by-amount"></a>
-            <h2>Number of Tips by Amount</h2>
-            <div class="chart" data-chart="ntips"></div>
-            <div class="x-axis">tip amount ($)</div>
-        </div>
-
-        <div class="chart-wrapper">
-            <a name="sum-by-amount"></a>
-            <h2>Sum of Tips by Amount ($)</h2>
-            <div class="chart" data-chart="sum"></div>
-            <div class="x-axis">tip amount ($)</div>
+            <div class="x-axis">{{ _("weeks") }}</div>
         </div>
     </div>
 

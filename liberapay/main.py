@@ -2,15 +2,12 @@ from __future__ import division
 
 import base64
 
-import gratipay
-import gratipay.wireup
-from gratipay import canonize, utils
-from gratipay.cron import Cron
-from gratipay.models.participant import Participant
-from gratipay.security import authentication, csrf, x_frame_options
-from gratipay.utils import erase_cookie, http_caching, i18n, set_cookie, timer
-from gratipay.version import get_version
-from gratipay.renderers import csv_dump, jinja2_htmlescaped
+from liberapay import canonize, utils, wireup
+from liberapay.cron import Cron
+from liberapay.models.participant import Participant
+from liberapay.security import authentication, csrf, x_frame_options
+from liberapay.utils import erase_cookie, http_caching, i18n, set_cookie, timer
+from liberapay.renderers import csv_dump, jinja2_htmlescaped
 
 import aspen
 from aspen.website import Website
@@ -49,28 +46,17 @@ website.renderer_factories['jinja2'].Renderer.global_context = {
 # Wireup Algorithm
 # ================
 
-exc = None
-try:
-    website.version = get_version()
-except Exception, e:
-    exc = e
-    website.version = 'x'
-
-
-env = website.env = gratipay.wireup.env()
-tell_sentry = website.tell_sentry = gratipay.wireup.make_sentry_teller(env)
-gratipay.wireup.canonical(env)
-website.db = gratipay.wireup.db(env)
-website.mailer = gratipay.wireup.mail(env, website.project_root)
-gratipay.wireup.billing(env)
-gratipay.wireup.username_restrictions(website)
-gratipay.wireup.load_i18n(website.project_root, tell_sentry)
-gratipay.wireup.other_stuff(website, env)
-gratipay.wireup.accounts_elsewhere(website, env)
-gratipay.wireup.cryptocoin_networks(website)
-
-if exc:
-    tell_sentry(exc, {})
+env = website.env = wireup.env()
+tell_sentry = website.tell_sentry = wireup.make_sentry_teller(env)
+wireup.canonical(env)
+website.db = wireup.db(env)
+website.mailer = wireup.mail(env, website.project_root)
+wireup.billing(env)
+wireup.username_restrictions(website)
+wireup.load_i18n(website.project_root, tell_sentry)
+wireup.other_stuff(website, env)
+wireup.accounts_elsewhere(website, env)
+wireup.cryptocoin_networks(website)
 
 
 # Periodic jobs
@@ -102,8 +88,8 @@ algorithm.functions = [
 
     algorithm['dispatch_request_to_filesystem'],
 
-    http_caching.get_etag_for_file if website.cache_static else noop,
-    http_caching.try_to_serve_304 if website.cache_static else noop,
+    http_caching.get_etag_for_file if env.cache_static else noop,
+    http_caching.try_to_serve_304 if env.cache_static else noop,
 
     algorithm['apply_typecasters_to_path'],
     algorithm['get_resource_for_request'],
@@ -113,7 +99,6 @@ algorithm.functions = [
     tell_sentry,
     algorithm['get_response_for_exception'],
 
-    gratipay.set_version_header,
     authentication.add_auth_to_response,
     csrf.add_token_to_response,
     http_caching.add_caching_to_response,

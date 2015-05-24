@@ -2,8 +2,8 @@ from datetime import datetime
 
 from aspen import Response
 
-from gratipay.utils import get_participant
-from gratipay.utils.history import iter_payday_events
+from liberapay.utils import get_participant
+from liberapay.utils.history import iter_payday_events
 
 [-----------------------------------------------------------------------------]
 
@@ -76,7 +76,7 @@ else:
     </tr>
     <tr class="head">
         <td colspan="3" class="outside">&larr; {{ _("Outside") }}</td>
-        <td colspan="5" class="inside">{{ _("Inside Gratipay") }} &rarr;</td>
+        <td colspan="5" class="inside">{{ _("Inside Liberapay") }} &rarr;</td>
     </tr>
     <tr class="head">
         <td class="bank">{{ _("Bank") }}</td>

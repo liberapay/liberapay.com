@@ -6,10 +6,10 @@ import json
 
 from mock import patch
 
-from gratipay.billing.payday import Payday
-from gratipay.models.participant import Participant
-from gratipay.testing import Harness
-from gratipay.utils.history import get_end_of_year_balance, iter_payday_events
+from liberapay.billing.payday import Payday
+from liberapay.models.participant import Participant
+from liberapay.testing import Harness
+from liberapay.utils.history import get_end_of_year_balance, iter_payday_events
 
 
 def make_history(harness):

@@ -1,4 +1,4 @@
-from gratipay.models import community
+from liberapay.models import community
 
 [-----------------------------]
 
@@ -8,19 +8,14 @@ title = _("Explore")
 
 [-----------------------------]
 {% extends "templates/explore.html" %}
-{% block head %}
-    <!-- Otherwise we're getting Indonesian. :-/ -->
-    <!-- https://github.com/gratipay/gratipay.com/issues/953 -->
-    <meta name="google" value="notranslate">
-{% endblock %}
 
 {% block sidebar %}
     <div class="avatar">
         <img src="{{ website.asset('communities.svg') }}">
     </div>
     <p>
-        {{ ngettext( "There is {n} community on Gratipay."
-                   , "There are {n} communities on Gratipay."
+        {{ ngettext( "There is {n} community on Liberapay."
+                   , "There are {n} communities on Liberapay."
                    , ncommunities
                     ) }}
     </p>
@@ -64,9 +59,9 @@ title = _("Explore")
         function createOption(term)
         {
             success = function () {
-                Gratipay.communities.jumpTo(term);
+                Liberapay.communities.jumpTo(term);
             }
-            Gratipay.communities.join(term, success, Gratipay.error);
+            Liberapay.communities.join(term, success, Liberapay.error);
         }
         // TODO: in future
         {% if user.ANON %}
@@ -77,7 +72,7 @@ title = _("Explore")
                           };
         {% endif %}
         communityChooser.chosen(chosenOpts).change(function() {
-            Gratipay.communities.jumpTo(communityChooser.val());
+            Liberapay.communities.jumpTo(communityChooser.val());
         });
     });
 </script>

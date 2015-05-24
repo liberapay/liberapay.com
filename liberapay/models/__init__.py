@@ -1,11 +1,3 @@
-"""
-
-The most important object in the Gratipay object model is Participant, and the
-second most important one is Ccommunity. There are a few others, but those are
-the most important two. Participant, in particular, is at the center of
-everything on Gratipay.
-
-"""
 from contextlib import contextmanager
 
 from postgres import Postgres
@@ -17,14 +9,14 @@ def just_yield(obj):
     yield obj
 
 
-class GratipayDB(Postgres):
+class DB(Postgres):
 
     def get_cursor(self, cursor=None, **kw):
         if cursor:
             if kw:
                 raise ValueError('cannot change options when reusing a cursor')
             return just_yield(cursor)
-        return super(GratipayDB, self).get_cursor(**kw)
+        return super(DB, self).get_cursor(**kw)
 
     def self_check(self):
         with self.get_cursor() as cursor:

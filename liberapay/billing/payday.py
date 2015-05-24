@@ -1,7 +1,7 @@
-"""This is Gratipay's payday algorithm.
+"""This is Liberapay's payday algorithm.
 
-Exchanges (moving money between Gratipay and the outside world) and transfers
-(moving money amongst Gratipay users) happen within an isolated event called
+Exchanges (moving money between Liberapay and the outside world) and transfers
+(moving money amongst Liberapay users) happen within an isolated event called
 payday. This event has duration (it's not punctiliar).
 
 Payday is designed to be crash-resistant. Everything that can be rolled back
@@ -14,16 +14,16 @@ from __future__ import unicode_literals
 import itertools
 from multiprocessing.dummy import Pool as ThreadPool
 
-from balanced import CardHold
-
 import aspen.utils
 from aspen import log
-from gratipay.billing.exchanges import (
+from balanced import CardHold
+from psycopg2 import IntegrityError
+
+from liberapay.billing.exchanges import (
     ach_credit, cancel_card_hold, capture_card_hold, create_card_hold, upcharge
 )
-from gratipay.exceptions import NegativeBalance
-from gratipay.models import check_db
-from psycopg2 import IntegrityError
+from liberapay.exceptions import NegativeBalance
+from liberapay.models import check_db
 
 
 with open('sql/fake_payday.sql') as f:
@@ -57,31 +57,6 @@ class NoPayday(Exception):
 
 
 class Payday(object):
-    """Represent an abstract event during which money is moved.
-
-    On Payday, we want to use a participant's Gratipay balance to settle their
-    tips due (pulling in more money via credit card as needed), but we only
-    want to use their balance at the start of Payday. Balance changes should be
-    atomic globally per-Payday.
-
-    Here's the call structure of the Payday.run method:
-
-        run
-            payin
-                prepare
-                create_card_holds
-                transfer_tips
-                transfer_takes
-                settle_card_holds
-                update_balances
-                take_over_balances
-            payout
-            update_stats
-            update_cached_amounts
-            end
-
-    """
-
 
     @classmethod
     def start(cls):
@@ -115,7 +90,6 @@ class Payday(object):
         payday.__dict__.update(d)
         return payday
 
-
     def run(self):
         """This is the starting point for payday.
 
@@ -148,7 +122,6 @@ class Payday(object):
         fmt_past = "Script ran for %%(age)s (%s)." % _delta
         log(aspen.utils.to_age(_start, fmt_past=fmt_past))
 
-
     def payin(self):
         """The first stage of payday where we charge credit cards and transfer
         money internally between participants.
@@ -180,7 +153,6 @@ class Payday(object):
             DROP FUNCTION settle_tip_graph();
             DROP FUNCTION transfer(text, text, numeric, context_type);
         """)
-
 
     @staticmethod
     def prepare(cursor, ts_start):
@@ -385,7 +357,6 @@ class Payday(object):
         """, dict(ts_start=ts_start))
         log('Prepared the DB.')
 
-
     @staticmethod
     def fetch_card_holds(participant_ids):
         holds = {}
@@ -407,7 +378,6 @@ class Payday(object):
             else:
                 cancel_card_hold(hold)
         return holds
-
 
     def create_card_holds(self, cursor):
 
@@ -464,7 +434,6 @@ class Payday(object):
 
         return holds
 
-
     @staticmethod
     def transfer_tips(cursor):
         cursor.run("""
@@ -478,7 +447,6 @@ class Payday(object):
         SELECT settle_tip_graph();
 
         """)
-
 
     @staticmethod
     def transfer_takes(cursor, ts_start):
@@ -507,7 +475,6 @@ class Payday(object):
 
         """, dict(ts_start=ts_start))
 
-
     def settle_card_holds(self, cursor, holds):
         participants = cursor.all("""
             SELECT *
@@ -526,7 +493,6 @@ class Payday(object):
         # Cancel the remaining holds
         threaded_map(cancel_card_hold, holds.values())
         log("Canceled %i card holds." % len(holds))
-
 
     @staticmethod
     def update_balances(cursor):
@@ -556,7 +522,6 @@ class Payday(object):
                 SELECT * FROM payday_transfers;
         """)
         log("Updated the balances of %i participants." % len(participants))
-
 
     def take_over_balances(self):
         """If an account that receives money is taken over during payin we need
@@ -597,7 +562,6 @@ class Payday(object):
 
             """)
 
-
     def payout(self):
         """This is the second stage of payday in which we send money out to the
         bank accounts of participants.
@@ -625,7 +589,6 @@ class Payday(object):
         log("Did payout for %d participants." % len(participants))
         self.db.self_check()
         log("Checked the DB.")
-
 
     def update_stats(self):
         self.db.run("""\
@@ -689,23 +652,18 @@ class Payday(object):
         """, {'ts_start': self.ts_start})
         log("Updated payday stats.")
 
-
     def update_cached_amounts(self):
         with self.db.get_cursor() as cursor:
             cursor.execute(FAKE_PAYDAY)
         log("Updated receiving amounts.")
 
-
     def end(self):
-        self.ts_end = self.db.one("""\
-
+        self.ts_end = self.db.one("""
             UPDATE paydays
                SET ts_end=now()
              WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
          RETURNING ts_end AT TIME ZONE 'UTC'
-
         """, default=NoPayday).replace(tzinfo=aspen.utils.utc)
-
 
     def notify_participants(self):
         ts_start, ts_end = self.ts_start, self.ts_end
@@ -756,27 +714,21 @@ class Payday(object):
                 top_tippee=top_tippee,
             )
 
-
-    # Record-keeping.
-    # ===============
+    # Record-keeping
+    # ==============
 
     def mark_ach_failed(self):
-        self.db.one("""\
-
+        self.db.one("""
             UPDATE paydays
                SET nach_failing = nach_failing + 1
              WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
          RETURNING id
-
         """, default=NoPayday)
 
-
     def mark_stage_done(self):
-        self.db.one("""\
-
+        self.db.one("""
             UPDATE paydays
                SET stage = stage + 1
              WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
          RETURNING id
-
         """, default=NoPayday)

@@ -1,4 +1,4 @@
-"""Functions for moving money between Gratipay and the outside world.
+"""Functions for moving money between Liberapay and the outside world.
 """
 from __future__ import unicode_literals
 
@@ -8,10 +8,10 @@ import balanced
 
 from aspen import log
 from aspen.utils import typecheck
-from gratipay.exceptions import NegativeBalance, NotWhitelisted
-from gratipay.models import check_db
-from gratipay.models.participant import Participant
-from gratipay.models.exchange_route import ExchangeRoute
+from liberapay.exceptions import NegativeBalance, NotWhitelisted
+from liberapay.models import check_db
+from liberapay.models.participant import Participant
+from liberapay.models.exchange_route import ExchangeRoute
 
 
 BALANCED_CLASSES = {
@@ -88,7 +88,7 @@ def ach_credit(db, participant, withhold, minimum_credit=MINIMUM_CREDIT):
 
     # Compute the amount to credit them.
     # ==================================
-    # Leave money in Gratipay to cover their obligations next week (as these
+    # Leave money in the wallet to cover their obligations next week (as these
     # currently stand).
 
     balance = participant.balance
@@ -155,8 +155,8 @@ def ach_credit(db, participant, withhold, minimum_credit=MINIMUM_CREDIT):
 def create_card_hold(db, participant, amount):
     """Create a hold on the participant's credit card.
 
-    Amount should be the nominal amount. We'll compute Gratipay's fee below
-    this function and add it to amount to end up with charge_amount.
+    Amount should be the nominal amount. We'll compute fees below this function
+    and add it to amount to end up with charge_amount.
 
     """
     typecheck(amount, Decimal)
@@ -272,7 +272,7 @@ def record_exchange(db, route, amount, fee, participant, status, error=None):
     Records in the exchanges table have these characteristics:
 
         amount  It's negative for credits (representing an outflow from
-                Gratipay to you) and positive for charges.
+                Liberapay to you) and positive for charges.
                 The sign is how we differentiate the two in, e.g., the
                 history page.
 

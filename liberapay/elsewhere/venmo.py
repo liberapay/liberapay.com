@@ -1,7 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from gratipay.elsewhere import PlatformOAuth2
-from gratipay.elsewhere._extractors import key
+from liberapay.elsewhere import PlatformOAuth2
+from liberapay.elsewhere._extractors import key
 
 
 class Venmo(PlatformOAuth2):

@@ -6,13 +6,13 @@ import os
 import balanced
 import mock
 
-from gratipay.billing.exchanges import create_card_hold
-from gratipay.billing.payday import NoPayday, Payday
-from gratipay.exceptions import NegativeBalance
-from gratipay.models.participant import Participant
-from gratipay.testing import Foobar, Harness
-from gratipay.testing.balanced import BalancedHarness
-from gratipay.testing.emails import EmailHarness
+from liberapay.billing.exchanges import create_card_hold
+from liberapay.billing.payday import NoPayday, Payday
+from liberapay.exceptions import NegativeBalance
+from liberapay.models.participant import Participant
+from liberapay.testing import Foobar, Harness
+from liberapay.testing.balanced import BalancedHarness
+from liberapay.testing.emails import EmailHarness
 
 
 class TestPayday(BalancedHarness):
@@ -89,7 +89,7 @@ class TestPayday(BalancedHarness):
         assert debit.description == 'janet'
 
     @mock.patch.object(Payday, 'fetch_card_holds')
-    @mock.patch('gratipay.billing.payday.create_card_hold')
+    @mock.patch('liberapay.billing.payday.create_card_hold')
     def test_ncc_failing(self, cch, fch):
         self.janet.set_tip_to(self.homer, 24)
         fch.return_value = {}
@@ -184,7 +184,7 @@ class TestPayday(BalancedHarness):
         Payday.start().update_cached_amounts()
         check()
 
-    @mock.patch('gratipay.billing.payday.log')
+    @mock.patch('liberapay.billing.payday.log')
     def test_start_prepare(self, log):
         self.clear_tables()
         self.make_participant('bob', balance=10, claimed_time=None)
@@ -244,8 +244,8 @@ class TestPayday(BalancedHarness):
         with self.assertRaises(NoPayday):
             Payday().end()
 
-    @mock.patch('gratipay.billing.payday.log')
-    @mock.patch('gratipay.billing.payday.Payday.payin')
+    @mock.patch('liberapay.billing.payday.log')
+    @mock.patch('liberapay.billing.payday.Payday.payin')
     def test_payday(self, payin, log):
         greeting = 'Greetings, program! It\'s PAYDAY!!!!'
         Payday.start().run()
@@ -262,7 +262,7 @@ class TestPayin(BalancedHarness):
             return payday.create_card_holds(cursor)
 
     @mock.patch.object(Payday, 'fetch_card_holds')
-    @mock.patch('gratipay.billing.payday.create_card_hold')
+    @mock.patch('liberapay.billing.payday.create_card_hold')
     def test_hold_amount_includes_negative_balance(self, cch, fch):
         self.db.run("""
             UPDATE participants SET balance = -10 WHERE username='janet'
@@ -278,7 +278,7 @@ class TestPayin(BalancedHarness):
         hold, error = create_card_hold(self.db, self.janet, D(20))
         assert hold is not None
         assert not error
-        with mock.patch('gratipay.billing.payday.create_card_hold') as cch:
+        with mock.patch('liberapay.billing.payday.create_card_hold') as cch:
             cch.return_value = (None, None)
             self.create_card_holds()
             assert not cch.called, cch.call_args_list
@@ -289,7 +289,7 @@ class TestPayin(BalancedHarness):
         hold, error = create_card_hold(self.db, self.janet, D(10))
         assert not error
         fch.return_value = {self.janet.id: hold}
-        with mock.patch('gratipay.billing.payday.create_card_hold') as cch:
+        with mock.patch('liberapay.billing.payday.create_card_hold') as cch:
             fake_hold = object()
             cch.return_value = (fake_hold, None)
             holds = self.create_card_holds()
@@ -297,8 +297,8 @@ class TestPayin(BalancedHarness):
             assert holds[self.janet.id] is fake_hold
             assert hold.voided_at is not None
 
-    @mock.patch('gratipay.billing.payday.CardHold')
-    @mock.patch('gratipay.billing.payday.cancel_card_hold')
+    @mock.patch('liberapay.billing.payday.CardHold')
+    @mock.patch('liberapay.billing.payday.cancel_card_hold')
     def test_fetch_card_holds_handles_extra_holds(self, cancel, CardHold):
         fake_hold = mock.MagicMock()
         fake_hold.meta = {'participant_id': 0}
@@ -316,7 +316,7 @@ class TestPayin(BalancedHarness):
         cancel.assert_called_with(fake_hold)
         assert len(holds) == 0
 
-    @mock.patch('gratipay.billing.payday.log')
+    @mock.patch('liberapay.billing.payday.log')
     def test_payin_cancels_uncaptured_holds(self, log):
         self.janet.set_tip_to(self.homer, 42)
         alice = self.make_participant('alice', claimed_time='now',
@@ -346,7 +346,7 @@ class TestPayin(BalancedHarness):
                 payday.update_balances(cursor)
 
     @mock.patch.object(Payday, 'fetch_card_holds')
-    @mock.patch('gratipay.billing.exchanges.thing_from_href')
+    @mock.patch('liberapay.billing.exchanges.thing_from_href')
     def test_card_hold_error(self, tfh, fch):
         self.janet.set_tip_to(self.homer, 17)
         tfh.side_effect = Foobar
@@ -487,7 +487,7 @@ class TestPayin(BalancedHarness):
         assert Participant.from_id(billy.id).balance == 18
 
     @mock.patch.object(Payday, 'fetch_card_holds')
-    @mock.patch('gratipay.billing.payday.capture_card_hold')
+    @mock.patch('liberapay.billing.payday.capture_card_hold')
     def test_payin_dumps_transfers_for_debugging(self, cch, fch):
         self.janet.set_tip_to(self.homer, 10)
         fake_hold = mock.MagicMock()
@@ -511,7 +511,7 @@ class TestPayout(Harness):
                               balance=20)
         Payday.start().payout()
 
-    @mock.patch('gratipay.billing.payday.log')
+    @mock.patch('liberapay.billing.payday.log')
     def test_payout_unreviewed(self, log):
         self.make_participant('alice', claimed_time='now', is_suspicious=None,
                               balance=20, balanced_customer_href='foo',
@@ -519,7 +519,7 @@ class TestPayout(Harness):
         Payday.start().payout()
         log.assert_any_call('UNREVIEWED: alice')
 
-    @mock.patch('gratipay.billing.payday.ach_credit')
+    @mock.patch('liberapay.billing.payday.ach_credit')
     def test_payout_ach_error(self, ach_credit):
         self.make_participant('alice', claimed_time='now', is_suspicious=False,
                               balance=20, balanced_customer_href='foo',

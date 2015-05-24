@@ -1,7 +1,7 @@
 from __future__ import print_function, unicode_literals
 
-from gratipay.utils import fake_data
-from gratipay.testing import Harness
+from liberapay.utils import fake_data
+from liberapay.testing import Harness
 
 
 class TestFakeData(Harness):

@@ -1,8 +1,8 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from gratipay.elsewhere import PlatformOAuth2
-from gratipay.elsewhere._extractors import any_key, key
-from gratipay.elsewhere._paginators import query_param_paginator
+from liberapay.elsewhere import PlatformOAuth2
+from liberapay.elsewhere._extractors import any_key, key
+from liberapay.elsewhere._paginators import query_param_paginator
 
 
 class Google(PlatformOAuth2):

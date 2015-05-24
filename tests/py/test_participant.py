@@ -2,30 +2,27 @@ from __future__ import print_function, unicode_literals
 
 import datetime
 from decimal import Decimal
-import random
 
 import mock
 import pytest
 
 from aspen.utils import utcnow
-from gratipay import NotSane
-from gratipay.exceptions import (
-    HasBigTips,
+from liberapay.exceptions import (
+    ProblemChangingUsername,
     UserDoesntAcceptTips,
     UsernameIsEmpty,
     UsernameTooLong,
     UsernameAlreadyTaken,
     UsernameContainsInvalidCharacters,
-    UsernameIsRestricted,
     NoSelfTipping,
     NoTippee,
     BadAmount,
 )
-from gratipay.models.account_elsewhere import AccountElsewhere
-from gratipay.models.participant import (
+from liberapay.models.account_elsewhere import AccountElsewhere
+from liberapay.models.participant import (
     LastElsewhere, NeedConfirmation, NonexistingElsewhere, Participant, TeamCantBeOnlyAuth
 )
-from gratipay.testing import Harness
+from liberapay.testing import Harness
 
 
 # TODO: Test that accounts elsewhere are not considered claimed by default
@@ -298,7 +295,7 @@ class TestParticipant(Harness):
         assert ctimes[0] == ctimes[1]
 
     def test_connecting_unknown_account_fails(self):
-        with self.assertRaises(NotSane):
+        with self.assertRaises(Exception):
             self.bob.take_over(('github', 'jim'))
 
     def test_delete_elsewhere_last(self):
@@ -342,14 +339,6 @@ class TestParticipant(Harness):
 
 class Tests(Harness):
 
-    def random_restricted_username(self):
-        """helper method to chooses a restricted username for testing """
-        from gratipay import RESTRICTED_USERNAMES
-        random_item = random.choice(RESTRICTED_USERNAMES)
-        while random_item.startswith('%'):
-            random_item = random.choice(RESTRICTED_USERNAMES)
-        return random_item
-
     def setUp(self):
         Harness.setUp(self)
         self.participant = self.make_participant('user1')  # Our protagonist
@@ -381,8 +370,8 @@ class Tests(Harness):
         assert self.participant == actual
 
     def test_changing_username_returns_the_new_username(self):
-        returned = self.participant.change_username('  foo bar baz  ')
-        assert returned == 'foo bar baz', returned
+        returned = self.participant.change_username('  foo_bar-baz  ')
+        assert returned == 'foo_bar-baz'
 
     def test_changing_username_to_too_long(self):
         with self.assertRaises(UsernameTooLong):
@@ -403,8 +392,10 @@ class Tests(Harness):
             self.participant.change_username(u"\u2603") # Snowman
 
     def test_changing_username_to_restricted_name(self):
-        with self.assertRaises(UsernameIsRestricted):
-            self.participant.change_username(self.random_restricted_username())
+        from liberapay import RESTRICTED_USERNAMES
+        for name in RESTRICTED_USERNAMES:
+            with self.assertRaises(ProblemChangingUsername):
+                self.participant.change_username(name)
 
     def test_getting_tips_actually_made(self):
         expected = Decimal('1.00')
@@ -430,15 +421,7 @@ class Tests(Harness):
 
     # number
 
-    def test_cant_go_singular_with_big_tips(self):
-        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
-        bob = self.make_participant('bob', number='plural')
-        carl = self.make_participant('carl', claimed_time='now')
-        carl.set_tip_to(bob, '100.00')
-        alice.set_tip_to(bob, '1000.00')
-        pytest.raises(HasBigTips, bob.update_number, 'singular')
-
-    def test_can_go_singular_without_big_tips(self):
+    def test_can_go_singular(self):
         alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
         bob = self.make_participant('bob', number='plural')
         alice.set_tip_to(bob, '100.00')
@@ -500,38 +483,9 @@ class Tests(Harness):
         self.make_participant('bob')
         self.assertRaises(BadAmount, alice.set_tip_to, 'bob', '1000.00')
 
-    def test_stt_allows_higher_tip_to_plural_receiver(self):
-        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
-        bob = self.make_participant('bob', number='plural')
-        actual = alice.set_tip_to(bob, '1000.00')
-        assert actual['amount'] == 1000
-
-    def test_stt_still_caps_tips_to_plural_receivers(self):
-        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
-        self.make_participant('bob', number='plural')
-        self.assertRaises(BadAmount, alice.set_tip_to, 'bob', '1000.01')
-
     def test_stt_fails_to_tip_unknown_people(self):
         alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
         self.assertRaises(NoTippee, alice.set_tip_to, 'bob', '1.00')
-
-    def test_stt_is_free_rider_defaults_to_none(self):
-        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
-        assert alice.is_free_rider is None
-
-    def test_stt_sets_is_free_rider_to_false(self):
-        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
-        gratipay = self.make_participant('Gratipay', number='plural')
-        alice.set_tip_to(gratipay, '0.01')
-        assert alice.is_free_rider is False
-        assert Participant.from_username('alice').is_free_rider is False
-
-    def test_stt_resets_is_free_rider_to_null(self):
-        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
-        gratipay = self.make_participant('Gratipay', number='plural')
-        alice.set_tip_to(gratipay, '0.00')
-        assert alice.is_free_rider is None
-        assert Participant.from_username('alice').is_free_rider is None
 
 
     # giving, npatrons and receiving

@@ -1,7 +1,7 @@
 import balanced
 
-from gratipay.models.exchange_route import ExchangeRoute
-from gratipay.utils import get_participant
+from liberapay.models.exchange_route import ExchangeRoute
+from liberapay.utils import get_participant
 
 [-----------------------------------------------------------------------------]
 
@@ -39,7 +39,7 @@ title = _("Credit Card")
         <h1>{{ title }}</h1>
     {% endif %}
 
-    <p>{{ _("When you don't have enough money in your Gratipay account to cover your gifts, we'll attempt to pull money in using your credit card.") }}
+    <p>{{ _("When you don't have enough money in your Liberapay account to cover your gifts, we'll attempt to pull money in using your credit card.") }}
     {{ _("If your credit card is missing or fails then your gifts won't go through for that week.") }}</p>
 
 {% endblock %}
@@ -49,7 +49,7 @@ title = _("Credit Card")
 {% if not user.ANON %}
 <script>
     $(document).ready(function() {
-        Gratipay.payments.cc.init();
+        Liberapay.payments.cc.init();
         $('#country').chosen();
     });
 </script>
@@ -101,7 +101,7 @@ title = _("Credit Card")
 
             <div class="info">
                 {{ _("To minimize processing fees, we charge your credit card at least $10 at a time "
-                     "(anything extra stays in Gratipay to use in future weeks). {0}Read More{1}",
+                     "(anything extra stays in Liberapay to use in future weeks). {0}Read More{1}",
                      "<a target='_blank' href='/about/faq.html#how-add-funds'>"|safe,
                      "</a>"|safe) }}
             </div>

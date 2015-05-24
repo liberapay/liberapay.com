@@ -42,19 +42,19 @@ git pull
 
 
 # Compute the next version number
-prev="$(git describe --tags --match '[0-9]*' | cut -d- -f1 | sed 's/\.//g')"
+prev="$(git describe --tags --match '[0-9]*' | cut -d- -f1)"
 version="$((prev + 1))"
 
 
 # Check that the environment contains all required variables
-heroku config -sa gratipay | ./env/bin/honcho run -e /dev/stdin \
-    ./env/bin/python gratipay/wireup.py
+heroku config -sa liberapay | ./env/bin/honcho run -e /dev/stdin \
+    ./env/bin/python liberapay/wireup.py
 
 
 # Sync the translations
 echo "Syncing translations..."
 if [ ! -e .transifexrc -a ! -e ~/.transifexrc ]; then
-    heroku config -sa gratipay | ./env/bin/honcho run -e /dev/stdin make transifexrc
+    heroku config -sa liberapay | ./env/bin/honcho run -e /dev/stdin make transifexrc
 fi
 make i18n_upload
 make i18n_download
@@ -86,17 +86,15 @@ fi
 
 # Ask confirmation and bump the version
 yesno "Tag and deploy version $version?" || exit
-echo $version >www/version.txt
-git commit www/version.txt -m "Bump version to $version"
 git tag $version
 
 
 # Deploy to Heroku
-[ "$maintenance" = "yes" ] && heroku maintenance:on -a gratipay
-[ "$run_sql" = "before" ] && heroku pg:psql -a gratipay <sql/branch.sql
+[ "$maintenance" = "yes" ] && heroku maintenance:on -a liberapay
+[ "$run_sql" = "before" ] && heroku pg:psql -a liberapay <sql/branch.sql
 git push --force heroku master
-[ "$maintenance" = "yes" ] && heroku maintenance:off -a gratipay
-[ "$run_sql" = "after" ] && heroku pg:psql -a gratipay <sql/branch.sql
+[ "$maintenance" = "yes" ] && heroku maintenance:off -a liberapay
+[ "$run_sql" = "after" ] && heroku pg:psql -a liberapay <sql/branch.sql
 rm -f sql/branch.sql
 
 

@@ -3,7 +3,7 @@ from base64 import b64decode
 from aspen import Response
 from oauthlib.oauth2 import TokenExpiredError
 
-from gratipay.models.account_elsewhere import AccountElsewhere
+from liberapay.models.account_elsewhere import AccountElsewhere
 
 platforms_nav = [('/%s/' % p.name, p.display_name) for p in website.friends_platforms]
 del p
@@ -59,7 +59,7 @@ limited = getattr(platform, 'api_friends_limited', False)
 {% macro limitation_note() %}
     {% if limited %}
         <br>
-        <p>{{ _("Note: privacy settings may prevent Gratipay from seeing some of your {0} friends.",
+        <p>{{ _("Note: privacy settings may prevent Liberapay from seeing some of your {0} friends.",
                 platform.display_name) }}</p>
     {% endif %}
 {% endmacro %}
@@ -92,7 +92,7 @@ limited = getattr(platform, 'api_friends_limited', False)
 <table class="table">
     <tr>
         <th>{{ _('Name') }}</th>
-        <th class="figure">{{ _('On Gratipay?') }}</th>
+        <th class="figure">{{ _('On Liberapay?') }}</th>
         <th class="figure">{{ _('Supporters') }}</th>
         <th class="figure">{{ _('Receives') }}</th>
         <th class="figure">{{ _('Gives') }}</th>
@@ -100,7 +100,7 @@ limited = getattr(platform, 'api_friends_limited', False)
     {% for friend in friends %}
     {% set p = friend.participant %}
     <tr>
-        <td><a href="./{{ friend.gratipay_slug }}/">{{ friend.friendly_name }}</a></td>
+        <td><a href="./{{ friend.liberapay_slug }}/">{{ friend.friendly_name }}</a></td>
         <td class="figure">{{ '&check;'|safe if p.is_claimed }}</td>
         <td class="figure">{{ _('hidden') if p.anonymous_receiving else p.npatrons }}</td>
         <td class="figure">{{ _('hidden') if p.anonymous_receiving else p.receiving }}</td>

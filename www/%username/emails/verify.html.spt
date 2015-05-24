@@ -4,7 +4,7 @@ from datetime import timedelta
 
 from aspen import Response
 from aspen.utils import utcnow
-from gratipay.utils import emails, get_participant
+from liberapay.utils import emails, get_participant
 
 [-----------------------------------------------------------------------------]
 
@@ -23,7 +23,7 @@ if participant == user.participant:
 {% block scripts %}
 <script>
     $(document).ready(function() {
-        $('button.resend').on('click', Gratipay.settings.post_email);
+        $('button.resend').on('click', Liberapay.settings.post_email);
     });
 </script>
 {{ super() }}
@@ -39,24 +39,24 @@ if participant == user.participant:
     {% elif user.participant != participant %}
         <h1>{{ _("Wrong Account") }}</h1>
 
-        <p>{{ _("You're signed into the wrong Gratipay account to complete this email "
-                "verification. If you accidentally created two Gratipay accounts, you can merge "
+        <p>{{ _("You're signed into the wrong Liberapay account to complete this email "
+                "verification. If you accidentally created two Liberapay accounts, you can merge "
                 "them by logging into the main one and adding the social accounts from the other. "
                 "Email {0} if you'd like help.",
-                '<a href="mailto:support@gratipay.com">support@gratipay.com</a>'|safe) }}</p>
+                '<a href="mailto:support@liberapay.com">support@liberapay.com</a>'|safe) }}</p>
 
     {% else %}
         {% if result == emails.VERIFICATION_SUCCEEDED %}
             <h1>{{ _("Success!") }}</h1>
-            <p>{{ _("Your email address {0} is now connected to your Gratipay account.",
+            <p>{{ _("Your email address {0} is now connected to your Liberapay account.",
                     ("<b>%s</b>"|safe) % email) }}</p>
         {% elif result == emails.VERIFICATION_STYMIED %}
             <h1>{{ _("Address Taken") }}</h1>
-            <p>{{ _("The email address {0} is already connected to a different Gratipay account.",
+            <p>{{ _("The email address {0} is already connected to a different Liberapay account.",
                     ("<b>%s</b>"|safe) % email) }}</p>
         {% elif result == emails.VERIFICATION_REDUNDANT %}
             <h1>{{ _("Already Verified") }}</h1>
-            <p>{{ _("Your email address {0} is already connected to your Gratipay account.",
+            <p>{{ _("Your email address {0} is already connected to your Liberapay account.",
                     ("<b>%s</b>"|safe) % email) }}</p>
         {% elif result == emails.VERIFICATION_MISSING %}
             <h1>{{ _("Missing Info") }}</h1>

@@ -6,11 +6,11 @@ from decimal import Decimal as D
 import mock
 import pytest
 
-from gratipay.billing.payday import Payday
-from gratipay.exceptions import NotWhitelisted
-from gratipay.models.community import Community
-from gratipay.models.participant import Participant
-from gratipay.testing import Harness
+from liberapay.billing.payday import Payday
+from liberapay.exceptions import NotWhitelisted
+from liberapay.models.community import Community
+from liberapay.models.participant import Participant
+from liberapay.testing import Harness
 
 
 class TestClosing(Harness):
@@ -71,7 +71,7 @@ class TestClosing(Harness):
         body = self.client.POST('/alice/settings/close', auth_as='alice').body
         assert 'Try Again Later' in body
 
-    @mock.patch('gratipay.billing.exchanges.ach_credit')
+    @mock.patch('liberapay.billing.exchanges.ach_credit')
     def test_ach_credit_failure_doesnt_cause_500(self, ach_credit):
         ach_credit.side_effect = 'some error'
         self.make_participant('alice', claimed_time='now', balance=384)
@@ -82,7 +82,7 @@ class TestClosing(Harness):
 
     # wbtba - withdraw_balance_to_bank_account
 
-    @mock.patch('gratipay.billing.exchanges.thing_from_href')
+    @mock.patch('liberapay.billing.exchanges.thing_from_href')
     def test_wbtba_withdraws_balance_to_bank_account(self, tfh):
         alice = self.make_participant( 'alice'
                                      , balance=D('10.00')

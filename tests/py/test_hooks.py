@@ -7,10 +7,10 @@ from aspen.http.request import Request
 from aspen.http.response import Response
 from environment import Environment
 
-from gratipay import wireup
-from gratipay.security import csrf
-from gratipay.security.user import SESSION
-from gratipay.testing import Harness
+from liberapay import wireup
+from liberapay.security import csrf
+from liberapay.security.user import SESSION
+from liberapay.testing import Harness
 
 
 class Tests(Harness):
@@ -24,7 +24,7 @@ class Tests(Harness):
 
         # Change env, doesn't change self.environ.
         env.canonical_scheme = 'https'
-        env.canonical_host = 'gratipay.com'
+        env.canonical_host = 'example.com'
 
         wireup.canonical(env)
 
@@ -35,11 +35,11 @@ class Tests(Harness):
 
     def test_canonize_canonizes(self):
         response = self.client.GxT( "/"
-                                  , HTTP_HOST=b'gratipay.com'
+                                  , HTTP_HOST=b'example.com'
                                   , HTTP_X_FORWARDED_PROTO=b'http'
                                    )
         assert response.code == 302
-        assert response.headers['Location'] == b'https://gratipay.com/'
+        assert response.headers['Location'] == b'https://example.com/'
 
     def test_no_cookies_over_http(self):
         """
@@ -50,7 +50,7 @@ class Tests(Harness):
         redirect = self.client.GET( "/"
                                   , auth_as='alice'
                                   , HTTP_X_FORWARDED_PROTO=b'http'
-                                  , HTTP_HOST=b'gratipay.com'
+                                  , HTTP_HOST=b'example.com'
                                   , raise_immediately=False
                                    )
         assert redirect.code == 302
@@ -64,7 +64,7 @@ class Tests(Harness):
         response = self.client.GET( '/alice/public.json'
                                   , HTTP_AUTHORIZATION=auth_header
                                   , HTTP_X_FORWARDED_PROTO=b'https'
-                                  , HTTP_HOST=b'gratipay.com'
+                                  , HTTP_HOST=b'example.com'
                                    )
 
         assert response.code == 200
@@ -78,7 +78,7 @@ class Tests(Harness):
         response = self.client.GET( '/alice/public.json'
                                   , HTTP_AUTHORIZATION=auth_header
                                   , HTTP_X_FORWARDED_PROTO=b'https'
-                                  , HTTP_HOST=b'gratipay.com'
+                                  , HTTP_HOST=b'example.com'
                                    )
 
         assert response.code == 200
@@ -89,7 +89,7 @@ class Tests(Harness):
         response = self.client.GxT( '/alice/public.json'
                                   , HTTP_AUTHORIZATION=auth_header
                                   , HTTP_X_FORWARDED_PROTO=b'https'
-                                  , HTTP_HOST=b'gratipay.com'
+                                  , HTTP_HOST=b'example.com'
                                    )
         assert response.code == 401
 
@@ -117,14 +117,14 @@ class Tests2(Harness):
 
     def test_caching_of_assets(self):
         r = self.client.GET('/assets/jquery.min.js')
-        assert r.headers['Access-Control-Allow-Origin'] == 'https://gratipay.com'
+        assert r.headers['Access-Control-Allow-Origin'] == 'https://liberapay.com'
         assert r.headers['Cache-Control'] == 'public, max-age=5'
         assert 'Vary' not in r.headers
         assert not r.headers.cookie
 
     def test_caching_of_assets_with_etag(self):
         r = self.client.GET(self.client.website.asset('jquery.min.js'))
-        assert r.headers['Access-Control-Allow-Origin'] == 'https://gratipay.com'
+        assert r.headers['Access-Control-Allow-Origin'] == 'https://liberapay.com'
         assert r.headers['Cache-Control'] == 'public, max-age=31536000'
         assert 'Vary' not in r.headers
         assert not r.headers.cookie
@@ -151,7 +151,7 @@ class Tests2(Harness):
         assert b'csrf_token' in r.headers.cookie
 
     def test_no_csrf_cookie_set_for_assets(self):
-        r = self.client.GET('/assets/gratipay.css')
+        r = self.client.GET('/assets/base.css')
         assert b'csrf_token' not in r.headers.cookie
 
     def test_sanitize_token_passes_through_good_token(self):

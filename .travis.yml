@@ -4,27 +4,22 @@ addons:
 branches:
   only:
     - master
-before_install:
- - node --version
 cache:
   directories:
     - env/bin
     - env/lib/python2.7/site-packages
 install:
  - if [ "${TRAVIS_BRANCH}" = "master" -a "${TRAVIS_PULL_REQUEST}" = "false" ]; then rm -rf env; fi
- - touch requirements.txt package.json
- - make env
- - make node_modules
+ - touch requirements.txt && make env
 before_script:
- - echo "DATABASE_URL=dbname=gratipay" | tee -a tests/local.env local.env
- - psql -U postgres -c 'CREATE DATABASE "gratipay";'
+ - psql -U postgres -c 'CREATE DATABASE liberapay_tests;'
  - if [ "${TRAVIS_BRANCH}" = "master" -a "${TRAVIS_PULL_REQUEST}" = "false" ]; then rm -rfv tests/py/fixtures; fi
 script: make test
 notifications:
   email: false
   irc:
     channels:
-      - "chat.freenode.net#gratipay"
+      - "chat.freenode.net#liberapay"
     on_success: change
     on_failure: always
     template:

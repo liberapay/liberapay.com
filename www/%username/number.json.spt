@@ -1,8 +1,7 @@
 from __future__ import print_function, unicode_literals
 
 from aspen import Response
-from gratipay.utils import get_participant
-from gratipay.exceptions import ProblemChangingNumber
+from liberapay.utils import get_participant
 
 [-----------------------------------------------------------------------------]
 
@@ -26,10 +25,7 @@ if number != participant.number:
                 "Are you sure you want to do this?")
         out = {'confirm': msg}
     else:
-        try:
-            participant.update_number(number)
-        except ProblemChangingNumber, e:
-            raise Response(400, unicode(e))
+        participant.update_number(number)
         msg = _("Your account type has been changed.")
         out = {'number': number, 'msg': msg}
 

@@ -4,9 +4,9 @@ import json
 
 from mock import patch
 
-from gratipay.billing.exchanges import record_exchange
-from gratipay.models.exchange_route import ExchangeRoute
-from gratipay.testing import Harness
+from liberapay.billing.exchanges import record_exchange
+from liberapay.models.exchange_route import ExchangeRoute
+from liberapay.testing import Harness
 
 
 class TestBalancedCallbacks(Harness):
@@ -29,7 +29,7 @@ class TestBalancedCallbacks(Harness):
         r = self.callback(body=b'{"events": []}', csrf_token=False)
         assert b'csrf_token' not in r.headers.cookie
 
-    @patch('gratipay.billing.exchanges.record_exchange_result')
+    @patch('liberapay.billing.exchanges.record_exchange_result')
     def test_credit_callback(self, rer):
         alice = self.make_participant('alice', last_ach_result='')
         ba = ExchangeRoute.from_network(alice, 'balanced-ba')

@@ -1,10 +1,10 @@
 import json
 
-from gratipay.exceptions import CannotRemovePrimaryEmail, EmailAlreadyTaken, EmailNotVerified
-from gratipay.exceptions import TooManyEmailAddresses
-from gratipay.models.participant import Participant
-from gratipay.testing.emails import EmailHarness
-from gratipay.utils import emails
+from liberapay.exceptions import CannotRemovePrimaryEmail, EmailAlreadyTaken, EmailNotVerified
+from liberapay.exceptions import TooManyEmailAddresses
+from liberapay.models.participant import Participant
+from liberapay.testing.emails import EmailHarness
+from liberapay.utils import emails
 
 
 class TestEmail(EmailHarness):
@@ -31,20 +31,20 @@ class TestEmail(EmailHarness):
         self.hit_email_spt('add-email', new_email)
 
     def test_participant_can_add_email(self):
-        response = self.hit_email_spt('add-email', 'alice@gratipay.com')
+        response = self.hit_email_spt('add-email', 'alice@example.com')
         actual = json.loads(response.body)
         assert actual
 
     def test_adding_email_sends_verification_email(self):
-        self.hit_email_spt('add-email', 'alice@gratipay.com')
+        self.hit_email_spt('add-email', 'alice@example.com')
         assert self.mailer.call_count == 1
         last_email = self.get_last_email()
-        assert last_email['to'][0]['email'] == 'alice@gratipay.com'
-        expected = "We've received a request to connect alice@gratipay.com to the alice account on Gratipay"
+        assert last_email['to'][0]['email'] == 'alice@example.com'
+        expected = "We've received a request to connect alice@example.com to the alice account on Liberapay"
         assert expected in last_email['text']
 
     def test_verification_email_doesnt_contain_unsubscribe(self):
-        self.hit_email_spt('add-email', 'alice@gratipay.com')
+        self.hit_email_spt('add-email', 'alice@example.com')
         last_email = self.get_last_email()
         assert "To stop receiving" not in last_email['text']
 
@@ -53,19 +53,19 @@ class TestEmail(EmailHarness):
         assert self.mailer.call_count == 3
         last_email = self.get_last_email()
         assert last_email['to'][0]['email'] == 'alice1@example.com'
-        expected = "We are connecting alice2@example.com to the alice account on Gratipay"
+        expected = "We are connecting alice2@example.com to the alice account on Liberapay"
         assert expected in last_email['text']
 
     def test_post_anon_returns_403(self):
-        response = self.hit_email_spt('add-email', 'anon@gratipay.com', user=None, should_fail=True)
+        response = self.hit_email_spt('add-email', 'anon@example.com', user=None, should_fail=True)
         assert response.code == 403
 
     def test_post_with_no_at_symbol_is_400(self):
-        response = self.hit_email_spt('add-email', 'gratipay.com', should_fail=True)
+        response = self.hit_email_spt('add-email', 'example.com', should_fail=True)
         assert response.code == 400
 
     def test_post_with_no_period_symbol_is_400(self):
-        response = self.hit_email_spt('add-email', 'test@gratipay', should_fail=True)
+        response = self.hit_email_spt('add-email', 'test@example', should_fail=True)
         assert response.code == 400
 
     def test_verify_email_without_adding_email(self):
@@ -75,7 +75,7 @@ class TestEmail(EmailHarness):
     def test_verify_email_wrong_nonce(self):
         self.hit_email_spt('add-email', 'alice@example.com')
         nonce = 'fake-nonce'
-        r = self.alice.verify_email('alice@gratipay.com', nonce)
+        r = self.alice.verify_email('alice@example.com', nonce)
         assert r == emails.VERIFICATION_FAILED
         self.verify_email('alice@example.com', nonce)
         expected = None
@@ -140,32 +140,32 @@ class TestEmail(EmailHarness):
 
     def test_cannot_update_email_to_already_verified(self):
         bob = self.make_participant('bob', claimed_time='now')
-        self.alice.add_email('alice@gratipay.com')
-        nonce = self.alice.get_email('alice@gratipay.com').nonce
-        r = self.alice.verify_email('alice@gratipay.com', nonce)
+        self.alice.add_email('alice@example.com')
+        nonce = self.alice.get_email('alice@example.com').nonce
+        r = self.alice.verify_email('alice@example.com', nonce)
         assert r == emails.VERIFICATION_SUCCEEDED
 
         with self.assertRaises(EmailAlreadyTaken):
-            bob.add_email('alice@gratipay.com')
-            nonce = bob.get_email('alice@gratipay.com').nonce
-            bob.verify_email('alice@gratipay.com', nonce)
+            bob.add_email('alice@example.com')
+            nonce = bob.get_email('alice@example.com').nonce
+            bob.verify_email('alice@example.com', nonce)
 
         email_alice = Participant.from_username('alice').email_address
-        assert email_alice == 'alice@gratipay.com'
+        assert email_alice == 'alice@example.com'
 
     def test_cannot_add_too_many_emails(self):
-        self.alice.add_email('alice@gratipay.com')
-        self.alice.add_email('alice@gratipay.net')
-        self.alice.add_email('alice@gratipay.org')
-        self.alice.add_email('alice@gratipay.co.uk')
-        self.alice.add_email('alice@gratipay.io')
-        self.alice.add_email('alice@gratipay.co')
-        self.alice.add_email('alice@gratipay.eu')
-        self.alice.add_email('alice@gratipay.asia')
-        self.alice.add_email('alice@gratipay.museum')
-        self.alice.add_email('alice@gratipay.py')
+        self.alice.add_email('alice@example.com')
+        self.alice.add_email('alice@example.net')
+        self.alice.add_email('alice@example.org')
+        self.alice.add_email('alice@example.co.uk')
+        self.alice.add_email('alice@example.io')
+        self.alice.add_email('alice@example.co')
+        self.alice.add_email('alice@example.eu')
+        self.alice.add_email('alice@example.asia')
+        self.alice.add_email('alice@example.museum')
+        self.alice.add_email('alice@example.py')
         with self.assertRaises(TooManyEmailAddresses):
-            self.alice.add_email('alice@gratipay.coop')
+            self.alice.add_email('alice@example.coop')
 
     def test_account_page_shows_emails(self):
         self.verify_and_change_email('alice@example.com', 'alice@example.net')

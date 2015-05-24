@@ -6,8 +6,8 @@ import json
 from mock import patch
 
 from aspen.utils import utcnow
-from gratipay.billing.payday import Payday
-from gratipay.testing import Harness
+from liberapay.billing.payday import Payday
+from liberapay.testing import Harness
 
 def today():
     return datetime.datetime.utcnow().date().strftime('%Y-%m-%d')
@@ -36,12 +36,7 @@ class TestChartsJson(Harness):
     def test_no_payday_returns_empty_list(self):
         assert json.loads(self.client.GET('/carl/charts.json').body) == []
 
-    def test_zeroth_payday_is_ignored(self):
-        self.run_payday()   # zeroeth
-        assert json.loads(self.client.GET('/carl/charts.json').body) == []
-
     def test_first_payday_comes_through(self):
-        self.run_payday()   # zeroeth, ignored
         self.run_payday()   # first
 
         expected = [ { "date": today()
@@ -54,7 +49,6 @@ class TestChartsJson(Harness):
         assert actual == expected
 
     def test_second_payday_comes_through(self):
-        self.run_payday()   # zeroth, ignored
         self.run_payday()   # first
 
         self.alice.set_tip_to(self.carl, '5.00')
@@ -76,7 +70,6 @@ class TestChartsJson(Harness):
         assert actual == expected
 
     def test_sandwiched_tipless_payday_comes_through(self):
-        self.run_payday()   # zeroth, ignored
         self.run_payday()   # first
 
         # Oops! Sorry, Carl. :-(
@@ -106,7 +99,6 @@ class TestChartsJson(Harness):
         assert actual == expected
 
     def test_out_of_band_transfer_gets_included_with_prior_payday(self):
-        self.run_payday()   # zeroth, ignored
         self.run_payday()   # first
         self.run_payday()   # second
 
@@ -136,7 +128,6 @@ class TestChartsJson(Harness):
         assert actual == expected
 
     def test_never_received_gives_empty_array(self):
-        self.run_payday()   # zeroeth, ignored
         self.run_payday()   # first
         self.run_payday()   # second
         self.run_payday()   # third

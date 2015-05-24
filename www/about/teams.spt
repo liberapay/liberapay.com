@@ -1,0 +1,31 @@
+# encoding: utf8
+[---]
+title = _("Teams")
+[---] text/html
+{% extends "templates/about.html" %}
+{% block content %}
+<div class="col0">
+
+<p>{{ _(
+    "A Liberapay team account is a collective tip jar, it allows a group of users "
+    "to receive money, and share it democratically."
+) }}</p>
+
+<h2>{{ _("Creating a team") }}</h2>
+
+<p>TODO</p>
+
+<h2>{{ _("Becoming a team member") }}</h2>
+
+<p>TODO</p>
+
+<h2>{{ _("Sharing the money") }}</h2>
+
+<p>TODO</p>
+
+<h2>{{ _("Removing team membership") }}</h2>
+
+<p>TODO</p>
+
+</div>
+{% endblock %}

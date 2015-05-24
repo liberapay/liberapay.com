@@ -3,7 +3,7 @@ from __future__ import print_function, unicode_literals
 import json
 
 from aspen.utils import utcnow
-from gratipay.testing import Harness
+from liberapay.testing import Harness
 
 
 class TestTipsJson(Harness):
@@ -16,8 +16,8 @@ class TestTipsJson(Harness):
         self.make_participant("test_tipper", claimed_time=now)
 
         data = [
-            {'username': 'test_tippee1', 'platform': 'gratipay', 'amount': '1.00'},
-            {'username': 'test_tippee2', 'platform': 'gratipay', 'amount': '2.00'}
+            {'username': 'test_tippee1', 'amount': '1.00'},
+            {'username': 'test_tippee2', 'amount': '2.00'}
         ]
 
         response = self.client.POST( '/test_tipper/tips.json'
@@ -31,7 +31,6 @@ class TestTipsJson(Harness):
 
         response = self.client.POST( '/test_tipper/tips.json?also_prune=' + also_prune
                                    , body=json.dumps([{ 'username': 'test_tippee2'
-                                                      , 'platform': 'gratipay'
                                                       , 'amount': '1.00'
                                                        }])
                                    , content_type='application/json'
@@ -72,48 +71,6 @@ class TestTipsJson(Harness):
         assert response.code == 200
         assert data['username'] == 'test_tippee1'
         assert data['amount'] == '1.00'
-
-    def test_post_bad_platform(self):
-        now = utcnow()
-        self.make_participant("test_tippee1", claimed_time=now)
-        self.make_participant("test_tipper", claimed_time=now)
-
-        response = self.client.POST( '/test_tipper/tips.json'
-                                   , body=json.dumps([{ 'username': 'test_tippee1'
-                                                 , 'platform': 'badname'
-                                                 , 'amount': '1.00'
-                                                  }])
-                                   , auth_as='test_tipper'
-                                   , content_type='application/json'
-                                    )
-
-        assert response.code == 200
-
-        resp = json.loads(response.body)
-
-        for tip in resp:
-            assert 'error' in tip
-
-    def test_gittip_as_platform_works(self):
-        now = utcnow()
-        self.make_participant("test_tippee1", claimed_time=now)
-        self.make_participant("test_tipper", claimed_time=now)
-
-        response = self.client.POST( '/test_tipper/tips.json'
-                                   , body=json.dumps([{ 'username': 'test_tippee1'
-                                                      , 'platform': 'gittip'
-                                                      , 'amount': '1.00'
-                                                       }])
-                                   , auth_as='test_tipper'
-                                   , content_type='application/json'
-                                    )
-
-        assert response.code == 200
-
-        resp = json.loads(response.body)
-        assert len(resp) == 1
-        tip = resp[0]
-        assert tip['platform'] == 'gittip'
 
     def test_also_prune_as_1(self):
         self.also_prune_variant('1')

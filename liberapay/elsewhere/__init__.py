@@ -15,8 +15,8 @@ from aspen.utils import to_age, utc
 from oauthlib.oauth2 import TokenExpiredError
 from requests_oauthlib import OAuth1Session, OAuth2Session
 
-from gratipay.elsewhere._extractors import not_available
-from gratipay.utils import LazyResponse
+from liberapay.elsewhere._extractors import not_available
+from liberapay.utils import LazyResponse
 
 
 ACTIONS = {'opt-in', 'connect', 'lock', 'unlock'}
@@ -27,7 +27,7 @@ class UnknownAccountElsewhere(Exception): pass
 
 
 class PlatformRegistry(object):
-    """Registry of platforms we support connecting to Gratipay accounts.
+    """Registry of platforms we support.
     """
     def __init__(self, platforms):
         self.__dict__ = OrderedDict((p.name, p) for p in platforms)

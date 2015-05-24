@@ -1,10 +1,5 @@
-import re
-from aspen import json, Response
-from gratipay.utils import get_participant
-
-callback_pattern = re.compile(r'^[_A-Za-z0-9.]+$')
-
-class BadPlatform(Exception): pass
+from aspen import Response
+from liberapay.utils import get_participant
 
 [-----------------------]
 participant = get_participant(state, restrict=True)
@@ -17,10 +12,8 @@ if request.method == 'POST':
     seen = set()
     for tip in new_tips:
         seen.add(tip['username'])
-        one = {"username": tip['username'], "platform": tip['platform']}
+        one = {"username": tip['username']}
         try:
-            if tip['platform'] not in ('gittip', 'gratipay'):
-                raise BadPlatform
             amount = participant.set_tip_to( tip['username']
                                            , parse_decimal(tip['amount'])
                                             )['amount']
@@ -44,7 +37,6 @@ else:
         if tip.amount == 0:
             continue
         out.append({ "username": tip.tippee
-                   , "platform": "gratipay"
                    , "amount": str(tip.amount)
                     })
 

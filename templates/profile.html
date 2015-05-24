@@ -8,7 +8,7 @@
 
 {% block scripts %}
     {% if user.ADMIN %}<script src="{{ website.asset('admin.js') }}"></script>{% endif %}
-    <script>$(document).ready(Gratipay.tips.init)</script>
+    <script>$(document).ready(Liberapay.tips.init)</script>
     <script>$(document).ready(function() {
       $('#goal-custom').on('click change', function() {
         $('#goal-yes').attr('checked', true)

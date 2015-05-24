@@ -1,6 +1,6 @@
 [---] text/html
 <div style="text-align: center; padding: 20px 0; margin: 0;">
-    <img src="https://downloads.gratipay.com/email/gratipay.png" alt="Gratipay">
+    <img src="https://static.liberapay.com/logo/banner.png" alt="Liberapay">
 </div>
 
 <div style="text-align: center; font: normal 14px/21px Arial, sans-serif; color: #333; padding: 0 20%;">
@@ -11,12 +11,9 @@ $body
     <div style="font: normal 14px/21px Arial, sans-serif;">
         {{ _("Something not right? Reply to this email for help.") }}
     </div>
-    <div style="font: normal 10px/21px Arial, sans-serif;">
-        Sent by <a href="https://gratipay.com/" style="color: #999; text-decoration: underline;">Gratipay, LLC</a> | 716 Park Road, Ambridge, PA, 15003, USA
-    </div>
     {% if include_unsubscribe %}
     <div style="font: normal 10px/21px Arial, sans-serif; padding-top: 10px;">
-        To stop receiving emails like this, change your <a href="https://gratipay.com/about/me/settings/#notifications" style="color: #999; text-decoration: underline;">notification preferences</a>.
+        To stop receiving emails like this, change your <a href="https://liberapay.com/about/me/settings/#notifications" style="color: #999; text-decoration: underline;">notification preferences</a>.
     </div>
     {% endif %}
 </div>
@@ -30,9 +27,6 @@ $body
 
 ----
 
-Sent by Gratipay, LLC, https://gratipay.com/
-716 Park Road, Ambridge, PA, 15003, USA
-
 {% if include_unsubscribe %}
-To stop receiving emails like this, change your notification preferences by visiting https://gratipay.com/about/me/settings/#notifications
+To stop receiving emails like this, change your notification preferences by visiting https://liberapay.com/about/me/settings/#notifications
 {% endif %}

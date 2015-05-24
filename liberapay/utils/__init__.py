@@ -9,7 +9,7 @@ from aspen.utils import to_rfc822, utcnow
 from dependency_injection import resolve_dependencies
 from postgres.cursors import SimpleCursorBase
 
-import gratipay
+import liberapay
 
 
 BEGINNING_OF_EPOCH = to_rfc822(datetime(1970, 1, 1)).encode('ascii')
@@ -59,7 +59,7 @@ def get_participant(state, restrict=True, resolve_unclaimed=True):
         if user.ANON:
             raise Response(403, _("You need to log in to access this page."))
 
-    from gratipay.models.participant import Participant  # avoid circular import
+    from liberapay.models.participant import Participant  # avoid circular import
     participant = Participant.from_username(slug)
 
     if participant is None:
@@ -76,7 +76,7 @@ def get_participant(state, restrict=True, resolve_unclaimed=True):
         to = participant.resolve_unclaimed()
         if to:
             # This is a stub account (someone on another platform who hasn't
-            # actually registered with Gratipay yet)
+            # actually registered with Liberapay yet)
             request.redirect(to)
         else:
             # This is an archived account (result of take_over)
@@ -99,22 +99,6 @@ def update_global_stats(website):
     """, default=(0, 0.0))
     website.gnactive = stats[0]
     website.gtransfer_volume = stats[1]
-
-    nbackers = website.db.one("""
-        SELECT npatrons
-          FROM participants
-         WHERE username = 'Gratipay'
-    """, default=0)
-    website.support_current = cur = int(round(nbackers / stats[0] * 100)) if stats[0] else 0
-    if cur < 10:    goal = 20
-    elif cur < 15:  goal = 30
-    elif cur < 25:  goal = 40
-    elif cur < 35:  goal = 50
-    elif cur < 45:  goal = 60
-    elif cur < 55:  goal = 70
-    elif cur < 65:  goal = 80
-    elif cur > 70:  goal = None
-    website.support_goal = goal
 
 
 def _execute(this, sql, params=[]):
@@ -166,7 +150,7 @@ def set_cookie(cookies, key, value, expires=None, httponly=True, path=b'/'):
         cookie[b'httponly'] = True
     if path:
         cookie[b'path'] = path
-    if gratipay.canonical_scheme == 'https':
+    if liberapay.canonical_scheme == 'https':
         cookie[b'secure'] = True
 
 

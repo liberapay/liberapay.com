@@ -2,8 +2,8 @@ from __future__ import unicode_literals
 
 from decimal import Decimal as D
 
-from gratipay.testing import Harness
-from gratipay.models.participant import Participant
+from liberapay.testing import Harness
+from liberapay.models.participant import Participant
 
 
 TEAM = 'A Team'

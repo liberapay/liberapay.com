@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 import pytest
 from aspen import json
 from aspen.utils import utcnow
-from gratipay.testing import Harness
+from liberapay.testing import Harness
 
 class TestMembernameJson(Harness):
 

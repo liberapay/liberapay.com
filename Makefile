@@ -2,14 +2,13 @@ python := "$(shell { command -v python2.7 || command -v python; } 2>/dev/null)"
 
 # Set the relative path to installed binaries under the project virtualenv.
 # NOTE: Creating a virtualenv on Windows places binaries in the 'Scripts' directory.
-bin_dir := $(shell $(python) -c 'import sys; bin = "Scripts" if sys.platform == "win32" else "bin"; print(bin)')
+bin_dir := $(shell $(python) -c 'import sys; print("Scripts" if sys.platform == "win32" else "bin")')
 env_bin := env/$(bin_dir)
-venv := "./vendor/virtualenv-12.0.7.py"
 test_env_files := defaults.env,tests/test.env,tests/local.env
 pip := $(env_bin)/pip
-honcho := $(env_bin)/honcho
-honcho_run := $(honcho) run -e defaults.env,local.env
-py_test := $(honcho) run -e $(test_env_files) $(env_bin)/py.test
+with_local_env := $(env_bin)/honcho run -e defaults.env,local.env
+with_tests_env := $(env_bin)/honcho run -e $(test_env_files)
+py_test := $(with_tests_env) $(env_bin)/py.test
 
 ifdef PYTEST
 	pytest = ./tests/py/$(PYTEST)
@@ -17,87 +16,65 @@ else
 	pytest = ./tests/py/
 endif
 
-env: requirements.txt requirements_tests.txt setup.py
-	$(python) $(venv) \
-				--prompt="[gratipay] " \
-				--extra-search-dir=./vendor/ \
-				--always-copy \
-				./env/
-	$(pip) install --no-index -f ./vendor/ -r requirements.txt
-	$(pip) install --no-index -f ./vendor/ -r requirements_tests.txt
-	$(pip) install -e ./
+env: requirements.txt requirements_tests.txt
+	$(python) -m virtualenv ./env/
+	$(pip) install -r requirements.txt
+	$(pip) install -r requirements_tests.txt
+	@touch env
 
 clean:
 	rm -rf env *.egg *.egg-info
 	find . -name \*.pyc -delete
 
 schema: env
-	$(honcho_run) ./recreate-schema.sh
+	$(with_local_env) ./recreate-schema.sh
 
 schema-diff: test-schema
-	pg_dump -sO `heroku config:get DATABASE_URL -a gratipay` >prod.sql
-	$(honcho) run -e $(test_env_files) sh -c 'pg_dump -sO "$$DATABASE_URL"' >local.sql
+	pg_dump -sO `heroku config:get DATABASE_URL -a liberapay` >prod.sql
+	$(with_tests_env) sh -c 'pg_dump -sO "$$DATABASE_URL"' >local.sql
 	diff -uw prod.sql local.sql
 	rm prod.sql local.sql
 
-data:
-	$(honcho_run) $(env_bin)/fake_data fake_data
+data: env
+	$(with_local_env) $(env_bin)/python -m liberapay.utils.fake_data
 
 run: env
-	PATH=$(env_bin):$(PATH) $(honcho_run) web
+	$(with_local_env) make --no-print-directory run_
 
-stop:
-	pkill gunicorn
+run_:
+	$(env_bin)/$(shell grep -E '^web: ' Procfile | cut -d' ' -f2-)
 
 py: env
-	$(honcho_run) $(env_bin)/python -i gratipay/main.py
+	$(with_local_env) $(env_bin)/python -i liberapay/main.py
 
 test-schema: env
-	$(honcho) run -e $(test_env_files) ./recreate-schema.sh
+	$(with_tests_env) ./recreate-schema.sh test
 
 pyflakes: env
-	$(env_bin)/pyflakes *.py bin gratipay tasks tests
+	$(env_bin)/pyflakes liberapay tests
 
-test: test-schema pytest jstest
-
-pytest: env
-	$(py_test) --cov gratipay $(pytest)
-	@$(MAKE) --no-print-directory pyflakes
-
-retest: env
-	$(py_test) ./tests/py/ --lf
-	@$(MAKE) --no-print-directory pyflakes
-
-test-cov: env
-	$(py_test) --cov-report html --cov gratipay ./tests/py/
-
+test: test-schema pytest
 tests: test
 
-node_modules: package.json
-	npm install --no-bin-links
-	@if [ -d node_modules ]; then touch node_modules; fi
+pytest: env
+	PYTHONPATH=. $(py_test) --cov liberapay $(pytest)
+	@$(MAKE) --no-print-directory pyflakes
 
-jstest: node_modules
-	node_modules/grunt-cli/bin/grunt test
+pytest-cov: env
+	PYTHONPATH=. $(py_test) --cov-report html --cov liberapay ./tests/py/
 
-transifexrc:
-	@echo '[https://www.transifex.com]' >.transifexrc
-	@echo 'hostname = https://www.transifex.com' >>.transifexrc
-	@echo "password = $$TRANSIFEX_PASS" >>.transifexrc
-	@echo 'token = ' >>.transifexrc
-	@echo "username = $$TRANSIFEX_USER" >>.transifexrc
+pytest-re: env
+	PYTHONPATH=. $(py_test) --lf ./tests/py/
+	@$(MAKE) --no-print-directory pyflakes
 
-tx:
-	@if [ ! -x $(env_bin)/tx ]; then $(env_bin)/pip install transifex-client; fi
-
-i18n: env tx
-	$(env_bin)/pybabel extract -F .babel_extract --no-wrap -o i18n/core.pot emails gratipay templates www
+i18n: env
+	$(env_bin)/pybabel extract -F .babel_extract --no-wrap -o i18n/core.pot emails liberapay templates www
 
 i18n_upload: i18n
 	$(env_bin)/tx push -s
 	rm i18n/*.pot
 
-i18n_download: env tx
+i18n_download: env
 	$(env_bin)/tx pull -a -f --mode=reviewed --minimum-perc=50
 	@for f in i18n/*/*.po; do \
 	    sed -E -e '/^"POT?-[^-]+-Date: /d' \

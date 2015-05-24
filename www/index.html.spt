@@ -6,20 +6,15 @@ if not user.ANON:
 
 [---]
 {% extends "templates/base.html" %}
-{% block head_early %}
-    {% if website.optimizely_id and request.headers.get('DNT') != '1' %}
-    <script src="//cdn.optimizely.com/js/{{ website.optimizely_id }}.js"></script>
-    {% endif %}
-{% endblock %}
 {% block head %}
     <link rel="publisher" href="https://plus.google.com/104524895706770139568">
     <link type="application/opensearchdescription+xml" rel="search" href="/opensearch.osdd" />
     <meta name="description" content="Weekly payments, motivated by gratitude. Sustainably crowdfund your business, personal projects, or charity, with no extra fees." />
     <meta name="fb:app_id" content="229465400522758" />
     <meta name="og:type" content="website" />
-    <meta name="og:url" content="https://gratipay.com/" />
-    <meta name="og:title" content="Gratipay" />
-    <meta name="og:image" content="{{ website.asset('gratipay.opengraph.png') }}" />
+    <meta name="og:url" content="https://liberapay.com/" />
+    <meta name="og:title" content="Liberapay" />
+    <meta name="og:image" content="{{ website.asset('liberapay.png') }}" />
     {% if user.ANON %}
     <style>
         #header, #footer { display: none; }
@@ -30,7 +25,7 @@ if not user.ANON:
 
 {% block sidebar %}
 {% if user.ANON %}
-    <img src="{{ website.asset('gratipay.white.svg') }}" alt="Gratipay">
+    <img src="{{ website.asset('liberapay.svg') }}" alt="Liberapay">
     <h1>{{ _("Weekly Payments") }}</h1>
     <p>{{ _("Motivated by Gratitude") }}</p>
 
@@ -80,10 +75,8 @@ if not user.ANON:
               format_currency(website.gtransfer_volume, "USD"),
               "<a href='/about/stats'>"|safe, "</a>"|safe) + " " +
             _("Want to see who they are? Browse {0}our communities{1}.",
-              "<a href='/for/'>"|safe, "</a>"|safe) + " " +
-            _("Want to work for Gratipay? We are an {0}open company{1}.",
-              "<a href='http://inside.gratipay.com/big-picture/welcome'>"|safe,
-              "</a>"|safe) }}</p>
+              "<a href='/for/'>"|safe, "</a>"|safe)
+        }}</p>
 
     {% else %}
 
@@ -94,7 +87,7 @@ if not user.ANON:
                 _("You give {0} per week.", format_currency(participant.giving, 'USD'))
             }}</a></p>
 
-            <p>{{ _("Who inspires you? See if they're on Gratipay:") }}</p>
+            <p>{{ _("Who inspires you? See if they're on Liberapay:") }}</p>
             {% include "templates/search-box.html" %}
 
             <p>{{ _("Find your friends from social networks:") }}<br>

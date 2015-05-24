@@ -20,7 +20,7 @@ unreviewed = website.db.all("""
 title = _("Fraud Review Dashboard")
 [---] text/html
 <script src="{{ website.asset('jquery.min.js') }}"></script>
-<script src="{{ website.asset('gratipay.js') }}"></script>
+<script src="{{ website.asset('base.js') }}"></script>
 <style>
     table {
         width: auto;
@@ -41,7 +41,7 @@ title = _("Fraud Review Dashboard")
 <script>
     $(document).ready(function()
     {
-        Gratipay.forms.initCSRF();
+        Liberapay.forms.initCSRF();
 
         function error(a,b,c)
         {

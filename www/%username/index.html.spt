@@ -2,8 +2,8 @@
 """
 from collections import OrderedDict
 
-from gratipay.models import community
-from gratipay.utils import excerpt_intro, get_participant, markdown
+from liberapay.models import community
+from liberapay.utils import get_participant, markdown
 
 LONG_STATEMENT = 256
 
@@ -30,12 +30,12 @@ if participant.number == 'singular':
     GRATEFUL = _("I'm grateful for gifts, but don't have a specific funding goal.")
     PATRON = _("I'm here as a patron.")
     PATRON_NO_GIFTS = _("I'm here as a patron, and politely decline to receive gifts.")
-    GOAL_RAW = _("My goal is to receive {0} per week on Gratipay.")
+    GOAL_RAW = _("My goal is to receive {0} per week on Liberapay.")
 else:
     GRATEFUL = _("We're grateful for gifts, but don't have a specific funding goal.")
     PATRON = _("We're here as a patron.")
     PATRON_NO_GIFTS = _("We're here as a patron, and politely decline to receive gifts.")
-    GOAL_RAW = _("Our goal is to receive {0} per week on Gratipay.")
+    GOAL_RAW = _("Our goal is to receive {0} per week on Liberapay.")
 
 GOAL = GOAL_RAW.format(format_currency(participant.goal or 0, 'USD', trailing_zeroes=False))
 GOAL_PARTS = GOAL_RAW.split("{0}")
@@ -46,24 +46,6 @@ def with_others(obj):
 
 [-----------------------------------------------------------------------------]
 {% extends "templates/profile.html" %}
-
-{% block head %}
-    <link rel="payment" type="text/html" title="Give weekly gift on Gratipay"
-        href="https://gratipay.com/{{ username }}/" />
-    <meta name="twitter:card" content="summary" />
-    <meta name="og:url" content="https://gratipay.com/{{ username }}/" />
-    <meta name="og:type" content="profile" />
-    <meta name="og:title" content="{{ participant.get_og_title() }}" />
-    {% if statement %}
-    <meta name="og:description" content="{{ excerpt_intro(statement) }}" />
-    {% else %}
-    <meta name="og:description" content="Gratipay is a weekly gift exchange" />
-    {% endif %}
-    {% if participant.avatar_url %}
-    <meta name="og:image" content="{{ participant.avatar_url }}" />
-    {% endif %}
-    <meta name="og:image" content="{{ website.asset('gratipay.opengraph.png') }}" />
-{% endblock %}
 
 {% block content %}
 {% if user.participant == participant %}
@@ -102,7 +84,7 @@ def with_others(obj):
 
 {% block scripts %}
 {% if user.participant == participant %}
-<script>$(document).ready(Gratipay.profile.init);</script>
+<script>$(document).ready(Liberapay.profile.init);</script>
 {% endif %}
 {{ super() }}
 {% endblock %}

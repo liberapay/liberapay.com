@@ -5,10 +5,10 @@ from datetime import timedelta
 
 import pytest
 from aspen.http.response import Response
-from gratipay import utils
-from gratipay.testing import Harness
-from gratipay.utils import i18n, markdown
-from gratipay.utils.username import safely_reserve_a_username, FailedToReserveUsername, \
+from liberapay import utils
+from liberapay.testing import Harness
+from liberapay.utils import i18n, markdown
+from liberapay.utils.username import safely_reserve_a_username, FailedToReserveUsername, \
                                                                            RanOutOfUsernameAttempts
 from psycopg2 import IntegrityError
 

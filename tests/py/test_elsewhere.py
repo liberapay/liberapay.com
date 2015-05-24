@@ -5,11 +5,11 @@ from base64 import b64encode
 
 import mock
 
-from gratipay.elsewhere import UserInfo
-from gratipay.models.account_elsewhere import AccountElsewhere
-from gratipay.models.participant import Participant
-from gratipay.testing import Harness
-import gratipay.testing.elsewhere as user_info_examples
+from liberapay.elsewhere import UserInfo
+from liberapay.models.account_elsewhere import AccountElsewhere
+from liberapay.models.participant import Participant
+from liberapay.testing import Harness
+import liberapay.testing.elsewhere as user_info_examples
 
 
 class TestElsewhere(Harness):
@@ -57,8 +57,8 @@ class TestElsewhere(Harness):
         assert alice.goal == 100
 
     @mock.patch('requests_oauthlib.OAuth2Session.fetch_token')
-    @mock.patch('gratipay.elsewhere.Platform.get_user_self_info')
-    @mock.patch('gratipay.elsewhere.Platform.get_user_info')
+    @mock.patch('liberapay.elsewhere.Platform.get_user_self_info')
+    @mock.patch('liberapay.elsewhere.Platform.get_user_info')
     def test_connect_might_need_confirmation(self, gui, gusi, ft):
         self.make_participant('alice', claimed_time='now')
         self.make_participant('bob', claimed_time='now')
@@ -93,7 +93,7 @@ class TestElsewhere(Harness):
             account = AccountElsewhere.upsert(platform.extract_user_info(user_info))
             assert isinstance(account, AccountElsewhere)
 
-    @mock.patch('gratipay.elsewhere.Platform.get_user_info')
+    @mock.patch('liberapay.elsewhere.Platform.get_user_info')
     def test_user_pages(self, get_user_info):
         for platform in self.platforms:
             alice = UserInfo( platform=platform.name
@@ -128,8 +128,8 @@ class TestElsewhere(Harness):
         assert 'pledge to alice' in body
 
     def test_failure_page_accepts_valid_username(self):
-        self.client.GET('/on/twitter/Gratipay/')  # normal case will have the db primed
-        response = self.client.GET('/on/twitter/Gratipay/failure.html')
+        self.client.GET('/on/github/liberapay/')  # normal case will have the db primed
+        response = self.client.GET('/on/github/liberapay/failure.html')
         assert response.code == 200
 
 

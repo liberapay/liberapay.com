@@ -2,38 +2,19 @@
 <html>
 <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb#">
     {% block head_early %}{% endblock %}
-    <title>{% if title %}{% if subhead %}{{ subhead }} - {% endif %}{{ title }} - {% endif %}Gratipay</title>
+    <title>{% if title %}{% if subhead %}{{ subhead }} - {% endif %}{{ title }} - {% endif %}Liberapay</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ website.asset('gratipay.css') }}" type="text/css">
-    <link rel="apple-touch-icon-precomposed" href="{{ website.asset('touch/icon-60x60.png') }}">
-    <link rel="apple-touch-icon-precomposed" href="{{ website.asset('touch/icon-76x76.png') }}" sizes="76x76">
-    <link rel="apple-touch-icon-precomposed" href="{{ website.asset('touch/icon-120x120.png') }}" sizes="120x120">
-    <link rel="apple-touch-icon-precomposed" href="{{ website.asset('touch/icon-152x152.png') }}" sizes="152x152">
+    <link rel="stylesheet" href="{{ website.asset('base.css') }}" type="text/css">
     <link rel="stylesheet" type="text/css" href="//cloud.typography.com/6540672/615104/css/fonts.css" />
     {% block head %}{% endblock %}
-
-    {% if website.include_piwik and request.headers.get('DNT') != '1' %}
-    <script type="text/javascript">
-        var _paq = _paq || [];
-        _paq.push(['trackPageView']);
-        _paq.push(['enableLinkTracking']);
-        (function() {
-            var u="//gratipay.piwik.pro/";
-            _paq.push(['setTrackerUrl', u+'piwik.php']);
-            _paq.push(['setSiteId', 1]);
-            var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-            g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
-        })();
-    </script>
-    {% endif %}
 </head>
 {% set homepage = request.path.raw == '/' %}
 <body id="{{ 'homepage' if homepage and user.ANON }}">
 
     <div id="wrapper">
         <div id="header" class="clearfix">
-            <h1><a href="/"><img src="{{ website.asset('gratipay.svg') }}"
-                                 alt="Gratipay" /></a></h1>
+            <h1><a href="/"><img src="{{ website.asset('liberapay.svg') }}"
+                                 alt="Liberapay" /></a></h1>
             {% set pages = [('/about/', _('About')), ('/explore/', _('Explore')), ('/search', _('Search'))] %}
             {% set current_page = request.path.raw.split('/')[1] %}
             {% include "templates/nav.html" %}
@@ -57,7 +38,6 @@
                 </li>
             </ul>
             {% endif %}
-            {% include "templates/support-gratipay.html" %}
         </div>
 
         <div id="main">
@@ -69,7 +49,7 @@
             </div>
         </div>
 
-        <a class="feedback" href="https://github.com/gratipay/gratipay.com/issues" target="_blank">Feedback</a>
+        <a class="feedback" href="https://github.com/liberapay/liberapay.com/issues" target="_blank">Feedback</a>
 
         <div id="footer">
             <ul>
@@ -77,10 +57,8 @@
                 <li><a href="/about/contact">{{ _("Contact Us") }}</a></li>
                 <li><a href="/about/faq">{{ _("FAQ") }}</a></li>
                 <li><a href="/about/terms/">{{ _("Terms") }}</a></li>
-                <li><a href="http://inside.gratipay.com/appendices/colophon">{{ _("Colophon") }}</a></li>
-                <li><a href="https://medium.com/gratipay-blog">{{ _("Blog") }}</a></li>
-                <li><a href="https://twitter.com/gratipay">Twitter</a></li>
-                <li><a href="https://github.com/gratipay/gratipay.com">GitHub</a></li>
+                <li><a href="https://twitter.com/liberapaye">Twitter</a></li>
+                <li><a href="https://github.com/liberapay/liberapay.com">GitHub</a></li>
             </ul>
         </div>
     </div>
@@ -94,16 +72,15 @@
 </script>
 <script src="{{ website.asset('jquery.min.js') }}"></script>
 <script src="{{ website.asset('chosen.jquery.min.js') }}"></script>
-<script src="{{ website.asset('tipr.min.js') }}"></script>
 <script src="{{ website.asset('bootstrap-dropdown.js') }}"></script>
-<script src="{{ website.asset('gratipay.js') }}"></script>
+<script src="{{ website.asset('base.js') }}"></script>
 
 <script>
     $(document).ready(function() {
-        Gratipay.init();
+        Liberapay.init();
         {% if not user.ANON %}
-        Gratipay.username = {{ to_javascript(user.participant.username)|safe }};
-        Gratipay.initNotifications(
+        Liberapay.username = {{ to_javascript(user.participant.username)|safe }};
+        Liberapay.initNotifications(
             {{ to_javascript(user.participant.render_notifications(state))|safe }}
         );
         {% endif %}
@@ -112,8 +89,5 @@
 
 {% block scripts %}{% endblock %}
 
-{% if website.include_piwik and request.headers.get('DNT') != '1' %}
-<noscript><img src="//gratipay.piwik.pro/piwik.php?idsite=1" style="border:0;" alt="" /></noscript>
-{% endif %}
 </body>
 </html>

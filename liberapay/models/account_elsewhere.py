@@ -12,10 +12,10 @@ from postgres.orm import Model
 from psycopg2 import IntegrityError
 import xmltodict
 
-import gratipay
-from gratipay.exceptions import ProblemChangingUsername
-from gratipay.security.crypto import constant_time_compare
-from gratipay.utils.username import safely_reserve_a_username
+import liberapay
+from liberapay.exceptions import ProblemChangingUsername
+from liberapay.security.crypto import constant_time_compare
+from liberapay.utils.username import safely_reserve_a_username
 
 
 CONNECT_TOKEN_TIMEOUT = timedelta(hours=24)
@@ -185,15 +185,15 @@ class AccountElsewhere(Model):
         return self.platform_data.get_auth_session(**params)
 
     @property
-    def gratipay_slug(self):
+    def liberapay_slug(self):
         return self.user_name or ('~' + self.user_id)
 
     @property
-    def gratipay_url(self):
-        scheme = gratipay.canonical_scheme
-        host = gratipay.canonical_host
+    def liberapay_url(self):
+        scheme = liberapay.canonical_scheme
+        host = liberapay.canonical_host
         platform = self.platform
-        slug = self.gratipay_slug
+        slug = self.liberapay_slug
         return "{scheme}://{host}/on/{platform}/{slug}/".format(**locals())
 
     @property
@@ -225,7 +225,7 @@ class AccountElsewhere(Model):
     def opt_in(self, desired_username):
         """Given a desired username, return a User object.
         """
-        from gratipay.security.user import User
+        from liberapay.security.user import User
         user = User.from_username(self.participant.username)
         assert not user.ANON, self.participant  # sanity check
         if self.participant.is_claimed:

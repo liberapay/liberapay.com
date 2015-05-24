@@ -1,6 +1,7 @@
 # encoding: utf8
 from __future__ import print_function, unicode_literals
 
+from datetime import date, datetime
 from io import BytesIO
 import re
 from unicodedata import combining, normalize
@@ -147,7 +148,9 @@ def n_get_text(tell_sentry, state, loc, s, p, n, *a, **kw):
 
 
 def to_age(dt, loc, **kw):
-    return format_timedelta(dt - utcnow(), locale=loc, **kw)
+    if isinstance(dt, datetime):
+        return format_timedelta(dt - utcnow(), locale=loc, **kw)
+    return format_timedelta(dt - date.today(), locale=loc, granularity='day', **kw)
 
 
 def regularize_locale(loc):

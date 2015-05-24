@@ -1,6 +1,6 @@
 
-from gratipay.models.exchange_route import ExchangeRoute
-from gratipay.utils import get_participant
+from liberapay.models.exchange_route import ExchangeRoute
+from liberapay.utils import get_participant
 
 [-----------------------------------------------------------------------------]
 
@@ -14,7 +14,7 @@ emails = participant.get_emails()
 {% extends "templates/profile.html" %}
 
 {% block scripts %}
-<script>$(document).ready(Gratipay.settings.init);</script>
+<script>$(document).ready(Liberapay.settings.init);</script>
 {{ super() }}
 {% endblock %}
 
@@ -31,7 +31,7 @@ emails = participant.get_emails()
                     <button class="save">{{ _("Save") }}</button>
                     <button class="cancel">{{ _("Cancel") }}</button>
                     <span class="warning">
-                        {{ _("Have you linked to your Gratipay profile from other websites? Be sure to update those links!") }}
+                        {{ _("Have you linked to your Liberapay profile from other websites? Be sure to update those links!") }}
                     </span>
                 </form>
             </h2>
@@ -167,7 +167,7 @@ emails = participant.get_emails()
             <button class="hide" style="display: none">{{ _("Hide Key") }}</button>
             <button class="recreate">{{ _("Recreate") }}</button>
           </div>
-          <a href="https://github.com/gratipay/gratipay.com#api">{{ _("API docs") }}</a>
+          <a href="https://github.com/liberapay/liberapay.com#api">{{ _("API docs") }}</a>
         </div>
 
         <h2>{{ _("Privacy") }}</h2>
@@ -208,7 +208,7 @@ emails = participant.get_emails()
             <label>
                 <input type="checkbox" data-field="notify_on_opt_in"
                     {{ 'checked' if participant.notify_on_opt_in }} />
-                    {{ _("When people I pledge to join Gratipay") }}
+                    {{ _("When people I pledge to join Liberapay") }}
             </label>
             <div>
                 {{ _("When my credit card is charged:") }}

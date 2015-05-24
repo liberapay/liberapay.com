@@ -3,8 +3,8 @@ from datetime import timedelta
 import uuid
 
 from aspen.utils import utcnow
-from gratipay.models.participant import Participant
-from gratipay.utils import erase_cookie, set_cookie
+from liberapay.models.participant import Participant
+from liberapay.utils import erase_cookie, set_cookie
 
 
 SESSION = b'session'

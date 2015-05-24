@@ -1,7 +1,7 @@
 import balanced
 
-from gratipay.billing.exchanges import repr_exception
-from gratipay.utils import get_participant
+from liberapay.billing.exchanges import repr_exception
+from liberapay.utils import get_participant
 
 [---]
 request.allow('GET', 'POST')
@@ -57,7 +57,7 @@ else:
         $(document).ready(function(){
             $('select[name="country"]').chosen();
             {% if error %}
-            Gratipay.notification({{ to_javascript(error)|safe }}, 'error', -1);
+            Liberapay.notification({{ to_javascript(error)|safe }}, 'error', -1);
             {% endif %}
         });
     </script>

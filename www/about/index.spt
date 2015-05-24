@@ -1,40 +1,31 @@
+from liberapay import MAX_TIP
 [---]
 title = _("About")
-example = website.db.one("""
-
-    SELECT username FROM participants
-     WHERE is_suspicious IS NOT true
-       AND (giving > 10 AND NOT anonymous_giving)
-        OR (receiving > 10 AND NOT anonymous_receiving)
-  ORDER BY random() LIMIT 1
-
-""")
 [---] text/html
-{% extends "templates/about-basic-info.html" %}
+{% extends "templates/about.html" %}
 {% block content %}
 <div class="col0">
 
-    <p>You've found Gratipay!</p>
+    <p>{{ _("Liberapay is a way to donate money recurrently to people and teams you believe in.") }}</p>
 
-    <p>Gratipay (formerly Gittip) is a way to give money every week to people
-    and teams you believe in.</p>
+    <p>{{ _(
+        "Payments come with no strings attached. You don't know exactly who is "
+        "giving to you, and donations are capped at {0} per week per donor to "
+        "dampen undue influence."
+        , format_currency(MAX_TIP, 'USD')
+    ) }}</p>
 
-    <p>Payments are <b>weekly</b>. Bills are recurring. Therefore, income from
-    Gratipay is recurring.</p>
+    <p>{{ _(
+        "Donations are public. By default, the total amount you give and the "
+        "total amount you receive are public (you can opt out of sharing this "
+        "info)."
+    ) }}</p>
 
-    <p>Payments come with <b>no strings attached</b>. You don't know exactly
-    who is paying you, and payments are capped at $100/wk to individuals and
-    $1,000/wk to organizations, to dampen undue influence.</p>
-
-    <p>Payments are <b>public</b>. By default, the <i>total</i> amount you give
-    and the <i>total</i> amount you receive is public (you can opt out of
-    sharing this info).</p>
-
-    <p title="Gratipay does pass credit card processing fees to donors. See Features for more information.">
-    Gratipay does not take a cut of payments, recipients get the <b>full face
-    value</b>. Instead of taking a cut, Gratipay is funded by the voluntary
-    payments of our users to <a href="/Gratipay/">our own Gratipay account</a>.
-    See our <a href="/about/pricing">pricing page</a> for more information.</p>
+    <p>{{ _(
+        "Liberapay does not take a cut of payments, recipients get the full face "
+        "value. The service is funded by the donations to {0}its own account{1}."
+        , '<a href="/Liberapay/">'|safe, '</a>'|safe
+    ) }}</p>
 
 </div>
 {% endblock %}

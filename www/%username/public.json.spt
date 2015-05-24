@@ -1,29 +1,9 @@
-"""JSON endpoint for a Gratipay widget.
-"""
-import re
-
-from aspen import json, Response
-from gratipay.utils import get_participant
-
-callback_pattern = re.compile(r'^[_A-Za-z0-9.]+$')
+from liberapay.utils import get_participant
 
 [-----------------------------------------------------------------------------]
 
 participant = get_participant(state, restrict=False)
-
-# CORS - see https://github.com/gratipay/aspen-python/issues/138
 response.headers["Access-Control-Allow-Origin"] = "*"
-out = participant.to_dict(details=True, inquirer=user.participant)
 
-# JSONP - see https://github.com/gratipay/aspen-python/issues/138
-callback = request.qs.get('callback')
-if callback is not None:
-    if callback_pattern.match(callback) is None:
-        raise Response(400, "bad callback")
-    else:
-        response.body = "%s(%s)" % (callback, json.dumps(out))
-        response.headers['Content-Type'] = 'application/javascript'
-        raise response
-
-[---] application/json via json_dump
-out
+[---] application/json via jsonp_dump
+participant.to_dict(details=True, inquirer=user.participant)

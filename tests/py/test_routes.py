@@ -3,9 +3,9 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import balanced
 import mock
 
-from gratipay.testing.balanced import BalancedHarness
-from gratipay.models.exchange_route import ExchangeRoute
-from gratipay.models.participant import Participant
+from liberapay.testing.balanced import BalancedHarness
+from liberapay.models.exchange_route import ExchangeRoute
+from liberapay.models.participant import Participant
 
 
 class TestRoutes(BalancedHarness):

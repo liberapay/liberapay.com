@@ -12,7 +12,7 @@ $(document).ready(function() {
                 $('.avatar').toggleClass('is-suspicious', data.is_suspicious);
                 $('.is-suspicious-label input').prop('checked', data.is_suspicious);
             },
-            error: Gratipay.error,
+            error: Liberapay.error,
         });
     });
 });

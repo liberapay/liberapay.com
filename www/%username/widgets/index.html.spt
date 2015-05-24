@@ -1,4 +1,4 @@
-from gratipay.utils import get_participant
+from liberapay.utils import get_participant
 
 [-----------------------------------------------------------------------------]
 
@@ -9,159 +9,39 @@ subhead = _("Widgets")
 [-----------------------------------------------------------------------------]
 {% extends "templates/profile.html" %}
 {% block content %}
-<style>
-    /* Copied and pasted from %username/widget.html */
-    .button-examples button.old-widget-style {
-        font: normal 12pt/12pt "Lato", sans-serif;
-        text-decoration: none;
-
-        /* reset/override */
-        color: white ! important;
-        letter-spacing: 0;
-        text-transform: none;
-
-        width: auto;
-        overflow: visible;
-        display: inline-block;
-        cursor: pointer;
-
-        border: 1pt solid #999;
-        border-radius: 7pt;
-
-        background: #F7F7F6 url("{{ website.asset('button-bg.png') }}") repeat-x bottom left;
-        background-image: -webkit-gradient( linear, 0% 0%, 0% 100%
-                                          , from(#F7F7F6)
-                                          , to(#999)
-                                           );
-        background-image: -moz-linear-gradient(top, #F7F7F6, #CCC);
-        background-image: linear-gradient(top, #F7F7F6, #999);
-
-        padding: 4pt 12pt 6pt 11pt;
-        margin: 0;
-        vertical-align: middle;
-        background-clip: padding-box;
-    }
-
-    .button-examples button.old-widget-style { /* .selected */
-        border: 1px solid #0A382E;
-        background: #2A8F79 url("{{ website.asset('button-bg.png') }}") repeat-x bottom left;
-        background-image: -webkit-gradient( linear, 0% 0%, 0% 100%
-                                          , from(#2A8F79)
-                                          , to(#0D4035)
-                                           );
-        background-image: -moz-linear-gradient(top, #2A8F79, #0D4035);
-        background-image: linear-gradient(top, #2A8F79, #0D4035);
-    }
-
-    .button-examples button.old-widget-style { /* .small */
-        font: normal 9pt/9pt "Lato", sans-serif;
-        padding: 2pt 5pt 2.5pt;
-        border-radius: 3pt;
-    }
-
-    .button-examples button.old-widget-style::-moz-focus-inner {
-        border: none;
-        padding: 0;
-    }
-
-    .button-examples button.old-widget-style:focus {
-        outline: none;
-    }
-
-    .button-examples button.old-widget-style, .button-examples button.old-widget-style:visited {
-        color: #888;
-    }
-
-    .button-examples button.old-widget-style.selected, .button-examples button.old-widget-style.selected:visited,
-    .button-examples button.old-widget-style:hover, .button-examples button.old-widget-style:hover:visited,
-    .button-examples button.old-widget-style:focus, .button-examples button.old-widget-style:focus:visited,
-    .button-examples button.old-widget-style:active, .button-examples button.old-widget-style:active:visited {
-        color: white;
-    }
-
-    .button-examples button.old-widget-style:hover, .button-examples button.old-widget-style:focus {
-        border: 1px solid #0A382E;
-        background-image: url("{{ website.asset('button-bg.over.png') }}");
-        background-image: -webkit-gradient( linear, 0% 0%, 0% 100%
-                                          , from(#2A8F79)
-                                          , to(#04221B)
-                                           );
-        background-image: -moz-linear-gradient(top, #2A8F79, #04221B);
-        background-image: linear-gradient(top, #2A8F79, #04221B));
-    }
-    .button-examples button.old-widget-style:active {
-        /* http://somadesign.ca/demos/buttons-redux.html */
-        box-shadow:
-            0 .33em 2em rgba(0,0,0,.67) inset,
-            1px 1px 0 rgba(255,255,255,.25) inset,
-            -1px -1px 0 rgba(255,255,255,.25) inset;
-    }
-</style>
-<div class="row">
-<div class="col1">
-    <h2>{{ _("Button") }}</h2>
-
-    <p>{{ _("Use this code to embed a Gratipay button on your website:") }}</p>
-
-    <pre>&lt;script data-gratipay-username="{{ participant.username }}"
-        data-gratipay-widget="button"
-        src="//grtp.co/v1.js"&gt;&lt;/script&gt;</pre>
-
-    <p>{{ _("The button opens your profile on Gratipay in a new tab or window. Here's what the text reads:") }}</p>
-
-    <ul class="button-examples no-bullets">
-
-        <li><button class="old-widget-style">Gratipay</button>&mdash;
-        {{ _("person is not logged into Gratipay or doesn't tip you") }}</li>
-
-        <li><button class="old-widget-style">3.00</button>&mdash;
-        {{ _("person tips you; shows current gift amount") }}</li>
-
-        <li><button class="old-widget-style">You!</button>&mdash;
-        {{ _("your own button") }}</li>
-
-    </ul>
-
-    <p>
-        {{ _("Here's an example using {0}:", "<a href='/whit537/'>whit537</a>"|safe) }}
-        <script data-gratipay-username="whit537" data-gratipay-widget="button" src="//grtp.co/v1.js"></script>
-    </p>
+<div class="col0">
 
     <h2>{{ _("Badge") }}</h2>
 
-    <p>{{ _("Use this code to embed a Gratipay badge on your website:") }}</p>
+    <p>{{ _("Use this code to embed a Liberapay badge on your website:") }}</p>
 
-    <pre>&lt;img src="//img.shields.io/gratipay/{{ participant.username }}.svg"&gt;</pre>
+    <pre>&lt;img src="//img.shields.io/liberapay/{{ participant.username }}.svg"&gt;</pre>
 
     <p>{{ _("Here's what it looks like:") }}</p>
 
-    <img src="//img.shields.io/gratipay/{{ participant.username }}.svg">
-
-</div>
-<div class="col1">
+    <img src="//img.shields.io/liberapay/{{ participant.username }}.svg">
 
     <h2>{{ _("Giving & Receiving Widgets") }}</h2>
 
-    <p>{{ _("Use this code to add a Gratipay \"receiving\" widget on your website:") }}</p>
+    <p>{{ _("Use this code to add a Liberapay \"receiving\" widget on your website:") }}</p>
 
-    <pre>&lt;script data-gratipay-username="{{ participant.username }}"
-        src="//grtp.co/v1.js"&gt;&lt;/script&gt;</pre>
+    <pre>&lt;script data-username="{{ participant.username }}"
+        src="//static.liberapay.com/v1.js"&gt;&lt;/script&gt;</pre>
 
     <p>{{ _("Here's what it looks like:") }}</p>
 
-    <p><script data-gratipay-username="{{ participant.username }}" src="//grtp.co/v1.js"></script></p>
+    <p><script data-username="{{ participant.username }}" src="//static.liberapay.com/v1.js"></script></p>
 
     <p>{{ _("Or, if you'd like to include a \"giving\" widget, you can add the {0} attribute:",
-            "<pre>data-gratipay-widget=\"giving\"</pre>"|safe) }}</p>
+            "<pre>data-widget=\"giving\"</pre>"|safe) }}</p>
 
-    <pre>&lt;script data-gratipay-username="{{ participant.username }}"
-        data-gratipay-widget="giving"
-        src="//grtp.co/v1.js"&gt;&lt;/script&gt;</pre>
+    <pre>&lt;script data-username="{{ participant.username }}"
+        data-widget="giving"
+        src="//static.liberapay.com/v1.js"&gt;&lt;/script&gt;</pre>
 
     <p>{{ _("Here's what it looks like:") }}</p>
 
-    <p><script data-gratipay-username="{{ participant.username }}" data-gratipay-widget="giving" src="//grtp.co/v1.js"></script></p>
+    <p><script data-username="{{ participant.username }}" data-widget="giving" src="//static.liberapay.com/v1.js"></script></p>
 
-</div>
 </div>
 {% endblock %}

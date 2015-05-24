@@ -1,8 +1,8 @@
 from __future__ import unicode_literals
-from gratipay.models._mixin_team import StubParticipantAdded
+from liberapay.models._mixin_team import StubParticipantAdded
 
-from gratipay.testing import Harness
-from gratipay.security.user import User
+from liberapay.testing import Harness
+from liberapay.security.user import User
 
 
 class Tests(Harness):

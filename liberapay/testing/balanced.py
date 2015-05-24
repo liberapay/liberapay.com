@@ -4,9 +4,9 @@ import itertools
 
 import balanced
 
-from gratipay.models.exchange_route import ExchangeRoute
-from gratipay.testing import Harness
-from gratipay.testing.vcr import use_cassette
+from liberapay.models.exchange_route import ExchangeRoute
+from liberapay.testing import Harness
+from liberapay.testing.vcr import use_cassette
 
 
 class BalancedHarness(Harness):
@@ -55,13 +55,6 @@ with use_cassette('BalancedHarness'):
             'state': 'Confusion',
             'postal_code': '90210',
         },
-        # gratipay stores some of the address data in the meta fields,
-        # continue using them to support backwards compatibility
-        meta={
-            'address_2': 'Box 2',
-            'city_town': '',
-            'region': 'Confusion',
-        }
     ).save()
     cls.card.associate_to_customer(cls.janet_href)
     cls.card_href = unicode(cls.card.href)

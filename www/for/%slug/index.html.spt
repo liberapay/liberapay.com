@@ -1,10 +1,8 @@
-from itertools import chain
-
 from aspen import Response
 from aspen.utils import utcnow
-from gratipay.models.community import name_pattern, slugize, Community
-from gratipay.utils import excerpt_intro, format_money
-from gratipay.utils.query_cache import QueryCache
+from liberapay.models.community import name_pattern, slugize, Community
+from liberapay.utils import format_money
+from liberapay.utils.query_cache import QueryCache
 
 LUXURY = 4
 
@@ -83,9 +81,6 @@ givers = query_cache.all("""
 
 """, (community.slug, limit, offset))
 
-# XXX I'm nearly positive that one or both of givers and receivers can contain
-# orphan accounts. See https://github.com/gratipay/gratipay.com/issues/650
-
 receivers = query_cache.all("""
 -- top receivers on community page
 
@@ -105,25 +100,6 @@ receivers = query_cache.all("""
   OFFSET %s
 
 """, (community.slug, limit, offset))
-
-
-# Fetch statements
-
-ids = tuple(p.id for p in chain(new_participants, givers, receivers))
-if ids:
-    statements = website.db.all("""
-        SELECT DISTINCT ON (participant) participant, content
-        FROM statements s
-        JOIN enumerate(%s) langs ON langs.value = s.lang
-        WHERE participant IN %s
-    ORDER BY participant, langs.rank ASC
-    """, (request.accept_langs, ids))
-    statements = {s.participant: s.content for s in statements}
-else:
-    statements = {}
-
-for p in chain(new_participants, givers, receivers):
-    p.__dict__['statement'] = statements.get(p.id)
 
 [---]
 {% from 'templates/avatar-url.html' import avatar_url with context %}
@@ -152,7 +128,7 @@ for p in chain(new_participants, givers, receivers):
     {% if user.ANON %}
         <div class="sign-in-to">
             {% include "templates/sign-in-using.html" %}
-            {{ _("{0} to join the {1} community on Gratipay.", "", community.name) }}
+            {{ _("{0} to join the {1} community on Liberapay.", "", community.name) }}
         </div>
     {% else %}
         <div class="cta">
@@ -170,7 +146,7 @@ for p in chain(new_participants, givers, receivers):
 
 {% if community.nmembers == 0 %}
     <h2>{{ _("You're the first one here!") }}</h2>
-    <p>{{ _("Bring the {0} community to Gratipay to find like-minded people to give to.",
+    <p>{{ _("Bring the {0} community to Liberapay to find like-minded people to give to.",
             community.name) }}</p>
 {% else %}
 
@@ -180,8 +156,7 @@ for p in chain(new_participants, givers, receivers):
         <ul class="clearfix">
             {% for i, participant in enumerate(new_participants, start=1) %}
             <li{% if i > LUXURY %} class="luxury"{% endif %}>
-                <a href="/{{ participant.username }}/" class="mini-user"
-                   data-tip="{{ excerpt_intro(participant.statement) }}">
+                <a href="/{{ participant.username }}/" class="mini-user">
                     <span class="inner">
                         <span class="avatar"
                             style="background-image: url('{{ avatar_url(participant) }}')">
@@ -210,8 +185,7 @@ for p in chain(new_participants, givers, receivers):
                 </span>
                 {% else %}
                 <a href="/{{ giver.username }}/"
-                   class="mini-user{{ ' anonymous' if giver.anonymous else '' }}"
-                   data-tip="{{ excerpt_intro(giver.statement) }}">
+                   class="mini-user{{ ' anonymous' if giver.anonymous else '' }}">
                     <span class="inner">
                         <span class="avatar" style="background-image: url('{{ avatar_url(giver) }}')">
                         </span>
@@ -240,8 +214,7 @@ for p in chain(new_participants, givers, receivers):
                 </span>
                 {% else %}
                 <a href="/{{ receiver.username }}/"
-                   class="mini-user{{ ' anonymous' if receiver.anonymous else '' }}"
-                   data-tip="{{ excerpt_intro(receiver.statement) }}">
+                   class="mini-user{{ ' anonymous' if receiver.anonymous else '' }}">
                     <span class="inner">
                         <span class="avatar"
                             style="background-image: url('{{ avatar_url(receiver) }}')">
@@ -269,19 +242,14 @@ for p in chain(new_participants, givers, receivers):
 
 <script>
 $(document).ready(function() {
-    $("a.mini-user:not([data-tip=''])").tipr();
-
-    $('button.join-leave').click(function()
-    {
+    $('button.join-leave').click(function() {
         var button = $(this);
         var name = button.attr('data-name');
         var is_member = button.attr('data-is-member') === 'true';
-        Gratipay.communities.update(name, !is_member, function()
-        {
+        Liberapay.communities.update(name, !is_member, function() {
             window.location.reload();
         });
     });
-
 });
 </script>
 

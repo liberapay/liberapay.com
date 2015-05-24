@@ -3,7 +3,7 @@ from __future__ import print_function, unicode_literals
 import json
 from decimal import Decimal
 
-from gratipay.testing import Harness
+from liberapay.testing import Harness
 
 
 class Tests(Harness):

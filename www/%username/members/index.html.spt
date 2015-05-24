@@ -1,7 +1,7 @@
 # encoding: utf8
 """Show information about a single participant. It might be you!
 """
-from gratipay.utils import get_participant
+from liberapay.utils import get_participant
 
 [-----------------------------------------------------------------------------]
 
@@ -16,7 +16,7 @@ subhead = _("Team Members")
 {% extends "templates/profile.html" %}
 
 {% block scripts %}
-<script>$(document).ready(Gratipay.team.init);</script>
+<script>$(document).ready(Liberapay.team.init);</script>
 {{ super() }}
 {% endblock %}
 
@@ -49,7 +49,7 @@ subhead = _("Team Members")
             <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
             <input tabindex="1" id="query"
                    autocomplete="off"
-                   placeholder="{{ _("Enter a Gratipay username") }}"
+                   placeholder="{{ _("Enter a username") }}"
                />&nbsp;<button type="submit"
                                tabindex="2">{{ _("Add") }}</button>
             <ul id="lookup-results"></ul>

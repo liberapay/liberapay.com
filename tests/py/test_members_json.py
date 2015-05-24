@@ -3,7 +3,7 @@ from __future__ import print_function, unicode_literals
 import json
 
 import pytest
-from gratipay.testing import Harness
+from liberapay.testing import Harness
 from aspen import Response
 
 

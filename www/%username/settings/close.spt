@@ -1,4 +1,4 @@
-from gratipay.utils import get_participant, to_javascript
+from liberapay.utils import get_participant, to_javascript
 [---]
 participant = get_participant(state, restrict=True)
 title = _("Close Account")
@@ -16,7 +16,7 @@ if request.method == 'POST':
     else:
         disbursement_strategy = request.body.get('disbursement_strategy')
         if participant.balance and disbursement_strategy is None:
-            error = _("You still have money in this Gratipay account, please "
+            error = _("You still have money in this Liberapay account, please "
                       "choose a disbursement method below or contact support.")
         else:
             try:
@@ -65,7 +65,7 @@ if request.method == 'POST':
                         by Thursday, and then you'll be able to have your
                         funds deposited to your bank account on file. To
                         expedite the review, please <a
-                        href="mailto:support@gratipay.com?subject=review%20for%20closing%20account">contact
+                        href="mailto:support@liberapay.com?subject=review%20for%20closing%20account">contact
                         support</a>.</label></li>
 
                     {% endif %}
@@ -90,7 +90,7 @@ if request.method == 'POST':
             </ul>
 
             <p>If neither option works for you, please <a
-            href="mailto:support@gratipay.com?subject=close%20account">contact
+            href="mailto:support@liberapay.com?subject=close%20account">contact
             support</a> to otherwise deal with your balance before
             closing your account.</p>
 
@@ -100,10 +100,7 @@ if request.method == 'POST':
             <h2>Personal Information</h2>
 
             <p>We immediately clear out most of the information in your
-            profile (though it may still exist in our database in event
-                    logs, to be fully deleted once we sort out our <a
-                    href="https://github.com/gratipay/gratipay.com/issues/397">data
-                    retention policy</a>).</p>
+            profile.</p>
 
             <p>Things we clear immediately include your profile statement,
             any funding goal, the tips you're receiving, and those you're
@@ -128,7 +125,7 @@ if request.method == 'POST':
                     trademark).</p>
 
             <p>Until we give your username to someone else, you can use it
-            again if you ever decide to rejoin Gratipay. Simply sign in.</p>
+            again if you ever decide to rejoin Liberapay. Simply sign in.</p>
 
 
             <h2>Remember</h2>
@@ -146,7 +143,7 @@ if request.method == 'POST':
         <div class="nav level-1">
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
             <button class="selected larger close-account" id="save"
-                type="submit">Yes, Close My Gratipay Account</button>
+                type="submit">Yes, Close My Liberapay Account</button>
         </div>
     </form>
     {% endif %}
@@ -157,7 +154,7 @@ if request.method == 'POST':
 {% if error %}
     <script>
         $(function () {
-            Gratipay.notification({{ to_javascript(error)|safe }}, 'error', -1)
+            Liberapay.notification({{ to_javascript(error)|safe }}, 'error', -1)
         });
     </script>
 {% endif %}

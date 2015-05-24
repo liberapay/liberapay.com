@@ -1,5 +1,5 @@
 from aspen import Response
-from gratipay.utils import get_participant
+from liberapay.utils import get_participant
 [---]
 request.allow("GET", "POST")
 participant = get_participant(state, restrict=True)

@@ -1,8 +1,8 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from gratipay.elsewhere import PlatformOAuth1
-from gratipay.elsewhere._extractors import key, not_available
-from gratipay.elsewhere._paginators import query_param_paginator
+from liberapay.elsewhere import PlatformOAuth1
+from liberapay.elsewhere._extractors import key, not_available
+from liberapay.elsewhere._paginators import query_param_paginator
 
 
 class Twitter(PlatformOAuth1):

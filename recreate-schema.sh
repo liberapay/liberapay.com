@@ -1,11 +1,9 @@
 #!/bin/sh
 
+# usage: DATABASE_URL=postgres://foo:bar@baz:5234/buz recreate-schema.sh
+
 # Exit if any subcommands or pipeline returns a non-zero status.
 set -e
-
-# Make a database for Gratipay.
-#
-#   usage: DATABASE_URL=postgres://foo:bar@baz:5234/buz recreate-schema.sh
 
 echo "=============================================================================="
 
@@ -23,6 +21,15 @@ echo "==========================================================================
 echo "Applying sql/schema.sql ..."
 echo 
 
+if [ "$1" = "test" ]; then
+    psql $DATABASE_URL <<EOF
+DO \$$
+BEGIN
+    EXECUTE 'ALTER DATABASE '||current_database()||' SET synchronous_commit TO off';
+END
+\$$
+EOF
+fi
 psql $DATABASE_URL < sql/schema.sql
 
 

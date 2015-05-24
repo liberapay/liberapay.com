@@ -43,7 +43,6 @@ CREATE TABLE participants
 , receiving             numeric(35,2)               NOT NULL DEFAULT 0
 , taking                numeric(35,2)               NOT NULL DEFAULT 0
 , npatrons              integer                     NOT NULL DEFAULT 0
-, is_free_rider         boolean                     DEFAULT NULL
 , email_address         text                        UNIQUE
 , email_lang            text
 , is_searchable         bool                        NOT NULL DEFAULT TRUE
@@ -195,7 +194,7 @@ CREATE CAST (current_exchange_routes AS exchange_routes) WITH INOUT;
 CREATE TYPE exchange_status AS ENUM ('pre', 'pending', 'failed', 'succeeded');
 
 
--- exchanges -- when a participant moves cash between Gratipay and their bank
+-- exchanges -- when a participant moves cash between Liberapay and their bank
 CREATE TABLE exchanges
 ( id                    serial                      PRIMARY KEY
 , timestamp             timestamp with time zone    NOT NULL DEFAULT CURRENT_TIMESTAMP

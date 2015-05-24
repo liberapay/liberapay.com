@@ -1,7 +1,7 @@
 import json
 
-from gratipay.models.community import slugize
-from gratipay.testing import Harness
+from liberapay.models.community import slugize
+from liberapay.testing import Harness
 
 
 class TestForCommunityJson(Harness):

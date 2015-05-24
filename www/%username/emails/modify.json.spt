@@ -4,8 +4,8 @@ Manages the authenticated user's email addresses.
 import re
 
 from aspen import Response
-from gratipay.exceptions import ProblemChangingEmail
-from gratipay.utils import get_participant
+from liberapay.exceptions import ProblemChangingEmail
+from liberapay.utils import get_participant
 
 email_re = re.compile(r'^[^@]+@[^@]+\.[^@]+$')
 

@@ -1,12 +1,10 @@
 # encoding: utf8
-"""External user page on Gratipay.
-"""
 
 from base64 import b64decode, b64encode
 
 from aspen import Response
 
-from gratipay.models.account_elsewhere import *
+from liberapay.models.account_elsewhere import *
 
 [-----------------------------------------------------------------------------]
 
@@ -56,7 +54,7 @@ if is_team:
 
 {% block scripts %}
   {% if allow_pledges %}
-    <script>$(document).ready(Gratipay.tips.init);</script>
+    <script>$(document).ready(Liberapay.tips.init);</script>
   {% endif %}
 
   {{ super() }}
@@ -103,11 +101,11 @@ if is_team:
     {% if is_team %}
         <p>{{ _("If you are an administrator of this {0} team account, you can "
                 "unlock it to allow people to pledge tips to your team on "
-                "Gratipay.",
+                "Liberapay.",
                 platform.display_name) }}</p>
     {% else %}
         <p>{{ _("If you are {0} on {1}, you can unlock your account to allow "
-                "people to pledge tips to you on Gratipay.",
+                "people to pledge tips to you on Liberapay.",
                 '<a href="%s">%s</a>'|safe % (account.html_url, friendly_name),
                 platform.display_name) }}</p>
     {% endif %}
@@ -119,9 +117,9 @@ if is_team:
   {% elif is_team %}
 
     {% if allow_team_connect %}
-        <h2>{{ _("{0} has not joined Gratipay.", user_id) }}</h2>
+        <h2>{{ _("{0} has not joined Liberapay.", user_id) }}</h2>
         <p>{{ _("Are you an administrator of this {0} team account? Connect it "
-                "to your Gratipay account.",
+                "to your Liberapay account.",
                 platform.display_name) }}</p>
         {% call auth_button(platform.name, 'connect', user_id) %}
             {{ _("Connect team account") }}
@@ -130,16 +128,16 @@ if is_team:
 
   {% else %}
 
-    <h2>{{ _("{0} has not joined Gratipay.", friendly_name) }}</h2>
+    <h2>{{ _("{0} has not joined Liberapay.", friendly_name) }}</h2>
 
     {% if platform in website.signin_platforms or not user.ANON %}
         {% if user.ANON %}
             <p>{{ _("Is this you? We never collect money for you unless you join.") }}</p>
             {% call auth_button(platform.name, 'opt-in', user_id) %}
-                {{ _("Join Gratipay") }}
+                {{ _("Join Liberapay") }}
             {% endcall %}
         {% else %}
-            <p>{{ _("Is this yours? Connect it to your Gratipay account.") }}</p>
+            <p>{{ _("Is this yours? Connect it to your Liberapay account.") }}</p>
             {% call auth_button(platform.name, 'connect', user_id) %}
                 {{ _("Connect") }}
             {% endcall %}
@@ -150,9 +148,9 @@ if is_team:
 
   {% if user.ANON %}
 
-    <h2>{{ _("What is Gratipay?") }}</h2>
+    <h2>{{ _("What is Liberapay?") }}</h2>
 
-    <p>{{ _("Gratipay is a way to thank and support your favorite artists, "
+    <p>{{ _("Liberapay is a way to thank and support your favorite artists, "
             "musicians, writers, programmers, etc. by setting up a small weekly "
             "cash gift to them.") }}
     <a href="/about/">{{ _("Learn more") }}</a></p>
@@ -164,7 +162,7 @@ if is_team:
     <h2>{{ _("Don't like what you see?") }}</h2>
 
     <p>{{ _("If you are an owner of this {0} account, you can explicitly opt "
-            "out of Gratipay by locking it. We don't allow new pledges to "
+            "out of Liberapay by locking it. We don't allow new pledges to "
             "locked accounts.",
             platform.display_name) }}</p>
 
@@ -186,10 +184,10 @@ if is_team:
     <tbody>
 
     {% for member in members %}
-        {% set on_gratipay = member.participant.is_claimed %}
+        {% set on_liberapay = member.participant.is_claimed %}
         {% set declines_gifts = not member.participant.accepts_tips %}
-        <tr class="{{ 'declines' if declines_gifts }} {{ 'not-on-gratipay' if not on_gratipay }}">
-            {% if on_gratipay %}
+        <tr class="{{ 'declines' if declines_gifts }} {{ 'not-on-liberapay' if not on_liberapay }}">
+            {% if on_liberapay %}
                 <td>
                     <a href="/{{ member.participant.username }}/">
                         {{ avatar_img(member.participant) }}
@@ -205,16 +203,16 @@ if is_team:
                 </td>
             {% else %}
                 <td>
-                    <a href="/on/{{platform.name}}/{{member.gratipay_slug}}/">
+                    <a href="/on/{{platform.name}}/{{member.liberapay_slug}}/">
                         {{ avatar_img(member) }}
                         {{ member.friendly_name }}
                     </a>
                 </td>
                 <td>
                     {% if not member.participant.accepts_tips %}
-                        {{ _("opted out of Gratipay") }}
+                        {{ _("opted out of Liberapay") }}
                     {% else %}
-                        {{ _("hasn't joined Gratipay yet") }}
+                        {{ _("hasn't joined Liberapay yet") }}
                     {% endif %}
                 </td>
             {% endif %}

@@ -1,11 +1,9 @@
-"""*Participant* is the name Gratipay gives to people and groups that are known
-to Gratipay. We've got a ``participants`` table in the database, and a
-:py:class:`Participant` class that we define here. We distinguish several kinds
-of participant, based on certain properties.
+"""*Participant* is the name we give to people and groups that are known to us.
+We've got a `participants` table in the database, and a `Participant` class
+that we define here. We distinguish two kinds of participants:
 
- - *Stub* participants
- - *Organizations* are plural participants
- - *Teams* are plural participants with members
+ - "stub" participants who haven't actually joined yet
+ - "real" participants who have signed in
 
 """
 from __future__ import print_function, unicode_literals
@@ -24,10 +22,8 @@ from markupsafe import escape as htmlescape
 from postgres.orm import Model
 from psycopg2 import IntegrityError
 
-import gratipay
-from gratipay import NotSane
-from gratipay.exceptions import (
-    HasBigTips,
+import liberapay
+from liberapay.exceptions import (
     UsernameIsEmpty,
     UsernameTooLong,
     UsernameContainsInvalidCharacters,
@@ -43,28 +39,26 @@ from gratipay.exceptions import (
     TooManyEmailAddresses,
 )
 
-from gratipay.models import add_event
-from gratipay.models._mixin_team import MixinTeam
-from gratipay.models.account_elsewhere import AccountElsewhere
-from gratipay.models.exchange_route import ExchangeRoute
-from gratipay.security.crypto import constant_time_compare
-from gratipay.utils import i18n, is_card_expiring, emails, notifications, pricing
-from gratipay.utils.username import safely_reserve_a_username
+from liberapay.models import add_event
+from liberapay.models._mixin_team import MixinTeam
+from liberapay.models.account_elsewhere import AccountElsewhere
+from liberapay.models.exchange_route import ExchangeRoute
+from liberapay.security.crypto import constant_time_compare
+from liberapay.utils import i18n, is_card_expiring, emails, notifications
+from liberapay.utils.username import safely_reserve_a_username
 
 
 ASCII_ALLOWED_IN_USERNAME = set("0123456789"
                                 "abcdefghijklmnopqrstuvwxyz"
                                 "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                                ".,-_:@ ")
-# We use | in Sentry logging, so don't make that allowable. :-)
+                                "-_")
 
 EMAIL_HASH_TIMEOUT = timedelta(hours=24)
 
 USERNAME_MAX_SIZE = 32
 
+
 class Participant(Model, MixinTeam):
-    """Represent a Gratipay participant.
-    """
 
     typname = 'participants'
 
@@ -199,12 +193,6 @@ class Participant(Model, MixinTeam):
 
     def update_number(self, number):
         assert number in ('singular', 'plural')
-        if number == 'singular':
-            nbigtips = self.db.one("""\
-                SELECT count(*) FROM current_tips WHERE tippee=%s AND amount > %s
-            """, (self.username, gratipay.MAX_TIP_SINGULAR))
-            if nbigtips > 0:
-                raise HasBigTips
         with self.db.get_cursor() as c:
             add_event(c, 'participant', dict(action='set', id=self.id, values=dict(number=number)))
             self.remove_all_members(c)
@@ -270,11 +258,7 @@ class Participant(Model, MixinTeam):
 
     @property
     def suggested_payment(self):
-        return pricing.suggested_payment(self.usage)
-
-    @property
-    def suggested_payment_low_high(self):
-        return pricing.suggested_payment_low_high(self.usage)
+        return (self.usage * Decimal('0.05')).quantize(Decimal('.01'))
 
 
     # API Key
@@ -295,8 +279,6 @@ class Participant(Model, MixinTeam):
 
     # Claiming
     # ========
-    # An unclaimed Participant is a stub that's created when someone pledges to
-    # give to an AccountElsewhere that's not been connected on Gratipay yet.
 
     def resolve_unclaimed(self):
         """Given a username, return an URL path.
@@ -353,7 +335,7 @@ class Participant(Model, MixinTeam):
     class BankWithdrawalFailed(Exception): pass
 
     def withdraw_balance_to_bank_account(self):
-        from gratipay.billing.exchanges import ach_credit
+        from liberapay.billing.exchanges import ach_credit
         error = ach_credit( self.db
                           , self
                           , Decimal('0.00') # don't withhold anything
@@ -541,8 +523,8 @@ class Participant(Model, MixinTeam):
             if not nonce:
                 return self.add_email(email)
 
-        scheme = gratipay.canonical_scheme
-        host = gratipay.canonical_host
+        scheme = liberapay.canonical_scheme
+        host = liberapay.canonical_host
         username = self.username_lower
         quoted_email = quote(email)
         link = "{scheme}://{host}/{username}/emails/verify.html?email={quoted_email}&nonce={nonce}"
@@ -648,8 +630,8 @@ class Participant(Model, MixinTeam):
             b = base_spt[t].render(context).strip()
             return b.replace('$body', spt[t].render(context).strip())
         message = {}
-        message['from_email'] = 'support@gratipay.com'
-        message['from_name'] = 'Gratipay Support'
+        message['from_email'] = 'support@liberapay.com'
+        message['from_name'] = 'Liberapay Support'
         message['to'] = [{'email': email, 'name': self.username}]
         message['subject'] = spt['subject'].render(context)
         message['html'] = render('text/html', context_html)
@@ -668,7 +650,7 @@ class Participant(Model, MixinTeam):
                     user_name=elsewhere.user_name,
                     platform=elsewhere.platform_data.display_name,
                     amount=t.amount,
-                    profile_url=elsewhere.gratipay_url,
+                    profile_url=elsewhere.liberapay_url,
                 )
 
     def queue_email(self, spt_name, **context):
@@ -792,8 +774,8 @@ class Participant(Model, MixinTeam):
 
     @property
     def profile_url(self):
-        scheme = gratipay.canonical_scheme
-        host = gratipay.canonical_host
+        scheme = liberapay.canonical_scheme
+        host = liberapay.canonical_host
         username = self.username
         return '{scheme}://{host}/{username}/'.format(**locals())
 
@@ -856,7 +838,7 @@ class Participant(Model, MixinTeam):
 
         lowercased = suggested.lower()
 
-        if lowercased in gratipay.RESTRICTED_USERNAMES:
+        if lowercased in liberapay.RESTRICTED_USERNAMES:
             raise UsernameIsRestricted(suggested)
 
         if suggested != self.username:
@@ -1017,18 +999,6 @@ class Participant(Model, MixinTeam):
             new_takes = self.compute_actual_takes(cursor=cursor)
             self.update_taking(old_takes, new_takes, cursor=cursor)
 
-    def update_is_free_rider(self, is_free_rider, cursor=None):
-        with self.db.get_cursor(cursor) as cursor:
-            cursor.run( "UPDATE participants SET is_free_rider=%(is_free_rider)s "
-                        "WHERE username=%(username)s"
-                      , dict(username=self.username, is_free_rider=is_free_rider)
-                       )
-            add_event( cursor
-                     , 'participant'
-                     , dict(id=self.id, action='set', values=dict(is_free_rider=is_free_rider))
-                      )
-            self.set_attributes(is_free_rider=is_free_rider)
-
 
     def set_tip_to(self, tippee, amount, update_self=True, update_tippee=True, cursor=None):
         """Given a Participant or username, and amount as str, returns a dict.
@@ -1056,8 +1026,7 @@ class Participant(Model, MixinTeam):
             raise NoSelfTipping
 
         amount = Decimal(amount)  # May raise InvalidOperation
-        max_tip = gratipay.MAX_TIP_PLURAL if tippee.IS_PLURAL else gratipay.MAX_TIP_SINGULAR
-        if (amount < gratipay.MIN_TIP) or (amount > max_tip):
+        if amount != 0 and amount < liberapay.MIN_TIP or amount > liberapay.MAX_TIP:
             raise BadAmount
 
         if not tippee.accepts_tips and amount != 0:
@@ -1088,9 +1057,6 @@ class Participant(Model, MixinTeam):
         if update_tippee:
             # Update receiving amount of tippee
             tippee.update_receiving(cursor)
-        if tippee.username == 'Gratipay':
-            # Update whether the tipper is using Gratipay for free
-            self.update_is_free_rider(None if amount == 0 else False, cursor)
 
         return t._asdict()
 
@@ -1173,12 +1139,6 @@ class Participant(Model, MixinTeam):
 
 
     def get_giving_for_profile(self):
-        """Given a participant id and a date, return a list and a Decimal.
-
-        This function is used to populate a participant's page for their own
-        viewing pleasure.
-
-        """
 
         TIPS = """\
 
@@ -1232,13 +1192,7 @@ class Participant(Model, MixinTeam):
         unclaimed_tips = self.db.all(UNCLAIMED_TIPS, (self.username,))
 
 
-        # Compute the total.
-        # ==================
-        # For payday we only want to process payments to tippees who have
-        # themselves opted into Gratipay. For the tipper's profile page we want
-        # to show the total amount they've pledged (so they're not surprised
-        # when someone *does* start accepting tips and all of a sudden they're
-        # hit with bigger charges.
+        # Compute the total
 
         total = sum([t.amount for t in tips])
         if not total:
@@ -1280,19 +1234,6 @@ class Participant(Model, MixinTeam):
                    , tippee
         """
         return self.db.all(TIPS, (self.username,), back_as=dict)
-
-
-    def get_og_title(self):
-        out = self.username
-        receiving = self.receiving
-        giving = self.giving
-        if (giving > receiving) and not self.anonymous_giving:
-            out += " gives $%.2f/wk" % giving
-        elif receiving > 0 and not self.anonymous_receiving:
-            out += " receives $%.2f/wk" % receiving
-        else:
-            out += " is"
-        return out + " on Gratipay"
 
 
     def get_age_in_seconds(self):
@@ -1406,7 +1347,7 @@ class Participant(Model, MixinTeam):
             """, ( username
                  , username.lower()
                  , self.username
-                  ), default=NotSane)
+                  ), default=Exception)
             return check
 
         archived_as = safely_reserve_a_username(cursor, reserve=reserve)
@@ -1426,16 +1367,16 @@ class Participant(Model, MixinTeam):
         Returns None or raises NeedConfirmation.
 
         This method associates an account on another platform (GitHub, Twitter,
-        etc.) with the given Gratipay participant. Every account elsewhere has an
-        associated Gratipay participant account, even if its only a stub
+        etc.) with the given Liberapay participant. Every account elsewhere has an
+        associated Liberapay participant account, even if its only a stub
         participant (it allows us to track pledges to that account should they
-        ever decide to join Gratipay).
+        ever decide to join Liberapay).
 
         In certain circumstances, we want to present the user with a
         confirmation before proceeding to transfer the account elsewhere to
-        the new Gratipay account; NeedConfirmation is the signal to request
+        the new Liberapay account; NeedConfirmation is the signal to request
         confirmation. If it was the last account elsewhere connected to the old
-        Gratipay account, then we absorb the old Gratipay account into the new one,
+        Liberapay account, then we absorb the old Liberapay account into the new one,
         effectively archiving the old account.
 
         Here's what absorbing means:
@@ -1596,7 +1537,7 @@ class Participant(Model, MixinTeam):
             # Load the existing connection.
             # =============================
             # Every account elsewhere has at least a stub participant account
-            # on Gratipay.
+            # on Liberapay.
 
             elsewhere = cursor.one("""
 
@@ -1605,7 +1546,7 @@ class Participant(Model, MixinTeam):
                   JOIN participants ON participant=participants.username
                  WHERE elsewhere.platform=%s AND elsewhere.user_id=%s
 
-            """, (platform, user_id), default=NotSane)
+            """, (platform, user_id), default=Exception)
             other = elsewhere.participant
 
 
@@ -1622,13 +1563,12 @@ class Participant(Model, MixinTeam):
             # three cases:
             #
             #   - the other participant is not a stub; we are taking the
-            #       account elsewhere away from another viable Gratipay
-            #       participant
+            #       account elsewhere away from another viable participant
             #
             #   - the other participant has no other accounts elsewhere; taking
-            #       away the account elsewhere will leave the other Gratipay
-            #       participant without any means of logging in, and it will be
-            #       archived and its tips absorbed by us
+            #       away the account elsewhere will leave the other participant
+            #       without any means of logging in, and it will be archived
+            #       and its tips absorbed by us
             #
             #   - we already have an account elsewhere connected from the given
             #       platform, and it will be handed off to a new stub
@@ -1785,7 +1725,6 @@ class Participant(Model, MixinTeam):
                  , 'username': self.username
                  , 'avatar': self.avatar_url
                  , 'number': self.number
-                 , 'on': 'gratipay'
                  }
 
         if not details:

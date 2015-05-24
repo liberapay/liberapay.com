@@ -4,10 +4,10 @@ import binascii
 from datetime import date
 
 from aspen import Response
-from gratipay.models.participant import Participant
-from gratipay.security import csrf
-from gratipay.security.crypto import constant_time_compare
-from gratipay.security.user import User, SESSION
+from liberapay.models.participant import Participant
+from liberapay.security import csrf
+from liberapay.security.crypto import constant_time_compare
+from liberapay.security.user import User, SESSION
 
 
 ANON = User()

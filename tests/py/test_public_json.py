@@ -3,7 +3,7 @@ from __future__ import print_function, unicode_literals
 import json
 
 from aspen.utils import utcnow
-from gratipay.testing import Harness
+from liberapay.testing import Harness
 
 
 class Tests(Harness):
@@ -11,12 +11,6 @@ class Tests(Harness):
     def make_participant(self, *a, **kw):
         kw['claimed_time'] = utcnow()
         return Harness.make_participant(self, *a, **kw)
-
-    def test_on_key_gives_gratipay(self):
-        self.make_participant('alice', last_bill_result='')
-        data = json.loads(self.client.GET('/alice/public.json').body)
-
-        assert data['on'] == 'gratipay'
 
     def test_anonymous_gets_receiving(self):
         alice = self.make_participant('alice', last_bill_result='')
@@ -154,10 +148,10 @@ class Tests(Harness):
 
         alice.set_tip_to(bob, '3.00')
 
-        raw = self.client.GxT('/bob/public.json?callback=foo', auth_as='bob').body
+        raw = self.client.GET('/bob/public.json?callback=foo', auth_as='bob').body
 
         assert raw == '''\
-foo({
+/**/ foo({
     "avatar": null,
     "cryptocoins": {},
     "elsewhere": {
@@ -173,7 +167,6 @@ foo({
     "my_tip": "self",
     "npatrons": 1,
     "number": "singular",
-    "on": "gratipay",
     "receiving": "3.00",
     "username": "bob"
-})''' % dict(user_id=bob.id, elsewhere_id=bob.get_accounts_elsewhere()['github'].id)
+});''' % dict(user_id=bob.id, elsewhere_id=bob.get_accounts_elsewhere()['github'].id)

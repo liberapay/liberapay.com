@@ -5,9 +5,9 @@ from decimal import Decimal as D
 
 from aspen import Response
 
-from gratipay.security.user import SESSION
-from gratipay.testing import Harness
-from gratipay.wireup import find_files
+from liberapay.security.user import SESSION
+from liberapay.testing import Harness
+from liberapay.wireup import find_files
 
 
 overescaping_re = re.compile(r'&amp;(#[0-9]{4}|[a-z]+);')
@@ -28,7 +28,7 @@ class TestPages(Harness):
             url = spt[i:-4].replace('/%username/', '/alice/') \
                            .replace('/for/%slug/', '/for/wonderland/') \
                            .replace('/%platform/', '/github/') \
-                           .replace('/%user_name/', '/gratipay/') \
+                           .replace('/%user_name/', '/liberapay/') \
                            .replace('/%membername', '/alan') \
                            .replace('/%exchange_id.int', '/%s' % exchange_id) \
                            .replace('/%redirect_to', '/giving') \
@@ -80,55 +80,16 @@ class TestPages(Harness):
         body = self.client.GET('/alice/').body
         assert 'give to alice' in body
 
-    def test_widget(self):
-        self.make_participant('cheese', claimed_time='now')
-        expected = "javascript: window.open"
-        actual = self.client.GET('/cheese/widget.html').body
-        assert expected in actual
-
     def test_github_associate(self):
         assert self.client.GxT('/on/github/associate').code == 400
 
     def test_twitter_associate(self):
         assert self.client.GxT('/on/twitter/associate').code == 400
 
-    def test_about(self):
-        expected = "give money every week"
-        actual = self.client.GET('/about/').body
-        assert expected in actual
-
-    def test_about_stats(self):
-        expected = "have joined Gratipay"
-        actual = self.client.GET('/about/stats.html').body
-        assert expected in actual
-
-    def test_about_charts(self):
-        assert self.client.GxT('/about/charts.html').code == 302
-
-    def test_about_faq(self):
-        expected = "What is Gratipay?"
-        actual = self.client.GET('/about/faq.html').body.decode('utf8')
-        assert expected in actual
-
-    def test_about_teams_redirect(self):
-        assert self.client.GxT('/about/teams/').code == 302
-
-    def test_about_teams(self):
-        expected = "Teams"
-        actual = self.client.GET('/about/features/teams/').body.decode('utf8')
-        assert expected in actual
-
     def test_404(self):
         response = self.client.GET('/about/four-oh-four.html', raise_immediately=False)
         assert "Not Found" in response.body
         assert "{%" not in response.body
-
-    def test_for_contributors_redirects_to_inside_gratipay(self):
-        loc = self.client.GxT('/for/contributors/').headers['Location']
-        assert loc == 'http://inside.gratipay.com/'
-
-    def test_mission_statement_also_redirects(self):
-        assert self.client.GxT('/for/contributors/mission-statement.html').code == 302
 
     def test_anonymous_sign_out_redirects(self):
         response = self.client.PxST('/sign-out.html')

@@ -1,6 +1,6 @@
-from gratipay.models.account_elsewhere import AccountElsewhere
-from gratipay.models.participant import Participant
-from gratipay.testing.emails import EmailHarness
+from liberapay.models.account_elsewhere import AccountElsewhere
+from liberapay.models.participant import Participant
+from liberapay.testing.emails import EmailHarness
 
 
 class TestTransactionalEmails(EmailHarness):

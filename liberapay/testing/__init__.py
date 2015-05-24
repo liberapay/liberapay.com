@@ -1,4 +1,4 @@
-"""Helpers for testing Gratipay.
+"""Helpers for testing.
 """
 from __future__ import absolute_import, division, print_function, unicode_literals
 
@@ -9,13 +9,13 @@ from os.path import dirname, join, realpath
 from aspen import resources
 from aspen.utils import utcnow
 from aspen.testing.client import Client
-from gratipay.billing.exchanges import record_exchange, record_exchange_result
-from gratipay.elsewhere import UserInfo
-from gratipay.main import website
-from gratipay.models.account_elsewhere import AccountElsewhere
-from gratipay.models.exchange_route import ExchangeRoute
-from gratipay.security.user import User
-from gratipay.testing.vcr import use_cassette
+from liberapay.billing.exchanges import record_exchange, record_exchange_result
+from liberapay.elsewhere import UserInfo
+from liberapay.main import website
+from liberapay.models.account_elsewhere import AccountElsewhere
+from liberapay.models.exchange_route import ExchangeRoute
+from liberapay.security.user import User
+from liberapay.testing.vcr import use_cassette
 from psycopg2 import IntegrityError, InternalError
 
 
