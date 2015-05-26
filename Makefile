@@ -5,7 +5,7 @@ python := "$(shell { command -v python2.7 || command -v python; } 2>/dev/null)"
 bin_dir := $(shell $(python) -c 'import sys; print("Scripts" if sys.platform == "win32" else "bin")')
 env_bin := env/$(bin_dir)
 test_env_files := defaults.env,tests/test.env,tests/local.env
-pip := $(env_bin)/pip
+pip := $(env_bin)/pip --disable-pip-version-check
 with_local_env := $(env_bin)/honcho run -e defaults.env,local.env
 with_tests_env := $(env_bin)/honcho run -e $(test_env_files)
 py_test := $(with_tests_env) $(env_bin)/py.test
