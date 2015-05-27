@@ -17,6 +17,7 @@ else
 endif
 
 env: requirements.txt requirements_tests.txt
+	$(python) -c "import virtualenv" || pip install virtualenv
 	$(python) -m virtualenv ./env/
 	$(pip) install -r requirements.txt
 	$(pip) install -r requirements_tests.txt
