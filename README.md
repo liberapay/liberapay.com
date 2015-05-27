@@ -2,7 +2,12 @@
 [Gratipay](http://gratipay.com).
 
 
-## Contributing
+## Contributing to the translations
+
+[![We use Weblate for translations](https://hosted.weblate.org/widgets/liberapay/-/287x66-white.png)](https://hosted.weblate.org/engage/liberapay/?utm_source=widget)
+
+
+## Contributing to the code
 
 ### Installation
 
