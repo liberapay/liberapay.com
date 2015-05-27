@@ -61,6 +61,9 @@ class AccountElsewhere(Model):
     @classmethod
     def _from_thing(cls, thing, platform, value):
         assert thing in ('user_id', 'user_name')
+        if thing == 'user_name':
+            thing = 'lower(user_name)'
+            value = value.lower()
         exception = UnknownAccountElsewhere(thing, platform, value)
         return cls.db.one("""
 

@@ -80,6 +80,8 @@ CREATE TABLE elsewhere
 
 \i sql/elsewhere_with_participant.sql
 
+CREATE UNIQUE INDEX ON elsewhere (platform, lower(user_name));
+
 -- https://github.com/gratipay/gratipay.com/issues/951
 CREATE INDEX elsewhere_participant ON elsewhere(participant);
 

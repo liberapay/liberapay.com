@@ -1,4 +1,3 @@
-from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.participant import Participant
 from liberapay.testing.emails import EmailHarness
 
@@ -23,7 +22,7 @@ class TestTransactionalEmails(EmailHarness):
         self.dan.set_tip_to(carl_twitter.participant.username, '100')
         roy.set_tip_to(carl_twitter.participant.username, '100') # Roy will NOT receive an email.
 
-        AccountElsewhere.from_user_name('twitter', 'carl').opt_in('carl')
+        carl_twitter.opt_in('carl')
 
         Participant.dequeue_emails()
         assert self.mailer.call_count == 2 # Emails should only be sent to bob and dan
@@ -52,7 +51,7 @@ class TestTransactionalEmails(EmailHarness):
         roy = self.make_participant('roy', claimed_time='now', email_address='roy@example.com', notify_on_opt_in=1)
         roy.set_tip_to(carl_twitter.participant.username, '100')
 
-        AccountElsewhere.from_user_name('twitter', 'carl').opt_in('carl')
+        carl_twitter.opt_in('carl')
 
         Participant.dequeue_emails()
         assert "To stop receiving" in self.get_last_email()['text']
