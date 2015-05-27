@@ -14,9 +14,9 @@ def gen_random_usernames():
 
 
 def insert_into_participants(cursor, username):
-    return cursor.one( "INSERT INTO participants (username, username_lower) "
-                       "VALUES (%s, %s) RETURNING username"
-                     , (username, username.lower())
+    return cursor.one( "INSERT INTO participants (username) "
+                       "VALUES (%s) RETURNING username"
+                     , (username,)
                       )
 
 

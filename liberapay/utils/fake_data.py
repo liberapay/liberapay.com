@@ -55,7 +55,6 @@ def fake_participant(db, number="singular", is_admin=False):
         _fake_thing( db
                    , "participants"
                    , username=username
-                   , username_lower=username.lower()
                    , ctime=faker.date_time_this_year()
                    , is_admin=is_admin
                    , balance=0

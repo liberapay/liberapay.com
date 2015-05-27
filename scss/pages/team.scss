@@ -52,7 +52,6 @@
             width: 225px;
             min-height: 26px;
             position: absolute;
-            bottom: -1px;
             z-index: 0;
             left: -4px;
             background: white;
@@ -61,6 +60,10 @@
             border: 1px solid rgba($brown, 0.5);
             color: $light-brown;
             @include border-radius(3px);
+
+            &:empty {
+                display: none;
+            }
 
             li {
                 font: normal 16px/16px $Ideal;

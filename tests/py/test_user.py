@@ -25,8 +25,8 @@ class TestUser(Harness):
 
     def test_username_is_case_insensitive(self):
         self.make_participant('AlIcE')
-        actual = User.from_username('aLiCe').participant.username_lower
-        assert actual == 'alice'
+        actual = User.from_username('aLiCe').participant.username
+        assert actual == 'AlIcE'
 
     def test_known_user_is_not_admin(self):
         self.make_participant('alice')

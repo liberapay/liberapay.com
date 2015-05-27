@@ -32,7 +32,6 @@ CREATE TABLE participants
 , balanced_customer_href  text                      DEFAULT NULL
 , is_suspicious         boolean                     DEFAULT NULL
 , id                    bigserial                   NOT NULL UNIQUE
-, username_lower        text                        NOT NULL UNIQUE
 , api_key               text                        DEFAULT NULL
 , number                participant_number          NOT NULL DEFAULT 'singular'
 , anonymous_receiving   boolean                     NOT NULL DEFAULT FALSE
@@ -50,6 +49,8 @@ CREATE TABLE participants
 , notifications         text[]                      NOT NULL DEFAULT '{}'
 , CONSTRAINT team_not_anonymous CHECK (NOT (number='plural' AND anonymous_receiving))
  );
+
+CREATE UNIQUE INDEX ON participants (lower(username));
 
 -- https://github.com/gratipay/gratipay.com/pull/1610
 CREATE INDEX participants_claimed_time ON participants (claimed_time DESC)
@@ -344,7 +345,7 @@ CREATE TABLE statements
 CREATE EXTENSION pg_trgm;
 
 CREATE INDEX username_trgm_idx ON participants
-    USING gist(username_lower gist_trgm_ops)
+    USING gist(lower(username) gist_trgm_ops)
     WHERE claimed_time IS NOT NULL AND NOT is_closed;
 
 CREATE INDEX community_trgm_idx ON communities

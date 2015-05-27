@@ -149,10 +149,10 @@ class Harness(unittest.TestCase):
     def make_participant(self, username, **kw):
         participant = self.db.one("""
             INSERT INTO participants
-                        (username, username_lower)
-                 VALUES (%s, %s)
+                        (username)
+                 VALUES (%s)
               RETURNING participants.*::participants
-        """, (username, username.lower()))
+        """, (username,))
 
         if 'elsewhere' in kw or 'claimed_time' in kw:
             platform = kw.pop('elsewhere', 'github')

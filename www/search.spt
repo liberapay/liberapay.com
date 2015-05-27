@@ -3,8 +3,8 @@ from liberapay.utils.i18n import LANGUAGES_2, SEARCH_CONFS, strip_accents
 
 [---]
 
-action = request.qs.get('action')
 query = request.qs.get('q')
+scope = request.qs.get('scope')
 
 title = _("Search")
 results = {}
@@ -13,9 +13,9 @@ if query:
     subhead = query
     q = strip_accents(query)
 
-    if action in (None, 'search_usernames'):
+    if scope in (None, 'usernames'):
         results['usernames'] = website.db.all("""
-            SELECT username, avatar_url, similarity(username, %(q)s) AS rank
+            SELECT username, avatar_url, similarity(username, %(q)s) AS rank, id
               FROM participants
              WHERE username %% %(q)s
                AND claimed_time IS NOT NULL
@@ -25,7 +25,7 @@ if query:
              LIMIT 10
         """, locals())
 
-    if action in (None, 'search_statements'):
+    if scope in (None, 'statements'):
         langs = tuple(l for l in request.accept_langs if l in LANGUAGES_2)
         search_confs = list(set(SEARCH_CONFS.get(lang, 'simple') for lang in langs))
         results['statements'] = website.db.all("""
@@ -60,7 +60,7 @@ if query:
           ORDER BY max_rank DESC
         """, locals())
 
-    if action in (None, 'search_communities'):
+    if scope in (None, 'communities'):
         results['communities'] = website.db.all("""
             SELECT slug, name, nmembers, similarity(name, %(q)s) AS rank
               FROM communities

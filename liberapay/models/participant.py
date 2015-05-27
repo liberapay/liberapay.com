@@ -97,7 +97,7 @@ class Participant(Model, MixinTeam):
     def from_username(cls, username):
         """Return an existing participant based on username.
         """
-        return cls._from_thing("username_lower", username.lower())
+        return cls._from_thing("lower(username)", username.lower())
 
     @classmethod
     def from_session_token(cls, token):
@@ -111,7 +111,7 @@ class Participant(Model, MixinTeam):
 
     @classmethod
     def _from_thing(cls, thing, value):
-        assert thing in ("id", "username_lower", "session_token", "api_key")
+        assert thing in ("id", "lower(username)", "session_token", "api_key")
         return cls.db.one("""
 
             SELECT participants.*::participants
@@ -525,7 +525,7 @@ class Participant(Model, MixinTeam):
 
         scheme = liberapay.canonical_scheme
         host = liberapay.canonical_host
-        username = self.username_lower
+        username = self.username
         quoted_email = quote(email)
         link = "{scheme}://{host}/{username}/emails/verify.html?email={quoted_email}&nonce={nonce}"
         r = self.send_email('verification',
@@ -846,17 +846,17 @@ class Participant(Model, MixinTeam):
                 # Will raise IntegrityError if the desired username is taken.
                 with self.db.get_cursor(back_as=tuple) as c:
                     add_event(c, 'participant', dict(id=self.id, action='set', values=dict(username=suggested)))
-                    actual = c.one( "UPDATE participants "
-                                    "SET username=%s, username_lower=%s "
-                                    "WHERE username=%s "
-                                    "RETURNING username, username_lower"
-                                   , (suggested, lowercased, self.username)
-                                   )
+                    actual = c.one("""
+                        UPDATE participants
+                           SET username=%s
+                         WHERE username=%s
+                     RETURNING username, lower(username)
+                    """, (suggested, self.username))
             except IntegrityError:
                 raise UsernameAlreadyTaken(suggested)
 
             assert (suggested, lowercased) == actual # sanity check
-            self.set_attributes(username=suggested, username_lower=lowercased)
+            self.set_attributes(username=suggested)
 
         return suggested
 
@@ -1149,7 +1149,7 @@ class Participant(Model, MixinTeam):
                      , t.ctime
                      , t.mtime
                      , p.claimed_time
-                     , p.username_lower
+                     , p.username
                      , p.number
                   FROM tips t
                   JOIN participants p ON p.username = t.tippee
@@ -1160,7 +1160,7 @@ class Participant(Model, MixinTeam):
                      , t.mtime DESC
             ) AS foo
             ORDER BY amount DESC
-                   , username_lower
+                   , username
 
         """
         tips = self.db.all(TIPS, (self.username,))
@@ -1333,7 +1333,6 @@ class Participant(Model, MixinTeam):
 
                 UPDATE participants
                    SET username=%s
-                     , username_lower=%s
                      , claimed_time=NULL
                      , session_token=NULL
                      , session_expires=now()
@@ -1345,7 +1344,6 @@ class Participant(Model, MixinTeam):
              RETURNING username
 
             """, ( username
-                 , username.lower()
                  , self.username
                   ), default=Exception)
             return check
