@@ -75,15 +75,12 @@ CREATE TABLE elsewhere
 , connect_token         text
 , connect_expires       timestamptz
 , UNIQUE (platform, user_id)
-, UNIQUE (platform, participant)
+, UNIQUE (participant, platform)
  );
 
 \i sql/elsewhere_with_participant.sql
 
-CREATE UNIQUE INDEX ON elsewhere (platform, lower(user_name));
-
--- https://github.com/gratipay/gratipay.com/issues/951
-CREATE INDEX elsewhere_participant ON elsewhere(participant);
+CREATE UNIQUE INDEX ON elsewhere (lower(user_name), platform);
 
 
 -- tips -- all times a participant elects to tip another
