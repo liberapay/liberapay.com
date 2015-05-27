@@ -1,10 +1,8 @@
 """Defines website authentication helpers.
 """
 import binascii
-from datetime import date
 
 from aspen import Response
-from liberapay.models.participant import Participant
 from liberapay.security import csrf
 from liberapay.security.crypto import constant_time_compare
 from liberapay.security.user import User, SESSION
